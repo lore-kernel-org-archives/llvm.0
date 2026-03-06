@@ -1,126 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6462ECE86;
-	Fri,  6 Mar 2026 21:26:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C19433A708
+	for <llvm@lists.linux.dev>; Fri,  6 Mar 2026 21:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772832421; cv=none; b=cezb6Gf1LV437xORxuQW3Swng3D/PVHDzBdVKRfLAt3eTk9X1yI7/WqucbDKg1NYfjXl8ucf7EpaeiAg4M4+6MFsdIF1kPUbj0x5KEAboYGAVNUyLJz0wVZvY3iW+Z82iB4RlmU+LGWcAEuG5QzIGCRaPRrKvaX+2Z4bKjXSuFE=
+	t=1772832554; cv=none; b=eMkEdMzM2haY83IEDGzwMLC8aNdvwVnp5qoELOB7nMaKkTJ33RFBZyg7+FchPoDbgxyoDu8UjF+6MWxnE10zZRJEZwgRBkkt/+Tg9bGPcfLd43nK3mGqC4wIxESIBubR+r6/9VbJxPipeKaInXNXDiaTrC07ZjlXlL80NyWl/x4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772832421; c=relaxed/simple;
-	bh=Pcqa1aROGPqmbgXnwpvDNC18YG5xbuGd6StuiSiRmJ0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=s8Mh+HJPKV2ILoZS+cbsGTfL1TKglaUW0BYeHDfI9sDeCxXRJjAWDCmQRHPlyfbWPWh+EU/XrbYE9Rbh2zHLMFHukBJhXSZebalO8wXPNIaQCe5AlOtsUa3iB0yUWaKJRuZNfwah1Jhtqg2EmHDzHAH9GSpzLB21abLJM3DjNEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UzSj5Ei6; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772832554; c=relaxed/simple;
+	bh=+NF3mFz52hezxKpAyhXhRTGDdqKBhLHa2w2NvjiuPw4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iQiAZKFK6GkFKYg9IgOaK/mVt+faHR2RjB0D0tEyrJ8+DuPBYvBUT4bBNmOSrgAvQ5dPU3+rE0ANN2VQhAeFuFYuXU0eWeTYrByV8tG6vH4y3BMGE0Y3pwEZ+kfEhW9DkJQCq7o9d0wSloF1217Ea0syqCQJu8It/fA0sgL4Pyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xSXPhP4r; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UzSj5Ei6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772832420; x=1804368420;
-  h=date:from:to:cc:subject:message-id;
-  bh=Pcqa1aROGPqmbgXnwpvDNC18YG5xbuGd6StuiSiRmJ0=;
-  b=UzSj5Ei6TbYj6CnedGik1Zwm4/10aKi+oCtwVRskOeE60ZbjGC5JP2pr
-   ej20JOEYx+uz6X1mu7mp1arrExIsXypxvomsgmTDrxGxj46bpRtiyM0tV
-   GPSNQ6lIDmtsX2YRmyjiSbpv1VjHtwo7zuCmkLv54bWmBY76ZZKOpomdO
-   We0H5b+lNJp0nXOztewsYATbDmBNHm1Cv/T0cWPlRfiTPmrUYVnUjyji8
-   +F5Ixx8DQ2R17fhrXSoEpH2qi0b2JhQXPnRw0c8YTKv07GECVHyHtzZ7N
-   hRfOnpSEksE8msu0wl0lbPGrgSwap1CBp0uOQznuu0fAF3JKu0tTOJ38c
-   Q==;
-X-CSE-ConnectionGUID: 1VPMgBGxSi+Y9+hJKxFgPw==
-X-CSE-MsgGUID: FhzDm+LLTFC//6+BCmCFHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11721"; a="73143134"
-X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
-   d="scan'208";a="73143134"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 13:26:58 -0800
-X-CSE-ConnectionGUID: zURXw9OhT8+fGllyUz25xQ==
-X-CSE-MsgGUID: /2ZfMOYcQ02LUOWCDewwFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,105,1770624000"; 
-   d="scan'208";a="242132667"
-Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 06 Mar 2026 13:26:56 -0800
-Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vychC-000000001Od-0jzf;
-	Fri, 06 Mar 2026 21:26:54 +0000
-Date: Sat, 07 Mar 2026 05:26:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2026-03-04-3 79/79]
- sound/soc/soc-component.c:1694:18: warning: variable 'card' is uninitialized
- when used here
-Message-ID: <202603070517.lBiktoto-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xSXPhP4r"
+Message-ID: <6cdc68c2-8fde-4882-9369-cb7c64a523e1@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772832541;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4YJPbmxJzJ+emDMSdaGGgr3h8r0R6f4f/zaEYN+u/kg=;
+	b=xSXPhP4rgLV6FqEFPh33x048yA9gKwJuR8BiGaGYctqG7FBgvi2RU5QofuYNZ8Iu+vBDiR
+	fV1yt6QWwqD/ijPnSkBlsFm/SKLYjzVZ//e6LjzvDVcdNvhv8h1BBmtX+ENRbCKvB+sLkM
+	ZhGHpr2bdonoSWCJPJFRIJ+twzGP5Yk=
+Date: Fri, 6 Mar 2026 13:28:57 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Subject: Re: [PATCHv2 1/1] RDMA/rxe: Add the support that rxe can work in net
+ namespace
+To: kernel test robot <lkp@intel.com>, jgg@ziepe.ca, leon@kernel.org,
+ zyjzyj2000@gmail.com, dsahern@kernel.org, linux-rdma@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <20260304041607.11685-1-yanjun.zhu@linux.dev>
+ <202603061015.zwXUa3OS-lkp@intel.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "yanjun.zhu" <yanjun.zhu@linux.dev>
+In-Reply-To: <202603061015.zwXUa3OS-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2026-03-04-3
-head:   778b9472f0c90f749c084257e0893772fd5ff6ac
-commit: 778b9472f0c90f749c084257e0893772fd5ff6ac [79/79] ASoC: soc-component: move soc_component_add/del() to soc-component.c
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260307/202603070517.lBiktoto-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c32caeec8158d634bb71ab8911a6031248b9fc47)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260307/202603070517.lBiktoto-lkp@intel.com/reproduce)
+On 3/5/26 6:58 PM, kernel test robot wrote:
+> Hi Zhu,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on rdma/for-next]
+> [also build test WARNING on linus/master v7.0-rc2]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Zhu-Yanjun/RDMA-rxe-Add-the-support-that-rxe-can-work-in-net-namespace/20260304-121951
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
+> patch link:    https://lore.kernel.org/r/20260304041607.11685-1-yanjun.zhu%40linux.dev
+> patch subject: [PATCHv2 1/1] RDMA/rxe: Add the support that rxe can work in net namespace
+> config: x86_64-randconfig-014-20260305 (https://download.01.org/0day-ci/archive/20260306/202603061015.zwXUa3OS-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260306/202603061015.zwXUa3OS-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202603061015.zwXUa3OS-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603070517.lBiktoto-lkp@intel.com/
+With W=1, I run the latest commits, this problem does not occur.
 
-All warnings (new ones prefixed by >>):
+Zhu Yanjun
 
->> sound/soc/soc-component.c:1694:18: warning: variable 'card' is uninitialized when used here [-Wuninitialized]
-    1694 |         soc_card_rebind(card);
-         |                         ^~~~
-   sound/soc/soc-component.c:1665:27: note: initialize the variable 'card' to silence this warning
-    1665 |         struct snd_soc_card *card;
-         |                                  ^
-         |                                   = NULL
-   1 warning generated.
+> 
+>>> WARNING: modpost: drivers/infiniband/sw/rxe/rdma_rxe: section mismatch in reference: rxe_namespace_exit+0x7 (section: .exit.text) -> rxe_net_ops (section: .init.data)
+> 
 
-
-vim +/card +1694 sound/soc/soc-component.c
-
-  1661	
-  1662	int soc_component_add(struct snd_soc_component *component,
-  1663			      struct snd_soc_dai_driver *dai_drv, int num_dai)
-  1664	{
-  1665		struct snd_soc_card *card;
-  1666		int ret;
-  1667		int i;
-  1668	
-  1669		if (component->driver->endianness) {
-  1670			for (i = 0; i < num_dai; i++) {
-  1671				convert_endianness_formats(&dai_drv[i].playback);
-  1672				convert_endianness_formats(&dai_drv[i].capture);
-  1673			}
-  1674		}
-  1675	
-  1676		ret = soc_component_dais_register(component, dai_drv, num_dai);
-  1677		if (ret < 0) {
-  1678			dev_err(component->dev, "ASoC: Failed to register DAIs: %d\n",
-  1679				ret);
-  1680			goto err_cleanup;
-  1681		}
-  1682	
-  1683		if (!component->driver->write && !component->driver->read) {
-  1684			if (!component->regmap)
-  1685				component->regmap = dev_get_regmap(component->dev,
-  1686								   NULL);
-  1687			if (component->regmap)
-  1688				snd_soc_component_setup_regmap(component);
-  1689		}
-  1690	
-  1691		/* see for_each_component */
-  1692		list_add(&component->list, soc_component_get_list_head());
-  1693	
-> 1694		soc_card_rebind(card);
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
