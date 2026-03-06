@@ -1,137 +1,195 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDF07081E
-	for <llvm@lists.linux.dev>; Fri,  6 Mar 2026 00:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC272E1F02;
+	Fri,  6 Mar 2026 01:06:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772755331; cv=none; b=Xldx5HrdGkGoGKTuh6PG1Wp2CU62N077LzUarDfPhv0I4VeR1SzJsmg/0uBp5D/3yCdq8K9Wqs5Thrv5w2zDk3U4/AINZN0dKFKD4Us4B6ApGoAT0jUTgafuuPS2RpxP2ogtr9qxrByd6f2dLX7FdPwTjSDw2OGGYnVA7W0nzyE=
+	t=1772759201; cv=none; b=qVjhmhbSyURuP+eUbTXrdlk18iQ6mJDzits228+4v1Bthm2Nvje3jzInorKwbhHAyPQiblLzagAlRnLSbC9fC2Cn/Yrc70uR0LEUMoZUX+4qEJH83VCOeD7abjR5B4cXfEBFHxVPSzT01DnqxQnoRKpw61KlRc2ajHuR4WgnT0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772755331; c=relaxed/simple;
-	bh=xSew5Hq3DqH9ifskhZTqLBSL/Vl09mLiHyCNUB3R8iQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UZUVMFpEeROJLW947aAI8T0Lsfqjm45lEHrUEuc/9HNmJnRGsQJSGqmzDT9aYMd7VPFVhsDMaNregopXM4OVy59aw/CwqkP9vx/3uv20dTMj0vFERsGs9n6Si7DZWyRhGZBCv41BAk8NQe56jPiXCzUa3qArMqglhqlUNynMDNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g2/Xs7GZ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772759201; c=relaxed/simple;
+	bh=/3UzXOX7nYsk0ycjPDcHwDC51rQGido5I13QEdeIfH8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dc/R/XyZs0RgpTuTty2KXC14aVgn3rdg5fI0hiLv0pbN0BXmSad0G1ggF45mfht1/WromIVv1ueCwj5c3X6kRq0LxjVtMOIMGKQkCvaIlqnp0chkSBYHUwW7VLFGbN5vPvocdX+hqhemZim15axfQUdjFVdAoFZEDKzama/J2X0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nYk4WPLt; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g2/Xs7GZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772755328;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PQg4mA65hFCsS/qYvSzO/8dF9QzXfVrIRjvflNGk/Co=;
-	b=g2/Xs7GZjqeKO1tE6dsf7iOXubPh6A+UWFCWSr7YYtVJQbfL1Cm2R0VFmTyOJiXN5tczaO
-	qwpDcfVFZVe/9fNAk2xWz8Jgd5iUjbrFBt4JmTgATzt3pzJHO2I+KuE3qbrNBxETLoDufA
-	G8LzPCUZ4tAp6HniUsDtZJRk23XiA6g=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-232-AOvXPzpJObmJmazcUCmMEQ-1; Thu,
- 05 Mar 2026 19:02:07 -0500
-X-MC-Unique: AOvXPzpJObmJmazcUCmMEQ-1
-X-Mimecast-MFC-AGG-ID: AOvXPzpJObmJmazcUCmMEQ_1772755326
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7006E1956056
-	for <llvm@lists.linux.dev>; Fri,  6 Mar 2026 00:02:06 +0000 (UTC)
-Received: from [172.20.96.208] (unknown [10.30.44.37])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0FF921958DC5;
-	Fri,  6 Mar 2026 00:02:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc2,
- upstream-mainline, 5ee8dbf5)
-Date: Fri, 06 Mar 2026 00:02:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nYk4WPLt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772759200; x=1804295200;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/3UzXOX7nYsk0ycjPDcHwDC51rQGido5I13QEdeIfH8=;
+  b=nYk4WPLtEHBTNNqrYVn+z6V7SPnWvC5Ut0u01gU9jhcni4cNKfqW8vOf
+   jOyvdT7iSqKKEFGkOBKk9YVlHhniu3GE8EhryUhYmfvSDxxgR/VXN9XIQ
+   1lj6eN6yDYKu0koghpvnO0ZK7krgfPe3rATtGZYNOUSizmzSvWLufJeG0
+   qUIH3viw2deLA/5KAOwxkW/Dn27XDwLBvO8TpW9Us1zHCOXcflVkaBjkG
+   kwK+Ah2atlwcWDdT2JcsAuyTdjTSA/SVAvfB2wC5fSH1JPmrgB7s01r/9
+   mwSkaoR5R3eBCZeCUOlLPnasff79NPWg35QGgLztJOEeo3O0e41pxR0gk
+   Q==;
+X-CSE-ConnectionGUID: gU0suVKMQsaMVpBqgwYmow==
+X-CSE-MsgGUID: QtdnsaUITiGhraCTl21dDw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11720"; a="73779494"
+X-IronPort-AV: E=Sophos;i="6.23,104,1770624000"; 
+   d="scan'208";a="73779494"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2026 17:06:40 -0800
+X-CSE-ConnectionGUID: Fb6imYfYRdyyNHiSGLSlLg==
+X-CSE-MsgGUID: fmZ26AOZSoCSufqFWdsyZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,104,1770624000"; 
+   d="scan'208";a="218805096"
+Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 05 Mar 2026 17:06:34 -0800
+Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vyJe9-0000000009N-2EjF;
+	Fri, 06 Mar 2026 01:06:29 +0000
+Date: Fri, 6 Mar 2026 09:06:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Mika Westerberg <westeri@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-omap@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 2/6] gpio: move hogs into GPIO core
+Message-ID: <202603060850.dUlmPBav-lkp@intel.com>
+References: <20260305-gpio-hog-fwnode-v1-2-97d7df6bbd17@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <37622.126030519020700323@us-mta-232.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 5-7SGyNkixjS15DOVTnzObZr0eB6Xq2Q3yfYn7v6bhI_1772755326
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260305-gpio-hog-fwnode-v1-2-97d7df6bbd17@oss.qualcomm.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Bartosz,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on c025f6cf4209e1542ec2afebe49f42bbaf1a5c7b]
 
-Kernel information:
-    Commit message: Merge tag 'fsverity-for-linus' of git://git.kernel.org/=
-pub/scm/fs/fsverity/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/gpio-of-clear-OF_POPULATED-on-hog-nodes-in-remove-path/20260305-175735
+base:   c025f6cf4209e1542ec2afebe49f42bbaf1a5c7b
+patch link:    https://lore.kernel.org/r/20260305-gpio-hog-fwnode-v1-2-97d7df6bbd17%40oss.qualcomm.com
+patch subject: [PATCH 2/6] gpio: move hogs into GPIO core
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260306/202603060850.dUlmPBav-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c32caeec8158d634bb71ab8911a6031248b9fc47)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260306/202603060850.dUlmPBav-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2366982170
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603060850.dUlmPBav-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: fedora: avc:  denied  { create } for  pid=3D1 comm=3D"system=
-d" name=3D"io.systemd.Hostname" scontext=3Dsystem_u:system_r:init_t:s0 tcon=
-text=3Dsystem_u:object_r:var_run_t:s0 tclass=3Dlnk_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2443788
-            Affected tests:
-                Boot test [aarch64, ppc64le, s390x, x86_64]
-                Reboot test [aarch64, ppc64le, s390x, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpio/gpiolib.c:981:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     981 |                 return ret;
+         |                        ^~~
+   drivers/gpio/gpiolib.c:971:9: note: initialize the variable 'ret' to silence this warning
+     971 |         int ret, argc;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
+vim +/ret +981 drivers/gpio/gpiolib.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   962	
+   963	int gpiochip_add_hog(struct gpio_chip *gc, struct fwnode_handle *fwnode)
+   964	{
+   965		struct fwnode_handle *gc_node = dev_fwnode(&gc->gpiodev->dev);
+   966		struct of_phandle_args gpiospec;
+   967		enum gpiod_flags dflags;
+   968		struct gpio_desc *desc;
+   969		unsigned long lflags;
+   970		const char *name;
+   971		int ret, argc;
+   972		u32 gpios[3]; /* We support up to three-cell bindings. */
+   973		u32 cells;
+   974	
+   975		lflags = GPIO_LOOKUP_FLAGS_DEFAULT;
+   976		dflags = GPIOD_ASIS;
+   977		name = NULL;
+   978	
+   979		argc = fwnode_property_count_u32(fwnode, "gpios");
+   980		if (argc < 0)
+ > 981			return ret;
+   982		if (argc > 3)
+   983			return -EINVAL;
+   984	
+   985		ret = fwnode_property_read_u32_array(fwnode, "gpios", gpios, argc);
+   986		if (ret < 0)
+   987			return ret;
+   988	
+   989		if (is_of_node(fwnode)) {
+   990			/*
+   991			 * OF-nodes need some additional special handling for
+   992			 * translating of devicetree flags.
+   993			 */
+   994			ret = fwnode_property_read_u32(gc_node, "#gpio-cells", &cells);
+   995			if (ret)
+   996				return ret;
+   997			if (cells && argc != cells)
+   998				return -EINVAL;
+   999	
+  1000			memset(&gpiospec, 0, sizeof(gpiospec));
+  1001			gpiospec.np = to_of_node(fwnode);
+  1002			gpiospec.args_count = argc;
+  1003			memcpy(&gpiospec.args, gpios, argc * sizeof(u32));
+  1004	
+  1005			ret = of_gpiochip_get_lflags(gc, &gpiospec, &lflags);
+  1006			if (ret)
+  1007				return ret;
+  1008		} else {
+  1009			/*
+  1010			 * GPIO_ACTIVE_LOW is currently the only lookup flag
+  1011			 * supported for non-OF firmware nodes.
+  1012			 */
+  1013			if (gpios[1])
+  1014				lflags |= GPIO_ACTIVE_LOW;
+  1015		}
+  1016	
+  1017		if (fwnode_property_present(fwnode, "input"))
+  1018			dflags |= GPIOD_IN;
+  1019		else if (fwnode_property_present(fwnode, "output-low"))
+  1020			dflags |= GPIOD_OUT_LOW;
+  1021		else if (fwnode_property_present(fwnode, "output-high"))
+  1022			dflags |= GPIOD_OUT_HIGH;
+  1023		else
+  1024			return -EINVAL;
+  1025	
+  1026		fwnode_property_read_string(fwnode, "line-name", &name);
+  1027	
+  1028		desc = gpiochip_get_desc(gc, gpios[0]);
+  1029		if (IS_ERR(desc))
+  1030			return PTR_ERR(desc);
+  1031	
+  1032		ret = gpiod_hog(desc, name, lflags, dflags);
+  1033		if (ret)
+  1034			return ret;
+  1035	
+  1036		return 0;
+  1037	}
+  1038	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
