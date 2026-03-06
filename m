@@ -1,67 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8F33AE1A5;
-	Fri,  6 Mar 2026 15:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C773AE6FB;
+	Fri,  6 Mar 2026 15:06:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772809471; cv=none; b=Op0oCCLsF8Z8ctny1vV0/kqo+fHO74t4T08x3eq1YQ8RTzJTOt255/FkmPzr/qTKnogMaKWF8s/B4P4qFelqMY/6JdzqSZuMbuVj4MU0W1ucvxb3rN36WybN29cKmSjAiJ5qcQZC+gpBBACnaloC+upZhmOODf9HrnShcXMf5zg=
+	t=1772809580; cv=none; b=KoBYFWyMT2l4KzAcza4m6IQVEaeRVeQIagZ46DLSOGHDkyEP/7SfL6D4gllfDWPShnk/XITtXrdkBMLCW+7grumFdzdWymjgoTK0AxUOCNthOSCI61hreU8/x2jJXcmQYfyUfR59Wx46ify3e9piHPQKFDGM4n5rnvTc2/5EDyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772809471; c=relaxed/simple;
-	bh=25CPe4EGSUbqlSDNHofrLGG8PR/WzU7sNEADToXqfos=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QbkRlYC9YA5e/aZwWrJSIW3Enogz5yBcpzz5yTIgtq4bKxafm9YwK9akO0pZcVBUs5oioZEdwZlnvcxmyY0nVQF16QLlDQwjxPqHo5cZTr9pHxwo45K1xgLvkfFnOhq3K4lR5I7VXoy6B4d2Nv2WnUxwgomEE+emADQN0LfVuOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l00mYyAe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772809580; c=relaxed/simple;
+	bh=Kvw8Ndr8jNcvE5TUiNuyuhdLOCnX6CEmPLgxPo8iI8Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nYkw/rT8uQb2uGbmBdy3FyVXOZ87omaI3N+fepLYHIGrdw12EthO4Y7kSTHHwiiPVdlRWvOWoYyHg4FAVL7YqqqFL1y1U9XDT+oOtoeUkcSjojS2BlAA8GqoMGAtv3MvGYeit2AK4uoky+XBLJQYcDHq2uMUpqdA66uGjW1XxL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IDpuoWA5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l00mYyAe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF2D7C4CEF7;
-	Fri,  6 Mar 2026 15:04:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IDpuoWA5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84CE7C2BC9E;
+	Fri,  6 Mar 2026 15:06:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772809471;
-	bh=25CPe4EGSUbqlSDNHofrLGG8PR/WzU7sNEADToXqfos=;
+	s=k20201202; t=1772809579;
+	bh=Kvw8Ndr8jNcvE5TUiNuyuhdLOCnX6CEmPLgxPo8iI8Y=;
 	h=From:To:Cc:Subject:Date:From;
-	b=l00mYyAeVzZNhOkHGoBqNdxgrGLiNdHhVl3kHwWYeL1Y9cFWXVlXooc68wEuF7L0Q
-	 OF2NVmz98U+4tMbNLueBvXb1fQq7cXDImpDKIGf4tKnWW++vZxu/EY+wexkETnxwFD
-	 MWqyCam4Ic8JyGq5WqejMJe9U3A1XlNrnepTU7jea0jQaiV8DaUy+MCEWae68Risxu
-	 qkBXP3twWnqgmthNNhGJ5AZYReddCWjdC3dgnUrpIrec7ooGju9tx+THX/KeuImLH8
-	 yhx06aMwr48pfMFdKNoEE3NgYZYj6wC+11wNOWM+t5CSAxsd0lxY8gLOiIilbMEZIm
-	 dZ/eso6rn5L2w==
+	b=IDpuoWA53nsMphSgS8EwODEhFc2GC96LBFngQoBVQP7okdRu+cE0gAD+4oqXe7XJs
+	 BAHT0AP57c3iP7+JO2Z3diywzNust+4eWUMLT6Pv9qfpZ0kztZ/WqyW5Y20fS5uWS8
+	 PN+mNjueixgYlb0/Tx2RrAD7hxnuGOfKmdhX+ZJRWQWvbjJb6KXISaP3MTIG2vQIDX
+	 93RDSDJEboXQM0NnWQqkm9VWKV3W9U97siXZl52aZTRY6xPS+4LYKryPP29jthfNnb
+	 AsRnraJi38dnhwHznErBobRFUhUxmTmrRgQoa1gWmYpsMP5qNUA7pvVNDhNL54Bw4B
+	 2RIMA7Z35EBag==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Coiby Xu <coxu@redhat.com>
-Cc: Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Kees Cook <kees@kernel.org>,
+	Marco Elver <elver@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	kasan-dev@googlegroups.com,
+	linux-hardening@vger.kernel.org,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Andrew Donnellan <ajd@linux.ibm.com>,
-	linuxppc-dev@lists.ozlabs.org,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	keyrings@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] integrity: avoid using __weak functions
-Date: Fri,  6 Mar 2026 16:03:24 +0100
-Message-Id: <20260306150421.270124-1-arnd@kernel.org>
+Subject: [PATCH] ubsan: turn off kmsan inside of ubsan instrumentation
+Date: Fri,  6 Mar 2026 16:05:49 +0100
+Message-Id: <20260306150613.350029-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -73,212 +55,48 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The security/integrity/secure_boot.c file containing only a __weak function
-leads to a build failure with clang:
+The structure initialization in the two type mismatch handling functions
+causes a call to __msan_memset() to be generated inside of a UACCESS
+block, which in turn leads to an objtool warning about possibly leaking
+uaccess-enabled state:
 
-Cannot find symbol for section 2: .text.
-security/integrity/secure_boot.o: failed
+lib/ubsan.o: warning: objtool: __ubsan_handle_type_mismatch+0xda: call to __msan_memset() with UACCESS enabled
+lib/ubsan.o: warning: objtool: __ubsan_handle_type_mismatch_v1+0xf4: call to __msan_memset() with UACCESS enabled
 
-Moving the function into another file that has at least one non-__weak
-symbol would solve this, but this is always fragile.
+Most likely __msan_memset() is safe to be called here and could be added
+to the uaccess_safe_builtin[] list of safe functions, but seeing that
+the ubsan file itself already has kasan, ubsan and kcsan disabled itself,
+it is probably a good idea to also turn off kmsan here, in particular this
+also avoids the risk of recursing between ubsan and kcsan checks in
+other functions of this file.
 
-Avoid __weak definitions entirely and instead move the stub helper into
-an asm-generic header that gets used by default on architectures that
-do not provide their own version. This is consistent with how a lot
-of other architecture specific functionality works, and is more reliable.
+I saw this happen while testing randconfig builds with clang-22, but did
+not try older versions, or attempt to see which kernel change introduced
+the warning.
 
-Fixes: a0f87ede3bf4 ("integrity: Make arch_ima_get_secureboot integrity-wide")
+Cc: Kees Cook <kees@kernel.org>
+Cc: Marco Elver <elver@google.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc: kasan-dev@googlegroups.com
+Cc: linux-hardening@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-This is a larger change than I had hoped for.
+ lib/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-If you prefer a different way to address the build failure, please
-treat this as a Reported-by when you apply your own fix
----
- arch/powerpc/include/asm/secure_boot.h        |  6 +++
- arch/powerpc/kernel/secure_boot.c             |  1 -
- arch/s390/include/asm/secure_boot.h           |  9 +++++
- include/asm-generic/Kbuild                    |  1 +
- include/asm-generic/secure_boot.h             | 37 +++++++++++++++++++
- include/linux/secure_boot.h                   |  8 +---
- security/integrity/Makefile                   |  2 +-
- .../integrity/platform_certs/load_powerpc.c   |  2 +-
- security/integrity/secure_boot.c              | 16 --------
- 9 files changed, 56 insertions(+), 26 deletions(-)
- create mode 100644 arch/s390/include/asm/secure_boot.h
- create mode 100644 include/asm-generic/secure_boot.h
- delete mode 100644 security/integrity/secure_boot.c
-
-diff --git a/arch/powerpc/include/asm/secure_boot.h b/arch/powerpc/include/asm/secure_boot.h
-index a2ff556916c6..db72dcdf5bb3 100644
---- a/arch/powerpc/include/asm/secure_boot.h
-+++ b/arch/powerpc/include/asm/secure_boot.h
-@@ -10,11 +10,17 @@
+diff --git a/lib/Makefile b/lib/Makefile
+index 280a71e4f813..3e1eeefd9832 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -306,6 +306,7 @@ obj-$(CONFIG_UBSAN) += ubsan.o
+ UBSAN_SANITIZE_ubsan.o := n
+ KASAN_SANITIZE_ubsan.o := n
+ KCSAN_SANITIZE_ubsan.o := n
++KMSAN_SANITIZE_ubsan.o := n
+ CFLAGS_ubsan.o := -fno-stack-protector $(DISABLE_KSTACK_ERASE)
  
- #ifdef CONFIG_PPC_SECURE_BOOT
- 
-+bool arch_get_secureboot(void);
- bool is_ppc_secureboot_enabled(void);
- bool is_ppc_trustedboot_enabled(void);
- 
- #else
- 
-+static inline bool arch_get_secureboot(void)
-+{
-+	return false;
-+}
-+
- static inline bool is_ppc_secureboot_enabled(void)
- {
- 	return false;
-diff --git a/arch/powerpc/kernel/secure_boot.c b/arch/powerpc/kernel/secure_boot.c
-index 28436c1599e0..e3ea46124180 100644
---- a/arch/powerpc/kernel/secure_boot.c
-+++ b/arch/powerpc/kernel/secure_boot.c
-@@ -7,7 +7,6 @@
- #include <linux/of.h>
- #include <linux/secure_boot.h>
- #include <linux/string_choices.h>
--#include <asm/secure_boot.h>
- 
- static struct device_node *get_ppc_fw_sb_node(void)
- {
-diff --git a/arch/s390/include/asm/secure_boot.h b/arch/s390/include/asm/secure_boot.h
-new file mode 100644
-index 000000000000..4086fdfb9e5c
---- /dev/null
-+++ b/arch/s390/include/asm/secure_boot.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_S390_SECURE_BOOT_H
-+#define _ASM_S390_SECURE_BOOT_H
-+
-+#include <linux/types.h
-+
-+bool arch_get_secureboot(void);
-+
-+#endif
-diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
-index 0f97f7b594c3..8c0a499141fb 100644
---- a/include/asm-generic/Kbuild
-+++ b/include/asm-generic/Kbuild
-@@ -51,6 +51,7 @@ mandatory-y += rqspinlock.h
- mandatory-y += runtime-const.h
- mandatory-y += rwonce.h
- mandatory-y += sections.h
-+mandatory-y += secure_boot.h
- mandatory-y += serial.h
- mandatory-y += shmparam.h
- mandatory-y += simd.h
-diff --git a/include/asm-generic/secure_boot.h b/include/asm-generic/secure_boot.h
-new file mode 100644
-index 000000000000..08d8e294576c
---- /dev/null
-+++ b/include/asm-generic/secure_boot.h
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2026 Red Hat, Inc. All Rights Reserved.
-+ *
-+ * Author: Coiby Xu <coxu@redhat.com>
-+ */
-+#ifndef _ASM_SECURE_BOOT_H
-+#define _ASM_SECURE_BOOT_H
-+
-+
-+#include <linux/types.h>
-+
-+#ifdef CONFIG_EFI
-+
-+/*
-+ * Default implementation.
-+ * Architectures that support secure boot must override this.
-+ *
-+ * Returns true if the platform secure boot is enabled.
-+ * Returns false if disabled or not supported.
-+ */
-+bool arch_get_secureboot(void);
-+
-+#else
-+
-+/*
-+ * Default implementation.
-+ * Architectures that support secure boot must override this.
-+ */
-+static inline bool arch_get_secureboot(void)
-+{
-+	return false;
-+}
-+
-+#endif
-+
-+#endif
-diff --git a/include/linux/secure_boot.h b/include/linux/secure_boot.h
-index 3ded3f03655c..9ddfbe109b1d 100644
---- a/include/linux/secure_boot.h
-+++ b/include/linux/secure_boot.h
-@@ -8,12 +8,6 @@
- #ifndef _LINUX_SECURE_BOOT_H
- #define _LINUX_SECURE_BOOT_H
- 
--#include <linux/types.h>
--
--/*
-- * Returns true if the platform secure boot is enabled.
-- * Returns false if disabled or not supported.
-- */
--bool arch_get_secureboot(void);
-+#include <asm/secure_boot.h>
- 
- #endif /* _LINUX_SECURE_BOOT_H */
-diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-index 548665e2b702..45dfdedbdad4 100644
---- a/security/integrity/Makefile
-+++ b/security/integrity/Makefile
-@@ -5,7 +5,7 @@
- 
- obj-$(CONFIG_INTEGRITY) += integrity.o
- 
--integrity-y := iint.o secure_boot.o
-+integrity-y := iint.o
- integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
- integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
- integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
-diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
-index 714c961a00f5..ab74e947a8bc 100644
---- a/security/integrity/platform_certs/load_powerpc.c
-+++ b/security/integrity/platform_certs/load_powerpc.c
-@@ -10,7 +10,7 @@
- #include <linux/cred.h>
- #include <linux/err.h>
- #include <linux/slab.h>
--#include <asm/secure_boot.h>
-+#include <linux/secure_boot.h>
- #include <asm/secvar.h>
- #include "keyring_handler.h"
- #include "../integrity.h"
-diff --git a/security/integrity/secure_boot.c b/security/integrity/secure_boot.c
-deleted file mode 100644
-index fc2693c286f8..000000000000
---- a/security/integrity/secure_boot.c
-+++ /dev/null
-@@ -1,16 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Copyright (C) 2026 Red Hat, Inc. All Rights Reserved.
-- *
-- * Author: Coiby Xu <coxu@redhat.com>
-- */
--#include <linux/secure_boot.h>
--
--/*
-- * Default weak implementation.
-- * Architectures that support secure boot must override this.
-- */
--__weak bool arch_get_secureboot(void)
--{
--	return false;
--}
+ obj-$(CONFIG_SBITMAP) += sbitmap.o
 -- 
 2.39.5
 
