@@ -1,152 +1,98 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7D841B361
-	for <llvm@lists.linux.dev>; Fri,  6 Mar 2026 17:23:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26C433B96C
+	for <llvm@lists.linux.dev>; Fri,  6 Mar 2026 17:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772817802; cv=none; b=t9M5CSmfu7vnpEO7d0NQK2+FeeLA9Wa35gpDTdqncf7DzLlqPvYikkrU/XXD1lOPZP1ZvfyCSSpPxd4YxXmtbXpnP4QCPB1TlT7rwBIWen7xvP03Y2hIhdKvDmVITwZTqwlYc8+zeMgUSM+ToJbyQ6DbSDOgVTRu6LyFAnyk+vM=
+	t=1772818356; cv=none; b=TB2tvsjlNwA4+K6hIHqLyL7S/+zyX+IR6eLcpuhn9xd71kVakeaXH73h7Ws0HWgARsV/z8P3ID8Tr9Y3zer7mpl4+TXD4QvKqrDG9a0AaKZCOif86swZ3QGTcbfezgdY5oNa2BR0VO1lKvvDQiMlbWdRnY4hIrEWiamBI9u5FyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772817802; c=relaxed/simple;
-	bh=28PgpQjXpX06klA0+NZf+/j1U6ayzOO+y+w1rOpBpOU=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=WBWxO3CFVRRvNEP+YUeI8QnxtevqFuyioAvYCrAzy5JeKonY1F8iXtxqZdQJRLgcc/0CzsoqknUV82GkQ+e8GPYkC7hGwGOPQXQVk5fiJW8OBFJXolmPNT76IC4caLJZZJmplkOUL+hPs/1ShJsMUQqAY1Do39ubTlejncdr714=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Am/hurKj; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1772818356; c=relaxed/simple;
+	bh=bIxrx4KoLTRQn4XRd5Efn4xp/evATyJ+zwU3/uVKTz4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=czY4+ve6oe6NEbSczcNd9kyLyF0u+iJSwX6NMm2g6mK58l62pH1vUL3YlqB+i7MyQwkx22el+qeLP4QkqsBTpHAcosHKAUS4wflrdFx5VclEtwXsTftdDfPELdl2+A+DhG2sQtTdE0xw2Y3ia1L6ViDM5SI6i7b2yjq+HzlqaIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d/e8wfO0; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Am/hurKj"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-483bd7354efso124092895e9.2
-        for <llvm@lists.linux.dev>; Fri, 06 Mar 2026 09:23:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d/e8wfO0"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4832c4621c2so106573815e9.3
+        for <llvm@lists.linux.dev>; Fri, 06 Mar 2026 09:32:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1772817799; x=1773422599; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FJxRsyeN4rh2Hs6t770BtULfs11CYbEujdDpyg3thI4=;
-        b=Am/hurKjq3mnC0RpNDSYtjDiPm89SlZ9jRXV3ShxSM4dR677AB3Aqc/8Rgxbmaq1A4
-         CL/vBkcDuLdelMlNOhsOGHeAZXTdR5fiEr4CFVTBoNltrnGT63Ehwp1jSoJj8LUMNgwf
-         UwLgSXg5pT8t+CKTTuc2JoqiTNO6SNVM5oUCbcj/NhhdWDZWkLucxS7MggAo5954wgwB
-         EWgX7VddkIscG2oQXls5+wBK0uWiEIzMfCpKJ/7xgP/uBfs/WmwBrS1KxSVCSxMTW1Cb
-         BXJw307yFKMZPrmbzKzlx64fymdh5MckBZ63EJS4sAOGlT8okQiHr0CW1NF6O0hSHyXa
-         +xxw==
+        d=google.com; s=20230601; t=1772818354; x=1773423154; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/vcQthuk1eWzIx9SkfXAplSVF+zzfp3bHB4lRD3w+Jw=;
+        b=d/e8wfO0qiVMis3wU+4VI09wV6B3bum9pxQ8Z0sbYw2hZ6DxB10Ag+EP5SsAEMgkHc
+         4Pocl/v7g0ebZXml3dMo6Y98+2ZNUXwdTVOJ3x9a4TN4idCdHyEtGqP4WLBMi0xrkSbE
+         Xn1LfOPPl3OtN+gr5a77+XTWqplNZMQS/Y6fa9fgpcEBbRf3bpbknDlNT83ZHGRGUuYm
+         WS8Vm1f/x6LBCPZzkZcDrytdU2lp3Vq6teh+9mfY+FtwMQg16W4SIMZ088WCO8l00Yls
+         cKXFz4stfYXTWspf/JYgeJ7UGD/8mm6kbLUw1YPC20hGr2Y+NEfGYIlup3r+eAAI6dBA
+         IU/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772817799; x=1773422599;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FJxRsyeN4rh2Hs6t770BtULfs11CYbEujdDpyg3thI4=;
-        b=hOHL+fNutaJM9iOIwME9hCixKaHmPkArG8Zptv8KPepgXCaMxXNrpboFWP5UTLEe8N
-         K6/xf71oy85UVz+rUGcDv1Os82uzDVj7QqQ1X/xlNDcZxsOa11Cbae6iMKb712tdQkhv
-         BEz7meWtVR3LI0sFa5lWvcQCFDy5BmYkv8v1QznHwYCbVUl37Lk0yIrELOht9tW6Cg0b
-         36YM1ledlvbCon/2/hGeb4Labb03FUp3QHJYDvERne5DSA2cO/PUydR0il4fRCHGB9ZW
-         ZYTr2UL/f74EpnJ22BrcMUmyTJkLIG9O4QbKGXCLU4dNQhmCFh/ojGEa+QZqobjjdkK7
-         QObg==
-X-Gm-Message-State: AOJu0Yy4SRBX2HHf1lgvCtrFSWum8vYoNdQ7btv/weYHGDVAv3iq5eqd
-	Mt0qUlFJZBczsxMAT943F38iIX4FQr0tk/j7AzTC1DYMcLc09rrDXx/uTcU08h0D9skbW2BHUKl
-	o/oRl
-X-Gm-Gg: ATEYQzxIMu0HrQLzU7gVqck7r2MvP7E0adcofvraBg91y0BS/N/qfNks5IzU1zC4ee8
-	3dBVlsxlksTykVNwMfzahrdM+MyyBGvjZev+Xbqbfyp2VCR990fzYsDQWcq1h5pCu16ovh7zJQB
-	gf5BdTlUvqqBlSUml8QLaXzj+UZkwOJGrOqpJM8dGIxnJ1yNy62EL6ThTpUvaLIdns0YTDENWcs
-	Q854wTVG9r9Gb1s5UoeZawQuKCZ9Kb73LtBD4a4C2YlRTX9smEI8OzskzWlrvFyx7yMB/2F7EML
-	VYloyAz9FHMl2tu7yMP0DZdtoMxgGZeLTmAScyk1uqXKsbhDaBXo7ye+kYh408THVThuPmYa0Xs
-	B1k8NcIYpdqb4letR2vPitjE0e2NkSwDkBnTJoFdy7EIKVzgQszVJhsOKYWXKdX/TpK3yweZkDS
-	N22OFuVRSXH4DvncdhRMfNPFycX+SfZxn+RB2AylQt/4DILAg7KNmW4OA2V8F1RSk/FpDl0A==
-X-Received: by 2002:a05:600c:4451:b0:483:bcff:7948 with SMTP id 5b1f17b1804b1-4852692427cmr47205035e9.10.1772817799211;
-        Fri, 06 Mar 2026 09:23:19 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485276b09casm76532745e9.11.2026.03.06.09.23.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 09:23:18 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Fri, 6 Mar 2026 17:23:16 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1797330463.42395.1772817798699@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v7.0-rc1-9-gdb64b9107f146: Failure on aarch64
+        d=1e100.net; s=20230601; t=1772818354; x=1773423154;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/vcQthuk1eWzIx9SkfXAplSVF+zzfp3bHB4lRD3w+Jw=;
+        b=Xr462ruaPqBRvMcwAUXCK0odIsRePsnmv6Vz2Vt0wJJfttvbzlqXItkRH/hWP2kA/w
+         zdWCJrbeKAUIy5dmF+UxBAEXyEt7tsZejLhjw22L+NFQqCN+BQDguTaZtf8mxFx83chR
+         77mRiRoD8HDrNLO3Fbn4xTAQpLTsYI0TDJljKAUXc04F/aCOgr/sjvKreUFX9qLYa32c
+         2UTlukPmABwA8vEfN5nVcB+sBeg1kQcm+0AbsxVtt8/jPgrVNhqJMZWJjLhsglpHVoLQ
+         ILOZjf69dNvrj8KdgnHjDaCfSWW5ycUadUy2acOe+Dh9ea/NhHxMNA+qoTWKG0d3R0vP
+         o7tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV7/d9B/7M4lrMADUVpFEpzxHK0BWRr0LITOYRZfPf/McdFnAdmL58n2YIBsXG8moPxGOkv@lists.linux.dev
+X-Gm-Message-State: AOJu0YzT1t5OeDIzGKCeYae09rmgYcpTyGM/55P9xZrKTkKNbvt9xKqs
+	zcrKFuAMu6+UsFMtymitjFrEabhkf5PvjLFmTvUgwrXaIXzUvGRz+V8Ku8sF5f9kI49xHmRPYw6
+	uozH9m3r3ivXSYvPT0w==
+X-Received: from wmc2.prod.google.com ([2002:a05:600c:6002:b0:483:43e2:3e67])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:4710:b0:480:20f1:7abd with SMTP id 5b1f17b1804b1-48526978dc0mr46728455e9.31.1772818354024;
+ Fri, 06 Mar 2026 09:32:34 -0800 (PST)
+Date: Fri, 6 Mar 2026 17:32:33 +0000
+In-Reply-To: <20260203-inline-helpers-v2-3-beb8547a03c9@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_42394_1192100199.1772817796644"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-X-Jenkins-Result: SUCCESS
+Mime-Version: 1.0
+References: <20260203-inline-helpers-v2-0-beb8547a03c9@google.com> <20260203-inline-helpers-v2-3-beb8547a03c9@google.com>
+Message-ID: <aasPsbMEsX6iGUl8@google.com>
+Subject: Re: [PATCH v2 3/3] build: rust: provide an option to inline C helpers
+ into Rust
+From: Alice Ryhl <aliceryhl@google.com>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uladzislau Rezki <urezki@gmail.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
+	Matthew Maurer <mmaurer@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-------=_Part_42394_1192100199.1772817796644
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Tue, Feb 03, 2026 at 11:34:10AM +0000, Alice Ryhl wrote:
+>  $(obj)/bindings/bindings_helpers_generated.rs: $(src)/helpers/helpers.c FORCE
+>  	$(call if_changed_dep,bindgen)
+>  
+> +quiet_cmd_rust_helper = HELPER  $@
+> +      cmd_rust_helper = \
+> +	$(CC) $(filter-out $(CFLAGS_REMOVE_helpers/helpers.o), $(c_flags)) \
+> +		-c -g0 $< $(if $(filter %_module.bc,$@),-DMODULE) -emit-llvm -o $@
+> +
+> +$(obj)/helpers/helpers.bc $(obj)/helpers/helpers_module.bc: $(src)/helpers/helpers.c FORCE
+> +	+$(call if_changed_dep,rust_helper)
 
-Dear contributor,
+I think this needs:
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+$(obj)/helpers/helpers.bc: private part-of-builtin := y
+$(obj)/helpers/helpers_module.bc: private part-of-module := y
 
-In tcwg_kernel/llvm-master-aarch64-next-allmodconfig, after:
-  | commit v7.0-rc1-9-gdb64b9107f146
-  | Author: Joanne Koong <joannelkoong@gmail.com>
-  | Date:   Tue Jan 20 14:44:47 2026 -0800
-  | 
-  |     fuse: simplify logic in fuse_notify_store() and fuse_retrieve()
-  |     
-  |     Simplify the folio parsing logic in fuse_notify_store() and
-  |     fuse_retrieve().
-  |     
-  | ... 9 lines of the commit log omitted.
+at least it seems to make a difference for AutoFDO.
 
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 27509
-  | # First few build errors in logs:
-  | # 01:13:39 fs/fuse/dev.c:1818:43: error: variable 'folio_offset' is uninitialized when used here [-Werror,-Wuninitialized]
-  | # 01:13:39 make[4]: *** [scripts/Makefile.build:289: fs/fuse/dev.o] Error 1
-  | # 01:14:47 make[3]: *** [scripts/Makefile.build:546: fs/fuse] Error 2
-  | # 01:52:43 make[2]: *** [scripts/Makefile.build:546: fs] Error 2
-  | # 02:22:13 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_0/linux/Makefile:2101: .] Error 2
-  | # 02:22:13 make: *** [Makefile:248: __sub-make] Error 2
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 37968
-  | # First few build errors in logs:
-  | # 02:03:02 make[2]: *** [scripts/Makefile.vmlinux:100: vmlinux] Error 1
-  | # 02:03:22 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_0/linux/Makefile:1295: vmlinux] Error 2
-  | # 02:28:01 make: *** [Makefile:248: __sub-make] Error 2
-
-Used configuration :
- tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-2188. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
-
-
-
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/505/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/504/artifact/artifacts
-
-Instruction to reproduce the build : https://gitlab.com/LinaroLtd/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/db64b9107f146940606d512f1d6214323b905565/tcwg_kernel/llvm-master-aarch64-next-allmodconfig/reproduction_instructions.txt
-
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/db64b9107f146940606d512f1d6214323b905565
-------=_Part_42394_1192100199.1772817796644--
+Alice
