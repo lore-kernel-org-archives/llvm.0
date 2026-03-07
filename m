@@ -1,141 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88FD2D5C6C;
-	Sat,  7 Mar 2026 13:38:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9AF281525
+	for <llvm@lists.linux.dev>; Sat,  7 Mar 2026 14:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772890704; cv=none; b=D3kZN1pxudhA0SoN3Iz2NnuUsXR2lQj2Qr/f9zZm3hjuXNK+Z2GZvGMH6mdcY9r2cDpYWGUN/n9RnfrRtnddsk7LZz71Qq9L9e1QEUrGbtapbCoXREFje7x+s7BQSh2PAiPS86zgE80lGisjaMipcU4LWkuDgr7tfoG9TpF9vdA=
+	t=1772894540; cv=none; b=rsRkXRRQxMovIDGmRdJZ4w3aI/9bIRTKLT5+nlj5QuJEApfRoyNSmK/YVAv5k8xM2wWjAqLIVD+eTa+aWoKOERoRipjAFx+iPWaR7vRXUc4K1xMyCefndVDAVwMKwpyf7swFClIZljit6eI8NCpowMxMcsKD7BSTkfpqN5LeJcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772890704; c=relaxed/simple;
-	bh=PqbtgbG+t3VigQKYJJfr6c/17wbVG9irva+I3YjSaAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=edTwdUvzPyJKHZRyDtm8dFoXkeZknRRb1YlUsxIHMAHDuRi0rN/mGYZ/Ory1ZDfXoTgnLys+CfpxH4i2sggGIivFFLi6+QiFGJNOUK8rDCyRUWqiIWkhouhqByh8DV3mPmaE81yIGR025CZ3Gq241s6QFCgfPbQrJd15PXLn1Qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vl8qJ/lr; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772894540; c=relaxed/simple;
+	bh=56OBOkIzjy/uxwrBUlE3/GyAxtadOAWIbJi29aK6CcE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=J0X2Lhc+IFza1a3io9W8iB70iU8cJFMq0fyPGwljXNOYSLvpshRcu5kJbRYJgjvX559dbtbYDzQJ6Q3oYuquooP5aGJuilBALMTn8jUPCtoblQUrCnsQWrQkfAqh6lD/1pa/IGt4gZEpiVJLlSJb348CyBi1RR2qZBSh3wYNsDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fqei0JOX; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vl8qJ/lr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772890702; x=1804426702;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PqbtgbG+t3VigQKYJJfr6c/17wbVG9irva+I3YjSaAo=;
-  b=Vl8qJ/lrYJuBuzODcs0wm3G8U22iTgGPXknf/s7hMtQ9bYKkWR2ZwtmA
-   NW24l2ab5tlozGFW5F+fxL7642G7Z/xs0m62GqtxxxgoKoG8GU1EEVrfc
-   CgzzFW648PBDM5fcHLX1s2MuXPUdHMYTY8GCrVp5C6I0Vr3ThH6VcHdrL
-   ofP8sicVwNwWV4zL+rDqceslCrSXGKXpfq+kophm1dga8GoG5kROmgDbv
-   VTL5PaYFq7DGuCYrMMSes5F15Pd6XWQ4K44pENw9f7D1PHEgacGAwHeqI
-   pmH1FLWrl37RdcAjcMgZDCMrQcXAvWgWcCYabdwVmR1V3Sf6BdBiuHk0x
-   w==;
-X-CSE-ConnectionGUID: 2LRx90BcSduPIcJrJ2M5Tw==
-X-CSE-MsgGUID: 1vmEnsamQZSOlRBdyOATSg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="91554261"
-X-IronPort-AV: E=Sophos;i="6.23,106,1770624000"; 
-   d="scan'208";a="91554261"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 05:38:21 -0800
-X-CSE-ConnectionGUID: bhKrMhpsQeueIQEugd8exw==
-X-CSE-MsgGUID: /Hgor2FcR1ag+M7FQyfU8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,106,1770624000"; 
-   d="scan'208";a="218432650"
-Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 07 Mar 2026 05:38:18 -0800
-Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vyrrC-0000000021t-1H55;
-	Sat, 07 Mar 2026 13:38:14 +0000
-Date: Sat, 7 Mar 2026 21:37:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>, David Ahern <dsahern@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kui-Feng Lee <thinker.li@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>, Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org
-Subject: Re: [PATCH v1 net 2/2] ipv6: Don't remove permanent routes with
- exceptions from tb6_gc_hlist.
-Message-ID: <202603072124.nNhJgNnw-lkp@intel.com>
-References: <20260307024709.718395-3-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fqei0JOX"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-829a568f3ccso746588b3a.0
+        for <llvm@lists.linux.dev>; Sat, 07 Mar 2026 06:42:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772894539; x=1773499339; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6QA6JTgkCmC8RnKP+cAmYpuoERGcQQmKSYmaGYS81ag=;
+        b=Fqei0JOXNG2cWDl3CBS+hoS/MikgmrwFC/hW70DZxMq0U78IOvJazllRSorrFom12X
+         aEiGT5q/iswTKN5pbTDEznL/z42cUAlyWtB1ibu1JSNHXNNa9D2F+0Kai5169+RLhg4x
+         WVc4LLXQirEguOPKoQsASkaLt7hqbE986JfD5JFgA3R/idzdlHCZGS5YClRetX5DW6cR
+         MLhCUpePcQy7Fxx09E6lynWhIcfKxg7zHiJT3/idkL2UJE/1CjksoOKDzn2W9N5mxouz
+         PiEn4AuJNOi43ZeStmWp4yq8RDY16XYErfyqiYmabNZhEQ+oU2fTZa0ZGk5UVNw7OSfq
+         cCgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772894539; x=1773499339;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6QA6JTgkCmC8RnKP+cAmYpuoERGcQQmKSYmaGYS81ag=;
+        b=azS6QyN1pJpI5PI2Ck/kmFJX6fv1j82GUkaZ/egRnCWQfb8DDSJkLgEguUl13MAkPf
+         oLovddPUvLJEpyXmQ+UKbOp94AzUrHP9GmbVLy5CAw6UT8WCSzgWze76vIxtTThHNmXX
+         kGokYHRAT5LNKj+c57i6NLqTTuakMV51/+sNCGtOVBWblpaTpCmiqY8LvlwXOA7okPkG
+         4obZk5op43H2bW7MIbVo7pudLfbpvJOutzvO5mPghXCCZF/7Kkkfo0IcPKW/Ial7yo/b
+         w2MtEm/XxzeGU4kid9pRUPcj99e34j2Tq6Yg2fslZrKNmBiVswfKrkmXLUiWCMBDy5xJ
+         8GrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVy8TSG2UhY0kxi68Ew6fNunub5iNtWPUvTpWb45WjnyYy7sB1XR1+0qliOBj2UD33TXppS@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy1ltMw47ey0MbnltzMCPwCtHlTsvzIzc3KY8sjQTf5fCmJl3m7
+	YQQ+tLNCIH4Swx/YmOVM56M88UOT1sE8RepHHdfIg13sUP/7Hc+DNNp0
+X-Gm-Gg: ATEYQzzDhJajRKv3Ag5PiOLq2JMaMAAKYWZZ4oDzvIHfb1jk5gpkXnJ5AYSgvqAwhAg
+	SuX8881zVI4P7a5KUSSrLV9sNsetOOiF/ACgku0OHYtJ7ndiTVO09f4JzA1u/UOL8JRpB34qhql
+	3uS+o0hrG2YvYcPTN4hif1+2ESYetxg7Inn0sog7L75bZXROzWYqsJXDLupkavUuqKsOYd3n7v/
+	ffQEB8CakN7+A8XLmbMO9IokCvltwsV0suSSEFszDNSOPUQ09izSjB9WX1ezWVVPeA//jOqqGp2
+	TrgwHCq2yDOjfCH7LcR5C0ETlIWpaBYy4j96eegs7JQAosoEm2KjHG2uBNewIWTSMnJqp23B/JJ
+	GipHw+fgS34G0QwJRSkeySyIhex1+XyQbKsD3wC1hmnhuXLL2IOQHo0js+PU3VnLtkrj4YA6VdO
+	QXaqUSlFzakYJ68RF9zgwPmvSBpn/kDInCzg+cKEr3Bm4=
+X-Received: by 2002:a05:6a00:1815:b0:821:8492:7f66 with SMTP id d2e1a72fcca58-829a2ded871mr4982644b3a.22.1772894538988;
+        Sat, 07 Mar 2026 06:42:18 -0800 (PST)
+Received: from DESKTOP-3LEPQG8.localdomain ([119.28.20.50])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829a48b2c41sm4778981b3a.54.2026.03.07.06.42.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Mar 2026 06:42:18 -0800 (PST)
+From: Xie Yuanbin <qq570070308@gmail.com>
+To: rppt@kernel.org,
+	akpm@linux-foundation.org
+Cc: Liam.Howlett@oracle.com,
+	david@kernel.org,
+	justinstitt@google.com,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	ljs@kernel.org,
+	llvm@lists.linux.dev,
+	mhocko@suse.com,
+	morbo@google.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	qq570070308@gmail.com,
+	surenb@google.com,
+	vbabka@kernel.org
+Subject: Re: [PATCH] mm: optimize once judgment with clang
+Date: Sat,  7 Mar 2026 22:41:35 +0800
+Message-ID: <20260307144135.380683-1-qq570070308@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <aavd4hoAO1DFLuJP@kernel.org>
+References: <aavd4hoAO1DFLuJP@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260307024709.718395-3-kuniyu@google.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Kuniyuki,
+On Sat, 7 Mar 2026 10:12:18 +0200, Mike Rapoport wrote:
+> On Sat, Mar 07, 2026 at 02:54:04PM +0800, Xie Yuanbin wrote:
+>> commit 242b872239f6a7deacbc ("include/linux/once_lite.h: fix judgment in
+>> WARN_ONCE with clang") helps optimize performance and size under the
+>> clang compiler, but the modification is not complete.
+>
+> How much does it actually optimize for size?
 
-kernel test robot noticed the following build errors:
+Basing on commit a0ae2a256046c0c5d377 ("Add linux-next specific
+files for 20260306"), compiler "Debian clang version 21.1.8 (5)",
+arm64 default defconfig, and setting CONFIG_CC_OPTIMIZE_FOR_SIZE=y,
+the size result is:
+|                                    | size     |
+|                                   -|         -|
+| Image.gz                           | 14256146 |
+| size of ".text" section in vmlinex | 17035264 |
 
-[auto build test ERROR on net/main]
+Basing on above, revert the commit 242b872239f6a7deacbc
+("include/linux/once_lite.h: fix judgment in WARN_ONCE with clang"),
+and build again:
+|                                    | size            |
+|                                   -|	              -|
+| Image.gz                           | 14258152(+2006) |
+| size of ".text" section in vmlinex | 17039360(+4096) |
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/ipv6-Remove-permanent-routes-from-tb6_gc_hlist-when-all-exceptions-expire/20260307-104803
-base:   net/main
-patch link:    https://lore.kernel.org/r/20260307024709.718395-3-kuniyu%40google.com
-patch subject: [PATCH v1 net 2/2] ipv6: Don't remove permanent routes with exceptions from tb6_gc_hlist.
-config: powerpc-currituck_defconfig (https://download.01.org/0day-ci/archive/20260307/202603072124.nNhJgNnw-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c32caeec8158d634bb71ab8911a6031248b9fc47)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260307/202603072124.nNhJgNnw-lkp@intel.com/reproduce)
+> Note that performance is really not critical here because we are already
+> dealing with slow path of debug code.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603072124.nNhJgNnw-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from net/core/sock.c:133:
-   In file included from include/net/xfrm.h:26:
->> include/net/ip6_fib.h:557:35: error: no member named 'ipv6' in 'struct net'
-     557 |         gc_args.timeout = READ_ONCE(net->ipv6.sysctl.ip6_rt_gc_interval),
-         |                                     ~~~  ^
->> include/net/ip6_fib.h:557:35: error: no member named 'ipv6' in 'struct net'
-     557 |         gc_args.timeout = READ_ONCE(net->ipv6.sysctl.ip6_rt_gc_interval),
-         |                                     ~~~  ^
->> include/net/ip6_fib.h:557:35: error: no member named 'ipv6' in 'struct net'
-     557 |         gc_args.timeout = READ_ONCE(net->ipv6.sysctl.ip6_rt_gc_interval),
-         |                                     ~~~  ^
->> include/net/ip6_fib.h:557:35: error: no member named 'ipv6' in 'struct net'
-     557 |         gc_args.timeout = READ_ONCE(net->ipv6.sysctl.ip6_rt_gc_interval),
-         |                                     ~~~  ^
->> include/net/ip6_fib.h:557:35: error: no member named 'ipv6' in 'struct net'
-     557 |         gc_args.timeout = READ_ONCE(net->ipv6.sysctl.ip6_rt_gc_interval),
-         |                                     ~~~  ^
->> include/net/ip6_fib.h:557:35: error: no member named 'ipv6' in 'struct net'
-     557 |         gc_args.timeout = READ_ONCE(net->ipv6.sysctl.ip6_rt_gc_interval),
-         |                                     ~~~  ^
->> include/net/ip6_fib.h:557:35: error: no member named 'ipv6' in 'struct net'
-     557 |         gc_args.timeout = READ_ONCE(net->ipv6.sysctl.ip6_rt_gc_interval),
-         |                                     ~~~  ^
-   7 errors generated.
-
-
-vim +557 include/net/ip6_fib.h
-
-   548	
-   549	static inline void fib6_may_remove_gc_list(struct net *net,
-   550						   struct fib6_info *f6i)
-   551	{
-   552		struct fib6_gc_args gc_args;
-   553	
-   554		if (hlist_unhashed(&f6i->gc_link))
-   555			return;
-   556	
- > 557		gc_args.timeout = READ_ONCE(net->ipv6.sysctl.ip6_rt_gc_interval),
-   558		gc_args.more = 0,
-   559	
-   560		fib6_age_exceptions(f6i, &gc_args, jiffies);
-   561	}
-   562	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+It seems that WARN_ON_ONCE_GFP() is not affected by in CONFIG_DEBUG_VM,
+and it is used in __alloc_frozen_pages_noprof(), which seems to be a hot
+path.
