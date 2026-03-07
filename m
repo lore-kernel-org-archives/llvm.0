@@ -1,136 +1,158 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E8328852B;
-	Sat,  7 Mar 2026 06:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE418479
+	for <llvm@lists.linux.dev>; Sat,  7 Mar 2026 06:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772864690; cv=none; b=gkDthOH4UaehiQOSC3zHd3tYxJveD020IyaaTc+r6JIPoJX1VmLN9cagLmyobFxolBtR+FmBklnnYFY7FsVdJacCQTgelpfSSLwhJorxXAx/senzfzkX6pbk8QR7TrzY7WsJb4GwB7ohE9idNIC0pWcN7ZrIbSmSr86mh+mRMFE=
+	t=1772866464; cv=none; b=uqtnhRm7DcoxAugMZ2vuTens9/PEOm21fi5Row2ZsatgBs+jBaBZ+T/oSIsyuM922rEXzDrsFjRoeBCqPxg0daJsKtvtw2aAecB741vCq+uUhxHlhq1jiqAOLg9BlRXyESMsoOynjETt/AP6a+Or9/Nt4DnvbcWQVVPNm1TcBCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772864690; c=relaxed/simple;
-	bh=F1p8d40hA31dsgxW43gX/RjftpDQ5kE1wlQB1LtBUVk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J5PXohNadGtxbUtEwQSq+Yo2HsYTObgAZawy8GdFDEMxhmqKYtlA+L4usCSDnoxX3cxSGX6Ih3hP/VoH4FqBgm7QsKNbXdyrggJCiyQ65INxuNfNzCoIP10AG/Aj0RTYwxYdPtaJ6sraFXGrJMyJJPpDcU34S4Hj5me/IXL67bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jj4+fsry; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772866464; c=relaxed/simple;
+	bh=bP6c3sT+V4RHEwFQm5V0XUbBDPOTQenKAaYyhZdLacw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ewGoBfx4N1nkKysQpwfdvgqelyV4jgivh0oE36Xol3PKpJR/tzzb8WBpFOWInY2Q9xyHoVBBpZ8tkLA73O7JEr57H3U2x3kW/DqRTgGljdwa/PczinrxPv5FAY8hkz9IYjfV4809VCUIbpLuoqx4xHi5oQBOjSAjqpj6N4s4KZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UMlrOQoe; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jj4+fsry"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772864689; x=1804400689;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F1p8d40hA31dsgxW43gX/RjftpDQ5kE1wlQB1LtBUVk=;
-  b=Jj4+fsryRBldT02RqppuiYJqF64VHmsKu1MhOSOv9kE25NFRFPEy67SL
-   g+OijG9RzjQmjSbQ18od+zP3NoQnv/NIbj0aCARv5gzBvSNM/LAEhkOoJ
-   +wKSJAwTizPS3PBRTovGEa55uwxiwMtwXFLRYtt35IKzNFoVPsaiEPHiM
-   UVU2C6r1wRmbrWGCe7Bp7vXaMcamy3Z1qa/ACJndpB7HdJKw8YLduE9PB
-   Q0GwpqJaS4fTwmkC8MC8xRZQ4Xbd1SJHwdydCTPDP93p2h9NOz29j3Mg2
-   VlfBAVcEOs5EJgeoAvjmWThcqiEBPZs5B2qMdfVVQ/4gJJ4maia+oObZ0
-   g==;
-X-CSE-ConnectionGUID: qCMJHdbLSf+WX+kMYwId7w==
-X-CSE-MsgGUID: fHpnhb8nQjmN3Ga9i8ylWA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11721"; a="91543752"
-X-IronPort-AV: E=Sophos;i="6.23,106,1770624000"; 
-   d="scan'208";a="91543752"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2026 22:24:48 -0800
-X-CSE-ConnectionGUID: YXjD98BGTLmzOfKlRnE4Vg==
-X-CSE-MsgGUID: TfRVbod+Q0us5b9MlmFjzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,106,1770624000"; 
-   d="scan'208";a="218378244"
-Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 06 Mar 2026 22:24:46 -0800
-Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vyl5f-000000001lR-3lFy;
-	Sat, 07 Mar 2026 06:24:43 +0000
-Date: Sat, 7 Mar 2026 14:24:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] PCI: Work around CXL Port PM Init failure when ACS
- SV enabled
-Message-ID: <202603071429.J91G5AVd-lkp@intel.com>
-References: <20260306195232.388814-1-fabio.m.de.francesco@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UMlrOQoe"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ae4d48dc2fso29324585ad.3
+        for <llvm@lists.linux.dev>; Fri, 06 Mar 2026 22:54:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772866462; x=1773471262; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CFh5xzf9mXTWKL8wgZ/1CT8NM6bT0JUa5sch2tV0MvY=;
+        b=UMlrOQoeOAGCq2H6uScpH5TRucXc7TdUFsN7JWu9p62w9aGdcil7cgzZNGTJurWLHs
+         dn3JcO3vzcoEYXuumxpoHxf/DXroLe18BmQswg5/LyWmsIZFN+IqGnOaWi90qMsBKA2/
+         c5KsMx0gvsZHxTKwFi5HatJNFyT4H6nnDUSpcZj+0RqMIL0rfQUIRZrJRdMeSL1qcvho
+         Jgx4VvsO40GlEnMICLyAFKBFr16zrweND/K7yKLha4C+HpnwFsynZ5CKyaY/o9cVYGc6
+         4n7rWWWhb5uXblrrPGEek3E6QmbyLlwYD/e5UQNBT4ipkrDjuUAreEv93J7Yc6Yh8IaZ
+         b35w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772866462; x=1773471262;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CFh5xzf9mXTWKL8wgZ/1CT8NM6bT0JUa5sch2tV0MvY=;
+        b=bT/KbSYfq1nv8ifjfgDKa8p9yigP/ZUR+BfWAIV3B906Z1izca920/AAJdV9DVDzfT
+         s5OVFYXpMFSmZfj07n+6b0WXtECh3Z2rf+WpYPXxHZ5a+NtgO2ASlULBUm1lM7E3h6p2
+         q9HPIhf3VOAW2ebKM2SwzU1iv/YJIZ6cbUZyZ1ZzGhFq8QtysvyIwWityrPhWN/ACbdW
+         qR0kuM+NdiBbOtrHqzVSovPpLSKBroqCjEmnkLH4gNEgy9dscw+WbTW8JxSusAf4IMke
+         2pNiOGdx0uxJliy91kB2MUmzCB/RzhBq+y6yQu7zcZkDv9v8hso1WL3dbvuFTrDLEjO1
+         3IJg==
+X-Forwarded-Encrypted: i=1; AJvYcCXEFH5Qumb3MDXS+C0JfYbIJXZ4XGq+uWUGRRWCc2JL9XUJn4lnTRqXgWjYhrwUz3vLCtpF@lists.linux.dev
+X-Gm-Message-State: AOJu0YxvKVCz2ldCUnl4BuBDRw9xn/B2laNKeGjYecwMsKDpSfBTWdvi
+	G+5TjhtYyg/CzoHnbooaHVbdH7ERxhc0Wn+fql2tWvgv4k5g+rwfzzHD
+X-Gm-Gg: ATEYQzyJSIeX1dmouxJ3aNoakR1dKlS4rYZPEGlZ34KbqCZ/oyRHKd7f6GQMCkcjNsd
+	qkOB0uZ4O++LnB5373EfWNBoLqIoZZA29E0cSFYkqXZsSDWBlj56cCtmPZbKr5VvHCj73e4UFCw
+	P0KbT+j6tHPufK4YVWSsUptkTOlcC/dv2InIKXv/TOpCfLT+tEytDa6YRCBRaxmmobUICCwSa3k
+	0pzUmXLRmp13XJ1c7+iNqnFmUFrJ8TjDFKlimQ9jwG724PxZeMk4oO1rdBHEM3hILSyV+ABd5eN
+	jM5ZHOfWTb6KdEAM50ctldyfBNdJsEenMUIFlEgEZNIClyAuGl2J9DhlkSv3h9ghX+TxBkDM9X+
+	BVZx/JLkBzCO0xWs0iIB4ZUKG2SPz9xqLAOjX6VY50hzpKePq0NjLB87CxqV4+ZxIPa+GlWzEIb
+	ad9ikwnkjYOsPtUc8/4mKplbxF1M1P18121lJ4RoUAjZs=
+X-Received: by 2002:a17:903:120f:b0:2ae:670e:309f with SMTP id d9443c01a7336-2ae824f4d5fmr46909505ad.34.1772866462157;
+        Fri, 06 Mar 2026 22:54:22 -0800 (PST)
+Received: from DESKTOP-3LEPQG8.localdomain ([119.28.20.50])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83e77197sm41388995ad.20.2026.03.06.22.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2026 22:54:21 -0800 (PST)
+From: Xie Yuanbin <qq570070308@gmail.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	Liam.Howlett@oracle.com,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com
+Cc: linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Xie Yuanbin <qq570070308@gmail.com>
+Subject: [PATCH] mm: optimize once judgment with clang
+Date: Sat,  7 Mar 2026 14:54:04 +0800
+Message-ID: <20260307065405.37473-1-qq570070308@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260306195232.388814-1-fabio.m.de.francesco@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Fabio,
+commit 242b872239f6a7deacbc ("include/linux/once_lite.h: fix judgment in
+WARN_ONCE with clang") helps optimize performance and size under the
+clang compiler, but the modification is not complete.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Port the modification to WARN_ON_ONCE_GFP(), VM_WARN_ON_ONCE_PAGE(),
+VM_WARN_ON_ONCE_FOLIO(), VM_WARN_ON_ONCE_MM() and VM_WARN_ON_ONCE_VMA().
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus cxl/next linus/master v7.0-rc2 next-20260305]
-[cannot apply to cxl/pending]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Xie Yuanbin <qq570070308@gmail.com>
+---
+ include/linux/mmdebug.h | 8 ++++----
+ mm/internal.h           | 3 ++-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/PCI-Work-around-CXL-Port-PM-Init-failure-when-ACS-SV-enabled/20260307-035826
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20260306195232.388814-1-fabio.m.de.francesco%40linux.intel.com
-patch subject: [RFC PATCH] PCI: Work around CXL Port PM Init failure when ACS SV enabled
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260307/202603071429.J91G5AVd-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c32caeec8158d634bb71ab8911a6031248b9fc47)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260307/202603071429.J91G5AVd-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603071429.J91G5AVd-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pci/pci.c:4883:6: warning: no previous prototype for function 'cxl_sbr_masked' [-Wmissing-prototypes]
-    4883 | bool cxl_sbr_masked(struct pci_dev *dev)
-         |      ^
-   drivers/pci/pci.c:4883:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    4883 | bool cxl_sbr_masked(struct pci_dev *dev)
-         | ^
-         | static 
-   1 warning generated.
-
-
-vim +/cxl_sbr_masked +4883 drivers/pci/pci.c
-
-  4882	
-> 4883	bool cxl_sbr_masked(struct pci_dev *dev)
-  4884	{
-  4885		u16 dvsec, reg;
-  4886		int rc;
-  4887	
-  4888		dvsec = cxl_port_dvsec(dev);
-  4889		if (!dvsec)
-  4890			return false;
-  4891	
-  4892		rc = pci_read_config_word(dev, dvsec + PCI_DVSEC_CXL_PORT_CTL, &reg);
-  4893		if (rc || PCI_POSSIBLE_ERROR(reg))
-  4894			return false;
-  4895	
-  4896		/*
-  4897		 * Per CXL spec r3.1, sec 8.1.5.2, when "Unmask SBR" is 0, the SBR
-  4898		 * bit in Bridge Control has no effect.  When 1, the Port generates
-  4899		 * hot reset when the SBR bit is set to 1.
-  4900		 */
-  4901		if (reg & PCI_DVSEC_CXL_PORT_CTL_UNMASK_SBR)
-  4902			return false;
-  4903	
-  4904		return true;
-  4905	}
-  4906	EXPORT_SYMBOL_NS_GPL(cxl_sbr_masked, "CXL");
-  4907	
-
+diff --git a/include/linux/mmdebug.h b/include/linux/mmdebug.h
+index ab60ffba08f5..a167c5aa525e 100644
+--- a/include/linux/mmdebug.h
++++ b/include/linux/mmdebug.h
+@@ -60,7 +60,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+ 	static bool __section(".data..once") __warned;			\
+ 	int __ret_warn_once = !!(cond);					\
+ 									\
+-	if (unlikely(__ret_warn_once && !__warned)) {			\
++	if (unlikely(__ret_warn_once) && unlikely(!__warned)) {		\
+ 		dump_page(page, "VM_WARN_ON_ONCE_PAGE(" __stringify(cond)")");\
+ 		__warned = true;					\
+ 		WARN_ON(1);						\
+@@ -80,7 +80,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+ 	static bool __section(".data..once") __warned;			\
+ 	int __ret_warn_once = !!(cond);					\
+ 									\
+-	if (unlikely(__ret_warn_once && !__warned)) {			\
++	if (unlikely(__ret_warn_once) && unlikely(!__warned)) {		\
+ 		dump_page(&folio->page, "VM_WARN_ON_ONCE_FOLIO(" __stringify(cond)")");\
+ 		__warned = true;					\
+ 		WARN_ON(1);						\
+@@ -91,7 +91,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+ 	static bool __section(".data..once") __warned;			\
+ 	int __ret_warn_once = !!(cond);					\
+ 									\
+-	if (unlikely(__ret_warn_once && !__warned)) {			\
++	if (unlikely(__ret_warn_once) && unlikely(!__warned)) {		\
+ 		dump_mm(mm);						\
+ 		__warned = true;					\
+ 		WARN_ON(1);						\
+@@ -102,7 +102,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+ 	static bool __section(".data..once") __warned;			\
+ 	int __ret_warn_once = !!(cond);					\
+ 									\
+-	if (unlikely(__ret_warn_once && !__warned)) {			\
++	if (unlikely(__ret_warn_once) && unlikely(!__warned)) {		\
+ 		dump_vma(vma);						\
+ 		__warned = true;					\
+ 		WARN_ON(1);						\
+diff --git a/mm/internal.h b/mm/internal.h
+index 6e1162e13289..52367f52d623 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -93,7 +93,8 @@ struct pagetable_move_control {
+ 	static bool __section(".data..once") __warned;			\
+ 	int __ret_warn_once = !!(cond);					\
+ 									\
+-	if (unlikely(!(gfp & __GFP_NOWARN) && __ret_warn_once && !__warned)) { \
++	if (unlikely(__ret_warn_once) && !(gfp & __GFP_NOWARN) &&	\
++	    unlikely(!__warned)) {					\
+ 		__warned = true;					\
+ 		WARN_ON(1);						\
+ 	}								\
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
