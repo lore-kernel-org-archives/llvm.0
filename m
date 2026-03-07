@@ -1,125 +1,75 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0ADA33C52A;
-	Fri,  6 Mar 2026 23:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44C0322A3F;
+	Sat,  7 Mar 2026 01:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772840921; cv=none; b=rXu7lBD/2YeLVJAy8uGoGp4yL4HUScLSHw7MB4PfNi7hwM0nuJ74YJFkXC1m9eAnJOadazACArcNFfQRMtpDRZFQE/WuomHz6IqsnEpbPT8vSwte1WesJYeXmRnZ0ZkdNjjYXp2+b6XDdQKe9omMHXkllRwqeGS9/ZHkppU/P7E=
+	t=1772848507; cv=none; b=ekVYBQA0HlA87GpTueQHmP0Yy4KtqoSZoSy3qjRo5cWrKQY5O84HLJxvSe0qse/Fvn/l1xAiYNUoIgmkUmKR0lxZKzIXWkvGw4wadFgTKAH+gVKsuJwnlBGtO1uulPs0NbDAzeZ9rnarh15Yn5sa7ZiCncGo7Muw03Zb5ykL6/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772840921; c=relaxed/simple;
-	bh=Cumo5affjPLcsVDjRUQxVwzoQguZomb+2nAYaG1f9XY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JTCNQk63EiFbp3DHeM+iy8ajeTeYqpg9npI8D4mbnGir82dDafm4RjrXmcyIfVvcKg+DKTGDtzELlKdU+jEjursagRNJjj+vrRpv4Hx12ksHlFZkovkCRNkQe6XwggKQiW0WFtmPm1O2EFnJgMeH/WJZ8gBHjgREDWy3D0toc6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=PioK8n1G; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1772848507; c=relaxed/simple;
+	bh=XVN3nH4qg+D4tMd3gcdzpMvUjkQbzscyxApzwJOekuk=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=VuCtUUdO/EsA3DQjGodhZscMedaQdJ4jmua6StVVSghiYXR0nnhAgayl28Lrr9b1mCyZbxrYzK0DmhIDgTFbfiBmLkO/6RknSG2leb3CGSY6sa4hlHk9qE8E2eheWWvZ7HWCeKhBKbrPsrswLNK3t2GBJMX+4Wzd89vONSXmHHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=BPyu2yUv; arc=none smtp.client-ip=220.197.31.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="PioK8n1G"
-Received: from [172.27.2.41] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 626NVQj92208026
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 6 Mar 2026 15:31:58 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 626NVQj92208026
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026022301; t=1772839922;
-	bh=+EuyHHVP1ezysh+DOMChYpQ6YLA93nDMuTUQuNAbUKI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PioK8n1GDOCMylG5Zt2121yBqaQjmuAgAG8ArmoqbSGk+AY2HjiUf0EtOT1DsexRY
-	 3XzpMhpcVWr9RPSEgwVE9ESR7uck6X+0Brpr8WoubZ+TlXmlH4lDGa0CVViVEYVOPr
-	 a2U1eLnne4Jq8YkGPdE7tatxcJ2Gd+LMg66XDUlWERyyYKh8whYexkpditNEyz4ILx
-	 yckiGOkMmhcxGYFKzQD0ff8pydvHcvjyUktvDHaVTIquZDk64YCElixBnK+5hWClOa
-	 uRJidGVd5gvOOIeokQ5EcbFwoFLXBWjUIyo+ZDse7szoWgdzIXdm2JW1VkFzyB6i6x
-	 eQ3pvQwa4welw==
-Message-ID: <75d0ca29-b227-49c1-8204-b305f64b009b@zytor.com>
-Date: Fri, 6 Mar 2026 15:31:21 -0800
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="BPyu2yUv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=U6DoWm37H++4dH+vDQoXURRD04KeM3Sveq3hB5ij1fY=;
+	b=BPyu2yUvb1NNgKq+H7HUk4yBtTsa5fs6+u32YRqUGUOz9G2B4ToJP6hxxbIkbQ
+	thvrdpStum0Fgz6CW5fCvwj6idg4Yb0g5PWjLGIx8oC3SUQZBaSG8KcJvcnTLv3t
+	vhJ9enPsSj12+Oiq83LZQdKO5zsQpcH2MzS+8yDmG3Hyo=
+Received: from ehlo.thunderbird.net (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3H_pLhatp4CDSBQ--.64382S2;
+	Sat, 07 Mar 2026 09:54:20 +0800 (CST)
+Date: Sat, 07 Mar 2026 09:54:18 +0800
+From: Zhao mengmeng <zhaomzhao@126.com>
+To: Andrea Righi <arighi@nvidia.com>
+CC: tj@kernel.org, void@manifault.com, changwoo@igalia.com, nathan@kernel.org,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
+ emil@etsalapatis.com, sched-ext@lists.linux.dev,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+ zhaomengmeng@kylinos.cn
+Subject: Re: [PATCH 2/3] tools/sched_ext: Update scx enum autogens
+User-Agent: Thunderbird for Android
+In-Reply-To: <aarnUtBe2klutXLm@gpd4>
+References: <20260306073110.229595-1-zhaomzhao@126.com> <20260306073110.229595-3-zhaomzhao@126.com> <aarnUtBe2klutXLm@gpd4>
+Message-ID: <7C4C6EC7-258F-4EB4-ABEF-89897AC56D9E@126.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] kbuild: Switch from '-fms-extensions' to
- '-fms-anonymous-structs' when available
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-efi@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20260223-fms-anonymous-structs-v1-0-8ee406d3c36c@kernel.org>
- <01433066-eb9b-4a96-8d7f-794af941d365@zytor.com>
- <20260306231705.GD2746259@ax162>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20260306231705.GD2746259@ax162>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:_____wD3H_pLhatp4CDSBQ--.64382S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZF45urW8XFy3Cw15JrW3Awb_yoWxurbEkw
+	45Zr1kZa98Xwn8WrWYkrZ3GrW0krnxJ3yrXrWaqrW7Zr15ZFykAayqyrZY9rWfWw4Iyr42
+	yF1kZwn0yF13tjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRR1CJJUUUUU==
+X-CM-SenderInfo: 52kd0zp2kd0qqrswhudrp/xtbBqwy5MWmrhUyAkAAA30
 
-On 2026-03-06 15:17, Nathan Chancellor wrote:
-> On Thu, Mar 05, 2026 at 03:43:29PM -0800, H. Peter Anvin wrote:
->> Question: does clang allow this with __extension__, or only if the option is
->> on the command line?  It would be desirable in the long run if both clang and
-> 
-> It looks like only on the command line:
-> 
->   https://godbolt.org/z/zrE766obe
-> 
->> gcc would allow this with __extension__, as that would be required to use it
->> in uapi headers (at least without some doable-but-nontrivial preprocessing,
->> which might be worthwhile to do anyway...)
-> 
-> I agree that would be desirable but wouldn't that change how
-> __extension__ works? As far as I can tell from reading GCC's
-> documentation [1], __extension__ just supresses warnings from -pedantic
-> and such, it does not actually enable a used extension if it conflicts
-> with whatever -std= value is passed?
-> 
-> [1]: https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html
-> 
+On March 6, 2026 10:40:18 PM GMT+08:00, Andrea Righi <arighi@nvidia=2Ecom> =
+wrote:
+>On Fri, Mar 06, 2026 at 03:31:09PM +0800, Zhao Mengmeng wrote:
+>> From: Zhao Mengmeng <zhaomengmeng@kylinos=2Ecn>
+>=2E=2E=2E
+>> @@ -46,5 +45,5 @@
+>>  	SCX_ENUM_SET(skel, scx_enq_flags, SCX_ENQ_LAST); \
+>>  	SCX_ENUM_SET(skel, scx_enq_flags, SCX_ENQ_CLEAR_OPSS); \
+>>  	SCX_ENUM_SET(skel, scx_enq_flags, SCX_ENQ_DSQ_PRIQ); \
+>> -	SCX_ENUM_SET(skel, scx_deq_flags, SCX_DEQ_SCHED_CHANGE); \
+>> +	SCX_ENUM_SET(skel, scx_enq_flags, SCX_DEQ_SCHED_CHANGE); \
+>
+>This is wrong, SCX_DEQ_SCHED_CHANGE is moved from scx_deq_flags to
+>scx_enq_flags=2E
+>
+>-Andrea
 
-Maybe it does, but it's explicit purpose is to allow code to be compiled with
-a -std= setting lower than the system libraries.
-
-I was a little surprised to see that -std=c90 doesn't actually enforce C90
-compatibility; even with -Wall -Wextra it requires -pedantic to issue
-warnings; the same seems to apply to -std=c99 for at least some features that
-were included in gnu* standards like anonymous structures and unions.
-
-The latter is probably a particular indication about the desirability of this,
-since the extension we are talking about is a relatively obvious extension of
-the anonymous struct/union construct!
-
-It is an incredibly useful thing in ABI headers, because it lets you avoid the
-"copy/macro this entire structure definition into another."
-
-	-hpa
-
-
-
-
+Thanks a lot=2E  I will send a v2 fix=2E
 
