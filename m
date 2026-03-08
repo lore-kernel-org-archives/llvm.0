@@ -1,99 +1,206 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746F629DB9A;
-	Sun,  8 Mar 2026 15:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC65F22A4F8
+	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 16:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772983304; cv=none; b=bAJku8MoSKT6ybnBZ216FBuPeAl67OoDY2TySSvUk3hgHzDMXYtdswacnpKbHoHi5KTK4aFoYkyQ//PDBCdCazY5Ms+WRVKR8Xi8Kem4ciRnsaFyEgItlYy0MhN0GwFXmkkfGSrdUG6myw8MBHHmogSPMjztp6ntRxr6dOHUBA0=
+	t=1772988402; cv=none; b=LJubVvbJ+kgtTdgUoU+uTx4kDAWzUe4N/eKjgbNS0WL3WhYkoBEYLncYFz2YNk0i4hHtJYhqabIwgPzzqIcmiw3P0rGj+Xnj2JcI39RfyB00Uj1w/7Xt3EZkaSWkz4sUlOojdv8vrJ5dnyoKucewf/neCRc90rgznzzyDXPUmrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772983304; c=relaxed/simple;
-	bh=yDzNEqRrRAhvayACf2rMbNqXf3V42o1yRrdEMCoycsM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=FguNbvNUZy2b96UoUJGkBldVdKaeiImqvpaAW8OsicR7ZB5Hx1pEK5uUmOmPgaa+VgmMPzkCzkIcNC1K/YwKvxQpNcUbcHZGZjnjQIS4eMpKCNiTHcwFsvKSjT9NiER+/LhRChVf+4QxuF51SVYN5vJHb39Yrisys4u+66vEkGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a5tGnm/L; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a5tGnm/L"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772983302; x=1804519302;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yDzNEqRrRAhvayACf2rMbNqXf3V42o1yRrdEMCoycsM=;
-  b=a5tGnm/LLgdfgQ/EIzHA2Kix5OIRQeBrM0kDu556JFgbhcZNN1kJpx5C
-   YJKPBspQP7LG7WkzCPK1FgiFkxB1TnIJMeNEW5qMF7p87abOCH+rW5HO0
-   reNj0bVtMLOEms6vqeQhaNixePRrqwkRaj9zFMOhqlX5HokUmoPYz9QdN
-   OoUa4rjCVb4Xm2FqiS47CIs3OZNadXFr50d2aKTnkz3U/itEzXIFvOlU4
-   Ee7bNydUVVs/7S1q+mn2Lhx5Y994z0+GNfikBuLfPG20vplzIBcgKuDeD
-   cITmWUvAeOcUqSpFrXmmOOldn/tiNYj8nKcUGUj+mmht5wW1ttjwtFskc
-   g==;
-X-CSE-ConnectionGUID: vvQAoqRDQg6m38ICzoiMdA==
-X-CSE-MsgGUID: 9FfW3MMMSnCuEHDgLEPOKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="73896563"
-X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="73896563"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2026 08:21:41 -0700
-X-CSE-ConnectionGUID: qRzGCl+iTievQSm43NO+KA==
-X-CSE-MsgGUID: cPPmQvIER3exxhn1Mf0zmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="242533494"
-Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 08 Mar 2026 08:21:39 -0700
-Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vzFwm-000000003CS-46EZ;
-	Sun, 08 Mar 2026 15:21:36 +0000
-Date: Sun, 08 Mar 2026 23:20:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/uapi-ucontext 2/2]
- ./usr/include/asm/ucontext.h:24:37: error: use of undeclared identifier
- 'sigset_t'
-Message-ID: <202603082317.n3Cv4poc-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1772988402; c=relaxed/simple;
+	bh=Tc0lndhA3qp3WkqrTPnPBNSk6pyPwX6QhyRxTEiuDnY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=d/h7T2/1o5G0hF799W6Wt9Dog9AKajsWSdb2SwUr+UShJ6uPzLXreSk0dlkPvsLbakAc8lTTLJotoZex2F7sMH9/HC4O3lHq4TQVzxgujnKhiFvyX7sBMoAWLbdaRDGLvXDV3B+JOW+7IoS6D1DmtU3AKbcemtJEuyQHz2dZe0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B651D1758;
+	Sun,  8 Mar 2026 09:46:26 -0700 (PDT)
+Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8B843F694;
+	Sun,  8 Mar 2026 09:46:24 -0700 (PDT)
+From: Leo Yan <leo.yan@arm.com>
+Subject: [PATCH v3 00/30] tools build: Append -fzero-init-padding-bits=all
+ option
+Date: Sun, 08 Mar 2026 16:46:05 +0000
+Message-Id: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAM2nrWkC/42NXQ6CMBCEr0L22Rq6KjY+eQ9Dmv6ssgm0pEWiE
+ u5u5QQ+fpOZbxbIlJgyXKoFEs2cOYYCh10FrjPhQYJ9YcAamxrxKKYY+6ztk3uv7/zSH0pRc+B
+ JeHfCRlqvrLJQ9mOiUtjct7Zwx3mK6b1dzfhL/7HOKKSw0jin5NnUkq4mDXsXB2jXdf0CBGiwx
+ cAAAAA=
+X-Change-ID: 20260224-tools_build_fix_zero_init-dc5261bd8b8b
+To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
+ James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
+ Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, 
+ Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+ Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+ Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
+ Len Brown <lenb@kernel.org>, 
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+ Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+ Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
+ Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+ Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ Leo Yan <leo.yan@arm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772988384; l=5429;
+ i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
+ bh=Tc0lndhA3qp3WkqrTPnPBNSk6pyPwX6QhyRxTEiuDnY=;
+ b=/7RyLMM/efjUgseU6DFkghtJCkFtN/T0ka5j+jiiuEp7Td6vOngRngWVLncOqQAI8NGl1uWn0
+ sttzYZ4XOv0DoeW3cBuiqE34X3ALthVmG/knEHLBCH7w5mvdla4NVBx
+X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
+ pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/uapi-ucontext
-head:   1a122f38e5ce0abdc67e4dd182a7070244ac7e2f
-commit: 1a122f38e5ce0abdc67e4dd182a7070244ac7e2f [2/2] ucontext
-config: riscv-randconfig-002-20260308 (https://download.01.org/0day-ci/archive/20260308/202603082317.n3Cv4poc-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c32caeec8158d634bb71ab8911a6031248b9fc47)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603082317.n3Cv4poc-lkp@intel.com/reproduce)
+GCC-15 doesn't guarantee that a {0} initializer clears the whole union [1].
+This may cause bugs if data is not intialized properly.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603082317.n3Cv4poc-lkp@intel.com/
+The kernel enabld the -fzero-init-padding-bits=all option to tackle the
+issue, which was merged in commit dce4aab8441d ("kbuild: Use
+-fzero-init-padding-bits=all").
 
-All errors (new ones prefixed by >>):
+This series propagates the same flag to the tools build.  It uses
+tools/scripts/Makefile.include as the central place to add the
+option to EXTRA_CFLAGS and HOST_EXTRACFLAGS for the CC and HOSTCC
+compilers.  Each project under tools/ appends the variables as needed.
 
-   In file included from <built-in>:1:
-   ./usr/include/asm/ucontext.h:16:2: error: unknown type name 'stack_t'
-      16 |         stack_t           uc_stack;
-         |         ^
-   ./usr/include/asm/ucontext.h:17:2: error: unknown type name 'sigset_t'
-      17 |         sigset_t          uc_sigmask;
-         |         ^
->> ./usr/include/asm/ucontext.h:24:37: error: use of undeclared identifier 'sigset_t'
-      24 |         __u8              __unused[1024 / 8 - sizeof(sigset_t)];
-         |                                                      ^~~~~~~~
->> ./usr/include/asm/ucontext.h:35:20: error: field has incomplete type 'struct sigcontext'
-      35 |         struct sigcontext uc_mcontext;
-         |                           ^
-   ./usr/include/asm/ucontext.h:35:9: note: forward declaration of 'struct sigcontext'
-      35 |         struct sigcontext uc_mcontext;
-         |                ^
-   4 errors generated.
+The variable name HOST_EXTRACFLAGS comes from kbuild conventions (see
+Documentation/kbuild/makefiles.rst).
 
+This series is divided into three parts:
+
+  Patches 01 – 04: Preparation before adding the new compiler option.
+                   These patches adjust Makefiles to ensure the newly
+                   introduced option does not cause regressions.
+  Patch 05:        Propagate -fzero-init-padding-bits=all to
+                   EXTRA_CFLAGS and HOST_EXTRACFLAGS for the
+                   CC and HOSTCC compilers, respectively.
+  Patches 06 – 30: Apply EXTRA_CFLAGS and HOST_EXTRACFLAGS in
+                   project Makefiles.
+
+The change has been verified:
+
+Test 1: cross compiling perf with aarch64 GCC-15.2 [2]:
+
+  ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- \
+       make LDFLAGS="-static" -C tools/perf VF=1 NO_JEVENTS=1 \
+       DEBUG=1 V=1 NO_LIBELF=1 NO_LIBTRACEEVENT=1
+
+Test 2: native selftest build on Arm64 machine:
+
+  make -C tools/testing/selftests TARGETS=hid SKIP_TARGETS="" V=1
+
+[1] https://gcc.gnu.org/gcc-15/changes.html
+[2] https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
+
+Signed-off-by: Leo Yan <leo.yan@arm.com>
+---
+Changes in v3:
+- Extended to support cross compilation (Quentin).
+- Link to v2: https://lore.kernel.org/r/20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com
+
+---
+Leo Yan (30):
+      bpftool: Avoid adding EXTRA_CFLAGS to HOST_CFLAGS
+      libbpf: Initialize CFLAGS before including Makefile.include
+      tools: lib: thermal: Initialize CFLAGS before including Makefile.include
+      tools/thermal: Initialize CFLAGS before including Makefile.include
+      tools build: Append -fzero-init-padding-bits=all to extra cflags
+      bpftool: Append extra host flags
+      perf build: Append extra host flags
+      tools/bpf: build: Append extra cflags
+      tools build: Append extra host cflags
+      tools build: Append extra cflags for feature
+      tools: bootconfig: Append extra cflags
+      tools: counter: Append extra cflags
+      tools: dma: Append extra cflags
+      tools: gpio: Append extra cflags
+      tools: hv: Append extra cflags
+      tools: iio: Append extra cflags
+      tools: mm: Append extra cflags
+      tools: nolibc: Append extra cflags
+      tools: objtool: Append extra host cflags
+      tools: power: acpi: Append extra cflags
+      tools: power: x86/intel-speed-select: Append extra cflags
+      tools: sched_ext: Append extra cflags
+      tools: spi: Append extra cflags
+      tools: tracing: Append extra cflags
+      tools: usb: Append extra cflags
+      tools: verification: Append extra cflags
+      selftests/bpf: Append extra cflags
+      selftests/hid: Append extra cflags
+      selftests/nolibc: Append extra cflags
+      selftests/sched_ext: Append extra cflags
+
+ tools/bootconfig/Makefile                      |  1 +
+ tools/bpf/Makefile                             |  1 +
+ tools/bpf/bpftool/Makefile                     |  9 +++++++--
+ tools/build/Makefile                           |  6 ++++--
+ tools/build/feature/Makefile                   |  2 ++
+ tools/counter/Makefile                         |  1 +
+ tools/dma/Makefile                             |  1 +
+ tools/gpio/Makefile                            |  1 +
+ tools/hv/Makefile                              |  1 +
+ tools/iio/Makefile                             |  1 +
+ tools/include/nolibc/Makefile                  |  2 +-
+ tools/lib/bpf/Makefile                         | 16 ++++++++-------
+ tools/lib/thermal/Makefile                     | 16 ++++++++-------
+ tools/mm/Makefile                              |  1 +
+ tools/objtool/Makefile                         |  2 ++
+ tools/perf/Makefile.config                     |  2 +-
+ tools/power/acpi/Makefile.config               |  1 +
+ tools/power/x86/intel-speed-select/Makefile    |  1 +
+ tools/sched_ext/Makefile                       |  1 +
+ tools/scripts/Makefile.include                 | 28 ++++++++++++++++++++++++++
+ tools/spi/Makefile                             |  1 +
+ tools/testing/selftests/bpf/Makefile           |  1 +
+ tools/testing/selftests/hid/Makefile           |  1 +
+ tools/testing/selftests/nolibc/Makefile.nolibc |  3 +++
+ tools/testing/selftests/sched_ext/Makefile     |  1 +
+ tools/thermal/lib/Makefile                     | 16 ++++++++-------
+ tools/tracing/latency/Makefile                 |  1 +
+ tools/usb/Makefile                             |  1 +
+ tools/verification/rv/Makefile                 |  1 +
+ 29 files changed, 93 insertions(+), 27 deletions(-)
+---
+base-commit: 4ae12d8bd9a830799db335ee661d6cbc6597f838
+change-id: 20260224-tools_build_fix_zero_init-dc5261bd8b8b
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Leo Yan <leo.yan@arm.com>
+
