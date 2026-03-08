@@ -1,64 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB466382F3F;
-	Sun,  8 Mar 2026 13:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 713671C8604;
+	Sun,  8 Mar 2026 14:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772975738; cv=none; b=mGMskIstD4XxiZVdtec0uueaHiweKUad37ClHzSg6bEJLaWQ9vbx90oaBdahchzFA19pkA+LRddcAtmAphOkAOaBJjJvAhnnUJpIAG1G3Ogw9VR8pdYSsNdVoVWuVrhG1nnlJNbNj7ymq3jhGG1NHM9inKzQq26yWhSSx5xwtDw=
+	t=1772979465; cv=none; b=ZgP0mXdmCc7dliu/w4sgNxPHpQL8ViNoL4V+6tUyFt1s9OyFU77g+wdPTSLes9vmJt9VCSmwXFoIA/ClYikfFi7wkKidWuDs5kcCGLn/3wQPJFfo1FPRI5CE1E+dw35gMYnbqSajMKPf1gnAOTHsFwXB5eCU9OKRBgoGJzX7vIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772975738; c=relaxed/simple;
-	bh=Noz2yNrHvJsj/QSS3Rm04Lmfig7379E6JfL6LHpvVs4=;
+	s=arc-20240116; t=1772979465; c=relaxed/simple;
+	bh=8qeFutWw+BB4rroxVqdEPs7a3s6Ta8CazCTn6Ie2wzc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m6T0JYu6yaHOoETugV7ywYJCIdlrZzwWYo4979SDu2ApD0kG8AzEsINaXLUz9PYLWmvRc5+mLXjPlBtWtiS6HryNmCFGerWmBAjNfj+q6bf587FmIpJecF5jNgZpY++47iIMas4+58Wqk9WI25ZItjpSTuG/ZEAAfayXN1Zk5k4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e72xK18h; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=lndGp0BPx8QvYPfjRuMNNtzyXSskZ27a4C8/EWTUjkFQw6I4AAI4dRnu4ZiRbMf8Ct+el/Fl3myGGFwoP0RUShlOoNIc0m++xXumiEmo4WkrVL/FNDx/9q6qIRfb3XFA/cIFY+AhYFJOGy+Ar7l2oZOwfoWl4kN2zzsIVI6B2vQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lv0xnwrJ; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e72xK18h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lv0xnwrJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772975736; x=1804511736;
+  t=1772979462; x=1804515462;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Noz2yNrHvJsj/QSS3Rm04Lmfig7379E6JfL6LHpvVs4=;
-  b=e72xK18h9TlWP63tS03LUexJgny53vYw8urloU7dqRAzUjJGLkezjOjj
-   EimKEQCow8Eu87AT8R3q0Xo9ct0X8D8ZTZmXAF25KuWeMeW3eV8RjswJa
-   k9t7di7tzkQamIn9HNyYczAsxFE7+UXf2tnS/hNQlZ1DgGxQZy4EUfJKn
-   idvtK16ZKfP3eFQGS3nqxHJ9uzVcP+Faqx7XR8VoRxG+NWHR/Oo/3+Bdv
-   3ZBWLKqPiP0GYf6DdxPk296EvkFlDpnmJZBnQYURmfS1fcs/slIoKmSze
-   b3IsDHHgwdyuG6D5n214Aa1Mvsdho4qrGzS1g/5mzFHxt6rviNs8dmbfh
-   w==;
-X-CSE-ConnectionGUID: MqNYUSGEQB2SoFjG5af1OQ==
-X-CSE-MsgGUID: oFICffVVRVmv7EyAglEXMg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="73919663"
+  bh=8qeFutWw+BB4rroxVqdEPs7a3s6Ta8CazCTn6Ie2wzc=;
+  b=lv0xnwrJ6/KdS8EV8g9w8V3A3j3yleTceETtPf0UbthsOl3cgeQPVSXE
+   6fpNK4QUw6XqSN8jFAPA3ofQz2arN5kv8I8bAL2fX/mEL2qS13enjblub
+   fNloCe1/TBo3JOecp9m076jW4D7IeNt9pkCHvlp0mh56vBt1NjHr016uf
+   LhJ/nxwYLSoxbYDjDa8geBJGpjo9TE+Viqr4xT776KFipm5IPAPDEaQPQ
+   QQJj/vXkV5LubbX7G2Uaw+bWsdhw/6Hr/iCNougi1WHKfCXshS/JqtGGZ
+   F16wtxtms2345FKK1PwOEs5iB87hMtG0VSP2Wbmt4yZ8oVtKAQbpd1nXa
+   g==;
+X-CSE-ConnectionGUID: 7llR+5R7TPq2cPP2L/k+Xw==
+X-CSE-MsgGUID: g5mTQ79RRxOOPSNN0MgpKg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="77898214"
 X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="73919663"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2026 06:15:36 -0700
-X-CSE-ConnectionGUID: L7JQtB5zTTG7ChH3nJt9fQ==
-X-CSE-MsgGUID: WMLsvv9FTrSCACcXr/dWWg==
+   d="scan'208";a="77898214"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2026 07:17:41 -0700
+X-CSE-ConnectionGUID: vK5RaDZZTU+P8ecYkBrL4g==
+X-CSE-MsgGUID: KN9S+TStSV65E+A7SP3bog==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="249973166"
+   d="scan'208";a="222211592"
 Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 08 Mar 2026 06:15:32 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 08 Mar 2026 07:17:36 -0700
 Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vzDyj-0000000037u-1ijU;
-	Sun, 08 Mar 2026 13:15:29 +0000
-Date: Sun, 8 Mar 2026 21:15:08 +0800
+	id 1vzEwn-000000003AW-3Wna;
+	Sun, 08 Mar 2026 14:17:33 +0000
+Date: Sun, 8 Mar 2026 22:16:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Douglas Freimuth <freimuth@linux.ibm.com>, borntraeger@linux.ibm.com,
-	imbrenda@linux.ibm.com, frankja@linux.ibm.com, david@kernel.org,
-	hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-	svens@linux.ibm.com, kvm@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Alexander Koskovich <AKoskovich@pm.me>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <jesszhan0024@gmail.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	mjrosato@linux.ibm.com, freimuth@linux.ibm.com
-Subject: Re: [PATCH v1 1/3] Add map/unmap ioctl and clean mappings post-guest
-Message-ID: <202603082108.iY5mWhWR-lkp@intel.com>
-References: <20260308030438.88580-2-freimuth@linux.ibm.com>
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexander Koskovich <akoskovich@pm.me>
+Subject: Re: [PATCH 2/2] drm/panel: Add support for Tianma TA066VVHM03 panel
+Message-ID: <202603082210.FAhPnZOe-lkp@intel.com>
+References: <20260308-tianma-ta066vvhm03-v1-2-869fac443b20@pm.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,112 +74,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260308030438.88580-2-freimuth@linux.ibm.com>
+In-Reply-To: <20260308-tianma-ta066vvhm03-v1-2-869fac443b20@pm.me>
 
-Hi Douglas,
+Hi Alexander,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on v7.0-rc2]
-[also build test WARNING on linus/master next-20260306]
-[cannot apply to kvms390/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 11439c4635edd669ae435eec308f4ab8a0804808]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Freimuth/Add-map-unmap-ioctl-and-clean-mappings-post-guest/20260308-110653
-base:   v7.0-rc2
-patch link:    https://lore.kernel.org/r/20260308030438.88580-2-freimuth%40linux.ibm.com
-patch subject: [PATCH v1 1/3] Add map/unmap ioctl and clean mappings post-guest
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260308/202603082108.iY5mWhWR-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603082108.iY5mWhWR-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Koskovich/dt-bindings-display-panel-Document-Tianma-TA066VVHM03/20260308-140525
+base:   11439c4635edd669ae435eec308f4ab8a0804808
+patch link:    https://lore.kernel.org/r/20260308-tianma-ta066vvhm03-v1-2-869fac443b20%40pm.me
+patch subject: [PATCH 2/2] drm/panel: Add support for Tianma TA066VVHM03 panel
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260308/202603082210.FAhPnZOe-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603082210.FAhPnZOe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603082108.iY5mWhWR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603082210.FAhPnZOe-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   arch/s390/kvm/interrupt.c:2478:16: warning: unused variable 'flags' [-Wunused-variable]
-    2478 |         unsigned long flags;
-         |                       ^~~~~
->> arch/s390/kvm/interrupt.c:2578:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    2578 |                 if (kvm_s390_pv_is_protected(dev->kvm)) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/s390/kvm/interrupt.c:2602:9: note: uninitialized use occurs here
-    2602 |         return ret;
-         |                ^~~
-   arch/s390/kvm/interrupt.c:2578:3: note: remove the 'if' if its condition is always false
-    2578 |                 if (kvm_s390_pv_is_protected(dev->kvm)) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2579 |                         mutex_unlock(&dev->kvm->lock);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2580 |                         break;
-         |                         ~~~~~~
-    2581 |                 }
-         |                 ~
-   arch/s390/kvm/interrupt.c:2561:9: note: initialize the variable 'ret' to silence this warning
-    2561 |         int ret, idx;
-         |                ^
-         |                 = 0
-   2 warnings generated.
+>> drivers/gpu/drm/panel/panel-tianma-ta066vvhm03.c:335:7: error: no member named 'dsc_slice_per_pkt' in 'struct mipi_dsi_device'
+     335 |         dsi->dsc_slice_per_pkt = 2;
+         |         ~~~  ^
+   1 error generated.
 
 
-vim +2578 arch/s390/kvm/interrupt.c
+vim +335 drivers/gpu/drm/panel/panel-tianma-ta066vvhm03.c
 
-  2554	
-  2555	static int modify_io_adapter(struct kvm_device *dev,
-  2556				     struct kvm_device_attr *attr)
-  2557	{
-  2558		struct kvm_s390_io_adapter_req req;
-  2559		struct s390_io_adapter *adapter;
-  2560		__u64 host_addr;
-  2561		int ret, idx;
-  2562	
-  2563		if (copy_from_user(&req, (void __user *)attr->addr, sizeof(req)))
-  2564			return -EFAULT;
-  2565	
-  2566		adapter = get_io_adapter(dev->kvm, req.id);
-  2567		if (!adapter)
-  2568			return -EINVAL;
-  2569		switch (req.type) {
-  2570		case KVM_S390_IO_ADAPTER_MASK:
-  2571			ret = kvm_s390_mask_adapter(dev->kvm, req.id, req.mask);
-  2572			if (ret > 0)
-  2573				ret = 0;
-  2574			break;
-  2575		case KVM_S390_IO_ADAPTER_MAP:
-  2576		case KVM_S390_IO_ADAPTER_UNMAP:
-  2577			mutex_lock(&dev->kvm->lock);
-> 2578			if (kvm_s390_pv_is_protected(dev->kvm)) {
-  2579				mutex_unlock(&dev->kvm->lock);
-  2580				break;
-  2581			}
-  2582			mutex_unlock(&dev->kvm->lock);
-  2583			idx = srcu_read_lock(&dev->kvm->srcu);
-  2584			host_addr = gpa_to_hva(dev->kvm, req.addr);
-  2585			if (kvm_is_error_hva(host_addr)) {
-  2586				srcu_read_unlock(&dev->kvm->srcu, idx);
-  2587				return -EFAULT;
-  2588				}
-  2589			srcu_read_unlock(&dev->kvm->srcu, idx);
-  2590			if (req.type == KVM_S390_IO_ADAPTER_MAP) {
-  2591				dev->kvm->stat.io_390_adapter_map++;
-  2592				ret = kvm_s390_adapter_map(dev->kvm, req.id, host_addr);
-  2593			} else {
-  2594				dev->kvm->stat.io_390_adapter_unmap++;
-  2595				ret = kvm_s390_adapter_unmap(dev->kvm, req.id, host_addr);
-  2596			}
-  2597			break;
-  2598		default:
-  2599			ret = -EINVAL;
-  2600		}
-  2601	
-  2602		return ret;
-  2603	}
-  2604	
+   286	
+   287	static int tianma_ta066vvhm03_probe(struct mipi_dsi_device *dsi)
+   288	{
+   289		struct device *dev = &dsi->dev;
+   290		struct tianma_ta066vvhm03 *ctx;
+   291		int ret;
+   292	
+   293		ctx = devm_drm_panel_alloc(dev, struct tianma_ta066vvhm03, panel,
+   294					   &tianma_ta066vvhm03_panel_funcs,
+   295					   DRM_MODE_CONNECTOR_DSI);
+   296		if (IS_ERR(ctx))
+   297			return PTR_ERR(ctx);
+   298	
+   299		ret = devm_regulator_bulk_get_const(dev,
+   300						    ARRAY_SIZE(tianma_ta066vvhm03_supplies),
+   301						    tianma_ta066vvhm03_supplies,
+   302						    &ctx->supplies);
+   303		if (ret < 0)
+   304			return ret;
+   305	
+   306		ctx->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
+   307		if (IS_ERR(ctx->enable_gpio))
+   308			return dev_err_probe(dev, PTR_ERR(ctx->enable_gpio),
+   309					     "Failed to get enable-gpios\n");
+   310	
+   311		ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+   312		if (IS_ERR(ctx->reset_gpio))
+   313			return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
+   314					     "Failed to get reset-gpios\n");
+   315	
+   316		ctx->dsi = dsi;
+   317		mipi_dsi_set_drvdata(dsi, ctx);
+   318	
+   319		dsi->lanes = 4;
+   320		dsi->format = MIPI_DSI_FMT_RGB888;
+   321		dsi->mode_flags = MIPI_DSI_MODE_NO_EOT_PACKET |
+   322				  MIPI_DSI_CLOCK_NON_CONTINUOUS;
+   323	
+   324		ctx->panel.prepare_prev_first = true;
+   325	
+   326		ctx->panel.backlight = tianma_ta066vvhm03_create_backlight(dsi);
+   327		if (IS_ERR(ctx->panel.backlight))
+   328			return dev_err_probe(dev, PTR_ERR(ctx->panel.backlight),
+   329					     "Failed to create backlight\n");
+   330	
+   331		drm_panel_add(&ctx->panel);
+   332	
+   333		/* This panel only supports DSC; unconditionally enable it */
+   334		dsi->dsc = &ctx->dsc;
+ > 335		dsi->dsc_slice_per_pkt = 2;
+   336	
+   337		ctx->dsc.dsc_version_major = 1;
+   338		ctx->dsc.dsc_version_minor = 1;
+   339	
+   340		ctx->dsc.slice_height = 20;
+   341		ctx->dsc.slice_width = 540;
+   342		WARN_ON(1080 % ctx->dsc.slice_width);
+   343		ctx->dsc.slice_count = 1080 / ctx->dsc.slice_width;
+   344		ctx->dsc.bits_per_component = 10;
+   345		ctx->dsc.bits_per_pixel = 8 << 4; /* 4 fractional bits */
+   346		ctx->dsc.block_pred_enable = true;
+   347	
+   348		ret = mipi_dsi_attach(dsi);
+   349		if (ret < 0) {
+   350			drm_panel_remove(&ctx->panel);
+   351			return dev_err_probe(dev, ret, "Failed to attach to DSI host\n");
+   352		}
+   353	
+   354		return 0;
+   355	}
+   356	
 
 -- 
 0-DAY CI Kernel Test Service
