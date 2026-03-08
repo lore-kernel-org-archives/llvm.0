@@ -1,26 +1,26 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26C1E346FDA
-	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 16:48:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 785CC349B1C
+	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 16:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772988512; cv=none; b=rPYZHJKxuUco6KX4UiCcSjmkh498shpedQF7zCu6e02nXKzOppQsPS/rq0g4PZgLxr+Y6QbGeES3m3be+J2R0BbdwPyCg69RFbBPnGZctqBCoGFPpXUP1hXJf8r7+Shiq+RPaYbMGcGHsba31bKUp4dG9ykDxAvCqOwCzq08Adw=
+	t=1772988523; cv=none; b=l8CXeixToNdaNPI+mncwXftYqA7eQtVhCtiWwXUGUWtpmJypulterLR4Fm0ULmXF8gEUZojIysaDxhR9g0lFtT+VyX8lnaFLjTWf5TRI7M+svqyQCtyIFhFz26Th89/qa++F6zXszrWv2MV6DEp/vLswRe64V6BxhdXZN5HfLvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772988512; c=relaxed/simple;
-	bh=z+eb8JjRcMKWmOmDVgBPqMTO/VCb/LlZhICM41pXN5E=;
+	s=arc-20240116; t=1772988523; c=relaxed/simple;
+	bh=fkf/zlqrIfnebG/RdFS0MlAsAXXN8IFUwXNXXxMzUGI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OR4mg2wbfDYzyAPC/n6XKhZ+v9+iONQHzeSFGR5TDgBvkalFX6rbgv4VSoHadBsZ6qkAO+/HwDrpGlwVNxxCKuvbl8k+3LdEMo2KHBziX5qdZw2/zEpq+CVVZLDAHDmn1rzjx7JtFIyipQMK2y6uM2kpc71NxcicSUFWCd9aDYY=
+	 In-Reply-To:To:Cc; b=QO2q87fa1BwETXPioRt8Qhz0PiXd38iMPsnb9sLIH4nig4H/QfuH2g2STZ2gUT3Sw71NeaO8MIfVxankISeyS/zeGl3C9bNGWPXTY5WdaRvcAV/gb97+6oUUrOdL06X03ZATo8OhxCkfRymLjH6HTqxaAuBngA6x63vHlRlpFrc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6483C1CE2;
-	Sun,  8 Mar 2026 09:48:22 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A4C991CE2;
+	Sun,  8 Mar 2026 09:48:30 -0700 (PDT)
 Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 923D53F694;
-	Sun,  8 Mar 2026 09:48:20 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D761D3F694;
+	Sun,  8 Mar 2026 09:48:28 -0700 (PDT)
 From: Leo Yan <leo.yan@arm.com>
-Date: Sun, 08 Mar 2026 16:46:19 +0000
-Subject: [PATCH v3 14/30] tools: gpio: Append extra cflags
+Date: Sun, 08 Mar 2026 16:46:20 +0000
+Subject: [PATCH v3 15/30] tools: hv: Append extra cflags
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260308-tools_build_fix_zero_init-v3-14-6477808123b7@arm.com>
+Message-Id: <20260308-tools_build_fix_zero_init-v3-15-6477808123b7@arm.com>
 References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
 In-Reply-To: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
@@ -75,11 +75,11 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
  Leo Yan <leo.yan@arm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772988384; l=706;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772988384; l=685;
  i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=z+eb8JjRcMKWmOmDVgBPqMTO/VCb/LlZhICM41pXN5E=;
- b=LeaNaEbxL3zKVg1xU9P3DfgfzU9TwlNFYlS+6teuiXgIXU0uygLzynZe/OueOi+fjrrcgSkEC
- fVBmrgMxXNmB7qZWIVF08ycTdHAE1oAWk/w0C1IbDqRtF84EKHbUGBU
+ bh=fkf/zlqrIfnebG/RdFS0MlAsAXXN8IFUwXNXXxMzUGI=;
+ b=Yu9uqkc2uVWKlNic7iEKsNilQ1Fn0jLboaTqYJ2puHgxFW2xEwmYtY/tD+hTG7P8L6nhbZ9cv
+ bUjwAFUJ0ZJBhjwFf/BOjPI2SnlHXqi8lZn/0QDsWzGU/DwL0tmgrQ/
 X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
  pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
@@ -88,21 +88,21 @@ the compiler.
 
 Signed-off-by: Leo Yan <leo.yan@arm.com>
 ---
- tools/gpio/Makefile | 1 +
+ tools/hv/Makefile | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/gpio/Makefile b/tools/gpio/Makefile
-index 342e056c8c665ac075041ff7c7ca7ba94c691187..206fb6c91a569d64b1e4b906ada5ec866323053c 100644
---- a/tools/gpio/Makefile
-+++ b/tools/gpio/Makefile
+diff --git a/tools/hv/Makefile b/tools/hv/Makefile
+index 34ffcec264ab0fdf7075d25456ef012cb866796b..e39c16325b451ee7c2ddc581cc4d168915472ed6 100644
+--- a/tools/hv/Makefile
++++ b/tools/hv/Makefile
 @@ -16,6 +16,7 @@ endif
  # (this improves performance and avoids hard-to-debug behaviour);
  MAKEFLAGS += -r
  
 +override CFLAGS += $(EXTRA_CFLAGS)
  override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
+ override CFLAGS += -Wno-address-of-packed-member
  
- ALL_TARGETS := lsgpio gpio-hammer gpio-event-mon gpio-watch
 
 -- 
 2.34.1
