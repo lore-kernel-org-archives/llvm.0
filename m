@@ -1,137 +1,101 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CFB3368B0
-	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 06:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E45336883;
+	Sun,  8 Mar 2026 06:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772949791; cv=none; b=VZLuj4O4k9mw1mRjx4tEZa4vZ8Vvr9vc9I9UgePwxFQBbu65CMwguPsT88nCowCWTLvSe+TLaXJm+1ytzijLS9cbw7s4FVCpCvhJJhkndBVmKyuLD3mwmW+NPD6GPhqtT8cCftNfGLiYvOEnHeqAqO8UJJ09IO2hSH1ws/ZiCMo=
+	t=1772950199; cv=none; b=LZT7yB32lOhfCD+LEQc8+v8ESgxhMFkbiHvPTrrhS5LOjduuobL3DOPtWr3TCHbAV40loOArhV4hAUY8gOXgTV8cON/LE9uU4CJIv3Ils/H08WIhf3g6ddbAsqX9n2yDL1OAfC6lP1i/I9BTO3LM/eStj6RJYmFOD3sPY/LMwls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772949791; c=relaxed/simple;
-	bh=cWKPuDVl67xseSTHDRD6csC6Qv0Dge7qmYw2eIym0bY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ZW/F689VHO9DzXOPHE3PeSuE2G/yntjv9FJpFuPvQgLk4INQPpCS7AcC9bFQU6hcC7WcaEAVKnG5Yy5Iyt+ImOZYBYAYNz5TW3Eg6jgk02oUNCW4HE9p1Ty86mWRjXvTqMejHRvexqQ4b+u03OU6CFlg1+RYyKJBeFJubUn1Mqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VP7MZYHq; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772950199; c=relaxed/simple;
+	bh=wwX+tdXmbBhV+MANPmVIQGzD60GjFbE/UZjK3DaljdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UAoqWutDr5vE8aM1L1zrLfWjB2oC5YZ+b0PvDwDMtvz12teFg7FNUysL36ntVfIk8rdI8wv8lotU8XZbthAzdjg2ChHFGYzl6BaBfTU8xvJE3LttDvkniMPAOXoBV+9E5BpsKAXRB95ZZqzhuOf6djdGj9V+YiW68Nl0EvlIKxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rt+Sd45G; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VP7MZYHq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772949788;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=z+n6icsLGCXhEz9zET4ixPleBe5htWZnctYbFAtXcug=;
-	b=VP7MZYHqZ3XPqFOCVYl5jd9KD4lvUh3+yGKf95OPtnFbMoEraLy9OO0gkIeoc7+r60/VZQ
-	Kr6R/mzmvKbSE2Dmz/CFywQSzCVmoO1cmPm2c5hoMsVUJaX8B9IH4ucFxgMsXfrcM0zV3Q
-	Cf9MtXVnfWpBMUO/cWObTWJdkf3MwL0=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-134-tUnEODHPOUyKRW3Jx0F7Dw-1; Sun,
- 08 Mar 2026 01:03:07 -0500
-X-MC-Unique: tUnEODHPOUyKRW3Jx0F7Dw-1
-X-Mimecast-MFC-AGG-ID: tUnEODHPOUyKRW3Jx0F7Dw_1772949786
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 590CF1800614
-	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 06:03:06 +0000 (UTC)
-Received: from [172.20.96.208] (unknown [10.30.44.37])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0C0371800576;
-	Sun,  8 Mar 2026 06:03:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc2,
- upstream-mainline, c23719ab)
-Date: Sun, 08 Mar 2026 06:03:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rt+Sd45G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772950197; x=1804486197;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wwX+tdXmbBhV+MANPmVIQGzD60GjFbE/UZjK3DaljdI=;
+  b=Rt+Sd45GnsCAKX9fGVS1xa7++j61qx6CVCgzomXmgn7fg+rFXKL3PYgC
+   iZ5Pq2Mn7Wq3cQDZCACFiQ7JuuylRh/TVnJofv5fglxtt0ZoEc1nQOnWm
+   2HjRWaM+Va95d2hDbwbJ7OzM3QGj1VYR19dzVnweGgnoBCBUUb/07BnwY
+   +OhFiOOGJiRmHzd3icpX0Qn4X/NMMkKR7PcZHf76xwBJyvPbAgffYqS2a
+   ZEktDjkhiN6tEzI2adod/yGiw5NRxQuIKejvC1qrqnjhhjmWTmCjSd6Ba
+   WzHKlq/2BOUE53zE5BMNKD9BgANV4WUEG6yC91z3CYEX6FW+GFsqDeKG5
+   g==;
+X-CSE-ConnectionGUID: 6Yl6hl+3T3WYcHNuv93KNg==
+X-CSE-MsgGUID: jM8OvSjBSsGMoAhwtkYlXQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="74117494"
+X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
+   d="scan'208";a="74117494"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 22:09:56 -0800
+X-CSE-ConnectionGUID: 4OSQFm1QSeSmYnmHQWMRIw==
+X-CSE-MsgGUID: EJ0xPvzdS7eq1gYGeoTV5A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
+   d="scan'208";a="217540014"
+Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 07 Mar 2026 22:09:54 -0800
+Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vz7Kp-000000002wr-2AOu;
+	Sun, 08 Mar 2026 06:09:51 +0000
+Date: Sun, 8 Mar 2026 14:09:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zhu Yanjun <yanjun.zhu@linux.dev>, jgg@ziepe.ca, leon@kernel.org,
+	zyjzyj2000@gmail.com, dsahern@kernel.org,
+	linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 3/4] RDMA/rxe: Support RDMA link creation and destruction
+ per net namespace
+Message-ID: <202603081310.Lo0y72dG-lkp@intel.com>
+References: <20260307075611.3410-4-yanjun.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <07957.126030801030700101@us-mta-134.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: yhb3lI4KMH-QmvCY0oJ4BhuJlLPNg-0pvxF-pR0hhBA_1772949786
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260307075611.3410-4-yanjun.zhu@linux.dev>
 
-Hi, we tested your kernel and here are the results:
+Hi Zhu,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes linus/master v7.0-rc2 next-20260306]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'x86-urgent-2026-03-08' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/tip/tip
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhu-Yanjun/RDMA-nldev-Add-dellink-function-pointer/20260307-155949
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20260307075611.3410-4-yanjun.zhu%40linux.dev
+patch subject: [PATCH 3/4] RDMA/rxe: Support RDMA link creation and destruction per net namespace
+config: loongarch-randconfig-001-20260308 (https://download.01.org/0day-ci/archive/20260308/202603081310.Lo0y72dG-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603081310.Lo0y72dG-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2370850270
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603081310.Lo0y72dG-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: fedora: avc:  denied  { create } for  pid=3D1 comm=3D"system=
-d" name=3D"io.systemd.Hostname" scontext=3Dsystem_u:system_r:init_t:s0 tcon=
-text=3Dsystem_u:object_r:var_run_t:s0 tclass=3Dlnk_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2443788
-            Affected tests:
-                Boot test [aarch64, ppc64le, x86_64]
-                Reboot test [aarch64, ppc64le, x86_64]
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
+>> WARNING: modpost: drivers/infiniband/sw/rxe/rdma_rxe: section mismatch in reference: rxe_namespace_exit+0x0 (section: .text) -> rxe_net_ops (section: .init.data)
+WARNING: modpost: drivers/infiniband/sw/rxe/rdma_rxe: section mismatch in reference: rxe_namespace_exit+0x4 (section: .text) -> rxe_net_ops (section: .init.data)
+ERROR: modpost: "sysfb_primary_display" [drivers/video/fbdev/core/fb.ko] undefined!
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
