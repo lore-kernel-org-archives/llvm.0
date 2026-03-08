@@ -1,109 +1,97 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B86A5388373
-	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 16:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D513C186E58;
+	Sun,  8 Mar 2026 18:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772988648; cv=none; b=nJK41wLQF/F8phGiFspBIuVpKE/i62cuYGiUTshAiUHVUymu6vILGjZrSUQyPpmHTg82VU9Mc18tY1sDwyp1qjOhQWNp6ZVwBBgTWYE37ApjZ6u/7Rvxvc0PQWxpVnmQZpw7gH6UmZKGds4wxt57b7fFWQRhEv6ZpFcTm/s6bKo=
+	t=1772992996; cv=none; b=WgYuRTVrbqFjPxgHUv8Iu6lRMzYK5vFpaP1oZaDolluxQIAD1TDG0wuekyLx9TTtGx0QGfaww4LXj+P99qM1VOQReqHyuOLlgM25HurI5WCEAz8ti6xq3sW3pN9tiqQY1ytqjz3dX01AhNcHTlc9k4VxNhw6OjExBcCaGMpgYls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772988648; c=relaxed/simple;
-	bh=6fa1hK+r0aPhZL3fayi+LxFYmgJr6kdDCoMOrNXGWCA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XT1W634RrSLjTxec/ETsqgKvMqUs6gKNupbZUYWWPsZeE0f+N5tg07fyt0r3JcEE0mtVff8rZjwIAJOHGRwLyMo7VrVDM+Adw7cOhmMSIG1XreR0oeYwrmLxPGtYiyBVGTS//iFs3+h8n5zHPXHs9VKn5uzxFODopVMD70iiByk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8E551E2F;
-	Sun,  8 Mar 2026 09:50:34 -0700 (PDT)
-Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 087133F694;
-	Sun,  8 Mar 2026 09:50:32 -0700 (PDT)
-From: Leo Yan <leo.yan@arm.com>
-Date: Sun, 08 Mar 2026 16:46:35 +0000
-Subject: [PATCH v3 30/30] selftests/sched_ext: Append extra cflags
+	s=arc-20240116; t=1772992996; c=relaxed/simple;
+	bh=rmJMdlEXDjwGvBgpvp1qb6ZGImcvRLTk9sD7zdDDS1Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ILXrPIVwGkYDXagf/xdP+d6YriL2bKQ4WGBucL4sAMWVW7uOHOu4R6ZyMF8uh37sjNr+yxZI6OBrp0EpEykMPFjoMb9HBsxnwpSXIJKjksLRMY/G3usmwMceEi16SJMMzbG2UEnAbP+R+/P9DWcfHv3fhqbLGzZEin/uZ4I1SQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aH4mGr9U; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aH4mGr9U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95EB4C116C6;
+	Sun,  8 Mar 2026 18:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772992996;
+	bh=rmJMdlEXDjwGvBgpvp1qb6ZGImcvRLTk9sD7zdDDS1Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aH4mGr9UYO5eiH6AIYXjfCmgDRp3A7ggtu+GzfHkqbKy+0vL0gxX2TlSiTUU68lSO
+	 mZwlZNtMkKgE7gZt2SaP+89cW14wfxz5VTb7zjO3U4Qc/MZDUTTQBF4rKQUNfW8Pzz
+	 vLgqbwOYuL5pL7ApHNUav/WPPEIhafkLtcKq52vRCG6/UUXjJs4DEVZPEDwZkiLhHO
+	 QnLEE3cbrLBK76mO0kYVn73zwcIvs4ZkXYBBvuljg5cqfZHlHXs4VGEcqlLzNnMQCG
+	 9QDmJGzlL2xsps7prrX2KVszEA31X9jT224ZwKGHyHVQMy/T94Bf9iriN3gqEz4pBA
+	 1qPa6++O6An9w==
+Date: Sun, 8 Mar 2026 20:03:07 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Xie Yuanbin <qq570070308@gmail.com>
+Cc: akpm@linux-foundation.org, Liam.Howlett@oracle.com, david@kernel.org,
+	justinstitt@google.com, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, ljs@kernel.org, llvm@lists.linux.dev,
+	mhocko@suse.com, morbo@google.com, nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com, surenb@google.com,
+	vbabka@kernel.org
+Subject: Re: [PATCH] mm: optimize once judgment with clang
+Message-ID: <aa2523KDNwWXHbDD@kernel.org>
+References: <aavd4hoAO1DFLuJP@kernel.org>
+ <20260307144135.380683-1-qq570070308@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260308-tools_build_fix_zero_init-v3-30-6477808123b7@arm.com>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
- Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
- Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Adrian Hunter <adrian.hunter@intel.com>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, 
- Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, 
- Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
- Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
- Andy Shevchenko <andy@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
- Len Brown <lenb@kernel.org>, 
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
- Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
- Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
- Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- Leo Yan <leo.yan@arm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772988384; l=850;
- i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=6fa1hK+r0aPhZL3fayi+LxFYmgJr6kdDCoMOrNXGWCA=;
- b=gAKVQy5T5THX3Hwb3o86ZTGlxfO0FDVQewHiIZIpOeEtI72L0rRLygt1lC+DnZSWfq3gAPTdN
- o9UY9Ce/uECCLY7rgjJFBrY2hYVd1Og7K56s1ikShRDPd+Ni2V//V9/
-X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
- pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260307144135.380683-1-qq570070308@gmail.com>
 
-Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-the compiler.
+On Sat, Mar 07, 2026 at 10:41:35PM +0800, Xie Yuanbin wrote:
+> On Sat, 7 Mar 2026 10:12:18 +0200, Mike Rapoport wrote:
+> > On Sat, Mar 07, 2026 at 02:54:04PM +0800, Xie Yuanbin wrote:
+> >> commit 242b872239f6a7deacbc ("include/linux/once_lite.h: fix judgment in
+> >> WARN_ONCE with clang") helps optimize performance and size under the
+> >> clang compiler, but the modification is not complete.
+> >
+> > How much does it actually optimize for size?
+> 
+> Basing on commit a0ae2a256046c0c5d377 ("Add linux-next specific
+> files for 20260306"), compiler "Debian clang version 21.1.8 (5)",
+> arm64 default defconfig, and setting CONFIG_CC_OPTIMIZE_FOR_SIZE=y,
+> the size result is:
+> |                                    | size     |
+> |                                   -|         -|
+> | Image.gz                           | 14256146 |
+> | size of ".text" section in vmlinex | 17035264 |
+> 
+> Basing on above, revert the commit 242b872239f6a7deacbc
+> ("include/linux/once_lite.h: fix judgment in WARN_ONCE with clang"),
+> and build again:
+> |                                    | size            |
+> |                                   -|	              -|
+> | Image.gz                           | 14258152(+2006) |
+> | size of ".text" section in vmlinex | 17039360(+4096) |
 
-Signed-off-by: Leo Yan <leo.yan@arm.com>
----
- tools/testing/selftests/sched_ext/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+It would be nice to see where the difference is with scripts/bloat-o-meter.
 
-diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
-index 006300ac6dff88a48104977398d8517753e7e385..81d8f4a184245d8c330cf45b75bd868b2a7aa7dc 100644
---- a/tools/testing/selftests/sched_ext/Makefile
-+++ b/tools/testing/selftests/sched_ext/Makefile
-@@ -53,6 +53,7 @@ ifneq ($(wildcard $(GENHDR)),)
-   GENFLAGS := -DHAVE_GENHDR
- endif
- 
-+CFLAGS += $(EXTRA_CFLAGS)
- CFLAGS += -g -O2 -rdynamic -pthread -Wall -Werror $(GENFLAGS)			\
- 	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)				\
- 	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(CURDIR)/include -I$(SCXTOOLSINCDIR)
+And while commit 242b872239f6a7deacbc is a oneliner that essentially
+updates most of the _ONCE constructs, I'm not convinced that the churn in
+the patch that updates include/linux/mmdebug.h worth it.
+Do you have the numbers for this patch as well?
+
+> > Note that performance is really not critical here because we are already
+> > dealing with slow path of debug code.
+> 
+> It seems that WARN_ON_ONCE_GFP() is not affected by in CONFIG_DEBUG_VM,
+> and it is used in __alloc_frozen_pages_noprof(), which seems to be a hot
+> path.
+
+What might be useful there is to change the order of conditions so that
+__ret_warn_once will be evaluated first.
 
 -- 
-2.34.1
-
+Sincerely yours,
+Mike.
