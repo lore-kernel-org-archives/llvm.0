@@ -1,143 +1,156 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C071AA7A6
-	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 03:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772939328; cv=pass; b=QsVCI7BYrgaHaCVaQrqNwcWAU9ZeWBSAHZC0vB+UXXnnZgcJmMFcY+PSi/4T1Fnck4x22m3OqfKc8cYIlM29I8gvMqUnMaA8AQBB06TOnie7ciPovhyM7LL40suFiHpVLmk+PvfqRqJU6RY0Kc53VtRBf99D69Gw60XNwP29568=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772939328; c=relaxed/simple;
-	bh=urYB0CUwxtHfVVQokjPh2rco2JxICNlUyjAd+lTINpc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Pu3SA2/jsgLmNMrtuT5zKkYxL4qpOmoAC1titauJ9usmuAFbPhlY1wVhV6xUhagi30iei2fEOMZOMH9JRTTXumLpUjQqR8cLfCX5NwM4+rd9O06THvoKPkcIjXKFlnvLdhlzZrvRUh65uOs/vk742K1ZOTdi97Dgb/pGko/WL6Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fSdfNfA3; arc=pass smtp.client-ip=74.125.82.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED69280308;
+	Sun,  8 Mar 2026 05:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772946357; cv=none; b=tVdy2taKB4N8hCQAoZus9PDjcOrId8wM1rQ4jNYcjymAagbtj2iiHxNcQEH/uS0hnsPwDDDUErgWMHs2So3JJI12W3FyGqSP7WumYWlpku1yvCbhklDrudqCxgCrnH4g5confi9XZCY/V4PKkAWgjoq74QM5gaMJbes1+Id14nw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772946357; c=relaxed/simple;
+	bh=KU2EbtNpUmTOC9y4uli7NcQUzLIsbeTzo3qRJWgiD7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lv8VkNu4NPrg5MfOrSBgoBLDOwj5TFnpUNncgu7ThlSTMVoH+xzMLOJsoNnX02u59apaNK8DMLGQGBLkHhWuMdUZd93wdE859/NxDSHV31Yw5hOYbVxEBEr/LzRP2bmHl2FG82OwQcTT77XkzjNQLA1v08tIt/veinhKWoCXb/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OK9HpiMF; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fSdfNfA3"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-126ea4e9694so4047169c88.1
-        for <llvm@lists.linux.dev>; Sat, 07 Mar 2026 19:08:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772939326; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Ay1Nf9ghfopso2wXoUDaAyzP1zqQ1s7AoJR7+Aw+ET89M7vgEvHclRy88LoOBHgoeB
-         KVMjsVAFtVtbNlPlJ//s1vT8e43PZPxfhBtK3rUSVhfInqWJ5YdXMsBy7VTSIBEfWr01
-         EjVa7KVR36Aor1AqlNHdypEVwxkc3hyJ4ewjV6I2GdYiC1j9uBsJcUa/eKlooqS5v4+Z
-         tpTbta8ldJXENuDfuEAEH8X6qwgrT7Bi2rg6uZiO6bJnI6ryPeDEeB6p0RDNMOblOezJ
-         LnlNLZuB8eycYUIoKQ5YfcHIqsO11goPqz6bsJ9yFuuG/v5dFxYnefW4GtsB+L8aDlWJ
-         Nkjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=vL+kYgBcVaHGMpKP/KOcO6tTjJs1gho5KzlvMYmWcNg=;
-        fh=ZwfL2I9HiMoE+etZ80kR4zXoc5nuG/WNzVnEQRTT3Ks=;
-        b=AV7c9DK601YJEcTsDmFNb5s68I0FI8syx+6IrcnlzV+mQ+slqaEQszz+K3Men+jEPv
-         YQDQUt3/6pKInrSCfiou7xotoYCOYnNQUEATjjXooS5UyrvqD/OO/DVQye5/QhRauD7P
-         4WY8FZnRrPFA5C2eVgZdMW0BAsDuKJJnUSwER+WH86Q/oMEX1vav86imtY0ZNjg4bnB3
-         FJjTJ4qJPMMl8C/WnhKc9MlB8Xza8tZtucmaYASBHAF0fijNkR7OWD52tZ0ABOXhrPga
-         msLfQIBqPlBVqKw0Iq2Ovyg/d07ghnQuD1m0fpHShqKWFwb/2fagrm4tq2zJCItn/93S
-         847A==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772939326; x=1773544126; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vL+kYgBcVaHGMpKP/KOcO6tTjJs1gho5KzlvMYmWcNg=;
-        b=fSdfNfA3g9LsyLlgekLr1BTF9vPoczZfqCvxKrqS6PzCXcO0Vv4K2VEC9/GqasofZn
-         K61drjb3JeJ6wWS2eN5B2efXkRn/Ck+gUVr2doDgHBILyGpz4j6sH9XVjhlOguGXXBYq
-         1+bipYIyrgv3K5KKuTD2RxeBLwAqgwEm7uBPvQ0XoEnl+pH6R+PH2KYVMhk1XsUIcyB0
-         zfa3xxK8YIt+5Wec3cMS/oAPm9OjqmhA8CpUZLiJxUjc93Tx+zflBNw5BKcTGMPGf3EF
-         xQqzRq0lbF3FxiX4zrjmumHmv/eLS81+OpLP0fr3spQci99SCFZoJlDqn3V6pZG0Hxhp
-         gw0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772939326; x=1773544126;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=vL+kYgBcVaHGMpKP/KOcO6tTjJs1gho5KzlvMYmWcNg=;
-        b=P4Gqe69gPNDzqvz7dgDRkGxyYpFb6nEeXjZgDjd7wQ0S7RbzB8vO8FcFiEGIozI7No
-         4rfs/GI5iOLuXmbF2z+Ww512iPM2jpqA6CGz/t+h1b2uqjBXk8+gaV3mXLbBN9CGOLZV
-         j06760OROb856iLnvVIHM6kBrwjzuFgQS2iNgRFcde4TSgRxsADW9BB6GXIfRtJyUq0O
-         BFRGMVX3Vr3pvDJyzpg6hf2UZJYCs0Hsin/hMCAYfucEWGsxKAg8a/d8UcNdIZwEO+mb
-         n40CAMHm3ukmsYDkpfsavDvO3ZnXiMRwiNdphvYWvlAC3GvOysOMEbLKVQV91pjKwV1n
-         hXOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCULClw6I7DHK/Fu6hfZtMQPKGtb2gg3JH25d3acQ5QBG8JfWgzgkTGDzAzHoQBgjthxDEf2@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx3tw0idmNNiUCG9gs/ug1Hnx/ZCaTajPwjcGxXDSc5Kshj+Lth
-	bbhDoXgdAEc3vqSghVOtkn9yR0EYuOrvhoXL+qW+xmlTlUmfFKmoKWslBidt6Lhn+tGc2RktLo6
-	2VPCT8ndVuVbwj6u/7d/qov86YwvG6bvDrV9GEMIM
-X-Gm-Gg: ATEYQzzpcI0uDQh6f96z7+H4hXsQ6Xu2PNnqWRv938Ot57Xss/bDRxJHS6JO6m+rTo+
-	sB4CSS8416KHg+DWKDgWXYjicimpWQlbCzO/ZDzDrpvcM1duwCHMoRMtUZLc0/w7jJwoYxSgkpi
-	ENtnct2vNhOarc/aPFz28dX7icKC5t3A84l8QchLKuFbIjAV9ERrS3PCyOhnwr9EPC//qB21HxS
-	go07T9oi/s6ErXQEFCD4o3J/tIQVOm2N7kItA3MDa4Bes/89NJxZJ2SykRS90rXBpzQwHFkMlb+
-	sZkVs3dPEVNrNhyF+njhXyomvvlRd/vFMbko6V/iT/WBqubAhuJ9tr5i/x6+DW4vOJ1HjDFq
-X-Received: by 2002:a05:7022:117:b0:123:3407:1066 with SMTP id
- a92af1059eb24-128c2e8f192mr3059142c88.43.1772939325636; Sat, 07 Mar 2026
- 19:08:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OK9HpiMF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772946356; x=1804482356;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KU2EbtNpUmTOC9y4uli7NcQUzLIsbeTzo3qRJWgiD7Q=;
+  b=OK9HpiMFwUJXkxsQJVO/GkpaDArD0j7LkErMWLx2ZWL5ZtAGVRquJ/gv
+   ydBmeL6iarrCyI7T/ZZ95L+kHvms1bHj51Lx/8b9caXwmszUFy7/fY8y6
+   mvLcSBxsymFyngKhxNfL5cBiHJeLKaJV1YaXK0+lKSVYnx5R3Z/rthJd3
+   su1WtXQSlhtzvFWk85RoI2LvMhyGklv7IMVMIey3K1r0kGot7Q0y4kvxK
+   TdQygmE100/Nty+G6SVjtlpJJbm7ytOLYcMraZFrcwnbPb2L9E/zk2WWf
+   G5lsWCQbW4sdRhphrE8FRqGaGOJ4xTrQC/84kV2eqc3kwebNGsyyx1uja
+   g==;
+X-CSE-ConnectionGUID: BNnJsqCASOK5GsvWu2RdRw==
+X-CSE-MsgGUID: CYDaloFRSVupLQ2jtMIsDA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="73028018"
+X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
+   d="scan'208";a="73028018"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 21:05:56 -0800
+X-CSE-ConnectionGUID: iK19d4IsQwGj+KS96MdSfg==
+X-CSE-MsgGUID: yPyYIg/KRdmpYWmtDoUIEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
+   d="scan'208";a="216003698"
+Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 07 Mar 2026 21:05:53 -0800
+Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vz6Kr-000000002ur-3fyI;
+	Sun, 08 Mar 2026 05:05:49 +0000
+Date: Sun, 8 Mar 2026 13:05:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+	andrew+netdev@lunn.ch, horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>, hawk@kernel.org,
+	ilias.apalodimas@linaro.org
+Subject: Re: [PATCH net] page_pool: store detach_time as ktime_t to avoid
+ false-negatives
+Message-ID: <202603081213.mN3LtMM5-lkp@intel.com>
+References: <20260307204022.1897614-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260307024709.718395-3-kuniyu@google.com> <202603072124.nNhJgNnw-lkp@intel.com>
-In-Reply-To: <202603072124.nNhJgNnw-lkp@intel.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Sat, 7 Mar 2026 19:08:34 -0800
-X-Gm-Features: AaiRm530dp8zNSZFQaweLHDEXy6u7qeD2gjLWLlfefoma-wEY34m8E-f-DzfMgs
-Message-ID: <CAAVpQUCFHWPYown66QVTaNDeVWERg0a99gcc3WBQeikXdUy1=w@mail.gmail.com>
-Subject: Re: [PATCH v1 net 2/2] ipv6: Don't remove permanent routes with
- exceptions from tb6_gc_hlist.
-To: kernel test robot <lkp@intel.com>
-Cc: David Ahern <dsahern@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Kui-Feng Lee <thinker.li@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
-	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260307204022.1897614-1-kuba@kernel.org>
 
-On Sat, Mar 7, 2026 at 5:38=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
-ote:
->
-> Hi Kuniyuki,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on net/main]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/=
-ipv6-Remove-permanent-routes-from-tb6_gc_hlist-when-all-exceptions-expire/2=
-0260307-104803
-> base:   net/main
-> patch link:    https://lore.kernel.org/r/20260307024709.718395-3-kuniyu%4=
-0google.com
-> patch subject: [PATCH v1 net 2/2] ipv6: Don't remove permanent routes wit=
-h exceptions from tb6_gc_hlist.
-> config: powerpc-currituck_defconfig (https://download.01.org/0day-ci/arch=
-ive/20260307/202603072124.nNhJgNnw-lkp@intel.com/config)
-> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c=
-32caeec8158d634bb71ab8911a6031248b9fc47)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20260307/202603072124.nNhJgNnw-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202603072124.nNhJgNnw-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    In file included from net/core/sock.c:133:
->    In file included from include/net/xfrm.h:26:
-> >> include/net/ip6_fib.h:557:35: error: no member named 'ipv6' in 'struct=
- net'
->      557 |         gc_args.timeout =3D READ_ONCE(net->ipv6.sysctl.ip6_rt_=
-gc_interval),
->          |                                     ~~~  ^
+Hi Jakub,
 
-Oops, I missed ip6_fib.h is included from many places.
-I'll guard the GC functions with ifdef CONFIG_IPV6.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jakub-Kicinski/page_pool-store-detach_time-as-ktime_t-to-avoid-false-negatives/20260308-044057
+base:   net/main
+patch link:    https://lore.kernel.org/r/20260307204022.1897614-1-kuba%40kernel.org
+patch subject: [PATCH net] page_pool: store detach_time as ktime_t to avoid false-negatives
+config: loongarch-randconfig-001-20260308 (https://download.01.org/0day-ci/archive/20260308/202603081213.mN3LtMM5-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603081213.mN3LtMM5-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603081213.mN3LtMM5-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/core/page_pool_user.c:248:5: error: call to undeclared function 'ktime_to_seconds'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     248 |                          ktime_to_seconds(pool->user.detach_time)))
+         |                          ^
+   net/core/page_pool_user.c:248:5: note: did you mean 'ktime_get_seconds'?
+   include/linux/timekeeping.h:59:17: note: 'ktime_get_seconds' declared here
+      59 | extern time64_t ktime_get_seconds(void);
+         |                 ^
+   1 error generated.
+
+
+vim +/ktime_to_seconds +248 net/core/page_pool_user.c
+
+   214	
+   215	static int
+   216	page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
+   217			  const struct genl_info *info)
+   218	{
+   219		size_t inflight, refsz;
+   220		unsigned int napi_id;
+   221		void *hdr;
+   222	
+   223		hdr = genlmsg_iput(rsp, info);
+   224		if (!hdr)
+   225			return -EMSGSIZE;
+   226	
+   227		if (nla_put_uint(rsp, NETDEV_A_PAGE_POOL_ID, pool->user.id))
+   228			goto err_cancel;
+   229	
+   230		if (pool->slow.netdev->ifindex != LOOPBACK_IFINDEX &&
+   231		    nla_put_u32(rsp, NETDEV_A_PAGE_POOL_IFINDEX,
+   232				pool->slow.netdev->ifindex))
+   233			goto err_cancel;
+   234	
+   235		napi_id = pool->p.napi ? READ_ONCE(pool->p.napi->napi_id) : 0;
+   236		if (napi_id_valid(napi_id) &&
+   237		    nla_put_uint(rsp, NETDEV_A_PAGE_POOL_NAPI_ID, napi_id))
+   238			goto err_cancel;
+   239	
+   240		inflight = page_pool_inflight(pool, false);
+   241		refsz =	PAGE_SIZE << pool->p.order;
+   242		if (nla_put_uint(rsp, NETDEV_A_PAGE_POOL_INFLIGHT, inflight) ||
+   243		    nla_put_uint(rsp, NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
+   244				 inflight * refsz))
+   245			goto err_cancel;
+   246		if (pool->user.detach_time &&
+   247		    nla_put_uint(rsp, NETDEV_A_PAGE_POOL_DETACH_TIME,
+ > 248				 ktime_to_seconds(pool->user.detach_time)))
+   249			goto err_cancel;
+   250	
+   251		if (pool->mp_ops && pool->mp_ops->nl_fill(pool->mp_priv, rsp, NULL))
+   252			goto err_cancel;
+   253	
+   254		genlmsg_end(rsp, hdr);
+   255	
+   256		return 0;
+   257	err_cancel:
+   258		genlmsg_cancel(rsp, hdr);
+   259		return -EMSGSIZE;
+   260	}
+   261	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
