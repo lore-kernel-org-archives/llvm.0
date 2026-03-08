@@ -1,101 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07EC636C0AE;
-	Sun,  8 Mar 2026 10:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940D821D599
+	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 11:13:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772966587; cv=none; b=WurvnkGE2WImf9R/NHXXC0SghhIbTLdf0oBqrCoh1vLfXldteNJ4v+WNs4OF0P2xpK/BWV4Q2aO5f6BoSgAnkd0fIBeh9vlHeDFw4SEMT7eZnJQSkvM8xoL9zngvFRiv1kszQEb4beznfq7fOu0yCBzZPr2W82E5ARXsvh/z210=
+	t=1772968419; cv=none; b=CF1vSKf3VQP9EEZn2NuFKVpmiGIq7JDeyc9i+HO/MqJbH+etrTW15dNaYMUUUymWoaydNfMrA11aZV2eHGBLHrbE6SqbWC+R8nMW0nqnMdbljADjfZhOeSr6Dhk/j7vFyyVLv8Rs7Iyg1mt8Jurt1Q6YVvdlTSLVbsNPjwMv9qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772966587; c=relaxed/simple;
-	bh=ZLn1J3pPOZjzXPfM4/Ly2rEcvg8ZHbBeXi5+Yt1f9Wk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AhR+SxOVbnKh1pnaHUXhilLHziO2v79NZSl7gYWsk0kga0DDKndTMSYkB+uZZ9n8zx6GYwn/XaLId2sy0hzZpGL6SU4YrJUsP18DYaSbHpmET5yh9Q9uUirpz1p1ycyiCibtH+15WmeE2c8UI6kq1DeWVW7hign3VIvBDahTAH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k6n0bXuR; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772968419; c=relaxed/simple;
+	bh=rUIInd5K6kOACS1tWqup7nK+dUyf7CQRanumz9cLbow=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JEQJXbbpkOqj1E4mfvh14QYHZDvVs/B2hCKdJiQliBmVHkSJWta76P0UY3vU4DkiBym4UY5Jv3EE1yHPeYsAibhbLag6ZzI/cTkaQOfopicme0oZHqVZElH4PidiTkw1187U8u+KVR67hbJ9cxpaeP9c1z2BOUAxGsqayoOwRao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=neVQOxZI; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k6n0bXuR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772966584; x=1804502584;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZLn1J3pPOZjzXPfM4/Ly2rEcvg8ZHbBeXi5+Yt1f9Wk=;
-  b=k6n0bXuRZXrr+vfJ2mmUO9udUPWaOqGno9JcWPSAyEOavTNwuKAQz6S4
-   QY0/h01JrHQt9DhTIi+Eu9lPY+dDwDr3GG0xKeVMdNDtY1yhb0W9KVf42
-   bPxC2ofaMt3LHO6i7WH1LVME0RwxkqbELI9Q/MAHhgu33kZMwWe7+i6QT
-   Zuz0FArI36KHXJvvLbvyalGqweU2rbDN9ruWmBCdBdGDrr1oX9H+qBNM3
-   0cXztU9+dn9f6CKgYEwiNw3wzLc1WtGDfJsayDgyIi2pTUB3TtO5zkV3z
-   WxI6kTpd0hsAwMKIguB44P+J21SsXTnfU/Frhne6nsGN03kVKCKScnBLs
-   A==;
-X-CSE-ConnectionGUID: /DI5xqgTS6qxzz+Om9Xt0Q==
-X-CSE-MsgGUID: u3VVviKwSoynfb42xcPZtA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="99483052"
-X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="99483052"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2026 03:43:03 -0700
-X-CSE-ConnectionGUID: IwQ0R9fNT2S9zSofpwEANA==
-X-CSE-MsgGUID: kujBofz8Qjy+MTzt6WXWZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="224166576"
-Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 08 Mar 2026 03:43:02 -0700
-Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vzBb9-0000000032P-3xyA;
-	Sun, 08 Mar 2026 10:42:59 +0000
-Date: Sun, 8 Mar 2026 18:42:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 1/2] drm/ttm: Add EFI variable support for page limit
- configuration
-Message-ID: <202603081810.gDFhD5td-lkp@intel.com>
-References: <20260306055439.1822879-2-mario.limonciello@amd.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="neVQOxZI"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-824c9da9928so6070205b3a.3
+        for <llvm@lists.linux.dev>; Sun, 08 Mar 2026 04:13:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772968416; x=1773573216; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e9z7EGgDIs51XBH02ZmG5zUVGonDeGX7qmX1TqKhzyE=;
+        b=neVQOxZIUY7qmsXwZ0alBszjqXI7db4IeGluOqaW14Vg9tpgObF3MOTEVfjB0JPQtf
+         bmYgLsrHxh3/LmPXOCv/IekoYtu8vcz8vga672Q6yxfcP5KzvuFZPBeWAYnQw3xyryTh
+         nXCT5XG/x/njqQ8p31WA1FJETdjp70UmMbG3NJ/cDqwgJdblbIsGdzoQkbhkQJb6kiIs
+         7sxyPjARy8KKu+1BjlTh6mXT2y4GWwWYsU8UUoYrmnaGAa087lgJOwlPSruwuIBBD91h
+         FuXZBZHis493p1vhDsda9QH3re6qxSmXchiAsKlK0cZ6MP3kQRWSufcNM3j4nTuFje1h
+         lSGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772968416; x=1773573216;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e9z7EGgDIs51XBH02ZmG5zUVGonDeGX7qmX1TqKhzyE=;
+        b=fDBXJH1pIFZyWS8BhagqdaCtnydYIpro3W7bWvncT6Argz79wtKjsFfqDRVnjM/sRO
+         YSS5o+tKVajsLqL9UhIx1SgP2ZTqzPKcZbIsSNC7CIZCppctmvzvcqWMPlWnuwxGsnmd
+         yIYqmQk3qSr1vxYHC1LPaxd9GwmtFGyRETCOtqbgihiXiuqSO7q6pTDZHPjm1b9PIc/Y
+         8sSUq+r/E3dMkaX+jShODNixk9WT8jNaVDt9SZL3T5waSQ8nE4zLjhuNOh2sXKUfXqQ5
+         gkYEMR8c6YtdFCehKhN08YqyQnaYixH4LzQ+I7Q0WGT0ZS5TOpVMwIOf/diDKy1mXyhe
+         dRqA==
+X-Forwarded-Encrypted: i=1; AJvYcCVYkRBiB3t56T6yxVmu6PDbLqnmbhUuS+62R76a5Iy13UTWXj7+fncSupSFKF3srS4Ki32u@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw/EnAEyRCfs/x47HgOJ0GKa5uRnfp+MvozamnzR2OkzFX+hTes
+	vOudmMv8maP6BQEqo4bWXy/SU4qcMbH9E0HNECeC1I/mYWujXGSN4Dr8
+X-Gm-Gg: ATEYQzzDoA2lv3qekIrhCgeg837nsqx8qsQSD619wubx27tc5BOil2yBk9j+1/3MWSv
+	/xDufQqct6086vJRrdo6W3ycgo9Rkon386yqBlfR1KBM5m1mJC8fjtVo4Koy9LpZGZRth2eVGgj
+	pOHt0NjVwDVdxYUgvmUTq3+OaAGoCY0at5o0JGsvEQw6RakfcqyS2bi1kWn5e8rekaKiehFQUii
+	SeO+W/xAPxqE9YspEDNClOYk9OxxkUgFYDhL8RSZ2P5xaEL3Y5ezjSpH7Invn/Pov3AYC+sskxs
+	wQegKixkTjEcFy86wqQf7psMpF9u1OH4DS251rJDONPYOKHiVwekoTmOOr2jhdHtS00kJ1rJ8AN
+	qD4zfp5ELkIgHNWzfoCUASxKE6KgcMyX/pcteY4KMg+ayLPca6qfB8YSt+3rRdaNCdYXxftVZSO
+	QHEoW/wUwtAKMlthEZxyvtMq5usIbHcqjMoeutpH+4
+X-Received: by 2002:a05:6a00:7444:b0:827:3c74:e6a6 with SMTP id d2e1a72fcca58-829a30b9fd6mr5378887b3a.58.1772968415956;
+        Sun, 08 Mar 2026 04:13:35 -0700 (PDT)
+Received: from russ.ust.hk (wf121-083.ust.hk. [175.159.121.83])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829a46369d3sm6923755b3a.2.2026.03.08.04.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Mar 2026 04:13:35 -0700 (PDT)
+From: Haoyang LIU <tttturtleruss@gmail.com>
+To: Dongliang Mu <dzm91@hust.edu.cn>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Alex Shi <alexs@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: Haoyang LIU <tttturtleruss@gmail.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] tools/docs/checktransupdate.py: add support for scanning directory
+Date: Sun,  8 Mar 2026 19:13:13 +0800
+Message-ID: <20260308111314.27333-1-tttturtleruss@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260306055439.1822879-2-mario.limonciello@amd.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Mario,
+Origin script can only accept a file as parameter, this commit enables
+it to scan a directory.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Usage example:
+./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes drm-tip/drm-tip linus/master v7.0-rc2 next-20260306]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+And it will output something like:
+"""
+[1772967203.351603] Documentation/translations/zh_CN/dev-tools/kmemleak.rst
+[1772967205.074201] commit 7591c127f3b1 ("kmemleak: iommu/iova: fix transient kmemleak false positive")
+[1772967205.074337] 1 commits needs resolving in total
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/drm-ttm-Add-EFI-variable-support-for-page-limit-configuration/20260306-135655
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20260306055439.1822879-2-mario.limonciello%40amd.com
-patch subject: [RFC PATCH 1/2] drm/ttm: Add EFI variable support for page limit configuration
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260308/202603081810.gDFhD5td-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603081810.gDFhD5td-lkp@intel.com/reproduce)
+[1772967205.301705] Documentation/translations/zh_CN/dev-tools/index.rst
+[1772967206.912395] commit a592a36e4937 ("Documentation: use a source-read extension for the index link boilerplate")
+[1772967206.921424] commit 6eac13c87680 ("Documentation: dev-tools: add container.rst page")
+[1772967206.930220] commit 8f32441d7a53 ("Documentation: Add documentation for Compiler-Based Context Analysis")
+[1772967206.939002] commit 1e9ddbb2cd34 ("docs: Pull LKMM documentation into dev-tools book")
+[1772967206.948636] commit d5af79c05e93 ("Documentation: move dev-tools debugging files to process/debugging/")
+[1772967206.957562] commit d5dc95836147 ("kbuild: Add Propeller configuration for kernel build")
+[1772967206.966255] commit 315ad8780a12 ("kbuild: Add AutoFDO support for Clang build")
+[1772967206.966410] 7 commits needs resolving in total
+"""
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603081810.gDFhD5td-lkp@intel.com/
+Signed-off-by: Haoyang LIU <tttturtleruss@gmail.com>
+---
+ tools/docs/checktransupdate.py | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: module ttm uses symbol efivar_lock from namespace EFIVAR, but does not import it.
->> ERROR: modpost: module ttm uses symbol efivar_get_variable from namespace EFIVAR, but does not import it.
->> ERROR: modpost: module ttm uses symbol efivar_unlock from namespace EFIVAR, but does not import it.
-
+diff --git a/tools/docs/checktransupdate.py b/tools/docs/checktransupdate.py
+index bf735562aeeb..b0bc61f958cf 100755
+--- a/tools/docs/checktransupdate.py
++++ b/tools/docs/checktransupdate.py
+@@ -13,6 +13,8 @@ The usage is as follows:
+ This will print all the files that need to be updated or translated in the zh_CN locale.
+ - tools/docs/checktransupdate.py Documentation/translations/zh_CN/dev-tools/testing-overview.rst
+ This will only print the status of the specified file.
++- tools/docs/checktransupdate.py Documentation/translations/zh_CN/dev-tools
++This will print the status of all files under the directory.
+ 
+ The output is something like:
+ Documentation/dev-tools/kfence.rst
+@@ -262,7 +264,7 @@ def main():
+         help='Set the logging file (default: checktransupdate.log)')
+ 
+     parser.add_argument(
+-        "files", nargs="*", help="Files to check, if not specified, check all files"
++        "files", nargs="*", help="Files or directories to check, if not specified, check all files"
+     )
+     args = parser.parse_args()
+ 
+@@ -293,6 +295,17 @@ def main():
+                 if args.print_missing_translations:
+                     logging.info(os.path.relpath(os.path.abspath(file), linux_path))
+                     logging.info("No translation in the locale of %s\n", args.locale)
++    else:
++        # check if the files are directories or files
++        new_files = []
++        for file in files:
++            if os.path.isfile(file):
++                new_files.append(file)
++            elif os.path.isdir(file):
++                # for directories, list all files in the directory and its subfolders
++                new_files.extend(list_files_with_excluding_folders(
++                    file, [], "rst"))
++        files = new_files
+ 
+     files = list(map(lambda x: os.path.relpath(os.path.abspath(x), linux_path), files))
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.53.0
+
