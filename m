@@ -1,26 +1,26 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 858913537FD
-	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 16:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CA99359A8D
+	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 16:49:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772988550; cv=none; b=icW6VtqHdvwbrV+ABG5xvejzRZl2ahS1i3n+H5X8Dpj+MX5tgaSXAEDftKLadw2I57CvAnUaBOC4IDd+LkPTdEDBtF9p9qNg7iwuAP2owz3YZWcnF6uaanF5QOCeKNDJ8elLqnUfg2WY7Zpe3jADKL0C0fWGMJ7oaYruyi8GZgI=
+	t=1772988562; cv=none; b=iDdN7BUL8xV0qsyeQ2/M9v734mvh3MeV8afoARhO+Zsmt4lzQtKpMJ+cfvVZGQY5qq2RT8n8mioc57LNDegNhFJLPyUBlnbNUVXE7OCrMzE0hfmiy2Ms1y1AvG3Jl7Zk0i3o0TRkOZ8qmTzKZx/vDbLgmtezAJqE5z2P5lonbrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772988550; c=relaxed/simple;
-	bh=+1eHuPUMvMgXuyMN6uOdzIYIpwsuKuiu5gQn19TAlZ8=;
+	s=arc-20240116; t=1772988562; c=relaxed/simple;
+	bh=Amn4P40BAlBk4Ag+n9eCcy5jzEAK4Ibu1v4I55f1mrQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qjES2PJeijbY0lWeQr6VjoaWRRalR9L164mzGnZ4hvvjAT5RZKhSOmcXrtN5tZFbdKCBrUBihYoNzxldBQFhmYZzDjo+XJW+ziaI3an8Eqi08gSwB70nR9yaDRi6yOl9dqXX9FRQj/qN+yoy8JeMfH3PRe8SsSNZhT8laXKYdzA=
+	 In-Reply-To:To:Cc; b=G7TJ0i+Cq6GLB9UPtSwE9hu4qz0egqQd0OpxWzqQTr3eUmkfs6iHCIBKrVUMZPgo5Ueu3nwJplFsDork2KBRC3Lbbdd/O+mxzy7PE36W8sVJmlke//To40ftAYcDtATkeUcOk/VOgOHZ+ywGO/AyCZBqwSckCaCKPUd7Ji7p8m4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 841AD1C01;
-	Sun,  8 Mar 2026 09:49:00 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7BD01E2F;
+	Sun,  8 Mar 2026 09:49:03 -0700 (PDT)
 Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B21AB3F694;
-	Sun,  8 Mar 2026 09:48:53 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 01F633F836;
+	Sun,  8 Mar 2026 09:49:01 -0700 (PDT)
 From: Leo Yan <leo.yan@arm.com>
-Date: Sun, 08 Mar 2026 16:46:23 +0000
-Subject: [PATCH v3 18/30] tools: nolibc: Append extra cflags
+Date: Sun, 08 Mar 2026 16:46:24 +0000
+Subject: [PATCH v3 19/30] tools: objtool: Append extra host cflags
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260308-tools_build_fix_zero_init-v3-18-6477808123b7@arm.com>
+Message-Id: <20260308-tools_build_fix_zero_init-v3-19-6477808123b7@arm.com>
 References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
 In-Reply-To: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
@@ -75,35 +75,35 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
  Leo Yan <leo.yan@arm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772988384; l=823;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772988384; l=803;
  i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=+1eHuPUMvMgXuyMN6uOdzIYIpwsuKuiu5gQn19TAlZ8=;
- b=WVHp/PVSA93B9ZiuYlKmtT4hgVNbkqIJUIpqBiwlUqYW2amEgF5cFgVMyzaMw2tpfvRIFp5aW
- hj1eTUzNXdDDlguovhxMNUTNyUfqraHhlmZQUxMLehV3vNO7MXHg88G
+ bh=Amn4P40BAlBk4Ag+n9eCcy5jzEAK4Ibu1v4I55f1mrQ=;
+ b=r/6D2rZLbD8+gjhhfKeB4uIfNj+wauYlADAoIqX9gL+a4U3+eqXyQbGvF+cpteH19xO/A4Pzd
+ UQPkUml7fMLDs08WJ1o4wjZMU8/gNIXP0mwwaVO6cC+y2qbLzkkwkLS
 X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
  pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-the compiler.
+Append HOST_EXTRACFLAGS to HOSTCFLAGS so that additional flags can be
+applied to the host compiler.
 
 Signed-off-by: Leo Yan <leo.yan@arm.com>
 ---
- tools/include/nolibc/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/objtool/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index 1958dda988954d8a604b28f5feb75ebb67ee2e14..b7f0385ccba14fdaa08aab6192acf0296b47cdbc 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -105,7 +105,7 @@ headers_standalone: headers
- 	$(Q)$(MAKE) -C $(srctree) headers_install INSTALL_HDR_PATH=$(OUTPUT)sysroot
+diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+index 76bcd4e85de345048bba0a6e0066c3cf61dac979..716e84cc33eaccb0e4ae592746eb1888edc2f850 100644
+--- a/tools/objtool/Makefile
++++ b/tools/objtool/Makefile
+@@ -60,6 +60,8 @@ INCLUDES := -I$(srctree)/tools/include \
+ 	    -I$(srctree)/tools/objtool/arch/$(SRCARCH)/include \
+ 	    -I$(LIBSUBCMD_OUTPUT)/include
  
- CFLAGS_s390 := -m64
--CFLAGS := $(CFLAGS_$(ARCH))
-+CFLAGS := $(CFLAGS_$(ARCH)) $(EXTRA_CFLAGS)
++HOSTCFLAGS      += $(HOST_EXTRACFLAGS)
++
+ OBJTOOL_CFLAGS  := -std=gnu11 -fomit-frame-pointer -O2 -g $(WARNINGS)	\
+ 		   $(INCLUDES) $(LIBELF_FLAGS) $(LIBXXHASH_CFLAGS) $(HOSTCFLAGS)
  
- headers_check: headers_standalone
- 	$(Q)for header in $(filter-out crt.h std.h,$(all_files)); do \
 
 -- 
 2.34.1
