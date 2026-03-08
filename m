@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED69280308;
-	Sun,  8 Mar 2026 05:05:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3F3288510;
+	Sun,  8 Mar 2026 05:07:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772946357; cv=none; b=tVdy2taKB4N8hCQAoZus9PDjcOrId8wM1rQ4jNYcjymAagbtj2iiHxNcQEH/uS0hnsPwDDDUErgWMHs2So3JJI12W3FyGqSP7WumYWlpku1yvCbhklDrudqCxgCrnH4g5confi9XZCY/V4PKkAWgjoq74QM5gaMJbes1+Id14nw=
+	t=1772946442; cv=none; b=Vt3YwxSLqC5QY2vTwfTDUmqp341n1wuy8ayTlS6+re5rfqm/xM5GfNAeDvq/pEI0ZKycPv0GT4AbytSOe7TzBkxUp3Ks2o1NQLKO5DEau4AZn4osn70csjR0Os1c2n4iyYygkAWLQNAbAaLzvx614ep8qMQ8IGJVh0MmTP0FT9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772946357; c=relaxed/simple;
-	bh=KU2EbtNpUmTOC9y4uli7NcQUzLIsbeTzo3qRJWgiD7Q=;
+	s=arc-20240116; t=1772946442; c=relaxed/simple;
+	bh=PoRRun1BrhuZi8h7yUzp/FrTozKQZcf2gZHWG2DVOMY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lv8VkNu4NPrg5MfOrSBgoBLDOwj5TFnpUNncgu7ThlSTMVoH+xzMLOJsoNnX02u59apaNK8DMLGQGBLkHhWuMdUZd93wdE859/NxDSHV31Yw5hOYbVxEBEr/LzRP2bmHl2FG82OwQcTT77XkzjNQLA1v08tIt/veinhKWoCXb/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OK9HpiMF; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=U96N8KF4EBX8pZKULIDfymP5UVLypO5/P/pjTisPTpYnjY2XIdKETGKMblalmDZW5m1fqUhilgOhFiX1XPtQvgw3gitHbMB4fu1f5720XlFwOyZmY0GG1RDTQHoNsZw5lOgEONNkjsIy0jDe+LCSKTDgr0RDqBjpSstR4xnE14E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GY3oOv45; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OK9HpiMF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GY3oOv45"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772946356; x=1804482356;
+  t=1772946440; x=1804482440;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KU2EbtNpUmTOC9y4uli7NcQUzLIsbeTzo3qRJWgiD7Q=;
-  b=OK9HpiMFwUJXkxsQJVO/GkpaDArD0j7LkErMWLx2ZWL5ZtAGVRquJ/gv
-   ydBmeL6iarrCyI7T/ZZ95L+kHvms1bHj51Lx/8b9caXwmszUFy7/fY8y6
-   mvLcSBxsymFyngKhxNfL5cBiHJeLKaJV1YaXK0+lKSVYnx5R3Z/rthJd3
-   su1WtXQSlhtzvFWk85RoI2LvMhyGklv7IMVMIey3K1r0kGot7Q0y4kvxK
-   TdQygmE100/Nty+G6SVjtlpJJbm7ytOLYcMraZFrcwnbPb2L9E/zk2WWf
-   G5lsWCQbW4sdRhphrE8FRqGaGOJ4xTrQC/84kV2eqc3kwebNGsyyx1uja
+  bh=PoRRun1BrhuZi8h7yUzp/FrTozKQZcf2gZHWG2DVOMY=;
+  b=GY3oOv45tddSmNHK0iEdbUNGW43YI7Kt/5gA1lKh1p0cDZAgEQ1eXYLW
+   8FUd6m18oPYfE6kLb9pkWZhCR340JJsTN5QeHmNxezfRDLlNJkbxet2f/
+   5GQYdEY+r+ah144fMrs6oB3a8sZdUUM2SZ7+y9h7pq58VpooiFILovNtm
+   3MxBlVVJFuBdaU9K1JOBdIGYEFe0xqjSH9EOnMZ/0sVIvVq6O+T3PHN+5
+   596T/s3wd2kWmjE10CIuYBgNSmn6k1e3QXla9IeuRF/kB0bb93DEeT6xu
+   yC6hLFV2zl1QLqt49lhQKZNICM8nXT1x/Fhks0UArCWrPyjNsKIQt/XA7
    g==;
-X-CSE-ConnectionGUID: BNnJsqCASOK5GsvWu2RdRw==
-X-CSE-MsgGUID: CYDaloFRSVupLQ2jtMIsDA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="73028018"
+X-CSE-ConnectionGUID: bDz1K2tXTsi+EoXnPaMf2w==
+X-CSE-MsgGUID: 9Fd92V7vRjKrVCjkugwVEQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="84329234"
 X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="73028018"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 21:05:56 -0800
-X-CSE-ConnectionGUID: iK19d4IsQwGj+KS96MdSfg==
-X-CSE-MsgGUID: yPyYIg/KRdmpYWmtDoUIEw==
+   d="scan'208";a="84329234"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 21:07:19 -0800
+X-CSE-ConnectionGUID: yvAT1GjpSTauFybyja8tCw==
+X-CSE-MsgGUID: HiLVP5tFQKqisV/SxtTzcg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="216003698"
-Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 07 Mar 2026 21:05:53 -0800
-Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
+   d="scan'208";a="223527466"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 07 Mar 2026 21:07:17 -0800
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vz6Kr-000000002ur-3fyI;
-	Sun, 08 Mar 2026 05:05:49 +0000
-Date: Sun, 8 Mar 2026 13:05:12 +0800
+	id 1vz6ME-000000002dB-2Tlg;
+	Sun, 08 Mar 2026 05:07:14 +0000
+Date: Sun, 8 Mar 2026 06:06:35 +0100
 From: kernel test robot <lkp@intel.com>
 To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -57,7 +57,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	ilias.apalodimas@linaro.org
 Subject: Re: [PATCH net] page_pool: store detach_time as ktime_t to avoid
  false-negatives
-Message-ID: <202603081213.mN3LtMM5-lkp@intel.com>
+Message-ID: <202603080650.SZhWEYVL-lkp@intel.com>
 References: <20260307204022.1897614-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -79,14 +79,14 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Jakub-Kicinski/page_pool-
 base:   net/main
 patch link:    https://lore.kernel.org/r/20260307204022.1897614-1-kuba%40kernel.org
 patch subject: [PATCH net] page_pool: store detach_time as ktime_t to avoid false-negatives
-config: loongarch-randconfig-001-20260308 (https://download.01.org/0day-ci/archive/20260308/202603081213.mN3LtMM5-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603081213.mN3LtMM5-lkp@intel.com/reproduce)
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260308/202603080650.SZhWEYVL-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603080650.SZhWEYVL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603081213.mN3LtMM5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603080650.SZhWEYVL-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
