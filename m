@@ -1,64 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4E514F9FB;
-	Sat,  7 Mar 2026 22:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C18F2556E;
+	Sun,  8 Mar 2026 00:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772924188; cv=none; b=JML6+O1Z/RRJy5gc/mgGHQOANJAsxvnUh5OOgaY1Nk5Zer+QteIR5GJPqdWtrmdbTnogSjGkRECRLGoY8rYJC+k5zwTjAkO7ScEf3kJVETF71apIDefCPgt1HKo05yIdPjmm+qrikqP+AG6/fggEg6NggNwaJhocsvY8g0dpegA=
+	t=1772929234; cv=none; b=p/Qf04k3AqrY70u2WvqWWeU4ariP5rvMz7375ueATBzOGpn3WChBRKo1etPrwkqnM8yk/a8x2NDITdv2SxZUG32UaS81X02ke0S2AfAw0XGcUusKRKRFkpWoM4h6pzHIaWAKACABDvZcw4Ujgv9+Mdg3+4Jvaiyou/fiV087tm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772924188; c=relaxed/simple;
-	bh=S8KcR1LmjqTxj/mWoKrlCUsjydq8SPbkoQLE2AIRIaY=;
+	s=arc-20240116; t=1772929234; c=relaxed/simple;
+	bh=S+TdmegN6LPmRbLcYD+guAiSDuYAfP/isRPuL+f2XLI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=upLqmvKVkXZXOt/lWZm41JXZcns0C2zN/zK93btlg1i+iOmnSRlgg2FVMXn54O0MHBIlOg04sZyuEU0pXEKrxto6OQ3c1uvam43FqlPgnJgZIGZ2d85cn+DWOxPF2sI/u5yZiywE36+UbvEbMqqsHs4O0JzBVaM0KuT+dQCKGBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OSC7TL2h; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=JOttaU1ff1c7FAvvQMTjIZkzSFjQK0aAygZL1lB1I+bpAXuYYDS4RrGwDlUcC+4xa7VUQrkHzJbwjlG10v+hoWB5DvI9FAs3fgM5dFJ8Ih5IM+GUtq55wrgcPtbOjPrWXmdLkSzuZejaR7AtZLZS+Z/pCbXP6X96CPv2mzRmqVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lT8uJsZV; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OSC7TL2h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lT8uJsZV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772924186; x=1804460186;
+  t=1772929233; x=1804465233;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=S8KcR1LmjqTxj/mWoKrlCUsjydq8SPbkoQLE2AIRIaY=;
-  b=OSC7TL2hCWPCCMOxKczKwHIcDQwG8pH4dvY4zh2wBHe3YicuRzk7EBYd
-   5+HPhuFg8jwBrdieu9iCESbcYEWtAWEJWT2nmqOkJRvty4H0dTy5euOU4
-   jUDJBIgogrkgxL++1c2xKZtwirpPrJe4n8Iu0qdK/L0BmDrFrGFoXu32k
-   JZMdNtm64s46lTQcmJtRaKbf3pRE/damZMcdQF9tcmCI7a9WQ85CxmTJQ
-   KDKvHgAq6KOMcjspU4S+QS79D1DklVA+pQBoPa/T2OI3FMdFOUl56HDC5
-   NlWO+u8wMbvv3uQfXesRUQRB6/dKGLwkgj+3ETIgBHffVeQrpOU2xRwDo
-   Q==;
-X-CSE-ConnectionGUID: xAW/VkL3RYaw8EN5v37jNQ==
-X-CSE-MsgGUID: qoh6WzpXS2ao1hv7imUXrw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="74043052"
+  bh=S+TdmegN6LPmRbLcYD+guAiSDuYAfP/isRPuL+f2XLI=;
+  b=lT8uJsZV88pJX/NeFzYlWxyGY+3PvG+vh3dM6rXeyaHmddyrBwu53M2h
+   mq3o2pKwLl2n3lqxVHQLsJGWvJu2ONWbnwHwCuNZfHhUm18VTKXOsAX21
+   BmuBIT5DmmFtGSku/LutB9BpLFhYEF29PQLxxh7iQljgWi8936wroXBVp
+   FfnpV/IZOdnukEouHSzLlwHi1bdS5lcyc8Y0dUJy3kN+iMg/HhNVWiIDq
+   g7vLKVK+oJwgO9aZ3+23Thq3+Z9tSHngk90Hf8GDU10vWza/l/GYANXq+
+   HLsa28YZaq0EwcJ5j8doVF5grzb0uT7rs1vQ+Vc04yLLhNRrwGR/mIuXL
+   w==;
+X-CSE-ConnectionGUID: DeGhVVYTREuo1+2GOZ4bGg==
+X-CSE-MsgGUID: JHkQ3jWpROOIiFCYxkn+ig==
+X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="74189171"
 X-IronPort-AV: E=Sophos;i="6.23,107,1770624000"; 
-   d="scan'208";a="74043052"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 14:56:26 -0800
-X-CSE-ConnectionGUID: uCIvkWKkSZKiepC7ovznDw==
-X-CSE-MsgGUID: gyg//feTTbC9tPeuQ0GjLA==
+   d="scan'208";a="74189171"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 16:20:33 -0800
+X-CSE-ConnectionGUID: rUSUHO+4QTm7GK+RgPqDEA==
+X-CSE-MsgGUID: o6vPGFn9TwqDQJmm+fRLPg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,107,1770624000"; 
-   d="scan'208";a="218573738"
+   d="scan'208";a="245489683"
 Received: from lkp-server01.sh.intel.com (HELO 058beb05654c) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 07 Mar 2026 14:56:21 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 07 Mar 2026 16:20:29 -0800
 Received: from kbuild by 058beb05654c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vz0ZF-000000002hR-42FW;
-	Sat, 07 Mar 2026 22:56:17 +0000
-Date: Sun, 8 Mar 2026 06:55:23 +0800
+	id 1vz1sg-000000002kr-0d2A;
+	Sun, 08 Mar 2026 00:20:26 +0000
+Date: Sun, 8 Mar 2026 08:19:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Haifeng Xu <haifeng.xu@shopee.com>, akpm@linux-foundation.org,
-	david@fromorbit.com, roman.gushchin@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	zhengqi.arch@bytedance.com, muchun.song@linux.dev,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	Haifeng Xu <haifeng.xu@shopee.com>
-Subject: Re: [PATCH 2/3] mm: shrinker: optimize the allocation of
- shrinker_info when setting cgroup_memory_nokmem
-Message-ID: <202603080606.UQEPDmnB-lkp@intel.com>
-References: <20260306075757.198887-3-haifeng.xu@shopee.com>
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Olivier Moysan <olivier.moysan@foss.st.com>,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v5 4/4] iio: adc: ad4080: add support for AD4880
+ dual-channel ADC
+Message-ID: <202603080827.qjeW4PYt-lkp@intel.com>
+References: <20260305113756.47243-5-antoniu.miclaus@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,104 +74,142 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260306075757.198887-3-haifeng.xu@shopee.com>
+In-Reply-To: <20260305113756.47243-5-antoniu.miclaus@analog.com>
 
-Hi Haifeng,
+Hi Antoniu,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.0-rc2 next-20260306]
-[cannot apply to akpm-mm/mm-everything]
+[auto build test ERROR on v7.0-rc2]
+[also build test ERROR on linus/master]
+[cannot apply to jic23-iio/togreg next-20260306]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Haifeng-Xu/mm-shrinker-introduce-new-function-get_shrinker_id/20260306-160247
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260306075757.198887-3-haifeng.xu%40shopee.com
-patch subject: [PATCH 2/3] mm: shrinker: optimize the allocation of shrinker_info when setting cgroup_memory_nokmem
-config: i386-randconfig-002-20260307 (https://download.01.org/0day-ci/archive/20260308/202603080606.UQEPDmnB-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603080606.UQEPDmnB-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Antoniu-Miclaus/iio-backend-use-__free-fwnode_handle-for-automatic-cleanup/20260305-194647
+base:   v7.0-rc2
+patch link:    https://lore.kernel.org/r/20260305113756.47243-5-antoniu.miclaus%40analog.com
+patch subject: [PATCH v5 4/4] iio: adc: ad4080: add support for AD4880 dual-channel ADC
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260308/202603080827.qjeW4PYt-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603080827.qjeW4PYt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603080606.UQEPDmnB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603080827.qjeW4PYt-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/huge_memory.c:4355:38: error: no member named 'id' in 'struct shrinker'
-    4355 |                         int id = deferred_split_shrinker->id;
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~  ^
->> mm/huge_memory.c:4358:35: error: no member named 'nonslab_id' in 'struct shrinker'
-    4358 |                                 id = deferred_split_shrinker->nonslab_id;
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~  ^
+>> drivers/iio/adc/ad4080.c:739:17: error: call to undeclared function 'devm_spi_new_ancillary_device'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   st->spi[ch] = devm_spi_new_ancillary_device(spi,
+                                 ^
+   drivers/iio/adc/ad4080.c:739:17: note: did you mean 'spi_new_ancillary_device'?
+   include/linux/spi/spi.h:389:27: note: 'spi_new_ancillary_device' declared here
+   extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 chip_select);
+                             ^
+>> drivers/iio/adc/ad4080.c:739:15: error: incompatible integer to pointer conversion assigning to 'struct spi_device *' from 'int' [-Wint-conversion]
+                   st->spi[ch] = devm_spi_new_ancillary_device(spi,
+                               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    2 errors generated.
 
 
-vim +4355 mm/huge_memory.c
+vim +/devm_spi_new_ancillary_device +739 drivers/iio/adc/ad4080.c
 
-  4307	
-  4308	/* partially_mapped=false won't clear PG_partially_mapped folio flag */
-  4309	void deferred_split_folio(struct folio *folio, bool partially_mapped)
-  4310	{
-  4311		struct deferred_split *ds_queue;
-  4312		unsigned long flags;
-  4313	
-  4314		/*
-  4315		 * Order 1 folios have no space for a deferred list, but we also
-  4316		 * won't waste much memory by not adding them to the deferred list.
-  4317		 */
-  4318		if (folio_order(folio) <= 1)
-  4319			return;
-  4320	
-  4321		if (!partially_mapped && !split_underused_thp)
-  4322			return;
-  4323	
-  4324		/*
-  4325		 * Exclude swapcache: originally to avoid a corrupt deferred split
-  4326		 * queue. Nowadays that is fully prevented by memcg1_swapout();
-  4327		 * but if page reclaim is already handling the same folio, it is
-  4328		 * unnecessary to handle it again in the shrinker, so excluding
-  4329		 * swapcache here may still be a useful optimization.
-  4330		 */
-  4331		if (folio_test_swapcache(folio))
-  4332			return;
-  4333	
-  4334		ds_queue = folio_split_queue_lock_irqsave(folio, &flags);
-  4335		if (partially_mapped) {
-  4336			if (!folio_test_partially_mapped(folio)) {
-  4337				folio_set_partially_mapped(folio);
-  4338				if (folio_test_pmd_mappable(folio))
-  4339					count_vm_event(THP_DEFERRED_SPLIT_PAGE);
-  4340				count_mthp_stat(folio_order(folio), MTHP_STAT_SPLIT_DEFERRED);
-  4341				mod_mthp_stat(folio_order(folio), MTHP_STAT_NR_ANON_PARTIALLY_MAPPED, 1);
-  4342	
-  4343			}
-  4344		} else {
-  4345			/* partially mapped folios cannot become non-partially mapped */
-  4346			VM_WARN_ON_FOLIO(folio_test_partially_mapped(folio), folio);
-  4347		}
-  4348		if (list_empty(&folio->_deferred_list)) {
-  4349			struct mem_cgroup *memcg;
-  4350	
-  4351			memcg = folio_split_queue_memcg(folio, ds_queue);
-  4352			list_add_tail(&folio->_deferred_list, &ds_queue->split_queue);
-  4353			ds_queue->split_queue_len++;
-  4354			if (memcg) {
-> 4355				int id = deferred_split_shrinker->id;
-  4356	
-  4357				if (!memcg_kmem_online() &&  memcg != root_mem_cgroup)
-> 4358					id = deferred_split_shrinker->nonslab_id;
-  4359	
-  4360				set_shrinker_bit(memcg, folio_nid(folio), id);
-  4361			}
-  4362		}
-  4363		split_queue_unlock_irqrestore(ds_queue, flags);
-  4364	}
-  4365	
+   705	
+   706	static int ad4080_probe(struct spi_device *spi)
+   707	{
+   708		struct iio_dev *indio_dev;
+   709		struct device *dev = &spi->dev;
+   710		struct ad4080_state *st;
+   711		struct clk *clk;
+   712		int ret;
+   713	
+   714		indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
+   715		if (!indio_dev)
+   716			return -ENOMEM;
+   717	
+   718		st = iio_priv(indio_dev);
+   719	
+   720		ret = devm_regulator_bulk_get_enable(dev,
+   721						     ARRAY_SIZE(ad4080_power_supplies),
+   722						     ad4080_power_supplies);
+   723		if (ret)
+   724			return dev_err_probe(dev, ret,
+   725					     "failed to get and enable supplies\n");
+   726	
+   727		/* Setup primary SPI device (channel 0) */
+   728		st->spi[0] = spi;
+   729		st->regmap[0] = devm_regmap_init_spi(spi, &ad4080_regmap_config);
+   730		if (IS_ERR(st->regmap[0]))
+   731			return PTR_ERR(st->regmap[0]);
+   732	
+   733		st->info = spi_get_device_match_data(spi);
+   734		if (!st->info)
+   735			return -ENODEV;
+   736	
+   737		/* Setup ancillary SPI devices for additional channels */
+   738		for (unsigned int ch = 1; ch < st->info->num_channels; ch++) {
+ > 739			st->spi[ch] = devm_spi_new_ancillary_device(spi,
+   740								    spi_get_chipselect(spi, ch));
+   741			if (IS_ERR(st->spi[ch]))
+   742				return dev_err_probe(dev, PTR_ERR(st->spi[ch]),
+   743						     "failed to register ancillary device\n");
+   744	
+   745			st->regmap[ch] = devm_regmap_init_spi(st->spi[ch],
+   746							      &ad4080_regmap_config);
+   747			if (IS_ERR(st->regmap[ch]))
+   748				return PTR_ERR(st->regmap[ch]);
+   749		}
+   750	
+   751		ret = devm_mutex_init(dev, &st->lock);
+   752		if (ret)
+   753			return ret;
+   754	
+   755		indio_dev->name = st->info->name;
+   756		indio_dev->channels = st->info->channels;
+   757		indio_dev->num_channels = st->info->num_channels;
+   758		indio_dev->info = st->info->num_channels > 1 ?
+   759				  &ad4880_iio_info : &ad4080_iio_info;
+   760	
+   761		ret = ad4080_properties_parse(st);
+   762		if (ret)
+   763			return ret;
+   764	
+   765		clk = devm_clk_get_enabled(&spi->dev, "cnv");
+   766		if (IS_ERR(clk))
+   767			return PTR_ERR(clk);
+   768	
+   769		st->clk_rate = clk_get_rate(clk);
+   770	
+   771		/* Get backends for all channels */
+   772		for (unsigned int ch = 0; ch < st->info->num_channels; ch++) {
+   773			st->back[ch] = devm_iio_backend_get_by_index(dev, ch);
+   774			if (IS_ERR(st->back[ch]))
+   775				return PTR_ERR(st->back[ch]);
+   776	
+   777			ret = devm_iio_backend_enable(dev, st->back[ch]);
+   778			if (ret)
+   779				return ret;
+   780		}
+   781	
+   782		/*
+   783		 * Request buffer from the first backend only. For multi-channel
+   784		 * devices (e.g., AD4880), all backends share a single IIO buffer
+   785		 * as data from all ADC channels is interleaved into one stream.
+   786		 */
+   787		ret = devm_iio_backend_request_buffer(dev, st->back[0], indio_dev);
+   788		if (ret)
+   789			return ret;
+   790	
+   791		ret = ad4080_setup(indio_dev);
+   792		if (ret)
+   793			return ret;
+   794	
+   795		return devm_iio_device_register(&spi->dev, indio_dev);
+   796	}
+   797	
 
 -- 
 0-DAY CI Kernel Test Service
