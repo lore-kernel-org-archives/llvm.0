@@ -1,26 +1,26 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5912934677F
-	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 16:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B021C346A02
+	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 16:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772988485; cv=none; b=epdcHMDHigp68zJzo2NiwZT+j4mDyUrEZ928+jF0PyWNrdVmbTJ/fIJTO0QzA3q54IO5Pdrc2E9CLInWPWGoxEBef2UE12qyEnNjlLnGhpVFnBiQ9Ba/fgPXan2LwIbPSAsRENjTa6IjuL/9RDwSlKooHyqUi0TSzXUe6sbjWq0=
+	t=1772988495; cv=none; b=COnIAM4wzK9o69clwjeAeXO22vbZVF2pNNvDk4tK4wgk3JzfQU6gmszMxh8TyppKN5ATA4fTukD+TIoaAaKDp3RN7eC0CiJ+KWKoJVhCMP8gbZh6fJ/SqfB6s6PiF419M0C4z3AQeuwAIuHqGFVbpjUsaFn+fgO+x8tCizPX9W0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772988485; c=relaxed/simple;
-	bh=Ldva6x87YlQYltUy+7xacckcnd0JK3KvzRSadgU3M+I=;
+	s=arc-20240116; t=1772988495; c=relaxed/simple;
+	bh=BiICEwgnh75o/Dau8EVK8l08aGlFGik0AfI3UODfkRk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=X+g75LlqCYIlloRPXRwNsnAfr9kmt0Pp6s3RyoxpCOZDZhrcBIlHpzFfScwpB5eQokZ8Rwq6r68Y2rYZ9IITloMe6HjDUD+FUILOnNdsJ9WFkLE/MK5iqs8NUGzMWjA04Zsm+2fEICp5H8/aHK3BsI8OIfDagSin1NnJ2UIpYsQ=
+	 In-Reply-To:To:Cc; b=M75XIPctzsLu71kF6yTeTtV8JiBD20ZWGuRINOuj6gb6nKJN8pQ3cfB6tVpJJOBwTWyjYBAzwrG0pjCTPPR8jVrm4uczrnpo26B46eRpbwkI90fKIa2cJn1Ybf9ID/KYbEj/tN/hMZMBv2u9fhDgY8AxVIs62upr7Nsk4ScQ8hs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9810C1C01;
-	Sun,  8 Mar 2026 09:47:57 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CEEAB1C01;
+	Sun,  8 Mar 2026 09:48:05 -0700 (PDT)
 Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CC7763F694;
-	Sun,  8 Mar 2026 09:47:55 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 173BD3F694;
+	Sun,  8 Mar 2026 09:48:03 -0700 (PDT)
 From: Leo Yan <leo.yan@arm.com>
-Date: Sun, 08 Mar 2026 16:46:16 +0000
-Subject: [PATCH v3 11/30] tools: bootconfig: Append extra cflags
+Date: Sun, 08 Mar 2026 16:46:17 +0000
+Subject: [PATCH v3 12/30] tools: counter: Append extra cflags
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260308-tools_build_fix_zero_init-v3-11-6477808123b7@arm.com>
+Message-Id: <20260308-tools_build_fix_zero_init-v3-12-6477808123b7@arm.com>
 References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
 In-Reply-To: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
@@ -75,11 +75,11 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
  Leo Yan <leo.yan@arm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772988384; l=724;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772988384; l=692;
  i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=Ldva6x87YlQYltUy+7xacckcnd0JK3KvzRSadgU3M+I=;
- b=eteLbDcAudMK6X1J/T2GmOPSB3yMvfQmaZM8q8ZU3TQT7jxvtyGBF96iBuUGuMMOvpEFZ5rkG
- u9puGx5iFA8DbiKMnkIQuLKj1AuDizFZPi004XQrvzFJ5BcPC5pRxqS
+ bh=BiICEwgnh75o/Dau8EVK8l08aGlFGik0AfI3UODfkRk=;
+ b=UkayiGxfrgITF93bvnXO2u3oGhdSIzt5RbJ6LzWbdhZs2SIY48ex7o/gWjApLlBe48z+imJcS
+ CKsaT4fK+n4DVB/KMROqFEZQNJlQnYQ0QJ2Io4w2alO3OvlUt9aGZFj
 X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
  pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
@@ -88,21 +88,21 @@ the compiler.
 
 Signed-off-by: Leo Yan <leo.yan@arm.com>
 ---
- tools/bootconfig/Makefile | 1 +
+ tools/counter/Makefile | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/bootconfig/Makefile b/tools/bootconfig/Makefile
-index 90eb47c9d8de67b0ccc74a8de0af3a7e0b97feeb..6bbf4dfdb5b56fcb2a43ccda18b59a270778267b 100644
---- a/tools/bootconfig/Makefile
-+++ b/tools/bootconfig/Makefile
-@@ -10,6 +10,7 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
+diff --git a/tools/counter/Makefile b/tools/counter/Makefile
+index d82d35a520f610260abb43f6ae28e56d73268231..c0628677af3807bdc331ce2dba92b4e5f1a25b68 100644
+--- a/tools/counter/Makefile
++++ b/tools/counter/Makefile
+@@ -12,6 +12,7 @@ endif
+ # (this improves performance and avoids hard-to-debug behaviour);
+ MAKEFLAGS += -r
  
- LIBSRC = $(srctree)/lib/bootconfig.c $(srctree)/include/linux/bootconfig.h
 +override CFLAGS += $(EXTRA_CFLAGS)
- override CFLAGS += -Wall -g -I$(CURDIR)/include
+ override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include \
+ 	 -I$(srctree)/tools/include
  
- ALL_TARGETS := bootconfig
 
 -- 
 2.34.1
