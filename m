@@ -1,156 +1,137 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3F3288510;
-	Sun,  8 Mar 2026 05:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CFB3368B0
+	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 06:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772946442; cv=none; b=Vt3YwxSLqC5QY2vTwfTDUmqp341n1wuy8ayTlS6+re5rfqm/xM5GfNAeDvq/pEI0ZKycPv0GT4AbytSOe7TzBkxUp3Ks2o1NQLKO5DEau4AZn4osn70csjR0Os1c2n4iyYygkAWLQNAbAaLzvx614ep8qMQ8IGJVh0MmTP0FT9w=
+	t=1772949791; cv=none; b=VZLuj4O4k9mw1mRjx4tEZa4vZ8Vvr9vc9I9UgePwxFQBbu65CMwguPsT88nCowCWTLvSe+TLaXJm+1ytzijLS9cbw7s4FVCpCvhJJhkndBVmKyuLD3mwmW+NPD6GPhqtT8cCftNfGLiYvOEnHeqAqO8UJJ09IO2hSH1ws/ZiCMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772946442; c=relaxed/simple;
-	bh=PoRRun1BrhuZi8h7yUzp/FrTozKQZcf2gZHWG2DVOMY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U96N8KF4EBX8pZKULIDfymP5UVLypO5/P/pjTisPTpYnjY2XIdKETGKMblalmDZW5m1fqUhilgOhFiX1XPtQvgw3gitHbMB4fu1f5720XlFwOyZmY0GG1RDTQHoNsZw5lOgEONNkjsIy0jDe+LCSKTDgr0RDqBjpSstR4xnE14E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GY3oOv45; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772949791; c=relaxed/simple;
+	bh=cWKPuDVl67xseSTHDRD6csC6Qv0Dge7qmYw2eIym0bY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ZW/F689VHO9DzXOPHE3PeSuE2G/yntjv9FJpFuPvQgLk4INQPpCS7AcC9bFQU6hcC7WcaEAVKnG5Yy5Iyt+ImOZYBYAYNz5TW3Eg6jgk02oUNCW4HE9p1Ty86mWRjXvTqMejHRvexqQ4b+u03OU6CFlg1+RYyKJBeFJubUn1Mqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VP7MZYHq; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GY3oOv45"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772946440; x=1804482440;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PoRRun1BrhuZi8h7yUzp/FrTozKQZcf2gZHWG2DVOMY=;
-  b=GY3oOv45tddSmNHK0iEdbUNGW43YI7Kt/5gA1lKh1p0cDZAgEQ1eXYLW
-   8FUd6m18oPYfE6kLb9pkWZhCR340JJsTN5QeHmNxezfRDLlNJkbxet2f/
-   5GQYdEY+r+ah144fMrs6oB3a8sZdUUM2SZ7+y9h7pq58VpooiFILovNtm
-   3MxBlVVJFuBdaU9K1JOBdIGYEFe0xqjSH9EOnMZ/0sVIvVq6O+T3PHN+5
-   596T/s3wd2kWmjE10CIuYBgNSmn6k1e3QXla9IeuRF/kB0bb93DEeT6xu
-   yC6hLFV2zl1QLqt49lhQKZNICM8nXT1x/Fhks0UArCWrPyjNsKIQt/XA7
-   g==;
-X-CSE-ConnectionGUID: bDz1K2tXTsi+EoXnPaMf2w==
-X-CSE-MsgGUID: 9Fd92V7vRjKrVCjkugwVEQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11722"; a="84329234"
-X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="84329234"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2026 21:07:19 -0800
-X-CSE-ConnectionGUID: yvAT1GjpSTauFybyja8tCw==
-X-CSE-MsgGUID: HiLVP5tFQKqisV/SxtTzcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,108,1770624000"; 
-   d="scan'208";a="223527466"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa003.jf.intel.com with ESMTP; 07 Mar 2026 21:07:17 -0800
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vz6ME-000000002dB-2Tlg;
-	Sun, 08 Mar 2026 05:07:14 +0000
-Date: Sun, 8 Mar 2026 06:06:35 +0100
-From: kernel test robot <lkp@intel.com>
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-	andrew+netdev@lunn.ch, horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>, hawk@kernel.org,
-	ilias.apalodimas@linaro.org
-Subject: Re: [PATCH net] page_pool: store detach_time as ktime_t to avoid
- false-negatives
-Message-ID: <202603080650.SZhWEYVL-lkp@intel.com>
-References: <20260307204022.1897614-1-kuba@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VP7MZYHq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772949788;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=z+n6icsLGCXhEz9zET4ixPleBe5htWZnctYbFAtXcug=;
+	b=VP7MZYHqZ3XPqFOCVYl5jd9KD4lvUh3+yGKf95OPtnFbMoEraLy9OO0gkIeoc7+r60/VZQ
+	Kr6R/mzmvKbSE2Dmz/CFywQSzCVmoO1cmPm2c5hoMsVUJaX8B9IH4ucFxgMsXfrcM0zV3Q
+	Cf9MtXVnfWpBMUO/cWObTWJdkf3MwL0=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-134-tUnEODHPOUyKRW3Jx0F7Dw-1; Sun,
+ 08 Mar 2026 01:03:07 -0500
+X-MC-Unique: tUnEODHPOUyKRW3Jx0F7Dw-1
+X-Mimecast-MFC-AGG-ID: tUnEODHPOUyKRW3Jx0F7Dw_1772949786
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 590CF1800614
+	for <llvm@lists.linux.dev>; Sun,  8 Mar 2026 06:03:06 +0000 (UTC)
+Received: from [172.20.96.208] (unknown [10.30.44.37])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0C0371800576;
+	Sun,  8 Mar 2026 06:03:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc2,
+ upstream-mainline, c23719ab)
+Date: Sun, 08 Mar 2026 06:03:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260307204022.1897614-1-kuba@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <07957.126030801030700101@us-mta-134.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: yhb3lI4KMH-QmvCY0oJ4BhuJlLPNg-0pvxF-pR0hhBA_1772949786
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jakub,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on net/main]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jakub-Kicinski/page_pool-store-detach_time-as-ktime_t-to-avoid-false-negatives/20260308-044057
-base:   net/main
-patch link:    https://lore.kernel.org/r/20260307204022.1897614-1-kuba%40kernel.org
-patch subject: [PATCH net] page_pool: store detach_time as ktime_t to avoid false-negatives
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260308/202603080650.SZhWEYVL-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260308/202603080650.SZhWEYVL-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'x86-urgent-2026-03-08' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603080650.SZhWEYVL-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2370850270
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: fedora: avc:  denied  { create } for  pid=3D1 comm=3D"system=
+d" name=3D"io.systemd.Hostname" scontext=3Dsystem_u:system_r:init_t:s0 tcon=
+text=3Dsystem_u:object_r:var_run_t:s0 tclass=3Dlnk_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2443788
+            Affected tests:
+                Boot test [aarch64, ppc64le, x86_64]
+                Reboot test [aarch64, ppc64le, x86_64]
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
->> net/core/page_pool_user.c:248:5: error: call to undeclared function 'ktime_to_seconds'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     248 |                          ktime_to_seconds(pool->user.detach_time)))
-         |                          ^
-   net/core/page_pool_user.c:248:5: note: did you mean 'ktime_get_seconds'?
-   include/linux/timekeeping.h:59:17: note: 'ktime_get_seconds' declared here
-      59 | extern time64_t ktime_get_seconds(void);
-         |                 ^
-   1 error generated.
 
 
-vim +/ktime_to_seconds +248 net/core/page_pool_user.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   214	
-   215	static int
-   216	page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
-   217			  const struct genl_info *info)
-   218	{
-   219		size_t inflight, refsz;
-   220		unsigned int napi_id;
-   221		void *hdr;
-   222	
-   223		hdr = genlmsg_iput(rsp, info);
-   224		if (!hdr)
-   225			return -EMSGSIZE;
-   226	
-   227		if (nla_put_uint(rsp, NETDEV_A_PAGE_POOL_ID, pool->user.id))
-   228			goto err_cancel;
-   229	
-   230		if (pool->slow.netdev->ifindex != LOOPBACK_IFINDEX &&
-   231		    nla_put_u32(rsp, NETDEV_A_PAGE_POOL_IFINDEX,
-   232				pool->slow.netdev->ifindex))
-   233			goto err_cancel;
-   234	
-   235		napi_id = pool->p.napi ? READ_ONCE(pool->p.napi->napi_id) : 0;
-   236		if (napi_id_valid(napi_id) &&
-   237		    nla_put_uint(rsp, NETDEV_A_PAGE_POOL_NAPI_ID, napi_id))
-   238			goto err_cancel;
-   239	
-   240		inflight = page_pool_inflight(pool, false);
-   241		refsz =	PAGE_SIZE << pool->p.order;
-   242		if (nla_put_uint(rsp, NETDEV_A_PAGE_POOL_INFLIGHT, inflight) ||
-   243		    nla_put_uint(rsp, NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
-   244				 inflight * refsz))
-   245			goto err_cancel;
-   246		if (pool->user.detach_time &&
-   247		    nla_put_uint(rsp, NETDEV_A_PAGE_POOL_DETACH_TIME,
- > 248				 ktime_to_seconds(pool->user.detach_time)))
-   249			goto err_cancel;
-   250	
-   251		if (pool->mp_ops && pool->mp_ops->nl_fill(pool->mp_priv, rsp, NULL))
-   252			goto err_cancel;
-   253	
-   254		genlmsg_end(rsp, hdr);
-   255	
-   256		return 0;
-   257	err_cancel:
-   258		genlmsg_cancel(rsp, hdr);
-   259		return -EMSGSIZE;
-   260	}
-   261	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
