@@ -1,100 +1,88 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 972BD28468E;
-	Mon,  9 Mar 2026 20:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE181DED42;
+	Mon,  9 Mar 2026 20:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773086537; cv=none; b=OCQmtVM58+Ewb41BIXowOPCgmK3u/B8l0u3gQuD+41xgcZ/owlleMYFJ9VOFxi9FywE+BXum501yDUUfLFi2IfAZ8n8faMs7xXUcOJ1ry4cWqQNZD/sPPKjN7ADUZgG9z6bRi7mTmLMXa2y7B46p38Ufp7VAuoc93EYiIsvcsao=
+	t=1773087572; cv=none; b=ZvguJLKx9jhTPcjiDIeqStWAHdMyZP79hfLzFVF+WVAnLU4r+X7AOf8q/lzEKO71qhW8MTd4TnbYjiPFUidgEZKGkEu928KeJ7dz07HSsPgZTU2fSIppgrwFltfSPWikqe6DMj8xoJ2YfFbYbVOCtEbwco5cBoKaKQinaItvuRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773086537; c=relaxed/simple;
-	bh=KwN2/QpGEWJWWCk/fREnpSRX85f5N6DdZdaRA3c0G6k=;
+	s=arc-20240116; t=1773087572; c=relaxed/simple;
+	bh=ofM93fWFg9wOYbbqABGamk2Cktt1rzuB3peBI04jSGM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sDLgpce3GHuBe7vnyaIgEsRRgQt16p1bEeEg9Wvbut9B9Elr7W1RdXSMy0mgIlRNJnwUNi4Nk17CuhgKXSPfXo8kaxtpSO05VPNnBL3mDHNTOVAZZeBt+4h7Na8O36X5i6IX3f1W2p/UJ1/pIEp+t8m9g9n0r2+zIdy/kHdoYec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WVltCFGS; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=hVNlPHxKuLXEcZzOBwBORz9bTuNLMtyKBX9pXh54bsUjRdjzmevmzOaQYpVkR2vNuUU+SCWRQW3XDRZvcKoDuCRy++ym/25IWqbY+DiVgp4ABdyZjDjtFlSZezBAlTBNIG+FLCEuT7GWqkyHN3zbaJFB7OWbP6AFYsHbfHDakoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gcYz0Ocv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WVltCFGS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773086536; x=1804622536;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KwN2/QpGEWJWWCk/fREnpSRX85f5N6DdZdaRA3c0G6k=;
-  b=WVltCFGSARaTPGNXADoqZTWVIW5Jq9bWiyZbwArCfYcqG3oFqgttB+iU
-   vIcKcUfuvAsYOfMw6VjVCNl4eiexYpwsifVnUqpEY/p7ZBIAOiG39WLXr
-   j17UAiLbtVG/hMmlQyIyMGSjeC+Fiandmk5AZZu53YgO6z+qtkbNhee9J
-   AQLFDCOXlMDRK6umkUWGS9wohc5ECQ1ENuo4KLIbmIkq3nc9KsmoGswQe
-   swUCWI0iyITSDV/FfvDZnr8G8G3HwTRnS1jgrxJtHBIufK0kinW5n3gng
-   qtxDyo/zhsz13ncBOmyDd6JDnHt4V4cNKNO4nJ/8xgte32Mq6YvW6t3l+
-   Q==;
-X-CSE-ConnectionGUID: MLVdqCmoRkC9zQQuABdOuA==
-X-CSE-MsgGUID: 9SnuqK/VT4esOSW1Q0QTXg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11724"; a="84449963"
-X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
-   d="scan'208";a="84449963"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 13:02:15 -0700
-X-CSE-ConnectionGUID: DXxdW0NzQda9QHQTYmEHug==
-X-CSE-MsgGUID: 8xBox6r2QyuVL/4EgABK8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
-   d="scan'208";a="223975906"
-Received: from lkp-server01.sh.intel.com (HELO 434e41ea3c86) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 09 Mar 2026 13:02:12 -0700
-Received: from kbuild by 434e41ea3c86 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vzgnp-000000000m8-0V8m;
-	Mon, 09 Mar 2026 20:02:09 +0000
-Date: Tue, 10 Mar 2026 04:01:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kanchan Joshi <joshi.k@samsung.com>, brauner@kernel.org, hch@lst.de,
-	djwong@kernel.org, jack@suse.cz, cem@kernel.org, kbusch@kernel.org,
-	axboe@kernel.dk
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	gost.dev@samsung.com, Kanchan Joshi <joshi.k@samsung.com>
-Subject: Re: [PATCH v2 4/5] xfs: steer allocation using write stream
-Message-ID: <202603100305.6kIq1qtR-lkp@intel.com>
-References: <20260309052944.156054-5-joshi.k@samsung.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gcYz0Ocv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F22CC4CEF7;
+	Mon,  9 Mar 2026 20:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773087571;
+	bh=ofM93fWFg9wOYbbqABGamk2Cktt1rzuB3peBI04jSGM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gcYz0OcvvZtaGV5WQIiDGmqIa3liLRrsdSKGaRASR9HRDXNlSZRubqbUwfRo18MuW
+	 yQoLhUo0WAWPN0i6rbsXcx17ovSxuzsmqhGJqpVmcm4LKLt4VyH6HaBcFVxot1JTsz
+	 aH1ez9k1c2MCqTuZJJthNOBr++QxBhVI9Rk7ravSZ9LiJmXXFxHHdOPd+V6Uem/noj
+	 QJ1ktHAyRFXKm34k+Zxf615dv373m4Cy1wcDFweNxe4E6EvrTMlX0Y6ftYI4oW+6YP
+	 twNYF6oqYKXESxDxSGs8FZpCs3fOXHQZO/qkdvcG6qmFP5bFzK9TUQC1bAYKeXIcdH
+	 CuKWQBlGyr9jg==
+Date: Mon, 9 Mar 2026 13:19:27 -0700
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet <qmo@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, 
+	Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>, 
+	David Lechner <dlechner@baylibre.com>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Willy Tarreau <w@1wt.eu>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+	Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
+	Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v3 19/30] tools: objtool: Append extra host cflags
+Message-ID: <uub7xebutunq7cl4szwepu3lqenat3c4mle5rdxjtumq4t5lzv@arbi62zsbic3>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+ <20260308-tools_build_fix_zero_init-v3-19-6477808123b7@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260309052944.156054-5-joshi.k@samsung.com>
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-19-6477808123b7@arm.com>
 
-Hi Kanchan,
+On Sun, Mar 08, 2026 at 04:46:24PM +0000, Leo Yan wrote:
+> Append HOST_EXTRACFLAGS to HOSTCFLAGS so that additional flags can be
+> applied to the host compiler.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
 
-kernel test robot noticed the following build errors:
+Thanks!
 
-[auto build test ERROR on 11439c4635edd669ae435eec308f4ab8a0804808]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kanchan-Joshi/fs-add-generic-write-stream-management-ioctl/20260309-133736
-base:   11439c4635edd669ae435eec308f4ab8a0804808
-patch link:    https://lore.kernel.org/r/20260309052944.156054-5-joshi.k%40samsung.com
-patch subject: [PATCH v2 4/5] xfs: steer allocation using write stream
-config: arm-randconfig-002-20260309 (https://download.01.org/0day-ci/archive/20260310/202603100305.6kIq1qtR-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260310/202603100305.6kIq1qtR-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603100305.6kIq1qtR-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: __aeabi_uldivmod
-   >>> referenced by xfs_inode.c:126 (fs/xfs/xfs_inode.c:126)
-   >>>               fs/xfs/xfs_inode.o:(xfs_inode_write_stream_to_ag) in archive vmlinux.a
-   >>> did you mean: __aeabi_uidivmod
-   >>> defined in: vmlinux.a(arch/arm/lib/lib1funcs.o)
+Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Josh
