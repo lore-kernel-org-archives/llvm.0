@@ -1,117 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0107636897C
-	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 08:54:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE717361664;
+	Mon,  9 Mar 2026 09:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773046465; cv=none; b=sJTfOz7vN8xzxAeS2qlGvRGZyQKUhq4ROfnhlr6sNZhaFUz47PCYvVfvHTFexGO6mVdLnxW/AfZqP99Fr5VRQuttD14zLB6I+A+fDkHz1+iUuUHmT9BdHRZTJxKrtVU3l5hY2alXTaLlmv1SXHVYMTXnHlSiES65T4zk1X3NPnw=
+	t=1773048192; cv=none; b=sbwSeBmDviWgG+didr5xcpMW5XORwB3G4dukEiymbIH3l+9ZwoQRkk0OAB04r71uqb8jK638uIjS1MTn/DLJ5UYeCGjtXGaKZtri667c3M9JvA2VaqUNhqoFTy6dt5D3p3PgXjSOOeUohLrC4wIDfR6aLP3lOlbFPf8TCkpTP78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773046465; c=relaxed/simple;
-	bh=wG5+/hVL6HjKUoRhP7gA3WSoKo1PhFh9knJZ5mzHy6Y=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PLlmp7RbZKpgmmsH8IhOQZJfo0Ah/5n+5XhUjmoJAwJQ2PwVQuDnWz/hCazKy5VO/nkUGnGHERJEzzcuRHHPujQ8rOh5IJt8bSrgPs15FnSA7k9pVBv03vKxSBo+20lCgDZp2Q/O2oSnJN0G/AAuW9pJsl6VcpmWqX7kAJLFODg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sCIWThDb; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sCIWThDb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CEA4C2BCC4
-	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 08:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773046464;
-	bh=wG5+/hVL6HjKUoRhP7gA3WSoKo1PhFh9knJZ5mzHy6Y=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=sCIWThDb1pmD+lNgEh46tr1vNedfh7KDb/87oVDfsXY1s3m/gsVhqQ2nwHXly/rwv
-	 nX5+JMWc45p87a2svSkXrI9ciK1Bjt5muz4MF0D9hcgClxj/TbBFew/Y+s3QPXzY5J
-	 66GLmPG4XePGRrTcLf/vtY58jPNDILLKl5U5YnKEB7rr4H39QBlPLTVPgsvySPFdMQ
-	 xj6xqsa97AagA1+NhpCThgz+I4MmomXwcR4LBFvUDXsAXL4pdX5F1nJBsB6Q3WaVDe
-	 aXsSosImQpvl9rbkIdEZ570JaBJsZmDWPMUcoqZ9kSCTj+OeVPcaJZiYoSpgY5F0HF
-	 43k/sMXnLD6qw==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5a12f6871b2so5446618e87.1
-        for <llvm@lists.linux.dev>; Mon, 09 Mar 2026 01:54:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVZ/PK6dqt0OcngA9t639W2Jb63XbXdexp5Ne4HspKobZprpIYKusFcsai15hDb/1QuT94X@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz8E/Zd0h+dfP7Ly4CN+5Ial89ST8xwOJEbzbiucLG5lcwQlFkw
-	/CVZzjKkylA/xsjzwPV/v5EnFuaumpkR3btkNrMK3YdaIXh1YMGtuy7R2X4keCqwFTB+aHpFe7J
-	AXS9Wnf1+GG0mhAhh+hwTVaBbKraQqgApnG6FjSqvnw==
-X-Received: by 2002:a2e:b8d1:0:b0:383:1f06:559e with SMTP id
- 38308e7fff4ca-38a40910e52mr31075631fa.0.1773046462934; Mon, 09 Mar 2026
- 01:54:22 -0700 (PDT)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 9 Mar 2026 01:54:21 -0700
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 9 Mar 2026 01:54:21 -0700
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-14-6477808123b7@arm.com>
+	s=arc-20240116; t=1773048192; c=relaxed/simple;
+	bh=JMXViFWMTNfo+yhVFBtXHtyP9ZgTL9VYu1BjU/X26Rs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UJbJFqAReG0ecm1PDsMmabPCclLfn7Khc1G6n80j4Ss35QIVk/BRZNfWY8aj79rJouu9NmgX7lShcqnVF/N+Oo+nKLpGDzvy/zRywnNJ3aC2GZ+pTLKqklLOMFK9OWIA+21CuGmlJ0JasnY8+EH5eUxu/2apIomLf4KnvXYgtGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fTs4F051PzKHMt1;
+	Mon,  9 Mar 2026 17:22:53 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 819BD40591;
+	Mon,  9 Mar 2026 17:23:06 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with SMTP id gCh0CgBHIUxuka5pnygTAQ--.6481S2;
+	Mon, 09 Mar 2026 17:22:54 +0800 (CST)
+Message-ID: <3b2d9b4b-099c-411f-9bc7-b4cbd11f01ee@huaweicloud.com>
+Date: Mon, 9 Mar 2026 17:22:54 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com> <20260308-tools_build_fix_zero_init-v3-14-6477808123b7@arm.com>
-Date: Mon, 9 Mar 2026 01:54:21 -0700
-X-Gmail-Original-Message-ID: <CAMRc=Mcts8eWGJG2RfTrJ4=ZtcGbraSfN7pnPUkuVs7LN3MJGQ@mail.gmail.com>
-X-Gm-Features: AaiRm53otyAIdQ8tJkI0Szk9_yhE2ni_y74h6y-9Tp-K59x5n9G2XJBB-whf1jY
-Message-ID: <CAMRc=Mcts8eWGJG2RfTrJ4=ZtcGbraSfN7pnPUkuVs7LN3MJGQ@mail.gmail.com>
-Subject: Re: [PATCH v3 14/30] tools: gpio: Append extra cflags
-To: Leo Yan <leo.yan@arm.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
-	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
-	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [bpf-next v7 1/5] bpf: Move constants blinding from JIT to
+ verifier
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>, Puranjay Mohan
+ <puranjay@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
+ Shahab Vahedi <list+bpf@vahedi.org>, Russell King <linux@armlinux.org.uk>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>,
+ Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+ Paul Burton <paulburton@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>,
+ Christophe Leroy <chleroy@kernel.org>, Naveen N Rao <naveen@kernel.org>,
+ Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ "David S . Miller" <davem@davemloft.net>, Wang YanQing <udknight@gmail.com>
+References: <20260307103949.2340104-2-xukuohai@huaweicloud.com>
+ <202603071836.igZbCyrE-lkp@intel.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <202603071836.igZbCyrE-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgBHIUxuka5pnygTAQ--.6481S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFWfCrW7uw4DtF1rKw1Utrb_yoW5KFW7pa
+	y8Wr9Ikr4qqr1I939rKr4kCFn8t395Jw13K3WUu34rCFsrZFZrGFyxK3yavFya9r95G3yS
+	qrZxZ3s7t34DGa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
+	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xU4R6zUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Sun, 8 Mar 2026 17:46:19 +0100, Leo Yan <leo.yan@arm.com> said:
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> the compiler.
->
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/gpio/Makefile | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/gpio/Makefile b/tools/gpio/Makefile
-> index 342e056c8c665ac075041ff7c7ca7ba94c691187..206fb6c91a569d64b1e4b906ada5ec866323053c 100644
-> --- a/tools/gpio/Makefile
-> +++ b/tools/gpio/Makefile
-> @@ -16,6 +16,7 @@ endif
->  # (this improves performance and avoids hard-to-debug behaviour);
->  MAKEFLAGS += -r
->
-> +override CFLAGS += $(EXTRA_CFLAGS)
->  override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
->
->  ALL_TARGETS := lsgpio gpio-hammer gpio-event-mon gpio-watch
->
-> --
-> 2.34.1
->
+On 3/8/2026 1:08 AM, kernel test robot wrote:
+> Hi Xu,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on bpf-next/master]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Kuohai/bpf-Move-constants-blinding-from-JIT-to-verifier/20260307-181538
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> patch link:    https://lore.kernel.org/r/20260307103949.2340104-2-xukuohai%40huaweicloud.com
+> patch subject: [bpf-next v7 1/5] bpf: Move constants blinding from JIT to verifier
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260307/202603071836.igZbCyrE-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260307/202603071836.igZbCyrE-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202603071836.igZbCyrE-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> kernel/bpf/verifier.c:23100:9: error: call to undeclared function 'bpf_jit_blind_constants'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      23100 |                 err = bpf_jit_blind_constants(env);
+>            |                       ^
+>     1 error generated.
 >
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+oops, it's not defined when CONFIG_BPF_JIT is not enabled
+
+> 
+> vim +/bpf_jit_blind_constants +23100 kernel/bpf/verifier.c
+> 
+>   23087	
+>   23088	static int fixup_call_args(struct bpf_verifier_env *env)
+>   23089	{
+>   23090	#ifndef CONFIG_BPF_JIT_ALWAYS_ON
+>   23091		struct bpf_prog *prog = env->prog;
+>   23092		struct bpf_insn *insn = prog->insnsi;
+>   23093		bool has_kfunc_call = bpf_prog_has_kfunc_call(prog);
+>   23094		int i, depth;
+>   23095	#endif
+>   23096		int err = 0;
+>   23097	
+>   23098		if (env->prog->jit_requested &&
+>   23099		    !bpf_prog_is_offloaded(env->prog->aux)) {
+>   23100			err = bpf_jit_blind_constants(env);
+>   23101			if (err)
+>   23102				return err;
+>   23103			err = jit_subprogs(env);
+>   23104			if (err == 0)
+>   23105				return 0;
+>   23106			if (err == -EFAULT)
+>   23107				return err;
+>   23108		}
+>   23109	#ifndef CONFIG_BPF_JIT_ALWAYS_ON
+>   23110		if (has_kfunc_call) {
+>   23111			verbose(env, "calling kernel functions are not allowed in non-JITed programs\n");
+>   23112			return -EINVAL;
+>   23113		}
+>   23114		if (env->subprog_cnt > 1 && env->prog->aux->tail_call_reachable) {
+>   23115			/* When JIT fails the progs with bpf2bpf calls and tail_calls
+>   23116			 * have to be rejected, since interpreter doesn't support them yet.
+>   23117			 */
+>   23118			verbose(env, "tail_calls are not allowed in non-JITed programs with bpf-to-bpf calls\n");
+>   23119			return -EINVAL;
+>   23120		}
+>   23121		for (i = 0; i < prog->len; i++, insn++) {
+>   23122			if (bpf_pseudo_func(insn)) {
+>   23123				/* When JIT fails the progs with callback calls
+>   23124				 * have to be rejected, since interpreter doesn't support them yet.
+>   23125				 */
+>   23126				verbose(env, "callbacks are not allowed in non-JITed programs\n");
+>   23127				return -EINVAL;
+>   23128			}
+>   23129	
+>   23130			if (!bpf_pseudo_call(insn))
+>   23131				continue;
+>   23132			depth = get_callee_stack_depth(env, insn, i);
+>   23133			if (depth < 0)
+>   23134				return depth;
+>   23135			bpf_patch_call_args(insn, depth);
+>   23136		}
+>   23137		err = 0;
+>   23138	#endif
+>   23139		return err;
+>   23140	}
+>   23141	
+> 
+
