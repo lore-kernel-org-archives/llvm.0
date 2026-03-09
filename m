@@ -1,93 +1,93 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD983ED11D
-	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 17:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20BE41C2F9
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 17:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.182
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773079034; cv=pass; b=lI+Vs+8oBRMcjOeSWNRN/yCdqQGFPW4zLnOQ9o4NjrGx0dmj5zuWizu/XR9env/ixR6j7xBueT+qpHvBj3qR0nF3L7sgMGgBIqK1YIkZWV+YWhiANfNw+PpZxCiUx+ZPo5ksHGvkZAkoZpi3vokK/DBoV+HKBy3T7K5EDkPFkFU=
+	t=1773079071; cv=pass; b=A19oPV14I+/Lk7btv4kXf5rX3wZiYKRLuutbCn9V9Ulkpdi6Rrc9mJfBpEiDRa5hSCX3l2c2Zd71FfD4Dbs3VIWBwkWgaXU7FOYPmkldVe6KItthdw+gKDPA5Q/HGEQVxYLtEgo/JEpkkK+Pcym68DiMcAuaZ3DAlXD8Aqr6wq4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773079034; c=relaxed/simple;
-	bh=e7l4SmZBUR6r5igqEW+38ztoAKGAhS0X/5S8zKQD+s4=;
+	s=arc-20240116; t=1773079071; c=relaxed/simple;
+	bh=bi/0kzUFQaV8p3doZRD93rVlwd2uelaWqK+VBjCrW5c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uPK2IqLfZOfbwbTsy81Frf/OLY9C+uH8eKikum3HICnwNE0/jvfQrJErWh5SK3Babr/cfgG/57dqRvOpYRACI5la3yQKOVmmwm3jymG1uAGQBTuMoN/LPrDvcC18hkITPnuWKPSA5g9P+/wf2v2ElIUlKyJye+ieWGy1iYAKCEo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vg0KBBFp; arc=pass smtp.client-ip=209.85.214.180
+	 To:Cc:Content-Type; b=tI9dH8DNSMlhCFFRxJbx+qFLuExZ1YL5lX7yAru60l5IYUA3XvgC0/KUZhNeJUD9zLHHJB6UafU/5UVNNw/tk+tN/7yHuec5Eey8jtcCI68Bs+WRsssMryAPAz2Vxv7HauLEdd0gtcO9miPBr2QXRDAzitbcVPBM22LVRQoCYdk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=faunCFSw; arc=pass smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vg0KBBFp"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ae4b40999bso14305ad.1
-        for <llvm@lists.linux.dev>; Mon, 09 Mar 2026 10:57:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773079030; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="faunCFSw"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ae4b40999bso14715ad.1
+        for <llvm@lists.linux.dev>; Mon, 09 Mar 2026 10:57:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773079067; cv=none;
         d=google.com; s=arc-20240605;
-        b=cFAS7F3AcvMitJENgncz4lhX9rs9yGgmAh6T8eJRUkGSM2GsE5/snZvCFIwdl9xZQY
-         WPCDPtNweJLBOgkAHtAzg52c6VMgZPBcgrrhQsEjNMJhRHYRQkgbaJ0n9HeB3ahhSboQ
-         FtTMG4rMYOgxd4+DrGjb6SgN95J0zJ6wjWZvv43Q26ADwfnBn2T307ji5QDnhIln4LmW
-         4fDz+CtOsz4PoP97FLv3WknzY3amaWraoX506Zfr4sTND4Nl4X1136s8O9SsSRyyqKT/
-         OJt5kmHEd1A3fQMbAwxZGPQ9WT94kC9Wq/3L9y5M72xA3jOFH6yfvEcd5NuJmNJHb4UF
-         yTFA==
+        b=KhwQDbbl4LlWG6RCh5jbC3jcEUKSC0ghksIVbieWCgYEdjrBtDCOwBok31ub4+XkGJ
+         yzFXyCkIw6nJ/hi3/bMOGCA/Dpx9BCvyf/DJw3gdxPzVz4ZoQLQzQhy7YO0nAGMxT+K3
+         SAxfYGnhoJbl8SiCGcq9ZV4z3tII2KDOJWLK3Eg3ixWPlUBbRnMPcB+WAQugdMJ7ANty
+         ubmwYVs2Ygo2cLNwfB85VNIomFVsnpjyNo9tA2gKMB4X/bDSK/XxS6ociZY/XFstja8U
+         F3H9ErRgxG1eIOnfNDKJMvJ51zHGdsbCqLAI2xv2uoLpRgpv+IudlV2y66u1WxBB8Jv4
+         /8Og==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=YgaFfLtD6LpB7+GDppuc9zjZm5c30kugkl39n1WKFb8=;
-        fh=5pFYB3Mzk4kNgML+qkKLr5GqXbCMAkKgyRToM/yyWV0=;
-        b=Q1W1eCbPYAR6NQQKIjllhJLQ/fFsQEzaKvJXx2cWrMArYe+PdIDKLCgCCkrTQLpY5y
-         6DT5/SLmdqlGKZ/4aTSw0Xm7trKyJr5n8mSStCuRpoOdNiQVgf/UUlDzI/S55quXEYBW
-         oUlvu/t4S3/a2GzCkKXa0J0h2zEP6JyM8X7fq+A2T7yMfufzwAVIRRk2OepKMkHg1csp
-         XoaLCFTELUxodrSEeC7WVQdEm8F3dOqVQxizwfFCzQefAP+Q5PnkS42ncj3o9v8FqElv
-         xFJ7rrinlA241AAXqAIzMvMLGCVhjkVSYdEpQJS53vZc5Zp07VegmoWEagCsQ7kt39zl
-         EUDg==;
+        bh=vDlEc+C10LHwn7mMynGp+oAsPyPidhsvHXmfLuBSVbU=;
+        fh=7v0ZhsdOBsOCalpPN9bpa/pKW/4BDs9XyEk8sHVZQek=;
+        b=ACLh891pzxhWv9GB0xJHow9Lf2luGELUju+AVIxDtbkJIT0dQ/bUUzIdNptRRFSMSg
+         cVUymPZ81CiSbR16okbc2hUTDn6Z7rgYIBjqgD8k2Y7TcanaRD6NBakkHlXtbA4PaFTI
+         4x3n9Aw4Xb2HhfkkYjBVawrSqPvWsMP0fgnXkshytetXgAU1Uy5Hy665jWvZmFg2QCSY
+         Oj/T7a6zZ4mMuoJB4BxRIOvanaOl0w4z0OBoZ80J59GBFB97cbCibBaZsnR+QrIVjRHi
+         j/j9jjhvNey1C9yieiLojA9LFRxec4LolfP7qHoDJdF3TH257gO3OamVINSLfuPe1BXr
+         GPjw==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773079030; x=1773683830; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1773079067; x=1773683867; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YgaFfLtD6LpB7+GDppuc9zjZm5c30kugkl39n1WKFb8=;
-        b=vg0KBBFpOhQ18o/CFr2yovi7s7u9KjOl4W493OJG/GoZVINgM0whNljzmlG5sTo3mq
-         QhzET7XxAp4k4ZgAqQqbAIQ1bmpUHdwHLBEudX69etgOu9jgug68Z2sRgA/0W7Kwy+ZR
-         w1+Ala2ms8YWDdh2y8FEhUQzonsCL0DiEl3G088QkEEjpaLyoL/ejz8zx6jjDCaRp/Ek
-         BLwiF79IXWwjgpDDJn8DwJv3UFYZEDRt3rj4ugSNLnb8MfkiAB71zBcLZEULlRAdJU5Q
-         4xBtq1bggAEReiyIOp8khw+VEwd7NhE7HrrFy2ldx6SltOhAEFPtMtwdsvVjWSl53v09
-         bIYQ==
+        bh=vDlEc+C10LHwn7mMynGp+oAsPyPidhsvHXmfLuBSVbU=;
+        b=faunCFSwU1lsjF/MbldIL8j+K5CgEjAci90mAb/sj16PEJp+QgVCxALO5MbR5LNM49
+         oT2j1/V+duC8mGoGdRUWCrZLr7VsTt5VFvRpi+VLdqP36Y2HYXSJFMS24W+JXZi9U35a
+         PY3WGBHiZcmE0frwgODa+flaA48up7uKOuB5Z6ECC3zXSVc1vtitye9c4Fb3U/5HbaVz
+         DVxu5CPXGr+Nx/9py4GdwoTkNss7kWtR7KUoC3YC+iiUTk5RcQVafArOzSr70+9kN482
+         cxoTClIBFQYAoi1QBPF3++tKREyAEHFJu4kOyby96ARgpbcHJ/NQljkc5rKTxyRUTkYi
+         1z1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773079030; x=1773683830;
+        d=1e100.net; s=20230601; t=1773079067; x=1773683867;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=YgaFfLtD6LpB7+GDppuc9zjZm5c30kugkl39n1WKFb8=;
-        b=eG8vylAbvSFrZxFU84MuvZOIwaT7kWnM494mRXV9X0x1F+ms+XpsplBsyP6p1kpoqn
-         OF4iDwfaa2vM+Ww69qwoz8H/5r7xgvOoh5IayhCyYYVSXXUiTX7yh1F+7RLqLyaj0F23
-         DZMDgYeio5t1Jr4Gm7eXsL6JSaO8SExvU/YkydLxZOm4IHMlXJD89eKHayKeUr/KWf0s
-         SKCigRaEszp0tqVkSf6Z5HsPtKhcH2oOVFUyajczq7+lLCJMVsReFYMwWJkkYz80/sZT
-         Rh+yWds3c3hg0DM+gZ6GXwlSnK9T83eK8iq7bz9YDDomcAU8NcJ7SjLYmcUuQpokNK2D
-         o0ag==
-X-Forwarded-Encrypted: i=1; AJvYcCVZ5pqdn51JheBh90iwLMw5qdTvt2vgla5JENKM9oPvLYl2I3khN3Ow7P6AeZGbru+1Svgn@lists.linux.dev
-X-Gm-Message-State: AOJu0Yydg01QpYEYqithncFOH7/wPYYmXLYTSlCKJnmFS47ocWM5ltij
-	y+3r73lypYyUqSpjfV879fEq44xsElio00OFB9Rd3G0AD7jB/jrImFSjFeWzV36fsbF08Zu5vmP
-	7p7wbwR9OEdOCVjrCG5DS54V68GZ8wX5MeeNYBXj+
-X-Gm-Gg: ATEYQzxT3uqKT5RtjkVppPfBQzil5dGQz0THxWNhpm4sJ2GyQyAiSiVNT1jf9gQY3eY
-	Vzgjm5dITcu2MwZkT0QQc43Ft5BSfeE4DZL8477qByjPW1nvT5iLXhE7Kj7s2MftgPQruSKxgPR
-	8cMh6sAuWIPsP2WgxP+v/Kfp92V0tGgvQw92kGOqEnL/Jgo/wZpqhlNZRU2A7Yg4DQqxmAr5uUR
-	agvjeJzzVphz19JNx9lN7vMCjELSkHfq9sRSUMf/IDa8BYdyF3Znn/UShjUPYE26vqopDhhCR4A
-	JdJHOvlbuKqIqADxGP8nSTV95eRt/aIsLw0=
-X-Received: by 2002:a17:902:f68c:b0:2a7:6fd3:c11e with SMTP id
- d9443c01a7336-2aea30c63dbmr244475ad.18.1773079029518; Mon, 09 Mar 2026
- 10:57:09 -0700 (PDT)
+        bh=vDlEc+C10LHwn7mMynGp+oAsPyPidhsvHXmfLuBSVbU=;
+        b=VrJnr/qmwTtEOxB+iSmNRgTWPnWkqQ/zF/p0Q4dnP256cwk/Ze2f9uBXsibhOj+NQZ
+         LWGSYW6p40rXbdpXy4xZcpy4cF5/I6iRfitks3rjJiT00TZy1OOWhXDZot0ar383vpqr
+         9cgj5kkf9Jw3YmEGFQDXNrw7tYtDY2tqtDLCLW0e6TgEyuNiC6Y7zkI0ScUW1m/PHZNk
+         NO1WrK4n2fNqp3pJNK+7y8F73oL+cO7VWZxBex1oY77qUu/DWr1vXhgCOSywWLFz+cIW
+         bc9zKqko3rrHyaX8xws13vrUAUr57SzukoYNODZ1gu2zaDhYpyM9fsrTfp2wVzCDt6d8
+         PILA==
+X-Forwarded-Encrypted: i=1; AJvYcCUzC/0aUMX8yIJY8VZqk4IhJ8iMmIEVlBSkW+DQki976EtrXbbQ5Ku9ud46nNzdjdKtQ3N6@lists.linux.dev
+X-Gm-Message-State: AOJu0YyWKEMR7f/pnco2PbFA91xP7KxrlqBBYUbGsQhfOwb1wk5KDulc
+	tJ5OIAoknLHduZ0PZsgGfH1wRKr0Gn2db4DnWIh0LMKwmaTr3kE1UvrbQIbP6jpPSJxg5Aw1U3l
+	GG1lzrBABMxLcW8N+EZFaLXqxCri8maDyXCMnmk7U
+X-Gm-Gg: ATEYQzxn1FN6hzdc5i7lX4v2US+C4+jROUx8SGopxRmzwNI12oIxFoMEz1G9Hc11qXX
+	L6w0KTfyW5lcxihN1/DjBJ3W1VvP090G1FZz6My0dpW/ickpcT8ianz/giPrJqnQkZ4Qho8vRdv
+	QXDEZBk4crMzsg22cSMXoMTkjJ7zBqKcxbJHPZXB9GLmwdYZLYsdDuWXs0FV9OroMDg4VnX7s9K
+	PrlwNA+BhulHwDDnC/oMMvy4vT3BPmsRsEuEaBAeUNzd75W9yQXt8reGshYuSi2b1h5zBb6CvTk
+	m4rE/0zzSllc3Gxtd4+OSmg/VsEQWe1UWY8=
+X-Received: by 2002:a17:902:aa85:b0:2ae:8039:fcb0 with SMTP id
+ d9443c01a7336-2aea3122a7cmr131785ad.5.1773079066411; Mon, 09 Mar 2026
+ 10:57:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com> <20260308-tools_build_fix_zero_init-v3-13-6477808123b7@arm.com>
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-13-6477808123b7@arm.com>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com> <20260308-tools_build_fix_zero_init-v3-14-6477808123b7@arm.com>
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-14-6477808123b7@arm.com>
 From: Ian Rogers <irogers@google.com>
-Date: Mon, 9 Mar 2026 10:56:57 -0700
-X-Gm-Features: AaiRm513FrreYhP9xkA-LN0GZhrOTdf4osjECxyH4jBzskTrYRD5OF8a_TvuwzA
-Message-ID: <CAP-5=fWkVHaa417c=1kzq7s=qrsHHDyKn9K1G+BbX7TrzaXZLw@mail.gmail.com>
-Subject: Re: [PATCH v3 13/30] tools: dma: Append extra cflags
+Date: Mon, 9 Mar 2026 10:57:35 -0700
+X-Gm-Features: AaiRm52StTlx-ugeD48VkaRFXPHj3olO-UKSkeOjK7TIFhirgpNgc7cDU1gN2Ws
+Message-ID: <CAP-5=fVTKXfV0qqt_Fj6r6wZ-O2X-gqjM2mkPfbawnDJQj7U-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 14/30] tools: gpio: Append extra cflags
 To: Leo Yan <leo.yan@arm.com>
 Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
 	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
@@ -130,14 +130,14 @@ On Sun, Mar 8, 2026 at 9:48=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
 >
 > Signed-off-by: Leo Yan <leo.yan@arm.com>
 > ---
->  tools/dma/Makefile | 1 +
+>  tools/gpio/Makefile | 1 +
 >  1 file changed, 1 insertion(+)
 >
-> diff --git a/tools/dma/Makefile b/tools/dma/Makefile
-> index e4abf37bf020ca613b6dca340299198cb887126a..bdca05c69a8a12a4f9419eed8=
-c1df71adac4f26d 100644
-> --- a/tools/dma/Makefile
-> +++ b/tools/dma/Makefile
+> diff --git a/tools/gpio/Makefile b/tools/gpio/Makefile
+> index 342e056c8c665ac075041ff7c7ca7ba94c691187..206fb6c91a569d64b1e4b906a=
+da5ec866323053c 100644
+> --- a/tools/gpio/Makefile
+> +++ b/tools/gpio/Makefile
 > @@ -16,6 +16,7 @@ endif
 >  # (this improves performance and avoids hard-to-debug behaviour);
 >  MAKEFLAGS +=3D -r
@@ -151,7 +151,7 @@ be overridden.
 Thanks,
 Ian
 
->  ALL_TARGETS :=3D dma_map_benchmark
+>  ALL_TARGETS :=3D lsgpio gpio-hammer gpio-event-mon gpio-watch
 >
 > --
 > 2.34.1
