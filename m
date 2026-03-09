@@ -1,225 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EDFE36B07D;
-	Mon,  9 Mar 2026 20:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFBF305E19
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 20:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773088632; cv=none; b=pYB6fn8aWDls5IEM1c1oib3y05qMyycDP7A6WY23grtnPTmdOuIwHR3JsWh4BS/9ANAF97l2uH2ffo6DJb+JpsUkBEFgRCkTdWQfPmtGF5CEAX9nv0JnzJ0FoVzrwyLMYDkHeQFWWcNpI5SZs0K0pXggzcKFADOD/nC4BTBTFes=
+	t=1773089110; cv=none; b=r5nEkwll5WDOi5NEzac9ryjfq1MRwf6/SwOH2a8rezKwRQCYG8fD/VdBLYL4FuZwK79cvkktAdAC+qX/jy/hOY9BskCh1AmQwmO1H4fW6ezvqi823zFsH0Z78vDKvQGvJ2mOdWSfRrNy1TTuHxk1jYbtYS+6N6v4AZuUq9xACQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773088632; c=relaxed/simple;
-	bh=y6yHZjzRHz8qgrcVZjbW20G4/s3LnaHOsPnyYMHI7zw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=IvM+I9XVFE7pZxw5l0f1QGI8Rx4jRDWnJyL4cK1l1bMEhS5TLSEtxKemNjVP4pgH8Rv8MHOLtzhsijCXPYCF+LPBTX2WIUDfRA9HnQGZ6t40DVCSZN7z5ce+PmOItikmMNyI2xaBWTg8jqimnJF8GQygyEszf37gshvUmSsZNcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MAPPmBl1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773089110; c=relaxed/simple;
+	bh=08dEyKmsWuAcWA4Z7AfzoFqqnOlI07Xk4MCFkwukRfA=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=KgJHfSj6btkU4Z85JACBvxJVD9X2SL9wStLfsVkXIarm0nQgABH3s/W4XajoASNIM3/01Hvev8SpLR2dFzVnglUKzWG/TSPi7p+O9Cu+bTwR/MHflITGM1IWpH5GXo53ERdgl3B9/mn4++WD7LK2/K6jM5Ca12IyBS7q/+jN/1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dXtviKgn; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MAPPmBl1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4013C4CEF7;
-	Mon,  9 Mar 2026 20:37:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773088632;
-	bh=y6yHZjzRHz8qgrcVZjbW20G4/s3LnaHOsPnyYMHI7zw=;
-	h=From:Date:Subject:To:Cc:From;
-	b=MAPPmBl1JEkdt+MdYLrh8LOhqW7t70Ogyy64+Fv/8uJQ0nJQZCId999gytuCojVTO
-	 xKrS8qpflGUOaOIsEQ1CVym33M3fPKps7eMPxWXZAeLCQWWhTsK8SJKe5FMY5NWE0x
-	 UhXmq+G3q82WjBvg4aQgLnjs8CsxvAHot7g733S068lD14JuAuzFarpGIna2oZcYmE
-	 SnP9f3VuwiW0YMyjKWrhl7jfyRbLrtklYlUlLZv922BWBa97cikr3f8gqpylWsK6eo
-	 RIFsDbM0kGqeTL4jVBPmin+DdHcEvqUP/516KFaZvMj+Kwy1mvWH9lEWHeZRZX12ef
-	 vcXF9qExdSBQQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 09 Mar 2026 13:37:02 -0700
-Subject: [PATCH] integrity: Eliminate weak definition of
- arch_get_secureboot()
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dXtviKgn"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4853f2826f7so11522945e9.1
+        for <llvm@lists.linux.dev>; Mon, 09 Mar 2026 13:45:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1773089107; x=1773693907; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pW0NEwM1inY47yIpYO2BQwkT4nvIjnkouCd6QVAds4A=;
+        b=dXtviKgnuaUZt6Fl9kO71UhW67D5qiE/U0e5IjxsBkWOE5sV+MdjPrpDOPZrE8+RM9
+         V5hnIt+LI0pWSdLAkcX29mt46zq7XGGTIMebz7PGv0g0e4sj+276bYUwXIUctKTTLVEh
+         IoW+RklQMOEvUeeACoViH6UjkiFy53Y8V1xDIJvUslDpnXxI+3Rfoi6birFR2oufcOgH
+         7go0gvNbupFcgVRRC7A4dNJP8xqRWrFGRLWOW/PRFN+iE1NkEM7TbY+isSrWF4wF88Ds
+         1g4Zj9+GxV/Lft4r0WGSWx7fwAYwCrUUiPvVZec8abPRz75cB1hTR/q/QpAZVGb1Ju39
+         wqjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773089107; x=1773693907;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pW0NEwM1inY47yIpYO2BQwkT4nvIjnkouCd6QVAds4A=;
+        b=N+yl+3IfIUkgM/IxAznUgyZaReTNv7juEhwJdXnqyqRMaCz8AUsJ/t8n6uhZqmx+yM
+         EvgfSuK2P3V6fKhxjQABcNvAMjHsRAUkXNGcr8ft5GWIc+/zn9G/nLDT/U2hX7ASRwg5
+         Rmqv9gh0N3iNQWP/vAXyO6pe+AYWNtSbygUxmgehiymKf5EzegCeOrflKNzsuPKP4SUu
+         zaBE8/SLEP7uiN+AC4WSgW8raUJ18VV13s3yPrbK0RfgvXR1dmIryqoG5hFDjFOI9rw/
+         w11wOC0yKwF2lGJTurOgVQBMhceLFHIIMLn8kE2icP40pKmW98cbbrjgAIq8rPJzXf9Z
+         poTQ==
+X-Gm-Message-State: AOJu0YwuUdm6xuc6dYHd2aqwWlDjbxQng26WDxjyrjWKwJo1rnSY1EJV
+	exlF/DOsM+A2fd8MG4vpb+BzPEhIFAdiZYKDQuUSsvhbnY91bB3Yqp5bbkc6tPtxN0dbK5z4Tja
+	qbFOd
+X-Gm-Gg: ATEYQzw86ADtfGd6+VAmupmHyPL4r6wir3SzNGWPVrNnY+2+lxPzkTC+jbVfz0Clwna
+	/G3z+ECeEsazJETOMfb+Ffj8qA1NSZG2OVzCzN2EI1x1nhr90D39nPxisz30y8bayAfjj1TV5hs
+	B2LA/hhnO9Yi45v2roO35824i4bj+0mPmy+xneuxlGANbjMPPsXCFpq558wgyRa9m9kPnsvB9V/
+	TXp4gsKdnFjorAtLG+6fmCHJuTnkfWHkq6Yp9mTE5GkroMsuDQsZdaozS9oYzD1QeJ3FR6+dPIZ
+	pj8cA0IcNLbWuwupclObxWyrSyGDBbRZymP6kXMRXUrkmEjH2WyuZD75Lz1yVhaT3RVojefvXb2
+	V2PYY0PEZ+JOa6zADY8zxK7Cw6HUpyPnVwUAigqa+Fhoc8NYmFRq/5BV2zOq8HYCX8JMhyYYqVx
+	6fHbYHkbYNxgbJhVXeTI7QXnm5CpIy1KIhk9x15SyfFjO/Bl+YiFu4UrB13tyagq1dOFR7/Q==
+X-Received: by 2002:a05:600c:3f0c:b0:485:4278:24fb with SMTP id 5b1f17b1804b1-48542782705mr8211225e9.32.1773089107490;
+        Mon, 09 Mar 2026 13:45:07 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48534fa65a6sm109348275e9.2.2026.03.09.13.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 13:45:07 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Mon, 9 Mar 2026 20:45:05 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <1414278353.44514.1773089107071@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] v7.0-rc2-17-gd22ba968a7a90: Failure on arm
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_44513_1313110423.1773089105196"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-allmodconfig
+X-Jenkins-Result: SUCCESS
+
+------=_Part_44513_1313110423.1773089105196
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260309-integrity-drop-weak-arch-get-secureboot-v1-1-6460d5c4bb89@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNyw6CMBBG4Vchs3aSWoyxvopxUdqfMppQMi1eQ
- nh3UZff5pyFClRQ6NwspHhIkTxu2O8aCoMfE1jiZrLGHk1rHMtYkVTqm6PmiZ/wd/YaBk6oXBB
- mRZdz5QAfrTvFg2t72mqTopfX73S5/l3m7oZQv3la1w8uN0CXiwAAAA==
-X-Change-ID: 20260309-integrity-drop-weak-arch-get-secureboot-cead298d493f
-To: Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Paul Moore <paul@paul-moore.com>, 
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
- Coiby Xu <coxu@redhat.com>, linux-kernel@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5057; i=nathan@kernel.org;
- h=from:subject:message-id; bh=y6yHZjzRHz8qgrcVZjbW20G4/s3LnaHOsPnyYMHI7zw=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJnr9Yv5y4oyL1hnRjjflo6Pt/JVilJ7sKTBr+rB3goL6
- dqpXxM6SlkYxLgYZMUUWaofqx43NJxzlvHGqUkwc1iZQIYwcHEKwESOLWH4w2+zVHOSfUm70YJP
- opIlZQlJvywEF+b/yrafbVA+vaPiFsP/9LOPU3ii9T5fzLevWvhn0Wmbt03zdj4/wejyZXHLdZ7
- J/AA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-security/integrity/secure_boot.c contains a single __weak function,
-which breaks recordmcount when building with clang:
+Dear contributor,
 
-  $ make -skj"$(nproc)" ARCH=powerpc LLVM=1 ppc64_defconfig security/integrity/secure_boot.o
-  Cannot find symbol for section 2: .text.
-  security/integrity/secure_boot.o: failed
+Our automatic CI has detected problems related to your patch(es). Please find some details below.
 
-Introduce a Kconfig symbol, CONFIG_HAVE_ARCH_GET_SECUREBOOT, to indicate
-that an architecture provides a definition of arch_get_secureboot().
-Provide a static inline stub when this symbol is not defined to achieve
-the same effect as the __weak function, allowing secure_boot.c to be
-removed altogether. Move the s390 definition of arch_get_secureboot()
-out of the CONFIG_KEXEC_FILE block to ensure it is always available, as
-it does not actually depend on KEXEC_FILE.
+In tcwg_kernel/llvm-master-arm-next-allmodconfig, after:
+  | commit v7.0-rc2-17-gd22ba968a7a90
+  | Author: Thomas Zimmermann <tzimmermann@suse.de>
+  | Date:   Mon Mar 2 15:08:43 2026 +0100
+  | 
+  |     lib/fonts: Compare font data for equality with font_data_is_equal()
+  |     
+  |     Add font_data_is_equal() and update consoles to use it.
+  |     
+  |     Font data is equal if it has the same size and contains the same values
+  | ... 13 lines of the commit log omitted.
 
-Fixes: 31a6a07eefeb ("integrity: Make arch_ima_get_secureboot integrity-wide")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/Kconfig                     |  3 +++
- arch/powerpc/Kconfig             |  1 +
- arch/s390/Kconfig                |  1 +
- arch/s390/kernel/ipl.c           | 10 +++++-----
- include/linux/secure_boot.h      |  4 ++++
- security/integrity/Makefile      |  2 +-
- security/integrity/secure_boot.c | 16 ----------------
- 7 files changed, 15 insertions(+), 22 deletions(-)
+Produces Failure:
+  | Results changed to
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 26355
+  | # First few build errors in logs:
+  | # 01:20:59 make[2]: *** [scripts/Makefile.modpost:147: Module.symvers] Error 1
+  | # 01:20:59 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_1/linux/Makefile:2051: modpost] Error 2
+  | # 01:20:59 make: *** [Makefile:248: __sub-make] Error 2
+  | 
+  | From
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 36615
+  | # linux build successful:
+  | all
+  | # linux boot successful:
+  | boot
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 102ddbd4298e..a6d1c8cc1d64 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1841,4 +1841,7 @@ config ARCH_WANTS_PRE_LINK_VMLINUX
- config ARCH_HAS_CPU_ATTACK_VECTORS
- 	bool
- 
-+config HAVE_ARCH_GET_SECUREBOOT
-+	def_bool EFI
-+
- endmenu
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index ad7a2fe63a2a..da1eafb64354 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -1061,6 +1061,7 @@ config PPC_SECURE_BOOT
- 	depends on IMA_ARCH_POLICY
- 	imply IMA_SECURE_AND_OR_TRUSTED_BOOT
- 	select PSERIES_PLPKS if PPC_PSERIES
-+	select HAVE_ARCH_GET_SECUREBOOT
- 	help
- 	  Systems with firmware secure boot enabled need to define security
- 	  policies to extend secure boot to the OS. This config allows a user
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index 2101cc738b5e..4197c20d34b4 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -181,6 +181,7 @@ config S390
- 	select GENERIC_IOREMAP if PCI
- 	select HAVE_ALIGNED_STRUCT_PAGE
- 	select HAVE_ARCH_AUDITSYSCALL
-+	select HAVE_ARCH_GET_SECUREBOOT
- 	select HAVE_ARCH_JUMP_LABEL
- 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
- 	select HAVE_ARCH_KASAN
-diff --git a/arch/s390/kernel/ipl.c b/arch/s390/kernel/ipl.c
-index 2d01a1713938..3c346b02ceb9 100644
---- a/arch/s390/kernel/ipl.c
-+++ b/arch/s390/kernel/ipl.c
-@@ -2388,6 +2388,11 @@ void __no_stack_protector s390_reset_system(void)
- 	diag_amode31_ops.diag308_reset();
- }
- 
-+bool arch_get_secureboot(void)
-+{
-+	return ipl_secure_flag;
-+}
-+
- #ifdef CONFIG_KEXEC_FILE
- 
- int ipl_report_add_component(struct ipl_report *report, struct kexec_buf *kbuf,
-@@ -2505,11 +2510,6 @@ void *ipl_report_finish(struct ipl_report *report)
- 	return buf;
- }
- 
--bool arch_get_secureboot(void)
--{
--	return ipl_secure_flag;
--}
--
- int ipl_report_free(struct ipl_report *report)
- {
- 	struct ipl_report_component *comp, *ncomp;
-diff --git a/include/linux/secure_boot.h b/include/linux/secure_boot.h
-index 3ded3f03655c..d17e92351567 100644
---- a/include/linux/secure_boot.h
-+++ b/include/linux/secure_boot.h
-@@ -10,10 +10,14 @@
- 
- #include <linux/types.h>
- 
-+#ifdef CONFIG_HAVE_ARCH_GET_SECUREBOOT
- /*
-  * Returns true if the platform secure boot is enabled.
-  * Returns false if disabled or not supported.
-  */
- bool arch_get_secureboot(void);
-+#else
-+static inline bool arch_get_secureboot(void) { return false; }
-+#endif
- 
- #endif /* _LINUX_SECURE_BOOT_H */
-diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-index 548665e2b702..45dfdedbdad4 100644
---- a/security/integrity/Makefile
-+++ b/security/integrity/Makefile
-@@ -5,7 +5,7 @@
- 
- obj-$(CONFIG_INTEGRITY) += integrity.o
- 
--integrity-y := iint.o secure_boot.o
-+integrity-y := iint.o
- integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
- integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
- integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
-diff --git a/security/integrity/secure_boot.c b/security/integrity/secure_boot.c
-deleted file mode 100644
-index fc2693c286f8..000000000000
---- a/security/integrity/secure_boot.c
-+++ /dev/null
-@@ -1,16 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Copyright (C) 2026 Red Hat, Inc. All Rights Reserved.
-- *
-- * Author: Coiby Xu <coxu@redhat.com>
-- */
--#include <linux/secure_boot.h>
--
--/*
-- * Default weak implementation.
-- * Architectures that support secure boot must override this.
-- */
--__weak bool arch_get_secureboot(void)
--{
--	return false;
--}
+Used configuration :
+ tcwg_kernel/llvm-master-arm-next-allmodconfig
 
----
-base-commit: 870819434c8dfcc3158033b66e7851b81bb17e21
-change-id: 20260309-integrity-drop-weak-arch-get-secureboot-cead298d493f
+We track this bug report under https://linaro.atlassian.net/browse/LLVM-2190. Please let us know if you have a fix.
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
 
+-----------------8<--------------------------8<--------------------------8<--------------------------
+
+The information below contains the details of the failures, and the ways to reproduce a debug environment:
+
+
+
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/456/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allmodconfig-build/455/artifact/artifacts
+
+Instruction to reproduce the build : https://gitlab.com/LinaroLtd/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/d22ba968a7a90ffbda1875532f6d854d5830bb55/tcwg_kernel/llvm-master-arm-next-allmodconfig/reproduction_instructions.txt
+
+Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/d22ba968a7a90ffbda1875532f6d854d5830bb55
+------=_Part_44513_1313110423.1773089105196--
