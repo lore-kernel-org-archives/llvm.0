@@ -1,201 +1,204 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010066.outbound.protection.outlook.com [52.101.46.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEC03B95E7
-	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 12:45:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87123D412B
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 15:10:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773060339; cv=fail; b=bf5kp886DIzaMeTSBfQXt9SJEfSQ3+u/irHtH/SHAJsZYd8Dyu3N3CAmwZWQmMbLiu0RaqOoFpvHS4YNBkqDpw0pO7qDev2o6fFdsJQC8xf4DG6Z7R9+A2HNTDuEaHC0GPXZW63SlEu3114yxXbfPO4UXip5b28riS2BU2B+wTY=
+	t=1773069029; cv=pass; b=Afm8iYAFwvyTaXfkfoD2KI4FAauqkponrduxItKprtUZN0i/EFTlW2DBN8eymaSs8OmtmO46DKmW++kDdyfx7ZTNqmdH2bwQe5CVOffs9p0sa2Y6cQ+lVmHGS23Q32w5aO1UCIrD/3KOP4ednY0xEFMi3NI2ACUjydGZkBN9Cz4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773060339; c=relaxed/simple;
-	bh=n+fwtR+q3qN7c5tHBcWRIaOfwwIYoiyLNNl3DmHri/g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=fLAJZdRKW8pijW30nMlT9eFiali1UmLaTDssZ9D4agQ4FGX8RAjlrSe5IAENnyNlBpwAy+duWaXrrGIrSJC6jNK4zZQHygBrVjGTl5LCpntXlmscM9SdYsC/ED+3Lv3QvFCxLr+S08gITlhRoKERJ53J3cW4mMrPMYU6gk/yhnY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HBE5HORV; arc=fail smtp.client-ip=52.101.46.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1773069029; c=relaxed/simple;
+	bh=5i8qPmQzszVgv/IzZW6/JLkFuKhxnzZQEpxh8nw5jy0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WHir7+51Icor7V1p6ftTYIYX+q7uFbLpQTUuD3MFHoKJCmDlJSUai2Apaz02QvkKNYCELngf4MEELhiQeQUqYJMPPfV0M8Xy4fXVMJwH+Hr2d987DI57OFbGvY2J+93PNJrSfpk30pQO2EzmarAf2aMqb0mnXhEIXWrECHCsFnw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QcMq2riq; arc=pass smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HBE5HORV"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uoTQxIqB0q0AWLneE3SUTn7VkmNnY+lY38r72PcmTMq7VY3KYHpo8mSNu27SDxiED3IpeqRCgt4ei/FDXKz2O1+rNZ0bliVG7YafXSzYg4pXSUUyb5hhI5H0TfyxuFWR1pQNiNmqUkTy5jCPF+l3oBA8VmO3JQ/KiPscGrAngtbobKGJRtycox1p4Oz2b+LebOp7eH+cPYYLu0ft26WTNbc5Ouhcl0aATYkb+fQVycaAPyA3uZNX7SEEi2stOkzk9qYPp5xY89dLs7QOmtMOTlByMr/LVmTby4L6gpPabvxxYcOhg5ZeAy6noiMqLizddcZqnk7/fVif55yISouhUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gsKAwx/AXQUjcyE7CvyEbwa7Kbybwco2Bt7gRUfogGg=;
- b=I8jM11F6rm+SjFb+3WAYOpg/rRUVcyjSkZsvTeCvpfsl7ERCYi/EoKTWYh7U740fF8YEVgTinpPB80iEMFnogYvIv7M/qqJ2a8WGJJaNsqxN5uotWrmPSjgZQp5gLcdPKta25G3ZzV4oUyj3GyQUZhsQHCe2SXvGvklq9YEdqcy82lb6tJohi05BMWDWfrpUuyrAszphdVxaLJOL65o4gZJrztGOE78NPmhiwIGzIq5UfWmM7TlYBllEI0Xq6510CcksigRBcUFS5FUDWJAvkZvFZUh8rTTTsixnddp27v8vNT1s0MGHKD17KN8/fJJrrN3qTo0XEgd/OH4QDB5tfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gsKAwx/AXQUjcyE7CvyEbwa7Kbybwco2Bt7gRUfogGg=;
- b=HBE5HORVMbaNlD8o7ehIoC4jA+KaXqLlcyADCHlOi6ZghWI+8NvJlGE8yj8KWYMyRVKflY4eo+v+g8lH50P6GF+G2r0BwK3ChgxtfnWXnJVPROySOZ5gUNghPgikMU8S7PNHwsezccIc/ukSszi8n7eblUVWcF0me/zmFn1UnO9MacgRIOinitxeM0TWt+WvHIQpWeKqgHNWHqZtDHoggeLdKq9cyOErzpvrOC8TA0PKJK3vjdxFlJSM/3MxVyR1+f6LLzbF9q/1OTB7XwzXjiskmn6jiLfrcXPX4P1YtqEKIOTNV0LwxcOmUKiKIaFwtBkgjtkwS/NGtlKjLN9Yaw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
- by CY5PR12MB6297.namprd12.prod.outlook.com (2603:10b6:930:22::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.11; Mon, 9 Mar
- 2026 12:45:32 +0000
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9654.022; Mon, 9 Mar 2026
- 12:45:32 +0000
-Date: Mon, 9 Mar 2026 13:45:19 +0100
-From: Andrea Righi <arighi@nvidia.com>
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	Quentin Monnet <qmo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	William Breathitt Gray <wbg@kernel.org>,
-	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Kent Gibson <warthog618@gmail.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 30/30] selftests/sched_ext: Append extra cflags
-Message-ID: <aa7A36lVJQKzr3IL@gpd4>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
- <20260308-tools_build_fix_zero_init-v3-30-6477808123b7@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-30-6477808123b7@arm.com>
-X-ClientProxiedBy: MI1P293CA0014.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:2::17) To LV8PR12MB9620.namprd12.prod.outlook.com
- (2603:10b6:408:2a1::19)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QcMq2riq"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ae4b40999bso157365ad.1
+        for <llvm@lists.linux.dev>; Mon, 09 Mar 2026 08:10:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773069025; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Z5IMUca/CdZ3JOTAdV2HjZMireNgKOQdc2xDMr5pf9n5jMhkUmKKoz3LIvJBGkDhUl
+         prdfwxfR82xfC6/P8RX0s6PVSGSxRp9ugKk23NFIWBWSL/z1eAV30RqogXX6xxm8amaO
+         14UxNI0bwi+nGylgbQzHRrN/MOkcJuS0e5cBNt6DqPKUIFtfuIEDd6I0Hh9Rg+hE7y5m
+         8pesICdrKMWetPmhllg+8Pl8RjPH0VwsiWY+3PGJm+F7MgD9oSeOBTHtYynb91y+y0B9
+         DyDNv7Ut+xM+0Db8YsJ+oUBtyn6MNd6Xb/lj05NRHQDreBBRgsoxTQGh5kj9TYXhFGzV
+         Dz6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=6FbR4+wo96W1dWPj028FNCvwM/SPgWjQY/Nh61K7Dcw=;
+        fh=Xa/19SOVIRwMNk1OlQ8QJQ7RKmErnAxqxmBY2hMyu/A=;
+        b=jTs3F3AOh8PFMLKRQh9uJxZZdSXcCotC37FKkHKsHeDzwmXRXVe/CtxnJ53C89XYVa
+         wQsPoMLvh/yG5JDSVsOth2fHebYo2hB+/IUjkKHPceyeyyvLmvj/xR2cKOguYB+tFyh1
+         76Bk1nUcGAUFlWGz/IKX/fOPu6BVRQcdMRlLqqY5jitxp8yIa5z1uVvL/T2j+uAHjPmP
+         DA7dPv53Du36TkpxBgoUCX3DoicUKzbH77c3ZXXkD/Y4jCwZ7mniHW1H1GAMqMpKWRAv
+         fkk1tGmvO3MV0KFR6CL89CVMARUuYJTuvarq49PTbUu9b55M6Zz40JUWxt/nJzh3EapZ
+         Dykg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773069025; x=1773673825; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6FbR4+wo96W1dWPj028FNCvwM/SPgWjQY/Nh61K7Dcw=;
+        b=QcMq2riqhfjZS4ySNBCR4nS3Xfr8T9TTnYK9OII1cfTNicCPcMff5EEpTyZb/hxI8o
+         YKSj6FWDXkZneC9gt3vgsTRQvkLjyynz1J7JxZisziVKslZDyd9cAKxVOHHAqecUD4cW
+         ztTIgys4WlmDiEOBWDd5NPkuy0QKfSlg/PD+okIpy0NEp+Hhec7WIJkX/37h0SOFxwuS
+         qoAmRYS9l83lpils6Vty/rJTaUOjQwtWaxSMslJbELsoyCg+jZ/UuqvUc0YKmBouuRk6
+         bey4o0GVF3QsLRuWa3EGlVmBWACZLEfYGOY9Y+f2f13+ckZGQN5eEXWiLsHNRPXEwpxO
+         vipg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773069025; x=1773673825;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6FbR4+wo96W1dWPj028FNCvwM/SPgWjQY/Nh61K7Dcw=;
+        b=sNjGmBfGHT/Q88y0cWLOna3FLmtBiVX/OLyjlxy/5VbZvXFDkSTYC+g7TpCidfGwVL
+         iSS4dALeqqInOP23glaX6vj8dZRI0vGhf6YDv9aMo2fgFTDIG/gi5TE4j4GW0vkrtiO/
+         60cUrfA0xHoD3fBf42bKmIMe4OeK+UZc5/CslhFBnQgX50gi8cfVfhaNjc+Q7/GAtnJr
+         oPgSKKfdTOXkjUkNyO5cv3ptPtgxmF3nLEH0+wGQkmJs5o2Tdkz3qcYlJQYC8aaBWytA
+         U3fGk72z1oUvXOHg6qPN4sP4q/iy+P7/6i6zOJgEaVK8iEo4P86NhpphrJ+Lponbjqw1
+         buhg==
+X-Forwarded-Encrypted: i=1; AJvYcCXzIdi5ItH+D95xPf4L5F3IfTulwhBR8sYR0NNpPawgKO/4fJx7Lb8mM4oLlSZBw3vIiren@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzn4aP43FwJPEwoakSFdG9V5M54vdcUz+C8SsSyOK3qKcuxQP/z
+	tgQzCPrkTammufcCVabYWWm2CUh3pRHjk3AlsWzbOrU4swyjUfHFTStXLE5smWi/rUdJXWIHsgS
+	WDL7mCPslCVmMjdlW2R2vVIRby4xzmOZ9lfG8cwvR
+X-Gm-Gg: ATEYQzzrJLuoW2cI3U2UAR4473gTQFPkHSfaQCSQp8es5jpMjohU9h36MDG0VzzzFk6
+	CuicTwUr1+b9xRNM7qQ/PVaYnKzGuhb/8YrfnawWKebBeF2ri6aiT5CgBU0MAPR9PRluomvaDkP
+	9WomnrJSOLhGR9UTWLWZ7UH/1d6OC+JLw+HSKjfpB9csOejz+mP4sSVAiG6ldKFQpQz8c77jFSS
+	lz97/RdL0CFDNH3c0q8P8e5nlAwZAna8tKO34pm2HvApMznyTzNSS8MpjChutRYvv61aOdOb5xi
+	jHb1d8RRG16qfOTL1FqCBvyC0sCkNowi9SpnDg==
+X-Received: by 2002:a17:903:1a23:b0:2a7:6c4e:5914 with SMTP id
+ d9443c01a7336-2ae8ad1c62emr4122395ad.6.1773069024342; Mon, 09 Mar 2026
+ 08:10:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|CY5PR12MB6297:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4175c5a3-f69b-4238-9ad6-08de7dd9c06c
-X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	bi/9t+k7trv/EYmN6l/OvJKWyUSczP3QOioNs9S0Fn2Lt41ayLvqL4wWG6abKjFJMBhzGdOHjY6cyBCZ8zKX9G1NErF65e8jz67rZIvrcAer+M80fDvhkVY5MG0kUwrOCXutsOF2wTticTxsaS8UoeRu6Xkq35SMkzpf0VxCuuPxcKy3gpApxC6H1LGH3JYx18x0l6SxFe/4pYWQXj610OTruf2yqKQkIr9ZCYES6Y/xFNqepnH4gv5ZYunqMY1n5HfQEBZTnlJFDYkYB+IICes/zxt/2zDOTcYLkrE2cezQWSSHuef9n8ve0jXvI2iefFjkV9kv504boPkXO83LkRhKcDz8GG0Xipe6uJYydCmJ4QkNEk825oSz6Gp0ae+gl3XrjKXqFbSbbJ/+rfHLGI7XKX34gN/YkwKIJweI7RXCFaFi2UXxEdkGbk49zuNWLnLAOdgVr0NgF2IRFcmmr9C7KflN+2jfmUwES2Bh+WJHSQdhg8qANrlV/xUodBVE82iXYfcv7vpr94JigzNTiBeieaPH+xfdm6expW3oCtmy0OttO5nc2aZ/a37hviTQq9u2AAaGPhx++A0YhV2Eh3lmnTWlx0hFnFNYa1QnwHqf5QnbVmfAO1AaqSCZUD6d8AjPpCJKzHrH5BCXctInNMS0UL56kZdFnwrKlDRIO0tOOOZHtwYs1TY8NPXGzcaSr6pZ5ESDCmYgHVln0ok9VfJtvd3Ix0oXDM2GyAXqteg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?PnCfLPeOjIp7ainixdnTeg0GxWslxjSwKQaYp1W4K1W4XMU0nSeXFDEfootW?=
- =?us-ascii?Q?OhQmZRDvg4tkeTshRKpTsLC2s8UuwCD8r22x7RZ+kMn+b3uH4GOWKOx/QS0S?=
- =?us-ascii?Q?NUP5KAr2jZQoCYQvMShdBOo4oe3zwcdZtn4Fwgwsf27WyCEhCOST+8QrePGb?=
- =?us-ascii?Q?VZR+6icxSASeAhjmCEhmh0SkfWocsp8PYSl+b/uyuB0UpHq/MbC9B6yGS5F0?=
- =?us-ascii?Q?KKoFVqNTFZWzfvsDh8fqtfMraSMPYiIwAzeBu4KY1nTjM2xM9DtHE+Ij87ip?=
- =?us-ascii?Q?rcIRHquyPb/1IYEgi2qes9xz2Om9AYAnKCL8N4FBQbVRYNotTVIezuJe3tRf?=
- =?us-ascii?Q?aJf/mfjUUpvfqoTpYsYmP0JOL/6O3Gipe/yIuGsqnHalEOZTjnED6vEPZ68l?=
- =?us-ascii?Q?pY1w7hxj27QFLT+SIjdk6YLtv3Mz+lfkvbdWl0VTXJ0guigUQUIhFWtJPVYw?=
- =?us-ascii?Q?EkW9rU1CXvjTzwDMsHoAcbgspcZweofhyXM9dRujCifUqGudqlkTXKX3IBnU?=
- =?us-ascii?Q?9G2T6o+xs3j8XzrzHDQBmHdzq8pjdJaFGAszN7I6j45S1gCjv0vqzgypU42R?=
- =?us-ascii?Q?j17TRcc41icNGC7vTcZkALN9XlIKEkzb1DnY5GULUmrqaM8mmmC9PPSaVwWX?=
- =?us-ascii?Q?JXchqL9iFXWvIlBv3sYMWJb+VotUnuGJFlIQfxpOxrbcG10zapAsHnkNqWFu?=
- =?us-ascii?Q?nEvy4hXFK16GqPZgK94Dc80VZetTlVBW+VhspK8d4sp8JIqQ/tHnA0MsmQdS?=
- =?us-ascii?Q?iWei1yVMPdvtweXlV3ZCkXovD1I253ixBvUd7WdPPOwbP69BoiLebA+dVaEC?=
- =?us-ascii?Q?zQGdTG5qvvZF2Wj6phN+CQtJMF2Xp9pzCxMt/gRHix/+CmfHLENOijICHASm?=
- =?us-ascii?Q?6BElofW2uTzGGLHQqLfdgpjMrFjiMgaTGrMAWQ3gY+yXiJSNO/1CnDeM2aoD?=
- =?us-ascii?Q?HJVFXGc67ufu/L4tqSQ4A7BI7KI+Pm35/mNc/GJDl1BP4Dp4izDH+DATKvrN?=
- =?us-ascii?Q?HWy0koIhuE62W5NqExIgb6YYoMu6Y2GktS04hPp17VLI4D20V+rvzC+RKW01?=
- =?us-ascii?Q?S4UCo7IU4o3kTjiKN3AVkc+6cexaYa2Rt+67MfhRFAvrkUoOYjPmYgtFRtTF?=
- =?us-ascii?Q?kgcCitKkyaa8C9MBZpJcK09f5JXtdjJQgwcdMVNpqeQPwdKs0xc5KpfQ/w1T?=
- =?us-ascii?Q?hmjd8NKKeqI6fgyjar1Zku4yDPtYs+CrRLNeabkfxPcR0lPpY6imNN+jDkPt?=
- =?us-ascii?Q?ntoMH9Jzb5mYvI+uNZcemyfjRRrbEhz3ScHAvQeHQgTFDY1j3ATk3p2vkYoJ?=
- =?us-ascii?Q?0SBqsCtyZTfCqF/nuqogqhG88sZk29yiqOwBzv3ioHAIgBCdCKelprLQt8Do?=
- =?us-ascii?Q?FGbKQSH0nK9n1z4g+L9PY9lW2zMSqCrpHuZshaQnEM2QoFOinzmL0JOcCeQz?=
- =?us-ascii?Q?QXi2ZdTXkfVWp43GpgbC+ZMEz/q0EFpl/4mkwUfQvU9Uw6E5hGDIOeWBevr+?=
- =?us-ascii?Q?rTyGmMUq36AmuH8bxeusHhsh6TEBrFkBiROwPmibnZZp/gS4jHUJfsUkOuB+?=
- =?us-ascii?Q?P+HRd7vmvviCooy0DRyszYrl9dCzPpymRE6k80dn4EC0N02iX0Fga9awRktL?=
- =?us-ascii?Q?TGp0eWZ+1wqEAehgYAkBD5+cGKpFThJZ6BYTPaNecXdrMu/EmYaBMoca2nso?=
- =?us-ascii?Q?h0CblRDpdddaPAUhfFKzzE2ch/xSpcKf1JMww7tRoiYBizIRq6xxvuqMVXjK?=
- =?us-ascii?Q?qC0e9SIJMw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4175c5a3-f69b-4238-9ad6-08de7dd9c06c
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 12:45:32.5583
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iHVkotXk0vb77UbEtMyi07c7gWqAoaMiV60ysFrhONJSjoleu4+PiqGjIbSQIWgySm9r1l1wX6YfYCTf23tjoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6297
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com> <20260308-tools_build_fix_zero_init-v3-3-6477808123b7@arm.com>
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-3-6477808123b7@arm.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 9 Mar 2026 08:10:13 -0700
+X-Gm-Features: AaiRm53Q6tq8LuPIrmfsSi3or0ZsIgIF5Wzq_daN-fddH5XU6fwZ-9Q1_o7c91A
+Message-ID: <CAP-5=fUjJ1QONNLNyJL7Ugc3=44sJ2i10wpQNoGtM7Fnd5wJ0g@mail.gmail.com>
+Subject: Re: [PATCH v3 03/30] tools: lib: thermal: Initialize CFLAGS before
+ including Makefile.include
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
+	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
+	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
+	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
+	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 08, 2026 at 04:46:35PM +0000, Leo Yan wrote:
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> the compiler.
-> 
+On Sun, Mar 8, 2026 at 9:46=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+>
+> Initialize CFLAGS to the default value before including
+> tools/scripts/Makefile.include.
+>
+> Defer appending EXTRA_CFLAGS to CFLAGS until after including
+> Makefile.include, as it may extend EXTRA_CFLAGS in the future.
+>
 > Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/lib/thermal/Makefile | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/lib/thermal/Makefile b/tools/lib/thermal/Makefile
+> index 41aa7a324ff4d76351b89d7d7cf382df3fc14052..50efa97163fc089455161d6b8=
+1db13aa0ae41af6 100644
+> --- a/tools/lib/thermal/Makefile
+> +++ b/tools/lib/thermal/Makefile
+> @@ -23,6 +23,14 @@ INSTALL =3D install
+>  DESTDIR ?=3D
+>  DESTDIR_SQ =3D '$(subst ','\'',$(DESTDIR))'
+>
+> +# Defer assigning EXTRA_CFLAGS to CFLAGS until after including
+> +# tools/scripts/Makefile.include, as it may add flags to EXTRA_CFLAGS.
+> +ifdef EXTRA_CFLAGS
+> +  CFLAGS :=3D
+> +else
+> +  CFLAGS :=3D -g -Wall
+> +endif
+> +
+>  include $(srctree)/tools/scripts/Makefile.include
+>  include $(srctree)/tools/scripts/Makefile.arch
+>
+> @@ -39,13 +47,6 @@ libdir =3D $(prefix)/$(libdir_relative)
+>  libdir_SQ =3D $(subst ','\'',$(libdir))
+>  libdir_relative_SQ =3D $(subst ','\'',$(libdir_relative))
+>
+> -# Set compile option CFLAGS
+> -ifdef EXTRA_CFLAGS
+> -  CFLAGS :=3D $(EXTRA_CFLAGS)
+> -else
+> -  CFLAGS :=3D -g -Wall
+> -endif
+> -
+>  NL3_CFLAGS =3D $(shell pkg-config --cflags libnl-3.0 2>/dev/null)
+>  ifeq ($(NL3_CFLAGS),)
+>  NL3_CFLAGS =3D -I/usr/include/libnl3
+> @@ -60,6 +61,7 @@ INCLUDES =3D \
+>  -I$(srctree)/tools/include/uapi
+>
+>  # Append required CFLAGS
+> +override CFLAGS +=3D $(EXTRA_CFLAGS)
+>  override CFLAGS +=3D $(EXTRA_WARNINGS)
+>  override CFLAGS +=3D -Werror -Wall
+>  override CFLAGS +=3D -fPIC
 
-Acked-by: Andrea Righi <arighi@nvidia.com>
+The change lgtm. Running this patch through an AI review showed that
+what looks like a typo, CFLAGS becoming CFGLAS, is located below:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/tools/lib/thermal/Makefile#n62
+```
+# Append required CFLAGS
+override CFLAGS +=3D $(EXTRA_WARNINGS)
+override CFLAGS +=3D -Werror -Wall
+override CFLAGS +=3D -fPIC
+override CFLAGS +=3D $(NL3_CFLAGS)
+override CFLAGS +=3D $(INCLUDES)
+override CFLAGS +=3D -fvisibility=3Dhidden
+override CFGLAS +=3D -Wl,-L.
+override CFGLAS +=3D -Wl,-lthermal
+```
 
 Thanks,
--Andrea
+Ian
 
-> ---
->  tools/testing/selftests/sched_ext/Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
-> index 006300ac6dff88a48104977398d8517753e7e385..81d8f4a184245d8c330cf45b75bd868b2a7aa7dc 100644
-> --- a/tools/testing/selftests/sched_ext/Makefile
-> +++ b/tools/testing/selftests/sched_ext/Makefile
-> @@ -53,6 +53,7 @@ ifneq ($(wildcard $(GENHDR)),)
->    GENFLAGS := -DHAVE_GENHDR
->  endif
->  
-> +CFLAGS += $(EXTRA_CFLAGS)
->  CFLAGS += -g -O2 -rdynamic -pthread -Wall -Werror $(GENFLAGS)			\
->  	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)				\
->  	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(CURDIR)/include -I$(SCXTOOLSINCDIR)
-> 
-> -- 
+> --
 > 2.34.1
-> 
+>
