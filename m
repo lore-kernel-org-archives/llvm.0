@@ -1,65 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0987E349AF5;
-	Mon,  9 Mar 2026 21:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42FD238E5F2
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 22:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773091796; cv=none; b=kMTzCLSS1YERiKKiEqrwSHTMV5zWoLk/wWCIxXIDgIGf1zDTO/fE5bl70TvrhR2ZYiZhtxF1AIqgM4Kfrtye+eR6l6VvyLjthc0NWhnmAdcu/W+jKfko2wd9C/KCAWpp7sAJG24HqqhJbYUlSwUHahZSavTP91WrnH2caR241lI=
+	t=1773094860; cv=none; b=VvbWyhbMeB7gpBruThaWHrYElxQ6V9fnPu9AMlXCUc3/Cd3AaOnGd0OoGKomM72iRAc6hHlTmXiNcJ14vKaJsmJoe2j+geEknDSbRTcDoHxKC6eCRUFh8PSCoTz4WNR7pWnC2VlAL4K5GX31pTxdfgOWvo6LJ5y6G5ZxK7B1MuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773091796; c=relaxed/simple;
-	bh=dlZ+cYzjAVo9R0VWTOYYhJLvWL2hlTOrad+GmSBnVSA=;
+	s=arc-20240116; t=1773094860; c=relaxed/simple;
+	bh=cPpaWJQ80q+Lffa6Wa0Eh87ldCBLbEMQduRkLHgrlQY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mvXSACyh/DZgG4trOa12WobSyRtkwz8WeOprMW4UCYQkzQSC9IT+74IMFXByhsRrNjuyK++OUzw5hqr1WjX02ebZsQsjpov7f4mxV7ZSUCC0KWOyFdH4q9s+g36+QXV8mf3zqsJs6eLg/obwBFf5/ovJDPjWFK37jcTXIp+IxIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f3/uicOT; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=UdPDmA5zBRYtFV3QQ5Jgzn9ggRQ12zAFSMTu2y0/bdwk2gyrGGIduk/jtMrYH+MGdivma/9KnyMrhxRI//YaK/UO5cmdIWHGnzMQd9ZKAR6DLRj7FwpXSAeVxEBbnw9iAF/rKmiFMZy8jSJJrpUbbG6Crkk18qppKRwc+AaoXq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=l4FtqkE2; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f3/uicOT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6059C4CEF7;
-	Mon,  9 Mar 2026 21:29:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773091795;
-	bh=dlZ+cYzjAVo9R0VWTOYYhJLvWL2hlTOrad+GmSBnVSA=;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="l4FtqkE2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1773094851;
+	bh=cPpaWJQ80q+Lffa6Wa0Eh87ldCBLbEMQduRkLHgrlQY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f3/uicOTsDKsMaKy7R9/QUtYshUxWJBEDQwtzxfFYZSOYp7emjBBTyp8sACuA41ZA
-	 uFsGingtwi4ZiWmLejlxSqNUNkNjw0whzlDh+lCbwMs55wI53/YT1Ff55j5rftp6o8
-	 oOrwNy0ee74jJWtZQbwM9TrIfiZrkgU3VAO6WCMPwrogviRRnIDsz2jXaiwdXTArip
-	 BUHMPgdDsJNuVgfrO91jO0Ue3qKjSl2/hysZ/hpLXypw3NvAf6W0ThbXJWgjEE6KbB
-	 fi8jmiRwgeznkfplbkcSANyKgAHU4JnbCic2pM968DnfoezBirmtWFcFwsvpUbx59O
-	 XpdOdy9PYrhUw==
-Date: Mon, 9 Mar 2026 14:29:47 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>, Coiby Xu <coxu@redhat.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andrew Donnellan <ajd@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] integrity: avoid using __weak functions
-Message-ID: <20260309212947.GA4150408@ax162>
-References: <20260306150421.270124-1-arnd@kernel.org>
- <20260306225648.GC2746259@ax162>
- <abb4d186d1ca76c080d5e15bcd9e0019cce3af39.camel@linux.ibm.com>
+	b=l4FtqkE2r3xNDU+YNU5fDpID5U4KhRcECi077BNVvuAQ7eHjVs7AGtsG5ppDmyH2R
+	 DsU/qkDlIZ7U0BC9t2/AyTsfKeE2mUMLWGDZ8kcUnHC8pjcPnPoo0goxIom0ZuZtIG
+	 McB7anzqo30tlykekx0wC1giSfEHW6i5oc5PPb7s=
+Date: Mon, 9 Mar 2026 23:20:51 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet <qmo@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, 
+	Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>, 
+	David Lechner <dlechner@baylibre.com>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Willy Tarreau <w@1wt.eu>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+	Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
+	Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v3 18/30] tools: nolibc: Append extra cflags
+Message-ID: <a23c078e-e057-4e2e-8c85-945cb61a4f88@t-8ch.de>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+ <20260308-tools_build_fix_zero_init-v3-18-6477808123b7@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,15 +69,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <abb4d186d1ca76c080d5e15bcd9e0019cce3af39.camel@linux.ibm.com>
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-18-6477808123b7@arm.com>
 
-On Sun, Mar 08, 2026 at 09:01:58PM -0400, Mimi Zohar wrote:
-> Thanks Arnd, Nathan. LGTM.  Nathan, could you send a patch with a proper patch
-> description.
+Hi Leo,
 
-Done, thanks for the input!
+On 2026-03-08 16:46:23+0000, Leo Yan wrote:
+> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+> the compiler.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/include/nolibc/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
+> index 1958dda988954d8a604b28f5feb75ebb67ee2e14..b7f0385ccba14fdaa08aab6192acf0296b47cdbc 100644
+> --- a/tools/include/nolibc/Makefile
+> +++ b/tools/include/nolibc/Makefile
+> @@ -105,7 +105,7 @@ headers_standalone: headers
+>  	$(Q)$(MAKE) -C $(srctree) headers_install INSTALL_HDR_PATH=$(OUTPUT)sysroot
+>  
+>  CFLAGS_s390 := -m64
+> -CFLAGS := $(CFLAGS_$(ARCH))
+> +CFLAGS := $(CFLAGS_$(ARCH)) $(EXTRA_CFLAGS)
 
-  https://lore.kernel.org/20260309-integrity-drop-weak-arch-get-secureboot-v1-1-6460d5c4bb89@kernel.org/
+I don't think we need additional cflags in tools/include/nolibc.
+The only thing this Makefile does is to test-compile some headers.
 
-Cheers,
-Nathan
+>  headers_check: headers_standalone
+>  	$(Q)for header in $(filter-out crt.h std.h,$(all_files)); do \
+
+
+Thomas
