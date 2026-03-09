@@ -1,144 +1,312 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5834186A
-	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 00:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F981F16B
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 01:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773014532; cv=none; b=dxpR1ZPEvfQbzwumK3y7cn7MzEjpuc5W8GFCffCj4NDvJj1H7S0tHxfz4NNr/TlzKg1x0uKHXZRx/W26vGDQqsZkKwC9TqIWJUe/bL/WGlXiUTM4alyGCPSQdGZS2YYlIvMMTEus/0e68NKO3ahNv7E3K3Jmk/8WVF/RFXlPzfU=
+	t=1773018151; cv=none; b=d8ufFArFe4Qovj3adi/qVF0Y5xX2xowN/yeodJQJDpYlR6LlfRw5vzHqYw5Mp/VyES56W1E6s6RYwQb3aAyEqp6irI67A9jG1wyXCiEfnUczeAZVa5Bf6cuCNrg36e54p/TQQ7DCS2Em6oOio12EiPb8f9RynLmNvzKsCp5UJ/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773014532; c=relaxed/simple;
-	bh=BrY2R9xq4RCeCTbNPVHDT00P2dz6ECfFJdBBz5egr54=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=oBfIlp1jWkoHFFDWGw2SqEmrLxhNN4lF+VznjUp+pFegQn3+ipF58t4MhYlS58qw3lmy95LS5maBrtk+IsJ7kkHFrruGC02UfSvURg7rCZ3ZFZXAYnVsYU7bI89YVkiyjBhv/YhjhMEk4RVuxZdcWaePrIj8QAoXDKlR85zmhY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=acvAXhv6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773018151; c=relaxed/simple;
+	bh=74etvlk807ljjkZ6toEN/U0VfA3h0gxwcApl7bLvFvo=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=ClGl+d0eXsWLm1lM8MazJTixcFLm3zaSCoiPrIXMn9UoQBYwjid0a5e9ZXYkwLKk+1h/jrGUrt8k84zh6jkKgQXnkqQpYaAL0OLtghB7iPeI/KqtaL08/gUC67sERalM861EmZNE+3G8/J8UPyjDchl46L7KRv0nPLOC0dozQ5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qRg7p5Oh; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="acvAXhv6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773014529;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=6UpACUILY/GVj95ElFvcURTQetUWrMMdDcAwKnaXVIA=;
-	b=acvAXhv6O1xAMxPbUrnDHkCdwJpmgJsyOSFjE30mS7hB+TNdzIqFVngF3fM3B9qAOeDHKm
-	DlNNGjwve3qTe0m8gGd6LDKj/1Xp3qdWPTIr59/PVG1zcLeROPo/ihwr68+MaLTmo4SS5f
-	UJgTm1ZuvlyM8OLoHBiGLF64lKBllf0=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-659-NmlkPep2OaWb4tRTBQP7CQ-1; Sun,
- 08 Mar 2026 20:02:08 -0400
-X-MC-Unique: NmlkPep2OaWb4tRTBQP7CQ-1
-X-Mimecast-MFC-AGG-ID: NmlkPep2OaWb4tRTBQP7CQ_1773014527
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A2062180047F
-	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 00:02:07 +0000 (UTC)
-Received: from [172.20.96.208] (unknown [10.30.44.37])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 41E4F1800361;
-	Mon,  9 Mar 2026 00:02:07 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc2,
- upstream-mainline, 014441d1)
-Date: Mon, 09 Mar 2026 00:02:07 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qRg7p5Oh"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 628JrcRC1223472;
+	Mon, 9 Mar 2026 01:02:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ZAx9/o
+	wdG0G6ICXDw5HgKVKEoK5USbJOvKksnS4Fpms=; b=qRg7p5Oh1tsCQ+aHqLUuGn
+	vCcGGePq9CtuDWvdb9r7Khed2e9ytRaLfOwXyW3/Jg9zXZcToOGDeM0l0nqowUOd
+	w3d/mv3o7fb24ykKQuaHxfQC3u3Al6VWdgwk8cpXRaMdWwVODCd0Z5MziawagM9C
+	6f10eiFV/OR8wFy4O5vFh/9ibHtVZhmKFkLBMJ8cepxKx8uNX+iiWJ4KU/kWbEz4
+	FsRYJc2MR0QO9LSe87nhLGCEBm4aKUSoGQK3Dc56TcOSf6aPlSmIwsalASrRMdDx
+	XzHo2vcEjEfiAugaJV+H+vXTUHayzFTFQZqMlcWZo7FlIzh/zRPYseqjdTpiyi7w
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crcyw4n0p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Mar 2026 01:02:01 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 628Kt5Me009091;
+	Mon, 9 Mar 2026 01:02:00 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4crxqy350k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Mar 2026 01:02:00 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62911x9X10355338
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 9 Mar 2026 01:01:59 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 10D7B5805A;
+	Mon,  9 Mar 2026 01:01:59 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D67C05803F;
+	Mon,  9 Mar 2026 01:01:56 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.45.230])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  9 Mar 2026 01:01:56 +0000 (GMT)
+Message-ID: <abb4d186d1ca76c080d5e15bcd9e0019cce3af39.camel@linux.ibm.com>
+Subject: Re: [PATCH] integrity: avoid using __weak functions
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman	
+ <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik	
+ <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Arnd
+ Bergmann	 <arnd@arndb.de>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry
+ Kasatkin	 <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>, James Morris	 <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jarkko Sakkinen	 <jarkko@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Coiby Xu <coxu@redhat.com>, Nicholas Piggin <npiggin@gmail.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Christian Borntraeger	
+ <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Eric
+ Snowberg	 <eric.snowberg@oracle.com>,
+        Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Andrew Donnellan
+ <ajd@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        llvm@lists.linux.dev
+In-Reply-To: <20260306225648.GC2746259@ax162>
+References: <20260306150421.270124-1-arnd@kernel.org>
+	 <20260306225648.GC2746259@ax162>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 08 Mar 2026 21:01:58 -0400
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <50701.126030820020800568@us-mta-659.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: JrdSdTr68qbpg_DsWgAtMoAZIhyb8rujOYgN0ScPydA_1773014527
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA5MDAwNyBTYWx0ZWRfX3/6s09a465jV
+ X5RMKcSgniR/weZ24VJoZk55Xtm/lAiCEumDwtMkgbw7l8qHW3aABWu1Ii6bpWYnZo+KZZQR+Ir
+ okBtoUHeLT0gp/D7Ttg4TSGALsBlB7VOPMHgSYsUfOLPhRllx72g3i+0cmD9abPmSeIleww4M4Z
+ tKuCL8UVJsQD2+0Wwsl2OTwxYSh41iyVrH4F/mCC5TNaJmjxx0Q0/KI7rjoHptb4hdvfPQ8YKwL
+ OD51zYKKm6IrMEIis519AD+VSszUibhD+rMGOMxui5yRpF6YPFtx6RbBRIYenbMKSLR1g0f24Od
+ QErYubUT6O76OSER0WRppUfj27l/9I103kzAywGBTXI3AJ4KIC96ExFlDz1vm1HehllIaTDs/RE
+ XlwpDC+RELOtoHv7PQcAGDrNA/jxyeL83oMycA/ABD0hCuKzBWvO2FlBr1Sx3o/stlk/k90+Y9w
+ Dh8CBsJhgwnIYmMUp5g==
+X-Authority-Analysis: v=2.4 cv=QaVrf8bv c=1 sm=1 tr=0 ts=69ae1c0a cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=20KFwNOVAAAA:8
+ a=i7x0JOCGzW7_FyAnX44A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: uteMIeVtaIqwHYQJDjZ7cWbjdPsRQTqb
+X-Proofpoint-ORIG-GUID: a4u9xCS4h4_FS-qJnm-SFm-cF9zF4d1h
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-08_07,2026-03-06_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 spamscore=0 impostorscore=0 clxscore=1011 adultscore=0
+ bulkscore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603090007
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'i2c-for-7.0-rc3' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/wsa/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2371449197
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: fedora: avc:  denied  { create } for  pid=3D1 comm=3D"system=
-d" name=3D"io.systemd.Hostname" scontext=3Dsystem_u:system_r:init_t:s0 tcon=
-text=3Dsystem_u:object_r:var_run_t:s0 tclass=3Dlnk_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2443788
-            Affected tests:
-                Boot test [aarch64, ppc64le, s390x, x86_64]
-                Reboot test [aarch64, ppc64le, s390x, x86_64]
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: [upstream] WARNING: drivers/gpu/drm/drm_atomic_helper.c:1920=
- at drm_atomic_helper_wait_for_vblanks.part.0+0x228/0x240, CPU#1: kworker/1=
-:1/54 - RIP: 0010:drm_atomic_helper_wait_for_vblanks
-            URL: https://lore.kernel.org/dri-devel/69381d6c.050a0220.4004e.=
-0017.GAE@google.com/
-            Affected tests:
-                Reboot test [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
+On Fri, 2026-03-06 at 15:56 -0700, Nathan Chancellor wrote:
+> On Fri, Mar 06, 2026 at 04:03:24PM +0100, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >=20
+> > The security/integrity/secure_boot.c file containing only a __weak func=
+tion
+> > leads to a build failure with clang:
+> >=20
+> > Cannot find symbol for section 2: .text.
+> > security/integrity/secure_boot.o: failed
+> >=20
+> > Moving the function into another file that has at least one non-__weak
+> > symbol would solve this, but this is always fragile.
+> >=20
+> > Avoid __weak definitions entirely and instead move the stub helper into
+> > an asm-generic header that gets used by default on architectures that
+> > do not provide their own version. This is consistent with how a lot
+> > of other architecture specific functionality works, and is more reliabl=
 e.
+> >=20
+> > Fixes: a0f87ede3bf4 ("integrity: Make arch_ima_get_secureboot integrity=
+-wide")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> > This is a larger change than I had hoped for.
+> >=20
+> > If you prefer a different way to address the build failure, please
+> > treat this as a Reported-by when you apply your own fix
+> > ---
+> >  arch/powerpc/include/asm/secure_boot.h        |  6 +++
+> >  arch/powerpc/kernel/secure_boot.c             |  1 -
+> >  arch/s390/include/asm/secure_boot.h           |  9 +++++
+> >  include/asm-generic/Kbuild                    |  1 +
+> >  include/asm-generic/secure_boot.h             | 37 +++++++++++++++++++
+> >  include/linux/secure_boot.h                   |  8 +---
+> >  security/integrity/Makefile                   |  2 +-
+> >  .../integrity/platform_certs/load_powerpc.c   |  2 +-
+> >  security/integrity/secure_boot.c              | 16 --------
+> >  9 files changed, 56 insertions(+), 26 deletions(-)
+> >  create mode 100644 arch/s390/include/asm/secure_boot.h
+> >  create mode 100644 include/asm-generic/secure_boot.h
+> >  delete mode 100644 security/integrity/secure_boot.c
+>=20
+> Thanks, I noticed this as well. The version I came up with and have been
+> locally testing is the following, which is a little bit more compact.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Thanks Arnd, Nathan. LGTM.  Nathan, could you send a patch with a proper pa=
+tch
+description.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Mimi
 
+>=20
+>  arch/Kconfig                     |  3 +++
+>  arch/powerpc/Kconfig             |  1 +
+>  arch/s390/Kconfig                |  1 +
+>  arch/s390/kernel/ipl.c           | 10 +++++-----
+>  include/linux/secure_boot.h      |  4 ++++
+>  security/integrity/Makefile      |  2 +-
+>  security/integrity/secure_boot.c | 16 ----------------
+>  7 files changed, 15 insertions(+), 22 deletions(-)
+>=20
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 102ddbd4298e..a6d1c8cc1d64 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1841,4 +1841,7 @@ config ARCH_WANTS_PRE_LINK_VMLINUX
+>  config ARCH_HAS_CPU_ATTACK_VECTORS
+>  	bool
+> =20
+> +config HAVE_ARCH_GET_SECUREBOOT
+> +	def_bool EFI
+> +
+>  endmenu
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index c28776660246..e76d6cf0c403 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -1062,6 +1062,7 @@ config PPC_SECURE_BOOT
+>  	depends on IMA_ARCH_POLICY
+>  	imply IMA_SECURE_AND_OR_TRUSTED_BOOT
+>  	select PSERIES_PLPKS if PPC_PSERIES
+> +	select HAVE_ARCH_GET_SECUREBOOT
+>  	help
+>  	  Systems with firmware secure boot enabled need to define security
+>  	  policies to extend secure boot to the OS. This config allows a user
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index 24695ea29d5b..76f191dd208b 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -181,6 +181,7 @@ config S390
+>  	select GENERIC_IOREMAP if PCI
+>  	select HAVE_ALIGNED_STRUCT_PAGE
+>  	select HAVE_ARCH_AUDITSYSCALL
+> +	select HAVE_ARCH_GET_SECUREBOOT
+>  	select HAVE_ARCH_JUMP_LABEL
+>  	select HAVE_ARCH_JUMP_LABEL_RELATIVE
+>  	select HAVE_ARCH_KASAN
+> diff --git a/arch/s390/kernel/ipl.c b/arch/s390/kernel/ipl.c
+> index 2d01a1713938..3c346b02ceb9 100644
+> --- a/arch/s390/kernel/ipl.c
+> +++ b/arch/s390/kernel/ipl.c
+> @@ -2388,6 +2388,11 @@ void __no_stack_protector s390_reset_system(void)
+>  	diag_amode31_ops.diag308_reset();
+>  }
+> =20
+> +bool arch_get_secureboot(void)
+> +{
+> +	return ipl_secure_flag;
+> +}
+> +
+>  #ifdef CONFIG_KEXEC_FILE
+> =20
+>  int ipl_report_add_component(struct ipl_report *report, struct kexec_buf=
+ *kbuf,
+> @@ -2505,11 +2510,6 @@ void *ipl_report_finish(struct ipl_report *report)
+>  	return buf;
+>  }
+> =20
+> -bool arch_get_secureboot(void)
+> -{
+> -	return ipl_secure_flag;
+> -}
+> -
+>  int ipl_report_free(struct ipl_report *report)
+>  {
+>  	struct ipl_report_component *comp, *ncomp;
+> diff --git a/include/linux/secure_boot.h b/include/linux/secure_boot.h
+> index 3ded3f03655c..d17e92351567 100644
+> --- a/include/linux/secure_boot.h
+> +++ b/include/linux/secure_boot.h
+> @@ -10,10 +10,14 @@
+> =20
+>  #include <linux/types.h>
+> =20
+> +#ifdef CONFIG_HAVE_ARCH_GET_SECUREBOOT
+>  /*
+>   * Returns true if the platform secure boot is enabled.
+>   * Returns false if disabled or not supported.
+>   */
+>  bool arch_get_secureboot(void);
+> +#else
+> +static inline bool arch_get_secureboot(void) { return false; }
+> +#endif
+> =20
+>  #endif /* _LINUX_SECURE_BOOT_H */
+> diff --git a/security/integrity/Makefile b/security/integrity/Makefile
+> index 548665e2b702..45dfdedbdad4 100644
+> --- a/security/integrity/Makefile
+> +++ b/security/integrity/Makefile
+> @@ -5,7 +5,7 @@
+> =20
+>  obj-$(CONFIG_INTEGRITY) +=3D integrity.o
+> =20
+> -integrity-y :=3D iint.o secure_boot.o
+> +integrity-y :=3D iint.o
+>  integrity-$(CONFIG_INTEGRITY_AUDIT) +=3D integrity_audit.o
+>  integrity-$(CONFIG_INTEGRITY_SIGNATURE) +=3D digsig.o
+>  integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) +=3D digsig_asymmetric.o
+> diff --git a/security/integrity/secure_boot.c b/security/integrity/secure=
+_boot.c
+> deleted file mode 100644
+> index fc2693c286f8..000000000000
+> --- a/security/integrity/secure_boot.c
+> +++ /dev/null
+> @@ -1,16 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-only
+> -/*
+> - * Copyright (C) 2026 Red Hat, Inc. All Rights Reserved.
+> - *
+> - * Author: Coiby Xu <coxu@redhat.com>
+> - */
+> -#include <linux/secure_boot.h>
+> -
+> -/*
+> - * Default weak implementation.
+> - * Architectures that support secure boot must override this.
+> - */
+> -__weak bool arch_get_secureboot(void)
+> -{
+> -	return false;
+> -}
