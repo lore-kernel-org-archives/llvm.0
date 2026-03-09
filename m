@@ -1,118 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB4D38E5D4;
-	Mon,  9 Mar 2026 10:18:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F25134EF09
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 10:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773051481; cv=none; b=Gbeb43UxkMe+lH+y7CA5HwKtfekBf6SiOYll974w6Zw9VMCtp7mCi0TJacynk19WUdeJPxGGXySCLZf3fEi5mIJlNfj3RRDxqbf2j6kSKg6PXiErxmzsdKWW7HVFZoS0J2j5GYBijGwk7D2C6MTriO3MgTIkKU50yh/Om4YwIvs=
+	t=1773052269; cv=none; b=gkdVU7Z0fkSyhHusCJeOAZix6il+K6jgFC2zHPoEd05DJP8XEoq2e66wsRsMq68A5/jNA5Z/CgNoIcYxHIcJd6otEFPu8kqmeZqVTOmem2TMHUr7g45w4hnvNb2fm5htzhIo8aaUFaowJ0Kc3xaXHqszaf/3U8orUn9NcsMl8DE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773051481; c=relaxed/simple;
-	bh=2EC+wTYFQkxUTDCtHiHCoOwNgIgiRnx9FT0UQMAHILc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nucLicAECL9GKzsd739R2TTRN96g2tBgDbOcBWdhWFbC01mOgeeWGUNG829erCe5WwsiqzM8xWHN5OCx6AIbmtqUsl2BYdMLlebXtX5nfTzbo5N61iuCRbfTi741hWODrLiDFqVvbPy3N9qX0oQPiCL0OQZzPJJVvdUZiOlkkuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FMlHZ2gs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773052269; c=relaxed/simple;
+	bh=0wBglbdbgyiJwsBzxJASt8/d9BKvUo+GZcF1rrVwqeA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kLpGOHtSgRd0bSw+pnu0e0oE0C7pwRdb1fzRVRnT5OfDlbQW6UYWinGvwWVSW1lNAX/dKSDdpe4VH+MA+yaJXsxZQi+udZBjiN9Rw9OL7PDdBMaf0o4nFnjWVDbLitxh8gAtbean0Dg8iXREOBh5uYVbNghKAu0ydb/KqDaHJx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qzhkih9q; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FMlHZ2gs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B123C2BCAF;
-	Mon,  9 Mar 2026 10:17:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773051480;
-	bh=2EC+wTYFQkxUTDCtHiHCoOwNgIgiRnx9FT0UQMAHILc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FMlHZ2gsXqYoMc0B50ulHkU+VdI0fwSM5vDNkmq/f/qa7R+ym3zrku8rvnOtBfdI6
-	 dPxWyld6YnAtmcY3mEnhum3nQh6i4XWacWw9TEptM90xzKbBOjnTUjdYr4N2qP+ppo
-	 VTot2VEEurdk7y7tUuhOIzc1O5UWLf8Obsu3bb7hRulDQn3UXWynn6snRqBwydsefv
-	 Miva8ljrX780FoGNfNnhVIncoJ1aQqwv8Ihc5RqTm4nnSUzb84jHgnY73Wcz4NloqQ
-	 rduQPbZhjMuWbaxDavP9Dyd/NaSXhan6lR82SSCtLVk8gfL9qlpeNN0dxKR9SR/PLG
-	 /cBq3vYl7etrw==
-Message-ID: <8b5b0e81-436f-49f7-8d3c-9271d4d05ffc@kernel.org>
-Date: Mon, 9 Mar 2026 10:17:49 +0000
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qzhkih9q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773052267;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6uDuPQs7d6skRF5tTd2jlNb7jo/fZnfZ7p1rRhnGX3E=;
+	b=Qzhkih9qV/2xhhp5nc2IMkhB5BeX2MrzxZGBL3S8/dkK8pTW2kJZeRg7AegHiSUMOoXzII
+	ucQTICJ0qh6OwOZtQxyUv5ASxCzzqx9AB1WRrHDbeDQSm6MpfnAzLQKcWVZc5WO1XU6qvZ
+	aMUoQ/FPai0Q9fQ/x58t5m1lEmWuauI=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-511-AVmNVzWLNVuZev3V0ytKyw-1; Mon, 09 Mar 2026 06:31:05 -0400
+X-MC-Unique: AVmNVzWLNVuZev3V0ytKyw-1
+X-Mimecast-MFC-AGG-ID: AVmNVzWLNVuZev3V0ytKyw_1773052264
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-b943b0819cbso217619966b.0
+        for <llvm@lists.linux.dev>; Mon, 09 Mar 2026 03:31:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773052264; x=1773657064;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6uDuPQs7d6skRF5tTd2jlNb7jo/fZnfZ7p1rRhnGX3E=;
+        b=lv2+alHNvuNGv3oruMHhK4HWJmAQlDffpvwSegxignqwFZNTI3rwhoDdNGnQV87sH8
+         yshm5gnpAv/tgQTU9iVZ3mKWC9HdxUjri/hCN6KCoU16d6uxSXUJUS7dSE6NYd8Rqdct
+         BeW9K/ZUy3rY3eQt+Nokf+pVUJPCIz0bRWbU7D1kl866WIFae216TxXpg1vA2pDi4NBP
+         aehzGy6neak0dppm6zJDNugqxGdDes4HNQ8NcEl674jDDIHQ9e0gTdpnURgyvzMmqJFr
+         HNoq6iW/9nWipRBk8CGLnpstLkBRTeTxQUKHTlbuVfqyzmmN6Eln+CFTi4xtrfxtd10R
+         68fA==
+X-Gm-Message-State: AOJu0Yz8IId+C1Z+iEme6F1n/yWSIlnzfvJWoflr08wr4/N9oC+/BQ68
+	ySJTiGFeYxzf3WzZHChGojw2mjOHYssfL50jQ04EIxYN6igPb2BJMmCHnLey4vVoqIqi/f7V8hj
+	OVxJpvhQY644tZTOriGmG1dJkgX9SpKF6BrmyaCAiU/KphVhkYmogYPs0x/QaeXdgv9kxXyBf4M
+	tN9u8H0+cYMKClTXAY/tVnKC40/CJhhp+9iUXGB7pM
+X-Gm-Gg: ATEYQzw8v4kllOPwQYH4l0jv5GrcZmQ4T4pxY5Q1oRLp243TgJCteRXbu3yjWIBJ7PC
+	0t9/4hTnuEsjrS/fUx9QTF7Ay5rlPAEGazvTcVdNx+GoEavUMi+nIa/dffHm2Ndxw1ZjHAZgiDJ
+	HutghomX46HGz/aErVbybr92Q0881S8Y8jLVkj17zMfNq03f1beho+Bj4ZMZ3vK7Ss/Ujfm9/M4
+	KRb9w==
+X-Received: by 2002:a17:907:1c81:b0:b93:6b41:e394 with SMTP id a640c23a62f3a-b942dbced3bmr523912266b.3.1773052264067;
+        Mon, 09 Mar 2026 03:31:04 -0700 (PDT)
+X-Received: by 2002:a17:907:1c81:b0:b93:6b41:e394 with SMTP id
+ a640c23a62f3a-b942dbced3bmr523909766b.3.1773052263586; Mon, 09 Mar 2026
+ 03:31:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 05/30] tools build: Append -fzero-init-padding-bits=all
- to extra cflags
-To: Leo Yan <leo.yan@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>,
- Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>,
- Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
- Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>,
- Len Brown <lenb@kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
- Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
- <20260308-tools_build_fix_zero_init-v3-5-6477808123b7@arm.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-5-6477808123b7@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260306-clk-scaling-v5-2-d21b84ee6f27@redhat.com> <202603082228.3RYA8l9q-lkp@intel.com>
+In-Reply-To: <202603082228.3RYA8l9q-lkp@intel.com>
+From: Brian Masney <bmasney@redhat.com>
+Date: Mon, 9 Mar 2026 06:30:51 -0400
+X-Gm-Features: AaiRm51xv-5Fvpq28_DyyKVNTDjNUzh2q55dvvBrMPegtA0lGwMe9trv34GXR08
+Message-ID: <CABx5tq+zKeMXt+dsfO3LNz-DrwG14zFiLznsS9ubTmRrRTeoMQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v5 2/4] clk: test: introduce test suite for sibling
+ rate changes on a divider
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 5VSADYx9aI6MAWw3T2rQowo8s_iE3nTBijex4y2HfHc_1773052264
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-2026-03-08 16:46 UTC+0000 ~ Leo Yan <leo.yan@arm.com>
-> GCC-15 release claims [1]:
-> 
->   {0} initializer in C or C++ for unions no longer guarantees clearing
->   of the whole union (except for static storage duration initialization),
->   it just initializes the first union member to zero. If initialization
->   of the whole union including padding bits is desirable, use {} (valid
->   in C23 or C++) or use -fzero-init-padding-bits=unions option to
->   restore old GCC behavior.
-> 
-> As a result, this new behaviour might cause unexpected data when we
-> initialize a union with using the '{ 0 }' initializer.
-> 
-> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
-> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
-> in unions and structures.  This commit applies the same option for tools
-> building.
-> 
-> The option is not supported by any version older than GCC 15, nor is it
-> supported by LLVM.  This patch adds the cc-option and host-cc-option
-> functions to dynamically detect compiler option and append it to the
-> EXTRA_CFLAGS and HOST_EXTRACFLAGS respectively.
-> 
-> [1] https://gcc.gnu.org/gcc-15/changes.html
-> 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
+On Sun, Mar 8, 2026 at 10:37=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+> [This is a private test report for your RFC patch.]
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on fc7b1a72c6cd5cbbd989c6c32a6486e3e4e3594d]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Masney/clk-t=
+est-introduce-clk_dummy_div-for-a-mock-divider/20260307-074328
+> base:   fc7b1a72c6cd5cbbd989c6c32a6486e3e4e3594d
+> patch link:    https://lore.kernel.org/r/20260306-clk-scaling-v5-2-d21b84=
+ee6f27%40redhat.com
+> patch subject: [PATCH RFC v5 2/4] clk: test: introduce test suite for sib=
+ling rate changes on a divider
+> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/202=
+60308/202603082228.3RYA8l9q-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009=
+708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20260308/202603082228.3RYA8l9q-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202603082228.3RYA8l9q-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> drivers/clk/clk_test.c:686:26: error: use of undeclared identifier 'HZ=
+_PER_MHZ'
+>      686 |         ctx->parent.rate =3D 24 * HZ_PER_MHZ;
+>          |                                 ^
 
+Thanks for the report. I forgot to mark my series dependent on this on
+series I had posted that includes units.h.
 
-I can't speak for the maintainers of the other tools of course, but as
-far as bpftool is concerned, this looks OK to me. Thanks for this work!
+https://lore.kernel.org/linux-clk/20260304-clk-docs-v1-0-fee468db99f1@redha=
+t.com/
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
+Brian
+
