@@ -1,93 +1,168 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A633DA7C8
-	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 15:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842CB3DEAC0;
+	Mon,  9 Mar 2026 15:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773071074; cv=none; b=GXvOqTim+3MHfYJ+cbDBFPaRzIZkllfqGph0H21GJVcwjFNblYhSq+Y7KLrSyWhs48OjTLb6XlKrhCLBBzFnfzWpcVfBJyyouPvnOEgB5eiJi6ovSvYaaIYV4aue0ZPHKPLySDq550q4HTsujn9uDvDgdQuLtI8g0WR1M2noZyk=
+	t=1773071142; cv=none; b=mPWinpZ9Si9XKLnp00CH83dCZK2KvNgbpnyaGuDGpQh5lY89KzvkQzpOSJSyZuLBbPkeL8cUy8YY3upZkl1AlH6ilp1x/JUw4FszE7Adu7bp+tsv8HeniH5WyQoJBrDIHdKNpB+pDHnra/tH7jTC6JiR95dTAffnY2sIc6eD/v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773071074; c=relaxed/simple;
-	bh=6kD1xtE1WWvb8q5Sgj38ZAiQ3VqGPX0njcNklX6dX5U=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sRxfQL9S9NGIMU/1No0nTPqxsX4o/s0PjYusE+SnS8OfYH7/g5cOPiu8fP2Tdy0Uyj+wcfEfvc0WGLjXORX4lBLLBqa8pWDObgguBs9iKkMEYI3H9pAsscE6QbGIP3Yjyg0QUYatHpnmDb4QdxK19u7vkF1zHhKNOPYHosTFNdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id 9473EB734D;
-	Mon,  9 Mar 2026 15:44:29 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id 5F1FF20033;
-	Mon,  9 Mar 2026 15:44:05 +0000 (UTC)
-Date: Mon, 9 Mar 2026 11:44:13 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers
- <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James Clark
- <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet
- <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
- <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
- <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
- <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
- <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>, Adrian Hunter
- <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
- Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia
- <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson
- <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang
- Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui
- <decui@microsoft.com>, Long Li <longli@microsoft.com>, Jonathan Cameron
- <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, Nuno
- =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, Thomas
- =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, Len Brown
- <lenb@kernel.org>, Srinivas Pandruvada
- <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David
- Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min
- <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, Gabriele Monaco
- <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina
- <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 24/30] tools: tracing: Append extra cflags
-Message-ID: <20260309114413.09e05127@gandalf.local.home>
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-24-6477808123b7@arm.com>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
-	<20260308-tools_build_fix_zero_init-v3-24-6477808123b7@arm.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1773071142; c=relaxed/simple;
+	bh=jwi9ebvnM0hO6++49RVnkk82lZ9CJamEzE6bQ8Tn474=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gZJv1d+VtjuhkMf/d0Hmk89Fbg2jeVK/pbtuTisw3QCiL0Wkh4IohB8WfwGBenNhFhY0h0SjNEsOtmjk2dxZ5Ju7AknPoUxQGnkbbOcdzuQTH24NA/fLV3P9C+LtaFUys0+TWxCmNttqwNqRqi1kbr/DltFzOccLbfENBDUxrK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nZc2vjMY; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nZc2vjMY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773071140; x=1804607140;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jwi9ebvnM0hO6++49RVnkk82lZ9CJamEzE6bQ8Tn474=;
+  b=nZc2vjMYtDqeosG19kiW00GcUhg1A3Sez9groUaeRcO9r+rULW6FiwBh
+   E/MjilmiMSs21ft/GOot3j7oowv/oE95j1UL37A25UEzSUTtQwjw0esS/
+   bsmrrpeeiUK0nrkBBTxjSdPHRQUUfD0+1ErcUEnmKwDvBUp/qT24E7cly
+   MANVxUa3iTK1QGkGqWtQyah3FuKq72dMKqzZ//tBMsydVmE4XrBRWmjxf
+   baozqT3BehlUGWTrBFCg3O4BqRyyzn426jylNEKPaHV/NJwGC6ZkLo1zi
+   d03GvcohSi2yOG7CatArHt7jEfqc4FOm6bSTA+u9HrrdF53xfwO0htZwE
+   Q==;
+X-CSE-ConnectionGUID: RLLmdqQIQXWJp9HQrITYfw==
+X-CSE-MsgGUID: eEiikfMBS/+9NfJPaXl9eg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="84425139"
+X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
+   d="scan'208";a="84425139"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 08:45:39 -0700
+X-CSE-ConnectionGUID: y8kklu2jQ+GS/rDGkR2w+A==
+X-CSE-MsgGUID: Kk/LttEYQ8az5973KwI19g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
+   d="scan'208";a="218939087"
+Received: from lkp-server01.sh.intel.com (HELO 434e41ea3c86) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 09 Mar 2026 08:45:37 -0700
+Received: from kbuild by 434e41ea3c86 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vzcnV-000000000S0-1FRM;
+	Mon, 09 Mar 2026 15:45:33 +0000
+Date: Mon, 9 Mar 2026 23:44:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans Zhang <18255117159@163.com>, lpieralisi@kernel.org,
+	jingoohan1@gmail.com, mani@kernel.org, kwilczynski@kernel.org,
+	bhelgaas@google.com, helgaas@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh@kernel.org,
+	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Hans Zhang <18255117159@163.com>
+Subject: Re: [PATCH v7 2/2] PCI: dwc: Validate max-link-speed property
+Message-ID: <202603092301.uROFb9mn-lkp@intel.com>
+References: <20260308142629.75392-3-18255117159@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 5F1FF20033
-X-Stat-Signature: eafrht6xkmsqqmd9cnu6ar9xapr1638s
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19rLbmrZoPaL0P3RR5YEAAcY/f/FTBjLlw=
-X-HE-Tag: 1773071045-495839
-X-HE-Meta: U2FsdGVkX18hYXf7K7ag/ax7Ts7l3Hno4V18G/TB3MoiJMt9J0UTBoWMbzCp847Is7JqEhDwYsa6RkhNVAj4HOjhz5B/q6HVutoXc50QRvze1HSHvgRmarYDaR89e13hcutkSur3qPJpb3WQFSh1kdMUPCjB2b9DrVsIeUUknDfC/QNDPoZ7dvLdsgAow4a1fKz845hKI16eOggjPm7NDBP6AlYzhvNte5IIqplnI5az3vz5xKL2rkARtnKqaf6MXyrlcHqNY6XkzrFZIQd+O8sxRIgW8+eDV6GtbJbCez+kywyEICXzGrVsrMmhLwpiud6RJloP8vMv+rRkU2DqAfIR8yWgoyU+kF5+JrXiNgyBGYPMzAUyWhyEeZZHpvBu+fhbJbFXvHWuECsbvAzeB/VloY8v8OcBTStcXIOjMjwqxrXqBaVCdaist9Q8JiqOCKevNg2BnurmQ+kFgTqqWQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260308142629.75392-3-18255117159@163.com>
 
-On Sun, 08 Mar 2026 16:46:29 +0000
-Leo Yan <leo.yan@arm.com> wrote:
+Hi Hans,
 
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> the compiler.
-> 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
+kernel test robot noticed the following build errors:
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+[auto build test ERROR on c23719abc3308df7ed3ad35650ad211fb2d2003d]
 
--- Steve
+url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Zhang/PCI-of-Remove-max-link-speed-generation-validation/20260308-223128
+base:   c23719abc3308df7ed3ad35650ad211fb2d2003d
+patch link:    https://lore.kernel.org/r/20260308142629.75392-3-18255117159%40163.com
+patch subject: [PATCH v7 2/2] PCI: dwc: Validate max-link-speed property
+config: i386-randconfig-004-20260308 (https://download.01.org/0day-ci/archive/20260309/202603092301.uROFb9mn-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260309/202603092301.uROFb9mn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603092301.uROFb9mn-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pci/controller/dwc/pcie-designware.c:128:19: error: invalid application of 'sizeof' to an incomplete type 'const unsigned char[]'
+     128 |             max_speed >= ARRAY_SIZE(pcie_link_speed) ||
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^~~~~
+   drivers/pci/controller/dwc/pcie-designware.c:255:9: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
+     255 |         return PCI_FIND_NEXT_CAP(dw_pcie_read_cfg, PCI_CAPABILITY_LIST, cap,
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     256 |                                  NULL, pci);
+         |                                  ~~~~~~~~~~
+   drivers/pci/controller/dwc/../../pci.h:159:5: note: expanded from macro 'PCI_FIND_NEXT_CAP'
+     159 |                                 *(u8 *)prev_ptr = __prev_pos;           \
+         |                                 ^~~~~~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-designware.c:255:9: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
+   drivers/pci/controller/dwc/../../pci.h:159:5: note: expanded from macro 'PCI_FIND_NEXT_CAP'
+     159 |                                 *(u8 *)prev_ptr = __prev_pos;           \
+         |                                 ^
+   drivers/pci/controller/dwc/pcie-designware.c:262:9: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
+     262 |         return PCI_FIND_NEXT_EXT_CAP(dw_pcie_read_cfg, 0, cap, NULL, pci);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pci/controller/dwc/../../pci.h:207:5: note: expanded from macro 'PCI_FIND_NEXT_EXT_CAP'
+     207 |                                 *(u16 *)prev_ptr = __prev_pos;          \
+         |                                 ^~~~~~~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-designware.c:262:9: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
+   drivers/pci/controller/dwc/../../pci.h:207:5: note: expanded from macro 'PCI_FIND_NEXT_EXT_CAP'
+     207 |                                 *(u16 *)prev_ptr = __prev_pos;          \
+         |                                 ^
+   drivers/pci/controller/dwc/pcie-designware.c:329:17: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
+     329 |         while ((vsec = PCI_FIND_NEXT_EXT_CAP(dw_pcie_read_cfg, vsec,
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     330 |                                              PCI_EXT_CAP_ID_VNDR, NULL, pci))) {
+         |                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pci/controller/dwc/../../pci.h:207:5: note: expanded from macro 'PCI_FIND_NEXT_EXT_CAP'
+     207 |                                 *(u16 *)prev_ptr = __prev_pos;          \
+         |                                 ^~~~~~~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-designware.c:329:17: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
+   drivers/pci/controller/dwc/../../pci.h:207:5: note: expanded from macro 'PCI_FIND_NEXT_EXT_CAP'
+     207 |                                 *(u16 *)prev_ptr = __prev_pos;          \
+         |                                 ^
+   3 warnings and 1 error generated.
+
+
+vim +128 drivers/pci/controller/dwc/pcie-designware.c
+
+   112	
+   113	static void dw_pcie_get_link_speed(struct dw_pcie *pci)
+   114	{
+   115		struct device_node *np = dev_of_node(pci->dev);
+   116		int max_speed;
+   117	
+   118		max_speed = of_pci_get_max_link_speed(np);
+   119		if (max_speed < 0) {
+   120			dev_warn(pci->dev,
+   121				 "Failed to get max-link-speed, using default (Gen1)\n");
+   122			pci->max_link_speed = 1;
+   123			return;
+   124		}
+   125	
+   126		/* Validate against known speeds in pcie_link_speed */
+   127		if (max_speed == 0 ||
+ > 128		    max_speed >= ARRAY_SIZE(pcie_link_speed) ||
+   129		    pcie_link_speed[max_speed] == PCI_SPEED_UNKNOWN) {
+   130			dev_warn(pci->dev,
+   131				 "Invalid max-link-speed %d, using default (Gen1)\n",
+   132				 max_speed);
+   133			pci->max_link_speed = 1;
+   134			return;
+   135		}
+   136	
+   137		pci->max_link_speed = max_speed;
+   138	}
+   139	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
