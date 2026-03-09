@@ -1,93 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2037638F65F;
-	Mon,  9 Mar 2026 10:17:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7670338E5DC;
+	Mon,  9 Mar 2026 10:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773051461; cv=none; b=dRq8fipRagy2InHEImwNIgQHx1AANf4lGV3TLtyoDkLZRGylPOu7H3Kw8w1K4jFNYQxH80j+LweDcbV+W3PXoevaqUBYs0E4BasiOgrQFGNmQlpi1npVcyr+KcxEiMjBR0rIMC0lu/4UPhEYwhN6wLdqnBDFok+CoRPapG2sWK0=
+	t=1773051479; cv=none; b=h93CWaGzaQpsXCfo3QmBz3ANH0c5MXefKiycJTbdNhXhGgTUKy487bDUCjl6CrUM/SNvX5/zB4M2evtZcnsp5kY1MShN06/IOaIG9u5K9fenSlUXrgZIEtgccG/57N5vJx+pkU3U3sTJn1KYC9CrrqYcrS/N0vqHWGn4lV+gFt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773051461; c=relaxed/simple;
-	bh=h17xRooob/NjSPrlNjlltY9eQtTUi8G3SHGUmwObWzw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f9VumBNum47Lt3JuoQirButTWBU7eNd3n//1NYFUmXMAycSejRcl7Qg5+EbiSs2ijCuzbJqekxrtgvCAB7dSpOqcLwTEmxpEqHeFy5/ZBtyKzWxF+eIohlCcVeVtNPQLg84/A0mNfjB7tQZHOAWT6u0iGD+YRXrjmMPDf7h5l58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qcISnSBW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773051479; c=relaxed/simple;
+	bh=RnOkfCfKAMoTQQlcqzc1AeWJtZlyjuxr4eJQccNZ1QU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=jn+2w6NysH+8StYiNv7pshW8ReW1SsLH4f/pVCW3jFa3PQ86NbPRASYMVzrFvUCOxeOlUmTy0Pi/utIdLx3WP/pcRotphYd3VAg6wh4l09TxyMQeVolRv7RBpmQZImVV9VjtBLJD/BObWClon8W3/GZ0v+5aNCNbVms2SVMeqPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q4nlSzzc; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qcISnSBW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB55AC19423;
-	Mon,  9 Mar 2026 10:17:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773051460;
-	bh=h17xRooob/NjSPrlNjlltY9eQtTUi8G3SHGUmwObWzw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qcISnSBWeBIBZ8/E3/T6klqoS/HrhPByDqp4ynjbpZNT26WjwIWyyiB6kQ2GCBoJC
-	 7lRpQFAKHLrJlufltvydY9o+fPsT81SJK5fTBsWowsJHD6uEAc6GT9gZKwBq7cx2Sc
-	 dfM5wSYpPuWluKxR5hxNoJ3AC6TsrgINwsliqk8n7VclULyyjSh1UMgmXDldapD6Ji
-	 6MiPvOve4ZyLkKN2Jk0TcBliZAjlfB52HWLttkbyUckBtOqaKX7I4eD6rN1y0qK9Nr
-	 cF/woPOUAoQ6K6yic4sUMOVpuiY6tt43tLhQF9uqWwYOxne+k6h0pX0ElJDWH2l8cO
-	 dhcKFft+HcBjQ==
-Message-ID: <a0e77fec-4271-40a7-b725-ae7ace6eac48@kernel.org>
-Date: Mon, 9 Mar 2026 10:17:30 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q4nlSzzc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773051477; x=1804587477;
+  h=date:from:to:cc:subject:message-id;
+  bh=RnOkfCfKAMoTQQlcqzc1AeWJtZlyjuxr4eJQccNZ1QU=;
+  b=Q4nlSzzcxDNPOog9KM+ILi3d2L201UsM0sn+i/g/ldy9/NPdlrF7HfcY
+   eRZeDwwBptFTGpMgaEZtt+G69YtURaxtgeFcphz5Xjcrvda96JxtcyWw9
+   7w8dKuUuFT9Xnk9E7bkH/oj2R7PMuftAwBRLFzCs0j5kILmg5zc4OCpLK
+   96SuOGyvNmihWGzp42qZB08n4UImRmyGy2/Vu7VQFuiHTuSJ6ZUmh5dsS
+   3JnbzPpr/KiCNyYw3My7rVyy13dvZnouIRyBMi5rGOxJgcYC77yfvvjlT
+   cZXkvLHnQGVMQMG+NYlTODZj/Q+plQmWbmebEV+sz8Mipa0/ApYRJCObn
+   Q==;
+X-CSE-ConnectionGUID: Usl9ax4mQm2YME8vSeVZnA==
+X-CSE-MsgGUID: xXRcLBpiRJ6NppXfvxkGBw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="96688245"
+X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
+   d="scan'208";a="96688245"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 03:17:57 -0700
+X-CSE-ConnectionGUID: ykcVKZ4IQF+7FzYcOfBelQ==
+X-CSE-MsgGUID: jc7MsdkFQOa5ZuGcDrAv7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
+   d="scan'208";a="224639031"
+Received: from lkp-server01.sh.intel.com (HELO 434e41ea3c86) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 09 Mar 2026 03:17:55 -0700
+Received: from kbuild by 434e41ea3c86 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vzXgO-0000000004E-28FD;
+	Mon, 09 Mar 2026 10:17:52 +0000
+Date: Mon, 09 Mar 2026 18:17:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jfern:nova/mm 2/27] error[E0433]: failed to resolve: use of
+ undeclared type `GpuBuddyFlags`
+Message-ID: <202603091804.gtN2fvsF-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 06/30] bpftool: Append extra host flags
-To: Leo Yan <leo.yan@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>,
- Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>,
- Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
- Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>,
- Len Brown <lenb@kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
- Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
- <20260308-tools_build_fix_zero_init-v3-6-6477808123b7@arm.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-6-6477808123b7@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-2026-03-08 16:46 UTC+0000 ~ Leo Yan <leo.yan@arm.com>
-> Append HOST_EXTRACFLAGS to HOST_CFLAGS so that additional flags can be
-> applied to the host compiler.
-> 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git nova/mm
+head:   f93bd1f081990c55183e8e7d0bcf33b6c895720d
+commit: e8d69c8d924bc07172af6297d92e8a2056831d56 [2/27] rust: gpu: Add GPU buddy allocator bindings
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260309/202603091804.gtN2fvsF-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260309/202603091804.gtN2fvsF-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603091804.gtN2fvsF-lkp@intel.com/
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
+All errors (new ones prefixed by >>):
+
+>> error[E0433]: failed to resolve: use of undeclared type `GpuBuddyFlags`
+   --> rust/doctests_kernel_generated.rs:6635:9
+   |
+   6635 |         GpuBuddyFlags::default(),
+   |         ^^^^^^^^^^^^^
+   |         |
+   |         use of undeclared type `GpuBuddyFlags`
+   |         help: a struct with a similar name exists: `GpuBuddyParams`
+--
+>> error[E0433]: failed to resolve: use of undeclared type `GpuBuddyFlags`
+   --> rust/doctests_kernel_generated.rs:6648:9
+   |
+   6648 |         GpuBuddyFlags::default(),
+   |         ^^^^^^^^^^^^^
+   |         |
+   |         use of undeclared type `GpuBuddyFlags`
+   |         help: a struct with a similar name exists: `GpuBuddyParams`
+--
+>> error[E0433]: failed to resolve: use of undeclared type `GpuBuddyFlags`
+   --> rust/doctests_kernel_generated.rs:6741:9
+   |
+   6741 |         GpuBuddyFlags::default(),
+   |         ^^^^^^^^^^^^^
+   |         |
+   |         use of undeclared type `GpuBuddyFlags`
+   |         help: a struct with a similar name exists: `GpuBuddyParams`
+--
+>> error[E0433]: failed to resolve: use of undeclared type `GpuBuddyFlags`
+   --> rust/doctests_kernel_generated.rs:6825:9
+   |
+   6825 |         GpuBuddyFlags::default(),
+   |         ^^^^^^^^^^^^^
+   |         |
+   |         use of undeclared type `GpuBuddyFlags`
+   |         help: a struct with a similar name exists: `GpuBuddyParams`
+--
+>> error[E0433]: failed to resolve: use of undeclared type `GpuBuddyFlags`
+   --> rust/doctests_kernel_generated.rs:6912:9
+   |
+   6912 |         GpuBuddyFlags::default(),
+   |         ^^^^^^^^^^^^^
+   |         |
+   |         use of undeclared type `GpuBuddyFlags`
+   |         help: a struct with a similar name exists: `GpuBuddyParams`
+--
+>> error[E0433]: failed to resolve: use of undeclared type `GpuBuddyFlags`
+   --> rust/doctests_kernel_generated.rs:6926:9
+   |
+   6926 |         GpuBuddyFlags::default(),
+   |         ^^^^^^^^^^^^^
+   |         |
+   |         use of undeclared type `GpuBuddyFlags`
+   |         help: a struct with a similar name exists: `GpuBuddyParams`
+--
+>> error[E0433]: failed to resolve: use of undeclared type `GpuBuddyFlags`
+   --> rust/doctests_kernel_generated.rs:6938:9
+   |
+   6938 |         GpuBuddyFlags::default(),
+   |         ^^^^^^^^^^^^^
+   |         |
+   |         use of undeclared type `GpuBuddyFlags`
+   |         help: a struct with a similar name exists: `GpuBuddyParams`
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
