@@ -1,126 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645D83451B2;
-	Sun,  8 Mar 2026 23:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5834186A
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 00:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773012114; cv=none; b=ky3uKZ3HiKEUFKESzsTYXw8/jIugAO51Z4dfF9MrkA+I7ZXVNgoFuvGD1afJPS9W4rVgbfnrf7SaB0zy/y5UmkSkZfQDzWdcLAd+4oL9aswAQQZFUIocW8DCvDLe8cdb82CG6aTSoEyzwV0BaqaeX3MHI1GV0xfWuTgMPI3mPSI=
+	t=1773014532; cv=none; b=dxpR1ZPEvfQbzwumK3y7cn7MzEjpuc5W8GFCffCj4NDvJj1H7S0tHxfz4NNr/TlzKg1x0uKHXZRx/W26vGDQqsZkKwC9TqIWJUe/bL/WGlXiUTM4alyGCPSQdGZS2YYlIvMMTEus/0e68NKO3ahNv7E3K3Jmk/8WVF/RFXlPzfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773012114; c=relaxed/simple;
-	bh=jNNNkiII245/C2khGGXc20U20DAStk9w4iZlI1E7WFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EiibQkOr/uqCbdikHIRx/iFZyF/4SJ62o4CyPffohWfXnzno4ZZnpk1agTbtPnA/Gg5jJeLTHPHQiQ6OFJq2uqLEMMiV2tHx5muoQpibFHU2MQeoSSAi7lC2u1jNq+zGkiTRCMKNmKq2QCpBSgeDjPOXfs8X8lLnVYiunWB+4L8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V8fbwXVR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773014532; c=relaxed/simple;
+	bh=BrY2R9xq4RCeCTbNPVHDT00P2dz6ECfFJdBBz5egr54=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=oBfIlp1jWkoHFFDWGw2SqEmrLxhNN4lF+VznjUp+pFegQn3+ipF58t4MhYlS58qw3lmy95LS5maBrtk+IsJ7kkHFrruGC02UfSvURg7rCZ3ZFZXAYnVsYU7bI89YVkiyjBhv/YhjhMEk4RVuxZdcWaePrIj8QAoXDKlR85zmhY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=acvAXhv6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V8fbwXVR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35013C116C6;
-	Sun,  8 Mar 2026 23:21:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773012114;
-	bh=jNNNkiII245/C2khGGXc20U20DAStk9w4iZlI1E7WFc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V8fbwXVRyzt7joHpimPPusIIVcOaPBEvManQZGiJbXP9GBvSp9LRNh05ryrfqKPYT
-	 A5ds8yd81qL0fJu1d3uqEJlie6bjJ6EmBkCYXJmmuXnJzGZ0E7s5JjGNHGRyf6/C7r
-	 LEWGUpewkZmOAZB6IO8TopFR/xl0LKtzpSWCyKNjgNXLIcBSS37C6vaT1YhPvOg1HY
-	 BIAkjuyiA2CuloOEogHHtSNV2WGgsSQLHkPTIzIN/yetZary0m+uI05cq01A1Dt3Cf
-	 l9lTfVmZwC7rm7rh3v8tRoxc+VkHCXcDRtyWfCOOjI72e75Ajo3VeEN+7I+3oI9/e5
-	 ujaKhQgsY8HuQ==
-Date: Sun, 8 Mar 2026 23:21:39 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	Quentin Monnet <qmo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	William Breathitt Gray <wbg@kernel.org>,
-	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Kent Gibson <warthog618@gmail.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 23/30] tools: spi: Append extra cflags
-Message-ID: <ce4286b5-06de-49ac-8e5b-bf071d921540@sirena.org.uk>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
- <20260308-tools_build_fix_zero_init-v3-23-6477808123b7@arm.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="acvAXhv6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773014529;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6UpACUILY/GVj95ElFvcURTQetUWrMMdDcAwKnaXVIA=;
+	b=acvAXhv6O1xAMxPbUrnDHkCdwJpmgJsyOSFjE30mS7hB+TNdzIqFVngF3fM3B9qAOeDHKm
+	DlNNGjwve3qTe0m8gGd6LDKj/1Xp3qdWPTIr59/PVG1zcLeROPo/ihwr68+MaLTmo4SS5f
+	UJgTm1ZuvlyM8OLoHBiGLF64lKBllf0=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-659-NmlkPep2OaWb4tRTBQP7CQ-1; Sun,
+ 08 Mar 2026 20:02:08 -0400
+X-MC-Unique: NmlkPep2OaWb4tRTBQP7CQ-1
+X-Mimecast-MFC-AGG-ID: NmlkPep2OaWb4tRTBQP7CQ_1773014527
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A2062180047F
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 00:02:07 +0000 (UTC)
+Received: from [172.20.96.208] (unknown [10.30.44.37])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 41E4F1800361;
+	Mon,  9 Mar 2026 00:02:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc2,
+ upstream-mainline, 014441d1)
+Date: Mon, 09 Mar 2026 00:02:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="L8PNT90XVIA9M/yR"
-Content-Disposition: inline
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-23-6477808123b7@arm.com>
-X-Cookie: I smell a wumpus.
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <50701.126030820020800568@us-mta-659.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: JrdSdTr68qbpg_DsWgAtMoAZIhyb8rujOYgN0ScPydA_1773014527
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'i2c-for-7.0-rc3' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/wsa/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2371449197
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: fedora: avc:  denied  { create } for  pid=3D1 comm=3D"system=
+d" name=3D"io.systemd.Hostname" scontext=3Dsystem_u:system_r:init_t:s0 tcon=
+text=3Dsystem_u:object_r:var_run_t:s0 tclass=3Dlnk_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2443788
+            Affected tests:
+                Boot test [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [upstream] WARNING: drivers/gpu/drm/drm_atomic_helper.c:1920=
+ at drm_atomic_helper_wait_for_vblanks.part.0+0x228/0x240, CPU#1: kworker/1=
+:1/54 - RIP: 0010:drm_atomic_helper_wait_for_vblanks
+            URL: https://lore.kernel.org/dri-devel/69381d6c.050a0220.4004e.=
+0017.GAE@google.com/
+            Affected tests:
+                Reboot test [x86_64]
 
 
---L8PNT90XVIA9M/yR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Sun, Mar 08, 2026 at 04:46:28PM +0000, Leo Yan wrote:
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> the compiler.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
---L8PNT90XVIA9M/yR
-Content-Type: application/pgp-signature; name="signature.asc"
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmuBH8ACgkQJNaLcl1U
-h9BYQwf+P1392LjsZ+ZPhzWbmpcXpIDSBO1qdtzXtehmsd1v1HNPYaENqJo5vgxe
-Amfy1Q45rQqkRUuYlUXjqQF6V3D+Z7/XTiWPl40Q7lWNI9E7XhBMpfNq5G8iqFL5
-mk1IwfmX0SpyUt2OSLKKJjqTuMHRUjIt0b0DjeyrskTbNaRwT2UTBB5nQLdFXo/M
-lLeZdLJwsnEjFcRmRmMmW2903FRxLfLKoD1Dx+83BnkCh7jbN6F94LEzV8VDCNHN
-+0EDJXOp+uLfO3pX6u1HWbV2+pSZnveCgK2wN6U8yDjUPGe3mz/K0phasCkLe6BL
-8SW+S9YNSL9O8qMn6FjPoTFwIoArhg==
-=ZxZe
------END PGP SIGNATURE-----
-
---L8PNT90XVIA9M/yR--
