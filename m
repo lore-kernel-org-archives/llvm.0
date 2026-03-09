@@ -1,93 +1,94 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAC92BEC57
-	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 17:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631C33EBF29
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 17:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773075844; cv=pass; b=p+FeCwmBp4N2ZkvE6kPxGEMvMVlgtDZdDOf9a7vzolq4CZTQ4GTuryimnZ7dWClGc7V+UfSgAkJKIZ53Qp3Ppd6I+bOWU1wB84OSRUJGcSCVmUo0rWTwuhUP2FDeSRhBJMrOgiSpO6VXJrsY86dRnjI7fTAv5Q6AJ3GCM/PGJ78=
+	t=1773076649; cv=pass; b=CVO67dve0dO0AMLSK2ecHaS8WChB5W8zWvZqb1eOmf4pwp78UJrNHoo4uTXORUcnck5dtMf+rbD7C9NVz2WFqaqQPV2GPCXw2dRMgCg3JfucHNUkr7gKOEa7J7qggaodru+Bdusx+PXJmEE3lo9EHA0a/nbfJyb3szbG1mrpETs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773075844; c=relaxed/simple;
-	bh=ASdF+Mq32+mdYKDjWTsjOQ8jTq7m3B4M/EbHwWyjk4k=;
+	s=arc-20240116; t=1773076649; c=relaxed/simple;
+	bh=KlVS4uimnGg2P9OAHjWKxIKUvpjpakW2vhNGGc1Iif4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oAy0TUdzoftauOPI4/4ZGC1AeHhpK8SsdG6DvB+Nbf9lq77RofvQJOI2IY78FIvFf/01Sv52miQzcjQ3V3TEEFFaBLxkdYd8xSrBUi49NvU+b7GTcf3qZoxpTErvh0FkYmdXtxTyih+yhJ0ZUXvcSZLHsNJ4xIWGyzyPXjBd+aA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LCGMkMom; arc=pass smtp.client-ip=209.85.214.176
+	 To:Cc:Content-Type; b=u7vlzn+nVWRFR8nZ1W2y+AtUv3AXof5jVPd6ylvqWICzVxtvdVPnphSiqgr43Xi1Uy4lQw4IQfGRcr7aBk3Eg9FzbUG4OVJggl3tqhKaQwyNgMNnyEOTVElSgThr0h7KLLRIA7IJh3o5ePRLMgYnubH99ylxS9tJ3vtoHDoVVRc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jAUtsnug; arc=pass smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LCGMkMom"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ae49120e97so8505ad.0
-        for <llvm@lists.linux.dev>; Mon, 09 Mar 2026 10:04:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773075839; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jAUtsnug"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ae49120e97so10415ad.0
+        for <llvm@lists.linux.dev>; Mon, 09 Mar 2026 10:17:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773076647; cv=none;
         d=google.com; s=arc-20240605;
-        b=dtjGwiQg0Tr69iBf3VOdAxbf7Hts9F+TZnT3OO+KKDEjBvsx/iiYS3AZOIwk/rbhLT
-         zr/habfc3AqUTY/arH/D5TyVAhDnGScgW52S3SXzto3wUUXJ1z50XTjuxUybVl2WKPpD
-         2J4peJ9yxWqPByFOO8k4WC5Fvq28yoIUWab5Y6W3OqqQCsPbKB/ZJk0boib8TsKLBqxc
-         ilAkyPhA8x3d138wqPhBaVxfgosU6fJqsNKkzCza3bUpM4ryH03VR10VItmDhBFa4jmH
-         OrVajr6fIacvIvuavXXJ6CPzrSyQQEdBZ1PIc6vlkWrWGsc/tb+RRrozj8q/iOqdzpN2
-         cKrA==
+        b=bR06RRASiGlu+7pCZJ6MpJusC8jm75psBgklcedCpJYmwZGrXmEadQ8NsfKKTKZVNQ
+         C3KsYJLJ0BXxpFfjA278S0G49pWKMmeDqIWXcPEIfYFsgmmLgKN5dknQ858bgZV2XSNu
+         PDeFDH/771F9rJeFmWstvOh9OKkxbBWMNpNVrrab7L/nIf6nN4YfVZph8d9+1V7Q4pRx
+         TDBUZNi3hXCM5Wtz8RDLaI0tdCeHneyWObdjW3FTQg+2Bo4S6Oh2vOkYuR28VZuz8aVL
+         TeYtCOT+Pfr5PgoH0upI9+GdoxA6aT9elnB1gOI1KpRlyK/MTqIcD3pAtijaBUJHV7xT
+         ptPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=waNBZBIho4Q6qhndz2br3MqS0TFnbVcCKcfXaRGOh+0=;
-        fh=cely/PeVcqwOn4IED4cnzQYUarlU8Z2AUoMlsSNDmzM=;
-        b=SzrUosPDlI6w9toQbU99VXnDo8//ZezxxsQ5qNialwKlp8C21KeE02WC2LF8JLvTbG
-         syOIQTjWj8q57LKelll3y8n3LICSeU82lxtF0fHI6k5Ia3uUzmkrK/0PA8FuJtbWoHqM
-         a21dHz+pGIGxYfygcB1KwPyivEm7VeDHP2zwR7CgIrSKuzeB5sjlhqGG7NP31DL3GIBq
-         QjhcdZkiWcdlG6JwMTfbIN49oVaeC9KDrPO/Cytfw38aeSjimiaX3yU9rThVjJAfkniv
-         xCQ6XullvOhGyKLRovTEhp/IT63ciBdNoAxIGNNUdqH8XPWCKYeKU2MKuOltBmMX1lOM
-         DSkA==;
+        bh=w45p66NfPrqrjiogvGBWv0oHv9O2Jx2o1hhM+o6/k7c=;
+        fh=gcp475xRflAihQS6FWGs4NfPiEqcRY8hWz8oZ7BmmG4=;
+        b=jpYptK2geDjQL//qb1V0WFyi0Vd3iP5eR1qyhTgy17dA2h5eqi1XDpQ6GU5lsMcV6O
+         +UGRxgJFdq59o3vOkZlqRaOQBuztSHYMV+5xAxqvv9T4GJYlRg/qIPe9YU08p3En68kH
+         N6LFuhqoRfow9UFONv/5gwat0nhy7GBMFKU1xshkMYPBYdM3NmMewloFbQnbuxClozjh
+         RtnI62E/63x5OJ6lt3YTFN9ufbGu4h0yhMxpaavbEGWkok481JyiMJq346ybpfq+Xj/x
+         uQIbU8lVfGzWQAjVotl1e8AMCX7L2GXKY5wX35wz9xRn3iHwHSnePgZ1C3XN7z2J8faH
+         9wWg==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773075839; x=1773680639; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1773076647; x=1773681447; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=waNBZBIho4Q6qhndz2br3MqS0TFnbVcCKcfXaRGOh+0=;
-        b=LCGMkMomiU7pVbqmNXgbYa/W84pFVOrThSc3ltDBjlB+qB28a+FxdrtvcWMeoKk+yt
-         dQkf1ZsIjhjvx8AUE2kygilLhs1nR1svPlNGs5fgk2vyBLyzcrWRqTLuny2nPiaINDeC
-         CUDlqrRsR3Hvwtu+nsuzdNfRowIxFgGGCFhH7cqJCZQIJyyWSHoPhR8qY3JlWjEG/4LA
-         kTQ5pMRYyJ9vMM64kle/ZuwHQWMQFZG3WLb2Jp4+nvLJCVkey4IvvXcpG8nUA0BLm4ut
-         /C0zQKJYXXrV2sPp6TSnqYoUo2maUdz1hoGntqWX/It/MLH3asu6OFcOoO12v/U0TckG
-         +HOg==
+        bh=w45p66NfPrqrjiogvGBWv0oHv9O2Jx2o1hhM+o6/k7c=;
+        b=jAUtsnug1/vovpPD3//hbWJ0mQIonrBJ+mf/Ui6x5dhuBerSLUNvTFIC4sQp9LC2r3
+         /L1lz26DBJpCMz/jep5jzXXG2SYx0j262f4gor1W6cl9U9zsxv3PusIsTodfr0MbweEG
+         nvm31ZXL0hFDL1NR0L0gWGeUYpviXFPkZn+poiFIVaEa9ZMvMLZNMkLH21+TK3znmx6c
+         vXCs1U8egBU8ZoGzBGM89uDJwrZWfIeZnnNwt/QLNL9OcoDyk0hHd2lHqx4Oma/nGQRC
+         ht8166r7HboZzOxBm4Au5ij8d0RUEr6B4X1+t31RfzcperEoTxHk3g8X4gNGjimt6rJr
+         D28A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773075839; x=1773680639;
+        d=1e100.net; s=20230601; t=1773076647; x=1773681447;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=waNBZBIho4Q6qhndz2br3MqS0TFnbVcCKcfXaRGOh+0=;
-        b=IvI4XXICSoJpCL1RsrBS6ezXrgvnLMb3lGcpJnEbKEArF1PUG9Z1uObGo1Rjg7AlbM
-         SYFOz9yOysXiWAotuORgSt+LdS2URwJVl0r6oP4rvrDnGUqA3gBluIz7tJeio5CNTdtd
-         WSljDRs9drJIBhY04nQIuRH0zglfcZ0hBR9iLGVpdE1WpjLnyjtTARyEMrZjLZ9QOSF4
-         63qMP/9TrZH/a935EUDszICd7pfyAFnGpBbkA5CKT7vCI3RedHlSbnoECnRtni6SH4KJ
-         9O6bEQnNk1BfmTfIviNRS0C9SSz7tMQTKuyCy8KtNo/0cn8YjHw3hb3CRj6NXrLZ5lyT
-         M6oA==
-X-Forwarded-Encrypted: i=1; AJvYcCUpZPPWDly9dkHCPMrBiKLpRNKCIFATsbyjhlpBgvGhIVNsZYj63I15a+sIZUB2r8ysMAua@lists.linux.dev
-X-Gm-Message-State: AOJu0YyiSrFozN9aZG9t9Q6lsJfGquRshEe2qhuOTHJk374ubEMEk8NG
-	TWhy7DBca9yhn/djfbzaExyN5TTYUGUygWDcpAb142xYPH3Uol+tyFBBnh4bYHwRU33fke8gr2B
-	cR77S59/Qu2zh/uxYVr0uUWlpSYTbM8ASkycZzyNY
-X-Gm-Gg: ATEYQzxzVj51UE0Y1sZ4RGUSa2+bU72gIbBk+zKLP9Xu47MUYMIs2lM70HzEdEgQ1L6
-	+a22gGlWscLldlUNUEpRyzkObBAD2kRynEQ13Mkj3TesvFz39t/D9mAlIaKqBYbmD9RVI3g5BOR
-	hdB1vj+idmX6XLxPiRvxG5CCm8HqxBaRNB9DTrO7v5SF32zsxecps0A+XYZZoNteXi2DfcxtmYn
-	yvLTAbH2CNZUL3YuCztT3/6aBPHmJHQtaIeYQXDMik0O5VEMPcL1w+fk/uPVuYzRrKl+kUY61j0
-	zZMa6km8ZBFF1vHhXoGytcBau+/vtXHnmEU=
-X-Received: by 2002:a17:903:40d1:b0:2ae:44db:570c with SMTP id
- d9443c01a7336-2aea3053fbcmr53805ad.12.1773075839042; Mon, 09 Mar 2026
- 10:03:59 -0700 (PDT)
+        bh=w45p66NfPrqrjiogvGBWv0oHv9O2Jx2o1hhM+o6/k7c=;
+        b=h5I/qnY9FHeFT//RvtuVoFfO3GT/SDi6YYpjp2EGvgsKgB5wmlZ1BLc3RYBZtMossY
+         ISURAGTgGljmvx2YZVlYDOYDCuJ//TO74uQhJdybRPRdXKhPUY7cLcifmsP6kSN8clMJ
+         6PZI2WzdalbjQNA4tQD3aUlm02+rkaTVF7nnrpXf9MIaJVvnm70FwoWomkZMYYSkJ9bB
+         RRQhcGp5chcpH8cLqXToBtovBugi+jkKrnI9GIRoSDY4agkm7B+qZNS44xsfWkhQLfwS
+         CuXyCFZ6g4/3yUg9KV3zQt5lhr2ophwh3ODSLfwtScHmjh3Q3GE0YbzYjvnxAt5kKpWO
+         +9NA==
+X-Forwarded-Encrypted: i=1; AJvYcCVtuTKNr7IM/Ytlq2Fr1GzIut0cEVJrHyC7zCm0yeSWkkd2cZJkKXa9YHL2Tz0RaUfuZV/e@lists.linux.dev
+X-Gm-Message-State: AOJu0YwkkuLhEkkYgFydjcPI29zTJf9Hyl4kGh1rBcFdK6mYdhrrKOgu
+	zmVQjQFt978WjbYE8UfeWIDtVGq4FAJzQnD2+x5EvGW9OhOEkps5FIDZyMiQnR1ktejXqq3h7XK
+	A6wix0GlhIirFW0dqJ21Us+kr6PAzBQ6/dJpchDIB
+X-Gm-Gg: ATEYQzxUDI/CjpH/XaCEQXksJpKVPqv04DzMBZoiWlmVncGqhN2XPSp2b1Vu91FWUoZ
+	f/8BssgoETgK656V/OjT3jUByLYJptl8jegBoX9sP67GS/LZLecGp2ILhhfQDpfBvRXdt5+bG/c
+	gB/YOwMIMCCOBsNkcFDPOuKYFZTrQx4yvQ6Q+8d16RzUcTRggUQiKS8qVdppJMoYHE8Fa88X4BP
+	Pifh9susVEHTDEtx1Cdj4rZIi8K0M5H9ZJF2k3znBnqk2snpnlaeKxbAyLLctCXZSXtWSCOHwgs
+	Kb5y5yGg2qLYrfoiV9ZtIaK7VLj46KuLekD5viouK7vdCA==
+X-Received: by 2002:a17:903:2345:b0:2ae:4e8e:954e with SMTP id
+ d9443c01a7336-2aea3247986mr23025ad.5.1773076645917; Mon, 09 Mar 2026 10:17:25
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com> <20260308-tools_build_fix_zero_init-v3-2-6477808123b7@arm.com>
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-2-6477808123b7@arm.com>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com> <20260308-tools_build_fix_zero_init-v3-5-6477808123b7@arm.com>
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-5-6477808123b7@arm.com>
 From: Ian Rogers <irogers@google.com>
-Date: Mon, 9 Mar 2026 10:03:47 -0700
-X-Gm-Features: AaiRm53Xzo9WAGNyLfx5oOgp1hEVoxj0zvCDJaSL-xxCQXMap_Y2Qeu5UcpeDVU
-Message-ID: <CAP-5=fX7f69cyuvKwXbJWz_njdHNdcoJxY=wWPCcz86XMXBX_A@mail.gmail.com>
-Subject: Re: [PATCH v3 02/30] libbpf: Initialize CFLAGS before including Makefile.include
+Date: Mon, 9 Mar 2026 10:17:13 -0700
+X-Gm-Features: AaiRm50U-PXwLYjmiDwgX5D5-bqDn4azdaS0klGDRU3-QqWA5WlM1eBYcGFDKIM
+Message-ID: <CAP-5=fV5jFCyyywddBmijiedcVLKz+LReU=NPkUOcanjJ5oAsg@mail.gmail.com>
+Subject: Re: [PATCH v3 05/30] tools build: Append -fzero-init-padding-bits=all
+ to extra cflags
 To: Leo Yan <leo.yan@arm.com>
 Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
 	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
@@ -123,75 +124,99 @@ Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.or
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 8, 2026 at 9:46=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+On Sun, Mar 8, 2026 at 9:47=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
 >
-> Initialize CFLAGS to the default value before including
-> tools/scripts/Makefile.include.
+> GCC-15 release claims [1]:
 >
-> Defer appending EXTRA_CFLAGS to CFLAGS until after including
-> Makefile.include, as it may extend EXTRA_CFLAGS in the future.
+>   {0} initializer in C or C++ for unions no longer guarantees clearing
+>   of the whole union (except for static storage duration initialization),
+>   it just initializes the first union member to zero. If initialization
+>   of the whole union including padding bits is desirable, use {} (valid
+>   in C23 or C++) or use -fzero-init-padding-bits=3Dunions option to
+>   restore old GCC behavior.
+>
+> As a result, this new behaviour might cause unexpected data when we
+> initialize a union with using the '{ 0 }' initializer.
+>
+> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=3Dall"),
+> the kernel has enabled -fzero-init-padding-bits=3Dall to zero padding bit=
+s
+> in unions and structures.  This commit applies the same option for tools
+> building.
+>
+> The option is not supported by any version older than GCC 15, nor is it
+> supported by LLVM.  This patch adds the cc-option and host-cc-option
+> functions to dynamically detect compiler option and append it to the
+> EXTRA_CFLAGS and HOST_EXTRACFLAGS respectively.
+>
+> [1] https://gcc.gnu.org/gcc-15/changes.html
 >
 > Signed-off-by: Leo Yan <leo.yan@arm.com>
 > ---
->  tools/lib/bpf/Makefile | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
+>  tools/scripts/Makefile.include | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
 >
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index 168140f8e6461bd06db40e23d21a3fb8847ccbf4..76cc802375f67b9d8f589904b=
-d9764040947e5dd 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -49,6 +49,14 @@ man_dir_SQ =3D '$(subst ','\'',$(man_dir))'
->  export man_dir man_dir_SQ INSTALL
->  export DESTDIR DESTDIR_SQ
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
+ude
+> index b5ecf137febcae59f506e107a7f2e2ad72f4bef4..bab3174565f0d1e40ec574a36=
+0a0fddcee641f7e 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -137,6 +137,34 @@ else
+>  EXTRA_WARNINGS +=3D -Wshadow
+>  endif
 >
-> +# Defer assigning EXTRA_CFLAGS to CFLAGS until after including
-> +# tools/scripts/Makefile.include, as it may add flags to EXTRA_CFLAGS.
-> +ifdef EXTRA_CFLAGS
-> +  CFLAGS :=3D
-> +else
-> +  CFLAGS :=3D -g -O2
-> +endif
+> +# output directory for tests below
+> +TMPOUT =3D .tmp_$$$$
 > +
->  include $(srctree)/tools/scripts/Makefile.include
->
->  # copy a bit from Linux kbuild
-> @@ -70,14 +78,8 @@ LIB_TARGET   =3D libbpf.a libbpf.so.$(LIBBPF_VERSION)
->  LIB_FILE       =3D libbpf.a libbpf.so*
->  PC_FILE                =3D libbpf.pc
->
-> -# Set compile option CFLAGS
-> -ifdef EXTRA_CFLAGS
-> -  CFLAGS :=3D $(EXTRA_CFLAGS)
-> -else
-> -  CFLAGS :=3D -g -O2
-> -endif
-> -
->  # Append required CFLAGS
-> +override CFLAGS +=3D $(EXTRA_CFLAGS)
->  override CFLAGS +=3D -std=3Dgnu89
->  override CFLAGS +=3D $(EXTRA_WARNINGS) -Wno-switch-enum
->  override CFLAGS +=3D -Werror -Wall
+> +# try-run
+> +# Usage: option =3D $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwi=
+se)
+> +# Exit code chooses option. "$$TMP" serves as a temporary file and is
+> +# automatically cleaned up.
+> +try-run =3D $(shell set -e;              \
+> +       TMP=3D$(TMPOUT)/tmp;              \
+> +       trap "rm -rf $(TMPOUT)" EXIT;   \
+> +       mkdir -p $(TMPOUT);             \
+> +       if ($(1)) >/dev/null 2>&1;      \
+> +       then echo "$(2)";               \
+> +       else echo "$(3)";               \
+> +       fi)
+> +
+> +# cc-option
+> +# Usage: CFLAGS +=3D $(call cc-option,-march=3Dwinchip-c6,-march=3Di586)
+> +cc-option =3D $(call try-run, \
+> +       $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+> +
+> +host-cc-option =3D $(call try-run, \
+> +       $(HOSTCC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+> +
+> +# Explicitly clear padding bits with the initializer '{ 0 }'
+> +override EXTRA_CFLAGS +=3D $(call cc-option,-fzero-init-padding-bits=3Da=
+ll)
+> +override HOST_EXTRACFLAGS +=3D $(call host-cc-option,-fzero-init-padding=
+-bits=3Dall)
 
-Not a problem with the change but AI assisted code review noticed
-something unusual. Below here is:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/tools/lib/bpf/Makefile#n87
+Could this slow down builds, as each reference to EXTRA_CFLAGS and
+HOST_EXTRACFLAGS will invoke cc-option, which shells out and runs cc?
+Perhaps you could evaluate the values once then reference them
+something like:
+```makefile
+FLAG_ZERO_INIT :=3D $(call cc-option,-fzero-init-padding-bits=3Dall)
+override EXTRA_CFLAGS +=3D $(FLAG_ZERO_INIT)
+HOST_FLAG_ZERO_INIT :=3D $(call host-cc-option,-fzero-init-padding-bits=3Da=
+ll)
+override HOST_EXTRACFLAGS +=3D $(HOST_FLAG_ZERO_INIT)
 ```
-override CFLAGS +=3D $(CLANG_CROSS_FLAGS)
-```
-and $(srctree)/tools/scripts/Makefile.include has when CROSS_COMPILE is set=
-:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/tools/scripts/Makefile.include#n116
-```
-CFLAGS +=3D $(CLANG_CROSS_FLAGS)
-```
-so it looks like the CFLAGS is duplicating $(CLANG_CROSS_FLAGS).
 
 Thanks,
 Ian
 
+> +
+>  ifneq ($(findstring $(MAKEFLAGS), w),w)
+>  PRINT_DIR =3D --no-print-directory
+>  else
+>
 > --
 > 2.34.1
 >
