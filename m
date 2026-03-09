@@ -1,128 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66AA63D668A
-	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 15:59:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DAC3E123D
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 15:59:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773071946; cv=none; b=NtnqTuF8t56YbmuwM4PbjdTWLvXx4kuGhYmKnurloGzTH+RGVSa/SzuifJJDYYClTZ9JO0MoqhFNnM54LFnPIIa/ochemhBtCLuGiV+0+m8LeXKzBJzN6VAaEWuZGhj5JZD3x9jowIB5DdqgOZ7ioHuCHqYA3nXAErndLYgZfHY=
+	t=1773071990; cv=none; b=YESkASq0u8ragl61F4KB3E5JJ5SC4Fgp2AeqTwR80RyiZ45NT2ckUUASKpJjel/7rI6HWkTga6tLw62brRP8GvYCNfcRMnaCXx4PHUvTg5QaRKeceOtlP5JEG+1urtwyJ2De6DYDigAkHkisbJGBQtZzoVWEU6X1XawIJGYogYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773071946; c=relaxed/simple;
-	bh=XjCiNsAC40h7dMKWtLaCdeJCA8OyX9rhMEPwBg7AirQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Sl9wZpzzYz8nnZ6XAj35ch67ND0TF8A+KsgjEhx/qIRQmfr1eoXgykr9/UhqnWXw6ReDLKEA0ZSGpI5qupnw+iDnW9Hm5QAeZjeyxLEpmBe+TONrR5xFDPeehy61zFps3mVJNIpQSVxXymwPlcRF+hSE1eEVi3W6TG6MFmHhzCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zyr4schr; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1773071990; c=relaxed/simple;
+	bh=lxBJyqGJiol9HEpza28/mPltLmrDdSsX1VZdrScZvFw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MWpSUYBgKfZyVaBX8dKaLM5Z25bl9jwa7heIpTGE9mWNPFsRw1quPxpt+KI6tdqZa8XItI+gCCaQS90XYFxil8QEkzXtYhYT7sWkGTZ2Cid9GgybHVCYpBkh37xD3Pw96IvZBXqdNMqStI6zwFjxKncbawelvpYcv9hdjZn3FnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V8w6iQ2Z; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zyr4schr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773071945; x=1804607945;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=XjCiNsAC40h7dMKWtLaCdeJCA8OyX9rhMEPwBg7AirQ=;
-  b=Zyr4schrZdj0/GasNAlO0vjqNlo9rRzHpUnsVf5IUV61j/egbGuGLE7k
-   46D4r8iKdjCTMv5W1KLiLaXTMdhsbdO+7gFiR4YvwK98XHlwt3pbf6U8T
-   XkZHI+12lIPPwl9j6oVif0f6icUjszaK90sUGNsKSQ7PbDzozvNJDqA6r
-   FDaTyCXcPmYFE1uu4OUsCrjuREbLveMmsGFxJGu9Oy0SNsHvwl4l4rHo4
-   uxJrkqwBNdO7wGfLbgE5JHQ53qWnt2STOWoK5moObGFUkhC9wIFMnMbJU
-   b2YHpij/hmgm7jswWwfxEJiMDnOlZSQnhn0/ZYoFu3QReGpYjOEiX+z0F
-   A==;
-X-CSE-ConnectionGUID: 882vV2s8TsOm/ubAb/AtWg==
-X-CSE-MsgGUID: uu0Ix2B8TSSmK4M6Lw+H6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="74001646"
-X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
-   d="scan'208";a="74001646"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 08:59:05 -0700
-X-CSE-ConnectionGUID: 94ByP5coQ0qgnYf3omjoYw==
-X-CSE-MsgGUID: 1pvQjpCEQB60R/AQ1hj1Jw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
-   d="scan'208";a="224735153"
-Received: from spandruv-desk2.jf.intel.com ([10.88.27.176])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 08:59:05 -0700
-Message-ID: <31d0568a9a1f2dd55ab040a95ce1c2165d95ba4f.camel@linux.intel.com>
-Subject: Re: [PATCH v3 21/30] tools: power: x86/intel-speed-select: Append
- extra cflags
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Leo Yan <leo.yan@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James
- Clark <james.clark@linaro.org>,  Kees Cook <kees@kernel.org>, Quentin
- Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>,  Nicolas
- Schier	 <nsc@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, Alexei Starovoitov	 <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko	
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman	 <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh	 <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo	
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki"	
- <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui	
- <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra	
- <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Mark Rutland	
- <mark.rutland@arm.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>,  Adrian Hunter
- <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
- Breathitt Gray	 <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin
- Xia	 <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, Kent
- Gibson	 <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang	 <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui	 <decui@microsoft.com>, Long Li <longli@microsoft.com>, Jonathan
- Cameron	 <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, Nuno
- =?ISO-8859-1?Q?S=E1?=	 <nuno.sa@analog.com>, Andy Shevchenko
- <andy@kernel.org>, Andrew Morton	 <akpm@linux-foundation.org>, Willy
- Tarreau <w@1wt.eu>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=	
- <linux@weissschuh.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore	
- <robert.moore@intel.com>, Len Brown <lenb@kernel.org>, Tejun Heo
- <tj@kernel.org>,  David Vernet <void@manifault.com>, Andrea Righi
- <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,  Mark Brown
- <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco
-	 <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina	
- <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Date: Mon, 09 Mar 2026 08:59:04 -0700
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-21-6477808123b7@arm.com>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
-	 <20260308-tools_build_fix_zero_init-v3-21-6477808123b7@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V8w6iQ2Z"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ab46931cf1so81245095ad.0
+        for <llvm@lists.linux.dev>; Mon, 09 Mar 2026 08:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773071988; x=1773676788; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lxBJyqGJiol9HEpza28/mPltLmrDdSsX1VZdrScZvFw=;
+        b=V8w6iQ2ZaRdnjZ3UOBs+fNHQPBcyNuoP0NwgcclAJKGoGOMySDooX3J1vbNVLffrgT
+         AhHF69cXhAVoRLjjXwSDNf2HjUhjfnD7xPxAZH9AaKqjg1NbpLZ8wkojh5tVP8Wu8aFI
+         iq/n9N6St76h6OyrgytdT2osBjrP/IoKil+d2IFY9s4jKuuX/D6SDwchGh7setsDpUm7
+         86V3Bqx1sJDguvLEsf9EvI9MhJnHy0OqUf+WAfGEGx8rujjT7VokyUyw+nxSByUk3z3N
+         qbyUulVAvD6mbpBqOUQScrzZhMd1n8YcWqYI3yWXpD9R6WmDA9CAePXm8oDj7dwlyyiJ
+         g1jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773071988; x=1773676788;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lxBJyqGJiol9HEpza28/mPltLmrDdSsX1VZdrScZvFw=;
+        b=gqpuhoqvRSeyvHsKTTAce49JPKf4Z2PdfTgP/kfDr4EJB2M6hdF1ZLxKv+cGcAlO34
+         x4GXlFdenIOkRz7ThrevkMZcdDIZaMoIuXgva4qmXW/u0AqVrv7DyaWSqUU+cWg5UIV2
+         gBS2Y/PmbZfefAEgKMFjc3fEZO0MIGHNS5bb98ZrK9ntnqQzp+BHisZh+kzhxQo6Z+e/
+         qT1J/qa3L40wbsRTsRKS+NzOVONZe9gW0+0Vtay6SErE+v61/jzz+6u2QgRR0Ax4oI+f
+         u5JTF3bl+LGbF1fXUaAFcaf4JcW+WE+IOZAy7xYJY5y4odJtGfiWF5GDiYD3tI4KIu75
+         o4Tg==
+X-Forwarded-Encrypted: i=1; AJvYcCWjvKJ4eflx+wBXguDJOzViS7DeOc0/Tigz/GyY7yS/fKKme6r9hnR97TwiSntA7QhqBHJL@lists.linux.dev
+X-Gm-Message-State: AOJu0YykSSe7Y9gz+7eI2MeY0PijeUQK+n71c6Fu6mH01RQ+gmtZvK9q
+	MX2D/Kr2Wwqn4XoA1NHl81+S1UPus1HIO1Io3zknLXGqd6eEZBqcldTp
+X-Gm-Gg: ATEYQzwI9y5Kl5CZuYzh8eM+wNa5R4x4M6kYFd8fpLwkBPgbluTgtCa9ys+ZQqssUG0
+	HSHp/YPfoFZWwA+OCAbYUdxVTNFbiqj/ezBmRKbJ8dRj7SpyNErX7kaxQlu6CgJF6Kp8PVxsFpK
+	hlvLdb6zUUrK+DyvNQd0sTMeEGwuQAbe/iLvRxSooOVefkuMYFEwI7d9hMvAf368ZY70xiCf1q4
+	YaPE//3zVvz2546tMBCdTFHt4RMrt29p0AgybwweSNDf/kkCVh6P0kEgef3Bfr0xoFW+tG5A1T+
+	gYzFPEJe9yDd5w0xidFGvC/Kef2LCPvqSSL6bTWGXSY0Te6AXEoZiEctBmrTNBu4ebyng6AuwAr
+	b1j/q7wo4tgTuS/dsWnujdSXOJlyBxwJorGg4haG2sHZ9pVtEF90D+OIeFB5pNoJxcI1slTDjE5
+	BheSR3K4lfJ6PJF5SptRNaxnMUxtHVJfXI6RDD5Z+XMqA=
+X-Received: by 2002:a17:902:e892:b0:2ae:4da9:afce with SMTP id d9443c01a7336-2aea1e1b6bemr505155ad.23.1773071987450;
+        Mon, 09 Mar 2026 08:59:47 -0700 (PDT)
+Received: from DESKTOP-3LEPQG8.localdomain ([119.28.20.50])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83f8a629sm144852655ad.62.2026.03.09.08.59.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 08:59:47 -0700 (PDT)
+From: Xie Yuanbin <qq570070308@gmail.com>
+To: willy@infradead.org
+Cc: Liam.Howlett@oracle.com,
+	akpm@linux-foundation.org,
+	david.laight.linux@gmail.com,
+	david@kernel.org,
+	justinstitt@google.com,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	ljs@kernel.org,
+	llvm@lists.linux.dev,
+	mhocko@suse.com,
+	morbo@google.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	qq570070308@gmail.com,
+	rppt@kernel.org,
+	surenb@google.com,
+	vbabka@kernel.org
+Subject: Re: [PATCH] mm: optimize the implementation of WARN_ON_ONCE_GFP()
+Date: Mon,  9 Mar 2026 23:59:33 +0800
+Message-ID: <20260309155933.41179-1-qq570070308@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <aa7p3eQfEuh2wObQ@casper.infradead.org>
+References: <aa7p3eQfEuh2wObQ@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun, 2026-03-08 at 16:46 +0000, Leo Yan wrote:
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied
-> to
-> the compiler.
->=20
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-    Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Mon, 9 Mar 2026 15:40:13 +0000, Matthew Wilcox wrote:
+>On Mon, Mar 09, 2026 at 11:38:11PM +0800, Xie Yuanbin wrote:
+>> As shown in the commit message of commit 242b872239f6a7deacbc
+>> ("include/linux/once_lite.h: fix judgment in WARN_ONCE with clang"),
+>> the code "unlikely(a && b)" may generate poor assembly code if it is
+>> actually "unlikely(a) && unlikely(b)" or "unlikely(a) && b".
+>
+> Why fix this in multiple places in the kernel instead of once in clang?
 
-> ---
-> =C2=A0tools/power/x86/intel-speed-select/Makefile | 1 +
-> =C2=A01 file changed, 1 insertion(+)
->=20
-> diff --git a/tools/power/x86/intel-speed-select/Makefile
-> b/tools/power/x86/intel-speed-select/Makefile
-> index
-> 6b299aae2ded89c3a70a3649996e258b98001ee7..61d6e81f3cf1d6427addb4f31c1
-> 369ac663ba3d6 100644
-> --- a/tools/power/x86/intel-speed-select/Makefile
-> +++ b/tools/power/x86/intel-speed-select/Makefile
-> @@ -19,6 +19,7 @@ ifeq ($(NL3_CFLAGS),)
-> =C2=A0NL3_CFLAGS =3D -I/usr/include/libnl3
-> =C2=A0endif
-> =C2=A0
-> +override CFLAGS +=3D $(EXTRA_CFLAGS)
-> =C2=A0override CFLAGS +=3D -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
-> $(NL3_CFLAGS)
-> =C2=A0override LDFLAGS +=3D -lnl-genl-3 -lnl-3
-> =C2=A0
+If a and b is both unlikely, then "unlikely(a) && unlikely(b)" will
+generate better code than "unlikely(a && b)". This is also true for gcc.
+
+As for the issue of clang judging twice, I have already submitted it to
+clang:
+Link: https://github.com/llvm/llvm-project/issues/167117
+However, even if clang fixes it, this optimization will not be merged
+back to the old version of clang.
