@@ -1,60 +1,93 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DBA3D4100;
-	Mon,  9 Mar 2026 15:40:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A633DA7C8
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 15:44:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773070820; cv=none; b=Cxk90Od5jl9S6rDGmwY13hr4ncwQJgZbQnSP/mgQ5mL2X3Vk9ZE/GC6g4c3tdcft5KNbNhINcZOj6IU+bON6E1akv0L/jOTkFXlef5WTXM/Sq3XaYR3ClxNbWEObhkO48mDHqBdqwFKgo9zl8FocigRokol1LpBB7zdTs6cAMQQ=
+	t=1773071074; cv=none; b=GXvOqTim+3MHfYJ+cbDBFPaRzIZkllfqGph0H21GJVcwjFNblYhSq+Y7KLrSyWhs48OjTLb6XlKrhCLBBzFnfzWpcVfBJyyouPvnOEgB5eiJi6ovSvYaaIYV4aue0ZPHKPLySDq550q4HTsujn9uDvDgdQuLtI8g0WR1M2noZyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773070820; c=relaxed/simple;
-	bh=BH5jW73g8Nbb+MOjYtZX3x5WWXhBibQwMiTFmg8NspM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s8qNwFN3nOBR2HYTZ83WxNntQW6LdX40dibfgYOmwqaGPKa0Hg5qqd02YUTL3ONzkWYPKLpjsTf+7jYK0Fh1vHlL/Lw8SbTlvQX65hdi1Ha4Te0Rz/bXgRFNz6e36C3NU+TVwPrgFeR5cFV3OaxTWAToy+kLWRQM9QYh5TTOgbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HNX5zIrr; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HNX5zIrr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=BH5jW73g8Nbb+MOjYtZX3x5WWXhBibQwMiTFmg8NspM=; b=HNX5zIrrNTdc66q+DRzxzxmDJh
-	aC+4Ui7AidvvtENeSLq1FUXKwWB0VMSnDToWmHjVpUYPQmLC6/xFedb1FOJEiIWjLls8fEtBbGcmx
-	RH+PakbfC8kUJOCJM2sRAOCYYvmbgH/ISeP973YAcPe7tCVy392sdlYBCWxTObifkis+favDEVuE1
-	wZIl304YuROD6csuFgI9Z49+rXJ7oDmnoWnJpWDF1jqkNuv+LTKa3rRQ3kRiA5hghMH+YwFjeD7CQ
-	02v3UuDQ6kTLCSdaVs1bRdaASzR9XI5mXRer/cAJNiQYcgj/lYVEQhgo+zcHR9cZvM2G0H9YLIngr
-	8dxwxjVw==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vzciM-00000006AaX-0gpX;
-	Mon, 09 Mar 2026 15:40:14 +0000
-Date: Mon, 9 Mar 2026 15:40:13 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: Xie Yuanbin <qq570070308@gmail.com>
-Cc: rppt@kernel.org, david.laight.linux@gmail.com,
-	akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
-	Liam.Howlett@oracle.com, vbabka@kernel.org, surenb@google.com,
-	mhocko@suse.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
-	morbo@google.com, justinstitt@google.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] mm: optimize the implementation of WARN_ON_ONCE_GFP()
-Message-ID: <aa7p3eQfEuh2wObQ@casper.infradead.org>
-References: <20260309153811.40958-1-qq570070308@gmail.com>
+	s=arc-20240116; t=1773071074; c=relaxed/simple;
+	bh=6kD1xtE1WWvb8q5Sgj38ZAiQ3VqGPX0njcNklX6dX5U=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sRxfQL9S9NGIMU/1No0nTPqxsX4o/s0PjYusE+SnS8OfYH7/g5cOPiu8fP2Tdy0Uyj+wcfEfvc0WGLjXORX4lBLLBqa8pWDObgguBs9iKkMEYI3H9pAsscE6QbGIP3Yjyg0QUYatHpnmDb4QdxK19u7vkF1zHhKNOPYHosTFNdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 9473EB734D;
+	Mon,  9 Mar 2026 15:44:29 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id 5F1FF20033;
+	Mon,  9 Mar 2026 15:44:05 +0000 (UTC)
+Date: Mon, 9 Mar 2026 11:44:13 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers
+ <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James Clark
+ <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet
+ <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
+ <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
+ <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
+ Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia
+ <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson
+ <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang
+ Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui
+ <decui@microsoft.com>, Long Li <longli@microsoft.com>, Jonathan Cameron
+ <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, Nuno
+ =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, Thomas
+ =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, Len Brown
+ <lenb@kernel.org>, Srinivas Pandruvada
+ <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David
+ Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min
+ <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, Gabriele Monaco
+ <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina
+ <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v3 24/30] tools: tracing: Append extra cflags
+Message-ID: <20260309114413.09e05127@gandalf.local.home>
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-24-6477808123b7@arm.com>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+	<20260308-tools_build_fix_zero_init-v3-24-6477808123b7@arm.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260309153811.40958-1-qq570070308@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 5F1FF20033
+X-Stat-Signature: eafrht6xkmsqqmd9cnu6ar9xapr1638s
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19rLbmrZoPaL0P3RR5YEAAcY/f/FTBjLlw=
+X-HE-Tag: 1773071045-495839
+X-HE-Meta: U2FsdGVkX18hYXf7K7ag/ax7Ts7l3Hno4V18G/TB3MoiJMt9J0UTBoWMbzCp847Is7JqEhDwYsa6RkhNVAj4HOjhz5B/q6HVutoXc50QRvze1HSHvgRmarYDaR89e13hcutkSur3qPJpb3WQFSh1kdMUPCjB2b9DrVsIeUUknDfC/QNDPoZ7dvLdsgAow4a1fKz845hKI16eOggjPm7NDBP6AlYzhvNte5IIqplnI5az3vz5xKL2rkARtnKqaf6MXyrlcHqNY6XkzrFZIQd+O8sxRIgW8+eDV6GtbJbCez+kywyEICXzGrVsrMmhLwpiud6RJloP8vMv+rRkU2DqAfIR8yWgoyU+kF5+JrXiNgyBGYPMzAUyWhyEeZZHpvBu+fhbJbFXvHWuECsbvAzeB/VloY8v8OcBTStcXIOjMjwqxrXqBaVCdaist9Q8JiqOCKevNg2BnurmQ+kFgTqqWQ==
 
-On Mon, Mar 09, 2026 at 11:38:11PM +0800, Xie Yuanbin wrote:
-> As shown in the commit message of commit 242b872239f6a7deacbc
-> ("include/linux/once_lite.h: fix judgment in WARN_ONCE with clang"),
-> the code "unlikely(a && b)" may generate poor assembly code if it is
-> actually "unlikely(a) && unlikely(b)" or "unlikely(a) && b".
+On Sun, 08 Mar 2026 16:46:29 +0000
+Leo Yan <leo.yan@arm.com> wrote:
 
-Why fix this in multiple places in the kernel instead of once in clang?
+> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+> the compiler.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
