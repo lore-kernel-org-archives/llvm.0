@@ -1,120 +1,121 @@
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF553A63FD
-	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 12:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8935392C41;
+	Mon,  9 Mar 2026 12:22:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773058105; cv=none; b=g630J38ADi0WRd3dwE36tMzWYYet4pIfA+3iPTuui3O+ejBPiC2wru/uwRnx6SMn0kaj06Ioch6Q7S5nm5M6BCU7f/hJLkieFpJNXRRH7ZzNuJScfl4lbScQnRP92xjkyOF2eOsZQTJ3AWh3q6AYII+t11oRbJXBLq5FvHVi2Nk=
+	t=1773058945; cv=none; b=AfEWHnzuJT+iy3ATCvdaBPpRAeI/UAbDc8IVYsRbgmqWYlRdOHUJl+wbA8Vvu+gCWBOHpddqhIMv6irrW93pxkZqv/+ampy1vl9gnYmOK61ERf6QEfqnAM9oeM5s8uMRmoiMijwf64Piy3xjU7TkSxGt2qlfWN+C6SGThHh2e/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773058105; c=relaxed/simple;
-	bh=g2sWoetMr2WaqFvwxERZ4WobytiHdKKwlE59fTrauKM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=qajskao4beJGCaKKwSHg/rUcnnric7NXqw1UHu/cAmAt97e8gHWZt+BrwnrXK33Q++iZ/DT2XMFKI7ck6hs7fKtLrx82tAzso9RPBmxpM5LJnaFDlu2MINLo9FKlZsCY46R7fp/8ad/G4SlNvftiIifDfxXlY0XEH+vzRRCZS4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=DNfHcxoq; arc=none smtp.client-ip=113.46.200.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1773058945; c=relaxed/simple;
+	bh=vUaGo1RgUjNF4T9u8tnNrMdmKsRzkeuWTIiEhc6SWCE=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Skiegr6TeVYpTTbScq2199eqkcdkU3PRHxQcVbCEvxpSFiBtk+katrdZs8kbSCYxgmpR9ayXgchU2XmDoQDvAumn4Xz/lyN5cWt4f8L+tvfxYf9RYEACXj9UxOJC7BezRkEMCd6bl14PcRfbeoOu7wzlS6lbRY6KwU3q7Hj0tyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tiJ/PFNI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="DNfHcxoq"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=up4v/et4lJKRUJbSgjVJpe+Szh9u4uk8/4CweOLUjio=;
-	b=DNfHcxoqPIirpAZD1xO9rwIP9rvfNWtbFiOrBAvkuDPNGvPzt4mIPc3QleXeuzEza89i5ijQV
-	Fo1zeL0G9ox9mKCl379V5fNjHSFkQ1gfIR7njBcaFWYzTm7ICZxhBv6uwFfMmb99WwKBiWyoJ0r
-	KqjIZhODjz/PoZpKdjHMODM=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fTwdS4lGXzKm9N;
-	Mon,  9 Mar 2026 20:03:24 +0800 (CST)
-Received: from kwepemj200003.china.huawei.com (unknown [7.202.194.15])
-	by mail.maildlp.com (Postfix) with ESMTPS id 716954048B;
-	Mon,  9 Mar 2026 20:08:19 +0800 (CST)
-Received: from [10.67.120.170] (10.67.120.170) by
- kwepemj200003.china.huawei.com (7.202.194.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 9 Mar 2026 20:08:16 +0800
-Message-ID: <8a2a8771-0bcf-4ed2-981b-6ad09943b691@huawei.com>
-Date: Mon, 9 Mar 2026 20:08:15 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tiJ/PFNI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB5FC4CEF7;
+	Mon,  9 Mar 2026 12:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773058945;
+	bh=vUaGo1RgUjNF4T9u8tnNrMdmKsRzkeuWTIiEhc6SWCE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=tiJ/PFNI9ux9EUxWfJJtcFjWYEPmkN5PHxxDWm3sw/wF6jnp4OT+v555FZgdtA+Yj
+	 jdxP4xGVp6IcDPSzzx6yZbnyHBAjqi8+Ay5OP9fYCt1vEXO7e1buONq/EUwBrDd8zE
+	 ErqiD/OhK6WXffDIGES98SgNwr4gQ2Gbsn7g6qKULkk0R3fmudUeC3sltWEcuorX62
+	 v+Ts9i//L0S+RwfXDVylym7NK/UEnRckRIcJ1nhHzkEyPzhkT0odDj2bbDdLRySz7D
+	 XKvv8ImuNeCWKfLy09X6PzrCtXa+JHDVNvUcsZeL+NMjEeXb5MlRm9cibu5H6KUK9z
+	 4ipUSB6Z6K9DQ==
+Date: Mon, 9 Mar 2026 21:22:15 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers
+ <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James Clark
+ <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet
+ <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
+ <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
+ <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, William Breathitt Gray <wbg@kernel.org>, Barry
+ Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, Bartosz
+ Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>,
+ "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang
+ <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui
+ <decui@microsoft.com>, Long Li <longli@microsoft.com>, Jonathan Cameron
+ <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, Nuno
+ =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, Thomas
+ =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, Len Brown
+ <lenb@kernel.org>, Srinivas Pandruvada
+ <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David
+ Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min
+ <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, Steven Rostedt
+ <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
+ <bentiss@kernel.org>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org,
+ linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v3 11/30] tools: bootconfig: Append extra cflags
+Message-Id: <20260309212215.b3bb7a65778c6aef6304efb2@kernel.org>
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-11-6477808123b7@arm.com>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+	<20260308-tools_build_fix_zero_init-v3-11-6477808123b7@arm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 13/30] tools: dma: Append extra cflags
-To: Leo Yan <leo.yan@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Ian
- Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James Clark
-	<james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet
-	<qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
-	<nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii
- Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra
-	<peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Mark Rutland
-	<mark.rutland@arm.com>, Alexander Shishkin
-	<alexander.shishkin@linux.intel.com>, Adrian Hunter
-	<adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
- Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Bartosz
- Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, "K. Y.
- Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei
- Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, Long Li
-	<longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>, David Lechner
-	<dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, Andy
- Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
-	Willy Tarreau <w@1wt.eu>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
-	<linux@weissschuh.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore
-	<robert.moore@intel.com>, Len Brown <lenb@kernel.org>, Srinivas Pandruvada
-	<srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David
- Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min
-	<changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, Steven Rostedt
-	<rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan
-	<shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
-	<bentiss@kernel.org>
-CC: <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <bpf@vger.kernel.org>,
-	<linux-perf-users@vger.kernel.org>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
- <20260308-tools_build_fix_zero_init-v3-13-6477808123b7@arm.com>
-From: Qinxin Xia <xiaqinxin@huawei.com>
-In-Reply-To: <20260308-tools_build_fix_zero_init-v3-13-6477808123b7@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemj200003.china.huawei.com (7.202.194.15)
 
+On Sun, 08 Mar 2026 16:46:16 +0000
+Leo Yan <leo.yan@arm.com> wrote:
 
-
-On 2026/3/9 00:46:18, Leo Yan <leo.yan@arm.com> wrote:
 > Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
 > the compiler.
 > 
 > Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->   tools/dma/Makefile | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/dma/Makefile b/tools/dma/Makefile
-> index e4abf37bf020ca613b6dca340299198cb887126a..bdca05c69a8a12a4f9419eed8c1df71adac4f26d 100644
-> --- a/tools/dma/Makefile
-> +++ b/tools/dma/Makefile
-> @@ -16,6 +16,7 @@ endif
->   # (this improves performance and avoids hard-to-debug behaviour);
->   MAKEFLAGS += -r
->   
-> +override CFLAGS += $(EXTRA_CFLAGS)
->   override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
->   
->   ALL_TARGETS := dma_map_benchmark
-> 
-Acked-by: Qinxin Xia <xiaqinxin@huawei.com>
--- 
-Thanks,
-Qinxin
 
+This looks good to me.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thanks,
+
+> ---
+>  tools/bootconfig/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/bootconfig/Makefile b/tools/bootconfig/Makefile
+> index 90eb47c9d8de67b0ccc74a8de0af3a7e0b97feeb..6bbf4dfdb5b56fcb2a43ccda18b59a270778267b 100644
+> --- a/tools/bootconfig/Makefile
+> +++ b/tools/bootconfig/Makefile
+> @@ -10,6 +10,7 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  endif
+>  
+>  LIBSRC = $(srctree)/lib/bootconfig.c $(srctree)/include/linux/bootconfig.h
+> +override CFLAGS += $(EXTRA_CFLAGS)
+>  override CFLAGS += -Wall -g -I$(CURDIR)/include
+>  
+>  ALL_TARGETS := bootconfig
+> 
+> -- 
+> 2.34.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
