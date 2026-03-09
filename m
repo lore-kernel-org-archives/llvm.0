@@ -1,148 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64481396D30;
-	Mon,  9 Mar 2026 11:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF553A63FD
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 12:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773054725; cv=none; b=GHuWe9tsgp8GRqFLnQLhdXukg7ha48gMoJJZPr7tz0x+bFKsprB9l09Kt9YBXuULnnFgrWmOSSTNjJlio3DvOShmjVMMToFd2WPKudtE0Lrk8vdyGJ+LFpt8P7p6v8NHNIe434zznFkmyt1so6U7tnv/4EoBRxKZdsX0KovvDPk=
+	t=1773058105; cv=none; b=g630J38ADi0WRd3dwE36tMzWYYet4pIfA+3iPTuui3O+ejBPiC2wru/uwRnx6SMn0kaj06Ioch6Q7S5nm5M6BCU7f/hJLkieFpJNXRRH7ZzNuJScfl4lbScQnRP92xjkyOF2eOsZQTJ3AWh3q6AYII+t11oRbJXBLq5FvHVi2Nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773054725; c=relaxed/simple;
-	bh=UAF4L3W3XkviqAFTgOW7VEHQreqTnxXeNsGGT6LXUdk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h++AINK+YQWWdHTLPfsLOMePyS94NYeMi9oyfK9q4VmojKdyWEyy+T0L8c76HblAedXRZylWPM0k11P3YBjhQxs4FpV9AwkLPrDGG5X0KK/6JHMn54YD4T152zzvi1cYV097N+5LB+fs2wjmtqkqD0k7BIz08v8C8XHNKMB0z9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zer0FkqI; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773058105; c=relaxed/simple;
+	bh=g2sWoetMr2WaqFvwxERZ4WobytiHdKKwlE59fTrauKM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=qajskao4beJGCaKKwSHg/rUcnnric7NXqw1UHu/cAmAt97e8gHWZt+BrwnrXK33Q++iZ/DT2XMFKI7ck6hs7fKtLrx82tAzso9RPBmxpM5LJnaFDlu2MINLo9FKlZsCY46R7fp/8ad/G4SlNvftiIifDfxXlY0XEH+vzRRCZS4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=DNfHcxoq; arc=none smtp.client-ip=113.46.200.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zer0FkqI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773054723; x=1804590723;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UAF4L3W3XkviqAFTgOW7VEHQreqTnxXeNsGGT6LXUdk=;
-  b=Zer0FkqIMVykoUo8FNQpPh/Tg8ENb56nV3ImAXWmtO4ntGgh2nrX+R+S
-   /NUTggWbbPepk3tci0Z6EMnN1hQh++YS76fP3NSM8Tj1+HabznKjBNou1
-   dmB+G6uyEUtDQ4pz5K1NCftRoE6kDj1BNCR1y2jr+iMcH27L3wXJBNgIV
-   DXobfSA/Wlvem1OZu/b3zs0mjarjw3ARaKcm6SWk8dhwPO3qg8AzTDGHr
-   FDZwmnvvfSY/ToeUWhvlgdatUGxNykQId8C0/Md2X0zCIu8zUZLgrdKSS
-   +APPhIusaDGqYYyh1cScmhOWHH2xJdsKeI1bFzNvVNP4tH8Lwv16gBR2a
-   g==;
-X-CSE-ConnectionGUID: FuFoFPihRTCA7bzbQEjmdg==
-X-CSE-MsgGUID: JQmnXp5JR+GiZsMVTDJU8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="84709483"
-X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
-   d="scan'208";a="84709483"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 04:12:02 -0700
-X-CSE-ConnectionGUID: ywfDS89NQJilEXe/K984FQ==
-X-CSE-MsgGUID: q/GIchPFThSzo8NF9Ybkbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
-   d="scan'208";a="216663390"
-Received: from lkp-server01.sh.intel.com (HELO 434e41ea3c86) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 09 Mar 2026 04:12:00 -0700
-Received: from kbuild by 434e41ea3c86 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vzYWj-0000000007M-0WCv;
-	Mon, 09 Mar 2026 11:11:57 +0000
-Date: Mon, 9 Mar 2026 19:11:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans Zhang <18255117159@163.com>, lpieralisi@kernel.org,
-	jingoohan1@gmail.com, mani@kernel.org, kwilczynski@kernel.org,
-	bhelgaas@google.com, helgaas@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh@kernel.org,
-	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Hans Zhang <18255117159@163.com>
-Subject: Re: [PATCH v7 2/2] PCI: dwc: Validate max-link-speed property
-Message-ID: <202603091845.8xKRO6rW-lkp@intel.com>
-References: <20260308142629.75392-3-18255117159@163.com>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="DNfHcxoq"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=up4v/et4lJKRUJbSgjVJpe+Szh9u4uk8/4CweOLUjio=;
+	b=DNfHcxoqPIirpAZD1xO9rwIP9rvfNWtbFiOrBAvkuDPNGvPzt4mIPc3QleXeuzEza89i5ijQV
+	Fo1zeL0G9ox9mKCl379V5fNjHSFkQ1gfIR7njBcaFWYzTm7ICZxhBv6uwFfMmb99WwKBiWyoJ0r
+	KqjIZhODjz/PoZpKdjHMODM=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fTwdS4lGXzKm9N;
+	Mon,  9 Mar 2026 20:03:24 +0800 (CST)
+Received: from kwepemj200003.china.huawei.com (unknown [7.202.194.15])
+	by mail.maildlp.com (Postfix) with ESMTPS id 716954048B;
+	Mon,  9 Mar 2026 20:08:19 +0800 (CST)
+Received: from [10.67.120.170] (10.67.120.170) by
+ kwepemj200003.china.huawei.com (7.202.194.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 9 Mar 2026 20:08:16 +0800
+Message-ID: <8a2a8771-0bcf-4ed2-981b-6ad09943b691@huawei.com>
+Date: Mon, 9 Mar 2026 20:08:15 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260308142629.75392-3-18255117159@163.com>
-
-Hi Hans,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on c23719abc3308df7ed3ad35650ad211fb2d2003d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Zhang/PCI-of-Remove-max-link-speed-generation-validation/20260308-223128
-base:   c23719abc3308df7ed3ad35650ad211fb2d2003d
-patch link:    https://lore.kernel.org/r/20260308142629.75392-3-18255117159%40163.com
-patch subject: [PATCH v7 2/2] PCI: dwc: Validate max-link-speed property
-config: i386-randconfig-004-20260308 (https://download.01.org/0day-ci/archive/20260309/202603091845.8xKRO6rW-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260309/202603091845.8xKRO6rW-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603091845.8xKRO6rW-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/pci/controller/dwc/pcie-designware.c:128:19: error: invalid application of 'sizeof' to an incomplete type 'const unsigned char[]'
-     128 |             max_speed >= ARRAY_SIZE(pcie_link_speed) ||
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^~~~~
->> drivers/pci/controller/dwc/pcie-designware.c:255:9: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
-     255 |         return PCI_FIND_NEXT_CAP(dw_pcie_read_cfg, PCI_CAPABILITY_LIST, cap,
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     256 |                                  NULL, pci);
-         |                                  ~~~~~~~~~~
-   drivers/pci/controller/dwc/../../pci.h:159:5: note: expanded from macro 'PCI_FIND_NEXT_CAP'
-     159 |                                 *(u8 *)prev_ptr = __prev_pos;           \
-         |                                 ^~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware.c:255:9: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
-   drivers/pci/controller/dwc/../../pci.h:159:5: note: expanded from macro 'PCI_FIND_NEXT_CAP'
-     159 |                                 *(u8 *)prev_ptr = __prev_pos;           \
-         |                                 ^
-   drivers/pci/controller/dwc/pcie-designware.c:262:9: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
-     262 |         return PCI_FIND_NEXT_EXT_CAP(dw_pcie_read_cfg, 0, cap, NULL, pci);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/../../pci.h:207:5: note: expanded from macro 'PCI_FIND_NEXT_EXT_CAP'
-     207 |                                 *(u16 *)prev_ptr = __prev_pos;          \
-         |                                 ^~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware.c:262:9: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
-   drivers/pci/controller/dwc/../../pci.h:207:5: note: expanded from macro 'PCI_FIND_NEXT_EXT_CAP'
-     207 |                                 *(u16 *)prev_ptr = __prev_pos;          \
-         |                                 ^
-   drivers/pci/controller/dwc/pcie-designware.c:329:17: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
-     329 |         while ((vsec = PCI_FIND_NEXT_EXT_CAP(dw_pcie_read_cfg, vsec,
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     330 |                                              PCI_EXT_CAP_ID_VNDR, NULL, pci))) {
-         |                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/../../pci.h:207:5: note: expanded from macro 'PCI_FIND_NEXT_EXT_CAP'
-     207 |                                 *(u16 *)prev_ptr = __prev_pos;          \
-         |                                 ^~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware.c:329:17: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
-   drivers/pci/controller/dwc/../../pci.h:207:5: note: expanded from macro 'PCI_FIND_NEXT_EXT_CAP'
-     207 |                                 *(u16 *)prev_ptr = __prev_pos;          \
-         |                                 ^
-   3 warnings and 1 error generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 13/30] tools: dma: Append extra cflags
+To: Leo Yan <leo.yan@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Ian
+ Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James Clark
+	<james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet
+	<qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
+	<nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii
+ Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui
+	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra
+	<peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Mark Rutland
+	<mark.rutland@arm.com>, Alexander Shishkin
+	<alexander.shishkin@linux.intel.com>, Adrian Hunter
+	<adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
+ Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Bartosz
+ Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, "K. Y.
+ Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei
+ Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, Long Li
+	<longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>, David Lechner
+	<dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, Andy
+ Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+	Willy Tarreau <w@1wt.eu>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+	<linux@weissschuh.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore
+	<robert.moore@intel.com>, Len Brown <lenb@kernel.org>, Srinivas Pandruvada
+	<srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David
+ Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min
+	<changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, Steven Rostedt
+	<rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan
+	<shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
+	<bentiss@kernel.org>
+CC: <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, <bpf@vger.kernel.org>,
+	<linux-perf-users@vger.kernel.org>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+ <20260308-tools_build_fix_zero_init-v3-13-6477808123b7@arm.com>
+From: Qinxin Xia <xiaqinxin@huawei.com>
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-13-6477808123b7@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemj200003.china.huawei.com (7.202.194.15)
 
 
-vim +255 drivers/pci/controller/dwc/pcie-designware.c
 
-13e9d3900c2024 Serge Semin 2022-06-24  252  
-7a6854f6874ff4 Vidya Sagar 2019-08-13  253  u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap)
-7a6854f6874ff4 Vidya Sagar 2019-08-13  254  {
-8ffc9f234fdf33 Hans Zhang  2025-08-13 @255  	return PCI_FIND_NEXT_CAP(dw_pcie_read_cfg, PCI_CAPABILITY_LIST, cap,
-a2582e05e39adf Qiang Yu    2025-11-09  256  				 NULL, pci);
-7a6854f6874ff4 Vidya Sagar 2019-08-13  257  }
-7a6854f6874ff4 Vidya Sagar 2019-08-13  258  EXPORT_SYMBOL_GPL(dw_pcie_find_capability);
-7a6854f6874ff4 Vidya Sagar 2019-08-13  259  
-
+On 2026/3/9 00:46:18, Leo Yan <leo.yan@arm.com> wrote:
+> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+> the compiler.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>   tools/dma/Makefile | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/dma/Makefile b/tools/dma/Makefile
+> index e4abf37bf020ca613b6dca340299198cb887126a..bdca05c69a8a12a4f9419eed8c1df71adac4f26d 100644
+> --- a/tools/dma/Makefile
+> +++ b/tools/dma/Makefile
+> @@ -16,6 +16,7 @@ endif
+>   # (this improves performance and avoids hard-to-debug behaviour);
+>   MAKEFLAGS += -r
+>   
+> +override CFLAGS += $(EXTRA_CFLAGS)
+>   override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
+>   
+>   ALL_TARGETS := dma_map_benchmark
+> 
+Acked-by: Qinxin Xia <xiaqinxin@huawei.com>
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Qinxin
+
