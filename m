@@ -1,170 +1,189 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE717361664;
-	Mon,  9 Mar 2026 09:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9B0638B7D4
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 10:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773048192; cv=none; b=sbwSeBmDviWgG+didr5xcpMW5XORwB3G4dukEiymbIH3l+9ZwoQRkk0OAB04r71uqb8jK638uIjS1MTn/DLJ5UYeCGjtXGaKZtri667c3M9JvA2VaqUNhqoFTy6dt5D3p3PgXjSOOeUohLrC4wIDfR6aLP3lOlbFPf8TCkpTP78=
+	t=1773050835; cv=none; b=h/HtTi6EP+QLJPMiX2Rrvqj14TPNgnfGWN0suYU30vRvw2qUhGsLLmxWeUo4N+wXtGtTDdiBlIatrakIr6eUjXEyVGCiL83wYJ0uDD0GRFsVVXFmzkBmWpKmN7AC+kS9zE4lO0jJeV81DiSVuBRfx378yEmLp5W97UmyNVfwfsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773048192; c=relaxed/simple;
-	bh=JMXViFWMTNfo+yhVFBtXHtyP9ZgTL9VYu1BjU/X26Rs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UJbJFqAReG0ecm1PDsMmabPCclLfn7Khc1G6n80j4Ss35QIVk/BRZNfWY8aj79rJouu9NmgX7lShcqnVF/N+Oo+nKLpGDzvy/zRywnNJ3aC2GZ+pTLKqklLOMFK9OWIA+21CuGmlJ0JasnY8+EH5eUxu/2apIomLf4KnvXYgtGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fTs4F051PzKHMt1;
-	Mon,  9 Mar 2026 17:22:53 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 819BD40591;
-	Mon,  9 Mar 2026 17:23:06 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP4 (Coremail) with SMTP id gCh0CgBHIUxuka5pnygTAQ--.6481S2;
-	Mon, 09 Mar 2026 17:22:54 +0800 (CST)
-Message-ID: <3b2d9b4b-099c-411f-9bc7-b4cbd11f01ee@huaweicloud.com>
-Date: Mon, 9 Mar 2026 17:22:54 +0800
+	s=arc-20240116; t=1773050835; c=relaxed/simple;
+	bh=niigQqdnyEgr+xuuEMIVsG1eGQfD+BEJm+xOSQaVtLo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X8GbcA/zbkn5c3C9qGq8hGsNu0xI484w3FSP9tV3BJrDyUyJVnojfNEmyq7/H+a0ONXLaax0LmFuucTAwWtqDc+Cv2Wl86Fyk6+bUtxoHWsOV1TD4bnS8CTR+5wYDLy3iT1W934kTkHTPttU9IPmK8F2C79PR+sieyinUBGdxGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C6F0F1C01;
+	Mon,  9 Mar 2026 03:07:04 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 99AF73F7BD;
+	Mon,  9 Mar 2026 03:07:10 -0700 (PDT)
+Date: Mon, 9 Mar 2026 10:07:08 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v3 04/30] tools/thermal: Initialize CFLAGS before
+ including Makefile.include
+Message-ID: <20260309100708.GN1098637@e132581.arm.com>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+ <20260308-tools_build_fix_zero_init-v3-4-6477808123b7@arm.com>
+ <2ae5e4e5-a860-4f94-9655-67368d558f86@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bpf-next v7 1/5] bpf: Move constants blinding from JIT to
- verifier
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>, Puranjay Mohan
- <puranjay@kernel.org>, Anton Protopopov <a.s.protopopov@gmail.com>,
- Shahab Vahedi <list+bpf@vahedi.org>, Russell King <linux@armlinux.org.uk>,
- Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>,
- Johan Almbladh <johan.almbladh@anyfinetworks.com>,
- Paul Burton <paulburton@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>,
- Christophe Leroy <chleroy@kernel.org>, Naveen N Rao <naveen@kernel.org>,
- Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Pu Lehui <pulehui@huawei.com>, Ilya Leoshkevich <iii@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- "David S . Miller" <davem@davemloft.net>, Wang YanQing <udknight@gmail.com>
-References: <20260307103949.2340104-2-xukuohai@huaweicloud.com>
- <202603071836.igZbCyrE-lkp@intel.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <202603071836.igZbCyrE-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgBHIUxuka5pnygTAQ--.6481S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFWfCrW7uw4DtF1rKw1Utrb_yoW5KFW7pa
-	y8Wr9Ikr4qqr1I939rKr4kCFn8t395Jw13K3WUu34rCFsrZFZrGFyxK3yavFya9r95G3yS
-	qrZxZ3s7t34DGa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
-	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-	xU4R6zUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ae5e4e5-a860-4f94-9655-67368d558f86@oss.qualcomm.com>
 
-On 3/8/2026 1:08 AM, kernel test robot wrote:
-> Hi Xu,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on bpf-next/master]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Kuohai/bpf-Move-constants-blinding-from-JIT-to-verifier/20260307-181538
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> patch link:    https://lore.kernel.org/r/20260307103949.2340104-2-xukuohai%40huaweicloud.com
-> patch subject: [bpf-next v7 1/5] bpf: Move constants blinding from JIT to verifier
-> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260307/202603071836.igZbCyrE-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260307/202603071836.igZbCyrE-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202603071836.igZbCyrE-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> kernel/bpf/verifier.c:23100:9: error: call to undeclared function 'bpf_jit_blind_constants'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      23100 |                 err = bpf_jit_blind_constants(env);
->            |                       ^
->     1 error generated.
->
+Hi Daniel,
 
-oops, it's not defined when CONFIG_BPF_JIT is not enabled
+On Mon, Mar 09, 2026 at 09:41:16AM +0100, Daniel Lezcano wrote:
 
-> 
-> vim +/bpf_jit_blind_constants +23100 kernel/bpf/verifier.c
-> 
->   23087	
->   23088	static int fixup_call_args(struct bpf_verifier_env *env)
->   23089	{
->   23090	#ifndef CONFIG_BPF_JIT_ALWAYS_ON
->   23091		struct bpf_prog *prog = env->prog;
->   23092		struct bpf_insn *insn = prog->insnsi;
->   23093		bool has_kfunc_call = bpf_prog_has_kfunc_call(prog);
->   23094		int i, depth;
->   23095	#endif
->   23096		int err = 0;
->   23097	
->   23098		if (env->prog->jit_requested &&
->   23099		    !bpf_prog_is_offloaded(env->prog->aux)) {
->   23100			err = bpf_jit_blind_constants(env);
->   23101			if (err)
->   23102				return err;
->   23103			err = jit_subprogs(env);
->   23104			if (err == 0)
->   23105				return 0;
->   23106			if (err == -EFAULT)
->   23107				return err;
->   23108		}
->   23109	#ifndef CONFIG_BPF_JIT_ALWAYS_ON
->   23110		if (has_kfunc_call) {
->   23111			verbose(env, "calling kernel functions are not allowed in non-JITed programs\n");
->   23112			return -EINVAL;
->   23113		}
->   23114		if (env->subprog_cnt > 1 && env->prog->aux->tail_call_reachable) {
->   23115			/* When JIT fails the progs with bpf2bpf calls and tail_calls
->   23116			 * have to be rejected, since interpreter doesn't support them yet.
->   23117			 */
->   23118			verbose(env, "tail_calls are not allowed in non-JITed programs with bpf-to-bpf calls\n");
->   23119			return -EINVAL;
->   23120		}
->   23121		for (i = 0; i < prog->len; i++, insn++) {
->   23122			if (bpf_pseudo_func(insn)) {
->   23123				/* When JIT fails the progs with callback calls
->   23124				 * have to be rejected, since interpreter doesn't support them yet.
->   23125				 */
->   23126				verbose(env, "callbacks are not allowed in non-JITed programs\n");
->   23127				return -EINVAL;
->   23128			}
->   23129	
->   23130			if (!bpf_pseudo_call(insn))
->   23131				continue;
->   23132			depth = get_callee_stack_depth(env, insn, i);
->   23133			if (depth < 0)
->   23134				return depth;
->   23135			bpf_patch_call_args(insn, depth);
->   23136		}
->   23137		err = 0;
->   23138	#endif
->   23139		return err;
->   23140	}
->   23141	
-> 
+[...]
 
+> On 3/8/26 17:46, Leo Yan wrote:
+> > Initialize CFLAGS to the default value before including
+> > tools/scripts/Makefile.include.
+> > 
+> > Defer appending EXTRA_CFLAGS to CFLAGS until after including
+> > Makefile.include, as it may extend EXTRA_CFLAGS in the future.
+> > 
+> > Signed-off-by: Leo Yan <leo.yan@arm.com>
+> > ---
+> >   tools/thermal/lib/Makefile | 16 +++++++++-------
+> >   1 file changed, 9 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/tools/thermal/lib/Makefile b/tools/thermal/lib/Makefile
+> > index 056d212f25cf51cd8c02260fbe2ef28dda5e4acb..1890779f1574ebd9015f3001b9bb31d4bc0ae5ce 100644
+> > --- a/tools/thermal/lib/Makefile
+> > +++ b/tools/thermal/lib/Makefile
+> > @@ -23,6 +23,14 @@ INSTALL = install
+> >   DESTDIR ?=
+> >   DESTDIR_SQ = '$(subst ','\'',$(DESTDIR))'
+> > +# Defer assigning EXTRA_CFLAGS to CFLAGS until after including
+> > +# tools/scripts/Makefile.include, as it may add flags to EXTRA_CFLAGS.
+> > +ifdef EXTRA_CFLAGS
+> > +  CFLAGS :=
+> > +else
+> > +  CFLAGS := -g -Wall
+> > +endif
+> > +
+> 
+> Sorry, I don't get the comment :/
+> 
+> Can you clarify the intended purpose with this change ?
+
+Sure. Since this series sets EXTRA_CFLAGS in Makefile.include (patch 05).
+Without this patch, the init behavior of the thermal Makefile may change.
+
+For example:
+
+  make -C tools/thermal/lib/
+
+Before this series, the Makefile initializes:
+
+  CFLAGS := -g -Wall
+
+If _only_ patch 05 is applied, EXTRA_CFLAGS is implicitly set in
+tools/scripts/Makefile.include to work around compiler bugs. The
+Makefile would initialize:
+
+  CFLAGS := $(EXTRA_CFLAGS)
+
+This patch preserves the original initialization of CFLAGS, but changes
+the sequence:
+
+  CFLAGS := -g -Wall
+  CFLAGS += $(EXTRA_CFLAGS)
+
+If $(EXTRA_CFLAGS) is set by Makefile.include, it will be appended.
+Otherwise, if $(EXTRA_CFLAGS) is empty, the behavior remains unchanged.
+
+>  and the 'override' directive below ?
+
+The override directive is used to override any CFLAGS set on the make
+command line.  This patch does not introduce the directive; it simply
+follows the existing style.  As you can see, the following lines
+already use the directive when appending options.
+
+Thanks,
+Leo
+
+> >   include $(srctree)/tools/scripts/Makefile.include
+> >   include $(srctree)/tools/scripts/Makefile.arch
+> > @@ -39,13 +47,6 @@ libdir = $(prefix)/$(libdir_relative)
+> >   libdir_SQ = $(subst ','\'',$(libdir))
+> >   libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
+> > -# Set compile option CFLAGS
+> > -ifdef EXTRA_CFLAGS
+> > -  CFLAGS := $(EXTRA_CFLAGS)
+> > -else
+> > -  CFLAGS := -g -Wall
+> > -endif
+> > -
+> >   INCLUDES = \
+> >   -I/usr/include/libnl3 \
+> >   -I$(srctree)/tools/lib/thermal/include \
+> > @@ -56,6 +57,7 @@ INCLUDES = \
+> >   -I$(srctree)/tools/include/uapi
+> >   # Append required CFLAGS
+> > +override CFLAGS += $(EXTRA_CFLAGS)
+> >   override CFLAGS += $(EXTRA_WARNINGS)
+> >   override CFLAGS += -Werror -Wall
+> >   override CFLAGS += -fPIC
+> > 
+> 
