@@ -1,124 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150201F3D56;
-	Mon,  9 Mar 2026 03:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D110279907
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 05:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773028672; cv=none; b=CxEz50SDbooH7honTPDRod1ik5isw4V/nvGA1YU0adYOcpok2nXUF9d4uhmniwfbz488AvjEKxXqTNxrVowl3gGjQUR2RsKM8HPtKYsml0r1I+0URs30Itd92iJPVkV6SSXeIVX1e13YU5VzMwJlwyMaMtC2+Y3Y8PP2MseIEuw=
+	t=1773035531; cv=none; b=MlhSRWT/DAualk6RcMtIVaXuTM+APywsns1WqecT9DY6qMYHiCr2/pJelNMCjQXAbsMnNlIkGe98w++d0YnU6qOz+qczWUwmz45iPzIqMGfp9rS8cXHFBe3Xb61jiMBARWysray7602P3f8PFsMbU3zJo1h9TC4Kd08SFMmy78Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773028672; c=relaxed/simple;
-	bh=guIANQMH0c5Vi7BIgG+9v/P7/bvGlgo44kcre7HgFy4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bl6YJkTUiJtZMrOsunmSGF1BfKF4On66EWTjXCEvGITSrP08EGOxxbv4KcMbV2M33MjuQhM65WhIjnudjINLxdz4A3f5Gk5HrttMhnxFApXZudlZM6DeOjXGaY1eDep+dz59WwsnVAP5DJO7ecGd4COSgk9u2C3w1YohlR3Itnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RDQK1zI4; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773035531; c=relaxed/simple;
+	bh=XHgdQ/75WI8kxOkImdgVomT0r6AlmxZpJSc5gEDQ/co=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=o8eOGuJ9i7bgUYmXLXOEL+b5Brqwxuw3qwnmgGgp81nYELoPmhnB6xAjTx/DpanzlBUVp6DgaLKVb1ywT3ECaqk5x9vKCCeeVrI/SR0jfBJAfpJwLzPrTz6EIraM0wjCLaznuwK8nvvj4ec6YkCLNHcbQovbV+fT6cp69N7hfjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MWsmBUB0; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RDQK1zI4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773028670; x=1804564670;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=guIANQMH0c5Vi7BIgG+9v/P7/bvGlgo44kcre7HgFy4=;
-  b=RDQK1zI4AfExJSXMP3RKWiigeVJmrgQa9aZndXXBWY8TMsuUl27Y1L5V
-   tISsTJu7rgUY3DTjpsF4Tk/DvMatxJwmvQZhwT5dFa/eYinMqfA3Y+22U
-   xrQieWR7xU4Br9xKbPTXNCWADZAzUAwqFGHvdFOfQgb3ez7SUEhLpTUvp
-   bprOU2L32uXPT4Qk0Q8nHkM7uGBN4RTfjq6nqcyHy4r0QM2vZyaRmnr7a
-   1PfWkI3qBzhkFgkxfaNvo7GUANvCSjyhWJ9SB2t83TVLSDGozGtAEYzYA
-   NP6+iko0RNic56O0kZRxCDJPMl2E7tK5k4SB+BKW/2hkgMMlN1RajGwAI
-   Q==;
-X-CSE-ConnectionGUID: 4cRJRc0nT3mp1s7bEsCwPg==
-X-CSE-MsgGUID: t+r7rwbvSUmCYxXJjglCVA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11723"; a="73949539"
-X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
-   d="scan'208";a="73949539"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2026 20:57:49 -0700
-X-CSE-ConnectionGUID: u78bIBNmTT+A93NEMQDGZQ==
-X-CSE-MsgGUID: DcpL+dr/Tga1sllf05d2rg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,109,1770624000"; 
-   d="scan'208";a="224082335"
-Received: from lkp-server01.sh.intel.com (HELO 17db2bb44c9a) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 08 Mar 2026 20:57:48 -0700
-Received: from kbuild by 17db2bb44c9a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vzRkX-0000000008D-32qM;
-	Mon, 09 Mar 2026 03:57:45 +0000
-Date: Mon, 9 Mar 2026 11:56:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC net-next v2 5/6] netdevsim: Add module EEPROM simulation
- via debugfs
-Message-ID: <202603091145.XesQOgpn-lkp@intel.com>
-References: <20260308124016.3134012-6-bjorn@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MWsmBUB0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773035529;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tw5Gbms5uPmxaNSsdfym/7AWVr9aDAEifVwJnc+AZTQ=;
+	b=MWsmBUB0OTecvZrk+V6mV1dWPmd7XiMJT3w/0W1J4RrdxtHT6Iz7b6rHGMDZ55l6ziiKhW
+	CV+0wPwdZQH6M6LtTa50WngzUaXpg1bOLG5YkihfocHGoWnibvnToN2q5OvrbguYB2ICD2
+	vQt/WhnHdMgsoOMIlOFQwKI2QBmhgq0=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-297-QcQQiNmPPyC9xJaPxwBfpw-1; Mon,
+ 09 Mar 2026 01:52:07 -0400
+X-MC-Unique: QcQQiNmPPyC9xJaPxwBfpw-1
+X-Mimecast-MFC-AGG-ID: QcQQiNmPPyC9xJaPxwBfpw_1773035527
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2303D1956095
+	for <llvm@lists.linux.dev>; Mon,  9 Mar 2026 05:52:07 +0000 (UTC)
+Received: from [172.20.96.208] (unknown [10.30.44.37])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C981630001BB;
+	Mon,  9 Mar 2026 05:52:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc3,
+ upstream-mainline, 1f318b96)
+Date: Mon, 09 Mar 2026 05:52:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260308124016.3134012-6-bjorn@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <34803.126030901520700271@us-mta-297.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: Wk6t6NtreDGNTEP1chRHtSH-w2nsaFu2Wy5orYFgojU_1773035527
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Björn,
+Hi, we tested your kernel and here are the results:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on 0bcac7b11262557c990da1ac564d45777eb6b005]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bj-rn-T-pel/ethtool-Add-loopback-netlink-UAPI-definitions/20260308-204636
-base:   0bcac7b11262557c990da1ac564d45777eb6b005
-patch link:    https://lore.kernel.org/r/20260308124016.3134012-6-bjorn%40kernel.org
-patch subject: [RFC net-next v2 5/6] netdevsim: Add module EEPROM simulation via debugfs
-config: i386-buildonly-randconfig-006-20260309 (https://download.01.org/0day-ci/archive/20260309/202603091145.XesQOgpn-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260309/202603091145.XesQOgpn-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Linux 7.0-rc3
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603091145.XesQOgpn-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2371746568
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: fedora: avc:  denied  { create } for  pid=3D1 comm=3D"system=
+d" name=3D"io.systemd.Hostname" scontext=3Dsystem_u:system_r:init_t:s0 tcon=
+text=3Dsystem_u:object_r:var_run_t:s0 tclass=3Dlnk_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2443788
+            Affected tests:
+                Boot test [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
->> drivers/net/netdevsim/ethtool.c:212:11: warning: result of comparison of constant 256 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
-     212 |         if (page >= NSIM_MODULE_EEPROM_PAGES)
-         |             ~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
 
 
-vim +212 drivers/net/netdevsim/ethtool.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   197	
-   198	static u8 *nsim_module_eeprom_ptr(struct netdevsim *ns,
-   199					  const struct ethtool_module_eeprom *page_data, u32 *len)
-   200	{
-   201		u32 offset;
-   202		u8 page;
-   203	
-   204		if (page_data->offset < NSIM_MODULE_EEPROM_PAGE_LEN) {
-   205			page = 0;
-   206			offset = page_data->offset;
-   207		} else {
-   208			page = page_data->page;
-   209			offset = page_data->offset - NSIM_MODULE_EEPROM_PAGE_LEN;
-   210		}
-   211	
- > 212		if (page >= NSIM_MODULE_EEPROM_PAGES)
-   213			return NULL;
-   214	
-   215		*len = min_t(u32, page_data->length, NSIM_MODULE_EEPROM_PAGE_LEN - offset);
-   216		return ns->ethtool.module.pages[page] + offset;
-   217	}
-   218	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
