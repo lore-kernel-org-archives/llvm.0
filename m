@@ -1,129 +1,136 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55F302DC32E
-	for <llvm@lists.linux.dev>; Tue, 10 Mar 2026 14:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F392FE079
+	for <llvm@lists.linux.dev>; Tue, 10 Mar 2026 14:52:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773152733; cv=none; b=krTaZq0fM+oh+rHgAizle2KBGgF3Z/n4WDFw7phlH4AiVuj6KbUZUOpMy+xXS9kQ5pq2XR0sYlMNvb3NzepBz+o+cY4NwNxUZBf5MYYQXndqABFkvG/r9TRg/ReNiRsv/LVJBXOVkapjMNps/vFktegaq0CsanBxhCFYvFea4dE=
+	t=1773154356; cv=none; b=u4SrlMQahacN1yUZOdMWZk5QDyPLq1tUfSLvZDqGNb14yqRY6paJkT4rvGdttSiiKy7+sA+pDrQjkRJdfZs3VAXh/Fmej26eC3iw+m0t2spKx17OlQ+SkCvJ2ebHIvwRvy26Ukyx6Bndtr8H1/yltPF7rkKlZL150pRJ7t5wX9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773152733; c=relaxed/simple;
-	bh=ocle/VN/4WgPVAINWiYhmUV/8XKxVhPdrde6hqn6gPg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R1OjcI4i0eIDQDCpJ/bbdGYSJbU/+JCLfvu3GmMX3zvVfbdaFYZ4YZQsir3oNAx7nOnG3FeoOXrnAYqD1tK2ghNPGi5DFbrhPx+9JbQgNlNMdPgHwpxoSbL6WjePoxFYh45+OgV1eBU8Ow/+g0xw/5OcV/HVHGjnR3plQpHvToA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49BC216A3;
-	Tue, 10 Mar 2026 07:25:24 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 309D53F7BD;
-	Tue, 10 Mar 2026 07:25:30 -0700 (PDT)
-Date: Tue, 10 Mar 2026 14:25:28 +0000
-From: Leo Yan <leo.yan@arm.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	Quentin Monnet <qmo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	William Breathitt Gray <wbg@kernel.org>,
-	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Kent Gibson <warthog618@gmail.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 10/30] tools build: Append extra cflags for feature
-Message-ID: <20260310142528.GB4153946@e132581.arm.com>
-References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
- <20260308-tools_build_fix_zero_init-v3-10-6477808123b7@arm.com>
- <CAP-5=fW83wsZfWpa9777ze-RNSFhAB9PnBa3xkVMu0LN64CThg@mail.gmail.com>
+	s=arc-20240116; t=1773154356; c=relaxed/simple;
+	bh=nNT08OXZ+foj3c8qL6cEktLfXz4SEfmFoLf3u4thxeQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NBgUo23sOt8Vde/40Mchp+CqJcFV+TxUA8DI6jVYcJXfhAHKVwWYr66BRXjGazNUXIglDaabk9sCRMcSTN8FFpP1D7uQF38sNnddbcSjqDydCN6uyQFO4aGm5FYOgBntcSGkgvqryxKTO9Nvhb7TRmhM4sXOuoOHd66HtZyUJ7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HkH8WyQx; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HkH8WyQx"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-483487335c2so109350515e9.2
+        for <llvm@lists.linux.dev>; Tue, 10 Mar 2026 07:52:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773154353; x=1773759153; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ml1c+QBVKH1G4D7WQDxLbH41bxeuoQxcf06ZreXxasU=;
+        b=HkH8WyQxlKONg9L/wr2QIAv8FFXVsqdsCHVZ5J4p+TeUmg7jiRa4swC5IVaCx/XVD9
+         vil4feWQc8zk/BPTiK4Ctn46nrTLUypFUW8gxXg2wrJA0iM8rCvf+MrOaiOJRofMiNad
+         ON8e2nPDtAqhiyXNTpCSG5Fo9tV78gMBGRmW+MEppdz6rCBIIA7CKWVZrSCPba69XTWf
+         X0W5PdKYdG9ynlFjXnCxwBmqiae8nNidPDuXXwU5lEUItWEiHT6/fN/oBLQEwJd+91QS
+         L7y62hxSnhi/cm2vRwlRWb25Gt4JhBsh091QweS6IfTDlafvZQ5Z3r3/lN76lKKAQo6d
+         aPqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773154353; x=1773759153;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ml1c+QBVKH1G4D7WQDxLbH41bxeuoQxcf06ZreXxasU=;
+        b=Nxc7qvw0zEG3v6b1DwBPIX8n7/rhAlQL1QOcdzDEaD7U1MeGmrffXlXCu2M+4xnkZ1
+         pNctPYxz312up3FFOQU9WBWHplh1SKtrDLGbqhuPFipWc46XavQFk2Kbb9ZQPOvp0xyF
+         YlHvjoBER44NmaSkDHioi+Dm9PlW2nFxc+iX2oJumvHOMpvHSLWwYKrNlpX+5jHbl8NS
+         rrpDfT4Vo+V2xMfvS03gGnoKPZtymHUCtrJbnQtqVlZyHsE+fLsSgurZzhT5dhXAOsTt
+         2enDHTN03WyNv5Q5lSiVOJQs4dGo7/AvSy2eSritTRscRwW8f28ZvBmnIjXzMYyF0mhW
+         tXCw==
+X-Forwarded-Encrypted: i=1; AJvYcCXy4uOHlqxVqBGcUETCDwzH+V29XDkDy/C1UutlInLMvBibErLPFuFgS6nxDIyc8HnEdarV@lists.linux.dev
+X-Gm-Message-State: AOJu0YzG1dyNfIfAOzPgW+jLPzxfAO74llrs90O3mUGzQuJTEcE2jqPu
+	O+JV9XOwOpNW/klIXH1hwXC8zqKoDbfOxvy0UhGdfogSBGATHjNI6Fvt
+X-Gm-Gg: ATEYQzzgJz1bJamJqDiEF4g2vfmR1x5mpB3eijSUMRrvb964AMNCAFJCeDUG8CfLAH1
+	J17hKtL7pCOh8QsXwGoSD0KX0kpxwJSp7Juemgsgv4osPOOQRajfXZ/dg6Zzc1P/QHpuzxS5FCj
+	aQgDc2/+ShFNjSuopMXFRHJ/fJDuensAmgSCix71tsyHN/H5f9L0wan/jklI58jpnRrgVpRSuZh
+	5ArCU+WzarQpoAXCN00j4qst/FG5HhkcBBfkk58vryo9BkrwM0kAvMH0OicbWbLjfwyRKPCDsIV
+	9SO+Z53ZjxlQHLfzLTxaxerAMsNs7SXbyvFfPjnW6XExuPfNKkQKY51W9+HShQMblRx38Hhd8uR
+	G52tSU+6WANMGHYp3Dl7vZc2vz0KO7hNpsRCta5cfBE1G/qhPfcagbQ8fq5odgMH68XW2e5Mv2F
+	H2dkcvpBrIskEaJCj3FddsHP5spEAYb87UvdQ3V5roE/qFedqEb1i3oeffiZVVIXPz
+X-Received: by 2002:a05:600c:8b5b:b0:480:4ae2:def1 with SMTP id 5b1f17b1804b1-485269305e5mr250455895e9.13.1773154353218;
+        Tue, 10 Mar 2026 07:52:33 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439dada3b43sm37635135f8f.13.2026.03.10.07.52.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2026 07:52:32 -0700 (PDT)
+Date: Tue, 10 Mar 2026 14:52:31 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Cc: Xie Yuanbin <qq570070308@gmail.com>, willy@infradead.org,
+ Liam.Howlett@oracle.com, akpm@linux-foundation.org, david@kernel.org,
+ justinstitt@google.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ ljs@kernel.org, llvm@lists.linux.dev, mhocko@suse.com, morbo@google.com,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, rppt@kernel.org,
+ surenb@google.com
+Subject: Re: [PATCH] mm: optimize the implementation of WARN_ON_ONCE_GFP()
+Message-ID: <20260310145231.1680db9b@pumpkin>
+In-Reply-To: <be647d6b-9bcb-41c8-bfcf-7fa03d2b942f@kernel.org>
+References: <aa7p3eQfEuh2wObQ@casper.infradead.org>
+	<20260309155933.41179-1-qq570070308@gmail.com>
+	<be647d6b-9bcb-41c8-bfcf-7fa03d2b942f@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fW83wsZfWpa9777ze-RNSFhAB9PnBa3xkVMu0LN64CThg@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 09, 2026 at 10:51:43AM -0700, Ian Rogers wrote:
-> On Sun, Mar 8, 2026 at 9:47 AM Leo Yan <leo.yan@arm.com> wrote:
-> >
-> > Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> > the feature build.
-> >
-> > Signed-off-by: Leo Yan <leo.yan@arm.com>
-> > ---
-> >  tools/build/feature/Makefile | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> > index 1fbcb3ce74d2173072748a417fc63bd9a5b13888..103d8b71e7a4e8d0979242cfc95c1c0b946222b5 100644
-> > --- a/tools/build/feature/Makefile
-> > +++ b/tools/build/feature/Makefile
-> > @@ -1,6 +1,8 @@
-> >  # SPDX-License-Identifier: GPL-2.0
-> >  include ../../scripts/Makefile.include
-> >
-> > +CFLAGS += $(EXTRA_CFLAGS)
-> > +
+On Tue, 10 Mar 2026 11:55:55 +0100
+"Vlastimil Babka (SUSE)" <vbabka@kernel.org> wrote:
+
+> On 3/9/26 16:59, Xie Yuanbin wrote:
+> > On Mon, 9 Mar 2026 15:40:13 +0000, Matthew Wilcox wrote:  
+> >>On Mon, Mar 09, 2026 at 11:38:11PM +0800, Xie Yuanbin wrote:  
+> >>> As shown in the commit message of commit 242b872239f6a7deacbc
+> >>> ("include/linux/once_lite.h: fix judgment in WARN_ONCE with clang"),
+> >>> the code "unlikely(a && b)" may generate poor assembly code if it is
+> >>> actually "unlikely(a) && unlikely(b)" or "unlikely(a) && b".  
+> >>
+> >> Why fix this in multiple places in the kernel instead of once in clang?  
+> > 
+> > If a and b is both unlikely, then "unlikely(a) && unlikely(b)" will
+> > generate better code than "unlikely(a && b)". This is also true for gcc.  
 > 
-> Is this necessary? In Makefile.feature:
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/build/Makefile.feature#n11
-> The build invocation does "CFLAGS="$(EXTRA_CFLAGS)" and so the locally
-> set CFLAGS appear to be ignored.
+> What are the details of how it's better for gcc?
 
-You are right.  So far, some projects (perf, latency, rtla and
-verification/rv) calls feature_check with "CFLAGS=$(EXTRA_CFLAGS) ...".
-I confirmed with pref build, the -fzero-init-padding-bits=all option
-has been properly appended and passed to feature build:
+I'm not sure about that specific case, but I've definitely seen gcc
+generate sub-optimal code for some un/likely() of compound expressions.
+The underlying cause is that the code is (probably) first transformed to:
+	bool tmp = expression;
+	if (unlikely(tmp)) ...
+this means that you lose some of the short-circuiting that happens
+early in the code generation of 'if (expression)'.
 
-  gcc -fzero-init-padding-bits=all -I/usr/include/python3.12 ...
+It is also not at all clear what you want the compiler to generate.
+For 'unlikely(a || b)' you want 'if (a) goto x; if (b) goto x' so that
+the 'likely' path is the no-branch one.
+But for 'unlikely(a && b)' you still want 'if (a) goto x; y:' which means
+that the 'b' test is out-of-line and has to be 'x: if (!b) goto y' to
+avoid a branch when a is false - but that means you have a 'normally
+taken' branch after the test of b.
+That pretty much means the compiler has to decide which unlikely()
+to ignore.
+So it only makes sense to do 'if (unlikely(a) && b)'.
+Indeed even 'if (unlikely(a) && likely(b))' may be better!
 
-As a result, it is useless for this patch.  I will drop it.
+	David
 
-Thanks,
-Leo
+> 
+> > As for the issue of clang judging twice, I have already submitted it to
+> > clang:
+> > Link: https://github.com/llvm/llvm-project/issues/167117
+> > However, even if clang fixes it, this optimization will not be merged
+> > back to the old version of clang.  
+> 
+> That's life and not worth complicating the kernel code for. This is not
+> about making it functional, only about perf.
+> 
+
