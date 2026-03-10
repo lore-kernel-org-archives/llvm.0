@@ -1,60 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E636E376BF2;
-	Tue, 10 Mar 2026 20:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7682D3CFF7D;
+	Tue, 10 Mar 2026 22:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773176125; cv=none; b=pwcOJ5zwNVZGlvpAhp1hKelauX/5LRO9R9OODlnhQ3mndzxQVnm2ECQLUDAmKZgQZhD3Hq6AEHRkAGrErEj5TcJIoz2ttwTgAz8vBzejkwQugFTP16wrp5WTra52xPMNOde3tRgQHM52+TtnPnosGeDc+4eSJqsMgMHaQn7kgZk=
+	t=1773180637; cv=none; b=PbcsvPa2/3n1hMsS9qixMvTpI+wALN0900fg/ziu1qqsZop5C58HFwXPD2/f+QjNK3ks9msqQt4AZ+Zf6Xg157FziO5imsm1cWTdOs7xxXaZ8JgpdXYztXU5ZWN9nu7T6Z1GwssznbqmVspYieSw6G639NaGY109L2D1wwEFRgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773176125; c=relaxed/simple;
-	bh=T988jY1bBaZ1hcHb0+bOyCPAIu9H136aFLXICw6nrw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=MnaJwwkikoGD8gpXtYQYKcltxDoPM9COgfRCvYKKfSTJGjmKa+P7Cd7tcM2vAvW/dPCjzkvil+vgVL/IRWHC9EtGRFp3g0x+rhoXT1vJwDaT6YmneXRDmMHj6bNBlbVi1SHuR/RPgL9GcaEH4xlHsyzFxCXBhzsPYATFWifv5x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=izyz8Uee; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1773180637; c=relaxed/simple;
+	bh=LGf7Kaidv2GQPcQDZz9qxc5JFxu4+rtVauMwHWogG2A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gJj4KZ6KFwmHUFWq4DVhcdWwn/LdA+4kwnyMboMUrEAPi5dfh9wDjIGguObXPq3v4e/tGnXFyrxYkGG/7ChBAUrfReXgv0vqlK+xbkuOWfv3/L8D/Dcu23E/rpvE6ZL9ZVGjW4hLPSoXM0ppnuCwddCuzAsBGymhB3UoH63sXKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jpPjMQCp; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="izyz8Uee"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jpPjMQCp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773176124; x=1804712124;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T988jY1bBaZ1hcHb0+bOyCPAIu9H136aFLXICw6nrw4=;
-  b=izyz8UeeK3FX+XKiqwKptH7Asl7apNyIOkCL/Xl7rCpzwvMlgAdW/82E
-   xFeACDcIiyB3Eq7dDroNVFeEAh0P72iiYrL//cSyZVPxL0BNxK0YruXDt
-   0c4bL8KwIEIUoBK/lqHWcgzoMU72oMmo+X0PAIycpyzbaeWU0wPEEdUYl
-   InAXz61Se+/GrqcXnfS0qd1hqreKiM9zo0EOVnt+UVib2O98pbTmYJGi2
-   kHBa4IqdsU2XC5aWa1766M1AY3rcJxN0HiachZaqjwoMPIOGazKed94Xg
-   oGXs3vOF93fJlIfF3L5/oSg6CdJgmBzhct9tajea2iOKrzGao3/wJfHCw
-   Q==;
-X-CSE-ConnectionGUID: PnBrk52zTF29LFAwkGp6Fg==
-X-CSE-MsgGUID: 9S2P6SqMT2eacYpYnZca4w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="77840149"
-X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
-   d="scan'208";a="77840149"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 13:55:24 -0700
-X-CSE-ConnectionGUID: EbRl4CHuT02y/QQU9ZqxVw==
-X-CSE-MsgGUID: Pva65qtSRGS6xFbAYycZKQ==
+  t=1773180636; x=1804716636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LGf7Kaidv2GQPcQDZz9qxc5JFxu4+rtVauMwHWogG2A=;
+  b=jpPjMQCpoC1/XvnlPeKWQolJKUzQXsWKdlw1RJizf5cuVZ1K/I43vj5V
+   uz+qmAf7uczhbsmU6GG9P/bmUDEclbLSFoCu6pe7aZzwK/HPQoOTlefEU
+   mYolnq+OAQub3p8UYLXOlpJIhfmBvx45D5GR7YkgUbeHpuaelMyqDs9w0
+   ks/Niup6SAtGuT9Ng7khlMLfInH/QP5PhY9Jw8ZGHKiT02n7Qin2ZZdkG
+   86K8F+yE63jKbqlK+YpbCWPgJq4NdlgaSY8E4GKnC1OvTU0cf2fihjrkR
+   0HRgoVBIy5u/pqr/xbjzYzaA5jG5aNOEl6/VqnCFuZ4PdqTvqT8B0ttye
+   A==;
+X-CSE-ConnectionGUID: LUQcpgPCQ7ewbt1u9VDP1g==
+X-CSE-MsgGUID: aXdwZ/jVRbK/4qHdmZCNhQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="85717240"
+X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
+   d="scan'208";a="85717240"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 15:10:35 -0700
+X-CSE-ConnectionGUID: 8YtaUo58SPa+QM0pyMdfBw==
+X-CSE-MsgGUID: 7DKPCwGlR32znkWSeRkF8A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
-   d="scan'208";a="218165666"
+X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
+   d="scan'208";a="224948111"
 Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 10 Mar 2026 13:55:21 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 10 Mar 2026 15:10:32 -0700
 Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w046p-000000000Ha-1Mnx;
-	Tue, 10 Mar 2026 20:55:19 +0000
-Date: Wed, 11 Mar 2026 04:54:24 +0800
+	id 1w05Ha-000000000Ma-0yAa;
+	Tue, 10 Mar 2026 22:10:30 +0000
+Date: Wed, 11 Mar 2026 06:10:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Marek =?utf-8?Q?Marczykowski-G=C3=B3recki"?= <marmarek@invisiblethingslab.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-efi@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Subject: [efi:next 1/4] drivers/firmware/efi/efi.c:1009:37: error:
- passing 'const efi_memory_desc_t *' to parameter of type 'efi_memory_desc_t
- *' discards qualifiers
-Message-ID: <202603110434.qe4wAhhY-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	bpf@vger.kernel.org, magnus.karlsson@intel.com,
+	stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH net-next] xsk: use __xsk_rcv_zc_safe for ZC multi-buffer
+ Rx processing
+Message-ID: <202603110534.EYw1bSxj-lkp@intel.com>
+References: <20260310133024.422464-1-maciej.fijalkowski@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,54 +66,84 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260310133024.422464-1-maciej.fijalkowski@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
-head:   c8da97cbb39c4c043d8456fcae25aa921c844a3f
-commit: 5992265762e666564b0275d72e54c514ab20c7f3 [1/4] efi: make efi_mem_type() and efi_mem_attributes() work on Xen PV
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260311/202603110434.qe4wAhhY-lkp@intel.com/config)
+Hi Maciej,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Maciej-Fijalkowski/xsk-use-__xsk_rcv_zc_safe-for-ZC-multi-buffer-Rx-processing/20260310-222557
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260310133024.422464-1-maciej.fijalkowski%40intel.com
+patch subject: [PATCH net-next] xsk: use __xsk_rcv_zc_safe for ZC multi-buffer Rx processing
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260311/202603110534.EYw1bSxj-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 122f0b13a237b5024747b4ee99002590cc9a220a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260311/202603110434.qe4wAhhY-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260311/202603110534.EYw1bSxj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603110434.qe4wAhhY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603110534.EYw1bSxj-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/firmware/efi/efi.c:1009:37: error: passing 'const efi_memory_desc_t *' to parameter of type 'efi_memory_desc_t *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-    1009 |         if (efi_mem_desc_lookup(phys_addr, &md))
-         |                                            ^~~
-   drivers/firmware/efi/efi.c:570:19: note: passing argument to parameter here
-     570 | EXPORT_SYMBOL_GPL(efi_mem_desc_lookup);
-         |                   ^
+>> net/xdp/xsk.c:188:2: error: call to undeclared function '__xsk_rcv_zc_safe'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     188 |         __xsk_rcv_zc_safe(xs, xskb, len, contd);
+         |         ^
+   net/xdp/xsk.c:188:2: note: did you mean '__xsk_rcv_zc'?
+   net/xdp/xsk.c:146:12: note: '__xsk_rcv_zc' declared here
+     146 | static int __xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff_xsk *xskb, u32 len,
+         |            ^
    1 error generated.
 
 
-vim +1009 drivers/firmware/efi/efi.c
+vim +/__xsk_rcv_zc_safe +188 net/xdp/xsk.c
 
-   993	
-   994	/*
-   995	 * efi_mem_type - lookup memmap type for physical address
-   996	 * @phys_addr: the physical address to lookup
-   997	 *
-   998	 * Search in the EFI memory map for the region covering @phys_addr.
-   999	 * Returns the EFI memory type if the region was found in the memory
-  1000	 * map, -EINVAL otherwise.
-  1001	 */
-  1002	int efi_mem_type(unsigned long phys_addr)
-  1003	{
-  1004		const efi_memory_desc_t md;
-  1005	
-  1006		if (!efi_enabled(EFI_MEMMAP) && !efi_enabled(EFI_PARAVIRT))
-  1007			return -ENOTSUPP;
-  1008	
-> 1009		if (efi_mem_desc_lookup(phys_addr, &md))
-  1010			return -EINVAL;
-  1011	
-  1012		return md.type;
-  1013	}
-  1014	
+   162	
+   163	static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+   164	{
+   165		struct xdp_buff_xsk *xskb = container_of(xdp, struct xdp_buff_xsk, xdp);
+   166		u32 frags = xdp_buff_has_frags(xdp);
+   167		struct xdp_buff_xsk *pos, *tmp;
+   168		struct list_head *xskb_list;
+   169		u32 contd = 0;
+   170		u32 num_desc;
+   171		int err;
+   172	
+   173		if (likely(!frags)) {
+   174			err = __xsk_rcv_zc(xs, xskb, len, contd);
+   175			if (err)
+   176				goto err;
+   177			return 0;
+   178		}
+   179	
+   180		contd = XDP_PKT_CONTD;
+   181		num_desc = xdp_get_shared_info_from_buff(xdp)->nr_frags + 1;
+   182		if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
+   183			xs->rx_queue_full++;
+   184			err = -ENOBUFS;
+   185			goto err;
+   186		}
+   187	
+ > 188		__xsk_rcv_zc_safe(xs, xskb, len, contd);
+   189		xskb_list = &xskb->pool->xskb_list;
+   190		list_for_each_entry_safe(pos, tmp, xskb_list, list_node) {
+   191			if (list_is_singular(xskb_list))
+   192				contd = 0;
+   193			len = pos->xdp.data_end - pos->xdp.data;
+   194			__xsk_rcv_zc_safe(xs, pos, len, contd);
+   195			list_del_init(&pos->list_node);
+   196		}
+   197	
+   198		return 0;
+   199	err:
+   200		xsk_buff_free(xdp);
+   201		return err;
+   202	}
+   203	
 
 -- 
 0-DAY CI Kernel Test Service
