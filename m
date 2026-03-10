@@ -1,63 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72FF3E8C41;
-	Tue, 10 Mar 2026 20:44:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E636E376BF2;
+	Tue, 10 Mar 2026 20:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773175467; cv=none; b=ZwsUzSS6gxeVUJ9ettEIBp4cqKSxwDqQuAPGpJNeQL2zLKcsQUaDZFjaHjhgB+3jDV6fi6YBphXWdhHoEZkcYljv6sBslXWtuZ+DeZh+mxgwtH62iwNBnStsO4DJ0fZmZqoyyzRkRW8jYC2kpRfUo5FZNbX/e/quHkhmj6rQgSE=
+	t=1773176125; cv=none; b=pwcOJ5zwNVZGlvpAhp1hKelauX/5LRO9R9OODlnhQ3mndzxQVnm2ECQLUDAmKZgQZhD3Hq6AEHRkAGrErEj5TcJIoz2ttwTgAz8vBzejkwQugFTP16wrp5WTra52xPMNOde3tRgQHM52+TtnPnosGeDc+4eSJqsMgMHaQn7kgZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773175467; c=relaxed/simple;
-	bh=6qMrLtx1HkCxpdBNJCz60aOmbbnnraZYUi4qvVGQTWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ka9S/x23kUl46C2fTsqIGDT1DRJHkqhsGAqasANwfN/C/3gKhZpCTBCtFr2adBKb4ewIdbuxuMyDBYjMHsJSIS+qhH3oQt/0XbVJfb26igGgCuS4CIokq6GXwOvhsi5AZSoZCxlPw8ONXVFjmWi0gPjjRqYGZdppeIBvBV0ejgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hCEemFlO; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1773176125; c=relaxed/simple;
+	bh=T988jY1bBaZ1hcHb0+bOyCPAIu9H136aFLXICw6nrw4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=MnaJwwkikoGD8gpXtYQYKcltxDoPM9COgfRCvYKKfSTJGjmKa+P7Cd7tcM2vAvW/dPCjzkvil+vgVL/IRWHC9EtGRFp3g0x+rhoXT1vJwDaT6YmneXRDmMHj6bNBlbVi1SHuR/RPgL9GcaEH4xlHsyzFxCXBhzsPYATFWifv5x0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=izyz8Uee; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCEemFlO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="izyz8Uee"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773175464; x=1804711464;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6qMrLtx1HkCxpdBNJCz60aOmbbnnraZYUi4qvVGQTWw=;
-  b=hCEemFlOnSde/Mu6YUhSP6TWTnlnWeazAVH102cWn+KHDvHo0t21/1J6
-   0O1vF/S92gO765hSkOClstlThRViReJsayCW5vzB6DcKcCSlI3yIwRZ43
-   WyJtfZOACoIXK6oa1uv2ARa/2XC7Gn+UYqQEWcQdbae+ecemZVY4t+KE2
-   6gfdw10X7C4tDlNaYmNB5G+Xum1yl76QBBdxdD5EXYyNMoDrDXosAwFBo
-   TRTYAZpxXpZ6XO3OBd7FuUqZEo0rRQrTINYNZnKzuiqFXksUSwpNo1ZPe
-   4RmB5YhfvU30cL+iWzvg04GDQFA1jpY9kGpVHQftEY1wleF3an5dOT5fX
-   w==;
-X-CSE-ConnectionGUID: kFUDmr10Swm19lvqA9L/HQ==
-X-CSE-MsgGUID: Ux/DxifATqO+fHVVX2zuiw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="78092628"
+  t=1773176124; x=1804712124;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=T988jY1bBaZ1hcHb0+bOyCPAIu9H136aFLXICw6nrw4=;
+  b=izyz8UeeK3FX+XKiqwKptH7Asl7apNyIOkCL/Xl7rCpzwvMlgAdW/82E
+   xFeACDcIiyB3Eq7dDroNVFeEAh0P72iiYrL//cSyZVPxL0BNxK0YruXDt
+   0c4bL8KwIEIUoBK/lqHWcgzoMU72oMmo+X0PAIycpyzbaeWU0wPEEdUYl
+   InAXz61Se+/GrqcXnfS0qd1hqreKiM9zo0EOVnt+UVib2O98pbTmYJGi2
+   kHBa4IqdsU2XC5aWa1766M1AY3rcJxN0HiachZaqjwoMPIOGazKed94Xg
+   oGXs3vOF93fJlIfF3L5/oSg6CdJgmBzhct9tajea2iOKrzGao3/wJfHCw
+   Q==;
+X-CSE-ConnectionGUID: PnBrk52zTF29LFAwkGp6Fg==
+X-CSE-MsgGUID: 9S2P6SqMT2eacYpYnZca4w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="77840149"
 X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
-   d="scan'208";a="78092628"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 13:44:23 -0700
-X-CSE-ConnectionGUID: jSBQVH6jQSmmOZidMf3YVg==
-X-CSE-MsgGUID: IJHzyH/GSNu3AwFkeRl8FQ==
+   d="scan'208";a="77840149"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 13:55:24 -0700
+X-CSE-ConnectionGUID: EbRl4CHuT02y/QQU9ZqxVw==
+X-CSE-MsgGUID: Pva65qtSRGS6xFbAYycZKQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
-   d="scan'208";a="217753107"
+   d="scan'208";a="218165666"
 Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Mar 2026 13:44:21 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 10 Mar 2026 13:55:21 -0700
 Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w03wA-000000000H8-2xtx;
-	Tue, 10 Mar 2026 20:44:18 +0000
-Date: Wed, 11 Mar 2026 04:43:46 +0800
+	id 1w046p-000000000Ha-1Mnx;
+	Tue, 10 Mar 2026 20:55:19 +0000
+Date: Wed, 11 Mar 2026 04:54:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pei Xiao <xiaopei01@kylinos.cn>, cl634@andestech.com,
-	broonie@kernel.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+To: "Marek =?utf-8?Q?Marczykowski-G=C3=B3recki"?= <marmarek@invisiblethingslab.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pei Xiao <xiaopei01@kylinos.cn>
-Subject: Re: [PATCH] spi: atcspi200: Use helper function
- devm_clk_get_enabled()
-Message-ID: <202603110449.mxLAYdGU-lkp@intel.com>
-References: <9f6e31608a24f3cdbd6e1429c1e006ccf9f7d9c1.1773132237.git.xiaopei01@kylinos.cn>
+ linux-efi@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Subject: [efi:next 1/4] drivers/firmware/efi/efi.c:1009:37: error:
+ passing 'const efi_memory_desc_t *' to parameter of type 'efi_memory_desc_t
+ *' discards qualifiers
+Message-ID: <202603110434.qe4wAhhY-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,59 +62,54 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f6e31608a24f3cdbd6e1429c1e006ccf9f7d9c1.1773132237.git.xiaopei01@kylinos.cn>
 
-Hi Pei,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on linus/master v7.0-rc3 next-20260309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pei-Xiao/spi-atcspi200-Use-helper-function-devm_clk_get_enabled/20260310-165916
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/9f6e31608a24f3cdbd6e1429c1e006ccf9f7d9c1.1773132237.git.xiaopei01%40kylinos.cn
-patch subject: [PATCH] spi: atcspi200: Use helper function devm_clk_get_enabled()
-config: riscv-randconfig-001-20260310 (https://download.01.org/0day-ci/archive/20260311/202603110449.mxLAYdGU-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260311/202603110449.mxLAYdGU-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
+head:   c8da97cbb39c4c043d8456fcae25aa921c844a3f
+commit: 5992265762e666564b0275d72e54c514ab20c7f3 [1/4] efi: make efi_mem_type() and efi_mem_attributes() work on Xen PV
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260311/202603110434.qe4wAhhY-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 122f0b13a237b5024747b4ee99002590cc9a220a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260311/202603110434.qe4wAhhY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603110449.mxLAYdGU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603110434.qe4wAhhY-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/spi/spi-atcspi200.c:510:6: warning: unused variable 'ret' [-Wunused-variable]
-     510 |         int ret;
-         |             ^~~
-   1 warning generated.
+>> drivers/firmware/efi/efi.c:1009:37: error: passing 'const efi_memory_desc_t *' to parameter of type 'efi_memory_desc_t *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+    1009 |         if (efi_mem_desc_lookup(phys_addr, &md))
+         |                                            ^~~
+   drivers/firmware/efi/efi.c:570:19: note: passing argument to parameter here
+     570 | EXPORT_SYMBOL_GPL(efi_mem_desc_lookup);
+         |                   ^
+   1 error generated.
 
 
-vim +/ret +510 drivers/spi/spi-atcspi200.c
+vim +1009 drivers/firmware/efi/efi.c
 
-34e3815ea459713 CL Wang  2025-12-15  507  
-34e3815ea459713 CL Wang  2025-12-15  508  static int atcspi_enable_clk(struct atcspi_dev *spi)
-34e3815ea459713 CL Wang  2025-12-15  509  {
-34e3815ea459713 CL Wang  2025-12-15 @510  	int ret;
-34e3815ea459713 CL Wang  2025-12-15  511  
-7dd262df6a0fc29 Pei Xiao 2026-03-10  512  	spi->clk = devm_clk_get_enabled(spi->dev, NULL);
-7dd262df6a0fc29 Pei Xiao 2026-03-10  513  	if (IS_ERR(spi->clk))
-7dd262df6a0fc29 Pei Xiao 2026-03-10  514  		return dev_err_probe(spi->dev, PTR_ERR(spi->clk),
-7dd262df6a0fc29 Pei Xiao 2026-03-10  515  				     "Failed to get SPI clock\n");
-34e3815ea459713 CL Wang  2025-12-15  516  	spi->clk_rate = clk_get_rate(spi->clk);
-34e3815ea459713 CL Wang  2025-12-15  517  	if (!spi->clk_rate)
-34e3815ea459713 CL Wang  2025-12-15  518  		return dev_err_probe(spi->dev, -EINVAL,
-34e3815ea459713 CL Wang  2025-12-15  519  				     "Failed to get SPI clock rate\n");
-34e3815ea459713 CL Wang  2025-12-15  520  
-34e3815ea459713 CL Wang  2025-12-15  521  	return 0;
-34e3815ea459713 CL Wang  2025-12-15  522  }
-34e3815ea459713 CL Wang  2025-12-15  523  
+   993	
+   994	/*
+   995	 * efi_mem_type - lookup memmap type for physical address
+   996	 * @phys_addr: the physical address to lookup
+   997	 *
+   998	 * Search in the EFI memory map for the region covering @phys_addr.
+   999	 * Returns the EFI memory type if the region was found in the memory
+  1000	 * map, -EINVAL otherwise.
+  1001	 */
+  1002	int efi_mem_type(unsigned long phys_addr)
+  1003	{
+  1004		const efi_memory_desc_t md;
+  1005	
+  1006		if (!efi_enabled(EFI_MEMMAP) && !efi_enabled(EFI_PARAVIRT))
+  1007			return -ENOTSUPP;
+  1008	
+> 1009		if (efi_mem_desc_lookup(phys_addr, &md))
+  1010			return -EINVAL;
+  1011	
+  1012		return md.type;
+  1013	}
+  1014	
 
 -- 
 0-DAY CI Kernel Test Service
