@@ -1,74 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF703B27ED;
-	Tue, 10 Mar 2026 15:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EBBD3B27F5
+	for <llvm@lists.linux.dev>; Tue, 10 Mar 2026 15:59:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773157530; cv=none; b=StHksrkFwxeu2MRFMqOaM2JG1ryG9Y/pdpXJoUutuvHgd6ynMC/XA8UTdYbgC7tYDTChxezJWjiUCcezNJaVQksOS7pcACJlSooiwP79DLFYR6yZImd3WF6l1gmzmSk7zkZkV234SkvEXrhn/dAOHPBvwPMiqF8MAwGxBx4ejYs=
+	t=1773158342; cv=none; b=LUq4ygp0FM2efeyWcLVePMwz9ND0LRjf7wWJ6+xjkmPhgZgZ9uMm7pIVHydSqYQdrNIXbuc8gF64qxyvmBdAY6KARJyElytqUguN4kLPhjGwM09CGdpAj/yqZGmoyeauf0kpfxp6MQJ+W5wTQQMYFT++6P93Y+DG41zAvpWB3gM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773157530; c=relaxed/simple;
-	bh=Cv97Ws/zNwbo6YWXcHsBsuy9O/qYjJBZgOhqLepgki0=;
+	s=arc-20240116; t=1773158342; c=relaxed/simple;
+	bh=xYyjm4nRyBmfWe/YNYoAxak2KTVExUZ8/pbqLPyxwHk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hATxkh6poePLQr0AehfcZz/JEcO9vupFmro0oFd/fF6a0sp3S+zjVtvdJ4v1vnrEIgeOQspOOP9p98TCxvNnZansPWF9hZlSZg48S9jlAe569CD2z9J4mLsxcjZvuDw8u4AXIlauvquhAxm9+GBKZNTs1ghEp9Ob9HNaKgu0418=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C5naDtzJ; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C5naDtzJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773157530; x=1804693530;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Cv97Ws/zNwbo6YWXcHsBsuy9O/qYjJBZgOhqLepgki0=;
-  b=C5naDtzJtBiIGBZ1+iCj1hq6mnXKOH/B4R1+Rng3O7qF/h+tANxY3NX4
-   1BDjbD7amf3vafT9Ag53vkCrb+61j5uIF+PUQcIJei6TIYlDVPyJruynq
-   6xSf8hOeo4NfguJ/+dmzZ7F6VEIgZBrqbQlrtrUI+h2p1fpP5Ex2KLUfY
-   EMbUcVSbsg4hfWkWDVxA4qNDrf31rz4D0rMZePk5gdbkZI8N1vcUs/dy2
-   vWPVxg5XwoEaTj0LQKmO0WMQ5PlflirH/Qxm0WxKantHqQxGz2kJMPIol
-   NKK2/vn/qK2U0qbaxvbBjf6vFb9ZMGYuHtXGMCZg1x4+/rTE/ao+TzPkW
-   Q==;
-X-CSE-ConnectionGUID: qlHerto6S5KAtTi4ts6GYw==
-X-CSE-MsgGUID: NKIDRG1HTrKJdWDLWfinyw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="85563509"
-X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
-   d="scan'208";a="85563509"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 08:45:29 -0700
-X-CSE-ConnectionGUID: jEw2x5dgTzGHsXowmShwPw==
-X-CSE-MsgGUID: KYAMdssUQ96LnOJT768SxA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
-   d="scan'208";a="220337301"
-Received: from lkp-server01.sh.intel.com (HELO 434e41ea3c86) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 10 Mar 2026 08:45:23 -0700
-Received: from kbuild by 434e41ea3c86 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vzzGp-000000002AS-30bv;
-	Tue, 10 Mar 2026 15:45:19 +0000
-Date: Tue, 10 Mar 2026 23:45:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Golle <daniel@makrotopia.org>, Andrew Lunn <andrew@lunn.ch>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Frank Wunderlich <frankwu@gmx.de>,
-	Chad Monroe <chad@monroe.io>,
-	Cezary Wilmanski <cezary.wilmanski@adtran.com>,
-	Liang Xu <lxu@maxlinear.com>,
-	"Benny (Ying-Tsan) Weng" <yweng@maxlinear.com>,
-	Jose Maria Verdu Munoz <jverdu@maxlinear.com>,
-	Avinash Jayaraman <ajayaraman@maxlinear.com>,
-	John Crispin <john@phrozen.org>
-Subject: Re: [PATCH net-next v2 2/2] net: dsa: mxl862xx: implement bridge
- offloading
-Message-ID: <202603102333.SSWo6WNe-lkp@intel.com>
-References: <f6fb8c9c6d38585c0efce72b3d1aebe923277d5a.1773102942.git.daniel@makrotopia.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qSdRMAfg1mmgZkoKaokdlDyVV+KyJZ9SIHaTmwg/TrJ4CdC4K0EhKRCqUzesokfzX7gfLcb8RFcQ4DDvlINfhTztAfd1RH0/lMuf9O9ViDEJScFg5cJe3H4JsYEzjE3wX1BA8Sci/24el6ctGVBxupeytATHcG2qxmP8Szereto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FD271BA8;
+	Tue, 10 Mar 2026 08:58:54 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 60FF43F836;
+	Tue, 10 Mar 2026 08:59:00 -0700 (PDT)
+Date: Tue, 10 Mar 2026 15:58:58 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: Gabriele Monaco <gmonaco@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v3 26/30] tools: verification: Append extra cflags
+Message-ID: <20260310155858.GC4153946@e132581.arm.com>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+ <20260308-tools_build_fix_zero_init-v3-26-6477808123b7@arm.com>
+ <9cb773f5209fc21a3842abe9e60a27b6130c7fd4.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,65 +85,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f6fb8c9c6d38585c0efce72b3d1aebe923277d5a.1773102942.git.daniel@makrotopia.org>
+In-Reply-To: <9cb773f5209fc21a3842abe9e60a27b6130c7fd4.camel@redhat.com>
 
-Hi Daniel,
+On Mon, Mar 09, 2026 at 07:26:16AM +0100, Gabriele Monaco wrote:
+> On Sun, 2026-03-08 at 16:46 +0000, Leo Yan wrote:
+> > Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+> > the compiler.
+> > 
+> > Signed-off-by: Leo Yan <leo.yan@arm.com>
+> 
+> Thanks, for the patch, however I don't think this is necessary for RV as
+> EXTRA_CFLAGS are already appended to CFLAGS elsewhere [1].
+> 
+> Makefile.rv is included after the various Makefile.include, so I presume that's
+> good to go for the new flags you're appending in this series.
+> I did a quick check and I see -fzero-init-padding-bits=all by just adding 05/30
+> of this series.
+> 
+> [1] -
+> https://elixir.bootlin.com/linux/v6.19.3/source/tools/verification/rv/Makefile.rv#L29
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Golle/dsa-tag_mxl862xx-set-dsa_default_offload_fwd_mark/20260310-084425
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/f6fb8c9c6d38585c0efce72b3d1aebe923277d5a.1773102942.git.daniel%40makrotopia.org
-patch subject: [PATCH net-next v2 2/2] net: dsa: mxl862xx: implement bridge offloading
-config: x86_64-randconfig-004-20260310 (https://download.01.org/0day-ci/archive/20260310/202603102333.SSWo6WNe-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260310/202603102333.SSWo6WNe-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603102333.SSWo6WNe-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/dsa/mxl862xx/mxl862xx.c:655:2: error: call to undeclared function 'ether_addr_copy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     655 |         ether_addr_copy(param.mac, addr);
-         |         ^
-   drivers/net/dsa/mxl862xx/mxl862xx.c:676:2: error: call to undeclared function 'ether_addr_copy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     676 |         ether_addr_copy(param.mac, addr);
-         |         ^
-   2 errors generated.
-
-
-vim +/ether_addr_copy +655 drivers/net/dsa/mxl862xx/mxl862xx.c
-
-   640	
-   641	static int mxl862xx_port_fdb_add(struct dsa_switch *ds, int port,
-   642					 const unsigned char *addr, u16 vid, struct dsa_db db)
-   643	{
-   644		struct mxl862xx_mac_table_add param = { };
-   645		int fid = mxl862xx_get_fid(ds, db), ret;
-   646		struct mxl862xx_priv *priv = ds->priv;
-   647	
-   648		if (fid < 0)
-   649			return fid;
-   650	
-   651		param.port_id = cpu_to_le32(port);
-   652		param.static_entry = true;
-   653		param.fid = cpu_to_le16(fid);
-   654		param.tci = cpu_to_le16(FIELD_PREP(MXL862XX_TCI_VLAN_ID, vid));
- > 655		ether_addr_copy(param.mac, addr);
-   656	
-   657		ret = MXL862XX_API_WRITE(priv, MXL862XX_MAC_TABLEENTRYADD, param);
-   658		if (ret)
-   659			dev_err(ds->dev, "failed to add FDB entry on port %d\n", port);
-   660	
-   661		return ret;
-   662	}
-   663	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!  I will drop this one in next spin.
