@@ -1,109 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD25623ABA8;
-	Tue, 10 Mar 2026 01:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7FF2E0914
+	for <llvm@lists.linux.dev>; Tue, 10 Mar 2026 04:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773106139; cv=none; b=kb19MIF+mQjOBjI8IW/68QZuYvlRL1YwnbaXCKezsYEr4Fj3fXXZyAklgoDdgGNmcmXkPZLK60QJfTh5oWb2hpgwgrz2sGkbeatoG4coqFY8CBZNtGsPU/p2q3akHNi3BvOw3tt7nTpcUuIFbWLPJjB1ntedEg7hyVeLIZxgfU8=
+	t=1773116711; cv=none; b=cwN7Xy8bN/V0dAA9v2ZfU4IDtjYR4S11mzZhiqcuwn/2B6K0Oqwx/1z4Y3IEUHeMoVnnNGeuKQzbpbEyENUeX9+jQFIlXG+gHuAeI5DKe1E/4Iobgoxjx9934JYW1yaJg1WfyEPWezUSR42aWgEIwOKYOUNzaxD6TPS9dKEcOnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773106139; c=relaxed/simple;
-	bh=OYRRL25JJhnSqbeItTgbclgKam+DyOlXO0iBeOjfMPA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=l2Pwdy0fpweohxfWqOyEd/O3bMEyJ2jxAxD8mJeBUOGlFsPA+AiDp+EweEWLbpsomMrSQuie/BckH+2ArCmgYVAoSLcjH68O3CokuSKEVdjV/ptRyJcqOQ8hYGJPuZUWMOsmN8jvxKNz9juma4YgmPXUPl+/n9w0GsCKBVtvs8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Js3KZ6fG; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773116711; c=relaxed/simple;
+	bh=UToTWkADz2konqxXLNRFKBpRT8+jAoOYOmICiB35LYY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Xg0/mgq0lxIG5wNPDu0kjiNBszgSlkEBfG//w7BAeSuU9RgEKCxoDppRQAwWxHs3fKYvjoTCpn57PVYT+FIGOgnpCZQoVjvZRwktNPcQiuZ6IlszPNwfoeeTLlBDjxFWUeB1/BUGQjP+Gu3AlDM26h5um3v2HUV9ik4e0faMq7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org; spf=pass smtp.mailfrom=wbinvd.org; dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b=IHwpFrLq; arc=none smtp.client-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wbinvd.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Js3KZ6fG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773106138; x=1804642138;
-  h=date:from:to:cc:subject:message-id;
-  bh=OYRRL25JJhnSqbeItTgbclgKam+DyOlXO0iBeOjfMPA=;
-  b=Js3KZ6fG6T2dxY6jbIOuSN72xcClsYdgI7XAcQ4E2QOeg0oSn/b9rS/G
-   61HrwlimSEOSCMRZgPYi63sQj60arSVrIvvbEBuAfgUblM+1uYbB4C6ba
-   KJzXncOSSfTmLFyvxOS22yfTADLEGqtwbeR2rt4K5lVsyYsg3gh3EfQEE
-   wWDt+m9yn+HIwGIntNPBNSzwE6t1LeOcHifKnw3go7P+/VWJEL9sVpUtC
-   fnhXY+Mbdq3yVei9qCmt0HVcVGvGgh3B0NeRU5V8VHJEpqeDbKUjJrUTr
-   zYR7YEZ4custhThNdVdceL55n31ra0ncdnBv0mdwwqw6xnu86j56OmkW+
-   w==;
-X-CSE-ConnectionGUID: 68miSEJgQmOI0f7708YFLA==
-X-CSE-MsgGUID: bxRj80LPS8ukAtCcxNZ2rA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11724"; a="84470054"
-X-IronPort-AV: E=Sophos;i="6.23,111,1770624000"; 
-   d="scan'208";a="84470054"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2026 18:28:58 -0700
-X-CSE-ConnectionGUID: ZWnGJ0l+Qp6GGHnh9ocuaA==
-X-CSE-MsgGUID: hohpq4/UT3u/HOj/niNLGQ==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 434e41ea3c86) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 09 Mar 2026 18:28:55 -0700
-Received: from kbuild by 434e41ea3c86 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vzlu1-0000000014c-2aKf;
-	Tue, 10 Mar 2026 01:28:53 +0000
-Date: Tue, 10 Mar 2026 09:27:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joel Fernandes <joelagnelf@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jfern:nova/mm 2/27] error[E0433]: failed to resolve: use of
- undeclared type `GpuBuddyAllocFlags`
-Message-ID: <202603100953.sdLvQZHq-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b="IHwpFrLq"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-12776bebe9fso414623c88.1
+        for <llvm@lists.linux.dev>; Mon, 09 Mar 2026 21:25:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=wbinvd.org; s=wbinvd; t=1773116708; x=1773721508; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hPa4uc736wUZG7p1hT7+UQGgiHHzlxFbUs+tG5i8A9g=;
+        b=IHwpFrLq8T5EA9IKGbOiipbuhXQJ50qajvNOnRxHKNBc6tu6spdoL1Fl67DEKkR1mB
+         +xPJEenoxy/Uzx+DBSbLYqyp00LIpk9ZPlMpan8BEZClpJ6K+RvDbYGHN7rdw6Us67P3
+         rtlvW5GzDM1Tv3h8XdE4krXOUxXrrBX7KtdJuLbAl82hEeoYtuojw1LJDv3g8x0L30Tr
+         JxxwHyhaI5kPoBECmD0PZvls4xXegrUldDu6hT8YAZblFeQcHaDiUB1YCuZ8vq4L0+Yq
+         y/tJGVQRkE/q9iWm1bFT1ADPXnxz+9Ml48SZrx55ZuQ/7mWvxfSxJ/+cjT0EDrdqVHpf
+         bMCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773116708; x=1773721508;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hPa4uc736wUZG7p1hT7+UQGgiHHzlxFbUs+tG5i8A9g=;
+        b=b7c86I2w0FDObXtjBOfsAV0yYb+nQpeD/sUZtClQzQheCfDWH7ot1dIshdfLx5v0m0
+         +WLHxfmk8NzxFadE0C4TqBrxu17Nhu/solD12slwix0TbpipX6m2TaR33i95jLrbGw99
+         CXlBFUT6iznHcypvmkDpVcvOgGYgo7GG2tfc1btxL2uJi3uYaiP+AMYZ/YUIbNpBayp8
+         ZE82NiZxwSa+iTPXC7gtZ5EnlYcyn+f29lVNl3V6Sy5PICOQ92aMMKGtZ/gYCbGRf1cp
+         TTHkbOEI+PW1dfpeYWKmxBxXaxgd62Wb1Gh3GZjvGES7k9U4MElhxKTVoahT2RHkG1wy
+         r+Dg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0My3WhPT1+iGbC7nUY6Ocfj18qDrbCK1i6wJsd8OjLARePKt0S2Gm1LTkikq6xTxrKhgY@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw5SylgR4GpY6/no85bfIcr05ElP0o2ZOFdTR6i7cEfZSedZX5Y
+	8fK3F5/Iqc/zJnVdYVS2RQPDLsp80P8UEHnQKCuLlQpavAO42LoIRQurs9hIlIE6nrE=
+X-Gm-Gg: ATEYQzy0UjA+4HxTALDjVWPwAcNb9LuZoT+KzOSl2VUnN7YsSMYnqjWbPbFa0+Lvut7
+	lV6hxqu0RfqX/QAGOwHanm8BEAKhI+Uaeg4ibkan5hIwChBeJmTVcKWM9hp/SfSR8/e8/6OPME3
+	yjfgXvwSOP/CDxShjjdrRHZN4H/Ufe1mmqrJx9w7VlaL58Evb3eypI5jw41x9v9DnH3TmBGsLBw
+	qNLrdhPgKg3/ju6oyNnsBxnDZgJHNCfT8V+bSmBTSBG/hV46mmersol8ZT54lAlt6H34ERQhjPo
+	qc6A8wQhI7pWud7Zv0ghETKBuHnp7ZDHujCdjFSvQfZfL4ma/F2k0m7DkYskAcg3/unY5ACkjF5
+	Ixxb1f5n1P3+wj4XR18KxT4yOjW5TdYGivjN0V0pcBwprYvbK7tjkAvaQpyoDbqIdP72ogc9gG8
+	yScrI44GcvhSbW8DsjYzfG0OVQqA==
+X-Received: by 2002:a05:7022:6081:b0:128:dbbf:fd35 with SMTP id a92af1059eb24-128dbbffee6mr1751213c88.28.1773116708236;
+        Mon, 09 Mar 2026 21:25:08 -0700 (PDT)
+Received: from mozart.vkv.me ([2001:5a8:468b:d015:eea6:1f6d:5163:10ae])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f984cf5sm12925551eec.33.2026.03.09.21.25.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 21:25:07 -0700 (PDT)
+From: Calvin Owens <calvin@wbinvd.org>
+To: linux-kernel@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org,
+	amd-gfx@lists.freedesktop.org,
+	Charlene Liu <charlene.liu@amd.com>,
+	Ovidiu Bunea <ovidiu.bunea@amd.com>,
+	Alex Hung <alex.hung@amd.com>,
+	Dan Wheeler <daniel.wheeler@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Leo Li <sunpeng.li@amd.com>,
+	Rodrigo Siqueira <siqueira@igalia.com>,
+	Christian Koenig <christian.koenig@amd.com>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	llvm@lists.linux.dev
+Subject: [REGRESSION][PATCH] drm/amd/display: Fix uninitialized variable which breaks full LTO
+Date: Mon,  9 Mar 2026 21:24:57 -0700
+Message-ID: <ef7266eb7802ce6d68ebd9356477e9671f0c94e0.1773116305.git.calvin@wbinvd.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git nova/mm
-head:   a39e8ca680493b58999f85267d9841a8926dbd45
-commit: eb57be6bde8518e01bac666cf1acfb2425ba6731 [2/27] rust: gpu: Add GPU buddy allocator bindings
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260310/202603100953.sdLvQZHq-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260310/202603100953.sdLvQZHq-lkp@intel.com/reproduce)
+Commit e1b385726f7f ("drm/amd/display: Add additional checks for PSP
+footer size") introduced a use of an uninitialized stack variable
+in dm_dmub_sw_init() (region_params.bss_data_size).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603100953.sdLvQZHq-lkp@intel.com/
+Interestingly, this seems to cause no issue on normal kernels. But when
+full LTO is enabled, it causes the compiler to "optimize" out huge
+swaths of amdgpu initialization code, and the driver is unusable:
 
-All errors (new ones prefixed by >>):
+    amdgpu 0000:03:00.0: [drm] Loading DMUB firmware via PSP: version=0x07002F00
+    amdgpu 0000:03:00.0: sw_init of IP block <dm> failed 5
+    amdgpu 0000:03:00.0: amdgpu_device_ip_init failed
+    amdgpu 0000:03:00.0: Fatal error during GPU init
 
->> error[E0433]: failed to resolve: use of undeclared type `GpuBuddyAllocFlags`
-   --> rust/doctests_kernel_generated.rs:6635:9
-   |
-   6635 |         GpuBuddyAllocFlags::default(),
-   |         ^^^^^^^^^^^^^^^^^^ use of undeclared type `GpuBuddyAllocFlags`
-   |
-   help: an enum with a similar name exists
-   |
-   6635 -         GpuBuddyAllocFlags::default(),
-   6635 +         GpuBuddyAllocFlag::default(),
-   |
-   help: consider importing this struct
-   |
-   3    + use kernel::gpu::buddy::GpuBuddyAllocFlags;
-   |
---
->> error[E0433]: failed to resolve: use of undeclared type `GpuBuddyAllocFlags`
-   --> rust/doctests_kernel_generated.rs:6648:9
-   |
-   6648 |         GpuBuddyAllocFlags::default(),
-   |         ^^^^^^^^^^^^^^^^^^ use of undeclared type `GpuBuddyAllocFlags`
-   |
-   help: an enum with a similar name exists
-   |
-   6648 -         GpuBuddyAllocFlags::default(),
-   6648 +         GpuBuddyAllocFlag::default(),
-   |
-   help: consider importing this struct
-   |
-   3    + use kernel::gpu::buddy::GpuBuddyAllocFlags;
-   |
+It surprises me that neither gcc nor clang emit a warning about this: I
+only found it by bisecting the LTO breakage.
 
+Fix by using the old value for region_params.bss_data_size in place of
+the uninitialized reference, which makes amdgpu work with LTO again.
+
+Fixes: e1b385726f7f ("drm/amd/display: Add additional checks for PSP footer size")
+Signed-off-by: Calvin Owens <calvin@wbinvd.org>
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index b3d6f2cd8ab6..e69e61163ae9 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -2554,7 +2554,7 @@ static int dm_dmub_sw_init(struct amdgpu_device *adev)
+ 	fw_meta_info_params.fw_inst_const = adev->dm.dmub_fw->data +
+ 					    le32_to_cpu(hdr->header.ucode_array_offset_bytes) +
+ 					    PSP_HEADER_BYTES_256;
+-	fw_meta_info_params.fw_bss_data = region_params.bss_data_size ? adev->dm.dmub_fw->data +
++	fw_meta_info_params.fw_bss_data = le32_to_cpu(hdr->bss_data_bytes) ? adev->dm.dmub_fw->data +
+ 					  le32_to_cpu(hdr->header.ucode_array_offset_bytes) +
+ 					  le32_to_cpu(hdr->inst_const_bytes) : NULL;
+ 	fw_meta_info_params.custom_psp_footer_size = 0;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.3
+
