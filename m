@@ -1,60 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFDC3D16FB;
-	Tue, 10 Mar 2026 17:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FBDD292B2E
+	for <llvm@lists.linux.dev>; Tue, 10 Mar 2026 17:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773164328; cv=none; b=sHgt36loqHVITqqLyh/+KE0ICiW1GyyZgNOKT6ia4TyEUUnAZGT4G77hXaAGUSN2TDH5NGbrl+nTMZ3bkKMGOJib7CGPYEyp27Zf3RejfeeBUjmewI1uYoXhECLbwDZ0paErt0za7cRP8beQRDE/97+e7O4lBzxYX3rgPnI+EN4=
+	t=1773165061; cv=none; b=Gg/yS3zclPcRD3KLbrQbDenk6Bedm/jnCUIcP3v8WodGiihHJ+crLDcTJJMbO/+x4s17MccRjaTQK2GSLsaNr81/ayoe+82BZEvm8NUmPFDUM4WMy4cGdv6tjILPD0CQBaJYHnYYI4EswYmINC2/K0cqW1ajrBHuVo5q8jlHjFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773164328; c=relaxed/simple;
-	bh=DZlX3dkt90iZeJo21NRyUd3PEqCnuE943/sQO3+loaM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ZU3T378PGEm7cISwvpYrjrc482q+2DaoiJxXjoHvrfM/gk9Pu0hMcw1Mxnh/eS2x72mGQV29eqEx+bah6UcA+62SS9wYYwtVnTTAy2ib1UDUFpcQvmWHU9jHjbiEpIj56JBoXSS2bikHIaRYJZ6TTHnGyamAU021XLwpDCM+AZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lI+UTZ+R; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lI+UTZ+R"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773164326; x=1804700326;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DZlX3dkt90iZeJo21NRyUd3PEqCnuE943/sQO3+loaM=;
-  b=lI+UTZ+RWiLO6FJCmPVSutKCMmwwfbO3yi4w31Di44kplujt3i8a8/hg
-   WtemwupX9Mit+Dik6MNZh4+I+62dqaX58qergUkxs7s1TlRhQvvNygdrX
-   WXj1pf91BrnRsPGuNcs2WRI1Uwr7cGf6co8oQUcnrxBe2v1LFUFG66MrW
-   PqIGw5/nPVVUXhLFjmUr44GQMTvp1vPa/9b7Uo8eIVimivQ1s5gL1/Whm
-   gH9zFd0sM9qF99LValX15p5i+1k+KC43oB7cBrQ1KSx02ECfKs/VTX7f6
-   mHuWHPUR1NjIM/R6txf20mJBf2begmvYQFsVWGF8pxBHDOuh9DR7war6w
-   A==;
-X-CSE-ConnectionGUID: heeH2sbCTTCqQ67hdwzngw==
-X-CSE-MsgGUID: XsqN864cQQGLZakfGJYE1w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="85575906"
-X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
-   d="scan'208";a="85575906"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 10:38:44 -0700
-X-CSE-ConnectionGUID: Ifhgr3JDQgyCGH1fSq+F7Q==
-X-CSE-MsgGUID: UWwDRkzMQnycKrSKArNrkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
-   d="scan'208";a="217715563"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Mar 2026 10:38:42 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w012W-0000000037J-3Oqb;
-	Tue, 10 Mar 2026 17:38:40 +0000
-Date: Tue, 10 Mar 2026 18:38:19 +0100
-From: kernel test robot <lkp@intel.com>
-To: "Marek =?utf-8?Q?Marczykowski-G=C3=B3recki"?= <marmarek@invisiblethingslab.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-efi@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Subject: [efi:next 1/4] drivers/firmware/efi/efi.c:1009:37: error:
- passing 'const efi_memory_desc_t *' to parameter of type 'efi_memory_desc_t
- *' discards qualifiers
-Message-ID: <202603101859.RnuowrOx-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1773165061; c=relaxed/simple;
+	bh=WcpIf4jmyVmqqaM72AFjCpjIwQJCn0VVYDwmYUBwxoE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KEz9OkiPpccA14kywleMwhiQbC9xQSs5TPu5wnZgfo5t+/SKcTNVFYtOHyHV0iYjP4nTYe/d08D/S7Q1DX7+GHDf4wl9q8zMiLC78aiy6Py3NeadjNBuxoh796bvmEAuFPA8ywrb1epObmISjWjD4xW9DDGwHtG8bAj1iKmTdqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1C1A169C;
+	Tue, 10 Mar 2026 10:50:51 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 81E153F694;
+	Tue, 10 Mar 2026 10:50:57 -0700 (PDT)
+Date: Tue, 10 Mar 2026 17:50:55 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v3 27/30] selftests/bpf: Append extra cflags
+Message-ID: <20260310175055.GE4153946@e132581.arm.com>
+References: <20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com>
+ <20260308-tools_build_fix_zero_init-v3-27-6477808123b7@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,55 +83,46 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260308-tools_build_fix_zero_init-v3-27-6477808123b7@arm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
-head:   c8da97cbb39c4c043d8456fcae25aa921c844a3f
-commit: 5992265762e666564b0275d72e54c514ab20c7f3 [1/4] efi: make efi_mem_type() and efi_mem_attributes() work on Xen PV
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260310/202603101859.RnuowrOx-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260310/202603101859.RnuowrOx-lkp@intel.com/reproduce)
+On Sun, Mar 08, 2026 at 04:46:32PM +0000, Leo Yan wrote:
+> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+> the compiler.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603101859.RnuowrOx-lkp@intel.com/
+FWIW, this patch causes bpf selftest build failure and was reported in:
 
-All errors (new ones prefixed by >>):
+  https://github.com/kernel-patches/bpf/actions/runs/22825654003
 
->> drivers/firmware/efi/efi.c:1009:37: error: passing 'const efi_memory_desc_t *' to parameter of type 'efi_memory_desc_t *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-    1009 |         if (efi_mem_desc_lookup(phys_addr, &md))
-         |                                            ^~~
-   drivers/firmware/efi/efi.c:570:19: note: passing argument to parameter here
-     570 | EXPORT_SYMBOL_GPL(efi_mem_desc_lookup);
-         |                   ^
-   1 error generated.
+The Makefile reuses CFLAGS for clang to build urandom_read, which may
+cause GCC specific flags to feed to clang and causes errors.
 
+The updated patch will introduce a new variable URANDOM_READ_CFLAGS,
+without appending EXTRA_CFLAGS, this can effectively avoid incompatible
+options.
 
-vim +1009 drivers/firmware/efi/efi.c
+Thanks,
+Leo
 
-   993	
-   994	/*
-   995	 * efi_mem_type - lookup memmap type for physical address
-   996	 * @phys_addr: the physical address to lookup
-   997	 *
-   998	 * Search in the EFI memory map for the region covering @phys_addr.
-   999	 * Returns the EFI memory type if the region was found in the memory
-  1000	 * map, -EINVAL otherwise.
-  1001	 */
-  1002	int efi_mem_type(unsigned long phys_addr)
-  1003	{
-  1004		const efi_memory_desc_t md;
-  1005	
-  1006		if (!efi_enabled(EFI_MEMMAP) && !efi_enabled(EFI_PARAVIRT))
-  1007			return -ENOTSUPP;
-  1008	
-> 1009		if (efi_mem_desc_lookup(phys_addr, &md))
-  1010			return -EINVAL;
-  1011	
-  1012		return md.type;
-  1013	}
-  1014	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  tools/testing/selftests/bpf/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 72a9ba41f95ebb825d25799c07ba3f0311243e45..29dfcdbe98c781b53f1e87dcebecf2027bafcd5d 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -49,6 +49,7 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  endif
+>  
+> +CFLAGS += $(EXTRA_CFLAGS)
+>  CFLAGS += -g $(OPT_FLAGS) -rdynamic -std=gnu11				\
+>  	  -Wall -Werror -fno-omit-frame-pointer				\
+>  	  -Wno-unused-but-set-variable					\
+> 
+> -- 
+> 2.34.1
+> 
