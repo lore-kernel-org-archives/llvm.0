@@ -1,43 +1,39 @@
-Received: from mail-24416.protonmail.ch (mail-24416.protonmail.ch [109.224.244.16])
+Received: from mail-244123.protonmail.ch (mail-244123.protonmail.ch [109.224.244.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3906132E141
-	for <llvm@lists.linux.dev>; Tue, 10 Mar 2026 17:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B893D3CEC
+	for <llvm@lists.linux.dev>; Tue, 10 Mar 2026 18:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773165232; cv=none; b=Qd2TC9G5kgDAMO0nxYySXwf6IRXaO2YIiWjxK0JwR+rQwWIf6k3CLQieeTshSzS1zo9XamTTSuiF9j3lTnAacxEVRiFMrGvD/iHJpmbFMgibDbC+oA+/atm4Al31Mt7mRe86+bGcXWoK0JWy+54DvlM1ojk8lehkivXkLv0xxTU=
+	t=1773166112; cv=none; b=nt1LZcmqa7cQuU1ODsckUxccfCmEsC+40ZF+3tupsz1ZbRMfzol4pgFjAFyINpxyf9YXFs5CPfjaWvDkvSs6axpWriyg1JWFy15815wxnb44FTAAab0QOH5ijVBw1sCiGd4b1AfSdxroxcS2kb3W1bM3YraS2VQ6/2iYA3LT4wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773165232; c=relaxed/simple;
-	bh=dx/n2ZSnVbr5KLV93z31YExmyUZ4EQEgGgGeMkJk0wo=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=K7bJ+3T0mnbZ8GavlYq0KnnBI1EPz371ysy/d+pzoOu2q27BBmz6s+KSpSjFlgD8o/jV5WIYrQKw65WSEhNgQupSdyuzyuW6UUnDm5pYMVc+BZD7+UyfQeYrzkVL/+UtU0k05Y51bmV9IXztd51EOhQ4T/mY4mP11Bw4H1GmDMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=OCZ8/RHk; arc=none smtp.client-ip=109.224.244.16
+	s=arc-20240116; t=1773166112; c=relaxed/simple;
+	bh=iDyRelz8CGDzDT4VlHyPVr8DvQuMD+iP3RIOuf7hcZA=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=nS6dNK+90w6ZLK2mDsuW3yaCkGNLrusGE8WQ3y21AY1TzVXfKBlbkcWAS+L/aphaeYYpJFIf9WpnwsSRPVS0aMK+mPGD8Cq0zybFlkDawy5Za/bM3OA7rIcVN8WypKRoZ0POzqWm2EENCMcBjhscIUWNXlWzEvZVhbWFyObs1zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=iJbAi81R; arc=none smtp.client-ip=109.224.244.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="OCZ8/RHk"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="iJbAi81R"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1773165228; x=1773424428;
-	bh=xt/M6F0af0Aewj/HTy9bWBamZzfKiE3bbOG01o2uFtM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=OCZ8/RHkyI35Q6A0yR+RlSOPGPYSk95DfrWBIY7p8V/viEvmzGZvUe8tjlMy+xUAb
-	 YZxSyBFVgunZn7wwh/cKKrJcpyOKdnJ8r3p0QarhThx67GQf5jtz6G5YUJ7oN8xy8Y
-	 gwCy+JoB0+WB81UMeFRkjNeFijQl7HDVHIH2yXFKehOcCWLk1PwOuT3kzta6lrLPbO
-	 ce3uP5sGBRxTzJYtMjqNV0eDGTI6tg3UD3pmNtXcNWqjcLwNp5Dv6h85HwMc0V7944
-	 2NIOQgqQrciyfov6UbBS2oicOp2uhu8o5KV8TSes8yhIMlTRLul5B3gA/2Op2P9oi+
-	 1bCHAPg1pxXnw==
-Date: Tue, 10 Mar 2026 17:53:41 +0000
-To: akpm@linux-foundation.org, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+	s=protonmail3; t=1773166107; x=1773425307;
+	bh=/c4BcsLBw+8ZDRnuRw/+gRQyl4/fQXV5G/XEqQN1CXc=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=iJbAi81Rn+6qHpXdbRZoJxFpxs+VfAgRjfVU17ABA2Va2qeBmTg5Ne7p7fMRXAHeD
+	 3ICwxMtGC9HBEBV7oczDCfs0EU9fINEUwv0UPw//kctg27NL65rvYfV6x8KaGS30+A
+	 ssldWC1393rorduWyMoRtGu0AiIYvyD/D5JZKuvohcey99AjwZxUlIVRXVgJA7iAiU
+	 WWgGRlYE6Cr4btFDLfGzwlcIKbLFsD+y0A54mgXHorRPuIJBkc5vPA4o8CSJR3c+tA
+	 eeDnfJ8lncBCUM49fwGJcxBuMreTqc89wystf+uReIGVTAcrujZX4r/ktdyS4jv0VF
+	 3EC7IFyY/CENQ==
+Date: Tue, 10 Mar 2026 18:08:20 +0000
+To: bp@alien8.de, ryan.roberts@arm.com, hpa@zytor.com, jgross@suse.com, oleg@redhat.com, tglx@kernel.org, nathan@kernel.org, akpm@linux-foundation.org, baohua@kernel.org, seanjc@google.com, shuah@kernel.org, houwenlong.hwl@antgroup.com, perry.yuan@amd.com, xin@zytor.com, riel@surriel.com, will@kernel.org, mingo@redhat.com, morbo@google.com, peterz@infradead.org, nick.desaulniers+lkml@gmail.com, maciej.wieczor-retman@intel.com, justinstitt@google.com, dave.hansen@linux.intel.com
 From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: m.wieczorretman@pm.me, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, kasan-dev@googlegroups.com, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v11 03/15] kasan: Fix inline mode for x86 tag-based mode
-Message-ID: <257e64c7cf5ee94a5010bed60ae5f39d41af59cb.1773164688.git.m.wieczorretman@pm.me>
-In-Reply-To: <cover.1773164688.git.m.wieczorretman@pm.me>
-References: <cover.1773164688.git.m.wieczorretman@pm.me>
+Cc: sohil.mehta@intel.com, llvm@lists.linux.dev, x86@kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, m.wieczorretman@pm.me
+Subject: [PATCH v4 0/3] x86: Simplifying LAM
+Message-ID: <cover.1773165953.git.m.wieczorretman@pm.me>
 Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 594cb8d8a1a8fb1968c30ad4a796e272e7b30e4e
+X-Pm-Message-ID: 3af4bcd6271730e4a8e425a194794acecf223ccc
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,61 +43,62 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+After ChkTag [1] announcement, it's worth preparing a stable x86 linear
+address masking (lam) user interface. One important aspect of lam is the
+tag width, and aligning it with other industry solutions can provide a
+more popular, generalized interface that other technologies could
+utilize.
 
-The LLVM compiler uses hwasan-instrument-with-calls parameter to setup
-inline or outline mode in tag-based KASAN. If zeroed, it means the
-instrumentation implementation will be pasted into each relevant
-location along with KASAN related constants during compilation. If set
-to one all function instrumentation will be done with function calls
-instead.
+ChkTag will use 4-bit tags and since that's the direction other memory
+tagging implementations seem to be taking too (for example Arm's MTE)
+it's reasonable to converge lam in linux to the same specification. Even
+though x86's LAM supports 6-bit tags it is beneficial to shorten lam to
+4 bits as ChkTag will likely be the main user of the interface and such
+connection should simplify things in the future.
 
-The default hwasan-instrument-with-calls value for the x86 architecture
-in the compiler is "1", which is not true for other architectures.
-Because of this, enabling inline mode in software tag-based KASAN
-doesn't work on x86 as the kernel script doesn't zero out the parameter
-and always sets up the outline mode.
+If a usecase arises in the future, the 6-bit tags can be made available
+as a debug feature and possible to enable through debugfs.
 
-Explicitly zero out hwasan-instrument-with-calls when enabling inline
-mode in tag-based KASAN.
+Changing the tag width has no effect on userspace programs. Due to LAM
+being disabled until LASS is fully supported in the kernel there are yet
+no userspace projects relying on a specific LAM tag width. One known
+exception is the clang compiler and its hwasan support. It is however
+not a problem since there are both no users of hwasan on x86 yet and
+upon closer inspection (when working on x86 KASAN software tag-based
+mode) I found it's not working correctly and needs to be patched.
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
-Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
----
-Changelog v9:
-- Add Andrey Ryabinin's Reviewed-by tag.
+The patchset also cleans up some comments referencing LAM_U48 which was
+not implemented in the kernel and the comments shouldn't imply it can be
+enabled.
 
-Changelog v7:
-- Add Alexander's Reviewed-by tag.
+Patches are based on v7.0-rc3
 
-Changelog v6:
-- Add Andrey's Reviewed-by tag.
+Changelog v4:
+- Remove the 'default' wording from the cover letter and patch messages.
+- Add a paragraph to the cover letter about userspace impact.
 
 Changelog v3:
-- Add this patch to the series.
+- Remove the debugfs part and update the rest of the code and patch
+  messages accordingly.
 
- scripts/Makefile.kasan | 3 +++
- 1 file changed, 3 insertions(+)
+Changelog v2:
+- Extend a char buffer in debugfs read callback to fit the format
+  string.
 
-diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
-index 0ba2aac3b8dc..e485814df3e9 100644
---- a/scripts/Makefile.kasan
-+++ b/scripts/Makefile.kasan
-@@ -76,8 +76,11 @@ CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress
- RUSTFLAGS_KASAN :=3D -Zsanitizer=3Dkernel-hwaddress \
- =09=09   -Zsanitizer-recover=3Dkernel-hwaddress
-=20
-+# LLVM sets hwasan-instrument-with-calls to 1 on x86 by default. Set it to=
- 0
-+# when inline mode is enabled.
- ifdef CONFIG_KASAN_INLINE
- =09kasan_params +=3D hwasan-mapping-offset=3D$(KASAN_SHADOW_OFFSET)
-+=09kasan_params +=3D hwasan-instrument-with-calls=3D0
- else
- =09kasan_params +=3D hwasan-instrument-with-calls=3D1
- endif
+[1] https://community.intel.com/t5/Blogs/Tech-Innovation/open-intel/ChkTag-=
+x86-Memory-Safety/post/1721490
+
+Maciej Wieczor-Retman (3):
+  x86/process: Shorten the default LAM tag width
+  x86/mm: Cleanup comments where LAM_U48 is mentioned
+  selftests/lam: Add test cases for different LAM tag widths
+
+ arch/x86/include/asm/mmu.h        |  2 +-
+ arch/x86/include/asm/tlbflush.h   |  2 +-
+ arch/x86/kernel/process_64.c      |  8 +--
+ tools/testing/selftests/x86/lam.c | 86 +++++++++++++++----------------
+ 4 files changed, 49 insertions(+), 49 deletions(-)
+
 --=20
 2.53.0
 
