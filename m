@@ -1,77 +1,124 @@
-Received: from mail-244123.protonmail.ch (mail-244123.protonmail.ch [109.224.244.123])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D841C5F11
-	for <llvm@lists.linux.dev>; Tue, 10 Mar 2026 19:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72FF3E8C41;
+	Tue, 10 Mar 2026 20:44:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773171046; cv=none; b=qddU3b1dofB5dJ5XXy37ffhcUgbEZp6nolCW1s5tTx78JEYAG3NdFbxM+ytT5AitGBR1dXMk2t/QEKUqkHY2X0ACyB0/532F/r5e4QMI68MuGvrpFBklWGH+Um9mHFgjVi+wU6GuSjZ9GfZQPes6hfSjDjFgiVEBkRYJ3HwWAlI=
+	t=1773175467; cv=none; b=ZwsUzSS6gxeVUJ9ettEIBp4cqKSxwDqQuAPGpJNeQL2zLKcsQUaDZFjaHjhgB+3jDV6fi6YBphXWdhHoEZkcYljv6sBslXWtuZ+DeZh+mxgwtH62iwNBnStsO4DJ0fZmZqoyyzRkRW8jYC2kpRfUo5FZNbX/e/quHkhmj6rQgSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773171046; c=relaxed/simple;
-	bh=DebX/uKrd8E1cdubk7gVqD5mFHMWz0EBsTGvClcjjLU=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nvxweJS7nM8O3YG7ihovgG2iB5VO0oCE7Zrh8V+JCqJKnfakUwF6A/ngyE5C87+uJkFyVF4gQsplzEmnjTD4TGFf4fozW17Yz4/j+/86v7bOThLZn94TcmIAC8KDy3bOU6KXConLWDS5LSNV7g8hwdw7DxI1IowaP4Bn3PdOCNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=NNYtUTuf; arc=none smtp.client-ip=109.224.244.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1773175467; c=relaxed/simple;
+	bh=6qMrLtx1HkCxpdBNJCz60aOmbbnnraZYUi4qvVGQTWw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ka9S/x23kUl46C2fTsqIGDT1DRJHkqhsGAqasANwfN/C/3gKhZpCTBCtFr2adBKb4ewIdbuxuMyDBYjMHsJSIS+qhH3oQt/0XbVJfb26igGgCuS4CIokq6GXwOvhsi5AZSoZCxlPw8ONXVFjmWi0gPjjRqYGZdppeIBvBV0ejgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hCEemFlO; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="NNYtUTuf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1773171042; x=1773430242;
-	bh=DebX/uKrd8E1cdubk7gVqD5mFHMWz0EBsTGvClcjjLU=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=NNYtUTufT6cuK2gc3E3sBQG2y4/1aMcxGYI/3+6ltvtRORBVHg0PdzDYXP8h0g/s4
-	 4gikZ/igoaKXzSdiysh94bjtGM/3re9YTzZ7wmKv0lDLKJxpWkqTRgtFXddPz0ED4v
-	 ERO+26f0E9y2rIwdKL4WodXyL/Hsw0E+F+oGyCJxysGm5Lodv8BIyYVrHx66zMx/cq
-	 d676Pvcr12yESXAuomDZyFPLuDRgX332ei0JVZqSxiLFB0FHH1aId+YikcqE3ozcV0
-	 CAaKYUkFstB2d73FF+hgRfcJRAF85qA3g/qFKLTTFpk2djX8mWzmrtwBTUKKs/bmxI
-	 Y/2pcg890uG3A==
-Date: Tue, 10 Mar 2026 19:30:36 +0000
-To: Peter Zijlstra <peterz@infradead.org>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: urezki@gmail.com, ryan.roberts@arm.com, kevin.brodsky@arm.com, samuel.holland@sifive.com, dave.hansen@linux.intel.com, jeremy.linton@arm.com, weixugc@google.com, ljs@kernel.org, ryabinin.a.a@gmail.com, rppt@kernel.org, bp@alien8.de, luto@kernel.org, jan.kiszka@siemens.com, mingo@redhat.com, david@kernel.org, mhocko@suse.com, akpm@linux-foundation.org, andreas@gaisler.com, kas@kernel.org, Liam.Howlett@oracle.com, morbo@google.com, thuth@redhat.com, catalin.marinas@arm.com, ankur.a.arora@oracle.com, kbingham@kernel.org, nick.desaulniers+lkml@gmail.com, andreyknvl@gmail.com, dvyukov@google.com, corbet@lwn.net, leitao@debian.org, hpa@zytor.com, tglx@kernel.org, yuanchu@google.com, ardb@kernel.org, vincenzo.frascino@arm.com, tabba@google.com, joey.gouly@arm.com, nsc@kernel.org, will@kernel.org, yeoreum.yun@arm.com, nathan@kernel.org, maciej.wieczor-retman@intel.com, skhan@linuxfoundation.org, axelrasmussen@google.com, osandov@fb.com, surenb@google.com, justinstitt@google.com,
-	kees@kernel.org, vbabka@kernel.org, hsj0512@snu.ac.kr, trintaeoitogc@gmail.com, jackmanb@google.com, maz@kernel.org, glider@google.com, linux-doc@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, workflows@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v11 00/15] kasan: x86: arm64: KASAN tag-based mode for x86
-Message-ID: <abBu-M5esEYWScDf@wieczorr-mobl1.localdomain>
-In-Reply-To: <20260310190022.GI606826@noisy.programming.kicks-ass.net>
-References: <cover.1773164688.git.m.wieczorretman@pm.me> <20260310190022.GI606826@noisy.programming.kicks-ass.net>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: deeac2913fe3968b47380487a2b3c2c800a00e30
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCEemFlO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773175464; x=1804711464;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6qMrLtx1HkCxpdBNJCz60aOmbbnnraZYUi4qvVGQTWw=;
+  b=hCEemFlOnSde/Mu6YUhSP6TWTnlnWeazAVH102cWn+KHDvHo0t21/1J6
+   0O1vF/S92gO765hSkOClstlThRViReJsayCW5vzB6DcKcCSlI3yIwRZ43
+   WyJtfZOACoIXK6oa1uv2ARa/2XC7Gn+UYqQEWcQdbae+ecemZVY4t+KE2
+   6gfdw10X7C4tDlNaYmNB5G+Xum1yl76QBBdxdD5EXYyNMoDrDXosAwFBo
+   TRTYAZpxXpZ6XO3OBd7FuUqZEo0rRQrTINYNZnKzuiqFXksUSwpNo1ZPe
+   4RmB5YhfvU30cL+iWzvg04GDQFA1jpY9kGpVHQftEY1wleF3an5dOT5fX
+   w==;
+X-CSE-ConnectionGUID: kFUDmr10Swm19lvqA9L/HQ==
+X-CSE-MsgGUID: Ux/DxifATqO+fHVVX2zuiw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="78092628"
+X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
+   d="scan'208";a="78092628"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 13:44:23 -0700
+X-CSE-ConnectionGUID: jSBQVH6jQSmmOZidMf3YVg==
+X-CSE-MsgGUID: IJHzyH/GSNu3AwFkeRl8FQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
+   d="scan'208";a="217753107"
+Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 10 Mar 2026 13:44:21 -0700
+Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w03wA-000000000H8-2xtx;
+	Tue, 10 Mar 2026 20:44:18 +0000
+Date: Wed, 11 Mar 2026 04:43:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pei Xiao <xiaopei01@kylinos.cn>, cl634@andestech.com,
+	broonie@kernel.org, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Pei Xiao <xiaopei01@kylinos.cn>
+Subject: Re: [PATCH] spi: atcspi200: Use helper function
+ devm_clk_get_enabled()
+Message-ID: <202603110449.mxLAYdGU-lkp@intel.com>
+References: <9f6e31608a24f3cdbd6e1429c1e006ccf9f7d9c1.1773132237.git.xiaopei01@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9f6e31608a24f3cdbd6e1429c1e006ccf9f7d9c1.1773132237.git.xiaopei01@kylinos.cn>
 
-On 2026-03-10 at 20:00:22 +0100, Peter Zijlstra wrote:
->On Tue, Mar 10, 2026 at 05:51:19PM +0000, Maciej Wieczor-Retman wrote:
->
->> =3D=3D=3D=3D=3D=3D=3D Compilation
->> Clang was used to compile the series (make LLVM=3D1) since gcc doesn't
->> seem to have support for KASAN tag-based compiler instrumentation on
->> x86. Patchset does seem to compile with gcc without an issue but doesn't
->> boot afterwards.
->
->Can you put all that under a specific CONFIG and make that depend on
->CC_IS_CLANG?
+Hi Pei,
 
-I made HAVE_ARCH_KASAN_SW_TAGS depend on CC_IS_CLANG, and that controls all=
- the
-software tags stuff, like ARCH_DISABLE_KASAN_INLINE through KASAN_SW_TAGS.
-And ARCH_NEEDS_DEFER_KASAN is for if KASAN is compiled but LAM is not avail=
-able,
-so that it gets disabled in runtime.
+kernel test robot noticed the following build warnings:
 
-But sure, I suppose I can add a separate CONFIG with CC_IS_CLANG to these t=
-hree
-so the clang connection is more transparent.
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on linus/master v7.0-rc3 next-20260309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
---=20
-Kind regards
-Maciej Wiecz=C3=B3r-Retman
+url:    https://github.com/intel-lab-lkp/linux/commits/Pei-Xiao/spi-atcspi200-Use-helper-function-devm_clk_get_enabled/20260310-165916
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/9f6e31608a24f3cdbd6e1429c1e006ccf9f7d9c1.1773132237.git.xiaopei01%40kylinos.cn
+patch subject: [PATCH] spi: atcspi200: Use helper function devm_clk_get_enabled()
+config: riscv-randconfig-001-20260310 (https://download.01.org/0day-ci/archive/20260311/202603110449.mxLAYdGU-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260311/202603110449.mxLAYdGU-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603110449.mxLAYdGU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/spi/spi-atcspi200.c:510:6: warning: unused variable 'ret' [-Wunused-variable]
+     510 |         int ret;
+         |             ^~~
+   1 warning generated.
+
+
+vim +/ret +510 drivers/spi/spi-atcspi200.c
+
+34e3815ea459713 CL Wang  2025-12-15  507  
+34e3815ea459713 CL Wang  2025-12-15  508  static int atcspi_enable_clk(struct atcspi_dev *spi)
+34e3815ea459713 CL Wang  2025-12-15  509  {
+34e3815ea459713 CL Wang  2025-12-15 @510  	int ret;
+34e3815ea459713 CL Wang  2025-12-15  511  
+7dd262df6a0fc29 Pei Xiao 2026-03-10  512  	spi->clk = devm_clk_get_enabled(spi->dev, NULL);
+7dd262df6a0fc29 Pei Xiao 2026-03-10  513  	if (IS_ERR(spi->clk))
+7dd262df6a0fc29 Pei Xiao 2026-03-10  514  		return dev_err_probe(spi->dev, PTR_ERR(spi->clk),
+7dd262df6a0fc29 Pei Xiao 2026-03-10  515  				     "Failed to get SPI clock\n");
+34e3815ea459713 CL Wang  2025-12-15  516  	spi->clk_rate = clk_get_rate(spi->clk);
+34e3815ea459713 CL Wang  2025-12-15  517  	if (!spi->clk_rate)
+34e3815ea459713 CL Wang  2025-12-15  518  		return dev_err_probe(spi->dev, -EINVAL,
+34e3815ea459713 CL Wang  2025-12-15  519  				     "Failed to get SPI clock rate\n");
+34e3815ea459713 CL Wang  2025-12-15  520  
+34e3815ea459713 CL Wang  2025-12-15  521  	return 0;
+34e3815ea459713 CL Wang  2025-12-15  522  }
+34e3815ea459713 CL Wang  2025-12-15  523  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
