@@ -1,87 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E9143E4AE;
-	Tue, 10 Mar 2026 10:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C8236E47E;
+	Tue, 10 Mar 2026 10:50:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773137585; cv=none; b=QCZ/pdWwRXFBuZXgpmzTnVXQukwGXrfnw6VZcHhCGh5piNqn88QbqpCFeiQVgGllPhadwQ87ERfiOqX7ItA1NfRn+xmfERQq5a3RpNiLKLBgar1cArlp0gV7ldkCVI4/h5giAkJT3755+AnJ5/VlywIYtnRyTvXgITF72Jdsjf0=
+	t=1773139816; cv=none; b=tWt8PydVmdQPvu7L8K7lTumPQnEVdOt/auczWjSba+yT0idDFaeiOrZmnN8xfmovGTSyqRa3ilm53DyzVu6dWkbum59bJq5lDGXDMVTbNBjXL2AjtyHYEJMpfpXpUN+fnjkmamcZBOQkZ7X2zakH/zWSKyxcWJHqdqJB9i+DwMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773137585; c=relaxed/simple;
-	bh=kGl1AiP2y4nJT1Ekz+dqxJlitvGyd3vY/7cfmzQLFs4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=pPd7Ah/5PaUr7Js2BOd+FGIqY6grF6Qp7HCWdxi63kbbDC46P7EqRMOlr8ihxkUX95O1TVzcEut7oUsxN2H28bqcq/mfEnk6g+slfLzPDHL7fKAqKY2bMaFDegKlBODRs57BNDo81kDlahCF+ch8ppjolbcNnr+PxvPbuikUIEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AHvDJ3mE; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773139816; c=relaxed/simple;
+	bh=lv/Ndv2cGNSU8aZpViy8aWp8+gArFm7Nl+ywKCt1J2w=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=iNJg3yWWB0dOa1JrPYpaY+iQtWPC+c2UdoZfPEN/JaYfaymCBq9aVT8WTd+nhYeVxMSn78wiMNfSgZGY0QjjcF2/TxLTkBparlq12bXjKeJ1wsSC+LLjne/kq5vNacsAesU3QHMsHCHS2kI6/WoR6AnPBrCmEsMrz+bJ8O1Jank=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mz8OWw/n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AHvDJ3mE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773137583; x=1804673583;
-  h=date:from:to:cc:subject:message-id;
-  bh=kGl1AiP2y4nJT1Ekz+dqxJlitvGyd3vY/7cfmzQLFs4=;
-  b=AHvDJ3mE2h6nArPqjxEZGKlnrJklPJ9f5kTYPJJG5EW9rWpDolQ60Asr
-   XxupEx178UgFcmu+07KNw/trPb1/tZEleZX7LfSitvGtVC6GeKRPgcHqk
-   w2/EUuZFP/pihNzpy4X9MX6+Kk6FnXR4LRSy+WWZMtTjWDgRUxAb5e9BP
-   FI2EmAKMVcE9vUhmzJM6lSk2jzzRlKNA6AUXv3zSzDn9DYYimikYLbRt1
-   fHFuNJYPdAyMWKgeP59z6jUveOZ60FCKTG5bKnud5EEfpaATdX7q62Qhq
-   a9VC6dbm3xnIvIZQ6ulUqeti6pKAPE25R9BVNHsmsaJ3NdyvPf5VqmICJ
-   g==;
-X-CSE-ConnectionGUID: nI+ffiXUSoiSiqIHDa/i8A==
-X-CSE-MsgGUID: 0AjF8LF0RuaQY3x09xTd/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11724"; a="76787713"
-X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
-   d="scan'208";a="76787713"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 03:13:02 -0700
-X-CSE-ConnectionGUID: TXWG15DFRJ6D30KbDn3Urg==
-X-CSE-MsgGUID: ic6QgQWuQSGPXvuipuo+Tw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,112,1770624000"; 
-   d="scan'208";a="216864156"
-Received: from lkp-server01.sh.intel.com (HELO 434e41ea3c86) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 10 Mar 2026 03:13:01 -0700
-Received: from kbuild by 434e41ea3c86 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vzu5C-000000001i2-2T0O;
-	Tue, 10 Mar 2026 10:12:58 +0000
-Date: Tue, 10 Mar 2026 18:12:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 140/141] ld.lld: error: undefined
- symbol: auxiliary_device_init
-Message-ID: <202603101801.WkDiQ5K0-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mz8OWw/n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDB5AC19423;
+	Tue, 10 Mar 2026 10:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773139816;
+	bh=lv/Ndv2cGNSU8aZpViy8aWp8+gArFm7Nl+ywKCt1J2w=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=Mz8OWw/nAP45YmbN1qfVWB3MpD98Hq/VK4sTreUz7bDKtUvA6dRpWW/XE73U4ugEG
+	 HhK4RLYI4/BTv0PJfPT90p+fYzsFN01N89hUx7C94T9HjSoaosuONwyCThwlQtoYJQ
+	 Wrg01OKBiiEMs3wpPqXT2AaQBxJNENgHYrypN/aMO+uyGPgOXNmnaUF3ijVO5wqqVb
+	 89W5niv3FFHxKAfnIe8mubdmZSPDym/rdkgsKua1F4DFVyv9hwxIvfeeLSuPKZRS/8
+	 9O8mqN/poUxM/G3DmidqbMQj8phGfEZ50QXVjxgHCRGO3PYM5dnyFadj/po+kEVEZs
+	 I+EFrtjnwVVJg==
+Message-ID: <a7d5ed43-2ab4-4338-87f0-7a50af463018@kernel.org>
+Date: Tue, 10 Mar 2026 11:50:11 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: vbabka@kernel.org
+Subject: Re: [PATCH] mm/debug: optimize once judgment with clang
+Content-Language: en-US
+To: Xie Yuanbin <qq570070308@gmail.com>, rppt@kernel.org,
+ david.laight.linux@gmail.com, akpm@linux-foundation.org, david@kernel.org,
+ ljs@kernel.org, Liam.Howlett@oracle.com, surenb@google.com, mhocko@suse.com,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+ justinstitt@google.com
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20260309153405.20130-1-qq570070308@gmail.com>
+In-Reply-To: <20260309153405.20130-1-qq570070308@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   4ebf43399f2d20075ab4ab03c0270169af62ba36
-commit: cc2b80418f5a9958cc550deeea9a65d598afe514 [140/141] ACPI: video: Switch over to auxiliary bus type
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260310/202603101801.WkDiQ5K0-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c32caeec8158d634bb71ab8911a6031248b9fc47)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260310/202603101801.WkDiQ5K0-lkp@intel.com/reproduce)
+On 3/9/26 16:34, Xie Yuanbin wrote:
+> commit 242b872239f6a7deacbc ("include/linux/once_lite.h: fix judgment in
+> WARN_ONCE with clang") helps optimize performance and size under the
+> clang compiler, but the modification is not complete.
+> 
+> Port the modification to VM_WARN_ON_ONCE_PAGE(), VM_WARN_ON_ONCE_FOLIO(),
+> VM_WARN_ON_ONCE_MM() and VM_WARN_ON_ONCE_VMA().
+> 
+> Cc: Mike Rapoport <rppt@kernel.org>
+> Cc: David Laight <david.laight.linux@gmail.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Xie Yuanbin <qq570070308@gmail.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603101801.WkDiQ5K0-lkp@intel.com/
+We don't need to make debug code (hence perf doesn't matter there) more ugly
+just for clang's sake, I think.
 
-All errors (new ones prefixed by >>):
+> ---
+>  include/linux/mmdebug.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/mmdebug.h b/include/linux/mmdebug.h
+> index ab60ffba08f5..a167c5aa525e 100644
+> --- a/include/linux/mmdebug.h
+> +++ b/include/linux/mmdebug.h
+> @@ -60,7 +60,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+>  	static bool __section(".data..once") __warned;			\
+>  	int __ret_warn_once = !!(cond);					\
+>  									\
+> -	if (unlikely(__ret_warn_once && !__warned)) {			\
+> +	if (unlikely(__ret_warn_once) && unlikely(!__warned)) {		\
+>  		dump_page(page, "VM_WARN_ON_ONCE_PAGE(" __stringify(cond)")");\
+>  		__warned = true;					\
+>  		WARN_ON(1);						\
+> @@ -80,7 +80,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+>  	static bool __section(".data..once") __warned;			\
+>  	int __ret_warn_once = !!(cond);					\
+>  									\
+> -	if (unlikely(__ret_warn_once && !__warned)) {			\
+> +	if (unlikely(__ret_warn_once) && unlikely(!__warned)) {		\
+>  		dump_page(&folio->page, "VM_WARN_ON_ONCE_FOLIO(" __stringify(cond)")");\
+>  		__warned = true;					\
+>  		WARN_ON(1);						\
+> @@ -91,7 +91,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+>  	static bool __section(".data..once") __warned;			\
+>  	int __ret_warn_once = !!(cond);					\
+>  									\
+> -	if (unlikely(__ret_warn_once && !__warned)) {			\
+> +	if (unlikely(__ret_warn_once) && unlikely(!__warned)) {		\
+>  		dump_mm(mm);						\
+>  		__warned = true;					\
+>  		WARN_ON(1);						\
+> @@ -102,7 +102,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+>  	static bool __section(".data..once") __warned;			\
+>  	int __ret_warn_once = !!(cond);					\
+>  									\
+> -	if (unlikely(__ret_warn_once && !__warned)) {			\
+> +	if (unlikely(__ret_warn_once) && unlikely(!__warned)) {		\
+>  		dump_vma(vma);						\
+>  		__warned = true;					\
+>  		WARN_ON(1);						\
 
->> ld.lld: error: undefined symbol: auxiliary_device_init
-   >>> referenced by scan.c
-   >>>               drivers/acpi/scan.o:(acpi_default_enumeration) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: __auxiliary_device_add
-   >>> referenced by scan.c
-   >>>               drivers/acpi/scan.o:(acpi_default_enumeration) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
