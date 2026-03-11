@@ -1,138 +1,99 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF6A23BCED
-	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 09:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126213DA7F5
+	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 11:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773222130; cv=none; b=hCDeZKrHbbgxyrUx/bG3GU/4XpuWdvoClIrdVxwkaxw4o0KpLAv++kg0P79lJlz2BpkRe28kDbAJ+8vJdCzTn03SyXX1sI/oE6nHfc39HT2/GO3as9k3AJjkwLk0WHh22N+E3EfimOcIa07qnv9e/jEDIixL0TQGkxZW0ly2oHc=
+	t=1773227175; cv=none; b=QvM28XGGl1sU3AuJInUCWsmoRdM40pOzU+MpI6bxFOjX6UINixPdKGcD0DyI2iqx9OVRJAadDy4ks+K4cPAUtzxj1MoU35S+J784kxj5U5126ebXNNfJbX+O1dXaVVUXPwyYO3+bcq4VWqWOQr3AqThUh+E7u0hBgfDWPCFgi/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773222130; c=relaxed/simple;
-	bh=831Y7f7Em6bxLtHwM64xs+4tqZstjbfs/IXcJ1gJR2g=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=SCCL75hQlYaBcCOOGcczWcFY4fUEpsXTKKxCJbqkbki7TAku7P5PG4ty/iwLTxN2wRpUj2qgEb/FHW3JMfjeIYGUB54mIDBK6LNdu3UO2IeqZaMDcrL1cXRYrk7zhqUv97Rol+NIBJV9i+1Q/YVOvGpY6cgQCkIkkTc8TVuMTXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PPkQZx6/; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773227175; c=relaxed/simple;
+	bh=kfpEWkH2XpzSfGzipu6OR2Z7FxO8Oow3FzZ0Lraka2o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ECy2s260aHR9LPRJ2a4j/IJsjeDJisfZGZuaFSqHw2ZTfpBjr+OosZ0NlnPWe3nX6jczLwd1sdnhTGHTpvc9XRoorQHiKJ0RFtCfDDc8xPSdrlMeycDjH5M0t2k4tWzyUxrWRJhAHysO7RZYsSoF7XjIYGlrxBp7TlpFi3XXn7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=orz5LePz; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PPkQZx6/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773222127;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=wEPVajOJ9mIka+XV8vlFamNU7l5OtfPujQKlK9pWmsQ=;
-	b=PPkQZx6/fwIiqTZ+y3JoqT6voknxuTENamhJQ090vMon+bksxRID4Aqm4sxKre+THBkGRt
-	porDYEu1ZQsr7x3/U/CrwtQQ7CHUo/VLx8g0ENeqOlsi1vLOzf3JnBnyR9IYfkyzuHAQ4W
-	4AxTHjntS4jtxXn4xy0giqd/2KUzDYc=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-414-I2UzPlYYMUqlH_j0FAelAA-1; Wed,
- 11 Mar 2026 05:42:06 -0400
-X-MC-Unique: I2UzPlYYMUqlH_j0FAelAA-1
-X-Mimecast-MFC-AGG-ID: I2UzPlYYMUqlH_j0FAelAA_1773222125
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C46D91956095
-	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 09:42:05 +0000 (UTC)
-Received: from [172.20.219.202] (unknown [10.30.44.44])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4515E1800351;
-	Wed, 11 Mar 2026 09:42:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc3,
- upstream-mainline, b29fb882)
-Date: Wed, 11 Mar 2026 09:42:05 -0000
-To: llvm@lists.linux.dev, ftjahjad@redhat.com, bgoncalv@redhat.com
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="orz5LePz"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=8TahdgEn3gMu5VtPViQvPPRTFhQLJ1Z62fN7PBBs1bk=; b=orz5LePzw3opuW/yz8CcEmozDO
+	xiizCf5g/4MxZjstVBcXke9ZnZO0KfEYJyfLt0qfJxIIKWpBbcS25b5NkpFXIyAuerC1Y725y3LI1
+	LmM0yprkpnTTnsGvdRnTLlYjnZARPC5drSicT9Fq5KQr8WyNNGJF+1kOGcLp5EIkuE3AL72ee/fUz
+	i4g9g/jZnVHSAF6x8tSUjURxXZ2eTOJKvuxIej/M2PFOoechdoDgi51M4IPbIJI7whfeRMrmMMkBm
+	FHy5O1AL5RyUC27FW2JJ5juzEuX3Q9MFEWUsLs4jHoo+n6nXEasBBdDdErUBGTx5ebJCzAqOLxnQK
+	1CorYs0A==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1w0HNx-00000009VAZ-34x3;
+	Wed, 11 Mar 2026 11:05:53 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 395B8300462; Wed, 11 Mar 2026 12:05:53 +0100 (CET)
+Date: Wed, 11 Mar 2026 12:05:53 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: urezki@gmail.com, ryan.roberts@arm.com, kevin.brodsky@arm.com,
+	samuel.holland@sifive.com, dave.hansen@linux.intel.com,
+	jeremy.linton@arm.com, weixugc@google.com, ljs@kernel.org,
+	ryabinin.a.a@gmail.com, rppt@kernel.org, bp@alien8.de,
+	luto@kernel.org, jan.kiszka@siemens.com, mingo@redhat.com,
+	david@kernel.org, mhocko@suse.com, akpm@linux-foundation.org,
+	andreas@gaisler.com, kas@kernel.org, Liam.Howlett@oracle.com,
+	morbo@google.com, thuth@redhat.com, catalin.marinas@arm.com,
+	ankur.a.arora@oracle.com, kbingham@kernel.org,
+	nick.desaulniers+lkml@gmail.com, andreyknvl@gmail.com,
+	dvyukov@google.com, corbet@lwn.net, leitao@debian.org,
+	hpa@zytor.com, tglx@kernel.org, yuanchu@google.com, ardb@kernel.org,
+	vincenzo.frascino@arm.com, tabba@google.com, joey.gouly@arm.com,
+	nsc@kernel.org, will@kernel.org, yeoreum.yun@arm.com,
+	nathan@kernel.org, maciej.wieczor-retman@intel.com,
+	skhan@linuxfoundation.org, axelrasmussen@google.com, osandov@fb.com,
+	surenb@google.com, justinstitt@google.com, kees@kernel.org,
+	vbabka@kernel.org, hsj0512@snu.ac.kr, trintaeoitogc@gmail.com,
+	jackmanb@google.com, maz@kernel.org, glider@google.com,
+	linux-doc@vger.kernel.org, x86@kernel.org,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+	workflows@vger.kernel.org, llvm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH v11 00/15] kasan: x86: arm64: KASAN tag-based mode for x86
+Message-ID: <20260311110553.GM606826@noisy.programming.kicks-ass.net>
+References: <cover.1773164688.git.m.wieczorretman@pm.me>
+ <20260310190022.GI606826@noisy.programming.kicks-ass.net>
+ <abBu-M5esEYWScDf@wieczorr-mobl1.localdomain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <66185.126031105420600514@us-mta-414.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 1axr1rJPTULY4Z0K1r8MoXU8wHHdjZUm2W9YJchUtbk_1773222125
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abBu-M5esEYWScDf@wieczorr-mobl1.localdomain>
 
-Hi, we tested your kernel and here are the results:
+On Tue, Mar 10, 2026 at 07:30:36PM +0000, Maciej Wieczor-Retman wrote:
+> On 2026-03-10 at 20:00:22 +0100, Peter Zijlstra wrote:
+> >On Tue, Mar 10, 2026 at 05:51:19PM +0000, Maciej Wieczor-Retman wrote:
+> >
+> >> ======= Compilation
+> >> Clang was used to compile the series (make LLVM=1) since gcc doesn't
+> >> seem to have support for KASAN tag-based compiler instrumentation on
+> >> x86. Patchset does seem to compile with gcc without an issue but doesn't
+> >> boot afterwards.
+> >
+> >Can you put all that under a specific CONFIG and make that depend on
+> >CC_IS_CLANG?
+> 
+> I made HAVE_ARCH_KASAN_SW_TAGS depend on CC_IS_CLANG, and that controls all the
+> software tags stuff, like ARCH_DISABLE_KASAN_INLINE through KASAN_SW_TAGS.
+> And ARCH_NEEDS_DEFER_KASAN is for if KASAN is compiled but LAM is not available,
+> so that it gets disabled in runtime.
+> 
+> But sure, I suppose I can add a separate CONFIG with CC_IS_CLANG to these three
+> so the clang connection is more transparent.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'v7.0-rc3-ksmbd-server-fixes' of git://git.sa=
-mba.org/ksmbd
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2377317725
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2377317725_s390x_kernel_kcidb_tool_20854717_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: fedora: avc:  denied  { create } for  pid=3D1 comm=3D"system=
-d" name=3D"io.systemd.Hostname" scontext=3Dsystem_u:system_r:init_t:s0 tcon=
-text=3Dsystem_u:object_r:var_run_t:s0 tclass=3Dlnk_file permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2443788
-            Affected tests:
-                Boot test [aarch64, ppc64le, x86_64]
-                Reboot test [aarch64, ppc64le, x86_64]
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Right, because building but not booting is BAD :-) While compiler
+specific features are a dime a dozen.
