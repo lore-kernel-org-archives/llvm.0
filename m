@@ -1,93 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DAF371862;
-	Wed, 11 Mar 2026 21:57:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EB135E930;
+	Wed, 11 Mar 2026 22:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773266227; cv=none; b=QSfbpE9JlqFjW9OuzNOeDvpQWkwvbcyc8jobbm7hqvf9bPH3EdLSzTGe/fVn98Fh+JGip8FY4O+5sYVAqNUvXsFjcI7tGQ3e6o9VvHymkGWNj289JuyAzZk6t3m2eK9LwdwSnmWVgpM1ueJ6z62NdbpeiAmBwTC1sAMvU4EnxU0=
+	t=1773269848; cv=none; b=NzFrbgqctDA5qYrMCEsRig7nHB+PNYAdTXOyAMfCD4SDfyseWmh04UTLV9QR3BYi5pZsMxB3kWBcje4O74a2E+F28VUMtkQYUsVgAzTJkiUFJa3YCuF0EE79FgunGUJM5tKVt+58S5gux5K33QbMpOdVEU2nRQq0uUeUUPUHL7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773266227; c=relaxed/simple;
-	bh=OsG9K40sR4G/EGEZgUu0mPs+Eu/B6Q92ozaspornThw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jINX0NrMJub7OT4eg4ZDTFJyqwv1G04g0RjPLzjI+9vQQaTHUkmgW+h4+yMkRgPxF15ywIg3FGl2uvKIlf371tRhYTvUw+wGNJt8XwXCnfb7gzg0c+qTugqmCSKZ1oS4k8FdpJnFGcV77vBXnZgkg6YFQndCavGe5EnK61ER3aQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M3pmnHwq; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773269848; c=relaxed/simple;
+	bh=xi0AbXfQmrLwVfnhq6kkJmstaWpN6l8PVzrhpkwa73I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o9UfyaspPYX8IpBNh+2OOo2oExPeZElEcpzRb0VNCBJzleYX39s4jM9bPcrFYyYQLfKWnx2XGOVOtSOI7BzowOR+8QOlgDprqUh7677Yn7LC1fymoK9raPlnl3MEx/871nJazUkkllKNAGpbzvv20Z+w9b+zoh6+qy1OeImLJg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=u/o0XCNt; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M3pmnHwq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773266225; x=1804802225;
-  h=date:from:to:cc:subject:message-id;
-  bh=OsG9K40sR4G/EGEZgUu0mPs+Eu/B6Q92ozaspornThw=;
-  b=M3pmnHwqINvTK17DgA5ZaiUM9ktzk6W35705T5/5hlojEFRfZ+cH2fbY
-   FRu/R9AotHRJwQafu2QAetMjNUGta+sq7CdNdOWoLJL24kG8ueWtpxi/f
-   ZT75fdhHdO+68hoeNveMhI2SRhPPlsRmwCFG9gt4Pm/7UpbiChR56BdhB
-   /InZwfPDIKlNmdA5bNLMSU0tPZijjb+bzSVCYeTW/BOygFYljkj+bgaLl
-   czEbac4B0rHN1Iy8cpzrKQ+jl9q2ZFgOnvX9EJjM+uhdwQ/XPYgh7pG/l
-   Lx7YUCqnR2QiDAiWbueqmwfEgLU6iCdCmukR8VZ6ytvzJHGbf+6DEPIBb
-   g==;
-X-CSE-ConnectionGUID: 1oDd5edcTNO+thYOpE7zXQ==
-X-CSE-MsgGUID: dwwjiZYxRYmrQFAUU0fKUg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="77955595"
-X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
-   d="scan'208";a="77955595"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 14:57:05 -0700
-X-CSE-ConnectionGUID: ZNpBYw7hR2mkrpzmbmWLJg==
-X-CSE-MsgGUID: 79MQ8kheRu+0PLJnJTA4Mw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
-   d="scan'208";a="243629171"
-Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Mar 2026 14:57:03 -0700
-Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w0RY4-000000001kR-1ytQ;
-	Wed, 11 Mar 2026 21:57:00 +0000
-Date: Thu, 12 Mar 2026 05:56:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vincent Donnefort <vdonnefort@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Marc Zyngier <maz@kernel.org>
-Subject: [linux-next:master 5480/5731]
- arch/arm64/kvm/hyp/nvhe/trace.c:16:10: fatal error: 'simple_ring_buffer.c'
- file not found
-Message-ID: <202603120516.w7mPa5ZC-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="u/o0XCNt"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=I4DJD2x5EZNAH8ZiryIU8tR51Bg3iZew9jLVM41Ptkk=; b=u/o0XCNt4la6bkZT+uAavI7ZtN
+	yBb8xUVAWjG4hvSX1+OakbjcCJWeO5wIQa5cFb7j0KTGn+eI+hoyFKS6ZdsRZZ17CbM1laONGNAvy
+	1zLT0oUJzy10TkM/47nkrasvVdOJ0nZG/EldskDTMSO+mkeJ1d76DKuCnAOD3F2J7yju1ExCSh9/E
+	VfAksZy8rsLE+TipeM3ToPGf7/xl0gfroymxcUI0b+HEXU8KTudGUHu9EobcedyIKbKxiN4FsMozU
+	dcYsUR19ou/WhRSKhVmkmG+iaJQ/KuGVFQX0VlSS/v0ONSHXandxMBjPHmi6ehuXD1tjfjXRwn3aC
+	2Cf2CtZw==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1w0SUR-0000000AQjA-3gwx;
+	Wed, 11 Mar 2026 22:57:19 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id D7478302EC2; Wed, 11 Mar 2026 23:57:17 +0100 (CET)
+Date: Wed, 11 Mar 2026 23:57:17 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Jann Horn <jannh@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev,
+	Ingo Molnar <mingo@redhat.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [PATCH 0/3] KCOV function entry/exit records
+Message-ID: <20260311225717.GY606826@noisy.programming.kicks-ass.net>
+References: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f90aadf1c67c8b4969d1e5e6d4fd7227adb6e4d7
-commit: 680a04c333fa29bf92007efe11431be005e8c4bb [5480/5731] KVM: arm64: Add tracing capability for the nVHE/pKVM hyp
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260312/202603120516.w7mPa5ZC-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603120516.w7mPa5ZC-lkp@intel.com/reproduce)
+On Wed, Mar 11, 2026 at 10:06:13PM +0100, Jann Horn wrote:
+> This series adds a KCOV feature that userspace can use to keep track of
+> the current call stack. When userspace enables the new mode
+> KCOV_TRACE_PC_EXT, collected instruction addresses are tagged with one
+> of three types:
+> 
+>  - function entry
+>  - non-entry basic block
+>  - function exit
+> 
+> This requires corresponding LLVM support; an LLVM patch implementing
+> this feature has been uploaded for review at
+> <https://github.com/llvm/llvm-project/pull/185972>, but hasn't landed yet.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603120516.w7mPa5ZC-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   clang: warning: no such include directory: './kernel/trace/' [-Wmissing-include-dirs]
->> arch/arm64/kvm/hyp/nvhe/trace.c:16:10: fatal error: 'simple_ring_buffer.c' file not found
-      16 | #include "simple_ring_buffer.c"
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +16 arch/arm64/kvm/hyp/nvhe/trace.c
-
-    15	
-  > 16	#include "simple_ring_buffer.c"
-    17	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+And I don't suppose KCOV will finally honour noinstr ?
