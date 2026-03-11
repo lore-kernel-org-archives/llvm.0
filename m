@@ -1,52 +1,63 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EB135E930;
-	Wed, 11 Mar 2026 22:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634A03909BF;
+	Wed, 11 Mar 2026 22:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773269848; cv=none; b=NzFrbgqctDA5qYrMCEsRig7nHB+PNYAdTXOyAMfCD4SDfyseWmh04UTLV9QR3BYi5pZsMxB3kWBcje4O74a2E+F28VUMtkQYUsVgAzTJkiUFJa3YCuF0EE79FgunGUJM5tKVt+58S5gux5K33QbMpOdVEU2nRQq0uUeUUPUHL7c=
+	t=1773269953; cv=none; b=BkhSQXRLXgRVYBXhKGyrOKx8tIw0ifoCbOYu5vNOKwlVTLwRF+PtL8zt8gbzkXT9+lYYp8TqUwcEr5RR9uPJ1gKuBSGC6BxRry2b50rJme9zw3bMbr2003Xb865iGKKDKbSy/6j8AbUwBwmg5t4iIm8FHnd9HyX/pGr3O42fGMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773269848; c=relaxed/simple;
-	bh=xi0AbXfQmrLwVfnhq6kkJmstaWpN6l8PVzrhpkwa73I=;
+	s=arc-20240116; t=1773269953; c=relaxed/simple;
+	bh=LdDfjKM5xdtNNb47NSd1OkfYPktd1pYlbjrXP+Pjqos=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o9UfyaspPYX8IpBNh+2OOo2oExPeZElEcpzRb0VNCBJzleYX39s4jM9bPcrFYyYQLfKWnx2XGOVOtSOI7BzowOR+8QOlgDprqUh7677Yn7LC1fymoK9raPlnl3MEx/871nJazUkkllKNAGpbzvv20Z+w9b+zoh6+qy1OeImLJg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=u/o0XCNt; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=aEthAsTU+E6KEukqpUHjov8Kfi4niPiSW/keLjBczKUxvxrF5OCUwSR1l3RDt390bPx4fIgmU9SlmjPuXmSbPH7TI7oyho6Awong1dYif9nIjJo0N1uqXG7r6zt3yg71d0dLESAHf2OSz3DqkKl9JrVCpJ3YNUNLvbgvQ/IW6sM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iJE8BYrz; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="u/o0XCNt"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=I4DJD2x5EZNAH8ZiryIU8tR51Bg3iZew9jLVM41Ptkk=; b=u/o0XCNt4la6bkZT+uAavI7ZtN
-	yBb8xUVAWjG4hvSX1+OakbjcCJWeO5wIQa5cFb7j0KTGn+eI+hoyFKS6ZdsRZZ17CbM1laONGNAvy
-	1zLT0oUJzy10TkM/47nkrasvVdOJ0nZG/EldskDTMSO+mkeJ1d76DKuCnAOD3F2J7yju1ExCSh9/E
-	VfAksZy8rsLE+TipeM3ToPGf7/xl0gfroymxcUI0b+HEXU8KTudGUHu9EobcedyIKbKxiN4FsMozU
-	dcYsUR19ou/WhRSKhVmkmG+iaJQ/KuGVFQX0VlSS/v0ONSHXandxMBjPHmi6ehuXD1tjfjXRwn3aC
-	2Cf2CtZw==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w0SUR-0000000AQjA-3gwx;
-	Wed, 11 Mar 2026 22:57:19 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id D7478302EC2; Wed, 11 Mar 2026 23:57:17 +0100 (CET)
-Date: Wed, 11 Mar 2026 23:57:17 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Jann Horn <jannh@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev,
-	Ingo Molnar <mingo@redhat.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [PATCH 0/3] KCOV function entry/exit records
-Message-ID: <20260311225717.GY606826@noisy.programming.kicks-ass.net>
-References: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iJE8BYrz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773269952; x=1804805952;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LdDfjKM5xdtNNb47NSd1OkfYPktd1pYlbjrXP+Pjqos=;
+  b=iJE8BYrzNaI/oASBMwlc7eWeFRXTZsuIfBVpw4l6MUf/y7Zd36cvPuOe
+   w+/996kP7awJgHb8Ac/TRTmLJEkIgVXHpgmo0yJpiltIF2Icys0fXp3Vh
+   ncfZH9nB2OfBvOw0rR4dMRTbr2hOnMb6iHFDUI6O24yzVnt/wQLkWoKrb
+   TKDjvexCo3uT5AoSZnwjS1ngeVpEjUxZtC2ysSVMRWs6BjSTUE4eiHWPx
+   9td+slw9jACcPkODaqRMRaHG/HX4doQ0XprPdLghUvD6qOLFJ5o1IfIpY
+   lLkL9tdJMFBToj/TQpDqCRELTH6GlDfBfqwhYvvaPr7C8avI/w4JJ0zA3
+   Q==;
+X-CSE-ConnectionGUID: 4V672LNWSJGYZmtE1NIjzw==
+X-CSE-MsgGUID: yXFjj0dGQoeHoE1r07jzXQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="91733929"
+X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
+   d="scan'208";a="91733929"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 15:59:12 -0700
+X-CSE-ConnectionGUID: ROUf1J18RVSxm9LAgxnLEw==
+X-CSE-MsgGUID: Q3YfRIKSTw++gwR9PsPKyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
+   d="scan'208";a="243641634"
+Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 11 Mar 2026 15:59:09 -0700
+Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w0SWA-000000001nH-0qGV;
+	Wed, 11 Mar 2026 22:59:06 +0000
+Date: Thu, 12 Mar 2026 06:58:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jamie Lindsey <jamie@matrixforgelabs.com>,
+	rust-for-linux@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ojeda@kernel.org,
+	paul@paul-moore.com, aliceryhl@google.com, jmorris@namei.org,
+	serge@hallyn.com, jamie@matrixforgelabs.com
+Subject: Re: [PATCH v2 3/5] rust: kernel: add LSM abstraction layer
+Message-ID: <202603120654.DWidINbR-lkp@intel.com>
+References: <0102019cdb4c705e-7d46b4f3-5cbb-4a6a-b315-e10f182fa987-000000@eu-west-1.amazonses.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,20 +66,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
+In-Reply-To: <0102019cdb4c705e-7d46b4f3-5cbb-4a6a-b315-e10f182fa987-000000@eu-west-1.amazonses.com>
 
-On Wed, Mar 11, 2026 at 10:06:13PM +0100, Jann Horn wrote:
-> This series adds a KCOV feature that userspace can use to keep track of
-> the current call stack. When userspace enables the new mode
-> KCOV_TRACE_PC_EXT, collected instruction addresses are tagged with one
-> of three types:
-> 
->  - function entry
->  - non-entry basic block
->  - function exit
-> 
-> This requires corresponding LLVM support; an LLVM patch implementing
-> this feature has been uploaded for review at
-> <https://github.com/llvm/llvm-project/pull/185972>, but hasn't landed yet.
+Hi Jamie,
 
-And I don't suppose KCOV will finally honour noinstr ?
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rust/rust-next]
+[also build test ERROR on linus/master v7.0-rc3 next-20260311]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jamie-Lindsey/rust-helpers-add-C-shims-for-LSM-hook-initialisation/20260311-131258
+base:   https://github.com/Rust-for-Linux/linux rust-next
+patch link:    https://lore.kernel.org/r/0102019cdb4c705e-7d46b4f3-5cbb-4a6a-b315-e10f182fa987-000000%40eu-west-1.amazonses.com
+patch subject: [PATCH v2 3/5] rust: kernel: add LSM abstraction layer
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260312/202603120654.DWidINbR-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603120654.DWidINbR-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603120654.DWidINbR-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error[E0433]: failed to resolve: use of unresolved module or unlinked crate `bindings`
+   --> rust/doctests_kernel_generated.rs:8845:40
+   |
+   8845 | kernel::define_lsm!(MyLsm, "my_lsm\0", bindings::LSM_ID_UNDEF as u64);
+   |                                        ^^^^^^^^ use of unresolved module or unlinked crate `bindings`
+   |
+   = help: you might be missing a crate named `bindings`
+   = help: consider importing this crate:
+   kernel::bindings
+--
+>> error[E0412]: cannot find type `MyLsm` in this scope
+   --> rust/doctests_kernel_generated.rs:8845:21
+   |
+   8845 | kernel::define_lsm!(MyLsm, "my_lsm\0", bindings::LSM_ID_UNDEF as u64);
+   |                     ^^^^^ not found in this scope
+--
+>> error[E0433]: failed to resolve: use of unresolved module or unlinked crate `bindings`
+   --> rust/doctests_kernel_generated.rs:8898:44
+   |
+   8898 | kernel::define_lsm!(MyLsmType, "my_lsm\0", bindings::LSM_ID_UNDEF as u64);
+   |                                            ^^^^^^^^ use of unresolved module or unlinked crate `bindings`
+   |
+   = help: you might be missing a crate named `bindings`
+   = help: consider importing this crate:
+   kernel::bindings
+--
+>> error[E0412]: cannot find type `MyLsmType` in this scope
+   --> rust/doctests_kernel_generated.rs:8898:21
+   |
+   8898 | kernel::define_lsm!(MyLsmType, "my_lsm\0", bindings::LSM_ID_UNDEF as u64);
+   |                     ^^^^^^^^^ not found in this scope
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
