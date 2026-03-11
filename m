@@ -1,67 +1,66 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DFC348463
-	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 21:06:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EC2348463
+	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 21:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773263213; cv=none; b=TkTRtV4yCp9so2b1e5Z28Vakxc55YV3k4qVauuh7HfKTcujnQI1nEZDGp8oRWdbJnEf59NPuy6qIhJ2xdIRrqPIh3pjbUdjJ//wVjrLDtZDl1fsLkzdREWVEvc4Vd8QdRU3mhnwrgz5PEg+ZgRMKbbncdBc0/KAy9N7xeWI6daU=
+	t=1773263215; cv=none; b=i+/RvZBbkrHWOeZNTbfUxSxs9e+/2oacV/gQrk+5xByiX1Grh1Uzmtc28Z7leo2gZwlOwUtq1Fgo6d7sUBM64G7THH31BKPscVGl4YSIGXR7JVXnzrFV4B9aHWdNObH4xirOt6d82MbmzMVNU9THNeYwf6M0fEbfuZP46t2KbsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773263213; c=relaxed/simple;
-	bh=5DsfSgu+FPcywkrKjdBKgz/A0iooKEhY4/hZbp/L+BY=;
+	s=arc-20240116; t=1773263215; c=relaxed/simple;
+	bh=gl1kEdDECICBLTyyKuOyRBl/9O6Rh/+H5tSpq5Vi8UM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MxlYQ9JTXTASkiiF++4mgexRKxyIJezoo3hGKFtrLbdfQwi/gHsiYge3KPUhRCEtKxnYgJDQBZ6XR1u4XUTthMvTrHRtK9o/UYZcxZu/azXNpFIEMUHQwpkj9pmtnt+yumnuGEQlPdymRW0qE+90Xoc9UbPyvyM3eq3nbhox+OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aqB2QkcZ; arc=none smtp.client-ip=209.85.128.46
+	 In-Reply-To:To:Cc; b=t++0ioEQ35+Ll0b1Ki57HB8wfoQ5EvaqLNfR+CpMJcCKz0dFFZl0qpktFeyp11KRiJcEkhVqITbjhDSoNTV0GzAtGJNxo6vaW+C2ay/8RTeGkxKHdzwqEJkOXBPTZGMdRP9Y7pPrUeAenmL7EvQCEL71ej+FsTNg0BkZCx8cowE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gglQkCnA; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aqB2QkcZ"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4852ef20fe8so8145e9.1
-        for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 14:06:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gglQkCnA"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4852ef20fe8so8185e9.1
+        for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 14:06:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773263211; x=1773868011; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1773263212; x=1773868012; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NzKnYN2/boQ9iOCZJ64ZuiUoSY4TlQ9bsFVP29RzfIo=;
-        b=aqB2QkcZr1cL3OoLhLkJN5P/2hFldYOYSwsc+xxD2n7vCxr3iL/hNzWXf5RRjShBMz
-         lnEFFk4Fl8cC800oauWOcRRJif6C04W4G20bmyqzoDUyhCV5ZeALc7mABlQrH/HiduHy
-         x9Zt0Wb6Ax+zhz4KWNALIfmkgRc2OJxrm21vqx4rGZOpvQL5UEC+mDeZMUb2QKY2eIuz
-         S2pgaeLsIAoI8K3lUXFxn17sa8oBgtUajVUGiuQig0YwIJKJ35fsjWoQb4KB27WP/Eme
-         FpnKQvlMlGMGGUzJrkYsogXqvelAst/OfzUkJ1mOzMRyDSgngnrjPhKGmJfyoN2Mz4tT
-         B9bA==
+        bh=jjaMhHW49Qnvje+/av4ZyUIAC9q72eON3wvAJYxVTt0=;
+        b=gglQkCnAFbuhmjqr5R4wZz/nZpEOLlxyUK9qT/kFX1et3ilngvop5/kL3ku5Cp+g4Q
+         ZiGbfO3Fh6l+WRWMs1oHiAqvxTX255OJ4IdbNzd/nITasF/YYExMkqMiXPchjqSZLfuT
+         4Etp+yKbCa6jnKj4N5UXtxKlwp1kjPxmzWmXNqnomLOfKZBgDjLryy6gV1WtrjzP14d3
+         uhiPCi3Fzi9uj1wsM+A6GWDHc82D5cri5SnhRNCefuVLJKANGYXbARB40xqwr7QaFmWk
+         hx91f3+M0dRv2QEh2psA5S2wXmzpP0eX/qSS9lDF2PKbW/3GVZzCGKl/5h/kLzWQ/Phk
+         0dKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773263211; x=1773868011;
+        d=1e100.net; s=20230601; t=1773263212; x=1773868012;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=NzKnYN2/boQ9iOCZJ64ZuiUoSY4TlQ9bsFVP29RzfIo=;
-        b=EvUf7O6kr6cP+9p2y4VXWNy7SZ+eoOI8oIuBeGEd0Io9bHuFsI0HPq7DjoHN5r/IEi
-         NK4dJlb5+nka4jpuxav57NzX68LhC7QkZcMTzrWerBvcOxf92jrWGWBZ0krKeyXNC6So
-         X+h9QcXddo0D6AOES4p8kyadZC/fCHBs9syvyZQ0VHkNKjdahKdQPYxm/rRiMLtXKaMp
-         K+4I7kPZj8GthNqGnG1eLN6XqWS3/NRG07O2DoZY1AvMGfHU4OT1/VlvaLhiC0oT7tDj
-         E7H+e3jqx06co9FOOO4RgCaJMdUr4kKqeKduUK1gCZHQH+RtnHSP4Njadeoif4Q4PoqB
-         Hh7w==
-X-Forwarded-Encrypted: i=1; AJvYcCWugRpg82KZencWsAX3VxYDoH3m5bHrYo6KRbbrp8cDQdnO+xp5zyAHbxLOohMvjmPD3OyK@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywj6TjaDkIR/etwcWJk7A/WMlKeE6qLBQo0n+2dVTcFFmxpVWXr
-	hFNJeZcA41+TICQfAHeCcDIf2kDQXEwf8fpeU62tGVcT460uTZYAgrQLzNmSWTdfcA==
-X-Gm-Gg: ATEYQzx2WZ1v739rG57xY9cMpnHIyVy4nzvTwgg7Dg4ImAJh2rEAlX4t9Wbmy44Squ8
-	tE/f1eJjq2+OXMIsElcMovBuvDm8UKoEs+E2Y2ICd5BFf+2WAEMsh5zxpeU8ZSy3qoAshMPjcM7
-	AkIkAi+Qi8wnDR7P6oIm2epDoW7O/d+07naVxGwNU+eeN2xdsyZeA127ItbO5RUp2vHiMIXTuKE
-	HklP0byYDzlAh/ICErOJrtQDjakTHEaMf2kEmAvzVSpffaS8213NqPjkIu1GVeahm5Dap9JRwr6
-	V6nA8R3EYk2nV+kVXaoFr52dI1zkOQSXjIDYhW5l6hifVSUYwF7iWj9ZTkgAGvWc6FI/JckFTJw
-	p0zz7z94dt7c9Cjvt9d4R4hl7BhK0oZjQmh7+snyM5OipvROu+HI/X+z2VI2crsP1rQ41iECLvD
-	Mw648TyOXyU9eBYyjhyPgb4Tqo8T0AAk4g/mPTJDXTveJPtAck1nw=
-X-Received: by 2002:a05:600c:1c09:b0:477:255c:bea8 with SMTP id 5b1f17b1804b1-48552297bdcmr92595e9.7.1773263210284;
-        Wed, 11 Mar 2026 14:06:50 -0700 (PDT)
+        bh=jjaMhHW49Qnvje+/av4ZyUIAC9q72eON3wvAJYxVTt0=;
+        b=f5gDSbERtYoaiKPbtbkn3tUB3uPyQYJ7mHEE43l9VoaVbhRj8tL8zjoRJ+iE/bcjvJ
+         9CQn4IFG4J1andOY9gvY+cybkZQ+ena/m26mh72f61TMLkgR26QS12tkJDyMg9yCHAA8
+         7c9INKD+Ay6JvveKOfW2GmWhWcY+bh0gAn9F6ziMl1s/MEi32gc5JKNFYBx8fmpeDj4v
+         QwbTYGE87BOa+Gu3JHgvWGq+vN2S5JF982K6dV5kkGxl7jgp+lEGvYUJ0uwEQM2dzani
+         y/nLgMlHOTfh8etxMk5i/jSD8TILt0vZNU0jd3jLzH0mblVHVfLRLBlywipGa7Tov5kV
+         96LA==
+X-Forwarded-Encrypted: i=1; AJvYcCWVkGl6/a/nOcl6HWlNzSyWvXZvmQEWmtDTwYx2pPbzKd+KLwZ74loLp84NKXZCJaULIbfh@lists.linux.dev
+X-Gm-Message-State: AOJu0YzHD8NEA0IcgcBYPS4WA+1rbbaJJLrlhtsyBrMisX1oteU7XZi/
+	YzuCxOqTxU5mhu9RM+W4gPKJw/XsRm/T9p3GgKQiUAWWWSU+e7sQfykNJAsB1IinIA==
+X-Gm-Gg: ATEYQzw73aJoCtb8XgY1pOKbfL40gcyLagYyYO5WwaD/DFSnuWiPYkHwlfGydOZk2cw
+	BPxK48b4LsYpaeIrdYA52JAbzJ7co09CxEPjTs1BhHfnZQVP7OlliEBue696NBaglqVzOnPQfjd
+	ddxse4ll3S/NNq9GsNp9Hhtjptcact5pQGWshCOLAl3xTmXNllJcN+YEh0sUQtK+sDbKfYIw7kE
+	FkeE0Xkd6550kC4vZdzrXmDGRfuiJlzdbMR+XccirZcO2QBVOZT00o3qYo+DAkJ2KXmDTc6nhQj
+	0wWNXSGf00iUkq3m+fJ+BvJ1iarm2fqbu7T6AxdqxFh/qi14bZGdVk04fn8luNDRVrJDgpNrQNW
+	xGfQ2GfR8ZxahZ/iMjs46wb1Lfgu5rRj9pfd3bu5Q7plLsyG3G0NY/VZAewKd87/G26BqpmLuD/
+	vlBHxkWvtX65AQe8/EG08UCSPYKzpeVR2eRI2E0wGXm0do+cGT84VNk4wE3FFECQ==
+X-Received: by 2002:a05:600c:c285:b0:477:86fd:fb47 with SMTP id 5b1f17b1804b1-4854fa1a473mr146295e9.8.1773263211980;
+        Wed, 11 Mar 2026 14:06:51 -0700 (PDT)
 Received: from localhost ([2a00:79e0:288a:8:c9d4:528c:7414:ba3a])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4854b0fa98bsm30652335e9.30.2026.03.11.14.06.49
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4854b0b906esm39112635e9.4.2026.03.11.14.06.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 14:06:49 -0700 (PDT)
+        Wed, 11 Mar 2026 14:06:51 -0700 (PDT)
 From: Jann Horn <jannh@google.com>
-Date: Wed, 11 Mar 2026 22:06:15 +0100
-Subject: [PATCH 2/3] kcov: wire up compiler instrumentation for
- CONFIG_KCOV_EXT_RECORDS
+Date: Wed, 11 Mar 2026 22:06:16 +0100
+Subject: [PATCH 3/3] kcov: introduce extended PC coverage collection mode
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,7 +69,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260311-kcov-extrecord-v1-2-68f03c4a05ad@google.com>
+Message-Id: <20260311-kcov-extrecord-v1-3-68f03c4a05ad@google.com>
 References: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
 In-Reply-To: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
 To: Dmitry Vyukov <dvyukov@google.com>, 
@@ -79,168 +78,240 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
  linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
- llvm@lists.linux.dev, Jann Horn <jannh@google.com>, 
- Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+ llvm@lists.linux.dev, Jann Horn <jannh@google.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773263202; l=5297;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773263202; l=7510;
  i=jannh@google.com; s=20240730; h=from:subject:message-id;
- bh=5DsfSgu+FPcywkrKjdBKgz/A0iooKEhY4/hZbp/L+BY=;
- b=K6AVC8ItMBgT1JQDBXviHQZ3H70ou6Q4xycc4VLgngTNhupShXHtef90BIuy7Ymek+6rnFAi2
- Y8bz3jas2jaCNDe7ONh2j6QP+E+fmvnj8kVvHN07gOFdeKaDUCFWjcu
+ bh=gl1kEdDECICBLTyyKuOyRBl/9O6Rh/+H5tSpq5Vi8UM=;
+ b=e/rnv3+0v+r78iIlsq75/4nso6BkrQk3V2nDG/iHUsVN7+gvM3C9zbVYQ5KwhdojDxQjkjCZ7
+ dQQGF6fxaiPBk56ppaUuFfJ3FRVFPNtBItKr6lDOZo9uaR561Iq3UG/
 X-Developer-Key: i=jannh@google.com; a=ed25519;
  pk=AljNtGOzXeF6khBXDJVVvwSEkVDGnnZZYqfWhP1V+C8=
 
-This is the first half of CONFIG_KCOV_EXT_RECORDS.
+This is the second half of CONFIG_KCOV_EXT_RECORDS.
 
-Set the appropriate compiler flags to call separate hooks for function
-entry/exit, and provide these hooks, but don't make it visible in the KCOV
-UAPI yet.
+Introduce a new KCOV mode KCOV_TRACE_PC_EXT which replaces the upper 8 bits
+of recorded instruction pointers with metadata. For now, userspace can use
+this metadata to distinguish three types of records:
 
-With -fsanitize-coverage=trace-pc-entry-exit, the compiler behavior changes
-as follows:
+ - function entry
+ - function exit
+ - normal basic block inside the function
 
-- The __sanitizer_cov_trace_pc() call on function entry is replaced with a
-  call to __sanitizer_cov_trace_pc_entry(); so for now,
-  __sanitizer_cov_trace_pc_entry() must be treated the same way as
-  __sanitizer_cov_trace_pc().
- - On function exit, an extra call to __sanitizer_cov_trace_pc_exit()
-   happens; since function exit produced no coverage in the old UAPI,
-   __sanitizer_cov_trace_pc_exit() should do nothing for now.
-
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Jann Horn <jannh@google.com>
 ---
- include/linux/kcov.h  |  2 ++
- kernel/kcov.c         | 30 +++++++++++++++++++++++-------
- lib/Kconfig.debug     | 14 ++++++++++++++
- scripts/Makefile.kcov |  2 ++
- tools/objtool/check.c |  2 ++
- 5 files changed, 43 insertions(+), 7 deletions(-)
+ include/linux/sched.h     |  6 ++++--
+ include/uapi/linux/kcov.h | 12 ++++++++++++
+ kernel/kcov.c             | 46 +++++++++++++++++++++++++++++++++++++++++-----
+ 3 files changed, 57 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/kcov.h b/include/linux/kcov.h
-index 0143358874b0..e5502d674029 100644
---- a/include/linux/kcov.h
-+++ b/include/linux/kcov.h
-@@ -81,6 +81,8 @@ typedef unsigned long long kcov_u64;
- #endif
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index a7b4a980eb2f..9a297d2d2abc 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1519,8 +1519,10 @@ struct task_struct {
+ 	int				kcov_sequence;
  
- void __sanitizer_cov_trace_pc(void);
-+void __sanitizer_cov_trace_pc_entry(void);
-+void __sanitizer_cov_trace_pc_exit(void);
- void __sanitizer_cov_trace_cmp1(u8 arg1, u8 arg2);
- void __sanitizer_cov_trace_cmp2(u16 arg1, u16 arg2);
- void __sanitizer_cov_trace_cmp4(u32 arg1, u32 arg2);
+ 	/* Collect coverage from softirq context: */
+-	unsigned int			kcov_softirq;
+-#endif
++	unsigned int			kcov_softirq : 1;
++	/* Emit KCOV records in extended format: */
++	unsigned int			kcov_ext_format : 1;
++#endif /* CONFIG_KCOV */
+ 
+ #ifdef CONFIG_MEMCG_V1
+ 	struct mem_cgroup		*memcg_in_oom;
+diff --git a/include/uapi/linux/kcov.h b/include/uapi/linux/kcov.h
+index ed95dba9fa37..8d8a233bd61f 100644
+--- a/include/uapi/linux/kcov.h
++++ b/include/uapi/linux/kcov.h
+@@ -35,8 +35,20 @@ enum {
+ 	KCOV_TRACE_PC = 0,
+ 	/* Collecting comparison operands mode. */
+ 	KCOV_TRACE_CMP = 1,
++	/*
++	 * Extended PC coverage collection mode.
++	 * In this mode, the top byte of the PC is replaced with flag bits
++	 * (KCOV_RECORDFLAG_*).
++	 */
++	KCOV_TRACE_PC_EXT = 2,
+ };
+ 
++#define KCOV_RECORD_IP_MASK         0x00ffffffffffffff
++#define KCOV_RECORDFLAG_TYPEMASK    0xf000000000000000
++#define KCOV_RECORDFLAG_TYPE_NORMAL 0xf000000000000000
++#define KCOV_RECORDFLAG_TYPE_ENTRY  0x0000000000000000
++#define KCOV_RECORDFLAG_TYPE_EXIT   0x1000000000000000
++
+ /*
+  * The format for the types of collected comparisons.
+  *
 diff --git a/kernel/kcov.c b/kernel/kcov.c
-index 0b369e88c7c9..2cc48b65384b 100644
+index 2cc48b65384b..3482044a7bd5 100644
 --- a/kernel/kcov.c
 +++ b/kernel/kcov.c
-@@ -202,15 +202,10 @@ static notrace unsigned long canonicalize_ip(unsigned long ip)
- 	return ip;
+@@ -71,6 +71,8 @@ struct kcov {
+ 	 * kcov_remote_stop(), see the comment there.
+ 	 */
+ 	int			sequence;
++	/* Whether emitted records should have type bits. */
++	unsigned int kcov_ext_format : 1 __guarded_by(&lock);
+ };
+ 
+ struct kcov_remote_area {
+@@ -97,6 +99,7 @@ struct kcov_percpu_data {
+ 	void			*saved_area;
+ 	struct kcov		*saved_kcov;
+ 	int			saved_sequence;
++	unsigned int		saved_kcov_ext_format : 1;
+ };
+ 
+ static DEFINE_PER_CPU(struct kcov_percpu_data, kcov_percpu_data) = {
+@@ -235,6 +238,12 @@ static void notrace kcov_add_pc_record(unsigned long record)
+  */
+ void notrace __sanitizer_cov_trace_pc(void)
+ {
++	/*
++	 * No bitops are needed here for setting the record type because
++	 * KCOV_RECORDFLAG_TYPE_NORMAL has the high bits set.
++	 * This relies on userspace not caring about the rest of the top byte
++	 * for KCOV_RECORDFLAG_TYPE_NORMAL records.
++	 */
+ 	kcov_add_pc_record(canonicalize_ip(_RET_IP_));
+ }
+ EXPORT_SYMBOL(__sanitizer_cov_trace_pc);
+@@ -244,10 +253,26 @@ void notrace __sanitizer_cov_trace_pc_entry(void)
+ {
+ 	unsigned long record = canonicalize_ip(_RET_IP_);
+ 
++	/*
++	 * This hook replaces __sanitizer_cov_trace_pc() for the function entry
++	 * basic block; it should still emit a record even in classic kcov mode.
++	 */
++	if (current->kcov_ext_format)
++		record = (record & KCOV_RECORD_IP_MASK) | KCOV_RECORDFLAG_TYPE_ENTRY;
+ 	kcov_add_pc_record(record);
+ }
+ void notrace __sanitizer_cov_trace_pc_exit(void)
+ {
++	unsigned long record;
++
++	/*
++	 * Unlike __sanitizer_cov_trace_pc_entry(), this PC should only be
++	 * reported in extended mode.
++	 */
++	if (!current->kcov_ext_format)
++		return;
++	record = (canonicalize_ip(_RET_IP_) & KCOV_RECORD_IP_MASK) | KCOV_RECORDFLAG_TYPE_EXIT;
++	kcov_add_pc_record(record);
+ }
+ #endif
+ 
+@@ -371,7 +396,7 @@ EXPORT_SYMBOL(__sanitizer_cov_trace_switch);
+ 
+ static void kcov_start(struct task_struct *t, struct kcov *kcov,
+ 			unsigned int size, void *area, enum kcov_mode mode,
+-			int sequence)
++			int sequence, unsigned int kcov_ext_format)
+ {
+ 	kcov_debug("t = %px, size = %u, area = %px\n", t, size, area);
+ 	t->kcov = kcov;
+@@ -379,6 +404,7 @@ static void kcov_start(struct task_struct *t, struct kcov *kcov,
+ 	t->kcov_size = size;
+ 	t->kcov_area = area;
+ 	t->kcov_sequence = sequence;
++	t->kcov_ext_format = kcov_ext_format;
+ 	/* See comment in check_kcov_mode(). */
+ 	barrier();
+ 	WRITE_ONCE(t->kcov_mode, mode);
+@@ -398,6 +424,7 @@ static void kcov_task_reset(struct task_struct *t)
+ 	kcov_stop(t);
+ 	t->kcov_sequence = 0;
+ 	t->kcov_handle = 0;
++	t->kcov_ext_format = 0;
  }
  
--/*
-- * Entry point from instrumented code.
-- * This is called once per basic-block/edge.
-- */
--void notrace __sanitizer_cov_trace_pc(void)
-+static void notrace kcov_add_pc_record(unsigned long record)
- {
- 	struct task_struct *t;
- 	unsigned long *area;
--	unsigned long ip = canonicalize_ip(_RET_IP_);
- 	unsigned long pos;
- 
- 	t = current;
-@@ -230,11 +225,32 @@ void notrace __sanitizer_cov_trace_pc(void)
- 		 */
- 		WRITE_ONCE(area[0], pos);
- 		barrier();
--		area[pos] = ip;
-+		area[pos] = record;
+ void kcov_task_init(struct task_struct *t)
+@@ -570,6 +597,8 @@ static int kcov_get_mode(unsigned long arg)
+ #else
+ 		return -ENOTSUPP;
+ #endif
++	else if (arg == KCOV_TRACE_PC_EXT)
++		return IS_ENABLED(CONFIG_KCOV_EXT_RECORDS) ? KCOV_MODE_TRACE_PC : -ENOTSUPP;
+ 	else
+ 		return -EINVAL;
+ }
+@@ -636,8 +665,9 @@ static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,
+ 			return mode;
+ 		kcov_fault_in_area(kcov);
+ 		kcov->mode = mode;
++		kcov->kcov_ext_format = (arg == KCOV_TRACE_PC_EXT);
+ 		kcov_start(t, kcov, kcov->size, kcov->area, kcov->mode,
+-				kcov->sequence);
++				kcov->sequence, kcov->kcov_ext_format);
+ 		kcov->t = t;
+ 		/* Put either in kcov_task_exit() or in KCOV_DISABLE. */
+ 		kcov_get(kcov);
+@@ -668,7 +698,8 @@ static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,
+ 			return -EINVAL;
+ 		kcov->mode = mode;
+ 		t->kcov = kcov;
+-	        t->kcov_mode = KCOV_MODE_REMOTE;
++		t->kcov_mode = KCOV_MODE_REMOTE;
++		kcov->kcov_ext_format = (remote_arg->trace_mode == KCOV_TRACE_PC_EXT);
+ 		kcov->t = t;
+ 		kcov->remote = true;
+ 		kcov->remote_size = remote_arg->area_size;
+@@ -853,6 +884,7 @@ static void kcov_remote_softirq_start(struct task_struct *t)
+ 		data->saved_area = t->kcov_area;
+ 		data->saved_sequence = t->kcov_sequence;
+ 		data->saved_kcov = t->kcov;
++		data->saved_kcov_ext_format = t->kcov_ext_format;
+ 		kcov_stop(t);
  	}
  }
-+
-+/*
-+ * Entry point from instrumented code.
-+ * This is called once per basic-block/edge.
-+ */
-+void notrace __sanitizer_cov_trace_pc(void)
-+{
-+	kcov_add_pc_record(canonicalize_ip(_RET_IP_));
-+}
- EXPORT_SYMBOL(__sanitizer_cov_trace_pc);
+@@ -865,12 +897,14 @@ static void kcov_remote_softirq_stop(struct task_struct *t)
+ 	if (data->saved_kcov) {
+ 		kcov_start(t, data->saved_kcov, data->saved_size,
+ 				data->saved_area, data->saved_mode,
+-				data->saved_sequence);
++				data->saved_sequence,
++				data->saved_kcov_ext_format);
+ 		data->saved_mode = 0;
+ 		data->saved_size = 0;
+ 		data->saved_area = NULL;
+ 		data->saved_sequence = 0;
+ 		data->saved_kcov = NULL;
++		data->saved_kcov_ext_format = 0;
+ 	}
+ }
  
-+#ifdef CONFIG_KCOV_EXT_RECORDS
-+void notrace __sanitizer_cov_trace_pc_entry(void)
-+{
-+	unsigned long record = canonicalize_ip(_RET_IP_);
-+
-+	kcov_add_pc_record(record);
-+}
-+void notrace __sanitizer_cov_trace_pc_exit(void)
-+{
-+}
-+#endif
-+
- #ifdef CONFIG_KCOV_ENABLE_COMPARISONS
- static void notrace write_comp_data(u64 type, u64 arg1, u64 arg2, u64 ip)
- {
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 93f356d2b3d9..dddc330ad3ca 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2215,6 +2215,20 @@ config KCOV
+@@ -884,6 +918,7 @@ void kcov_remote_start(u64 handle)
+ 	unsigned int size;
+ 	int sequence;
+ 	unsigned long flags;
++	unsigned int kcov_ext_format;
  
- 	  For more details, see Documentation/dev-tools/kcov.rst.
+ 	if (WARN_ON(!kcov_check_handle(handle, true, true, true)))
+ 		return;
+@@ -930,6 +965,7 @@ void kcov_remote_start(u64 handle)
+ 	 * acquired _after_ kcov->lock elsewhere.
+ 	 */
+ 	mode = context_unsafe(kcov->mode);
++	kcov_ext_format = context_unsafe(kcov->kcov_ext_format);
+ 	sequence = kcov->sequence;
+ 	if (in_task()) {
+ 		size = kcov->remote_size;
+@@ -958,7 +994,7 @@ void kcov_remote_start(u64 handle)
+ 		kcov_remote_softirq_start(t);
+ 		t->kcov_softirq = 1;
+ 	}
+-	kcov_start(t, kcov, size, area, mode, sequence);
++	kcov_start(t, kcov, size, area, mode, sequence, kcov_ext_format);
  
-+config KCOV_EXT_RECORDS
-+	bool "Support extended KCOV records with function entry/exit records"
-+	depends on KCOV
-+	depends on 64BIT
-+	# TODO: check CLANG_VERSION instead once this has landed in an LLVM
-+	# release
-+	depends on $(cc-option,-fsanitize-coverage=trace-pc-entry-exit)
-+	help
-+	  Extended KCOV records allow distinguishing between multiple types of
-+	  records: Normal edge coverage, function entry, and function exit.
-+
-+	  This will likely cause a small additional slowdown compared to normal
-+	  KCOV.
-+
- config KCOV_ENABLE_COMPARISONS
- 	bool "Enable comparison operands collection by KCOV"
- 	depends on KCOV
-diff --git a/scripts/Makefile.kcov b/scripts/Makefile.kcov
-index 78305a84ba9d..aa0be904268f 100644
---- a/scripts/Makefile.kcov
-+++ b/scripts/Makefile.kcov
-@@ -1,10 +1,12 @@
- # SPDX-License-Identifier: GPL-2.0-only
- kcov-flags-y					+= -fsanitize-coverage=trace-pc
-+kcov-flags-$(CONFIG_KCOV_EXT_RECORDS)		+= -fsanitize-coverage=trace-pc-entry-exit
- kcov-flags-$(CONFIG_KCOV_ENABLE_COMPARISONS)	+= -fsanitize-coverage=trace-cmp
+ 	local_unlock_irqrestore(&kcov_percpu_data.lock, flags);
  
- kcov-rflags-y					+= -Cpasses=sancov-module
- kcov-rflags-y					+= -Cllvm-args=-sanitizer-coverage-level=3
- kcov-rflags-y					+= -Cllvm-args=-sanitizer-coverage-trace-pc
-+kcov-rflags-$(CONFIG_KCOV_EXT_RECORDS)		+= -Cllvm-args=-sanitizer-coverage-trace-pc-entry-exit
- kcov-rflags-$(CONFIG_KCOV_ENABLE_COMPARISONS)	+= -Cllvm-args=-sanitizer-coverage-trace-compares
- 
- export CFLAGS_KCOV := $(kcov-flags-y)
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index a30379e4ff97..ae3127227621 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1251,6 +1251,8 @@ static const char *uaccess_safe_builtin[] = {
- 	"write_comp_data",
- 	"check_kcov_mode",
- 	"__sanitizer_cov_trace_pc",
-+	"__sanitizer_cov_trace_pc_entry",
-+	"__sanitizer_cov_trace_pc_exit",
- 	"__sanitizer_cov_trace_const_cmp1",
- 	"__sanitizer_cov_trace_const_cmp2",
- 	"__sanitizer_cov_trace_const_cmp4",
 
 -- 
 2.53.0.473.g4a7958ca14-goog
