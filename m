@@ -1,26 +1,27 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1B53B530F
-	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 08:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7534C3B47CF
+	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 08:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773217815; cv=none; b=BjxtUvKvMNIT29g/cs5yemNDIQ8sVa1QqWppJ6RZDH1ZTt3JhjHugO6kAQhySPqX9qCJKN0iSVBb9iEyESjaOGH/A1iWxlIYRf5bNRloLfNah5k86t6ZHIM3GIptpMmiTOLlMlnzV5rzNxCVKxC4fc6Oe60/JtWJwfc4gkuEoNM=
+	t=1773217824; cv=none; b=n2ZkXrwUMDudVMKwuCtMKGSjNMdFcG1j5q9z7Yz4Sl8H2sDdkH/QSNNwSAGj7WIbmaVSnrKTEAaiA2qjZ5O18AiHjTU5jvCQqj4omiO5RguOY/DEFlMRInESJjQLlaES10mEXrDpAsv7l6kx6KqeYkMsJvmx9o6GDUL9r1W1KT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773217815; c=relaxed/simple;
-	bh=ohdWzHaQ3kzQcv0Ygt+2e5uE+m+KR3HcpWZZjFWxBlo=;
+	s=arc-20240116; t=1773217824; c=relaxed/simple;
+	bh=mkmGFFMWdiiEQbxcc15mMJc9KkOmMYC/dMkN1+6Ji9s=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mXqh5eG9YVCw5bkTyt1TzUYSF4AWzps9eaNPxMV4uhEFd3qLIekWm7yjdz37t5eM5oLfLiiHu7p0pQbRvjMUbDzSSnqKxSBRm8l2VkUaD7N0CJ092F9p5JCOy9DSk13flx2lSVW/coQT5nT/39+TVl7Yg1CNXU00XkPUrkRsFsE=
+	 In-Reply-To:To:Cc; b=pEDkRGfG8IXQ2OtddmF5k70bKjqF0EESGvFmgGOGmR+TH0ut3ER75Ngida11rFmbpmWReuoQt+PQ8pwZijExhIETDI5PVqsruC11qc/xc+nVLveLcoeHueyP49NN72xn4CNXBRSPonWWjI2AqAToZW2AT5wXrUPEjvfGFaXwi2Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F2A33204C;
-	Wed, 11 Mar 2026 01:30:06 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F64A204C;
+	Wed, 11 Mar 2026 01:30:14 -0700 (PDT)
 Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BAEE23F73B;
-	Wed, 11 Mar 2026 01:30:05 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 664FD3F73B;
+	Wed, 11 Mar 2026 01:30:13 -0700 (PDT)
 From: Leo Yan <leo.yan@arm.com>
-Date: Wed, 11 Mar 2026 08:29:27 +0000
-Subject: [PATCH v4 02/30] tools/thermal: Fix typo
+Date: Wed, 11 Mar 2026 08:29:28 +0000
+Subject: [PATCH v4 03/30] tools: lib: thermal: Initialize CFLAGS before
+ including Makefile.include
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,7 +30,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260311-tools_build_fix_zero_init-v4-2-9e35bdb99cb3@arm.com>
+Message-Id: <20260311-tools_build_fix_zero_init-v4-3-9e35bdb99cb3@arm.com>
 References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
 In-Reply-To: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
@@ -75,34 +76,70 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
  Leo Yan <leo.yan@arm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773217789; l=755;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773217789; l=1997;
  i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=ohdWzHaQ3kzQcv0Ygt+2e5uE+m+KR3HcpWZZjFWxBlo=;
- b=FJqxegSrNqNtDnY6jdZzx610+RrtAC5xYp8tEvdouZcNlQ+egr6xx2/3dRU063hvj4BNGrteX
- /mlqzlsIvKlBGn67wpGdAzO7kiGmE/fsjgipwFhT8qhJ9ifLeWg6Gy4
+ bh=mkmGFFMWdiiEQbxcc15mMJc9KkOmMYC/dMkN1+6Ji9s=;
+ b=0hVcsSXNi9/47VYLKM1iq+lFejB1rgTLWX7/mNYrGYlGgEGqSFVH6DyiC19WaQkrCczMMA2d0
+ E2ZRdzf1Ku4AZb5lSGjAAsBeesU5GmmAhfMlw1uF7aeaJs2FW9/bujm
 X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
  pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-s/CFGLAS/CFLAGS
+tools/scripts/Makefile.include may expand EXTRA_CFLAGS in a future
+change.  This could alter the initialization of CFLAGS in the thermal
+Makefile, as the default options "-g -Wall" would never be set once
+EXTRA_CFLAGS is expanded.
 
-Fixes: 3b7c5e8adf9c ("tools/thermal: Add util library")
+Prepare for this by moving the CFLAGS initialization before including
+tools/scripts/Makefile.include, so it is not affected by the extended
+EXTRA_CFLAGS.
+
+Append EXTRA_CFLAGS to CFLAGS only after including Makefile.include and
+place it last so that the extra flags propagate properly and can
+override the default options.
+
 Signed-off-by: Leo Yan <leo.yan@arm.com>
 ---
- tools/thermal/lib/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/lib/thermal/Makefile | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/tools/thermal/lib/Makefile b/tools/thermal/lib/Makefile
-index 056d212f25cf51cd8c02260fbe2ef28dda5e4acb..8c9a37f999b826855dad11c0d9574b41d5b24244 100644
---- a/tools/thermal/lib/Makefile
-+++ b/tools/thermal/lib/Makefile
-@@ -60,8 +60,8 @@ override CFLAGS += $(EXTRA_WARNINGS)
- override CFLAGS += -Werror -Wall
- override CFLAGS += -fPIC
- override CFLAGS += $(INCLUDES)
--override CFGLAS += -Wl,-L.
--override CFGLAS += -Wl,-lthermal
-+override CFLAGS += -Wl,-L.
-+override CFLAGS += -Wl,-lthermal
+diff --git a/tools/lib/thermal/Makefile b/tools/lib/thermal/Makefile
+index 09d8f4ba6a0ab7ab9c99ac7f64d52d0268bee340..b55fa42cefa47628b7f2fac32fc08fcd82580a0e 100644
+--- a/tools/lib/thermal/Makefile
++++ b/tools/lib/thermal/Makefile
+@@ -23,6 +23,14 @@ INSTALL = install
+ DESTDIR ?=
+ DESTDIR_SQ = '$(subst ','\'',$(DESTDIR))'
+ 
++# Defer assigning EXTRA_CFLAGS to CFLAGS until after including
++# tools/scripts/Makefile.include, as it may add flags to EXTRA_CFLAGS.
++ifdef EXTRA_CFLAGS
++  CFLAGS :=
++else
++  CFLAGS := -g -Wall
++endif
++
+ include $(srctree)/tools/scripts/Makefile.include
+ include $(srctree)/tools/scripts/Makefile.arch
+ 
+@@ -39,13 +47,6 @@ libdir = $(prefix)/$(libdir_relative)
+ libdir_SQ = $(subst ','\'',$(libdir))
+ libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
+ 
+-# Set compile option CFLAGS
+-ifdef EXTRA_CFLAGS
+-  CFLAGS := $(EXTRA_CFLAGS)
+-else
+-  CFLAGS := -g -Wall
+-endif
+-
+ NL3_CFLAGS = $(shell pkg-config --cflags libnl-3.0 2>/dev/null)
+ ifeq ($(NL3_CFLAGS),)
+ NL3_CFLAGS = -I/usr/include/libnl3
+@@ -68,6 +69,7 @@ override CFLAGS += $(INCLUDES)
+ override CFLAGS += -fvisibility=hidden
+ override CFLAGS += -Wl,-L.
+ override CFLAGS += -Wl,-lthermal
++override CFLAGS += $(EXTRA_CFLAGS)
  
  all:
  
