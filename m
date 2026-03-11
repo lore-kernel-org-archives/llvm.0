@@ -1,65 +1,67 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E092F1FDB
-	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 21:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D92E2F261C
+	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 21:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773263210; cv=none; b=XXpulCm9S7ZbKXbtmdruJthGJukAsphhLYLTkLmA1aJweobjksIVyb40djYPEAHwPUnPh2r7iPrno2JTCyTvA9INDBUo8ZvGzCxZIGsxUy0RynTuRIG+eDex11EaHNBCfAAzGZXff2muOW7OJz0LTOvcBuLXxgUO+a6He9C0tm4=
+	t=1773263211; cv=none; b=BPvYCcxyDLOEMmsJB3IieAcI+Bsr7L/P4qtVRlMocBik08ZfbI6uxlSXczb3n0amDCL5NBq2/UHlO7nvTC6VuuTQs2C0pfxf+6QvA0l/Z3pOiSMvfTATlBLbHiYCEwB5EF9D4OKPt4/yYJ+igjti6Rt96ixFqX4AlhM1TAL6ceg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773263210; c=relaxed/simple;
-	bh=Uy/UI29Iq405E8xsVzmdW4SfU10ROPsA+zY2cfEtEVk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=plMaqEzLMRagbtfpqiirZLiPUO/bIVGcql83HX63Pb04P6kwgCf1syDggQYwrgdNgVPeyMrJTiS8mOWNqFAAhT71aJXvyC5v2f+seQHOLjzav2mC6CW8dpmU19gXWLDbs7JEHjIiGPRGeYlsxE/NVtTbuGZ/SWwQSuSvjZEM4zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tqzIZtaW; arc=none smtp.client-ip=209.85.128.42
+	s=arc-20240116; t=1773263211; c=relaxed/simple;
+	bh=Rn/uhAEizGU7xZ5aEfF2VvvEfAV/mBrSUtHKuGh1e2Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=OIay9aa/NBPPa0uVktShtdwID/wsRFXphu7cEjR1UC8g3NDg+f0aZedESNLK16IpVcl7/9CV/vzphyA9kF0YXQKodX2w86YOlZCF/FS4nVLntAXAWL0r/pCrR34Bn16l5s4VbDcHUffdmnp9Y1SnQP0iGJQwI46DEYXed5hGboU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L4r5FzFd; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tqzIZtaW"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4852ef20fe8so8095e9.1
-        for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 14:06:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L4r5FzFd"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-485317b6bd0so9055e9.1
+        for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 14:06:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773263207; x=1773868007; darn=lists.linux.dev;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gZdQ8Ils30nUjKOGDWVOhEvKLZ9afdR+c489qxXz3cA=;
-        b=tqzIZtaW+33dV9x4BOVD7G0+dHxTNE3n7wI4zQF0FNIbb+gbTAk+PRQ0g3SVEdZI6j
-         VCO4+m3XtpvzBMVtR2M7MYleTuW1l/hf+w5srEpSBkNGV06QYhJfl/iAKQnijhjONnyw
-         ck4hYM/DaWwX6PBArJ2OimWkj3ncIl/i3C0Cwqnio/5VOw5nbguVpFwol2rBg7MOfy+9
-         MCPmD5Zf8zJ5CArswp1Wlfd1vKLzx0WKLxIEJyK6V/Hl6RK4ZKjGfCn4lwSiCGLyDqwO
-         3Gq3cY7XRS/OfAKQ1+UslW7kVhzRay3rHGJEORFh0gFJY7nFCiUQwaQk5u6B8UrWINYn
-         I2iA==
+        d=google.com; s=20230601; t=1773263209; x=1773868009; darn=lists.linux.dev;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jq184yv6qhyq5he4JEdx2+D4Atx68RIlmhXc/nCq5F8=;
+        b=L4r5FzFdpsVUE5iUs4z50wHz2LOHO/BRfCshoRoOaFPY0XN0LLw9CHYt5voPXOtwQy
+         uxqxdIpcWJ5dC1M+Men3TlXLzqFG6sD7vjCmO12HsMmbV7hXZYttk8BnM7YFH9ExUpXZ
+         aXF9U7cXRmcTHy68CRa7aBYOidG09vQBviESdZ6BXQWmr0syZMNiF2NneMCCQz7Ibsz4
+         DIAZ8uhNXp2dy7JgukCfhNwe1ssJaKTS/U4PCxiNY56rVS9AvSaLtgWdMYbxNtkPEpR/
+         F+K78xFp3qS3fmEPWnXZaLlN10xBC/h0Mqoju+5Wi/IFd2+B1nJSdkbCRTMGqfqIi/UC
+         o7Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773263207; x=1773868007;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gZdQ8Ils30nUjKOGDWVOhEvKLZ9afdR+c489qxXz3cA=;
-        b=pN49Q6fKdLkRp6EDUIXA5ljIesBWNr83E999LLA06I5oDV7Z2nFBFYPfNDUlmcfv2Y
-         TQ7lCoWZ0PaJDHUPuXUG9wGPYTkWiHW2JRh26yJw5P6MAhypdm4HR1BCAxJvIw70PU0q
-         ee4WqDtVx+Pcc9k1KAzEeqhXWE8vi9+HZGnhB+FdqDLsuV556ahzNfcGP1qxdZXEA2Sm
-         QO8egBcV2dqbMQEqEfsQgQVvwb2AJXhCOOB3T/4esvs3fOQlzXRJ/W3stXUzadkxBt9c
-         UzYtQYToxQ31jExFO/kR76VWLZNFpQUBgKiE9W7Md/6kUvc3sIBe0vIc21WKV5sWphrJ
-         WYUg==
-X-Forwarded-Encrypted: i=1; AJvYcCUysmvCnqDI6ljFIjNNN+sKNU4fpha7i/oAEl8CJ8YQud+DhO7x2LyVofo6bAlwYzNHBNVl@lists.linux.dev
-X-Gm-Message-State: AOJu0YwjJ5P7e3hGkEi48DzxS7zxe9VuCcy8zzP6CmFbjf4CYA5ToeiI
-	M2QNXUKmuQzQWDlmgYy2cLyBVIris2/ch9kefiLpmxdQ97fOOyeoq0npfLNtE71oTw==
-X-Gm-Gg: ATEYQzz6diG0Eoq/q8vxgw/qhnXF/3ABw2i272IWhpMTWnp7+hY33VQKdU9X1VhL7sy
-	NwajGUggw/Er1IADQVqlDq2mmAtRLGY4XuuLEaCA0EkZS2TZx/sjOu9Scf6Q8x4l0DeOUDGHKzz
-	09D6q4PZ9FMbMpIjCWG6PXef8mcIAZsln3AEOKRmbX08JjoSdYJ/rYoH2bdE9RmqeKcs/02VqMY
-	N5eCm+Qwy+pY9EqC3AM9reBGeXPMzaiwFmGqLRJdfXFinNdrQ+v3HIM2UfkdFuG4aUjpafueXZv
-	m2pg/Lowt8P/SPPvXmTiCwASG8Jldv/AcaTuKBC6SbvFuH50ZWueF1JSaFBlr8adWdnj4qt+NqR
-	XTTMu3Cz4raVEh1SdwGRYEvIixAaDiDhpsRSOI3wgIZa9+4yMwgl9bIs8FtKo2dOU2DL07fFDBR
-	YKbhrta3yefKeNxP8y/qndizeRZSwcDH1vJwWtj+kpW5VYtLBGwJ0=
-X-Received: by 2002:a05:600c:da:b0:477:86fd:fb49 with SMTP id 5b1f17b1804b1-4854fa196edmr202315e9.10.1773263206900;
-        Wed, 11 Mar 2026 14:06:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1773263209; x=1773868009;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Jq184yv6qhyq5he4JEdx2+D4Atx68RIlmhXc/nCq5F8=;
+        b=cclSqsM31tKzXLeHNs2ywFvz43a/pWv6pYloGtyW4j5PPmRkA1ifapzg1b0ABZWbqi
+         TX1lvWGFBN33PmN78aoFRYEIZhZEY3ynaPXUnyGb1EdVlh3GywWOScFgHn1QDk34YCFu
+         U3tdupeGZuv+mhRPHiJbS0QWM0LUTKsZmxX25H7FwFhoAc7fz86MycUuBqUhZz+T/Xgy
+         TAZ/FOGNJzEmytlFi3shihjaMTz0JGjvuzw7+dh98m5gA4vTRV5x2U8OT03qLwYMjW+C
+         lynWKqJM5XH5BrRM9wYd7JZbbPXIQP+ScF8kM6hJ3cmlXGjTph0X7cYuKLrT17mqEB8o
+         6P5g==
+X-Forwarded-Encrypted: i=1; AJvYcCWqQ9czbj8A6qS9eGft/KNR220aBOumfoTak/1KhsUKeG8lCWYPEqBIPPVY5ALcXcJMlnrA@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz+WDrKtrRUvf6Sgf9Dvm8Yl9x4YoGvDearXcOwS+FddfPryDHh
+	0eUx1TpdEp6s40RyAZzDsGh5H6Ld0WhGNhAVwQx8wDi2SM0sfeSvsYNRfIbnxFMiig==
+X-Gm-Gg: ATEYQzwYizF3kQAXkJ6BSmkR9MULqO+eTrmg097HZ+wlNcgRyn+gvZDBAxBNSjKxxtc
+	/XpEroKZFsZDw9DABTSK7xxPREYuBkA7frZWm4xNulRcQhoMLQptmZnhaOzw550CNY+dejaf8kK
+	cwenBSWZUAIQnNmaqVlmxEiPVaEuU6/ZLg9EHgg4vi9O0O27vfSMZfcs6SNle1sO0WlYgS6ycgj
+	Rv4q2xtuK4PAdNgR9eThEtnhxM67+JuDrHKSWA7NyMOxcf5kjd3HMPvFVBWcg0U/KfYkRpEOKNn
+	oSxtDXKW+KrLoFzkk/xkJsTGRzGXLAT3zJioehUQVtfIL/KbpoSS+h0EZ2KT/7E8pSAkf6plExQ
+	XL3uK0oD34jk9IYdQU3qs48DH7tKLkmpmf1qCP8AtYM+RnLViXoL+Hcc2OMWM8kGVOoVaRV+sJq
+	rnpMSy/x1Nzw8eIeQnDtS/OGQSTafnNTrrtjHiHqd7y742J7hhiAzPw9XyIAoMEg==
+X-Received: by 2002:a05:600c:4688:b0:483:1093:f29b with SMTP id 5b1f17b1804b1-4854fa11e50mr229415e9.8.1773263208180;
+        Wed, 11 Mar 2026 14:06:48 -0700 (PDT)
 Received: from localhost ([2a00:79e0:288a:8:c9d4:528c:7414:ba3a])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-439fe19ad9asm2575134f8f.7.2026.03.11.14.06.46
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-439fe219c41sm1949038f8f.29.2026.03.11.14.06.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 14:06:46 -0700 (PDT)
+        Wed, 11 Mar 2026 14:06:47 -0700 (PDT)
 From: Jann Horn <jannh@google.com>
-Subject: [PATCH 0/3] KCOV function entry/exit records
-Date: Wed, 11 Mar 2026 22:06:13 +0100
-Message-Id: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
+Date: Wed, 11 Mar 2026 22:06:14 +0100
+Subject: [PATCH 1/3] sched: Ensure matching stack state for kcov
+ disable/enable on switch
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,10 +70,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEXZsWkC/x3MQQqAIBBA0avIrBtQg6iuEi1MpxqCjDFEiO6et
- HyL/x9IJEwJRvWAUObE8awwjQK/u3Mj5FANVttOt8bg4WNGKreQjxKwIx0GZxfteg81uoRWLv9
- wmt/3AxHQ1n1gAAAA
-X-Change-ID: 20260311-kcov-extrecord-6e0d9a2b0a8c
+Message-Id: <20260311-kcov-extrecord-v1-1-68f03c4a05ad@google.com>
+References: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
+In-Reply-To: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
 To: Dmitry Vyukov <dvyukov@google.com>, 
  Andrey Konovalov <andreyknvl@gmail.com>
 Cc: Nathan Chancellor <nathan@kernel.org>, 
@@ -79,261 +80,70 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
  linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
  llvm@lists.linux.dev, Jann Horn <jannh@google.com>, 
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Josh Poimboeuf <jpoimboe@kernel.org>
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773263202; l=9105;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773263202; l=1827;
  i=jannh@google.com; s=20240730; h=from:subject:message-id;
- bh=Uy/UI29Iq405E8xsVzmdW4SfU10ROPsA+zY2cfEtEVk=;
- b=hlxXEo/ecNo7FckkbUmQK84ac0pbfDNmhk+lxOWxdyub56fn3Q421h+dqWIsCH/RIa30VFBOj
- bmTVaVT9MlKAy4PUkBQ4LTvRnbXbPVDAm2bX2BDEGUNuTuQ6LX1uyCE
+ bh=Rn/uhAEizGU7xZ5aEfF2VvvEfAV/mBrSUtHKuGh1e2Y=;
+ b=nT5u7hSmk+peI4Z70WnnNJltIQzTqQK/FPRXLCAfr/CfAZI5TfWDbVdHNATBPrJE8rscRMwNT
+ pAw0yBbVLkOAnpe1QwRXRzw27rZhNYJFgCMi0/mSGW/bPY0IR7FtcjT
 X-Developer-Key: i=jannh@google.com; a=ed25519;
  pk=AljNtGOzXeF6khBXDJVVvwSEkVDGnnZZYqfWhP1V+C8=
 
-This series adds a KCOV feature that userspace can use to keep track of
-the current call stack. When userspace enables the new mode
-KCOV_TRACE_PC_EXT, collected instruction addresses are tagged with one
-of three types:
+Ensure that kcov is disabled and enabled with the same call stack.
+This will be relied on by subsequent patches for recording function
+entry/exit records via kcov.
 
- - function entry
- - non-entry basic block
- - function exit
+This patch should not affect compilation of normal kernels without KCOV
+(though it changes "inline" to "__always_inline").
 
-This requires corresponding LLVM support; an LLVM patch implementing
-this feature has been uploaded for review at
-<https://github.com/llvm/llvm-project/pull/185972>, but hasn't landed yet.
-
-A simple example of how to use KCOV_TRACE_PC_EXT:
-```
-user@vm:~/kcov/u$ cat kcov-u.c
-
-  typeof(x) __res = (x);      \
-  if (__res == (typeof(x))-1) \
-    err(1, "SYSCHK(" #x ")"); \
-  __res;                      \
-})
-
-static void indent(int depth) {
-  for (int i=0; i<depth; i++)
-    printf("  ");
-}
-
-int main(void) {
-  int fd = SYSCHK(open("/sys/kernel/debug/kcov", O_RDWR));
-  SYSCHK(ioctl(fd, KCOV_INIT_TRACE, COVER_SIZE));
-  unsigned long *cover = (unsigned long*)SYSCHK(
-      mmap(NULL, COVER_SIZE * sizeof(unsigned long), PROT_READ | PROT_WRITE,
-           MAP_SHARED, fd, 0));
-  SYSCHK(ioctl(fd, KCOV_ENABLE, KCOV_TRACE_PC_EXT));
-  usleep(1000); // fault in stuff
-  __atomic_store_n(&cover[0], 0, __ATOMIC_RELAXED); // start recording
-  usleep(1000);
-  unsigned long cover_num = __atomic_load_n(&cover[0], __ATOMIC_RELAXED); // end
-
-  int depth = 0;
-  for (unsigned long i = 0; i < cover_num; i++) {
-    unsigned long record = cover[1+i];
-    unsigned long pc = record | ~KCOV_RECORD_IP_MASK;
-    switch (record & KCOV_RECORDFLAG_TYPEMASK) {
-    case KCOV_RECORDFLAG_TYPE_NORMAL:
-      indent(depth);
-      printf("BB    0x%lx\n", pc);
-      break;
-    case KCOV_RECORDFLAG_TYPE_ENTRY:
-      indent(depth);
-      printf("ENTER 0x%lx\n", pc);
-      depth++;
-      break;
-    case KCOV_RECORDFLAG_TYPE_EXIT:
-      if (depth == 0)
-        errx(1, "exit at depth 0");
-      depth--;
-      indent(depth);
-      printf("EXIT  0x%lx\n", pc);
-      break;
-    default: errx(1, "unknown record type in 0x%016lx", record);
-    }
-  }
-}
-user@vm:~/kcov/u$ cat symbolize.py
-
-import sys
-syms = []
-with open('/proc/kallsyms') as f:
-  for line in f:
-    parts = line.strip().split(' ')
-    if len(parts) < 3:
-      continue
-    syms.append((int(parts[0], 16), parts[2]))
-
-for line in sys.stdin:
-  parts = line.rstrip().split('0x')
-  if len(parts) != 2:
-    continue
-  record_pc = int(parts[1], 16)
-  for i in range(0, len(syms)-1):
-    if syms[i+1][0] > record_pc:
-      print(parts[0] + syms[i][1] + '+' + hex(record_pc - syms[i][0]))
-      break
-user@vm:~/kcov/u$ gcc -o kcov-u kcov-u.c -Wall
-user@vm:~/kcov/u$ sudo ./kcov-u | sudo ./symbolize.py
-ENTER __audit_syscall_entry+0x2c
-  BB    __audit_syscall_entry+0xa4
-  BB    __audit_syscall_entry+0xd2
-  BB    __audit_syscall_entry+0x1ab
-  ENTER ktime_get_coarse_real_ts64+0x1a
-    BB    ktime_get_coarse_real_ts64+0x3f
-    BB    ktime_get_coarse_real_ts64+0x96
-  EXIT  ktime_get_coarse_real_ts64+0x9b
-EXIT  __audit_syscall_entry+0x12b
-ENTER __x64_sys_clock_nanosleep+0x18
-  ENTER __se_sys_clock_nanosleep+0x33
-    BB    __se_sys_clock_nanosleep+0x10e
-    ENTER get_timespec64+0x29
-      ENTER _copy_from_user+0x17
-        BB    _copy_from_user+0x5d
-      EXIT  _copy_from_user+0x62
-      BB    get_timespec64+0xaf
-    EXIT  get_timespec64+0xd5
-    BB    __se_sys_clock_nanosleep+0x1c0
-    ENTER common_nsleep+0x1f
-      ENTER hrtimer_nanosleep+0x2f
-        ENTER hrtimer_setup_sleeper_on_stack+0x20
-          BB    hrtimer_setup_sleeper_on_stack+0x2a
-          BB    hrtimer_setup_sleeper_on_stack+0x7e
-        EXIT  hrtimer_setup_sleeper_on_stack+0x14c
-        ENTER do_nanosleep+0x2d
-          BB    do_nanosleep+0x3b
-          ENTER hrtimer_start_range_ns+0x28
-            BB    hrtimer_start_range_ns+0x67
-            ENTER remove_hrtimer+0x22
-              BB    remove_hrtimer+0x4b
-            EXIT  remove_hrtimer+0x1ea
-            BB    hrtimer_start_range_ns+0x173
-            ENTER __hrtimer_cb_get_time+0x11
-              BB    __hrtimer_cb_get_time+0x32
-              ENTER ktime_get+0x17
-                BB    ktime_get+0x33
-                BB    ktime_get+0x58
-                ENTER kvm_clock_get_cycles+0xc
-                  BB    kvm_clock_get_cycles+0x48
-                EXIT  kvm_clock_get_cycles+0x4d
-                BB    ktime_get+0xb7
-                BB    ktime_get+0x149
-              EXIT  ktime_get+0x151
-            EXIT  __hrtimer_cb_get_time+0x84
-            BB    hrtimer_start_range_ns+0x3bc
-            BB    hrtimer_start_range_ns+0x5a4
-            ENTER enqueue_hrtimer+0x20
-              BB    enqueue_hrtimer+0x2a
-              BB    enqueue_hrtimer+0x5b
-              ENTER timerqueue_add+0x1c
-                BB    timerqueue_add+0x41
-                BB    timerqueue_add+0xb2
-                BB    timerqueue_add+0xb2
-                BB    timerqueue_add+0xf9
-              EXIT  timerqueue_add+0x150
-            EXIT  enqueue_hrtimer+0xaf
-            BB    hrtimer_start_range_ns+0x714
-            ENTER hrtimer_reprogram+0x1b
-              BB    hrtimer_reprogram+0x65
-              BB    hrtimer_reprogram+0x13a
-              BB    hrtimer_reprogram+0x1dc
-              ENTER tick_program_event+0x25
-                BB    tick_program_event+0x65
-                ENTER clockevents_program_event+0x20
-                  BB    clockevents_program_event+0x7e
-                  ENTER ktime_get+0x17
-                    BB    ktime_get+0x33
-                    BB    ktime_get+0x58
-                    ENTER kvm_clock_get_cycles+0xc
-                      BB    kvm_clock_get_cycles+0x48
-                    EXIT  kvm_clock_get_cycles+0x4d
-                    BB    ktime_get+0xb7
-                    BB    ktime_get+0x149
-                  EXIT  ktime_get+0x151
-                  BB    clockevents_program_event+0x219
-                EXIT  clockevents_program_event+0x22b
-              EXIT  tick_program_event+0x89
-            EXIT  hrtimer_reprogram+0x211
-          EXIT  hrtimer_start_range_ns+0x74d
-          BB    do_nanosleep+0x9c
-          ENTER sched_clock+0xc
-            BB    sched_clock+0x40
-          EXIT  sched_clock+0x45
-          ENTER arch_scale_cpu_capacity+0x13
-            BB    arch_scale_cpu_capacity+0x1a
-          EXIT  arch_scale_cpu_capacity+0x24
-          ENTER __cgroup_account_cputime+0x1b
-            ENTER css_rstat_updated+0x2c
-              BB    css_rstat_updated+0x77
-              BB    css_rstat_updated+0xbe
-            EXIT  css_rstat_updated+0x1bc
-            BB    __cgroup_account_cputime+0x81
-          EXIT  __cgroup_account_cputime+0x86
-          ENTER sched_clock+0xc
-            BB    sched_clock+0x40
-          EXIT  sched_clock+0x45
-          ENTER sched_clock+0xc
-            BB    sched_clock+0x40
-          EXIT  sched_clock+0x45
-          ENTER __msecs_to_jiffies+0x13
-            BB    __msecs_to_jiffies+0x25
-          EXIT  __msecs_to_jiffies+0x4c
-          ENTER prandom_u32_state+0x15
-          EXIT  prandom_u32_state+0xbe
-          ENTER hrtimer_try_to_cancel+0x1e
-            BB    hrtimer_try_to_cancel+0x6a
-            BB    hrtimer_try_to_cancel+0x1da
-          EXIT  hrtimer_try_to_cancel+0x1be
-          BB    do_nanosleep+0xbf
-          BB    do_nanosleep+0x166
-          BB    do_nanosleep+0x177
-          BB    do_nanosleep+0x275
-        EXIT  do_nanosleep+0x2d5
-        BB    hrtimer_nanosleep+0x182
-      EXIT  hrtimer_nanosleep+0x194
-    EXIT  common_nsleep+0x77
-  EXIT  __se_sys_clock_nanosleep+0x15d
-EXIT  __x64_sys_clock_nanosleep+0x62
-ENTER __audit_syscall_exit+0x1d
-  BB    __audit_syscall_exit+0x5c
-  ENTER audit_reset_context+0x1e
-    BB    audit_reset_context+0x52
-  EXIT  audit_reset_context+0x5f6
-EXIT  __audit_syscall_exit+0x168
-ENTER fpregs_assert_state_consistent+0x11
-  BB    fpregs_assert_state_consistent+0x48
-  BB    fpregs_assert_state_consistent+0xa6
-EXIT  fpregs_assert_state_consistent+0xcc
-ENTER switch_fpu_return+0xe
-  ENTER fpregs_restore_userregs+0x12
-    BB    fpregs_restore_userregs+0x4c
-    BB    fpregs_restore_userregs+0xb8
-  EXIT  fpregs_restore_userregs+0x107
-EXIT  switch_fpu_return+0x18
-```
-
+To: Ingo Molnar <mingo@redhat.com>
+To: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Jann Horn <jannh@google.com>
 ---
-Jann Horn (3):
-      sched: Ensure matching stack state for kcov disable/enable on switch
-      kcov: wire up compiler instrumentation for CONFIG_KCOV_EXT_RECORDS
-      kcov: introduce extended PC coverage collection mode
+ kernel/sched/core.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
- include/linux/kcov.h      |  2 ++
- include/linux/sched.h     |  6 ++--
- include/uapi/linux/kcov.h | 12 ++++++++
- kernel/kcov.c             | 76 +++++++++++++++++++++++++++++++++++++++--------
- kernel/sched/core.c       | 13 ++++++--
- lib/Kconfig.debug         | 14 +++++++++
- scripts/Makefile.kcov     |  2 ++
- tools/objtool/check.c     |  2 ++
- 8 files changed, 110 insertions(+), 17 deletions(-)
----
-base-commit: b29fb8829bff243512bb8c8908fd39406f9fd4c3
-change-id: 20260311-kcov-extrecord-6e0d9a2b0a8c
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index b7f77c165a6e..c470f0a669ec 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5072,8 +5072,10 @@ static inline void kmap_local_sched_in(void)
+  *
+  * prepare_task_switch sets up locking and calls architecture specific
+  * hooks.
++ *
++ * Must be inlined for kcov_prepare_switch().
+  */
+-static inline void
++static __always_inline void
+ prepare_task_switch(struct rq *rq, struct task_struct *prev,
+ 		    struct task_struct *next)
+ 	__must_hold(__rq_lockp(rq))
+@@ -5149,7 +5151,6 @@ static struct rq *finish_task_switch(struct task_struct *prev)
+ 	tick_nohz_task_switch();
+ 	finish_lock_switch(rq);
+ 	finish_arch_post_lock_switch();
+-	kcov_finish_switch(current);
+ 	/*
+ 	 * kmap_local_sched_out() is invoked with rq::lock held and
+ 	 * interrupts disabled. There is no requirement for that, but the
+@@ -5295,7 +5296,13 @@ context_switch(struct rq *rq, struct task_struct *prev,
+ 	switch_to(prev, next, prev);
+ 	barrier();
+ 
+-	return finish_task_switch(prev);
++	rq = finish_task_switch(prev);
++	/*
++	 * This has to happen outside finish_task_switch() to ensure that
++	 * entry/exit records are balanced.
++	 */
++	kcov_finish_switch(current);
++	return rq;
+ }
+ 
+ /*
 
---  
-Jann Horn <jannh@google.com>
+-- 
+2.53.0.473.g4a7958ca14-goog
 
