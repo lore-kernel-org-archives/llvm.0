@@ -1,140 +1,129 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4FF33DEC9
-	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 02:14:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B30346A0A;
+	Wed, 11 Mar 2026 02:44:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773195279; cv=none; b=JD85cvDO6mpk0ts/KEOryIH02nNa4Pcq7IZ/FGYF1v5I3m4oOUfESmhk5FWIJ0T6GYvvuPICTMVn97WEfaS7jnVpr5iiNbhFN5WHC0cZxvqEmqA9qE1mQyx17mP7EH0IMCMOueOx8VBaffLjE0bty4zVR/wmPkAMOpDOJoX1EGY=
+	t=1773197095; cv=none; b=qmf+vor71YIbbHehNoPqrlScpE/TzzuJc3mg51GVrX5tYWsD0y7m5iopHHP8II+NQzG7evNwYX+V3OccJnWVQ15Z9H3JTbPjv889SZkS0PdN4mjPbjPn7WyNZCwMNowb9Ev7RugPwL66h9Z/0rz9e78hsz3PQ81TrQu7Q3BBKPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773195279; c=relaxed/simple;
-	bh=q9ph/jByNHXEPdJdqgdHMhsu43DjQa3sHPm7wj7ZG5c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m67Bh8axS7l7WOrNXT2NBnJUWiVJ4iIsLTM6ZWsr0KvdxOeQtYtC5TTZe74H5fCV4UbpKk3tuf4TIswAYSrtFykZMMSS56mI3+DrJAursoiBTBM2SbOsceeEIWF5O9qsE9CSJvehtzRwI8GrWETpSsZccAb9BDliwrgwf+V4QYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=djxlG8l1; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1773197095; c=relaxed/simple;
+	bh=aaG8l65BlkwQHxO4vr3LjRQ34Lg8mKXUZjdSfAKItmU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=m9ZlABRZXU/5vwvyqIjLqxnqr9c1vUoGAN8KeC0j+bMAY7EJrEE6M1c/7YJj/rJ6FbA3GlzoHtSQ7Txsovqu1Rttv2nSCj3Qw/x16hivRgEPRJQtAvgJYW3tu5l1kK1BqZbaFTM859phLUbdDMJ/g042B8uLzrYdcrT+iepeIDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OpP7m6C9; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="djxlG8l1"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62AMIKkh1599036;
-	Wed, 11 Mar 2026 02:13:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=+DV6Ll
-	iBUfdyPJjIwW+FG4fh2a9F1Ch2hP8+oBbZj9I=; b=djxlG8l1mBUi89L254y3xJ
-	VzXvBfSKM/Y85ABnG+9ChyjUhFz045TjiahtVUwrPmVQovvaszchTCwpyS3mgWZZ
-	ulmwSGa7MoVWm16PzS/RhQcB/abyE5vjKtOov2wVore7k7LkD5pvA/siHVnpN5do
-	H/KkFEaDI1jQBKJ6c8JoHIDwWsQibrgJ7eTbul8MrwyLr19XgJT6ATM5xHDPeDGJ
-	0xwxtIympOx8DSXAUAzLAhzcJz2Q9je9ZId5A36sbxgAG/jPMW+vPx4O1+Z2aFVL
-	KBPs20wK7ExRyKDuEbfcjSsBCGX+LZStyNqcDvP8ixj+xBNBjKvijYux2f/dxeGg
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crcundbp0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Mar 2026 02:13:58 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62ALfMwM015714;
-	Wed, 11 Mar 2026 02:13:57 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cs1223d2b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Mar 2026 02:13:57 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62B2Duhp60424612
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 11 Mar 2026 02:13:56 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 143602004F;
-	Wed, 11 Mar 2026 02:13:56 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AAA202004E;
-	Wed, 11 Mar 2026 02:13:52 +0000 (GMT)
-Received: from Linuxdev (unknown [9.43.124.195])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 11 Mar 2026 02:13:52 +0000 (GMT)
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-To: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] powerpc/uaccess: Fix inline assembly for clang build on PPC32
-Date: Wed, 11 Mar 2026 07:43:51 +0530
-Message-ID: <177319508335.269267.12539814985617156070.b4-ty@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <8ca3a657a650e497a96bfe7acde2f637dadab344.1770103646.git.chleroy@kernel.org>
-References: <8ca3a657a650e497a96bfe7acde2f637dadab344.1770103646.git.chleroy@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OpP7m6C9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773197093; x=1804733093;
+  h=date:from:to:cc:subject:message-id;
+  bh=aaG8l65BlkwQHxO4vr3LjRQ34Lg8mKXUZjdSfAKItmU=;
+  b=OpP7m6C968sGlWgUUVKf430kSbhpAVda1OhMIU7bjGMDihZHGe4epE/I
+   BgWmzPME5+dW+k3gYUXcU21WWa41NTMIfZqS0xw2wBiF8auQKBqUGR0vz
+   13Yh+T8zZYk1X9vwfxqkgaY827GlsoagBTImtaiqtdO4PWSD0UlCK/HPI
+   LG0dWwyfcyC9Vz00bNSiQzkqyEvUoiEThuVaGDYE6ueedoznoPK26ppgP
+   XCtZp0km2YbWZ0sUcKkG7AAecundiywyGyonGrCjDI6DrveMDHrQ1OUqG
+   oh2pqdEgFku+V8M9UowjUB6gm037H0K14/iVcx/jAiXCwX06ARhdtba4i
+   A==;
+X-CSE-ConnectionGUID: ZP/zsbcFTfKCC0+Py9tnNA==
+X-CSE-MsgGUID: sRBJkYX/Qx2HpnelMr7aKA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11725"; a="74134169"
+X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
+   d="scan'208";a="74134169"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2026 19:44:51 -0700
+X-CSE-ConnectionGUID: KnKAjngQQYCaMr/ZlSH+iQ==
+X-CSE-MsgGUID: mi7y1Kv+T5aTnKujBsLT2w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,113,1770624000"; 
+   d="scan'208";a="219442203"
+Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 10 Mar 2026 19:44:50 -0700
+Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w09Z0-000000000bb-2UMF;
+	Wed, 11 Mar 2026 02:44:46 +0000
+Date: Wed, 11 Mar 2026 10:44:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+ LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/wfamnae-next20260309 14/19]
+ mm/mmu_gather.c:25:39: warning: comparison of distinct pointer types ('struct
+ mmu_gather_batch *' and 'struct mmu_gather_batch_hdr *')
+Message-ID: <202603111025.WgKunZHd-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: tkmjbTxIIX-p8uZhCvZeZaxyOZhu0dNu
-X-Authority-Analysis: v=2.4 cv=Hp172kTS c=1 sm=1 tr=0 ts=69b0cfe7 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8
- a=pkHXuqzuWi_d4ceyA14A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzExMDAxNiBTYWx0ZWRfX0weK41uve5bs
- yGxEE6ur2NfillcnvJoTs6p/M4N/ryOCFPzkSBHsUiLCBPJcRc9nQ1DaUxxs5+wYCwaLATx6k7p
- nfNZzMbZ2bdkR7Hvno9ZGP0Z3KRD9uPM+C62z039epBlKIFvRWAGYtURC+hkbsdaZuyyxhENBpH
- Y7bd9qRsiwp70J95E1uBdYWaZjXPiDAT/tgfq5EKtsne48rMJhx0FXNg90KcBrNjs0PlaIlAs3q
- jvGDYzJLDsxfND9puMxt2slSbREIPi/zgm7eFBchi8bRhDgEpa2jCcWMfn/ad1R6JrF8kmwTOBm
- vS5IgmV9MumXz4u3f+tBRQIg7YgUvH3ntjNHoQ9ZjChC63QN2X4vYJagMU+KIZx8lqJTwH6HqHc
- y5TYie6qojS/p39q+dKq31uavLg4oHlgJJH1IkvJEHpwDRlLS1jdTqmB72TJ0/mA+OnG8pe9qw+
- +d63y80mtG6Cr/bMd7A==
-X-Proofpoint-ORIG-GUID: xMBYQeEfyAkITEHbdVqYFxpdLGGN0Ima
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-10_05,2026-03-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 malwarescore=0 impostorscore=0 suspectscore=0
- spamscore=0 phishscore=0 clxscore=1011 priorityscore=1501 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603110016
 
-On Tue, 03 Feb 2026 08:30:41 +0100, Christophe Leroy (CS GROUP) wrote:
-> Test robot reports the following error with clang-16.0.6:
-> 
->    In file included from kernel/rseq.c:75:
->    include/linux/rseq_entry.h:141:3: error: invalid operand for instruction
->                    unsafe_get_user(offset, &ucs->post_commit_offset, efault);
->                    ^
->    include/linux/uaccess.h:608:2: note: expanded from macro 'unsafe_get_user'
->            arch_unsafe_get_user(x, ptr, local_label);      \
->            ^
->    arch/powerpc/include/asm/uaccess.h:518:2: note: expanded from macro 'arch_unsafe_get_user'
->            __get_user_size_goto(__gu_val, __gu_addr, sizeof(*(p)), e); \
->            ^
->    arch/powerpc/include/asm/uaccess.h:284:2: note: expanded from macro '__get_user_size_goto'
->            __get_user_size_allowed(x, ptr, size, __gus_retval);    \
->            ^
->    arch/powerpc/include/asm/uaccess.h:275:10: note: expanded from macro '__get_user_size_allowed'
->            case 8: __get_user_asm2(x, (u64 __user *)ptr, retval);  break;  \
->                    ^
->    arch/powerpc/include/asm/uaccess.h:258:4: note: expanded from macro '__get_user_asm2'
->                    "       li %1+1,0\n"                    \
->                     ^
->    <inline asm>:7:5: note: instantiated into assembly here
->            li 31+1,0
->               ^
->    1 error generated.
-> 
-> [...]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20260309
+head:   e9c10f65a9dba55b2ab308e88aeb068d775d1a65
+commit: f51f62a26a08681ba34f2d3e8df8395c91ecd8c1 [14/19] mm/mmu_gather: avoid dozens of -Wflex-array-member-not-at-end warnings
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260311/202603111025.WgKunZHd-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260311/202603111025.WgKunZHd-lkp@intel.com/reproduce)
 
-Applied to powerpc/fixes.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603111025.WgKunZHd-lkp@intel.com/
 
-[1/1] powerpc/uaccess: Fix inline assembly for clang build on PPC32
-      https://git.kernel.org/powerpc/c/0ee95a1d458630272d0415d0ffa9424fcb606c90
+All warnings (new ones prefixed by >>):
 
-cheers
+>> mm/mmu_gather.c:25:39: warning: comparison of distinct pointer types ('struct mmu_gather_batch *' and 'struct mmu_gather_batch_hdr *') [-Wcompare-distinct-pointer-types]
+      25 |         if (tlb->delayed_rmap && tlb->active != &tlb->local)
+         |                                  ~~~~~~~~~~~ ^  ~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +25 mm/mmu_gather.c
+
+952a31c9e6fa963 Martin Schwidefsky 2018-09-18  19  
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  20  static bool tlb_next_batch(struct mmu_gather *tlb)
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  21  {
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  22  	struct mmu_gather_batch *batch;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  23  
+c47454823bd4e3a Linus Torvalds     2022-12-06  24  	/* Limit batching if we have delayed rmaps pending */
+c47454823bd4e3a Linus Torvalds     2022-12-06 @25  	if (tlb->delayed_rmap && tlb->active != &tlb->local)
+5df397dec7c4c08 Linus Torvalds     2022-11-09  26  		return false;
+5df397dec7c4c08 Linus Torvalds     2022-11-09  27  
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  28  	batch = tlb->active;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  29  	if (batch->next) {
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  30  		tlb->active = batch->next;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  31  		return true;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  32  	}
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  33  
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  34  	if (tlb->batch_count == MAX_GATHER_BATCH_COUNT)
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  35  		return false;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  36  
+adf085ff0d6fde5 Qianfeng Rong      2025-08-12  37  	batch = (void *)__get_free_page(GFP_NOWAIT);
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  38  	if (!batch)
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  39  		return false;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  40  
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  41  	tlb->batch_count++;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  42  	batch->next = NULL;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  43  	batch->nr   = 0;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  44  	batch->max  = MAX_GATHER_BATCH;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  45  
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  46  	tlb->active->next = batch;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  47  	tlb->active = batch;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  48  
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  49  	return true;
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  50  }
+196d9d8bb71deaa Peter Zijlstra     2018-09-03  51  
+
+:::::: The code at line 25 was first introduced by commit
+:::::: c47454823bd4e3ab34ed3f795afd4479ab938a3f mm: mmu_gather: allow more than one batch of delayed rmaps
+
+:::::: TO: Linus Torvalds <torvalds@linux-foundation.org>
+:::::: CC: Andrew Morton <akpm@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
