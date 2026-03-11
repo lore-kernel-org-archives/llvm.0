@@ -1,103 +1,138 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D407622339
-	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 09:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF6A23BCED
+	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 09:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773221709; cv=none; b=lHGzswplAReTaJcNNGmSseExIWB9V96pgr9IfJPoDzED+UV8el5BGpvHCJcbtGYkUU0+qoo3MYaGc81GWcBBOvQcujxaFOm7WKMbOqQGjsUkHT/kNPmFroLRSDRQDX+NBK6VEuWiRpJZgf1tGKtICQE4KWlLn6Eh1L+6gUGWSjY=
+	t=1773222130; cv=none; b=hCDeZKrHbbgxyrUx/bG3GU/4XpuWdvoClIrdVxwkaxw4o0KpLAv++kg0P79lJlz2BpkRe28kDbAJ+8vJdCzTn03SyXX1sI/oE6nHfc39HT2/GO3as9k3AJjkwLk0WHh22N+E3EfimOcIa07qnv9e/jEDIixL0TQGkxZW0ly2oHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773221709; c=relaxed/simple;
-	bh=aa57vnTUh0SxWMfF1DF7EcfbL+UNLmA40TkPWU3lvMc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ABDKOcW5eJx3N5L1k0W0jaxWe8T1S3z19UXnPCPm5qWQvw8uBDDR56NQPq1t8AZRidVXOxjlF1CZ3QJZhf4wS+G0CWnAkacohs3Ci8jmLI36zK1SqTdJM6ryHzFoMYT34j+RPotvRk12QiInaHTR0mJ/zuLkbPvNlN8pfZiW2Uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14BBF169C;
-	Wed, 11 Mar 2026 02:35:01 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECA6B3F73B;
-	Wed, 11 Mar 2026 02:35:06 -0700 (PDT)
-Date: Wed, 11 Mar 2026 09:35:05 +0000
-From: Leo Yan <leo.yan@arm.com>
-To: bot+bpf-ci@kernel.org
-Cc: acme@kernel.org, irogers@google.com, namhyung@kernel.org,
-	james.clark@linaro.org, kees@kernel.org, qmo@kernel.org,
-	nathan@kernel.org, nsc@kernel.org, nick.desaulniers+lkml@gmail.com,
-	morbo@google.com, justinstitt@google.com, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-	haoluo@google.com, jolsa@kernel.org, rafael@kernel.org,
-	daniel.lezcano@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
-	peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com, adrian.hunter@intel.com,
-	mhiramat@kernel.org, wbg@kernel.org, baohua@kernel.org,
-	xiaqinxin@huawei.com, brgl@kernel.org, warthog618@gmail.com,
-	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, longli@microsoft.com, jic23@kernel.org,
-	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org,
-	akpm@linux-foundation.org, w@1wt.eu, linux@weissschuh.net,
-	jpoimboe@kernel.org, robert.moore@intel.com, lenb@kernel.org,
-	srinivas.pandruvada@linux.intel.com, tj@kernel.org,
-	void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
-	broonie@kernel.org, rostedt@goodmis.org, gmonaco@redhat.com,
-	shuah@kernel.org, jikos@kernel.org, bentiss@kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, martin.lau@kernel.org,
-	clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH v4 06/30] libbpf: Remove duplicate $(CLANG_CROSS_FLAGS)
-Message-ID: <20260311093505.GH4153946@e132581.arm.com>
-References: <20260311-tools_build_fix_zero_init-v4-6-9e35bdb99cb3@arm.com>
- <00482d80980f713b27b422ec1ea2d17d0f1daed19243b597c5954e470cc09c92@mail.kernel.org>
+	s=arc-20240116; t=1773222130; c=relaxed/simple;
+	bh=831Y7f7Em6bxLtHwM64xs+4tqZstjbfs/IXcJ1gJR2g=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=SCCL75hQlYaBcCOOGcczWcFY4fUEpsXTKKxCJbqkbki7TAku7P5PG4ty/iwLTxN2wRpUj2qgEb/FHW3JMfjeIYGUB54mIDBK6LNdu3UO2IeqZaMDcrL1cXRYrk7zhqUv97Rol+NIBJV9i+1Q/YVOvGpY6cgQCkIkkTc8TVuMTXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PPkQZx6/; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PPkQZx6/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773222127;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wEPVajOJ9mIka+XV8vlFamNU7l5OtfPujQKlK9pWmsQ=;
+	b=PPkQZx6/fwIiqTZ+y3JoqT6voknxuTENamhJQ090vMon+bksxRID4Aqm4sxKre+THBkGRt
+	porDYEu1ZQsr7x3/U/CrwtQQ7CHUo/VLx8g0ENeqOlsi1vLOzf3JnBnyR9IYfkyzuHAQ4W
+	4AxTHjntS4jtxXn4xy0giqd/2KUzDYc=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-414-I2UzPlYYMUqlH_j0FAelAA-1; Wed,
+ 11 Mar 2026 05:42:06 -0400
+X-MC-Unique: I2UzPlYYMUqlH_j0FAelAA-1
+X-Mimecast-MFC-AGG-ID: I2UzPlYYMUqlH_j0FAelAA_1773222125
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C46D91956095
+	for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 09:42:05 +0000 (UTC)
+Received: from [172.20.219.202] (unknown [10.30.44.44])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4515E1800351;
+	Wed, 11 Mar 2026 09:42:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc3,
+ upstream-mainline, b29fb882)
+Date: Wed, 11 Mar 2026 09:42:05 -0000
+To: llvm@lists.linux.dev, ftjahjad@redhat.com, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00482d80980f713b27b422ec1ea2d17d0f1daed19243b597c5954e470cc09c92@mail.kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <66185.126031105420600514@us-mta-414.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 1axr1rJPTULY4Z0K1r8MoXU8wHHdjZUm2W9YJchUtbk_1773222125
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 11, 2026 at 09:02:13AM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> > index 168140f8e646..b1fbd0211c5e 100644
-> > --- a/tools/lib/bpf/Makefile
-> > +++ b/tools/lib/bpf/Makefile
-> > @@ -84,7 +84,6 @@ override CFLAGS += -Werror -Wall
-> >  override CFLAGS += $(INCLUDES)
-> >  override CFLAGS += -fvisibility=hidden
-> >  override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-> > -override CFLAGS += $(CLANG_CROSS_FLAGS)
-> 
-> At this commit, doesn't this removal lose CLANG_CROSS_FLAGS entirely
-> from the libbpf build?
-> 
-> The libbpf Makefile includes Makefile.include at the top, which does
-> append CLANG_CROSS_FLAGS to CFLAGS. But then the libbpf Makefile
-> overwrites CFLAGS with :=
-> 
->     CFLAGS := -g -O2
-> 
-> which destroys everything Makefile.include appended. The removed line
-> above was the only thing that re-added the cross-compile flags after
-> that overwrite.
-> 
-> The next commit in the series (233d70853154 "libbpf: Initialize CFLAGS
-> before including Makefile.include") fixes this by moving the CFLAGS
-> initialization before the include, so Makefile.include's addition
-> survives. But at this commit, cross-compilation with Clang appears
-> broken.
-> 
-> Could these two patches be squashed or reordered so that the
-> initialization move comes first?
+Hi, we tested your kernel and here are the results:
 
-To be honest, I feel much more comfortable being corrected by a human
-rather than a bot :)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-The comment is fair enough, I will squash the two patches.
 
-Thanks,
-Leo
+Kernel information:
+    Commit message: Merge tag 'v7.0-rc3-ksmbd-server-fixes' of git://git.sa=
+mba.org/ksmbd
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2377317725
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+               s390x
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2377317725_s390x_kernel_kcidb_tool_20854717_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: fedora: avc:  denied  { create } for  pid=3D1 comm=3D"system=
+d" name=3D"io.systemd.Hostname" scontext=3Dsystem_u:system_r:init_t:s0 tcon=
+text=3Dsystem_u:object_r:var_run_t:s0 tclass=3Dlnk_file permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2443788
+            Affected tests:
+                Boot test [aarch64, ppc64le, x86_64]
+                Reboot test [aarch64, ppc64le, x86_64]
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
