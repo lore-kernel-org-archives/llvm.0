@@ -1,176 +1,189 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010028.outbound.protection.outlook.com [52.101.46.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829D03346AF;
-	Thu, 12 Mar 2026 20:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773346763; cv=none; b=MWP8JvEc6dcqZGjA8VTqBT3JnLG7xy9BzUcu+8cDWr4Wk+14gFb3gwSj/BYQCafo5fcvKW0Z1gC0AQUkIfIfMsz7QSgNrQpqURlFgNccgAnFPeKiTaKQxEqIIodIVL43awIcN/DxLz8oZSOy8EEjvM1Y27myik/6ZEnaHJYkqfM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773346763; c=relaxed/simple;
-	bh=q9i0aNYEP5JbHJFthJWj0hPcbi62cBIHgZdzs8kAjUM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=toDNTHMV9RC0iRDaVagnEJVryMIWMheUkdIBO46+WMV5OAPbauLxki1ixg1ye+TZ7z6pgWmFXEmbpza47WIGxv03tv+nH/JPiLUsBIk5J2ko56SVcHTccdDtf5B7kU7lrrFtvCQCROXSLMsosoE4hnPwm9njoP0KyJToGJv/iTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lCRqgJ/A; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E229A2D0606
+	for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 20:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.28
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773347486; cv=fail; b=TZSHS7krfcK1JvFYLc/zDqCS876t97GPg1g4GgXNrR7omwqyF3HGHDlA0WO95Ssq4opJiyb+RszatV6mMG7Y4dw5dQfcKJCUajgI6vLvOBe0WHe9FcCQXPkcX44awDzUGzk/Swdi/Ada1tN4K4u+4SpP/s6udcjpsDS7qrfTQFE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773347486; c=relaxed/simple;
+	bh=TGzdzkkGbTNqzAcX1auwuzNakytNtVToj0kiSdS1pc4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=oEh4bvZKEMrSoHlJgMLk8nPnXCT8EsIH3fSClUbkuaq0sjKhqFaerUflNmEw799olOE+K6mbktU3iR2liGtEZNQDv7Wo7QW2UiSEUFKWKbCKFVq4Z/0fwvrS83am1J67J97G4z3L2D2zJ4EuQYeV+2oDubstMmoZcHf3MObFsko=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Wib3a9qC; arc=fail smtp.client-ip=52.101.46.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lCRqgJ/A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773346763; x=1804882763;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q9i0aNYEP5JbHJFthJWj0hPcbi62cBIHgZdzs8kAjUM=;
-  b=lCRqgJ/AQzx8b3wKURQ2AN2oKpuoeQxl2eFKNzEjUaNqi40qhGy7mcH9
-   64OvOYUm5aC7Uws0MyVqiA4u/z7Rzvzp9+l9ibwWsZBw8Ny72/cw82t4l
-   RQHFyofX1x9+yMPM9RATYYyaaqP1wL+V+KB/HXpEqsMzyGwCo/B0dbcXY
-   1+5UbGo+NgfjbSXTOuZQHgyNsBffSjpA3Xm6BDo4ARraH1D1V2MLh6yEB
-   H9nXjlmW/WVJxo35wSL1VF0OUlHbgwuRAWIOcPcyRQZ6EWcgfRld+VN+3
-   Uq8mnCcgG17oZqaVrShRdNvjAjkKrHmEsBuUCKw3WLepJMlIGgF0G32R5
-   Q==;
-X-CSE-ConnectionGUID: r4EjijDxS26N526Tv9Z33A==
-X-CSE-MsgGUID: ZxEU2aXNRymjYqs18gddKw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="74335564"
-X-IronPort-AV: E=Sophos;i="6.23,116,1770624000"; 
-   d="scan'208";a="74335564"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2026 13:19:22 -0700
-X-CSE-ConnectionGUID: AYg91w3STzKB947nCvtOpw==
-X-CSE-MsgGUID: 631cUlyuSmizJuoqoO5P2w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,116,1770624000"; 
-   d="scan'208";a="220027894"
-Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 12 Mar 2026 13:19:14 -0700
-Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w0mUw-000000002wx-3Wq3;
-	Thu, 12 Mar 2026 20:19:10 +0000
-Date: Fri, 13 Mar 2026 04:18:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Eugen Hristev <eugen.hristev@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux-foundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Kees Cook <kees@kernel.org>,
-	Brendan Jackman <jackmanb@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH v2 03/25] mm/percpu: Annotate static information into
- meminspect
-Message-ID: <202603130444.K3MmZnxY-lkp@intel.com>
-References: <20260311-minidump-v2-v2-3-f91cedc6f99e@oss.qualcomm.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Wib3a9qC"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=AojHAProD7B00FIl2GT0495S5oSiU5dx7uIjeUQ0ZMMDTvdKGczl/p9Sj8fNujrEOYp/LFdyI1X2/wb3HoPez+IrRcHaaEk/Xe3B9nyUJ2vThk55XW+xslSwUMVqLApr7V8f5YbpOWqEXJdeNMm5V9Ki0N6Q+gddzUxWO6sESOYBgZQR+GyY8Vtpayo+LA02k0O4YFm64D0817g1Y0SmgnW68yitWquisDzDqgBSJ0v1KBFdvTRiF8k4dGa8shy01PfvMLt2Bk/7n63d0Ud8RgL08XfrreZh1/KdieA8fEc3LhxwntEk3b0OqHrQ1Ks8B0aRC9MpYYc+NrvPi4onzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7LFWaTWjB5PfBa/vbLvQUNEQPuXDCiSbqNSd8pvbFJY=;
+ b=RZZ2X5wt9qSiGmYuhjkkNrGtB5D9azSWrNdty+D8UjeMzZZmGI78NR3G9sV5wMJ4NwoD1RTyyoKYp6mJ3a9T+IEZLXwyB+7lnX2wojxSj14cauSShVK/jAHSma1p5lEkHN9PCMwkB+Mq6Rz706ceQsllwSNkFAx1Za4eOqTUHsj+C4jSft7USzBeAn4a60Gm4nM8P/OljRqKT7rYLpV8JeFhcUeuMbX1RsnrYqKh2xwN79gdZMPNv7adhi9wnWDr/Ua6v9h6WuGND19iZRJVPImTvkppgpNxLP0zCE9DfKP5sv7RElSAp40o+8SGkSjN5g8rnY0Xq12diKWtOtU+jw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7LFWaTWjB5PfBa/vbLvQUNEQPuXDCiSbqNSd8pvbFJY=;
+ b=Wib3a9qCNnhdfLPZCTN9Z6sITmaGs3Okq49V1WvNx3Pz22JneM1fSTEGkkIwmzmjegNWk19tBoFAqKCWnG+bijZ0yAdoaNjJ8MBOXDvODKq+TzflaqsUmmdE3hgDTS7bAS37CiFbHDesuKbxnFYEqR2lt8oYy0QYSmlOt2uRKCQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5130.namprd12.prod.outlook.com (2603:10b6:408:137::9)
+ by SAWPR12MB999141.namprd12.prod.outlook.com (2603:10b6:806:4e1::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.6; Thu, 12 Mar
+ 2026 20:31:23 +0000
+Received: from BN9PR12MB5130.namprd12.prod.outlook.com
+ ([fe80::e7a:4396:5bcb:2b5a]) by BN9PR12MB5130.namprd12.prod.outlook.com
+ ([fe80::e7a:4396:5bcb:2b5a%6]) with mapi id 15.20.9723.006; Thu, 12 Mar 2026
+ 20:31:22 +0000
+Message-ID: <e52de864-d6f3-4124-8d4f-3180bfbbbc05@amd.com>
+Date: Thu, 12 Mar 2026 16:31:17 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] drm/amd/display: Fix uninitialized variable use which
+ breaks full LTO
+To: Calvin Owens <calvin@wbinvd.org>, linux-kernel@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+ Charlene Liu <charlene.liu@amd.com>, Ovidiu Bunea <ovidiu.bunea@amd.com>,
+ Alex Hung <alex.hung@amd.com>, Dan Wheeler <daniel.wheeler@amd.com>,
+ Alex Deucher <alexander.deucher@amd.com>, Leo Li <sunpeng.li@amd.com>,
+ Rodrigo Siqueira <siqueira@igalia.com>,
+ Christian Koenig <christian.koenig@amd.com>, David Airlie
+ <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, llvm@lists.linux.dev
+References: <ef7266eb7802ce6d68ebd9356477e9671f0c94e0.1773116305.git.calvin@wbinvd.org>
+ <abL0PlD1FDnfrX4o@mozart.vkv.me>
+Content-Language: en-US
+From: Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <abL0PlD1FDnfrX4o@mozart.vkv.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR01CA0126.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:1::26) To BN9PR12MB5130.namprd12.prod.outlook.com
+ (2603:10b6:408:137::9)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260311-minidump-v2-v2-3-f91cedc6f99e@oss.qualcomm.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5130:EE_|SAWPR12MB999141:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9501644e-4558-4bf7-3257-08de8076535a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|366016|1800799024|7053199007|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	zGPN1XSJiUq5OMwcySt+AvMknlpdiYgLfR/Nsj1rNpWgEM44Ca3iMWC3eM7At1mv6LHqqUfmpUdXPc5pbxG5Dvu5wGl1o5TNoB9x4yv1VYShVvjiLWyzqsHIKGFLZ+L9N3uXypS+t9tURnceRQ7gSQl/JGla7zKFit2aMRyp5NhARjwbaVoflzRHvO5lQ6kmHqS844roUOACtcDfb7aYph8cnmVVoZ14VOkPQ29rUpY0/EruaW+lfpXwEv3hAiHRveKqc4tVPKYforlZffz0MdzGHPM/aLgc8tFMUm3XJKsUAR1s78jk2ih7udXMyagcBsuhygj/V9s4vByCEJ3it5FxacnA1sVK7wEYd9ofI9M30y4CxD07sH8lqD3hAG/7BK97aVhiiiPG+6fW6tSPQZYSOIu86fTxyrEwz3wcPr/7kr0/MvoaxH8n2gWTtB68w4unPg0KDWBkMOfyRlxNwpTx9V8lvzrjuSTvFaa5AH+wjsU/6NiYzIWBCAnARohmvdTtTAM4UAe77M3AFMmSxQbWPXfblCl1ATiJzMWZGl1IO6VA8Pd0NN8iOYSlJcMVhahXzr1pMc95Zh8NWVGouIybj/p0koIRhggqPoyxlK8MZeIgTqogpfL79os42xlhd7Q5bR69IbMOVjlDE4dD+AQ7wciNkJmg3RANgMR1okwzDYfAnaWxJ7JmGex0calki85Na8J1ihvd1D7QDoHO2Xb1er6dDSUYhZKEiJk57X4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(7053199007)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dnd3NkFCaVVvbW1vOGpVYTR4RGNLSEgxdmswdWhONkYvTXdVSHBGYnN2bmx3?=
+ =?utf-8?B?Y1NsVncybVVuUGtFQlVVK1huK2kzWFUrTGVZb1N6QkZ2RTVGUU1uQ1piTTNR?=
+ =?utf-8?B?bEdPZjBWa0NZT2UyNEtYQmhEVFZxcFVoT012OHJrVGxONlJ6N0UxN1h2dUxr?=
+ =?utf-8?B?Q2lwV2krSFhCTGdERU55TFBPalRYTFUzbzhpSll5VEpqQ2l0N2FwVFhYMlND?=
+ =?utf-8?B?a1hQRGNJZitoM3F1STF1K2xWNHN1QUhhK214aU1yZkhsQWhBODdua2dTMXVl?=
+ =?utf-8?B?SGlhd0ZWVDhJc1hHdFlmSE05QlJGQmVRcTk2RXNlbXNiZzh5d3gyVStxRG5x?=
+ =?utf-8?B?alBiQ1BaS1JNbnJHaHd5VHZjYTg3QXJBQXJTbmgxbnFGUU1SalJTMWxlNUdT?=
+ =?utf-8?B?YldrNDZWWjRyWW5kOXpYOGNoWnFFS3IvQzlhZFlwMU1hcmtWM3dQem9ZYkpT?=
+ =?utf-8?B?dVYwbk83akNRc01ub2puQmtkbWVBVmx2K3FNTjRXd1RMSXl5OVhNOFJvUEk2?=
+ =?utf-8?B?RWM3UDRvR2EwWC9hZm96elJXUy8rTXk4L0ExVUdPRS9TSXpWTDl4OUtsUEwx?=
+ =?utf-8?B?Vkt5RE5HTVlyNjdJVm9hR0dmMWl3MDZjLzM3c3FzMlBITmNHeEVHYWpPOEk3?=
+ =?utf-8?B?Q1liVGNNZDVaQmpVMUF2bUR6RnMzUCtqaGQ5K0hla0ZGZVp0TXpJTndIMTJ1?=
+ =?utf-8?B?b0MxcURwcTNGR3Q5YXBlYTd5ZHo4MlNDb1dTMFU4cmtwNklQZXowYnlteXFW?=
+ =?utf-8?B?d3FrMUkweGZENnY1YXlJL05vcFVhV1lyRy82WXJ3dmtFcS9WS3lycUdIMHFQ?=
+ =?utf-8?B?MkUrRGxSU3ZpbDB2WkFqVmVmQUw0UGlhTVlBNm5tWDFGNjhzV0tRL3FiT3do?=
+ =?utf-8?B?L0dlZnlSR0luWkxDU3F6b1VnRUVFaVJ2YzhsQmM0WXZmWGhPeTUyeU50Qm1s?=
+ =?utf-8?B?TDZzcVNZYmVLRkNMWnlUSHZXOWwxQWJrcFU2U1FHQ1JwckxQcWdzQTk3YURS?=
+ =?utf-8?B?c01GV0ROOFNHak1JdmUrS2xrMjNOVFkyQVg5Nk5kRzVOR0ozeHk4OTFZbmIv?=
+ =?utf-8?B?ekJLeXBFeEVpcDRybzJ5Z2k5dXltb01YR2JjRXFxWGl1LysvWkxyT1JEclFa?=
+ =?utf-8?B?SUZKWXlYRzVNNXpRM3duVDVFWHAwYktka3RyaFo3RFpaVGh0b1dLcHEzRHdz?=
+ =?utf-8?B?ZFhhSUwvVk83SG81VFp1NlpiTXBIQ2phdFlycnFVQzBiM1lUSURmak51UENa?=
+ =?utf-8?B?emFsOTBqSy9HdThnUXNvb1JSWWRxeWVEcW9CdjEwdHlqcU4zaXlUZm5uVm4z?=
+ =?utf-8?B?NkFEU2lzMmZuUTcxNjN5L3BhVEtUSmVPSlg0T3FsQStuZTl1WGtCTFVlSTBr?=
+ =?utf-8?B?cmFsQWJ6aDlQWkJzK3dwUkhIUXJrNTZablVRWDlJcGhiZHdPb1VTVWV1NjQx?=
+ =?utf-8?B?MVBPSURTWUxVVVJwWW01Y1MwZjJJLzl0S1N4STZXN1NNbW1GUVR4SzIreFpq?=
+ =?utf-8?B?dzVZYTBjQ21jMFlyUndlcTB2SkFXc3JETFdnTytoOWxPTGg5bGJWTEhCUzFV?=
+ =?utf-8?B?aDlPR0tka2UxemhDb3BBVWI4dEY5WjllYWhNWUlINk53cFdNejZFc3hQd1Rr?=
+ =?utf-8?B?Unk3VUFmSEQ3R3Z2UnhRQWlwUGtpb1Voa1NVZlRCM0hJVEVGcmdiY29NWEpJ?=
+ =?utf-8?B?UjF5aG9SVnozSy93UnVGeU1Tczdxa0dHNEtTdVhQUFJIOFBuUDFZcjI5dWtt?=
+ =?utf-8?B?RUgrNDR3M1l6eFUvd3h5aWhHZmFNUEpnbmdKby8rTDM3VkFBM1pkTEtVYVl0?=
+ =?utf-8?B?S2lYR1BYYmJKUzQrM0FaanBjU2JnYjNkWUtlUTVVU0p3RnJkYVg4MDJSZ0lj?=
+ =?utf-8?B?WWlYVkxBelJiRW5uZE9GVDJHckdxRmlzUDhsYk5Dc3NNTjVFZDY4YWFVM3Ur?=
+ =?utf-8?B?TDVnTnczQ05oRzYyT3hRSFBuV2Z3YjBtUCtoLzEyYkpMbjB1cFN0S1QyN3NT?=
+ =?utf-8?B?aVhyS2FlM3o0b054RXNjemhCT3UrWU9SWlowVzg3NE5zVjJ4Y0I5d0JKVlQ0?=
+ =?utf-8?B?aU9BTVVTaC9mV0I0UGg2MzhtZ3ZYUnNvRmZ0eStHUTA0Q2t5SS9GTXRmT0sx?=
+ =?utf-8?B?anBkQ0pvdUxpeEhvdUt0UTRhN1Fma3NVbFdjQjc3KzZ2MlZZb3phYk9Nd2Zy?=
+ =?utf-8?B?dGVuWXdTbjM0WjVucXl5NTZXOXBTM1JBdm5vcGcyTjYrKzRuTnVKc3RncWtz?=
+ =?utf-8?B?T1ZBc3NsRHZqMEM2eldUYkttRWtrWjZsRHQ0ajFac1VTaUtQNmR1aXNiQjRZ?=
+ =?utf-8?B?UmxWU1BDRm4vdEJNNlduYUltZysvR3NlZTVLV0QwZHhYdGtSZC9WZz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9501644e-4558-4bf7-3257-08de8076535a
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2026 20:31:22.8264
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 10m2Dr8z+Cz42LkJpM69gPDIXB6fW9/StiyPrDzSj1zMvBFHbUIah7plnGbaca0V0ruaJ1Pk4RYg5lj6zfIPnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SAWPR12MB999141
 
-Hi Mukesh,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 343f51842f4ed7143872f3aa116a214a5619a4b9]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Ojha/kernel-Introduce-meminspect/20260311-042334
-base:   343f51842f4ed7143872f3aa116a214a5619a4b9
-patch link:    https://lore.kernel.org/r/20260311-minidump-v2-v2-3-f91cedc6f99e%40oss.qualcomm.com
-patch subject: [PATCH v2 03/25] mm/percpu: Annotate static information into meminspect
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260313/202603130444.K3MmZnxY-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7d47b695929cc7f85eeb0f87d0189adc04c1c629)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260313/202603130444.K3MmZnxY-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603130444.K3MmZnxY-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/percpu.c:3363:25: error: use of undeclared identifier '__per_cpu_offset'; did you mean '__per_cpu_start'?
-    3363 | MEMINSPECT_SIMPLE_ENTRY(__per_cpu_offset);
-         |                         ^~~~~~~~~~~~~~~~
-         |                         __per_cpu_start
-   include/linux/meminspect.h:103:40: note: expanded from macro 'MEMINSPECT_SIMPLE_ENTRY'
-     103 |         MEMINSPECT_ENTRY(MEMINSPECT_ID_##sym, sym, sizeof(sym))
-         |                                               ^~~
-   include/linux/meminspect.h:94:19: note: expanded from macro 'MEMINSPECT_ENTRY'
-      94 |                 .va = (void *)&(sym),                                           \
-         |                                 ^~~
-   include/asm-generic/sections.h:42:13: note: '__per_cpu_start' declared here
-      42 | extern char __per_cpu_start[], __per_cpu_end[];
-         |             ^
->> mm/percpu.c:3363:25: error: use of undeclared identifier '__per_cpu_offset'; did you mean '__per_cpu_start'?
-    3363 | MEMINSPECT_SIMPLE_ENTRY(__per_cpu_offset);
-         |                         ^~~~~~~~~~~~~~~~
-         |                         __per_cpu_start
-   include/linux/meminspect.h:103:52: note: expanded from macro 'MEMINSPECT_SIMPLE_ENTRY'
-     103 |         MEMINSPECT_ENTRY(MEMINSPECT_ID_##sym, sym, sizeof(sym))
-         |                                                           ^~~
-   include/linux/meminspect.h:95:12: note: expanded from macro 'MEMINSPECT_ENTRY'
-      95 |                 .size = (sz),                                                   \
-         |                          ^~
-   include/asm-generic/sections.h:42:13: note: '__per_cpu_start' declared here
-      42 | extern char __per_cpu_start[], __per_cpu_end[];
-         |             ^
->> mm/percpu.c:3363:1: error: invalid application of 'sizeof' to an incomplete type 'char[]'
-    3363 | MEMINSPECT_SIMPLE_ENTRY(__per_cpu_offset);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/meminspect.h:103:51: note: expanded from macro 'MEMINSPECT_SIMPLE_ENTRY'
-     103 |         MEMINSPECT_ENTRY(MEMINSPECT_ID_##sym, sym, sizeof(sym))
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/linux/meminspect.h:95:12: note: expanded from macro 'MEMINSPECT_ENTRY'
-      95 |                 .size = (sz),                                                   \
-         |                          ^~
-   3 errors generated.
 
 
-vim +3363 mm/percpu.c
+On 2026-03-12 13:13, Calvin Owens wrote:
+> Commit e1b385726f7f ("drm/amd/display: Add additional checks for PSP
+> footer size") introduced a use of an uninitialized stack variable
+> in dm_dmub_sw_init() (region_params.bss_data_size).
+> 
+> Interestingly, this seems to cause no issue on normal kernels. But when
+> full LTO is enabled, it causes the compiler to "optimize" out huge
+> swaths of amdgpu initialization code, and the driver is unusable:
+> 
+>     amdgpu 0000:03:00.0: [drm] Loading DMUB firmware via PSP: version=0x07002F00
+>     amdgpu 0000:03:00.0: sw_init of IP block <dm> failed 5
+>     amdgpu 0000:03:00.0: amdgpu_device_ip_init failed
+>     amdgpu 0000:03:00.0: Fatal error during GPU init
+> 
+> It surprises me that neither gcc nor clang emit a warning about this: I
+> only found it by bisecting the LTO breakage.
+> 
+> Fix by using the bss_data_size field from fw_meta_info_params, as was
+> presumably intended.
+> 
+> Fixes: e1b385726f7f ("drm/amd/display: Add additional checks for PSP footer size")
+> Signed-off-by: Calvin Owens <calvin@wbinvd.org>
 
-  3362	
-> 3363	MEMINSPECT_SIMPLE_ENTRY(__per_cpu_offset);
-  3364	/*
-  3365	 * pcpu_nr_pages - calculate total number of populated backing pages
-  3366	 *
-  3367	 * This reflects the number of pages populated to back chunks.  Metadata is
-  3368	 * excluded in the number exposed in meminfo as the number of backing pages
-  3369	 * scales with the number of cpus and can quickly outweigh the memory used for
-  3370	 * metadata.  It also keeps this calculation nice and simple.
-  3371	 *
-  3372	 * RETURNS:
-  3373	 * Total number of populated backing pages in use by the allocator.
-  3374	 */
-  3375	unsigned long pcpu_nr_pages(void)
-  3376	{
-  3377		return data_race(READ_ONCE(pcpu_nr_populated)) * pcpu_nr_units;
-  3378	}
-  3379	
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Harry
+
+> ---
+> Changes in v2:
+> * Use fw_meta_info_params.bss_data_size instead of repeating the load
+>   from the payload header field [Nathan]
+> 
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index b3d6f2cd8ab6..0d1c772ef713 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -2553,9 +2553,9 @@ static int dm_dmub_sw_init(struct amdgpu_device *adev)
+>  	fw_meta_info_params.bss_data_size = le32_to_cpu(hdr->bss_data_bytes);
+>  	fw_meta_info_params.fw_inst_const = adev->dm.dmub_fw->data +
+>  					    le32_to_cpu(hdr->header.ucode_array_offset_bytes) +
+>  					    PSP_HEADER_BYTES_256;
+> -	fw_meta_info_params.fw_bss_data = region_params.bss_data_size ? adev->dm.dmub_fw->data +
+> +	fw_meta_info_params.fw_bss_data = fw_meta_info_params.bss_data_size ? adev->dm.dmub_fw->data +
+>  					  le32_to_cpu(hdr->header.ucode_array_offset_bytes) +
+>  					  le32_to_cpu(hdr->inst_const_bytes) : NULL;
+>  	fw_meta_info_params.custom_psp_footer_size = 0;
+>  
+
