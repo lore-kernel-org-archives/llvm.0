@@ -1,102 +1,177 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1B5396B75;
-	Wed, 11 Mar 2026 23:13:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773270805; cv=none; b=LC434/pt0QmtqwqQUVTtWRwzmuzQns76+efHb0yrG6HKtfVPSg4r26SBp4WJe7f5CrD8SgjPN4/Mo6mmUJMvUWx47GYE983ev1D5QZa500p7mV0Pbpl2UuqJWathbT6ZUaTHzTSmtTU+wuK7LLigBSWtNLe9+1e000GD43510o8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773270805; c=relaxed/simple;
-	bh=lu1VpTkh4FR0BHokv5InMIMcjOcfFFQgXviWv9LDeZw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TU8gm6KBoIFpOQZ/aJ0P0RZ07HJyrZN3dusXVsMuWcIdjaLRVxxcgzqP6LUjjuZmrGKVSETTB0ZG308gZh4CtXd9ZXuw8Oexs/aTTrSEWo1/KSUeVOOU8V56+tIZ1ROBootLYQXt9k4+XHREe7htDH4kPHbiXBj63wGz0KFrIFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RB1ra6e6; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1A5221F0C
+	for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 00:29:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773275398; cv=pass; b=C2qIVkLOsWdkdRPTzwvBLccv+PIWAq9Ys3d9jY6KGrwMq/eEJAsnAAiVeXgLTHxYOnjJBX3G02zgxfELUCl9Hl+FUVvuJnE1KZMjAfvmkLhBRWhaNtDV/kkWKi2Z56OxzdhgUZTDsuN0P3Yu2veDm4WWJWDZktG2YLG068xebh8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773275398; c=relaxed/simple;
+	bh=YcypzZhNU7pNSG3Co3XkiZS4WRLodx1GYdn6Od+L76g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kdtse+GbpG2KWsjipITkiKQPAYH6VcK/MwXrBYJjz8g/zqw3al0Vpaj5SWFHIiNKUFP260bX7XRhLTLS4XT9lm/GnHnz3qszT7MYt2+Khf/p7dm6Pfy20ufwdR9/JsFnT22td+Nr2VR8gCmoE1RnCM8cFLEtCrs1Ri8XeNB8JqI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xAVxXkpa; arc=pass smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RB1ra6e6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773270804; x=1804806804;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lu1VpTkh4FR0BHokv5InMIMcjOcfFFQgXviWv9LDeZw=;
-  b=RB1ra6e67mxIR191ylNvu0Q6mYVgQKTUQbceL56lxcdJkiIIrteUYxEk
-   X7p0aPkQeFe3eCyEH4kQ+sDuqX1NMF7/Hqon9lI1LUpIOwZGpF01ct1z7
-   8BiVjElwbECjPbTXc0V9QHtKGMkKw28ubvmrXka7pVCoc88lJ6m2E4EDR
-   76gFB6AxmuKO8FaBjmDfDsTa7sFyKfHbW/K/PMMonlycopbtwMnuF3KcS
-   POs3sgFgcyrAFv95FviojMUawLXj82EwYxX+GSIznl/vB7vtKiEOI0D0t
-   clOHcDyIwau+2KCBf+kbXC2aDRQ91dFPhxw7SLFqfgK3CctIMG7bHFyKq
-   A==;
-X-CSE-ConnectionGUID: Cmc5IgO9Rb64WCScGiQZKQ==
-X-CSE-MsgGUID: n6DhiEO3Tx2xhgsZaXyiaQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="91734940"
-X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
-   d="scan'208";a="91734940"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 16:13:24 -0700
-X-CSE-ConnectionGUID: KBENLqCLR/ypuR+Dl2pk7g==
-X-CSE-MsgGUID: iEV3TUzjSoeRDtEno4WRoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
-   d="scan'208";a="243645768"
-Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Mar 2026 16:13:21 -0700
-Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w0Sju-000000001nj-2Iv1;
-	Wed, 11 Mar 2026 23:13:18 +0000
-Date: Thu, 12 Mar 2026 07:13:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jamie Lindsey <jamie@matrixforgelabs.com>,
-	rust-for-linux@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ojeda@kernel.org,
-	paul@paul-moore.com, aliceryhl@google.com, jmorris@namei.org,
-	serge@hallyn.com, jamie@matrixforgelabs.com
-Subject: Re: [PATCH v2 2/5] rust: helpers: add C shims for LSM hook
- initialisation
-Message-ID: <202603120739.yWj1J5Hv-lkp@intel.com>
-References: <0102019cdb4c6a42-a28bbebb-3664-4792-966f-4036c94ac19c-000000@eu-west-1.amazonses.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xAVxXkpa"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ae49120e97so37695ad.0
+        for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 17:29:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773275396; cv=none;
+        d=google.com; s=arc-20240605;
+        b=HaltSoS7qge3HE0CyaEnQAXkP4p9FCDqoBesvzO+ji3YJliTOszkUixTcKLx2J3iJh
+         MdqIXJIoVRTciXMHpq0eTnoTPHhvHoR6JchtPVN17Ko5NvjfgPIPTLm+p5ujvgQ1lWL0
+         MYAyymdpL+u6slwEM2045do+Fo5PK7Tyx5RVGRSP5LASg3iTXpEE2e2Gc9pY7ujv+0k7
+         MieT+Ev6ftCyvQMNCSmcq+r8prLf9Hq9kIvfO7d5rZQOlJEiERkuhoOL5qs63yK5KlAD
+         ptVSSj/Xb5CClWZcLzubzaVvWPQK7eixqjla0AFKTrz/Mch95AUHS8865yYiHH+yMP5K
+         dGeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1PC+/wr2syCqvxGBoZe6+L+D9Kxcq5YGZvRoBAu0gk4=;
+        fh=a4MJ3YUF5J6caGPn2Mreuo5ZuH+7uyGR1lU+Ds+CfJU=;
+        b=XgyjkYR6Vt0XmqPa/zSLv36g376hF8SlQQbDusyxwAwM8x5y21OwyNLWBk84PFtdXn
+         kBRKIVqwO0w4Sj3doAG+sbGy5+DqEKji7D2JyD2Y2jli4U1OwugYxADrt7XndJcuuXMr
+         2tZuHgtFtQZrMXN0c/gNQifJ57kmV3l0FNj3FcCSTp8BYR/6kRTi/PUIjz8wtSweXoQB
+         quvYPe60HegvFGGccrwc0bfzPX1D5hnu9bE17zweoNsz/3LBG3tImGCCZw8//kznguRH
+         sC4szmBv8ywOOJ5M3BaMQE2Kfrk1qvxrAVxVYB88b7OT4i9JV2yxLtavsntz4TFqpHEQ
+         syjw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773275396; x=1773880196; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1PC+/wr2syCqvxGBoZe6+L+D9Kxcq5YGZvRoBAu0gk4=;
+        b=xAVxXkpaQAjr1T/Yl3Kd1IF8RPK62tuW9mUr3BmGeNV2iSlFmeG2nhQWmHjeLo8LL0
+         f+uQjp9XuVKhm9dEgm87To6UUwYB6O1r56q7oJJUvB1wsj/Li89m6UNngROuZkbMyYwd
+         3DelA4mBSIJeG/Luoikc6WwZ7hpru1dljKfwNXo84IpP6i/P4cnblAaYRwCL1uGLCp4g
+         ngv04HPldqBReOTm4Krntcpb26QNmVBqMN5drUNX3cbCEI7xbmcBFkXaepklyiVLjr7+
+         bd+MEsbcPyqdSEhb9JvaTbh/ZzjM32OQn+vPBhbMk2EyFOGZdFlfmvBOpj0oNrMYrtMF
+         TpfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773275396; x=1773880196;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1PC+/wr2syCqvxGBoZe6+L+D9Kxcq5YGZvRoBAu0gk4=;
+        b=tFCSlD6HEWiq5x7Jrnj+q1QJPzYEQfd1DcJ1tV2EAJz52iOmUM7aNSY7MQI80xVC+1
+         U7fsuyq7cp6qrdY8/qpbyL/rajbsgqjfCT5SE5mEtfnfNjXgnj6NGUCWgr/f7UsgMTGt
+         wbTRvS1MkQ+/HD3PqlR7EyvFn6JvkQL6SNVHznpPcf1euvbL98R86Q0K2M/GyfqE1yTB
+         wRKa0PrvWGbvNBhW3s/vTGt43FU7iUT79oJWKU+M3skyGUlN1YexKaRIdlAW2Dhwetkp
+         OwEs4lIUKQZ1EwJmx8lER7IC341jk7WSEaBYV5Ni1YZXVG9JrJqe880BCKtM62y2qWyf
+         1/vA==
+X-Forwarded-Encrypted: i=1; AJvYcCULmTjPtvT58Es549mnMHWrU+XRL0VPFQgraw8/08hpaC2pqkO4hvxfWR0Wk+VWpQ4/UBEX@lists.linux.dev
+X-Gm-Message-State: AOJu0YxWxNMy7gJnLkRgCUb3Db1E+mbCWjEOMrRhYDHlgEb+fK8k2eNX
+	SUjPakxuemJRAy66db8ltfSy9GoGPnJqIKHdrdnjqs6V8qDkFNc7lBLoMTP6vHIcguO7+ONJQo/
+	ka3kbyn7PU1epe/+IfIx0GCXejAlJnY477BY6rVki
+X-Gm-Gg: ATEYQzyfhVU2z0YeETShKy1GlSqt1IBtekb/+fWQckq8vJx0rvHOFKqqthXBun730SM
+	TqHu4bfoRR8ujSl8oMP+L1S6C9glYMIzg3MyRJF8dgBAwjkmXkfgq1jOydPD8Fp+U4hoj6GJt5h
+	IVAHjoqPqrMDFog5YDgKjQkfgQwhiPhFGtmi8+HWqAe1LL1JjjeH5gbg0pBRRdX61xPotixVKWk
+	wfKI7isajalIiR4CRJtjjlZHJl5s820Siq65UvfQSr+LyNlEI8w4A5wXYeo//Q3u2dtl8n+V5dQ
+	BmgBkOBAV50ry2B5TeUqDJHSMevetBWpZf0IzoWucpHNJW4=
+X-Received: by 2002:a17:903:3c67:b0:2ae:80a3:98a9 with SMTP id
+ d9443c01a7336-2aebd197d2bmr962485ad.11.1773275395866; Wed, 11 Mar 2026
+ 17:29:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0102019cdb4c6a42-a28bbebb-3664-4792-966f-4036c94ac19c-000000@eu-west-1.amazonses.com>
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com> <20260311-tools_build_fix_zero_init-v4-12-9e35bdb99cb3@arm.com>
+In-Reply-To: <20260311-tools_build_fix_zero_init-v4-12-9e35bdb99cb3@arm.com>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 11 Mar 2026 17:29:44 -0700
+X-Gm-Features: AaiRm51j9bOAiNXwV4INuHof8fl1AJbNKlxnNgZFr0pcoAP2BOsfzP0vifju5JA
+Message-ID: <CAP-5=fUsOzjCAOEyJF1cwDbfjSHi=TKjWd1kL6tWWvLu19CFkA@mail.gmail.com>
+Subject: Re: [PATCH v4 12/30] tools build: Append extra host cflags
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
+	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
+	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
+	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
+	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jamie,
+On Wed, Mar 11, 2026 at 1:31=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+>
+> Append HOST_EXTRACFLAGS to HOSTCFLAGS so that additional flags can be
+> applied to the host compiler.
+>
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/build/Makefile | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/build/Makefile b/tools/build/Makefile
+> index 3a5a3808ab2a1dedd40f35ea322913e8a0788130..a86ce3d99e2bb1c005942d9c3=
+2191e6eaa55cf50 100644
+> --- a/tools/build/Makefile
+> +++ b/tools/build/Makefile
+> @@ -40,14 +40,16 @@ endif
+>  FIXDEP         :=3D $(OUTPUT)fixdep
+>  FIXDEP_IN      :=3D $(OUTPUT)fixdep-in.o
+>
+> +HOSTCFLAGS     :=3D $(HOST_EXTRACFLAGS) $(KBUILD_HOSTCFLAGS)
 
-kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on rust/rust-next]
-[also build test WARNING on linus/master v7.0-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi Leo, should HOST_EXTRACFLAGS appear after KBUILD_HOSTCFLAGS here?
+This allows the extra flags to override the build system's flags.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jamie-Lindsey/rust-helpers-add-C-shims-for-LSM-hook-initialisation/20260311-131258
-base:   https://github.com/Rust-for-Linux/linux rust-next
-patch link:    https://lore.kernel.org/r/0102019cdb4c6a42-a28bbebb-3664-4792-966f-4036c94ac19c-000000%40eu-west-1.amazonses.com
-patch subject: [PATCH v2 2/5] rust: helpers: add C shims for LSM hook initialisation
-config: um-randconfig-002-20260311 (https://download.01.org/0day-ci/archive/20260312/202603120739.yWj1J5Hv-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603120739.yWj1J5Hv-lkp@intel.com/reproduce)
+Thanks,
+Ian
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603120739.yWj1J5Hv-lkp@intel.com/
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> WARNING: modpost: vmlinux: rust_helper_security_add_hooks: EXPORT_SYMBOL used for init symbol. Remove __init or EXPORT_SYMBOL.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> +
+>  # To track fixdep's dependencies properly, fixdep needs to run on itself=
+.
+>  # Build it twice the first time.
+>  $(FIXDEP_IN): FORCE
+>         $(Q)if [ ! -f $(FIXDEP) ]; then                                  =
+       \
+> -               $(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(KBUILD_HOSTCFLA=
+GS)";      \
+> +               $(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(HOSTCFLAGS)";  =
+           \
+>                 rm -f $(FIXDEP).o;                                       =
+       \
+>         fi
+> -       $(Q)$(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(KBUILD_HOSTCFLAGS)"
+> +       $(Q)$(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(HOSTCFLAGS)"
+>
+>
+>  $(FIXDEP): $(FIXDEP_IN)
+>
+> --
+> 2.34.1
+>
