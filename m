@@ -1,205 +1,156 @@
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659CF36165B
-	for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 16:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55FF389102
+	for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 16:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773332137; cv=none; b=ptwHcoHY66yx4qHz4WgfyupssLjuj1oSnXlx6BQrqPyr617ayRIzc2bUfz8M4gATM1byidT3zezBY41GX4qvj6JkFHfx/czxsqaq78cfMQnpu1VncpQ2bLc56kzyUm0E+Pe5oA6jxvWeg9M56Hu1q5P1gxGOmHtnwJ5YD+Zu/8c=
+	t=1773334580; cv=none; b=o1lLIUql8sjVorc9LSGnJK4ZlNcVPv5J+y75z9xhn7IvSkW3s8waQHQwaxYEYcTqj+ZwxagLKIYT4WaJLPXrJI6PWShDkFBLQoZ687HdSkkbVSkK5HLIkBcXmUYqmeGJVHKYl6fuSNtQOVtmjZkNPqviDuVrF/Fy3f1B3P61LdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773332137; c=relaxed/simple;
-	bh=Il21NT5G3bUSYbGNgP2ZFEeaPk8AZ8BNvAj2u09XGwE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dl9wxndG+JQh2WbAK5bCUdj93Vhmht8kWR9pTbuqs05uXUx50Y75QhTzjs2mqNR4hsT+/rcrn1nIfbR69VVatFxIeQ88jrcZfSdDL5LIuLzSed1lI78/oAypgZnI+FAOs94iT6Bo32sspL6uDFF3MfkgteIcs9f1GVaPh8+D5tI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wbinvd.org; spf=pass smtp.mailfrom=wbinvd.org; dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b=ba3MneD+; arc=none smtp.client-ip=74.125.82.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wbinvd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wbinvd.org
+	s=arc-20240116; t=1773334580; c=relaxed/simple;
+	bh=2FIX/z0MA78TQchy8Bl9fzSZSjfi9qD8z5KF77Ky/zQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=N0hQ6koCu/QlRGrKDdUStRigOkvCFd75MPZmWbYIRHI44En2/4Qhey81OXxeQ9XGDI7YG3F8vsQmYqNzKgBBRyOKcVUHndbV9tdb2J35yMyQRUnN3hyIbCtrmDOHNC8b2CpZYKJB4+CR6PJmojYC+lH/4EuuuTnpRPjiszlRLjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BY1zDlEw; arc=none smtp.client-ip=209.85.210.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b="ba3MneD+"
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-127380532eeso361838c88.1
-        for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 09:15:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BY1zDlEw"
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7d75ed779bfso1377070a34.2
+        for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 09:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wbinvd.org; s=wbinvd; t=1773332134; x=1773936934; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wYTHfLNKxvy35JvH8B5/QuRK+srFMTLyCSw6VerOpmQ=;
-        b=ba3MneD+jDiWaYUQ3ySvO6JRaSfs1KIxI5IZuzReSaa3frHLOdZfgtgWD3qhuz0oIl
-         n0J/EG+Qh/9x831m1P39U7JMgd07wDjoCaiywt3uYl4Xrb8ZOWhFsNFSTuIzrEnXnSEL
-         X8rg4NHYiMKC8nbc4zAp011Z13hreSCzAFgV2TA9ie5pPhyggxcJ0u1nV7PQjboAaOlu
-         qjU7TRM40Nh+v0KCgKurRuOZ157ElDaZ6HkWVuLPXJg1s1LFokb+s8QzbthLqcALNNJ7
-         632V9n0ZoZOPJPYY/ZxGxggD+5hSNkqSS9cYGF8SNW8h6ADRbrU5DFmV8ouHgXnx+5f2
-         57Og==
+        d=gmail.com; s=20230601; t=1773334578; x=1773939378; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=18JIT3O6zukphcEe6SxTxh/vhMczaM3dIFncm+AHYYE=;
+        b=BY1zDlEwUWF+h9RM3iLGs55r4zacL9iJVE78zyNPKD2mAd7LSGr01stURxmdGsXHwd
+         khnHju6ZdirymzYLAr7uSJWN0rMpWaTw2ZCZdH5TjkO6rp8vIwciSCxneW2p+HSbj4zW
+         Phk656eYR+r4ycEBiqj4sbmLgrDkrX94w3kEePj4/nM5JiktX/OXN/XMLWMMpOwonU2j
+         PX4um1dbWCly/xDI47PHeCCesVXfB+NYwmC53mnrDHaTOUqaBFTfoTVH9pUPPvfGyhsR
+         gjN/U1nqPT6tXoKz1RaiU1Yz1IBFAGWb0SdT/QFJfzYZQtdnjK0VtIbZ9enAJHuItvIM
+         X4pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773332134; x=1773936934;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wYTHfLNKxvy35JvH8B5/QuRK+srFMTLyCSw6VerOpmQ=;
-        b=K8loJ58z7OTWlB9f+DCaFf2THTVui7Tc7a4BoXWLHh/5nTrKTBl0sxVugDzQeQjjHw
-         5eJabcl577T+MwojG/HW6LzfTqRBcFpF+tykn2RRDQzQ41odivD5a/9/spBxYwcvtDIN
-         E9LJ35prbUJkYL+D6TyUeMHQv8JO8TlNVN5Ot/+EU0O06AKu9fWdHdiaxbxz2uNKa6p3
-         d6aFblI0rVTfA8RqWUBQDDFXvkSgExe4huB3ei0A+tG2cD5NRHKOWuY5kHT+a5WeCw2X
-         c3Ss4Pwo1Ol+IOFkY9zoJcNkjrJbWgqQ8xVJEXyvMwlCMAmUOI7WDbewMCrUAn86rDML
-         SDLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUUlAhgwkS9TiOqXZ+khjl7RmItywfIohXfUi9/NuBxainwqy6frv8EfepKAQWioNMdFx6r@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy8eXoCwLOyKCG4tnhRiJafzqIaHt91RLDDwLlbITqzJ6PnlsHE
-	bUiflv1Z0Ob63ZqQ4+Xql1jvrUupHx/akazPCfUJNxrdQvbLh1BEX6yH10DQOrbv/so=
-X-Gm-Gg: ATEYQzxxI5oWCSykF85Mj9QbU7DbCw6tXjznUpqXjiDttuZZcO5tUc3BEO3isSm/7Gg
-	81CcRV7/jeBVZJg5yPhTNp9nXGUlPckHs3mfDVT68o3oqCAjUR7g6qOCpwQytfE2q5VXWKWAmCT
-	bIUQaVTmUEVwLP2L3duJX904uMUhXIBeNiZFDNyfZTGfaOKMueFzlA4gmJQ52xU6xNo69/WGNE5
-	LhK5nzmZcrhvDJkTZJhDNjikz3PW+hLHnryfTyp6knUbiJ5pnvy7hv+4oxlzh7e7OahqqChz70/
-	rNSs0o2LaKewxh/G5aRrz2GHDfj2Mn8BvWFwkZASJxyXwVd/kQGLBjU2rFOS4mslrWH9ok2ZsGr
-	ZhmflUj6YjV+ZQIcyTgIsLXll9pzYzlLUV5aMkE0X78KFRdnnWvgVBYc1ZJ1P1zj6Our5ARevPB
-	/03giJ5SPef0uuD8iojNSdpe5Vlw==
-X-Received: by 2002:a05:7300:ec17:b0:2ba:7783:d1cd with SMTP id 5a478bee46e88-2bea5475343mr137153eec.12.1773332134317;
-        Thu, 12 Mar 2026 09:15:34 -0700 (PDT)
-Received: from mozart.vkv.me ([2001:5a8:468b:d015:53d0:dd05:1bb3:9034])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be8aa7413esm6963232eec.24.2026.03.12.09.15.32
+        d=1e100.net; s=20230601; t=1773334578; x=1773939378;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=18JIT3O6zukphcEe6SxTxh/vhMczaM3dIFncm+AHYYE=;
+        b=mwDCnjFPopKUwrvZxZjU8pesWhfKvTjsprT06gXQ905uB6jshuJvnak2UNKO7yNH2V
+         WErUeuUpbASTfVKi6rbjIkeVYb5l25kmWmckKIG63WlAwEw1GB5zDMBGQ6Ny2QRqmyEl
+         QMZ/nZReHQa6ksC0eG+C9Cng+2xE+VfKubjzrEuobOY77vuoj2qBrCGzb9JZY1umM1Ry
+         8gGX5VtcyMAyGfmaZnBDy/u+JSOaGX1OEscgJasPzgrBNWRmAJGIQl+Qh1H6P6xcDJmd
+         p2XyZYhvWhoP4k2gsAmJUtFtmniIU5Tmo3ktgCmiEUkKMUN2VcDr5lkleY0Kyr7yYOVv
+         /TDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVzIVaICfhKYWZ1Q1twgJpANZS4t8QNBH4MlxLYKFaQurNGyoqtci06/UmMqSEBHCuA/ozy@lists.linux.dev
+X-Gm-Message-State: AOJu0YwPiA4Fg/5J8x+/DiRd2C4k1pG4lkXWXKAE5uKZ7rblE0K0kyCR
+	R8MSrI+qI/HoZR0++Xt79A1NjDs70PXnHGlcjQ4iGY7hE5HLH2pD6ylT
+X-Gm-Gg: ATEYQzxfn/6I4bkqzbN5Bzuolt0r4l6OXiFrU7pCj1DIwH6aHi4wue3XkeEJMH9aniJ
+	qBi7CqwyBfAAB2/+BXw6Ri6iMsnF/V5Nsa2GX0nFHJmB3j4i9muq0gj0XMX5EhP/RsHWm8bNDFI
+	X2LK7DYgZ9yj/Aj5/4l6seS6kkkWku5PkV/ZNQSpiquAvsTxfFo8MuaaicoBIzCZV35455oGegn
+	zU+erQk3N08Py3bKVMZDJy/nkZjtB9YyrPpJ4GjkAB5FSGuu9y/DqhiFux3Dp+wKg9onrpWM7b/
+	f8Pk458SyuqX7Syy5WnNGjMRvRQ9GlpbzK2tfXAbbomflrV1/sqxgcES76SmJexGhiCaDdBVLsU
+	UHkun0HMsjg1m60ZQNKcO0okNaWPJ7O0liit+4VJ32/3J03jwxw++FWETg4ueSbL25uzpVF2qUr
+	BAwsv9z1jtwf6hRtOA6j5Y3A==
+X-Received: by 2002:a05:6830:64c8:b0:7d7:5b20:16ec with SMTP id 46e09a7af769-7d782466df9mr59235a34.11.1773334577663;
+        Thu, 12 Mar 2026 09:56:17 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:57::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d76aa5dcc7sm4596873a34.0.2026.03.12.09.56.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 09:15:33 -0700 (PDT)
-Date: Thu, 12 Mar 2026 09:15:30 -0700
-From: Calvin Owens <calvin@wbinvd.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	amd-gfx@lists.freedesktop.org, Charlene Liu <charlene.liu@amd.com>,
-	Ovidiu Bunea <ovidiu.bunea@amd.com>, Alex Hung <alex.hung@amd.com>,
-	Dan Wheeler <daniel.wheeler@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira <siqueira@igalia.com>,
-	Christian Koenig <christian.koenig@amd.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	llvm@lists.linux.dev
-Subject: Re: [REGRESSION][PATCH] drm/amd/display: Fix uninitialized variable
- which breaks full LTO
-Message-ID: <abLmonL-8QubcCpA@mozart.vkv.me>
-References: <ef7266eb7802ce6d68ebd9356477e9671f0c94e0.1773116305.git.calvin@wbinvd.org>
- <20260312080245.GA3988095@ax162>
+        Thu, 12 Mar 2026 09:56:17 -0700 (PDT)
+From: Joshua Hahn <joshua.hahnjy@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Minchan Kim <minchan@kernel.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Yosry Ahmed <yosry.ahmed@linux.dev>,
+	Nhat Pham <hoangnhat.pham@linux.dev>,
+	Harry Yoo <harry.yoo@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH 10/11] mm/zsmalloc: Handle single object charge migration in migrate_zspage
+Date: Thu, 12 Mar 2026 09:56:14 -0700
+Message-ID: <20260312165615.3800716-1-joshua.hahnjy@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <202603121158.g93vlc2U-lkp@intel.com>
+References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260312080245.GA3988095@ax162>
+Content-Transfer-Encoding: 8bit
 
-On Thursday 03/12 at 01:02 -0700, Nathan Chancellor wrote:
-> Hi Calvin,
+On Thu, 12 Mar 2026 11:51:59 +0800 kernel test robot <lkp@intel.com> wrote:
+
+> Hi Joshua,
 > 
-> On Mon, Mar 09, 2026 at 09:24:57PM -0700, Calvin Owens wrote:
-> > Commit e1b385726f7f ("drm/amd/display: Add additional checks for PSP
-> > footer size") introduced a use of an uninitialized stack variable
-> > in dm_dmub_sw_init() (region_params.bss_data_size).
-> > 
-> > Interestingly, this seems to cause no issue on normal kernels. But when
-> > full LTO is enabled, it causes the compiler to "optimize" out huge
-> > swaths of amdgpu initialization code, and the driver is unusable:
+> kernel test robot noticed the following build warnings:
 > 
-> Yeah, this appears to be a very unfortunate case of "clang encountered known
-> undefined behavior and stopped code generation", which we would like to
-> avoid but figuring out a proper upstreamable solution is hard. The most
-> recent attempt:
+> [auto build test WARNING on axboe/for-next]
+> [also build test WARNING on linus/master v7.0-rc3]
+> [cannot apply to akpm-mm/mm-everything next-20260311]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
->   https://github.com/llvm/llvm-project/pull/146791
+> url:    https://github.com/intel-lab-lkp/linux/commits/Joshua-Hahn/mm-zsmalloc-Rename-zs_object_copy-to-zs_obj_copy/20260312-035531
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
+> patch link:    https://lore.kernel.org/r/20260311195153.4013476-11-joshua.hahnjy%40gmail.com
+> patch subject: [PATCH 10/11] mm/zsmalloc: Handle single object charge migration in migrate_zspage
+> config: x86_64-randconfig-001-20260312 (https://download.01.org/0day-ci/archive/20260312/202603121158.g93vlc2U-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603121158.g93vlc2U-lkp@intel.com/reproduce)
 > 
-> My guess is that LTO allows inlining of
-> dmub_srv_get_fw_meta_info_from_raw_fw() into dm_dmub_sw_init(), at which
-> point it can see that the result of accessing an uninitialized
-> region_params.bss_data_size will be used through
-> fw_meta_info_params.fw_bss_data and gives up generating the rest of the
-> function.
-
-Thanks for looking Nathan. I'll keep an eye on that and see if it's able
-to catch this example. I've tried to come up with a minimal reproducer,
-but I haven't had any luck yet (so far I always get the warning), would
-that be helpful at all?
-
-I put the full W=2 output for the one file here in case anyone else
-wants to look:
-
-   https://github.com/jcalvinowens/lkml-debug/blob/main/amdgpu-lto/gcc-warns.txt
-   https://github.com/jcalvinowens/lkml-debug/blob/main/amdgpu-lto/llvm-warns.txt
-
-Somehow 'make drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.o' doesn't
-work, I want to look at that later because it was mildly annoying while
-digging into this.
-
-> >     amdgpu 0000:03:00.0: [drm] Loading DMUB firmware via PSP: version=0x07002F00
-> >     amdgpu 0000:03:00.0: sw_init of IP block <dm> failed 5
-> >     amdgpu 0000:03:00.0: amdgpu_device_ip_init failed
-> >     amdgpu 0000:03:00.0: Fatal error during GPU init
-> > 
-> > It surprises me that neither gcc nor clang emit a warning about this: I
-> > only found it by bisecting the LTO breakage.
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202603121158.g93vlc2U-lkp@intel.com/
 > 
-> gcc's -Wmaybe-uninitialized is disabled by default for the kernel but
-> even enabling it with KCFLAGS does not show an instance here, which I
-> find quite surprising... for clang, it is harder because the warning
-> happens early in the frontend where it might not be able to track a
-> value that well.
-
-GCC does flag what seems to me to be a real but benign warning about an
-ERR_PTR check that doesn't handle NULL in the same file:
-
-    https://lore.kernel.org/lkml/6aaf2cf4bd19363a85f35e649685d7bdae400253.1773157137.git.calvin@wbinvd.org/
-
-I'm also trying to find a minimal reproducer for GCC, no luck yet.
-
-> > Fix by using the old value for region_params.bss_data_size in place of
-> > the uninitialized reference, which makes amdgpu work with LTO again.
-> > 
-> > Fixes: e1b385726f7f ("drm/amd/display: Add additional checks for PSP footer size")
-> > Signed-off-by: Calvin Owens <calvin@wbinvd.org>
-> > ---
-> >  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > index b3d6f2cd8ab6..e69e61163ae9 100644
-> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > @@ -2554,7 +2554,7 @@ static int dm_dmub_sw_init(struct amdgpu_device *adev)
-> >  	fw_meta_info_params.fw_inst_const = adev->dm.dmub_fw->data +
-> >  					    le32_to_cpu(hdr->header.ucode_array_offset_bytes) +
-> >  					    PSP_HEADER_BYTES_256;
-> > -	fw_meta_info_params.fw_bss_data = region_params.bss_data_size ? adev->dm.dmub_fw->data +
-> > +	fw_meta_info_params.fw_bss_data = le32_to_cpu(hdr->bss_data_bytes) ? adev->dm.dmub_fw->data +
+> All warnings (new ones prefixed by >>):
 > 
-> Maybe it would be better to use fw_meta_info_params.bss_data_size
-> instead of le32_to_cpu(hdr->bss_data_bytes)? Obviously it is the same
-> value but it would result in a smaller change. It seems likely that this
-> was just a copy and paste failure.
+> >> mm/zsmalloc.c:1702:6: warning: variable 's_idx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>     1702 |         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
+>          |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    mm/zsmalloc.c:1752:45: note: uninitialized use occurs here
+>     1752 |         d_zspage->objcgs[d_idx] = s_zspage->objcgs[s_idx];
+>          |                                                    ^~~~~
+>    mm/zsmalloc.c:1702:2: note: remove the 'if' if its condition is always false
+>     1702 |         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     1703 |                 goto out;
+>          |                 ~~~~~~~~
+>    mm/zsmalloc.c:1696:20: note: initialize the variable 's_idx' to silence this warning
+>     1696 |         unsigned int s_idx, d_idx;
+>          |                           ^
+>          |                            = 0
+> >> mm/zsmalloc.c:1702:6: warning: variable 'd_idx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>     1702 |         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
+>          |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    mm/zsmalloc.c:1752:19: note: uninitialized use occurs here
+>     1752 |         d_zspage->objcgs[d_idx] = s_zspage->objcgs[s_idx];
+>          |                          ^~~~~
+>    mm/zsmalloc.c:1702:2: note: remove the 'if' if its condition is always false
+>     1702 |         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     1703 |                 goto out;
+>          |                 ~~~~~~~~
+>    mm/zsmalloc.c:1696:27: note: initialize the variable 'd_idx' to silence this warning
+>     1696 |         unsigned int s_idx, d_idx;
+>          |                                  ^
+>          |                                   = 0
+>    2 warnings generated.
 
-Agreed. That ends up being almost self evidently correct if I force git
-to add an extra context line with the assignment, I always forget I can
-do that:
+Hello kernel test robot,
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index b3d6f2cd8ab6..0d1c772ef713 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -2553,9 +2553,9 @@ static int dm_dmub_sw_init(struct amdgpu_device *adev)
- 	fw_meta_info_params.bss_data_size = le32_to_cpu(hdr->bss_data_bytes);
- 	fw_meta_info_params.fw_inst_const = adev->dm.dmub_fw->data +
- 					    le32_to_cpu(hdr->header.ucode_array_offset_bytes) +
- 					    PSP_HEADER_BYTES_256;
--	fw_meta_info_params.fw_bss_data = region_params.bss_data_size ? adev->dm.dmub_fw->data +
-+	fw_meta_info_params.fw_bss_data = fw_meta_info_params.bss_data_size ? adev->dm.dmub_fw->data +
- 					  le32_to_cpu(hdr->header.ucode_array_offset_bytes) +
- 					  le32_to_cpu(hdr->inst_const_bytes) : NULL;
- 	fw_meta_info_params.custom_psp_footer_size = 0;
- 
+Thank you for catching this issue! Yes, the MEMCG v1 check should be
+done after I use obj_to_location to initialize the indices, so that
+the objcg pointer swap works at the end.
 
-I'll send a v2 in a little bit.
-
-Thanks,
-Calvin
-
-> >  					  le32_to_cpu(hdr->header.ucode_array_offset_bytes) +
-> >  					  le32_to_cpu(hdr->inst_const_bytes) : NULL;
-> >  	fw_meta_info_params.custom_psp_footer_size = 0;
-> > -- 
-> > 2.47.3
-> > 
+Will make the change in the next version!
+Joshua
