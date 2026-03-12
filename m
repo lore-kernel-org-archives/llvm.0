@@ -1,161 +1,146 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8036838C2C2;
-	Thu, 12 Mar 2026 05:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710182D9EC2;
+	Thu, 12 Mar 2026 06:12:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773292268; cv=none; b=nIT2n8ACfNLYD4x6DI1InC9JyrFRp7DIdXrmevpZzLqIZHRk0LvxE4m23rg2LvXitIbjAhSPUAovgo9DK1eQBXxqAv/dXZmRex8zO6dfp9PerXz1KD5FNMf/FC70+yDqXC38Kt+7M9iwGBLmQ4VPjUSXwzfd/DdxRQwm7S4oUfY=
+	t=1773295928; cv=none; b=Vj16jUvDlLsijbzeHv8FrlE5vkUY4zk5sBtvS/CD5f1nLd11R8mZ8VU//U16fx0d0Zcmi2HPjRkItMO9vbDCYGm0tAYl8+j0GQRiR5PqMqQO2QuJc30ShNwl2Z3IaYGPLIp/O4AZQdluY4K8WRsjYsWfR8cUKqDbP8rQ5917OH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773292268; c=relaxed/simple;
-	bh=p5/WrTMgXaFFzActxG74w2aUPlAbHxR5XrnLZAuEJD4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bkZph/KYEVCDdqDUgd3z2sY/NB2HACLGrEA3Ev/KzGATUdZFUAOXibXHZWzE/xSn3+cMXmHC1l674i+waIbiIXUTwdZDI7jjQ/okoI8RxTkJ3mxm5vZchJ5dzQsrfus2OonXuk1gsUjQJXk6sEabqYA+pCD1/xWj+eaAvJZ68Oc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jryJekUG; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1773295928; c=relaxed/simple;
+	bh=I+/pNBa0HJA/K0LhDBGf833yZVgyYf1fX3wAXWVfyWA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=dU6RrzfgUfaJup3tiLH3/88L0z0pRJ3onwRE0Ibyu/80/3A+FvutzceZXNd+nmXKt39Gz/HgV1eNA8nubwtAWVn58hlR8u69yTK+jvB9ytHah2sMF5sdq/MAtG1TCXObjrvvBiJ6g1S6GH4poecuD1fmaxT6S3n5dSL9LoNV8y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MdsqSbVC; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jryJekUG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MdsqSbVC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773292267; x=1804828267;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p5/WrTMgXaFFzActxG74w2aUPlAbHxR5XrnLZAuEJD4=;
-  b=jryJekUGGGQwJhN1Up51Ntr+ECDVH3AW5S0pBTbmTZoWVb6oAweGlimN
-   PlfUUGyr24dsIvFNzjaqYbMBAMR146ZlLc1m1NEJ0tnfBol3DIJuzVy3s
-   69c7MWOZ7qGlP5uiP7zKO+3DUYJk757ztwt1LfNvXlfyh/dJoe4eUgxGD
-   pePic4UnxkEh10FhAYBjNma+yT/f7/UeGDI3ltJwwLFbAAJEYBybf/INV
-   sxvpvHg5O/ujpRBAkkHhHowqcMWAnFNgCN5/2w5VgOQ05pdd9YA4wZhm5
-   VSDi0wFb50kHf8aXy5x1XLVpI+2FxRcyaDcW89DohYgalI/SYIXRn+Owq
-   w==;
-X-CSE-ConnectionGUID: Ft1LENsPTmWcAJdukAyT3A==
-X-CSE-MsgGUID: iGGwyYiqT/a9IyLQr3GJ4w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="74341839"
+  t=1773295924; x=1804831924;
+  h=date:from:to:cc:subject:message-id;
+  bh=I+/pNBa0HJA/K0LhDBGf833yZVgyYf1fX3wAXWVfyWA=;
+  b=MdsqSbVCS8bOJY2m7DwZFrZkjGwNHAuKA/rfpmf/zGLEFaWlfsJJ+3ln
+   ts6XD4u4JWRtUH+Fq1SfvowyI+BEwXmEwExE8p9qa23XyujTQLEp34atV
+   QcAVI5K1YPNYHFSo3GRiKusp1bnh9OPAQ0v81xVD/T9qpiWisM6zWJ76D
+   vO/8gYX8MWYKDeSMxxYKAOJRk6LAWbULrsbNs0ds5aDZHzi15haMf8nT0
+   PI1NvfjKJOkg0kxfcd7F9bh6KGCejVFiwt4rhpA6VBsxPIPnMI4dxhsH2
+   DHvT2pyRd46A78vzBk6W8iVp7yViNTCb/i5V9Omv9GKf8C4haWoHyrae3
+   g==;
+X-CSE-ConnectionGUID: uQPV7AtDQCma/EvzdGL/Sw==
+X-CSE-MsgGUID: dlbRoYRCS86KaNALSfJG8g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="61955841"
 X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
-   d="scan'208";a="74341839"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 22:11:06 -0700
-X-CSE-ConnectionGUID: 87LtlV16RoaXm4u1eKexlA==
-X-CSE-MsgGUID: 0BwqtQi+S0iWJ8cMC6bcOg==
+   d="scan'208";a="61955841"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 23:12:03 -0700
+X-CSE-ConnectionGUID: 3HO+lu63QY+8JW6xTERl5A==
+X-CSE-MsgGUID: 1X/MVPciR22yzKCDqHe9Dg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
-   d="scan'208";a="258605653"
+   d="scan'208";a="251208362"
 Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa001.jf.intel.com with ESMTP; 11 Mar 2026 22:11:02 -0700
+  by orviesa002.jf.intel.com with ESMTP; 11 Mar 2026 23:12:02 -0700
 Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w0YK3-000000003SX-0PTy;
-	Thu, 12 Mar 2026 05:10:59 +0000
-Date: Thu, 12 Mar 2026 06:10:51 +0100
+	id 1w0ZH5-000000003Sx-213s;
+	Thu, 12 Mar 2026 06:11:59 +0000
+Date: Thu, 12 Mar 2026 07:11:46 +0100
 From: kernel test robot <lkp@intel.com>
-To: David Jeffery <djeffery@redhat.com>, linux-kernel@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-pci@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Tarun Sahu <tarunsahu@google.com>,
-	Pasha Tatashin <tatashin@google.com>,
-	=?utf-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>,
-	Jordan Richards <jordanrichards@google.com>,
-	Ewan Milne <emilne@redhat.com>,
-	John Meneghini <jmeneghi@redhat.com>,
-	"Lombardi, Maurizio" <mlombard@redhat.com>,
-	David Jeffery <djeffery@redhat.com>,
-	Stuart Hayes <stuart.w.hayes@gmail.com>,
-	Laurence Oberman <loberman@redhat.com>
-Subject: Re: [PATCH 2/5] driver core: separate function to shutdown one device
-Message-ID: <202603120643.h7j4avWA-lkp@intel.com>
-References: <20260311171209.9205-2-djeffery@redhat.com>
+ Ian Rogers <irogers@google.com>
+Subject: [peterz-queue:perf/urgent 3/6] kernel/events/core.c:4839:3:
+ warning: variable 'pmu' is uninitialized when used here
+Message-ID: <202603120700.bXtzJZ09-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260311171209.9205-2-djeffery@redhat.com>
 
-Hi David,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on driver-core/driver-core-testing]
-[also build test WARNING on driver-core/driver-core-next driver-core/driver-core-linus jejb-scsi/for-next mkp-scsi/for-next linus/master v7.0-rc3 next-20260311]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Jeffery/driver-core-separate-function-to-shutdown-one-device/20260312-011646
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20260311171209.9205-2-djeffery%40redhat.com
-patch subject: [PATCH 2/5] driver core: separate function to shutdown one device
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260312/202603120643.h7j4avWA-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/urgent
+head:   af07eac4595fcf921f6a4c93b666e3bb896aa3d7
+commit: 10d25ea5d989da5bda265b59445e3d494cf892e3 [3/6] perf: Make sure to use pmu_ctx->pmu for groups
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260312/202603120700.bXtzJZ09-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603120643.h7j4avWA-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603120700.bXtzJZ09-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603120643.h7j4avWA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603120700.bXtzJZ09-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/base/core.c:4824:23: warning: variable 'parent' set but not used [-Wunused-but-set-variable]
-    4824 |         struct device *dev, *parent;
-         |                              ^
+>> kernel/events/core.c:4839:3: warning: variable 'pmu' is uninitialized when used here [-Wuninitialized]
+    4839 |                 pmu->read(event);
+         |                 ^~~
+   kernel/events/core.c:4816:17: note: initialize the variable 'pmu' to silence this warning
+    4816 |         struct pmu *pmu;
+         |                        ^
+         |                         = NULL
    1 warning generated.
 
 
-vim +/parent +4824 drivers/base/core.c
+vim +/pmu +4839 kernel/events/core.c
 
-f9dcdf9ae03c404 David Jeffery      2026-03-11  4818  
-37b0c0203430802 Greg Kroah-Hartman 2007-11-26  4819  /**
-37b0c0203430802 Greg Kroah-Hartman 2007-11-26  4820   * device_shutdown - call ->shutdown() on each device to shutdown.
-37b0c0203430802 Greg Kroah-Hartman 2007-11-26  4821   */
-37b0c0203430802 Greg Kroah-Hartman 2007-11-26  4822  void device_shutdown(void)
-37b0c0203430802 Greg Kroah-Hartman 2007-11-26  4823  {
-f123db8e9d6c84c Benson Leung       2013-09-24 @4824  	struct device *dev, *parent;
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4825  
-3297c8fc65af5d4 Pingfan Liu        2018-07-19  4826  	wait_for_device_probe();
-3297c8fc65af5d4 Pingfan Liu        2018-07-19  4827  	device_block_probing();
-3297c8fc65af5d4 Pingfan Liu        2018-07-19  4828  
-65650b35133ff20 Rafael J. Wysocki  2019-10-09  4829  	cpufreq_suspend();
-65650b35133ff20 Rafael J. Wysocki  2019-10-09  4830  
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4831  	spin_lock(&devices_kset->list_lock);
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4832  	/*
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4833  	 * Walk the devices list backward, shutting down each in turn.
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4834  	 * Beware that device unplug events may also start pulling
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4835  	 * devices offline, even as the system is shutting down.
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4836  	 */
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4837  	while (!list_empty(&devices_kset->list)) {
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4838  		dev = list_entry(devices_kset->list.prev, struct device,
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4839  				kobj.entry);
-d1c6c030fcec6f8 Ming Lei           2012-06-22  4840  
-d1c6c030fcec6f8 Ming Lei           2012-06-22  4841  		/*
-d1c6c030fcec6f8 Ming Lei           2012-06-22  4842  		 * hold reference count of device's parent to
-d1c6c030fcec6f8 Ming Lei           2012-06-22  4843  		 * prevent it from being freed because parent's
-d1c6c030fcec6f8 Ming Lei           2012-06-22  4844  		 * lock is to be held
-d1c6c030fcec6f8 Ming Lei           2012-06-22  4845  		 */
-f123db8e9d6c84c Benson Leung       2013-09-24  4846  		parent = get_device(dev->parent);
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4847  		get_device(dev);
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4848  		/*
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4849  		 * Make sure the device is off the kset list, in the
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4850  		 * event that dev->*->shutdown() doesn't remove it.
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4851  		 */
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4852  		list_del_init(&dev->kobj.entry);
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4853  		spin_unlock(&devices_kset->list_lock);
-fe6b91f47080eb1 Alan Stern         2011-12-06  4854  
-f9dcdf9ae03c404 David Jeffery      2026-03-11  4855  		shutdown_one_device(dev);
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4856  
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4857  		spin_lock(&devices_kset->list_lock);
-37b0c0203430802 Greg Kroah-Hartman 2007-11-26  4858  	}
-6245838fe4d2ce4 Hugh Daschbach     2010-03-22  4859  	spin_unlock(&devices_kset->list_lock);
-37b0c0203430802 Greg Kroah-Hartman 2007-11-26  4860  }
-99bcf217183e02e Joe Perches        2010-06-27  4861  
+d6a2f9035bfc27d kernel/events/core.c  David Carrillo-Cisneros 2016-08-17  4806  
+0793a61d4df8dae kernel/perf_counter.c Thomas Gleixner         2008-12-04  4807  /*
+cdd6c482c9ff9c5 kernel/perf_event.c   Ingo Molnar             2009-09-21  4808   * Cross CPU call to read the hardware event
+0793a61d4df8dae kernel/perf_counter.c Thomas Gleixner         2008-12-04  4809   */
+cdd6c482c9ff9c5 kernel/perf_event.c   Ingo Molnar             2009-09-21  4810  static void __perf_event_read(void *info)
+0793a61d4df8dae kernel/perf_counter.c Thomas Gleixner         2008-12-04  4811  {
+0492d4c5b8c4dc3 kernel/events/core.c  Peter Zijlstra          2015-09-03  4812  	struct perf_read_data *data = info;
+0492d4c5b8c4dc3 kernel/events/core.c  Peter Zijlstra          2015-09-03  4813  	struct perf_event *sub, *event = data->event;
+cdd6c482c9ff9c5 kernel/perf_event.c   Ingo Molnar             2009-09-21  4814  	struct perf_event_context *ctx = event->ctx;
+bd27568117664b8 kernel/events/core.c  Peter Zijlstra          2022-10-08  4815  	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
+10d25ea5d989da5 kernel/events/core.c  Peter Zijlstra          2026-03-09  4816  	struct pmu *pmu;
+621a01eac89b5e2 kernel/perf_counter.c Ingo Molnar             2008-12-11  4817  
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4818  	/*
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4819  	 * If this is a task context, we need to check whether it is
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4820  	 * the current task context of this cpu.  If not it has been
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4821  	 * scheduled out before the smp call arrived.  In that case
+cdd6c482c9ff9c5 kernel/perf_event.c   Ingo Molnar             2009-09-21  4822  	 * event->count would have been updated to a recent sample
+cdd6c482c9ff9c5 kernel/perf_event.c   Ingo Molnar             2009-09-21  4823  	 * when the event was scheduled out.
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4824  	 */
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4825  	if (ctx->task && cpuctx->task_ctx != ctx)
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4826  		return;
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4827  
+10d25ea5d989da5 kernel/events/core.c  Peter Zijlstra          2026-03-09  4828  	guard(raw_spinlock)(&ctx->lock);
+9a32bd9901fe5b1 kernel/events/core.c  Peter Zijlstra          2024-08-07  4829  	ctx_time_update_event(ctx, event);
+0492d4c5b8c4dc3 kernel/events/core.c  Peter Zijlstra          2015-09-03  4830  
+0d3d73aac2ff05c kernel/events/core.c  Peter Zijlstra          2017-09-05  4831  	perf_event_update_time(event);
+0d3d73aac2ff05c kernel/events/core.c  Peter Zijlstra          2017-09-05  4832  	if (data->group)
+0d3d73aac2ff05c kernel/events/core.c  Peter Zijlstra          2017-09-05  4833  		perf_event_update_sibling_time(event);
+0c1cbc18df9e381 kernel/events/core.c  Peter Zijlstra          2017-09-05  4834  
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4835  	if (event->state != PERF_EVENT_STATE_ACTIVE)
+10d25ea5d989da5 kernel/events/core.c  Peter Zijlstra          2026-03-09  4836  		return;
+0492d4c5b8c4dc3 kernel/events/core.c  Peter Zijlstra          2015-09-03  4837  
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4838  	if (!data->group) {
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03 @4839  		pmu->read(event);
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4840  		data->ret = 0;
+10d25ea5d989da5 kernel/events/core.c  Peter Zijlstra          2026-03-09  4841  		return;
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4842  	}
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4843  
+10d25ea5d989da5 kernel/events/core.c  Peter Zijlstra          2026-03-09  4844  	pmu = event->pmu_ctx->pmu;
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4845  	pmu->start_txn(pmu, PERF_PMU_TXN_READ);
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4846  
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4847  	pmu->read(event);
+0492d4c5b8c4dc3 kernel/events/core.c  Peter Zijlstra          2015-09-03  4848  
+8ce939a0fa19493 kernel/events/core.c  Peter Zijlstra (Intel   2025-01-21  4849) 	for_each_sibling_event(sub, event)
+8ce939a0fa19493 kernel/events/core.c  Peter Zijlstra (Intel   2025-01-21  4850) 		perf_pmu_read(sub);
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4851  
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4852  	data->ret = pmu->commit_txn(pmu);
+0793a61d4df8dae kernel/perf_counter.c Thomas Gleixner         2008-12-04  4853  }
+0793a61d4df8dae kernel/perf_counter.c Thomas Gleixner         2008-12-04  4854  
+
+:::::: The code at line 4839 was first introduced by commit
+:::::: 4a00c16e552ea5e71756cd29cd2df7557ec9cac4 perf/core: Define PERF_PMU_TXN_READ interface
+
+:::::: TO: Sukadev Bhattiprolu <sukadev@linux.vnet.ibm.com>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
