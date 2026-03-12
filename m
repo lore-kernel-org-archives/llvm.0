@@ -1,149 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from flow-b4-smtp.messagingengine.com (flow-b4-smtp.messagingengine.com [202.12.124.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4ACB34D389;
-	Thu, 12 Mar 2026 14:29:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6FC39936F
+	for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 15:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773325786; cv=none; b=WZ2Lw73KJnaDVIHuWP3L4IKINDL2wcEDjrWDAHk8MyIbBwAiTo626gw2vu+IKc8HOYcqDjLFMUj6Js/ou5wCs2XfV26HM/a7SNn2C6YHNKYWdaQt2ZiNXyG4LiSttchtxtXJvypSs2f8dYJ1mX48Ct5Fd3QEb7Bp3j1LxqVtpQs=
+	t=1773327817; cv=none; b=XVzDDBt0gSueUW7Ja89Uo42eDmUVbQl2Aoh1BuQb0n1WkKOSpDLdBc00aWkLvXKAyyCOWFe0FtDgkjSUVBZrMtIF7YwUkcRTPaH5ZeiZlUI38LDMMiarVV2tuYvNPIoqs6S5UmosevU7uTsz9NtpB0Jls3VgtFs+HPsGC+1MZLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773325786; c=relaxed/simple;
-	bh=U6h2kSkaL3m+HufZ+v4XEQzA63uvN0k+ygU09TQOjv8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t4NOtCvTnItaoRn2V5P5Db140SfD2V2Rn3jQ912u8MXdHz5a0N9EAq2Euk+cR/y38oIIoY4CEv9ei9uJk5ZxwQfieXR2aylruyrs/GAYHSDCGfmiWdoUNMnkj3W1rTL1R6qJq7dRY+gQTKnNexVjRbW5tIiJ/aGeJQkogcMcUQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UJv1cXJS; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773327817; c=relaxed/simple;
+	bh=4HvxgeI3PO4yA0pphzfGBVWxJBn7uDgm1lDw/UyhGFI=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=apbwQAJR9eVN438Edr+3aSx40m1NXZ+IyElxh/7CQ+dxhNJeZ/3k0SA9jkHxzpflaW/T5UcPqWWF7RsCz9ZuIeOdodq5gB5/c/y26Ef1qPwqG4JuXAa+n7XRJV39doPy2tOPA8tCi3GH0AsAxPRvAA+flsGXj94CrrUDSC+cmkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bGvJqXL+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=o81mzw52; arc=none smtp.client-ip=202.12.124.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UJv1cXJS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773325785; x=1804861785;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U6h2kSkaL3m+HufZ+v4XEQzA63uvN0k+ygU09TQOjv8=;
-  b=UJv1cXJSNNejbkrLFZ0oFtzI1i5LdqpJcftwqg3rJZenR0miCusccBMh
-   z737S+LCf/JL3FsGKiq1iiE7DFoeD9UDPBoYRLyigCiizD+2oZgASgfrM
-   x7IMwEk9pcAAESvZGzsDx1yVqRJysXyaOWheXl37nHl7h3wGnAHiwnbag
-   Er+XdAvo+yiNdSE6JX+1lDUraJ4A/lVDFvfOJBbVViB61qr+nCHAQDuHD
-   CN0pI/N/P9bGD806qF9GsRw5lkakjRaZpNX8kdXnslxbreMnqEE7G/Nzd
-   s1dW5lWJusqRtaDttdKbDToiffyxMvGxFqYkwwbLTb7+y38/SJ5Xddj4r
-   g==;
-X-CSE-ConnectionGUID: 3+/cNA7PQSOnsx8Dokbo8A==
-X-CSE-MsgGUID: lDUOJrbtQzScvo0YYkenww==
-X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="85773984"
-X-IronPort-AV: E=Sophos;i="6.23,116,1770624000"; 
-   d="scan'208";a="85773984"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2026 07:29:44 -0700
-X-CSE-ConnectionGUID: 4MKoUK6kRgGlaA8Dhfivaw==
-X-CSE-MsgGUID: 5lbBIi/WTwK4sairjG9Ekg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,116,1770624000"; 
-   d="scan'208";a="218641912"
-Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 12 Mar 2026 07:29:38 -0700
-Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w0h2c-000000002Yj-1R2Q;
-	Thu, 12 Mar 2026 14:29:34 +0000
-Date: Thu, 12 Mar 2026 22:28:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Eugen Hristev <eugen.hristev@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux-foundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Kees Cook <kees@kernel.org>,
-	Brendan Jackman <jackmanb@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH v2 13/25] mm/init-mm: Annotate static information into
- meminspect
-Message-ID: <202603122259.3cXlDDN9-lkp@intel.com>
-References: <20260311-minidump-v2-v2-13-f91cedc6f99e@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bGvJqXL+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="o81mzw52"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.stl.internal (Postfix) with ESMTP id 989381301A09;
+	Thu, 12 Mar 2026 11:03:34 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Thu, 12 Mar 2026 11:03:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1773327814;
+	 x=1773335014; bh=SaJoBOWdSuPgCxv7hYpeAKeVFQyklTNNXObk3qvPfvI=; b=
+	bGvJqXL+CssgN9qcX6cryh57mVbGY/RIgqlwo0DFIBN1SUBMT453trmu9eYBrm37
+	hVMySZEnXc1sCYAT9luPhCcccEYQp/GcoeeL5U11WztDI9Kos7lHLrpQ7DSbCIFb
+	VLAX1fDkP4Nbox42DREjtOpPaVpQ2CaKlMC0wEOW6Ixb98oVCagr9dRR/BRbIaPl
+	K/lb1IRzMjRLEPNHLPQSjcHtJQ1m20e4/ueYZYoaNXNdTsNxeu1Gejx5wqTYw3/Q
+	RpyIxEQzLw3Ffvb7AgeIffzCQVwtg6Ehi2jf9DErhilCuB9EAgUUQolo0Ybod/MK
+	AAKTvyOsypVX9Hsl7BV73A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1773327814; x=
+	1773335014; bh=SaJoBOWdSuPgCxv7hYpeAKeVFQyklTNNXObk3qvPfvI=; b=o
+	81mzw52m7Y8g0esA44ovBldf2w1mCxrd2Nk9Hq8Q6NGnMoMh5sV1H75k6hYOWrkn
+	/IqenwKMsv4+S+qDpNTCEa08jDAdQW4w94TEalRfExX+/5d9PfHjY+TEoW+X2+FE
+	nFWMlydaHFMouUdZ/ynE6XSlGki1Iwh7MbfViMcd7rfUxiDrbaymgAmqcCF2/f1F
+	cAQXtApjwSKqnLbWj14/DUBi6KTSwyGikFO7OdhTu2t8k4XPTUo85uY97bxS6W+o
+	Sai+Jorj6mgUE1c18wQdKIG3yLYOGQ4rF1wH3nc5mWaOz/5kRWpuG+ckYl2Q0kTR
+	2GoP9XsLVT3rcDlxDQxYw==
+X-ME-Sender: <xms:xdWyaZDkEMiQgozqvnBiLyFjtP28g1ahKIBoyZrE_DaQA6uTpqgKTA>
+    <xme:xdWyaSWF2czmKEqMg2Cvo9TuyFgPMGQGQ8na5IFTOatpC2gB6mVkngxTfEJgl3h66
+    xHSsQTi-DP2fTzR5tNK-koMttWfQPwS9rU9OAGV2evxTVEPYx7rE-NE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvkeejtdelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeeuudfgtdfhfeejjeetfeeutddufffgheejjeekudelkeekvddvvefftdejjefg
+    necuffhomhgrihhnpehtvgigthdrshgvtghurhhithihnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgs
+    pghrtghpthhtohepvdegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmphgvse
+    gvlhhlvghrmhgrnhdrihgurdgruhdprhgtphhtthhopegumhhithhrhidrkhgrshgrthhk
+    ihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhhpihhgghhinhesghhmrghilhdrtg
+    homhdprhgtphhtthhopehsvghrghgvsehhrghllhihnhdrtghomhdprhgtphhtthhopehr
+    ohgsvghrthhordhsrghsshhusehhuhgrfigvihdrtghomhdprhgtphhtthhopegthhhlvg
+    hrohihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtoheprghgohhruggvvghvsehlihhnuhigrdhisghmrdgtohhmpd
+    hrtghpthhtohepsghorhhnthhrrggvghgvrheslhhinhhugidrihgsmhdrtghomh
+X-ME-Proxy: <xmx:xdWyaRetzDGkS5SKI9bnsPzbkpuMdRANOtnlcfTJPNlcWisTF1b1rQ>
+    <xmx:xdWyadUGzj6XKM0U8A8TXpxoxcXoRD1syeMM2bNSJaTyZXuR_9okgQ>
+    <xmx:xdWyaVGeL5I89cDQK5OzddGLqJwI522nV9L0TkeDyZinXQQiEKbXQw>
+    <xmx:xdWyafdE08ACWNnAG8Xfy_DAQnVumhTLT3b6G07k1mGbHRJic4s2OQ>
+    <xmx:xtWyaSNd2Rb7zlX_iGsR_SmDs79ks89ndHprjg7QyEwUf6Qyb8gfZZoH>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id A99AC700065; Thu, 12 Mar 2026 11:03:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260311-minidump-v2-v2-13-f91cedc6f99e@oss.qualcomm.com>
+X-ThreadId: AHq5N6LSCfHR
+Date: Thu, 12 Mar 2026 16:03:12 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nathan Chancellor" <nathan@kernel.org>,
+ "Mimi Zohar" <zohar@linux.ibm.com>,
+ "Roberto Sassu" <roberto.sassu@huawei.com>,
+ "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "Eric Snowberg" <eric.snowberg@oracle.com>
+Cc: "Madhavan Srinivasan" <maddy@linux.ibm.com>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Christophe Leroy" <chleroy@kernel.org>,
+ "Heiko Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>,
+ "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+ "Sven Schnelle" <svens@linux.ibm.com>, "Paul Moore" <paul@paul-moore.com>,
+ "James Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ "Coiby Xu" <coxu@redhat.com>, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <d2089740-16d8-4ca4-a61c-8c381f8e30a0@app.fastmail.com>
+In-Reply-To: 
+ <20260309-integrity-drop-weak-arch-get-secureboot-v1-1-6460d5c4bb89@kernel.org>
+References: 
+ <20260309-integrity-drop-weak-arch-get-secureboot-v1-1-6460d5c4bb89@kernel.org>
+Subject: Re: [PATCH] integrity: Eliminate weak definition of arch_get_secureboot()
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Mukesh,
+On Mon, Mar 9, 2026, at 21:37, Nathan Chancellor wrote:
+> security/integrity/secure_boot.c contains a single __weak function,
+> which breaks recordmcount when building with clang:
+>
+>   $ make -skj"$(nproc)" ARCH=powerpc LLVM=1 ppc64_defconfig 
+> security/integrity/secure_boot.o
+>   Cannot find symbol for section 2: .text.
+>   security/integrity/secure_boot.o: failed
+>
+> Introduce a Kconfig symbol, CONFIG_HAVE_ARCH_GET_SECUREBOOT, to indicate
+> that an architecture provides a definition of arch_get_secureboot().
+> Provide a static inline stub when this symbol is not defined to achieve
+> the same effect as the __weak function, allowing secure_boot.c to be
+> removed altogether. Move the s390 definition of arch_get_secureboot()
+> out of the CONFIG_KEXEC_FILE block to ensure it is always available, as
+> it does not actually depend on KEXEC_FILE.
+>
+> Fixes: 31a6a07eefeb ("integrity: Make arch_ima_get_secureboot integrity-wide")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 343f51842f4ed7143872f3aa116a214a5619a4b9]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Ojha/kernel-Introduce-meminspect/20260311-042334
-base:   343f51842f4ed7143872f3aa116a214a5619a4b9
-patch link:    https://lore.kernel.org/r/20260311-minidump-v2-v2-13-f91cedc6f99e%40oss.qualcomm.com
-patch subject: [PATCH v2 13/25] mm/init-mm: Annotate static information into meminspect
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260312/202603122259.3cXlDDN9-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603122259.3cXlDDN9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603122259.3cXlDDN9-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/init-mm.c:23:23: error: use of undeclared identifier '_sinittext'
-      23 | MEMINSPECT_AREA_ENTRY(_sinittext, sizeof(void *));
-         |                       ^
->> mm/init-mm.c:24:23: error: use of undeclared identifier '_einittext'
-      24 | MEMINSPECT_AREA_ENTRY(_einittext, sizeof(void *));
-         |                       ^
->> mm/init-mm.c:25:23: error: use of undeclared identifier '_end'
-      25 | MEMINSPECT_AREA_ENTRY(_end, sizeof(void *));
-         |                       ^
->> mm/init-mm.c:26:23: error: use of undeclared identifier '_text'
-      26 | MEMINSPECT_AREA_ENTRY(_text, sizeof(void *));
-         |                       ^
->> mm/init-mm.c:27:23: error: use of undeclared identifier '_stext'
-      27 | MEMINSPECT_AREA_ENTRY(_stext, sizeof(void *));
-         |                       ^
->> mm/init-mm.c:28:23: error: use of undeclared identifier '_etext'
-      28 | MEMINSPECT_AREA_ENTRY(_etext, sizeof(void *));
-         |                       ^
-   6 errors generated.
-
-
-vim +/_sinittext +23 mm/init-mm.c
-
-    22	
-  > 23	MEMINSPECT_AREA_ENTRY(_sinittext, sizeof(void *));
-  > 24	MEMINSPECT_AREA_ENTRY(_einittext, sizeof(void *));
-  > 25	MEMINSPECT_AREA_ENTRY(_end, sizeof(void *));
-  > 26	MEMINSPECT_AREA_ENTRY(_text, sizeof(void *));
-  > 27	MEMINSPECT_AREA_ENTRY(_stext, sizeof(void *));
-  > 28	MEMINSPECT_AREA_ENTRY(_etext, sizeof(void *));
-    29	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Arnd Bergmann <arnd@arndb.de>
