@@ -1,108 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D5037DE84;
-	Thu, 12 Mar 2026 20:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AB629D27D;
+	Thu, 12 Mar 2026 20:55:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773347866; cv=none; b=BaGRprIhxB5ANEMcGpjTFTCqqvc7jHoT5LYM9FYDbdhC87vqWemcNhSm3vHa8PDbZXS9XBKXZuXuo6HHFe3uH9sMMWDJXc6jGbXVoXEQXFJytaPQSvOR6+REYSNhoSx0O9WJgXZ8i08vJM0/eXGEhct42Bn/n64XYAQIVV5fMvI=
+	t=1773348941; cv=none; b=W8DclWVnDjyStJsIohUPH+pEmQ8S+q+m+U0Z2cDLQ5SFSZaYoFkGT839c9V5ahHcOVA4Pup3tZ/oGpX33dYfwI2XT1ib4q4S1cAC9fP7weQipneYAzuPtrndtfC90r04pvshwm3dQ8qf4PnL0FJ6X//hLo+mv4vpYAIk0pUZQZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773347866; c=relaxed/simple;
-	bh=Hlj3wUVDqV3lGFj/UpEgAg7uNK/MNg5jI7SSa9ZuiSI=;
+	s=arc-20240116; t=1773348941; c=relaxed/simple;
+	bh=v7Mp7oQuSeeAnOPIaJpcQ06wzPNoyTHncHKVCUFHvZ4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KQOF/LRlI2R/+XMb08LF2D43gfmVuRRIKcpTd/YmInsqynOoE7NWoB3u92Eym7RjvuWN/iVWHTtG72sdD4SQiV6LVp9g6zMAYb8pf/OJaeU517IfPyU/hVVb5nQ3y9tDXoeAiLSlRsM0IfWWjf+SKl7DCGX71jTcc5KgltIIcQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C/QLezoJ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=aDxpe2GxiB/lHri1Be4vQG/ZYMiavrhR8Yq62LteKmNU0hP6P0wZgY9EZfnrheWuXrBBp9Xg4We9yLtru811Le/Af1AJFgsB7ir2KNgQ59xScWho8qsRHpzenma1jGn3z/ITQw+EHqWJ2NcwjKXs1DAkT1JiUdiURivkDSrRHJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jPrZEGSB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C/QLezoJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA7CC4CEF7;
-	Thu, 12 Mar 2026 20:37:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jPrZEGSB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB758C4CEF7;
+	Thu, 12 Mar 2026 20:55:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773347866;
-	bh=Hlj3wUVDqV3lGFj/UpEgAg7uNK/MNg5jI7SSa9ZuiSI=;
+	s=k20201202; t=1773348940;
+	bh=v7Mp7oQuSeeAnOPIaJpcQ06wzPNoyTHncHKVCUFHvZ4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C/QLezoJFTZ2W1UxtqdQN5LK1EmIN7m6I0wcGmma+62apeVCvv6OTk8lUKDGL9Bck
-	 SKtnnR1IeNSiM4EoGP43LJ4XmGA9laBiUxLUl3a0vYozZtSUyfotxBycyYLq1pTKrA
-	 sceSRw3irBaavRL6Nb6Ut9H8v6XADlw1FEmMrdgAXHRwtgoo+NRsY1TdTWkOgYX/Sf
-	 X153gd+D+ZnSA02cvaPWrLunOnHMqfkQaGnT/3jvubTyanCyFBUa/kbSS/GaCft+Ua
-	 Ztr0K958uKpOlUYe3bLsvCPDteIR8aJbKle7G7BBINtEkDbXFNvsoYLZ2wFMbmAdlz
-	 jljSLSlzkgQ4g==
-Date: Thu, 12 Mar 2026 13:37:40 -0700
+	b=jPrZEGSBi1TQR0t3km00WpEMYTejgQIVQOjE077ht7cWB1pkJRLriLLy7Jjd5Kerz
+	 zF+VvIJYLQbTm0nSWzEM/kqqohL3jJQs/qv6MCXKVMRHXi9DKgZYofma5Hzt2KrtFr
+	 LR9+Pe0bGHixbeU3D8vgl8LYkd1EypoBTAR1U/yFO6oI+U84EE2D4fltW4APa3K1+5
+	 cze6ejEVN8VlLmzwMZySmLHlYPwt3/KtqDYQ10Ylk1r+aGFvg9mPnJPPWWmdDM5mF1
+	 B4m5h+JdU/9liZubVMb3aVD+i3ThdUcK6dvL4WIylaTenx7wGKZs4CmHTvYNCoZU1f
+	 VBSPEbfslo2XA==
+Date: Thu, 12 Mar 2026 13:55:33 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Calvin Owens <calvin@wbinvd.org>
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	amd-gfx@lists.freedesktop.org, Charlene Liu <charlene.liu@amd.com>,
-	Ovidiu Bunea <ovidiu.bunea@amd.com>, Alex Hung <alex.hung@amd.com>,
-	Dan Wheeler <daniel.wheeler@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira <siqueira@igalia.com>,
-	Christian Koenig <christian.koenig@amd.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] drm/amd/display: Fix uninitialized variable use which
- breaks full LTO
-Message-ID: <20260312203740.GA2747807@ax162>
-References: <ef7266eb7802ce6d68ebd9356477e9671f0c94e0.1773116305.git.calvin@wbinvd.org>
- <abL0PlD1FDnfrX4o@mozart.vkv.me>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Alexander Egorenkov <egorenar@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, Coiby Xu <coxu@redhat.com>,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] integrity: Eliminate weak definition of
+ arch_get_secureboot()
+Message-ID: <20260312205533.GC2747807@ax162>
+References: <20260309-integrity-drop-weak-arch-get-secureboot-v1-1-6460d5c4bb89@kernel.org>
+ <d2089740-16d8-4ca4-a61c-8c381f8e30a0@app.fastmail.com>
+ <a985c90d9df8ba0fc63f65117cc8e884f70e6035.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <abL0PlD1FDnfrX4o@mozart.vkv.me>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a985c90d9df8ba0fc63f65117cc8e884f70e6035.camel@linux.ibm.com>
 
-On Thu, Mar 12, 2026 at 10:13:34AM -0700, Calvin Owens wrote:
-> Commit e1b385726f7f ("drm/amd/display: Add additional checks for PSP
-> footer size") introduced a use of an uninitialized stack variable
-> in dm_dmub_sw_init() (region_params.bss_data_size).
+On Thu, Mar 12, 2026 at 12:07:41PM -0400, Mimi Zohar wrote:
+> I pushed out the patch to next-integrity, but am a bit concerned about the
+> definition:
 > 
-> Interestingly, this seems to cause no issue on normal kernels. But when
-> full LTO is enabled, it causes the compiler to "optimize" out huge
-> swaths of amdgpu initialization code, and the driver is unusable:
-> 
->     amdgpu 0000:03:00.0: [drm] Loading DMUB firmware via PSP: version=0x07002F00
->     amdgpu 0000:03:00.0: sw_init of IP block <dm> failed 5
->     amdgpu 0000:03:00.0: amdgpu_device_ip_init failed
->     amdgpu 0000:03:00.0: Fatal error during GPU init
-> 
-> It surprises me that neither gcc nor clang emit a warning about this: I
-> only found it by bisecting the LTO breakage.
-> 
-> Fix by using the bss_data_size field from fw_meta_info_params, as was
-> presumably intended.
-> 
-> Fixes: e1b385726f7f ("drm/amd/display: Add additional checks for PSP footer size")
-> Signed-off-by: Calvin Owens <calvin@wbinvd.org>
+> +config HAVE_ARCH_GET_SECUREBOOT
+> +       def_bool EFI
+> +
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+What is concerning about the definition with regards to s390?
 
-> ---
-> Changes in v2:
-> * Use fw_meta_info_params.bss_data_size instead of repeating the load
->   from the payload header field [Nathan]
-> 
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index b3d6f2cd8ab6..0d1c772ef713 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -2553,9 +2553,9 @@ static int dm_dmub_sw_init(struct amdgpu_device *adev)
->  	fw_meta_info_params.bss_data_size = le32_to_cpu(hdr->bss_data_bytes);
->  	fw_meta_info_params.fw_inst_const = adev->dm.dmub_fw->data +
->  					    le32_to_cpu(hdr->header.ucode_array_offset_bytes) +
->  					    PSP_HEADER_BYTES_256;
-> -	fw_meta_info_params.fw_bss_data = region_params.bss_data_size ? adev->dm.dmub_fw->data +
-> +	fw_meta_info_params.fw_bss_data = fw_meta_info_params.bss_data_size ? adev->dm.dmub_fw->data +
->  					  le32_to_cpu(hdr->header.ucode_array_offset_bytes) +
->  					  le32_to_cpu(hdr->inst_const_bytes) : NULL;
->  	fw_meta_info_params.custom_psp_footer_size = 0;
->  
-> -- 
-> 2.47.3
-> 
-> 
+> Has anyone actually tested this patch on s390, not just compiled it?  If so, I'd
+> appreciate a tested-by tag.
+
+It would be good to test (if it is possible to test in QEMU, I am happy
+to attempt to do so). As far as I can tell, 31a6a07eefeb placed
+arch_get_secureboot() in such a way that the __weak definition would be
+used when CONFIG_KEXEC_FILE was disabled, even though ipl_secure_flag
+should always be available, which this patch avoids.
+
+Cheers,
+Nathan
