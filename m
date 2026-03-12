@@ -1,107 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2D5271471;
-	Thu, 12 Mar 2026 11:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12C03BE649;
+	Thu, 12 Mar 2026 12:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773315982; cv=none; b=PlrEwBP2ZZp7Fcyq8fbHClcye6SVjzKrfDChk5zol01f/3kithxDhdu7OEr7zw9/w6OgiiEg6I8EUshbHWfqnwYJRhagYlBeVFqAXU4h0mh8I6IbEuSKQ/KYOIpWosbYriVO3oKHaxMdDqgi/so77Uc1tGYTEMKtdU5dNrnbx1g=
+	t=1773317437; cv=none; b=WejTnyH7jTEvQUJnmkDzUwX7NmzCdmiriexXfRZ9uaZ9VPC3rilkYgpuB7zeQDy8ieAdtGxuMTiUph0LWgSDxq5J0XiKEK8gRSEH4samEwvFCRgHA2sKnH8oND6IX9PP4WBJayYQ2aokiQ1aVKqb9J1g9lnUK4DluUhUyZ+Gv0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773315982; c=relaxed/simple;
-	bh=jtK8dDtUft4/ENJDBV0ud3J6ohGSG6+qs6EFqSMBhvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W+jy3Xm7dpcpsD5mtxKBgaApX69YMMF8h5hApykXS5vdQD7oVZe3qoS3FT6RNGuAW9NHFyGtMBrvvasB8BLfeAAwwbbruQarb5b6s9V9i/KHafgwb0aXg0nuIADK4kru7WVGJXlw8weQpWHCmasmQntQdfllmenmXDyB0U0LMmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZXUUnyV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773317437; c=relaxed/simple;
+	bh=nQuXQCfJ/SfXG9YfnkL7myftheQ9u5GoCmA3GEgvOX4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JjJIE8EilaZhXsmXS2O1fZDTKwrl8iiVOg2xTe0LTOO8EfIVkMHQHpPpa8eCd4TaIp+pS9UmsiA8MGIVIJH3TbLl0tKflKHut/8XVoWb6rrILrmkqYiicXDK0k7SCl+V+qVMUddvzVl9Vm0n1y+7ETXWqXA5uE5POUSLpif4ghA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kzp5oTip; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZXUUnyV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA820C4CEF7;
-	Thu, 12 Mar 2026 11:46:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kzp5oTip"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8DBDC4CEF7;
+	Thu, 12 Mar 2026 12:10:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773315982;
-	bh=jtK8dDtUft4/ENJDBV0ud3J6ohGSG6+qs6EFqSMBhvI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PZXUUnyV3P/yfYnBvbNTdP9S9ELy+NCg5I4wCNuJDtVPC2GoQGzZzS7709Q/y/y1F
-	 Nn98lG0hCj8nFakpbrY0FpBwyz6Ri8f9IU6W2zDm/Z7cO8xuF6FCAvMw4VgVh6knj0
-	 bPdwVH5fQPaa5/+LgQsbj5Fsq26PTJmV5IbGNuk8BuV4en6El2O7vUsZ5p2cthQq0W
-	 krc37S0WpO8hR1W8rakhvHFFR8IdWSUZ37/8FMfjdTdVN/jzvUduB8it0/klLcNvLl
-	 bN4mcQCT9/CdOwpTRDXfc9u0Qkwba6xXTchjwDh03jGo3jmsDK0xgVaAbW+r4A5OtP
-	 ddSg1vWEyXBQQ==
-Date: Thu, 12 Mar 2026 12:45:42 +0100
+	s=k20201202; t=1773317436;
+	bh=nQuXQCfJ/SfXG9YfnkL7myftheQ9u5GoCmA3GEgvOX4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=kzp5oTipiNOs9fmIBpi1nmmSuQ4uLVNq08LPCSch8yiIeOkyJ8Az9MBCTybE7cm5d
+	 AMxfwpohLYKZvdRcwY6FVWNb1PtjdZE3EgpeQC628X0efwh2wRrw0LhWn9yaxAQfpf
+	 w6ZUYG6LkLltn75gOmO38N55qeVwus4Wr+Sb10hyo0888DrxKRH5rYKA32g+xfcRRS
+	 vWwOBuST+wlsK+dHrf7tH4G3ruupinYIHv4ZCjmtIer0Zb+wbl+bwIETcNIuNLPGvg
+	 W1154YFBZI0Xw+DtOH34QkYfcH3Ndv6eraBdM09caT66SnioiGB/fgmwobzxV3sXLI
+	 1S2FtYnyjdp3A==
 From: Nicolas Schier <nsc@kernel.org>
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: xur@google.com, Masahiro Yamada <masahiroy@kernel.org>,
+Cc: Nicolas Schier <nsc@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Rafael Aquini <aquini@redhat.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Stafford Horne <shorne@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Piotr Gorski <piotrgorski@cachyos.org>,
-	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 0/2] kbuild: distributed build support for Clang
- ThinLTO
-Message-ID: <abKnZrHleb-XKR_a@derry.ads.avm.de>
-References: <20251028182822.3210436-1-xur@google.com>
- <20260312082502.GA790897@ax162>
+	Kees Cook <kees@kernel.org>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev,
+	linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] kbuild: Switch from '-fms-extensions' to '-fms-anonymous-structs' when available
+Date: Thu, 12 Mar 2026 13:08:48 +0100
+Message-ID: <177331711843.39835.18126183139184363231.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260223-fms-anonymous-structs-v1-0-8ee406d3c36c@kernel.org>
+References: <20260223-fms-anonymous-structs-v1-0-8ee406d3c36c@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260312082502.GA790897@ax162>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 12, 2026 at 01:25:02AM -0700, Nathan Chancellor wrote:
-> Hi Nicolas,
+On Mon, 23 Feb 2026 12:10:27 -0700, Nathan Chancellor wrote:
+> The kernel enabled '-fms-extensions' in commit c4781dc3d1cf ("Kbuild:
+> enable -fms-extensions") in 6.19 to gain access to a Microsoft
+> (originally Plan 9) extension around including a tagged structure/union
+> anonymously in an other structure/union. Since then, Clang 23.0.0
+> (current main) has added a flag to enable only that extension, rather
+> than all Microsoft extensions, '-fms-anonymous-structs' [1]. Using this
+> narrower compiler option would have avoided the build error fixed by
+> commit a6773e6932cb ("jfs: Rename _inline to avoid conflict with clang's
+> '-fms-extensions'"). While these errors are not expected to be common,
+> using the narrower option when available has no drawbacks because the
+> kernel only cares about this extension in '-fms-extensions', no others.
+> While this could result in build errors for folks using
+> '-fms-anonymous-structs' if a developer uses another extension in
+> '-fms-extensions' (either intentionally or unintentionally), flagging
+> these uses for further scrutiny seems worthwhile.
 > 
-> On Tue, Oct 28, 2025 at 06:28:20PM +0000, xur@google.com wrote:
-> > From: Rong Xu <xur@google.com>
-> > 
-> > ChangeLog:
-> > 
-> > V5: Handle single quote escaping in echo _c_flags to fix
-> >     Piotr Gorski's reported error.
-> > 
-> > V4: This is based on the reimplementation provided by Masahiro Yamada
-> > on May 26. The difference is that this version now saves the compiler
-> > flags (_c_flags) from the Front-End (FE) compilation and re-uses them
-> > for the subsequent Back-End (BE) compilation.
-> >  
-> > Rong Xu (2):
-> >   kbuild: move vmlinux.a build rule to scripts/Makefile.vmlinux_a
-> >   kbuild: distributed build support for Clang ThinLTO
-> > 
-> >  .gitignore                 |  2 +
-> >  Makefile                   | 25 +++++-------
-> >  arch/Kconfig               | 19 +++++++++
-> >  scripts/Makefile.lib       |  7 ++++
-> >  scripts/Makefile.thinlto   | 40 ++++++++++++++++++
-> >  scripts/Makefile.vmlinux_a | 83 ++++++++++++++++++++++++++++++++++++++
-> >  scripts/mod/modpost.c      | 15 +++++--
-> >  7 files changed, 174 insertions(+), 17 deletions(-)
-> >  create mode 100644 scripts/Makefile.thinlto
-> >  create mode 100644 scripts/Makefile.vmlinux_a
-> 
-> I have been running this for a few months locally and I have not noticed
-> any problems with it (at least for the two distribution configurations I
-> regularly test). I think this looks good overall and seems fairly well
-> contained thanks to Masahiro's work on the earlier revisions. Could this
-> be picked up in kbuild-next-unstable so it can bake in -next for a
-> little bit? It should still be applicable.
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> [...]
 
-Thanks!  Sure, I will pick the series up.
+Applied to kbuild/kbuild-next.git (kbuild-next), thanks!
 
-Kind regards,
+[1/2] kbuild: Consolidate C dialect options
+      https://git.kernel.org/kbuild/c/ec4c2827
+[2/2] kbuild: Use '-fms-anonymous-structs' if it is available
+      https://git.kernel.org/kbuild/c/0d3fccf6
+
+Please look out for regression or issue reports or other follow up
+comments, as they may result in the patch/series getting dropped,
+reverted or modified (e.g. trailers).
+
+Acks from arch maintainers are still welcome!
+
+Best regards,
+-- 
 Nicolas
+
