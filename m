@@ -1,132 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC77D3FE647;
-	Thu, 12 Mar 2026 17:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773338050; cv=none; b=MxEyiAowOYReeMWZmOGvpZMWo76C5syJLB/x2Kq48ERzHgOg3DTZ+M2ACQ26zszFfr4wPvbHZl9mCgeWtegm3qhGUsg2k0FBhLQMn7npzNtdUCfohspxS0PfjUzM8LodeeGISYsEbNye4RGgtawmGOyIXkRido/nngyfYJ3UMLg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773338050; c=relaxed/simple;
-	bh=FcLAZQ1PMT5aEh0d51Os7N7jGkgtnOhbhE50umhUp6U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lOLNpRfWsjhAUX/slesJMG+AWPLiCbcL8a3qPpgzrKThHnxn+L1EgyTZMBkoT2UjAQokKr9WTpqUhlrsJEbBE6uZzib6ABL/14szGrIpBLgxpoO2O+JCV+vov2f3/dvcLChNE3vv4LfdLinAMU75kM+bfdnDkTY6hNWE02BT1vI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i6HQeuHm; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 900073B634B
+	for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 18:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773339583; cv=pass; b=REXvnraIB//MFZtEANyBVDPHj3EJkM6y4DpVhUlJoahE9/wnwix9QoFi0MJZNxf1C8gzYT+07gwiwOerEPABAgU6tuu9su51VHgiXhCtFUJULxhNFIfvrYRxvE4kjRi2rvRSIx9RqGePTXSh27c+NKz0tj/NlU2msu/mt1dJCcY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773339583; c=relaxed/simple;
+	bh=RpNiXDAE+taeWZnGMx/djr6110y6v5HGJRLyCPqoeNI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q1xz8GNG3Br4cv84TIk80kPBVoHdDGoNKQzTOHOCsp0z0hN28h9DPezKO/8aM9ey2A3S6IW+fVA1olFvdHnR/EeeA9suBYlOSUIb3p9fguN/thoxB34t7/qGI40TtbH1W9WjzEiq2aCqNYBewARL1ZpTqKKCnCkXzeSMqqW/jFM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jEO5s/rg; arc=pass smtp.client-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i6HQeuHm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773338049; x=1804874049;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FcLAZQ1PMT5aEh0d51Os7N7jGkgtnOhbhE50umhUp6U=;
-  b=i6HQeuHm2i5NSkpzfGjoHxCIoFV25clY67BILf7DAq6SftdrwZLoKjWS
-   tQcTXsdonIN89Ahjq8viAJMMJLrLnoR2OHk838h+X+WnXXsMI4H/W2SBz
-   kmWCjCFWmgqaZhHLx81DNsGMVbH7ZmDzT29v8aCaJab5/bd+znLG6kZiS
-   MszfO8XsRlHaXpaZiXj/yEAvkXua1mAJYGUWpuDqr/x3VlTJyZAH0K4Xb
-   WI+NQ/dLWEengaEnFexMNGZwL7cKuzSKD8ujczcjW3WKL3pClcUXqqJa2
-   Opl9UdAJ6chfvQJ3f/lNzBmhvkNyryEeJ+YHJlz7umWelax1vUv5d0N/8
-   w==;
-X-CSE-ConnectionGUID: QK4P+LoLRDq6jM5f8TQskA==
-X-CSE-MsgGUID: UfCXar2xRBG1ihpv0/eCCw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="77049153"
-X-IronPort-AV: E=Sophos;i="6.23,116,1770624000"; 
-   d="scan'208";a="77049153"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2026 10:54:08 -0700
-X-CSE-ConnectionGUID: a6qGDw00TYGi77z7sFnAjw==
-X-CSE-MsgGUID: B8HZEOlfRe2FBnXXYrViCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,116,1770624000"; 
-   d="scan'208";a="217407757"
-Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 12 Mar 2026 10:54:01 -0700
-Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w0kEP-000000002mF-0RQc;
-	Thu, 12 Mar 2026 17:53:57 +0000
-Date: Fri, 13 Mar 2026 01:53:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chengwen Feng <fengchengwen@huawei.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>, Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Len Brown <lenb@kernel.org>, Sunil V L <sunilvl@ventanamicro.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Kees Cook <kees@kernel.org>, Yanteng Si <si.yanteng@linux.dev>,
-	Sean Christopherson <seanjc@google.com>,
-	Kai Huang <kai.huang@intel.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Thomas Huth <thuth@redhat.com>
-Subject: Re: [PATCH v6 2/3] x86: Implement acpi_get_cpu_uid()
-Message-ID: <202603130128.58JEZ1Wg-lkp@intel.com>
-References: <20260312072316.4806-3-fengchengwen@huawei.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jEO5s/rg"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2be22d699c9so81594eec.0
+        for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 11:19:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773339577; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fBQsOszkzAdLI4NpYovH51bE711zJ8b7dPB1O2pju7/owkfHS4+lDvUqonQDxUxUfo
+         txf7L0eRsCuYhGvHp1jPe9nhTJY6KqBYRHGso6sCpoa/u64iGbuMBVaQnxuxPbOrVy2s
+         hyfjfewlVQh8+wA19dKJ5ur/YJXevpheU+AhkdaBV7HFem6BoSEA07Ba0ss3zkLENxjs
+         oxyTsbwlFkCUUvUbj6IQCPLWkFt/KfYDPh5N2iTHWhoa3+DpJOOYiY8zXVUd3bCFIsds
+         FcTymVDkIhUpNstJuraVHy9IQwWyGVDYXaLj4PaZXxMv3fVkGgIOseGBJ13dGytvQcAx
+         rFOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=RpNiXDAE+taeWZnGMx/djr6110y6v5HGJRLyCPqoeNI=;
+        fh=+osfa/ezuuSfuuZMXmgz8ac8SZN09C5wygH0v9KJtT4=;
+        b=isdGVWF8FAiGCxYQbL+xbhp1s5N4wMNhL+aqliXybVLm4fbzzhbSkkmzS2uadjV3kZ
+         Q1VPV+Njl6p0KR2JF6vMjp6KWnp6OfdnWC5jTO+4gdtMvRTXikZB3azyyAIl4psG7kF4
+         T6dPR9bOubrbkqJxY45F2J4TSGbUQIa3Lzk3YdK35IiS+/qvAk/vst4oX2leuS11xXJm
+         bNiAUw53vDRz5jKExskb17YNeReHx5js8v0j8vLshIR9TC684s+XxdRl2zaBtPPliYR0
+         IOcghPBPXtLc+jsd+KV1SeIgWT9oEmPN5D/oeI6rbeIr+IqA/8X1KLTqaoYVUviL8KTC
+         iU3Q==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773339577; x=1773944377; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RpNiXDAE+taeWZnGMx/djr6110y6v5HGJRLyCPqoeNI=;
+        b=jEO5s/rgDXlkr55bKwelmLXPGsIWRc9HkBg9QZtQTYFnZdkxwMioxdZ4JxbMBAmK/5
+         JymhDia2Cmp9QAfiZtmxTKNUeJTu5l3DoUYX8G+euFuiM/VWZoeJ29Mx0r6I9JgAUGrD
+         IcveB8pEWUs24Oo6kHmWMFWrFG1b+J3H2YVauFKeo8ng6kzF4FhhSH+2wl5Dm4gN6Mgm
+         RJly1z1anMEBzPVXyagvsFzVt/wCj96gC5O3XuXdf9LZCixa/EAtYPCM2Q6250Olh4ij
+         hWtnuHaqt92UPCRCKAQMxmi9zTSWsUXzyyt70AzwxcJdh5HCtaSfOBHSjlTvPYBxFKbo
+         XfDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773339577; x=1773944377;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RpNiXDAE+taeWZnGMx/djr6110y6v5HGJRLyCPqoeNI=;
+        b=OpBeZFQZqLWJRQRXwcZlqP+8DUZd7bzyiTGhNml60bO9/WBBKYL+XYnikhsrQeqImE
+         j1Kzdb/rzf0QNPIE/hf8YcDZeGMnMiBIs+LKWh7dHNaBQsibowQlYcdKPJbJ6OoSEUZf
+         u5hVaxM4ocnY6gbKeJsys7BoiCwhZULpwOJGM0hAh3+k2bwXzXT3wrXKvTZhvGprWCix
+         bD0t7aW+xiLncsEbAbCrcbeP2F7M15sbHiBxNgxE8x1Bn8/5etG7MCuundM7kLVGdMCs
+         hj/ad53Ut9/17bOJxDsKJxvs4qe+Ly9b0YXVIFdmynTq/pGAY2grTUWT8kbyONdOwrVb
+         1i+Q==
+X-Gm-Message-State: AOJu0YxuIeKsiCpRy2Ce2vqcMcqcdJ+P7zPXoANdmPf4hHlUAzODyZ/I
+	0W+qGhJbe8agUiim5mkz0jc0yZf8++EJ4vCsdemzOm2TaUApeN0zQjTsi2JrDmOEewfRBhf4vA3
+	2mnnfW9NqjHp4Ur5NrA/Mo5ddn1VKXO4=
+X-Gm-Gg: ATEYQzyyAmGF3Y9HTDU+K0pAf2dD8YUw9CJEHZ2VBpGiV/7PKNw1YktHLNCwSxBnchl
+	lNkxmb0ipJauMyll+v+7gWVCyPGHZ02Sk9ePmC84uaPredKCVxVG4Iwn5nUYgHZMweFurBUp9qb
+	KewsaeN/9QDvrunbfzSbr7zRRK55673EwqBwJ7F+13hszVzXgFdwc4EtrkLcKY5O7GTGXCmkmL5
+	pGWfcdSBGPK+u+Fx4x4ZXlzYEPnsUcDSKP9dUg0sFDh0hliOfiogBgk7hAWd+geRmh3XS0Ux/Qj
+	rsnUx2pz9rOLFWwLVjk5UT3eHzhEoG9R1bakUTDrsN2TkB90FfUnqZzYfJLzAPdhBIgkmpfx9cU
+	L9Nnpqh4oYva8FOEdkBf+iLo=
+X-Received: by 2002:a05:7301:fa8b:b0:2be:298c:a11 with SMTP id
+ 5a478bee46e88-2bea5538210mr173440eec.3.1773339577205; Thu, 12 Mar 2026
+ 11:19:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260312072316.4806-3-fengchengwen@huawei.com>
+References: <20260311071652.GA1991880@ax162>
+In-Reply-To: <20260311071652.GA1991880@ax162>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 12 Mar 2026 19:19:22 +0100
+X-Gm-Features: AaiRm51kAUNkJEU6OonpCbwhDL1HIuHv13f3yqZVZu3WpWfHANbwjxGrnwHaOzQ
+Message-ID: <CANiq72k5KipAULbzyFDxEQLZCK9o_4Xf4rYcFo0RhF=3RyGG5Q@mail.gmail.com>
+Subject: Re: Prebuilt LLVM 22.1.1 uploaded
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Chengwen,
+On Wed, Mar 11, 2026 at 8:16=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> I have built and uploaded LLVM 22.1.1 to
+> https://mirrors.edge.kernel.org/pub/tools/llvm/.
+>
+> If there are any issues found, please let us know via email or
+> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+> opportunity to get them fixed in main and backported before the 22.x
+> series is no longer supported.
 
-kernel test robot noticed the following build warnings:
+Tested it with a Rust enabled build as usual (just the LLVM toolchain,
+without the "LLVM latest with Rust" combined packages, since they use
+LLVM 22.1.0 instead):
 
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on pci/next pci/for-linus rafael-pm/linux-next rafael-pm/bleeding-edge tip/x86/core linus/master v7.0-rc3 next-20260311]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chengwen-Feng/ACPI-Rename-get_acpi_id_for_cpu-to-acpi_get_cpu_uid-on-non-x86/20260312-152657
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20260312072316.4806-3-fengchengwen%40huawei.com
-patch subject: [PATCH v6 2/3] x86: Implement acpi_get_cpu_uid()
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260313/202603130128.58JEZ1Wg-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260313/202603130128.58JEZ1Wg-lkp@intel.com/reproduce)
+Thanks!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603130128.58JEZ1Wg-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kernel/cpu/common.c:2652:5: warning: no previous prototype for function 'acpi_get_cpu_uid' [-Wmissing-prototypes]
-    2652 | int acpi_get_cpu_uid(unsigned int cpu, u32 *uid)
-         |     ^
-   arch/x86/kernel/cpu/common.c:2652:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    2652 | int acpi_get_cpu_uid(unsigned int cpu, u32 *uid)
-         | ^
-         | static 
-   1 warning generated.
-
-
-vim +/acpi_get_cpu_uid +2652 arch/x86/kernel/cpu/common.c
-
-  2651	
-> 2652	int acpi_get_cpu_uid(unsigned int cpu, u32 *uid)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
