@@ -1,134 +1,107 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372DC27B4F7
-	for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 11:45:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773315927; cv=pass; b=tM1mtmu+F2I9pz3P+XOZ+GQfWxin3a8mcZnQr4whPvh2EdQLxoJ1BOUhS2QqcALCYND2T3GT6uAL+OeSIcIHWXAfruM0Y9Qr7m+Yf5hV0dNr6ujdmcMA2H+n8VJ/nxu4U4HnCoeLsuFQNCfaWS7rnaWHaSjuJa0eRtzZIH4ckKo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773315927; c=relaxed/simple;
-	bh=X8mqXhY9gTYTpA1Ii/Sq9UmHokzMRb0eTBsgPlGyvIg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iLfLLQVcP1iDhzAXUiGudLVZixm6IpPzrEv38cid44wC5JmJ+p8Ojfyh/yV/R0uUnajEK9LbjlSJNXPbz8AYNDE1b5aA/xYkkVKwhQJ0Z3ePqQq0FSUqs4VLAJRR5KESbKN04NA0jdkjiFKqs77NGNvsuUWbNRvxDftAOiW6Lrk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FTvF3xD1; arc=pass smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2D5271471;
+	Thu, 12 Mar 2026 11:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773315982; cv=none; b=PlrEwBP2ZZp7Fcyq8fbHClcye6SVjzKrfDChk5zol01f/3kithxDhdu7OEr7zw9/w6OgiiEg6I8EUshbHWfqnwYJRhagYlBeVFqAXU4h0mh8I6IbEuSKQ/KYOIpWosbYriVO3oKHaxMdDqgi/so77Uc1tGYTEMKtdU5dNrnbx1g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773315982; c=relaxed/simple;
+	bh=jtK8dDtUft4/ENJDBV0ud3J6ohGSG6+qs6EFqSMBhvI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W+jy3Xm7dpcpsD5mtxKBgaApX69YMMF8h5hApykXS5vdQD7oVZe3qoS3FT6RNGuAW9NHFyGtMBrvvasB8BLfeAAwwbbruQarb5b6s9V9i/KHafgwb0aXg0nuIADK4kru7WVGJXlw8weQpWHCmasmQntQdfllmenmXDyB0U0LMmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZXUUnyV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FTvF3xD1"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6628cc1bd69so6953a12.1
-        for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 04:45:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773315924; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IKkkMWSmbuXrZr+U1Pr43EXMROevmAVlckxAg/nsBlxCV2Ssp+mrP5SSFwN8JTFOTi
-         SLJ+tcQqmc3yr3UQU0y4sDw0FMguI0mfPlJfK9gIwvmmzZax9KP4ghpDuUGunQLmZzXf
-         E45vM1YTQtFkWC8Tp+qfIQH/g4l2no/lERme11h2lTIj6yvmBuBGn9lvkXgUTh8rpnX6
-         vP0zvya6pVQFigzONqD10i3sOVwBQyXcffL+emvtsLz3gTh/KcCMyK4P6EJsBcaIPtp5
-         K8RJOxyvJCMV2tGwevYV0ucq2OUkp5unIB1mHS+03At1N/7/vKkNRK+rprNWw9s4k6x/
-         YWMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=X8mqXhY9gTYTpA1Ii/Sq9UmHokzMRb0eTBsgPlGyvIg=;
-        fh=c4vtFXEXAPSs2L6So3x25wmmhtRSz1KRk89iaJ+PIyg=;
-        b=D2p2cW+9ewL2WqXR+zRjcZ1MK6hxepVNzuq0sCrGns2RuBlE2iu9ZCt1Yg9LjNo03M
-         f7ddpHeWioNG7a94f8dt9f8hS2UQbIo4PKEiRM3d2eeZqnhlWoXF8hTjHDJbqNArux7/
-         VDtTk/bPwzV95yYoelOlbc/JBHtWMqZVSo3ZjqTAEkjgzt9Yee54rDC5qX+08UnIFaYd
-         4aXNELp0LM48bo8f2RvdnKUNoe+KM+3xePNVE27uTtXjw21R3Nau696XZZM8cXagnXc3
-         8ro+pecPlNxUQ81Vn7B9L0XzLKkpLp3YuPctPXtUWPyeskBcYsgF7wORwXDtaMuKujzD
-         zrCQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773315924; x=1773920724; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X8mqXhY9gTYTpA1Ii/Sq9UmHokzMRb0eTBsgPlGyvIg=;
-        b=FTvF3xD1+XY5PAvJQhuS2paW4Dg1bQpkkPF4qi7vB3VQKDkV/gYScLmur67R3+iEif
-         GHWjXRGR2Ifqlp/COxmmG5mAA58UCiadooheDLC2+IEb5tGt3nFji9mZaW9hWggW8Lp4
-         KDbl29rhylPKbm/GiztBfK49kAEugb1nVsDHEdHdt7f6MjWdTKmzZpgme+D7Y+JbXtIo
-         eXmzYO/JxIvKhHUheAtza9s6rZOSQPUtiHAV2kRmnKqQ5ELmqI44E2nV1wFSDw8gg1lf
-         z1yBjgqDxOTSMLR/odh7+RC7pnKrph2iRQEd/1nbnAEnEl0kis5JNgzEVF/NrTlL2Gr1
-         OnfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773315924; x=1773920724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=X8mqXhY9gTYTpA1Ii/Sq9UmHokzMRb0eTBsgPlGyvIg=;
-        b=PKbdf9aDuAOZN59JhhUoObxzMB3lsAZF9s5liIe+6wBhgIpQqM+suPGjMySqM44rqk
-         XH5zU4lAOr1HteWnm8HkfiTs9Yu/IefV01sFpZvfwXadde1F1RCjCm9SXuUMdEFvpU2X
-         GtZz6GEHMixjkxi2km4XsWclNEzxwUjnvlubNv0WzgdCOI4xt1XkgFhFndMqEfKtEv6r
-         NKU+wWHhvz+D+QfnqW9s722gggKiMyJ14JIXv6XV6DQkN18Pws3hDvq92TCuoE7cmrQp
-         NswO4OpJ4Dy3wn1pLVkmDTZDlrZq2lo+RT1EXAUi7mX3MdqC2WSNnH5ANZR9Xx1IfdIX
-         xNUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUeoiIj7DJCYs/gsbzzMsgpTIR0JCILX+cC5BMNyXHXNe5RkhCFRG5Y5hPmhB9+supes0ez@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw/dpQMsDobWDo3vvyrDQkAlH2DfiPqyJSjsKTl2TP5vqaNbp11
-	AwRQTo9AbHhTI/6FLzJs/2Kk36b5dSb86Y1fEhXGlGYDzbrh5CzJzesQNtXT1gGAdfDOpoYS61R
-	uIG7qRC1tt5Eqt3riq44DweXpIzPJXqJt4Povnomv
-X-Gm-Gg: ATEYQzwA2/+WQdR//EDIdl0iqfISAuLuHr4JUSsDy9dpl7M54w4w3/XnTiSkeM1hHSz
-	4k9E4ymZJjHTRds7bjc9Zz/ysMnsV5dDAh4g5/g7t6JjWdNpZ97mDf8M37xFaXbLIaqhe6cieon
-	ceofwczejRtzkEaKcvZnVDA9XEJXcBh6yDycNJ61WP6kvWchPUf7fhGdrY6mSUYhGLMvR2gj5fk
-	55jQmQyVoHBopC2zx8eWoFwDmzkceqnNN9zn0AxBHHgl8sMQR+ZnxEMZJjHs6ALe2bjvmoUrfun
-	yM75NztvnXMrlV/gc5WvfHykSaCplJmGc/UJZQ==
-X-Received: by 2002:aa7:d857:0:b0:64b:2faa:d4e8 with SMTP id
- 4fb4d7f45d1cf-66361cf137fmr31716a12.1.1773315924001; Thu, 12 Mar 2026
- 04:45:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZXUUnyV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA820C4CEF7;
+	Thu, 12 Mar 2026 11:46:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773315982;
+	bh=jtK8dDtUft4/ENJDBV0ud3J6ohGSG6+qs6EFqSMBhvI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PZXUUnyV3P/yfYnBvbNTdP9S9ELy+NCg5I4wCNuJDtVPC2GoQGzZzS7709Q/y/y1F
+	 Nn98lG0hCj8nFakpbrY0FpBwyz6Ri8f9IU6W2zDm/Z7cO8xuF6FCAvMw4VgVh6knj0
+	 bPdwVH5fQPaa5/+LgQsbj5Fsq26PTJmV5IbGNuk8BuV4en6El2O7vUsZ5p2cthQq0W
+	 krc37S0WpO8hR1W8rakhvHFFR8IdWSUZ37/8FMfjdTdVN/jzvUduB8it0/klLcNvLl
+	 bN4mcQCT9/CdOwpTRDXfc9u0Qkwba6xXTchjwDh03jGo3jmsDK0xgVaAbW+r4A5OtP
+	 ddSg1vWEyXBQQ==
+Date: Thu, 12 Mar 2026 12:45:42 +0100
+From: Nicolas Schier <nsc@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: xur@google.com, Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Stafford Horne <shorne@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Piotr Gorski <piotrgorski@cachyos.org>,
+	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v5 0/2] kbuild: distributed build support for Clang
+ ThinLTO
+Message-ID: <abKnZrHleb-XKR_a@derry.ads.avm.de>
+References: <20251028182822.3210436-1-xur@google.com>
+ <20260312082502.GA790897@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com> <20260311225717.GY606826@noisy.programming.kicks-ass.net>
-In-Reply-To: <20260311225717.GY606826@noisy.programming.kicks-ass.net>
-From: Jann Horn <jannh@google.com>
-Date: Thu, 12 Mar 2026 12:44:47 +0100
-X-Gm-Features: AaiRm50QWh1Nj2LpHOw3udJm_njRdRiZKS2l5lDJTx9MAkzkBkdjudL0pPisNLk
-Message-ID: <CAG48ez3mKsdpc6KK+PC--1dkrNrRJ9SXPHjJhQXVfkfap+fjcA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] KCOV function entry/exit records
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
-	Ingo Molnar <mingo@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260312082502.GA790897@ax162>
 
-On Wed, Mar 11, 2026 at 11:57=E2=80=AFPM Peter Zijlstra <peterz@infradead.o=
-rg> wrote:
-> And I don't suppose KCOV will finally honour noinstr ?
+On Thu, Mar 12, 2026 at 01:25:02AM -0700, Nathan Chancellor wrote:
+> Hi Nicolas,
+> 
+> On Tue, Oct 28, 2025 at 06:28:20PM +0000, xur@google.com wrote:
+> > From: Rong Xu <xur@google.com>
+> > 
+> > ChangeLog:
+> > 
+> > V5: Handle single quote escaping in echo _c_flags to fix
+> >     Piotr Gorski's reported error.
+> > 
+> > V4: This is based on the reimplementation provided by Masahiro Yamada
+> > on May 26. The difference is that this version now saves the compiler
+> > flags (_c_flags) from the Front-End (FE) compilation and re-uses them
+> > for the subsequent Back-End (BE) compilation.
+> >  
+> > Rong Xu (2):
+> >   kbuild: move vmlinux.a build rule to scripts/Makefile.vmlinux_a
+> >   kbuild: distributed build support for Clang ThinLTO
+> > 
+> >  .gitignore                 |  2 +
+> >  Makefile                   | 25 +++++-------
+> >  arch/Kconfig               | 19 +++++++++
+> >  scripts/Makefile.lib       |  7 ++++
+> >  scripts/Makefile.thinlto   | 40 ++++++++++++++++++
+> >  scripts/Makefile.vmlinux_a | 83 ++++++++++++++++++++++++++++++++++++++
+> >  scripts/mod/modpost.c      | 15 +++++--
+> >  7 files changed, 174 insertions(+), 17 deletions(-)
+> >  create mode 100644 scripts/Makefile.thinlto
+> >  create mode 100644 scripts/Makefile.vmlinux_a
+> 
+> I have been running this for a few months locally and I have not noticed
+> any problems with it (at least for the two distribution configurations I
+> regularly test). I think this looks good overall and seems fairly well
+> contained thanks to Masahiro's work on the earlier revisions. Could this
+> be picked up in kbuild-next-unstable so it can bake in -next for a
+> little bit? It should still be applicable.
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-I believe it should, as long as the compiler is new enough?
+Thanks!  Sure, I will pick the series up.
 
-We have this in include/linux/compiler-clang.h, and I just checked
-that, for example, the noinstr function fpu_idle_fpregs indeed doesn't
-get instrumented with clang:
-```
-/*
- * Support for __has_feature(coverage_sanitizer) was added in Clang 13 toge=
-ther
- * with no_sanitize("coverage"). Prior versions of Clang support coverage
- * instrumentation, but cannot be queried for support by the preprocessor.
- */
-#if __has_feature(coverage_sanitizer)
-#define __no_sanitize_coverage __attribute__((no_sanitize("coverage")))
-#else
-#define __no_sanitize_coverage
-#endif
-```
-
-And include/linux/compiler-gcc.h has this, which also seems to be
-effective in a GCC build:
-```
-/*
- * Only supported since gcc >=3D 12
- */
-#if defined(CONFIG_KCOV) && __has_attribute(__no_sanitize_coverage__)
-#define __no_sanitize_coverage __attribute__((__no_sanitize_coverage__))
-#else
-#define __no_sanitize_coverage
-#endif
-```
+Kind regards,
+Nicolas
