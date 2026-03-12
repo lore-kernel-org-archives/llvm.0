@@ -1,177 +1,124 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1A5221F0C
-	for <llvm@lists.linux.dev>; Thu, 12 Mar 2026 00:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773275398; cv=pass; b=C2qIVkLOsWdkdRPTzwvBLccv+PIWAq9Ys3d9jY6KGrwMq/eEJAsnAAiVeXgLTHxYOnjJBX3G02zgxfELUCl9Hl+FUVvuJnE1KZMjAfvmkLhBRWhaNtDV/kkWKi2Z56OxzdhgUZTDsuN0P3Yu2veDm4WWJWDZktG2YLG068xebh8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773275398; c=relaxed/simple;
-	bh=YcypzZhNU7pNSG3Co3XkiZS4WRLodx1GYdn6Od+L76g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kdtse+GbpG2KWsjipITkiKQPAYH6VcK/MwXrBYJjz8g/zqw3al0Vpaj5SWFHIiNKUFP260bX7XRhLTLS4XT9lm/GnHnz3qszT7MYt2+Khf/p7dm6Pfy20ufwdR9/JsFnT22td+Nr2VR8gCmoE1RnCM8cFLEtCrs1Ri8XeNB8JqI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xAVxXkpa; arc=pass smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD4A184;
+	Thu, 12 Mar 2026 00:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773276008; cv=none; b=XeE7PHzodEu8+y+7Ws3EdWdd4sYLDMz8+IXG+ROQq6udZDmoZcIA6FQMsfw0l3S4GhNdp6o16whlFOFzff2RJNIPoVMpCFd2hwksqrVa5j2GMvoCUYpOoxCnlUj6WlnQLNT3SJ/Uvg8vghDiuPV0ytXOOoMLCMB6fxd9cy8wx44=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773276008; c=relaxed/simple;
+	bh=nQbnEBithESt6CWLnUtQicYUaszVzxppnpWJix1YO4c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Q2N+nYghd+ePGEpd2bbDQYF9IrULanBHvjoD836OP70w53ZQALValdz2fwFcUU8mAJ1TfSj9eT1extb5NtQVB5bJukWp6aQeeBBvPzMWBcP073FWWsVCBBEkbJ9JZYR7/JM8h0I/u5e41sKg+soRBL3wrNws3hHKeHKajvHrLKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mycyTdB0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xAVxXkpa"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ae49120e97so37695ad.0
-        for <llvm@lists.linux.dev>; Wed, 11 Mar 2026 17:29:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773275396; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HaltSoS7qge3HE0CyaEnQAXkP4p9FCDqoBesvzO+ji3YJliTOszkUixTcKLx2J3iJh
-         MdqIXJIoVRTciXMHpq0eTnoTPHhvHoR6JchtPVN17Ko5NvjfgPIPTLm+p5ujvgQ1lWL0
-         MYAyymdpL+u6slwEM2045do+Fo5PK7Tyx5RVGRSP5LASg3iTXpEE2e2Gc9pY7ujv+0k7
-         MieT+Ev6ftCyvQMNCSmcq+r8prLf9Hq9kIvfO7d5rZQOlJEiERkuhoOL5qs63yK5KlAD
-         ptVSSj/Xb5CClWZcLzubzaVvWPQK7eixqjla0AFKTrz/Mch95AUHS8865yYiHH+yMP5K
-         dGeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1PC+/wr2syCqvxGBoZe6+L+D9Kxcq5YGZvRoBAu0gk4=;
-        fh=a4MJ3YUF5J6caGPn2Mreuo5ZuH+7uyGR1lU+Ds+CfJU=;
-        b=XgyjkYR6Vt0XmqPa/zSLv36g376hF8SlQQbDusyxwAwM8x5y21OwyNLWBk84PFtdXn
-         kBRKIVqwO0w4Sj3doAG+sbGy5+DqEKji7D2JyD2Y2jli4U1OwugYxADrt7XndJcuuXMr
-         2tZuHgtFtQZrMXN0c/gNQifJ57kmV3l0FNj3FcCSTp8BYR/6kRTi/PUIjz8wtSweXoQB
-         quvYPe60HegvFGGccrwc0bfzPX1D5hnu9bE17zweoNsz/3LBG3tImGCCZw8//kznguRH
-         sC4szmBv8ywOOJ5M3BaMQE2Kfrk1qvxrAVxVYB88b7OT4i9JV2yxLtavsntz4TFqpHEQ
-         syjw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773275396; x=1773880196; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1PC+/wr2syCqvxGBoZe6+L+D9Kxcq5YGZvRoBAu0gk4=;
-        b=xAVxXkpaQAjr1T/Yl3Kd1IF8RPK62tuW9mUr3BmGeNV2iSlFmeG2nhQWmHjeLo8LL0
-         f+uQjp9XuVKhm9dEgm87To6UUwYB6O1r56q7oJJUvB1wsj/Li89m6UNngROuZkbMyYwd
-         3DelA4mBSIJeG/Luoikc6WwZ7hpru1dljKfwNXo84IpP6i/P4cnblAaYRwCL1uGLCp4g
-         ngv04HPldqBReOTm4Krntcpb26QNmVBqMN5drUNX3cbCEI7xbmcBFkXaepklyiVLjr7+
-         bd+MEsbcPyqdSEhb9JvaTbh/ZzjM32OQn+vPBhbMk2EyFOGZdFlfmvBOpj0oNrMYrtMF
-         TpfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773275396; x=1773880196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1PC+/wr2syCqvxGBoZe6+L+D9Kxcq5YGZvRoBAu0gk4=;
-        b=tFCSlD6HEWiq5x7Jrnj+q1QJPzYEQfd1DcJ1tV2EAJz52iOmUM7aNSY7MQI80xVC+1
-         U7fsuyq7cp6qrdY8/qpbyL/rajbsgqjfCT5SE5mEtfnfNjXgnj6NGUCWgr/f7UsgMTGt
-         wbTRvS1MkQ+/HD3PqlR7EyvFn6JvkQL6SNVHznpPcf1euvbL98R86Q0K2M/GyfqE1yTB
-         wRKa0PrvWGbvNBhW3s/vTGt43FU7iUT79oJWKU+M3skyGUlN1YexKaRIdlAW2Dhwetkp
-         OwEs4lIUKQZ1EwJmx8lER7IC341jk7WSEaBYV5Ni1YZXVG9JrJqe880BCKtM62y2qWyf
-         1/vA==
-X-Forwarded-Encrypted: i=1; AJvYcCULmTjPtvT58Es549mnMHWrU+XRL0VPFQgraw8/08hpaC2pqkO4hvxfWR0Wk+VWpQ4/UBEX@lists.linux.dev
-X-Gm-Message-State: AOJu0YxWxNMy7gJnLkRgCUb3Db1E+mbCWjEOMrRhYDHlgEb+fK8k2eNX
-	SUjPakxuemJRAy66db8ltfSy9GoGPnJqIKHdrdnjqs6V8qDkFNc7lBLoMTP6vHIcguO7+ONJQo/
-	ka3kbyn7PU1epe/+IfIx0GCXejAlJnY477BY6rVki
-X-Gm-Gg: ATEYQzyfhVU2z0YeETShKy1GlSqt1IBtekb/+fWQckq8vJx0rvHOFKqqthXBun730SM
-	TqHu4bfoRR8ujSl8oMP+L1S6C9glYMIzg3MyRJF8dgBAwjkmXkfgq1jOydPD8Fp+U4hoj6GJt5h
-	IVAHjoqPqrMDFog5YDgKjQkfgQwhiPhFGtmi8+HWqAe1LL1JjjeH5gbg0pBRRdX61xPotixVKWk
-	wfKI7isajalIiR4CRJtjjlZHJl5s820Siq65UvfQSr+LyNlEI8w4A5wXYeo//Q3u2dtl8n+V5dQ
-	BmgBkOBAV50ry2B5TeUqDJHSMevetBWpZf0IzoWucpHNJW4=
-X-Received: by 2002:a17:903:3c67:b0:2ae:80a3:98a9 with SMTP id
- d9443c01a7336-2aebd197d2bmr962485ad.11.1773275395866; Wed, 11 Mar 2026
- 17:29:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mycyTdB0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51DBBC4CEF7;
+	Thu, 12 Mar 2026 00:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773276008;
+	bh=nQbnEBithESt6CWLnUtQicYUaszVzxppnpWJix1YO4c=;
+	h=From:Date:Subject:To:Cc:From;
+	b=mycyTdB0jUEBRJxMCkU9s2dIJp8qM2LyFyXSqjinha7qnpewU7pSnFDftq4TrEf/H
+	 W1CqMhZHFofopo6AlQr0AjOqLQvfZ4Ot7kB0Lb0Z1HX5dCFG8jDQsNvlfc6OzdY2P+
+	 TbTzXdKE9P3Yz9Ow0byFIgf/ghWMV77mogaHbnPfkwCTtc+cyYcgTMGhd/KCl1vlIy
+	 c6jjjcQmWYIGKoTnJWxf8yR/MVP6YFxdnK4TM5mfa1ztfCsd2uLT30dT3wo/C4pJPO
+	 w+IWParo2OHLKWYOWze2/NVC69sDI4nZjfnnywCeuLHpXSuY3Qo/8fMAdUdu4UDas3
+	 Lu+s23amTNCsg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 11 Mar 2026 17:39:56 -0700
+Subject: [PATCH] powerpc/vdso: Drop -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+ from 32-bit flags with clang
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com> <20260311-tools_build_fix_zero_init-v4-12-9e35bdb99cb3@arm.com>
-In-Reply-To: <20260311-tools_build_fix_zero_init-v4-12-9e35bdb99cb3@arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 11 Mar 2026 17:29:44 -0700
-X-Gm-Features: AaiRm51j9bOAiNXwV4INuHof8fl1AJbNKlxnNgZFr0pcoAP2BOsfzP0vifju5JA
-Message-ID: <CAP-5=fUsOzjCAOEyJF1cwDbfjSHi=TKjWd1kL6tWWvLu19CFkA@mail.gmail.com>
-Subject: Re: [PATCH v4 12/30] tools build: Append extra host cflags
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
-	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
-	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260311-ppc-vdso-drop-cc-using-pfe-define-clang-v1-1-66c790e22650@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNQQrCMBBFr1Jm7UBS0yy8irjQyaSOSBIytgild
+ 3fU5ePx399AuQsrnIYNOq+iUouBPwxA92uZGSUZw+jG6I7eY2uEa9KKqdeGRLiolBlbZkycpTD
+ S03YYYop5csFPIYDVWjf7/j2dL3/W5fZgen3zsO8fescys4sAAAA=
+X-Change-ID: 20260311-ppc-vdso-drop-cc-using-pfe-define-clang-46d6f5041544
+To: Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+ Hari Bathini <hbathini@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2955; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=nQbnEBithESt6CWLnUtQicYUaszVzxppnpWJix1YO4c=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJmbuFPffHHdcnzStz/ZYr1zUnJestRtvXTi2QXzTf/vK
+ /Sa9My52VHKwiDGxSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmcjmV4b+LIrc5w1+lWd4/
+ ircvUrrFz9qX1cv5PrbdUqiS+XFaCDPD//QrrpsWmCbtmtP+/c820Y/Xs8sf1Z848UfMcDvLbid
+ fNVYA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Wed, Mar 11, 2026 at 1:31=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
->
-> Append HOST_EXTRACFLAGS to HOSTCFLAGS so that additional flags can be
-> applied to the host compiler.
->
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/build/Makefile | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/build/Makefile b/tools/build/Makefile
-> index 3a5a3808ab2a1dedd40f35ea322913e8a0788130..a86ce3d99e2bb1c005942d9c3=
-2191e6eaa55cf50 100644
-> --- a/tools/build/Makefile
-> +++ b/tools/build/Makefile
-> @@ -40,14 +40,16 @@ endif
->  FIXDEP         :=3D $(OUTPUT)fixdep
->  FIXDEP_IN      :=3D $(OUTPUT)fixdep-in.o
->
-> +HOSTCFLAGS     :=3D $(HOST_EXTRACFLAGS) $(KBUILD_HOSTCFLAGS)
+After commit 73cdf24e81e4 ("powerpc64: make clang cross-build
+friendly"), building 64-bit little endian + CONFIG_COMPAT=y with clang
+results in many warnings along the lines of:
 
+  $ cat arch/powerpc/configs/compat.config
+  CONFIG_COMPAT=y
 
-Hi Leo, should HOST_EXTRACFLAGS appear after KBUILD_HOSTCFLAGS here?
-This allows the extra flags to override the build system's flags.
+  $ make -skj"$(nproc)" ARCH=powerpc LLVM=1 ppc64le_defconfig compat.config arch/powerpc/kernel/vdso/
+  ...
+  In file included from <built-in>:4:
+  In file included from lib/vdso/gettimeofday.c:6:
+  In file included from include/vdso/datapage.h:15:
+  In file included from include/vdso/cache.h:5:
+  arch/powerpc/include/asm/cache.h:77:8: warning: unknown attribute 'patchable_function_entry' ignored [-Wunknown-attributes]
+     77 | static inline u32 l1_icache_bytes(void)
+        |        ^~~~~~
+  include/linux/compiler_types.h:235:58: note: expanded from macro 'inline'
+    235 | #define inline inline __gnu_inline __inline_maybe_unused notrace
+        |                                                          ^~~~~~~
+  include/linux/compiler_types.h:215:34: note: expanded from macro 'notrace'
+    215 | #define notrace                 __attribute__((patchable_function_entry(0, 0)))
+        |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ...
 
-Thanks,
-Ian
+arch/powerpc/Makefile adds -DCC_USING_PATCHABLE_FUNCTION_ENTRY to
+KBUILD_CPPFLAGS, which is inherited by the 32-bit vDSO. However, the
+32-bit little endian target does not support
+'-fpatchable-function-entry', resulting in the warnings above.
 
->
-> +
->  # To track fixdep's dependencies properly, fixdep needs to run on itself=
-.
->  # Build it twice the first time.
->  $(FIXDEP_IN): FORCE
->         $(Q)if [ ! -f $(FIXDEP) ]; then                                  =
-       \
-> -               $(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(KBUILD_HOSTCFLA=
-GS)";      \
-> +               $(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(HOSTCFLAGS)";  =
-           \
->                 rm -f $(FIXDEP).o;                                       =
-       \
->         fi
-> -       $(Q)$(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(KBUILD_HOSTCFLAGS)"
-> +       $(Q)$(MAKE) $(build)=3Dfixdep HOSTCFLAGS=3D"$(HOSTCFLAGS)"
->
->
->  $(FIXDEP): $(FIXDEP_IN)
->
-> --
-> 2.34.1
->
+Remove -DCC_USING_PATCHABLE_FUNCTION_ENTRY from the 32-bit vDSO flags
+when building with clang to avoid the warnings.
+
+Fixes: 73cdf24e81e4 ("powerpc64: make clang cross-build friendly")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/powerpc/kernel/vdso/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+index 8834dfe9d727..368759f81708 100644
+--- a/arch/powerpc/kernel/vdso/Makefile
++++ b/arch/powerpc/kernel/vdso/Makefile
+@@ -62,6 +62,12 @@ CC32FLAGSREMOVE += -fno-stack-clash-protection
+ # 32-bit one. clang validates the values passed to these arguments during
+ # parsing, even when -fno-stack-protector is passed afterwards.
+ CC32FLAGSREMOVE += -mstack-protector-guard%
++# ftrace is disabled for the vdso but arch/powerpc/Makefile adds this define to
++# KBUILD_CPPFLAGS, which enables use of the 'patchable_function_entry'
++# attribute in the 'inline' define via 'notrace'. This attribute is not
++# supported for the powerpcle target, resulting in many instances of
++# -Wunknown-attributes.
++CC32FLAGSREMOVE += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+ endif
+ LD32FLAGS := -Wl,-soname=linux-vdso32.so.1
+ AS32FLAGS := -D__VDSO32__
+
+---
+base-commit: 35e4f2a17eb40288f9bcdb09549fa04a63a96279
+change-id: 20260311-ppc-vdso-drop-cc-using-pfe-define-clang-46d6f5041544
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
