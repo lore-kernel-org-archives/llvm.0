@@ -1,119 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12C03BE649;
-	Thu, 12 Mar 2026 12:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4ACB34D389;
+	Thu, 12 Mar 2026 14:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773317437; cv=none; b=WejTnyH7jTEvQUJnmkDzUwX7NmzCdmiriexXfRZ9uaZ9VPC3rilkYgpuB7zeQDy8ieAdtGxuMTiUph0LWgSDxq5J0XiKEK8gRSEH4samEwvFCRgHA2sKnH8oND6IX9PP4WBJayYQ2aokiQ1aVKqb9J1g9lnUK4DluUhUyZ+Gv0s=
+	t=1773325786; cv=none; b=WZ2Lw73KJnaDVIHuWP3L4IKINDL2wcEDjrWDAHk8MyIbBwAiTo626gw2vu+IKc8HOYcqDjLFMUj6Js/ou5wCs2XfV26HM/a7SNn2C6YHNKYWdaQt2ZiNXyG4LiSttchtxtXJvypSs2f8dYJ1mX48Ct5Fd3QEb7Bp3j1LxqVtpQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773317437; c=relaxed/simple;
-	bh=nQuXQCfJ/SfXG9YfnkL7myftheQ9u5GoCmA3GEgvOX4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JjJIE8EilaZhXsmXS2O1fZDTKwrl8iiVOg2xTe0LTOO8EfIVkMHQHpPpa8eCd4TaIp+pS9UmsiA8MGIVIJH3TbLl0tKflKHut/8XVoWb6rrILrmkqYiicXDK0k7SCl+V+qVMUddvzVl9Vm0n1y+7ETXWqXA5uE5POUSLpif4ghA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kzp5oTip; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773325786; c=relaxed/simple;
+	bh=U6h2kSkaL3m+HufZ+v4XEQzA63uvN0k+ygU09TQOjv8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t4NOtCvTnItaoRn2V5P5Db140SfD2V2Rn3jQ912u8MXdHz5a0N9EAq2Euk+cR/y38oIIoY4CEv9ei9uJk5ZxwQfieXR2aylruyrs/GAYHSDCGfmiWdoUNMnkj3W1rTL1R6qJq7dRY+gQTKnNexVjRbW5tIiJ/aGeJQkogcMcUQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UJv1cXJS; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kzp5oTip"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8DBDC4CEF7;
-	Thu, 12 Mar 2026 12:10:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773317436;
-	bh=nQuXQCfJ/SfXG9YfnkL7myftheQ9u5GoCmA3GEgvOX4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kzp5oTipiNOs9fmIBpi1nmmSuQ4uLVNq08LPCSch8yiIeOkyJ8Az9MBCTybE7cm5d
-	 AMxfwpohLYKZvdRcwY6FVWNb1PtjdZE3EgpeQC628X0efwh2wRrw0LhWn9yaxAQfpf
-	 w6ZUYG6LkLltn75gOmO38N55qeVwus4Wr+Sb10hyo0888DrxKRH5rYKA32g+xfcRRS
-	 vWwOBuST+wlsK+dHrf7tH4G3ruupinYIHv4ZCjmtIer0Zb+wbl+bwIETcNIuNLPGvg
-	 W1154YFBZI0Xw+DtOH34QkYfcH3Ndv6eraBdM09caT66SnioiGB/fgmwobzxV3sXLI
-	 1S2FtYnyjdp3A==
-From: Nicolas Schier <nsc@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UJv1cXJS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773325785; x=1804861785;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U6h2kSkaL3m+HufZ+v4XEQzA63uvN0k+ygU09TQOjv8=;
+  b=UJv1cXJSNNejbkrLFZ0oFtzI1i5LdqpJcftwqg3rJZenR0miCusccBMh
+   z737S+LCf/JL3FsGKiq1iiE7DFoeD9UDPBoYRLyigCiizD+2oZgASgfrM
+   x7IMwEk9pcAAESvZGzsDx1yVqRJysXyaOWheXl37nHl7h3wGnAHiwnbag
+   Er+XdAvo+yiNdSE6JX+1lDUraJ4A/lVDFvfOJBbVViB61qr+nCHAQDuHD
+   CN0pI/N/P9bGD806qF9GsRw5lkakjRaZpNX8kdXnslxbreMnqEE7G/Nzd
+   s1dW5lWJusqRtaDttdKbDToiffyxMvGxFqYkwwbLTb7+y38/SJ5Xddj4r
+   g==;
+X-CSE-ConnectionGUID: 3+/cNA7PQSOnsx8Dokbo8A==
+X-CSE-MsgGUID: lDUOJrbtQzScvo0YYkenww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="85773984"
+X-IronPort-AV: E=Sophos;i="6.23,116,1770624000"; 
+   d="scan'208";a="85773984"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2026 07:29:44 -0700
+X-CSE-ConnectionGUID: 4MKoUK6kRgGlaA8Dhfivaw==
+X-CSE-MsgGUID: 5lbBIi/WTwK4sairjG9Ekg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,116,1770624000"; 
+   d="scan'208";a="218641912"
+Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 12 Mar 2026 07:29:38 -0700
+Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w0h2c-000000002Yj-1R2Q;
+	Thu, 12 Mar 2026 14:29:34 +0000
+Date: Thu, 12 Mar 2026 22:28:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Eugen Hristev <eugen.hristev@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@linux-foundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
 	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kees Cook <kees@kernel.org>,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	loongarch@lists.linux.dev,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 0/2] kbuild: Switch from '-fms-extensions' to '-fms-anonymous-structs' when available
-Date: Thu, 12 Mar 2026 13:08:48 +0100
-Message-ID: <177331711843.39835.18126183139184363231.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260223-fms-anonymous-structs-v1-0-8ee406d3c36c@kernel.org>
-References: <20260223-fms-anonymous-structs-v1-0-8ee406d3c36c@kernel.org>
+	Peter Zijlstra <peterz@infradead.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Kees Cook <kees@kernel.org>,
+	Brendan Jackman <jackmanb@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH v2 13/25] mm/init-mm: Annotate static information into
+ meminspect
+Message-ID: <202603122259.3cXlDDN9-lkp@intel.com>
+References: <20260311-minidump-v2-v2-13-f91cedc6f99e@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260311-minidump-v2-v2-13-f91cedc6f99e@oss.qualcomm.com>
 
-On Mon, 23 Feb 2026 12:10:27 -0700, Nathan Chancellor wrote:
-> The kernel enabled '-fms-extensions' in commit c4781dc3d1cf ("Kbuild:
-> enable -fms-extensions") in 6.19 to gain access to a Microsoft
-> (originally Plan 9) extension around including a tagged structure/union
-> anonymously in an other structure/union. Since then, Clang 23.0.0
-> (current main) has added a flag to enable only that extension, rather
-> than all Microsoft extensions, '-fms-anonymous-structs' [1]. Using this
-> narrower compiler option would have avoided the build error fixed by
-> commit a6773e6932cb ("jfs: Rename _inline to avoid conflict with clang's
-> '-fms-extensions'"). While these errors are not expected to be common,
-> using the narrower option when available has no drawbacks because the
-> kernel only cares about this extension in '-fms-extensions', no others.
-> While this could result in build errors for folks using
-> '-fms-anonymous-structs' if a developer uses another extension in
-> '-fms-extensions' (either intentionally or unintentionally), flagging
-> these uses for further scrutiny seems worthwhile.
-> 
-> [...]
+Hi Mukesh,
 
-Applied to kbuild/kbuild-next.git (kbuild-next), thanks!
+kernel test robot noticed the following build errors:
 
-[1/2] kbuild: Consolidate C dialect options
-      https://git.kernel.org/kbuild/c/ec4c2827
-[2/2] kbuild: Use '-fms-anonymous-structs' if it is available
-      https://git.kernel.org/kbuild/c/0d3fccf6
+[auto build test ERROR on 343f51842f4ed7143872f3aa116a214a5619a4b9]
 
-Please look out for regression or issue reports or other follow up
-comments, as they may result in the patch/series getting dropped,
-reverted or modified (e.g. trailers).
+url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Ojha/kernel-Introduce-meminspect/20260311-042334
+base:   343f51842f4ed7143872f3aa116a214a5619a4b9
+patch link:    https://lore.kernel.org/r/20260311-minidump-v2-v2-13-f91cedc6f99e%40oss.qualcomm.com
+patch subject: [PATCH v2 13/25] mm/init-mm: Annotate static information into meminspect
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260312/202603122259.3cXlDDN9-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603122259.3cXlDDN9-lkp@intel.com/reproduce)
 
-Acks from arch maintainers are still welcome!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603122259.3cXlDDN9-lkp@intel.com/
 
-Best regards,
+All errors (new ones prefixed by >>):
+
+>> mm/init-mm.c:23:23: error: use of undeclared identifier '_sinittext'
+      23 | MEMINSPECT_AREA_ENTRY(_sinittext, sizeof(void *));
+         |                       ^
+>> mm/init-mm.c:24:23: error: use of undeclared identifier '_einittext'
+      24 | MEMINSPECT_AREA_ENTRY(_einittext, sizeof(void *));
+         |                       ^
+>> mm/init-mm.c:25:23: error: use of undeclared identifier '_end'
+      25 | MEMINSPECT_AREA_ENTRY(_end, sizeof(void *));
+         |                       ^
+>> mm/init-mm.c:26:23: error: use of undeclared identifier '_text'
+      26 | MEMINSPECT_AREA_ENTRY(_text, sizeof(void *));
+         |                       ^
+>> mm/init-mm.c:27:23: error: use of undeclared identifier '_stext'
+      27 | MEMINSPECT_AREA_ENTRY(_stext, sizeof(void *));
+         |                       ^
+>> mm/init-mm.c:28:23: error: use of undeclared identifier '_etext'
+      28 | MEMINSPECT_AREA_ENTRY(_etext, sizeof(void *));
+         |                       ^
+   6 errors generated.
+
+
+vim +/_sinittext +23 mm/init-mm.c
+
+    22	
+  > 23	MEMINSPECT_AREA_ENTRY(_sinittext, sizeof(void *));
+  > 24	MEMINSPECT_AREA_ENTRY(_einittext, sizeof(void *));
+  > 25	MEMINSPECT_AREA_ENTRY(_end, sizeof(void *));
+  > 26	MEMINSPECT_AREA_ENTRY(_text, sizeof(void *));
+  > 27	MEMINSPECT_AREA_ENTRY(_stext, sizeof(void *));
+  > 28	MEMINSPECT_AREA_ENTRY(_etext, sizeof(void *));
+    29	
+
 -- 
-Nicolas
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
