@@ -1,216 +1,146 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AFA37DE88;
-	Thu, 12 Mar 2026 03:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E46D38CFF9;
+	Thu, 12 Mar 2026 04:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773287558; cv=none; b=ktpGapqqjZtf1QoXKlzq9hgtYmfZrLQnuDE5DsfFujFDYQk9LqFxFpfcXM7pvA5VKvABjjrI1+6l7W6QvuCbvIhJ8hm1z7kxIASrcg5m0ItrxIIHGVqIaWbkJ5xkKuv+A3BkFND/5nzcWA3GBmpSFNgTNqHDHUrQm3zTBeSKhjE=
+	t=1773288639; cv=none; b=HRjDGedVTHodQXgTUfSE3mMONyGYMdYLJsIYmVYUVIlIUbsiOgsAfF1dxztl3d4SOFH2ANqM0a/EWKAryFpyngq2/00aHF0Yu3N2IpPIR2lmRZnHGZz/727LSms8C0LMV56iWy7m82Stm48WNBxAWA2qiPf3F7M+lkid9Kd2nEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773287558; c=relaxed/simple;
-	bh=hgT3wFUEL6+EQV3boNcDOYwH0s8O8YUiGYj5Lz8pWeE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UpHHB8aNTBmU44eBHUOtpzI4tT4bQ5yy3rzGSU7iaGnt278iRfJIg4kC/830N2uPo4w3D3LlYvJmuw2oDfLrPVMeFZqhI00nreqx7Ca8/a4QE3C/CNsQP417jbAkNU7TcIQbB8fJA4EYB75jPM1emMp1XsFrlsJvJvtwM/DVW3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AcapmrQf; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1773288639; c=relaxed/simple;
+	bh=zh5Zn1BEr7RxI6CSl8nRdmg4fT4T8fA4qECGfo9E+2E=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Uf3Ikr9MS3Rz1fRtILRhvMJbX8e6Nh9tCJa/UBSw3uFmSxvEbgziCeV65Oudd4iEgpkvQAOHmp9c4zkCuMIwExzQco7SHzFo+IYKVktUXK2Zd3gKRlRWFLF9SVQ/UnaguKFeL35z2a6XGZUCrslSVTcKt1NiX4yGCogz7tOgBV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kXjC4qJ7; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AcapmrQf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kXjC4qJ7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773287555; x=1804823555;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hgT3wFUEL6+EQV3boNcDOYwH0s8O8YUiGYj5Lz8pWeE=;
-  b=AcapmrQfCDBsL/wqXC7NALnNrflkFxbWYykbllIQ8LtMD0r7f4GMjzyx
-   sDyDOkX37gttpJbOGFYmSuEn/qwfocjq2sIFhYVepSI7efhW14ct0uqDa
-   x/typ4NcjStOYwkFEQ+bclF9QMq2YXL+IP6ZUHzshE0Oak5o4GuJxWqiA
-   BIMCrhIzdVgahbGZjQtcPbL/48vzWeNql4VGxWSCRxlQUM1L/l4ey9D+w
-   xnUzhj//vlVu24/JVyA22ylIlSYIFDfKGEVUlzq7B20D4wlgWOEw3/Y33
-   9606hj8Ti11IYE7eAKfdmTysen2TDfNHgw1RsQaZ5HF0XGtN0Wo0xcgB5
-   Q==;
-X-CSE-ConnectionGUID: trb7iTtvR5qZkYpq533yWw==
-X-CSE-MsgGUID: pdwzml3RSI+8fNIGCiX/zw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="91749589"
+  t=1773288637; x=1804824637;
+  h=date:from:to:cc:subject:message-id;
+  bh=zh5Zn1BEr7RxI6CSl8nRdmg4fT4T8fA4qECGfo9E+2E=;
+  b=kXjC4qJ7VxfmpOd+1iJe/t86jEGU72ExBCaQ6vOZmTG9fLtHwPP/9rTw
+   Ulluq/VZT59qRDfUAK65/Q8eubTWg+423kH9WzGd7VL/PDAZqghRNCTwS
+   bzwvVBAN8+W2+NRKm19OqckbkolUVgjh68N6SkYncJUNKuGD/Xjgor6ug
+   Arzvx2/A4EaiqmPX1eGTckfF3lGWA0gFF/0Bpiwt+CMpvsALTorVrpOH2
+   JDkRlADArIkDE1qBKdke2F0eVTyPbChBx2LHPs80A890QeYNxxU9PwqFA
+   96rKMFCTqUIwtVb/5IyABqIfp/w+y0HMLNA4cZitRHQckxqacpyIxeCZ4
+   w==;
+X-CSE-ConnectionGUID: ag9tb3vaQjKjeuMPxakByQ==
+X-CSE-MsgGUID: vZX36nyKSF2fzj5D/UWwkA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11726"; a="84689868"
 X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
-   d="scan'208";a="91749589"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 20:52:31 -0700
-X-CSE-ConnectionGUID: VcIHKcTrQMaHq4Kxx65oUQ==
-X-CSE-MsgGUID: gEpSBS05SI+Pg21K9z98Cg==
+   d="scan'208";a="84689868"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2026 21:10:34 -0700
+X-CSE-ConnectionGUID: f7QujYEdSd2duMeZ+DNJAA==
+X-CSE-MsgGUID: HYIf26B/RGKTxwcJn7XB5A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,115,1770624000"; 
-   d="scan'208";a="220863664"
+   d="scan'208";a="246144306"
 Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 11 Mar 2026 20:52:27 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 11 Mar 2026 21:10:32 -0700
 Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w0X60-0000000022f-3Aoy;
-	Thu, 12 Mar 2026 03:52:24 +0000
-Date: Thu, 12 Mar 2026 11:51:59 +0800
+	id 1w0XNV-0000000023j-3oRN;
+	Thu, 12 Mar 2026 04:10:29 +0000
+Date: Thu, 12 Mar 2026 12:09:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Joshua Hahn <joshua.hahnjy@gmail.com>, Minchan Kim <minchan@kernel.org>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Yosry Ahmed <yosry.ahmed@linux.dev>,
-	Nhat Pham <hoangnhat.pham@linux.dev>,
-	Harry Yoo <harry.yoo@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 10/11] mm/zsmalloc: Handle single object charge migration
- in migrate_zspage
-Message-ID: <202603121158.g93vlc2U-lkp@intel.com>
-References: <20260311195153.4013476-11-joshua.hahnjy@gmail.com>
+ Ian Rogers <irogers@google.com>
+Subject: [peterz-queue:perf/urgent 3/6] kernel/events/core.c:4839:3:
+ warning: variable 'pmu' is uninitialized when used here
+Message-ID: <202603121259.28y3L4qz-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260311195153.4013476-11-joshua.hahnjy@gmail.com>
 
-Hi Joshua,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on axboe/for-next]
-[also build test WARNING on linus/master v7.0-rc3]
-[cannot apply to akpm-mm/mm-everything next-20260311]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Joshua-Hahn/mm-zsmalloc-Rename-zs_object_copy-to-zs_obj_copy/20260312-035531
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
-patch link:    https://lore.kernel.org/r/20260311195153.4013476-11-joshua.hahnjy%40gmail.com
-patch subject: [PATCH 10/11] mm/zsmalloc: Handle single object charge migration in migrate_zspage
-config: x86_64-randconfig-001-20260312 (https://download.01.org/0day-ci/archive/20260312/202603121158.g93vlc2U-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/urgent
+head:   af07eac4595fcf921f6a4c93b666e3bb896aa3d7
+commit: 10d25ea5d989da5bda265b59445e3d494cf892e3 [3/6] perf: Make sure to use pmu_ctx->pmu for groups
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260312/202603121259.28y3L4qz-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603121158.g93vlc2U-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260312/202603121259.28y3L4qz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603121158.g93vlc2U-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603121259.28y3L4qz-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> mm/zsmalloc.c:1702:6: warning: variable 's_idx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1702 |         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/zsmalloc.c:1752:45: note: uninitialized use occurs here
-    1752 |         d_zspage->objcgs[d_idx] = s_zspage->objcgs[s_idx];
-         |                                                    ^~~~~
-   mm/zsmalloc.c:1702:2: note: remove the 'if' if its condition is always false
-    1702 |         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1703 |                 goto out;
-         |                 ~~~~~~~~
-   mm/zsmalloc.c:1696:20: note: initialize the variable 's_idx' to silence this warning
-    1696 |         unsigned int s_idx, d_idx;
-         |                           ^
-         |                            = 0
->> mm/zsmalloc.c:1702:6: warning: variable 'd_idx' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1702 |         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/zsmalloc.c:1752:19: note: uninitialized use occurs here
-    1752 |         d_zspage->objcgs[d_idx] = s_zspage->objcgs[s_idx];
-         |                          ^~~~~
-   mm/zsmalloc.c:1702:2: note: remove the 'if' if its condition is always false
-    1702 |         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1703 |                 goto out;
-         |                 ~~~~~~~~
-   mm/zsmalloc.c:1696:27: note: initialize the variable 'd_idx' to silence this warning
-    1696 |         unsigned int s_idx, d_idx;
-         |                                  ^
-         |                                   = 0
-   2 warnings generated.
+>> kernel/events/core.c:4839:3: warning: variable 'pmu' is uninitialized when used here [-Wuninitialized]
+    4839 |                 pmu->read(event);
+         |                 ^~~
+   kernel/events/core.c:4816:17: note: initialize the variable 'pmu' to silence this warning
+    4816 |         struct pmu *pmu;
+         |                        ^
+         |                         = NULL
+   1 warning generated.
 
 
-vim +1702 mm/zsmalloc.c
+vim +/pmu +4839 kernel/events/core.c
 
-  1686	
-  1687	#ifdef CONFIG_MEMCG
-  1688	static void zs_migrate_objcg(struct zspage *s_zspage, struct zspage *d_zspage,
-  1689				     unsigned long used_obj, unsigned long free_obj,
-  1690				     struct zs_pool *pool, int size)
-  1691	{
-  1692		struct zpdesc *s_zpdesc, *d_zpdesc;
-  1693		struct obj_cgroup *objcg;
-  1694		struct mem_cgroup *memcg;
-  1695		struct lruvec *l;
-  1696		unsigned int s_idx, d_idx;
-  1697		unsigned int s_off, d_off;
-  1698		int charges[4], nids[4], partial;
-  1699		int s_bytes_in_page, d_bytes_in_page;
-  1700		int i;
-  1701	
-> 1702		if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
-  1703			goto out;
-  1704	
-  1705		obj_to_location(used_obj, &s_zpdesc, &s_idx);
-  1706		obj_to_location(free_obj, &d_zpdesc, &d_idx);
-  1707	
-  1708		objcg = s_zspage->objcgs[s_idx];
-  1709		if (!objcg)
-  1710			goto out;
-  1711	
-  1712		/*
-  1713		 * The object migration here can touch up to 4 nodes.
-  1714		 * Instead of breaking down all possible combinations of node changes,
-  1715		 * just uncharge entirely from the source and charge entirely to the
-  1716		 * destination, even if there is are node overlaps between src and dst.
-  1717		 */
-  1718		s_off = (s_idx * size) % PAGE_SIZE;
-  1719		d_off = (d_idx * size) % PAGE_SIZE;
-  1720		s_bytes_in_page = min_t(int, size, PAGE_SIZE - s_off);
-  1721		d_bytes_in_page = min_t(int, size, PAGE_SIZE - d_off);
-  1722	
-  1723		charges[0] = -s_bytes_in_page;
-  1724		nids[0] = page_to_nid(zpdesc_page(s_zpdesc));
-  1725		charges[1] = -(size - s_bytes_in_page); /* 0 if object doesn't span */
-  1726		if (charges[1])
-  1727			nids[1] = page_to_nid(zpdesc_page(get_next_zpdesc(s_zpdesc)));
-  1728	
-  1729		charges[2] = d_bytes_in_page;
-  1730		nids[2] = page_to_nid(zpdesc_page(d_zpdesc));
-  1731		charges[3] = size - d_bytes_in_page; /* 0 if object doesn't span */
-  1732		if (charges[3])
-  1733			nids[3] = page_to_nid(zpdesc_page(get_next_zpdesc(d_zpdesc)));
-  1734	
-  1735		rcu_read_lock();
-  1736		memcg = obj_cgroup_memcg(objcg);
-  1737		for (i = 0; i < 4; i++) {
-  1738			if (!charges[i])
-  1739				continue;
-  1740	
-  1741			l = mem_cgroup_lruvec(memcg, NODE_DATA(nids[i]));
-  1742			partial = (PAGE_SIZE * charges[i]) / size;
-  1743			mod_memcg_lruvec_state(l, pool->compressed_stat, charges[i]);
-  1744			mod_memcg_lruvec_state(l, pool->uncompressed_stat, partial);
-  1745		}
-  1746		rcu_read_unlock();
-  1747	
-  1748		dec_node_page_state(zpdesc_page(s_zpdesc), pool->uncompressed_stat);
-  1749		inc_node_page_state(zpdesc_page(d_zpdesc), pool->uncompressed_stat);
-  1750	
-  1751	out:
-  1752		d_zspage->objcgs[d_idx] = s_zspage->objcgs[s_idx];
-  1753		s_zspage->objcgs[s_idx] = NULL;
-  1754	}
-  1755	#else
-  1756	static void zs_migrate_objcg(struct zspage *s_zspage, struct zspage *d_zspage,
-  1757				     unsigned long used_obj, unsigned long free_obj,
-  1758				     struct zs_pool *pool, int size)
-  1759	{
-  1760	}
-  1761	#endif
-  1762	
+d6a2f9035bfc27d kernel/events/core.c  David Carrillo-Cisneros 2016-08-17  4806  
+0793a61d4df8dae kernel/perf_counter.c Thomas Gleixner         2008-12-04  4807  /*
+cdd6c482c9ff9c5 kernel/perf_event.c   Ingo Molnar             2009-09-21  4808   * Cross CPU call to read the hardware event
+0793a61d4df8dae kernel/perf_counter.c Thomas Gleixner         2008-12-04  4809   */
+cdd6c482c9ff9c5 kernel/perf_event.c   Ingo Molnar             2009-09-21  4810  static void __perf_event_read(void *info)
+0793a61d4df8dae kernel/perf_counter.c Thomas Gleixner         2008-12-04  4811  {
+0492d4c5b8c4dc3 kernel/events/core.c  Peter Zijlstra          2015-09-03  4812  	struct perf_read_data *data = info;
+0492d4c5b8c4dc3 kernel/events/core.c  Peter Zijlstra          2015-09-03  4813  	struct perf_event *sub, *event = data->event;
+cdd6c482c9ff9c5 kernel/perf_event.c   Ingo Molnar             2009-09-21  4814  	struct perf_event_context *ctx = event->ctx;
+bd27568117664b8 kernel/events/core.c  Peter Zijlstra          2022-10-08  4815  	struct perf_cpu_context *cpuctx = this_cpu_ptr(&perf_cpu_context);
+10d25ea5d989da5 kernel/events/core.c  Peter Zijlstra          2026-03-09  4816  	struct pmu *pmu;
+621a01eac89b5e2 kernel/perf_counter.c Ingo Molnar             2008-12-11  4817  
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4818  	/*
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4819  	 * If this is a task context, we need to check whether it is
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4820  	 * the current task context of this cpu.  If not it has been
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4821  	 * scheduled out before the smp call arrived.  In that case
+cdd6c482c9ff9c5 kernel/perf_event.c   Ingo Molnar             2009-09-21  4822  	 * event->count would have been updated to a recent sample
+cdd6c482c9ff9c5 kernel/perf_event.c   Ingo Molnar             2009-09-21  4823  	 * when the event was scheduled out.
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4824  	 */
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4825  	if (ctx->task && cpuctx->task_ctx != ctx)
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4826  		return;
+e1ac3614ff606ae kernel/perf_counter.c Paul Mackerras          2009-08-14  4827  
+10d25ea5d989da5 kernel/events/core.c  Peter Zijlstra          2026-03-09  4828  	guard(raw_spinlock)(&ctx->lock);
+9a32bd9901fe5b1 kernel/events/core.c  Peter Zijlstra          2024-08-07  4829  	ctx_time_update_event(ctx, event);
+0492d4c5b8c4dc3 kernel/events/core.c  Peter Zijlstra          2015-09-03  4830  
+0d3d73aac2ff05c kernel/events/core.c  Peter Zijlstra          2017-09-05  4831  	perf_event_update_time(event);
+0d3d73aac2ff05c kernel/events/core.c  Peter Zijlstra          2017-09-05  4832  	if (data->group)
+0d3d73aac2ff05c kernel/events/core.c  Peter Zijlstra          2017-09-05  4833  		perf_event_update_sibling_time(event);
+0c1cbc18df9e381 kernel/events/core.c  Peter Zijlstra          2017-09-05  4834  
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4835  	if (event->state != PERF_EVENT_STATE_ACTIVE)
+10d25ea5d989da5 kernel/events/core.c  Peter Zijlstra          2026-03-09  4836  		return;
+0492d4c5b8c4dc3 kernel/events/core.c  Peter Zijlstra          2015-09-03  4837  
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4838  	if (!data->group) {
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03 @4839  		pmu->read(event);
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4840  		data->ret = 0;
+10d25ea5d989da5 kernel/events/core.c  Peter Zijlstra          2026-03-09  4841  		return;
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4842  	}
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4843  
+10d25ea5d989da5 kernel/events/core.c  Peter Zijlstra          2026-03-09  4844  	pmu = event->pmu_ctx->pmu;
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4845  	pmu->start_txn(pmu, PERF_PMU_TXN_READ);
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4846  
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4847  	pmu->read(event);
+0492d4c5b8c4dc3 kernel/events/core.c  Peter Zijlstra          2015-09-03  4848  
+8ce939a0fa19493 kernel/events/core.c  Peter Zijlstra (Intel   2025-01-21  4849) 	for_each_sibling_event(sub, event)
+8ce939a0fa19493 kernel/events/core.c  Peter Zijlstra (Intel   2025-01-21  4850) 		perf_pmu_read(sub);
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4851  
+4a00c16e552ea5e kernel/events/core.c  Sukadev Bhattiprolu     2015-09-03  4852  	data->ret = pmu->commit_txn(pmu);
+0793a61d4df8dae kernel/perf_counter.c Thomas Gleixner         2008-12-04  4853  }
+0793a61d4df8dae kernel/perf_counter.c Thomas Gleixner         2008-12-04  4854  
+
+:::::: The code at line 4839 was first introduced by commit
+:::::: 4a00c16e552ea5e71756cd29cd2df7557ec9cac4 perf/core: Define PERF_PMU_TXN_READ interface
+
+:::::: TO: Sukadev Bhattiprolu <sukadev@linux.vnet.ibm.com>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
