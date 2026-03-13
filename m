@@ -1,70 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6017136309E;
-	Fri, 13 Mar 2026 18:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2DC390999;
+	Fri, 13 Mar 2026 19:50:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773425961; cv=none; b=ltwYAL4fZyAmi6vybaw3cDTWdM5x0zxNApZ8CGJfRjtzfA0QLJTmVvlLWNrW1iRtt7KtTnxSe46xBiKeraudo4IbYL5PMJV+rUfHmLntlEyMi0obBOeLAGn87LY7J2IYRRtb4CoxTxzV9kDDS6OFF86XBJb2iibGCQ25c6OGvTI=
+	t=1773431421; cv=none; b=aQ2P4McvvPMkdayYsV0em1r8xws8z+tjsvddyUq5hkTadZoCp6BYOCSh7JjtvObnOUANEA5MtMLZOIqAJ8AVmZ5DTzZSOt3/PkA5ZQvgf2H15K4W3sizee4BVEgMtLwXyqA+jB0D9WIl8Z0Svpyw35jg/KzFNpwbUXuDYDQS72s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773425961; c=relaxed/simple;
-	bh=wGHHmea18QzDv20CIQ8/NkoCGCljzKpgR/2yblyc0Sk=;
+	s=arc-20240116; t=1773431421; c=relaxed/simple;
+	bh=2yBCYa2goQHEMmE1k4SHkPwXDkUt+BCmZISdg4ehhOU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hzRAgfZ91VKnwRZehBK1eMWZQqnTwvedo2Lk9r7YjiAbCH9ceDiC5qDayraMr+DnyKaoJVczRuJXa5gDzFb71IzmiNfFxxzrS5mblnJv9XGahC0Uou2tvGm9NjvOtZR0iYcimdympdUa0pLWiCKdKDYJWQiq5+WTvEKtt/xooWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F5pK6hhj; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=stL/jVFmb8t+t1M/PLAopHbPHfLzRcLXeqEOZZ7Whu7RTNBJdLSV6yuXDbA0UwdmJY9mBDJIqkakbvXxx5MrXQneU5fi7w8gQ9jR3hWXLQlA1y/Z1gPb5ja5239OCuu/rFF6zsxECVVx2wAh/iaSVsLfdLEzowE4cO+p9lT7nKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZmxXZccK; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F5pK6hhj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZmxXZccK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773425960; x=1804961960;
+  t=1773431420; x=1804967420;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=wGHHmea18QzDv20CIQ8/NkoCGCljzKpgR/2yblyc0Sk=;
-  b=F5pK6hhjocPrUn74BVv8E0HdKeSxqJd+lLfIar4C9o8xJvaIph+2St+x
-   xX36Rc4E141yyudPXfjAopNIs1hjfRYtMlLJnP5Rt/WWdtL9rpgw7VPwI
-   jRuLN9ZB7e9Nj21Xfz2fJGFfJiqcjSxYjsbgTP71kg6h+hzFsZN/EDN2+
-   VVuldfo539nWKub339SyWAuD6g3Liv2g2pemV12tHytIm/I0iVJXS9J8z
-   jo+ZuWhleGOyiyr2bwlp314UVwFMkWK+Au/T+mtktlzh9M6BMzDBxm32I
-   Ye38iFGflFxs/R4V+Wd4uJrQZ27beRXYimRMBsRqLF+GaK0y3Oq/wOnhp
+  bh=2yBCYa2goQHEMmE1k4SHkPwXDkUt+BCmZISdg4ehhOU=;
+  b=ZmxXZccKNcDONi0wz30JSNU2/nvvEb6gweBApTLz4Ve/9FTa4gmN/y+/
+   2FMMQK2c8khbGhoruwa5UernBeCrAWVC/H49q2WIQHfay2ou4WCV/dKAa
+   sTvpKBBB7i9O0y1euJgOt1aE2L31GHTCgb6gY6wpZ73e9ua7sulLqUIiq
+   T3kxKjwV8Sm3mxLOnsK9/geM65FZSf/eVHJT58HlIeSiFr7P2+AaZjDJ/
+   SJPh0ewTU/L/k6H519mzrjx0+yP4tIhjQYetSsxwuZGY8yrTwklQGm1RE
+   u9ly9y4foTFFPEskBIEpjDLTfriSDNL4AdCNSm5Y6tVfXUSIOiAE+gwtq
    w==;
-X-CSE-ConnectionGUID: 2JffA4jzQQydBKCfjbX6Yw==
-X-CSE-MsgGUID: q6p+RPk4SlKX/Gvqr2GqoQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11728"; a="74618907"
+X-CSE-ConnectionGUID: SUir6NHTSKCWb44Ws9pZ9w==
+X-CSE-MsgGUID: DQAh+Y5kS/WCWjKQIH78uA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11728"; a="74660093"
 X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
-   d="scan'208";a="74618907"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 11:19:20 -0700
-X-CSE-ConnectionGUID: IsUab5fAS8+RjETs0meTqA==
-X-CSE-MsgGUID: tK2pfwEHS9KDtmikB151zw==
+   d="scan'208";a="74660093"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 12:50:19 -0700
+X-CSE-ConnectionGUID: TtppXxqqSbe/6BojyOSYlA==
+X-CSE-MsgGUID: kyiZqeEoSI+5J4z8lD5Edg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
-   d="scan'208";a="225347842"
+   d="scan'208";a="251775876"
 Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa003.jf.intel.com with ESMTP; 13 Mar 2026 11:19:15 -0700
+  by orviesa002.jf.intel.com with ESMTP; 13 Mar 2026 12:50:15 -0700
 Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w176O-000000003h3-2O4L;
-	Fri, 13 Mar 2026 18:19:12 +0000
-Date: Fri, 13 Mar 2026 19:18:54 +0100
+	id 1w18WT-000000003hV-0A89;
+	Fri, 13 Mar 2026 19:50:13 +0000
+Date: Fri, 13 Mar 2026 20:50:05 +0100
 From: kernel test robot <lkp@intel.com>
-To: Hans Zhang <18255117159@163.com>, lpieralisi@kernel.org,
-	jingoohan1@gmail.com, mani@kernel.org, kwilczynski@kernel.org,
-	bhelgaas@google.com, helgaas@kernel.org,
-	florian.fainelli@broadcom.com, jim2101024@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh@kernel.org,
-	ilpo.jarvinen@linux.intel.com, linux-arm-msm@vger.kernel.org,
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Andrew Lunn <andrew@lunn.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org, claudiu.beznea.uj@bp.renesas.com,
-	linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-	linux-omap@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Hans Zhang <18255117159@163.com>
-Subject: Re: [PATCH v8 1/5] PCI: Add pcie_get_link_speed() helper for safe
- array access
-Message-ID: <202603131934.SHJnSGL9-lkp@intel.com>
-References: <20260312163652.113228-2-18255117159@163.com>
+	linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Subject: Re: [PATCH net-next v2 13/15] net: stmmac: add helper to set
+ transmit tail pointer
+Message-ID: <202603132053.N3kL3UZZ-lkp@intel.com>
+References: <E1w0czK-0000000CzH7-19Fb@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,30 +74,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260312163652.113228-2-18255117159@163.com>
+In-Reply-To: <E1w0czK-0000000CzH7-19Fb@rmk-PC.armlinux.org.uk>
 
-Hi Hans,
+Hi Russell,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 80234b5ab240f52fa45d201e899e207b9265ef91]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Zhang/PCI-Add-pcie_get_link_speed-helper-for-safe-array-access/20260313-220734
-base:   80234b5ab240f52fa45d201e899e207b9265ef91
-patch link:    https://lore.kernel.org/r/20260312163652.113228-2-18255117159%40163.com
-patch subject: [PATCH v8 1/5] PCI: Add pcie_get_link_speed() helper for safe array access
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260313/202603131934.SHJnSGL9-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-stmmac-rearrange-stmmac_tx_info-members-to-pack-better/20260313-225823
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/E1w0czK-0000000CzH7-19Fb%40rmk-PC.armlinux.org.uk
+patch subject: [PATCH net-next v2 13/15] net: stmmac: add helper to set transmit tail pointer
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260313/202603132053.N3kL3UZZ-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260313/202603131934.SHJnSGL9-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260313/202603132053.N3kL3UZZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603131934.SHJnSGL9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603132053.N3kL3UZZ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> Warning: drivers/pci/probe.c:793 expecting prototype for pcie_link_speed_value(). Prototype was for pcie_get_link_speed() instead
+>> drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c:430:26: error: call to undeclared function 'dma_desc_to_edesc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     430 |                 struct dma_edesc *ep = dma_desc_to_edesc(head);
+         |                                        ^
+>> drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c:430:21: error: incompatible integer to pointer conversion initializing 'struct dma_edesc *' with an expression of type 'int' [-Wint-conversion]
+     430 |                 struct dma_edesc *ep = dma_desc_to_edesc(head);
+         |                                   ^    ~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/dma_desc_to_edesc +430 drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+
+   396	
+   397	static void dwmac4_display_ring(void *head, unsigned int size, bool rx,
+   398					dma_addr_t dma_rx_phy, unsigned int desc_size)
+   399	{
+   400		dma_addr_t dma_addr;
+   401		int i;
+   402	
+   403		pr_info("%s descriptor ring:\n", rx ? "RX" : "TX");
+   404	
+   405		if (desc_size == sizeof(struct dma_desc)) {
+   406			struct dma_desc *p = (struct dma_desc *)head;
+   407	
+   408			for (i = 0; i < size; i++) {
+   409				dma_addr = dma_rx_phy + i * sizeof(*p);
+   410				pr_info("%03d [%pad]: 0x%x 0x%x 0x%x 0x%x\n",
+   411					i, &dma_addr,
+   412					le32_to_cpu(p->des0), le32_to_cpu(p->des1),
+   413					le32_to_cpu(p->des2), le32_to_cpu(p->des3));
+   414				p++;
+   415			}
+   416		} else if (desc_size == sizeof(struct dma_extended_desc)) {
+   417			struct dma_extended_desc *extp = (struct dma_extended_desc *)head;
+   418	
+   419			for (i = 0; i < size; i++) {
+   420				dma_addr = dma_rx_phy + i * sizeof(*extp);
+   421				pr_info("%03d [%pad]: 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x\n",
+   422					i, &dma_addr,
+   423					le32_to_cpu(extp->basic.des0), le32_to_cpu(extp->basic.des1),
+   424					le32_to_cpu(extp->basic.des2), le32_to_cpu(extp->basic.des3),
+   425					le32_to_cpu(extp->des4), le32_to_cpu(extp->des5),
+   426					le32_to_cpu(extp->des6), le32_to_cpu(extp->des7));
+   427				extp++;
+   428			}
+   429		} else if (desc_size == sizeof(struct dma_edesc)) {
+ > 430			struct dma_edesc *ep = dma_desc_to_edesc(head);
+   431	
+   432			for (i = 0; i < size; i++) {
+   433				dma_addr = dma_rx_phy + i * sizeof(*ep);
+   434				pr_info("%03d [%pad]: 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x\n",
+   435					i, &dma_addr,
+   436					le32_to_cpu(ep->des4), le32_to_cpu(ep->des5),
+   437					le32_to_cpu(ep->des6), le32_to_cpu(ep->des7),
+   438					le32_to_cpu(ep->basic.des0), le32_to_cpu(ep->basic.des1),
+   439					le32_to_cpu(ep->basic.des2), le32_to_cpu(ep->basic.des3));
+   440				ep++;
+   441			}
+   442		} else {
+   443			pr_err("unsupported descriptor!");
+   444		}
+   445	}
+   446	
 
 -- 
 0-DAY CI Kernel Test Service
