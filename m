@@ -1,140 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFAD038CFFF;
-	Fri, 13 Mar 2026 16:26:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62E23D3CF7
+	for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 17:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773419196; cv=none; b=JvUraB4mxfDNxIz+dk8lO/LfrewVwb+rtANRZFr2aBLyAUuLx4ZhxXvmf1h7YcpkzOHzaGt5GaagUxludBGiFVeUPMV2g/drfoI284c3oS44UtdVZSVWVcQegJnyMEhaihD/61LgE9kGbrk8LelnQgZgw7KitoIcts70OUPG9Ck=
+	t=1773424331; cv=none; b=pv8pYANhb5YiWeoGXlvt9H4GT4TL53tR5nNCXBjy81/GrClPLeHEo0mZDuZ8dhFTnI6xLurKaKI2BgzAktldaIraVFP0k01aJGsXWkWnH1/3orViMPgmnlRLJnIHxhsA6FKLKMtUlfqp+TA9QGDmgp7vvKzmnLQ3SQCIwZlUsGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773419196; c=relaxed/simple;
-	bh=AfxxKs2KdlZH6f4DtzjOy6zLTdABVf9Ufjw9UhlQVKk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mb5sqdRxiFNCpsXvvKKfc9yNzc079Xbicc6C8t5/bE4CAO+zTOT2bBUPo3mpNTeZg3vMal5YaJo78csyG5HuvTsy+Uhbz9qscMVsrwkyoIsQNboA/E3F5UuqG9hDc5NmxKFgq+mnM5dqtra9Gx0dfvQsOANUE8yb4QqR6JUF5GU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NfmsN5PQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773424331; c=relaxed/simple;
+	bh=vfrRQR+JpQYLSHtZyqbjbuFN1gFOZoHwi5oXGFGrSRw=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=jNs8oUQvaDcbRD4N7eYE0D7z276htN8aoBA9TpMhuS0lV+SryXHXdNY8KJisWhTjKyVBcTERp02fDlzen8MOg+gGvmjOxAlOlPOwwvv2WI9UVCMUzIfQah6W6DU/NtE27EgFQR+z2LqBjbM7D8+RdG47yu1Cq2RUd9A0nTYKfG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bLkuDNwY; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NfmsN5PQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAABFC19421;
-	Fri, 13 Mar 2026 16:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773419196;
-	bh=AfxxKs2KdlZH6f4DtzjOy6zLTdABVf9Ufjw9UhlQVKk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NfmsN5PQ0SU0nWpk7AibNnDc3kc7s/4QP2FYjwVVlFozUV6/eyLJXCmw0zrEml684
-	 pTXEeKVCXi777niHBawr1hlOeiX6TPn7nxYeL9+WwMmz9Ux8RIZ9kjngPzuNr0SLrN
-	 ngsdEYVCFkZbJbZAkUwhUwALTriR97EdKEd9oXzcW2uo94FlzQx0IDZ+jkFEgZDmZV
-	 pwItaAfHuE4tOHVhD+jQuGjP8IZAvRDCIln9feFUpbKCbGDjaLi9TpCGYDZXeHqq3C
-	 taop9WqXxxd9NCm4LkbZNPrxoyhuAoasJeEcD5DLIsB1xoJgxOs0YtqA3bYvvG2NtA
-	 DSyGhAN4CJBPw==
-Message-ID: <9f59fabc-8668-4e2e-bf4e-c7726890cf07@kernel.org>
-Date: Fri, 13 Mar 2026 16:26:24 +0000
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bLkuDNwY"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-829b7ed8964so2519983b3a.2
+        for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 10:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1773424327; x=1774029127; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4NBAuTsPtZw2mEjZqDawFjkhVE0UFfzabotF/tS63ZE=;
+        b=bLkuDNwYyOYWEATN2I344R/x9Gfu4lOKGmcdKY9PEfH5SSkFGUNeYyIoHtneITJ9hN
+         qS20/12IciqxwD2jYHJDvaSDy9mPfNQ0r7OY1tO8KymeswYC+cB/MPX4w+eIFvrt00NL
+         fExTsl1A4NXwA0B/t5OLM/JtP0nn3BB9qcbij7cHw+si/2GDD2I8qeolFCxOsnu7wQqY
+         UrMRnmOpQGLrIpTGZwgaxr+WAnP870Q86gDFFSGX4agjE0avDXTqIZP5/ZgDmNss7OM/
+         IimMa2E/ttCDR8N5JAblaaPzzTMxGUcx8TBG9Qr4WNHagUrAYBNtHSLfFoNgmYIG0Qio
+         UF9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773424327; x=1774029127;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4NBAuTsPtZw2mEjZqDawFjkhVE0UFfzabotF/tS63ZE=;
+        b=Xh2AFXOvDYqtGp2ZqR1mi1nFDe5pgH0IyJiwnUzxe6AXFk5z2cX65ZKQIBtSbV74vl
+         3dnjhbsPpKm7gg9ac9tFdqRHMxytrwEQLoLo/Hf2n9xTls8MOy/4ILPHC46Bb8PGtEgp
+         w1aQNONeTiIGGqbJtG6QQjYl72p0t6/qLFMSyQEy2Mvcsn9dTial5P4Pqz3Q+Q3nCDVk
+         qd03fgt+XQk0nHDc+kwfYfg7J8b2/Lcu2c5mjXi+lsPSnC/ss1rzk2RLiRuiC53GDxb/
+         9siGUyrRHQh86cBBLoXPTlnlvkyd7AF7nqwC07Pbgfc7QeP0laO3eIAlh+iFmEcm5OkF
+         xGWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVcnvtku1+l6L3Il6FhkxwO2UfT7CBEuY78qC4WIJtRs4MMu55n1UPg2IG2UxMNHflil+Dl@lists.linux.dev
+X-Gm-Message-State: AOJu0YzSmvyUhT1V8OBRcvi8iNcXGcvxlAqBfFlKA0Qs30E460Mz4T62
+	XQjsoRnPvGH64NLe1DD8TJkeEMOy/XvOMOb5M/U/s9WnB9TLxQNFU2osAVdBwJsg38Q2+BXy9/r
+	P8NiqdXbywVm2iy3UzA==
+X-Received: from pfnp5.prod.google.com ([2002:aa7:8605:0:b0:829:7d34:ff8b])
+ (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:22c4:b0:827:3093:9026 with SMTP id d2e1a72fcca58-82a198fb819mr3435913b3a.48.1773424326549;
+ Fri, 13 Mar 2026 10:52:06 -0700 (PDT)
+Date: Fri, 13 Mar 2026 10:51:53 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 05/30] bpftool: Avoid adding EXTRA_CFLAGS to
- HOST_CFLAGS
-To: Leo Yan <leo.yan@arm.com>
-Cc: Ian Rogers <irogers@google.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, James Clark <james.clark@linaro.org>,
- Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>,
- Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>,
- Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
- Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>,
- Len Brown <lenb@kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
- Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
- <20260311-tools_build_fix_zero_init-v4-5-9e35bdb99cb3@arm.com>
- <CAP-5=fUOYsnbB4B0khUetRWOFMtHuO6_ESG30b1ZW01n_-gt6g@mail.gmail.com>
- <20260313155600.GP4153946@e132581.arm.com>
- <cdc75030-e750-42ad-a068-55abe3a10d82@kernel.org>
- <20260313162430.GR4153946@e132581.arm.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260313162430.GR4153946@e132581.arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
+Message-ID: <20260313175153.235681-1-tjmercier@google.com>
+Subject: [PATCH] kernfs: Add missing documentation for kernfs_put_active's
+ drop_supers argument
+From: "T.J. Mercier" <tjmercier@google.com>
+To: gregkh@linuxfoundation.org
+Cc: lkp@intel.com, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	devel@driverdev.osuosl.org, "T.J. Mercier" <tjmercier@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-2026-03-13 16:24 UTC+0000 ~ Leo Yan <leo.yan@arm.com>
-> On Fri, Mar 13, 2026 at 04:07:27PM +0000, Quentin Monnet wrote:
-> 
-> [...]
-> 
->>>>> +
->>>>> +# This must be done before appending EXTRA_CFLAGS to CFLAGS to avoid
->>>>> +# including flags that are not applicable to the host compiler.
->>>>> +HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
->>>>> +               $(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
->>>>> +
->>>>>  ifneq ($(EXTRA_CFLAGS),)
->>>>>  CFLAGS += $(EXTRA_CFLAGS)
->>>>>  endif
->>>>> @@ -88,8 +94,6 @@ ifneq ($(EXTRA_LDFLAGS),)
->>>>>  LDFLAGS += $(EXTRA_LDFLAGS)
->>>>>  endif
->>>>>
->>>>> -HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
->>>>> -               $(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
->>>>>  HOST_LDFLAGS := $(LDFLAGS)
->>>>
->>>> Should HOST_LDFLAGS be similarly moved? Otherwise, it seems target
->>>> flags in EXTRA_LDFLAGS will be added for the host.
->>>
->>> Though this series is irrelevant to LDFLAGS, I am fine to move
->>> HOST_LDFLAGS together.
->>
->>
->> If we move the HOST_LDFLAGS earlier so that they no longer receive the
->> EXTRA_LDFLAGS, then we lose the possibility to use any EXTRA variable to
->> pass additional flags to HOST_LDFLAGS. So OK to move, but maybe add a
->> "HOST_LDFLAGS += $(HOST_EXTRALDFLAGS)" to it for consistency with the
->> processing of HOST_CFLAGS?
-> 
-> Adding HOST_EXTRALDFLAGS seems a bit over designed to me, as there is
-> no use case for it currently.  To avoid complexity, let's keep this
-> patch as it is, we can add HOST_EXTRALDFLAGS if later have requirement.
-> 
-> P.s. I saw that you already replied the same comment in the previous
-> version.  I should have confirmed at that time, sorry for the duplicate
-> discussion.
+The drop_supers argument was added to kernfs_put_active to control
+whether the kernfs_supers_rwsem is temporarily dropped along with the
+kernfs_rwsem, but no documentation was added for it.
 
+Fixes: eea5d2bb34ba ("kernfs: Send IN_DELETE_SELF and IN_IGNORED")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202603130112.2FcCzv1g-lkp@intel.com/
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
+---
+ fs/kernfs/dir.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-That's fine :) - And agreed, it's probably best to leave it as-is for
-now. Thanks!
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index 715b651e35a0..7f355316704c 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -481,6 +481,8 @@ void kernfs_put_active(struct kernfs_node *kn)
+ /**
+  * kernfs_drain - drain kernfs_node
+  * @kn: kernfs_node to drain
++ * @drop_supers: Set to true if this function is called with the
++ *               kernfs_supers_rwsem locked.
+  *
+  * Drain existing usages and nuke all existing mmaps of @kn.  Multiple
+  * removers may invoke this function concurrently on @kn and all will
 
-Quentin
+base-commit: e7ccc9e054beb4c366228d24786f67c738206605
+-- 
+2.53.0.851.ga537e3e6e9-goog
+
