@@ -1,80 +1,80 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EA037B02C
-	for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 12:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FD82DECA3
+	for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 12:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773405159; cv=pass; b=ZtLiRdmeGPY764FMayPszHXfk4KP099WFq6qg2nupAalY7il8+65V05jBIbL/BqAlY9XNo7tDVndnuKXqcX0Df8N6zDfGGktHDGx7l6nNOTguaUt/c6mcag3a9+RSvOMoe7/raqfXh6cobGpo0nd3bpS+98Jz/sTQWQRQm8F6FQ=
+	t=1773405640; cv=pass; b=l1S6JU80C8EA8+5bzEuu9wZy4ksvnI7bQ1xkLu0DewCM7Nhp22knE2rAfRe15+3lW/Cf0uHOJyu/NE3CR9rwqAFqVGd3kYWzAVlkxO0cerrnImho3dzlPItoQ/T2u4AK1D2TuXKBL3F/iOIOSZH0czsFE0MzLKYUNI78dsaNpC8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773405159; c=relaxed/simple;
-	bh=XcWV/jwv+DaFRFEPs3UtR5auo6Za+XnTz8JF7SS1gE4=;
+	s=arc-20240116; t=1773405640; c=relaxed/simple;
+	bh=BH2Tt+ZzgX13lYh/CBBIQ3E5W7P3MU6/b8YCQdgOaCU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GMGPQm5sE/Ikk9fT0NlobERte2Y7ZJKlNla5VQyHQzbbrB4g2MyWoSij9ukJiTkril3fLIlHSNSfBHhRVm9RhoVAbtlhGDD8gjqdylDdma34CWdMOihy2yK0NJ3Za2KI1E0LOYrEdDVUjdfAt93gpBoyINr2J8I2GFzvlUaQAbo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rdTaGInj; arc=pass smtp.client-ip=209.85.208.52
+	 To:Cc:Content-Type; b=WLHZwoxp4WTlzxUxNBN9ToBt6Yvthh4thBqBwJ8uPJpA/aXkdX+jbTb4LNh+/LUQVEZUc9SDmNw5ZzluSn1T5H94o229akpaqu5IMpkxo7mI2O4Wd/juk1gH5uejo6qLHYdxpOL0sU3Wb2VZe7ASFAOG92/rPupQGp/kkr7HTNU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mw4ktRgr; arc=pass smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rdTaGInj"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6628cc1bd69so7197a12.1
-        for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 05:32:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773405157; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mw4ktRgr"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-660a4aa2aa9so10635a12.0
+        for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 05:40:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773405638; cv=none;
         d=google.com; s=arc-20240605;
-        b=OS8aOunPs9geeBAzGfFbptncTw5/91mzRa/1VvFgPubd43n0TfW9K6wvUiC6KAhR8Q
-         f4nbnBQ2nHFOKJBCYHS5J3VDIAChP6iE0uGrN25UYpH41fsu4J3m0oy3SA0BwVljweI2
-         5tX8fLY3/cLqdHXV6WLLPL+UqUATc5FHi2QbWkdxeBvkfhLCkCyAbH3NzR+IatNNnL0C
-         XXUD4wV5b8qrd0Y3wmwQe0rfw7MSeyTEnurJxVg0oa61t/P9huGvCB+V8be4hDG2eyVm
-         XclnIovBudehnbunJwkYBvNMJSIcUJjC/AKFbXHphztEIXc8BF/+0Ja4f84CxECS09OF
-         okug==
+        b=fynGrB4k/+PFpr9GYc49Uf4dzI8HG2hnCnt5q7DEkwZnkgUWtw6qhMbL3+flnGlid9
+         I+X5mAKCFO3LEpNrPp+OGtx+FRuLNKEKsAuzoGZLhgNwMbHLRjtKCg7h9DaYQfdsV2B2
+         62B47L6+6yT04zOPLYKsHDnblSbBypoVF0USrLpqOffcWkXAqh2zO01Gk4Ds92hoT/uB
+         7e4ds/KXkMLlTupKvufwmA30XxOJZ7DvmKfbzkQuFP0GU1tgbRWKvMkYzkjSm+UYrvAh
+         9F7Wfrjfs/BdZMOlhF1n9OoSx3cLvDg7dLpq75kiF9S5gHf91h3CjjN8sjkmSemOcT8a
+         iIAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=9epzK3C05Aqic050HU4sGv3sK4NyLKb/ZPKh0TB3haA=;
-        fh=W1FecyhMhI4nu7iCDrGl9E7O5MzTUAXxEUa4EeE8nKI=;
-        b=hny3W/3vXBqR2y6XwnjuT5t/my14qwirlX2+hkpbJS85RGzBKMOLBcqRkzar4oPjf5
-         TRP4nr4D/FSinXqxYMJpEowjd1F06hTJEIWcPguEa/obzr9uIFhUZPeK+T8rCZIylRC0
-         v8oKrtbiK0Yk9RNyrFNkg3+jEPy5nj32ccq9IoSepA1mirhvFJj+fLHO97NLc2L5rp7V
-         Y4o+GxFJAT2lBpD5cLPwjR+/YLiykULtJTg6fYXinBe6AUbPGrBsxlanoY/mMiQUxDCE
-         jPpvMjpmw8SIpmYfCS+++2PIgYB9JO+22gAy+CkNn1rlwFq/RIpnIsI2Xo1Fwpt41556
-         vBhw==;
+        bh=TiD2EX4E5GX5UawpYTJv+Z9RV3pyP1GtHitgeXF1tTQ=;
+        fh=pejMvz+KE2yts/RVHTA0d9syMpexUOMXZXgfPl7EmT0=;
+        b=IJp56cqfo9sxMFnLBM+GZC3S0gLRz4jbODQATjqZskSi5Yzj9P8vkJkuTCXbGGv3bV
+         gkImPyoK1nLmI61QGka6uiQ4ifpyS+2Mv/1ElndNI5bYD8OcR1itxVUlowWVlWuAT03l
+         J9f3cof3j/pRf+8d9/RO+0gmQ+VNCxwfUCsuNDlFMxHDouF5q3JJQDEvurkc7GynWtWo
+         E8DiY+mL2lIggOrWMsH6zQzWVGyf6+uKxIfsOXBogcW4+FtZcURoYthRuvd3MBsXL78I
+         ITg8e+Y6n6zAa77ttA8zNBI0zvSERiZe9enmQ5xFKqAGpQooiwqlX6atndVbJvdIrBfV
+         sh4A==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773405157; x=1774009957; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1773405638; x=1774010438; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9epzK3C05Aqic050HU4sGv3sK4NyLKb/ZPKh0TB3haA=;
-        b=rdTaGInj/fZbxnbvRpb6A1pfmpkGj1qN8kyh47pJdTQ5Ep8O6fEsdRPOkHZpEHWR8g
-         b/xEnE7HRhZ6L5vCab0YpHtddfAGPVlmTO0Q/vk9kxprSuR0Pow5jvB30ADXHoH9hD+6
-         FDxxvNvKgTeTYkiOaxJPoNppi0bxUYTnHNfM4m0P77hNzNn0UI1+DXy4qF48Td3AXb+B
-         OL/GdNw4ZBAcR/QRsXq11nhjo+64/gC1GKggiMcloN7O13lVPsaYHls7703jnIGOGqxL
-         P1aOpgfhtsuYjR5Hs3tAEdAJpe4oZ/XItvZh4uUeKjojjEQcFHy4K+6h5tiWqE+3xhVq
-         18FA==
+        bh=TiD2EX4E5GX5UawpYTJv+Z9RV3pyP1GtHitgeXF1tTQ=;
+        b=mw4ktRgrsooYQVhk96rKd3qizd4zN6b0YQSQvJfFFI0m9LVuWo+ZqrKq/eCwf6DMJB
+         zRCLbNZglXKsO7/t2dc/ggs8jNE8brb0aUo53lNCAWwL/1LFDzHCNqzmy7m6KV/yzc+g
+         ZeycCofnp5MPe7rCJSDHD0QLnZJfNNYb+iJ9oSQAq2rThHV5t3QhoObaagHYJYNe3mCD
+         ggzlUs86cTxfR0KeGApIRYGzLGUX+3iD4Eip1sPuTUgEIXc+v7tnU3bjUc9o+lL/eiTI
+         oUBFHy0l0Vh6FPEQz0uitvVs3mkb+etiHj1amiMmFFTovH7+C8nlh7eGsWJf5BPm2qJA
+         CPtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773405157; x=1774009957;
+        d=1e100.net; s=20251104; t=1773405638; x=1774010438;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=9epzK3C05Aqic050HU4sGv3sK4NyLKb/ZPKh0TB3haA=;
-        b=pqWUnnqk3ypX2F9nbQfSv9KPqj6YzXkg9TXcmIES04MgYJmIvNsI2yMEntFm4LVMix
-         3hGR0rEZJJPCCCskdupYublviqh/+TvAlb4lcAq7Ce76XiVywKQEW645D2NriTG6Roos
-         wItHdVcV+s5w/wz6FbyOuH/JycOb8GHGDZLbIst4VjAW2o8/0p7S8XzUcrRS9Y5zj8nQ
-         gikkFbRAOeizwjJrBgZcuLf9hWFt33qaKBx8+Ehd0QqMUXj25a8zPV4l0FEtmdZ3sDXp
-         3p6LpxYsq4JwlXVhijep+WRne9rrmCom4fSBg0UOjRpRoGeDtwJ6EPrhCYtqDiPrzZ5E
-         NmMg==
-X-Forwarded-Encrypted: i=1; AJvYcCV2g3yqSXidBFZC6ww8i4TilQcCl8cBp246/Qg8/MKnnRwyDML/meP0hlnsmoGSzDeKYGO6@lists.linux.dev
-X-Gm-Message-State: AOJu0YxSc9tmp+LiZO4kSNjFDNzLVhjGbD6Z8f3eNrDR2LmsyE5WyC4h
-	nXZ6DMiTZWrQT1YSPQTnhyGUlKeSzxoK7kfYkoc7K86p3rjSUaAnm3PbYnbrwQU5rY4VhBvhCQc
-	/hkQ70mZQXaBARQnn2vqlMan/VWWu6bnJz/0PAE+l
-X-Gm-Gg: ATEYQzyKJnIL3zHpUSyZeeOGyMlQLm+S7mVontp2b0700xiCD2WZc3cMwnOFss5PGAJ
-	sxY3tERfSzjX+nMQdDaLjttQxq8eS6lN1mlVUfBUq0dwffCWJsnM9CfzYdu5VZIV39+RqBC2OhQ
-	2vHcj690EenfiCFSvwlq5Qw2pLbhxvK1FjKkKz4+2RpNPu5zmZuZB6EWIcHy+TsXYryoG0zGBV1
-	frA3+7z9DhJ5UGI54kL219CqCfqSlgCWgN5qyYef4I9oyX/Q0dHHW+DtiBpdibJZm9gZfkO5SMI
-	rxhrqiJShHUImk5UP4RFOVCJJsE7qUI0tQmy
-X-Received: by 2002:aa7:c497:0:b0:664:2c92:536b with SMTP id
- 4fb4d7f45d1cf-6642c9254fdmr13109a12.1.1773405156207; Fri, 13 Mar 2026
- 05:32:36 -0700 (PDT)
+        bh=TiD2EX4E5GX5UawpYTJv+Z9RV3pyP1GtHitgeXF1tTQ=;
+        b=VC8NvHailXSHNp/BfvKreA+NQKARBUnN/u/5dg6I3EnGDS4AQO6j45XBWetwjHmPTG
+         071fqnS3AO6lV5VqwrHj/pEmCtm8ZzfgjMLPpNBjWEmMhP29nlJWiA26CVDBfThUPk/r
+         e10bg567aWZZZ0T6BKPlDkoF/cmEgUfB3piqm+pRqJIQrWkBjMzDlJWEWDnuqm4Y0I9C
+         /s5IwVBOMKiapK1w2+IhekoO58lK3JX+M6pLdreRdu4KHUadGLBXxzz3938uKkKoiH6W
+         tEwjZ1SechzlYZBHZT2GSJpZWu94rhHwo19Pyepi+7Lg51YccMHuJ/n+k0lNUqJcxg/9
+         VMrA==
+X-Forwarded-Encrypted: i=1; AJvYcCVgB2CC+BxaFzJJgLfEf3MPwpq/ozWdccoyHqGYxah31G3npVOElBWzlHNvHHFLe5MPxGOQ@lists.linux.dev
+X-Gm-Message-State: AOJu0YxWHoFNuAnqGXVj5ybAgw/Ma8H0uTMkDf8MCHOvSXJLL+N6Z9iG
+	vlQZZO2W3LN4QNSpCbrYeJXCYuD8GohFJWAFQRe2qYX7OJBwlVYMs4s8235yfGMGIcGo7y5F9uQ
+	pr+3GS5CoJqTvH0sXXbrHx+tEyUcXTittoFAEUuus1xlzAre+bRvMjAap
+X-Gm-Gg: ATEYQzyioS8Xvms1dclSjHXyRZtsQQQ2AVRIZex4IfgHjhnfWFz9dHOmGbVreQCaBUm
+	7wAgoZ1cIC4yzBLAkG9k2+9KbnngSjac6ehf1KB4uEc92JqQNFQtoQRn4KCOPjqZPmMQAupCbJ4
+	p6O7uwjeSAPyDod4Cx9BKk1ypcwtQRgTg4w+kyqYx4Amn51VXqGtgnbC4LtPIcnuMcNvAqmJ87/
+	NDFJhYyHAvvYcamjGW/45OPP/UHqsm/f/qXopRxWGmHodoxdJN4MpXa9Ba4sz+jmLuaF7zOpngo
+	vSuDQXigDkXaOY3Gpti+8QuOrrN4CUR/6H1+
+X-Received: by 2002:a05:6402:a591:10b0:663:a627:3ef4 with SMTP id
+ 4fb4d7f45d1cf-663bccd4116mr27920a12.4.1773405637372; Fri, 13 Mar 2026
+ 05:40:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -82,63 +82,57 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
- <20260311-kcov-extrecord-v1-3-68f03c4a05ad@google.com> <CACT4Y+bRTjPG7pw-k9okGZ=Gv81b+_AgdQcCxWxpF25guYpo=w@mail.gmail.com>
-In-Reply-To: <CACT4Y+bRTjPG7pw-k9okGZ=Gv81b+_AgdQcCxWxpF25guYpo=w@mail.gmail.com>
+ <20260311-kcov-extrecord-v1-2-68f03c4a05ad@google.com> <CACT4Y+aLx-ZG7FqYNrhrABi1bgNo6AnG5JL9tq+mCPRAnx37Tg@mail.gmail.com>
+In-Reply-To: <CACT4Y+aLx-ZG7FqYNrhrABi1bgNo6AnG5JL9tq+mCPRAnx37Tg@mail.gmail.com>
 From: Jann Horn <jannh@google.com>
-Date: Fri, 13 Mar 2026 13:31:59 +0100
-X-Gm-Features: AaiRm51AsQr-GnfrmT-s2mK0Siar6QSBwzDlciobq2qYdJRCAb9h-hiOndoW4mU
-Message-ID: <CAG48ez1STjb-QCbZzwJRYGfysnUs=xLSFUObN1FkWjn4PYhDfA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kcov: introduce extended PC coverage collection mode
+Date: Fri, 13 Mar 2026 13:40:01 +0100
+X-Gm-Features: AaiRm50m_KKY-Ui-GtFJVc8fktrbZ1qfcaOrt70ftdmrqPSIAcrmjDuP-BlI1cY
+Message-ID: <CAG48ez18oqEBcNoSJP1=-HUEBbberz2--Wds4gDMd0c+=evDsA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kcov: wire up compiler instrumentation for CONFIG_KCOV_EXT_RECORDS
 To: Dmitry Vyukov <dvyukov@google.com>
-Cc: Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev
+Cc: Andrey Konovalov <andreyknvl@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 13, 2026 at 8:58=E2=80=AFAM Dmitry Vyukov <dvyukov@google.com> =
+On Fri, Mar 13, 2026 at 8:54=E2=80=AFAM Dmitry Vyukov <dvyukov@google.com> =
 wrote:
 > On Wed, 11 Mar 2026 at 22:06, Jann Horn <jannh@google.com> wrote:
-> > This is the second half of CONFIG_KCOV_EXT_RECORDS.
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index 93f356d2b3d9..dddc330ad3ca 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -2215,6 +2215,20 @@ config KCOV
 > >
-> > Introduce a new KCOV mode KCOV_TRACE_PC_EXT which replaces the upper 8 =
-bits
-> > of recorded instruction pointers with metadata. For now, userspace can =
-use
-> > this metadata to distinguish three types of records:
-[...]
-> > @@ -1519,8 +1519,10 @@ struct task_struct {
-> >         int                             kcov_sequence;
+> >           For more details, see Documentation/dev-tools/kcov.rst.
 > >
-> >         /* Collect coverage from softirq context: */
-> > -       unsigned int                    kcov_softirq;
-> > -#endif
-> > +       unsigned int                    kcov_softirq : 1;
-> > +       /* Emit KCOV records in extended format: */
-> > +       unsigned int                    kcov_ext_format : 1;
+> > +config KCOV_EXT_RECORDS
+> > +       bool "Support extended KCOV records with function entry/exit re=
+cords"
+> > +       depends on KCOV
+> > +       depends on 64BIT
+> > +       # TODO: check CLANG_VERSION instead once this has landed in an =
+LLVM
+> > +       # release
 >
-> Setting/saving/restoring this flag is fragile. I afraid some of future
-> patches can break it in some corner cases.
-> Can we have a new kcov_mode and use some mask check on tracing fast
-> path, so that it's as cheap as the current =3D=3D kcov_mode comparison?
+> I think the compiler option check is actually better, since it will
+> allow us to test earlier and supports compiler backports.
 
-Yeah, I also thought that what I'm doing here didn't look particularly
-pretty... I'll try to implement something like what you suggested for
-v2.
+Makes sense, I'll remove the TODO. (I was thinking about it from the
+perspective that every compiler flag test increases the kernel build
+time a tiny bit, because it causes an extra compiler invocation at the
+start of the build.)
 
-> >  void notrace __sanitizer_cov_trace_pc_exit(void)
-> >  {
-> > +       unsigned long record;
-> > +
-> > +       /*
-> > +        * Unlike __sanitizer_cov_trace_pc_entry(), this PC should only=
- be
-> > +        * reported in extended mode.
+> But it may be good to add a reference to the compiler patch in the
+> commit description.
+
+Ack, will add that.
+
+> Otherwise:
 >
-> It would help to explain _why_. The fact that it's not traced is
-> already in the code.
+> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
-Right, I'll change the comment to explain that this callback isn't at
-the start of a basic block, and that the basic block is already
-covered by a preceding hook call.
+Thanks!
