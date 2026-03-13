@@ -1,96 +1,103 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62E23D3CF7
-	for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 17:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6017136309E;
+	Fri, 13 Mar 2026 18:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773424331; cv=none; b=pv8pYANhb5YiWeoGXlvt9H4GT4TL53tR5nNCXBjy81/GrClPLeHEo0mZDuZ8dhFTnI6xLurKaKI2BgzAktldaIraVFP0k01aJGsXWkWnH1/3orViMPgmnlRLJnIHxhsA6FKLKMtUlfqp+TA9QGDmgp7vvKzmnLQ3SQCIwZlUsGM=
+	t=1773425961; cv=none; b=ltwYAL4fZyAmi6vybaw3cDTWdM5x0zxNApZ8CGJfRjtzfA0QLJTmVvlLWNrW1iRtt7KtTnxSe46xBiKeraudo4IbYL5PMJV+rUfHmLntlEyMi0obBOeLAGn87LY7J2IYRRtb4CoxTxzV9kDDS6OFF86XBJb2iibGCQ25c6OGvTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773424331; c=relaxed/simple;
-	bh=vfrRQR+JpQYLSHtZyqbjbuFN1gFOZoHwi5oXGFGrSRw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=jNs8oUQvaDcbRD4N7eYE0D7z276htN8aoBA9TpMhuS0lV+SryXHXdNY8KJisWhTjKyVBcTERp02fDlzen8MOg+gGvmjOxAlOlPOwwvv2WI9UVCMUzIfQah6W6DU/NtE27EgFQR+z2LqBjbM7D8+RdG47yu1Cq2RUd9A0nTYKfG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bLkuDNwY; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
+	s=arc-20240116; t=1773425961; c=relaxed/simple;
+	bh=wGHHmea18QzDv20CIQ8/NkoCGCljzKpgR/2yblyc0Sk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hzRAgfZ91VKnwRZehBK1eMWZQqnTwvedo2Lk9r7YjiAbCH9ceDiC5qDayraMr+DnyKaoJVczRuJXa5gDzFb71IzmiNfFxxzrS5mblnJv9XGahC0Uou2tvGm9NjvOtZR0iYcimdympdUa0pLWiCKdKDYJWQiq5+WTvEKtt/xooWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F5pK6hhj; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bLkuDNwY"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-829b7ed8964so2519983b3a.2
-        for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 10:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773424327; x=1774029127; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4NBAuTsPtZw2mEjZqDawFjkhVE0UFfzabotF/tS63ZE=;
-        b=bLkuDNwYyOYWEATN2I344R/x9Gfu4lOKGmcdKY9PEfH5SSkFGUNeYyIoHtneITJ9hN
-         qS20/12IciqxwD2jYHJDvaSDy9mPfNQ0r7OY1tO8KymeswYC+cB/MPX4w+eIFvrt00NL
-         fExTsl1A4NXwA0B/t5OLM/JtP0nn3BB9qcbij7cHw+si/2GDD2I8qeolFCxOsnu7wQqY
-         UrMRnmOpQGLrIpTGZwgaxr+WAnP870Q86gDFFSGX4agjE0avDXTqIZP5/ZgDmNss7OM/
-         IimMa2E/ttCDR8N5JAblaaPzzTMxGUcx8TBG9Qr4WNHagUrAYBNtHSLfFoNgmYIG0Qio
-         UF9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773424327; x=1774029127;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4NBAuTsPtZw2mEjZqDawFjkhVE0UFfzabotF/tS63ZE=;
-        b=Xh2AFXOvDYqtGp2ZqR1mi1nFDe5pgH0IyJiwnUzxe6AXFk5z2cX65ZKQIBtSbV74vl
-         3dnjhbsPpKm7gg9ac9tFdqRHMxytrwEQLoLo/Hf2n9xTls8MOy/4ILPHC46Bb8PGtEgp
-         w1aQNONeTiIGGqbJtG6QQjYl72p0t6/qLFMSyQEy2Mvcsn9dTial5P4Pqz3Q+Q3nCDVk
-         qd03fgt+XQk0nHDc+kwfYfg7J8b2/Lcu2c5mjXi+lsPSnC/ss1rzk2RLiRuiC53GDxb/
-         9siGUyrRHQh86cBBLoXPTlnlvkyd7AF7nqwC07Pbgfc7QeP0laO3eIAlh+iFmEcm5OkF
-         xGWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVcnvtku1+l6L3Il6FhkxwO2UfT7CBEuY78qC4WIJtRs4MMu55n1UPg2IG2UxMNHflil+Dl@lists.linux.dev
-X-Gm-Message-State: AOJu0YzSmvyUhT1V8OBRcvi8iNcXGcvxlAqBfFlKA0Qs30E460Mz4T62
-	XQjsoRnPvGH64NLe1DD8TJkeEMOy/XvOMOb5M/U/s9WnB9TLxQNFU2osAVdBwJsg38Q2+BXy9/r
-	P8NiqdXbywVm2iy3UzA==
-X-Received: from pfnp5.prod.google.com ([2002:aa7:8605:0:b0:829:7d34:ff8b])
- (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:22c4:b0:827:3093:9026 with SMTP id d2e1a72fcca58-82a198fb819mr3435913b3a.48.1773424326549;
- Fri, 13 Mar 2026 10:52:06 -0700 (PDT)
-Date: Fri, 13 Mar 2026 10:51:53 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F5pK6hhj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773425960; x=1804961960;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wGHHmea18QzDv20CIQ8/NkoCGCljzKpgR/2yblyc0Sk=;
+  b=F5pK6hhjocPrUn74BVv8E0HdKeSxqJd+lLfIar4C9o8xJvaIph+2St+x
+   xX36Rc4E141yyudPXfjAopNIs1hjfRYtMlLJnP5Rt/WWdtL9rpgw7VPwI
+   jRuLN9ZB7e9Nj21Xfz2fJGFfJiqcjSxYjsbgTP71kg6h+hzFsZN/EDN2+
+   VVuldfo539nWKub339SyWAuD6g3Liv2g2pemV12tHytIm/I0iVJXS9J8z
+   jo+ZuWhleGOyiyr2bwlp314UVwFMkWK+Au/T+mtktlzh9M6BMzDBxm32I
+   Ye38iFGflFxs/R4V+Wd4uJrQZ27beRXYimRMBsRqLF+GaK0y3Oq/wOnhp
+   w==;
+X-CSE-ConnectionGUID: 2JffA4jzQQydBKCfjbX6Yw==
+X-CSE-MsgGUID: q6p+RPk4SlKX/Gvqr2GqoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11728"; a="74618907"
+X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
+   d="scan'208";a="74618907"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 11:19:20 -0700
+X-CSE-ConnectionGUID: IsUab5fAS8+RjETs0meTqA==
+X-CSE-MsgGUID: tK2pfwEHS9KDtmikB151zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
+   d="scan'208";a="225347842"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 13 Mar 2026 11:19:15 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w176O-000000003h3-2O4L;
+	Fri, 13 Mar 2026 18:19:12 +0000
+Date: Fri, 13 Mar 2026 19:18:54 +0100
+From: kernel test robot <lkp@intel.com>
+To: Hans Zhang <18255117159@163.com>, lpieralisi@kernel.org,
+	jingoohan1@gmail.com, mani@kernel.org, kwilczynski@kernel.org,
+	bhelgaas@google.com, helgaas@kernel.org,
+	florian.fainelli@broadcom.com, jim2101024@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh@kernel.org,
+	ilpo.jarvinen@linux.intel.com, linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org, claudiu.beznea.uj@bp.renesas.com,
+	linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+	linux-omap@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Hans Zhang <18255117159@163.com>
+Subject: Re: [PATCH v8 1/5] PCI: Add pcie_get_link_speed() helper for safe
+ array access
+Message-ID: <202603131934.SHJnSGL9-lkp@intel.com>
+References: <20260312163652.113228-2-18255117159@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
-Message-ID: <20260313175153.235681-1-tjmercier@google.com>
-Subject: [PATCH] kernfs: Add missing documentation for kernfs_put_active's
- drop_supers argument
-From: "T.J. Mercier" <tjmercier@google.com>
-To: gregkh@linuxfoundation.org
-Cc: lkp@intel.com, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	devel@driverdev.osuosl.org, "T.J. Mercier" <tjmercier@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260312163652.113228-2-18255117159@163.com>
 
-The drop_supers argument was added to kernfs_put_active to control
-whether the kernfs_supers_rwsem is temporarily dropped along with the
-kernfs_rwsem, but no documentation was added for it.
+Hi Hans,
 
-Fixes: eea5d2bb34ba ("kernfs: Send IN_DELETE_SELF and IN_IGNORED")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202603130112.2FcCzv1g-lkp@intel.com/
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
----
- fs/kernfs/dir.c | 2 ++
- 1 file changed, 2 insertions(+)
+kernel test robot noticed the following build warnings:
 
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index 715b651e35a0..7f355316704c 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -481,6 +481,8 @@ void kernfs_put_active(struct kernfs_node *kn)
- /**
-  * kernfs_drain - drain kernfs_node
-  * @kn: kernfs_node to drain
-+ * @drop_supers: Set to true if this function is called with the
-+ *               kernfs_supers_rwsem locked.
-  *
-  * Drain existing usages and nuke all existing mmaps of @kn.  Multiple
-  * removers may invoke this function concurrently on @kn and all will
+[auto build test WARNING on 80234b5ab240f52fa45d201e899e207b9265ef91]
 
-base-commit: e7ccc9e054beb4c366228d24786f67c738206605
+url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Zhang/PCI-Add-pcie_get_link_speed-helper-for-safe-array-access/20260313-220734
+base:   80234b5ab240f52fa45d201e899e207b9265ef91
+patch link:    https://lore.kernel.org/r/20260312163652.113228-2-18255117159%40163.com
+patch subject: [PATCH v8 1/5] PCI: Add pcie_get_link_speed() helper for safe array access
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260313/202603131934.SHJnSGL9-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260313/202603131934.SHJnSGL9-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603131934.SHJnSGL9-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/pci/probe.c:793 expecting prototype for pcie_link_speed_value(). Prototype was for pcie_get_link_speed() instead
+
 -- 
-2.53.0.851.ga537e3e6e9-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
