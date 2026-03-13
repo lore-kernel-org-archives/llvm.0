@@ -1,120 +1,109 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F37A37CD42
-	for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 12:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773405670; cv=pass; b=E7D/W9OrkdtQHKQltFm95iFzq4vYtkbyX2UEfcV3TiYR0tcB7QCgxjkuCo05NmgikPQH4TLlM2/6DtrM7m3dqP+T5gG2esJoyyqwlw8vXkOt0ecAC4fZFvld5gzldCATd6ExIXI0eIW5mECOaO44M3Lh0KK6yTAZFB1R/xZF3KA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773405670; c=relaxed/simple;
-	bh=EMozAAWSnFJUelZV86MxnthF2jzYtuMYjm23DlNldWw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rWzKhluiYfLH6/Mp80Rqkz6nbhusdBinFdNx7oKxXk0012sBB+PxqiGRYCVNsgdDz9Hm0Y+ZmC6TXzLpGssBdsLS8Eugc9di9PUWdTHonJcY/tBAEKOxED5sKFYBqkZzV2/nWVbuIEamDzz0Mo1Ja/2UK4lGRMzZj5FrX6NRWPY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p748UdTB; arc=pass smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2403A9DA3;
+	Fri, 13 Mar 2026 13:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773408836; cv=none; b=HGm19+hjCloCOm14LALJ3GE7bJ5sikWZkqZB7VUrc52k8oXV+/cn//ks2TtRD2/ZQSmVV9+BVqlip8wIr2uZsKqFxpE8AHqmvGB4gVba9YDUpptMeUjJ+40Oct4XtAHlFsCYEcDmrKQjodxAITtSsep9P0pz8A80XIS1DTFCBJI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773408836; c=relaxed/simple;
+	bh=AsX3C2hlUvkqktdPj7+pB/3rNjxKkhPkB+9v9ZcQKf4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y01xcnoSKNUZUsz6Txz+XnzhL2+6TSAm4WRRYNmEvhCyd5rdnPdyzBbwyj7IJQK9xRLDSf9Xz8udzf5uLhysWTRDA3dVNQySyjIXITz+/kQ0bKTJCgBXBqRu+jcBXrdTPxLQf8d8GudZ5m8iR8mSiYrdmNZ7Q1NbXqrCk15uVOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dyFxil+n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p748UdTB"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-661ce258878so10385a12.0
-        for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 05:41:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773405667; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZAfrZo3/bfBkGC1nJl38vpQfelWKLIJErghRHJ/ihsNNg4HVuaVQTXoXcndEPHB0YR
-         voMsZ/eE+N/GTndEBhuT9XcbZWcDyMkEKvizeNtO0cteFq9RYXWLsYqmblelTnPuarH5
-         YVkGNLi/CM7qoJtKNDca1vAcfn6ogcdfpgHbkq/q7oWMCWjz1mO1V1Vmo3trRwBI+PBH
-         MrsETymQkgJdvJxe+30hrVU+bwk37UKCwxcX3S3NMkebeWaQQ1PkQ2xcYtiecdbRUW+i
-         ehGhZZph+PT+3l7rHUNX9xehkyKyf/3UhBkdMKNZpIfntWNW4zzU4bcyHpxLQ00SbW4l
-         L20w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xYGx2mEIZB1/xfXeiI85UtX0lshuCczBTfo+165seyw=;
-        fh=UHRP2FchXHzXqpEg5kC/rGCvxMafPNUP4lSahMmvaHs=;
-        b=A59LSNSZ0JUCKrfPs51XaE4uqnUiXtZQ6aol687Pb1DMJrMd5vzEqBcVafbt3TRMCB
-         3G7q8qJI4XT1o1aPeT4Um45haUIVz2V36Glsw1EKmgqdzqL33ec4a038rUcIrQzROpch
-         glQwJPtFbfgzE+17t40OvUdZYocGFa3ZXv0Qg9oMEoigwNF1wZlv/goWQXlYFmeejVjr
-         qCe42ioN+FwKQBbjFEwi2KtK/USFk9kh3vi9wXh+sfsBOgorVcRvYJWtpBnUJqGuBs8U
-         BWPazZpEVS7ituaO27Z1sW2M7dKC/X3L1LzgmM1ccrwNjEh/Tf7U8mGtFJ0ecw1kObDb
-         Sdwg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773405667; x=1774010467; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xYGx2mEIZB1/xfXeiI85UtX0lshuCczBTfo+165seyw=;
-        b=p748UdTBp8cd47NZAL0Mk+4Q8jcrSP3RpxzVLav861BU+5wfyS6tlSsqopDc71zCSC
-         ivbcMQLnjqcztIPnUXKNlXnhftSXYXp9TTvEfjGVTJ4liZCBMn3aiEaG/BADt/R7ZIS4
-         9w+qUgUWnJLhST78xf/OK9NxSMBLtvpE6zc0YbwvQ4nlAwiMgpW2JAS1fVWu0+mmGWOr
-         dLW5Uiw5P7KUiHoKNfom5y4M7Ouyg9DEmeVoVl6NLfylJplpnsWvEwS5DveG7kLIEG3B
-         J3+Ic4eja0UrgWQlXs+hBI1Wk+JYQtfxd72A+6XD0BW2/mLG8awntPPUhIuIGNkgR46/
-         WOwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773405667; x=1774010467;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xYGx2mEIZB1/xfXeiI85UtX0lshuCczBTfo+165seyw=;
-        b=gmLJMhnTpjkkQdzj7QA88+LCHY/PMg64UaVYGDvX6J0QD/5qA77hMSWQ0NyNnFZJn4
-         fwMM4U4rirSnmRaxHk2748TMi36fXIdlqAmgGJuU6DoSt5fOfXK1guuCIdLE6B5otP6Y
-         +LO+OL178x2RkIoovK4Z+BD3YOlVBmzQgZSVTDy9rPXYDjHSYO6sf5yN7gWYzLH9DELh
-         ioGMh4rvYfppz8awYMwlT/PfIU+I/aOwMBXmnjLr7XM3kpCwCaa3XVNH6r7U7vDSCdyi
-         YuAsgO/zo00/znS9ABNLVYRi38eFb0ZIb9pQLzHCwDt0BWALUAN/ND18og3FMoaKFfBk
-         xYag==
-X-Forwarded-Encrypted: i=1; AJvYcCUbwHX0y40oqOxh/jeU0Yueiy0GjE7b5g1SDAINGsVy2Qe0Hgf/tYiaIhWebO9cKEhBpVuC@lists.linux.dev
-X-Gm-Message-State: AOJu0YxmIoXyq1XrteNuq4hQ7runNzXTFpevXfG3UOZ0ZfFNnX6vSSXo
-	XVdi8014smmV0C/BXK3w7qVN0+d/ZMYfi4HFq+1XHxIb3kJ38o7ayLQYUMNSNUaeV2TjwOwfOqO
-	cjy9BtiriRbW96L0/tXoq98OKFjFKyP2UgkHgefkw
-X-Gm-Gg: ATEYQzzeWsdqULgaMpGn4vx7MpSFZdKHW0Ds9NZ7JEQlVISJaJnqhz18qQBxKBKVq3K
-	WzoLGlK466PiMmNVvv/9Js+ocvZNoQAf+oti09AWyQ7DrWgyc72AyL5Qqp484dKLUBB/RcCAlHM
-	NigpAlVdwP6B9ykEKFRq03Yo1hooepXiVGwHbFQyqjw1K1FketlKkSCfb1reHMzsaTL0SZk78L7
-	6BcPeRCdjV1LvK2USSE2TT1BW4ctRcfQ7kS1pCanz6/y+yDlYAWRuSzpGvORowC1Nm72LvfnIPb
-	kt9sOVlEkdoAliJ3iFjSav3rzi9UgR+WvNlj
-X-Received: by 2002:a05:6402:a294:10b0:660:bcdc:af50 with SMTP id
- 4fb4d7f45d1cf-663bd2d456dmr19000a12.6.1773405666960; Fri, 13 Mar 2026
- 05:41:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dyFxil+n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98853C19421;
+	Fri, 13 Mar 2026 13:33:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773408835;
+	bh=AsX3C2hlUvkqktdPj7+pB/3rNjxKkhPkB+9v9ZcQKf4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dyFxil+nKP2AhM6je5QpP0RaFX8/v/cDk7TTmgWg0TVuLcn9ryIJFFOKybiUVi50U
+	 uvdQc8Y6kpDTi0BHcpPulUDB2ubvS6FkKhBDLSu9E0be+AZWlWih7uFLO3+aUElFmu
+	 13ruL9CC83R8seUZq5gEOLGkDUjBcgQgaUXRI3n/91MR+gcPDy31cMuznMDyMbXhVH
+	 bNDvCk/LVVtkfJBhMSijeGJi0YyQ09xstTBjmqtsJbqV6hlwX23eVom1+8lBf/DwiL
+	 2LWG0BN+/BCF79835ZbyBurws49fKNyB2/jDJGmoytzZtrwJeDPyrFb34LppYcAbh5
+	 csTNrevq9Mhxg==
+Date: Fri, 13 Mar 2026 14:33:04 +0100
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet <qmo@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, 
+	Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>, 
+	David Lechner <dlechner@baylibre.com>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Willy Tarreau <w@1wt.eu>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
+	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+	Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
+	Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v4 28/30] selftests/hid: Append extra cflags
+Message-ID: <abQR8dXwrbX47SEQ@beelink>
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
+ <20260311-tools_build_fix_zero_init-v4-28-9e35bdb99cb3@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
- <20260311-kcov-extrecord-v1-2-68f03c4a05ad@google.com> <CACT4Y+aLx-ZG7FqYNrhrABi1bgNo6AnG5JL9tq+mCPRAnx37Tg@mail.gmail.com>
- <CACT4Y+aXejLgWT=56_d-D04guRUi5iAnAeR-rV_Q6n4qL5g7aQ@mail.gmail.com>
-In-Reply-To: <CACT4Y+aXejLgWT=56_d-D04guRUi5iAnAeR-rV_Q6n4qL5g7aQ@mail.gmail.com>
-From: Jann Horn <jannh@google.com>
-Date: Fri, 13 Mar 2026 13:40:30 +0100
-X-Gm-Features: AaiRm530hfORxmkUBDEarDpQOiNDlBDBt4dqsIL4nOCxseky1NajwtHLyN1UmCE
-Message-ID: <CAG48ez2C9aAz633RPqDFZ2e0_Thr-bzf9z8KbfJ7p6n=myV+QQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kcov: wire up compiler instrumentation for CONFIG_KCOV_EXT_RECORDS
-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260311-tools_build_fix_zero_init-v4-28-9e35bdb99cb3@arm.com>
 
-On Fri, Mar 13, 2026 at 8:59=E2=80=AFAM Dmitry Vyukov <dvyukov@google.com> =
-wrote:
-> On Fri, 13 Mar 2026 at 08:53, Dmitry Vyukov <dvyukov@google.com> wrote:
-> > On Wed, 11 Mar 2026 at 22:06, Jann Horn <jannh@google.com> wrote:
-> > > @@ -202,15 +202,10 @@ static notrace unsigned long canonicalize_ip(un=
-signed long ip)
-> > >         return ip;
-> > >  }
-> > >
-> > > -/*
-> > > - * Entry point from instrumented code.
-> > > - * This is called once per basic-block/edge.
-> > > - */
-> > > -void notrace __sanitizer_cov_trace_pc(void)
-> > > +static void notrace kcov_add_pc_record(unsigned long record)
->
-> __alwaysinline just in case
+On Mar 11 2026, Leo Yan wrote:
+> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+> the compiler.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/testing/selftests/hid/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
+> index 50ec9e0406abaf316fba232c5da1967e27d0fa9b..686c5f79ca592c2ce94e37b39ab5c3ebe8483f79 100644
+> --- a/tools/testing/selftests/hid/Makefile
+> +++ b/tools/testing/selftests/hid/Makefile
+> @@ -26,6 +26,7 @@ HOSTPKG_CONFIG := pkg-config
+>  
+>  CFLAGS += -g -O0 -rdynamic -Wall -Werror -I$(OUTPUT)
+>  CFLAGS += -I$(OUTPUT)/tools/include
+> +CFLAGS += $(EXTRA_CFLAGS)
 
-Ack, will add in v2.
+Acked-by: Benjamin Tissoires <bentiss@kernel.org>
+
+Cheers,
+Benjamin
+
+>  
+>  LDLIBS += -lelf -lz -lrt -lpthread
+>  
+> 
+> -- 
+> 2.34.1
+> 
+> 
