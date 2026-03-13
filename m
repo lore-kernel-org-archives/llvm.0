@@ -1,49 +1,49 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C757E2FC881
-	for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 01:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBF634C815
+	for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 03:32:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773366130; cv=none; b=DW7e4eCH/yftZ2H23oDL0usjcWEH4xYSq1JGISqaUulyTrsuawlbwWtn1j+XvQSuPaqsKfkCuVC3RkA0jEglFp7ZI2KJ3PgG1ZYg+vc/y+WuFtxVlvdTJmXslwcP8B7TB9xm8JuZX+gUfGXdi39K+S9BOIkDSXuQHWtBjycw1B8=
+	t=1773372730; cv=none; b=a/Tf8FzTEdUg7sW90bwJYOyG8Q4GRYhwKaHe6OAvroKeQfsVRxT5OnMQcsbcjI8KBSt9GJvFcyppVDno9qrqTihYBaZj+wLb2RuZs7eFjOtZrD6SEn5cOAhOz5j8UTA1a0snW/qtdZ1IXa/NHAcbH1anwFTnnp8si4GpybEwFXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773366130; c=relaxed/simple;
-	bh=7iEWKr3ijBj4/NdUiqjcUPrAMIum0kwkU4p24/Z0aPQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Sla9oQEaJO6M84hb0G38qmSPHwZYqO637CRjwV1+azeBJ5J/+kX+WWqudICjFmo75uBU+dEjzb2DKFLFX0vU3bjXni7bAzdXJh8JQEu5OOtZFyMCNh0bcRT/Vj8ZEI0YG6TniGGVmUXkaHJ2XlL6hlp/Z37xlyUSMS6XCgRpb5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WRSzET9a; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1773372730; c=relaxed/simple;
+	bh=eSvSbJkq+2fFUVbx+dy2xdUGtaFDIp0wSq+lVvwWHAc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=S25TaFxoKJnt9RWgnkenU6KuKNHnzEhubmdgQVraO54BenIht+hSF3S2GbkayPieMq5snV6r1C2DceAQ1vbUxjaLC9dcnnPfMgQ1Z0Nq3T4XxnvmURJ8ze6ePC54Q5hSqgaRgKzJ1yya6fjh8Pu+UCmAV9KxZJNoe2EaxscWUhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AwtadT1l; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WRSzET9a"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AwtadT1l"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773366127;
+	s=mimecast20190719; t=1773372727;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=NjAclQc2EtKa3YrPtziYeYgCX59sSXa/rSClG6OF55U=;
-	b=WRSzET9aU5Osni4QsRMUHekk6B5J+gNa45IIrPvqJ38TmaLCW9JcQmItuCQ9FZS8yKWYSM
-	nIbWczdxprdKsJgirbhjgsVZw3axN0a3c5uzERwkmL/1HPPqWFwN7Na/m426JwW88Veq6y
-	u9INs2BuS+frfVJXnqt/aigPLyWEr3Y=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=kM/JCp6G1I/UJ8yZCbqa5Z7YG9Pfk1Gxhhg0yHWFn5M=;
+	b=AwtadT1lOTMmwCGaEcbClg0PMoW+z+TgV2vu7DgT4Vw0fdG/C0qpoRQ1sFRouq6O1Feb5w
+	1j2gLaWASoZB70uWp09j8wNmIGvCsiUJf0T+QA4wOYoPMpU9k2jgeuuHfPGQCw/xZRsaay
+	C4VH+n7mxdD647lThYFb7jV+Xi4Wm40=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-167-wPW6kaULM-K11p-Re5aRMg-1; Thu,
- 12 Mar 2026 21:42:05 -0400
-X-MC-Unique: wPW6kaULM-K11p-Re5aRMg-1
-X-Mimecast-MFC-AGG-ID: wPW6kaULM-K11p-Re5aRMg_1773366125
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-112-_0rP-dk3MU67oBgZcfRwxQ-1; Thu,
+ 12 Mar 2026 23:32:06 -0400
+X-MC-Unique: _0rP-dk3MU67oBgZcfRwxQ-1
+X-Mimecast-MFC-AGG-ID: _0rP-dk3MU67oBgZcfRwxQ_1773372725
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DFBA21956089
-	for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 01:42:04 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D79521945CB7
+	for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 03:32:04 +0000 (UTC)
 Received: from [172.20.219.202] (unknown [10.30.44.44])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 734D230002DA;
-	Fri, 13 Mar 2026 01:42:04 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 77AF3180035F;
+	Fri, 13 Mar 2026 03:32:04 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc3,
- upstream-mainline, 8004279c)
-Date: Fri, 13 Mar 2026 01:42:04 -0000
+ upstream-mainline, 0257f64b)
+Date: Fri, 13 Mar 2026 03:32:04 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -51,10 +51,10 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <65713.126031221420500635@us-mta-167.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <79887.126031223320600207@us-mta-112.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: GyEEG5CwykRf8SvZCyqX0flwS5cUOFAb_fsnbcJBbFs_1773366125
+X-Mimecast-MFC-PROC-ID: SikdqDSrVMT9T4x_TKPbhLj25ffRDqTx-lfytqteUCM_1773372725
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
@@ -69,15 +69,21 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'nfs-for-7.0-2' of git://git.linux-nfs.org/pr=
-ojects/anna/linux-nfs
+    Commit message: Merge tag 'pm-7.0-rc4' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/rafael/linux-pm
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2382122946
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2382185108
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
 anges:
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
         Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
 d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
@@ -90,23 +96,12 @@ tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
             Affected tests:
                 xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
         Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
 dated" and "ctime not updated"
             URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
 orniev@redhat.com/
             Affected tests:
                 xfstests - nfsv4.2 [x86_64]
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
 
 
 
