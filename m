@@ -1,251 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8055E3909B0;
-	Fri, 13 Mar 2026 12:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773403467; cv=none; b=nlWLwUhRvBZVQLdBXJlIkFrkqnhkd7VpNT1VIzTq4b5L80MYqsgWULC8NqTzyq1lRubSNiUsKPS8+bu+RMd3EkR5z8vyizDGCWEUnG6rwTir9o5h5bV9nrD//tj7ffoyVSUdzwzJy3OFTo2lx2Nn5LKvyZSq/T1BiLpb/Q4hWYk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773403467; c=relaxed/simple;
-	bh=Vn9MKdmospXCDEw0rllXl9HCIunbJ7CLm0zvFF8ui1s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BdhHHBGcA9iGas2Ls/sLZzFdq+JyQ5FFBmWr4zplieM6HPlWDOGnl6Szh6oQjHgcOdr5bW03hK/Xa4VVRj16e/EQ3aj9XPu1WLvARe5B2AAG0UJsYWPKjo5Xfy6obM59+pAjMrBncsBkgbLXp2JAbLdapDGuuIrcRjCtBuH6K+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X9T0fvLT; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EA037B02C
+	for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 12:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773405159; cv=pass; b=ZtLiRdmeGPY764FMayPszHXfk4KP099WFq6qg2nupAalY7il8+65V05jBIbL/BqAlY9XNo7tDVndnuKXqcX0Df8N6zDfGGktHDGx7l6nNOTguaUt/c6mcag3a9+RSvOMoe7/raqfXh6cobGpo0nd3bpS+98Jz/sTQWQRQm8F6FQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773405159; c=relaxed/simple;
+	bh=XcWV/jwv+DaFRFEPs3UtR5auo6Za+XnTz8JF7SS1gE4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GMGPQm5sE/Ikk9fT0NlobERte2Y7ZJKlNla5VQyHQzbbrB4g2MyWoSij9ukJiTkril3fLIlHSNSfBHhRVm9RhoVAbtlhGDD8gjqdylDdma34CWdMOihy2yK0NJ3Za2KI1E0LOYrEdDVUjdfAt93gpBoyINr2J8I2GFzvlUaQAbo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rdTaGInj; arc=pass smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X9T0fvLT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773403458; x=1804939458;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Vn9MKdmospXCDEw0rllXl9HCIunbJ7CLm0zvFF8ui1s=;
-  b=X9T0fvLTRdcl6vxADZYIvpWBk+l79qGJK/U3KE3mfyy6ZOoQdzaQuK+H
-   xBzOShP+KpQ8V6mllisWLiF8BYm95dUy6ALMFPytHQ9CK2keGYVP/xPHL
-   oW3dxLLgBemGa1CCpkLiBVyvk2x9TGoZIc7qPMBit53xFcrpaQ7e7GXG4
-   4G3w9J0zoflpZw/9daJ8bAqzihm5naCL/plcKemyR5fOHxBiK0+sT29Sn
-   zJFId61D94cpFXM4PHNQ6Jsi0hE5yumxwbymq0wUo6p34FuqQF4AORY56
-   3KiR2hofHFO2rtCABf28v7xCOvMHheFQMrsL1UMt9a/mX89B/rKYHqL8K
-   g==;
-X-CSE-ConnectionGUID: Qkfa3eAaTwC1ViWpoUlJVg==
-X-CSE-MsgGUID: Qyqd2db1QAy9hwxvEjVYpQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11727"; a="74477031"
-X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
-   d="scan'208";a="74477031"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 05:04:14 -0700
-X-CSE-ConnectionGUID: xFO41X7NRaq0My1mU5FAsA==
-X-CSE-MsgGUID: TXxtIBCET5qcSAy5YPgqhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,118,1770624000"; 
-   d="scan'208";a="246333775"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa001.fm.intel.com with ESMTP; 13 Mar 2026 05:04:12 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w11FS-000000003eX-0A44;
-	Fri, 13 Mar 2026 12:04:10 +0000
-Date: Fri, 13 Mar 2026 13:03:25 +0100
-From: kernel test robot <lkp@intel.com>
-To: Miklos Szeredi <mszeredi@redhat.com>, linux-fsdevel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bernd Schubert <bernd@bsbernd.com>
-Subject: Re: [PATCH v2 6/6] fuse: support FSCONFIG_SET_FD for "fd" option
-Message-ID: <202603131356.P70o4OPq-lkp@intel.com>
-References: <20260312194019.3077902-7-mszeredi@redhat.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rdTaGInj"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6628cc1bd69so7197a12.1
+        for <llvm@lists.linux.dev>; Fri, 13 Mar 2026 05:32:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773405157; cv=none;
+        d=google.com; s=arc-20240605;
+        b=OS8aOunPs9geeBAzGfFbptncTw5/91mzRa/1VvFgPubd43n0TfW9K6wvUiC6KAhR8Q
+         f4nbnBQ2nHFOKJBCYHS5J3VDIAChP6iE0uGrN25UYpH41fsu4J3m0oy3SA0BwVljweI2
+         5tX8fLY3/cLqdHXV6WLLPL+UqUATc5FHi2QbWkdxeBvkfhLCkCyAbH3NzR+IatNNnL0C
+         XXUD4wV5b8qrd0Y3wmwQe0rfw7MSeyTEnurJxVg0oa61t/P9huGvCB+V8be4hDG2eyVm
+         XclnIovBudehnbunJwkYBvNMJSIcUJjC/AKFbXHphztEIXc8BF/+0Ja4f84CxECS09OF
+         okug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9epzK3C05Aqic050HU4sGv3sK4NyLKb/ZPKh0TB3haA=;
+        fh=W1FecyhMhI4nu7iCDrGl9E7O5MzTUAXxEUa4EeE8nKI=;
+        b=hny3W/3vXBqR2y6XwnjuT5t/my14qwirlX2+hkpbJS85RGzBKMOLBcqRkzar4oPjf5
+         TRP4nr4D/FSinXqxYMJpEowjd1F06hTJEIWcPguEa/obzr9uIFhUZPeK+T8rCZIylRC0
+         v8oKrtbiK0Yk9RNyrFNkg3+jEPy5nj32ccq9IoSepA1mirhvFJj+fLHO97NLc2L5rp7V
+         Y4o+GxFJAT2lBpD5cLPwjR+/YLiykULtJTg6fYXinBe6AUbPGrBsxlanoY/mMiQUxDCE
+         jPpvMjpmw8SIpmYfCS+++2PIgYB9JO+22gAy+CkNn1rlwFq/RIpnIsI2Xo1Fwpt41556
+         vBhw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1773405157; x=1774009957; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9epzK3C05Aqic050HU4sGv3sK4NyLKb/ZPKh0TB3haA=;
+        b=rdTaGInj/fZbxnbvRpb6A1pfmpkGj1qN8kyh47pJdTQ5Ep8O6fEsdRPOkHZpEHWR8g
+         b/xEnE7HRhZ6L5vCab0YpHtddfAGPVlmTO0Q/vk9kxprSuR0Pow5jvB30ADXHoH9hD+6
+         FDxxvNvKgTeTYkiOaxJPoNppi0bxUYTnHNfM4m0P77hNzNn0UI1+DXy4qF48Td3AXb+B
+         OL/GdNw4ZBAcR/QRsXq11nhjo+64/gC1GKggiMcloN7O13lVPsaYHls7703jnIGOGqxL
+         P1aOpgfhtsuYjR5Hs3tAEdAJpe4oZ/XItvZh4uUeKjojjEQcFHy4K+6h5tiWqE+3xhVq
+         18FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773405157; x=1774009957;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9epzK3C05Aqic050HU4sGv3sK4NyLKb/ZPKh0TB3haA=;
+        b=pqWUnnqk3ypX2F9nbQfSv9KPqj6YzXkg9TXcmIES04MgYJmIvNsI2yMEntFm4LVMix
+         3hGR0rEZJJPCCCskdupYublviqh/+TvAlb4lcAq7Ce76XiVywKQEW645D2NriTG6Roos
+         wItHdVcV+s5w/wz6FbyOuH/JycOb8GHGDZLbIst4VjAW2o8/0p7S8XzUcrRS9Y5zj8nQ
+         gikkFbRAOeizwjJrBgZcuLf9hWFt33qaKBx8+Ehd0QqMUXj25a8zPV4l0FEtmdZ3sDXp
+         3p6LpxYsq4JwlXVhijep+WRne9rrmCom4fSBg0UOjRpRoGeDtwJ6EPrhCYtqDiPrzZ5E
+         NmMg==
+X-Forwarded-Encrypted: i=1; AJvYcCV2g3yqSXidBFZC6ww8i4TilQcCl8cBp246/Qg8/MKnnRwyDML/meP0hlnsmoGSzDeKYGO6@lists.linux.dev
+X-Gm-Message-State: AOJu0YxSc9tmp+LiZO4kSNjFDNzLVhjGbD6Z8f3eNrDR2LmsyE5WyC4h
+	nXZ6DMiTZWrQT1YSPQTnhyGUlKeSzxoK7kfYkoc7K86p3rjSUaAnm3PbYnbrwQU5rY4VhBvhCQc
+	/hkQ70mZQXaBARQnn2vqlMan/VWWu6bnJz/0PAE+l
+X-Gm-Gg: ATEYQzyKJnIL3zHpUSyZeeOGyMlQLm+S7mVontp2b0700xiCD2WZc3cMwnOFss5PGAJ
+	sxY3tERfSzjX+nMQdDaLjttQxq8eS6lN1mlVUfBUq0dwffCWJsnM9CfzYdu5VZIV39+RqBC2OhQ
+	2vHcj690EenfiCFSvwlq5Qw2pLbhxvK1FjKkKz4+2RpNPu5zmZuZB6EWIcHy+TsXYryoG0zGBV1
+	frA3+7z9DhJ5UGI54kL219CqCfqSlgCWgN5qyYef4I9oyX/Q0dHHW+DtiBpdibJZm9gZfkO5SMI
+	rxhrqiJShHUImk5UP4RFOVCJJsE7qUI0tQmy
+X-Received: by 2002:aa7:c497:0:b0:664:2c92:536b with SMTP id
+ 4fb4d7f45d1cf-6642c9254fdmr13109a12.1.1773405156207; Fri, 13 Mar 2026
+ 05:32:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260312194019.3077902-7-mszeredi@redhat.com>
+References: <20260311-kcov-extrecord-v1-0-68f03c4a05ad@google.com>
+ <20260311-kcov-extrecord-v1-3-68f03c4a05ad@google.com> <CACT4Y+bRTjPG7pw-k9okGZ=Gv81b+_AgdQcCxWxpF25guYpo=w@mail.gmail.com>
+In-Reply-To: <CACT4Y+bRTjPG7pw-k9okGZ=Gv81b+_AgdQcCxWxpF25guYpo=w@mail.gmail.com>
+From: Jann Horn <jannh@google.com>
+Date: Fri, 13 Mar 2026 13:31:59 +0100
+X-Gm-Features: AaiRm51AsQr-GnfrmT-s2mK0Siar6QSBwzDlciobq2qYdJRCAb9h-hiOndoW4mU
+Message-ID: <CAG48ez1STjb-QCbZzwJRYGfysnUs=xLSFUObN1FkWjn4PYhDfA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] kcov: introduce extended PC coverage collection mode
+To: Dmitry Vyukov <dvyukov@google.com>
+Cc: Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Miklos,
+On Fri, Mar 13, 2026 at 8:58=E2=80=AFAM Dmitry Vyukov <dvyukov@google.com> =
+wrote:
+> On Wed, 11 Mar 2026 at 22:06, Jann Horn <jannh@google.com> wrote:
+> > This is the second half of CONFIG_KCOV_EXT_RECORDS.
+> >
+> > Introduce a new KCOV mode KCOV_TRACE_PC_EXT which replaces the upper 8 =
+bits
+> > of recorded instruction pointers with metadata. For now, userspace can =
+use
+> > this metadata to distinguish three types of records:
+[...]
+> > @@ -1519,8 +1519,10 @@ struct task_struct {
+> >         int                             kcov_sequence;
+> >
+> >         /* Collect coverage from softirq context: */
+> > -       unsigned int                    kcov_softirq;
+> > -#endif
+> > +       unsigned int                    kcov_softirq : 1;
+> > +       /* Emit KCOV records in extended format: */
+> > +       unsigned int                    kcov_ext_format : 1;
+>
+> Setting/saving/restoring this flag is fragile. I afraid some of future
+> patches can break it in some corner cases.
+> Can we have a new kcov_mode and use some mask check on tracing fast
+> path, so that it's as cheap as the current =3D=3D kcov_mode comparison?
 
-kernel test robot noticed the following build errors:
+Yeah, I also thought that what I'm doing here didn't look particularly
+pretty... I'll try to implement something like what you suggested for
+v2.
 
-[auto build test ERROR on mszeredi-fuse/for-next]
-[also build test ERROR on linus/master v7.0-rc3 next-20260312]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >  void notrace __sanitizer_cov_trace_pc_exit(void)
+> >  {
+> > +       unsigned long record;
+> > +
+> > +       /*
+> > +        * Unlike __sanitizer_cov_trace_pc_entry(), this PC should only=
+ be
+> > +        * reported in extended mode.
+>
+> It would help to explain _why_. The fact that it's not traced is
+> already in the code.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Miklos-Szeredi/fuse-create-fuse_dev-on-dev-fuse-open-instead-of-mount/20260313-153922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git for-next
-patch link:    https://lore.kernel.org/r/20260312194019.3077902-7-mszeredi%40redhat.com
-patch subject: [PATCH v2 6/6] fuse: support FSCONFIG_SET_FD for "fd" option
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260313/202603131356.P70o4OPq-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260313/202603131356.P70o4OPq-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603131356.P70o4OPq-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/fuse/inode.c:916:2: error: cannot jump from switch statement to this case label
-     916 |         default:
-         |         ^
-   fs/fuse/inode.c:864:16: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     864 |                 struct file *file __free(fput) = fget(result.uint_32);
-         |                              ^
-   fs/fuse/inode.c:910:2: error: cannot jump from switch statement to this case label
-     910 |         case OPT_BLKSIZE:
-         |         ^
-   fs/fuse/inode.c:864:16: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     864 |                 struct file *file __free(fput) = fget(result.uint_32);
-         |                              ^
-   fs/fuse/inode.c:906:2: error: cannot jump from switch statement to this case label
-     906 |         case OPT_MAX_READ:
-         |         ^
-   fs/fuse/inode.c:864:16: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     864 |                 struct file *file __free(fput) = fget(result.uint_32);
-         |                              ^
-   fs/fuse/inode.c:902:2: error: cannot jump from switch statement to this case label
-     902 |         case OPT_ALLOW_OTHER:
-         |         ^
-   fs/fuse/inode.c:864:16: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     864 |                 struct file *file __free(fput) = fget(result.uint_32);
-         |                              ^
-   fs/fuse/inode.c:898:2: error: cannot jump from switch statement to this case label
-     898 |         case OPT_DEFAULT_PERMISSIONS:
-         |         ^
-   fs/fuse/inode.c:864:16: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     864 |                 struct file *file __free(fput) = fget(result.uint_32);
-         |                              ^
-   fs/fuse/inode.c:886:2: error: cannot jump from switch statement to this case label
-     886 |         case OPT_GROUP_ID:
-         |         ^
-   fs/fuse/inode.c:864:16: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     864 |                 struct file *file __free(fput) = fget(result.uint_32);
-         |                              ^
-   fs/fuse/inode.c:874:2: error: cannot jump from switch statement to this case label
-     874 |         case OPT_USER_ID:
-         |         ^
-   fs/fuse/inode.c:864:16: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     864 |                 struct file *file __free(fput) = fget(result.uint_32);
-         |                              ^
-   fs/fuse/inode.c:867:2: error: cannot jump from switch statement to this case label
-     867 |         case OPT_ROOTMODE:
-         |         ^
-   fs/fuse/inode.c:864:16: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     864 |                 struct file *file __free(fput) = fget(result.uint_32);
-         |                              ^
-   8 errors generated.
-
-
-vim +916 fs/fuse/inode.c
-
-510714a1f72bd3f Miklos Szeredi 2026-03-12  821  
-84c215075b5723a Miklos Szeredi 2021-08-04  822  static int fuse_parse_param(struct fs_context *fsc, struct fs_parameter *param)
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  823  {
-c30da2e981a703c David Howells  2019-03-25  824  	struct fs_parse_result result;
-84c215075b5723a Miklos Szeredi 2021-08-04  825  	struct fuse_fs_context *ctx = fsc->fs_private;
-c30da2e981a703c David Howells  2019-03-25  826  	int opt;
-525bd65aa759ec3 Eric Sandeen   2024-07-02  827  	kuid_t kuid;
-525bd65aa759ec3 Eric Sandeen   2024-07-02  828  	kgid_t kgid;
-c30da2e981a703c David Howells  2019-03-25  829  
-84c215075b5723a Miklos Szeredi 2021-08-04  830  	if (fsc->purpose == FS_CONTEXT_FOR_RECONFIGURE) {
-e8b20a474cf2c42 Miklos Szeredi 2020-07-14  831  		/*
-e8b20a474cf2c42 Miklos Szeredi 2020-07-14  832  		 * Ignore options coming from mount(MS_REMOUNT) for backward
-e8b20a474cf2c42 Miklos Szeredi 2020-07-14  833  		 * compatibility.
-e8b20a474cf2c42 Miklos Szeredi 2020-07-14  834  		 */
-84c215075b5723a Miklos Szeredi 2021-08-04  835  		if (fsc->oldapi)
-e8b20a474cf2c42 Miklos Szeredi 2020-07-14  836  			return 0;
-e8b20a474cf2c42 Miklos Szeredi 2020-07-14  837  
-84c215075b5723a Miklos Szeredi 2021-08-04  838  		return invalfc(fsc, "No changes allowed in reconfigure");
-b330966f79fb4fd Miklos Szeredi 2020-07-14  839  	}
-b330966f79fb4fd Miklos Szeredi 2020-07-14  840  
-84c215075b5723a Miklos Szeredi 2021-08-04  841  	opt = fs_parse(fsc, fuse_fs_parameters, param, &result);
-c30da2e981a703c David Howells  2019-03-25  842  	if (opt < 0)
-c30da2e981a703c David Howells  2019-03-25  843  		return opt;
-c30da2e981a703c David Howells  2019-03-25  844  
-c30da2e981a703c David Howells  2019-03-25  845  	switch (opt) {
-c30da2e981a703c David Howells  2019-03-25  846  	case OPT_SOURCE:
-84c215075b5723a Miklos Szeredi 2021-08-04  847  		if (fsc->source)
-84c215075b5723a Miklos Szeredi 2021-08-04  848  			return invalfc(fsc, "Multiple sources specified");
-84c215075b5723a Miklos Szeredi 2021-08-04  849  		fsc->source = param->string;
-c30da2e981a703c David Howells  2019-03-25  850  		param->string = NULL;
-c30da2e981a703c David Howells  2019-03-25  851  		break;
-c30da2e981a703c David Howells  2019-03-25  852  
-c30da2e981a703c David Howells  2019-03-25  853  	case OPT_SUBTYPE:
-c30da2e981a703c David Howells  2019-03-25  854  		if (ctx->subtype)
-84c215075b5723a Miklos Szeredi 2021-08-04  855  			return invalfc(fsc, "Multiple subtypes specified");
-c30da2e981a703c David Howells  2019-03-25  856  		ctx->subtype = param->string;
-c30da2e981a703c David Howells  2019-03-25  857  		param->string = NULL;
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  858  		return 0;
-c30da2e981a703c David Howells  2019-03-25  859  
-c30da2e981a703c David Howells  2019-03-25  860  	case OPT_FD:
-6ad877148e563ae Miklos Szeredi 2026-03-12  861  		if (param->type == fs_value_is_file)
-6ad877148e563ae Miklos Szeredi 2026-03-12  862  			return fuse_opt_fd(fsc, param->file);
-6ad877148e563ae Miklos Szeredi 2026-03-12  863  
-6ad877148e563ae Miklos Szeredi 2026-03-12  864  		struct file *file __free(fput) = fget(result.uint_32);
-6ad877148e563ae Miklos Szeredi 2026-03-12  865  		return fuse_opt_fd(fsc, file);
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  866  
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  867  	case OPT_ROOTMODE:
-c30da2e981a703c David Howells  2019-03-25  868  		if (!fuse_valid_type(result.uint_32))
-84c215075b5723a Miklos Szeredi 2021-08-04  869  			return invalfc(fsc, "Invalid rootmode");
-c30da2e981a703c David Howells  2019-03-25  870  		ctx->rootmode = result.uint_32;
-cabdb4fa2f666fa zhengbin       2020-01-14  871  		ctx->rootmode_present = true;
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  872  		break;
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  873  
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  874  	case OPT_USER_ID:
-eea6a8322efd398 Eric Sandeen   2024-07-02  875  		kuid = result.uid;
-525bd65aa759ec3 Eric Sandeen   2024-07-02  876  		/*
-525bd65aa759ec3 Eric Sandeen   2024-07-02  877  		 * The requested uid must be representable in the
-525bd65aa759ec3 Eric Sandeen   2024-07-02  878  		 * filesystem's idmapping.
-525bd65aa759ec3 Eric Sandeen   2024-07-02  879  		 */
-525bd65aa759ec3 Eric Sandeen   2024-07-02  880  		if (!kuid_has_mapping(fsc->user_ns, kuid))
-525bd65aa759ec3 Eric Sandeen   2024-07-02  881  			return invalfc(fsc, "Invalid user_id");
-525bd65aa759ec3 Eric Sandeen   2024-07-02  882  		ctx->user_id = kuid;
-cabdb4fa2f666fa zhengbin       2020-01-14  883  		ctx->user_id_present = true;
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  884  		break;
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  885  
-87729a5514e855c Miklos Szeredi 2005-09-09  886  	case OPT_GROUP_ID:
-eea6a8322efd398 Eric Sandeen   2024-07-02  887  		kgid = result.gid;
-525bd65aa759ec3 Eric Sandeen   2024-07-02  888  		/*
-525bd65aa759ec3 Eric Sandeen   2024-07-02  889  		 * The requested gid must be representable in the
-525bd65aa759ec3 Eric Sandeen   2024-07-02  890  		 * filesystem's idmapping.
-525bd65aa759ec3 Eric Sandeen   2024-07-02  891  		 */
-525bd65aa759ec3 Eric Sandeen   2024-07-02  892  		if (!kgid_has_mapping(fsc->user_ns, kgid))
-84c215075b5723a Miklos Szeredi 2021-08-04  893  			return invalfc(fsc, "Invalid group_id");
-525bd65aa759ec3 Eric Sandeen   2024-07-02  894  		ctx->group_id = kgid;
-cabdb4fa2f666fa zhengbin       2020-01-14  895  		ctx->group_id_present = true;
-87729a5514e855c Miklos Szeredi 2005-09-09  896  		break;
-87729a5514e855c Miklos Szeredi 2005-09-09  897  
-1e9a4ed9396e9c3 Miklos Szeredi 2005-09-09  898  	case OPT_DEFAULT_PERMISSIONS:
-cabdb4fa2f666fa zhengbin       2020-01-14  899  		ctx->default_permissions = true;
-1e9a4ed9396e9c3 Miklos Szeredi 2005-09-09  900  		break;
-1e9a4ed9396e9c3 Miklos Szeredi 2005-09-09  901  
-1e9a4ed9396e9c3 Miklos Szeredi 2005-09-09  902  	case OPT_ALLOW_OTHER:
-cabdb4fa2f666fa zhengbin       2020-01-14  903  		ctx->allow_other = true;
-1e9a4ed9396e9c3 Miklos Szeredi 2005-09-09  904  		break;
-1e9a4ed9396e9c3 Miklos Szeredi 2005-09-09  905  
-db50b96c0f28a21 Miklos Szeredi 2005-09-09  906  	case OPT_MAX_READ:
-c30da2e981a703c David Howells  2019-03-25  907  		ctx->max_read = result.uint_32;
-db50b96c0f28a21 Miklos Szeredi 2005-09-09  908  		break;
-db50b96c0f28a21 Miklos Szeredi 2005-09-09  909  
-d809161402e9f99 Miklos Szeredi 2006-12-06  910  	case OPT_BLKSIZE:
-c30da2e981a703c David Howells  2019-03-25  911  		if (!ctx->is_bdev)
-84c215075b5723a Miklos Szeredi 2021-08-04  912  			return invalfc(fsc, "blksize only supported for fuseblk");
-c30da2e981a703c David Howells  2019-03-25  913  		ctx->blksize = result.uint_32;
-d809161402e9f99 Miklos Szeredi 2006-12-06  914  		break;
-d809161402e9f99 Miklos Szeredi 2006-12-06  915  
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09 @916  	default:
-c30da2e981a703c David Howells  2019-03-25  917  		return -EINVAL;
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  918  	}
-5a53368277efa2d Miklos Szeredi 2005-09-09  919  
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  920  	return 0;
-c30da2e981a703c David Howells  2019-03-25  921  }
-d8a5ba45457e4a2 Miklos Szeredi 2005-09-09  922  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Right, I'll change the comment to explain that this callback isn't at
+the start of a basic block, and that the basic block is already
+covered by a preceding hook call.
