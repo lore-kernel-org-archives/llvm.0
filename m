@@ -1,60 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0BA3FFD;
-	Sat, 14 Mar 2026 00:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FF934F475;
+	Sat, 14 Mar 2026 05:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773448820; cv=none; b=TOU7/uFpih32Lna0/v3N0owEE9MTZJNPGxXyqsXlxMn6aTD7LjP0WJE2XfWJcO/fQvTgU89esCHDVsGeqPWUVViO036Z6sqqOZ8sGMuyc1RFNLtiog3Uo2JBx7rTbYMfuiWz5aKNKzAitgm6TcVpYFCVL1XraMwbvM3ZVepXq7A=
+	t=1773464813; cv=none; b=Jk2SQ6yISyWleHdru+NE+elJDCn/FhCDbhMI2w02Plu8mMh3TvZxa8Y75lxcPNSeYEyJm+9Tet2yJvGnfFFRAXEtLNxHwYJc1+4iqmtcGQmF0Kc7OUMty263ISvKPyskdvdkcVs+uKZInX2Su9AKXD2gwWbtOje/vE/4V8O19E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773448820; c=relaxed/simple;
-	bh=0gr9KSxldAsVL37ewdEm7gS+QwXkMqtMYEStjECI/A0=;
+	s=arc-20240116; t=1773464813; c=relaxed/simple;
+	bh=919cWECtI9nDP95JX3t80/DiyeQ2NSU98r0FTBoXwlk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aHvbDkvPo2TSgPfMuqtL1M02DO2Z2v7wqIBpcvKIdY/ZT1XhPsaOxoeIZ1KcJGss+DYPsA0hQKwcREJ8HbWDcjh7QUDHlPGZ6fcmVDloNBxjW9sLej3MU+XtRfhOXfvIlkQt4mfevf6SOn0Y41BKdF5W3oMZJo35WWnw24xwpCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SymjV1g9; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=mQ1ywSyYtVoIeAq5MgSLwltnbdqfI0e5OAZs6TuBjQUiPPkCIZW5AFTp1FpOkHroh+v/n1SuVZWiciGNSwIqKYlJiUhXZm508X7UbcYC04lOkfHGpYJaaLFKcqFjsNIEVwpQzyuSJs06JB3IftbskWFbkjmdaq403zTfhxUGVRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lflj/3Eo; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SymjV1g9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F20C19421;
-	Sat, 14 Mar 2026 00:40:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773448819;
-	bh=0gr9KSxldAsVL37ewdEm7gS+QwXkMqtMYEStjECI/A0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SymjV1g9y9ackIFgNet5bLgMQiyOi+sQJ3HWOAAavOgS556/ugt+dfQ6Wl/j1jzc8
-	 Tm87cle8BQTjx1hOok2oZek/8PSILyrU8EaUm1CDgBGexy+w3hbhdYxgLYFBXlJcGm
-	 xQ4/vGTpHXi1lLJMWPqrir6QkVZVjMYdp3R7oZrrV3TRfd5O3bouY9utN6q2p3OrH9
-	 bA1J3HOjBlmxaSdTsY6Y6uOerD+hwaRY93rHxGCzwWuvk4Jt6cMQAPBPlLRnpATnUv
-	 zDFR7eI4UJ5e+bfXP5qKuS0ptUR2JKTATZ1bd54cYt3Ow1OSpnduBdc9czgQHEr4ig
-	 M7Xtxnz3uxMjg==
-Date: Fri, 13 Mar 2026 17:40:12 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, linux-mm@kvack.org,
-	Matthew Maurer <mmaurer@google.com>
-Subject: Re: [PATCH v2 3/3] build: rust: provide an option to inline C
- helpers into Rust
-Message-ID: <20260314004012.GD534169@ax162>
-References: <20260203-inline-helpers-v2-0-beb8547a03c9@google.com>
- <20260203-inline-helpers-v2-3-beb8547a03c9@google.com>
- <aasPsbMEsX6iGUl8@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lflj/3Eo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773464811; x=1805000811;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=919cWECtI9nDP95JX3t80/DiyeQ2NSU98r0FTBoXwlk=;
+  b=Lflj/3EoeVgy3N09JaKR0MgICN0aBts8S7CQGO1KZgvUR3Y8fPUU52qb
+   y7c+pVeLbpQ2iBtGLYFYw/7nXKCYhGe4rcdydLI5eI8PJtYxGeOl199HE
+   k2+YCymmXnypA21THoDK6GVm6gHGuxEwxOUdBU03JcCOpzpoZlmhpHZA9
+   ypN5TE+MRwsYwR5KWdkTVlibGEdNokFzdBNQ0L/7aWHiCUujQ7ZRemfap
+   2dyR/DGspcvHGF2UK0v3bPT8eTxz6NgpWHDFw7eNG0P94Xe3/a15mlgiH
+   0xf4BSEu7doqgjI/TT6zW+bPzWikj8/uiEABz5Rgs2OfkfbNZo3MBaqhT
+   g==;
+X-CSE-ConnectionGUID: cuaGDKP+Ri2xNiV5pdG0Yw==
+X-CSE-MsgGUID: +nOijCVRSIm7EpVjxdCMdA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11728"; a="62136402"
+X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
+   d="scan'208";a="62136402"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 22:06:50 -0700
+X-CSE-ConnectionGUID: ty5fyfgcTXOqimCeP2E0mQ==
+X-CSE-MsgGUID: DuJcevY8REuf3+NBH17ceQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
+   d="scan'208";a="246456319"
+Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 13 Mar 2026 22:06:47 -0700
+Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w1HD2-000000004fb-0fYu;
+	Sat, 14 Mar 2026 05:06:44 +0000
+Date: Sat, 14 Mar 2026 13:06:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chuck Lever <cel@kernel.org>, NeilBrown <neilb@ownmail.net>,
+	Jeff Layton <jlayton@kernel.org>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <dai.ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	Leon Romanovsky <leon@kernel.org>, Christoph Hellwig <hch@lst.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-nfs@vger.kernel.org, linux-rdma@vger.kernel.org,
+	Chuck Lever <chuck.lever@oracle.com>
+Subject: Re: [PATCH v2 2/2] svcrdma: Use contiguous pages for RDMA Read sink
+ buffers
+Message-ID: <202603141225.oTCKSz8H-lkp@intel.com>
+References: <20260312134008.7387-3-cel@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,35 +69,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aasPsbMEsX6iGUl8@google.com>
+In-Reply-To: <20260312134008.7387-3-cel@kernel.org>
 
-On Fri, Mar 06, 2026 at 05:32:33PM +0000, Alice Ryhl wrote:
-> On Tue, Feb 03, 2026 at 11:34:10AM +0000, Alice Ryhl wrote:
-> >  $(obj)/bindings/bindings_helpers_generated.rs: $(src)/helpers/helpers.c FORCE
-> >  	$(call if_changed_dep,bindgen)
-> >  
-> > +quiet_cmd_rust_helper = HELPER  $@
-> > +      cmd_rust_helper = \
-> > +	$(CC) $(filter-out $(CFLAGS_REMOVE_helpers/helpers.o), $(c_flags)) \
-> > +		-c -g0 $< $(if $(filter %_module.bc,$@),-DMODULE) -emit-llvm -o $@
-> > +
-> > +$(obj)/helpers/helpers.bc $(obj)/helpers/helpers_module.bc: $(src)/helpers/helpers.c FORCE
-> > +	+$(call if_changed_dep,rust_helper)
-> 
-> I think this needs:
-> 
-> $(obj)/helpers/helpers.bc: private part-of-builtin := y
-> $(obj)/helpers/helpers_module.bc: private part-of-module := y
-> 
-> at least it seems to make a difference for AutoFDO.
+Hi Chuck,
 
-Would
+kernel test robot noticed the following build errors:
 
-  $(obj)/helpers/helpers.bc $(obj)/helpers/helpers_module.bc: private is-kernel-object := y
+[auto build test ERROR on v7.0-rc1]
+[also build test ERROR on next-20260311]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-work as well? Presumably, this is because c_flags only has the AutoFDO
-flags when is-kernel-object is set, which is only true when
-helpers/helpers.o is a part of obj-y.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chuck-Lever/RDMA-rw-Fix-MR-pool-exhaustion-in-bvec-RDMA-READ-path/20260313-085521
+base:   v7.0-rc1
+patch link:    https://lore.kernel.org/r/20260312134008.7387-3-cel%40kernel.org
+patch subject: [PATCH v2 2/2] svcrdma: Use contiguous pages for RDMA Read sink buffers
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260314/202603141225.oTCKSz8H-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260314/202603141225.oTCKSz8H-lkp@intel.com/reproduce)
 
-Cheers,
-Nathan
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603141225.oTCKSz8H-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/sunrpc/xprtrdma/svc_rdma_rw.c:813:3: error: call to undeclared function 'svc_rqst_page_release'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   svc_rqst_page_release(rqstp,
+                   ^
+   net/sunrpc/xprtrdma/svc_rdma_rw.c:813:3: note: did you mean 'svc_rdma_cc_release'?
+   net/sunrpc/xprtrdma/svc_rdma_rw.c:193:6: note: 'svc_rdma_cc_release' declared here
+   void svc_rdma_cc_release(struct svcxprt_rdma *rdma,
+        ^
+   1 error generated.
+
+
+vim +/svc_rqst_page_release +813 net/sunrpc/xprtrdma/svc_rdma_rw.c
+
+   779	
+   780	/*
+   781	 * svc_rdma_fill_contig_bvec - Replace rq_pages with a contiguous allocation
+   782	 * @rqstp: RPC transaction context
+   783	 * @head: context for ongoing I/O
+   784	 * @bv: bvec entry to fill
+   785	 * @pages_left: number of data pages remaining in the segment
+   786	 * @len_left: bytes remaining in the segment
+   787	 *
+   788	 * On success, fills @bv with a bvec spanning the contiguous range and
+   789	 * advances rc_curpage/rc_page_count. Returns the byte length covered,
+   790	 * or zero if the allocation failed or would overrun rq_maxpages.
+   791	 */
+   792	static unsigned int
+   793	svc_rdma_fill_contig_bvec(struct svc_rqst *rqstp,
+   794				  struct svc_rdma_recv_ctxt *head,
+   795				  struct bio_vec *bv, unsigned int pages_left,
+   796				  unsigned int len_left)
+   797	{
+   798		unsigned int order, alloc_nr, chunk_pages, chunk_len, i;
+   799		struct page *page;
+   800	
+   801		page = svc_rdma_alloc_read_pages(pages_left, &order);
+   802		if (!page)
+   803			return 0;
+   804		alloc_nr = 1 << order;
+   805	
+   806		if (head->rc_curpage + alloc_nr > rqstp->rq_maxpages) {
+   807			for (i = 0; i < alloc_nr; i++)
+   808				__free_page(page + i);
+   809			return 0;
+   810		}
+   811	
+   812		for (i = 0; i < alloc_nr; i++) {
+ > 813			svc_rqst_page_release(rqstp,
+   814					      rqstp->rq_pages[head->rc_curpage + i]);
+   815			rqstp->rq_pages[head->rc_curpage + i] = page + i;
+   816		}
+   817	
+   818		chunk_pages = min(alloc_nr, pages_left);
+   819		chunk_len = min_t(unsigned int, chunk_pages << PAGE_SHIFT, len_left);
+   820		bvec_set_page(bv, page, chunk_len, 0);
+   821		head->rc_page_count += chunk_pages;
+   822		head->rc_curpage += chunk_pages;
+   823		return chunk_len;
+   824	}
+   825	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
