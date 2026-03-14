@@ -1,134 +1,170 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2C022A80D
-	for <llvm@lists.linux.dev>; Sat, 14 Mar 2026 11:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773486946; cv=pass; b=SlWnBpg+dgCZdF3U9Ijhx5TZQDv2cfUsGj1p/8Dh9gljWkTSoTJQbIdkhN1GryjbecGdMXx9zGW10IvBeFJqK/sIix5CXjKNqxrLFU0mRole0GQ2PerQTgOjBkq37MczZfycPKYqndrQN+PYVSnPfc6SxvhuORccCfjaX7enXPw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773486946; c=relaxed/simple;
-	bh=zcMk2juHKP2RohK/1BK8E8XwH+Ave8HercTkx4NfKUI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GogbVAnd3GjZNYpo2g6+TPYgVkLRFRmlLSiRMQcsSCLEXm1vqEpEq7eyUo6u7fPXHvTniln3mWpgAVU/57tVCwWOu0KfJTZtaBTEqxJkDLh/30eetIpoUuSkZngyWkRp/GyhgpDEfJMtYYND49lqysVwBpXwIkqQe+JLp+lozPA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GrPbZxyR; arc=pass smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AD71F8723
+	for <llvm@lists.linux.dev>; Sat, 14 Mar 2026 11:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773487198; cv=none; b=RAR9k/XXC1BKow+nlPqshW5R2WgmDenYxWx0J8pUXZWhSeCSxv7KmmVr/WOJCs3KSpZ/VIHiG7sgLFYYBtB8RD2Pd+iHELRK+g+KsNwPNf5hIq+vQge9N2mzcSdsgq8YpdGS6RVy7ZdEjKPcLVoYSuHi4R5sgb+K3fTbGAFqJeU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773487198; c=relaxed/simple;
+	bh=5aOrVoN4piYS/Amiu6IhnErIjFSEW8Pg4CtCMBPDDpc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=mq1dkQeD4UVoAg2KQ9Gy80qLpKlahpgja6wt919TQL9J3wcZKB4gyrNEapOH0++r522k6ODqRVZiig4j9lqY/ZG+girlFj1XmVugR7jgsjRiL2aStJiWJUC/7zSH2E8zj4BOC3ZoWjrdaxDP2ffbmLU8gu4dkxwZLjvnubitxu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tQMC6vqT; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GrPbZxyR"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-439b78b638eso3194894f8f.2
-        for <llvm@lists.linux.dev>; Sat, 14 Mar 2026 04:15:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773486943; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fcDEuYjuRBL7rdhavXGG43K34JxTvuxRmzpdAQVuZPayt7B33B+70RBP4K2UmdD2Ng
-         G3k4Khq79d0a9YXFb+mnU+xBxVGmb/TKbWGM8L2uWa8mAO7aKekkItIVfQXTfgbMBAEr
-         nwfWnxNf0utXaCf5UsrXnIWXO1bShG2S5P0lKj+Ej+PXcLuR1C/oQTZSaytcG8xKjJWa
-         e8Fgw7sruiz6yFYm94kZ1KgczIVPbxr/vfGHCUzMhU6f5Enzd/dg8xkYn5RKJieqpJmF
-         y/iOOrrKy3WiE9En5/O74zQ/kQ5qgweRBX38RZTmmRgXW4bCpezVmRBpFD8Dhcmn3W+c
-         ePwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=zcMk2juHKP2RohK/1BK8E8XwH+Ave8HercTkx4NfKUI=;
-        fh=U1qzvzSdRYlOnJHLc8+wbtDxvSLEZeQnpak5K3jwwcI=;
-        b=Lkm+TStLU8OPycjn+uzfRb+SAv/4MvZarGddbTJBbSAKA7YYcKqrKmgg6vPa8Zy+jN
-         7EBoVsOW54D/XTN7pFdRgOtKnB8iiwYnDOdPVS92WvuAmKrmsWGc4hG8TLK75DV6ySsR
-         LtexzgvVYoGRnkTA+j9XVJxmuPxt4vokL9+HBPr3mGZPVlk4C3DqrhXS6K3NayEBZ+5x
-         WfBRa0NlXi5GRvISm/ZhoT15NZnj4+u/bT6uboZU0XhmI8LBmlWBtFOX6lWeEo9CcKYf
-         sUVETlE78u4TPodoWR1/NLdn9Mz2Is73R2rlB345ODg52eCnid086cKn+Z/h/YbbyIGV
-         oCpw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tQMC6vqT"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4853efceaddso24333225e9.3
+        for <llvm@lists.linux.dev>; Sat, 14 Mar 2026 04:19:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773486943; x=1774091743; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zcMk2juHKP2RohK/1BK8E8XwH+Ave8HercTkx4NfKUI=;
-        b=GrPbZxyRrBJHLots6+Mx+g3PfAWZuHtk72o3FXD0syDU59+b50Hr7/fSqv73jGaF0R
-         PGFpk187neOMsAxMcVyhCoJZIEjKlkeneouQfLSfXiwLrtrrnXQVFtNfW6lIFyqzNa7n
-         sQGDzrNfEvNhxLRqCdi7CJkzY4J3uAfVm7YKU1DnyBjMt6RSwKeZf/BR/9ulwWytDtoq
-         MVctddAr8cChV8da7pzuLrEOOoydeNCt/EuN8nBrTDv+8Sy8U9cPiSPTxEK01SbDKOGm
-         OWBpdEtdSrNNcuB/77bktUFa1Gn1PvYde/kVUGWc9JYl05n1L2O2kfJiq8ye1wPfZF3h
-         5K8g==
+        d=google.com; s=20251104; t=1773487195; x=1774091995; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=V83MI+X4cH1kv5YYy8UyAToYkv5v+x2hivsQCcl9ql0=;
+        b=tQMC6vqT9SEAxPQ2lsQBi32oNrNbSKnmU7sTMtoAzZCan9w3vA1WkpwhtaApeOHD80
+         /H+ue/EbC4c06vIsorzWcFZqjKGR0SPudydHbAyY3OFZ32sOAUgvA7/eOW6shYchzy3z
+         wEcasH30RhDW6h7I0Fmr6q7kbgCb//LxOmM5wQMv1MNoIoJjOYbYcbdycE8+KAZzLown
+         FfSw/neBrbc/i/kvz3M/qHBgaH+apLvpnJQiwqD02PfTmSCB2z6yw5xXC/JR/Mx1c30m
+         jhsBRqn0IEXSYezeBWUYboh1W2dk6ZVQfpvgMZvAEgg2n2b2zn2k4p9MFF6GxSK2rk0c
+         Dm6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773486943; x=1774091743;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zcMk2juHKP2RohK/1BK8E8XwH+Ave8HercTkx4NfKUI=;
-        b=oaBHyLZonz46U1Y03eEyKISP7Tmi0lDz2jozH2iVn/W4L7V3Y4K/CahnQzGUnEwoA9
-         WUhNmNNLSBpVS+WyxdWklqHq0EgY2St7m4OuFGEqpEzgZ3RZQZLcn0IlTKd15aS/UCdp
-         Ve9ctcTCptguJIaMnBv05Smob5UqutXDueulhZ7oW7Ptho2x7vWiW0+W9TcNp7SSp4iZ
-         FPe/6DTewsW9ImoZLyWLHd+1/DYnvWcDA3VGXElBcB45soqtnq+mK8boElyb3PlAP2yZ
-         BPoBsYWHtXEga6rJTLpwkK9YFDlV4UU10oQDa6ZyfvuxxqEXQWrWMF0TcuN+UsS7E9t2
-         Bsfg==
-X-Forwarded-Encrypted: i=1; AJvYcCXyj3KWn4g5sGNz0xCb433s/7RWJ5T74LH9HR+oHgZqcPAxmkKEreFyxvAOW47lAMDWHiQO@lists.linux.dev
-X-Gm-Message-State: AOJu0YwBkqQsI1FAsJnRc1LpVDAnywvaUGf+9imtdcej2L75mtAP48Mo
-	sS3qQ9KUXoZW8kNOcUNispYMEpp9p6kjxpx7oMn94D1SuJ+fDWscECxiuj5y98kGriEBiFS4naY
-	Kok862evopJnXpu9gGxarpSqRQ1A1hjUVLrT59F8J
-X-Gm-Gg: ATEYQzzXQM4tbLQAq3HFxj1ElYdyP7bMMlMT/GJ731kuNfpLxZkZj3MqbcDZGbeffwU
-	kD/iJbCsVHkRGTE7lQjArRgJu6ybKdc29DOsCsrGbUh6r64TByidGtED1alBmzKYQ1OKDuzR8su
-	RoY8BuATry0sm61pX8ieq4IjOgKavwAATgpItgHage8zr6jBX4sZO20EdIyP7HP/LMjcJJtO0hm
-	Xwl7IQ+ov5Y3LcwA+Zatr5Q0fPGWfugI5Ut1ITV/U46g8aoQvdwI8hvVIAMtAL14VyIzhtdyn8Y
-	jcrfIjvQML/FZ+vnB96J9iP7hEtC1p35FtXu3g==
-X-Received: by 2002:a05:6000:1ac8:b0:439:bc79:9f8f with SMTP id
- ffacd0b85a97d-43a04d14d83mr12829860f8f.0.1773486942418; Sat, 14 Mar 2026
- 04:15:42 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773487195; x=1774091995;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V83MI+X4cH1kv5YYy8UyAToYkv5v+x2hivsQCcl9ql0=;
+        b=hZIRNvBqJgUiqlOulcxH+8AY3IoHndHWOwYDKy5ETgF21yuHM4V2Rhk2ndoQVpvJ3H
+         iEdpZhnhhgRCMZvw9YAAe4stE/dEfbKgSb2cRtphfnuEtU8U4gIY3GEAcBAPAtvyyFkC
+         zv3jwU4hjvfoa9OMS+3xMk31b1gfODqEVsA83+lanQRTW2ZmcLUQ+2dAhAnJPK3DFna2
+         Gq5KZAczeESTFcESPgrPlOWSDCE7KfXDxx7XqCSM0qIIKsf1sFVnig2eP2EJ1iUS/zVx
+         2LqyHLTAzxYgbU+Ut3s1EILBXTypN9mmck3O44yw1dXV8XVQJrVsCTuhxcU4taQIBJfF
+         puOg==
+X-Forwarded-Encrypted: i=1; AJvYcCXK2FOmUI0Min5esWuAHi5h+oC+zCif3qHtnpN870s+MbdhF5v/A2C/Bwnayt2QiqqqpaND@lists.linux.dev
+X-Gm-Message-State: AOJu0YwG4yENfl+C7qQiVZ+bMIGppyRK5CPbaihfqICEnopTaDR4Cztk
+	GwdDtOuUOA6WoxAJSiARZEmMFFyYUv+WhKRq/yinqgs1V/Yrf7rKh0P2lTNwck+48pY3ay8w3Bk
+	ZJQy7jPSqSfLg9Fyg1Q==
+X-Received: from wmbe18.prod.google.com ([2002:a05:600c:5912:b0:485:37cb:adc1])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600d:8495:10b0:485:3e00:9451 with SMTP id 5b1f17b1804b1-485566fac49mr79883095e9.17.1773487195026;
+ Sat, 14 Mar 2026 04:19:55 -0700 (PDT)
+Date: Sat, 14 Mar 2026 11:19:51 +0000
+In-Reply-To: <CAH5fLgixE9MGXxNEnU5b0EXdgLQoTs5CMv_0OdnfCX3v=coUpw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <202603121235.tpnRxFKO-lkp@intel.com> <20260313213638.GA147391@ax162>
- <CANiq72mzEzjNg7O_2dWT_6QOJvJ3TwV+HyxNd_F4j6v9C+pc7A@mail.gmail.com> <2026031422-catsup-rectal-f886@gregkh>
-In-Reply-To: <2026031422-catsup-rectal-f886@gregkh>
+Mime-Version: 1.0
+References: <CAH5fLgixE9MGXxNEnU5b0EXdgLQoTs5CMv_0OdnfCX3v=coUpw@mail.gmail.com>
+X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3874; i=aliceryhl@google.com;
+ h=from:subject; bh=5aOrVoN4piYS/Amiu6IhnErIjFSEW8Pg4CtCMBPDDpc=;
+ b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBptUQvenk57YLJzXb/usVxhPtRc8Xg36U+3nHLl
+ FX/2l7d59eJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCabVELwAKCRAEWL7uWMY5
+ RheQD/9dEzfyCuMDcej1iovP3Z5C8WazN9d6dzEloO5VxxwuODKRD2AGgleN8Ww0vch93akQD02
+ +Q5zuHBihPS7xs7rIfZ1S6UU5LsSmk3mWK6GDvJUvH8PePtBWiL/nbqjJWKXNpzsp/4pBfYU7Yt
+ LKatHxCLPO5zKz6niyruLuuHZAAzGQeIrxtdCoI6bd353xRNTSgG2xJlFZAojyen/0K6ui8wOeO
+ 0kFf9buZXjdjj+4CkiZ2DNetXxMw1Iv0KLqG7RJn27DkMVU8fP/eSRvf25X/wBfUe56ZXYkuzya
+ 5bRg7HNaq9ZA53KETB0oU3rdz9IyukkM//uxTOKBVqST4XZ05fudzFN5JOepnX0su9GK0N6SRnq
+ PzTpmtlsPaSRAh0YOrTyQkI1fOyJWJF1uHQnaaJ8Po6cANVd0ZQ1Ke3sjkpfmj3togZjNRS6yPC
+ KnkLltyxIdTqrQAgx7E+DtSFQIrrMjharuEP360I5mjNWCkvaeAf9TVvGoSqKzuIOkaU4xenWXt
+ s1rr3EfpmAGfyVUne/0z8QXARf3J/vwweuYV6/jIwkKy/vUi7dJZ4fZWNeMhwaMM75dJaYWRcCk
+ +66ukvunUjzKQQP6gyl8BsTjWYTOqT+1MMAlGR5z410gvivD1cvFdKTURaVzBzqqKt9pn3QUzOB MwlJ0IpFzW2PYhQ==
+X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
+Message-ID: <20260314111951.4139029-1-aliceryhl@google.com>
+Subject: [PATCH] rust_binder: use AssertSync for BINDER_VM_OPS
 From: Alice Ryhl <aliceryhl@google.com>
-Date: Sat, 14 Mar 2026 12:15:30 +0100
-X-Gm-Features: AaiRm51ckUfgkRssBsogIj0VIQkDe2Z-Te-pFSaEkqjwee_TzN5cwYkr8WTmMWw
-Message-ID: <CAH5fLgixE9MGXxNEnU5b0EXdgLQoTs5CMv_0OdnfCX3v=coUpw@mail.gmail.com>
-Subject: Re: [linux-next:master 5585/5731] error[E0277]: `*const
- kernel::bindings::vm_uffd_ops` cannot be shared between threads safely
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, kernel test robot <lkp@intel.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, Mark Brown <broonie@kernel.org>, rust-for-linux@vger.kernel.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Jann Horn <jannh@google.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>
+To: aliceryhl@google.com, gregkh@linuxfoundation.org
+Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org, broonie@kernel.org, 
+	dakr@kernel.org, jannh@google.com, linux-mm@kvack.org, lkp@intel.com, 
+	llvm@lists.linux.dev, miguel.ojeda.sandonis@gmail.com, nathan@kernel.org, 
+	oe-kbuild-all@lists.linux.dev, ojeda@kernel.org, rppt@kernel.org, 
+	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 14, 2026 at 12:13=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Mar 13, 2026 at 11:39:14PM +0100, Miguel Ojeda wrote:
-> > On Fri, Mar 13, 2026 at 10:36=E2=80=AFPM Nathan Chancellor <nathan@kern=
-el.org> wrote:
-> > >
-> > > It looks like this is a conflict between Alice's "rust_binder: check =
-ownership
-> > > before using vma" [1] (currently in char-misc-linus [2]) and Mike's
-> > > "userfaultfd: introduce vm_uffd_ops" [3] (currently in mm-unstable [4=
-]),
-> > > hence why it was bisected to the -next merge commit.
-> >
-> > Thanks Nathan, yeah, adding a raw pointer (not function pointer) to
-> > the struct makes the type `!Sync` in Rust.
-> >
-> > I assume this is best handled with a patch on top of char-misc-linus.
-> > Perhaps creating a wrapper to assert it is `Sync`, since the
-> > `BINDER_VM_OPS` contents are unused (so far).
-> >
-> > Cc'ing more folks related to the commit.
->
-> char-misc-linus should get merged into Linus's tree "soon" and then we
-> can fix up the mm-unstable change for this.
+When declaring an immutable global variable in Rust, the compiler checks
+that it looks thread safe, because it is generally safe to access said
+global variable. When using C bindings types for these globals, we don't
+really want this check, because it is conservative and assumes pointers
+are not thread safe.
 
-I'm working on the fix as we speak. It would be ideal if it went into
-char-misc-linus, because the commit that is wrong is mine, not the one
-in mm.
+In the case of BINDER_VM_OPS, this is a challenge when combined with the
+patch 'userfaultfd: introduce vm_uffd_ops' [1], which introduces a
+pointer field to vm_operations_struct. It previously only held function
+pointers, which are considered thread safe.
 
-Alice
+Rust Binder should not be assuming that vm_operations_struct contains no
+pointer fields, so to fix this, use AssertSync (which Rust Binder has
+already declared for another similar global of type struct
+file_operations with the same problem). This ensures that even if
+another commit adds a pointer field to vm_operations_struct, this does
+not cause problems.
+
+Fixes: 8ef2c15aeae0 ("rust_binder: check ownership before using vma")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202603121235.tpnRxFKO-lkp@intel.com/
+Link: https://lore.kernel.org/r/20260306171815.3160826-8-rppt@kernel.org [1]
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+ drivers/android/binder/page_range.rs       | 8 +++++---
+ drivers/android/binder/rust_binder_main.rs | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/android/binder/page_range.rs b/drivers/android/binder/page_range.rs
+index 9dfc154e5dd4..b57e0c7ba3f1 100644
+--- a/drivers/android/binder/page_range.rs
++++ b/drivers/android/binder/page_range.rs
+@@ -13,6 +13,8 @@
+ //
+ // The shrinker will use trylock methods because it locks them in a different order.
+ 
++use crate::AssertSync;
++
+ use core::{
+     marker::PhantomPinned,
+     mem::{size_of, size_of_val, MaybeUninit},
+@@ -143,14 +145,14 @@ pub(crate) struct ShrinkablePageRange {
+ }
+ 
+ // We do not define any ops. For now, used only to check identity of vmas.
+-static BINDER_VM_OPS: bindings::vm_operations_struct = pin_init::zeroed();
++static BINDER_VM_OPS: AssertSync<bindings::vm_operations_struct> = AssertSync(pin_init::zeroed());
+ 
+ // To ensure that we do not accidentally install pages into or zap pages from the wrong vma, we
+ // check its vm_ops and private data before using it.
+ fn check_vma(vma: &virt::VmaRef, owner: *const ShrinkablePageRange) -> Option<&virt::VmaMixedMap> {
+     // SAFETY: Just reading the vm_ops pointer of any active vma is safe.
+     let vm_ops = unsafe { (*vma.as_ptr()).vm_ops };
+-    if !ptr::eq(vm_ops, &BINDER_VM_OPS) {
++    if !ptr::eq(vm_ops, &BINDER_VM_OPS.0) {
+         return None;
+     }
+ 
+@@ -342,7 +344,7 @@ pub(crate) fn register_with_vma(&self, vma: &virt::VmaNew) -> Result<usize> {
+ 
+         // SAFETY: We own the vma, and we don't use any methods on VmaNew that rely on
+         // `vm_ops`.
+-        unsafe { (*vma.as_ptr()).vm_ops = &BINDER_VM_OPS };
++        unsafe { (*vma.as_ptr()).vm_ops = &BINDER_VM_OPS.0 };
+ 
+         Ok(num_pages)
+     }
+diff --git a/drivers/android/binder/rust_binder_main.rs b/drivers/android/binder/rust_binder_main.rs
+index aa5f2a75adb4..014010662df8 100644
+--- a/drivers/android/binder/rust_binder_main.rs
++++ b/drivers/android/binder/rust_binder_main.rs
+@@ -306,7 +306,7 @@ fn init(_module: &'static kernel::ThisModule) -> Result<Self> {
+ /// Makes the inner type Sync.
+ #[repr(transparent)]
+ pub struct AssertSync<T>(T);
+-// SAFETY: Used only to insert `file_operations` into a global, which is safe.
++// SAFETY: Used only to insert C bindings types into globals, which is safe.
+ unsafe impl<T> Sync for AssertSync<T> {}
+ 
+ /// File operations that rust_binderfs.c can use.
+
+base-commit: a0b9b0f1433c845bda708753db32befef78e0f1f
+-- 
+2.53.0.851.ga537e3e6e9-goog
+
