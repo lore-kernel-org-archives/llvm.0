@@ -1,66 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FF934F475;
-	Sat, 14 Mar 2026 05:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D999314D35;
+	Sat, 14 Mar 2026 08:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773464813; cv=none; b=Jk2SQ6yISyWleHdru+NE+elJDCn/FhCDbhMI2w02Plu8mMh3TvZxa8Y75lxcPNSeYEyJm+9Tet2yJvGnfFFRAXEtLNxHwYJc1+4iqmtcGQmF0Kc7OUMty263ISvKPyskdvdkcVs+uKZInX2Su9AKXD2gwWbtOje/vE/4V8O19E4=
+	t=1773475802; cv=none; b=AluSEeqK3v7ntuSNzSvBVtebRKXYts3hu+meqgchAvnuhnWwI/pyB2sjRGKRwlFjvgeYeoqzwmtf+X0Cs5Wo5auk4KoojP0fiKDlK/PvQZAHNpts+m4MwkuauRhnn4ayAdR8aZVinFISuxFQj1Yf+Idn0RZ4K+3tZsACqcxhYJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773464813; c=relaxed/simple;
-	bh=919cWECtI9nDP95JX3t80/DiyeQ2NSU98r0FTBoXwlk=;
+	s=arc-20240116; t=1773475802; c=relaxed/simple;
+	bh=+4AgdqFOb2ygbgOiAa0mqpkoOtNg8UyP9uTOgaqJ1cE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mQ1ywSyYtVoIeAq5MgSLwltnbdqfI0e5OAZs6TuBjQUiPPkCIZW5AFTp1FpOkHroh+v/n1SuVZWiciGNSwIqKYlJiUhXZm508X7UbcYC04lOkfHGpYJaaLFKcqFjsNIEVwpQzyuSJs06JB3IftbskWFbkjmdaq403zTfhxUGVRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lflj/3Eo; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=rVkIQMqUwa9guQZDVFnD3D3uhUnepwO4t9aqaKH8s/N2aLu7ZFnWY8dreFlLymnAd1BU7yyfp1w49xASZQBqBqeHe35OA+LPkCdfyNv+y5Ofj2FZsD/8GlQSiUMCt3UE4LwQnhbPeXPQ4P1IfgrgOUY1aGff2K4jK/lasvXPpjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nLZKnGbD; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lflj/3Eo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nLZKnGbD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773464811; x=1805000811;
+  t=1773475801; x=1805011801;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=919cWECtI9nDP95JX3t80/DiyeQ2NSU98r0FTBoXwlk=;
-  b=Lflj/3EoeVgy3N09JaKR0MgICN0aBts8S7CQGO1KZgvUR3Y8fPUU52qb
-   y7c+pVeLbpQ2iBtGLYFYw/7nXKCYhGe4rcdydLI5eI8PJtYxGeOl199HE
-   k2+YCymmXnypA21THoDK6GVm6gHGuxEwxOUdBU03JcCOpzpoZlmhpHZA9
-   ypN5TE+MRwsYwR5KWdkTVlibGEdNokFzdBNQ0L/7aWHiCUujQ7ZRemfap
-   2dyR/DGspcvHGF2UK0v3bPT8eTxz6NgpWHDFw7eNG0P94Xe3/a15mlgiH
-   0xf4BSEu7doqgjI/TT6zW+bPzWikj8/uiEABz5Rgs2OfkfbNZo3MBaqhT
+  bh=+4AgdqFOb2ygbgOiAa0mqpkoOtNg8UyP9uTOgaqJ1cE=;
+  b=nLZKnGbDgrIw80SAw7reWTqZ3Xf5lovBg9ZLdjke5pveQyMbEIPMZk70
+   NxbL1Z5u0BW2NQlYhN90RG+MKlr0ebY1xI5lhV/Z55Jx4bChJ4AsLs1Lg
+   rhIVSh0ZqJ8ydpFMo7ShyRvs53giVclvs+bDsi39B5aCO4XBnUqo06h0U
+   Rm/erakh6Wxpj+hUf5pVYNKv5j554U9+cOJuHJvCwif3al45+u4CAZGig
+   BN7zKYTiNw/zlgpRXNPf6jct75btxvwXY4gqFtNizdxaDfAQn49kh+wKP
+   ytDY8AnkGyYmC9gfJibAFzJJzgWy1GnWh/nZ22bOX2F+6SxqUAnLfTr/t
    g==;
-X-CSE-ConnectionGUID: cuaGDKP+Ri2xNiV5pdG0Yw==
-X-CSE-MsgGUID: +nOijCVRSIm7EpVjxdCMdA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11728"; a="62136402"
+X-CSE-ConnectionGUID: dJbru4B4Qw6cAAM5JiOe4g==
+X-CSE-MsgGUID: L6iXI9HsRgmPN/if+0Du3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11728"; a="74690561"
 X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
-   d="scan'208";a="62136402"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2026 22:06:50 -0700
-X-CSE-ConnectionGUID: ty5fyfgcTXOqimCeP2E0mQ==
-X-CSE-MsgGUID: DuJcevY8REuf3+NBH17ceQ==
+   d="scan'208";a="74690561"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2026 01:10:01 -0700
+X-CSE-ConnectionGUID: s8pqu76fSCKL19s0jIkvUg==
+X-CSE-MsgGUID: cNVw7CG6QHKSOY6o74mZug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
-   d="scan'208";a="246456319"
+   d="scan'208";a="217748831"
 Received: from lkp-server01.sh.intel.com (HELO 418530b1a366) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 13 Mar 2026 22:06:47 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 14 Mar 2026 01:09:59 -0700
 Received: from kbuild by 418530b1a366 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w1HD2-000000004fb-0fYu;
-	Sat, 14 Mar 2026 05:06:44 +0000
-Date: Sat, 14 Mar 2026 13:06:04 +0800
+	id 1w1K4K-000000004qN-3oNt;
+	Sat, 14 Mar 2026 08:09:56 +0000
+Date: Sat, 14 Mar 2026 16:09:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chuck Lever <cel@kernel.org>, NeilBrown <neilb@ownmail.net>,
-	Jeff Layton <jlayton@kernel.org>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <dai.ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	Leon Romanovsky <leon@kernel.org>, Christoph Hellwig <hch@lst.de>
+To: Ville Syrjala <ville.syrjala@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nfs@vger.kernel.org, linux-rdma@vger.kernel.org,
-	Chuck Lever <chuck.lever@oracle.com>
-Subject: Re: [PATCH v2 2/2] svcrdma: Use contiguous pages for RDMA Read sink
- buffers
-Message-ID: <202603141225.oTCKSz8H-lkp@intel.com>
-References: <20260312134008.7387-3-cel@kernel.org>
+	intel-xe@lists.freedesktop.org
+Subject: Re: [PATCH 3/3] drm/i915/de: Implement register polling in the
+ display code
+Message-ID: <202603141514.jgf9tlEy-lkp@intel.com>
+References: <20260313111028.25159-4-ville.syrjala@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,92 +65,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260312134008.7387-3-cel@kernel.org>
+In-Reply-To: <20260313111028.25159-4-ville.syrjala@linux.intel.com>
 
-Hi Chuck,
+Hi Ville,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on v7.0-rc1]
-[also build test ERROR on next-20260311]
+[auto build test WARNING on drm-i915/for-linux-next]
+[also build test WARNING on drm-tip/drm-tip next-20260311]
+[cannot apply to drm-i915/for-linux-next-fixes drm-xe/drm-xe-next linus/master v7.0-rc3]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chuck-Lever/RDMA-rw-Fix-MR-pool-exhaustion-in-bvec-RDMA-READ-path/20260313-085521
-base:   v7.0-rc1
-patch link:    https://lore.kernel.org/r/20260312134008.7387-3-cel%40kernel.org
-patch subject: [PATCH v2 2/2] svcrdma: Use contiguous pages for RDMA Read sink buffers
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260314/202603141225.oTCKSz8H-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260314/202603141225.oTCKSz8H-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-i915-de-Introduce-intel_de-c-and-move-intel_de_-read-write-8-there/20260314-004939
+base:   https://gitlab.freedesktop.org/drm/i915/kernel.git for-linux-next
+patch link:    https://lore.kernel.org/r/20260313111028.25159-4-ville.syrjala%40linux.intel.com
+patch subject: [PATCH 3/3] drm/i915/de: Implement register polling in the display code
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260314/202603141514.jgf9tlEy-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7d47b695929cc7f85eeb0f87d0189adc04c1c629)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260314/202603141514.jgf9tlEy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603141225.oTCKSz8H-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603141514.jgf9tlEy-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/sunrpc/xprtrdma/svc_rdma_rw.c:813:3: error: call to undeclared function 'svc_rqst_page_release'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   svc_rqst_page_release(rqstp,
-                   ^
-   net/sunrpc/xprtrdma/svc_rdma_rw.c:813:3: note: did you mean 'svc_rdma_cc_release'?
-   net/sunrpc/xprtrdma/svc_rdma_rw.c:193:6: note: 'svc_rdma_cc_release' declared here
-   void svc_rdma_cc_release(struct svcxprt_rdma *rdma,
-        ^
-   1 error generated.
+>> drivers/gpu/drm/i915/display/intel_de.c:72:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+      72 |         if (fast_timeout_us)
+         |             ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_de.c:77:6: note: uninitialized use occurs here
+      77 |         if (ret && slow_timeout_us)
+         |             ^~~
+   drivers/gpu/drm/i915/display/intel_de.c:72:2: note: remove the 'if' if its condition is always true
+      72 |         if (fast_timeout_us)
+         |         ^~~~~~~~~~~~~~~~~~~~
+      73 |                 ret = __intel_de_wait_for_register(display, reg, mask, value,
+   drivers/gpu/drm/i915/display/intel_de.c:70:9: note: initialize the variable 'ret' to silence this warning
+      70 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +/svc_rqst_page_release +813 net/sunrpc/xprtrdma/svc_rdma_rw.c
+vim +72 drivers/gpu/drm/i915/display/intel_de.c
 
-   779	
-   780	/*
-   781	 * svc_rdma_fill_contig_bvec - Replace rq_pages with a contiguous allocation
-   782	 * @rqstp: RPC transaction context
-   783	 * @head: context for ongoing I/O
-   784	 * @bv: bvec entry to fill
-   785	 * @pages_left: number of data pages remaining in the segment
-   786	 * @len_left: bytes remaining in the segment
-   787	 *
-   788	 * On success, fills @bv with a bvec spanning the contiguous range and
-   789	 * advances rc_curpage/rc_page_count. Returns the byte length covered,
-   790	 * or zero if the allocation failed or would overrun rq_maxpages.
-   791	 */
-   792	static unsigned int
-   793	svc_rdma_fill_contig_bvec(struct svc_rqst *rqstp,
-   794				  struct svc_rdma_recv_ctxt *head,
-   795				  struct bio_vec *bv, unsigned int pages_left,
-   796				  unsigned int len_left)
-   797	{
-   798		unsigned int order, alloc_nr, chunk_pages, chunk_len, i;
-   799		struct page *page;
-   800	
-   801		page = svc_rdma_alloc_read_pages(pages_left, &order);
-   802		if (!page)
-   803			return 0;
-   804		alloc_nr = 1 << order;
-   805	
-   806		if (head->rc_curpage + alloc_nr > rqstp->rq_maxpages) {
-   807			for (i = 0; i < alloc_nr; i++)
-   808				__free_page(page + i);
-   809			return 0;
-   810		}
-   811	
-   812		for (i = 0; i < alloc_nr; i++) {
- > 813			svc_rqst_page_release(rqstp,
-   814					      rqstp->rq_pages[head->rc_curpage + i]);
-   815			rqstp->rq_pages[head->rc_curpage + i] = page + i;
-   816		}
-   817	
-   818		chunk_pages = min(alloc_nr, pages_left);
-   819		chunk_len = min_t(unsigned int, chunk_pages << PAGE_SHIFT, len_left);
-   820		bvec_set_page(bv, page, chunk_len, 0);
-   821		head->rc_page_count += chunk_pages;
-   822		head->rc_curpage += chunk_pages;
-   823		return chunk_len;
-   824	}
-   825	
+    62	
+    63	static int intel_de_wait_for_register(struct intel_display *display,
+    64					      i915_reg_t reg, u32 mask, u32 value,
+    65					      unsigned int fast_timeout_us,
+    66					      unsigned int slow_timeout_us,
+    67					      u32 (*read)(struct intel_display *display, i915_reg_t reg),
+    68					      u32 *out_value, bool is_atomic)
+    69	{
+    70		int ret;
+    71	
+  > 72		if (fast_timeout_us)
+    73			ret = __intel_de_wait_for_register(display, reg, mask, value,
+    74							   fast_timeout_us, read,
+    75							   out_value, is_atomic);
+    76	
+    77		if (ret && slow_timeout_us)
+    78			ret = __intel_de_wait_for_register(display, reg, mask, value,
+    79							   slow_timeout_us, read,
+    80							   out_value, is_atomic);
+    81	
+    82		return ret;
+    83	}
+    84	
 
 -- 
 0-DAY CI Kernel Test Service
