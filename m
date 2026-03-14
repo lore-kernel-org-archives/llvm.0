@@ -1,177 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4312C31F99D;
-	Sat, 14 Mar 2026 19:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8A7125A0
+	for <llvm@lists.linux.dev>; Sat, 14 Mar 2026 21:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773515909; cv=none; b=tnqMEC3ddGeYWApEK/ENtK66tMCSNIW6gIjQRroUTalNXTMjC/OLhsCSVRA0VzbBeOHvQ7eU/xfhWeOAJ6cCpr6b25uyCIW4qas7ep8I73j2GbA5voYt3pAZBEjg1w1UuhgHMYqhFWzEQZyWZS+/OzFEP74NdZtjrftrZ0NF89k=
+	t=1773522049; cv=none; b=jv6q0m+fbFL6idc79Qw9g/q+9rC75vRK/UHO8ormc9+Sa9zEJX9j9NYhKhORhUwtSCL6fURCsLLQXP0vfwFBn6vRCdbMGLUh6ynx2oVcqbgaXfZ7sF5KEhWlokt2wEqQ9As+sVx/JghuQT+mgS/7q33RThkLfNbeWI5NG5XMbDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773515909; c=relaxed/simple;
-	bh=ylNrgLGYs6FyNvdWSx2nz7nBY0yLMohSbhzFKOABu9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q5yoiHSMEl8prCpN4rc7F51BtBdLLVb16okxe024rYVGJwAhgtiBmDxydorNgX1xfXOjwwKXBPBSwQ0+0T5APGOhZLHsnSIL+cncNDoQrVTwePddrEl23AXNIccI5ldX5HUtu3OiJl7CQQriAJQVcWrcQmhWH/aQ4i6uQObfbNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ExVDBroC; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773522049; c=relaxed/simple;
+	bh=HvK8DCYq7ftY+IqAjZoph+mhMslUVYNPgVGSEMfb/kc=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=g45T7/FCPqnnywOhrdcxD7PMcxIrpgZqEh7jh9PTblKdLVlqmdaR5yiK+cuSJVz7uMUslXVXmE0Lvy9PnRHLsbMEVTmyZhRVeAXa4tr14jvP5JHK7u99wxQEeJtplRXMkiEdqdjMcd1fp3UTrM8XSEXrBUadMPqXNucgFt6/H60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PGl+oKJe; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ExVDBroC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773515906; x=1805051906;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ylNrgLGYs6FyNvdWSx2nz7nBY0yLMohSbhzFKOABu9A=;
-  b=ExVDBroC/6aYJ8gJ6eKC7IPDcu3JElHs6JblPxjz5HCgHcZJZDwgY5ra
-   qYDNglXhZOdrIyyHgJbm9oMWmgR/RhmdW/GLptCn36dRwtvPTE5hEi5AH
-   53+BCEn8WVGUdNdsbrxa7fuI/fVJDm1TuEmpPPcjdQ/Q7u0YB5n/P95Wy
-   bZNs9rpBvdxS3zzrTHVb1QvtHlb4bCjCZvrrPl+9SOliubpEGRGhCl67y
-   IitHRdacd44LebfXZK8xi1Hro80ceYT3jSiYbWvlLCDEyM0NmxK1gLSOQ
-   QuPU4BaSGnDm8E5mbjSjceDlOBFUskl3QpcTpVlHDeLqMscqZt2By32BM
-   w==;
-X-CSE-ConnectionGUID: orrc8KhVSnmWuzr6RqBivQ==
-X-CSE-MsgGUID: evoM61GtS1KXaT+ZZjjBhQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11729"; a="92159375"
-X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
-   d="scan'208";a="92159375"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2026 12:18:25 -0700
-X-CSE-ConnectionGUID: WqONoNejSqSKPGmuWAFL7Q==
-X-CSE-MsgGUID: yKGVWQrGTmWHc+cuJzCJEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
-   d="scan'208";a="246532064"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa001.fm.intel.com with ESMTP; 14 Mar 2026 12:18:24 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w1UVB-000000003q1-2naQ;
-	Sat, 14 Mar 2026 19:18:21 +0000
-Date: Sat, 14 Mar 2026 20:17:32 +0100
-From: kernel test robot <lkp@intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Simon Richter <Simon.Richter@hogyros.de>,
-	linux-kernel@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
-Subject: Re: [PATCH v2] PCI/VGA: Move pci_set_vga_state() to vgaarb.c
-Message-ID: <202603142059.lRB5ARkv-lkp@intel.com>
-References: <20260312224713.1305228-1-bhelgaas@google.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PGl+oKJe"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4852fdb36a8so38705255e9.2
+        for <llvm@lists.linux.dev>; Sat, 14 Mar 2026 14:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1773522046; x=1774126846; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UzYFnz5Qj7jIdELXN01x+T9fD8wn1N0N7euC1Yo9rtI=;
+        b=PGl+oKJeWUOnvUrz8CCenehxS3U7iCAs9hpPNC/E5hcuDoAbr6LPwr1c2JoWNb+CbC
+         LTWFY1K4EMgJoD5ZN0NRWLSDdYSr4XwX/eeNyA2PpwWF51Hg8kBuNvMbAgPLxoig3O8R
+         DL5RsZXJ2klVu0XVUfGcd3mT1xYqW0stf1WCPt24IjtZ1Acvjd3SBCchHgpbHbNORZ8+
+         ceJToP2gO1mgIi6yMkaBelogez3I9RfoKv5bBuxQ5PSWqtr+mQHxWffGE6McTWgtwqWM
+         lSe+H7MEqclVRWwmQhi+EbTSS6G7nFp8+y17bfxvHZCZy7rgXi45G950/bb6p6qvyBu1
+         Zx1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773522046; x=1774126846;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UzYFnz5Qj7jIdELXN01x+T9fD8wn1N0N7euC1Yo9rtI=;
+        b=MY60x6CSLmK5MrLZZvqwbFIAs+sAOg/1pfNJUwfJ5U1cWVxRjJIdVRdE3NQtPT1JLy
+         z1pFIODM8wG/SKKQh0mysks1vIpBvEJiBDNsk2cxiSg22vmpg7CzszLeo+wRW1JbrXrh
+         TUXzMR7AZFh3hcLLyfcF6vCasbH+GBXRhEZz/DeJlph4SZGKyXgVlLdJMOTK6dfZUld6
+         6tVwsHpw8RCDZftxluVmHXhJke4HIYrxxh/JJkTTA2IWE4AXNk4+ldcjDDYDdXP4OsTx
+         H9dqetUv16pZpLEPu/u8HS+CxVMuqIJSsLkgqwhnfvQZtn16yKruFre7ydTtl9cPtHQ4
+         qj6w==
+X-Gm-Message-State: AOJu0YzB2p97lc11JG9ReoErx+bATzgdW845VLD9Eu2/eEAWDMFU9t79
+	Atbb3xKrcQkCWc+Qs/1XL8JLNWw/7VGvgM4wJalbkNP0b7ei8jnvL17GbIc9VYt7oAcQr122eRT
+	s25B4
+X-Gm-Gg: ATEYQzxSrcdhR/7hCPyJDQqeUYDDdfGfSCKv+7oI5BfQkuKrQv0jJ3wR0qDU+ZlPk3f
+	SYlbnfc1xHwwKq48rJK+5TJ0W50A5g8hNiJ/CS8abO5hspyj//O6H2mPd0UWEwlppl+2FXEm94W
+	40LNRmHekjvTMY55C7c9NEDSnhfwFO0bMogUpH96aFK0VZ0aufyLx5GYM6gmufF3ew+WcGAu/Rf
+	VlGAy5Ou2hHejhQ5S21yTeNF/zAnRKTJkJTSGucO8hu8Tt2oao3qlk1OzWICAOJ62tMVTTxFboJ
+	Mako5syoNsldoF6StWwdEYnCJl60m2mVA2a2uRozRTohbvYFL2VA2DXIoSBFFOpcYkT/K9mHSZ+
+	lKCJADoe2sYjUi1lK3Yt4hG+xuYo6zt0KhLQV7KJS+IqatFYvtDOIjfIQYTjYXH+e1stOg+cnXG
+	SlwKlbAkiC9945JYg6Ltl0KEidgntfWh1wCDAB5BAXmeUxJC9KxV/+EfzFhg69cQb1Dgc7QQ==
+X-Received: by 2002:a05:600c:c0c3:20b0:485:5981:1411 with SMTP id 5b1f17b1804b1-4855981166bmr80861145e9.23.1773522045637;
+        Sat, 14 Mar 2026 14:00:45 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485577835ebsm100427915e9.7.2026.03.14.14.00.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Mar 2026 14:00:45 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Sat, 14 Mar 2026 21:00:43 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <1977231884.48273.1773522045160@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] v7.0-rc3-18-ga717943d8ecc0: Failure on aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260312224713.1305228-1-bhelgaas@google.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_48272_2038541687.1773522043985"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allmodconfig
+X-Jenkins-Result: SUCCESS
 
-Hi Bjorn,
+------=_Part_48272_2038541687.1773522043985
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build errors:
+Dear contributor,
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus next-20260313]
-[cannot apply to linus/master v6.16-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Our automatic CI has detected problems related to your patch(es). Please find some details below.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bjorn-Helgaas/PCI-VGA-Move-pci_set_vga_state-to-vgaarb-c/20260314-150705
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20260312224713.1305228-1-bhelgaas%40google.com
-patch subject: [PATCH v2] PCI/VGA: Move pci_set_vga_state() to vgaarb.c
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260314/202603142059.lRB5ARkv-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260314/202603142059.lRB5ARkv-lkp@intel.com/reproduce)
+In tcwg_kernel/llvm-master-aarch64-next-allmodconfig, after:
+  | commit v7.0-rc3-18-ga717943d8ecc0
+  | Author: Vincent Donnefort <vdonnefort@google.com>
+  | Date:   Mon Mar 9 16:25:04 2026 +0000
+  | 
+  |     tracing: Check for undefined symbols in simple_ring_buffer
+  |     
+  |     The simple_ring_buffer implementation must remain simple enough to be
+  |     used by the pKVM hypervisor. Prevent the object build if unresolved
+  |     symbols are found.
+  | ... 5 lines of the commit log omitted.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603142059.lRB5ARkv-lkp@intel.com/
+Produces Failure:
+  | Results changed to
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 27514
+  | # First few build errors in logs:
+  | # 00:52:51 make[4]: *** [kernel/trace/Makefile:147: kernel/trace/simple_ring_buffer.o.checked] Error 1
+  | # 00:52:51 make[3]: *** [scripts/Makefile.build:546: kernel/trace] Error 2
+  | # 01:08:47 make[2]: *** [scripts/Makefile.build:546: kernel] Error 2
+  | # 02:57:07 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_1/linux/Makefile:2101: .] Error 2
+  | # 02:57:07 make: *** [Makefile:248: __sub-make] Error 2
+  | 
+  | From
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 37972
+  | # First few build errors in logs:
+  | # 01:44:35 make[2]: *** [scripts/Makefile.vmlinux:100: vmlinux] Error 1
+  | # 01:44:53 make[1]: *** [/home/tcwg-buildslave/workspace/tcwg_kernel_1/linux/Makefile:1295: vmlinux] Error 2
+  | # 02:14:50 make: *** [Makefile:248: __sub-make] Error 2
 
-All errors (new ones prefixed by >>):
+Used configuration :
+ tcwg_kernel/llvm-master-aarch64-next-allmodconfig
 
->> drivers/pci/vgaarb.c:229:7: error: call to undeclared function 'pci_set_vga_state_arch'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     229 |         rc = pci_set_vga_state_arch(dev, decode, command_bits, flags);
-         |              ^
-   drivers/pci/vgaarb.c:229:7: note: did you mean 'pci_set_vga_state'?
-   drivers/pci/vgaarb.c:218:12: note: 'pci_set_vga_state' declared here
-     218 | static int pci_set_vga_state(struct pci_dev *dev, bool decode,
-         |            ^
-     219 |                              unsigned int command_bits, u32 flags)
-     220 | {
-     221 |         struct pci_bus *bus;
-     222 |         struct pci_dev *bridge;
-     223 |         u16 cmd;
-     224 |         int rc;
-     225 | 
-     226 |         WARN_ON((flags & PCI_VGA_STATE_CHANGE_DECODES) && (command_bits & ~(PCI_COMMAND_IO|PCI_COMMAND_MEMORY)));
-     227 | 
-     228 |         /* ARCH specific VGA enables */
-     229 |         rc = pci_set_vga_state_arch(dev, decode, command_bits, flags);
-         |              ~~~~~~~~~~~~~~~~~~~~~~
-         |              pci_set_vga_state
-   1 error generated.
+We track this bug report under https://linaro.atlassian.net/browse/LLVM-2192. Please let us know if you have a fix.
+
+If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+
+The information below contains the details of the failures, and the ways to reproduce a debug environment:
 
 
-vim +/pci_set_vga_state_arch +229 drivers/pci/vgaarb.c
 
-   209	
-   210	/**
-   211	 * pci_set_vga_state - set VGA decode state on device and parents if requested
-   212	 * @dev: the PCI device
-   213	 * @decode: true = enable decoding, false = disable decoding
-   214	 * @command_bits: PCI_COMMAND_IO and/or PCI_COMMAND_MEMORY
-   215	 * @flags: traverse ancestors and change bridges
-   216	 * CHANGE_BRIDGE_ONLY / CHANGE_BRIDGE
-   217	 */
-   218	static int pci_set_vga_state(struct pci_dev *dev, bool decode,
-   219				     unsigned int command_bits, u32 flags)
-   220	{
-   221		struct pci_bus *bus;
-   222		struct pci_dev *bridge;
-   223		u16 cmd;
-   224		int rc;
-   225	
-   226		WARN_ON((flags & PCI_VGA_STATE_CHANGE_DECODES) && (command_bits & ~(PCI_COMMAND_IO|PCI_COMMAND_MEMORY)));
-   227	
-   228		/* ARCH specific VGA enables */
- > 229		rc = pci_set_vga_state_arch(dev, decode, command_bits, flags);
-   230		if (rc)
-   231			return rc;
-   232	
-   233		if (flags & PCI_VGA_STATE_CHANGE_DECODES) {
-   234			pci_read_config_word(dev, PCI_COMMAND, &cmd);
-   235			if (decode)
-   236				cmd |= command_bits;
-   237			else
-   238				cmd &= ~command_bits;
-   239			pci_write_config_word(dev, PCI_COMMAND, cmd);
-   240		}
-   241	
-   242		if (!(flags & PCI_VGA_STATE_CHANGE_BRIDGE))
-   243			return 0;
-   244	
-   245		bus = dev->bus;
-   246		while (bus) {
-   247			bridge = bus->self;
-   248			if (bridge) {
-   249				pci_read_config_word(bridge, PCI_BRIDGE_CONTROL,
-   250						     &cmd);
-   251				if (decode)
-   252					cmd |= PCI_BRIDGE_CTL_VGA;
-   253				else
-   254					cmd &= ~PCI_BRIDGE_CTL_VGA;
-   255				pci_write_config_word(bridge, PCI_BRIDGE_CONTROL,
-   256						      cmd);
-   257			}
-   258			bus = bus->parent;
-   259		}
-   260		return 0;
-   261	}
-   262	
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/512/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/511/artifact/artifacts
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Instruction to reproduce the build : https://gitlab.com/LinaroLtd/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/a717943d8ecc0e533c581bf04473b50f6f17f2cb/tcwg_kernel/llvm-master-aarch64-next-allmodconfig/reproduction_instructions.txt
+
+Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/a717943d8ecc0e533c581bf04473b50f6f17f2cb
+------=_Part_48272_2038541687.1773522043985--
