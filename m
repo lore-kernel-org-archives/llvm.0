@@ -1,130 +1,101 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1055B5AB
-	for <llvm@lists.linux.dev>; Sun, 15 Mar 2026 02:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955B542A9D;
+	Sun, 15 Mar 2026 03:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773540130; cv=none; b=de7zRoVS94VJ42NLDJux8+25ODmXfnl1EjeTgSMS6B74ivBhf2rKAgNyRhAmrn1YLVnPrd6HfHULBJVey0JWYe+ST1o8rBZbSxZl4GJPsnkfbimnX3z7dvvK4+EmEOZsfozZPEC2Rj9pBefph/MSvf26lmVkHjqYwHx0SMFd3/w=
+	t=1773546214; cv=none; b=VkphE6K04bI65uKXM85jtBqYZpQxesOxdARestLsvj395cDVjCaa7iz4nHtzJ6sgQOCujJOcDjfp1ehp/gmKWe/0ki1g2sQ8zeR8LaIy50uMKbmQdxzPMfESqDih6b1gqhnVRx1EbeT+uUbW722IYZF3hXUXItk7wSXfLf25eFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773540130; c=relaxed/simple;
-	bh=59OcaL7wr4rrn2QJFNuKWnrszyxL2pi37n3sLg1ki0U=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=BAnwV2yjPPMCpNfeHb21ytzzoCJfUmqsmUvYTPeFCXAuB3RNnfw50tO79tRlX9uydvdFjHhzeXUZjHPl1Ol36JZ7mT0Z9GovG9x3/8i9P8orkqSpPvT7RBAmhyPnH3gC/Ye9qL1Do/qfQnn2h9/sUIJ/V1Id1tAYgWMIoeJXAOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Wm7se7lr; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773546214; c=relaxed/simple;
+	bh=ApwIQ8mOebtZU98sLSXw62ssgbaO+JCrIqcvOkxLo18=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FCnMcmvl3pRArRn4OSSW7K07hgx4bnNDpoUbsbiI4P4HWGpwiGrMgplwf8/3+tkZe8MuBeXL2Uvc/9CTj7TVAR1GbYYbzLs+7QGq7rloK2J/KaEui8ihDXq9ve/hEJTb5TDvdnmaOioHh9jG9dU1hgS1eyu5qeA1LYtR3H170JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TuFwe3F2; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wm7se7lr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773540127;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Uk09VKWjHu2sOoAqwOkD51f1iNAtRWuLbtk27xdQ0DU=;
-	b=Wm7se7lrRFp7sleedEISj3rlVXlMbX1iYQuLOqK9bVrmqaxyLsXhNQOwg2ANiYJd3KMqaO
-	xWvbi8ciAjSLDOZHeJur6+VWI6e1pG7aRWfS9UPlyvaiv0DjFQGqPl2CBWUaIpH4SuOvpq
-	POgHgg9crN+477M7N1SKgEPzZRRVQag=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-448-hHzLAq6LOpuoLJ9UP9ZzsQ-1; Sat,
- 14 Mar 2026 22:02:04 -0400
-X-MC-Unique: hHzLAq6LOpuoLJ9UP9ZzsQ-1
-X-Mimecast-MFC-AGG-ID: hHzLAq6LOpuoLJ9UP9ZzsQ_1773540124
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E275F1977405
-	for <llvm@lists.linux.dev>; Sun, 15 Mar 2026 02:02:03 +0000 (UTC)
-Received: from [172.20.219.202] (unknown [10.30.44.44])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 95248180075D;
-	Sun, 15 Mar 2026 02:02:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.0.0-rc3,
- upstream-mainline, 69237f8c)
-Date: Sun, 15 Mar 2026 02:02:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TuFwe3F2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773546212; x=1805082212;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ApwIQ8mOebtZU98sLSXw62ssgbaO+JCrIqcvOkxLo18=;
+  b=TuFwe3F23fbbnvGXG9UV9leP8QVjK8oS9D3SWAmEeBsFrx+e9QfPUmPF
+   5ZwEJv4dWq8j37rGZlDSaoNsjkSSX/WnW4rADPleNoyQ/7IcGQqnbIswk
+   +/8f7CXJVvQqiwCnkXevmOxpdJaFWDUlSR0/YPbJrjEDHm7NrslMBzZRN
+   G1FsQn8SKaF3BbveN28KJqKrNyG9QJhSmxEdbjtHTMhVUTF2NRl4ZNKuy
+   EfmF5hKj0Gbh9PDbOFPLwhsgL+7dLO3wuuWafYVeXMcWaApURWki6iLSS
+   eTTJyEdourBPl6w4Iiu3SxDwViw6H5F2GeirCaQACmx4IuOYhthJmidgz
+   Q==;
+X-CSE-ConnectionGUID: MhJHIB9TRXqIJAkh5Qxx6g==
+X-CSE-MsgGUID: ayNNi5LORjSzVWNaKs0igQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11729"; a="74637766"
+X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
+   d="scan'208";a="74637766"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2026 20:43:32 -0700
+X-CSE-ConnectionGUID: eUyWCbTMRkePCViBbtB+Zg==
+X-CSE-MsgGUID: Vifn+p1LRiS8nunKtT5fCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,119,1770624000"; 
+   d="scan'208";a="218830928"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by fmviesa007.fm.intel.com with ESMTP; 14 Mar 2026 20:43:29 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w1cNz-000000003x3-14gZ;
+	Sun, 15 Mar 2026 03:43:27 +0000
+Date: Sun, 15 Mar 2026 04:42:39 +0100
+From: kernel test robot <lkp@intel.com>
+To: Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+	eric.dumazet@gmail.com, Eric Dumazet <edumazet@google.com>,
+	Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>
+Subject: Re: [PATCH net] bonding: prevent potential infinite loop in
+ bond_header_parse()
+Message-ID: <202603150436.yxfJziep-lkp@intel.com>
+References: <20260314115650.3646361-1-edumazet@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <08896.126031422020400303@us-mta-448.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: wh6yBfy68e8Myz5SXP0sYcS4OLs8MiFyAtLQa1KdqHM_1773540124
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260314115650.3646361-1-edumazet@google.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Eric,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on net/main]
 
-Kernel information:
-    Commit message: Merge tag 'usb-7.0-rc4' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/gregkh/usb
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/bonding-prevent-potential-infinite-loop-in-bond_header_parse/20260315-010404
+base:   net/main
+patch link:    https://lore.kernel.org/r/20260314115650.3646361-1-edumazet%40google.com
+patch subject: [PATCH net] bonding: prevent potential infinite loop in bond_header_parse()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260315/202603150436.yxfJziep-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260315/202603150436.yxfJziep-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2385475144
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603150436.yxfJziep-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+All warnings (new ones prefixed by >>):
 
+>> Warning: net/ethernet/eth.c:202 function parameter 'dev' not described in 'eth_header_parse'
+>> Warning: net/ethernet/eth.c:202 function parameter 'dev' not described in 'eth_header_parse'
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
