@@ -1,211 +1,173 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5668538734D;
-	Mon, 16 Mar 2026 10:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9501E520A
+	for <llvm@lists.linux.dev>; Mon, 16 Mar 2026 10:18:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773655674; cv=none; b=Tdt3u/2IXYQgEEp4agKyHPDKW0fvcuqpr9UKIC/NjL7MLxKD6e9B19nJSkY4xpJwYk95gjZaI0+yPuQ0l3momy6kB9h9wBgJeKxgIwP+8JIZYF5xFmhCVKFNi8M5g93iCGg7OfJGltpla41t4TB1gFCUTPGuMYf2NhZ92VlAtYY=
+	t=1773656285; cv=none; b=J2Nz/a/yUeKqcibAXiiFL1N3WA30do6PLq/rz/7Omp043mbxbWOV5gXCrrROiee+1I/HmPfO1wdQDDPtB6H2tgvwdBqfL32l7N4A4QFdN+LYxr1kN6wdv2x/HrCSk68/EQXOoTqE3Zka5G0lEkxipyiXuSWb5jEFUTiM6ZycYMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773655674; c=relaxed/simple;
-	bh=I3e6pQjacJL2CC/LlYa1aPvv2alogsi3mE2PqaAgWhA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=JW16bubqUVTsAJXtXajRz7J95dihng6nbeR3Wo/WAZhAwO0m9mu7YAW1e3iPhnIqonFGdlKPjYENAHxnnJ1JB1UCsiGF3b6Xu59kqBTDkFMFVExrzP8Q5/u4va+1QVCxRko2KgbECIUf5vzzsLG9CK5sFU7cjJAn0mlU0FRk6yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MTpUzlsp; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MTpUzlsp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773655672; x=1805191672;
-  h=date:from:to:cc:subject:message-id;
-  bh=I3e6pQjacJL2CC/LlYa1aPvv2alogsi3mE2PqaAgWhA=;
-  b=MTpUzlspUbf13pxTWqfc+EUPWBrHb0uDkTYme3UpzbLqpBOyFVAZnktC
-   r6GakW416Vn18YCCeKzU8FxSvWrzq5a5NvXdMhol3tLvUUnAOWIM0pc7D
-   THZA9g4B1cyOc233RajOEYG4EvkhasIU1AaRMawxTiQkog+iVT2XNOuCU
-   4/oaIQ8AUk9kk99+hOG1Y4nHVmvWRtBsA5QeCPQrk05KjZlluJUcvoF0j
-   ZOqLfZ2vPX0NsUQp8oYztt2DlojsTidBKJgLIJhR7WaRX7p5sO4FzMmsW
-   0nYuTc2jBrrnJWgxF1TQXHGjv/UlGyMmVCAWcwkkMIW0l3YYTnCBFRlXi
-   A==;
-X-CSE-ConnectionGUID: wavP+F94TPCVBjrBZbhS1Q==
-X-CSE-MsgGUID: OpTiQllWSze2ygvwPc70kg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11730"; a="85367964"
-X-IronPort-AV: E=Sophos;i="6.23,123,1770624000"; 
-   d="scan'208";a="85367964"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 03:07:51 -0700
-X-CSE-ConnectionGUID: xBAPKy3/SH+9NZqqrwM+Zg==
-X-CSE-MsgGUID: 6LsVsalCRgaNrXG0TW9xBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,123,1770624000"; 
-   d="scan'208";a="246758780"
-Received: from lkp-server01.sh.intel.com (HELO 892944969b78) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 16 Mar 2026 03:07:50 -0700
-Received: from kbuild by 892944969b78 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w24rT-000000000T4-3u7I;
-	Mon, 16 Mar 2026 10:07:47 +0000
-Date: Mon, 16 Mar 2026 18:07:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-next 25/25] fs/ceph/addr.c:273:18:
- warning: declaration of 'struct netfs_read_context' will not be visible
- outside of this function
-Message-ID: <202603161823.0DLM0r9w-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1773656285; c=relaxed/simple;
+	bh=c30q8cP+1tW7hMgKrmZODRuHGnO1oWLiLKKYH9vT2C8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tXVqCkEs09iLDfzGD7rSTlXB9+bIGIJCHgdgUKGRNap6YpVsr4TtR+e7xHDKZxe0PgZvRn26LAv8BOihsHpri5dZZjXj7cJBYQuX0bvVDTYMAk7GLLnBETHcotVlv5Y9kKDy4lJeZ36zYdXUQKTEcS3wCf45+z1B6BMqE9UAl+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 422051477;
+	Mon, 16 Mar 2026 03:17:57 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CAD483F73B;
+	Mon, 16 Mar 2026 03:18:02 -0700 (PDT)
+Date: Mon, 16 Mar 2026 10:18:00 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v4 07/30] libbpf: Initialize CFLAGS before including
+ Makefile.include
+Message-ID: <20260316101800.GB8048@e132581.arm.com>
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
+ <20260311-tools_build_fix_zero_init-v4-7-9e35bdb99cb3@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260311-tools_build_fix_zero_init-v4-7-9e35bdb99cb3@arm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
-head:   1aea2bfdfc039b008ff97eec23c755b5ac4b25a4
-commit: 1aea2bfdfc039b008ff97eec23c755b5ac4b25a4 [25/25] netfs: Combine prepare and issue ops and grab the buffers on request
-config: x86_64-randconfig-015-20260316 (https://download.01.org/0day-ci/archive/20260316/202603161823.0DLM0r9w-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260316/202603161823.0DLM0r9w-lkp@intel.com/reproduce)
+Hi BPF maintainers,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603161823.0DLM0r9w-lkp@intel.com/
+On Wed, Mar 11, 2026 at 08:29:32AM +0000, Leo Yan wrote:
+> tools/scripts/Makefile.include may expand EXTRA_CFLAGS in a future
+> change.  This could alter the initialization of CFLAGS, as the default
+> options "-g -O2" would never be set once EXTRA_CFLAGS is expanded.
+> 
+> Prepare for this by moving the CFLAGS initialization before including
+> tools/scripts/Makefile.include, so it is not affected by the extended
+> EXTRA_CFLAGS.
+> 
+> Append EXTRA_CFLAGS to CFLAGS only after including Makefile.include and
+> place it last so that the extra flags propagate properly and can
+> override the default options.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
 
-All warnings (new ones prefixed by >>):
+Before sending a new version, I'd check if you have a chance to review
+the libbpf patches.  The libbpf change is crucial for this series.
 
->> fs/ceph/addr.c:273:18: warning: declaration of 'struct netfs_read_context' will not be visible outside of this function [-Wvisibility]
-     273 |                                       struct netfs_read_context *rctx)
-         |                                              ^
-   fs/ceph/addr.c:297:8: error: call to undeclared function 'netfs_subreq_get_buffer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     297 |         err = netfs_subreq_get_buffer(subreq, rctx, UINT_MAX);
-         |               ^
-   fs/ceph/addr.c:312:37: error: too many arguments to function call, expected single argument 'subreq', have 2 arguments
-     312 |         netfs_mark_read_submission(subreq, rctx);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~         ^~~~
-   include/linux/netfs.h:456:6: note: 'netfs_mark_read_submission' declared here
-     456 | void netfs_mark_read_submission(struct netfs_io_subrequest *subreq);
-         |      ^                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/ceph/addr.c:327:71: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     327 |         err = copy_to_iter(iinfo->inline_data + subreq->start, len, &subreq->io_iter);
-         |                                                                      ~~~~~~  ^
-   fs/ceph/addr.c:344:13: warning: declaration of 'struct netfs_read_context' will not be visible outside of this function [-Wvisibility]
-     344 |                                  struct netfs_read_context *rctx)
-         |                                         ^
-   fs/ceph/addr.c:363:44: error: incompatible pointer types passing 'struct netfs_read_context *' to parameter of type 'struct netfs_read_context *' [-Werror,-Wincompatible-pointer-types]
-     363 |                 err = ceph_netfs_issue_op_inline(subreq, rctx);
-         |                                                          ^~~~
-   fs/ceph/addr.c:273:38: note: passing argument to parameter 'rctx' here
-     273 |                                       struct netfs_read_context *rctx)
-         |                                                                  ^
-   fs/ceph/addr.c:401:8: error: call to undeclared function 'netfs_subreq_get_buffer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     401 |         err = netfs_subreq_get_buffer(subreq, rctx, UINT_MAX);
-         |               ^
-   fs/ceph/addr.c:425:11: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     425 |                 subreq->io_iter.count = len;
-         |                 ~~~~~~  ^
-   fs/ceph/addr.c:427:44: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     427 |                 err = iov_iter_get_pages_alloc2(&subreq->io_iter, &pages, len, &page_off);
-         |                                                  ~~~~~~  ^
-   fs/ceph/addr.c:443:47: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     443 |                 osd_req_op_extent_osd_iter(req, 0, &subreq->io_iter);
-         |                                                     ~~~~~~  ^
-   fs/ceph/addr.c:455:37: error: too many arguments to function call, expected single argument 'subreq', have 2 arguments
-     455 |         netfs_mark_read_submission(subreq, rctx);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~         ^~~~
-   include/linux/netfs.h:456:6: note: 'netfs_mark_read_submission' declared here
-     456 | void netfs_mark_read_submission(struct netfs_io_subrequest *subreq);
-         |      ^                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/ceph/addr.c:472:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
-     472 |         __set_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags);
-         |                   ^
-   fs/ceph/addr.c:472:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
-   fs/ceph/addr.c:472:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
-   fs/ceph/addr.c:517:22: error: no member named 'sreq_max_len' in 'struct netfs_io_stream'
-     517 |         rreq->io_streams[0].sreq_max_len = fsc->mount_options->rsize;
-         |         ~~~~~~~~~~~~~~~~~~~ ^
-   fs/ceph/addr.c:545:17: error: incompatible function pointer types initializing 'int (*)(struct netfs_io_subrequest *)' with an expression of type 'int (struct netfs_io_subrequest *, struct netfs_read_context *)' [-Wincompatible-function-pointer-types]
-     545 |         .issue_read             = ceph_netfs_issue_read,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 14 errors generated.
+Another reason for pinging because I received a bpf-ci report about test
+failures for this series [1].  The failures looks to be unrelated, as
+the tests fail starting from the first patch, which is irrelevant to BPF
+code [2].  I tried reaching kernel-ci@meta.com last week but haven't
+received a response yet.
 
+If bpf-ci testing is mandatory for libbpf patches, could you advise me
+on the correct workflow (e.g., whether the patches should be based on a
+specific branch)?
 
-vim +273 fs/ceph/addr.c
+Thanks.
 
-   271	
-   272	static int ceph_netfs_issue_op_inline(struct netfs_io_subrequest *subreq,
- > 273					      struct netfs_read_context *rctx)
-   274	{
-   275		struct netfs_io_request *rreq = subreq->rreq;
-   276		struct inode *inode = rreq->inode;
-   277		struct ceph_mds_reply_info_parsed *rinfo;
-   278		struct ceph_mds_reply_info_in *iinfo;
-   279		struct ceph_mds_request *req;
-   280		struct ceph_mds_client *mdsc = ceph_sb_to_mdsc(inode->i_sb);
-   281		struct ceph_inode_info *ci = ceph_inode(inode);
-   282		ssize_t err;
-   283		size_t len;
-   284		int mode;
-   285	
-   286		if (rreq->origin != NETFS_UNBUFFERED_READ &&
-   287		    rreq->origin != NETFS_DIO_READ)
-   288			__set_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags);
-   289		__clear_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags);
-   290	
-   291		if (subreq->start >= inode->i_size) {
-   292			__set_bit(NETFS_SREQ_HIT_EOF, &subreq->flags);
-   293			err = 0;
-   294			goto out;
-   295		}
-   296	
-   297		err = netfs_subreq_get_buffer(subreq, rctx, UINT_MAX);
-   298		if (err < 0)
-   299			return err;
-   300	
-   301		/* We need to fetch the inline data. */
-   302		mode = ceph_try_to_choose_auth_mds(inode, CEPH_STAT_CAP_INLINE_DATA);
-   303		req = ceph_mdsc_create_request(mdsc, CEPH_MDS_OP_GETATTR, mode);
-   304		if (IS_ERR(req))
-   305			return PTR_ERR(req);
-   306	
-   307		req->r_ino1 = ci->i_vino;
-   308		req->r_args.getattr.mask = cpu_to_le32(CEPH_STAT_CAP_INLINE_DATA);
-   309		req->r_num_caps = 2;
-   310	
-   311		/* After this point, we're not allowed to return an error. */
-   312		netfs_mark_read_submission(subreq, rctx);
-   313	
-   314		err = ceph_mdsc_do_request(mdsc, NULL, req);
-   315		if (err < 0)
-   316			goto out;
-   317	
-   318		rinfo = &req->r_reply_info;
-   319		iinfo = &rinfo->targeti;
-   320		if (iinfo->inline_version == CEPH_INLINE_NONE) {
-   321			/* The data got uninlined */
-   322			ceph_mdsc_put_request(req);
-   323			return 1;
-   324		}
-   325	
-   326		len = min_t(size_t, iinfo->inline_len - subreq->start, subreq->len);
-   327		err = copy_to_iter(iinfo->inline_data + subreq->start, len, &subreq->io_iter);
-   328		if (err == 0) {
-   329			err = -EFAULT;
-   330		} else {
-   331			subreq->transferred += err;
-   332			err = 0;
-   333		}
-   334	
-   335		ceph_mdsc_put_request(req);
-   336	out:
-   337		subreq->error = err;
-   338		trace_netfs_sreq(subreq, netfs_sreq_trace_io_progress);
-   339		netfs_read_subreq_terminated(subreq);
-   340		return -EIOCBQUEUED;
-   341	}
-   342	
+[1] https://github.com/kernel-patches/bpf/actions/runs/22944268645
+[2] https://patchwork.kernel.org/project/netdevbpf/patch/20260311-tools_build_fix_zero_init-v4-1-9e35bdb99cb3@arm.com/
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  tools/lib/bpf/Makefile | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index b1fbd0211c5edde7be3d98630b16e53e028d9116..eca584fb061e16013e76827e4203f6be0477a73e 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -49,6 +49,14 @@ man_dir_SQ = '$(subst ','\'',$(man_dir))'
+>  export man_dir man_dir_SQ INSTALL
+>  export DESTDIR DESTDIR_SQ
+>  
+> +# Defer assigning EXTRA_CFLAGS to CFLAGS until after including
+> +# tools/scripts/Makefile.include, as it may add flags to EXTRA_CFLAGS.
+> +ifdef EXTRA_CFLAGS
+> +  CFLAGS :=
+> +else
+> +  CFLAGS := -g -O2
+> +endif
+> +
+>  include $(srctree)/tools/scripts/Makefile.include
+>  
+>  # copy a bit from Linux kbuild
+> @@ -70,13 +78,6 @@ LIB_TARGET	= libbpf.a libbpf.so.$(LIBBPF_VERSION)
+>  LIB_FILE	= libbpf.a libbpf.so*
+>  PC_FILE		= libbpf.pc
+>  
+> -# Set compile option CFLAGS
+> -ifdef EXTRA_CFLAGS
+> -  CFLAGS := $(EXTRA_CFLAGS)
+> -else
+> -  CFLAGS := -g -O2
+> -endif
+> -
+>  # Append required CFLAGS
+>  override CFLAGS += -std=gnu89
+>  override CFLAGS += $(EXTRA_WARNINGS) -Wno-switch-enum
+> @@ -84,6 +85,7 @@ override CFLAGS += -Werror -Wall
+>  override CFLAGS += $(INCLUDES)
+>  override CFLAGS += -fvisibility=hidden
+>  override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> +override CFLAGS += $(EXTRA_CFLAGS)
+>  
+>  # flags specific for shared library
+>  SHLIB_FLAGS := -DSHARED -fPIC
+> 
+> -- 
+> 2.34.1
+> 
