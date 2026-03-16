@@ -1,173 +1,442 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9501E520A
-	for <llvm@lists.linux.dev>; Mon, 16 Mar 2026 10:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1188A286D5E;
+	Mon, 16 Mar 2026 11:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773656285; cv=none; b=J2Nz/a/yUeKqcibAXiiFL1N3WA30do6PLq/rz/7Omp043mbxbWOV5gXCrrROiee+1I/HmPfO1wdQDDPtB6H2tgvwdBqfL32l7N4A4QFdN+LYxr1kN6wdv2x/HrCSk68/EQXOoTqE3Zka5G0lEkxipyiXuSWb5jEFUTiM6ZycYMg=
+	t=1773660061; cv=none; b=Ns3blIQhMYbb+LWN5XH8/j0+kAf3GxswWySZ9x5qR1Gn8hBJHDA6Vk+/I6LfRKmLV047gbAh41jvK6OK4/+CDV4i0u60zlaGAmaDSv25KCapHx935EpHFS4+gmfaim02k7yGlu4H7o7MDnVwtTIsC4OfrfTLR418Q08HMtINchQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773656285; c=relaxed/simple;
-	bh=c30q8cP+1tW7hMgKrmZODRuHGnO1oWLiLKKYH9vT2C8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tXVqCkEs09iLDfzGD7rSTlXB9+bIGIJCHgdgUKGRNap6YpVsr4TtR+e7xHDKZxe0PgZvRn26LAv8BOihsHpri5dZZjXj7cJBYQuX0bvVDTYMAk7GLLnBETHcotVlv5Y9kKDy4lJeZ36zYdXUQKTEcS3wCf45+z1B6BMqE9UAl+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 422051477;
-	Mon, 16 Mar 2026 03:17:57 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CAD483F73B;
-	Mon, 16 Mar 2026 03:18:02 -0700 (PDT)
-Date: Mon, 16 Mar 2026 10:18:00 +0000
-From: Leo Yan <leo.yan@arm.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	Quentin Monnet <qmo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	William Breathitt Gray <wbg@kernel.org>,
-	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Kent Gibson <warthog618@gmail.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v4 07/30] libbpf: Initialize CFLAGS before including
- Makefile.include
-Message-ID: <20260316101800.GB8048@e132581.arm.com>
-References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
- <20260311-tools_build_fix_zero_init-v4-7-9e35bdb99cb3@arm.com>
+	s=arc-20240116; t=1773660061; c=relaxed/simple;
+	bh=1dsFK+O2tNuAvXzVfpxFutV/ciiJAlfBnKWTBzyfB+w=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cVgTBZp5XIM/diMLf6l5SUX7YnH3tdTts9R9+72Ya5i6hxICgK5iqG8xk0QBECEiKXwzrlrhmIx+fUiWpVssnhPeg1f+1DJ0iRh4BogT4GM7WMJjnbYTijKAnXP5tbS16+knGG5Vukzdkwsni9fRMIkl4BnI0p9+CcGDLReXkjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hPXMOYLm; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hPXMOYLm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773660059; x=1805196059;
+  h=date:from:to:cc:subject:message-id;
+  bh=1dsFK+O2tNuAvXzVfpxFutV/ciiJAlfBnKWTBzyfB+w=;
+  b=hPXMOYLmDTr+v/uj+9UQN6YO7vCiDOgRqmyrdCYqvE3t1IFW+/VVzfOj
+   WiXh1tXArpa3DJa00qoCZUJAupZQlzDXv9CXp5HwC50z1+FdUI7wMxmt6
+   N5cDC+hXtMyUUHcg+cPSdD9ElZGLLpB8Mk4ooj6MmLeWZ+3Y8y/oxygW8
+   ZBYbEWM0OOmcm9jb9GKbFJtYej1nRCC7+RUMW+E9/MbjFOGET0MdIkpBM
+   vCijl11uMIzkVpQkSnlRjWKPj+RSyfRdhY0Fa8drt3HF9hxWEdx3GDiaH
+   SZIbiLjdMGEJvAixjwQ2bCRWiot5OoDinIEGIOMCPDyZMdjb/PIYDfPbA
+   w==;
+X-CSE-ConnectionGUID: rd1p4YMBQqSEFF3eu5lhHg==
+X-CSE-MsgGUID: vjgHiwROQsuDXjrgEcLC4g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11730"; a="74562499"
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="74562499"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 04:20:59 -0700
+X-CSE-ConnectionGUID: rNT+sGukToWC4VlFRJugyQ==
+X-CSE-MsgGUID: /XMFGNkSQDy8YiY0tLsGzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="221833258"
+Received: from lkp-server01.sh.intel.com (HELO 892944969b78) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 16 Mar 2026 04:20:57 -0700
+Received: from kbuild by 892944969b78 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w260E-000000000a2-03JK;
+	Mon, 16 Mar 2026 11:20:54 +0000
+Date: Mon, 16 Mar 2026 19:20:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Christian Brauner <christianvanbrauner@gmail.com>
+Subject: [brauner-github:work.kthread.nullfs.split.rebase 21/27]
+ include/linux/poll.h:134:27: warning: division by zero is undefined
+Message-ID: <202603161935.hkbhB9OY-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260311-tools_build_fix_zero_init-v4-7-9e35bdb99cb3@arm.com>
 
-Hi BPF maintainers,
+tree:   https://github.com/brauner/linux.git work.kthread.nullfs.split.rebase
+head:   860c2d1391cc4c3a4bb2a01002ef315773f09569
+commit: 3e90c261ca823ef96b9b956d2cd5fe2e9b37629e [21/27] fs: add kthread_mntns()
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260316/202603161935.hkbhB9OY-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project f46a5153850c1303d687233d4adf699b01041da8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260316/202603161935.hkbhB9OY-lkp@intel.com/reproduce)
 
-On Wed, Mar 11, 2026 at 08:29:32AM +0000, Leo Yan wrote:
-> tools/scripts/Makefile.include may expand EXTRA_CFLAGS in a future
-> change.  This could alter the initialization of CFLAGS, as the default
-> options "-g -O2" would never be set once EXTRA_CFLAGS is expanded.
-> 
-> Prepare for this by moving the CFLAGS initialization before including
-> tools/scripts/Makefile.include, so it is not affected by the extended
-> EXTRA_CFLAGS.
-> 
-> Append EXTRA_CFLAGS to CFLAGS only after including Makefile.include and
-> place it last so that the extra flags propagate properly and can
-> override the default options.
-> 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603161935.hkbhB9OY-lkp@intel.com/
 
-Before sending a new version, I'd check if you have a chance to review
-the libbpf patches.  The libbpf change is crucial for this series.
+All warnings (new ones prefixed by >>):
 
-Another reason for pinging because I received a bpf-ci report about test
-failures for this series [1].  The failures looks to be unrelated, as
-the tests fail starting from the first patch, which is irrelevant to BPF
-code [2].  I tried reaching kernel-ci@meta.com last week but haven't
-received a response yet.
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:175:3: note: expanded from macro '_SIG_SET_OP'
+     175 |                 set->sig[2] = op(set->sig[2]);                          \
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/pnode.c:10:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:177:27: note: expanded from macro '_SIG_SET_OP'
+     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
+         |                                  ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/pnode.c:10:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:177:10: note: expanded from macro '_SIG_SET_OP'
+     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/pnode.c:10:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:198:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     198 |         case 2: set->sig[1] = 0;
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/pnode.c:10:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:211:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     211 |         case 2: set->sig[1] = -1;
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/pnode.c:10:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:242:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     242 |         case 2: set->sig[1] = 0;
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/pnode.c:10:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:255:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     255 |         case 2: set->sig[1] = -1;
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/pnode.c:14:
+   In file included from fs/pnode.h:11:
+   In file included from fs/mount.h:4:
+>> include/linux/poll.h:134:27: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                         ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:134:39: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                                     ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:135:12: warning: division by zero is undefined [-Wdivision-by-zero]
+     135 |                 M(HUP) | M(RDHUP) | M(MSG);
+         |                          ^~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:135:23: warning: division by zero is undefined [-Wdivision-by-zero]
+     135 |                 M(HUP) | M(RDHUP) | M(MSG);
+         |                                     ^~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   53 warnings and 1 error generated.
+--
+     175 |                 set->sig[2] = op(set->sig[2]);                          \
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:4:
+   In file included from include/linux/namei.h:5:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:177:27: note: expanded from macro '_SIG_SET_OP'
+     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
+         |                                  ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:4:
+   In file included from include/linux/namei.h:5:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:177:10: note: expanded from macro '_SIG_SET_OP'
+     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:4:
+   In file included from include/linux/namei.h:5:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:198:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     198 |         case 2: set->sig[1] = 0;
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:4:
+   In file included from include/linux/namei.h:5:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:211:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     211 |         case 2: set->sig[1] = -1;
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:4:
+   In file included from include/linux/namei.h:5:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:242:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     242 |         case 2: set->sig[1] = 0;
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:4:
+   In file included from include/linux/namei.h:5:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:255:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     255 |         case 2: set->sig[1] = -1;
+         |                 ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:6:
+   In file included from include/linux/syscalls.h:95:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:7:
+>> include/linux/poll.h:134:27: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                         ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:134:39: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                                     ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:135:12: warning: division by zero is undefined [-Wdivision-by-zero]
+     135 |                 M(HUP) | M(RDHUP) | M(MSG);
+         |                          ^~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:135:23: warning: division by zero is undefined [-Wdivision-by-zero]
+     135 |                 M(HUP) | M(RDHUP) | M(MSG);
+         |                                     ^~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   In file included from fs/utimes.c:8:
+   include/linux/compat.h:454:22: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     454 |         case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
+         |                             ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:8:
+   include/linux/compat.h:454:10: warning: array index 7 is past the end of the array (that has type 'compat_sigset_word[2]' (aka 'unsigned int[2]')) [-Warray-bounds]
+     454 |         case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
+         |                 ^     ~
+   include/linux/compat.h:130:2: note: array 'sig' declared here
+     130 |         compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
+         |         ^
+   include/linux/compat.h:454:42: warning: array index 6 is past the end of the array (that has type 'compat_sigset_word[2]' (aka 'unsigned int[2]')) [-Warray-bounds]
+     454 |         case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
+         |                                                 ^     ~
+   include/linux/compat.h:130:2: note: array 'sig' declared here
+     130 |         compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
+         |         ^
+   include/linux/compat.h:454:53: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     454 |         case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
+         |                                                            ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:8:
+   include/linux/compat.h:456:22: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     456 |         case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
+         |                             ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:8:
+   include/linux/compat.h:456:10: warning: array index 5 is past the end of the array (that has type 'compat_sigset_word[2]' (aka 'unsigned int[2]')) [-Warray-bounds]
+     456 |         case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
+         |                 ^     ~
+   include/linux/compat.h:130:2: note: array 'sig' declared here
+     130 |         compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
+         |         ^
+   include/linux/compat.h:456:42: warning: array index 4 is past the end of the array (that has type 'compat_sigset_word[2]' (aka 'unsigned int[2]')) [-Warray-bounds]
+     456 |         case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
+         |                                                 ^     ~
+   include/linux/compat.h:130:2: note: array 'sig' declared here
+     130 |         compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
+         |         ^
+   include/linux/compat.h:456:53: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     456 |         case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
+         |                                                            ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:8:
+   include/linux/compat.h:458:22: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     458 |         case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
+         |                             ^        ~
+   arch/sparc/include/uapi/asm/signal.h:113:8: note: array 'sig' declared here
+     113 |        unsigned long sig[_NSIG_WORDS];
+         |        ^
+   In file included from fs/utimes.c:8:
+   include/linux/compat.h:458:10: warning: array index 3 is past the end of the array (that has type 'compat_sigset_word[2]' (aka 'unsigned int[2]')) [-Warray-bounds]
+     458 |         case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
+         |                 ^     ~
+   include/linux/compat.h:130:2: note: array 'sig' declared here
+     130 |         compat_sigset_word      sig[_COMPAT_NSIG_WORDS];
+..
 
-If bpf-ci testing is mandatory for libbpf patches, could you advise me
-on the correct workflow (e.g., whether the patches should be based on a
-specific branch)?
 
-Thanks.
+vim +134 include/linux/poll.h
 
-[1] https://github.com/kernel-patches/bpf/actions/runs/22944268645
-[2] https://patchwork.kernel.org/project/netdevbpf/patch/20260311-tools_build_fix_zero_init-v4-1-9e35bdb99cb3@arm.com/
+7a163b2195cda0 Al Viro 2018-02-01  129  
+7a163b2195cda0 Al Viro 2018-02-01  130  static inline __poll_t demangle_poll(u16 val)
+7a163b2195cda0 Al Viro 2018-02-01  131  {
+7a163b2195cda0 Al Viro 2018-02-01  132  #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+7a163b2195cda0 Al Viro 2018-02-01  133  	return M(IN) | M(OUT) | M(PRI) | M(ERR) | M(NVAL) |
+7a163b2195cda0 Al Viro 2018-02-01 @134  		M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+7a163b2195cda0 Al Viro 2018-02-01  135  		M(HUP) | M(RDHUP) | M(MSG);
+7a163b2195cda0 Al Viro 2018-02-01  136  #undef M
+7a163b2195cda0 Al Viro 2018-02-01  137  }
+7a163b2195cda0 Al Viro 2018-02-01  138  #undef __MAP
+7a163b2195cda0 Al Viro 2018-02-01  139  
+7a163b2195cda0 Al Viro 2018-02-01  140  
 
-> ---
->  tools/lib/bpf/Makefile | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index b1fbd0211c5edde7be3d98630b16e53e028d9116..eca584fb061e16013e76827e4203f6be0477a73e 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -49,6 +49,14 @@ man_dir_SQ = '$(subst ','\'',$(man_dir))'
->  export man_dir man_dir_SQ INSTALL
->  export DESTDIR DESTDIR_SQ
->  
-> +# Defer assigning EXTRA_CFLAGS to CFLAGS until after including
-> +# tools/scripts/Makefile.include, as it may add flags to EXTRA_CFLAGS.
-> +ifdef EXTRA_CFLAGS
-> +  CFLAGS :=
-> +else
-> +  CFLAGS := -g -O2
-> +endif
-> +
->  include $(srctree)/tools/scripts/Makefile.include
->  
->  # copy a bit from Linux kbuild
-> @@ -70,13 +78,6 @@ LIB_TARGET	= libbpf.a libbpf.so.$(LIBBPF_VERSION)
->  LIB_FILE	= libbpf.a libbpf.so*
->  PC_FILE		= libbpf.pc
->  
-> -# Set compile option CFLAGS
-> -ifdef EXTRA_CFLAGS
-> -  CFLAGS := $(EXTRA_CFLAGS)
-> -else
-> -  CFLAGS := -g -O2
-> -endif
-> -
->  # Append required CFLAGS
->  override CFLAGS += -std=gnu89
->  override CFLAGS += $(EXTRA_WARNINGS) -Wno-switch-enum
-> @@ -84,6 +85,7 @@ override CFLAGS += -Werror -Wall
->  override CFLAGS += $(INCLUDES)
->  override CFLAGS += -fvisibility=hidden
->  override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-> +override CFLAGS += $(EXTRA_CFLAGS)
->  
->  # flags specific for shared library
->  SHLIB_FLAGS := -DSHARED -fPIC
-> 
-> -- 
-> 2.34.1
-> 
+:::::: The code at line 134 was first introduced by commit
+:::::: 7a163b2195cda0cddf47b5caf14a7229d4e2bea3 unify {de,}mangle_poll(), get rid of kernel-side POLL...
+
+:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
