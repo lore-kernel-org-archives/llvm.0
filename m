@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6F233C1B2;
-	Mon, 16 Mar 2026 17:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C775933468C;
+	Mon, 16 Mar 2026 18:00:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773683810; cv=none; b=lNyYSy/u9DtaIxKMTjMIkjjhq8IArjRXWN0kmunVcGpdXSSvtIG3oJ2EzWKt9KPEwqBuN6GJ28I72YWDrTAb7hzobsPkayESctW+H974lnkGeoaizSLW2Go1QTcz5f8j7vWDTLuN6wzP6RLXfvq2Rw13FwsCUE3q426hNetYW9k=
+	t=1773684000; cv=none; b=g4PehNGRD134+PFkuX/6c4xiTfvgOwmC7oBBHM4+yv/OCE+kPq8Cb84lJEpph2R0MXy9Om6iY9bE1K9FNwtdDPR1c4c//RKSvEPG9+kGRxt0Ts5TwZbkRy9lo6nP6VauyZ+CwFxSWjs3VzHwSEH5I3t1g5GIYpvDFi9MaPw6egQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773683810; c=relaxed/simple;
-	bh=QsvI7xh+xmuVKe0toI6okbDwY6fJwH4DKn5xR2ODfgI=;
+	s=arc-20240116; t=1773684000; c=relaxed/simple;
+	bh=WJ+7NOHIyo2AVqHU3Hy1mS4mauWLaZ+ucROLTZVcQC8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m5XYNvzWAVBxa7uKpjpWWm504NOEEChBSoKL5lEF+H4/KwwG9UV1CN1i2+acaFyAQgzC31riYVqNeipE55x1cXNg4jSVHbRVn0sEtM4/V260hFwdjmyK7VwFLb+uWbSUrXt1c/fbpbHjNIgtg1GPbp5vXVJS5s9HZa5jph/S0hE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kcM+ccPB; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZLLJIVokGRecXa5nXK6NuxixL0zLPBZ/lhzHDYp+eWRNWzxMDo7cxEijFsjvHRyvYsXaUUPXcL3DRCWrKlIpFY0CEkzdT6Mcs/bz/xWcy1w6YJzduT1yuQEkuDCVz5Vr6fQxWOurBC0s4Tub+Z/0PMJbLzk8cCCH6qAriKwu09k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gYncrS59; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kcM+ccPB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D633C19421;
-	Mon, 16 Mar 2026 17:56:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gYncrS59"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E2E7C19425;
+	Mon, 16 Mar 2026 17:59:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773683810;
-	bh=QsvI7xh+xmuVKe0toI6okbDwY6fJwH4DKn5xR2ODfgI=;
+	s=k20201202; t=1773684000;
+	bh=WJ+7NOHIyo2AVqHU3Hy1mS4mauWLaZ+ucROLTZVcQC8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kcM+ccPBGh7N4ro6gnNhIsFjjtEtWhVRcNdHs2DLYgX8hl7QPmv9Tfvs9mJbvwlLQ
-	 oynayt0GbizqFxrD8PqPJ3olyhlI+tgZ01RpL6SbpyHzZ1BQBDPcYBN7vVv5Ri1BOA
-	 vu5HX6yAtqiPjehXhZV/SO/tAGFQSb7TwkIV+XeFkPsiu49TKoXJ+PVO9vhufFno99
-	 Ay8JB4CSnvE+mn6r/XXw6afL/kDwgAhpiuw9B/azIHKmj4YMB4L/Sj3A+8oidL0OaT
-	 Q+6pex4wR81B5kiFbhnkACxGt3YLpAclxbRV0eXEHCmztUncFMwRwuP6s9ARsFByIQ
-	 avTHcHOnFl8TA==
-Date: Mon, 16 Mar 2026 18:52:10 +0100
-From: Nicolas Schier <nsc@kernel.org>
+	b=gYncrS59AK4UsZU2csYt2ANYL3lyicT0Hy5yyHRd0lo++mh/6TD6tG2+i7KLjHojv
+	 qdNdN7NzJuSpXFLrg3F79VuxnpgU+zByUq+8joUfhNk/b0ZJiSTXKfeyD1zvtjJlKK
+	 pIy87vt+9kMoktxmjSBMu/LRWXNnFtozLQuqNaVlY4Em8/l2NkEFrL8ndSc8G3+ht1
+	 Se7J1/uhDR4QM3ixGNB3tvI/C/4EihEWqBr/gh5RnwIOvPlxWSVaXhwsKBjDcZpHq/
+	 Ktl70c7q/ldBkBsqHTgh7FFcPLCKttED/UIK4tjx+tPW67uCzwyhUjvnKdziOzk7BI
+	 pewnKCN843IGw==
+Date: Mon, 16 Mar 2026 10:59:53 -0700
+From: Nathan Chancellor <nathan@kernel.org>
 To: Rong Xu <xur@google.com>
 Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Nicolas Schier <nsc@kernel.org>,
 	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
@@ -50,27 +50,7 @@ Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
 	Arnd Bergmann <arnd@arndb.de>
 Subject: Re: [PATCH v5 1/2] kbuild: move vmlinux.a build rule to
  scripts/Makefile.vmlinux_a
-Message-ID: <abhDSrgevNJl-AUh@levanger>
-Mail-Followup-To: Nicolas Schier <nsc@kernel.org>, Rong Xu <xur@google.com>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Rafael Aquini <aquini@redhat.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Stafford Horne <shorne@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Piotr Gorski <piotrgorski@cachyos.org>,
-	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-	Arnd Bergmann <arnd@arndb.de>
+Message-ID: <20260316175953.GA1910339@ax162>
 References: <20251028182822.3210436-1-xur@google.com>
  <20251028182822.3210436-2-xur@google.com>
  <abgGnfO5ZrpOUza7@levanger>
@@ -92,15 +72,11 @@ On Mon, Mar 16, 2026 at 05:27:01PM +0000, Rong Xu wrote:
 > 
 > We can either
 > (1) Bump the LLVM version to 15 and remove the --thin flag, or
-> (2) Implement a condition, as the --thin flag is only required for
-> llvm-ar. I assume the reported error was using gcc? (can someone send
-> a link for the failure?)
-> 
-> I think (2) is less involved. I can prepare a updated patch.
 
-Great, thanks!  Yes, the report was using gcc.
+The minimum supported version of LLVM for building the kernel was
+bumped to 15 in 6.18 with commit 20c098928356 ("kbuild: Bump minimum
+version of LLVM for building the kernel to 15.0.0"), so it seems like we
+can just do this?
 
-The report is at https://lore.kernel.org/linux-next/476507c9-a371-4864-9e87-572c1ecae82d@linux.ibm.com/
-
-Kind regards,
-Nicolas
+Cheers,
+Nathan
