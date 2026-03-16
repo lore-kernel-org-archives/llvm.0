@@ -1,225 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80D039A04A;
-	Mon, 16 Mar 2026 13:40:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773668442; cv=none; b=MPldSOQvIW0byB8qSoBvxQusEQ5VLr08Tc/dxFW6LM6fEvkA5Lg01kpLdJTXDf2eOSTBgtPDw5MZBahwpM13TB0S4g4Xk7f00PALgXZAGTfv1Mcl3ti2BkqwdPa0Wnjcx3PWZZYTvPpMrQBoP75zyNnqyLfYj1+lfkbM33G9jQc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773668442; c=relaxed/simple;
-	bh=0xTxDT0xeRLRDn1/97+bZ4KoB/Z0tHh7d+AWsRqC2wk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wa4B4tRrAcKcheuMrBsnDQtO+zqkl96GoeGsOXZ4X0ZxTJWpupeiW6tN5JelqZAaWgewO7SlrVQBsbhcWcqF41yMghlUq8YzMa+c+oigInrxfdxEmG9jDqmLG2zC4uTp8YsHOZBbZr1AYz7ZbBEeEl1tWJNuiDUZtytRg6xWFaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jBHLwNXQ; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EB4BA21
+	for <llvm@lists.linux.dev>; Mon, 16 Mar 2026 13:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773669582; cv=pass; b=T3unoKvgUyqCPp4KoDX2zuuKcadQ+HWYkg/ApllvWFAYAQQkHjmFasrhyqiUkTnt9SLTMQSxkzChlWLFT2sUacHkrHtWgo8Dx1dquMVHXx9xfjLXqMOfoXbAjPOkiJcg1Gl12//rn9vv8IoBFX/lzZUOFLsQibJoEGfWecCqoPE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773669582; c=relaxed/simple;
+	bh=TENiWIskmMEWydIsAXEosg505GukLfFhkft6Jm8fr0o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=m6t+j2TQLo0La7keNIbPyOeHMz4AtX1psyh5PpaP6NQeRyC5dozVEGOu98huybc+47KlPQ0qET70/jqZh6WmJgEiRsZJ69pPsOuzuYAMYOZwLmkdiAGQLk3Aoq0cUZzqPjTddzXp/idCPoo5+g7hp3uJTvFplkV4oKYaovIa7hc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dCBGjIlL; arc=pass smtp.client-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jBHLwNXQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C4AC19421;
-	Mon, 16 Mar 2026 13:40:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773668442;
-	bh=0xTxDT0xeRLRDn1/97+bZ4KoB/Z0tHh7d+AWsRqC2wk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jBHLwNXQbs2F8DNXTpPHny6U3eI9vxUx24AOiZ73rm/CrAHsABVRjLik0R5Py2aFi
-	 oBvRz+OC8VT0xMczNnEYechlE1B3RZ3pQlNVnJniZL7O14p5VAJsY8unFMudVDyamI
-	 M+XXDrlh25JhuXAyWFyrS2DAGh8igmP5ngO5JnWJofUF1uBLeFCoKzjipUpmGC/CSC
-	 nblE9TbGYCtqzW5qi5g1Vf4FSKFc/1/k02TJO6H93eRtsb0ILhDQ5n+VooOS8SVhL0
-	 SuoaLTAT/s60rRFIdpO76KpTePScrKU2vCInkHeo4TxuRNlSccEe5dvCAAuO3nyY/D
-	 AHOEaqMMpRJuA==
-Date: Mon, 16 Mar 2026 14:33:17 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: xur@google.com
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Rafael Aquini <aquini@redhat.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Stafford Horne <shorne@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Piotr Gorski <piotrgorski@cachyos.org>,
-	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 1/2] kbuild: move vmlinux.a build rule to
- scripts/Makefile.vmlinux_a
-Message-ID: <abgGnfO5ZrpOUza7@levanger>
-Mail-Followup-To: Nicolas Schier <nsc@kernel.org>, xur@google.com,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Rafael Aquini <aquini@redhat.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Stafford Horne <shorne@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Piotr Gorski <piotrgorski@cachyos.org>,
-	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-References: <20251028182822.3210436-1-xur@google.com>
- <20251028182822.3210436-2-xur@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dCBGjIlL"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2c0c482dfc8so28987eec.1
+        for <llvm@lists.linux.dev>; Mon, 16 Mar 2026 06:59:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773669580; cv=none;
+        d=google.com; s=arc-20240605;
+        b=i/34Xt60PcRYD0dJE5rNGN0N0unkUUXQnj0JqNcCykOcHCNOCuYfh22T3RLtQViFfT
+         duDaHEa/ejvIzzboYazkHmFky3KLHTMJf0AREngyCGhd7tSG3gfbmWFdBKu/3UXP3v1P
+         WmDmG/JZo5XculpIrz9VvvX9AIFL9esdqonA9NZzawLAwTWBxUsfmkJKTsLmroy1Du1g
+         iHxv5J5yoApXqmHuzaBWSa3SvY5kPW62xkszmkv2Evo7GpQP0dpc5nccRAQRuza8RodG
+         s5skfrgkzoLGdvWV2Hw05B4cT4PUCz1LBhXsNDcopD0nxb8xbiEn+5pX+aQkHnC0Zrd9
+         r/Jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=TENiWIskmMEWydIsAXEosg505GukLfFhkft6Jm8fr0o=;
+        fh=y2SRU629Nfv/bn4bVRy22YAKfB3zCKD5A6VUswqtTOc=;
+        b=Ok3oMID6MNVYLg0PNXpugAiGiaX4mS6Ug/X1SYxR2477bfBh1g2Sh2Te9w8uz+YmZx
+         /bXr1WmsM0/wWVOIsy2ni9PqHvGkEkQhnVqf61WstHRzCUvlVU7ZeU+GUQmqpA1+/3mV
+         s85sobhlr12ryw+b1iS1zBjV96Fnk338DQvxag6TT1DBvdj7IIqFwQSueOKULv6rDEfH
+         gG7xa/kNMHmtOr/hIHkQDHvX2rU2KSoyvFoykzSbULh9RNFxn985Smzx9Z7IxK1bQ/nC
+         jut80Ryz4o8jhDIGK04e9lKIEzGLyBL5giyqLAKuv8qcaWz+FrV3/fbN6b8fpc4uAeLZ
+         7I6Q==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773669580; x=1774274380; darn=lists.linux.dev;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TENiWIskmMEWydIsAXEosg505GukLfFhkft6Jm8fr0o=;
+        b=dCBGjIlLENtcwvmhAky+VOAA1tnCFPSMAOolasKHvP9O7vN70UBJ9SNNqNimwNpjSc
+         UWYCwW1Ew5+HEyh0DKjptkIoBxMj2Vvwws1MRzkmlm7zmeyL469SJDzDRp24cINeheQk
+         4Q27dorYVIPjFK3N5/q/mV9zuKd82BF0xONFg4aK+l/5OH3FjFS5OzoI+AaTpuepyPwO
+         k/cplVxe55USQPzTEvpFq29XjNBf4U1eR+TwESs2kvhaDB9BDR0g/ob8t44GoW2mdOUT
+         FEfXV6SGLb1GJuUaILorKjkTVbCWByI9LjB6rIkMSc2V0Mff0PbCo6XcjHMM/bhcg5Wz
+         mxtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773669580; x=1774274380;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TENiWIskmMEWydIsAXEosg505GukLfFhkft6Jm8fr0o=;
+        b=fCKf+UkuzEuKENILWyF/+JuTcINnH6STEOvD5su/yVsZ11XD5B3nOkrZcut/Utd7xJ
+         F8KM6ZD6sUNTmwck0E73/6QYg+2+RD2xta7ykS4/aoQ2T5nsXt7yoXu15JXmSFMCu87c
+         9U2ipR51tGYXx6aKus6pgu0e1y/e+H3litI7Za3hfk+T3C6ngClEcvx4Nw8IHV31xOs1
+         XQOnsFdzj4NCTonHQpsSF5T1i0oPJhypYs3vEbc1X852h6h5NYYUwy9xQw9pRMsXh2XB
+         t5nZ+q8VdvNQzB+0y+CHsU70BoQ33i8VwI6Jj/NO/5erP5VRBf7D+mP1nSaYSpJy2Vat
+         YAXg==
+X-Forwarded-Encrypted: i=1; AJvYcCUmifN64QkpAq3+NKR9prXFPugeTGY0KOq57ossDWTPM7gQ0vsG90+d5UavCjmZtpgNmhTL@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzi7bDQX2HYLQc4kJyC71i/AsiT0bDWiS6sjC2m8atMq2TfNcfm
+	++12nv2t9Z2hX2Fq/uoek2q1wlrS5mLGf+tp83paAUbNPH866syvsSlEJePil5C/65i+X5UGaKR
+	QDg19hqOFlG83FexoZH4Kx8E0v9AiEbc=
+X-Gm-Gg: ATEYQzwdIxRD7bQ+jFEuazB3HZ13av37X3xEmETR7N8FemNOD2jc3r3qhqj5IgRMqk8
+	txFVIBCz71bVjW7n1Bi6mgLG+H0uNdAnd3IQILlMiBJl6jjLVaeanb7idHcWzSalpkqS+IJbkVJ
+	xav3xcRmhn9q5E/s39A9IJ+Bu1awHDnHzH2u0E25m0r5ZcpG5yZipY0huejOVZBZK0HKZqsk2gZ
+	/V/F3Edp3CoMkvFYpV6gIagqWu+3aXRRqbemN8qgkEYTLR28PQ+HA4/iKTWlbQ1LuvH2P8yVlBV
+	r547j9QjOcsjmy+43yCddcVZZG7URSn4Fq3SNOeuHdJCayTiwQA/X8Azc3SuEY/Jn9IenMyBNRO
+	IHUqw6RfqmoDczqOKoRYm+m0=
+X-Received: by 2002:a05:7301:fa8b:b0:2be:1946:858b with SMTP id
+ 5a478bee46e88-2bea5537069mr3308614eec.3.1773669579867; Mon, 16 Mar 2026
+ 06:59:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3LIPWUU5r6vqSeC4"
-Content-Disposition: inline
-In-Reply-To: <20251028182822.3210436-2-xur@google.com>
-
-
---3LIPWUU5r6vqSeC4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20251028182822.3210436-1-xur@google.com> <20251028182822.3210436-2-xur@google.com>
+ <abgGnfO5ZrpOUza7@levanger>
+In-Reply-To: <abgGnfO5ZrpOUza7@levanger>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 16 Mar 2026 14:59:26 +0100
+X-Gm-Features: AaiRm53TmmEldlbSbIxGsm46srTQKJN82jRa_BhGLUfrM1H32Pu13C6vCiHeFPY
+Message-ID: <CANiq72mCpc9=2TN_zC4NeDMpFQtPXAFvyiP+gRApg2vzspPWmw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] kbuild: move vmlinux.a build rule to scripts/Makefile.vmlinux_a
+To: Nicolas Schier <nsc@kernel.org>, xur@google.com, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
+	Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Stafford Horne <shorne@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Piotr Gorski <piotrgorski@cachyos.org>, Teresa Johnson <tejohnson@google.com>, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 28, 2025 at 06:28:21PM +0000, xur@google.com wrote:
-> From: Rong Xu <xur@google.com>
->=20
-> From: Masahiro Yamada <masahiroy@kernel.org>
->=20
-> Move the build rule for vmlinux.a to a separate file in preparation
-> for supporting distributed builds with Clang ThinLTO.
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Tested-by: Rong Xu <xur@google.com>
-> ---
->  Makefile                   | 16 +++++--------
->  scripts/Makefile.vmlinux_a | 46 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 52 insertions(+), 10 deletions(-)
->  create mode 100644 scripts/Makefile.vmlinux_a
->=20
-> diff --git a/Makefile b/Makefile
-> index b34a1f4c03967..89a25bac2bbab 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1198,7 +1198,7 @@ export ARCH_DRIVERS	:=3D $(drivers-y) $(drivers-m)
->  KBUILD_VMLINUX_OBJS :=3D built-in.a $(patsubst %/, %/lib.a, $(filter %/,=
- $(libs-y)))
->  KBUILD_VMLINUX_LIBS :=3D $(filter-out %/, $(libs-y))
-> =20
-> -export KBUILD_VMLINUX_LIBS
-> +export KBUILD_VMLINUX_OBJS KBUILD_VMLINUX_LIBS
->  export KBUILD_LDS          :=3D arch/$(SRCARCH)/kernel/vmlinux.lds
-> =20
->  ifdef CONFIG_TRIM_UNUSED_KSYMS
-> @@ -1207,16 +1207,12 @@ ifdef CONFIG_TRIM_UNUSED_KSYMS
->  KBUILD_MODULES :=3D y
->  endif
-> =20
-> -# '$(AR) mPi' needs 'T' to workaround the bug of llvm-ar <=3D 14
-> -quiet_cmd_ar_vmlinux.a =3D AR      $@
-> -      cmd_ar_vmlinux.a =3D \
-> -	rm -f $@; \
-> -	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
-> -	$(AR) mPiT $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(s=
-rctree)/scripts/head-object-list.txt)
-> +PHONY +=3D vmlinux_a
-> +vmlinux_a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt FORCE
-> +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_a
-> =20
-> -targets +=3D vmlinux.a
-> -vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt FORCE
-> -	$(call if_changed,ar_vmlinux.a)
-> +vmlinux.a: vmlinux_a
-> +	@:
-> =20
->  PHONY +=3D vmlinux_o
->  vmlinux_o: vmlinux.a $(KBUILD_VMLINUX_LIBS)
-> diff --git a/scripts/Makefile.vmlinux_a b/scripts/Makefile.vmlinux_a
-> new file mode 100644
-> index 0000000000000..9774f02b43b2f
-> --- /dev/null
-> +++ b/scripts/Makefile.vmlinux_a
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +PHONY :=3D __default
-> +__default: vmlinux.a
-> +
-> +include include/config/auto.conf
-> +include $(srctree)/scripts/Kbuild.include
-> +include $(srctree)/scripts/Makefile.lib
-> +
-> +# Link of built-in-fixup.a
-> +# ----------------------------------------------------------------------=
------
-> +
-> +# '$(AR) mPi' needs --thin to workaround the bug of llvm-ar <=3D 14
-> +quiet_cmd_ar_builtin_fixup =3D AR      $@
-> +      cmd_ar_builtin_fixup =3D \
-> +	rm -f $@; \
-> +	$(AR) cDPrS --thin $@ $(KBUILD_VMLINUX_OBJS); \
-> +	$(AR) mPi --thin $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F =
--f $(srctree)/scripts/head-object-list.txt)
+On Mon, Mar 16, 2026 at 2:40=E2=80=AFPM Nicolas Schier <nsc@kernel.org> wro=
+te:
+>
+> The simpliest solution would be to declare binutils 2.38 as build
+> dependency; but I am afraid that it is still "too new", right now.
 
-Venkat Rao Bagalkote <venkat88@linux.ibm.com> reported [1] that this
-breaks builds on system with binutils < 2.38.
-Documentation/process/changes.rst state binutils 2.30 as build
-dependency; binutils 2.38 has been released in 02/2022.
+From the last bump at commit 118c40b7b503 ("kbuild: require gcc-8 and
+binutils-2.30"), it seems binutils' minimum is supposed to go at
+roughly the same pace as GCC's. Cc'ing Arnd.
 
-I removed the patch set from kbuild-next-unstable and kbuild-for-next
-for now.
+Debian Old Stable has 2.40, so we would leave out Old Old Stable which
+would have a recent enough GCC otherwise, so I guess that means we
+cannot?
 
-The simpliest solution would be to declare binutils 2.38 as build
-dependency; but I am afraid that it is still "too new", right now.
+(I was taking a look at this minimum yesterday, because I was thinking
+of removing the comment for a workaround related to binutils <=3D 2.36
+in `Documentation/rust/quick-start.rst` when I bump the Rust minimum.
+Of course, that comment is less critical, and those debugging a
+Rust-enabled kernel likely have newer binutils anyway).
 
-Can someone elaborate a bit on the comment about --thin and "the bug of
-llvm-ar <=3D 14'?
-
-May it be an option to introduce $(ar-option) macro?
-Something like this? (untested)
-
-ar-option =3D $(call try-run, \
-		( trap 'rm -f $(tmp-target).ar-option' EXIT INT HUP QUIT; \
-		  $(AR) cr $(1) $(tmp-target).ar-option ),$(1),$(2) )
-AR_THIN =3D $(call ar-option, --thin)
-
-=2E..
-
-	$(AR) cDPrS $(AR_THIN) $@ $(KBUILD_VMLINUX_OBJS); \
-	$(AR) mPi $(AR_THIN) $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F=
- -f $(srctree)/scripts/head-object-list.txt)
-
-
-Kind regards,
-Nicolas
-
-
-[1]: https://lore.kernel.org/linux-next/476507c9-a371-4864-9e87-572c1ecae82=
-d@linux.ibm.com
-
---3LIPWUU5r6vqSeC4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmm4BpgACgkQB1IKcBYm
-EmmoHA/8CI0dGKaduIbY1RzoF59sKLCivn2ONplDPchC6PDPiqcpzuYj1IinAxo2
-KLru6c8Gc/Pq21in4d64WM05CN5jeljjX7W/SJ230VWzbDHqjkt+mgA3reuLi12I
-k30mnIQKwn9FNA/7m6TRFH9RadO0OaKUConmEwDdWg718hQoLm01pufr97XyGh2I
-SUjS1MbPUq96lQMo0CyR3RkdIG5T0CkMKHfoyNBm2m2kR3iynenSL2GIliZqP1V0
-k2vblZUs0iS8aDvbdv5FhMWdnVel4jv+3v4MLkfiwj2X3WQJJP4PsP1GtDViQNDe
-IwNSgOPwT97AieSyohzkmj3uNBIYTv+htJC0ZsheoDzuKNCU6oZVhZFiJPy0LJZU
-I2/Mf2HccFPfw5nITg3Rp15Z2nnU0EXeKrC3qQI7XgoQZParV0YUa/DknRf+IhNA
-UZcLL8C+W//N5VcIbyK4GVnRvoatvEC3PnyrsI3ZbNK0NIC8yt9PtMqpd9dz1Ijq
-IQw/J9P1IdwuZpBYWyl3ZSZiHYdNYznsyhI7M3Tg20cuDNU2yFHG+8mzhQpLmZHE
-bz1UKhiP5M/8KBMHZJQNA/ktnSQw4LfVibaR3TWbipvb7NnLKZnNlYLDSdT0qeKi
-L1VAW8Ty+FJxMkUDFd3nGEEn/JKxIFJHG7zy1sbvY8hH3C3/sz0=
-=JAXb
------END PGP SIGNATURE-----
-
---3LIPWUU5r6vqSeC4--
+Cheers,
+Miguel
