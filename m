@@ -1,259 +1,174 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC153750C7;
-	Tue, 17 Mar 2026 16:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C409B2550CD;
+	Tue, 17 Mar 2026 17:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773765032; cv=none; b=YbZgvU5IjlyzV2irxTD2xCuSaZDeXNREJrDQ30PrL0o/xju5Zb9ahA+UYeQ6YZg2Q+U153o7tub0WGksMYALqATMfVeqUsfK0RB3WIJB5QcnJR9GQl8lb0aqeo356AiKfuAHVIG6yvAcRSTwQHfnbjEb/9ppovwQ/PLTQNhi22w=
+	t=1773768856; cv=none; b=aI+k7ZBc/1yfOArjdKj/954GAMP/GDHOlTf+MVaPDqcBNXgjexPftoUBHVfs8m+fOhpQ2SbMNz1zHJkQs/BmoZnOH/6dHqV4AqXJxrLRljuQDSqq9ijrti49uF/R9x1An69IvCWNbLu+kMTmkZrcYpsAKBDpr7Ulfi6HenCWfWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773765032; c=relaxed/simple;
-	bh=Qou/yJTuMtB+w2nO+owDGAmULjrywMij+rJMUUrY82o=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Xy1L2CO51E49SrL8t0Ra8xy9UmBRk9LyCiTzJkcdVd95KUKUulOVwf377Lfx7ugZmhU5c3OvskRvDm67NXbxmC6NiwCniMDz0RnXrh/2bA0x6DusDFrY+bnv48cIDVbBvUSgooFO7WAqzra+5Z3FdYXnVMsi+yg1EytyfpnLKvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jDOhy/Eh; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1773768856; c=relaxed/simple;
+	bh=7ZccMc3Apke0eeN/KclrZzFU2rMsGhi6O8ACatsDWRc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CPGnNViReBxXckOwkDmYwTdab1kEaBxdO1+4jqZBJaxAxm7mHpKNb/DDMVJSAQX/0KOsqokdKaCWhwqv0wNkUMT8NSdqFdwH83tUYIECK6Mf8botxee7uCpxog/Uu0I77IHXLhGLfh3bBu/LgfPFjRZ1uQ4eybt3mwav+uc+7oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zb4VmKAf; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jDOhy/Eh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zb4VmKAf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773765031; x=1805301031;
-  h=date:from:to:cc:subject:message-id;
-  bh=Qou/yJTuMtB+w2nO+owDGAmULjrywMij+rJMUUrY82o=;
-  b=jDOhy/EhdCMHS8WH+qsHEFqfWi9SQchoWatfx4lAdeESwYPRW/1662L+
-   An07g6jQQc/qq4bwdie3LCKWmD5ybT2WbIK5kCmPYLzMn6q0wxNvEyCBB
-   uns6dSO4EANZXgER4YKlc/DCFBJ7VFyZEC71DMAIsISadppyeLtrad5VT
-   KgqtS+FtfmKu2cecnZsCzebrMZKNbkpTnrvDdwEEqOXcc+9E+zjDFPWj2
-   gDS6z0XcIvvXaD1AGnWe/mrhJNRka7PzDWO3mVdnjfrV/q+T8OVZm/o4L
-   yBMnyYrcMSlj15K0bdsOR0d5I/ynARTVUYhRDsII9tljDAnZxs12v/Mz5
-   A==;
-X-CSE-ConnectionGUID: 2lcqxN9+SrClTibuR2QiSw==
-X-CSE-MsgGUID: s7Z8qipuR4WKEU4zY7k6RQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="92374597"
+  t=1773768855; x=1805304855;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7ZccMc3Apke0eeN/KclrZzFU2rMsGhi6O8ACatsDWRc=;
+  b=Zb4VmKAfRSFozRN4VDQJxKSbrScDJiB+BButCsaMydE6O/SFaOXwF7dF
+   r4cNOvXCEHCZi+XQloUYOyO9xogV6+GhJiDhFzoLOzmSMWlKzYKrH22Nq
+   3SDpaGZSWUoNQkcbRlf5WfpQB5J5v16/JuiWiqGWkVVwFSghCj1x8gMiB
+   ZixbWwSZB6cVXB3lupqR662ySsaknNcY3SMfvL63ESQ90ZKD6LKLpojdv
+   lbart0IaC2ly3qyg5c158abf/TCHl+CEtryoa/J+a7+nxuDI8DdNGTse+
+   ZG8X3RthMm37t+MUuXX5SNR8eXsmSlPwWVDXNRlHegpcXsLzKjKjgPYFs
+   Q==;
+X-CSE-ConnectionGUID: 0wJj/fnSTImOGWKbMu+lFw==
+X-CSE-MsgGUID: NOzWIlNVQwqqISp5/RdPkA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="78418972"
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="92374597"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 09:30:26 -0700
-X-CSE-ConnectionGUID: F4N8Y7k2Q0iBVVGuFp52wQ==
-X-CSE-MsgGUID: dTVa8BlcRQGYD3FPN/8VDg==
+   d="scan'208";a="78418972"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 10:34:14 -0700
+X-CSE-ConnectionGUID: 5z8xt1pQS9qYu7K69/8O9g==
+X-CSE-MsgGUID: n5pqkOHfQ92UoeJPAVTtjQ==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
+   d="scan'208";a="226805129"
 Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 17 Mar 2026 09:30:24 -0700
+  by orviesa004.jf.intel.com with ESMTP; 17 Mar 2026 10:34:12 -0700
 Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w2XJG-000000000nD-0XwY;
-	Tue, 17 Mar 2026 16:30:22 +0000
-Date: Wed, 18 Mar 2026 00:30:19 +0800
+	id 1w2YIz-000000001Yf-2b6m;
+	Tue, 17 Mar 2026 17:34:09 +0000
+Date: Wed, 18 Mar 2026 01:33:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-next 24/24] fs/ceph/addr.c:363:44: error:
- incompatible pointer types passing 'struct netfs_read_context *' to parameter
- of type 'struct netfs_read_context *'
-Message-ID: <202603180051.TxKi8BGp-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Jonathan Grant <jg@jguk.org>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	platform-driver-x86@vger.kernel.org, luke@ljones.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] platform/x86: asus-wmi: log thermal notification event
+Message-ID: <202603180137.ePqnMidQ-lkp@intel.com>
+References: <94dbe1e1-d706-47aa-abf5-f5d76aacf017@jguk.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94dbe1e1-d706-47aa-abf5-f5d76aacf017@jguk.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
-head:   d8339d806de3ae4a4f33f8d94db13cc6ca26e463
-commit: d8339d806de3ae4a4f33f8d94db13cc6ca26e463 [24/24] netfs: Combine prepare and issue ops and grab the buffers on request
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260318/202603180051.TxKi8BGp-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180051.TxKi8BGp-lkp@intel.com/reproduce)
+Hi Jonathan,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on amd-pstate/linux-next]
+[also build test WARNING on amd-pstate/bleeding-edge linus/master v7.0-rc4 next-20260316]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Grant/platform-x86-asus-wmi-log-thermal-notification-event/20260316-204950
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
+patch link:    https://lore.kernel.org/r/94dbe1e1-d706-47aa-abf5-f5d76aacf017%40jguk.org
+patch subject: [PATCH v2] platform/x86: asus-wmi: log thermal notification event
+config: i386-randconfig-014-20260317 (https://download.01.org/0day-ci/archive/20260318/202603180137.ePqnMidQ-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180137.ePqnMidQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603180051.TxKi8BGp-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603180137.ePqnMidQ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   fs/ceph/addr.c:273:18: warning: declaration of 'struct netfs_read_context' will not be visible outside of this function [-Wvisibility]
-     273 |                                       struct netfs_read_context *rctx)
-         |                                              ^
-   fs/ceph/addr.c:297:8: error: call to undeclared function 'netfs_subreq_get_buffer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     297 |         err = netfs_subreq_get_buffer(subreq, rctx, UINT_MAX);
-         |               ^
-   fs/ceph/addr.c:312:37: error: too many arguments to function call, expected single argument 'subreq', have 2 arguments
-     312 |         netfs_mark_read_submission(subreq, rctx);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~         ^~~~
-   include/linux/netfs.h:456:6: note: 'netfs_mark_read_submission' declared here
-     456 | void netfs_mark_read_submission(struct netfs_io_subrequest *subreq);
-         |      ^                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/ceph/addr.c:327:71: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     327 |         err = copy_to_iter(iinfo->inline_data + subreq->start, len, &subreq->io_iter);
-         |                                                                      ~~~~~~  ^
-   fs/ceph/addr.c:344:13: warning: declaration of 'struct netfs_read_context' will not be visible outside of this function [-Wvisibility]
-     344 |                                  struct netfs_read_context *rctx)
-         |                                         ^
->> fs/ceph/addr.c:363:44: error: incompatible pointer types passing 'struct netfs_read_context *' to parameter of type 'struct netfs_read_context *' [-Wincompatible-pointer-types]
-     363 |                 err = ceph_netfs_issue_op_inline(subreq, rctx);
-         |                                                          ^~~~
-   fs/ceph/addr.c:273:38: note: passing argument to parameter 'rctx' here
-     273 |                                       struct netfs_read_context *rctx)
-         |                                                                  ^
-   fs/ceph/addr.c:401:8: error: call to undeclared function 'netfs_subreq_get_buffer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     401 |         err = netfs_subreq_get_buffer(subreq, rctx, UINT_MAX);
-         |               ^
-   fs/ceph/addr.c:425:11: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     425 |                 subreq->io_iter.count = len;
-         |                 ~~~~~~  ^
-   fs/ceph/addr.c:427:44: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     427 |                 err = iov_iter_get_pages_alloc2(&subreq->io_iter, &pages, len, &page_off);
-         |                                                  ~~~~~~  ^
-   fs/ceph/addr.c:443:47: error: no member named 'io_iter' in 'struct netfs_io_subrequest'
-     443 |                 osd_req_op_extent_osd_iter(req, 0, &subreq->io_iter);
-         |                                                     ~~~~~~  ^
-   fs/ceph/addr.c:455:37: error: too many arguments to function call, expected single argument 'subreq', have 2 arguments
-     455 |         netfs_mark_read_submission(subreq, rctx);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~         ^~~~
-   include/linux/netfs.h:456:6: note: 'netfs_mark_read_submission' declared here
-     456 | void netfs_mark_read_submission(struct netfs_io_subrequest *subreq);
-         |      ^                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/ceph/addr.c:472:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
-     472 |         __set_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags);
-         |                   ^~~~~~~~~~~~~~~~~~~~~~
-   fs/ceph/addr.c:472:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
-     472 |         __set_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags);
-         |                   ^~~~~~~~~~~~~~~~~~~~~~
-   fs/ceph/addr.c:472:12: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
-     472 |         __set_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags);
-         |                   ^~~~~~~~~~~~~~~~~~~~~~
-   fs/ceph/addr.c:517:22: error: no member named 'sreq_max_len' in 'struct netfs_io_stream'
-     517 |         rreq->io_streams[0].sreq_max_len = fsc->mount_options->rsize;
-         |         ~~~~~~~~~~~~~~~~~~~ ^
-   fs/ceph/addr.c:545:17: error: incompatible function pointer types initializing 'int (*)(struct netfs_io_subrequest *)' with an expression of type 'int (struct netfs_io_subrequest *, struct netfs_read_context *)' [-Wincompatible-function-pointer-types]
-     545 |         .issue_read             = ceph_netfs_issue_read,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 14 errors generated.
+>> drivers/platform/x86/asus-wmi.c:4603:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+    4603 |                 else
+         |                 ^
+   1 warning generated.
 
 
-vim +363 fs/ceph/addr.c
+vim +4603 drivers/platform/x86/asus-wmi.c
 
-   342	
-   343	static int ceph_netfs_issue_read(struct netfs_io_subrequest *subreq,
-   344					 struct netfs_read_context *rctx)
-   345	{
-   346		struct netfs_io_request *rreq = subreq->rreq;
-   347		struct inode *inode = rreq->inode;
-   348		struct ceph_inode_info *ci = ceph_inode(inode);
-   349		struct ceph_fs_client *fsc = ceph_inode_to_fs_client(inode);
-   350		struct ceph_client *cl = fsc->client;
-   351		struct ceph_osd_request *req = NULL;
-   352		struct ceph_vino vino = ceph_vino(inode);
-   353		u64 objno, objoff, len, off = subreq->start;
-   354		u32 maxlen;
-   355		int err;
-   356		bool sparse = IS_ENCRYPTED(inode) || ceph_test_mount_opt(fsc, SPARSEREAD);
-   357		int extent_cnt;
-   358	
-   359		if (ceph_inode_is_shutdown(inode))
-   360			return -EIO;
-   361	
-   362		if (ceph_has_inline_data(ci)) {
- > 363			err = ceph_netfs_issue_op_inline(subreq, rctx);
-   364			if (err != 1)
-   365				return err;
-   366		}
-   367	
-   368		/* Truncate the extent at the end of the current block */
-   369		ceph_calc_file_object_mapping(&ci->i_layout, subreq->start, subreq->len,
-   370					      &objno, &objoff, &maxlen);
-   371		maxlen = umin(maxlen, fsc->mount_options->rsize);
-   372		len = umin(subreq->len, maxlen);
-   373		subreq->len = len;
-   374	
-   375		// TODO: This rounding here is slightly dodgy.  It *should* work, for
-   376		// now, as the cache only deals in blocks that are a multiple of
-   377		// PAGE_SIZE and fscrypt blocks are at most PAGE_SIZE.  What needs to
-   378		// happen is for the fscrypt driving to be moved into netfslib and the
-   379		// data in the cache also to be stored encrypted.
-   380		ceph_fscrypt_adjust_off_and_len(inode, &off, &len);
-   381	
-   382		req = ceph_osdc_new_request(&fsc->client->osdc, &ci->i_layout, vino,
-   383				off, &len, 0, 1, sparse ? CEPH_OSD_OP_SPARSE_READ : CEPH_OSD_OP_READ,
-   384				CEPH_OSD_FLAG_READ, NULL, ci->i_truncate_seq,
-   385				ci->i_truncate_size, false);
-   386		if (IS_ERR(req))
-   387			return PTR_ERR(req);
-   388	
-   389		if (sparse) {
-   390			extent_cnt = __ceph_sparse_read_ext_count(inode, len);
-   391			err = ceph_alloc_sparse_ext_map(&req->r_ops[0], extent_cnt);
-   392			if (err) {
-   393				ceph_osdc_put_request(req);
-   394				return err;
-   395			}
-   396		}
-   397	
-   398		doutc(cl, "%llx.%llx pos=%llu orig_len=%zu len=%llu\n",
-   399		      ceph_vinop(inode), subreq->start, subreq->len, len);
-   400	
-   401		err = netfs_subreq_get_buffer(subreq, rctx, UINT_MAX);
-   402		if (err < 0) {
-   403			ceph_osdc_put_request(req);
-   404			return err;
-   405		}
-   406	
-   407		/*
-   408		 * FIXME: For now, use CEPH_OSD_DATA_TYPE_PAGES instead of _ITER for
-   409		 * encrypted inodes. We'd need infrastructure that handles an iov_iter
-   410		 * instead of page arrays, and we don't have that as of yet. Once the
-   411		 * dust settles on the write helpers and encrypt/decrypt routines for
-   412		 * netfs, we should be able to rework this.
-   413		 */
-   414		if (IS_ENCRYPTED(inode)) {
-   415			struct page **pages;
-   416			size_t page_off;
-   417	
-   418			/*
-   419			 * FIXME: io_iter.count needs to be corrected to aligned
-   420			 * length. Otherwise, iov_iter_get_pages_alloc2() operates
-   421			 * with the initial unaligned length value. As a result,
-   422			 * ceph_msg_data_cursor_init() triggers BUG_ON() in the case
-   423			 * if msg->sparse_read_total > msg->data_length.
-   424			 */
-   425			subreq->io_iter.count = len;
-   426	
-   427			err = iov_iter_get_pages_alloc2(&subreq->io_iter, &pages, len, &page_off);
-   428			if (err < 0) {
-   429				doutc(cl, "%llx.%llx failed to allocate pages, %d\n",
-   430				      ceph_vinop(inode), err);
-   431				ceph_osdc_put_request(req);
-   432				return -EIO;
-   433			}
-   434	
-   435			/* should always give us a page-aligned read */
-   436			WARN_ON_ONCE(page_off);
-   437			len = err;
-   438			err = 0;
-   439	
-   440			osd_req_op_extent_osd_data_pages(req, 0, pages, len, 0, false,
-   441							 false);
-   442		} else {
-   443			osd_req_op_extent_osd_iter(req, 0, &subreq->io_iter);
-   444		}
-   445		if (!ceph_inc_osd_stopping_blocker(fsc->mdsc)) {
-   446			ceph_osdc_put_request(req);
-   447			return -EIO;
-   448		}
-   449		req->r_callback = finish_netfs_read;
-   450		req->r_priv = subreq;
-   451		req->r_inode = inode;
-   452		ihold(inode);
-   453	
-   454		/* After this point, we're not allowed to return an error. */
-   455		netfs_mark_read_submission(subreq, rctx);
-   456		ceph_osdc_start_request(req->r_osdc, req);
-   457		ceph_osdc_put_request(req);
-   458		doutc(cl, "%llx.%llx result -EIOCBQUEUED\n", ceph_vinop(inode));
-   459		return -EIOCBQUEUED;
-   460	}
-   461	
+  4538	
+  4539	static void asus_wmi_handle_event_code(int code, struct asus_wmi *asus)
+  4540	{
+  4541		enum led_brightness led_value;
+  4542		unsigned int key_value = 1;
+  4543		bool autorelease = 1;
+  4544	
+  4545		if (asus->driver->key_filter) {
+  4546			asus->driver->key_filter(asus->driver, &code, &key_value,
+  4547						 &autorelease);
+  4548			if (code == ASUS_WMI_KEY_IGNORE)
+  4549				return;
+  4550		}
+  4551	
+  4552		if (acpi_video_get_backlight_type() == acpi_backlight_vendor &&
+  4553		    code >= NOTIFY_BRNUP_MIN && code <= NOTIFY_BRNDOWN_MAX) {
+  4554			asus_wmi_backlight_notify(asus, code);
+  4555			return;
+  4556		}
+  4557	
+  4558		scoped_guard(spinlock_irqsave, &asus_ref.lock)
+  4559			led_value = asus->kbd_led_wk;
+  4560	
+  4561		if (code == NOTIFY_KBD_BRTUP) {
+  4562			kbd_led_set_by_kbd(asus, led_value + 1);
+  4563			return;
+  4564		}
+  4565		if (code == NOTIFY_KBD_BRTDWN) {
+  4566			kbd_led_set_by_kbd(asus, led_value - 1);
+  4567			return;
+  4568		}
+  4569		if (code == NOTIFY_KBD_BRTTOGGLE) {
+  4570			if (led_value >= ASUS_EV_MAX_BRIGHTNESS)
+  4571				kbd_led_set_by_kbd(asus, 0);
+  4572			else
+  4573				kbd_led_set_by_kbd(asus, led_value + 1);
+  4574			return;
+  4575		}
+  4576	
+  4577		if (code == NOTIFY_FNLOCK_TOGGLE) {
+  4578			asus->fnlock_locked = !asus->fnlock_locked;
+  4579			asus_wmi_fnlock_update(asus);
+  4580			return;
+  4581		}
+  4582	
+  4583		if (code == asus->tablet_switch_event_code) {
+  4584			asus_wmi_tablet_mode_get_state(asus);
+  4585			return;
+  4586		}
+  4587	
+  4588		if (code == NOTIFY_KBD_FBM || code == NOTIFY_KBD_TTP) {
+  4589			if (asus->fan_boost_mode_available)
+  4590				fan_boost_mode_switch_next(asus);
+  4591			if (asus->throttle_thermal_policy_dev)
+  4592				platform_profile_cycle();
+  4593			return;
+  4594		}
+  4595	
+  4596		if (is_display_toggle(code) && asus->driver->quirks->no_display_toggle)
+  4597			return;
+  4598	
+  4599		if (!sparse_keymap_report_event(asus->inputdev, code,
+  4600						key_value, autorelease))
+  4601			if (code == NOTIFY_THERMAL)
+  4602				pr_info("Thermal state change\n");
+> 4603			else
+  4604				pr_info("Unknown key code 0x%x\n", code);
+  4605	}
+  4606	
 
 -- 
 0-DAY CI Kernel Test Service
