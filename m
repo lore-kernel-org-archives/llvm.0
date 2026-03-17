@@ -1,191 +1,235 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893D639C64C;
-	Tue, 17 Mar 2026 08:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F34639EF00;
+	Tue, 17 Mar 2026 09:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773737062; cv=none; b=tsA7diCRyoiw2k4QBrAvDRJbRlrU4txsiAd4KPWbRdQJEOla+f0vSz5DXNn6xKFI54+6AegOPzbHzymtkpA7LpnOYyxnqZohsyoW3+DdulgpR0fZvcrcu/WitZnTC0C93E8YgwuYfCVXgPAgJAiWjw1vVl3wnIB1L3AxMykwzrQ=
+	t=1773739052; cv=none; b=jQOi9EE2E6KFwEWqrs8azNXX1zMUrnYh4XEi0v0eFPjCvc2e+idQDOQw60J+Sa4LNEgsXK18ze237Bb067hGWbhYSm9WwJt7oxHym3mC0QJAZmPWn/6jIcglfveXG+JY5WGmfT9wa7Fbkx9ZcoTaoKk8xwvprXVabYpU28UryZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773737062; c=relaxed/simple;
-	bh=reN1ExzdLEqD8HVCpoyL9v3MG4Jeymcn9UW3+OEgzww=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IZvLAEi4HaV5N/VsuwbuxLJL2Y7vIF6kWJaelWE+SCFiJf2KN0CPlkvwob9LlXiD/4peIQjDqvDciqX5hrFArkwqjSy8eKt++Bm/k0ZsCPg6TNsSvhdygA53NQFcgH0cztmy0MGRTVXKz1mZ9ox0qM/jplS+XuTyqtp65DSlzLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PnfZFoFV; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1773739052; c=relaxed/simple;
+	bh=Oo5C74gSLvjpWx5l8lOVZYjD324Hln5Lo2lcxM0GgCg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Gi4hAgtxopkrHt6wRcoTltR5YGHpoQJhEdvRfPGqPGUiQZPOc4cE8jXlOo+ypLHWuVAP4WOmXX2ztLgI7OXQCVUXejaoDgRwmD12e+MkkSOin1IrIbmXGvvRhEFWJopZuIR+pXsb7n7UR9ML45NKa4bMsekmVu0Teuh1uaGxTMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kIbz4T/V; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PnfZFoFV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kIbz4T/V"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773737061; x=1805273061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=reN1ExzdLEqD8HVCpoyL9v3MG4Jeymcn9UW3+OEgzww=;
-  b=PnfZFoFVrh7i2aUVq+NELG2Aqa34IIFRu7/kIjk1aRYG+E0s2XdIuN5Q
-   xV2PHUEatARujsZxYBtTD9HMjg0yBd/m0g3qvwo/qFVXs82uVjma/bNyw
-   dWQ+w++15IydPytOQMETRI/9MTN7vsEA0A1bgIkBHEQYTkNjGAtLblvDp
-   te4+TlCESBdEOHFAHE0phO3PUbAzfiFVep3cBxJy+LEE6h7ZdiAe976Rx
-   V19Qk01sFArYXFy3GHCzKEj0P6ULsn0i8jEajZXbHtrSWypyslJoti1HJ
-   1Ex3hhPFD/6gcnXRSFbGqmFis+RR16tCF/iReO6MuyHFoAXjKDHiH25n3
-   A==;
-X-CSE-ConnectionGUID: 8yxnsvAUTgmwgCACOlfEMQ==
-X-CSE-MsgGUID: yp7PYkQuQNayV9sD9CR3Aw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="74946575"
+  t=1773739047; x=1805275047;
+  h=date:from:to:cc:subject:message-id;
+  bh=Oo5C74gSLvjpWx5l8lOVZYjD324Hln5Lo2lcxM0GgCg=;
+  b=kIbz4T/VvUmk4yWY+8b6fZlLP/dEFbvVn/10huRfH32zQnnn5dVcuRJz
+   DfR6kAYiazzZRJqNdQxCqryJFNEAr7qb/nK9kIkY21zVDUrNgKu+4hZfP
+   DRCmWkdcmuSVGM5tFACDQv9W4iOd8CU2uNYVXkw56cX9JgrN2D8CpnvmR
+   KZgPpucAFnxyoJyytntQvFz6d4qYtj0fzR/WkO0gvGwhsbg4ypnJ9tAlK
+   6Ef0MHkc7OB61IoZqMTdIkwyWNS76jn1FOHaq8F72eR61sfgvVCv2sPBb
+   OOMhDN6JXlMoKiejqPNgRmjP2vam30SYw/eZMdn8Ts4XUduXRl6uCm27w
+   g==;
+X-CSE-ConnectionGUID: PommimSASsGeZe/RKahhuQ==
+X-CSE-MsgGUID: pcaaJGv6TA2lUavN9OEMZQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="78660444"
 X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="74946575"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 01:44:21 -0700
-X-CSE-ConnectionGUID: i4TMYhh1SJmDtT9VPYv95A==
-X-CSE-MsgGUID: MwtWjn/sSB+XIPDkipta6g==
+   d="scan'208";a="78660444"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 02:17:26 -0700
+X-CSE-ConnectionGUID: /c2GqzjjTmSc6c/uwI0f6g==
+X-CSE-MsgGUID: P7ADY+oLQx6ZB3HqzcB2Ug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="221432349"
+   d="scan'208";a="226674494"
 Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 17 Mar 2026 01:44:17 -0700
+  by orviesa004.jf.intel.com with ESMTP; 17 Mar 2026 02:17:25 -0700
 Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w2Q29-0000000004j-3H6m;
-	Tue, 17 Mar 2026 08:44:13 +0000
-Date: Tue, 17 Mar 2026 16:43:31 +0800
+	id 1w2QYE-0000000009h-0mGC;
+	Tue, 17 Mar 2026 09:17:22 +0000
+Date: Tue, 17 Mar 2026 17:16:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jie Gan <jie.gan@oss.qualcomm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Mike Leach <mike.leach@arm.com>,
-	James Clark <james.clark@linaro.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Tingwei Zhang <tingwei.zhang@oss.qualcomm.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>
+To: Mimi Zohar <zohar@linux.ibm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, Jie Gan <jie.gan@oss.qualcomm.com>
-Subject: Re: [PATCH v15 2/7] coresight: tmc: add create/clean functions for
- etr_buf_list
-Message-ID: <202603171518.XQOgdjNN-lkp@intel.com>
-References: <20260313-enable-byte-cntr-for-ctcu-v15-2-1777f14ed319@oss.qualcomm.com>
+ linux-integrity@vger.kernel.org
+Subject: [zohar-integrity:next-integrity.ima-sigv3-support-1 13/15]
+ security/integrity/evm/evm_main.c:270:6: error: too many arguments to
+ function call, expected 5, have 6
+Message-ID: <202603171719.U8qaT87C-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260313-enable-byte-cntr-for-ctcu-v15-2-1777f14ed319@oss.qualcomm.com>
 
-Hi Jie,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on a0ae2a256046c0c5d3778d1a194ff2e171f16e5f]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jie-Gan/coresight-core-refactor-ctcu_get_active_port-and-make-it-generic/20260315-052703
-base:   a0ae2a256046c0c5d3778d1a194ff2e171f16e5f
-patch link:    https://lore.kernel.org/r/20260313-enable-byte-cntr-for-ctcu-v15-2-1777f14ed319%40oss.qualcomm.com
-patch subject: [PATCH v15 2/7] coresight: tmc: add create/clean functions for etr_buf_list
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260317/202603171518.XQOgdjNN-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603171518.XQOgdjNN-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity.ima-sigv3-support-1
+head:   9037cd4a36eb9554fb5968a4c1a990d44843190b
+commit: d45011bbc88d112e7eea4dbb9a1b3b0081d0b30a [13/15] ima: Define asymmetric_verify_v3() to verify IMA sigv3 signatures
+config: i386-buildonly-randconfig-005-20260317 (https://download.01.org/0day-ci/archive/20260317/202603171719.U8qaT87C-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603171719.U8qaT87C-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603171518.XQOgdjNN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603171719.U8qaT87C-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/hwtracing/coresight/coresight-tmc-etr.c:1979:50: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
-    1979 |                 raw_spin_unlock_irqrestore(&drvdata->spinlock, flags);
-         |                                                                ^~~~~
-   include/linux/spinlock.h:283:37: note: expanded from macro 'raw_spin_unlock_irqrestore'
-     283 |                 _raw_spin_unlock_irqrestore(lock, flags);       \
-         |                                                   ^~~~~
-   drivers/hwtracing/coresight/coresight-tmc-etr.c:1969:21: note: initialize the variable 'flags' to silence this warning
-    1969 |         unsigned long flags;
-         |                            ^
-         |                             = 0
-   1 warning generated.
+>> security/integrity/evm/evm_main.c:270:6: error: too many arguments to function call, expected 5, have 6
+     267 |                 rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
+         |                      ~~~~~~~~~~~~~~~~~~~~~~~
+     268 |                                         (const char *)xattr_data, xattr_len,
+     269 |                                         digest.digest, digest.hdr.length,
+     270 |                                         digest.hdr.algo);
+         |                                         ^~~~~~~~~~~~~~~
+   security/integrity/evm/../integrity.h:143:19: note: 'integrity_digsig_verify' declared here
+     143 | static inline int integrity_digsig_verify(const unsigned int id,
+         |                   ^                       ~~~~~~~~~~~~~~~~~~~~~~
+     144 |                                           const char *sig, int siglen,
+         |                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     145 |                                           const char *digest, int digestlen)
+         |                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/flags +1979 drivers/hwtracing/coresight/coresight-tmc-etr.c
+vim +270 security/integrity/evm/evm_main.c
 
-  1957	
-  1958	/**
-  1959	 * tmc_create_etr_buf_list - create a list to manage the etr_buf_node.
-  1960	 * @drvdata:	driver data of the TMC device.
-  1961	 * @num_nodes:	number of nodes want to create with the list.
-  1962	 *
-  1963	 * Return 0 upon success and return the error number if fail.
-  1964	 */
-  1965	int tmc_create_etr_buf_list(struct tmc_drvdata *drvdata, int num_nodes)
-  1966	{
-  1967		struct etr_buf_node *new_node;
-  1968		struct etr_buf *sysfs_buf;
-  1969		unsigned long flags;
-  1970		int i = 0, ret = 0;
-  1971	
-  1972		lockdep_assert_held(&drvdata->spinlock);
-  1973		/* We dont need a list if there is only one node */
-  1974		if (num_nodes < 2)
-  1975			return -EINVAL;
-  1976	
-  1977		/* We expect that sysfs_buf in drvdata has already been allocated. */
-  1978		if (drvdata->sysfs_buf) {
-> 1979			raw_spin_unlock_irqrestore(&drvdata->spinlock, flags);
-  1980			/* Directly insert the allocated sysfs_buf into the list first */
-  1981			new_node = kzalloc_obj(*new_node, GFP_KERNEL);
-  1982			if (IS_ERR(new_node))
-  1983				return PTR_ERR(new_node);
-  1984	
-  1985			raw_spin_lock_irqsave(&drvdata->spinlock, flags);
-  1986			new_node->sysfs_buf = drvdata->sysfs_buf;
-  1987			new_node->is_free = false;
-  1988			list_add(&new_node->link, &drvdata->etr_buf_list);
-  1989			i++;
-  1990		}
-  1991	
-  1992		raw_spin_unlock_irqrestore(&drvdata->spinlock, flags);
-  1993		while (i < num_nodes) {
-  1994			new_node = kzalloc_obj(*new_node, GFP_KERNEL);
-  1995			if (IS_ERR(new_node)) {
-  1996				ret = PTR_ERR(new_node);
-  1997				break;
-  1998			}
-  1999	
-  2000			sysfs_buf = tmc_alloc_etr_buf(drvdata, drvdata->size, 0, cpu_to_node(0), NULL);
-  2001			if (IS_ERR(sysfs_buf)) {
-  2002				kfree(new_node);
-  2003				ret = PTR_ERR(sysfs_buf);
-  2004				break;
-  2005			}
-  2006	
-  2007			/* We dont have a available sysfs_buf in drvdata, setup one */
-  2008			if (!drvdata->sysfs_buf) {
-  2009				drvdata->sysfs_buf = sysfs_buf;
-  2010				new_node->is_free = false;
-  2011			} else
-  2012				new_node->is_free = true;
-  2013	
-  2014			new_node->sysfs_buf = sysfs_buf;
-  2015			list_add(&new_node->link, &drvdata->etr_buf_list);
-  2016			i++;
-  2017		}
-  2018	
-  2019		/* Clean the list if there is an error */
-  2020		if (ret)
-  2021			tmc_clean_etr_buf_list(drvdata);
-  2022	
-  2023		raw_spin_lock_irqsave(&drvdata->spinlock, flags);
-  2024	
-  2025		return ret;
-  2026	}
-  2027	EXPORT_SYMBOL_GPL(tmc_create_etr_buf_list);
-  2028	
+   172	
+   173	/*
+   174	 * evm_verify_hmac - calculate and compare the HMAC with the EVM xattr
+   175	 *
+   176	 * Compute the HMAC on the dentry's protected set of extended attributes
+   177	 * and compare it against the stored security.evm xattr.
+   178	 *
+   179	 * For performance:
+   180	 * - use the previously retrieved xattr value and length to calculate the
+   181	 *   HMAC.)
+   182	 * - cache the verification result in the iint, when available.
+   183	 *
+   184	 * Returns integrity status
+   185	 */
+   186	static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+   187						     const char *xattr_name,
+   188						     char *xattr_value,
+   189						     size_t xattr_value_len)
+   190	{
+   191		struct evm_ima_xattr_data *xattr_data = NULL;
+   192		struct signature_v2_hdr *hdr;
+   193		enum integrity_status evm_status = INTEGRITY_PASS;
+   194		struct evm_digest digest;
+   195		struct inode *inode = d_backing_inode(dentry);
+   196		struct evm_iint_cache *iint = evm_iint_inode(inode);
+   197		int rc, xattr_len, evm_immutable = 0;
+   198	
+   199		if (iint && (iint->evm_status == INTEGRITY_PASS ||
+   200			     iint->evm_status == INTEGRITY_PASS_IMMUTABLE))
+   201			return iint->evm_status;
+   202	
+   203		/*
+   204		 * On unsupported filesystems without EVM_INIT_X509 enabled, skip
+   205		 * signature verification.
+   206		 */
+   207		if (!(evm_initialized & EVM_INIT_X509) &&
+   208		    is_unsupported_hmac_fs(dentry))
+   209			return INTEGRITY_UNKNOWN;
+   210	
+   211		/* if status is not PASS, try to check again - against -ENOMEM */
+   212	
+   213		/* first need to know the sig type */
+   214		rc = vfs_getxattr_alloc(&nop_mnt_idmap, dentry, XATTR_NAME_EVM,
+   215					(char **)&xattr_data, 0, GFP_NOFS);
+   216		if (rc <= 0) {
+   217			evm_status = INTEGRITY_FAIL;
+   218			if (rc == -ENODATA) {
+   219				rc = evm_find_protected_xattrs(dentry);
+   220				if (rc > 0)
+   221					evm_status = INTEGRITY_NOLABEL;
+   222				else if (rc == 0)
+   223					evm_status = INTEGRITY_NOXATTRS; /* new file */
+   224			} else if (rc == -EOPNOTSUPP) {
+   225				evm_status = INTEGRITY_UNKNOWN;
+   226			}
+   227			goto out;
+   228		}
+   229	
+   230		xattr_len = rc;
+   231	
+   232		/* check value type */
+   233		switch (xattr_data->type) {
+   234		case EVM_XATTR_HMAC:
+   235			if (xattr_len != sizeof(struct evm_xattr)) {
+   236				evm_status = INTEGRITY_FAIL;
+   237				goto out;
+   238			}
+   239	
+   240			digest.hdr.algo = HASH_ALGO_SHA1;
+   241			rc = evm_calc_hmac(dentry, xattr_name, xattr_value,
+   242					   xattr_value_len, &digest, iint);
+   243			if (rc)
+   244				break;
+   245			rc = crypto_memneq(xattr_data->data, digest.digest,
+   246					   SHA1_DIGEST_SIZE);
+   247			if (rc)
+   248				rc = -EINVAL;
+   249			break;
+   250		case EVM_XATTR_PORTABLE_DIGSIG:
+   251			evm_immutable = 1;
+   252			fallthrough;
+   253		case EVM_IMA_XATTR_DIGSIG:
+   254			/* accept xattr with non-empty signature field */
+   255			if (xattr_len <= sizeof(struct signature_v2_hdr)) {
+   256				evm_status = INTEGRITY_FAIL;
+   257				goto out;
+   258			}
+   259	
+   260			hdr = (struct signature_v2_hdr *)xattr_data;
+   261			digest.hdr.algo = hdr->hash_algo;
+   262			rc = evm_calc_hash(dentry, xattr_name, xattr_value,
+   263					   xattr_value_len, xattr_data->type, &digest,
+   264					   iint);
+   265			if (rc)
+   266				break;
+   267			rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
+   268						(const char *)xattr_data, xattr_len,
+   269						digest.digest, digest.hdr.length,
+ > 270						digest.hdr.algo);
+   271			if (!rc) {
+   272				if (xattr_data->type == EVM_XATTR_PORTABLE_DIGSIG) {
+   273					if (iint)
+   274						iint->flags |= EVM_IMMUTABLE_DIGSIG;
+   275					evm_status = INTEGRITY_PASS_IMMUTABLE;
+   276				} else if (!IS_RDONLY(inode) &&
+   277					   !(inode->i_sb->s_readonly_remount) &&
+   278					   !IS_IMMUTABLE(inode) &&
+   279					   !is_unsupported_hmac_fs(dentry)) {
+   280					evm_update_evmxattr(dentry, xattr_name,
+   281							    xattr_value,
+   282							    xattr_value_len);
+   283				}
+   284			}
+   285			break;
+   286		default:
+   287			rc = -EINVAL;
+   288			break;
+   289		}
+   290	
+   291		if (rc) {
+   292			if (rc == -ENODATA)
+   293				evm_status = INTEGRITY_NOXATTRS;
+   294			else if (evm_immutable)
+   295				evm_status = INTEGRITY_FAIL_IMMUTABLE;
+   296			else
+   297				evm_status = INTEGRITY_FAIL;
+   298		}
+   299		pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
+   300			  digest.digest);
+   301	out:
+   302		if (iint)
+   303			iint->evm_status = evm_status;
+   304		kfree(xattr_data);
+   305		return evm_status;
+   306	}
+   307	
 
 -- 
 0-DAY CI Kernel Test Service
