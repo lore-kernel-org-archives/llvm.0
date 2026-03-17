@@ -1,203 +1,198 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DDAF331A6D;
-	Tue, 17 Mar 2026 17:46:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D5131E841;
+	Tue, 17 Mar 2026 17:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773769565; cv=none; b=WQSWhQ2wdRUFAr3m6e01rVh7t1FT4o6ZUS491bLHW6IqY3KCYWHbRa4JjIGfx4fhgyPOHmjlFuC334bB4cgytzUmrkJfuvfpljd1i+7srW5R/vnrmbS1rj9OpiskWCnS90et7ZKRLOxQZuBNfTc3nFlRle1IZJKmudRIsqZ/hwY=
+	t=1773770186; cv=none; b=XffWepLJoFxt4xg+j9cvsCFtluDBaeyZlr/kPlQjpN0QnyIWWuauZeSKc1A5qMo3bXRYOKfZi+c8ygCjiC/7go7AKdbDDf2lrlOciKB2EeMvtCndK1k9sx8l0kOq03ZLfRTdoGEGDeKcMlGj5PKpHwPyIjYfa5OtMu2dFZBkLzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773769565; c=relaxed/simple;
-	bh=meDOgFZsp9t8qHxBQVBAJcgZFytRkiMISoWsVNRBdkw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tW7CqBA/NwzjU4JNYt0cF3z+jad/+bRcNpjClsryihGLs6WQ1KrZryUZ2xSQhXiWITEtnWQmYwPxI/+kozw354VmlKTiiYeTSE/HnwiOB140TkuruOiI9x9Er6HealWBxjQZqNwJVwXN7pft6l42dsoxFuNBEOt4k/VxRiu8NP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ef2eap+F; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1773770186; c=relaxed/simple;
+	bh=oeoeZ1TsBNUyhMWJyS66KyJ4V0L4Gjw+0F740YbxJ7M=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=IGxaEBxhBpsevs6cydiGqY6A38xFB/FghYETuGauhJd0ZMv6tjcaFw/8ToD+pSnRwlEDt9EBRtY10ModHP1aM5W0ukllepjBDLZ6/8bT5G2W1rYJk1H65sUuVeH8BiTD7J/ukHmMwjP94Xckr+2UuHi56kqSIDFWRJYX5dtjYts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Htb2ZG4p; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ef2eap+F"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Htb2ZG4p"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773769564; x=1805305564;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=meDOgFZsp9t8qHxBQVBAJcgZFytRkiMISoWsVNRBdkw=;
-  b=Ef2eap+Fv8EwbLyCRlQawjfsTEOFYyRQzwkxR+FdV1eVGwrLrEoIoAz7
-   KKZRnpvqLpZ34tyL5FVh9q5g6og9NsdR4ZQduormoJ9yN9P92HLQlHR83
-   JeXOdRKeYyNiFToVPHQOl+CPZY8n+bZPw7Ej6skNsZjkl5mqVBpGbmWEt
-   iEgjLrmwzR9c7ZrY3y2rfWlVFPvxGWFLv8l296RclJDClIcOluAOplOEJ
-   oujy4XCa8/9Voj3r/KtuntLX5aNGbo0VUiqemEGm2Ane2PtGl+ModvFdy
-   FE8hRBMdC2fGn1AXqGpfelOAjDQPqrXQzD+rcQLTpBFYT3vg783QhdLsM
-   Q==;
-X-CSE-ConnectionGUID: PE81XPTzQgCeUzl8Q6vbjQ==
-X-CSE-MsgGUID: Ym8mE7enSuiNhsCi4DeWsQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="85508066"
+  t=1773770185; x=1805306185;
+  h=date:from:to:cc:subject:message-id;
+  bh=oeoeZ1TsBNUyhMWJyS66KyJ4V0L4Gjw+0F740YbxJ7M=;
+  b=Htb2ZG4pnLO9hXrBGhU+x7m9VQTKuJlHPQ18B2Pg+VRWH0LUH4uBda/j
+   eMVkVGZZUQp8hUOe21cK6AZ9SSp/i3+j8SDs10qpnAC8qXYYiPSNMzF1X
+   TimPsXfLSR32gvtVZgKQ8MuxLKXrhBVHo3quxDMHzfqp5ROAwrlRJdX+f
+   IhvSUiYSLnScBffQphht32wzPgT0wVakqFO8r02wOnvCG4QPeZ5M5JOb8
+   swvZtPjuRGzjC6n7kppQEUdYbO9eC1J23zQ93Bk6wVoVAfa45Oct3LoID
+   bvtR9j0yxegLM4zQH474Qm3cf8Ov1xN4745YHYSh7RHdhrg+vnaWTQmUr
+   A==;
+X-CSE-ConnectionGUID: KbHAglEOS9CseHHRXMojqQ==
+X-CSE-MsgGUID: Ttt1jniuSLaXot5zfuM4Rg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="74934806"
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="85508066"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 10:46:03 -0700
-X-CSE-ConnectionGUID: iqhCGTDgRcug5ssz+7tWTg==
-X-CSE-MsgGUID: nPwSKXBMSCutlgLu2VIUqQ==
+   d="scan'208";a="74934806"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 10:56:25 -0700
+X-CSE-ConnectionGUID: buwq+U02Q0CrGMKg775T1Q==
+X-CSE-MsgGUID: pyJgd8HqScSOmuixig1unQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="221408834"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa006.jf.intel.com with ESMTP; 17 Mar 2026 10:46:00 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+   d="scan'208";a="246974909"
+Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 17 Mar 2026 10:56:22 -0700
+Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w2YUO-000000004TV-3Qvi;
-	Tue, 17 Mar 2026 17:45:56 +0000
-Date: Tue, 17 Mar 2026 18:45:25 +0100
+	id 1w2YeS-000000001jZ-0GuO;
+	Tue, 17 Mar 2026 17:56:20 +0000
+Date: Wed, 18 Mar 2026 01:55:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anand Moon <linux.amoon@gmail.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Hans Zhang <18255117159@163.com>, Niklas Cassel <cassel@kernel.org>,
-	linux-kernel@vger.kernel.org
+To: Asim Viladi Oglu Manizada <manizada@pm.me>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Anand Moon <linux.amoon@gmail.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Danilo Krummrich <dakr@kernel.org>
-Subject: Re: [PATCH next v1] r8169: Fix PHY lookup for mdiobus_get_phy() and
- improve error reporting during probe
-Message-ID: <202603171855.OtM7sS7W-lkp@intel.com>
-References: <20260317061700.7734-1-linux.amoon@gmail.com>
+ Namjae Jeon <linkinjeon@kernel.org>,
+ Steve French <stfrench@microsoft.com>
+Subject: [samba-ksmbd:ksmbd-for-next-next 11/12]
+ fs/smb/server/smb2pdu.c:5723:3: warning: variable 'pntsd' is uninitialized
+ when used here
+Message-ID: <202603180118.ClDWNtId-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260317061700.7734-1-linux.amoon@gmail.com>
 
-Hi Anand,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 95c541ddfb0815a0ea8477af778bb13bb075079a]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/r8169-Fix-PHY-lookup-for-mdiobus_get_phy-and-improve-error-reporting-during-probe/20260317-183327
-base:   95c541ddfb0815a0ea8477af778bb13bb075079a
-patch link:    https://lore.kernel.org/r/20260317061700.7734-1-linux.amoon%40gmail.com
-patch subject: [PATCH next v1] r8169: Fix PHY lookup for mdiobus_get_phy() and improve error reporting during probe
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260317/202603171855.OtM7sS7W-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603171855.OtM7sS7W-lkp@intel.com/reproduce)
+tree:   git://git.samba.org/ksmbd.git ksmbd-for-next-next
+head:   a58d8c8b3d5daee33fb03f4d41ea278ae6e6ffc9
+commit: 095198efe2c86423f647b242687c50e34e355d3a [11/12] ksmbd: fix heap OOB write in QUERY_INFO for compound requests
+config: arm-randconfig-003-20260317 (https://download.01.org/0day-ci/archive/20260318/202603180118.ClDWNtId-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180118.ClDWNtId-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603171855.OtM7sS7W-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603180118.ClDWNtId-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/realtek/r8169_main.c:5467:17: warning: variable 'phydev' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-    5467 |         for (addr = 0; addr < PHY_MAX_ADDR; addr++) {
-         |                        ^~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/realtek/r8169_main.c:5476:7: note: uninitialized use occurs here
-    5476 |         if (!phydev) {
-         |              ^~~~~~
-   drivers/net/ethernet/realtek/r8169_main.c:5467:17: note: remove the condition if it is always true
-    5467 |         for (addr = 0; addr < PHY_MAX_ADDR; addr++) {
-         |                        ^~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/realtek/r8169_main.c:5430:27: note: initialize the variable 'phydev' to silence this warning
-    5430 |         struct phy_device *phydev;
-         |                                  ^
-         |                                   = NULL
+>> fs/smb/server/smb2pdu.c:5723:3: warning: variable 'pntsd' is uninitialized when used here [-Wuninitialized]
+    5723 |                 pntsd->revision = cpu_to_le16(1);
+         |                 ^~~~~
+   fs/smb/server/smb2pdu.c:5708:24: note: initialize the variable 'pntsd' to silence this warning
+    5708 |         struct smb_ntsd *pntsd, *ppntsd = NULL;
+         |                               ^
+         |                                = NULL
    1 warning generated.
 
 
-vim +5467 drivers/net/ethernet/realtek/r8169_main.c
+vim +/pntsd +5723 fs/smb/server/smb2pdu.c
 
-  5425	
-  5426	static int r8169_mdio_register(struct rtl8169_private *tp)
-  5427	{
-  5428		struct pci_dev *pdev = tp->pci_dev;
-  5429		struct mii_bus *new_bus;
-  5430		struct phy_device *phydev;
-  5431		int ret, addr;
-  5432	
-  5433		/* On some boards with this chip version the BIOS is buggy and misses
-  5434		 * to reset the PHY page selector. This results in the PHY ID read
-  5435		 * accessing registers on a different page, returning a more or
-  5436		 * less random value. Fix this by resetting the page selector first.
-  5437		 */
-  5438		if (tp->mac_version == RTL_GIGA_MAC_VER_25 ||
-  5439		    tp->mac_version == RTL_GIGA_MAC_VER_26)
-  5440			r8169_mdio_write(tp, 0x1f, 0);
-  5441	
-  5442		new_bus = devm_mdiobus_alloc(&pdev->dev);
-  5443		if (!new_bus)
-  5444			return -ENOMEM;
-  5445	
-  5446		new_bus->name = "r8169";
-  5447		new_bus->priv = tp;
-  5448		new_bus->parent = &pdev->dev;
-  5449		new_bus->irq[0] = PHY_MAC_INTERRUPT;
-  5450		new_bus->phy_mask = GENMASK(31, 1);
-  5451		snprintf(new_bus->id, MII_BUS_ID_SIZE, "r8169-%x-%x",
-  5452			 pci_domain_nr(pdev->bus), pci_dev_id(pdev));
-  5453	
-  5454		new_bus->read = r8169_mdio_read_reg;
-  5455		new_bus->write = r8169_mdio_write_reg;
-  5456	
-  5457		if (tp->mac_version >= RTL_GIGA_MAC_VER_40) {
-  5458			new_bus->read_c45 = r8169_mdio_read_reg_c45;
-  5459			new_bus->write_c45 = r8169_mdio_write_reg_c45;
-  5460		}
-  5461	
-  5462		ret = devm_mdiobus_register(&pdev->dev, new_bus);
-  5463		if (ret)
-  5464			return ret;
-  5465	
-  5466		/* find the first (lowest address) PHY on the current MAC's MII bus */
-> 5467		for (addr = 0; addr < PHY_MAX_ADDR; addr++) {
-  5468			struct phy_device *tmp = mdiobus_get_phy(new_bus, addr);
-  5469	
-  5470			if (tmp) {
-  5471				phydev = tmp;
-  5472				break;
-  5473			}
-  5474		}
-  5475	
-  5476		if (!phydev) {
-  5477			dev_err(&pdev->dev, "no PHY found on bus\n");
-  5478			return -ENODEV;
-  5479		}
-  5480	
-  5481		/* Most chip versions fail with the genphy driver.
-  5482		 * Therefore ensure that the dedicated PHY driver is loaded.
-  5483		 */
-  5484		if (!phydev->drv) {
-  5485			dev_err(&pdev->dev, "no dedicated PHY driver found for PHY ID 0x%08x, maybe realtek.ko needs to be added to initramfs?\n",
-  5486				phydev->phy_id);
-  5487			return -EUNATCH;
-  5488		}
-  5489	
-  5490		tp->phydev = phydev;
-  5491		tp->phydev->mac_managed_pm = true;
-  5492		if (rtl_supports_eee(tp))
-  5493			phy_support_eee(tp->phydev);
-  5494		phy_support_asym_pause(tp->phydev);
-  5495	
-  5496		/* mimic behavior of r8125/r8126 vendor drivers */
-  5497		if (tp->mac_version == RTL_GIGA_MAC_VER_61)
-  5498			phy_disable_eee_mode(tp->phydev,
-  5499					     ETHTOOL_LINK_MODE_2500baseT_Full_BIT);
-  5500	
-  5501		/* PHY will be woken up in rtl_open() */
-  5502		phy_suspend(tp->phydev);
-  5503	
-  5504		return 0;
-  5505	}
-  5506	
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5701  
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5702  static int smb2_get_info_sec(struct ksmbd_work *work,
+64b39f4a2fd293 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-30  5703  			     struct smb2_query_info_req *req,
+cb4517201b8acd fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-11-03  5704  			     struct smb2_query_info_rsp *rsp)
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5705  {
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5706  	struct ksmbd_file *fp;
+4609e1f18e19c3 fs/ksmbd/smb2pdu.c      Christian Brauner         2023-01-13  5707  	struct mnt_idmap *idmap;
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5708  	struct smb_ntsd *pntsd, *ppntsd = NULL;
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5709  	struct smb_fattr fattr = {{0}};
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5710  	struct inode *inode;
+8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5711  	__u32 secdesclen = 0;
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5712  	unsigned int id = KSMBD_NO_FID, pid = KSMBD_NO_FID;
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5713  	int addition_info = le32_to_cpu(req->AdditionalInformation);
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5714  	int rc = 0, ppntsd_size = 0, max_len;
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5715  	size_t scratch_len;
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5716  
+e294f78d347851 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-06-28  5717  	if (addition_info & ~(OWNER_SECINFO | GROUP_SECINFO | DACL_SECINFO |
+e294f78d347851 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-06-28  5718  			      PROTECTED_DACL_SECINFO |
+e294f78d347851 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-06-28  5719  			      UNPROTECTED_DACL_SECINFO)) {
+8e537d1465e740 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-11-21  5720  		ksmbd_debug(SMB, "Unsupported addition info: 0x%x)\n",
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5721  		       addition_info);
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5722  
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27 @5723  		pntsd->revision = cpu_to_le16(1);
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5724  		pntsd->type = cpu_to_le16(SELF_RELATIVE | DACL_PROTECTED);
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5725  		pntsd->osidoffset = 0;
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5726  		pntsd->gsidoffset = 0;
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5727  		pntsd->sacloffset = 0;
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5728  		pntsd->dacloffset = 0;
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5729  
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5730  		secdesclen = sizeof(struct smb_ntsd);
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5731  		rsp->OutputBufferLength = cpu_to_le32(secdesclen);
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5732  
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5733  		return 0;
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5734  	}
+ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5735  
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5736  	if (work->next_smb2_rcv_hdr_off) {
+2d004c6cae567e fs/ksmbd/smb2pdu.c      Paulo Alcantara           2022-03-21  5737  		if (!has_file_id(req->VolatileFileId)) {
+3867369ef8f760 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-07-08  5738  			ksmbd_debug(SMB, "Compound request set FID = %llu\n",
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5739  				    work->compound_fid);
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5740  			id = work->compound_fid;
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5741  			pid = work->compound_pfid;
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5742  		}
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5743  	}
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5744  
+3867369ef8f760 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-07-08  5745  	if (!has_file_id(id)) {
+2d004c6cae567e fs/ksmbd/smb2pdu.c      Paulo Alcantara           2022-03-21  5746  		id = req->VolatileFileId;
+2d004c6cae567e fs/ksmbd/smb2pdu.c      Paulo Alcantara           2022-03-21  5747  		pid = req->PersistentFileId;
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5748  	}
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5749  
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5750  	fp = ksmbd_lookup_fd_slow(work, id, pid);
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5751  	if (!fp)
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5752  		return -ENOENT;
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5753  
+4609e1f18e19c3 fs/ksmbd/smb2pdu.c      Christian Brauner         2023-01-13  5754  	idmap = file_mnt_idmap(fp->filp);
+ab0b263b749ade fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-06-29  5755  	inode = file_inode(fp->filp);
+e67fe63341b811 fs/ksmbd/smb2pdu.c      Christian Brauner         2023-01-13  5756  	ksmbd_acls_fattr(&fattr, idmap, inode);
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5757  
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5758  	if (test_share_config_flag(work->tcon->share_conf,
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5759  				   KSMBD_SHARE_FLAG_ACL_XATTR))
+4609e1f18e19c3 fs/ksmbd/smb2pdu.c      Christian Brauner         2023-01-13  5760  		ppntsd_size = ksmbd_vfs_get_sd_xattr(work->conn, idmap,
+8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5761  						     fp->filp->f_path.dentry,
+8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5762  						     &ppntsd);
+8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5763  
+8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5764  	/* Check if sd buffer size exceeds response buffer size */
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5765  	max_len = smb2_calc_max_out_buf_len(work,
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5766  			offsetof(struct smb2_query_info_rsp, Buffer),
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5767  			le32_to_cpu(req->OutputBufferLength));
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5768  	if (max_len < 0) {
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5769  		rc = -EINVAL;
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5770  		goto out;
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5771  	}
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5772  
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5773  	scratch_len = smb_acl_sec_desc_scratch_len(&fattr, ppntsd,
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5774  			ppntsd_size, addition_info);
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5775  	pntsd = kvmalloc(scratch_len, KSMBD_DEFAULT_GFP);
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5776  	if (!pntsd) {
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5777  		rc = -ENOMEM;
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5778  		goto out;
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5779  	}
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5780  
+4d7ca4090184c1 fs/ksmbd/smb2pdu.c      Christian Brauner         2023-01-13  5781  	rc = build_sec_desc(idmap, pntsd, ppntsd, ppntsd_size,
+8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5782  			addition_info, &secdesclen, &fattr);
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5783  
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5784  out:
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5785  	posix_acl_release(fattr.cf_acls);
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5786  	posix_acl_release(fattr.cf_dacls);
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5787  	kfree(ppntsd);
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5788  	ksmbd_fd_put(work, fp);
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5789  	if (rc) {
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5790  		kvfree(pntsd);
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5791  		return rc;
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5792  	}
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5793  
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5794  	rsp->OutputBufferLength = cpu_to_le32(secdesclen);
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5795  	return ksmbd_iov_pin_rsp_read(work, (void *)rsp,
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5796  			offsetof(struct smb2_query_info_rsp, Buffer),
+095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5797  			pntsd, secdesclen);
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5798  }
+e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5799  
+
+:::::: The code at line 5723 was first introduced by commit
+:::::: ced2b26a76cd1db0b6ccb39e0bc873177c9bda21 cifsd: Fix regression in smb2_get_info
+
+:::::: TO: Sebastian Gottschall <s.gottschall@dd-wrt.com>
+:::::: CC: Steve French <stfrench@microsoft.com>
 
 -- 
 0-DAY CI Kernel Test Service
