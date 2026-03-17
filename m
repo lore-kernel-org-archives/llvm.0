@@ -1,147 +1,163 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2493A35DA40;
-	Tue, 17 Mar 2026 12:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773750961; cv=none; b=qDdTIqSDhsc66OPJvezlfm9RYBMV126F2D/UE//Zztmndka7nfS/lgLOBmyuFtXiisXAI/jQ1ehz7/ZLtTAMzVgPIeuVhXN6mHBCKVyodBJnFQnWOrerspIDUil0uw9Cde4lg5Bj4tu1UP02oAlml4aQ/dPvePlKT0fIOjVfdvU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773750961; c=relaxed/simple;
-	bh=zQkF4aFPpCjumouL76AqCA/45MXGsssqAVQg7werIi8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ulHY8uVBRr2YoSNWqgmiSTaCIXWVOHB0kvtqkIlfMDbrBKq0YG1fLqdgY22VL74Po9oK8hEaKrtEpMKtAU51hcuSNqK81JkcyN2ytrBYY3Ht76CYqiEHHhti8Vy4SxVeLsdHdZTY4gT3vC193ytvvXWbYBxP4AOBcobjqjwmW1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ns13gIdW; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A696F3C6A2B
+	for <llvm@lists.linux.dev>; Tue, 17 Mar 2026 13:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773752673; cv=pass; b=TVCBwiSJxklI1qa86hvdG58wDza8mFA0QDwHIDZpH0QaKZQnz7OZ5b37YpYXuTM3SMPZPp3oVLvRnOlhG12+APRNoAIa4Hl3jhCbYB/ykguLJLbOcFawGLb4wI9JWLjXG4qcETzGJczvJXJQPB2VR5K7rdS46Azn2n7dEzMT/CY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773752673; c=relaxed/simple;
+	bh=HOKSjD3DqXm2Q72cQVGdFQMwGQQ1FcKjaSZW8AAyutw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OlZMjok2EGID5RRaJS7RENyO3Q84+kZR6unxgFlLrTvfbaeRoUDB6IVDVy7H6kU+CamHbW4pxq2QRPmJyuZgsJQ0xYa/jw6W2s7aOsSp9SJG7fU7WB6hEWCX/K+/7sDnmN8GLubOBkZYzv3/4319Hm7DgvXaBGcq1nqe+SrnYdk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=GtgwNG/4; arc=pass smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ns13gIdW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773750959; x=1805286959;
-  h=date:from:to:cc:subject:message-id;
-  bh=zQkF4aFPpCjumouL76AqCA/45MXGsssqAVQg7werIi8=;
-  b=Ns13gIdWCO0Dw9VqvRXHzRVB5GkWFJ8/VYfCVI5q+Q+8uiNswbI0ZmQm
-   56zW6Cf1MBCSEkSomZY+Rh/oWtSFShq+BrgaqwbFl7jVe7C6rU9iMXz1l
-   Hw7NjokCjBaCs7VgfrxVTW2Ozir1LKtTaOO1PVx6FufgvxZDtV7GwOwtT
-   mqx87l31CIGctVXXAcFmrurOgGhGwEGOhbslFuS/0rtGiIFJTzfgw5d4p
-   swum8R2UncxHssWjwyjNPNRkVumpIUq7r2LAeLbKQ0q9rGgNlIKmv4yr6
-   vU2+BljXIN8tkVIPnkK2Au56TRYFpmaW+Nm722ADMNDnmDtE7gpvjIrX0
-   Q==;
-X-CSE-ConnectionGUID: fzqqvI+IS/Kh0sAZD70WyA==
-X-CSE-MsgGUID: +XSQ8wrTROeihluwrOUM8Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="74963231"
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="74963231"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 05:35:58 -0700
-X-CSE-ConnectionGUID: FcP8cXcXRUu5ana5/xNe9g==
-X-CSE-MsgGUID: CoQ9LS8oREOxUBzMJTtpWw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="219364165"
-Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 17 Mar 2026 05:35:56 -0700
-Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w2TeM-000000000Oj-281e;
-	Tue, 17 Mar 2026 12:35:54 +0000
-Date: Tue, 17 Mar 2026 20:35:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [chao:bugfix/common 1/3] fs/f2fs/f2fs.h:5090:5: warning:
- variable 'stop_reason' is used uninitialized whenever 'if' condition is false
-Message-ID: <202603172032.Bqe3qOBm-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="GtgwNG/4"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6644a3029b3so6644952a12.0
+        for <llvm@lists.linux.dev>; Tue, 17 Mar 2026 06:04:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773752670; cv=none;
+        d=google.com; s=arc-20240605;
+        b=a90TaDGuXNMREKOOb08TebixyZQCI1O8RwFBXbLXuzV0Ng6bOa2ZmChMsfLMZduyFg
+         sp70/XuJUVjZFFcdx3RgibTsFkJAblJ+t66arKIHrSbdwqPeKh+HbtNFWdWuBeN9hY4F
+         vDWeAdlcQgSUJ2UY0lo4jIosy+n0WmtIjfGW09lPvn4AYBxV4u/YUnDdrFt/inyj9unO
+         Fn6c+d0w/CVbyGdSIbmcGvQBuMPLGHxuxhWQXwwSwhytSemYqjoyF5qqORWtAaBAldlK
+         8objJyQ+qu8/mBsHCzrV063C9BqoPdEH8HcMenUZzmDwYe2VhPqZzWcaZBIoTyxIxAhx
+         EVjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ysuLlj+wUK3hDLUIv/hpeGMF0lK81wTkavGvi0NT4w8=;
+        fh=m4enFtmrl3jufLBUzGQeSyiuzNKN6LL24/s/QYDfcFQ=;
+        b=MJicblB58kgNlwCibaXiIl+aMdoOsCdiISEWZto10FcAVCL3NbbxBrL0v2kE59pQff
+         ExmgNJx1IldtU2SCKE2EfpP/J1aan41YyDAhew5se87ZHJy5sfZmI1TzF/qQUrKscjjY
+         4nsymv1yQhbjjpAUvoTarmviIQOELnGd9NnkThHsbgb28FJyh5D8/ic1zrIz8IeSTZS9
+         fgelFcFTL8xBQUzM4tmnbYFsuqV+DT+V28wXAYeAvk5ME/SyUdZQ/atQETC3IHNnz7mC
+         Ex+nrdG/X64j5puu//k7NdgDXKW/XYUsp/lHOtEIzhs4cGnZ2r/nWsLz/CKyweIf1lFp
+         v5pg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1773752670; x=1774357470; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ysuLlj+wUK3hDLUIv/hpeGMF0lK81wTkavGvi0NT4w8=;
+        b=GtgwNG/4peV40X0hmWoQjbTb9dbPnQFimjNQpGZLgRP/jPo6kkOvfcKu2KBnA5PmCA
+         VI5q7P9ge8ElMXFxEAKfk+ug+zJP89HSjlmZb4d+qe0ZadPgYpzF+gjEIk85Eu2Ygj4I
+         J9BGgx61j7KvDOV/OBtykArLZQTScwXqUmUJbnUKA2Z+ZnzTMA/I1NtJfcW6oDuAnE7r
+         haSK4XRH9NBiFQ/WDBITLpCxUM5xIYhzeaMJ//9EuhUngyBxrgna/yEgoZxhsoAj8cIO
+         t9AV0fdo7326OMkyHH3eQz8BluUUZ80adlp8+xUUtYYHdqw0MOA/7oALvJqE+zDr3h9x
+         5aeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773752670; x=1774357470;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ysuLlj+wUK3hDLUIv/hpeGMF0lK81wTkavGvi0NT4w8=;
+        b=fRQ7oPU8seN2UoAIfsYlsr+Y/fjnjXFzJd0R33/a8mxjrtRxHDKMxsnYQ2KImLU0A0
+         8haLbUIkKZ931COLK6mhbh+oSsKa7NWLqJ4e8XAItdd/BeCHXukrl1utrLxWUXEsN8DN
+         IqMQU204ru5EJeVaIBAMkuYrWVoGku1aE7gQaM3jTjkqYt0VNPYZvTSUuiuN1HJhv5Vi
+         y2NpTT8suUXTOjPHmQisXRij0etlZgQwsQM+vGJbdvlOYOtZfI0zRvDQFF99QXJlnSYo
+         uvy+S+2yIi8KummHRxlbRDcmUcbJcdW+QPHWNj9QYwbgfgR6YaPRWJreL4zdYjAhZLt+
+         hFag==
+X-Forwarded-Encrypted: i=1; AJvYcCXCz1Z/YY6+c56DJba7PBeJR3MLf1mMqYZ5MZh7tW1NkFT/NObQyRpSqQ5E3OBc4RTROMV7@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx4IQsrMNswkn75JT3pAwRBeO36SDABofK5XIx3P2Gr1MThpn2v
+	tLHJIhzQi02Ybwg6N3jVZItJqSh2b4SqKvsyoM+sM5v69oTV3aXiYQTSFbVigyBS6cbcQmtWy1D
+	2+0vcyGfFfMGkrtENO9dbtscxmoEs7ORprtClCVzdqg==
+X-Gm-Gg: ATEYQzypY6rEemyurB6Ykl55L4siKDkKU8Da1qurl+IEEdyx/qa0AIAlSOwBZF57PGf
+	zdaMLqmQelOSzWWzO1zaLiBgMpKIL1W4GMfQPEe2c+c1C+BGp/iLk75DUp8tYjmw2jVLAIHyFHy
+	pfntoahK43+9Kq6pJ9ZPt0WjEmKsRfepizPrKGf7eXDOTNV7oWZrm2hetbk8qySw8hlRBNCUcsO
+	F8HhfsBz6wQunkJn9zqMMPx2XwC3LmqeJcRIHCnhVc5Tt70ZPggeO694Acmwqy9S5WHeOOR9tq8
+	Zu67lDuFcmorwZOr7ant7Gw/BIZQMWdOsbG6Vw==
+X-Received: by 2002:a05:6402:f01:b0:658:d1b0:9970 with SMTP id
+ 4fb4d7f45d1cf-663ba0ffedemr7428895a12.5.1773752669881; Tue, 17 Mar 2026
+ 06:04:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260317025049.494931-6-pasha.tatashin@soleen.com> <202603171111.YBKWkKnp-lkp@intel.com>
+In-Reply-To: <202603171111.YBKWkKnp-lkp@intel.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Tue, 17 Mar 2026 09:03:52 -0400
+X-Gm-Features: AaiRm53BOiJuI_VHcpORXajPgafrQwkAny2SxrdtOShKer-_ZbanQn5yTzxfajY
+Message-ID: <CA+CK2bALxiExWL3LuF_+fhctKGYmdBQejjFiw09jFiV1UtPZ3A@mail.gmail.com>
+Subject: Re: [PATCH 5/6] liveupdate: Make unregister functions return void
+To: kernel test robot <lkp@intel.com>
+Cc: rppt@kernel.org, pratyush@kernel.org, linux-kernel@vger.kernel.org, 
+	dmatlack@google.com, akpm@linux-foundation.org, linux-mm@kvack.org, 
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git bugfix/common
-head:   8b0a278150d8b381c33a881c61d439905cc90ccd
-commit: 42d256b5f9f2e46beb837949272d4374e2a5e859 [1/3] f2fs: call f2fs_handle_critical_error() to set cp_error flag
-config: x86_64-randconfig-015-20260317 (https://download.01.org/0day-ci/archive/20260317/202603172032.Bqe3qOBm-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603172032.Bqe3qOBm-lkp@intel.com/reproduce)
+On Tue, Mar 17, 2026 at 6:11=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Pasha,
+>
+> kernel test robot noticed the following build warnings:
+>
+> [auto build test WARNING on akpm-mm/mm-nonmm-unstable]
+> [also build test WARNING on akpm-mm/mm-everything linus/master v7.0-rc4 n=
+ext-20260316]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Pasha-Tatashin/liv=
+eupdate-Protect-file-handler-list-with-rwsem/20260317-105522
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-no=
+nmm-unstable
+> patch link:    https://lore.kernel.org/r/20260317025049.494931-6-pasha.ta=
+tashin%40soleen.com
+> patch subject: [PATCH 5/6] liveupdate: Make unregister functions return v=
+oid
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260317/20=
+2603171111.YBKWkKnp-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
+227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20260317/202603171111.YBKWkKnp-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202603171111.YBKWkKnp-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>    In file included from kernel/kexec_core.c:18:
+> >> include/linux/liveupdate.h:274:2: warning: void function 'liveupdate_u=
+nregister_flb' should not return a value [-Wreturn-mismatch]
+>      274 |         return -EOPNOTSUPP;
+>          |         ^      ~~~~~~~~~~~
+>    1 warning generated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603172032.Bqe3qOBm-lkp@intel.com/
+Ah, forgot to update these. Will send v2 soon.
 
-All warnings (new ones prefixed by >>):
+Pasha
 
-   In file included from fs/f2fs/hash.c:18:
->> fs/f2fs/f2fs.h:5090:5: warning: variable 'stop_reason' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    5090 |                                 f2fs_bug_on(sbi, 1);
-         |                                 ^~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:34:37: note: expanded from macro 'f2fs_bug_on'
-      34 | #define f2fs_bug_on(sbi, condition)     BUG_ON(condition)
-         |                                         ^~~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:81:36: note: expanded from macro 'BUG_ON'
-      81 | #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
-         |                                    ^~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:47:23: note: expanded from macro 'unlikely'
-      47 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:5092:36: note: uninitialized use occurs here
-    5092 |                         f2fs_handle_critical_error(sbi, stop_reason);
-         |                                                         ^~~~~~~~~~~
-   fs/f2fs/f2fs.h:5090:5: note: remove the 'if' if its condition is always true
-    5090 |                                 f2fs_bug_on(sbi, 1);
-         |                                 ^
-   fs/f2fs/f2fs.h:34:37: note: expanded from macro 'f2fs_bug_on'
-      34 | #define f2fs_bug_on(sbi, condition)     BUG_ON(condition)
-         |                                         ^
-   include/asm-generic/bug.h:81:32: note: expanded from macro 'BUG_ON'
-      81 | #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
-         |                                ^
-   fs/f2fs/f2fs.h:5077:4: note: variable 'stop_reason' is declared here
-    5077 |                         enum stop_cp_reason stop_reason;
-         |                         ^
-   1 warning generated.
-
-
-vim +5090 fs/f2fs/f2fs.h
-
-  5066	
-  5067	static inline void f2fs_handle_page_eio(struct f2fs_sb_info *sbi,
-  5068					struct folio *folio, enum page_type type)
-  5069	{
-  5070		pgoff_t ofs = folio->index;
-  5071	
-  5072		if (unlikely(f2fs_cp_error(sbi)))
-  5073			return;
-  5074	
-  5075		if (ofs == sbi->page_eio_ofs[type]) {
-  5076			if (sbi->page_eio_cnt[type]++ == MAX_RETRY_PAGE_EIO) {
-  5077				enum stop_cp_reason stop_reason;
-  5078	
-  5079				switch (type) {
-  5080				case META:
-  5081					stop_reason = STOP_CP_REASON_READ_META;
-  5082					break;
-  5083				case NODE:
-  5084					stop_reason = STOP_CP_REASON_READ_NODE;
-  5085					break;
-  5086				case DATA:
-  5087					stop_reason = STOP_CP_REASON_READ_DATA;
-  5088					break;
-  5089				default:
-> 5090					f2fs_bug_on(sbi, 1);
-  5091				}
-  5092				f2fs_handle_critical_error(sbi, stop_reason);
-  5093			}
-  5094		} else {
-  5095			sbi->page_eio_ofs[type] = ofs;
-  5096			sbi->page_eio_cnt[type] = 0;
-  5097		}
-  5098	}
-  5099	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+>
+> vim +/liveupdate_unregister_flb +274 include/linux/liveupdate.h
+>
+> cab056f2aae725 Pasha Tatashin 2025-12-18  270
+> e62bd1ab0687a1 Pasha Tatashin 2026-03-16  271  static inline void liveupd=
+ate_unregister_flb(struct liveupdate_file_handler *fh,
+> cab056f2aae725 Pasha Tatashin 2025-12-18  272                            =
+            struct liveupdate_flb *flb)
+> cab056f2aae725 Pasha Tatashin 2025-12-18  273  {
+> cab056f2aae725 Pasha Tatashin 2025-12-18 @274   return -EOPNOTSUPP;
+> cab056f2aae725 Pasha Tatashin 2025-12-18  275  }
+> cab056f2aae725 Pasha Tatashin 2025-12-18  276
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
