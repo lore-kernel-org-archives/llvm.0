@@ -1,179 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC9B396B7D;
-	Tue, 17 Mar 2026 08:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9485619D081;
+	Tue, 17 Mar 2026 08:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773736941; cv=none; b=a7FvBwlOYC6gc1xXzHnvty1+efIVrT/Xy04JAUCXRsK5iCu/xm38Fr5cFIpiXn+dXAgC4mfddDrsJOMwgsOASxjEOUKDe5PDmE4/kjBEpxHzkCKnyG+qCV4nGhbV02Pfsf23H8KqqN6AO7uclAiPDLOn3Lj0gBY3tVUiUeJlI/w=
+	t=1773737059; cv=none; b=UT32ezNsnbruIsqUAgZ099kLjcdjfh4HKV8MoTugk9PIJL4D2TiDrk/h+D9M+VBpQeV6YPBJ2NR3+4UmIzr5jnt2E5I37XInxRL1DuItVV5LXLTJrKoVvBi+YH8/pd2iBWXO5JBm+J+T4UgE7D3YA1GMDP2mDd2ogRwS88gaYeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773736941; c=relaxed/simple;
-	bh=sjP2kUUv/ebsFWd0HXbv/74udIp3imRLZB7s841aAsE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=gXulQu9m7TC0TePeKa9Nm1ojUMklK69cMsXJd4WydsYMiqt6zgHnsXftjsUsC/l4cyGMsbWRdWFwXCxI8X3b6qfRyyy/v6MaiVhIgXuaVkk63+BLfLf/dAm+QSVePv8y6Rc8q0P1V73+FuD6k/GlQysM6c9U9au8Nal1sFcVJPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=haZfJrLw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773737059; c=relaxed/simple;
+	bh=UCy/wPRSnRVvRCcmLTWm3DCZUBCsWRbfqizdy3YIhiE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mqrt4yKodAUMLg6YDYHd8655eRFOOshOm/Urksp3VPCKzPGT6nzqwD++QCiQX3I/+ezZHScqLPonwZ6EynGN6UBBYPUYTevTAndqK3uaLyXNZU12v7a38jOpO8KWaBHkfshdvTq5YMPrFut/tpolpkRZbWnWb3/0szMwiCAX8PY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c2zRdaVP; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="haZfJrLw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF175C19425;
-	Tue, 17 Mar 2026 08:42:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773736940;
-	bh=sjP2kUUv/ebsFWd0HXbv/74udIp3imRLZB7s841aAsE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=haZfJrLwEcd2jNdOOzbE2T3kAK6kpT0Bzs2AIuf2VB1sHBSdUwtungxubXKz/VpqS
-	 UCwKGWdbfC9M4bG7N1PyRaiQCeiX0hmfQsYH2dSc5scA6+kzjh+tK336DKstaq4dx5
-	 g8XWVMP6xRPdbQ2Kgt8+UeqP49a30GqDbi+JRIiDyw7daG5ZZUMSIBgZVh1w/IGj3u
-	 Y0vw/RWadAqP8fq38d5XQTWQsBkW/XvBoSXHut3k7QRBxJm3ay+MO324mW9NPLc5GL
-	 eAWZfOoGHJVJgT443GDgSY/BprQ8VJIfBWvVgGjugmCEvzcXBDkdSZ4391O8T0O8n5
-	 kJeczJXlssy2Q==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex
- Gaynor <alex.gaynor@gmail.com>, Nathan Chancellor <nathan@kernel.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn?=
- Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin
- <benno.lossin@proton.me>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross
- <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, Nick Desaulniers
- <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org, patches@lists.linux.dev, Aaron Ballman
- <aaron@aaronballman.com>, Bill Wendling <isanbard@gmail.com>, Cole
- Nixon <nixontcole@gmail.com>, Connor Kuehl <cipkuehl@gmail.com>, Fangrui
- Song <i@maskray.me>, James Foster <jafosterja@gmail.com>, Jeff
- Takahashi <jeffrey.takahashi@gmail.com>, Jordan Cantrell
- <jordan.cantrell@mail.com>, Matthew Maurer <mmaurer@google.com>, Nikk
- Forbus <nicholas.forbus@gmail.com>, Qing Zhao <qing.zhao@oracle.com>, Sami
- Tolvanen <samitolvanen@google.com>, Tim Pugh <nwtpugh@gmail.com>, Kees
- Cook <kees@kernel.org>
-Subject: Re: [RFC PATCH] rust: allow Clang-native `RANDSTRUCT` configs
-In-Reply-To: <20241119185747.862544-1-ojeda@kernel.org>
-References: <GYMB6vN7uKNVSwQPEtPg0kZPHUkxHQbQe3ZIUqOGZm8ZGwCUE6-iRxJdUQ5xB_qV2bLZVauIZtAGbK1iduefTw==@protonmail.internalid>
- <20241119185747.862544-1-ojeda@kernel.org>
-Date: Tue, 17 Mar 2026 09:42:04 +0100
-Message-ID: <871phisv8j.fsf@t14s.mail-host-address-is-not-set>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c2zRdaVP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773737057; x=1805273057;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UCy/wPRSnRVvRCcmLTWm3DCZUBCsWRbfqizdy3YIhiE=;
+  b=c2zRdaVP9r6oZMuCyDrOH8WqQKjCA1yk6seRv3Te+6yHzKQ5b29q/7y+
+   WzFQ/0fnGYNG5VPhxnLW3l6ehf4yS0ejrvCpYdBI2jrgAvWxpfcKmxCKL
+   miOxisZtXQ8lRxehfVX4HR7Ectd7KspS2ENEBtl5yX6gK7X2v5tuQMqLj
+   B8o/qERyi6/lwG8cJ7KRqd7NPhLl3n54JtqxWh34msjLZ/DQ975RpaO8j
+   F/U6NWBFYved8F/af12Mu+CdJmPn5aw7MmrM9qjThtL+FWYn2vZBe6QgH
+   xkA2u5oGWVfufR6B8jFllBh89N/6LTiKBE4IlXJb1YNixQ+CKV7rMT6ly
+   w==;
+X-CSE-ConnectionGUID: fMe710StTDu5Fub3Q65C4Q==
+X-CSE-MsgGUID: wXYd8Rt0TQOEGqBRHO0DqQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="74796452"
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="74796452"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 01:44:17 -0700
+X-CSE-ConnectionGUID: 6XFI5ushT3qEB+EPVJnkTg==
+X-CSE-MsgGUID: 7ypYJNBSQJCh7psmN+B7Ug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="252692280"
+Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 17 Mar 2026 01:44:16 -0700
+Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w2Q29-0000000004h-39XS;
+	Tue, 17 Mar 2026 08:44:13 +0000
+Date: Tue, 17 Mar 2026 16:43:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC v3 10/43] KVM: guest_memfd: Handle lru_add fbatch
+ refcounts during conversion safety check
+Message-ID: <202603171521.oEqPhbPQ-lkp@intel.com>
+References: <20260313-gmem-inplace-conversion-v3-10-5fc12a70ec89@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260313-gmem-inplace-conversion-v3-10-5fc12a70ec89@google.com>
 
-"Miguel Ojeda" <ojeda@kernel.org> writes:
+Hi Ackerley,
 
-> The kernel supports `RANDSTRUCT_FULL` with Clang 16+, and `bindgen`
-> (which uses `libclang` under the hood) inherits the information, so the
-> generated bindings look correct.
->
-> For instance, running:
->
->     bindgen x.h -- -frandomize-layout-seed=100
->
-> with:
->
->     struct S1 {
->         int a;
->         int b;
->     };
->
->     struct S2 {
->         int a;
->         int b;
->     } __attribute__((randomize_layout));
->
->     struct S3 {
->         void (*a)(void);
->         void (*b)(void);
->     };
->
->     struct S4 {
->         void (*a)(void);
->         void (*b)(void);
->     } __attribute__((no_randomize_layout));
->
-> may swap `S2`'s and `S3`'s members, but not `S1`'s nor `S4`'s:
->
->     pub struct S1 {
->         pub a: ::std::os::raw::c_int,
->         pub b: ::std::os::raw::c_int,
->     }
->
->     pub struct S2 {
->         pub b: ::std::os::raw::c_int,
->         pub a: ::std::os::raw::c_int,
->     }
->
->     pub struct S3 {
->         pub b: ::std::option::Option<unsafe extern "C" fn()>,
->         pub a: ::std::option::Option<unsafe extern "C" fn()>,
->     }
->
->     pub struct S4 {
->         pub a: ::std::option::Option<unsafe extern "C" fn()>,
->         pub b: ::std::option::Option<unsafe extern "C" fn()>,
->     }
->
-> Thus allow those configurations by requiring a Clang compiler to use
-> `RANDSTRUCT`. In addition, remove the `!GCC_PLUGIN_RANDSTRUCT` check
-> since it is not needed.
->
-> A simpler alternative would be to remove the `!RANDSTRUCT` check (keeping
-> the `!GCC_PLUGIN_RANDSTRUCT` one). However, if in the future GCC starts
-> supporting `RANDSTRUCT` natively, it would be likely that it would not
-> work unless GCC and Clang agree on the exact semantics of the flag. And,
-> as far as I can see, so far the randomization in Clang does not seem to be
-> guaranteed to remain stable across versions or platforms, i.e. only for a
-> given compiler Clang binary, given it is not documented and that LLVM's
-> `HEAD` has the revert in place for the expected field names in the test
-> (LLVM commit 8dbc6b560055 ("Revert "[randstruct] Check final randomized
-> layout ordering"")) [1][2]. And the GCC plugin definitely does not match,
-> e.g. its RNG is different (`std::mt19937` vs Bob Jenkins').
->
-> And given it is not supposed to be guaranteed to remain stable across
-> versions, it is a good idea to match the Clang and `bindgen`'s
-> `libclang` versions -- we already have a warning for that in
-> `scripts/rust_is_available.sh`. In the future, it would also be good to
-> have a build test to double-check layouts do actually match (but that
-> is true regardless of this particular feature).
->
-> Finally, make a required small change to take into account the anonymous
-> struct used in `randomized_struct_fields_*` in `struct task_struct`.
->
-> Cc: Aaron Ballman <aaron@aaronballman.com>
-> Cc: Bill Wendling <isanbard@gmail.com>
-> Cc: Cole Nixon <nixontcole@gmail.com>
-> Cc: Connor Kuehl <cipkuehl@gmail.com>
-> Cc: Fangrui Song <i@maskray.me>
-> Cc: James Foster <jafosterja@gmail.com>
-> Cc: Jeff Takahashi <jeffrey.takahashi@gmail.com>
-> Cc: Jordan Cantrell <jordan.cantrell@mail.com>
-> Cc: Justin Stitt <justinstitt@google.com>
-> Cc: Matthew Maurer <mmaurer@google.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nikk Forbus <nicholas.forbus@gmail.com>
-> Cc: Qing Zhao <qing.zhao@oracle.com>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Tim Pugh <nwtpugh@gmail.com>
-> Link: https://reviews.llvm.org/D121556
-> Link: https://github.com/llvm/llvm-project/commit/8dbc6b560055ff5068ff45b550482ba62c36b5a5 [1]
-> Link: https://reviews.llvm.org/D124199 [2]
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on d2ea4ff1ce50787a98a3900b3fb1636f3620b7cf]
 
-Tested-by: Andreas Hindborg <a.hindborg@kernel.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/Ackerley-Tng/KVM-guest_memfd-Introduce-per-gmem-attributes-use-to-guard-user-mappings/20260314-175023
+base:   d2ea4ff1ce50787a98a3900b3fb1636f3620b7cf
+patch link:    https://lore.kernel.org/r/20260313-gmem-inplace-conversion-v3-10-5fc12a70ec89%40google.com
+patch subject: [PATCH RFC v3 10/43] KVM: guest_memfd: Handle lru_add fbatch refcounts during conversion safety check
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260317/202603171521.oEqPhbPQ-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603171521.oEqPhbPQ-lkp@intel.com/reproduce)
 
-Tested with the rust null block driver patch series [1]. I did a
-few functional verification tests and a set of performance tests.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603171521.oEqPhbPQ-lkp@intel.com/
 
-For the rnull driver, enabling randstruct with this patch gives no
-statistically significant change to the average performance of the set
-of 120 workloads that we publish on [2]. Individual configurations see
-around 10% change in throughput, both directions.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Best regards,
-Andreas Hindborg
+>> ERROR: modpost: "lru_add_drain_all" [arch/x86/kvm/kvm.ko] undefined!
 
-[1] https://lore.kernel.org/rust-for-linux/20260216-rnull-v6-19-rc5-send-v1-0-de9a7af4b469@kernel.org/
-[2] https://rust-for-linux.com/null-block-driver
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
