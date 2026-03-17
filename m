@@ -1,219 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2296318121;
-	Tue, 17 Mar 2026 22:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED913B52F8;
+	Tue, 17 Mar 2026 22:52:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773786601; cv=none; b=nKjKsPAzJpRXp2e7NRhm9veiyjUGhebuYomwKRwb+8HXht4KMMVbkpQf+LPnS+OBicxv5fva7ZYLEQJ+JYw2FhO2ukmQMLsAOYlxlkjXoEUSzN0OSJhjE/kzHtcvIHTF+wot5woSf9sYmwvIPv3GH+mOd+8tIxOxuV8J9HpjN3I=
+	t=1773787975; cv=none; b=fBOiHF0iwvMIwsWWvZjOl5BNfmAAizDqieFMf6uKOVbh0PVIGLUefWRe0YLljXRNNFRmPuzJgTUrIUqgrAdOR/qFTKN+yBED0/GeX81jV10zCN7FfnjWvAlyEdxl40sro/FWJxFt75ioksscoYtWtzV1eHcxpWv5ykGf14xXQ9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773786601; c=relaxed/simple;
-	bh=CnhOIHlyblpvsOEV8hoOhLwkcqHdhWN6Zqa9wOHKLVY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oBD0ClpD7mi52ZiiDdMxzgok0BYVhgVKA0/uwhCaCgk+SbAQ2njwJiaJX57BfIWvXcVEr3E6S+sXFMjuSFCEEMBshOGW94A6qwhQZCJjBg57WntbLpswyuZ8USQNZTEPaloho/LcX0sg8PgG3HyekKgkit+WQPm/GjeJUzc548s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JY1yqQr+; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1773787975; c=relaxed/simple;
+	bh=90y8N2wsqf8T2qk4q2gXoV2ouFVDYXDB1GvOAIs9jDY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=L3UD7MAe3Z3woJiU8noCc1XpZYYLnfGRJ6BCn4cBCQZNuizYdsG6S6dvaTlrlDEwTYJDDzmKRwQyZRUCtFQ7DHeLrHEUudlfgjCVHTHCUdkeSf242VpuVfUnGESYR24N2+0xdcUGJAb0ThkNSAh5/q1kyi9am37JK0v9mZp71Po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nCSkj+BE; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JY1yqQr+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nCSkj+BE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773786599; x=1805322599;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CnhOIHlyblpvsOEV8hoOhLwkcqHdhWN6Zqa9wOHKLVY=;
-  b=JY1yqQr+sUgDkRTFF8vFrVj8cMMY8iYlONhuAHSg5Ph1X/V3dH0S/IqO
-   3tTL1HFwA3e3eE85vY8rpSr+0QDE2ky94EjKWW/k0EnWAbalwpMFz2Red
-   Xvxyvf6/0mfsjnzpU8O70dIPF6J8IP/zle8+WBwWsQpcBFFaVV92+LQfH
-   CsohSEff041ElvhloexLASZ9iFf5uPykQNVHLf4y6Ypf7OTwfzPj+foAW
-   L0o4DbtXe7E4KszqULZDkxBXMxvSy381+2nAgczznXTfjYwKDVV2PHMXO
-   fYmpCTUqBJ1CdCgx18cJWCxCC5ti1hhDthCJAwIExeUBPYzj2xvhgiDgl
-   w==;
-X-CSE-ConnectionGUID: lDRcTgpJQLmCv44iKtEldg==
-X-CSE-MsgGUID: wnv6z+hrSz25YCohWFsZ4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="74809294"
+  t=1773787975; x=1805323975;
+  h=date:from:to:cc:subject:message-id;
+  bh=90y8N2wsqf8T2qk4q2gXoV2ouFVDYXDB1GvOAIs9jDY=;
+  b=nCSkj+BE0oDukKNQyZRcXQKfkZ0mxoWFqPZwfsVKY/778zV520hacxl2
+   eNwmG9FDDBqdxu3NiZVxtRsZ7Nn9NbOnWmK6ggK3BoWJdUajd5Yml+nVU
+   KH8lkxafKW2zHSxLVpAUT+cvMufvwv2ZowrhMLJtVot5cMqlKlqBZFx+a
+   mXUW1SD6Po0kUPAAzGqquPLhB3nuX1XaOl39QyM4oULItzdF7DF+4RjAa
+   0pFkFhhmTUYx4XXaD1rLAbPzi/IXKL9WvzLnqwB71VuqmnK61H/5kJysl
+   ABEtlG7bQ09UM2wWZd9RwsSMsI06Y5Q1GJv9RucjoAAOdjRXLjPlwq5gQ
+   Q==;
+X-CSE-ConnectionGUID: Xu3UQeJFTY2eQsGdyEizjA==
+X-CSE-MsgGUID: QhFNOlnQSEONDd7dDaAwkg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="92218329"
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="74809294"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 15:29:59 -0700
-X-CSE-ConnectionGUID: BEMfbMsJRnKCt++S2U62cA==
-X-CSE-MsgGUID: pRhFVNvwQ+Se5X5qKLOxnA==
+   d="scan'208";a="92218329"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 15:52:53 -0700
+X-CSE-ConnectionGUID: hfEH69HuR2un55TML+R5LA==
+X-CSE-MsgGUID: ZSHrtwqnSkyvFbsWDRQ75g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="221486241"
+   d="scan'208";a="227093509"
 Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 17 Mar 2026 15:29:51 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 17 Mar 2026 15:52:51 -0700
 Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w2cv5-0000000026z-0bPZ;
-	Tue, 17 Mar 2026 22:29:47 +0000
-Date: Wed, 18 Mar 2026 06:29:45 +0800
+	id 1w2dHM-0000000028f-2SWW;
+	Tue, 17 Mar 2026 22:52:48 +0000
+Date: Wed, 18 Mar 2026 06:52:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	"Derek J. Clark" <derekjohn.clark@gmail.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Linus Walleij <linusw@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	Dmitry Baryshkov <lumag@kernel.org>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v6 9/9] power: sequencing: pcie-m2: Create serdev device
- for WCN7850 bluetooth
-Message-ID: <202603180601.E8FFoQ4J-lkp@intel.com>
-References: <20260317-pci-m2-e-v6-9-9c898f108d3d@oss.qualcomm.com>
+ linux-gpio@vger.kernel.org,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [linusw-gpio:b4/descriptors-wireless 2/2]
+ drivers/gpio/gpio-ath79.c:264:1: warning: non-void function does not return a
+ value
+Message-ID: <202603180646.GLjbhfKi-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260317-pci-m2-e-v6-9-9c898f108d3d@oss.qualcomm.com>
 
-Hi Manivannan,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 559f264e403e4d58d56a17595c60a1de011c5e20]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Manivannan-Sadhasivam-via-B4-Relay/serdev-Convert-to_serdev_-helpers-to-macros-and-use-container_of_const/20260317-123910
-base:   559f264e403e4d58d56a17595c60a1de011c5e20
-patch link:    https://lore.kernel.org/r/20260317-pci-m2-e-v6-9-9c898f108d3d%40oss.qualcomm.com
-patch subject: [PATCH v6 9/9] power: sequencing: pcie-m2: Create serdev device for WCN7850 bluetooth
-config: um-randconfig-002-20260318 (https://download.01.org/0day-ci/archive/20260318/202603180601.E8FFoQ4J-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180601.E8FFoQ4J-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git b4/descriptors-wireless
+head:   f498eb811e7dd7b968743a9bba20710a5070c0be
+commit: f498eb811e7dd7b968743a9bba20710a5070c0be [2/2] wifi: ath9k: Obtain system GPIOS from descriptors
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260318/202603180646.GLjbhfKi-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180646.GLjbhfKi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603180601.E8FFoQ4J-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603180646.GLjbhfKi-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:28:
-   In file included from include/linux/cgroup_api.h:1:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:31:
-   In file included from include/linux/cpufreq.h:17:
->> include/linux/of.h:1652:34: error: use of undeclared identifier 'OF_RECONFIG_ATTACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
-    1652 |         return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
-         |                                         OF_RECONFIG_NO_CHANGE
-   include/linux/of.h:1627:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
-    1627 |         OF_RECONFIG_NO_CHANGE = 0,
-         |         ^
->> include/linux/of.h:1658:34: error: use of undeclared identifier 'OF_RECONFIG_DETACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
-    1658 |         return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
-         |                                         OF_RECONFIG_NO_CHANGE
-   include/linux/of.h:1627:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
-    1627 |         OF_RECONFIG_NO_CHANGE = 0,
-         |         ^
->> include/linux/of.h:1664:34: error: use of undeclared identifier 'OF_RECONFIG_ADD_PROPERTY'
-    1664 |         return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~
->> include/linux/of.h:1670:34: error: use of undeclared identifier 'OF_RECONFIG_REMOVE_PROPERTY'
-    1670 |         return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> include/linux/of.h:1676:34: error: use of undeclared identifier 'OF_RECONFIG_UPDATE_PROPERTY'
-    1676 |         return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 5 errors generated.
-   make[3]: *** [scripts/Makefile.build:184: kernel/sched/rq-offsets.s] Error 1 shuffle=497447418
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1333: prepare0] Error 2 shuffle=497447418
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=497447418
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=497447418
-   make: Target 'prepare' not remade because of errors.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OF_DYNAMIC
-   Depends on [n]: OF [=n]
-   Selected by [y]:
-   - POWER_SEQUENCING_PCIE_M2 [=y] && POWER_SEQUENCING [=y] && (PCI [=n] && OF [=n] || COMPILE_TEST [=y])
+>> drivers/gpio/gpio-ath79.c:264:1: warning: non-void function does not return a value [-Wreturn-type]
+     264 | }
+         | ^
+   1 warning generated.
 
 
-vim +1652 include/linux/of.h
+vim +264 drivers/gpio/gpio-ath79.c
 
-2e8fff668dc14e Rob Herring       2023-03-29  1633  
-201c910bd6898d Pantelis Antoniou 2014-07-04  1634  #ifdef CONFIG_OF_DYNAMIC
-f6892d193fb9d6 Grant Likely      2014-11-21  1635  extern int of_reconfig_notifier_register(struct notifier_block *);
-f6892d193fb9d6 Grant Likely      2014-11-21  1636  extern int of_reconfig_notifier_unregister(struct notifier_block *);
-f5242e5a883bf1 Grant Likely      2014-11-24  1637  extern int of_reconfig_notify(unsigned long, struct of_reconfig_data *rd);
-f5242e5a883bf1 Grant Likely      2014-11-24  1638  extern int of_reconfig_get_state_change(unsigned long action,
-f5242e5a883bf1 Grant Likely      2014-11-24  1639  					struct of_reconfig_data *arg);
-f6892d193fb9d6 Grant Likely      2014-11-21  1640  
-201c910bd6898d Pantelis Antoniou 2014-07-04  1641  extern void of_changeset_init(struct of_changeset *ocs);
-201c910bd6898d Pantelis Antoniou 2014-07-04  1642  extern void of_changeset_destroy(struct of_changeset *ocs);
-201c910bd6898d Pantelis Antoniou 2014-07-04  1643  extern int of_changeset_apply(struct of_changeset *ocs);
-201c910bd6898d Pantelis Antoniou 2014-07-04  1644  extern int of_changeset_revert(struct of_changeset *ocs);
-201c910bd6898d Pantelis Antoniou 2014-07-04  1645  extern int of_changeset_action(struct of_changeset *ocs,
-201c910bd6898d Pantelis Antoniou 2014-07-04  1646  		unsigned long action, struct device_node *np,
-201c910bd6898d Pantelis Antoniou 2014-07-04  1647  		struct property *prop);
-201c910bd6898d Pantelis Antoniou 2014-07-04  1648  
-201c910bd6898d Pantelis Antoniou 2014-07-04  1649  static inline int of_changeset_attach_node(struct of_changeset *ocs,
-201c910bd6898d Pantelis Antoniou 2014-07-04  1650  		struct device_node *np)
-201c910bd6898d Pantelis Antoniou 2014-07-04  1651  {
-201c910bd6898d Pantelis Antoniou 2014-07-04 @1652  	return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
-201c910bd6898d Pantelis Antoniou 2014-07-04  1653  }
-201c910bd6898d Pantelis Antoniou 2014-07-04  1654  
-201c910bd6898d Pantelis Antoniou 2014-07-04  1655  static inline int of_changeset_detach_node(struct of_changeset *ocs,
-201c910bd6898d Pantelis Antoniou 2014-07-04  1656  		struct device_node *np)
-201c910bd6898d Pantelis Antoniou 2014-07-04  1657  {
-201c910bd6898d Pantelis Antoniou 2014-07-04 @1658  	return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
-201c910bd6898d Pantelis Antoniou 2014-07-04  1659  }
-201c910bd6898d Pantelis Antoniou 2014-07-04  1660  
-201c910bd6898d Pantelis Antoniou 2014-07-04  1661  static inline int of_changeset_add_property(struct of_changeset *ocs,
-201c910bd6898d Pantelis Antoniou 2014-07-04  1662  		struct device_node *np, struct property *prop)
-201c910bd6898d Pantelis Antoniou 2014-07-04  1663  {
-201c910bd6898d Pantelis Antoniou 2014-07-04 @1664  	return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
-201c910bd6898d Pantelis Antoniou 2014-07-04  1665  }
-201c910bd6898d Pantelis Antoniou 2014-07-04  1666  
-201c910bd6898d Pantelis Antoniou 2014-07-04  1667  static inline int of_changeset_remove_property(struct of_changeset *ocs,
-201c910bd6898d Pantelis Antoniou 2014-07-04  1668  		struct device_node *np, struct property *prop)
-201c910bd6898d Pantelis Antoniou 2014-07-04  1669  {
-201c910bd6898d Pantelis Antoniou 2014-07-04 @1670  	return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
-201c910bd6898d Pantelis Antoniou 2014-07-04  1671  }
-201c910bd6898d Pantelis Antoniou 2014-07-04  1672  
-201c910bd6898d Pantelis Antoniou 2014-07-04  1673  static inline int of_changeset_update_property(struct of_changeset *ocs,
-201c910bd6898d Pantelis Antoniou 2014-07-04  1674  		struct device_node *np, struct property *prop)
-201c910bd6898d Pantelis Antoniou 2014-07-04  1675  {
-201c910bd6898d Pantelis Antoniou 2014-07-04 @1676  	return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
-201c910bd6898d Pantelis Antoniou 2014-07-04  1677  }
-b544fc2b8606d7 Lizhi Hou         2023-08-15  1678  
+   217	
+   218	#if IS_ENABLED(CONFIG_ATH9K_AHB)
+   219	/*
+   220	 * This registers all of the ath79k GPIOs as descriptors to be picked
+   221	 * directly from the ATH79K wifi driver if the two are jitted together
+   222	 * in the same SoC.
+   223	 */
+   224	#define ATH79K_WIFI_DESCS 32
+   225	static int ath79_gpio_register_wifi_descriptors(struct device *dev,
+   226							const char *label)
+   227	{
+   228		struct gpiod_lookup_table *lookup;
+   229		int i;
+   230	
+   231		/* Create a gpiod lookup using gpiochip-local offsets + 1 for NULL */
+   232		lookup = devm_kzalloc(dev,
+   233				      struct_size(lookup, table, ATH79K_WIFI_DESCS + 1),
+   234				      GFP_KERNEL);
+   235		if (!lookup)
+   236			return -ENOMEM;
+   237	
+   238		/*
+   239		 * Ugly system-wide lookup for the NULL device: we know this
+   240		 * is already NULL but explicitly assign it here for people to
+   241		 * know what is going on. (Yes this is an ugly legacy hack, live
+   242		 * with it.)
+   243		 */
+   244		lookup->dev_id = NULL;
+   245	
+   246		for (i = 0; i < ATH79K_WIFI_DESCS; i++) {
+   247			lookup->table[i] =
+   248				/*
+   249				 * Set the HW offset on the chip and the lookup
+   250				 * index to the same value, so looking up index 0
+   251				 * will get HW offset 0, index 1 HW offset 1 etc.
+   252				 */
+   253				GPIO_LOOKUP_IDX(label, i, "ath9k", i, GPIO_ACTIVE_HIGH);
+   254		}
+   255	
+   256		gpiod_add_lookup_table(lookup);
+   257	
+   258		return 0;
+   259	}
+   260	#else
+   261	static int ath79_gpio_register_wifi_descriptors(struct device *dev,
+   262							const char *label)
+   263	{
+ > 264	}
+   265	#endif
+   266	
 
 -- 
 0-DAY CI Kernel Test Service
