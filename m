@@ -1,205 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7CF373BF5;
-	Tue, 17 Mar 2026 10:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAD933A9E9
+	for <llvm@lists.linux.dev>; Tue, 17 Mar 2026 11:00:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773744960; cv=none; b=uk4b3UrWxYyFd2wAu/47K8d3PcZf1KjbN26nqApC6pj5Ffdy3L3KzaChX2Jhl8M3qwrJCqGz/Keylh368yCgi+acFA+cc45NL2BEeF76GDg9Ub+8t6T1plWWnBBlyXL8qHeTgAdFXSqELd1BN641tpHY8QtwXHmBr5KrB/iCYcE=
+	t=1773745253; cv=none; b=ZcV//M/2gitw2VaP420J+UjgbT0NDRP5qqi9/DN9Mp9tflkggZ1qj6+CWhSl2srt5iMR+A9Uvt8y2PGxbjRm0SkTS8i7XeEldhFiZ/sG83YZK280utiv4N68t6oZpqG9AOmCgeuLY1Wh6UK82iXIS1Lu8nySfUFLVjgYrT6uPDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773744960; c=relaxed/simple;
-	bh=EDvSeByYOLl2MUUcEfRd5YPOReBce8qffcQSiklMDt4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=cY0aniFGJCgr3xE+8yw7hmgtp/q++y7Tzme0UfPR7kyAqN5H27Rq6X1g9Exa8NfoeM7ZmhUKhD5dA2CNpaMEecsa6c8PIQA9zi0XB30quHAtrKgQSneVTfsrRhL+xrx1u5ZabPPfWNI2dTmRDTVJ9JijbozvrDAgWD1nbbN1m7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lzmly6v6; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lzmly6v6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773744959; x=1805280959;
-  h=date:from:to:cc:subject:message-id;
-  bh=EDvSeByYOLl2MUUcEfRd5YPOReBce8qffcQSiklMDt4=;
-  b=Lzmly6v6OYgKmt2Xtqhx9SLJRhDwlxig2ihceeDj1y5xlUNzYb3gJKqd
-   Q48Ms2Qv3TMGgxsX92Npp52Tw2ksOkmCQWVpDtZR2i+E53Y6DeaSKKWHI
-   KxKMicdcn7z7qrzQRRjMneG0J7HSfv6nhYkdgCt3WSAsnKtjm1REU1iz0
-   F+8djuY/OcoIMI6zhP/pAcuEkFVV8j8Gso0oWkRBTZ36hKdaMvsEOCdGx
-   i53bitFNbsVrQPTCsauh7E4p7tB+Eo9gGLa8gYfWv+kaV2dikmNDY8m0a
-   Tge4f6sL8ynWxtKbRq4+X7ztJIaoy9XFRlkVfc5+hj1m9dk2qxSF/BHHT
-   Q==;
-X-CSE-ConnectionGUID: +5Yyk5FuRCOX1J+NCrosMA==
-X-CSE-MsgGUID: zFQNVQNgQpuwzrNFS/uTEQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="73791746"
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="73791746"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 03:55:48 -0700
-X-CSE-ConnectionGUID: dlsAN+1CTOOmPoe/KDuzQQ==
-X-CSE-MsgGUID: zSMfYxDLR8mUQzZBuKZ7NA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="222459728"
-Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 17 Mar 2026 03:55:46 -0700
-Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w2S5P-000000000HD-3N14;
-	Tue, 17 Mar 2026 10:55:43 +0000
-Date: Tue, 17 Mar 2026 18:55:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <ast@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ast-bpf:stacklive 12/22] kernel/bpf/liveness.c:2302:5:
- warning: stack frame size (1464) exceeds limit (1280) in
- 'compute_subprog_arg_access'
-Message-ID: <202603171840.EMoRjsHz-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1773745253; c=relaxed/simple;
+	bh=BR9kW5ZjiDDsV4GsKjKcwmYxCRLsI3jocIzjmmAqAm8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JpfsOPMyzzK/IgrNlslBGlSwXZ6IUTINvT2PKhXr3YeT5E+rhMlb0bYmQFSrm1xlUDJkAyPZC5Up/aCs3VzCtXYO8YFCbnxPYvjCguoMSFEIM+MpfLIbBZ8qCY0wI9f+otEKktbIbnwueJnC7YUtqUtAUfoLcOb/Nxsed26EB80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4ABDF16F2;
+	Tue, 17 Mar 2026 04:00:45 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 180843F7BD;
+	Tue, 17 Mar 2026 04:00:51 -0700 (PDT)
+Date: Tue, 17 Mar 2026 11:00:49 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	William Breathitt Gray <wbg@kernel.org>,
+	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Kent Gibson <warthog618@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v4 29/30] selftests/nolibc: Append extra cflags
+Message-ID: <20260317110049.GJ8048@e132581.arm.com>
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
+ <20260311-tools_build_fix_zero_init-v4-29-9e35bdb99cb3@arm.com>
+ <aacd52ed-4ef6-49f1-90a4-0affeea908e6@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aacd52ed-4ef6-49f1-90a4-0affeea908e6@t-8ch.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git stacklive
-head:   f4d911f1115995504320e415e04768858065221b
-commit: d9d806381e9caf5be8c404e90b7997fd39bacf63 [12/22] bpf: Add per-subprog arg tracking analysis
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260317/202603171840.EMoRjsHz-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603171840.EMoRjsHz-lkp@intel.com/reproduce)
+On Mon, Mar 16, 2026 at 11:27:41PM +0100, Thomas Weißschuh wrote:
+> On 2026-03-11 08:29:54+0000, Leo Yan wrote:
+> > Include tools/scripts/Makefile.include, which may provide additional
+> > flags in EXTRA_CFLAGS, and append to CFLAGS.
+> > 
+> > Since Makefile.include already defines cc-option, remove the redundant
+> > definition and include.
+> > 
+> > Signed-off-by: Leo Yan <leo.yan@arm.com>
+> > ---
+> >  tools/testing/selftests/nolibc/Makefile | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > index 0370489d938b540721a4fb814ebb68c463760e73..d1a9c1d5988bdc6a8778ef418aaa4c5ac1d26a10 100644
+> > --- a/tools/testing/selftests/nolibc/Makefile
+> > +++ b/tools/testing/selftests/nolibc/Makefile
+> > @@ -3,15 +3,13 @@
+> >  TEST_GEN_PROGS := nolibc-test libc-test
+> >  
+> >  include ../lib.mk
+> > -include $(top_srcdir)/scripts/Makefile.compiler
+> > -
+> > -cc-option = $(call __cc-option, $(CC),,$(1),$(2))
+> > +include $(top_srcdir)/tools/scripts/Makefile.include
+> >  
+> >  include Makefile.include
+> >  
+> >  $(OUTPUT)/nolibc-test: CFLAGS = -nostdlib -nostdinc -static \
+> >  	 -isystem $(top_srcdir)/tools/include/nolibc -isystem $(top_srcdir)/usr/include \
+> > -	 $(CFLAGS_NOLIBC_TEST)
+> > +	 $(CFLAGS_NOLIBC_TEST) $(EXTRA_CFLAGS)
+> >  $(OUTPUT)/nolibc-test: LDLIBS = $(if $(LLVM),,-lgcc)
+> >  $(OUTPUT)/nolibc-test: nolibc-test.c nolibc-test-linkage.c | headers
+> 
+> The rule for "libc-test", which uses the standard $(LINK.c) to invoke
+> the compiler, does not respect $(EXTRA_CFLAGS) automatically.
+> Is this intentional?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603171840.EMoRjsHz-lkp@intel.com/
+Thanks for the review. Is the change below OK with you? I can update it
+before sending a new series.
 
-All warnings (new ones prefixed by >>):
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 0370489d938b..7b65e6f9840b 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -3,18 +3,17 @@
+ TEST_GEN_PROGS := nolibc-test libc-test
 
->> kernel/bpf/liveness.c:2302:5: warning: stack frame size (1464) exceeds limit (1280) in 'compute_subprog_arg_access' [-Wframe-larger-than]
-    2302 | int compute_subprog_arg_access(struct bpf_verifier_env *env,
-         |     ^
-   1 warning generated.
+ include ../lib.mk
+-include $(top_srcdir)/scripts/Makefile.compiler
+-
+-cc-option = $(call __cc-option, $(CC),,$(1),$(2))
++include $(top_srcdir)/tools/scripts/Makefile.include
 
+ include Makefile.include
 
-vim +/compute_subprog_arg_access +2302 kernel/bpf/liveness.c
+ $(OUTPUT)/nolibc-test: CFLAGS = -nostdlib -nostdinc -static \
+         -isystem $(top_srcdir)/tools/include/nolibc -isystem $(top_srcdir)/usr/include \
+-        $(CFLAGS_NOLIBC_TEST)
++        $(CFLAGS_NOLIBC_TEST) $(EXTRA_CFLAGS)
+ $(OUTPUT)/nolibc-test: LDLIBS = $(if $(LLVM),,-lgcc)
+ $(OUTPUT)/nolibc-test: nolibc-test.c nolibc-test-linkage.c | headers
 
-  2244	
-  2245	/*
-  2246	 * Backward pass: compute per-instruction argument read liveness.
-  2247	 * arg_live[i][arg] = union of arg_use[j][arg] for all j reachable from i.
-  2248	 * No def-kills: conservative (reads through written slots stay live).
-  2249	 *
-  2250	 * For nested calls (subprog0 -> subprog1 -> subprog2), this works
-  2251	 * transitively: the forward pass folds inner callee reads into arg_use
-  2252	 * at each BPF-to-BPF call instruction, so arg_live for subprog1 already
-  2253	 * includes reads that subprog2 makes through subprog1's arguments.
-  2254	 * clean_verifier_state() only needs to consult the immediate child's
-  2255	 * arg_live to get correct liveness for any call depth.
-  2256	 */
-  2257	static int compute_arg_live(struct bpf_verifier_env *env,
-  2258				    int subprog, int start, int len,
-  2259				    struct subprog_arg_access *access,
-  2260				    u64 (*arg_use)[NUM_AT_IDS][2])
-  2261	{
-  2262		int po_start = env->subprog_info[subprog].postorder_start;
-  2263		int po_end = env->subprog_info[subprog + 1].postorder_start;
-  2264		bool changed = true;
-  2265	
-  2266		access->subprog_len = len;
-  2267		access->arg_live = kvzalloc_objs(*access->arg_live, len, GFP_KERNEL_ACCOUNT);
-  2268		if (!access->arg_live)
-  2269			return -ENOMEM;
-  2270	
-  2271		while (changed) {
-  2272			changed = false;
-  2273			for (int p = po_start; p < po_end; p++) {
-  2274				int insn_idx = env->cfg.insn_postorder[p];
-  2275				int li = insn_idx - start;
-  2276				struct bpf_iarray *succ;
-  2277				u64 new_live[NUM_AT_IDS][2] = {};
-  2278				int a;
-  2279	
-  2280				succ = bpf_insn_successors(env, insn_idx);
-  2281				for (int s = 0; s < succ->cnt; s++) {
-  2282					int target = succ->items[s];
-  2283	
-  2284					if (target < start || target >= start + len)
-  2285						continue;
-  2286					for (a = 0; a < NUM_AT_IDS; a++)
-  2287						spis_or(new_live[a], access->arg_live[target - start][a]);
-  2288				}
-  2289				for (a = 0; a < NUM_AT_IDS; a++)
-  2290					spis_or(new_live[a], arg_use[li][a]);
-  2291	
-  2292				for (a = 0; a < NUM_AT_IDS; a++) {
-  2293					if (!spis_equal(new_live[a], access->arg_live[li][a])) {
-  2294						spis_copy(access->arg_live[li][a], new_live[a]);
-  2295						changed = true;
-  2296					}
-  2297				}
-  2298			}
-  2299		}
-  2300		return 0;
-  2301	}
-> 2302	int compute_subprog_arg_access(struct bpf_verifier_env *env,
-  2303				       struct insn_live_regs *state)
-  2304	{
-  2305		struct bpf_insn *insns = env->prog->insnsi;
-  2306		struct subprog_at_info *info;
-  2307		int k, err = 0;
-  2308	
-  2309		env->subprog_arg_access = kvcalloc(env->subprog_cnt,
-  2310						   sizeof(*env->subprog_arg_access),
-  2311						   GFP_KERNEL_ACCOUNT);
-  2312		if (!env->subprog_arg_access)
-  2313			return -ENOMEM;
-  2314	
-  2315		info = kvcalloc(env->subprog_cnt, sizeof(*info), GFP_KERNEL_ACCOUNT);
-  2316		if (!info)
-  2317			return -ENOMEM;
-  2318	
-  2319		/*
-  2320		 * Process subprogs in topological order (leaves first).
-  2321		 * Each subprog gets: arg tracking, callee folding, arg liveness.
-  2322		 * Subprog 0 needs stack tracking but not arg liveness.
-  2323		 */
-  2324		for (k = 0; k < env->subprog_cnt; k++) {
-  2325			int i = env->subprog_topo_order[k];
-  2326			struct subprog_arg_access *access;
-  2327	
-  2328			access = &env->subprog_arg_access[i];
-  2329			err = compute_subprog_arg_tracking(env, insns, i,
-  2330							   access, &info[i],
-  2331							   state);
-  2332			if (err)
-  2333				goto err_free;
-  2334	
-  2335			if (i > 0) {
-  2336				fold_callee_accesses_for_subprog(env, insns, i,
-  2337								 access,
-  2338								 &info[i]);
-  2339			}
-  2340	
-  2341			if (i > 0) {
-  2342				int start = env->subprog_info[i].start;
-  2343	
-  2344				err = compute_arg_live(env, i, start,
-  2345						       info[i].len, access,
-  2346						       info[i].arg_use);
-  2347				if (err)
-  2348					goto err_free;
-  2349			}
-  2350		}
-  2351	
-  2352	err_free:
-  2353		for (k = 0; k < env->subprog_cnt; k++) {
-  2354			kvfree(info[k].at_in);
-  2355			kvfree(info[k].arg_use);
-  2356		}
-  2357		kvfree(info);
-  2358		return err;
-  2359	}
-  2360	
++$(OUTPUT)/libc-test: CFLAGS += $(EXTRA_CFLAGS)
+ $(OUTPUT)/libc-test: nolibc-test.c nolibc-test-linkage.c
+        $(call msg,CC,,$@)
+        $(Q)$(LINK.c) $^ -o $@
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> It also affects all other users of lib.mk which
+> don't have any custom cflags handling.
+
+Many projects include lib.mk, but most do not include
+tools/scripts/Makefile.include.  Without it, the appended EXTRA_CFLAGS
+cannot be inherited.  This is why I did not touch those projects.
+
+Appending EXTRA_CFLAGS in lib.mk may not be a good idea ? as such a
+global change could break some builds.
+
+Thanks,
+Leo
