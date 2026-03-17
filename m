@@ -1,171 +1,210 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAD933A9E9
-	for <llvm@lists.linux.dev>; Tue, 17 Mar 2026 11:00:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AD63BD247;
+	Tue, 17 Mar 2026 12:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773745253; cv=none; b=ZcV//M/2gitw2VaP420J+UjgbT0NDRP5qqi9/DN9Mp9tflkggZ1qj6+CWhSl2srt5iMR+A9Uvt8y2PGxbjRm0SkTS8i7XeEldhFiZ/sG83YZK280utiv4N68t6oZpqG9AOmCgeuLY1Wh6UK82iXIS1Lu8nySfUFLVjgYrT6uPDg=
+	t=1773749578; cv=none; b=t8/ljnMOYyORiQ8KTFlGEQ1DAK+TnTnxBzWzgIBEsfC/DV70zAVZYczTCwomvaym7QMFsfzOD7JtwgXiySLaoZ3aKCEUek8WuvfF/xG2P7GC3JsD2lfw6Jps90VNFu16IPwhGd7rf79/uSD2DVpDoF9Uyytg4gCe0pbxEV2qVaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773745253; c=relaxed/simple;
-	bh=BR9kW5ZjiDDsV4GsKjKcwmYxCRLsI3jocIzjmmAqAm8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JpfsOPMyzzK/IgrNlslBGlSwXZ6IUTINvT2PKhXr3YeT5E+rhMlb0bYmQFSrm1xlUDJkAyPZC5Up/aCs3VzCtXYO8YFCbnxPYvjCguoMSFEIM+MpfLIbBZ8qCY0wI9f+otEKktbIbnwueJnC7YUtqUtAUfoLcOb/Nxsed26EB80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4ABDF16F2;
-	Tue, 17 Mar 2026 04:00:45 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 180843F7BD;
-	Tue, 17 Mar 2026 04:00:51 -0700 (PDT)
-Date: Tue, 17 Mar 2026 11:00:49 +0000
-From: Leo Yan <leo.yan@arm.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	Quentin Monnet <qmo@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	William Breathitt Gray <wbg@kernel.org>,
-	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Kent Gibson <warthog618@gmail.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v4 29/30] selftests/nolibc: Append extra cflags
-Message-ID: <20260317110049.GJ8048@e132581.arm.com>
-References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
- <20260311-tools_build_fix_zero_init-v4-29-9e35bdb99cb3@arm.com>
- <aacd52ed-4ef6-49f1-90a4-0affeea908e6@t-8ch.de>
+	s=arc-20240116; t=1773749578; c=relaxed/simple;
+	bh=r6G7Nwqjl+vSixtZqsdkGJl/WjBT8FqQC5kh88mrFHc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=knl3bL5lMegIKWKLOLGrxMDgvrzY2C6wsiFEtnHFBAqrR67XicxGAvlaPZTduHl0LO8FB/OuShIV+yXk0V/NWRhLcqqOMaNJ0STPEO2vrkeUVOvNGwNxXtC2T6WkhUQ2TGVh1/hALPCdjVRZQLVKhV8B5JpBMBF+hiH+2DpeUcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gNwlRNTA; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gNwlRNTA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773749576; x=1805285576;
+  h=date:from:to:cc:subject:message-id;
+  bh=r6G7Nwqjl+vSixtZqsdkGJl/WjBT8FqQC5kh88mrFHc=;
+  b=gNwlRNTAsaHHImFSfzXfYk3vdiUCL0I8Yj6uan2ruEOt3L2pOqgfhLk9
+   n0Wma8fSK7s575ZyzyslMtwsA8WOP9BqwiBmfHcH6y1B2ZNuLq526Kequ
+   SAuRplWpwKxht0lofhb4yuVJdxriZWKHWwu09fSSG0RsRJq5nkc2HiGZ7
+   yGSaAN0REeCXauBGsb1j/8Vq0/s0yAOhxVgrJGqa3H9qoE0aYThAhS12B
+   D5gFWz0tYE+vRCexty4BG10dXcsFK0bJuc0sJt3SYUBo2dGWIGQwDEvro
+   zVf6btyaunAcU6+PKzWUj+v7t8sY1aPcYHWPOuaPKm6UjM10P5iH1tC+y
+   A==;
+X-CSE-ConnectionGUID: 19KObUH6Sv+fajN7TGfhyg==
+X-CSE-MsgGUID: Z9eHkUY1S0iPUqP54dUx5w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="77389303"
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="77389303"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 05:12:55 -0700
+X-CSE-ConnectionGUID: +ORjRspcQnujsFFQ1YGsxA==
+X-CSE-MsgGUID: LwQe4pNJSq+H06j6ZkQDzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
+   d="scan'208";a="222473507"
+Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 17 Mar 2026 05:12:54 -0700
+Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w2TI3-000000000MV-0jxD;
+	Tue, 17 Mar 2026 12:12:51 +0000
+Date: Tue, 17 Mar 2026 20:12:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:locking/futex 2/8]
+ include/linux/futex_types.h:52:26: error: expected ';' at end of declaration
+ list
+Message-ID: <202603172048.EegYZnPt-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aacd52ed-4ef6-49f1-90a4-0affeea908e6@t-8ch.de>
 
-On Mon, Mar 16, 2026 at 11:27:41PM +0100, Thomas Weißschuh wrote:
-> On 2026-03-11 08:29:54+0000, Leo Yan wrote:
-> > Include tools/scripts/Makefile.include, which may provide additional
-> > flags in EXTRA_CFLAGS, and append to CFLAGS.
-> > 
-> > Since Makefile.include already defines cc-option, remove the redundant
-> > definition and include.
-> > 
-> > Signed-off-by: Leo Yan <leo.yan@arm.com>
-> > ---
-> >  tools/testing/selftests/nolibc/Makefile | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > index 0370489d938b540721a4fb814ebb68c463760e73..d1a9c1d5988bdc6a8778ef418aaa4c5ac1d26a10 100644
-> > --- a/tools/testing/selftests/nolibc/Makefile
-> > +++ b/tools/testing/selftests/nolibc/Makefile
-> > @@ -3,15 +3,13 @@
-> >  TEST_GEN_PROGS := nolibc-test libc-test
-> >  
-> >  include ../lib.mk
-> > -include $(top_srcdir)/scripts/Makefile.compiler
-> > -
-> > -cc-option = $(call __cc-option, $(CC),,$(1),$(2))
-> > +include $(top_srcdir)/tools/scripts/Makefile.include
-> >  
-> >  include Makefile.include
-> >  
-> >  $(OUTPUT)/nolibc-test: CFLAGS = -nostdlib -nostdinc -static \
-> >  	 -isystem $(top_srcdir)/tools/include/nolibc -isystem $(top_srcdir)/usr/include \
-> > -	 $(CFLAGS_NOLIBC_TEST)
-> > +	 $(CFLAGS_NOLIBC_TEST) $(EXTRA_CFLAGS)
-> >  $(OUTPUT)/nolibc-test: LDLIBS = $(if $(LLVM),,-lgcc)
-> >  $(OUTPUT)/nolibc-test: nolibc-test.c nolibc-test-linkage.c | headers
-> 
-> The rule for "libc-test", which uses the standard $(LINK.c) to invoke
-> the compiler, does not respect $(EXTRA_CFLAGS) automatically.
-> Is this intentional?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git locking/futex
+head:   226e6782e81c88b9263e006a356f58dd8c15bef5
+commit: 2ace2e1df2b9de73d65c1a11bbb4183c42ba5752 [2/8] futex: Move futex related mm_struct data into a struct
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20260317/202603172048.EegYZnPt-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603172048.EegYZnPt-lkp@intel.com/reproduce)
 
-Thanks for the review. Is the change below OK with you? I can update it
-before sending a new series.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603172048.EegYZnPt-lkp@intel.com/
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 0370489d938b..7b65e6f9840b 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -3,18 +3,17 @@
- TEST_GEN_PROGS := nolibc-test libc-test
+All errors (new ones prefixed by >>):
 
- include ../lib.mk
--include $(top_srcdir)/scripts/Makefile.compiler
--
--cc-option = $(call __cc-option, $(CC),,$(1),$(2))
-+include $(top_srcdir)/tools/scripts/Makefile.include
+   In file included from arch/um/kernel/asm-offsets.c:4:
+   In file included from include/linux/sched.h:19:
+>> include/linux/futex_types.h:52:26: error: expected ';' at end of declaration list
+      52 |         unsigned int                    __percpu *phash_ref;
+         |                                                  ^
+   In file included from arch/um/kernel/asm-offsets.c:8:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:8:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:8:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:8:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:8:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:8:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:8:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                      ^      ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:8:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                                      ^      ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:8:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:139:8: note: expanded from macro '_SIG_SET_BINOP'
+     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+         |                      ^      ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
 
- include Makefile.include
 
- $(OUTPUT)/nolibc-test: CFLAGS = -nostdlib -nostdinc -static \
-         -isystem $(top_srcdir)/tools/include/nolibc -isystem $(top_srcdir)/usr/include \
--        $(CFLAGS_NOLIBC_TEST)
-+        $(CFLAGS_NOLIBC_TEST) $(EXTRA_CFLAGS)
- $(OUTPUT)/nolibc-test: LDLIBS = $(if $(LLVM),,-lgcc)
- $(OUTPUT)/nolibc-test: nolibc-test.c nolibc-test-linkage.c | headers
+vim +52 include/linux/futex_types.h
 
-+$(OUTPUT)/libc-test: CFLAGS += $(EXTRA_CFLAGS)
- $(OUTPUT)/libc-test: nolibc-test.c nolibc-test-linkage.c
-        $(call msg,CC,,$@)
-        $(Q)$(LINK.c) $^ -o $@
+    33	
+    34	/**
+    35	 * struct futex_mm_data - Futex related per MM data
+    36	 * @phash_lock:		Mutex to protect the private hash operations
+    37	 * @phash:		RCU managed pointer to the private hash
+    38	 * @phash_new:		Pointer to a newly allocated private hash
+    39	 * @phash_batches:	Batch state for RCU synchronization
+    40	 * @phash_rcu:		RCU head for call_rcu()
+    41	 * @phash_atomic:	Aggregate value for @phash_ref
+    42	 * @phash_ref:		Per CPU reference counter for a private hash
+    43	 */
+    44	struct futex_mm_data {
+    45	#ifdef CONFIG_FUTEX_PRIVATE_HASH
+    46		struct mutex			phash_lock;
+    47		struct futex_private_hash	__rcu *phash;
+    48		struct futex_private_hash	*phash_new;
+    49		unsigned long			phash_batches;
+    50		struct rcu_head			phash_rcu;
+    51		atomic_long_t			phash_atomic;
+  > 52		unsigned int			__percpu *phash_ref;
+    53	#endif
+    54	};
+    55	
 
-> It also affects all other users of lib.mk which
-> don't have any custom cflags handling.
-
-Many projects include lib.mk, but most do not include
-tools/scripts/Makefile.include.  Without it, the appended EXTRA_CFLAGS
-cannot be inherited.  This is why I did not touch those projects.
-
-Appending EXTRA_CFLAGS in lib.mk may not be a good idea ? as such a
-global change could break some builds.
-
-Thanks,
-Leo
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
