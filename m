@@ -1,197 +1,204 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386BD369220;
-	Tue, 17 Mar 2026 10:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7CF373BF5;
+	Tue, 17 Mar 2026 10:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773743507; cv=none; b=nfvoPh6Zxhek86XR5rYGXzKeOeev8eImrjCMLOOkRx92d2LN+xew0fkVqJ1jCX/wVUhNfHK2bhvGSb8SJxmY+eZPmubIUc/wISn4nzrKDhHAm6Z0RszGT7lvGpJoHPdBe2q94yAwTKXPP4MUfm+CEFy7EARtHutiR38BaBv946E=
+	t=1773744960; cv=none; b=uk4b3UrWxYyFd2wAu/47K8d3PcZf1KjbN26nqApC6pj5Ffdy3L3KzaChX2Jhl8M3qwrJCqGz/Keylh368yCgi+acFA+cc45NL2BEeF76GDg9Ub+8t6T1plWWnBBlyXL8qHeTgAdFXSqELd1BN641tpHY8QtwXHmBr5KrB/iCYcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773743507; c=relaxed/simple;
-	bh=5a4otmlXMXl+OKMa3jtyUU5FQmCser64UOBMlNJzTR0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=n9vEvgs5y4QXvsnXnfpkuRYX36jVXH8MJDxziV4mUTp2NzRN8agqUiqKHWnOKC1rRDNbtz0j/0laRM1rSRwWM6MmWcByZ/e6/U45Y287wltAxnYHykrvqbuWvYXjXRZ2WIW/0iZcNcbwKzYFrQljLKuXAAkv1G7Q8vp3z2EkqY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cipn0WB7; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1773744960; c=relaxed/simple;
+	bh=EDvSeByYOLl2MUUcEfRd5YPOReBce8qffcQSiklMDt4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cY0aniFGJCgr3xE+8yw7hmgtp/q++y7Tzme0UfPR7kyAqN5H27Rq6X1g9Exa8NfoeM7ZmhUKhD5dA2CNpaMEecsa6c8PIQA9zi0XB30quHAtrKgQSneVTfsrRhL+xrx1u5ZabPPfWNI2dTmRDTVJ9JijbozvrDAgWD1nbbN1m7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lzmly6v6; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cipn0WB7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lzmly6v6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773743506; x=1805279506;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5a4otmlXMXl+OKMa3jtyUU5FQmCser64UOBMlNJzTR0=;
-  b=cipn0WB7/bziksrTbkJP67WMEFr9TMlxcWQZO85tZuShJpFthXlB/gAl
-   Ykmix3+ogzDg96k6rIn9Wu/+0JwqccMUOB1IQfKsJBzIdifBonrdNl0Sl
-   KNobjd46KGsR7f2pbUqwUpJWAfeG5rz1E8sPNWuM+lnsGxLsxMvp1Cyv4
-   dF/QYCImPP/4SeZyq8ttuhQgrM1tA6JfuFw4OtdA1VKYHTYPbxXHQb3Vr
-   XMXsb7Z0v/+nHtrm9x0Q8MeHj+2NWDZVAEwx/rSXco/DIpogx7JF5z0FW
-   69AReve9w93JrvsbaPkThr/YW+5klWK2X+cFRI/QBSn+rL15veJq8Jxcb
-   g==;
-X-CSE-ConnectionGUID: 0mXQmR4zSy+Mfjx77swO3w==
-X-CSE-MsgGUID: gPqkffq9RO63XLYHTgXOKQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="74745234"
+  t=1773744959; x=1805280959;
+  h=date:from:to:cc:subject:message-id;
+  bh=EDvSeByYOLl2MUUcEfRd5YPOReBce8qffcQSiklMDt4=;
+  b=Lzmly6v6OYgKmt2Xtqhx9SLJRhDwlxig2ihceeDj1y5xlUNzYb3gJKqd
+   Q48Ms2Qv3TMGgxsX92Npp52Tw2ksOkmCQWVpDtZR2i+E53Y6DeaSKKWHI
+   KxKMicdcn7z7qrzQRRjMneG0J7HSfv6nhYkdgCt3WSAsnKtjm1REU1iz0
+   F+8djuY/OcoIMI6zhP/pAcuEkFVV8j8Gso0oWkRBTZ36hKdaMvsEOCdGx
+   i53bitFNbsVrQPTCsauh7E4p7tB+Eo9gGLa8gYfWv+kaV2dikmNDY8m0a
+   Tge4f6sL8ynWxtKbRq4+X7ztJIaoy9XFRlkVfc5+hj1m9dk2qxSF/BHHT
+   Q==;
+X-CSE-ConnectionGUID: +5Yyk5FuRCOX1J+NCrosMA==
+X-CSE-MsgGUID: zFQNVQNgQpuwzrNFS/uTEQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11731"; a="73791746"
 X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="74745234"
+   d="scan'208";a="73791746"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 03:31:45 -0700
-X-CSE-ConnectionGUID: 8FCw3WN2R1iFY/Ejn0KfRA==
-X-CSE-MsgGUID: QgkE+ESwRqCptj9RR/hEDg==
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 03:55:48 -0700
+X-CSE-ConnectionGUID: dlsAN+1CTOOmPoe/KDuzQQ==
+X-CSE-MsgGUID: zSMfYxDLR8mUQzZBuKZ7NA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,124,1770624000"; 
-   d="scan'208";a="222452669"
+   d="scan'208";a="222459728"
 Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 17 Mar 2026 03:31:44 -0700
+  by orviesa007.jf.intel.com with ESMTP; 17 Mar 2026 03:55:46 -0700
 Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w2Ri9-000000000FB-2MZp;
-	Tue, 17 Mar 2026 10:31:41 +0000
-Date: Tue, 17 Mar 2026 18:31:40 +0800
+	id 1w2S5P-000000000HD-3N14;
+	Tue, 17 Mar 2026 10:55:43 +0000
+Date: Tue, 17 Mar 2026 18:55:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Serin Yeh <serin.yeh@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- =?utf-8?Q?"=D0=94=D0=B0=D0=BC=D1=98=D0=B0=D0=BD?=
- =?utf-8?Q?_=D0=93=D0=B5=D0=BE=D1=80=D0=B3=D0=B8=D0=B5=D0=B2=D1=81=D0?=
- =?utf-8?Q?=BA=D0=B8"?= <gdamjan@gmail.com>
-Subject: [gdamjan:v7.0/thinkpad-x9-14 4/4]
- drivers/media/i2c/imx471.c:932:15: warning: variable 'props' is uninitialized
- when passed as a const pointer argument here
-Message-ID: <202603171859.NgbhSEFJ-lkp@intel.com>
+To: Alexei Starovoitov <ast@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ast-bpf:stacklive 12/22] kernel/bpf/liveness.c:2302:5:
+ warning: stack frame size (1464) exceeds limit (1280) in
+ 'compute_subprog_arg_access'
+Message-ID: <202603171840.EMoRjsHz-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 
-tree:   https://github.com/gdamjan/linux v7.0/thinkpad-x9-14
-head:   0c3c30420dc270439af41cee1c574d624d5bf3fc
-commit: 0c3c30420dc270439af41cee1c574d624d5bf3fc [4/4] Add IMX471 mirror/flip functions for fitting camera module's orientation In order to meet Sony's init table and flip function, also modify registers as a better settings.
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260317/202603171859.NgbhSEFJ-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project f46a5153850c1303d687233d4adf699b01041da8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603171859.NgbhSEFJ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git stacklive
+head:   f4d911f1115995504320e415e04768858065221b
+commit: d9d806381e9caf5be8c404e90b7997fd39bacf63 [12/22] bpf: Add per-subprog arg tracking analysis
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260317/202603171840.EMoRjsHz-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603171840.EMoRjsHz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603171859.NgbhSEFJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603171840.EMoRjsHz-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/i2c/imx471.c:932:15: warning: variable 'props' is uninitialized when passed as a const pointer argument here [-Wuninitialized-const-pointer]
-     932 |                                                               &props);
-         |                                                                ^~~~~
+>> kernel/bpf/liveness.c:2302:5: warning: stack frame size (1464) exceeds limit (1280) in 'compute_subprog_arg_access' [-Wframe-larger-than]
+    2302 | int compute_subprog_arg_access(struct bpf_verifier_env *env,
+         |     ^
    1 warning generated.
 
 
-vim +/props +932 drivers/media/i2c/imx471.c
+vim +/compute_subprog_arg_access +2302 kernel/bpf/liveness.c
 
-   842	
-   843	/* Initialize control handlers */
-   844	static int imx471_init_controls(struct imx471 *imx471)
-   845	{
-   846		struct i2c_client *client = v4l2_get_subdevdata(&imx471->sd);
-   847		struct v4l2_ctrl_handler *ctrl_hdlr;
-   848		struct v4l2_fwnode_device_properties props;
-   849	
-   850		s64 exposure_max;
-   851		s64 vblank_def;
-   852		s64 vblank_min;
-   853		s64 hblank;
-   854		u64 pixel_rate;
-   855		const struct imx471_mode *mode;
-   856		u32 max;
-   857		int ret;
-   858	
-   859		ctrl_hdlr = &imx471->ctrl_handler;
-   860		ret = v4l2_ctrl_handler_init(ctrl_hdlr, 10);
-   861		if (ret)
-   862			return ret;
-   863	
-   864		mutex_init(&imx471->mutex);
-   865		ctrl_hdlr->lock = &imx471->mutex;
-   866		max = ARRAY_SIZE(link_freq_menu_items) - 1;
-   867		imx471->link_freq = v4l2_ctrl_new_int_menu(ctrl_hdlr, &imx471_ctrl_ops,
-   868							   V4L2_CID_LINK_FREQ, max, 0,
-   869							   link_freq_menu_items);
-   870		if (imx471->link_freq)
-   871			imx471->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-   872	
-   873		/* pixel_rate = link_freq * 2 * nr_of_lanes / bits_per_sample */
-   874		pixel_rate = IMX471_LINK_FREQ_DEFAULT * 2 * 4;
-   875		do_div(pixel_rate, 10);
-   876		/* By default, PIXEL_RATE is read only */
-   877		imx471->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
-   878						       V4L2_CID_PIXEL_RATE, pixel_rate,
-   879						       pixel_rate, 1, pixel_rate);
-   880	
-   881		/* Initial vblank/hblank/exposure parameters based on current mode */
-   882		mode = imx471->cur_mode;
-   883		vblank_def = mode->fll_def - mode->height;
-   884		vblank_min = mode->fll_min - mode->height;
-   885		imx471->vblank = v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
-   886						   V4L2_CID_VBLANK, vblank_min,
-   887						   IMX471_FLL_MAX - mode->height,
-   888						   1, vblank_def);
-   889	
-   890		hblank = mode->llp - mode->width;
-   891		imx471->hblank = v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
-   892						   V4L2_CID_HBLANK, hblank, hblank,
-   893						   1, hblank);
-   894		if (imx471->hblank)
-   895			imx471->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-   896	
-   897		/* fll >= exposure time + adjust parameter (default value is 18) */
-   898		exposure_max = mode->fll_def - 18;
-   899		imx471->exposure = v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
-   900						     V4L2_CID_EXPOSURE,
-   901						     IMX471_EXPOSURE_MIN, exposure_max,
-   902						     IMX471_EXPOSURE_STEP,
-   903						     IMX471_EXPOSURE_DEFAULT);
-   904	
-   905		v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
-   906				  IMX471_ANA_GAIN_MIN, IMX471_ANA_GAIN_MAX,
-   907				  IMX471_ANA_GAIN_STEP, IMX471_ANA_GAIN_DEFAULT);
-   908	
-   909		/* Digital gain */
-   910		v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops, V4L2_CID_DIGITAL_GAIN,
-   911				  IMX471_DGTL_GAIN_MIN, IMX471_DGTL_GAIN_MAX,
-   912				  IMX471_DGTL_GAIN_STEP, IMX471_DGTL_GAIN_DEFAULT);
-   913	
-   914		v4l2_ctrl_new_std_menu_items(ctrl_hdlr, &imx471_ctrl_ops,
-   915					     V4L2_CID_TEST_PATTERN,
-   916					     ARRAY_SIZE(imx471_test_pattern_menu) - 1,
-   917					     0, 0, imx471_test_pattern_menu);
-   918	
-   919		/* HFLIP & VFLIP */
-   920		v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
-   921					V4L2_CID_HFLIP, 0, 1, 1, 0);
-   922		v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
-   923					V4L2_CID_VFLIP, 0, 1, 1, 0);
-   924	
-   925		if (ctrl_hdlr->error) {
-   926			ret = ctrl_hdlr->error;
-   927			dev_err(&client->dev, "%s control init failed: %d", __func__, ret);
-   928			goto error;
-   929		}
-   930	
-   931		ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &imx471_ctrl_ops,
- > 932								      &props);
-   933		if (ret)
-   934			goto error;
-   935	
-   936		imx471->sd.ctrl_handler = ctrl_hdlr;
-   937	
-   938		return 0;
-   939	
-   940	error:
-   941		v4l2_ctrl_handler_free(ctrl_hdlr);
-   942		mutex_destroy(&imx471->mutex);
-   943	
-   944		return ret;
-   945	}
-   946	
+  2244	
+  2245	/*
+  2246	 * Backward pass: compute per-instruction argument read liveness.
+  2247	 * arg_live[i][arg] = union of arg_use[j][arg] for all j reachable from i.
+  2248	 * No def-kills: conservative (reads through written slots stay live).
+  2249	 *
+  2250	 * For nested calls (subprog0 -> subprog1 -> subprog2), this works
+  2251	 * transitively: the forward pass folds inner callee reads into arg_use
+  2252	 * at each BPF-to-BPF call instruction, so arg_live for subprog1 already
+  2253	 * includes reads that subprog2 makes through subprog1's arguments.
+  2254	 * clean_verifier_state() only needs to consult the immediate child's
+  2255	 * arg_live to get correct liveness for any call depth.
+  2256	 */
+  2257	static int compute_arg_live(struct bpf_verifier_env *env,
+  2258				    int subprog, int start, int len,
+  2259				    struct subprog_arg_access *access,
+  2260				    u64 (*arg_use)[NUM_AT_IDS][2])
+  2261	{
+  2262		int po_start = env->subprog_info[subprog].postorder_start;
+  2263		int po_end = env->subprog_info[subprog + 1].postorder_start;
+  2264		bool changed = true;
+  2265	
+  2266		access->subprog_len = len;
+  2267		access->arg_live = kvzalloc_objs(*access->arg_live, len, GFP_KERNEL_ACCOUNT);
+  2268		if (!access->arg_live)
+  2269			return -ENOMEM;
+  2270	
+  2271		while (changed) {
+  2272			changed = false;
+  2273			for (int p = po_start; p < po_end; p++) {
+  2274				int insn_idx = env->cfg.insn_postorder[p];
+  2275				int li = insn_idx - start;
+  2276				struct bpf_iarray *succ;
+  2277				u64 new_live[NUM_AT_IDS][2] = {};
+  2278				int a;
+  2279	
+  2280				succ = bpf_insn_successors(env, insn_idx);
+  2281				for (int s = 0; s < succ->cnt; s++) {
+  2282					int target = succ->items[s];
+  2283	
+  2284					if (target < start || target >= start + len)
+  2285						continue;
+  2286					for (a = 0; a < NUM_AT_IDS; a++)
+  2287						spis_or(new_live[a], access->arg_live[target - start][a]);
+  2288				}
+  2289				for (a = 0; a < NUM_AT_IDS; a++)
+  2290					spis_or(new_live[a], arg_use[li][a]);
+  2291	
+  2292				for (a = 0; a < NUM_AT_IDS; a++) {
+  2293					if (!spis_equal(new_live[a], access->arg_live[li][a])) {
+  2294						spis_copy(access->arg_live[li][a], new_live[a]);
+  2295						changed = true;
+  2296					}
+  2297				}
+  2298			}
+  2299		}
+  2300		return 0;
+  2301	}
+> 2302	int compute_subprog_arg_access(struct bpf_verifier_env *env,
+  2303				       struct insn_live_regs *state)
+  2304	{
+  2305		struct bpf_insn *insns = env->prog->insnsi;
+  2306		struct subprog_at_info *info;
+  2307		int k, err = 0;
+  2308	
+  2309		env->subprog_arg_access = kvcalloc(env->subprog_cnt,
+  2310						   sizeof(*env->subprog_arg_access),
+  2311						   GFP_KERNEL_ACCOUNT);
+  2312		if (!env->subprog_arg_access)
+  2313			return -ENOMEM;
+  2314	
+  2315		info = kvcalloc(env->subprog_cnt, sizeof(*info), GFP_KERNEL_ACCOUNT);
+  2316		if (!info)
+  2317			return -ENOMEM;
+  2318	
+  2319		/*
+  2320		 * Process subprogs in topological order (leaves first).
+  2321		 * Each subprog gets: arg tracking, callee folding, arg liveness.
+  2322		 * Subprog 0 needs stack tracking but not arg liveness.
+  2323		 */
+  2324		for (k = 0; k < env->subprog_cnt; k++) {
+  2325			int i = env->subprog_topo_order[k];
+  2326			struct subprog_arg_access *access;
+  2327	
+  2328			access = &env->subprog_arg_access[i];
+  2329			err = compute_subprog_arg_tracking(env, insns, i,
+  2330							   access, &info[i],
+  2331							   state);
+  2332			if (err)
+  2333				goto err_free;
+  2334	
+  2335			if (i > 0) {
+  2336				fold_callee_accesses_for_subprog(env, insns, i,
+  2337								 access,
+  2338								 &info[i]);
+  2339			}
+  2340	
+  2341			if (i > 0) {
+  2342				int start = env->subprog_info[i].start;
+  2343	
+  2344				err = compute_arg_live(env, i, start,
+  2345						       info[i].len, access,
+  2346						       info[i].arg_use);
+  2347				if (err)
+  2348					goto err_free;
+  2349			}
+  2350		}
+  2351	
+  2352	err_free:
+  2353		for (k = 0; k < env->subprog_cnt; k++) {
+  2354			kvfree(info[k].at_in);
+  2355			kvfree(info[k].arg_use);
+  2356		}
+  2357		kvfree(info);
+  2358		return err;
+  2359	}
+  2360	
 
 -- 
 0-DAY CI Kernel Test Service
