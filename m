@@ -1,62 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE5737C0E7;
-	Tue, 17 Mar 2026 17:45:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DDAF331A6D;
+	Tue, 17 Mar 2026 17:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773769524; cv=none; b=Td8LPe3LARZQDDkRjQJ2PFpXWhBti+y/FQ1X/wM+KIfI+MwjimmELN/Md1ZqPQExbKvfbo/pn40vFa08Oi09g7OBEWkIppqucgJK3w1sa/dz+7DMu9YQewOO8gUBQUZyKHin0b49vqjCcmkgYIsKGAfhPnms0F2A+BJdJMDtTVM=
+	t=1773769565; cv=none; b=WQSWhQ2wdRUFAr3m6e01rVh7t1FT4o6ZUS491bLHW6IqY3KCYWHbRa4JjIGfx4fhgyPOHmjlFuC334bB4cgytzUmrkJfuvfpljd1i+7srW5R/vnrmbS1rj9OpiskWCnS90et7ZKRLOxQZuBNfTc3nFlRle1IZJKmudRIsqZ/hwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773769524; c=relaxed/simple;
-	bh=/Lg+L/LHpOVqEbuMKNJ/NXw+fYYAhV4A3JVISUtGN+k=;
+	s=arc-20240116; t=1773769565; c=relaxed/simple;
+	bh=meDOgFZsp9t8qHxBQVBAJcgZFytRkiMISoWsVNRBdkw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n5AB80Neb40OtOiwZxSPzuh1bZJWAfhiT+n6mrJJTHVnElLaWJaLnXqXxetIQe2jK3OuJcwC2W//6Sr0cTIyNNkBSw//G7s9EiVmeIbDXxGwf8weD1q47BZFSXsSdshrvtrAJthgYCa+WtjY9Zguj+FtUqT7IoPvFrlbtQwp04g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UADnHu8I; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=tW7CqBA/NwzjU4JNYt0cF3z+jad/+bRcNpjClsryihGLs6WQ1KrZryUZ2xSQhXiWITEtnWQmYwPxI/+kozw354VmlKTiiYeTSE/HnwiOB140TkuruOiI9x9Er6HealWBxjQZqNwJVwXN7pft6l42dsoxFuNBEOt4k/VxRiu8NP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ef2eap+F; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UADnHu8I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ef2eap+F"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773769523; x=1805305523;
+  t=1773769564; x=1805305564;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/Lg+L/LHpOVqEbuMKNJ/NXw+fYYAhV4A3JVISUtGN+k=;
-  b=UADnHu8I27uBdxP/k8HZoaOaCBtyCayalbssU0pK690LNw/L6Jr6HWUq
-   b8E81Q0j/+UAZLfjafN5Hf/p2zuez0UrNU83937SNmINbUO0jJwhyX5iT
-   vjUw8Mp07LJKh2dKJ7ufkB4NNY9nNC2lgvxcmozNEaXhn5qHcN7hLvARb
-   T77kkmxqN1wt79QP7SU45oDk+wE4E04tAcwJ03gYkSjDjdJhDYGLGH7OG
-   Buh+Yy1kOhU8jNGDmZwCulaIBwTAR+/SC2NJ5N3IKQn8j2MuQg6qv2uk3
-   1DXiWYOBdSu0bpA3OxPNs0PI2JxcAHiAwegPbogNmKEt9asJGx+tbLujv
-   w==;
-X-CSE-ConnectionGUID: R4XsJjx+SPSLkY5vhItVpQ==
-X-CSE-MsgGUID: AjkLQDffQbudKaJLJrtqig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="85440471"
+  bh=meDOgFZsp9t8qHxBQVBAJcgZFytRkiMISoWsVNRBdkw=;
+  b=Ef2eap+Fv8EwbLyCRlQawjfsTEOFYyRQzwkxR+FdV1eVGwrLrEoIoAz7
+   KKZRnpvqLpZ34tyL5FVh9q5g6og9NsdR4ZQduormoJ9yN9P92HLQlHR83
+   JeXOdRKeYyNiFToVPHQOl+CPZY8n+bZPw7Ej6skNsZjkl5mqVBpGbmWEt
+   iEgjLrmwzR9c7ZrY3y2rfWlVFPvxGWFLv8l296RclJDClIcOluAOplOEJ
+   oujy4XCa8/9Voj3r/KtuntLX5aNGbo0VUiqemEGm2Ane2PtGl+ModvFdy
+   FE8hRBMdC2fGn1AXqGpfelOAjDQPqrXQzD+rcQLTpBFYT3vg783QhdLsM
+   Q==;
+X-CSE-ConnectionGUID: PE81XPTzQgCeUzl8Q6vbjQ==
+X-CSE-MsgGUID: Ym8mE7enSuiNhsCi4DeWsQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="85508066"
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="85440471"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 10:45:20 -0700
-X-CSE-ConnectionGUID: 0tci6cXuRIG09fCx/UZ4UA==
-X-CSE-MsgGUID: Ornf0OYoTseJKMv9GaXQXQ==
+   d="scan'208";a="85508066"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 10:46:03 -0700
+X-CSE-ConnectionGUID: iqhCGTDgRcug5ssz+7tWTg==
+X-CSE-MsgGUID: nPwSKXBMSCutlgLu2VIUqQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="252818131"
-Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 17 Mar 2026 10:45:17 -0700
-Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
+   d="scan'208";a="221408834"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa006.jf.intel.com with ESMTP; 17 Mar 2026 10:46:00 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w2YTh-000000001dh-41ay;
-	Tue, 17 Mar 2026 17:45:13 +0000
-Date: Wed, 18 Mar 2026 01:44:48 +0800
+	id 1w2YUO-000000004TV-3Qvi;
+	Tue, 17 Mar 2026 17:45:56 +0000
+Date: Tue, 17 Mar 2026 18:45:25 +0100
 From: kernel test robot <lkp@intel.com>
-To: Loke Forsberg <loke.forsberg@gmail.com>, linux-usb@vger.kernel.org
+To: Anand Moon <linux.amoon@gmail.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	Hans Zhang <18255117159@163.com>, Niklas Cassel <cassel@kernel.org>,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, khtsai@google.com, raubcameo@gmail.com,
-	kees@kernel.org, linux-kernel@vger.kernel.org,
-	Loke Forsberg <Loke.Forsberg@gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: f_ncm: replace kzalloc with kzalloc_obj
-Message-ID: <202603180133.Mwj8SBgf-lkp@intel.com>
-References: <20260316092505.8841-1-Loke.Forsberg@gmail.com>
+	netdev@vger.kernel.org, Anand Moon <linux.amoon@gmail.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Danilo Krummrich <dakr@kernel.org>
+Subject: Re: [PATCH next v1] r8169: Fix PHY lookup for mdiobus_get_phy() and
+ improve error reporting during probe
+Message-ID: <202603171855.OtM7sS7W-lkp@intel.com>
+References: <20260317061700.7734-1-linux.amoon@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,195 +75,129 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260316092505.8841-1-Loke.Forsberg@gmail.com>
+In-Reply-To: <20260317061700.7734-1-linux.amoon@gmail.com>
 
-Hi Loke,
+Hi Anand,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v7.0-rc4 next-20260316]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 95c541ddfb0815a0ea8477af778bb13bb075079a]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Loke-Forsberg/usb-gadget-f_ncm-replace-kzalloc-with-kzalloc_obj/20260316-173026
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20260316092505.8841-1-Loke.Forsberg%40gmail.com
-patch subject: [PATCH v2] usb: gadget: f_ncm: replace kzalloc with kzalloc_obj
-config: hexagon-randconfig-002-20260317 (https://download.01.org/0day-ci/archive/20260318/202603180133.Mwj8SBgf-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180133.Mwj8SBgf-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/r8169-Fix-PHY-lookup-for-mdiobus_get_phy-and-improve-error-reporting-during-probe/20260317-183327
+base:   95c541ddfb0815a0ea8477af778bb13bb075079a
+patch link:    https://lore.kernel.org/r/20260317061700.7734-1-linux.amoon%40gmail.com
+patch subject: [PATCH next v1] r8169: Fix PHY lookup for mdiobus_get_phy() and improve error reporting during probe
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260317/202603171855.OtM7sS7W-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260317/202603171855.OtM7sS7W-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603180133.Mwj8SBgf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603171855.OtM7sS7W-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/usb/gadget/function/f_ncm.c:1459:17: error: incompatible pointer types assigning to 'struct usb_os_desc_table *' from 'typeof (os_desc_table) *' (aka 'struct usb_os_desc_table **'); dereference with * [-Wincompatible-pointer-types]
-    1459 |                 os_desc_table = kzalloc_obj(os_desc_table);
-         |                               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                 *(                        )
->> drivers/usb/gadget/function/f_ncm.c:1756:6: error: incompatible pointer types assigning to 'struct f_ncm *' from 'typeof (ncm) *' (aka 'struct f_ncm **'); dereference with * [-Wincompatible-pointer-types]
-    1756 |         ncm = kzalloc_obj(ncm);
-         |             ^ ~~~~~~~~~~~~~~~~
-         |               *(              )
-   2 errors generated.
+>> drivers/net/ethernet/realtek/r8169_main.c:5467:17: warning: variable 'phydev' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
+    5467 |         for (addr = 0; addr < PHY_MAX_ADDR; addr++) {
+         |                        ^~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/realtek/r8169_main.c:5476:7: note: uninitialized use occurs here
+    5476 |         if (!phydev) {
+         |              ^~~~~~
+   drivers/net/ethernet/realtek/r8169_main.c:5467:17: note: remove the condition if it is always true
+    5467 |         for (addr = 0; addr < PHY_MAX_ADDR; addr++) {
+         |                        ^~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/realtek/r8169_main.c:5430:27: note: initialize the variable 'phydev' to silence this warning
+    5430 |         struct phy_device *phydev;
+         |                                  ^
+         |                                   = NULL
+   1 warning generated.
 
 
-vim +1459 drivers/usb/gadget/function/f_ncm.c
+vim +5467 drivers/net/ethernet/realtek/r8169_main.c
 
-  1441	
-  1442	static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
-  1443	{
-  1444		struct usb_composite_dev *cdev = c->cdev;
-  1445		struct f_ncm		*ncm = func_to_ncm(f);
-  1446		struct f_ncm_opts	*ncm_opts = func_to_ncm_opts(f);
-  1447		struct usb_string	*us;
-  1448		int			status = 0;
-  1449		struct usb_ep		*ep;
-  1450	
-  1451		struct usb_os_desc_table	*os_desc_table __free(kfree) = NULL;
-  1452		struct net_device		*netdev __free(free_gether_netdev) = NULL;
-  1453		struct usb_request		*request __free(free_usb_request) = NULL;
-  1454	
-  1455		if (!can_support_ecm(cdev->gadget))
-  1456			return -EINVAL;
-  1457	
-  1458		if (cdev->use_os_string) {
-> 1459			os_desc_table = kzalloc_obj(os_desc_table);
-  1460			if (!os_desc_table)
-  1461				return -ENOMEM;
-  1462		}
-  1463	
-  1464		netdev = gether_setup_default();
-  1465		if (IS_ERR(netdev))
-  1466			return -ENOMEM;
-  1467	
-  1468		scoped_guard(mutex, &ncm_opts->lock) {
-  1469			gether_apply_opts(netdev, &ncm_opts->net_opts);
-  1470			netdev->mtu = ncm_opts->max_segment_size - ETH_HLEN;
-  1471		}
-  1472	
-  1473		gether_set_gadget(netdev, cdev->gadget);
-  1474		status = gether_register_netdev(netdev);
-  1475		if (status)
-  1476			return status;
-  1477	
-  1478		/* export host's Ethernet address in CDC format */
-  1479		status = gether_get_host_addr_cdc(netdev, ncm->ethaddr,
-  1480						  sizeof(ncm->ethaddr));
-  1481		if (status < 12)
-  1482			return -EINVAL;
-  1483		ncm_string_defs[STRING_MAC_IDX].s = ncm->ethaddr;
-  1484	
-  1485		us = usb_gstrings_attach(cdev, ncm_strings,
-  1486					 ARRAY_SIZE(ncm_string_defs));
-  1487		if (IS_ERR(us))
-  1488			return PTR_ERR(us);
-  1489	
-  1490		ncm_control_intf.iInterface = us[STRING_CTRL_IDX].id;
-  1491		ncm_data_nop_intf.iInterface = us[STRING_DATA_IDX].id;
-  1492		ncm_data_intf.iInterface = us[STRING_DATA_IDX].id;
-  1493		ecm_desc.iMACAddress = us[STRING_MAC_IDX].id;
-  1494		ncm_iad_desc.iFunction = us[STRING_IAD_IDX].id;
-  1495	
-  1496		/* allocate instance-specific interface IDs */
-  1497		status = usb_interface_id(c, f);
-  1498		if (status < 0)
-  1499			return status;
-  1500		ncm->ctrl_id = status;
-  1501		ncm_iad_desc.bFirstInterface = status;
-  1502	
-  1503		ncm_control_intf.bInterfaceNumber = status;
-  1504		ncm_union_desc.bMasterInterface0 = status;
-  1505	
-  1506		status = usb_interface_id(c, f);
-  1507		if (status < 0)
-  1508			return status;
-  1509		ncm->data_id = status;
-  1510	
-  1511		ncm_data_nop_intf.bInterfaceNumber = status;
-  1512		ncm_data_intf.bInterfaceNumber = status;
-  1513		ncm_union_desc.bSlaveInterface0 = status;
-  1514	
-  1515		ecm_desc.wMaxSegmentSize = cpu_to_le16(ncm_opts->max_segment_size);
-  1516	
-  1517		/* allocate instance-specific endpoints */
-  1518		ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_in_desc);
-  1519		if (!ep)
-  1520			return -ENODEV;
-  1521		ncm->port.in_ep = ep;
-  1522	
-  1523		ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_out_desc);
-  1524		if (!ep)
-  1525			return -ENODEV;
-  1526		ncm->port.out_ep = ep;
-  1527	
-  1528		ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_notify_desc);
-  1529		if (!ep)
-  1530			return -ENODEV;
-  1531		ncm->notify = ep;
-  1532	
-  1533		/* allocate notification request and buffer */
-  1534		request = usb_ep_alloc_request(ep, GFP_KERNEL);
-  1535		if (!request)
-  1536			return -ENOMEM;
-  1537		request->buf = kmalloc(NCM_STATUS_BYTECOUNT, GFP_KERNEL);
-  1538		if (!request->buf)
-  1539			return -ENOMEM;
-  1540		request->context = ncm;
-  1541		request->complete = ncm_notify_complete;
-  1542	
-  1543		/*
-  1544		 * support all relevant hardware speeds... we expect that when
-  1545		 * hardware is dual speed, all bulk-capable endpoints work at
-  1546		 * both speeds
-  1547		 */
-  1548		hs_ncm_in_desc.bEndpointAddress = fs_ncm_in_desc.bEndpointAddress;
-  1549		hs_ncm_out_desc.bEndpointAddress = fs_ncm_out_desc.bEndpointAddress;
-  1550		hs_ncm_notify_desc.bEndpointAddress =
-  1551			fs_ncm_notify_desc.bEndpointAddress;
-  1552	
-  1553		ss_ncm_in_desc.bEndpointAddress = fs_ncm_in_desc.bEndpointAddress;
-  1554		ss_ncm_out_desc.bEndpointAddress = fs_ncm_out_desc.bEndpointAddress;
-  1555		ss_ncm_notify_desc.bEndpointAddress =
-  1556			fs_ncm_notify_desc.bEndpointAddress;
-  1557	
-  1558		status = usb_assign_descriptors(f, ncm_fs_function, ncm_hs_function,
-  1559				ncm_ss_function, ncm_ss_function);
-  1560		if (status)
-  1561			return status;
-  1562	
-  1563		/*
-  1564		 * NOTE:  all that is done without knowing or caring about
-  1565		 * the network link ... which is unavailable to this code
-  1566		 * until we're activated via set_alt().
-  1567		 */
-  1568	
-  1569		ncm->port.open = ncm_open;
-  1570		ncm->port.close = ncm_close;
-  1571	
-  1572		hrtimer_setup(&ncm->task_timer, ncm_tx_timeout, CLOCK_MONOTONIC, HRTIMER_MODE_REL_SOFT);
-  1573	
-  1574		if (cdev->use_os_string) {
-  1575			os_desc_table[0].os_desc = &ncm_opts->ncm_os_desc;
-  1576			os_desc_table[0].if_id = ncm_iad_desc.bFirstInterface;
-  1577			f->os_desc_table = no_free_ptr(os_desc_table);
-  1578			f->os_desc_n = 1;
-  1579		}
-  1580		ncm->notify_req = no_free_ptr(request);
-  1581		ncm->netdev = no_free_ptr(netdev);
-  1582		ncm->port.ioport = netdev_priv(ncm->netdev);
-  1583	
-  1584		DBG(cdev, "CDC Network: IN/%s OUT/%s NOTIFY/%s\n",
-  1585				ncm->port.in_ep->name, ncm->port.out_ep->name,
-  1586				ncm->notify->name);
-  1587		return 0;
-  1588	}
-  1589	
+  5425	
+  5426	static int r8169_mdio_register(struct rtl8169_private *tp)
+  5427	{
+  5428		struct pci_dev *pdev = tp->pci_dev;
+  5429		struct mii_bus *new_bus;
+  5430		struct phy_device *phydev;
+  5431		int ret, addr;
+  5432	
+  5433		/* On some boards with this chip version the BIOS is buggy and misses
+  5434		 * to reset the PHY page selector. This results in the PHY ID read
+  5435		 * accessing registers on a different page, returning a more or
+  5436		 * less random value. Fix this by resetting the page selector first.
+  5437		 */
+  5438		if (tp->mac_version == RTL_GIGA_MAC_VER_25 ||
+  5439		    tp->mac_version == RTL_GIGA_MAC_VER_26)
+  5440			r8169_mdio_write(tp, 0x1f, 0);
+  5441	
+  5442		new_bus = devm_mdiobus_alloc(&pdev->dev);
+  5443		if (!new_bus)
+  5444			return -ENOMEM;
+  5445	
+  5446		new_bus->name = "r8169";
+  5447		new_bus->priv = tp;
+  5448		new_bus->parent = &pdev->dev;
+  5449		new_bus->irq[0] = PHY_MAC_INTERRUPT;
+  5450		new_bus->phy_mask = GENMASK(31, 1);
+  5451		snprintf(new_bus->id, MII_BUS_ID_SIZE, "r8169-%x-%x",
+  5452			 pci_domain_nr(pdev->bus), pci_dev_id(pdev));
+  5453	
+  5454		new_bus->read = r8169_mdio_read_reg;
+  5455		new_bus->write = r8169_mdio_write_reg;
+  5456	
+  5457		if (tp->mac_version >= RTL_GIGA_MAC_VER_40) {
+  5458			new_bus->read_c45 = r8169_mdio_read_reg_c45;
+  5459			new_bus->write_c45 = r8169_mdio_write_reg_c45;
+  5460		}
+  5461	
+  5462		ret = devm_mdiobus_register(&pdev->dev, new_bus);
+  5463		if (ret)
+  5464			return ret;
+  5465	
+  5466		/* find the first (lowest address) PHY on the current MAC's MII bus */
+> 5467		for (addr = 0; addr < PHY_MAX_ADDR; addr++) {
+  5468			struct phy_device *tmp = mdiobus_get_phy(new_bus, addr);
+  5469	
+  5470			if (tmp) {
+  5471				phydev = tmp;
+  5472				break;
+  5473			}
+  5474		}
+  5475	
+  5476		if (!phydev) {
+  5477			dev_err(&pdev->dev, "no PHY found on bus\n");
+  5478			return -ENODEV;
+  5479		}
+  5480	
+  5481		/* Most chip versions fail with the genphy driver.
+  5482		 * Therefore ensure that the dedicated PHY driver is loaded.
+  5483		 */
+  5484		if (!phydev->drv) {
+  5485			dev_err(&pdev->dev, "no dedicated PHY driver found for PHY ID 0x%08x, maybe realtek.ko needs to be added to initramfs?\n",
+  5486				phydev->phy_id);
+  5487			return -EUNATCH;
+  5488		}
+  5489	
+  5490		tp->phydev = phydev;
+  5491		tp->phydev->mac_managed_pm = true;
+  5492		if (rtl_supports_eee(tp))
+  5493			phy_support_eee(tp->phydev);
+  5494		phy_support_asym_pause(tp->phydev);
+  5495	
+  5496		/* mimic behavior of r8125/r8126 vendor drivers */
+  5497		if (tp->mac_version == RTL_GIGA_MAC_VER_61)
+  5498			phy_disable_eee_mode(tp->phydev,
+  5499					     ETHTOOL_LINK_MODE_2500baseT_Full_BIT);
+  5500	
+  5501		/* PHY will be woken up in rtl_open() */
+  5502		phy_suspend(tp->phydev);
+  5503	
+  5504		return 0;
+  5505	}
+  5506	
 
 -- 
 0-DAY CI Kernel Test Service
