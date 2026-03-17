@@ -1,245 +1,219 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D652387364;
-	Tue, 17 Mar 2026 20:31:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2296318121;
+	Tue, 17 Mar 2026 22:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773779503; cv=none; b=ul2GdrLoT833vC4Xc0prLar5uLa4EdyHAGgRjjHB/TIIiwTCy8Pm29/kHycTMv0E0KOWhtzNniV0h8XiU33FbMsd+bEY/ncL+obmD2z0qQX/dgafq2DpQZQo+JFG71RAehBnuBhzXNVXbzRwQUgk2ViQpptvH+IyS0sdTnZnp/E=
+	t=1773786601; cv=none; b=nKjKsPAzJpRXp2e7NRhm9veiyjUGhebuYomwKRwb+8HXht4KMMVbkpQf+LPnS+OBicxv5fva7ZYLEQJ+JYw2FhO2ukmQMLsAOYlxlkjXoEUSzN0OSJhjE/kzHtcvIHTF+wot5woSf9sYmwvIPv3GH+mOd+8tIxOxuV8J9HpjN3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773779503; c=relaxed/simple;
-	bh=VE7Tb+bM7zGpB8HtR3p1/Sc+swRpMb3N7112NEZT4hk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=UZ9+Rnsy3bIv+0yB0njOHfz728KWiDAQqjDx/SqJFi1OP0Pf2Ueptrirp6bK/WcorMlIL6VFASCKX6TCpYPf0PiIUNLuA+t9LngOilHIUQOuFaot0cHb+uTiE1bc6wZblXFVmCgZWmoqmMCPWb95IxtvCAROuGyS6n07n55SGUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nOTod7o+; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1773786601; c=relaxed/simple;
+	bh=CnhOIHlyblpvsOEV8hoOhLwkcqHdhWN6Zqa9wOHKLVY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oBD0ClpD7mi52ZiiDdMxzgok0BYVhgVKA0/uwhCaCgk+SbAQ2njwJiaJX57BfIWvXcVEr3E6S+sXFMjuSFCEEMBshOGW94A6qwhQZCJjBg57WntbLpswyuZ8USQNZTEPaloho/LcX0sg8PgG3HyekKgkit+WQPm/GjeJUzc548s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JY1yqQr+; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nOTod7o+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JY1yqQr+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773779502; x=1805315502;
-  h=date:from:to:cc:subject:message-id;
-  bh=VE7Tb+bM7zGpB8HtR3p1/Sc+swRpMb3N7112NEZT4hk=;
-  b=nOTod7o+wyZekX6Eu3R1/t6S0cQG1LbInFUOLYx5NaDWcjzYierPq5s3
-   qAitvRalE6wfNsQYWSCx4R2iVJRceyxzGwUeJISD5OCUpDewjIJ3nihDP
-   lkpNjqQBupeXEa8tz+BBPwUi4rMPmj07q0F0iC7tpeB/nchA+gvgqLVeQ
-   O8htgJaGNzyenXJixhzU6FLEhBG1hJ/hYMmPHjGskFB9MRGkVya6zNT58
-   fNEppKPXbKp6WkzsBVM3tK56YH6VGykc9g7769qJ1jPCJeuBUuS/oCrfB
-   DESfU6N714DBjU6RDRDvoVww1T8rv+MP4J0E2jEC8ecPIvNDAcruu1CkX
-   g==;
-X-CSE-ConnectionGUID: AaRmmbQdTBmUQzExjEM8Qg==
-X-CSE-MsgGUID: KCuBF/S+QHuOgb2L/RQClA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="85456534"
+  t=1773786599; x=1805322599;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CnhOIHlyblpvsOEV8hoOhLwkcqHdhWN6Zqa9wOHKLVY=;
+  b=JY1yqQr+sUgDkRTFF8vFrVj8cMMY8iYlONhuAHSg5Ph1X/V3dH0S/IqO
+   3tTL1HFwA3e3eE85vY8rpSr+0QDE2ky94EjKWW/k0EnWAbalwpMFz2Red
+   Xvxyvf6/0mfsjnzpU8O70dIPF6J8IP/zle8+WBwWsQpcBFFaVV92+LQfH
+   CsohSEff041ElvhloexLASZ9iFf5uPykQNVHLf4y6Ypf7OTwfzPj+foAW
+   L0o4DbtXe7E4KszqULZDkxBXMxvSy381+2nAgczznXTfjYwKDVV2PHMXO
+   fYmpCTUqBJ1CdCgx18cJWCxCC5ti1hhDthCJAwIExeUBPYzj2xvhgiDgl
+   w==;
+X-CSE-ConnectionGUID: lDRcTgpJQLmCv44iKtEldg==
+X-CSE-MsgGUID: wnv6z+hrSz25YCohWFsZ4Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11732"; a="74809294"
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="85456534"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 13:31:41 -0700
-X-CSE-ConnectionGUID: L/J+OV/9REiJ9xZ1r10a9A==
-X-CSE-MsgGUID: sa307hSwS7e9tDOkddtuog==
+   d="scan'208";a="74809294"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 15:29:59 -0700
+X-CSE-ConnectionGUID: BEMfbMsJRnKCt++S2U62cA==
+X-CSE-MsgGUID: pRhFVNvwQ+Se5X5qKLOxnA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,126,1770624000"; 
-   d="scan'208";a="227058430"
+   d="scan'208";a="221486241"
 Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 17 Mar 2026 13:31:40 -0700
+  by orviesa006.jf.intel.com with ESMTP; 17 Mar 2026 15:29:51 -0700
 Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w2b4j-000000001xd-2dRn;
-	Tue, 17 Mar 2026 20:31:37 +0000
-Date: Wed, 18 Mar 2026 04:30:44 +0800
+	id 1w2cv5-0000000026z-0bPZ;
+	Tue, 17 Mar 2026 22:29:47 +0000
+Date: Wed, 18 Mar 2026 06:29:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:locking/futex 2/8]
- drivers/ptp/ptp_mock.c:142:11: warning: shift count >= width of type
-Message-ID: <202603180414.SMx5OgLj-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Hans de Goede <hansg@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	"Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Stephan Gerhold <stephan.gerhold@linaro.org>,
+	Dmitry Baryshkov <lumag@kernel.org>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v6 9/9] power: sequencing: pcie-m2: Create serdev device
+ for WCN7850 bluetooth
+Message-ID: <202603180601.E8FFoQ4J-lkp@intel.com>
+References: <20260317-pci-m2-e-v6-9-9c898f108d3d@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260317-pci-m2-e-v6-9-9c898f108d3d@oss.qualcomm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git locking/futex
-head:   226e6782e81c88b9263e006a356f58dd8c15bef5
-commit: 2ace2e1df2b9de73d65c1a11bbb4183c42ba5752 [2/8] futex: Move futex related mm_struct data into a struct
-config: powerpc64-randconfig-002-20260317 (https://download.01.org/0day-ci/archive/20260318/202603180414.SMx5OgLj-lkp@intel.com/config)
+Hi Manivannan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 559f264e403e4d58d56a17595c60a1de011c5e20]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Manivannan-Sadhasivam-via-B4-Relay/serdev-Convert-to_serdev_-helpers-to-macros-and-use-container_of_const/20260317-123910
+base:   559f264e403e4d58d56a17595c60a1de011c5e20
+patch link:    https://lore.kernel.org/r/20260317-pci-m2-e-v6-9-9c898f108d3d%40oss.qualcomm.com
+patch subject: [PATCH v6 9/9] power: sequencing: pcie-m2: Create serdev device for WCN7850 bluetooth
+config: um-randconfig-002-20260318 (https://download.01.org/0day-ci/archive/20260318/202603180601.E8FFoQ4J-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180414.SMx5OgLj-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180601.E8FFoQ4J-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603180414.SMx5OgLj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603180601.E8FFoQ4J-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:177:27: note: expanded from macro '_SIG_SET_OP'
-     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
-         |                                  ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
+   In file included from kernel/sched/rq-offsets.c:5:
+   In file included from kernel/sched/sched.h:28:
+   In file included from include/linux/cgroup_api.h:1:
+   In file included from include/linux/cgroup.h:27:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+   In file included from kernel/sched/rq-offsets.c:5:
+   In file included from kernel/sched/sched.h:31:
+   In file included from include/linux/cpufreq.h:17:
+>> include/linux/of.h:1652:34: error: use of undeclared identifier 'OF_RECONFIG_ATTACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1652 |         return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1627:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1627 |         OF_RECONFIG_NO_CHANGE = 0,
          |         ^
-   In file included from drivers/ptp/ptp_mock.c:11:
-   In file included from include/linux/ptp_clock_kernel.h:15:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:177:10: note: expanded from macro '_SIG_SET_OP'
-     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
-         |                 ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
+>> include/linux/of.h:1658:34: error: use of undeclared identifier 'OF_RECONFIG_DETACH_NODE'; did you mean 'OF_RECONFIG_NO_CHANGE'?
+    1658 |         return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         OF_RECONFIG_NO_CHANGE
+   include/linux/of.h:1627:2: note: 'OF_RECONFIG_NO_CHANGE' declared here
+    1627 |         OF_RECONFIG_NO_CHANGE = 0,
          |         ^
-   In file included from drivers/ptp/ptp_mock.c:11:
-   In file included from include/linux/ptp_clock_kernel.h:15:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:198:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     198 |         case 2: set->sig[1] = 0;
-         |                 ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/ptp/ptp_mock.c:11:
-   In file included from include/linux/ptp_clock_kernel.h:15:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:211:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     211 |         case 2: set->sig[1] = -1;
-         |                 ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/ptp/ptp_mock.c:11:
-   In file included from include/linux/ptp_clock_kernel.h:15:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:242:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     242 |         case 2: set->sig[1] = 0;
-         |                 ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/ptp/ptp_mock.c:11:
-   In file included from include/linux/ptp_clock_kernel.h:15:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:255:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     255 |         case 2: set->sig[1] = -1;
-         |                 ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
->> drivers/ptp/ptp_mock.c:142:11: warning: shift count >= width of type [-Wshift-count-overflow]
-     142 |                 .mask   = CYCLECOUNTER_MASK(64),
-         |                           ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/timecounter.h:14:59: note: expanded from macro 'CYCLECOUNTER_MASK'
-      14 | #define CYCLECOUNTER_MASK(bits) (u64)((bits) < 64 ? ((1ULL<<(bits))-1) : -1)
-         |                                                           ^ ~~~~~~
-   50 warnings and 1 error generated.
+>> include/linux/of.h:1664:34: error: use of undeclared identifier 'OF_RECONFIG_ADD_PROPERTY'
+    1664 |         return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/of.h:1670:34: error: use of undeclared identifier 'OF_RECONFIG_REMOVE_PROPERTY'
+    1670 |         return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/of.h:1676:34: error: use of undeclared identifier 'OF_RECONFIG_UPDATE_PROPERTY'
+    1676 |         return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 5 errors generated.
+   make[3]: *** [scripts/Makefile.build:184: kernel/sched/rq-offsets.s] Error 1 shuffle=497447418
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1333: prepare0] Error 2 shuffle=497447418
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=497447418
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=497447418
+   make: Target 'prepare' not remade because of errors.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OF_DYNAMIC
+   Depends on [n]: OF [=n]
+   Selected by [y]:
+   - POWER_SEQUENCING_PCIE_M2 [=y] && POWER_SEQUENCING [=y] && (PCI [=n] && OF [=n] || COMPILE_TEST [=y])
 
 
-vim +142 drivers/ptp/ptp_mock.c
+vim +1652 include/linux/of.h
 
-40b0425f8ba17c Vladimir Oltean 2023-08-07  117  
-40b0425f8ba17c Vladimir Oltean 2023-08-07  118  struct mock_phc *mock_phc_create(struct device *dev)
-40b0425f8ba17c Vladimir Oltean 2023-08-07  119  {
-40b0425f8ba17c Vladimir Oltean 2023-08-07  120  	struct mock_phc *phc;
-40b0425f8ba17c Vladimir Oltean 2023-08-07  121  	int err;
-40b0425f8ba17c Vladimir Oltean 2023-08-07  122  
-bf4afc53b77aea Linus Torvalds  2026-02-21  123  	phc = kzalloc_obj(*phc);
-40b0425f8ba17c Vladimir Oltean 2023-08-07  124  	if (!phc) {
-40b0425f8ba17c Vladimir Oltean 2023-08-07  125  		err = -ENOMEM;
-40b0425f8ba17c Vladimir Oltean 2023-08-07  126  		goto out;
-40b0425f8ba17c Vladimir Oltean 2023-08-07  127  	}
-40b0425f8ba17c Vladimir Oltean 2023-08-07  128  
-40b0425f8ba17c Vladimir Oltean 2023-08-07  129  	phc->info = (struct ptp_clock_info) {
-40b0425f8ba17c Vladimir Oltean 2023-08-07  130  		.owner		= THIS_MODULE,
-40b0425f8ba17c Vladimir Oltean 2023-08-07  131  		.name		= "Mock-up PTP clock",
-40b0425f8ba17c Vladimir Oltean 2023-08-07  132  		.max_adj	= MOCK_PHC_MAX_ADJ_PPB,
-40b0425f8ba17c Vladimir Oltean 2023-08-07  133  		.adjfine	= mock_phc_adjfine,
-40b0425f8ba17c Vladimir Oltean 2023-08-07  134  		.adjtime	= mock_phc_adjtime,
-40b0425f8ba17c Vladimir Oltean 2023-08-07  135  		.gettime64	= mock_phc_gettime64,
-40b0425f8ba17c Vladimir Oltean 2023-08-07  136  		.settime64	= mock_phc_settime64,
-40b0425f8ba17c Vladimir Oltean 2023-08-07  137  		.do_aux_work	= mock_phc_refresh,
-40b0425f8ba17c Vladimir Oltean 2023-08-07  138  	};
-40b0425f8ba17c Vladimir Oltean 2023-08-07  139  
-40b0425f8ba17c Vladimir Oltean 2023-08-07  140  	phc->cc = (struct cyclecounter) {
-40b0425f8ba17c Vladimir Oltean 2023-08-07  141  		.read	= mock_phc_cc_read,
-40b0425f8ba17c Vladimir Oltean 2023-08-07 @142  		.mask	= CYCLECOUNTER_MASK(64),
-40b0425f8ba17c Vladimir Oltean 2023-08-07  143  		.mult	= MOCK_PHC_CC_MULT,
-40b0425f8ba17c Vladimir Oltean 2023-08-07  144  		.shift	= MOCK_PHC_CC_SHIFT,
-40b0425f8ba17c Vladimir Oltean 2023-08-07  145  	};
-40b0425f8ba17c Vladimir Oltean 2023-08-07  146  
-40b0425f8ba17c Vladimir Oltean 2023-08-07  147  	spin_lock_init(&phc->lock);
-40b0425f8ba17c Vladimir Oltean 2023-08-07  148  	timecounter_init(&phc->tc, &phc->cc, 0);
-40b0425f8ba17c Vladimir Oltean 2023-08-07  149  
-40b0425f8ba17c Vladimir Oltean 2023-08-07  150  	phc->clock = ptp_clock_register(&phc->info, dev);
-40b0425f8ba17c Vladimir Oltean 2023-08-07  151  	if (IS_ERR(phc->clock)) {
-40b0425f8ba17c Vladimir Oltean 2023-08-07  152  		err = PTR_ERR(phc->clock);
-40b0425f8ba17c Vladimir Oltean 2023-08-07  153  		goto out_free_phc;
-40b0425f8ba17c Vladimir Oltean 2023-08-07  154  	}
-40b0425f8ba17c Vladimir Oltean 2023-08-07  155  
-40b0425f8ba17c Vladimir Oltean 2023-08-07  156  	ptp_schedule_worker(phc->clock, MOCK_PHC_REFRESH_INTERVAL);
-40b0425f8ba17c Vladimir Oltean 2023-08-07  157  
-40b0425f8ba17c Vladimir Oltean 2023-08-07  158  	return phc;
-40b0425f8ba17c Vladimir Oltean 2023-08-07  159  
-40b0425f8ba17c Vladimir Oltean 2023-08-07  160  out_free_phc:
-40b0425f8ba17c Vladimir Oltean 2023-08-07  161  	kfree(phc);
-40b0425f8ba17c Vladimir Oltean 2023-08-07  162  out:
-40b0425f8ba17c Vladimir Oltean 2023-08-07  163  	return ERR_PTR(err);
-40b0425f8ba17c Vladimir Oltean 2023-08-07  164  }
-40b0425f8ba17c Vladimir Oltean 2023-08-07  165  EXPORT_SYMBOL_GPL(mock_phc_create);
-40b0425f8ba17c Vladimir Oltean 2023-08-07  166  
-
-:::::: The code at line 142 was first introduced by commit
-:::::: 40b0425f8ba17c32cf7182975032a3999c364dfc net: ptp: create a mock-up PTP Hardware Clock driver
-
-:::::: TO: Vladimir Oltean <vladimir.oltean@nxp.com>
-:::::: CC: Jakub Kicinski <kuba@kernel.org>
+2e8fff668dc14e Rob Herring       2023-03-29  1633  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1634  #ifdef CONFIG_OF_DYNAMIC
+f6892d193fb9d6 Grant Likely      2014-11-21  1635  extern int of_reconfig_notifier_register(struct notifier_block *);
+f6892d193fb9d6 Grant Likely      2014-11-21  1636  extern int of_reconfig_notifier_unregister(struct notifier_block *);
+f5242e5a883bf1 Grant Likely      2014-11-24  1637  extern int of_reconfig_notify(unsigned long, struct of_reconfig_data *rd);
+f5242e5a883bf1 Grant Likely      2014-11-24  1638  extern int of_reconfig_get_state_change(unsigned long action,
+f5242e5a883bf1 Grant Likely      2014-11-24  1639  					struct of_reconfig_data *arg);
+f6892d193fb9d6 Grant Likely      2014-11-21  1640  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1641  extern void of_changeset_init(struct of_changeset *ocs);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1642  extern void of_changeset_destroy(struct of_changeset *ocs);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1643  extern int of_changeset_apply(struct of_changeset *ocs);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1644  extern int of_changeset_revert(struct of_changeset *ocs);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1645  extern int of_changeset_action(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1646  		unsigned long action, struct device_node *np,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1647  		struct property *prop);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1648  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1649  static inline int of_changeset_attach_node(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1650  		struct device_node *np)
+201c910bd6898d Pantelis Antoniou 2014-07-04  1651  {
+201c910bd6898d Pantelis Antoniou 2014-07-04 @1652  	return of_changeset_action(ocs, OF_RECONFIG_ATTACH_NODE, np, NULL);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1653  }
+201c910bd6898d Pantelis Antoniou 2014-07-04  1654  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1655  static inline int of_changeset_detach_node(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1656  		struct device_node *np)
+201c910bd6898d Pantelis Antoniou 2014-07-04  1657  {
+201c910bd6898d Pantelis Antoniou 2014-07-04 @1658  	return of_changeset_action(ocs, OF_RECONFIG_DETACH_NODE, np, NULL);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1659  }
+201c910bd6898d Pantelis Antoniou 2014-07-04  1660  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1661  static inline int of_changeset_add_property(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1662  		struct device_node *np, struct property *prop)
+201c910bd6898d Pantelis Antoniou 2014-07-04  1663  {
+201c910bd6898d Pantelis Antoniou 2014-07-04 @1664  	return of_changeset_action(ocs, OF_RECONFIG_ADD_PROPERTY, np, prop);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1665  }
+201c910bd6898d Pantelis Antoniou 2014-07-04  1666  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1667  static inline int of_changeset_remove_property(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1668  		struct device_node *np, struct property *prop)
+201c910bd6898d Pantelis Antoniou 2014-07-04  1669  {
+201c910bd6898d Pantelis Antoniou 2014-07-04 @1670  	return of_changeset_action(ocs, OF_RECONFIG_REMOVE_PROPERTY, np, prop);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1671  }
+201c910bd6898d Pantelis Antoniou 2014-07-04  1672  
+201c910bd6898d Pantelis Antoniou 2014-07-04  1673  static inline int of_changeset_update_property(struct of_changeset *ocs,
+201c910bd6898d Pantelis Antoniou 2014-07-04  1674  		struct device_node *np, struct property *prop)
+201c910bd6898d Pantelis Antoniou 2014-07-04  1675  {
+201c910bd6898d Pantelis Antoniou 2014-07-04 @1676  	return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, prop);
+201c910bd6898d Pantelis Antoniou 2014-07-04  1677  }
+b544fc2b8606d7 Lizhi Hou         2023-08-15  1678  
 
 -- 
 0-DAY CI Kernel Test Service
