@@ -1,105 +1,165 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820443E0C67
-	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 15:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14603B27DB
+	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 16:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773846802; cv=none; b=gmz/pN52zjRYnFlGJzKioxo2K2MMVrSBgRSm3A/M8F5Hv7y/IDWRTyGLej3Qk2GuOnPnV8IOaCx+kluZ7T30UJtDjvbALtqhBgdQF8d3fp1hjZqKcO0TKBWzZbMYki2PRngmE+q+ykG9HUm0A2CWERMcrhCetrYHzHwiR24tv1s=
+	t=1773849743; cv=none; b=p2Vl4DSkwHZoYiyx0lQrJfpj3YSYSzuEgUfCCOydPsnhk7fhqSca5+TIDVCusReroKlECLSzJIJ4o0yComQsdXReChIoxWLaO+fQZOHaKuOvDWlvC8Mp67TrjlR8nptT3jlZdqG/G64YXOgKkIyrX8Am29aGMkfv3NzNUC1qXsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773846802; c=relaxed/simple;
-	bh=mcByvHAC12ZJE2Ee6LT24Yp29yRr5rwa469/SF7LLN8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MyAMLy1HkB1x3qKJW4fFnhS0U9Q663gQahuGerS0NRh2Sz3Pxf2xim1HHn8gj6JMzYfGc8v34A3ycSKwySS6JUF46Eg6cBbjDUzwEHspSMcPyg8VXapDs0erGypw11pwYKhnGHe3AlgSbIGz/1+7SV1X+nZsH0Dx8Fpuur7nANY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88D451E2F;
-	Wed, 18 Mar 2026 08:13:12 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F1533F73B;
-	Wed, 18 Mar 2026 08:13:18 -0700 (PDT)
-Date: Wed, 18 Mar 2026 15:13:16 +0000
-From: Leo Yan <leo.yan@arm.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	Quentin Monnet <qmo@kernel.org>,
+	s=arc-20240116; t=1773849743; c=relaxed/simple;
+	bh=jlbFnWqkJTnl/zzkZhCyWdDgvyh0j1BKiZNim9nq6d4=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=npgQRQLmSNRzgGDgk4VZ5rtcF2ueD9rAaRiTwybQvat57DakmS10ikEEV+RN+Zi4M4dO0Buigppwdn2WeS8T17bmrO1Lkuqjt3xFyICtPmhmWhThpqX6Uh6u7ahyr/wWtXiUnp5MKoB2uEUNJyxzB+ApQxQnjDFhMz5yX8Zrza4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=OUB41oPt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Q1aXJt36; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=kMODMvSG; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=qxOMW19b; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="OUB41oPt";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Q1aXJt36";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="kMODMvSG";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qxOMW19b"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B4D915BEC8;
+	Wed, 18 Mar 2026 16:02:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1773849731; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mSf19b1jhenmvaLomGbxX0Yg6uNP1NpERxPlC4iLUjo=;
+	b=OUB41oPt9v9QXb9hwyPO7pkjdLHaYhQBzQ8Me03uXGDaebGJv5lD/lxW1fsDbpt3AE8P/m
+	OaxwXr1TTyJ9Yp2s5IMClZG6nRAqMdETHVKb+n12Lbtu89bMX3tSjXxuNUR5hR9pvRMfq9
+	8zXomZtOi0WQzxxCaw2aHpGAxRitiwE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1773849731;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mSf19b1jhenmvaLomGbxX0Yg6uNP1NpERxPlC4iLUjo=;
+	b=Q1aXJt360Mo3/bJKuq1RmYeqR8ksAUjyLTnMf6nCuMsDeX2BDUTZ+nYEBJ8jE5W8vH+Xw0
+	BIhHoyWu8z75E9Bw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=kMODMvSG;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=qxOMW19b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1773849724; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mSf19b1jhenmvaLomGbxX0Yg6uNP1NpERxPlC4iLUjo=;
+	b=kMODMvSGzMtO3DOdpH/RJyJepbi96b40ikUDON8i1cYB9bi+vFnT9vlRUSLKSBwoIm/koQ
+	oiW0C4/v8uwZSTkLTzBvRHjnvzcdYA2k6pJJSL5MLOv+XU2DWVBCNCOcIsEXvwsI8tH5B/
+	UfI6YxCye8BxpGzy1fcjtcVm/FTYA3U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1773849724;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mSf19b1jhenmvaLomGbxX0Yg6uNP1NpERxPlC4iLUjo=;
+	b=qxOMW19bHl+SxvmMgSVB2A5vSwpOwxlzuv4ENH/J/Ru6R37I4uSncWvIl7P0P+yeNRrI0h
+	SpnT3idgRgOcYIAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6287B4273C;
+	Wed, 18 Mar 2026 16:02:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id wWqVFnvMumm1RgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Wed, 18 Mar 2026 16:02:03 +0000
+Date: Wed, 18 Mar 2026 17:02:03 +0100
+Message-ID: <87341xceis.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	William Breathitt Gray <wbg@kernel.org>,
-	Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Kent Gibson <warthog618@gmail.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Subject: Re: [PATCH v5 00/26] tools build: Append
- -fzero-init-padding-bits=all option
-Message-ID: <20260318151316.GN8048@e132581.arm.com>
-References: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
- <20260318115325.GB3738786@noisy.programming.kicks-ass.net>
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] [v2] ALSA: asihpi: avoid write overflow check warning
+In-Reply-To: <20260318124016.3488566-1-arnd@kernel.org>
+References: <20260318124016.3488566-1-arnd@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260318115325.GB3738786@noisy.programming.kicks-ass.net>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-2.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[perex.cz,suse.com,kernel.org,arndb.de,gmail.com,google.com,vger.kernel.org,lists.linux.dev];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	TAGGED_RCPT(0.00)[lkml];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arndb.de:email,suse.de:dkim,suse.de:mid,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Queue-Id: B4D915BEC8
+X-Spam-Flag: NO
+X-Spam-Score: -2.01
+X-Spam-Level: 
 
-On Wed, Mar 18, 2026 at 12:53:25PM +0100, Peter Zijlstra wrote:
-> On Wed, Mar 18, 2026 at 09:16:44AM +0000, Leo Yan wrote:
-> > Thank you for reviewing and commenting on v4.
-> > 
-> > For anyone new to the series, the reason for appending this compiler
-> > option is described in v3 (see "Link to v3" below).
+On Wed, 18 Mar 2026 13:40:07 +0100,
+Arnd Bergmann wrote:
 > 
-> So why can't you just copy-paste that yourself, and save me from having
-> to go find a browser and copy/paste the stupid link, just to find
-> something that should have been here to begin with?!
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> clang-22 rightfully warns that the memcpy() in adapter_prepare() copies
+> between different structures, crossing the boundary of nested
+> structures inside it:
+> 
+> In file included from sound/pci/asihpi/hpimsgx.c:13:
+> In file included from include/linux/string.h:386:
+> include/linux/fortify-string.h:569:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+>   569 |                         __write_overflow_field(p_size_field, size);
+> 
+> The two structures seem to refer to the same layout, despite the
+> separate definitions, so the code is in fact correct.
+> 
+> Avoid the warning by copying the two inner structures separately.
+> I see the same pattern happens in other functions in the same file,
+> so there is a chance that this may come back in the future, but
+> this instance is the only one that I saw in practice, hitting it
+> multiple times per day in randconfig build.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> 
+> v2: use correct union member
 
-Sorry about that!
+Applied now.  Thanks.
 
-I didn't expect a link to cause trouble.  I'll include the information
-instead later.
+
+Takashi
