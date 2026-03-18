@@ -1,133 +1,90 @@
-Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61619175A9E
-	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 12:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847E53A4513;
+	Wed, 18 Mar 2026 12:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773836199; cv=none; b=Quxvh6HFA74uvmmKFRBpJ2eoThA06qJxoOnfbY7sDiHQjLjOPn9eYTMJpkh/DxvBCZWTT1aZtZU1zcxvWUXrCaYLJzpDgAZyLnGIkQAD/ccDc/96yiQaez+InftRL06zkWC+xP0Wtp58vlG5RVaz5eVIVi/+kliqAWN/F7sJtFI=
+	t=1773836483; cv=none; b=rcudMR/uAqs1UIb4iFLC8XehCZbhH8eu3NxNxvksyeZYn0WASAW4hrE7BNi6QR+k+xiMTVFL5a6nHq9z1wxWYM7Wmr0Ij6aLQcuWWqxyMvHg/U1HC/TVOWlbRy6rry7tqPcqecr4J5c48G0KKuUpBRfAqjvHkxNumpgO29lCpd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773836199; c=relaxed/simple;
-	bh=TuP4/cPm0qZZyyQWMHpS3BG08uESJQQ8U9i9UhPkGiw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=azJ44JZ5B+7Ic8erNazejJmO92vzhMzbMJZFkEF61GBi2zmP8xrIGh1NCez08k+cC/wi9hG0WPYNZHyuGzmDNsqBvDfatu2kcGjQrUvsjtnxikw7U7V+v5Uxke1fckybqrG5bbdxOYpFD1Z3K+GvzdK6EiF0+KP2XFLBGkoMcic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Ufi4+BR9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VBu9+VSM; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1773836483; c=relaxed/simple;
+	bh=VETUb0Ok7/wSEHFBIMBMVSrMOraqztpcjMZcYixugyo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G87UeVdzCWemB0rO6/9RR35MaDBJyaP79jROOOo4Cckf2E4O6hSyInIumxuyq5KS7ed3TuWO7cNLLGmMFqtjr3MQQ+5qElgRS+EHXKjwnpE2txV9JT9ios9gBdzHgP7s08Oah6FM1dKxvTJ2p5U2njhBDhOPCDtUP8amJqJu9w0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oNJqUE7q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Ufi4+BR9";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VBu9+VSM"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 8BB6A140018A;
-	Wed, 18 Mar 2026 08:16:36 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Wed, 18 Mar 2026 08:16:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1773836196;
-	 x=1773922596; bh=ftWj48LxStIGIyTYBzrKDf0B99ZDSmwvLH1iX54TQug=; b=
-	Ufi4+BR9RQCnhTRgi23P8nk6lMJCCbaOetyTyNR4rVeCjEcEEoxh2ZmFne5Z6zls
-	jrlM6QgTRveAF5aYkkN336SKXqDlwJ0Pd9wjNB9ekUINyyomgrW2EJx/vFy5qhNr
-	HL42TdUwganSPuM+XZqhQpGFZdXZ8hteEzO+eJEiEXcj5CB6kJ3iKShrxXZqg3Ob
-	5YOMkvLsW+ZTIzFZgnYBQhX5otpu027OH30q44tGlk0sQYMiojtemFI+G3udeHuq
-	eWbbvbPZT4X24l/CGC7GVrMrdwLBm0cbiuDKdlhEMwrnSylpF2s+PBbHAhS0oov0
-	DpViAjdE1LEJ8s7QU49MAA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1773836196; x=
-	1773922596; bh=ftWj48LxStIGIyTYBzrKDf0B99ZDSmwvLH1iX54TQug=; b=V
-	Bu9+VSMsFi/+e3mpKQ1brPmE8sRVoyE/OSpj0wEKuzPNUaGK7dTrY9kVIotkJXZz
-	IZdc5RKyKWck1CfeoXKYLE4RdHYtMc+XYu9QD3QLkXw5J1qRryXh9eo/y2hMB178
-	AqQJuv6BGxsgkHSjCqTaKDN/OThiw9vuRjMtlkNc43wN4GJl2lsDFvlwY1JuIwnt
-	JM//NWQaiQeyNf2j34gTXkNZCJHP6nb7pQ8tuzkYiBH15fqnu8qpFovIJ9C3B+nj
-	6DGXFLfZf8nLxA/NRXS1XQ1sjJDBG5E1O9D4/0EBwuMNuoa8Y05NX7HM3Kmm3Cwo
-	/P1ROtU7Ad5O1FaLYpf/A==
-X-ME-Sender: <xms:o5e6aa-pI_uLNGqg5EMJpMnazpxBe2YOabrmwbmWTLLDlMfwqDnz0A>
-    <xme:o5e6aVhNhQNkFkd3zpFcse3SxGLwdnRQkLf79TARfFsERrJjzwve82ZiAO69OIJBJ
-    a6sKS2HMf3UzbgTuRc0uojDUpCr1-eBgVlakSyITNebY15xHhVwhg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeftdegudduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhlsehgmhgrih
-    hlrdgtohhmpdhrtghpthhtohepjhhushhtihhnshhtihhtthesghhoohhglhgvrdgtohhm
-    pdhrtghpthhtohepmhhorhgsohesghhoohhglhgvrdgtohhmpdhrtghpthhtoheprghrnh
-    gusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdho
-    rhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpth
-    htohepphgvrhgvgiesphgvrhgvgidrtgiipdhrtghpthhtohepthhifigrihesshhushgv
-    rdgtohhmpdhrtghpthhtohepthhifigrihesshhushgvrdguvg
-X-ME-Proxy: <xmx:o5e6abHZXFrKsbcnIoCcAcigxGNdEUmW2ioB_d5VEx7VAiDxoeB8UQ>
-    <xmx:o5e6aUIhe8-mmvQ8DSz2qi-8-6HuPKxn871UVEnlwMQdG7aKvyQ69A>
-    <xmx:o5e6aYiud6Q5S83rfsxI4ct7BzPAVdzVcYw6heUABZvyhFmwxKEz0Q>
-    <xmx:o5e6aSm90ZWrMu0ADB9ffPDAD8qqQwdSeBJ2LAP9oXeiFgMP77NaOg>
-    <xmx:pJe6aaKHWLy-sbWoojqkusXUmwC79GgopJzrIPlShbf39ToMroMr83on>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 9B894700065; Wed, 18 Mar 2026 08:16:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oNJqUE7q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB77C19421;
+	Wed, 18 Mar 2026 12:21:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773836483;
+	bh=VETUb0Ok7/wSEHFBIMBMVSrMOraqztpcjMZcYixugyo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oNJqUE7qC0JMEzUfSQhebxrMLRrF2cE4BV510qU7Bnu6OrVlvo6N2kLXxm4yacwVe
+	 QkZcq6aAydkvefXCM6OFDT3RaDFeuRHErYMtNTRAO+LurstvZiOa6E4zKZB+hOgecN
+	 Y8rIokqTAId1h63piwFI7OnTLFigYcZnS6qplYtfZwiEptKeaQgodUS67+LJtJUTLj
+	 QZ2CFn8EubdMgNXw1vjK3AeaC30OcmZ+ChuuMsKpY5zjip0BmrexeNrpWluZ3s2XRG
+	 aRSAAwPK8OBPIi1imVJyYq1UHPpY0s5hOgsE4EGrLdODoRjzQ0rxcfypkn3RUl8YSA
+	 PiL4W7C6bdYyA==
+Message-ID: <9434f836-aa96-44e7-8f34-243d6c94f6dc@kernel.org>
+Date: Wed, 18 Mar 2026 13:21:17 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AaL53sJK8WL3
-Date: Wed, 18 Mar 2026 13:16:14 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Takashi Iwai" <tiwai@suse.de>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND 1/2] powerpc/ps3: Drop redundant result assignment
+To: Segher Boessenkool <segher@kernel.crashing.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Geoff Levand <geoff@infradead.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev
-Message-Id: <74923a6e-fdce-4f15-b345-55fddcc4c7c2@app.fastmail.com>
-In-Reply-To: <87eclhcpzo.wl-tiwai@suse.de>
-References: <20260318105017.1934798-1-arnd@kernel.org>
- <87eclhcpzo.wl-tiwai@suse.de>
-Subject: Re: [PATCH] ALSA: asihpi: avoid write overflow check warning
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20260317130823.240279-3-krzysztof.kozlowski@oss.qualcomm.com>
+ <abqRvDiAI85w2bCe@gate>
+ <dfb53d65-ee34-47bf-b305-5694c7224ec7@oss.qualcomm.com>
+ <abqTSG-wg-9ahRTe@gate>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <abqTSG-wg-9ahRTe@gate>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 18, 2026, at 12:54, Takashi Iwai wrote:
-> On Wed, 18 Mar 2026 11:50:08 +0100,
 
->> +	memcpy(&rESP_HPI_ADAPTER_OPEN[adapter].h, &hr,
->> +		sizeof(rESP_HPI_ADAPTER_OPEN[adapter].h));
->> +	memcpy(&rESP_HPI_ADAPTER_OPEN[adapter].a, &hr.u.s,
->> +		sizeof(rESP_HPI_ADAPTER_OPEN[adapter].a));
->
-> I think the last one is still a bit confusing as if doing an overflow
-> copy again: hr.u.s is struct hpi_subsys_res which is smaller than
-> rESP_HPI_ADAPTER_OPEN[adapter].a which is struct hpi_adapter_res.
 
-Right, I got confused by the various similarly named types
-again.
+Le 18/03/2026 à 12:58, Segher Boessenkool a écrit :
+> On Wed, Mar 18, 2026 at 12:54:30PM +0100, Krzysztof Kozlowski wrote:
+>> On 18/03/2026 12:51, Segher Boessenkool wrote:
+>>> On Tue, Mar 17, 2026 at 02:08:24PM +0100, Krzysztof Kozlowski wrote:
+>>>> Return value of ps3_start_probe_thread() is not used, so code can be
+>>>> simplified to fix W=1 clang warnings:
+>>>>
+>>>>    arch/powerpc/platforms/ps3/device-init.c:953:6: error: variable 'result' set but not used [-Werror,-Wunused-but-set-variable]
+>>>
+>>> And this is exactly why -Werror is harmful.  A boring harmless warning
+>>> turned into a build break :-(
+>>
+>> -Werror does not matter here. We do not want warnings either, assuming
+>> of course they are correct.
+>>
+>> So if this warning is correct, then patch should be applied and WERROR
+>> is irrelevant.
+> 
+> The build is broken.  -Werror is positively harmful.
+> 
+> Yes, you want the warnings fixed, but maybe something else has priority
+> right now?
 
-> If any, the last one should be
->
-> 	memcpy(&rESP_HPI_ADAPTER_OPEN[adapter].a, &hr.u.ax.info,
-> 		sizeof(rESP_HPI_ADAPTER_OPEN[adapter].a));
->
-> Or it could be even
->
-> 	rESP_HPI_ADAPTER_OPEN[adapter].a = hr.u.ax.info;
->
-> (I'm not sure which one can be a better result, though.)
+But if I understand correctly this is a build performed with W=1
 
-Code generation wise, I would expect them to be the same,
-as gcc is good at transforming the memcpy() calls into
-direct copies and vice versa.
+Without W=1 there is no build breakage.
 
-I'll send a v2 with the first one after it passes build tests,
-unless someone has another preference.
+Someone who forces W=1 on its build can be expected to unselect 
+CONFIG_PPC_WERROR if it is needed for him, no ?
 
-      Arnd
+Christophe
