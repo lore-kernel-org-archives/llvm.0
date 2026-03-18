@@ -1,110 +1,95 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA5603AE6FD
-	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 09:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C880836A02F;
+	Wed, 18 Mar 2026 10:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773825672; cv=none; b=CreO9EB0ymae6jTR9U+Ujxx+xeqEK6YyN0CTjqJ6KG9M8lfxM0FCQK0OSHhIrh2aHBTsDf1H9WeJAeSx1tAbxI/MyrF8PUH3NHEAhhCLVGh59r2Huh/16NoF0/RGiy2ZKkQ9Q9ZdjnUHV+TlqKogC4ZbaJRt36UlP2yKBM9UxRY=
+	t=1773831023; cv=none; b=nsByKq1TYAS94APXd+/31IFa5R7PWBQ54NghvM6aG84cvcXnVo98xyxr9E2oa5njCmdO3fiTeyuBoWLAz1JofpKAJg/k72qIfqUJ7NOcJpmV06p4LPaV8UA0Bj/JmQrGf3tqoN/8MAlSQXtVSKKTsIi0P8qnK0uAJu4dzPDuncc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773825672; c=relaxed/simple;
-	bh=u6vnl/Tc6siw5/z3VuI7EgUIJilNCagL/0epWPyB+xk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ppAX/13pERLN3jCXKqWuFD53hB6JrURbXtuGRG5zkg9Xc9TDVZC7Bl+/FTcFAmbYTRFaRmcH8IQVTwJOy6ECFJcH/FEqwxjesSoa/P44iAsG4q2P1e5hBjEGefdx+i3LPDu0g6bDLzh2Sz+WH8qwIXiyuJXLypPYDJT1y4abEeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A38522D9;
-	Wed, 18 Mar 2026 02:21:05 -0700 (PDT)
-Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4BD6A3F73B;
-	Wed, 18 Mar 2026 02:21:02 -0700 (PDT)
-From: Leo Yan <leo.yan@arm.com>
-Date: Wed, 18 Mar 2026 09:17:10 +0000
-Subject: [PATCH v5 26/26] selftests/sched_ext: Append extra cflags
+	s=arc-20240116; t=1773831023; c=relaxed/simple;
+	bh=R3RQWmpJ9Ts8d1/ewmXBwW/9WUiOtoneWY0/2ZA6W/o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=U4YYR3Xkklvtkl0i87KetrcLSMQ5cEFq+JnaVly84DFF6KR7yJ1ctU5CSG+lGmKaegLOpgp1tnz8icPAmvFkznt98LbtJjFUBXpyny9M5oAIuLKiw+KRJQinO1lTRC6CwdBilpE4htnZ7AuQJyHBrzUvMsMducKSp/nU2V4FJPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=taYe4bPp; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="taYe4bPp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C3CC19421;
+	Wed, 18 Mar 2026 10:50:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773831023;
+	bh=R3RQWmpJ9Ts8d1/ewmXBwW/9WUiOtoneWY0/2ZA6W/o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=taYe4bPpMqc8j+7xaU2yUz/ERh8dnQOnYIomLv7Alll6PKfhvQShu5Ui3cVzKX0/g
+	 S44MggbbtMuxwJ2vYjJSBkGrTCYwrgF0gcmjG/080koy05yN1rLliEDuK0sZg16euu
+	 kfrTNb9THytLZvyGPSdVXUqovgUSH6DFir57gKz4sjGWErpT80PYg89+xu/5+KqjRT
+	 EkIgJ+1DPexpDPFYxnle+1KmztoaQc62zHbX2jeROrZU+V5oCIiVuMJiVatuSZ1x/r
+	 Z2nBV27QLLaqCR2L4cvXvBjl/9imDrIeJcjFTIh5AU8c6YHjLV8qUumpOz07fvYxVJ
+	 5TkhS91PIOiaA==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] ALSA: asihpi: avoid write overflow check warning
+Date: Wed, 18 Mar 2026 11:50:08 +0100
+Message-Id: <20260318105017.1934798-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260318-tools_build_fix_zero_init-v5-26-bbeffd8da199@arm.com>
-References: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
-In-Reply-To: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
- Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
- Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Adrian Hunter <adrian.hunter@intel.com>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, 
- Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, 
- Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
- Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
- Andy Shevchenko <andy@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
- Len Brown <lenb@kernel.org>, 
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
- Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
- Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
- Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- Leo Yan <leo.yan@arm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773825421; l=901;
- i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=u6vnl/Tc6siw5/z3VuI7EgUIJilNCagL/0epWPyB+xk=;
- b=D7NYsutW/NXxShdTUteIjA8Z+l/O6POwGn+5Xgj9yepAFnQR08U8SSTLbwwdrN+2BvTC5olpU
- +7ojN+qQqBmD2OFTToyy/n1ILKXFPjLg/sanqOrmM1zqAyHuSUo+/db
-X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
- pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
+Content-Transfer-Encoding: 8bit
 
-Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-the compiler.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Acked-by: Andrea Righi <arighi@nvidia.com>
-Signed-off-by: Leo Yan <leo.yan@arm.com>
+clang-22 rightfully warns that the memcpy() in adapter_prepare() copies
+between different structures, crossing the boundary of nested
+structures inside it:
+
+In file included from sound/pci/asihpi/hpimsgx.c:13:
+In file included from include/linux/string.h:386:
+include/linux/fortify-string.h:569:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+  569 |                         __write_overflow_field(p_size_field, size);
+
+The two structures seem to refer to the same layout, despite the
+separate definitions, so the code is in fact correct.
+
+Avoid the warning by copying the two inner structures separately.
+I see the same pattern happens in other functions in the same file,
+so there is a chance that this may come back in the future, but
+this instance is the only one that I saw in practice, hitting it
+multiple times per day in randconfig build.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- tools/testing/selftests/sched_ext/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ sound/pci/asihpi/hpimsgx.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
-index 006300ac6dff88a48104977398d8517753e7e385..2c8fbc9f8666ec4d6f75dbdd7602bd4f2b502aed 100644
---- a/tools/testing/selftests/sched_ext/Makefile
-+++ b/tools/testing/selftests/sched_ext/Makefile
-@@ -56,6 +56,7 @@ endif
- CFLAGS += -g -O2 -rdynamic -pthread -Wall -Werror $(GENFLAGS)			\
- 	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)				\
- 	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(CURDIR)/include -I$(SCXTOOLSINCDIR)
-+CFLAGS += $(EXTRA_CFLAGS)
+diff --git a/sound/pci/asihpi/hpimsgx.c b/sound/pci/asihpi/hpimsgx.c
+index b68e6bfbbfba..432a5b787a2a 100644
+--- a/sound/pci/asihpi/hpimsgx.c
++++ b/sound/pci/asihpi/hpimsgx.c
+@@ -581,8 +581,10 @@ static u16 adapter_prepare(u16 adapter)
+ 		HPI_ADAPTER_OPEN);
+ 	hm.adapter_index = adapter;
+ 	hw_entry_point(&hm, &hr);
+-	memcpy(&rESP_HPI_ADAPTER_OPEN[adapter], &hr,
+-		sizeof(rESP_HPI_ADAPTER_OPEN[0]));
++	memcpy(&rESP_HPI_ADAPTER_OPEN[adapter].h, &hr,
++		sizeof(rESP_HPI_ADAPTER_OPEN[adapter].h));
++	memcpy(&rESP_HPI_ADAPTER_OPEN[adapter].a, &hr.u.s,
++		sizeof(rESP_HPI_ADAPTER_OPEN[adapter].a));
+ 	if (hr.error)
+ 		return hr.error;
  
- # Silence some warnings when compiled with clang
- ifneq ($(LLVM),)
-
 -- 
-2.34.1
+2.39.5
 
