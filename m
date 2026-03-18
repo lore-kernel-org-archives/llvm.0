@@ -1,255 +1,241 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BFE402456
-	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 16:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773851243; cv=none; b=HrhzILVZL9SRjOrzgucauLcLmDSCD4+cL0gvl/TkH9XOcNwJp6JxGlCLs0Hs10jiWW6GCfk1wO3twna3XVBuokDeMwmnuHxz4d9ETa14qisMgKDl+40msTWAWqgt85lecfUalKxm6DEiJoC/SJHCgxgxY8kBgTRBUmgOuUfHk8U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773851243; c=relaxed/simple;
-	bh=52RZwge2HiHzFPyKFZk5GPDAZYf3/NA1Sia8icDS9Tc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=m61zA6noWSVw+DzLz4oFUlO1WcTZ9xKTBgdjJQf7Q4PVDjNiqTzciGvCt4MtDcb0NfBHn+T9CrqSd9ylAqrP9UhhcupRIuAnZAlUYShaPV9NTX/pin/Y2VEs5rP8itO5F3Cyi6Ii+vkzuJg8xUXIzsbs1iyt1V+Ipin6nJp3HRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vVV+ZB1z; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576A62D7DE4
+	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 16:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773851937; cv=pass; b=c5vVNLPfGxirHE7YIZKr4uW80nTvk8QRyDa5RESgYsnVamwXrxJtwmuPqhvpiLdgizeNnRCZyUUsj2pFv1FyznXGLcY+urqeR2HqyG7XgYKCoWaftcZBLm7JXolX4PZbAbpi1af3N5rLu9eMODCo5muwiTRzCKlXLMQUkY+nZoA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773851937; c=relaxed/simple;
+	bh=pQRo/AIDHbWYmQiKbzY1fu0YoqvFJr3p4qbPZJOQBWw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f5tZvJPaOWxrhc76S5wh16jCaP+XPUyPHv4rH23WYWykj/JYLYJtNzZS6gU4vdaad+OOb6mWLK2La3pS3HlQ2ZkXZMgdi70d7utex9BntxHGBN/YMQfoniAFstqqvgQpC2Q4gpBrW3Vk/5gqPkfvsvB2Q4UhbiLW2EqJlLs40yw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FrsxZ6M+; arc=pass smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vVV+ZB1z"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4852af55981so96055e9.0
-        for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 09:27:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FrsxZ6M+"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2b052562254so119495ad.0
+        for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 09:38:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773851936; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KP/k1gyE/gdffSRcD8kId5+MbUhKB/LmRt7NAIERLE8J4hhDUQ9mJHivgD8rwJn1p1
+         FQ9GAzMrhmIT38PHr/rSziic3bBoGGLd5iGATSQPiE66JUnoy53ZjzCXG/UwwyPS0mui
+         Rqy6FpnsTGdawmciprvOzdjAujH1EbeZpu1YZBCNL9xv2Ku15qQVNC+YWakDMoXWFV74
+         ujVZRIVTKCD/OQXu1KXadoVZ8EREXIxEf5+xt8ImiKzilcIi1kROiDO/ZZojcHCm/lmB
+         hzWlUOd2J7yuylv7geR5neBiavSlG6iM5U84quK51WgK3+XwxQPC2CIXBUa7YLNfEGEG
+         4zjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hcjCxyCQZIThfXRlEgtWrMDq+8GZ2+bJDcg2rHRM0J0=;
+        fh=WsdsBddoS0Qj+/JqkWqnB9lKi15HSnFheviffFjoqWs=;
+        b=CTXs/MHdl2RKVSRt32JqI0DX6qsrzsDFGBLjy8gl7xkLhntCfmmS1k++dMdMFBG1bL
+         PCeRPpb3mFH2IiojcT9aLzLjcqh3kbWIcHBoKhU5xK9P4te4/MD4QAcdkSFLt4usuEFq
+         JHkpqrHQexDISeEehlxbIVu0WpG/QipTB9h3EPMVEswPbXXwTsFvo1ubQgrke0tv6Qwq
+         ClMxZu2m7o7MEA+IZEKVmycG3cBc1/ndoY7gWxRwH0tdZO0EWf3BGvt+oxhj1fAYqkF0
+         Xya/MjLk5ITtNmB0Yufa9ynPKL4SDlwriiWstasJurrQOxlbK7auR9nVT2JxWp4SrUOy
+         XrtQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773851235; x=1774456035; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vQZ6ddyBeM1zS1Zg0ooxydiW5suttBWB2nJPekIy2YI=;
-        b=vVV+ZB1zOQD2d/+slXR5lezN6AcH1q+uSDn8dwIqryOHehZ8dXZFi+ividc+oCL2SW
-         PJhMP6fw9MhHQTSfL2U2gVyikx1yHwdJGnvbhb643zN3FR68wg+8w/xMSnafa3qial4r
-         EHMkMji1kDgObkdK4KdRYYOniLNHYroIxQ1HtiJN/P9GbUMmriashkDLnqja9D6E0hBX
-         R5sgNujldZn5fo4vaUuDvqTW9A3Ysn904JPjSBzXYu844Xppn5pJQjIQ2SuNWsDS2Stc
-         XxmjMeHRneSIg9JK6mbK9e86nI8ekUziUNivGJ/mvl2MJ8aJC71B6N4dZJK26qbFU13F
-         QmfA==
+        d=google.com; s=20251104; t=1773851936; x=1774456736; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hcjCxyCQZIThfXRlEgtWrMDq+8GZ2+bJDcg2rHRM0J0=;
+        b=FrsxZ6M+rpb/jyj0FPQHk7xz+yaoE69Xf1TMw2usAJ7oppfxH6+MDqXrZgg5W5z9qp
+         i2Gw9KTunvhr6Lw3gC/SHht+O/DrS22nhNC6l4yAVOkThSbpe/+dUqEXszp2M6zyPcrD
+         z9yLjDLxA/Sz6QTXgD5ACjgBw/yd1/j/xkJQ7pR350tCwbWsu4OOuE8wksIRpWx73nw4
+         GqJLZY410TArVMyJ0aPbxdZPByPBkkujS2GL/ziO+3mxKpOisZ65jhBEDPl2jsn5CREB
+         rfcvCvEBmKlQRAf7/8/jO/ZLYHLxEz61J2n9yxKy2asVa/gbUdePCuyd2qsv7hzh+asE
+         ghWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773851235; x=1774456035;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vQZ6ddyBeM1zS1Zg0ooxydiW5suttBWB2nJPekIy2YI=;
-        b=tNXdCtQs6dihofidtaZXs75Ca4OWoAPfZ8xFtryfJtir8nR4rZrMboA26dQxj+ZXiz
-         jTP47IXxvBD1zl4g7RChSfpKzz8D56CUH908MirwS3/3kJ3vwTe52v68XsNPmUtnbGcD
-         ggWnaxPwl6lOmsQBYRxz2adyaotn+zUDffg5a6B5DlS5LLmi5uWfJIkJwcTHWKfY3xu4
-         lH+d2Y8XK+ew+B+va1Caa/0kB/a2cCIm0jhTigjAkmwZ8zh0iDfE5wu2GuCOD2W1Uxcn
-         CsJr96u5UEEeI2kiGyuApIC6KvBgIGuLhhL5speDAu5cksUsTSAuMZwGd40JYkrOW2pb
-         TBRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXc26HC6SL1yjYWvrdQl9qzs/xNxzf+PnmlRPQEf4+dZozE3lKaf/E81HqQBnhNQ/NDlYOv@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy5+kjwq5Alc67ZvSdXNgLbkzYzwYFSRYJsDfucUMD79ULoaqg+
-	iAQu+XcLFfDzEPVzOs24XoiK0hYj5l5T3Tsf5hxwdDZh8GLq+i/PchP00PfG+Z3+1kMNLjUU6hM
-	YoVc2cjj3
-X-Gm-Gg: ATEYQzzbdu1wNnHsMZaJGjnApTsVtEmPqh1gjpGektyvqxhRa7zGA8Ao6cxdVgUR8LY
-	44kTqYKoytpYLKBnRUX3fdEwavWiXeOMUOrqhbN8vN+z1wXHaMGIVpQoMD4p3NlHrfs2m6HSUme
-	yhsa7wSNFOhabRGJ/CJq1UU/tIOYFo9uEshcpCD+P3EFHe+3ZjVQafKD7U7UOwwn7ShGtnpm8dv
-	dND+gLC51YS/Z+cKYXZ2ahB3hItWc7nSiUv2VEUJ+4bsry4KLvykRwcUQHCQExo/6jnVwyeo9lv
-	Qgry9bwWOlRJ9WYNY7xVeiYgK8JTbMvc+JqV1Mjw3GD8ImvvlSuLRB91C2h9+bpqyu/LUkgM0JM
-	yFmqDfiSarsuZIRYGWes7uZYnseemJHeLolMCHBLR2eKuQOq2hMMCT9w9y93XePQJfBF1QH6YHS
-	gj85ms9slI5mbyEmxx4dQbQ961e63uDbhgooRRD0Aq5+0q6YR1GA==
-X-Received: by 2002:a05:600c:8889:10b0:483:6f85:b16e with SMTP id 5b1f17b1804b1-486f4ce23ecmr596355e9.3.1773851234397;
-        Wed, 18 Mar 2026 09:27:14 -0700 (PDT)
-Received: from localhost ([2a00:79e0:288a:8:c66d:1e51:595a:925])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-486f4b9bb2esm20905255e9.20.2026.03.18.09.27.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 09:27:13 -0700 (PDT)
-From: Jann Horn <jannh@google.com>
-Date: Wed, 18 Mar 2026 17:27:01 +0100
-Subject: [PATCH v2 4/4] kcov: introduce extended PC coverage collection
- mode
+        d=1e100.net; s=20251104; t=1773851936; x=1774456736;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hcjCxyCQZIThfXRlEgtWrMDq+8GZ2+bJDcg2rHRM0J0=;
+        b=KDRlI0razK+dmQhnLKHwdYnQmvzY5qgTxyvWwJmbvugRrR9elCTowec63VVaNkCuhk
+         h09U+rPGAKHBsyjn/Nb56bLKNHxQvInQ2IBh8S3Ivkfwz0BdIaNyvEm8zq7ffP7SCvHF
+         9lunwfRAgTozJsBRIJ5OqzhUFkI1oRqSHkzPB6e92QOSNp8VwU6f6xd60JM/MaVzmlWw
+         ZGd6T52zLoG0zN4RAfB80PihqewZyO6YC555PYvOjYwEPiQx9TzKK+gO4vr936tLvAXD
+         B8es06yGr+5iX3iC1KFVuWBeY3EtutJNHPZ8+15jMjhxuXASJiaD8pdr2ICD/svI7ltK
+         zs7A==
+X-Forwarded-Encrypted: i=1; AJvYcCXtemXvSByFSqgOQ1/lzobzgsSH0dN19VyWIEw4Md+29cSlD6VntJPgWsiL6jjTAoE/WrC0@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzoyb8s9WOGKObw62vWtGM2pCfp1ADscVz8klW+miJVICwX0bFY
+	I9OScyCFJ/5YjoJ58hc9GRBJi9XaqXhN+pceYTRDJt95/OSv6XINPZDYMLCVpeBuOAUf2v4T8lz
+	Bo7q3WTFOBL9QoH/tH6VKER/aXC3a21OfqOeq39GI
+X-Gm-Gg: ATEYQzwQ0VTvOPrTAUDMixIN18eDfJGZDb+voM23Fofo0Ei4xRBXiMrGXgaue/PbkTe
+	S5WR75P60YYCQ3fnQssYH/Lr+Hwx2UaIFdD/S3r7TaIdrBo09NARktG7A5zAWpEAxUumBzFxNCz
+	sy1POcYwqLtGpKQlt8Y/IrB9q3Bfj8mebiHjNJ71weNCy3Z/0k0oL/nEunCnedtE1uF1j0RA3Ti
+	vL67ozgdaghSymuKJe6sgDbIX4xw8NDR1sonG/ZSzBq5PgRhxSUl2uQmB7Q7zuehTPJw4jf7vIH
+	V7TCJjPc
+X-Received: by 2002:a17:903:22c7:b0:2ae:c566:bd99 with SMTP id
+ d9443c01a7336-2b06e88a5f7mr4276635ad.22.1773851935141; Wed, 18 Mar 2026
+ 09:38:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260318-kcov-extrecord-v2-4-2522da6fcd3f@google.com>
-References: <20260318-kcov-extrecord-v2-0-2522da6fcd3f@google.com>
-In-Reply-To: <20260318-kcov-extrecord-v2-0-2522da6fcd3f@google.com>
-To: Dmitry Vyukov <dvyukov@google.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, 
- Alexander Potapenko <glider@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
- llvm@lists.linux.dev, Jann Horn <jannh@google.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773851224; l=5681;
- i=jannh@google.com; s=20240730; h=from:subject:message-id;
- bh=52RZwge2HiHzFPyKFZk5GPDAZYf3/NA1Sia8icDS9Tc=;
- b=tLZgiv8MkBfdhi/W3flmRalK3OU9W4IRmqGFBLRSj8kDcwSh7Nei0AFtOSJwz3H/1nqGUg3dn
- dDZNtgFXJmxB6aSRsbo3EwV8RxFRYsCND/pdn97snaexZB7ADSu8WBA
-X-Developer-Key: i=jannh@google.com; a=ed25519;
- pk=AljNtGOzXeF6khBXDJVVvwSEkVDGnnZZYqfWhP1V+C8=
+References: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com> <20260318-tools_build_fix_zero_init-v5-6-bbeffd8da199@arm.com>
+In-Reply-To: <20260318-tools_build_fix_zero_init-v5-6-bbeffd8da199@arm.com>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 18 Mar 2026 09:38:43 -0700
+X-Gm-Features: AaiRm50hpzLMMjzX6OI5eZpFyBk6BPkQvLc7onrrMNrR4VNp8m3oc-g1ki8itfQ
+Message-ID: <CAP-5=fV_ObgCokJ3bKAQBYn-DPrGadGVzqvrzbuy8aEcsfkp8w@mail.gmail.com>
+Subject: Re: [PATCH v5 06/26] tools build: Append -fzero-init-padding-bits=all
+ to extra cflags
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
+	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
+	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
+	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
+	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
+	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This is the second half of CONFIG_KCOV_EXT_RECORDS.
+On Wed, Mar 18, 2026 at 2:18=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+>
+> GCC-15 release claims [1]:
+>
+>   {0} initializer in C or C++ for unions no longer guarantees clearing
+>   of the whole union (except for static storage duration initialization),
+>   it just initializes the first union member to zero. If initialization
+>   of the whole union including padding bits is desirable, use {} (valid
+>   in C23 or C++) or use -fzero-init-padding-bits=3Dunions option to
+>   restore old GCC behavior.
+>
+> As a result, this new behaviour might cause unexpected data when we
+> initialize a union with using the '{ 0 }' initializer.
+>
+> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=3Dall"),
+> the kernel has enabled -fzero-init-padding-bits=3Dall to zero padding bit=
+s
+> in unions and structures.  This commit applies the same option for tools
+> building.
+>
+> The option is not supported by any version older than GCC 15, nor is it
+> supported by LLVM.  This patch adds the cc-option and host-cc-option
+> functions to dynamically detect compiler option and append it to the
+> EXTRA_CFLAGS and HOST_EXTRACFLAGS respectively.
+>
+> [1] https://gcc.gnu.org/gcc-15/changes.html
+>
+> Acked-by: Quentin Monnet <qmo@kernel.org>
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/scripts/Makefile.include | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
+ude
+> index b5ecf137febcae59f506e107a7f2e2ad72f4bef4..a2397ceae512c1bc54adb15cb=
+1a111ff34e28e43 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -137,6 +137,36 @@ else
+>  EXTRA_WARNINGS +=3D -Wshadow
+>  endif
+>
+> +# output directory for tests below
+> +TMPOUT =3D .tmp_$$$$
+> +
+> +# try-run
+> +# Usage: option =3D $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwi=
+se)
+> +# Exit code chooses option. "$$TMP" serves as a temporary file and is
+> +# automatically cleaned up.
+> +try-run =3D $(shell set -e;              \
+> +       TMP=3D$(TMPOUT)/tmp;              \
+> +       trap "rm -rf $(TMPOUT)" EXIT;   \
+> +       mkdir -p $(TMPOUT);             \
+> +       if ($(1)) >/dev/null 2>&1;      \
+> +       then echo "$(2)";               \
+> +       else echo "$(3)";               \
+> +       fi)
+> +
+> +# cc-option
+> +# Usage: CFLAGS +=3D $(call cc-option,-march=3Dwinchip-c6,-march=3Di586)
+> +cc-option =3D $(call try-run, \
+> +       $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+> +
+> +host-cc-option =3D $(call try-run, \
+> +       $(HOSTCC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+> +
+> +# Explicitly clear padding bits with the initializer '{ 0 }'
+> +FLAG_ZERO_INIT :=3D $(call cc-option,-fzero-init-padding-bits=3Dall)
+> +override EXTRA_CFLAGS +=3D $(FLAG_ZERO_INIT)
 
-Introduce a new KCOV mode KCOV_TRACE_PC_EXT which replaces the upper 8 bits
-of recorded instruction pointers with metadata. For now, userspace can use
-this metadata to distinguish three types of records:
+Sashiko [1] noted a possibly unintended consequence of this change for libb=
+pf:
 
- - function entry
- - function exit
- - normal basic block inside the function
+Does this override unintentionally drop the default compiler flags for libb=
+pf?
 
-Internally, this new mode is represented as a variant of
-KCOV_MODE_TRACE_PC, distinguished with the flag KCOV_EXT_FORMAT.
-Store this flag as part of the mode in task_struct::kcov_mode and in
-kcov::mode to avoid having to pass it around separately everywhere.
+Looking at tools/lib/bpf/Makefile, the default compiler flags like -g and -=
+O2
+are only applied if EXTRA_CFLAGS is undefined:
 
-Signed-off-by: Jann Horn <jannh@google.com>
----
- include/linux/kcov.h      |  7 +++++++
- include/uapi/linux/kcov.h | 12 ++++++++++++
- kernel/kcov.c             | 39 ++++++++++++++++++++++++++++++++++-----
- 3 files changed, 53 insertions(+), 5 deletions(-)
+tools/lib/bpf/Makefile:
+ifndef EXTRA_CFLAGS
+EXTRA_CFLAGS :=3D -g -O2
+endif
 
-diff --git a/include/linux/kcov.h b/include/linux/kcov.h
-index e5502d674029..455302b1cd1c 100644
---- a/include/linux/kcov.h
-+++ b/include/linux/kcov.h
-@@ -25,8 +25,15 @@ enum kcov_mode {
- 	KCOV_MODE_REMOTE = 4,
- };
- 
-+/*
-+ * Modifier for KCOV_MODE_TRACE_PC to record function entry/exit marked with
-+ * metadata bits.
-+ */
-+#define KCOV_EXT_FORMAT	(1 << 29)
- #define KCOV_IN_CTXSW	(1 << 30)
- 
-+#define KCOV_MODE_TRACE_PC_EXT (KCOV_MODE_TRACE_PC | KCOV_EXT_FORMAT)
-+
- void kcov_task_init(struct task_struct *t);
- void kcov_task_exit(struct task_struct *t);
- 
-diff --git a/include/uapi/linux/kcov.h b/include/uapi/linux/kcov.h
-index ed95dba9fa37..8d8a233bd61f 100644
---- a/include/uapi/linux/kcov.h
-+++ b/include/uapi/linux/kcov.h
-@@ -35,8 +35,20 @@ enum {
- 	KCOV_TRACE_PC = 0,
- 	/* Collecting comparison operands mode. */
- 	KCOV_TRACE_CMP = 1,
-+	/*
-+	 * Extended PC coverage collection mode.
-+	 * In this mode, the top byte of the PC is replaced with flag bits
-+	 * (KCOV_RECORDFLAG_*).
-+	 */
-+	KCOV_TRACE_PC_EXT = 2,
- };
- 
-+#define KCOV_RECORD_IP_MASK         0x00ffffffffffffff
-+#define KCOV_RECORDFLAG_TYPEMASK    0xf000000000000000
-+#define KCOV_RECORDFLAG_TYPE_NORMAL 0xf000000000000000
-+#define KCOV_RECORDFLAG_TYPE_ENTRY  0x0000000000000000
-+#define KCOV_RECORDFLAG_TYPE_EXIT   0x1000000000000000
-+
- /*
-  * The format for the types of collected comparisons.
-  *
-diff --git a/kernel/kcov.c b/kernel/kcov.c
-index 7edb39e18bfe..3cd4ee4cc310 100644
---- a/kernel/kcov.c
-+++ b/kernel/kcov.c
-@@ -55,7 +55,12 @@ struct kcov {
- 	refcount_t		refcount;
- 	/* The lock protects mode, size, area and t. */
- 	spinlock_t		lock;
--	enum kcov_mode		mode __guarded_by(&lock);
-+	/*
-+	 * Mode, consists of:
-+	 *  - enum kcov_mode
-+	 *  - flag KCOV_EXT_FORMAT
-+	 */
-+	unsigned int		mode __guarded_by(&lock);
- 	/* Size of arena (in long's). */
- 	unsigned int		size __guarded_by(&lock);
- 	/* Coverage buffer shared with user space. */
-@@ -232,8 +237,14 @@ void notrace __sanitizer_cov_trace_pc(void)
- {
- 	struct task_struct *cur = current;
- 
--	if (READ_ONCE(cur->kcov_mode) != KCOV_MODE_TRACE_PC)
-+	if ((READ_ONCE(cur->kcov_mode) & ~KCOV_EXT_FORMAT) != KCOV_MODE_TRACE_PC)
- 		return;
-+	/*
-+	 * No bitops are needed here for setting the record type because
-+	 * KCOV_RECORDFLAG_TYPE_NORMAL has the high bits set.
-+	 * This relies on userspace not caring about the rest of the top byte
-+	 * for KCOV_RECORDFLAG_TYPE_NORMAL records.
-+	 */
- 	kcov_add_pc_record(cur, canonicalize_ip(_RET_IP_));
- }
- EXPORT_SYMBOL(__sanitizer_cov_trace_pc);
-@@ -249,12 +260,28 @@ void notrace __sanitizer_cov_trace_pc_entry(void)
- 	 * This hook replaces __sanitizer_cov_trace_pc() for the function entry
- 	 * basic block; it should still emit a record even in classic kcov mode.
- 	 */
--	if (kcov_mode != KCOV_MODE_TRACE_PC)
-+	if ((kcov_mode & ~KCOV_EXT_FORMAT) != KCOV_MODE_TRACE_PC)
- 		return;
-+	if ((kcov_mode & KCOV_EXT_FORMAT) != 0)
-+		record = (record & KCOV_RECORD_IP_MASK) | KCOV_RECORDFLAG_TYPE_ENTRY;
- 	kcov_add_pc_record(cur, record);
- }
- void notrace __sanitizer_cov_trace_pc_exit(void)
- {
-+	struct task_struct *cur = current;
-+	unsigned long record;
-+
-+	/*
-+	 * This hook is not called at the beginning of a basic block; the basic
-+	 * block from which the hook was invoked is already covered by a
-+	 * preceding hook call.
-+	 * So unlike __sanitizer_cov_trace_pc_entry(), this PC should only be
-+	 * reported in extended mode, where function exit events are recorded.
-+	 */
-+	if (READ_ONCE(cur->kcov_mode) != KCOV_MODE_TRACE_PC_EXT)
-+		return;
-+	record = (canonicalize_ip(_RET_IP_) & KCOV_RECORD_IP_MASK) | KCOV_RECORDFLAG_TYPE_EXIT;
-+	kcov_add_pc_record(cur, record);
- }
- #endif
- 
-@@ -377,7 +404,7 @@ EXPORT_SYMBOL(__sanitizer_cov_trace_switch);
- #endif /* ifdef CONFIG_KCOV_ENABLE_COMPARISONS */
- 
- static void kcov_start(struct task_struct *t, struct kcov *kcov,
--			unsigned int size, void *area, enum kcov_mode mode,
-+			unsigned int size, void *area, unsigned int mode,
- 			int sequence)
- {
- 	kcov_debug("t = %px, size = %u, area = %px\n", t, size, area);
-@@ -577,6 +604,8 @@ static int kcov_get_mode(unsigned long arg)
- #else
- 		return -ENOTSUPP;
- #endif
-+	else if (arg == KCOV_TRACE_PC_EXT)
-+		return IS_ENABLED(CONFIG_KCOV_EXT_RECORDS) ? KCOV_MODE_TRACE_PC_EXT : -ENOTSUPP;
- 	else
- 		return -EINVAL;
- }
-@@ -1089,7 +1118,7 @@ void kcov_remote_stop(void)
- 	 * and kcov_remote_stop(), hence the sequence check.
- 	 */
- 	if (sequence == kcov->sequence && kcov->remote)
--		kcov_move_area(kcov->mode, kcov->area, kcov->size, area);
-+		kcov_move_area(kcov->mode & ~KCOV_EXT_FORMAT, kcov->area, kcov->size, area);
- 	spin_unlock(&kcov->lock);
- 
- 	if (in_task()) {
+Since tools/scripts/Makefile.include unconditionally appends to EXTRA_CFLAG=
+S
+here, the variable will be defined before tools/lib/bpf/Makefile evaluates =
+it.
 
--- 
-2.53.0.851.ga537e3e6e9-goog
+This causes libbpf to silently drop the default -g and -O2 flags.
 
+While later commits in this series fix this exact issue for
+tools/lib/thermal/Makefile, it appears tools/lib/bpf/Makefile was missed.
+
+Thanks,
+Ian
+
+[1] https://sashiko.dev/#/patchset/20260318-tools_build_fix_zero_init-v5-0-=
+bbeffd8da199%40arm.com
+
+> +HOST_FLAG_ZERO_INIT :=3D $(call host-cc-option,-fzero-init-padding-bits=
+=3Dall)
+> +override HOST_EXTRACFLAGS +=3D $(HOST_FLAG_ZERO_INIT)
+> +
+>  ifneq ($(findstring $(MAKEFLAGS), w),w)
+>  PRINT_DIR =3D --no-print-directory
+>  else
+>
+> --
+> 2.34.1
+>
