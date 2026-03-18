@@ -1,241 +1,203 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576A62D7DE4
-	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 16:38:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773851937; cv=pass; b=c5vVNLPfGxirHE7YIZKr4uW80nTvk8QRyDa5RESgYsnVamwXrxJtwmuPqhvpiLdgizeNnRCZyUUsj2pFv1FyznXGLcY+urqeR2HqyG7XgYKCoWaftcZBLm7JXolX4PZbAbpi1af3N5rLu9eMODCo5muwiTRzCKlXLMQUkY+nZoA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773851937; c=relaxed/simple;
-	bh=pQRo/AIDHbWYmQiKbzY1fu0YoqvFJr3p4qbPZJOQBWw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f5tZvJPaOWxrhc76S5wh16jCaP+XPUyPHv4rH23WYWykj/JYLYJtNzZS6gU4vdaad+OOb6mWLK2La3pS3HlQ2ZkXZMgdi70d7utex9BntxHGBN/YMQfoniAFstqqvgQpC2Q4gpBrW3Vk/5gqPkfvsvB2Q4UhbiLW2EqJlLs40yw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FrsxZ6M+; arc=pass smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C173CB2C9;
+	Wed, 18 Mar 2026 19:35:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773862542; cv=none; b=QG0mX8/unsWlNh8SLZaLKYZsYLfyKndl17Yo3EQ3ZCYofjjBL8lg4bD9/OLSYUS0THRPeqnDjKUciemO6H8lFPW79Eu/loUjXLslS7TYW2WfEyDsnClX7ncVMFwhSW3k3B6uXxAZn4BtYzgNKn67SEFaeFUuBPi8m6YALSpOfPI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773862542; c=relaxed/simple;
+	bh=afMn9spXkrUU+N2aaHeBIllMcoSBOQY+2Duh84Hc3Lg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hzc1na6+bZQ1A6I2kZ32ShkXRWNjQoML0QSvJbkTNFYkfYJeIUm3/U8jFg9EzIz4DLd1rCeej7N5G6fTvK6rTGbWx4iR88h0M3P1k3cTKferD0G2BkcaR625qVj3H57e5gjGaV9UkYvCjsCUstJA38O8WCBl796kM1jEeLJ9pqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rdh4GvnX; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FrsxZ6M+"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2b052562254so119495ad.0
-        for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 09:38:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773851936; cv=none;
-        d=google.com; s=arc-20240605;
-        b=KP/k1gyE/gdffSRcD8kId5+MbUhKB/LmRt7NAIERLE8J4hhDUQ9mJHivgD8rwJn1p1
-         FQ9GAzMrhmIT38PHr/rSziic3bBoGGLd5iGATSQPiE66JUnoy53ZjzCXG/UwwyPS0mui
-         Rqy6FpnsTGdawmciprvOzdjAujH1EbeZpu1YZBCNL9xv2Ku15qQVNC+YWakDMoXWFV74
-         ujVZRIVTKCD/OQXu1KXadoVZ8EREXIxEf5+xt8ImiKzilcIi1kROiDO/ZZojcHCm/lmB
-         hzWlUOd2J7yuylv7geR5neBiavSlG6iM5U84quK51WgK3+XwxQPC2CIXBUa7YLNfEGEG
-         4zjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hcjCxyCQZIThfXRlEgtWrMDq+8GZ2+bJDcg2rHRM0J0=;
-        fh=WsdsBddoS0Qj+/JqkWqnB9lKi15HSnFheviffFjoqWs=;
-        b=CTXs/MHdl2RKVSRt32JqI0DX6qsrzsDFGBLjy8gl7xkLhntCfmmS1k++dMdMFBG1bL
-         PCeRPpb3mFH2IiojcT9aLzLjcqh3kbWIcHBoKhU5xK9P4te4/MD4QAcdkSFLt4usuEFq
-         JHkpqrHQexDISeEehlxbIVu0WpG/QipTB9h3EPMVEswPbXXwTsFvo1ubQgrke0tv6Qwq
-         ClMxZu2m7o7MEA+IZEKVmycG3cBc1/ndoY7gWxRwH0tdZO0EWf3BGvt+oxhj1fAYqkF0
-         Xya/MjLk5ITtNmB0Yufa9ynPKL4SDlwriiWstasJurrQOxlbK7auR9nVT2JxWp4SrUOy
-         XrtQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1773851936; x=1774456736; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hcjCxyCQZIThfXRlEgtWrMDq+8GZ2+bJDcg2rHRM0J0=;
-        b=FrsxZ6M+rpb/jyj0FPQHk7xz+yaoE69Xf1TMw2usAJ7oppfxH6+MDqXrZgg5W5z9qp
-         i2Gw9KTunvhr6Lw3gC/SHht+O/DrS22nhNC6l4yAVOkThSbpe/+dUqEXszp2M6zyPcrD
-         z9yLjDLxA/Sz6QTXgD5ACjgBw/yd1/j/xkJQ7pR350tCwbWsu4OOuE8wksIRpWx73nw4
-         GqJLZY410TArVMyJ0aPbxdZPByPBkkujS2GL/ziO+3mxKpOisZ65jhBEDPl2jsn5CREB
-         rfcvCvEBmKlQRAf7/8/jO/ZLYHLxEz61J2n9yxKy2asVa/gbUdePCuyd2qsv7hzh+asE
-         ghWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773851936; x=1774456736;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hcjCxyCQZIThfXRlEgtWrMDq+8GZ2+bJDcg2rHRM0J0=;
-        b=KDRlI0razK+dmQhnLKHwdYnQmvzY5qgTxyvWwJmbvugRrR9elCTowec63VVaNkCuhk
-         h09U+rPGAKHBsyjn/Nb56bLKNHxQvInQ2IBh8S3Ivkfwz0BdIaNyvEm8zq7ffP7SCvHF
-         9lunwfRAgTozJsBRIJ5OqzhUFkI1oRqSHkzPB6e92QOSNp8VwU6f6xd60JM/MaVzmlWw
-         ZGd6T52zLoG0zN4RAfB80PihqewZyO6YC555PYvOjYwEPiQx9TzKK+gO4vr936tLvAXD
-         B8es06yGr+5iX3iC1KFVuWBeY3EtutJNHPZ8+15jMjhxuXASJiaD8pdr2ICD/svI7ltK
-         zs7A==
-X-Forwarded-Encrypted: i=1; AJvYcCXtemXvSByFSqgOQ1/lzobzgsSH0dN19VyWIEw4Md+29cSlD6VntJPgWsiL6jjTAoE/WrC0@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzoyb8s9WOGKObw62vWtGM2pCfp1ADscVz8klW+miJVICwX0bFY
-	I9OScyCFJ/5YjoJ58hc9GRBJi9XaqXhN+pceYTRDJt95/OSv6XINPZDYMLCVpeBuOAUf2v4T8lz
-	Bo7q3WTFOBL9QoH/tH6VKER/aXC3a21OfqOeq39GI
-X-Gm-Gg: ATEYQzwQ0VTvOPrTAUDMixIN18eDfJGZDb+voM23Fofo0Ei4xRBXiMrGXgaue/PbkTe
-	S5WR75P60YYCQ3fnQssYH/Lr+Hwx2UaIFdD/S3r7TaIdrBo09NARktG7A5zAWpEAxUumBzFxNCz
-	sy1POcYwqLtGpKQlt8Y/IrB9q3Bfj8mebiHjNJ71weNCy3Z/0k0oL/nEunCnedtE1uF1j0RA3Ti
-	vL67ozgdaghSymuKJe6sgDbIX4xw8NDR1sonG/ZSzBq5PgRhxSUl2uQmB7Q7zuehTPJw4jf7vIH
-	V7TCJjPc
-X-Received: by 2002:a17:903:22c7:b0:2ae:c566:bd99 with SMTP id
- d9443c01a7336-2b06e88a5f7mr4276635ad.22.1773851935141; Wed, 18 Mar 2026
- 09:38:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rdh4GvnX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773862541; x=1805398541;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=afMn9spXkrUU+N2aaHeBIllMcoSBOQY+2Duh84Hc3Lg=;
+  b=Rdh4GvnX9Ff4NUHJSCYwr1UsRe+N3N6eBHbpX0ufHZvMPUKUX6PD/KtD
+   vynCArtwk0lu3shIE2qend6v74C+LY/a6qXhdPbHWUlN0ew+SPyJ3B9Mu
+   wu89CqmeU47v+6Jhru9wwXs/K0izJGbIuWlz3T/EGc/6AwzgLppz4x8ol
+   /m5px4SVt/Csn3M2aB+uM75cJMHqQhb9t+rM/3svN7DGLA/HM5AZk/o/J
+   t3DWNc733cKfgbURqRH51s8IOLx56EF2KkHtzuyCHjQGe5jHpx5axl7YD
+   n8uL7WP310Prjt/jw6LCd/7GWXS3sCZJ0e05QMGK5Vc+sxPKhvbefet7c
+   w==;
+X-CSE-ConnectionGUID: DL+0+GNIRfeaqdITxRxCyg==
+X-CSE-MsgGUID: S3YgkQtnTeCQBqguo+nzzQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11733"; a="77536521"
+X-IronPort-AV: E=Sophos;i="6.23,127,1770624000"; 
+   d="scan'208";a="77536521"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2026 12:35:40 -0700
+X-CSE-ConnectionGUID: 1xULVR8AQM6h5v2lbnkBFg==
+X-CSE-MsgGUID: 874DppwrThu+VoC6XgAptw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,127,1770624000"; 
+   d="scan'208";a="222698701"
+Received: from lkp-server01.sh.intel.com (HELO 63737dd503cb) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 18 Mar 2026 12:35:35 -0700
+Received: from kbuild by 63737dd503cb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w2wg0-000000003J7-24Hx;
+	Wed, 18 Mar 2026 19:35:32 +0000
+Date: Thu, 19 Mar 2026 03:35:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mallesh Koujalagi <mallesh.koujalagi@intel.com>,
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	rodrigo.vivi@intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	andrealmeid@igalia.com, christian.koenig@amd.com, airlied@gmail.com,
+	simona.vetter@ffwll.ch, mripard@kernel.org,
+	anshuman.gupta@intel.com, badal.nilawar@intel.com,
+	riana.tauro@intel.com, karthik.poosa@intel.com,
+	sk.anirban@intel.com, raag.jadav@intel.com,
+	Mallesh Koujalagi <mallesh.koujalagi@intel.com>
+Subject: Re: [PATCH v2 1/5] Introduce Xe Uncorrectable Error Handling
+Message-ID: <202603190311.jqPlioXj-lkp@intel.com>
+References: <20260318064016.374656-8-mallesh.koujalagi@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com> <20260318-tools_build_fix_zero_init-v5-6-bbeffd8da199@arm.com>
-In-Reply-To: <20260318-tools_build_fix_zero_init-v5-6-bbeffd8da199@arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 18 Mar 2026 09:38:43 -0700
-X-Gm-Features: AaiRm50hpzLMMjzX6OI5eZpFyBk6BPkQvLc7onrrMNrR4VNp8m3oc-g1ki8itfQ
-Message-ID: <CAP-5=fV_ObgCokJ3bKAQBYn-DPrGadGVzqvrzbuy8aEcsfkp8w@mail.gmail.com>
-Subject: Re: [PATCH v5 06/26] tools build: Append -fzero-init-padding-bits=all
- to extra cflags
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
-	Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia <xiaqinxin@huawei.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson <warthog618@gmail.com>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
-	Len Brown <lenb@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318064016.374656-8-mallesh.koujalagi@intel.com>
 
-On Wed, Mar 18, 2026 at 2:18=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
->
-> GCC-15 release claims [1]:
->
->   {0} initializer in C or C++ for unions no longer guarantees clearing
->   of the whole union (except for static storage duration initialization),
->   it just initializes the first union member to zero. If initialization
->   of the whole union including padding bits is desirable, use {} (valid
->   in C23 or C++) or use -fzero-init-padding-bits=3Dunions option to
->   restore old GCC behavior.
->
-> As a result, this new behaviour might cause unexpected data when we
-> initialize a union with using the '{ 0 }' initializer.
->
-> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=3Dall"),
-> the kernel has enabled -fzero-init-padding-bits=3Dall to zero padding bit=
-s
-> in unions and structures.  This commit applies the same option for tools
-> building.
->
-> The option is not supported by any version older than GCC 15, nor is it
-> supported by LLVM.  This patch adds the cc-option and host-cc-option
-> functions to dynamically detect compiler option and append it to the
-> EXTRA_CFLAGS and HOST_EXTRACFLAGS respectively.
->
-> [1] https://gcc.gnu.org/gcc-15/changes.html
->
-> Acked-by: Quentin Monnet <qmo@kernel.org>
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/scripts/Makefile.include | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
-ude
-> index b5ecf137febcae59f506e107a7f2e2ad72f4bef4..a2397ceae512c1bc54adb15cb=
-1a111ff34e28e43 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -137,6 +137,36 @@ else
->  EXTRA_WARNINGS +=3D -Wshadow
->  endif
->
-> +# output directory for tests below
-> +TMPOUT =3D .tmp_$$$$
-> +
-> +# try-run
-> +# Usage: option =3D $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwi=
-se)
-> +# Exit code chooses option. "$$TMP" serves as a temporary file and is
-> +# automatically cleaned up.
-> +try-run =3D $(shell set -e;              \
-> +       TMP=3D$(TMPOUT)/tmp;              \
-> +       trap "rm -rf $(TMPOUT)" EXIT;   \
-> +       mkdir -p $(TMPOUT);             \
-> +       if ($(1)) >/dev/null 2>&1;      \
-> +       then echo "$(2)";               \
-> +       else echo "$(3)";               \
-> +       fi)
-> +
-> +# cc-option
-> +# Usage: CFLAGS +=3D $(call cc-option,-march=3Dwinchip-c6,-march=3Di586)
-> +cc-option =3D $(call try-run, \
-> +       $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
-> +
-> +host-cc-option =3D $(call try-run, \
-> +       $(HOSTCC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
-> +
-> +# Explicitly clear padding bits with the initializer '{ 0 }'
-> +FLAG_ZERO_INIT :=3D $(call cc-option,-fzero-init-padding-bits=3Dall)
-> +override EXTRA_CFLAGS +=3D $(FLAG_ZERO_INIT)
+Hi Mallesh,
 
-Sashiko [1] noted a possibly unintended consequence of this change for libb=
-pf:
+kernel test robot noticed the following build warnings:
 
-Does this override unintentionally drop the default compiler flags for libb=
-pf?
+[auto build test WARNING on drm-xe/drm-xe-next]
+[also build test WARNING on drm-misc/drm-misc-next drm/drm-next next-20260318]
+[cannot apply to linus/master v7.0-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Looking at tools/lib/bpf/Makefile, the default compiler flags like -g and -=
-O2
-are only applied if EXTRA_CFLAGS is undefined:
+url:    https://github.com/intel-lab-lkp/linux/commits/Mallesh-Koujalagi/Introduce-Xe-Uncorrectable-Error-Handling/20260318-153303
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20260318064016.374656-8-mallesh.koujalagi%40intel.com
+patch subject: [PATCH v2 1/5] Introduce Xe Uncorrectable Error Handling
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260319/202603190311.jqPlioXj-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260319/202603190311.jqPlioXj-lkp@intel.com/reproduce)
 
-tools/lib/bpf/Makefile:
-ifndef EXTRA_CFLAGS
-EXTRA_CFLAGS :=3D -g -O2
-endif
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603190311.jqPlioXj-lkp@intel.com/
 
-Since tools/scripts/Makefile.include unconditionally appends to EXTRA_CFLAG=
-S
-here, the variable will be defined before tools/lib/bpf/Makefile evaluates =
-it.
+All warnings (new ones prefixed by >>):
 
-This causes libbpf to silently drop the default -g and -O2 flags.
+>> drivers/gpu/drm/xe/xe_ras.c:241:4: warning: variable 'action' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+     241 |                         default:
+         |                         ^~~~~~~
+   drivers/gpu/drm/xe/xe_ras.c:250:8: note: uninitialized use occurs here
+     250 |                         if (action > final_action)
+         |                             ^~~~~~
+   drivers/gpu/drm/xe/xe_ras.c:227:4: note: variable 'action' is declared here
+     227 |                         enum xe_ras_recovery_action action;
+         |                         ^
+   1 warning generated.
 
-While later commits in this series fix this exact issue for
-tools/lib/thermal/Makefile, it appears tools/lib/bpf/Makefile was missed.
 
-Thanks,
-Ian
+vim +/action +241 drivers/gpu/drm/xe/xe_ras.c
 
-[1] https://sashiko.dev/#/patchset/20260318-tools_build_fix_zero_init-v5-0-=
-bbeffd8da199%40arm.com
+   177	
+   178	/**
+   179	 * xe_ras_process_errors - Process and contain hardware errors
+   180	 * @xe: xe device instance
+   181	 *
+   182	 * Get error details from system controller and return recovery
+   183	 * method. Called only from PCI error handling.
+   184	 *
+   185	 * Returns: recovery action to be taken
+   186	 */
+   187	enum xe_ras_recovery_action xe_ras_process_errors(struct xe_device *xe)
+   188	{
+   189		struct xe_sysctrl_mailbox_command command = {0};
+   190		struct xe_ras_get_error_response response;
+   191		enum xe_ras_recovery_action final_action;
+   192		size_t rlen;
+   193		int ret;
+   194	
+   195		/* Default action */
+   196		final_action = XE_RAS_RECOVERY_ACTION_RECOVERED;
+   197	
+   198		if (!xe->info.has_sysctrl)
+   199			return XE_RAS_RECOVERY_ACTION_RESET;
+   200	
+   201		xe_ras_prepare_sysctrl_command(&command, XE_SYSCTRL_CMD_GET_SOC_ERROR, NULL, 0,
+   202					       &response, sizeof(response));
+   203	
+   204		do {
+   205			memset(&response, 0, sizeof(response));
+   206			rlen = 0;
+   207	
+   208			ret = xe_sysctrl_send_command(xe, &command, &rlen);
+   209			if (ret || !rlen) {
+   210				xe_err(xe, "[RAS]: Sysctrl error ret %d\n", ret);
+   211				goto err;
+   212			}
+   213	
+   214			if (rlen != sizeof(response)) {
+   215				xe_err(xe, "[RAS]: Sysctrl response does not match len!!\n");
+   216				goto err;
+   217			}
+   218	
+   219			if (response.num_errors > XE_RAS_NUM_ERROR_ARR) {
+   220				xe_err(xe, "[RAS]: Number of errors out of bound (%d)\n",
+   221				       XE_RAS_NUM_ERROR_ARR);
+   222				goto err;
+   223			}
+   224	
+   225			for (int i = 0; i < response.num_errors; i++) {
+   226				struct xe_ras_error_array arr = response.error_arr[i];
+   227				enum xe_ras_recovery_action action;
+   228				struct xe_ras_error_class error_class;
+   229				u8 component;
+   230	
+   231				error_class = arr.error_class;
+   232				component = error_class.common.component;
+   233	
+   234				switch (component) {
+   235				case XE_RAS_COMPONENT_CORE_COMPUTE:
+   236					action = handle_compute_errors(xe, &arr);
+   237					break;
+   238				case XE_RAS_COMPONENT_SOC_INTERNAL:
+   239					action = handle_soc_internal_errors(xe, &arr);
+   240					break;
+ > 241				default:
+   242					xe_err(xe, "[RAS]: Unknown error component %u\n", component);
+   243					break;
+   244				}
+   245	
+   246				/*
+   247				 * Retain the highest severity action. Process and log all errors
+   248				 * and then take appropriate recovery action
+   249				 */
+   250				if (action > final_action)
+   251					final_action = action;
+   252			}
+   253	
+   254		} while (response.additional_errors);
+   255	
+   256		return final_action;
+   257	
+   258	err:
+   259		return XE_RAS_RECOVERY_ACTION_RESET;
+   260	}
+   261	
 
-> +HOST_FLAG_ZERO_INIT :=3D $(call host-cc-option,-fzero-init-padding-bits=
-=3Dall)
-> +override HOST_EXTRACFLAGS +=3D $(HOST_FLAG_ZERO_INIT)
-> +
->  ifneq ($(findstring $(MAKEFLAGS), w),w)
->  PRINT_DIR =3D --no-print-directory
->  else
->
-> --
-> 2.34.1
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
