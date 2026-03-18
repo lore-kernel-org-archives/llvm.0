@@ -1,26 +1,26 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C215E3A2542
-	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 09:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9CB63A4539
+	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 09:18:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773825516; cv=none; b=knLKkB/Jf7o8c35DbSHl/BNMPjpwqdi+pLOhteZPkQTFIftH1iyGcGlFNgbVQ7/8pVFzbZ6LRMIFunjqliZCFKjfriunuvbyXDhHZd4FSr6C38fWQu/FXNGDGndj2LHVC469UkF3tzKs/a4aNfA/IQok03AhRvlpXPDFoDD9AeE=
+	t=1773825525; cv=none; b=jIssFRxxEumK8FIsI3ijtf87p9YVBRKfjoTlnlcvMUilzTlz9S2VfEI03vC28S0neuOBQaAj57GT+DQIlA2YG7KiXTjKrSVcXufhaq5SQY8YxkNHDhiGTZGEmx2I9HKqHy/fw9Xrm/S8HdRA9wRiFfbf/FRLVUNGh9MgzsDMgTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773825516; c=relaxed/simple;
-	bh=G2cI6gno4ym5dTpFGJCwLPZT6MUzcUe+/hvBAAojmWk=;
+	s=arc-20240116; t=1773825525; c=relaxed/simple;
+	bh=k31Kk/i0K4ZvTRnARLSwM6pAc2QmOSVp+PsTzUqEpMA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=W+mOwytEMk7buJv4E/8wE9k+pbmmQkAnOOHzxP1Bi8H9J8BwhsUswgs9c9JK6iQxFQ1dnE9HvwKVVFn9T7HZGIVNKe69klv5nk8GgJatPJawvWhUHWuiobdfofLIyeAtImQlDZcwwEqxYC3kqtJD3WBD5qhvqOxR0t9L173/tIw=
+	 In-Reply-To:To:Cc; b=AiWgUEffGcGJrkOCp26qWf9/m+jdI+y+wOKwnwjtlJcQy4LX7RP7irTUu2axcC4YIH0Gvxtc1F9OVmNmoqa1q/bfPOtQdkgPdVxhCGU8xoitEvRluBO7ZtveSXq58AVQlfM6U/pv7wjIikDaX0SIvUV1YoV3z/bUT7a3mnrTJfc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 02F121F37;
-	Wed, 18 Mar 2026 02:18:28 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4162C1F91;
+	Wed, 18 Mar 2026 02:18:37 -0700 (PDT)
 Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 230663F73B;
-	Wed, 18 Mar 2026 02:18:25 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5AFCA3F73B;
+	Wed, 18 Mar 2026 02:18:34 -0700 (PDT)
 From: Leo Yan <leo.yan@arm.com>
-Date: Wed, 18 Mar 2026 09:16:53 +0000
-Subject: [PATCH v5 09/26] tools build: Append extra host cflags
+Date: Wed, 18 Mar 2026 09:16:54 +0000
+Subject: [PATCH v5 10/26] tools: bootconfig: Append extra cflags
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260318-tools_build_fix_zero_init-v5-9-bbeffd8da199@arm.com>
+Message-Id: <20260318-tools_build_fix_zero_init-v5-10-bbeffd8da199@arm.com>
 References: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
 In-Reply-To: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
@@ -75,45 +75,35 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
  Leo Yan <leo.yan@arm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773825421; l=1108;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773825421; l=793;
  i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=G2cI6gno4ym5dTpFGJCwLPZT6MUzcUe+/hvBAAojmWk=;
- b=seG0PjkzdDNVsGala65O+1S70R48XtzDJwDLtNyhQAVylJ2TCLKK6WHBZrivpWJYqa0fpGC84
- da2K3i00MvTDOo4GoQbfeyyjggGtDMEDmp0b53lEAxAgxD5zX2M9pIl
+ bh=k31Kk/i0K4ZvTRnARLSwM6pAc2QmOSVp+PsTzUqEpMA=;
+ b=ULtqChTWbLUKgf2q2ef+jZSS7mLhK0i3sjmxhA98o5VhnHrMvHgPZ+Xhxu57LL+rSyKbafUFZ
+ fHt8pYSJ+i+BbNZ/gf8e6Hg6mtOGk8sfN2hbvkrq83uh0TiThUwTLh9
 X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
  pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-Append HOST_EXTRACFLAGS to HOSTCFLAGS so that additional flags can be
-applied to the host compiler.
+Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+the compiler.
 
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Leo Yan <leo.yan@arm.com>
 ---
- tools/build/Makefile | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/bootconfig/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/build/Makefile b/tools/build/Makefile
-index 3a5a3808ab2a1dedd40f35ea322913e8a0788130..44e50a7c182484e18ff80f4205c49a77e8c8abd9 100644
---- a/tools/build/Makefile
-+++ b/tools/build/Makefile
-@@ -40,14 +40,16 @@ endif
- FIXDEP		:= $(OUTPUT)fixdep
- FIXDEP_IN	:= $(OUTPUT)fixdep-in.o
+diff --git a/tools/bootconfig/Makefile b/tools/bootconfig/Makefile
+index 90eb47c9d8de67b0ccc74a8de0af3a7e0b97feeb..4490df707585acf356153b78cb87760f622a6190 100644
+--- a/tools/bootconfig/Makefile
++++ b/tools/bootconfig/Makefile
+@@ -11,6 +11,7 @@ endif
  
-+HOSTCFLAGS	:= $(KBUILD_HOSTCFLAGS) $(HOST_EXTRACFLAGS)
-+
- # To track fixdep's dependencies properly, fixdep needs to run on itself.
- # Build it twice the first time.
- $(FIXDEP_IN): FORCE
- 	$(Q)if [ ! -f $(FIXDEP) ]; then						\
--		$(MAKE) $(build)=fixdep HOSTCFLAGS="$(KBUILD_HOSTCFLAGS)";	\
-+		$(MAKE) $(build)=fixdep HOSTCFLAGS="$(HOSTCFLAGS)";		\
- 		rm -f $(FIXDEP).o;						\
- 	fi
--	$(Q)$(MAKE) $(build)=fixdep HOSTCFLAGS="$(KBUILD_HOSTCFLAGS)"
-+	$(Q)$(MAKE) $(build)=fixdep HOSTCFLAGS="$(HOSTCFLAGS)"
+ LIBSRC = $(srctree)/lib/bootconfig.c $(srctree)/include/linux/bootconfig.h
+ override CFLAGS += -Wall -g -I$(CURDIR)/include
++override CFLAGS += $(EXTRA_CFLAGS)
  
- 
- $(FIXDEP): $(FIXDEP_IN)
+ ALL_TARGETS := bootconfig
+ ALL_PROGRAMS := $(patsubst %,$(OUTPUT)%,$(ALL_TARGETS))
 
 -- 
 2.34.1
