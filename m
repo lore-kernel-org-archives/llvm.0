@@ -1,26 +1,26 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91FBF3A9630
-	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 09:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA5603AE6FD
+	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 09:21:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773825665; cv=none; b=helnvbw6q9AgjXH0e0B4CHLfjZ6UvJHLrDeU+ZntKse4IFn7Hl2AfZRt7sIBtPu6oPd4XpKCaMWTsWBjPRJ3Vnb/BUmwKcklJVBe8mMfRoWOe/4tmp41ac4OxQMw0r1q/tBfiKn9Ws2wC1LUSQlljNsYla8LDQNrpO9Xr9HsQ6k=
+	t=1773825672; cv=none; b=CreO9EB0ymae6jTR9U+Ujxx+xeqEK6YyN0CTjqJ6KG9M8lfxM0FCQK0OSHhIrh2aHBTsDf1H9WeJAeSx1tAbxI/MyrF8PUH3NHEAhhCLVGh59r2Huh/16NoF0/RGiy2ZKkQ9Q9ZdjnUHV+TlqKogC4ZbaJRt36UlP2yKBM9UxRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773825665; c=relaxed/simple;
-	bh=x2h+4FB5LaYokMgKHEvZZeyJKpOwoKiSiosB1fOmqrU=;
+	s=arc-20240116; t=1773825672; c=relaxed/simple;
+	bh=u6vnl/Tc6siw5/z3VuI7EgUIJilNCagL/0epWPyB+xk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UWUC+P8XbjYXz9eMzp4HS9qvB7GdIRb+1StXjJCKUsLNUXetMg9IVBNGbPGMPi+BsLoVuGz5bNx0B/z6lSKWgzo4Gx2xrdKDLMdDNydB/25bLuGWZFnhIwQ4ycqG4fXj3N2W9CacSFqSIr+dvZjfA4vHc/pZG5qJlw/aTo59Mig=
+	 In-Reply-To:To:Cc; b=ppAX/13pERLN3jCXKqWuFD53hB6JrURbXtuGRG5zkg9Xc9TDVZC7Bl+/FTcFAmbYTRFaRmcH8IQVTwJOy6ECFJcH/FEqwxjesSoa/P44iAsG4q2P1e5hBjEGefdx+i3LPDu0g6bDLzh2Sz+WH8qwIXiyuJXLypPYDJT1y4abEeU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E74DB2008;
-	Wed, 18 Mar 2026 02:20:55 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A38522D9;
+	Wed, 18 Mar 2026 02:21:05 -0700 (PDT)
 Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0EFCD3F73B;
-	Wed, 18 Mar 2026 02:20:52 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4BD6A3F73B;
+	Wed, 18 Mar 2026 02:21:02 -0700 (PDT)
 From: Leo Yan <leo.yan@arm.com>
-Date: Wed, 18 Mar 2026 09:17:09 +0000
-Subject: [PATCH v5 25/26] selftests/nolibc: Append extra cflags
+Date: Wed, 18 Mar 2026 09:17:10 +0000
+Subject: [PATCH v5 26/26] selftests/sched_ext: Append extra cflags
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260318-tools_build_fix_zero_init-v5-25-bbeffd8da199@arm.com>
+Message-Id: <20260318-tools_build_fix_zero_init-v5-26-bbeffd8da199@arm.com>
 References: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
 In-Reply-To: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
@@ -75,51 +75,35 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
  Leo Yan <leo.yan@arm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1773825421; l=1451;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773825421; l=901;
  i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=x2h+4FB5LaYokMgKHEvZZeyJKpOwoKiSiosB1fOmqrU=;
- b=86diJBsidIsbxd+QyonKL+CQAz+Q1KZkYa+Qrua4pDJEbEQn+TlPK2abrAoVcTfIgF96GWV5d
- WBzDj0G+3rtD5RmgBkp0PHl6Vyg1jjiWuHQ0RTmF2UWTbXtUW0FHOYy
+ bh=u6vnl/Tc6siw5/z3VuI7EgUIJilNCagL/0epWPyB+xk=;
+ b=D7NYsutW/NXxShdTUteIjA8Z+l/O6POwGn+5Xgj9yepAFnQR08U8SSTLbwwdrN+2BvTC5olpU
+ +7ojN+qQqBmD2OFTToyy/n1ILKXFPjLg/sanqOrmM1zqAyHuSUo+/db
 X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
  pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-Include tools/scripts/Makefile.include, which may provide additional
-flags in EXTRA_CFLAGS, and append to CFLAGS.
+Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+the compiler.
 
-Since Makefile.include already defines cc-option, remove the redundant
-definition and include.
-
+Acked-by: Andrea Righi <arighi@nvidia.com>
 Signed-off-by: Leo Yan <leo.yan@arm.com>
 ---
- tools/testing/selftests/nolibc/Makefile | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ tools/testing/selftests/sched_ext/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 0370489d938b540721a4fb814ebb68c463760e73..7b65e6f9840b035c1d8580574fc3145318b278b4 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -3,18 +3,17 @@
- TEST_GEN_PROGS := nolibc-test libc-test
+diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
+index 006300ac6dff88a48104977398d8517753e7e385..2c8fbc9f8666ec4d6f75dbdd7602bd4f2b502aed 100644
+--- a/tools/testing/selftests/sched_ext/Makefile
++++ b/tools/testing/selftests/sched_ext/Makefile
+@@ -56,6 +56,7 @@ endif
+ CFLAGS += -g -O2 -rdynamic -pthread -Wall -Werror $(GENFLAGS)			\
+ 	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)				\
+ 	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(CURDIR)/include -I$(SCXTOOLSINCDIR)
++CFLAGS += $(EXTRA_CFLAGS)
  
- include ../lib.mk
--include $(top_srcdir)/scripts/Makefile.compiler
--
--cc-option = $(call __cc-option, $(CC),,$(1),$(2))
-+include $(top_srcdir)/tools/scripts/Makefile.include
- 
- include Makefile.include
- 
- $(OUTPUT)/nolibc-test: CFLAGS = -nostdlib -nostdinc -static \
- 	 -isystem $(top_srcdir)/tools/include/nolibc -isystem $(top_srcdir)/usr/include \
--	 $(CFLAGS_NOLIBC_TEST)
-+	 $(CFLAGS_NOLIBC_TEST) $(EXTRA_CFLAGS)
- $(OUTPUT)/nolibc-test: LDLIBS = $(if $(LLVM),,-lgcc)
- $(OUTPUT)/nolibc-test: nolibc-test.c nolibc-test-linkage.c | headers
- 
-+$(OUTPUT)/libc-test: CFLAGS += $(EXTRA_CFLAGS)
- $(OUTPUT)/libc-test: nolibc-test.c nolibc-test-linkage.c
- 	$(call msg,CC,,$@)
- 	$(Q)$(LINK.c) $^ -o $@
+ # Silence some warnings when compiled with clang
+ ifneq ($(LLVM),)
 
 -- 
 2.34.1
