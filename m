@@ -1,117 +1,211 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5123436B056
-	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 08:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ED7939B48D
+	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 09:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773822731; cv=none; b=siCjfG8qJgZITc9H6giZhEHXKGG7yu0maBKO1gVVR+d9E67XhVXhPbONo/c4X172M+Iq/vRCXWEblYXbbiGe4hBOjp67W5lBwqfiFYr8OKcD2chzE6WdLnTR63OSbjqBcnxhepLURVv8YN5ZZVp8oTl4zjH85N3rn+1gWgkHrxM=
+	t=1773825441; cv=none; b=mwi30YHUhnqB6g4hQ7M2bG6RfLDoYfqHlsPPLbuaZWb7Ng0tnaTLYXJrGhKyUnskGMITbVcolZ7S3khjiIzVrCgNZ4IFlbqjSxcUeBCzItRGGSgjJOW64Ia7rQQQde3nieflzmfMXTesJ13uQVTy4++VRd8vANdJb8O0m6Q7Pu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773822731; c=relaxed/simple;
-	bh=+C+ybIp3BnmDduKId/Uv0Gu1Q6q3686Hq6ub2b7aazY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=cCddmUjMOgocViA2JQCyn3IoYV8TnnWOoT96lJhJvZh44DOssBRind4wEpITK/44wHNFKQ6R5YhtaO47vmb93zFPMw/mJeSMfHloyhhVrc3b/deB0DfOCanb11M65uKBNObyXZ9fw+yWjGTMgqhBRC+tx0im9uynjwdVs68xQ0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ScSOVKsH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ScSOVKsH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773822729;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=UOzOZqak+ic7y3yZIGc+cTYT4LY9OLNaUZ6tXrjEU6w=;
-	b=ScSOVKsH9F+/3Z/Ol1yNKnD1I3cCt/7PPdj/U0CctfAfG69jG6R7/1YK+XkHGSYpt6rGTb
-	PVP20gQdK9hb3uh2tbFKV5H2z0YLP88tCkUXDwDk6kHMVqMcMrKc09K9LbeHG7FskPVaX7
-	4OojdiWQq0nCdMDmOK6mWwr5XWhFhGg=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-522-cA8pfCBzM_2SXXkqswCS7w-1; Wed,
- 18 Mar 2026 04:32:07 -0400
-X-MC-Unique: cA8pfCBzM_2SXXkqswCS7w-1
-X-Mimecast-MFC-AGG-ID: cA8pfCBzM_2SXXkqswCS7w_1773822727
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0D95C19560B4
-	for <llvm@lists.linux.dev>; Wed, 18 Mar 2026 08:32:07 +0000 (UTC)
-Received: from [172.20.92.244] (unknown [10.30.44.31])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8AD8630001A1;
-	Wed, 18 Mar 2026 08:32:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc4,
- upstream-mainline, f0caa1d4)
-Date: Wed, 18 Mar 2026 08:32:06 -0000
-To: llvm@lists.linux.dev
+	s=arc-20240116; t=1773825441; c=relaxed/simple;
+	bh=ZGKuPIwbdXR8s5su0qDzEXK8S9PgMd8yIP/evG69qcc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bBmltsFygJ2Kedz8kD1427THmmIWcOvdVilZnEZJ6EB3kUe1bEweFpnPhxr4kSUqniTRudEETuE9fLGDpr1DdQdLD8R0rlDHdsOgNi1rtjUZXGD1nX5n5kiEfVoSzyLhQSrgR1Hf/45pPhbBYdqvif1XWt9uDv4aoaZGgRt9GrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C94121F37;
+	Wed, 18 Mar 2026 02:17:04 -0700 (PDT)
+Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A38223F73B;
+	Wed, 18 Mar 2026 02:17:01 -0700 (PDT)
+From: Leo Yan <leo.yan@arm.com>
+Subject: [PATCH v5 00/26] tools build: Append -fzero-init-padding-bits=all
+ option
+Date: Wed, 18 Mar 2026 09:16:44 +0000
+Message-Id: <20260318-tools_build_fix_zero_init-v5-0-bbeffd8da199@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <27733.126031804320703090@us-mta-522.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: X748vUXLabCpm7HDG1NKOcFU9oiWHg616kX_ZtFgaSo_1773822727
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAHxtumkC/43NSw6CMBCA4auQrq3pg0dx5T2MIUxbZRKkpkWiE
+ u5uYYNuiMt/MvPNSIL1aAM5JCPxdsCArouR7RKim7q7WoomNhFM5EyIlPbOtaGCB7amuuCzelv
+ vKuywp0ZnIudgFCgg8f7ubVxY7NM5doOhd/61vBrEPP1HHQTlFHitteJFzbg91v621+5GZnOQq
+ yOZ2nIkZTRPi0IxxYWE4tdJvxzOt5w0OqWVGRgoSw1ydaZp+gCG67AuUAEAAA==
+X-Change-ID: 20260224-tools_build_fix_zero_init-dc5261bd8b8b
+To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, 
+ James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
+ Quentin Monnet <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ William Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, 
+ Qinxin Xia <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+ Kent Gibson <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+ Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore <robert.moore@intel.com>, 
+ Len Brown <lenb@kernel.org>, 
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+ Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+ Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
+ Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+ Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ Leo Yan <leo.yan@arm.com>, 
+ Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773825421; l=5318;
+ i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
+ bh=ZGKuPIwbdXR8s5su0qDzEXK8S9PgMd8yIP/evG69qcc=;
+ b=rCs4AS2t7Rahlxd/h549WaR1+JjUhUAud2CA403JALg1IPppakXeQRXDKgwXYZ97EQrnBIzSJ
+ CW7dqJDTNy6D0V52zCNmr050xXckAHKFB34mabWboySY9CApaGuGVY+
+X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
+ pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-Hi, we tested your kernel and here are the results:
+Thank you for reviewing and commenting on v4.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+For anyone new to the series, the reason for appending this compiler
+option is described in v3 (see "Link to v3" below).
 
+In this version, the BPF related patches have been split out and will be
+sent separately (note that I have kept the bpftool patches in this
+series, as I have gathered Quentin's Acked-by tags).
 
-Kernel information:
-    Commit message: Merge tag 'hid-for-linus-2026031701' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/hid/hid
+The changes are organized into three parts:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2391616014
+  Patches 01 – 05: Preparation before adding the new compiler option.
+                   Fix typos, adjust Makefiles to ensure the newly
+                   introduced option does not cause regressions.
+  Patch 06:        Propagate -fzero-init-padding-bits=all to
+                   EXTRA_CFLAGS and HOST_EXTRACFLAGS for the
+                   CC and HOSTCC compilers, respectively.
+  Patches 07 – 26: Apply EXTRA_CFLAGS and HOST_EXTRACFLAGS in
+                   project Makefiles.
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2391616014_ppc64le_kernel
+The change has been verified:
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+Test 1: Cross compiling perf
+	host: gcc 15.2.0 (x86_64), target: aarch64-linux-gnu-gcc
 
+  make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- LDFLAGS="-static" \
+	    -C tools/perf VF=1 CORESIGHT=1 NO_JEVENTS=1 DEBUG=1
 
+Test 2: Cross compiling selftest bpf and sched_ext
+	host: gcc 15.2.0 (x86_64), target: aarch64-linux-gnu-gcc
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  export ARCH=arm64
+  export CROSS_COMPILE=aarch64-linux-gnu-
+  make -C tools/testing/selftests/ TARGETS="bpf sched_ext" SKIP_TARGETS=""
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Test 3: Native compiling selftest bpf and sched_ext
+	host: gcc 15.2.0 (x86_64)
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+  make -C tools/testing/selftests/ TARGETS="bpf sched_ext" SKIP_TARGETS=""
+
+Signed-off-by: Leo Yan <leo.yan@arm.com>
+---
+Changes in v5:
+- Gathered Acked tags (thanks Daniel, Namhyung, Benjamin!)
+- Appended HOST_EXTRACFLAGS after KBUILD_HOSTCFLAGS (Ian)
+- Appended CFLAGS for libc-test (Thomas)
+- Left out BPF patches and will send out separately (Alexei)
+- Rebase on v7.0.0-rc4
+- Link to v4: https://lore.kernel.org/r/20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com
+
+Changes in v4:
+- Placed EXTRA_CFLAGS last so it can override the default options (Ian).
+- Cached evaluated values to avoid invoking cc-option when each
+  reference EXTRA_CFLAGS/HOST_EXTRACFLAGS (Ian).
+- Dropped useless patches for feature, verification and nolibc
+  (Gabriele / Ian / Thomas).
+- Fixed typos for thermal (Ian).
+- Removed duplicate $(CLANG_CROSS_FLAGS) in libbpf (Ian).
+- Collected maintainers' reviewed and ACK tags.
+- Link to v3: https://lore.kernel.org/r/20260308-tools_build_fix_zero_init-v3-0-6477808123b7@arm.com
+
+---
+Leo Yan (26):
+      tools: lib: thermal: Fix typo
+      tools/thermal: Fix typo
+      tools: lib: thermal: Initialize CFLAGS before including Makefile.include
+      tools/thermal: Initialize CFLAGS before including Makefile.include
+      bpftool: Avoid adding EXTRA_CFLAGS to HOST_CFLAGS
+      tools build: Append -fzero-init-padding-bits=all to extra cflags
+      bpftool: Append extra host flags
+      perf build: Append extra host flags
+      tools build: Append extra host cflags
+      tools: bootconfig: Append extra cflags
+      tools: counter: Append extra cflags
+      tools: dma: Append extra cflags
+      tools: gpio: Append extra cflags
+      tools: hv: Append extra cflags
+      tools: iio: Append extra cflags
+      tools: mm: Append extra cflags
+      tools: objtool: Append extra host cflags
+      tools: power: acpi: Append extra cflags
+      tools: power: x86/intel-speed-select: Append extra cflags
+      tools: sched_ext: Append extra cflags
+      tools: spi: Append extra cflags
+      tools: tracing: Append extra cflags
+      tools: usb: Append extra cflags
+      selftests/hid: Append extra cflags
+      selftests/nolibc: Append extra cflags
+      selftests/sched_ext: Append extra cflags
+
+ tools/bootconfig/Makefile                   |  1 +
+ tools/bpf/bpftool/Makefile                  |  9 +++++++--
+ tools/build/Makefile                        |  6 ++++--
+ tools/counter/Makefile                      |  1 +
+ tools/dma/Makefile                          |  1 +
+ tools/gpio/Makefile                         |  1 +
+ tools/hv/Makefile                           |  1 +
+ tools/iio/Makefile                          |  1 +
+ tools/lib/thermal/Makefile                  | 20 ++++++++++---------
+ tools/mm/Makefile                           |  1 +
+ tools/objtool/Makefile                      |  2 ++
+ tools/perf/Makefile.config                  |  2 +-
+ tools/power/acpi/Makefile.config            |  1 +
+ tools/power/x86/intel-speed-select/Makefile |  1 +
+ tools/sched_ext/Makefile                    |  1 +
+ tools/scripts/Makefile.include              | 30 +++++++++++++++++++++++++++++
+ tools/spi/Makefile                          |  1 +
+ tools/testing/selftests/hid/Makefile        |  1 +
+ tools/testing/selftests/nolibc/Makefile     |  7 +++----
+ tools/testing/selftests/sched_ext/Makefile  |  1 +
+ tools/thermal/lib/Makefile                  | 20 ++++++++++---------
+ tools/tracing/latency/Makefile              |  1 +
+ tools/usb/Makefile                          |  1 +
+ 23 files changed, 84 insertions(+), 27 deletions(-)
+---
+base-commit: a989fde763f4f24209e4702f50a45be572340e68
+change-id: 20260224-tools_build_fix_zero_init-dc5261bd8b8b
+
+Best regards,
+-- 
+Leo Yan <leo.yan@arm.com>
 
