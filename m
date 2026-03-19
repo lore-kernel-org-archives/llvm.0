@@ -1,159 +1,263 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885C530FF21;
-	Thu, 19 Mar 2026 01:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031E42D7DD5;
+	Thu, 19 Mar 2026 01:54:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773884115; cv=none; b=sh2c6EFmP5Unudvahsk3vNLWtnlqgAMYcvBSseB4ex/sgMocqja+dMRZgNr0nMarlm0qKTaYYmgIOJwHiRDpBLh3VAqb7kDj09moOYYtXTuayKxPJyXXnkhR/eNljQg6KTyJeZz80ve3RwECuUG6l7M01GhgulfH8ENm+g8VdVo=
+	t=1773885301; cv=none; b=NulJ3PV+kgh3Ekhvh0eiclCKHKlEJ/HzmaAkCVo1Yoa327/WIMaXcilG3R7jxT6YFPGH9wCXPwrt3eYB03HYE3v/BYtaoPGWwStWHm4vagt0N6SElCQq+JXCokqjOqfw7wrLBDw/tLRqAq+zTUUU50cdvnF7FF0wVE24H4oUUNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773884115; c=relaxed/simple;
-	bh=o2JIB0ulYpFLO2G8cREBI30pejf2WQk+5r824J/EsHk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K8JHewvRSivKW3yJASww8VUu6z+ZqWOyrxgDbtE2G90zXfEG1AML3zKlRVtffwEY+p3K3PiY2Ed4hSGTiH6WtZoo1e3OFSIzLtg6C8NxdbJNvcJcS6ZNuhEuEnjoXYpBqLbwkssx1Cz2o8etnalWq8H5Wdks0b+XfLuw44TzAKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GMYN3DIp; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1773885301; c=relaxed/simple;
+	bh=xOqFZex+b1X/Wd5nti3IxGFhSOwnjIhNul3qZM6DJCo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=JcOqnEC195flJDp1PTxx51aQ3Sp0nJHrtKNr25tCT87kPZhqsFHvjXcRgORr0oufoxx1+prcgthybbsG8U1KxhDURrvlzywq1NxzMKKfmZblOoPqS3ErJRHQZa/2oG0ApVxgALjEST1Rb7NrHiSgHEpFkphxCnTr7SBR/Tm8+6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FFTPLPn1; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GMYN3DIp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FFTPLPn1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773884108; x=1805420108;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o2JIB0ulYpFLO2G8cREBI30pejf2WQk+5r824J/EsHk=;
-  b=GMYN3DIpoXA/BJQXK6+AvFJyNYwA+v2+ug1QMD1BRBd2Kt4Si5TeUVou
-   wJfrsHOVDiO8J4tTpyHh3VQOkWfr9McZYR3Lc5w+ikLD6QRuCZ7BPN+XE
-   n/q/ULB//mNzTRCFM9oSnfB+DzBXyQYFgrQjymK9Qrrclhgr5e7uSM/P3
-   L6T/oESdbKcGRfW0rGiQl5FVMHLqJYxLP+4XOySNK7pzg5jY6tZoUShru
-   WyzVegnNqyg356KqsWt5jKEsKcdDwqiZSKg0NWj8lVXBDFFm2UiQZtG9n
-   1mrmTjaHrjVYz92HYrbBiq8yNzqJ4K2snjiVzDnWX9mO6WRmgJrPPiJUX
+  t=1773885298; x=1805421298;
+  h=date:from:to:cc:subject:message-id;
+  bh=xOqFZex+b1X/Wd5nti3IxGFhSOwnjIhNul3qZM6DJCo=;
+  b=FFTPLPn1igYpy6hfwNTxfWzd/AdFkBCZ5dirKYZDOncIs4nxZVlUBgoQ
+   07RPZcUsEwE4/6x6VmEs9s73C9UWjRuqYeraZL0TB7cEsRzFhzKBgmLbW
+   Kb7LxKTwBNpnB7yetY7Y28ohLWhX4+GfQBCe3+Q59rhQ7fo8xPlc/j0gy
+   0ApPRangcVFdwJgVsa5+22UP5TBI2u0z1bMvkpMSx/iVpjjfREuGDLAiJ
+   6l5mU1YjAit1uR2pOrQWrE/mMZC23uO1Y98Ku1NomAUMaBLjnJQOvMmup
+   8LCkADyt0oN/rwuSfAXGRtfUkWlpgMGkIb0Ml7ZMG5aRNf2bRWDWv35YP
    w==;
-X-CSE-ConnectionGUID: U2PoIGxtTW+XtnM7NyfpuQ==
-X-CSE-MsgGUID: YLLOJsuVSCWmpLCXmKgbEg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11733"; a="85654855"
+X-CSE-ConnectionGUID: 0hRJBXXDT/29wqpRezl+9A==
+X-CSE-MsgGUID: S9w1BApeS0OsiXf0+nFmPQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11733"; a="86430495"
 X-IronPort-AV: E=Sophos;i="6.23,128,1770624000"; 
-   d="scan'208";a="85654855"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2026 18:35:07 -0700
-X-CSE-ConnectionGUID: GJ3uzMY6RiOAvlWDLhrMfA==
-X-CSE-MsgGUID: BeRjQjWMTnWCv8JRw8FEdw==
+   d="scan'208";a="86430495"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2026 18:54:57 -0700
+X-CSE-ConnectionGUID: o94INmWnSR6427nj0uflEw==
+X-CSE-MsgGUID: fG+lxW20TgevoR6L9YnnmQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,128,1770624000"; 
-   d="scan'208";a="218322706"
+   d="scan'208";a="260705206"
 Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 18 Mar 2026 18:35:04 -0700
+  by orviesa001.jf.intel.com with ESMTP; 18 Mar 2026 18:54:55 -0700
 Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w32Ht-000000000B3-28tK;
-	Thu, 19 Mar 2026 01:35:01 +0000
-Date: Thu, 19 Mar 2026 09:29:25 +0800
+	id 1w32az-000000000Bp-0QEA;
+	Thu, 19 Mar 2026 01:54:53 +0000
+Date: Thu, 19 Mar 2026 09:53:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Michael Dege <michael.dege@renesas.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+To: Matt Roper <matthew.d.roper@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Michael Dege <michael.dege@renesas.com>
-Subject: Re: [PATCH net-next 13/13] net: renesas: rswitch: add vlan aware
- switching
-Message-ID: <202603190927.5oLw58VC-lkp@intel.com>
-References: <20260317-rswitch_add_vlans-v1-13-3a57bfa0f2d1@renesas.com>
+ Dnyaneshwar Bhadane <dnyaneshwar.bhadane@intel.com>
+Subject: [linux-next:master 6002/7246]
+ drivers/gpu/drm/xe/xe_lrc.c:1922:7: error: format specifies type 'unsigned
+ long' but the argument has type 'int'
+Message-ID: <202603190925.XTQEcJ0B-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260317-rswitch_add_vlans-v1-13-3a57bfa0f2d1@renesas.com>
 
-Hi Michael,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Dege/net-renesas-rswitch-improve-port-change-mode-functions/20260318-221709
-base:   1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
-patch link:    https://lore.kernel.org/r/20260317-rswitch_add_vlans-v1-13-3a57bfa0f2d1%40renesas.com
-patch subject: [PATCH net-next 13/13] net: renesas: rswitch: add vlan aware switching
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260319/202603190927.5oLw58VC-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260319/202603190927.5oLw58VC-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   8e42d2514a7e8eb8d740d0ba82339dd6c0b6463f
+commit: 65fcf19cb36bf43c893c3444d5bd120006cb843d [6002/7246] drm/xe: Include running dword offset in default_lrc dumps
+config: i386-randconfig-017-20260319 (https://download.01.org/0day-ci/archive/20260319/202603190925.XTQEcJ0B-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260319/202603190925.XTQEcJ0B-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603190927.5oLw58VC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603190925.XTQEcJ0B-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/renesas/rswitch_l2.c:268:7: warning: variable 'err' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-     268 |         case SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED:
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/renesas/rswitch_l2.c:275:6: note: uninitialized use occurs here
-     275 |         if (err < 0)
-         |             ^~~
-   drivers/net/ethernet/renesas/rswitch_l2.c:264:7: warning: variable 'err' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-     264 |         case SWITCHDEV_ATTR_ID_BRIDGE_VLAN_FILTERING:
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/renesas/rswitch_l2.c:275:6: note: uninitialized use occurs here
-     275 |         if (err < 0)
-         |             ^~~
-   drivers/net/ethernet/renesas/rswitch_l2.c:251:9: note: initialize the variable 'err' to silence this warning
-     251 |         int err;
-         |                ^
-         |                 = 0
-   2 warnings generated.
+>> drivers/gpu/drm/xe/xe_lrc.c:1922:7: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    1921 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_NOOP (%d dwords)\n",
+         |                                    ~~~~~
+         |                                    %#5x
+    1922 |                            dw - num_noop - start, inst_header, num_noop);
+         |                            ^~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:1927:7: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    1926 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_TOPOLOGY_FILTER\n",
+         |                                    ~~~~~
+         |                                    %#5x
+    1927 |                            dw - start, inst_header);
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:1932:7: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    1931 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_BATCH_BUFFER_END\n",
+         |                                    ~~~~~
+         |                                    %#5x
+    1932 |                            dw - start, inst_header);
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:1947:7: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    1946 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_LOAD_REGISTER_IMM: %d regs\n",
+         |                                    ~~~~~
+         |                                    %#5x
+    1947 |                            dw - start, inst_header, (numdw - 1) / 2);
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:1950:8: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    1949 |                         drm_printf(p, "LRC[%#5lx]  =  - %#6x = %#010x\n",
+         |                                            ~~~~~
+         |                                            %#5x
+    1950 |                                    &dw[i] - start, dw[i], dw[i + 1]);
+         |                                    ^~~~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:1955:7: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    1954 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_LOAD_REGISTER_MEM: %s%s\n",
+         |                                    ~~~~~
+         |                                    %#5x
+    1955 |                            dw - start, inst_header,
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:1960:8: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    1959 |                         drm_printf(p, "LRC[%#5lx]  =  - %#6x = %#010llx\n",
+         |                                            ~~~~~
+         |                                            %#5x
+    1960 |                                    dw - start,
+         |                                    ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:1964:8: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    1963 |                         drm_printf(p, "LRC[%#5lx]  =  - %*ph (%s)\n",
+         |                                            ~~~~~
+         |                                            %#5x
+    1964 |                                    dw - start, (int)sizeof(u32) * (numdw - 1),
+         |                                    ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:1970:7: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    1969 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_FORCE_WAKEUP\n",
+         |                                    ~~~~~
+         |                                    %#5x
+    1970 |                            dw - start, inst_header);
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:1975:7: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    1974 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] unknown MI opcode %#x, likely %d dwords\n",
+         |                                    ~~~~~
+         |                                    %#5x
+    1975 |                            dw - start, inst_header, opcode, numdw);
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2010:2: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    2010 |         MATCH(STATE_BASE_ADDRESS);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2002:7: note: expanded from macro 'MATCH'
+    2001 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] " #cmd " (%d dwords)\n", \
+         |                                    ~~~~~
+    2002 |                            dw - start, *dw, numdw); \
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2011:2: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    2011 |         MATCH(STATE_SIP);
+         |         ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2002:7: note: expanded from macro 'MATCH'
+    2001 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] " #cmd " (%d dwords)\n", \
+         |                                    ~~~~~
+    2002 |                            dw - start, *dw, numdw); \
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2012:2: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    2012 |         MATCH(GPGPU_CSR_BASE_ADDRESS);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2002:7: note: expanded from macro 'MATCH'
+    2001 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] " #cmd " (%d dwords)\n", \
+         |                                    ~~~~~
+    2002 |                            dw - start, *dw, numdw); \
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2013:2: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    2013 |         MATCH(STATE_COMPUTE_MODE);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2002:7: note: expanded from macro 'MATCH'
+    2001 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] " #cmd " (%d dwords)\n", \
+         |                                    ~~~~~
+    2002 |                            dw - start, *dw, numdw); \
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2014:2: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+    2014 |         MATCH3D(3DSTATE_BTD);
+         |         ^~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2007:7: note: expanded from macro 'MATCH3D'
+    2006 |                 drm_printf(p, "LRC[%#5lx]  =  [%#010x] " #cmd " (%d dwords)\n", \
+         |                                    ~~~~~
+    2007 |                            dw - start, *dw, numdw); \
+         |                            ^~~~~~~~~~
+   drivers/gpu/drm/xe/xe_lrc.c:2015:2: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
 
 
-vim +/err +268 drivers/net/ethernet/renesas/rswitch_l2.c
+vim +1922 drivers/gpu/drm/xe/xe_lrc.c
 
-   244	
-   245	static int rswitch_handle_port_attr_set(struct net_device *ndev,
-   246						struct notifier_block *nb,
-   247						struct switchdev_notifier_port_attr_info *info)
-   248	{
-   249		const struct switchdev_attr *attr = info->attr;
-   250		struct rswitch_private *priv;
-   251		int err;
-   252	
-   253		priv = container_of(nb, struct rswitch_private, rswitch_switchdev_blocking_nb);
-   254	
-   255		switch (attr->id) {
-   256		case SWITCHDEV_ATTR_ID_PORT_STP_STATE:
-   257			err = rswitch_port_update_stp_state(ndev, attr->u.stp_state);
-   258	
-   259			break;
-   260		case SWITCHDEV_ATTR_ID_BRIDGE_AGEING_TIME:
-   261			err = rswitch_update_ageing_time(priv, attr->u.ageing_time);
-   262	
-   263			break;
-   264		case SWITCHDEV_ATTR_ID_BRIDGE_VLAN_FILTERING:
-   265			rswitch_update_vlan_filtering(priv, attr->u.vlan_filtering);
-   266	
-   267			break;
- > 268		case SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED:
-   269	
-   270			break;
-   271		default:
-   272			return -EOPNOTSUPP;
-   273		}
-   274	
-   275		if (err < 0)
-   276			return err;
-   277	
-   278		info->handled = true;
-   279	
-   280		return NOTIFY_DONE;
-   281	}
-   282	
+  1902	
+  1903	static int dump_mi_command(struct drm_printer *p,
+  1904				   struct xe_gt *gt,
+  1905				   u32 *start,
+  1906				   u32 *dw,
+  1907				   int remaining_dw)
+  1908	{
+  1909		u32 inst_header = *dw;
+  1910		u32 numdw = instr_dw(inst_header);
+  1911		u32 opcode = REG_FIELD_GET(MI_OPCODE, inst_header);
+  1912		int num_noop;
+  1913	
+  1914		/* First check for commands that don't have/use a '# DW' field */
+  1915		switch (inst_header & MI_OPCODE) {
+  1916		case MI_NOOP:
+  1917			num_noop = 1;
+  1918			while (num_noop < remaining_dw &&
+  1919			       (*(++dw) & REG_GENMASK(31, 23)) == MI_NOOP)
+  1920				num_noop++;
+  1921			drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_NOOP (%d dwords)\n",
+> 1922				   dw - num_noop - start, inst_header, num_noop);
+  1923			return num_noop;
+  1924	
+  1925		case MI_TOPOLOGY_FILTER:
+  1926			drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_TOPOLOGY_FILTER\n",
+  1927				   dw - start, inst_header);
+  1928			return 1;
+  1929	
+  1930		case MI_BATCH_BUFFER_END:
+  1931			drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_BATCH_BUFFER_END\n",
+  1932				   dw - start, inst_header);
+  1933			/* Return 'remaining_dw' to consume the rest of the LRC */
+  1934			return remaining_dw;
+  1935		}
+  1936	
+  1937		/*
+  1938		 * Any remaining commands include a # of dwords.  We should make sure
+  1939		 * it doesn't exceed the remaining size of the LRC.
+  1940		 */
+  1941		if (xe_gt_WARN_ON(gt, numdw > remaining_dw))
+  1942			numdw = remaining_dw;
+  1943	
+  1944		switch (inst_header & MI_OPCODE) {
+  1945		case MI_LOAD_REGISTER_IMM:
+  1946			drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_LOAD_REGISTER_IMM: %d regs\n",
+  1947				   dw - start, inst_header, (numdw - 1) / 2);
+  1948			for (int i = 1; i < numdw; i += 2)
+  1949				drm_printf(p, "LRC[%#5lx]  =  - %#6x = %#010x\n",
+  1950					   &dw[i] - start, dw[i], dw[i + 1]);
+  1951			return numdw;
+  1952	
+  1953		case MI_LOAD_REGISTER_MEM & MI_OPCODE:
+  1954			drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_LOAD_REGISTER_MEM: %s%s\n",
+  1955				   dw - start, inst_header,
+  1956				   dw[0] & MI_LRI_LRM_CS_MMIO ? "CS_MMIO " : "",
+  1957				   dw[0] & MI_LRM_USE_GGTT ? "USE_GGTT " : "");
+  1958			if (numdw == 4)
+  1959				drm_printf(p, "LRC[%#5lx]  =  - %#6x = %#010llx\n",
+  1960					   dw - start,
+  1961					   dw[1], ((u64)(dw[3]) << 32 | (u64)(dw[2])));
+  1962			else
+  1963				drm_printf(p, "LRC[%#5lx]  =  - %*ph (%s)\n",
+  1964					   dw - start, (int)sizeof(u32) * (numdw - 1),
+  1965					   dw + 1, numdw < 4 ? "truncated" : "malformed");
+  1966			return numdw;
+  1967	
+  1968		case MI_FORCE_WAKEUP:
+  1969			drm_printf(p, "LRC[%#5lx]  =  [%#010x] MI_FORCE_WAKEUP\n",
+  1970				   dw - start, inst_header);
+  1971			return numdw;
+  1972	
+  1973		default:
+  1974			drm_printf(p, "LRC[%#5lx]  =  [%#010x] unknown MI opcode %#x, likely %d dwords\n",
+  1975				   dw - start, inst_header, opcode, numdw);
+  1976			return numdw;
+  1977		}
+  1978	}
+  1979	
 
 -- 
 0-DAY CI Kernel Test Service
