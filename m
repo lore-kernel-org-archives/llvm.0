@@ -1,109 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C239D3783CA;
-	Thu, 19 Mar 2026 11:45:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1216C2C1780
+	for <llvm@lists.linux.dev>; Thu, 19 Mar 2026 13:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773920726; cv=none; b=Utl7DK3yL6dHS+zCXWs2ZlswSDLz2yw94Fh/ouGSInusRnCJAwbyDVmsCAYseNvwWkrWtd2sfXpE2Q4OH2RR6IHna5nM2eMWYzpuEp1NpL/gphrxNwQRp7+t+ENC+1v5dJmaV3+J7oF1cIHbsEU1RPPCRFbxlr9gT4DHTSJQltE=
+	t=1773928380; cv=none; b=J2aK25+VTnQ+61Mi+hn3mt1imNdLtGKG0ICOL+CcuEuSo5oOYwj51eBuWyafBrt/gm/2wPbV1MlmKqXzWZ9Fq+LTLFSzVEqZ/gmNpJD4/iMVOlo7nof4CM/Wya1pI2nJo4p9M56JedlFbryd4SWE2SGuLsQNXWG5Hcjq7X+Xj1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773920726; c=relaxed/simple;
-	bh=V9PeQHG+J9/hfCBxtV3PFI1VLoNo23MIN/xtY1+w03U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=krmJIEks89RZRw5389DgkujqXpuuQKL1EbCLy6eqFSp96o0fvlxq1p6UQwMde6VXM8/6YqXEq5N4MdlMqhdQQxjG6gI5YL3LlHnwaxhERP6C/rAxsfqBCbM6LSn1850TNJSyr88XQaBPEoux9v/dAczhXoD0Ai9f4lWAmSysiU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C7U4UADd; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773928380; c=relaxed/simple;
+	bh=N3JUv4FAKrJiGsjb/JjZ5eEIy7p5lTbcpeg4XLkvWbI=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=IgBLOIksRUWje//lwnYWQncFCy8SAFauogqAbQ/+Ry00uW4c5HsRKlOlvFHAdhfr9bFMZrfOuETKI0ba7IX4hTPdwKwl2IjNtzc3kE1LXV+IBiKh51Jm7/x4s4Sq/+SuzuZVZdl1n+2DUEzMBAz6gWzKWoSIVdz+81v3bn/Rn9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jfPSdzQU; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C7U4UADd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773920723; x=1805456723;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V9PeQHG+J9/hfCBxtV3PFI1VLoNo23MIN/xtY1+w03U=;
-  b=C7U4UADdaih0xq5LABlZbGG/xz5fjhgMytFo6YYZELMZXtYxApYHcd87
-   AIVng7ByDwYgMYH8DJuANp6Ek0/D6qsBpU9DCGq9Rp5eZSBC7Mcwyle1z
-   TABaOrOrOwF5QTKKA/kJrca9OEYkKplktpXkO+O1iN27o7HrN5yl4QOZl
-   i2FBA3bJVGvH/67WPzyjJoZYbD9UtbWz19g57W8m9UU9Kf4Bj1VSYrz0r
-   FvUdPQMhd+ylnyjcPmkRXOzBXeJT+gfBkn5LZEELEKtn+8bjF+ZYtyt83
-   p6GnDWl9YQ6pgBQ4Q1nUZpLij2cvxo5WWwtSrsRHM81ObSFI1cMFbq9lR
-   g==;
-X-CSE-ConnectionGUID: WLgTRypySSSHSRFZwOAn1w==
-X-CSE-MsgGUID: 3jIaSYmsQa+N1pYwn9piFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11733"; a="74874169"
-X-IronPort-AV: E=Sophos;i="6.23,129,1770624000"; 
-   d="scan'208";a="74874169"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 04:45:23 -0700
-X-CSE-ConnectionGUID: wbbZ3gjpTNqxjJxVG5x4oQ==
-X-CSE-MsgGUID: Esg5765uRLSzoQtLgt5Ntw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,129,1770624000"; 
-   d="scan'208";a="247246308"
-Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 19 Mar 2026 04:45:20 -0700
-Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w3BoU-000000000tJ-0O1j;
-	Thu, 19 Mar 2026 11:45:18 +0000
-Date: Thu, 19 Mar 2026 19:44:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Florian Eckert <fe@dev.tdt.de>, Thomas Gleixner <tglx@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Florian Eckert <fe@dev.tdt.de>, Eckert.Florian@googlemail.com,
-	ms@dev.tdt.de
-Subject: Re: [PATCH 2/2] irqchip: Add Lightning Mountain irqchip support
-Message-ID: <202603191903.MUNojwHX-lkp@intel.com>
-References: <20260318-irq-intel-soc-msi-v1-2-0e8cdf844fa8@dev.tdt.de>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jfPSdzQU"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-486fc42c83aso4767165e9.0
+        for <llvm@lists.linux.dev>; Thu, 19 Mar 2026 06:52:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1773928377; x=1774533177; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eZ48RxtqhFC+Ft2ryzXO0wxvBOUpn0Fzs00xvrlNRUI=;
+        b=jfPSdzQUDarPft+qBkAmdBwX9raeP9w0rf6J/avN9FIgy3+9lEwSgOmNKNBVcYZalt
+         1WBmNzW3BppOGIl7wyhtjMI7YeqTtxcCdOFTlq29O8xgsK302t14/GttIdpexczBb2T/
+         afjQTogOfzGCv0hBxc7tpxLS0qNBaFQquFMnfjE5/R/qS9ry2/OR0lMTckeAr05ebCUq
+         d0GyqfS/yncIqxWzsN9sXZQ/V5UP8IpxloNDdUGqSeY3RaTKEgflRSlXpV38PLwUEjcj
+         uG53qN8NEoO3PhiEVuVDW6kT2X9PvF/28u5to4LbeIPGIyNs5C3nLj0GmIBOuea7FAsU
+         L6TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773928377; x=1774533177;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eZ48RxtqhFC+Ft2ryzXO0wxvBOUpn0Fzs00xvrlNRUI=;
+        b=jP3Way/9xJErXJZvKc9W7PNan7gByWbPaLDY9rE9dVxjWRFtl7lUA4NkH2En/RsLbN
+         qRLt0XIf0rtIXkHAkn8hp9GyN+DNqR94O2ZF6sor9uTna1B/07UuclFoN1AqLThsiW6p
+         8coXQubkHFAgtYEvGbEhxij22lhcElyCc7IVF5hNyVaBDrYvPb7AGHnwhl5XTRjA9IhS
+         JzGmb507v5uE5lNKngn0QZ7ykomQlqQMdJNJ2URZFbzxFJbAJ9tturj1NbJBhEvUeUZd
+         odflzXfXHp8103yG8CikHU9mhQ1i/0pR76g6/jrlnY/xx8MsFHdOTBTIT6BIQ9zEIl4M
+         hFIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUF2Q0EjSKd8qglMq+GdmYUjUJ5pe/I5c7D+kFyfvfzm36ujE9qz7eA5PWfYF1LYsOfG6Z+@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw0R2S7qmgC7lgmu4YdFxGcXX0st58TxXplvFZVOSc4p2LVIylD
+	rpmAsA4jWPAN4LnzJAgoCroGgpbjaId+mJLBBdvH7m6UEIwJV/TDZ8ymudI5cVhrFWVoXik1Y7m
+	pfQ==
+X-Received: from wmol21.prod.google.com ([2002:a05:600c:47d5:b0:485:33e8:9296])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:b8a:b0:486:f308:94ec
+ with SMTP id 5b1f17b1804b1-486f456fdeemr126886675e9.24.1773928377192; Thu, 19
+ Mar 2026 06:52:57 -0700 (PDT)
+Date: Thu, 19 Mar 2026 14:52:38 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260318-irq-intel-soc-msi-v1-2-0e8cdf844fa8@dev.tdt.de>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.851.ga537e3e6e9-goog
+Message-ID: <20260319135245.1420780-1-elver@google.com>
+Subject: [PATCH] compiler: Simplify generic RELOC_HIDE()
+From: Marco Elver <elver@google.com>
+To: elver@google.com, Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
+	Bart Van Assche <bvanassche@acm.org>, David Laight <david.laight.linux@gmail.com>, 
+	linux-kernel@vger.kernel.org, Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Florian,
+When enabling Context Analysis (CONTEXT_ANALYSIS := y) in arch/x86/kvm
+code, Clang's Thread Safety Analysis failed to recognize that identical
+per_cpu() accesses refer to the same lock:
 
-kernel test robot noticed the following build errors:
+|   CC [M]  arch/x86/kvm/vmx/posted_intr.o
+| arch/x86/kvm/vmx/posted_intr.c:186:2: error: releasing raw_spinlock '__ptr + __per_cpu_offset[vcpu->cpu]' that was not held [-Werror,-Wthread-safety-analysis]
+|   186 |         raw_spin_unlock(&per_cpu(wakeup_vcpus_on_cpu_lock, vcpu->cpu));
+|       |         ^
+| ./include/linux/spinlock.h:276:32: note: expanded from macro 'raw_spin_unlock'
+|   276 | #define raw_spin_unlock(lock)           _raw_spin_unlock(lock)
+|       |                                         ^
+| arch/x86/kvm/vmx/posted_intr.c:207:1: error: raw_spinlock '__ptr + __per_cpu_offset[vcpu->cpu]' is still held at the end of function [-Werror,-Wthread-safety-analysis]
+|   207 | }
+|       | ^
+| arch/x86/kvm/vmx/posted_intr.c:182:2: note: raw_spinlock acquired here
+|   182 |         raw_spin_lock_nested(&per_cpu(wakeup_vcpus_on_cpu_lock, vcpu->cpu),
+|       |         ^
+| ./include/linux/spinlock.h:235:2: note: expanded from macro 'raw_spin_lock_nested'
+|   235 |         _raw_spin_lock(((void)(subclass), (lock)))
+|       |         ^
+| 2 errors generated.
 
-[auto build test ERROR on f338e77383789c0cae23ca3d48adcc5e9e137e3c]
+This occurred because the default RELOC_HIDE() implementation (used by
+the per-CPU macros) is a statement expression containing an intermediate
+'unsigned long' variable (this version appears to predate Git history).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Eckert/dt-bindings-Add-Lightning-Mountain-MSI-interrupt-controller-bindings/20260319-033849
-base:   f338e77383789c0cae23ca3d48adcc5e9e137e3c
-patch link:    https://lore.kernel.org/r/20260318-irq-intel-soc-msi-v1-2-0e8cdf844fa8%40dev.tdt.de
-patch subject: [PATCH 2/2] irqchip: Add Lightning Mountain irqchip support
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260319/202603191903.MUNojwHX-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260319/202603191903.MUNojwHX-lkp@intel.com/reproduce)
+While the analysis strips away inner casts when resolving pointer
+aliases, it stops when encountering intermediate non-pointer variables
+(this is Thread Safety Analysis specific and irrelevant for codegen).
+This prevents the analysis from concluding that the pointers passed to
+e.g. raw_spin_lock() and raw_spin_unlock() were identical when per-CPU
+accessors are used.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603191903.MUNojwHX-lkp@intel.com/
+Simplify RELOC_HIDE() to a single expression. This preserves the intent
+of obfuscating UB-introducing out-of-bounds pointer calculations from
+the compiler via the 'unsigned long' cast, but allows the alias analysis
+to successfully resolve the pointers.
 
-All errors (new ones prefixed by >>):
+Using a recent Clang version, I observe that generated code remains the
+same for vmlinux; the intermediate variable was already being optimized
+away (for any respectable modern compiler, not doing so would be an
+optimizer bug). Note that GCC provides its own version of RELOC_HIDE(),
+so this change only affects Clang builds.
 
->> drivers/irqchip/irq-intel-soc-msi.c:17:10: fatal error: 'asm/irqdomain.h' file not found
-   #include <asm/irqdomain.h>
-            ^~~~~~~~~~~~~~~~~
-   1 error generated.
+Add a test case to lib/test_context-analysis.c to catch any regressions.
 
+Link: https://lore.kernel.org/all/e3946223-4543-4a76-a328-9c6865e95192@acm.org/
+Reported-by: Bart Van Assche <bvanassche@acm.org>
+Reported-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ include/linux/compiler.h    |  5 +----
+ lib/test_context-analysis.c | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-vim +17 drivers/irqchip/irq-intel-soc-msi.c
-
-    16	
-  > 17	#include <asm/irqdomain.h>
-    18	#include <asm/apic.h>
-    19	
-
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index af16624b29fd..cb2f6050bdf7 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -149,10 +149,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ #endif
+ 
+ #ifndef RELOC_HIDE
+-# define RELOC_HIDE(ptr, off)					\
+-  ({ unsigned long __ptr;					\
+-     __ptr = (unsigned long) (ptr);				\
+-    (typeof(ptr)) (__ptr + (off)); })
++# define RELOC_HIDE(ptr, off) ((typeof(ptr))((unsigned long)(ptr) + (off)))
+ #endif
+ 
+ #define absolute_pointer(val)	RELOC_HIDE((void *)(val), 0)
+diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
+index 140efa8a9763..06b4a6a028e0 100644
+--- a/lib/test_context-analysis.c
++++ b/lib/test_context-analysis.c
+@@ -596,3 +596,14 @@ static void __used test_ww_mutex_lock_ctx(struct test_ww_mutex_data *d)
+ 
+ 	ww_mutex_destroy(&d->mtx);
+ }
++
++static DEFINE_PER_CPU(raw_spinlock_t, test_per_cpu_lock);
++
++static void __used test_per_cpu(int cpu)
++{
++	raw_spin_lock(&per_cpu(test_per_cpu_lock, cpu));
++	raw_spin_unlock(&per_cpu(test_per_cpu_lock, cpu));
++
++	raw_spin_lock(per_cpu_ptr(&test_per_cpu_lock, cpu));
++	raw_spin_unlock(per_cpu_ptr(&test_per_cpu_lock, cpu));
++}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.53.0.851.ga537e3e6e9-goog
+
