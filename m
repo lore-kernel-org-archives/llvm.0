@@ -1,124 +1,124 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524B21F92E
-	for <llvm@lists.linux.dev>; Thu, 19 Mar 2026 05:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2A73A169B;
+	Thu, 19 Mar 2026 07:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773896591; cv=none; b=VgUNGdxB4gxBm07cNma1uUzrbUifLm4V50iyZtlO/X1JrIwj6HURarZTckVsA1TMK7+b6hkTUwRjeC7o8T7S6leqNJkBLeWYtJjq54DITpaZHSuMta4znxvQZa7yplYKTd5tEz/k3hiCsAKZwDyW2jM017rdqTYQVwYB84ek+Xk=
+	t=1773905838; cv=none; b=KO84oHyw30Vevgenvfdt7uFrojoteR07YUmQKPydi7mzUs3+gx08ScdG7bpz3E2Z0UCL9pxEuskbT9USOjT8q0NTEUCNgmua4QQBEQL9mgZVrV2wxhv5RfOqNDGzRDw7t2LcoW8FfqT5gXK5BwGHPDuBGUNG8ZpmnbtmBvqnkc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773896591; c=relaxed/simple;
-	bh=PJZ59D79kTDeQ4mHhc+fLWpDR7mylanwnphq48/AXSU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CW494kX6OOlkHxRnncyvU0Dfj0vUUYO/PsY++WVYBqLDs2sXkUwyOM1qKmkb4JC30njLHdoWfq1im++NTqYPNQFVJA0MuxJxm8sHdArVZniNwq9uvWNRQqMWnp4/94QyPhjIpkSJIE7vi+CFb//yWvDEHCXEIhGMnZAq3UUZ05o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YPL4zwNX; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773905838; c=relaxed/simple;
+	bh=5GlKQPm6S7BT7ZpyaFyITs7NatqZk5qI94iTbqaqVys=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rax2WbPBTIT5KbPnYnd8F8coX8lkxZFPy93QgtX2IhUt7LWMFBNnkmWqjRjgZrYCcp3Z2TxVGU4cy2wttcmDjhwLSloOKuoh/zEdWf9HIFtfgACNtr27AEUYG+2Rx64NUGPH7Wm8K4j0WoC5L0M4AJeIhux6lKV+/JVoq2C4Ghg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DlBNNf+c; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YPL4zwNX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773896589;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=AVaKxtwIn6Wu2rFti6gqk2yew5yW2xmCWNzXju0cEss=;
-	b=YPL4zwNXVfdmwutDzqZ+E46lrRv2vqoYqfMqRotK/7E+4+RVqPmbyMAdUxFeCemk1e8VYp
-	j4FKUEGzacvCpIS7xfdQ+TKgJ2EZwHpMYa7UDPnzcgBmr9fAV2SapOCRxyA7+OON/zJnJt
-	A+TSJo/qk08DCVQ9VE2Sb9Vc93gqMS4=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-650-2WZOPPQPMpKCNb61NpRsQQ-1; Thu,
- 19 Mar 2026 01:03:06 -0400
-X-MC-Unique: 2WZOPPQPMpKCNb61NpRsQQ-1
-X-Mimecast-MFC-AGG-ID: 2WZOPPQPMpKCNb61NpRsQQ_1773896585
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EA3AB1800365
-	for <llvm@lists.linux.dev>; Thu, 19 Mar 2026 05:03:04 +0000 (UTC)
-Received: from [172.20.92.244] (unknown [10.30.44.31])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9CAA61955F2E;
-	Thu, 19 Mar 2026 05:03:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc4,
- upstream-mainline, 04a9f176)
-Date: Thu, 19 Mar 2026 05:03:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DlBNNf+c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773905837; x=1805441837;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5GlKQPm6S7BT7ZpyaFyITs7NatqZk5qI94iTbqaqVys=;
+  b=DlBNNf+cxTobim9+KTslwDeQ4Y2eNVfuRJ/fSCXZZA7XL7HSnPnpMUdc
+   nMOGag0ZweDR/9RCkObRADOoyxfd4g8Xtaftcn6xahAdqxKn1LidGzucN
+   yciYE8IkW9rDjWT9viZNX30o9IVT/Z2suB9a15MjHV9QRL+h0RpUHDrgl
+   1KOcENQ5LxMMiQ/WBr+SdR5aioEAHLeImOqTMV78Z43/vsjvFZkfWmMS7
+   ua46DrUjsGN1tIEtuoKPsqEAqnoKMZqMVl96GC8SP434UHGzq4Y4PmqVj
+   K6I2XttfXEBAEn+8HMckTS2q/HT7vLUeFx3aXIoXzUTnbIMz8TZL0i9Dc
+   g==;
+X-CSE-ConnectionGUID: S2+59VVQQrOiPMbnZ93Jqw==
+X-CSE-MsgGUID: RfNAVkvWSRu4rJawWaULfg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11733"; a="85289467"
+X-IronPort-AV: E=Sophos;i="6.23,129,1770624000"; 
+   d="scan'208";a="85289467"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 00:37:17 -0700
+X-CSE-ConnectionGUID: hTXmQQTHQe6ldpGx1GmUjA==
+X-CSE-MsgGUID: pn68SoZEROG3KTRdJgQFzA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,129,1770624000"; 
+   d="scan'208";a="260779971"
+Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 19 Mar 2026 00:37:13 -0700
+Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w37vQ-000000000Ur-1qmr;
+	Thu, 19 Mar 2026 07:36:43 +0000
+Date: Thu, 19 Mar 2026 15:34:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bradford Love <brad@nextdimension.cc>, linux-media@vger.kernel.org,
+	hverkuil+cisco@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Bradford Love <brad@nextdimension.cc>
+Subject: Re: [PATCH v2] media: au0828: Fix green screen in analog
+Message-ID: <202603191517.dqbfX1as-lkp@intel.com>
+References: <20260317172820.2959499-1-brad@nextdimension.cc>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <13060.126031901030600250@us-mta-650.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: brVOfZWpFb_g0PnuT23NpeYthMB3MD7FXvShL1ijP7Q_1773896585
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260317172820.2959499-1-brad@nextdimension.cc>
 
-Hi, we tested your kernel and here are the results:
+Hi Bradford,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
-
-
-Kernel information:
-    Commit message: Merge tag 'soc-fixes-7.0' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/soc/soc
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2393900489
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2393900489_ppc64le_kernel
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] WARNING: drivers/gpu/drm/drm_atomic_helper.c:1920=
- at drm_atomic_helper_wait_for_vblanks.part.0+0x228/0x240, CPU#1: kworker/1=
-:1/54 - RIP: 0010:drm_atomic_helper_wait_for_vblanks
-            URL: https://lore.kernel.org/dri-devel/69381d6c.050a0220.4004e.=
-0017.GAE@google.com/
-            Affected tests:
-                Boot test [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+kernel test robot noticed the following build warnings:
 
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+url:    https://github.com/intel-lab-lkp/linux/commits/UPDATE-20260318-180458/Bradford-Love/si2157-Analog-format-fixes/20260314-162352
+base:   the 5th patch of https://lore.kernel.org/r/20260312213532.2907276-6-brad%40nextdimension.cc
+patch link:    https://lore.kernel.org/r/20260317172820.2959499-1-brad%40nextdimension.cc
+patch subject: [PATCH v2] media: au0828: Fix green screen in analog
+config: hexagon-randconfig-001-20260319 (https://download.01.org/0day-ci/archive/20260319/202603191517.dqbfX1as-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260319/202603191517.dqbfX1as-lkp@intel.com/reproduce)
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603191517.dqbfX1as-lkp@intel.com/
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+All warnings (new ones prefixed by >>):
 
+>> drivers/media/usb/au0828/au0828-video.c:1676:23: warning: unused variable 'vdev' [-Wunused-variable]
+    1676 |         struct video_device *vdev = video_devdata(file);
+         |                              ^~~~
+   1 warning generated.
+
+
+vim +/vdev +1676 drivers/media/usb/au0828/au0828-video.c
+
+  1673	
+  1674	static int vidioc_dqbuf(struct file *file, void *priv, struct v4l2_buffer *b)
+  1675	{
+> 1676		struct video_device *vdev = video_devdata(file);
+  1677		struct au0828_dev *dev = video_drvdata(file);
+  1678		int rc;
+  1679	
+  1680		rc = check_dev(dev);
+  1681		if (rc < 0)
+  1682			return rc;
+  1683	
+  1684		/* Workaround for a bug in the au0828 hardware design that
+  1685		 * sometimes results in the colorspace being inverted
+  1686		 */
+  1687		if (dev->greenscreen_detected == 1) {
+  1688			dprintk(1, "Detected green frame.  Resetting stream...\n");
+  1689			au0828_analog_stream_reset(dev);
+  1690			dev->greenscreen_detected = 0;
+  1691		}
+  1692	
+  1693		return vb2_ioctl_dqbuf(file, priv, b);
+  1694	}
+  1695	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
