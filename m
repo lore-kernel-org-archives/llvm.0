@@ -1,146 +1,120 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3FD2F1FDB
-	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 15:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F7D371CE6
+	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 15:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774020281; cv=none; b=FjbY7HzFjREqkByH+phiYPDds+7t5vcVzjY+FyAqF2lwxk6apepND/MHmtwwoZXjntvhjTL8cUaRW+oQhUIIaFeFiZAI39s58QSkDJQ8U1lyN8XMNEifIa2Xr9yXFI5lCjNvI0b84KjYn9anxoMt9LyqVYvNyw0RlTf5ZR+Ovuk=
+	t=1774022007; cv=none; b=K/5zXX/Xoq9jZ434vl13ADLxN5Eozgc39ZEqSBebFWYaNt65zHR1uthIaOyt0CKBnTfn2otYJ0idUiOXEfOM+US/8siNLgQOcV0IwFmfJnoVdvJOoA37GQSAR2XvRLdpVAFqSDMvMcq9LNPrywk1HNNJrnlkva0KfpKeFde9/u0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774020281; c=relaxed/simple;
-	bh=1uUWbAfjhQKGsekiHalIN3wkJj3mxEEBjAHougA6NbE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ePBLyHtbIb9/GeSMxLQWMGzYnRm/vFSw/DfhhnPCI8O+G5vXS09lmc6+Dbml3AnY4lsObXJsFQbszlSFI80gkOxKOanKTERKHwrDpApwRq4IQEdvEiNazHNclNJb1owiCUeKkTyCyyJXwBullipX3jAUiO7ZUm9D/YVpX4LS1+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uRkksmZY; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1774022007; c=relaxed/simple;
+	bh=dUoSYwUjUcEnqomdHPtx9gEQLHzWM4becMbFXd30NRM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=tdmK2vQxpcXi6bRlaoeNmyHT8CuOTAz6lWXz64GbPCeyW9R+07CO2oobJ/qYmszRHUsFggFhbMUcT9jYiyWABEiNprUWUJy0rW1W1WF7D79SD6qx4XB4Y0yPuqDHX7+K8CDcw/w43fevF5f+NIiJ4l9d5ikbyACkYQ4aYMXl2ZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=BJQCyPfW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dUl+OaHw; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uRkksmZY"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-486fc4725f0so15390055e9.1
-        for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 08:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1774020278; x=1774625078; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EGuAgDtSJcuttCP6aHyWnJnRrzDxd6vKtX0ipXN9Dgo=;
-        b=uRkksmZYLCgS0359yzpE5hK9aU0CtbxHdD+Qzq9D92lFW28avwFQt8h1iKDLWHIKlU
-         Tikry5my0vz/UQg3Q4wOWm0MVJjucY53dgbeWLxV6rdJ381CCrLkvp7bHQ5ASLWVJeh9
-         nOjdih8wGFtzgFf+B6lPINv15KPBaHv+4BBaaAK26qeSNW6pQgk+YGHf8CFNZx8viJJH
-         hQQfdtT3uuD6x4H0UKx3kP6rV+14FbyukWYt6XXVDr9zKki7tYu3+NN7xH8BWmygCPyp
-         WAAxIb7ZXsNmzCpxd/ulZhjcHBi11lmVAHN23Pe5eL5LG+LTPyRtXNuem63o+q6oPwyK
-         ZG/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774020278; x=1774625078;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EGuAgDtSJcuttCP6aHyWnJnRrzDxd6vKtX0ipXN9Dgo=;
-        b=Fyj0nShHNY3ymMiOSkKYD847dxDcJg3tK6rYzv3epVVl1uVCetU7G2AHRhODNMrN6k
-         btYzyfza9DaPopswWhqTCmUQNJIs8z5aI5zphKJXEoMZgFqpDRMiyK3Se5Hbmf9qEClW
-         Lgpt77wmYrEODgS8ooYLFdV4LAzSBt/wo0Y1hZPFq/R+bdpoSmmfS4l8YOqKlYrsaz9C
-         U4V70GbVn4kzkPXgsHHu+P+lFqXC7+xes0t5XHlTt519Ym3Euu6Fz/h4mXHl1FDsROyx
-         b7m9u7C1qTt8fMzZq6K5WCRJSvP1Y91RE8BgXP0KdNmjC2v3GA/YUGB/ovJ9dW/Z0pdW
-         RhyA==
-X-Forwarded-Encrypted: i=1; AJvYcCWTTnglIP1IiK5QSGD34Xd8R06EVAkVzeGyVPS3G5LfhvIagH0f9eAn5cOVJ68VUB0YSnZN@lists.linux.dev
-X-Gm-Message-State: AOJu0YyRbZRgEnKHSP5LpD+0SVm5ihhY8rbgr6wWkrmFAGJye5ZVDGtN
-	p1qt/ZXfTrmjfEfRt3w/Gnwg42U4k/KXaP6ZUSEtkZVHvkjfaxBTI2Y/R7t9VyxVRak=
-X-Gm-Gg: ATEYQzyFlt6scG/LuIqTQRmmTUxUekYYBuNN4rZ2VrFG0Rp1m3ynAshN7AjwvmQdN8n
-	odLgvkXPCHCBtqUr/i+BAy9+zZbezDXVl+VRAQ/UFTEHWTWrTAjm2+Q5sesd2MmqJ/vNI+paFdN
-	LtEoTzHjrLdHK9/I6I+wSAP9Z4oD90ejf8Jr5/GTDNvIrtb3/yKz9ouX/ppYrUHh9rFonoHvK+a
-	GI1dlwn1UutwYgSoVxVd52E98uF7FNSEo/cilreQoZYBFLf2irGP1Ew3ooG7/U6N+sbXz2fG+RD
-	4/6SUQaVt0JXVcAFsMISE885gw2mn1iGwavqSzJB6LTfA0ahNGIb2nr0SayZSCxYcvwaDqOpC6j
-	KeiAE7aIrH2tMf3IflCRfNibaqOgZXgJcsloLT156g5Nl3ly349VvClzlpuIPpqsB7GkipwUuRa
-	P66NVU9kxSZzSFynSQI0Ixm27HHuZ1heJYX6WULaXQnpNVBbE=
-X-Received: by 2002:a05:600d:8449:b0:477:9890:9ab8 with SMTP id 5b1f17b1804b1-486fe8a2bafmr46366735e9.3.1774020277489;
-        Fri, 20 Mar 2026 08:24:37 -0700 (PDT)
-Received: from [192.168.0.167] ([109.76.207.215])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486ff1e6029sm33334055e9.9.2026.03.20.08.24.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Mar 2026 08:24:36 -0700 (PDT)
-Message-ID: <e5e9cc38-9d8c-4a79-ab4f-8c5ed98f6eee@linaro.org>
-Date: Fri, 20 Mar 2026 15:24:35 +0000
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BJQCyPfW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dUl+OaHw"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 3DD2F1D00126;
+	Fri, 20 Mar 2026 11:53:25 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Fri, 20 Mar 2026 11:53:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1774022005;
+	 x=1774108405; bh=noOXDEKNXN1IiJg4buPQeIP+T9GD+aXC85Vf+H9KRV0=; b=
+	BJQCyPfW6MMtGrEkrmOalK04Na5N9+J/YpoKt/bOhbsSm91nZz62CYQSlreN/kDq
+	MO/BN8AxGQgB97e6sGfMEYXXyBP3AgzecxTqx+3gWhF0tqsWBBaIVedivoWv1IAe
+	5TXAzX1GLPhp0f+p7d4jXnekfuq7VIJtNYUodfcl53elVYtp2WloVQWJeD6nEiRy
+	7MDpAP59SOYWQ8SPg7KdZU/rZUre18zWjDVDdwHyQIiq938mcqgkfKl8l9OBqrtr
+	+Y35wrIDXtWNsVVgj9NhCkw1Fk7uanYRvZO0gUckeTOog7WFHnMvTi6JJKU2YTjm
+	oHA+IwNzXqIdRquiq4B/iQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774022005; x=
+	1774108405; bh=noOXDEKNXN1IiJg4buPQeIP+T9GD+aXC85Vf+H9KRV0=; b=d
+	Ul+OaHw8DmDG5cqP02h4If8IdvLpYIYXXiQi+NpdUqpWIB4+eJSy+mtpCmdMCfMd
+	MWsZ/3MpPfTOx2h4Lasxp+ar5CNvpfUhTxEY/fb37gjOyR115l3bWCgiK4p/JwLH
+	19cLHpfJ4doBAwVd/FFfzqbecfTp6xnS0EBxB5tNRkIqEi7Pz5UEH2i2B+43exu/
+	8/AOYOc4bH/5UZC9emQuK44+iTXfZcMHu0dfpAm9dp12LG69mOYHMTXwCsBmkRFY
+	sFxdtw/AC1fRnTAHkHMgB7uwkPCKvqP9D2oXomBX3uuXlCZyoDPOUXbzIc35Sv3B
+	dIP1pFrN4xLMJeFl+NkKw==
+X-ME-Sender: <xms:dG29aec_8ELwMA0levilxeGwhLh-PGysm-5BJIG6EeLpShd0GZshDQ>
+    <xme:dG29aTCTN3DutBayUnzE-bd-PjDn0lZflLK7pmtAKFZejPxHb3wQnskjjYG5TYsOp
+    FzIPyuAiekY75KjF6zQNqVzprfwpcnmcuN0HlrttPIcstJFF2NHHAA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefuddtfedvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudeipdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopeguvghnnhhishdruggrlhgvshhsrghnughrohestghorhhnvghlih
+    hsnhgvthifohhrkhhsrdgtohhmpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgv
+    rhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhith
+    htsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtgho
+    mhdprhgtphhtthhopehmihgthhgrvghlrdhjrdhruhhhlhesihhnthgvlhdrtghomhdprh
+    gtphhtthhopehmihhkvgdrmhgrrhgtihhnihhsiiihnhesihhnthgvlhdrtghomhdprhgt
+    phhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvohhnsehkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopehmihhnghhosehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:dG29aSJcFB1R9IPken2tzTCSmk3Z8kIaVeBToUQWrCHgqEiuSdzm1A>
+    <xmx:dG29aYoEUPdINb2Ps3_1bS8xiMtgXZmGWqulg4T9eOvPiR6Bpf_30g>
+    <xmx:dG29aZgGWoLcnIb2hCS9MLyBuySOCYlJikFRv3Rj0GVbv8ZWIf8Amg>
+    <xmx:dG29aXaqxxcvgOld4MB4HL8hub4iax5--KkgRR_k_sytlyCeWaF1CQ>
+    <xmx:dW29aQfx9L08UEF-Iom27A2keqpOYEODhtVaR3dH7IyzT8VY2VCWeEfn>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 62EC8700069; Fri, 20 Mar 2026 11:53:24 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: qcom: camss: avoid format string warning
-To: Arnd Bergmann <arnd@kernel.org>, Robert Foss <rfoss@kernel.org>,
- Todor Tomov <todor.too@gmail.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Hans Verkuil <hverkuil@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Hans Verkuil <hverkuil+cisco@kernel.org>,
- Vincent Knecht <vincent.knecht@mailoo.org>,
- Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>, linux-media@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20260320151828.3456863-1-arnd@kernel.org>
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20260320151828.3456863-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ThreadId: AhovTUn8f-P3
+Date: Fri, 20 Mar 2026 16:53:04 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Arnd Bergmann" <arnd@kernel.org>,
+ "Dennis Dalessandro" <dennis.dalessandro@cornelisnetworks.com>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>, "Leon Romanovsky" <leon@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Mike Marciniszyn" <mike.marciniszyn@intel.com>,
+ "Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+ "Doug Ledford" <dledford@redhat.com>
+Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Marco Crivellari" <marco.crivellari@suse.com>,
+ "Ingo Molnar" <mingo@kernel.org>, linux-rdma@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Message-Id: <6b56c476-86fd-4d43-8dee-c7f89d346941@app.fastmail.com>
+In-Reply-To: <20260320151511.3420818-2-arnd@kernel.org>
+References: <20260320151511.3420818-1-arnd@kernel.org>
+ <20260320151511.3420818-2-arnd@kernel.org>
+Subject: Re: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 20/03/2026 15:18, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang-22 warns about csiphy_match_clock_name() taking a variable format
-> string that is not checked against the 'int index' argument:
-> 
-> drivers/media/platform/qcom/camss/camss-csiphy.c:566:44: error: diagnostic behavior may be improved by
->        adding the 'format(printf, 2, 3)' attribute to the declaration of 'csiphy_match_clock_name'
->        [-Werror,-Wmissing-format-attribute]
->    561 | static bool csiphy_match_clock_name(const char *clock_name, const char *format,
->        | __attribute__((format(printf, 2, 3)))
->    562 |                                     int index)
->    563 | {
->    564 |         char name[16]; /* csiphyXXX_timer\0 */
->    565 |
->    566 |         snprintf(name, sizeof(name), format, index);
->        |                                                   ^
-> drivers/media/platform/qcom/camss/camss-csiphy.c:561:13: note: 'csiphy_match_clock_name' declared here
->    561 | static bool csiphy_match_clock_name(const char *clock_name, const char *format,
->        |             ^
-> 
-> Change the function to use a snprintf() style format string that allows this
-> to be checked at the call site.
-> 
-> Fixes: 0727615fb975 ("media: qcom: camss: Functionally decompose CSIPHY clock lookups")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   drivers/media/platform/qcom/camss/camss-csiphy.c | 10 +++++++---
->   1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-> index 62623393f414..78a1b568dbae 100644
-> --- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-> +++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-> @@ -558,12 +558,16 @@ static int csiphy_init_formats(struct v4l2_subdev *sd,
->   	return csiphy_set_format(sd, fh ? fh->state : NULL, &format);
->   }
->   
-> -static bool csiphy_match_clock_name(const char *clock_name, const char *format,
-> -				    int index)
-> +static bool __printf(2, 3)
-> +csiphy_match_clock_name(const char *clock_name, const char *format, ...)
->   {
->   	char name[16]; /* csiphyXXX_timer\0 */
-> +	va_list args;
+On Fri, Mar 20, 2026, at 16:12, Arnd Bergmann wrote:
+
+> +	 */
+> +	ibdev = &dd->verbs_dev.rdi.ibdev;
+> +	dev_set_name(&ibdev->dev, "%s_%d", class_name(), dd->unit);
+> +	strscpy(&ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
 > +
-> +	va_start(args, format);
-> +	vsnprintf(name, sizeof(name), format, args);
-> +	va_end(args);
->   
-> -	snprintf(name, sizeof(name), format, index);
->   	return !strcmp(clock_name, name);
->   }
->   
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+
+I messed this up during a rebase, that should have been 
+
+       strscpy(ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
+
+(without the extra &). I'll wait for comments before resending.
+
+       Arnd
