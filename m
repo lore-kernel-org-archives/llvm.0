@@ -1,179 +1,107 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3377732C923;
-	Fri, 20 Mar 2026 22:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C3E353EF2;
+	Fri, 20 Mar 2026 23:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774044659; cv=none; b=Ni/KN7EbxfwWcq+YzXco8481KWjbfXRvhzIxoNbGbRCXJZMBoGK4ZzP5hCw1N+0kPLORrCofAUHe97RV8cixy2VIZkWGq2zUqT4V1nIvx4dQraBd9tKJb8JoDEElaPBoNurWyM8i4Y4jBz1A4F14oyt64X4Y+mHoBe6AOYDxA1s=
+	t=1774050423; cv=none; b=UgreIvBX1veYCFuqyRBQcynuXwpqRVHfaNgRLGuZMlpXlwiZNwcEEU2v0d/dOVq1002A7XD5en3gBBcShHV1fXH8sEb1p744+uqBHEt0/gS+AgGX/rxNN5NusMiW+HOjSdVwP48G2qgZSXsr3JrC6udZ9u0Vo7iY9A3AoQL98+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774044659; c=relaxed/simple;
-	bh=J+8zKVAP9JlQtzGNnlqNZHx/03ppdb6SVg986gQB8H8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tnTz//wIltDlQQvfRJy3LnmAEy0mV6w1We6Faqqf9GO7/i8Tr+6AhcY4OG/0dXCcZ22jKF6CKdjpd5mLmS8mbhl4/qFKvD3dFHWk6QEIKONZAdU01oCi8yXsveRSo4WEV1r5x44eH+TEGVN748m78oe9U1qWj6AQVyX4kG/Sdbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MGcIsm66; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1774050423; c=relaxed/simple;
+	bh=gWfK1b8BdWEr4pCPlbKH9YVWO0Dv5ituchaZxQS8RBg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=BjHHUkyzvlTITOXNVvdixbN/sqZQ95dXog5GUApV2ifStwB1ZtUjsqGgcSH8CQIvq3RZUFN+Th+/kQEB3l3OBFDcFuZsgFJFaHS1QyVsnZm1GPww8sEyQdVDpbm9MGAGmQYKziAcmHYxGernaaP8n+t1Bk47GIdL410pMZyNfPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mv/QexHe; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MGcIsm66"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ymBi0o5H4WjeXAhMvQJfYlPhxbSAi7Mfyz34a+CjDvk=; b=MGcIsm662ntnuk5epJHc9NV7pX
-	CgNxYMQgrw/EkAOoLxOjZQjg5Y6uJo6Wpgb81XVmKNLEZvKtAlW1FcfODOMIZ/k65Vzth0jagIgYt
-	DKMhorsLo0qTdszsLnXBUwYufSYWpSYY4RV5QNa7LyGsztBWlhuqPqxRaqgFIVD9ysS9NRzlW/6Rg
-	LRwzTu9io3h47Eg3MxyLHyc/yPPR8F74qpEWLw87yMesClM6fIiRBUnW4biW1mKVMFiZ7pY4dn7J7
-	iCucSLUlcyncGL3sUvnDWpKRx2/2aXdNxoZCOnCL8gLTATBmS0ah9Sbs41CQ3bmh1RtJdi5Jvm+h7
-	RMB2JnYw==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w3i3Q-00000008RaC-1bMg;
-	Fri, 20 Mar 2026 22:10:52 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 29A58301185; Fri, 20 Mar 2026 23:10:51 +0100 (CET)
-Date: Fri, 20 Mar 2026 23:10:51 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Jann Horn <jannh@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev,
-	Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH v2 1/4] sched: Ensure matching stack state for kcov
- disable/enable on switch
-Message-ID: <20260320221051.GX3738010@noisy.programming.kicks-ass.net>
-References: <20260318-kcov-extrecord-v2-0-2522da6fcd3f@google.com>
- <20260318-kcov-extrecord-v2-1-2522da6fcd3f@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mv/QexHe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774050422; x=1805586422;
+  h=date:from:to:cc:subject:message-id;
+  bh=gWfK1b8BdWEr4pCPlbKH9YVWO0Dv5ituchaZxQS8RBg=;
+  b=mv/QexHedBj1AJllrwyD7vBCaFnl0jQkWbTi4Ov9/dR9/EWfyFq3QMj2
+   8ZC88BWrXp0aSw6jVnspRsMsLPoOZ/K/sujVYBk+8BlxsvgjpX/gvZxFY
+   pvu8DDMSz1Y8SS6GFMb546luwBxtIp0Mer9CAIASPDnUCUjWmUenEjoIf
+   vxwE/8mc2AbrmXb2iblLJduqeFij5E7a+zv06D3h88uc6uoYoCV85NG+2
+   Syxo8dkIL8Hcxg+AfDlUsS/lx4w8XfuqhngsTpbqnRbzFCufdSv+i6BG3
+   vSNaIuQFZ5t0vHvSLJ8bVm14uZaeABudYmtWK51CogJ6Mt8u0xYCyR2rt
+   w==;
+X-CSE-ConnectionGUID: euvboLamTnKwokNWOFaWDw==
+X-CSE-MsgGUID: OBPDakI6TvWs3oH6iKtSiw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="62703932"
+X-IronPort-AV: E=Sophos;i="6.23,132,1770624000"; 
+   d="scan'208";a="62703932"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 16:47:01 -0700
+X-CSE-ConnectionGUID: D5l3viYoS/arEX0lS7JogQ==
+X-CSE-MsgGUID: Bj2A6bLER+KBGg5KAfUxSg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,132,1770624000"; 
+   d="scan'208";a="219178474"
+Received: from lkp-server02.sh.intel.com (HELO d7fefbca0d04) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 20 Mar 2026 16:46:59 -0700
+Received: from kbuild by d7fefbca0d04 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w3jYP-0000000001P-1p65;
+	Fri, 20 Mar 2026 23:46:57 +0000
+Date: Sat, 21 Mar 2026 07:44:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:irq/core 4/14] arch/x86/kernel/irq.c:138:17:
+ error: use of undeclared identifier 'IRQ_COUNT_X86_POSTED_MSI'
+Message-ID: <202603210703.cFdqbWnR-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260318-kcov-extrecord-v2-1-2522da6fcd3f@google.com>
 
-On Wed, Mar 18, 2026 at 05:26:58PM +0100, Jann Horn wrote:
-> Ensure that kcov is disabled and enabled with the same call stack.
-> This will be relied on by subsequent patches for recording function
-> entry/exit records via kcov.
-> 
-> This patch should not affect compilation of normal kernels without KCOV
-> (though it changes "inline" to "__always_inline").
-> 
-> To: Ingo Molnar <mingo@redhat.com>
-> To: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Jann Horn <jannh@google.com>
-> ---
->  kernel/sched/core.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index b7f77c165a6e..c470f0a669ec 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5072,8 +5072,10 @@ static inline void kmap_local_sched_in(void)
->   *
->   * prepare_task_switch sets up locking and calls architecture specific
->   * hooks.
-> + *
-> + * Must be inlined for kcov_prepare_switch().
->   */
-> -static inline void
-> +static __always_inline void
->  prepare_task_switch(struct rq *rq, struct task_struct *prev,
->  		    struct task_struct *next)
->  	__must_hold(__rq_lockp(rq))
-> @@ -5149,7 +5151,6 @@ static struct rq *finish_task_switch(struct task_struct *prev)
->  	tick_nohz_task_switch();
->  	finish_lock_switch(rq);
->  	finish_arch_post_lock_switch();
-> -	kcov_finish_switch(current);
->  	/*
->  	 * kmap_local_sched_out() is invoked with rq::lock held and
->  	 * interrupts disabled. There is no requirement for that, but the
-> @@ -5295,7 +5296,13 @@ context_switch(struct rq *rq, struct task_struct *prev,
->  	switch_to(prev, next, prev);
->  	barrier();
->  
-> -	return finish_task_switch(prev);
-> +	rq = finish_task_switch(prev);
-> +	/*
-> +	 * This has to happen outside finish_task_switch() to ensure that
-> +	 * entry/exit records are balanced.
-> +	 */
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git irq/core
+head:   9e85c64195f3479abcad77115c7d5626e6905546
+commit: d5debb2dd149e388fe3fdc1660437d2362579d28 [4/14] x86/irq: Make irqstats array based
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260321/202603210703.cFdqbWnR-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260321/202603210703.cFdqbWnR-lkp@intel.com/reproduce)
 
-That's not exactly right; the requirement is that kcov_prepare_switch()
-and kcov_finish_switch() are called from the exact same frame.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603210703.cFdqbWnR-lkp@intel.com/
 
-The wording above "outside finish_task_switch" could be anywhere and
-doesn't cover the relation to prepare_switch().
+All errors (new ones prefixed by >>):
 
-> +	kcov_finish_switch(current);
-> +	return rq;
->  }
+>> arch/x86/kernel/irq.c:138:17: error: use of undeclared identifier 'IRQ_COUNT_X86_POSTED_MSI'
+     138 |                 irq_stat_info[IRQ_COUNT_X86_POSTED_MSI].skip_vector = 1;
+         |                               ^
+   1 error generated.
 
-That said; there was a patch that marked finish_task_switch() as
-__always_inline too:
 
-  https://lkml.kernel.org/r/20260301083520.110969-4-qq570070308@gmail.com
+vim +/IRQ_COUNT_X86_POSTED_MSI +138 arch/x86/kernel/irq.c
 
-Except I think that does a little too much for one patch.
+   123	
+   124	void __init irq_init_stats(void)
+   125	{
+   126		struct irq_stat_info *info = irq_stat_info;
+   127	
+   128		for (unsigned int i = 0; i < ARRAY_SIZE(irq_stat_info); i++, info++) {
+   129			if (info->skip_vector && test_bit(info->skip_vector, system_vectors))
+   130				info->skip_vector = 0;
+   131		}
+   132	
+   133		if (!x86_platform_ipi_callback)
+   134			irq_stat_info[IRQ_COUNT_X86_PLATFORM_IPI].skip_vector = 1;
+   135	
+   136	#ifdef CONFIG_X86_POSTED_MSI
+   137		if (!posted_msi_enabled())
+ > 138			irq_stat_info[IRQ_COUNT_X86_POSTED_MSI].skip_vector = 1;
+   139	#endif
+   140	}
+   141	
 
-Anyway, I'm a little divided on this. Perhaps the simplest and most
-obvious way is something like so.
-
-But what about compiler funnies like the various IPA optimizations that
-can do partial clones and whatnot? That could result in violating this
-constraint, no?
-
----
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 6e509e292f99..d9925220d51b 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5135,7 +5135,6 @@ prepare_task_switch(struct rq *rq, struct task_struct *prev,
- 		    struct task_struct *next)
- 	__must_hold(__rq_lockp(rq))
- {
--	kcov_prepare_switch(prev);
- 	sched_info_switch(rq, prev, next);
- 	perf_event_task_sched_out(prev, next);
- 	fire_sched_out_preempt_notifiers(prev, next);
-@@ -5206,7 +5205,6 @@ static struct rq *finish_task_switch(struct task_struct *prev)
- 	tick_nohz_task_switch();
- 	finish_lock_switch(rq);
- 	finish_arch_post_lock_switch();
--	kcov_finish_switch(current);
- 	/*
- 	 * kmap_local_sched_out() is invoked with rq::lock held and
- 	 * interrupts disabled. There is no requirement for that, but the
-@@ -5294,6 +5292,7 @@ context_switch(struct rq *rq, struct task_struct *prev,
- 	       struct task_struct *next, struct rq_flags *rf)
- 	__releases(__rq_lockp(rq))
- {
-+	kcov_prepare_switch(prev);
- 	prepare_task_switch(rq, prev, next);
- 
- 	/*
-@@ -5352,7 +5351,13 @@ context_switch(struct rq *rq, struct task_struct *prev,
- 	switch_to(prev, next, prev);
- 	barrier();
- 
--	return finish_task_switch(prev);
-+	rq = finish_task_switch(prev);
-+	/*
-+	 * kcov_prepare_switch() above, and kcov_finish_switch() must be
-+	 * called from the same stack frame.
-+	 */
-+	kcov_finish_switch(current);
-+	return rq;
- }
- 
- /*
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
