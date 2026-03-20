@@ -1,66 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5801A1DF987
-	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 14:36:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312CC3B961D;
+	Fri, 20 Mar 2026 15:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774017418; cv=none; b=miAHx1rFLK8Z5eQqW/SitI3LlDYMGzfPE0EPRIwpc2YfDzfct+p4+HjzDli9Dm+cqNkgih150BlbDi78ed9MbjeNpqrQI32CnwGxqGHLx3uVl32Lw6jI28dxAMJbsC68quvzPNPyXTIL4NbUUhKkkGNryyPpwbuyslT+DGn0gzQ=
+	t=1774019732; cv=none; b=N71FkIJlF6XcYsFIp2p/wgOV4RptNn7fOk5cu2cgDNdCtfaK9SxAnn0VU89AZ+mk5tJtXDpVSNzmvFrfvKNAytoucYFSjMu0paf9H//vRUNe8S9yiKyPMVPRZn4CBpCsy+h5QCfyuj85AscwNF48NJ2fjaw4wkteCoKciX+xep8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774017418; c=relaxed/simple;
-	bh=vrfoLwO/FTvfay85UrFhHzYUQTVGvBxfTjlQlWQxsFg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e2ZS5Vma8NIOStM9ph8MyqvojI5l7AfqV9ULqHAYAf6QX8er81NMcBZsGNDZ+khqoiR0p/irHbTq7xCB6Vh63yQ1pXXt8IB3jocnv+AaFsscXOSA4CmcTyAJ/MBNhCBhyhQ39VBQC3UdCcXxAELg0x1ZDrJaAHNVPQmhM7GDxRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=STAwuExd; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1774019732; c=relaxed/simple;
+	bh=hpDZ5j56hWihlvr2tldSS67Y7hr7VWN/4PiY5cUG6/U=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=S79LY/HdehDzYnoRhP2vDQIpp1KcNt2anhgdBcql5Tpa9uaQnK7wXOdLG2Q0PMo5T2swPL/jJe62kbpePMJIvPoTV2CeKu/WSp0YaXmaVpL3gUb1onNVBmYmRWWU9RQmCOs7Ii7Ya22Xql2Ute+FAQpiWtgW6Ame1PAvfuLoggw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GryPzZWY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="STAwuExd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774017416; x=1805553416;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vrfoLwO/FTvfay85UrFhHzYUQTVGvBxfTjlQlWQxsFg=;
-  b=STAwuExd/UjNYKO6r3AEK8C+V8bQseOKIMt0vpxvqrgtX0i+p6x74V9r
-   8fO70HzSIHMwbJwveY1YHTH3diqrwpQBbXSEG0Nkp0sYS/WLkH9nIRpT0
-   N9BnYquxposqHAVPubbyfxrMVix0odg18k4d2uy7U7lK0hSdOTsYio7R7
-   eQ9QGgtZuSAA1A1BlnaA0dzP4bsvaMpmCVgeTDSjKxjzbn0Tc9QYB8PEF
-   puaLFvl5VRltuofCWS01D+JhDQeFoyJr6R+fZkJm+VYjx0t8uAnmTcbwQ
-   bEQLVoXw6bwfrnANggYxGb4mai/beGt90beG70DmOkfYSb3Mai7GA2Np+
-   Q==;
-X-CSE-ConnectionGUID: wwR+Jj99SjGFzjLMwsKWog==
-X-CSE-MsgGUID: a7QLqNI3TQCAX0e4LRTQwQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="75011907"
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="75011907"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 07:36:55 -0700
-X-CSE-ConnectionGUID: qtGnx5r3RmuRASzkFq83Nw==
-X-CSE-MsgGUID: d4QWydUcThixM+6K9Je94g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="218649764"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Mar 2026 07:36:53 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 0A3B195; Fri, 20 Mar 2026 15:36:52 +0100 (CET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>,
-	linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Helge Deller <deller@gmx.de>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GryPzZWY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A37DDC4CEF7;
+	Fri, 20 Mar 2026 15:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774019731;
+	bh=hpDZ5j56hWihlvr2tldSS67Y7hr7VWN/4PiY5cUG6/U=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=GryPzZWYs7Qj37CDjggwK3lIORT1CR0SvYmuqmE0+poZa9rIdQ1jxORpe9d6AtBpc
+	 N9MR+0eiQ/MpRzZl6n1w6I8dyKC4/fpvK6T8U54O+Z6TVLnimqZ8I6KwLSUZ49/xKk
+	 CY9knn+kQnRW8jc+3u5wBqUaUyI9/8XjR5G9jYNtZ3aHFrFZQI4nUGXl4Hu24+QbBR
+	 3u9DDyV7N/mUdlSxMj+XQLK4KHlo8507OkOXvpKTXdPJRGqElN9PRFeVIJswWglusf
+	 cjU6ZKy4vhM1D5POCPgKCNqKJo2Gl1ll69Gah+SDQOR6RmRH5HfEdFT3w0stnr58TA
+	 DpmUfHdb+8jVQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
+	Mike Marciniszyn <mike.marciniszyn@intel.com>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	Doug Ledford <dledford@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH v1 1/1] video: fbdev: matroxfb: Mark variable with __maybe_unused to avoid W=1 build break
-Date: Fri, 20 Mar 2026 15:36:46 +0100
-Message-ID: <20260320143646.3218199-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
+Date: Fri, 20 Mar 2026 16:12:38 +0100
+Message-Id: <20260320151511.3420818-2-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20260320151511.3420818-1-arnd@kernel.org>
+References: <20260320151511.3420818-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,65 +57,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clang is not happy about set but unused variable:
+From: Arnd Bergmann <arnd@arndb.de>
 
-drivers/video/fbdev/matrox/g450_pll.c:412:18: error: variable 'mnp' set but not used [-Werror,-Wunused-but-set-variable]
-   412 |                                 unsigned int mnp;
-       |                                              ^
-1 error generated.
+clang warns about a function missing a printf attribute:
 
-Since the commit 7b987887f97b ("video: fbdev: matroxfb: remove dead code
-and set but not used variable") the 'mnp' became unused, but eliminating
-that code might have side-effects. The question here is what should we do
-with 'mnp'? The easiest way out is just mark it with __maybe_unused which
-will shut the compiler up and won't change any possible IO flow. So does
-this change.
+include/rdma/rdma_vt.h:457:47: error: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'rvt_set_ibdev_name' [-Werror,-Wmissing-format-attribute]
+  447 | static inline void rvt_set_ibdev_name(struct rvt_dev_info *rdi,
+      | __attribute__((format(printf, 2, 3)))
+  448 |                                       const char *fmt, const char *name,
+  449 |                                       const int unit)
 
-Fixes: 7b987887f97b ("video: fbdev: matroxfb: remove dead code and set but not used variable")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The helper was originally added as an abstraction for the hfi1 and
+qib drivers needing the same thing, but now qib is gone, and hfi1
+is the only remaining user of rdma_vt.
 
+Avoid the warning and allow the compiler to check the format string by
+open-coding the helper and directly assigning the device name.
+
+Fixes: 5084c8ff21f2 ("IB/{rdmavt, hfi1, qib}: Self determine driver name")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-Cc: Jason Yan <yanaijie@huawei.com>
----
+ drivers/infiniband/hw/hfi1/init.c | 13 ++++++++++++-
+ include/rdma/rdma_vt.h            | 20 --------------------
+ 2 files changed, 12 insertions(+), 21 deletions(-)
 
-Below is a dive into the history of the driver.
-
-The problem was revealed when the #if 0 guarded code along with unused
-pixel_vco variable was removed. That code was introduced in the original
-commit 213d22146d1f ("[PATCH] (1/3) matroxfb for 2.5.3"). And then guarded
-in the commit 705e41f82988 ("matroxfb DVI updates: Handle DVI output on
-G450/G550. Powerdown unused portions of G450/G550 DAC. Split G450/G550 DAC
-from older DAC1064 handling. Modify PLL setting when both CRTCs use same
-pixel clocks.").
-
-NOTE: The two commits mentioned above pre-date Git era and available in
-history.git repository for archaeological purposes.
-
-Even without that guard the modern compilers may see that the pixel_vco
-wasn't ever used and seems a leftover after some debug or review made
-25 years ago.
-
-The g450_mnp2vco() doesn't have any IO and as Jason said doesn't seem
-to have any side effects either than some unneeded CPU processing during
-runtime. I agree that's unlikely that timeout (or heating up the CPU) has
-any effect on the HW (GPU/display) functionality.
----
- drivers/video/fbdev/matrox/g450_pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/video/fbdev/matrox/g450_pll.c b/drivers/video/fbdev/matrox/g450_pll.c
-index e2c1478aa47f..6a08f78cd1ac 100644
---- a/drivers/video/fbdev/matrox/g450_pll.c
-+++ b/drivers/video/fbdev/matrox/g450_pll.c
-@@ -409,7 +409,7 @@ static int __g450_setclk(struct matrox_fb_info *minfo, unsigned int fout,
- 		case M_VIDEO_PLL:
- 			{
- 				u_int8_t tmp;
--				unsigned int mnp;
-+				unsigned int mnp __maybe_unused;
- 				unsigned long flags;
+diff --git a/drivers/infiniband/hw/hfi1/init.c b/drivers/infiniband/hw/hfi1/init.c
+index 8b5a5b32b0fa..fb0a8325a43d 100644
+--- a/drivers/infiniband/hw/hfi1/init.c
++++ b/drivers/infiniband/hw/hfi1/init.c
+@@ -1206,6 +1206,7 @@ static struct hfi1_devdata *hfi1_alloc_devdata(struct pci_dev *pdev,
+ 					       size_t extra)
+ {
+ 	struct hfi1_devdata *dd;
++	struct ib_device *ibdev;
+ 	int ret, nports;
  
- 				matroxfb_DAC_lock_irqsave(flags);
+ 	/* extra is * number of ports */
+@@ -1227,7 +1228,17 @@ static struct hfi1_devdata *hfi1_alloc_devdata(struct pci_dev *pdev,
+ 			"Could not allocate unit ID: error %d\n", -ret);
+ 		goto bail;
+ 	}
+-	rvt_set_ibdev_name(&dd->verbs_dev.rdi, "%s_%d", class_name(), dd->unit);
++
++	/*
++	 * FIXME: rvt and its users want to touch the ibdev before
++	 * registration and have things like the name work. We don't have the
++	 * infrastructure in the core to support this directly today, hack it
++	 * to work by setting the name manually here.
++	 */
++	ibdev = &dd->verbs_dev.rdi.ibdev;
++	dev_set_name(&ibdev->dev, "%s_%d", class_name(), dd->unit);
++	strscpy(&ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
++
+ 	/*
+ 	 * If the BIOS does not have the NUMA node information set, select
+ 	 * NUMA 0 so we get consistent performance.
+diff --git a/include/rdma/rdma_vt.h b/include/rdma/rdma_vt.h
+index 7d8de561f71b..7ffc83262a01 100644
+--- a/include/rdma/rdma_vt.h
++++ b/include/rdma/rdma_vt.h
+@@ -438,26 +438,6 @@ struct rvt_dev_info {
+ 	struct rvt_wss *wss;
+ };
+ 
+-/**
+- * rvt_set_ibdev_name - Craft an IB device name from client info
+- * @rdi: pointer to the client rvt_dev_info structure
+- * @name: client specific name
+- * @unit: client specific unit number.
+- */
+-static inline void rvt_set_ibdev_name(struct rvt_dev_info *rdi,
+-				      const char *fmt, const char *name,
+-				      const int unit)
+-{
+-	/*
+-	 * FIXME: rvt and its users want to touch the ibdev before
+-	 * registration and have things like the name work. We don't have the
+-	 * infrastructure in the core to support this directly today, hack it
+-	 * to work by setting the name manually here.
+-	 */
+-	dev_set_name(&rdi->ibdev.dev, fmt, name, unit);
+-	strscpy(rdi->ibdev.name, dev_name(&rdi->ibdev.dev), IB_DEVICE_NAME_MAX);
+-}
+-
+ /**
+  * rvt_get_ibdev_name - return the IB name
+  * @rdi: rdmavt device
 -- 
-2.50.1
+2.39.5
 
