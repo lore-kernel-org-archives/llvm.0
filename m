@@ -1,117 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F200933ADBA
-	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 09:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B764535E941;
+	Fri, 20 Mar 2026 09:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773998533; cv=none; b=HzdONWr18T1bzwubt1E6eM9OzkcHJ833NOPfHk9gLVULePCBl+AQda08FTogopWJgrUeof//a6/7FlWXer3zV0FmSblEvaYkd3xOkJeGzElxqnE8ghSm6yc/MdFN0Ycx6Szqlzi0j4YAGGR8IuJynn0+9cwqSCllqyAo6HfEt4s=
+	t=1773998795; cv=none; b=l6zb/sPxr0A5pZOppVlB93FT58LuBnPxNU+kl2Xb5rTof+3+GZxBvQFblmYl10dvboxexW6m2Hk6aSJjWdtUET7R/za7Ye2Wa22Fy6XgTQz33IY8S/5GE46g64Nqrd84zz5s68F6SEzaDwjVByiNA4R3ffFsuEcp40y+fj5wNCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773998533; c=relaxed/simple;
-	bh=PhQXZKtba7ITXXpMxqDE13jAjK5XuCJA33kvRYoraPk=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kjAgBxb1gujN38sYjW6PRyC8VjJMc1eLXm6O37PzgomrAM6mCwQA9wjCnBZSfGNFZ7g05EcRuTuIlavHyf5M1ilDS9gPkrAOvlX6Thuy9Z8KLrPhkadanuopLIJ7066q3xm2RaJniCf7fAvax3oq/Viyz4Fu9kaqgPVSD3PuNsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vnmw0j92; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1773998795; c=relaxed/simple;
+	bh=DOGaCuBCTRkz1PBAmYE+qDUnukQ0pca3NhU408CcktE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Uv4/GKICoxJyx3qeLmnUSSM4EVJ7SGamkk8Ca/50f6Bu6+5q5hSxMjsbtHMXLO2BIvn0XEOPGPWANJVWm8h8fRZqXyPFXOhMii6cKO//REqmVjznnLmcduRLV8VYp00b8XtaRK4No5pCQ9KDSa64T4zCad8l0qitJ93sueKkuWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lE7vjFKL; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vnmw0j92"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1773998531;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=11oCAh5vfYa3zrS42RKn2lcdfFOzB9v1mLT9aJ6CWOY=;
-	b=Vnmw0j92FYiLrLYkbXJmMLUjjCU21d7zKESHQaEMTx9GQWGWLc0Rmw3jl1h76DEUf1RczY
-	D56Jc1tyK5GFCtSzHf/p+gMntJH7CntUjrYxuFaLmyrmoYJCN9WfuVDVgYEUJNFBTtAM+U
-	lYKQ0aXGvy6nFl5rR7zo3N+eJMZ78Ag=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-613-5hOIF0pVOBa62z9lRZWVSA-1; Fri,
- 20 Mar 2026 05:22:07 -0400
-X-MC-Unique: 5hOIF0pVOBa62z9lRZWVSA-1
-X-Mimecast-MFC-AGG-ID: 5hOIF0pVOBa62z9lRZWVSA_1773998527
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E3D251944E43
-	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 09:22:06 +0000 (UTC)
-Received: from [172.20.92.244] (unknown [10.30.44.31])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1DD29180075D;
-	Fri, 20 Mar 2026 09:22:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc4,
- upstream-mainline, a1d9d8e8)
-Date: Fri, 20 Mar 2026 09:22:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lE7vjFKL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773998795; x=1805534795;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DOGaCuBCTRkz1PBAmYE+qDUnukQ0pca3NhU408CcktE=;
+  b=lE7vjFKLo3fnUv+L7/SPtCF62vh6NZf2Rx65mOfV4W5+FCspx6U8Jhgq
+   DLYjrIMKIAjd9KWWQckSW7WVQOYWGAL/Z+rThZimXVTj4sPbjewVRfmtj
+   kEwFejGbjxVCSXOb82gr6YupadYvwhbhJVSkS2UAv7q3g9RqQqOjdVQrX
+   j2IQ3QN3kj/2Ak74agmv82PuEYgiGE3Otz5xXDUUnVbU2aJ3z8TnoiL8b
+   hSRoMW6y8fOf0Ub5MHHBEXsJlafVUZYkEZazOSNa2IIwLKWhGbr8HyiW6
+   ZRNftFSFMDHTgf7aHqKa+8DQrRb2piolsrO0YmhpRyRAjjWtihWuynXfg
+   A==;
+X-CSE-ConnectionGUID: JL4sDvUoRGaCXzCP4BAjTA==
+X-CSE-MsgGUID: S7qcvwpsRCCg96ONs4ri5w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="85782600"
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="85782600"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 02:26:34 -0700
+X-CSE-ConnectionGUID: 6CMDdqN/R2qCbE52BuaMXA==
+X-CSE-MsgGUID: AWRO+khYT12j2nQa9yZPfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="228171443"
+Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 20 Mar 2026 02:26:29 -0700
+Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w3W63-000000002Cd-33yE;
+	Fri, 20 Mar 2026 09:25:07 +0000
+Date: Fri, 20 Mar 2026 17:22:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Koskovich <akoskovich@pm.me>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+	Alexander Koskovich <akoskovich@pm.me>
+Subject: Re: [PATCH v3 3/4] drm/msm/dsi: Add support for RGB101010 pixel
+ format
+Message-ID: <202603201719.MxZJCZoY-lkp@intel.com>
+References: <20260319-dsi-rgb101010-support-v3-3-85b99df2d090@pm.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <34559.126032005220700534@us-mta-613.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: zpoTr2KJoCc5PVrfeHFpKQnQEkW_O9WIZPDvlSyp-x4_1773998527
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260319-dsi-rgb101010-support-v3-3-85b99df2d090@pm.me>
 
-Hi, we tested your kernel and here are the results:
+Hi Alexander,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on f338e77383789c0cae23ca3d48adcc5e9e137e3c]
 
-Kernel information:
-    Commit message: Merge tag 'net-7.0-rc5' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Koskovich/drm-msm-dsi-rename-MSM8998-DSI-version-from-V2_2_0-to-V2_0_0/20260320-011528
+base:   f338e77383789c0cae23ca3d48adcc5e9e137e3c
+patch link:    https://lore.kernel.org/r/20260319-dsi-rgb101010-support-v3-3-85b99df2d090%40pm.me
+patch subject: [PATCH v3 3/4] drm/msm/dsi: Add support for RGB101010 pixel format
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260320/202603201719.MxZJCZoY-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603201719.MxZJCZoY-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2396720022
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603201719.MxZJCZoY-lkp@intel.com/
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2396720022_ppc64le_kernel
+All errors (new ones prefixed by >>):
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+>> drivers/gpu/drm/msm/dsi/dsi_host.c:760:7: error: use of undeclared identifier 'MIPI_DSI_FMT_RGB101010'
+     760 |         case MIPI_DSI_FMT_RGB101010:    return VID_DST_FORMAT_RGB101010;
+         |              ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/dsi/dsi_host.c:773:7: error: use of undeclared identifier 'MIPI_DSI_FMT_RGB101010'
+     773 |         case MIPI_DSI_FMT_RGB101010:    return CMD_DST_FORMAT_RGB101010;
+         |              ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/dsi/dsi_host.c:1710:21: error: use of undeclared identifier 'MIPI_DSI_FMT_RGB101010'
+    1710 |         if (dsi->format == MIPI_DSI_FMT_RGB101010 &&
+         |                            ^~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
 
+vim +/MIPI_DSI_FMT_RGB101010 +760 drivers/gpu/drm/msm/dsi/dsi_host.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   755	
+   756	static inline enum dsi_vid_dst_format
+   757	dsi_get_vid_fmt(const enum mipi_dsi_pixel_format mipi_fmt)
+   758	{
+   759		switch (mipi_fmt) {
+ > 760		case MIPI_DSI_FMT_RGB101010:	return VID_DST_FORMAT_RGB101010;
+   761		case MIPI_DSI_FMT_RGB888:	return VID_DST_FORMAT_RGB888;
+   762		case MIPI_DSI_FMT_RGB666:	return VID_DST_FORMAT_RGB666_LOOSE;
+   763		case MIPI_DSI_FMT_RGB666_PACKED:	return VID_DST_FORMAT_RGB666;
+   764		case MIPI_DSI_FMT_RGB565:	return VID_DST_FORMAT_RGB565;
+   765		default:			return VID_DST_FORMAT_RGB888;
+   766		}
+   767	}
+   768	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
