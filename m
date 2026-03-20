@@ -1,139 +1,106 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6A53101A2
-	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 19:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3292F2EDD6B;
+	Fri, 20 Mar 2026 19:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774033478; cv=none; b=ffGSnsVqz9xwmfuioIhHWNdQykLF5/wO0dzV8HnQVGyzsDglqYTxssPmmgW5UONyGtrZufJDey8Yyb9kIGhQsX/L0Yxe0xecFw3xn54M5P/EESrIYkpsoy6rUivjCeanjH+I8RCMPDO0Zv9Onc/A47a/qV+wV4ezOkR7XvwOVIY=
+	t=1774033718; cv=none; b=ENplmpgBG2j1DUNFlUmiD9Z2QqwPZ7YY6hEU4SDbQV/q89dZqM7ZS7O4EM/Wwbu9TKHsDP3/bt2a3B9FGQ8l3EbYiZ7PFr/h+ZWFslT1KvYvvCyfw+1OxMzM60hDJcBr9V1vZ9eatxphvMdZNOp9Ra+wNqOWrNb7/3xfQFNhj/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774033478; c=relaxed/simple;
-	bh=y4xjiVBHeQF5JqZbrncshkWLcltuy9g0ZxsUn3RToTc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dSNKnM4fWTmHsr481yG3i/2BFBJ8F5AP7rhei2hwut5FCFBgQzU70Vhiqn3RxdD/zFJaXQm+EmcI6dsbqf5QzXX8W16ItlE+LCTlK9AJCtRnXxfcpiRaCLHS1ibxeQVz34GpWu3I2h+oA/2Mxp1ab865Lr1/nnS/BgJk6kuRBuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EszzBtWR; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774033718; c=relaxed/simple;
+	bh=bik8oyNGLaTjVM6yI4cw1LkuBzrb1094LbbMjw3GXXE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=tdBJ1fuZvicCGhdVCOwFl7uO2kJBwGO2Z2msuGsBgzOWUg0mHe2w5I5eOt7M8vxpOpnrGGKQEGl9pLS01X6lYsptVCdcNkNag8uF0PUF3TVsW5JMNPcCSkcY+qd84OpEsBXhyLzmjKW8ADll8NC3U14IS5yA7Bum7J1d5/GtXqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DjT+2H6i; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EszzBtWR"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-43b4fd681c2so1905764f8f.3
-        for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 12:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774033476; x=1774638276; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rU8hROsash8pjNenSuRQmTzxfx2+/q618jsTqv5sedE=;
-        b=EszzBtWRbDP2uQ62QeV4NMioSoPYrBpHFL5j7HO0kTaMWiXH4PaD0bsCCcxMNrWp/C
-         0Y9bPsxs6vKC3DYb3b+1bUY3deDPGMuvXON3ACwnDHhNbxvD95JGCp3nHhWppdkhrKL6
-         WUwmNuSfpSd6EnIYT2Ty4/JHnqMfQrVH8o4VKQpWrr2qYpEgZPkcf/pWzpp2ib76HPtr
-         RJ3IZfm1Xf1mfbrfzQeHcJonvQ3JRiuo7EaN+a4BucVur2fompFZIuamlrjitdog7qiV
-         KOqzKN7MXf+6XkWRQfJjYY5OkgmbW9AWFIpPRAqOKB5Ar7//h6yDoNc6IW4Vt5I/SP2x
-         EtRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774033476; x=1774638276;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rU8hROsash8pjNenSuRQmTzxfx2+/q618jsTqv5sedE=;
-        b=beOFiUFWogD6pF0+UjCiNAN95p5nBjHIyQflvdLXQWcxfF9avb0H+l617YIHea0iVg
-         BnfTmCmJBq6HjnU6pFXpO7wGvn7nCIpQfCcBrlOQkvoL/IhTr2BSKH7toCYW3kZIPSdP
-         yQ9sHcPHNXlwGXqQ9yTr/nQlzRGD0oAJ1brZJ9HXhV4wJvg3L7mI/IQHoFB4bcKK63Xp
-         t+kWhyLBwtLOfWiwFAlgYkY0SA7+zDn7ns/t0qgf5EPXMfD8n+5W/EgBAhxJnbdLDe0o
-         W5looA+skv4gxRXAFO/XCsHoUtU3SaQn85f7/pXlDmYvYXQB1xv7xE0smYX/fng+LQMQ
-         yUSA==
-X-Forwarded-Encrypted: i=1; AJvYcCX7vBNxIi+I1BSawTMcSPSV6KeV2pxo/BdrW6XDOVLXUNX8OzeVisg8XbrVD8/1Uw4ZQzE2@lists.linux.dev
-X-Gm-Message-State: AOJu0YywmMVHlXAlYvi62bwV1/0Iu56RBa9k2pGXRCag1L3mA60T6eyI
-	MVWj69zai429LnE2NUlqnRbY78+8dVFeTwqmEdqYz2En40+z7IQg1rSi
-X-Gm-Gg: ATEYQzwKCnxNBsed3JxCUidVOfNZ9ZLisx55qeiNs8RhVXj4ft+r2E5H21qyS/wyBHg
-	OPc6c3aEkaniywVGHdSB9hsz2I5VfNcJz7AiOH/NEuFS21l0oN9ZKZWVyojGUC4bkgDVPuuJ9Kt
-	32d40nQHRWYyClNp1Xg4AjXAdc/LLaGVsaI27nqKrMqyNy7T2haZuSI7pHwtCMfl4R60vQFQ+YD
-	RISrTnS9W8xVuCEattlrFgIdkLYv2p7nVV3sY3NcNQcpStaXd2IesJ3lXIPgDxctqLwBgzSmqd8
-	Fh6XvF26YfyvLfchqDkLnTfFn/GQrRTulwP07tVgMtb7LGXD61EKQoj6I1K6krFU3rYsE+oGZrK
-	HtyOkhDehbyJ7jhfmVtYFvwqQiK7Kqimzq3oXFlwo3Zd3R5zWJ6QACO9sHpHdpQByX/FhaIDwcu
-	b/UcN2bKio86fYb5J1oDARHZBM2JmOUTtdmiUxikZXeqcJoDPbYh+6YQhbFFP4V57wVLKhSQ97B
-	mac3iKg8651PXQe4RiiMVS+
-X-Received: by 2002:a05:6000:2407:b0:439:b3d2:3766 with SMTP id ffacd0b85a97d-43b6423fc13mr8053476f8f.19.1774033475555;
-        Fri, 20 Mar 2026 12:04:35 -0700 (PDT)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b644bd923sm9802710f8f.12.2026.03.20.12.04.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Mar 2026 12:04:35 -0700 (PDT)
-Message-ID: <90a03d3c-def3-4e34-89a0-6e952d3b0d7a@gmail.com>
-Date: Fri, 20 Mar 2026 19:04:33 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DjT+2H6i"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774033717; x=1805569717;
+  h=date:from:to:cc:subject:message-id;
+  bh=bik8oyNGLaTjVM6yI4cw1LkuBzrb1094LbbMjw3GXXE=;
+  b=DjT+2H6i//cOkO6MfOwBNYWS65pleNrVQ5MGfzIek5bN2xJcFFh6KvE4
+   +5eWkuL1Zf+qHZ3y9GQ8NiBcwxP0ULqrVIDX8FHK7Ta148Xj+v7tFsDQ2
+   gDeM4si6bYn/A0o82gKqt4W/ns+HaVPU8/LSnoIgXW5idq0cyZiMTAF3s
+   PHB44wcnGVMH9TzLQ+K/EJ4SoAHAhFDm8Kuo9RNszUSkXmTG3EZ99GI4i
+   mzSbySsPlpoPrUabXyvBHrXDrTFI2097tvbX4zOl3HJFeFut0AjuWrjk/
+   O3RBUB/GpArj2XLlQAB60v8kqsd2EmC72zzqjAV6D5Y/zSlunFk/GUWX/
+   A==;
+X-CSE-ConnectionGUID: YX+eHLZeQKypphTMrawSYg==
+X-CSE-MsgGUID: rfONXukxSe2r18s/KYRcpg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="92703160"
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="92703160"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 12:08:37 -0700
+X-CSE-ConnectionGUID: Nlo5YKSWSDSFxWvXoeKTYg==
+X-CSE-MsgGUID: YkHZN1G4RNKSolHs5WSrUA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="246403998"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by fmviesa002.fm.intel.com with ESMTP; 20 Mar 2026 12:08:35 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w3fCz-0000000056B-2hHW;
+	Fri, 20 Mar 2026 19:08:33 +0000
+Date: Fri, 20 Mar 2026 20:07:58 +0100
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:irq/core 4/14] arch/x86/kernel/irq.c:138:17:
+ error: use of undeclared identifier 'IRQ_COUNT_X86_POSTED_MSI'
+Message-ID: <202603202055.hSvtFKgU-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] net: sfc: avoid format string warning
-To: Arnd Bergmann <arnd@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Nathan Chancellor <nathan@kernel.org>, Jeff Garzik <jgarzik@redhat.com>,
- Ben Hutchings <bhutchings@solarflare.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Brett Creeley <brett.creeley@amd.com>, Breno Leitao <leitao@debian.org>,
- Kees Cook <kees@kernel.org>, netdev@vger.kernel.org,
- linux-net-drivers@amd.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20260320151924.3474821-1-arnd@kernel.org>
-Content-Language: en-GB
-From: Edward Cree <ecree.xilinx@gmail.com>
-In-Reply-To: <20260320151924.3474821-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 20/03/2026 15:19, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Three sfc drivers contain the same *_fill_test() function that takes
-> a format string argument that gets passed down to snprintf(), producing
-> a warning with clang-22:
-> 
-> drivers/net/ethernet/sfc/falcon/ethtool.c:227:60: error: diagnostic behavior may be improved by adding
->       the 'format(printf, 7, 8)' attribute to the declaration of 'ef4_fill_test' [-Werror,-Wmissing-format-attribute]
->   210 |                 snprintf(test_str, sizeof(test_str), test_format, test_id);
->       |                                                                          ^
-> drivers/net/ethernet/sfc/falcon/ethtool.c:210:13: note: 'ef4_fill_test' declared here
-> 
-> Rework these to take a varargs based test_format that allows better
-> type checking and avoids this warning.
-> 
-> Fixes: 3273c2e8c66a ("[netdrvr] sfc: sfc: Add self-test support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git irq/core
+head:   9e85c64195f3479abcad77115c7d5626e6905546
+commit: d5debb2dd149e388fe3fdc1660437d2362579d28 [4/14] x86/irq: Make irqstats array based
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260320/202603202055.hSvtFKgU-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603202055.hSvtFKgU-lkp@intel.com/reproduce)
 
-I'm not convinced this is an improvement.  The function takes *two* printf
- format strings (unit_format and test_format), and this only annotates and
- varargs-ifies one of them (and doesn't harden the unit_format, which has
- the considerably more worrying-looking "if it has a % in, assume it takes
- precisely one int argument").
-So it may make things 'look' hardened enough to satisfy the compiler
- warning, but that just hides the unsafety and might sucker future
- developers into thinking "oh, the compiler knows about the format strings
- so I don't need to check it by hand".
-I'm not sure what a proper fix would look like — possibly a rewrite adding
- a separate efx_fill_test_perq() function for the cases with a nontrivial
- unit_format, baking in the knowledge that the format is always "foo%d"
- for some constant string foo and thus we don't actually need to pass in
- an arbitrary format string.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603202055.hSvtFKgU-lkp@intel.com/
 
-> -static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
-> -			  int *test, const char *unit_format, int unit_id,
-> -			  const char *test_format, const char *test_id)
-> +static void __printf(7, 8)
-> +efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
+All errors (new ones prefixed by >>):
 
-I don't like splitting the specifiers/return type from the function name
- like this.  It's not Linux style[1].
-(From a quick poke around the tree, there seems to be less consensus on
- where the __printf attribute goes — some put it on its own line before
- `static`, some would put it between `static` and `void`… sigh.)
+>> arch/x86/kernel/irq.c:138:17: error: use of undeclared identifier 'IRQ_COUNT_X86_POSTED_MSI'
+     138 |                 irq_stat_info[IRQ_COUNT_X86_POSTED_MSI].skip_vector = 1;
+         |                               ^
+   1 error generated.
 
--Ed
 
-[1]: https://lore.kernel.org/all/1054519757.161606@palladium.transmeta.com/T/#u
+vim +/IRQ_COUNT_X86_POSTED_MSI +138 arch/x86/kernel/irq.c
+
+   123	
+   124	void __init irq_init_stats(void)
+   125	{
+   126		struct irq_stat_info *info = irq_stat_info;
+   127	
+   128		for (unsigned int i = 0; i < ARRAY_SIZE(irq_stat_info); i++, info++) {
+   129			if (info->skip_vector && test_bit(info->skip_vector, system_vectors))
+   130				info->skip_vector = 0;
+   131		}
+   132	
+   133		if (!x86_platform_ipi_callback)
+   134			irq_stat_info[IRQ_COUNT_X86_PLATFORM_IPI].skip_vector = 1;
+   135	
+   136	#ifdef CONFIG_X86_POSTED_MSI
+   137		if (!posted_msi_enabled())
+ > 138			irq_stat_info[IRQ_COUNT_X86_POSTED_MSI].skip_vector = 1;
+   139	#endif
+   140	}
+   141	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
