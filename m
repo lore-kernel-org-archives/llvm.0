@@ -1,124 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D17A3563F8;
-	Fri, 20 Mar 2026 07:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F200933ADBA
+	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 09:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773990417; cv=none; b=io3xuS7DQQ3uxfwZXs+8rwkU9Ao+mI1bTjOivGo+u3PnCtcSAxpf/nnTbIX5osolnlVOZ1bUVkbkpq/bLIxW+xZyFGloZt993GF+OJ2Z+Cu90LlOXQQDNDsyjoMl0ER4UAyjq4mRc9fecKQZNji+GFVJ9dKNIKIwEpzNVxUx1JI=
+	t=1773998533; cv=none; b=HzdONWr18T1bzwubt1E6eM9OzkcHJ833NOPfHk9gLVULePCBl+AQda08FTogopWJgrUeof//a6/7FlWXer3zV0FmSblEvaYkd3xOkJeGzElxqnE8ghSm6yc/MdFN0Ycx6Szqlzi0j4YAGGR8IuJynn0+9cwqSCllqyAo6HfEt4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773990417; c=relaxed/simple;
-	bh=uBEvHkVjcBklcgC52UtPKhltjj0pTxjl1G1kzeuwrtg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=niPuAqm1kOQzmaVUjroO1CaDKfId6vIelYqwvMVG1+ae62lwzysv0qmqRg4nO5a7vhNdp2iDhPlxOML6BBiudg0dyS4oKzvjr7mo+39y3ZxM3w7rtG7pc5zzcrvLTLIqbt2JGkYmXGnzeevgLNcoQ8mauKQDVhaXYJo29wBmL7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EEuHgrOS; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1773998533; c=relaxed/simple;
+	bh=PhQXZKtba7ITXXpMxqDE13jAjK5XuCJA33kvRYoraPk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kjAgBxb1gujN38sYjW6PRyC8VjJMc1eLXm6O37PzgomrAM6mCwQA9wjCnBZSfGNFZ7g05EcRuTuIlavHyf5M1ilDS9gPkrAOvlX6Thuy9Z8KLrPhkadanuopLIJ7066q3xm2RaJniCf7fAvax3oq/Viyz4Fu9kaqgPVSD3PuNsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vnmw0j92; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EEuHgrOS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773990417; x=1805526417;
-  h=date:from:to:cc:subject:message-id;
-  bh=uBEvHkVjcBklcgC52UtPKhltjj0pTxjl1G1kzeuwrtg=;
-  b=EEuHgrOS7/3xY2gqhes4yonOc9qQmwuea+1ReRWmXUnzmh68qM+cZF+S
-   /S6U/NutF9fZyMNVu7ip7Y1DJpJgVGnm9cgv964tKE4OVDfvFAp8RFN3V
-   UXeh0FXXpgbctllaG4IzNaR9NcAJU3FioG3GrnqZfm6ztyKgNHNlzHm1L
-   /HT7A/I1zsMIeqKdtTvjtGmiQNe7LcvXYyNg3+vOwV4jKmfvIGb2RoWcV
-   Cvrc8++Bm5dKM58Kj5L4nzba21EaVcuvDbcB5pHLsOVvDEIS3akeWN7BV
-   f+dC8zzu3mpL4tzk4s6G4GPUpXfvwLL0RnI7wIlwFj0QkBvuqSzfs6X69
-   A==;
-X-CSE-ConnectionGUID: IjG+sHacSv6R0PrbhEsZtg==
-X-CSE-MsgGUID: DRtsdp2eRkecqKGg9xcNJw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="75104800"
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="75104800"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 00:06:54 -0700
-X-CSE-ConnectionGUID: gwfVsj/eQvmAOv9UNwnc3A==
-X-CSE-MsgGUID: waSkPAmhQCGdMVtm/7mbPA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="246235034"
-Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 20 Mar 2026 00:06:52 -0700
-Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w3TwX-0000000025p-20Yh;
-	Fri, 20 Mar 2026 07:06:49 +0000
-Date: Fri, 20 Mar 2026 15:06:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Dinh Nguyen <dinguyen@kernel.org>
-Subject: [dinguyen:socfpga_firmware_for_v7.1 2/2]
- drivers/firmware/stratix10-svc.c:271:33: error: array has incomplete element
- type 'struct stratix10_svc_chan'
-Message-ID: <202603201536.KvAI7CLq-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vnmw0j92"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773998531;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=11oCAh5vfYa3zrS42RKn2lcdfFOzB9v1mLT9aJ6CWOY=;
+	b=Vnmw0j92FYiLrLYkbXJmMLUjjCU21d7zKESHQaEMTx9GQWGWLc0Rmw3jl1h76DEUf1RczY
+	D56Jc1tyK5GFCtSzHf/p+gMntJH7CntUjrYxuFaLmyrmoYJCN9WfuVDVgYEUJNFBTtAM+U
+	lYKQ0aXGvy6nFl5rR7zo3N+eJMZ78Ag=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-613-5hOIF0pVOBa62z9lRZWVSA-1; Fri,
+ 20 Mar 2026 05:22:07 -0400
+X-MC-Unique: 5hOIF0pVOBa62z9lRZWVSA-1
+X-Mimecast-MFC-AGG-ID: 5hOIF0pVOBa62z9lRZWVSA_1773998527
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E3D251944E43
+	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 09:22:06 +0000 (UTC)
+Received: from [172.20.92.244] (unknown [10.30.44.31])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1DD29180075D;
+	Fri, 20 Mar 2026 09:22:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc4,
+ upstream-mainline, a1d9d8e8)
+Date: Fri, 20 Mar 2026 09:22:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <34559.126032005220700534@us-mta-613.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: zpoTr2KJoCc5PVrfeHFpKQnQEkW_O9WIZPDvlSyp-x4_1773998527
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git socfpga_firmware_for_v7.1
-head:   6146df4b6330e6ec1a1273f77f817bc917548f69
-commit: 6146df4b6330e6ec1a1273f77f817bc917548f69 [2/2] firmware: stratix10-svc: kmalloc_array + kzalloc to flex
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260320/202603201536.KvAI7CLq-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603201536.KvAI7CLq-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603201536.KvAI7CLq-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/firmware/stratix10-svc.c:271:33: error: array has incomplete element type 'struct stratix10_svc_chan'
-     271 |         struct stratix10_svc_chan chans[] __counted_by(num_chans);
-         |                                        ^
-   include/linux/firmware/intel/stratix10-svc-client.h:78:8: note: forward declaration of 'struct stratix10_svc_chan'
-      78 | struct stratix10_svc_chan;
-         |        ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +271 drivers/firmware/stratix10-svc.c
+Kernel information:
+    Commit message: Merge tag 'net-7.0-rc5' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/netdev/net
 
-   242	
-   243	/**
-   244	 * struct stratix10_svc_controller - service controller
-   245	 * @dev: device
-   246	 * @num_chans: number of channels in 'chans' array
-   247	 * @num_active_client: number of active service client
-   248	 * @node: list management
-   249	 * @genpool: memory pool pointing to the memory region
-   250	 * @complete_status: state for completion
-   251	 * @invoke_fn: function to issue secure monitor call or hypervisor call
-   252	 * @svc: manages the list of client svc drivers
-   253	 * @sdm_lock: only allows a single command single response to SDM
-   254	 * @actrl: async control structure
-   255	 * @chans: array of service channels
-   256	 *
-   257	 * This struct is used to create communication channels for service clients, to
-   258	 * handle secure monitor or hypervisor call.
-   259	 */
-   260	struct stratix10_svc_controller {
-   261		struct device *dev;
-   262		int num_chans;
-   263		int num_active_client;
-   264		struct list_head node;
-   265		struct gen_pool *genpool;
-   266		struct completion complete_status;
-   267		svc_invoke_fn *invoke_fn;
-   268		struct stratix10_svc *svc;
-   269		struct mutex sdm_lock;
-   270		struct stratix10_async_ctrl actrl;
- > 271		struct stratix10_svc_chan chans[] __counted_by(num_chans);
-   272	};
-   273	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2396720022
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2396720022_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
