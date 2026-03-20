@@ -1,54 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312CC3B961D;
-	Fri, 20 Mar 2026 15:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AB435BDA5;
+	Fri, 20 Mar 2026 15:18:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774019732; cv=none; b=N71FkIJlF6XcYsFIp2p/wgOV4RptNn7fOk5cu2cgDNdCtfaK9SxAnn0VU89AZ+mk5tJtXDpVSNzmvFrfvKNAytoucYFSjMu0paf9H//vRUNe8S9yiKyPMVPRZn4CBpCsy+h5QCfyuj85AscwNF48NJ2fjaw4wkteCoKciX+xep8=
+	t=1774019915; cv=none; b=uEPZCI+16IM63ax82XkUcJ9jYK5/GZFViPrZtuA4xTUpmiV6AV6FvMkXUyC/Z3lAm7KA4mDcvOa9e+O8WYIqGJ5WWEKcT2qnfwADSh9Qnup2fSA59QvJhJaYaiBhmizcPVIf2RcwLY/k1vx/7eOg4UE8YS+houIYJ19QaVxPltA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774019732; c=relaxed/simple;
-	bh=hpDZ5j56hWihlvr2tldSS67Y7hr7VWN/4PiY5cUG6/U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S79LY/HdehDzYnoRhP2vDQIpp1KcNt2anhgdBcql5Tpa9uaQnK7wXOdLG2Q0PMo5T2swPL/jJe62kbpePMJIvPoTV2CeKu/WSp0YaXmaVpL3gUb1onNVBmYmRWWU9RQmCOs7Ii7Ya22Xql2Ute+FAQpiWtgW6Ame1PAvfuLoggw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GryPzZWY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774019915; c=relaxed/simple;
+	bh=S29HBR0Hz0DVZko3Rdj2fO4bO47STz9iDGPW+Bata38=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tx+8JBEyX72CLJMAWP3B46pX4ahW+HVkoKz7+S4viTH0BBaZ2kbVRxYwIH2rJ7HFHV3UCQqGFTmleWRf5jkxpAEPI4C6M9nXGWmDLHiG3xEXkxxDpx2/NLfeDJVPvfXvAdujocU/qhqwEQPgRP4zgJG+tr/HoGn++D+K0atiSxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tVWrkiVp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GryPzZWY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A37DDC4CEF7;
-	Fri, 20 Mar 2026 15:15:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tVWrkiVp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 738CEC4CEF7;
+	Fri, 20 Mar 2026 15:18:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774019731;
-	bh=hpDZ5j56hWihlvr2tldSS67Y7hr7VWN/4PiY5cUG6/U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GryPzZWYs7Qj37CDjggwK3lIORT1CR0SvYmuqmE0+poZa9rIdQ1jxORpe9d6AtBpc
-	 N9MR+0eiQ/MpRzZl6n1w6I8dyKC4/fpvK6T8U54O+Z6TVLnimqZ8I6KwLSUZ49/xKk
-	 CY9knn+kQnRW8jc+3u5wBqUaUyI9/8XjR5G9jYNtZ3aHFrFZQI4nUGXl4Hu24+QbBR
-	 3u9DDyV7N/mUdlSxMj+XQLK4KHlo8507OkOXvpKTXdPJRGqElN9PRFeVIJswWglusf
-	 cjU6ZKy4vhM1D5POCPgKCNqKJo2Gl1ll69Gah+SDQOR6RmRH5HfEdFT3w0stnr58TA
-	 DpmUfHdb+8jVQ==
+	s=k20201202; t=1774019915;
+	bh=S29HBR0Hz0DVZko3Rdj2fO4bO47STz9iDGPW+Bata38=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tVWrkiVpnr0N6sSwBRRIMOc58ADVqH7UEcAxf6hyPu27A5RBzIKJUgsUPYtdZjjhg
+	 hzg7p1zMnZ69Km1ly3TOriPpWblRKuFfspkeYLYyjexNcNF2dHwhUBZce1zhlp3Akk
+	 smZdenOlCXjR5UXnUrw4Ls2yHz/3pnxekZganc5L0c3jX3F/+3bPdLZTAK+6MihfUs
+	 DnHyr2myTSDuUt5rdTNcfB/m6TFNYbw7beQLq5VVRxoMKIArA43WiIf1HgACOmyoyM
+	 gsdlfeVBcSzO2Uf7h7EF5TGvqxbgY+pUcunTOyLZSxVRwZQ+ivGt4V46fXWNdrrAxB
+	 vJ+RHTj94JajQ==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Leon Romanovsky <leon@kernel.org>,
+To: Robert Foss <rfoss@kernel.org>,
+	Todor Tomov <todor.too@gmail.com>,
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Mike Marciniszyn <mike.marciniszyn@intel.com>,
-	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
-	Doug Ledford <dledford@redhat.com>
+	Hans Verkuil <hverkuil@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	linux-rdma@vger.kernel.org,
+	Hans Verkuil <hverkuil+cisco@kernel.org>,
+	Vincent Knecht <vincent.knecht@mailoo.org>,
+	Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>,
+	linux-media@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
-Date: Fri, 20 Mar 2026 16:12:38 +0100
-Message-Id: <20260320151511.3420818-2-arnd@kernel.org>
+Subject: [PATCH] media: qcom: camss: avoid format string warning
+Date: Fri, 20 Mar 2026 16:18:24 +0100
+Message-Id: <20260320151828.3456863-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20260320151511.3420818-1-arnd@kernel.org>
-References: <20260320151511.3420818-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,90 +58,57 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang warns about a function missing a printf attribute:
+clang-22 warns about csiphy_match_clock_name() taking a variable format
+string that is not checked against the 'int index' argument:
 
-include/rdma/rdma_vt.h:457:47: error: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'rvt_set_ibdev_name' [-Werror,-Wmissing-format-attribute]
-  447 | static inline void rvt_set_ibdev_name(struct rvt_dev_info *rdi,
+drivers/media/platform/qcom/camss/camss-csiphy.c:566:44: error: diagnostic behavior may be improved by
+      adding the 'format(printf, 2, 3)' attribute to the declaration of 'csiphy_match_clock_name'
+      [-Werror,-Wmissing-format-attribute]
+  561 | static bool csiphy_match_clock_name(const char *clock_name, const char *format,
       | __attribute__((format(printf, 2, 3)))
-  448 |                                       const char *fmt, const char *name,
-  449 |                                       const int unit)
+  562 |                                     int index)
+  563 | {
+  564 |         char name[16]; /* csiphyXXX_timer\0 */
+  565 |
+  566 |         snprintf(name, sizeof(name), format, index);
+      |                                                   ^
+drivers/media/platform/qcom/camss/camss-csiphy.c:561:13: note: 'csiphy_match_clock_name' declared here
+  561 | static bool csiphy_match_clock_name(const char *clock_name, const char *format,
+      |             ^
 
-The helper was originally added as an abstraction for the hfi1 and
-qib drivers needing the same thing, but now qib is gone, and hfi1
-is the only remaining user of rdma_vt.
+Change the function to use a snprintf() style format string that allows this
+to be checked at the call site.
 
-Avoid the warning and allow the compiler to check the format string by
-open-coding the helper and directly assigning the device name.
-
-Fixes: 5084c8ff21f2 ("IB/{rdmavt, hfi1, qib}: Self determine driver name")
+Fixes: 0727615fb975 ("media: qcom: camss: Functionally decompose CSIPHY clock lookups")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/infiniband/hw/hfi1/init.c | 13 ++++++++++++-
- include/rdma/rdma_vt.h            | 20 --------------------
- 2 files changed, 12 insertions(+), 21 deletions(-)
+ drivers/media/platform/qcom/camss/camss-csiphy.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/infiniband/hw/hfi1/init.c b/drivers/infiniband/hw/hfi1/init.c
-index 8b5a5b32b0fa..fb0a8325a43d 100644
---- a/drivers/infiniband/hw/hfi1/init.c
-+++ b/drivers/infiniband/hw/hfi1/init.c
-@@ -1206,6 +1206,7 @@ static struct hfi1_devdata *hfi1_alloc_devdata(struct pci_dev *pdev,
- 					       size_t extra)
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+index 62623393f414..78a1b568dbae 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -558,12 +558,16 @@ static int csiphy_init_formats(struct v4l2_subdev *sd,
+ 	return csiphy_set_format(sd, fh ? fh->state : NULL, &format);
+ }
+ 
+-static bool csiphy_match_clock_name(const char *clock_name, const char *format,
+-				    int index)
++static bool __printf(2, 3)
++csiphy_match_clock_name(const char *clock_name, const char *format, ...)
  {
- 	struct hfi1_devdata *dd;
-+	struct ib_device *ibdev;
- 	int ret, nports;
- 
- 	/* extra is * number of ports */
-@@ -1227,7 +1228,17 @@ static struct hfi1_devdata *hfi1_alloc_devdata(struct pci_dev *pdev,
- 			"Could not allocate unit ID: error %d\n", -ret);
- 		goto bail;
- 	}
--	rvt_set_ibdev_name(&dd->verbs_dev.rdi, "%s_%d", class_name(), dd->unit);
+ 	char name[16]; /* csiphyXXX_timer\0 */
++	va_list args;
 +
-+	/*
-+	 * FIXME: rvt and its users want to touch the ibdev before
-+	 * registration and have things like the name work. We don't have the
-+	 * infrastructure in the core to support this directly today, hack it
-+	 * to work by setting the name manually here.
-+	 */
-+	ibdev = &dd->verbs_dev.rdi.ibdev;
-+	dev_set_name(&ibdev->dev, "%s_%d", class_name(), dd->unit);
-+	strscpy(&ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
-+
- 	/*
- 	 * If the BIOS does not have the NUMA node information set, select
- 	 * NUMA 0 so we get consistent performance.
-diff --git a/include/rdma/rdma_vt.h b/include/rdma/rdma_vt.h
-index 7d8de561f71b..7ffc83262a01 100644
---- a/include/rdma/rdma_vt.h
-+++ b/include/rdma/rdma_vt.h
-@@ -438,26 +438,6 @@ struct rvt_dev_info {
- 	struct rvt_wss *wss;
- };
++	va_start(args, format);
++	vsnprintf(name, sizeof(name), format, args);
++	va_end(args);
  
--/**
-- * rvt_set_ibdev_name - Craft an IB device name from client info
-- * @rdi: pointer to the client rvt_dev_info structure
-- * @name: client specific name
-- * @unit: client specific unit number.
-- */
--static inline void rvt_set_ibdev_name(struct rvt_dev_info *rdi,
--				      const char *fmt, const char *name,
--				      const int unit)
--{
--	/*
--	 * FIXME: rvt and its users want to touch the ibdev before
--	 * registration and have things like the name work. We don't have the
--	 * infrastructure in the core to support this directly today, hack it
--	 * to work by setting the name manually here.
--	 */
--	dev_set_name(&rdi->ibdev.dev, fmt, name, unit);
--	strscpy(rdi->ibdev.name, dev_name(&rdi->ibdev.dev), IB_DEVICE_NAME_MAX);
--}
--
- /**
-  * rvt_get_ibdev_name - return the IB name
-  * @rdi: rdmavt device
+-	snprintf(name, sizeof(name), format, index);
+ 	return !strcmp(clock_name, name);
+ }
+ 
 -- 
 2.39.5
 
