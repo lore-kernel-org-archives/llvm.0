@@ -1,114 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63113C1408;
-	Fri, 20 Mar 2026 14:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5801A1DF987
+	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 14:36:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774016817; cv=none; b=re7WIa3b8yEwRghg8LH3rywLDtvx6+HEZV6y4oyddSVF5bpXxOyAZ8k2Hn89wGzJ6V2x2Y6oP+5TH71kmUg6dv7sfbkQbjPILaeuBhIGOFFs5K45bdF+chkH8PzgiHcwDHVzER+Dv9+5NFTW+g0QdBY+4MxsMNCc3MUyrW/nipc=
+	t=1774017418; cv=none; b=miAHx1rFLK8Z5eQqW/SitI3LlDYMGzfPE0EPRIwpc2YfDzfct+p4+HjzDli9Dm+cqNkgih150BlbDi78ed9MbjeNpqrQI32CnwGxqGHLx3uVl32Lw6jI28dxAMJbsC68quvzPNPyXTIL4NbUUhKkkGNryyPpwbuyslT+DGn0gzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774016817; c=relaxed/simple;
-	bh=Ej4NUBf1ZQKo+LPQkcwUQb9IYVa+4LZy2t0eim3b6gY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=SfGAwM9E4D4G0+m4t/FpT45kPNWwAo103C0iIDXZQf4YtNNFPNXqlEeJb9hpNqwnsohbdZXCA/oDufHN8tm5rtwUw90MAD65lBhPH4IUeJJQGCx+XcdyePJEMZ6MOPL8bkClbCsN0k3WuDtVh5OeWz9LHZxWmByvyBbz0E8gW+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XsxNYjQj; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774017418; c=relaxed/simple;
+	bh=vrfoLwO/FTvfay85UrFhHzYUQTVGvBxfTjlQlWQxsFg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e2ZS5Vma8NIOStM9ph8MyqvojI5l7AfqV9ULqHAYAf6QX8er81NMcBZsGNDZ+khqoiR0p/irHbTq7xCB6Vh63yQ1pXXt8IB3jocnv+AaFsscXOSA4CmcTyAJ/MBNhCBhyhQ39VBQC3UdCcXxAELg0x1ZDrJaAHNVPQmhM7GDxRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=STAwuExd; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XsxNYjQj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="STAwuExd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774016815; x=1805552815;
-  h=date:from:to:cc:subject:message-id;
-  bh=Ej4NUBf1ZQKo+LPQkcwUQb9IYVa+4LZy2t0eim3b6gY=;
-  b=XsxNYjQj5b1bFfH0MSqxmE+HRsMIwI3WXkOw6HZNLsSgP5k5iE4ZglMJ
-   XUHE08TUyw39Jq4tUJvRaC5M2pG7iRwzFVCEd3HB9/U4OTPy7cWS5JxWN
-   nn57tQcMNOoEgC13x7blKKqImCk6Z8ongwHjRwasPOoDRhC559SLGUE8u
-   mMq139HP+2isC2nLAODkiApZFRyR552qV+01zpA/q5yc4bK2Nh+A6a5ze
-   iVjDesB51Sq/ipoYQMQivnApL4XeVBXk2bx9Cpuzh7SFY1iK57GRzTg0Q
-   yaKdE0cPC2hduNSBqAvakQDr18Vv4muaGCti/BYviDiBX2w2GoTfAlbWz
-   A==;
-X-CSE-ConnectionGUID: PuWUXjoYR2Ou2ux0mZo9iQ==
-X-CSE-MsgGUID: MaUjwvXiQe6xr+ZTW9+73Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="75175336"
+  t=1774017416; x=1805553416;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vrfoLwO/FTvfay85UrFhHzYUQTVGvBxfTjlQlWQxsFg=;
+  b=STAwuExd/UjNYKO6r3AEK8C+V8bQseOKIMt0vpxvqrgtX0i+p6x74V9r
+   8fO70HzSIHMwbJwveY1YHTH3diqrwpQBbXSEG0Nkp0sYS/WLkH9nIRpT0
+   N9BnYquxposqHAVPubbyfxrMVix0odg18k4d2uy7U7lK0hSdOTsYio7R7
+   eQ9QGgtZuSAA1A1BlnaA0dzP4bsvaMpmCVgeTDSjKxjzbn0Tc9QYB8PEF
+   puaLFvl5VRltuofCWS01D+JhDQeFoyJr6R+fZkJm+VYjx0t8uAnmTcbwQ
+   bEQLVoXw6bwfrnANggYxGb4mai/beGt90beG70DmOkfYSb3Mai7GA2Np+
+   Q==;
+X-CSE-ConnectionGUID: wwR+Jj99SjGFzjLMwsKWog==
+X-CSE-MsgGUID: a7QLqNI3TQCAX0e4LRTQwQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="75011907"
 X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="75175336"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 07:26:54 -0700
-X-CSE-ConnectionGUID: Dsfc5Z0XTearPKu0PB2MMw==
-X-CSE-MsgGUID: gRm927vKSju0o37lrtckyA==
+   d="scan'208";a="75011907"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 07:36:55 -0700
+X-CSE-ConnectionGUID: qtGnx5r3RmuRASzkFq83Nw==
+X-CSE-MsgGUID: d4QWydUcThixM+6K9Je94g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="225217057"
-Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 20 Mar 2026 07:26:53 -0700
-Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w3ao8-000000002T1-0bdQ;
-	Fri, 20 Mar 2026 14:26:38 +0000
-Date: Fri, 20 Mar 2026 22:24:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- David Wei <dw@davidwei.uk>
-Subject: [cilium:pr/netkit-iouring19 570/583]
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5617:7: error: call to
- undeclared function 'netif_rxq_has_unreadable_mp'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202603202209.dNMkb930-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+   d="scan'208";a="218649764"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa006.fm.intel.com with ESMTP; 20 Mar 2026 07:36:53 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 0A3B195; Fri, 20 Mar 2026 15:36:52 +0100 (CET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>,
+	linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Helge Deller <deller@gmx.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jason Yan <yanaijie@huawei.com>
+Subject: [PATCH v1 1/1] video: fbdev: matroxfb: Mark variable with __maybe_unused to avoid W=1 build break
+Date: Fri, 20 Mar 2026 15:36:46 +0100
+Message-ID: <20260320143646.3218199-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/cilium/linux.git pr/netkit-iouring19
-head:   263b05479cf2219b9610925d32a127cb5adde246
-commit: 8b33e9b1c0bee6f058cbe6cf57915e49e58baa9d [570/583] net: Implement netdev_nl_queue_create_doit
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260320/202603202209.dNMkb930-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603202209.dNMkb930-lkp@intel.com/reproduce)
+Clang is not happy about set but unused variable:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603202209.dNMkb930-lkp@intel.com/
+drivers/video/fbdev/matrox/g450_pll.c:412:18: error: variable 'mnp' set but not used [-Werror,-Wunused-but-set-variable]
+   412 |                                 unsigned int mnp;
+       |                                              ^
+1 error generated.
 
-Note: the cilium/pr/netkit-iouring19 HEAD 263b05479cf2219b9610925d32a127cb5adde246 builds fine.
-      It only hurts bisectability.
+Since the commit 7b987887f97b ("video: fbdev: matroxfb: remove dead code
+and set but not used variable") the 'mnp' became unused, but eliminating
+that code might have side-effects. The question here is what should we do
+with 'mnp'? The easiest way out is just mark it with __maybe_unused which
+will shut the compiler up and won't change any possible IO flow. So does
+this change.
 
-All errors (new ones prefixed by >>):
+Fixes: 7b987887f97b ("video: fbdev: matroxfb: remove dead code and set but not used variable")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
->> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:5617:7: error: call to undeclared function 'netif_rxq_has_unreadable_mp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    5617 |         if (!netif_rxq_has_unreadable_mp(dev, queue_index))
-         |              ^
-   1 error generated.
+---
+Cc: Jason Yan <yanaijie@huawei.com>
+---
 
+Below is a dive into the history of the driver.
 
-vim +/netif_rxq_has_unreadable_mp +5617 drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+The problem was revealed when the #if 0 guarded code along with unused
+pixel_vco variable was removed. That code was introduced in the original
+commit 213d22146d1f ("[PATCH] (1/3) matroxfb for 2.5.3"). And then guarded
+in the commit 705e41f82988 ("matroxfb DVI updates: Handle DVI output on
+G450/G550. Powerdown unused portions of G450/G550 DAC. Split G450/G550 DAC
+from older DAC1064 handling. Modify PLL setting when both CRTCs use same
+pixel clocks.").
 
-0fa8c93357601c Dragos Tatulea 2026-02-23  5609  
-df5135fced85bf Dragos Tatulea 2026-02-23  5610  static bool mlx5e_queue_validate_page_size(struct net_device *dev,
-df5135fced85bf Dragos Tatulea 2026-02-23  5611  					   struct netdev_queue_config *qcfg,
-df5135fced85bf Dragos Tatulea 2026-02-23  5612  					   int queue_index)
-df5135fced85bf Dragos Tatulea 2026-02-23  5613  {
-df5135fced85bf Dragos Tatulea 2026-02-23  5614  	if (qcfg->rx_page_size == PAGE_SIZE)
-df5135fced85bf Dragos Tatulea 2026-02-23  5615  		return true;
-df5135fced85bf Dragos Tatulea 2026-02-23  5616  
-df5135fced85bf Dragos Tatulea 2026-02-23 @5617  	if (!netif_rxq_has_unreadable_mp(dev, queue_index))
-df5135fced85bf Dragos Tatulea 2026-02-23  5618  		return false;
-df5135fced85bf Dragos Tatulea 2026-02-23  5619  
-df5135fced85bf Dragos Tatulea 2026-02-23  5620  	return true;
-df5135fced85bf Dragos Tatulea 2026-02-23  5621  }
-df5135fced85bf Dragos Tatulea 2026-02-23  5622  
+NOTE: The two commits mentioned above pre-date Git era and available in
+history.git repository for archaeological purposes.
 
-:::::: The code at line 5617 was first introduced by commit
-:::::: df5135fced85bf3c3dfe174f1cf853cdf39312e5 net/mlx5e: SHAMPO, Allow high order pages in zerocopy mode
+Even without that guard the modern compilers may see that the pixel_vco
+wasn't ever used and seems a leftover after some debug or review made
+25 years ago.
 
-:::::: TO: Dragos Tatulea <dtatulea@nvidia.com>
-:::::: CC: Paolo Abeni <pabeni@redhat.com>
+The g450_mnp2vco() doesn't have any IO and as Jason said doesn't seem
+to have any side effects either than some unneeded CPU processing during
+runtime. I agree that's unlikely that timeout (or heating up the CPU) has
+any effect on the HW (GPU/display) functionality.
+---
+ drivers/video/fbdev/matrox/g450_pll.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/video/fbdev/matrox/g450_pll.c b/drivers/video/fbdev/matrox/g450_pll.c
+index e2c1478aa47f..6a08f78cd1ac 100644
+--- a/drivers/video/fbdev/matrox/g450_pll.c
++++ b/drivers/video/fbdev/matrox/g450_pll.c
+@@ -409,7 +409,7 @@ static int __g450_setclk(struct matrox_fb_info *minfo, unsigned int fout,
+ 		case M_VIDEO_PLL:
+ 			{
+ 				u_int8_t tmp;
+-				unsigned int mnp;
++				unsigned int mnp __maybe_unused;
+ 				unsigned long flags;
+ 
+ 				matroxfb_DAC_lock_irqsave(flags);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.1
+
