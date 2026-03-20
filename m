@@ -1,85 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7AD3DE450;
-	Fri, 20 Mar 2026 18:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F74D286881;
+	Fri, 20 Mar 2026 18:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774029657; cv=none; b=gF3qjZ1Zebr94gvOrJa4dD426OdGxPadJOVDvwcVrgolaZNsgus+yAo5OTkvwLOCt0O/0EbREF01Rc9orD/GCnsOhJy6f+k4buA/jRSJTa3MGhTSAp8UWUvx8KDnbYUEgozgBemqsUhgN2ilZA80foiL4Cc9wyFT4QG4dC+LSvw=
+	t=1774032766; cv=none; b=KNcgl+o/rqiotKFGN5MrhqXtAoLN0bg7MjY9HSX6czihJDjZroircM6iywRBcZuZl11Pol8lKfnY3Zia10ZzfmaHtFjruxATi8ORhYwYddBM5aSqsAhXzEZW5GyBskXbweWaTOqasRF6lPNdCvw92cGG704zmJEdy+60kyJL0gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774029657; c=relaxed/simple;
-	bh=UblSInEiA/mfUiA8e8q0rtmtS/Sqfi8+Dh2007xpxwY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P9a9NULNI16DSzNYTgNMgLcpur9BAcZFlZQ1DaR+yycCjkUrTFJAlgqwycEEIzJvstFAzQ+7vj+1bIdDyiM5kituzBCt/6MPVBoLVC6IIXFoohXI8gUEWTGqK9/tk6/5ok/pEibwlv4g9VtscgEyt4Qa9ox6nRf9b8GBsoZxP08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JcSBAWYz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774032766; c=relaxed/simple;
+	bh=yZxmNupLjMnOVyoVWs6WeaGs693HPuq7zByuOqLBqsE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gi6/rK9Z7I5O4eNqSISldMY4XSAkyY4MVEF9yR3L9+vdTs/tJ71RNhH5jBrIhw6OgnGkpvfrOnB01sZOzwD9OEk3a6etCTvV9RRITIlSU8ahR3ghF4rAUzaKqRSGzKRqf076s/TbsUG8l5ctkkq+8KqbaBM80GV9wg433r1H6Wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r0WJEZd/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JcSBAWYz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8216EC4CEF7;
-	Fri, 20 Mar 2026 18:00:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r0WJEZd/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F39C4CEF7;
+	Fri, 20 Mar 2026 18:52:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774029656;
-	bh=UblSInEiA/mfUiA8e8q0rtmtS/Sqfi8+Dh2007xpxwY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JcSBAWYzbwb5FwOKfwL5RuCX+bSD9AbMhCF/n4jwvVN1bWeHCpVGP/hiXMsfZbxbe
-	 fvRYC2HpUbdIGmx/5RHfXPdEN0BVguYdoM0FQefCaiuZSc0xI8vDLauW+LZD9rWd7R
-	 yKNlFjxoAUJWm5Tc7mfB4wg+IDtkslPQmhBLXalsUtk5noQFPH+6dkCsGrZS0NGW/F
-	 H/FHy+cfLtEUkanQ+aNdocE0wN1VAncZgvxqNwvlzC5XEZS5gsLrdB4it5SqCtOBfk
-	 TimVgqai6n35QuH++Ebyg6jnhb8WF8uPwEXGn15ATT7X9D0oeervL4fvTM9M+xRqcg
-	 CsUz9Bc/YnN4A==
-Date: Fri, 20 Mar 2026 11:00:56 -0700
+	s=k20201202; t=1774032765;
+	bh=yZxmNupLjMnOVyoVWs6WeaGs693HPuq7zByuOqLBqsE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=r0WJEZd/D8wpi8ysSQnHaf0MkjQCJTR0+U5/8AUsnpws4eMIRPuTjZhPCNEvheoIO
+	 eQCdjMru8TLGPkB89E5bBIFxYZ8fYkcRSeVg8szcjeD18YP/fP+nuTXETGRhAvPTD5
+	 LAO1xmPSPbHSewCQgKt9sbciqtQvVEEyCBNV71Arn5MwICPhHvBPwHvgqxe4szQpna
+	 bUEX+C8+JCUAVXBcZdxZHg0iN5qWuIddfrpPqe4bLoKv8INVYCEweS0XyDMHqZS0oD
+	 KB+vOwQTgi3d87P349WofmjtzbBufiTRvGhwVe9f3j1LmpJDAYYSY3ud2iAbPtP+2F
+	 773vOPNa6zXjA==
 From: Kees Cook <kees@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Edward Cree <ecree.xilinx@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jeff Garzik <jgarzik@redhat.com>,
-	Ben Hutchings <bhutchings@solarflare.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Brett Creeley <brett.creeley@amd.com>,
-	Breno Leitao <leitao@debian.org>, netdev@vger.kernel.org,
-	linux-net-drivers@amd.com, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] net: sfc: avoid format string warning
-Message-ID: <202603201100.210F1C73E0@keescook>
-References: <20260320151924.3474821-1-arnd@kernel.org>
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] init/Kconfig: Require a release version of clang-22 for CC_HAS_COUNTED_BY_PTR
+Date: Fri, 20 Mar 2026 11:52:41 -0700
+Message-Id: <177403275866.3826131.2167472865845160418.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260318-counted_by_ptr-release-clang-22-v1-1-e017da246df0@kernel.org>
+References: <20260318-counted_by_ptr-release-clang-22-v1-1-e017da246df0@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260320151924.3474821-1-arnd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 20, 2026 at 04:19:16PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Wed, 18 Mar 2026 17:20:18 -0700, Nathan Chancellor wrote:
+> Commit 150a04d817d8 ("compiler_types.h: Attributes: Add __counted_by_ptr
+> macro") used Clang 22.0.0 as a minimum supported version for
+> __counted_by_ptr, which made sense while 22.0.0 was the version of
+> LLVM's main branch to allow developers to easily test and develop uses
+> of __counted_by_ptr in their code. However, __counted_by_ptr requires a
+> change [1] merged towards the end of the 22 development cycle to avoid
+> errors when applied to void pointers.
 > 
-> Three sfc drivers contain the same *_fill_test() function that takes
-> a format string argument that gets passed down to snprintf(), producing
-> a warning with clang-22:
-> 
-> drivers/net/ethernet/sfc/falcon/ethtool.c:227:60: error: diagnostic behavior may be improved by adding
->       the 'format(printf, 7, 8)' attribute to the declaration of 'ef4_fill_test' [-Werror,-Wmissing-format-attribute]
->   210 |                 snprintf(test_str, sizeof(test_str), test_format, test_id);
->       |                                                                          ^
-> drivers/net/ethernet/sfc/falcon/ethtool.c:210:13: note: 'ef4_fill_test' declared here
-> 
-> Rework these to take a varargs based test_format that allows better
-> type checking and avoids this warning.
-> 
-> Fixes: 3273c2e8c66a ("[netdrvr] sfc: sfc: Add self-test support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> [...]
 
-Nice rework!
+Applied to for-linus/hardening, thanks!
 
-Reviewed-by: Kees Cook <kees@kernel.org>
+[1/1] init/Kconfig: Require a release version of clang-22 for CC_HAS_COUNTED_BY_PTR
+      https://git.kernel.org/kees/c/7a618ca9b9c4
+
+Take care,
 
 -- 
 Kees Cook
+
