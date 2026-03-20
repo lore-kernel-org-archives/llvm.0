@@ -1,52 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AB435BDA5;
-	Fri, 20 Mar 2026 15:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94392382379;
+	Fri, 20 Mar 2026 15:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774019915; cv=none; b=uEPZCI+16IM63ax82XkUcJ9jYK5/GZFViPrZtuA4xTUpmiV6AV6FvMkXUyC/Z3lAm7KA4mDcvOa9e+O8WYIqGJ5WWEKcT2qnfwADSh9Qnup2fSA59QvJhJaYaiBhmizcPVIf2RcwLY/k1vx/7eOg4UE8YS+houIYJ19QaVxPltA=
+	t=1774019939; cv=none; b=MBLY9ugAN5mYfCEnx0nbWYpoxi9zSjRGXHGCN7QtASB+27QQYoXwPnrLivAhpjxf43e7vNegQKXubs6cfheqEr0hxACnHFLxzFDK/RanCU3FUY7Yy2eytOpxMfNJbT1z/vjJoDzgQ/H08Wbt/k/PHRcqACmv5VBjwB9/l0bAIiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774019915; c=relaxed/simple;
-	bh=S29HBR0Hz0DVZko3Rdj2fO4bO47STz9iDGPW+Bata38=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tx+8JBEyX72CLJMAWP3B46pX4ahW+HVkoKz7+S4viTH0BBaZ2kbVRxYwIH2rJ7HFHV3UCQqGFTmleWRf5jkxpAEPI4C6M9nXGWmDLHiG3xEXkxxDpx2/NLfeDJVPvfXvAdujocU/qhqwEQPgRP4zgJG+tr/HoGn++D+K0atiSxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tVWrkiVp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774019939; c=relaxed/simple;
+	bh=xHmhQ8dRD2dEcRUqB7fOfr+94wpA4YRxC+E13Alo6RI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Pg5xp7iLsW4cXn3MDFaMR9TkUsXZ5gWZ8C2/cGDV2jpq6SsCHb9oXrPLtWQ6tIa9ut5kT3PEOLDaXuv3DFgvXTJQOq+blm1BWQ0ZyqV5FUamYB0Aqwot2HyKMLxzwxd4YqhcblbmkMiicj2gETYGPNWZyk/8IQrgPCD91IaWhlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4pdjy7k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tVWrkiVp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 738CEC4CEF7;
-	Fri, 20 Mar 2026 15:18:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4pdjy7k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A0FC4CEF7;
+	Fri, 20 Mar 2026 15:18:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774019915;
-	bh=S29HBR0Hz0DVZko3Rdj2fO4bO47STz9iDGPW+Bata38=;
+	s=k20201202; t=1774019939;
+	bh=xHmhQ8dRD2dEcRUqB7fOfr+94wpA4YRxC+E13Alo6RI=;
 	h=From:To:Cc:Subject:Date:From;
-	b=tVWrkiVpnr0N6sSwBRRIMOc58ADVqH7UEcAxf6hyPu27A5RBzIKJUgsUPYtdZjjhg
-	 hzg7p1zMnZ69Km1ly3TOriPpWblRKuFfspkeYLYyjexNcNF2dHwhUBZce1zhlp3Akk
-	 smZdenOlCXjR5UXnUrw4Ls2yHz/3pnxekZganc5L0c3jX3F/+3bPdLZTAK+6MihfUs
-	 DnHyr2myTSDuUt5rdTNcfB/m6TFNYbw7beQLq5VVRxoMKIArA43WiIf1HgACOmyoyM
-	 gsdlfeVBcSzO2Uf7h7EF5TGvqxbgY+pUcunTOyLZSxVRwZQ+ivGt4V46fXWNdrrAxB
-	 vJ+RHTj94JajQ==
+	b=L4pdjy7kU+nEWfitkhWYS7mfJNZRQICELhUgT91XlRwOw7Hr07wXxx3m/Jw+Ij0Uu
+	 UxSRTn1c5RysVZm9wELETz+hiJQmM2DPs9ZQDqhgsCjBtFCU3Z+5XVZWeHmDtrvub1
+	 qpR9YMrFxakuyH2F+d+CQrGmxuCvFeTM+c5/F5YW5ZLzvKmO3bsIItwlV7075l6P44
+	 2HOf2ngJMGx3xlkBhBOxJqrSGQsCi2gz1KqWemcvWBqCs9FAqfLlyH5nefnL+dTFEq
+	 s+/GLzdtIHGkgCKApyWjIerH5Fu3iRI4+d/WCG3Ut9NCf/aw6qPQt7js5msnDHb8t5
+	 DMc1TJPLDEGxw==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Robert Foss <rfoss@kernel.org>,
-	Todor Tomov <todor.too@gmail.com>,
-	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Hans Verkuil <hverkuil@kernel.org>
+	Scott Wood <scottwood@freescale.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>,
-	Vincent Knecht <vincent.knecht@mailoo.org>,
-	Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>,
-	linux-media@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
+	Kees Cook <kees@kernel.org>,
+	linux-clk@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] media: qcom: camss: avoid format string warning
-Date: Fri, 20 Mar 2026 16:18:24 +0100
-Message-Id: <20260320151828.3456863-1-arnd@kernel.org>
+Subject: [PATCH] clk: qoriq: avoid formwat string warning
+Date: Fri, 20 Mar 2026 16:18:49 +0100
+Message-Id: <20260320151854.3465248-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,57 +52,77 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-clang-22 warns about csiphy_match_clock_name() taking a variable format
-string that is not checked against the 'int index' argument:
+clang-22 warns about the use of non-variadic format arguments passed into
+snprintf():
 
-drivers/media/platform/qcom/camss/camss-csiphy.c:566:44: error: diagnostic behavior may be improved by
-      adding the 'format(printf, 2, 3)' attribute to the declaration of 'csiphy_match_clock_name'
-      [-Werror,-Wmissing-format-attribute]
-  561 | static bool csiphy_match_clock_name(const char *clock_name, const char *format,
-      | __attribute__((format(printf, 2, 3)))
-  562 |                                     int index)
-  563 | {
-  564 |         char name[16]; /* csiphyXXX_timer\0 */
-  565 |
-  566 |         snprintf(name, sizeof(name), format, index);
-      |                                                   ^
-drivers/media/platform/qcom/camss/camss-csiphy.c:561:13: note: 'csiphy_match_clock_name' declared here
-  561 | static bool csiphy_match_clock_name(const char *clock_name, const char *format,
-      |             ^
+drivers/clk/clk-qoriq.c:925:39: error: diagnostic behavior may be improved by adding the
+      'format(printf, 7, 8)' attribute to the declaration of 'create_mux_common' [-Werror,-Wmissing-format-attribute]
+  910 | static struct clk * __init create_mux_common(struct clockgen *cg,
+      | __attribute__((format(printf, 7, 8)))
+  911 |                                              struct mux_hwclock *hwc,
+  912 |                                              const struct clk_ops *ops,
+  913 |                                              unsigned long min_rate,
+  914 |                                              unsigned long max_rate,
+  915 |                                              unsigned long pct80_rate,
+  916 |                                              const char *fmt, int idx)
+  917 | {
+  918 |         struct clk_init_data init = {};
+  919 |         struct clk *clk;
+  920 |         const struct clockgen_pll_div *div;
+  921 |         const char *parent_names[NUM_MUX_PARENTS];
+  922 |         char name[32];
+  923 |         int i, j;
+  924 |
+  925 |         snprintf(name, sizeof(name), fmt, idx);
+      |                                              ^
+drivers/clk/clk-qoriq.c:910:28: note: 'create_mux_common' declared here
+  910 | static struct clk * __init create_mux_common(struct clockgen *cg,
 
-Change the function to use a snprintf() style format string that allows this
-to be checked at the call site.
+Rework this to pass the 'int idx' as a varargs argument, allowing the
+format string to be verified at the caller location.
 
-Fixes: 0727615fb975 ("media: qcom: camss: Functionally decompose CSIPHY clock lookups")
+Fixes: 0dfc86b3173f ("clk: qoriq: Move chip-specific knowledge into driver")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/platform/qcom/camss/camss-csiphy.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/clk/clk-qoriq.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 62623393f414..78a1b568dbae 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -558,12 +558,16 @@ static int csiphy_init_formats(struct v4l2_subdev *sd,
- 	return csiphy_set_format(sd, fh ? fh->state : NULL, &format);
+diff --git a/drivers/clk/clk-qoriq.c b/drivers/clk/clk-qoriq.c
+index f05631e55310..2524c5c0eb46 100644
+--- a/drivers/clk/clk-qoriq.c
++++ b/drivers/clk/clk-qoriq.c
+@@ -907,13 +907,11 @@ static const struct clockgen_pll_div *get_pll_div(struct clockgen *cg,
+ 	return &cg->pll[pll].div[div];
  }
  
--static bool csiphy_match_clock_name(const char *clock_name, const char *format,
--				    int index)
-+static bool __printf(2, 3)
-+csiphy_match_clock_name(const char *clock_name, const char *format, ...)
+-static struct clk * __init create_mux_common(struct clockgen *cg,
+-					     struct mux_hwclock *hwc,
+-					     const struct clk_ops *ops,
+-					     unsigned long min_rate,
+-					     unsigned long max_rate,
+-					     unsigned long pct80_rate,
+-					     const char *fmt, int idx)
++static struct clk * __init __printf(7, 8)
++create_mux_common(struct clockgen *cg, struct mux_hwclock *hwc,
++		  const struct clk_ops *ops, unsigned long min_rate,
++		  unsigned long max_rate, unsigned long pct80_rate,
++		  const char *fmt, ...)
  {
- 	char name[16]; /* csiphyXXX_timer\0 */
+ 	struct clk_init_data init = {};
+ 	struct clk *clk;
+@@ -921,8 +919,11 @@ static struct clk * __init create_mux_common(struct clockgen *cg,
+ 	const char *parent_names[NUM_MUX_PARENTS];
+ 	char name[32];
+ 	int i, j;
 +	va_list args;
-+
-+	va_start(args, format);
-+	vsnprintf(name, sizeof(name), format, args);
+ 
+-	snprintf(name, sizeof(name), fmt, idx);
++	va_start(args, fmt);
++	vsnprintf(name, sizeof(name), fmt, args);
 +	va_end(args);
  
--	snprintf(name, sizeof(name), format, index);
- 	return !strcmp(clock_name, name);
- }
- 
+ 	for (i = 0, j = 0; i < NUM_MUX_PARENTS; i++) {
+ 		unsigned long rate;
 -- 
 2.39.5
 
