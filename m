@@ -1,281 +1,97 @@
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD6335B64B
-	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 20:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A238536C9CE;
+	Fri, 20 Mar 2026 21:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774039718; cv=none; b=dMPueVfOF7/Gamq5vUfGC1fszgw/MvfUyxDQinvTi8FXuGxXI56YPcvc3+1yfWonrnEv8y2WflWB/uOb0ddzUrBbNoZ+Jen8Oxl5nq9ZcHnLGRhfj+1QE2kQD4iW01HzmeRSjtYUMfsqiWJxe3jjXE/3iM7PQzE5G+BH20LeZRQ=
+	t=1774041334; cv=none; b=mVITefB2bC5k8lRS5FsQliMJzK22r7U4SovGKDRoph3Cpw+mntgjrlty+YiMVJF0kQEvLSFzuMC/lpFTnqgz6LAMGTRnlJOr2Eb3u7gvczYU1q9bTbVV+JZ9hWs0c4SUB9WPmvu/bXM7pvW0Gda5SJ/gr3te4uXo2Qe8Ei+Ar9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774039718; c=relaxed/simple;
-	bh=6iJKeRVvfZKtvhtpJrPt73DDKKzzdGV+KggsGp531mw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=JLpO6ydRL39QZppWbpSF8Wm7S1kzXG7XGhXzHSNNncz0S9bGzJ0j7SeCG0ACHNPLE5ywDw+VCx1bN4cY2jSdvhalMVNBIldU3ITjrL5g6jFuda0R6dzp8vdDrkJAf5hmQNS1/3Hu56iC1y8IhwaeaB7UdGUbWQj339U1ZeKaw48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Esq0mgpv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VCZ/AHdp; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1774041334; c=relaxed/simple;
+	bh=csKLUf7y3E2BBLslrtaxu3wMNwA8IU1Jx5o2zubmCoA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CabM57bhLcsBHMXum5G/1ri8JHAkti6WBpfA0l3+GFw50R8AkuXUYBnRb6OV+ELXqZtirskfKfPVJT+supqWeDMEATWoth+w2IYNy3Lc3U5XvkgzsPGMPX30gdnfVs138ui6cafeCmA2MBwGiuCD7ybx477nRXJI0lAej7/j9Tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rE5jZlt5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Esq0mgpv";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VCZ/AHdp"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id D37501D000B2;
-	Fri, 20 Mar 2026 16:48:34 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Fri, 20 Mar 2026 16:48:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1774039714;
-	 x=1774126114; bh=MR438byzDRVcyRIAzP4AWEVh8CmGgC39iq9wYYJZ1E8=; b=
-	Esq0mgpv1o2fwCKdLQyDCSUnC0nd8bc2XeMLb7OWaYCz9Hc7t0js2gmCgmnspy4n
-	DkRKgcdQO9fh264uVmWa9KukQ2aRXANjtGfcsz8f5g/RPmlTuGvxAVMiMhErKv8E
-	VrsNcR1QXueHzgTtNkCmcLptynczYll8xaJ7rTlwBH33/t2K5hBsJX0KjKwP+ph5
-	nOiBCqBJLZF+ZjmxV8uAaVoe76O0RYPG5Og0a49e299H1X8WC/mXDnbNN6YkZv1I
-	ACWTiLEv0UHsY3m37jMXSYk9rEmuNnWERxacPOrWnRfFtfL2omZIEglMWCmFdU+o
-	KuYNynbJ3JgigK3eXsv5Yw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774039714; x=
-	1774126114; bh=MR438byzDRVcyRIAzP4AWEVh8CmGgC39iq9wYYJZ1E8=; b=V
-	CZ/AHdpsPj8Tcw2UrJoFF04ip4tlZ655w87p5Y4nBcodWG9rQBYoJUtpYpd82/gm
-	TeQXea2G8hLq0l9DBOoh27js0OiXcwhKgfrV/NO5UBenyZYfCeSPVKaui7scTrjA
-	bYvLVTmyGSLyAOEHRJE7tbomTlNWnOfZH1YEVKpZRtE39IjEJ+T4njiqLdXrK57V
-	8QSMNDXTf5mYIdgIvydpKZ9FFNMThBA4GTd4VvgHZ7gn1/NyHeb+zm6upsdLhs5W
-	vz4JjKG2KZeqXKqrFPAXhxWAll8DktgR9QuGl7r8HNWMRAEXzMX2Zkbdec9vJS1Z
-	Ji+pTX2eCjtvircfV1/sA==
-X-ME-Sender: <xms:orK9aUKqbKfJgMqo6LBQsfCAUdNZyiBKeeYHXJSoOmfYA5w4ITVDYA>
-    <xme:orK9ae-dovZOJUe9Yl1pQIxvVgrdEOqE9_hdUE-TN2-e_5GgjJv5qsTFwnhX9Xvt-
-    JXn4aQh0FBov-QcKZFNT3GUf2fU_-jPJRih7R-9OZoqmchKRV0U3n5X>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefuddtleduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepkedvuefhiedtueeijeevtdeiieejfeelvefffeelkeeiteejffdvkefgteeuhffg
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
-    phhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghrvghtthdrtg
-    hrvggvlhgvhiesrghmugdrtghomhdprhgtphhtthhopehlihhnuhigqdhnvghtqdgurhhi
-    vhgvrhhssegrmhgurdgtohhmpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfth
-    drnhgvthdprhgtphhtthhopehlvghithgrohesuggvsghirghnrdhorhhgpdhrtghpthht
-    ohepvggtrhgvvgdrgihilhhinhigsehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhhitg
-    hkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthho
-    pegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhushhtihhnsh
-    htihhtthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhglhgv
-    rdgtohhm
-X-ME-Proxy: <xmx:orK9aVqhBiSmLvglClMV_DRg4Luags_lTnYYtZgkubxrOPOwENKpvQ>
-    <xmx:orK9aTjexPJt4yHR9X8asqkwyPrzyIrpbkW1iRyLKEk0STjl9mIM6Q>
-    <xmx:orK9advULLJthfVwVRnxjV-BzfsxrhUFrq3R5GX6D0SskPcK00rSWw>
-    <xmx:orK9aU1NqpvEtosOzfTaiR42howqM6_E_H9PWvR7ZJTPBbHZVSeJfw>
-    <xmx:orK9aUg1kd-iA2cr6GkN4mcHLjFTaqFABlEEkAoRDps2_U7VZ40EJM7Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 0F04A700069; Fri, 20 Mar 2026 16:48:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rE5jZlt5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 296F3C4CEF7;
+	Fri, 20 Mar 2026 21:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774041334;
+	bh=csKLUf7y3E2BBLslrtaxu3wMNwA8IU1Jx5o2zubmCoA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=rE5jZlt5LTQFurZbBN5sDlM/PrJaZuk3sVzsDJ43H6lMhnYot+i9vrFHKPzcEloq5
+	 21e3JuQmEtZMo01tabvZM39wqBfZQQSUs3wCkEtbef2oMlw6CN+r1MU0SYSD/Ytp/N
+	 gx2BW7SXKLNRXMhzqIOP41mX+R/PCYj7WlN2dqgg8XKuBxINgm/2x0unxl58l192Qs
+	 iIiB+wbjd4FHNeZaE7WyUxn9BEd68VzqlD3dwR1/BP+DiMAQP2D/fjYUJ4RffbZBAy
+	 giRhsasAI2EIors4Fu/i0sn3Qhozg1MMbG4jBfDn4EoKV34lRjAcWTr3nfMOIhGGYt
+	 4oyzPIWNT5hRg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Brendan Jackman <jackmanb@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] bug: shut up format attribute warning for clang as well
+Date: Fri, 20 Mar 2026 22:14:25 +0100
+Message-Id: <20260320211528.2474389-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: Aywyuz1KiUOB
-Date: Fri, 20 Mar 2026 21:48:13 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Edward Cree" <ecree.xilinx@gmail.com>, "Arnd Bergmann" <arnd@kernel.org>,
- "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>,
- "Jeff Garzik" <jgarzik@redhat.com>,
- "Ben Hutchings" <bhutchings@solarflare.com>
-Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Brett Creeley" <brett.creeley@amd.com>, "Breno Leitao" <leitao@debian.org>,
- "Kees Cook" <kees@kernel.org>, Netdev <netdev@vger.kernel.org>,
- linux-net-drivers@amd.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <61de3aea-26b3-4c00-8598-3a137ebef1bc@app.fastmail.com>
-In-Reply-To: <90a03d3c-def3-4e34-89a0-6e952d3b0d7a@gmail.com>
-References: <20260320151924.3474821-1-arnd@kernel.org>
- <90a03d3c-def3-4e34-89a0-6e952d3b0d7a@gmail.com>
-Subject: Re: [PATCH] net: sfc: avoid format string warning
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 20, 2026, at 20:04, Edward Cree wrote:
-> On 20/03/2026 15:19, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>=20
->> Three sfc drivers contain the same *_fill_test() function that takes
->> a format string argument that gets passed down to snprintf(), produci=
-ng
->> a warning with clang-22:
->>=20
->> drivers/net/ethernet/sfc/falcon/ethtool.c:227:60: error: diagnostic b=
-ehavior may be improved by adding
->>       the 'format(printf, 7, 8)' attribute to the declaration of 'ef4=
-_fill_test' [-Werror,-Wmissing-format-attribute]
->>   210 |                 snprintf(test_str, sizeof(test_str), test_for=
-mat, test_id);
->>       |                                                              =
-            ^
->> drivers/net/ethernet/sfc/falcon/ethtool.c:210:13: note: 'ef4_fill_tes=
-t' declared here
->>=20
->> Rework these to take a varargs based test_format that allows better
->> type checking and avoids this warning.
->>=20
->> Fixes: 3273c2e8c66a ("[netdrvr] sfc: sfc: Add self-test support")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> I'm not convinced this is an improvement.  The function takes *two* pr=
-intf
->  format strings (unit_format and test_format), and this only annotates=
- and
->  varargs-ifies one of them (and doesn't harden the unit_format, which =
-has
->  the considerably more worrying-looking "if it has a % in, assume it t=
-akes
->  precisely one int argument").
+From: Arnd Bergmann <arnd@arndb.de>
 
-Right, I took a bit of a shortcut there. How about changing it
-so the other format string is just a name that gets joined with the
-number?
+Like gcc, clang-22 now also warns about a function that it
+incorrectly identifies as a printf-style format:
 
-diff --git a/drivers/net/ethernet/sfc/falcon/ethtool.c b/drivers/net/eth=
-ernet/sfc/falcon/ethtool.c
-index 1ae8acb8fdc8..a0064eadff41 100644
---- a/drivers/net/ethernet/sfc/falcon/ethtool.c
-+++ b/drivers/net/ethernet/sfc/falcon/ethtool.c
-@@ -200,7 +200,7 @@ static void ef4_ethtool_set_msglevel(struct net_devi=
-ce *net_dev, u32 msg_enable)
-  * @strings:		Ethtool strings, or %NULL
-  * @data:		Ethtool test results, or %NULL
-  * @test:		Pointer to test result (used only if data !=3D %NULL)
-- * @unit_format:	Unit name format (e.g. "chan\%d")
-+ * @unit_name:		Unit name format (e.g. "chan\%d")
-  * @unit_id:		Unit id (e.g. 0 for "chan0")
-  * @test_format:	Test name format (e.g. "loopback.\%s.tx.sent")
-  * @test_id:		Test id (e.g. "PHYXS" for "loopback.PHYXS.tx_sent")
-@@ -208,9 +208,9 @@ static void ef4_ethtool_set_msglevel(struct net_devi=
-ce *net_dev, u32 msg_enable)
-  * Fill in an individual self-test entry.
-  */
- static void __printf(7, 8)
-- ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
--			  int *test, const char *unit_format, int unit_id,
--			  const char *test_format, ...)
-+ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
-+	      int *test, const char *unit_name, int unit_id,
-+	      const char *test_format, ...)
- {
- 	char unit_str[ETH_GSTRING_LEN], test_str[ETH_GSTRING_LEN];
-=20
-@@ -222,11 +222,11 @@ static void __printf(7, 8)
- 	if (strings) {
- 		va_list arg;
-=20
--		if (strchr(unit_format, '%'))
-+		if (unit_id >=3D 0)
- 			snprintf(unit_str, sizeof(unit_str),
--				 unit_format, unit_id);
-+				 "%s%d", unit_name, unit_id);
- 		else
--			strcpy(unit_str, unit_format);
-+			strcpy(unit_str, unit_name);
- 		va_start(arg, test_format);
- 		vsnprintf(test_str, sizeof(test_str), test_format, arg);
- 		va_end(arg);
-@@ -236,9 +236,9 @@ static void __printf(7, 8)
- 	}
+lib/bug.c:190:22: error: diagnostic behavior may be improved by adding the 'format(printf, 1, 0)' attribute to the declaration of '__warn_printf' [-Werror,-Wmissing-format-attribute]
+  179 | static void __warn_printf(const char *fmt, struct pt_regs *regs)
+      | __attribute__((format(printf, 1, 0)))
+  180 | {
+  181 |         if (!fmt)
+  182 |                 return;
+  183 |
+  184 | #ifdef HAVE_ARCH_BUG_FORMAT_ARGS
+  185 |         if (regs) {
+  186 |                 struct arch_va_list _args;
+  187 |                 va_list *args = __warn_args(&_args, regs);
+  188 |
+  189 |                 if (args) {
+  190 |                         vprintk(fmt, *args);
+      |                                           ^
+
+Turn off this warning for all compilers and versions.
+
+Fixes: d36067d6ea00 ("bug: Hush suggest-attribute=format for __warn_printf()")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ lib/bug.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/lib/bug.c b/lib/bug.c
+index bbc301097749..374feb144f0b 100644
+--- a/lib/bug.c
++++ b/lib/bug.c
+@@ -174,8 +174,7 @@ struct bug_entry *find_bug(unsigned long bugaddr)
  }
-=20
--#define EF4_CHANNEL_NAME(_channel) "chan%d", _channel->channel
--#define EF4_TX_QUEUE_NAME(_tx_queue) "txq%d", _tx_queue->queue
--#define EF4_RX_QUEUE_NAME(_rx_queue) "rxq%d", _rx_queue->queue
-+#define EF4_CHANNEL_NAME(_channel) "chan", _channel->channel
-+#define EF4_TX_QUEUE_NAME(_tx_queue) "txq", _tx_queue->queue
-+#define EF4_RX_QUEUE_NAME(_rx_queue) "rxq", _rx_queue->queue
- #define EF4_LOOPBACK_NAME(_mode, _counter)			\
- 	"loopback.%s." _counter, STRING_TABLE_LOOKUP(_mode, ef4_loopback_mode)
-=20
-@@ -276,11 +276,11 @@ static int ef4_fill_loopback_test(struct ef4_nic *=
-efx,
- 	}
- 	ef4_fill_test(test_index++, strings, data,
- 		      &lb_tests->rx_good,
--		      "rx", 0,
-+		      "rx", -1,
- 		      EF4_LOOPBACK_NAME(mode, "rx_good"));
- 	ef4_fill_test(test_index++, strings, data,
- 		      &lb_tests->rx_bad,
--		      "rx", 0,
-+		      "rx", -1,
- 		      EF4_LOOPBACK_NAME(mode, "rx_bad"));
-=20
- 	return test_index;
-@@ -308,11 +308,11 @@ static int ef4_ethtool_fill_self_tests(struct ef4_=
-nic *efx,
- 	enum ef4_loopback_mode mode;
-=20
- 	ef4_fill_test(n++, strings, data, &tests->phy_alive,
--		      "phy", 0, "alive");
-+		      "phy", -1, "alive");
- 	ef4_fill_test(n++, strings, data, &tests->nvram,
--		      "core", 0, "nvram");
-+		      "core", -1, "nvram");
- 	ef4_fill_test(n++, strings, data, &tests->interrupt,
--		      "core", 0, "interrupt");
-+		      "core", -1, "interrupt");
-=20
- 	/* Event queues */
- 	ef4_for_each_channel(channel, efx) {
-@@ -327,9 +327,9 @@ static int ef4_ethtool_fill_self_tests(struct ef4_ni=
-c *efx,
- 	}
-=20
- 	ef4_fill_test(n++, strings, data, &tests->memory,
--		      "core", 0, "memory");
-+		      "core", -1, "memory");
- 	ef4_fill_test(n++, strings, data, &tests->registers,
--		      "core", 0, "registers");
-+		      "core", -1, "registers");
-=20
- 	if (efx->phy_op->run_tests !=3D NULL) {
- 		EF4_BUG_ON_PARANOID(efx->phy_op->test_name =3D=3D NULL);
-@@ -343,7 +343,7 @@ static int ef4_ethtool_fill_self_tests(struct ef4_ni=
-c *efx,
- 				break;
-=20
- 			ef4_fill_test(n++, strings, data, &tests->phy_ext[i],
--				      "phy", 0, "%s", name);
-+				      "phy", -1, "%s", name);
- 		}
- 	}
-=20
+ 
+ __diag_push();
+-__diag_ignore(GCC, all, "-Wsuggest-attribute=format",
+-	      "Not a valid __printf() conversion candidate.");
++__diag_ignore_all("-Wmissing-format-attribute", "Not a valid __printf() conversion candidate.");
+ static void __warn_printf(const char *fmt, struct pt_regs *regs)
+ {
+ 	if (!fmt)
+-- 
+2.39.5
 
-> I don't like splitting the specifiers/return type from the function na=
-me
->  like this.  It's not Linux style[1].
-> (From a quick poke around the tree, there seems to be less consensus on
->  where the __printf attribute goes =E2=80=94 some put it on its own li=
-ne before
->  `static`, some would put it between `static` and `void`=E2=80=A6 sigh=
-.)
->
-> [1]: https://lore.kernel.org/all/1054519757.161606@palladium.transmeta=
-.com/T/#u
-
-There are not a lot of good options here, and splitting the line seems
-better than an overlong line to me. I don't really have a strong opinion
-on where the __printf attribute should go either, but I do see that
-after the return type is probably the least common, so I'll change
-that. How about having the specifiers on one line and
-the type in front of the name? that seems faily common.
-
-static __printf(7, 8)
-void ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
-
-    Arnd
