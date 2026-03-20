@@ -1,73 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B764535E941;
-	Fri, 20 Mar 2026 09:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95FA538AC67;
+	Fri, 20 Mar 2026 10:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773998795; cv=none; b=l6zb/sPxr0A5pZOppVlB93FT58LuBnPxNU+kl2Xb5rTof+3+GZxBvQFblmYl10dvboxexW6m2Hk6aSJjWdtUET7R/za7Ye2Wa22Fy6XgTQz33IY8S/5GE46g64Nqrd84zz5s68F6SEzaDwjVByiNA4R3ffFsuEcp40y+fj5wNCk=
+	t=1774001947; cv=none; b=VV1mbrh+XPbNi4PE2sjZfLkKK9pCjYfoeUzewKQpyGzDJXBAa4dymsBErK/hPJLgl8rO+TclxXAYe5RTZfB7VMdf1W+CKRwJETGQ1R717W/5V3ozsD6TiNeTx1KUbMgDwv/eqyJfEOJxVhJGKcW4JyaH0jLKqSj5oe6DbcX1j+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773998795; c=relaxed/simple;
-	bh=DOGaCuBCTRkz1PBAmYE+qDUnukQ0pca3NhU408CcktE=;
+	s=arc-20240116; t=1774001947; c=relaxed/simple;
+	bh=9xUNeMBUbv50TFhTrU7GhOJSxZ6PPhrSR/Qj7v/5NWQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uv4/GKICoxJyx3qeLmnUSSM4EVJ7SGamkk8Ca/50f6Bu6+5q5hSxMjsbtHMXLO2BIvn0XEOPGPWANJVWm8h8fRZqXyPFXOhMii6cKO//REqmVjznnLmcduRLV8VYp00b8XtaRK4No5pCQ9KDSa64T4zCad8l0qitJ93sueKkuWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lE7vjFKL; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=A8e1yjPFc5mnHEaweCQ5Jc+JvHd2z+Jh+UqDPjtDCQMwlz4O8eZ1ZJ04ckQA3v568CHg8LWAMxHkLw9n6IYuTI0ywWYYMI2AzMqGgQ8cjZhSYOi4Do6+Cget3gTJuXLJFoiOiRVKvfFa3gdBNJI+eS+/fSV7OQ8/8VaiRqPHKVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I3FGcLQz; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lE7vjFKL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I3FGcLQz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1773998795; x=1805534795;
+  t=1774001938; x=1805537938;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=DOGaCuBCTRkz1PBAmYE+qDUnukQ0pca3NhU408CcktE=;
-  b=lE7vjFKLo3fnUv+L7/SPtCF62vh6NZf2Rx65mOfV4W5+FCspx6U8Jhgq
-   DLYjrIMKIAjd9KWWQckSW7WVQOYWGAL/Z+rThZimXVTj4sPbjewVRfmtj
-   kEwFejGbjxVCSXOb82gr6YupadYvwhbhJVSkS2UAv7q3g9RqQqOjdVQrX
-   j2IQ3QN3kj/2Ak74agmv82PuEYgiGE3Otz5xXDUUnVbU2aJ3z8TnoiL8b
-   hSRoMW6y8fOf0Ub5MHHBEXsJlafVUZYkEZazOSNa2IIwLKWhGbr8HyiW6
-   ZRNftFSFMDHTgf7aHqKa+8DQrRb2piolsrO0YmhpRyRAjjWtihWuynXfg
-   A==;
-X-CSE-ConnectionGUID: JL4sDvUoRGaCXzCP4BAjTA==
-X-CSE-MsgGUID: S7qcvwpsRCCg96ONs4ri5w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="85782600"
+  bh=9xUNeMBUbv50TFhTrU7GhOJSxZ6PPhrSR/Qj7v/5NWQ=;
+  b=I3FGcLQzeRTfk76HnulvH+h0zeBVDPzhLDdQKHnFqpABJUjdbGNEZ+C2
+   oIbWtmrhL7yotqGX8SLAdxp1kqfejXPHNjqDNkYww4GXWBLKjfHk68Jwx
+   mPug6e4B5sIMXOUjVOol7OCYEYFDK8Sj+TiFzJnaxH+/SmeJCwYyZDaRl
+   hXZzzO4g8AKm8I/UJAF6Lc6cyNURlD8seF1DUSBW2jOLUn4HukJ8QruMo
+   QMzzNT3NM29DjM9CULiYH/OXvp63/78WTYR6GPPyu5tx/pVB/D+zsxI1u
+   2lzN2flpvCNh70uV3KWnVZVgCt7k0A4nJJxWXvTxDZITacZfKCeLe7CpD
+   g==;
+X-CSE-ConnectionGUID: D0mCqVTGRhKVUG2x7of3bQ==
+X-CSE-MsgGUID: +fBdtZCnSFW8vV+0uygoTA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="92658886"
 X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="85782600"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 02:26:34 -0700
-X-CSE-ConnectionGUID: 6CMDdqN/R2qCbE52BuaMXA==
-X-CSE-MsgGUID: AWRO+khYT12j2nQa9yZPfA==
+   d="scan'208";a="92658886"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 03:18:57 -0700
+X-CSE-ConnectionGUID: zLehAkZ/Qu6Cfa49jA9rEA==
+X-CSE-MsgGUID: HEHwKXlOS/6q0uNEFA0sYQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="228171443"
+   d="scan'208";a="218615516"
 Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 20 Mar 2026 02:26:29 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 20 Mar 2026 03:18:53 -0700
 Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w3W63-000000002Cd-33yE;
-	Fri, 20 Mar 2026 09:25:07 +0000
-Date: Fri, 20 Mar 2026 17:22:56 +0800
+	id 1w3WwM-000000002G5-2cL7;
+	Fri, 20 Mar 2026 10:18:50 +0000
+Date: Fri, 20 Mar 2026 18:18:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Koskovich <akoskovich@pm.me>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+To: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-	Alexander Koskovich <akoskovich@pm.me>
-Subject: Re: [PATCH v3 3/4] drm/msm/dsi: Add support for RGB101010 pixel
- format
-Message-ID: <202603201719.MxZJCZoY-lkp@intel.com>
-References: <20260319-dsi-rgb101010-support-v3-3-85b99df2d090@pm.me>
+	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCHv3 bpf-next 08/24] bpf: Add
+ bpf_trampoline_multi_attach/detach functions
+Message-ID: <202603201820.zsM5FRDS-lkp@intel.com>
+References: <20260316075138.465430-9-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,57 +71,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260319-dsi-rgb101010-support-v3-3-85b99df2d090@pm.me>
+In-Reply-To: <20260316075138.465430-9-jolsa@kernel.org>
 
-Hi Alexander,
+Hi Jiri,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on f338e77383789c0cae23ca3d48adcc5e9e137e3c]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Koskovich/drm-msm-dsi-rename-MSM8998-DSI-version-from-V2_2_0-to-V2_0_0/20260320-011528
-base:   f338e77383789c0cae23ca3d48adcc5e9e137e3c
-patch link:    https://lore.kernel.org/r/20260319-dsi-rgb101010-support-v3-3-85b99df2d090%40pm.me
-patch subject: [PATCH v3 3/4] drm/msm/dsi: Add support for RGB101010 pixel format
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260320/202603201719.MxZJCZoY-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603201719.MxZJCZoY-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/ftrace-Add-ftrace_hash_count-function/20260316-160117
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260316075138.465430-9-jolsa%40kernel.org
+patch subject: [PATCHv3 bpf-next 08/24] bpf: Add bpf_trampoline_multi_attach/detach functions
+config: x86_64-randconfig-075-20260320 (https://download.01.org/0day-ci/archive/20260320/202603201820.zsM5FRDS-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603201820.zsM5FRDS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603201719.MxZJCZoY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603201820.zsM5FRDS-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/dsi/dsi_host.c:760:7: error: use of undeclared identifier 'MIPI_DSI_FMT_RGB101010'
-     760 |         case MIPI_DSI_FMT_RGB101010:    return VID_DST_FORMAT_RGB101010;
-         |              ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/dsi/dsi_host.c:773:7: error: use of undeclared identifier 'MIPI_DSI_FMT_RGB101010'
-     773 |         case MIPI_DSI_FMT_RGB101010:    return CMD_DST_FORMAT_RGB101010;
-         |              ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/dsi/dsi_host.c:1710:21: error: use of undeclared identifier 'MIPI_DSI_FMT_RGB101010'
-    1710 |         if (dsi->format == MIPI_DSI_FMT_RGB101010 &&
-         |                            ^~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
+>> kernel/bpf/trampoline.c:1520:8: error: call to undeclared function 'btf_distill_func_proto'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1520 |         err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
+         |               ^
+   1 error generated.
 
 
-vim +/MIPI_DSI_FMT_RGB101010 +760 drivers/gpu/drm/msm/dsi/dsi_host.c
+vim +/btf_distill_func_proto +1520 kernel/bpf/trampoline.c
 
-   755	
-   756	static inline enum dsi_vid_dst_format
-   757	dsi_get_vid_fmt(const enum mipi_dsi_pixel_format mipi_fmt)
-   758	{
-   759		switch (mipi_fmt) {
- > 760		case MIPI_DSI_FMT_RGB101010:	return VID_DST_FORMAT_RGB101010;
-   761		case MIPI_DSI_FMT_RGB888:	return VID_DST_FORMAT_RGB888;
-   762		case MIPI_DSI_FMT_RGB666:	return VID_DST_FORMAT_RGB666_LOOSE;
-   763		case MIPI_DSI_FMT_RGB666_PACKED:	return VID_DST_FORMAT_RGB666;
-   764		case MIPI_DSI_FMT_RGB565:	return VID_DST_FORMAT_RGB565;
-   765		default:			return VID_DST_FORMAT_RGB888;
-   766		}
-   767	}
-   768	
+  1498	
+  1499	static int bpf_get_btf_id_target(struct btf *btf, struct bpf_prog *prog, u32 btf_id,
+  1500					 struct bpf_attach_target_info *tgt_info)
+  1501	{
+  1502		const struct btf_type *t;
+  1503		unsigned long addr;
+  1504		const char *tname;
+  1505		int err;
+  1506	
+  1507		if (!btf_id || !btf)
+  1508			return -EINVAL;
+  1509		t = btf_type_by_id(btf, btf_id);
+  1510		if (!t)
+  1511			return -EINVAL;
+  1512		tname = btf_name_by_offset(btf, t->name_off);
+  1513		if (!tname)
+  1514			return -EINVAL;
+  1515		if (!btf_type_is_func(t))
+  1516			return -EINVAL;
+  1517		t = btf_type_by_id(btf, t->type);
+  1518		if (!btf_type_is_func_proto(t))
+  1519			return -EINVAL;
+> 1520		err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
+  1521		if (err < 0)
+  1522			return err;
+  1523		if (btf_is_module(btf)) {
+  1524			/* The bpf program already holds refference to module. */
+  1525			if (WARN_ON_ONCE(!prog->aux->mod))
+  1526				return -EINVAL;
+  1527			addr = find_kallsyms_symbol_value(prog->aux->mod, tname);
+  1528		} else {
+  1529			addr = kallsyms_lookup_name(tname);
+  1530		}
+  1531		if (!addr || !ftrace_location(addr))
+  1532			return -ENOENT;
+  1533		tgt_info->tgt_addr = addr;
+  1534		return 0;
+  1535	}
+  1536	
 
 -- 
 0-DAY CI Kernel Test Service
