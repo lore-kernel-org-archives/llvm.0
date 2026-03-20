@@ -1,223 +1,262 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB353CFF4D;
-	Fri, 20 Mar 2026 16:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE083B9DAF
+	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 16:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774023835; cv=none; b=QqMZgWBCqWNp5V2VRzzN/NjXGNVZ6L65QSAIaHvZ669rUieoOk6gLN0TfvEtaCEZayqi7ijLX8PVmrvpVWQ2uwjSzZBRSus8C/VaYkwbGoNxhCEGqOlO3lOx9xFuCGhin2b7YTyuySd+hdULBKXIEj3m22ZlaZzGuaydJ0VwPgE=
+	t=1774024397; cv=none; b=E8SS6l+4jWWxP4NilQSN9toPx1pqcpS9Uom35UbRIqFXpsHq3SK2RHh+JIWaJ8EYQc8hgkzZS0fM+0xir8Ud4qmkkcps+/7kPRjiI6AErUKpSgt4Qd5O/ORMv7f7R9+pGOeJd767u/LFcLM+qeJi5onyfibQ7wWZClGw7FLDb7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774023835; c=relaxed/simple;
-	bh=KxdVgLtOTeImyENstNAgOZZQCVvGhMky6D0LvTxmWPk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ekLmBd6FGVfFBv5H3XW309K+mmv+lSOo7LkXWEPf28iaZoNug5oJL5+4knzshlbOqWmeJpSA/BKddp0RZIshD9ZfiFVotdHA1ka+/S3WFBygjY5j81FSDMnYFKXFBHiqyvgCEuwPkZRvJMP3aPgJB87EbaMLmX7KwTmgd8K7QfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kVzv7c+p; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774024397; c=relaxed/simple;
+	bh=77y8NOVrbX5dHU2JG15fd9EqoicWcy+jqIlK9RsWDlk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FfzoRYLVzm9MVla6ORlW8ha4kLXuZ2QicRQDnRuvnAvlK9a0cVl/kewJX5wtZfjdmIOUCM9TSTkWC7lLuDYvnugew3APe2v2fYztmj6t7OfCAdxqbvh7xC7F6nccYw4g7wR37bGQipke8Ag6myHc6hlVaomoZtmlV3UaKRdumFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=nAUPjFQn; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kVzv7c+p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774023833; x=1805559833;
-  h=date:from:to:cc:subject:message-id;
-  bh=KxdVgLtOTeImyENstNAgOZZQCVvGhMky6D0LvTxmWPk=;
-  b=kVzv7c+pQHe9WTOxtRaHPmKRr4IAsk/538A57TSMwLzGBfTIwd3V6Rf3
-   8ObzMfI0F+4XAbjo8J8n/7aYRCvImtSOKr6sHVSZOzU/C4ktA9DT49I/n
-   7aef0unL7NpEGUHAyvKTfdyE7TufG4VZAKnlJn7JgQqyPvNdQuvoRFv3W
-   x63JPtMJ26vT61GpPkpYkCpYOfq5kXs4mn8m2M1iNMM+Oab3C45C3X3F/
-   a6uYUmrS+Yah1HRKfp590wh9g6WCqhGvBnRAUikCoFTavAYJWmsddjmVs
-   gURdt9xMwsrrKVyp6baOGl18TyvuCYgWz+yu/yygkdvV1sZ5ittNWi7RG
-   Q==;
-X-CSE-ConnectionGUID: Yb5i1oLQTiGkOjPQCmAT9g==
-X-CSE-MsgGUID: CyaplZpERlyJVukgBPOVEw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="74814897"
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="74814897"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 09:23:48 -0700
-X-CSE-ConnectionGUID: PY30DsFNTVWCzNA+DHyZ0w==
-X-CSE-MsgGUID: ClIxtv3LTIaIJ/ULDH//LQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="220664933"
-Received: from lkp-server01.sh.intel.com (HELO ba623fe84fe1) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 20 Mar 2026 09:23:45 -0700
-Received: from kbuild by ba623fe84fe1 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w3cdT-00000000081-0F2p;
-	Fri, 20 Mar 2026 16:23:43 +0000
-Date: Sat, 21 Mar 2026 00:22:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [linux-next:master 6897/7971]
- drivers/hsi/controllers/omap_ssi_port.c:1121:12: warning: address of array
- 'ssi->port' will always evaluate to 'true'
-Message-ID: <202603202333.o9PN1JUT-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="nAUPjFQn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1774024365; x=1774629165; i=deller@gmx.de;
+	bh=9fG9TFK5YBYiwlIO4JNLa3f0OU3eRcodXPXEP1JnLCk=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=nAUPjFQnZqNSk6pfCncsfwtoET2l6BpyXs6XJX2Z2gCTKmf47+oRQjVHft7cqA1f
+	 SFB1zB2VXsCFuVES0/zi3eQY/aRZZGXtd87ucfuFdvOBj4w+F3ncLQE0sx3sAu2b/
+	 l9TIMzJqOtSsAGgvm7kFCRxhoZNUHgcgtJHnEEQeoDytxtFlI2I7hBc7OnjvVugF1
+	 tayj1440pFOqnWn7AV1bflWKp1f97ni1DvEOwzupjhe809cMXPvZoe9rY0DKa7HTM
+	 Ce9zPJEYia8Q3WShvuo3Lbw/bRqMKU8+gftqpvt7FhCFBgNsii2iLbjKHWEb8EkJH
+	 Zz2KlD9ZWroUiRbfZQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mnpnm-1vFfZ10dCs-00c4XU; Fri, 20
+ Mar 2026 17:32:45 +0100
+Message-ID: <fa586aeb-a15b-4615-b399-e327dea6cc17@gmx.de>
+Date: Fri, 20 Mar 2026 17:32:43 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] video: fbdev: matroxfb: Mark variable with
+ __maybe_unused to avoid W=1 build break
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Jason Yan <yanaijie@huawei.com>
+References: <20260320143646.3218199-1-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US
+From: Helge Deller <deller@gmx.de>
+Autocrypt: addr=deller@gmx.de; keydata=
+ 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
+In-Reply-To: <20260320143646.3218199-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3gzxMWiLSVfO+TBsML0zfYMcIjl4yjZPuz23OCsXImcMtBmQsOC
+ Vsi3lmSRQPslP9dPq/THnRvy8W9FW3K0i3OFa9T+NSgmYx6MMrcBo0Mv21uzIuNvtZHxIE4
+ zQTXD9zy3Z/CSl0X0aydESy9og8NyJkq10pEqVY38QOLZIU5qYIdduoPFCx2ne4kTDlYF3y
+ ZRThL/sp17wGq7roc+6Tg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:LGW3KeTOgF4=;wXp7ze3YMtf0NmJbvB7t/uAfun1
+ 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
+ P9qTPT919Rh
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   785f0eb2f85decbe7c1ef9ae922931f0194ffc2e
-commit: e61af3ca893363838f263f3528476f6e1faed9aa [6897/7971] hsi: hsi_core: use kzalloc_flex
-config: arm-randconfig-002-20260320 (https://download.01.org/0day-ci/archive/20260320/202603202333.o9PN1JUT-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603202333.o9PN1JUT-lkp@intel.com/reproduce)
+On 3/20/26 15:36, Andy Shevchenko wrote:
+> Clang is not happy about set but unused variable:
+>=20
+> drivers/video/fbdev/matrox/g450_pll.c:412:18: error: variable 'mnp' set =
+but not used [-Werror,-Wunused-but-set-variable]
+>     412 |                                 unsigned int mnp;
+>         |                                              ^
+> 1 error generated.
+>=20
+> Since the commit 7b987887f97b ("video: fbdev: matroxfb: remove dead code
+> and set but not used variable") the 'mnp' became unused, but eliminating
+> that code might have side-effects. The question here is what should we d=
+o
+> with 'mnp'? The easiest way out is just mark it with __maybe_unused whic=
+h
+> will shut the compiler up and won't change any possible IO flow. So does
+> this change.
+>=20
+> Fixes: 7b987887f97b ("video: fbdev: matroxfb: remove dead code and set b=
+ut not used variable")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603202333.o9PN1JUT-lkp@intel.com/
+Reviewed-by: Helge Deller <deller@gmx.de>
 
-All warnings (new ones prefixed by >>):
+Thanks!
+Helge
 
-   drivers/hsi/controllers/omap_ssi_port.c:455:6: warning: variable 'val' set but not used [-Wunused-but-set-variable]
-     455 |         u32 val;
-         |             ^
->> drivers/hsi/controllers/omap_ssi_port.c:1121:12: warning: address of array 'ssi->port' will always evaluate to 'true' [-Wpointer-bool-conversion]
-    1121 |         if (!ssi->port || !omap_ssi->port) {
-         |             ~~~~~~^~~~
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                                      ^~~~
-   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
-      68 |         (cond) ?                                        \
-         |          ^~~~
->> drivers/hsi/controllers/omap_ssi_port.c:1121:12: warning: address of array 'ssi->port' will always evaluate to 'true' [-Wpointer-bool-conversion]
-    1121 |         if (!ssi->port || !omap_ssi->port) {
-         |             ~~~~~~^~~~
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                    ^~~~
->> drivers/hsi/controllers/omap_ssi_port.c:1121:12: warning: address of array 'ssi->port' will always evaluate to 'true' [-Wpointer-bool-conversion]
-    1121 |         if (!ssi->port || !omap_ssi->port) {
-         |             ~~~~~~^~~~
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                             ^~~~
-   drivers/hsi/controllers/omap_ssi_port.c:1302:6: warning: variable 'mode' set but not used [-Wunused-but-set-variable]
-    1302 |         u32 mode;
-         |             ^
-   5 warnings generated.
+>=20
+> ---
+> Cc: Jason Yan <yanaijie@huawei.com>
+> ---
+>=20
+> Below is a dive into the history of the driver.
+>=20
+> The problem was revealed when the #if 0 guarded code along with unused
+> pixel_vco variable was removed. That code was introduced in the original
+> commit 213d22146d1f ("[PATCH] (1/3) matroxfb for 2.5.3"). And then guard=
+ed
+> in the commit 705e41f82988 ("matroxfb DVI updates: Handle DVI output on
+> G450/G550. Powerdown unused portions of G450/G550 DAC. Split G450/G550 D=
+AC
+> from older DAC1064 handling. Modify PLL setting when both CRTCs use same
+> pixel clocks.").
+>=20
+> NOTE: The two commits mentioned above pre-date Git era and available in
+> history.git repository for archaeological purposes.
+>=20
+> Even without that guard the modern compilers may see that the pixel_vco
+> wasn't ever used and seems a leftover after some debug or review made
+> 25 years ago.
+>=20
+> The g450_mnp2vco() doesn't have any IO and as Jason said doesn't seem
+> to have any side effects either than some unneeded CPU processing during
+> runtime. I agree that's unlikely that timeout (or heating up the CPU) ha=
+s
+> any effect on the HW (GPU/display) functionality.
+> ---
+>   drivers/video/fbdev/matrox/g450_pll.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/video/fbdev/matrox/g450_pll.c b/drivers/video/fbdev=
+/matrox/g450_pll.c
+> index e2c1478aa47f..6a08f78cd1ac 100644
+> --- a/drivers/video/fbdev/matrox/g450_pll.c
+> +++ b/drivers/video/fbdev/matrox/g450_pll.c
+> @@ -409,7 +409,7 @@ static int __g450_setclk(struct matrox_fb_info *minf=
+o, unsigned int fout,
+>   		case M_VIDEO_PLL:
+>   			{
+>   				u_int8_t tmp;
+> -				unsigned int mnp;
+> +				unsigned int mnp __maybe_unused;
+>   				unsigned long flags;
+>  =20
+>   				matroxfb_DAC_lock_irqsave(flags);
 
-
-vim +1121 drivers/hsi/controllers/omap_ssi_port.c
-
-b209e047bc7432 Sebastian Reichel 2013-12-15  1107  
-0845e1f20af100 Sebastian Reichel 2016-04-30  1108  static int ssi_port_probe(struct platform_device *pd)
-b209e047bc7432 Sebastian Reichel 2013-12-15  1109  {
-b209e047bc7432 Sebastian Reichel 2013-12-15  1110  	struct device_node *np = pd->dev.of_node;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1111  	struct hsi_port *port;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1112  	struct omap_ssi_port *omap_port;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1113  	struct hsi_controller *ssi = dev_get_drvdata(pd->dev.parent);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1114  	struct omap_ssi_controller *omap_ssi = hsi_controller_drvdata(ssi);
-73e6ce09c068d4 Sebastian Reichel 2016-04-30  1115  	struct gpio_desc *cawake_gpio = NULL;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1116  	u32 port_id;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1117  	int err;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1118  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1119  	dev_dbg(&pd->dev, "init ssi port...\n");
-b209e047bc7432 Sebastian Reichel 2013-12-15  1120  
-b209e047bc7432 Sebastian Reichel 2013-12-15 @1121  	if (!ssi->port || !omap_ssi->port) {
-b209e047bc7432 Sebastian Reichel 2013-12-15  1122  		dev_err(&pd->dev, "ssi controller not initialized!\n");
-b209e047bc7432 Sebastian Reichel 2013-12-15  1123  		err = -ENODEV;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1124  		goto error;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1125  	}
-b209e047bc7432 Sebastian Reichel 2013-12-15  1126  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1127  	/* get id of first uninitialized port in controller */
-b209e047bc7432 Sebastian Reichel 2013-12-15  1128  	for (port_id = 0; port_id < ssi->num_ports && omap_ssi->port[port_id];
-b209e047bc7432 Sebastian Reichel 2013-12-15  1129  		port_id++)
-b209e047bc7432 Sebastian Reichel 2013-12-15  1130  		;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1131  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1132  	if (port_id >= ssi->num_ports) {
-b209e047bc7432 Sebastian Reichel 2013-12-15  1133  		dev_err(&pd->dev, "port id out of range!\n");
-b209e047bc7432 Sebastian Reichel 2013-12-15  1134  		err = -ENODEV;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1135  		goto error;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1136  	}
-b209e047bc7432 Sebastian Reichel 2013-12-15  1137  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1138  	port = ssi->port[port_id];
-b209e047bc7432 Sebastian Reichel 2013-12-15  1139  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1140  	if (!np) {
-b209e047bc7432 Sebastian Reichel 2013-12-15  1141  		dev_err(&pd->dev, "missing device tree data\n");
-b209e047bc7432 Sebastian Reichel 2013-12-15  1142  		err = -EINVAL;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1143  		goto error;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1144  	}
-b209e047bc7432 Sebastian Reichel 2013-12-15  1145  
-73e6ce09c068d4 Sebastian Reichel 2016-04-30  1146  	cawake_gpio = devm_gpiod_get(&pd->dev, "ti,ssi-cawake", GPIOD_IN);
-73e6ce09c068d4 Sebastian Reichel 2016-04-30  1147  	if (IS_ERR(cawake_gpio)) {
-73e6ce09c068d4 Sebastian Reichel 2016-04-30  1148  		err = PTR_ERR(cawake_gpio);
-73e6ce09c068d4 Sebastian Reichel 2016-04-30  1149  		dev_err(&pd->dev, "couldn't get cawake gpio (err=%d)!\n", err);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1150  		goto error;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1151  	}
-b209e047bc7432 Sebastian Reichel 2013-12-15  1152  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1153  	omap_port = devm_kzalloc(&port->device, sizeof(*omap_port), GFP_KERNEL);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1154  	if (!omap_port) {
-b209e047bc7432 Sebastian Reichel 2013-12-15  1155  		err = -ENOMEM;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1156  		goto error;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1157  	}
-b209e047bc7432 Sebastian Reichel 2013-12-15  1158  	omap_port->wake_gpio = cawake_gpio;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1159  	omap_port->pdev = &pd->dev;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1160  	omap_port->port_id = port_id;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1161  
-4e552310cdf0c8 Sebastian Reichel 2016-05-20  1162  	INIT_DEFERRABLE_WORK(&omap_port->errqueue_work, ssi_process_errqueue);
-7c5d81620ecd37 Sebastian Reichel 2016-05-11  1163  	INIT_WORK(&omap_port->work, start_tx_work);
-7c5d81620ecd37 Sebastian Reichel 2016-05-11  1164  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1165  	/* initialize HSI port */
-b209e047bc7432 Sebastian Reichel 2013-12-15  1166  	port->async	= ssi_async;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1167  	port->setup	= ssi_setup;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1168  	port->flush	= ssi_flush;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1169  	port->start_tx	= ssi_start_tx;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1170  	port->stop_tx	= ssi_stop_tx;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1171  	port->release	= ssi_release;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1172  	hsi_port_set_drvdata(port, omap_port);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1173  	omap_ssi->port[port_id] = omap_port;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1174  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1175  	platform_set_drvdata(pd, port);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1176  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1177  	err = ssi_port_get_iomem(pd, "tx", &omap_port->sst_base,
-b209e047bc7432 Sebastian Reichel 2013-12-15  1178  		&omap_port->sst_dma);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1179  	if (err < 0)
-b209e047bc7432 Sebastian Reichel 2013-12-15  1180  		goto error;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1181  	err = ssi_port_get_iomem(pd, "rx", &omap_port->ssr_base,
-b209e047bc7432 Sebastian Reichel 2013-12-15  1182  		&omap_port->ssr_dma);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1183  	if (err < 0)
-b209e047bc7432 Sebastian Reichel 2013-12-15  1184  		goto error;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1185  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1186  	err = ssi_port_irq(port, pd);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1187  	if (err < 0)
-b209e047bc7432 Sebastian Reichel 2013-12-15  1188  		goto error;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1189  	err = ssi_wake_irq(port, pd);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1190  	if (err < 0)
-b209e047bc7432 Sebastian Reichel 2013-12-15  1191  		goto error;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1192  
-b209e047bc7432 Sebastian Reichel 2013-12-15  1193  	ssi_queues_init(omap_port);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1194  	spin_lock_init(&omap_port->lock);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1195  	spin_lock_init(&omap_port->wk_lock);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1196  	omap_port->dev = &port->device;
-b209e047bc7432 Sebastian Reichel 2013-12-15  1197  
-ad60db2f9fe336 Sebastian Reichel 2016-05-11  1198  	pm_runtime_use_autosuspend(omap_port->pdev);
-ad60db2f9fe336 Sebastian Reichel 2016-05-11  1199  	pm_runtime_set_autosuspend_delay(omap_port->pdev, 250);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1200  	pm_runtime_enable(omap_port->pdev);
-b209e047bc7432 Sebastian Reichel 2013-12-15  1201  
-
-:::::: The code at line 1121 was first introduced by commit
-:::::: b209e047bc743247f74ce79e8827ae1ed556bae0 HSI: Introduce OMAP SSI driver
-
-:::::: TO: Sebastian Reichel <sre@kernel.org>
-:::::: CC: Sebastian Reichel <sre@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
