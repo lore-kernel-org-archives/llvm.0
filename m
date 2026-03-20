@@ -1,58 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06DC3A7F4C;
-	Fri, 20 Mar 2026 11:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91E539C004;
+	Fri, 20 Mar 2026 11:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774005994; cv=none; b=V7ylmswWkc4U4EloUdZ69o+hRqn8d9ifhEFVswiQFojqK7R0jVbPdBoReqPdbCU7ep29Sl1wBzKHr47+TBLIX/1Mx8Hai9Db0DBNvFvQIpW5eK74EEM00X3xRBf2pdhcGc2EXliOhCsHlLdquYiuOvUIceGdOKk1cLRp3tTAv6M=
+	t=1774007864; cv=none; b=mjWEBA2OF+hYsCM0Fh3WsRth9jtRaOjZqmVrrtsGEX78eU2FPbOT+kgNxrJjOLmOwF8xoYIGKOI3Hs8R/g8O/NqhL7zWQhdpDNPL3QQpIWz99Zj7Ob9wnUmtGS3Kry/1vHtQH55Y8woR4BeY47WdR7qx8Qw39cUo5O58g2UXJbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774005994; c=relaxed/simple;
-	bh=S9kyTw6v4Hvvnd2vtU8jxbZDobP6TI13uDpyigbSNUQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=rh64txzdnkBdY/5IQ70Du2XUowWHrUIxAFN8B6ia9SfFxmgqVfEbdL18z6gLMHBbqXWC8xbVYCUKnBQNb/hG83neNTSuoOri6JUxqteR2FnZxzxRlWBK1Wrn/UrdWKGfuK4JNa+d53qX08CdS5xjN9hLJEviIxs/D+wMkIV4YAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b66FINKY; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1774007864; c=relaxed/simple;
+	bh=6QllHB4KYJSvd6qB7im849nTcQ5o+Z7wG85iNdSLzqo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=la2uBQCeSkXrkptWaaTTZ+jVSGdz655+b4cDNK5wN9NijyJZn5sMGIwRFTRS2fjhl3SIWHJmIqQecNiGjvEPsL8ET0U/6+wU8q6XQImz34mWtroQy4vU9xGSTDHs7NFL6zdEmohF6Z0y361cw/tUekbXOCcY/VBvCnfbd+0U4CI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lQNK+Lrj; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b66FINKY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lQNK+Lrj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774005991; x=1805541991;
+  t=1774007862; x=1805543862;
   h=date:from:to:cc:subject:message-id;
-  bh=S9kyTw6v4Hvvnd2vtU8jxbZDobP6TI13uDpyigbSNUQ=;
-  b=b66FINKYqTfElrjYibjWKEa6qDottd+v6GgOuBZdfJxPeWuu7Q3KMHRs
-   MWp+kwlJpmYajthM5/hGwfilh7W9LtrFhxmOytccwcrkknmGi7XaV7U7o
-   UImoWut5CayyjUfRFYoGHrHE+JBi0M3iUB+JW3AvFuQVJsikXvtc/RQL1
-   S+07jq5/BshzjNCcSxt59kEQr1Ti7ImSi0HxGoUY0NVkqyTpYK/sDNxbb
-   DRypgHFXO+NplUfBaHsxUk6xnCRPpLYVgMW57BrD3xLFc7vY0MP/yCaYV
-   09iZzEIAAiJ/XPEunYze0MO/lnKNqREUCalSYVTKaULII++VQQTPEpMQv
-   g==;
-X-CSE-ConnectionGUID: /iT6faliT+W6FWVcyu6IgQ==
-X-CSE-MsgGUID: UUOsJOjYSdaJiYZbbpD8hw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="100543761"
+  bh=6QllHB4KYJSvd6qB7im849nTcQ5o+Z7wG85iNdSLzqo=;
+  b=lQNK+LrjfL4Mgt4gqF3a0ZjK+WMeTdcBXELGMYqfvghJ70xlTGTipkls
+   cXEGM3BNE8IpKuwl5zSru3gqT4d42SYUhVZYthPcFqAiESCVgm82unm7P
+   IQSIcIX+PqVXBLCXWTWP9fPAl5QiMBQxrO5c9GU7irJmqM0uwfviUt5S/
+   m/Mp+fUxMAyzMplpzMtDD52592kkDJFeaq5N1fVHlBx4oALn0BLd6EA0H
+   +3bOxIAj/ZWijIAvM8Os/LhQVmOXuoX93Ea3k0e3XgN3yNX7tHX7iQkHv
+   i3+7GH6CKK97iMoRshiFeyit9+dc3ihjVM1bGfTiv8g5BlKbhT6QCSnbi
+   A==;
+X-CSE-ConnectionGUID: DLjfW01tSwKFTrGoWFQzpA==
+X-CSE-MsgGUID: tste9vMNSi6pg2tlE1pnWA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="75277283"
 X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="100543761"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 04:25:56 -0700
-X-CSE-ConnectionGUID: DZu7TnBDRKGQLo7HNJd67Q==
-X-CSE-MsgGUID: mTWEXM1tSReEShQfv2+WOQ==
+   d="scan'208";a="75277283"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 04:57:42 -0700
+X-CSE-ConnectionGUID: V17c0GxgThi9HXUdHPNAig==
+X-CSE-MsgGUID: d9rJVqrITTqI+5Oc54jNhQ==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="225195552"
 Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 20 Mar 2026 04:25:53 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 20 Mar 2026 04:57:39 -0700
 Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w3XzD-000000002In-0dA4;
-	Fri, 20 Mar 2026 11:25:51 +0000
-Date: Fri, 20 Mar 2026 19:21:48 +0800
+	id 1w3YTf-000000002Jt-0gGR;
+	Fri, 20 Mar 2026 11:57:26 +0000
+Date: Fri, 20 Mar 2026 19:57:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Konstantin Taranov <kotaranov@microsoft.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Doug Ledford <dledford@redhat.com>,
- Jason Gunthorpe <jgg+lists@ziepe.ca>, linux-rdma@vger.kernel.org,
- Leon Romanovsky <leon@kernel.org>
-Subject: [rdma:wip/leon-for-next 47/53]
- drivers/infiniband/hw/mana/main.c:696:3: error: expected ')'
-Message-ID: <202603201909.6pvOE0KP-lkp@intel.com>
+ linux-media@vger.kernel.org
+Subject: [sailus-media-tree:metadata 19/106]
+ drivers/media/platform/renesas/vsp1/vsp1_rwpf.c:280:13: error: incompatible
+ function pointer types initializing 'int (*)(struct v4l2_subdev *, const
+ struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct
+ v4l2_subdev_format *)' with an expres...
+Message-ID: <202603201906.5eCaoTIU-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,67 +63,287 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git wip/leon-for-next
-head:   90b7abe25ce9b8ea6b97c534cb0f037155013bb8
-commit: 684603da1e156756affe3a9f6070428d72dcf944 [47/53] RDMA/mana_ib: cleanup the usage of mana_gd_send_request()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260320/202603201909.6pvOE0KP-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603201909.6pvOE0KP-lkp@intel.com/reproduce)
+tree:   git://linuxtv.org/sailus/media_tree.git metadata
+head:   7a108073e0c1f6e9035329a152d5835f9d4f9507
+commit: bdc96b4bd0deb40af6350382e510ddfa0850d656 [19/106] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260320/202603201906.5eCaoTIU-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603201906.5eCaoTIU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603201909.6pvOE0KP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603201906.5eCaoTIU-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/infiniband/hw/mana/main.c:696:3: error: expected ')'
-     696 |                 return err;
-         |                 ^
-   drivers/infiniband/hw/mana/main.c:695:5: note: to match this '('
-     695 |         if (err
-         |            ^
-   1 error generated.
+>> drivers/media/platform/renesas/sh_vou.c:716:8: error: too few arguments to function call, expected 4, have 3
+     716 |         ret = v4l2_device_call_until_err(&vou_dev->v4l2_dev, 0, pad,
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     717 |                                          set_fmt, NULL, &format);
+         |                                          ~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-device.h:448:2: note: expanded from macro 'v4l2_device_call_until_err'
+     448 |         __v4l2_device_call_subdevs_until_err_p(v4l2_dev, __sd,          \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     449 |                         (grpid) == 0 || __sd->grp_id == (grpid), o, f , \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     450 |                         ##args);                                        \
+         |                         ~~~~~~~
+   include/media/v4l2-device.h:356:41: note: expanded from macro '__v4l2_device_call_subdevs_until_err_p'
+     356 |                         __err = (sd)->ops->o->f((sd) , ##args);         \
+         |                                 ~~~~~~~~~~~~~~~              ^
+   drivers/media/platform/renesas/sh_vou.c:976:2: error: too few arguments to function call, expected 4, have 3
+     976 |         v4l2_device_call_until_err(&vou_dev->v4l2_dev, 0, pad,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     977 |                                    set_selection, NULL, &sd_sel);
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-device.h:448:2: note: expanded from macro 'v4l2_device_call_until_err'
+     448 |         __v4l2_device_call_subdevs_until_err_p(v4l2_dev, __sd,          \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     449 |                         (grpid) == 0 || __sd->grp_id == (grpid), o, f , \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     450 |                         ##args);                                        \
+         |                         ~~~~~~~
+   include/media/v4l2-device.h:356:41: note: expanded from macro '__v4l2_device_call_subdevs_until_err_p'
+     356 |                         __err = (sd)->ops->o->f((sd) , ##args);         \
+         |                                 ~~~~~~~~~~~~~~~              ^
+   drivers/media/platform/renesas/sh_vou.c:980:8: error: too few arguments to function call, expected 4, have 3
+     980 |         ret = v4l2_device_call_until_err(&vou_dev->v4l2_dev, 0, pad,
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     981 |                                          set_fmt, NULL, &format);
+         |                                          ~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-device.h:448:2: note: expanded from macro 'v4l2_device_call_until_err'
+     448 |         __v4l2_device_call_subdevs_until_err_p(v4l2_dev, __sd,          \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     449 |                         (grpid) == 0 || __sd->grp_id == (grpid), o, f , \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     450 |                         ##args);                                        \
+         |                         ~~~~~~~
+   include/media/v4l2-device.h:356:41: note: expanded from macro '__v4l2_device_call_subdevs_until_err_p'
+     356 |                         __err = (sd)->ops->o->f((sd) , ##args);         \
+         |                                 ~~~~~~~~~~~~~~~              ^
+   3 errors generated.
+--
+>> drivers/media/platform/renesas/rcar-vin/rcar-dma.c:1184:6: error: too few arguments to function call, expected 4, have 3
+    1184 |         if (v4l2_subdev_call(sd, pad, get_fmt, NULL, &fmt))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1931:20: note: expanded from macro 'v4l2_subdev_call'
+    1930 |                         __result = v4l2_subdev_call_wrappers.o->f(      \
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1931 |                                                         __sd, ##args);  \
+         |                                                                     ^
+>> drivers/media/platform/renesas/rcar-vin/rcar-dma.c:1184:6: error: too few arguments to function call, expected 4, have 3
+    1184 |         if (v4l2_subdev_call(sd, pad, get_fmt, NULL, &fmt))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1933:43: note: expanded from macro 'v4l2_subdev_call'
+    1933 |                         __result = __sd->ops->o->f(__sd, ##args);       \
+         |                                    ~~~~~~~~~~~~~~~             ^
+   2 errors generated.
+--
+>> drivers/media/platform/st/stm32/stm32-dcmi.c:741:9: error: too few arguments to function call, expected 4, have 3
+     741 |                 ret = v4l2_subdev_call(subdev, pad, set_fmt, NULL, &fmt);
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1931:20: note: expanded from macro 'v4l2_subdev_call'
+    1930 |                         __result = v4l2_subdev_call_wrappers.o->f(      \
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1931 |                                                         __sd, ##args);  \
+         |                                                                     ^
+>> drivers/media/platform/st/stm32/stm32-dcmi.c:741:9: error: too few arguments to function call, expected 4, have 3
+     741 |                 ret = v4l2_subdev_call(subdev, pad, set_fmt, NULL, &fmt);
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1933:43: note: expanded from macro 'v4l2_subdev_call'
+    1933 |                         __result = __sd->ops->o->f(__sd, ##args);       \
+         |                                    ~~~~~~~~~~~~~~~             ^
+   drivers/media/platform/st/stm32/stm32-dcmi.c:1066:8: error: too few arguments to function call, expected 4, have 3
+    1066 |         ret = v4l2_subdev_call_state_try(dcmi->source, pad, set_fmt, &format);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1998:15: note: expanded from macro 'v4l2_subdev_call_state_try'
+    1998 |                         __result = v4l2_subdev_call(sd, o, f, state, ##args); \
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1931:20: note: expanded from macro 'v4l2_subdev_call'
+    1930 |                         __result = v4l2_subdev_call_wrappers.o->f(      \
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1931 |                                                         __sd, ##args);  \
+         |                                                                     ^
+   drivers/media/platform/st/stm32/stm32-dcmi.c:1066:8: error: too few arguments to function call, expected 4, have 3
+    1066 |         ret = v4l2_subdev_call_state_try(dcmi->source, pad, set_fmt, &format);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1998:15: note: expanded from macro 'v4l2_subdev_call_state_try'
+    1998 |                         __result = v4l2_subdev_call(sd, o, f, state, ##args); \
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1933:43: note: expanded from macro 'v4l2_subdev_call'
+    1933 |                         __result = __sd->ops->o->f(__sd, ##args);       \
+         |                                    ~~~~~~~~~~~~~~~             ^
+   drivers/media/platform/st/stm32/stm32-dcmi.c:1199:8: error: too few arguments to function call, expected 4, have 3
+    1199 |         ret = v4l2_subdev_call(dcmi->source, pad, get_fmt, NULL, &fmt);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1931:20: note: expanded from macro 'v4l2_subdev_call'
+    1930 |                         __result = v4l2_subdev_call_wrappers.o->f(      \
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1931 |                                                         __sd, ##args);  \
+         |                                                                     ^
+   drivers/media/platform/st/stm32/stm32-dcmi.c:1199:8: error: too few arguments to function call, expected 4, have 3
+    1199 |         ret = v4l2_subdev_call(dcmi->source, pad, get_fmt, NULL, &fmt);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1933:43: note: expanded from macro 'v4l2_subdev_call'
+    1933 |                         __result = __sd->ops->o->f(__sd, ##args);       \
+         |                                    ~~~~~~~~~~~~~~~             ^
+   drivers/media/platform/st/stm32/stm32-dcmi.c:1227:8: error: too few arguments to function call, expected 4, have 3
+    1227 |         ret = v4l2_subdev_call_state_try(dcmi->source, pad, set_fmt, &format);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1998:15: note: expanded from macro 'v4l2_subdev_call_state_try'
+    1998 |                         __result = v4l2_subdev_call(sd, o, f, state, ##args); \
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1931:20: note: expanded from macro 'v4l2_subdev_call'
+    1930 |                         __result = v4l2_subdev_call_wrappers.o->f(      \
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1931 |                                                         __sd, ##args);  \
+         |                                                                     ^
+   drivers/media/platform/st/stm32/stm32-dcmi.c:1227:8: error: too few arguments to function call, expected 4, have 3
+    1227 |         ret = v4l2_subdev_call_state_try(dcmi->source, pad, set_fmt, &format);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1998:15: note: expanded from macro 'v4l2_subdev_call_state_try'
+    1998 |                         __result = v4l2_subdev_call(sd, o, f, state, ##args); \
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1933:43: note: expanded from macro 'v4l2_subdev_call'
+    1933 |                         __result = __sd->ops->o->f(__sd, ##args);       \
+         |                                    ~~~~~~~~~~~~~~~             ^
+   drivers/media/platform/st/stm32/stm32-dcmi.c:1249:8: error: too few arguments to function call, expected 4, have 3
+    1249 |         ret = v4l2_subdev_call(dcmi->source, pad, get_selection,
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1250 |                                NULL, &bounds);
+         |                                ~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1931:20: note: expanded from macro 'v4l2_subdev_call'
+    1930 |                         __result = v4l2_subdev_call_wrappers.o->f(      \
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1931 |                                                         __sd, ##args);  \
+         |                                                                     ^
+   drivers/media/platform/st/stm32/stm32-dcmi.c:1249:8: error: too few arguments to function call, expected 4, have 3
+    1249 |         ret = v4l2_subdev_call(dcmi->source, pad, get_selection,
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1250 |                                NULL, &bounds);
+         |                                ~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1933:43: note: expanded from macro 'v4l2_subdev_call'
+    1933 |                         __result = __sd->ops->o->f(__sd, ##args);       \
+         |                                    ~~~~~~~~~~~~~~~             ^
+   10 errors generated.
+--
+>> drivers/media/platform/ti/omap3isp/ispccdc.c:1160:7: error: too few arguments to function call, expected 4, have 3
+    1160 |         if (!v4l2_subdev_call(sensor, pad, get_fmt, NULL, &fmt_src)) {
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1931:20: note: expanded from macro 'v4l2_subdev_call'
+    1930 |                         __result = v4l2_subdev_call_wrappers.o->f(      \
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1931 |                                                         __sd, ##args);  \
+         |                                                                     ^
+>> drivers/media/platform/ti/omap3isp/ispccdc.c:1160:7: error: too few arguments to function call, expected 4, have 3
+    1160 |         if (!v4l2_subdev_call(sensor, pad, get_fmt, NULL, &fmt_src)) {
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/media/v4l2-subdev.h:1933:43: note: expanded from macro 'v4l2_subdev_call'
+    1933 |                         __result = __sd->ops->o->f(__sd, ##args);       \
+         |                                    ~~~~~~~~~~~~~~~             ^
+   drivers/media/platform/ti/omap3isp/ispccdc.c:2496:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+    2496 |         .get_fmt = ccdc_get_format,
+         |                    ^~~~~~~~~~~~~~~
+   drivers/media/platform/ti/omap3isp/ispccdc.c:2497:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+    2497 |         .set_fmt = ccdc_set_format,
+         |                    ^~~~~~~~~~~~~~~
+   drivers/media/platform/ti/omap3isp/ispccdc.c:2498:19: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' [-Wincompatible-function-pointer-types]
+    2498 |         .get_selection = ccdc_get_selection,
+         |                          ^~~~~~~~~~~~~~~~~~
+   drivers/media/platform/ti/omap3isp/ispccdc.c:2499:19: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' [-Wincompatible-function-pointer-types]
+    2499 |         .set_selection = ccdc_set_selection,
+         |                          ^~~~~~~~~~~~~~~~~~
+   6 errors generated.
+--
+>> drivers/media/platform/renesas/vsp1/vsp1_rwpf.c:280:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     280 |         .get_fmt = vsp1_subdev_get_pad_format,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_rwpf.c:281:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     281 |         .set_fmt = vsp1_rwpf_set_format,
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_rwpf.c:282:19: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' [-Wincompatible-function-pointer-types]
+     282 |         .get_selection = vsp1_rwpf_get_selection,
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_rwpf.c:283:19: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' [-Wincompatible-function-pointer-types]
+     283 |         .set_selection = vsp1_rwpf_set_selection,
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~
+   4 errors generated.
+--
+>> drivers/media/platform/renesas/vsp1/vsp1_clu.c:160:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     160 |         .get_fmt = vsp1_subdev_get_pad_format,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_clu.c:161:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     161 |         .set_fmt = clu_set_format,
+         |                    ^~~~~~~~~~~~~~
+   2 errors generated.
+--
+>> drivers/media/platform/renesas/vsp1/vsp1_hsit.c:126:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     126 |         .get_fmt = vsp1_subdev_get_pad_format,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_hsit.c:127:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     127 |         .set_fmt = hsit_set_format,
+         |                    ^~~~~~~~~~~~~~~
+   2 errors generated.
+--
+>> drivers/media/platform/renesas/vsp1/vsp1_lut.c:136:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     136 |         .get_fmt = vsp1_subdev_get_pad_format,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_lut.c:137:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     137 |         .set_fmt = lut_set_format,
+         |                    ^~~~~~~~~~~~~~
+   2 errors generated.
+--
+>> drivers/media/platform/renesas/vsp1/vsp1_brx.c:267:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     267 |         .get_fmt = vsp1_subdev_get_pad_format,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_brx.c:268:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     268 |         .set_fmt = brx_set_format,
+         |                    ^~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_brx.c:269:19: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' [-Wincompatible-function-pointer-types]
+     269 |         .get_selection = brx_get_selection,
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_brx.c:270:19: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' [-Wincompatible-function-pointer-types]
+     270 |         .set_selection = brx_set_selection,
+         |                          ^~~~~~~~~~~~~~~~~
+   4 errors generated.
+--
+>> drivers/media/platform/renesas/vsp1/vsp1_sru.c:262:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     262 |         .get_fmt = vsp1_subdev_get_pad_format,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_sru.c:263:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     263 |         .set_fmt = sru_set_format,
+         |                    ^~~~~~~~~~~~~~
+   2 errors generated.
+--
+>> drivers/media/platform/renesas/vsp1/vsp1_uds.c:249:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     249 |         .get_fmt = vsp1_subdev_get_pad_format,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/renesas/vsp1/vsp1_uds.c:250:13: error: incompatible function pointer types initializing 'int (*)(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' with an expression of type 'int (struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Wincompatible-function-pointer-types]
+     250 |         .set_fmt = uds_set_format,
+         |                    ^~~~~~~~~~~~~~
+   2 errors generated.
+..
 
 
-vim +696 drivers/infiniband/hw/mana/main.c
+vim +280 drivers/media/platform/renesas/vsp1/vsp1_rwpf.c
 
-98b889c43935c4 Konstantin Taranov 2024-04-10  682  
-c390828d4d7b45 Konstantin Taranov 2025-05-07  683  int mana_eth_query_adapter_caps(struct mana_ib_dev *dev)
-c390828d4d7b45 Konstantin Taranov 2025-05-07  684  {
-c390828d4d7b45 Konstantin Taranov 2025-05-07  685  	struct mana_ib_adapter_caps *caps = &dev->adapter_caps;
-c390828d4d7b45 Konstantin Taranov 2025-05-07  686  	struct gdma_query_max_resources_resp resp = {};
-c390828d4d7b45 Konstantin Taranov 2025-05-07  687  	struct gdma_general_req req = {};
-c390828d4d7b45 Konstantin Taranov 2025-05-07  688  	int err;
-c390828d4d7b45 Konstantin Taranov 2025-05-07  689  
-c390828d4d7b45 Konstantin Taranov 2025-05-07  690  	mana_gd_init_req_hdr(&req.hdr, GDMA_QUERY_MAX_RESOURCES,
-c390828d4d7b45 Konstantin Taranov 2025-05-07  691  			     sizeof(req), sizeof(resp));
-c390828d4d7b45 Konstantin Taranov 2025-05-07  692  
-684603da1e1567 Konstantin Taranov 2026-03-18  693  	err = mana_gd_send_request(mdev_to_gc(dev), sizeof(req), &req,
-684603da1e1567 Konstantin Taranov 2026-03-18  694  				   sizeof(resp), &resp);
-684603da1e1567 Konstantin Taranov 2026-03-18  695  	if (err
-c390828d4d7b45 Konstantin Taranov 2025-05-07 @696  		return err;
-c390828d4d7b45 Konstantin Taranov 2025-05-07  697  
-c390828d4d7b45 Konstantin Taranov 2025-05-07  698  	caps->max_qp_count = min_t(u32, resp.max_sq, resp.max_rq);
-c390828d4d7b45 Konstantin Taranov 2025-05-07  699  	caps->max_cq_count = resp.max_cq;
-c390828d4d7b45 Konstantin Taranov 2025-05-07  700  	caps->max_mr_count = resp.max_mst;
-c390828d4d7b45 Konstantin Taranov 2025-05-07  701  	caps->max_pd_count = 0x6000;
-c390828d4d7b45 Konstantin Taranov 2025-05-07  702  	caps->max_qp_wr = min_t(u32,
-c390828d4d7b45 Konstantin Taranov 2025-05-07  703  				0x100000 / GDMA_MAX_SQE_SIZE,
-c390828d4d7b45 Konstantin Taranov 2025-05-07  704  				0x100000 / GDMA_MAX_RQE_SIZE);
-c390828d4d7b45 Konstantin Taranov 2025-05-07  705  	caps->max_send_sge_count = 30;
-c390828d4d7b45 Konstantin Taranov 2025-05-07  706  	caps->max_recv_sge_count = 15;
-c390828d4d7b45 Konstantin Taranov 2025-05-07  707  	caps->page_size_cap = PAGE_SZ_BM;
-c390828d4d7b45 Konstantin Taranov 2025-05-07  708  
-c390828d4d7b45 Konstantin Taranov 2025-05-07  709  	return 0;
-c390828d4d7b45 Konstantin Taranov 2025-05-07  710  }
-c390828d4d7b45 Konstantin Taranov 2025-05-07  711  
+bd2fdd5aa919e3 drivers/media/platform/vsp1/vsp1_rwpf.c         Laurent Pinchart 2015-11-01  276  
+42d62b7e47d582 drivers/media/platform/renesas/vsp1/vsp1_rwpf.c Laurent Pinchart 2023-10-24  277  static const struct v4l2_subdev_pad_ops vsp1_rwpf_pad_ops = {
+c6c8efb656ff21 drivers/media/platform/vsp1/vsp1_rwpf.c         Laurent Pinchart 2015-11-22  278  	.enum_mbus_code = vsp1_rwpf_enum_mbus_code,
+c6c8efb656ff21 drivers/media/platform/vsp1/vsp1_rwpf.c         Laurent Pinchart 2015-11-22  279  	.enum_frame_size = vsp1_rwpf_enum_frame_size,
+3f557220cc29d1 drivers/media/platform/vsp1/vsp1_rwpf.c         Laurent Pinchart 2016-02-24 @280  	.get_fmt = vsp1_subdev_get_pad_format,
+c6c8efb656ff21 drivers/media/platform/vsp1/vsp1_rwpf.c         Laurent Pinchart 2015-11-22  281  	.set_fmt = vsp1_rwpf_set_format,
+c6c8efb656ff21 drivers/media/platform/vsp1/vsp1_rwpf.c         Laurent Pinchart 2015-11-22  282  	.get_selection = vsp1_rwpf_get_selection,
+c6c8efb656ff21 drivers/media/platform/vsp1/vsp1_rwpf.c         Laurent Pinchart 2015-11-22  283  	.set_selection = vsp1_rwpf_set_selection,
+c6c8efb656ff21 drivers/media/platform/vsp1/vsp1_rwpf.c         Laurent Pinchart 2015-11-22  284  };
+c6c8efb656ff21 drivers/media/platform/vsp1/vsp1_rwpf.c         Laurent Pinchart 2015-11-22  285  
 
-:::::: The code at line 696 was first introduced by commit
-:::::: c390828d4d7b453c21c6fc0787c714db82731093 RDMA/mana_ib: Add support of mana_ib for RNIC and ETH nic
+:::::: The code at line 280 was first introduced by commit
+:::::: 3f557220cc29d1961ef9efa2a8db04c7c5f6e6d4 [media] v4l: vsp1: Factorize get pad format code
 
-:::::: TO: Konstantin Taranov <kotaranov@microsoft.com>
-:::::: CC: Leon Romanovsky <leon@kernel.org>
+:::::: TO: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
 
 -- 
 0-DAY CI Kernel Test Service
