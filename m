@@ -1,225 +1,281 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A722EA749;
-	Fri, 20 Mar 2026 20:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD6335B64B
+	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 20:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774038145; cv=none; b=Qqcx1UbsJTQJ3QhM0UIw7PxQJs8g1G6QNJc275Asip4Npe2sColmX2Mr3+WVQLCxjXQeo2BiXvBjWSPXjyMTmGTkb6n/xNfKtP60Tf89FT7dyeQyB6z4DAKupinmzA3/naowwTjtWELkRJHOjy6Xzzzxwrq+ejSP5+1pdYJOlcA=
+	t=1774039718; cv=none; b=dMPueVfOF7/Gamq5vUfGC1fszgw/MvfUyxDQinvTi8FXuGxXI56YPcvc3+1yfWonrnEv8y2WflWB/uOb0ddzUrBbNoZ+Jen8Oxl5nq9ZcHnLGRhfj+1QE2kQD4iW01HzmeRSjtYUMfsqiWJxe3jjXE/3iM7PQzE5G+BH20LeZRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774038145; c=relaxed/simple;
-	bh=n2l65V527Eau2vdGUiD28sG9Dh+TiRpLL5+N4dmLSg0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oYm971hqNwKTlpaGYo/ZApY0HjjR1iVj04lu2rbOuNpFE+KPLuKh5ixiIPsoqXHHf5xlLLT9vHlyEdocve8aMKQIGz0x+XDPjxZMFiu+I+rTE7+pwosWUWtrXEFpOJ4mpZTYUGr5kKCOzb+G4AC0neo4yCtR62dq+kTJllD/AR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NLn5RRVI; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774039718; c=relaxed/simple;
+	bh=6iJKeRVvfZKtvhtpJrPt73DDKKzzdGV+KggsGp531mw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=JLpO6ydRL39QZppWbpSF8Wm7S1kzXG7XGhXzHSNNncz0S9bGzJ0j7SeCG0ACHNPLE5ywDw+VCx1bN4cY2jSdvhalMVNBIldU3ITjrL5g6jFuda0R6dzp8vdDrkJAf5hmQNS1/3Hu56iC1y8IhwaeaB7UdGUbWQj339U1ZeKaw48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Esq0mgpv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VCZ/AHdp; arc=none smtp.client-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NLn5RRVI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774038144; x=1805574144;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n2l65V527Eau2vdGUiD28sG9Dh+TiRpLL5+N4dmLSg0=;
-  b=NLn5RRVI+9lnMx/Yi9BN5JtfKRB1BR6DFo+IdqA0UxXapRAxhQtInPTQ
-   zY7QrYk2UHCwmZT2ouocKbUXFGaibbj4h5UviStRU8JYsd7w+nBHsPkOO
-   MEn5lm2vonxaTuST+NzY1Dos3JiPT8BplJwxTwb1+B3EXD5orxb6dyNrz
-   QlvjdIuFYtGcaDVCSVUWjszG6N/6ZLNBTGR7w4hyjih+I6YeDeBVfRVf1
-   vzEJGKmFNupS/kZHh9SswLNIK0M/Iz6Io7cxKMS7Qj62dygtSS0Tawg/y
-   Ahlb+7BNT0oElbAI8zIlAc41FpDiwUcxYAZ48rUdExmbOuoeDC8Fn4R+B
-   w==;
-X-CSE-ConnectionGUID: 163k+mN6QhuUkgv65n4vIw==
-X-CSE-MsgGUID: BXtCkpiaRRKXmEmVrnsVlA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="92707762"
-X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
-   d="scan'208";a="92707762"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 13:22:23 -0700
-X-CSE-ConnectionGUID: qmWb/r3jTGiKAi5V8+u5Bg==
-X-CSE-MsgGUID: cINMvrv3QKSJ7r2hNSA3Fw==
-X-ExtLoop1: 1
-Received: from lkp-server02.sh.intel.com (HELO ef9b23065726) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 20 Mar 2026 13:22:19 -0700
-Received: from kbuild by ef9b23065726 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w3gKm-000000000BJ-43SO;
-	Fri, 20 Mar 2026 20:21:03 +0000
-Date: Sat, 21 Mar 2026 04:16:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matheus Giarola <matheustpgiarola@gmail.com>, lars@metafoo.de,
-	Michael.Hennerich@analog.com, jic23@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	matheusgiarola@usp.br, arthurpilone@usp.br,
-	davidbtadokoro@ime.usp.br
-Subject: Re: [PATCH] iio: adc: ad7280a: replace mutex_lock() with guard(mutex)
-Message-ID: <202603210411.t4KwH3aX-lkp@intel.com>
-References: <20260319184615.10970-1-matheusgiarola@usp.br>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Esq0mgpv";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VCZ/AHdp"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id D37501D000B2;
+	Fri, 20 Mar 2026 16:48:34 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Fri, 20 Mar 2026 16:48:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1774039714;
+	 x=1774126114; bh=MR438byzDRVcyRIAzP4AWEVh8CmGgC39iq9wYYJZ1E8=; b=
+	Esq0mgpv1o2fwCKdLQyDCSUnC0nd8bc2XeMLb7OWaYCz9Hc7t0js2gmCgmnspy4n
+	DkRKgcdQO9fh264uVmWa9KukQ2aRXANjtGfcsz8f5g/RPmlTuGvxAVMiMhErKv8E
+	VrsNcR1QXueHzgTtNkCmcLptynczYll8xaJ7rTlwBH33/t2K5hBsJX0KjKwP+ph5
+	nOiBCqBJLZF+ZjmxV8uAaVoe76O0RYPG5Og0a49e299H1X8WC/mXDnbNN6YkZv1I
+	ACWTiLEv0UHsY3m37jMXSYk9rEmuNnWERxacPOrWnRfFtfL2omZIEglMWCmFdU+o
+	KuYNynbJ3JgigK3eXsv5Yw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774039714; x=
+	1774126114; bh=MR438byzDRVcyRIAzP4AWEVh8CmGgC39iq9wYYJZ1E8=; b=V
+	CZ/AHdpsPj8Tcw2UrJoFF04ip4tlZ655w87p5Y4nBcodWG9rQBYoJUtpYpd82/gm
+	TeQXea2G8hLq0l9DBOoh27js0OiXcwhKgfrV/NO5UBenyZYfCeSPVKaui7scTrjA
+	bYvLVTmyGSLyAOEHRJE7tbomTlNWnOfZH1YEVKpZRtE39IjEJ+T4njiqLdXrK57V
+	8QSMNDXTf5mYIdgIvydpKZ9FFNMThBA4GTd4VvgHZ7gn1/NyHeb+zm6upsdLhs5W
+	vz4JjKG2KZeqXKqrFPAXhxWAll8DktgR9QuGl7r8HNWMRAEXzMX2Zkbdec9vJS1Z
+	Ji+pTX2eCjtvircfV1/sA==
+X-ME-Sender: <xms:orK9aUKqbKfJgMqo6LBQsfCAUdNZyiBKeeYHXJSoOmfYA5w4ITVDYA>
+    <xme:orK9ae-dovZOJUe9Yl1pQIxvVgrdEOqE9_hdUE-TN2-e_5GgjJv5qsTFwnhX9Xvt-
+    JXn4aQh0FBov-QcKZFNT3GUf2fU_-jPJRih7R-9OZoqmchKRV0U3n5X>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefuddtleduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepkedvuefhiedtueeijeevtdeiieejfeelvefffeelkeeiteejffdvkefgteeuhffg
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
+    phhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghrvghtthdrtg
+    hrvggvlhgvhiesrghmugdrtghomhdprhgtphhtthhopehlihhnuhigqdhnvghtqdgurhhi
+    vhgvrhhssegrmhgurdgtohhmpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfth
+    drnhgvthdprhgtphhtthhopehlvghithgrohesuggvsghirghnrdhorhhgpdhrtghpthht
+    ohepvggtrhgvvgdrgihilhhinhigsehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhhitg
+    hkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthho
+    pegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhushhtihhnsh
+    htihhtthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhglhgv
+    rdgtohhm
+X-ME-Proxy: <xmx:orK9aVqhBiSmLvglClMV_DRg4Luags_lTnYYtZgkubxrOPOwENKpvQ>
+    <xmx:orK9aTjexPJt4yHR9X8asqkwyPrzyIrpbkW1iRyLKEk0STjl9mIM6Q>
+    <xmx:orK9advULLJthfVwVRnxjV-BzfsxrhUFrq3R5GX6D0SskPcK00rSWw>
+    <xmx:orK9aU1NqpvEtosOzfTaiR42howqM6_E_H9PWvR7ZJTPBbHZVSeJfw>
+    <xmx:orK9aUg1kd-iA2cr6GkN4mcHLjFTaqFABlEEkAoRDps2_U7VZ40EJM7Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 0F04A700069; Fri, 20 Mar 2026 16:48:34 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260319184615.10970-1-matheusgiarola@usp.br>
+X-ThreadId: Aywyuz1KiUOB
+Date: Fri, 20 Mar 2026 21:48:13 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Edward Cree" <ecree.xilinx@gmail.com>, "Arnd Bergmann" <arnd@kernel.org>,
+ "Andrew Lunn" <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Jeff Garzik" <jgarzik@redhat.com>,
+ "Ben Hutchings" <bhutchings@solarflare.com>
+Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Brett Creeley" <brett.creeley@amd.com>, "Breno Leitao" <leitao@debian.org>,
+ "Kees Cook" <kees@kernel.org>, Netdev <netdev@vger.kernel.org>,
+ linux-net-drivers@amd.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Message-Id: <61de3aea-26b3-4c00-8598-3a137ebef1bc@app.fastmail.com>
+In-Reply-To: <90a03d3c-def3-4e34-89a0-6e952d3b0d7a@gmail.com>
+References: <20260320151924.3474821-1-arnd@kernel.org>
+ <90a03d3c-def3-4e34-89a0-6e952d3b0d7a@gmail.com>
+Subject: Re: [PATCH] net: sfc: avoid format string warning
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Matheus,
+On Fri, Mar 20, 2026, at 20:04, Edward Cree wrote:
+> On 20/03/2026 15:19, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>=20
+>> Three sfc drivers contain the same *_fill_test() function that takes
+>> a format string argument that gets passed down to snprintf(), produci=
+ng
+>> a warning with clang-22:
+>>=20
+>> drivers/net/ethernet/sfc/falcon/ethtool.c:227:60: error: diagnostic b=
+ehavior may be improved by adding
+>>       the 'format(printf, 7, 8)' attribute to the declaration of 'ef4=
+_fill_test' [-Werror,-Wmissing-format-attribute]
+>>   210 |                 snprintf(test_str, sizeof(test_str), test_for=
+mat, test_id);
+>>       |                                                              =
+            ^
+>> drivers/net/ethernet/sfc/falcon/ethtool.c:210:13: note: 'ef4_fill_tes=
+t' declared here
+>>=20
+>> Rework these to take a varargs based test_format that allows better
+>> type checking and avoids this warning.
+>>=20
+>> Fixes: 3273c2e8c66a ("[netdrvr] sfc: sfc: Add self-test support")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> I'm not convinced this is an improvement.  The function takes *two* pr=
+intf
+>  format strings (unit_format and test_format), and this only annotates=
+ and
+>  varargs-ifies one of them (and doesn't harden the unit_format, which =
+has
+>  the considerably more worrying-looking "if it has a % in, assume it t=
+akes
+>  precisely one int argument").
 
-kernel test robot noticed the following build errors:
+Right, I took a bit of a shortcut there. How about changing it
+so the other format string is just a name that gets joined with the
+number?
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v7.0-rc4 next-20260320]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+diff --git a/drivers/net/ethernet/sfc/falcon/ethtool.c b/drivers/net/eth=
+ernet/sfc/falcon/ethtool.c
+index 1ae8acb8fdc8..a0064eadff41 100644
+--- a/drivers/net/ethernet/sfc/falcon/ethtool.c
++++ b/drivers/net/ethernet/sfc/falcon/ethtool.c
+@@ -200,7 +200,7 @@ static void ef4_ethtool_set_msglevel(struct net_devi=
+ce *net_dev, u32 msg_enable)
+  * @strings:		Ethtool strings, or %NULL
+  * @data:		Ethtool test results, or %NULL
+  * @test:		Pointer to test result (used only if data !=3D %NULL)
+- * @unit_format:	Unit name format (e.g. "chan\%d")
++ * @unit_name:		Unit name format (e.g. "chan\%d")
+  * @unit_id:		Unit id (e.g. 0 for "chan0")
+  * @test_format:	Test name format (e.g. "loopback.\%s.tx.sent")
+  * @test_id:		Test id (e.g. "PHYXS" for "loopback.PHYXS.tx_sent")
+@@ -208,9 +208,9 @@ static void ef4_ethtool_set_msglevel(struct net_devi=
+ce *net_dev, u32 msg_enable)
+  * Fill in an individual self-test entry.
+  */
+ static void __printf(7, 8)
+- ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
+-			  int *test, const char *unit_format, int unit_id,
+-			  const char *test_format, ...)
++ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
++	      int *test, const char *unit_name, int unit_id,
++	      const char *test_format, ...)
+ {
+ 	char unit_str[ETH_GSTRING_LEN], test_str[ETH_GSTRING_LEN];
+=20
+@@ -222,11 +222,11 @@ static void __printf(7, 8)
+ 	if (strings) {
+ 		va_list arg;
+=20
+-		if (strchr(unit_format, '%'))
++		if (unit_id >=3D 0)
+ 			snprintf(unit_str, sizeof(unit_str),
+-				 unit_format, unit_id);
++				 "%s%d", unit_name, unit_id);
+ 		else
+-			strcpy(unit_str, unit_format);
++			strcpy(unit_str, unit_name);
+ 		va_start(arg, test_format);
+ 		vsnprintf(test_str, sizeof(test_str), test_format, arg);
+ 		va_end(arg);
+@@ -236,9 +236,9 @@ static void __printf(7, 8)
+ 	}
+ }
+=20
+-#define EF4_CHANNEL_NAME(_channel) "chan%d", _channel->channel
+-#define EF4_TX_QUEUE_NAME(_tx_queue) "txq%d", _tx_queue->queue
+-#define EF4_RX_QUEUE_NAME(_rx_queue) "rxq%d", _rx_queue->queue
++#define EF4_CHANNEL_NAME(_channel) "chan", _channel->channel
++#define EF4_TX_QUEUE_NAME(_tx_queue) "txq", _tx_queue->queue
++#define EF4_RX_QUEUE_NAME(_rx_queue) "rxq", _rx_queue->queue
+ #define EF4_LOOPBACK_NAME(_mode, _counter)			\
+ 	"loopback.%s." _counter, STRING_TABLE_LOOKUP(_mode, ef4_loopback_mode)
+=20
+@@ -276,11 +276,11 @@ static int ef4_fill_loopback_test(struct ef4_nic *=
+efx,
+ 	}
+ 	ef4_fill_test(test_index++, strings, data,
+ 		      &lb_tests->rx_good,
+-		      "rx", 0,
++		      "rx", -1,
+ 		      EF4_LOOPBACK_NAME(mode, "rx_good"));
+ 	ef4_fill_test(test_index++, strings, data,
+ 		      &lb_tests->rx_bad,
+-		      "rx", 0,
++		      "rx", -1,
+ 		      EF4_LOOPBACK_NAME(mode, "rx_bad"));
+=20
+ 	return test_index;
+@@ -308,11 +308,11 @@ static int ef4_ethtool_fill_self_tests(struct ef4_=
+nic *efx,
+ 	enum ef4_loopback_mode mode;
+=20
+ 	ef4_fill_test(n++, strings, data, &tests->phy_alive,
+-		      "phy", 0, "alive");
++		      "phy", -1, "alive");
+ 	ef4_fill_test(n++, strings, data, &tests->nvram,
+-		      "core", 0, "nvram");
++		      "core", -1, "nvram");
+ 	ef4_fill_test(n++, strings, data, &tests->interrupt,
+-		      "core", 0, "interrupt");
++		      "core", -1, "interrupt");
+=20
+ 	/* Event queues */
+ 	ef4_for_each_channel(channel, efx) {
+@@ -327,9 +327,9 @@ static int ef4_ethtool_fill_self_tests(struct ef4_ni=
+c *efx,
+ 	}
+=20
+ 	ef4_fill_test(n++, strings, data, &tests->memory,
+-		      "core", 0, "memory");
++		      "core", -1, "memory");
+ 	ef4_fill_test(n++, strings, data, &tests->registers,
+-		      "core", 0, "registers");
++		      "core", -1, "registers");
+=20
+ 	if (efx->phy_op->run_tests !=3D NULL) {
+ 		EF4_BUG_ON_PARANOID(efx->phy_op->test_name =3D=3D NULL);
+@@ -343,7 +343,7 @@ static int ef4_ethtool_fill_self_tests(struct ef4_ni=
+c *efx,
+ 				break;
+=20
+ 			ef4_fill_test(n++, strings, data, &tests->phy_ext[i],
+-				      "phy", 0, "%s", name);
++				      "phy", -1, "%s", name);
+ 		}
+ 	}
+=20
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matheus-Giarola/iio-adc-ad7280a-replace-mutex_lock-with-guard-mutex/20260320-142509
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20260319184615.10970-1-matheusgiarola%40usp.br
-patch subject: [PATCH] iio: adc: ad7280a: replace mutex_lock() with guard(mutex)
-config: arm-randconfig-004-20260321 (https://download.01.org/0day-ci/archive/20260321/202603210411.t4KwH3aX-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260321/202603210411.t4KwH3aX-lkp@intel.com/reproduce)
+> I don't like splitting the specifiers/return type from the function na=
+me
+>  like this.  It's not Linux style[1].
+> (From a quick poke around the tree, there seems to be less consensus on
+>  where the __printf attribute goes =E2=80=94 some put it on its own li=
+ne before
+>  `static`, some would put it between `static` and `void`=E2=80=A6 sigh=
+.)
+>
+> [1]: https://lore.kernel.org/all/1054519757.161606@palladium.transmeta=
+.com/T/#u
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603210411.t4KwH3aX-lkp@intel.com/
+There are not a lot of good options here, and splitting the line seems
+better than an overlong line to me. I don't really have a strong opinion
+on where the __printf attribute should go either, but I do see that
+after the return type is probably the least common, so I'll change
+that. How about having the specifiers on one line and
+the type in front of the name? that seems faily common.
 
-All errors (new ones prefixed by >>):
+static __printf(7, 8)
+void ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
 
->> drivers/iio/adc/ad7280a.c:899:2: error: cannot jump from switch statement to this case label
-     899 |         case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-         |         ^
-   drivers/iio/adc/ad7280a.c:878:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     878 |                 guard(mutex)(&st->lock);
-         |                 ^
-   include/linux/cleanup.h:419:2: note: expanded from macro 'guard'
-     419 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:300:3: note: expanded from macro 'CLASS'
-     300 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:15:1: note: expanded from here
-      15 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:21:1: note: expanded from here
-      21 | __UNIQUE_ID_unlock_538
-         | ^
-   drivers/iio/adc/ad7280a.c:878:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:419:15: note: expanded from macro 'guard'
-     419 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
-     168 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:9:1: note: expanded from here
-       9 | __UNIQUE_ID_guard_537
-         | ^
-   drivers/iio/adc/ad7280a.c:891:2: error: cannot jump from switch statement to this case label
-     891 |         case IIO_CHAN_INFO_SCALE:
-         |         ^
-   drivers/iio/adc/ad7280a.c:878:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     878 |                 guard(mutex)(&st->lock);
-         |                 ^
-   include/linux/cleanup.h:419:2: note: expanded from macro 'guard'
-     419 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:300:3: note: expanded from macro 'CLASS'
-     300 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:15:1: note: expanded from here
-      15 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:21:1: note: expanded from here
-      21 | __UNIQUE_ID_unlock_538
-         | ^
-   drivers/iio/adc/ad7280a.c:878:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:419:15: note: expanded from macro 'guard'
-     419 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
-     168 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:9:1: note: expanded from here
-       9 | __UNIQUE_ID_guard_537
-         | ^
-   2 errors generated.
-
-
-vim +899 drivers/iio/adc/ad7280a.c
-
-c5fe2f537b91e17 drivers/staging/iio/adc/ad7280a.c Jonathan Cameron   2022-02-06  866  
-84f79ecb0c1f393 drivers/staging/iio/adc/ad7280a.c Jonathan Cameron   2011-10-06  867  static int ad7280_read_raw(struct iio_dev *indio_dev,
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  868  			   struct iio_chan_spec const *chan,
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  869  			   int *val,
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  870  			   int *val2,
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  871  			   long m)
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  872  {
-84f79ecb0c1f393 drivers/staging/iio/adc/ad7280a.c Jonathan Cameron   2011-10-06  873  	struct ad7280_state *st = iio_priv(indio_dev);
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  874  	int ret;
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  875  
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  876  	switch (m) {
-b11f98ff8c35d62 drivers/staging/iio/adc/ad7280a.c Jonathan Cameron   2012-04-15  877  	case IIO_CHAN_INFO_RAW:
-801020aafb667e4 drivers/iio/adc/ad7280a.c         Matheus Giarola    2026-03-19  878  		guard(mutex)(&st->lock);
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  879  		if (chan->address == AD7280A_ALL_CELLS)
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  880  			ret = ad7280_read_all_channels(st, st->scan_cnt, NULL);
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  881  		else
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  882  			ret = ad7280_read_channel(st, chan->address >> 8,
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  883  						  chan->address & 0xFF);
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  884  
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  885  		if (ret < 0)
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  886  			return ret;
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  887  
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  888  		*val = ret;
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  889  
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  890  		return IIO_VAL_INT;
-c8a9f8056f40f62 drivers/staging/iio/adc/ad7280a.c Jonathan Cameron   2011-10-26  891  	case IIO_CHAN_INFO_SCALE:
-4c59aabd9a93d8f drivers/staging/iio/adc/ad7280a.c Jonathan Cameron   2022-02-06  892  		if ((chan->address & 0xFF) <= AD7280A_CELL_VOLTAGE_6_REG)
-d6570b33a1c0620 drivers/staging/iio/adc/ad7280a.c Lars-Peter Clausen 2013-09-28  893  			*val = 4000;
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  894  		else
-d6570b33a1c0620 drivers/staging/iio/adc/ad7280a.c Lars-Peter Clausen 2013-09-28  895  			*val = 5000;
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  896  
-d6570b33a1c0620 drivers/staging/iio/adc/ad7280a.c Lars-Peter Clausen 2013-09-28  897  		*val2 = AD7280A_BITS;
-d6570b33a1c0620 drivers/staging/iio/adc/ad7280a.c Lars-Peter Clausen 2013-09-28  898  		return IIO_VAL_FRACTIONAL_LOG2;
-c5fe2f537b91e17 drivers/staging/iio/adc/ad7280a.c Jonathan Cameron   2022-02-06 @899  	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-c5fe2f537b91e17 drivers/staging/iio/adc/ad7280a.c Jonathan Cameron   2022-02-06  900  		*val = ad7280a_n_avg[st->oversampling_ratio];
-c5fe2f537b91e17 drivers/staging/iio/adc/ad7280a.c Jonathan Cameron   2022-02-06  901  		return IIO_VAL_INT;
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  902  	}
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  903  	return -EINVAL;
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  904  }
-2051f25d2a26573 drivers/staging/iio/adc/ad7280a.c Michael Hennerich  2011-07-20  905  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    Arnd
