@@ -1,129 +1,209 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638482D8399
-	for <llvm@lists.linux.dev>; Fri, 20 Mar 2026 03:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773976019; cv=pass; b=mg5QMHjQ0yp3QFWlOV5CjQBoyLqDIOaJ5SKxjW9ils0Xg+A0SdCJK9fYnTu7ADYB7qIIReiqIUvWadikgaH8Qy7w9rPN5Zj1rIzCF8Bq5dnU6pyZy8tkvfPpHWi+VlQ3PAqdqWfjZXmjT+t/SM2SPy3ue8SEgj/xoncCD4yz1ss=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773976019; c=relaxed/simple;
-	bh=RM61q1uWCHCZRwTddCQGqRStiqTB47nu5R9QT11eXPY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZTNNjYFltF1Edkoyn2x5AzsdLEESKzBeCamVOrZZ144M4eYnX6hlBbEkAXn/u4VUimHppDQ5SUmJP51VSHtcFgU9JSS/uFGEJqFiDt83sOOIuornUbQqftrlVV6dl5ovAKoje39TlQblzr73BSEeb+rLdLE66uKN80FV7UB11Os=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nXKWsLEF; arc=pass smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B0B28507E;
+	Fri, 20 Mar 2026 04:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773980460; cv=none; b=cq7Q8lru6ZBN5L6pUT3Rtm41KiVZygbqZEnvs2fSQckCO96odIH0TDWtxyDMfJWNkClX+Gz22m1Pe4B/JWP+az0PiYbPELoKF4mJ9etCfdCqSs6ckraAYMIqHAbKmHO0Hh56U8Eg6NNSaX5BYMMFAZyuaRnS+cI/ujf+skS+T4c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773980460; c=relaxed/simple;
+	bh=OHnX7uZBV92R01nqYlUueQh+SwiiSpGawFPFVc+X9Ac=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cmtHUVHWmt87tDufK3hEyk3XwibDkD3mdwlY+qDajPry+HWIxaljoL5CvEYMECLczkvBZYpYDHleasiODojAmkvkRxGDX+dRBTbgmbCaFluiCYFfuaXyCVdWO1nyYpPtc4IPfe1gIBqCBstkzTpgBaBJDwdQmfXaCcYSU9JZQo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L5LaXyqU; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nXKWsLEF"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-668d41905a4so579679a12.0
-        for <llvm@lists.linux.dev>; Thu, 19 Mar 2026 20:06:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773976017; cv=none;
-        d=google.com; s=arc-20240605;
-        b=DD0VL9XVCtgZZc2h0IHrdWCqh8dsqS2Axf+WmC1/LKLcXDju88rm/nIcOQm/QHjybX
-         Am4ObC4haISuImuF1sp2h6pP1Ou1Lv585XqpceAM6WjAYGoB1f/qqtg93YWu1etEUlyY
-         4A9F8FPOff3zUdcRJR7mlhDJe45yIqrPbR12syIBFaZmbjAfx27bt2BHxF/SXuynWfUg
-         Y2MMUY3NxvRGWBGxjtNv9pBmh6mLyfaRY2WQDXBssQvGpUENWKUFu+Wwa/i4qBXsChKu
-         FlhL7c7Bo8sjCj4AAVFAZwTOnynam0L/m8+eaLQYKdfiKW8sKYCjxNDZQNGykWEclTFF
-         5NAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=Uh2XnjWm7w7sL+W4dFrZCyFtW9ll5NN+pKsvTMlZQ8Y=;
-        fh=KO4i6r6wid3dGLX70OIdYVzkvlpNkyh9COfjIk6bkxQ=;
-        b=Gfjmac8OBpesFjDi1aLYIFLMPprtkEMaGdIN4kcrVVvNH2zS6I1rWEjk0qsEe2Jx+t
-         85874Zgln/9rzAlB1YGqI8npf80Y+liJaECz4ZPKRLHOjYtjCUbGccfI8M1vRUptaJGs
-         WskYltt97bIny9zpw6sZMn0kaOf3o5yJSeOGpJGyB3pJM2lOP4Ew5WzpCv572dr8hQQX
-         DeQ8lSvcxmQFCFYjWnIRDMgLxzmfmIwyu9MIyE4cN7kF6Ayxi0kBViWKixpHgI5aCetT
-         wsqrdufREmz9KKtytoT9Hwb7t4BKZzRSjXCN4tCQ4QFgVS6GsWfe+z2W51OBuPg82l5y
-         GAmw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773976017; x=1774580817; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uh2XnjWm7w7sL+W4dFrZCyFtW9ll5NN+pKsvTMlZQ8Y=;
-        b=nXKWsLEFSs6BBFQtj/TnQJt6kbYlSCYHULR1QwinmBD3dWKNa5q5vxiBqHf6Elj2+k
-         5gSKxL7b2IsTatmve0EYFrktBVBRAv1FQCowc2br5bphbwT07+qiHSd8vCP/oC2lG2e9
-         cr3YdKmKoyI/90I3Z9i+2ytJkTIYpFq/lhHX56Es/23I5PtGH1bbraikwmR/JdtoBHiO
-         2zMK/yc9isH03EL6M1s+2jsLvGpPQj1sfxS1tYWuuK8P/h4FLKOCrP/I7OKu4B5X4RMM
-         QVfZUdIWmzN1NuXj4zTSGBcnMnTwP/L/zxHly3Ju2hNpKWi4uaaNp8Z2qAkZPC+Sx0NN
-         9mfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773976017; x=1774580817;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Uh2XnjWm7w7sL+W4dFrZCyFtW9ll5NN+pKsvTMlZQ8Y=;
-        b=K1DbXNaTLkK1OfxMbGBpAPMmmQE2B3ng+RbunCsIldBGUbzHEiZIfPkNHyAc39Nwzw
-         o5ijwrd03MrhKtxjTva6OqRqRilgw3idfTKhX319p5zPrn/OQSyExu+SJCU72fiV40ak
-         UEubT91QgF+e/lVdyekAHLiT0J7/ydFLABEm/nI/X2R08/ZkNO6GifnUl++VowvYMqdA
-         C+Xly0Rm2YLrB6MF+igPLMjZJzGOG4RRJcrHw2LmSwg1YbeZ+lMR8OQaCbmjEQmPNKMo
-         0w/Ef5Rvlj1Ctq0xoWI9KuR2xARFBpEgLQlOm6vq0CKL0hm7ZfqeNLcoGMJwp5j+1GYc
-         WcEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXj0z1o5cknz3kSU8Gajo0e6VbWxSHUeE5ilnmwyNOJqAW0HZnEBV47AXjtLIBwOkRHC9eY@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyc1KOHztpkSfk26o/KlWt1amOQLKljF36hcowTJHASuP54btja
-	iTi+NeCKyOLBXpaFACrsjHR5EX2STY52xRoSWo2bVTDZZJ5rwsLiFySwk26xnnKnkPjPWTIpNHN
-	CSmaUFVT3wSXW9YDgftK+1ePoUJCTATI=
-X-Gm-Gg: ATEYQzxUEJM07jdBKCw6QgIKpj/PX54691/eto8oCP8ODtBuSczM3r7c8oTWDwM0/Yy
-	zBgoZovolMv6Z9RxPXUyTf+S31CV0XEhEWlPOOzEATpK6lu/gQM8RXf2CC/pgUetIAf5aTe0Ccl
-	4ahxrH+sbFtSmT4/+Jy9l90/QdWTaXyzX8Isu7bEkOkyh5FJ+jMBEnWHIcerjDoTJvypul7tftm
-	yPnx/da1ynL9ueSHgTqII0I5T+oiTDz71m6EQ2uwcMrfqz3hIdfE2YioSmtLahCzOsGGe9pWcsC
-	zlqRAQ==
-X-Received: by 2002:a17:906:240e:b0:b97:f12a:3f8c with SMTP id
- a640c23a62f3a-b982f1ffa96mr69781266b.20.1773976016363; Thu, 19 Mar 2026
- 20:06:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L5LaXyqU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1773980457; x=1805516457;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OHnX7uZBV92R01nqYlUueQh+SwiiSpGawFPFVc+X9Ac=;
+  b=L5LaXyqUQuSe9rdSxkrQ/fc2MQGDqU5dOM72R0hr5sA2UrBzFxYzwSGJ
+   H/ur1e4kexj//aCB29nGwoxmD3UxjrWUwYpj5/hh8/zAhTxtTfIqhCaDP
+   id25clAsc3MlDgsk8oijH9RxevA4r5wmRCy87oouzK7wgWliDAGs9gNQU
+   UR0HweJyPXQhr23ae8CkqA1OhXQbe/NwO/2q2bOHXGb+vwXoma8+nUBbK
+   XDBLkdYdC5460QIcFJa98Hc5EsJredJKtvC2LTJL4fT5BsSzXfkiljoLK
+   V5lQhNiZuDe2Otq0EvmbyxKXVc2ZPWAkO8zfYIKEeWDfZhEa9lIGlUpfI
+   Q==;
+X-CSE-ConnectionGUID: 7iD78qGiRsOAsrK6fFLlEg==
+X-CSE-MsgGUID: kxbDbmOXRJq3CQrMOM7i9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11734"; a="77670260"
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="77670260"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2026 21:20:56 -0700
+X-CSE-ConnectionGUID: f2vicg65TU+omWmZ32VWkg==
+X-CSE-MsgGUID: Kgb03j0VRrWGSeCxQZ27jw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,130,1770624000"; 
+   d="scan'208";a="220549657"
+Received: from lkp-server02.sh.intel.com (HELO a51c2a36b9df) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 19 Mar 2026 21:20:53 -0700
+Received: from kbuild by a51c2a36b9df with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w3RLn-000000001wf-2k5k;
+	Fri, 20 Mar 2026 04:20:45 +0000
+Date: Fri, 20 Mar 2026 12:19:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: aspeedyh <yh_chung@aspeedtech.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Ryan Chen <ryan_chen@aspeedtech.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	openbmc@lists.ozlabs.org, maciej.lawniczak@intel.com,
+	aspeedyh <yh_chung@aspeedtech.com>
+Subject: Re: [PATCH 5/7] soc: aspeed: Add eSPI flash channel support
+Message-ID: <202603201234.n0spXcAN-lkp@intel.com>
+References: <20260313-upstream_espi-v1-5-9504428e1f43@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260317061700.7734-1-linux.amoon@gmail.com> <202603200758.vueafhDW-lkp@intel.com>
-In-Reply-To: <202603200758.vueafhDW-lkp@intel.com>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Fri, 20 Mar 2026 08:36:40 +0530
-X-Gm-Features: AaiRm5341vISAh2YMw8-vBK1a-KteoqiImPAmam6qIBBOzrX-3-bGM_THq4e-Z8
-Message-ID: <CANAwSgS=TzC=QVs2Mw1qJxDffj5H6gU7Ak=Kdd_pCf_1sgY74Q@mail.gmail.com>
-Subject: Re: [PATCH next v1] r8169: Fix PHY lookup for mdiobus_get_phy() and
- improve error reporting during probe
-To: kernel test robot <lkp@intel.com>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Shawn Lin <shawn.lin@rock-chips.com>, 
-	Hans Zhang <18255117159@163.com>, Niklas Cassel <cassel@kernel.org>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org, 
-	Robin Murphy <robin.murphy@arm.com>, Danilo Krummrich <dakr@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260313-upstream_espi-v1-5-9504428e1f43@aspeedtech.com>
 
-Hi Kernel test robot,
+Hi aspeedyh,
 
-On Fri, 20 Mar 2026 at 05:25, kernel test robot <lkp@intel.com> wrote:
->
-> Hi Anand,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on 95c541ddfb0815a0ea8477af778bb13bb075079a]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/r8169-Fix-PHY-lookup-for-mdiobus_get_phy-and-improve-error-reporting-during-probe/20260317-183327
-> base:   95c541ddfb0815a0ea8477af778bb13bb075079a
-> patch link:    https://lore.kernel.org/r/20260317061700.7734-1-linux.amoon%40gmail.com
-> patch subject: [PATCH next v1] r8169: Fix PHY lookup for mdiobus_get_phy() and improve error reporting during probe
-> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260320/202603200758.vueafhDW-lkp@intel.com/config)
-> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603200758.vueafhDW-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202603200758.vueafhDW-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
+kernel test robot noticed the following build errors:
 
-Please discard this patch.
+[auto build test ERROR on 0257f64bdac7fdca30fa3cae0df8b9ecbec7733a]
 
-Thanks
--Anand
+url:    https://github.com/intel-lab-lkp/linux/commits/aspeedyh/dt-bindings-soc-aspeed-Add-AST2600-eSPI-controller/20260315-101647
+base:   0257f64bdac7fdca30fa3cae0df8b9ecbec7733a
+patch link:    https://lore.kernel.org/r/20260313-upstream_espi-v1-5-9504428e1f43%40aspeedtech.com
+patch subject: [PATCH 5/7] soc: aspeed: Add eSPI flash channel support
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260320/202603201234.n0spXcAN-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260320/202603201234.n0spXcAN-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603201234.n0spXcAN-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/soc/aspeed/espi/ast2600-espi.c:137:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           reg |= FIELD_PREP(ESPI_CTRL_FLASH_TAFS_MODE, flash->tafs.mode);
+                  ^
+   drivers/soc/aspeed/espi/ast2600-espi.c:172:28: warning: variable 'flash' set but not used [-Wunused-but-set-variable]
+           struct aspeed_espi_flash *flash;
+                                     ^
+>> drivers/soc/aspeed/espi/ast2600-espi.c:194:13: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           hdr->cyc = FIELD_GET(ESPI_FLASH_RX_CTRL_CYC, reg);
+                      ^
+   drivers/soc/aspeed/espi/ast2600-espi.c:243:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           reg = FIELD_PREP(ESPI_FLASH_TX_CTRL_CYC, cyc) |
+                 ^
+   1 warning and 3 errors generated.
+
+
+vim +/FIELD_PREP +137 drivers/soc/aspeed/espi/ast2600-espi.c
+
+   111	
+   112	static void ast2600_espi_flash_reset(struct aspeed_espi *espi)
+   113	{
+   114		struct aspeed_espi_flash *flash;
+   115		u32 reg;
+   116	
+   117		flash = &espi->flash;
+   118	
+   119		writel(ESPI_INT_EN_FLASH, espi->regs + ESPI_INT_EN_CLR);
+   120		writel(ESPI_INT_STS_FLASH, espi->regs + ESPI_INT_STS);
+   121	
+   122		reg = readl(espi->regs + ESPI_CTRL);
+   123		reg &= ~(ESPI_CTRL_FLASH_TX_SW_RST
+   124			 | ESPI_CTRL_FLASH_RX_SW_RST
+   125			 | ESPI_CTRL_FLASH_TX_DMA_EN
+   126			 | ESPI_CTRL_FLASH_RX_DMA_EN
+   127			 | ESPI_CTRL_FLASH_SW_RDY);
+   128		writel(reg, espi->regs + ESPI_CTRL);
+   129	
+   130		udelay(1);
+   131	
+   132		reg |= (ESPI_CTRL_FLASH_TX_SW_RST | ESPI_CTRL_FLASH_RX_SW_RST);
+   133		writel(reg, espi->regs + ESPI_CTRL);
+   134	
+   135		flash->tafs.mode = TAFS_MODE_SW;
+   136		reg = readl(espi->regs + ESPI_CTRL) & ~ESPI_CTRL_FLASH_TAFS_MODE;
+ > 137		reg |= FIELD_PREP(ESPI_CTRL_FLASH_TAFS_MODE, flash->tafs.mode);
+   138		writel(reg, espi->regs + ESPI_CTRL);
+   139	
+   140		if (flash->dma.enable) {
+   141			writel(flash->dma.tx_addr, espi->regs + ESPI_FLASH_TX_DMA);
+   142			writel(flash->dma.rx_addr, espi->regs + ESPI_FLASH_RX_DMA);
+   143	
+   144			reg = readl(espi->regs + ESPI_CTRL)
+   145			      | ESPI_CTRL_FLASH_TX_DMA_EN
+   146			      | ESPI_CTRL_FLASH_RX_DMA_EN;
+   147			writel(reg, espi->regs + ESPI_CTRL);
+   148		}
+   149	
+   150		writel(ESPI_INT_EN_FLASH_RX_CMPLT, espi->regs + ESPI_INT_EN);
+   151	
+   152		reg = readl(espi->regs + ESPI_CTRL) | ESPI_CTRL_FLASH_SW_RDY;
+   153		writel(reg, espi->regs + ESPI_CTRL);
+   154	}
+   155	
+   156	int ast2600_espi_flash_probe(struct aspeed_espi *espi)
+   157	{
+   158		u32 regs;
+   159	
+   160		regs = readl(espi->regs + ESPI_STS);
+   161		if (regs & (ESPI_STS_FLASH_TX_BUSY | ESPI_STS_FLASH_RX_BUSY)) {
+   162			dev_warn(espi->dev, "eSPI flash channel is busy, deferring...\n");
+   163			return -EPROBE_DEFER;
+   164		}
+   165	
+   166		ast2600_espi_flash_reset(espi);
+   167		return 0;
+   168	}
+   169	
+   170	int ast2600_espi_flash_remove(struct aspeed_espi *espi)
+   171	{
+   172		struct aspeed_espi_flash *flash;
+   173		u32 reg;
+   174	
+   175		flash = &espi->flash;
+   176	
+   177		writel(ESPI_INT_EN_FLASH, espi->regs + ESPI_INT_EN_CLR);
+   178	
+   179		reg = readl(espi->regs + ESPI_CTRL);
+   180		reg &= ~(ESPI_CTRL_FLASH_TX_DMA_EN
+   181			 | ESPI_CTRL_FLASH_RX_DMA_EN
+   182			 | ESPI_CTRL_FLASH_SW_RDY);
+   183		writel(reg, espi->regs + ESPI_CTRL);
+   184	
+   185		return 0;
+   186	}
+   187	
+   188	int ast2600_espi_flash_get_hdr(struct aspeed_espi *espi,
+   189				       struct espi_comm_hdr *hdr)
+   190	{
+   191		u32 reg, len;
+   192	
+   193		reg = readl(espi->regs + ESPI_FLASH_RX_CTRL);
+ > 194		hdr->cyc = FIELD_GET(ESPI_FLASH_RX_CTRL_CYC, reg);
+   195		hdr->tag = FIELD_GET(ESPI_FLASH_RX_CTRL_TAG, reg);
+   196		len = FIELD_GET(ESPI_FLASH_RX_CTRL_LEN, reg);
+   197		hdr->len_h = (len >> 8) & 0xff;
+   198		hdr->len_l = len & 0xff;
+   199	
+   200		return 0;
+   201	}
+   202	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
