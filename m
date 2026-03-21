@@ -1,123 +1,104 @@
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AC4299923
-	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 02:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE15B27F754;
+	Sat, 21 Mar 2026 02:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774059638; cv=none; b=XqkY9iG7HzqAVhCga1yh1yyhp1qHdkQfokab9X5LkbpdCMH+ea9Cd+IO6lYaonQRItBL2cXuL7pLpE3VrdbZrwVSZThvFS4wDcdf3eZkxxJjJTGa4MDWxdqQLkPH8RgA53MCjt+ZFE5I/6kSWmWcghaXCAC61VAX/yfq0HWSGOA=
+	t=1774059971; cv=none; b=LB+dNT9qZGuyXD2AjTmBGKvp3VMg6Q1ncQ8enDiHWigAUI5/Szl4PHcLmMTN06v0JeUss58gJdAvXnhUNqbJhdcnEKf/axG8t+zjk4oSvw82HLvMePwLcOen0Nx3Pi4a+koxDIlUStr/oFXJArpFQrH4iKMXhPSXoCD/4HheZ3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774059638; c=relaxed/simple;
-	bh=Qer7XtUdn/hgWhPuvUq0nksSyHMOsuBlGMrQi8nOfj8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=HTUXEH9Tu5iW6Mjbcq5MxqYAimLMIRGhLqF4vc6skWsAc+xy23Bxc7dOKq2jn5ZyEBeN/7yjQcXazVZ1pG9ezhKpbN7z6ajlgadrtB5Ck4cMDln5fFv/R0ecNvNYhQZXj7M5rRoXbaEUd1j8YsRDxS5XaRFr61tBZfYULR8zy2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=K1Az0G+I; arc=none smtp.client-ip=113.46.200.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1774059971; c=relaxed/simple;
+	bh=eG5LkS+9cCOeVxm20ZTUca9k3IWxWt9/hMQ4+PWUen0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sB1rp34azQHz7vYIdb7wUo4Sxs86O9uCDKKho1zwYey3CmLs9C6qjRS0XqaiZ2bKqq1tvnzk32tRxFh1sy91XeMF2Dyq8KAMoCUX6AwVi/zXfg0NYf2MCUDizlZiIGgXAUU0v1GyjkYP4J3nm+nPZAYvlrKcVe3fV+y5owXZOHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UL3lja34; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="K1Az0G+I"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=G1QUG9uubtkZKNrUSnV+qD2JajwUNppKtuRnRb8xPNk=;
-	b=K1Az0G+IgOYrtU30nfOTWUkGDWXkpj9pDzK4YhV3vJuHVCUyldqiUVgWIb5tlqvpWs8PRxvV9
-	M8GsIlbYTDNAO2XhEpyCXEwKxR8krFwI6C2q72udF1VSOErZvxN/HmRwodkDIRyhSQhdlkEWXfE
-	csez44twmzDIrzSWnFKruTQ=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4fd30M1db2zRhQf;
-	Sat, 21 Mar 2026 10:14:27 +0800 (CST)
-Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
-	by mail.maildlp.com (Postfix) with ESMTPS id 35EA240569;
-	Sat, 21 Mar 2026 10:20:30 +0800 (CST)
-Received: from [10.174.179.11] (10.174.179.11) by
- dggpemf500002.china.huawei.com (7.185.36.57) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Sat, 21 Mar 2026 10:20:29 +0800
-Message-ID: <530b1334-302d-44fb-b180-ddb52cd52115@huawei.com>
-Date: Sat, 21 Mar 2026 10:20:28 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UL3lja34"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774059969; x=1805595969;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eG5LkS+9cCOeVxm20ZTUca9k3IWxWt9/hMQ4+PWUen0=;
+  b=UL3lja342nStXdPKoKxDE5G4uz+pYWAnwLxT7ahLR5veXnHO4dmkuDPS
+   kv7hrqWLp/SlTBiTzqteMEmVEvWsJc7XyySRBKjc7PZqZwk9ABCgQioDT
+   zTg1xEA63Ux1WAjLWNqhE6fTMRD0kX5tzgY+nQYpqdc26D3+lfpB3fG5f
+   X7imsRQXcZ/LcmKLkkppUA7uiEpB/5X3f27EZ8i9m26M9TXJBlrz62z/x
+   BlCuFLZlYMbGbBSZpR4MiirshdfyqDDRCIv60pjR1KJe9NxTF/5lB9S7j
+   0U80cnlYkNaEIH00EOiZeWk1/HzHT8X/xuGVYlWpB6AZPIhFsEH4AxZsP
+   g==;
+X-CSE-ConnectionGUID: q5AXYw+SRFi49gYqn3505A==
+X-CSE-MsgGUID: PbjLD1DxRJK2GS5I1QRoiw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="86513222"
+X-IronPort-AV: E=Sophos;i="6.23,132,1770624000"; 
+   d="scan'208";a="86513222"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 19:26:08 -0700
+X-CSE-ConnectionGUID: o0WWiGR5QOOQvsToiLyxHg==
+X-CSE-MsgGUID: wLO7713QQmCTMFZ6fN/fgg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,132,1770624000"; 
+   d="scan'208";a="223679709"
+Received: from lkp-server02.sh.intel.com (HELO d7fefbca0d04) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 20 Mar 2026 19:26:04 -0700
+Received: from kbuild by d7fefbca0d04 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w3m2C-000000000CD-0ohq;
+	Sat, 21 Mar 2026 02:25:53 +0000
+Date: Sat, 21 Mar 2026 10:25:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mahadevan P <mahadevan.p@oss.qualcomm.com>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Sean Paul <sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>,
+	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Jessica Zhang <jesszhan0024@gmail.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Mahadevan P <mahadevan.p@oss.qualcomm.com>
+Subject: Re: [PATCH v2] drm/msm: default separate_gpu_kms to auto selection
+Message-ID: <202603211049.NkgQVReV-lkp@intel.com>
+References: <20260317-separate_gpu_kms-v2-1-b027ca97b9fe@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/1] video: fbdev: matroxfb: Mark variable with
- __maybe_unused to avoid W=1 build break
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Thomas Zimmermann
-	<tzimmermann@suse.de>, <linux-fbdev@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-CC: Helge Deller <deller@gmx.de>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
-	<morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <20260320143646.3218199-1-andriy.shevchenko@linux.intel.com>
-From: Jason Yan <yanaijie@huawei.com>
-In-Reply-To: <20260320143646.3218199-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- dggpemf500002.china.huawei.com (7.185.36.57)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260317-separate_gpu_kms-v2-1-b027ca97b9fe@oss.qualcomm.com>
 
-在 2026/3/20 22:36, Andy Shevchenko 写道:
-> Clang is not happy about set but unused variable:
-> 
-> drivers/video/fbdev/matrox/g450_pll.c:412:18: error: variable 'mnp' set but not used [-Werror,-Wunused-but-set-variable]
->     412 |                                 unsigned int mnp;
->         |                                              ^
-> 1 error generated.
-> 
-> Since the commit 7b987887f97b ("video: fbdev: matroxfb: remove dead code
-> and set but not used variable") the 'mnp' became unused, but eliminating
-> that code might have side-effects. The question here is what should we do
-> with 'mnp'? The easiest way out is just mark it with __maybe_unused which
-> will shut the compiler up and won't change any possible IO flow. So does
-> this change.
-> 
-> Fixes: 7b987887f97b ("video: fbdev: matroxfb: remove dead code and set but not used variable")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> ---
-> Cc: Jason Yan <yanaijie@huawei.com>
-> ---
-> 
-> Below is a dive into the history of the driver.
-> 
-> The problem was revealed when the #if 0 guarded code along with unused
-> pixel_vco variable was removed. That code was introduced in the original
-> commit 213d22146d1f ("[PATCH] (1/3) matroxfb for 2.5.3"). And then guarded
-> in the commit 705e41f82988 ("matroxfb DVI updates: Handle DVI output on
-> G450/G550. Powerdown unused portions of G450/G550 DAC. Split G450/G550 DAC
-> from older DAC1064 handling. Modify PLL setting when both CRTCs use same
-> pixel clocks.").
-> 
-> NOTE: The two commits mentioned above pre-date Git era and available in
-> history.git repository for archaeological purposes.
-> 
-> Even without that guard the modern compilers may see that the pixel_vco
-> wasn't ever used and seems a leftover after some debug or review made
-> 25 years ago.
-> 
-> The g450_mnp2vco() doesn't have any IO and as Jason said doesn't seem
-> to have any side effects either than some unneeded CPU processing during
-> runtime. I agree that's unlikely that timeout (or heating up the CPU) has
-> any effect on the HW (GPU/display) functionality.
-> ---
->   drivers/video/fbdev/matrox/g450_pll.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/video/fbdev/matrox/g450_pll.c b/drivers/video/fbdev/matrox/g450_pll.c
-> index e2c1478aa47f..6a08f78cd1ac 100644
-> --- a/drivers/video/fbdev/matrox/g450_pll.c
-> +++ b/drivers/video/fbdev/matrox/g450_pll.c
-> @@ -409,7 +409,7 @@ static int __g450_setclk(struct matrox_fb_info *minfo, unsigned int fout,
->   		case M_VIDEO_PLL:
->   			{
->   				u_int8_t tmp;
-> -				unsigned int mnp;
-> +				unsigned int mnp __maybe_unused;
->   				unsigned long flags;
->   
->   				matroxfb_DAC_lock_irqsave(flags);
+Hi Mahadevan,
 
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on b84a0ebe421ca56995ff78b66307667b62b3a900]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mahadevan-P/drm-msm-default-separate_gpu_kms-to-auto-selection/20260318-063854
+base:   b84a0ebe421ca56995ff78b66307667b62b3a900
+patch link:    https://lore.kernel.org/r/20260317-separate_gpu_kms-v2-1-b027ca97b9fe%40oss.qualcomm.com
+patch subject: [PATCH v2] drm/msm: default separate_gpu_kms to auto selection
+config: loongarch-randconfig-002-20260321 (https://download.01.org/0day-ci/archive/20260321/202603211049.NkgQVReV-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260321/202603211049.NkgQVReV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603211049.NkgQVReV-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "msm_mdss_count_masters" [drivers/gpu/drm/msm/msm.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
