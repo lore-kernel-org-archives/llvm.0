@@ -1,168 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4536318BA8
-	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 15:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20EB71D0DEE
+	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 16:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774105940; cv=none; b=dDgEgTGxpjUHF56GfjJRX6HUviU954wAyMKJMeTei3iQwxrJRByzOhJhvDOcPvxCvJKt1ge032ytf7hKWjlXD2UJeFe2K2aewF23RV0ux/jtHt4F5p6pXwf52UhZOo7TYXW9zqH/2hVbD0VO38nm6viUW/z/llOiL1HJKy/g2bI=
+	t=1774108932; cv=none; b=o8SBsYYo2xkqDlFNJoYTavOZwpLzKvcy5J8aJTU0LAxps/QItguxGwE7TXQfUZilAbBO31L2XQkFQmI9Wn0FlUJY77zyGYdFFLWAhmU1CuTzipY3jEz5N6qIFfnFmUt43pCyDhfeX0w9kOanzIF5FNRlWOc0KvUmkItUqlP8kYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774105940; c=relaxed/simple;
-	bh=gD1q6VTwcr3ywJK3thmlj3oefKwCOvFp8KGDVpaIr9s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PiiEptYTagmIzdo2MrtOYSzSmRAzK8AGx1+KQrfeYwlnmEexR/l6nCr888NPyNNlEkm9+V2sFTgrxvZFkGRlYzaLOI/ShT6kT73EkMWFC7pE+BsRYzrs4cmHZOYDaW0NrSnqxAevqfrHbyChHiIpDLdaDE5gEAbePv+5g46+8uU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sH9TlI3B; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774108932; c=relaxed/simple;
+	bh=jIjQ+m7/eWabaDmIrV3u0j5GODa9il6y9ZJBrH0oY4o=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CmgDZBHdjQgZNkajYbv6HFiG96VOnHPSuw/2gudgU4xQP8h0G4eZ/78cJOc3tvs32ypM4EoRRudBnmMLrgQPhhxxxn+JueaRdh4NKYVxx1BsShHgRHLloStAvhAIt72yhFX1DaICNRYfxqmS0pLRfVQthiupRpZGXxE3geatLwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CaraJG9n; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sH9TlI3B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF96C2BCB1
-	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 15:12:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774105940;
-	bh=gD1q6VTwcr3ywJK3thmlj3oefKwCOvFp8KGDVpaIr9s=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=sH9TlI3BLUAgQ5noUfDXKLXqORTdkMae+MkhxTq4JKYmhYsWyu1SMcCgmDjU3xIgQ
-	 z8wdri4lAum4xlM+bbceKkSwyVleUcuKcKy+gYI2N0lwUSXAINISDyAtG0tWLk3Bw7
-	 tE1L/WzB5n42AVVydTEUurZKNlvI48l/e7h8X3vJso/ahKGCIucuol9CzF+O2nuwOW
-	 fgF2Ap2YDGu7XxFPbY7/OyiTK/Kn1byNCS5ENJcY1NLL22PTEvKxGj7G4X8El9UYy2
-	 J6Jb13NRG5uwBbvTBMN42+2k2hzO80EyQq0sfT9abPGNvY6cPq09xokxWLyufhNoMR
-	 pl+BlNGBfcTrQ==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-40ea36b56b7so2301966fac.3
-        for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 08:12:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXiJGLYAMiwXUiZr0vVU6BIpHuubStRs0SpvvwAaPya2O28pyb+IjQ5DRLytgKrr5ig4ZL4@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywkaz5eXy5dEo4/F6WfN8fJ7hnraBsO0WEGnlYWl4gV1iLfzgnj
-	k5qjEOK+2m+wajQkSoXT0YiO3I8VXEE9wPuksWz+o33DcdFBNjRLR0Nj3gllE4Z8XyV9Gm9Sasg
-	s6bBTn/52CZ1L97FbvdspxGjXW6wfMhU=
-X-Received: by 2002:a05:6870:f214:b0:417:3936:1c7a with SMTP id
- 586e51a60fabf-41c11138b63mr4241564fac.24.1774105939612; Sat, 21 Mar 2026
- 08:12:19 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CaraJG9n"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774108930;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CgD+aTEd25n1s+ozFbeZoOXnPgl2euVWxpQNGK5GXlI=;
+	b=CaraJG9nzNEqoeE7b8D7S8FII/9ZlfZTkcNox4Tx3R3qc1DaZNRCirJncrm6dYiDmI9JHl
+	tWkBiMCRMC+O+JJ+s64MCPMGVMCctVsB47rDDr0uGCA3FWgz/CQ/tI7yyNyetW+pK5/JRk
+	zjO6CraUmTJw3/+o4QJ3vASLsTmfcqM=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-423-R5jxvg_tNFyYL24SB-s8qA-1; Sat,
+ 21 Mar 2026 12:02:08 -0400
+X-MC-Unique: R5jxvg_tNFyYL24SB-s8qA-1
+X-Mimecast-MFC-AGG-ID: R5jxvg_tNFyYL24SB-s8qA_1774108927
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6EADD19560A1
+	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 16:02:07 +0000 (UTC)
+Received: from [172.20.168.233] (unknown [10.30.45.63])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0C78C180075D;
+	Sat, 21 Mar 2026 16:02:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc4,
+ upstream-mainline, a0c83177)
+Date: Sat, 21 Mar 2026 16:02:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202603211336.i375F7lD-lkp@intel.com>
-In-Reply-To: <202603211336.i375F7lD-lkp@intel.com>
-From: Chanwoo Choi <chanwoo@kernel.org>
-Date: Sun, 22 Mar 2026 00:11:43 +0900
-X-Gmail-Original-Message-ID: <CAGTfZH0bZMGpdKjvgw7S54NF+KeXPtvhsanKmSs1vHDhx7F7Lg@mail.gmail.com>
-X-Gm-Features: AaiRm50EBCXkYVYAInLz4rhnn5PAPFokSX2lprR94ZFvTJQ1blDiv0BKjixMPe0
-Message-ID: <CAGTfZH0bZMGpdKjvgw7S54NF+KeXPtvhsanKmSs1vHDhx7F7Lg@mail.gmail.com>
-Subject: Re: [chanwoo:devfreq-next 5/5] drivers/devfreq/devfreq.c:1946:37:
- error: redefinition of 'devfreq_group'
-To: kernel test robot <lkp@intel.com>
-Cc: Jori Koolstra <jkoolstra@xs4all.nl>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org, 
-	Chanwoo Choi <cw00.choi@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <24156.126032112020800667@us-mta-423.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: GkfjCX1_J_mrBAVTvnHnX5SCMZUnxY6Ef3xF6xNp8Es_1774108927
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-HI Jori,
+Hi, we tested your kernel and here are the results:
 
-There are build errors in your patches.
-DId you test it? I hope to fix and test the patch before posting.
-
-On Sat, Mar 21, 2026 at 9:52=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git=
- devfreq-next
-> head:   38aa14f9be920f3fea6fe3f16b69b7a0cd0478a1
-> commit: 38aa14f9be920f3fea6fe3f16b69b7a0cd0478a1 [5/5] PM / devfreq: chan=
-ge devfreq_class to a const struct
-> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260321/20=
-2603211336.i375F7lD-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
-227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20260321/202603211336.i375F7lD-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202603211336.i375F7lD-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> drivers/devfreq/devfreq.c:1946:37: error: redefinition of 'devfreq_gro=
-up'
->     1946 | static const struct attribute_group devfreq_group =3D {
->          |                                     ^
->    drivers/devfreq/devfreq.c:40:1: note: previous definition is here
->       40 | ATTRIBUTE_GROUPS(devfreq);
->          | ^
->    include/linux/sysfs.h:291:37: note: expanded from macro 'ATTRIBUTE_GRO=
-UPS'
->      291 | static const struct attribute_group _name##_group =3D {       =
-    \
->          |                                     ^
->    <scratch space>:89:1: note: expanded from here
->       89 | devfreq_group
->          | ^
-> >> drivers/devfreq/devfreq.c:1955:38: error: redefinition of 'devfreq_gro=
-ups'
->     1955 | static const struct attribute_group *devfreq_groups[] =3D {
->          |                                      ^
->    drivers/devfreq/devfreq.c:40:1: note: previous definition is here
->       40 | ATTRIBUTE_GROUPS(devfreq);
->          | ^
->    include/linux/sysfs.h:298:11: note: expanded from macro 'ATTRIBUTE_GRO=
-UPS'
->      298 | };                                                            =
-  \
->          |                                                               =
-  ^
->    include/linux/sysfs.h:285:38: note: expanded from macro '\
->    __ATTRIBUTE_GROUPS'
->      285 | static const struct attribute_group *_name##_groups[] =3D {   =
-    \
->          |                                      ^
->    <scratch space>:93:1: note: expanded from here
->       93 | devfreq_groups
->          | ^
->    2 errors generated.
->
->
-> vim +/devfreq_group +1946 drivers/devfreq/devfreq.c
->
-> 9005b65099ee4f MyungJoo Ham  2011-10-02  1945
-> e4999090951abc Pengjie Zhang 2025-12-16 @1946  static const struct attrib=
-ute_group devfreq_group =3D {
-> e4999090951abc Pengjie Zhang 2025-12-16  1947   .attrs =3D devfreq_attrs,
-> e4999090951abc Pengjie Zhang 2025-12-16  1948  };
-> e4999090951abc Pengjie Zhang 2025-12-16  1949
-> e4999090951abc Pengjie Zhang 2025-12-16  1950  static const struct attrib=
-ute_group gov_attr_group =3D {
-> e4999090951abc Pengjie Zhang 2025-12-16  1951   .attrs =3D governor_attrs=
-,
-> e4999090951abc Pengjie Zhang 2025-12-16  1952   .is_visible =3D gov_attr_=
-visible,
-> e4999090951abc Pengjie Zhang 2025-12-16  1953  };
-> e4999090951abc Pengjie Zhang 2025-12-16  1954
-> e4999090951abc Pengjie Zhang 2025-12-16 @1955  static const struct attrib=
-ute_group *devfreq_groups[] =3D {
-> e4999090951abc Pengjie Zhang 2025-12-16  1956   &devfreq_group,
-> e4999090951abc Pengjie Zhang 2025-12-16  1957   &gov_attr_group,
-> e4999090951abc Pengjie Zhang 2025-12-16  1958   NULL
-> e4999090951abc Pengjie Zhang 2025-12-16  1959  };
-> e4999090951abc Pengjie Zhang 2025-12-16  1960
->
-> :::::: The code at line 1946 was first introduced by commit
-> :::::: e4999090951abcf39543aa22b7a7a7f13c5a5857 PM / devfreq: use _visibl=
-e attribute to replace create/remove_sysfs_files()
->
-> :::::: TO: Pengjie Zhang <zhangpengjie2@huawei.com>
-> :::::: CC: Chanwoo Choi <cw00.choi@samsung.com>
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
->
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
---=20
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2026-03-21' of https://gitlab.free=
+desktop.org/drm/kernel
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2399467582
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2399467582_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] [eln] waived call traces we don't plan to report =
+upstream
+            URL: https://issues.redhat.com/browse/RHELTEST-137
+            Affected tests:
+                Boot test [x86_64]
+        Issue: [upstream] WARNING: drivers/gpu/drm/drm_atomic_helper.c:1920=
+ at drm_atomic_helper_wait_for_vblanks.part.0+0x228/0x240, CPU#1: kworker/1=
+:1/54 - RIP: 0010:drm_atomic_helper_wait_for_vblanks
+            URL: https://lore.kernel.org/dri-devel/69381d6c.050a0220.4004e.=
+0017.GAE@google.com/
+            Affected tests:
+                Boot test [x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
