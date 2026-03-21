@@ -1,117 +1,135 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C562E093A
-	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 11:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B152DECDE;
+	Sat, 21 Mar 2026 12:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774092187; cv=none; b=YNu9ORNg8NEag6i4VoFh2+NRgoXJLM2mbOkQWeyuBwMh62tneIWU4++9R1QdFy4eB1C4jLNZ0Sad6HgyBXN2fwM4xskLAl0ROeWeew3SKHY6qasrNWZANmpgDzYjXuo3J4OGeo+Gg6sQp9rbPZ+zd8kDFFbbad4DkcwAGv9RePo=
+	t=1774097557; cv=none; b=SireKdXToS/cktc3yWEvS/I2Iz6iSs13w7z+23R8J6+qV6aSFRlkH2+W5trbMH/FZtSJ46C7btHtwsofd8Xm9HVwaQ94nZ36/1vIY3v8SoblxY+1k0Vcp9mfFXS+AhqPhgnkERdtEyWLTWOIA61pZQIbR3B5/S1h5L0C07RXSkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774092187; c=relaxed/simple;
-	bh=PgxQk5SsAl7i2g6w2uNxaYzZkyFs82piqoG52gDVZdY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=qbkmitl2cs86By+nejYUV9FjIjECa08eY97acU67NerRiEQMryoK7puyfHIj/OUjlGQf/mw2Ru1nQiYvWQz1n4mVxMgpjPTyWzr8eBkntAVWx1xGI80M7sYgEo12wxtJn6w3lDgaL85MHRbuEjF3A3MIcc/gKb/g9rCr4yWEm14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J+ouYSQ7; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774097557; c=relaxed/simple;
+	bh=JIuJkZZttoOzKPM0gXcgQPryTYEMZb6jC8ptmj5Xuqs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=VJ8nFUNAfiasMDULqsT1beG+DNfph7OE9F5ET2kGzrvj54bG8tY8VjXURwqYDuyfQk1spsAinqxB939UDRIrYcnz8F6Rd1SXftU7ogTOtCzWPHOI7gsXpxcmMfC0a+Eh7ao1QS977sGJ0Uo094cNImWUvcwO2v/BWoI5fYUIObU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A4CUn+C7; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J+ouYSQ7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774092184;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=pxkMfk3iPrKugAxCUOGIKtOmuFYiQNx3v0GmzPEUgNQ=;
-	b=J+ouYSQ7HFTQmI3HWC2v0kEwoQngzoUiw8p8sDr44x7WnPdatY4s52b1+6XZSaFdqC5fQm
-	cG5QZA75IQyXR6WsuyjlsOyEwfZm0z4ezY5xPOQS+9bB+yvxNmmbD/s9TU15dXcdJbPJYO
-	csqUM5WAvW1mSQn1zFGAzv+W5EN0NEA=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-524-QTFkRWKhPmGXwF8DE3z8uw-1; Sat,
- 21 Mar 2026 07:23:03 -0400
-X-MC-Unique: QTFkRWKhPmGXwF8DE3z8uw-1
-X-Mimecast-MFC-AGG-ID: QTFkRWKhPmGXwF8DE3z8uw_1774092182
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 55893195605E
-	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 11:23:02 +0000 (UTC)
-Received: from [172.20.168.233] (unknown [10.30.45.63])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E4519180075D;
-	Sat, 21 Mar 2026 11:23:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc4,
- upstream-mainline, c612261b)
-Date: Sat, 21 Mar 2026 11:23:01 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A4CUn+C7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774097557; x=1805633557;
+  h=date:from:to:cc:subject:message-id;
+  bh=JIuJkZZttoOzKPM0gXcgQPryTYEMZb6jC8ptmj5Xuqs=;
+  b=A4CUn+C76hE0gwP66dlT5qYtFXThn2n5PJiaeBiQvEaBNDamnnnzE90O
+   GRqZgMt8vEHFs6jIUBMMU2lm/ZAM8nizvUApZfUgwica7ktzu/4H0PoM3
+   FggBk8vPyT58I42RMiSstUwYsHX2KdxVd2lqVrsi7DUOuIfKxdlO3ewux
+   /dD656T23dILMMI7VAvYyZ4mJ8WphvR5RTGtPgfSLBbebWX3crUPTFmET
+   Oh8Pr9KWwYn/tvwa5BqGYjoUlTE08kR16WAfpZ8SENXRlWAmUyC5l0xE7
+   gUkq/ojmmPyCHzOKp44qOQLIGMOC+fOXrY7DMfv222ePVeNTf8P52eQOP
+   w==;
+X-CSE-ConnectionGUID: 5KCwumq4Rv+bj1mHfXj03w==
+X-CSE-MsgGUID: 3ExSdSwISn+d9FmJcRY2og==
+X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="79029433"
+X-IronPort-AV: E=Sophos;i="6.23,133,1770624000"; 
+   d="scan'208";a="79029433"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2026 05:52:36 -0700
+X-CSE-ConnectionGUID: ktkgtm4CTtic1Zx+ghqyXA==
+X-CSE-MsgGUID: tOdiYfZ2Qy+PbPkyb1CscA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,133,1770624000"; 
+   d="scan'208";a="222640011"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa006.jf.intel.com with ESMTP; 21 Mar 2026 05:52:35 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w3vod-0000000067N-2dTW;
+	Sat, 21 Mar 2026 12:52:31 +0000
+Date: Sat, 21 Mar 2026 13:52:29 +0100
+From: kernel test robot <lkp@intel.com>
+To: Jori Koolstra <jkoolstra@xs4all.nl>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-pm@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [chanwoo:devfreq-next 5/5]
+ drivers/devfreq/devfreq.c:1946:37: error: redefinition of 'devfreq_group'
+Message-ID: <202603211336.i375F7lD-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <28540.126032107230300161@us-mta-524.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: z0aWjyj911WZexItdbuX_aUyB3J2cEj6r4hv5dJAGxE_1774092182
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-next
+head:   38aa14f9be920f3fea6fe3f16b69b7a0cd0478a1
+commit: 38aa14f9be920f3fea6fe3f16b69b7a0cd0478a1 [5/5] PM / devfreq: change devfreq_class to a const struct
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260321/202603211336.i375F7lD-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260321/202603211336.i375F7lD-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603211336.i375F7lD-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/devfreq/devfreq.c:1946:37: error: redefinition of 'devfreq_group'
+    1946 | static const struct attribute_group devfreq_group = {
+         |                                     ^
+   drivers/devfreq/devfreq.c:40:1: note: previous definition is here
+      40 | ATTRIBUTE_GROUPS(devfreq);
+         | ^
+   include/linux/sysfs.h:291:37: note: expanded from macro 'ATTRIBUTE_GROUPS'
+     291 | static const struct attribute_group _name##_group = {           \
+         |                                     ^
+   <scratch space>:89:1: note: expanded from here
+      89 | devfreq_group
+         | ^
+>> drivers/devfreq/devfreq.c:1955:38: error: redefinition of 'devfreq_groups'
+    1955 | static const struct attribute_group *devfreq_groups[] = {
+         |                                      ^
+   drivers/devfreq/devfreq.c:40:1: note: previous definition is here
+      40 | ATTRIBUTE_GROUPS(devfreq);
+         | ^
+   include/linux/sysfs.h:298:11: note: expanded from macro 'ATTRIBUTE_GROUPS'
+     298 | };                                                              \
+         |                                                                 ^
+   include/linux/sysfs.h:285:38: note: expanded from macro '\
+   __ATTRIBUTE_GROUPS'
+     285 | static const struct attribute_group *_name##_groups[] = {       \
+         |                                      ^
+   <scratch space>:93:1: note: expanded from here
+      93 | devfreq_groups
+         | ^
+   2 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'io_uring-7.0-20260320' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/axboe/linux
+vim +/devfreq_group +1946 drivers/devfreq/devfreq.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2398729928
+9005b65099ee4f MyungJoo Ham  2011-10-02  1945  
+e4999090951abc Pengjie Zhang 2025-12-16 @1946  static const struct attribute_group devfreq_group = {
+e4999090951abc Pengjie Zhang 2025-12-16  1947  	.attrs = devfreq_attrs,
+e4999090951abc Pengjie Zhang 2025-12-16  1948  };
+e4999090951abc Pengjie Zhang 2025-12-16  1949  
+e4999090951abc Pengjie Zhang 2025-12-16  1950  static const struct attribute_group gov_attr_group = {
+e4999090951abc Pengjie Zhang 2025-12-16  1951  	.attrs = governor_attrs,
+e4999090951abc Pengjie Zhang 2025-12-16  1952  	.is_visible = gov_attr_visible,
+e4999090951abc Pengjie Zhang 2025-12-16  1953  };
+e4999090951abc Pengjie Zhang 2025-12-16  1954  
+e4999090951abc Pengjie Zhang 2025-12-16 @1955  static const struct attribute_group *devfreq_groups[] = {
+e4999090951abc Pengjie Zhang 2025-12-16  1956  	&devfreq_group,
+e4999090951abc Pengjie Zhang 2025-12-16  1957  	&gov_attr_group,
+e4999090951abc Pengjie Zhang 2025-12-16  1958  	NULL
+e4999090951abc Pengjie Zhang 2025-12-16  1959  };
+e4999090951abc Pengjie Zhang 2025-12-16  1960  
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2398729928_ppc64le_kernel
+:::::: The code at line 1946 was first introduced by commit
+:::::: e4999090951abcf39543aa22b7a7a7f13c5a5857 PM / devfreq: use _visible attribute to replace create/remove_sysfs_files()
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+:::::: TO: Pengjie Zhang <zhangpengjie2@huawei.com>
+:::::: CC: Chanwoo Choi <cw00.choi@samsung.com>
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
