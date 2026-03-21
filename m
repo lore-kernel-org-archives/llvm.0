@@ -1,140 +1,219 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20EB71D0DEE
-	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 16:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DBE7284690;
+	Sat, 21 Mar 2026 23:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774108932; cv=none; b=o8SBsYYo2xkqDlFNJoYTavOZwpLzKvcy5J8aJTU0LAxps/QItguxGwE7TXQfUZilAbBO31L2XQkFQmI9Wn0FlUJY77zyGYdFFLWAhmU1CuTzipY3jEz5N6qIFfnFmUt43pCyDhfeX0w9kOanzIF5FNRlWOc0KvUmkItUqlP8kYY=
+	t=1774134407; cv=none; b=lFkoaBlhDL0XDl6O0BZbzq6yH151H86Ztqlk+g7MloKo3oSDwsd0yD3FGT239F4eTRPkye4pJdFBXAsrZ9BTST/xR/Isn4scEvT1xZWZkxzc0NNqFyItYyrW4qS96pxcsfYWst9jrCAaMJjQnVx69ot0YZmWWTHeU2jr50RrLgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774108932; c=relaxed/simple;
-	bh=jIjQ+m7/eWabaDmIrV3u0j5GODa9il6y9ZJBrH0oY4o=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CmgDZBHdjQgZNkajYbv6HFiG96VOnHPSuw/2gudgU4xQP8h0G4eZ/78cJOc3tvs32ypM4EoRRudBnmMLrgQPhhxxxn+JueaRdh4NKYVxx1BsShHgRHLloStAvhAIt72yhFX1DaICNRYfxqmS0pLRfVQthiupRpZGXxE3geatLwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CaraJG9n; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1774134407; c=relaxed/simple;
+	bh=nE5LWGwV2y/S17RyreD+NQzQfwzt9cqThVbWtoq/HIU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lB50ePSMH475zNDuPkCDXQSMkl7hHCxAGNB1uzysAW6M1ubtPKiYYhG+KgQaolBTYGeIxvmNnRPQYmu0UoKqfDnNt3i/yC5PSpkoTkC2fuRKXQdnf+OP/RMdbqbB0UzVkc+yoorO2oGPl/SYaJbnQzFrXTOZZai49/yVAIJ1ZSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AxcxHxCk; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CaraJG9n"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774108930;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=CgD+aTEd25n1s+ozFbeZoOXnPgl2euVWxpQNGK5GXlI=;
-	b=CaraJG9nzNEqoeE7b8D7S8FII/9ZlfZTkcNox4Tx3R3qc1DaZNRCirJncrm6dYiDmI9JHl
-	tWkBiMCRMC+O+JJ+s64MCPMGVMCctVsB47rDDr0uGCA3FWgz/CQ/tI7yyNyetW+pK5/JRk
-	zjO6CraUmTJw3/+o4QJ3vASLsTmfcqM=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-423-R5jxvg_tNFyYL24SB-s8qA-1; Sat,
- 21 Mar 2026 12:02:08 -0400
-X-MC-Unique: R5jxvg_tNFyYL24SB-s8qA-1
-X-Mimecast-MFC-AGG-ID: R5jxvg_tNFyYL24SB-s8qA_1774108927
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6EADD19560A1
-	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 16:02:07 +0000 (UTC)
-Received: from [172.20.168.233] (unknown [10.30.45.63])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0C78C180075D;
-	Sat, 21 Mar 2026 16:02:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc4,
- upstream-mainline, a0c83177)
-Date: Sat, 21 Mar 2026 16:02:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AxcxHxCk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774134405; x=1805670405;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nE5LWGwV2y/S17RyreD+NQzQfwzt9cqThVbWtoq/HIU=;
+  b=AxcxHxCk7voHpRbK2+hvXlZFU3FmUOxQTFt++04f/+tLNsVwHqTF7Uab
+   n0Bp2USUDiK4Xrr3rX+LKsMH48sQa3aQFlRTe/OWjU5gEUTkHWgliB5nM
+   o1rL2aQJRN8XaPJBHDG+G9fY1xrmRpWNfCl7ZsTzgc2vKp00y15VADjEW
+   8EsVngc+1YJv8vdkjh2QxWlg+Q0drMdrGWmeXhtRuSug9gyoa0XWtj5mM
+   ZkjNai533VLNBko3BxrAWvzAHBEkGHIB6fBCgfk8iPEreXJbjXmI/9o+Y
+   0viaTu+UZ6jp2M2T73tF5jDfyW683hhoiDQ7xpKqdHPw58yv+ttIxz3pV
+   A==;
+X-CSE-ConnectionGUID: 8gW0bntmTXiuiYSisP8jjA==
+X-CSE-MsgGUID: 1jLDgks3SuGn6MwhxjXWzA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11736"; a="62742720"
+X-IronPort-AV: E=Sophos;i="6.23,134,1770624000"; 
+   d="scan'208";a="62742720"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2026 16:06:44 -0700
+X-CSE-ConnectionGUID: LX6qAGG7RZG1Sw+Pp5hVPA==
+X-CSE-MsgGUID: BOUO6qRyTZ2vpT9e1J4pDg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,134,1770624000"; 
+   d="scan'208";a="223680244"
+Received: from lkp-server02.sh.intel.com (HELO d7fefbca0d04) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 21 Mar 2026 16:06:41 -0700
+Received: from kbuild by d7fefbca0d04 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w45Ow-000000001MX-3B74;
+	Sat, 21 Mar 2026 23:06:38 +0000
+Date: Sun, 22 Mar 2026 07:05:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jovin Basil <jovin555@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jovin555@gmail.com,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: gpio: replace printk with dev_err in probe
+Message-ID: <202603220606.UKyjPueP-lkp@intel.com>
+References: <20260320150144.432345-1-jovin555@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <24156.126032112020800667@us-mta-423.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: GkfjCX1_J_mrBAVTvnHnX5SCMZUnxY6Ef3xF6xNp8Es_1774108927
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320150144.432345-1-jovin555@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Jovin,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on wsa/i2c/for-next linus/master v7.0-rc4 next-20260320]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jovin-Basil/i2c-gpio-replace-printk-with-dev_err-in-probe/20260322-012109
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20260320150144.432345-1-jovin555%40gmail.com
+patch subject: [PATCH] i2c: gpio: replace printk with dev_err in probe
+config: riscv-randconfig-001-20260322 (https://download.01.org/0day-ci/archive/20260322/202603220606.UKyjPueP-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260322/202603220606.UKyjPueP-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603220606.UKyjPueP-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/cgroup.h:27:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:854:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     854 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:110:53: note: expanded from macro 'insl'
+     110 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/i2c/busses/i2c-gpio.c:11:
+   In file included from include/linux/i2c-algo-bit.h:13:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:27:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:863:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     863 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:122:55: note: expanded from macro 'outsb'
+     122 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/i2c/busses/i2c-gpio.c:11:
+   In file included from include/linux/i2c-algo-bit.h:13:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:27:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:872:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     872 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:123:55: note: expanded from macro 'outsw'
+     123 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/i2c/busses/i2c-gpio.c:11:
+   In file included from include/linux/i2c-algo-bit.h:13:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:27:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:881:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     881 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:124:55: note: expanded from macro 'outsl'
+     124 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/i2c/busses/i2c-gpio.c:11:
+   In file included from include/linux/i2c-algo-bit.h:13:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:27:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/i2c/busses/i2c-gpio.c:493:12: error: use of undeclared identifier 'pdev'
+     493 |                 dev_err(&pdev->dev, "i2c-gpio: probe failed: %d\n",ret);
+         |                          ^~~~
+   7 warnings and 1 error generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2026-03-21' of https://gitlab.free=
-desktop.org/drm/kernel
+vim +/pdev +493 drivers/i2c/busses/i2c-gpio.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2399467582
+   486	
+   487	static int __init i2c_gpio_init(void)
+   488	{
+   489		int ret;
+   490	
+   491		ret = platform_driver_register(&i2c_gpio_driver);
+   492		if (ret)
+ > 493			dev_err(&pdev->dev, "i2c-gpio: probe failed: %d\n",ret);
+   494	
+   495		return ret;
+   496	}
+   497	subsys_initcall(i2c_gpio_init);
+   498	
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2399467582_ppc64le_kernel
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] [eln] waived call traces we don't plan to report =
-upstream
-            URL: https://issues.redhat.com/browse/RHELTEST-137
-            Affected tests:
-                Boot test [x86_64]
-        Issue: [upstream] WARNING: drivers/gpu/drm/drm_atomic_helper.c:1920=
- at drm_atomic_helper_wait_for_vblanks.part.0+0x228/0x240, CPU#1: kworker/1=
-:1/54 - RIP: 0010:drm_atomic_helper_wait_for_vblanks
-            URL: https://lore.kernel.org/dri-devel/69381d6c.050a0220.4004e.=
-0017.GAE@google.com/
-            Affected tests:
-                Boot test [x86_64]
-        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
-=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
-tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
