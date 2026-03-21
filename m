@@ -1,169 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD39740DFB9;
-	Sat, 21 Mar 2026 02:07:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AC4299923
+	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 02:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774058837; cv=none; b=qLCiKEqc6eajZ68x3iailF97F2yO3/iXoUD93+DnHFKV/79HLsqRAUm5mdONUCJVvxb7rV+bY7Et8dFtWM3Px7Zk2W0+LLmN0FU0TS47cq7Be+FiPrenPl9B2p1CvKYyMoW8LGWouB99EKV1ZtKJj7lpSybZ7rHrv6HLfnV4SqA=
+	t=1774059638; cv=none; b=XqkY9iG7HzqAVhCga1yh1yyhp1qHdkQfokab9X5LkbpdCMH+ea9Cd+IO6lYaonQRItBL2cXuL7pLpE3VrdbZrwVSZThvFS4wDcdf3eZkxxJjJTGa4MDWxdqQLkPH8RgA53MCjt+ZFE5I/6kSWmWcghaXCAC61VAX/yfq0HWSGOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774058837; c=relaxed/simple;
-	bh=CJXQgjxTdfI89/PlGwbmUCHBQ5qHgBLJcbbTD0YcvEs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bfFg7AtGGNupOL610Pa3LEwgsqFXoSTRPmBdMQKKz1mDcp3VVIa8YWJ1S141qVcwMA4HFK5wpxNNyzDbPtT6xEzaj5NW81b98kjlGSyetRzncISZJ7eHLGDIC3JTKa76YpGB2Iv0i7vFQKHd5lULNRt9usgBStSMbo9ebd+xdqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CayOowf1; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774059638; c=relaxed/simple;
+	bh=Qer7XtUdn/hgWhPuvUq0nksSyHMOsuBlGMrQi8nOfj8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=HTUXEH9Tu5iW6Mjbcq5MxqYAimLMIRGhLqF4vc6skWsAc+xy23Bxc7dOKq2jn5ZyEBeN/7yjQcXazVZ1pG9ezhKpbN7z6ajlgadrtB5Ck4cMDln5fFv/R0ecNvNYhQZXj7M5rRoXbaEUd1j8YsRDxS5XaRFr61tBZfYULR8zy2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=K1Az0G+I; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CayOowf1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774058835; x=1805594835;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CJXQgjxTdfI89/PlGwbmUCHBQ5qHgBLJcbbTD0YcvEs=;
-  b=CayOowf1EqHvXm2rtP1/BLEuG4POyLZ7KFlLrPdi1l7eHTZiJw6bU/qK
-   AN+EBbm/TJ1HL6b0bLTWizD82WO9zw/50V8n8UBs08BEn3b88Yo3jKS0R
-   rXHzsp25U/DWvrms7zZSOqkiFLqpYBv78GZi07qs2htvp3Cq/pUvfmYy5
-   IZ5Wv17YRmONcOlwtjiTxY44CWFfjsB/T7+3TUvDrpcBLH/ab1mL5NqMw
-   0ezIK/MlY+uyknr6wcFswydvNGwqjXMBCpQtUkm8hzN7Kctfs+rqAfsTA
-   jk4HuEGgIUACW1RVsSZXn983ObRK1Dyo0b4nqI2/VTGTDGUwzessGxU0f
-   w==;
-X-CSE-ConnectionGUID: /XfOSkhCSzSqTKaCV0Gq8g==
-X-CSE-MsgGUID: pFAJrfK0SRi71tA+XGosLQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="74169564"
-X-IronPort-AV: E=Sophos;i="6.23,132,1770624000"; 
-   d="scan'208";a="74169564"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2026 19:07:14 -0700
-X-CSE-ConnectionGUID: 3k5cdpCZRCabfhJMFheOnA==
-X-CSE-MsgGUID: R5tB/UUXSfeixiY9YZO0yg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,132,1770624000"; 
-   d="scan'208";a="219200287"
-Received: from lkp-server02.sh.intel.com (HELO d7fefbca0d04) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 20 Mar 2026 19:07:07 -0700
-Received: from kbuild by d7fefbca0d04 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w3lga-000000000BN-32yA;
-	Sat, 21 Mar 2026 02:04:10 +0000
-Date: Sat, 21 Mar 2026 10:01:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chengwen Feng <fengchengwen@huawei.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>, Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Len Brown <lenb@kernel.org>, Sunil V L <sunilvl@ventanamicro.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Kees Cook <kees@kernel.org>, Yanteng Si <si.yanteng@linux.dev>,
-	Sean Christopherson <seanjc@google.com>,
-	Kai Huang <kai.huang@intel.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Thomas Huth <thuth@redhat.com>
-Subject: Re: [PATCH v9 4/7] x86/acpi: Add acpi_get_cpu_uid() implementation
- and update Xen users
-Message-ID: <202603210907.zP8613EA-lkp@intel.com>
-References: <20260319065735.45954-5-fengchengwen@huawei.com>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="K1Az0G+I"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=G1QUG9uubtkZKNrUSnV+qD2JajwUNppKtuRnRb8xPNk=;
+	b=K1Az0G+IgOYrtU30nfOTWUkGDWXkpj9pDzK4YhV3vJuHVCUyldqiUVgWIb5tlqvpWs8PRxvV9
+	M8GsIlbYTDNAO2XhEpyCXEwKxR8krFwI6C2q72udF1VSOErZvxN/HmRwodkDIRyhSQhdlkEWXfE
+	csez44twmzDIrzSWnFKruTQ=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4fd30M1db2zRhQf;
+	Sat, 21 Mar 2026 10:14:27 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id 35EA240569;
+	Sat, 21 Mar 2026 10:20:30 +0800 (CST)
+Received: from [10.174.179.11] (10.174.179.11) by
+ dggpemf500002.china.huawei.com (7.185.36.57) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sat, 21 Mar 2026 10:20:29 +0800
+Message-ID: <530b1334-302d-44fb-b180-ddb52cd52115@huawei.com>
+Date: Sat, 21 Mar 2026 10:20:28 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260319065735.45954-5-fengchengwen@huawei.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] video: fbdev: matroxfb: Mark variable with
+ __maybe_unused to avoid W=1 build break
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Thomas Zimmermann
+	<tzimmermann@suse.de>, <linux-fbdev@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+CC: Helge Deller <deller@gmx.de>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+	<morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20260320143646.3218199-1-andriy.shevchenko@linux.intel.com>
+From: Jason Yan <yanaijie@huawei.com>
+In-Reply-To: <20260320143646.3218199-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 
-Hi Chengwen,
+在 2026/3/20 22:36, Andy Shevchenko 写道:
+> Clang is not happy about set but unused variable:
+> 
+> drivers/video/fbdev/matrox/g450_pll.c:412:18: error: variable 'mnp' set but not used [-Werror,-Wunused-but-set-variable]
+>     412 |                                 unsigned int mnp;
+>         |                                              ^
+> 1 error generated.
+> 
+> Since the commit 7b987887f97b ("video: fbdev: matroxfb: remove dead code
+> and set but not used variable") the 'mnp' became unused, but eliminating
+> that code might have side-effects. The question here is what should we do
+> with 'mnp'? The easiest way out is just mark it with __maybe_unused which
+> will shut the compiler up and won't change any possible IO flow. So does
+> this change.
+> 
+> Fixes: 7b987887f97b ("video: fbdev: matroxfb: remove dead code and set but not used variable")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> ---
+> Cc: Jason Yan <yanaijie@huawei.com>
+> ---
+> 
+> Below is a dive into the history of the driver.
+> 
+> The problem was revealed when the #if 0 guarded code along with unused
+> pixel_vco variable was removed. That code was introduced in the original
+> commit 213d22146d1f ("[PATCH] (1/3) matroxfb for 2.5.3"). And then guarded
+> in the commit 705e41f82988 ("matroxfb DVI updates: Handle DVI output on
+> G450/G550. Powerdown unused portions of G450/G550 DAC. Split G450/G550 DAC
+> from older DAC1064 handling. Modify PLL setting when both CRTCs use same
+> pixel clocks.").
+> 
+> NOTE: The two commits mentioned above pre-date Git era and available in
+> history.git repository for archaeological purposes.
+> 
+> Even without that guard the modern compilers may see that the pixel_vco
+> wasn't ever used and seems a leftover after some debug or review made
+> 25 years ago.
+> 
+> The g450_mnp2vco() doesn't have any IO and as Jason said doesn't seem
+> to have any side effects either than some unneeded CPU processing during
+> runtime. I agree that's unlikely that timeout (or heating up the CPU) has
+> any effect on the HW (GPU/display) functionality.
+> ---
+>   drivers/video/fbdev/matrox/g450_pll.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/video/fbdev/matrox/g450_pll.c b/drivers/video/fbdev/matrox/g450_pll.c
+> index e2c1478aa47f..6a08f78cd1ac 100644
+> --- a/drivers/video/fbdev/matrox/g450_pll.c
+> +++ b/drivers/video/fbdev/matrox/g450_pll.c
+> @@ -409,7 +409,7 @@ static int __g450_setclk(struct matrox_fb_info *minfo, unsigned int fout,
+>   		case M_VIDEO_PLL:
+>   			{
+>   				u_int8_t tmp;
+> -				unsigned int mnp;
+> +				unsigned int mnp __maybe_unused;
+>   				unsigned long flags;
+>   
+>   				matroxfb_DAC_lock_irqsave(flags);
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on tip/x86/core pci/next pci/for-linus linus/master v7.0-rc4 next-20260320]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chengwen-Feng/arm64-acpi-Add-acpi_get_cpu_uid-and-switch-arm_cspmu-to-use-it/20260320-194713
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20260319065735.45954-5-fengchengwen%40huawei.com
-patch subject: [PATCH v9 4/7] x86/acpi: Add acpi_get_cpu_uid() implementation and update Xen users
-config: x86_64-buildonly-randconfig-005-20260321 (https://download.01.org/0day-ci/archive/20260321/202603210907.zP8613EA-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260321/202603210907.zP8613EA-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603210907.zP8613EA-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/xen/enlighten_hvm.c:165:6: error: call to undeclared function 'acpi_get_cpu_uid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     165 |         if (acpi_get_cpu_uid(cpu, &cpu_uid) == 0)
-         |             ^
-   1 error generated.
-
-
-vim +/acpi_get_cpu_uid +165 arch/x86/xen/enlighten_hvm.c
-
-   151	
-   152	static int xen_cpu_up_prepare_hvm(unsigned int cpu)
-   153	{
-   154		u32 cpu_uid;
-   155		int rc = 0;
-   156	
-   157		/*
-   158		 * If a CPU was offlined earlier and offlining timed out then the
-   159		 * lock mechanism is still initialized. Uninit it unconditionally
-   160		 * as it's safe to call even if already uninited. Interrupts and
-   161		 * timer have already been handled in xen_cpu_dead_hvm().
-   162		 */
-   163		xen_uninit_lock_cpu(cpu);
-   164	
- > 165		if (acpi_get_cpu_uid(cpu, &cpu_uid) == 0)
-   166			per_cpu(xen_vcpu_id, cpu) = cpu_uid;
-   167		else
-   168			per_cpu(xen_vcpu_id, cpu) = cpu;
-   169		xen_vcpu_setup(cpu);
-   170		if (!xen_have_vector_callback)
-   171			return 0;
-   172	
-   173		if (xen_percpu_upcall) {
-   174			rc = xen_set_upcall_vector(cpu);
-   175			if (rc) {
-   176				WARN(1, "HVMOP_set_evtchn_upcall_vector"
-   177				     " for CPU %d failed: %d\n", cpu, rc);
-   178				return rc;
-   179			}
-   180		}
-   181	
-   182		if (xen_feature(XENFEAT_hvm_safe_pvclock))
-   183			xen_setup_timer(cpu);
-   184	
-   185		rc = xen_smp_intr_init(cpu);
-   186		if (rc) {
-   187			WARN(1, "xen_smp_intr_init() for CPU %d failed: %d\n",
-   188			     cpu, rc);
-   189		}
-   190		return rc;
-   191	}
-   192	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Jason Yan <yanaijie@huawei.com>
