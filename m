@@ -1,82 +1,168 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D4F28C035;
-	Sat, 21 Mar 2026 13:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4536318BA8
+	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 15:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774099169; cv=none; b=XVs60Bw8hmfeDJSVArFDRn5MfPFKloI5F8FF0lkiWuYOMqb2w3aBwzmqj9Oh5sqJMKDDvhyv64z/4mEiW7Xq8wvCKIPsgXkDARcGQYx/SAtCQsX2LED9pKouYvroi795UW1lS1T0u/MO5N0UMgHzdi5V28sT1LgZE47l5n3uJf4=
+	t=1774105940; cv=none; b=dDgEgTGxpjUHF56GfjJRX6HUviU954wAyMKJMeTei3iQwxrJRByzOhJhvDOcPvxCvJKt1ge032ytf7hKWjlXD2UJeFe2K2aewF23RV0ux/jtHt4F5p6pXwf52UhZOo7TYXW9zqH/2hVbD0VO38nm6viUW/z/llOiL1HJKy/g2bI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774099169; c=relaxed/simple;
-	bh=LUF/6vFCXaXhcWtLCV4YfgFTbjErUmHlepSE935r8Nc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qg1j35gn4Pg4SHdMn0tC52XiguClhfWu9ve4EI0fEI5SgIk/L11CZk3chulbSlfvkqoprNYjgx5XFAKU09AMKHPzi4vnqUEAzC+vINCecStajePhdlDPMqTNCzp9Ct7wSUXJEIz7hJAZNkxxVBsMI8VIeOeJUJCGlqY5r0tjX/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IYNcvBzC; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1774105940; c=relaxed/simple;
+	bh=gD1q6VTwcr3ywJK3thmlj3oefKwCOvFp8KGDVpaIr9s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PiiEptYTagmIzdo2MrtOYSzSmRAzK8AGx1+KQrfeYwlnmEexR/l6nCr888NPyNNlEkm9+V2sFTgrxvZFkGRlYzaLOI/ShT6kT73EkMWFC7pE+BsRYzrs4cmHZOYDaW0NrSnqxAevqfrHbyChHiIpDLdaDE5gEAbePv+5g46+8uU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sH9TlI3B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IYNcvBzC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774099169; x=1805635169;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LUF/6vFCXaXhcWtLCV4YfgFTbjErUmHlepSE935r8Nc=;
-  b=IYNcvBzCJnZd/HkWm4gXLfJkZG3Rm/3KxrVlVtibTWNB0pNhomwaNH6b
-   bV3WGK9Tp41rKmIub2wk3mtyy1XhG84ic0RfuLDfrybMrzV/3rPzgvvIZ
-   lZvxcESHXjLNyhWsz7hkddUTT7aHu1ZBIdwm3zxlKK4eSn+RL/PwAc0sH
-   uf1b2IC6VsOapc42cin4YUBnIELEPYeMdIjZ+egvoBf1V6YNdxuHJGhHR
-   kh9NxtBD5wKlSt5uUdAod9woYYBw9UZAIYnqnMs8kvBgZLf7pY2yGHZY2
-   Co8f9nMoLgyTImnbajbNr2H7xVPGgKj08ELa5Ts7krZJ67mx9hnb3JrID
-   w==;
-X-CSE-ConnectionGUID: Kklb5S9jSySHZdwQikd7dg==
-X-CSE-MsgGUID: kAAuW6YuSISQxfDs4EuLSg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11735"; a="75051901"
-X-IronPort-AV: E=Sophos;i="6.23,133,1770624000"; 
-   d="scan'208";a="75051901"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2026 06:19:28 -0700
-X-CSE-ConnectionGUID: YoWggR7AQXW0Ig4nlMclPA==
-X-CSE-MsgGUID: 4NU+7VG2TOCCfIUJfyTz2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,133,1770624000"; 
-   d="scan'208";a="223773304"
-Received: from fpallare-mobl4.ger.corp.intel.com (HELO localhost) ([10.245.245.191])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2026 06:19:26 -0700
-Date: Sat, 21 Mar 2026 15:19:24 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Linus Walleij <linusw@kernel.org>, linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v1 1/1] pinctrl: core: Drop unused include
-Message-ID: <ab6a3MACb9fed99h@ashevche-desk.local>
-References: <20260320220550.3237142-1-andriy.shevchenko@linux.intel.com>
- <202603211748.5YfMNVO3-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sH9TlI3B"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF96C2BCB1
+	for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 15:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774105940;
+	bh=gD1q6VTwcr3ywJK3thmlj3oefKwCOvFp8KGDVpaIr9s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=sH9TlI3BLUAgQ5noUfDXKLXqORTdkMae+MkhxTq4JKYmhYsWyu1SMcCgmDjU3xIgQ
+	 z8wdri4lAum4xlM+bbceKkSwyVleUcuKcKy+gYI2N0lwUSXAINISDyAtG0tWLk3Bw7
+	 tE1L/WzB5n42AVVydTEUurZKNlvI48l/e7h8X3vJso/ahKGCIucuol9CzF+O2nuwOW
+	 fgF2Ap2YDGu7XxFPbY7/OyiTK/Kn1byNCS5ENJcY1NLL22PTEvKxGj7G4X8El9UYy2
+	 J6Jb13NRG5uwBbvTBMN42+2k2hzO80EyQq0sfT9abPGNvY6cPq09xokxWLyufhNoMR
+	 pl+BlNGBfcTrQ==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-40ea36b56b7so2301966fac.3
+        for <llvm@lists.linux.dev>; Sat, 21 Mar 2026 08:12:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXiJGLYAMiwXUiZr0vVU6BIpHuubStRs0SpvvwAaPya2O28pyb+IjQ5DRLytgKrr5ig4ZL4@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywkaz5eXy5dEo4/F6WfN8fJ7hnraBsO0WEGnlYWl4gV1iLfzgnj
+	k5qjEOK+2m+wajQkSoXT0YiO3I8VXEE9wPuksWz+o33DcdFBNjRLR0Nj3gllE4Z8XyV9Gm9Sasg
+	s6bBTn/52CZ1L97FbvdspxGjXW6wfMhU=
+X-Received: by 2002:a05:6870:f214:b0:417:3936:1c7a with SMTP id
+ 586e51a60fabf-41c11138b63mr4241564fac.24.1774105939612; Sat, 21 Mar 2026
+ 08:12:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202603211748.5YfMNVO3-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+References: <202603211336.i375F7lD-lkp@intel.com>
+In-Reply-To: <202603211336.i375F7lD-lkp@intel.com>
+From: Chanwoo Choi <chanwoo@kernel.org>
+Date: Sun, 22 Mar 2026 00:11:43 +0900
+X-Gmail-Original-Message-ID: <CAGTfZH0bZMGpdKjvgw7S54NF+KeXPtvhsanKmSs1vHDhx7F7Lg@mail.gmail.com>
+X-Gm-Features: AaiRm50EBCXkYVYAInLz4rhnn5PAPFokSX2lprR94ZFvTJQ1blDiv0BKjixMPe0
+Message-ID: <CAGTfZH0bZMGpdKjvgw7S54NF+KeXPtvhsanKmSs1vHDhx7F7Lg@mail.gmail.com>
+Subject: Re: [chanwoo:devfreq-next 5/5] drivers/devfreq/devfreq.c:1946:37:
+ error: redefinition of 'devfreq_group'
+To: kernel test robot <lkp@intel.com>
+Cc: Jori Koolstra <jkoolstra@xs4all.nl>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org, 
+	Chanwoo Choi <cw00.choi@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 21, 2026 at 05:55:35PM +0800, kernel test robot wrote:
-> Hi Andy,
-> 
-> kernel test robot noticed the following build errors:
+HI Jori,
 
-Ouch!
+There are build errors in your patches.
+DId you test it? I hope to fix and test the patch before posting.
 
-So, seems the gpio.h is used as a 'proxy' for some other headers.
-I will test it carefully before sending v2.
+On Sat, Mar 21, 2026 at 9:52=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git=
+ devfreq-next
+> head:   38aa14f9be920f3fea6fe3f16b69b7a0cd0478a1
+> commit: 38aa14f9be920f3fea6fe3f16b69b7a0cd0478a1 [5/5] PM / devfreq: chan=
+ge devfreq_class to a const struct
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260321/20=
+2603211336.i375F7lD-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
+227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20260321/202603211336.i375F7lD-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202603211336.i375F7lD-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> drivers/devfreq/devfreq.c:1946:37: error: redefinition of 'devfreq_gro=
+up'
+>     1946 | static const struct attribute_group devfreq_group =3D {
+>          |                                     ^
+>    drivers/devfreq/devfreq.c:40:1: note: previous definition is here
+>       40 | ATTRIBUTE_GROUPS(devfreq);
+>          | ^
+>    include/linux/sysfs.h:291:37: note: expanded from macro 'ATTRIBUTE_GRO=
+UPS'
+>      291 | static const struct attribute_group _name##_group =3D {       =
+    \
+>          |                                     ^
+>    <scratch space>:89:1: note: expanded from here
+>       89 | devfreq_group
+>          | ^
+> >> drivers/devfreq/devfreq.c:1955:38: error: redefinition of 'devfreq_gro=
+ups'
+>     1955 | static const struct attribute_group *devfreq_groups[] =3D {
+>          |                                      ^
+>    drivers/devfreq/devfreq.c:40:1: note: previous definition is here
+>       40 | ATTRIBUTE_GROUPS(devfreq);
+>          | ^
+>    include/linux/sysfs.h:298:11: note: expanded from macro 'ATTRIBUTE_GRO=
+UPS'
+>      298 | };                                                            =
+  \
+>          |                                                               =
+  ^
+>    include/linux/sysfs.h:285:38: note: expanded from macro '\
+>    __ATTRIBUTE_GROUPS'
+>      285 | static const struct attribute_group *_name##_groups[] =3D {   =
+    \
+>          |                                      ^
+>    <scratch space>:93:1: note: expanded from here
+>       93 | devfreq_groups
+>          | ^
+>    2 errors generated.
+>
+>
+> vim +/devfreq_group +1946 drivers/devfreq/devfreq.c
+>
+> 9005b65099ee4f MyungJoo Ham  2011-10-02  1945
+> e4999090951abc Pengjie Zhang 2025-12-16 @1946  static const struct attrib=
+ute_group devfreq_group =3D {
+> e4999090951abc Pengjie Zhang 2025-12-16  1947   .attrs =3D devfreq_attrs,
+> e4999090951abc Pengjie Zhang 2025-12-16  1948  };
+> e4999090951abc Pengjie Zhang 2025-12-16  1949
+> e4999090951abc Pengjie Zhang 2025-12-16  1950  static const struct attrib=
+ute_group gov_attr_group =3D {
+> e4999090951abc Pengjie Zhang 2025-12-16  1951   .attrs =3D governor_attrs=
+,
+> e4999090951abc Pengjie Zhang 2025-12-16  1952   .is_visible =3D gov_attr_=
+visible,
+> e4999090951abc Pengjie Zhang 2025-12-16  1953  };
+> e4999090951abc Pengjie Zhang 2025-12-16  1954
+> e4999090951abc Pengjie Zhang 2025-12-16 @1955  static const struct attrib=
+ute_group *devfreq_groups[] =3D {
+> e4999090951abc Pengjie Zhang 2025-12-16  1956   &devfreq_group,
+> e4999090951abc Pengjie Zhang 2025-12-16  1957   &gov_attr_group,
+> e4999090951abc Pengjie Zhang 2025-12-16  1958   NULL
+> e4999090951abc Pengjie Zhang 2025-12-16  1959  };
+> e4999090951abc Pengjie Zhang 2025-12-16  1960
+>
+> :::::: The code at line 1946 was first introduced by commit
+> :::::: e4999090951abcf39543aa22b7a7a7f13c5a5857 PM / devfreq: use _visibl=
+e attribute to replace create/remove_sysfs_files()
+>
+> :::::: TO: Pengjie Zhang <zhangpengjie2@huawei.com>
+> :::::: CC: Chanwoo Choi <cw00.choi@samsung.com>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+>
 
--- 
-With Best Regards,
-Andy Shevchenko
 
-
+--=20
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
