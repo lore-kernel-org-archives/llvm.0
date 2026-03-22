@@ -1,115 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FF61624D5;
-	Sun, 22 Mar 2026 12:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9609D17A31C;
+	Sun, 22 Mar 2026 14:16:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774180827; cv=none; b=TSXo3RkzACc+1g+9Q1SBeGZHnMITTeczEg43lEGD8sHSsRP3ikUO9ZRBdAsud4Z5d8fo4I6kxzTn3/l5ztk/y9qfRdqtyE14JJjGrx8ILbBPLaJZhxJVjAUm7FSup1cbu4nsfP0hl5Gwj4lEugkeeGZDGaahau1jlTxFgjjchSQ=
+	t=1774188967; cv=none; b=p3AIGd6worloJhBeC/7EJyNoA8j8sO5E0k6xHjbd8NcI104MP2dCdZOXokVTiMZFxrlL7jRMUHY2s1xq5foaCONQ7GECjHIAA6AcTwY/a74oKog0D8HN2sAyKpWrwDrgDni+d7afqwQfjPrC1WUx1fcIw6eSic9+nYZMp6FZAFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774180827; c=relaxed/simple;
-	bh=p9dJVRdv2llYJDIpgBwjEM3yl73MNPDLaVVF0l7e160=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VZBnkhtjFh0IvJNRlZT4cXrEYoPaPhdS/J2wbHncAErjzRFTOma8HQacFkh0LbHf2Pmv4nvliQO+xVmn/796bHcJiMFUHF3ksZLdeRt0rWjLxZ5hLQaYOW/5n+s5lyOa6BnVvsg5zhwJfmjsUYvMow3bcDQkm2ftsMzob1ldaog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uEZWVknz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774188967; c=relaxed/simple;
+	bh=IigGF6U3blVwl7+mttTv8ABlCNI5lUMx+1rU3nKGGxA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SVd1hdvuuCtzjPZyW+ORZAZIsYzKRfSGjOroI2jB6u8JUdPtOYsICIL/If95Vl+6SuhWpfM4n3FRNmRPqQqXcBlT2Y+8bnT9SAASN2FAtQuVKufy/QBBsAMyCAYsNfWYxciAfYErHEP7oFUNvUGBeQVhsfz1QgDgPurVK8pS+gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IMrZqHVJ; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uEZWVknz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1607CC2BCB1;
-	Sun, 22 Mar 2026 12:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774180827;
-	bh=p9dJVRdv2llYJDIpgBwjEM3yl73MNPDLaVVF0l7e160=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=uEZWVknzPoit/IPSfxQIQXxu72DpSC3EZt6MIpljBOkNEvO+nFggyCM72Z3d/CI64
-	 oUPgidjSRFnD1n2Tcrc4vD0XRf6daXSGfa9sQ91u/emnUPdG8d3FDh2qviZHi8/UPq
-	 qcPyNs30HlkwOdvZ7u3U4EN2VtIqxqVbJla0NFaPatkb1Kmw3D1ntiWSkmxSUVm4q4
-	 z4KIi7cp7yGed6f6hSmoQXPpU9yzgqkgPvpd7OvNv1meWwl2ARC0L5gPSovxIYhbTx
-	 lMqvx7Tx6oBL7v6UHi9tfJtjULXAFaBzpwAceCx6oPCThfXQBFbx1yaByoIjLQcbPj
-	 Jc/yv9Z/TN5pg==
-Date: Sun, 22 Mar 2026 12:00:11 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers
- <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James Clark
- <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet
- <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
- <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
- <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
- <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
- <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>, Adrian Hunter
- <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
- Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia
- <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson
- <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang
- Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui
- <decui@microsoft.com>, Long Li <longli@microsoft.com>, David Lechner
- <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy
- Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Willy Tarreau <w@1wt.eu>, Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?=
- <linux@weissschuh.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore
- <robert.moore@intel.com>, Len Brown <lenb@kernel.org>, Srinivas Pandruvada
- <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David
- Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min
- <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, Steven Rostedt
- <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
- <bentiss@kernel.org>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org,
- linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v4 18/30] tools: iio: Append extra cflags
-Message-ID: <20260322120011.112b173c@jic23-huawei>
-In-Reply-To: <20260311-tools_build_fix_zero_init-v4-18-9e35bdb99cb3@arm.com>
-References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
-	<20260311-tools_build_fix_zero_init-v4-18-9e35bdb99cb3@arm.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IMrZqHVJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774188965; x=1805724965;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IigGF6U3blVwl7+mttTv8ABlCNI5lUMx+1rU3nKGGxA=;
+  b=IMrZqHVJZjaR/bflI2oII5lxH9nN5Zx5BVl7azFfZo+mqa8zpR77xY2S
+   THH3eFQMiy42y/AIVSpINQI6OoOYjr5h8H7OMSQ+OzbneO0WCmxr4ZhxN
+   +yA16RdMXvcDECc9QnYBiztwHm+guVSiB02d0CRt/uCFJUc5ahk/XC4OY
+   pVLRC4bxX9C3GH5Tu+bQsQNf2SZvGhZL1aB7uGQQsibks5g6BLS5SLE4V
+   3LfLgRqbmLwuSMUrNZWozYW8G955qX35sCp0gS8oRAAtSHMLCiTJ6m9+8
+   gWEICpCPAiC/bQKsfQLu3AiLF3bUKilkz32d6f+anSqikc6NXWvDQJJys
+   w==;
+X-CSE-ConnectionGUID: /oNXoiaVRPqfye7kywRfBg==
+X-CSE-MsgGUID: kdEb+iN0TkmWQopYLgxWlw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="62765359"
+X-IronPort-AV: E=Sophos;i="6.23,135,1770624000"; 
+   d="scan'208";a="62765359"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2026 07:16:05 -0700
+X-CSE-ConnectionGUID: JRLBnVVlSqa6fLyDLAUY4Q==
+X-CSE-MsgGUID: qbzVjqmzRUKzhYMJv9+fAA==
+X-ExtLoop1: 1
+Received: from lkp-server02.sh.intel.com (HELO d7fefbca0d04) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 22 Mar 2026 07:16:00 -0700
+Received: from kbuild by d7fefbca0d04 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4Jav-000000002Dx-1Ld7;
+	Sun, 22 Mar 2026 14:15:57 +0000
+Date: Sun, 22 Mar 2026 22:15:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexey Klimov <alexey.klimov@linaro.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Sam Protsenko <semen.protsenko@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Peter Griffin <peter.griffin@linaro.org>,
+	linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Alexey Klimov <alexey.klimov@linaro.org>
+Subject: Re: [PATCH 4/5] mailbox: exynos: Add support for Exynos850 mailbox
+Message-ID: <202603222239.JTuBxs7K-lkp@intel.com>
+References: <20260320-exynos850-ap2apm-mailbox-v1-4-983eb3f296fc@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320-exynos850-ap2apm-mailbox-v1-4-983eb3f296fc@linaro.org>
 
-On Wed, 11 Mar 2026 08:29:43 +0000
-Leo Yan <leo.yan@arm.com> wrote:
+Hi Alexey,
 
-> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-> the compiler.
-> 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-Given discussion leading to:
-https://lore.kernel.org/all/20260311113537.70c4bacd2021c8d29c7dcf68@linux-foundation.org/
-I'm assuming I don't need to do anything beyond.
+kernel test robot noticed the following build warnings:
 
-Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+[auto build test WARNING on 785f0eb2f85decbe7c1ef9ae922931f0194ffc2e]
 
-Shout if otherwise.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexey-Klimov/dt-bindings-clock-exynos850-Add-APM_AP-MAILBOX-clock/20260322-085441
+base:   785f0eb2f85decbe7c1ef9ae922931f0194ffc2e
+patch link:    https://lore.kernel.org/r/20260320-exynos850-ap2apm-mailbox-v1-4-983eb3f296fc%40linaro.org
+patch subject: [PATCH 4/5] mailbox: exynos: Add support for Exynos850 mailbox
+config: x86_64-buildonly-randconfig-004-20260322 (https://download.01.org/0day-ci/archive/20260322/202603222239.JTuBxs7K-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260322/202603222239.JTuBxs7K-lkp@intel.com/reproduce)
 
-> ---
->  tools/iio/Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/iio/Makefile b/tools/iio/Makefile
-> index 3bcce0b7d10f42208765be83dac047faa2e0ceb1..f0428421792d1cbe5ff71b01b67f23eb908fa714 100644
-> --- a/tools/iio/Makefile
-> +++ b/tools/iio/Makefile
-> @@ -13,6 +13,7 @@ endif
->  MAKEFLAGS += -r
->  
->  override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
-> +override CFLAGS += $(EXTRA_CFLAGS)
->  
->  ALL_TARGETS := iio_event_monitor lsiio iio_generic_buffer
->  ALL_PROGRAMS := $(patsubst %,$(OUTPUT)%,$(ALL_TARGETS))
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603222239.JTuBxs7K-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/mailbox/exynos-mailbox.c:60 struct member 'irq_mask_value' not described in 'exynos_mbox_driver_data'
+>> Warning: drivers/mailbox/exynos-mailbox.c:60 struct member 'irq_mask_value' not described in 'exynos_mbox_driver_data'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
