@@ -1,81 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 640AB2FC037;
-	Sun, 22 Mar 2026 09:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FF61624D5;
+	Sun, 22 Mar 2026 12:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774171710; cv=none; b=lfcuOyjn+sasevzP4JoD0cBeb+TLkxm+zJ9Sy9nT51ML0bceHswIwV3XJimWqJARIc87G0zL18flpK89+WRHKqreLfv5SR7xwE2JHtHpq3+hxx3x0XMY+R8qkLnnmD7plLaI/0yUsppi7ZzFjds4t0EY8UcRi0QiLsXVOZTFUVA=
+	t=1774180827; cv=none; b=TSXo3RkzACc+1g+9Q1SBeGZHnMITTeczEg43lEGD8sHSsRP3ikUO9ZRBdAsud4Z5d8fo4I6kxzTn3/l5ztk/y9qfRdqtyE14JJjGrx8ILbBPLaJZhxJVjAUm7FSup1cbu4nsfP0hl5Gwj4lEugkeeGZDGaahau1jlTxFgjjchSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774171710; c=relaxed/simple;
-	bh=wlsj78X4xOMfOPl9nNkkvRaam2RLW/SMDM0/9+HWLFY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=r7jewZNtrB6x5zBQWJ6nXMMfyFtriJ2Ejo/cbOmFYpOmzRpcxXlz4dHaJs6avVt0M6jmgpZd1xxgs3oE2+C2MDS2AxFvJ2DflpgpCdgny4uMwzdV0x/2csxw1SzyUR/s12RxnW79d72h/FgWZtzk5d5hdQE+wnqfUPjOxg00yx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LaO0ftVO; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774180827; c=relaxed/simple;
+	bh=p9dJVRdv2llYJDIpgBwjEM3yl73MNPDLaVVF0l7e160=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VZBnkhtjFh0IvJNRlZT4cXrEYoPaPhdS/J2wbHncAErjzRFTOma8HQacFkh0LbHf2Pmv4nvliQO+xVmn/796bHcJiMFUHF3ksZLdeRt0rWjLxZ5hLQaYOW/5n+s5lyOa6BnVvsg5zhwJfmjsUYvMow3bcDQkm2ftsMzob1ldaog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uEZWVknz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LaO0ftVO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774171709; x=1805707709;
-  h=date:from:to:cc:subject:message-id;
-  bh=wlsj78X4xOMfOPl9nNkkvRaam2RLW/SMDM0/9+HWLFY=;
-  b=LaO0ftVOO+BADE7Ix/jp3ZS5ISge72O1d2V/yDxVhm/Iq4er4bpSoaRw
-   CKdXpn9ousRyGsexDSaQW66ZyCn0SX3DW9Owqjc8loCc9XVkDMdaOgmjL
-   9/byDlJTnIRSKmZHPvkKyPnoVB3ZJFItLT+3twMY8nS2n4A4wO4xv5yGs
-   6SUGTw59hopa81HY92LO1bHWfctOhmXwNLRXUNPSW6lTbmHPiz5FRBX0a
-   WsyhQ7j9gniMucgb4+2i9I5MlZrjpZKT9PRq6s79R1W8vFpAOqyv58Z9A
-   PwvbrpAyoLyiNErDgNc4i8c7dleIP9OiqYcuVOq6cZ7C7IC/F0JZyU5VL
-   A==;
-X-CSE-ConnectionGUID: aetYoS8MT46ldg80xUgFOQ==
-X-CSE-MsgGUID: 2Bco31bwTGiq/FpJ+JXpNA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11736"; a="100653291"
-X-IronPort-AV: E=Sophos;i="6.23,134,1770624000"; 
-   d="scan'208";a="100653291"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2026 02:28:28 -0700
-X-CSE-ConnectionGUID: Adw6zMdhTTq1D7qnvhzYLg==
-X-CSE-MsgGUID: e4Vfe0I/Sj+rqqUn8h2/CA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,134,1770624000"; 
-   d="scan'208";a="223767037"
-Received: from lkp-server02.sh.intel.com (HELO d7fefbca0d04) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 22 Mar 2026 02:28:26 -0700
-Received: from kbuild by d7fefbca0d04 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w4F6c-000000001wH-3xZ4;
-	Sun, 22 Mar 2026 09:28:22 +0000
-Date: Sun, 22 Mar 2026 17:27:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ebiggers:wip-crypto 3/3] ERROR: modpost:
- "crypto_register_kpp" [crypto/crypto_engine.ko] undefined!
-Message-ID: <202603221755.qX7fVto3-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uEZWVknz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1607CC2BCB1;
+	Sun, 22 Mar 2026 12:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774180827;
+	bh=p9dJVRdv2llYJDIpgBwjEM3yl73MNPDLaVVF0l7e160=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=uEZWVknzPoit/IPSfxQIQXxu72DpSC3EZt6MIpljBOkNEvO+nFggyCM72Z3d/CI64
+	 oUPgidjSRFnD1n2Tcrc4vD0XRf6daXSGfa9sQ91u/emnUPdG8d3FDh2qviZHi8/UPq
+	 qcPyNs30HlkwOdvZ7u3U4EN2VtIqxqVbJla0NFaPatkb1Kmw3D1ntiWSkmxSUVm4q4
+	 z4KIi7cp7yGed6f6hSmoQXPpU9yzgqkgPvpd7OvNv1meWwl2ARC0L5gPSovxIYhbTx
+	 lMqvx7Tx6oBL7v6UHi9tfJtjULXAFaBzpwAceCx6oPCThfXQBFbx1yaByoIjLQcbPj
+	 Jc/yv9Z/TN5pg==
+Date: Sun, 22 Mar 2026 12:00:11 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers
+ <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, James Clark
+ <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, Quentin Monnet
+ <qmo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
+ <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
+ <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, William
+ Breathitt Gray <wbg@kernel.org>, Barry Song <baohua@kernel.org>, Qinxin Xia
+ <xiaqinxin@huawei.com>, Bartosz Golaszewski <brgl@kernel.org>, Kent Gibson
+ <warthog618@gmail.com>, "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang
+ Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui
+ <decui@microsoft.com>, Long Li <longli@microsoft.com>, David Lechner
+ <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy
+ Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Willy Tarreau <w@1wt.eu>, Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?=
+ <linux@weissschuh.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Robert Moore
+ <robert.moore@intel.com>, Len Brown <lenb@kernel.org>, Srinivas Pandruvada
+ <srinivas.pandruvada@linux.intel.com>, Tejun Heo <tj@kernel.org>, David
+ Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min
+ <changwoo@igalia.com>, Mark Brown <broonie@kernel.org>, Steven Rostedt
+ <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
+ <bentiss@kernel.org>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org,
+ linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v4 18/30] tools: iio: Append extra cflags
+Message-ID: <20260322120011.112b173c@jic23-huawei>
+In-Reply-To: <20260311-tools_build_fix_zero_init-v4-18-9e35bdb99cb3@arm.com>
+References: <20260311-tools_build_fix_zero_init-v4-0-9e35bdb99cb3@arm.com>
+	<20260311-tools_build_fix_zero_init-v4-18-9e35bdb99cb3@arm.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git wip-crypto
-head:   2105b8775edddbbf41231d6335a598c249242d58
-commit: 2105b8775edddbbf41231d6335a598c249242d58 [3/3] crypto: cryptomgr - Select algorithm types only when CRYPTO_SELFTESTS
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20260322/202603221755.qX7fVto3-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260322/202603221755.qX7fVto3-lkp@intel.com/reproduce)
+On Wed, 11 Mar 2026 08:29:43 +0000
+Leo Yan <leo.yan@arm.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603221755.qX7fVto3-lkp@intel.com/
+> Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
+> the compiler.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+Given discussion leading to:
+https://lore.kernel.org/all/20260311113537.70c4bacd2021c8d29c7dcf68@linux-foundation.org/
+I'm assuming I don't need to do anything beyond.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
->> ERROR: modpost: "crypto_register_kpp" [crypto/crypto_engine.ko] undefined!
->> ERROR: modpost: "crypto_unregister_kpp" [crypto/crypto_engine.ko] undefined!
+Shout if otherwise.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  tools/iio/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/iio/Makefile b/tools/iio/Makefile
+> index 3bcce0b7d10f42208765be83dac047faa2e0ceb1..f0428421792d1cbe5ff71b01b67f23eb908fa714 100644
+> --- a/tools/iio/Makefile
+> +++ b/tools/iio/Makefile
+> @@ -13,6 +13,7 @@ endif
+>  MAKEFLAGS += -r
+>  
+>  override CFLAGS += -O2 -Wall -g -D_GNU_SOURCE -I$(OUTPUT)include
+> +override CFLAGS += $(EXTRA_CFLAGS)
+>  
+>  ALL_TARGETS := iio_event_monitor lsiio iio_generic_buffer
+>  ALL_PROGRAMS := $(patsubst %,$(OUTPUT)%,$(ALL_TARGETS))
+> 
+
