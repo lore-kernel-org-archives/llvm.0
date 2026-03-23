@@ -1,94 +1,81 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851ED382385
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 22:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12EB2331222;
+	Mon, 23 Mar 2026 23:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774306373; cv=none; b=KbaxmVzrzAcuAmX53mSx2aE/OLl79XbqjjNCBqRN2GY5ggdRirW1fgunBPt01tIzFsLD3HfoHSwABcP0eiM1VDQv/QHqVh8Fx6mKEOzwL9su0L85OBF8KV/3rYb815k8iyZH9xO4R2hb3btgFLDFBHD5x1Iw9lrVvhiwtKRLRtI=
+	t=1774307956; cv=none; b=ZVbYRp5wgVyNqdLrYInxY+QbD9eaB1ZmC6rL/+ngeBqy/6OF8Bg8nv0PaGsQGW14XYArghrCiBpmcWci0yVlfcr3lJQQopE4+asqloXYkBzUcejdCp4sW6dMK8ZXTvHJoEJh0L4YXRqL73mn7ytEvfB+vc629AjUJNjJJnbJAjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774306373; c=relaxed/simple;
-	bh=aZo4CfPz64jb8YX9fZTkSmpIjaX3+9pLmtrcV93cUbM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Aq8FNW/pj7L1JeCztoBNWn9gzHPB+E/m2PfNzcqNYo9UvbPL4DTyElSdRWb2GW8HYl9hk1wRL7ePgP9H8gaKpZiGqR60YYajFXxtnVb4JPmyiISLI1W779/wg6jyxQGcEKeAyKLUooSeVd5YYlJT74uEYO1EIpdP9zbB5vMLoSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z3e8DwsW; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1774307956; c=relaxed/simple;
+	bh=2lZiCeCc8SPkeJnBsKKB6eCHQ9MFJaxsrHM5lKPuCSY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=tgLIBxII2PUhmKB+6h6WCgt4aXR+fKwpnfYwGmQ7lYkHLLMg5XG4fV7suRUrMcFot1foHxaxEdCEVxgHIpYYG3JXujcbEvljPzCozjmb7AWkFgednyv/yGFX79QH9FboALgVZOvKcfj/jbipgPfDtkarn5jhJ2AckGgxzhKLyv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HNIzZSbF; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z3e8DwsW"
-Message-ID: <31243215-918a-4f03-917b-de869b7b7bf1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774306370;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J8Ka4SY63TMkmYUtleL7Ko7Nb4LY2LzQW7pxbDpjBzY=;
-	b=Z3e8DwsWLTCq8255/3q/VJFN7cEE632K47hwxkWvDUOUDI6C2DAJb1cLGc1aF6uzI0dGaY
-	Jsrh/h9oCbB8mtHMjqLC0VZj7NaraKxZWBLj3/q4fYDuXhSD2M60NDulFMAo4FkrtCV5YP
-	/UwiUvmtdy88TGhkLUPe/Tgcm8zmzv8=
-Date: Mon, 23 Mar 2026 15:52:38 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HNIzZSbF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774307954; x=1805843954;
+  h=date:from:to:cc:subject:message-id;
+  bh=2lZiCeCc8SPkeJnBsKKB6eCHQ9MFJaxsrHM5lKPuCSY=;
+  b=HNIzZSbFeOjiAoDIU5NsY6hNcNfOFGFrqM2dcnjvZyWW2J7ZDb0ltjlc
+   53KdRSzB3z+2sHeYUD0+6b3gi9fuBWEEBBDaJgYKCxYzB7tVQ4Gh0nrzu
+   ec2i0jltGA621hVVBgHciYTqNAmNrucE8mM/5Z77NG5J02TSMztwZDQUo
+   +oCFBnqP59hIj4YErmavjhL7A/N80QoyZzYTAClLwPnWNqt1I1M0NQiV7
+   cdkoSvrECQ1Sg3/wmEivhn/1WoRxiUt1+KgltkNcaV/H2tlRW+nX5fKB7
+   aVo4zYf9CF1wBR8OazgRtSAcqf+l2WRAJXjuAZEJqbubHxgixXQ9fe9Ed
+   w==;
+X-CSE-ConnectionGUID: TtH6aMtwTh2MTSnw0XTFtw==
+X-CSE-MsgGUID: /Ge+i+WaTDS/hAmroNkQjg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="79225232"
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="79225232"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 16:19:13 -0700
+X-CSE-ConnectionGUID: 6fTx2JidSemOBdakFOsHpQ==
+X-CSE-MsgGUID: EQqdEIXwTHuJ/EK/iukEZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="247860433"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by fmviesa001.fm.intel.com with ESMTP; 23 Mar 2026 16:19:12 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4oYA-000000006kb-03BI;
+	Mon, 23 Mar 2026 23:19:10 +0000
+Date: Tue, 24 Mar 2026 00:19:02 +0100
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-crypt 34/42] vmlinux.o: warning: objtool:
+ netfs_prepare_write_buffer+0x38e: netfs_wait_for_encryption() missing
+ __noreturn in .c/.h or NORETURN() in noreturns.h
+Message-ID: <202603240027.f0i73Kcq-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Subject: Re: [PATCH 5/6] selftests/bpf: Initialize operation name before use
-To: Leo Yan <leo.yan@arm.com>, Quentin Monnet <qmo@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
- <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 3/23/26 8:40 AM, Leo Yan wrote:
-> ASAN reports stack-buffer-overflow due to the uninitialized op_name.
-> 
-> Initialize it to fix the issue.
-> 
-> Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_BTF_LOAD command")
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> index aaa2854974c0a91cbbb9fc13ae0f966de1bcc818..dcbe2ef995c5b211c2b86b9555c02144e11ee7d6 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> @@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
->  	res = load_btf(&opts, true);
->  	ASSERT_EQ(res, -ENOSPC, "half_log_fd");
->  	ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
-> +	snprintf(op_name, sizeof(op_name), "log_fixed");
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-crypt
+head:   ae7ccdf83025020c44837849de26fb4546fbf825
+commit: d045bc8a941a2f79f07a9d3fc62b3596fa4a4326 [34/42] netfs: Perform content encryption for buffered writeback
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260324/202603240027.f0i73Kcq-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260324/202603240027.f0i73Kcq-lkp@intel.com/reproduce)
 
-You should use strscpy() here.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603240027.f0i73Kcq-lkp@intel.com/
 
-This patch looks very unrelated.
-Did this surface only after the changes in the makefiles?
+All warnings (new ones prefixed by >>):
 
->  	ASSERT_STRNEQ(logs.buf, logs.reference, 24, op_name);
->  
->  	/* validate rolling verifier log logic: try all variations of log buf
-> 
+>> vmlinux.o: warning: objtool: netfs_prepare_write_buffer+0x38e: netfs_wait_for_encryption() missing __noreturn in .c/.h or NORETURN() in noreturns.h
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
