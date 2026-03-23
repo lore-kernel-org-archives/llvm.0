@@ -1,143 +1,118 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F23D3B47D6
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 15:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774280334; cv=pass; b=bjDagiYR2DC9YQRnB/bkOO/mw22wuEfIEJ0F24uOPT1u/t2qJEkzFuhfUWb0iPZuEFf+N8ILKSEqy5mzSv92FkkZHBS364oLwl2JS75t2vt0shj/mbVvqtpH3iAsGY3H2gRzLSzEC3c7Inauc2UC/oHwwEXVZBW08x2fHpiLDDY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774280334; c=relaxed/simple;
-	bh=ZmWh/DuRvSZu1elnpeWrQV+U187fmJiYXIaGuwiNT00=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ALi2YsCcMSPHUcnkngws8ans4rwiNcJvpupR5XM9XOGxFha6mfThIuF2oRAiXyiFujgX+qMRiKe5bpb7QWEt/CIOCeNFLrsbRXtCFcYBuDdSuusugetNbLgzjutMEhZkWsVU/91koHBghfyL0seBkd/tMRU/NDRYL62s000JPLg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UihAU7mh; arc=pass smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CC53BE654
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 15:39:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774280346; cv=none; b=bo2liqpeeHwcCAhtFv1hnmqaZ7M+kFw93Cy/nHYj20dJG5a7Yvf1cjj9Xqlp2bVVTZIWNVc7wtzPDC+KEjiMcVAgDSxHKf2/RiDCs8f/aHZjWzTpPxRWCc4F2wZ2Yp1Xz1pxoWc3hsUO0NgoIZVqobJRQMraD9O22Xy7izbLKAE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774280346; c=relaxed/simple;
+	bh=b4v8HDtN+Yy8TiJM9E0QDOhCsM+VBy8jx0P7y+tR2t4=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=TCZqaTekTxiJKdBfILwIMRydBTDFM9cDvLEbezpWUy+KaMvG3wA+e5+hl1ix+yNF5EJX9q2Sntl3iaQl49826fK08RyfVkNL4JTD91wcAs7on2qTuLDhPWoosobLbMmmEwN2+ZlL040X2nf3iIZKHKnPxM+cX2OQ+xcXz2AncGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Lc+ro7TK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qatokyL4; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UihAU7mh"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-899fbf92bdbso51758146d6.0
-        for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 08:38:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774280332; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NUyv/Wwhl18Mq3xsI+KNvck6OcGe1Rp+ehaJjKaMswIueJR5kAyDpoezOEFoWvt6m/
-         Lb9iToDv63mf5s9QRlPgDZHSny/Ns9ABkpXlr25RZU77H5pRPZ4vPkkj9vfaz5//4C+0
-         vSMDcCx5ERoeXTlPOYo0K4mAZq8XAQY4TZP/stA+JqThfrulLJmHzmlhGfLtW1rjlbWg
-         OZFbGYA4hcFANU8t7pD92h7n3FfuR4WnkC7kEyUvAF5gxfvyV1Su8ypzqzZBdLxY1S0B
-         7xFoYhTSt61K5WeId1G4XxKHZBl7q2uCUui/Hv3+pQfqzJuNndNSnBmMZrP4PiKUbwy1
-         3W+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=WzHQP2pHDPf8b/aNOBFwrKe9Fe+VkqE7R9SoZi1QpZg=;
-        fh=93KZDjIabqBFgbSC1rIfg2OL9H9vBcRlzFHSjWBl5As=;
-        b=A49Op67QukySSwMjED3hnwFV6MCmoxp/d46/gbmfvuiJBRwB9EuaVdwdDYl3VvoKNL
-         lZiDiCAgJC21xoIib/g0frj2ZTSR7fsv6vyoErOqk29JBz25ZTUEw4eqeO9UH0o6mNAO
-         nqwjJFkA5lBTOTHW7ngcx7WeZGMSBfF89FjybRsj8LYHLOe4xyp2B7tGBno+6OUMSTFK
-         W0A2Xy19Pubiv7pvTcjYD2I72XNaPaR4vEDLuqIFyiJsow1vyqoyzhl4QYBrgexNKXNo
-         hrhtHBxqFD6LA6QW8ydCe9j5Fk/XVN9jHRBF6iuIQaKsESHV432evBFpxYq47Xt2stFi
-         qwSg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774280332; x=1774885132; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WzHQP2pHDPf8b/aNOBFwrKe9Fe+VkqE7R9SoZi1QpZg=;
-        b=UihAU7mheCqvn3V6hdiD7tzqtZRPQBW5NFRsbUXs5HYNSdgR/62w8j5MzJf1fe5j8X
-         8ls1w3gQlpxiN7mED0L6O51EcKeEO28oUMQYC10UaVnjFjGKOvTrN2fMD/euPqDr8JqY
-         8m1VmE17ZDkg53vWbOqw3fBn3QQVDPul4Q8VkTz9POseBr8j6YCgbyYxyAJ8UXe5Yz4X
-         T5NoHyWZXkuGkbT8+LJpoH+fflzlEBsJYFFLpnu12JKadwMjRQvp3WVAXiT1KLuDROLD
-         R41fdjeGlBxYsYAHahLpPw/CxJ8qWYtM7BhS9dDm80A1R2SFbSyjE6GR4Zrm4xgIhHAd
-         Z9ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774280332; x=1774885132;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WzHQP2pHDPf8b/aNOBFwrKe9Fe+VkqE7R9SoZi1QpZg=;
-        b=NOvWRlpHyuEUhAhrslHwMu78iukRCtIUERW9XBBRfhS1vOo0ZX+gm6q5nNtDSyDV4t
-         wWfbGgjn9DsYb9Tf1lQXQ6XCTkDkFjDUfXC+d7iwN0p8bXPA0kjHjg1bV6/bEVonE1DD
-         ysrZk1jogLA+v0RdtM3X987KdWmTqMrYK+1ZtYdthAVo0QDCvaukDYpNlwljAjrFarj1
-         aM8qpt/wSCoR47T6J8JMVkn0bPfbazc/SokHVJxT7gccV2p0g7slJHqoFxctQOqshx8q
-         2dKfRUUONCEcBE8DLvpp9i6W8a0jrOZwhtaG9/xFUZ2XmFE62WB77Lkcjk0gtBx8I+q7
-         kZeg==
-X-Forwarded-Encrypted: i=1; AJvYcCXCbex+x2uZ42QJ6GBwPB8oscxx6M0kupT8sSy91vlEQRzOf6GyXto7+wJrqJ8uOoAkfK1h@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx1zf91m42NfwuNpLWQb0G/IMGX/QMzdyUCBwYat16dWqD191m3
-	NwEdBNl+CBeuHcM7PZNurYg7yLU9lW3q1HgSxWZBrKVTIZGU++WWVW/z984mZ7IiQRfDZqhgUIt
-	NGoF+8pQqVYAwvJ+rieiBfdIbhOSG3wc=
-X-Gm-Gg: ATEYQzwJkCybFpTn947sRVKidsU+jCw8o+YtIPN7YBvmsp3YxmM+kz6TKpzaKNYwlCf
-	8+JMAeEMotWE8dtM3NXop1pr6ajvWyMDV6LW33De+03AppeOh0QM4lY4GKAmsKWFDMJQJN9RbxA
-	Ce16FthMfVaqSplkMfeA8hHYQOkOesKTz1uLrgDD0Pkpl/BWTYgO+5KpiQlQuumzWW+/zMp0MK0
-	ULewFynVbJSsz2nEQ0yQVbLU/ugEIGJ2BDGwMDS6+DSLyJ0r8Kvh3Ar6R7esRIF+lg+tzkT7Bj3
-	1ZPQtc22Z/ughqvrCm5runbyBhTYmiRCMkD4+C21/gcAFaMxIXbnVpXuXK/mwU47snxqgKf3ES1
-	xdtrvAp7ZaH4DPh40uElaP+vcbxaRPfQsvrf5JG5BuT8Sxa3p7X7eK72Mz6n2k6J1FQ==
-X-Received: by 2002:a0c:f101:0:b0:89a:6f04:ac85 with SMTP id
- 6a1803df08f44-89c85a9043fmr158483166d6.54.1774280332010; Mon, 23 Mar 2026
- 08:38:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Lc+ro7TK";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qatokyL4"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 271A6EC01F6;
+	Mon, 23 Mar 2026 11:39:05 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Mon, 23 Mar 2026 11:39:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1774280345;
+	 x=1774366745; bh=WmO42/HL8Y/ekMAK9BOwO6mohdqq0YHPPrKCz6wjCAw=; b=
+	Lc+ro7TKbZwSNYAAZ6ZHiqN+ORU3vwfNJFbQzPPGTjBd51rkO364JrjUVHRA0FyE
+	HLuCNqTueWyU2HYHxY2hgl8E7p62B+TiDvor6M5dL7gac4FPLpQT7kX4Bx0SQeXW
+	TemZRUJdFk7ovCT+2hTHuUL4wHeWjmBhgBzxPqV+TytfRkg1MIQCdukNB2dJp8XN
+	CECsgX/CDAV+evl0rJd+lvz8gka5O54pRqJRkPH2udml6YLORp06KvA4Qz3gt7HV
+	f+tZWTio7cRkdLqQfXltf2KnRmNdxJ2O+sc4chT69Lb2Z+8QTVG2j/tr0Ti+nDLH
+	nNPYII8PWuzbRK02JfWhZg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774280345; x=
+	1774366745; bh=WmO42/HL8Y/ekMAK9BOwO6mohdqq0YHPPrKCz6wjCAw=; b=q
+	atokyL477pvcYfSk8Xjy2KvpHQo0/gMWD4ra/BLN1TVjdTVNR2PFy/e2FefwYsKC
+	grufotNB4HOVNEenQSrdgaKxYf6TYC/TWgH2gFG+Z73bnMRtTfRuwpsWirmH8Q0P
+	9tt2CO1wwWnJ+LlO8uk9kzEfCQoYbW7rkQJmbj4ioit5tfKZVYO6Fr2IXRks9Ki7
+	GC6tdleylCoMfbjZbZHTKVOUPN5PNJUudXIuiUkq9I5GuvZyGg08myl7efF5lhTk
+	p9Ga9FZm+JwhpsjUKmZlxQFFyvMUiSbAq1M6sZ1JJDeSkrPcXZOKUWK0lZklzays
+	20Dwna4nltJcUhtMdrIYQ==
+X-ME-Sender: <xms:mF7BaaFrZj-ORfMDpt_zucQJb1-YZlage89AbgK5OfPOELmGT1ceqA>
+    <xme:mF7BaWJNSbX1kYXjk8FgwrBIDNZdqdoeMyP4_fi1_EQb5x-Avc9tM86T8horbAkrR
+    CoyJFgPM-ax4j3HQ1DSyYA8brubtsrfDE_0Aq67VT8C6ibf0LtOc7VK>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudeltdelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfefhheetffduvdfgieeghfejtedvkeetkeejfeekkeelffejteevvdeghffhiefh
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
+    phhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhitghkrdguvg
+    hsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehjrggt
+    khhmrghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhushhtihhnshhtihhtth
+    esghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhglhgvrdgtohhm
+    pdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoh
+    eprghrnhgusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhnghhosehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrgh
+X-ME-Proxy: <xmx:mF7BaSDQ-z0ucu2jgh-jOejdqIP37xoUATUW9fr0OVYxIan9jtgZZg>
+    <xmx:mF7BaS7cHpFAkLhUjMVHbN6Of4qdIvLAMCNGyMkp6CXFkn3oGwCqtw>
+    <xmx:mF7BaR01Td8jKJDikKxbD7_XMTSUi5KusNnz8dBZJFYzt7Imyb1IKA>
+    <xmx:mF7BaelKwfP6F7mGnBSo37vKdZEfgoIcubQHWcnuuTLK-1q3Vbosdw>
+    <xmx:mV7Bafcz0rFAMCBxa6YD0ZrhUU2LIipL4HQ1wJyl8T8wtT6fxa-p_qJ7>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 6BD0A700065; Mon, 23 Mar 2026 11:39:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202603180118.ClDWNtId-lkp@intel.com> <b859bfa1-7844-4b23-91a4-bbd526ffc19b@samba.org>
- <CAH2r5mvvjWtJza+9YrLYvneysyEQa5rENhTYiFTAwrE+KhOy8Q@mail.gmail.com>
- <CAKYAXd_yLYLD5SsRUZy8d6u7vknTPuN8Cbe11HJt0Eq6bLzBBw@mail.gmail.com> <69c54f80-dff1-4c02-af97-08799fe59b94@samba.org>
-In-Reply-To: <69c54f80-dff1-4c02-af97-08799fe59b94@samba.org>
-From: Steve French <smfrench@gmail.com>
-Date: Mon, 23 Mar 2026 10:38:40 -0500
-X-Gm-Features: AQROBzB9SG6sPgo5T8QjqxwVih72HS4tyEMWLFluaBLXGLnuGbVnDzT8w0i3o6U
-Message-ID: <CAH2r5msADO+SbgJxwX0vNU0keHb5WScqOmrb+uszmG2uZt9Qrw@mail.gmail.com>
-Subject: Re: [samba-ksmbd:ksmbd-for-next-next 11/12] fs/smb/server/smb2pdu.c:5723:3:
- warning: variable 'pntsd' is uninitialized when used here
-To: Stefan Metzmacher <metze@samba.org>
-Cc: Namjae Jeon <linkinjeon@kernel.org>, Asim Viladi Oglu Manizada <manizada@pm.me>, 
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Steve French <stfrench@microsoft.com>, 
-	"linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: AuIeNFRcSw9w
+Date: Mon, 23 Mar 2026 16:38:14 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Brendan Jackman" <jackmanb@google.com>,
+ "Arnd Bergmann" <arnd@kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@kernel.org>
+Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ andriy.shevchenko@linux.intel.com
+Message-Id: <cf40b3d8-9a69-40b7-b885-aff87e85de68@app.fastmail.com>
+In-Reply-To: <DHA3U3U4ZZXQ.2RPHOFNQJ70JQ@google.com>
+References: <20260320211528.2474389-1-arnd@kernel.org>
+ <DHA3U3U4ZZXQ.2RPHOFNQJ70JQ@google.com>
+Subject: Re: [PATCH] bug: shut up format attribute warning for clang as well
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-I agree - looks like a bug.  Should be setting the declaration to null
-
-   struct smb_ntsd *pntsd =3D NULL;
-
-since the initialization of ptsd is in an if clause, you could end up
-doing kfree of uninitialized pntsd pointer on line 5801
-
-On Mon, Mar 23, 2026 at 9:52=E2=80=AFAM Stefan Metzmacher <metze@samba.org>=
- wrote:
+On Mon, Mar 23, 2026, at 11:54, Brendan Jackman wrote:
+> On Fri Mar 20, 2026 at 9:14 PM UTC, Arnd Bergmann wrote:
 >
-> Am 23.03.26 um 15:43 schrieb Namjae Jeon:
-> > On Mon, Mar 23, 2026 at 10:22=E2=80=AFPM Steve French <smfrench@gmail.c=
-om> wrote:
-> >>
-> >> looks like a simple fix to initialize it to null at declaration, right=
-?
-> > It seems this test was performed on an outdated version. The current
-> > ksmbd-for-next already includes the updated one, so we don't need to
-> > check it.
+> There is actually a superior fix for this warning that Andy Schevchenko
+> posted here (mine just happened to get merged first):
 >
-> For it still happens with the current state:
+> https://lore.kernel.org/all/20251208141618.2805983-1-andriy.shevchenko@linux.intel.com/T/#u
 >
-> 1ce4e48216b84385319da308f2262eb11ee7e459
-> (smfrench-smb3-kernel/ksmbd-for-next) smb: smbdirect: fix inverted compar=
-ison operator in negotiation log message
->
-> And there it's likely:
->
-> 6a0795e46296589d8eba6c194586e9e65974d73f
-> ksmbd: fix OOB write in QUERY_INFO for compound requests
->
-> With setting it to NULL the smatch warning goes away.
->
-> metze
+> Should we just switch over to that? Looks like it should work for both
+> compilers.
 
+Right, I tried that again and it works. I had confused it with the
+similar logic to disable the warning on va_format(), which is
+not that easy to avoid.
 
-
---=20
-Thanks,
-
-Steve
+    Arnd
