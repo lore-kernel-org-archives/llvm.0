@@ -1,341 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF5945948;
-	Mon, 23 Mar 2026 13:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774270964; cv=none; b=IyE65ldSRugVMxV6vCuR+p4UFJIWXUexdk7FkjmgjLgKQZoEix9EB/zlwPEBKf49Hnc2Ed4zyPtS5sKcCU0C7Y3J4+evWhJNd4kI7Ch7YWc8Pf7zCszKNwqx/I4cOqDWj91qzljkOEnxwVDHSRnM7ygnolRjq57SyZHqD+LlZg4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774270964; c=relaxed/simple;
-	bh=dGugYsSSm0m+CsRJX9rAmm9p56BnzRQocyVfqD5UzNA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XbXIaI2Bqr6XDDgLdYNcZmV2pEYX83L8ascmzdXX6TNXFY7cyV3Q7pIXHnnC9FOuBltKz7SMHHtFc45HXQgj7VZHZMUywOpfttx5LfeEcBlkKNdD0njw1qoPE8GDvUVVd5p5DjGwSJzm+HUC11O0CMlMFFZf0R3wG86iNCWeQ88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XZRvS2W0; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766011E9B3A
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 13:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774271189; cv=pass; b=NB3J4G0MSSgqPEkVAI2NWOtFiKUDMgiwe4NMvvpFIgyYbd0Ti6qrMJsalvJf/gEz3sbeawyQRo8oKOLue0VnoqmC59mkq+F42PbwVYa65jP566Whl9Qga/Wha0r3yH+9oFkHK4Jc1Pn6YY2z+u6ppIVLwdQ7lURnfyef5cSPbhA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774271189; c=relaxed/simple;
+	bh=mpomDLO8ZlCocmuPtdKICwxv4H57ynvhw4z1RG2BH9k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=El9A/y9/MDfD8beu5tsgtoAhN5FfD42XKYSdZoO3ZNZ2xx2b2yl1lleR/d67bvSFSMpnxkd0ppla+/HuqWmKl38O2gx8yXuzDuGGU5qouUTdSjpIuxw+OiG01CsZixxFk5UWGFyh5POXD30fFHU3PcLS81MvYCWWhA3C3gOt09s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kuSIAhck; arc=pass smtp.client-ip=74.125.82.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XZRvS2W0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 933D6C2BCB9;
-	Mon, 23 Mar 2026 13:02:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774270963;
-	bh=dGugYsSSm0m+CsRJX9rAmm9p56BnzRQocyVfqD5UzNA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=XZRvS2W0yDwJGkYRoGtIMBrCwJq8z7PVHuP4SrwWTsSj7js/eOHCF0+0VTnxbRk6u
-	 jbnqa3DX7i884VhLZ+Mx2FU+fLpvNjKr64y8f3BN+zucXHT1qVSseWLcyFsoMmnMd4
-	 Ly41hAmEGdIMJH0Lv0SRXZvDLGxV0Cq2lusVcgA7f5SpxkTtisX5X9DZuadXumJVPK
-	 0FcfdE0UYfQ4f8esGYigOANzfFQVrvhcBodrQAjwVdEKOUk5a8fQJ52wdYFKBFcUkH
-	 tziWh6WNVUJ4k8RUwH8hCtfhjHCN5sAzxeQ/tWuV+0umzz3Dr5G9x90eBrGLwg/PWX
-	 Xoa9n7tq/KBXQ==
-From: Miguel Ojeda <ojeda@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
-	Todd Kjos <tkjos@android.com>,
-	Christian Brauner <christian@brauner.io>,
-	Carlos Llamas <cmllamas@google.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>
-Cc: Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org,
-	Aaron Ballman <aaron@aaronballman.com>,
-	Bill Wendling <isanbard@gmail.com>,
-	Cole Nixon <nixontcole@gmail.com>,
-	Connor Kuehl <cipkuehl@gmail.com>,
-	Fangrui Song <i@maskray.me>,
-	James Foster <jafosterja@gmail.com>,
-	Jeff Takahashi <jeffrey.takahashi@gmail.com>,
-	Jordan Cantrell <jordan.cantrell@mail.com>,
-	Matthew Maurer <mmaurer@google.com>,
-	Nikk Forbus <nicholas.forbus@gmail.com>,
-	Qing Zhao <qing.zhao@oracle.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Tim Pugh <nwtpugh@gmail.com>,
-	Kees Cook <kees@kernel.org>
-Subject: [PATCH v2] rust: allow Clang-native `RANDSTRUCT` configs
-Date: Mon, 23 Mar 2026 14:02:24 +0100
-Message-ID: <20260323130224.165738-1-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kuSIAhck"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2c1410009a8so17319eec.1
+        for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 06:06:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774271187; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FlOG9iPjlyk7wv/DR9X55ou/AlxEJHhVFCbVi83r0Wfs48s2z46uGW8DAXajO8Q1Dt
+         l6Sbrh35ek02JdmfPaGvQVGDM2ljtNtGsHLgScb969pDI75tgIrVMRK188BJgkmgz3JR
+         E6x/7sRJrb+q509yoJ/kvVZctFH8UYsrfMzs7hGjj1c14a3Q/LO2/DMPwARlWZKPC/sp
+         beN3MWb4njZxj7kTXV05fy2oYXA/4RJV1b8qzNtsGGxcwP5iAo/acXmJjyFV/rc8ISkl
+         u1JhhuGP3i7g1nYdCYWoH1fwoxp+26dv/ot2JBWV/SL5/z9QRWhvpJfwPqmKADEtLPWv
+         NOcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZeosOC78tfRPtRL6p+oZtOws2T4Y/1DZR2wWiWY/WhY=;
+        fh=k5Oxxmkfr46dxF7IVHT/AfPXwSC88EsD6mm+DDLeiOA=;
+        b=Ob2w/4OyufE8yes8d8SZ1rY+7JAUMR+O5y22e9o+N61ToV28lkPna44cjrJx8yUFTW
+         LKzVFQWryWk/6RaKxgk9KEIBuMotV2mU5o6E5T/GgVzMJe35wNRHlzL+dZahTOF+pzcs
+         rfuzlyqGbzMkrfXuq1SLNkLLPpm97/UX+vE0Bw6ecluMcTw9TAVBqDBcGTfJsApmAOWB
+         XS8LPqrS/09NnwzDR2lQI+V6zksGSk5+w/xLOrK/WTqnE6+O4ppaRgVDu49Uy8T84+jQ
+         xk34G2NYSOSYzmBRLZsTgJqwaM/CSXDIz+7uNWtBW0m/bXRW6LnkxEGEBHtzGGcthVXW
+         hbLg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774271187; x=1774875987; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZeosOC78tfRPtRL6p+oZtOws2T4Y/1DZR2wWiWY/WhY=;
+        b=kuSIAhckaeaKYiiaSQHGGdQiBIjCzMoc4vClkUtfwWsuojkT12tHkzs/N4en5Wn9UQ
+         yWi+KMmnMhh4kcEqvLF4yBJIl21qOYDziv+hSHLm/b1WCNYJ2Mp2Fs705GUKZdKkcqPd
+         hnsHfE6eD4NweRa7YDGUJBFxaE3XUPn7o/kmu3YY54V/I8g7yCUyVbL38t8OIiUWCx7L
+         qxuJ7Oto0qUAhklOeFqljt6zrN40bua5Sw9O3w5mB8bXYx6vbDErP5++x4x4Z9ApQAbZ
+         G7mj20wGkeXd/fGTJis01GAlympMy1f61ofHiiU5eFjo2+cvVviG95XZjRhQhRLISkBy
+         afzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774271187; x=1774875987;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZeosOC78tfRPtRL6p+oZtOws2T4Y/1DZR2wWiWY/WhY=;
+        b=B612oZDkRntU6sd0DCYuIG43CrAN4kT5g69aQFZ56ESWa35gwEhyZoxBgxzNRYCbwg
+         0XxY/keSM8g1Mh2MBE8T0nErK0OIfpYO7YHJ2wDhS8+u0aUIYu8fgYlLqJSxvkQeAU/G
+         1DLlbYneEnPr3wzZY7Pg0M5ajIHdX0CAUT+f+AV0NdsoJEHtowHY/7ahqET3NLvJ+yMD
+         28T0KBcqrkVdJjDT2ede+Rqhs3Mgqdq82qynMjNX5HrH9LgWnogz7nRHROoJtVb7mEld
+         w7z4Dkz/3WS3wsRs4sQqBewhyyJiSqcmCVvNwiuLWr5NPOWnnLZ0RJu2f0wCE9TaWWde
+         pX0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUY+B5quVINRdLdg01ZakewKeLJHYEq+iHj998E5DuJpXN8XwKfZ6K/6+you6Zf955GLkFa@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw7tEpiCX3BGSpVPe6CfLyGksR3RAkxCQ8dkbO1BMqnH+3dzNy4
+	l45L7Vqo+c22z+kOwo7Ia/LSTTrPr4JNfYwYWePd5C15oaeQbJ7Sj89a2im+8MDPH79DR8qu7kB
+	rMpgny/jTFUxjZKtVG8sGU8pyQRLx1jo=
+X-Gm-Gg: ATEYQzxQyBPQbrYhRyx/6kqqMnwfU/U9iRLu3Dms4nOSdrJl5vTAV1QHIF2Zk4zwdgZ
+	2VwXEhL3IwklhLs4ks8lnnNQoFHfsHxV3gvW6+Yx6SVAOlOJ42M2ZZC2fwd7V9JvhZvqmtHwW85
+	7v2rqySydD6tt6KZYvjD3IkO9Z4P9V4SxQ7a8qufMq1Bi3to4nlDwzbKDZUX0roZi4lXiCfUMZT
+	9r9u4HLAvIg+JA1ZtvSuh4pXTfWaiJUaVCMxheKC+GbdlaaMbNEx5ah6586GoR6VJjJHeQmyuHU
+	MkPqhjNMMILdk6mpGn708NptJRNIJh/g0YCwjVW9WPV2bDKtDNEmo2JxY7L+5N4u62DvuDWv9MR
+	2qhscqTOCtIsO6n1d43HSz+M=
+X-Received: by 2002:a05:7301:4085:b0:2be:1f56:ed0d with SMTP id
+ 5a478bee46e88-2c109861f4cmr2413702eec.6.1774271187398; Mon, 23 Mar 2026
+ 06:06:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241119185747.862544-1-ojeda@kernel.org> <CANiq72n4Fw96hcuqQeorsfH7z4Tb+R1gdf80H_XkD-oA6z5TSA@mail.gmail.com>
+ <CANiq72mNJrMMbEcfJMLT4kM-_iviM0AR6oeigCyrb5eMWkn3KQ@mail.gmail.com>
+In-Reply-To: <CANiq72mNJrMMbEcfJMLT4kM-_iviM0AR6oeigCyrb5eMWkn3KQ@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 23 Mar 2026 14:06:14 +0100
+X-Gm-Features: AQROBzDGgsUaXadH-7vInj5g5TFUGkgbxokPDq2lRRDY18_WJ88m9e2GeTeDbRg
+Message-ID: <CANiq72nvR70EOud=4drW6gs=FAndv5o7+8n5NNRkAStTaSJWPg@mail.gmail.com>
+Subject: Re: [RFC PATCH] rust: allow Clang-native `RANDSTRUCT` configs
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Alex Gaynor <alex.gaynor@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	patches@lists.linux.dev, Aaron Ballman <aaron@aaronballman.com>, 
+	Bill Wendling <isanbard@gmail.com>, Cole Nixon <nixontcole@gmail.com>, 
+	Connor Kuehl <cipkuehl@gmail.com>, Fangrui Song <i@maskray.me>, James Foster <jafosterja@gmail.com>, 
+	Jeff Takahashi <jeffrey.takahashi@gmail.com>, Jordan Cantrell <jordan.cantrell@mail.com>, 
+	Matthew Maurer <mmaurer@google.com>, Nikk Forbus <nicholas.forbus@gmail.com>, 
+	Qing Zhao <qing.zhao@oracle.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Tim Pugh <nwtpugh@gmail.com>, Kees Cook <kees@kernel.org>, Nicolas Schier <n.schier@avm.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The kernel supports `RANDSTRUCT_FULL` with Clang 16+, and `bindgen`
-(which uses `libclang` under the hood) inherits the information, so the
-generated bindings look correct.
+On Tue, Apr 29, 2025 at 3:19=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On top of that, backlinking the seed discussion since I will need to
+> update this patch:
+>
+>     https://lore.kernel.org/rust-for-linux/CANiq72mwYbg_L8u9NEfRD0Fp9E_zh=
+Ci=3Dt=3DU2jyjsZe_Ls306hw@mail.gmail.com/
 
-For instance, running:
+I don't think that got merged, so I didn't update it for v2.
 
-    bindgen x.h -- -frandomize-layout-seed=100
-
-with:
-
-    struct S1 {
-        int a;
-        int b;
-    };
-
-    struct S2 {
-        int a;
-        int b;
-    } __attribute__((randomize_layout));
-
-    struct S3 {
-        void (*a)(void);
-        void (*b)(void);
-    };
-
-    struct S4 {
-        void (*a)(void);
-        void (*b)(void);
-    } __attribute__((no_randomize_layout));
-
-may swap `S2`'s and `S3`'s members, but not `S1`'s nor `S4`'s:
-
-    pub struct S1 {
-        pub a: ::std::os::raw::c_int,
-        pub b: ::std::os::raw::c_int,
-    }
-
-    pub struct S2 {
-        pub b: ::std::os::raw::c_int,
-        pub a: ::std::os::raw::c_int,
-    }
-
-    pub struct S3 {
-        pub b: ::std::option::Option<unsafe extern "C" fn()>,
-        pub a: ::std::option::Option<unsafe extern "C" fn()>,
-    }
-
-    pub struct S4 {
-        pub a: ::std::option::Option<unsafe extern "C" fn()>,
-        pub b: ::std::option::Option<unsafe extern "C" fn()>,
-    }
-
-Thus allow those configurations by requiring a Clang compiler to use
-`RANDSTRUCT`. In addition, remove the `!GCC_PLUGIN_RANDSTRUCT` check
-since it is not needed.
-
-A simpler alternative would be to remove the `!RANDSTRUCT` check (keeping
-the `!GCC_PLUGIN_RANDSTRUCT` one). However, if in the future GCC starts
-supporting `RANDSTRUCT` natively, it would be likely that it would not
-work unless GCC and Clang agree on the exact semantics of the flag. And,
-as far as I can see, so far the randomization in Clang does not seem to be
-guaranteed to remain stable across versions or platforms, i.e. only for a
-given compiler Clang binary, given it is not documented and that LLVM's
-`HEAD` has the revert in place for the expected field names in the test
-(LLVM commit 8dbc6b560055 ("Revert "[randstruct] Check final randomized
-layout ordering"")) [1][2]. And the GCC plugin definitely does not match,
-e.g. its RNG is different (`std::mt19937` vs Bob Jenkins').
-
-And given it is not supposed to be guaranteed to remain stable across
-versions, it is a good idea to match the Clang and `bindgen`'s
-`libclang` versions -- we already have a warning for that in
-`scripts/rust_is_available.sh`. In the future, it would also be good to
-have a build test to double-check layouts do actually match (but that
-is true regardless of this particular feature).
-
-Finally, make a few required small changes to take into account the
-anonymous struct used in `randomized_struct_fields_*` in `struct
-task_struct`.
-
-[ Andreas writes:
-
-    Tested with the rust null block driver patch series [1]. I did a
-    few functional verification tests and a set of performance tests.
-
-    For the rnull driver, enabling randstruct with this patch gives no
-    statistically significant change to the average performance of the set
-    of 120 workloads that we publish on [2]. Individual configurations see
-    around 10% change in throughput, both directions.
-
-    Link: https://lore.kernel.org/rust-for-linux/20260216-rnull-v6-19-rc5-send-v1-0-de9a7af4b469@kernel.org/ [1]
-    Link: https://rust-for-linux.com/null-block-driver [2]
-
-        - Miguel ]
-
-Cc: Aaron Ballman <aaron@aaronballman.com>
-Cc: Bill Wendling <isanbard@gmail.com>
-Cc: Cole Nixon <nixontcole@gmail.com>
-Cc: Connor Kuehl <cipkuehl@gmail.com>
-Cc: Fangrui Song <i@maskray.me>
-Cc: James Foster <jafosterja@gmail.com>
-Cc: Jeff Takahashi <jeffrey.takahashi@gmail.com>
-Cc: Jordan Cantrell <jordan.cantrell@mail.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Matthew Maurer <mmaurer@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>
-Cc: Nikk Forbus <nicholas.forbus@gmail.com>
-Cc: Qing Zhao <qing.zhao@oracle.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Tim Pugh <nwtpugh@gmail.com>
-Link: https://reviews.llvm.org/D121556
-Link: https://github.com/llvm/llvm-project/commit/8dbc6b560055ff5068ff45b550482ba62c36b5a5 [1]
-Link: https://reviews.llvm.org/D124199 [2]
-Reviewed-by: Kees Cook <kees@kernel.org>
-Tested-by: Andreas Hindborg <a.hindborg@kernel.org>
-Link: https://patch.msgid.link/20241119185747.862544-1-ojeda@kernel.org
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
----
-Ok, here is a rebased one in case it helps. Nowadays we have a couple
-more instances in Binder.
-
-I ran all the KUnit tests (nowadays we have way more compared to the
-days of v1) with a bunch of debug options and for a few architectures.
-Also did a run of all released Rust versions with x86_64. It would still
-be nice to get more actual testing like Andreas' did with his driver,
-but we will probably only get that if we actually go ahead...
-
-Kees: do you want to do the other change directly?
-
- drivers/android/binder/deferred_close.rs | 29 ++++++++++++++++++---
- init/Kconfig                             |  3 +--
- rust/kernel/task.rs                      | 33 +++++++++++++++++++++---
- 3 files changed, 57 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/android/binder/deferred_close.rs b/drivers/android/binder/deferred_close.rs
-index ac895c04d0cb..edda56b7c4c0 100644
---- a/drivers/android/binder/deferred_close.rs
-+++ b/drivers/android/binder/deferred_close.rs
-@@ -69,9 +69,20 @@ pub(crate) fn close_fd(self, fd: u32) -> Result<(), DeferredFdCloseError> {
-         // Task works are not available on kthreads.
-         let current = kernel::current!();
-
--        // Check if this is a kthread.
-         // SAFETY: Reading `flags` from a task is always okay.
--        if unsafe { ((*current.as_ptr()).flags & bindings::PF_KTHREAD) != 0 } {
-+        let flags = unsafe {
-+            #[cfg(not(CONFIG_RANDSTRUCT))]
-+            {
-+                (*current.as_ptr()).flags
-+            }
-+            #[cfg(CONFIG_RANDSTRUCT)]
-+            {
-+                (*current.as_ptr()).__bindgen_anon_1.flags
-+            }
-+        };
-+
-+        // Check if this is a kthread.
-+        if (flags & bindings::PF_KTHREAD) != 0 {
-             return Err(DeferredFdCloseError::TaskWorkUnavailable);
-         }
-
-@@ -135,6 +146,18 @@ pub(crate) fn close_fd(self, fd: u32) -> Result<(), DeferredFdCloseError> {
-         // SAFETY: The `file` pointer points at a file with a non-zero refcount.
-         unsafe { bindings::get_file(file) };
-
-+        // SAFETY: Reading `files` from a task is always okay.
-+        let files = unsafe {
-+            #[cfg(not(CONFIG_RANDSTRUCT))]
-+            {
-+                (*current).files
-+            }
-+            #[cfg(CONFIG_RANDSTRUCT)]
-+            {
-+                (*current).__bindgen_anon_1.files
-+            }
-+        };
-+
-         // This method closes the fd, consuming one of our two refcounts. There could be active
-         // light refcounts created from that fd, so we must ensure that the file has a positive
-         // refcount for the duration of those active light refcounts. We do that by holding on to
-@@ -145,7 +168,7 @@ pub(crate) fn close_fd(self, fd: u32) -> Result<(), DeferredFdCloseError> {
-         // `current->files`.
-         //
-         // Note: fl_owner_t is currently a void pointer.
--        unsafe { bindings::filp_close(file, (*current).files as bindings::fl_owner_t) };
-+        unsafe { bindings::filp_close(file, files as bindings::fl_owner_t) };
-
-         // We update the file pointer that the task work is supposed to fput. This transfers
-         // ownership of our last refcount.
-diff --git a/init/Kconfig b/init/Kconfig
-index 444ce811ea67..d3d0e8c95fb3 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -2173,8 +2173,7 @@ config RUST
- 	depends on RUST_IS_AVAILABLE
- 	select EXTENDED_MODVERSIONS if MODVERSIONS
- 	depends on !MODVERSIONS || GENDWARFKSYMS
--	depends on !GCC_PLUGIN_RANDSTRUCT
--	depends on !RANDSTRUCT
-+	depends on !RANDSTRUCT || CC_IS_CLANG
- 	depends on !DEBUG_INFO_BTF || (PAHOLE_HAS_LANG_EXCLUDE && !LTO)
- 	depends on !CFI || HAVE_CFI_ICALL_NORMALIZE_INTEGERS_RUSTC
- 	select CFI_ICALL_NORMALIZE_INTEGERS if CFI
-diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
-index 049c8a4d45d8..a533f5be2469 100644
---- a/rust/kernel/task.rs
-+++ b/rust/kernel/task.rs
-@@ -207,7 +207,16 @@ pub fn as_ptr(&self) -> *mut bindings::task_struct {
-     pub fn pid(&self) -> Pid {
-         // SAFETY: The pid of a task never changes after initialization, so reading this field is
-         // not a data race.
--        unsafe { *ptr::addr_of!((*self.as_ptr()).pid) }
-+        unsafe {
-+            #[cfg(not(CONFIG_RANDSTRUCT))]
-+            {
-+                *ptr::addr_of!((*self.as_ptr()).pid)
-+            }
-+            #[cfg(CONFIG_RANDSTRUCT)]
-+            {
-+                *ptr::addr_of!((*self.as_ptr()).__bindgen_anon_1.pid)
-+            }
-+        }
-     }
-
-     /// Returns the UID of the given task.
-@@ -278,7 +287,16 @@ impl CurrentTask {
-     pub fn mm(&self) -> Option<&MmWithUser> {
-         // SAFETY: The `mm` field of `current` is not modified from other threads, so reading it is
-         // not a data race.
--        let mm = unsafe { (*self.as_ptr()).mm };
-+        let mm = unsafe {
-+            #[cfg(not(CONFIG_RANDSTRUCT))]
-+            {
-+                (*self.as_ptr()).mm
-+            }
-+            #[cfg(CONFIG_RANDSTRUCT)]
-+            {
-+                (*self.as_ptr()).__bindgen_anon_1.mm
-+            }
-+        };
-
-         if mm.is_null() {
-             return None;
-@@ -337,7 +355,16 @@ pub fn active_pid_ns(&self) -> Option<&PidNamespace> {
-     pub fn group_leader(&self) -> &Task {
-         // SAFETY: The group leader of a task never changes while the task is running, and `self`
-         // is the current task, which is guaranteed running.
--        let ptr = unsafe { (*self.as_ptr()).group_leader };
-+        let ptr = unsafe {
-+            #[cfg(not(CONFIG_RANDSTRUCT))]
-+            {
-+                (*self.as_ptr()).group_leader
-+            }
-+            #[cfg(CONFIG_RANDSTRUCT)]
-+            {
-+                (*self.as_ptr()).__bindgen_anon_1.group_leader
-+            }
-+        };
-
-         // SAFETY: `current->group_leader` stays valid for at least the duration in which `current`
-         // is running, and the signature of this function ensures that the returned `&Task` can
-
-base-commit: bf074eb6891be799174ff42e0051492681fdc045
---
-2.53.0
+Cheers,
+Miguel
