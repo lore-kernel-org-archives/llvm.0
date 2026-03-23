@@ -1,210 +1,103 @@
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11021104.outbound.protection.outlook.com [52.101.52.104])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365B93644B3
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 21:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.104
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774302867; cv=fail; b=KO9WnIGf56trWG285wWsf1Yw/8omWxBwx4qJxKt170hO91uYajMXWDujwv3j6LSb+ugoAFU4NFNP6VmMoaMm56brupIbsxR2vX1c2cZjnxFbsKPUO1wao37TLqyBhkTPKAnbv/Z6jlR+Nrm1Q4MiVQJqZ1XEqxWtjsKohrjIdaw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774302867; c=relaxed/simple;
-	bh=GXTIK4Xh41+vf5rpJeR3G0JMT+c/BrqJLB1xoj5Ye5Y=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=O4BOWSQISrxmYGPsHxOIuTkU0CjStyrGkbTg7Mek5FfNk4OTxkA2wer/UkkQKBT3noDjD7WNT3WgtF1VxCXLVo9ld0DCYf9tTNyagoTSKmbsB+xm1zIHCczZVGvdkxPPzOaLA6y4TE6hZ9YTQhMcXXyH9dawHhBxJ8ZP2sMWPTo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cornelisnetworks.com; spf=pass smtp.mailfrom=cornelisnetworks.com; dkim=pass (2048-bit key) header.d=cornelisnetworks.com header.i=@cornelisnetworks.com header.b=Mv7uF6DS; arc=fail smtp.client-ip=52.101.52.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cornelisnetworks.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cornelisnetworks.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FB230FC1D;
+	Mon, 23 Mar 2026 22:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774305921; cv=none; b=geXTvzppFaKnMCt3MKYlL2B0bVWBgv/YiTOfpotKe4FV9z/PpDOtO8BlJGczGY0wSax0jOoKL7ZHU5Q3RKsYrOmpO9KT90zRdyNxu+RREHazrgJlKhvuVnRhiv5gvHA8XXxlYmk01lOE/tv45RFpn1r04ZlJLGrzTsoOmp9pIPI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774305921; c=relaxed/simple;
+	bh=HB855h5KUQIUJ49ih92q+X2WC/COaUd5j7Ixy3OTvJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iy7rj5pGRjfIlhje7Fy3Pj4HqJCXpMKhTEc2ATH+a9YNBHWfjq6aJI5neLh4pib00ae0AOke4GSOcrdSexdSEaHkC7/zhc1a67hziQzVt0qQMToAZDJAKtRg9xPc532yinRArsj8j2g8zi0K6HLZhrCu+xN82ywrGPeWdeT5OWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aM0Y4z8/; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cornelisnetworks.com header.i=@cornelisnetworks.com header.b="Mv7uF6DS"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nyJBX74kWBTv0bE9sE8PsjK0xu6pTQf0zOV/Jcbfqyu5jDC7ovwVjIfEuiinGiFvYqb8qW4G7a5EtOf8zRA+4RFELAC5bsZhUZXt9oMCCFvpgfAg7q8py/iu8xO8AzjVtiK+DviWabBY2w8klmBNigSX47rFgWp8oLSV90dD+7K7uQermKGeUdMmsui4T5aijDkQRX6jZqP6TFcgmnwQHwXHMkP7QrRy1h6ybD9Epe95uN7d3WJjYptUJm/QnkzMp97t2aDHFGEBSObtjGufjffDMU1u+VVz9p09DYbAbPgP3kmWBUIl3Qh4XVIo662HTTts+FhHI/TqlbG4dhF6QA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a82lksIV7iEgNfTSEQLSFaarISYf+9dzjz17qaqKXCY=;
- b=hMStEhyYs+UNKRzRJX1WO3IXzXPuDGHJkSK1PITtGlSfJ2QDYZJAq+1hF5ApWhqvADF+FV2BrzoBa+w42NyUHg6LGQ5w5QovNi349wQV8kiOETLvd/QcRPeiJXlZmlrm/IVKgVUknllztOaTeLDKEuAZKTHWqWrCR7GS1RBTijVIfR7WVwpr5Csb/8ZjgkSOlJgwbD/dugT0f2YavQ8kbUtWf6BTwNLh8AGudeBqaPwDhNETxvW+mc8lYoOaMy258LFJbRJNitwD9idkmcvnzcjwIgcP29y/L+7+GMbU2NAqbSoYEFGYdWzF005/5mwvaa4A2wQjQh1cZ4jd+HEmrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornelisnetworks.com; dmarc=pass action=none
- header.from=cornelisnetworks.com; dkim=pass header.d=cornelisnetworks.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornelisnetworks.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a82lksIV7iEgNfTSEQLSFaarISYf+9dzjz17qaqKXCY=;
- b=Mv7uF6DS5DEj2ZSY+cNAcT9GMD79d+GJ24qs2qLLA0BgND3xxj739swjF+gxz5Ve0vkyWkSLex3jjRm8ZIU16b3/DXprvaMPQSCTaLAByhLjfRMCzno64QO/NT3SGE6y1tpcUnvIkN/SV9Xxr0WtYWG6aZdxMtthMD5m4sm1VPDq0teciMmblvjV3cv4j1ePRlkjtoHD89NGht0fCCLiD+uKVN6LcwJBAuLn0f71FxqfSlqAZaB25ANsqlhX6bgGtzg1rhEsvnopKC29nqYrZ4z/8BBK4TgG+FEAWt6QzLrmTQw0gkRq0ZcZZ1nWMWvXAGMYEBA11myR1N48CiknPA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cornelisnetworks.com;
-Received: from SA1PR01MB7248.prod.exchangelabs.com (2603:10b6:806:1f3::14) by
- DS1PR01MB8943.prod.exchangelabs.com (2603:10b6:8:219::16) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9723.31; Mon, 23 Mar 2026 21:54:23 +0000
-Received: from SA1PR01MB7248.prod.exchangelabs.com
- ([fe80::42ce:7e6d:25b5:95be]) by SA1PR01MB7248.prod.exchangelabs.com
- ([fe80::42ce:7e6d:25b5:95be%6]) with mapi id 15.20.9723.030; Mon, 23 Mar 2026
- 21:54:08 +0000
-Message-ID: <54d04d85-79c0-41fb-9c33-4858cd4e6b2f@cornelisnetworks.com>
-Date: Mon, 23 Mar 2026 17:54:20 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
-To: Arnd Bergmann <arnd@arndb.de>, Leon Romanovsky <leon@kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- Nathan Chancellor <nathan@kernel.org>,
- Mike Marciniszyn <mike.marciniszyn@intel.com>,
- "Michael J. Ruhl" <michael.j.ruhl@intel.com>,
- Doug Ledford <dledford@redhat.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Marco Crivellari <marco.crivellari@suse.com>, Ingo Molnar
- <mingo@kernel.org>, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20260320151511.3420818-1-arnd@kernel.org>
- <20260320151511.3420818-2-arnd@kernel.org>
- <6b56c476-86fd-4d43-8dee-c7f89d346941@app.fastmail.com>
- <20260323080848.GF814676@unreal>
- <5d5f25fc-e522-4131-ae4b-22db57b92d6e@app.fastmail.com>
-Content-Language: en-US
-From: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-In-Reply-To: <5d5f25fc-e522-4131-ae4b-22db57b92d6e@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH5P221CA0015.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:610:1f2::9) To SA1PR01MB7248.prod.exchangelabs.com
- (2603:10b6:806:1f3::14)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aM0Y4z8/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774305920; x=1805841920;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HB855h5KUQIUJ49ih92q+X2WC/COaUd5j7Ixy3OTvJs=;
+  b=aM0Y4z8/bRURhDGPOgT5xQW0pv5u82TzXwX7vfAXF1u5bI6qbO1DASbv
+   gD1kjzl2rvNZ4MqF33GrJ/Rj555S8+up61KipvKXyGMhjLs8Fjn0aziDI
+   wa3n+wInuRWOf+RQ/+qsqqttN213uIZP3q4AQAULaLR456lvKUghweJmU
+   /DUYyBwss+7zDq6DydjUXHtz4X0oS4QF1jW4yq5U6NKTVWqx9FyHMKZiP
+   Em0otFBVwwQ6Au34hQSV4OfRY/A6KAXxElPWNd598BUEshVSA9CZzClfZ
+   CBrTvgy+QrYcKtYZCal9HqyzSBzDkXZHrvAfR3+EmVAxgXbzIueA/qbzL
+   Q==;
+X-CSE-ConnectionGUID: +fpakMnrQTCzGjQ3vFEedw==
+X-CSE-MsgGUID: bKhpDwHQTziF/3jIYKBSsw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="86389497"
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="86389497"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 15:45:20 -0700
+X-CSE-ConnectionGUID: NCCFSdcBTmWDAy0PZsSmyg==
+X-CSE-MsgGUID: L6Yuv4Y7QTW7rFnfmMzlLQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="220860610"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 23 Mar 2026 15:45:18 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4o1L-000000003LR-3L2G;
+	Mon, 23 Mar 2026 22:45:15 +0000
+Date: Tue, 24 Mar 2026 06:44:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rosen Penev <rosenp@gmail.com>, linux-tegra@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware/tegra: add COMPILE_TEST
+Message-ID: <202603240615.RVT9LSpj-lkp@intel.com>
+References: <20260320064503.57620-1-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR01MB7248:EE_|DS1PR01MB8943:EE_
-X-MS-Office365-Filtering-Correlation-Id: f092a648-4d5a-411d-01c8-08de8926b5cb
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|55112099003|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	GgPSLcKDxM5fS6+Q+RuEPPsgFzr1HMDZZ4IunEsYrrXmi2sQbxtHEi0+Dn+6FxvqibPDu31Z7pHs7EgPA2s+dHCUTfJVawawqOW6iTmRZAC13vo1Qkb+oM3IJ7vCI2bo2eT+xZnPBoy7/tVHt3lFETscA4bt7bMuCRFWEtHFA3KQcJ9iQ6G+KsxkbydyTLolr8QxIT1xBFT0lGW32F4JoWYT4WmWUN3mvKMtv8sVJKA/Tkb5Cu/wuPv07KyfuEWi220xPCQ/IadPI6yUlyL8tckjWmDOJVgLNwk0F8XxqhoNieWSWnbvuwI4gp1T7H0vPpne/tyCg1awNFPj8qBwvKhjrWPYPWa8D3yz5dl/n+esxwc6vfcT1rRkOs7kUmu1WBwncDd8npvWjfyTPLgQ523D+eIvCsMTHf/F8y1KzucClxPIOjHHCcbv6k6Jy17/FZ4ok9Q6Ia2LajY78JrMl2tO0RvQ+K/fFKnMm3GLHfhHU8RAuXZsPhyrv4gzfBEcCxdVI2L2Gturtgv+jvG5M/CJxHzHzxp49tKb5JIMKaKyaw+Ao54VysxRN9l0aUu40SDD7U5/MGkyx10/yclJ/ZMkmNZNCHMeu/6g6cUC4+/N0fOf8er5s4S0Au2197p6hZyRJx0GEv6mNiuCtvjBA9YqQgVuW2quGiuFu39vxY6ZuR1220gmIDatQooqJ50iDv5o6z7e1t3qkMOlZlnfDlvzMqmHPyTOjcCVY4hecuE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR01MB7248.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(55112099003)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WlV6dXU3Vi9UZ2FZQVpmbVNLK1dPWGZOS0dtNDFiaFd3RWNRUk9DUk5SbUJ0?=
- =?utf-8?B?cUpvZm5xQ3JlZm14TXJtbHEzVDBWeEtFR0lldU5GUk55YW9idElBMHovdFM3?=
- =?utf-8?B?THhaQWlHdnpxYmF0Q09qUWloSFd0QUJkN2txakNBcmdla0RyWU9vcnMrRUJy?=
- =?utf-8?B?cnRhUjZaNXBseENhQ2tLd2FESHMvUUhReU1WM3d0Wm51N29RYTZFNUFoR0VI?=
- =?utf-8?B?VmhNWUt2TzljUW52OVFxN3pPWVpRTytHa0libEduQ2FGN3N0aUNxOSs2OHFj?=
- =?utf-8?B?aFBnK2NETmlOcHJNaGVwY2trazhwTThDZE1vd1RMNHUyZmFDZVpnWVlLYzZH?=
- =?utf-8?B?OG9iMVJyWnZPZ2R6N3pMQWpmdE4wWllXNEUxSWVGL3NrYnBwc21NcDZpNTlX?=
- =?utf-8?B?YURXY041TW9wUXdXTzZUR2xrQXNrdmNweG14UDZsa2JOT3ZSTEsxZ3Z5VVlj?=
- =?utf-8?B?QUFoNzV3ZGNkTjVubjNJS1lKZGpsSDlzNWd4Q29EZXhwSC9ha0l0SXU4UExW?=
- =?utf-8?B?TkwwdU12UEQ0ZHp5QndlN2dGc2VoSldoOHRIM0JMZHNSSTViVjdxejN6K1hq?=
- =?utf-8?B?cld6UUQzazRPdjBEM1FQRlVwZWJmVDR1ck54SXpMK0l4YWtLY0t2SEg1SkE3?=
- =?utf-8?B?WGhJRnU1RVlFcnYwd0kzeFFpd01Jc1N5eldRRmdidWl6Y0duR1A0dFB6TTI2?=
- =?utf-8?B?Y2VCRWxuVWZYNmlrWjNyNkVmOG9VYjVXbkJGM0JNM1IwVzFRVi8wMnlveHhK?=
- =?utf-8?B?RHVJR3pBQStjWmowTGdXa1ltdDZkUnVlNWZ5VGxQZUVzREJ0V0dIYjhyazZ6?=
- =?utf-8?B?WmFmR3BLMGYvdUpyYmNNdkw4L1UzN1RRWnZYOUxLb2RaQkVBVGxxdkxUMDRY?=
- =?utf-8?B?eE95UXBPVTdVNVJnMHM5WGhQeEhPeGp5ZGt4RmdVZlpyZHlralVLa0ZiUksv?=
- =?utf-8?B?VTQzWFpPM3FWY3F6Q2hoY3I0Y2NqcnFzRVpsbTRTMldMSGpDYmZFbTYxdThO?=
- =?utf-8?B?Zlh1cUtmTjNVeHNqOUdXR1k1dE5yc3ZLa1VsZ29mTUxCeVZLdHJKSUxaL0Rw?=
- =?utf-8?B?UWNYSWw4cGR3Mms1ZzdVUm15aktXUlRja2hRUUJuNGF6M1c2SkViL2NUQ2dh?=
- =?utf-8?B?YVhiWFJMcDl0NVhhOE4vSWJQVVVMTmNqNTc0NWo4dExhSHVCUElEZ1lETXZw?=
- =?utf-8?B?YTFCUWE1bzFpQVhFU2N0K09iSTM2bUJ0NE5LUENFNmttSWFMckNUTWhITlBs?=
- =?utf-8?B?Q1l5MW94ejBPanZlOXMwQStsdGlKa1NHbUdjTjMzaVNKTjdCVVRMY0d5WDdL?=
- =?utf-8?B?OTBnd0N1bkRjQm5UMXoyUWFucTJDZjRpV0ZBOFBSWmoxaE9kd0sxeWpPQ0R1?=
- =?utf-8?B?b1FkaDg2Y3g3WjYydFFKZjJDb05oa3BGVWJSSmhQMy9Eamg5OU1ocVBmYjVn?=
- =?utf-8?B?ZVoxZ0ZyTDRCdWhibmVjaUZXeVdETkZFZHJKd1NoVjlxZTdzdGxYNEo1VVhH?=
- =?utf-8?B?S2lwTzEvNzh3eFdDWk1Lc2o2am5tU2VDTGhTV1RZeFNaTnEyY3IyUC9zSy94?=
- =?utf-8?B?VlpwaEF3WlEwLzZkYVFuZTZGYVZVNU1iR3MvQkRmYURyQ1U5cE42c3NRbUZW?=
- =?utf-8?B?M2h1bWR3QUNuY3BBWWZ4a1Jad3AvVjRGZThuVzNoN2VNdWhVNzV3ekdDbElw?=
- =?utf-8?B?b1YzaHpRdkFPcDhjSXhaMkc1Z1JNdGg2U0pvK1RWb3JRN2Y4U1hIMnN1QmJI?=
- =?utf-8?B?VkdMcG1JdjZIVlZyakVjYWN5eDJwZ1lXTTlvOWJ2aFdSWWpOTnFvcncvNkN0?=
- =?utf-8?B?QkI0UXB6WUJXdWI1Qjd1VG1GYVZabHl0NVExSi9YREdkNnFhamJyZm9vdEd5?=
- =?utf-8?B?YWgwaVhkM28wSkNaVVhRWFNqOE5lNUVFVHk0YWZCci9lWlBxdFJvTk51QW5j?=
- =?utf-8?B?bG01OGExdXIwaGZMT0VFRXp2U1MrZzJwdkducW4wZGRNV01Ua1ZyM2c3a0dR?=
- =?utf-8?B?cjQ5MFl1VzVleWtneWE3UDNwNmF1RmJhTytSRE9VL3JxSStpVnl1RzFMNW5a?=
- =?utf-8?B?bVdYYjZpdUd3Y0dpd3AvQ2VGK0x6UFhWbmNBUXBQN3kwV2ptT1ovVWErUHpR?=
- =?utf-8?B?QjhCZHk0b2VRZVlFSkxGbzFieFNDZEY4R2MzY1Z3RC9JRXVWbWdRZWZGRTdJ?=
- =?utf-8?B?WG9vR2szTFJsSG4rMFQxQVg1ZzFjNlpDQU0xblRmSkxnNWpQSjcyRUJNWlJy?=
- =?utf-8?B?NkY4VThyU2R5ak5OUmVEM2JkYkpYVUxJYm1kV3pCaU1Wc2hWcS92WW84Rlcz?=
- =?utf-8?B?VWxoWG0vSDUxaDlZbjVBUVVyRHl4enlRWk1TdVBENkRxcmdDK0FnUFFVU29a?=
- =?utf-8?Q?jQzUUsskEz4tXnJVwi8JnB5UgFONk/jSwf74/?=
-X-OriginatorOrg: cornelisnetworks.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f092a648-4d5a-411d-01c8-08de8926b5cb
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR01MB7248.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 21:54:08.7973
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4dbdb7da-74ee-4b45-8747-ef5ce5ebe68a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cFY6wYxpmBEMHOgapU+AVaFeHGLfImymg16nwF5531KSoZrcnftZvdeDfkRbCHm4icpyp5LXteVsLjesRDtwgmTyuap4Dy1uRhfWbI79IRt0Q8DtVtyxwyhCBE3iL2E1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS1PR01MB8943
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320064503.57620-1-rosenp@gmail.com>
 
-On 3/23/26 4:48 AM, Arnd Bergmann wrote:
-> I took a quick look at the hfi2 driver, and noticed a few things
-> that that may be worth addressing before it gets merged, mostly
-> stuff copied from hfi1:
-> 
-> - A few global functions with questionable namespacing:
->    user_event_ack, ctxt_reset, iowait_init, register_pinning_interface,
->    sc_{alloc,free,enable,disable}, pio_copy, acquire_hw_mutex,
->    load_firmware, cap_mask.
->    It would make sense to prefix all global identifiers with 'hfi2_',
->    both out of principle, and to allow building hfi1 and hfi2 into
->    an allyesconfig kernel without link failures.
+Hi Rosen,
 
-Will address that stuff.
+kernel test robot noticed the following build errors:
 
-> - The use of INFINIBAND_RDMAVT seems unnecessary: right now
->    this is only used by hfi1, now shared with hfi2 but later to
->    be exclusive to the latter. Since it is unlikely to ever
->    be used by another driver again, this may be a good time
->    to drop the abstraction again and integrate it all into
->    hfi2, with the old version getting dropped along with hfi1.
+[auto build test ERROR on tegra/for-next]
+[also build test ERROR on linus/master v7.0-rc5 next-20260323]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Replied about RDMAVT stuff separately. Perhaps when we target removal of 
-hfi1 that would be the time to get RDMAVT re-incorporated into the main 
-hfi (hfi2) driver.
+url:    https://github.com/intel-lab-lkp/linux/commits/Rosen-Penev/firmware-tegra-add-COMPILE_TEST/20260321-064927
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
+patch link:    https://lore.kernel.org/r/20260320064503.57620-1-rosenp%40gmail.com
+patch subject: [PATCH] firmware/tegra: add COMPILE_TEST
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260324/202603240615.RVT9LSpj-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260324/202603240615.RVT9LSpj-lkp@intel.com/reproduce)
 
-> 
-> - The pio_copy() function is particularly slow since it uses
->    the full-barrier version of writeq() in a tight loop,
->    this should probably use __iowrite64_copy() etc to make it
->    work better on arm64 and other architectures
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603240615.RVT9LSpj-lkp@intel.com/
 
-Will certainly look into this. Thanks for pointing it out.
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: undefined symbol: tegra_bpmp_init_clocks
+   >>> referenced by bpmp.c
+   >>>               drivers/firmware/tegra/bpmp.o:(tegra_bpmp_probe) in archive vmlinux.a
+   >>> referenced by bpmp.c
+   >>>               drivers/firmware/tegra/bpmp.o:(tegra_bpmp_probe) in archive vmlinux.a
 
-> - The use of bitfields in drivers/infiniband/hw/hfi2/cport.h
->    makes the structures nonportable especially for big-endian
->    targets, if those describe device interfaces. Similarly
->    the use of __packed attributes in the same file seems
->    arbitrary and inconsistent, to the point where it
->    is likely to cause more harm than it can help. E.g.
->    in
-
-Actually have a patch that addresses some of that. It's coming. We had 
-previously only built on x86_64 but have plans to change that.
-
-
-> +struct ib_cc_table_entry_shadow {
-> +	u16 entry; /* shift:2, multiplier:14 */
-> +};
-> +
->>
-> +struct ib_cc_table_attr_shadow {
-> +	u16 ccti_limit; /* max CCTI for cc table */
-> +	struct ib_cc_table_entry_shadow ccti_entries[IB_CCT_ENTRIES];
-> +} __packed;
-> 
->    the outer structure is unaligned while the inner one requires
->    alignment.
-> 
-
-Will take care of that one too.
-
-
--Denny
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
