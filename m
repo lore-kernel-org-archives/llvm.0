@@ -1,77 +1,104 @@
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2135474F
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 15:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E013BED3D
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 16:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774281052; cv=none; b=Uds5OxDV3Fo4Y1g8ixQGNqop+ZDwohwPNbCfeKNWR8AXWFfZDqYrOX1Y4McDiDG/xYCIggzt2MFDc40jJsa6zS9ohCsHulaDOFIPOsqupYz8gdoc4d9a/PHjU/qM2r081D8QKZK/6WOUt9jrdQzVUJoZIr+XuZccgpDyrRM4gNg=
+	t=1774283504; cv=none; b=tNRQ0VuEkcCLiMkiuGFCS+xxWpLSIab1plIJIiQtjXTxManYkwA5uA8V/mGhaX6iEJTIXx780Em45C5RQxUTdFrK5Q4p6yehkuomzDFUVlS/xw2ht5uTnAl3AhpF7d2Hbve3KgLfCK5XeejIbEkgYcqD+tokUXHxowAfkjGciI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774281052; c=relaxed/simple;
-	bh=5cHqT8+iomPvbqIMKaYDCoYgDOBwOolodTXuTfszMac=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YTQOb3ywYBnVAUZKo86Xq73FvwTZd2meSfVmty7JfNbdd07WCT6LlASrj99wUBWuXzSIgYungEvM4QXsaX1NKCTcXlemZNSIJnetGG/gYyrqpbxOh06hjJDPM3ViHsIWgrjpxd9kWnH58IcXrS/hP0qVAekyY9SzA9n075+9xE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=rw0bnuLh; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1774283504; c=relaxed/simple;
+	bh=YequnmNaiUgu1X5AL6Y6SfyDxBw89iVjKvArcY/3kec=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=jFQDxo40X1CUF9Tmhis0IC8AhHAY/7yJ4OakHeAXEcq5SQ/Ib90jnONyjbN0Ck8EIVIjEh8CsjM73/Ok3k9xrKUJbRnPc5itJ2Ud97lNuBuQn6CRAsitd88YT3ayVQSuTo7al0NFnYQJoPtb4jwLjQT9T87pMlcRLcs845+FxeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Tct6w9Wr; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="rw0bnuLh"
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4ffd1R0WVNz1XM6Jl;
-	Mon, 23 Mar 2026 15:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1774281045; x=1776873046; bh=5cHqT8+iomPvbqIMKaYDCoYg
-	DOBwOolodTXuTfszMac=; b=rw0bnuLhNTpygo+LY4T/PmZ4mB3+7caRHdV10+fL
-	NBQJ9qVRolo1gi8NnWNBLSCH7KoT212zhTU//Ahcqasxwj/RV16n2uM0B7LsA7Tc
-	jbP9+3WrfXlpC1nEzrkN+k8mi289A2Vbj7z5Tq5yyCaB8p/zSCuMX2fb+DiURcQj
-	m9l+xgrxBpoZ7tNQC748yVOSDM7/azsRSH0YNPQp0BERcwLJxOHm89ndWD1jrVwg
-	C/ByrLQ/UFjspXdLoicvvK2t7nV70Tbkkq/oQND59nZqlVWr7NTIw7ve5I6srzM0
-	2GeJIhKwDG/mmf/e0wyeLL/Mfh7jOpq1qCFw5xdmjW4uTQ==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id S-hNqC-8Tm9F; Mon, 23 Mar 2026 15:50:45 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4ffd1F3J3hz1XM6JY;
-	Mon, 23 Mar 2026 15:50:41 +0000 (UTC)
-Message-ID: <207a4a3c-39ce-4413-a307-586a718746c5@acm.org>
-Date: Mon, 23 Mar 2026 08:50:40 -0700
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Tct6w9Wr"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-486ff3a0fc1so25533245e9.2
+        for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 09:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1774283497; x=1774888297; darn=lists.linux.dev;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YequnmNaiUgu1X5AL6Y6SfyDxBw89iVjKvArcY/3kec=;
+        b=Tct6w9WrNth2ceLwrAguWwUkC5XAzjbbjdUp+/9h517e2447SRG8htFFBtaEre0qhK
+         ZbzNPhuiS+QDKKt/FTknXZg/11dezBxe0JFK5EAGDrSH7J4jqgYmZKgMMvrQ1foMDuJ3
+         KGy9cRm8rhdmg9gij8qpZr+qBvrCeI3OeyRqUEwxeLjdDub6z1s8KffaAFfDXWGoOckO
+         ea2CYnFBKheoOC2MwTmXWefGTwRWl816rnnMT0Ph2XErkgsesRDuQLjPloFxpdoEqsPR
+         7jfaWdp1qgekxgaYtgSwjoXdm1NTfZ8DHltbOzvFoT1eB/iuyL/dntZ9L5DUvn6j3JjE
+         KeRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774283497; x=1774888297;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YequnmNaiUgu1X5AL6Y6SfyDxBw89iVjKvArcY/3kec=;
+        b=D1GjrwmfrBt3dNVrQPwQCv8046VIJB46h70mSKPGFnp1PSdTiH9QOoxT+cxpYI//rA
+         fPBWW43zYpzKncAJZw19bYc0S7jCU/ID3d/WQ/1yPwtRlfIiFRiydRSMtQbbeH4FhaOr
+         3LJUbCNDQf5iId6ny5hO4kQJZtsUTK/IBo3iyEkR/DR3R+RdPdOi9W3ZbJcuWKOs3bE7
+         ELiTHZE906AHAl68eiC6eg/EvRVY0GbVi/JKYhJkxopH36HRpND99h5r6bfcYPXjvP3F
+         CCbq7yh868OK68y4rUlxxx+UygIBC6y2vVZeWCuHwGbso2s/RtgDC5OTttJjoAvHNoxr
+         Ou8A==
+X-Gm-Message-State: AOJu0Yw+FThw8ZpnGXxUgaBYxuBnSsWd12b7KNRgtcmnmUYCiAva0gVb
+	pwdD3ZM9VfT+lJunF8iRiGvc+Jmn5RIYPdZQD8ixd6t4m03HbbvTSLt8JdZxXoRJc6Y=
+X-Gm-Gg: ATEYQzxryfIDylEF0OcKLzhVO6lcO/E42u1f09uRyc5MNUepU9FWANUb8G1L0jKhGVT
+	cT//VCEtJ3EFm6oDlWFEb9SxMYBEEFJztulPwKF50gCYncrwV4JOwQroWQs9UlNDMH1ESVJOXAU
+	x7luhe7PRAPz5H8smecavjt0eWO3OnhkGf7+s80Ph1k3eQLCE3xvXvYOSwVGVArAA5vg8wu/Oko
+	F4McJzmGq+XuLmkqC5hXdbOGAjH4s83jSWhC/mO/jTSrqn5zZmGeuPsPhaCdJA6VU+ORAO1MV1h
+	YzXGwXqf1XWyDp5srXkNQIuN+xDH/tTtFM6rXCvjVAuLckro8ohDwh1XEyNki0MrOXKm84LUP+4
+	6YBS2N9lNx4GkaNPpbQMmdl8SnWtqh1WnbxCdpfQrBO422EOntEo3orrUUu6erkNiIpXgK7J6B3
+	7RLd1RkG0LFyvePtdftP6/HDbgC+X7bUORgM3THxx6rQWekBY2R7HpxPFSmjlQ+Y5Ifw7MJGGzx
+	4KDfFK5JFsm
+X-Received: by 2002:a05:600c:a4a:b0:486:fe83:8621 with SMTP id 5b1f17b1804b1-486fee1ab20mr149439885e9.23.1774283496632;
+        Mon, 23 Mar 2026 09:31:36 -0700 (PDT)
+Received: from localhost ([94.4.193.72])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48700377b71sm121384715e9.0.2026.03.23.09.31.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Mar 2026 09:31:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: esas2r: fix __printf annotation on
- esas2r_log_master()
-To: Arnd Bergmann <arnd@kernel.org>, Bradley Grove
- <linuxdrivers@attotech.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20260323100027.1975646-1-arnd@kernel.org>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260323100027.1975646-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 23 Mar 2026 16:31:35 +0000
+Message-Id: <DHAB093OVD2G.3IO4C9P3ZI8HP@linaro.org>
+From: "Alexey Klimov" <alexey.klimov@linaro.org>
+To: "kernel test robot" <lkp@intel.com>
+Cc: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, "Peter Griffin"
+ <peter.griffin@linaro.org>, <linux-samsung-soc@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Krzysztof
+ Kozlowski" <krzk@kernel.org>, "Sylwester Nawrocki"
+ <s.nawrocki@samsung.com>, "Chanwoo Choi" <cw00.choi@samsung.com>, "Alim
+ Akhtar" <alim.akhtar@samsung.com>, "Sam Protsenko"
+ <semen.protsenko@linaro.org>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
+ <robh@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Tudor Ambarus"
+ <tudor.ambarus@linaro.org>, "Jassi Brar" <jassisinghbrar@gmail.com>
+Subject: Re: [PATCH 4/5] mailbox: exynos: Add support for Exynos850 mailbox
+X-Mailer: aerc 0.21.0
+References: <20260320-exynos850-ap2apm-mailbox-v1-4-983eb3f296fc@linaro.org>
+ <202603222239.JTuBxs7K-lkp@intel.com>
+In-Reply-To: <202603222239.JTuBxs7K-lkp@intel.com>
 
-On 3/23/26 2:57 AM, Arnd Bergmann wrote:
-> The warning already got silenced for gcc but not clang in the past.
-> Rather than modify that hack to turn it off for both, just add the
-> attribute as suggested and remove the pragma again.
+On Sun Mar 22, 2026 at 2:15 PM GMT, kernel test robot wrote:
+> Hi Alexey,
+> kernel test robot noticed the following build warnings:
+[..]
+>>> Warning: drivers/mailbox/exynos-mailbox.c:60 struct member 'irq_mask_va=
+lue' not described in 'exynos_mbox_driver_data'
+>>> Warning: drivers/mailbox/exynos-mailbox.c:60 struct member 'irq_mask_va=
+lue' not described in 'exynos_mbox_driver_data'
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Thanks, I'll correct it in the next version. The warning is a bit vague its=
+elf
+though, the problem is comment that describes the mentioned struct.
+
+Thanks,
+Alexey
