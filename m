@@ -1,41 +1,40 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9370637F729
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 22:50:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851ED382385
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 22:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774306249; cv=none; b=SJmCOaNrFwlGsacayXD5tliqAlmkRCTOi+BJW1QpPeocF05hY12s6djdKGWJJtf/Cg1g3RAYcL+XorNuYaxM3R/R4lCh7NUvixrpCNmimQSkgpHLpjFmKngguXOOwTnMsqTTKHd4uw7BOA6cFJAlvb38iqMWxmdIPzQgmKZ3hXQ=
+	t=1774306373; cv=none; b=KbaxmVzrzAcuAmX53mSx2aE/OLl79XbqjjNCBqRN2GY5ggdRirW1fgunBPt01tIzFsLD3HfoHSwABcP0eiM1VDQv/QHqVh8Fx6mKEOzwL9su0L85OBF8KV/3rYb815k8iyZH9xO4R2hb3btgFLDFBHD5x1Iw9lrVvhiwtKRLRtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774306249; c=relaxed/simple;
-	bh=u5HO0Gr5cs32w+Pck799DzAmoCUrRAsgtsG42XKv5RI=;
+	s=arc-20240116; t=1774306373; c=relaxed/simple;
+	bh=aZo4CfPz64jb8YX9fZTkSmpIjaX3+9pLmtrcV93cUbM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bJK1kZrOQ+cpo/jX9PUEiMVXOgkej1GFTgx7VnuXEWqs5Q7PxUwlLfVsfuf7hHaeWNUpw8VZqsgEihgE64bHQTwLrryGyfo+RdGfN5xlY4WiT4wU+sVspLafvEYdkrbzHjEMr+7u48ed2FrEYNW8jMYf7gnyvBO2Z9IGRzjhZik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EdMHs6hj; arc=none smtp.client-ip=91.218.175.182
+	 In-Reply-To:Content-Type; b=Aq8FNW/pj7L1JeCztoBNWn9gzHPB+E/m2PfNzcqNYo9UvbPL4DTyElSdRWb2GW8HYl9hk1wRL7ePgP9H8gaKpZiGqR60YYajFXxtnVb4JPmyiISLI1W779/wg6jyxQGcEKeAyKLUooSeVd5YYlJT74uEYO1EIpdP9zbB5vMLoSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z3e8DwsW; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EdMHs6hj"
-Message-ID: <11402a16-d675-4957-83fb-703082b070e6@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z3e8DwsW"
+Message-ID: <31243215-918a-4f03-917b-de869b7b7bf1@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774306245;
+	t=1774306370;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6TgKBPmRhcJgMaORlFuSIbnAMIo0QRaXhfhdWogPNSs=;
-	b=EdMHs6hjlFmHZ2M0HfbjMKvI3NfLLJPfmjIgNrUVwYuKaKcCq2PJ7tzJu/6VwpJkFrcXUA
-	v2WUi9Z2xCbyEIUcq9yDPOipdhL3wG2OQsIgsuDrTXQCCpZbiQ+dBkxQJQOnp0KGcnHYEB
-	aHYHWGDO0we2050Y+VSv34otK1UBGdQ=
-Date: Mon, 23 Mar 2026 15:50:30 -0700
+	bh=J8Ka4SY63TMkmYUtleL7Ko7Nb4LY2LzQW7pxbDpjBzY=;
+	b=Z3e8DwsWLTCq8255/3q/VJFN7cEE632K47hwxkWvDUOUDI6C2DAJb1cLGc1aF6uzI0dGaY
+	Jsrh/h9oCbB8mtHMjqLC0VZj7NaraKxZWBLj3/q4fYDuXhSD2M60NDulFMAo4FkrtCV5YP
+	/UwiUvmtdy88TGhkLUPe/Tgcm8zmzv8=
+Date: Mon, 23 Mar 2026 15:52:38 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH 3/6] libbpf: Initialize CFLAGS before including
- Makefile.include
+Subject: Re: [PATCH 5/6] selftests/bpf: Initialize operation name before use
 To: Leo Yan <leo.yan@arm.com>, Quentin Monnet <qmo@kernel.org>,
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
@@ -53,81 +52,43 @@ Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 References: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
- <20260323-tools_build_fix_zero_init_bpf_only-v1-3-d1cfad2f4cd1@arm.com>
+ <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260323-tools_build_fix_zero_init_bpf_only-v1-3-d1cfad2f4cd1@arm.com>
+In-Reply-To: <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 On 3/23/26 8:40 AM, Leo Yan wrote:
-> tools/scripts/Makefile.include may expand EXTRA_CFLAGS in a future
-> change.  This could alter the initialization of CFLAGS, as the default
-> options "-g -O2" would never be set once EXTRA_CFLAGS is expanded.
+> ASAN reports stack-buffer-overflow due to the uninitialized op_name.
 > 
-> Prepare for this by moving the CFLAGS initialization before including
-> tools/scripts/Makefile.include, so it is not affected by the extended
-> EXTRA_CFLAGS.
+> Initialize it to fix the issue.
 > 
-> Append EXTRA_CFLAGS to CFLAGS only after including Makefile.include and
-> place it last so that the extra flags propagate properly and can
-> override the default options.
-> 
-> tools/scripts/Makefile.include already appends $(CLANG_CROSS_FLAGS) to
-> CFLAGS, the Makefile appends $(CLANG_CROSS_FLAGS) again, remove the
-> redundant append.
-> 
+> Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_BTF_LOAD command")
 > Signed-off-by: Leo Yan <leo.yan@arm.com>
 > ---
->  tools/lib/bpf/Makefile | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
+>  tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index 168140f8e6461bd06db40e23d21a3fb8847ccbf4..eca584fb061e16013e76827e4203f6be0477a73e 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -49,6 +49,14 @@ man_dir_SQ = '$(subst ','\'',$(man_dir))'
->  export man_dir man_dir_SQ INSTALL
->  export DESTDIR DESTDIR_SQ
->  
-> +# Defer assigning EXTRA_CFLAGS to CFLAGS until after including
-> +# tools/scripts/Makefile.include, as it may add flags to EXTRA_CFLAGS.
-> +ifdef EXTRA_CFLAGS
-> +  CFLAGS :=
-> +else
-> +  CFLAGS := -g -O2
-> +endif
-> +
->  include $(srctree)/tools/scripts/Makefile.include
->  
->  # copy a bit from Linux kbuild
-> @@ -70,13 +78,6 @@ LIB_TARGET	= libbpf.a libbpf.so.$(LIBBPF_VERSION)
->  LIB_FILE	= libbpf.a libbpf.so*
->  PC_FILE		= libbpf.pc
->  
-> -# Set compile option CFLAGS
-> -ifdef EXTRA_CFLAGS
-> -  CFLAGS := $(EXTRA_CFLAGS)
-> -else
-> -  CFLAGS := -g -O2
-> -endif
-> -
->  # Append required CFLAGS
->  override CFLAGS += -std=gnu89
->  override CFLAGS += $(EXTRA_WARNINGS) -Wno-switch-enum
-> @@ -84,7 +85,7 @@ override CFLAGS += -Werror -Wall
->  override CFLAGS += $(INCLUDES)
->  override CFLAGS += -fvisibility=hidden
->  override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-> -override CFLAGS += $(CLANG_CROSS_FLAGS)
-> +override CFLAGS += $(EXTRA_CFLAGS)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> index aaa2854974c0a91cbbb9fc13ae0f966de1bcc818..dcbe2ef995c5b211c2b86b9555c02144e11ee7d6 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> @@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
+>  	res = load_btf(&opts, true);
+>  	ASSERT_EQ(res, -ENOSPC, "half_log_fd");
+>  	ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
+> +	snprintf(op_name, sizeof(op_name), "log_fixed");
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+You should use strscpy() here.
 
+This patch looks very unrelated.
+Did this surface only after the changes in the makefiles?
+
+>  	ASSERT_STRNEQ(logs.buf, logs.reference, 24, op_name);
 >  
->  # flags specific for shared library
->  SHLIB_FLAGS := -DSHARED -fPIC
+>  	/* validate rolling verifier log logic: try all variations of log buf
 > 
 
