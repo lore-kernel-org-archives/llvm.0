@@ -1,185 +1,110 @@
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41DD37B03B
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 08:49:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C11F37F01B;
+	Mon, 23 Mar 2026 08:49:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774255775; cv=none; b=apnam3scDaDN9hR5xHcU6QI1x68gWBaMGNBBTYxKAF+/gvPRdWygpqAkalwf2ytedoYFnMhCCX10vjctWxA6ZKL5qRPXx6imao0C6yDnfJk3kZ3iiF6pEJh0vklQqtpnFhECZURvy80u7EEnWNdUIs87uh1zxKrMNA66ATP503I=
+	t=1774255778; cv=none; b=EQLxFwwoenha/bg7mThA9yGF9x47yZZW0bSPFECcOPouQsRV7B1nWu3tFd77jVkpMPkPM1oqabQ25kfTUfScg9CUzPrJwAZ6rHiSz9c1qUbx3KjzJNDX76Bt8SP2UQK9K2diFXKKl2M+7+tSKlf5po/p58SqKI8OH66Na6UYDbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774255775; c=relaxed/simple;
-	bh=p9B9IgGH88HGmQ61xIwwmQEr8RIY/R3tOPjndnPplWo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=n8Sb78CvB2xkWi2CHcibl/K4Nzpe/turTDBbpZxJOTGkhxjjWNnUDxOzaXoUektEEQNhVe5sDHuHpmUifwPw3k0WQpGgxDgZkvEGGsE/66ROAMzLcmh8oZV3EjzihK8Fz58R7A16EAKn4c8b64FT1SlTJ41K8JXFOEh+V4XrChE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=q5yHBILY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qODxOPEn; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1774255778; c=relaxed/simple;
+	bh=apQDKAVtzeWI9NRHQrgtkW1nDuBlvlKb70pvhcicwCI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=f4UIEJhyXhfIZWvOeuIui/BmuQKKqJBcXBVVj1kjm8WuW27MqJJWNEsYW/FmNcJiDY1TEicwd39cqRI7K9PzJVY3Q5ZiuKFu6sAQ3ZpXqVPIcqkh8+K3CW2isoufIyDhLZqHKnbhJ1MlA56284Ff7frHOsgIsUaBbSkS5LLGct4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=qR20M1T8; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="q5yHBILY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qODxOPEn"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id ED0C1EC01D5;
-	Mon, 23 Mar 2026 04:49:32 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Mon, 23 Mar 2026 04:49:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1774255772;
-	 x=1774342172; bh=tdJCIcUWditaxcgxgFlEFsn2IU+LFbGTMnX6JWZKdXk=; b=
-	q5yHBILYNTaEj0UGHrUmAVH4w1rePRf4dMjJnjHJIgqCe65RtIHEoyGaqnckTkgm
-	A4UcGDFBgODFKfnYh+5ZmISGd7kUEX9nfN+2yLceV80VzkaEIy40Eiz6CmrUFZRK
-	xIRMItES/zizM6T3Mi+KV3C+l0IMsdn8QwAJA49Ac1HFXQ5JoJHWoe+MKhs3zPgQ
-	+Bf0Jn+SdtcqZ9OKNTZXn4u4elYtFWySYTZ9DeokaWy0s0NghroxBITWdPn2Vvjn
-	vxOjIyyDA32cj9oIwk8j2zP1opyQ9UdbV92FF31JchQCxaNxGT+IJkgXk3/BvOfL
-	T7/bfYLKJ6apIA1jP91rtg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774255772; x=
-	1774342172; bh=tdJCIcUWditaxcgxgFlEFsn2IU+LFbGTMnX6JWZKdXk=; b=q
-	ODxOPEnx2VlBZaEVPGjZw+T94REgQ60c2KcRLew88db3/pAF/8MWmYy/s1MaCW++
-	+sYaRgyIDskk/ZfhKtIszcsccCZnBmdf4QyUgNB8AHVftvLiNjbxpGCRl5bOuL0Z
-	HL28paWI83IC3CHq0lOwbQqwNwdu7u5vEeSG2o3xg4iX6FKTwj9pW5eynAXNRv/J
-	iWlxsY4GLzd25EJ4QHMBPgBgKcyakVUu9Yxlm14VY0RBZElZzh5RRqIotZBVKN58
-	AZrBYnEFxFw8PjzD/G7c2ZMGb9peWvIg/htDwIHdDPZzpX5x9FkpOvptRhTSWYI5
-	hYun3QeHE17t1YB9n/Wfg==
-X-ME-Sender: <xms:nP7AaXgCW44O4HbHcYOmy9r91A9rd96zPpfpU5iLZ4vPjLItg_3Big>
-    <xme:nP7Aae2wJpNdvkEzqat9dUhZPG-iWZ1SODv8NTWGwxNmg4utdS3kYGmEFVlQyKW3V
-    k85UDNprOc0_doUEXR54r-na3IM4Ll3pHNSUDNqqnU2EMx2JX0PMhE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudekvdejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepfefhheetffduvdfgieeghfejtedvkeetkeejfeekkeelffejteevvdeghffhiefh
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
-    phhtthhopeduiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepuggvnhhnihhsrd
-    gurghlvghsshgrnhgurhhosegtohhrnhgvlhhishhnvghtfihorhhkshdrtghomhdprhgt
-    phhtthhopehnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhlsehgmhgrihhlrdgtoh
-    hmpdhrtghpthhtohepjhhushhtihhnshhtihhtthesghhoohhglhgvrdgtohhmpdhrtghp
-    thhtohepmhhorhgsohesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhitghhrggvlh
-    drjhdrrhhuhhhlsehinhhtvghlrdgtohhmpdhrtghpthhtohepmhhikhgvrdhmrghrtghi
-    nhhishiihihnsehinhhtvghlrdgtohhmpdhrtghpthhtoheprghrnhgusehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehlvghonheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    mhhinhhgoheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:nP7AaVNF3zMRqm3avsSVqs1btmQwy8tGvVBLS7OyiMAbPTlGM11G2w>
-    <xmx:nP7AaWdUY3C08mKej00puu-9Dsxdys9w5teXuB-UqLJeHwUdua64AQ>
-    <xmx:nP7AabGVD682BrGBaxmbqosdgmpX9Ds-9XILB4zVwGGzx3vSJLvNYg>
-    <xmx:nP7AaRsOstikJQAIuoEyINEAoZA2y4UMKkmrSkq5R0FVGy2y4o7G_A>
-    <xmx:nP7AaXSrwpvqumCY4WS_qRiYv76aPdUieW6moF1IntnxmroNveBREDBm>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E1BE6700065; Mon, 23 Mar 2026 04:49:31 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="qR20M1T8"
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20260323084927euoutp02741697b9873d78530075a5e111d0c62e~fbDhQX7Vx2817128171euoutp02Q;
+	Mon, 23 Mar 2026 08:49:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20260323084927euoutp02741697b9873d78530075a5e111d0c62e~fbDhQX7Vx2817128171euoutp02Q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1774255767;
+	bh=izD245/HWTfY4YvMavmH0UjvQPvQnie+y+bSLStgLq0=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=qR20M1T8vm/bninpWfYJUqD2cujoDpUOWwbtW5EzAYPKXXW/reNN8Na0Z0P22N5Fq
+	 KD9VJ2HiMGpMBAqMkrXfK9sxLV95K7db3i4rPSoQsvdHzljE+ooz9t4d3X72LfLXNP
+	 8uUHazdKV/PWg9ZWyVALYMO1f3Gp3Q87CRMB/Hm0=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20260323084927eucas1p12614d2febd7dd400e32c691c74e396e2~fbDhDI1aS1911919119eucas1p1N;
+	Mon, 23 Mar 2026 08:49:27 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20260323084923eusmtip200157d20bd875804c9aaff92db3a8414~fbDd8kVqg2543925439eusmtip2B;
+	Mon, 23 Mar 2026 08:49:23 +0000 (GMT)
+Message-ID: <1c4e429b-f30c-42a9-8de1-71cb2cbbc114@samsung.com>
+Date: Mon, 23 Mar 2026 09:49:22 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AhovTUn8f-P3
-Date: Mon, 23 Mar 2026 09:48:59 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Leon Romanovsky" <leon@kernel.org>
-Cc: "Arnd Bergmann" <arnd@kernel.org>,
- "Dennis Dalessandro" <dennis.dalessandro@cornelisnetworks.com>,
- "Jason Gunthorpe" <jgg@ziepe.ca>, "Nathan Chancellor" <nathan@kernel.org>,
- "Mike Marciniszyn" <mike.marciniszyn@intel.com>,
- "Michael J. Ruhl" <michael.j.ruhl@intel.com>,
- "Doug Ledford" <dledford@redhat.com>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Marco Crivellari" <marco.crivellari@suse.com>,
- "Ingo Molnar" <mingo@kernel.org>, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <5d5f25fc-e522-4131-ae4b-22db57b92d6e@app.fastmail.com>
-In-Reply-To: <20260323080848.GF814676@unreal>
-References: <20260320151511.3420818-1-arnd@kernel.org>
- <20260320151511.3420818-2-arnd@kernel.org>
- <6b56c476-86fd-4d43-8dee-c7f89d346941@app.fastmail.com>
- <20260323080848.GF814676@unreal>
-Subject: Re: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
-Content-Type: text/plain
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
+To: Miguel Ojeda <ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Danilo Krummrich <dakr@kernel.org>, Abdiel Janulgue
+	<abdiel.janulgue@gmail.com>, Daniel Almeida <daniel.almeida@collabora.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>, Christoph Hellwig <hch@lst.de>
+Cc: iommu@lists.linux.dev, driver-core@lists.linux.dev, acourbot@nvidia.com,
+	akpm@linux-foundation.org, aliceryhl@google.com,
+	anton.ivanov@cambridgegreys.com, bjorn3_gh@protonmail.com,
+	boqun.feng@gmail.com, david@davidgow.net, gary@garyguo.net,
+	johannes@sipsolutions.net, justinstitt@google.com,
+	linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-um@lists.infradead.org, linux@armlinux.org.uk, llvm@lists.linux.dev,
+	lossin@kernel.org, mark.rutland@arm.com, mmaurer@google.com,
+	morbo@google.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+	nicolas.schier@linux.dev, nsc@kernel.org, peterz@infradead.org,
+	richard@nod.at, rust-for-linux@vger.kernel.org, tmgross@umich.edu,
+	urezki@gmail.com, will@kernel.org
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20260322194616.89847-1-ojeda@kernel.org>
 Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20260323084927eucas1p12614d2febd7dd400e32c691c74e396e2
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20260322194701eucas1p1f72625f53e50806fa4f430550f291e76
+X-EPHeader: CA
+X-CMS-RootMailID: 20260322194701eucas1p1f72625f53e50806fa4f430550f291e76
+References: <20260322192159.88138-1-ojeda@kernel.org>
+	<CGME20260322194701eucas1p1f72625f53e50806fa4f430550f291e76@eucas1p1.samsung.com>
+	<20260322194616.89847-1-ojeda@kernel.org>
 
-On Mon, Mar 23, 2026, at 09:08, Leon Romanovsky wrote:
-> On Fri, Mar 20, 2026 at 04:53:04PM +0100, Arnd Bergmann wrote:
->> On Fri, Mar 20, 2026, at 16:12, Arnd Bergmann wrote:
->> 
->> > +	 */
->> > +	ibdev = &dd->verbs_dev.rdi.ibdev;
->> > +	dev_set_name(&ibdev->dev, "%s_%d", class_name(), dd->unit);
->> > +	strscpy(&ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
->> > +
->> 
->> I messed this up during a rebase, that should have been 
->> 
->>        strscpy(ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
->> 
->> (without the extra &). I'll wait for comments before resending.
+On 22.03.2026 20:46, Miguel Ojeda wrote:
+> On Sun, 22 Mar 2026 20:21:59 +0100 Miguel Ojeda <ojeda@kernel.org> wrote:
+>> I will reply to a couple other bindings in separate emails to avoid
+>> spamming people too much.
+> Under UML, I got `-Wstatic-in-inline` for `dma_free_attrs`:
 >
-> The hfi1 driver is scheduled for removal. Dennis has already posted the
-> hfi2 driver, which serves as its replacement.
-
-Ok, that does sound like a sensible decision, and I'll just drop
-patches 1 and 3 then, which are just cleanups.
-
-The cover letter at [1] suggests that the two drivers will still
-coexist for a bit though, so I think we'd still want patch 2/3
-in order to get a clean 'allmodconfig' build when the 
--Wmissing-format-attribute is enabled by defaultt. I have a couple
-of patches in flight.
-
-I took a quick look at the hfi2 driver, and noticed a few things
-that that may be worth addressing before it gets merged, mostly
-stuff copied from hfi1:
-
-- A few global functions with questionable namespacing:
-  user_event_ack, ctxt_reset, iowait_init, register_pinning_interface,
-  sc_{alloc,free,enable,disable}, pio_copy, acquire_hw_mutex,
-  load_firmware, cap_mask.
-  It would make sense to prefix all global identifiers with 'hfi2_',
-  both out of principle, and to allow building hfi1 and hfi2 into
-  an allyesconfig kernel without link failures.
-
-- The use of INFINIBAND_RDMAVT seems unnecessary: right now
-  this is only used by hfi1, now shared with hfi2 but later to
-  be exclusive to the latter. Since it is unlikely to ever
-  be used by another driver again, this may be a good time
-  to drop the abstraction again and integrate it all into
-  hfi2, with the old version getting dropped along with hfi1.
-
-- The pio_copy() function is particularly slow since it uses
-  the full-barrier version of writeq() in a tight loop,
-  this should probably use __iowrite64_copy() etc to make it
-  work better on arm64 and other architectures
-
-- The use of bitfields in drivers/infiniband/hw/hfi2/cport.h
-  makes the structures nonportable especially for big-endian
-  targets, if those describe device interfaces. Similarly
-  the use of __packed attributes in the same file seems
-  arbitrary and inconsistent, to the point where it
-  is likely to cause more harm than it can help. E.g.
-  in
-
-+struct ib_cc_table_entry_shadow {
-+	u16 entry; /* shift:2, multiplier:14 */
-+};
-+
+>        BINDGEN rust/bindings/bindings_generated.rs - due to target missing
+>      In file included from rust/helpers/helpers.c:59:
+>      rust/helpers/dma.c:17:2: warning: static function 'dma_free_attrs' is used in an inline function with external linkage [-Wstatic-in-inline]
+>         17 |         dma_free_attrs(dev, size, cpu_addr, dma_handle, attrs);
+>            |         ^
+>      rust/helpers/dma.c:12:1: note: use 'static' to give inline function 'rust_helper_dma_free_attrs' internal linkage
+>         12 | __rust_helper void rust_helper_dma_free_attrs(struct device *dev, size_t size,
+>            | ^
+>            | static
 >
-+struct ib_cc_table_attr_shadow {
-+	u16 ccti_limit; /* max CCTI for cc table */
-+	struct ib_cc_table_entry_shadow ccti_entries[IB_CCT_ENTRIES];
-+} __packed;
+> For some reason, `dma_free_attrs` is not marked `inline` in
+> `include/linux/dma-mapping.h` to begin with, unlike the rest.
+>
+> Unless I am missing something and there is a reason for that, it looks
+> like it has just been missing since it was added in commit ed6ccf10f24b
+> ("dma-mapping: properly stub out the DMA API for !CONFIG_HAS_DMA").
+>
+> Do you want a patch?
 
-  the outer structure is unaligned while the inner one requires
-  alignment.
+Yes please, this looks like an oversight.
 
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-     Arnd
-
-[1] https://lore.kernel.org/all/177325138778.57064.8330693913074464417.stgit@awdrv-04.cornelisnetworks.com/
