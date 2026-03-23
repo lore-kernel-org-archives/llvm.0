@@ -1,203 +1,127 @@
-Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249F437E308;
-	Mon, 23 Mar 2026 08:57:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFEA3793DD
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 09:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774256227; cv=none; b=G2ijmckLeJZse3Lnn8J+SqZGYlWlUGhVplIYb+H/12XFX6TURbY/F0KN4kjbPmnMfjStLWUd8Wcf8Cbrq9lwq+Y/AieQidQ/fKDAbpH2cz2sViaW/KCaS2cFRJCY1XXAtAfdR8qMmqZH0UcyioV6/R0ZOZN3JLm3L4fXNapD4h4=
+	t=1774258476; cv=none; b=ldbFB92PSPhmm5TYv9yBhlQjz7PChIpweZ+KWfZQ1xIEhDMvM8sfH/aTvs1h5RUhi9WvOCOAbcPVQeEISf33BAYQK3Dl61tIWyuca5JZiqYEPiEsat7mLTAd5qnKPk2m0qHExIYa0+gZl1zg0BP8rJdetE2nSQt5YqBxhtoRgHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774256227; c=relaxed/simple;
-	bh=Imi/cVexHrWWfeDIKVuhuL2qfOivoQT/o1hfaf9yflY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MszifcvAp6teIrlWXHPKEvSPok9SVKpR7hjaIpoaULY9bpg9+K9CKa9kVomIK78dAk+w58RIw7nwsGBED+jyin9YV+hkL346QTKec9CXodU30j5eSUGK2iOgja9oJJpAgGWMCwwD2lySJ8y28pWcEhTsf4eoyDoFlMeuw4658hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=qf/JHMp+; arc=none smtp.client-ip=144.76.82.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
+	s=arc-20240116; t=1774258476; c=relaxed/simple;
+	bh=AtsToOKDluaEdX51nE3VJvvs+WVxnjZwuyLDleJ3UMs=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=hOoWN6lPJfDcA1JHe5AbhOBHI3MtjGRIttESDOsCDKwME4B3GOYhSgmGe8UaPieDPSWPzgkWgWvOUgWaYB5YsfC0WW2ZrmmpmgJf1KPgSiwlGUIRwIUGr/LnSgY8XRGRSCLbBIxRcy2Nq/FSBRe0jNFte4Sw1ip58eJPJEw6VUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RdDopsBK; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="qf/JHMp+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-	s=42; h=From:Cc:To:Date:Message-ID;
-	bh=NcbGlqCjpnVnoHFXtPPNjgxf7OG552L1THRV7a+FW3U=; b=qf/JHMp+zJhN9raXNf4084RakZ
-	MD9D5SFlKku6Xwd/BFe8b6/i+AAg1nE/3MTLFTh6VmI06S3gUwaH3NacQpjVr6wW5Lx/Vsw3ACpjh
-	ITfQDOGdY0pHWyQ0OJh4OkTVWLqhYRGixC7h3iKExw3AkFfvzGxL3IttWHnEaPj8JvESURXqFIPih
-	Lr2Ee6s6CJS60aKT9WcV87RI1MUVhoUwVynQ7sKnQSZXQP8f0hpO2B5yGAsGlHzuDzCYZCvgHuFgK
-	3q/Jmr5CDCq8pA5wXe9SAlZNxTAIcz37z/zrl+cF1ZQ2BcRravI/GnLisOLpzB9yxWtoRgwEM10as
-	FQKkFTGMJwoWUx7kCENteFjgdcZoSPB2ROC3mBvTrk/lyyqXLZXneuHasyqjyfqKgIvNXr65V6qMV
-	3+bYm/TPmiJAZZT5IyRYIwxMV+PLQwYsqd9Qh5Qt9qWpcKdQ6H3t7MUAvWEEOdK504Ygg9wkY0UIN
-	ByV8VOnhD93uRgF54AJ2ZnVH;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-	(Exim)
-	id 1w4b5j-00000003163-2Uc4;
-	Mon, 23 Mar 2026 08:56:55 +0000
-Message-ID: <b859bfa1-7844-4b23-91a4-bbd526ffc19b@samba.org>
-Date: Mon, 23 Mar 2026 09:56:55 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RdDopsBK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774258474;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zaSg6itYugGxnz+4ILPAfCnYY6OxXelCVXeHpQQL/y8=;
+	b=RdDopsBKbDrPOsYrUiRN6nK+8EeM4CNwSSmzCS1U6xNMB8PedZEXfUEIMltFz3UZl/qmDK
+	f3U8PDowIxJ0e/WM7dVfw8GFNaU1onKf62ZB02i4/bWoLqi9p88i5/WkNp0k9Jovgs4obd
+	xJZN8QnwaPeFGOzWZA1c+M9g3Mg/oEs=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-106-RKl-09wVNBKazLEe7qzASQ-1; Mon,
+ 23 Mar 2026 05:34:32 -0400
+X-MC-Unique: RKl-09wVNBKazLEe7qzASQ-1
+X-Mimecast-MFC-AGG-ID: RKl-09wVNBKazLEe7qzASQ_1774258471
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DEDAD1A5815B
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 09:23:07 +0000 (UTC)
+Received: from [172.20.168.233] (unknown [10.30.45.63])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7EC30180058B;
+	Mon, 23 Mar 2026 09:23:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc5,
+ upstream-mainline, c3692998)
+Date: Mon, 23 Mar 2026 09:23:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [samba-ksmbd:ksmbd-for-next-next 11/12]
- fs/smb/server/smb2pdu.c:5723:3: warning: variable 'pntsd' is uninitialized
- when used here
-To: Asim Viladi Oglu Manizada <manizada@pm.me>,
- Steve French <smfrench@gmail.com>, Namjae Jeon <linkinjeon@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Steve French <stfrench@microsoft.com>,
- "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-References: <202603180118.ClDWNtId-lkp@intel.com>
-Content-Language: en-US
-From: Stefan Metzmacher <metze@samba.org>
-In-Reply-To: <202603180118.ClDWNtId-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <03806.126032305343200143@us-mta-106.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: J-CnLvCrtXNrn8EcQUdxJoTcURkct8FuNroldPzLB-c_1774258471
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi, we tested your kernel and here are the results:
 
-I'm seeing the same thing in ksmbd-for-next now:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-6a0795e46296589d8eba6c194586e9e65974d73f ksmbd: fix OOB write in QUERY_INFO for compound requests
 
-smatch generates this error now:
+Kernel information:
+    Commit message: Linux 7.0-rc5
 
-server/smb2pdu.c:5801 smb2_get_info_sec() error: uninitialized symbol 'pntsd'.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2401438269
 
-metze
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2401438269_ppc64le_kernel
 
-Am 17.03.26 um 18:55 schrieb kernel test robot:
-> tree:   git://git.samba.org/ksmbd.git ksmbd-for-next-next
-> head:   a58d8c8b3d5daee33fb03f4d41ea278ae6e6ffc9
-> commit: 095198efe2c86423f647b242687c50e34e355d3a [11/12] ksmbd: fix heap OOB write in QUERY_INFO for compound requests
-> config: arm-randconfig-003-20260317 (https://download.01.org/0day-ci/archive/20260318/202603180118.ClDWNtId-lkp@intel.com/config)
-> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260318/202603180118.ClDWNtId-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202603180118.ClDWNtId-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> fs/smb/server/smb2pdu.c:5723:3: warning: variable 'pntsd' is uninitialized when used here [-Wuninitialized]
->      5723 |                 pntsd->revision = cpu_to_le16(1);
->           |                 ^~~~~
->     fs/smb/server/smb2pdu.c:5708:24: note: initialize the variable 'pntsd' to silence this warning
->      5708 |         struct smb_ntsd *pntsd, *ppntsd = NULL;
->           |                               ^
->           |                                = NULL
->     1 warning generated.
-> 
-> 
-> vim +/pntsd +5723 fs/smb/server/smb2pdu.c
-> 
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5701
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5702  static int smb2_get_info_sec(struct ksmbd_work *work,
-> 64b39f4a2fd293 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-30  5703  			     struct smb2_query_info_req *req,
-> cb4517201b8acd fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-11-03  5704  			     struct smb2_query_info_rsp *rsp)
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5705  {
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5706  	struct ksmbd_file *fp;
-> 4609e1f18e19c3 fs/ksmbd/smb2pdu.c      Christian Brauner         2023-01-13  5707  	struct mnt_idmap *idmap;
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5708  	struct smb_ntsd *pntsd, *ppntsd = NULL;
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5709  	struct smb_fattr fattr = {{0}};
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5710  	struct inode *inode;
-> 8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5711  	__u32 secdesclen = 0;
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5712  	unsigned int id = KSMBD_NO_FID, pid = KSMBD_NO_FID;
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5713  	int addition_info = le32_to_cpu(req->AdditionalInformation);
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5714  	int rc = 0, ppntsd_size = 0, max_len;
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5715  	size_t scratch_len;
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5716
-> e294f78d347851 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-06-28  5717  	if (addition_info & ~(OWNER_SECINFO | GROUP_SECINFO | DACL_SECINFO |
-> e294f78d347851 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-06-28  5718  			      PROTECTED_DACL_SECINFO |
-> e294f78d347851 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-06-28  5719  			      UNPROTECTED_DACL_SECINFO)) {
-> 8e537d1465e740 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-11-21  5720  		ksmbd_debug(SMB, "Unsupported addition info: 0x%x)\n",
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5721  		       addition_info);
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5722
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27 @5723  		pntsd->revision = cpu_to_le16(1);
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5724  		pntsd->type = cpu_to_le16(SELF_RELATIVE | DACL_PROTECTED);
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5725  		pntsd->osidoffset = 0;
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5726  		pntsd->gsidoffset = 0;
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5727  		pntsd->sacloffset = 0;
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5728  		pntsd->dacloffset = 0;
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5729
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5730  		secdesclen = sizeof(struct smb_ntsd);
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5731  		rsp->OutputBufferLength = cpu_to_le32(secdesclen);
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5732
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5733  		return 0;
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5734  	}
-> ced2b26a76cd1d fs/cifsd/smb2pdu.c      Sebastian Gottschall      2021-04-27  5735
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5736  	if (work->next_smb2_rcv_hdr_off) {
-> 2d004c6cae567e fs/ksmbd/smb2pdu.c      Paulo Alcantara           2022-03-21  5737  		if (!has_file_id(req->VolatileFileId)) {
-> 3867369ef8f760 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-07-08  5738  			ksmbd_debug(SMB, "Compound request set FID = %llu\n",
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5739  				    work->compound_fid);
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5740  			id = work->compound_fid;
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5741  			pid = work->compound_pfid;
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5742  		}
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5743  	}
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5744
-> 3867369ef8f760 fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-07-08  5745  	if (!has_file_id(id)) {
-> 2d004c6cae567e fs/ksmbd/smb2pdu.c      Paulo Alcantara           2022-03-21  5746  		id = req->VolatileFileId;
-> 2d004c6cae567e fs/ksmbd/smb2pdu.c      Paulo Alcantara           2022-03-21  5747  		pid = req->PersistentFileId;
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5748  	}
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5749
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5750  	fp = ksmbd_lookup_fd_slow(work, id, pid);
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5751  	if (!fp)
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5752  		return -ENOENT;
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5753
-> 4609e1f18e19c3 fs/ksmbd/smb2pdu.c      Christian Brauner         2023-01-13  5754  	idmap = file_mnt_idmap(fp->filp);
-> ab0b263b749ade fs/ksmbd/smb2pdu.c      Namjae Jeon               2021-06-29  5755  	inode = file_inode(fp->filp);
-> e67fe63341b811 fs/ksmbd/smb2pdu.c      Christian Brauner         2023-01-13  5756  	ksmbd_acls_fattr(&fattr, idmap, inode);
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5757
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5758  	if (test_share_config_flag(work->tcon->share_conf,
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5759  				   KSMBD_SHARE_FLAG_ACL_XATTR))
-> 4609e1f18e19c3 fs/ksmbd/smb2pdu.c      Christian Brauner         2023-01-13  5760  		ppntsd_size = ksmbd_vfs_get_sd_xattr(work->conn, idmap,
-> 8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5761  						     fp->filp->f_path.dentry,
-> 8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5762  						     &ppntsd);
-> 8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5763
-> 8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5764  	/* Check if sd buffer size exceeds response buffer size */
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5765  	max_len = smb2_calc_max_out_buf_len(work,
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5766  			offsetof(struct smb2_query_info_rsp, Buffer),
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5767  			le32_to_cpu(req->OutputBufferLength));
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5768  	if (max_len < 0) {
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5769  		rc = -EINVAL;
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5770  		goto out;
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5771  	}
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5772
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5773  	scratch_len = smb_acl_sec_desc_scratch_len(&fattr, ppntsd,
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5774  			ppntsd_size, addition_info);
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5775  	pntsd = kvmalloc(scratch_len, KSMBD_DEFAULT_GFP);
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5776  	if (!pntsd) {
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5777  		rc = -ENOMEM;
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5778  		goto out;
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5779  	}
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5780
-> 4d7ca4090184c1 fs/ksmbd/smb2pdu.c      Christian Brauner         2023-01-13  5781  	rc = build_sec_desc(idmap, pntsd, ppntsd, ppntsd_size,
-> 8f0541186e9ad1 fs/ksmbd/smb2pdu.c      Namjae Jeon               2022-08-02  5782  			addition_info, &secdesclen, &fattr);
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5783
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5784  out:
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5785  	posix_acl_release(fattr.cf_acls);
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5786  	posix_acl_release(fattr.cf_dacls);
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5787  	kfree(ppntsd);
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5788  	ksmbd_fd_put(work, fp);
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5789  	if (rc) {
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5790  		kvfree(pntsd);
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5791  		return rc;
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5792  	}
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5793
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5794  	rsp->OutputBufferLength = cpu_to_le32(secdesclen);
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5795  	return ksmbd_iov_pin_rsp_read(work, (void *)rsp,
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5796  			offsetof(struct smb2_query_info_rsp, Buffer),
-> 095198efe2c864 fs/smb/server/smb2pdu.c Asim Viladi Oglu Manizada 2026-03-16  5797  			pntsd, secdesclen);
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5798  }
-> e2f34481b24db2 fs/cifsd/smb2pdu.c      Namjae Jeon               2021-03-16  5799
-> 
-> :::::: The code at line 5723 was first introduced by commit
-> :::::: ced2b26a76cd1db0b6ccb39e0bc873177c9bda21 cifsd: Fix regression in smb2_get_info
-> 
-> :::::: TO: Sebastian Gottschall <s.gottschall@dd-wrt.com>
-> :::::: CC: Steve French <stfrench@microsoft.com>
-> 
-b
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { getattr } for comm=3D"rpcbind" name=3D"/" dev=
+=3D"pidfs" ino=3D1 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsys=
+tem_u:object_r:pidfs_t:s0 tclass=3Dfilesystem permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417839
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
