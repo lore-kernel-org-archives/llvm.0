@@ -1,104 +1,176 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010039.outbound.protection.outlook.com [52.101.85.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E013BED3D
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 16:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774283504; cv=none; b=tNRQ0VuEkcCLiMkiuGFCS+xxWpLSIab1plIJIiQtjXTxManYkwA5uA8V/mGhaX6iEJTIXx780Em45C5RQxUTdFrK5Q4p6yehkuomzDFUVlS/xw2ht5uTnAl3AhpF7d2Hbve3KgLfCK5XeejIbEkgYcqD+tokUXHxowAfkjGciI0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774283504; c=relaxed/simple;
-	bh=YequnmNaiUgu1X5AL6Y6SfyDxBw89iVjKvArcY/3kec=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=jFQDxo40X1CUF9Tmhis0IC8AhHAY/7yJ4OakHeAXEcq5SQ/Ib90jnONyjbN0Ck8EIVIjEh8CsjM73/Ok3k9xrKUJbRnPc5itJ2Ud97lNuBuQn6CRAsitd88YT3ayVQSuTo7al0NFnYQJoPtb4jwLjQT9T87pMlcRLcs845+FxeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Tct6w9Wr; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C658D2F3621;
+	Mon, 23 Mar 2026 18:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.39
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774291369; cv=fail; b=bhT7gDIv4ySrklUKsIvQwsdf2nQ6TvLqP2MdhWHS1RTcF3pKPIyUgLIA7XRBkNdLcavTK4Vk/CBqfeCMPMBjLgESh/kHPmjroNd39Nfmmjo78426dtFSf0iLMLDGShVFRf78Opy9kn1I5slrgkJG4klHWRYgX4MX01pYfzgwxTQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774291369; c=relaxed/simple;
+	bh=aPipYrk+eMKKA/A7XtygUZ+vs8EV045cL1NAPbGEHlo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TFwqVhoSPEExcAKuCw7+vSzmu0rcnMb9LZIt7oFvNcBc13HZgPGwm+th07CVW1AVaykuv+nibJ/GOB1TOVkmvIr9se5pjB+rbYawQ0XoCJ//fTNp/ETyVHNFeeXzbdQ7Cv+eMU3Ekcg1Gxs3GsDPIlfS9JnctJSiob34Em4mhKk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OIh7cOu3; arc=fail smtp.client-ip=52.101.85.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Tct6w9Wr"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-486ff3a0fc1so25533245e9.2
-        for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 09:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1774283497; x=1774888297; darn=lists.linux.dev;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YequnmNaiUgu1X5AL6Y6SfyDxBw89iVjKvArcY/3kec=;
-        b=Tct6w9WrNth2ceLwrAguWwUkC5XAzjbbjdUp+/9h517e2447SRG8htFFBtaEre0qhK
-         ZbzNPhuiS+QDKKt/FTknXZg/11dezBxe0JFK5EAGDrSH7J4jqgYmZKgMMvrQ1foMDuJ3
-         KGy9cRm8rhdmg9gij8qpZr+qBvrCeI3OeyRqUEwxeLjdDub6z1s8KffaAFfDXWGoOckO
-         ea2CYnFBKheoOC2MwTmXWefGTwRWl816rnnMT0Ph2XErkgsesRDuQLjPloFxpdoEqsPR
-         7jfaWdp1qgekxgaYtgSwjoXdm1NTfZ8DHltbOzvFoT1eB/iuyL/dntZ9L5DUvn6j3JjE
-         KeRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774283497; x=1774888297;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YequnmNaiUgu1X5AL6Y6SfyDxBw89iVjKvArcY/3kec=;
-        b=D1GjrwmfrBt3dNVrQPwQCv8046VIJB46h70mSKPGFnp1PSdTiH9QOoxT+cxpYI//rA
-         fPBWW43zYpzKncAJZw19bYc0S7jCU/ID3d/WQ/1yPwtRlfIiFRiydRSMtQbbeH4FhaOr
-         3LJUbCNDQf5iId6ny5hO4kQJZtsUTK/IBo3iyEkR/DR3R+RdPdOi9W3ZbJcuWKOs3bE7
-         ELiTHZE906AHAl68eiC6eg/EvRVY0GbVi/JKYhJkxopH36HRpND99h5r6bfcYPXjvP3F
-         CCbq7yh868OK68y4rUlxxx+UygIBC6y2vVZeWCuHwGbso2s/RtgDC5OTttJjoAvHNoxr
-         Ou8A==
-X-Gm-Message-State: AOJu0Yw+FThw8ZpnGXxUgaBYxuBnSsWd12b7KNRgtcmnmUYCiAva0gVb
-	pwdD3ZM9VfT+lJunF8iRiGvc+Jmn5RIYPdZQD8ixd6t4m03HbbvTSLt8JdZxXoRJc6Y=
-X-Gm-Gg: ATEYQzxryfIDylEF0OcKLzhVO6lcO/E42u1f09uRyc5MNUepU9FWANUb8G1L0jKhGVT
-	cT//VCEtJ3EFm6oDlWFEb9SxMYBEEFJztulPwKF50gCYncrwV4JOwQroWQs9UlNDMH1ESVJOXAU
-	x7luhe7PRAPz5H8smecavjt0eWO3OnhkGf7+s80Ph1k3eQLCE3xvXvYOSwVGVArAA5vg8wu/Oko
-	F4McJzmGq+XuLmkqC5hXdbOGAjH4s83jSWhC/mO/jTSrqn5zZmGeuPsPhaCdJA6VU+ORAO1MV1h
-	YzXGwXqf1XWyDp5srXkNQIuN+xDH/tTtFM6rXCvjVAuLckro8ohDwh1XEyNki0MrOXKm84LUP+4
-	6YBS2N9lNx4GkaNPpbQMmdl8SnWtqh1WnbxCdpfQrBO422EOntEo3orrUUu6erkNiIpXgK7J6B3
-	7RLd1RkG0LFyvePtdftP6/HDbgC+X7bUORgM3THxx6rQWekBY2R7HpxPFSmjlQ+Y5Ifw7MJGGzx
-	4KDfFK5JFsm
-X-Received: by 2002:a05:600c:a4a:b0:486:fe83:8621 with SMTP id 5b1f17b1804b1-486fee1ab20mr149439885e9.23.1774283496632;
-        Mon, 23 Mar 2026 09:31:36 -0700 (PDT)
-Received: from localhost ([94.4.193.72])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48700377b71sm121384715e9.0.2026.03.23.09.31.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2026 09:31:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OIh7cOu3"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CMKq+CnNQfPOW0HrfQ+J9vrzjvxoE0PIEdwGoptYJPk09lEYPtwOap1vDSScGeVRujsOgoSlHp6sDuCGOYwtwZ8SmRi6zqwEI2pXK38G2Cg9ZTkDFDF8xJDziLIOGnwpsopybETEN9dAG4PPp0VATaC4Svpefp+e5KNapruwC1/zjEOdtd3FjGbs4mu3iwN3E3A2/Ee7b6NslpZbHYZfbFELEkpA0PPfytGyNsOWzoOtZsHWwFD/bulwaUfA3X2GQJ0hC7OFRapGZY4Vf35vWOeT2sSiIZwrQzM5K8lUiimp74cdGHoVAH6mRdzwvhZYqG3+vwTqXAGnwL5eAVjENg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BPndFtE8B6bVqJmADMf1xBaiwFAnovZ17uGNPtnvv0U=;
+ b=Z0D3y+J9G1dfvVPGLHfUUQCnPwFTxu9yUbm2MNSziKqqiMLQicMNR0IevV00CCVGNyOUg4n3xxhSMD+scwcY4ReQUePTiTqcyXz19DBq5GijVxKXhszHquiJ63hZsMHxQL3GaoDbSzNKC0Qc37dTcSkiGl3jcbf0mVzKiWwTs1o5aI1uuwrtXleb762HS5SJYQVKRbXDUptpBkRUQX6T/hP/bZnVmdux/INi2rwFrgFfDACRUP2Xn5k5B31Orns6vbwPx6c+VwLMj2hK3sYV+E0x4NyE5CbGsQP8Rg11MqzPu0iNx18oXsGyi3+zM2KCkLYu/9nl2yuNWHCQn8epoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BPndFtE8B6bVqJmADMf1xBaiwFAnovZ17uGNPtnvv0U=;
+ b=OIh7cOu3lItzRjdkJd438Sg1RJ45Fi7MedgszeH32cRMtMj5B5QlLHVpjaNEG0ITYAFjtWTZCMPUSf9Lob1eVZBfXSCxGjLB4J5DpXYQs1ZtgF4EdgewTrFv9W2dPqfqYixXJEA1fr/zhA57jMDHeCal+VFdKK504P06k9WpTuW/JzJrkeI2mjZRv9LwIyO4SIGzEGNiOvCmv/dOckWGMq3319g/A3XdR20RDnGUJDKaT8J2MiwvC0m+6zdEy2YY2mRN0aBAjwNY6DxYW0he9NIHs6+fsvlQdWVlEEZKofhFodDZzlBuQ1lelJq2Q8sQracZydsIc39tBozC78cNiw==
+Received: from BL1PR13CA0119.namprd13.prod.outlook.com (2603:10b6:208:2b9::34)
+ by DM4PR12MB5867.namprd12.prod.outlook.com (2603:10b6:8:66::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.9; Mon, 23 Mar
+ 2026 18:42:37 +0000
+Received: from BL6PEPF00020E61.namprd04.prod.outlook.com
+ (2603:10b6:208:2b9:cafe::c6) by BL1PR13CA0119.outlook.office365.com
+ (2603:10b6:208:2b9::34) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.31 via Frontend Transport; Mon,
+ 23 Mar 2026 18:42:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BL6PEPF00020E61.mail.protection.outlook.com (10.167.249.22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9723.19 via Frontend Transport; Mon, 23 Mar 2026 18:42:36 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 23 Mar
+ 2026 11:42:16 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 23 Mar
+ 2026 11:42:15 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Mon, 23 Mar 2026 11:42:08 -0700
+From: Akhil R <akhilrajeev@nvidia.com>
+To: <lkp@intel.com>
+CC: <Frank.Li@nxp.com>, <acpica-devel@lists.linux.dev>,
+	<akhilrajeev@nvidia.com>, <alexandre.belloni@bootlin.com>,
+	<conor+dt@kernel.org>, <devicetree@vger.kernel.org>, <ebiggers@kernel.org>,
+	<fredrik.markstrom@est.tech>, <jonathanh@nvidia.com>, <krzk@kernel.org>,
+	<lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-i3c@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+	<linux@roeck-us.net>, <llvm@lists.linux.dev>, <miquel.raynal@bootlin.com>,
+	<oe-kbuild-all@lists.linux.dev>, <p.zabel@pengutronix.de>,
+	<rafael@kernel.org>, <robert.moore@intel.com>, <robh@kernel.org>,
+	<smangipudi@nvidia.com>, <thierry.reding@kernel.org>
+Subject: Re: [PATCH 04/12] i3c: master: Support ACPI enumeration
+Date: Tue, 24 Mar 2026 00:12:07 +0530
+Message-ID: <20260323184207.68515-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <202603230124.VFt6CPBe-lkp@intel.com>
+References: <202603230124.VFt6CPBe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Mar 2026 16:31:35 +0000
-Message-Id: <DHAB093OVD2G.3IO4C9P3ZI8HP@linaro.org>
-From: "Alexey Klimov" <alexey.klimov@linaro.org>
-To: "kernel test robot" <lkp@intel.com>
-Cc: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, "Peter Griffin"
- <peter.griffin@linaro.org>, <linux-samsung-soc@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Krzysztof
- Kozlowski" <krzk@kernel.org>, "Sylwester Nawrocki"
- <s.nawrocki@samsung.com>, "Chanwoo Choi" <cw00.choi@samsung.com>, "Alim
- Akhtar" <alim.akhtar@samsung.com>, "Sam Protsenko"
- <semen.protsenko@linaro.org>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
- <robh@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Tudor Ambarus"
- <tudor.ambarus@linaro.org>, "Jassi Brar" <jassisinghbrar@gmail.com>
-Subject: Re: [PATCH 4/5] mailbox: exynos: Add support for Exynos850 mailbox
-X-Mailer: aerc 0.21.0
-References: <20260320-exynos850-ap2apm-mailbox-v1-4-983eb3f296fc@linaro.org>
- <202603222239.JTuBxs7K-lkp@intel.com>
-In-Reply-To: <202603222239.JTuBxs7K-lkp@intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF00020E61:EE_|DM4PR12MB5867:EE_
+X-MS-Office365-Filtering-Correlation-Id: 17386d8b-37cd-4736-56c8-08de890bf445
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700016|7416014|376014|22082099003|18002099003|7053199007|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	kzMxMuRnD9fjvedV7Bhxf8CIVIHuIqZt9wrNgIq0AnI7vM34S/9spGWKZ/mg6xrqGPmAomMnZIymIn8LtgfgOHTOr2CHWMU5Crla5kzEM/20NtQ1bWyfvR02zu9ubaE306FvzigzBpBHe++zK3UX5zGvs/JTzRAdx5o5FLraouWB7U6ev1+SPudM5cXGkmiPURAlstUoXBJBIcQPQd1DB7pIATmXuRN70R7vnZMTBGgkNOHgSAmQY1WJsYkb+En8E17QvwudbP4VVcH0NYF+0zIJ/j9MOLqun9pBCIlTraY9C96zDm4IQwZ5qkJc/hjEdlhPY06wWOqeV2zmLWs6c66tVhBjVN9+aJDgcoH15cZhmcJ0z1SDQ1btgU2tNln7T7SIhJyy/QgCG9vkZUTcnUgFcUFwWa8dSFBSUpRVeWjn4ujbdGp3IOjTwN0odbUdJmNMu5RebDMFAClXDihGlMOqGs9LgcA1yiHQhyUBqfu7/DCxTace2c2xAFNp6gIi8zxx/k+uB1IU7SbvfYm/YqnTVKoWbFDidTjBxJkkEQFej4yJ+1kXUivW8xXsOdXFsj8WAdo8ObjERN1KGxUHy/w7yzp6IlfmHHCRsqufhL6CuzxPo/s5X/icOwBgasK6ek2OyX9qmXwY90NMv4UmvmkLhJbW4QEe0kWU+UAOKF0XaEwF814A0zVDgxcr2sxTay+asMtNrqlbkseClWLCEKPFyDTWnxXA8MzXEBtJOYKi6yRwivTnV02MRlwD77+IFGK764RmVq5InHYNfa2Q/g==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700016)(7416014)(376014)(22082099003)(18002099003)(7053199007)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Knjwv4/5Gkq4LNSwj3HO3WdE/5rr/KUC01DNf6JUcGoSITltrMHTpTb0TM3EDxcJyDQTBjsaHvmS9kLMIuwvVUj7geOIZ3zLoCBJb2fy6XSfvjDFkO/oiAJlI0shXUZNlxzLVJ3bQBPCnwE4AQo51zjGBH3DToOzDDdrsRRGK30W/LXR3etBD0+zTQmTHjK6wQMulORd4VIvghd3S825fCGpFa/lj4FPY+knoolcG87pQtJMwAFUi91F4GZePog2oF/9qrBVPowmqz099Fadz1ShxI7rjb17mH+aoUzPARTz+C8jdqFJNPzjyf/Lyi78aORRRSJmfr4JvpWPF/l/dO1UHbci9Z4EQwdqmQ/qkW1k7EqhNR397OPHtV17IQxVzqu03aew+uuCbaAZRcgRrtA9FpjfE6Mm7jLqi2uhFs+OMAptE0sS6Ow0qFqVpc3Q
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 18:42:36.7292
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 17386d8b-37cd-4736-56c8-08de890bf445
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF00020E61.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5867
 
-On Sun Mar 22, 2026 at 2:15 PM GMT, kernel test robot wrote:
-> Hi Alexey,
-> kernel test robot noticed the following build warnings:
-[..]
->>> Warning: drivers/mailbox/exynos-mailbox.c:60 struct member 'irq_mask_va=
-lue' not described in 'exynos_mbox_driver_data'
->>> Warning: drivers/mailbox/exynos-mailbox.c:60 struct member 'irq_mask_va=
-lue' not described in 'exynos_mbox_driver_data'
+On Mon, 23 Mar 2026 01:47:20 +0800, kernel test robot wrote:
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on next-20260320]
+> [also build test ERROR on linus/master v7.0-rc4]
+> [cannot apply to i3c/i3c/next rafael-pm/linux-next rafael-pm/bleeding-edge groeck-staging/hwmon-next v7.0-rc4 v7.0-rc3 v7.0-rc2]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Akhil-R/dt-bindings-i3c-Add-mipi-i3c-static-method-to-support-SETAASA/20260322-174037
+> base:   next-20260320
+> patch link:    https://lore.kernel.org/r/20260318172820.13771-5-akhilrajeev%40nvidia.com
+> patch subject: [PATCH 04/12] i3c: master: Support ACPI enumeration
+> config: sparc-randconfig-002-20260322 (https://download.01.org/0day-ci/archive/20260323/202603230007.WOMwklQ6-lkp@intel.com/config)
+> compiler: sparc-linux-gcc (GCC) 15.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603230007.WOMwklQ6-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202603230007.WOMwklQ6-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    drivers/i3c/master.c: In function 'i3c_master_add_i2c_boardinfo':
+>>> drivers/i3c/master.c:2449:23: error: implicit declaration of function 'acpi_dev_get_resources'; did you mean 'acpi_get_event_resources'? [-Wimplicit-function-declaration]
+>     2449 |                 ret = acpi_dev_get_resources(adev, &resources,
+>          |                       ^~~~~~~~~~~~~~~~~~~~~~
+>          |                       acpi_get_event_resources
+>>> drivers/i3c/master.c:2455:17: error: implicit declaration of function 'acpi_dev_free_resource_list' [-Wimplicit-function-declaration]
+>     2455 |                 acpi_dev_free_resource_list(&resources);
+>          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/i3c/master.c: In function 'i3c_master_add_acpi_dev':
+>>> drivers/i3c/master.c:2556:9: error: unknown type name 'acpi_bus_address'; did you mean 'acpi_io_address'?
+>     2556 |         acpi_bus_address adr;
+>          |         ^~~~~~~~~~~~~~~~
+>          |         acpi_io_address
+>>> drivers/i3c/master.c:2563:14: error: implicit declaration of function 'acpi_has_method'; did you mean 'acpi_has_watchdog'? [-Wimplicit-function-declaration]
+>     2563 |         if (!acpi_has_method(adev->handle, "_ADR"))
+>          |              ^~~~~~~~~~~~~~~
+>          |              acpi_has_watchdog
+>>> drivers/i3c/master.c:2563:34: error: invalid use of undefined type 'struct acpi_device'
+>     2563 |         if (!acpi_has_method(adev->handle, "_ADR"))
+>          |                                  ^~
+>>> drivers/i3c/master.c:2566:15: error: implicit declaration of function 'acpi_device_adr'; did you mean 'acpi_device_handle'? [-Wimplicit-function-declaration]
+>     2566 |         adr = acpi_device_adr(adev);
+>          |               ^~~~~~~~~~~~~~~
+>          |               acpi_device_handle
 
-Thanks, I'll correct it in the next version. The warning is a bit vague its=
-elf
-though, the problem is comment that describes the mentioned struct.
+#include <linux/acpi.h> is added in PATCH 03/12. The functions' prototypes
+are present in acpi.h. I think the bot checked this patch individually,
+or did I miss something?
 
-Thanks,
-Alexey
+Best Regards,
+Akhil
