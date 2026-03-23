@@ -1,114 +1,77 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C7E3B9DA3
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 15:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2135474F
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 15:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774280452; cv=none; b=ZIPpjx9cYB/M0Sy1pFsrbntACuBFiGyXeQ1vSs1jKFuX/r5ScRG0SNxa32jAhYJ5tLCHpiYMcl/mPx2x+J6CqFPeuFSCxy0oxtLgvvz5vfKkWWL5nnNjHMWGwez9X9G+WODPQV96RO0yQYEj8eRohwpX3woQvvwJY88WnBy7N40=
+	t=1774281052; cv=none; b=Uds5OxDV3Fo4Y1g8ixQGNqop+ZDwohwPNbCfeKNWR8AXWFfZDqYrOX1Y4McDiDG/xYCIggzt2MFDc40jJsa6zS9ohCsHulaDOFIPOsqupYz8gdoc4d9a/PHjU/qM2r081D8QKZK/6WOUt9jrdQzVUJoZIr+XuZccgpDyrRM4gNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774280452; c=relaxed/simple;
-	bh=K3wdiOIPmKzJb3V7P58ebfdxfQJMWLNeh3ipytoXWwU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XxbRlmWXpRVs3VuZMc7LVewworH9+R30dZJSYj0+L/hTfi45cSqr2oSXjhtSLvrs0mYHjcpIb6gTvL+pVIlR3bG/tabsmcbt7eahCxZLkeg1WJ5dPGYnAuZtZ5uit7z469Ib58dZlCpaInE8ZVVSyr3DDUuzRCMaHo0SyHUzWTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0931714BF;
-	Mon, 23 Mar 2026 08:40:44 -0700 (PDT)
-Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40ADC3F694;
-	Mon, 23 Mar 2026 08:40:46 -0700 (PDT)
-From: Leo Yan <leo.yan@arm.com>
-Date: Mon, 23 Mar 2026 15:40:07 +0000
-Subject: [PATCH 6/6] selftests/bpf: Append extra cflags
+	s=arc-20240116; t=1774281052; c=relaxed/simple;
+	bh=5cHqT8+iomPvbqIMKaYDCoYgDOBwOolodTXuTfszMac=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YTQOb3ywYBnVAUZKo86Xq73FvwTZd2meSfVmty7JfNbdd07WCT6LlASrj99wUBWuXzSIgYungEvM4QXsaX1NKCTcXlemZNSIJnetGG/gYyrqpbxOh06hjJDPM3ViHsIWgrjpxd9kWnH58IcXrS/hP0qVAekyY9SzA9n075+9xE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=rw0bnuLh; arc=none smtp.client-ip=199.89.1.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="rw0bnuLh"
+Received: from localhost (localhost [127.0.0.1])
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4ffd1R0WVNz1XM6Jl;
+	Mon, 23 Mar 2026 15:50:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1774281045; x=1776873046; bh=5cHqT8+iomPvbqIMKaYDCoYg
+	DOBwOolodTXuTfszMac=; b=rw0bnuLhNTpygo+LY4T/PmZ4mB3+7caRHdV10+fL
+	NBQJ9qVRolo1gi8NnWNBLSCH7KoT212zhTU//Ahcqasxwj/RV16n2uM0B7LsA7Tc
+	jbP9+3WrfXlpC1nEzrkN+k8mi289A2Vbj7z5Tq5yyCaB8p/zSCuMX2fb+DiURcQj
+	m9l+xgrxBpoZ7tNQC748yVOSDM7/azsRSH0YNPQp0BERcwLJxOHm89ndWD1jrVwg
+	C/ByrLQ/UFjspXdLoicvvK2t7nV70Tbkkq/oQND59nZqlVWr7NTIw7ve5I6srzM0
+	2GeJIhKwDG/mmf/e0wyeLL/Mfh7jOpq1qCFw5xdmjW4uTQ==
+X-Virus-Scanned: by MailRoute
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id S-hNqC-8Tm9F; Mon, 23 Mar 2026 15:50:45 +0000 (UTC)
+Received: from [100.119.48.131] (unknown [104.135.180.219])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4ffd1F3J3hz1XM6JY;
+	Mon, 23 Mar 2026 15:50:41 +0000 (UTC)
+Message-ID: <207a4a3c-39ce-4413-a307-586a718746c5@acm.org>
+Date: Mon, 23 Mar 2026 08:50:40 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scsi: esas2r: fix __printf annotation on
+ esas2r_log_master()
+To: Arnd Bergmann <arnd@kernel.org>, Bradley Grove
+ <linuxdrivers@attotech.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260323100027.1975646-1-arnd@kernel.org>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20260323100027.1975646-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260323-tools_build_fix_zero_init_bpf_only-v1-6-d1cfad2f4cd1@arm.com>
-References: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
-In-Reply-To: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
-To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
- James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
- Leo Yan <leo.yan@arm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1774280421; l=2317;
- i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=K3wdiOIPmKzJb3V7P58ebfdxfQJMWLNeh3ipytoXWwU=;
- b=6rkoiMv1f9bl/ohzee85t44Ww5uAMM1mVQPtXsR9tqgP/7amWpwxTqBrHN/Sm9C5YY0DfdRcn
- PAbEu+V1cv9CyO6twxqNxlpkHJyGSV2el40z9N3Tuk0qMa4QKtChMcg
-X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
- pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-Append EXTRA_CFLAGS to CFLAGS so that additional flags can be applied to
-the compiler.
+On 3/23/26 2:57 AM, Arnd Bergmann wrote:
+> The warning already got silenced for gcc but not clang in the past.
+> Rather than modify that hack to turn it off for both, just add the
+> attribute as suggested and remove the pragma again.
 
-urandom_read is built with clang.  Introduce URANDOM_READ_CFLAGS to copy
-the compiler flags without appending EXTRA_CFLAGS, which may contain
-incompatible options with clang.
-
-Since lib.mk appends options to CFLAGS, ensure that CFLAGS is inherited
-after including lib.mk.
-
-Signed-off-by: Leo Yan <leo.yan@arm.com>
----
- tools/testing/selftests/bpf/Makefile | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index f75c4f52c02842541f385bc8cbaeab32d8195ed3..50bcf4c386ba52e6cceef4c15f999d9eec6efd6e 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -158,6 +158,12 @@ endef
- 
- include ../lib.mk
- 
-+# urandom_read is built with clang. Copy $(CFLAGS) before EXTRA_CFLAGS are
-+# appended so that it does not inherit potentially incompatible options.
-+URANDOM_READ_CFLAGS := $(CFLAGS)
-+
-+CFLAGS += $(EXTRA_CFLAGS)
-+
- NON_CHECK_FEAT_TARGETS := clean docs-clean
- CHECK_FEAT := $(filter-out $(NON_CHECK_FEAT_TARGETS),$(or $(MAKECMDGOALS), "none"))
- ifneq ($(CHECK_FEAT),)
-@@ -255,7 +261,7 @@ endif
- $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom_read.map
- 	$(call msg,LIB,,$@)
- 	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
--		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
-+		     $(filter-out -static,$(URANDOM_READ_CFLAGS) $(LDFLAGS)) \
- 		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
- 		     -Wno-unused-command-line-argument \
- 		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-@@ -265,7 +271,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
- $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
--		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
-+		     $(filter-out -static,$(URANDOM_READ_CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
- 		     -Wno-unused-command-line-argument \
- 		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
- 		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-
--- 
-2.34.1
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
