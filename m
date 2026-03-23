@@ -1,294 +1,371 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6064F366558;
-	Mon, 23 Mar 2026 11:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6298635C19C;
+	Mon, 23 Mar 2026 12:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774266613; cv=none; b=DeFbNyS1RY19wq3Ntazz8KZs5fQYD+NkxZ17U4FqNnNVVmszzmuPPJLqP3ExSM2M76JpUJ4LkoXq8gLw+YxX4LsyzOF/jxQsHHhmarFBZofkZXlA0IH+451xrlb1PbClTSd4Yrx5TmyO67uyuEToaVdft66OvM+pypDBo+TT3Ns=
+	t=1774267335; cv=none; b=QB6oG9rn3fc4R6Ex1vdyZUEvwfaZ3ij7KHHIQIjWaoMuazfgoTi6t+ggMBrF/DGj7WYoGg7SyIrc+DBD5UViKtG7NAZaZxjghnBi/2RS948zUf6+Qldw5UqOaV6QTAzb3xmQKCnB4mxkKTQxw8g4EHKmcAQWjgxfPt+/QcwpRXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774266613; c=relaxed/simple;
-	bh=2E2pCXRCjUmFwJ1p11lXSuychCLwf00vUaVSi1BRtIw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=gCp6P4MVppfp3oeIyaNRDyw1w/QAE6mGBb0leGxIo6qH5V7glh/SCIE+1DJx0NptObJOCRa5I0Aa0133KdRmN5M1aRD3X/PM2BC8VVxZY8TuwUWAWi/P0bjUOHzDvyUr0FbJn5qlYtrKUxOcmQ1cnSeWvhM3gY/1W/VRdNzk/9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sQJ4gOcY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774267335; c=relaxed/simple;
+	bh=DH990MAA7XqDK96wX1hSt53+bz7x8xh+FefGD2xWiVI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=oqetfp0DnHfhseHUKeJSfFxceO+vdElkgMUwcWfGpJSDdNgrNax+eHENZ7m/Lj99KEnsUV82x4Hf0d2yuWBLm855FcdhRl5zfjW/e6At14D8hKnZdRo0dUYWvzl2v/6ZogTLD3tZZwWlLywmf9Bkq68wzmVybv4Pqt6ekn5syEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AxDmyPUD; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sQJ4gOcY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35974C4CEF7;
-	Mon, 23 Mar 2026 11:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774266613;
-	bh=2E2pCXRCjUmFwJ1p11lXSuychCLwf00vUaVSi1BRtIw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=sQJ4gOcYn5CHTLDUzJguOYEsSzHqNQ7pUN9CewGnJ7LFPD2l7Up7MJriZfedUxhMC
-	 24fkswbsYdCWDHa6wAyaaif0aDEGawqXo7Y/q/z6Qfrvji2/KSe6edlhOJ3mSHupik
-	 Qh6eATtzVv606HrLw7aWXR1q+I+hIvoQoN4sK3OTZ1i4IHCdPuvEdOcrAIR3sfVxzA
-	 mMP023nE2ydody6P7mExHD+4mLCV3XCgjuI2I9xD/KKV8kO92A/MF3d/o2bpEFOy87
-	 0SOkNOOnz8wZ/ZOxlJb9PDKRGt4cp1s7Z+iy9OslZaGXxg5cSpCUeFwhcrnWB6pRzo
-	 f09h+Mrqmib/Q==
-Date: Mon, 23 Mar 2026 20:50:09 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, Ian Rogers <irogers@google.com>
-Subject: Re: [PATCH v11 4/5] ring-buffer: Skip invalid sub-buffers when
- rewinding persistent ring buffer
-Message-Id: <20260323205009.2f4185f62cbd6103a0f892e1@kernel.org>
-In-Reply-To: <202603230725.uMAZiKJx-lkp@intel.com>
-References: <177391156211.193994.7531495945584650297.stgit@mhiramat.tok.corp.google.com>
-	<202603230725.uMAZiKJx-lkp@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AxDmyPUD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774267333; x=1805803333;
+  h=date:from:to:cc:subject:message-id;
+  bh=DH990MAA7XqDK96wX1hSt53+bz7x8xh+FefGD2xWiVI=;
+  b=AxDmyPUD85lGUcyH47Ujk+4r6d4XnnH20fNeG21ipd9fDszX/wHfqlkM
+   UrUY7i47ZVCPFAzpwfECZK9JL3dYitwYsmQL38fV/9Hw3idLRPmJ0U/wX
+   LQGoNo4JTeLsbbLRsxSehnLP0FQcy5kVsqDzLcTrdJuazZAgJLlPEcNPf
+   lkxObEWmFiNVHcN9rweuognT+PdDfBQYkUkI/NF9+YABcz7Aq28NlmMwB
+   Dixw3j5ABRiv/pygULpDwidjQIeBUZpv3y8iy77hIA3wL5JFiQ33/uT7K
+   ekVFTdjX9wqBzoyrpN/0XJFWNk39xpupJ+i8dG4rQg0KePAOai1/+f5eZ
+   g==;
+X-CSE-ConnectionGUID: /kJWaBuMSpGfZPY7Ln4MrQ==
+X-CSE-MsgGUID: egBwz1AQTneq/cy48OYczQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="75144138"
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="75144138"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 05:02:13 -0700
+X-CSE-ConnectionGUID: rc4+HHOKSwGRH2ZQvL+5jw==
+X-CSE-MsgGUID: hwcc9uMwQ7euFNoeiqU2eQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="225722933"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 23 Mar 2026 05:02:11 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4dyy-000000000TV-3VtL;
+	Mon, 23 Mar 2026 12:02:08 +0000
+Date: Mon, 23 Mar 2026 20:01:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrea Righi <arighi@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Tejun Heo <tj@kernel.org>
+Subject: [tj-sched-ext:for-next 95/109]
+ kernel/sched/ext_idle.c:629:25: error: call to undeclared function
+ 'cpu_smt_mask'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202603231900.ScD9mZNd-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Mon, 23 Mar 2026 07:18:07 +0800
-kernel test robot <lkp@intel.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext.git for-next
+head:   c919783ddb4e64aed07a276172a6712de07fce12
+commit: 2197cecdb02c57b08340059452540fcf101fa30d [95/109] sched_ext: idle: Prioritize idle SMT sibling
+config: riscv-randconfig-002-20260323 (https://download.01.org/0day-ci/archive/20260323/202603231900.ScD9mZNd-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 3258d361cbc5d57e5e507004706eb36acf120066)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603231900.ScD9mZNd-lkp@intel.com/reproduce)
 
-> Hi Masami,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on trace/for-next]
-> [also build test ERROR on geert-m68k/for-next geert-m68k/for-linus openrisc/for-next deller-parisc/for-next powerpc/next powerpc/fixes s390/features uml/next tip/x86/core uml/fixes v7.0-rc4 next-20260320]
-> [cannot apply to linus/master]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/ring-buffer-Fix-to-update-per-subbuf-entries-of-persistent-ring-buffer/20260322-122412
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-> patch link:    https://lore.kernel.org/r/177391156211.193994.7531495945584650297.stgit%40mhiramat.tok.corp.google.com
-> patch subject: [PATCH v11 4/5] ring-buffer: Skip invalid sub-buffers when rewinding persistent ring buffer
-> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260323/202603230725.uMAZiKJx-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603230725.uMAZiKJx-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202603230725.uMAZiKJx-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/trace/ring_buffer.c:1965:15: error: use of undeclared identifier 'bpage'
->     1965 |                         local_set(&bpage->entries, 0);
->          |                                    ^
->    kernel/trace/ring_buffer.c:1966:15: error: use of undeclared identifier 'bpage'
->     1966 |                         local_set(&bpage->page->commit, 0);
->          |                                    ^
->    2 errors generated.
-> 
-> 
-> vim +/bpage +1965 kernel/trace/ring_buffer.c
-> 
->   1910	
->   1911	/* If the meta data has been validated, now validate the events */
->   1912	static void rb_meta_validate_events(struct ring_buffer_per_cpu *cpu_buffer)
->   1913	{
->   1914		struct ring_buffer_cpu_meta *meta = cpu_buffer->ring_meta;
->   1915		struct buffer_page *head_page, *orig_head;
->   1916		unsigned long entry_bytes = 0;
->   1917		unsigned long entries = 0;
->   1918		int discarded = 0;
->   1919		int ret;
->   1920		u64 ts;
->   1921		int i;
->   1922	
->   1923		if (!meta || !meta->head_buffer)
->   1924			return;
->   1925	
->   1926		orig_head = head_page = cpu_buffer->head_page;
->   1927	
->   1928		/* Do the reader page first */
->   1929		ret = rb_validate_buffer(cpu_buffer->reader_page, cpu_buffer->cpu, meta);
->   1930		if (ret < 0) {
->   1931			pr_info("Ring buffer meta [%d] invalid reader page detected\n",
->   1932				cpu_buffer->cpu);
->   1933			discarded++;
->   1934		} else {
->   1935			entries += ret;
->   1936			entry_bytes += rb_page_size(cpu_buffer->reader_page);
->   1937		}
->   1938	
->   1939		ts = head_page->page->time_stamp;
->   1940	
->   1941		/*
->   1942		 * Try to rewind the head so that we can read the pages which already
->   1943		 * read in the previous boot.
->   1944		 */
->   1945		if (head_page == cpu_buffer->tail_page)
->   1946			goto skip_rewind;
->   1947	
->   1948		rb_dec_page(&head_page);
->   1949		for (i = 0; i < meta->nr_subbufs + 1; i++, rb_dec_page(&head_page)) {
->   1950	
->   1951			/* Rewind until tail (writer) page. */
->   1952			if (head_page == cpu_buffer->tail_page)
->   1953				break;
->   1954	
->   1955			/* Rewind until unused page (no timestamp, no commit). */
->   1956			if (!head_page->page->time_stamp && rb_page_commit(head_page) == 0)
->   1957				break;
->   1958	
->   1959			/*
->   1960			 * Skip if the page is invalid, or its timestamp is newer than the
->   1961			 * previous valid page.
->   1962			 */
->   1963			ret = rb_validate_buffer(head_page, cpu_buffer->cpu, meta);
->   1964			if (ret >= 0 && ts < head_page->page->time_stamp) {
-> > 1965				local_set(&bpage->entries, 0);
->   1966				local_set(&bpage->page->commit, 0);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603231900.ScD9mZNd-lkp@intel.com/
 
-Ooops, sorry, I made a copy & paste mistake. this should be head_page->entries and head_page->page_commit.
-Let me send v12 on the latest tracing/fixes.
+Note: the tj-sched-ext/for-next HEAD c919783ddb4e64aed07a276172a6712de07fce12 builds fine.
+      It only hurts bisectability.
 
-Thanks,
+All errors (new ones prefixed by >>):
 
->   1967				head_page->page->time_stamp = ts;
->   1968				ret = -1;
->   1969			}
->   1970			if (ret < 0) {
->   1971				if (!discarded)
->   1972					pr_info("Ring buffer meta [%d] invalid buffer page detected\n",
->   1973						cpu_buffer->cpu);
->   1974				discarded++;
->   1975			} else {
->   1976				entries += ret;
->   1977				entry_bytes += rb_page_size(head_page);
->   1978				if (ret > 0)
->   1979					local_inc(&cpu_buffer->pages_touched);
->   1980				ts = head_page->page->time_stamp;
->   1981			}
->   1982		}
->   1983		if (i)
->   1984			pr_info("Ring buffer [%d] rewound %d pages\n", cpu_buffer->cpu, i);
->   1985	
->   1986		/* The last rewound page must be skipped. */
->   1987		if (head_page != orig_head)
->   1988			rb_inc_page(&head_page);
->   1989	
->   1990		/*
->   1991		 * If the ring buffer was rewound, then inject the reader page
->   1992		 * into the location just before the original head page.
->   1993		 */
->   1994		if (head_page != orig_head) {
->   1995			struct buffer_page *bpage = orig_head;
->   1996	
->   1997			rb_dec_page(&bpage);
->   1998			/*
->   1999			 * Insert the reader_page before the original head page.
->   2000			 * Since the list encode RB_PAGE flags, general list
->   2001			 * operations should be avoided.
->   2002			 */
->   2003			cpu_buffer->reader_page->list.next = &orig_head->list;
->   2004			cpu_buffer->reader_page->list.prev = orig_head->list.prev;
->   2005			orig_head->list.prev = &cpu_buffer->reader_page->list;
->   2006			bpage->list.next = &cpu_buffer->reader_page->list;
->   2007	
->   2008			/* Make the head_page the reader page */
->   2009			cpu_buffer->reader_page = head_page;
->   2010			bpage = head_page;
->   2011			rb_inc_page(&head_page);
->   2012			head_page->list.prev = bpage->list.prev;
->   2013			rb_dec_page(&bpage);
->   2014			bpage->list.next = &head_page->list;
->   2015			rb_set_list_to_head(&bpage->list);
->   2016			cpu_buffer->pages = &head_page->list;
->   2017	
->   2018			cpu_buffer->head_page = head_page;
->   2019			meta->head_buffer = (unsigned long)head_page->page;
->   2020	
->   2021			/* Reset all the indexes */
->   2022			bpage = cpu_buffer->reader_page;
->   2023			meta->buffers[0] = rb_meta_subbuf_idx(meta, bpage->page);
->   2024			bpage->id = 0;
->   2025	
->   2026			for (i = 1, bpage = head_page; i < meta->nr_subbufs;
->   2027			     i++, rb_inc_page(&bpage)) {
->   2028				meta->buffers[i] = rb_meta_subbuf_idx(meta, bpage->page);
->   2029				bpage->id = i;
->   2030			}
->   2031	
->   2032			/* We'll restart verifying from orig_head */
->   2033			head_page = orig_head;
->   2034		}
->   2035	
->   2036	 skip_rewind:
->   2037		/* If the commit_buffer is the reader page, update the commit page */
->   2038		if (meta->commit_buffer == (unsigned long)cpu_buffer->reader_page->page) {
->   2039			cpu_buffer->commit_page = cpu_buffer->reader_page;
->   2040			/* Nothing more to do, the only page is the reader page */
->   2041			goto done;
->   2042		}
->   2043	
->   2044		/* Iterate until finding the commit page */
->   2045		for (i = 0; i < meta->nr_subbufs + 1; i++, rb_inc_page(&head_page)) {
->   2046	
->   2047			/* Reader page has already been done */
->   2048			if (head_page == cpu_buffer->reader_page)
->   2049				continue;
->   2050	
->   2051			ret = rb_validate_buffer(head_page, cpu_buffer->cpu, meta);
->   2052			if (ret < 0) {
->   2053				if (!discarded)
->   2054					pr_info("Ring buffer meta [%d] invalid buffer page detected\n",
->   2055						cpu_buffer->cpu);
->   2056				discarded++;
->   2057			} else {
->   2058				/* If the buffer has content, update pages_touched */
->   2059				if (ret)
->   2060					local_inc(&cpu_buffer->pages_touched);
->   2061	
->   2062				entries += ret;
->   2063				entry_bytes += rb_page_size(head_page);
->   2064			}
->   2065			if (head_page == cpu_buffer->commit_page)
->   2066				break;
->   2067		}
->   2068	
->   2069		if (head_page != cpu_buffer->commit_page) {
->   2070			pr_info("Ring buffer meta [%d] commit page not found\n",
->   2071				cpu_buffer->cpu);
->   2072			goto invalid;
->   2073		}
->   2074	 done:
->   2075		local_set(&cpu_buffer->entries, entries);
->   2076		local_set(&cpu_buffer->entries_bytes, entry_bytes);
->   2077	
->   2078		pr_info("Ring buffer meta [%d] is from previous boot! (%d pages discarded)\n",
->   2079			cpu_buffer->cpu, discarded);
->   2080		return;
->   2081	
->   2082	 invalid:
->   2083		/* The content of the buffers are invalid, reset the meta data */
->   2084		meta->head_buffer = 0;
->   2085		meta->commit_buffer = 0;
->   2086	
->   2087		/* Reset the reader page */
->   2088		local_set(&cpu_buffer->reader_page->entries, 0);
->   2089		local_set(&cpu_buffer->reader_page->page->commit, 0);
->   2090	
->   2091		/* Reset all the subbuffers */
->   2092		for (i = 0; i < meta->nr_subbufs - 1; i++, rb_inc_page(&head_page)) {
->   2093			local_set(&head_page->entries, 0);
->   2094			rb_init_page(head_page->page);
->   2095		}
->   2096	}
->   2097	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-> 
+   In file included from kernel/sched/build_policy.c:62:
+   kernel/sched/ext.c:6292:49: warning: diagnostic behavior may be improved by adding the 'format(printf, 4, 0)' attribute to the declaration of 'scx_vexit' [-Wmissing-format-attribute]
+     202 |         vscnprintf(ei->msg, SCX_EXIT_MSG_LEN, fmt, args);
+         |                                                        ^
+   kernel/sched/ext.c:202:13: note: 'scx_vexit' declared here
+     202 | static bool scx_vexit(struct scx_sched *sch, enum scx_exit_kind kind,
+         |             ^
+   In file included from kernel/sched/build_policy.c:63:
+>> kernel/sched/ext_idle.c:629:25: error: call to undeclared function 'cpu_smt_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     629 |                 for_each_cpu_and(cpu, cpu_smt_mask(prev_cpu), allowed) {
+         |                                       ^
+>> kernel/sched/ext_idle.c:629:3: error: member reference type 'int' is not a pointer
+     629 |                 for_each_cpu_and(cpu, cpu_smt_mask(prev_cpu), allowed) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cpumask.h:410:24: note: expanded from macro 'for_each_cpu_and'
+     410 |         for_each_and_bit(cpu, cpumask_bits(mask1), cpumask_bits(mask2), small_cpumask_bits)
+         |         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cpumask_types.h:18:39: note: expanded from macro 'cpumask_bits'
+      18 | #define cpumask_bits(maskp) ((maskp)->bits)
+         |                                       ^
+   include/linux/find.h:590:34: note: expanded from macro 'for_each_and_bit'
+     590 |              (bit) = find_next_and_bit((addr1), (addr2), (size), (bit)), (bit) < (size);\
+         |                                         ^~~~~
+   1 warning and 2 errors generated.
 
+
+vim +/cpu_smt_mask +629 kernel/sched/ext_idle.c
+
+   415	
+   416	/*
+   417	 * Built-in CPU idle selection policy:
+   418	 *
+   419	 * 1. Prioritize full-idle cores:
+   420	 *   - always prioritize CPUs from fully idle cores (both logical CPUs are
+   421	 *     idle) to avoid interference caused by SMT.
+   422	 *
+   423	 * 2. Reuse the same CPU:
+   424	 *   - prefer the last used CPU to take advantage of cached data (L1, L2) and
+   425	 *     branch prediction optimizations.
+   426	 *
+   427	 * 3. Prefer @prev_cpu's SMT sibling:
+   428	 *   - if @prev_cpu is busy and no fully idle core is available, try to
+   429	 *     place the task on an idle SMT sibling of @prev_cpu; keeping the
+   430	 *     task on the same core makes migration cheaper, preserves L1 cache
+   431	 *     locality and reduces wakeup latency.
+   432	 *
+   433	 * 4. Pick a CPU within the same LLC (Last-Level Cache):
+   434	 *   - if the above conditions aren't met, pick a CPU that shares the same
+   435	 *     LLC, if the LLC domain is a subset of @cpus_allowed, to maintain
+   436	 *     cache locality.
+   437	 *
+   438	 * 5. Pick a CPU within the same NUMA node, if enabled:
+   439	 *   - choose a CPU from the same NUMA node, if the node cpumask is a
+   440	 *     subset of @cpus_allowed, to reduce memory access latency.
+   441	 *
+   442	 * 6. Pick any idle CPU within the @cpus_allowed domain.
+   443	 *
+   444	 * Step 4 and 5 are performed only if the system has, respectively,
+   445	 * multiple LLCs / multiple NUMA nodes (see scx_selcpu_topo_llc and
+   446	 * scx_selcpu_topo_numa) and they don't contain the same subset of CPUs.
+   447	 *
+   448	 * If %SCX_OPS_BUILTIN_IDLE_PER_NODE is enabled, the search will always
+   449	 * begin in @prev_cpu's node and proceed to other nodes in order of
+   450	 * increasing distance.
+   451	 *
+   452	 * Return the picked CPU if idle, or a negative value otherwise.
+   453	 *
+   454	 * NOTE: tasks that can only run on 1 CPU are excluded by this logic, because
+   455	 * we never call ops.select_cpu() for them, see select_task_rq().
+   456	 */
+   457	s32 scx_select_cpu_dfl(struct task_struct *p, s32 prev_cpu, u64 wake_flags,
+   458			       const struct cpumask *cpus_allowed, u64 flags)
+   459	{
+   460		const struct cpumask *llc_cpus = NULL, *numa_cpus = NULL;
+   461		const struct cpumask *allowed = cpus_allowed ?: p->cpus_ptr;
+   462		int node = scx_cpu_node_if_enabled(prev_cpu);
+   463		bool is_prev_allowed;
+   464		s32 cpu;
+   465	
+   466		preempt_disable();
+   467	
+   468		/*
+   469		 * Check whether @prev_cpu is still within the allowed set. If not,
+   470		 * we can still try selecting a nearby CPU.
+   471		 */
+   472		is_prev_allowed = cpumask_test_cpu(prev_cpu, allowed);
+   473	
+   474		/*
+   475		 * Determine the subset of CPUs usable by @p within @cpus_allowed.
+   476		 */
+   477		if (allowed != p->cpus_ptr) {
+   478			struct cpumask *local_cpus = this_cpu_cpumask_var_ptr(local_idle_cpumask);
+   479	
+   480			if (task_affinity_all(p)) {
+   481				allowed = cpus_allowed;
+   482			} else if (cpumask_and(local_cpus, cpus_allowed, p->cpus_ptr)) {
+   483				allowed = local_cpus;
+   484			} else {
+   485				cpu = -EBUSY;
+   486				goto out_enable;
+   487			}
+   488		}
+   489	
+   490		/*
+   491		 * This is necessary to protect llc_cpus.
+   492		 */
+   493		rcu_read_lock();
+   494	
+   495		/*
+   496		 * Determine the subset of CPUs that the task can use in its
+   497		 * current LLC and node.
+   498		 *
+   499		 * If the task can run on all CPUs, use the node and LLC cpumasks
+   500		 * directly.
+   501		 */
+   502		if (static_branch_maybe(CONFIG_NUMA, &scx_selcpu_topo_numa)) {
+   503			struct cpumask *local_cpus = this_cpu_cpumask_var_ptr(local_numa_idle_cpumask);
+   504			const struct cpumask *cpus = numa_span(prev_cpu);
+   505	
+   506			if (allowed == p->cpus_ptr && task_affinity_all(p))
+   507				numa_cpus = cpus;
+   508			else if (cpus && cpumask_and(local_cpus, allowed, cpus))
+   509				numa_cpus = local_cpus;
+   510		}
+   511	
+   512		if (static_branch_maybe(CONFIG_SCHED_MC, &scx_selcpu_topo_llc)) {
+   513			struct cpumask *local_cpus = this_cpu_cpumask_var_ptr(local_llc_idle_cpumask);
+   514			const struct cpumask *cpus = llc_span(prev_cpu);
+   515	
+   516			if (allowed == p->cpus_ptr && task_affinity_all(p))
+   517				llc_cpus = cpus;
+   518			else if (cpus && cpumask_and(local_cpus, allowed, cpus))
+   519				llc_cpus = local_cpus;
+   520		}
+   521	
+   522		/*
+   523		 * If WAKE_SYNC, try to migrate the wakee to the waker's CPU.
+   524		 */
+   525		if (wake_flags & SCX_WAKE_SYNC) {
+   526			int waker_node;
+   527	
+   528			/*
+   529			 * If the waker's CPU is cache affine and prev_cpu is idle,
+   530			 * then avoid a migration.
+   531			 */
+   532			cpu = smp_processor_id();
+   533			if (is_prev_allowed && cpus_share_cache(cpu, prev_cpu) &&
+   534			    scx_idle_test_and_clear_cpu(prev_cpu)) {
+   535				cpu = prev_cpu;
+   536				goto out_unlock;
+   537			}
+   538	
+   539			/*
+   540			 * If the waker's local DSQ is empty, and the system is under
+   541			 * utilized, try to wake up @p to the local DSQ of the waker.
+   542			 *
+   543			 * Checking only for an empty local DSQ is insufficient as it
+   544			 * could give the wakee an unfair advantage when the system is
+   545			 * oversaturated.
+   546			 *
+   547			 * Checking only for the presence of idle CPUs is also
+   548			 * insufficient as the local DSQ of the waker could have tasks
+   549			 * piled up on it even if there is an idle core elsewhere on
+   550			 * the system.
+   551			 */
+   552			waker_node = cpu_to_node(cpu);
+   553			if (!(current->flags & PF_EXITING) &&
+   554			    cpu_rq(cpu)->scx.local_dsq.nr == 0 &&
+   555			    (!(flags & SCX_PICK_IDLE_IN_NODE) || (waker_node == node)) &&
+   556			    !cpumask_empty(idle_cpumask(waker_node)->cpu)) {
+   557				if (cpumask_test_cpu(cpu, allowed))
+   558					goto out_unlock;
+   559			}
+   560		}
+   561	
+   562		/*
+   563		 * If CPU has SMT, any wholly idle CPU is likely a better pick than
+   564		 * partially idle @prev_cpu.
+   565		 */
+   566		if (sched_smt_active()) {
+   567			/*
+   568			 * Keep using @prev_cpu if it's part of a fully idle core.
+   569			 */
+   570			if (is_prev_allowed &&
+   571			    cpumask_test_cpu(prev_cpu, idle_cpumask(node)->smt) &&
+   572			    scx_idle_test_and_clear_cpu(prev_cpu)) {
+   573				cpu = prev_cpu;
+   574				goto out_unlock;
+   575			}
+   576	
+   577			/*
+   578			 * Search for any fully idle core in the same LLC domain.
+   579			 */
+   580			if (llc_cpus) {
+   581				cpu = pick_idle_cpu_in_node(llc_cpus, node, SCX_PICK_IDLE_CORE);
+   582				if (cpu >= 0)
+   583					goto out_unlock;
+   584			}
+   585	
+   586			/*
+   587			 * Search for any fully idle core in the same NUMA node.
+   588			 */
+   589			if (numa_cpus) {
+   590				cpu = pick_idle_cpu_in_node(numa_cpus, node, SCX_PICK_IDLE_CORE);
+   591				if (cpu >= 0)
+   592					goto out_unlock;
+   593			}
+   594	
+   595			/*
+   596			 * Search for any full-idle core usable by the task.
+   597			 *
+   598			 * If the node-aware idle CPU selection policy is enabled
+   599			 * (%SCX_OPS_BUILTIN_IDLE_PER_NODE), the search will always
+   600			 * begin in prev_cpu's node and proceed to other nodes in
+   601			 * order of increasing distance.
+   602			 */
+   603			cpu = scx_pick_idle_cpu(allowed, node, flags | SCX_PICK_IDLE_CORE);
+   604			if (cpu >= 0)
+   605				goto out_unlock;
+   606	
+   607			/*
+   608			 * Give up if we're strictly looking for a full-idle SMT
+   609			 * core.
+   610			 */
+   611			if (flags & SCX_PICK_IDLE_CORE) {
+   612				cpu = -EBUSY;
+   613				goto out_unlock;
+   614			}
+   615		}
+   616	
+   617		/*
+   618		 * Use @prev_cpu if it's idle.
+   619		 */
+   620		if (is_prev_allowed && scx_idle_test_and_clear_cpu(prev_cpu)) {
+   621			cpu = prev_cpu;
+   622			goto out_unlock;
+   623		}
+   624	
+   625		/*
+   626		 * Use @prev_cpu's sibling if it's idle.
+   627		 */
+   628		if (sched_smt_active()) {
+ > 629			for_each_cpu_and(cpu, cpu_smt_mask(prev_cpu), allowed) {
+   630				if (cpu == prev_cpu)
+   631					continue;
+   632				if (scx_idle_test_and_clear_cpu(cpu))
+   633					goto out_unlock;
+   634			}
+   635		}
+   636	
+   637		/*
+   638		 * Search for any idle CPU in the same LLC domain.
+   639		 */
+   640		if (llc_cpus) {
+   641			cpu = pick_idle_cpu_in_node(llc_cpus, node, 0);
+   642			if (cpu >= 0)
+   643				goto out_unlock;
+   644		}
+   645	
+   646		/*
+   647		 * Search for any idle CPU in the same NUMA node.
+   648		 */
+   649		if (numa_cpus) {
+   650			cpu = pick_idle_cpu_in_node(numa_cpus, node, 0);
+   651			if (cpu >= 0)
+   652				goto out_unlock;
+   653		}
+   654	
+   655		/*
+   656		 * Search for any idle CPU usable by the task.
+   657		 *
+   658		 * If the node-aware idle CPU selection policy is enabled
+   659		 * (%SCX_OPS_BUILTIN_IDLE_PER_NODE), the search will always begin
+   660		 * in prev_cpu's node and proceed to other nodes in order of
+   661		 * increasing distance.
+   662		 */
+   663		cpu = scx_pick_idle_cpu(allowed, node, flags);
+   664	
+   665	out_unlock:
+   666		rcu_read_unlock();
+   667	out_enable:
+   668		preempt_enable();
+   669	
+   670		return cpu;
+   671	}
+   672	
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
