@@ -1,136 +1,147 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3CAF3C9447
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 20:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECCE3164DF;
+	Mon, 23 Mar 2026 20:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774299425; cv=none; b=PV7pvU9K4ERexnlfU9Y4dwDmDwY1lqZyKlMahxNJXZ4SJbf/cOGjcWJE2fO0FKOfKoMkGW9Gju/B69qc2Kx/4X1MrBv5gix6dv3UUCWO9dbZYgdQVmriCat1xgx/KMMosqZQt4FuBt+j0ydcjwjqEHALa4c9rjLcXJlYFfoWVwo=
+	t=1774299433; cv=none; b=HHXDIKKfvVZf3bSDf1axluFk4v30+OF+/ZB7JieCOia+xVaTgNOEFylPhq9v8FBLlIPtNpz1szGaVhVqTkbKSYYsgL6heaqao1jKsJBVeCnRimrWQ6sXmm89nmhbgfv0dh0lZxBvBQbH666K2NpZM1om7y0MfglGOEvYNzYgsnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774299425; c=relaxed/simple;
-	bh=k82pXJV/uzk96wJ1JJTyg+KqVmS0eDwcq6CaW/9nFpk=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=o/apCQd0i41aJY0gEs/3udgnTglRqTa2SEeOfc07cDpLDbCJp61WPLVXqJBadYhOWutPaGLi4MHfeDE7CCfeAR0bZyjjUJEztI6jPQRkKdIbV85mLA/gnuFv7+FMgQbpeMSx9e+qA7Iuqj5gFtraUlLdmD5PVTivcgmzcnUThok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fAWmhyPP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RJ8LeThG; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1774299433; c=relaxed/simple;
+	bh=9eyzVsezjTHr9B48nfZy+80UyoUgZl9UKU6dVKA/LmA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mUOT1NNt2Mmxpjj/JoKsLeLLa7tekPXL6mCMR/RuyR8/WWYtwKQ5g4fFd/zsCX78g/oIKFfLnPiy9hhCEl/edawaqV+EaedL/3clxZCJLgAXRit+HzQbRnnJivtqOHZRDotqMZLR1Qjo25eUczQmPiSuUY34owrJ/ljPwsp67qU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EXwBoK5A; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fAWmhyPP";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RJ8LeThG"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 86C0B1D00232;
-	Mon, 23 Mar 2026 16:57:02 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Mon, 23 Mar 2026 16:57:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1774299422;
-	 x=1774385822; bh=TRWIBf5HsVBc2olfebxe3KUbaRju4KcZcgxVm0YE1QI=; b=
-	fAWmhyPPDcN60rFVP+ZIn+mu6n06vPP43Oe+tl38MCf+RhIiwcicqR8sAXP2R4D6
-	AsEFZ8SP7s2jSeUBS3e4tnSxYIBfdC5Q/iZ3A9YKGezYZ9g7CbteXBxr5SSUAmV8
-	0cPoyUjd5AS5AXrxbj/t353y5DmuMvHN6XcrNSPmAcJkkgWXa92AlJ7cZq2UvxJr
-	Cz7pKFSub1LXAlyZ5ra++5XzAPpyJLtDAOqMn1+f7LmBiJOvIxYm1dNTG3zxtxIq
-	i1xyu/7/pVtPFe+jARJA8k13RRo9nR0Gnw/3rqiexva7kEppoaYsS8akOHbdQs+n
-	lzHFEavV3vneF8lYdPgrcg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774299422; x=
-	1774385822; bh=TRWIBf5HsVBc2olfebxe3KUbaRju4KcZcgxVm0YE1QI=; b=R
-	J8LeThGtP2wsVeg1lz7igchWsZSjyYPhk0cCK8V9U/y+nvDfWqV0x6RRalhDsVPI
-	AlKomSfjGeRkD31ueBcg6VkNhobf9GVkhnm2b9hCcTpR4+1oopmC6DnlGSq9JqYy
-	9XBXLYI9q89wcWjR6oV6y5Cw+NTFW7XsU6pdXuinEJM/QY/gr7rnnrIyt6LrRvDC
-	2pIJFnJicb7qDEyugh1uHYSJW1wM2mdGfeVv54T61aTKf2qhCkbKT7xUiXLFMenw
-	mzpoDz11SVrhpz9gYmn7fbT/li63vgdkm15WrhT+3Yns83B2KqyosBVoeu4kQFlc
-	SMMPa8/ze8rqkNPNkIwFg==
-X-ME-Sender: <xms:HanBaXK2lc_Z2W9cb-JYdDm70UIOM9uSWK7Sq37SWA3gN6fJ0Dn8zw>
-    <xme:HanBaV_uT8132lXZWdmfEx4P-moqW7StIL5R2l55dwXNC8Gt5RoHhyMyFLIuOo-_a
-    -J_RKQPiWATbHASwflE1z9zwyPPs97hlBNBrIIM02b_xY74q9T2l9GY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudeljeefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepfefhheetffduvdfgieeghfejtedvkeetkeejfeekkeelffejteevvdeghffhiefh
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
-    phhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhitghkrdguvg
-    hsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehjrggt
-    khhmrghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhushhtihhnshhtihhtth
-    esghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhglhgvrdgtohhm
-    pdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoh
-    eprghrnhgusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhnghhosehkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpth
-    htoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrgh
-X-ME-Proxy: <xmx:HanBaTFqtRYEc-uRmwngmSLrn2Lul4WSlUieWGDXwdDsnYs7o5L73Q>
-    <xmx:HanBaWu7PF4w2ynHsQf9t-8ZJNeHgMtUlGBPd9_F0KjWNEh0m9hVbQ>
-    <xmx:HanBaRYQ0r3YgSKEBAl4TGt3-_8KeX8ptHrg-WX88PswWNt1xi8ZWw>
-    <xmx:HanBae48mtpd_04q1B2tvjyN9jW1JJEjcqrdm__vsZWHwQ1HE9OA1w>
-    <xmx:HqnBaRySk-OsNKgED5eBhkklU6zhF1-4Bu4PxcGsiLUr5CGB119_YlUk>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 8DBB3700065; Mon, 23 Mar 2026 16:57:01 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EXwBoK5A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774299433; x=1805835433;
+  h=date:from:to:cc:subject:message-id;
+  bh=9eyzVsezjTHr9B48nfZy+80UyoUgZl9UKU6dVKA/LmA=;
+  b=EXwBoK5AJ4uP5CKx2Ib86afxZrHThe3QXkWWLQiSSF2MFjy748sm7Zyu
+   F9onrS30wYb0su2drLyS+dKkkD1pxu36NpdbJBDDEJSV6aTnqG72byY1n
+   6qPW5JftStpEJ8lZALKP3m9x8KbzCUi5QXJo/dbKjaUH4vwTSRMFaOTsd
+   hk5QbR+BSXrZmeIXXLemxzh3YfLwo10YjvYSBqjJN0DQpI9PoWrAR0dJ5
+   B34r4S6uwiH/A0hX2dbHk2uI8zd1YXA+b2qrEq70MVDS4qscT+FwA0Ko/
+   BVr3zj+3tgMmLyz0vVDkY2a6GN9rmAYI9Fo5WIlng+jAvObdUvGebMkZ1
+   w==;
+X-CSE-ConnectionGUID: i/TkKaONRRKp6ruGVrFbUw==
+X-CSE-MsgGUID: hnNBfsL6TSGZc7BcW4zcPg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="62864802"
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="62864802"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 13:57:12 -0700
+X-CSE-ConnectionGUID: Ski626+SSauqraUi0+MF/Q==
+X-CSE-MsgGUID: F2oYxVv3St+VT3ADYm5hxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="247183189"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by fmviesa002.fm.intel.com with ESMTP; 23 Mar 2026 13:57:10 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4mKi-000000006in-1j8G;
+	Mon, 23 Mar 2026 20:57:08 +0000
+Date: Mon, 23 Mar 2026 21:57:05 +0100
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-crypt 37/42]
+ fs/netfs/direct_read.c:86:20: warning: variable 'len' is uninitialized when
+ used here
+Message-ID: <202603232150.smRruVIF-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-ThreadId: AuIeNFRcSw9w
-Date: Mon, 23 Mar 2026 21:56:31 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andrew Morton" <akpm@linux-foundation.org>
-Cc: "Brendan Jackman" <jackmanb@google.com>,
- "Arnd Bergmann" <arnd@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Message-Id: <ca8b75f5-c342-469e-b596-510177863272@app.fastmail.com>
-In-Reply-To: <20260323134540.5de3cf098cc9858486462f08@linux-foundation.org>
-References: <20260320211528.2474389-1-arnd@kernel.org>
- <DHA3U3U4ZZXQ.2RPHOFNQJ70JQ@google.com>
- <cf40b3d8-9a69-40b7-b885-aff87e85de68@app.fastmail.com>
- <20260323134540.5de3cf098cc9858486462f08@linux-foundation.org>
-Subject: Re: [PATCH] bug: shut up format attribute warning for clang as well
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 23, 2026, at 21:45, Andrew Morton wrote:
-> On Mon, 23 Mar 2026 16:38:14 +0100 "Arnd Bergmann" <arnd@arndb.de> wrote:
->
->> On Mon, Mar 23, 2026, at 11:54, Brendan Jackman wrote:
->> > On Fri Mar 20, 2026 at 9:14 PM UTC, Arnd Bergmann wrote:
->> >
->> > There is actually a superior fix for this warning that Andy Schevchenko
->> > posted here (mine just happened to get merged first):
->> >
->> > https://lore.kernel.org/all/20251208141618.2805983-1-andriy.shevchenko@linux.intel.com/T/#u
->> >
->> > Should we just switch over to that? Looks like it should work for both
->> > compilers.
->> 
->> Right, I tried that again and it works. I had confused it with the
->> similar logic to disable the warning on va_format(), which is
->> not that easy to avoid.
->> 
->
-> What I think I'm hearing is that we should revert Brendan's
-> d36067d6ea00 ("bug: Hush suggest-attribute=format for __warn_printf()")
-> then apply Andy's
-> https://lore.kernel.org/all/20251208141618.2805983-1-andriy.shevchenko@linux.intel.com/T/#u,
-> yes?
->
-> Could someone please prepare a suitably changelogged and tested patch
-> for that?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-crypt
+head:   ae7ccdf83025020c44837849de26fb4546fbf825
+commit: e7c8280c95acfbbef1fc569cbb950835ab68c7f2 [37/42] netfs: Implement bounce-buffering for unbuffered/DIO read
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260323/202603232150.smRruVIF-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603232150.smRruVIF-lkp@intel.com/reproduce)
 
-I now sent the version that I had in my tree already as a v2
-of my patch. I tested this with gcc-16 and clang-22 in random
-configurations.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603232150.smRruVIF-lkp@intel.com/
 
-     Arnd
+All warnings (new ones prefixed by >>):
+
+>> fs/netfs/direct_read.c:86:20: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
+      86 |                 len = round_down(len, rreq->crypto_bsize);
+         |                                  ^~~
+   include/linux/math.h:35:28: note: expanded from macro 'round_down'
+      35 | #define round_down(x, y) ((x) & ~__round_mask(x, y))
+         |                            ^
+   fs/netfs/direct_read.c:74:12: note: initialize the variable 'len' to silence this warning
+      74 |         size_t len;
+         |                   ^
+         |                    = 0
+   1 warning generated.
+
+
+vim +/len +86 fs/netfs/direct_read.c
+
+    64	
+    65	/*
+    66	 * Prepare the buffer for the read RPC.  Limits are applied and the buffer may
+    67	 * be rounded down.  Bounce bufferage will be added if necessary.
+    68	 */
+    69	int netfs_prepare_unbuffered_read_buffer(struct netfs_io_subrequest *subreq,
+    70						 unsigned int max_segs)
+    71	{
+    72		struct netfs_io_request *rreq = subreq->rreq;
+    73		struct netfs_io_stream *stream = &rreq->io_streams[0];
+    74		size_t len;
+    75		int ret;
+    76	
+    77		bvecq_pos_set(&subreq->dispatch_pos, &stream->dispatch_cursor);
+    78		bvecq_pos_set(&subreq->content, &stream->dispatch_cursor);
+    79	
+    80		/* Limit encrypted reads so that we don't split an encryption block
+    81		 * across two subrequests unless the filesystem doesn't support blocks
+    82		 * that big.
+    83		 */
+    84		if (subreq->len > rreq->crypto_bsize &&
+    85		    test_bit(NETFS_RREQ_CONTENT_ENCRYPTION, &rreq->flags)) {
+  > 86			len = round_down(len, rreq->crypto_bsize);
+    87			if (WARN_ON_ONCE(len == 0))
+    88				return -EIO;
+    89		}
+    90	
+    91		/* Expand the bounce buffer so that we've got something to read into. */
+    92		if (test_bit(NETFS_RREQ_USE_BOUNCE_BUFFER, &rreq->flags)) {
+    93			ret = bvecq_buffer_add_space(&rreq->bounce_cursor,
+    94						     &rreq->bounce_alloc_to,
+    95						     subreq->start + subreq->len,
+    96						     round_up(rreq->start + rreq->len,
+    97							      rreq->crypto_bsize),
+    98						     false, GFP_KERNEL);
+    99			if (ret < 0)
+   100				return ret;
+   101		}
+   102	
+   103		len = bvecq_slice(&stream->dispatch_cursor, subreq->len, max_segs,
+   104				  &subreq->nr_segs);
+   105	
+   106		if (len < subreq->len) {
+   107			subreq->len = len;
+   108			trace_netfs_sreq(subreq, netfs_sreq_trace_limited);
+   109		}
+   110	
+   111		stream->buffered   -= subreq->len;
+   112		stream->issue_from += subreq->len;
+   113		return 0;
+   114	}
+   115	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
