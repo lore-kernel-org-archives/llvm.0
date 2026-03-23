@@ -1,123 +1,84 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED68738AC8A
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 10:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A2939185E;
+	Mon, 23 Mar 2026 10:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774263269; cv=none; b=sFj5lSouvpLhGWDR5m0BaLDI6kgwYSOviFmIW1PIzYzSz8/5SrYBtYjPjzXIomM+iLAVowKXaX4CbeXj09PWSQPSP7tPIvOARPTTN5wQvY5ELNEWq+GSPRQq1yYz/9tLhkGBmXEa8QozwEmNW6oPXMBRhhVDx6hka+4Ttx2bcG0=
+	t=1774263426; cv=none; b=BALGD5czi0XrBKan4b7vVIZA2NX8KN2kfxbZ8szsr04mlLM5lwAI0Hz2FRPJInJ4EjLY31AKXCBKdGSy52HdlQCTiB3itlrQYry15eLkzP/OlUiUKHtJrV5AXBRN2Gh44C3tu/7ZOt3xnvzIop3b06i9KWW7FUpOxP73wH+pw4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774263269; c=relaxed/simple;
-	bh=dCNJE7U5RGNCFs1f/bIjCmMUBMSVOy/fPu+d8fLBcQg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=btLg4NT7NXWA/GFF93YaXPw9XJWWS0pa/uNFDHo/Q4+QTxKQcXS4xNElrRLCjoeI6AP90DSMg1M49Z7YavdG/VE0jZ+iMXY3wz+soDVUaRwXUQvhDKfZK7p/MRyzzbAKWY7JGNRtTI18S2UR56kCFmnMZZwxqFpX7RHQ3bzdu34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OyOTxcaY; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+	s=arc-20240116; t=1774263426; c=relaxed/simple;
+	bh=wSDBEtgylDbVLV5Dzb2nr0Y74+YlFOeW3xsiMnjWhBg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=lXe1dKzOr9zqGyUXE6xcoM/BOFWU/xuDTjDVhJxoGp9vCIYzaBfeUxumhATShsVvJJ+qYAGd3NYF+sLA0ZEyLU/T//JLS6DY1F7QHPpOEdk6H2VRLNXLEnJGdtmOtLPTh8X1rSz2ZUnsvEqUxUVmRLlBg8vzTNCJOkElxsFVYEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GcsR2XDT; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OyOTxcaY"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-48544725bdeso40226675e9.2
-        for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 03:54:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774263266; x=1774868066; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2kszuLAyxs0b0uA7vliUMXaWBAHNPS94Epw+3Op512A=;
-        b=OyOTxcaYV1PSt5+Ohh6M0FjMz0efXaOa20sF0HEWRaUKYlEPVkp/1NG0R9eYhWBH9k
-         OBu9bsGn9W5XnyxmVbhjtBiyRVE654C8BUX1e6H6RGIuGumR99d1c2UIgdEyOWYsMT2V
-         nWvyzDnDe/FDht4RjMXwD/qhbCRydWcW1O61uvT+NuKp3xRNSoMWJu5KW5Icf4nhbKxP
-         bQodkr3v8ORWEqhV6ehmJGv2vVG7gjdPKuO04STM5s/TQPRwx03UVaPkcOTYZgMtS8vr
-         KjWAaz/ociEgUR2gaeScgZLblyUzQUUV/545Uih+aoPT/eAolIlf1+twEd/OWgWYhniX
-         i57g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774263266; x=1774868066;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2kszuLAyxs0b0uA7vliUMXaWBAHNPS94Epw+3Op512A=;
-        b=kscGfilxnCbBT1A0iwr+JXLS+evoitEJZyggjhdZlD7ZeAOqksn/KDTCfpH4euWgnf
-         PEhQNG1wo8naJ7USEEt6bggu0hrIuhS379uUUrVlOFP82f/5T9fQxkMq1Enn5FTo4MqN
-         IlByV66PJT5rrN5sful36gZI7MGXk2yaNN4Qpd0kig2YbfKZbBXmOr6otiq1uHNArNhK
-         R5YkG3vO+5fydZIjb8tx6c35717lqD6tzdWrH9/vkaHwjp1nufCdjZQuK+FWBGnvNHFO
-         rHd0PfrJRkWfDEzfRtR2O7sZzHgGV5oqvMs3Yju4R0O4ekL84djRshEtEt0p0Mnl9gTc
-         j71w==
-X-Forwarded-Encrypted: i=1; AJvYcCWxTXw7xT69j1RpEZc7T8kSNDGDRyxrPnoPU6KnCyp1UkyBrhsEcw2rh8t/fRlHjZZiZYNR@lists.linux.dev
-X-Gm-Message-State: AOJu0YzVbQl0RCiQ243MZQ1i0wCTnRui3lTWkgfpQXaVrE/PacXlo8YS
-	IkvNFSzMrXJNkx5t/ELjmWf4nStN3lNQyY8JaTAQcZsE5LbsTM/v7PM3OJDdkaxX+c/lpdB/2Gl
-	wzWkrg8eTyEP7Ig==
-X-Received: from wruq7.prod.google.com ([2002:a5d:6587:0:b0:43b:4e01:4ab8])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:3056:b0:487:1fc:14f9 with SMTP id 5b1f17b1804b1-48701fc15bbmr75448495e9.15.1774263266307;
- Mon, 23 Mar 2026 03:54:26 -0700 (PDT)
-Date: Mon, 23 Mar 2026 10:54:25 +0000
-In-Reply-To: <20260320211528.2474389-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GcsR2XDT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774263426; x=1805799426;
+  h=date:from:to:cc:subject:message-id;
+  bh=wSDBEtgylDbVLV5Dzb2nr0Y74+YlFOeW3xsiMnjWhBg=;
+  b=GcsR2XDTYimm6BBMqxY2F3e6enGg6HbHlLSPTeTZr9WrGkUtAOBlhSpf
+   4ehaoHwhdUmgpt0j0WzzY9feecqvBdrAHiyUfwTiB4Ehit/91PqSSMnq0
+   zmoSolwMYKm2pDfVY2j3zFRPUz0JHuNBuE7Tfc+2YuTHW53On3KDODhUJ
+   7EbS2hZyMsnIY1DazT1WKCKpZuUnPwUolTBcB8IolUK70C8aIcW9uX8X0
+   Ka4kH/aMBsTrf9p4usBbb+uMoXqU7ftU4oNMdKhLe8dFKfnmhYHOBZDVY
+   QSrL6O7p+mTiWB3OqsmJgk1b5sS2fvQkzSnXDBDfTDQizok6YFQsBOq6K
+   A==;
+X-CSE-ConnectionGUID: 5PfpG3SAQUSNHJqtWQQEHQ==
+X-CSE-MsgGUID: mlZNZkiqQLexlM3Q513lkw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="79116744"
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="79116744"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 03:57:05 -0700
+X-CSE-ConnectionGUID: UgX0DQDZTuC39PeTfMPrnA==
+X-CSE-MsgGUID: 1I+f6KRCQIStB80CMPmPFg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="223185084"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 23 Mar 2026 03:57:03 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4cxx-000000000Nr-0ZqY;
+	Mon, 23 Mar 2026 10:57:01 +0000
+Date: Mon, 23 Mar 2026 18:56:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mark:arm64/entry/preemption-fix 1/3] ld.lld: error:
+ vmlinux.a(process.o at 2773892) <inline asm>:1:10: expected readable system
+ register
+Message-ID: <202603231818.968oYVfp-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260320211528.2474389-1-arnd@kernel.org>
-X-Mailer: aerc 0.21.0
-Message-ID: <DHA3U3U4ZZXQ.2RPHOFNQJ70JQ@google.com>
-Subject: Re: [PATCH] bug: shut up format attribute warning for clang as well
-From: Brendan Jackman <jackmanb@google.com>
-To: Arnd Bergmann <arnd@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Ingo Molnar <mingo@kernel.org>, Brendan Jackman <jackmanb@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
 
-On Fri Mar 20, 2026 at 9:14 PM UTC, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Like gcc, clang-22 now also warns about a function that it
-> incorrectly identifies as a printf-style format:
->
-> lib/bug.c:190:22: error: diagnostic behavior may be improved by adding the 'format(printf, 1, 0)' attribute to the declaration of '__warn_printf' [-Werror,-Wmissing-format-attribute]
->   179 | static void __warn_printf(const char *fmt, struct pt_regs *regs)
->       | __attribute__((format(printf, 1, 0)))
->   180 | {
->   181 |         if (!fmt)
->   182 |                 return;
->   183 |
->   184 | #ifdef HAVE_ARCH_BUG_FORMAT_ARGS
->   185 |         if (regs) {
->   186 |                 struct arch_va_list _args;
->   187 |                 va_list *args = __warn_args(&_args, regs);
->   188 |
->   189 |                 if (args) {
->   190 |                         vprintk(fmt, *args);
->       |                                           ^
->
-> Turn off this warning for all compilers and versions.
->
-> Fixes: d36067d6ea00 ("bug: Hush suggest-attribute=format for __warn_printf()")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  lib/bug.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/lib/bug.c b/lib/bug.c
-> index bbc301097749..374feb144f0b 100644
-> --- a/lib/bug.c
-> +++ b/lib/bug.c
-> @@ -174,8 +174,7 @@ struct bug_entry *find_bug(unsigned long bugaddr)
->  }
->  
->  __diag_push();
-> -__diag_ignore(GCC, all, "-Wsuggest-attribute=format",
-> -	      "Not a valid __printf() conversion candidate.");
-> +__diag_ignore_all("-Wmissing-format-attribute", "Not a valid __printf() conversion candidate.");
->  static void __warn_printf(const char *fmt, struct pt_regs *regs)
->  {
->  	if (!fmt)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/entry/preemption-fix
+head:   423b062b9d1426491a06e59385e3b55da584cda0
+commit: 39a482d122b314ad64537c09bb66a282efa8181b [1/3] HACK: arm64: Check CPU state at task-switch time
+config: arm64-randconfig-004-20260321 (https://download.01.org/0day-ci/archive/20260323/202603231818.968oYVfp-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603231818.968oYVfp-lkp@intel.com/reproduce)
 
-There is actually a superior fix for this warning that Andy Schevchenko
-posted here (mine just happened to get merged first):
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603231818.968oYVfp-lkp@intel.com/
 
-https://lore.kernel.org/all/20251208141618.2805983-1-andriy.shevchenko@linux.intel.com/T/#u
+All errors (new ones prefixed by >>):
 
-Should we just switch over to that? Looks like it should work for both
-compilers.
+>> ld.lld: error: vmlinux.a(process.o at 2773892) <inline asm>:1:10: expected readable system register
+   mrs x8, PAN
+   ^
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
