@@ -1,123 +1,108 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766011E9B3A
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 13:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774271189; cv=pass; b=NB3J4G0MSSgqPEkVAI2NWOtFiKUDMgiwe4NMvvpFIgyYbd0Ti6qrMJsalvJf/gEz3sbeawyQRo8oKOLue0VnoqmC59mkq+F42PbwVYa65jP566Whl9Qga/Wha0r3yH+9oFkHK4Jc1Pn6YY2z+u6ppIVLwdQ7lURnfyef5cSPbhA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774271189; c=relaxed/simple;
-	bh=mpomDLO8ZlCocmuPtdKICwxv4H57ynvhw4z1RG2BH9k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=El9A/y9/MDfD8beu5tsgtoAhN5FfD42XKYSdZoO3ZNZ2xx2b2yl1lleR/d67bvSFSMpnxkd0ppla+/HuqWmKl38O2gx8yXuzDuGGU5qouUTdSjpIuxw+OiG01CsZixxFk5UWGFyh5POXD30fFHU3PcLS81MvYCWWhA3C3gOt09s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kuSIAhck; arc=pass smtp.client-ip=74.125.82.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DC02DE6F1;
+	Mon, 23 Mar 2026 13:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774271190; cv=none; b=jLrMFxaXCXDlX9jw1PQDIWY5D4VVULchtLH5pyu5GQqFdfRLoPUwnW9seqvkuJA73T3dpAuxT7MgVF3gD5QyZnlswAzktkxjSHKsp692iWV00r3HFmVD1/SU+ypVKLKAQ6AwQWO4n+j4rrFw/DVGkkndIFES9FccQWJhXdizFXE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774271190; c=relaxed/simple;
+	bh=gOgv5bKsksgGx3nrv4fb0woIoZIh4/V/CUpY0JM0vXI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fSlmRaQFAVWCxHT2DHUVzG3JWlHtZXo457aMPGHeu34n6+9t9QQLwUhFQB8UwIghgwOS1HOVZm5Wf42C/BwEsl4o0RFESP79xgTZ2GHa8BtWDb3zgbTqANBzrr8mePGPLZhrn24AefzUSXpgybemCX1wdWqJ3tx09Ng+nxf3bZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ikl1fSsQ; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kuSIAhck"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2c1410009a8so17319eec.1
-        for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 06:06:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774271187; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FlOG9iPjlyk7wv/DR9X55ou/AlxEJHhVFCbVi83r0Wfs48s2z46uGW8DAXajO8Q1Dt
-         l6Sbrh35ek02JdmfPaGvQVGDM2ljtNtGsHLgScb969pDI75tgIrVMRK188BJgkmgz3JR
-         E6x/7sRJrb+q509yoJ/kvVZctFH8UYsrfMzs7hGjj1c14a3Q/LO2/DMPwARlWZKPC/sp
-         beN3MWb4njZxj7kTXV05fy2oYXA/4RJV1b8qzNtsGGxcwP5iAo/acXmJjyFV/rc8ISkl
-         u1JhhuGP3i7g1nYdCYWoH1fwoxp+26dv/ot2JBWV/SL5/z9QRWhvpJfwPqmKADEtLPWv
-         NOcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZeosOC78tfRPtRL6p+oZtOws2T4Y/1DZR2wWiWY/WhY=;
-        fh=k5Oxxmkfr46dxF7IVHT/AfPXwSC88EsD6mm+DDLeiOA=;
-        b=Ob2w/4OyufE8yes8d8SZ1rY+7JAUMR+O5y22e9o+N61ToV28lkPna44cjrJx8yUFTW
-         LKzVFQWryWk/6RaKxgk9KEIBuMotV2mU5o6E5T/GgVzMJe35wNRHlzL+dZahTOF+pzcs
-         rfuzlyqGbzMkrfXuq1SLNkLLPpm97/UX+vE0Bw6ecluMcTw9TAVBqDBcGTfJsApmAOWB
-         XS8LPqrS/09NnwzDR2lQI+V6zksGSk5+w/xLOrK/WTqnE6+O4ppaRgVDu49Uy8T84+jQ
-         xk34G2NYSOSYzmBRLZsTgJqwaM/CSXDIz+7uNWtBW0m/bXRW6LnkxEGEBHtzGGcthVXW
-         hbLg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774271187; x=1774875987; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZeosOC78tfRPtRL6p+oZtOws2T4Y/1DZR2wWiWY/WhY=;
-        b=kuSIAhckaeaKYiiaSQHGGdQiBIjCzMoc4vClkUtfwWsuojkT12tHkzs/N4en5Wn9UQ
-         yWi+KMmnMhh4kcEqvLF4yBJIl21qOYDziv+hSHLm/b1WCNYJ2Mp2Fs705GUKZdKkcqPd
-         hnsHfE6eD4NweRa7YDGUJBFxaE3XUPn7o/kmu3YY54V/I8g7yCUyVbL38t8OIiUWCx7L
-         qxuJ7Oto0qUAhklOeFqljt6zrN40bua5Sw9O3w5mB8bXYx6vbDErP5++x4x4Z9ApQAbZ
-         G7mj20wGkeXd/fGTJis01GAlympMy1f61ofHiiU5eFjo2+cvVviG95XZjRhQhRLISkBy
-         afzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774271187; x=1774875987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZeosOC78tfRPtRL6p+oZtOws2T4Y/1DZR2wWiWY/WhY=;
-        b=B612oZDkRntU6sd0DCYuIG43CrAN4kT5g69aQFZ56ESWa35gwEhyZoxBgxzNRYCbwg
-         0XxY/keSM8g1Mh2MBE8T0nErK0OIfpYO7YHJ2wDhS8+u0aUIYu8fgYlLqJSxvkQeAU/G
-         1DLlbYneEnPr3wzZY7Pg0M5ajIHdX0CAUT+f+AV0NdsoJEHtowHY/7ahqET3NLvJ+yMD
-         28T0KBcqrkVdJjDT2ede+Rqhs3Mgqdq82qynMjNX5HrH9LgWnogz7nRHROoJtVb7mEld
-         w7z4Dkz/3WS3wsRs4sQqBewhyyJiSqcmCVvNwiuLWr5NPOWnnLZ0RJu2f0wCE9TaWWde
-         pX0w==
-X-Forwarded-Encrypted: i=1; AJvYcCUY+B5quVINRdLdg01ZakewKeLJHYEq+iHj998E5DuJpXN8XwKfZ6K/6+you6Zf955GLkFa@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw7tEpiCX3BGSpVPe6CfLyGksR3RAkxCQ8dkbO1BMqnH+3dzNy4
-	l45L7Vqo+c22z+kOwo7Ia/LSTTrPr4JNfYwYWePd5C15oaeQbJ7Sj89a2im+8MDPH79DR8qu7kB
-	rMpgny/jTFUxjZKtVG8sGU8pyQRLx1jo=
-X-Gm-Gg: ATEYQzxQyBPQbrYhRyx/6kqqMnwfU/U9iRLu3Dms4nOSdrJl5vTAV1QHIF2Zk4zwdgZ
-	2VwXEhL3IwklhLs4ks8lnnNQoFHfsHxV3gvW6+Yx6SVAOlOJ42M2ZZC2fwd7V9JvhZvqmtHwW85
-	7v2rqySydD6tt6KZYvjD3IkO9Z4P9V4SxQ7a8qufMq1Bi3to4nlDwzbKDZUX0roZi4lXiCfUMZT
-	9r9u4HLAvIg+JA1ZtvSuh4pXTfWaiJUaVCMxheKC+GbdlaaMbNEx5ah6586GoR6VJjJHeQmyuHU
-	MkPqhjNMMILdk6mpGn708NptJRNIJh/g0YCwjVW9WPV2bDKtDNEmo2JxY7L+5N4u62DvuDWv9MR
-	2qhscqTOCtIsO6n1d43HSz+M=
-X-Received: by 2002:a05:7301:4085:b0:2be:1f56:ed0d with SMTP id
- 5a478bee46e88-2c109861f4cmr2413702eec.6.1774271187398; Mon, 23 Mar 2026
- 06:06:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ikl1fSsQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774271189; x=1805807189;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gOgv5bKsksgGx3nrv4fb0woIoZIh4/V/CUpY0JM0vXI=;
+  b=ikl1fSsQN01POC/6fLBTSOAH+OphbMORWXCkkgvlxB7EDKyVDyqiiDjw
+   OFAaCh30UnaP8gMChjGQxp9/qPI7B0Ktoor4UO5k2Y3UxptjGSaT+QRvG
+   0VjPnaemMjlOKzxCwEGsSPQWQwGlr3Zw4n85ASt0CHC6FYPIqN5LbCsyE
+   qOsk3sKkE8ZwJkaUXx4iPWUS2SxFzXrN1KgmSSv2CuCCsyaEDuoSO1fbm
+   vXy7BPsSr4EaszajvsmvWAB2acqXpl0uI/VQD6L2DnOp7TV7uc4rVk0OO
+   6AkFumiIqx7r4OEPJy6Y2+Gr70yWmbDSTJDU4PXK5putxXwTIxoVKUAqq
+   A==;
+X-CSE-ConnectionGUID: dpCnqqcBRS6L1w1xpT/paA==
+X-CSE-MsgGUID: tRXUu97QTOyicYiorIY5Vg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="75332741"
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="75332741"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 06:06:28 -0700
+X-CSE-ConnectionGUID: W/sWqUpCSw2K+giilmXCDw==
+X-CSE-MsgGUID: K15JoVVdTbGmKczSDs/sOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="224235586"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 23 Mar 2026 06:06:21 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4ez2-000000000Zt-0X7C;
+	Mon, 23 Mar 2026 13:06:16 +0000
+Date: Mon, 23 Mar 2026 21:06:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Radu Sabau via B4 Relay <devnull+radu.sabau.analog.com@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+	linux-gpio@vger.kernel.org, Radu Sabau <radu.sabau@analog.com>
+Subject: Re: [PATCH v4 4/4] iio: adc: ad4691: add SPI offload support
+Message-ID: <202603232017.8IO2whBG-lkp@intel.com>
+References: <20260320-ad4692-multichannel-sar-adc-driver-v4-4-052c1050507a@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241119185747.862544-1-ojeda@kernel.org> <CANiq72n4Fw96hcuqQeorsfH7z4Tb+R1gdf80H_XkD-oA6z5TSA@mail.gmail.com>
- <CANiq72mNJrMMbEcfJMLT4kM-_iviM0AR6oeigCyrb5eMWkn3KQ@mail.gmail.com>
-In-Reply-To: <CANiq72mNJrMMbEcfJMLT4kM-_iviM0AR6oeigCyrb5eMWkn3KQ@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 23 Mar 2026 14:06:14 +0100
-X-Gm-Features: AQROBzDGgsUaXadH-7vInj5g5TFUGkgbxokPDq2lRRDY18_WJ88m9e2GeTeDbRg
-Message-ID: <CANiq72nvR70EOud=4drW6gs=FAndv5o7+8n5NNRkAStTaSJWPg@mail.gmail.com>
-Subject: Re: [RFC PATCH] rust: allow Clang-native `RANDSTRUCT` configs
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Alex Gaynor <alex.gaynor@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, Aaron Ballman <aaron@aaronballman.com>, 
-	Bill Wendling <isanbard@gmail.com>, Cole Nixon <nixontcole@gmail.com>, 
-	Connor Kuehl <cipkuehl@gmail.com>, Fangrui Song <i@maskray.me>, James Foster <jafosterja@gmail.com>, 
-	Jeff Takahashi <jeffrey.takahashi@gmail.com>, Jordan Cantrell <jordan.cantrell@mail.com>, 
-	Matthew Maurer <mmaurer@google.com>, Nikk Forbus <nicholas.forbus@gmail.com>, 
-	Qing Zhao <qing.zhao@oracle.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Tim Pugh <nwtpugh@gmail.com>, Kees Cook <kees@kernel.org>, Nicolas Schier <n.schier@avm.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320-ad4692-multichannel-sar-adc-driver-v4-4-052c1050507a@analog.com>
 
-On Tue, Apr 29, 2025 at 3:19=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On top of that, backlinking the seed discussion since I will need to
-> update this patch:
->
->     https://lore.kernel.org/rust-for-linux/CANiq72mwYbg_L8u9NEfRD0Fp9E_zh=
-Ci=3Dt=3DU2jyjsZe_Ls306hw@mail.gmail.com/
+Hi Radu,
 
-I don't think that got merged, so I didn't update it for v2.
+kernel test robot noticed the following build warnings:
 
-Cheers,
-Miguel
+[auto build test WARNING on 11439c4635edd669ae435eec308f4ab8a0804808]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Radu-Sabau-via-B4-Relay/dt-bindings-iio-adc-add-AD4691-family/20260321-120718
+base:   11439c4635edd669ae435eec308f4ab8a0804808
+patch link:    https://lore.kernel.org/r/20260320-ad4692-multichannel-sar-adc-driver-v4-4-052c1050507a%40analog.com
+patch subject: [PATCH v4 4/4] iio: adc: ad4691: add SPI offload support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260323/202603232017.8IO2whBG-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603232017.8IO2whBG-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603232017.8IO2whBG-lkp@intel.com/
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: module ad4691 uses symbol devm_iio_dmaengine_buffer_setup_with_handle from namespace IIO_DMAENGINE_BUFFER, but does not import it.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
