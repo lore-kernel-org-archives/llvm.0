@@ -1,84 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A2939185E;
-	Mon, 23 Mar 2026 10:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09BE392802;
+	Mon, 23 Mar 2026 11:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774263426; cv=none; b=BALGD5czi0XrBKan4b7vVIZA2NX8KN2kfxbZ8szsr04mlLM5lwAI0Hz2FRPJInJ4EjLY31AKXCBKdGSy52HdlQCTiB3itlrQYry15eLkzP/OlUiUKHtJrV5AXBRN2Gh44C3tu/7ZOt3xnvzIop3b06i9KWW7FUpOxP73wH+pw4s=
+	t=1774263714; cv=none; b=BNv1yuHDnNFRro3QvpsDZO0plNgQcxjfrzVNWGKanLKNuEuBTVHsxKlEjx7WT8M8M/s2AeqlWsaZGJ8gi/FmyfASrYmdBCxOVn8qP9uSXjlgLpGpvX/kL2c8kgRxaBS9ssal0hYNDEMewf5LImxv0CJ5xLm+LrvUt/WEjR8IxZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774263426; c=relaxed/simple;
-	bh=wSDBEtgylDbVLV5Dzb2nr0Y74+YlFOeW3xsiMnjWhBg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=lXe1dKzOr9zqGyUXE6xcoM/BOFWU/xuDTjDVhJxoGp9vCIYzaBfeUxumhATShsVvJJ+qYAGd3NYF+sLA0ZEyLU/T//JLS6DY1F7QHPpOEdk6H2VRLNXLEnJGdtmOtLPTh8X1rSz2ZUnsvEqUxUVmRLlBg8vzTNCJOkElxsFVYEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GcsR2XDT; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774263714; c=relaxed/simple;
+	bh=imVv5EG3DZvwMibJMQPIQgAXd8NxzOALu6vmEfSTsPE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VNwrc+Bqo6epyT0GVNPLxTGztTras/oHU8/yYMYFATL+AL5b8qgTLr1ZfWaSL1jlTfY3/RFvcoC/8prjzB1o3ZbHhEiijT/2iIJmFJaI0ud66xX+89kOqKkpIqwSvBqNaiDz5Kq8t2vZFloTBVqKMNcKTmd04AXN38s+AjIEMqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IX4tHpFV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GcsR2XDT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774263426; x=1805799426;
-  h=date:from:to:cc:subject:message-id;
-  bh=wSDBEtgylDbVLV5Dzb2nr0Y74+YlFOeW3xsiMnjWhBg=;
-  b=GcsR2XDTYimm6BBMqxY2F3e6enGg6HbHlLSPTeTZr9WrGkUtAOBlhSpf
-   4ehaoHwhdUmgpt0j0WzzY9feecqvBdrAHiyUfwTiB4Ehit/91PqSSMnq0
-   zmoSolwMYKm2pDfVY2j3zFRPUz0JHuNBuE7Tfc+2YuTHW53On3KDODhUJ
-   7EbS2hZyMsnIY1DazT1WKCKpZuUnPwUolTBcB8IolUK70C8aIcW9uX8X0
-   Ka4kH/aMBsTrf9p4usBbb+uMoXqU7ftU4oNMdKhLe8dFKfnmhYHOBZDVY
-   QSrL6O7p+mTiWB3OqsmJgk1b5sS2fvQkzSnXDBDfTDQizok6YFQsBOq6K
-   A==;
-X-CSE-ConnectionGUID: 5PfpG3SAQUSNHJqtWQQEHQ==
-X-CSE-MsgGUID: mlZNZkiqQLexlM3Q513lkw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="79116744"
-X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
-   d="scan'208";a="79116744"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 03:57:05 -0700
-X-CSE-ConnectionGUID: UgX0DQDZTuC39PeTfMPrnA==
-X-CSE-MsgGUID: 1I+f6KRCQIStB80CMPmPFg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
-   d="scan'208";a="223185084"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 23 Mar 2026 03:57:03 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w4cxx-000000000Nr-0ZqY;
-	Mon, 23 Mar 2026 10:57:01 +0000
-Date: Mon, 23 Mar 2026 18:56:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mark:arm64/entry/preemption-fix 1/3] ld.lld: error:
- vmlinux.a(process.o at 2773892) <inline asm>:1:10: expected readable system
- register
-Message-ID: <202603231818.968oYVfp-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IX4tHpFV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3458C4CEF7;
+	Mon, 23 Mar 2026 11:01:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774263713;
+	bh=imVv5EG3DZvwMibJMQPIQgAXd8NxzOALu6vmEfSTsPE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IX4tHpFVUpZsw6fAFSiGydpzX2vEz/VPYS7T8ep/6DT7rAdreGWGyfgMGYmINZVCy
+	 fGCRtVmQYbPpdAsGHP9loA7NwYi+nDE/ZOahYRZM9XeFvArnX0izGFoxwk4OMuNrRf
+	 fYzW1aODzleSVsDnkh0AsUFMbpQUGb6eQVkDbnA5uYGafi/MpfywmIQikdnmZMbTPL
+	 HWB8iJdXajwXnKZbn26UAU1uhu3YFzSGU5bx741L7DsafprV7DO+2sCDBnfICJ5G5f
+	 U3g1Fj3xRlAP5+ermCR9BO+87cjmOt6SZ0nSaSr8jUOSy0SwsQY2QXh175kSmFw8bn
+	 qS9+pZrA+Iecg==
+Date: Mon, 23 Mar 2026 13:01:44 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@kernel.org>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Mike Marciniszyn <mike.marciniszyn@intel.com>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	Doug Ledford <dledford@redhat.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Ingo Molnar <mingo@kernel.org>, linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
+Message-ID: <20260323110144.GG814676@unreal>
+References: <20260320151511.3420818-1-arnd@kernel.org>
+ <20260320151511.3420818-2-arnd@kernel.org>
+ <6b56c476-86fd-4d43-8dee-c7f89d346941@app.fastmail.com>
+ <20260323080848.GF814676@unreal>
+ <5d5f25fc-e522-4131-ae4b-22db57b92d6e@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d5f25fc-e522-4131-ae4b-22db57b92d6e@app.fastmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/entry/preemption-fix
-head:   423b062b9d1426491a06e59385e3b55da584cda0
-commit: 39a482d122b314ad64537c09bb66a282efa8181b [1/3] HACK: arm64: Check CPU state at task-switch time
-config: arm64-randconfig-004-20260321 (https://download.01.org/0day-ci/archive/20260323/202603231818.968oYVfp-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603231818.968oYVfp-lkp@intel.com/reproduce)
+On Mon, Mar 23, 2026 at 09:48:59AM +0100, Arnd Bergmann wrote:
+> On Mon, Mar 23, 2026, at 09:08, Leon Romanovsky wrote:
+> > On Fri, Mar 20, 2026 at 04:53:04PM +0100, Arnd Bergmann wrote:
+> >> On Fri, Mar 20, 2026, at 16:12, Arnd Bergmann wrote:
+> >> 
+> >> > +	 */
+> >> > +	ibdev = &dd->verbs_dev.rdi.ibdev;
+> >> > +	dev_set_name(&ibdev->dev, "%s_%d", class_name(), dd->unit);
+> >> > +	strscpy(&ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
+> >> > +
+> >> 
+> >> I messed this up during a rebase, that should have been 
+> >> 
+> >>        strscpy(ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
+> >> 
+> >> (without the extra &). I'll wait for comments before resending.
+> >
+> > The hfi1 driver is scheduled for removal. Dennis has already posted the
+> > hfi2 driver, which serves as its replacement.
+> 
+> Ok, that does sound like a sensible decision, and I'll just drop
+> patches 1 and 3 then, which are just cleanups.
+> 
+> The cover letter at [1] suggests that the two drivers will still
+> coexist for a bit though, so I think we'd still want patch 2/3
+> in order to get a clean 'allmodconfig' build when the 
+> -Wmissing-format-attribute is enabled by defaultt. I have a couple
+> of patches in flight.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603231818.968oYVfp-lkp@intel.com/
+Sure, builds need to be fixed.
 
-All errors (new ones prefixed by >>):
+> 
+> I took a quick look at the hfi2 driver, and noticed a few things
+> that that may be worth addressing before it gets merged, mostly
+> stuff copied from hfi1:
+> 
+> - A few global functions with questionable namespacing:
+>   user_event_ack, ctxt_reset, iowait_init, register_pinning_interface,
+>   sc_{alloc,free,enable,disable}, pio_copy, acquire_hw_mutex,
+>   load_firmware, cap_mask.
+>   It would make sense to prefix all global identifiers with 'hfi2_',
+>   both out of principle, and to allow building hfi1 and hfi2 into
+>   an allyesconfig kernel without link failures.
+> 
+> - The use of INFINIBAND_RDMAVT seems unnecessary: right now
+>   this is only used by hfi1, now shared with hfi2 but later to
+>   be exclusive to the latter. Since it is unlikely to ever
+>   be used by another driver again, this may be a good time
+>   to drop the abstraction again and integrate it all into
+>   hfi2, with the old version getting dropped along with hfi1.
 
->> ld.lld: error: vmlinux.a(process.o at 2773892) <inline asm>:1:10: expected readable system register
-   mrs x8, PAN
-   ^
+The best approach is to drop rdmavt as well, since hfi2 is expected to
+align with the other drivers in drivers/infiniband/hw.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Dennis, is this feasible?
+
+Thanks
