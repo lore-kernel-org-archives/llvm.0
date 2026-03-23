@@ -1,252 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F743BE17F;
-	Mon, 23 Mar 2026 15:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774280334; cv=none; b=C1UzEK+Sgis7d6s0ZjEnAPniT+NiZBJAjVFtybF8hzA3Dlcrvmz/QWKeS5y3PaAVtD7n8yjA1TE9tZiZoIT3flFbVNyRM+LIkJV8G2eRgbfJ7TIJo6v+sd0Jyk9gBFZF+TMzm0BDZVG982y+RrUtmuzvBYDpPpJXrbEc/rg3mY0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F23D3B47D6
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 15:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774280334; cv=pass; b=bjDagiYR2DC9YQRnB/bkOO/mw22wuEfIEJ0F24uOPT1u/t2qJEkzFuhfUWb0iPZuEFf+N8ILKSEqy5mzSv92FkkZHBS364oLwl2JS75t2vt0shj/mbVvqtpH3iAsGY3H2gRzLSzEC3c7Inauc2UC/oHwwEXVZBW08x2fHpiLDDY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1774280334; c=relaxed/simple;
-	bh=QGn0YNgmovEkd5wIwHGCPWLH1KN1h9XblBTCRjSDPVk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JzbNJAO/0+6G8DionnRfE6hhxqilheBcTloZ9p8GGSfzVKCO56u/Qx+QSE9YKFsdUPWl2R/XywJgVWXTMAWXpGNUJISxBGvU0U2SxzyH44sdg8EpZz8ZLjJGLV7YvcYEo0E2dVuYKzr9CD0lLc2zuCHvlfGg+wLbdHKtg6L5lAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mQlAu6Lc; arc=none smtp.client-ip=10.30.226.201
+	bh=ZmWh/DuRvSZu1elnpeWrQV+U187fmJiYXIaGuwiNT00=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ALi2YsCcMSPHUcnkngws8ans4rwiNcJvpupR5XM9XOGxFha6mfThIuF2oRAiXyiFujgX+qMRiKe5bpb7QWEt/CIOCeNFLrsbRXtCFcYBuDdSuusugetNbLgzjutMEhZkWsVU/91koHBghfyL0seBkd/tMRU/NDRYL62s000JPLg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UihAU7mh; arc=pass smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mQlAu6Lc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F133FC2BCB4;
-	Mon, 23 Mar 2026 15:38:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774280333;
-	bh=QGn0YNgmovEkd5wIwHGCPWLH1KN1h9XblBTCRjSDPVk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=mQlAu6LcuhDh346qAw3zwoEW0eb4/RvgPVYgfvmvkt18h68KpZR1VP3+JUrVHbJgS
-	 k9eZUNWJmWAUDGhzIP7TVQRGYku8xDOIHjq48O+wz9Cp5T2QV9q4pRT9tdght+Ksoq
-	 821y+zy3SFIgSDmmfTH+5dMkIVoJyCjLkKoFSSRjMty2DR3ZfXdRzspHCgiE/EkaaS
-	 rdph4PcW/mqQkDKKZWcFu3gh/2pS8DS7GRNe8UTqnvT9dYJOY/1ZpiAslPNbc5HCDA
-	 skrd6GBW97UtAoTkiKUgE7qRnFGHORwTVdszywrM4C5uzC+AYsjIOr+/LXVHTdv49U
-	 iwq5puNOE9PsQ==
-From: Gary Guo <gary@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: rust-for-linux@vger.kernel.org,
-	driver-core@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 6/8] rust: io: add `read_val` and `write_val` function on I/O view
-Date: Mon, 23 Mar 2026 15:37:58 +0000
-Message-ID: <20260323153807.1360705-7-gary@kernel.org>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20260323153807.1360705-1-gary@kernel.org>
-References: <20260323153807.1360705-1-gary@kernel.org>
-Reply-To: Gary Guo <gary@garyguo.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UihAU7mh"
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-899fbf92bdbso51758146d6.0
+        for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 08:38:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774280332; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NUyv/Wwhl18Mq3xsI+KNvck6OcGe1Rp+ehaJjKaMswIueJR5kAyDpoezOEFoWvt6m/
+         Lb9iToDv63mf5s9QRlPgDZHSny/Ns9ABkpXlr25RZU77H5pRPZ4vPkkj9vfaz5//4C+0
+         vSMDcCx5ERoeXTlPOYo0K4mAZq8XAQY4TZP/stA+JqThfrulLJmHzmlhGfLtW1rjlbWg
+         OZFbGYA4hcFANU8t7pD92h7n3FfuR4WnkC7kEyUvAF5gxfvyV1Su8ypzqzZBdLxY1S0B
+         7xFoYhTSt61K5WeId1G4XxKHZBl7q2uCUui/Hv3+pQfqzJuNndNSnBmMZrP4PiKUbwy1
+         3W+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WzHQP2pHDPf8b/aNOBFwrKe9Fe+VkqE7R9SoZi1QpZg=;
+        fh=93KZDjIabqBFgbSC1rIfg2OL9H9vBcRlzFHSjWBl5As=;
+        b=A49Op67QukySSwMjED3hnwFV6MCmoxp/d46/gbmfvuiJBRwB9EuaVdwdDYl3VvoKNL
+         lZiDiCAgJC21xoIib/g0frj2ZTSR7fsv6vyoErOqk29JBz25ZTUEw4eqeO9UH0o6mNAO
+         nqwjJFkA5lBTOTHW7ngcx7WeZGMSBfF89FjybRsj8LYHLOe4xyp2B7tGBno+6OUMSTFK
+         W0A2Xy19Pubiv7pvTcjYD2I72XNaPaR4vEDLuqIFyiJsow1vyqoyzhl4QYBrgexNKXNo
+         hrhtHBxqFD6LA6QW8ydCe9j5Fk/XVN9jHRBF6iuIQaKsESHV432evBFpxYq47Xt2stFi
+         qwSg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774280332; x=1774885132; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WzHQP2pHDPf8b/aNOBFwrKe9Fe+VkqE7R9SoZi1QpZg=;
+        b=UihAU7mheCqvn3V6hdiD7tzqtZRPQBW5NFRsbUXs5HYNSdgR/62w8j5MzJf1fe5j8X
+         8ls1w3gQlpxiN7mED0L6O51EcKeEO28oUMQYC10UaVnjFjGKOvTrN2fMD/euPqDr8JqY
+         8m1VmE17ZDkg53vWbOqw3fBn3QQVDPul4Q8VkTz9POseBr8j6YCgbyYxyAJ8UXe5Yz4X
+         T5NoHyWZXkuGkbT8+LJpoH+fflzlEBsJYFFLpnu12JKadwMjRQvp3WVAXiT1KLuDROLD
+         R41fdjeGlBxYsYAHahLpPw/CxJ8qWYtM7BhS9dDm80A1R2SFbSyjE6GR4Zrm4xgIhHAd
+         Z9ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774280332; x=1774885132;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WzHQP2pHDPf8b/aNOBFwrKe9Fe+VkqE7R9SoZi1QpZg=;
+        b=NOvWRlpHyuEUhAhrslHwMu78iukRCtIUERW9XBBRfhS1vOo0ZX+gm6q5nNtDSyDV4t
+         wWfbGgjn9DsYb9Tf1lQXQ6XCTkDkFjDUfXC+d7iwN0p8bXPA0kjHjg1bV6/bEVonE1DD
+         ysrZk1jogLA+v0RdtM3X987KdWmTqMrYK+1ZtYdthAVo0QDCvaukDYpNlwljAjrFarj1
+         aM8qpt/wSCoR47T6J8JMVkn0bPfbazc/SokHVJxT7gccV2p0g7slJHqoFxctQOqshx8q
+         2dKfRUUONCEcBE8DLvpp9i6W8a0jrOZwhtaG9/xFUZ2XmFE62WB77Lkcjk0gtBx8I+q7
+         kZeg==
+X-Forwarded-Encrypted: i=1; AJvYcCXCbex+x2uZ42QJ6GBwPB8oscxx6M0kupT8sSy91vlEQRzOf6GyXto7+wJrqJ8uOoAkfK1h@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx1zf91m42NfwuNpLWQb0G/IMGX/QMzdyUCBwYat16dWqD191m3
+	NwEdBNl+CBeuHcM7PZNurYg7yLU9lW3q1HgSxWZBrKVTIZGU++WWVW/z984mZ7IiQRfDZqhgUIt
+	NGoF+8pQqVYAwvJ+rieiBfdIbhOSG3wc=
+X-Gm-Gg: ATEYQzwJkCybFpTn947sRVKidsU+jCw8o+YtIPN7YBvmsp3YxmM+kz6TKpzaKNYwlCf
+	8+JMAeEMotWE8dtM3NXop1pr6ajvWyMDV6LW33De+03AppeOh0QM4lY4GKAmsKWFDMJQJN9RbxA
+	Ce16FthMfVaqSplkMfeA8hHYQOkOesKTz1uLrgDD0Pkpl/BWTYgO+5KpiQlQuumzWW+/zMp0MK0
+	ULewFynVbJSsz2nEQ0yQVbLU/ugEIGJ2BDGwMDS6+DSLyJ0r8Kvh3Ar6R7esRIF+lg+tzkT7Bj3
+	1ZPQtc22Z/ughqvrCm5runbyBhTYmiRCMkD4+C21/gcAFaMxIXbnVpXuXK/mwU47snxqgKf3ES1
+	xdtrvAp7ZaH4DPh40uElaP+vcbxaRPfQsvrf5JG5BuT8Sxa3p7X7eK72Mz6n2k6J1FQ==
+X-Received: by 2002:a0c:f101:0:b0:89a:6f04:ac85 with SMTP id
+ 6a1803df08f44-89c85a9043fmr158483166d6.54.1774280332010; Mon, 23 Mar 2026
+ 08:38:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202603180118.ClDWNtId-lkp@intel.com> <b859bfa1-7844-4b23-91a4-bbd526ffc19b@samba.org>
+ <CAH2r5mvvjWtJza+9YrLYvneysyEQa5rENhTYiFTAwrE+KhOy8Q@mail.gmail.com>
+ <CAKYAXd_yLYLD5SsRUZy8d6u7vknTPuN8Cbe11HJt0Eq6bLzBBw@mail.gmail.com> <69c54f80-dff1-4c02-af97-08799fe59b94@samba.org>
+In-Reply-To: <69c54f80-dff1-4c02-af97-08799fe59b94@samba.org>
+From: Steve French <smfrench@gmail.com>
+Date: Mon, 23 Mar 2026 10:38:40 -0500
+X-Gm-Features: AQROBzB9SG6sPgo5T8QjqxwVih72HS4tyEMWLFluaBLXGLnuGbVnDzT8w0i3o6U
+Message-ID: <CAH2r5msADO+SbgJxwX0vNU0keHb5WScqOmrb+uszmG2uZt9Qrw@mail.gmail.com>
+Subject: Re: [samba-ksmbd:ksmbd-for-next-next 11/12] fs/smb/server/smb2pdu.c:5723:3:
+ warning: variable 'pntsd' is uninitialized when used here
+To: Stefan Metzmacher <metze@samba.org>
+Cc: Namjae Jeon <linkinjeon@kernel.org>, Asim Viladi Oglu Manizada <manizada@pm.me>, 
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Steve French <stfrench@microsoft.com>, 
+	"linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Gary Guo <gary@garyguo.net>
+I agree - looks like a bug.  Should be setting the declaration to null
 
-When a view is narrowed to just a primitive, these functions provide a way
-to access them using the `IoCapable` trait. This is used to provide
-`io_read!` and `io_write!` macros, which are generalized version of current
-`dma_read!` and `dma_write!` macro (that works on `Coherent` only, but not
-subview of them, or other I/O backends).
+   struct smb_ntsd *pntsd =3D NULL;
 
-For DMA coherent objects, `IoCapable` is only implemented for atomically
-accessible primitives; this is because `read_volatile`/`write_volatile` can
-behave undesirably for aggregates; LLVM may turn them to multiple
-instructions to access parts and assemble, or could combine them to a
-single instruction.
+since the initialization of ptsd is in an if clause, you could end up
+doing kfree of uninitialized pntsd pointer on line 5801
 
-The ability to read/write aggregates (when atomicity is of no concern),
-could be implemented with copying primitives (e.g. memcpy_{from,to}io) in
-the future.
+On Mon, Mar 23, 2026 at 9:52=E2=80=AFAM Stefan Metzmacher <metze@samba.org>=
+ wrote:
+>
+> Am 23.03.26 um 15:43 schrieb Namjae Jeon:
+> > On Mon, Mar 23, 2026 at 10:22=E2=80=AFPM Steve French <smfrench@gmail.c=
+om> wrote:
+> >>
+> >> looks like a simple fix to initialize it to null at declaration, right=
+?
+> > It seems this test was performed on an outdated version. The current
+> > ksmbd-for-next already includes the updated one, so we don't need to
+> > check it.
+>
+> For it still happens with the current state:
+>
+> 1ce4e48216b84385319da308f2262eb11ee7e459
+> (smfrench-smb3-kernel/ksmbd-for-next) smb: smbdirect: fix inverted compar=
+ison operator in negotiation log message
+>
+> And there it's likely:
+>
+> 6a0795e46296589d8eba6c194586e9e65974d73f
+> ksmbd: fix OOB write in QUERY_INFO for compound requests
+>
+> With setting it to NULL the smatch warning goes away.
+>
+> metze
 
-Signed-off-by: Gary Guo <gary@garyguo.net>
----
- rust/kernel/dma.rs | 40 +++++++++++++++++++
- rust/kernel/io.rs  | 95 ++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 135 insertions(+)
 
-diff --git a/rust/kernel/dma.rs b/rust/kernel/dma.rs
-index ae2939abc166..fcdf85f5ed50 100644
---- a/rust/kernel/dma.rs
-+++ b/rust/kernel/dma.rs
-@@ -877,6 +877,46 @@ fn as_ptr(&self) -> *mut Self::Type {
-     }
- }
- 
-+/// Implements [`IoCapable`] on `Coherent` for `$ty` using `read_volatile` and `write_volatile`.
-+macro_rules! impl_coherent_io_capable {
-+    ($(#[$attr:meta])* $ty:ty) => {
-+        $(#[$attr])*
-+        impl<T: ?Sized + KnownSize> IoCapable<$ty> for Coherent<T> {
-+            #[inline]
-+            unsafe fn io_read(&self, address: *mut $ty) -> $ty {
-+                // SAFETY:
-+                // - By the safety precondition, the address is within bounds of the allocation and
-+                //   aligned.
-+                // - Using read_volatile() here so that race with hardware is well-defined.
-+                // - Using read_volatile() here is not sound if it races with other CPU per Rust
-+                //   rules, but this is allowed per LKMM.
-+                unsafe { address.read_volatile() }
-+            }
-+
-+            #[inline]
-+            unsafe fn io_write(&self, value: $ty, address: *mut $ty) {
-+                // SAFETY:
-+                // - By the safety precondition, the address is within bounds of the allocation and
-+                //   aligned.
-+                // - Using write_volatile() here so that race with hardware is well-defined.
-+                // - Using write_volatile() here is not sound if it races with other CPU per Rust
-+                //   rules, but this is allowed per LKMM.
-+                unsafe { address.write_volatile(value) }
-+            }
-+        }
-+    };
-+}
-+
-+// DMA regions support atomic 8, 16, and 32-bit accesses.
-+impl_coherent_io_capable!(u8);
-+impl_coherent_io_capable!(u16);
-+impl_coherent_io_capable!(u32);
-+// DMA regions on 64-bit systems also support atomic 64-bit accesses.
-+impl_coherent_io_capable!(
-+    #[cfg(CONFIG_64BIT)]
-+    u64
-+);
-+
- impl<'a, B: ?Sized + KnownSize, T: ?Sized> crate::io::View<'a, Coherent<B>, T> {
-     /// Returns a DMA handle which may be given to the device as the DMA address base of
-     /// the region.
-diff --git a/rust/kernel/io.rs b/rust/kernel/io.rs
-index 8166e47f1381..cf2074d066d2 100644
---- a/rust/kernel/io.rs
-+++ b/rust/kernel/io.rs
-@@ -992,6 +992,26 @@ pub fn try_cast<U>(self) -> Result<View<'a, IO, U>>
-     }
- }
- 
-+impl<T, IO: ?Sized + Io + IoCapable<T>> View<'_, IO, T> {
-+    /// Read from I/O memory.
-+    ///
-+    /// This is only supported on types that is directly supported by `IO` with [`IoCapable`].
-+    #[inline]
-+    pub fn read_val(&self) -> T {
-+        // SAFETY: Per type invariant.
-+        unsafe { self.io.io_read(self.ptr) }
-+    }
-+
-+    /// Write to I/O memory.
-+    ///
-+    /// This is only supported on types that is directly supported by `IO` with [`IoCapable`].
-+    #[inline]
-+    pub fn write_val(&self, value: T) {
-+        // SAFETY: Per type invariant.
-+        unsafe { self.io.io_write(value, self.ptr) }
-+    }
-+}
-+
- /// Project an I/O type to a subview of it.
- ///
- /// The syntax is of form `io_project!(io, proj)` where `io` is an expression to a type that
-@@ -1040,3 +1060,78 @@ macro_rules! io_project {
- 
- #[doc(inline)]
- pub use crate::io_project;
-+
-+/// Read from I/O memory.
-+///
-+/// The syntax is of form `io_read!(io, proj)` where `io` is an expression to a type that
-+/// implements [`Io`] and `proj` is a [projection specification](kernel::ptr::project!).
-+///
-+/// # Examples
-+///
-+/// ```
-+/// # use kernel::io::View;
-+/// struct MyStruct { field: u32, }
-+///
-+/// // SAFETY: All bit patterns are acceptable values for `MyStruct`.
-+/// unsafe impl kernel::transmute::FromBytes for MyStruct{};
-+/// // SAFETY: Instances of `MyStruct` have no uninitialized portions.
-+/// unsafe impl kernel::transmute::AsBytes for MyStruct{};
-+///
-+/// # fn test(mmio: &kernel::io::Mmio<[MyStruct]>) -> Result {
-+/// // let mmio: Mmio<[MyStruct]>;
-+/// let field: u32 = kernel::io::io_read!(mmio, [2]?.field);
-+/// # Ok::<(), Error>(()) }
-+#[macro_export]
-+#[doc(hidden)]
-+macro_rules! io_read {
-+    ($io:expr, $($proj:tt)*) => {
-+        $crate::io_project!($io, $($proj)*).read_val()
-+    };
-+}
-+
-+#[doc(inline)]
-+pub use crate::io_read;
-+
-+/// Writes to I/O memory.
-+///
-+/// The syntax is of form `io_write!(io, proj, val)` where `io` is an expression to a type that
-+/// implements [`Io`] and `proj` is a [projection specification](kernel::ptr::project!),
-+/// and `val` is the value to be written to the projected location.
-+///
-+/// # Examples
-+///
-+/// ```
-+/// # use kernel::io::View;
-+/// struct MyStruct { field: u32, }
-+///
-+/// // SAFETY: All bit patterns are acceptable values for `MyStruct`.
-+/// unsafe impl kernel::transmute::FromBytes for MyStruct{};
-+/// // SAFETY: Instances of `MyStruct` have no uninitialized portions.
-+/// unsafe impl kernel::transmute::AsBytes for MyStruct{};
-+///
-+/// # fn test(mmio: &kernel::io::Mmio<[MyStruct]>) -> Result {
-+/// // let mmio: Mmio<[MyStruct]>;
-+/// kernel::io::io_write!(mmio, [2]?.field, 10);
-+/// # Ok::<(), Error>(()) }
-+#[macro_export]
-+#[doc(hidden)]
-+macro_rules! io_write {
-+    (@parse [$io:expr] [$($proj:tt)*] [, $val:expr]) => {
-+        $crate::io_project!($io, $($proj)*).write_val($val)
-+    };
-+    (@parse [$io:expr] [$($proj:tt)*] [.$field:tt $($rest:tt)*]) => {
-+        $crate::io_write!(@parse [$io] [$($proj)* .$field] [$($rest)*])
-+    };
-+    (@parse [$io:expr] [$($proj:tt)*] [[$index:expr]? $($rest:tt)*]) => {
-+        $crate::io_write!(@parse [$io] [$($proj)* [$index]?] [$($rest)*])
-+    };
-+    (@parse [$io:expr] [$($proj:tt)*] [[$index:expr] $($rest:tt)*]) => {
-+        $crate::io_write!(@parse [$io] [$($proj)* [$index]] [$($rest)*])
-+    };
-+    ($io:expr, $($rest:tt)*) => {
-+        $crate::io_write!(@parse [$io] [] [$($rest)*])
-+    };
-+}
-+
-+#[doc(inline)]
-+pub use crate::io_write;
--- 
-2.51.2
 
+--=20
+Thanks,
+
+Steve
