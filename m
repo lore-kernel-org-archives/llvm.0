@@ -1,115 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CD73E51F1;
-	Mon, 23 Mar 2026 20:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3CAF3C9447
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 20:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774299342; cv=none; b=FBoE+HZou9/l1kpnORDKPJKVtM9qsojOZomQYsRL5jbc3dPLan1VxpmpfxR1yYvOtQZKpRVZE0DvVvFb/Nh8NJrGG7HMUA4v8qfVljKk98+RffI9/X+X/lgbuqigKiHAjVbyRasI1ZTvouQKJSaf9RyUJiQFWdzV1f+7p5FQVkE=
+	t=1774299425; cv=none; b=PV7pvU9K4ERexnlfU9Y4dwDmDwY1lqZyKlMahxNJXZ4SJbf/cOGjcWJE2fO0FKOfKoMkGW9Gju/B69qc2Kx/4X1MrBv5gix6dv3UUCWO9dbZYgdQVmriCat1xgx/KMMosqZQt4FuBt+j0ydcjwjqEHALa4c9rjLcXJlYFfoWVwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774299342; c=relaxed/simple;
-	bh=bXDsNZkol4rGNmXf4f6JJ+4NSTwVh9smZTUaoIwZfw8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=is3twNCIj81CgDm3zXxhu8XY930IAmfYeoEbkyB/uks5XsZea6Uh2xPW+kgtNZhTJpG/sYduJqA/lwJ14i8R+g2FwDirWlkdZFJfGsaXx5AxULh8A6cel/gSWIuM0uJP7NYHD/WikURrVjYYtI44ByvkjUnyaVMOpya3RLyfx6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ipoo2V1r; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774299425; c=relaxed/simple;
+	bh=k82pXJV/uzk96wJ1JJTyg+KqVmS0eDwcq6CaW/9nFpk=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=o/apCQd0i41aJY0gEs/3udgnTglRqTa2SEeOfc07cDpLDbCJp61WPLVXqJBadYhOWutPaGLi4MHfeDE7CCfeAR0bZyjjUJEztI6jPQRkKdIbV85mLA/gnuFv7+FMgQbpeMSx9e+qA7Iuqj5gFtraUlLdmD5PVTivcgmzcnUThok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fAWmhyPP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RJ8LeThG; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ipoo2V1r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE70C2BC9E;
-	Mon, 23 Mar 2026 20:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774299342;
-	bh=bXDsNZkol4rGNmXf4f6JJ+4NSTwVh9smZTUaoIwZfw8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ipoo2V1rFWbHawxbK3KPE5meRleljltEWCMANGRkGlXdotgzW13rsilxUFeydxnvm
-	 fAZPKKtE4WRWtPmhfHmSasJK0enROGbQhtbPpUofMF04lrX5TZUywKbKN1vSZ/2IcL
-	 lnfKsu9xxA5lgzGAdPBxZx2dasQBAvwNOePA6HhoHwGUw7bhnEcGRPXMX7Zkjic5mH
-	 oYYKBw86MPov4cGaxQUUUPLS6vf1lghTIsC7dSA0/XgJceBmX/QQKDWj7kcr1Pf1a6
-	 m3h+ZuUejdaS0lGil5G3STEtKOheDvtIOLR25F+sPrKEQYasQLYgS4rmKRKnx1I98/
-	 g5B9UsXoLYPDg==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] [v2] bug: avoid format attribute warning for clang as well
-Date: Mon, 23 Mar 2026 21:55:16 +0100
-Message-Id: <20260323205534.1284284-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fAWmhyPP";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RJ8LeThG"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 86C0B1D00232;
+	Mon, 23 Mar 2026 16:57:02 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Mon, 23 Mar 2026 16:57:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1774299422;
+	 x=1774385822; bh=TRWIBf5HsVBc2olfebxe3KUbaRju4KcZcgxVm0YE1QI=; b=
+	fAWmhyPPDcN60rFVP+ZIn+mu6n06vPP43Oe+tl38MCf+RhIiwcicqR8sAXP2R4D6
+	AsEFZ8SP7s2jSeUBS3e4tnSxYIBfdC5Q/iZ3A9YKGezYZ9g7CbteXBxr5SSUAmV8
+	0cPoyUjd5AS5AXrxbj/t353y5DmuMvHN6XcrNSPmAcJkkgWXa92AlJ7cZq2UvxJr
+	Cz7pKFSub1LXAlyZ5ra++5XzAPpyJLtDAOqMn1+f7LmBiJOvIxYm1dNTG3zxtxIq
+	i1xyu/7/pVtPFe+jARJA8k13RRo9nR0Gnw/3rqiexva7kEppoaYsS8akOHbdQs+n
+	lzHFEavV3vneF8lYdPgrcg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774299422; x=
+	1774385822; bh=TRWIBf5HsVBc2olfebxe3KUbaRju4KcZcgxVm0YE1QI=; b=R
+	J8LeThGtP2wsVeg1lz7igchWsZSjyYPhk0cCK8V9U/y+nvDfWqV0x6RRalhDsVPI
+	AlKomSfjGeRkD31ueBcg6VkNhobf9GVkhnm2b9hCcTpR4+1oopmC6DnlGSq9JqYy
+	9XBXLYI9q89wcWjR6oV6y5Cw+NTFW7XsU6pdXuinEJM/QY/gr7rnnrIyt6LrRvDC
+	2pIJFnJicb7qDEyugh1uHYSJW1wM2mdGfeVv54T61aTKf2qhCkbKT7xUiXLFMenw
+	mzpoDz11SVrhpz9gYmn7fbT/li63vgdkm15WrhT+3Yns83B2KqyosBVoeu4kQFlc
+	SMMPa8/ze8rqkNPNkIwFg==
+X-ME-Sender: <xms:HanBaXK2lc_Z2W9cb-JYdDm70UIOM9uSWK7Sq37SWA3gN6fJ0Dn8zw>
+    <xme:HanBaV_uT8132lXZWdmfEx4P-moqW7StIL5R2l55dwXNC8Gt5RoHhyMyFLIuOo-_a
+    -J_RKQPiWATbHASwflE1z9zwyPPs97hlBNBrIIM02b_xY74q9T2l9GY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefudeljeefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfefhheetffduvdfgieeghfejtedvkeetkeejfeekkeelffejteevvdeghffhiefh
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
+    phhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhitghkrdguvg
+    hsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehjrggt
+    khhmrghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhushhtihhnshhtihhtth
+    esghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhglhgvrdgtohhm
+    pdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoh
+    eprghrnhgusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhnghhosehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrgh
+X-ME-Proxy: <xmx:HanBaTFqtRYEc-uRmwngmSLrn2Lul4WSlUieWGDXwdDsnYs7o5L73Q>
+    <xmx:HanBaWu7PF4w2ynHsQf9t-8ZJNeHgMtUlGBPd9_F0KjWNEh0m9hVbQ>
+    <xmx:HanBaRYQ0r3YgSKEBAl4TGt3-_8KeX8ptHrg-WX88PswWNt1xi8ZWw>
+    <xmx:HanBae48mtpd_04q1B2tvjyN9jW1JJEjcqrdm__vsZWHwQ1HE9OA1w>
+    <xmx:HqnBaRySk-OsNKgED5eBhkklU6zhF1-4Bu4PxcGsiLUr5CGB119_YlUk>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 8DBB3700065; Mon, 23 Mar 2026 16:57:01 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: AuIeNFRcSw9w
+Date: Mon, 23 Mar 2026 21:56:31 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andrew Morton" <akpm@linux-foundation.org>
+Cc: "Brendan Jackman" <jackmanb@google.com>,
+ "Arnd Bergmann" <arnd@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Message-Id: <ca8b75f5-c342-469e-b596-510177863272@app.fastmail.com>
+In-Reply-To: <20260323134540.5de3cf098cc9858486462f08@linux-foundation.org>
+References: <20260320211528.2474389-1-arnd@kernel.org>
+ <DHA3U3U4ZZXQ.2RPHOFNQJ70JQ@google.com>
+ <cf40b3d8-9a69-40b7-b885-aff87e85de68@app.fastmail.com>
+ <20260323134540.5de3cf098cc9858486462f08@linux-foundation.org>
+Subject: Re: [PATCH] bug: shut up format attribute warning for clang as well
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Mar 23, 2026, at 21:45, Andrew Morton wrote:
+> On Mon, 23 Mar 2026 16:38:14 +0100 "Arnd Bergmann" <arnd@arndb.de> wrote:
+>
+>> On Mon, Mar 23, 2026, at 11:54, Brendan Jackman wrote:
+>> > On Fri Mar 20, 2026 at 9:14 PM UTC, Arnd Bergmann wrote:
+>> >
+>> > There is actually a superior fix for this warning that Andy Schevchenko
+>> > posted here (mine just happened to get merged first):
+>> >
+>> > https://lore.kernel.org/all/20251208141618.2805983-1-andriy.shevchenko@linux.intel.com/T/#u
+>> >
+>> > Should we just switch over to that? Looks like it should work for both
+>> > compilers.
+>> 
+>> Right, I tried that again and it works. I had confused it with the
+>> similar logic to disable the warning on va_format(), which is
+>> not that easy to avoid.
+>> 
+>
+> What I think I'm hearing is that we should revert Brendan's
+> d36067d6ea00 ("bug: Hush suggest-attribute=format for __warn_printf()")
+> then apply Andy's
+> https://lore.kernel.org/all/20251208141618.2805983-1-andriy.shevchenko@linux.intel.com/T/#u,
+> yes?
+>
+> Could someone please prepare a suitably changelogged and tested patch
+> for that?
 
-Like gcc, clang-22 now also warns about a function that it
-incorrectly identifies as a printf-style format:
+I now sent the version that I had in my tree already as a v2
+of my patch. I tested this with gcc-16 and clang-22 in random
+configurations.
 
-lib/bug.c:190:22: error: diagnostic behavior may be improved by adding the 'format(printf, 1, 0)' attribute to the declaration of '__warn_printf' [-Werror,-Wmissing-format-attribute]
-  179 | static void __warn_printf(const char *fmt, struct pt_regs *regs)
-      | __attribute__((format(printf, 1, 0)))
-  180 | {
-  181 |         if (!fmt)
-  182 |                 return;
-  183 |
-  184 | #ifdef HAVE_ARCH_BUG_FORMAT_ARGS
-  185 |         if (regs) {
-  186 |                 struct arch_va_list _args;
-  187 |                 va_list *args = __warn_args(&_args, regs);
-  188 |
-  189 |                 if (args) {
-  190 |                         vprintk(fmt, *args);
-      |                                           ^
-
-Revert the change that added a gcc-specific workaround, and instead add
-the generic annotation that avoid the warning.
-
-Fixes: d36067d6ea00 ("bug: Hush suggest-attribute=format for __warn_printf()")
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Suggested-by: Brendan Jackman <jackmanb@google.com>
-Link: https://lore.kernel.org/all/20251208141618.2805983-1-andriy.shevchenko@linux.intel.com/T/#u
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-Replace my earlier patch with Andy's solution
----
- lib/bug.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/lib/bug.c b/lib/bug.c
-index bbc301097749..224f4cfa4aa3 100644
---- a/lib/bug.c
-+++ b/lib/bug.c
-@@ -173,10 +173,8 @@ struct bug_entry *find_bug(unsigned long bugaddr)
- 	return module_find_bug(bugaddr);
- }
- 
--__diag_push();
--__diag_ignore(GCC, all, "-Wsuggest-attribute=format",
--	      "Not a valid __printf() conversion candidate.");
--static void __warn_printf(const char *fmt, struct pt_regs *regs)
-+static __printf(1, 0)
-+void __warn_printf(const char *fmt, struct pt_regs *regs)
- {
- 	if (!fmt)
- 		return;
-@@ -195,7 +193,6 @@ static void __warn_printf(const char *fmt, struct pt_regs *regs)
- 
- 	printk("%s", fmt);
- }
--__diag_pop();
- 
- static enum bug_trap_type __report_bug(struct bug_entry *bug, unsigned long bugaddr, struct pt_regs *regs)
- {
--- 
-2.39.5
-
+     Arnd
