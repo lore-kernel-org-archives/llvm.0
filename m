@@ -1,153 +1,249 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B792737E3
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 14:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774277617; cv=pass; b=Y9vXNHZxTKddoHa1yUuTygrEGrqeWS/8XJISuV7wNVAE/LO0kwAVZ/lWiU/iAlU81855N4Esa8ayRmyRghyf65JOoAjdNtT6HT2LNfnvP3jiOlihllNuJNUrcRra9wrSq4WYW1ae+L/cucXc0NyUoy+GMUMtYMWJxxvpWx1CfIY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774277617; c=relaxed/simple;
-	bh=SQMQ2nNoMlvs5BNEFGHnf/DZ8k1Iwt1ytZQm0Fd8SoQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=nS1inPAbsN7DsVH4RM+fgfd9eGHKRun5wtbjGHiid554+tDPH6/5ekB1YnXst1/90qyTGbIbyFKV/lxhI/U35wrBF6393ksM7roRkOcq7QWblHKc/Wi822fqCU5uD2KF1JEGZ5/+sXGcUfMmarUTdjhOOGpQNSPDFnw3SEDxkPw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iO1LSnQ+; arc=pass smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1550B3B95F2
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 15:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774280041; cv=none; b=FKjJQeWLW2LyPVMnCtZVBeBms+mytOTi3CJIOF3hc6aMjXSeMM/Wmjbd5+eR7xDAtls+MpFtpzkmUaQ8ttZQ1tOyNCk3iw9NGN/CKcN8cV+G2Uff1TTT2fhbnAAX9nx9ywbfDWBa5zm/HQW1/QPWN1OrRuRfXi5WOcS8hTSfj1I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774280041; c=relaxed/simple;
+	bh=KO4xKau1nE+RDkAytpATvSkBrm+PtImuAX7m8bCUZnA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qRfqFh/HGERg4as2IC7zvswNNYKs86tzzTetQnpRoNUhVQn7fcfxaOwy7xIRe88Fa19KqYqzK2KUUwjjT0GDAw/LnLVixMergBmUEyUSPrFeV0ugx3Eak4xzMWRBnIwLqJH2N2TAN+XyoHSEJyFilY2nkuqgp6XwaULvu+lamMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lKZ1Hjqu; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iO1LSnQ+"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2c0e532a408so133829eec.2
-        for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 07:53:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774277615; cv=none;
-        d=google.com; s=arc-20240605;
-        b=SX1a2NahAs9H6vypq9bIupQwgmDP2di98gWHboCHEImT7O0tLqCC4QTPAX4JFdB7w6
-         azQLM202Yy2H4c8oAVmxW8Ce64Gh5KHDB8bOMUkA+IhbZA9ZcRdQnNeQDXhlmG4ZRCaS
-         BPFQz8RSn6hMQl22JzjY0vZTpG/SEYPRbbhHf12w71MKG+dqrbFXvvBOscr4wH9Mov5+
-         SH8Y72JJCTXXemLFzUPWKP2tB5lrFgKGipXGbHYicscPu4nAS/dVvMBXvKX/SUYoFPZV
-         soczZWeFLv5gdhfJRNr4BUpY2RNnUtseZwpAV0bUMR5pAXB9+2ZSNvWvMRHxxk/MEw8O
-         qyuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LI8/dUz99GIMIFX7jL9A6Uqav/8pN6H5Y3gQQrLVq3g=;
-        fh=zP3RslB9KC5HlFmSAtBpUREAgvTqFYzY7CQ+CMJF3v8=;
-        b=cm1K4kJaq9tyhLhJ0Wd4muQAJ+dTlzy5vB1P6U6Ealwl/TeX+g/ZCABwPxAJiRQYlk
-         URYxCUbyvP1lWlljLuYhSEGuYuwoATLa8Trxa6F21kqrXD60rEe4N6OmqJa51NvlfsPH
-         JOxtMQYVz1PbhOkV1HBPEK9y9URkpsLwe8lCSDXM/gk/qicmqnVClHHkXuJCS+rl7FeO
-         FgMKzsLRbhge+rKYuqRt3O1XewST1edaYUTSDX50MZoZ0kW+udVWetGtKWhOMXehLWsK
-         CfKglPOV34i0LUNHUUM/r0Oay/kkMbCgnfNo6AAxgsJWlnWtgRwIy9VRnHeUT30S3Pky
-         gekA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lKZ1Hjqu"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4853a9467c5so31536165e9.2
+        for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 08:33:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774277615; x=1774882415; darn=lists.linux.dev;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LI8/dUz99GIMIFX7jL9A6Uqav/8pN6H5Y3gQQrLVq3g=;
-        b=iO1LSnQ+funa77hTvI+m8UMunsauC39AncUDlHFlWlB/INQY4KWrmiQWFpDCTKNQjl
-         ijD1T4e2D2V2dk1uEOm+uhVWQsk+yC/m9USTzSip+bFQ1sJuMxToBmHK2e9rWd1AS89O
-         MfJ2lUbcROUwJFjKY9BAjH37TrEfKEJn6ht4j2BaLv+t/aQrapnzOiR6AvKxKw45oDhY
-         MLbic3f8rt6NhSS56BIrUI9Uqx9Gp4NLPO+1OSo+/q9kJyHgA1vxUYWonCrt9tLU9vEQ
-         KywRywr+sW+fp3hmGLT3M4djrz7U+IsPEjWBZaOUDnist+CGMW7wF5eEuX3vjyybmzUM
-         0dEQ==
+        d=google.com; s=20251104; t=1774280037; x=1774884837; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=m1gKTBBEujeuqMRQ06o8mhLxWVZ5+wlLBtBCcrKARJY=;
+        b=lKZ1Hjqufgj1LCf0QgVz/yzjZE+a/7GGLrVgGPpI/Yhpyooi03b62tzFChCAqCsdzn
+         VIXgAJdk+WHc8uXN4t03iHQ0wHZT6Nj3uwazTQ3uFYl5L4Gm35N+P1XMX07+XUgkqb6K
+         F9CF/7sVymz6J49Tj3GWsGa0DjXZCG+68sFRRfU+m3xGwCS/baOScXpK5aaSo6VRb0U5
+         jW3AGP5nPxSa18vulLn0PrEXkfm85ycQOK/3ifvze2CjZBx5SUgxLA+sK/TCAWIqyH5J
+         6bZPG7Y80p8oyDoGRzje3Uh0h5k3vF1WmjXjhi4RZjd1253H0zXoPCGc8rV/Qduv1C9T
+         RIzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774277615; x=1774882415;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=LI8/dUz99GIMIFX7jL9A6Uqav/8pN6H5Y3gQQrLVq3g=;
-        b=T4a0RJMNqzna/5WSZCKTH3mBlaG5yt3NfMUK83SQloSMnKMQJ8jqJ8eE7vb56+cwKW
-         ifEJOHINYHZ/CaPn/pe/1ynW8Hmy119un8fB7BId0mG3jKJhAhQOf0++RuonSBmFD1EP
-         EXr+sOjc83OTcs30S2Yy5FTG9bRl08mzcjBgF++ZkpoeR2hK8GKuAeLV3q+K3+p9sMn9
-         0hpCLw2nbjsNy5/IddlHLKkWs6k3mNEwS4JHwfJ5cepT2LMi91PwV1olULyEXh3PCQmB
-         2Kcv/8DG5HCyhl3leB2qBQngb1EnvLutgf1r6kUpIMEnROc6X11tZe0M0Q8v5PlSX/Xk
-         iuhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXqk62Oh8/Lfo0fwDpaitJwve0tilU7nDj8ADM3i1yYSHKYP6LtDpIm3Nmg6Aq5X+qAWSeu@lists.linux.dev
-X-Gm-Message-State: AOJu0YzqjkHHodR9betbR8in8e3qlqHmEVuupEnsSJ4GFN/NPyP97A0U
-	6EzaOGWrbeQ67Mp21LtIGfiPCDF7dHrvESLgOeEXEL+Bk8L9X73wrbY4LKRbqn39wfR3YfcM3K5
-	l7gEP4zF+WAcmadgxz9N58Pp3PQYhQy4=
-X-Gm-Gg: ATEYQzw6Kcie2qpE56UnAaJDzmBhQY6Ax9ObJ3pNftEqZ9zejEau05w+xCZQX/rIDGj
-	prw4h/yPZqRnERhDoEPMNubcX0XKsQyep0pJc5iVDhgfurUCQGDuEWPAfuxIKzAFT3YBStWvvMT
-	oRVoxUaQVQDzxOWLsZ3NtR/lVBxWfyc5I7rVw54CvpKPXWVzvnWf00P/Q3ju3uYJgKruhy9d2Xb
-	q/9DAaMZAQXDZCiOFYZei6uLY/t+cdwyAgRA3/c11P4PGzBTQeiVBMwxQgwnDMyOe1pEvyAwWX8
-	rLc3pE4nzBuCtf+jQNI8Ohd8Sa7vdw6AZQE9yLqjTTudkKjWKNZRBl0e57d/R6mwsKaXjUT7Wc9
-	lIneOVG4rGe4HFk7AR4cfYmM=
-X-Received: by 2002:a05:7300:3215:b0:2c1:27c:758c with SMTP id
- 5a478bee46e88-2c109938d44mr2357139eec.8.1774277615132; Mon, 23 Mar 2026
- 07:53:35 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774280037; x=1774884837;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m1gKTBBEujeuqMRQ06o8mhLxWVZ5+wlLBtBCcrKARJY=;
+        b=BMqTOy+EboReDNxhz19cPRZuE+xDHzXYQqywzGB0KqLjobXEGLFOybZSn2IYe1Z11j
+         DVi7LII8n6VtEoATS3eIBzzgnQMJq3w/bqMeMGO4opyN3wqxmNqWyY/BtmmYsHlfCDUV
+         oCHavBdr5WW8dzxUfxSbIRIkNg2bKQBYyJkh2/QHMHvheW7RANALzsF4nFfrMWjef69a
+         kU84ePR0IP3YYP96u4JKXta4eWmby00SE49uq2XWQri7kcdX5xYuFr5P2FeKQ04Y+vu4
+         GMo4M/OA7MhxmWHisQl8MGOBI/5+WQdzR9iC4OWjKYUoxRyWcx4menHSr196IifTCrW4
+         tQEA==
+X-Forwarded-Encrypted: i=1; AJvYcCWEJl1vccYSrLEGGv9EpJXuRbXqS0RQCqPAfWwg/fvR0OdNPC8MQKf8n7MMW+Korgu3wEtF@lists.linux.dev
+X-Gm-Message-State: AOJu0YyjbkIDxysOBqCV2p0X7IlvojRTOj6yhDdDpo0d1ATM9O00Nyns
+	RQtgCc2vSR3eGAW5kMvfWMdfzz8kSmUF+RpwjxHspn7Q1YZbgQ1i/Y/bwoUdNENXTaqrTBBx83d
+	xYA==
+X-Received: from wmoo17.prod.google.com ([2002:a05:600d:111:b0:485:4ce0:d98f])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:820d:b0:487:467:42a2
+ with SMTP id 5b1f17b1804b1-487046744a1mr97974325e9.18.1774280037341; Mon, 23
+ Mar 2026 08:33:57 -0700 (PDT)
+Date: Mon, 23 Mar 2026 16:33:32 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260322192159.88138-1-ojeda@kernel.org> <20260322193830.89324-1-ojeda@kernel.org>
- <4fba0163-547e-4099-8b37-5d8429bda6da@sirena.org.uk>
-In-Reply-To: <4fba0163-547e-4099-8b37-5d8429bda6da@sirena.org.uk>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 23 Mar 2026 15:53:21 +0100
-X-Gm-Features: AQROBzBN4j7-1buNPtn5ON4A_wtJBuiQQ3UlTVe5clvsCt_bKh7FB_BsDwGf67A
-Message-ID: <CANiq72nmFsnoP3dv_-0PWH0XBpf0OuPzNR2CP9Hw56Z+RVifAg@mail.gmail.com>
-Subject: Re: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
-To: Miguel Ojeda <ojeda@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Jean Delvare <khali@linux-fr.org>, 
-	linux-kernel@vger.kernel.org, a.hindborg@kernel.org, acourbot@nvidia.com, 
-	akpm@linux-foundation.org, aliceryhl@google.com, 
-	anton.ivanov@cambridgegreys.com, bjorn3_gh@protonmail.com, 
-	boqun.feng@gmail.com, dakr@kernel.org, david@davidgow.net, gary@garyguo.net, 
-	johannes@sipsolutions.net, justinstitt@google.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, 
-	linux-mm@kvack.org, linux-um@lists.infradead.org, linux@armlinux.org.uk, 
-	llvm@lists.linux.dev, lossin@kernel.org, mark.rutland@arm.com, 
-	mmaurer@google.com, morbo@google.com, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, nicolas.schier@linux.dev, nsc@kernel.org, 
-	peterz@infradead.org, richard@nod.at, rust-for-linux@vger.kernel.org, 
-	tmgross@umich.edu, urezki@gmail.com, will@kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.1018.g2bb0e51243-goog
+Message-ID: <20260323153351.1412355-1-elver@google.com>
+Subject: [PATCH tip/locking/core] compiler-context-analysis: Add support for
+ multi-argument guarded_by
+From: Marco Elver <elver@google.com>
+To: elver@google.com, Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
+	Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 23, 2026 at 2:54=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> Callers should never treat NULL any differently to any other non-error
-> pointer, this is not a value intended for inspection by users.
->
-> Having specific handling for NULLs is very much not a preferred
-> interface, and most things shouldn't.  The caller should probably have
-> it's own !CONFIG_REGULATOR checks rather than using the return value.
+Clang 23 introduces support for multiple arguments in the `guarded_by`
+and `pt_guarded_by` attributes [1]. This allows defining variables
+protected by multiple context locks, where read access requires holding
+at least one lock (shared or exclusive), and write access requires
+holding all of them exclusively.
 
-Yeah, that is the understanding I got from reading both the docs and
-the comment, but I think the docs (i.e. not the comment in the stub)
-could point that `NULL` is one possible pointer value (perhaps
-including discouraging relying on particular values at the same time,
-and perhaps mentioning `!CONFIG_REGULATOR`).
+To use the feature while maintaining compatibility with Clang 22, add
+the `__guarded_by_any()` and `__pt_guarded_by_any()` macros. On Clang 23
+and newer, these expand to the underlying attributes; with older Clang
+versions, they fall back to a no-op (false negatives possible).
 
-i.e. to me, "Pointer to a struct regulator corresponding to the
-regulator producer," sounds in the docs a bit too much like it will be
-a valid one... no?
+Link: https://github.com/llvm/llvm-project/pull/186838 [1]
+Requested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ include/linux/compiler-context-analysis.h | 66 ++++++++++++++++++++---
+ init/Kconfig                              |  5 ++
+ lib/test_context-analysis.c               | 24 +++++++++
+ 3 files changed, 87 insertions(+), 8 deletions(-)
 
-Another perspective is that, when one reads the rendered docs:
+diff --git a/include/linux/compiler-context-analysis.h b/include/linux/compiler-context-analysis.h
+index 00c074a2ccb0..a0d135e500dd 100644
+--- a/include/linux/compiler-context-analysis.h
++++ b/include/linux/compiler-context-analysis.h
+@@ -39,8 +39,9 @@
+ # define __assumes_shared_ctx_lock(...)	__attribute__((assert_shared_capability(__VA_ARGS__)))
+ 
+ /**
+- * __guarded_by - struct member and globals attribute, declares variable
+- *                only accessible within active context
++ * __guarded_by() - struct member and globals attribute, declares variable
++ *                  only accessible within active context
++ * @x: context lock instance pointer
+  *
+  * Declares that the struct member or global variable is only accessible within
+  * the context entered by the given context lock. Read operations on the data
+@@ -53,11 +54,12 @@
+  *		long counter __guarded_by(&lock);
+  *	};
+  */
+-# define __guarded_by(...)		__attribute__((guarded_by(__VA_ARGS__)))
++# define __guarded_by(x)		__attribute__((guarded_by(x)))
+ 
+ /**
+- * __pt_guarded_by - struct member and globals attribute, declares pointed-to
+- *                   data only accessible within active context
++ * __pt_guarded_by() - struct member and globals attribute, declares pointed-to
++ *                     data only accessible within active context
++ * @x: context lock instance pointer
+  *
+  * Declares that the data pointed to by the struct member pointer or global
+  * pointer is only accessible within the context entered by the given context
+@@ -71,7 +73,53 @@
+  *		long *counter __pt_guarded_by(&lock);
+  *	};
+  */
+-# define __pt_guarded_by(...)		__attribute__((pt_guarded_by(__VA_ARGS__)))
++# define __pt_guarded_by(x)		__attribute__((pt_guarded_by(x)))
++
++/**
++ * __guarded_by_any() - struct member and globals attribute, declares variable
++ *                      only accessible within active contexts
++ * @...: context lock instance pointers
++ *
++ * Declares that the struct member or global variable is protected by multiple
++ * context locks. Write access requires all listed context locks to be held
++ * exclusively; read access requires at least one of them to be held (shared or
++ * exclusive).
++ *
++ * .. code-block:: c
++ *
++ *	struct some_state {
++ *		spinlock_t lock1, lock2;
++ *		long counter __guarded_by_any(&lock1, &lock2);
++ *	};
++ */
++# ifdef CONFIG_CC_HAS_MULTI_ARG_GUARDED_BY_ATTR
++#  define __guarded_by_any(...)		__attribute__((guarded_by(__VA_ARGS__)))
++# else
++#  define __guarded_by_any(...)
++# endif
++
++/**
++ * __pt_guarded_by_any() - struct member and globals attribute, declares pointed-to
++ *                         data only accessible within active contexts
++ * @...: context lock instance pointers
++ *
++ * Declares that the data pointed to by the struct member pointer or global
++ * pointer is protected by multiple context locks. Write access requires all
++ * listed context locks to be held exclusively; read access requires at least
++ * one of them to be held (shared or exclusive).
++ *
++ * .. code-block:: c
++ *
++ *	struct some_state {
++ *		spinlock_t lock1, lock2;
++ *		long *counter __pt_guarded_by_any(&lock1, &lock2);
++ *	};
++ */
++# ifdef CONFIG_CC_HAS_MULTI_ARG_GUARDED_BY_ATTR
++#  define __pt_guarded_by_any(...)		__attribute__((pt_guarded_by(__VA_ARGS__)))
++# else
++#  define __pt_guarded_by_any(...)
++# endif
+ 
+ /**
+  * context_lock_struct() - declare or define a context lock struct
+@@ -158,8 +206,10 @@
+ # define __assumes_ctx_lock(...)
+ # define __assumes_shared_ctx_lock(...)
+ # define __returns_ctx_lock(var)
+-# define __guarded_by(...)
+-# define __pt_guarded_by(...)
++# define __guarded_by(x)
++# define __pt_guarded_by(x)
++# define __guarded_by_any(...)
++# define __pt_guarded_by_any(...)
+ # define __excludes_ctx_lock(...)
+ # define __requires_ctx_lock(...)
+ # define __requires_shared_ctx_lock(...)
+diff --git a/init/Kconfig b/init/Kconfig
+index 444ce811ea67..9f9a800822ff 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -158,6 +158,11 @@ config CC_HAS_BROKEN_COUNTED_BY_REF
+ config CC_HAS_MULTIDIMENSIONAL_NONSTRING
+ 	def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring__)) = { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
+ 
++config CC_HAS_MULTI_ARG_GUARDED_BY_ATTR
++	# supported since clang 23
++	depends on CC_IS_CLANG
++	def_bool $(success,echo 'typedef int __attribute__((capability("l"))) L; L l1; L l2; int __attribute__((guarded_by(&l1, &l2))) x;' | $(CC) -x c - -c -o /dev/null -Werror)
++
+ config LD_CAN_USE_KEEP_IN_OVERLAY
+ 	# ld.lld prior to 21.0.0 did not support KEEP within an overlay description
+ 	# https://github.com/llvm/llvm-project/pull/130661
+diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
+index 06b4a6a028e0..691fb2d6fc45 100644
+--- a/lib/test_context-analysis.c
++++ b/lib/test_context-analysis.c
+@@ -159,6 +159,10 @@ TEST_SPINLOCK_COMMON(read_lock,
+ struct test_mutex_data {
+ 	struct mutex mtx;
+ 	int counter __guarded_by(&mtx);
++
++	struct mutex mtx2;
++	int anyread __guarded_by_any(&mtx, &mtx2);
++	int *anyptr __pt_guarded_by_any(&mtx, &mtx2);
+ };
+ 
+ static void __used test_mutex_init(struct test_mutex_data *d)
+@@ -219,6 +223,26 @@ static void __used test_mutex_cond_guard(struct test_mutex_data *d)
+ 	}
+ }
+ 
++static void __used test_mutex_multiguard(struct test_mutex_data *d)
++{
++	mutex_lock(&d->mtx);
++	(void)d->anyread;
++	(void)*d->anyptr;
++	mutex_unlock(&d->mtx);
++
++	mutex_lock(&d->mtx2);
++	(void)d->anyread;
++	(void)*d->anyptr;
++	mutex_unlock(&d->mtx2);
++
++	mutex_lock(&d->mtx);
++	mutex_lock(&d->mtx2);
++	d->anyread++;
++	(*d->anyptr)++;
++	mutex_unlock(&d->mtx2);
++	mutex_unlock(&d->mtx);
++}
++
+ struct test_seqlock_data {
+ 	seqlock_t sl;
+ 	int counter __guarded_by(&sl);
+-- 
+2.53.0.1018.g2bb0e51243-goog
 
-  https://docs.kernel.org/driver-api/regulator.html#c.regulator_get
-
-one sees the postconditions, but they happen to not apply in all cases
-(in fact, perhaps not having the "Returns" there would increase the
-chances one realizes that, but I understand that you want them to
-treat it as fully opaque as much as possible).
-
-It could also help things like AI review systems which may only notice
-the docs and not the comment inside the stub.
-
-Perhaps it could be at least a one-line comment in the real
-definition, even if not in the rendered docs, to have a chance for
-others to notice.
-
-I don't know -- I hope that helps, in any case. Perhaps Daniel can
-tell us what he thought when he was writing the code, as another
-perspective, i.e. whether it was the docs or not the issue.
-
-Thanks!
-
-Cheers,
-Miguel
