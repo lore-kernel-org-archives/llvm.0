@@ -1,79 +1,52 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0F229D26E;
-	Mon, 23 Mar 2026 07:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77D41DED4C;
+	Mon, 23 Mar 2026 08:08:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774249690; cv=none; b=LsKo+hw+HGIHMSyPf8UsqUyEWPgnbTLl/HQ2kEWnedg51GCaAoT+8qwxYZlN7Uu6SNj6gZwEVWHmo1+/w2QO9sv8Tx117heIKCLfbktXZbbZFB6Xp9vBEnY3dquCdjqtBz1NBhgH/Gvonk2OdMVZqRpfudeR/abK0GeC+Ul3gn4=
+	t=1774253335; cv=none; b=h9tSYC1AiUJOcCOZ9QW6AxKYVvd7Lgfjbrz8nLF78yPPHGPASeZNhQXjxloU8rr2zUieFLZTmHQCTY1kt1Ct7laGHjn9oKIutIQ3rm+Z4A57y90FSc6x8eWsfONMvPylAyRi7fUErbyvuyKFr0Pgz6EkyY9Y6AEv/lxV6Uy9H8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774249690; c=relaxed/simple;
-	bh=RCpk62n3AYbYiVU8MLmHxHTP0ibiZw4A4+CXyOIQstk=;
+	s=arc-20240116; t=1774253335; c=relaxed/simple;
+	bh=duHbJjCiv3keEx2pL+5FokNVI6n7igApHRCi0RJex9Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UyTww2es7i/eakytHwxu3bXv9QjQxQqnxYWjn7paattmeEZzMSHHqpMzu2n5pvKdqtGlqdHLOweN9Kt/F+3UMA9ZRQgWQPPUHtQycfb9ezcnktkQlcY3Xo9wjwjK3hwL11gL43EGcxREuIElBdwhWJnm5tWnsFugE6Cv0NNIg84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TBIe6ECB; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=CWF8Tyy/eWFbBOtMGH7dnrISa3bn4ezE3XBRrO1sb8UnLKjl4vt36+Qjik2GhwPkQXH3ZrRUfK+NtM7Mw00h4f+bDKV/KzGK5eHunxRPq+jezfGmA6jBdHwjULHQ3lk0u2uhpY6sOKGN1wwLpZXCG7hMGSePoQICxaGNBk977iQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s7b4fqp+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TBIe6ECB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774249689; x=1805785689;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RCpk62n3AYbYiVU8MLmHxHTP0ibiZw4A4+CXyOIQstk=;
-  b=TBIe6ECBaG7YbtyvMgl4zH9374wdggctey17zDE9OTHh5Kpzhki3sSEX
-   CLMJ5WSeTb7Uudlb2LdyTGXjAlr0DU2HjW0mcl0mv7maXIhuy8/e2Xoao
-   it3g5ddyMJVWaZoOhqc6Q5D83K83RvQV5GldDMsyuqDiBFDJNoWtTL5oR
-   oj9laSEUTAXSCBD6cVR+RYsqYi5MJ269SV8x45NuuS6Rih5TwwMwOBAfK
-   820Z/6d/x4GBp6N366mp/yf6Er8U2v8rlj6/siuEK7GWWKp+93GrXyqp1
-   lhRQK1ofy1Y+oGKyPs5MPN8DhIQaf+NZre3vB+hiwaDqJQsobGXXezdJ4
-   w==;
-X-CSE-ConnectionGUID: CLogf2USR+6WiEvkm6El6Q==
-X-CSE-MsgGUID: woz53t0xSXmScEd/iWDZHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="77851858"
-X-IronPort-AV: E=Sophos;i="6.23,136,1770624000"; 
-   d="scan'208";a="77851858"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 00:08:08 -0700
-X-CSE-ConnectionGUID: kRJ1g0y0QDaExnkxhsB7Kg==
-X-CSE-MsgGUID: badPk84/Tv+lneKFJzNajg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,136,1770624000"; 
-   d="scan'208";a="219142609"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa006.fm.intel.com with ESMTP; 23 Mar 2026 00:08:03 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w4ZOK-000000006Zt-2URK;
-	Mon, 23 Mar 2026 07:08:00 +0000
-Date: Mon, 23 Mar 2026 08:07:28 +0100
-From: kernel test robot <lkp@intel.com>
-To: Pingfan Liu <piliu@redhat.com>, kexec@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pingfan Liu <piliu@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jeremy Linton <jeremy.linton@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Simon Horman <horms@kernel.org>, Gerd Hoffmann <kraxel@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Philipp Rudo <prudo@redhat.com>, Viktor Malik <vmalik@redhat.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>, Baoquan He <bhe@redhat.com>,
-	Dave Young <dyoung@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	bpf@vger.kernel.org, systemd-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv7 08/13] kexec_file: Factor out routine to find a symbol
- in ELF
-Message-ID: <202603230851.qOD27RaS-lkp@intel.com>
-References: <20260322014402.8815-9-piliu@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s7b4fqp+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D649DC4CEF7;
+	Mon, 23 Mar 2026 08:08:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774253334;
+	bh=duHbJjCiv3keEx2pL+5FokNVI6n7igApHRCi0RJex9Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=s7b4fqp+kVUyMnMNOVp/ykyk3H23B5oRl0MU4J9jfYVuUs62QB5ciVDikFv8ercyK
+	 28zQOfjB91V9E6DfceJJF19ak6dzLDV77Cs6D0vL/k2Twn2rhof9zNW1bWPGGDbcBh
+	 Xr7DPx+Xz+Dil1/g0jItSUuFeXc3a1Igx98DnWgzYRA9zJdnM/X9BjJzrGEx/R3GRr
+	 qNpwzsBZAT8gsC0wGxO+05YeAfXo0a/G2inn1FceN+wDy76LDqAOHYkBSDMUNxbmcO
+	 oTz7AxjNSLlbgFq0UjOSGU0vWo2N4h2j5MmdhCUhqEZtBalUnmn0SioCwaPmzewUV6
+	 yMGjD0tu5NK4g==
+Date: Mon, 23 Mar 2026 10:08:48 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@kernel.org>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Mike Marciniszyn <mike.marciniszyn@intel.com>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	Doug Ledford <dledford@redhat.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Ingo Molnar <mingo@kernel.org>, linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
+Message-ID: <20260323080848.GF814676@unreal>
+References: <20260320151511.3420818-1-arnd@kernel.org>
+ <20260320151511.3420818-2-arnd@kernel.org>
+ <6b56c476-86fd-4d43-8dee-c7f89d346941@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -82,62 +55,28 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260322014402.8815-9-piliu@redhat.com>
+In-Reply-To: <6b56c476-86fd-4d43-8dee-c7f89d346941@app.fastmail.com>
 
-Hi Pingfan,
+On Fri, Mar 20, 2026 at 04:53:04PM +0100, Arnd Bergmann wrote:
+> On Fri, Mar 20, 2026, at 16:12, Arnd Bergmann wrote:
+> 
+> > +	 */
+> > +	ibdev = &dd->verbs_dev.rdi.ibdev;
+> > +	dev_set_name(&ibdev->dev, "%s_%d", class_name(), dd->unit);
+> > +	strscpy(&ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
+> > +
+> 
+> I messed this up during a rebase, that should have been 
+> 
+>        strscpy(ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
+> 
+> (without the extra &). I'll wait for comments before resending.
 
-kernel test robot noticed the following build errors:
+The hfi1 driver is scheduled for removal. Dennis has already posted the
+hfi2 driver, which serves as its replacement.
 
-[auto build test ERROR on bpf-next/net]
-[also build test ERROR on bpf-next/master bpf/master akpm-mm/mm-nonmm-unstable linus/master v7.0-rc5 next-20260320]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pingfan-Liu/bpf-Introduce-kfuncs-to-parser-buffer-content/20260323-084500
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
-patch link:    https://lore.kernel.org/r/20260322014402.8815-9-piliu%40redhat.com
-patch subject: [PATCHv7 08/13] kexec_file: Factor out routine to find a symbol in ELF
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260323/202603230851.qOD27RaS-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603230851.qOD27RaS-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603230851.qOD27RaS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/kexec_file.c:1276:23: error: redefinition of 'kexec_purgatory_find_symbol'
-    1276 | static const Elf_Sym *kexec_purgatory_find_symbol(struct purgatory_info *pi,
-         |                       ^
-   kernel/kexec_file.c:958:23: note: previous definition is here
-     958 | static const Elf_Sym *kexec_purgatory_find_symbol(struct purgatory_info *pi,
-         |                       ^
-   1 error generated.
-
-
-vim +/kexec_purgatory_find_symbol +1276 kernel/kexec_file.c
-
-  1268	
-  1269	/*
-  1270	 * kexec_purgatory_find_symbol - find a symbol in the purgatory
-  1271	 * @pi:		Purgatory to search in.
-  1272	 * @name:	Name of the symbol.
-  1273	 *
-  1274	 * Return: pointer to symbol in read-only symtab on success, NULL on error.
-  1275	 */
-> 1276	static const Elf_Sym *kexec_purgatory_find_symbol(struct purgatory_info *pi,
-  1277							  const char *name)
-  1278	{
-  1279		if (!pi->ehdr)
-  1280			return NULL;
-  1281	
-  1282		return elf_find_symbol(pi->ehdr, name);
-  1283	}
-  1284	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+>        Arnd
+> 
