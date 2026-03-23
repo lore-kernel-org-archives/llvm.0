@@ -1,63 +1,74 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA3338911B
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 10:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD5338D003;
+	Mon, 23 Mar 2026 10:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774260235; cv=none; b=pjcGkYaM/6FkLu9YdqbalC4XfBUxi43zrC/LPLWkK5hQUbFRkGBeTIoFfubIvDqzqT15ez9oRmMI+V5OH+dmkLBop0dtRiGIeyoeU0aFusRZpMeK3wf28fJp8T39EPz52Rg38qapMIwR6Gm0PjnY4CIzxuX+mFy0BlaqKwpeaRY=
+	t=1774262413; cv=none; b=OWLfYEo7kEL9tLUdY46Jrfz/rLm7cvwGiVHrOaQyxfFlwOYiOdDe3z5uG4UF6zlAKYotO9+0vDDcFTJ+S/QWwoc3duASr/CacGriZdLEJFc69hGRAkL05eBJIIS+3GpLvdvc1Ns3hFfuW8DAeEW05jtl30IcvMJw8tYLksQ0guA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774260235; c=relaxed/simple;
-	bh=xro7tl4zvQyJrRWdcW7R6YorirXJvSVqLPErH59zAT8=;
+	s=arc-20240116; t=1774262413; c=relaxed/simple;
+	bh=jl17xFX7FL3kILYlXWNhW78Mu/pU5NxzStolON6Tmh8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hxmR9s91mEVW65tLUeB9ToMcBYKpzr7CBMBaU5W0qL4ev5xTr6qOGGyMIZfg6HvkV2xQWjrooNTCE50OBXx2Ltd1O99NBBwzhbYsKflT5qEqYTlHk52brxuMSVJ186MhoN5snN3VMhwBQ7Up6DPGv7LfNlO8o3eN9Ds662J75Do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=0YF0Xiuw; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	 Content-Type:Content-Disposition:In-Reply-To; b=I6kRt1nln+cpNTw0S2EmNyJ0LLCw0ZgBH3gk6vCnChyhgBxCFdmRVF5TSTv52KTUCsvaNUvz9Q2CwD/qFto0XK9KFY0tyiVJKd10oGAPXacDGYGsszUYobPsVXdlKaszeSz7y/3VjGz6NujNXOUvC3wt4wXvUe+/IF2OEDkzmI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g539zflo; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="0YF0Xiuw"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Cz+j7B7EZWXqL1NEdjNkb8+tqvgFwGtEmQlc0a4uF/I=; b=0YF0XiuwT3u8tR4oPMYWEV/KFK
-	H9fwrg4T/+n+RJ03PpS/Fav/FeJLLU7KVNxg/rC1jqK+w+LeTgzBtMY5uSRpKHO0wDv+X6cxP7NiC
-	m75SRUqkIW5e3TcIYnU2V/9uxpyA8Sc/j0NWipcGGGzkIgVZX5Q+p4QRq+XPer8SHbcl8QxCKLAjM
-	+YmYDZJz5gc2FBjWWOLytVpK4pbu5cpv+VXUz3RUGr/wvAMjrH6Zo5aYlwvQ2q7xNgwDr/8QYZiUW
-	W9lgLx+4dBjuEbKoTDvDCm6znHsF6AcsyhR8Ua14v4nYL8zIAC5TUrwz1CHT9EOJzgzdxIrCwHslC
-	8tWM9ivQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45792)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1w4c8C-000000000IN-2POJ;
-	Mon, 23 Mar 2026 10:03:32 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1w4c86-000000003wH-1o0a;
-	Mon, 23 Mar 2026 10:03:26 +0000
-Date: Mon, 23 Mar 2026 10:03:26 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: a.hindborg@kernel.org, acourbot@nvidia.com, akpm@linux-foundation.org,
-	aliceryhl@google.com, anton.ivanov@cambridgegreys.com,
-	bjorn3_gh@protonmail.com, boqun.feng@gmail.com, dakr@kernel.org,
-	david@davidgow.net, gary@garyguo.net, johannes@sipsolutions.net,
-	justinstitt@google.com, linux-arm-kernel@lists.infradead.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-um@lists.infradead.org,
-	llvm@lists.linux.dev, lossin@kernel.org, mark.rutland@arm.com,
-	mmaurer@google.com, morbo@google.com, nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com, nicolas.schier@linux.dev,
-	nsc@kernel.org, peterz@infradead.org, richard@nod.at,
-	rust-for-linux@vger.kernel.org, tmgross@umich.edu, urezki@gmail.com,
-	will@kernel.org
-Subject: Re: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
-Message-ID: <acEP7tl8pqFA3tK8@shell.armlinux.org.uk>
-References: <20260322192159.88138-1-ojeda@kernel.org>
- <20260323000327.111235-1-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g539zflo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774262411; x=1805798411;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jl17xFX7FL3kILYlXWNhW78Mu/pU5NxzStolON6Tmh8=;
+  b=g539zfloFKdnLgg/NCpCk7Tt53fvi4HJyCzuhHD9SrZ6EDSn7cBKqv/C
+   CjRi0MUrp7Nj4qADCrdTTVdjvlQKjtF7H+K5qTXzvgpiN+CpuGv+XwTNG
+   dWc40htuqPoQKzY3ADl6+0nG0j6z9hhjp+kY37Sq7Ap3MICU5+6FJuckw
+   TA57HtrMtOGa7bd9N9QBd+nhnvIfaX1HqIIB5qhydsMYoKeKDD7aLhqS8
+   iM8AMvo8h+O9E3CvB6jTI05TPwdHQAEAMR0R3d4o7bjFqLKjYJf6xoE97
+   2obQoOiJlX5PTZiOGSy5H1yJ8+zm2yOPq0GhcmvNgrW/IOw1yLWYIyFFW
+   A==;
+X-CSE-ConnectionGUID: w5UTYy+kTPqsvqERnuBrLg==
+X-CSE-MsgGUID: 08dTL4MzSAKi10ZvymFa/g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="75138955"
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="75138955"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 03:40:11 -0700
+X-CSE-ConnectionGUID: IO9fLRWCQo215NjF5gWDdg==
+X-CSE-MsgGUID: VV63WbT1TuOjk7451sldHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,137,1770624000"; 
+   d="scan'208";a="228713292"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 23 Mar 2026 03:40:03 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4chU-000000000Mr-01qN;
+	Mon, 23 Mar 2026 10:40:00 +0000
+Date: Mon, 23 Mar 2026 18:39:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Golle <daniel@makrotopia.org>, Andrew Lunn <andrew@lunn.ch>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Russell King <linux@armlinux.org.uk>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Frank Wunderlich <frankwu@gmx.de>,
+	Chad Monroe <chad@monroe.io>,
+	Cezary Wilmanski <cezary.wilmanski@adtran.com>,
+	Liang Xu <lxu@maxlinear.com>,
+	"Benny (Ying-Tsan) Weng" <yweng@maxlinear.com>,
+	Jose Maria Verdu Munoz <jverdu@maxlinear.com>,
+	Avinash Jayaraman <ajayaraman@maxlinear.com>,
+	John Crispin <john@phrozen.org>
+Subject: Re: [PATCH net-next v6 2/4] net: dsa: add bridge member iteration
+ macro and port mask helper
+Message-ID: <202603231807.3CRfrjTg-lkp@intel.com>
+References: <ff936ce4ad3044102c367c55e7a455ab0020e4b7.1774136876.git.daniel@makrotopia.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,37 +77,121 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260323000327.111235-1-ojeda@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <ff936ce4ad3044102c367c55e7a455ab0020e4b7.1774136876.git.daniel@makrotopia.org>
 
-On Mon, Mar 23, 2026 at 01:03:27AM +0100, Miguel Ojeda wrote:
-> On Sun, 22 Mar 2026 20:21:59 +0100 Miguel Ojeda <ojeda@kernel.org> wrote:
-> >
-> >     On the other hand, regardless of whether we fix this (and another
-> >     issue in a separate email found thanks to the UML build), we could
-> >     instead add `depends on` listing explicitly the architectures where
-> >     this is going to be actually tested. That way maintainers can decide
-> >     whether they want to support it when they are ready. Thoughts?
-> 
-> Another one for arm 32-bit:
-> 
->       LD      .tmp_vmlinux1
->     ld.lld: error: undefined symbol: __aeabi_read_tp
->     >>> referenced by uaccess.rs:349 (rust/kernel/uaccess.rs:349)
->     >>>               samples/rust/rust_misc_device.o:(<rust_misc_device::RustMiscDevice as kernel::miscdevice::MiscDevice>::ioctl) in archive vmlinux.a
->     >>> referenced by uaccess.rs:543 (rust/kernel/uaccess.rs:543)
->     >>>               samples/rust/rust_misc_device.o:(<rust_misc_device::RustMiscDevice as kernel::miscdevice::MiscDevice>::ioctl) in archive vmlinux.a
->     >>> referenced by uaccess.rs:543 (rust/kernel/uaccess.rs:543)
->     >>>               drivers/android/binder/rust_binder_main.o:(rust_binder_main::rust_binder_ioctl) in archive vmlinux.a
->     >>> referenced 36 more times
+Hi Daniel,
 
-Why is Rust generating code for userspace thread accessors for kernel
-space, where userspace threads are meaningless. This is totally wrong.
-The kernel must not reference __aeabi_read_tp().
+kernel test robot noticed the following build errors:
 
-Note: I know nothing about Rust, but I know enough to say the above is
-pointing to a fundamental issue in Rust for 32-bit ARM.
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Golle/net-dsa-add-driver-private-pointer-to-struct-dsa_bridge/20260323-041502
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/ff936ce4ad3044102c367c55e7a455ab0020e4b7.1774136876.git.daniel%40makrotopia.org
+patch subject: [PATCH net-next v6 2/4] net: dsa: add bridge member iteration macro and port mask helper
+config: arm-randconfig-002-20260323 (https://download.01.org/0day-ci/archive/20260323/202603231807.3CRfrjTg-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c911b8492374942bf4cfe35411e90a35d3837f6a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603231807.3CRfrjTg-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603231807.3CRfrjTg-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/dsa/yt921x.c:2158:1: error: conflicting types for 'dsa_bridge_ports'
+    2158 | dsa_bridge_ports(struct dsa_switch *ds, const struct net_device *bdev)
+         | ^
+   include/net/dsa.h:845:19: note: previous definition is here
+     845 | static inline u32 dsa_bridge_ports(struct dsa_switch *ds,
+         |                   ^
+>> drivers/net/dsa/yt921x.c:2213:38: error: incompatible pointer types passing 'struct net_device *' to parameter of type 'const struct dsa_bridge *' [-Wincompatible-pointer-types]
+    2213 |                         ports_mask = dsa_bridge_ports(ds, bdev);
+         |                                                           ^~~~
+   include/net/dsa.h:846:33: note: passing argument to parameter 'bridge' here
+     846 |                                    const struct dsa_bridge *bridge)
+         |                                                             ^
+   drivers/net/dsa/yt921x.c:2285:36: error: incompatible pointer types passing 'struct net_device *' to parameter of type 'const struct dsa_bridge *' [-Wincompatible-pointer-types]
+    2285 |         ports_mask = dsa_bridge_ports(ds, bridge.dev);
+         |                                           ^~~~~~~~~~
+   include/net/dsa.h:846:33: note: passing argument to parameter 'bridge' here
+     846 |                                    const struct dsa_bridge *bridge)
+         |                                                             ^
+   3 errors generated.
+
+
+vim +/dsa_bridge_ports +2158 drivers/net/dsa/yt921x.c
+
+186623f4aa724c David Yang 2025-10-17  2156  
+186623f4aa724c David Yang 2025-10-17  2157  static u32
+186623f4aa724c David Yang 2025-10-17 @2158  dsa_bridge_ports(struct dsa_switch *ds, const struct net_device *bdev)
+186623f4aa724c David Yang 2025-10-17  2159  {
+186623f4aa724c David Yang 2025-10-17  2160  	struct dsa_port *dp;
+186623f4aa724c David Yang 2025-10-17  2161  	u32 mask = 0;
+186623f4aa724c David Yang 2025-10-17  2162  
+186623f4aa724c David Yang 2025-10-17  2163  	dsa_switch_for_each_user_port(dp, ds)
+186623f4aa724c David Yang 2025-10-17  2164  		if (dsa_port_offloads_bridge_dev(dp, bdev))
+186623f4aa724c David Yang 2025-10-17  2165  			mask |= BIT(dp->index);
+186623f4aa724c David Yang 2025-10-17  2166  
+186623f4aa724c David Yang 2025-10-17  2167  	return mask;
+186623f4aa724c David Yang 2025-10-17  2168  }
+186623f4aa724c David Yang 2025-10-17  2169  
+186623f4aa724c David Yang 2025-10-17  2170  static int
+186623f4aa724c David Yang 2025-10-17  2171  yt921x_bridge_flags(struct yt921x_priv *priv, int port,
+186623f4aa724c David Yang 2025-10-17  2172  		    struct switchdev_brport_flags flags)
+186623f4aa724c David Yang 2025-10-17  2173  {
+186623f4aa724c David Yang 2025-10-17  2174  	struct yt921x_port *pp = &priv->ports[port];
+186623f4aa724c David Yang 2025-10-17  2175  	bool do_flush;
+186623f4aa724c David Yang 2025-10-17  2176  	u32 mask;
+186623f4aa724c David Yang 2025-10-17  2177  	int res;
+186623f4aa724c David Yang 2025-10-17  2178  
+186623f4aa724c David Yang 2025-10-17  2179  	if (flags.mask & BR_LEARNING) {
+186623f4aa724c David Yang 2025-10-17  2180  		bool learning = flags.val & BR_LEARNING;
+186623f4aa724c David Yang 2025-10-17  2181  
+186623f4aa724c David Yang 2025-10-17  2182  		mask = YT921X_PORT_LEARN_DIS;
+186623f4aa724c David Yang 2025-10-17  2183  		res = yt921x_reg_toggle_bits(priv, YT921X_PORTn_LEARN(port),
+186623f4aa724c David Yang 2025-10-17  2184  					     mask, !learning);
+186623f4aa724c David Yang 2025-10-17  2185  		if (res)
+186623f4aa724c David Yang 2025-10-17  2186  			return res;
+186623f4aa724c David Yang 2025-10-17  2187  	}
+186623f4aa724c David Yang 2025-10-17  2188  
+186623f4aa724c David Yang 2025-10-17  2189  	/* BR_FLOOD, BR_MCAST_FLOOD: see the comment where ACT_UNK_ACTn_TRAP
+186623f4aa724c David Yang 2025-10-17  2190  	 * is set
+186623f4aa724c David Yang 2025-10-17  2191  	 */
+186623f4aa724c David Yang 2025-10-17  2192  
+186623f4aa724c David Yang 2025-10-17  2193  	/* BR_BCAST_FLOOD: we can filter bcast, but cannot trap them */
+186623f4aa724c David Yang 2025-10-17  2194  
+186623f4aa724c David Yang 2025-10-17  2195  	do_flush = false;
+186623f4aa724c David Yang 2025-10-17  2196  	if (flags.mask & BR_HAIRPIN_MODE) {
+186623f4aa724c David Yang 2025-10-17  2197  		pp->hairpin = flags.val & BR_HAIRPIN_MODE;
+186623f4aa724c David Yang 2025-10-17  2198  		do_flush = true;
+186623f4aa724c David Yang 2025-10-17  2199  	}
+186623f4aa724c David Yang 2025-10-17  2200  	if (flags.mask & BR_ISOLATED) {
+186623f4aa724c David Yang 2025-10-17  2201  		pp->isolated = flags.val & BR_ISOLATED;
+186623f4aa724c David Yang 2025-10-17  2202  		do_flush = true;
+186623f4aa724c David Yang 2025-10-17  2203  	}
+186623f4aa724c David Yang 2025-10-17  2204  	if (do_flush) {
+186623f4aa724c David Yang 2025-10-17  2205  		struct dsa_switch *ds = &priv->ds;
+186623f4aa724c David Yang 2025-10-17  2206  		struct dsa_port *dp = dsa_to_port(ds, port);
+186623f4aa724c David Yang 2025-10-17  2207  		struct net_device *bdev;
+186623f4aa724c David Yang 2025-10-17  2208  
+186623f4aa724c David Yang 2025-10-17  2209  		bdev = dsa_port_bridge_dev_get(dp);
+186623f4aa724c David Yang 2025-10-17  2210  		if (bdev) {
+186623f4aa724c David Yang 2025-10-17  2211  			u32 ports_mask;
+186623f4aa724c David Yang 2025-10-17  2212  
+186623f4aa724c David Yang 2025-10-17 @2213  			ports_mask = dsa_bridge_ports(ds, bdev);
+186623f4aa724c David Yang 2025-10-17  2214  			ports_mask |= priv->cpu_ports_mask;
+186623f4aa724c David Yang 2025-10-17  2215  			res = yt921x_bridge(priv, ports_mask);
+186623f4aa724c David Yang 2025-10-17  2216  			if (res)
+186623f4aa724c David Yang 2025-10-17  2217  				return res;
+186623f4aa724c David Yang 2025-10-17  2218  		}
+186623f4aa724c David Yang 2025-10-17  2219  	}
+186623f4aa724c David Yang 2025-10-17  2220  
+186623f4aa724c David Yang 2025-10-17  2221  	return 0;
+186623f4aa724c David Yang 2025-10-17  2222  }
+186623f4aa724c David Yang 2025-10-17  2223  
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
