@@ -1,69 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4333AF675
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 14:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7313B27D0;
+	Mon, 23 Mar 2026 14:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774276994; cv=none; b=Lg3o9jo/lA+afrIYJYCeiyZY+m5JhnOjSrkgzd+jznEnV2S1p3toovesUGRC4JWUq21xSKHsv4KBfccYJwYaGDrlmKo08ndu01x2XtB9TAqqn7HApQ5gcYh27N+bxc3TzHBREy9B8rscs2RXrAhOMV0bKlAj+kP3hfjAyySqJ4Q=
+	t=1774277552; cv=none; b=B2M6CQxGORGB6uGzgI7CdsuTBQNUSWr/rPa8S6mQ8MglFlvuCHRtWKw4hbed3qoBWPMlIYQ1mhmHwFlHnKuEM42iaT3CaJ/3eYOZyXLZ17AJfhee7aim66gyjGakp3xTJVzvIgAKnGaOoDrxdR3UM7GsmN4knhgYFl4uWvnqsFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774276994; c=relaxed/simple;
-	bh=JxlE8tyZrvnfbFBO0MpUGY0nImU77DWkxB9O0J/TiTY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WH5iwwUm9sCt/YlDMAk2S/gWYkWbq4Vb3mvQtgmNdDrsX93vq9166PeaiKO6szqBjV6q9+ZptZEXbDNHOU3iBd0Hri1gYLHI0D7SOeW5cRUij9+75f6E8PgF76R4WV4aFeMq9KaGLIfn9NsxgC73lTotG6Sn7Tb+FZJkkhSHBRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GW62zH6j; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774277552; c=relaxed/simple;
+	bh=KbfctE9xbMaq8z82UyfhfkaRlUugJsUcn7ei3aJP0ck=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cLAKmq4Aa4OmjQvOV5FyAMdCeS3dJ4db+um+rfFzrhJJZC1aG1yvT36Ni4V7rW4IypW4LVlsoQC/Q+F8Fym4tNq/KgIVPNyGSnqjp5xGTwS+2coOHpSDnN3YBxoqlBMjLo4u1+Wi59Bwiv05kBru1KPlHDzH3Tn2JoIn9tuS3sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=idjAmKJn; arc=none smtp.client-ip=144.76.82.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GW62zH6j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2827C2BCB6
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 14:43:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774276994;
-	bh=JxlE8tyZrvnfbFBO0MpUGY0nImU77DWkxB9O0J/TiTY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GW62zH6j3TfYSCWjR2VEDpFBOnjh6uHOzjLr52KLP8N1qc0Yq/keb4JpLlNx2mPLf
-	 AocYXrJ9JRpOVY302SFAP26KQXR5hLjjqgk3/wrgCPrxBcd92PUZwq2D+LcvLhnBlL
-	 LyETvh2jihzyLdPUJFRw8peqCivZbpDB6fLG2GOEV2+qUw5PPiW6fXqsjBY8QKuZ3B
-	 QNO0/Bz17I6nE1ieeLkLiUF9VuYeTi/z7s/9lOpFWQUTeWJB+D/0R6hyaCEbgeF9Cq
-	 egfV3vRlVcRa8S7wPYPOy7+2iog4190wwEvHWEOzegfHeHN3/M4vUYpMAlhaZypwfI
-	 FWGJXZ5+AM2Ww==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6634bb959a2so339040a12.1
-        for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 07:43:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU+yCT52GsQtqsIlEXlCNZ5oupm41HPoVp2QeeO6voPrgG7c1KGsULZKYSAt97Mr7Skems4@lists.linux.dev
-X-Gm-Message-State: AOJu0YwvXZnZPOsP+Yo2yzho28i4Jtm5fZC85haAwJ2+J2LGnE6bL9QT
-	Hyr2cF9Blm0US3P+PRD4DhKtoyUksXnmWd8VcGJKPI+QtZfz1olUPvknUZKJEW4eYfufuN6136S
-	Ps1exNaW56osmFTOZsyCZKz8SDkaVzOg=
-X-Received: by 2002:a05:6402:5287:b0:668:58b6:505c with SMTP id
- 4fb4d7f45d1cf-668c9b3b2famr8559139a12.30.1774276993063; Mon, 23 Mar 2026
- 07:43:13 -0700 (PDT)
+	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="idjAmKJn"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+	s=42; h=From:Cc:To:Date:Message-ID;
+	bh=KbfctE9xbMaq8z82UyfhfkaRlUugJsUcn7ei3aJP0ck=; b=idjAmKJndQK6w0F9Fk3UKCTEXB
+	uD7ZpClad8U/fhD+e7TDHDNe7EQ8M1uyeUJdHjeLkZsnYqsWONaQIhQth/6swG0uHWkelubCBSWee
+	2y+b7Bk2gjaaBhIhh6BdfdnZoCbjj5GxrN+ZaTzyRsTkm1t9GapMCgb/fgVqgZTZzh/3BXCqIhc35
+	p2Lw03TXFWAdlw92Fph4+h0NBTGnMcNwikUDcHNME26WHTa9cHs0kTycJlD3b1pJm4mzPDdEWVrbf
+	L92hS2JrJM4LmNgh1NY7PC2dXRwqEuxSOhf7/6nNYiT2pwvTd9iB37HORc1B1hg1oWxtHw7+rJAJ8
+	EtMhqsToxc3TyFV2VQ18vKku2cCx0SN5++2iiqXddfwWBj0uTkYzEb/UJ8xUd+6ZFNZIj31iIL1+K
+	eFsHuOf4SmWfFR9TekWYT6BD512p/pxl8RVfHr/2Di5BJwb5amio86ZTU7V2OhPEQoQcbX7ljlB1u
+	RGh3ZtTW7YkgW89Sb5BIP+LO;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+	(Exim)
+	id 1w4gdn-000000036Ya-3TjC;
+	Mon, 23 Mar 2026 14:52:27 +0000
+Message-ID: <69c54f80-dff1-4c02-af97-08799fe59b94@samba.org>
+Date: Mon, 23 Mar 2026 15:52:27 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202603180118.ClDWNtId-lkp@intel.com> <b859bfa1-7844-4b23-91a4-bbd526ffc19b@samba.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [samba-ksmbd:ksmbd-for-next-next 11/12]
+ fs/smb/server/smb2pdu.c:5723:3: warning: variable 'pntsd' is uninitialized
+ when used here
+To: Namjae Jeon <linkinjeon@kernel.org>, Steve French <smfrench@gmail.com>
+Cc: Asim Viladi Oglu Manizada <manizada@pm.me>,
+ kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Steve French <stfrench@microsoft.com>,
+ "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
+References: <202603180118.ClDWNtId-lkp@intel.com>
+ <b859bfa1-7844-4b23-91a4-bbd526ffc19b@samba.org>
  <CAH2r5mvvjWtJza+9YrLYvneysyEQa5rENhTYiFTAwrE+KhOy8Q@mail.gmail.com>
-In-Reply-To: <CAH2r5mvvjWtJza+9YrLYvneysyEQa5rENhTYiFTAwrE+KhOy8Q@mail.gmail.com>
-From: Namjae Jeon <linkinjeon@kernel.org>
-Date: Mon, 23 Mar 2026 23:43:00 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd_yLYLD5SsRUZy8d6u7vknTPuN8Cbe11HJt0Eq6bLzBBw@mail.gmail.com>
-X-Gm-Features: AQROBzDEQtvFmOi3srkmFwcUQgteSrrJ0KUFogU3fX2lCQFsAO1qj222hHE8nqY
-Message-ID: <CAKYAXd_yLYLD5SsRUZy8d6u7vknTPuN8Cbe11HJt0Eq6bLzBBw@mail.gmail.com>
-Subject: Re: [samba-ksmbd:ksmbd-for-next-next 11/12] fs/smb/server/smb2pdu.c:5723:3:
- warning: variable 'pntsd' is uninitialized when used here
-To: Steve French <smfrench@gmail.com>
-Cc: Stefan Metzmacher <metze@samba.org>, Asim Viladi Oglu Manizada <manizada@pm.me>, kernel test robot <lkp@intel.com>, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Steve French <stfrench@microsoft.com>, 
-	"linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <CAKYAXd_yLYLD5SsRUZy8d6u7vknTPuN8Cbe11HJt0Eq6bLzBBw@mail.gmail.com>
+Content-Language: en-US
+From: Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <CAKYAXd_yLYLD5SsRUZy8d6u7vknTPuN8Cbe11HJt0Eq6bLzBBw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 23, 2026 at 10:22=E2=80=AFPM Steve French <smfrench@gmail.com> =
-wrote:
->
-> looks like a simple fix to initialize it to null at declaration, right?
-It seems this test was performed on an outdated version. The current
-ksmbd-for-next already includes the updated one, so we don't need to
-check it.
-Thanks.
+Am 23.03.26 um 15:43 schrieb Namjae Jeon:
+> On Mon, Mar 23, 2026 at 10:22 PM Steve French <smfrench@gmail.com> wrote:
+>>
+>> looks like a simple fix to initialize it to null at declaration, right?
+> It seems this test was performed on an outdated version. The current
+> ksmbd-for-next already includes the updated one, so we don't need to
+> check it.
+
+For it still happens with the current state:
+
+1ce4e48216b84385319da308f2262eb11ee7e459
+(smfrench-smb3-kernel/ksmbd-for-next) smb: smbdirect: fix inverted comparison operator in negotiation log message
+
+And there it's likely:
+
+6a0795e46296589d8eba6c194586e9e65974d73f
+ksmbd: fix OOB write in QUERY_INFO for compound requests
+
+With setting it to NULL the smatch warning goes away.
+
+metze
