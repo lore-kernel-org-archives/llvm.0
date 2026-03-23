@@ -1,125 +1,146 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC2648CFC
-	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 03:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774236315; cv=pass; b=n/pugPsCkj9AfLOpGsI/ukqQcQ3buo2597/mzo0q9Mbh0B+WOG+yGUKzW3A3+zjPxVvnv4EXyUYPabVW5qNg0pO8G5ebheBBoJh4XukRJmyNQrM42elGhXtmXY9McdouCYeC3fs7qJz/95CIBvIbBnGvdN0CG86dgZax1wM18gM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774236315; c=relaxed/simple;
-	bh=6L7OuggG1xx/psBeZawamh6lKLmj+yBN2DAvG0qZTM4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GwM4tigXf1p43M0y2SwflstFoBGVdalKmPiOAsj7HxAakx5kPQ2HLryi1AapscgPwiaaA6em2My4qVhQBuNmad0VTrHpGX5HvhX5wnB/wYCil8orx++YgLe7J0HXyhdXSuJGvLNDzBYTyeMOEoWOANV1RFe9rIRgpLGBn9cF2sk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k5WXwRBD; arc=pass smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BA46F2F2;
+	Mon, 23 Mar 2026 04:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774241556; cv=none; b=ZNFfmdm4juMUukKkE6QUxMdGxycZQu7KUc6v1pDlrvpOG2vBRtW3YnIzePaTfERWVIGgSlAKJn7LGlkL46GuFokt2g5CEgJUMn1+Vv+1u1HXMJEnEalAIQ+D2FBa+B9Cr76WHzVLtm0ADCs2huYfz4zD4CU8/iTahKgbRuuPSD8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774241556; c=relaxed/simple;
+	bh=gj4epvDFeIQ+79d0kFwOUUT6v0miu7Biuv1ZAXOuROw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t5nYlot8D7x9EQ43gjTMrGDZiUTd2yo+5tGXrM5QZFfFZXxQ0gjbOiHI3i8ZQMIXhE63jhm1JHtUyg6zlOx04F6GsnbZQLK5/v5GK+K19nlqZ7PkXg5WTqIPUigFu230lQG9KasUW7Lkq8exr00PAziXMDbNSRMoX3ZJu6vUFks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KuJJry5u; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k5WXwRBD"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2c0f76bd201so224978eec.3
-        for <llvm@lists.linux.dev>; Sun, 22 Mar 2026 20:25:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774236313; cv=none;
-        d=google.com; s=arc-20240605;
-        b=luO7Qj7bkipNxInH/oJXcVnjj8BWFS80R1Y6LuD82JnednADCuNSnwdOvYKhRCq2zY
-         AgoiiuYcCk6mmq8FDKHGJGGfAanSxK+ggihwI7+nZvdqf7B3HyKDaOnomb8CafWwJQIA
-         35fSGdQTY/X0zpbgm8pqpTtAqiao1XJ8MGbFLIBi7/m3kcDtSfg608sy/39lOtpE2HqU
-         x+BAplrmpXcdh67yFm5HbyvTrv/HKnGvO0snWrF1y5rWwAEC8x9VAQB+AvMYgpWF66u2
-         /9Bkeg4XC1+/gJ1GU9MkydnjQJhY5Ituab3TjQ6uDLdy1VGmPYMOfK1uMXUVeH0StQSK
-         UEzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6L7OuggG1xx/psBeZawamh6lKLmj+yBN2DAvG0qZTM4=;
-        fh=H14QQ7UnOEWKWRw69Bh/8kqj8JnZ+mnKqxQL99LlKxA=;
-        b=chG4wbc3crFI4Q7NhMo3jhd04k//LXH6Ua2KS3KOl4ZMburpfN/+UNG4avjVJAh9nB
-         M7URpiIoKkRY7d7dU0OA75yfFlFOpKrmYccXHAkR8PBhjWb1XjrOn3SPeA6eJQyu8PNP
-         DatbD3KC3u743LiAKRaCijwqsjTef5wCvPLkoZBzOh3g2vxr3MJASKxo4wJZLAOYf/Sy
-         pXHyQH1d+Z3KGX77CKGCqSkO1r1MYqy/UicdQ4dxSncdeCUazfHmdDjyMyagf9ZxfYyA
-         AMVcRde8macXBW7QipkFtKNqXyu6srxUAZ04s8OdKq510EhJh8P9HO8nmhEBJRhRyldl
-         DARQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774236313; x=1774841113; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6L7OuggG1xx/psBeZawamh6lKLmj+yBN2DAvG0qZTM4=;
-        b=k5WXwRBDKX4Y5eBqdbKtTdce0wm7TFUyNTuM8260jh6aTbitL9WKWoD+bsjA868lYs
-         Cm/4W+zAJmAn5ULPJnZolXelAjgg4tjAWwA8BEMK9K8r/eKN94V8HRH9MjiIERn0RtA8
-         cXvfs1r3qzRCI6Vb5C1EnPAJeYLPLK0EEGGDaN8wHTF0sUWwBER0WX9wzrSnDu3/zeJs
-         AmwIcc2e7u8tatiVuObiZ2cTcWis/25hSi/fJZKJ7/6Tn8BBySBmGOo6n59xMST4o0GK
-         5iGhEOuq/yDQfAr8Z1CgBLD6q4WSXShjrLP+5TneLs0wHPwIxf9SAnPqz503KTSsSZZp
-         D+Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774236313; x=1774841113;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6L7OuggG1xx/psBeZawamh6lKLmj+yBN2DAvG0qZTM4=;
-        b=Ias7QHe1xSTlY/GVKIJMIHvmkkRns+bzmc8zP446xxUmIVNCEKxfPdTCVeST+N02Rt
-         BMqhN49P9kDWiup4VyGMuYl1hAtlSzupPtF4d16ArKqGjAWkJ6XxSfm75+1UcwDu8new
-         wseExKQPgCuA1+9I68lJUntLMl3/KWjnXr91gf40ryr5x+RRwSa+8tJPHUAeSeqGPYOz
-         ICc6Ul7/xcREXkmUwYx8ftp/IhBIRxL/wZtUJadYFRwWg5xmqPLMGd2XrCwRA6S++IKQ
-         ZudiLs+3vlbbE5li7JypcR+enmx8zC3wePTQhnj4xhdtM2tk2m8J6ziPX3+6qnfLkSvT
-         e6Vw==
-X-Forwarded-Encrypted: i=1; AJvYcCVaxfaYbrLPvNRlojYPfoKZvS88xgSGUl931TLWepo6vaQoBHBaGfPP+XDtMU0Cx+nwRNUJ@lists.linux.dev
-X-Gm-Message-State: AOJu0YxsZpERxegiaIqrKjejWiQ+PpflY9p4BZhXNahaRLcGk8RmW0/O
-	vJgpkWHMMakqor+65nWY0q/cTFuiA4OBI9Auf2/YFAe0P9RetfZhBAX59wC2oFxUAzJQyzgtjC1
-	aoZx305dVwHgiPu54LGdbhm5ASt7bS2o=
-X-Gm-Gg: ATEYQzxH91ahR+0QpzhsSY+ZzpzbXCbZipuW9oIZ/wEolJYO3Sc6BbERuRUlzKuqh4l
-	PlNSEqOCv+1SCCzAhpFIit66C0G4+NKHE73hftAZ5ncwSUhdJgaJbXpjky2tcLxIuux2g80XJ4R
-	l+IKl0fAOLeGY1WKpyTNUQEGeXIWxl8r16XOx+wBJlVi8boedys1lPiXydyytJXDKMeqJ1SC4du
-	JYwBB6J+Zfp+F4dSrg2xEM/t0BUDupUfq8ptdEcixp/GQ8NvGds+OQmx/z5GHr//UAxlPjA4XEZ
-	+9Lp3pkG4cIxJyl4EVYtOtJMqSx76qv3Nr3TOxy4XA9PcGx97upUoTsLn7kpsmRVfmrhVXpqib0
-	HxipMYe1HvEIcUTBDCpbkkxM=
-X-Received: by 2002:a05:7301:100d:b0:2be:1946:858b with SMTP id
- 5a478bee46e88-2c10970d302mr2034525eec.3.1774236312928; Sun, 22 Mar 2026
- 20:25:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KuJJry5u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774241555; x=1805777555;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gj4epvDFeIQ+79d0kFwOUUT6v0miu7Biuv1ZAXOuROw=;
+  b=KuJJry5u+ivV+gpx+suSU9PI8Zj9Dp6TIN7f99wfvZSRNVVf1G9LjF36
+   nZkqrKrWQN0DYo51Ykkz2RAdP8PFxIetENGSu2HtyKD7Da67xef5sJ1LQ
+   2w4bdVVO8f2o4qYGBZFOVWPjacmOwx2uaOMhwplsgC4YntuKoLholMyJA
+   iPwfZtuxHV9QJv6Y58yx+xpwkI6YXCL+J905rjignRg93ktBMn7NOlcr+
+   RzOjSMcciNXIzQjkalxEfHbeVFZyehPBQNx5vIrNLaRvSY2JPW/VTNYqt
+   EsulESvEeVKHAFae5gYoRvNhf6Tt5/kdaa+GmzS+IKgDZ/h+p9/o4DyER
+   Q==;
+X-CSE-ConnectionGUID: aQ6gZ28RQBOB99qxak0UUg==
+X-CSE-MsgGUID: 1ORA72gqSR2WqPUsr0uViQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11737"; a="79094656"
+X-IronPort-AV: E=Sophos;i="6.23,136,1770624000"; 
+   d="scan'208";a="79094656"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2026 21:52:35 -0700
+X-CSE-ConnectionGUID: MLB8bpFFSDiIx/LFSs74JQ==
+X-CSE-MsgGUID: UdD+rqkEQFmh04t6CEyvXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,136,1770624000"; 
+   d="scan'208";a="254384434"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 22 Mar 2026 21:52:33 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w4XHD-0000000001t-0njx;
+	Mon, 23 Mar 2026 04:52:31 +0000
+Date: Mon, 23 Mar 2026 12:51:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chen Jinghuang <chenjinghuang2@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v5 8/9] sched/fair: Steal work from an overloaded CPU
+ when CPU goes idle
+Message-ID: <202603231203.g4WzI66q-lkp@intel.com>
+References: <20260320055920.2518389-9-chenjinghuang2@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260322192159.88138-1-ojeda@kernel.org> <20260323000327.111235-1-ojeda@kernel.org>
- <96287f3a-d245-47cf-b7cb-f821451493d3@lunn.ch>
-In-Reply-To: <96287f3a-d245-47cf-b7cb-f821451493d3@lunn.ch>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 23 Mar 2026 04:24:59 +0100
-X-Gm-Features: AQROBzAuhFHkGwwSKh-Ea07cCRjtb6eZEQluwHGIFmDfJPfdFW0BK0DaJf2FJhk
-Message-ID: <CANiq72nwSWVDRqm0Vap5j5X5k+Q-wq8okQ9d3KUgZt6M4CpW9g@mail.gmail.com>
-Subject: Re: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Miguel Ojeda <ojeda@kernel.org>, a.hindborg@kernel.org, acourbot@nvidia.com, 
-	akpm@linux-foundation.org, aliceryhl@google.com, 
-	anton.ivanov@cambridgegreys.com, bjorn3_gh@protonmail.com, 
-	boqun.feng@gmail.com, dakr@kernel.org, david@davidgow.net, gary@garyguo.net, 
-	johannes@sipsolutions.net, justinstitt@google.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-um@lists.infradead.org, linux@armlinux.org.uk, llvm@lists.linux.dev, 
-	lossin@kernel.org, mark.rutland@arm.com, mmaurer@google.com, morbo@google.com, 
-	nathan@kernel.org, nick.desaulniers+lkml@gmail.com, nicolas.schier@linux.dev, 
-	nsc@kernel.org, peterz@infradead.org, richard@nod.at, 
-	rust-for-linux@vger.kernel.org, tmgross@umich.edu, urezki@gmail.com, 
-	will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260320055920.2518389-9-chenjinghuang2@huawei.com>
 
-On Mon, Mar 23, 2026 at 4:04=E2=80=AFAM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> Rust is already fragmented, because it does not support all
-> architectures. Do we really want to make it even more fragmented by
-> having some bindings only work on a subset of the subset of
-> architectures?
+Hi Chen,
 
-That is not the case. The `depends on` is not about putting them on
-abstractions, but on this experimental build feature, which is gated
-on `EXPERT` to begin with, because it uses a fairly exotic approach
-involving LLVM bitcode, which carries potential pitfalls, like the
-mismatches on the target string like one of the commit messages
-mentions, and possibly others.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-Cheers,
-Miguel
+[auto build test WARNING on linus/master]
+[also build test WARNING on v7.0-rc5]
+[cannot apply to tip/sched/core peterz-queue/sched/core next-20260320]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Jinghuang/sched-Provide-sparsemask-a-reduced-contention-bitmap/20260321-084706
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260320055920.2518389-9-chenjinghuang2%40huawei.com
+patch subject: [RFC PATCH v5 8/9] sched/fair: Steal work from an overloaded CPU when CPU goes idle
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20260323/202603231203.g4WzI66q-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project b1cf9b0835d214bcbd0d6e8882760c07cfccb298)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260323/202603231203.g4WzI66q-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603231203.g4WzI66q-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   kernel/sched/fair.c:13272:3: warning: releasing raw_spinlock 'rq_lockp(dst_rq)' that was not held [-Wthread-safety-analysis]
+    13272 |                 raw_spin_rq_unlock(dst_rq);
+          |                 ^
+   kernel/sched/fair.c:13293:2: warning: raw_spinlock 'rq_lockp(dst_rq)' is not held on every path through here [-Wthread-safety-analysis]
+    13293 |         local_irq_restore(rf.flags);
+          |         ^
+   include/linux/irqflags.h:223:8: note: expanded from macro 'local_irq_restore'
+     223 |                 if (!raw_irqs_disabled_flags(flags))    \
+         |                      ^
+   include/linux/irqflags.h:188:13: note: expanded from macro 'raw_irqs_disabled_flags'
+     188 |                 typecheck(unsigned long, flags);        \
+         |                           ^
+   kernel/sched/fair.c:13286:3: note: raw_spinlock acquired here
+    13286 |                 raw_spin_rq_lock(dst_rq);
+          |                 ^
+>> kernel/sched/fair.c:13366:2: warning: raw_spinlock 'rq_lockp(this_rq)' is not held on every path through here [-Wthread-safety-analysis]
+    13366 |         stolen |= (dst_rq->cfs.h_nr_runnable > 0);
+          |         ^
+   kernel/sched/fair.c:13363:3: note: raw_spinlock acquired here
+    13363 |                 raw_spin_rq_lock(dst_rq);
+          |                 ^
+   3 warnings generated.
+
+
+vim +13366 kernel/sched/fair.c
+
+ 13350	
+ 13351		/* Accept any suitable task in the LLC */
+ 13352	
+ 13353		sparsemask_for_each(overload_cpus, dst_cpu, src_cpu) {
+ 13354			if (steal_from(dst_rq, dst_rf, &locked, src_cpu)) {
+ 13355				stolen = 1;
+ 13356				goto out;
+ 13357			}
+ 13358		}
+ 13359	
+ 13360	out:
+ 13361		rcu_read_unlock();
+ 13362		if (!locked) {
+ 13363			raw_spin_rq_lock(dst_rq);
+ 13364			rq_repin_lock(dst_rq, dst_rf);
+ 13365		}
+ 13366		stolen |= (dst_rq->cfs.h_nr_runnable > 0);
+ 13367		if (dst_rq->nr_running != dst_rq->cfs.h_nr_runnable)
+ 13368			stolen = -1;
+ 13369		return stolen;
+ 13370	}
+ 13371	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
