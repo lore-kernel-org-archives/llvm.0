@@ -1,150 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733F5383C64;
-	Mon, 23 Mar 2026 22:45:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9370637F729
+	for <llvm@lists.linux.dev>; Mon, 23 Mar 2026 22:50:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774305925; cv=none; b=G0YkJC/VUmxU07UXQqDSrHJlrJ8kNhbAgjNomp+ASHdA4IhjjKgETGJfSfLCWZmtYiJMZbUU0+xMYOHTTVFoQNarUDNPQjVbxaFAl7iBshz08LevvTLKS6EjNZBjQaP1Aw3tu/rdFh7qjyhWpv7u6ghLL+PxFG4KnH9konprRrs=
+	t=1774306249; cv=none; b=SJmCOaNrFwlGsacayXD5tliqAlmkRCTOi+BJW1QpPeocF05hY12s6djdKGWJJtf/Cg1g3RAYcL+XorNuYaxM3R/R4lCh7NUvixrpCNmimQSkgpHLpjFmKngguXOOwTnMsqTTKHd4uw7BOA6cFJAlvb38iqMWxmdIPzQgmKZ3hXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774305925; c=relaxed/simple;
-	bh=/4U+DFZaun0U2N53e9WcUbM+CfTDtWxXba3EGX9WYho=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W86HP/fgCMF+kQ0J8u/kfj15w1gvkgJRhWq7KMmW9FsabmwTiUSziFcah/iRtRBFKbZ1T7CBifXzw4yXCUTt27NUJovtHE121LmxkFIt2S6gUyBhOyL5ZxvAFA80PczU8UhbDC8MBJKIMi2VEsEsT+AKaFSwFMHve+xrU7VzAk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eNt48Foh; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774306249; c=relaxed/simple;
+	bh=u5HO0Gr5cs32w+Pck799DzAmoCUrRAsgtsG42XKv5RI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bJK1kZrOQ+cpo/jX9PUEiMVXOgkej1GFTgx7VnuXEWqs5Q7PxUwlLfVsfuf7hHaeWNUpw8VZqsgEihgE64bHQTwLrryGyfo+RdGfN5xlY4WiT4wU+sVspLafvEYdkrbzHjEMr+7u48ed2FrEYNW8jMYf7gnyvBO2Z9IGRzjhZik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EdMHs6hj; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eNt48Foh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774305924; x=1805841924;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/4U+DFZaun0U2N53e9WcUbM+CfTDtWxXba3EGX9WYho=;
-  b=eNt48FohUSxbDMUryFkoHmfE2HAlZkxUNNjgSK9bdnX3W28lJqJ2e/eH
-   Gp89JxjBauHQ9NdCoH0XUh7+u/2/7vV8kd00nMR6UrzikKOm4CBEpgGxP
-   pDh79NpnnFsMG/jwBAClhjtCLcKu8YvBB/QFmagCHr53JbCKeIhBRFT2f
-   ctSmm5cf54oU3DrNiwxqhF0J+pr4SGCDiw1LbAM2UH1w77Cgokx3qqfeS
-   V/NRs7dHtTw4tKu5cP57EbG85jyKpr0rSybQmhKwPgaYhQwz/EvooDdAG
-   hdzFSESwiSG/NMW2k1zqpPGbA4eRnyqEXm9EMIc0N8P06nEPUXR0q0VZw
-   w==;
-X-CSE-ConnectionGUID: l29HcdimSGOPHG4tnWBIhQ==
-X-CSE-MsgGUID: 04qx8l/xQMqtvwpXJfe+Fg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="86685066"
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="86685066"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 15:45:23 -0700
-X-CSE-ConnectionGUID: SwX5nIW0Tzan2DLFVEoosA==
-X-CSE-MsgGUID: ILsyuvz8T9SoqJKqlQl9Ug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="262083210"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 23 Mar 2026 15:45:20 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w4o1M-000000003LU-13Qd;
-	Mon, 23 Mar 2026 22:45:16 +0000
-Date: Tue, 24 Mar 2026 06:44:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Howells <dhowells@redhat.com>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	John Johansen <john.johansen@canonical.com>,
-	Simon Horman <horms@kernel.org>, apparmor@lists.ubuntu.com,
-	stable@kernel.org
-Subject: Re: [PATCH net v2 04/10] list: Move on_list_rcu() to list.h and add
- on_list() also
-Message-ID: <202603240630.eCfHPMhL-lkp@intel.com>
-References: <20260323150505.3513839-5-dhowells@redhat.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EdMHs6hj"
+Message-ID: <11402a16-d675-4957-83fb-703082b070e6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774306245;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6TgKBPmRhcJgMaORlFuSIbnAMIo0QRaXhfhdWogPNSs=;
+	b=EdMHs6hjlFmHZ2M0HfbjMKvI3NfLLJPfmjIgNrUVwYuKaKcCq2PJ7tzJu/6VwpJkFrcXUA
+	v2WUi9Z2xCbyEIUcq9yDPOipdhL3wG2OQsIgsuDrTXQCCpZbiQ+dBkxQJQOnp0KGcnHYEB
+	aHYHWGDO0we2050Y+VSv34otK1UBGdQ=
+Date: Mon, 23 Mar 2026 15:50:30 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260323150505.3513839-5-dhowells@redhat.com>
+Subject: Re: [PATCH 3/6] libbpf: Initialize CFLAGS before including
+ Makefile.include
+To: Leo Yan <leo.yan@arm.com>, Quentin Monnet <qmo@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+ James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
+ <20260323-tools_build_fix_zero_init_bpf_only-v1-3-d1cfad2f4cd1@arm.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260323-tools_build_fix_zero_init_bpf_only-v1-3-d1cfad2f4cd1@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi David,
+On 3/23/26 8:40 AM, Leo Yan wrote:
+> tools/scripts/Makefile.include may expand EXTRA_CFLAGS in a future
+> change.  This could alter the initialization of CFLAGS, as the default
+> options "-g -O2" would never be set once EXTRA_CFLAGS is expanded.
+> 
+> Prepare for this by moving the CFLAGS initialization before including
+> tools/scripts/Makefile.include, so it is not affected by the extended
+> EXTRA_CFLAGS.
+> 
+> Append EXTRA_CFLAGS to CFLAGS only after including Makefile.include and
+> place it last so that the extra flags propagate properly and can
+> override the default options.
+> 
+> tools/scripts/Makefile.include already appends $(CLANG_CROSS_FLAGS) to
+> CFLAGS, the Makefile appends $(CLANG_CROSS_FLAGS) again, remove the
+> redundant append.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/lib/bpf/Makefile | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index 168140f8e6461bd06db40e23d21a3fb8847ccbf4..eca584fb061e16013e76827e4203f6be0477a73e 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -49,6 +49,14 @@ man_dir_SQ = '$(subst ','\'',$(man_dir))'
+>  export man_dir man_dir_SQ INSTALL
+>  export DESTDIR DESTDIR_SQ
+>  
+> +# Defer assigning EXTRA_CFLAGS to CFLAGS until after including
+> +# tools/scripts/Makefile.include, as it may add flags to EXTRA_CFLAGS.
+> +ifdef EXTRA_CFLAGS
+> +  CFLAGS :=
+> +else
+> +  CFLAGS := -g -O2
+> +endif
+> +
+>  include $(srctree)/tools/scripts/Makefile.include
+>  
+>  # copy a bit from Linux kbuild
+> @@ -70,13 +78,6 @@ LIB_TARGET	= libbpf.a libbpf.so.$(LIBBPF_VERSION)
+>  LIB_FILE	= libbpf.a libbpf.so*
+>  PC_FILE		= libbpf.pc
+>  
+> -# Set compile option CFLAGS
+> -ifdef EXTRA_CFLAGS
+> -  CFLAGS := $(EXTRA_CFLAGS)
+> -else
+> -  CFLAGS := -g -O2
+> -endif
+> -
+>  # Append required CFLAGS
+>  override CFLAGS += -std=gnu89
+>  override CFLAGS += $(EXTRA_WARNINGS) -Wno-switch-enum
+> @@ -84,7 +85,7 @@ override CFLAGS += -Werror -Wall
+>  override CFLAGS += $(INCLUDES)
+>  override CFLAGS += -fvisibility=hidden
+>  override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> -override CFLAGS += $(CLANG_CROSS_FLAGS)
+> +override CFLAGS += $(EXTRA_CFLAGS)
 
-kernel test robot noticed the following build errors:
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-[auto build test ERROR on net/main]
+>  
+>  # flags specific for shared library
+>  SHLIB_FLAGS := -DSHARED -fPIC
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Howells/rxrpc-Fix-key-quota-calculation-for-multitoken-keys/20260323-234846
-base:   net/main
-patch link:    https://lore.kernel.org/r/20260323150505.3513839-5-dhowells%40redhat.com
-patch subject: [PATCH net v2 04/10] list: Move on_list_rcu() to list.h and add on_list() also
-config: arm-randconfig-004-20260324 (https://download.01.org/0day-ci/archive/20260324/202603240630.eCfHPMhL-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260324/202603240630.eCfHPMhL-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603240630.eCfHPMhL-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/usb/dwc2/gadget.c:4313:13: error: conflicting types for 'on_list'
-    4313 | static bool on_list(struct dwc2_hsotg_ep *ep, struct dwc2_hsotg_req *test)
-         |             ^
-   include/linux/list.h:392:20: note: previous definition is here
-     392 | static inline bool on_list(const struct list_head *entry)
-         |                    ^
->> drivers/usb/dwc2/gadget.c:4341:22: error: too many arguments to function call, expected single argument 'entry', have 2 arguments
-    4341 |         if (!on_list(hs_ep, hs_req)) {
-         |              ~~~~~~~        ^~~~~~
-   include/linux/list.h:392:20: note: 'on_list' declared here
-     392 | static inline bool on_list(const struct list_head *entry)
-         |                    ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +/entry +4341 drivers/usb/dwc2/gadget.c
-
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4324  
-8b9bc4608eefeb drivers/usb/gadget/s3c-hsotg.c Lukasz Majewski    2012-05-04  4325  /**
-1f91b4cc03556b drivers/usb/dwc2/gadget.c      Felipe Balbi       2015-08-06  4326   * dwc2_hsotg_ep_dequeue - dequeue given endpoint
-8b9bc4608eefeb drivers/usb/gadget/s3c-hsotg.c Lukasz Majewski    2012-05-04  4327   * @ep: The endpoint to dequeue.
-8b9bc4608eefeb drivers/usb/gadget/s3c-hsotg.c Lukasz Majewski    2012-05-04  4328   * @req: The request to be removed from a queue.
-8b9bc4608eefeb drivers/usb/gadget/s3c-hsotg.c Lukasz Majewski    2012-05-04  4329   */
-1f91b4cc03556b drivers/usb/dwc2/gadget.c      Felipe Balbi       2015-08-06  4330  static int dwc2_hsotg_ep_dequeue(struct usb_ep *ep, struct usb_request *req)
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4331  {
-1f91b4cc03556b drivers/usb/dwc2/gadget.c      Felipe Balbi       2015-08-06  4332  	struct dwc2_hsotg_req *hs_req = our_req(req);
-1f91b4cc03556b drivers/usb/dwc2/gadget.c      Felipe Balbi       2015-08-06  4333  	struct dwc2_hsotg_ep *hs_ep = our_ep(ep);
-941fcce4ff6701 drivers/usb/dwc2/gadget.c      Dinh Nguyen        2014-11-11  4334  	struct dwc2_hsotg *hs = hs_ep->parent;
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4335  	unsigned long flags;
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4336  
-1e01129373f757 drivers/usb/dwc2/gadget.c      Marek Szyprowski   2014-09-09  4337  	dev_dbg(hs->dev, "ep_dequeue(%p,%p)\n", ep, req);
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4338  
-22258f4906aa87 drivers/usb/gadget/s3c-hsotg.c Lukasz Majewski    2012-06-14  4339  	spin_lock_irqsave(&hs->lock, flags);
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4340  
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02 @4341  	if (!on_list(hs_ep, hs_req)) {
-22258f4906aa87 drivers/usb/gadget/s3c-hsotg.c Lukasz Majewski    2012-06-14  4342  		spin_unlock_irqrestore(&hs->lock, flags);
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4343  		return -EINVAL;
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4344  	}
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4345  
-c524dd5f432a06 drivers/usb/dwc2/gadget.c      Mian Yousaf Kaukab 2015-09-29  4346  	/* Dequeue already started request */
-c524dd5f432a06 drivers/usb/dwc2/gadget.c      Mian Yousaf Kaukab 2015-09-29  4347  	if (req == &hs_ep->req->req)
-c524dd5f432a06 drivers/usb/dwc2/gadget.c      Mian Yousaf Kaukab 2015-09-29  4348  		dwc2_hsotg_ep_stop_xfr(hs, hs_ep);
-c524dd5f432a06 drivers/usb/dwc2/gadget.c      Mian Yousaf Kaukab 2015-09-29  4349  
-1f91b4cc03556b drivers/usb/dwc2/gadget.c      Felipe Balbi       2015-08-06  4350  	dwc2_hsotg_complete_request(hs, hs_ep, hs_req, -ECONNRESET);
-22258f4906aa87 drivers/usb/gadget/s3c-hsotg.c Lukasz Majewski    2012-06-14  4351  	spin_unlock_irqrestore(&hs->lock, flags);
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4352  
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4353  	return 0;
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4354  }
-5b7d70c6dbf2db drivers/usb/gadget/s3c-hsotg.c Ben Dooks          2009-06-02  4355  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
