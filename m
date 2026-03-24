@@ -1,153 +1,132 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B0B37A48B
-	for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 15:55:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774367737; cv=pass; b=hQL823Ao8Q6uG4neKHH4gn5fkIsSuOla/ACkGqCuZQ0DJ48GaxtOBVXlx3A9fhtK5kyZLQa9WgRA2qESjGXFbO7hhRyptUlA0kdN3lH80DdWhCCdT9fSlQtSxBZZL6Xqbh0NvCUbl528BB341zlLxRJR910Nu/V2EBSKyTeIyyE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774367737; c=relaxed/simple;
-	bh=agkUattKYKS6hTX3T/qy79TAvmS3mkdNShYWcGbK5XY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=As5TKoT3EiPGrhhEYNSGUt0xXVe4Jyz3Cm6s2uBavkqB+kWkWGi269WHIu3iZBofyfNKJn8A59jSvooorKexfbDQ0eeMrLEp5ab1Pg7HE4cBvVsniGejAaQOYXuV6Yn+1q5QFGO01cobRgHiSt6uCAujacUow7mXkAtBT7GOxnA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o52tYuPO; arc=pass smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97FC3C660E;
+	Tue, 24 Mar 2026 17:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774371715; cv=none; b=E1DrixrKOhOk+76s3bFSUNd+AzcX88QhKaIzxYm+kzW6CR/OlFOcOTbBoAFScJ4l5lorbBAhnwuaUxr9uRjwTrau4S7vZ34/mWvqi0Hjz/K92f6zrG93T8myD1g7APcTUGoVInHdDe8Af5SpuUcUL6Fuc00Y/J6fRaevKI9TXJc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774371715; c=relaxed/simple;
+	bh=G3kd7wvMlNspkd5kAYpgnMgmEoFUVBlq/rO9qEh09E8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=awD99tXAzPZ2pv9Cge6Sz5OMJEXLV7cZsbeVBG/mvK0UJ+ig8ISRIpKhbSphFoTrY2ECBq0FE/zP7N3J4gZcIcydRF/VfDwwlL8WhlZojZmooMSDZTii8kHcX3bMViH+I4CQ36OisUL/OLTlM+3OyFba9XT7iUMWiCdpWFJieUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eqJvhwqD; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o52tYuPO"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-439b94a19fdso3853305f8f.0
-        for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 08:55:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774367735; cv=none;
-        d=google.com; s=arc-20240605;
-        b=VsejhT/rbf13wE6cyqXi4oopIwXuxe9JK80rlPfYYOljKYiL4c+Qce+xuAQRd4uyUR
-         vg+511L/6A8gFC9kmIjK0jSgcb1OXTQuWyW9dpw69OaeiWpv3MLM3aQSQS10jpXfvpxq
-         SDqDT6zyE0BDlX4xJgb8Iw8SE/HtqzBjosaAx8VqeW3VXnXj/TKG8bjbh0Q3T46OfNJO
-         T3idG3fCoETOPRvnZalrL3YSf9VcQuxM5M+OpS6zYQjZdvONlC3nI1EUnd0uXNu1KiGL
-         eCYDu+PqQ7j1nNYk3KKh2ZNrUhe4SqzFaZ2+d+7jkhMYr7Gj2B9suArht9xYQ80+f28I
-         SOyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=/3OhNPFF53dFC048CnXCU+MpM/yyzQDjUWEZB/ZZUIA=;
-        fh=RHjoxb5NUn18WrLa8x2oxZ0pbqyhwDDHWhIQtmMus28=;
-        b=X8MPgdRdWGKN4PQNcD3wzT01o13XeItoMz+tJDLTuYGGyirDHlBV9AllKzSWNMBZwA
-         /sOrU1ajEUTe/7jMSfDPYdwCRfIn3adTCZMiqyaoJ2vUAHaRllfv4LK7reiJWD6ZzPQJ
-         dF0uVkYRCvHDPCLRAZHYysrSEAT7mR4EHGiMhlAZO5cLSaWR2GXALnZkLUXaqWSZG0V7
-         xEOklA8Xllboe0KHbb//J9/DyOg5vBKqZrtRI6SpApHwxaCs6GywVfu0pLbJM45KLwIW
-         KVZw7wljDNVBu+vrKYYhsr+nb5VEsqpt3UjiVFJBKvWXGKjpUL4Yp0arGMLYBwJGjR8u
-         sDRw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774367735; x=1774972535; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/3OhNPFF53dFC048CnXCU+MpM/yyzQDjUWEZB/ZZUIA=;
-        b=o52tYuPOtb7rRfZ5BhEM2IKbemXv/FDQCjcsumfjRarS7o+ZbSjTzEFWTRKj29ZmSS
-         TZdKrODRZbt5rDs5G0vBhuClOlJwPFqtvFFEF1zzMB1sHIBH3TwRpXUF7Z8QT4nZKTvE
-         CFlNE6LOFDHSN+Qmnr3VW9s9Q3RyBpHBXmH3+6XrSK1S8oBUFJYDbjqyvpWnF45UoBp8
-         8Tw/SBiByCEcEyc2tTTnFLFTxVg1zQn0Y8eoj/7MXt+6G7cDQiiNbZfCH5/qqJiDKP1K
-         LhumHa3xaZQ4+G1ZvSEJtBGJfVPAybrF4NPig1yemIMmHMKqTcIiLm7O9OjH8dgvCfAn
-         +WbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774367735; x=1774972535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/3OhNPFF53dFC048CnXCU+MpM/yyzQDjUWEZB/ZZUIA=;
-        b=fpym52pO+IkWb5YjCyll2lAAP+N2Fjo2LNgCJtj0kcM1YSGNKCY3gcbqPBu3GnDSac
-         mehLMJA+3po6Vw9Ms2+1IJPbQ26psKOkqSQZXeGy5Mw6ccryli0sH6xqiTZgIJ9xLGc+
-         dWElQ7+sWtcoDpl4tAAgZNaZz01/RUKOS0h1SCdAp2uNrcjZzs+M7l8ax3aJDTXSviDk
-         oXiuO3x1SElTLx4x3/s+lx292HgGcJo1T8iP+PBNWj9FhH/y9PKZwbiusJ5uUcLpu0zO
-         LJnpb5HBRBRkuJCO8WtM77tZ3is9FoF5zDsBrAmjHgfRqNZhwKXr7rIbeMTvZ7130PI9
-         sAWA==
-X-Forwarded-Encrypted: i=1; AJvYcCX8WsyP5Q2CUO0Kb8HbWDdPSUJnZilcS/aw+ywZpaXVejullf7OV8ctpfikbGQMkmxP2xQ8@lists.linux.dev
-X-Gm-Message-State: AOJu0YwXgoD08wekanLx0j9uLVQ9l/Mdvp2V8o9nYTbUzJVYHh25NB5r
-	lginXDvoKzn8UdUl6XSSfZ07aZNjvPXgVE+IIaSOeBm2qPYd4Wg4sk/qhtKhVDhCjdFwec9AB1W
-	FL2i3BLngVlnnJskespH6MVm6oi7+qt0=
-X-Gm-Gg: ATEYQzxFamB+5vqQRgxERoQsF+qvTssGV7tlE+rtaDhAgpDjrWq2g9LsmHyQ99oK8y5
-	+74A2OAtPCmwMUfv+htsJdP5FIgQrRg6QWtvD0cHR6PdzGeX1pLM05fdYuLC4UDia+9gbaCLzbw
-	mJ927TPbCbySlKPP6KKteMozkmD5y3ug7Jw+/Ndp2Lsp9vSa73VREQhpvdaPFS7ptaFUv8Wp2OI
-	zEgDQV56RaVpob1RNHnBoSIFclOg7mx/h9xFEZgNwMC5giqbWoDVuV3qzfwS5elrzmFZE8+VkRB
-	DxCMNKl9MPRan3HHjqrmzWLtGMTj0lYougDQHdvTLhsytJBTDCTt8GiMN6pALL6e9tEQ/IVEl+a
-	u3plaHG+TDrPzMEYCX/CKRqdde+Sk37LRpvvJ
-X-Received: by 2002:a5d:5d0b:0:b0:43b:447a:11b8 with SMTP id
- ffacd0b85a97d-43b8899533cmr19587f8f.6.1774367734362; Tue, 24 Mar 2026
- 08:55:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eqJvhwqD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774371714; x=1805907714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G3kd7wvMlNspkd5kAYpgnMgmEoFUVBlq/rO9qEh09E8=;
+  b=eqJvhwqD7PDAeBnY1ZiAlyumSDZPfoQFk/lOLu6umtcCDUp2iUw+Cbgb
+   DpMZVMxpOUTVusdfEchtLe1RPAEX5rBTqvCLQOG1y3xeX/b6+v6cSLqX4
+   Np0Sf3aQtAapWwH8BOBG40ReZhUFRdUauGbbX2ELX5BwyeJOkmzCLithB
+   ti/DCoXcLzKp+9zr00JluJyPTGSzZMDNaqUXYMVrEF6JWKf2HomHH2unR
+   3NwFPVFMRGL6sZtNxwyNM0WPLTqXZlRiEjdvbHafxcLY4a8SdtV1aWHGt
+   /FNt/fWisYBpcAfmmXZy9cLb3R9LGYB8XwrYaE8dblT8CCg2/ru3IAUKx
+   A==;
+X-CSE-ConnectionGUID: HYi8SKFMQt+hwPagO1hPRg==
+X-CSE-MsgGUID: qCYKMJBjQ5SwHGpLvDZW2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75365157"
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="75365157"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 10:01:54 -0700
+X-CSE-ConnectionGUID: Fpps84R2Rq+KcXg99CBezg==
+X-CSE-MsgGUID: ULNR2QDTSn6QJ3rl819Rxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="262341063"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 24 Mar 2026 10:01:52 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w558X-0000000051Z-3lmx;
+	Tue, 24 Mar 2026 17:01:49 +0000
+Date: Wed, 25 Mar 2026 01:00:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zi Yan <ziy@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 06/11] mm/truncate: use folio_split() in
+ truncate_inode_partial_folio()
+Message-ID: <202603250033.ifbSFRek-lkp@intel.com>
+References: <20260323190644.1714379-7-ziy@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
- <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
- <31243215-918a-4f03-917b-de869b7b7bf1@linux.dev> <20260324065820.GC43072@e132581.arm.com>
-In-Reply-To: <20260324065820.GC43072@e132581.arm.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Mar 2026 08:55:23 -0700
-X-Gm-Features: AQROBzC5IXAEUJFbmA8caaR_jFD39ZGF7akzX-go1yOK6QjtBXhXNQ_zLdejUkM
-Message-ID: <CAADnVQKJLO+7NnbPvmTraZr8hq8ENSh2f85a21b717ye=NgpUg@mail.gmail.com>
-Subject: Re: [PATCH 5/6] selftests/bpf: Initialize operation name before use
-To: Leo Yan <leo.yan@arm.com>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Lorenz Bauer <lmb@isovalent.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323190644.1714379-7-ziy@nvidia.com>
 
-On Mon, Mar 23, 2026 at 11:58=E2=80=AFPM Leo Yan <leo.yan@arm.com> wrote:
->
-> On Mon, Mar 23, 2026 at 03:52:38PM -0700, Ihor Solodrai wrote:
-> > On 3/23/26 8:40 AM, Leo Yan wrote:
-> > > ASAN reports stack-buffer-overflow due to the uninitialized op_name.
-> > >
-> > > Initialize it to fix the issue.
-> > >
-> > > Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_B=
-TF_LOAD command")
-> > > Signed-off-by: Leo Yan <leo.yan@arm.com>
-> > > ---
-> > >  tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/=
-tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> > > index aaa2854974c0a91cbbb9fc13ae0f966de1bcc818..dcbe2ef995c5b211c2b86=
-b9555c02144e11ee7d6 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> > > @@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
-> > >     res =3D load_btf(&opts, true);
-> > >     ASSERT_EQ(res, -ENOSPC, "half_log_fd");
-> > >     ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
-> > > +   snprintf(op_name, sizeof(op_name), "log_fixed");
-> >
-> > You should use strscpy() here.
->
-> Sure, I will change to :
->
->   strscpy(op_name, "log_fixed", sizeof(op_name));
->
-> > This patch looks very unrelated.
-> > Did this surface only after the changes in the makefiles?
->
-> Yes.  This change fixes ASAN error reported by BPF CI:
->
->   https://github.com/kernel-patches/bpf/actions/runs/23239705647/job/6755=
-4431963
+Hi Zi,
 
-When you respin please use [PATHC bpf-next v2] subject.
-Otherwise CI doesn't run all tests.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[cannot apply to brauner-vfs/vfs.all kdave/for-next linus/master v7.0-rc5 next-20260323]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zi-Yan/mm-remove-READ_ONLY_THP_FOR_FS-Kconfig-option/20260324-043510
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260323190644.1714379-7-ziy%40nvidia.com
+patch subject: [RFC PATCH 06/11] mm/truncate: use folio_split() in truncate_inode_partial_folio()
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260325/202603250033.ifbSFRek-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603250033.ifbSFRek-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603250033.ifbSFRek-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/truncate.c:189:8: error: call to undeclared function 'folio_split'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     189 |         ret = folio_split(folio, min_order, split_at, NULL);
+         |               ^
+   1 error generated.
+
+
+vim +/folio_split +189 mm/truncate.c
+
+   179	
+   180	static int folio_split_or_unmap(struct folio *folio, struct page *split_at,
+   181					    unsigned long min_order)
+   182	{
+   183		enum ttu_flags ttu_flags =
+   184			TTU_SYNC |
+   185			TTU_SPLIT_HUGE_PMD |
+   186			TTU_IGNORE_MLOCK;
+   187		int ret;
+   188	
+ > 189		ret = folio_split(folio, min_order, split_at, NULL);
+   190	
+   191		/*
+   192		 * If the split fails, unmap the folio, so it will be refaulted
+   193		 * with PTEs to respect SIGBUS semantics.
+   194		 *
+   195		 * Make an exception for shmem/tmpfs that for long time
+   196		 * intentionally mapped with PMDs across i_size.
+   197		 */
+   198		if (ret && !shmem_mapping(folio->mapping)) {
+   199			try_to_unmap(folio, ttu_flags);
+   200			WARN_ON(folio_mapped(folio));
+   201		}
+   202	
+   203		return ret;
+   204	}
+   205	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
