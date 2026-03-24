@@ -1,121 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44754383C6A;
-	Tue, 24 Mar 2026 02:25:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DBD386C35;
+	Tue, 24 Mar 2026 03:13:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774319139; cv=none; b=JpH2LGoGDHKDR0QHrnPv2dsLEOb2Ukz6FeOCFd4NmBd5u3408APUriom2HPRE+6Gk71gfSpHxn6VNuiNuDzLmM2YHQ/WxFOiMhOXCK7jO/MQy3eAlcsHhV1ka4wiApeADttFQjDXSlI7EvKRfAaqXDp8Wkcgp7gvLDfFRqMePXs=
+	t=1774322028; cv=none; b=TEjnINKt02+ItnAni/22MqLe99rvSAquEYO0DlKaqf51R5IbPKFcxdPyD1RfApJfQUmAZHfaYHZaRTwZ0daM+v3Jt/Ex5aFUg8Y+jv4AB13AHcJWjY7TEPd0u1DMXFWn0y3R5WrCO4VkbAdW0eUANZbJpvEZ5iPxf2nK4/UkM0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774319139; c=relaxed/simple;
-	bh=QtkcO+/XPDeyxYTYDSlS1yMQGaETD249Yr/K5dJZijg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=gUXvjxd4SI+jFcsJVvkUe9nuebN5WjnudxxydcriGLtkwtXGywQoo3ufXwNWuf4tx5/3cSBivL53Pe/qsM/FdyodoqMoxRsVYm3bp2iYv5rYMcVdupO6qOqPsyffJuDqjlTU7eMn10xPsY9KxvKFD1wx9czGhUbY8Obhy85DcdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LLoOLZ51; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LLoOLZ51"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774319137; x=1805855137;
-  h=date:from:to:cc:subject:message-id;
-  bh=QtkcO+/XPDeyxYTYDSlS1yMQGaETD249Yr/K5dJZijg=;
-  b=LLoOLZ51RfXq+/vUZHDtVE6/LHBEthfAk8NPXb4MYq3DcoerxNaPgKsZ
-   k1hE7gWU2/55pTStA4YW/9kg3gXES6eLnPJFF5ZsLHqZBmIJJ0CfIl+Ew
-   2HxMv7f+9uQoOLO17CngqMtwPxFjBkJsc1vrARIU4bgQdYvTA9Dbr/Q5a
-   /vldcKXyM4qorXYdsKmZ5hpptj/bzQS1x9TOOKAgmLU7tYbHO0nBnM5OS
-   BSwz9BiZpfRiEHqSZkrHVd59Y4h/Br1IG+y/XSSA1PL4WOs3Y2ZJ9sW3E
-   Xp2RZJYv1sstsQMq+oWQAtzar+5l5aCYV//Uer5aWBPZfV6cjG5vYVuNk
-   w==;
-X-CSE-ConnectionGUID: 2M8p3+2LS6q2yFTyTOvgTQ==
-X-CSE-MsgGUID: rZNXLvFUT7OXhy8yJ11jZg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="100783791"
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="100783791"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 19:25:37 -0700
-X-CSE-ConnectionGUID: IqT8tGTERNiNXBfbsQDnRw==
-X-CSE-MsgGUID: jW/HNj5XRI+2aRx2G/18tA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="223430153"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 23 Mar 2026 19:25:35 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w4rSW-000000003aZ-26wO;
-	Tue, 24 Mar 2026 02:25:32 +0000
-Date: Tue, 24 Mar 2026 10:24:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kees:dev/v7.0-rc2/strncpy 11/11]
- drivers/misc/lkdtm/fortify.c:28:2: error: call to undeclared library function
- 'strncpy' with type 'char *(char *, const char *, unsigned long)'; ISO C99
- and later do not support implicit function declarations
-Message-ID: <202603241035.G4pY8cMm-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1774322028; c=relaxed/simple;
+	bh=Dh3a6rkGrtRZBTSKE+L1RCYdXOxa9Sxo5kTh1jN+xbc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dR/61GtSmBZzNeDsO7U2pdesW79IHzJ3k1IQMoBbyrHtmXG6hdP5gL6xeWGr+MLNX08qHRxxxwhMxeqXgs6pwPqbECFmwhWIwnkGAMK9q45iqxEWGl/CRyVEyDDhUl+82mv80YbRenOCDA+Cv3EvkGeo9UEiFnJb0yYKruTKp2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [111.196.245.197])
+	by APP-05 (Coremail) with SMTP id zQCowACHGw9WAcJpC3RLCw--.5007S2;
+	Tue, 24 Mar 2026 11:13:34 +0800 (CST)
+From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+To: mchehab@kernel.org
+Cc: Pengpeng Hou <pengpeng@iscas.ac.cn>,
+	hverkuil@kernel.org,
+	nicolas.dufresne@collabora.com,
+	sakari.ailus@linux.intel.com,
+	laurent.pinchart@ideasonboard.com,
+	opensource206@gmail.com,
+	jernej.skrabec@gmail.com,
+	lkp@intel.com,
+	oe-kbuild-all@lists.linux.dev,
+	llvm@lists.linux.dev,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: v4l2-ctrls: validate HEVC slice reference lists
+Date: Tue, 24 Mar 2026 11:13:26 +0800
+Message-ID: <20260324031326.7275-1-pengpeng@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260323083031.30941-1-pengpeng@iscas.ac.cn>
+References: <20260323083031.30941-1-pengpeng@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowACHGw9WAcJpC3RLCw--.5007S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYB7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+	6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+	kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+	cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
+	IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+	5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
+	CFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l
+	FIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4c8EcI0Ec7CjxVAaw2AFwI
+	0_Jw0_GFyl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DUUUU
+X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git dev/v7.0-rc2/strncpy
-head:   da9b6bdc716b766da262998c114c86ebb1b96d43
-commit: da9b6bdc716b766da262998c114c86ebb1b96d43 [11/11] string: Remove strncpy() from the kernel
-config: x86_64-buildonly-randconfig-006-20260324 (https://download.01.org/0day-ci/archive/20260324/202603241035.G4pY8cMm-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260324/202603241035.G4pY8cMm-lkp@intel.com/reproduce)
+Hi Nicolas,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603241035.G4pY8cMm-lkp@intel.com/
+Thanks, this makes sense.
 
-All errors (new ones prefixed by >>):
+You are right that rejecting ref_idx_l0/ref_idx_l1 values in the common
+validation path would be a breaking change, since existing userspace may
+pass out-of-range sentinel values such as 0xff for missing references.
 
->> drivers/misc/lkdtm/fortify.c:28:2: error: call to undeclared library function 'strncpy' with type 'char *(char *, const char *, unsigned long)'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      28 |         strncpy(target[0].a, target[1].a, size);
-         |         ^
-   drivers/misc/lkdtm/fortify.c:28:2: note: include the header <string.h> or explicitly provide a declaration for 'strncpy'
-   1 error generated.
+I respun this by keeping only the active L0/L1 reference count checks in
+common code. I also fixed the missing `p_hevc_slice_params`
+declaration that caused the build failure reported by lkp.
 
+Best regards,
+Pengpeng
 
-vim +28 drivers/misc/lkdtm/fortify.c
-
-fe8e353bfda6d6 Kees Cook 2021-08-18  12  
-325bf6d84bad3f Kees Cook 2022-08-31  13  static void lkdtm_FORTIFY_STR_OBJECT(void)
-fe8e353bfda6d6 Kees Cook 2021-08-18  14  {
-fe8e353bfda6d6 Kees Cook 2021-08-18  15  	struct target {
-fe8e353bfda6d6 Kees Cook 2021-08-18  16  		char a[10];
-325bf6d84bad3f Kees Cook 2022-08-31  17  		int foo;
-325bf6d84bad3f Kees Cook 2022-08-31  18  	} target[3] = {};
-fe8e353bfda6d6 Kees Cook 2021-08-18  19  	/*
-fe8e353bfda6d6 Kees Cook 2021-08-18  20  	 * Using volatile prevents the compiler from determining the value of
-fe8e353bfda6d6 Kees Cook 2021-08-18  21  	 * 'size' at compile time. Without that, we would get a compile error
-fe8e353bfda6d6 Kees Cook 2021-08-18  22  	 * rather than a runtime error.
-fe8e353bfda6d6 Kees Cook 2021-08-18  23  	 */
-325bf6d84bad3f Kees Cook 2022-08-31  24  	volatile int size = 20;
-325bf6d84bad3f Kees Cook 2022-08-31  25  
-325bf6d84bad3f Kees Cook 2022-08-31  26  	pr_info("trying to strcmp() past the end of a struct\n");
-fe8e353bfda6d6 Kees Cook 2021-08-18  27  
-325bf6d84bad3f Kees Cook 2022-08-31 @28  	strncpy(target[0].a, target[1].a, size);
-fe8e353bfda6d6 Kees Cook 2021-08-18  29  
-fe8e353bfda6d6 Kees Cook 2021-08-18  30  	/* Store result to global to prevent the code from being eliminated */
-325bf6d84bad3f Kees Cook 2022-08-31  31  	fortify_scratch_space = target[0].a[3];
-fe8e353bfda6d6 Kees Cook 2021-08-18  32  
-325bf6d84bad3f Kees Cook 2022-08-31  33  	pr_err("FAIL: fortify did not block a strncpy() object write overflow!\n");
-fe8e353bfda6d6 Kees Cook 2021-08-18  34  	pr_expected_config(CONFIG_FORTIFY_SOURCE);
-fe8e353bfda6d6 Kees Cook 2021-08-18  35  }
-fe8e353bfda6d6 Kees Cook 2021-08-18  36  
-
-:::::: The code at line 28 was first introduced by commit
-:::::: 325bf6d84bad3fc641b94fad6e69c70e960fdf2e lkdtm: Update tests for memcpy() run-time warnings
-
-:::::: TO: Kees Cook <keescook@chromium.org>
-:::::: CC: Kees Cook <keescook@chromium.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
