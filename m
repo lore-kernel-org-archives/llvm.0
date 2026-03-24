@@ -1,59 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A7026ED4F;
-	Tue, 24 Mar 2026 19:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB5C35E93D;
+	Tue, 24 Mar 2026 20:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774380729; cv=none; b=nrv/ENb2epbIPna29IIDmqdZ6hjy/70aZ/G1oRX4fvnGKO9YLd0z1hBCHoyao7UiHqkCqwhiT0E/AiJa4Rp6iTzpKg4dttqhwj8BM/26lZHWPOSmYAbo2qzC0qyByldFW0z/7K7QWEj+f94qTwr3D7v1oTPj5xOCXe5Qk91KBb8=
+	t=1774385964; cv=none; b=h6obOt0SsW2H8Rll2T3WlWzoeYbNM6S2DOoKOKnwacoIpHhUat7d2dXTOGJOqIjrhU53JsFSXE1bXBrn1kNvZSZqJ6QMgdu87i+izfQmWT02iklIGhlY97QCjhqw+BFwlcWTwe2fzPwig/gG0HIWjFN9/E5rfguwKiWQRdQEUS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774380729; c=relaxed/simple;
-	bh=7zIHJv77EOTJAqcCZSvyswoLbZopEbkgXMF+9ayujNE=;
+	s=arc-20240116; t=1774385964; c=relaxed/simple;
+	bh=4hyMla9M/Y6avVaVN56ryzCX6CTzBLSgs1vNFOe2kRU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J3RPzdAn6WgZ5HnJ/drp2K0EDu9oHkWn62xLQ5NLLo4JKpKa8GNq4fmhUYAvjtKZaE5VBOuw854rnFDYHWvfKefFmizmctlfAZ6AYmVfdUUHnJLnRY3uSzT+StnFUhxpsRmv9nFRaoi8M0qHQaQyn8jsnTh+V2b0vQ81lx1ZVk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bsFD/Rvy; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=ngRICEpzSPPRxUsBIS9QMz8WtpXzRSPqQC9CHZ6cYxfari35Q37o5A44tFHO8uuTJDaYNx9qSkos3Qlq050aVdSq5wI1jGJquwsn3IrmtQ6vfMUItcAytVBELop3IVVkZWptq+q6koUaI0yAYMmu2WDBXTFI/AlxffNX7TtKff0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JWvj8IZh; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bsFD/Rvy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JWvj8IZh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774380727; x=1805916727;
+  t=1774385963; x=1805921963;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7zIHJv77EOTJAqcCZSvyswoLbZopEbkgXMF+9ayujNE=;
-  b=bsFD/RvyfdjsRk+ggATegJMhQT550JnS/+nnV/f4Z7s3WuU2s2dnWu0r
-   BpkiwnFoA5B1MmqtrQ8ISlgKA2V7wYW/GHycjzlWDA8Xptn5SDaBPKadu
-   RLtH/FbtBaj/oZAiSt1GcKkKHw/lvE7iTOZUlpXokxcN/Ob4MjavpLsux
-   c4UekyObd+3sWOv4ghCeexMux/kN8ZmHRdG82TSpYyRCzDYA8fX+eThc7
-   cIsuxrF2L8v0SwCFvbpRvIlWMBY5ai2Z3Xov122d5Y+BG32hba1xBxK7T
-   8IY0yxxhIkJlRhrNSrC/EB05fBpe+RLsKuIWEBPCx6MEpEdht7cGE1PUY
-   A==;
-X-CSE-ConnectionGUID: ZMTKpkz5Q2a1Y6lNGSZoyg==
-X-CSE-MsgGUID: 0jTcYIuAQI+htDe/bp9wKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="92793514"
+  bh=4hyMla9M/Y6avVaVN56ryzCX6CTzBLSgs1vNFOe2kRU=;
+  b=JWvj8IZhTnTPA6f5aoSJ6Z8dEe+JgSJ0RFf82h+4DaF1jRLKMR8vf6hd
+   dGF1UR3fwNchTXWjZ7+Mli5t1Po84sXad69ykrTEMRd+THmuigik0ETTa
+   vudEFbOuPEG6uqUmYx+HoY0AOuXwr73rMx03UdJH76+e4ydg2mY7IONKx
+   Ydajclt4ZoJqDjg3MGvBWSiFI8mmGvYEdaK7I3PbDdvkfKDhn9Vw7NRp2
+   5StSQVVG9uO/LD3P0fDJhnPfXiKD6f1iS/q7Y0ZBKyRySaRbmWWuanH4L
+   I3Knse3/+KX9LprR26GB5SmQwfamjESrexpICubN3uJvn8/VNvkbVl0e/
+   g==;
+X-CSE-ConnectionGUID: J8KjWoEbTra33ZKAyRx1XQ==
+X-CSE-MsgGUID: ey3TF0awStGObDr1t89S5g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="85725390"
 X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="92793514"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 12:32:07 -0700
-X-CSE-ConnectionGUID: R8FL05HLR1qA1sTdl4F8KA==
-X-CSE-MsgGUID: +00yFionSKiU5ktS0S6AAQ==
+   d="scan'208";a="85725390"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 13:59:23 -0700
+X-CSE-ConnectionGUID: 2y/TFWZdSqW0+gqVPTpxFQ==
+X-CSE-MsgGUID: +qdRDBy0TYCxZkBtxOwwrg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="247502691"
+   d="scan'208";a="224483735"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 24 Mar 2026 12:32:04 -0700
+  by orviesa008.jf.intel.com with ESMTP; 24 Mar 2026 13:59:18 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w57Tu-000000005LV-3DGb;
-	Tue, 24 Mar 2026 19:32:02 +0000
-Date: Wed, 25 Mar 2026 03:31:44 +0800
+	id 1w58qI-000000005R3-1p3e;
+	Tue, 24 Mar 2026 20:59:14 +0000
+Date: Wed, 25 Mar 2026 04:58:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v2 1/2] lsm: add backing_file LSM hooks
-Message-ID: <202603250333.LaZDZOEq-lkp@intel.com>
-References: <20260323042510.3331778-5-paul@paul-moore.com>
+To: Daniel Golle <daniel@makrotopia.org>, Andrew Lunn <andrew@lunn.ch>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Russell King <linux@armlinux.org.uk>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Frank Wunderlich <frankwu@gmx.de>,
+	Chad Monroe <chad@monroe.io>,
+	Cezary Wilmanski <cezary.wilmanski@adtran.com>,
+	Liang Xu <lxu@maxlinear.com>,
+	"Benny (Ying-Tsan) Weng" <yweng@maxlinear.com>,
+	Jose Maria Verdu Munoz <jverdu@maxlinear.com>,
+	Avinash Jayaraman <ajayaraman@maxlinear.com>,
+	John Crispin <john@phrozen.org>
+Subject: Re: [PATCH net-next v6 2/4] net: dsa: add bridge member iteration
+ macro and port mask helper
+Message-ID: <202603250450.uUuzfUx3-lkp@intel.com>
+References: <ff936ce4ad3044102c367c55e7a455ab0020e4b7.1774136876.git.daniel@makrotopia.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,94 +77,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260323042510.3331778-5-paul@paul-moore.com>
+In-Reply-To: <ff936ce4ad3044102c367c55e7a455ab0020e4b7.1774136876.git.daniel@makrotopia.org>
 
-Hi Paul,
+Hi Daniel,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on pcmoore-selinux/next]
-[also build test WARNING on xiang-erofs/dev-test xiang-erofs/dev xiang-erofs/fixes linus/master v7.0-rc5 next-20260323]
-[cannot apply to brauner-vfs/vfs.all]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Moore/lsm-add-backing_file-LSM-hooks/20260324-111550
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
-patch link:    https://lore.kernel.org/r/20260323042510.3331778-5-paul%40paul-moore.com
-patch subject: [RFC PATCH v2 1/2] lsm: add backing_file LSM hooks
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260325/202603250333.LaZDZOEq-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603250333.LaZDZOEq-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Golle/net-dsa-add-driver-private-pointer-to-struct-dsa_bridge/20260323-041502
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/ff936ce4ad3044102c367c55e7a455ab0020e4b7.1774136876.git.daniel%40makrotopia.org
+patch subject: [PATCH net-next v6 2/4] net: dsa: add bridge member iteration macro and port mask helper
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260325/202603250450.uUuzfUx3-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603250450.uUuzfUx3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603250333.LaZDZOEq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603250450.uUuzfUx3-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:64:
-   In file included from include/linux/syscalls_api.h:1:
-   In file included from include/linux/syscalls.h:95:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:53:
->> include/linux/security.h:1149:5: warning: no previous prototype for function 'security_backing_file_alloc' [-Wmissing-prototypes]
-    1149 | int security_backing_file_alloc(void **backing_file_blobp,
-         |     ^
-   include/linux/security.h:1149:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1149 | int security_backing_file_alloc(void **backing_file_blobp,
-         | ^
-         | static 
->> include/linux/security.h:1155:6: warning: no previous prototype for function 'security_backing_file_free' [-Wmissing-prototypes]
-    1155 | void security_backing_file_free(void **backing_file_blobp)
-         |      ^
-   include/linux/security.h:1155:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1155 | void security_backing_file_free(void **backing_file_blobp)
-         | ^
-         | static 
-   2 warnings generated.
---
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:64:
-   In file included from include/linux/syscalls_api.h:1:
-   In file included from include/linux/syscalls.h:95:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:53:
->> include/linux/security.h:1149:5: warning: no previous prototype for function 'security_backing_file_alloc' [-Wmissing-prototypes]
-    1149 | int security_backing_file_alloc(void **backing_file_blobp,
-         |     ^
-   include/linux/security.h:1149:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1149 | int security_backing_file_alloc(void **backing_file_blobp,
-         | ^
-         | static 
->> include/linux/security.h:1155:6: warning: no previous prototype for function 'security_backing_file_free' [-Wmissing-prototypes]
-    1155 | void security_backing_file_free(void **backing_file_blobp)
-         |      ^
-   include/linux/security.h:1155:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1155 | void security_backing_file_free(void **backing_file_blobp)
-         | ^
-         | static 
-   2 warnings generated.
+   drivers/net/dsa/yt921x.c:2158:1: error: conflicting types for 'dsa_bridge_ports'
+   dsa_bridge_ports(struct dsa_switch *ds, const struct net_device *bdev)
+   ^
+   include/net/dsa.h:845:19: note: previous definition is here
+   static inline u32 dsa_bridge_ports(struct dsa_switch *ds,
+                     ^
+>> drivers/net/dsa/yt921x.c:2213:38: error: incompatible pointer types passing 'struct net_device *' to parameter of type 'const struct dsa_bridge *' [-Werror,-Wincompatible-pointer-types]
+                           ports_mask = dsa_bridge_ports(ds, bdev);
+                                                             ^~~~
+   include/net/dsa.h:846:33: note: passing argument to parameter 'bridge' here
+                                      const struct dsa_bridge *bridge)
+                                                               ^
+   drivers/net/dsa/yt921x.c:2285:36: error: incompatible pointer types passing 'struct net_device *' to parameter of type 'const struct dsa_bridge *' [-Werror,-Wincompatible-pointer-types]
+           ports_mask = dsa_bridge_ports(ds, bridge.dev);
+                                             ^~~~~~~~~~
+   include/net/dsa.h:846:33: note: passing argument to parameter 'bridge' here
+                                      const struct dsa_bridge *bridge)
+                                                               ^
+   3 errors generated.
 
 
-vim +/security_backing_file_alloc +1149 include/linux/security.h
+vim +2213 drivers/net/dsa/yt921x.c
 
-  1148	
-> 1149	int security_backing_file_alloc(void **backing_file_blobp,
-  1150					const struct file *user_file)
-  1151	{
-  1152		return 0;
-  1153	}
-  1154	
-> 1155	void security_backing_file_free(void **backing_file_blobp)
-  1156	{ }
-  1157	
+186623f4aa724c David Yang 2025-10-17  2169  
+186623f4aa724c David Yang 2025-10-17  2170  static int
+186623f4aa724c David Yang 2025-10-17  2171  yt921x_bridge_flags(struct yt921x_priv *priv, int port,
+186623f4aa724c David Yang 2025-10-17  2172  		    struct switchdev_brport_flags flags)
+186623f4aa724c David Yang 2025-10-17  2173  {
+186623f4aa724c David Yang 2025-10-17  2174  	struct yt921x_port *pp = &priv->ports[port];
+186623f4aa724c David Yang 2025-10-17  2175  	bool do_flush;
+186623f4aa724c David Yang 2025-10-17  2176  	u32 mask;
+186623f4aa724c David Yang 2025-10-17  2177  	int res;
+186623f4aa724c David Yang 2025-10-17  2178  
+186623f4aa724c David Yang 2025-10-17  2179  	if (flags.mask & BR_LEARNING) {
+186623f4aa724c David Yang 2025-10-17  2180  		bool learning = flags.val & BR_LEARNING;
+186623f4aa724c David Yang 2025-10-17  2181  
+186623f4aa724c David Yang 2025-10-17  2182  		mask = YT921X_PORT_LEARN_DIS;
+186623f4aa724c David Yang 2025-10-17  2183  		res = yt921x_reg_toggle_bits(priv, YT921X_PORTn_LEARN(port),
+186623f4aa724c David Yang 2025-10-17  2184  					     mask, !learning);
+186623f4aa724c David Yang 2025-10-17  2185  		if (res)
+186623f4aa724c David Yang 2025-10-17  2186  			return res;
+186623f4aa724c David Yang 2025-10-17  2187  	}
+186623f4aa724c David Yang 2025-10-17  2188  
+186623f4aa724c David Yang 2025-10-17  2189  	/* BR_FLOOD, BR_MCAST_FLOOD: see the comment where ACT_UNK_ACTn_TRAP
+186623f4aa724c David Yang 2025-10-17  2190  	 * is set
+186623f4aa724c David Yang 2025-10-17  2191  	 */
+186623f4aa724c David Yang 2025-10-17  2192  
+186623f4aa724c David Yang 2025-10-17  2193  	/* BR_BCAST_FLOOD: we can filter bcast, but cannot trap them */
+186623f4aa724c David Yang 2025-10-17  2194  
+186623f4aa724c David Yang 2025-10-17  2195  	do_flush = false;
+186623f4aa724c David Yang 2025-10-17  2196  	if (flags.mask & BR_HAIRPIN_MODE) {
+186623f4aa724c David Yang 2025-10-17  2197  		pp->hairpin = flags.val & BR_HAIRPIN_MODE;
+186623f4aa724c David Yang 2025-10-17  2198  		do_flush = true;
+186623f4aa724c David Yang 2025-10-17  2199  	}
+186623f4aa724c David Yang 2025-10-17  2200  	if (flags.mask & BR_ISOLATED) {
+186623f4aa724c David Yang 2025-10-17  2201  		pp->isolated = flags.val & BR_ISOLATED;
+186623f4aa724c David Yang 2025-10-17  2202  		do_flush = true;
+186623f4aa724c David Yang 2025-10-17  2203  	}
+186623f4aa724c David Yang 2025-10-17  2204  	if (do_flush) {
+186623f4aa724c David Yang 2025-10-17  2205  		struct dsa_switch *ds = &priv->ds;
+186623f4aa724c David Yang 2025-10-17  2206  		struct dsa_port *dp = dsa_to_port(ds, port);
+186623f4aa724c David Yang 2025-10-17  2207  		struct net_device *bdev;
+186623f4aa724c David Yang 2025-10-17  2208  
+186623f4aa724c David Yang 2025-10-17  2209  		bdev = dsa_port_bridge_dev_get(dp);
+186623f4aa724c David Yang 2025-10-17  2210  		if (bdev) {
+186623f4aa724c David Yang 2025-10-17  2211  			u32 ports_mask;
+186623f4aa724c David Yang 2025-10-17  2212  
+186623f4aa724c David Yang 2025-10-17 @2213  			ports_mask = dsa_bridge_ports(ds, bdev);
+186623f4aa724c David Yang 2025-10-17  2214  			ports_mask |= priv->cpu_ports_mask;
+186623f4aa724c David Yang 2025-10-17  2215  			res = yt921x_bridge(priv, ports_mask);
+186623f4aa724c David Yang 2025-10-17  2216  			if (res)
+186623f4aa724c David Yang 2025-10-17  2217  				return res;
+186623f4aa724c David Yang 2025-10-17  2218  		}
+186623f4aa724c David Yang 2025-10-17  2219  	}
+186623f4aa724c David Yang 2025-10-17  2220  
+186623f4aa724c David Yang 2025-10-17  2221  	return 0;
+186623f4aa724c David Yang 2025-10-17  2222  }
+186623f4aa724c David Yang 2025-10-17  2223  
 
 -- 
 0-DAY CI Kernel Test Service
