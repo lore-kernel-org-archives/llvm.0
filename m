@@ -1,102 +1,48 @@
-Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CDA3AF649
-	for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 07:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42EC6358376;
+	Tue, 24 Mar 2026 07:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774337301; cv=none; b=SEWMxRwPWXZesSFfH8PJhp1paPcQjH5IMNn7wTGmyr7GWXvmZZjptF9fxuhOxRMuJap2qX1UGRPQazie2xxnJtF1SH/zoegRtI9f4Rzd1vvOanZYa7oBIpdDTY+MAdfk5K1vw9/oqlrkraLJefuwPKNFQyQtQOsV5qwil/HYkrQ=
+	t=1774338668; cv=none; b=RJo9jsxw/0kyBlnc7ZLicAyRzZnzP5MEstf6k1va/XW5MQE+S56Kt+19iogEjeU7ZQR/N5Z8JOOrH8seOoFEB6zb1l9iXyUR1u6NLZdi6IrATmEGYe0W2YMeHjlX9OXQa9QToCvdD+cyPAY/z4B1xEeifHB40xfxJjBX5NlHr5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774337301; c=relaxed/simple;
-	bh=9935aNNQSQsiXYuLACLVcgBUs03N3gemjcUbf0bEKIE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=hBSUEyOZDfVbvSLIBL0YiQdIQhnY2/iTpxXaiHGuZQFCNsYD/kXSaaBLpG/UOG/wWTQFjxYXNYLmttEJJJmzgvZtnHWS9cEWglA5dUggXFIa+scTg2mLzsnIAjXNrLmWllD4sRFuLAIv4qhTRQ+bkfJ57GtEcUExOsfCSxBJ/k4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=sTXgekOO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DyYn+RCb; arc=none smtp.client-ip=202.12.124.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1774338668; c=relaxed/simple;
+	bh=Jo/Yum7PMW8GvXdAg8nZGjGVKaMIowJwRdP4CkIARvk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aNmO/JLXoX7iOx0uh0eRC1ZelKyXoeH6+bvwUgwt4j45Qh/hXCucDBp7xxEkHy7WS1GllpF8tBYgi6viW3r2ZFizUO58bMxnl/qkFI229KMxJknEGlFdV137wqQOCnY6kh/J+po7nS3qdMrVj3DUeTmKzjK3+cwBM8msR1Y8twI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jor5KZWO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="sTXgekOO";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DyYn+RCb"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 951101D00022;
-	Tue, 24 Mar 2026 03:28:10 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Tue, 24 Mar 2026 03:28:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1774337290;
-	 x=1774423690; bh=WsgImSphwgKtJLr9aZyE1zO9zb0v904xqgk9dOrxycM=; b=
-	sTXgekOOBGfVABvr5F49sQHdiUjCFSvxMLwU91L5dJ0hO7vb23QuVRi1yMBKnCtc
-	Y0hVMSgKZnKDyU4yARFKRyrewVzvLh4sBA2jqtOQP2+feWJOn8YcNdtnhGtxex86
-	XMvEPPvcc/d505kwk/92mEQ9EGRs5f8iHdDRRifLPezwm9PDddjOv41IkfSKfSbL
-	c29wM+wG88KWuLs0+7p59drWXDeCh3qr12hMo1TCpZ6Lxjh4dj2J91RanLG1vVBE
-	iM6p8f/nAAvpfYDedOSSwPaPQldrNkSA7C1NudxxiFxOzC8VQHbt4nXRc556VjdF
-	bDfTS5rbc9xE3ZQc82teYw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774337290; x=
-	1774423690; bh=WsgImSphwgKtJLr9aZyE1zO9zb0v904xqgk9dOrxycM=; b=D
-	yYn+RCbKrus5/2S0ttN1Kky8v1i4berXXoP+4Lz34rbaMcoVNlJFM+OiscqQ9oN7
-	7ZmVY7upJM7Czwa5Y/Dkns5aXTTYsL4VURKqFf8qS4nbHl0KWINYyz8p6PVqiamP
-	AOo9IDGpOQpgX4dfBmmrMBe/LyXp+x9f1U7pHvYkxllix0oMkh9kT5EXEQekrZQW
-	9gGnU2tag8cygNMvSUjvC0kiUWCZQahe0c35m705Yx5uIHaO64Msw70VtEbiyqkJ
-	Y0YWLoU+TuO8BrH7GKTAmM1tk//RdRLGhlwEI00vmR1Wc+WjxIZQjrPayS/H9Evt
-	aI+h8FogwlObnrYt2imlA==
-X-ME-Sender: <xms:CT3CaR3Aqg8B_ehwA-Cd5e4kaJPt0xMdzwyFEsUyTO7iCDZCY_1stA>
-    <xme:CT3CaS6umDBVdWlVLVM-zhBzi0JiSljBP110HO0ugemQIr_n406bn-TzUSV36Cgjm
-    6XEjPtjlRDrnNsAb2jqgeT8Aalsww_LQGQ0Xf5iO21tC1m7r9mWQjQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefvddtleekucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudeipdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopeguvghnnhhishdruggrlhgvshhsrghnughrohestghorhhnvghlih
-    hsnhgvthifohhrkhhsrdgtohhmpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgv
-    rhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhith
-    htsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtgho
-    mhdprhgtphhtthhopehmihgthhgrvghlrdhjrdhruhhhlhesihhnthgvlhdrtghomhdprh
-    gtphhtthhopehmihhkvgdrmhgrrhgtihhnihhsiiihnhesihhnthgvlhdrtghomhdprhgt
-    phhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvohhnsehkvg
-    hrnhgvlhdrohhrghdprhgtphhtthhopehmihhnghhosehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:CT3CaX5YYj7C0FiL4IUjJ9UFGuPYJ6-0T5qMPLAKEkvx9sTjY45mVA>
-    <xmx:CT3CaWQt75SdCgTGxZJsBCfh5n4BvTWhlNogj_AKLL8sFAXF21LQ9w>
-    <xmx:CT3CaW9pzawDXlZiKjpI-cZ38t8RbV4CRA3SM2lktbVMZ2JdrqidRA>
-    <xmx:CT3CaXocvNByBARs-rlxlhHySBEoYUBsyh7iiOl_27N1wxu69rcw_w>
-    <xmx:Cj3CaYmV2kUdZ_Sl0AEKTVLUOp26bHB4_48Lc_DLXaisxyottZZE_tPp>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 34E5F700069; Tue, 24 Mar 2026 03:28:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-Precedence: bulk
-X-Mailing-List: llvm@lists.linux.dev
-List-Id: <llvm.lists.linux.dev>
-List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
-List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-ThreadId: AhovTUn8f-P3
-Date: Tue, 24 Mar 2026 08:27:45 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Dennis Dalessandro" <dennis.dalessandro@cornelisnetworks.com>,
- "Leon Romanovsky" <leon@kernel.org>
-Cc: "Arnd Bergmann" <arnd@kernel.org>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Mike Marciniszyn" <mike.marciniszyn@intel.com>,
- "Michael J. Ruhl" <michael.j.ruhl@intel.com>,
- "Doug Ledford" <dledford@redhat.com>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Marco Crivellari" <marco.crivellari@suse.com>,
- "Ingo Molnar" <mingo@kernel.org>, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <4b177986-dc77-4d0a-95a9-329ef62c1c94@app.fastmail.com>
-In-Reply-To: <8f060e86-5727-4cf6-ac03-7f7174b5a9fd@cornelisnetworks.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jor5KZWO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D2CC19424;
+	Tue, 24 Mar 2026 07:51:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774338668;
+	bh=Jo/Yum7PMW8GvXdAg8nZGjGVKaMIowJwRdP4CkIARvk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jor5KZWOVBXgwUHsBET+opMSWlYbgzMWmWY5zzx7VUfiIwnEqrF3mSbAHsyK7ODfG
+	 Qfyg3dQVlpvXQ1aTnwcVi6ZyMJ1mk/JtIeAXEBu0GFv64AHbDVpzU7V9VDIHXFLAVr
+	 eXIdJsMmNtFxOyPPCq0pfx6ilJjmUh0O0mSLv87Uvr/utE5yDXGRkMT/GS7LCIxtVW
+	 VGVVeAmAUf92+M3iU7BJ5gIvPnievNUSrT54DroDv/BCNKxXZ2O/dj1VYRJEDbLnk9
+	 FIKG4fbe3zUu5d1ddJfLu2/k9jySZTZ+DZbjhuLxfzvP8y24uiya2DxAbjPmwPE5Dm
+	 fQ1bwG0ADLqng==
+Date: Tue, 24 Mar 2026 09:51:02 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Arnd Bergmann <arnd@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Mike Marciniszyn <mike.marciniszyn@intel.com>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	Doug Ledford <dledford@redhat.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Ingo Molnar <mingo@kernel.org>, linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
+Message-ID: <20260324075102.GL814676@unreal>
 References: <20260320151511.3420818-1-arnd@kernel.org>
  <20260320151511.3420818-2-arnd@kernel.org>
  <6b56c476-86fd-4d43-8dee-c7f89d346941@app.fastmail.com>
@@ -104,32 +50,48 @@ References: <20260320151511.3420818-1-arnd@kernel.org>
  <5d5f25fc-e522-4131-ae4b-22db57b92d6e@app.fastmail.com>
  <20260323110144.GG814676@unreal>
  <8f060e86-5727-4cf6-ac03-7f7174b5a9fd@cornelisnetworks.com>
-Subject: Re: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+ <4b177986-dc77-4d0a-95a9-329ef62c1c94@app.fastmail.com>
+Precedence: bulk
+X-Mailing-List: llvm@lists.linux.dev
+List-Id: <llvm.lists.linux.dev>
+List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
+List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4b177986-dc77-4d0a-95a9-329ef62c1c94@app.fastmail.com>
 
-On Mon, Mar 23, 2026, at 22:47, Dennis Dalessandro wrote:
-> On 3/23/26 7:01 AM, Leon Romanovsky wrote:
->> On Mon, Mar 23, 2026 at 09:48:59AM +0100, Arnd Bergmann wrote:
->>> - The use of INFINIBAND_RDMAVT seems unnecessary: right now
->>>    this is only used by hfi1, now shared with hfi2 but later to
->>>    be exclusive to the latter. Since it is unlikely to ever
->>>    be used by another driver again, this may be a good time
->>>    to drop the abstraction again and integrate it all into
->>>    hfi2, with the old version getting dropped along with hfi1.
->> 
->> The best approach is to drop rdmavt as well, since hfi2 is expected to
->> align with the other drivers in drivers/infiniband/hw.
->> 
->> Dennis, is this feasible?
->
-> Feasible yes. I'd like to get hfi2 crossed off the list and in the tree 
-> first though. Then come back and do that. I'd like to do more than just 
-> plop rdmavt inside hfi2 and call it a day. There is a lot of code 
-> cleanup/simplification that we can do.
+On Tue, Mar 24, 2026 at 08:27:45AM +0100, Arnd Bergmann wrote:
+> On Mon, Mar 23, 2026, at 22:47, Dennis Dalessandro wrote:
+> > On 3/23/26 7:01 AM, Leon Romanovsky wrote:
+> >> On Mon, Mar 23, 2026 at 09:48:59AM +0100, Arnd Bergmann wrote:
+> >>> - The use of INFINIBAND_RDMAVT seems unnecessary: right now
+> >>>    this is only used by hfi1, now shared with hfi2 but later to
+> >>>    be exclusive to the latter. Since it is unlikely to ever
+> >>>    be used by another driver again, this may be a good time
+> >>>    to drop the abstraction again and integrate it all into
+> >>>    hfi2, with the old version getting dropped along with hfi1.
+> >> 
+> >> The best approach is to drop rdmavt as well, since hfi2 is expected to
+> >> align with the other drivers in drivers/infiniband/hw.
+> >> 
+> >> Dennis, is this feasible?
+> >
+> > Feasible yes. I'd like to get hfi2 crossed off the list and in the tree 
+> > first though. Then come back and do that. I'd like to do more than just 
+> > plop rdmavt inside hfi2 and call it a day. There is a lot of code 
+> > cleanup/simplification that we can do.
+> 
+> Does rdmavt have its own user-space ABI? If there is anything that
+> you'd want to change, this might be the one chance to do it, otherwise
+> I see nothing wrong with integrating it only after hfi1 is gone.
 
-Does rdmavt have its own user-space ABI? If there is anything that
-you'd want to change, this might be the one chance to do it, otherwise
-I see nothing wrong with integrating it only after hfi1 is gone.
+rdmavt has no user‑space exposure. It is a leftover from an old and never
+fully realized idea to provide a shim and common layer for RDMA drivers
+that require software handling in their data path.
 
-      Arnd
+Thanks
+
+> 
+>       Arnd
