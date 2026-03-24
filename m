@@ -1,71 +1,59 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE9119D065;
-	Tue, 24 Mar 2026 01:30:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F398373BFB;
+	Tue, 24 Mar 2026 01:51:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774315838; cv=none; b=tJLdk2FqCrGxQuzrUobuNzrnkGUP56xoDgz3BFEOLdhmdh8ID0HMO0KfzJ3b8aH1uFt+Nx4aFbauw0uuiV8slY7YI7sXC1TTzIY/NbjpbatH30y+tivsmrRd61y9Ryt181e6Qi+EOCQ3MwMOG7ICYjj80UTYxY+fLX2A28OKkOk=
+	t=1774317096; cv=none; b=jYBz5Db9nkGqjakVTHYvYlSEyYzxNpXzWQKbNK8HIiVln8iZGR6HOskUpPOlboet9pkG8ESTlLvyWf707OBsQC2og6Nco72lN3nYn8WgLGT7D6Ru2mZdUxHwF4xp68WoeTkn8QRFoIFGaqW/bOT5Sru1r+T5EbdJesWXFBJkClU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774315838; c=relaxed/simple;
-	bh=SHgpbAsOpS9aD7tNLFUzQfSp+rS+RdjARGptOI9/4bg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r2quVWm625Ra63u6MSSocQN/5h6dd+0OOwIjhWYM2cMmuvC5CbUM6Y82KrcCI+y+j/itq86IZwxhhQpsmeB+FgHICpP9RpC8T6/YH9pdshqcb+/K4T+Kt9+axjmeYoRtFbyDKUa9AXgVgywV65ToaSdoS8lbe2TWVaFuWmu0nGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pa0JWLFS; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1774317096; c=relaxed/simple;
+	bh=i3jC+/ADTiAomDZUpXJgJoiCkFlVF7S7TRTBPua4IHU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jrCCr5uZ895HTfTRdU035FAYLFYZOvvOFEm7UM0zJIx9L56OYu3msvk/t+fVK3xBlY2YBFdVzoodL9lqtmtl8MDMvbjpRD8KgLIYk3XQMwN0E/1xtMLa5IW4ifa6Vz7pf/Xc1WR7d43KsZdoljHvresOA2aQRBLyTKBnTbxsFqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=StgddsIG; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pa0JWLFS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="StgddsIG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774315837; x=1805851837;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SHgpbAsOpS9aD7tNLFUzQfSp+rS+RdjARGptOI9/4bg=;
-  b=Pa0JWLFSk/r/T7Qr8llWmSJ5XTTrBfYluqBBzQ38VzAaqqzj6Udcr85M
-   dPKLcDwkpEO4Qv6nN5CDUsnL1l8TtHoVyA/XJUbOhjzMjmsjB4rxed16e
-   aXGPqNaykV2Xog6p7NvGPTV1mBd3y63QqIVPrXOfULF80mMk2A8HYcYKj
-   VV4hBX2c9sTb4mzfjNKUYdzGG4tgfp/kBBnEuZEph2eKlCoCn+T9XF9NW
-   49yqtfe7MZjede+QYAQZvVRFCIYzwPsnOZ5D+HaJcSZ51y/DoIsQBSoht
-   SKZcbvxMrsH+8MLI61vzcjmV2r2Xbfzw1bWXIPJnj1slpkmW7IIpBSpr6
-   A==;
-X-CSE-ConnectionGUID: kduCtvL8Ra252/N09/Y9pA==
-X-CSE-MsgGUID: YS4alj6oQ+S1m+Ah1BE5wA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="100780308"
+  t=1774317095; x=1805853095;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i3jC+/ADTiAomDZUpXJgJoiCkFlVF7S7TRTBPua4IHU=;
+  b=StgddsIGnEI+7uum+rx5U+9xqDC+Qkg7u0Tb5M/tFCKXt2k1WvGzuHsH
+   HJR/hMu1mgW4v1xgALev7h5E+CEvGlVczchlJxfGhE6Ux6XvK3djSdQYY
+   nUsAjFJ3Q9kyh5yAgEnWOdIKtqNntEPT8+Sp6CxtrEJXIckiImUMErsN4
+   /3rxq7pob3Y4zJmHhKR6KNo2wru4lhtvCjdVkv114i3jrcjPLvvn2+JV0
+   nOQxs3jRnec9E590ftEBCyamvmB6sj0dy9qZ/86GqegYYdJ3LNxzXP8uW
+   hBa1oOkhjdzXtT1txIViBV7ZbtZJd6l36iL8dFt9202EbE10baKX6Jvuo
+   w==;
+X-CSE-ConnectionGUID: SLBnLY4qTRWtGTKIxgTNAw==
+X-CSE-MsgGUID: OMsgR4TGRbqcDz0z46xGYg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="100781538"
 X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="100780308"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 18:30:37 -0700
-X-CSE-ConnectionGUID: pOgt47R4SxyrL/0xZ4y0Tw==
-X-CSE-MsgGUID: jtfdBrTlTUOORy5f7FEL3Q==
+   d="scan'208";a="100781538"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2026 18:51:33 -0700
+X-CSE-ConnectionGUID: p/t/krvFQeuUuNcKVNZETQ==
+X-CSE-MsgGUID: TLqbSEaATuOL6KK3uAOPaw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="228268969"
+   d="scan'208";a="228947748"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 23 Mar 2026 18:30:33 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 23 Mar 2026 18:51:32 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w4qbE-000000003Vh-2icx;
-	Tue, 24 Mar 2026 01:30:28 +0000
-Date: Tue, 24 Mar 2026 09:29:42 +0800
+	id 1w4qva-000000003We-06jb;
+	Tue, 24 Mar 2026 01:51:30 +0000
+Date: Tue, 24 Mar 2026 09:50:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@kernel.org>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
-	Doug Ledford <dledford@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Ingo Molnar <mingo@kernel.org>, linux-rdma@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
-Message-ID: <202603240950.t4UIpBJh-lkp@intel.com>
-References: <20260320151511.3420818-2-arnd@kernel.org>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh?= (Schneider Electric)" <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/auxclock-nanosleep 18/44]
+ /usr/include/bits/floatn.h:97:9: error: __float128 is not supported on this
+ target
+Message-ID: <202603240953.qaWgnKsR-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,174 +61,33 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260320151511.3420818-2-arnd@kernel.org>
 
-Hi Arnd,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rdma/for-next]
-[also build test ERROR on soc/for-next linus/master v7.0-rc5 next-20260323]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/RDMA-hfi1-rdmavt-open-code-rvt_set_ibdev_name/20260322-190924
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
-patch link:    https://lore.kernel.org/r/20260320151511.3420818-2-arnd%40kernel.org
-patch subject: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260324/202603240950.t4UIpBJh-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260324/202603240950.t4UIpBJh-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/auxclock-nanosleep
+head:   b5f216d75bdbbafb19ea7d79a607512cecaea2c0
+commit: a876a196200710a8666ee1bd58be19f1e08fa5fb [18/44] benchmarks
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260324/202603240953.qaWgnKsR-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260324/202603240953.qaWgnKsR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603240950.t4UIpBJh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603240953.qaWgnKsR-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/infiniband/hw/hfi1/init.c:1240:10: error: incompatible pointer types passing 'char (*)[64]' to parameter of type 'char *' [-Werror,-Wincompatible-pointer-types]
-    1240 |         strscpy(&ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
-         |                 ^~~~~~~~~~~~
-   include/linux/string.h:114:50: note: expanded from macro 'strscpy'
-     114 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |                                                         ^~~
-   include/linux/string.h:83:16: note: expanded from macro '__strscpy1'
-      83 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
-         |                       ^~~
-   include/linux/fortify-string.h:275:57: note: passing argument to parameter 'p' here
-     275 | __FORTIFY_INLINE ssize_t sized_strscpy(char * const POS p, const char * const POS q, size_t size)
-         |                                                         ^
-   1 error generated.
-
-
-vim +1240 drivers/infiniband/hw/hfi1/init.c
-
-  1195	
-  1196	/**
-  1197	 * hfi1_alloc_devdata - Allocate our primary per-unit data structure.
-  1198	 * @pdev: Valid PCI device
-  1199	 * @extra: How many bytes to alloc past the default
-  1200	 *
-  1201	 * Must be done via verbs allocator, because the verbs cleanup process
-  1202	 * both does cleanup and free of the data structure.
-  1203	 * "extra" is for chip-specific data.
-  1204	 */
-  1205	static struct hfi1_devdata *hfi1_alloc_devdata(struct pci_dev *pdev,
-  1206						       size_t extra)
-  1207	{
-  1208		struct hfi1_devdata *dd;
-  1209		struct ib_device *ibdev;
-  1210		int ret, nports;
-  1211	
-  1212		/* extra is * number of ports */
-  1213		nports = extra / sizeof(struct hfi1_pportdata);
-  1214	
-  1215		dd = (struct hfi1_devdata *)rvt_alloc_device(sizeof(*dd) + extra,
-  1216							     nports);
-  1217		if (!dd)
-  1218			return ERR_PTR(-ENOMEM);
-  1219		dd->num_pports = nports;
-  1220		dd->pport = (struct hfi1_pportdata *)(dd + 1);
-  1221		dd->pcidev = pdev;
-  1222		pci_set_drvdata(pdev, dd);
-  1223	
-  1224		ret = xa_alloc_irq(&hfi1_dev_table, &dd->unit, dd, xa_limit_32b,
-  1225				GFP_KERNEL);
-  1226		if (ret < 0) {
-  1227			dev_err(&pdev->dev,
-  1228				"Could not allocate unit ID: error %d\n", -ret);
-  1229			goto bail;
-  1230		}
-  1231	
-  1232		/*
-  1233		 * FIXME: rvt and its users want to touch the ibdev before
-  1234		 * registration and have things like the name work. We don't have the
-  1235		 * infrastructure in the core to support this directly today, hack it
-  1236		 * to work by setting the name manually here.
-  1237		 */
-  1238		ibdev = &dd->verbs_dev.rdi.ibdev;
-  1239		dev_set_name(&ibdev->dev, "%s_%d", class_name(), dd->unit);
-> 1240		strscpy(&ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
-  1241	
-  1242		/*
-  1243		 * If the BIOS does not have the NUMA node information set, select
-  1244		 * NUMA 0 so we get consistent performance.
-  1245		 */
-  1246		dd->node = pcibus_to_node(pdev->bus);
-  1247		if (dd->node == NUMA_NO_NODE) {
-  1248			dd_dev_err(dd, "Invalid PCI NUMA node. Performance may be affected\n");
-  1249			dd->node = 0;
-  1250		}
-  1251	
-  1252		/*
-  1253		 * Initialize all locks for the device. This needs to be as early as
-  1254		 * possible so locks are usable.
-  1255		 */
-  1256		spin_lock_init(&dd->sc_lock);
-  1257		spin_lock_init(&dd->sendctrl_lock);
-  1258		spin_lock_init(&dd->rcvctrl_lock);
-  1259		spin_lock_init(&dd->uctxt_lock);
-  1260		spin_lock_init(&dd->hfi1_diag_trans_lock);
-  1261		spin_lock_init(&dd->sc_init_lock);
-  1262		spin_lock_init(&dd->dc8051_memlock);
-  1263		seqlock_init(&dd->sc2vl_lock);
-  1264		spin_lock_init(&dd->sde_map_lock);
-  1265		spin_lock_init(&dd->pio_map_lock);
-  1266		mutex_init(&dd->dc8051_lock);
-  1267		init_waitqueue_head(&dd->event_queue);
-  1268		spin_lock_init(&dd->irq_src_lock);
-  1269	
-  1270		dd->int_counter = alloc_percpu(u64);
-  1271		if (!dd->int_counter) {
-  1272			ret = -ENOMEM;
-  1273			goto bail;
-  1274		}
-  1275	
-  1276		dd->rcv_limit = alloc_percpu(u64);
-  1277		if (!dd->rcv_limit) {
-  1278			ret = -ENOMEM;
-  1279			goto bail;
-  1280		}
-  1281	
-  1282		dd->send_schedule = alloc_percpu(u64);
-  1283		if (!dd->send_schedule) {
-  1284			ret = -ENOMEM;
-  1285			goto bail;
-  1286		}
-  1287	
-  1288		dd->tx_opstats = alloc_percpu(struct hfi1_opcode_stats_perctx);
-  1289		if (!dd->tx_opstats) {
-  1290			ret = -ENOMEM;
-  1291			goto bail;
-  1292		}
-  1293	
-  1294		dd->comp_vect = kzalloc_obj(*dd->comp_vect);
-  1295		if (!dd->comp_vect) {
-  1296			ret = -ENOMEM;
-  1297			goto bail;
-  1298		}
-  1299	
-  1300		/* allocate dummy tail memory for all receive contexts */
-  1301		dd->rcvhdrtail_dummy_kvaddr =
-  1302			dma_alloc_coherent(&dd->pcidev->dev, sizeof(u64),
-  1303					   &dd->rcvhdrtail_dummy_dma, GFP_KERNEL);
-  1304		if (!dd->rcvhdrtail_dummy_kvaddr) {
-  1305			ret = -ENOMEM;
-  1306			goto bail;
-  1307		}
-  1308	
-  1309		atomic_set(&dd->ipoib_rsm_usr_num, 0);
-  1310		return dd;
-  1311	
-  1312	bail:
-  1313		hfi1_free_devdata(dd);
-  1314		return ERR_PTR(ret);
-  1315	}
-  1316	
+   In file included from kernel/time/benchmarks-user.c:3:
+   In file included from /usr/include/err.h:55:
+>> /usr/include/bits/floatn.h:97:9: error: __float128 is not supported on this target
+      97 | typedef __float128 _Float128;
+         |         ^
+   In file included from kernel/time/benchmarks-user.c:7:
+   In file included from /usr/include/errno.h:28:
+   In file included from /usr/include/bits/errno.h:26:
+>> /usr/include/linux/errno.h:1:10: fatal error: 'asm/errno.h' file not found
+       1 | #include <asm/errno.h>
+         |          ^~~~~~~~~~~~~
+   2 errors generated.
 
 -- 
 0-DAY CI Kernel Test Service
