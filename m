@@ -1,82 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD9C2D8793;
-	Tue, 24 Mar 2026 19:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A7026ED4F;
+	Tue, 24 Mar 2026 19:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774380086; cv=none; b=WoSpCfWSIV9X5Hdnf2np2w4IeLfOcPZKL62SVxudY/Wa/76fNIwIrYKnB4H2XzaVDzD06pSShxCiNylTytv4atvIYNIrOsMau25tdKV1IKsLljpa4OFdzT5h5fBLi8kDY3seL4LutIejwSn0fWoAdeENutYaY4xQ6PNEh2WtN48=
+	t=1774380729; cv=none; b=nrv/ENb2epbIPna29IIDmqdZ6hjy/70aZ/G1oRX4fvnGKO9YLd0z1hBCHoyao7UiHqkCqwhiT0E/AiJa4Rp6iTzpKg4dttqhwj8BM/26lZHWPOSmYAbo2qzC0qyByldFW0z/7K7QWEj+f94qTwr3D7v1oTPj5xOCXe5Qk91KBb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774380086; c=relaxed/simple;
-	bh=LkVASFfCf3ATBdOe3sx0A83ERlebruwDar/b1NTj974=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=il9U+K/o1dpqrZRV40SVL4uIxU1pWMZkGxj9BnDKvqDmsusBVOqOQdkWgtTvYm7OQe9bmbcFwD0AtOWutYi3XpLPHA4MnkGVUwvf55OTBcomGllmjWpbvSVGJ2g6ziLcAFiKEczjyYXbX+2GG4r5aarSqXS+TXCU4YHNiwzFfa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8bPnfBq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774380729; c=relaxed/simple;
+	bh=7zIHJv77EOTJAqcCZSvyswoLbZopEbkgXMF+9ayujNE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J3RPzdAn6WgZ5HnJ/drp2K0EDu9oHkWn62xLQ5NLLo4JKpKa8GNq4fmhUYAvjtKZaE5VBOuw854rnFDYHWvfKefFmizmctlfAZ6AYmVfdUUHnJLnRY3uSzT+StnFUhxpsRmv9nFRaoi8M0qHQaQyn8jsnTh+V2b0vQ81lx1ZVk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bsFD/Rvy; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8bPnfBq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DB2C19424;
-	Tue, 24 Mar 2026 19:21:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774380085;
-	bh=LkVASFfCf3ATBdOe3sx0A83ERlebruwDar/b1NTj974=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Q8bPnfBq9VTFFDhki9TexzbB01kz8x4c5fusIc4O51BP3nWQvYQSj/I66505ND0M4
-	 WMXKDcfR+L/VJLusElCgjf4b2wlv0vm8B1KSKdk0w/1cQFCf7OiDgisjqzitre7hZI
-	 kMrKb2rEJ1S7B/wunfktWFBpNRyexcVEghOEHJsR1sBAMCy14AiKN+NzCxtd80ip8d
-	 i8rbsk4sm/k5jhZdgTrwgqduKeeDxyv02f01gMhLMaBqJ8zoM00y0qPxJU5fcpRN72
-	 fcjfV+Av+eJ2VZ3bTaSs/ctY11OcD0XfXVspwCfka7vEG3MpuP1yhHO+kKXYu4sZgq
-	 NBUfpoOo/NUjw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Sebastian Reichel <sre@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Rosen Penev <rosenp@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] HSI: omap_ssi_port: skip useless NULL pointer check
-Date: Tue, 24 Mar 2026 20:21:15 +0100
-Message-Id: <20260324192120.2959891-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bsFD/Rvy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774380727; x=1805916727;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7zIHJv77EOTJAqcCZSvyswoLbZopEbkgXMF+9ayujNE=;
+  b=bsFD/RvyfdjsRk+ggATegJMhQT550JnS/+nnV/f4Z7s3WuU2s2dnWu0r
+   BpkiwnFoA5B1MmqtrQ8ISlgKA2V7wYW/GHycjzlWDA8Xptn5SDaBPKadu
+   RLtH/FbtBaj/oZAiSt1GcKkKHw/lvE7iTOZUlpXokxcN/Ob4MjavpLsux
+   c4UekyObd+3sWOv4ghCeexMux/kN8ZmHRdG82TSpYyRCzDYA8fX+eThc7
+   cIsuxrF2L8v0SwCFvbpRvIlWMBY5ai2Z3Xov122d5Y+BG32hba1xBxK7T
+   8IY0yxxhIkJlRhrNSrC/EB05fBpe+RLsKuIWEBPCx6MEpEdht7cGE1PUY
+   A==;
+X-CSE-ConnectionGUID: ZMTKpkz5Q2a1Y6lNGSZoyg==
+X-CSE-MsgGUID: 0jTcYIuAQI+htDe/bp9wKA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="92793514"
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="92793514"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 12:32:07 -0700
+X-CSE-ConnectionGUID: R8FL05HLR1qA1sTdl4F8KA==
+X-CSE-MsgGUID: +00yFionSKiU5ktS0S6AAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
+   d="scan'208";a="247502691"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 24 Mar 2026 12:32:04 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w57Tu-000000005LV-3DGb;
+	Tue, 24 Mar 2026 19:32:02 +0000
+Date: Wed, 25 Mar 2026 03:31:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v2 1/2] lsm: add backing_file LSM hooks
+Message-ID: <202603250333.LaZDZOEq-lkp@intel.com>
+References: <20260323042510.3331778-5-paul@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323042510.3331778-5-paul@paul-moore.com>
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Paul,
 
-ssi->port is no longer dynamically allocated, so there is now a warning
-from clang about the check being always true:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-drivers/hsi/controllers/omap_ssi_port.c:1121:12: error: address of array 'ssi->port' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
- 1121 |         if (!ssi->port || !omap_ssi->port) {
+[auto build test WARNING on pcmoore-selinux/next]
+[also build test WARNING on xiang-erofs/dev-test xiang-erofs/dev xiang-erofs/fixes linus/master v7.0-rc5 next-20260323]
+[cannot apply to brauner-vfs/vfs.all]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Remove it, as was done in the hsi core code.
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Moore/lsm-add-backing_file-LSM-hooks/20260324-111550
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+patch link:    https://lore.kernel.org/r/20260323042510.3331778-5-paul%40paul-moore.com
+patch subject: [RFC PATCH v2 1/2] lsm: add backing_file LSM hooks
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260325/202603250333.LaZDZOEq-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603250333.LaZDZOEq-lkp@intel.com/reproduce)
 
-Fixes: e61af3ca8933 ("hsi: hsi_core: use kzalloc_flex")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/hsi/controllers/omap_ssi_port.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603250333.LaZDZOEq-lkp@intel.com/
 
-diff --git a/drivers/hsi/controllers/omap_ssi_port.c b/drivers/hsi/controllers/omap_ssi_port.c
-index 50dde968febe..73932d7257d3 100644
---- a/drivers/hsi/controllers/omap_ssi_port.c
-+++ b/drivers/hsi/controllers/omap_ssi_port.c
-@@ -1118,7 +1118,7 @@ static int ssi_port_probe(struct platform_device *pd)
- 
- 	dev_dbg(&pd->dev, "init ssi port...\n");
- 
--	if (!ssi->port || !omap_ssi->port) {
-+	if (!omap_ssi->port) {
- 		dev_err(&pd->dev, "ssi controller not initialized!\n");
- 		err = -ENODEV;
- 		goto error;
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/sched/rq-offsets.c:5:
+   In file included from kernel/sched/sched.h:64:
+   In file included from include/linux/syscalls_api.h:1:
+   In file included from include/linux/syscalls.h:95:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:53:
+>> include/linux/security.h:1149:5: warning: no previous prototype for function 'security_backing_file_alloc' [-Wmissing-prototypes]
+    1149 | int security_backing_file_alloc(void **backing_file_blobp,
+         |     ^
+   include/linux/security.h:1149:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1149 | int security_backing_file_alloc(void **backing_file_blobp,
+         | ^
+         | static 
+>> include/linux/security.h:1155:6: warning: no previous prototype for function 'security_backing_file_free' [-Wmissing-prototypes]
+    1155 | void security_backing_file_free(void **backing_file_blobp)
+         |      ^
+   include/linux/security.h:1155:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1155 | void security_backing_file_free(void **backing_file_blobp)
+         | ^
+         | static 
+   2 warnings generated.
+--
+   In file included from kernel/sched/rq-offsets.c:5:
+   In file included from kernel/sched/sched.h:64:
+   In file included from include/linux/syscalls_api.h:1:
+   In file included from include/linux/syscalls.h:95:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:53:
+>> include/linux/security.h:1149:5: warning: no previous prototype for function 'security_backing_file_alloc' [-Wmissing-prototypes]
+    1149 | int security_backing_file_alloc(void **backing_file_blobp,
+         |     ^
+   include/linux/security.h:1149:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1149 | int security_backing_file_alloc(void **backing_file_blobp,
+         | ^
+         | static 
+>> include/linux/security.h:1155:6: warning: no previous prototype for function 'security_backing_file_free' [-Wmissing-prototypes]
+    1155 | void security_backing_file_free(void **backing_file_blobp)
+         |      ^
+   include/linux/security.h:1155:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1155 | void security_backing_file_free(void **backing_file_blobp)
+         | ^
+         | static 
+   2 warnings generated.
+
+
+vim +/security_backing_file_alloc +1149 include/linux/security.h
+
+  1148	
+> 1149	int security_backing_file_alloc(void **backing_file_blobp,
+  1150					const struct file *user_file)
+  1151	{
+  1152		return 0;
+  1153	}
+  1154	
+> 1155	void security_backing_file_free(void **backing_file_blobp)
+  1156	{ }
+  1157	
+
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
