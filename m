@@ -1,104 +1,140 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013025.outbound.protection.outlook.com [40.107.201.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B1A402453;
-	Tue, 24 Mar 2026 17:18:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774372695; cv=none; b=OEN8m+cwX0NYzqMW0whlrIyNxTbbjZrqYpHS1ddhmJhgHduCYzgIu0Y9nMA1eT6PAbvHfWsPHtKi2WuRM6gerAj6h50BC1Sp2Z8Q8bAO4FE7I0NhD4AGtyc8iJMaPxe1AuBz1k37HfcmHJTY8wDtyTbIVcErVWuL/v67B3eJsEE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774372695; c=relaxed/simple;
-	bh=+J/MDYyzTles5UOXk5iz5uUezpo00Kp3/yVMGuqA8Gw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g9OVUv8XsPymV4LlTdhfUq2p7rJHqx1Tg8BkuZ9G1DbRGGr20m13Ip3HpumS40AKzuMu+4eWIl58acF4oxTwMOZCY0qnRgbgNxp8uJuGDz6MX/0fKd4J1/XI73VxgjLRpBusUKD2lSG0MdOnBYXmGXxzYtJiPx/NWRBQ2QzuLkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NovR/Qr1; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F378524BBF4;
+	Tue, 24 Mar 2026 17:22:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774372969; cv=fail; b=Cn0pa3NExgZins9g+atbzz4OVR5FOtuVlq+rDJuYqQVGLjMgYR7WdDdRPCbZbWiWwZBFslIH3YxeGfawiSOK5jZbqQXDTd9yW9urHk3UxUhf/SNnbSTGF17RWOej3yDph0qTe9we1Icq1daaGz4mQiRt1fBtJaI8BQvpJy0bByo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774372969; c=relaxed/simple;
+	bh=ijT+PgY21oZUROO4eaO3LpGQqk3ssFlnhBPB460XK0E=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uyuEW1z/AVotoarxznCkoxWqLGhrj2GGTz6eC8y9qYSVmu9o9xW6MmqnzQZJJnzY5Ux8YNysOcVRa8f257bkWC7PwpF9pEXMnYZzHOvduQKDtObV/uSdSysppC6F9DmX8kSDbFF1K34LXDzHRf72Ebt44dW7CzZyLJS+ML+W3T8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hmZl7Egm; arc=fail smtp.client-ip=40.107.201.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NovR/Qr1"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=CYZ3hHo4euyitDk4EphKQxkOMq3o6lLcu1GyXe9kjh8=; b=NovR/Qr16FmLqDXyIKbZFHTNnA
-	zGJx7uCLw307fVjFPEwKxpKFeJzGz6Fcr8aHRgYJdnU67O1ZlFknIPBHCuD8wtrGoqc9PqPulWTBr
-	9YxZfI68w03P5nAKYJwzonz4e+pjTtqs9p4O698aRcfrrOcp3Jz15jJvoLNBul0CvPyeiPOaIoFbZ
-	q6ozmaiSz2900/eRr1bHHEPmuyFqEauMyvYiZVZljrXbVgQGSIMS5Pj+dU/o8qCK+GuxpLyixJUu+
-	TpmzPWig0arINr6GbRU/Lx/UZQCS/XOd2nL+kooq/H/cJd0c5g/Li8T963RME7P51RYOUYUAUBMeY
-	+Lbkplnw==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w55OL-0000000EMps-0hn0;
-	Tue, 24 Mar 2026 17:18:09 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 6F1E63002D8; Tue, 24 Mar 2026 18:18:07 +0100 (CET)
-Date: Tue, 24 Mar 2026 18:18:07 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Jann Horn <jannh@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev,
-	Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH v2 1/4] sched: Ensure matching stack state for kcov
- disable/enable on switch
-Message-ID: <20260324171807.GA1728621@noisy.programming.kicks-ass.net>
-References: <20260318-kcov-extrecord-v2-0-2522da6fcd3f@google.com>
- <20260318-kcov-extrecord-v2-1-2522da6fcd3f@google.com>
- <20260320221051.GX3738010@noisy.programming.kicks-ass.net>
- <CAG48ez1W_iJsfF0nrJqtV9sBvnxG9VHJ0zhhRi-6+kKiwyWemA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hmZl7Egm"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=w1vgjd+P/Xpy4aCva3RBYCh5ZlOIUJkm1IEEcGBi5GWORW1RDPNLRITiJqvgkaf22+Cdc3ETfHDWjQoLlD0nTJn/lLVnmfagE2R0NqQV9e2kyHQSkRPLf35jsQrsfdUGDZxJXXIZIQ2CaSa1rTUNGaWLcL3fruY+2SpyNd/w7oukberZtIaOe6SEwVK1ExhGe55ci5tCgrihDL+ADUQTGg0RW1aAUXqyR1MSqkQ5LOiDqTQ3CK8kKFgKFOQRMt4txQ5DuokCZKcHoi0N3Gz6pKFV3VjZpKqtCCLwxIUVmNz58PHemPYPbM7kt9xNc6yzf/bN2QKG9wgZxlJ+8zoiTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e44Bi+hnTC9Z/DjGZmffh7y/+KG5uB3gr/HdEQjzUVM=;
+ b=D9Uxy9TfeWOQTrMwym83ic3wLWw41WgLd57L7BeruzU+T/o1HZ9kKva3dtIDFm6rpRpD4e8ZIaB1UVJhZ4yS5DDwEyECcm+nhNgJibtcfjnB4bhPrSSX+D4G2GBIQjC/CAEqaNHOq/PCrDD7uStQpW9NSx63pDPZCD46hvuZxwFbj7ztH2Pg4iPY5J6+PVJ0jH6MUQgodBSX+/+8W+AqaaNpP9fUw8lDqpECjMDgWdqu0q8YDIWuG+j4mLkO/7G3oaygL1F5o5tVEfBnK6r5VLpwzkjd7+OdL7DYHFGfHTqUWwWPPQw+T7rwo7quuaZhtHmXVUakwgjdCDJjzCGa3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=bootlin.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e44Bi+hnTC9Z/DjGZmffh7y/+KG5uB3gr/HdEQjzUVM=;
+ b=hmZl7Egm0rWwcgSrUpMxLz0FKCLv+/kaAbu3HW+qZlksA/q/Bg21DUzfj/OQYlECQOITY5ydBjo9EP8pEzAuZ4i66zucqmJDwJuCfuV84Ir7JgtbXADmBIn2XjTIpUGdZz48pjQKb0SrET6qlFvX0WDwlNNkua1sWOOo8FSaINRQe4tCGWmEgQyCJI+JdpqmP6O1aSqbif3A+XQzjzntjRbWj8Np0p+dY/lxqbDVC8k5RsEkwB9I0jMVcibCIw9PytZ9Hqvi73btHc0HAcgiboXLNCs+B1zRgJgKh7jg6b5dgK8Nu457w4zUsjqWMK0/5rpk4G0BaoLZvytIfmafDw==
+Received: from DM6PR08CA0035.namprd08.prod.outlook.com (2603:10b6:5:80::48) by
+ CY3PR12MB9655.namprd12.prod.outlook.com (2603:10b6:930:100::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Tue, 24 Mar
+ 2026 17:22:42 +0000
+Received: from CY4PEPF0000E9D2.namprd03.prod.outlook.com
+ (2603:10b6:5:80:cafe::5e) by DM6PR08CA0035.outlook.office365.com
+ (2603:10b6:5:80::48) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31 via Frontend
+ Transport; Tue, 24 Mar 2026 17:22:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000E9D2.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9723.19 via Frontend Transport; Tue, 24 Mar 2026 17:22:41 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 24 Mar
+ 2026 10:22:23 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 24 Mar
+ 2026 10:22:23 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Tue, 24 Mar 2026 10:22:16 -0700
+From: Akhil R <akhilrajeev@nvidia.com>
+To: <alexandre.belloni@bootlin.com>
+CC: <Frank.Li@nxp.com>, <acpica-devel@lists.linux.dev>,
+	<akhilrajeev@nvidia.com>, <conor+dt@kernel.org>,
+	<devicetree@vger.kernel.org>, <ebiggers@kernel.org>,
+	<fredrik.markstrom@est.tech>, <jonathanh@nvidia.com>, <krzk@kernel.org>,
+	<lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-i3c@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+	<linux@roeck-us.net>, <lkp@intel.com>, <llvm@lists.linux.dev>,
+	<miquel.raynal@bootlin.com>, <oe-kbuild-all@lists.linux.dev>,
+	<p.zabel@pengutronix.de>, <rafael@kernel.org>, <robert.moore@intel.com>,
+	<robh@kernel.org>, <smangipudi@nvidia.com>, <thierry.reding@kernel.org>
+Subject: Re: [PATCH 04/12] i3c: master: Support ACPI enumeration
+Date: Tue, 24 Mar 2026 22:52:15 +0530
+Message-ID: <20260324172215.31540-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <202603240843279c9e8b90@mail.local>
+References: <202603240843279c9e8b90@mail.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG48ez1W_iJsfF0nrJqtV9sBvnxG9VHJ0zhhRi-6+kKiwyWemA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D2:EE_|CY3PR12MB9655:EE_
+X-MS-Office365-Filtering-Correlation-Id: ed63bd4f-0c22-4b0c-4bb1-08de89c9f461
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700016|376014|7416014|1800799024|18002099003|56012099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	YtYgX4QqLVx6KszpDLHCk/yIFztDUw8MMaGaL15XlEi0776586u9MIWwdgTWlF3YmBre1Hou/fne7E7YFBTJtTHKRJp29WfEfzhsmymO3sbcOhBmF2P58uxCyfr2c8/bmDqCovSdxrP4h3HNDHjslD2Buy+lOA51O180ECABVbWGPztos7IE/Bs3JuLh3Pn3z6eYSNiAfkcOrpBqFwjQoV2YeT2fl1MJK90n9qX1VqlSa4Biff6yNrxY/Ii4j8hLb4fTGgkk7ujSseRy9j1AFDcI1iqZx9W0iF2WGuoZ3xkdEOGN5xa2TnOaXt7dvtfyytWx0kNloJ9vVN9JeV/OI3QQYZo7bGrZ23CrRuzI4pcTOK0bbiAEy7w46BFmcdGYgU0rKKlfSA3oXr4Yek5SSY+2nv3FNu/JnXR4vs/NryMIJCE/obXKanJ4Vylan13g2eo8fFfmXEkyvvZA4v/s+eGuaIDJb7qpVPjnchFz2Kaz8zZWTWk9RIfzGYanP3ELRIScJhqdqml1TZVGLdNFVgCT+BbR9LGRpLyO60stH2dkXuaXAvB0Kdo0xeHTwFVxh3eMWXpaC6IpqGaWcYHvMtrs6+pvrB849ODg5XU1XlIeXpBlfurhyrxQUjVP+zXZRYSGE/V2YEx5QavKv0CInTrZBtP1TjZ0bH/ZnNbNrLOOckBTLCAml0wedEIEhdK/USZGH9050PfANixUCN4YGEU2r3CqjCytIDtzaFIIwhh8i2l1wetkpCwKCXWwcQsXZ9nyx7uqtn/N7+Kghn5Bfw==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700016)(376014)(7416014)(1800799024)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Or6ssy8Ks6m3CBwDmXq/tL6nh0qKA65g+oC7q4IVbz1yqGPtt/s7JDhEpbwUA2OeYbENZm/HiZVXtJfkrk1gW3ea3MiwPsWor85jRJt1xedSzb2n+J9eyZ4JTLznax1LH3nbfYW5RJMEVGrUh4wJub7POGI2JdrkFedpIQozyMJ79SaezvurwCdusfLokju6v/syfIepdFr1mV86FN8Nra3rN6Nk+2bCSU1ObyhpRJYzE21m9MKxaHyd9BFhEo4Kc2OIMvEF6jIIsCPugprYtqoXRldWSNTGWo+JnSyV7ZAJiiO3riX5QJCuxSugELzvE0nvKrRkCOr8i7QY76NhjwqJOWAt9lPcPBeGVtNQdhn6ytxSnWc0YCa4biyvYMt1sSwy80DtQAYMcMzHKQv9Eiw/zE9KTAskQOxMiYRjrLnfG0BBJH8erDOOnKufzVZJ
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2026 17:22:41.3517
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed63bd4f-0c22-4b0c-4bb1-08de89c9f461
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9D2.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY3PR12MB9655
 
-On Tue, Mar 24, 2026 at 04:47:51PM +0100, Jann Horn wrote:
+On Tue, 24 Mar 2026 09:43:27 +0100, Alexandre Belloni wrote:
 
-> > Anyway, I'm a little divided on this. Perhaps the simplest and most
-> > obvious way is something like so.
-> >
-> > But what about compiler funnies like the various IPA optimizations that
-> > can do partial clones and whatnot? That could result in violating this
-> > constraint, no?
+...
+
+>> #include <linux/acpi.h> is added in PATCH 03/12. The functions' prototypes
+>> are present in acpi.h. I think the bot checked this patch individually,
+>> or did I miss something?
+>> 
 > 
-> Ah, good point, bah. And commit 0ed557aa8139 ("sched/core / kcov:
-> avoid kcov_area during task switch") explains that we also can't just
-> keep emitting kcov records throughout a context switch.
+> #include <acpi/acpi_bus.h> is behind an #ifdef in acpi.h and your code
+> is not.
 
-Oh, fun!
+Thanks for pointing Alexandre and Guenter. I also noticed that we do not
+have stub functions for a few of the acpi_* functions in #else.
 
-> So options I have are:
-> 
-> 1. In the scheduler: Try to put enough magic annotations on __schedule
-> to prevent any such optimizations. (Probably "noinline __noclone"?)
-> But that's kind of invasive, I assume the scheduler wouldn't want to
-> have that unconditionally on a core function because of a niche KCOV
-> usecase.
+Looks like I will have to guard calls to these functions under
+#ifdef CONFIG_ACPI.
 
-So I noticed that clang doesn't even support __noclone, which is a bit
-of a stumbling block there. But while going through the various function
-attributes I did note __flatten, and I think we can use that.
-
-But yeah, without then inhibiting cloning and the like this isn't going
-to help. I found that linkers can also do cloning (as part of LTO I
-guess).
-
-> 2. In KCOV (without touching the scheduler code): Keep track of the
-> current and minimum stack depth while record generation is suppressed,
-> and emit those values when record generation is reenabled. That's a
-> bit more complexity but keeps it contained within KCOV, and I guess a
-> way to suppress events might be useful for other stuff too.
-> 
-> I guess I'll probably go with option 2...
-
-Yes, I suppose not relying on the compiler doing things exactly so is
-the more robust approach.
+Best Regards,
+Akhil
