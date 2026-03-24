@@ -1,82 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C9A2D5950;
-	Tue, 24 Mar 2026 09:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E721F370D75
+	for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 10:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774344787; cv=none; b=Pq+2aO+QRt/y6fJUx4xLXODKsOGbSaoUb23lC5axF4huEtdcpPO2469DLzNBRSi3DNRsfKyL0aigaUVRzpi2byTqir5b0PKgTLCULiiFhrGQ/GIskFNe18HAv9tKz3lJhS6QaWfRLAlKgtlzQKVM5TKG1wrcxmAYIpg5kzWMUCM=
+	t=1774348682; cv=none; b=YU83m5NpoCtck/3+F1GI0l3kY5a0L3wC3iZ6AXmqFCvh9xtYqwifc5QIYlWU4zvC73y7OJQgeDr6d+8N4E+vHe+M8YCehNpRqZ1OKHeziHMjw0IzUM5U736sE0RQpdIsGkJGAzOhKjcx3ZHc3m/OEmUm39Oc8ljldH86apjwxKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774344787; c=relaxed/simple;
-	bh=Ffayi0SqMNCb9DOa79vnAqKEz6MccYYxcrJzHKDPTCU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=bUtxAetM3qjmKWita6dS8DGztkugqnmL+oi6MNOoeZPQnakJY0kM7feDdhVlIVcRQ7Mm14OeO1o4uElc06u7rFqVU7/Ssax3j2/5WedVLdvwNkqlNit1EK6EmU5lAsPBdqeaqMjXbXChQfdWQQIondLj44hXUli4zweJw0yu7IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mxA01YT/; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774348682; c=relaxed/simple;
+	bh=7hKPAkTc8gkuKOQeOc2hw2B+zsm8HxW7BXmCLFr4IFs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=kw6eALFaS7wIibZbloivJGvPoMPCK73jvpx2sWlD/kY7DjKkMOnSb7yquZ9zxmPzhLAOHk05UI+L9ktA6EWId7Lth6q33+hVINcwWQRv1v5UxI4RGqr7rk2+GYnhMNhtktcN4M6OamZ4MfrXSkNym9ly1bxqO8Wt0MNHyHLWG2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=f+zNl0NJ; arc=none smtp.client-ip=209.85.221.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mxA01YT/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774344785; x=1805880785;
-  h=date:from:to:cc:subject:message-id;
-  bh=Ffayi0SqMNCb9DOa79vnAqKEz6MccYYxcrJzHKDPTCU=;
-  b=mxA01YT/RjelrbsUhvtmu46RpUYj4SgW+uNB8kHLjA9LMLUaeS1adpXy
-   AsmtCgHBGiQ/7m27XsQlhjjniZvGb5qBXi9kqEYXHwgEKV8o+6JyNJ9i1
-   UMtzPRXijxMvxbkXmc3FRs3xp3VZ3uRbAl1W9IzsmQSFdIYGBERYtcgTs
-   yx4bglmgW+MKk7AkRGhOSYVdqxUZgNvheF0a0LyUfa1VEodCx6uiVjSS0
-   AxmwfJ/xjNXXdMjzLDscQ0VdQCt2DUcJW/gXr5WxAf3xXyfk3c0eBTZRA
-   L704BOXI7l/bpLGfdUaPkz9vtM/7+v3Bpt1OecI7E205YgYnmpKxWSiPx
-   A==;
-X-CSE-ConnectionGUID: o8dqHdDsT36wnFpXpikEfg==
-X-CSE-MsgGUID: 7Vc0aHptTPO+YhBIhlXBWA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11738"; a="75424972"
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="75424972"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 02:30:49 -0700
-X-CSE-ConnectionGUID: BRyZGB+2Qy67TXYzZrhjgw==
-X-CSE-MsgGUID: x6lvRXSpTV+2BsnAdrGZeQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,138,1770624000"; 
-   d="scan'208";a="225945166"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 24 Mar 2026 02:30:48 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w4y5z-000000004JN-32XT;
-	Tue, 24 Mar 2026 09:30:43 +0000
-Date: Tue, 24 Mar 2026 17:30:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-crypt 34/42] vmlinux.o: warning: objtool:
- netfs_prepare_write_buffer+0x974: netfs_wait_for_encryption() missing
- __noreturn in .c/.h or NORETURN() in noreturns.h
-Message-ID: <202603241714.HznaSXs5-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="f+zNl0NJ"
+Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-43b4730dad8so895189f8f.3
+        for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 03:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774348678; x=1774953478; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ame1i2/P4uZZyXa5AdsReLRcEu535+ZYZ78TZbZKy1c=;
+        b=f+zNl0NJSoGF3IAextymjw8ynjasw7dcXDyLA9bwTvMiuXnq1kOwhVuFL1kAT2Om5y
+         fbHtrPQxizVGgmXo87QR/QdR6bqC5L4AvQjfoq4zxno/TlhUPH0wW05EjbvGRtV7B428
+         lfqTRKZ9Tyj/fD7Wb3fK/POihlChwCcDrVGw69qep+IRKwMfSPVVeVLhVIbcT22VrsBQ
+         dSHaEXlr08hq0rNeUF0oOPni5XVhIOrnamJyJ+ghgrhIg7LIMH5ThA0/YH7Nk8L8pSz0
+         gysEy2F7PNFZ/puUNt2vY69QoQpb8Q3jaGUQpp2n2F8c36nJi/ohPgwFns3hfwMiPpoq
+         fURA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774348678; x=1774953478;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ame1i2/P4uZZyXa5AdsReLRcEu535+ZYZ78TZbZKy1c=;
+        b=QEJtC5Ei4HDFDaZ4AW0gJb9JBYmsC8dVLjWuMjbh9uxdjSwA5DBeTrQVD2+nDGuTbR
+         I3UCF2Sy/q1j849eLUaKWuoB/B8L+TcO6RHa1gt1Sq5D4lEwUDwAkt6bkp65SJQbm8cb
+         buh/NbhFIyFdfSgCTfDG+ydzI2E8O4wZNU3ePl3vief+Ra+99++veJ8bpZawiTaHsi/g
+         2ddMcOQYFrWeQszpsryrbHt1IXrsiIFa0/HIVqN09TvB7KBqq1c3uMPKzhPPEVoiGwOf
+         tlUuF8xq7orq65GWycy95cBGU0P+VsQibAyxpaDajAd/bZKvnaC591jiUy9msZM8e8KT
+         MeVw==
+X-Forwarded-Encrypted: i=1; AJvYcCXU9JU+GqbtKeFNHh3J5DAvzfO2vtSdqji8DRdH1IYpAeRVS1saCjo/HUazgkN3bW5T/PRX@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx8FHvNizCg+QWLwbxOTJBSewZt7X2MVampa1neDToJvtR4+J+e
+	CaI98FIqpSFosTY7IiQqiGF+D50N22UBkihbWIXnYwublT+6Own1qP3XZqbNupCq6H8GsxOcubn
+	db4gCaIc6THTIKw==
+X-Received: from wrwj1.prod.google.com ([2002:a5d:5641:0:b0:439:c0d7:17ff])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6000:2383:b0:43b:445f:3177 with SMTP id ffacd0b85a97d-43b6427db29mr24920980f8f.31.1774348677529;
+ Tue, 24 Mar 2026 03:37:57 -0700 (PDT)
+Date: Tue, 24 Mar 2026 10:37:56 +0000
+In-Reply-To: <20260323205534.1284284-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+Mime-Version: 1.0
+References: <20260323205534.1284284-1-arnd@kernel.org>
+X-Mailer: aerc 0.21.0
+Message-ID: <DHAY417D26BS.16WD7OAD2Z7JX@google.com>
+Subject: Re: [PATCH] [v2] bug: avoid format attribute warning for clang as well
+From: Brendan Jackman <jackmanb@google.com>
+To: Arnd Bergmann <arnd@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Brendan Jackman <jackmanb@google.com>, 
+	Ingo Molnar <mingo@kernel.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, <linux-kernel@vger.kernel.org>, 
+	<llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-crypt
-head:   ae7ccdf83025020c44837849de26fb4546fbf825
-commit: d045bc8a941a2f79f07a9d3fc62b3596fa4a4326 [34/42] netfs: Perform content encryption for buffered writeback
-config: x86_64-randconfig-006-20260324 (https://download.01.org/0day-ci/archive/20260324/202603241714.HznaSXs5-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260324/202603241714.HznaSXs5-lkp@intel.com/reproduce)
+On Mon Mar 23, 2026 at 8:55 PM UTC, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Like gcc, clang-22 now also warns about a function that it
+> incorrectly identifies as a printf-style format:
+>
+> lib/bug.c:190:22: error: diagnostic behavior may be improved by adding the 'format(printf, 1, 0)' attribute to the declaration of '__warn_printf' [-Werror,-Wmissing-format-attribute]
+>   179 | static void __warn_printf(const char *fmt, struct pt_regs *regs)
+>       | __attribute__((format(printf, 1, 0)))
+>   180 | {
+>   181 |         if (!fmt)
+>   182 |                 return;
+>   183 |
+>   184 | #ifdef HAVE_ARCH_BUG_FORMAT_ARGS
+>   185 |         if (regs) {
+>   186 |                 struct arch_va_list _args;
+>   187 |                 va_list *args = __warn_args(&_args, regs);
+>   188 |
+>   189 |                 if (args) {
+>   190 |                         vprintk(fmt, *args);
+>       |                                           ^
+>
+> Revert the change that added a gcc-specific workaround, and instead add
+> the generic annotation that avoid the warning.
+>
+> Fixes: d36067d6ea00 ("bug: Hush suggest-attribute=format for __warn_printf()")
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Suggested-by: Brendan Jackman <jackmanb@google.com>
+> Link: https://lore.kernel.org/all/20251208141618.2805983-1-andriy.shevchenko@linux.intel.com/T/#u
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603241714.HznaSXs5-lkp@intel.com/
+Thank you,
 
-All warnings (new ones prefixed by >>):
-
->> vmlinux.o: warning: objtool: netfs_prepare_write_buffer+0x974: netfs_wait_for_encryption() missing __noreturn in .c/.h or NORETURN() in noreturns.h
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Brendan Jackman <jackmanb@google.com>
