@@ -1,108 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5939545BE3;
-	Tue, 24 Mar 2026 22:45:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774392330; cv=none; b=tEkkctrh8HoWzxzSL8kvSex+Q+loU/AET1ykEYJaZkBn6RCJH5CaFxbUcz+vczDBdsBKpK5gzic5FIh0bu45idtVKfN5JtDGY6JFUFcWd6+0ODsHviPM77g5MpHBLsmWhzJZF82M+ImsCoWEiFQxgDb2sLw3MptliCAPOyM8VaQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774392330; c=relaxed/simple;
-	bh=THc06DQ3l8ptVCXlPt5mAa/4t4qSjj1h5BSZc2NRN2E=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=eMCnFYEqzLBftKMG6tMH8AVpKFAiiJy+FjZQ1Y+9FrJUZXLlmKwCaGFYIjEx+hg3DF0HPqywL3NP4t3Q1CVOri/hGRrKsL6ivtMs3c6LYUDJzkMs5fdbDFSkT/nmHmEHiV2mCGrJV4R0JxACrGhSCMyhHv+wtT0DmNaAlng9dvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mxKm7bmr; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF3F3537D8
+	for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 22:55:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774392929; cv=pass; b=fXapwV/EDoCtm4hkQMTT+C3KKr+6CpqvQ0NiBLnSDLOD3l8L+Vi8x9hGOC4j2l8/8vZ/Yvxt4aOJSPYheOIADLX3LlTo1iX954gmzjLj4W8gbhw3q0yKMG2Ae7FhqitFjWCqdjgh+N5H/5K0JYq6LDqgoIkQa5J68gJU0wuCS/M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774392929; c=relaxed/simple;
+	bh=Acn0BwQVhsSbSe+KwV3ejCkpYW1kVwInpusMQW9ka3w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=vCL+6q3fS5Qy+Qgtip4lOg11O75AHKdF5wPU9CKkiSKgxzL1Md66QYKdg14UOD5cdKnWVELc580yk/jS7O0O04x3xGSdd7xSOuTbgqz2NTmphvBcaIo1/G5iT//65AMesLHWUiPHpFgoNMxnQMITvERqeyLBXuo761Gt7HzyT/g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D+IEXQgO; arc=pass smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mxKm7bmr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774392328; x=1805928328;
-  h=date:from:to:cc:subject:message-id;
-  bh=THc06DQ3l8ptVCXlPt5mAa/4t4qSjj1h5BSZc2NRN2E=;
-  b=mxKm7bmrn5KD/Lj0ObzXz0KIZfBXXuZIgkQQFfs9qWg9kJZKJucHStwf
-   2Sa41VJLleKnqqf/zZp+tXzy1hU+Sm+FmfvY4oDsbs7gDDN05xPV36kBz
-   6glMhx9WeXMDTpMiQ1mBq0B94F1MIfZl4Z8WFz2GK8fITePmUjwHRD0Fi
-   BhY7w6Kz+mksQFEcYLIqdiePYrTMnRhttlkX0IAuY5uveITcONsYHIv0D
-   7FhSymMClpQROP32s1t79cQUiONAZiTkaSYcW8EdZLEXr/6QGd24xXup7
-   EC3KCDgv97eBM7dCfI7YhI4wXMKHEG8nw+SEaQ6+AmAPNDGaOsOvwi6k+
-   A==;
-X-CSE-ConnectionGUID: jGEHiVcZTlW7lRn08tgr9w==
-X-CSE-MsgGUID: QDoXlo5wRlO+uwEgPARNNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="62974051"
-X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="62974051"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 15:45:28 -0700
-X-CSE-ConnectionGUID: C6cAAbLkRAeKmEkBr40evg==
-X-CSE-MsgGUID: 0dRBhlIBT8OwvegCpJQmxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="224449563"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 24 Mar 2026 15:45:25 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w5AV0-000000005X7-1qTc;
-	Tue, 24 Mar 2026 22:45:22 +0000
-Date: Wed, 25 Mar 2026 06:45:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Kees Cook <kees@kernel.org>
-Subject: [kees:dev/v7.0-rc2/obt 2/4]
- include/linux/compiler_attributes.h:409:10: error: '__trap' macro redefined
-Message-ID: <202603250654.OxFzRiGv-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D+IEXQgO"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b976536806cso892273566b.0
+        for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 15:55:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774392925; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EL36Nk7Hf5PzTRAi1USJ/FqwdWN7Oi+Vf0W6Vx7XH/7GmT1+m5H/Km/IPLqbqQiepQ
+         VmqCVLq+QjjvCEtdGymD8VNS+Yl1PR9kjRjOJJXz/ysB12NK9zjwzKwxwzwwnK7hkCcj
+         n/azkZdejeHd0XVVHDEmm/9rNAB7GdL5j6oQA7eXHTmsmMRqON1ZzExSDHnEyLL8zW7x
+         DBu4mixRD4mtKMCJjCv7nf6nB5OlME0/Of5B63/m8uuNZUxHQPeWF9gC8vUfUvo2Daza
+         XilXxTrjjcPWF8VwswX5bGyVYRQKrtM5+jVhR2EGJXo0AwV6hl8IjouHc28/afb8Rc/6
+         ZHIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=BxsOL3qFQEwh4IiGZGHNeBM2vf4BVFOua4QJBI1ntYM=;
+        fh=sIf2zVFH8EhpDHfeZlJqT3L000J+5T6uXDJxd//0OQA=;
+        b=Si+cOLjWzpUDLdVo7Jnvo8miKhYq3Y+8FTp2LCYie5QTup9+lmF/DrTdgLUwu/+oZN
+         ob3GQIP8NcqVvwO61nx9So2amPPvIJ55KqdAnEQXgzrE9VM5yxEEYOrvSyZg14lr3WVB
+         vLRIyu3uxj3YP9XcoLQ2fy+J3ovlryJONvSZFCjgw+/JKPbxLEssWT0fp5go6exRYjDu
+         VvBAJv0Lm+5KRIYuTvyDEsLYKLUeXgMFA+uUiHpEnLOOlQTpoyi1yvJTyryp6jKilbrU
+         gAFnXSGGwyPkApftUo4fFQX/E/8SCZ6qsyKI43cbpHyGl7yESqjxU6kjkXjatbuhMaLi
+         q6ow==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774392925; x=1774997725; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BxsOL3qFQEwh4IiGZGHNeBM2vf4BVFOua4QJBI1ntYM=;
+        b=D+IEXQgOxe2bKe9dfLvzc7N7kCG3e4oP+32AszzpmKygEceOtUtqcukDdhEewBd9WJ
+         jzpMSWfoplaawEI/z9TOOON0bmlh98EpFYwL7ZbyUHmVehvi4UOf3UXn2YQwP2wrZcTd
+         RSc6dAcvGquelu0VoRJCBOTPz53iI3Z6V60J/rWUif1JRuEFbUnvSOxXt5og7r4HcHNK
+         Q8NmdrUNM15j0KvMPvQGgCpyyd8d/aysEKGDTcUNdpLOL6uJGGlZ3gFIX0rNMWGWAYS0
+         0p0NCwhk2xRY9z9DR4LXSZytluspMumF8K2Q/Z1gTR0MGRZLUPtz6UXnYeRpDq8R+N0L
+         nODA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774392925; x=1774997725;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BxsOL3qFQEwh4IiGZGHNeBM2vf4BVFOua4QJBI1ntYM=;
+        b=EkL0OMMQnqDwn1R7tVBFor+wrcX7GKUuKKWuFcyNPUlcn8NuJ45kKBvkt3DhdDTvaW
+         w9AR69xAJr77JWXZxgWyjI5oTFPnDFYopGaPTvrMlGPzRTy3yKaGsDNMrJsuQ35wIoK8
+         wnu9aprIkRBK57m2kM/o61ogWJVou4kfDakREu7mgeJ5JVlySnj5lEvb/hXKNLEZbHL5
+         yYGClqN1yNV5Wtmd/mNZiq8qbTeh62u6nwVF1Z/fJ/ZmFPwrqqm9TL8fbvi/PuMTRllt
+         apBWkVZJqzpJb36Oc9p+6PVzzF72lB0pv4139Htls0wEs2L9AJuDkkYYOwoSBX7UU0w3
+         s0nw==
+X-Forwarded-Encrypted: i=1; AJvYcCWKFPV6LQqIRVfVNqWYNpUaYwx72zjsKoR0LtTikeBPTRcpu2FFEBupWHP0g7em982jY2cW@lists.linux.dev
+X-Gm-Message-State: AOJu0YzjF1OJOp3T3LV+uNcSstKytWPomj2qa1eWSLWXsr853QN6Z3I9
+	vk0kC4xpAewvy7H9XnnHKLDy53dWYLpR6wDgTB0hcOwJexXdCqm8lMm45zbZrZ51ot20e6zcCgI
+	x3ZPRZ7V0g7+jshSWaLRvxQqQPm8T0FY=
+X-Gm-Gg: ATEYQzxbSBdzp7vCZpRzUJyvOM/kK6ZJVonQ3ICCD4SbbD+fcUjwRyNV9C8PAkFJhWJ
+	n9Ml98eendYRb5WlifayqTMqtbiWg9R4iUiaJcza/wwJVQ4Ql48pnYgdhS7aNQ/9C+s3HDtKxDM
+	ZWMXBIdOc3mrLcSiyoItbUDUoI3/RVqfE10Ud9CTiunXEX9kVuJ/9Ry5V2jKGDo2yByTDyWxc5g
+	kBQs3tQfm3o0SN2ZA9J5WL1vcXGdw5obklsHRJIKpjJsp14hQndWsEStllxjm0HW/yD3cm89pyG
+	n8T+Z8y9tatV002HAnr/OD07UbKZdYry71mg2PeuhazM3TsbeuLxramNRt0nblfQGA9Uchxu7Ay
+	zAS4frQ==
+X-Received: by 2002:a17:906:1708:b0:b98:528b:8462 with SMTP id
+ a640c23a62f3a-b9a65c3b807mr52867266b.55.1774392925139; Tue, 24 Mar 2026
+ 15:55:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260324192120.2959891-1-arnd@kernel.org>
+In-Reply-To: <20260324192120.2959891-1-arnd@kernel.org>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Tue, 24 Mar 2026 15:55:13 -0700
+X-Gm-Features: AQROBzDQZJrTD_T7ZKPT7WtEzu2goAEf-BbMJgaMHMcvkrnz2wCR3Pp47UnOy0s
+Message-ID: <CAKxU2N-ORQZ-jcTAoR1CjS5pKL0q6E-2Ltta+qAcGuwCD2cM9Q@mail.gmail.com>
+Subject: Re: [PATCH] HSI: omap_ssi_port: skip useless NULL pointer check
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git dev/v7.0-rc2/obt
-head:   537858cd27d509ec0dedfa4b96bc1d0e461367b1
-commit: 368a623ca334a5de414be74df0471266c5985152 [2/4] compiler_attributes: Add overflow_behavior macros __wrap and __trap
-config: powerpc64-randconfig-001-20260325 (https://download.01.org/0day-ci/archive/20260325/202603250654.OxFzRiGv-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603250654.OxFzRiGv-lkp@intel.com/reproduce)
+On Tue, Mar 24, 2026 at 12:21=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wr=
+ote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> ssi->port is no longer dynamically allocated, so there is now a warning
+> from clang about the check being always true:
+>
+> drivers/hsi/controllers/omap_ssi_port.c:1121:12: error: address of array =
+'ssi->port' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversi=
+on]
+>  1121 |         if (!ssi->port || !omap_ssi->port) {
+>
+> Remove it, as was done in the hsi core code.
+>
+> Fixes: e61af3ca8933 ("hsi: hsi_core: use kzalloc_flex")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+https://lore.kernel.org/lkml/20260321034117.3746-1-rosenp@gmail.com/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603250654.OxFzRiGv-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:3:
-   In file included from include/linux/compiler_types.h:88:
->> include/linux/compiler_attributes.h:409:10: error: '__trap' macro redefined [-Werror,-Wmacro-redefined]
-     409 | # define __trap
-         |          ^
-   <built-in>:406:9: note: previous definition is here
-     406 | #define __trap __builtin_ppc_trap
-         |         ^
-   1 error generated.
-
-
-vim +/__trap +409 include/linux/compiler_attributes.h
-
-   398	
-   399	/*
-   400	 * Optional: only supported by Clang with -Xclang -experimental-foverflow-behavior-types
-   401	 * passed via CONFIG_UBSAN_INTEGER_WRAP
-   402	 *
-   403	 * clang: https://clang.llvm.org/docs/OverflowBehaviorTypes.html
-   404	 */
-   405	#if __has_attribute(overflow_behavior) && defined(INTEGER_WRAP)
-   406	# define __trap                     __attribute__((overflow_behavior(trap)))
-   407	# define __wrap                     __attribute__((overflow_behavior(wrap)))
-   408	#else
- > 409	# define __trap
-   410	# define __wrap
-   411	#endif
-   412	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Whichever makes it in is fine with me.
+> ---
+>  drivers/hsi/controllers/omap_ssi_port.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/hsi/controllers/omap_ssi_port.c b/drivers/hsi/contro=
+llers/omap_ssi_port.c
+> index 50dde968febe..73932d7257d3 100644
+> --- a/drivers/hsi/controllers/omap_ssi_port.c
+> +++ b/drivers/hsi/controllers/omap_ssi_port.c
+> @@ -1118,7 +1118,7 @@ static int ssi_port_probe(struct platform_device *p=
+d)
+>
+>         dev_dbg(&pd->dev, "init ssi port...\n");
+>
+> -       if (!ssi->port || !omap_ssi->port) {
+> +       if (!omap_ssi->port) {
+>                 dev_err(&pd->dev, "ssi controller not initialized!\n");
+>                 err =3D -ENODEV;
+>                 goto error;
+> --
+> 2.39.5
+>
