@@ -1,100 +1,135 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6D652E8DFC
-	for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 06:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CDA3AF649
+	for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 07:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774335514; cv=none; b=XPneH02BcH+DjBSSdsOaIaXxsxEPcyqoWJ5f1YMNv6KTH4g5ueVeGFzpnMkmdCIsWR4asWSnmZAhuPRwT/iJqA+iSfhdegYgGhVthoJ5Hg4dtt903OnT4q2ciENdArx96XVaSQeoIcJNWICuc6auEeNd31LwvJ3fwpXPn38FJ9o=
+	t=1774337301; cv=none; b=SEWMxRwPWXZesSFfH8PJhp1paPcQjH5IMNn7wTGmyr7GWXvmZZjptF9fxuhOxRMuJap2qX1UGRPQazie2xxnJtF1SH/zoegRtI9f4Rzd1vvOanZYa7oBIpdDTY+MAdfk5K1vw9/oqlrkraLJefuwPKNFQyQtQOsV5qwil/HYkrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774335514; c=relaxed/simple;
-	bh=lQ/mc0vvd2Gt23nmsGc/fXUoUtUsNAdvBalpI0Yyu9Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UcusVWXBhvfIH15pKEPxdTnjBJ7tJlTN7fjlSl5nKeeS+9rb9FfqvDXsOInB8OEYjsfL4uofXf57inXwkN3G6FLCywk6aoxtLNh/73YmZYQ6OftZpZnb9q4xaGi2KQAl4zVkf1IB5mZZ2ORTet7jysGFtku1bpe1/SBwbPS64Wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A8A71476;
-	Mon, 23 Mar 2026 23:58:17 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A87193F63F;
-	Mon, 23 Mar 2026 23:58:22 -0700 (PDT)
-Date: Tue, 24 Mar 2026 06:58:20 +0000
-From: Leo Yan <leo.yan@arm.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Lorenz Bauer <lmb@isovalent.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 5/6] selftests/bpf: Initialize operation name before use
-Message-ID: <20260324065820.GC43072@e132581.arm.com>
-References: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
- <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
- <31243215-918a-4f03-917b-de869b7b7bf1@linux.dev>
+	s=arc-20240116; t=1774337301; c=relaxed/simple;
+	bh=9935aNNQSQsiXYuLACLVcgBUs03N3gemjcUbf0bEKIE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=hBSUEyOZDfVbvSLIBL0YiQdIQhnY2/iTpxXaiHGuZQFCNsYD/kXSaaBLpG/UOG/wWTQFjxYXNYLmttEJJJmzgvZtnHWS9cEWglA5dUggXFIa+scTg2mLzsnIAjXNrLmWllD4sRFuLAIv4qhTRQ+bkfJ57GtEcUExOsfCSxBJ/k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=sTXgekOO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DyYn+RCb; arc=none smtp.client-ip=202.12.124.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="sTXgekOO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DyYn+RCb"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 951101D00022;
+	Tue, 24 Mar 2026 03:28:10 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 24 Mar 2026 03:28:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1774337290;
+	 x=1774423690; bh=WsgImSphwgKtJLr9aZyE1zO9zb0v904xqgk9dOrxycM=; b=
+	sTXgekOOBGfVABvr5F49sQHdiUjCFSvxMLwU91L5dJ0hO7vb23QuVRi1yMBKnCtc
+	Y0hVMSgKZnKDyU4yARFKRyrewVzvLh4sBA2jqtOQP2+feWJOn8YcNdtnhGtxex86
+	XMvEPPvcc/d505kwk/92mEQ9EGRs5f8iHdDRRifLPezwm9PDddjOv41IkfSKfSbL
+	c29wM+wG88KWuLs0+7p59drWXDeCh3qr12hMo1TCpZ6Lxjh4dj2J91RanLG1vVBE
+	iM6p8f/nAAvpfYDedOSSwPaPQldrNkSA7C1NudxxiFxOzC8VQHbt4nXRc556VjdF
+	bDfTS5rbc9xE3ZQc82teYw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774337290; x=
+	1774423690; bh=WsgImSphwgKtJLr9aZyE1zO9zb0v904xqgk9dOrxycM=; b=D
+	yYn+RCbKrus5/2S0ttN1Kky8v1i4berXXoP+4Lz34rbaMcoVNlJFM+OiscqQ9oN7
+	7ZmVY7upJM7Czwa5Y/Dkns5aXTTYsL4VURKqFf8qS4nbHl0KWINYyz8p6PVqiamP
+	AOo9IDGpOQpgX4dfBmmrMBe/LyXp+x9f1U7pHvYkxllix0oMkh9kT5EXEQekrZQW
+	9gGnU2tag8cygNMvSUjvC0kiUWCZQahe0c35m705Yx5uIHaO64Msw70VtEbiyqkJ
+	Y0YWLoU+TuO8BrH7GKTAmM1tk//RdRLGhlwEI00vmR1Wc+WjxIZQjrPayS/H9Evt
+	aI+h8FogwlObnrYt2imlA==
+X-ME-Sender: <xms:CT3CaR3Aqg8B_ehwA-Cd5e4kaJPt0xMdzwyFEsUyTO7iCDZCY_1stA>
+    <xme:CT3CaS6umDBVdWlVLVM-zhBzi0JiSljBP110HO0ugemQIr_n406bn-TzUSV36Cgjm
+    6XEjPtjlRDrnNsAb2jqgeT8Aalsww_LQGQ0Xf5iO21tC1m7r9mWQjQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefvddtleekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudeipdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopeguvghnnhhishdruggrlhgvshhsrghnughrohestghorhhnvghlih
+    hsnhgvthifohhrkhhsrdgtohhmpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgv
+    rhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhith
+    htsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtgho
+    mhdprhgtphhtthhopehmihgthhgrvghlrdhjrdhruhhhlhesihhnthgvlhdrtghomhdprh
+    gtphhtthhopehmihhkvgdrmhgrrhgtihhnihhsiiihnhesihhnthgvlhdrtghomhdprhgt
+    phhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvohhnsehkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopehmihhnghhosehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:CT3CaX5YYj7C0FiL4IUjJ9UFGuPYJ6-0T5qMPLAKEkvx9sTjY45mVA>
+    <xmx:CT3CaWQt75SdCgTGxZJsBCfh5n4BvTWhlNogj_AKLL8sFAXF21LQ9w>
+    <xmx:CT3CaW9pzawDXlZiKjpI-cZ38t8RbV4CRA3SM2lktbVMZ2JdrqidRA>
+    <xmx:CT3CaXocvNByBARs-rlxlhHySBEoYUBsyh7iiOl_27N1wxu69rcw_w>
+    <xmx:Cj3CaYmV2kUdZ_Sl0AEKTVLUOp26bHB4_48Lc_DLXaisxyottZZE_tPp>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 34E5F700069; Tue, 24 Mar 2026 03:28:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <31243215-918a-4f03-917b-de869b7b7bf1@linux.dev>
+X-ThreadId: AhovTUn8f-P3
+Date: Tue, 24 Mar 2026 08:27:45 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Dennis Dalessandro" <dennis.dalessandro@cornelisnetworks.com>,
+ "Leon Romanovsky" <leon@kernel.org>
+Cc: "Arnd Bergmann" <arnd@kernel.org>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Mike Marciniszyn" <mike.marciniszyn@intel.com>,
+ "Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+ "Doug Ledford" <dledford@redhat.com>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Marco Crivellari" <marco.crivellari@suse.com>,
+ "Ingo Molnar" <mingo@kernel.org>, linux-rdma@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Message-Id: <4b177986-dc77-4d0a-95a9-329ef62c1c94@app.fastmail.com>
+In-Reply-To: <8f060e86-5727-4cf6-ac03-7f7174b5a9fd@cornelisnetworks.com>
+References: <20260320151511.3420818-1-arnd@kernel.org>
+ <20260320151511.3420818-2-arnd@kernel.org>
+ <6b56c476-86fd-4d43-8dee-c7f89d346941@app.fastmail.com>
+ <20260323080848.GF814676@unreal>
+ <5d5f25fc-e522-4131-ae4b-22db57b92d6e@app.fastmail.com>
+ <20260323110144.GG814676@unreal>
+ <8f060e86-5727-4cf6-ac03-7f7174b5a9fd@cornelisnetworks.com>
+Subject: Re: [PATCH 2/3] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 23, 2026 at 03:52:38PM -0700, Ihor Solodrai wrote:
-> On 3/23/26 8:40 AM, Leo Yan wrote:
-> > ASAN reports stack-buffer-overflow due to the uninitialized op_name.
-> > 
-> > Initialize it to fix the issue.
-> > 
-> > Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_BTF_LOAD command")
-> > Signed-off-by: Leo Yan <leo.yan@arm.com>
-> > ---
-> >  tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> > index aaa2854974c0a91cbbb9fc13ae0f966de1bcc818..dcbe2ef995c5b211c2b86b9555c02144e11ee7d6 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-> > @@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
-> >  	res = load_btf(&opts, true);
-> >  	ASSERT_EQ(res, -ENOSPC, "half_log_fd");
-> >  	ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
-> > +	snprintf(op_name, sizeof(op_name), "log_fixed");
-> 
-> You should use strscpy() here.
+On Mon, Mar 23, 2026, at 22:47, Dennis Dalessandro wrote:
+> On 3/23/26 7:01 AM, Leon Romanovsky wrote:
+>> On Mon, Mar 23, 2026 at 09:48:59AM +0100, Arnd Bergmann wrote:
+>>> - The use of INFINIBAND_RDMAVT seems unnecessary: right now
+>>>    this is only used by hfi1, now shared with hfi2 but later to
+>>>    be exclusive to the latter. Since it is unlikely to ever
+>>>    be used by another driver again, this may be a good time
+>>>    to drop the abstraction again and integrate it all into
+>>>    hfi2, with the old version getting dropped along with hfi1.
+>> 
+>> The best approach is to drop rdmavt as well, since hfi2 is expected to
+>> align with the other drivers in drivers/infiniband/hw.
+>> 
+>> Dennis, is this feasible?
+>
+> Feasible yes. I'd like to get hfi2 crossed off the list and in the tree 
+> first though. Then come back and do that. I'd like to do more than just 
+> plop rdmavt inside hfi2 and call it a day. There is a lot of code 
+> cleanup/simplification that we can do.
 
-Sure, I will change to :
+Does rdmavt have its own user-space ABI? If there is anything that
+you'd want to change, this might be the one chance to do it, otherwise
+I see nothing wrong with integrating it only after hfi1 is gone.
 
-  strscpy(op_name, "log_fixed", sizeof(op_name));
-
-> This patch looks very unrelated.
-> Did this surface only after the changes in the makefiles?
-
-Yes.  This change fixes ASAN error reported by BPF CI:
-
-  https://github.com/kernel-patches/bpf/actions/runs/23239705647/job/67554431963
-
-Thanks,
-Leo
-
-> >  	ASSERT_STRNEQ(logs.buf, logs.reference, 24, op_name);
-> >  
-> >  	/* validate rolling verifier log logic: try all variations of log buf
-> > 
-> 
+      Arnd
