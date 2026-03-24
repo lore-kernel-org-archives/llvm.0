@@ -1,152 +1,153 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1599F313E29
-	for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 15:48:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B0B37A48B
+	for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 15:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774367311; cv=pass; b=kDRL0ZZHcKp60jAAbcIVoCdfQJ9jwsafNpHonE+N9S+mpSUoDO/n61PDtvD0Iyc5M52rF7VepmBaN8Vzhoaxd8KiS5J1494AhfoExf0KlrblOLXGqrqUWCVBhyISokBSesBIjYE5tzU2YCyHeaxkQvB2em0/nlf5MOqnvB70VLY=
+	t=1774367737; cv=pass; b=hQL823Ao8Q6uG4neKHH4gn5fkIsSuOla/ACkGqCuZQ0DJ48GaxtOBVXlx3A9fhtK5kyZLQa9WgRA2qESjGXFbO7hhRyptUlA0kdN3lH80DdWhCCdT9fSlQtSxBZZL6Xqbh0NvCUbl528BB341zlLxRJR910Nu/V2EBSKyTeIyyE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774367311; c=relaxed/simple;
-	bh=tJPxU0Gg3Dyf943OK62CjG33u0vQFjzQ1yhEmWLl/24=;
+	s=arc-20240116; t=1774367737; c=relaxed/simple;
+	bh=agkUattKYKS6hTX3T/qy79TAvmS3mkdNShYWcGbK5XY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qiGjBg84m1ZUUCc6wWIl5eOunvYFNXulFnToVqxFmwcVUzr6Jy3HFVFXnQ2qCQwMxl5q/xM8EkUAGacM3H6XaB9MrO3qf3CGhQKy17ub/Re7lZHiT75RiN0rw/QKaBC09TywPd8qPLAJC7A+/FXUtdtoh/HD6av6MhkBKoC9zVE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OihaZYp4; arc=pass smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=As5TKoT3EiPGrhhEYNSGUt0xXVe4Jyz3Cm6s2uBavkqB+kWkWGi269WHIu3iZBofyfNKJn8A59jSvooorKexfbDQ0eeMrLEp5ab1Pg7HE4cBvVsniGejAaQOYXuV6Yn+1q5QFGO01cobRgHiSt6uCAujacUow7mXkAtBT7GOxnA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o52tYuPO; arc=pass smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OihaZYp4"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-667365131b0so12888a12.0
-        for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 08:48:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774367308; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o52tYuPO"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-439b94a19fdso3853305f8f.0
+        for <llvm@lists.linux.dev>; Tue, 24 Mar 2026 08:55:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774367735; cv=none;
         d=google.com; s=arc-20240605;
-        b=jh1Zyhx9ofBOu5V6M2ON1CRK9jEyNly3ORoBPfmZah7qw+q6zWxVN9OFzDmvOWAewk
-         tZT5PKsG/6Xa3iRPnHtwAmBSoJWYBvWPLVS8MWZBcO9Hqk/Ub4w3m21QrHNyUE+zNFd4
-         MPBhdqF16u/QvhPkFBcKS7PEd2HPmHLi/18REZW7icmL23etdkggV/p3FBZpGd4qoLSc
-         Hm8pYXMygUWXsOWQmb1pggUAI/gwij7mJiDYQQHAJxN/Gowo42IW9NlygEOzUHC2TI/k
-         vusUeMVhCGmfTXeMtyKyL0WXE3fDTiLp7EEmNN/hjecKYzDepL802d60hp44iHddu5TB
-         2VBg==
+        b=VsejhT/rbf13wE6cyqXi4oopIwXuxe9JK80rlPfYYOljKYiL4c+Qce+xuAQRd4uyUR
+         vg+511L/6A8gFC9kmIjK0jSgcb1OXTQuWyW9dpw69OaeiWpv3MLM3aQSQS10jpXfvpxq
+         SDqDT6zyE0BDlX4xJgb8Iw8SE/HtqzBjosaAx8VqeW3VXnXj/TKG8bjbh0Q3T46OfNJO
+         T3idG3fCoETOPRvnZalrL3YSf9VcQuxM5M+OpS6zYQjZdvONlC3nI1EUnd0uXNu1KiGL
+         eCYDu+PqQ7j1nNYk3KKh2ZNrUhe4SqzFaZ2+d+7jkhMYr7Gj2B9suArht9xYQ80+f28I
+         SOyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=wK0GwFw5xGkP6qesBY1xpEPNZBozvuFve9qGb/f0LkU=;
-        fh=LNetYzd2jtNBsleRq+jynnLaewH29Y+/MqOaHm3vRbk=;
-        b=LYJkxWiIVqVZFQyfV7yorwzutADaT/tsDkgb94IXLUN+rp+0tDm2bQOb4MS9w9vZXi
-         OBZWoYm2GYtYkWy4Bm3EHTfSshYiyNoPSSr5TL1OG84iK11l0cMOMWW8dtWEnvGqhIoq
-         iFClprhD/laAF/hAkS95sDzZWL+mjAkjHDQsB9rmZrXFpp31TbeWzy7mLZPZBg5oh/oo
-         JpM5xi1Cz0abWJMDIDOmCxHu6GdCTP9Xa2hsZtEtlpygmBA1KdsUYSgCK3n/Tm9FJ+1u
-         TwNV+rDcHf0pQ80faf935obgqXAp78vL9aFEg/f8/yoS/kVF3B5vj28JfTacKheyJPdU
-         NRdw==;
+        bh=/3OhNPFF53dFC048CnXCU+MpM/yyzQDjUWEZB/ZZUIA=;
+        fh=RHjoxb5NUn18WrLa8x2oxZ0pbqyhwDDHWhIQtmMus28=;
+        b=X8MPgdRdWGKN4PQNcD3wzT01o13XeItoMz+tJDLTuYGGyirDHlBV9AllKzSWNMBZwA
+         /sOrU1ajEUTe/7jMSfDPYdwCRfIn3adTCZMiqyaoJ2vUAHaRllfv4LK7reiJWD6ZzPQJ
+         dF0uVkYRCvHDPCLRAZHYysrSEAT7mR4EHGiMhlAZO5cLSaWR2GXALnZkLUXaqWSZG0V7
+         xEOklA8Xllboe0KHbb//J9/DyOg5vBKqZrtRI6SpApHwxaCs6GywVfu0pLbJM45KLwIW
+         KVZw7wljDNVBu+vrKYYhsr+nb5VEsqpt3UjiVFJBKvWXGKjpUL4Yp0arGMLYBwJGjR8u
+         sDRw==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774367308; x=1774972108; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1774367735; x=1774972535; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wK0GwFw5xGkP6qesBY1xpEPNZBozvuFve9qGb/f0LkU=;
-        b=OihaZYp4I4Icp5vu2WWxWfHvYu2mmZyTMqFkxWLb0NOOaNjRNppdvYF4z0xcpA5IhI
-         UtuMOMXDmRuLVglfYkQyZfWbOxTeOgA3V8//kQH+uGa1buikvgGi4bPYdyvSlSUqONDe
-         E9oYCxhaVDX6lLXmK6yuWs7V2CyHkF3/ssRhxtuTDl+R7z2izun9Cbl3b1QGh6pjUL08
-         aII2FG1Y68PT0KJz3Ij5G2qwjs+o1qDDEX3rDU2beZvONjitYy1Y4ZlZIPiUyqDZhNrm
-         VRT3JNID7tOjjDHDNHUd4E4b61GaDGh9boyIrAHctaAHkj72eWAHrzPys4SHvmnaK7mu
-         4XVA==
+        bh=/3OhNPFF53dFC048CnXCU+MpM/yyzQDjUWEZB/ZZUIA=;
+        b=o52tYuPOtb7rRfZ5BhEM2IKbemXv/FDQCjcsumfjRarS7o+ZbSjTzEFWTRKj29ZmSS
+         TZdKrODRZbt5rDs5G0vBhuClOlJwPFqtvFFEF1zzMB1sHIBH3TwRpXUF7Z8QT4nZKTvE
+         CFlNE6LOFDHSN+Qmnr3VW9s9Q3RyBpHBXmH3+6XrSK1S8oBUFJYDbjqyvpWnF45UoBp8
+         8Tw/SBiByCEcEyc2tTTnFLFTxVg1zQn0Y8eoj/7MXt+6G7cDQiiNbZfCH5/qqJiDKP1K
+         LhumHa3xaZQ4+G1ZvSEJtBGJfVPAybrF4NPig1yemIMmHMKqTcIiLm7O9OjH8dgvCfAn
+         +WbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774367308; x=1774972108;
+        d=1e100.net; s=20251104; t=1774367735; x=1774972535;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=wK0GwFw5xGkP6qesBY1xpEPNZBozvuFve9qGb/f0LkU=;
-        b=b3zFDDgUbRon0OnHhJKk2PRBmxQHA5v/f+7kmvqmhB8umCznQfjUzpvAhDCX36FoFG
-         wbTy/UaRC7MCbGITkZqwiPlG/FW04/VSnJixNJKNWJooo+7DnW0+CSY1bGD+9oKfYgVv
-         8gd9kNmSAcqXGoIqGlJVtbrZ3x7fsl6AYdTbacDaiqCJrgebTc7hrUGyS0EkuVII2yop
-         HBFBXd3hyL8Ef0M8ihAEhLBxa0Agf+4Kdb5rt5wVXm2YzjFpA8zplqhOUF64Wp2li8qA
-         kWP1II6Kx0LVpXqrivyVOkOifjsgNSbOVLkEsozVVzN6u1CbTdcPKx6qnNWjhYqUEvvL
-         HvbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX8rUuM7S1pbNMa5gyElGMFLF7UhM8o20Pw4g/StpME9vPO2qORPf7e18GxL/XKY3Y0iTpi@lists.linux.dev
-X-Gm-Message-State: AOJu0YzFyQJkuK1zTx0e0eDk4rbsI6EdscmCZaS8XCelMjvmMuz0IM0b
-	X7bQBzjIVyj3HeNRBf0lTjJ4CsfbwUE0YgCM3N2hMQfj28v8FuJPhKpKKF476FiDXJB/VXqTnBq
-	h1asrEBhnkisivk3gJ3ZMjndYbq+hcgRn/20EPSuL
-X-Gm-Gg: ATEYQzxSFZIMNO/4hi9pVNiX1mHtEMMm4Wwe2EZN24Icolu11DM9qu5ZmwGD0UMBIhw
-	9kRNSH3P0URfkN/sqB38up5Oynvzq8ImAI2pZ6qv47Td4D0LYCzfz6HrzxacZfPqzKvusJFrsv0
-	rnFA9gT+fpkgAVPuP7UoatsRpRHDH34xdXhucfFOwduQjN4c3p398LL0p8T/ScrdNtZ4Z7MAMOq
-	wLXdEi++UXUSXyjxVH6Nl8QDpwt6RU0LIVjQlL96JqHTNdUL5W5Rz6SHsue01g4vH65BJMr90ha
-	nHqlKAEQvsp6z5gGVUPQHAUXUUSqH4UXNQPlnQ==
-X-Received: by 2002:a05:6402:b2e:b0:664:d536:82f with SMTP id
- 4fb4d7f45d1cf-66a36f30244mr40660a12.9.1774367307926; Tue, 24 Mar 2026
- 08:48:27 -0700 (PDT)
+        bh=/3OhNPFF53dFC048CnXCU+MpM/yyzQDjUWEZB/ZZUIA=;
+        b=fpym52pO+IkWb5YjCyll2lAAP+N2Fjo2LNgCJtj0kcM1YSGNKCY3gcbqPBu3GnDSac
+         mehLMJA+3po6Vw9Ms2+1IJPbQ26psKOkqSQZXeGy5Mw6ccryli0sH6xqiTZgIJ9xLGc+
+         dWElQ7+sWtcoDpl4tAAgZNaZz01/RUKOS0h1SCdAp2uNrcjZzs+M7l8ax3aJDTXSviDk
+         oXiuO3x1SElTLx4x3/s+lx292HgGcJo1T8iP+PBNWj9FhH/y9PKZwbiusJ5uUcLpu0zO
+         LJnpb5HBRBRkuJCO8WtM77tZ3is9FoF5zDsBrAmjHgfRqNZhwKXr7rIbeMTvZ7130PI9
+         sAWA==
+X-Forwarded-Encrypted: i=1; AJvYcCX8WsyP5Q2CUO0Kb8HbWDdPSUJnZilcS/aw+ywZpaXVejullf7OV8ctpfikbGQMkmxP2xQ8@lists.linux.dev
+X-Gm-Message-State: AOJu0YwXgoD08wekanLx0j9uLVQ9l/Mdvp2V8o9nYTbUzJVYHh25NB5r
+	lginXDvoKzn8UdUl6XSSfZ07aZNjvPXgVE+IIaSOeBm2qPYd4Wg4sk/qhtKhVDhCjdFwec9AB1W
+	FL2i3BLngVlnnJskespH6MVm6oi7+qt0=
+X-Gm-Gg: ATEYQzxFamB+5vqQRgxERoQsF+qvTssGV7tlE+rtaDhAgpDjrWq2g9LsmHyQ99oK8y5
+	+74A2OAtPCmwMUfv+htsJdP5FIgQrRg6QWtvD0cHR6PdzGeX1pLM05fdYuLC4UDia+9gbaCLzbw
+	mJ927TPbCbySlKPP6KKteMozkmD5y3ug7Jw+/Ndp2Lsp9vSa73VREQhpvdaPFS7ptaFUv8Wp2OI
+	zEgDQV56RaVpob1RNHnBoSIFclOg7mx/h9xFEZgNwMC5giqbWoDVuV3qzfwS5elrzmFZE8+VkRB
+	DxCMNKl9MPRan3HHjqrmzWLtGMTj0lYougDQHdvTLhsytJBTDCTt8GiMN6pALL6e9tEQ/IVEl+a
+	u3plaHG+TDrPzMEYCX/CKRqdde+Sk37LRpvvJ
+X-Received: by 2002:a5d:5d0b:0:b0:43b:447a:11b8 with SMTP id
+ ffacd0b85a97d-43b8899533cmr19587f8f.6.1774367734362; Tue, 24 Mar 2026
+ 08:55:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260318-kcov-extrecord-v2-0-2522da6fcd3f@google.com>
- <20260318-kcov-extrecord-v2-1-2522da6fcd3f@google.com> <20260320221051.GX3738010@noisy.programming.kicks-ass.net>
-In-Reply-To: <20260320221051.GX3738010@noisy.programming.kicks-ass.net>
-From: Jann Horn <jannh@google.com>
-Date: Tue, 24 Mar 2026 16:47:51 +0100
-X-Gm-Features: AQROBzD0DnglHVb8-ByMtnVNT5Ct2AVAffTes8sa6Q6hl-dUpIrA65aAUcBh-G8
-Message-ID: <CAG48ez1W_iJsfF0nrJqtV9sBvnxG9VHJ0zhhRi-6+kKiwyWemA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] sched: Ensure matching stack state for kcov
- disable/enable on switch
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Alexander Potapenko <glider@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
-	Ingo Molnar <mingo@redhat.com>
+References: <20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com>
+ <20260323-tools_build_fix_zero_init_bpf_only-v1-5-d1cfad2f4cd1@arm.com>
+ <31243215-918a-4f03-917b-de869b7b7bf1@linux.dev> <20260324065820.GC43072@e132581.arm.com>
+In-Reply-To: <20260324065820.GC43072@e132581.arm.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 24 Mar 2026 08:55:23 -0700
+X-Gm-Features: AQROBzC5IXAEUJFbmA8caaR_jFD39ZGF7akzX-go1yOK6QjtBXhXNQ_zLdejUkM
+Message-ID: <CAADnVQKJLO+7NnbPvmTraZr8hq8ENSh2f85a21b717ye=NgpUg@mail.gmail.com>
+Subject: Re: [PATCH 5/6] selftests/bpf: Initialize operation name before use
+To: Leo Yan <leo.yan@arm.com>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Lorenz Bauer <lmb@isovalent.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 20, 2026 at 11:10=E2=80=AFPM Peter Zijlstra <peterz@infradead.o=
-rg> wrote:
-> On Wed, Mar 18, 2026 at 05:26:58PM +0100, Jann Horn wrote:
-> > +     /*
-> > +      * This has to happen outside finish_task_switch() to ensure that
-> > +      * entry/exit records are balanced.
-> > +      */
+On Mon, Mar 23, 2026 at 11:58=E2=80=AFPM Leo Yan <leo.yan@arm.com> wrote:
 >
-> That's not exactly right; the requirement is that kcov_prepare_switch()
-> and kcov_finish_switch() are called from the exact same frame.
+> On Mon, Mar 23, 2026 at 03:52:38PM -0700, Ihor Solodrai wrote:
+> > On 3/23/26 8:40 AM, Leo Yan wrote:
+> > > ASAN reports stack-buffer-overflow due to the uninitialized op_name.
+> > >
+> > > Initialize it to fix the issue.
+> > >
+> > > Fixes: 054b6c7866c7 ("selftests/bpf: Add verifier log tests for BPF_B=
+TF_LOAD command")
+> > > Signed-off-by: Leo Yan <leo.yan@arm.com>
+> > > ---
+> > >  tools/testing/selftests/bpf/prog_tests/verifier_log.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/=
+tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> > > index aaa2854974c0a91cbbb9fc13ae0f966de1bcc818..dcbe2ef995c5b211c2b86=
+b9555c02144e11ee7d6 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+> > > @@ -317,6 +317,7 @@ static void verif_btf_log_subtest(bool bad_btf)
+> > >     res =3D load_btf(&opts, true);
+> > >     ASSERT_EQ(res, -ENOSPC, "half_log_fd");
+> > >     ASSERT_EQ(strlen(logs.buf), 24, "log_fixed_25");
+> > > +   snprintf(op_name, sizeof(op_name), "log_fixed");
+> >
+> > You should use strscpy() here.
 >
-> The wording above "outside finish_task_switch" could be anywhere and
-> doesn't cover the relation to prepare_switch().
+> Sure, I will change to :
 >
-> > +     kcov_finish_switch(current);
-> > +     return rq;
-> >  }
+>   strscpy(op_name, "log_fixed", sizeof(op_name));
 >
-> That said; there was a patch that marked finish_task_switch() as
-> __always_inline too:
+> > This patch looks very unrelated.
+> > Did this surface only after the changes in the makefiles?
 >
->   https://lkml.kernel.org/r/20260301083520.110969-4-qq570070308@gmail.com
+> Yes.  This change fixes ASAN error reported by BPF CI:
 >
-> Except I think that does a little too much for one patch.
->
-> Anyway, I'm a little divided on this. Perhaps the simplest and most
-> obvious way is something like so.
->
-> But what about compiler funnies like the various IPA optimizations that
-> can do partial clones and whatnot? That could result in violating this
-> constraint, no?
+>   https://github.com/kernel-patches/bpf/actions/runs/23239705647/job/6755=
+4431963
 
-Ah, good point, bah. And commit 0ed557aa8139 ("sched/core / kcov:
-avoid kcov_area during task switch") explains that we also can't just
-keep emitting kcov records throughout a context switch.
-
-So options I have are:
-
-1. In the scheduler: Try to put enough magic annotations on __schedule
-to prevent any such optimizations. (Probably "noinline __noclone"?)
-But that's kind of invasive, I assume the scheduler wouldn't want to
-have that unconditionally on a core function because of a niche KCOV
-usecase.
-2. In KCOV (without touching the scheduler code): Keep track of the
-current and minimum stack depth while record generation is suppressed,
-and emit those values when record generation is reenabled. That's a
-bit more complexity but keeps it contained within KCOV, and I guess a
-way to suppress events might be useful for other stuff too.
-
-I guess I'll probably go with option 2...
+When you respin please use [PATHC bpf-next v2] subject.
+Otherwise CI doesn't run all tests.
