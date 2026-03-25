@@ -1,103 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE7B3C344E;
-	Wed, 25 Mar 2026 12:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F32C19E7F7;
+	Wed, 25 Mar 2026 12:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774441350; cv=none; b=lofEW6nBLAu+RtKXbTZxpY3JiLJrxQO6deDKnQPaEyJpOM2yYIUni488b4OLs+BfcXoiz/ORY5WRYWnhAMOy67ne0nxE7sTZY1/GBjduj7uAgTu5et0MCGLwbormg9j5fyqWhc7LZn4Yfs92OZq9LQ0kmgqT/7PRF7CbmjoWvBU=
+	t=1774441897; cv=none; b=eyaWkLHj0LB+omI81LpogyJ9qh9SfGyKaCrMNRnOre1CSD8gMkXIXX3Q1jpJTraWcYcVg9mUQEUQAXjOjsR3lbBrSmXWzUdgnUOaAwhosaRjrkDyoxWbXD0+cWb52Ibbj8yFm2x2/YIB5iq4a1V6MPdGaKIZwEH77NOOxpfB+D8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774441350; c=relaxed/simple;
-	bh=jR++UhQwlnzd6tQ1GyMO+/4oIFawypTF5Dxm1zLj5gY=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=QNyHbCFPUBrsYHO0Bdyw89OTSKuyYjhvmnys0UGW1/wtpK+QCVRA95SnY42BM8vV0mG//WPgRKWNEd2JHS5E4CUyUIX7SQQXm1J2z287wl/zp3kNjHBAQXPnlXiUjFzC3WMn+X+QZgXytA7e0xtgiEn3oFdryguJHWvKRLZoQ8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PM33kyn8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774441897; c=relaxed/simple;
+	bh=KJ5Xqvb2OG1R7yYsNeFHe2+aJkViXBJd9c9qkEO48B4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G0Iy6wvEiiUTPhg4hyucl4v9wh3zNb/QggZtLF+vJ3FO+IQhSapfd9XW8QJ1k0uW3byr+Lqs8nmRihAiXL4JapD3bbU9nKzKdcCFBy942OnsVHAjDUh8DQXiOOm91cAwTDs1BTgrOyH6K75/Q6g0hgwDlKG/D+jIQtVchMo1mYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l0aOVehQ; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PM33kyn8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DA4C4CEF7;
-	Wed, 25 Mar 2026 12:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774441350;
-	bh=jR++UhQwlnzd6tQ1GyMO+/4oIFawypTF5Dxm1zLj5gY=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
-	b=PM33kyn8vitYaRmDSHgKSEHxqs8XTeSaT9T3kixyJCkqUq2/P6SEq0HmjRvoGiivw
-	 4Ypu0ffZINEuqVXrtH6WPJamQ9hI23CKlJdcfwQryS9r3jCUnc/vx01Te3i+f1Fi9+
-	 hX4rhDtkQGJoSDT8o1e9KbOB4FvXPY1WqP79Z43QXnsgLe8SV2/GvVdj4LY4DgfXhY
-	 jmRRUq4x5onfkLBeP5woSaxH8z2YI7qYI+cCoWbrql7Opj4C2KO76EylQtUqb95j3D
-	 BttdjOCJJ/Hp2B86cy9jXleGoqkLkZnqvaTylp0jQDzZZ+tVo0F2wKcGO4ZToY77M3
-	 gIojBL+hhGtvA==
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l0aOVehQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774441897; x=1805977897;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KJ5Xqvb2OG1R7yYsNeFHe2+aJkViXBJd9c9qkEO48B4=;
+  b=l0aOVehQncRKY8PBmY39rPVCEelMmx7LmCnRlpyJNTN5ywryL7SHaX93
+   9gSPMmheMe2XKmmfeL6cj1iDM101bZpDNryWBGIVxigWCM0O+wAnYChii
+   5MHpBThCCDrOBNuzCpbBU01tbFhRfTjFeu2IW5oRAgRPOOjelHRXkgkfo
+   QpUVnU9qv2ORAHLMBMlXG1ldEhM7sFP4l8EtQq/+QXhjMBdrdeq3LBCgJ
+   Y7n3NGXydBobbogpooNLi5zifdnTLnrgKHigUNQDpF8PAlprMlkxhaMnr
+   GjNkVMbiuHaJQd0J1owWbrN2hBFz00HWClfilB7YDB2th1rz6S5iF5BjX
+   w==;
+X-CSE-ConnectionGUID: mVZx3ovsRayE+E0luH67BQ==
+X-CSE-MsgGUID: iM/m+oHHQO6V+iavHLBr3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75364094"
+X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
+   d="scan'208";a="75364094"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 05:31:37 -0700
+X-CSE-ConnectionGUID: H+EfNkIHT0GjZldPbtfawQ==
+X-CSE-MsgGUID: Y6+AxHyvTA+3Fz5C8oA0JA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
+   d="scan'208";a="248184779"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 25 Mar 2026 05:31:33 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w5NOU-000000006oL-31qE;
+	Wed, 25 Mar 2026 12:31:30 +0000
+Date: Wed, 25 Mar 2026 20:30:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+	borntraeger@de.ibm.com, frankja@linux.ibm.com, nrb@linux.ibm.com,
+	seiden@linux.ibm.com, gra@linux.ibm.com, schlameuss@linux.ibm.com,
+	hca@linux.ibm.com, david@kernel.org
+Subject: Re: [PATCH v3 8/9] KVM: s390: vsie: Fix guest page tables protection
+Message-ID: <202603252045.f3Juk9sU-lkp@intel.com>
+References: <20260324174301.232921-9-imbrenda@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v6 1/2] kbuild: move vmlinux.a build rule to
- scripts/Makefile.vmlinux_a
-From: Nicolas Schier <nsc@kernel.org>
-To: xur@google.com
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nicolas.schier@linux.dev>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Miguel Ojeda <ojeda@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Alice Ryhl <aliceryhl@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
- Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
- Stafford Horne <shorne@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Piotr Gorski <piotrgorski@cachyos.org>, 
- Venkat Rao Bagalkote <venkat88@linux.ibm.com>, 
- Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
- Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-In-Reply-To: <20260316212930.120438-2-xur@google.com>
-References: <20260316212930.120438-1-xur@google.com>
- <20260316212930.120438-2-xur@google.com>
-Date: Wed, 25 Mar 2026 10:35:43 +0100
-Message-Id: <177443134349.415036.1506063887331719503.b4-review@b4>
-X-Mailer: b4 0.16-dev-ad80c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=571; i=nsc@kernel.org;
- s=20250924; h=from:subject:message-id;
- bh=jR++UhQwlnzd6tQ1GyMO+/4oIFawypTF5Dxm1zLj5gY=;
- b=owEBbQKS/ZANAwAKAQdSCnAWJhJpAcsmYgBpw6x0/rvVkQEUJ/tO5TepgqoorIVso1ZJNpQOA
- g4MRKedwU+JAjMEAAEKAB0WIQSHQTenhzckp4G+wsYHUgpwFiYSaQUCacOsdAAKCRAHUgpwFiYS
- aeVDEADZMN8E6KRDDLcUW0koW04uz43MDa7i+cWO4iRXlV5HywppmYhzEPrleulMxhdLuD19JvS
- 7T3fy/YkZX/uOa+wPuV0cWTRGgDjXfT3hShkVnltVldX8nyprv0VyI56Mo87YmoCxPoyQeM1OWI
- DI7f+OQ2H8odwa2MyubsprN3CBIoJzeFp0y8GejAvcxzky3XG09nJCBRkMTAqgsFkrgVacyZgJe
- ZUc5Q4fRCKa+GmAScM70+CtgF+GZk+QxrAQXx87kXUflwvJ+4dkWI+RsrK8RbWjYbcXX0K3z8Kb
- 7Cp/EeKQmIkQbv6qfzAKNRnAKqIgnOE52/WowRa6GyPVq4gvCxh8WdE2ebJNce+EMsUdWcwJpMY
- 7ycB1pSASKKxMoiQQue5WXNKbAb7kquUE6YryvusarHhd657JWQSPpZpEZxxNzFjnxoZECbO9k3
- sCfrPvSQtXJD0OQ3Zmn1T1MJMhqJs/6d7P5JhDwJsOWtvuCK5z+rQ97YxJ6YThW931jC7dstp5k
- bx8gy1Lp4eAZZlXYmd8pwW/Z0TqESm04iCzZC60+fRa42U3UcEqMzxGELGUdpwPDVO5hBuif+xY
- A3LITeDAV+StjbSVei0CtS7CHhN77ZnMOLxjIiEkFSGqrl+A5d0C4Q8Gn5cGwmJqSvy5YnHcHZa
- SbGNh+mG1n5L/Jg==
-X-Developer-Key: i=nsc@kernel.org; a=openpgp;
- fpr=18ED52DBE34F860EE9FBC82B7D97093255A0CE7F
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260324174301.232921-9-imbrenda@linux.ibm.com>
 
-On Mon, 16 Mar 2026 21:29:29 +0000, xur@google.com <xur@google.com> wrote:
+Hi Claudio,
 
-Hi Rong,
+kernel test robot noticed the following build warnings:
 
-> Move the build rule for vmlinux.a to a separate file in preparation
-> for supporting distributed builds with Clang ThinLTO.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Tested-by: Rong Xu <xur@google.com>
+[auto build test WARNING on kvm/queue]
+[also build test WARNING on kvm/next linus/master v7.0-rc5 next-20260324]
+[cannot apply to kvms390/next kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-As Masahiro's original patch is now being modified: I'd like to add
-something like
+url:    https://github.com/intel-lab-lkp/linux/commits/Claudio-Imbrenda/KVM-s390-vsie-Fix-dat_split_ste/20260325-092851
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20260324174301.232921-9-imbrenda%40linux.ibm.com
+patch subject: [PATCH v3 8/9] KVM: s390: vsie: Fix guest page tables protection
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20260325/202603252045.f3Juk9sU-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603252045.f3Juk9sU-lkp@intel.com/reproduce)
 
-[rong xu: change '--thin' back to 'T' in Makefile.vmlinux_a]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603252045.f3Juk9sU-lkp@intel.com/
 
-here before your 'Signed-off-by'.  Are you ok with that?
+All warnings (new ones prefixed by >>):
 
-Kind regards,
-Nicolas
+>> arch/s390/kvm/gaccess.c:1522:6: warning: variable 'gl' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1522 |         if (w->level <= LEVEL_MEM) {
+         |             ^~~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/gaccess.c:1555:10: note: uninitialized use occurs here
+    1555 |         if (l < gl) {
+         |                 ^~
+   arch/s390/kvm/gaccess.c:1522:2: note: remove the 'if' if its condition is always false
+    1522 |         if (w->level <= LEVEL_MEM) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1523 |                 l = TABLE_TYPE_PAGE_TABLE;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1524 |                 hl = TABLE_TYPE_REGION1;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~
+    1525 |                 goto real_address_space;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~
+    1526 |         }
+         |         ~
+   arch/s390/kvm/gaccess.c:1500:22: note: initialize the variable 'gl' to silence this warning
+    1500 |         int flags, i, hl, gl, l, rc;
+         |                             ^
+         |                              = 0
+   1 warning generated.
+
+
+vim +1522 arch/s390/kvm/gaccess.c
+
+  1495	
+  1496	static int _gaccess_do_shadow(struct kvm_s390_mmu_cache *mc, struct gmap *sg,
+  1497				      unsigned long saddr, struct pgtwalk *w)
+  1498	{
+  1499		struct guest_fault *entries;
+  1500		int flags, i, hl, gl, l, rc;
+  1501		union crste *table, *host;
+  1502		union pte *ptep, *ptep_h;
+  1503	
+  1504		lockdep_assert_held(&sg->kvm->mmu_lock);
+  1505		lockdep_assert_held(&sg->parent->children_lock);
+  1506	
+  1507		entries = get_entries(w);
+  1508		ptep_h = NULL;
+  1509		ptep = NULL;
+  1510	
+  1511		rc = dat_entry_walk(NULL, gpa_to_gfn(saddr), sg->asce, DAT_WALK_ANY, TABLE_TYPE_PAGE_TABLE,
+  1512				    &table, &ptep);
+  1513		if (rc)
+  1514			return rc;
+  1515	
+  1516		/* A race occurred. The shadow mapping is already valid, nothing to do */
+  1517		if ((ptep && !ptep->h.i && ptep->h.p == w->p) ||
+  1518		    (!ptep && crste_leaf(*table) && !table->h.i && table->h.p == w->p))
+  1519			return 0;
+  1520	
+  1521		/* In case of a real address space */
+> 1522		if (w->level <= LEVEL_MEM) {
+  1523			l = TABLE_TYPE_PAGE_TABLE;
+  1524			hl = TABLE_TYPE_REGION1;
+  1525			goto real_address_space;
+  1526		}
+  1527	
+  1528		gl = get_level(table, ptep);
+  1529	
+  1530		/*
+  1531		 * Skip levels that are already protected. For each level, protect
+  1532		 * only the page containing the entry, not the whole table.
+  1533		 */
+  1534		for (i = gl ; i >= w->level; i--) {
+  1535			rc = gmap_protect_rmap(mc, sg, entries[i].gfn, gpa_to_gfn(saddr),
+  1536					       entries[i].pfn, i + 1, entries[i].writable);
+  1537			if (rc)
+  1538				return rc;
+  1539			if (!sg->parent)
+  1540				return -EAGAIN;
+  1541		}
+  1542	
+  1543		rc = dat_entry_walk(NULL, entries[LEVEL_MEM].gfn, sg->parent->asce, DAT_WALK_LEAF,
+  1544				    TABLE_TYPE_PAGE_TABLE, &host, &ptep_h);
+  1545		if (rc)
+  1546			return rc;
+  1547	
+  1548		hl = get_level(host, ptep_h);
+  1549		/* Get the smallest granularity */
+  1550		l = min3(gl, hl, w->level);
+  1551	
+  1552	real_address_space:
+  1553		flags = DAT_WALK_SPLIT_ALLOC | (uses_skeys(sg->parent) ? DAT_WALK_USES_SKEYS : 0);
+  1554		/* If necessary, create the shadow mapping */
+  1555		if (l < gl) {
+  1556			rc = dat_entry_walk(mc, gpa_to_gfn(saddr), sg->asce, flags, l, &table, &ptep);
+  1557			if (rc)
+  1558				return rc;
+  1559		}
+  1560		if (l < hl) {
+  1561			rc = dat_entry_walk(mc, entries[LEVEL_MEM].gfn, sg->parent->asce,
+  1562					    flags, l, &host, &ptep_h);
+  1563			if (rc)
+  1564				return rc;
+  1565		}
+  1566	
+  1567		if (KVM_BUG_ON(l > TABLE_TYPE_REGION3, sg->kvm))
+  1568			return -EFAULT;
+  1569		if (l == TABLE_TYPE_PAGE_TABLE)
+  1570			return _do_shadow_pte(sg, saddr, ptep_h, ptep, entries + LEVEL_MEM, w->p);
+  1571		return _do_shadow_crste(sg, saddr, host, table, entries + LEVEL_MEM, w->p);
+  1572	}
+  1573	
 
 -- 
-Nicolas
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
