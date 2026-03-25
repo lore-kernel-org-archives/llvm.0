@@ -1,168 +1,167 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8118B2E401;
-	Wed, 25 Mar 2026 05:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF6C2DB7BD;
+	Wed, 25 Mar 2026 05:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774416252; cv=none; b=ady+V3Um7yhciW8frkdMP6HfQCl0e2koLRv6dagmHuTqxLeVa3AsnFqqIo7Z5SqW9PO79VBeT8K+RSZ9GySp+qAFutlcndfTJlw65Bzm9CbDmG7p7lwJgd2/qUr/88sMn05LY8NI+jG4WLJGSEIhR5yMXL/gaB//g/ZR1nFW7Gw=
+	t=1774416981; cv=none; b=mUfDMWj4WkXaqHTjBWZYc0oljmID0vaPjj4F+PHCOXc8fRY5jCQfyhzfm45yNEuXGFrHLodqGsyKwvFbr0IXug5Ey5MxKoIVxYr1ltImNInX66a/G7RlFitc5T4fyo2RnzMz2CxrUvYz1NiVBSl8oo97HP1pkwfaYqES/CzpzhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774416252; c=relaxed/simple;
-	bh=DQrJC7dyBQ9LgVoCAfL8W6FvWRvjfLA74pprv2ClgI4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=baKeZuQGBB3nWT3yiyDx0epyu1GakeSBMQFkMWGK/W7whDVzSyYbc6E04kfA0UCQtTzman8wWZzpFgY7Q86ANpYppZY+Sn/cX7SGLjU/wfjemKYgJWEYZ+eUXLDMQPc1Z3sd7zYqTa7zY7pjwFWclVugI8+96NjDiMJO2yetejU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FuUS/rDQ; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1774416981; c=relaxed/simple;
+	bh=lw2dF1Jz7k5PP1qT6ep8zHjP8aZcyJlc8wVKL2yCQYc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Vj1K/bVxcQNjw5NFpBp9XMpYKrBZRuorVtiqgVPoOI/MRS1iQdRLYjcoP60qtYzMU//8sl2RD5NQneawpjfGKGymVfnA4Jzb4W4oJb8rwF63M+LhWAFqWaDaY/nfkmjDWAcmVGXej3I2Oi/D6b7/3FTvJvwC7J2PeiND4XJXXs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KgCOyUaU; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FuUS/rDQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KgCOyUaU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774416251; x=1805952251;
-  h=date:from:to:cc:subject:message-id;
-  bh=DQrJC7dyBQ9LgVoCAfL8W6FvWRvjfLA74pprv2ClgI4=;
-  b=FuUS/rDQqBHm6OU1yeE7FPAorLsLMvehZuqyKCVCTktTFagcdyCCWwh3
-   irxotIc0V4FMykjLIsXXaTBPkWJXXiXh1298XDYWZ2qWix7mTfnI3QZA1
-   tbS1up8+HEC49czAmf+d9Hf5FMsO66gIDqOIE1zatQn9vAm8exe1DZLZN
-   bIJtRGfhv81pCyQg+ES9pQshIMNQfME92Dke+rotS2V2qMPwLlF6zGrbE
-   hzOPdsOrlIk13eig4cxLg5qJ2CRb0Jzp27hSirY0sqehCskPtlE6pymym
-   h3qPIULVbkaRoQzcpLjMr27bsnWCNqx++fEcVpRK+uxMxfnLbstdHH3LY
-   Q==;
-X-CSE-ConnectionGUID: R5kETE26SoWDcWfsTwKxGg==
-X-CSE-MsgGUID: SHzKz/VhSuSx3WLvumeqyg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75333115"
+  t=1774416979; x=1805952979;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lw2dF1Jz7k5PP1qT6ep8zHjP8aZcyJlc8wVKL2yCQYc=;
+  b=KgCOyUaUnvExCdxAP3z0t6NB8Kk4C177KXcXjINXICc2qHv4/QmYHsMH
+   bhA0TfQTb2Ab5c08g3HgL2mGbtkOwGioH2fMsQ6YdnNHr+xMLcPauxmpY
+   2NZR1+mmiw7F21TiAjhE+6CiXMnTUgqm/A4E4IcZ8a0EklRGIc1DS1uc7
+   MuWSBQAFQQYGYyLZkrY/j4X28ATOul6vQvhfBijqgl/BS3t18gmncTOiu
+   q30mUmenVGzR0H4jfatHA+xNyyCBGS/OsVR9qBXT/A18MDrABfhR9SW1j
+   TaH8lOmq2FjjdqT8PDOvyi7AdU3dGBiDkxry31/k+chnqlrq3vsB36IQq
+   A==;
+X-CSE-ConnectionGUID: oH3+6+Y+Qoi8cY2mpcr/dQ==
+X-CSE-MsgGUID: 9hXiYxnURaCU3tRxmSaHJw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="86820060"
 X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="75333115"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 22:24:10 -0700
-X-CSE-ConnectionGUID: 7cdP0t8cRjO0giEige8+mA==
-X-CSE-MsgGUID: +cdNCMBXQUS9SH1SIz5a+Q==
+   d="scan'208";a="86820060"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 22:36:19 -0700
+X-CSE-ConnectionGUID: vjaviDabQOKiGJfwMnZY+g==
+X-CSE-MsgGUID: qPYsJTYbT7Cf/v995+SRQw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="226211092"
+   d="scan'208";a="247610019"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 24 Mar 2026 22:24:07 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 24 Mar 2026 22:36:16 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w5Giq-000000006Ej-3sFb;
-	Wed, 25 Mar 2026 05:24:04 +0000
-Date: Wed, 25 Mar 2026 13:23:37 +0800
+	id 1w5Guc-000000006FP-1160;
+	Wed, 25 Mar 2026 05:36:14 +0000
+Date: Wed, 25 Mar 2026 13:35:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chengkaitao <chengkaitao@kylinos.cn>
+To: Simon Richter <Simon.Richter@hogyros.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- David Hildenbrand <david@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-stable 72/140] arch/sparc/mm/init_64.c:2582:16:
- error: call to undeclared function 'vmemmap_pgd_populate'; ISO C99 and later
- do not support implicit function declarations
-Message-ID: <202603251338.grra8xt7-lkp@intel.com>
+ linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Subject: [pci:vga 3/5] drivers/gpu/drm/i915/display/intel_vga.c:68:2:
+ warning: ignoring return value of function declared with 'warn_unused_result'
+ attribute
+Message-ID: <202603251309.Q7UMM0U3-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-stable
-head:   e393ce79b3cf63c2810be882eb6e531a54f520f4
-commit: e504282091c8e4dc4f945c89d9b44ac2e0bfe504 [72/140] mm: convert vmemmap_p?d_populate() to static functions
-config: sparc64-randconfig-002-20260325 (https://download.01.org/0day-ci/archive/20260325/202603251338.grra8xt7-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603251338.grra8xt7-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git vga
+head:   aac641c7e5feb2d966a07f7f5da5ddecb5f07e13
+commit: c75d295afc77223a889bed578e4a686e000c1691 [3/5] PCI/VGA: Mark vga_ge=
+t() and wrappers as __must_check
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20260325/20=
+2603251309.Q7UMM0U3-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f022=
+7cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
+/20260325/202603251309.Q7UMM0U3-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
+If you fix the issue in a separate patch/commit (i.e. not just a new versio=
+n of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603251338.grra8xt7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603251309.Q7UMM0U3-lkp@i=
+ntel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/sparc/mm/init_64.c:2582:16: error: call to undeclared function 'vmemmap_pgd_populate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2582 |                 pgd_t *pgd = vmemmap_pgd_populate(vstart, node);
-         |                              ^
-   arch/sparc/mm/init_64.c:2582:16: note: did you mean 'vmemmap_populate'?
-   arch/sparc/mm/init_64.c:2565:15: note: 'vmemmap_populate' declared here
-    2565 | int __meminit vmemmap_populate(unsigned long vstart, unsigned long vend,
-         |               ^
->> arch/sparc/mm/init_64.c:2582:10: error: incompatible integer to pointer conversion initializing 'pgd_t *' with an expression of type 'int' [-Wint-conversion]
-    2582 |                 pgd_t *pgd = vmemmap_pgd_populate(vstart, node);
-         |                        ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/sparc/mm/init_64.c:2591:9: error: call to undeclared function 'vmemmap_p4d_populate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2591 |                 p4d = vmemmap_p4d_populate(pgd, vstart, node);
-         |                       ^
->> arch/sparc/mm/init_64.c:2591:7: error: incompatible integer to pointer conversion assigning to 'p4d_t *' from 'int' [-Wint-conversion]
-    2591 |                 p4d = vmemmap_p4d_populate(pgd, vstart, node);
-         |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/sparc/mm/init_64.c:2595:9: error: call to undeclared function 'vmemmap_pud_populate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2595 |                 pud = vmemmap_pud_populate(p4d, vstart, node);
-         |                       ^
->> arch/sparc/mm/init_64.c:2595:7: error: incompatible integer to pointer conversion assigning to 'pud_t *' from 'int' [-Wint-conversion]
-    2595 |                 pud = vmemmap_pud_populate(p4d, vstart, node);
-         |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 errors generated.
+>> drivers/gpu/drm/i915/display/intel_vga.c:68:2: warning: ignoring return =
+value of function declared with 'warn_unused_result' attribute [-Wunused-re=
+sult]
+      68 |         vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_vga.c:93:2: warning: ignoring return =
+value of function declared with 'warn_unused_result' attribute [-Wunused-re=
+sult]
+      93 |         vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/vmemmap_pgd_populate +2582 arch/sparc/mm/init_64.c
+vim +/warn_unused_result +68 drivers/gpu/drm/i915/display/intel_vga.c
 
-c4bce90ea2069e5 arch/sparc64/mm/init.c  David S. Miller   2006-02-11  2563  
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2564  #ifdef CONFIG_SPARSEMEM_VMEMMAP
-0aad818b2de455f arch/sparc/mm/init_64.c Johannes Weiner   2013-04-29 @2565  int __meminit vmemmap_populate(unsigned long vstart, unsigned long vend,
-7b73d978a5d0d2a arch/sparc/mm/init_64.c Christoph Hellwig 2017-12-29  2566  			       int node, struct vmem_altmap *altmap)
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2567  {
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2568  	unsigned long pte_base;
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2569  
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2570  	pte_base = (_PAGE_VALID | _PAGE_SZ4MB_4U |
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2571  		    _PAGE_CP_4U | _PAGE_CV_4U |
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2572  		    _PAGE_P_4U | _PAGE_W_4U);
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2573  	if (tlb_type == hypervisor)
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2574  		pte_base = (_PAGE_VALID | _PAGE_SZ4MB_4V |
-494e5b6faeda1d1 arch/sparc/mm/init_64.c Khalid Aziz       2015-05-27  2575  			    page_cache4v_flag | _PAGE_P_4V | _PAGE_W_4V);
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2576  
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2577  	pte_base |= _PAGE_PMD_HUGE;
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2578  
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2579  	vstart = vstart & PMD_MASK;
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2580  	vend = ALIGN(vend, PMD_SIZE);
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2581  	for (; vstart < vend; vstart += PMD_SIZE) {
-df8ee578894ebb5 arch/sparc/mm/init_64.c Pavel Tatashin    2017-11-15 @2582  		pgd_t *pgd = vmemmap_pgd_populate(vstart, node);
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2583  		unsigned long pte;
-5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24  2584  		p4d_t *p4d;
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2585  		pud_t *pud;
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2586  		pmd_t *pmd;
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2587  
-df8ee578894ebb5 arch/sparc/mm/init_64.c Pavel Tatashin    2017-11-15  2588  		if (!pgd)
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2589  			return -ENOMEM;
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2590  
-5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24 @2591  		p4d = vmemmap_p4d_populate(pgd, vstart, node);
-5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24  2592  		if (!p4d)
-5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24  2593  			return -ENOMEM;
-5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24  2594  
-5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24 @2595  		pud = vmemmap_pud_populate(p4d, vstart, node);
-df8ee578894ebb5 arch/sparc/mm/init_64.c Pavel Tatashin    2017-11-15  2596  		if (!pud)
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2597  			return -ENOMEM;
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2598  
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2599  		pmd = pmd_offset(pud, vstart);
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2600  		pte = pmd_val(*pmd);
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2601  		if (!(pte & _PAGE_VALID)) {
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2602  			void *block = vmemmap_alloc_block(PMD_SIZE, node);
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2603  
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2604  			if (!block)
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2605  				return -ENOMEM;
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2606  
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2607  			pmd_val(*pmd) = pte_base | __pa(block);
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2608  		}
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2609  	}
-2856cc2e4d0852c arch/sparc/mm/init_64.c David S. Miller   2012-08-15  2610  
-c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2611  	return 0;
-2856cc2e4d0852c arch/sparc/mm/init_64.c David S. Miller   2012-08-15  2612  }
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2613  #endif /* CONFIG_SPARSEMEM_VMEMMAP */
-46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2614  
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  43 =20
+4fb8783165b7c6f Jani Nikula   2019-10-01  44  /* Disable the VGA plane that=
+ we never use */
+4b6e05c43b7542e Ville Syrj=C3=A4l=C3=A4 2024-09-06  45  void intel_vga_disa=
+ble(struct intel_display *display)
+4fb8783165b7c6f Jani Nikula   2019-10-01  46  {
+4b6e05c43b7542e Ville Syrj=C3=A4l=C3=A4 2024-09-06  47  	struct pci_dev *pd=
+ev =3D to_pci_dev(display->drm->dev);
+4b6e05c43b7542e Ville Syrj=C3=A4l=C3=A4 2024-09-06  48  	i915_reg_t vga_reg=
+ =3D intel_vga_cntrl_reg(display);
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  49  	enum pipe pipe;
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  50  	u32 tmp;
+4fb8783165b7c6f Jani Nikula   2019-10-01  51  	u8 sr1;
+4fb8783165b7c6f Jani Nikula   2019-10-01  52 =20
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  53  	tmp =3D intel_de_r=
+ead(display, vga_reg);
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  54  	if (tmp & VGA_DISP=
+_DISABLE)
+a3af0140663dc33 Emil Velikov  2021-06-04  55  		return;
+a3af0140663dc33 Emil Velikov  2021-06-04  56 =20
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  57  	if (display->platf=
+orm.cherryview)
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  58  		pipe =3D REG_FIEL=
+D_GET(VGA_PIPE_SEL_MASK_CHV, tmp);
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  59  	else if (has_vga_p=
+ipe_sel(display))
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  60  		pipe =3D REG_FIEL=
+D_GET(VGA_PIPE_SEL_MASK, tmp);
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  61  	else
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  62  		pipe =3D PIPE_A;
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  63 =20
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  64  	drm_dbg_kms(displa=
+y->drm, "Disabling VGA plane on pipe %c\n",
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  65  		    pipe_name(pip=
+e));
+0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  66 =20
+4fb8783165b7c6f Jani Nikula   2019-10-01  67  	/* WaEnableVGAAccessThroughI=
+OPort:ctg,elk,ilk,snb,ivb,vlv,hsw */
+4fb8783165b7c6f Jani Nikula   2019-10-01 @68  	vga_get_uninterruptible(pdev=
+, VGA_RSRC_LEGACY_IO);
+f0bb41fad02e031 Jani Nikula   2022-02-02  69  	outb(0x01, VGA_SEQ_I);
+f0bb41fad02e031 Jani Nikula   2022-02-02  70  	sr1 =3D inb(VGA_SEQ_D);
+f0bb41fad02e031 Jani Nikula   2022-02-02  71  	outb(sr1 | VGA_SR01_SCREEN_O=
+FF, VGA_SEQ_D);
+4fb8783165b7c6f Jani Nikula   2019-10-01  72  	vga_put(pdev, VGA_RSRC_LEGAC=
+Y_IO);
+4fb8783165b7c6f Jani Nikula   2019-10-01  73  	udelay(300);
+4fb8783165b7c6f Jani Nikula   2019-10-01  74 =20
+4b6e05c43b7542e Ville Syrj=C3=A4l=C3=A4 2024-09-06  75  	intel_de_write(dis=
+play, vga_reg, VGA_DISP_DISABLE);
+4b6e05c43b7542e Ville Syrj=C3=A4l=C3=A4 2024-09-06  76  	intel_de_posting_r=
+ead(display, vga_reg);
+4fb8783165b7c6f Jani Nikula   2019-10-01  77  }
+4fb8783165b7c6f Jani Nikula   2019-10-01  78 =20
 
-:::::: The code at line 2582 was first introduced by commit
-:::::: df8ee578894ebb591c2995cce422e6189c8bb757 sparc64: simplify vmemmap_populate
+:::::: The code at line 68 was first introduced by commit
+:::::: 4fb8783165b7c6fb4b52428dbb80da8554e5fd1e drm/i915/display: abstract =
+all vgaarb access to intel_vga.[ch]
 
-:::::: TO: Pavel Tatashin <pasha.tatashin@oracle.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+:::::: TO: Jani Nikula <jani.nikula@intel.com>
+:::::: CC: Jani Nikula <jani.nikula@intel.com>
 
--- 
+--=20
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
