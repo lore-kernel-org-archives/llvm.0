@@ -1,118 +1,198 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF33E2459C5;
-	Wed, 25 Mar 2026 04:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4C830AACD;
+	Wed, 25 Mar 2026 04:40:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774412218; cv=none; b=OA/3BirTjKwAMLQaxDhZlUgHFeZ/v/+rNjRaZ++Hz8kXLd9D3QmMvC1qri7fve4u1GwAWZ3aw53V9/G85Xy61I83XrrjV1okXEub5oeFy5gwodx3Ui4mQbIrGCGq1aaPrMOz7QckLsUkTo2tyv7/jhvs/ldLtOL6MqzfcNmUa5k=
+	t=1774413618; cv=none; b=CW4OmB6FXfSJiic26WPqTPsMzo6LLYDJJy3LCtpzDbgFZnK/KgmXP6JeOXxfIMV/Og8CRMMw1sSlPhmvOvavPJEWLzvZmMC1FpMU4ch14hloIbZA1Gtv1WoFsDPOGCbTgvA+9toEPI1gEvfficFv4lwAAQoOoVB9ITTCFHyZAP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774412218; c=relaxed/simple;
-	bh=szsi0JLizE0fjetMbtNt0HLfks0Ov14D3uXe6h43Xec=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=XOrgjX7pK52rtga6vxcYPDMCYV6yPa6iLQeCLOBCaUgDssWY1hF+BersxFFkDAwVcADwUY8HMNDPE6onq8gVTLkyQ34GFqdc2ymK6iVvfszG7Mx1uFPWdsC5ILRqnjle3R9rFljtVDdLVZc9BGbceV7ykMkYGj1emXJz1a7LMcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h7nu/g80; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1774413618; c=relaxed/simple;
+	bh=FdrSZZJWlda4b/iHdGvUBNw53MhgoxQX4XFQbplHhPU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XrXrE1RI2bFxyKgOC3gO6SjxQ3OhvzrtrU2DiznNMubxDwKOFJ/DxWSLjZw15cn9gKTfGHBKoiZIpvmxil/uwo01tFveRJooB5+zrzb+Up6IQwwM7I09YugWqB3D1BynQtQSOby3KF6Zp8FkSssM3Y3eD5tuHsbJyNCFJS8ffqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CI1SNkGD; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h7nu/g80"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CI1SNkGD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774412217; x=1805948217;
-  h=date:from:to:cc:subject:message-id;
-  bh=szsi0JLizE0fjetMbtNt0HLfks0Ov14D3uXe6h43Xec=;
-  b=h7nu/g80jYXy7QaQ0vHEMkElMtvcACNhcNpWl9jM13VSB3KnH25jx2j5
-   ZYs6H+dM2aiTEd5/XKEDwAR/eUNN8iMap6XiibiMcuJG7Gel8F4qAdIzy
-   MPwFqhX8kYYRpYvNUGAPy/ApcWLO0EZHyeeAOxKRkvh7V4wmV0GlNQbOY
-   ZYrUJuslOEkoyrTv5Gxv7zj7JOGeQZgbfSXGJpoljltCml3J+W9Y6ETWZ
-   4HMXEtCwIpWIlRWR0+9ubKqMHIVSNQwTb+7JDbcUt5O/VVePEqC7vz29a
-   kjC9OD87UBDmB60snYwMWJ77cn0wNOo1gUEJezSm7TDnP4PLgFF9UhGBY
+  t=1774413617; x=1805949617;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FdrSZZJWlda4b/iHdGvUBNw53MhgoxQX4XFQbplHhPU=;
+  b=CI1SNkGDRIkKrCxjXp5jLLmqZ0yXEOKUquAULLfmv+jHChlpNc1XWQNq
+   iOQI/KeN35jGhxIB52l7ScPCl8ykDOsMRn0PPAn5YsasB1Hf53Bl0CA4O
+   FG1isnq2Qw3P1NyIpKQNiSzhTQ/fanX8fID5sYPDEZIk4sAmGomA/w0wh
+   yNixwunWMjBAuL3EMaqw+TspqDy7c1yYGn/vBLI/OsN/IX4LgCA3Isn19
+   Y2n/MS3GmUrUVE7i4iobRUw+C4hLw6K74Nza9S4nDLxlozm+owuNGK2KE
+   TPkn00qGhJeezlRA0Ed5FBgQxs/XkTZTrLvoK23r7Z2rsr131U4rHZ/o9
    w==;
-X-CSE-ConnectionGUID: 9LMWgwtQTAmkiSw49zOvhw==
-X-CSE-MsgGUID: /R9Rt8DEQtOTsaGJovykfQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75410459"
+X-CSE-ConnectionGUID: Jfwk1qDSTkm1QnK51uctAQ==
+X-CSE-MsgGUID: X2caJsJDQ+eOq0O55jwfnw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="79351764"
 X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="75410459"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 21:16:56 -0700
-X-CSE-ConnectionGUID: 6aJpSTG9Tkya/J5YT5yrSQ==
-X-CSE-MsgGUID: OTe6wOifQzWJQtgX+iwBgQ==
+   d="scan'208";a="79351764"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 21:40:15 -0700
+X-CSE-ConnectionGUID: ikyhIFZZQWCB7XOgW7Cv+g==
+X-CSE-MsgGUID: 7BUuh80bRCCN7c6107pPyw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="229028607"
+   d="scan'208";a="228633803"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 24 Mar 2026 21:16:54 -0700
+  by orviesa003.jf.intel.com with ESMTP; 24 Mar 2026 21:40:11 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w5Ffn-000000005wF-0jsF;
-	Wed, 25 Mar 2026 04:16:51 +0000
-Date: Wed, 25 Mar 2026 12:16:31 +0800
+	id 1w5G2K-0000000064r-0e7u;
+	Wed, 25 Mar 2026 04:40:08 +0000
+Date: Wed, 25 Mar 2026 12:39:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Robin Murphy <robin.murphy@arm.com>
+To: Carlo Szelinsky <github@szelinsky.de>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Kory Maincent <kory.maincent@bootlin.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Will Deacon <will@kernel.org>,
- Ilkka Koskinen <ilkka@os.amperecomputing.com>
-Subject: [arm-perf:for-next/perf 4/11]
- drivers/perf/arm-cmn.c:2149:51: warning: format specifies type 'unsigned long
- long' but the argument has type 'resource_size_t' (aka 'unsigned int')
-Message-ID: <202603251248.s3JOjeN0-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org, Carlo Szelinsky <github@szelinsky.de>
+Subject: Re: [PATCH v2 3/3] net: pse-pd: add LED trigger support via
+ notification path
+Message-ID: <202603251254.o5PqMBRU-lkp@intel.com>
+References: <20260323201225.1836561-4-github@szelinsky.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323201225.1836561-4-github@szelinsky.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git for-next/perf
-head:   2f89b7f78c50ca973ca035ceb30426f78d9e0996
-commit: 5394396ff5488f007248727988b722c5d4f0638b [4/11] perf/arm-cmn: Stop claiming entire iomem region
-config: i386-buildonly-randconfig-003-20260325 (https://download.01.org/0day-ci/archive/20260325/202603251248.s3JOjeN0-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603251248.s3JOjeN0-lkp@intel.com/reproduce)
+Hi Carlo,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on net-next/main net/main linus/master v7.0-rc5 next-20260324]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Carlo-Szelinsky/dt-bindings-net-pse-pd-add-poll-interval-ms-property/20260325-040935
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20260323201225.1836561-4-github%40szelinsky.de
+patch subject: [PATCH v2 3/3] net: pse-pd: add LED trigger support via notification path
+config: hexagon-randconfig-001-20260325 (https://download.01.org/0day-ci/archive/20260325/202603251254.o5PqMBRU-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603251254.o5PqMBRU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603251248.s3JOjeN0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603251254.o5PqMBRU-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/perf/arm-cmn.c:2149:51: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-    2149 |                                      "Failed to request DTC region 0x%llx\n", base);
-         |                                                                      ~~~~     ^~~~
-         |                                                                      %x
-   1 warning generated.
+>> drivers/net/pse-pd/pse_core.c:1221:10: error: no member named 'pi_led_trigs' in 'struct pse_controller_dev'
+    1221 |                 pcdev->pi_led_trigs = NULL;
+         |                 ~~~~~  ^
+   1 error generated.
 
 
-vim +2149 drivers/perf/arm-cmn.c
+vim +1221 drivers/net/pse-pd/pse_core.c
 
-  2131	
-  2132	static int arm_cmn_init_dtc(struct arm_cmn *cmn, struct arm_cmn_node *dn, int idx)
-  2133	{
-  2134		struct arm_cmn_dtc *dtc = cmn->dtc + idx;
-  2135		const struct resource *cfg;
-  2136		resource_size_t base, size;
-  2137	
-  2138		dtc->pmu_base = dn->pmu_base;
-  2139		dtc->base = dtc->pmu_base - arm_cmn_pmu_offset(cmn, dn);
-  2140		dtc->irq = platform_get_irq(to_platform_device(cmn->dev), idx);
-  2141		if (dtc->irq < 0)
-  2142			return dtc->irq;
-  2143	
-  2144		cfg = platform_get_resource(to_platform_device(cmn->dev), IORESOURCE_MEM, 0);
-  2145		base = dtc->base - cmn->base + cfg->start;
-  2146		size = cmn->part == PART_CMN600 ? SZ_16K : SZ_64K;
-  2147		if (!devm_request_mem_region(cmn->dev, base, size, dev_name(cmn->dev)))
-  2148			return dev_err_probe(cmn->dev, -EBUSY,
-> 2149					     "Failed to request DTC region 0x%llx\n", base);
-  2150	
-  2151		writel_relaxed(CMN_DT_DTC_CTL_DT_EN, dtc->base + CMN_DT_DTC_CTL);
-  2152		writel_relaxed(CMN_DT_PMCR_PMU_EN | CMN_DT_PMCR_OVFL_INTR_EN, CMN_DT_PMCR(dtc));
-  2153		writeq_relaxed(0, CMN_DT_PMCCNTR(dtc));
-  2154		writel_relaxed(0x1ff, CMN_DT_PMOVSR_CLR(dtc));
-  2155	
-  2156		return 0;
-  2157	}
-  2158	
+  1141	
+  1142	/**
+  1143	 * pse_controller_register - register a PSE controller device
+  1144	 * @pcdev: a pointer to the initialized PSE controller device
+  1145	 *
+  1146	 * Return: 0 on success and failure value on error
+  1147	 */
+  1148	int pse_controller_register(struct pse_controller_dev *pcdev)
+  1149	{
+  1150		size_t reg_name_len;
+  1151		int ret, i;
+  1152	
+  1153		mutex_init(&pcdev->lock);
+  1154		INIT_LIST_HEAD(&pcdev->pse_control_head);
+  1155		spin_lock_init(&pcdev->ntf_fifo_lock);
+  1156		ret = kfifo_alloc(&pcdev->ntf_fifo, pcdev->nr_lines, GFP_KERNEL);
+  1157		if (ret) {
+  1158			dev_err(pcdev->dev, "failed to allocate kfifo notifications\n");
+  1159			return ret;
+  1160		}
+  1161		INIT_WORK(&pcdev->ntf_work, pse_send_ntf_worker);
+  1162	
+  1163		if (!pcdev->nr_lines)
+  1164			pcdev->nr_lines = 1;
+  1165	
+  1166		if (!pcdev->ops->pi_get_admin_state ||
+  1167		    !pcdev->ops->pi_get_pw_status) {
+  1168			dev_err(pcdev->dev,
+  1169				"Mandatory status report callbacks are missing");
+  1170			return -EINVAL;
+  1171		}
+  1172	
+  1173		ret = of_load_pse_pis(pcdev);
+  1174		if (ret)
+  1175			return ret;
+  1176	
+  1177		if (pcdev->ops->setup_pi_matrix) {
+  1178			ret = pcdev->ops->setup_pi_matrix(pcdev);
+  1179			if (ret)
+  1180				return ret;
+  1181		}
+  1182	
+  1183		/* Each regulator name len is pcdev dev name + 7 char +
+  1184		 * int max digit number (10) + 1
+  1185		 */
+  1186		reg_name_len = strlen(dev_name(pcdev->dev)) + 18;
+  1187	
+  1188		/* Register PI regulators */
+  1189		for (i = 0; i < pcdev->nr_lines; i++) {
+  1190			char *reg_name;
+  1191	
+  1192			/* Do not register regulator for PIs not described */
+  1193			if (!pcdev->no_of_pse_pi && !pcdev->pi[i].np)
+  1194				continue;
+  1195	
+  1196			reg_name = devm_kzalloc(pcdev->dev, reg_name_len, GFP_KERNEL);
+  1197			if (!reg_name)
+  1198				return -ENOMEM;
+  1199	
+  1200			snprintf(reg_name, reg_name_len, "pse-%s_pi%d",
+  1201				 dev_name(pcdev->dev), i);
+  1202	
+  1203			ret = devm_pse_pi_regulator_register(pcdev, reg_name, i);
+  1204			if (ret)
+  1205				return ret;
+  1206		}
+  1207	
+  1208		ret = pse_register_pw_ds(pcdev);
+  1209		if (ret)
+  1210			return ret;
+  1211	
+  1212		mutex_lock(&pse_list_mutex);
+  1213		list_add(&pcdev->list, &pse_controller_list);
+  1214		mutex_unlock(&pse_list_mutex);
+  1215	
+  1216		ret = pse_led_triggers_register(pcdev);
+  1217		if (ret) {
+  1218			dev_warn(pcdev->dev, "Failed to register LED triggers: %d\n",
+  1219				 ret);
+  1220			/* Ensure pse_led_update() is a no-op on partial failure */
+> 1221			pcdev->pi_led_trigs = NULL;
+  1222		}
+  1223	
+  1224		return 0;
+  1225	}
+  1226	EXPORT_SYMBOL_GPL(pse_controller_register);
+  1227	
 
 -- 
 0-DAY CI Kernel Test Service
