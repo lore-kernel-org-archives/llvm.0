@@ -1,198 +1,167 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4C830AACD;
-	Wed, 25 Mar 2026 04:40:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8118B2E401;
+	Wed, 25 Mar 2026 05:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774413618; cv=none; b=CW4OmB6FXfSJiic26WPqTPsMzo6LLYDJJy3LCtpzDbgFZnK/KgmXP6JeOXxfIMV/Og8CRMMw1sSlPhmvOvavPJEWLzvZmMC1FpMU4ch14hloIbZA1Gtv1WoFsDPOGCbTgvA+9toEPI1gEvfficFv4lwAAQoOoVB9ITTCFHyZAP8=
+	t=1774416252; cv=none; b=ady+V3Um7yhciW8frkdMP6HfQCl0e2koLRv6dagmHuTqxLeVa3AsnFqqIo7Z5SqW9PO79VBeT8K+RSZ9GySp+qAFutlcndfTJlw65Bzm9CbDmG7p7lwJgd2/qUr/88sMn05LY8NI+jG4WLJGSEIhR5yMXL/gaB//g/ZR1nFW7Gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774413618; c=relaxed/simple;
-	bh=FdrSZZJWlda4b/iHdGvUBNw53MhgoxQX4XFQbplHhPU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XrXrE1RI2bFxyKgOC3gO6SjxQ3OhvzrtrU2DiznNMubxDwKOFJ/DxWSLjZw15cn9gKTfGHBKoiZIpvmxil/uwo01tFveRJooB5+zrzb+Up6IQwwM7I09YugWqB3D1BynQtQSOby3KF6Zp8FkSssM3Y3eD5tuHsbJyNCFJS8ffqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CI1SNkGD; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1774416252; c=relaxed/simple;
+	bh=DQrJC7dyBQ9LgVoCAfL8W6FvWRvjfLA74pprv2ClgI4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=baKeZuQGBB3nWT3yiyDx0epyu1GakeSBMQFkMWGK/W7whDVzSyYbc6E04kfA0UCQtTzman8wWZzpFgY7Q86ANpYppZY+Sn/cX7SGLjU/wfjemKYgJWEYZ+eUXLDMQPc1Z3sd7zYqTa7zY7pjwFWclVugI8+96NjDiMJO2yetejU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FuUS/rDQ; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CI1SNkGD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FuUS/rDQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774413617; x=1805949617;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FdrSZZJWlda4b/iHdGvUBNw53MhgoxQX4XFQbplHhPU=;
-  b=CI1SNkGDRIkKrCxjXp5jLLmqZ0yXEOKUquAULLfmv+jHChlpNc1XWQNq
-   iOQI/KeN35jGhxIB52l7ScPCl8ykDOsMRn0PPAn5YsasB1Hf53Bl0CA4O
-   FG1isnq2Qw3P1NyIpKQNiSzhTQ/fanX8fID5sYPDEZIk4sAmGomA/w0wh
-   yNixwunWMjBAuL3EMaqw+TspqDy7c1yYGn/vBLI/OsN/IX4LgCA3Isn19
-   Y2n/MS3GmUrUVE7i4iobRUw+C4hLw6K74Nza9S4nDLxlozm+owuNGK2KE
-   TPkn00qGhJeezlRA0Ed5FBgQxs/XkTZTrLvoK23r7Z2rsr131U4rHZ/o9
-   w==;
-X-CSE-ConnectionGUID: Jfwk1qDSTkm1QnK51uctAQ==
-X-CSE-MsgGUID: X2caJsJDQ+eOq0O55jwfnw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="79351764"
+  t=1774416251; x=1805952251;
+  h=date:from:to:cc:subject:message-id;
+  bh=DQrJC7dyBQ9LgVoCAfL8W6FvWRvjfLA74pprv2ClgI4=;
+  b=FuUS/rDQqBHm6OU1yeE7FPAorLsLMvehZuqyKCVCTktTFagcdyCCWwh3
+   irxotIc0V4FMykjLIsXXaTBPkWJXXiXh1298XDYWZ2qWix7mTfnI3QZA1
+   tbS1up8+HEC49czAmf+d9Hf5FMsO66gIDqOIE1zatQn9vAm8exe1DZLZN
+   bIJtRGfhv81pCyQg+ES9pQshIMNQfME92Dke+rotS2V2qMPwLlF6zGrbE
+   hzOPdsOrlIk13eig4cxLg5qJ2CRb0Jzp27hSirY0sqehCskPtlE6pymym
+   h3qPIULVbkaRoQzcpLjMr27bsnWCNqx++fEcVpRK+uxMxfnLbstdHH3LY
+   Q==;
+X-CSE-ConnectionGUID: R5kETE26SoWDcWfsTwKxGg==
+X-CSE-MsgGUID: SHzKz/VhSuSx3WLvumeqyg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75333115"
 X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="79351764"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 21:40:15 -0700
-X-CSE-ConnectionGUID: ikyhIFZZQWCB7XOgW7Cv+g==
-X-CSE-MsgGUID: 7BUuh80bRCCN7c6107pPyw==
+   d="scan'208";a="75333115"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 22:24:10 -0700
+X-CSE-ConnectionGUID: 7cdP0t8cRjO0giEige8+mA==
+X-CSE-MsgGUID: +cdNCMBXQUS9SH1SIz5a+Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="228633803"
+   d="scan'208";a="226211092"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 24 Mar 2026 21:40:11 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 24 Mar 2026 22:24:07 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w5G2K-0000000064r-0e7u;
-	Wed, 25 Mar 2026 04:40:08 +0000
-Date: Wed, 25 Mar 2026 12:39:30 +0800
+	id 1w5Giq-000000006Ej-3sFb;
+	Wed, 25 Mar 2026 05:24:04 +0000
+Date: Wed, 25 Mar 2026 13:23:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Carlo Szelinsky <github@szelinsky.de>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Kory Maincent <kory.maincent@bootlin.com>
+To: Chengkaitao <chengkaitao@kylinos.cn>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org, Carlo Szelinsky <github@szelinsky.de>
-Subject: Re: [PATCH v2 3/3] net: pse-pd: add LED trigger support via
- notification path
-Message-ID: <202603251254.o5PqMBRU-lkp@intel.com>
-References: <20260323201225.1836561-4-github@szelinsky.de>
+ David Hildenbrand <david@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-stable 72/140] arch/sparc/mm/init_64.c:2582:16:
+ error: call to undeclared function 'vmemmap_pgd_populate'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202603251338.grra8xt7-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260323201225.1836561-4-github@szelinsky.de>
 
-Hi Carlo,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on net-next/main net/main linus/master v7.0-rc5 next-20260324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Carlo-Szelinsky/dt-bindings-net-pse-pd-add-poll-interval-ms-property/20260325-040935
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20260323201225.1836561-4-github%40szelinsky.de
-patch subject: [PATCH v2 3/3] net: pse-pd: add LED trigger support via notification path
-config: hexagon-randconfig-001-20260325 (https://download.01.org/0day-ci/archive/20260325/202603251254.o5PqMBRU-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603251254.o5PqMBRU-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-stable
+head:   e393ce79b3cf63c2810be882eb6e531a54f520f4
+commit: e504282091c8e4dc4f945c89d9b44ac2e0bfe504 [72/140] mm: convert vmemmap_p?d_populate() to static functions
+config: sparc64-randconfig-002-20260325 (https://download.01.org/0day-ci/archive/20260325/202603251338.grra8xt7-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603251338.grra8xt7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603251254.o5PqMBRU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603251338.grra8xt7-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/pse-pd/pse_core.c:1221:10: error: no member named 'pi_led_trigs' in 'struct pse_controller_dev'
-    1221 |                 pcdev->pi_led_trigs = NULL;
-         |                 ~~~~~  ^
-   1 error generated.
+>> arch/sparc/mm/init_64.c:2582:16: error: call to undeclared function 'vmemmap_pgd_populate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2582 |                 pgd_t *pgd = vmemmap_pgd_populate(vstart, node);
+         |                              ^
+   arch/sparc/mm/init_64.c:2582:16: note: did you mean 'vmemmap_populate'?
+   arch/sparc/mm/init_64.c:2565:15: note: 'vmemmap_populate' declared here
+    2565 | int __meminit vmemmap_populate(unsigned long vstart, unsigned long vend,
+         |               ^
+>> arch/sparc/mm/init_64.c:2582:10: error: incompatible integer to pointer conversion initializing 'pgd_t *' with an expression of type 'int' [-Wint-conversion]
+    2582 |                 pgd_t *pgd = vmemmap_pgd_populate(vstart, node);
+         |                        ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/sparc/mm/init_64.c:2591:9: error: call to undeclared function 'vmemmap_p4d_populate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2591 |                 p4d = vmemmap_p4d_populate(pgd, vstart, node);
+         |                       ^
+>> arch/sparc/mm/init_64.c:2591:7: error: incompatible integer to pointer conversion assigning to 'p4d_t *' from 'int' [-Wint-conversion]
+    2591 |                 p4d = vmemmap_p4d_populate(pgd, vstart, node);
+         |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/sparc/mm/init_64.c:2595:9: error: call to undeclared function 'vmemmap_pud_populate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2595 |                 pud = vmemmap_pud_populate(p4d, vstart, node);
+         |                       ^
+>> arch/sparc/mm/init_64.c:2595:7: error: incompatible integer to pointer conversion assigning to 'pud_t *' from 'int' [-Wint-conversion]
+    2595 |                 pud = vmemmap_pud_populate(p4d, vstart, node);
+         |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   6 errors generated.
 
 
-vim +1221 drivers/net/pse-pd/pse_core.c
+vim +/vmemmap_pgd_populate +2582 arch/sparc/mm/init_64.c
 
-  1141	
-  1142	/**
-  1143	 * pse_controller_register - register a PSE controller device
-  1144	 * @pcdev: a pointer to the initialized PSE controller device
-  1145	 *
-  1146	 * Return: 0 on success and failure value on error
-  1147	 */
-  1148	int pse_controller_register(struct pse_controller_dev *pcdev)
-  1149	{
-  1150		size_t reg_name_len;
-  1151		int ret, i;
-  1152	
-  1153		mutex_init(&pcdev->lock);
-  1154		INIT_LIST_HEAD(&pcdev->pse_control_head);
-  1155		spin_lock_init(&pcdev->ntf_fifo_lock);
-  1156		ret = kfifo_alloc(&pcdev->ntf_fifo, pcdev->nr_lines, GFP_KERNEL);
-  1157		if (ret) {
-  1158			dev_err(pcdev->dev, "failed to allocate kfifo notifications\n");
-  1159			return ret;
-  1160		}
-  1161		INIT_WORK(&pcdev->ntf_work, pse_send_ntf_worker);
-  1162	
-  1163		if (!pcdev->nr_lines)
-  1164			pcdev->nr_lines = 1;
-  1165	
-  1166		if (!pcdev->ops->pi_get_admin_state ||
-  1167		    !pcdev->ops->pi_get_pw_status) {
-  1168			dev_err(pcdev->dev,
-  1169				"Mandatory status report callbacks are missing");
-  1170			return -EINVAL;
-  1171		}
-  1172	
-  1173		ret = of_load_pse_pis(pcdev);
-  1174		if (ret)
-  1175			return ret;
-  1176	
-  1177		if (pcdev->ops->setup_pi_matrix) {
-  1178			ret = pcdev->ops->setup_pi_matrix(pcdev);
-  1179			if (ret)
-  1180				return ret;
-  1181		}
-  1182	
-  1183		/* Each regulator name len is pcdev dev name + 7 char +
-  1184		 * int max digit number (10) + 1
-  1185		 */
-  1186		reg_name_len = strlen(dev_name(pcdev->dev)) + 18;
-  1187	
-  1188		/* Register PI regulators */
-  1189		for (i = 0; i < pcdev->nr_lines; i++) {
-  1190			char *reg_name;
-  1191	
-  1192			/* Do not register regulator for PIs not described */
-  1193			if (!pcdev->no_of_pse_pi && !pcdev->pi[i].np)
-  1194				continue;
-  1195	
-  1196			reg_name = devm_kzalloc(pcdev->dev, reg_name_len, GFP_KERNEL);
-  1197			if (!reg_name)
-  1198				return -ENOMEM;
-  1199	
-  1200			snprintf(reg_name, reg_name_len, "pse-%s_pi%d",
-  1201				 dev_name(pcdev->dev), i);
-  1202	
-  1203			ret = devm_pse_pi_regulator_register(pcdev, reg_name, i);
-  1204			if (ret)
-  1205				return ret;
-  1206		}
-  1207	
-  1208		ret = pse_register_pw_ds(pcdev);
-  1209		if (ret)
-  1210			return ret;
-  1211	
-  1212		mutex_lock(&pse_list_mutex);
-  1213		list_add(&pcdev->list, &pse_controller_list);
-  1214		mutex_unlock(&pse_list_mutex);
-  1215	
-  1216		ret = pse_led_triggers_register(pcdev);
-  1217		if (ret) {
-  1218			dev_warn(pcdev->dev, "Failed to register LED triggers: %d\n",
-  1219				 ret);
-  1220			/* Ensure pse_led_update() is a no-op on partial failure */
-> 1221			pcdev->pi_led_trigs = NULL;
-  1222		}
-  1223	
-  1224		return 0;
-  1225	}
-  1226	EXPORT_SYMBOL_GPL(pse_controller_register);
-  1227	
+c4bce90ea2069e5 arch/sparc64/mm/init.c  David S. Miller   2006-02-11  2563  
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2564  #ifdef CONFIG_SPARSEMEM_VMEMMAP
+0aad818b2de455f arch/sparc/mm/init_64.c Johannes Weiner   2013-04-29 @2565  int __meminit vmemmap_populate(unsigned long vstart, unsigned long vend,
+7b73d978a5d0d2a arch/sparc/mm/init_64.c Christoph Hellwig 2017-12-29  2566  			       int node, struct vmem_altmap *altmap)
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2567  {
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2568  	unsigned long pte_base;
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2569  
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2570  	pte_base = (_PAGE_VALID | _PAGE_SZ4MB_4U |
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2571  		    _PAGE_CP_4U | _PAGE_CV_4U |
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2572  		    _PAGE_P_4U | _PAGE_W_4U);
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2573  	if (tlb_type == hypervisor)
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2574  		pte_base = (_PAGE_VALID | _PAGE_SZ4MB_4V |
+494e5b6faeda1d1 arch/sparc/mm/init_64.c Khalid Aziz       2015-05-27  2575  			    page_cache4v_flag | _PAGE_P_4V | _PAGE_W_4V);
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2576  
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2577  	pte_base |= _PAGE_PMD_HUGE;
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2578  
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2579  	vstart = vstart & PMD_MASK;
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2580  	vend = ALIGN(vend, PMD_SIZE);
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2581  	for (; vstart < vend; vstart += PMD_SIZE) {
+df8ee578894ebb5 arch/sparc/mm/init_64.c Pavel Tatashin    2017-11-15 @2582  		pgd_t *pgd = vmemmap_pgd_populate(vstart, node);
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2583  		unsigned long pte;
+5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24  2584  		p4d_t *p4d;
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2585  		pud_t *pud;
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2586  		pmd_t *pmd;
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2587  
+df8ee578894ebb5 arch/sparc/mm/init_64.c Pavel Tatashin    2017-11-15  2588  		if (!pgd)
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2589  			return -ENOMEM;
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2590  
+5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24 @2591  		p4d = vmemmap_p4d_populate(pgd, vstart, node);
+5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24  2592  		if (!p4d)
+5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24  2593  			return -ENOMEM;
+5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24  2594  
+5637bc504834045 arch/sparc/mm/init_64.c Mike Rapoport     2019-11-24 @2595  		pud = vmemmap_pud_populate(p4d, vstart, node);
+df8ee578894ebb5 arch/sparc/mm/init_64.c Pavel Tatashin    2017-11-15  2596  		if (!pud)
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2597  			return -ENOMEM;
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2598  
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2599  		pmd = pmd_offset(pud, vstart);
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2600  		pte = pmd_val(*pmd);
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2601  		if (!(pte & _PAGE_VALID)) {
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2602  			void *block = vmemmap_alloc_block(PMD_SIZE, node);
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2603  
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2604  			if (!block)
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2605  				return -ENOMEM;
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2606  
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2607  			pmd_val(*pmd) = pte_base | __pa(block);
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2608  		}
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2609  	}
+2856cc2e4d0852c arch/sparc/mm/init_64.c David S. Miller   2012-08-15  2610  
+c06240c7f5c39c8 arch/sparc/mm/init_64.c David S. Miller   2014-09-24  2611  	return 0;
+2856cc2e4d0852c arch/sparc/mm/init_64.c David S. Miller   2012-08-15  2612  }
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2613  #endif /* CONFIG_SPARSEMEM_VMEMMAP */
+46644c2477c5890 arch/sparc64/mm/init.c  David Miller      2007-10-16  2614  
+
+:::::: The code at line 2582 was first introduced by commit
+:::::: df8ee578894ebb591c2995cce422e6189c8bb757 sparc64: simplify vmemmap_populate
+
+:::::: TO: Pavel Tatashin <pasha.tatashin@oracle.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
