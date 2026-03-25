@@ -1,146 +1,111 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E463F789D
-	for <llvm@lists.linux.dev>; Wed, 25 Mar 2026 16:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774456496; cv=pass; b=MxVjxqCSZDlL6ktZCyfDOdIoN8E0/+NLqnF7lSXv7YpH/DrZjSH7MqFZahNACoc16sqvo8ihYpOiMNCPaCzvvHTPFUD4rGoK4MB5I7U5mycTCtu/vPbGi75v94AV6LykEPOCLWiPkZh0V1rA37R5nOH6MLIEFr45iWj6exRzUls=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774456496; c=relaxed/simple;
-	bh=fVUka6QRSdoSqopcl8+DYc6KjhZm4o4ga5M+4zCTdZo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rhoi1QiawsSsY4GOtJPGQQk81jxd1QdV5Jf0lZkiu7Rcp+V6ktSPDHCUv/KctgbrJdPah+LM4cCU6alImBy/9tBMFH02O1SYVc0/yDl5f01SF7y31eNxMb5x/2WET+7m526hEKJTLmHm+uqIwLN5eZLo4+8lpbV9oYQDYoUymaE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mWcqj95N; arc=pass smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C77401A3D;
+	Wed, 25 Mar 2026 17:09:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774458573; cv=none; b=hzV5+plbUz6rykRGikty98VfbJJE6XG/mlW/a1qalJuX+0D7Y+0CzbG0GHHq44l+7x0yT+xklPyIz1RorXkyKGh8vQC5u54bnNBe5gCzKKQp289RCWHsA1H21oaj8SW+YXDWgp7TQMtoYOOes+ty5g9PyKg/mJb8Cj82j8c4v8o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774458573; c=relaxed/simple;
+	bh=JXbk4O60vqvAc9C4+gJ015xvUjF2FznvzP7lf7G3S1s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kcamqjyDiLTTfz2SQAmxinJieTTU9iwP6A+NfVjf+hpkDWKcGR3BRuwR3QRq2bb51cKzltWNdDSFhuq3LbnHW+q7OHUdRXrfK+dgLOhoVWbpsaygIlbOy4OZPhmYdVD2u3INiVxuUMDcyQEauZOYq7bGv/Ultf0d3KIwTGMo/4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FcNnfrJc; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mWcqj95N"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-661ce258878so72a12.0
-        for <llvm@lists.linux.dev>; Wed, 25 Mar 2026 09:34:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774456489; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Qe1gpQE7nil4rIXqNGmz4ViIatGh1RqUQm7CKvG7DwAju/i8+pmlOYbYo8xG8Q5pwX
-         w7DoNZbyOoT1HY5GHK0YS25Ae/+QjlYs1MHFYDNu/FCl/jJ9MO6xAjAWL3QaCA/MEAQK
-         def6Ooz1NbY2RYLKor1ntiRNyua93+D9PpBcD/ayg8VHFGKRPo0DYiPwTisC1GM5SDyl
-         ofM9xFJbwxiydByxSDdiBHbBA6VIxqCRjS6WFfcbSDbt/Gnn92dePR74IqK1qVPKM6UV
-         dBSokX9VSULhC01+hWP3h4X37v2RyQsBWuQD95//oQx1gE9zC0954IyfMYtWoM0W8ZC3
-         1enw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0S+fHePIggsFy0AXEBOBbO8zgatdwlcvs6VyR87WtC4=;
-        fh=e9mauor1E4DmHRCBTzn7patFFpzFHBij07aqX3eKEKU=;
-        b=Qu1M4BzGrZyX/MfrP+Xj9C6X/EQ8vdVbdp2GP+t4X5BIJKAJjupwBXNj6NY8gpHITh
-         wx0zxxPMtzQ7dpYlqVwujYHOHAQ8h+mRU6Ng13Zo3b6zDmKU1jXdzFsSxjf4Y34/s/gE
-         7HFKuqrmuGARv3l/M85ftU4Djxk52SEIdCKyVBw6EyEK/xGQx6v7npsqttw8V3zrGwsP
-         t3OdGnplnottyfNBXbFNDk2+AOMAeuOOa6khb/MqLNV8pcu+aU5hZbwBYrq7SJTDomwG
-         4cHt8DfelO2uMSFlj9Mm1nDihF8yTNHww7n+tJRVN5Ar8EjzCiG8APlb9YkzYQ+FTsZK
-         n+zA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774456489; x=1775061289; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0S+fHePIggsFy0AXEBOBbO8zgatdwlcvs6VyR87WtC4=;
-        b=mWcqj95NOHYomspPz2ELtr3yZWjZoubnGMVgJfQxa0GuJ8u4WQrMoGfMGs/Ke9LuDJ
-         m9pPeG8KII9KgLnnhb7ci2+5HBNLX8GF8N/YDaLDVTRbPBRdw5bLn489JxsVuw0BIrG/
-         2pYNaC4ZaTxRVgGfKQpkpAINly5tfTya+lwvzh6zSyKdIt2orm7+Z86dOVZVdXdqy7Di
-         pdJxr+d9H5yVka10MNfPD8yFiZY/jNb/zhHUax3lG99+XvL7FY4DprA10lFIWP/fm/A+
-         OrTGwSyUNa/5zlJRLb2gEjgogJSSEcV+0COMB+9YikufK45Lt/z+GyzyHFfc25tylrVx
-         tSBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774456489; x=1775061289;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0S+fHePIggsFy0AXEBOBbO8zgatdwlcvs6VyR87WtC4=;
-        b=oTv13Rg6lNIGoDpy+PqlHGpRZF9JZcPFnntDfLcOH2H0rf7X2w5aEVmm/oMVIN7K/1
-         nQgv4oktWp4VqGCb9QA4WibTpM7I0166BN6JS/NURRBcFodMvMeYyoZk+aPt8j26brM6
-         QUjPKOZYBeF9Dz4Md98J3SoL8F8BrbGhbiFngNWbudQbuoUk9l8+NOP7Efg0fzthnOEg
-         +HeeKsIUyBi92D9JeVc2ia3rWgW5tLhYGdItGfTFOLGB0t1fwN3wvqJjBeZCKWOy51sZ
-         7clqt7RJbBDUtGzIUOyePeSYJQgDxwRJhnvxAZAOEkZPA1wMQGIv26vQ4j0RrWIqFF3i
-         MhQA==
-X-Forwarded-Encrypted: i=1; AJvYcCWZp/Fa4iX9XBBy8eeSgKqm5uOMBhp+5SxhYehz3cUkJ4WjoVShQY/C0kLSwtIJUmcrt0CJ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw13+klUJrF6tQYvUhC6EtgIO9sdAo1oxSvQc7ip282zfs4he9M
-	oomT05AtKEKTceMG0Xngk8H0Vwq2JW6eU3wCupX9CDtqlecfqT0g+JWH35wqGOsndWHQBLKVT3R
-	nIF8fzK3LGsPNdzqI3Gb5Gjv2QRncg1umhaCbxXyp
-X-Gm-Gg: ATEYQzz4xAlpOEjLkh1gapiKmiyRoHzihhRvHYQNfR8dT0hirsgwZYyjk2rHP0pmMm7
-	DwXxynLKlgbt0cOpgvisEyG0I4VArxXYB6xOzA92Rd1mkTBBFx8D5BrUs63krGKJEJjfOclra7I
-	hqpP/OmRj1ygot8sR6ojf7zp8fZBUGwvLpJC1ji8tzCy0gZy715xuhtTLvGjOkhqruQZXadyUCm
-	ppQzWDJyPzE5UBfN/DVgggiQAR9jcLcUfZFqbMEm47DrGnJxuvfgaXoQ1doZ7fMgHNHKZKNYy9p
-	bQEkqG60UFMwRmzkgTQTBPQM1AkV5tlwNgWFX1xq7L6Q5Q==
-X-Received: by 2002:a05:6402:50a:b0:665:4aee:2091 with SMTP id
- 4fb4d7f45d1cf-66a84d32635mr43994a12.1.1774456488881; Wed, 25 Mar 2026
- 09:34:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FcNnfrJc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774458564; x=1805994564;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JXbk4O60vqvAc9C4+gJ015xvUjF2FznvzP7lf7G3S1s=;
+  b=FcNnfrJcsUZK1tMk8LResHdi4LUzswZ+aH8SoeOoX1R97s5fN2Jbvd9+
+   CBFeu87YtDfHyj60cveuzB3VzXFK6UCPL1LR2v1OvK/M4PlhGeUKCA1l2
+   XGDy7ouj7apoZFZS1bh+pqsngeCfwz8YcJhfgyHOwzPo/6wEWlJMwEG5j
+   4P+/VXjZUsSHiuHra2OJFs8RKWl9EXYzFiHqVtzS4GPAZNwJqHinfc8xf
+   gsOll704BAp+TWCoOV5IYHuVJWhqWBBp+ECuQk7D+M15Z3GfuRECwVH3P
+   aT8/hDmcmPS09HsdVyrKF2uRo7JhHr7LiOv+M1GJjRMtivq3iTRPGS6u4
+   g==;
+X-CSE-ConnectionGUID: 0RSOiChETdyhZbt6VfpUuw==
+X-CSE-MsgGUID: eV4LlgKJS2yHVHfE9S583A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="75219347"
+X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
+   d="scan'208";a="75219347"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 10:09:14 -0700
+X-CSE-ConnectionGUID: qOXBes7WQ4ynEGWbwzUlCA==
+X-CSE-MsgGUID: So7UcWvoTgiq8KbKIywb3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
+   d="scan'208";a="228811652"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 25 Mar 2026 10:09:13 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w5RjC-000000007Kr-1ges;
+	Wed, 25 Mar 2026 17:09:10 +0000
+Date: Thu, 26 Mar 2026 01:08:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 2/3] media: qcom: camss: Add CAMSS Offline Processing
+ Engine driver
+Message-ID: <202603260121.sODrcixU-lkp@intel.com>
+References: <20260323125824.211615-3-loic.poulain@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260316212930.120438-1-xur@google.com> <20260316212930.120438-2-xur@google.com>
- <177443134349.415036.1506063887331719503.b4-review@b4>
-In-Reply-To: <177443134349.415036.1506063887331719503.b4-review@b4>
-From: Rong Xu <xur@google.com>
-Date: Wed, 25 Mar 2026 16:34:35 +0000
-X-Gm-Features: AQROBzCnEj7wN73t2GyTPCqzrLObCBImSyOeRDMFqmWvg7CtGODbiGadGl2Tyx0
-Message-ID: <CAF1bQ=RsQfV82Gdpm1oUNtN9Yxf64C4_oP3cu6CY7Zm4qXOoZw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] kbuild: move vmlinux.a build rule to scripts/Makefile.vmlinux_a
-To: Nicolas Schier <nsc@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
-	Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Stafford Horne <shorne@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Piotr Gorski <piotrgorski@cachyos.org>, Venkat Rao Bagalkote <venkat88@linux.ibm.com>, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Teresa Johnson <tejohnson@google.com>, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323125824.211615-3-loic.poulain@oss.qualcomm.com>
 
-Sounds good to me.
+Hi Loic,
 
-Could you also include a note stating that the '-T' flag is no longer
-problematic since the minimum requirement for LLVM has been updated to
-version 15? As of LLVM 14 and onward, the '-T' flag functions
-identically to the '--thin' flag.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-Thanks a lot for the help!
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v7.0-rc5 next-20260324]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--Rong
+url:    https://github.com/intel-lab-lkp/linux/commits/Loic-Poulain/dt-bindings-media-qcom-Add-CAMSS-Offline-Processing-Engine-OPE/20260323-220343
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20260323125824.211615-3-loic.poulain%40oss.qualcomm.com
+patch subject: [RFC PATCH 2/3] media: qcom: camss: Add CAMSS Offline Processing Engine driver
+config: loongarch-randconfig-001-20260325 (https://download.01.org/0day-ci/archive/20260326/202603260121.sODrcixU-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260326/202603260121.sODrcixU-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603260121.sODrcixU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/qcom/camss/camss-ope.c:1478:35: warning: unused variable 'ope_ctrl_ops' [-Wunused-const-variable]
+    1478 | static const struct v4l2_ctrl_ops ope_ctrl_ops = {
+         |                                   ^~~~~~~~~~~~
+   1 warning generated.
 
 
-On Wed, Mar 25, 2026 at 12:22=E2=80=AFPM Nicolas Schier <nsc@kernel.org> wr=
-ote:
->
-> On Mon, 16 Mar 2026 21:29:29 +0000, xur@google.com <xur@google.com> wrote=
-:
->
-> Hi Rong,
->
-> > Move the build rule for vmlinux.a to a separate file in preparation
-> > for supporting distributed builds with Clang ThinLTO.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > Tested-by: Rong Xu <xur@google.com>
->
-> As Masahiro's original patch is now being modified: I'd like to add
-> something like
->
-> [rong xu: change '--thin' back to 'T' in Makefile.vmlinux_a]
->
-> here before your 'Signed-off-by'.  Are you ok with that?
->
-> Kind regards,
-> Nicolas
->
-> --
-> Nicolas
->
+vim +/ope_ctrl_ops +1478 drivers/media/platform/qcom/camss/camss-ope.c
+
+  1477	
+> 1478	static const struct v4l2_ctrl_ops ope_ctrl_ops = {
+  1479		.s_ctrl = ope_s_ctrl,
+  1480	};
+  1481	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
