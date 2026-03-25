@@ -1,89 +1,109 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6137235C1BD;
-	Wed, 25 Mar 2026 09:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962633C4577;
+	Wed, 25 Mar 2026 10:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774432548; cv=none; b=ijvA9nitjXkVpK6SuIx2/xrQEenDpctYKun51F+yWvUQ6HxyR4wUGw4ccXKTKAo7NEWXoJ38zJsP2TSj589L2qKxRnxyM4u4kyU9oTGJRk2f5LFkBNxql/CyrkmsLKuKaEqG2o0wNje5ENs+F6YJmkqrdJs9Jdh7mRXGW1ETN4Q=
+	t=1774436355; cv=none; b=KK4PUhW/57xsn6jkQlAqr0BwCmZc6cmKOBgbtzx7HKcssBnk2350i2FL9dxMqYYbiM8VwrQ70I3rj9ahV5d4dKXfkvyVt2+/zTwJwMYyfwrpqPWu85U3XEvliizoDbCnnR9QR01OH8YCW/fl7XlPqIYjCnUekgxWeQou/0j5rk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774432548; c=relaxed/simple;
-	bh=2/MZaZbYqEpUfKHxTXqAQthx/7RrgnN8/1v1V38getM=;
+	s=arc-20240116; t=1774436355; c=relaxed/simple;
+	bh=7Iwcz9s808z/mU1qSlilMROm/eIn+LB4PP0YpFUxbvM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r/yesBZbAoDMotVKCzNUUxBi46VP5Qtcb9jePhk2Kl4DqcM57sDs6yhfRgI4fBwcyuoE3vIaUOU26JmhTgpGduC4g6C4Xeyl/LuoxJtnOO2+ouFt67XTNt95snFgt1q9OSgHehThIzP08dr4F+czp1Tg3y6YV2ZZ+WnSB8yi7Oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=aIBhr24x; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=aOBx9IhqfNcFPt6tRdd+gMnmHxo2UZBOFxC+eVYn6Ev4fi8B2H+yhkfWosXfjCj8rQmHz+2Bn2IAg1ResoF/zqxJv05wm8wVxxgZAE7WYZomdOxXJzqjcEorO6h2HuwMkdQN+39fs/t5V0ohoYLNgazR8SJG2q/nm/Oj8W44eHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bctRU6sn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="aIBhr24x"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=8/B7VBBqGmBiYJMGJFhUPu9zQHFdUibQvXtbqMoNvCw=; b=aIBhr24xYZQu75cmqhuxNcY/J9
-	Ygz5csRlKh6oA714CxjJTq//0W+zsQm855ks2NGbyBLUIy9raKk6Hu7/l8XWIUtgqboXzlUxBdGY1
-	EJ2f4JQBwfRbJ11fpEztE7XHQ0rocM2Ljid26ciwSexjEA4NXth9CVId0+oGif2uZ+cbTGJMC+snS
-	60iW8CMfbVe7xbbhlxTnfJsRmmcKs7uSJkAkqGHeYdtnxL7qdCqLYc2boI5/tujdJefdxKnuESh4P
-	FOAs4UVSX8N0zj5UsTSjOKPosHMnz/IFYCQI0RRb1ZXM6LT1Al01HDWIs9MkdRT0QnXOdPM4Y4OJy
-	8W4J9UBQ==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <leitao@debian.org>)
-	id 1w5Kxh-008zbx-NL; Wed, 25 Mar 2026 09:55:40 +0000
-Date: Wed, 25 Mar 2026 02:55:35 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [trace:bootconfig/for-next 16/16] init/main.c:437:20: warning:
- stack frame size (4192) exceeds limit (2048) in
- 'bootconfig_apply_early_params'
-Message-ID: <acOw2YXMZZEQ1UUz@gmail.com>
-References: <202603251010.5Ui0yrB2-lkp@intel.com>
- <20260325155227.55cdfb9f4ce96c335d0c7f18@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bctRU6sn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9876EC4CEF7;
+	Wed, 25 Mar 2026 10:59:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774436355;
+	bh=7Iwcz9s808z/mU1qSlilMROm/eIn+LB4PP0YpFUxbvM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bctRU6snoUqfa6o/jnqds7BJsGki8pA0AkWYXGknz4b15QHKcdTYuudUQc1dQmKxo
+	 S7ndOaZBrMB+xZlvc7NM6uhPpb3nsBY8CVX6YCY/U4PYvW8CX+c9YEXl93MtmpBApx
+	 K4d4yE4x2UoT+xVNEr5r2Vv/BZzYXhg5KGhe7xtdiLnQ2crx/JNmzT9AV0vR6wDSwq
+	 gvhVkBMed83CB08ZLn9Qih2ER/37gllE3gsUXvzgblLwQT+kyfYbFtQXaN3E9QdFDH
+	 8LQ+ESpArndkhF5d7ElWnywPVC/By0ZuoS+SF+rZN/3oznCDQFnsmG3IK8v4eOY8su
+	 34+0Y0tIrwFqQ==
+Date: Wed, 25 Mar 2026 11:59:12 +0100
+From: Thierry Reding <thierry.reding@kernel.org>
+To: Akhil R <akhilrajeev@nvidia.com>
+Cc: alexandre.belloni@bootlin.com, Frank.Li@nxp.com, 
+	acpica-devel@lists.linux.dev, conor+dt@kernel.org, devicetree@vger.kernel.org, 
+	ebiggers@kernel.org, fredrik.markstrom@est.tech, jonathanh@nvidia.com, 
+	krzk@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux@roeck-us.net, lkp@intel.com, llvm@lists.linux.dev, 
+	miquel.raynal@bootlin.com, oe-kbuild-all@lists.linux.dev, p.zabel@pengutronix.de, 
+	rafael@kernel.org, robert.moore@intel.com, robh@kernel.org, smangipudi@nvidia.com
+Subject: Re: [PATCH 04/12] i3c: master: Support ACPI enumeration
+Message-ID: <acO_PUjS_VG07qcS@orome>
+References: <202603240843279c9e8b90@mail.local>
+ <20260324172215.31540-1-akhilrajeev@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ydnbwbmjnjsuvysj"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260325155227.55cdfb9f4ce96c335d0c7f18@kernel.org>
-X-Debian-User: leitao
+In-Reply-To: <20260324172215.31540-1-akhilrajeev@nvidia.com>
 
-On Wed, Mar 25, 2026 at 03:52:27PM +0900, Masami Hiramatsu wrote:
 
-> >  > 437	static void __init bootconfig_apply_early_params(void)
-> >    438	{
-> >    439		char val_buf[COMMAND_LINE_SIZE];
-> 
-> Ah, this COMMAND_LINE_SIZE is too big to allocate it on stack.
-> We need to make it as a static __initdata variable.
+--ydnbwbmjnjsuvysj
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 04/12] i3c: master: Support ACPI enumeration
+MIME-Version: 1.0
 
-Ack, I will respin it. Thanks!
+On Tue, Mar 24, 2026 at 10:52:15PM +0530, Akhil R wrote:
+> On Tue, 24 Mar 2026 09:43:27 +0100, Alexandre Belloni wrote:
+>=20
+> ...
+>=20
+> >> #include <linux/acpi.h> is added in PATCH 03/12. The functions' protot=
+ypes
+> >> are present in acpi.h. I think the bot checked this patch individually,
+> >> or did I miss something?
+> >>=20
+> >=20
+> > #include <acpi/acpi_bus.h> is behind an #ifdef in acpi.h and your code
+> > is not.
+>=20
+> Thanks for pointing Alexandre and Guenter. I also noticed that we do not
+> have stub functions for a few of the acpi_* functions in #else.
+>=20
+> Looks like I will have to guard calls to these functions under
+> #ifdef CONFIG_ACPI.
 
-> Thank you,
-> 
-> >    440		struct xbc_node *knode, *root;
-> >    441		const char *val;
-> >    442	
-> >    443		root = xbc_find_node("kernel");
-> >    444		if (!root)
-> >    445			return;
-> >    446	
-> >    447		/*
-> >    448		 * Keys that do not match any early_param() handler are silently
-> >    449		 * ignored — do_early_param() always returns 0.
-> >    450		 */
-> >    451		xbc_node_for_each_key_value(root, knode, val) {
-> >    452			if (xbc_node_compose_key_after(root, knode, xbc_namebuf, XBC_KEYLEN_MAX) < 0)
-> >    453				continue;
-> >    454	
-> >    455			if (!val) {
+Alternatively it might make sense to add the stubs in a separate patch.
+I don't know if they were purposefully left out or nobody's ever run
+into the lack of these before.
 
-I also found that val cannot be NULL here, given
-xbc_node_for_each_key_value() returns an empty string ("") instead of
-NULL, so, I will remove this branch here as well.
+Thierry
+
+--ydnbwbmjnjsuvysj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmnDv/0ACgkQ3SOs138+
+s6G9+g/+LuZP8mpHvXnaAevACtJDkWGEheqiXMIkXddWa0UJAazqokRhVFFxWNqL
+KiHVB2TKCmyKj+ID/r0+YQyLpsAJE5Vc0I6oqP70QyFtUpBsvtYESRHg7Kmg36Kl
+YTj1voyogdqTiAfPjwI0T3b1cmUoJpB6H2qTG9sZYbbJJ1G8fySmR8JvNHeDkjjf
+4QYzhRp+HWbT7uNjc9mOUo/e2bVCGcIrT+usgwGPXq2g9i2Lvfduk5pp1669JbZ9
+SCxaYdNcq3aZMQ0G52cMSuOp/70zEpPhFOE0s1EHkVFge5pNoqTkymLAj5Pg1Wk8
+PT+bzWX+W+ViFhV//9lQ3Yx0JXQo5ZlIjqGl8aG0rCrA3qg+PgYj9vRHuFv8QoPF
+FeEWPSS+QzZPPuF/SktUCTI8/fgexXGg9IN9j1nalAEu218EqtIdw4pH566Zt0BN
+FlUqJ0ibFMgyxEzO4JMdueb8Wd4TMsKpdxQZ2INphJmyEHoIMEq17JlOs7d0fDGa
+CWdnSDBlNosjKX8oaUZj6rTrmcvDc1un6i7PWBjHbjN/zqfuAZQXiZkRp4Q3DJ4V
+g/3464luFjrpt5XkJD3RsiFM+UuT53RKL7vIa0odHNBtt0SOZC4wrx9zhrKCQEh3
+6ksFj9We1bqQm7sOxHFtFsfmvI/fnuc1w67aIdJCRevb++v3DCU=
+=nNsB
+-----END PGP SIGNATURE-----
+
+--ydnbwbmjnjsuvysj--
