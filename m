@@ -1,136 +1,94 @@
-Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3823A5E75
-	for <llvm@lists.linux.dev>; Wed, 25 Mar 2026 13:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4061C3D4126;
+	Wed, 25 Mar 2026 14:04:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774446556; cv=none; b=XTELGg3F7t25dsH4PXPKcc49Tp+kiM3fMX3YHlhLO7bCZlXUORSAMTYpULiTgQGUwlyg/ZVb9OlEXx4eihbrXgTYEZX8fuz1VleQ6rSdufzAU5sbJvFe18sjfU1JG1ngvdtUGDFNaigYci7Wp8imdAt8qiPDAqmCoeBK90SOJFE=
+	t=1774447455; cv=none; b=hG6RueixC9HlUkt9qPmH20oiEQBy+xU9Z8F7jm3drZGv8KxmtfyWDYxg5aYcJ8nkO6aKTX2HS+sRjIRGnv5ANgFFDjOY2VLtZ6dD4Si7OPsnJ2x/ouV4YDp+V/SRV6Aw3LuIpGgAx1LzgZuR3S7rHfBOS+E5YWXDrQhPTL1fqjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774446556; c=relaxed/simple;
-	bh=RUVqa+RRB+Blgh5kTh82WxFI2rrCB+MaiOvjcswq+IM=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=kQOE1iZDWrd68SRn6klaExpQfTq8JztnqlcNA89UEx6AQJZGfCVtbEDowOTqyRXQRsN8u3LsFO8lgA9F0/6g/J/QDci7zQaI6OCSHljRQjkPf4lH+jbhgrnWfHuVhHTefRu8oCaWH4pdzgPKA/nPRJjI1jbjAdp0HMJReBliOm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=pVqRGZeb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dOjhDuXi; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1774447455; c=relaxed/simple;
+	bh=KJQwlcR/AcSyY+ADzwJfyjsxqitEvvW6As2zMtsT50E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=NEoyssP88Eiv6WYj3+/Ww+g8r6PDELAe0LRMGGbAaUHNHiKsKaCBJZY+Wo4gsYSkW6m7soi75jB/vY9NRsBcylsMPKm/rC2mxIUzTZTsUC8ycGQSTJURVmNT+vkKXgkeIwFTHEpxUz03kKZN81bshmx5gghctvi6CAQi7Z1HnCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7Lpdh5b; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="pVqRGZeb";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dOjhDuXi"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 9336C140026D;
-	Wed, 25 Mar 2026 09:49:13 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Wed, 25 Mar 2026 09:49:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1774446553;
-	 x=1774532953; bh=O+42aIe44EcreLEetKhLjOBvDrCC6rqqhKNt49YXH4Q=; b=
-	pVqRGZebhPRXE6f3bg0KhoR2GHdVjAaILOUwqgo1ygjqene8boQbNyCbJoaWSZRv
-	tLQUNYzVvvl0o3+vNi2Jzrdn8wGbXY6MIn9KsH+l6HnRsP+PyyPT8BlfuounV/ej
-	7niisDuN2+YFfkhwY/unERP1JpkZkDCeGrhegz9NvlMSsuFt+PNsBkq7HzmNIaPK
-	woqySohItriXfpnP2SI1VCNos5oV+mqsPda3Vxgb0F80lIaJcxbCU8X1NEMRNPkv
-	E+WlR2VSJFQm552VxrdlVC5l1TDTHSpaUKIWFA25nd12tMfqvlhWxDOeEytyG4mR
-	inj9ymdB2JLWlR6abtminA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774446553; x=
-	1774532953; bh=O+42aIe44EcreLEetKhLjOBvDrCC6rqqhKNt49YXH4Q=; b=d
-	OjhDuXiALqQ2qDUuOjVzUM9xt+ZEz3J/ddcaDIB8JNXzcvnDBKn+aXDJYFWFJns2
-	wdKjuZ8FW/CThhbT8BDrlT+PhgGlXlEkzrJZNUQ2gdhVH1qQOBB7p6ElOen03p6u
-	KHWjIdKt8BDJO8r5wlg9XGGeh/c/1+sZ2skRylbc+TOWdhy8vFHp0VQFlWqaEvsD
-	SuYLIIpOHPyS1bVsaJCu6AvgNXXrIZLdXlgX4Ugg8/RLThqOMhuZ1/oN0UGmMIk7
-	ITIPY+yPd617wsis/k99bw1UIgyipHS01iS2bg+CukdZznzp7pcqf/zsXVdNiQYF
-	U3kQ6uy8GK3SFEDRPMKZA==
-X-ME-Sender: <xms:2efDaaHDU-hatmQ3Br6wewb_Xol2ZCD4wNFXP-0kP3xnizUTq1b_vA>
-    <xme:2efDaWLFZ_99kDKcod3cE80WE_nualNVzfRHqyYUS10ISYt2l8YVz4hru-MUAMjtF
-    91tOteD4MFF9iAxiEGFGnbjPl2YkBz6QvezioEiku_Q6Uhk9eTcE9U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefvdegiedvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddtpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegsrhgvthhtrdgtrhgvvghlvgihsegrmhgurdgtohhmpdhrtghpth
-    htoheplhhinhhugidqnhgvthdqughrihhvvghrshesrghmugdrtghomhdprhgtphhtthho
-    pegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtoheplhgvihhtrghose
-    guvggsihgrnhdrohhrghdprhgtphhtthhopegvtghrvggvrdigihhlihhngiesghhmrghi
-    lhdrtghomhdprhgtphhtthhopehnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhlse
-    hgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtgho
-    mhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtph
-    htthhopehmohhrsghosehgohhoghhlvgdrtghomh
-X-ME-Proxy: <xmx:2efDabmokKFV15gfzsfCwsEW9HkE-fWDdrydGIfyHk86Wte8JzsuTA>
-    <xmx:2efDaatbvZZ-b92Id--vGcYBhevs12HLTpFh4slY_yhAiRjbBAJu6Q>
-    <xmx:2efDadKQsyNeWN5nfdAhsvFuzR-9-fn8-bZxnTjolzvLKX7wsRNVOw>
-    <xmx:2efDaXg_nHgTC0oNhTVRgHjHvNzt9yotoIWjFGx6V_GOAQgRBJY9UA>
-    <xmx:2efDafXl9Hz2NTMf0JBHsAIrp6areKtNhickN62SgNg2pBt4pC59WCbT>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id DEF6E700065; Wed, 25 Mar 2026 09:49:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7Lpdh5b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0E15C4CEF7;
+	Wed, 25 Mar 2026 14:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774447454;
+	bh=KJQwlcR/AcSyY+ADzwJfyjsxqitEvvW6As2zMtsT50E=;
+	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
+	b=U7Lpdh5bGP93oRArkXGezXHZD4zZVjx/IFrP3HBGwqdhhJ9ICjposxyb5dWcSTh8d
+	 6g09S9rVSnnNXlheES1Z6BcBCdR0yZhyaoH8TYbhRElDhNmqa2/O3UFdVE25/n4hay
+	 HZlfXjsclAgy+HMSEckj+U2lkolRYneXu8+Rk4fKjdRcnNSx+kBlInzzts7tEKcB1F
+	 pA1j6X8dG5Tk9w1J7T+RVb2ZqYIy/IlbzHdciGPVsnz3bt7hGpVmSfTsU66GjI7lmL
+	 15vX3NLBRpQnImlHdNwPH5MvQV3ao6jukUiBYE8BaUAAuGwybe69cOci+fGiVuIFVS
+	 FJCJOdicCGkJg==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-ThreadId: Aywyuz1KiUOB
-Date: Wed, 25 Mar 2026 14:48:52 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Edward Cree" <ecree.xilinx@gmail.com>, "Arnd Bergmann" <arnd@kernel.org>,
- "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>,
- "Jeff Garzik" <jgarzik@redhat.com>,
- "Ben Hutchings" <bhutchings@solarflare.com>
-Cc: "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Brett Creeley" <brett.creeley@amd.com>, "Breno Leitao" <leitao@debian.org>,
- "Kees Cook" <kees@kernel.org>, Netdev <netdev@vger.kernel.org>,
- linux-net-drivers@amd.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <eac3d942-6378-454f-81e7-0d5936a3f6d0@app.fastmail.com>
-In-Reply-To: <9763c19d-131c-45ca-8976-a6473539240a@gmail.com>
-References: <20260320151924.3474821-1-arnd@kernel.org>
- <90a03d3c-def3-4e34-89a0-6e952d3b0d7a@gmail.com>
- <61de3aea-26b3-4c00-8598-3a137ebef1bc@app.fastmail.com>
- <9763c19d-131c-45ca-8976-a6473539240a@gmail.com>
-Subject: Re: [PATCH] net: sfc: avoid format string warning
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 25 Mar 2026 15:04:09 +0100
+Message-Id: <DHBX4GM8TBIY.1BPXJPVQAQAKH@kernel.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH 1/2] rust: kasan: do not pass -Zsanitizer-recover
+Cc: "Andrey Ryabinin" <ryabinin.a.a@gmail.com>, "Alexander Potapenko"
+ <glider@google.com>, "Andrey Konovalov" <andreyknvl@gmail.com>, "Dmitry
+ Vyukov" <dvyukov@google.com>, "Vincenzo Frascino"
+ <vincenzo.frascino@arm.com>, "Nathan Chancellor" <nathan@kernel.org>, "Nick
+ Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Bill Wendling"
+ <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
+ <linux-kernel@vger.kernel.org>, <kasan-dev@googlegroups.com>,
+ <rust-for-linux@vger.kernel.org>, <llvm@lists.linux.dev>
+To: "Alice Ryhl" <aliceryhl@google.com>
+References: <20260325-kasan-rust-sw-tags-v1-0-7d3a765a72aa@google.com>
+ <20260325-kasan-rust-sw-tags-v1-1-7d3a765a72aa@google.com>
+ <DHBTCP3NHE62.3N96AD6O1L7CK@kernel.org> <acPLYM0HtGfW1Q6X@google.com>
+In-Reply-To: <acPLYM0HtGfW1Q6X@google.com>
 
-On Wed, Mar 25, 2026, at 01:22, Edward Cree wrote:
-> On 20/03/2026 20:48, Arnd Bergmann wrote:
+On Wed Mar 25, 2026 at 12:47 PM CET, Alice Ryhl wrote:
+> On Wed, Mar 25, 2026 at 12:06:50PM +0100, Danilo Krummrich wrote:
+>> On Wed Mar 25, 2026 at 10:26 AM CET, Alice Ryhl wrote:
+>> > We do not pass -fsanitize-recover to clang, so for consistency we shou=
+ld
+>> > not pass -Zsanitizer-recover to rustc. Thus, remove these flags.
+>>=20
+>> Isn't this because clang forces it regardless? Is this true for rustc as=
+ well?
 >
-> That would work, but all those -1s are a bit unsightly.  Like I said,
->  I'd rather have two different efx_fill_test() functions, one which
->  takes a unit_id and one which doesn't.
-> (Also you need to change the kdoc description of unit_name.)
+> I forgot to mention this in commit, but I'm actually a bit confused
+> about the situation here. If clang forces it somehow, how?
 
-I sent a new version now, tried your suggestion but ended up with
-yet another variation where I preformat the string in the two
-cases (per driver) that actually use a nontrivial format. This
-ended up simpler both four the source and compiled form.
+I previously had a very brief look at the source code and came across this =
+[1],
+where
 
->> There are not a lot of good options here, and splitting the line seems
->> better than an overlong line to me. I don't really have a strong opinion
->> on where the __printf attribute should go either, but I do see that
->> after the return type is probably the least common, so I'll change
->> that. How about having the specifiers on one line and
->> the type in front of the name? that seems faily common.
->> 
->> static __printf(7, 8)
->> void ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
+	static const SanitizerMask AlwaysRecoverable =3D SanitizerKind::KernelAddr=
+ess |
+	                                               SanitizerKind::KernelHWAddr=
+ess |
+	                                               SanitizerKind::KCFI;
+
+But again, I only had a very brief look and it might well be that I got thi=
+s
+wrong.
+
+[1] https://github.com/llvm/llvm-project/blob/main/clang/lib/Driver/Sanitiz=
+erArgs.cpp#L750
+
+> I don't think rustc does anything like that, but not sure. If it doesn't,=
+ but
+> clang does, then maybe rustc should too? Depends on how that happens.
 >
-> I'd rather just have
-> static void __printf(7, 8) ef4_fill_test(unsigned int test_index,
+> Alice
 
-Done.
-
-      Arnd
