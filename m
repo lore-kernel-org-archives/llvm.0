@@ -1,143 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C01359A67;
-	Wed, 25 Mar 2026 06:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D6F351C3E
+	for <llvm@lists.linux.dev>; Wed, 25 Mar 2026 09:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774421550; cv=none; b=EcWCOoReO0y1slrZ/VZnO16MeN9yQ6zyuz+KLI8z0MLRZXWKgSI25hRk4Zz7DAlqopuMoyCL/Gm7Wku0XRl/DxaR548iSzGyESzakmSrG3AnMBDqs2OUFFdjL2k5YFb03p6Sa9x2aUPntmdb6yAzyjXHzoSrvmqjpVvFQXWSM3E=
+	t=1774430825; cv=none; b=Wy65SOdodLIbcUv7a2H/8TZVEp57tXBZKWQfPtXYwvFHdg5y7yDbzsLtfKlQZlJqAxpNSM/wkcA6k+pdmTawH+tvZzrRIowE1WFv54U9cmGD/wzSZ99eBh7yVZJ+9JvjE2EkKNQifwbuka92+4ShMa7Xua2vCYXzrGJO/NWfO70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774421550; c=relaxed/simple;
-	bh=fU/VJh0UztktKXhSBTPB1iPWDk4L9bU53cVBSq8CXbg=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=b2fMDvBFnO3FMT5nbRfTtmPwrjIdpKu+NZO54kMQuOrisLeQ0lE4O6J72stO73rplQWXJQtqvOlxg3LoebSEUma6jGv1PiuIWwrd0ys6HQWE0Huw/v7Y14TFIU891zHuzQae3dBP3fwCXeMGekKOOIaEe1sZXsFlli0TmJAc4xA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZM3lVxg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774430825; c=relaxed/simple;
+	bh=Gkp+txELiHIEhkzEMp2BVH5d9/FABWaIfVSHBigX4DM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=UlNS1n1cuFWWO5fOS/SrqJUqEUsOSO4SISDIqBL5ASWgmWCK3iv1kRLiy/6mtumQfC71NJluSM/op8PXJ78+mPwPfEYux6xT4xe7ZkEoXAHjRdL0ycsI0rPP/7gbryfNFl6NTkoHPStCaQSosPn8/lYYbvig7MDXHPgY/N9e5zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mThIRfAy; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZM3lVxg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192BCC4CEF7;
-	Wed, 25 Mar 2026 06:52:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774421549;
-	bh=fU/VJh0UztktKXhSBTPB1iPWDk4L9bU53cVBSq8CXbg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=OZM3lVxgorgE0odGqelej3/fjAhHD7YeknyfI7SVjzBgob8jn7kPaFwfMvKuoWUA8
-	 yk+9A0NJido9xTQjWNWp2CepFEnHiaryCVLuKGKblNi7imMKyE527KGnSZx5as7Ajy
-	 JOzWMw+goyCyiGCbBrsg5BffnhbbfzrkfiHhOE4vWDPMe4L6r9a5RVOoXqGQ3RQgrT
-	 8mCmZjmmQXtlmYIqAuA4rKxKpQzILXO4QRNOGaTdIqGZHPnulVqpotW/UnP0Izx7eg
-	 9OP8frL7ju0zcB5t6teZSXdgHzCdkF4s1noZnYVAgE3ArPCCnOqGn/Cdxp5qoW0Y6r
-	 fH84+JpSeCONA==
-Date: Wed, 25 Mar 2026 15:52:27 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Breno Leitao <leitao@debian.org>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, "Masami Hiramatsu (Google)"
- <mhiramat@kernel.org>
-Subject: Re: [trace:bootconfig/for-next 16/16] init/main.c:437:20: warning:
- stack frame size (4192) exceeds limit (2048) in
- 'bootconfig_apply_early_params'
-Message-Id: <20260325155227.55cdfb9f4ce96c335d0c7f18@kernel.org>
-In-Reply-To: <202603251010.5Ui0yrB2-lkp@intel.com>
-References: <202603251010.5Ui0yrB2-lkp@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mThIRfAy"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-48534941525so59784515e9.2
+        for <llvm@lists.linux.dev>; Wed, 25 Mar 2026 02:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774430822; x=1775035622; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BEHtnkDedFMhPuXZm50aAWepNktE4XNs6FAEIq0X4WA=;
+        b=mThIRfAyrQYWkxrpmvNobmhgoAeiPJODASy92B5qL7/nzNvR8ZWepcty3PjFbZULop
+         aTelXxHfB0Iq72wOqxRNnv3hC+rHCCstJqeImMRwEH1bXe1rMp2coPu6ghZp7awwlV8+
+         w0ne8GluhSbY/gK3Uy8wg06M2dGYjmntYyGIoE51BXLx3BteCYqrVwkNpLYUNV2CLhGK
+         RHj97f1NTqvd72aHH37tNX3ShEBK3Un27yzjEZ6R5F3rTFbbuvWR6zGHvPfs/RMYi6L3
+         d4IYb0ZJinBn1s6Kf9Gz/5WsgdzK0I1J626NIABFe3goln2IiVZqBik5hunzYvbxE8Dz
+         yWug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774430822; x=1775035622;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BEHtnkDedFMhPuXZm50aAWepNktE4XNs6FAEIq0X4WA=;
+        b=dTA5zdR1VUhBSCK5gx1vsvhrpUzvyI2eoxim/AjLQgcncD7DN0HSx72B3Y/T6W1PP9
+         q64Gfnzg/R3BkWeScICgMDlVAp2pt01BfH/086Y0764qOAWF9LTWA/u2ayO/gqgxPiI+
+         ZLzKYebJRKzeibS7f97hssv6ytF6lQNYwOG5DfUApIQ26SeGFuJHAf1U1U7mftHZMeey
+         XmLnwP5QL2ir+9vxvTLm4d+2MOBdBV3+b5tar0XVo374UnxqU94Ba5yB2XzG+Ppdfzmd
+         HR5ZwIospyUiVk1x7WU9eSmwB0nElx5AfD21eamp+glJBmHqazVjj3L1s1eDTObVuUna
+         zx9A==
+X-Forwarded-Encrypted: i=1; AJvYcCURzny42x9xMUwNfe2EFwolFocliP9t5t/4cdkg5KuQeaDMhIRw2U8AAox+OHEh2OCBZLM3@lists.linux.dev
+X-Gm-Message-State: AOJu0YxB38P8n/6H4yGvDkYwTpBix7oPlLsm6ZSSTX2QJT6NRpQFSIou
+	iiu3QqG3VYwxxrl60tnh/AEOAvBu5A8COrVjtmG7/updxun5gNaMhI2wZFaePnEYbPtUMdkPTSW
+	HYu2RvsOMPOOy9IivQg==
+X-Received: from wrxp3.prod.google.com ([2002:a05:6000:183:b0:439:bde4:bd47])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:1f12:b0:47e:e48b:506d with SMTP id 5b1f17b1804b1-487160564abmr39098945e9.16.1774430821806;
+ Wed, 25 Mar 2026 02:27:01 -0700 (PDT)
+Date: Wed, 25 Mar 2026 09:26:50 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAFqqw2kC/yXMMQ6DMAxA0asgz1hKE8HQq1QMJjhgKqUoDrQS4
+ u6EMr7h/x2Uk7DCs9oh8SYqn1jwqCvwE8WRUYZisMa2xtkG36QUMa2aUb+YaVT0DYUQnOHWEZR wSRzk95++utu69jP7fJ3gOE76yllBdgAAAA==
+X-Change-Id: 20260325-kasan-rust-sw-tags-c5afff30e63a
+X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
+X-Developer-Signature: v=1; a=openpgp-sha256; l=658; i=aliceryhl@google.com;
+ h=from:subject:message-id; bh=Gkp+txELiHIEhkzEMp2BVH5d9/FABWaIfVSHBigX4DM=;
+ b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBpw6pdwhphutdR3ITrnsA1N2S4eeYWKkURVyY6r
+ vbAyTxB+eeJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCacOqXQAKCRAEWL7uWMY5
+ Rtr2D/4u7PHGacW65aBo1y8qAu21b5nekFu2tSbr1t8ywoFs1uxgj9FUcNkzOcfUtiKsNJtANvg
+ QW2LLPq3Lrr+82jq+rEb8V16BUDoWZq43xgFijXQCEBtuS4R6D7g7jM5VNQfS2r2rlYhY4IyjYb
+ CqCaPp1EFmvg6U2rZMnYkftb7604uzT1j8/lNXt2pwKW2ccK1tzCTQJl/xCCDUs71h1emciuHTZ
+ c/5fQA8a7ceFyAk7YFIm1HyUUHutdM17Fh9bGtt+LfBNhKlb4BWl4pYk9uDa0FsMzjDJucLj7x+
+ l9TWEt3HIijFkWyUOg19uH3HXLzA1E6CAiPFQaUD6biFMH52jpdgYtFpYZncIIyMck7jr8fxL6b
+ SmGN2avkhXO/U9cP7gGH0nKqhSK7ngYda66V96dDwsZmjFAp4EJq78dy3/04zW0fzsnhMShTDed
+ K9hdmJdLH9JvrZzrWyNNgSXTjhI8h+C38zpagR+s423b54dB3QcFndRCy0lB7vqQP3B1i9OUcv7
+ Qt4RaWrmK7NIibwcvmYJw4yla1SK8yM9i9acPSBHvwvawzzVZNmrBa/7TcZM8LdDlXEVGoH5NcT
+ Gt7ZRFlxlv9nU2IxDJ5KFY3HsmnXETpqIiD3qx30ZINPFMcw1FQh3a3oSIHf0P2Uewyes1/nZgs mPiBoMv506akpMg==
+X-Mailer: b4 0.14.3
+Message-ID: <20260325-kasan-rust-sw-tags-v1-0-7d3a765a72aa@google.com>
+Subject: [PATCH 0/2] rust: add support for Software Tag-Based KASAN
+From: Alice Ryhl <aliceryhl@google.com>
+To: Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>
+Cc: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	Alice Ryhl <aliceryhl@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Wed, 25 Mar 2026 10:37:25 +0800
-kernel test robot <lkp@intel.com> wrote:
+Since my kernel-hwaddress patch to rustc [1] is now landed, I'm sending
+this series to enable support for it in the kernel.
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace bootconfig/for-next
-> head:   1a427f2a710583872b6176ea8378e0a1a8719fc4
-> commit: 1a427f2a710583872b6176ea8378e0a1a8719fc4 [16/16] bootconfig: Apply early options from embedded config
-> config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260325/202603251010.5Ui0yrB2-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603251010.5Ui0yrB2-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202603251010.5Ui0yrB2-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> init/main.c:437:20: warning: stack frame size (4192) exceeds limit (2048) in 'bootconfig_apply_early_params' [-Wframe-larger-than]
->      437 | static void __init bootconfig_apply_early_params(void)
->          |                    ^
->    1 warning generated.
-> 
-> 
-> vim +/bootconfig_apply_early_params +437 init/main.c
-> 
->    416	
->    417	/*
->    418	 * do_early_param() is defined later in this file but called from
->    419	 * bootconfig_apply_early_params() below, so we need a forward declaration.
->    420	 */
->    421	static int __init do_early_param(char *param, char *val,
->    422					 const char *unused, void *arg);
->    423	
->    424	/*
->    425	 * bootconfig_apply_early_params - dispatch kernel.* keys from the embedded
->    426	 * bootconfig as early_param() calls.
->    427	 *
->    428	 * early_param() handlers must run before most of the kernel initialises
->    429	 * (e.g. before the GIC driver reads irqchip.gicv3_pseudo_nmi).  A bootconfig
->    430	 * attached to the initrd arrives too late for this because the initrd is not
->    431	 * mapped yet when early params are processed.  The embedded bootconfig lives
->    432	 * in the kernel image itself (.init.data), so it is always reachable.
->    433	 *
->    434	 * This function is called from setup_boot_config() which runs in
->    435	 * start_kernel() before parse_early_param(), making the timing correct.
->    436	 */
->  > 437	static void __init bootconfig_apply_early_params(void)
->    438	{
->    439		char val_buf[COMMAND_LINE_SIZE];
+[1]: https://github.com/rust-lang/rust/pull/153049
 
-Ah, this COMMAND_LINE_SIZE is too big to allocate it on stack.
-We need to make it as a static __initdata variable.
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+Alice Ryhl (2):
+      rust: kasan: do not pass -Zsanitizer-recover
+      rust: kasan: add support for Software Tag-Based KASAN
 
-Thank you,
+ init/Kconfig           | 2 +-
+ scripts/Makefile.kasan | 6 +-----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
+---
+base-commit: 1f318b96cc84d7c2ab792fcc0bfd42a7ca890681
+change-id: 20260325-kasan-rust-sw-tags-c5afff30e63a
 
->    440		struct xbc_node *knode, *root;
->    441		const char *val;
->    442	
->    443		root = xbc_find_node("kernel");
->    444		if (!root)
->    445			return;
->    446	
->    447		/*
->    448		 * Keys that do not match any early_param() handler are silently
->    449		 * ignored — do_early_param() always returns 0.
->    450		 */
->    451		xbc_node_for_each_key_value(root, knode, val) {
->    452			if (xbc_node_compose_key_after(root, knode, xbc_namebuf, XBC_KEYLEN_MAX) < 0)
->    453				continue;
->    454	
->    455			if (!val) {
->    456				do_early_param(xbc_namebuf, NULL, NULL, NULL);
->    457				continue;
->    458			}
->    459	
->    460			/*
->    461			 * We need to copy const char *val to a char pointer,
->    462			 * which is what do_early_param() need, given it might
->    463			 * call strsep(), strtok() later.
->    464			 */
->    465			strscpy(val_buf, val, sizeof(val_buf));
->    466			do_early_param(xbc_namebuf, val_buf, NULL, NULL);
->    467		}
->    468	}
->    469	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-
-
+Best regards,
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Alice Ryhl <aliceryhl@google.com>
+
