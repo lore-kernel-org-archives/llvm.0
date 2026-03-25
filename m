@@ -1,164 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11EE2853E0;
-	Wed, 25 Mar 2026 02:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6354D28CF6F;
+	Wed, 25 Mar 2026 02:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774406270; cv=none; b=PaO3N5Z2zI+3QxFCw0kN0Mvyf9OTPrmD7t4IlpCdM0E817aOyVvDdhKXyhmVU1Jn6Ccj8d4DUhOE+u9acA5uhhMIxCcbTu/KOqu5zXq//FTXI+dsdR83PeRhUsQQf1W7RmHfGrJ9PuauTp5tubpQHQ5nfipuMvz/yE6YWxG5kqo=
+	t=1774407047; cv=none; b=l8PpYvQ5dbz3YOxNMxZ142lETFYXdnGcjyjBNjjTy4hkV39tyBCcgmdlWmln8BO8rtK+O97GjUt9Sc1QJfKBGEcUql2wUaa5h4cOMfusq2V0WI1FZ5ckQBEkCCSKZKEbGXTLQjmrvPiOjANMuNExTDTJGRQWhVF/6x1pdS/ugv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774406270; c=relaxed/simple;
-	bh=Ee45DSi93KBXd3nuAzPsNotDwGG+yh9Y13Y77PGmTt8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cSna3XcbkKX/0rFyWpnjGqeJOSUaYg1ZFA/hYwR0DPrXZylQjUD8fA3tQjZwGQteK7dykbIlgOokbJHoUSi8XPlHktvRfnz+W1Q3CThB54OPNOA6Eg7SU8Qy3kVmiYs/JsZvuRLUzkodb21wRXmS/9G6+AlUqS6OmFqHGoaf5iY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GvBS4h8G; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1774407047; c=relaxed/simple;
+	bh=/z2mwH1jc1ViXGJqbjAwde3q4g9MJx2WxSYSffEiyG0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=GxhvQNAy3REgvNMpsJC9M6MFt6U0F7GlAMycp4qSxICQ0foVibCPuKGdBrxIkM7cBwCmH89AeaxDQW5ju1/aY/prPp6f0OVOq4qwyJjwt5M4B5iSJ6xiaJH2vgbhkzNHx9XLliC9rph6/FzSbCRWmOOkHpZpsNDgWUKI2W6mwX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HmN99dYv; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GvBS4h8G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HmN99dYv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774406269; x=1805942269;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Ee45DSi93KBXd3nuAzPsNotDwGG+yh9Y13Y77PGmTt8=;
-  b=GvBS4h8GJ/Z7cU2ZpXaBj7s9bYDF+uveEP0ly2f2WLEvdee9e/H6ds1O
-   X3MSkIuCb2kw1Blk/jwSO+iwIlTFdztDq6mrhdzpd2QXRRgQxPzDJgrJN
-   uTBsNH9xOkdYXsF1bb9m5LuR2aAfQfMDI84T3oxs9SOOVTqS92svoEHih
-   NlIseVXbmovOeyp3I3l98h20pPaKEHINJWBTu0sXddTKG6ZOKa7uQGWdo
-   rsfG4A8H8qT7pa47EQruLHRP24InfSm9ODP8cgGixXJAZcAW+yT3W73ZW
-   8otJiVVGLragEDpcrc/Ocv3MiU0rli1/Znp4HVamyw2lV2NKi/Tyc48LS
-   A==;
-X-CSE-ConnectionGUID: cZTcyj4QSry6+aNqqX+V3Q==
-X-CSE-MsgGUID: +ywzZQOWRt6cX23FjjhxYw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="93012429"
+  t=1774407046; x=1805943046;
+  h=date:from:to:cc:subject:message-id;
+  bh=/z2mwH1jc1ViXGJqbjAwde3q4g9MJx2WxSYSffEiyG0=;
+  b=HmN99dYvxHRyAKXrR3mFWjxfiaQulYgIUvLRulpYF33Yg3fGRvAhT3Rs
+   IE/R69Xv+ApmGcTDKPakJApm3UPxBzyiR0ASJuB87U8HRFjGcfa5rd/iO
+   nsBb6GL2nEYIUTZMKIKjJuLrdXWcggon5IDh60SlN2tzvWEvkKxCwioJz
+   VKudDjkGOaboO2Vh9Pe1vB9Pb4vqKrR1GKokOR/B0vY/FKJyMMDV2m7Ch
+   r1oDMUI/9h7hwduG1Ogi/mJBJtieNYNpeCLDFr0T+TUA12ZXFcO6hOVLS
+   Q5Unwk3a+XeCE/lPYsYF9CIbhXWRREJEueX40WOv3jSQFrrrY2UvbOu1R
+   Q==;
+X-CSE-ConnectionGUID: 6hV0qJfmTyWsWLomsBEz6Q==
+X-CSE-MsgGUID: RC+Yor7XQt+fr46F2kTRCA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75463633"
 X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="93012429"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 19:37:46 -0700
-X-CSE-ConnectionGUID: i6KklGeJSXKosTfIglUoKw==
-X-CSE-MsgGUID: InJHzz6wTFez9cjKlGFq3w==
+   d="scan'208";a="75463633"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 19:50:44 -0700
+X-CSE-ConnectionGUID: V2i23nECRbSgBTpHW9CWWw==
+X-CSE-MsgGUID: UOLWMasMSquOgp3Qnj1E8g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="223742259"
+   d="scan'208";a="248087074"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 24 Mar 2026 19:37:43 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 24 Mar 2026 19:50:43 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w5E7o-000000005nB-0TvO;
-	Wed, 25 Mar 2026 02:37:40 +0000
-Date: Wed, 25 Mar 2026 10:37:25 +0800
+	id 1w5EKO-000000005oB-3znE;
+	Wed, 25 Mar 2026 02:50:40 +0000
+Date: Wed, 25 Mar 2026 10:49:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: [trace:bootconfig/for-next 16/16] init/main.c:437:20:
- warning: stack frame size (4192) exceeds limit (2048) in
- 'bootconfig_apply_early_params'
-Message-ID: <202603251010.5Ui0yrB2-lkp@intel.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mark:testing/v7.0-rc5 2/2]
+ arch/arm64/kernel/process.c:704:31: error: expected readable system register
+Message-ID: <202603251009.SO6yPDZX-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace b=
-ootconfig/for-next
-head:   1a427f2a710583872b6176ea8378e0a1a8719fc4
-commit: 1a427f2a710583872b6176ea8378e0a1a8719fc4 [16/16] bootconfig: Apply =
-early options from embedded config
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/202=
-60325/202603251010.5Ui0yrB2-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd7080=
-29e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
-/20260325/202603251010.5Ui0yrB2-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git testing/v7.0-rc5
+head:   53a91f2f4a3dd7bb262b669780eea2fff13f4e37
+commit: 53a91f2f4a3dd7bb262b669780eea2fff13f4e37 [2/2] HACK: arm64: Check CPU state at task-switch time
+config: arm64-randconfig-001-20260325 (https://download.01.org/0day-ci/archive/20260325/202603251009.SO6yPDZX-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603251009.SO6yPDZX-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new versio=
-n of
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603251010.5Ui0yrB2-lkp@i=
-ntel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603251009.SO6yPDZX-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> init/main.c:437:20: warning: stack frame size (4192) exceeds limit (2048=
-) in 'bootconfig_apply_early_params' [-Wframe-larger-than]
-     437 | static void __init bootconfig_apply_early_params(void)
-         |                    ^
-   1 warning generated.
+>> arch/arm64/kernel/process.c:704:31: error: expected readable system register
+     704 |         if (system_uses_hw_pan() && !read_sysreg(PAN))
+         |                                      ^
+   arch/arm64/include/asm/sysreg.h:1164:15: note: expanded from macro 'read_sysreg'
+    1164 |         asm volatile("mrs %0, " __stringify(r) : "=r" (__val)); \
+         |                      ^
+   <inline asm>:1:10: note: instantiated into assembly here
+       1 |         mrs x8, PAN
+         |                 ^
+   1 error generated.
 
 
-vim +/bootconfig_apply_early_params +437 init/main.c
+vim +704 arch/arm64/kernel/process.c
 
-   416=09
-   417	/*
-   418	 * do_early_param() is defined later in this file but called from
-   419	 * bootconfig_apply_early_params() below, so we need a forward decla=
-ration.
-   420	 */
-   421	static int __init do_early_param(char *param, char *val,
-   422					 const char *unused, void *arg);
-   423=09
-   424	/*
-   425	 * bootconfig_apply_early_params - dispatch kernel.* keys from the e=
-mbedded
-   426	 * bootconfig as early_param() calls.
-   427	 *
-   428	 * early_param() handlers must run before most of the kernel initial=
-ises
-   429	 * (e.g. before the GIC driver reads irqchip.gicv3_pseudo_nmi).  A b=
-ootconfig
-   430	 * attached to the initrd arrives too late for this because the init=
-rd is not
-   431	 * mapped yet when early params are processed.  The embedded bootcon=
-fig lives
-   432	 * in the kernel image itself (.init.data), so it is always reachabl=
-e.
-   433	 *
-   434	 * This function is called from setup_boot_config() which runs in
-   435	 * start_kernel() before parse_early_param(), making the timing corr=
-ect.
-   436	 */
- > 437	static void __init bootconfig_apply_early_params(void)
-   438	{
-   439		char val_buf[COMMAND_LINE_SIZE];
-   440		struct xbc_node *knode, *root;
-   441		const char *val;
-   442=09
-   443		root =3D xbc_find_node("kernel");
-   444		if (!root)
-   445			return;
-   446=09
-   447		/*
-   448		 * Keys that do not match any early_param() handler are silently
-   449		 * ignored =E2=80=94 do_early_param() always returns 0.
-   450		 */
-   451		xbc_node_for_each_key_value(root, knode, val) {
-   452			if (xbc_node_compose_key_after(root, knode, xbc_namebuf, XBC_KEYLE=
-N_MAX) < 0)
-   453				continue;
-   454=09
-   455			if (!val) {
-   456				do_early_param(xbc_namebuf, NULL, NULL, NULL);
-   457				continue;
-   458			}
-   459=09
-   460			/*
-   461			 * We need to copy const char *val to a char pointer,
-   462			 * which is what do_early_param() need, given it might
-   463			 * call strsep(), strtok() later.
-   464			 */
-   465			strscpy(val_buf, val, sizeof(val_buf));
-   466			do_early_param(xbc_namebuf, val_buf, NULL, NULL);
-   467		}
-   468	}
-   469=09
+   701	
+   702	static inline void debug_switch_state(void)
+   703	{
+ > 704		if (system_uses_hw_pan() && !read_sysreg(PAN))
+   705			WARN_ONCE(1, "PSTATE.PAN clear unexpectedly at task-switch\n");
+   706	
+   707		if (system_uses_irq_prio_masking()) {
+   708			unsigned long daif_expected = 0;
+   709			unsigned long daif_actual = read_sysreg(daif);
+   710			unsigned long pmr_expected = GIC_PRIO_IRQOFF;
+   711			unsigned long pmr_actual = read_sysreg_s(SYS_ICC_PMR_EL1);
+   712	
+   713			WARN_ONCE(daif_actual != daif_expected ||
+   714				  pmr_actual != pmr_expected,
+   715				  "Unexpected DAIF + PMR: 0x%lx + 0x%lx (expected 0x%lx + 0x%lx)\n",
+   716				  daif_actual, pmr_actual,
+   717				  daif_expected, pmr_expected);
+   718		} else {
+   719			unsigned long daif_expected = DAIF_PROCCTX_NOIRQ;
+   720			unsigned long daif_actual = read_sysreg(daif);
+   721	
+   722			WARN_ONCE(daif_actual != daif_expected,
+   723				  "Unexpected DAIF value: 0x%lx (expected 0x%lx)\n",
+   724				  daif_actual, daif_expected);
+   725		}
+   726	}
+   727	
 
---=20
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
