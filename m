@@ -1,136 +1,505 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A813B3081D6;
-	Wed, 25 Mar 2026 12:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43648242D67;
+	Wed, 25 Mar 2026 13:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774441898; cv=none; b=H6rS9Tz0SiGzRvjBAMZ5XChoZ3j4fyrTzt3MKG29vo2AKiET8+1WgbKyWRh0SP7sC8BwU+1mS4IwAV5xJChQBOT+IrMuD/+u8zeDEyNJedJ4mpOi2VNW8M7g7OtWUU0snTw9nUVvTzYlmRYDrlupp1bFWtZ1VLIGyj2qjTRYDKI=
+	t=1774446364; cv=none; b=jAelHbtIWSiowmZnyBDuxX7i0tAp811khCr5Mfyq9a2Mq4bbr7PpKXEO6xowVBNfrqAR3tkOzt3m0fWXHaUpJElXSGJtPM4XOWc2+dlqRoo0MCx76btx7B9tjajPdrw5fpLIs4mUCYCMD6EnJ4hEr4122BFIFEeVTZwvybpLatA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774441898; c=relaxed/simple;
-	bh=Z3SZCSbhBFWu8rsltkP3qFJdmtCVYUDApccrJqNIdqc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=iC4eWsiWBLZDVUe2Y1MJMTUdHrVP5NVnOTf3oukyRR2dZgAMlKlGStmPY0cQaSfqjf9ODjyfJ2tigke1VEBl2yLFxDpUwRj+ZQfKr9QmipssGa6VJWCTnRLtW8BeSzY8OVLBx50tvHuLg5OR0DsLfVwCJbCx3/ycMK2L233VybE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mpi5XMRQ; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774446364; c=relaxed/simple;
+	bh=TSXGQzfP711qrPB0j3RMTHQ/TMRpAy/A6hAklaBDA4k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mx4G4I4CGbhenMlmmyAcSGipU9pa3PoOKnoqtq3amS9hZ0YXw1aU3onzBpaPOZ64mb5tKGlYVh9N58oALncAsKyUKhNyJby0UHGTIhBi4Lrvycpre+DVjo3MzabDVqS+x+j7BfymGeBD1iqiDF3ZSHHfXs1OAPsr3AEb7l6P/ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/spztVF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mpi5XMRQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774441897; x=1805977897;
-  h=date:from:to:cc:subject:message-id;
-  bh=Z3SZCSbhBFWu8rsltkP3qFJdmtCVYUDApccrJqNIdqc=;
-  b=Mpi5XMRQlUnHtqyqgomlmt4Rzi+BJlpCB+LNMadOsjrCFpEEF+R7YpTK
-   pcOa2zGiyRQFcNEtpNJ5//XUzogekyzOevmUT4viyDWpI/ymiZeEsfCqS
-   1TrFKQ7XRYNgLiG7JuVHy98zB6RarWn/rXpjXWRz8NmVnZhl/xcqFGh/z
-   wsfLgJstdLx+Ju+JwEM9VVXKhX9WXpevAAC9EunG73/Z5yqjdiaPTp/gt
-   BYJjVyuzR4tMQQ6MdYGlvQTpJCc1s038VHz4kZ7jri63l5mgOs+19asr1
-   vnDkaEmAWrM7qtpqMSwaaoBxXoyRZu3xHS49A0kY7tQXA+1uy6PCKWWQ5
-   A==;
-X-CSE-ConnectionGUID: aiw8ooR5TcuUrHJQT8YufQ==
-X-CSE-MsgGUID: v5Tz4rzJRIqTvku1QbJikQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="75364091"
-X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
-   d="scan'208";a="75364091"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 05:31:35 -0700
-X-CSE-ConnectionGUID: 8CQC4yxfTTOs87CSuot9FA==
-X-CSE-MsgGUID: w5p9LRehRKyzhtdFCb4Urg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
-   d="scan'208";a="248184791"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 25 Mar 2026 05:31:33 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w5NOU-000000006oP-3PnQ;
-	Wed, 25 Mar 2026 12:31:30 +0000
-Date: Wed, 25 Mar 2026 20:30:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-input@vger.kernel.org
-Subject: [dtor-input:next 32/43]
- drivers/input/touchscreen/mxs-lradc-ts.c:508:45: error: too many arguments
- provided to function-like macro invocation
-Message-ID: <202603252030.fwSlmiBx-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/spztVF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34EB4C4CEF7;
+	Wed, 25 Mar 2026 13:46:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774446364;
+	bh=TSXGQzfP711qrPB0j3RMTHQ/TMRpAy/A6hAklaBDA4k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=J/spztVFpXILaV+6ISmNoFIGf1Mui271QWTcRyRoDb3SPrr3NxvDFhuPASQEbQhf8
+	 3K4ugQYSfJfFA5Z1JDdkJr05RYbVEcwVqb5JAJY7jRlH5QjoP47pxerzooHtYPyG9r
+	 nROPr3OA04hZpxq9YihKZWYR04DshQIa9eBCzPPFObwxQeqyf94IfX/p3TvvXgBTQg
+	 Cq6r0O7ufY2SjiUkL32ItHj7p8t02CQABqsFD8uZ20es3Chk61kKFvbSqsLjAJel/V
+	 R+C5N+C1OHEInDbsFsjKAwe+pOqGmHnhKQIr9F8tvcM9SSblh85T15PZ8XDDzGm2+b
+	 1rhwJWh62NviQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Edward Cree <ecree.xilinx@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Jeff Garzik <jgarzik@redhat.com>,
+	Ben Hutchings <bhutchings@solarflare.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Brett Creeley <brett.creeley@amd.com>,
+	Breno Leitao <leitao@debian.org>,
+	Kees Cook <kees@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-net-drivers@amd.com,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] [v2] net: sfc: avoid format string warning
+Date: Wed, 25 Mar 2026 14:45:44 +0100
+Message-Id: <20260325134557.3406655-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-head:   303cdff39cdb1895a6d2b08e8946cc89feaf405c
-commit: a995f3ca3bd51c348bd4c8d1833d318bef1a5001 [32/43] Input: mxs-lradc-ts - use guard notation when acquiring spinlock
-config: riscv-randconfig-001-20260325 (https://download.01.org/0day-ci/archive/20260325/202603252030.fwSlmiBx-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603252030.fwSlmiBx-lkp@intel.com/reproduce)
+From: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603252030.fwSlmiBx-lkp@intel.com/
+Three sfc drivers contain the same *_fill_test() function that takes
+a format string argument that gets passed down to snprintf(), producing
+a warning with clang-22:
 
-All errors (new ones prefixed by >>):
+drivers/net/ethernet/sfc/falcon/ethtool.c:227:60: error: diagnostic behavior may be improved by adding
+      the 'format(printf, 7, 8)' attribute to the declaration of 'ef4_fill_test' [-Werror,-Wmissing-format-attribute]
+  210 |                 snprintf(test_str, sizeof(test_str), test_format, test_id);
+      |                                                                          ^
+drivers/net/ethernet/sfc/falcon/ethtool.c:210:13: note: 'ef4_fill_test' declared here
 
->> drivers/input/touchscreen/mxs-lradc-ts.c:508:45: error: too many arguments provided to function-like macro invocation
-     508 |                 scoped_guard(spinlock_irqsave, &ts->lock, flags) {
-         |                                                           ^
-   include/linux/spinlock.h:623:9: note: macro 'class_spinlock_irqsave_constructor' defined here
-     623 | #define class_spinlock_irqsave_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(spinlock_irqsave, _T)
-         |         ^
->> drivers/input/touchscreen/mxs-lradc-ts.c:508:3: error: initializing 'class_spinlock_irqsave_t' with an expression of incompatible type 'class_spinlock_irqsave_t (spinlock_t *)' (aka 'class_spinlock_irqsave_t (struct spinlock *)')
-     508 |                 scoped_guard(spinlock_irqsave, &ts->lock, flags) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:447:2: note: expanded from macro 'scoped_guard'
-     447 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:438:20: note: expanded from macro '__scoped_guard'
-     438 |         for (CLASS(_name, scope)(args);                                 \
-         |              ~~~~~~~~~~~~~^~~~~~
-   include/linux/cleanup.h:299:20: note: expanded from macro 'CLASS'
-     299 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
-         |                           ^
-     300 |                 class_##_name##_constructor
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+Rework these to take a varargs based test_format that allows better
+type checking and a non-varargs unit name that gets pre-filled by
+the caller, so that the compiler can validate all format strings.
 
+Fixes: 3273c2e8c66a ("[netdrvr] sfc: sfc: Add self-test support")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+v2: open-code the unit name format as well
+    reformat the function prototype
+---
+ drivers/net/ethernet/sfc/ethtool_common.c     | 67 +++++++++---------
+ drivers/net/ethernet/sfc/falcon/ethtool.c     | 68 +++++++++---------
+ .../net/ethernet/sfc/siena/ethtool_common.c   | 69 +++++++++----------
+ 3 files changed, 99 insertions(+), 105 deletions(-)
 
-vim +508 drivers/input/touchscreen/mxs-lradc-ts.c
-
-   491	
-   492	/* IRQ Handling */
-   493	static irqreturn_t mxs_lradc_ts_handle_irq(int irq, void *data)
-   494	{
-   495		struct mxs_lradc_ts *ts = data;
-   496		struct mxs_lradc *lradc = ts->lradc;
-   497		unsigned long reg = readl(ts->base + LRADC_CTRL1);
-   498		u32 clr_irq = mxs_lradc_irq_mask(lradc);
-   499		const u32 ts_irq_mask =
-   500			LRADC_CTRL1_TOUCH_DETECT_IRQ |
-   501			LRADC_CTRL1_LRADC_IRQ(TOUCHSCREEN_VCHANNEL1) |
-   502			LRADC_CTRL1_LRADC_IRQ(TOUCHSCREEN_VCHANNEL2);
-   503	
-   504		if (!(reg & mxs_lradc_irq_mask(lradc)))
-   505			return IRQ_NONE;
-   506	
-   507		if (reg & ts_irq_mask) {
- > 508			scoped_guard(spinlock_irqsave, &ts->lock, flags) {
-   509				mxs_lradc_handle_touch(ts);
-   510			}
-   511			/* Make sure we don't clear the next conversion's interrupt. */
-   512			clr_irq &= ~(LRADC_CTRL1_LRADC_IRQ(TOUCHSCREEN_VCHANNEL1) |
-   513					LRADC_CTRL1_LRADC_IRQ(TOUCHSCREEN_VCHANNEL2));
-   514			writel(reg & clr_irq,
-   515			       ts->base + LRADC_CTRL1 + STMP_OFFSET_REG_CLR);
-   516		}
-   517	
-   518		return IRQ_HANDLED;
-   519	}
-   520	
-
+diff --git a/drivers/net/ethernet/sfc/ethtool_common.c b/drivers/net/ethernet/sfc/ethtool_common.c
+index 54f8e4626568..62a94c995241 100644
+--- a/drivers/net/ethernet/sfc/ethtool_common.c
++++ b/drivers/net/ethernet/sfc/ethtool_common.c
+@@ -247,18 +247,17 @@ int efx_ethtool_set_pauseparam(struct net_device *net_dev,
+  * @strings:		Ethtool strings, or %NULL
+  * @data:		Ethtool test results, or %NULL
+  * @test:		Pointer to test result (used only if data != %NULL)
+- * @unit_format:	Unit name format (e.g. "chan\%d")
+- * @unit_id:		Unit id (e.g. 0 for "chan0")
++ * @unit_name:		Unit name
+  * @test_format:	Test name format (e.g. "loopback.\%s.tx.sent")
+- * @test_id:		Test id (e.g. "PHYXS" for "loopback.PHYXS.tx_sent")
+  *
+  * Fill in an individual self-test entry.
+  */
+-static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
+-			  int *test, const char *unit_format, int unit_id,
+-			  const char *test_format, const char *test_id)
++static void __printf(6, 7) efx_fill_test(unsigned int test_index, u8 *strings,
++					 u64 *data, int *test,
++					 const char *unit_name,
++					 const char *test_format, ...)
+ {
+-	char unit_str[ETH_GSTRING_LEN], test_str[ETH_GSTRING_LEN];
++	char test_str[ETH_GSTRING_LEN];
+ 
+ 	/* Fill data value, if applicable */
+ 	if (data)
+@@ -266,20 +265,16 @@ static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
+ 
+ 	/* Fill string, if applicable */
+ 	if (strings) {
+-		if (strchr(unit_format, '%'))
+-			snprintf(unit_str, sizeof(unit_str),
+-				 unit_format, unit_id);
+-		else
+-			strcpy(unit_str, unit_format);
+-		snprintf(test_str, sizeof(test_str), test_format, test_id);
++		va_list args;
++
++		va_start(args, test_format);
++		vsnprintf(test_str, sizeof(test_str), test_format, args);
++		va_end(args);
+ 		snprintf(strings + test_index * ETH_GSTRING_LEN,
+-			 ETH_GSTRING_LEN,
+-			 "%-6s %-24s", unit_str, test_str);
++			 ETH_GSTRING_LEN, "%-6s %-24s", unit_name, test_str);
+ 	}
+ }
+ 
+-#define EFX_CHANNEL_NAME(_channel) "chan%d", _channel->channel
+-#define EFX_TX_QUEUE_NAME(_tx_queue) "txq%d", _tx_queue->label
+ #define EFX_LOOPBACK_NAME(_mode, _counter)			\
+ 	"loopback.%s." _counter, STRING_TABLE_LOOKUP(_mode, efx_loopback_mode)
+ 
+@@ -306,23 +301,23 @@ static int efx_fill_loopback_test(struct efx_nic *efx,
+ 	struct efx_tx_queue *tx_queue;
+ 
+ 	efx_for_each_channel_tx_queue(tx_queue, channel) {
++		char unit_str[ETH_GSTRING_LEN];
++
++		snprintf(unit_str, sizeof(unit_str), "txq%d", tx_queue->label);
++
+ 		efx_fill_test(test_index++, strings, data,
+ 			      &lb_tests->tx_sent[tx_queue->label],
+-			      EFX_TX_QUEUE_NAME(tx_queue),
+-			      EFX_LOOPBACK_NAME(mode, "tx_sent"));
++			      unit_str, EFX_LOOPBACK_NAME(mode, "tx_sent"));
+ 		efx_fill_test(test_index++, strings, data,
+ 			      &lb_tests->tx_done[tx_queue->label],
+-			      EFX_TX_QUEUE_NAME(tx_queue),
+-			      EFX_LOOPBACK_NAME(mode, "tx_done"));
++			      unit_str, EFX_LOOPBACK_NAME(mode, "tx_done"));
+ 	}
+ 	efx_fill_test(test_index++, strings, data,
+ 		      &lb_tests->rx_good,
+-		      "rx", 0,
+-		      EFX_LOOPBACK_NAME(mode, "rx_good"));
++		      "rx", EFX_LOOPBACK_NAME(mode, "rx_good"));
+ 	efx_fill_test(test_index++, strings, data,
+ 		      &lb_tests->rx_bad,
+-		      "rx", 0,
+-		      EFX_LOOPBACK_NAME(mode, "rx_bad"));
++		      "rx", EFX_LOOPBACK_NAME(mode, "rx_bad"));
+ 
+ 	return test_index;
+ }
+@@ -349,28 +344,30 @@ int efx_ethtool_fill_self_tests(struct efx_nic *efx,
+ 	enum efx_loopback_mode mode;
+ 
+ 	efx_fill_test(n++, strings, data, &tests->phy_alive,
+-		      "phy", 0, "alive", NULL);
++		      "phy", "alive");
+ 	efx_fill_test(n++, strings, data, &tests->nvram,
+-		      "core", 0, "nvram", NULL);
++		      "core", "nvram");
+ 	efx_fill_test(n++, strings, data, &tests->interrupt,
+-		      "core", 0, "interrupt", NULL);
++		      "core", "interrupt");
+ 
+ 	/* Event queues */
+ 	efx_for_each_channel(channel, efx) {
++		char unit_str[ETH_GSTRING_LEN];
++
++		snprintf(unit_str, sizeof(unit_str), "txq%d", channel->channel);
++
+ 		efx_fill_test(n++, strings, data,
+ 			      &tests->eventq_dma[channel->channel],
+-			      EFX_CHANNEL_NAME(channel),
+-			      "eventq.dma", NULL);
++			      unit_str, "eventq.dma");
+ 		efx_fill_test(n++, strings, data,
+ 			      &tests->eventq_int[channel->channel],
+-			      EFX_CHANNEL_NAME(channel),
+-			      "eventq.int", NULL);
++			      unit_str, "eventq.int");
+ 	}
+ 
+ 	efx_fill_test(n++, strings, data, &tests->memory,
+-		      "core", 0, "memory", NULL);
++		      "core", "memory");
+ 	efx_fill_test(n++, strings, data, &tests->registers,
+-		      "core", 0, "registers", NULL);
++		      "core", "registers");
+ 
+ 	for (i = 0; true; ++i) {
+ 		const char *name;
+@@ -380,7 +377,7 @@ int efx_ethtool_fill_self_tests(struct efx_nic *efx,
+ 		if (name == NULL)
+ 			break;
+ 
+-		efx_fill_test(n++, strings, data, &tests->phy_ext[i], "phy", 0, name, NULL);
++		efx_fill_test(n++, strings, data, &tests->phy_ext[i], "phy", "%s", name);
+ 	}
+ 
+ 	/* Loopback tests */
+diff --git a/drivers/net/ethernet/sfc/falcon/ethtool.c b/drivers/net/ethernet/sfc/falcon/ethtool.c
+index 807c587eba3b..260340b291d3 100644
+--- a/drivers/net/ethernet/sfc/falcon/ethtool.c
++++ b/drivers/net/ethernet/sfc/falcon/ethtool.c
+@@ -200,18 +200,17 @@ static void ef4_ethtool_set_msglevel(struct net_device *net_dev, u32 msg_enable)
+  * @strings:		Ethtool strings, or %NULL
+  * @data:		Ethtool test results, or %NULL
+  * @test:		Pointer to test result (used only if data != %NULL)
+- * @unit_format:	Unit name format (e.g. "chan\%d")
+- * @unit_id:		Unit id (e.g. 0 for "chan0")
++ * @unit_name:		Unit name
+  * @test_format:	Test name format (e.g. "loopback.\%s.tx.sent")
+- * @test_id:		Test id (e.g. "PHYXS" for "loopback.PHYXS.tx_sent")
+  *
+  * Fill in an individual self-test entry.
+  */
+-static void ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
+-			  int *test, const char *unit_format, int unit_id,
+-			  const char *test_format, const char *test_id)
++static void __printf(6, 7) ef4_fill_test(unsigned int test_index, u8 *strings,
++					 u64 *data, int *test,
++					 const char *unit_name,
++					 const char *test_format, ...)
+ {
+-	char unit_str[ETH_GSTRING_LEN], test_str[ETH_GSTRING_LEN];
++	char test_str[ETH_GSTRING_LEN];
+ 
+ 	/* Fill data value, if applicable */
+ 	if (data)
+@@ -219,21 +218,17 @@ static void ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
+ 
+ 	/* Fill string, if applicable */
+ 	if (strings) {
+-		if (strchr(unit_format, '%'))
+-			snprintf(unit_str, sizeof(unit_str),
+-				 unit_format, unit_id);
+-		else
+-			strcpy(unit_str, unit_format);
+-		snprintf(test_str, sizeof(test_str), test_format, test_id);
++		va_list arg;
++
++		va_start(arg, test_format);
++		vsnprintf(test_str, sizeof(test_str), test_format, arg);
++		va_end(arg);
+ 		snprintf(strings + test_index * ETH_GSTRING_LEN,
+ 			 ETH_GSTRING_LEN,
+-			 "%-6s %-24s", unit_str, test_str);
++			 "%-6s %-24s", unit_name, test_str);
+ 	}
+ }
+ 
+-#define EF4_CHANNEL_NAME(_channel) "chan%d", _channel->channel
+-#define EF4_TX_QUEUE_NAME(_tx_queue) "txq%d", _tx_queue->queue
+-#define EF4_RX_QUEUE_NAME(_rx_queue) "rxq%d", _rx_queue->queue
+ #define EF4_LOOPBACK_NAME(_mode, _counter)			\
+ 	"loopback.%s." _counter, STRING_TABLE_LOOKUP(_mode, ef4_loopback_mode)
+ 
+@@ -260,23 +255,23 @@ static int ef4_fill_loopback_test(struct ef4_nic *efx,
+ 	struct ef4_tx_queue *tx_queue;
+ 
+ 	ef4_for_each_channel_tx_queue(tx_queue, channel) {
++		char unit_str[ETH_GSTRING_LEN];
++
++		snprintf(unit_str, sizeof(unit_str), "txq%d", tx_queue->queue);
++
+ 		ef4_fill_test(test_index++, strings, data,
+ 			      &lb_tests->tx_sent[tx_queue->queue],
+-			      EF4_TX_QUEUE_NAME(tx_queue),
+-			      EF4_LOOPBACK_NAME(mode, "tx_sent"));
++			      unit_str, EF4_LOOPBACK_NAME(mode, "tx_sent"));
+ 		ef4_fill_test(test_index++, strings, data,
+ 			      &lb_tests->tx_done[tx_queue->queue],
+-			      EF4_TX_QUEUE_NAME(tx_queue),
+-			      EF4_LOOPBACK_NAME(mode, "tx_done"));
++			      unit_str, EF4_LOOPBACK_NAME(mode, "tx_done"));
+ 	}
+ 	ef4_fill_test(test_index++, strings, data,
+ 		      &lb_tests->rx_good,
+-		      "rx", 0,
+-		      EF4_LOOPBACK_NAME(mode, "rx_good"));
++		      "rx", EF4_LOOPBACK_NAME(mode, "rx_good"));
+ 	ef4_fill_test(test_index++, strings, data,
+ 		      &lb_tests->rx_bad,
+-		      "rx", 0,
+-		      EF4_LOOPBACK_NAME(mode, "rx_bad"));
++		      "rx", EF4_LOOPBACK_NAME(mode, "rx_bad"));
+ 
+ 	return test_index;
+ }
+@@ -303,28 +298,31 @@ static int ef4_ethtool_fill_self_tests(struct ef4_nic *efx,
+ 	enum ef4_loopback_mode mode;
+ 
+ 	ef4_fill_test(n++, strings, data, &tests->phy_alive,
+-		      "phy", 0, "alive", NULL);
++		      "phy", "alive");
+ 	ef4_fill_test(n++, strings, data, &tests->nvram,
+-		      "core", 0, "nvram", NULL);
++		      "core", "nvram");
+ 	ef4_fill_test(n++, strings, data, &tests->interrupt,
+-		      "core", 0, "interrupt", NULL);
++		      "core", "interrupt");
+ 
+ 	/* Event queues */
+ 	ef4_for_each_channel(channel, efx) {
++		char unit_str[ETH_GSTRING_LEN];
++
++		snprintf(unit_str, sizeof(unit_str), "chan%d",
++			 channel->channel);
++
+ 		ef4_fill_test(n++, strings, data,
+ 			      &tests->eventq_dma[channel->channel],
+-			      EF4_CHANNEL_NAME(channel),
+-			      "eventq.dma", NULL);
++			      unit_str, "eventq.dma");
+ 		ef4_fill_test(n++, strings, data,
+ 			      &tests->eventq_int[channel->channel],
+-			      EF4_CHANNEL_NAME(channel),
+-			      "eventq.int", NULL);
++			      unit_str, "eventq.int");
+ 	}
+ 
+ 	ef4_fill_test(n++, strings, data, &tests->memory,
+-		      "core", 0, "memory", NULL);
++		      "core", "memory");
+ 	ef4_fill_test(n++, strings, data, &tests->registers,
+-		      "core", 0, "registers", NULL);
++		      "core", "registers");
+ 
+ 	if (efx->phy_op->run_tests != NULL) {
+ 		EF4_BUG_ON_PARANOID(efx->phy_op->test_name == NULL);
+@@ -338,7 +336,7 @@ static int ef4_ethtool_fill_self_tests(struct ef4_nic *efx,
+ 				break;
+ 
+ 			ef4_fill_test(n++, strings, data, &tests->phy_ext[i],
+-				      "phy", 0, name, NULL);
++				      "phy", "%s", name);
+ 		}
+ 	}
+ 
+diff --git a/drivers/net/ethernet/sfc/siena/ethtool_common.c b/drivers/net/ethernet/sfc/siena/ethtool_common.c
+index 76cbce2b9592..e49cc604b43a 100644
+--- a/drivers/net/ethernet/sfc/siena/ethtool_common.c
++++ b/drivers/net/ethernet/sfc/siena/ethtool_common.c
+@@ -199,18 +199,17 @@ int efx_siena_ethtool_set_pauseparam(struct net_device *net_dev,
+  * @strings:		Ethtool strings, or %NULL
+  * @data:		Ethtool test results, or %NULL
+  * @test:		Pointer to test result (used only if data != %NULL)
+- * @unit_format:	Unit name format (e.g. "chan\%d")
+- * @unit_id:		Unit id (e.g. 0 for "chan0")
++ * @unit_name:		Unit name
+  * @test_format:	Test name format (e.g. "loopback.\%s.tx.sent")
+- * @test_id:		Test id (e.g. "PHYXS" for "loopback.PHYXS.tx_sent")
+  *
+  * Fill in an individual self-test entry.
+  */
+-static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
+-			  int *test, const char *unit_format, int unit_id,
+-			  const char *test_format, const char *test_id)
++static void __printf(6, 7) efx_fill_test(unsigned int test_index, u8 *strings,
++					 u64 *data, int *test,
++					 const char *unit_name,
++					 char *test_format, ...)
+ {
+-	char unit_str[ETH_GSTRING_LEN], test_str[ETH_GSTRING_LEN];
++	char test_str[ETH_GSTRING_LEN];
+ 
+ 	/* Fill data value, if applicable */
+ 	if (data)
+@@ -218,20 +217,16 @@ static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
+ 
+ 	/* Fill string, if applicable */
+ 	if (strings) {
+-		if (strchr(unit_format, '%'))
+-			snprintf(unit_str, sizeof(unit_str),
+-				 unit_format, unit_id);
+-		else
+-			strcpy(unit_str, unit_format);
+-		snprintf(test_str, sizeof(test_str), test_format, test_id);
++		va_list args;
++
++		va_start(args, test_format);
++		vsnprintf(test_str, sizeof(test_str), test_format, args);
++		va_end(args);
+ 		snprintf(strings + test_index * ETH_GSTRING_LEN,
+-			 ETH_GSTRING_LEN,
+-			 "%-6s %-24s", unit_str, test_str);
++			 ETH_GSTRING_LEN, "%-6s %-24s", unit_name, test_str);
+ 	}
+ }
+ 
+-#define EFX_CHANNEL_NAME(_channel) "chan%d", _channel->channel
+-#define EFX_TX_QUEUE_NAME(_tx_queue) "txq%d", _tx_queue->label
+ #define EFX_LOOPBACK_NAME(_mode, _counter)			\
+ 	"loopback.%s." _counter, STRING_TABLE_LOOKUP(_mode, efx_siena_loopback_mode)
+ 
+@@ -258,23 +253,23 @@ static int efx_fill_loopback_test(struct efx_nic *efx,
+ 	struct efx_tx_queue *tx_queue;
+ 
+ 	efx_for_each_channel_tx_queue(tx_queue, channel) {
++		char unit_str[ETH_GSTRING_LEN];
++
++		snprintf(unit_str, sizeof(unit_str), "txq%d",tx_queue->label);
++
+ 		efx_fill_test(test_index++, strings, data,
+ 			      &lb_tests->tx_sent[tx_queue->label],
+-			      EFX_TX_QUEUE_NAME(tx_queue),
+-			      EFX_LOOPBACK_NAME(mode, "tx_sent"));
++			      unit_str, EFX_LOOPBACK_NAME(mode, "tx_sent"));
+ 		efx_fill_test(test_index++, strings, data,
+ 			      &lb_tests->tx_done[tx_queue->label],
+-			      EFX_TX_QUEUE_NAME(tx_queue),
+-			      EFX_LOOPBACK_NAME(mode, "tx_done"));
++			      unit_str, EFX_LOOPBACK_NAME(mode, "tx_done"));
+ 	}
+ 	efx_fill_test(test_index++, strings, data,
+ 		      &lb_tests->rx_good,
+-		      "rx", 0,
+-		      EFX_LOOPBACK_NAME(mode, "rx_good"));
++		      "rx", EFX_LOOPBACK_NAME(mode, "rx_good"));
+ 	efx_fill_test(test_index++, strings, data,
+ 		      &lb_tests->rx_bad,
+-		      "rx", 0,
+-		      EFX_LOOPBACK_NAME(mode, "rx_bad"));
++		      "rx", EFX_LOOPBACK_NAME(mode, "rx_bad"));
+ 
+ 	return test_index;
+ }
+@@ -301,28 +296,31 @@ static int efx_ethtool_fill_self_tests(struct efx_nic *efx,
+ 	enum efx_loopback_mode mode;
+ 
+ 	efx_fill_test(n++, strings, data, &tests->phy_alive,
+-		      "phy", 0, "alive", NULL);
++		      "phy", "alive");
+ 	efx_fill_test(n++, strings, data, &tests->nvram,
+-		      "core", 0, "nvram", NULL);
++		      "core", "nvram");
+ 	efx_fill_test(n++, strings, data, &tests->interrupt,
+-		      "core", 0, "interrupt", NULL);
++		      "core", "interrupt");
+ 
+ 	/* Event queues */
+ 	efx_for_each_channel(channel, efx) {
++		char unit_str[ETH_GSTRING_LEN];
++
++		snprintf(unit_str, sizeof(unit_str), "chan%d",
++			 channel->channel);
++
+ 		efx_fill_test(n++, strings, data,
+ 			      &tests->eventq_dma[channel->channel],
+-			      EFX_CHANNEL_NAME(channel),
+-			      "eventq.dma", NULL);
++			      unit_str, "eventq.dma");
+ 		efx_fill_test(n++, strings, data,
+ 			      &tests->eventq_int[channel->channel],
+-			      EFX_CHANNEL_NAME(channel),
+-			      "eventq.int", NULL);
++			      unit_str, "eventq.int");
+ 	}
+ 
+ 	efx_fill_test(n++, strings, data, &tests->memory,
+-		      "core", 0, "memory", NULL);
++		      "core", "memory");
+ 	efx_fill_test(n++, strings, data, &tests->registers,
+-		      "core", 0, "registers", NULL);
++		      "core", "registers");
+ 
+ 	for (i = 0; true; ++i) {
+ 		const char *name;
+@@ -332,7 +330,8 @@ static int efx_ethtool_fill_self_tests(struct efx_nic *efx,
+ 		if (name == NULL)
+ 			break;
+ 
+-		efx_fill_test(n++, strings, data, &tests->phy_ext[i], "phy", 0, name, NULL);
++		efx_fill_test(n++, strings, data, &tests->phy_ext[i], "phy",
++			      "%s", name);
+ 	}
+ 
+ 	/* Loopback tests */
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.5
+
