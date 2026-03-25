@@ -1,167 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF6C2DB7BD;
-	Wed, 25 Mar 2026 05:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C01359A67;
+	Wed, 25 Mar 2026 06:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774416981; cv=none; b=mUfDMWj4WkXaqHTjBWZYc0oljmID0vaPjj4F+PHCOXc8fRY5jCQfyhzfm45yNEuXGFrHLodqGsyKwvFbr0IXug5Ey5MxKoIVxYr1ltImNInX66a/G7RlFitc5T4fyo2RnzMz2CxrUvYz1NiVBSl8oo97HP1pkwfaYqES/CzpzhY=
+	t=1774421550; cv=none; b=EcWCOoReO0y1slrZ/VZnO16MeN9yQ6zyuz+KLI8z0MLRZXWKgSI25hRk4Zz7DAlqopuMoyCL/Gm7Wku0XRl/DxaR548iSzGyESzakmSrG3AnMBDqs2OUFFdjL2k5YFb03p6Sa9x2aUPntmdb6yAzyjXHzoSrvmqjpVvFQXWSM3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774416981; c=relaxed/simple;
-	bh=lw2dF1Jz7k5PP1qT6ep8zHjP8aZcyJlc8wVKL2yCQYc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Vj1K/bVxcQNjw5NFpBp9XMpYKrBZRuorVtiqgVPoOI/MRS1iQdRLYjcoP60qtYzMU//8sl2RD5NQneawpjfGKGymVfnA4Jzb4W4oJb8rwF63M+LhWAFqWaDaY/nfkmjDWAcmVGXej3I2Oi/D6b7/3FTvJvwC7J2PeiND4XJXXs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KgCOyUaU; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774421550; c=relaxed/simple;
+	bh=fU/VJh0UztktKXhSBTPB1iPWDk4L9bU53cVBSq8CXbg=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=b2fMDvBFnO3FMT5nbRfTtmPwrjIdpKu+NZO54kMQuOrisLeQ0lE4O6J72stO73rplQWXJQtqvOlxg3LoebSEUma6jGv1PiuIWwrd0ys6HQWE0Huw/v7Y14TFIU891zHuzQae3dBP3fwCXeMGekKOOIaEe1sZXsFlli0TmJAc4xA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZM3lVxg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KgCOyUaU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774416979; x=1805952979;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lw2dF1Jz7k5PP1qT6ep8zHjP8aZcyJlc8wVKL2yCQYc=;
-  b=KgCOyUaUnvExCdxAP3z0t6NB8Kk4C177KXcXjINXICc2qHv4/QmYHsMH
-   bhA0TfQTb2Ab5c08g3HgL2mGbtkOwGioH2fMsQ6YdnNHr+xMLcPauxmpY
-   2NZR1+mmiw7F21TiAjhE+6CiXMnTUgqm/A4E4IcZ8a0EklRGIc1DS1uc7
-   MuWSBQAFQQYGYyLZkrY/j4X28ATOul6vQvhfBijqgl/BS3t18gmncTOiu
-   q30mUmenVGzR0H4jfatHA+xNyyCBGS/OsVR9qBXT/A18MDrABfhR9SW1j
-   TaH8lOmq2FjjdqT8PDOvyi7AdU3dGBiDkxry31/k+chnqlrq3vsB36IQq
-   A==;
-X-CSE-ConnectionGUID: oH3+6+Y+Qoi8cY2mpcr/dQ==
-X-CSE-MsgGUID: 9hXiYxnURaCU3tRxmSaHJw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="86820060"
-X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="86820060"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 22:36:19 -0700
-X-CSE-ConnectionGUID: vjaviDabQOKiGJfwMnZY+g==
-X-CSE-MsgGUID: qPYsJTYbT7Cf/v995+SRQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="247610019"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 24 Mar 2026 22:36:16 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w5Guc-000000006FP-1160;
-	Wed, 25 Mar 2026 05:36:14 +0000
-Date: Wed, 25 Mar 2026 13:35:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Simon Richter <Simon.Richter@hogyros.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
-Subject: [pci:vga 3/5] drivers/gpu/drm/i915/display/intel_vga.c:68:2:
- warning: ignoring return value of function declared with 'warn_unused_result'
- attribute
-Message-ID: <202603251309.Q7UMM0U3-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZM3lVxg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192BCC4CEF7;
+	Wed, 25 Mar 2026 06:52:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774421549;
+	bh=fU/VJh0UztktKXhSBTPB1iPWDk4L9bU53cVBSq8CXbg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OZM3lVxgorgE0odGqelej3/fjAhHD7YeknyfI7SVjzBgob8jn7kPaFwfMvKuoWUA8
+	 yk+9A0NJido9xTQjWNWp2CepFEnHiaryCVLuKGKblNi7imMKyE527KGnSZx5as7Ajy
+	 JOzWMw+goyCyiGCbBrsg5BffnhbbfzrkfiHhOE4vWDPMe4L6r9a5RVOoXqGQ3RQgrT
+	 8mCmZjmmQXtlmYIqAuA4rKxKpQzILXO4QRNOGaTdIqGZHPnulVqpotW/UnP0Izx7eg
+	 9OP8frL7ju0zcB5t6teZSXdgHzCdkF4s1noZnYVAgE3ArPCCnOqGn/Cdxp5qoW0Y6r
+	 fH84+JpSeCONA==
+Date: Wed, 25 Mar 2026 15:52:27 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Breno Leitao <leitao@debian.org>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>
+Subject: Re: [trace:bootconfig/for-next 16/16] init/main.c:437:20: warning:
+ stack frame size (4192) exceeds limit (2048) in
+ 'bootconfig_apply_early_params'
+Message-Id: <20260325155227.55cdfb9f4ce96c335d0c7f18@kernel.org>
+In-Reply-To: <202603251010.5Ui0yrB2-lkp@intel.com>
+References: <202603251010.5Ui0yrB2-lkp@intel.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git vga
-head:   aac641c7e5feb2d966a07f7f5da5ddecb5f07e13
-commit: c75d295afc77223a889bed578e4a686e000c1691 [3/5] PCI/VGA: Mark vga_ge=
-t() and wrappers as __must_check
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20260325/20=
-2603251309.Q7UMM0U3-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f022=
-7cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
-/20260325/202603251309.Q7UMM0U3-lkp@intel.com/reproduce)
+On Wed, 25 Mar 2026 10:37:25 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new versio=
-n of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603251309.Q7UMM0U3-lkp@i=
-ntel.com/
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace bootconfig/for-next
+> head:   1a427f2a710583872b6176ea8378e0a1a8719fc4
+> commit: 1a427f2a710583872b6176ea8378e0a1a8719fc4 [16/16] bootconfig: Apply early options from embedded config
+> config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260325/202603251010.5Ui0yrB2-lkp@intel.com/config)
+> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603251010.5Ui0yrB2-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202603251010.5Ui0yrB2-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> init/main.c:437:20: warning: stack frame size (4192) exceeds limit (2048) in 'bootconfig_apply_early_params' [-Wframe-larger-than]
+>      437 | static void __init bootconfig_apply_early_params(void)
+>          |                    ^
+>    1 warning generated.
+> 
+> 
+> vim +/bootconfig_apply_early_params +437 init/main.c
+> 
+>    416	
+>    417	/*
+>    418	 * do_early_param() is defined later in this file but called from
+>    419	 * bootconfig_apply_early_params() below, so we need a forward declaration.
+>    420	 */
+>    421	static int __init do_early_param(char *param, char *val,
+>    422					 const char *unused, void *arg);
+>    423	
+>    424	/*
+>    425	 * bootconfig_apply_early_params - dispatch kernel.* keys from the embedded
+>    426	 * bootconfig as early_param() calls.
+>    427	 *
+>    428	 * early_param() handlers must run before most of the kernel initialises
+>    429	 * (e.g. before the GIC driver reads irqchip.gicv3_pseudo_nmi).  A bootconfig
+>    430	 * attached to the initrd arrives too late for this because the initrd is not
+>    431	 * mapped yet when early params are processed.  The embedded bootconfig lives
+>    432	 * in the kernel image itself (.init.data), so it is always reachable.
+>    433	 *
+>    434	 * This function is called from setup_boot_config() which runs in
+>    435	 * start_kernel() before parse_early_param(), making the timing correct.
+>    436	 */
+>  > 437	static void __init bootconfig_apply_early_params(void)
+>    438	{
+>    439		char val_buf[COMMAND_LINE_SIZE];
 
-All warnings (new ones prefixed by >>):
+Ah, this COMMAND_LINE_SIZE is too big to allocate it on stack.
+We need to make it as a static __initdata variable.
 
->> drivers/gpu/drm/i915/display/intel_vga.c:68:2: warning: ignoring return =
-value of function declared with 'warn_unused_result' attribute [-Wunused-re=
-sult]
-      68 |         vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_vga.c:93:2: warning: ignoring return =
-value of function declared with 'warn_unused_result' attribute [-Wunused-re=
-sult]
-      93 |         vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
+Thank you,
+
+>    440		struct xbc_node *knode, *root;
+>    441		const char *val;
+>    442	
+>    443		root = xbc_find_node("kernel");
+>    444		if (!root)
+>    445			return;
+>    446	
+>    447		/*
+>    448		 * Keys that do not match any early_param() handler are silently
+>    449		 * ignored — do_early_param() always returns 0.
+>    450		 */
+>    451		xbc_node_for_each_key_value(root, knode, val) {
+>    452			if (xbc_node_compose_key_after(root, knode, xbc_namebuf, XBC_KEYLEN_MAX) < 0)
+>    453				continue;
+>    454	
+>    455			if (!val) {
+>    456				do_early_param(xbc_namebuf, NULL, NULL, NULL);
+>    457				continue;
+>    458			}
+>    459	
+>    460			/*
+>    461			 * We need to copy const char *val to a char pointer,
+>    462			 * which is what do_early_param() need, given it might
+>    463			 * call strsep(), strtok() later.
+>    464			 */
+>    465			strscpy(val_buf, val, sizeof(val_buf));
+>    466			do_early_param(xbc_namebuf, val_buf, NULL, NULL);
+>    467		}
+>    468	}
+>    469	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
 
-vim +/warn_unused_result +68 drivers/gpu/drm/i915/display/intel_vga.c
-
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  43 =20
-4fb8783165b7c6f Jani Nikula   2019-10-01  44  /* Disable the VGA plane that=
- we never use */
-4b6e05c43b7542e Ville Syrj=C3=A4l=C3=A4 2024-09-06  45  void intel_vga_disa=
-ble(struct intel_display *display)
-4fb8783165b7c6f Jani Nikula   2019-10-01  46  {
-4b6e05c43b7542e Ville Syrj=C3=A4l=C3=A4 2024-09-06  47  	struct pci_dev *pd=
-ev =3D to_pci_dev(display->drm->dev);
-4b6e05c43b7542e Ville Syrj=C3=A4l=C3=A4 2024-09-06  48  	i915_reg_t vga_reg=
- =3D intel_vga_cntrl_reg(display);
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  49  	enum pipe pipe;
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  50  	u32 tmp;
-4fb8783165b7c6f Jani Nikula   2019-10-01  51  	u8 sr1;
-4fb8783165b7c6f Jani Nikula   2019-10-01  52 =20
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  53  	tmp =3D intel_de_r=
-ead(display, vga_reg);
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  54  	if (tmp & VGA_DISP=
-_DISABLE)
-a3af0140663dc33 Emil Velikov  2021-06-04  55  		return;
-a3af0140663dc33 Emil Velikov  2021-06-04  56 =20
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  57  	if (display->platf=
-orm.cherryview)
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  58  		pipe =3D REG_FIEL=
-D_GET(VGA_PIPE_SEL_MASK_CHV, tmp);
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  59  	else if (has_vga_p=
-ipe_sel(display))
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  60  		pipe =3D REG_FIEL=
-D_GET(VGA_PIPE_SEL_MASK, tmp);
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  61  	else
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  62  		pipe =3D PIPE_A;
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  63 =20
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  64  	drm_dbg_kms(displa=
-y->drm, "Disabling VGA plane on pipe %c\n",
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  65  		    pipe_name(pip=
-e));
-0c80d60ae63461c Ville Syrj=C3=A4l=C3=A4 2025-04-17  66 =20
-4fb8783165b7c6f Jani Nikula   2019-10-01  67  	/* WaEnableVGAAccessThroughI=
-OPort:ctg,elk,ilk,snb,ivb,vlv,hsw */
-4fb8783165b7c6f Jani Nikula   2019-10-01 @68  	vga_get_uninterruptible(pdev=
-, VGA_RSRC_LEGACY_IO);
-f0bb41fad02e031 Jani Nikula   2022-02-02  69  	outb(0x01, VGA_SEQ_I);
-f0bb41fad02e031 Jani Nikula   2022-02-02  70  	sr1 =3D inb(VGA_SEQ_D);
-f0bb41fad02e031 Jani Nikula   2022-02-02  71  	outb(sr1 | VGA_SR01_SCREEN_O=
-FF, VGA_SEQ_D);
-4fb8783165b7c6f Jani Nikula   2019-10-01  72  	vga_put(pdev, VGA_RSRC_LEGAC=
-Y_IO);
-4fb8783165b7c6f Jani Nikula   2019-10-01  73  	udelay(300);
-4fb8783165b7c6f Jani Nikula   2019-10-01  74 =20
-4b6e05c43b7542e Ville Syrj=C3=A4l=C3=A4 2024-09-06  75  	intel_de_write(dis=
-play, vga_reg, VGA_DISP_DISABLE);
-4b6e05c43b7542e Ville Syrj=C3=A4l=C3=A4 2024-09-06  76  	intel_de_posting_r=
-ead(display, vga_reg);
-4fb8783165b7c6f Jani Nikula   2019-10-01  77  }
-4fb8783165b7c6f Jani Nikula   2019-10-01  78 =20
-
-:::::: The code at line 68 was first introduced by commit
-:::::: 4fb8783165b7c6fb4b52428dbb80da8554e5fd1e drm/i915/display: abstract =
-all vgaarb access to intel_vga.[ch]
-
-:::::: TO: Jani Nikula <jani.nikula@intel.com>
-:::::: CC: Jani Nikula <jani.nikula@intel.com>
-
---=20
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
