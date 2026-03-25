@@ -1,60 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C77401A3D;
-	Wed, 25 Mar 2026 17:09:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DA1371D11;
+	Wed, 25 Mar 2026 20:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774458573; cv=none; b=hzV5+plbUz6rykRGikty98VfbJJE6XG/mlW/a1qalJuX+0D7Y+0CzbG0GHHq44l+7x0yT+xklPyIz1RorXkyKGh8vQC5u54bnNBe5gCzKKQp289RCWHsA1H21oaj8SW+YXDWgp7TQMtoYOOes+ty5g9PyKg/mJb8Cj82j8c4v8o=
+	t=1774470397; cv=none; b=LPmDZF9M4TVwfINd95ZGX1W6RyVkltlH4e6Q4xbGEH5wJYrKkXX0elLyJsh8cQi/wT9MBRLXryOPUrzw3ezkRC2/t57gYwxZeEiqfCx9BS/qfheODtDKpqaaTIi9f4HT64OZqFlnrGMuGK7MIOxmOvHpGlzuZWvfBZkekaBUZdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774458573; c=relaxed/simple;
-	bh=JXbk4O60vqvAc9C4+gJ015xvUjF2FznvzP7lf7G3S1s=;
+	s=arc-20240116; t=1774470397; c=relaxed/simple;
+	bh=slXWIoKoRaY5w1vNrhs58BF51BbfKTdoGAsPVpe34Qo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kcamqjyDiLTTfz2SQAmxinJieTTU9iwP6A+NfVjf+hpkDWKcGR3BRuwR3QRq2bb51cKzltWNdDSFhuq3LbnHW+q7OHUdRXrfK+dgLOhoVWbpsaygIlbOy4OZPhmYdVD2u3INiVxuUMDcyQEauZOYq7bGv/Ultf0d3KIwTGMo/4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FcNnfrJc; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=cWFdpHN62aAIKIaRkERWlmqzAOlEXnrjU3IVu07u7UwYkoBd2oEqX2HL2h9rK7RxeM3UuwPE36Xk5WjPYhIl1KHdnwBQ0/nRQgK9Is1Mf2R8FIszXN89zOhjqu3ptdPyg7Djd0AJi22U7l/64faGQl9FJEHg0h68uujdI5eyRkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cptRYVSF; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FcNnfrJc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cptRYVSF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774458564; x=1805994564;
+  t=1774470396; x=1806006396;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JXbk4O60vqvAc9C4+gJ015xvUjF2FznvzP7lf7G3S1s=;
-  b=FcNnfrJcsUZK1tMk8LResHdi4LUzswZ+aH8SoeOoX1R97s5fN2Jbvd9+
-   CBFeu87YtDfHyj60cveuzB3VzXFK6UCPL1LR2v1OvK/M4PlhGeUKCA1l2
-   XGDy7ouj7apoZFZS1bh+pqsngeCfwz8YcJhfgyHOwzPo/6wEWlJMwEG5j
-   4P+/VXjZUsSHiuHra2OJFs8RKWl9EXYzFiHqVtzS4GPAZNwJqHinfc8xf
-   gsOll704BAp+TWCoOV5IYHuVJWhqWBBp+ECuQk7D+M15Z3GfuRECwVH3P
-   aT8/hDmcmPS09HsdVyrKF2uRo7JhHr7LiOv+M1GJjRMtivq3iTRPGS6u4
-   g==;
-X-CSE-ConnectionGUID: 0RSOiChETdyhZbt6VfpUuw==
-X-CSE-MsgGUID: eV4LlgKJS2yHVHfE9S583A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="75219347"
+  bh=slXWIoKoRaY5w1vNrhs58BF51BbfKTdoGAsPVpe34Qo=;
+  b=cptRYVSFkrNmEt47zL/YRvncPYGfXHXaCtJVEAumSPlMAQPJTO7qgVuv
+   IMNUoNovGJbdOL7kqjovkXsmY5dpSKx0QxqlohplYinRSgTBGSujjqZgB
+   LWhtEeaRovI5BuM38AkVEox01JvWuTYOiMseF25XqAdsIOYd0g8kr0t0s
+   mubzPeyus6rV/ZqVknXaLzDOHeUQuIXjoFUbLqpZC5SKFIRmpaBz9vXh0
+   n/XoQgc5Tij3kiN5jX4iav9GbKQc1MBeaKrcY5j28e+QBnovJ+X1dn8pb
+   fokLaN4UIZxBiyn/itnOq6AL5CyBE7Vz0hh0CXJe6lSdcT4h8xNT40Ig5
+   Q==;
+X-CSE-ConnectionGUID: pMadMUT5RsidRGGWBwIz2w==
+X-CSE-MsgGUID: f6KkcavwTkCgHCvn9yX/Kg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="86213513"
 X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
-   d="scan'208";a="75219347"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 10:09:14 -0700
-X-CSE-ConnectionGUID: qOXBes7WQ4ynEGWbwzUlCA==
-X-CSE-MsgGUID: So7UcWvoTgiq8KbKIywb3Q==
+   d="scan'208";a="86213513"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 13:26:36 -0700
+X-CSE-ConnectionGUID: yIhT0x4GQGqsM/lplnN5Yg==
+X-CSE-MsgGUID: XyRSoRoHQJKh4SIsU++rSA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,140,1770624000"; 
-   d="scan'208";a="228811652"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 25 Mar 2026 10:09:13 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 25 Mar 2026 13:26:33 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w5RjC-000000007Kr-1ges;
-	Wed, 25 Mar 2026 17:09:10 +0000
-Date: Thu, 26 Mar 2026 01:08:15 +0800
+	id 1w5UoB-000000007h3-0GWK;
+	Wed, 25 Mar 2026 20:26:31 +0000
+Date: Thu, 26 Mar 2026 04:25:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Loic Poulain <loic.poulain@oss.qualcomm.com>
+To: Francesco Lavra <flavra@baylibre.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 2/3] media: qcom: camss: Add CAMSS Offline Processing
- Engine driver
-Message-ID: <202603260121.sODrcixU-lkp@intel.com>
-References: <20260323125824.211615-3-loic.poulain@oss.qualcomm.com>
+Subject: Re: [PATCH v9 6/6] iio: imu: st_lsm6dsx: Add support for rotation
+ sensor
+Message-ID: <202603260457.MZI9sXnu-lkp@intel.com>
+References: <20260324084808.654118-1-flavra@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,48 +67,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260323125824.211615-3-loic.poulain@oss.qualcomm.com>
+In-Reply-To: <20260324084808.654118-1-flavra@baylibre.com>
 
-Hi Loic,
+Hi Francesco,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v7.0-rc5 next-20260324]
+[auto build test WARNING on next-20260323]
+[cannot apply to jic23-iio/togreg linus/master v7.0-rc5 v7.0-rc4 v7.0-rc3 v7.0-rc5]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Loic-Poulain/dt-bindings-media-qcom-Add-CAMSS-Offline-Processing-Engine-OPE/20260323-220343
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20260323125824.211615-3-loic.poulain%40oss.qualcomm.com
-patch subject: [RFC PATCH 2/3] media: qcom: camss: Add CAMSS Offline Processing Engine driver
-config: loongarch-randconfig-001-20260325 (https://download.01.org/0day-ci/archive/20260326/202603260121.sODrcixU-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Francesco-Lavra/iio-imu-st_lsm6dsx-Fix-check-for-invalid-samples-from-FIFO/20260325-021519
+base:   next-20260323
+patch link:    https://lore.kernel.org/r/20260324084808.654118-1-flavra%40baylibre.com
+patch subject: [PATCH v9 6/6] iio: imu: st_lsm6dsx: Add support for rotation sensor
+config: arm-randconfig-001-20260326 (https://download.01.org/0day-ci/archive/20260326/202603260457.MZI9sXnu-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260326/202603260121.sODrcixU-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260326/202603260457.MZI9sXnu-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603260121.sODrcixU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603260457.MZI9sXnu-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/qcom/camss/camss-ope.c:1478:35: warning: unused variable 'ope_ctrl_ops' [-Wunused-const-variable]
-    1478 | static const struct v4l2_ctrl_ops ope_ctrl_ops = {
-         |                                   ^~~~~~~~~~~~
-   1 warning generated.
+>> drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_fusion.c:138:1: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+     138 | }
+         | ^
+>> drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_fusion.c:137:1: warning: unused label 'out' [-Wunused-label]
+     137 | out:
+         | ^~~~
+   2 warnings generated.
 
 
-vim +/ope_ctrl_ops +1478 drivers/media/platform/qcom/camss/camss-ope.c
+vim +138 drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_fusion.c
 
-  1477	
-> 1478	static const struct v4l2_ctrl_ops ope_ctrl_ops = {
-  1479		.s_ctrl = ope_s_ctrl,
-  1480	};
-  1481	
+   117	
+   118	int st_lsm6dsx_fusion_set_odr(struct st_lsm6dsx_sensor *sensor, bool enable)
+   119	{
+   120		struct st_lsm6dsx_hw *hw = sensor->hw;
+   121		int err;
+   122	
+   123		guard(mutex)(&hw->page_lock);
+   124	
+   125		err = st_lsm6dsx_fusion_page_enable(hw);
+   126		if (err)
+   127			return err;
+   128	
+   129		err = st_lsm6dsx_fusion_set_odr_locked(sensor, enable);
+   130		if (err) {
+   131			st_lsm6dsx_fusion_page_disable(hw);
+   132			return err;
+   133		}
+   134	
+   135		return st_lsm6dsx_fusion_page_disable(hw);
+   136	
+ > 137	out:
+ > 138	}
+   139	
 
 -- 
 0-DAY CI Kernel Test Service
