@@ -1,162 +1,164 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77329200C2;
-	Wed, 25 Mar 2026 02:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11EE2853E0;
+	Wed, 25 Mar 2026 02:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774406268; cv=none; b=jkr52GYTaz2O+Sb74C56AKRl18dCfEhkMZxuatqJ3XdKu0TfvqrqsBlcbiCJALskBEiAOfxf3TYwRC9uwaIereOJfW8OKjA+wbFLx+ODP/8M3DeNJcvrgrnswOWAptt9yQmOx09L7RtX4BvJxnwUTbydWUSlgfb7qOL08Stc/ig=
+	t=1774406270; cv=none; b=PaO3N5Z2zI+3QxFCw0kN0Mvyf9OTPrmD7t4IlpCdM0E817aOyVvDdhKXyhmVU1Jn6Ccj8d4DUhOE+u9acA5uhhMIxCcbTu/KOqu5zXq//FTXI+dsdR83PeRhUsQQf1W7RmHfGrJ9PuauTp5tubpQHQ5nfipuMvz/yE6YWxG5kqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774406268; c=relaxed/simple;
-	bh=y7oR0qlRGqTwWhoBBY+minKc+cqz/3MynZaKcvk8uPY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OowY0bTE9VMOC33EgCHy7xOomlnQeoxdSB7ByTAmy5eX13YcuaD260H5Bn8g4FPT8YQ7xTm6PU7el4DtrnwtQu2eFqn5P9IgeB3zdMl4hO30JP1eNrmWZoonsvuPGWi5a+jq+pLZoZheyAFr6S7bpvfRlrwKcw3dCS8LhGfBCNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aJUNF0Q0; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1774406270; c=relaxed/simple;
+	bh=Ee45DSi93KBXd3nuAzPsNotDwGG+yh9Y13Y77PGmTt8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cSna3XcbkKX/0rFyWpnjGqeJOSUaYg1ZFA/hYwR0DPrXZylQjUD8fA3tQjZwGQteK7dykbIlgOokbJHoUSi8XPlHktvRfnz+W1Q3CThB54OPNOA6Eg7SU8Qy3kVmiYs/JsZvuRLUzkodb21wRXmS/9G6+AlUqS6OmFqHGoaf5iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GvBS4h8G; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aJUNF0Q0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GvBS4h8G"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774406267; x=1805942267;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=y7oR0qlRGqTwWhoBBY+minKc+cqz/3MynZaKcvk8uPY=;
-  b=aJUNF0Q0B474qpv4BdTCLTgVMfyOwxHGZqVqZlPcF8q7hSeZl7TrBG3n
-   QIbj6fWV9KpIC5C7kvdFYeRunmdg9uGLdg8QcV2JGheaf2B9fHXAzZdEj
-   fIW1CZb1uz6mdeGtNNwnSJBR28/pLsU1tIvgcdEYYjgRRMSfxeCSseoXz
-   VpKbmqkMmBvEQBzrrNGdRmqECEBK7eXdOmKt8vDzz1KQOCNEr5g5XuAso
-   9nnt6xW5bFTT6yZFriGXf33NSxVKgtA5cC7GqhR3oi0UBxHYGtRe8kg0j
-   1L9JP328cttGvHoUBR5oaMYzjPPnm1avmGH/mx4p6VvpUKnT4U0INRq1I
+  t=1774406269; x=1805942269;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ee45DSi93KBXd3nuAzPsNotDwGG+yh9Y13Y77PGmTt8=;
+  b=GvBS4h8GJ/Z7cU2ZpXaBj7s9bYDF+uveEP0ly2f2WLEvdee9e/H6ds1O
+   X3MSkIuCb2kw1Blk/jwSO+iwIlTFdztDq6mrhdzpd2QXRRgQxPzDJgrJN
+   uTBsNH9xOkdYXsF1bb9m5LuR2aAfQfMDI84T3oxs9SOOVTqS92svoEHih
+   NlIseVXbmovOeyp3I3l98h20pPaKEHINJWBTu0sXddTKG6ZOKa7uQGWdo
+   rsfG4A8H8qT7pa47EQruLHRP24InfSm9ODP8cgGixXJAZcAW+yT3W73ZW
+   8otJiVVGLragEDpcrc/Ocv3MiU0rli1/Znp4HVamyw2lV2NKi/Tyc48LS
    A==;
-X-CSE-ConnectionGUID: hsPhFBRJR0i8klHzsk4/ig==
-X-CSE-MsgGUID: kKevDEI0ThKJeNnWQno5Nw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="93012423"
+X-CSE-ConnectionGUID: cZTcyj4QSry6+aNqqX+V3Q==
+X-CSE-MsgGUID: +ywzZQOWRt6cX23FjjhxYw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11739"; a="93012429"
 X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="93012423"
+   d="scan'208";a="93012429"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2026 19:37:46 -0700
-X-CSE-ConnectionGUID: A0Zb+U/nRtCsULoVvUJ0GA==
-X-CSE-MsgGUID: 8yZ7YyEHRH6LPK/HGlB2lw==
+X-CSE-ConnectionGUID: i6KklGeJSXKosTfIglUoKw==
+X-CSE-MsgGUID: InJHzz6wTFez9cjKlGFq3w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,139,1770624000"; 
-   d="scan'208";a="223742248"
+   d="scan'208";a="223742259"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
   by orviesa010.jf.intel.com with ESMTP; 24 Mar 2026 19:37:43 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w5E7o-000000005n7-0EGZ;
+	id 1w5E7o-000000005nB-0TvO;
 	Wed, 25 Mar 2026 02:37:40 +0000
-Date: Wed, 25 Mar 2026 10:37:24 +0800
+Date: Wed, 25 Mar 2026 10:37:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kartik Rajput <kkartik@nvidia.com>, thierry.reding@gmail.com,
-	jonathanh@nvidia.com, kees@kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] soc/tegra: fuse: Register nvmem lookups at probe
-Message-ID: <202603251045.wm2KjZbP-lkp@intel.com>
-References: <20260324114242.551939-1-kkartik@nvidia.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Subject: [trace:bootconfig/for-next 16/16] init/main.c:437:20:
+ warning: stack frame size (4192) exceeds limit (2048) in
+ 'bootconfig_apply_early_params'
+Message-ID: <202603251010.5Ui0yrB2-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260324114242.551939-1-kkartik@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kartik,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace b=
+ootconfig/for-next
+head:   1a427f2a710583872b6176ea8378e0a1a8719fc4
+commit: 1a427f2a710583872b6176ea8378e0a1a8719fc4 [16/16] bootconfig: Apply =
+early options from embedded config
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/202=
+60325/202603251010.5Ui0yrB2-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd7080=
+29e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
+/20260325/202603251010.5Ui0yrB2-lkp@intel.com/reproduce)
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tegra/for-next]
-[also build test WARNING on linus/master v7.0-rc5 next-20260324]
-[cannot apply to drm-tegra/drm/tegra/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kartik-Rajput/soc-tegra-fuse-Register-nvmem-lookups-at-probe/20260325-020016
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
-patch link:    https://lore.kernel.org/r/20260324114242.551939-1-kkartik%40nvidia.com
-patch subject: [PATCH] soc/tegra: fuse: Register nvmem lookups at probe
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20260325/202603251045.wm2KjZbP-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260325/202603251045.wm2KjZbP-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
+If you fix the issue in a separate patch/commit (i.e. not just a new versio=
+n of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603251045.wm2KjZbP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603251010.5Ui0yrB2-lkp@i=
+ntel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/soc/tegra/fuse/fuse-tegra.c:569:9: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-     569 |         return err;
-         |                ^~~
-   drivers/soc/tegra/fuse/fuse-tegra.c:476:9: note: initialize the variable 'err' to silence this warning
-     476 |         int err;
-         |                ^
-         |                 = 0
+>> init/main.c:437:20: warning: stack frame size (4192) exceeds limit (2048=
+) in 'bootconfig_apply_early_params' [-Wframe-larger-than]
+     437 | static void __init bootconfig_apply_early_params(void)
+         |                    ^
    1 warning generated.
 
 
-vim +/err +569 drivers/soc/tegra/fuse/fuse-tegra.c
+vim +/bootconfig_apply_early_params +437 init/main.c
 
-7e939de1b2bb26 Thierry Reding     2015-04-29  521  
-7e939de1b2bb26 Thierry Reding     2015-04-29  522  			default:
-7e939de1b2bb26 Thierry Reding     2015-04-29  523  				pr_warn("Unsupported SoC: %02x\n", chip);
-7e939de1b2bb26 Thierry Reding     2015-04-29  524  				break;
-7e939de1b2bb26 Thierry Reding     2015-04-29  525  			}
-7e939de1b2bb26 Thierry Reding     2015-04-29  526  		} else {
-7e939de1b2bb26 Thierry Reding     2015-04-29  527  			/*
-7e939de1b2bb26 Thierry Reding     2015-04-29  528  			 * At this point we're not running on Tegra, so play
-7e939de1b2bb26 Thierry Reding     2015-04-29  529  			 * nice with multi-platform kernels.
-7e939de1b2bb26 Thierry Reding     2015-04-29  530  			 */
-24fa5af81059af Thierry Reding     2014-07-11  531  			return 0;
-7e939de1b2bb26 Thierry Reding     2015-04-29  532  		}
-7e939de1b2bb26 Thierry Reding     2015-04-29  533  	} else {
-7e939de1b2bb26 Thierry Reding     2015-04-29  534  		/*
-7e939de1b2bb26 Thierry Reding     2015-04-29  535  		 * Extract information from the device tree if we've found a
-7e939de1b2bb26 Thierry Reding     2015-04-29  536  		 * matching node.
-7e939de1b2bb26 Thierry Reding     2015-04-29  537  		 */
-7e939de1b2bb26 Thierry Reding     2015-04-29  538  		if (of_address_to_resource(np, 0, &regs) < 0) {
-7e939de1b2bb26 Thierry Reding     2015-04-29  539  			pr_err("failed to get FUSE register\n");
-7e939de1b2bb26 Thierry Reding     2015-04-29  540  			return -ENXIO;
-7e939de1b2bb26 Thierry Reding     2015-04-29  541  		}
-24fa5af81059af Thierry Reding     2014-07-11  542  
-7e939de1b2bb26 Thierry Reding     2015-04-29  543  		fuse->soc = match->data;
-7e939de1b2bb26 Thierry Reding     2015-04-29  544  	}
-783c8f4c84451b Peter De Schrijver 2014-06-12  545  
-783c8f4c84451b Peter De Schrijver 2014-06-12  546  	np = of_find_matching_node(NULL, car_match);
-7e939de1b2bb26 Thierry Reding     2015-04-29  547  	if (np) {
-7e939de1b2bb26 Thierry Reding     2015-04-29  548  		void __iomem *base = of_iomap(np, 0);
-e941712cccab8a Liang He           2022-06-16  549  		of_node_put(np);
-7e939de1b2bb26 Thierry Reding     2015-04-29  550  		if (base) {
-7e939de1b2bb26 Thierry Reding     2015-04-29  551  			tegra_enable_fuse_clk(base);
-7e939de1b2bb26 Thierry Reding     2015-04-29  552  			iounmap(base);
-783c8f4c84451b Peter De Schrijver 2014-06-12  553  		} else {
-7e939de1b2bb26 Thierry Reding     2015-04-29  554  			pr_err("failed to map clock registers\n");
-7e939de1b2bb26 Thierry Reding     2015-04-29  555  			return -ENXIO;
-7e939de1b2bb26 Thierry Reding     2015-04-29  556  		}
-7e939de1b2bb26 Thierry Reding     2015-04-29  557  	}
-7e939de1b2bb26 Thierry Reding     2015-04-29  558  
-4bdc0d676a6431 Christoph Hellwig  2020-01-06  559  	fuse->base = ioremap(regs.start, resource_size(&regs));
-7e939de1b2bb26 Thierry Reding     2015-04-29  560  	if (!fuse->base) {
-7e939de1b2bb26 Thierry Reding     2015-04-29  561  		pr_err("failed to map FUSE registers\n");
-24fa5af81059af Thierry Reding     2014-07-11  562  		return -ENXIO;
-783c8f4c84451b Peter De Schrijver 2014-06-12  563  	}
-783c8f4c84451b Peter De Schrijver 2014-06-12  564  
-7e939de1b2bb26 Thierry Reding     2015-04-29  565  	fuse->soc->init(fuse);
-783c8f4c84451b Peter De Schrijver 2014-06-12  566  
-13a69354147e0a Kartik             2023-10-17  567  	tegra_fuse_print_sku_info(&tegra_sku_info);
-24fa5af81059af Thierry Reding     2014-07-11  568  
-71661c1c8c34d1 Kartik             2023-10-17 @569  	return err;
-783c8f4c84451b Peter De Schrijver 2014-06-12  570  }
-24fa5af81059af Thierry Reding     2014-07-11  571  early_initcall(tegra_init_fuse);
-27a0342ac162bf Thierry Reding     2017-08-17  572  
+   416=09
+   417	/*
+   418	 * do_early_param() is defined later in this file but called from
+   419	 * bootconfig_apply_early_params() below, so we need a forward decla=
+ration.
+   420	 */
+   421	static int __init do_early_param(char *param, char *val,
+   422					 const char *unused, void *arg);
+   423=09
+   424	/*
+   425	 * bootconfig_apply_early_params - dispatch kernel.* keys from the e=
+mbedded
+   426	 * bootconfig as early_param() calls.
+   427	 *
+   428	 * early_param() handlers must run before most of the kernel initial=
+ises
+   429	 * (e.g. before the GIC driver reads irqchip.gicv3_pseudo_nmi).  A b=
+ootconfig
+   430	 * attached to the initrd arrives too late for this because the init=
+rd is not
+   431	 * mapped yet when early params are processed.  The embedded bootcon=
+fig lives
+   432	 * in the kernel image itself (.init.data), so it is always reachabl=
+e.
+   433	 *
+   434	 * This function is called from setup_boot_config() which runs in
+   435	 * start_kernel() before parse_early_param(), making the timing corr=
+ect.
+   436	 */
+ > 437	static void __init bootconfig_apply_early_params(void)
+   438	{
+   439		char val_buf[COMMAND_LINE_SIZE];
+   440		struct xbc_node *knode, *root;
+   441		const char *val;
+   442=09
+   443		root =3D xbc_find_node("kernel");
+   444		if (!root)
+   445			return;
+   446=09
+   447		/*
+   448		 * Keys that do not match any early_param() handler are silently
+   449		 * ignored =E2=80=94 do_early_param() always returns 0.
+   450		 */
+   451		xbc_node_for_each_key_value(root, knode, val) {
+   452			if (xbc_node_compose_key_after(root, knode, xbc_namebuf, XBC_KEYLE=
+N_MAX) < 0)
+   453				continue;
+   454=09
+   455			if (!val) {
+   456				do_early_param(xbc_namebuf, NULL, NULL, NULL);
+   457				continue;
+   458			}
+   459=09
+   460			/*
+   461			 * We need to copy const char *val to a char pointer,
+   462			 * which is what do_early_param() need, given it might
+   463			 * call strsep(), strtok() later.
+   464			 */
+   465			strscpy(val_buf, val, sizeof(val_buf));
+   466			do_early_param(xbc_namebuf, val_buf, NULL, NULL);
+   467		}
+   468	}
+   469=09
 
--- 
+--=20
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
