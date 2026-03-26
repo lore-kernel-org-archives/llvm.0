@@ -1,123 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6867D30E85D;
-	Thu, 26 Mar 2026 13:24:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774531489; cv=none; b=HBD/ohMMLhswCan6F+mtiTuezFdWowo+jVgd4mVETjQ+JKo+CAOC0GEGVv/L3UIj8G+ccsaHyhw7WskIrgaNomYrgFyjMSdsVB0oXeuVGNEDhJgkbu7B/n+jPcwZxXU5hbYyxbs3FYhnSh5gCpvg/EmLWF5RRMyfJivC58vG/eQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774531489; c=relaxed/simple;
-	bh=lqKWc/FFQwxIVGjVfqveY33E7rzJ71mAfK6dsqpxj4M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A4UNnbUASLljXt+CpG+UnKEnYLKU5Z54gVSYlNGN+nBYuUKye7YiuYfZ9s84ml0hN9pHzQvDXNwwBw5DwLg2yvNptrYjjfkcKmyT3rUhLEwXh5q6qpZECCTHNC2nqiJK2cZKujuPd65Yv1Ldb7E/0a69dEgckaPuQFiicSJUirg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jQ+fq1Oe; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF0E2DF3DA
+	for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 13:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774532875; cv=pass; b=dzIqB2CDSXIjs6itMFfcHGvX1G1dGI4+QfDZDt50YMxi8BvYuivO658kS3k8iCXGh4xh5wAcQPDOCcTJeJArQ+YqmbzARWTKPIowPY9AtytKWMwzY29quX0medDRQqqGMLbaloqSmEJKVAeF7GxxUhkJO+5YY9Gywng/9SU+gX8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774532875; c=relaxed/simple;
+	bh=3oU1ZaWY15KqHTdXghcWSWByFzglfTk9rdjKl+Mk/PM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fLvjWVDAWr98FZYJatNSwR01jIZ77g3dBZARk9jr4DOy71FfrmUO6QCIq6grOmCtVdgAv4A+hA0VS19tHBJM8AxjtcgMpNINW9DCCd9UaAQp7UJYdvpSBjxjFFXnNX9yEk21Vdo5Rite7uQ6GPj61VRQy7zV1u/DJPBhj4yeG6k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pl0amtEQ; arc=pass smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jQ+fq1Oe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774531486; x=1806067486;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lqKWc/FFQwxIVGjVfqveY33E7rzJ71mAfK6dsqpxj4M=;
-  b=jQ+fq1OeW90Dvoc25Gcgg+hO1ajW8iLTWL8QWTWA0vj02QNV10qIvkuN
-   R88IO8IS3OIcZaCjHsNMi6rP0yX9FYxn8MTaGmcrX0YN1ewgLjkRho8qC
-   aG+O2wFJhBTBpzkFUrLPkOpcWy0DBtMRN1bV0e7u6y7xIg/l8HB54BOVh
-   aS0HsAh3pLJCI/xF9aZFMVkM4GvbgDb/d5I5PsXjtKvuXiBgVRPZG33+S
-   5aYgv5vrmgQKSVGmpSB7zMB8Mua4wslFCnM0Bt06eiGJYBCmrLEAbi8Ed
-   6XmVFRO6ldIoK1z71pnAPJIjCdXfJE1A+qS/Yi7mfJvVjQ0JE4Ao1VMCK
-   A==;
-X-CSE-ConnectionGUID: SY+a9yvnSJmBqb/ic4J1PQ==
-X-CSE-MsgGUID: 5WRDD9OGTk2ZSZLFvT8RvQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="74616469"
-X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
-   d="scan'208";a="74616469"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 06:24:45 -0700
-X-CSE-ConnectionGUID: gPfRzRU+STGC9PQzUDHfbw==
-X-CSE-MsgGUID: pHkplRBlQXabR9TB5h7Bhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
-   d="scan'208";a="220592210"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa010.fm.intel.com with ESMTP; 26 Mar 2026 06:24:41 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w5khT-000000007HZ-2dON;
-	Thu, 26 Mar 2026 13:24:39 +0000
-Date: Thu, 26 Mar 2026 14:23:51 +0100
-From: kernel test robot <lkp@intel.com>
-To: Christian Loehle <christian.loehle@arm.com>, arighi@nvidia.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	peterz@infradead.org, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, valentin.schneider@arm.com,
-	mingo@redhat.com, rostedt@goodmis.org, segall@google.com,
-	mgorman@suse.de, catalin.marinas@arm.com, will@kernel.org,
-	sudeep.holla@arm.com, rafael@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-	kobak@nvidia.com, fabecassis@nvidia.com,
-	Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [PATCH 1/3] sched/topology: Introduce arch hooks for asympacking
-Message-ID: <202603261419.mAKkKckS-lkp@intel.com>
-References: <20260325181314.3875909-2-christian.loehle@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pl0amtEQ"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2c153272250so110032eec.2
+        for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 06:47:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774532873; cv=none;
+        d=google.com; s=arc-20240605;
+        b=c3A0Sk4rfhzXmojPtNzAjWLZGbpkrN2rsMNcLjTyysoCvfe4I62SoioX2bdVm8kBTG
+         o6LsUdtl1/pkOyH9iYmoyUUsD48LSF+5/1XlFIwbvrFXKX2OTJimeVuw1dqdVmaipS6x
+         S4bO1jlyXOs4h6PDq5FY45jNpkpKpflM4hvdwe2RZ2PrI3ZVsQTaPtvvuoag68yYnS1X
+         l0I0w0nixqC+Igx3yExwdgNEtuKxwu9hCTc0XmaQr/Kn6uPP6K6d0mQkIVM2WqU2SZvh
+         LoB6xPpXnpVPqG28Z5iz14nzqL0wo0Wgj+dlTY/vJm2FQmgdG1iniw5X/VPNWiyxS57q
+         W3Tg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3oU1ZaWY15KqHTdXghcWSWByFzglfTk9rdjKl+Mk/PM=;
+        fh=5EpHfW3m9io2tWpBAsTsMHrN17toqfKCm67hyfan5wM=;
+        b=ND9pd/JED5sUSnP2tE59cA7lA+QuR35LofVCTjHlYbeDm8fpSnkTYm6D+tZbMNwYHb
+         l0RY5d4wnrKQc28JvJnS5VDN9NxHtMnl+dhNSiQvRQAkH7louDJML3KBYDnZfh1UdqLW
+         Fdd8srkOCYkBa5M3HDD9rttNZ8M7xuQAnEM4vtRNnP9ggb8yqyiYdONi6TGdcggwk9BM
+         r7XhnIa9ljVYKEabnYiIzLwW5HOzemxnEvOI1jY0VOz7g6VwSVhNnX4bzQK7RvS4vfXO
+         xc2mN+Uik86zoVMe4NkPflzPGphGJTkyfVYSJECY93GaPFKH+v8QLwbvKuf7Cjk1qKZ9
+         x28A==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774532873; x=1775137673; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3oU1ZaWY15KqHTdXghcWSWByFzglfTk9rdjKl+Mk/PM=;
+        b=pl0amtEQvyDOws3ss118COxP4ZkV7O6YihXW8zDnqpMTUoudGqFp6nlKfslZ02nkIh
+         8VfIEhkhBnuJF0BFRRX2OyZQaZwSSLfurR1nrEbOO/mTuJVbNk/oLTpa5hrTP+7R791r
+         5woTamPfKtaW0U0r8yBLhwrh0ufGQ16RyEjTkdRyI6p/zja56MRE9WMwaNwxqoOAZhFu
+         l5glYUWoqSYUiOhh65w66l+uMKhWj2pSlldpdV5o6Vizc51eqW1x6gzS2S64VKfPplug
+         rIMOF7E3YtUGNXj1KpowFhRbkm+WJV67/8JGK6EIWY9P0AEZrEa+uUUH+nsT5FGUb4wM
+         yVvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774532873; x=1775137673;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3oU1ZaWY15KqHTdXghcWSWByFzglfTk9rdjKl+Mk/PM=;
+        b=o0TI7mVigF8dyt4RJJlZLsrucDtVcyby/XJPIVaMdbnUVE5vsMjehhqwKY2NeYf4UT
+         osVyJyWgN87wKUDnYSCTvY70oQJeqiClWOVL2p9xX4xd7KzKdoWHhe+NlhAvfYwmvbDB
+         ebodxZklz6j6314KcdYrPLPtNJLL7OicxbzfRFrXgkDSC7zPqipFObMcFPMcSzwmOw1X
+         cXnTzyB/oRkfPbHbqU3X0nMAKJ662NV7y577iud504c4qEwXBYItwdgt6JG8pOmANs6+
+         xhQk+kgZ/KnlmVuHOZYy0xzZlJDkR73usV2YS44+IMIYXUi7y6LWpawG4h+XjeFsXtfr
+         2cBw==
+X-Forwarded-Encrypted: i=1; AJvYcCXSDk8KLvnBRtmxgy11Y8xnw37nIhCS0yT+J9PaHILMwZZ63x2iJ1oXnpXzCsUv6be1VwsD@lists.linux.dev
+X-Gm-Message-State: AOJu0YymfSE3PTNVgqhC85LvIl8Es4gBiXpORpR3OrVx9WSRSA/AwetH
+	xhQMYwUmVqlTvRZP3nwXCD3LSR+sHvLlCJgSeJIBJ7ZGaf4DAeVo7e+JYyZHQSWdTGkVYGkdZqV
+	NE3yoU+Q7rnehlIu444Wc8DNkEvBMMyY=
+X-Gm-Gg: ATEYQzxscsKS1ENC+F+Dk5nxBPoFqkG8JgUZ8Np2L0STtZqOHD5ej+zKAwmg5UVzCY3
+	HjoSPE2cJjWk5wQsV35AaEEShzR/DQnM9PB4//ntJ1RtcTo4o3H7Dfy/+IcNz8c7KEv6Qs6kj78
+	4ta2URtDsoVz9/0PQRpJGCVKHsGb0RxsbGwm3jmgHOzUQVDMfdpTbo4Dxcg43yjGZth9jmydqS5
+	XGhjHlf2qjrkqUkcyuPR6uOrzqMj2WKjA/nJDODuKseFmwmRPLTaysKs5/8ELkk4UhgNHdMoGyi
+	qHc+SloKFnLlO9XqR3HOEmBFP7pmblZghEmOs3cTAo2+GJ6zWzIgWCqH4/494VtA3bn+Aqfn8cu
+	sYrxjQhLBmDthGDII1PvIXF0=
+X-Received: by 2002:a05:7301:5f8a:b0:2be:140c:bc2b with SMTP id
+ 5a478bee46e88-2c15d282067mr2176054eec.2.1774532872905; Thu, 26 Mar 2026
+ 06:47:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260325181314.3875909-2-christian.loehle@arm.com>
+References: <20260322192159.88138-1-ojeda@kernel.org> <20260323000327.111235-1-ojeda@kernel.org>
+ <acEP7tl8pqFA3tK8@shell.armlinux.org.uk> <acUGAsjYvNvTEO92@google.com>
+In-Reply-To: <acUGAsjYvNvTEO92@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 26 Mar 2026 14:47:40 +0100
+X-Gm-Features: AQROBzCEnROF6sNSCO8peAhuS8KhaF6UHZKXXIBMm9aT2zIjtnika7P390Hajek
+Message-ID: <CANiq72mzPpkELXis1CiSbKUmBXNQYMiMmjj-7-sYiLh4T_JSOQ@mail.gmail.com>
+Subject: Re: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
+To: Alice Ryhl <aliceryhl@google.com>, Christian Schrefl <chrisi.schrefl@gmail.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Jamie Cunliffe <Jamie.Cunliffe@arm.com>, Will Deacon <will@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>
+Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>, Miguel Ojeda <ojeda@kernel.org>, a.hindborg@kernel.org, 
+	acourbot@nvidia.com, akpm@linux-foundation.org, 
+	anton.ivanov@cambridgegreys.com, bjorn3_gh@protonmail.com, 
+	boqun.feng@gmail.com, dakr@kernel.org, david@davidgow.net, gary@garyguo.net, 
+	johannes@sipsolutions.net, justinstitt@google.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-um@lists.infradead.org, llvm@lists.linux.dev, lossin@kernel.org, 
+	mark.rutland@arm.com, mmaurer@google.com, morbo@google.com, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, nicolas.schier@linux.dev, nsc@kernel.org, 
+	peterz@infradead.org, richard@nod.at, rust-for-linux@vger.kernel.org, 
+	tmgross@umich.edu, urezki@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Christian,
+On Thu, Mar 26, 2026 at 11:10=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> =
+wrote:
+>
+> I noticed that the Makefile currently uses the arm-unknown-linux-gnueabi
+> target. It should probably not be -linux target to avoid this? Probably
+> it should just be armv7a-none-eabi, right? We gate HAVE_RUST on
+> CPU_32v7, so we should not need to consider the other variants.
 
-kernel test robot noticed the following build errors:
+I think Christian tried several targets back then and eventually
+picked that one.
 
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on arm64/for-next/core driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus peterz-queue/sched/core linus/master v7.0-rc5 next-20260325]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Christian: what was the reason to pick the `-linux-` one? e.g. was
+there something you wanted to rely on that target spec that you
+couldn't enable or disable via `rustc` flags or similar?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Loehle/sched-topology-Introduce-arch-hooks-for-asympacking/20260326-145644
-base:   tip/sched/core
-patch link:    https://lore.kernel.org/r/20260325181314.3875909-2-christian.loehle%40arm.com
-patch subject: [PATCH 1/3] sched/topology: Introduce arch hooks for asympacking
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260326/202603261419.mAKkKckS-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260326/202603261419.mAKkKckS-lkp@intel.com/reproduce)
+Cc'ing a few folks.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603261419.mAKkKckS-lkp@intel.com/
+Thanks!
 
-All errors (new ones prefixed by >>):
-
->> arch/x86/kernel/itmt.c:168:5: error: redefinition of 'topology_arch_asym_cpu_priority'
-     168 | int arch_asym_cpu_priority(int cpu)
-         |     ^
-   include/linux/arch_topology.h:131:32: note: expanded from macro 'arch_asym_cpu_priority'
-     131 | #define arch_asym_cpu_priority topology_arch_asym_cpu_priority
-         |                                ^
-   include/linux/arch_topology.h:132:19: note: previous definition is here
-     132 | static inline int topology_arch_asym_cpu_priority(int cpu)
-         |                   ^
-   1 error generated.
-
-
-vim +/topology_arch_asym_cpu_priority +168 arch/x86/kernel/itmt.c
-
-5e76b2ab36b40c Tim Chen 2016-11-22  167  
-5e76b2ab36b40c Tim Chen 2016-11-22 @168  int arch_asym_cpu_priority(int cpu)
-5e76b2ab36b40c Tim Chen 2016-11-22  169  {
-5e76b2ab36b40c Tim Chen 2016-11-22  170  	return per_cpu(sched_core_priority, cpu);
-5e76b2ab36b40c Tim Chen 2016-11-22  171  }
-5e76b2ab36b40c Tim Chen 2016-11-22  172  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
