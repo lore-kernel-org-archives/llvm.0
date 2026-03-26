@@ -1,131 +1,116 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF0E2DF3DA
-	for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 13:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774532875; cv=pass; b=dzIqB2CDSXIjs6itMFfcHGvX1G1dGI4+QfDZDt50YMxi8BvYuivO658kS3k8iCXGh4xh5wAcQPDOCcTJeJArQ+YqmbzARWTKPIowPY9AtytKWMwzY29quX0medDRQqqGMLbaloqSmEJKVAeF7GxxUhkJO+5YY9Gywng/9SU+gX8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774532875; c=relaxed/simple;
-	bh=3oU1ZaWY15KqHTdXghcWSWByFzglfTk9rdjKl+Mk/PM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fLvjWVDAWr98FZYJatNSwR01jIZ77g3dBZARk9jr4DOy71FfrmUO6QCIq6grOmCtVdgAv4A+hA0VS19tHBJM8AxjtcgMpNINW9DCCd9UaAQp7UJYdvpSBjxjFFXnNX9yEk21Vdo5Rite7uQ6GPj61VRQy7zV1u/DJPBhj4yeG6k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pl0amtEQ; arc=pass smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8482537BE62
+	for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 14:12:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774534371; cv=none; b=mVpkGnMbrawRY5zmjedreHxo/s8rjBPV/3B8OVRU6TdRjC+JwBMUJfj8i+6tFVOIn/XpeTRcja3i+1SU2CNCbpNeIxJ6uCxkXejFq+n3tBSJ0xiHAox/O7pzsaKvVDdZ0zkzJw/m69wTghQ1pFicth7feFruTBZVs0ZOC2mhn+U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774534371; c=relaxed/simple;
+	bh=YnyssR1U8+X9y1SYl1GJU4frL0DYNZQZvVabQEvijyQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CJinx8yGsCVStjlMpH4pQ13B8jxx63mhRebCcsIWdw2eWx8HyRweR13LC9g+Ll/dSyKf7laI0b8iehOu3Cu/mmlLuicvDMkyRiZpMkSx5poHT1dqkGzPpvp+z346+CyYmvnYBX1UgkkxyPkdc0NMRvzaveErXVy3G+BVLz1X/FQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QwG8zcva; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pl0amtEQ"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2c153272250so110032eec.2
-        for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 06:47:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774532873; cv=none;
-        d=google.com; s=arc-20240605;
-        b=c3A0Sk4rfhzXmojPtNzAjWLZGbpkrN2rsMNcLjTyysoCvfe4I62SoioX2bdVm8kBTG
-         o6LsUdtl1/pkOyH9iYmoyUUsD48LSF+5/1XlFIwbvrFXKX2OTJimeVuw1dqdVmaipS6x
-         S4bO1jlyXOs4h6PDq5FY45jNpkpKpflM4hvdwe2RZ2PrI3ZVsQTaPtvvuoag68yYnS1X
-         l0I0w0nixqC+Igx3yExwdgNEtuKxwu9hCTc0XmaQr/Kn6uPP6K6d0mQkIVM2WqU2SZvh
-         LoB6xPpXnpVPqG28Z5iz14nzqL0wo0Wgj+dlTY/vJm2FQmgdG1iniw5X/VPNWiyxS57q
-         W3Tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3oU1ZaWY15KqHTdXghcWSWByFzglfTk9rdjKl+Mk/PM=;
-        fh=5EpHfW3m9io2tWpBAsTsMHrN17toqfKCm67hyfan5wM=;
-        b=ND9pd/JED5sUSnP2tE59cA7lA+QuR35LofVCTjHlYbeDm8fpSnkTYm6D+tZbMNwYHb
-         l0RY5d4wnrKQc28JvJnS5VDN9NxHtMnl+dhNSiQvRQAkH7louDJML3KBYDnZfh1UdqLW
-         Fdd8srkOCYkBa5M3HDD9rttNZ8M7xuQAnEM4vtRNnP9ggb8yqyiYdONi6TGdcggwk9BM
-         r7XhnIa9ljVYKEabnYiIzLwW5HOzemxnEvOI1jY0VOz7g6VwSVhNnX4bzQK7RvS4vfXO
-         xc2mN+Uik86zoVMe4NkPflzPGphGJTkyfVYSJECY93GaPFKH+v8QLwbvKuf7Cjk1qKZ9
-         x28A==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774532873; x=1775137673; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3oU1ZaWY15KqHTdXghcWSWByFzglfTk9rdjKl+Mk/PM=;
-        b=pl0amtEQvyDOws3ss118COxP4ZkV7O6YihXW8zDnqpMTUoudGqFp6nlKfslZ02nkIh
-         8VfIEhkhBnuJF0BFRRX2OyZQaZwSSLfurR1nrEbOO/mTuJVbNk/oLTpa5hrTP+7R791r
-         5woTamPfKtaW0U0r8yBLhwrh0ufGQ16RyEjTkdRyI6p/zja56MRE9WMwaNwxqoOAZhFu
-         l5glYUWoqSYUiOhh65w66l+uMKhWj2pSlldpdV5o6Vizc51eqW1x6gzS2S64VKfPplug
-         rIMOF7E3YtUGNXj1KpowFhRbkm+WJV67/8JGK6EIWY9P0AEZrEa+uUUH+nsT5FGUb4wM
-         yVvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774532873; x=1775137673;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3oU1ZaWY15KqHTdXghcWSWByFzglfTk9rdjKl+Mk/PM=;
-        b=o0TI7mVigF8dyt4RJJlZLsrucDtVcyby/XJPIVaMdbnUVE5vsMjehhqwKY2NeYf4UT
-         osVyJyWgN87wKUDnYSCTvY70oQJeqiClWOVL2p9xX4xd7KzKdoWHhe+NlhAvfYwmvbDB
-         ebodxZklz6j6314KcdYrPLPtNJLL7OicxbzfRFrXgkDSC7zPqipFObMcFPMcSzwmOw1X
-         cXnTzyB/oRkfPbHbqU3X0nMAKJ662NV7y577iud504c4qEwXBYItwdgt6JG8pOmANs6+
-         xhQk+kgZ/KnlmVuHOZYy0xzZlJDkR73usV2YS44+IMIYXUi7y6LWpawG4h+XjeFsXtfr
-         2cBw==
-X-Forwarded-Encrypted: i=1; AJvYcCXSDk8KLvnBRtmxgy11Y8xnw37nIhCS0yT+J9PaHILMwZZ63x2iJ1oXnpXzCsUv6be1VwsD@lists.linux.dev
-X-Gm-Message-State: AOJu0YymfSE3PTNVgqhC85LvIl8Es4gBiXpORpR3OrVx9WSRSA/AwetH
-	xhQMYwUmVqlTvRZP3nwXCD3LSR+sHvLlCJgSeJIBJ7ZGaf4DAeVo7e+JYyZHQSWdTGkVYGkdZqV
-	NE3yoU+Q7rnehlIu444Wc8DNkEvBMMyY=
-X-Gm-Gg: ATEYQzxscsKS1ENC+F+Dk5nxBPoFqkG8JgUZ8Np2L0STtZqOHD5ej+zKAwmg5UVzCY3
-	HjoSPE2cJjWk5wQsV35AaEEShzR/DQnM9PB4//ntJ1RtcTo4o3H7Dfy/+IcNz8c7KEv6Qs6kj78
-	4ta2URtDsoVz9/0PQRpJGCVKHsGb0RxsbGwm3jmgHOzUQVDMfdpTbo4Dxcg43yjGZth9jmydqS5
-	XGhjHlf2qjrkqUkcyuPR6uOrzqMj2WKjA/nJDODuKseFmwmRPLTaysKs5/8ELkk4UhgNHdMoGyi
-	qHc+SloKFnLlO9XqR3HOEmBFP7pmblZghEmOs3cTAo2+GJ6zWzIgWCqH4/494VtA3bn+Aqfn8cu
-	sYrxjQhLBmDthGDII1PvIXF0=
-X-Received: by 2002:a05:7301:5f8a:b0:2be:140c:bc2b with SMTP id
- 5a478bee46e88-2c15d282067mr2176054eec.2.1774532872905; Thu, 26 Mar 2026
- 06:47:52 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QwG8zcva"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774534366;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=J9JzYG5INSc4ONlKnu1I/1h2X1tCA/lHVwZLWmQvpvo=;
+	b=QwG8zcvapM9iawXJ5qFhgoRuDvVLedKapLToLcSkqkvLIOdT8jo0e1cgO13+zWScdcjkdL
+	WzAkgLrzx38H0G9fFtmZ6arik/8XGK0JFQSdDBhuxhN1Ftr8gkJ2ZyVQr76lEorw6vJMVr
+	YhbnCR2y2oWuEV7xWxIR/0gxV2r8/Mc=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-210-TD0GdB15NfSpBAVmHH3Bsg-1; Thu,
+ 26 Mar 2026 10:12:43 -0400
+X-MC-Unique: TD0GdB15NfSpBAVmHH3Bsg-1
+X-Mimecast-MFC-AGG-ID: TD0GdB15NfSpBAVmHH3Bsg_1774534362
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5AB98195608E
+	for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 14:12:42 +0000 (UTC)
+Received: from [172.20.168.233] (unknown [10.30.45.63])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0D8D71800351;
+	Thu, 26 Mar 2026 14:12:41 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc5,
+ upstream-mainline, 0138af24)
+Date: Thu, 26 Mar 2026 14:12:41 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260322192159.88138-1-ojeda@kernel.org> <20260323000327.111235-1-ojeda@kernel.org>
- <acEP7tl8pqFA3tK8@shell.armlinux.org.uk> <acUGAsjYvNvTEO92@google.com>
-In-Reply-To: <acUGAsjYvNvTEO92@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 26 Mar 2026 14:47:40 +0100
-X-Gm-Features: AQROBzCEnROF6sNSCO8peAhuS8KhaF6UHZKXXIBMm9aT2zIjtnika7P390Hajek
-Message-ID: <CANiq72mzPpkELXis1CiSbKUmBXNQYMiMmjj-7-sYiLh4T_JSOQ@mail.gmail.com>
-Subject: Re: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
-To: Alice Ryhl <aliceryhl@google.com>, Christian Schrefl <chrisi.schrefl@gmail.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Jamie Cunliffe <Jamie.Cunliffe@arm.com>, Will Deacon <will@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>
-Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>, Miguel Ojeda <ojeda@kernel.org>, a.hindborg@kernel.org, 
-	acourbot@nvidia.com, akpm@linux-foundation.org, 
-	anton.ivanov@cambridgegreys.com, bjorn3_gh@protonmail.com, 
-	boqun.feng@gmail.com, dakr@kernel.org, david@davidgow.net, gary@garyguo.net, 
-	johannes@sipsolutions.net, justinstitt@google.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-um@lists.infradead.org, llvm@lists.linux.dev, lossin@kernel.org, 
-	mark.rutland@arm.com, mmaurer@google.com, morbo@google.com, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, nicolas.schier@linux.dev, nsc@kernel.org, 
-	peterz@infradead.org, richard@nod.at, rust-for-linux@vger.kernel.org, 
-	tmgross@umich.edu, urezki@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <59275.126032610124300461@us-mta-210.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: BGFD_4joDMzRTth0Tupy07ze8z4JbDc2-Ip2ptfj8DA_1774534362
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 26, 2026 at 11:10=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> =
-wrote:
->
-> I noticed that the Makefile currently uses the arm-unknown-linux-gnueabi
-> target. It should probably not be -linux target to avoid this? Probably
-> it should just be armv7a-none-eabi, right? We gate HAVE_RUST on
-> CPU_32v7, so we should not need to consider the other variants.
+Hi, we tested your kernel and here are the results:
 
-I think Christian tried several targets back then and eventually
-picked that one.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-Christian: what was the reason to pick the `-linux-` one? e.g. was
-there something you wanted to rely on that target spec that you
-couldn't enable or disable via `rustc` flags or similar?
 
-Cc'ing a few folks.
+Kernel information:
+    Commit message: Merge tag 'erofs-for-7.0-rc6-fixes' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/xiang/erofs
 
-Thanks!
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2409730716
 
-Cheers,
-Miguel
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2409730716_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
