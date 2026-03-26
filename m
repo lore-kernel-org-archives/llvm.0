@@ -1,111 +1,118 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6432D9796
-	for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 02:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C759322A00;
+	Thu, 26 Mar 2026 02:42:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774490429; cv=none; b=p16MihIWTmjmS1tKwIJ4DAwhq0/OeTQ2tFOYWiCpydkcwFpRh+RCjEtb0C2h9YFE65w6lqNXcs/Zc5JvTMshwCHr2KpgV4FdK6XQrBy4TenzYNfTPxAkX/8HN43G2yzMXAz/UGJDpiq0TuHnVqm2KgIWf1PIPoJPLsuDHIbAevg=
+	t=1774492955; cv=none; b=JVZzNnCJh1X5P5+BPaEoepCHsv1WZ191b8ry6zteCDWvapuz2Q0zkQU6QVjUx0gaSVQIAA3nq85rI5uNuOJF1QUNHMLQWz7S7V0mD7RsbA5y4H0qSgFLshIdWPCdyNkWjvpzmMFjicTDRGvJ3yzIi2RQVqYxoEmYV+gWY5BmRwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774490429; c=relaxed/simple;
-	bh=RfijQGsKWUEkGdgHfWsVT1ZhVP2PeputQJ9VXpu31nw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d1DRtq8Q6jqyETgVHhJU5obwsTAxMwaeu8BxYzufgWynl/49wfGeKugJZo9mUFd9sk+Zglcsd79OihnGohLCo+6YGil/8hn2bUhbhBnFTEaQo0ZyNCD5aCQsFowwanBluAdgCAi6rGCnigNcUAYYjRgFUa+or2Djs7dJd03NqQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LmROjC1V; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774492955; c=relaxed/simple;
+	bh=zQaAoby1LL5qtX0PbqpV15cjdPtMgN1fWIPjYj6cHHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U4V1yX3TKnJcSrfA2ZQ/oJ/M1inSBlFmHIl8JVHwnwmL6pzFFuZD6rYsZaYzOi88Di2s0mueZoGXoET9T0JSBMwP1pLd1LW2GcGsiKv0jSTHyFglVg61eJYIkGkcscacMNt/ps+4g3a70BUrjlgzbZMj/hKlaVbKMD3aeoV1sUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S8zGn/i+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LmROjC1V"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4852a9c6309so4460795e9.0
-        for <llvm@lists.linux.dev>; Wed, 25 Mar 2026 19:00:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774490426; x=1775095226; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uhbkdLidpODGTRsYmLRF0FS3n+wDOfvaXSzlGywSvfg=;
-        b=LmROjC1V8LhUbCl63fnmkRqlJs3LaLv2mnkCkEQ+KSrkWDm7yNNnFZERHEQ7E6NcpF
-         14jN6kAhe+9DjLqNMmjqwKXKJJ+qC+Juj9Tc248FJJ/sU5HqA8zt7RBU0OIn5pwffyxT
-         MUE7f1xXq45haQ3jeSqbJX432sMzKMMZORHnfwN/oAtelEjHisX3bxiI2OmIBTqWDawC
-         yS/CvTvM2qi3rg3yoUZAsajGgeao/KSLI98GuS+vt4OvV2zdraovzZCz0MbKy29Tb0eT
-         93BJGCU7k7rt3WfO6SQfD+tZ3OKfzPp8cXfDmhLTcu4IwcQtN3FYWU37uGRWcL0VPpfC
-         VXVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774490426; x=1775095226;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uhbkdLidpODGTRsYmLRF0FS3n+wDOfvaXSzlGywSvfg=;
-        b=nwlmXaqyu4vIFegBs3o8FNeQkrl1i/IfZLam9yFJ1REC8kSI+2nzQ0QUt4g8Y1m7VB
-         xcXouG0jh6ahCjLSePiKjv/Tj5JRMN8X5iSfqzK+NqzHcVgILogihVnSF94GSB+nUtRg
-         Q367h3G9qwGGxexJOGWutQdaDu2wJXNYHdJDKMdbQjglqNN6Hdf9WH8IWRACK/TBxUN6
-         ukEnYvQ8V3rTb4YZ7dELdVNlC8g05Ad71VOe2NSsstSSt73shkTGTPBA9SUCA/Nubt5/
-         rp4suO0F+A6Q2aDnH0fqq2XGuYe7kzmdB7KTvpLDDpOkrCzbqUuxi+CYHx2o8Ltg/M18
-         u8gA==
-X-Forwarded-Encrypted: i=1; AJvYcCUfAvD0xYEfK8FWyjEkWgazVEjf8+ZNPNqdYXEvBs+62njxNld7GdZpeESSZ0CQCQDpzE5I@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy7rdpSN7N26lp1PFEx3A57Y1xGSTo2MXjHi9T8BWq0FN6+KW6F
-	waqNagyA+TToJuc0acay10vgenkkH+QYnPZ8Q7fDuvEdrBwWqvGg+Uiv
-X-Gm-Gg: ATEYQzzdvaiwNRFm3HGN/iWe/qSnH/psT1/vKGtpHfzWzkYWzqZCwjadYXYkfYFteEy
-	onW7M+6ca2SXCIBvltxtKRKi3nWVa5PuNjb0vi3gDvUdJ+kaGcfpHFh1evwlwj1gCxnqrl0kIiO
-	9pKV9eC9j3OeTP3hswm3iGzzNcGUO50128T1Zq0PwG03M0xvcVArCmdpg1PH0kUJAQ2X+JVq3pt
-	ktcaUk2b/8HeKhFyPInaAt1Rl8KHtX42vuf7CcfV/+SOjRgn2RH+CQQP8XRjD7XVw7wD3cHX05u
-	y/b2KUS7TIFpdRSHC+x/3nVFbN9+Q6Sht9uODqYv1YYBZiD7QOpWJqo2GOlRAQZSstHE+9uee96
-	/yAR15bDEgo6pkX/bVfD7SvTj04DuTjKeK5tfFjmDxsMlZLiaW9AHM69IfRPIzEisYsgVomqyMG
-	FGEkhKGGgWck+TGUVNz+El0qwyxKk5DufLt9HwgDOdoGQPZu95UPMshYFRW4yq2dJSJelRJAive
-	YCZstmg/PtT5Q==
-X-Received: by 2002:a05:600c:c4a6:b0:485:3dfc:57c with SMTP id 5b1f17b1804b1-48716042c15mr81428365e9.21.1774490425914;
-        Wed, 25 Mar 2026 19:00:25 -0700 (PDT)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4871fb333fbsm33300625e9.3.2026.03.25.19.00.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Mar 2026 19:00:24 -0700 (PDT)
-Message-ID: <fab5260a-b83f-4750-8b4e-ae5c1313d7ba@gmail.com>
-Date: Thu, 26 Mar 2026 02:00:23 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S8zGn/i+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB208C4CEF7;
+	Thu, 26 Mar 2026 02:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774492954;
+	bh=zQaAoby1LL5qtX0PbqpV15cjdPtMgN1fWIPjYj6cHHc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=S8zGn/i+Spyx9XA47CpCu/vQAg2jkahFRQzQumLqtrDpCNSJTCj03aAkEznFHIBqF
+	 BHqQtK9yH0jlsDRFhpqINdr/8qKOFZZ33DoLjiHS1rBQN8A7rN6+cd4XspEv86q4aw
+	 fX5sdIVSmixq08mIaV+WQ20CFRO/xOqtaVcHBACJLjdgVgNEAW/1eD2ppZ4E8Sqo34
+	 KMBXF5A5vLLXjt9vVzfBdhnIBFejLTjFksFyWA19+Dk1JNuNC3tUVbCRh3Eo+Ed2YP
+	 iTNr+GVTtwyhLeEY70H14v74c5VO6yI6pMXy8ExXxlKbsKAbxCmXLa/pnbG4dlN+CH
+	 y4s8jAUhtp60A==
+Date: Wed, 25 Mar 2026 19:42:26 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	David Gow <david@davidgow.net>,
+	Russell King <linux@armlinux.org.uk>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>, aliceryhl@google.com,
+	linux-um@lists.infradead.org, llvm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+	a.hindborg@kernel.org, acourbot@nvidia.com,
+	akpm@linux-foundation.org, bjorn3_gh@protonmail.com,
+	boqun.feng@gmail.com, dakr@kernel.org, gary@garyguo.net,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, lossin@kernel.org,
+	mark.rutland@arm.com, mmaurer@google.com, nicolas.schier@linux.dev,
+	peterz@infradead.org, rust-for-linux@vger.kernel.org,
+	tmgross@umich.edu, urezki@gmail.com, will@kernel.org
+Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
+Message-ID: <20260326024226.GB2302780@ax162>
+References: <20260203-inline-helpers-v2-0-beb8547a03c9@google.com>
+ <20260322192159.88138-1-ojeda@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] [v2] net: sfc: avoid format string warning
-To: Arnd Bergmann <arnd@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Nathan Chancellor <nathan@kernel.org>, Jeff Garzik <jgarzik@redhat.com>,
- Ben Hutchings <bhutchings@solarflare.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Brett Creeley <brett.creeley@amd.com>, Breno Leitao <leitao@debian.org>,
- Kees Cook <kees@kernel.org>, netdev@vger.kernel.org,
- linux-net-drivers@amd.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20260325134557.3406655-1-arnd@kernel.org>
-Content-Language: en-GB
-From: Edward Cree <ecree.xilinx@gmail.com>
-In-Reply-To: <20260325134557.3406655-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260322192159.88138-1-ojeda@kernel.org>
 
-On 25/03/2026 13:45, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Sun, Mar 22, 2026 at 08:21:59PM +0100, Miguel Ojeda wrote:
+>   - Clang passes `-Werror=unused-command-line-argument`, which means
+>     under arm (i.e. 32-bit) we get:
 > 
-> Three sfc drivers contain the same *_fill_test() function that takes
-> a format string argument that gets passed down to snprintf(), producing
-> a warning with clang-22:
+>       clang: error: argument unused during compilation: '-U arm' [-Werror,-Wunused-command-line-argument]
 > 
-> drivers/net/ethernet/sfc/falcon/ethtool.c:227:60: error: diagnostic behavior may be improved by adding
->       the 'format(printf, 7, 8)' attribute to the declaration of 'ef4_fill_test' [-Werror,-Wmissing-format-attribute]
->   210 |                 snprintf(test_str, sizeof(test_str), test_format, test_id);
->       |                                                                          ^
-> drivers/net/ethernet/sfc/falcon/ethtool.c:210:13: note: 'ef4_fill_test' declared here
+>     And under UML I see:
 > 
-> Rework these to take a varargs based test_format that allows better
-> type checking and a non-varargs unit name that gets pre-filled by
-> the caller, so that the compiler can validate all format strings.
+>       clang: error: argument unused during compilation: '-I ./arch/um/include/shared' [-Werror,-Wunused-command-line-argument]
+>       clang: error: argument unused during compilation: '-I ./arch/x86/um/shared' [-Werror,-Wunused-command-line-argument]
+>       clang: error: argument unused during compilation: '-I ./arch/um/include/shared/skas' [-Werror,-Wunused-command-line-argument]
 > 
-> Fixes: 3273c2e8c66a ("[netdrvr] sfc: sfc: Add self-test support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>     So we would need e.g. `-Wno-unused-command-line-argument` there
+>     close to the `-Wno-override-module` one, unless Kbuild or
+>     ClangBuiltLinux thinks it is important to keep it for this case.
 
-Reviewed-by: Edward Cree <ecree.xilinx@gmail.com>
+No, I don't think it is worth trying to make -Wunused-command-line-argument
+work for this command. Just disable it. This mirrors what is being done
+for cmd_cc_o_bc in the distributed ThinLTO:
+
+  https://lore.kernel.org/20260316212930.120438-3-xur@google.com/
+
+>     On the other hand, regardless of whether we fix this (and another
+>     issue in a separate email found thanks to the UML build), we could
+>     instead add `depends on` listing explicitly the architectures where
+>     this is going to be actually tested. That way maintainers can decide
+>     whether they want to support it when they are ready. Thoughts?
+> 
+>     Cc'ing Nathan, Nicolas, Nick, Bill, Justin, David, UML, ARM.
+
+I do agree with some of the concerns that adding an architecure
+dimension to this is a little complicated. I would rather try to flush
+out those build problems with patches and keep it enabled for all
+architectures. At the same time though, I understand that enabling it
+for the "tier 1" architectures is a low barrier of entry for getting the
+feature upstream, validated, and distributed to the majority of people
+that would actually use and depend on it, so I ultimately leave that
+call up to you.
+
+>   - If we use the `.bc` extension, we need to add a `.gitignore` for
+>     `.bc` files, and an exception for `kernel/time/timeconst.bc`.
+> 
+>     I guess we will not have too many `bc` scripts in the future for
+>     that to be a problem. On the other hand, we have the chance to use
+>     another extension (either for LLVM bitcode or for `bc` scripts).
+> 
+>     But please let me know on e.g. the Kbuild side if someone has
+>     concerns...
+
+No real concern on that front but .gitignore has a command to run when
+modifying it, which will require a !timeconst.bc in a
+kernel/time/.gitignore file.
+
+Cheers,
+Nathan
