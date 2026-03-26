@@ -1,152 +1,113 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4329A322B8C;
-	Thu, 26 Mar 2026 10:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8032C38736E
+	for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 10:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774519764; cv=none; b=P4jUa21g4Iyc3NB4t5fsCdFhSRMhmIn1rwRkmaSmLfBFBM3RhgZUxTOUQHE7z2tOk5TjeHMnrDsQx9fBTEnLlCOsMFa/oDJzeiaLGG7jMDX+gCbuxVbTTSfCvgGVzVfx74WJgq2IWMwX6YW+uZzXqw5s8Kp4UmMd+Gd77EtNueo=
+	t=1774519814; cv=none; b=qS7oIa2uzJCyQzlWJmqG/2UkMJ7vMjkNT1N7+VIGBfVtXuYRfrocU4hZ8fU5eC+fSY40Vc9U63zYhhLhJtnYz2Kxev/avilezopeZv6BBdYy1fmxqiwJ2mz155lL/Cdvpx3yCaMYrVEWsOt6T4a3dZ2cNtl8DleRsUZBEaRL+2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774519764; c=relaxed/simple;
-	bh=s+D4558G3oU8R0YvDMEI/gfGDw/0rkU3Qj/wYtVwG2o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=noS1hiID7cWzEOCWIeQOzNrF5m0SEIIzFOanmyqYH+bnaSehpKNO+7p/ocd/NVtf5bLACBvCFu/w70BujVti1YnRqdbCNlUmnxX5PflWf9i1o1zJmNcAN39oo+lr08IrMIgpvJk4LVlm/l0j9oxtckEdZNNOd4shUqZhc+J6nuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lYuJCsiP; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774519814; c=relaxed/simple;
+	bh=uTL56eo9X2lUBgWDNCn1Tquwax2vc9PBJBXL6+0eRfU=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=oZKUKXjTA+JbYoaez+SNfmD7ejEDGalR85DnSFWUqdkKgVTOmxd/VII33dOhJQsWFIc+WcpOlXK9y2iwptXbXtemJ3BfyVGIi/tkEgjrIucZBxbAqfdjxo7P4DxyofQUzGhtqEctWS4QgvZ8IZSbHrSNfJNNYJa4iXzsBCotMNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R4Z0jtlv; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lYuJCsiP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774519761; x=1806055761;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s+D4558G3oU8R0YvDMEI/gfGDw/0rkU3Qj/wYtVwG2o=;
-  b=lYuJCsiPry+Pjj4EJClsmXfxcR8FHHM/g7p42LLX+7Pq94FJ+6ajEpad
-   7hE+HmNpAELzane0MuXG2VZerhKd5RrWyzTWDsTMfZM6bEtGt5qe/nphS
-   aLNyxIp7aFRgwR3rceC9MRv5UbsFR6JVLqhWHY632JMwNqTL8ytFOMovS
-   SuBEn5nLVNidaXySm8aSEMpcF5+KlDhHKqYdvV87v8pqI/FgnL5oOBECJ
-   xl43I2dfAzCzpOT2eveX5Uq5pGbQkspcAJclVgI7feQLrUEwtqrsJ5Aaz
-   ZHr5jrT9+dLpfIk32isqB7XynNI8XD1Kc1UJwGOz7nNZ35wuyAzj47S58
-   w==;
-X-CSE-ConnectionGUID: 3vUNLnSDQHmMn0KMxn0QQA==
-X-CSE-MsgGUID: i52iTt1rQrO2delmP59Auw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="63124605"
-X-IronPort-AV: E=Sophos;i="6.23,141,1770624000"; 
-   d="scan'208";a="63124605"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 03:09:20 -0700
-X-CSE-ConnectionGUID: fKBdK13SSMe1TNDTxNivJw==
-X-CSE-MsgGUID: Tqpkcb8CStiia4SibxGC/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,141,1770624000"; 
-   d="scan'208";a="262875048"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 26 Mar 2026 03:09:17 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w5heM-000000008kX-0sHk;
-	Thu, 26 Mar 2026 10:09:14 +0000
-Date: Thu, 26 Mar 2026 18:08:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linusw@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Jaya Kumar <jayakumar.alsa@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Bartosz Golaszewski <brgl@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-sound@vger.kernel.org, linux-gpio@vger.kernel.org,
-	Linus Walleij <linusw@kernel.org>
-Subject: Re: [PATCH] RFT: x86_32: Move OLPC XO-1 audio GPIO to software nodes
-Message-ID: <202603261710.M57Gdhep-lkp@intel.com>
-References: <20260325-asoc-olpc-v1-1-ebe6de05c7e2@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R4Z0jtlv"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-48544725bdeso15756585e9.2
+        for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 03:10:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774519812; x=1775124612; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lBGicU27laianFvyzY656GHLSJPIgkYXNKTwZ0wPpek=;
+        b=R4Z0jtlvCS5YBaqYHkvyctHdipNTgRWcNfO+Rpa9Kx3PTdEji28sKijqJVxCNaSSos
+         Iqf0ynUCudNtqdNT+zJ/in09L4gEgBNv05AxosqTxi3hWzQp3N31/DFH+p0iHrFDWrzC
+         dMlvlTbwfK2l66HlDQ/tlvv9PiFTnv649jecxOFdOwH45RWyZpEUiVSamrf2Z0UZiBOy
+         A75xtaA2ZSNh0rykXz1huelTgL9FnLwadKRoiF6cL54trlHl3HEvEPyAbgR8VHcnPjhe
+         Q0bzIzwOD0+qCCFvzG0vopuXEsgLerR+jJNa+B5bNX9iQRe4KGVvs6aS6Nk2qtAsSKhe
+         5KQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774519812; x=1775124612;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lBGicU27laianFvyzY656GHLSJPIgkYXNKTwZ0wPpek=;
+        b=WiSuRmHY6yQ+yiHbPQ3n08pPpWLT/14AomhnvySfao6PkdZo4jYei73lf1I5OXLaIN
+         UGwJIXCCXJAnoOufEnKvCDLZDevCbjnh4CrDCbwqFVFnG6esj6WUP8+ija1+fonMwTqX
+         wFpFuil+dDxNjwx66BT3Chusx4ULMOdB6hAnT9/1/OCiEJQ0XrU813yS5vV2VQ21x21k
+         QTdnuavAEFLGM1J1KY5ecYHn7532d3EiralLbPxcYVwZgIsMfWxBYeGyXo3Ot3mBtQnP
+         96+5JVUnX+lwGv2N1vTBH7PW9aLZF29K4wgSJo7lVbDWufwGX/JZncprOm5apnlfokA4
+         hKCg==
+X-Forwarded-Encrypted: i=1; AJvYcCWMeDvAU371oTrLcwJTg5HuvzP5KllRpi0liNwQC7wgzAvc5d6gVZc9SyRSGWqASCBECvLG@lists.linux.dev
+X-Gm-Message-State: AOJu0YzcWaqfCVWbNvET7TOf2bnakSIsci+p6LPlDMsL2nT5jUNgiP4E
+	9+pfMd6qGibNewDQuydrU4gq84w6N6H3hRKUoX+4GG+K75jMEDgqr3DQftmMpANHVCsWg27TuIR
+	mDBzZ6EIBp7mFk6YmCw==
+X-Received: from wmoo2.prod.google.com ([2002:a05:600d:102:b0:47d:5bef:a379])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:890b:b0:485:6ec7:2df with SMTP id 5b1f17b1804b1-48715fd50abmr80350625e9.8.1774519811752;
+ Thu, 26 Mar 2026 03:10:11 -0700 (PDT)
+Date: Thu, 26 Mar 2026 10:10:10 +0000
+In-Reply-To: <acEP7tl8pqFA3tK8@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260325-asoc-olpc-v1-1-ebe6de05c7e2@kernel.org>
+Mime-Version: 1.0
+References: <20260322192159.88138-1-ojeda@kernel.org> <20260323000327.111235-1-ojeda@kernel.org>
+ <acEP7tl8pqFA3tK8@shell.armlinux.org.uk>
+Message-ID: <acUGAsjYvNvTEO92@google.com>
+Subject: Re: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
+From: Alice Ryhl <aliceryhl@google.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Miguel Ojeda <ojeda@kernel.org>, a.hindborg@kernel.org, acourbot@nvidia.com, 
+	akpm@linux-foundation.org, anton.ivanov@cambridgegreys.com, 
+	bjorn3_gh@protonmail.com, boqun.feng@gmail.com, dakr@kernel.org, 
+	david@davidgow.net, gary@garyguo.net, johannes@sipsolutions.net, 
+	justinstitt@google.com, linux-arm-kernel@lists.infradead.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-um@lists.infradead.org, llvm@lists.linux.dev, 
+	lossin@kernel.org, mark.rutland@arm.com, mmaurer@google.com, morbo@google.com, 
+	nathan@kernel.org, nick.desaulniers+lkml@gmail.com, nicolas.schier@linux.dev, 
+	nsc@kernel.org, peterz@infradead.org, richard@nod.at, 
+	rust-for-linux@vger.kernel.org, tmgross@umich.edu, urezki@gmail.com, 
+	will@kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-Hi Linus,
+On Mon, Mar 23, 2026 at 10:03:26AM +0000, Russell King (Oracle) wrote:
+> On Mon, Mar 23, 2026 at 01:03:27AM +0100, Miguel Ojeda wrote:
+> > On Sun, 22 Mar 2026 20:21:59 +0100 Miguel Ojeda <ojeda@kernel.org> wrote:
+> > >
+> > >     On the other hand, regardless of whether we fix this (and another
+> > >     issue in a separate email found thanks to the UML build), we could
+> > >     instead add `depends on` listing explicitly the architectures where
+> > >     this is going to be actually tested. That way maintainers can decide
+> > >     whether they want to support it when they are ready. Thoughts?
+> > 
+> > Another one for arm 32-bit:
+> > 
+> >       LD      .tmp_vmlinux1
+> >     ld.lld: error: undefined symbol: __aeabi_read_tp
+> >     >>> referenced by uaccess.rs:349 (rust/kernel/uaccess.rs:349)
+> >     >>>               samples/rust/rust_misc_device.o:(<rust_misc_device::RustMiscDevice as kernel::miscdevice::MiscDevice>::ioctl) in archive vmlinux.a
+> >     >>> referenced by uaccess.rs:543 (rust/kernel/uaccess.rs:543)
+> >     >>>               samples/rust/rust_misc_device.o:(<rust_misc_device::RustMiscDevice as kernel::miscdevice::MiscDevice>::ioctl) in archive vmlinux.a
+> >     >>> referenced by uaccess.rs:543 (rust/kernel/uaccess.rs:543)
+> >     >>>               drivers/android/binder/rust_binder_main.o:(rust_binder_main::rust_binder_ioctl) in archive vmlinux.a
+> >     >>> referenced 36 more times
+> 
+> Why is Rust generating code for userspace thread accessors for kernel
+> space, where userspace threads are meaningless. This is totally wrong.
+> The kernel must not reference __aeabi_read_tp().
+> 
+> Note: I know nothing about Rust, but I know enough to say the above is
+> pointing to a fundamental issue in Rust for 32-bit ARM.
 
-kernel test robot noticed the following build errors:
+I noticed that the Makefile currently uses the arm-unknown-linux-gnueabi
+target. It should probably not be -linux target to avoid this? Probably
+it should just be armv7a-none-eabi, right? We gate HAVE_RUST on
+CPU_32v7, so we should not need to consider the other variants.
 
-[auto build test ERROR on 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/RFT-x86_32-Move-OLPC-XO-1-audio-GPIO-to-software-nodes/20260326-073823
-base:   6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
-patch link:    https://lore.kernel.org/r/20260325-asoc-olpc-v1-1-ebe6de05c7e2%40kernel.org
-patch subject: [PATCH] RFT: x86_32: Move OLPC XO-1 audio GPIO to software nodes
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260326/202603261710.M57Gdhep-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260326/202603261710.M57Gdhep-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603261710.M57Gdhep-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> sound/pci/cs5535audio/cs5535audio.c:167:26: error: incompatible pointer types passing 'struct cs5535audio *' to parameter of type 'struct snd_ac97 *' [-Wincompatible-pointer-types]
-     167 |         err = olpc_quirks(card, cs5535au);
-         |                                 ^~~~~~~~
-   sound/pci/cs5535audio/cs5535audio.h:128:71: note: passing argument to parameter 'ac97' here
-     128 | static inline int olpc_quirks(struct snd_card *card, struct snd_ac97 *ac97)
-         |                                                                       ^
-   1 error generated.
-
-
-vim +167 sound/pci/cs5535audio/cs5535audio.c
-
-   134	
-   135	static int snd_cs5535audio_mixer(struct cs5535audio *cs5535au)
-   136	{
-   137		struct snd_card *card = cs5535au->card;
-   138		struct snd_ac97_bus *pbus;
-   139		struct snd_ac97_template ac97;
-   140		int err;
-   141		static const struct snd_ac97_bus_ops ops = {
-   142			.write = snd_cs5535audio_ac97_codec_write,
-   143			.read = snd_cs5535audio_ac97_codec_read,
-   144		};
-   145	
-   146		err = snd_ac97_bus(card, 0, &ops, NULL, &pbus);
-   147		if (err < 0)
-   148			return err;
-   149	
-   150		memset(&ac97, 0, sizeof(ac97));
-   151		ac97.scaps = AC97_SCAP_AUDIO | AC97_SCAP_SKIP_MODEM
-   152				| AC97_SCAP_POWER_SAVE;
-   153		ac97.private_data = cs5535au;
-   154		ac97.pci = cs5535au->pci;
-   155	
-   156		/* set any OLPC-specific scaps */
-   157		olpc_prequirks(card, &ac97);
-   158	
-   159		err = snd_ac97_mixer(pbus, &ac97, &cs5535au->ac97);
-   160		if (err < 0) {
-   161			dev_err(card->dev, "mixer failed\n");
-   162			return err;
-   163		}
-   164	
-   165		snd_ac97_tune_hardware(cs5535au->ac97, ac97_quirks, ac97_quirk);
-   166	
- > 167		err = olpc_quirks(card, cs5535au);
-   168		if (err < 0) {
-   169			dev_err(card->dev, "olpc quirks failed\n");
-   170			return err;
-   171		}
-   172	
-   173		return 0;
-   174	}
-   175	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alice
