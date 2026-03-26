@@ -1,152 +1,434 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789E832AADE
-	for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 19:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774553926; cv=pass; b=L5fdzhw4tEFFH3MOlJwolpRV/TKWKqytEtzvQChZDtMh4sHgLJj5qcuKlgKeJ+2Eax8UO9l6dKOD5RFA4yR4ThErYpZrsnXhMGXH5u07C5R+qcWlnMGkSCi24m/JRZ+02ncmEeCZ+Dq308Zpyw+BfC4k0qMS+sEB7mMwFppN6Qo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774553926; c=relaxed/simple;
-	bh=Db4TAAnVc2T0Rf7Wc2cEY/pwtSDY+KMo+MImooH/kK4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=upTm4HlRn2xyO0jDVWmXbisPWRmERMG98ZN3ZXHiwO+sgawgxdHKYnVN3/sDzsZcBfalUYTTN/1h7DoPR2diy8qqPvemRBqkK2j5C+sphcz977HskXMelIgAPOHptPqBktzwHDeP4wl8+v/Pr5YoVNuS8tR7YTOS8w3cB1tAT2A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BWXYgI2h; arc=pass smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6279A38E5F6;
+	Thu, 26 Mar 2026 21:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774559604; cv=none; b=DGQ8/l41QdGR3eB8L6Jy6h2u5pE9Eyqcnn0ROLuEbi7ER9920FqFiNaUwzCJDDrIipHbhjJy5rJA6y6FcEwL3OsR7lC5XmxFl7ByqCFzEJBd6j00zAzqCgkPH0eA4NK/2+wFf6eKq+PdKvAxX0TiqfJa8VJrIx9H4s3OZRgkpcg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774559604; c=relaxed/simple;
+	bh=oewKbCNQi6VCrnD2yWEUckeYtQXwwIyqIxQ7eIre35s=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=oN5e0SdKAYeiqWpA6GYyy5a/YU6w5s4bYAtWOX/oVKdgsw7Lv8sNccD4TW2cGakF9R+loVlu3xkrAs+KjfEvtNRkO3ZhvIx7hH8HtixolNjHYvzLqoKxaMfs4pXeDKx27U7Am0YjPyPN6ZnBA2dmF/wzzFqDtXBjzxnxZ7OurdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=h6asKu9U; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OXCrFmp0; arc=none smtp.client-ip=202.12.124.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BWXYgI2h"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1273349c56bso1761946c88.0
-        for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 12:38:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774553924; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jojtVHCE+CD5xOq5U4s+4vrMYnt/Xn7ZaFaRFgQAZG2ogDwK22rRC5ljmgM4AjrAnt
-         48pz9HpxuYXZ4WBTnuyxuLRv1a7GQz3PyGR5zBkSOO0bo3bv0mMN7zYmy82nkZdQwg4G
-         PCb0V+dSfOsfr/BpLu6Fe9am0T9PL8pgCQ68yJu2QS4uBc7WPzn3Nq9DTxLw0toWBfq8
-         u8cC3mU1OhqHDGrhy+EwROoMhuHh/DQSkT2pLqcwzePPr+NjEt9ZsAEfymcFQE4mn/Fv
-         6U1m2hnKKbKriQD56CIFXvW5npM+gNg6//uOet3RLIbyyYVYxJuf0r732Hfn/FgUjaP1
-         4Ldg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6mCMJ7IYsFJz0Hh2fdQYOLxKjKcxltIu2zRqwDNj3FY=;
-        fh=wrjCpa2WW6bR+amF1gyuLjJkDyQt9F0W+n7WEJ1OiZw=;
-        b=ZJ481fpZP+DM7w9TguGZaULR7YZdDF9T8j2qnE0JaAQvOk/NH6nzvMEweLcs9hZLmt
-         34jVun499dw7kq/mKQnWnhF8y5lvFzaMdHnfvtGu6mlAATxcagrPqqypakn7aExc0VrN
-         VC4oj3ew9xomF4gQ5XW5vZcvEZxYwNv16SvzY1aWC2bu3VWxt82D8ebwbZ2ko8OSyYCt
-         B/wReWRMg6EZ+TGT26P+t9nZozQ194gSnh5LM7Yec7z9xZmsN/sra+dKNKrGLeHgynts
-         b18tkZd5IrnNN4M7WI9fPpfYHOmMF5wdr+WfGckvoJ3k/wbRusuijfN3W+oRW55jZ3ZN
-         x0WQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774553924; x=1775158724; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6mCMJ7IYsFJz0Hh2fdQYOLxKjKcxltIu2zRqwDNj3FY=;
-        b=BWXYgI2hz/ab66GayiQ6/kO1qKihsksrT/mskBNHZWRezMNbwLWmIpVwk4BuO6Sr7U
-         elKfhDUYZLLdZAi8Nyov36MFk6f8+bxtwstCZyuHOJV/6AAGpV4NJowcma98L1D5HzGs
-         TyXkLmtH2JdoEvZSzwIZsPnCQOx4J3dWVcJFuNIMbwVPnDc78zaapZBxvJHtdOBMN8oh
-         UhdIgjNWTsWPtVbrZqS/u/zcmNVlHlXe9BcjPaVQN6QBrURF37B8Sx3WTAGP+2/QDKoA
-         HMPXFK4jGXEDKSfbf2gZeH0Y70CX0gsu9ftaMzBhHqliU1CWzD1i9RLFMLQTrYnBHhWC
-         JmFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774553924; x=1775158724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6mCMJ7IYsFJz0Hh2fdQYOLxKjKcxltIu2zRqwDNj3FY=;
-        b=DgRIMDe+LmMMJUvv8m0mwVmAn01Pm6sZBrQnnq9qJYKwWgxN7XCcowN0QJ+71/bDLd
-         ndjAKWuv12V1LUyUwf2eqBMCRuWAnjG3vE73zfQvmSu7XcBEhWgYx36uhNm7gGncG7gg
-         W/2W3OKbS/WrsRtkJWgDG/IhWZDEsuHT/J/yBfxqquD328JNDhcHI4v5cTjWN1Vkfpnt
-         Kjh2pk2vwgYV05pMBaigjSeXjsdvQu7E7sYYyRWpQIAa17Eyd11uxtJIgRmmfwbn3Svu
-         TvMCicpb8PqbvkKCO/h9+G7IvZmt4koebXYQYvdmdKDKo5Mdj4iPWlB7HusWvdjGb3SZ
-         ffUA==
-X-Forwarded-Encrypted: i=1; AJvYcCWAxYgivPPv8hd9PmZx2s+fTuYPfIIsqcfv6/YF3PrhyPuOQCCHMq1z+4A1uquGCf2Ylc/w@lists.linux.dev
-X-Gm-Message-State: AOJu0YxA8Ev9yKjAPo/kW2MROtjCaQ5wLrBRu66BfofA1bet0BDMDomw
-	4NNwbAToDlpFh7zmHUwHw+aJUbpluadudpPzlnYuWNQjzUOfk36fAvPXKS9ZxaMabGaAUAJKt0n
-	Kc39ut7jTUXQnWx0Uuj4KfO9wXLYKO1DNp+9jAdUNOq3GZhVTYjGKebH7
-X-Gm-Gg: ATEYQzx9TNrKELH41yv0ArhA199GADNcfJLi8HQ2BM67FlqD5H4/FTArT3CgGYcd3Nm
-	JOYm5Akz8TrW/wH+l8wN5iJpojc60jngNnrK3T44VnuXqvt3l8UK2wEhFLL+NLYrVQn2UhLDs8i
-	AyQ7cWYaeDu6cYIfKsE9H6q0PkMwYeKx7XfWgUgAvYy3UmNVFCe6iH0UOQc8s8TASqSL77hCXou
-	fSreGBmtVL9t+E+6ns2Nun+jWfby01mkny0RSdvzDyMdpt76ZQLuwsfXW5EpkUkpXxTp+kVj44F
-	7XI8tTV0qdUK1rf4VVSJT9nLTItZBOU2hSq4A+piGS4Rzw9CU3/YBJCz7nDEXfSM3WlFZg==
-X-Received: by 2002:a05:7022:ff45:b0:128:d51a:5157 with SMTP id
- a92af1059eb24-12a96f09443mr4300359c88.33.1774553923052; Thu, 26 Mar 2026
- 12:38:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="h6asKu9U";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OXCrFmp0"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.stl.internal (Postfix) with ESMTP id F135613000B5;
+	Thu, 26 Mar 2026 17:13:18 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Thu, 26 Mar 2026 17:13:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1774559598;
+	 x=1774566798; bh=6pjb3URkbbR01eXdGvkmTKg9j6MWjYnJLhpcHkswgr8=; b=
+	h6asKu9Uks25ifOvsWbdAJZSoSzdSq9ur05qS8lnhn9V/7eSdAB2i7oILTnWk05h
+	a1Bd7UiTH53pYCRbXfVFE7SEv1wQWMNzz4DQi9QvV1PDSBcx/dwPX2MtAshG6h9s
+	uNvT/JNFfEKe59zeVqppgigdwUzitymd/Yh/E2tFdqDDeqv4j+G/9aGkQh6Fe+s5
+	midsXRlD2K/MuIyiAFPpc2orO7JtJLzKRjCAs7k/miWaYl7rwmoPqaM+8FnMGApS
+	yTq/OCHm/mm0DAuonaZ6+v92mbvkTMkShEEMhNkCWquTmCcLIuq6HvzhGZdBaatc
+	UOByiv+8LC9UuODYhXbuYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774559598; x=
+	1774566798; bh=6pjb3URkbbR01eXdGvkmTKg9j6MWjYnJLhpcHkswgr8=; b=O
+	XCrFmp0xOx34V+/K+8Az+IxDwAi0L+d5/ghlz5sW2+v5K5TS/Lmw18CzE2aWaDD1
+	lUCrX1ge/MGkGOijz4Gid3J3VilT7GgYu5MrTH1NSW4+cRxywYAXIV9CywX9qOsi
+	iXHdqq7t3yAqpK/xcBjDu1Fw2LvYf5SdkPS07TRs94A7pp5MplN7/hvYHpF2nGWk
+	7VUmVMTVHMmIfYxvn1VT4X+9KSDvLPyocrwABTjv9Hwa2D1w/OdJiewf0PANvYUE
+	om86o69UMnG81/maqi5puEjUwhYy/jWqIWYka2xfUupH1/auvrOn0cFXjmEkRFzP
+	h8zv2fuqgRd/pV4lc+zKw==
+X-ME-Sender: <xms:bKHFaS1M2gDWqgSSjr5TTWzG-0MpiTpD6ijnhoWWMcY4y66zpocZYA>
+    <xme:bKHFaf6wbZjHiirlgQKu81zSxSJGhzT7vY8geF5gvIGBuYCkhLC37Y23WHblY5xQ7
+    dxjJ-ftXhETnPmcdwb7w0yJtIxQdqKZdkpht41Z4pLBOsy7HKWqS2E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefvdekgeefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepgedvpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehmrghrkhdrrhhuthhlrghnugesrghrmhdrtghomhdprhgtphhtth
+    hopehrohgsihhnrdhmuhhrphhhhiesrghrmhdrtghomhdprhgtphhtthhopehlihhnuhig
+    segrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtoheprghnthhonhdrihhvrghnoh
+    hvsegtrghmsghrihgughgvghhrvgihshdrtghomhdprhgtphhtthhopegurghnihgvlhdr
+    rghlmhgvihgurgestgholhhlrggsohhrrgdrtghomhdprhgtphhtthhopegurghvihguse
+    gurghvihgughhofidrnhgvthdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgv
+    thdprhgtphhtthhopegrsgguihgvlhdrjhgrnhhulhhguhgvsehgmhgrihhlrdgtohhmpd
+    hrtghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:bKHFacD0ra2IKewOzV85-guaMKbD70dENWsy-p75QsHo1Yk0z9Nn_g>
+    <xmx:bKHFaathmkCZaZCL5hDPhlvL3BEdEuWC-JUBLqLCWV9m_v1HsxUVmg>
+    <xmx:bKHFaWue742_u7hiwisJ5WxIf99QUzzi0Dr0SkABQDBOjBgU5pdtxg>
+    <xmx:bKHFaeX3iXr1bIB49LOaucusKHBGCI8-g5rftWB0rU1MNmzYPTijsg>
+    <xmx:bqHFaY1IWjdkzpMo1o5XFVQetaAAt7u7flqJ1LRde5SJaQlj3ZPuM0gR>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B95A4700065; Thu, 26 Mar 2026 17:13:16 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260325063843.1790782-6-kuniyu@google.com> <202603270301.kJulQgkT-lkp@intel.com>
-In-Reply-To: <202603270301.kJulQgkT-lkp@intel.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Thu, 26 Mar 2026 12:38:31 -0700
-X-Gm-Features: AQROBzC56kOOvilMQ9x7JfCrqjezesmORZsrlXxqw-kdyJdYRmxiltxnB1IbvvY
-Message-ID: <CAAVpQUBdco4wFmdVFdi4yQbH38fDCNLL-SUD=udBUy8uJ0spqQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] nbd: Use lock_sock_try() for TCP sendmsg() and shutdown().
-To: kernel test robot <lkp@intel.com>
-Cc: Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, Simon Horman <horms@kernel.org>, 
-	linux-block@vger.kernel.org, nbd@other.debian.org, netdev@vger.kernel.org, 
-	syzbot+7b4f368d3955d2c9950e@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: AUJnWW6OA6Vc
+Date: Thu, 26 Mar 2026 22:12:24 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Miguel Ojeda" <ojeda@kernel.org>,
+ "Marek Szyprowski" <m.szyprowski@samsung.com>,
+ "Robin Murphy" <robin.murphy@arm.com>, "Danilo Krummrich" <dakr@kernel.org>,
+ "Abdiel Janulgue" <abdiel.janulgue@gmail.com>,
+ "Daniel Almeida" <daniel.almeida@collabora.com>,
+ "Andreas Hindborg" <a.hindborg@kernel.org>, "Christoph Hellwig" <hch@lst.de>
+Cc: iommu@lists.linux.dev, driver-core@lists.linux.dev, acourbot@nvidia.com,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Alice Ryhl" <aliceryhl@google.com>,
+ "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ "Boqun Feng" <boqun.feng@gmail.com>, "David Gow" <david@davidgow.net>,
+ "Gary Guo" <gary@garyguo.net>,
+ "Johannes Berg" <johannes@sipsolutions.net>,
+ "Justin Stitt" <justinstitt@google.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-um@lists.infradead.org, "Russell King" <linux@armlinux.org.uk>,
+ llvm@lists.linux.dev, "Benno Lossin" <lossin@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, mmaurer@google.com,
+ "Bill Wendling" <morbo@google.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Nicolas Schier" <nicolas.schier@linux.dev>,
+ "Nicolas Schier" <nsc@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Richard Weinberger" <richard@nod.at>, rust-for-linux@vger.kernel.org,
+ "Trevor Gross" <tmgross@umich.edu>,
+ "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+ "Will Deacon" <will@kernel.org>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>
+Message-Id: <7ad8bdf9-5eff-4443-ad15-c05355d793d1@app.fastmail.com>
+In-Reply-To: <20260322194616.89847-1-ojeda@kernel.org>
+References: <20260322192159.88138-1-ojeda@kernel.org>
+ <20260322194616.89847-1-ojeda@kernel.org>
+Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 26, 2026 at 12:14=E2=80=AFPM kernel test robot <lkp@intel.com> =
-wrote:
+On Sun, Mar 22, 2026, at 20:46, Miguel Ojeda wrote:
+> On Sun, 22 Mar 2026 20:21:59 +0100 Miguel Ojeda <ojeda@kernel.org> wrote:
+>>
+>       BINDGEN rust/bindings/bindings_generated.rs - due to target 
+> missing
+>     In file included from rust/helpers/helpers.c:59:
+>     rust/helpers/dma.c:17:2: warning: static function 'dma_free_attrs' 
+> is used in an inline function with external linkage [-Wstatic-in-inline]
+>        17 |         dma_free_attrs(dev, size, cpu_addr, dma_handle, 
+> attrs);
+>           |         ^
+>     rust/helpers/dma.c:12:1: note: use 'static' to give inline function 
+> 'rust_helper_dma_free_attrs' internal linkage
+>        12 | __rust_helper void rust_helper_dma_free_attrs(struct device 
+> *dev, size_t size,
+>           | ^
+>           | static
 >
-> Hi Kuniyuki,
+> For some reason, `dma_free_attrs` is not marked `inline` in
+> `include/linux/dma-mapping.h` to begin with, unlike the rest.
 >
-> kernel test robot noticed the following build errors:
+> Unless I am missing something and there is a reason for that, it looks
+> like it has just been missing since it was added in commit ed6ccf10f24b
+> ("dma-mapping: properly stub out the DMA API for !CONFIG_HAS_DMA").
 >
-> [auto build test ERROR on axboe/for-next]
-> [also build test ERROR on linus/master v7.0-rc5]
-> [cannot apply to next-20260325]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/=
-nbd-Remove-redundant-sock-ops-shutdown-check-in-nbd_get_socket/20260325-175=
-457
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git f=
-or-next
-> patch link:    https://lore.kernel.org/r/20260325063843.1790782-6-kuniyu%=
-40google.com
-> patch subject: [PATCH 5/5] nbd: Use lock_sock_try() for TCP sendmsg() and=
- shutdown().
-> config: x86_64-buildonly-randconfig-004-20260326 (https://download.01.org=
-/0day-ci/archive/20260327/202603270301.kJulQgkT-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
-227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20260327/202603270301.kJulQgkT-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202603270301.kJulQgkT-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> ld.lld: error: undefined symbol: inet_shutdown_locked
->    >>> referenced by nbd.c
->    >>>               drivers/block/nbd.o:(nbd_mark_nsock_dead) in archive=
- vmlinux.a
-> --
-> >> ld.lld: error: undefined symbol: tcp_sendmsg_locked
->    >>> referenced by nbd.c
->    >>>               drivers/block/nbd.o:(__sock_xmit) in archive vmlinux=
-.a
+> Do you want a patch?
 
-ah, CONFIG_INET=3Dn.  Will fix it in v2.
+I have an older patch to drop CONFIG_NO_DMA entirely, which 
+may be better here, since we know that nobody cares about the
+empty stubs.
 
-Thanks
+The only targets that 'select NO_DMA' today are m68k (sun3
+and dragonball), sh2 and um, which are some of the targets
+that don't have any DMA masters, but there is little downside
+of enabling the DMA mapping interfaces on those as well.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+index 11835eb59d94..19fb556357fc 100644
+--- a/arch/m68k/Kconfig
++++ b/arch/m68k/Kconfig
+@@ -38,7 +38,6 @@ config M68K
+ 	select MMU_GATHER_NO_RANGE if MMU
+ 	select MODULES_USE_ELF_REL
+ 	select MODULES_USE_ELF_RELA
+-	select NO_DMA if !MMU && !COLDFIRE
+ 	select OLD_SIGACTION
+ 	select OLD_SIGSUSPEND3
+ 	select UACCESS_MEMCPY if !MMU
+diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
+index c9a7e602d8a4..adc50396b87d 100644
+--- a/arch/m68k/Kconfig.cpu
++++ b/arch/m68k/Kconfig.cpu
+@@ -38,7 +38,6 @@ config SUN3
+ 	depends on MMU
+ 	select HAVE_ARCH_PFN_VALID
+ 	select LEGACY_TIMER_TICK
+-	select NO_DMA
+ 	select M68020
+ 	help
+ 	  This option enables support for the Sun 3 series of workstations
+@@ -558,4 +557,4 @@ config COLDFIRE_COHERENT_DMA
+ config M68K_NONCOHERENT_DMA
+ 	bool
+ 	default y
+-	depends on HAS_DMA && !COLDFIRE_COHERENT_DMA
++	depends on HAS_DMA && !COLDFIRE_COHERENT_DMA && !SUN3
+diff --git a/arch/m68k/include/asm/pgtable_mm.h b/arch/m68k/include/asm/pgtable_mm.h
+index 7501ff030c63..d095ae6c19f9 100644
+--- a/arch/m68k/include/asm/pgtable_mm.h
++++ b/arch/m68k/include/asm/pgtable_mm.h
+@@ -159,8 +159,10 @@ static inline void update_mmu_cache_range(struct vm_fault *vmf,
+ 	    ? (__pgprot((pgprot_val(prot) & _CACHEMASK040) | _PAGE_NOCACHE_S))	\
+ 	    : (prot)))
+ 
++#ifndef CONFIG_SUN3
+ pgprot_t pgprot_dmacoherent(pgprot_t prot);
+ #define pgprot_dmacoherent(prot)	pgprot_dmacoherent(prot)
++#endif
+ 
+ #endif /* CONFIG_COLDFIRE */
+ #endif /* !__ASSEMBLER__ */
+diff --git a/arch/m68k/kernel/dma.c b/arch/m68k/kernel/dma.c
+index 16063783aa80..c52584e024af 100644
+--- a/arch/m68k/kernel/dma.c
++++ b/arch/m68k/kernel/dma.c
+@@ -8,7 +8,7 @@
+ #include <linux/kernel.h>
+ #include <asm/cacheflush.h>
+ 
+-#ifndef CONFIG_COLDFIRE
++#if !defined(CONFIG_COLDFIRE) && !defined(CONFIG_SUN3)
+ void arch_dma_prep_coherent(struct page *page, size_t size)
+ {
+ 	cache_push(page_to_phys(page), size);
+diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+index d5795067befa..e246f295ec48 100644
+--- a/arch/sh/Kconfig
++++ b/arch/sh/Kconfig
+@@ -63,7 +63,6 @@ config SUPERH
+ 	select LOCK_MM_AND_FIND_VMA
+ 	select MODULES_USE_ELF_RELA
+ 	select NEED_SG_DMA_LENGTH
+-	select NO_DMA if !MMU && !DMA_COHERENT
+ 	select NO_GENERIC_PCI_IOPORT_MAP if PCI
+ 	select OLD_SIGACTION
+ 	select OLD_SIGSUSPEND
+@@ -133,10 +132,10 @@ config SWAP_IO_SPACE
+ 	bool
+ 
+ config DMA_COHERENT
+-	bool
++	def_bool !MMU
+ 
+ config DMA_NONCOHERENT
+-	def_bool !NO_DMA && !DMA_COHERENT
++	def_bool !DMA_COHERENT
+ 	select ARCH_HAS_DMA_PREP_COHERENT
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+ 	select DMA_DIRECT_REMAP
+diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+index 098cda44db22..dd3428a49614 100644
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@ -25,7 +25,6 @@ config UML
+ 	select HAVE_DEBUG_KMEMLEAK
+ 	select HAVE_DEBUG_BUGVERBOSE
+ 	select HAVE_PAGE_SIZE_4KB
+-	select NO_DMA if !UML_DMA_EMULATION
+ 	select OF_EARLY_FLATTREE if OF
+ 	select GENERIC_IRQ_SHOW
+ 	select GENERIC_CPU_DEVICES
+diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
+index 677c51ab7510..a96a22f857f1 100644
+--- a/include/linux/dma-mapping.h
++++ b/include/linux/dma-mapping.h
+@@ -138,7 +138,6 @@ static inline void debug_dma_map_single(struct device *dev, const void *addr,
+ }
+ #endif /* CONFIG_DMA_API_DEBUG */
+ 
+-#ifdef CONFIG_HAS_DMA
+ static inline int dma_mapping_error(struct device *dev, dma_addr_t dma_addr)
+ {
+ 	debug_dma_mapping_error(dev, dma_addr);
+@@ -200,146 +199,6 @@ void *dma_vmap_noncontiguous(struct device *dev, size_t size,
+ void dma_vunmap_noncontiguous(struct device *dev, void *vaddr);
+ int dma_mmap_noncontiguous(struct device *dev, struct vm_area_struct *vma,
+ 		size_t size, struct sg_table *sgt);
+-#else /* CONFIG_HAS_DMA */
+-static inline dma_addr_t dma_map_page_attrs(struct device *dev,
+-		struct page *page, size_t offset, size_t size,
+-		enum dma_data_direction dir, unsigned long attrs)
+-{
+-	return DMA_MAPPING_ERROR;
+-}
+-static inline void dma_unmap_page_attrs(struct device *dev, dma_addr_t addr,
+-		size_t size, enum dma_data_direction dir, unsigned long attrs)
+-{
+-}
+-static inline dma_addr_t dma_map_phys(struct device *dev, phys_addr_t phys,
+-		size_t size, enum dma_data_direction dir, unsigned long attrs)
+-{
+-	return DMA_MAPPING_ERROR;
+-}
+-static inline void dma_unmap_phys(struct device *dev, dma_addr_t addr,
+-		size_t size, enum dma_data_direction dir, unsigned long attrs)
+-{
+-}
+-static inline unsigned int dma_map_sg_attrs(struct device *dev,
+-		struct scatterlist *sg, int nents, enum dma_data_direction dir,
+-		unsigned long attrs)
+-{
+-	return 0;
+-}
+-static inline void dma_unmap_sg_attrs(struct device *dev,
+-		struct scatterlist *sg, int nents, enum dma_data_direction dir,
+-		unsigned long attrs)
+-{
+-}
+-static inline int dma_map_sgtable(struct device *dev, struct sg_table *sgt,
+-		enum dma_data_direction dir, unsigned long attrs)
+-{
+-	return -EOPNOTSUPP;
+-}
+-static inline dma_addr_t dma_map_resource(struct device *dev,
+-		phys_addr_t phys_addr, size_t size, enum dma_data_direction dir,
+-		unsigned long attrs)
+-{
+-	return DMA_MAPPING_ERROR;
+-}
+-static inline void dma_unmap_resource(struct device *dev, dma_addr_t addr,
+-		size_t size, enum dma_data_direction dir, unsigned long attrs)
+-{
+-}
+-static inline int dma_mapping_error(struct device *dev, dma_addr_t dma_addr)
+-{
+-	return -ENOMEM;
+-}
+-static inline void *dma_alloc_attrs(struct device *dev, size_t size,
+-		dma_addr_t *dma_handle, gfp_t flag, unsigned long attrs)
+-{
+-	return NULL;
+-}
+-static inline void dma_free_attrs(struct device *dev, size_t size,
+-		void *cpu_addr, dma_addr_t dma_handle, unsigned long attrs)
+-{
+-}
+-static inline void *dmam_alloc_attrs(struct device *dev, size_t size,
+-		dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs)
+-{
+-	return NULL;
+-}
+-static inline void dmam_free_coherent(struct device *dev, size_t size,
+-		void *vaddr, dma_addr_t dma_handle)
+-{
+-}
+-static inline int dma_get_sgtable_attrs(struct device *dev,
+-		struct sg_table *sgt, void *cpu_addr, dma_addr_t dma_addr,
+-		size_t size, unsigned long attrs)
+-{
+-	return -ENXIO;
+-}
+-static inline int dma_mmap_attrs(struct device *dev, struct vm_area_struct *vma,
+-		void *cpu_addr, dma_addr_t dma_addr, size_t size,
+-		unsigned long attrs)
+-{
+-	return -ENXIO;
+-}
+-static inline bool dma_can_mmap(struct device *dev)
+-{
+-	return false;
+-}
+-static inline bool dma_pci_p2pdma_supported(struct device *dev)
+-{
+-	return false;
+-}
+-static inline int dma_set_mask(struct device *dev, u64 mask)
+-{
+-	return -EIO;
+-}
+-static inline int dma_set_coherent_mask(struct device *dev, u64 mask)
+-{
+-	return -EIO;
+-}
+-static inline u64 dma_get_required_mask(struct device *dev)
+-{
+-	return 0;
+-}
+-static inline bool dma_addressing_limited(struct device *dev)
+-{
+-	return false;
+-}
+-static inline size_t dma_max_mapping_size(struct device *dev)
+-{
+-	return 0;
+-}
+-static inline size_t dma_opt_mapping_size(struct device *dev)
+-{
+-	return 0;
+-}
+-static inline unsigned long dma_get_merge_boundary(struct device *dev)
+-{
+-	return 0;
+-}
+-static inline struct sg_table *dma_alloc_noncontiguous(struct device *dev,
+-		size_t size, enum dma_data_direction dir, gfp_t gfp,
+-		unsigned long attrs)
+-{
+-	return NULL;
+-}
+-static inline void dma_free_noncontiguous(struct device *dev, size_t size,
+-		struct sg_table *sgt, enum dma_data_direction dir)
+-{
+-}
+-static inline void *dma_vmap_noncontiguous(struct device *dev, size_t size,
+-		struct sg_table *sgt)
+-{
+-	return NULL;
+-}
+-static inline void dma_vunmap_noncontiguous(struct device *dev, void *vaddr)
+-{
+-}
+-static inline int dma_mmap_noncontiguous(struct device *dev,
+-		struct vm_area_struct *vma, size_t size, struct sg_table *sgt)
+-{
+-	return -EINVAL;
+-}
+-#endif /* CONFIG_HAS_DMA */
+ 
+ #ifdef CONFIG_IOMMU_DMA
+ /**
+diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
+index 0748091339f7..228a3566d344 100644
+--- a/kernel/dma/Kconfig
++++ b/kernel/dma/Kconfig
+@@ -1,12 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+-config NO_DMA
+-	bool
+-
+ config HAS_DMA
+-	bool
+-	depends on !NO_DMA
+-	default y
++	def_bool y
+ 
+ config DMA_OPS_HELPERS
+ 	bool
