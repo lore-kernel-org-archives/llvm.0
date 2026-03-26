@@ -1,113 +1,149 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8032C38736E
-	for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 10:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76A53BED73;
+	Thu, 26 Mar 2026 10:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774519814; cv=none; b=qS7oIa2uzJCyQzlWJmqG/2UkMJ7vMjkNT1N7+VIGBfVtXuYRfrocU4hZ8fU5eC+fSY40Vc9U63zYhhLhJtnYz2Kxev/avilezopeZv6BBdYy1fmxqiwJ2mz155lL/Cdvpx3yCaMYrVEWsOt6T4a3dZ2cNtl8DleRsUZBEaRL+2A=
+	t=1774521141; cv=none; b=MV+wumjYAEK1a7nrHeKOertj9gdhWz8qeQhrAF7nzZ6nv+NDuUMLzdg8sxZGLDn58iBK7X/xuO7as+2/I7IxUA8Ijxm7Jwoucw/8grIQx/9NlwJbDB1E/pX4x4PycM0n9f02Cw889O3EH55VamTwURHDEpuLjY3wiRTJxIg3KAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774519814; c=relaxed/simple;
-	bh=uTL56eo9X2lUBgWDNCn1Tquwax2vc9PBJBXL6+0eRfU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=oZKUKXjTA+JbYoaez+SNfmD7ejEDGalR85DnSFWUqdkKgVTOmxd/VII33dOhJQsWFIc+WcpOlXK9y2iwptXbXtemJ3BfyVGIi/tkEgjrIucZBxbAqfdjxo7P4DxyofQUzGhtqEctWS4QgvZ8IZSbHrSNfJNNYJa4iXzsBCotMNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R4Z0jtlv; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1774521141; c=relaxed/simple;
+	bh=XLArEAmimxaRm+qdFedIgU5DmZ4+ND0uqiqPffSdh80=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b/0QhqACTtz1FxNYkEARXqo7BCNd7A3hpL8XJUTRhgaHdfIAcIx1iYNWfYrW8dltifjQNuYhOd2YUJMU5COS3j0zj8WmGMVroHV/GywWYWmEbszWuKEFVI9ZcVgya/pN5QvKncIomfxIiu+uopvKU/BRqtnP3ASHppkStPFxv4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sh2ubX9I; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R4Z0jtlv"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-48544725bdeso15756585e9.2
-        for <llvm@lists.linux.dev>; Thu, 26 Mar 2026 03:10:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774519812; x=1775124612; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lBGicU27laianFvyzY656GHLSJPIgkYXNKTwZ0wPpek=;
-        b=R4Z0jtlvCS5YBaqYHkvyctHdipNTgRWcNfO+Rpa9Kx3PTdEji28sKijqJVxCNaSSos
-         Iqf0ynUCudNtqdNT+zJ/in09L4gEgBNv05AxosqTxi3hWzQp3N31/DFH+p0iHrFDWrzC
-         dMlvlTbwfK2l66HlDQ/tlvv9PiFTnv649jecxOFdOwH45RWyZpEUiVSamrf2Z0UZiBOy
-         A75xtaA2ZSNh0rykXz1huelTgL9FnLwadKRoiF6cL54trlHl3HEvEPyAbgR8VHcnPjhe
-         Q0bzIzwOD0+qCCFvzG0vopuXEsgLerR+jJNa+B5bNX9iQRe4KGVvs6aS6Nk2qtAsSKhe
-         5KQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774519812; x=1775124612;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lBGicU27laianFvyzY656GHLSJPIgkYXNKTwZ0wPpek=;
-        b=WiSuRmHY6yQ+yiHbPQ3n08pPpWLT/14AomhnvySfao6PkdZo4jYei73lf1I5OXLaIN
-         UGwJIXCCXJAnoOufEnKvCDLZDevCbjnh4CrDCbwqFVFnG6esj6WUP8+ija1+fonMwTqX
-         wFpFuil+dDxNjwx66BT3Chusx4ULMOdB6hAnT9/1/OCiEJQ0XrU813yS5vV2VQ21x21k
-         QTdnuavAEFLGM1J1KY5ecYHn7532d3EiralLbPxcYVwZgIsMfWxBYeGyXo3Ot3mBtQnP
-         96+5JVUnX+lwGv2N1vTBH7PW9aLZF29K4wgSJo7lVbDWufwGX/JZncprOm5apnlfokA4
-         hKCg==
-X-Forwarded-Encrypted: i=1; AJvYcCWMeDvAU371oTrLcwJTg5HuvzP5KllRpi0liNwQC7wgzAvc5d6gVZc9SyRSGWqASCBECvLG@lists.linux.dev
-X-Gm-Message-State: AOJu0YzcWaqfCVWbNvET7TOf2bnakSIsci+p6LPlDMsL2nT5jUNgiP4E
-	9+pfMd6qGibNewDQuydrU4gq84w6N6H3hRKUoX+4GG+K75jMEDgqr3DQftmMpANHVCsWg27TuIR
-	mDBzZ6EIBp7mFk6YmCw==
-X-Received: from wmoo2.prod.google.com ([2002:a05:600d:102:b0:47d:5bef:a379])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:890b:b0:485:6ec7:2df with SMTP id 5b1f17b1804b1-48715fd50abmr80350625e9.8.1774519811752;
- Thu, 26 Mar 2026 03:10:11 -0700 (PDT)
-Date: Thu, 26 Mar 2026 10:10:10 +0000
-In-Reply-To: <acEP7tl8pqFA3tK8@shell.armlinux.org.uk>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sh2ubX9I"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774521140; x=1806057140;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XLArEAmimxaRm+qdFedIgU5DmZ4+ND0uqiqPffSdh80=;
+  b=Sh2ubX9IPVjfzxJbXv32diF48cTeIypPaI0RK+DWqF0sp+iWLOLTDDxA
+   2J3pKbHzBhmKgWXE05CdUizKyND7JsWu4HFTqWN0g6xModCse99Jbt/HT
+   amGSAi6CgC1MRQFHNjyZ+9BeSOI5J+5xb1CgwMLtNUHMcjtj1UCkF3oi7
+   GQhpj46WCD+j0XIPjy3jR1DDqLUKZnePyFZiw+s14jdaUcjsoCIUKRyBN
+   iS7N2L7zQ6sGKzxB2idVXxCBOw6iRfZqYDiZlt41qO3SdP2IaDaksjbXP
+   2UP555xHlvgpDBzCzx0VIT/qrzRzNhaBKfyFL6EzwMEYwKm4K45gBAXg/
+   A==;
+X-CSE-ConnectionGUID: 7LCYHbEnSzOoFCWdbrZZ/A==
+X-CSE-MsgGUID: PRL+z7GRT7Wcj5ujPQO5/Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="75770231"
+X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
+   d="scan'208";a="75770231"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 03:32:19 -0700
+X-CSE-ConnectionGUID: ZzBQ2d0aRbWp7Idnj3yU9A==
+X-CSE-MsgGUID: fcjuZRMlRTyM/BViI3pbvg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,142,1770624000"; 
+   d="scan'208";a="262879485"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 26 Mar 2026 03:32:18 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w5i0d-000000008lh-1OIb;
+	Thu, 26 Mar 2026 10:32:15 +0000
+Date: Thu, 26 Mar 2026 18:31:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bitterblue Smith <rtl8821cerfe2@gmail.com>,
+	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ping-Ke Shih <pkshih@realtek.com>
+Subject: Re: [PATCH rtw-next] wifi: rtw89: Fill fw_version member of struct
+ wiphy
+Message-ID: <202603261814.fyYqPTNZ-lkp@intel.com>
+References: <60bdb2f8-d5dd-46a3-8679-5b4a5fd0604b@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260322192159.88138-1-ojeda@kernel.org> <20260323000327.111235-1-ojeda@kernel.org>
- <acEP7tl8pqFA3tK8@shell.armlinux.org.uk>
-Message-ID: <acUGAsjYvNvTEO92@google.com>
-Subject: Re: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
-From: Alice Ryhl <aliceryhl@google.com>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Miguel Ojeda <ojeda@kernel.org>, a.hindborg@kernel.org, acourbot@nvidia.com, 
-	akpm@linux-foundation.org, anton.ivanov@cambridgegreys.com, 
-	bjorn3_gh@protonmail.com, boqun.feng@gmail.com, dakr@kernel.org, 
-	david@davidgow.net, gary@garyguo.net, johannes@sipsolutions.net, 
-	justinstitt@google.com, linux-arm-kernel@lists.infradead.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-um@lists.infradead.org, llvm@lists.linux.dev, 
-	lossin@kernel.org, mark.rutland@arm.com, mmaurer@google.com, morbo@google.com, 
-	nathan@kernel.org, nick.desaulniers+lkml@gmail.com, nicolas.schier@linux.dev, 
-	nsc@kernel.org, peterz@infradead.org, richard@nod.at, 
-	rust-for-linux@vger.kernel.org, tmgross@umich.edu, urezki@gmail.com, 
-	will@kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60bdb2f8-d5dd-46a3-8679-5b4a5fd0604b@gmail.com>
 
-On Mon, Mar 23, 2026 at 10:03:26AM +0000, Russell King (Oracle) wrote:
-> On Mon, Mar 23, 2026 at 01:03:27AM +0100, Miguel Ojeda wrote:
-> > On Sun, 22 Mar 2026 20:21:59 +0100 Miguel Ojeda <ojeda@kernel.org> wrote:
-> > >
-> > >     On the other hand, regardless of whether we fix this (and another
-> > >     issue in a separate email found thanks to the UML build), we could
-> > >     instead add `depends on` listing explicitly the architectures where
-> > >     this is going to be actually tested. That way maintainers can decide
-> > >     whether they want to support it when they are ready. Thoughts?
-> > 
-> > Another one for arm 32-bit:
-> > 
-> >       LD      .tmp_vmlinux1
-> >     ld.lld: error: undefined symbol: __aeabi_read_tp
-> >     >>> referenced by uaccess.rs:349 (rust/kernel/uaccess.rs:349)
-> >     >>>               samples/rust/rust_misc_device.o:(<rust_misc_device::RustMiscDevice as kernel::miscdevice::MiscDevice>::ioctl) in archive vmlinux.a
-> >     >>> referenced by uaccess.rs:543 (rust/kernel/uaccess.rs:543)
-> >     >>>               samples/rust/rust_misc_device.o:(<rust_misc_device::RustMiscDevice as kernel::miscdevice::MiscDevice>::ioctl) in archive vmlinux.a
-> >     >>> referenced by uaccess.rs:543 (rust/kernel/uaccess.rs:543)
-> >     >>>               drivers/android/binder/rust_binder_main.o:(rust_binder_main::rust_binder_ioctl) in archive vmlinux.a
-> >     >>> referenced 36 more times
-> 
-> Why is Rust generating code for userspace thread accessors for kernel
-> space, where userspace threads are meaningless. This is totally wrong.
-> The kernel must not reference __aeabi_read_tp().
-> 
-> Note: I know nothing about Rust, but I know enough to say the above is
-> pointing to a fundamental issue in Rust for 32-bit ARM.
+Hi Bitterblue,
 
-I noticed that the Makefile currently uses the arm-unknown-linux-gnueabi
-target. It should probably not be -linux target to avoid this? Probably
-it should just be armv7a-none-eabi, right? We gate HAVE_RUST on
-CPU_32v7, so we should not need to consider the other variants.
+kernel test robot noticed the following build errors:
 
-Alice
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v7.0-rc5 next-20260325]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bitterblue-Smith/wifi-rtw89-Fill-fw_version-member-of-struct-wiphy/20260326-082721
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/60bdb2f8-d5dd-46a3-8679-5b4a5fd0604b%40gmail.com
+patch subject: [PATCH rtw-next] wifi: rtw89: Fill fw_version member of struct wiphy
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260326/202603261814.fyYqPTNZ-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260326/202603261814.fyYqPTNZ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603261814.fyYqPTNZ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/wireless/realtek/rtw89/fw.c:759:14: error: use of undeclared identifier 'RTW89_FW_NORMAL_B'
+     759 |             type == RTW89_FW_NORMAL_B)
+         |                     ^
+   1 error generated.
+
+
+vim +/RTW89_FW_NORMAL_B +759 drivers/net/wireless/realtek/rtw89/fw.c
+
+   726	
+   727	static int rtw89_fw_update_ver(struct rtw89_dev *rtwdev,
+   728				       enum rtw89_fw_type type,
+   729				       struct rtw89_fw_suit *fw_suit)
+   730	{
+   731		const struct rtw89_fw_hdr *v0 = (const struct rtw89_fw_hdr *)fw_suit->data;
+   732		const struct rtw89_fw_hdr_v1 *v1 = (const struct rtw89_fw_hdr_v1 *)fw_suit->data;
+   733	
+   734		if (type == RTW89_FW_LOGFMT)
+   735			return 0;
+   736	
+   737		fw_suit->type = type;
+   738		fw_suit->hdr_ver = le32_get_bits(v0->w3, FW_HDR_W3_HDR_VER);
+   739	
+   740		switch (fw_suit->hdr_ver) {
+   741		case 0:
+   742			rtw89_fw_update_ver_v0(rtwdev, fw_suit, v0);
+   743			break;
+   744		case 1:
+   745			rtw89_fw_update_ver_v1(rtwdev, fw_suit, v1);
+   746			break;
+   747		default:
+   748			rtw89_err(rtwdev, "Unknown firmware header version %u\n",
+   749				  fw_suit->hdr_ver);
+   750			return -ENOENT;
+   751		}
+   752	
+   753		rtw89_info(rtwdev,
+   754			   "Firmware version %u.%u.%u.%u (%08x), cmd version %u, type %u\n",
+   755			   fw_suit->major_ver, fw_suit->minor_ver, fw_suit->sub_ver,
+   756			   fw_suit->sub_idex, fw_suit->commitid, fw_suit->cmd_ver, type);
+   757	
+   758		if (type == RTW89_FW_NORMAL || type == RTW89_FW_NORMAL_CE ||
+ > 759		    type == RTW89_FW_NORMAL_B)
+   760			snprintf(rtwdev->hw->wiphy->fw_version,
+   761				 sizeof(rtwdev->hw->wiphy->fw_version),
+   762				 "%u.%u.%u.%u",
+   763				 fw_suit->major_ver, fw_suit->minor_ver,
+   764				 fw_suit->sub_ver, fw_suit->sub_idex);
+   765	
+   766		return 0;
+   767	}
+   768	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
