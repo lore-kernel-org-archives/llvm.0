@@ -1,159 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9E61922FD;
-	Thu, 26 Mar 2026 04:03:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868CE39B943;
+	Thu, 26 Mar 2026 05:40:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774497784; cv=none; b=fMTk6kPApSvUXBNkOfE2hptgiNVlslskpY5DiAIOw+j+VEZIifeUKT6avmYkfRcCzu9ZJGQbjuRUu5P+2g9Mz+HBO0MyuqokJX87YcQQtjoIGQ4kuyb8mcn9vAK8Oo3Zq6YJtKZCHeYN+Et/7MOVlNOqayv6gHSYFwo4UC9+DkA=
+	t=1774503621; cv=none; b=uIuYLueeDhN+jLmiBIeHFND4gm2+RYvfdSZt423wH2jQmXAOWfT6YhMVlB85lnIrSlSJa7OBGaMq8zUJ46cMbc4cl/crAO2BduhrFDwCP/h2w6C6k/xpNku0ieYpkn98z7J24Yzo75V5z35DGCwHEjrYywRAxDYr0Gw97Z7TRNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774497784; c=relaxed/simple;
-	bh=IuuEEyWJNDW0imqIl9qXGhUhxnaLcaHZrqucTzs12ho=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=DKUw16nEDj3mXvkp7nU7oKZS65jgvSroMtN+diONtuet1D95Rr/5C3BJwAwwZNzCjnhPJE9cEsV8A8Y1PueXwlFLz0HxqbgJUGek8P5esxEdNu+fLPKvbWILaLKrR3gW9KnkMez8Lz818RRmk+ewkH1v88EckZkUdmUltqJnwV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bPJh5GOo; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1774503621; c=relaxed/simple;
+	bh=oW8AKHaKiPRcfFyQaL9/PspJoWCGfB/4eBYkak3V3MM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K5Svew9H0SaV0ik0N1JhAqpu9yuvwg3jy5xbS8EYUvhh/Zzqi88U2V5agkRYVNkTJZuEEZyCqiFB+3EkGNOQH/e804w7j1ywOdyLtBbTURpFUlm7OnVcFiQArIHBdQ6xq15896xawTG9g7pocCYyuT85KSUij4VZ5g06/ajNGEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OG5TCqfU; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bPJh5GOo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OG5TCqfU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774497782; x=1806033782;
-  h=date:from:to:cc:subject:message-id;
-  bh=IuuEEyWJNDW0imqIl9qXGhUhxnaLcaHZrqucTzs12ho=;
-  b=bPJh5GOo3BEfl3cbgFdI4PLcPJDQguecMgB8vFelqYXT6oKCvZC1Czgp
-   O7oIjOzufXmwlbXVqFz38mA4k62M3wYUO9EzxdllkXDVFQ1YrxziVUaBr
-   zDBN7bJmxCVRkMqn5FWM1+3I4Vr+2/YMuzbZ+/uM1EaPUzHhD67+VZKmK
-   jx9uVWMVqj+2Q3S3hixWtFSQHZXf10wM4keLxraCVASvNWQGGPC4EkIAO
-   lPg4Tr0dL3CPYJ4ku1bgM+1+cKX+4vZ6a5AGWwongaQ3hOMsqsNXkrkrz
-   I0TaNqnz6i+Ym1WdsA1L0n++PMQt0mql4tuEScWHVFo3KSNENcnNoDKHy
-   w==;
-X-CSE-ConnectionGUID: ckL6vdtjQyKFQ+mVUX2/Hg==
-X-CSE-MsgGUID: tjWdxfmSQ0eF+nhGYheSjw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="86923493"
+  t=1774503618; x=1806039618;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oW8AKHaKiPRcfFyQaL9/PspJoWCGfB/4eBYkak3V3MM=;
+  b=OG5TCqfU7uK5dgKpKuSLUEpKWoUBpdhQUNFZt1o9AlzcGPzKx/GFvo17
+   DYy99DuzPNvZJgr9jqHhaTRzJl+V142TO7Qm78rVvahigtaw2PeiAYfGM
+   XapG6j4WFkZNx7ZpHD676e1ZHA+Cgdm15qnkFw1JpSn9un/Zv44Rftx1C
+   H+82JWawCy8dFhGOavUmtSm+AUDbzYYaLh5bX033LgFOeT1r0lQJ2TdXb
+   C/epRmWTt6qe4yNNP3t2nvyiJ/3Y/wWOcewC77upC5TM20el5XBqbzZPq
+   Fj/VT1v80L90xtk9ixNdm5S9TOdAxHPUIjWU6vutd9Qoi5E2tajPQguyh
+   g==;
+X-CSE-ConnectionGUID: vMtkl5oQS2G3I87iwAbEcw==
+X-CSE-MsgGUID: W2f+a5mJTHCJSIExqRNdMw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11740"; a="75515682"
 X-IronPort-AV: E=Sophos;i="6.23,141,1770624000"; 
-   d="scan'208";a="86923493"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 21:03:02 -0700
-X-CSE-ConnectionGUID: rKxtnDyVQUK2YEnwCusrGQ==
-X-CSE-MsgGUID: m8r38287RcGy+HrIq50DDQ==
+   d="scan'208";a="75515682"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2026 22:40:18 -0700
+X-CSE-ConnectionGUID: +dW/4zaXRVG098+Ti0BcDw==
+X-CSE-MsgGUID: 6hzwvHHSS6qUEOtenFr0qA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,141,1770624000"; 
-   d="scan'208";a="224903812"
+   d="scan'208";a="224835758"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 25 Mar 2026 21:03:00 -0700
+  by orviesa009.jf.intel.com with ESMTP; 25 Mar 2026 22:40:13 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w5bvt-0000000088l-3gkc;
-	Thu, 26 Mar 2026 04:02:57 +0000
-Date: Thu, 26 Mar 2026 12:02:13 +0800
+	id 1w5dRy-000000008I5-3jeB;
+	Thu, 26 Mar 2026 05:40:10 +0000
+Date: Thu, 26 Mar 2026 13:39:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:kdevops 4/26] fs/namei.c:4173:31: error: use of
- undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-Message-ID: <202603261133.R0SpGbfl-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>, Nuno Sa <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Michal Simek <monstr@monstr.eu>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	saikrishna12468@gmail.com, git@amd.com,
+	Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Subject: Re: [PATCH v2 1/4] iio: adc: xilinx-xadc: Split driver into core and
+ platform files
+Message-ID: <202603261323.1EonYM3W-lkp@intel.com>
+References: <20260323074505.3853353-2-sai.krishna.potthuri@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323074505.3853353-2-sai.krishna.potthuri@amd.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
-head:   996759a25534ab4a7e986fe0153659e93c1611ec
-commit: e7730a146d19c905b78c9c16be3d172b194ab963 [4/26] filelock: add support for ignoring deleg breaks for dir change events
-config: i386-buildonly-randconfig-004-20260326 (https://download.01.org/0day-ci/archive/20260326/202603261133.R0SpGbfl-lkp@intel.com/config)
+Hi Sai,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on robh/for-next linus/master v7.0-rc5 next-20260325]
+[cannot apply to xilinx-xlnx/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sai-Krishna-Potthuri/iio-adc-xilinx-xadc-Split-driver-into-core-and-platform-files/20260326-024045
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20260323074505.3853353-2-sai.krishna.potthuri%40amd.com
+patch subject: [PATCH v2 1/4] iio: adc: xilinx-xadc: Split driver into core and platform files
+config: i386-buildonly-randconfig-002-20260326 (https://download.01.org/0day-ci/archive/20260326/202603261323.1EonYM3W-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260326/202603261133.R0SpGbfl-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260326/202603261323.1EonYM3W-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603261133.R0SpGbfl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603261323.1EonYM3W-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> fs/namei.c:4173:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    4173 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, di);
-         |                                      ^
-   fs/namei.c:4472:38: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    4472 |                 error = try_break_deleg(dir_inode, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                                    ^
-   fs/namei.c:5088:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    5088 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                      ^
-   fs/namei.c:5229:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    5229 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                      ^
->> fs/namei.c:5334:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
-    5334 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
-         |                                      ^
-   fs/namei.c:5464:33: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
-    5464 |                         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
-         |                                                      ^
-   fs/namei.c:5611:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    5611 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                      ^
-   fs/namei.c:5742:32: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    5742 |                 error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                              ^
->> fs/namei.c:6009:26: error: use of undeclared identifier 'LEASE_BREAK_DIR_RENAME'
-    6009 |                                 old_dir == new_dir ? LEASE_BREAK_DIR_RENAME :
-         |                                                      ^
-   fs/namei.c:6010:12: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
-    6010 |                                                      LEASE_BREAK_DIR_DELETE,
-         |                                                      ^
-   fs/namei.c:6015:36: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    6015 |                 error = try_break_deleg(new_dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                                  ^
-   11 errors generated.
-
-
-vim +/LEASE_BREAK_DIR_CREATE +4173 fs/namei.c
-
-  4140	
-  4141	/**
-  4142	 * vfs_create - create new file
-  4143	 * @idmap:	idmap of the mount the inode was found from
-  4144	 * @dentry:	dentry of the child file
-  4145	 * @mode:	mode of the child file
-  4146	 * @di:		returns parent inode, if the inode is delegated.
-  4147	 *
-  4148	 * Create a new file.
-  4149	 *
-  4150	 * If the inode has been found through an idmapped mount the idmap of
-  4151	 * the vfsmount must be passed through @idmap. This function will then take
-  4152	 * care to map the inode according to @idmap before checking permissions.
-  4153	 * On non-idmapped mounts or if permission checking is to be performed on the
-  4154	 * raw inode simply pass @nop_mnt_idmap.
-  4155	 */
-  4156	int vfs_create(struct mnt_idmap *idmap, struct dentry *dentry, umode_t mode,
-  4157		       struct delegated_inode *di)
-  4158	{
-  4159		struct inode *dir = d_inode(dentry->d_parent);
-  4160		int error;
-  4161	
-  4162		error = may_create_dentry(idmap, dir, dentry);
-  4163		if (error)
-  4164			return error;
-  4165	
-  4166		if (!dir->i_op->create)
-  4167			return -EACCES;	/* shouldn't it be ENOSYS? */
-  4168	
-  4169		mode = vfs_prepare_mode(idmap, dir, mode, S_IALLUGO, S_IFREG);
-  4170		error = security_inode_create(dir, dentry, mode);
-  4171		if (error)
-  4172			return error;
-> 4173		error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, di);
-  4174		if (error)
-  4175			return error;
-  4176		error = dir->i_op->create(idmap, dir, dentry, mode, true);
-  4177		if (!error)
-  4178			fsnotify_create(dir, dentry);
-  4179		return error;
-  4180	}
-  4181	EXPORT_SYMBOL(vfs_create);
-  4182	
+>> ERROR: modpost: "xadc_handle_events" [drivers/iio/adc/xilinx-xadc-platform.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
