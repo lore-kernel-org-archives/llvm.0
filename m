@@ -1,129 +1,189 @@
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE1F3CE48D
-	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 08:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774598544; cv=pass; b=aQ7pkhHAEDvkxr1H/SZAPCYppK7W6cT6FRFDL20IReI6GHW6MP7htSyRBrj+2Gbxne4IIzkWJzzOi1jDTEOVFCwX0+nBMqhzG/RTn+hiKK7xs/7Yk47a1Q3y0x9d7jvms6/6c2euanD8+wijInJAwvR8htBHQse03hoHSGEvNaw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774598544; c=relaxed/simple;
-	bh=5ep9g2m9wnZ/qw5uP60q9XJwKT04QFSPHpz8SR3TFGU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o8r4HiLBGYn8yoCSVg16BLAmbJ49eM1xuzAYJYuIRDpy/Ma8kwo4fJGqyFJylICHEDx37M/AT1dZ7otIsLtmhAway4Wo9taZpoT32Rd/bMKHLqFIJZvQgYht/u2KKWYBMhz1BcRR3sPHHNWUy66p1C6DjMWnUq8d2xbrdzeqDIo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cf7/pcJT; arc=pass smtp.client-ip=74.125.82.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F353CE4A3;
+	Fri, 27 Mar 2026 08:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774598561; cv=none; b=BRwu1DnRN17DQEnzigcOT0ArWxeTpJRMAq//+EH+fds5pHV0LodsuRULvbaInXnEnrCnyoVw6ghvM/h5aoksGJI93Va2+W825NIHVRt6L9IOqNtfjlh521zhpxSpHVrdNWDsQJOTfoo4SwPSTJdT8XIMfCt1/U0hplcg7EVeATA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774598561; c=relaxed/simple;
+	bh=4yElemxoldf70eF7hcKaNFQI55z5oAEHZ7RUijBnr5g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PnXXyH0JHFifqD0m9bYVYtdzkyE9y4UC2uc/QhhvA/wptMHZ85TFYdoxe4janVV6ZC4WbxICIeeCt4ZAGgYcJM/EKaXOP5p3i7TAWbMcui7FAExnHmtXePXpJEB3vpUvrOV3ZOrIqWms3ROS/KHj8VaoulCQXMlXyUB8IBhUN7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BFbL7bSg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cf7/pcJT"
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12711867ca1so128402c88.3
-        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 01:02:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774598537; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NwV6ZlZ5V3mbjM0I9TV5ydr/32q9f/eEXiFUi9XPYfm12TVXhd/nDa2wucg1RVsuqy
-         G5uvgbbX7dFK4nGe55ei7PqVP0jPETH3FH6zSvBt6tPB2mTJADTgm0OOD+6KAbcs08b8
-         GuuzzIwXOhkm8d6lP4u18M3q2d19qgCvrfx9va6X2XkSrxtrXk5eYXPNg6NHodVMjBrH
-         rkXetBIUZjeIcgOJ054Zj3AvyxG7rXg6oJuxBP62+SyCRPDUBWIT6zT8+7eapCBXGlX7
-         0MxOC48nAGSs1dw87Xtue+VtqBUdeLJFuFIvvSA3HPS93ydhbFBo/AfZ/wpqLa0qRDVW
-         +INA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5ep9g2m9wnZ/qw5uP60q9XJwKT04QFSPHpz8SR3TFGU=;
-        fh=S1L4R6vETPZqSYgdNSwoz3jo/NY7QkZYYirnF2vHh7Q=;
-        b=YVEtY1MMo8qtTVeBGZvepS7ZqY7bf4zZHUKtu7fAHMP0N8OQMWzZnQocbQt/Pa0DQD
-         +RFvmwuSe/Eo5u5/G/4QBRpulLrH3tf0mw1A+XobOaHstkp4qYVUvG1QpTdtcUO8Z36T
-         UK8RJ3N9W2s0GjFoJ5if6QH2emtchT2MyFd0q1kRRRs1JKqvXbLNtbwpsZVgMpVf+3+W
-         bGTEjaW7KYLx0SfrcRXPuxxOcK53wFkf7kUpIGyvXzzxH3iB/GxGhRjuvTq4xEnDWUuT
-         bit1UN5gZpMemHOwd1ab7IMuXmyU+c/ETT4/1n6/DGph7lsSeR+XrZkZE5np1bD6ac5m
-         7UuA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774598537; x=1775203337; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5ep9g2m9wnZ/qw5uP60q9XJwKT04QFSPHpz8SR3TFGU=;
-        b=cf7/pcJTCRtxfUCm7mWEO/UTfux5dofKFj+84oo2oTmSWia0zNPMXFv9XZoX79IcK3
-         wRCzafTxewp00sLKT4y24peNM/GL9kAnfj0H3NtANDadUeitx8yuKsBeLpSyHEEvcUIt
-         ifytY0jeruEMhmUBuAIg9fZyAV8Gz1yzTJYzCUM4QMqXftBKCSHAL69KkKL5geFaKIyo
-         6MKvdO1tRU7sKOPRtP3QySIiV/BAbs1h85bkCZPj0qP5+L0fx+H6YagmldP6OYwO/oTw
-         bW/YbYZXV4TdcWXF2Prb8isnRbUf1kQPxtV7jQRDhV4uORqWBAY9/CfPkYwOmxB1jRlf
-         +9/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774598537; x=1775203337;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5ep9g2m9wnZ/qw5uP60q9XJwKT04QFSPHpz8SR3TFGU=;
-        b=DC5uCpN8fNObrX+uc2YZy+U21HR2U/F+Qvt7Or+ZP6gXOiSd1XVFrvuTuTYfVv8YBp
-         uyxLpF5S+dDfXLfnsueut6woj7kgl49/26JyrKPtbbUbmWOCu2vTTtc50oc3WeWrBTJN
-         /vBZua6tmkTbz2NeMGrR0jq3WJO8sgaQHQaG1RXp4pFDMNr6m9dbbFElOElRq2WlTkdb
-         Vjs6c2up5URepFOV5aHzR6iqOgCMeFMM3PkkmvJpb8YRWwdPXvas7wQDFHWce0dU0P3X
-         /kUcevssPzL8a+ZpevCsQ1jzueqROKUst0kZwrmqh+yakrGGUAbjHYOg1Uhu/v/X4r+g
-         QhQA==
-X-Forwarded-Encrypted: i=1; AJvYcCVjt5rrZpuhFusVJiuiVax3pcxsi90FyydOLwSKMG4Yy5JpNygndW3XTJWV9zrx48dtFZwh@lists.linux.dev
-X-Gm-Message-State: AOJu0YwxqBf/N9VUSj6MKRE0HLyhgGVZst8gCEzgSXTr81eK8LKLwmYy
-	u+X6EAQDGv6XuvapMjyLSl3z68p2gYI6Bp57u0u48kFdZTPH7Nq9vl1SER8rBD0d0O+wvtH/+lz
-	U8crPEgrG3xVUi3pu1Qm81ScE1QoQLh4=
-X-Gm-Gg: ATEYQzz4P+dt7USw0uTl3moXJ0IJgSAXUFmyoPJvpDvdlIt5oMibqsr3ItFCdp0qysw
-	1Z3Z4L10Y6mAZK2j6ZBoKyceGUnaLKEA911pI5HZvE9JgUJ5PgTpnfFkoXH98dpIUGS+i7GDVJL
-	A+TcxwLzNXd4nI9ycpj7a626Qg+AW2w0rYk88mE8GmUy8Z+8bvwzSYhPiJcOysApaSg8Jm9xF0B
-	MGK8a+9ktiwBFUP1DLk1uSC8FRkdz0tZy5c+cQEYDOa470oM+6lgquYxUzTfR4mWFIvIVBsV6Ik
-	Q6ek5ghTf2yj0vU04X/f2gJdB0aZSPHh5TSvm4RwbPq/Aq/ekiCdYXC6fig03+Ic5gJXKX6IHNt
-	OS4Ts1LyVnMIllhT4rmiRbaE=
-X-Received: by 2002:a05:7022:618a:b0:12a:6cde:fd0c with SMTP id
- a92af1059eb24-12ab2906c98mr371178c88.7.1774598537022; Fri, 27 Mar 2026
- 01:02:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BFbL7bSg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2A62C19423;
+	Fri, 27 Mar 2026 08:02:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774598561;
+	bh=4yElemxoldf70eF7hcKaNFQI55z5oAEHZ7RUijBnr5g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BFbL7bSgskzfoDKi/FKRm0HzHU9+zKYToteP1BoTs7aWO41cGNGhZp7n4eTeSImTt
+	 2mA18PnA6LV/NsOUjgeqyhNaZQTW7mHA2MbfJF1MpHHfOffJsApIIjcZWjvDOZmttq
+	 0OWn26vWhF5Mu13y7tW7kFvhUkW1lC1Tj9pENYAJVj1CDVZs9nQl6F0VjSzBVP3cQU
+	 2+T/bghmhKm0XrIuTIFAmlo4BU89MaNzmobfcOjH5k6GC+8d6JhIfRinRgKeyygR+m
+	 i48X9B4VzQj66nfjoFu4j52m+qI91CtPhALF7Z6a9tfPBYH00RnJ9qzaFLA0OntmZn
+	 ez/Ec/a9rvlVw==
+Date: Fri, 27 Mar 2026 08:59:50 +0100
+From: Nicolas Schier <nsc@kernel.org>
+To: xur@google.com
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Stafford Horne <shorne@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Piotr Gorski <piotrgorski@cachyos.org>,
+	Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v6 2/2] kbuild: distributed build support for Clang
+ ThinLTO
+Message-ID: <acY49h_jpzbd74vq@levanger>
+Mail-Followup-To: Nicolas Schier <nsc@kernel.org>, xur@google.com,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Stafford Horne <shorne@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Piotr Gorski <piotrgorski@cachyos.org>,
+	Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+References: <20260316212930.120438-1-xur@google.com>
+ <20260316212930.120438-3-xur@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260322192159.88138-1-ojeda@kernel.org> <20260322194616.89847-1-ojeda@kernel.org>
- <7ad8bdf9-5eff-4443-ad15-c05355d793d1@app.fastmail.com>
-In-Reply-To: <7ad8bdf9-5eff-4443-ad15-c05355d793d1@app.fastmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 27 Mar 2026 09:02:04 +0100
-X-Gm-Features: AQROBzCrGdIlIe2CkDWKMkYFmP8XiqVc047zlhYRt_gjOqAGZtEWFJuOGnDO47I
-Message-ID: <CANiq72nz6zB0jGahw4Eh-i-Rew1kQ0g_qcZ68Whw==MyjhYaJw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Robin Murphy <robin.murphy@arm.com>, Danilo Krummrich <dakr@kernel.org>, 
-	Abdiel Janulgue <abdiel.janulgue@gmail.com>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Christoph Hellwig <hch@lst.de>, iommu@lists.linux.dev, 
-	driver-core@lists.linux.dev, acourbot@nvidia.com, 
-	Andrew Morton <akpm@linux-foundation.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, David Gow <david@davidgow.net>, Gary Guo <gary@garyguo.net>, 
-	Johannes Berg <johannes@sipsolutions.net>, Justin Stitt <justinstitt@google.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-um@lists.infradead.org, Russell King <linux@armlinux.org.uk>, llvm@lists.linux.dev, 
-	Benno Lossin <lossin@kernel.org>, Mark Rutland <mark.rutland@arm.com>, mmaurer@google.com, 
-	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nicolas Schier <nsc@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Richard Weinberger <richard@nod.at>, rust-for-linux@vger.kernel.org, 
-	Trevor Gross <tmgross@umich.edu>, "Uladzislau Rezki (Sony)" <urezki@gmail.com>, Will Deacon <will@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260316212930.120438-3-xur@google.com>
 
-On Thu, Mar 26, 2026 at 10:13=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
->
-> I have an older patch to drop CONFIG_NO_DMA entirely, which
-> may be better here, since we know that nobody cares about the
-> empty stubs.
+On Mon, Mar 16, 2026 at 09:29:30PM +0000, xur@google.com wrote:
+> From: Rong Xu <xur@google.com>
+> 
+> Add distributed ThinLTO build support for the Linux kernel.
+> This new mode offers several advantages: (1) Increased
+> flexibility in handling user-specified build options.
+> (2) Improved user-friendliness for developers. (3) Greater
+> convenience for integrating with objtool and livepatch.
+> 
+> Note that "distributed" in this context refers to a term
+> that differentiates in-process ThinLTO builds by invoking
+> backend compilation through the linker, not necessarily
+> building in distributed environments.
+> 
+> Distributed ThinLTO is enabled via the
+> `CONFIG_LTO_CLANG_THIN_DIST` Kconfig option. For example:
+>  > make LLVM=1 defconfig
+>  > scripts/config -e LTO_CLANG_THIN_DIST
+>  > make LLVM=1 oldconfig
+>  > make LLVM=1 vmlinux -j <..>
+> 
+> The build flow proceeds in four stages:
+>   1. Perform FE compilation, mirroring the in-process ThinLTO mode.
+>   2. Thin-link the generated IR files and object files.
+>   3. Find all IR files and perform BE compilation, using the flags
+>     stored in the .*.o.cmd files.
+>   4. Link the BE results to generate the final vmlinux.o.
+> 
+> NOTE: This patch currently implements the build for the main kernel
+> image (vmlinux) only. Kernel module support is planned for a
+> subsequent patch.
+> 
+> Tested on the following arch: x86, arm64, loongarch, and
+> riscv.
+> 
+> The earlier implementation details can be found here:
+> https://discourse.llvm.org/t/rfc-distributed-thinlto-build-for-kernel/85934
+> 
+> Signed-off-by: Rong Xu <xur@google.com>
+> Co-developed-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Tested-by: Piotr Gorski <piotrgorski@cachyos.org>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  .gitignore                 |  2 ++
+>  Makefile                   |  9 +++++----
+>  arch/Kconfig               | 19 ++++++++++++++++++
+>  scripts/Makefile.lib       |  7 +++++++
+>  scripts/Makefile.thinlto   | 40 ++++++++++++++++++++++++++++++++++++++
+>  scripts/Makefile.vmlinux_a | 37 +++++++++++++++++++++++++++++++++++
+>  scripts/mod/modpost.c      | 15 +++++++++++---
+>  7 files changed, 122 insertions(+), 7 deletions(-)
+>  create mode 100644 scripts/Makefile.thinlto
+> 
+> diff --git a/.gitignore b/.gitignore
+> index 3a7241c941f5..c12bdf5a97f9 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -56,6 +56,7 @@
+>  *.zst
+>  Module.symvers
+>  dtbs-list
+> +builtin.order
+>  modules.order
+>  
+>  #
+> @@ -67,6 +68,7 @@ modules.order
+>  /vmlinux.32
+>  /vmlinux.map
+>  /vmlinux.symvers
+> +/vmlinux.thinlto-index
+>  /vmlinux.unstripped
+>  /vmlinux-gdb.py
+>  /vmlinuz
+> diff --git a/Makefile b/Makefile
+> index ba5eee68d5d2..4a399b7f3b48 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1033,10 +1033,10 @@ export CC_FLAGS_SCS
+>  endif
+>  
+>  ifdef CONFIG_LTO_CLANG
+> -ifdef CONFIG_LTO_CLANG_THIN
+> -CC_FLAGS_LTO	:= -flto=thin -fsplit-lto-unit
+> -else
+> +ifdef CONFIG_LTO_CLANG_FULL
+>  CC_FLAGS_LTO	:= -flto
+> +else
+> +CC_FLAGS_LTO	:= -flto=thin -fsplit-lto-unit
+>  endif
+>  CC_FLAGS_LTO	+= -fvisibility=hidden
+>  
 
-In case it helps / for future reference: the patch I sent to Marek is
-already in mainline: commit 2cdaff22ed26 ("dma-mapping: add missing
-`inline` for `dma_free_attrs`").
+This hunk does not apply on kbuild-next-unstable [1] (a possible
+conflict resolution: [2]).  Can you please rebase the patch set on
+kbuild-next-unstable as Nathan suggested [3] ?
 
-Cheers,
-Miguel
+Thanks and kind regards
+Nicolas
+
+[1]: https://git.kernel.org/kbuild/l/kbuild-next-unstable
+[2]: https://git.kernel.org/nsc/kbuild/c/505471374cfb107
+[3]: https://lore.kernel.org/linux-kbuild/20260316204311.GA1329928@ax162/
