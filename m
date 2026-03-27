@@ -1,118 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543E43F54AA;
-	Fri, 27 Mar 2026 14:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA8A3033E7
+	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 15:16:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774622205; cv=none; b=J92/lpTtOaaaNWiiwWQsy5lqdF0yesHqcGSmWISlN7OeMTbIrdVnSK/rElCBI1VdPyUp5inVvCWSIUVk8jQWIouEdbaWJH4jicZaCJIoY6kpvKiEhz0XInGOAkIaXm4jFWT9hcagYtSvjRrFHWqqo7S8l+OdMGH4ifsUu2HXYeE=
+	t=1774624567; cv=none; b=nLfGS+5xefi2j/z1W3RSdSG0I6pQVTyAUE5XerTl7gD3LOOH7glQqoQU7EhoDf4pcOm9x1OOzKfLdvSsN608ccyc/YUlD4aft/PIqv6TruLuwEAyveHl+xLLWjUz5/+i5/zKSp0ll0FFLiU79YrifkId2eP4J4/gmYV41uBe3fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774622205; c=relaxed/simple;
-	bh=B5exAoQGp5WNxnqYf4AvOne/9Go48BYicoRskxtSHi8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=XLprK25Oy67Qrez6I47xCUxN2tQbyzDQj/43/7kgNkSOf3LcArZCPbAgjiXNbU9aIvlpIszK1+YnozgmnaSjaG/ejCVa3P028zPDoZNJMfhQtl67V1jOxWeaUuDz3z3IqGtrZ6/E2Om1aSnflGdw0ykPIvRAzPyXiPF7vpdwVUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UoD5nb4B; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774624567; c=relaxed/simple;
+	bh=GklGLwJruxxCBqdiF2yNlz/pCwjKi6IpbWoG97hl45U=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TNzvUdFKNyAroo7LXzN7cnxiPX3pB6RZdn+lxA3i2uUbC0tP3Rt8yvYTOSQYkiptVraBCj7OXHQTru3XjLN//WPIrOT6iRsA6N2IzP6WFTQded/Fte8eoNSTeuBkN+fJisPRhuHZQQD1QJiN6kcjkE7IKVUw8dGUU84ognqTyRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NczD2fvs; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UoD5nb4B"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774622204; x=1806158204;
-  h=date:from:to:cc:subject:message-id;
-  bh=B5exAoQGp5WNxnqYf4AvOne/9Go48BYicoRskxtSHi8=;
-  b=UoD5nb4BtxFjwZUDqh1xhc9FocCtLRkuWKioFbKi9oEyBo/AZZyEMOnu
-   rgSdMpaSSx2ys3mlEP+03kYTiuPlL2MIpTpMAmwE6w+BTGHoL44ccA7In
-   VL3IFdeoya3+pjnM19HA2JQdwpK2EJKZRfYD6J+YW8787eMQ4+CjY91+n
-   Vg7sXQbaVzOGfEJe0iQlofy6xzfs6obQYlfLjLDxQvhCo2wafrnSmuIev
-   6nzr8Q/AmGDHA7vaQU+TRD4kQcElplCtbxaI2DLkhBbNR4/4eWLh1Qq/o
-   QkIpw93DCR9M6dIJP3JG2IcNgORJOxsE0BPO1P84oQwYASifEoPVJ8Eka
-   g==;
-X-CSE-ConnectionGUID: bAc1pvubSLKrEEEdDV8QIA==
-X-CSE-MsgGUID: dqZN3h8jSqeMf/JtTn2OZg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="101155324"
-X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
-   d="scan'208";a="101155324"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 07:36:42 -0700
-X-CSE-ConnectionGUID: ApSmsPF+RPOka1wM5b3m0A==
-X-CSE-MsgGUID: 3/wTvwXYQWe/SA35Gbyo9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
-   d="scan'208";a="230258222"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 27 Mar 2026 07:36:41 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w68Ig-00000000AMl-1xnz;
-	Fri, 27 Mar 2026 14:36:38 +0000
-Date: Fri, 27 Mar 2026 22:36:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2026-03-27 102/106]
- sound/soc/pxa/pxa2xx-ac97.c:103:2: error: call to undeclared function
- 'snd_soc_dai_set_dma_data'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202603272243.4zzxmUWG-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NczD2fvs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1774624564;
+	bh=GklGLwJruxxCBqdiF2yNlz/pCwjKi6IpbWoG97hl45U=;
+	h=From:Subject:Date:To:Cc:From;
+	b=NczD2fvsNvnPYKVl+HB0VESISWa5CSibbFLoh6UlXu3EChWSs1GQm3Sci17xbRMg7
+	 cjK4CShwTzoHL+92HAp0lODxLULkNrmY2rxRbf6RKfXc66nZHaRKr6WQKXXyjydjke
+	 WJ+jDWseoArnDRt5MQGnHQwbBXXMM3BMYcUrTli7Oi3sO/cptkgJaOcUCXtvuzCaWt
+	 eNZ05UnqSOl1Fxu/m4toBSCDkGMZ9Ei7Y7MMksuuoK+qovWVpjwqD4HuC29g6x1Krc
+	 ThpnmO7eqCXhOPOY8r9QbSiY9EikUHH4E7Kb6R121MHJ2u8UPBkde+vFtDmyaBU5DR
+	 aMUIAWX9uNyEg==
+Received: from [192.168.0.15] (modemcable014.2-22-96.mc.videotron.ca [96.22.2.14])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: detlev)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id A059017E58B9;
+	Fri, 27 Mar 2026 16:16:02 +0100 (CET)
+From: Detlev Casanova <detlev.casanova@collabora.com>
+Subject: [PATCH 0/4] media: rkvdec: Switch to using a bitwriter
+Date: Fri, 27 Mar 2026 11:15:59 -0400
+Message-Id: <20260327-rkvdec-use-bitwriter-v1-0-982cf872b590@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMwQ6CMAyA4VchPdOEDQPRVyEcXNdpNUHTDjQhv
+ LsTjt/h/1cwVmGDS7WC8iImr6nA1RXQ/TrdGCUWg29817S+R30ukQlnYwySPyqZFZOL7nQOLaW
+ eoKRv5STffTuMh20OD6b8f8G2/QB+N5kQeAAAAA==
+X-Change-ID: 20260327-rkvdec-use-bitwriter-f1d149b3cf7c
+To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Heiko Stuebner <heiko@sntech.de>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Jonas Karlman <jonas@kwiboo.se>, 
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ llvm@lists.linux.dev, kernel@collabora.com, 
+ Detlev Casanova <detlev.casanova@collabora.com>
+X-Mailer: b4 0.15.0
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2026-03-27
-head:   b547ff73a13ed8ce92e8e208ccd27884077b160b
-commit: 0d274db4952b307b03194e254479adefe2a1ba25 [102/106] ASoC: soc-dai: remove compatible definition
-config: x86_64-buildonly-randconfig-002-20260327 (https://download.01.org/0day-ci/archive/20260327/202603272243.4zzxmUWG-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260327/202603272243.4zzxmUWG-lkp@intel.com/reproduce)
+Using bitfields in large structures where fields are mostly unaligned can
+be hard on the compiler.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603272243.4zzxmUWG-lkp@intel.com/
+Issues have been reported with clang ([1], [2]) and, even though those
+issues are addressed by clang devs, some setup can't or won't update clang
+just to compile a driver.
 
-All errors (new ones prefixed by >>):
+Even when fixed, the compiler still might have to allocate a bigger stack
+frame to manage misalignement. Coupled with other features like KASAN, the
+stack becomes larger than the kernel's maximum [3].
 
->> sound/soc/pxa/pxa2xx-ac97.c:103:2: error: call to undeclared function 'snd_soc_dai_set_dma_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     103 |         snd_soc_dai_set_dma_data(cpu_dai, substream, dma_data);
-         |         ^
-   sound/soc/pxa/pxa2xx-ac97.c:118:2: error: call to undeclared function 'snd_soc_dai_set_dma_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     118 |         snd_soc_dai_set_dma_data(cpu_dai, substream, dma_data);
-         |         ^
-   sound/soc/pxa/pxa2xx-ac97.c:128:2: error: call to undeclared function 'snd_soc_dai_set_dma_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     128 |         snd_soc_dai_set_dma_data(cpu_dai, substream,
-         |         ^
-   3 errors generated.
+To avoid this, let's drop the bitfield implementation and switch to a
+bitwriter. There is already one for the older variants, so make it global
+and use it in other variants.
 
+Note that only buffer structures are switched to the bitwriter. The
+registers representation structures are kept with bitfields, as they are
+properly aligned every 32 bits and don't require heavy stack overhead.
 
-vim +/snd_soc_dai_set_dma_data +103 sound/soc/pxa/pxa2xx-ac97.c
+Also note that the VDPU381 SPS and PPS structs are kept with bitfields,
+for the same reason that they are small and aligned enough not to require
+heavy stack overhead.
 
-75b41027662e298 Liam Girdwood 2006-10-12   92  
-58ceb57ec1be928 Daniel Mack   2015-09-30   93  static int pxa2xx_ac97_hifi_startup(struct snd_pcm_substream *substream,
-f0fba2ad1b6b53d Liam Girdwood 2010-03-17   94  				    struct snd_soc_dai *cpu_dai)
-75b41027662e298 Liam Girdwood 2006-10-12   95  {
-d65a14587a9be85 Daniel Mack   2013-08-12   96  	struct snd_dmaengine_dai_dma_data *dma_data;
-75b41027662e298 Liam Girdwood 2006-10-12   97  
-75b41027662e298 Liam Girdwood 2006-10-12   98  	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
-5f712b2b73a9fc8 Daniel Mack   2010-03-22   99  		dma_data = &pxa2xx_ac97_pcm_stereo_out;
-75b41027662e298 Liam Girdwood 2006-10-12  100  	else
-5f712b2b73a9fc8 Daniel Mack   2010-03-22  101  		dma_data = &pxa2xx_ac97_pcm_stereo_in;
-5f712b2b73a9fc8 Daniel Mack   2010-03-22  102  
-5f712b2b73a9fc8 Daniel Mack   2010-03-22 @103  	snd_soc_dai_set_dma_data(cpu_dai, substream, dma_data);
-75b41027662e298 Liam Girdwood 2006-10-12  104  
-75b41027662e298 Liam Girdwood 2006-10-12  105  	return 0;
-75b41027662e298 Liam Girdwood 2006-10-12  106  }
-75b41027662e298 Liam Girdwood 2006-10-12  107  
+[1]: https://lore.kernel.org/oe-kbuild-all/202601211924.rqKS2Ihm-lkp@intel.com/
+[2]: https://github.com/llvm/llvm-project/issues/178535
+[3]: https://yhbt.net/lore/llvm/20260121230406.GA2625738@ax162/T/#mad878ec24a8224e1387ef5e73cb77b9ada55e3f2
 
-:::::: The code at line 103 was first introduced by commit
-:::::: 5f712b2b73a9fc87fcc52124cfe8adefaa0c92f5 ALSA: ASoC: move dma_data from snd_soc_dai to snd_soc_pcm_stream
+Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+---
+Detlev Casanova (4):
+      media: rkvdec: Introduce a global bitwriter helper
+      media: rkvdec: Use the global bitwriter instead of local one
+      media: rkvdec: common: Drop bitfields for the bitwriter
+      media: rkvdec: vdpu383: Drop bitfields for the bitwriter
 
-:::::: TO: Daniel Mack <daniel@caiaq.de>
-:::::: CC: Mark Brown <broonie@opensource.wolfsonmicro.com>
+ drivers/media/platform/rockchip/rkvdec/Makefile    |   1 +
+ .../platform/rockchip/rkvdec/rkvdec-bitwriter.c    |  30 ++
+ .../platform/rockchip/rkvdec/rkvdec-bitwriter.h    |  25 +
+ .../platform/rockchip/rkvdec/rkvdec-h264-common.c  |  51 +--
+ .../platform/rockchip/rkvdec/rkvdec-h264-common.h  |  40 +-
+ .../media/platform/rockchip/rkvdec/rkvdec-h264.c   | 109 ++---
+ .../platform/rockchip/rkvdec/rkvdec-hevc-common.c  |  92 +---
+ .../platform/rockchip/rkvdec/rkvdec-hevc-common.h  |  57 +--
+ .../media/platform/rockchip/rkvdec/rkvdec-hevc.c   | 171 +++----
+ .../platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c | 351 ++++++--------
+ .../platform/rockchip/rkvdec/rkvdec-vdpu383-hevc.c | 502 +++++++++------------
+ 11 files changed, 578 insertions(+), 851 deletions(-)
+---
+base-commit: bbeb83d3182abe0d245318e274e8531e5dd7a948
+change-id: 20260327-rkvdec-use-bitwriter-f1d149b3cf7c
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+--  
+Detlev Casanova <detlev.casanova@collabora.com>
+
