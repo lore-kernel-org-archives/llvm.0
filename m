@@ -1,149 +1,128 @@
-Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B34481B1
-	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 13:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774618948; cv=none; b=M4c2J+8z0Qat4m+SSwvI3kqKezjrVQoYghwgSrhqe9tSzfIII/nOEBuoj3uWR8oIo/IuQsglBjTSs67bkCFQWHq0LjUjSZlkTrpLS3GgyWF/zW282/41T0tyTdJt2iDHEZK9q0omTXS6+XaPNwD9+5vy5Y/dWXracdKP7VmwWq8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774618948; c=relaxed/simple;
-	bh=frSGxxmPjWh6IoWttfH/PUHq0x6wot1GxUuiDrqWzYQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=O2UUIqsd4IDvkYkfET1OB3X41igg1uk1xk+qN/NNczPxG9/8Ycrpw8sn+qFpEWioS2TyD7tM/+0n601yMcJqDj6THlSeDhaGpL09PR2bhlMzZGt2/CyeM8u0VhkONHnbPvvGicSBUoFEMom0a7By0+ofUvjFWMFZCKRkWspQc/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=WXmgYcfo; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IHVVfnyL; arc=none smtp.client-ip=202.12.124.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DAE53EDAD7
+	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 14:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774621330; cv=pass; b=nJ5oxC4JOxXR4ZYxN8Bm0VK0UE2ZYOaELxJODSM0/k1fOo5uGv+rmGTiqPxQg2AAozgpcW5W9YDjAWcywMOumdw9Yh0tjVOMXWezBqkpsxxJwGCgQZ08QzYSWygLcHprAVCjzXQPrDpKZarLozh99taUFNwJKVw5Nsy8uoWvvEY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774621330; c=relaxed/simple;
+	bh=KTDK3vOxt1fIVdHhRs3HNHtD5rFi66H7oz+TrzUybAM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YTMBgq/lScUklGL6ex3mpQL9Ptt33CGqBXDsLIp5RXILeu7dz1W/isVSIbREPzQbbyuJXSlf4savevzTOAdZ+6rXBYTujs7HmUz20VsxEJWq1kSfSUaH06EzDRsNjMChBFLi1OYaZ7h/3fm7VXvu6UAVRZscryK7xPf5Xwd8P70=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VasB4bsZ; arc=pass smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="WXmgYcfo";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IHVVfnyL"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id EE82B130002C;
-	Fri, 27 Mar 2026 09:42:23 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Fri, 27 Mar 2026 09:42:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1774618943;
-	 x=1774626143; bh=r8kqb/PmSoN6Ni50HiBp9vabWKni4KIgQFght4+Tts0=; b=
-	WXmgYcfoU7DXqp4nVD4iHGiZnjmZ/oBiySyxKd7rz8vp9kcZDKnYLEMGgCJQIjL7
-	V2ImP+GLWMVeAo9BapSvgkg6sZA8FAlX89F/EJgDZjHchNHND2dlQNt4pc3epoh3
-	OJ9ax8G8Ti4nTeaIYae/vg9E4znqy0UmoGNsm5mT/JIT7wWxREblo3ydqTVYtkHP
-	UlmWf1KNBzT+e6MgE7LIPG67LgydS+QGPzIPPt6kxSxTjBes6xazxKTqstswJBaF
-	FpIaPM3zI7B8Hpd+MXNo6jjXH4XrRQbGwe29451a2OxlVNv+QJ8HI+vwtzjFwRfv
-	pS+0qtzZIeVwB5SBu2Lzrw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774618943; x=
-	1774626143; bh=r8kqb/PmSoN6Ni50HiBp9vabWKni4KIgQFght4+Tts0=; b=I
-	HVVfnyLZcN35pRyg32jICZM0qVLXsONawFPdb+heGxPgSM+izITH8vBPCEA/bJ9E
-	UN6H6aMcYUgpH7jg7wSGLvSMIlKgI7lRJLiAnw1ZuUsNQGzkiUxHOU3GYu5q66XA
-	Jtq76kjAyjkWoLV5eiPhBRC7IduTmfV52rSHitiA33ESsKYRWwKnZbkkIzoB5A80
-	UuVbB2VtJaN78K11CULHWhyiLFlTrPunOhraGsziiJpg80dksixydziqGGZRWk+1
-	rmY6b5kCR5m6oncjYZkweCTkFj8Kmi58gdgjDLPH5eRzHI0CFMQYY1btUypTC9F3
-	EVQl22V83017juQKIQ6Eg==
-X-ME-Sender: <xms:PYnGaTFjNv-2kjwzDO96mcm0J53r3iq9GAQxohg1QK5UaJwCiRIPvA>
-    <xme:PYnGabIVAVLiZp2iZ7XOB_zppj6xtVcQUdS2evGHJbBxfLdaZ5WI6ibLO15radjvz
-    L2ZUekfulSqpSJwxkEQ-5xkmAa_hhYZUOHObcnX-PTAuMVzrh-xqU8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeffedtgeefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepgedupdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehjrghmihgvrdgtuhhnlhhifhhfvgesrghrmhdrtghomhdprhgtph
-    htthhopegtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtohep
-    mhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugiesrg
-    hrmhhlihhnuhigrdhorhhgrdhukhdprhgtphhtthhopegrnhhtohhnrdhivhgrnhhovhes
-    tggrmhgsrhhiughgvghgrhgvhihsrdgtohhmpdhrtghpthhtohepuggrvhhiugesuggrvh
-    hiughgohifrdhnvghtpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvghtpdhr
-    tghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtoheptg
-    hhrhhishhirdhstghhrhgvfhhlsehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:PonGac941VeA2oTCcTkWfzRB1nZw0mSSQHJ5Pqk3p0ZS0l9NehXMHQ>
-    <xmx:PonGaQa4Rabao1kTTsgiRbWyc3rxCyCd3mcww27MNaGYm9rsSBoKMA>
-    <xmx:PonGaVpcyAK2snd2rS9lHbXXYlQwTHW_7ACWd1UNjoDP3Fnvn14ONw>
-    <xmx:PonGacv8QU40CC2nyaF90d74nBjZSBShHRTwrc0LnYslN6WX6eF_Ng>
-    <xmx:P4nGabYMQKNNUJ-KtgTpLrS-vE-2hZR7lr1g9qxy0N1Vgj0xHOpyYnfa>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D382B700065; Fri, 27 Mar 2026 09:42:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VasB4bsZ"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-487012ce896so13515915e9.0
+        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 07:22:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774621327; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WNCsKV7exAfhw1Mgd2EGjWZQ1g+8v++8zfn/EJmlgGXluWdQeR+7CnWTXQcQ0tTAD1
+         hTBnbXdquH0YU4x0IxgINre8kn3q7UJMu/QRC8c+zWXs+2io5CfXSpaOajusqrZvDDsI
+         Dw0gdIu2v6YQuwTU8xDL1q+wZMm0gJUT3B1QbkqYq6hq+qAQC+l/pmTzTUzhcH+UsU4o
+         v6F9+XKCCVp4hhQUIBDhGuT/E0HM0S4/LqKrmWsD/wHod5UNI81Dy9Gpnrh7VMFpHAOd
+         wMsJwq5QlIpsG/08/mZZBO+Xfq4zQR6pHRrW8jfT93njHXAvOWJVbPTluh6dqZz3AQ7H
+         BXqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ms382mXmeMfyEZXo+JDpLmvuZwZ5tlyqI074nqlFpZI=;
+        fh=bqsrsZWVRa9IucATg7nv4n1YHCMV/mfOcNUJx0P5bcg=;
+        b=fXqBJFrQ9D2qo9hEVsssO0dmCELIWZpL3iReigw7Rw7SP/667Rry64WxIG/X//OR0T
+         BvfVYfD1X0i5ij/7j55PY5fOfDi0PxW9+e3iBYYDgzQSnp/foxixgTQoFmo4KnvAZoAy
+         tW+yfIxj9EJlLiPwPiY0UswJAjbFG2T/rplbBJgh+7qwM7K+Q50DenVYWtGcpk7C8Dg6
+         nDrJDqRLn92hJxkKM/ifq7lpjddzp4S8m1ph0lg7u2z+c2oawzL88ZpAOXnxJqkxjEeH
+         py/V2MvZQowdgFTgfHQlTAQbx2otKr4oo37dbWHIysHvOx/bNuQbcxsF9htMmtHIkoQX
+         ETEw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774621327; x=1775226127; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ms382mXmeMfyEZXo+JDpLmvuZwZ5tlyqI074nqlFpZI=;
+        b=VasB4bsZo/LKzZs1gMfKHahKlBlqbNbkuDSje0ce95FnLeAieMbHlvt7m529ZqFL0L
+         N7uoX+pqT9Gv82t9Tzxw1dMJZw8oMCEXcL4qPvpGCmBhkBrGhVuoOTDb5PF7M/pNF3tP
+         dPMqkhOTGWsA0rQQGaulwjAkZSb4sDPlzCmD0XJB9euEXXpkBUcs/QTddYFKVRkk2Buz
+         Q6UkzXmU5euMvj4eN3P0gQCpR9Wm50/0as15IG/MvxczN3vva5T8oW4ZNo7g0LRoozfF
+         mzr+sis4Qx3hPgkEcSALPm6Vm817wBirg7OpsBlEGDYsoFwZJF5afsPxg5IbeQw08M0H
+         qbDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774621327; x=1775226127;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ms382mXmeMfyEZXo+JDpLmvuZwZ5tlyqI074nqlFpZI=;
+        b=S4y2qd419q8IyMk691tGxfhRZwrsUoLbir/Rb4jIUYnRH1ggSNyxoMwLRyXGxSBxxn
+         tWHWj3AnCEoTegh1VRh1gacHrPgftIzim3zNqcKjHG/z0qz7WlCYsCU0ZYpmhixnNyAa
+         riyM7D8s1H7jjm/gcoQkzLBpyTwN+jaHdi4LRM7eRhy5ReEbH2SWmvwcttmo4W8KBqJH
+         vqGmzlqJwGATqDp61udvyYifHVnS8/P8JrfgGssJunhIfmRUHhJk/0RCj8XNV6PGrsrk
+         1/t//PzD5p9YPP3ojpE9EhiqjoCOYcjZ3yPEMdZ+5I1xiIQo023Ro0jp/caNVVH7p+5F
+         2ikQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5m6gKUWjdz65g5nXcgPmvTKKQZhwvHqmlkCFDcQSUmSuW0+IDyHHfX3wGK8IcSOckHy1h@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy5vvU9ZV/YUg0do6iXBs/tXG0LDl0TdvtBw02fG0zAtWeqQHi6
+	Eyw4XKzP5wHgKwfkJoOe1ahasPAcn+pXIK8GSTdEiZCwo9qI0hfv4UI/Tyq0lMIXwe2daU3Jpzt
+	kd3uNXfRmnQ982jmawoHZcpPDU1obTV4=
+X-Gm-Gg: ATEYQzyG4gfAREMMlnFczY0XXN/Y495wT3WPZLglg0jTnZTzGJLvfruU/aA4v28mOBC
+	u0WdAY4XGsAgydTN80GMDyoiNFBhVI9HL4RCEIwh8ENHubjUov4jF/eHEj9wLcTSBoQ0Smzurbt
+	DSFZdDpfC4g+PZr4DWlWWc2YuTAaZrUdzBSbOjz4v6HORQvOtyvaGo6d7NL/44ExKcWt/TEns6T
+	92VyV6pwZIVZMImbU4ZrMhBYiVmLS48yTPU70GM1iNur0rWRQjWNwVo4txkYzxJPdcg6GhPckTh
+	At0oos1pMaXKaFE66yMZqVDhfXlBCcfs6+ssI/RraYXM0raBRJN+nvPi2FRwwmT/48OMaQvpbX7
+	nUshGRpU1fT0OCY55LrnMH5iMKw==
+X-Received: by 2002:a05:600c:4f91:b0:486:f634:ef1 with SMTP id
+ 5b1f17b1804b1-48727eda549mr46648885e9.17.1774621327165; Fri, 27 Mar 2026
+ 07:22:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AUJnWW6OA6Vc
-Date: Fri, 27 Mar 2026 14:41:41 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc: "Russell King" <linux@armlinux.org.uk>,
- "Christian Schrefl" <chrisi.schrefl@gmail.com>,
- "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>,
- "Alice Ryhl" <aliceryhl@google.com>, "Ard Biesheuvel" <ardb@kernel.org>,
- "Jamie Cunliffe" <Jamie.Cunliffe@arm.com>,
- "Will Deacon" <will@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Miguel Ojeda" <ojeda@kernel.org>,
- "Andreas Hindborg" <a.hindborg@kernel.org>, acourbot@nvidia.com,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- "Boqun Feng" <boqun.feng@gmail.com>,
- "Danilo Krummrich" <dakr@kernel.org>, "David Gow" <david@davidgow.net>,
- "Gary Guo" <gary@garyguo.net>,
- "Johannes Berg" <johannes@sipsolutions.net>,
- "Justin Stitt" <justinstitt@google.com>,
- linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-um@lists.infradead.org, llvm@lists.linux.dev,
- "Benno Lossin" <lossin@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, mmaurer@google.com,
- "Bill Wendling" <morbo@google.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Nicolas Schier" <nicolas.schier@linux.dev>,
- "Nicolas Schier" <nsc@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Richard Weinberger" <richard@nod.at>, rust-for-linux@vger.kernel.org,
- "Trevor Gross" <tmgross@umich.edu>,
- "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>
-Message-Id: <1990bf45-050a-445d-bcea-16d225207531@app.fastmail.com>
-In-Reply-To: <93439e91-cf81-477b-b880-a813bb01ad7c@app.fastmail.com>
-References: <20260322192159.88138-1-ojeda@kernel.org>
- <20260323000327.111235-1-ojeda@kernel.org>
- <acEP7tl8pqFA3tK8@shell.armlinux.org.uk> <acUGAsjYvNvTEO92@google.com>
- <CANiq72mzPpkELXis1CiSbKUmBXNQYMiMmjj-7-sYiLh4T_JSOQ@mail.gmail.com>
- <9cf5a94c-0f37-446c-b63d-ddac5674d220@gmail.com>
- <acVOL5Psz6kHlhq2@shell.armlinux.org.uk>
- <641592e3-2354-4238-9eb8-a1f5c2a13126@app.fastmail.com>
- <CAMuHMdUUfVCBZFi2WoOYibJLVnyPY-joRDJDowgHwjN_DGeEzw@mail.gmail.com>
- <93439e91-cf81-477b-b880-a813bb01ad7c@app.fastmail.com>
-Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20260327114741.91500-1-pilgrimtao@gmail.com> <20260327114741.91500-2-pilgrimtao@gmail.com>
+In-Reply-To: <20260327114741.91500-2-pilgrimtao@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 27 Mar 2026 07:21:56 -0700
+X-Gm-Features: AQROBzBIPfZAUsMrDB7LBzUtbbmaH79IMxVvd9bzKdqKC91ZGulsOHpJpWVa3Bc
+Message-ID: <CAADnVQJizm+Y8_AE0rjJnBCrvNc+ThiWdbc-ZuUZqYTLtf=MOA@mail.gmail.com>
+Subject: Re: [RFC 1/2] block: Introduce the UFQ I/O scheduler
+To: Chengkaitao <pilgrimtao@gmail.com>
+Cc: Jens Axboe <axboe@kernel.dk>, pjw@kernel.org, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alex Ghiti <alex@ghiti.fr>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, bjorn3_gh@protonmail.com, 
+	lossin@kernel.org, a.hindborg@kernel.org, Alice Ryhl <aliceryhl@google.com>, 
+	tmgross@umich.edu, Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-block@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	linux-riscv <linux-riscv@lists.infradead.org>, 
+	rust-for-linux <rust-for-linux@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Kaitao Cheng <chengkaitao@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 27, 2026, at 10:02, Arnd Bergmann wrote:
-> On Fri, Mar 27, 2026, at 08:56, Geert Uytterhoeven wrote:
-> but that only allowed bitfields to be marked as __attribute__((packed))
-> in order to get tightly packed fields and return '4' on all architectures,
-> while m68k-linux-gcc apparently has all bitfields implicitly packed unless they
-> are explicitly marked __attribute__((aligned(x))). This behavior is
-> independent of the -malign-int flag.
+On Fri, Mar 27, 2026 at 4:49=E2=80=AFAM Chengkaitao <pilgrimtao@gmail.com> =
+wrote:
+>
+> +
+> +__bpf_kfunc bool bpf_request_put(struct request *rq)
+> +{
+> +       if (req_ref_put_and_test(rq))
+> +               return false;
+> +
+> +       return true;
+> +}
 
-I had another look and found that this has been in gcc since ELF
-support was originally added for m68k:
+...
 
-gcc/config/m68k/linux.h:#undef PCC_BITFIELD_TYPE_MATTERS
+> +BTF_ID_FLAGS(func, bpf_request_put)
 
-All other current Linux/ELF targets get the default from gcc/config/elfos.h
-
-      Arnd
+I bet you knew this is not safe and despite that you still
+decided to hack it this way.
+This corner cutting is a red flag for this patchset and
+your link list patches.
+Since you got caught doing this you need to prove much harder
+that you know what you're doing and there are no other safety issues.
