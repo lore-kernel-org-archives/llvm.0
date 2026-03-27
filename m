@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2923D15A864;
-	Fri, 27 Mar 2026 16:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CDD3F8E0D;
+	Fri, 27 Mar 2026 17:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774627248; cv=none; b=rHKORy5eJ6k1gOcUkLelFHSyHsm3KXk6rBcDGvjmcpzjhj6gOIo3M7VxGqWUnbZPrAXqfCnWvCFQ4XPCtStD8MROlnOaIlwdaDfJUCV99Dr7V0qhW36MhzVwaT8j9WZzPsuvEUxXQhAuntzEeCwzPeZ0HyiksfwGvRYGTzgdBJU=
+	t=1774632960; cv=none; b=lFzGovkvOaY/umzC+EQteZQIenCDkj5YPIhSpN7fz3rtQLYTx2Wz78VISCbT9TNo/VOGVNUJSbxAFBLuLa/m5FIE01S6jCRpHpHwq8KstUJPDu+nX90Nzs8t6qw7H08XX3kNWwHiRjwM0urCnaB3blqd5BEM0TfFizQhWYSOwRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774627248; c=relaxed/simple;
-	bh=8ABsho9fB27uHd0E9e8vJwKZriqU6JH5Anl9iuDxn7o=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=HdjkN22hKVV1HWK+sMtTq46BwoG55XSMcwnoqsa0xbOZuCoCXpOttLgyp3PDsqVSrAvPMtUSJ/e2njGyupaYsAZBRGrjYMD9zVIvIkll/WGV8GFTaE19EEfg9q+PqUrAVAquBu2wQaFvsuFhsgTOTWLsv+D82EoR+XPRc6KxonY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LyuIozf/; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1774632960; c=relaxed/simple;
+	bh=CJUSl2idgF/8gpsDPtg++lRvo+B/MOMTwUOP6MMZMbs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ATGUvZPH7D+35WoCbAdv6Xa3y92eoAMzEiDvif2tFnIJ6BQEyWdud7bslu9fGg2TGaZ2ijZ/v14vbqZD9ZisC9MobJZClBoESZnwkmdJuzzGiP3vJk5O3nuGzAdfB1naPjhnCJjAouZ48wg3WfdqKwXGYz0KFu3BoDKv3addYUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=asqmaShU; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LyuIozf/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="asqmaShU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774627246; x=1806163246;
+  t=1774632958; x=1806168958;
   h=date:from:to:cc:subject:message-id;
-  bh=8ABsho9fB27uHd0E9e8vJwKZriqU6JH5Anl9iuDxn7o=;
-  b=LyuIozf/W8m9JQGuu4MeoE9vKaN3KLDFfXysueYd90VHhW9Pz5csTnVZ
-   rqIfKUt9iQF2fpx41OdwFlUCxTD4tVzs16Jgg7vdcX4Niiz1gT2aQL3r1
-   wWZTZmcf5AsG4FWB8TDcbCkcToCLrhBI9USZgqJfVv/Cqyiwk2R1UhPMb
-   mxf1cMsgssGOn+isl2OuEAMPe4rtlXVfngMJiEXxw3iXiATSu9kZk3Xjf
-   B851QLAUlivACni653l9EDy6LgzM7CdfxJOkX+53UcTTNyN+PQTYzr+50
-   ESTdcu82KeXl5t/086uReojMmaFA96fDgSG6xRKWotUGJQgJwG42q3BBV
-   A==;
-X-CSE-ConnectionGUID: ++eWPBXHRzmCEmbQ5KFxOQ==
-X-CSE-MsgGUID: REjNc2kaTNKVzSlkqcpCew==
-X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="75901998"
+  bh=CJUSl2idgF/8gpsDPtg++lRvo+B/MOMTwUOP6MMZMbs=;
+  b=asqmaShU0ajpfvNsSqvS92zpC/dVg+yIuYG0WZ+VcOHl7tNge8PksLTj
+   ims18qrYIQRSc5/UR/31K7Ws/t/DelaSUv2GWeSoVu7XK9G9cOTDzRtLs
+   JWyziy+kw0r4rkA4DIdHQfRMNJ9GA8fOzYAezSMAIKa/b4HOocBFWNXzv
+   o56y91FIvSFLy+j3QA8q4G0vUhEdFhPHY0onb7tsvOiseHN/fgwlDv9Sc
+   TtQc4XPcYzeFk4ol9hTOHu9WC4jg3f2XFf1s3C5IXn+xP4FlEL0ZsUv7X
+   YQKVwk+eDute5GugtNawFiBTw9Efwl2AAysoLThtKoKbHgyhyM+CeUGaZ
+   Q==;
+X-CSE-ConnectionGUID: JzEZsV1aSXmapYcH1WMhwQ==
+X-CSE-MsgGUID: cm/ktp2vTqyEQ2g1kyGbFw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="75603536"
 X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
-   d="scan'208";a="75901998"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 09:00:46 -0700
-X-CSE-ConnectionGUID: qG1QRG/FQAG2X5MZ3Lnbwg==
-X-CSE-MsgGUID: b6hQJ1YvQq2GH0n1dwv3cw==
+   d="scan'208";a="75603536"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 10:35:58 -0700
+X-CSE-ConnectionGUID: mvSI/KEKRoGyobyfgXC2yg==
+X-CSE-MsgGUID: OQhOrmm/RZaGJMXB5A6DZQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
-   d="scan'208";a="248387157"
+   d="scan'208";a="222050440"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 27 Mar 2026 09:00:44 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 27 Mar 2026 10:35:56 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w69c1-00000000AQn-3O8v;
-	Fri, 27 Mar 2026 16:00:41 +0000
-Date: Sat, 28 Mar 2026 00:00:00 +0800
+	id 1w6B69-00000000AXB-2FwJ;
+	Fri, 27 Mar 2026 17:35:53 +0000
+Date: Sat, 28 Mar 2026 01:34:57 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2026-03-27 82/106]
- sound/soc/intel/avs/pcm.c:1403:10: warning: variable 'ret' is uninitialized
- when used here
-Message-ID: <202603272354.8LQSBKkh-lkp@intel.com>
+Subject: [morimoto:sound-cleanup-2026-03-27 95/106]
+ sound/soc/pxa/mmp-sspa.c:110:23: error: call to undeclared function
+ 'snd_soc_dai_to_dev'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202603280124.IoW0q20u-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -62,59 +63,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
 tree:   https://github.com/morimoto/linux sound-cleanup-2026-03-27
 head:   b547ff73a13ed8ce92e8e208ccd27884077b160b
-commit: a22cf4c5c5139a4eb0afdd43d21ab0c8e359594b [82/106] ASoC: intel: avs: use snd_soc_component_alloc()
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260327/202603272354.8LQSBKkh-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260327/202603272354.8LQSBKkh-lkp@intel.com/reproduce)
+commit: 09f6604cc02792c7e69777d60b23ac6314ee428c [95/106] dai
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260328/202603280124.IoW0q20u-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260328/202603280124.IoW0q20u-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603272354.8LQSBKkh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603280124.IoW0q20u-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/soc/intel/avs/pcm.c:1403:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-    1403 |                 return ret;
-         |                        ^~~
-   sound/soc/intel/avs/pcm.c:1391:9: note: initialize the variable 'ret' to silence this warning
-    1391 |         int ret;
+>> sound/soc/pxa/mmp-sspa.c:110:23: error: call to undeclared function 'snd_soc_dai_to_dev'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     110 |         struct device *dev = snd_soc_dai_to_dev(cpu_dai);
+         |                              ^
+   sound/soc/pxa/mmp-sspa.c:110:23: note: did you mean 'snd_soc_dapm_to_dev'?
+   include/sound/soc-dapm.h:643:16: note: 'snd_soc_dapm_to_dev' declared here
+     643 | struct device *snd_soc_dapm_to_dev(struct snd_soc_dapm_context *dapm);
          |                ^
-         |                 = 0
-   1 warning generated.
+>> sound/soc/pxa/mmp-sspa.c:110:17: error: incompatible integer to pointer conversion initializing 'struct device *' with an expression of type 'int' [-Wint-conversion]
+     110 |         struct device *dev = snd_soc_dai_to_dev(cpu_dai);
+         |                        ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/pxa/mmp-sspa.c:138:23: error: call to undeclared function 'snd_soc_dai_to_dev'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     138 |         struct device *dev = snd_soc_dai_to_dev(cpu_dai);
+         |                              ^
+   sound/soc/pxa/mmp-sspa.c:138:17: error: incompatible integer to pointer conversion initializing 'struct device *' with an expression of type 'int' [-Wint-conversion]
+     138 |         struct device *dev = snd_soc_dai_to_dev(cpu_dai);
+         |                        ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/pxa/mmp-sspa.c:216:23: error: call to undeclared function 'snd_soc_dai_to_dev'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     216 |         struct device *dev = snd_soc_dai_to_dev(dai);
+         |                              ^
+   sound/soc/pxa/mmp-sspa.c:216:17: error: incompatible integer to pointer conversion initializing 'struct device *' with an expression of type 'int' [-Wint-conversion]
+     216 |         struct device *dev = snd_soc_dai_to_dev(dai);
+         |                        ^     ~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/pxa/mmp-sspa.c:327:23: error: call to undeclared function 'snd_soc_dai_to_dev'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     327 |         struct device *dev = snd_soc_dai_to_dev(dai);
+         |                              ^
+   sound/soc/pxa/mmp-sspa.c:327:17: error: incompatible integer to pointer conversion initializing 'struct device *' with an expression of type 'int' [-Wint-conversion]
+     327 |         struct device *dev = snd_soc_dai_to_dev(dai);
+         |                        ^     ~~~~~~~~~~~~~~~~~~~~~~~
+   8 errors generated.
 
 
-vim +/ret +1403 sound/soc/intel/avs/pcm.c
+vim +/snd_soc_dai_to_dev +110 sound/soc/pxa/mmp-sspa.c
 
-  1384	
-  1385	int avs_register_component(struct device *dev, const char *name,
-  1386				   struct snd_soc_component_driver *drv,
-  1387				   struct snd_soc_dai_driver *cpu_dais, int num_cpu_dais)
-  1388	{
-  1389		struct avs_soc_component *acomp;
-  1390		char *cpname;
-  1391		int ret;
-  1392	
-  1393		cpname = devm_kstrdup(dev, name, GFP_KERNEL);
-  1394		if (!cpname)
-  1395			return -ENOMEM;
-  1396	
-  1397		acomp = devm_kzalloc(dev, sizeof(*acomp), GFP_KERNEL);
-  1398		if (!acomp)
-  1399			return -ENOMEM;
-  1400	
-  1401		acomp->base = snd_soc_component_alloc(dev, drv, NULL, cpname, NULL, NULL);
-  1402		if (!acomp->base)
-> 1403			return ret;
-  1404	
-  1405		snd_soc_component_attach_priv(acomp->base, acomp);
-  1406		INIT_LIST_HEAD(&acomp->node);
-  1407	
-  1408		drv->use_dai_pcm_id = !obsolete_card_names;
-  1409	
-  1410		return snd_soc_component_add(acomp->base, cpu_dais, num_cpu_dais);
-  1411	}
-  1412	
+   102	
+   103	/*
+   104	 * Set the SSP ports SYSCLK.
+   105	 */
+   106	static int mmp_sspa_set_dai_sysclk(struct snd_soc_dai *cpu_dai,
+   107					    int clk_id, unsigned int freq, int dir)
+   108	{
+   109		struct sspa_priv *sspa = snd_soc_dai_get_drvdata(cpu_dai);
+ > 110		struct device *dev = snd_soc_dai_to_dev(cpu_dai);
+   111		int ret = 0;
+   112	
+   113		if (dev->of_node)
+   114			return -ENOTSUPP;
+   115	
+   116		switch (clk_id) {
+   117		case MMP_SSPA_CLK_AUDIO:
+   118			ret = clk_set_rate(sspa->audio_clk, freq);
+   119			if (ret)
+   120				return ret;
+   121			break;
+   122		case MMP_SSPA_CLK_PLL:
+   123		case MMP_SSPA_CLK_VCXO:
+   124			/* not support yet */
+   125			return -EINVAL;
+   126		default:
+   127			return -EINVAL;
+   128		}
+   129	
+   130		return 0;
+   131	}
+   132	
 
 -- 
 0-DAY CI Kernel Test Service
