@@ -1,175 +1,430 @@
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82696371069
-	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 22:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774650573; cv=pass; b=LaH2ktGxBaojdbAgA3aAfqHU5XZBOfuKVCXr6ntDM0R5JQUBVJKyOWDAkzm+Egmr2xJpR36HKUb4Tc6jXtU71vGXC9qrL5Zcx5QGCdi13/xVDejLHZTpxQp2rsT3ADXUGmEosnYpmhA0kZTcwNibPvihDYhvsKyK1cRCO0xyTUY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774650573; c=relaxed/simple;
-	bh=+zK/IjuErEG0mSVkQ2Ixds0Bt/74frZ/HefXmED2JbM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XKCHYIansXfCevv8xDDc1DidPa8IgCjooqCseIA/t/B2Ir8iuK5+MLy8hzsjNdrQhCZRHBYBlPZFvB6g5nZdNO0a0eUDW/ZDTH07AI0eF0vEMfWa3kaxAYsloSqXjfhSIW3vrYlEJA5V1+SELAquioiqnEf2Qstmtih25GOzsTg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JbtnbIvp; arc=pass smtp.client-ip=209.85.217.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A533A24B28;
+	Fri, 27 Mar 2026 22:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774652200; cv=none; b=JLylOmpNELUhtqeBLVSAWKMq9NMI+zMYvC0C7Au+UzE4wwEDx6UMsm25GM5QbKyv7AibvtxlUQnScslt18laoL5j+/sIZY8QnIZQQlHElQyFJwjObV/JYPrGj8dPYM5bOCi4XR+T85azrwRpAJ60IRBtejsT1iqw3l9rOXwgFfQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774652200; c=relaxed/simple;
+	bh=YHX7FxwHQPp5ad0gMKhioOiX8b3Jexp4m0alrCdRu0I=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Erts9x022d38vcqLmocX+GlPmKiE5P1mchG+RM7wHDMapA1G2KEX3OaYMhHDoKr1xxtxZs2hwwUeRCz+giU2doV8JJA0Hgs82liRxPFPhh7aGqinsJ+N65vxi9womSU9/lU/Kc5y2nuBRjn3TAhSVDFXR2DZ6Ukvp313FXFerYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yzh6Abql; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JbtnbIvp"
-Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-60328aa10efso782394137.1
-        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 15:29:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774650569; cv=none;
-        d=google.com; s=arc-20240605;
-        b=dOxHiRU0W584npP9Ur0nwkzRGoYFq/BNhd54xVVTd0dBSz6dND48WzO2wzQjt4KJZt
-         1cHlMWLeY6OnM3SceDC1lifpGP2zFObKgySihDWeSkjZ5XRemy0tEuwZ4tTse3zRA0K0
-         g4UKCiYDYv3sjy9shBM8nTHglbrxwEFka1u0FgsuI1dslgIhYcgLiEicsWmeOalJIvks
-         9OySrynLKG1sNiaV0veRw65wzFX77SZBIBFd1PxJRfwJxXvubleqOpw6i3QcuwHzx0U/
-         wNErFNukNcpXsIkf5he42HUpKOF32rozta6ObmLHD6obUiEtGnrCSzj+GyJt7ALbLVVB
-         XKgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=7DmvSXyuF97zXrdEx+TZcwBI74PTPGa+q4rDT1NiLTo=;
-        fh=5J9b9vaGSSlAvdJm5/0eZeiZSTvpsO7rYzWt+q+KUWM=;
-        b=gjf+QNkQexYdDassvWjTN13axZyUEzL3rdQFfGkukQXJ1tOfCV6OHt6VLwDEhZrxY6
-         /m7CDuwsUTYpk6HuRWq2lQA7LHEOk9fqigMJpYVQ4Ax0guoaIhxPY4K9bT2AnFhDkk2Z
-         LyejW7ozqjJZtdvbMRnZvJKbrPWzXHU9P1IBexsPwH2MCcSzoEI+2h/q+jZ89Pic3Lmp
-         xuC74lVbLMz2s4ZbLZ2C65AN+VWvf1xik0BU3B7u+b8GptRuKp3qEObY8vSo2fYOjqbf
-         gIKuG2/l0AO3l141b2bSVLqcb1YKK1JCDQ20U/SQehUfGl9QPFhkPLD/syDv6L/byQs8
-         WfSg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774650569; x=1775255369; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7DmvSXyuF97zXrdEx+TZcwBI74PTPGa+q4rDT1NiLTo=;
-        b=JbtnbIvpHWdNa6PKXgbuXL0DuBS+Ti8RC6kxLOJvHHK1plwvQLzt+n3fCL4J5JvHVS
-         qs8pgXjJtOOp3ipngl26ViD6PU3+JE4HQP5tdEJpawjbP+PyCckqNGe2Lm7vmy+kkdwp
-         oTQqkuHCJa6D6s9fn+IT7nYkEEA8IrdZ8wbBx5g5WpdNQwADi5ZL/f6lhr1LGWdbIEzl
-         Dq0PWYHm2KTYWGY4z9HB+9MihUzkr3//vQ3HfGRLCpqrJabatZt/rYJRFu03gHu4/F6j
-         XLQHanB/AyOsDjEUi9qOwavO3RzfyYSoK+ESySgFcSTY6Q6taImur6cTmO/Fizplf7uW
-         061w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774650569; x=1775255369;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7DmvSXyuF97zXrdEx+TZcwBI74PTPGa+q4rDT1NiLTo=;
-        b=BmBShhfeaZAF5Qgh6Fu8CIc93Oau1trPkFw2+rReu1UyCi9y8cijAE2scMcxh/GijK
-         aETtkUjRtg2elOEzYngp5ZensvYcbaQ6abcF8/Mu1cfKcvkF7YQLV/GQbcSa3gtvY4ED
-         uStm3YrOqgTIR3HASslnN2p8gPHPIQDaEdF2NS7YHP7Tq3S3i2gbKtnLaVUKMa9oSW3/
-         0uLwcQytGqqSCjojbkDQviHTz6DitApjbl1GrtfDbax4xfn7gZ/chaKTamhVd35u9pUo
-         fctONfk9hHJlalsSu0No604pTr1Cy7cNVPHtpyPsNpF+SbZJzx/+cYH3Sr/gE1sZN3x9
-         h/KA==
-X-Forwarded-Encrypted: i=1; AJvYcCWptNwg09KfAVAYw9l5qu4K7nBpiVi+6oBijfs7bq0Jq/L8ArUZxNe5XFb1RcG1jwxkZJqs@lists.linux.dev
-X-Gm-Message-State: AOJu0YyG9QS2Tdu/Em5mDuqZgZvmLPl/v0D+Zul6Znp/mqrstiROT7og
-	+Wmda1Iyxltz6MualPYuqh5snD7kZcWY/ERKB5jLg8McvgbeFA0DOdhJpIwmiREbDRXiTfRpVg9
-	zjAfiswLzIBgLylizLbWWhKnPC9qCTWWdo7mxhcrF
-X-Gm-Gg: ATEYQzzYSpYP62yjzyT26cc/wJ+X1OswCoLqc0Do5brNmYHz9nz+sa+CBJi4f6VIXBe
-	1gxeoNqszHmYPXaZwarKrPS7lBQ5OfgSyPEVI4oHt2vN55jSpJAlOEt8jwv7qPvcHC0nl4ij5YJ
-	gLI8OdubJ7vBuRm7KvoyuqhyKsQb8ZlxNvENhoR+FVQAcCVp+7/nRhVfVuc0G6h/ruUK7NeTGhJ
-	2P5L7rOBkr1mYPUz2YmbCwUbighYLnlx5uBUbWdd6M5Df4ezTTLfdM7gFhDQSkqwtM2iJfVf5c1
-	LYRuXhr4djzxmaBsKA==
-X-Received: by 2002:a05:6102:6047:b0:5ff:2569:cfe7 with SMTP id
- ada2fe7eead31-604f9082af7mr1815817137.10.1774650569160; Fri, 27 Mar 2026
- 15:29:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yzh6Abql"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774652197; x=1806188197;
+  h=date:from:to:cc:subject:message-id;
+  bh=YHX7FxwHQPp5ad0gMKhioOiX8b3Jexp4m0alrCdRu0I=;
+  b=Yzh6Abql6kBWP8uaAeS85IRYNngLkHXP1HE/hYLWp1VCQclWsFdV06bF
+   PJDGp15Koxh9L4IqYDt/AlMaPhGgfnzsAg925Eg/cRuxsX+NdRHSW7P2A
+   4UJRRReVkqT+7Xl7rGysp2JDZSJAz05M4rlRDqDxsSpdQT0ustKsd2T3T
+   RlE1Z0sRkkZGyyMuACgPZ/ki/+lirafW3ZBK3PRPT6H4w8VKLeHlSFyXV
+   CG9R9HB7d2srZuk01B6V1uF8krdnXKYPa+BjfipIxTzHOO60eoqRUyJjK
+   l8gJvW3WLPKyJF88kyXX6gLSV/aqeWArQHII5ftBH5AU3sRGGNzBt7skv
+   w==;
+X-CSE-ConnectionGUID: FPrPjL52QLS3hhhkuhNFCg==
+X-CSE-MsgGUID: yM63tPB4QIOmnH+2YhGQGA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="86809858"
+X-IronPort-AV: E=Sophos;i="6.23,145,1770624000"; 
+   d="scan'208";a="86809858"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 15:56:36 -0700
+X-CSE-ConnectionGUID: DTJn4RxpQOmZx8Jzczd/yw==
+X-CSE-MsgGUID: /J4GDEE8R46BHpV109ZPxw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,145,1770624000"; 
+   d="scan'208";a="221049206"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 27 Mar 2026 15:56:34 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w6G6R-00000000ArL-2Gte;
+	Fri, 27 Mar 2026 22:56:31 +0000
+Date: Sat, 28 Mar 2026 06:56:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-03-27 104/106]
+ sound/soc/mediatek/mt6797/mt6797-afe-pcm.c:145:29: error: call to undeclared
+ function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202603280604.aHtoXzUS-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260327-kbuild-show-inlining-v1-1-730ac2cae571@google.com> <20260327221837.GA3622500@ax162>
-In-Reply-To: <20260327221837.GA3622500@ax162>
-From: Justin Stitt <justinstitt@google.com>
-Date: Fri, 27 Mar 2026 15:29:18 -0700
-X-Gm-Features: AQROBzDBMJYR007qSz1FH4Yl2MRm5BJFykXdmb0qHAOvrPorltKgcSvxgsAtd-0
-Message-ID: <CAFhGd8pWwbjjLt=FSaDtFysqRU5k_YozDgBFMJBN4YmnAEaktw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: add -fdiagnostics-show-inlining-chain for FORTIFY_SOURCE
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Kees Cook <kees@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-03-27
+head:   b547ff73a13ed8ce92e8e208ccd27884077b160b
+commit: 55f784e93bd97f195076c74fbd15fcb7dfa4a435 [104/106] ASoC: soc-component: remove snd_soc_component_{set/get}_drvdata()
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260328/202603280604.aHtoXzUS-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260328/202603280604.aHtoXzUS-lkp@intel.com/reproduce)
 
-On Fri, Mar 27, 2026 at 3:18=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> On Fri, Mar 27, 2026 at 02:59:20PM -0700, Justin Stitt wrote:
-> > Clang recently added -fdiagnostics-show-inlining-chain [1] to improve
-> > the visibility of inlining chains in diagnostics. This is particularly
-> > useful for CONFIG_FORTIFY_SOURCE where detections can happen deep in
-> > inlined functions.
-> >
-> > Add this flag to KBUILD_CFLAGS when CONFIG_FORTIFY_SOURCE is enabled
-> > and the compiler supports it.
-> >
-> > Link: https://github.com/llvm/llvm-project/pull/174892 [1]
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1571
-> > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > ---
-> >  Makefile | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index e1279c4d5b24..978726aeb1ef 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -973,6 +973,12 @@ KBUILD_CFLAGS    +=3D $(call cc-option, -fno-stack=
--clash-protection)
-> >  # Get details on warnings generated due to GCC value tracking.
-> >  KBUILD_CFLAGS        +=3D $(call cc-option, -fdiagnostics-show-context=
-=3D2)
-> >
-> > +# Show inlining chain notes for FORTIFY_SOURCE-related diagnostics.
-> > +# GCC does this by default while Clang 23+ supports a flag.
-> > +ifdef CONFIG_FORTIFY_SOURCE
->
-> While this is indeed particularly useful for CONFIG_FORTIFY_SOURCE, this
-> impacts the warning and error attributes, which can be used anywhere
-> (see __bad_copy_from() for example). Is this being wrapped due to the
-> potential compile time impact? Can we use something like hyperfine to
-> quantify it and see if the impact is worth the trade off of always
-> having it enabled for friendlier diagnostics?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603280604.aHtoXzUS-lkp@intel.com/
 
-The compile time impact is not measurable (within expected noise). The
-peak memory usage may increase by somewhere in the 0.5% to 1.5% range
-depending on build configuration.
+All errors (new ones prefixed by >>):
 
-I bundled this under fortify to limit initial impact as its had
-virtually no real-world testing and may produce unhelpful diagnostic
-notes under its heuristic mode. I don't expect folks to use `-g1` in
-the kernel (which would enable full-proof diagnostic notes).
+>> sound/soc/mediatek/mt6797/mt6797-afe-pcm.c:145:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     145 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                                    ^
+>> sound/soc/mediatek/mt6797/mt6797-afe-pcm.c:145:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     145 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt6797/mt6797-afe-pcm.c:146:37: error: incomplete definition of type 'struct snd_soc_dai'
+     146 |         int id = snd_soc_rtd_to_cpu(rtd, 0)->id;
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt6797/mt6797-afe-pcm.c:156:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     156 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                                    ^
+   sound/soc/mediatek/mt6797/mt6797-afe-pcm.c:156:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     156 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   5 errors generated.
+--
+>> sound/soc/mediatek/mt6797/mt6797-dai-adda.c:56:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      56 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt6797/mt6797-dai-adda.c:56:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+      56 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt6797/mt6797-dai-adda.c:155:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     155 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt6797/mt6797-dai-adda.c:155:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     155 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt6797/mt6797-dai-adda.c:159:16: error: incomplete definition of type 'struct snd_soc_dai'
+     159 |                 __func__, dai->id, substream->stream, rate);
+         |                           ~~~^
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                              ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:285:19: note: expanded from macro 'dynamic_dev_dbg'
+     285 |                            dev, fmt, ##__VA_ARGS__)
+         |                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
+     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
+     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
+     231 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   5 errors generated.
+--
+>> sound/soc/mediatek/mt7986/mt7986-afe-pcm.c:111:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     111 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                                    ^
+>> sound/soc/mediatek/mt7986/mt7986-afe-pcm.c:111:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     111 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt7986/mt7986-afe-pcm.c:121:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     121 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                                    ^
+   sound/soc/mediatek/mt7986/mt7986-afe-pcm.c:121:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     121 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 errors generated.
+--
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:297:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     297 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:297:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     297 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:310:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     310 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:310:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     310 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:325:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     325 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:325:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     325 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:346:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     346 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:346:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     346 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:360:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     360 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:360:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     360 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:374:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     374 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:374:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     374 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:436:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     436 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:436:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     436 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:438:57: error: incomplete definition of type 'struct snd_soc_dai'
+     438 |         dev_info(afe->dev, "%s cmd=%d %s\n", __func__, cmd, dai->name);
+         |                                                             ~~~^
+   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
+     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                          ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+>> sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:486:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     486 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                                    ^
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:486:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     486 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8173/mt8173-afe-pcm.c:487:75: error: incomplete definition of type 'struct snd_soc_dai'
+     487 |         struct mtk_base_afe_memif *memif = &afe->memif[snd_soc_rtd_to_cpu(rtd, 0)->id];
+         |                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   18 errors generated.
+--
+>> sound/soc/mediatek/mt8183/mt8183-afe-pcm.c:150:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     150 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                                    ^
+>> sound/soc/mediatek/mt8183/mt8183-afe-pcm.c:150:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     150 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-afe-pcm.c:151:37: error: incomplete definition of type 'struct snd_soc_dai'
+     151 |         int id = snd_soc_rtd_to_cpu(rtd, 0)->id;
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8183/mt8183-afe-pcm.c:161:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     161 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-afe-pcm.c:161:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     161 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   5 errors generated.
+--
+>> sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:122:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     122 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:122:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     122 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:141:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     141 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:141:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     141 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:275:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     275 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:275:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     275 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:302:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     302 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:302:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     302 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:420:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     420 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:420:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     420 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:441:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     441 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:441:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     441 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:470:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     470 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:470:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     470 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:496:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     496 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:496:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     496 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:525:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     525 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:525:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     525 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-i2s.c:776:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     776 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
+--
+>> sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:251:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     251 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:251:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     251 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:277:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     277 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:277:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     277 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:335:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     335 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:335:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     335 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:468:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     468 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:468:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     468 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:470:18: error: incomplete definition of type 'struct snd_soc_dai'
+     470 |         int tdm_id = dai->id;
+         |                      ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:585:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     585 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:585:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     585 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:618:48: error: incomplete definition of type 'struct snd_soc_dai'
+     618 |         struct mtk_base_afe *afe = dev_get_drvdata(dai->dev);
+         |                                                    ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:620:60: error: incomplete definition of type 'struct snd_soc_dai'
+     620 |         struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai->id];
+         |                                                                ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:639:48: error: incomplete definition of type 'struct snd_soc_dai'
+     639 |         struct mtk_base_afe *afe = dev_get_drvdata(dai->dev);
+         |                                                    ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8183/mt8183-dai-tdm.c:641:60: error: incomplete definition of type 'struct snd_soc_dai'
+     641 |         struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai->id];
+         |                                                                ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   15 errors generated.
+--
+>> sound/soc/mediatek/mt8183/mt8183-dai-adda.c:63:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      63 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-adda.c:63:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+      63 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-adda.c:117:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     117 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-adda.c:117:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     117 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-adda.c:129:29: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     129 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-adda.c:129:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     129 |         struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-adda.c:273:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     273 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8183/mt8183-dai-adda.c:273:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     273 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8183/mt8183-dai-adda.c:277:16: error: incomplete definition of type 'struct snd_soc_dai'
+     277 |                 __func__, dai->id, substream->stream, rate);
+         |                           ~~~^
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                              ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:285:19: note: expanded from macro 'dynamic_dev_dbg'
+     285 |                            dev, fmt, ##__VA_ARGS__)
+         |                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
+     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
+     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
+     231 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   9 errors generated.
+..
 
-> If not, maybe worth adding a Kconfig option that is force selected by FOR=
-TIFY_SOURCE with
-> clang or can be optionally enabled by a user?
 
-I'll defer to you on this one. We could add
-CONFIG_SHOW_INLINING_CHAIN_NOTES or something similar?
+vim +/snd_soc_component_get_drvdata +145 sound/soc/mediatek/mt6797/mt6797-afe-pcm.c
 
->
-> > +KBUILD_CFLAGS        +=3D $(call cc-option, -fdiagnostics-show-inlinin=
-g-chain)
-> > +endif
-> > +
-> >  # Clear used registers at func exit (to reduce data lifetime and ROP g=
-adgets).
-> >  ifdef CONFIG_ZERO_CALL_USED_REGS
-> >  KBUILD_CFLAGS        +=3D -fzero-call-used-regs=3Dused-gpr
-> >
-> > ---
-> > base-commit: 7df48e36313029e4c0907b2023905dd7213fd678
-> > change-id: 20260327-kbuild-show-inlining-557d31d2293a
-> >
-> > Best regards,
-> > --
-> > Justin Stitt <justinstitt@google.com>
-> >
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25  138  
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25  139  static int mt6797_memif_fs(struct snd_pcm_substream *substream,
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25  140  			   unsigned int rate)
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25  141  {
+de9e70137f0068 Kuninori Morimoto 2023-09-26  142  	struct snd_soc_pcm_runtime *rtd = snd_soc_substream_to_rtd(substream);
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25  143  	struct snd_soc_component *component =
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25  144  		snd_soc_rtdcom_lookup(rtd, AFE_PCM_NAME);
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25 @145  	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
+de9e70137f0068 Kuninori Morimoto 2023-09-26  146  	int id = snd_soc_rtd_to_cpu(rtd, 0)->id;
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25  147  
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25  148  	return mt6797_rate_transform(afe->dev, rate, id);
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25  149  }
+3901b9fc0f0de6 Kai Chieh Chuang  2018-04-25  150  
 
-Justin
+:::::: The code at line 145 was first introduced by commit
+:::::: 3901b9fc0f0de6801b4a2dad8f8731f619723437 ASoC: mt6797: add mt6797 platform driver
+
+:::::: TO: Kai Chieh Chuang <kaichieh.chuang@mediatek.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
