@@ -1,145 +1,129 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678A8332ED3
-	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 08:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774598522; cv=none; b=ett5rp408d60c986BsynzLsosrrbrZRupO4/5TQtTUxnkKDkmcjxOKaBeVWkQPrZ2JFMOwgkUWlTaBZdtT4HPaj3JFtxfIgAynlf8HorNyEejpNg2p8zHyQkEKdAWtPi/kS1m5yGbqlgVVIU8QJSRVb9o5mDaUbMFuiP2nIxhTI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774598522; c=relaxed/simple;
-	bh=u5VEHiJyZVoFEpzPp8IWhx3oSssO/QYrmWzaVG0pNx0=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE1F3CE48D
+	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 08:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774598544; cv=pass; b=aQ7pkhHAEDvkxr1H/SZAPCYppK7W6cT6FRFDL20IReI6GHW6MP7htSyRBrj+2Gbxne4IIzkWJzzOi1jDTEOVFCwX0+nBMqhzG/RTn+hiKK7xs/7Yk47a1Q3y0x9d7jvms6/6c2euanD8+wijInJAwvR8htBHQse03hoHSGEvNaw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774598544; c=relaxed/simple;
+	bh=5ep9g2m9wnZ/qw5uP60q9XJwKT04QFSPHpz8SR3TFGU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rRxFrpzN1tP456l35fhQnz947u87wRSi2mBwDbIN3JerR0fWcHVLNrUKlQtb76p2Jew/3tZBN4Sc+gADSr2oF29mvwHGqYoFbnbSQImBwBMNiI2M8JJ5nAcTHLJG2dm+0lSOHZdDPwW/I/zwnFBAf3p5W5AOXdo47QTeQvwYy6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	 To:Cc:Content-Type; b=o8r4HiLBGYn8yoCSVg16BLAmbJ49eM1xuzAYJYuIRDpy/Ma8kwo4fJGqyFJylICHEDx37M/AT1dZ7otIsLtmhAway4Wo9taZpoT32Rd/bMKHLqFIJZvQgYht/u2KKWYBMhz1BcRR3sPHHNWUy66p1C6DjMWnUq8d2xbrdzeqDIo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cf7/pcJT; arc=pass smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-467fd082ffeso1172510b6e.1
-        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 01:01:56 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cf7/pcJT"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12711867ca1so128402c88.3
+        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 01:02:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774598537; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NwV6ZlZ5V3mbjM0I9TV5ydr/32q9f/eEXiFUi9XPYfm12TVXhd/nDa2wucg1RVsuqy
+         G5uvgbbX7dFK4nGe55ei7PqVP0jPETH3FH6zSvBt6tPB2mTJADTgm0OOD+6KAbcs08b8
+         GuuzzIwXOhkm8d6lP4u18M3q2d19qgCvrfx9va6X2XkSrxtrXk5eYXPNg6NHodVMjBrH
+         rkXetBIUZjeIcgOJ054Zj3AvyxG7rXg6oJuxBP62+SyCRPDUBWIT6zT8+7eapCBXGlX7
+         0MxOC48nAGSs1dw87Xtue+VtqBUdeLJFuFIvvSA3HPS93ydhbFBo/AfZ/wpqLa0qRDVW
+         +INA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5ep9g2m9wnZ/qw5uP60q9XJwKT04QFSPHpz8SR3TFGU=;
+        fh=S1L4R6vETPZqSYgdNSwoz3jo/NY7QkZYYirnF2vHh7Q=;
+        b=YVEtY1MMo8qtTVeBGZvepS7ZqY7bf4zZHUKtu7fAHMP0N8OQMWzZnQocbQt/Pa0DQD
+         +RFvmwuSe/Eo5u5/G/4QBRpulLrH3tf0mw1A+XobOaHstkp4qYVUvG1QpTdtcUO8Z36T
+         UK8RJ3N9W2s0GjFoJ5if6QH2emtchT2MyFd0q1kRRRs1JKqvXbLNtbwpsZVgMpVf+3+W
+         bGTEjaW7KYLx0SfrcRXPuxxOcK53wFkf7kUpIGyvXzzxH3iB/GxGhRjuvTq4xEnDWUuT
+         bit1UN5gZpMemHOwd1ab7IMuXmyU+c/ETT4/1n6/DGph7lsSeR+XrZkZE5np1bD6ac5m
+         7UuA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774598537; x=1775203337; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5ep9g2m9wnZ/qw5uP60q9XJwKT04QFSPHpz8SR3TFGU=;
+        b=cf7/pcJTCRtxfUCm7mWEO/UTfux5dofKFj+84oo2oTmSWia0zNPMXFv9XZoX79IcK3
+         wRCzafTxewp00sLKT4y24peNM/GL9kAnfj0H3NtANDadUeitx8yuKsBeLpSyHEEvcUIt
+         ifytY0jeruEMhmUBuAIg9fZyAV8Gz1yzTJYzCUM4QMqXftBKCSHAL69KkKL5geFaKIyo
+         6MKvdO1tRU7sKOPRtP3QySIiV/BAbs1h85bkCZPj0qP5+L0fx+H6YagmldP6OYwO/oTw
+         bW/YbYZXV4TdcWXF2Prb8isnRbUf1kQPxtV7jQRDhV4uORqWBAY9/CfPkYwOmxB1jRlf
+         +9/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774598515; x=1775203315;
+        d=1e100.net; s=20251104; t=1774598537; x=1775203337;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=qJSO1Jy8gXJ3q0SyUcqZkfXUbxuRHoGqVtwy0Y1kZfY=;
-        b=ioWie3uL+fj8oElNINrpamN8Gjw7SIBUPyjYgmLBQJ91mtN6VJqSArSrePE5kIOVOv
-         L61vPh2igBPX9o1Ysne+q5jRkLKIfQK+F+PeWaTPEbZCrMHw0C5+u8VYL/nBYmf4VNx4
-         SXEWT5MkqlrlNqQV02imAYbgKGLdKGKpVHMDZzgQlljyoh20F+0JoaEQCLCQYakAnvoH
-         SEqG490cevunmrafR82tPxSIsGkNfdfcytGfxGPukNrN/Bg6/dT8DevQ7lNd6jL0cfOc
-         6e8qti7ZX+hWdgXiqHElMq2DtWd80IdHuglsOvSvSerG8CTJxjyGFGIARKEZZc6YWi+f
-         43CA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIVP3tXqbJcgZnJE1sXw/98lkR3oGEstL4dJg0eH1DX+j5Z8SJXk8q/w0Pp9dtRD5rQJRE@lists.linux.dev
-X-Gm-Message-State: AOJu0YxuOrNS5XnVIdrYybSaWoL1A9Y8cre93NqVXZYU9kW8FdigUVU0
-	CJnIiBqU7S/Sf4ozQoP+94TtctjYECP9Vjxec1KDhdazL6UljFXhAAq9O98LCJsUCZ4=
-X-Gm-Gg: ATEYQzyZOOU4Yi6moiclsF572rp+Y4HCV/oyHau/foFGoHpNIOSMf8aDoqjH+uklVJQ
-	/Ylvu0sdRWF2/nTKQ/dx1whbZu3no0fCAeNg3O0zi9XeucLtaksT0UAd8AfkjyHgtX1k99u2FCb
-	l7U6LbLC/+U3fV1SKIlrlxjNmc5wNQewNvxLKRcvXVN3Yn3c5c+lZaXKsMu5uB5ldRNp9CJb4zC
-	rM5aB9WTfNojKgO7DhRWsw8CRLbx3fVYYPSefjYuGHr/QwmCYMkvZMPx/mhSayYr2bNDcvQSFpV
-	v8PZVn4VyGqN+L/pk5EXNkBgBMlUGOUW8qFwgH7B0LXnvTimzyEGJXmmoLOiwgH9JQH4kk9A7EE
-	hJXLfiO2M1hzsY8AAtZ59/AfN8Kxq2fEjNIxkqbs9QevnRXiSija3hJpxp3QHrIMtVUFr5iPL9p
-	aukPtNple9RRzLrz7GQizsMiDWIwrRLsiHcRNbDb2gnmkJT730o4LkI2xsugBc
-X-Received: by 2002:a05:6808:1a15:b0:467:e5a2:a9e6 with SMTP id 5614622812f47-46a8a62f919mr682144b6e.55.1774598514839;
-        Fri, 27 Mar 2026 01:01:54 -0700 (PDT)
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com. [209.85.210.53])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41cc7b6312csm4312791fac.15.2026.03.27.01.01.54
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Mar 2026 01:01:54 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7d4c383f2fcso1711147a34.0
-        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 01:01:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWuCuIhw6MtUO7qDQp+JN/zhl9Ju0Aykzc9xSpVXRBtTDfUIj9GnXgtaYcNk8hABUoOx1tu@lists.linux.dev
-X-Received: by 2002:a05:6123:132:b0:56b:5e7e:d3fb with SMTP id
- 71dfb90a1353d-56d4a619a98mr460290e0c.12.1774598183104; Fri, 27 Mar 2026
- 00:56:23 -0700 (PDT)
+        bh=5ep9g2m9wnZ/qw5uP60q9XJwKT04QFSPHpz8SR3TFGU=;
+        b=DC5uCpN8fNObrX+uc2YZy+U21HR2U/F+Qvt7Or+ZP6gXOiSd1XVFrvuTuTYfVv8YBp
+         uyxLpF5S+dDfXLfnsueut6woj7kgl49/26JyrKPtbbUbmWOCu2vTTtc50oc3WeWrBTJN
+         /vBZua6tmkTbz2NeMGrR0jq3WJO8sgaQHQaG1RXp4pFDMNr6m9dbbFElOElRq2WlTkdb
+         Vjs6c2up5URepFOV5aHzR6iqOgCMeFMM3PkkmvJpb8YRWwdPXvas7wQDFHWce0dU0P3X
+         /kUcevssPzL8a+ZpevCsQ1jzueqROKUst0kZwrmqh+yakrGGUAbjHYOg1Uhu/v/X4r+g
+         QhQA==
+X-Forwarded-Encrypted: i=1; AJvYcCVjt5rrZpuhFusVJiuiVax3pcxsi90FyydOLwSKMG4Yy5JpNygndW3XTJWV9zrx48dtFZwh@lists.linux.dev
+X-Gm-Message-State: AOJu0YwxqBf/N9VUSj6MKRE0HLyhgGVZst8gCEzgSXTr81eK8LKLwmYy
+	u+X6EAQDGv6XuvapMjyLSl3z68p2gYI6Bp57u0u48kFdZTPH7Nq9vl1SER8rBD0d0O+wvtH/+lz
+	U8crPEgrG3xVUi3pu1Qm81ScE1QoQLh4=
+X-Gm-Gg: ATEYQzz4P+dt7USw0uTl3moXJ0IJgSAXUFmyoPJvpDvdlIt5oMibqsr3ItFCdp0qysw
+	1Z3Z4L10Y6mAZK2j6ZBoKyceGUnaLKEA911pI5HZvE9JgUJ5PgTpnfFkoXH98dpIUGS+i7GDVJL
+	A+TcxwLzNXd4nI9ycpj7a626Qg+AW2w0rYk88mE8GmUy8Z+8bvwzSYhPiJcOysApaSg8Jm9xF0B
+	MGK8a+9ktiwBFUP1DLk1uSC8FRkdz0tZy5c+cQEYDOa470oM+6lgquYxUzTfR4mWFIvIVBsV6Ik
+	Q6ek5ghTf2yj0vU04X/f2gJdB0aZSPHh5TSvm4RwbPq/Aq/ekiCdYXC6fig03+Ic5gJXKX6IHNt
+	OS4Ts1LyVnMIllhT4rmiRbaE=
+X-Received: by 2002:a05:7022:618a:b0:12a:6cde:fd0c with SMTP id
+ a92af1059eb24-12ab2906c98mr371178c88.7.1774598537022; Fri, 27 Mar 2026
+ 01:02:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260322192159.88138-1-ojeda@kernel.org> <20260323000327.111235-1-ojeda@kernel.org>
- <acEP7tl8pqFA3tK8@shell.armlinux.org.uk> <acUGAsjYvNvTEO92@google.com>
- <CANiq72mzPpkELXis1CiSbKUmBXNQYMiMmjj-7-sYiLh4T_JSOQ@mail.gmail.com>
- <9cf5a94c-0f37-446c-b63d-ddac5674d220@gmail.com> <acVOL5Psz6kHlhq2@shell.armlinux.org.uk>
- <641592e3-2354-4238-9eb8-a1f5c2a13126@app.fastmail.com>
-In-Reply-To: <641592e3-2354-4238-9eb8-a1f5c2a13126@app.fastmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 27 Mar 2026 08:56:11 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUUfVCBZFi2WoOYibJLVnyPY-joRDJDowgHwjN_DGeEzw@mail.gmail.com>
-X-Gm-Features: AQROBzCIA8XVkhuOJBqaPSt4vzM_veS-eZVPLLLcWDFZykO6P_Bu4uSiQhzQA0w
-Message-ID: <CAMuHMdUUfVCBZFi2WoOYibJLVnyPY-joRDJDowgHwjN_DGeEzw@mail.gmail.com>
+References: <20260322192159.88138-1-ojeda@kernel.org> <20260322194616.89847-1-ojeda@kernel.org>
+ <7ad8bdf9-5eff-4443-ad15-c05355d793d1@app.fastmail.com>
+In-Reply-To: <7ad8bdf9-5eff-4443-ad15-c05355d793d1@app.fastmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 27 Mar 2026 09:02:04 +0100
+X-Gm-Features: AQROBzCrGdIlIe2CkDWKMkYFmP8XiqVc047zlhYRt_gjOqAGZtEWFJuOGnDO47I
+Message-ID: <CANiq72nz6zB0jGahw4Eh-i-Rew1kQ0g_qcZ68Whw==MyjhYaJw@mail.gmail.com>
 Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
 To: Arnd Bergmann <arnd@arndb.de>
-Cc: Russell King <linux@armlinux.org.uk>, Christian Schrefl <chrisi.schrefl@gmail.com>, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Jamie Cunliffe <Jamie.Cunliffe@arm.com>, Will Deacon <will@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, acourbot@nvidia.com, 
-	Andrew Morton <akpm@linux-foundation.org>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+Cc: Miguel Ojeda <ojeda@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Robin Murphy <robin.murphy@arm.com>, Danilo Krummrich <dakr@kernel.org>, 
+	Abdiel Janulgue <abdiel.janulgue@gmail.com>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Christoph Hellwig <hch@lst.de>, iommu@lists.linux.dev, 
+	driver-core@lists.linux.dev, acourbot@nvidia.com, 
+	Andrew Morton <akpm@linux-foundation.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
 	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Danilo Krummrich <dakr@kernel.org>, David Gow <david@davidgow.net>, 
-	Gary Guo <gary@garyguo.net>, Johannes Berg <johannes@sipsolutions.net>, 
-	Justin Stitt <justinstitt@google.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-um@lists.infradead.org, llvm@lists.linux.dev, 
+	Boqun Feng <boqun.feng@gmail.com>, David Gow <david@davidgow.net>, Gary Guo <gary@garyguo.net>, 
+	Johannes Berg <johannes@sipsolutions.net>, Justin Stitt <justinstitt@google.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-um@lists.infradead.org, Russell King <linux@armlinux.org.uk>, llvm@lists.linux.dev, 
 	Benno Lossin <lossin@kernel.org>, Mark Rutland <mark.rutland@arm.com>, mmaurer@google.com, 
 	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
 	Nicolas Schier <nsc@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
 	Richard Weinberger <richard@nod.at>, rust-for-linux@vger.kernel.org, 
-	Trevor Gross <tmgross@umich.edu>, "Uladzislau Rezki (Sony)" <urezki@gmail.com>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+	Trevor Gross <tmgross@umich.edu>, "Uladzislau Rezki (Sony)" <urezki@gmail.com>, Will Deacon <will@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
-
-On Thu, 26 Mar 2026 at 22:34, Arnd Bergmann <arnd@arndb.de> wrote:
-> On Thu, Mar 26, 2026, at 16:18, Russell King (Oracle) wrote:
-> > On Thu, Mar 26, 2026 at 03:31:26PM +0100, Christian Schrefl wrote:
-> >> On 3/26/26 2:47 PM, Miguel Ojeda wrote:
-> >> > On Thu, Mar 26, 2026 at 11:10=E2=80=AFAM Alice Ryhl <aliceryhl@googl=
-e.com> wrote:
-> >
-> > I'm not sure if this is still true, but I believe it used to be the cas=
-e
-> > that the -linux-gnueabi target has one behaviour for enums (fixed size)
-> > whereas -none-eabi, the size of the type depends on the range of values
-> > included in the enum.
+On Thu, Mar 26, 2026 at 10:13=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
 >
-> I checked Debian's arm-none-eabi-gcc, which indeed still has this behavio=
-r:
->
-> $ echo 'enum { A, B } x =3D sizeof(x);' | arm-none-eabi-gcc -xc - -O2 -o-=
- -S | grep -A1 x:
-> x:
->         .byte   1
->
-> and I see the same thing for the hexagon target in clang, but none
-> of the other targets that Linux runs on. In particular, clang always
-> behaves like linux-gnueabi even when targeting plain eabi.
->
-> $ echo 'enum { A, B } x =3D sizeof(x);' | clang --target=3Darm-none-eabi =
--xc - -O2 -o- -S | grep -A1 x:
-> x:
->         .long   4
->
-> I noticed a similar issue with m68k-linux, which has a bitfield
-> alignment different from anything else on gcc, but uses the normal
-> behavior on clang.
+> I have an older patch to drop CONFIG_NO_DMA entirely, which
+> may be better here, since we know that nobody cares about the
+> empty stubs.
 
-Ugh, I wasn't aware of that. Adrian, did you know?
+In case it helps / for future reference: the patch I sent to Marek is
+already in mainline: commit 2cdaff22ed26 ("dma-mapping: add missing
+`inline` for `dma_free_attrs`").
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Cheers,
+Miguel
