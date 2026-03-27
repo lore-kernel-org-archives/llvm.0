@@ -1,156 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33813396B69;
-	Fri, 27 Mar 2026 12:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B34481B1
+	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 13:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774615901; cv=none; b=QZp1k/x2+wKAHCaUfGqebRhUhGtQ/uVxWkC2P9kSMjq3SgGeWVzPaCJmIMvbAO1aEhsaYDa4DzsDi64XBftwqbm4NwCdqEP4hFC9mpjXPQCW5niTrzjMYmqCscs/LHaU0grR/Y1JOJtTzUeJm4ycVW0JLeNWY6cOTVuHfYlK6bw=
+	t=1774618948; cv=none; b=M4c2J+8z0Qat4m+SSwvI3kqKezjrVQoYghwgSrhqe9tSzfIII/nOEBuoj3uWR8oIo/IuQsglBjTSs67bkCFQWHq0LjUjSZlkTrpLS3GgyWF/zW282/41T0tyTdJt2iDHEZK9q0omTXS6+XaPNwD9+5vy5Y/dWXracdKP7VmwWq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774615901; c=relaxed/simple;
-	bh=igR2uwWnIP1vFte7MCw7gFeiS0hftkmp0XPSK5xd0BI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tjLrOFpsvRjb0WUvDSdSzJzLKJl//RGKk3tTPptOmzHIXZ2w6GqLpb4v28+/6ohHs4Rs8Lu7xIqfpDtBLX6/Apg4PKD8tFLbUHWGWNRMsAtBlqGLquKXXOsN9XfotGGqvrsMOKuGUwItfe42BqoAMWRac27uBY3RXj/JKmbVSYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lW+svofX; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774618948; c=relaxed/simple;
+	bh=frSGxxmPjWh6IoWttfH/PUHq0x6wot1GxUuiDrqWzYQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=O2UUIqsd4IDvkYkfET1OB3X41igg1uk1xk+qN/NNczPxG9/8Ycrpw8sn+qFpEWioS2TyD7tM/+0n601yMcJqDj6THlSeDhaGpL09PR2bhlMzZGt2/CyeM8u0VhkONHnbPvvGicSBUoFEMom0a7By0+ofUvjFWMFZCKRkWspQc/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=WXmgYcfo; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IHVVfnyL; arc=none smtp.client-ip=202.12.124.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lW+svofX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774615899; x=1806151899;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=igR2uwWnIP1vFte7MCw7gFeiS0hftkmp0XPSK5xd0BI=;
-  b=lW+svofXR1dcb7xz1skBx55OYpbI+0167QdgBl+c2uI/NLfnknDEM2sV
-   RNiQfh/vrZ5V2GjPV2QRYqMLOJVk9KkQCNCEHTP/wkzoFSNbpeip94Eox
-   Q2eoHCx8+aRdc+ULHYFnVfJRzWAx2nO7U4G0nqLjiaxHEPGjrF3mwzSkZ
-   Q9+kjMMufibRNTiJFgrqhW7D0ijTxO7/H+fhjoaIOIbqpPyLc6OTdXdk4
-   EXePy9fIEj7y+w7Aeg13+UZGiWIw79t7kPUIjfTo7tkQJt1eq46Anlvwh
-   dMr+jPwM6awZy8zXbq4FhKid23XA0g7rYwgUOX7tS/qHoQFzD+ocvdExz
-   A==;
-X-CSE-ConnectionGUID: j8ze4pDoR2adBQZUEI0Nsg==
-X-CSE-MsgGUID: k1+CI9PlTOGQvPvAY0xw/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="75568912"
-X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
-   d="scan'208";a="75568912"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 05:51:39 -0700
-X-CSE-ConnectionGUID: nq3KOzv7TLGgC553Odh24w==
-X-CSE-MsgGUID: Uc94TcatTb2g+eOOvM9m6A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
-   d="scan'208";a="221981797"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 27 Mar 2026 05:51:36 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w66f0-00000000AIn-07pQ;
-	Fri, 27 Mar 2026 12:51:34 +0000
-Date: Fri, 27 Mar 2026 20:50:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Law <objecting@objecting.org>, SeongJae Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	damon@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Josh Law <objecting@objecting.org>
-Subject: Re: [PATCH] mm/damon: introduce DAMON-based NUMA memory tiering
- module
-Message-ID: <202603272022.tcaGCvSO-lkp@intel.com>
-References: <20260326072737.341964-1-objecting@objecting.org>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="WXmgYcfo";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IHVVfnyL"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.stl.internal (Postfix) with ESMTP id EE82B130002C;
+	Fri, 27 Mar 2026 09:42:23 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Fri, 27 Mar 2026 09:42:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1774618943;
+	 x=1774626143; bh=r8kqb/PmSoN6Ni50HiBp9vabWKni4KIgQFght4+Tts0=; b=
+	WXmgYcfoU7DXqp4nVD4iHGiZnjmZ/oBiySyxKd7rz8vp9kcZDKnYLEMGgCJQIjL7
+	V2ImP+GLWMVeAo9BapSvgkg6sZA8FAlX89F/EJgDZjHchNHND2dlQNt4pc3epoh3
+	OJ9ax8G8Ti4nTeaIYae/vg9E4znqy0UmoGNsm5mT/JIT7wWxREblo3ydqTVYtkHP
+	UlmWf1KNBzT+e6MgE7LIPG67LgydS+QGPzIPPt6kxSxTjBes6xazxKTqstswJBaF
+	FpIaPM3zI7B8Hpd+MXNo6jjXH4XrRQbGwe29451a2OxlVNv+QJ8HI+vwtzjFwRfv
+	pS+0qtzZIeVwB5SBu2Lzrw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774618943; x=
+	1774626143; bh=r8kqb/PmSoN6Ni50HiBp9vabWKni4KIgQFght4+Tts0=; b=I
+	HVVfnyLZcN35pRyg32jICZM0qVLXsONawFPdb+heGxPgSM+izITH8vBPCEA/bJ9E
+	UN6H6aMcYUgpH7jg7wSGLvSMIlKgI7lRJLiAnw1ZuUsNQGzkiUxHOU3GYu5q66XA
+	Jtq76kjAyjkWoLV5eiPhBRC7IduTmfV52rSHitiA33ESsKYRWwKnZbkkIzoB5A80
+	UuVbB2VtJaN78K11CULHWhyiLFlTrPunOhraGsziiJpg80dksixydziqGGZRWk+1
+	rmY6b5kCR5m6oncjYZkweCTkFj8Kmi58gdgjDLPH5eRzHI0CFMQYY1btUypTC9F3
+	EVQl22V83017juQKIQ6Eg==
+X-ME-Sender: <xms:PYnGaTFjNv-2kjwzDO96mcm0J53r3iq9GAQxohg1QK5UaJwCiRIPvA>
+    <xme:PYnGabIVAVLiZp2iZ7XOB_zppj6xtVcQUdS2evGHJbBxfLdaZ5WI6ibLO15radjvz
+    L2ZUekfulSqpSJwxkEQ-5xkmAa_hhYZUOHObcnX-PTAuMVzrh-xqU8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeffedtgeefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepgedupdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehjrghmihgvrdgtuhhnlhhifhhfvgesrghrmhdrtghomhdprhgtph
+    htthhopegtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtohep
+    mhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugiesrg
+    hrmhhlihhnuhigrdhorhhgrdhukhdprhgtphhtthhopegrnhhtohhnrdhivhgrnhhovhes
+    tggrmhgsrhhiughgvghgrhgvhihsrdgtohhmpdhrtghpthhtohepuggrvhhiugesuggrvh
+    hiughgohifrdhnvghtpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvghtpdhr
+    tghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtoheptg
+    hhrhhishhirdhstghhrhgvfhhlsehgmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:PonGac941VeA2oTCcTkWfzRB1nZw0mSSQHJ5Pqk3p0ZS0l9NehXMHQ>
+    <xmx:PonGaQa4Rabao1kTTsgiRbWyc3rxCyCd3mcww27MNaGYm9rsSBoKMA>
+    <xmx:PonGaVpcyAK2snd2rS9lHbXXYlQwTHW_7ACWd1UNjoDP3Fnvn14ONw>
+    <xmx:PonGacv8QU40CC2nyaF90d74nBjZSBShHRTwrc0LnYslN6WX6eF_Ng>
+    <xmx:P4nGabYMQKNNUJ-KtgTpLrS-vE-2hZR7lr1g9qxy0N1Vgj0xHOpyYnfa>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D382B700065; Fri, 27 Mar 2026 09:42:21 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260326072737.341964-1-objecting@objecting.org>
+X-ThreadId: AUJnWW6OA6Vc
+Date: Fri, 27 Mar 2026 14:41:41 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc: "Russell King" <linux@armlinux.org.uk>,
+ "Christian Schrefl" <chrisi.schrefl@gmail.com>,
+ "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Ard Biesheuvel" <ardb@kernel.org>,
+ "Jamie Cunliffe" <Jamie.Cunliffe@arm.com>,
+ "Will Deacon" <will@kernel.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Miguel Ojeda" <ojeda@kernel.org>,
+ "Andreas Hindborg" <a.hindborg@kernel.org>, acourbot@nvidia.com,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ "Boqun Feng" <boqun.feng@gmail.com>,
+ "Danilo Krummrich" <dakr@kernel.org>, "David Gow" <david@davidgow.net>,
+ "Gary Guo" <gary@garyguo.net>,
+ "Johannes Berg" <johannes@sipsolutions.net>,
+ "Justin Stitt" <justinstitt@google.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-um@lists.infradead.org, llvm@lists.linux.dev,
+ "Benno Lossin" <lossin@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, mmaurer@google.com,
+ "Bill Wendling" <morbo@google.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Nicolas Schier" <nicolas.schier@linux.dev>,
+ "Nicolas Schier" <nsc@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Richard Weinberger" <richard@nod.at>, rust-for-linux@vger.kernel.org,
+ "Trevor Gross" <tmgross@umich.edu>,
+ "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+ "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>
+Message-Id: <1990bf45-050a-445d-bcea-16d225207531@app.fastmail.com>
+In-Reply-To: <93439e91-cf81-477b-b880-a813bb01ad7c@app.fastmail.com>
+References: <20260322192159.88138-1-ojeda@kernel.org>
+ <20260323000327.111235-1-ojeda@kernel.org>
+ <acEP7tl8pqFA3tK8@shell.armlinux.org.uk> <acUGAsjYvNvTEO92@google.com>
+ <CANiq72mzPpkELXis1CiSbKUmBXNQYMiMmjj-7-sYiLh4T_JSOQ@mail.gmail.com>
+ <9cf5a94c-0f37-446c-b63d-ddac5674d220@gmail.com>
+ <acVOL5Psz6kHlhq2@shell.armlinux.org.uk>
+ <641592e3-2354-4238-9eb8-a1f5c2a13126@app.fastmail.com>
+ <CAMuHMdUUfVCBZFi2WoOYibJLVnyPY-joRDJDowgHwjN_DGeEzw@mail.gmail.com>
+ <93439e91-cf81-477b-b880-a813bb01ad7c@app.fastmail.com>
+Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Josh,
+On Fri, Mar 27, 2026, at 10:02, Arnd Bergmann wrote:
+> On Fri, Mar 27, 2026, at 08:56, Geert Uytterhoeven wrote:
+> but that only allowed bitfields to be marked as __attribute__((packed))
+> in order to get tightly packed fields and return '4' on all architectures,
+> while m68k-linux-gcc apparently has all bitfields implicitly packed unless they
+> are explicitly marked __attribute__((aligned(x))). This behavior is
+> independent of the -malign-int flag.
 
-kernel test robot noticed the following build errors:
+I had another look and found that this has been in gcc since ELF
+support was originally added for m68k:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+gcc/config/m68k/linux.h:#undef PCC_BITFIELD_TYPE_MATTERS
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Josh-Law/mm-damon-introduce-DAMON-based-NUMA-memory-tiering-module/20260327-033827
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260326072737.341964-1-objecting%40objecting.org
-patch subject: [PATCH] mm/damon: introduce DAMON-based NUMA memory tiering module
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260327/202603272022.tcaGCvSO-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260327/202603272022.tcaGCvSO-lkp@intel.com/reproduce)
+All other current Linux/ELF targets get the default from gcc/config/elfos.h
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603272022.tcaGCvSO-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/damon/tier.c:283:30: error: too few arguments to function call, expected 5, have 4
-                                           param_ctx->min_region_sz);
-                                                                   ^
-   include/linux/damon.h:995:5: note: 'damon_set_region_biggest_system_ram_default' declared here
-   int damon_set_region_biggest_system_ram_default(struct damon_target *t,
-       ^
-   1 error generated.
-
-
-vim +283 mm/damon/tier.c
-
-   243	
-   244	static int damon_tier_apply_parameters(void)
-   245	{
-   246		struct damon_ctx *param_ctx;
-   247		struct damon_target *param_target;
-   248		struct damos *promote_scheme, *demote_scheme;
-   249		int err;
-   250	
-   251		err = damon_modules_new_paddr_ctx_target(&param_ctx, &param_target);
-   252		if (err)
-   253			return err;
-   254	
-   255		err = damon_set_attrs(param_ctx, &damon_tier_mon_attrs);
-   256		if (err)
-   257			goto out;
-   258	
-   259		err = -ENOMEM;
-   260		promote_scheme = damon_tier_new_promote_scheme();
-   261		if (!promote_scheme)
-   262			goto out;
-   263	
-   264		demote_scheme = damon_tier_new_demote_scheme();
-   265		if (!demote_scheme) {
-   266			damon_destroy_scheme(promote_scheme);
-   267			goto out;
-   268		}
-   269	
-   270		damon_set_schemes(param_ctx, &promote_scheme, 1);
-   271		damon_add_scheme(param_ctx, demote_scheme);
-   272	
-   273		err = damon_tier_add_quota_goals(promote_scheme, demote_scheme);
-   274		if (err)
-   275			goto out;
-   276		err = damon_tier_add_filters(promote_scheme, demote_scheme);
-   277		if (err)
-   278			goto out;
-   279	
-   280		err = damon_set_region_biggest_system_ram_default(param_target,
-   281						&monitor_region_start,
-   282						&monitor_region_end,
- > 283						param_ctx->min_region_sz);
-   284		if (err)
-   285			goto out;
-   286		err = damon_commit_ctx(ctx, param_ctx);
-   287	out:
-   288		damon_destroy_ctx(param_ctx);
-   289		return err;
-   290	}
-   291	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+      Arnd
