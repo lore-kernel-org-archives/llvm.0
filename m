@@ -1,112 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f201.google.com (mail-oi1-f201.google.com [209.85.167.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856D729DB88;
-	Fri, 27 Mar 2026 21:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4FF23939A4
+	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 21:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774647545; cv=none; b=q49AvDUeDI1zVPkVmAqGVFYc7Q/qFuenk5PSg2UAMbNXkZGGkbcajLsurCM/XcU2BlZv2bK5+r0k9OCKvIupRE2eDMZFi4vDo+VaF3P2Ta/olWe0Yqihvd2M40axeTgaLG1BNr+YN5ssKi51et2L/qx3C0y/PicKYkrEs+Fg0/U=
+	t=1774648765; cv=none; b=qi6IZIMnhyMSMu8B7RJrXi4WTFUZGUEnZMQIXygApkx9bfFH21ID5h/Y6nXFeYUUt9nVwxBVnGklzs53JxjiXBiR3/XeR2JMgWxtx2EUzOHnwsSxCPIkSQqmP2AFVHVA5LRc0+TEkNE5Za6iWtBfvnQSMWwgE3vu2mxTyDYoHXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774647545; c=relaxed/simple;
-	bh=m0xyN/K4zSKcbMCe0Pigk/i5SRWQIcAcko2GQbCvTjg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qSOetwC/dY+VH02tCTgp3QyJZbpVN95ByBxy0w1nnxOd2MPQj7ClYBc3Lt0iCSnRSnQ7OI4YUc3tFiSX9JPyR6sCqLf6dUTqx5aILyFNX9AQ8l6HjCFapIkKpBeZa6WDcFAoA6r3Ut3jkZ2xQ49j5Owdo64A1CzhaxsWgGPai58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=toHYW7vR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774648765; c=relaxed/simple;
+	bh=pUs9THT6DHn2Yh3ii6ZcA4QCK2Rk+meZhFMzqf6DDdM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=VDvqi0vu6Bth2sC9E6zD7QGyu9QV965FIAL+S0D2IlS8LitTq1bbPPZPG07WzKLgE82c9RIDoQKAlRwRQdUWNPX/nlOAcoWnMhpDsUUsAyhbfSKSsLb1g8CfOjdbCYD1zfaB7OmYaPzrYe4w+0VoM/BKR/joRpUyX60eziQXQVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d3jsRnMe; arc=none smtp.client-ip=209.85.167.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="toHYW7vR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0354EC19423;
-	Fri, 27 Mar 2026 21:39:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774647545;
-	bh=m0xyN/K4zSKcbMCe0Pigk/i5SRWQIcAcko2GQbCvTjg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=toHYW7vRoEUWdcJjPz6TA1qTwrnJuw2lVfyg8XYEcr3C0SVa0+i7LFe3PEWxhRPTc
-	 30a33Msav4wL0TDWZZoYgjok56+O/WV61RkBGsTLgiTCfPt5RVH43WWN+3438Gp1KY
-	 aEPIWd0YQrdraTa95iIUQbZk2H9jnaQoY+VaXXXXI0A0FZebSDUdrwI4qSdjV6cuoA
-	 Himl6hXUQlpqErfe/E7QeQgqzlUuc7WLH9YlS47oCxwKJ9XEPXuR5hHx9MTHg0gLhM
-	 4OFsZb7t95rOXQXoPDu0FDH8rqrOhDXORg0kaYOxKomajkS5UUDH1GjpMk2Z/i+UPF
-	 maLu4iHUMzzcw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 27 Mar 2026 22:38:55 +0100
-Subject: [PATCH] scripts/dtc: Remove unused dts_version in dtc-lexer.l
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d3jsRnMe"
+Received: by mail-oi1-f201.google.com with SMTP id 5614622812f47-463a075e177so3877098b6e.2
+        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 14:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774648763; x=1775253563; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bXUVdAQ2VqEkZsnQST785FFjZDxfkqJqi9/U/lqUA6Q=;
+        b=d3jsRnMejcJB6teQ0UU+RZ2XjOd+Srj2dq1vK7iT3i1KQ3MXewDzDnupvkSbH4yz7X
+         86tLlP34qQwpmBcycqAmYQv46YchSwE3KrBsq+3Wi0/qio3OBEHpqTXt7tWeY7375y6l
+         BAgdSt9mievFYr1qiKvuvxhHuoBJ5dO0r2itLOMl/cWFAbGOR7jbHtoZAQumvjOZYdIX
+         2HACtSlEcg6bfuSWhvCFxN29IIpyyBln1be2Maokn1fNBmd2Z0m+MjDENLDfdbOx8zz1
+         BO7t2iZpMdvGuovZ4ItRuvZWPirgGpdelqw+e7LSqTmkBDak/NhpCbKvyiFEua3R6zqF
+         4hWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774648763; x=1775253563;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bXUVdAQ2VqEkZsnQST785FFjZDxfkqJqi9/U/lqUA6Q=;
+        b=WHLIn4T8q4pKPA7lOPBnejRLYftxUlW+0T03Rp5KzkIbi4rPjP/bwVAk31pWKxVPrZ
+         2yDpRpgZLWpmVGyJ7O5xvRXRbUo5pFEhHx6hEnwidvDHJ8T0liBAbgYGuBIh+7kUntWv
+         HS4eeOhYs4Fj95LAfDQ5amsIn+oQ75Betf04daBxGy58lQUJajFNhOSNXVPoNAWnHmhG
+         56BNoM07MpsOSv7Hw1ztv2G7VskBjZI74Ju/ZVYPuK8j0zLhv0476zt/9O2H54IQLnp8
+         HnZ04O9qKitn1OkQdxFPb66Fo+eeoIBQq3HGXz4ZCmRIuqssQTynoheOqYOBpOq+mrU6
+         kLMw==
+X-Forwarded-Encrypted: i=1; AJvYcCUo7P8s1aa+G+TPwbGh3Y/98clJxntsfMV3lKkieTEY/mfsCqvqTusL5+N8dLXOptQoiWTG@lists.linux.dev
+X-Gm-Message-State: AOJu0YzFM2ceUkgdCF0MDrSwsYUua6djVxkvA316Vyv2q5JbpAVanwxB
+	Q1AlCZkkmsxip131xKxr2RmhkhrGa0bQ3fDDoiswZnAFxgqUhtX/zXZ2MvYLjanJtQ42f8KGYiz
+	ftQbqIMPMFvLgIUi1AWm5WCLalQ==
+X-Received: from ilqp16.prod.google.com ([2002:a92:da50:0:b0:4f8:400c:308c])
+ (user=justinstitt job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6820:2914:b0:67c:1fc7:daa6 with SMTP id 006d021491bc7-67e185f1e03mr2232968eaf.10.1774648762484;
+ Fri, 27 Mar 2026 14:59:22 -0700 (PDT)
+Date: Fri, 27 Mar 2026 14:59:20 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIALf9xmkC/4WNQQ6CMBBFr0Jm7RimBFBX3sOwQDq0E7ElrVYN4
+ e5WLuDyveS/v0DkIBzhVCwQOEkU7zLQroDB9s4wis4MqlRNWakWb9enTBqj9S8UN4kTZ7CuW12
+ RVupY9ZCnc+BR3lv20mW2Eh8+fLaXRD/7J5gICUs6MI3UsK75bLw3E+8Hf4duXdcvKFk4JbkAA AA=
+X-Change-Id: 20260327-kbuild-show-inlining-557d31d2293a
+X-Developer-Key: i=justinstitt@google.com; a=openpgp; fpr=6E3AADB90F44DA9EB9CDCB6799D922A9379F2964
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1492; i=justinstitt@google.com;
+ h=from:subject:message-id; bh=pUs9THT6DHn2Yh3ii6ZcA4QCK2Rk+meZhFMzqf6DDdM=;
+ b=owEBbQKS/ZANAwAKAZnZIqk3nylkAcsmYgBpxv25vibCsY1AcfNIAiZK8Vc/x2WLaiNGyz8wL
+ lmTfG9BTk+JAjMEAAEKAB0WIQRuOq25D0TanrnNy2eZ2SKpN58pZAUCacb9uQAKCRCZ2SKpN58p
+ ZLU1EACPMFCyHnqyHs0hybIGSIyVIGgZ/EC39mnSfbpMvEbeiRMmQCDGF3Om16lIpbta6E4UfhV
+ lRPmgkNnhH0H+eaVbn7EOZJZjYS0Gw87mvWkf/JpIctlcLdIunaLhAo4swGR0JqNvOYmcjZeWTo
+ Me3aZ4OIKy4o/VsXhpVxP+zZJJs6zw5oRyN9BMtJgF4k0RMwvIYyOiqlmtvM+fNv61qtMao5edX
+ opyhtyLTmH3oR8f5GqmzkPy/9b2tp9sUMTz6u7V0X0Mq6rHfPGuq1HBDk/3EF+KBScS4W4nrF33
+ KznPxAiCKmI6sE94Ms1Uvgnz8PEHuPVdKeR3QxvoToA2iGZGsmzjaKzeMJXzkKCgDhXR2MdB7YZ
+ bTlwLCR0VMZ0k/hi596pixgUOLd9QXV7LHk43gXFZw+fogrn3OFRiv6gZvr+EeIYIlK41vzaztO
+ mm8SlKR0rgkKVfYUMahdozruDXiCvHm2DhtjEJ0kIOSk7PWyXJQsxzbGUYXjUr7n/+6xLrDjvif
+ szb84/+QmluBK+Yu6rpfOeSHiJPnTEVHK5WN/4kAZTcfgE5gJEobyBItW+RyvL77WA4GthXdQtW
+ 92oxCWnREqxnbAKdQBTCV3YC05/mhXafL2uRjpY3GRNvu6pDyFSieuQoz1ur/D/2rTH2Lmoa2PL VOKxRXMf7K5KwRg==
+X-Mailer: b4 0.14.3
+Message-ID: <20260327-kbuild-show-inlining-v1-1-730ac2cae571@google.com>
+Subject: [PATCH] kbuild: add -fdiagnostics-show-inlining-chain for FORTIFY_SOURCE
+From: Justin Stitt <justinstitt@google.com>
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>
+Cc: Kees Cook <kees@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260327-dtc-drop-dts_version-v1-1-41066690aefd@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMQQqDMBAAvyJ7NmBiTcWvSBG7WdvtQWU3FUH8u
- 1FvM4eZDZSESaHJNhBaWHkak9g8A/z244cMh+TgCueL0j1NiGiCTHMC7RaSMzC2Kqm26P3DIqR
- 0Fhp4vbbt63b9v3+E8XzBvh+CB5t5eAAAAA==
-X-Change-ID: 20260327-dtc-drop-dts_version-153e81c6641c
-To: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1703; i=nathan@kernel.org;
- h=from:subject:message-id; bh=m0xyN/K4zSKcbMCe0Pigk/i5SRWQIcAcko2GQbCvTjg=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJnHfnxz6zbt2fzjTpVxvsc/dZ5Mly/2E942ZbxUPK9v8
- un4kuQjHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiQPX/7N7rva6YLSAaW/rW
- NWJD+P80jTOCtT/V2gN9K8IZxGauYmS4mBW/ovheWF+kewjD33tPNz06+lve6qN3j/F9Lp0l4n1
- cAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-A recent strengthening of -Wunused-but-set-variable (enabled with -Wall)
-in clang under a new subwarning, -Wunused-but-set-global, points out an
-unused static global variable in dtc-lexer.lex.c (compiled from
-dtc-lexer.l):
+Clang recently added -fdiagnostics-show-inlining-chain [1] to improve
+the visibility of inlining chains in diagnostics. This is particularly
+useful for CONFIG_FORTIFY_SOURCE where detections can happen deep in
+inlined functions.
 
-  scripts/dtc/dtc-lexer.lex.c:641:12: warning: variable 'dts_version' set but not used [-Wunused-but-set-global]
-    641 | static int dts_version = 1;
-        |            ^
+Add this flag to KBUILD_CFLAGS when CONFIG_FORTIFY_SOURCE is enabled
+and the compiler supports it.
 
-This variable has been unused since commit 658f29a51e98 ("of/flattree:
-Update dtc to current mainline."). Remove it to clear up the warning.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://github.com/llvm/llvm-project/pull/174892 [1]
+Link: https://github.com/ClangBuiltLinux/linux/issues/1571
+Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
-This is commit 53373d1 ("dtc: Remove unused dts_version in dtc-lexer.l")
-in upstream dtc. I sent it separately to make it easier to backport to
-stable, along with updating the warning and hash to match the kernel's
-version.
----
- scripts/dtc/dtc-lexer.l | 3 ---
- 1 file changed, 3 deletions(-)
+ Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/scripts/dtc/dtc-lexer.l b/scripts/dtc/dtc-lexer.l
-index 15d585c80798..1b129b118b0f 100644
---- a/scripts/dtc/dtc-lexer.l
-+++ b/scripts/dtc/dtc-lexer.l
-@@ -39,8 +39,6 @@ extern bool treesource_error;
- #define DPRINT(fmt, ...)	do { } while (0)
- #endif
+diff --git a/Makefile b/Makefile
+index e1279c4d5b24..978726aeb1ef 100644
+--- a/Makefile
++++ b/Makefile
+@@ -973,6 +973,12 @@ KBUILD_CFLAGS	+= $(call cc-option, -fno-stack-clash-protection)
+ # Get details on warnings generated due to GCC value tracking.
+ KBUILD_CFLAGS	+= $(call cc-option, -fdiagnostics-show-context=2)
  
--static int dts_version = 1;
--
- #define BEGIN_DEFAULT()		DPRINT("<V1>\n"); \
- 				BEGIN(V1); \
- 
-@@ -101,7 +99,6 @@ static void PRINTF(1, 2) lexical_error(const char *fmt, ...);
- 
- <*>"/dts-v1/"	{
- 			DPRINT("Keyword: /dts-v1/\n");
--			dts_version = 1;
- 			BEGIN_DEFAULT();
- 			return DT_V1;
- 		}
++# Show inlining chain notes for FORTIFY_SOURCE-related diagnostics.
++# GCC does this by default while Clang 23+ supports a flag.
++ifdef CONFIG_FORTIFY_SOURCE
++KBUILD_CFLAGS	+= $(call cc-option, -fdiagnostics-show-inlining-chain)
++endif
++
+ # Clear used registers at func exit (to reduce data lifetime and ROP gadgets).
+ ifdef CONFIG_ZERO_CALL_USED_REGS
+ KBUILD_CFLAGS	+= -fzero-call-used-regs=used-gpr
 
 ---
-base-commit: c369299895a591d96745d6492d4888259b004a9e
-change-id: 20260327-dtc-drop-dts_version-153e81c6641c
+base-commit: 7df48e36313029e4c0907b2023905dd7213fd678
+change-id: 20260327-kbuild-show-inlining-557d31d2293a
 
 Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+-- 
+Justin Stitt <justinstitt@google.com>
 
