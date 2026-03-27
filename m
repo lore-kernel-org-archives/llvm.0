@@ -1,60 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74862DF59;
-	Fri, 27 Mar 2026 06:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FCE30B51E;
+	Fri, 27 Mar 2026 06:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774591559; cv=none; b=J0OgddadtrGco/MxE7ZGQZ3P+otF5TMpYmBCmmN4nA2K0SensOEezlLnSxYEYVi6fXHIXJ8MNmeTGq+08ZnEWFF/f/64H9aVe7UrO7tKTtd3Ltu/+LuIjdKygynBJTdnki85/wfbudGrfC/Xbqg2d0pV8ATkAhISMm+P4s9KCXo=
+	t=1774591560; cv=none; b=I0VlKXANQ7EfZSSz7JYBsYu0QQpHjyxDkSMGmDcA0PjC6A2FgwTsbqK7C0yLinHYkqf/tfDPOWOHWAT757BZJvzwJ87jRIXUSwIIdUshdewyAZgeD+44yCng87nHtpr4OdNlszm/IrVNJlvniCXo9gIjCQ95PgweCbvLNTLrLVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774591559; c=relaxed/simple;
-	bh=rshW/KraPFt6qu9+jYpS0v2+ZFEotb20B4b2+pmKCp4=;
+	s=arc-20240116; t=1774591560; c=relaxed/simple;
+	bh=4YKoegXNl/z95DhhSsl6seq1dNu1HoG7+gaZVeQtUto=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pSDn/AhrCxp3Yx8z/TxBeToNcAILnVN8IDVvGL8pvq9wH8V3NzYGBdgxYvgD9x5mFTdkJ8Eh5W2/WnL4YbIAET5EBXsFcR8RMSF987kI7ewlT6PXR+645RRLeJReC3KlFN9hruWUs0Egm6XfaIuzF3RkieCZKmWLDwoz97gyO/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GEh5DPQH; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=QT9w2ATfBmdAw2Ymt82tMOA6ekf8RdEsfJFrbAoT7c84BBopgLnAG6Qj8yWxXNWIdeEd5Rlnj7QOKHLzwTnNHSJiUAJ9XC5oY3qTvBJu6qFaZkC8uPECi+T6Lnf7mGwMVrlD/9WEkcvm/EjetTmazJNihKguIb79uI11CzTE/AQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z9Qx5miB; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GEh5DPQH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z9Qx5miB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1774591559; x=1806127559;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rshW/KraPFt6qu9+jYpS0v2+ZFEotb20B4b2+pmKCp4=;
-  b=GEh5DPQHFsBtMNsjnpVnIujhxOYO3ZCeS2FXZ8kcNOl3MmKbEFWaiQ+e
-   6gHgYAW6ue1dZJFr/oLiXYAhm3XyBe1oGGMJayasirdqLdzeFpCyHOuON
-   0OoTFycHOdzupbMKOKOA5ZqfSC6oz/J+eKJmR0X8Ch5ow/Lov/d13qspl
-   EYWFYyZ8WWmE4416z2Fhu4EMTrcZv/Y7MXMWu+6zsS98i52iUoO2zN+Q3
-   ioD5VRiWZNJAg2BEIFcDVXuJRNVySgf8Mh7Rbt0j2tiwhE4dHfeyMCPRD
-   mPnnflUcUIeezuzUhPMhQopd+OJ7lkHc8qjsBPCT2tG6MBbFTnx9CufYr
-   A==;
-X-CSE-ConnectionGUID: 2y1Lb3aOTCu08gO1POheoQ==
-X-CSE-MsgGUID: NIN8YcroQ+ycdbiZuK40aw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="75775895"
+  bh=4YKoegXNl/z95DhhSsl6seq1dNu1HoG7+gaZVeQtUto=;
+  b=Z9Qx5miBYsh+77nrQ2AFMdKC297HUlZj9eU0xdswDEzpfELeJQBYTQHH
+   ySiO4gXPq8JXwHTDsuK9Ull/D21OGneeMAx43ZjllumBIyJBj7SYQNxKB
+   kFKoGYM2pvtndiQGXhdkzZaFjcjuYvh5B8UBj7/KeOfDBk7QWSPXmuw5k
+   5WkOUK2wJyTkXOeg+SSSfBjL8gnqtaJQ/DqLqSF2ZRgV9/ptncjtdioqI
+   GzUxmZYC63ZruPvJTK3E3V+6Twi8sDXwehKgF2Kx74hfqzPONS82DQuif
+   5BbvcWwsx8qlV/JotAvnyzuHIkO/xGl0x8GZdxdltelX9DAr3CRKZvOcx
+   w==;
+X-CSE-ConnectionGUID: tg+z3c+bS4KyD9vuU9XF1w==
+X-CSE-MsgGUID: vLWh35HuRpy1eF3ebpiS1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="75564856"
 X-IronPort-AV: E=Sophos;i="6.23,143,1770624000"; 
-   d="scan'208";a="75775895"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 23:05:58 -0700
-X-CSE-ConnectionGUID: Ytj3hztRQMq/b+i5QxjHMw==
-X-CSE-MsgGUID: cVE9mgRAQje94geeX9T1Wg==
+   d="scan'208";a="75564856"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 23:05:59 -0700
+X-CSE-ConnectionGUID: TOgSNZoFTa6yMCF9aDABVA==
+X-CSE-MsgGUID: 90r2Y3HFQnyeACP5T/GSSQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,143,1770624000"; 
-   d="scan'208";a="225466570"
+   d="scan'208";a="218604192"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 26 Mar 2026 23:05:56 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 26 Mar 2026 23:05:56 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w60KP-000000009qx-3LSH;
+	id 1w60KP-000000009qv-3Gfk;
 	Fri, 27 Mar 2026 06:05:53 +0000
-Date: Fri, 27 Mar 2026 14:05:33 +0800
+Date: Fri, 27 Mar 2026 14:05:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tianyu Lan <ltykernel@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH V3] x86/VMBus: Confidential VMBus for dynamic DMA
- transfers
-Message-ID: <202603271353.0O7DBbvf-lkp@intel.com>
-References: <20260325075649.248241-1-tiala@microsoft.com>
+To: David Carlier <devnexen@gmail.com>,
+	Daniel Scally <dan.scally@ideasonboard.com>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nayden Kanchev <nayden.kanchev@arm.com>,
+	Hans Verkuil <hverkuil@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, David Carlier <devnexen@gmail.com>
+Subject: Re: [PATCH] media: mali-c55: fix resource leaks in probe and remove
+Message-ID: <202603271400.K56xZKaE-lkp@intel.com>
+References: <20260326190052.11780-1-devnexen@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,116 +68,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260325075649.248241-1-tiala@microsoft.com>
+In-Reply-To: <20260326190052.11780-1-devnexen@gmail.com>
 
-Hi Tianyu,
+Hi David,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.0-rc5 next-20260326]
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linus/master v7.0-rc5 next-20260326]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tianyu-Lan/x86-VMBus-Confidential-VMBus-for-dynamic-DMA-transfers/20260325-162853
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260325075649.248241-1-tiala%40microsoft.com
-patch subject: [RFC PATCH V3] x86/VMBus: Confidential VMBus for dynamic DMA transfers
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260327/202603271353.0O7DBbvf-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260327/202603271353.0O7DBbvf-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Carlier/media-mali-c55-fix-resource-leaks-in-probe-and-remove/20260327-045201
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20260326190052.11780-1-devnexen%40gmail.com
+patch subject: [PATCH] media: mali-c55: fix resource leaks in probe and remove
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260327/202603271400.K56xZKaE-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260327/202603271400.K56xZKaE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603271353.0O7DBbvf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603271400.K56xZKaE-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/hv/vmbus_drv.c:2194:3: error: call to undeclared function 'swiotlb_dev_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2194 |                 swiotlb_dev_disable(&child_device_obj->device);
-         |                 ^
-   1 error generated.
+>> drivers/media/platform/arm/mali-c55/mali-c55-core.c:883:1: warning: unused label 'err_free_context_registers' [-Wunused-label]
+     883 | err_free_context_registers:
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/swiotlb_dev_disable +2194 drivers/hv/vmbus_drv.c
+vim +/err_free_context_registers +883 drivers/media/platform/arm/mali-c55/mali-c55-core.c
 
-  2172	
-  2173	/*
-  2174	 * vmbus_device_register - Register the child device
-  2175	 */
-  2176	int vmbus_device_register(struct hv_device *child_device_obj)
-  2177	{
-  2178		struct kobject *kobj = &child_device_obj->device.kobj;
-  2179		int ret;
-  2180	
-  2181		dev_set_name(&child_device_obj->device, "%pUl",
-  2182			     &child_device_obj->channel->offermsg.offer.if_instance);
-  2183	
-  2184		child_device_obj->device.bus = &hv_bus;
-  2185		child_device_obj->device.parent = vmbus_root_device;
-  2186		child_device_obj->device.release = vmbus_device_release;
-  2187	
-  2188		child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
-  2189		child_device_obj->device.dma_mask = &child_device_obj->dma_mask;
-  2190		dma_set_mask(&child_device_obj->device, DMA_BIT_MASK(64));
-  2191	
-  2192		device_initialize(&child_device_obj->device);
-  2193		if (child_device_obj->channel->co_external_memory)
-> 2194			swiotlb_dev_disable(&child_device_obj->device);
-  2195	
-  2196		/*
-  2197		 * Register with the LDM. This will kick off the driver/device
-  2198		 * binding...which will eventually call vmbus_match() and vmbus_probe()
-  2199		 */
-  2200		ret = device_add(&child_device_obj->device);
-  2201		if (ret) {
-  2202			pr_err("Unable to register child device\n");
-  2203			put_device(&child_device_obj->device);
-  2204			return ret;
-  2205		}
-  2206	
-  2207		/*
-  2208		 * If device_register() found a driver to assign to the device, the
-  2209		 * driver's probe function has already run at this point. If that
-  2210		 * probe function accesses or operates on the "channels" subdirectory
-  2211		 * in sysfs, those operations will have failed because the "channels"
-  2212		 * subdirectory doesn't exist until the code below runs. Or if the
-  2213		 * probe function creates a /dev entry, a user space program could
-  2214		 * find and open the /dev entry, and then create a race by accessing
-  2215		 * the "channels" subdirectory while the creation steps are in progress
-  2216		 * here. The race can't result in a kernel failure, but the user space
-  2217		 * program may get an error in accessing "channels" or its
-  2218		 * subdirectories. See also comments with vmbus_add_dynid() about a
-  2219		 * related race condition.
-  2220		 */
-  2221		child_device_obj->channels_kset = kset_create_and_add("channels",
-  2222								      NULL, kobj);
-  2223		if (!child_device_obj->channels_kset) {
-  2224			ret = -ENOMEM;
-  2225			goto err_dev_unregister;
-  2226		}
-  2227	
-  2228		ret = vmbus_add_channel_kobj(child_device_obj,
-  2229					     child_device_obj->channel);
-  2230		if (ret) {
-  2231			pr_err("Unable to register primary channel\n");
-  2232			goto err_kset_unregister;
-  2233		}
-  2234		hv_debug_add_dev_dir(child_device_obj);
-  2235	
-  2236		return 0;
-  2237	
-  2238	err_kset_unregister:
-  2239		kset_unregister(child_device_obj->channels_kset);
-  2240	
-  2241	err_dev_unregister:
-  2242		device_unregister(&child_device_obj->device);
-  2243		return ret;
-  2244	}
-  2245	
+d5f281f3dd2988 Daniel Scally 2025-11-11  804  
+d5f281f3dd2988 Daniel Scally 2025-11-11  805  static int mali_c55_probe(struct platform_device *pdev)
+d5f281f3dd2988 Daniel Scally 2025-11-11  806  {
+d5f281f3dd2988 Daniel Scally 2025-11-11  807  	struct device *dev = &pdev->dev;
+d5f281f3dd2988 Daniel Scally 2025-11-11  808  	struct mali_c55 *mali_c55;
+d5f281f3dd2988 Daniel Scally 2025-11-11  809  	struct resource *res;
+d5f281f3dd2988 Daniel Scally 2025-11-11  810  	int ret;
+d5f281f3dd2988 Daniel Scally 2025-11-11  811  
+d5f281f3dd2988 Daniel Scally 2025-11-11  812  	mali_c55 = devm_kzalloc(dev, sizeof(*mali_c55), GFP_KERNEL);
+d5f281f3dd2988 Daniel Scally 2025-11-11  813  	if (!mali_c55)
+d5f281f3dd2988 Daniel Scally 2025-11-11  814  		return -ENOMEM;
+d5f281f3dd2988 Daniel Scally 2025-11-11  815  
+d5f281f3dd2988 Daniel Scally 2025-11-11  816  	mali_c55->dev = dev;
+d5f281f3dd2988 Daniel Scally 2025-11-11  817  	platform_set_drvdata(pdev, mali_c55);
+d5f281f3dd2988 Daniel Scally 2025-11-11  818  
+d5f281f3dd2988 Daniel Scally 2025-11-11  819  	mali_c55->base = devm_platform_get_and_ioremap_resource(pdev, 0,
+d5f281f3dd2988 Daniel Scally 2025-11-11  820  								&res);
+d5f281f3dd2988 Daniel Scally 2025-11-11  821  	if (IS_ERR(mali_c55->base))
+d5f281f3dd2988 Daniel Scally 2025-11-11  822  		return dev_err_probe(dev, PTR_ERR(mali_c55->base),
+d5f281f3dd2988 Daniel Scally 2025-11-11  823  				     "failed to map IO memory\n");
+d5f281f3dd2988 Daniel Scally 2025-11-11  824  
+d5f281f3dd2988 Daniel Scally 2025-11-11  825  	for (unsigned int i = 0; i < ARRAY_SIZE(mali_c55_clk_names); i++)
+d5f281f3dd2988 Daniel Scally 2025-11-11  826  		mali_c55->clks[i].id = mali_c55_clk_names[i];
+d5f281f3dd2988 Daniel Scally 2025-11-11  827  
+d5f281f3dd2988 Daniel Scally 2025-11-11  828  	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(mali_c55->clks), mali_c55->clks);
+d5f281f3dd2988 Daniel Scally 2025-11-11  829  	if (ret)
+d5f281f3dd2988 Daniel Scally 2025-11-11  830  		return dev_err_probe(dev, ret, "failed to acquire clocks\n");
+d5f281f3dd2988 Daniel Scally 2025-11-11  831  
+d5f281f3dd2988 Daniel Scally 2025-11-11  832  	for (unsigned int i = 0; i < ARRAY_SIZE(mali_c55_reset_names); i++)
+d5f281f3dd2988 Daniel Scally 2025-11-11  833  		mali_c55->resets[i].id = mali_c55_reset_names[i];
+d5f281f3dd2988 Daniel Scally 2025-11-11  834  
+d5f281f3dd2988 Daniel Scally 2025-11-11  835  	ret = devm_reset_control_bulk_get_optional_shared(dev,
+d5f281f3dd2988 Daniel Scally 2025-11-11  836  			ARRAY_SIZE(mali_c55_reset_names), mali_c55->resets);
+d5f281f3dd2988 Daniel Scally 2025-11-11  837  	if (ret)
+d5f281f3dd2988 Daniel Scally 2025-11-11  838  		return dev_err_probe(dev, ret, "failed to acquire resets\n");
+d5f281f3dd2988 Daniel Scally 2025-11-11  839  
+d5f281f3dd2988 Daniel Scally 2025-11-11  840  	of_reserved_mem_device_init(dev);
+d5f281f3dd2988 Daniel Scally 2025-11-11  841  	vb2_dma_contig_set_max_seg_size(dev, UINT_MAX);
+d5f281f3dd2988 Daniel Scally 2025-11-11  842  
+d5f281f3dd2988 Daniel Scally 2025-11-11  843  	ret = __mali_c55_power_on(mali_c55);
+3b2d04fb011b8b David Carlier 2026-03-26  844  	if (ret) {
+3b2d04fb011b8b David Carlier 2026-03-26  845  		dev_err_probe(dev, ret, "failed to power on\n");
+3b2d04fb011b8b David Carlier 2026-03-26  846  		goto err_release_mem;
+3b2d04fb011b8b David Carlier 2026-03-26  847  	}
+d5f281f3dd2988 Daniel Scally 2025-11-11  848  
+d5f281f3dd2988 Daniel Scally 2025-11-11  849  	ret = mali_c55_check_hwcfg(mali_c55);
+d5f281f3dd2988 Daniel Scally 2025-11-11  850  	if (ret)
+d5f281f3dd2988 Daniel Scally 2025-11-11  851  		goto err_power_off;
+d5f281f3dd2988 Daniel Scally 2025-11-11  852  
+d5f281f3dd2988 Daniel Scally 2025-11-11  853  	ret = mali_c55_init_context(mali_c55, res);
+d5f281f3dd2988 Daniel Scally 2025-11-11  854  	if (ret)
+d5f281f3dd2988 Daniel Scally 2025-11-11  855  		goto err_power_off;
+d5f281f3dd2988 Daniel Scally 2025-11-11  856  
+d5f281f3dd2988 Daniel Scally 2025-11-11  857  	mali_c55->media_dev.dev = dev;
+d5f281f3dd2988 Daniel Scally 2025-11-11  858  
+d5f281f3dd2988 Daniel Scally 2025-11-11  859  	pm_runtime_set_autosuspend_delay(&pdev->dev, 2000);
+d5f281f3dd2988 Daniel Scally 2025-11-11  860  	pm_runtime_use_autosuspend(&pdev->dev);
+d5f281f3dd2988 Daniel Scally 2025-11-11  861  	pm_runtime_set_active(&pdev->dev);
+d5f281f3dd2988 Daniel Scally 2025-11-11  862  	pm_runtime_enable(&pdev->dev);
+d5f281f3dd2988 Daniel Scally 2025-11-11  863  
+d5f281f3dd2988 Daniel Scally 2025-11-11  864  	ret = mali_c55_media_frameworks_init(mali_c55);
+d5f281f3dd2988 Daniel Scally 2025-11-11  865  	if (ret)
+3b2d04fb011b8b David Carlier 2026-03-26  866  		goto err_runtime_disable;
+d5f281f3dd2988 Daniel Scally 2025-11-11  867  
+d5f281f3dd2988 Daniel Scally 2025-11-11  868  	pm_runtime_idle(&pdev->dev);
+d5f281f3dd2988 Daniel Scally 2025-11-11  869  
+d5f281f3dd2988 Daniel Scally 2025-11-11  870  	mali_c55->irqnum = platform_get_irq(pdev, 0);
+d5f281f3dd2988 Daniel Scally 2025-11-11  871  	if (mali_c55->irqnum < 0) {
+d5f281f3dd2988 Daniel Scally 2025-11-11  872  		ret = mali_c55->irqnum;
+d5f281f3dd2988 Daniel Scally 2025-11-11  873  		dev_err(dev, "failed to get interrupt\n");
+d5f281f3dd2988 Daniel Scally 2025-11-11  874  		goto err_deinit_media_frameworks;
+d5f281f3dd2988 Daniel Scally 2025-11-11  875  	}
+d5f281f3dd2988 Daniel Scally 2025-11-11  876  
+d5f281f3dd2988 Daniel Scally 2025-11-11  877  	return 0;
+d5f281f3dd2988 Daniel Scally 2025-11-11  878  
+d5f281f3dd2988 Daniel Scally 2025-11-11  879  err_deinit_media_frameworks:
+d5f281f3dd2988 Daniel Scally 2025-11-11  880  	mali_c55_media_frameworks_deinit(mali_c55);
+3b2d04fb011b8b David Carlier 2026-03-26  881  err_runtime_disable:
+d5f281f3dd2988 Daniel Scally 2025-11-11  882  	pm_runtime_disable(&pdev->dev);
+d5f281f3dd2988 Daniel Scally 2025-11-11 @883  err_free_context_registers:
+d5f281f3dd2988 Daniel Scally 2025-11-11  884  	kfree(mali_c55->context.registers);
+d5f281f3dd2988 Daniel Scally 2025-11-11  885  err_power_off:
+d5f281f3dd2988 Daniel Scally 2025-11-11  886  	__mali_c55_power_off(mali_c55);
+3b2d04fb011b8b David Carlier 2026-03-26  887  err_release_mem:
+3b2d04fb011b8b David Carlier 2026-03-26  888  	of_reserved_mem_device_release(dev);
+d5f281f3dd2988 Daniel Scally 2025-11-11  889  
+d5f281f3dd2988 Daniel Scally 2025-11-11  890  	return ret;
+d5f281f3dd2988 Daniel Scally 2025-11-11  891  }
+d5f281f3dd2988 Daniel Scally 2025-11-11  892  
 
 -- 
 0-DAY CI Kernel Test Service
