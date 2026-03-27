@@ -1,198 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FCE30B51E;
-	Fri, 27 Mar 2026 06:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678A8332ED3
+	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 08:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774591560; cv=none; b=I0VlKXANQ7EfZSSz7JYBsYu0QQpHjyxDkSMGmDcA0PjC6A2FgwTsbqK7C0yLinHYkqf/tfDPOWOHWAT757BZJvzwJ87jRIXUSwIIdUshdewyAZgeD+44yCng87nHtpr4OdNlszm/IrVNJlvniCXo9gIjCQ95PgweCbvLNTLrLVw=
+	t=1774598522; cv=none; b=ett5rp408d60c986BsynzLsosrrbrZRupO4/5TQtTUxnkKDkmcjxOKaBeVWkQPrZ2JFMOwgkUWlTaBZdtT4HPaj3JFtxfIgAynlf8HorNyEejpNg2p8zHyQkEKdAWtPi/kS1m5yGbqlgVVIU8QJSRVb9o5mDaUbMFuiP2nIxhTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774591560; c=relaxed/simple;
-	bh=4YKoegXNl/z95DhhSsl6seq1dNu1HoG7+gaZVeQtUto=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QT9w2ATfBmdAw2Ymt82tMOA6ekf8RdEsfJFrbAoT7c84BBopgLnAG6Qj8yWxXNWIdeEd5Rlnj7QOKHLzwTnNHSJiUAJ9XC5oY3qTvBJu6qFaZkC8uPECi+T6Lnf7mGwMVrlD/9WEkcvm/EjetTmazJNihKguIb79uI11CzTE/AQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z9Qx5miB; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z9Qx5miB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774591559; x=1806127559;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4YKoegXNl/z95DhhSsl6seq1dNu1HoG7+gaZVeQtUto=;
-  b=Z9Qx5miBYsh+77nrQ2AFMdKC297HUlZj9eU0xdswDEzpfELeJQBYTQHH
-   ySiO4gXPq8JXwHTDsuK9Ull/D21OGneeMAx43ZjllumBIyJBj7SYQNxKB
-   kFKoGYM2pvtndiQGXhdkzZaFjcjuYvh5B8UBj7/KeOfDBk7QWSPXmuw5k
-   5WkOUK2wJyTkXOeg+SSSfBjL8gnqtaJQ/DqLqSF2ZRgV9/ptncjtdioqI
-   GzUxmZYC63ZruPvJTK3E3V+6Twi8sDXwehKgF2Kx74hfqzPONS82DQuif
-   5BbvcWwsx8qlV/JotAvnyzuHIkO/xGl0x8GZdxdltelX9DAr3CRKZvOcx
-   w==;
-X-CSE-ConnectionGUID: tg+z3c+bS4KyD9vuU9XF1w==
-X-CSE-MsgGUID: vLWh35HuRpy1eF3ebpiS1w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="75564856"
-X-IronPort-AV: E=Sophos;i="6.23,143,1770624000"; 
-   d="scan'208";a="75564856"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2026 23:05:59 -0700
-X-CSE-ConnectionGUID: TOgSNZoFTa6yMCF9aDABVA==
-X-CSE-MsgGUID: 90r2Y3HFQnyeACP5T/GSSQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,143,1770624000"; 
-   d="scan'208";a="218604192"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 26 Mar 2026 23:05:56 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w60KP-000000009qv-3Gfk;
-	Fri, 27 Mar 2026 06:05:53 +0000
-Date: Fri, 27 Mar 2026 14:05:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Carlier <devnexen@gmail.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nayden Kanchev <nayden.kanchev@arm.com>,
-	Hans Verkuil <hverkuil@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, David Carlier <devnexen@gmail.com>
-Subject: Re: [PATCH] media: mali-c55: fix resource leaks in probe and remove
-Message-ID: <202603271400.K56xZKaE-lkp@intel.com>
-References: <20260326190052.11780-1-devnexen@gmail.com>
+	s=arc-20240116; t=1774598522; c=relaxed/simple;
+	bh=u5VEHiJyZVoFEpzPp8IWhx3oSssO/QYrmWzaVG0pNx0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rRxFrpzN1tP456l35fhQnz947u87wRSi2mBwDbIN3JerR0fWcHVLNrUKlQtb76p2Jew/3tZBN4Sc+gADSr2oF29mvwHGqYoFbnbSQImBwBMNiI2M8JJ5nAcTHLJG2dm+0lSOHZdDPwW/I/zwnFBAf3p5W5AOXdo47QTeQvwYy6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-467fd082ffeso1172510b6e.1
+        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 01:01:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774598515; x=1775203315;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qJSO1Jy8gXJ3q0SyUcqZkfXUbxuRHoGqVtwy0Y1kZfY=;
+        b=ioWie3uL+fj8oElNINrpamN8Gjw7SIBUPyjYgmLBQJ91mtN6VJqSArSrePE5kIOVOv
+         L61vPh2igBPX9o1Ysne+q5jRkLKIfQK+F+PeWaTPEbZCrMHw0C5+u8VYL/nBYmf4VNx4
+         SXEWT5MkqlrlNqQV02imAYbgKGLdKGKpVHMDZzgQlljyoh20F+0JoaEQCLCQYakAnvoH
+         SEqG490cevunmrafR82tPxSIsGkNfdfcytGfxGPukNrN/Bg6/dT8DevQ7lNd6jL0cfOc
+         6e8qti7ZX+hWdgXiqHElMq2DtWd80IdHuglsOvSvSerG8CTJxjyGFGIARKEZZc6YWi+f
+         43CA==
+X-Forwarded-Encrypted: i=1; AJvYcCXIVP3tXqbJcgZnJE1sXw/98lkR3oGEstL4dJg0eH1DX+j5Z8SJXk8q/w0Pp9dtRD5rQJRE@lists.linux.dev
+X-Gm-Message-State: AOJu0YxuOrNS5XnVIdrYybSaWoL1A9Y8cre93NqVXZYU9kW8FdigUVU0
+	CJnIiBqU7S/Sf4ozQoP+94TtctjYECP9Vjxec1KDhdazL6UljFXhAAq9O98LCJsUCZ4=
+X-Gm-Gg: ATEYQzyZOOU4Yi6moiclsF572rp+Y4HCV/oyHau/foFGoHpNIOSMf8aDoqjH+uklVJQ
+	/Ylvu0sdRWF2/nTKQ/dx1whbZu3no0fCAeNg3O0zi9XeucLtaksT0UAd8AfkjyHgtX1k99u2FCb
+	l7U6LbLC/+U3fV1SKIlrlxjNmc5wNQewNvxLKRcvXVN3Yn3c5c+lZaXKsMu5uB5ldRNp9CJb4zC
+	rM5aB9WTfNojKgO7DhRWsw8CRLbx3fVYYPSefjYuGHr/QwmCYMkvZMPx/mhSayYr2bNDcvQSFpV
+	v8PZVn4VyGqN+L/pk5EXNkBgBMlUGOUW8qFwgH7B0LXnvTimzyEGJXmmoLOiwgH9JQH4kk9A7EE
+	hJXLfiO2M1hzsY8AAtZ59/AfN8Kxq2fEjNIxkqbs9QevnRXiSija3hJpxp3QHrIMtVUFr5iPL9p
+	aukPtNple9RRzLrz7GQizsMiDWIwrRLsiHcRNbDb2gnmkJT730o4LkI2xsugBc
+X-Received: by 2002:a05:6808:1a15:b0:467:e5a2:a9e6 with SMTP id 5614622812f47-46a8a62f919mr682144b6e.55.1774598514839;
+        Fri, 27 Mar 2026 01:01:54 -0700 (PDT)
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com. [209.85.210.53])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41cc7b6312csm4312791fac.15.2026.03.27.01.01.54
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Mar 2026 01:01:54 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7d4c383f2fcso1711147a34.0
+        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 01:01:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWuCuIhw6MtUO7qDQp+JN/zhl9Ju0Aykzc9xSpVXRBtTDfUIj9GnXgtaYcNk8hABUoOx1tu@lists.linux.dev
+X-Received: by 2002:a05:6123:132:b0:56b:5e7e:d3fb with SMTP id
+ 71dfb90a1353d-56d4a619a98mr460290e0c.12.1774598183104; Fri, 27 Mar 2026
+ 00:56:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260326190052.11780-1-devnexen@gmail.com>
+References: <20260322192159.88138-1-ojeda@kernel.org> <20260323000327.111235-1-ojeda@kernel.org>
+ <acEP7tl8pqFA3tK8@shell.armlinux.org.uk> <acUGAsjYvNvTEO92@google.com>
+ <CANiq72mzPpkELXis1CiSbKUmBXNQYMiMmjj-7-sYiLh4T_JSOQ@mail.gmail.com>
+ <9cf5a94c-0f37-446c-b63d-ddac5674d220@gmail.com> <acVOL5Psz6kHlhq2@shell.armlinux.org.uk>
+ <641592e3-2354-4238-9eb8-a1f5c2a13126@app.fastmail.com>
+In-Reply-To: <641592e3-2354-4238-9eb8-a1f5c2a13126@app.fastmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 27 Mar 2026 08:56:11 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUUfVCBZFi2WoOYibJLVnyPY-joRDJDowgHwjN_DGeEzw@mail.gmail.com>
+X-Gm-Features: AQROBzCIA8XVkhuOJBqaPSt4vzM_veS-eZVPLLLcWDFZykO6P_Bu4uSiQhzQA0w
+Message-ID: <CAMuHMdUUfVCBZFi2WoOYibJLVnyPY-joRDJDowgHwjN_DGeEzw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Russell King <linux@armlinux.org.uk>, Christian Schrefl <chrisi.schrefl@gmail.com>, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Jamie Cunliffe <Jamie.Cunliffe@arm.com>, Will Deacon <will@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, acourbot@nvidia.com, 
+	Andrew Morton <akpm@linux-foundation.org>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Danilo Krummrich <dakr@kernel.org>, David Gow <david@davidgow.net>, 
+	Gary Guo <gary@garyguo.net>, Johannes Berg <johannes@sipsolutions.net>, 
+	Justin Stitt <justinstitt@google.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-um@lists.infradead.org, llvm@lists.linux.dev, 
+	Benno Lossin <lossin@kernel.org>, Mark Rutland <mark.rutland@arm.com>, mmaurer@google.com, 
+	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nicolas Schier <nsc@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, rust-for-linux@vger.kernel.org, 
+	Trevor Gross <tmgross@umich.edu>, "Uladzislau Rezki (Sony)" <urezki@gmail.com>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+Hi Arnd,
 
-kernel test robot noticed the following build warnings:
+On Thu, 26 Mar 2026 at 22:34, Arnd Bergmann <arnd@arndb.de> wrote:
+> On Thu, Mar 26, 2026, at 16:18, Russell King (Oracle) wrote:
+> > On Thu, Mar 26, 2026 at 03:31:26PM +0100, Christian Schrefl wrote:
+> >> On 3/26/26 2:47 PM, Miguel Ojeda wrote:
+> >> > On Thu, Mar 26, 2026 at 11:10=E2=80=AFAM Alice Ryhl <aliceryhl@googl=
+e.com> wrote:
+> >
+> > I'm not sure if this is still true, but I believe it used to be the cas=
+e
+> > that the -linux-gnueabi target has one behaviour for enums (fixed size)
+> > whereas -none-eabi, the size of the type depends on the range of values
+> > included in the enum.
+>
+> I checked Debian's arm-none-eabi-gcc, which indeed still has this behavio=
+r:
+>
+> $ echo 'enum { A, B } x =3D sizeof(x);' | arm-none-eabi-gcc -xc - -O2 -o-=
+ -S | grep -A1 x:
+> x:
+>         .byte   1
+>
+> and I see the same thing for the hexagon target in clang, but none
+> of the other targets that Linux runs on. In particular, clang always
+> behaves like linux-gnueabi even when targeting plain eabi.
+>
+> $ echo 'enum { A, B } x =3D sizeof(x);' | clang --target=3Darm-none-eabi =
+-xc - -O2 -o- -S | grep -A1 x:
+> x:
+>         .long   4
+>
+> I noticed a similar issue with m68k-linux, which has a bitfield
+> alignment different from anything else on gcc, but uses the normal
+> behavior on clang.
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on linus/master v7.0-rc5 next-20260326]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Ugh, I wasn't aware of that. Adrian, did you know?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Carlier/media-mali-c55-fix-resource-leaks-in-probe-and-remove/20260327-045201
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20260326190052.11780-1-devnexen%40gmail.com
-patch subject: [PATCH] media: mali-c55: fix resource leaks in probe and remove
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260327/202603271400.K56xZKaE-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260327/202603271400.K56xZKaE-lkp@intel.com/reproduce)
+Gr{oetje,eeting}s,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603271400.K56xZKaE-lkp@intel.com/
+                        Geert
 
-All warnings (new ones prefixed by >>):
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
->> drivers/media/platform/arm/mali-c55/mali-c55-core.c:883:1: warning: unused label 'err_free_context_registers' [-Wunused-label]
-     883 | err_free_context_registers:
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/err_free_context_registers +883 drivers/media/platform/arm/mali-c55/mali-c55-core.c
-
-d5f281f3dd2988 Daniel Scally 2025-11-11  804  
-d5f281f3dd2988 Daniel Scally 2025-11-11  805  static int mali_c55_probe(struct platform_device *pdev)
-d5f281f3dd2988 Daniel Scally 2025-11-11  806  {
-d5f281f3dd2988 Daniel Scally 2025-11-11  807  	struct device *dev = &pdev->dev;
-d5f281f3dd2988 Daniel Scally 2025-11-11  808  	struct mali_c55 *mali_c55;
-d5f281f3dd2988 Daniel Scally 2025-11-11  809  	struct resource *res;
-d5f281f3dd2988 Daniel Scally 2025-11-11  810  	int ret;
-d5f281f3dd2988 Daniel Scally 2025-11-11  811  
-d5f281f3dd2988 Daniel Scally 2025-11-11  812  	mali_c55 = devm_kzalloc(dev, sizeof(*mali_c55), GFP_KERNEL);
-d5f281f3dd2988 Daniel Scally 2025-11-11  813  	if (!mali_c55)
-d5f281f3dd2988 Daniel Scally 2025-11-11  814  		return -ENOMEM;
-d5f281f3dd2988 Daniel Scally 2025-11-11  815  
-d5f281f3dd2988 Daniel Scally 2025-11-11  816  	mali_c55->dev = dev;
-d5f281f3dd2988 Daniel Scally 2025-11-11  817  	platform_set_drvdata(pdev, mali_c55);
-d5f281f3dd2988 Daniel Scally 2025-11-11  818  
-d5f281f3dd2988 Daniel Scally 2025-11-11  819  	mali_c55->base = devm_platform_get_and_ioremap_resource(pdev, 0,
-d5f281f3dd2988 Daniel Scally 2025-11-11  820  								&res);
-d5f281f3dd2988 Daniel Scally 2025-11-11  821  	if (IS_ERR(mali_c55->base))
-d5f281f3dd2988 Daniel Scally 2025-11-11  822  		return dev_err_probe(dev, PTR_ERR(mali_c55->base),
-d5f281f3dd2988 Daniel Scally 2025-11-11  823  				     "failed to map IO memory\n");
-d5f281f3dd2988 Daniel Scally 2025-11-11  824  
-d5f281f3dd2988 Daniel Scally 2025-11-11  825  	for (unsigned int i = 0; i < ARRAY_SIZE(mali_c55_clk_names); i++)
-d5f281f3dd2988 Daniel Scally 2025-11-11  826  		mali_c55->clks[i].id = mali_c55_clk_names[i];
-d5f281f3dd2988 Daniel Scally 2025-11-11  827  
-d5f281f3dd2988 Daniel Scally 2025-11-11  828  	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(mali_c55->clks), mali_c55->clks);
-d5f281f3dd2988 Daniel Scally 2025-11-11  829  	if (ret)
-d5f281f3dd2988 Daniel Scally 2025-11-11  830  		return dev_err_probe(dev, ret, "failed to acquire clocks\n");
-d5f281f3dd2988 Daniel Scally 2025-11-11  831  
-d5f281f3dd2988 Daniel Scally 2025-11-11  832  	for (unsigned int i = 0; i < ARRAY_SIZE(mali_c55_reset_names); i++)
-d5f281f3dd2988 Daniel Scally 2025-11-11  833  		mali_c55->resets[i].id = mali_c55_reset_names[i];
-d5f281f3dd2988 Daniel Scally 2025-11-11  834  
-d5f281f3dd2988 Daniel Scally 2025-11-11  835  	ret = devm_reset_control_bulk_get_optional_shared(dev,
-d5f281f3dd2988 Daniel Scally 2025-11-11  836  			ARRAY_SIZE(mali_c55_reset_names), mali_c55->resets);
-d5f281f3dd2988 Daniel Scally 2025-11-11  837  	if (ret)
-d5f281f3dd2988 Daniel Scally 2025-11-11  838  		return dev_err_probe(dev, ret, "failed to acquire resets\n");
-d5f281f3dd2988 Daniel Scally 2025-11-11  839  
-d5f281f3dd2988 Daniel Scally 2025-11-11  840  	of_reserved_mem_device_init(dev);
-d5f281f3dd2988 Daniel Scally 2025-11-11  841  	vb2_dma_contig_set_max_seg_size(dev, UINT_MAX);
-d5f281f3dd2988 Daniel Scally 2025-11-11  842  
-d5f281f3dd2988 Daniel Scally 2025-11-11  843  	ret = __mali_c55_power_on(mali_c55);
-3b2d04fb011b8b David Carlier 2026-03-26  844  	if (ret) {
-3b2d04fb011b8b David Carlier 2026-03-26  845  		dev_err_probe(dev, ret, "failed to power on\n");
-3b2d04fb011b8b David Carlier 2026-03-26  846  		goto err_release_mem;
-3b2d04fb011b8b David Carlier 2026-03-26  847  	}
-d5f281f3dd2988 Daniel Scally 2025-11-11  848  
-d5f281f3dd2988 Daniel Scally 2025-11-11  849  	ret = mali_c55_check_hwcfg(mali_c55);
-d5f281f3dd2988 Daniel Scally 2025-11-11  850  	if (ret)
-d5f281f3dd2988 Daniel Scally 2025-11-11  851  		goto err_power_off;
-d5f281f3dd2988 Daniel Scally 2025-11-11  852  
-d5f281f3dd2988 Daniel Scally 2025-11-11  853  	ret = mali_c55_init_context(mali_c55, res);
-d5f281f3dd2988 Daniel Scally 2025-11-11  854  	if (ret)
-d5f281f3dd2988 Daniel Scally 2025-11-11  855  		goto err_power_off;
-d5f281f3dd2988 Daniel Scally 2025-11-11  856  
-d5f281f3dd2988 Daniel Scally 2025-11-11  857  	mali_c55->media_dev.dev = dev;
-d5f281f3dd2988 Daniel Scally 2025-11-11  858  
-d5f281f3dd2988 Daniel Scally 2025-11-11  859  	pm_runtime_set_autosuspend_delay(&pdev->dev, 2000);
-d5f281f3dd2988 Daniel Scally 2025-11-11  860  	pm_runtime_use_autosuspend(&pdev->dev);
-d5f281f3dd2988 Daniel Scally 2025-11-11  861  	pm_runtime_set_active(&pdev->dev);
-d5f281f3dd2988 Daniel Scally 2025-11-11  862  	pm_runtime_enable(&pdev->dev);
-d5f281f3dd2988 Daniel Scally 2025-11-11  863  
-d5f281f3dd2988 Daniel Scally 2025-11-11  864  	ret = mali_c55_media_frameworks_init(mali_c55);
-d5f281f3dd2988 Daniel Scally 2025-11-11  865  	if (ret)
-3b2d04fb011b8b David Carlier 2026-03-26  866  		goto err_runtime_disable;
-d5f281f3dd2988 Daniel Scally 2025-11-11  867  
-d5f281f3dd2988 Daniel Scally 2025-11-11  868  	pm_runtime_idle(&pdev->dev);
-d5f281f3dd2988 Daniel Scally 2025-11-11  869  
-d5f281f3dd2988 Daniel Scally 2025-11-11  870  	mali_c55->irqnum = platform_get_irq(pdev, 0);
-d5f281f3dd2988 Daniel Scally 2025-11-11  871  	if (mali_c55->irqnum < 0) {
-d5f281f3dd2988 Daniel Scally 2025-11-11  872  		ret = mali_c55->irqnum;
-d5f281f3dd2988 Daniel Scally 2025-11-11  873  		dev_err(dev, "failed to get interrupt\n");
-d5f281f3dd2988 Daniel Scally 2025-11-11  874  		goto err_deinit_media_frameworks;
-d5f281f3dd2988 Daniel Scally 2025-11-11  875  	}
-d5f281f3dd2988 Daniel Scally 2025-11-11  876  
-d5f281f3dd2988 Daniel Scally 2025-11-11  877  	return 0;
-d5f281f3dd2988 Daniel Scally 2025-11-11  878  
-d5f281f3dd2988 Daniel Scally 2025-11-11  879  err_deinit_media_frameworks:
-d5f281f3dd2988 Daniel Scally 2025-11-11  880  	mali_c55_media_frameworks_deinit(mali_c55);
-3b2d04fb011b8b David Carlier 2026-03-26  881  err_runtime_disable:
-d5f281f3dd2988 Daniel Scally 2025-11-11  882  	pm_runtime_disable(&pdev->dev);
-d5f281f3dd2988 Daniel Scally 2025-11-11 @883  err_free_context_registers:
-d5f281f3dd2988 Daniel Scally 2025-11-11  884  	kfree(mali_c55->context.registers);
-d5f281f3dd2988 Daniel Scally 2025-11-11  885  err_power_off:
-d5f281f3dd2988 Daniel Scally 2025-11-11  886  	__mali_c55_power_off(mali_c55);
-3b2d04fb011b8b David Carlier 2026-03-26  887  err_release_mem:
-3b2d04fb011b8b David Carlier 2026-03-26  888  	of_reserved_mem_device_release(dev);
-d5f281f3dd2988 Daniel Scally 2025-11-11  889  
-d5f281f3dd2988 Daniel Scally 2025-11-11  890  	return ret;
-d5f281f3dd2988 Daniel Scally 2025-11-11  891  }
-d5f281f3dd2988 Daniel Scally 2025-11-11  892  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
