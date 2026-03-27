@@ -1,159 +1,157 @@
-Received: from flow-a1-smtp.messagingengine.com (flow-a1-smtp.messagingengine.com [103.168.172.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835ED3DA5D0
-	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 09:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7704536AB46;
+	Fri, 27 Mar 2026 09:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774602164; cv=none; b=j8R5JIimRyki2mpSNmYJ04SBJzWaYf8K76X/8gUKBuEqEOBkNhCFL4b3uqVZ/lzUDXyW9RIDMQcYtTlnZP4WmrMYUC/+RYmTcRzOB9hdvdKcAYQppZDt2eN7w8PO4BGb3k6uS//IAc4fgSpHDyBVRJE9eg8E6M6xinIKm7gDTfk=
+	t=1774604182; cv=none; b=spuhYrVkXFZWWFviiXNqlVDQfH0kVSR62pmlXtT7yKkSfGYXmeo1/LAdkSHy5AyuCCe1xyQpGR69kePaxaZmWrF31gju9E+1Xr9ibbzMmVZ3XdkEiem7zg1GNBJO9S9ihSmTX0iw46/yHzNBO552OticU44hufBGyFSoGoEHHjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774602164; c=relaxed/simple;
-	bh=+dXAU2BVuB/qGRf5fclh0Kp4rQtTP3fcLN2jOD9b4f4=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=ETPtgBB+QpMqrdidjVBBQ9nlaP6IWo5SjDmpzkpXttwJRwmqRm5QeGUAzEdSVOpweDRhoxyessmjfBOVA5KPIPRlAt4AXXIauHIt45CB0hFXrnLRG9k8vAJgyW5K2XuoFYn/ctcW1e7eKC1G2kUFmPFLVlP3jfq6EvKoqDdFkiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=GVzqQY5n; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iExk1Qnj; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1774604182; c=relaxed/simple;
+	bh=PBwhHdoRja7dlpN2hamBn1BpdzNzw6McKoVgUYzeL/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=BxvOIPiUQ7KVt2WmakPrQUJzhN5coE0CT8q/nilh9Rs2PKf7F0LAwdbpfP45vOc3kCe+a1Q8Uqx3LXtl0eFYo+Av2sXzPGSDWOz+m8uReXvHvFLRsMNBGaXka5/p/KfJTeqt3gnx5izMIZcvGnswmzXEKaWdgYPRtYerrsrFcoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YwRaLjuP; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="GVzqQY5n";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iExk1Qnj"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.phl.internal (Postfix) with ESMTP id 4A6471380181;
-	Fri, 27 Mar 2026 05:02:39 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Fri, 27 Mar 2026 05:02:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1774602159;
-	 x=1774609359; bh=XlE8K29BcOci/GJeK99hdrRjgIObqUNFNRdsO2zBvLY=; b=
-	GVzqQY5nceojm37M1XZpOPq3WUecXUQj9WVf3CfutP3dTobqmGMQjzRLgNhoVby6
-	46aeZZINaK1f7YVuydM5TqNUI4j8vyRQzPpJA34i7ACZR1RSV4TO+hIb/Y1wlQAV
-	e4naVPRom36f6nfcFXr2OjE1mhktO/8tDetlgDKx/ERP6X26MCzVLKwpghPIlA9u
-	FgAZLJCBgZpz0FbarT4w54TicAqCn2qTr0Z2ZfdL6DznrwvGSdcVVRrirxDEue/H
-	5fVwFvlMX5ysAAT1/mtv1Dd/8FtVIaDqWDOOvUgWKJ3vwJ4vCQKKNs+/aj1E6yt+
-	+mz/Xbi/v8lcnLVbeJxZpA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774602159; x=
-	1774609359; bh=XlE8K29BcOci/GJeK99hdrRjgIObqUNFNRdsO2zBvLY=; b=i
-	Exk1Qnjsvq2JnZ1+yT0ebsDIbgY2gqeRl0z1YUchEz9YmFAT5XKQHCu5+ZzfUzMA
-	KUBEKUA267I42sL6kTGiC0o6muCrmy6qX1nLFaMFkw6x8TBMIldQ20mR85lgu/Dz
-	dB2EG1eKMb571eSkAhGeN6NfTkTpx4Lu0/tgLzlYoDT4OZDwCv6fEL37252eYC4+
-	1qR+fAEfE/kjUNCAyy4Q+SMie5NYypjDP+zkoB40j+zYPYlVZgSiYG+KFdyvrW7G
-	OWPfc7ZhuIizFLxUKMgVQKKjnJY5rCQ68EF4nMVgcJw97GM4yWWv2nTfrHXCbuKd
-	K8t0sfV8n6x5lC5qiobPQ==
-X-ME-Sender: <xms:rUfGaePC1BrMnmTf9_OY6lvLvc1mUKp6M_A0RyuXLyRS-NOn6VKFDg>
-    <xme:rUfGaXzAgfItBbTl9XynqmOmljqUaNK22QfAcW8j65Y-hka2CDyCF6HlPX-DBmYss
-    eoR8l0vie_-ZAfZlP2omID4VIFPPLAESbv9Vf23rJ3uQmLsZXfiKPw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefvdelkeejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepuefhhedvjedtudeiiefgvdeuuefhueehfefffeeutdeiudegleevleeivdefgfei
-    necuffhomhgrihhnpehgihhthhhusgdrtghomhdpghhnuhdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdr
-    uggvpdhnsggprhgtphhtthhopeeguddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
-    epjhgrmhhivgdrtghunhhlihhffhgvsegrrhhmrdgtohhmpdhrtghpthhtoheptggrthgr
-    lhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuth
-    hlrghnugesrghrmhdrtghomhdprhgtphhtthhopehlihhnuhigsegrrhhmlhhinhhugidr
-    ohhrghdruhhkpdhrtghpthhtoheprghnthhonhdrihhvrghnohhvsegtrghmsghrihgugh
-    gvghhrvgihshdrtghomhdprhgtphhtthhopegurghvihgusegurghvihgughhofidrnhgv
-    thdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhopegsoh
-    hquhhnrdhfvghnghesghhmrghilhdrtghomhdprhgtphhtthhopegthhhrihhsihdrshgt
-    hhhrvghflhesghhmrghilhdrtghomh
-X-ME-Proxy: <xmx:rUfGaRCaBcqc7KdntZl0FsBnvOqvRVfnzmfBbmotVoydnvBrFXOcMg>
-    <xmx:rUfGaZyWyK0ItY1fAukXgGQMxYnCWlJ_ttZ9LwB67jfvcP3jcgDiJg>
-    <xmx:rUfGaeUWikKeRd3kQ5HcVz8AqFZRkLvV9rX5NscA0USMCL-N4mVGIQ>
-    <xmx:rUfGaQXDnwGyrD4fd56NTxM2Fq_dVcdlQpFE1HUUfNw_jSb36M81IQ>
-    <xmx:r0fGaasdsr7hoeyfiet3dxQz1PzdqR0Oy-FDo6Fl_eW5_GQ_HIxB6CTf>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 95B2C700069; Fri, 27 Mar 2026 05:02:37 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YwRaLjuP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774604182; x=1806140182;
+  h=date:from:to:cc:subject:message-id;
+  bh=PBwhHdoRja7dlpN2hamBn1BpdzNzw6McKoVgUYzeL/Q=;
+  b=YwRaLjuPZXRaXsF5dZjgDSRG0sY8Kn7S2Qnm9cv6fOn20ZA68JU1QwoM
+   t2qpJkwMVOSHA9eigauDIt6vm+O7G4nhh8TD85mQA9h3Yal4rghyEi23b
+   G2MNXFqwzyA0NQFmhMd6bG5SoNsMKhJAFhyI4+CF329wOYz2Ogi7wkUUh
+   EI4VY5Yhy1Tpz61IoJQ2g4K4RLhB87z4OncnauHU9++4iEUKuNGrg2+5p
+   Zb3v77a8TnBiyf/N053y30ocbWfKA2v1VHlQSq8WptpVvugCm9OnXgzXG
+   znD4roDv8OvCUQd7cxL9VCWnd3hj3p1lA0G963/8frFuOCp+u4vgj7JMg
+   A==;
+X-CSE-ConnectionGUID: JePocGFNQtCMqqBpoG6gBw==
+X-CSE-MsgGUID: ZzBjMBzhRP+my15DnSfjkw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="101134434"
+X-IronPort-AV: E=Sophos;i="6.23,143,1770624000"; 
+   d="scan'208";a="101134434"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 02:36:21 -0700
+X-CSE-ConnectionGUID: SQOR4W0VQjSi/w7j2odH9A==
+X-CSE-MsgGUID: wwSF5KTvS/WWqsvHE5GyhA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,143,1770624000"; 
+   d="scan'208";a="222390876"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 27 Mar 2026 02:36:19 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w63c1-00000000A7p-0ASF;
+	Fri, 27 Mar 2026 09:36:17 +0000
+Date: Fri, 27 Mar 2026 17:35:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe:rw_iter 322/525] arch/powerpc/kvm/timing.c:172:6:
+ error: cannot take the address of an rvalue of type 'char *'
+Message-ID: <202603271712.kT4rdiHD-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-ThreadId: AUJnWW6OA6Vc
-Date: Fri, 27 Mar 2026 10:02:17 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc: "Russell King" <linux@armlinux.org.uk>,
- "Christian Schrefl" <chrisi.schrefl@gmail.com>,
- "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>,
- "Alice Ryhl" <aliceryhl@google.com>, "Ard Biesheuvel" <ardb@kernel.org>,
- "Jamie Cunliffe" <Jamie.Cunliffe@arm.com>,
- "Will Deacon" <will@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Miguel Ojeda" <ojeda@kernel.org>,
- "Andreas Hindborg" <a.hindborg@kernel.org>, acourbot@nvidia.com,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- "Boqun Feng" <boqun.feng@gmail.com>,
- "Danilo Krummrich" <dakr@kernel.org>, "David Gow" <david@davidgow.net>,
- "Gary Guo" <gary@garyguo.net>,
- "Johannes Berg" <johannes@sipsolutions.net>,
- "Justin Stitt" <justinstitt@google.com>,
- linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-um@lists.infradead.org, llvm@lists.linux.dev,
- "Benno Lossin" <lossin@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, mmaurer@google.com,
- "Bill Wendling" <morbo@google.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Nicolas Schier" <nicolas.schier@linux.dev>,
- "Nicolas Schier" <nsc@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Richard Weinberger" <richard@nod.at>, rust-for-linux@vger.kernel.org,
- "Trevor Gross" <tmgross@umich.edu>,
- "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>
-Message-Id: <93439e91-cf81-477b-b880-a813bb01ad7c@app.fastmail.com>
-In-Reply-To: 
- <CAMuHMdUUfVCBZFi2WoOYibJLVnyPY-joRDJDowgHwjN_DGeEzw@mail.gmail.com>
-References: <20260322192159.88138-1-ojeda@kernel.org>
- <20260323000327.111235-1-ojeda@kernel.org>
- <acEP7tl8pqFA3tK8@shell.armlinux.org.uk> <acUGAsjYvNvTEO92@google.com>
- <CANiq72mzPpkELXis1CiSbKUmBXNQYMiMmjj-7-sYiLh4T_JSOQ@mail.gmail.com>
- <9cf5a94c-0f37-446c-b63d-ddac5674d220@gmail.com>
- <acVOL5Psz6kHlhq2@shell.armlinux.org.uk>
- <641592e3-2354-4238-9eb8-a1f5c2a13126@app.fastmail.com>
- <CAMuHMdUUfVCBZFi2WoOYibJLVnyPY-joRDJDowgHwjN_DGeEzw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-On Fri, Mar 27, 2026, at 08:56, Geert Uytterhoeven wrote:
->>
->> I noticed a similar issue with m68k-linux, which has a bitfield
->> alignment different from anything else on gcc, but uses the normal
->> behavior on clang.
->
-> Ugh, I wasn't aware of that. Adrian, did you know?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git rw_iter
+head:   520344cda122ca1903fafb19768f56509e3db8b1
+commit: 347664d07e7cc165e1dae2f95b2f6f1053a62844 [322/525] powerpc/kvm: convert to read/write iterators
+config: powerpc64-randconfig-002-20260327 (https://download.01.org/0day-ci/archive/20260327/202603271712.kT4rdiHD-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260327/202603271712.kT4rdiHD-lkp@intel.com/reproduce)
 
-To clarify, this illustrates what I mean here:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603271712.kT4rdiHD-lkp@intel.com/
 
-echo 'struct { short a : 3; short b :15; short c :14; } x; int y = sizeof(x);' | m68k-linux-gcc -xc - -S -o-
+All errors (new ones prefixed by >>):
 
-this produces '4' on m68k-linux-gcc, but '6' everywhere else. I originally
-thought this was related to this 2009 change in both compilers
+>> arch/powerpc/kvm/timing.c:172:6: error: cannot take the address of an rvalue of type 'char *'
+     172 |         if (get_iter(&c, from)) {
+         |             ^        ~~
+   include/linux/uio.h:243:50: note: expanded from macro 'get_iter'
+     243 | #define get_iter(val, from)     !copy_from_iter_full(&(val), sizeof((val)), from)
+         |                                                      ^ ~~~
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+>> arch/powerpc/kvm/timing.c:172:6: error: cannot take the address of an rvalue of type 'char *'
+     172 |         if (get_iter(&c, from)) {
+         |             ^        ~~
+   include/linux/uio.h:243:50: note: expanded from macro 'get_iter'
+     243 | #define get_iter(val, from)     !copy_from_iter_full(&(val), sizeof((val)), from)
+         |                                                      ^ ~~~
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^~~~
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^~~~
+>> arch/powerpc/kvm/timing.c:172:6: error: cannot take the address of an rvalue of type 'char *'
+     172 |         if (get_iter(&c, from)) {
+         |             ^        ~~
+   include/linux/uio.h:243:50: note: expanded from macro 'get_iter'
+     243 | #define get_iter(val, from)     !copy_from_iter_full(&(val), sizeof((val)), from)
+         |                                                      ^ ~~~
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^~~~
+   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                                      ^~~~
+   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
+      68 |         (cond) ?                                        \
+         |          ^~~~
+   3 errors generated.
 
-https://github.com/llvm/llvm-project/commit/830dfccfb2c06a1749938ce8cb78a1d6a295b942
-https://gcc.gnu.org/cgit/gcc/commit/?id=2cd36c22d3d16e24f342829a989ac35f2f442656
 
-but that only allowed bitfields to be marked as __attribute__((packed))
-in order to get tightly packed fields and return '4' on all architectures,
-while m68k-linux-gcc apparently has all bitfields implicitly packed unless they
-are explicitly marked __attribute__((aligned(x))). This behavior is
-independent of the -malign-int flag.
+vim +172 arch/powerpc/kvm/timing.c
 
-     Arnd
+   159	
+   160	/* Write 'c' to clear the timing statistics. */
+   161	static ssize_t kvmppc_exit_timing_write(struct kiocb *iocb,
+   162						struct iov_iter *from)
+   163	{
+   164		size_t count = iov_iter_count(from);
+   165		int err = -EINVAL;
+   166		char c;
+   167	
+   168		if (count > 1) {
+   169			goto done;
+   170		}
+   171	
+ > 172		if (get_iter(&c, from)) {
+   173			err = -EFAULT;
+   174			goto done;
+   175		}
+   176	
+   177		if (c == 'c') {
+   178			struct seq_file *seqf = iocb->ki_filp->private_data;
+   179			struct kvm_vcpu *vcpu = seqf->private;
+   180			/* Write does not affect our buffers previously generated with
+   181			 * show. seq_file is locked here to prevent races of init with
+   182			 * a show call */
+   183			mutex_lock(&seqf->lock);
+   184			kvmppc_init_timing_stats(vcpu);
+   185			mutex_unlock(&seqf->lock);
+   186			err = count;
+   187		}
+   188	
+   189	done:
+   190		return err;
+   191	}
+   192	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
