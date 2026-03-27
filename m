@@ -1,99 +1,121 @@
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9659931716B
-	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 15:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2923D15A864;
+	Fri, 27 Mar 2026 16:00:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774626519; cv=none; b=GKHnK8tcf33EQCsdO5vbL2dYRqPrTLivJfbxIAhKi175aZbruhTTd0yCCisjqRl/EA1fjUA4w5E9oMjmMGs1I/XzpPOoe5+UAMhDL8N1p1ySldl4bLfY7+VwTDXd5b5H9i2kbe6+Cc+z3GYiEFB7wjZw7jI4s9foH1gVCwYx8mE=
+	t=1774627248; cv=none; b=rHKORy5eJ6k1gOcUkLelFHSyHsm3KXk6rBcDGvjmcpzjhj6gOIo3M7VxGqWUnbZPrAXqfCnWvCFQ4XPCtStD8MROlnOaIlwdaDfJUCV99Dr7V0qhW36MhzVwaT8j9WZzPsuvEUxXQhAuntzEeCwzPeZ0HyiksfwGvRYGTzgdBJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774626519; c=relaxed/simple;
-	bh=w7e8xKMVwZwox5IQWdkUnPwsOPywXW3XfBut2voR89o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S6wSVBYASV7jrq0ZafkaklZHRfdCyRHhwEvVVn0c4W3rPMQjrQZ5AeMh7f4PDltKDV9sw/P2DtpoxBWW/DoQN/wgJuKJ46SliKB6RGOj10va0ZrYz53xcRvV7ZdaY1rGnYMgGuuRmZ/DsUqaTWjdj0UF+GBFgH7RuqfB62uxc48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=y/CwjrgZ; arc=none smtp.client-ip=199.89.1.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1774627248; c=relaxed/simple;
+	bh=8ABsho9fB27uHd0E9e8vJwKZriqU6JH5Anl9iuDxn7o=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=HdjkN22hKVV1HWK+sMtTq46BwoG55XSMcwnoqsa0xbOZuCoCXpOttLgyp3PDsqVSrAvPMtUSJ/e2njGyupaYsAZBRGrjYMD9zVIvIkll/WGV8GFTaE19EEfg9q+PqUrAVAquBu2wQaFvsuFhsgTOTWLsv+D82EoR+XPRc6KxonY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LyuIozf/; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="y/CwjrgZ"
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4fj4n20nQszlgqw5;
-	Fri, 27 Mar 2026 15:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1774626506; x=1777218507; bh=daYKBfZtVRE0Up+JvW4epS91
-	zfI0bi2LU/4qn3ihDck=; b=y/CwjrgZaYZ8yuyWAm7DVpesBmImJ3qmESbF7Oph
-	7bcSW56maohK9flTVqvLGyUEPvzPHCsVBaSRD5PgFlANNFQ6DetOqlymgFOyuKvS
-	G89BGNB0HUcVwyVUe46i6iHpNQlkj5DsVwoGrohq040AglGJ3JeqHX/MMontyRBJ
-	65d0Fcz2pHeDO8DjVZeswp9C1voPLPXmsJsVY91BEF/Gd8SJHnUrsy48ZWUH/Tan
-	DFRKTzh13diapZrM5bsErlqCXq8j5qrB9X/68kkcaBjRZqmpN7atVfy9TfuTbcRU
-	ZW/e6waW9YBYz7gNn3Afjj1xTwahBjjBsBMu0LamPIoevA==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id XR9mbTQNfkjy; Fri, 27 Mar 2026 15:48:26 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4fj4mf33mJzlfwHS;
-	Fri, 27 Mar 2026 15:48:18 +0000 (UTC)
-Message-ID: <91bacd7d-6ec0-4888-be0d-f11a6607f38f@acm.org>
-Date: Fri, 27 Mar 2026 08:48:17 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LyuIozf/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774627246; x=1806163246;
+  h=date:from:to:cc:subject:message-id;
+  bh=8ABsho9fB27uHd0E9e8vJwKZriqU6JH5Anl9iuDxn7o=;
+  b=LyuIozf/W8m9JQGuu4MeoE9vKaN3KLDFfXysueYd90VHhW9Pz5csTnVZ
+   rqIfKUt9iQF2fpx41OdwFlUCxTD4tVzs16Jgg7vdcX4Niiz1gT2aQL3r1
+   wWZTZmcf5AsG4FWB8TDcbCkcToCLrhBI9USZgqJfVv/Cqyiwk2R1UhPMb
+   mxf1cMsgssGOn+isl2OuEAMPe4rtlXVfngMJiEXxw3iXiATSu9kZk3Xjf
+   B851QLAUlivACni653l9EDy6LgzM7CdfxJOkX+53UcTTNyN+PQTYzr+50
+   ESTdcu82KeXl5t/086uReojMmaFA96fDgSG6xRKWotUGJQgJwG42q3BBV
+   A==;
+X-CSE-ConnectionGUID: ++eWPBXHRzmCEmbQ5KFxOQ==
+X-CSE-MsgGUID: REjNc2kaTNKVzSlkqcpCew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11741"; a="75901998"
+X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
+   d="scan'208";a="75901998"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2026 09:00:46 -0700
+X-CSE-ConnectionGUID: qG1QRG/FQAG2X5MZ3Lnbwg==
+X-CSE-MsgGUID: b6hQJ1YvQq2GH0n1dwv3cw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,144,1770624000"; 
+   d="scan'208";a="248387157"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 27 Mar 2026 09:00:44 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w69c1-00000000AQn-3O8v;
+	Fri, 27 Mar 2026 16:00:41 +0000
+Date: Sat, 28 Mar 2026 00:00:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-03-27 82/106]
+ sound/soc/intel/avs/pcm.c:1403:10: warning: variable 'ret' is uninitialized
+ when used here
+Message-ID: <202603272354.8LQSBKkh-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 0/2] block: Introduce a BPF-based I/O scheduler
-To: Chengkaitao <pilgrimtao@gmail.com>, axboe@kernel.dk, pjw@kernel.org,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, ojeda@kernel.org,
- boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com,
- lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
- tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com
-Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, rust-for-linux@vger.kernel.org,
- bpf@vger.kernel.org, llvm@lists.linux.dev,
- Kaitao Cheng <chengkaitao@kylinos.cn>
-References: <20260327114741.91500-1-pilgrimtao@gmail.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260327114741.91500-1-pilgrimtao@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 3/27/26 4:47 AM, Chengkaitao wrote:
-> I have been working on adding a new BPF-based I/O scheduler. It has both
-> kernel and user-space parts. In kernel space, using per-ctx,
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-03-27
+head:   b547ff73a13ed8ce92e8e208ccd27884077b160b
+commit: a22cf4c5c5139a4eb0afdd43d21ab0c8e359594b [82/106] ASoC: intel: avs: use snd_soc_component_alloc()
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260327/202603272354.8LQSBKkh-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260327/202603272354.8LQSBKkh-lkp@intel.com/reproduce)
 
-Does "ctx" perhaps refer to struct blk_mq_hw_ctx? If so, please use the 
-abbreviation "hctx" to prevent confusion with struct blk_mq_ctx (block
-layer software queue).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603272354.8LQSBKkh-lkp@intel.com/
 
-For what type of block devices is this new type of I/O scheduler 
-intended? This new type of I/O scheduler is not appropriate for hard
-disks. To schedule I/O effectively for harddisks, an I/O scheduler must
-be aware of all pending I/O requests. This is why the mq-deadline I/O
-scheduler maintains a single list of requests across all hardware
-queues.
+All warnings (new ones prefixed by >>):
 
-Additionally, this new I/O scheduler is not appropriate for the fastest
-block devices. For very fast block devices, any I/O scheduler incurs a
-measurable overhead.
+>> sound/soc/intel/avs/pcm.c:1403:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+    1403 |                 return ret;
+         |                        ^~~
+   sound/soc/intel/avs/pcm.c:1391:9: note: initialize the variable 'ret' to silence this warning
+    1391 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
-> I implemented
-> a simple elevator that exposes a set of BPF hooks. The goal is to move the
-> policy side of I/O scheduling out of the kernel and into user space,
 
-What does "into user space" mean in this context? As you know BPF code
-runs in kernel context.
+vim +/ret +1403 sound/soc/intel/avs/pcm.c
 
-Thanks,
+  1384	
+  1385	int avs_register_component(struct device *dev, const char *name,
+  1386				   struct snd_soc_component_driver *drv,
+  1387				   struct snd_soc_dai_driver *cpu_dais, int num_cpu_dais)
+  1388	{
+  1389		struct avs_soc_component *acomp;
+  1390		char *cpname;
+  1391		int ret;
+  1392	
+  1393		cpname = devm_kstrdup(dev, name, GFP_KERNEL);
+  1394		if (!cpname)
+  1395			return -ENOMEM;
+  1396	
+  1397		acomp = devm_kzalloc(dev, sizeof(*acomp), GFP_KERNEL);
+  1398		if (!acomp)
+  1399			return -ENOMEM;
+  1400	
+  1401		acomp->base = snd_soc_component_alloc(dev, drv, NULL, cpname, NULL, NULL);
+  1402		if (!acomp->base)
+> 1403			return ret;
+  1404	
+  1405		snd_soc_component_attach_priv(acomp->base, acomp);
+  1406		INIT_LIST_HEAD(&acomp->node);
+  1407	
+  1408		drv->use_dai_pcm_id = !obsolete_card_names;
+  1409	
+  1410		return snd_soc_component_add(acomp->base, cpu_dais, num_cpu_dais);
+  1411	}
+  1412	
 
-Bart.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
