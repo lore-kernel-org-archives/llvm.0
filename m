@@ -1,126 +1,70 @@
-Received: from mail-oi1-f201.google.com (mail-oi1-f201.google.com [209.85.167.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4FF23939A4
-	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 21:59:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71C1611E;
+	Fri, 27 Mar 2026 22:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774648765; cv=none; b=qi6IZIMnhyMSMu8B7RJrXi4WTFUZGUEnZMQIXygApkx9bfFH21ID5h/Y6nXFeYUUt9nVwxBVnGklzs53JxjiXBiR3/XeR2JMgWxtx2EUzOHnwsSxCPIkSQqmP2AFVHVA5LRc0+TEkNE5Za6iWtBfvnQSMWwgE3vu2mxTyDYoHXg=
+	t=1774649468; cv=none; b=mO0M/yWA7dedbej3jhCE2+3huTjqYgOD+WH2r9+1PGLmfKtnWLEXf+xXrg4b7cUHSbKuDwIKE469tXfPVjy2EXIAUHSDMDipDrvy3Plwye4Utw3wOOOb3hqFD8JobxSp+mjXsOWNWd4HRtx+gzEt3RsSq5BOsbBSTGazKY570Wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774648765; c=relaxed/simple;
-	bh=pUs9THT6DHn2Yh3ii6ZcA4QCK2Rk+meZhFMzqf6DDdM=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=VDvqi0vu6Bth2sC9E6zD7QGyu9QV965FIAL+S0D2IlS8LitTq1bbPPZPG07WzKLgE82c9RIDoQKAlRwRQdUWNPX/nlOAcoWnMhpDsUUsAyhbfSKSsLb1g8CfOjdbCYD1zfaB7OmYaPzrYe4w+0VoM/BKR/joRpUyX60eziQXQVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d3jsRnMe; arc=none smtp.client-ip=209.85.167.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
+	s=arc-20240116; t=1774649468; c=relaxed/simple;
+	bh=8VJCRTG8WD3XC0KXW/cifyktDXB0cqBeZOPOfzSOUKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JC3BU+kQpSYFofgXJAQoNdRfUISzYBTN5bzthtd0xoZNp2DRZr78eG0dDe1yrxYJ2p2NT6YekXFTTmB7DtQ38Mik/862kGg+4j9/z0N5fPEJKw8RURUyvbQzVpD6qSM1/j867iiX5/Ks8EOsguX9aFroe6hz1LAAu5Ot0Va8Tps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hjE1lfkv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d3jsRnMe"
-Received: by mail-oi1-f201.google.com with SMTP id 5614622812f47-463a075e177so3877098b6e.2
-        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 14:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774648763; x=1775253563; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bXUVdAQ2VqEkZsnQST785FFjZDxfkqJqi9/U/lqUA6Q=;
-        b=d3jsRnMejcJB6teQ0UU+RZ2XjOd+Srj2dq1vK7iT3i1KQ3MXewDzDnupvkSbH4yz7X
-         86tLlP34qQwpmBcycqAmYQv46YchSwE3KrBsq+3Wi0/qio3OBEHpqTXt7tWeY7375y6l
-         BAgdSt9mievFYr1qiKvuvxhHuoBJ5dO0r2itLOMl/cWFAbGOR7jbHtoZAQumvjOZYdIX
-         2HACtSlEcg6bfuSWhvCFxN29IIpyyBln1be2Maokn1fNBmd2Z0m+MjDENLDfdbOx8zz1
-         BO7t2iZpMdvGuovZ4ItRuvZWPirgGpdelqw+e7LSqTmkBDak/NhpCbKvyiFEua3R6zqF
-         4hWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774648763; x=1775253563;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bXUVdAQ2VqEkZsnQST785FFjZDxfkqJqi9/U/lqUA6Q=;
-        b=WHLIn4T8q4pKPA7lOPBnejRLYftxUlW+0T03Rp5KzkIbi4rPjP/bwVAk31pWKxVPrZ
-         2yDpRpgZLWpmVGyJ7O5xvRXRbUo5pFEhHx6hEnwidvDHJ8T0liBAbgYGuBIh+7kUntWv
-         HS4eeOhYs4Fj95LAfDQ5amsIn+oQ75Betf04daBxGy58lQUJajFNhOSNXVPoNAWnHmhG
-         56BNoM07MpsOSv7Hw1ztv2G7VskBjZI74Ju/ZVYPuK8j0zLhv0476zt/9O2H54IQLnp8
-         HnZ04O9qKitn1OkQdxFPb66Fo+eeoIBQq3HGXz4ZCmRIuqssQTynoheOqYOBpOq+mrU6
-         kLMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUo7P8s1aa+G+TPwbGh3Y/98clJxntsfMV3lKkieTEY/mfsCqvqTusL5+N8dLXOptQoiWTG@lists.linux.dev
-X-Gm-Message-State: AOJu0YzFM2ceUkgdCF0MDrSwsYUua6djVxkvA316Vyv2q5JbpAVanwxB
-	Q1AlCZkkmsxip131xKxr2RmhkhrGa0bQ3fDDoiswZnAFxgqUhtX/zXZ2MvYLjanJtQ42f8KGYiz
-	ftQbqIMPMFvLgIUi1AWm5WCLalQ==
-X-Received: from ilqp16.prod.google.com ([2002:a92:da50:0:b0:4f8:400c:308c])
- (user=justinstitt job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6820:2914:b0:67c:1fc7:daa6 with SMTP id 006d021491bc7-67e185f1e03mr2232968eaf.10.1774648762484;
- Fri, 27 Mar 2026 14:59:22 -0700 (PDT)
-Date: Fri, 27 Mar 2026 14:59:20 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hjE1lfkv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70823C19423;
+	Fri, 27 Mar 2026 22:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774649468;
+	bh=8VJCRTG8WD3XC0KXW/cifyktDXB0cqBeZOPOfzSOUKs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hjE1lfkvrpWReQ0hAgpvoXUF2Zlu63xFrxXDZB83gcyWJL6gGM1MpplSdDZmGygUA
+	 40yF0tziQsqDYqqdGKbVK+b8bpoLe2o/mhzN/X8JaOcAPpLT1Ti7z3LcdSx+TOrBmA
+	 cQ+VvBm1k1TNIUu8W9bWzuLn41a9Uxoq00bRVy9gWF23wRiqMVdyiyPO8cTNkSmN95
+	 QlkkQUi0MBe1vvHe91NY6Z8zKDljktggjCsniNgwl7TxcYg/1wAXEnm/hTkX/MKVLn
+	 rtPhJY2YjJcPoExrucdCUOipDzVhqaDjNvalaWVY0TgeayzcYAO8puvbI3ITiOZzmB
+	 CVxmt3Fi0bcuw==
+Date: Fri, 27 Mar 2026 23:11:02 +0100
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc: Detlev Casanova <detlev.casanova@collabora.com>,
+	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>, Brian Cain <bcain@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-media@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] media: rockchip: Disable VIDEO_ROCKCHIP_VDEC when
+ compile testing for Hexagon
+Message-ID: <20260327221102.GA3621310@ax162>
+References: <20260213-media-disable-rockchip-vdec-hexagon-v1-1-3f903398cc83@kernel.org>
+ <90e62bf797b0532e5556adaf9e15cc7b73e18411.camel@ndufresne.ca>
+ <1a618af9b6c311e8fe5db64ff6fb7c1872c7b2b6.camel@ndufresne.ca>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIALf9xmkC/4WNQQ6CMBBFr0Jm7RimBFBX3sOwQDq0E7ElrVYN4
- e5WLuDyveS/v0DkIBzhVCwQOEkU7zLQroDB9s4wis4MqlRNWakWb9enTBqj9S8UN4kTZ7CuW12
- RVupY9ZCnc+BR3lv20mW2Eh8+fLaXRD/7J5gICUs6MI3UsK75bLw3E+8Hf4duXdcvKFk4JbkAA AA=
-X-Change-Id: 20260327-kbuild-show-inlining-557d31d2293a
-X-Developer-Key: i=justinstitt@google.com; a=openpgp; fpr=6E3AADB90F44DA9EB9CDCB6799D922A9379F2964
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1492; i=justinstitt@google.com;
- h=from:subject:message-id; bh=pUs9THT6DHn2Yh3ii6ZcA4QCK2Rk+meZhFMzqf6DDdM=;
- b=owEBbQKS/ZANAwAKAZnZIqk3nylkAcsmYgBpxv25vibCsY1AcfNIAiZK8Vc/x2WLaiNGyz8wL
- lmTfG9BTk+JAjMEAAEKAB0WIQRuOq25D0TanrnNy2eZ2SKpN58pZAUCacb9uQAKCRCZ2SKpN58p
- ZLU1EACPMFCyHnqyHs0hybIGSIyVIGgZ/EC39mnSfbpMvEbeiRMmQCDGF3Om16lIpbta6E4UfhV
- lRPmgkNnhH0H+eaVbn7EOZJZjYS0Gw87mvWkf/JpIctlcLdIunaLhAo4swGR0JqNvOYmcjZeWTo
- Me3aZ4OIKy4o/VsXhpVxP+zZJJs6zw5oRyN9BMtJgF4k0RMwvIYyOiqlmtvM+fNv61qtMao5edX
- opyhtyLTmH3oR8f5GqmzkPy/9b2tp9sUMTz6u7V0X0Mq6rHfPGuq1HBDk/3EF+KBScS4W4nrF33
- KznPxAiCKmI6sE94Ms1Uvgnz8PEHuPVdKeR3QxvoToA2iGZGsmzjaKzeMJXzkKCgDhXR2MdB7YZ
- bTlwLCR0VMZ0k/hi596pixgUOLd9QXV7LHk43gXFZw+fogrn3OFRiv6gZvr+EeIYIlK41vzaztO
- mm8SlKR0rgkKVfYUMahdozruDXiCvHm2DhtjEJ0kIOSk7PWyXJQsxzbGUYXjUr7n/+6xLrDjvif
- szb84/+QmluBK+Yu6rpfOeSHiJPnTEVHK5WN/4kAZTcfgE5gJEobyBItW+RyvL77WA4GthXdQtW
- 92oxCWnREqxnbAKdQBTCV3YC05/mhXafL2uRjpY3GRNvu6pDyFSieuQoz1ur/D/2rTH2Lmoa2PL VOKxRXMf7K5KwRg==
-X-Mailer: b4 0.14.3
-Message-ID: <20260327-kbuild-show-inlining-v1-1-730ac2cae571@google.com>
-Subject: [PATCH] kbuild: add -fdiagnostics-show-inlining-chain for FORTIFY_SOURCE
-From: Justin Stitt <justinstitt@google.com>
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>
-Cc: Kees Cook <kees@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a618af9b6c311e8fe5db64ff6fb7c1872c7b2b6.camel@ndufresne.ca>
 
-Clang recently added -fdiagnostics-show-inlining-chain [1] to improve
-the visibility of inlining chains in diagnostics. This is particularly
-useful for CONFIG_FORTIFY_SOURCE where detections can happen deep in
-inlined functions.
+On Thu, Mar 19, 2026 at 04:08:29PM -0400, Nicolas Dufresne wrote:
+> I haven't heard back about the port to plain bitwriter. I guess I have to pick
+> this patch, but I really don't want to have to maintain too many of these hacks.
+> Anyone else with an opinion on the topic ? Or a better idea how this can be
+> workaround differently ?
 
-Add this flag to KBUILD_CFLAGS when CONFIG_FORTIFY_SOURCE is enabled
-and the compiler supports it.
+I ended up retesting this recently after I saw Denis posted a bitwriter
+series and it turns out that Arnd's commit 446c6a25a449 ("media: rkvdec:
+reduce excessive stack usage in assemble_hw_pps()") is enough to avoid
+this issue, so you can disregard this change.
 
-Link: https://github.com/llvm/llvm-project/pull/174892 [1]
-Link: https://github.com/ClangBuiltLinux/linux/issues/1571
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
- Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/Makefile b/Makefile
-index e1279c4d5b24..978726aeb1ef 100644
---- a/Makefile
-+++ b/Makefile
-@@ -973,6 +973,12 @@ KBUILD_CFLAGS	+= $(call cc-option, -fno-stack-clash-protection)
- # Get details on warnings generated due to GCC value tracking.
- KBUILD_CFLAGS	+= $(call cc-option, -fdiagnostics-show-context=2)
- 
-+# Show inlining chain notes for FORTIFY_SOURCE-related diagnostics.
-+# GCC does this by default while Clang 23+ supports a flag.
-+ifdef CONFIG_FORTIFY_SOURCE
-+KBUILD_CFLAGS	+= $(call cc-option, -fdiagnostics-show-inlining-chain)
-+endif
-+
- # Clear used registers at func exit (to reduce data lifetime and ROP gadgets).
- ifdef CONFIG_ZERO_CALL_USED_REGS
- KBUILD_CFLAGS	+= -fzero-call-used-regs=used-gpr
-
----
-base-commit: 7df48e36313029e4c0907b2023905dd7213fd678
-change-id: 20260327-kbuild-show-inlining-557d31d2293a
-
-Best regards,
--- 
-Justin Stitt <justinstitt@google.com>
-
+Cheers,
+Nathan
