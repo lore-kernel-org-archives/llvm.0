@@ -1,113 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5BF2322DAF;
-	Fri, 27 Mar 2026 08:21:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774599680; cv=none; b=ijDGf+g0cvvx3dAdsl2a9QXWwHa+f5iynj0MwQ+TiIYUwBBiWqJSBHj8DMepVAim2b1FP86k4fPJ6GLOrl7rSoFklJeEEiYsmYJrnbBOhDBSnjFII6MWdOCH4ODz/2Lpt0W4VrFWxJr87MH/zika+t1cOq/dOSHoGxTY/+OXa0c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774599680; c=relaxed/simple;
-	bh=Vn5F78ip/X64SqJwzuFmEuGT3eHZ3TyVB/hj5cJy9/E=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jtfcin+kU5712VqpVclVq2CBS3VVtxVLAfAINzJip2LSySI+zK5G1Ofq6gbzNnFFPXorVU9WWHZKqgHbt9V+9QziaBAopXzeO2IVtNG0AiFq9RgJ2rGl+nzCTb9wtS88+/2MSZ1vlJp7ZTwYzKZSchqzIm+JdM2ByehxC/oT9d4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sorm3rRN; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B0E280A29
+	for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 08:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774601830; cv=pass; b=PWekxNIzafyOusRNe9QXIwAqrqTehRWsxZLH/0CFEGIJKD+YR1Li4XST/lfcozraljvo6x9rTS+6T91ZY0wTEOlEAkH54PgLHwE/szoFLyQvuQ5kDVEuzSIofPcdy6FuCBmyUFuAtNS3ilPb/9isR8DaulVVqR/2/AA2PucXMbI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774601830; c=relaxed/simple;
+	bh=kBO4iiA32cnxwKGzj+juzvgNMZmd4iWHksmtiGUJvKg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WpUwh6jRcYyvCE+OV/zdnbVec0GYm9Nu+YUWT96EraA/ZQd+lNQrLrJnkK2sZdUNepLTF73vmwBoSuWkBS7AQ3+R4V5eawajfKq5U+O4U4XsSpJ5zCBtX4eEz6Z6H9cDQUUTF/yN53Zwn2JR7qWokX/kbghm3J6dwf87atCGFKc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tpo1G5R+; arc=pass smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sorm3rRN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08347C19423;
-	Fri, 27 Mar 2026 08:21:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774599678;
-	bh=Vn5F78ip/X64SqJwzuFmEuGT3eHZ3TyVB/hj5cJy9/E=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=sorm3rRNaRNDfAjT4J9hR/IWzCxlACPy0pbXyhcARMkL9jT57MW46Ez5FfAN0P5Pz
-	 FbcnahzNwio7jIPutZZrB08Nn8TLOVqY09xba67/xAfYSbFVhw+4G5zmfg3OhGwPCs
-	 Z428HSylHslVB/N8MedJn1Hmofz7koYmtkijwPTuDwjahVb9n1cHw3TpREh/Wq0LGW
-	 JRq5+v/XzmujthnkmNRFarReqqzWXYWl+mBtGtJaE90VHgcXoTd/8NJ6Z91s4WtFnN
-	 4lMOSYL+sDJk2Ssf2x4t3EvRCZwWaPuKyqsNGa1ViO9fJlikKFs8fkD/sD2qkkfX5l
-	 iWWgFyLvMwGIQ==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Gary Guo <gary@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng
- <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn?= Roy
- Baron
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Alice Ryhl
- <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
- <dakr@kernel.org>, Abdiel Janulgue <abdiel.janulgue@gmail.com>, Daniel
- Almeida <daniel.almeida@collabora.com>, Robin Murphy
- <robin.murphy@arm.com>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: rust-for-linux@vger.kernel.org, driver-core@lists.linux.dev,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 6/8] rust: io: add `read_val` and `write_val` function
- on I/O view
-In-Reply-To: <20260323153807.1360705-7-gary@kernel.org>
-References: <20260323153807.1360705-1-gary@kernel.org>
- <x9CNNH_pSn2n9-PCo7dX7L8m_TykniwA_-YZSe604nqWvAJAKe534_yo9gacCO-pD833mKwNx42DshdzaPgehQ==@protonmail.internalid>
- <20260323153807.1360705-7-gary@kernel.org>
-Date: Fri, 27 Mar 2026 09:21:09 +0100
-Message-ID: <877bqxy96y.fsf@t14s.mail-host-address-is-not-set>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tpo1G5R+"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-128eb45835cso108803c88.1
+        for <llvm@lists.linux.dev>; Fri, 27 Mar 2026 01:57:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774601827; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WC/ghfFPx5UuCU9u7I61D9FHKu/xnS3pY4v1K4NW0iTVIC6P4g50v09xCg2NJsIj7z
+         pzSeJekyZB4AyVoViEX3cVok/qWB4R3t6hs7RylwXk2ECZq+oDonvlMNxciE5MM09TbN
+         /W9lmJkAsJ0RrI/+L39RheLrNWAfHrCCueNx/8ovhXFiDMQJkYRrg0f0XluY/mlSK8WM
+         ICeYWCPoJjbx2bCJt0IZ7hXZB4iwRH2qm5mfG4K1HJ5RHNn3CWWeY91uL9Ne1jhpp3IU
+         OnF3OAG8Y83wU++ZPUlYmEbbI3QhIMP6rz6jixb2PoYq1FNzuIAlcQRqsWQFx1nX8kCm
+         9O0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kBO4iiA32cnxwKGzj+juzvgNMZmd4iWHksmtiGUJvKg=;
+        fh=+osfa/ezuuSfuuZMXmgz8ac8SZN09C5wygH0v9KJtT4=;
+        b=AVkzitmBM7l65i6krsL6vCw3qjFNjlvB73IRHJ6fC7oanarGqVFbAWjGPBcB4m3ipv
+         U4SVDl30z3NA3dIAe9vwuKGHJ1yLvodL+25X4B5CpTcVB/iarLqgnRA8T1tz/R8tnQGm
+         V3EEIqxG9olBxd7yK8knH6el35Hm2y/OwTDBpH8qMQH3m7orJ/+sy0t0wESGsWILABQO
+         FrovrPgmNc7brqvk1RSiz1MAIM6KI3OJAj0RouDOB0/KelHpsAZtDX9PA1HXkh6LO2VZ
+         jhlfxZyZ/8GVvKMtNTaqrKWvPQ2v1V4orK/0zskZ/zPfNI99tWJaaxjKrNlirgGqu85t
+         R9fA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774601827; x=1775206627; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kBO4iiA32cnxwKGzj+juzvgNMZmd4iWHksmtiGUJvKg=;
+        b=Tpo1G5R+KMGOpCwD+d2tVprC5uBNscvgb5jnIyfqIYN9fE3VveZfLAGV+SzBKy7zEu
+         sNujyr/tVY5TvDIBt6XOzCUIIlCq1FYqpt9oW3HE48MCg9eRg5hqsHo441LBn+n2bqOT
+         J9WsLwDC0Os8acljqNu3048onBa6I4kizZc6W1xVs91Bx3NsFZ02nZ2GDyBq+JhwAMkg
+         J7ML8dswC6JSUd2hoNtI5ZPADdOxK8gHfskwtQfJ85NgHdy5ilbiA4NOAiIMxrDQTNYU
+         N5oL7quQN5I8oNG1l3SEv6mK8uqmqS/r51jKP7id6NxGjh2UHSW4XRNVrokEV6wW2yVX
+         BJ4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774601827; x=1775206627;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kBO4iiA32cnxwKGzj+juzvgNMZmd4iWHksmtiGUJvKg=;
+        b=Tw4D1EndTrd8w7B0psusoMjcLRO/mVokuNPiSoWwhpUNkw0G/caT6nEN8TwXl5oxaR
+         v/D6E71y9dTouBB2g3nJfgVpsl0RycYL8ddp7u0P95QVl1TYmClf8FDpypozUyEqFvUh
+         Z0zK4vpwmb2CjplthnIZ/wM5A/lJhSXwjZqE17YJeISjLZbAVEHLbzFKKLlHKAN0x8XN
+         0h+mzfTEnYdhQeiShVDrrLbID0dnKY1nUQZSOnqsy6f7AcyjF1PUzT+8fSJWIoLfCSTh
+         pdeCZkev9jqIhMau20ui33LYNASCVANX4HeIrkH2OmyD/8xVlkQ1Ga9IGPP88ml70zzi
+         /73w==
+X-Gm-Message-State: AOJu0YzMrTproHzKhuobwPBngoBX2gu7xnTPeWvzHeSdPC4cifQWHk33
+	S09LLhHev6rEDAxIV8L3GNf/gDBRf+cJuBeJxxCpaQiiYxz8Aj8SliV0S+ogOYypdg/rawcYyW2
+	yqMz9B+tW2BdTRsrMIAaHyZfNJk7BEBU=
+X-Gm-Gg: ATEYQzwe48PGL9kPaM97b8jp8q/6xXfkFfH4RZuqRhI+dC108QM4f9mtQGLzNb32q/V
+	Os+A0eQglfefLX5gXgCyWD3EI85an4DpAE4DVLVxtYVyoJJWzDQmO+KXETWXR3pllZU8nGI1bH/
+	9xUWSP41RZpW/0PC5yHOa3Ds3v0+AywvNaXucgG4eCVa8XmCw9bUShNWAZq5i2ZCgnDOGWe0RDD
+	r0WqjA60nJ8GWFoDt+yFDn2L4A9qm3jYAGv4l0WUx1eDa5x1rb2bbVAo3jv1WOAaQZyD31KEM5E
+	2z0B6AyQ8Pnr5dm4MkVmDzLR11sFVysnB6fLP44vdSEpfrWqNJEUUcXyIQ30m7z+FDPv1uUjQUz
+	r7Pe+a8gu3x/pFQUuNC1kXr2upvCfN//J7w==
+X-Received: by 2002:a05:7300:3254:b0:2be:1946:858b with SMTP id
+ 5a478bee46e88-2c185e6b478mr416977eec.3.1774601826841; Fri, 27 Mar 2026
+ 01:57:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260325000809.GA618985@ax162>
+In-Reply-To: <20260325000809.GA618985@ax162>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 27 Mar 2026 09:56:54 +0100
+X-Gm-Features: AQROBzCf-e2VbK4X7E1SV3PnA3xigEDYgvHGUnmgBxKKh0VrvS619qex1UYpI3I
+Message-ID: <CANiq72nHibowuTvFv4oiDjq_asRO_89DNzD1dmMnhiWfGu5WKw@mail.gmail.com>
+Subject: Re: Prebuilt LLVM 22.1.2 uploaded
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-"Gary Guo" <gary@kernel.org> writes:
-
-> From: Gary Guo <gary@garyguo.net>
+On Wed, Mar 25, 2026 at 1:08=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
 >
-> When a view is narrowed to just a primitive, these functions provide a way
-> to access them using the `IoCapable` trait. This is used to provide
-> `io_read!` and `io_write!` macros, which are generalized version of current
-> `dma_read!` and `dma_write!` macro (that works on `Coherent` only, but not
-> subview of them, or other I/O backends).
+> I have built and uploaded LLVM 22.1.2 to
+> https://mirrors.edge.kernel.org/pub/tools/llvm/.
 >
-> For DMA coherent objects, `IoCapable` is only implemented for atomically
-> accessible primitives; this is because `read_volatile`/`write_volatile` can
-> behave undesirably for aggregates; LLVM may turn them to multiple
-> instructions to access parts and assemble, or could combine them to a
-> single instruction.
->
-> The ability to read/write aggregates (when atomicity is of no concern),
-> could be implemented with copying primitives (e.g. memcpy_{from,to}io) in
-> the future.
->
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> ---
->  rust/kernel/dma.rs | 40 +++++++++++++++++++
->  rust/kernel/io.rs  | 95 ++++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 135 insertions(+)
->
-> diff --git a/rust/kernel/dma.rs b/rust/kernel/dma.rs
-> index ae2939abc166..fcdf85f5ed50 100644
-> --- a/rust/kernel/dma.rs
-> +++ b/rust/kernel/dma.rs
-> @@ -877,6 +877,46 @@ fn as_ptr(&self) -> *mut Self::Type {
->      }
->  }
->
-> +/// Implements [`IoCapable`] on `Coherent` for `$ty` using `read_volatile` and `write_volatile`.
-> +macro_rules! impl_coherent_io_capable {
-> +    ($(#[$attr:meta])* $ty:ty) => {
-> +        $(#[$attr])*
-> +        impl<T: ?Sized + KnownSize> IoCapable<$ty> for Coherent<T> {
-> +            #[inline]
-> +            unsafe fn io_read(&self, address: *mut $ty) -> $ty {
-> +                // SAFETY:
-> +                // - By the safety precondition, the address is within bounds of the allocation and
-> +                //   aligned.
-> +                // - Using read_volatile() here so that race with hardware is well-defined.
-> +                // - Using read_volatile() here is not sound if it races with other CPU per Rust
-> +                //   rules, but this is allowed per LKMM.
+> If there are any issues found, please let us know via email or
+> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+> opportunity to get them fixed in main and backported before the 22.x
+> series is no longer supported.
 
-You are not covering how we satisfy "Reading from src must produce a
-properly initialized value of type T." I assume you need a bound on `T: FromBytes`?
+As usual, I ran a test with Rust enabled for x86_64 using this LLVM
+toolchain for the C side:
 
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-Best regards,
-Andreas Hindborg
+Thanks!
 
-
+Cheers,
+Miguel
