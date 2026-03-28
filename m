@@ -1,66 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A844533507E;
-	Sat, 28 Mar 2026 21:44:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5E61AF0BB;
+	Sat, 28 Mar 2026 22:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774734245; cv=none; b=guFCJwIjTvF/URoVBKpUTyJVyAz7Fe58Ne3Co5fP1RWgYj+H4RgmeU1d1LZKYc6tK0bXokw4PbPh+sgjc3jUP1xcS0m3sZpOYhAb/E0WuTzae7VjQjN/8ZWtDJDNo0a2ejXcOM52Pgpg0iiOuyjszbSUpap1mWG6nixlmyqj+UA=
+	t=1774735572; cv=none; b=uw0RqrZl2pfvmjFfG15Cx1TcyI9dN8XfkDnWAEm05FNQ7XRBaHNDaSuFzAa8ouDPs9ktxn7bdvQoxfqURiWgNjO4uHFFk2aAXZjt4JCJZhOp+l4s5t2LkgkHUjPM61pgGTxrJw+iUvraHxjmHjCfXkWp/3KIHrXwZmvvhCaZrKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774734245; c=relaxed/simple;
-	bh=pTaIRF05eUSnh7ITUOAxQRdSFzmhR1m8AG4YR7CBpy8=;
+	s=arc-20240116; t=1774735572; c=relaxed/simple;
+	bh=pzc/tpsXptWa/yPOeB/pL7zDiAuIXRW8wVhhv3EJYGc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G4uc3LlkK1HtttqzdFdUKksEAtlGoPuZgMq1OuHo4HE7VBDbugPrKcHhgjhVYA6AoCNZzrfTn4Kn/b1s89JnLdwwkFBazh5fuvHXFOaQEX5m9lIAjfNgPlbeNUS4sglA2fN65Roj6Dk7dVdWjGq4TPLrnE5YY+mSKBWU1zwymsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GaqvtwxP; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=IUhMUv57lJULBYpa5M48x8cRdnKZmmJjbVcY5C6fAXUZ8C/1vA6+Frkk2Y3oq/+k2jfwfQAy93/LaMKonudK+JVDMQrpVJfdWOzUfWSRGZxP+/GLMNAWIdhilyyBuPU/8s0D3xB1hWfytq98CIwVfif1O5ErckmvgSMpxNyiTrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O6yLyMe8; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GaqvtwxP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O6yLyMe8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774734244; x=1806270244;
+  t=1774735569; x=1806271569;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=pTaIRF05eUSnh7ITUOAxQRdSFzmhR1m8AG4YR7CBpy8=;
-  b=GaqvtwxPPSmMCzwiZt/5b+l+eeRqkZxFqJC2wZKVsce07ZT82xx66+yY
-   dd6LhhosgA6/h1aPOs/44MkV0SWHAbbNmzoHUMjNTVzTltvSPbkcwdRRJ
-   d4jn52t4paetMoZOCYP50BdZJTfW39luR9Q3dbMHGnefJxzaWgrX+W67L
-   tUq84JFb+ZXVg4I5zFriomh//m9gIW3fnaqHR1/Vj0WNWGe/PEEgMHLCo
-   Bv8vPrvC9SUeW0Iax1s6lT6v51YdZaqm9kEarO0gIrscSDmz/RUnNLS5H
-   iKKwDO013l3m9IK57WYcYsZ3kGre0KSDBAwG2dFRKVdfy2Sa8Cf00QPi5
-   A==;
-X-CSE-ConnectionGUID: gKobpWGLRNC4bYfdsov9JA==
-X-CSE-MsgGUID: ijR8HFBOQVOsZpC+b5eBwg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="86078192"
+  bh=pzc/tpsXptWa/yPOeB/pL7zDiAuIXRW8wVhhv3EJYGc=;
+  b=O6yLyMe88Nhsc3aLW49+hkCqWDJzJjnGis0wr9dlRPeEjzyYLHFAN+xB
+   D/bJw3ud7WdgNMhcJV50VQKuIem66x86YG4jY+lYKMD48tP9m/VS8qArv
+   NHoTaJfD+FQDnXwob5oo4t4fm+aq55P5VKGeVpYqc0dcJRmbjTg3RlHaA
+   HZZRL/Yf5o3HbuXRiZd2Z/s4ps1MbEGP/FdlyC/XeqivGZy5oeBRDt0Nk
+   2LuZf4B/ZIvvaDilyQiN26fxYtdBVi6Yucmvc22s0vS3+/jhELLElTw+S
+   4OJzq4MOfecce/zSfSQIrz7vUxI3pAJjeZJ5kubWWSKyTJQM5qsUrMbuk
+   w==;
+X-CSE-ConnectionGUID: m2+9P1GuQCq/N4uamty7aA==
+X-CSE-MsgGUID: ouKcG8mtRS6/5k5s4l1msQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="75793924"
 X-IronPort-AV: E=Sophos;i="6.23,146,1770624000"; 
-   d="scan'208";a="86078192"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 14:44:04 -0700
-X-CSE-ConnectionGUID: 4tDmfR+KTXCKh2mQvlbrHA==
-X-CSE-MsgGUID: qilT9Ai5Suyuaq+7qEE82Q==
+   d="scan'208";a="75793924"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 15:06:09 -0700
+X-CSE-ConnectionGUID: w8xu/IBFTLKr5v3SzSh+tA==
+X-CSE-MsgGUID: +GVCDlQhQuiRiai87czLpA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,146,1770624000"; 
-   d="scan'208";a="222330962"
+   d="scan'208";a="225545327"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 28 Mar 2026 14:44:01 -0700
+  by orviesa009.jf.intel.com with ESMTP; 28 Mar 2026 15:06:04 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w6bRm-00000000Bnp-3xr8;
-	Sat, 28 Mar 2026 21:43:58 +0000
-Date: Sun, 29 Mar 2026 05:43:27 +0800
+	id 1w6bn6-00000000BoL-0LI1;
+	Sat, 28 Mar 2026 22:06:00 +0000
+Date: Sun, 29 Mar 2026 06:05:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Linus Walleij <linusw@kernel.org>, Rob Herring <robh@kernel.org>,
+To: Jay Liu <jay.liu@mediatek.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
-Subject: Re: [PATCH v3 2/2] pinctrl: qcom: Introduce IPQ5210 TLMM driver
-Message-ID: <202603290505.16AYT5so-lkp@intel.com>
-References: <20260325-ipq5210_tlmm-v3-2-3a4b9bb6b1fc@oss.qualcomm.com>
+	linux-arm-kernel@lists.infradead.org,
+	Jay Liu <jay.liu@mediatek.com>
+Subject: Re: [PATCH v4 5/6] drm/mediatek: Support multiple CCORR component
+Message-ID: <202603290611.fr83Gu7M-lkp@intel.com>
+References: <20260324125315.4715-6-jay.liu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,46 +76,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260325-ipq5210_tlmm-v3-2-3a4b9bb6b1fc@oss.qualcomm.com>
+In-Reply-To: <20260324125315.4715-6-jay.liu@mediatek.com>
 
-Hi Kathiravan,
+Hi Jay,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 85964cdcad0fac9a0eb7b87a0f9d88cc074b854c]
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm/drm-next pza/reset/next linus/master v7.0-rc5 next-20260327]
+[cannot apply to pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kathiravan-Thirumoorthy/dt-bindings-pinctrl-qcom-add-IPQ5210-pinctrl/20260327-002731
-base:   85964cdcad0fac9a0eb7b87a0f9d88cc074b854c
-patch link:    https://lore.kernel.org/r/20260325-ipq5210_tlmm-v3-2-3a4b9bb6b1fc%40oss.qualcomm.com
-patch subject: [PATCH v3 2/2] pinctrl: qcom: Introduce IPQ5210 TLMM driver
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260329/202603290505.16AYT5so-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260329/202603290505.16AYT5so-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jay-Liu/dt-bindings-display-mediatek-gamma-Add-support-for-MT8196/20260328-083359
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20260324125315.4715-6-jay.liu%40mediatek.com
+patch subject: [PATCH v4 5/6] drm/mediatek: Support multiple CCORR component
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260329/202603290611.fr83Gu7M-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260329/202603290611.fr83Gu7M-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603290505.16AYT5so-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603290611.fr83Gu7M-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pinctrl/qcom/pinctrl-ipq5210.c:377:30: warning: suspicious concatenation of string literals in an array initialization; did you mean to separate the elements with a comma? [-Wstring-concatenation]
-     377 |         "gpio40", "gpio41", "gpio42""gpio43",
-         |                                     ^
-         |                                     ,
-   drivers/pinctrl/qcom/pinctrl-ipq5210.c:377:22: note: place parentheses around the string literal to silence warning
-     377 |         "gpio40", "gpio41", "gpio42""gpio43",
-         |                             ^
-   1 warning generated.
+>> drivers/gpu/drm/mediatek/mtk_ddp_comp.c:461:3: error: use of undeclared identifier 'DDP_COMPONENT_CCORR0'; did you mean 'DDP_COMPONENT_CCORR'?
+     461 |         [DDP_COMPONENT_CCORR0]          = { MTK_DISP_CCORR,             0, &ddp_ccorr },
+         |          ^~~~~~~~~~~~~~~~~~~~
+         |          DDP_COMPONENT_CCORR
+   include/linux/soc/mediatek/mtk-mmsys.h:27:2: note: 'DDP_COMPONENT_CCORR' declared here
+      27 |         DDP_COMPONENT_CCORR,
+         |         ^
+>> drivers/gpu/drm/mediatek/mtk_ddp_comp.c:462:3: error: use of undeclared identifier 'DDP_COMPONENT_CCORR1'; did you mean 'DDP_COMPONENT_CCORR'?
+     462 |         [DDP_COMPONENT_CCORR1]          = { MTK_DISP_CCORR,             1, &ddp_ccorr },
+         |          ^~~~~~~~~~~~~~~~~~~~
+         |          DDP_COMPONENT_CCORR
+   include/linux/soc/mediatek/mtk-mmsys.h:27:2: note: 'DDP_COMPONENT_CCORR' declared here
+      27 |         DDP_COMPONENT_CCORR,
+         |         ^
+   drivers/gpu/drm/mediatek/mtk_ddp_comp.c:462:28: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     462 |         [DDP_COMPONENT_CCORR1]          = { MTK_DISP_CCORR,             1, &ddp_ccorr },
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/mediatek/mtk_ddp_comp.c:461:28: note: previous initialization is here
+     461 |         [DDP_COMPONENT_CCORR0]          = { MTK_DISP_CCORR,             0, &ddp_ccorr },
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-vim +377 drivers/pinctrl/qcom/pinctrl-ipq5210.c
+vim +461 drivers/gpu/drm/mediatek/mtk_ddp_comp.c
 
-   375	
-   376	static const char *const audio_sec_groups[] = {
- > 377		"gpio40", "gpio41", "gpio42""gpio43",
-   378	};
-   379	
+   456	
+   457	static const struct mtk_ddp_comp_match mtk_ddp_matches[DDP_COMPONENT_DRM_ID_MAX] = {
+   458		[DDP_COMPONENT_AAL0]		= { MTK_DISP_AAL,		0, &ddp_aal },
+   459		[DDP_COMPONENT_AAL1]		= { MTK_DISP_AAL,		1, &ddp_aal },
+   460		[DDP_COMPONENT_BLS]		= { MTK_DISP_BLS,		0, NULL },
+ > 461		[DDP_COMPONENT_CCORR0]		= { MTK_DISP_CCORR,		0, &ddp_ccorr },
+ > 462		[DDP_COMPONENT_CCORR1]		= { MTK_DISP_CCORR,		1, &ddp_ccorr },
+   463		[DDP_COMPONENT_COLOR0]		= { MTK_DISP_COLOR,		0, &ddp_color },
+   464		[DDP_COMPONENT_COLOR1]		= { MTK_DISP_COLOR,		1, &ddp_color },
+   465		[DDP_COMPONENT_DITHER0]		= { MTK_DISP_DITHER,		0, &ddp_dither },
+   466		[DDP_COMPONENT_DP_INTF0]	= { MTK_DP_INTF,		0, &ddp_dpi },
+   467		[DDP_COMPONENT_DP_INTF1]	= { MTK_DP_INTF,		1, &ddp_dpi },
+   468		[DDP_COMPONENT_DPI0]		= { MTK_DPI,			0, &ddp_dpi },
+   469		[DDP_COMPONENT_DPI1]		= { MTK_DPI,			1, &ddp_dpi },
+   470		[DDP_COMPONENT_DRM_OVL_ADAPTOR]	= { MTK_DISP_OVL_ADAPTOR,	0, &ddp_ovl_adaptor },
+   471		[DDP_COMPONENT_DSC0]		= { MTK_DISP_DSC,		0, &ddp_dsc },
+   472		[DDP_COMPONENT_DSC1]		= { MTK_DISP_DSC,		1, &ddp_dsc },
+   473		[DDP_COMPONENT_DSI0]		= { MTK_DSI,			0, &ddp_dsi },
+   474		[DDP_COMPONENT_DSI1]		= { MTK_DSI,			1, &ddp_dsi },
+   475		[DDP_COMPONENT_DSI2]		= { MTK_DSI,			2, &ddp_dsi },
+   476		[DDP_COMPONENT_DSI3]		= { MTK_DSI,			3, &ddp_dsi },
+   477		[DDP_COMPONENT_GAMMA]		= { MTK_DISP_GAMMA,		0, &ddp_gamma },
+   478		[DDP_COMPONENT_MERGE0]		= { MTK_DISP_MERGE,		0, &ddp_merge },
+   479		[DDP_COMPONENT_MERGE1]		= { MTK_DISP_MERGE,		1, &ddp_merge },
+   480		[DDP_COMPONENT_MERGE2]		= { MTK_DISP_MERGE,		2, &ddp_merge },
+   481		[DDP_COMPONENT_MERGE3]		= { MTK_DISP_MERGE,		3, &ddp_merge },
+   482		[DDP_COMPONENT_MERGE4]		= { MTK_DISP_MERGE,		4, &ddp_merge },
+   483		[DDP_COMPONENT_MERGE5]		= { MTK_DISP_MERGE,		5, &ddp_merge },
+   484		[DDP_COMPONENT_OD0]		= { MTK_DISP_OD,		0, &ddp_od },
+   485		[DDP_COMPONENT_OD1]		= { MTK_DISP_OD,		1, &ddp_od },
+   486		[DDP_COMPONENT_OVL0]		= { MTK_DISP_OVL,		0, &ddp_ovl },
+   487		[DDP_COMPONENT_OVL1]		= { MTK_DISP_OVL,		1, &ddp_ovl },
+   488		[DDP_COMPONENT_OVL_2L0]		= { MTK_DISP_OVL_2L,		0, &ddp_ovl },
+   489		[DDP_COMPONENT_OVL_2L1]		= { MTK_DISP_OVL_2L,		1, &ddp_ovl },
+   490		[DDP_COMPONENT_OVL_2L2]		= { MTK_DISP_OVL_2L,		2, &ddp_ovl },
+   491		[DDP_COMPONENT_POSTMASK0]	= { MTK_DISP_POSTMASK,		0, &ddp_postmask },
+   492		[DDP_COMPONENT_PWM0]		= { MTK_DISP_PWM,		0, NULL },
+   493		[DDP_COMPONENT_PWM1]		= { MTK_DISP_PWM,		1, NULL },
+   494		[DDP_COMPONENT_PWM2]		= { MTK_DISP_PWM,		2, NULL },
+   495		[DDP_COMPONENT_RDMA0]		= { MTK_DISP_RDMA,		0, &ddp_rdma },
+   496		[DDP_COMPONENT_RDMA1]		= { MTK_DISP_RDMA,		1, &ddp_rdma },
+   497		[DDP_COMPONENT_RDMA2]		= { MTK_DISP_RDMA,		2, &ddp_rdma },
+   498		[DDP_COMPONENT_RDMA4]		= { MTK_DISP_RDMA,		4, &ddp_rdma },
+   499		[DDP_COMPONENT_UFOE]		= { MTK_DISP_UFOE,		0, &ddp_ufoe },
+   500		[DDP_COMPONENT_WDMA0]		= { MTK_DISP_WDMA,		0, NULL },
+   501		[DDP_COMPONENT_WDMA1]		= { MTK_DISP_WDMA,		1, NULL },
+   502	};
+   503	
 
 -- 
 0-DAY CI Kernel Test Service
