@@ -1,66 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2723446C5;
-	Sat, 28 Mar 2026 19:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E1E28DB46;
+	Sat, 28 Mar 2026 21:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774725420; cv=none; b=enjOLIZihLly8M/flKc5Li1tckinrGCreOd6BKeNDagI76L7NsLiCErUTJIYTSTaMuBCzEPZtLPA/6cXujVkHCLLg1zUNB+Xuz8DxXSgjNhOEH81/Brb6Qia2k0ix0MB35R+q/inKjVwI4X1zNvGj88xShhwhuwYonj+sxcHEPg=
+	t=1774731724; cv=none; b=a5TeYmVtrtf6yOcDsbgRYs/aCDjnalDPhOYw6qecmyJ1gMNqluG2Qliy6feQryUa6VdKkaw7RzRNNMQVXX5QuRZovnJ0S8+7czl21Z6Wjv6sInkKweYwTTpO5BkZO2AJDsnsltnnPpJ06lD5LyFHQFK6xOSoEINyA3b2jNEEBec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774725420; c=relaxed/simple;
-	bh=Xi4KHjD3HwXhk0uReoN+g21GwT4k86mOjEuUDpZkY6I=;
+	s=arc-20240116; t=1774731724; c=relaxed/simple;
+	bh=3T6ln19B3QTWADMNWNJP3YA3rSvxbxarUP9Ato9B9a8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Crn9pClz+ZFwvH9zHUZj5Og/C9F2T1y5hC1hgEvENIsc0/adD0PQ5m0u5CujiZLDXHfOoDZRTKTWBgJUhHzMUdniQErPkpQDIAyShy8ohRJgkNziZcRLh1RLt9buiDvHndF4q2CSpUGs9wtK3TdyUumX60xDp6PTgQxZ5G+knbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b/TIOwp+; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=XCP7SPsCK7l/W/WWpqlmJg+otpD18KwmvCyzPG2t4brcdYPd3L7s/HekKANO6IcX5PI+xFlX9SAzLnYBPFSOMkEfo79MInpuUH5xTuK4OcngTHLffFiUj5H8Qq1qa+i83AqfelBhMGZkkqeeXRIqIZEMw+fKYuQP2MFaF1Lf04s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bJbetxKG; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b/TIOwp+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bJbetxKG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774725416; x=1806261416;
+  t=1774731721; x=1806267721;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Xi4KHjD3HwXhk0uReoN+g21GwT4k86mOjEuUDpZkY6I=;
-  b=b/TIOwp+98/w1oxHQ4ttjXbjCmXylaA+NjiN4LbCTr2jxKi9Na7c2fsw
-   QjoIF9w10iFxUXbs0UFchM5TAhTWzYRSBJQ1lTKBPoJ5ZSOF+6vjK4e8a
-   irWZ7CBLyyrux2BqKFY+K4RYveR4vx3n/Pmke+sUl9AwVssgtOlbraRln
-   uUGhGJTHpUYgdeXFCeZnPvaa8AnvfXQzI7Ktr/U96DpkjGA2Kofs/kvSC
-   fTIiJDlU9jm/WZcA+f1cpASTiIj4BoSy76ue+8sUB6p8Rfh5KgyYcCNVB
-   +tFpf/Q86W6J5bHSC3pofwqWVWro+NAdieZqcRHWOoIz4dJcWb0pmf/yu
+  bh=3T6ln19B3QTWADMNWNJP3YA3rSvxbxarUP9Ato9B9a8=;
+  b=bJbetxKGz5lIv3AzSSxSbIvBKKVrH2h7iPXGH+nRib+b+cgPH0xIBPLu
+   dhFLrIJ4/6MJ1Wts7VWIE14Qeb32/0r/ZKYSl40qomW7O62qutAOCO70q
+   ZAsOqy9O0Ip4uaNgER8wCcKSYRJbu8T+XwpZg4mTHAHPDIWEpJBVSKNyx
+   +rcp+0GEQR4O0/HV/zt3CigsyXye232uoW2mXws7CgaahgDU6Z38kJout
+   K1A1mek3cxHdHxRGCAfZdH4vsJ0SmlIh/me8iMIHiENx4Bvvkl4XIN0JQ
+   tbhHgC76ai/Z2Qb4TRlRZdUNk8SUZodieEHh+tszksIYhgZr98SxfgYeH
    w==;
-X-CSE-ConnectionGUID: HiEeHKhoQmS95sla9MOSfQ==
-X-CSE-MsgGUID: 0S3zF0zyRtOU+iiF2WtfKw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="74951692"
+X-CSE-ConnectionGUID: EYMMqigJRA2vX5O2qhkXQQ==
+X-CSE-MsgGUID: h6EBGUiZSYy7OpTd18+k2g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="98386302"
 X-IronPort-AV: E=Sophos;i="6.23,146,1770624000"; 
-   d="scan'208";a="74951692"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 12:16:55 -0700
-X-CSE-ConnectionGUID: Bi6e9WZjTFGfUJ6pscOXrQ==
-X-CSE-MsgGUID: q0TWhhlOSjmSh9srGREixg==
+   d="scan'208";a="98386302"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 14:02:01 -0700
+X-CSE-ConnectionGUID: u6H3sVA9QQi87kE3dGjf+w==
+X-CSE-MsgGUID: hfIzUsaPQuKZ7QaTh1369g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,146,1770624000"; 
-   d="scan'208";a="230399835"
+   d="scan'208";a="248871777"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 28 Mar 2026 12:16:52 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 28 Mar 2026 14:02:00 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w6Z9N-00000000Bi1-1tAL;
-	Sat, 28 Mar 2026 19:16:49 +0000
-Date: Sun, 29 Mar 2026 03:16:11 +0800
+	id 1w6an7-00000000Blp-39UE;
+	Sat, 28 Mar 2026 21:01:57 +0000
+Date: Sun, 29 Mar 2026 05:01:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Rob Herring <robh@kernel.org>, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v3 2/3] drm/gem-dma: Use the dma_*_attr API variant
-Message-ID: <202603290350.pIgD9ufQ-lkp@intel.com>
-References: <20260326100248.1171828-3-wenst@chromium.org>
+To: Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 6/6] net: ethernet: ti: am65-cpsw-nuss: Enable batch
+ processing for TX / TX CMPL
+Message-ID: <202603290408.efqYwGwb-lkp@intel.com>
+References: <20260325123850.638748-7-s-vadapalli@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,109 +63,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260326100248.1171828-3-wenst@chromium.org>
+In-Reply-To: <20260325123850.638748-7-s-vadapalli@ti.com>
 
-Hi Chen-Yu,
+Hi Siddharth,
 
-kernel test robot noticed the following build errors:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on next-20260327]
-[cannot apply to sunxi/sunxi/for-next linus/master v7.0-rc5]
+[auto build test WARNING on vkoul-dmaengine/next]
+[also build test WARNING on linus/master v7.0-rc5 next-20260327]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Yu-Tsai/drm-Introduce-DRM_MODE_DUMB_KERNEL_MAP-flag/20260328-141115
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20260326100248.1171828-3-wenst%40chromium.org
-patch subject: [PATCH v3 2/3] drm/gem-dma: Use the dma_*_attr API variant
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260329/202603290350.pIgD9ufQ-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Siddharth-Vadapalli/soc-ti-k3-ringacc-Add-helper-to-get-realtime-count-of-free-elements/20260326-120018
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20260325123850.638748-7-s-vadapalli%40ti.com
+patch subject: [RFC PATCH 6/6] net: ethernet: ti: am65-cpsw-nuss: Enable batch processing for TX / TX CMPL
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260329/202603290408.efqYwGwb-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260329/202603290350.pIgD9ufQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260329/202603290408.efqYwGwb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603290350.pIgD9ufQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603290408.efqYwGwb-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/renesas/rcar-du/rcar_du_vsp.c:297:11: error: expected ')'
-     297 |                                                     gem->dma_attrs);
-         |                                                     ^
-   drivers/gpu/drm/renesas/rcar-du/rcar_du_vsp.c:295:31: note: to match this '('
-     295 |                         ret = dma_get_sgtable_attrs(rcdu->dev, sgt, gem->vaddr,
-         |                                                    ^
-   1 error generated.
+   drivers/net/ethernet/ti/am65-cpsw-nuss.c:900:9: warning: cast to smaller integer type 'enum am65_cpsw_tx_buf_type' from 'void *' [-Wvoid-pointer-to-enum-cast]
+     900 |         return (enum am65_cpsw_tx_buf_type)k3_cppi_desc_pool_desc_info(tx_chn->desc_pool,
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     901 |                                                                        desc_idx);
+         |                                                                        ~~~~~~~~~
+>> drivers/net/ethernet/ti/am65-cpsw-nuss.c:1705:6: warning: variable 'res' set but not used [-Wunused-but-set-variable]
+    1705 |         int res, num_tx;
+         |             ^
+   2 warnings generated.
 
 
-vim +297 drivers/gpu/drm/renesas/rcar-du/rcar_du_vsp.c
+vim +/res +1705 drivers/net/ethernet/ti/am65-cpsw-nuss.c
 
-   258	
-   259	int rcar_du_vsp_map_fb(struct rcar_du_vsp *vsp, struct drm_framebuffer *fb,
-   260			       struct sg_table sg_tables[3])
-   261	{
-   262		struct rcar_du_device *rcdu = vsp->dev;
-   263		unsigned int i, j;
-   264		int ret;
-   265	
-   266		for (i = 0; i < fb->format->num_planes; ++i) {
-   267			struct drm_gem_dma_object *gem = drm_fb_dma_get_gem_obj(fb, i);
-   268			struct sg_table *sgt = &sg_tables[i];
-   269	
-   270			if (gem->sgt) {
-   271				struct scatterlist *src;
-   272				struct scatterlist *dst;
-   273	
-   274				/*
-   275				 * If the GEM buffer has a scatter gather table, it has
-   276				 * been imported from a dma-buf and has no physical
-   277				 * address as it might not be physically contiguous.
-   278				 * Copy the original scatter gather table to map it to
-   279				 * the VSP.
-   280				 */
-   281				ret = sg_alloc_table(sgt, gem->sgt->orig_nents,
-   282						     GFP_KERNEL);
-   283				if (ret)
-   284					goto fail;
-   285	
-   286				src = gem->sgt->sgl;
-   287				dst = sgt->sgl;
-   288				for (j = 0; j < gem->sgt->orig_nents; ++j) {
-   289					sg_set_page(dst, sg_page(src), src->length,
-   290						    src->offset);
-   291					src = sg_next(src);
-   292					dst = sg_next(dst);
-   293				}
-   294			} else {
-   295				ret = dma_get_sgtable_attrs(rcdu->dev, sgt, gem->vaddr,
-   296							    gem->dma_addr, gem->base.size
- > 297							    gem->dma_attrs);
-   298				if (ret)
-   299					goto fail;
-   300			}
-   301	
-   302			ret = vsp1_du_map_sg(vsp->vsp, sgt);
-   303			if (ret) {
-   304				sg_free_table(sgt);
-   305				goto fail;
-   306			}
-   307		}
-   308	
-   309		return 0;
-   310	
-   311	fail:
-   312		while (i--) {
-   313			struct sg_table *sgt = &sg_tables[i];
-   314	
-   315			vsp1_du_unmap_sg(vsp->vsp, sgt);
-   316			sg_free_table(sgt);
-   317		}
-   318	
-   319		return ret;
-   320	}
-   321	
+  1698	
+  1699	static int am65_cpsw_nuss_tx_compl_packets(struct am65_cpsw_common *common,
+  1700						   int chn, unsigned int budget, bool *tdown)
+  1701	{
+  1702		bool single_port = AM65_CPSW_IS_CPSW2G(common);
+  1703		struct am65_cpsw_tx_chn *tx_chn;
+  1704		u32 batch_size = 0;
+> 1705		int res, num_tx;
+  1706	
+  1707		tx_chn = &common->tx_chns[chn];
+  1708	
+  1709		if (!single_port)
+  1710			spin_lock(&tx_chn->lock);
+  1711	
+  1712		res = k3_udma_glue_pop_tx_chn_batch(tx_chn->tx_chn, tx_chn->cmpl_desc_dma_array,
+  1713						    &batch_size, AM65_CPSW_TX_BATCH_SIZE);
+  1714		if (!batch_size) {
+  1715			if (!single_port)
+  1716				spin_unlock(&tx_chn->lock);
+  1717			return 0;
+  1718		}
+  1719	
+  1720		num_tx = am65_cpsw_nuss_tx_cmpl_free_batch(common, chn, batch_size, budget, tdown);
+  1721	
+  1722		if (!single_port)
+  1723			spin_unlock(&tx_chn->lock);
+  1724	
+  1725		return num_tx;
+  1726	}
+  1727	
 
 -- 
 0-DAY CI Kernel Test Service
