@@ -1,213 +1,162 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80492F83B7;
-	Sat, 28 Mar 2026 13:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4062FF15B;
+	Sat, 28 Mar 2026 14:20:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774706048; cv=none; b=UsocC9j7DCIOiX10WiEiLLxYmlw/ZdMaYyciVS+8L7LyVx1tz1FwFgSoDqPExCHNcxamcJ7MhdyTWaTZPT+61hQKJXeJkNY1P5zKGshjZyzoHRhrIH7+s93Il0BMHh9fWFMzGgYy6ZFh+rbw4v6jT3okXXRNVPtT7ucwsO8QbCo=
+	t=1774707639; cv=none; b=rDQOZ/BX4E4d+lpLwXKLE5g+UrVyqTG7Z+yoxu4NnlItH9tzh9sx7m34D3w6LqGKPLBpLIBtrePrQc1RUIbeCshCi1MRtzMIhxXr3jQDz1wq82WttFqHQ+cpsMGo1sX2VxlMpZBxwYf90raRXD7kBt3/vd3q3Ew0wFaoIaYza+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774706048; c=relaxed/simple;
-	bh=YVYCGntBvyIjUxMBKGP5U7zMPbdGlUZrGABdfrJgNn8=;
+	s=arc-20240116; t=1774707639; c=relaxed/simple;
+	bh=xr7fm3XNdKFxhFsYnaPlMjk6niRTPElL9UdF0ILudQA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PrOE3DXp81779BO4gYZRw0Xa11651e6SPJf5dAGn/qCTVMEdoTVzfbOwbIFi16EvZnwTyKzfjig/9Lk/wPm7pkRtGUxudk+IesybdENUmMCCnw1lNrJjfoqXltZNN73yzlKLFNjwdygI4Hz1YMKd5xlCgVMTSDnqaKZS1B10KaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MWbzyuNv; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=U7YePqkYTbyWfRgSYBSS1ROvnJ6UlLui2hHCmZoANBVGEea/eXAhsac5goRrWJx0dUVjrNbvAZJaE3vXm+un34YZaLHFOyYWqhuEFcRWil2u3gd8TpF6nXDocr8IefnyZ6Z0CNav/W09FkJKm31Lcihbuzt7PvBpPxYRLd2EbB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cNIKbSps; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MWbzyuNv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cNIKbSps"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774706046; x=1806242046;
+  t=1774707636; x=1806243636;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YVYCGntBvyIjUxMBKGP5U7zMPbdGlUZrGABdfrJgNn8=;
-  b=MWbzyuNv4VwvzxPeZv0FoM72h5XDaoH3FUXGwYFKSdvLoYftqZciBkS0
-   ulhtcNlWiG1Dz7yYCKoZGWKxaX4mHsl+H4lrcaeHqFWwKnNlzTe2kF6gU
-   vLlU9wMrQCPruoGGZ9eFwxNztsaS7ARPXWCT1yRJb4x8ARG8/U/PHe5nM
-   GAROcAe/q/G0o2+HhrsVgLVEFsOz87elxRWgY48UgeJnqrZJoTk4ccSrL
-   fQr+cQL5D0QycZwd3DMmcDv/Te5qT1DCs8eAkUCwRJPHiOvkLJnX/Ro5/
-   d0r8FxpJSn0R3FB5zHMOZZUanfz+GYiEeMeanqwzZXc8Dlg0tACvtOnrF
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xr7fm3XNdKFxhFsYnaPlMjk6niRTPElL9UdF0ILudQA=;
+  b=cNIKbSpsWHgFhP1tWFyDyWhBTFZ4Y/FuvfDw4wGy0kQOsGx1AI0lx85x
+   iM+3gTaeUmVuMzI2D6ItkVbrTurp/ofAe/7OhIvCmwsOlHw+qXZ+uPmX0
+   nT/eZm/uRhpEqr4vWjtcXPUsx5CJHeTOi9lLzt3xHe3uvSRSy2HD7Hd8y
+   chuw/RrL/bIhf5p8aFrTb3pFlnjrlSKW56A8yXn92ccck0OPWHMtGT53F
+   nBib5Nj9M5qLE6UlyGWhZIruyTUVM/hSKgmof63lktmL9J9jyc1QWh63a
+   z0wBr2A+/axbX2rIg0mKdz7nbRvsqkB0lfoDfLBY2vYZ5z3T9EhmEekW9
    w==;
-X-CSE-ConnectionGUID: dW9Hnfy0TvOn/CHTSnLk5A==
-X-CSE-MsgGUID: sxo88KlSRfu4wtQLe2KddA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="75956179"
+X-CSE-ConnectionGUID: WMP4OVV9QV2vwrihfaIWtw==
+X-CSE-MsgGUID: evdvH2+YRHeIHbX9jG9PMw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="79623480"
 X-IronPort-AV: E=Sophos;i="6.23,146,1770624000"; 
-   d="scan'208";a="75956179"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 06:54:05 -0700
-X-CSE-ConnectionGUID: N4Wz+Lj9QBSno9x8XrH+sA==
-X-CSE-MsgGUID: 9hGTh2o3Ql6nYYjatSirrw==
+   d="scan'208";a="79623480"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 07:20:36 -0700
+X-CSE-ConnectionGUID: 3xBoiMHYT3W+qHOk6uAp3A==
+X-CSE-MsgGUID: muGkjwO0Qf+P8icEx5iqKQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,146,1770624000"; 
-   d="scan'208";a="248812701"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa001.fm.intel.com with ESMTP; 28 Mar 2026 06:54:04 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+   d="scan'208";a="225833073"
+Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 28 Mar 2026 07:20:35 -0700
+Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w6U6z-000000007gP-1bAH;
-	Sat, 28 Mar 2026 13:54:01 +0000
-Date: Sat, 28 Mar 2026 14:53:10 +0100
+	id 1w6UWe-00000000BU3-1W1P;
+	Sat, 28 Mar 2026 14:20:32 +0000
+Date: Sat, 28 Mar 2026 22:20:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Joanne Koong <joannelkoong@gmail.com>, axboe@kernel.dk
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, miklos@szeredi.hu,
-	bschubert@ddn.com, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v1 8/9] fuse: add zero-copy over io-uring
-Message-ID: <202603281401.HP3uX5G1-lkp@intel.com>
-References: <20260324224532.3733468-9-joannelkoong@gmail.com>
+To: Christoph =?iso-8859-1?Q?B=F6hmwalder?= <christoph.boehmwalder@linbit.com>,
+	Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+	Lars Ellenberg <lars.ellenberg@linbit.com>,
+	Philipp Reisner <philipp.reisner@linbit.com>,
+	linux-block@vger.kernel.org,
+	Christoph =?iso-8859-1?Q?B=F6hmwalder?= <christoph.boehmwalder@linbit.com>
+Subject: Re: [PATCH 20/20] drbd: remove BROKEN for DRBD
+Message-ID: <202603282234.zZBLE37a-lkp@intel.com>
+References: <20260327223820.2244227-21-christoph.boehmwalder@linbit.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260324224532.3733468-9-joannelkoong@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260327223820.2244227-21-christoph.boehmwalder@linbit.com>
 
-Hi Joanne,
+Hi Christoph,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on mszeredi-fuse/for-next]
-[also build test ERROR on linus/master v7.0-rc5 next-20260327]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 67807fbaf12719fca46a622d759484652b79c7c3]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/fuse-separate-next-request-fetching-from-sending-logic/20260328-142620
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git for-next
-patch link:    https://lore.kernel.org/r/20260324224532.3733468-9-joannelkoong%40gmail.com
-patch subject: [PATCH v1 8/9] fuse: add zero-copy over io-uring
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260328/202603281401.HP3uX5G1-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260328/202603281401.HP3uX5G1-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-B-hmwalder/drbd-mark-as-BROKEN-during-DRBD-9-rework/20260328-153634
+base:   67807fbaf12719fca46a622d759484652b79c7c3
+patch link:    https://lore.kernel.org/r/20260327223820.2244227-21-christoph.boehmwalder%40linbit.com
+patch subject: [PATCH 20/20] drbd: remove BROKEN for DRBD
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260328/202603282234.zZBLE37a-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260328/202603282234.zZBLE37a-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603281401.HP3uX5G1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603282234.zZBLE37a-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/fuse/dev_uring.c:132:3: error: call to undeclared function 'io_buffer_unregister'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     132 |                 io_buffer_unregister(ent->cmd, ent->id, issue_flags);
-         |                 ^
-   fs/fuse/dev_uring.c:132:3: note: did you mean 'io_buffer_unregister_bvec'?
-   include/linux/io_uring/cmd.h:188:5: note: 'io_buffer_unregister_bvec' declared here
-     188 | int io_buffer_unregister_bvec(struct io_uring_cmd *cmd, unsigned int index,
-         |     ^
-   fs/fuse/dev_uring.c:317:17: error: call to undeclared function 'io_uring_registered_mem_region_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     317 |         mem_reg_addr = io_uring_registered_mem_region_get(cmd, &nr_pages,
-         |                        ^
-   fs/fuse/dev_uring.c:317:15: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-     317 |         mem_reg_addr = io_uring_registered_mem_region_get(cmd, &nr_pages,
-         |                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     318 |                                                           issue_flags);
-         |                                                           ~~~~~~~~~~~~
-   fs/fuse/dev_uring.c:356:8: error: call to undeclared function 'io_uring_buf_ring_pin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     356 |         err = io_uring_buf_ring_pin(cmd, FUSE_URING_BUFRING_GROUP, issue_flags,
-         |               ^
-   fs/fuse/dev_uring.c:361:7: error: call to undeclared function 'io_uring_is_kmbuf_ring'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     361 |         if (!io_uring_is_kmbuf_ring(cmd, FUSE_URING_BUFRING_GROUP, issue_flags))
-         |              ^
-   fs/fuse/dev_uring.c:372:2: error: call to undeclared function 'io_uring_buf_ring_unpin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     372 |         io_uring_buf_ring_unpin(cmd, FUSE_URING_BUFRING_GROUP, issue_flags);
-         |         ^
-   fs/fuse/dev_uring.c:425:4: error: call to undeclared function 'io_uring_buf_ring_unpin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     425 |                         io_uring_buf_ring_unpin(cmd, FUSE_URING_BUFRING_GROUP,
-         |                         ^
->> fs/fuse/dev_uring.c:859:11: error: use of undeclared identifier 'IO_BUF_DEST'
-     859 |                 ddir |= IO_BUF_DEST;
-         |                         ^
->> fs/fuse/dev_uring.c:861:11: error: use of undeclared identifier 'IO_BUF_SOURCE'
-     861 |                 ddir |= IO_BUF_SOURCE;
-         |                         ^
->> fs/fuse/dev_uring.c:883:11: error: too many arguments to function call, expected 5, have 8
-     881 |         err = io_buffer_register_bvec(ent->cmd, bvs, ap->num_folios,
-         |               ~~~~~~~~~~~~~~~~~~~~~~~
-     882 |                                       fuse_zero_copy_release, zc_bvs,
-     883 |                                       ddir, ent->id,
-         |                                       ^~~~~~~~~~~~~~
-     884 |                                       issue_flags);
-         |                                       ~~~~~~~~~~~
-   include/linux/io_uring/cmd.h:185:5: note: 'io_buffer_register_bvec' declared here
-     185 | int io_buffer_register_bvec(struct io_uring_cmd *cmd, struct request *rq,
-         |     ^                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     186 |                             void (*release)(void *), unsigned int index,
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     187 |                             unsigned int issue_flags);
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/fuse/dev_uring.c:1013:8: error: call to undeclared function 'io_ring_buffer_select'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1013 |         sel = io_ring_buffer_select(cmd_to_io_kiocb(ent->cmd), &len,
-         |               ^
-   fs/fuse/dev_uring.c:1013:8: note: did you mean 'io_uring_cmd_buffer_select'?
-   include/linux/io_uring/cmd.h:83:18: note: 'io_uring_cmd_buffer_select' declared here
-      83 | struct io_br_sel io_uring_cmd_buffer_select(struct io_uring_cmd *ioucmd,
+>> drivers/block/drbd/drbd_transport_rdma.c:618:11: warning: variable 'i' set but not used [-Wunused-but-set-variable]
+     618 |         int err, i = 0;
          |                  ^
-   fs/fuse/dev_uring.c:1013:6: error: assigning to 'struct io_br_sel' from incompatible type 'int'
-    1013 |         sel = io_ring_buffer_select(cmd_to_io_kiocb(ent->cmd), &len,
-         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1014 |                                     ent->queue->bufring.list, issue_flags);
-         |                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/fuse/dev_uring.c:1017:11: error: no member named 'kaddr' in 'struct io_br_sel'; did you mean 'addr'?
-    1017 |         if (!sel.kaddr)
-         |                  ^~~~~
-         |                  addr
-   include/linux/io_uring_types.h:100:16: note: 'addr' declared here
-     100 |                 void __user *addr;
-         |                              ^
-   fs/fuse/dev_uring.c:1020:35: error: no member named 'kaddr' in 'struct io_br_sel'; did you mean 'addr'?
-    1020 |         ent->payload_kvec.iov_base = sel.kaddr;
-         |                                          ^~~~~
-         |                                          addr
-   include/linux/io_uring_types.h:100:16: note: 'addr' declared here
-     100 |                 void __user *addr;
-         |                              ^
-   fs/fuse/dev_uring.c:1022:20: error: no member named 'buf_id' in 'struct io_br_sel'
-    1022 |         ent->buf_id = sel.buf_id;
-         |                       ~~~ ^
-   fs/fuse/dev_uring.c:1038:15: error: call to undeclared function 'io_uring_kmbuf_recycle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1038 |         WARN_ON_ONCE(io_uring_kmbuf_recycle(ent->cmd, FUSE_URING_BUFRING_GROUP,
-         |                      ^
-   16 errors generated.
+   1 warning generated.
 
 
-vim +/io_buffer_unregister +132 fs/fuse/dev_uring.c
+vim +/i +618 drivers/block/drbd/drbd_transport_rdma.c
 
-   110	
-   111	static void fuse_uring_req_end(struct fuse_ring_ent *ent, struct fuse_req *req,
-   112				       int error, unsigned issue_flags)
-   113	{
-   114		struct fuse_ring_queue *queue = ent->queue;
-   115		struct fuse_ring *ring = queue->ring;
-   116		struct fuse_conn *fc = ring->fc;
-   117	
-   118		lockdep_assert_not_held(&queue->lock);
-   119		spin_lock(&queue->lock);
-   120		ent->fuse_req = NULL;
-   121		list_del_init(&req->list);
-   122		if (test_bit(FR_BACKGROUND, &req->flags)) {
-   123			queue->active_background--;
-   124			spin_lock(&fc->bg_lock);
-   125			fuse_uring_flush_bg(queue);
-   126			spin_unlock(&fc->bg_lock);
-   127		}
-   128	
-   129		spin_unlock(&queue->lock);
-   130	
-   131		if (ent->zero_copied) {
- > 132			io_buffer_unregister(ent->cmd, ent->id, issue_flags);
-   133			ent->zero_copied = false;
-   134		}
-   135	
-   136		if (error)
-   137			req->out.h.error = error;
-   138	
-   139		clear_bit(FR_SENT, &req->flags);
-   140		fuse_request_end(req);
-   141	}
-   142	
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  610  
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  611  
+221cfdc61a60c9 Christoph Böhmwalder 2026-03-27  612  static int dtr_recv_bio(struct drbd_transport *transport, struct bio_list *bios, size_t size)
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  613  {
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  614  	struct dtr_transport *rdma_transport =
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  615  		container_of(transport, struct dtr_transport, transport);
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  616  	struct dtr_stream *rdma_stream = &rdma_transport->stream[DATA_STREAM];
+221cfdc61a60c9 Christoph Böhmwalder 2026-03-27  617  	struct page *page;
+221cfdc61a60c9 Christoph Böhmwalder 2026-03-27 @618  	int err, i = 0;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  619  
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  620  	if (!dtr_transport_ok(transport))
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  621  		return -ECONNRESET;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  622  
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  623  	// pr_info("%s: in recv_pages, size: %zu\n", rdma_stream->name, size);
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  624  	TR_ASSERT(transport, rdma_stream->current_rx.bytes_left == 0);
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  625  	dtr_recycle_rx_desc(transport, DATA_STREAM, &rdma_stream->current_rx.desc, GFP_NOIO);
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  626  	dtr_refill_rx_desc(rdma_transport, DATA_STREAM);
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  627  
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  628  	while (size) {
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  629  		struct dtr_rx_desc *rx_desc = NULL;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  630  		long t;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  631  
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  632  		t = wait_event_interruptible_timeout(rdma_stream->recv_wq,
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  633  					dtr_receive_rx_desc(rdma_transport, DATA_STREAM, &rx_desc),
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  634  					rdma_stream->recv_timeout);
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  635  
+221cfdc61a60c9 Christoph Böhmwalder 2026-03-27  636  		if (t <= 0)
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  637  			return t == 0 ? -EAGAIN : -EINTR;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  638  
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  639  		page = rx_desc->page;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  640  		/* put_page() if we would get_page() in
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  641  		 * dtr_create_rx_desc().  but we don't. We return the page
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  642  		 * chain to the user, which is supposed to give it back to
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  643  		 * drbd_free_pages() eventually. */
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  644  		rx_desc->page = NULL;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  645  		size -= rx_desc->size;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  646  
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  647  		/* If the sender did dtr_send_page every bvec of a bio with
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  648  		 * unaligned bvecs (as xfs often creates), rx_desc->size and
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  649  		 * offset may well be not the PAGE_SIZE and 0 we hope for.
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  650  		 */
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  651  
+221cfdc61a60c9 Christoph Böhmwalder 2026-03-27  652  		err = drbd_bio_add_page(transport, bios, page, rx_desc->size, 0);
+221cfdc61a60c9 Christoph Böhmwalder 2026-03-27  653  		if (err < 0)
+221cfdc61a60c9 Christoph Böhmwalder 2026-03-27  654  			return err;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  655  
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  656  		atomic_dec(&rx_desc->cm->path->flow[DATA_STREAM].rx_descs_allocated);
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  657  		dtr_free_rx_desc(rx_desc);
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  658  
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  659  		i++;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  660  		dtr_refill_rx_desc(rdma_transport, DATA_STREAM);
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  661  	}
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  662  
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  663  	// pr_info("%s: rcvd %d pages\n", rdma_stream->name, i);
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  664  	return 0;
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  665  }
+bc43430bc671a7 Christoph Böhmwalder 2026-03-27  666  
 
 -- 
 0-DAY CI Kernel Test Service
