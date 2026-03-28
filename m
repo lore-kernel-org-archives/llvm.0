@@ -1,156 +1,214 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D03A31282C
-	for <llvm@lists.linux.dev>; Sat, 28 Mar 2026 13:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774705209; cv=pass; b=R/AIvlnHOOHjASvBbpEr+DkCSO4bP5QTZTBkuTKYDhOdBSxi4OT/kS6CAxybuVrZlAzEmQ/ZU9HyaAJhmjsOAGtuR1g9pmEsekXS9NaVREbb8GB+xVZTRC2DBb27cQX8pxUMpRvegWMAfwnm+65i4I+LjAumadzg8lsUq3w/NC4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774705209; c=relaxed/simple;
-	bh=5ZtQ2cHIQnNPmhkNNEc2uIDy13fXSNOA9me1ZOCMupg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jme3eauz3aJ7P7XNSqlXEq/8cAbPtUw8a6j8oikKF4RW1Y1Am66M+zw1cgENxVqKVKWp0Xq55wns+Ijg0dAGy1iZMPj4cAY+UEscY5fiAkbeDBPWL+0QmBsJABkGOdbnah7XdmyNsk/jQMHUouAu9LNURkx6pyrRTvGi4HkebK0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VZ92OR6k; arc=pass smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80492F83B7;
+	Sat, 28 Mar 2026 13:54:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774706048; cv=none; b=UsocC9j7DCIOiX10WiEiLLxYmlw/ZdMaYyciVS+8L7LyVx1tz1FwFgSoDqPExCHNcxamcJ7MhdyTWaTZPT+61hQKJXeJkNY1P5zKGshjZyzoHRhrIH7+s93Il0BMHh9fWFMzGgYy6ZFh+rbw4v6jT3okXXRNVPtT7ucwsO8QbCo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774706048; c=relaxed/simple;
+	bh=YVYCGntBvyIjUxMBKGP5U7zMPbdGlUZrGABdfrJgNn8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PrOE3DXp81779BO4gYZRw0Xa11651e6SPJf5dAGn/qCTVMEdoTVzfbOwbIFi16EvZnwTyKzfjig/9Lk/wPm7pkRtGUxudk+IesybdENUmMCCnw1lNrJjfoqXltZNN73yzlKLFNjwdygI4Hz1YMKd5xlCgVMTSDnqaKZS1B10KaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MWbzyuNv; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VZ92OR6k"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c70fb6aa323so1165586a12.3
-        for <llvm@lists.linux.dev>; Sat, 28 Mar 2026 06:40:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774705207; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NZZ0kVt0UTn7deA1kYNLfGIzaRe2+Ir0QGl2dxQ8XMLf8Kqv9+w3jlvNETYRzO7PBL
-         XuVP6sAYJAzTl6XSNDCmmN18tIhTD157ADaJorRYZb5oPHeezunuDhhTjhS/wc7wIm2N
-         SMf3oLc/6DqXRq0cDxm0Dn15ijfLscYNWhXiw+CpV08GuSwhLRsWiC7cYGjq604HwYJ9
-         LLaCAb9m4Tz3n+ipFVTQPQeQZKiQqQ//N+LYDGbUYTVFmImeyEuBbrquXxKz78er9iKz
-         NRH1jv7sYNyvfyWYaabc38qxpQlcAzHXg21LY9dTNCPcl7aFobyGa6qXbRnROiWbsKnh
-         lFJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5ZtQ2cHIQnNPmhkNNEc2uIDy13fXSNOA9me1ZOCMupg=;
-        fh=5OMnRG1EmacSDxmK8Ak4Hz6RaxPR5h3aRWtwQyBbR2M=;
-        b=dDBkPl81V4ZLbpUF+KpvLCoocx/Q4zUg89fI0QrYcXMQOpvvw/zvdEmtH11FydgKEd
-         hi1FldJfgt3fCbTjuqNs8ea7BPEQSyviwny+qlGzWMJEHLyCN7XK2mjRFK3DvrQQ42A7
-         34vAW0C5auS6c0LWO1k/YNwiGvwFQfaYFGwMCRD6C+SC1BmE6WBB2CpXwb7vd06rQHZm
-         yJcT6NVNNzpYTToZ2H1YS7A4e/cRlRxCeM6EbeqdD6BUktpzcrXMZHVCA/IUot0rneCg
-         b1jC+wW8S+I4EaWg2OhPOKHBOeo8GKq493BJjaq0ofZRA2IPQOphIsS12FaJ1X43QO8C
-         pY6A==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774705207; x=1775310007; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5ZtQ2cHIQnNPmhkNNEc2uIDy13fXSNOA9me1ZOCMupg=;
-        b=VZ92OR6kiJd6T6RkqHKGQcraFpwzNxojkocWhzJbXemJPLxbY8jdlgBvGaG+rQarAi
-         irxmI68U2ZNhHxml6Gd1QDywqjqD/tmMvMd2rmX0/FbCY9Cy/yfCQM5ATGgRG9gOUsK1
-         PEUoJbbaKhjVLgXpxTgC17+jN7xj6jB9yjZd5FYVKlqIDIQ4dfH3rTsWvlwkWlB0drRU
-         HGQL31vRD6FYNfQU+b0+5Inp1sMHNprKSOWoNohKVg1a7JayrE6IXWTjOqr7z0yHWXv5
-         L/Xs2+QfQCpFDQKoerB9Kzh4b//EK3OIBh9uV9JekTyZqZ8YxJIqloiDRbvdnopOL/WD
-         SkLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774705207; x=1775310007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5ZtQ2cHIQnNPmhkNNEc2uIDy13fXSNOA9me1ZOCMupg=;
-        b=YgdNwUdOfGhfF+h3pFzj+x7bDjRFXW6Wr9QUxRH7ggVh0NIuJW2OHJ819AktNUB1c1
-         bsyPXI5r7FLwJrBslB+S+conmNBZ3NrkWry6io4HPY3HmjjPjNfswP79Cn+jpMylvOUn
-         eiVMMLb7pgcsCuzEUSvr6ZL3dpwG/rH+dkLwmHz4cSQZf4bv0nB5YNmrqhj7FL14uTv1
-         PTftaNQA+pxvimomyo5H+ESXrLslzp8LrVrseSH8KX/x9iOSaC5FIrx0tqbfE0dbkUhq
-         /yolYCvjm2J2gcw68eMO6vHa6zzwjhalS5fi0ypR7bASfDQNqRn7eKN8TamgLCR1O+LX
-         yz9A==
-X-Forwarded-Encrypted: i=1; AJvYcCUcVBOXPToKKrKeFWADo+O0nOhc/x895+JSNnqawV6neYBdufKzSkx9j83/xOD9TFjfYjuv@lists.linux.dev
-X-Gm-Message-State: AOJu0YxYToVs50Q3yqHt39E/kOjifra1nPYkOYNBO4X+aNxSuZjM8RRw
-	7gzrZNRr3+vI/vYmPBQkd122Sq+7VuHWeGrLu5pqDUjso2qgLYXahQE4G2AM7cmaxQh3n8E5m02
-	FjuEJO/PdZn+haPZBVwx5ja8biS6PJXA=
-X-Gm-Gg: ATEYQzwuVbkhOLz+Ulg9/iaib4XZ5sPGmFhggw5qxDMZK535MFdRTtrSHVIQf62k7AQ
-	wLmZnScX9m5FWZYA3G8DrZwuwxza5Byawwyrj3YOLxmVJzvweA5Y/Msw25ikVV+RJSuTFKc1Yh2
-	B40nXDywddYrO1TjbUerdu70ejXLHSf6TSB/RjE48a/5efD7/3R+FLdSkyznsUk92pDZOGjaeSQ
-	/rNjJ5TBg1wGluFZDOhLajHVATGCDM+Th+u0KaAssV+Blytg/6Tsre2p2gemr3AncMz4q8vtyZe
-	w0Q8wKg=
-X-Received: by 2002:a05:6a00:1789:b0:82a:6de8:fa50 with SMTP id
- d2e1a72fcca58-82c95e45d30mr6453604b3a.18.1774705207164; Sat, 28 Mar 2026
- 06:40:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MWbzyuNv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774706046; x=1806242046;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YVYCGntBvyIjUxMBKGP5U7zMPbdGlUZrGABdfrJgNn8=;
+  b=MWbzyuNv4VwvzxPeZv0FoM72h5XDaoH3FUXGwYFKSdvLoYftqZciBkS0
+   ulhtcNlWiG1Dz7yYCKoZGWKxaX4mHsl+H4lrcaeHqFWwKnNlzTe2kF6gU
+   vLlU9wMrQCPruoGGZ9eFwxNztsaS7ARPXWCT1yRJb4x8ARG8/U/PHe5nM
+   GAROcAe/q/G0o2+HhrsVgLVEFsOz87elxRWgY48UgeJnqrZJoTk4ccSrL
+   fQr+cQL5D0QycZwd3DMmcDv/Te5qT1DCs8eAkUCwRJPHiOvkLJnX/Ro5/
+   d0r8FxpJSn0R3FB5zHMOZZUanfz+GYiEeMeanqwzZXc8Dlg0tACvtOnrF
+   w==;
+X-CSE-ConnectionGUID: dW9Hnfy0TvOn/CHTSnLk5A==
+X-CSE-MsgGUID: sxo88KlSRfu4wtQLe2KddA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="75956179"
+X-IronPort-AV: E=Sophos;i="6.23,146,1770624000"; 
+   d="scan'208";a="75956179"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 06:54:05 -0700
+X-CSE-ConnectionGUID: N4Wz+Lj9QBSno9x8XrH+sA==
+X-CSE-MsgGUID: 9hGTh2o3Ql6nYYjatSirrw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,146,1770624000"; 
+   d="scan'208";a="248812701"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by fmviesa001.fm.intel.com with ESMTP; 28 Mar 2026 06:54:04 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w6U6z-000000007gP-1bAH;
+	Sat, 28 Mar 2026 13:54:01 +0000
+Date: Sat, 28 Mar 2026 14:53:10 +0100
+From: kernel test robot <lkp@intel.com>
+To: Joanne Koong <joannelkoong@gmail.com>, axboe@kernel.dk
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, miklos@szeredi.hu,
+	bschubert@ddn.com, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v1 8/9] fuse: add zero-copy over io-uring
+Message-ID: <202603281401.HP3uX5G1-lkp@intel.com>
+References: <20260324224532.3733468-9-joannelkoong@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260327114741.91500-1-pilgrimtao@gmail.com> <91bacd7d-6ec0-4888-be0d-f11a6607f38f@acm.org>
-In-Reply-To: <91bacd7d-6ec0-4888-be0d-f11a6607f38f@acm.org>
-From: Chengkaitao <pilgrimtao@gmail.com>
-Date: Sat, 28 Mar 2026 21:39:55 +0800
-X-Gm-Features: AQROBzBTENtnZtQhxmzRNb76sGSIhzOCRnc5fvzKUgEMLoc4tyX_zU5SvhHxtug
-Message-ID: <CAAWJmAZe+pyfju+37-dfjYUdwRR1ae6Rq8OJjZea76d2CPkEMA@mail.gmail.com>
-Subject: Re: [RFC 0/2] block: Introduce a BPF-based I/O scheduler
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: axboe@kernel.dk, pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	alex@ghiti.fr, ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
-	aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, rust-for-linux@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, 
-	Kaitao Cheng <chengkaitao@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260324224532.3733468-9-joannelkoong@gmail.com>
 
-On Fri, Mar 27, 2026 at 11:48=E2=80=AFPM Bart Van Assche <bvanassche@acm.or=
-g> wrote:
->
-> On 3/27/26 4:47 AM, Chengkaitao wrote:
-> > I have been working on adding a new BPF-based I/O scheduler. It has bot=
-h
-> > kernel and user-space parts. In kernel space, using per-ctx,
->
-> Does "ctx" perhaps refer to struct blk_mq_hw_ctx? If so, please use the
-> abbreviation "hctx" to prevent confusion with struct blk_mq_ctx (block
-> layer software queue).
+Hi Joanne,
 
-Here, ctx refers to struct blk_mq_ctx. The intent is: when no eBPF
-policy is attached, the new I/O scheduler behaves like the none
-scheduler; when an eBPF policy is attached, the blk_mq_ctx queues
-maintained by the new I/O scheduler serve as backup and fallback
-for the eBPF program.
+kernel test robot noticed the following build errors:
 
-> For what type of block devices is this new type of I/O scheduler
-> intended? This new type of I/O scheduler is not appropriate for hard
-> disks. To schedule I/O effectively for harddisks, an I/O scheduler must
-> be aware of all pending I/O requests. This is why the mq-deadline I/O
-> scheduler maintains a single list of requests across all hardware
-> queues.
+[auto build test ERROR on mszeredi-fuse/for-next]
+[also build test ERROR on linus/master v7.0-rc5 next-20260327]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This new I/O scheduler targets mechanical hard disks. The scheduler
-can be aware of all pending I/O requests, and users can maintain a
-single list of requests in an eBPF program.
+url:    https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/fuse-separate-next-request-fetching-from-sending-logic/20260328-142620
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git for-next
+patch link:    https://lore.kernel.org/r/20260324224532.3733468-9-joannelkoong%40gmail.com
+patch subject: [PATCH v1 8/9] fuse: add zero-copy over io-uring
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260328/202603281401.HP3uX5G1-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260328/202603281401.HP3uX5G1-lkp@intel.com/reproduce)
 
-> Additionally, this new I/O scheduler is not appropriate for the fastest
-> block devices. For very fast block devices, any I/O scheduler incurs a
-> measurable overhead.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603281401.HP3uX5G1-lkp@intel.com/
 
-For the fastest block devices, avoiding extra scheduling policy is
-often the best policy. In some customized workloads, however, extra
-policy may be needed, for example priority scheduling, cgroup-aware
-differentiation, or fine-grained metrics. Those scenarios have not
-been validated with real demos yet, but the approach seems viable.
+All errors (new ones prefixed by >>):
 
-> > I implemented
-> > a simple elevator that exposes a set of BPF hooks. The goal is to move =
-the
-> > policy side of I/O scheduling out of the kernel and into user space,
->
-> What does "into user space" mean in this context? As you know BPF code
-> runs in kernel context.
+>> fs/fuse/dev_uring.c:132:3: error: call to undeclared function 'io_buffer_unregister'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     132 |                 io_buffer_unregister(ent->cmd, ent->id, issue_flags);
+         |                 ^
+   fs/fuse/dev_uring.c:132:3: note: did you mean 'io_buffer_unregister_bvec'?
+   include/linux/io_uring/cmd.h:188:5: note: 'io_buffer_unregister_bvec' declared here
+     188 | int io_buffer_unregister_bvec(struct io_uring_cmd *cmd, unsigned int index,
+         |     ^
+   fs/fuse/dev_uring.c:317:17: error: call to undeclared function 'io_uring_registered_mem_region_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     317 |         mem_reg_addr = io_uring_registered_mem_region_get(cmd, &nr_pages,
+         |                        ^
+   fs/fuse/dev_uring.c:317:15: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
+     317 |         mem_reg_addr = io_uring_registered_mem_region_get(cmd, &nr_pages,
+         |                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     318 |                                                           issue_flags);
+         |                                                           ~~~~~~~~~~~~
+   fs/fuse/dev_uring.c:356:8: error: call to undeclared function 'io_uring_buf_ring_pin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     356 |         err = io_uring_buf_ring_pin(cmd, FUSE_URING_BUFRING_GROUP, issue_flags,
+         |               ^
+   fs/fuse/dev_uring.c:361:7: error: call to undeclared function 'io_uring_is_kmbuf_ring'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     361 |         if (!io_uring_is_kmbuf_ring(cmd, FUSE_URING_BUFRING_GROUP, issue_flags))
+         |              ^
+   fs/fuse/dev_uring.c:372:2: error: call to undeclared function 'io_uring_buf_ring_unpin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     372 |         io_uring_buf_ring_unpin(cmd, FUSE_URING_BUFRING_GROUP, issue_flags);
+         |         ^
+   fs/fuse/dev_uring.c:425:4: error: call to undeclared function 'io_uring_buf_ring_unpin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     425 |                         io_uring_buf_ring_unpin(cmd, FUSE_URING_BUFRING_GROUP,
+         |                         ^
+>> fs/fuse/dev_uring.c:859:11: error: use of undeclared identifier 'IO_BUF_DEST'
+     859 |                 ddir |= IO_BUF_DEST;
+         |                         ^
+>> fs/fuse/dev_uring.c:861:11: error: use of undeclared identifier 'IO_BUF_SOURCE'
+     861 |                 ddir |= IO_BUF_SOURCE;
+         |                         ^
+>> fs/fuse/dev_uring.c:883:11: error: too many arguments to function call, expected 5, have 8
+     881 |         err = io_buffer_register_bvec(ent->cmd, bvs, ap->num_folios,
+         |               ~~~~~~~~~~~~~~~~~~~~~~~
+     882 |                                       fuse_zero_copy_release, zc_bvs,
+     883 |                                       ddir, ent->id,
+         |                                       ^~~~~~~~~~~~~~
+     884 |                                       issue_flags);
+         |                                       ~~~~~~~~~~~
+   include/linux/io_uring/cmd.h:185:5: note: 'io_buffer_register_bvec' declared here
+     185 | int io_buffer_register_bvec(struct io_uring_cmd *cmd, struct request *rq,
+         |     ^                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     186 |                             void (*release)(void *), unsigned int index,
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     187 |                             unsigned int issue_flags);
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/fuse/dev_uring.c:1013:8: error: call to undeclared function 'io_ring_buffer_select'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1013 |         sel = io_ring_buffer_select(cmd_to_io_kiocb(ent->cmd), &len,
+         |               ^
+   fs/fuse/dev_uring.c:1013:8: note: did you mean 'io_uring_cmd_buffer_select'?
+   include/linux/io_uring/cmd.h:83:18: note: 'io_uring_cmd_buffer_select' declared here
+      83 | struct io_br_sel io_uring_cmd_buffer_select(struct io_uring_cmd *ioucmd,
+         |                  ^
+   fs/fuse/dev_uring.c:1013:6: error: assigning to 'struct io_br_sel' from incompatible type 'int'
+    1013 |         sel = io_ring_buffer_select(cmd_to_io_kiocb(ent->cmd), &len,
+         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1014 |                                     ent->queue->bufring.list, issue_flags);
+         |                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/fuse/dev_uring.c:1017:11: error: no member named 'kaddr' in 'struct io_br_sel'; did you mean 'addr'?
+    1017 |         if (!sel.kaddr)
+         |                  ^~~~~
+         |                  addr
+   include/linux/io_uring_types.h:100:16: note: 'addr' declared here
+     100 |                 void __user *addr;
+         |                              ^
+   fs/fuse/dev_uring.c:1020:35: error: no member named 'kaddr' in 'struct io_br_sel'; did you mean 'addr'?
+    1020 |         ent->payload_kvec.iov_base = sel.kaddr;
+         |                                          ^~~~~
+         |                                          addr
+   include/linux/io_uring_types.h:100:16: note: 'addr' declared here
+     100 |                 void __user *addr;
+         |                              ^
+   fs/fuse/dev_uring.c:1022:20: error: no member named 'buf_id' in 'struct io_br_sel'
+    1022 |         ent->buf_id = sel.buf_id;
+         |                       ~~~ ^
+   fs/fuse/dev_uring.c:1038:15: error: call to undeclared function 'io_uring_kmbuf_recycle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1038 |         WARN_ON_ONCE(io_uring_kmbuf_recycle(ent->cmd, FUSE_URING_BUFRING_GROUP,
+         |                      ^
+   16 errors generated.
 
-Sorry, my wording was inaccurate. It would be more appropriate to
-phrase it as "into user-defined BPF programs".
 
---=20
-Yours,
-Chengkaitao
+vim +/io_buffer_unregister +132 fs/fuse/dev_uring.c
+
+   110	
+   111	static void fuse_uring_req_end(struct fuse_ring_ent *ent, struct fuse_req *req,
+   112				       int error, unsigned issue_flags)
+   113	{
+   114		struct fuse_ring_queue *queue = ent->queue;
+   115		struct fuse_ring *ring = queue->ring;
+   116		struct fuse_conn *fc = ring->fc;
+   117	
+   118		lockdep_assert_not_held(&queue->lock);
+   119		spin_lock(&queue->lock);
+   120		ent->fuse_req = NULL;
+   121		list_del_init(&req->list);
+   122		if (test_bit(FR_BACKGROUND, &req->flags)) {
+   123			queue->active_background--;
+   124			spin_lock(&fc->bg_lock);
+   125			fuse_uring_flush_bg(queue);
+   126			spin_unlock(&fc->bg_lock);
+   127		}
+   128	
+   129		spin_unlock(&queue->lock);
+   130	
+   131		if (ent->zero_copied) {
+ > 132			io_buffer_unregister(ent->cmd, ent->id, issue_flags);
+   133			ent->zero_copied = false;
+   134		}
+   135	
+   136		if (error)
+   137			req->out.h.error = error;
+   138	
+   139		clear_bit(FR_SENT, &req->flags);
+   140		fuse_request_end(req);
+   141	}
+   142	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
