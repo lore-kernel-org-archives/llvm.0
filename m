@@ -1,172 +1,171 @@
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9191D1FCFEF
-	for <llvm@lists.linux.dev>; Sun, 29 Mar 2026 17:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774805639; cv=pass; b=rrX3yxvzQ7WpdqYn+LI90nUOPFhH1np43N8Ws5/MbwKffGbyByiZ+aqwBi6sDMd45k1wixza/Kc8lVoY2BrKkNxhDCfWZRZfTQYecomMsSIhTaA+FALCZ5VOw6cXRoN+QQbpCnWiIQKtAwVJ9kxSNqQmGBOa9/L/q5CHUgs41e4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774805639; c=relaxed/simple;
-	bh=wH8d3KmUa0Vc2ojlkNpKwIlP5oooedUQAm8z4psgdIU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cvSXN8goMd2nyhidWwYKN8DXjonlDt6oexYOElsxvZqQhfBrHe/qsKHnosYNUYjPvhD8ki/dijyajWv1X4CN+JcJBCLRJHULJzhzigwgpKlhPM0aYJVQhUQIALWWDpuIu/MdCdKJY/lLhjfyQzdRodQfFE/gbhPW128+YpuCEYo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NmC2CBkl; arc=pass smtp.client-ip=74.125.82.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5186737F019;
+	Sun, 29 Mar 2026 20:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774814633; cv=none; b=BVL5ZyfQOn5+o8hgPL2U0X8nnmyJXuW1CnH+KqlrqYXYwmiwmxpC6xy+C15+U2jxkUAobLZ/Zrga4bh2lQQDydnmSNaKrDhiLFkx7BrZIy5s0JUvhpqc+i97e0azkYNaO3x+VmeTPUGTS0impABjNOZ//5e9Uh5Ou+OSaySHJKI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774814633; c=relaxed/simple;
+	bh=q/qB0hRSdc8iLgrZTYUS7uvy+vi1WvhhaqNLFnacfJU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=c9zOkvImM9TWM9WOvNTBAy98cNbprQAXA05BiTOA4o8ANurKFZ/0dsBKPGO+7BjvSdCw71N/3fEKKvHK3N1Onys4ThNO1kIg/PZG6Zkbn+77NAZnGRSBJUTguerc4H7Smy2jtc+I9p4eAj9AhvOl6r4z3HNzisEZQvn7evLst58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I63oxAiC; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NmC2CBkl"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2c16cdf31cdso131556eec.3
-        for <llvm@lists.linux.dev>; Sun, 29 Mar 2026 10:33:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774805638; cv=none;
-        d=google.com; s=arc-20240605;
-        b=OJ08XE+9wMip0qhnHzw6EWlCT0wSFbEuMBHQ2emTkVmoLsLSwd/HRDGgpG2wUWU9um
-         05G7yAHOoxlFP8ccc8ARUSCkr/I4D9hjH642dKWS5ft2uzv5bR1Uepr7wTCslorldUD9
-         vvhSRPMpoIbq1WmyJjgoWg3ZghqOmmYo+ZdBHLS3vvGNfj7f1j9HCMfPEZ9B5k55M4cI
-         I2oIOIVyw0aaxufxcpGxZvuROVCGO3IrRrKk6aAgeGXoGKG8koLomKpU3x30xLw4xErx
-         BvDsLfGMzdWdbWRuOrQ6P5w+oWNmSQtY1xAci5joneq+uYdBM/QMy2xNfhTQ4464M337
-         4ubQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=QkCmTI7yYjAJjvmfpeVl++cohGyuqaJEN8ofoKb3dzU=;
-        fh=6/G2JCR1C7vb15YVKm0QvkIkchwxwpdQnQnSJUaAKRw=;
-        b=VUtWG7iIIPLXEFp8cLjM+miDLmDEwWUfArOefTuan0n/ADwZGWzIbBozoHuQQNmu1Q
-         70XEcr2aDdJWxF76hhi/CetyqzJ/kGeAgza6QBT5iw8EPx7LPNRT59cu8y0GPDeF0txW
-         Fg/+m/RKzv8V6Gbofsea5WPBHMAhrl+JEjIF93T7tAkBB7NeiLpUJhMJvF0E0HrJQg6N
-         jDbG/8QJD5dywLOhkHX2QULknnxLSkfX/A2P7C0MiGj9TkeJKa4vKI117fAsR5Qsj4/6
-         Z/kgHb1jTQtWeocJwjeRkIr3cq3NtqQ3BY5RSrfnTfRbFrOYipx7Rq7s6HNmjlx7ybom
-         a1hQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774805638; x=1775410438; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QkCmTI7yYjAJjvmfpeVl++cohGyuqaJEN8ofoKb3dzU=;
-        b=NmC2CBkl8OmZ0EXm+WmeR4tvzrqFz6+MTYm+DJWrf/ZRr9mvLj8Hd0Ue3w5QjO7WTh
-         9UsNv22x3tE9ZxjQGyy+oWULE/fddy+eY3gHZ6QuBF3ag9RpRFYyXeazH84AWCHsxJEK
-         vbBlRDyr8dYsI+c7u7yaTL+fjCk54ELLl2aF5vy4D2NPM6+0jrHM9GURFW8fPFDbhKe8
-         ybsPtcxWiuLB8kbL/jpHso4wz7oNfOlerDE8GytQ4SN3mdRkePMkBY8U2FiUa2PPYk9i
-         gsYhj6yPXXY+uv8rIEKGcwg0dkF5tfT5JOQaLUy38aEA8K6ypoWnC2qrOktje2HB/5QC
-         OTrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774805638; x=1775410438;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QkCmTI7yYjAJjvmfpeVl++cohGyuqaJEN8ofoKb3dzU=;
-        b=lxOvYb4968dQ0IIZRXoISD7qcvygfXag9rL+7S3iNt1EuXWdHnFQsZNfNi4fEenY6J
-         u4lv7kzSIDvm72tnt/8DsYhiN18Jx6chLj1bDKdwr1PCK6SuKssLyTfFQ2bhNhXOoA8v
-         es25Xtk48mYJwtmpiegZL0xpOAAMIDxY/Q4N5PSELe/6RtLwZabHVCfen2PAWxnXjWTL
-         i9ZTTRM1yFhpyWVYahXC/7gX+GIPBR3GNlAtTEQmOnmrDUtUXYq+r3xD+/oDnkMEC5hh
-         4MhXZvd1VS/J5Bin6/eXwsg8yycXYXw2LRUrOmdiFn7gx8arOynxCbaAf5JopRd4i+xo
-         EILQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUT2bX9OlbbE3c3umL6oVetBD3TqW6wozPrF0jcmOgNrPNbRb5B3tjLUATloC4KXHjObf6E@lists.linux.dev
-X-Gm-Message-State: AOJu0YxZD7loHoW2hG6e4D0rWaCxVgcYMuaotK7oL6yB92C7KQzhgFY1
-	Z85PDthaHFkBmtCcPlLrH1l3Kg8f87n5r5IqxIEbZ+zKH03R/h/hbvBpKT42EkO34dCm9ACIhNk
-	Yfvjby1CGSG3PPupOyUYSv54494wUlTM=
-X-Gm-Gg: ATEYQzxGq8E9X6XM/g4k5pXauzaufSzbkRWADkQZOYtt50SpD6ln4jTScp/bAScAGTo
-	4CnIDjPLLTbqxHwNZ2ge3J+lHMfVDH0jPiB+ncNwqqS63zLIidCYcWv4GG9aDJykln878Nj3agq
-	g75mmWLSRtneUe6yXlYiwGgwhSK1021G5Ae4pfbaPSw5ZWoxG6e62OHAFDpHGcPLsEXJaJxNExQ
-	ztudk05hxDtJ3Hup9UEtjCcvB/NSTxP8QPD8JLC+dbzYvGTZnWcesqBTHx3EZ5nuad4VSs+rnR0
-	GqC57CibobB843zxLR3xJkVksCTgbYqtncVMbYonbdObhYvWg44jpgT4YwimweEevW4dqkeA8td
-	SFiuKhe/2gBl51JhfwbLlbvg=
-X-Received: by 2002:a05:7301:129b:b0:2c1:7ca:cec2 with SMTP id
- 5a478bee46e88-2c185f3463bmr2051760eec.8.1774805637680; Sun, 29 Mar 2026
- 10:33:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I63oxAiC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774814632; x=1806350632;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=q/qB0hRSdc8iLgrZTYUS7uvy+vi1WvhhaqNLFnacfJU=;
+  b=I63oxAiCnbaIzxWtBouAWPfHA/KMVe/Ul4C14xsX6wQTY7gIfzZeI6ny
+   uz9K6IN4ik7DRJfBVTHuo2aq0L5Yx3bDGbxCEYO6GZXFWsnN5iBR+IlIP
+   MQCwVD/8TcJGM6iARkbGvmFZMBd9kMsAGotu4FP0fsNU7aYK6Y3YNO4Pt
+   3ogi2rttz8J6AorQtt4anc6UICigGeCols4lHwZ97Ju8FXqTpQnn+0H1b
+   oZplwD/Ex2TPQLPgczX0x8gRrJXhGp9LXoQx6mDQT2EnxdeqoCiHVWhJR
+   /uf2Rl57uN1y4gr6UpkHYKwVSA7MOUUQODXeXLi0ON6K/aSIoR8kc/CVK
+   Q==;
+X-CSE-ConnectionGUID: UPycBILZS1WOh0gyw7rxcg==
+X-CSE-MsgGUID: FZkSZTkJQbiJTyyiRrZGBQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="75708671"
+X-IronPort-AV: E=Sophos;i="6.23,148,1770624000"; 
+   d="scan'208";a="75708671"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2026 13:03:52 -0700
+X-CSE-ConnectionGUID: 8xNt/3fWSzmEU6QOZpoiWg==
+X-CSE-MsgGUID: Xc7xvKgWRpqexbOk/sMx2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,148,1770624000"; 
+   d="scan'208";a="229927052"
+Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 29 Mar 2026 13:03:49 -0700
+Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w6wMM-0000000007H-2vro;
+	Sun, 29 Mar 2026 20:03:46 +0000
+Date: Mon, 30 Mar 2026 04:02:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Simon Richter <Simon.Richter@hogyros.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Subject: [pci:vga 3/5] drivers/gpu/drm/i915/display/intel_vga.c:68:2:
+ error: ignoring return value of function declared with 'warn_unused_result'
+ attribute
+Message-ID: <202603300336.G53JumVL-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260203-inline-helpers-v2-0-beb8547a03c9@google.com>
-In-Reply-To: <20260203-inline-helpers-v2-0-beb8547a03c9@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 29 Mar 2026 19:33:45 +0200
-X-Gm-Features: AQROBzAbWz3xOUBnSqR2d9NqgOZyOCJXfUW2zEO1m7L8IHXJSZ_QeR_z2lJXCRY
-Message-ID: <CANiq72=ns52NksGEj-5kBCkD0RxH12wKawr2pH_QvHshSsz6Kw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Uladzislau Rezki <urezki@gmail.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
-	Matthew Maurer <mmaurer@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 3, 2026 at 12:34=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
-rote:
->
-> Currently the only way for Rust code to call a static inline function is
-> to go through a helper in rust/helpers/. This introduces performance
-> costs due to additional function calls and also clutters backtraces and
-> flame graphs with helper symbols.
->
-> To get rid of these helper symbols, provide functionality to inline
-> helpers into Rust using llvm-link. This option complements full LTO, by
-> being much cheaper and avoiding incompatibility with BTF.
+Hi Simon,
 
-Applied to `rust-next` -- thanks everyone!
+First bad commit (maybe !=3D root cause):
 
-    [ Fixed typo. - Miguel ]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git vga
+head:   21b082bd2a45704a6f7e69c190c8287a3d011ea9
+commit: dc582b5ed4b749335b947258d4874df628726632 [3/5] PCI/VGA: Mark vga_ge=
+t() and wrappers as __must_check
+config: x86_64-randconfig-011-20260329 (https://download.01.org/0day-ci/arc=
+hive/20260330/202603300336.G53JumVL-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f022=
+7cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
+/20260330/202603300336.G53JumVL-lkp@intel.com/reproduce)
 
-    [ Andreas writes:
+If you fix the issue in a separate patch/commit (i.e. not just a new versio=
+n of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603300336.G53JumVL-lkp@i=
+ntel.com/
 
-        For the rnull driver, enabling helper inlining with this patch
-        gives an average speedup of 2% over the set of 120 workloads that
-        we publish on [2].
+All errors (new ones prefixed by >>):
 
-        Link: https://rust-for-linux.com/null-block-driver [2]
+>> drivers/gpu/drm/i915/display/intel_vga.c:68:2: error: ignoring return va=
+lue of function declared with 'warn_unused_result' attribute [-Werror,-Wunu=
+sed-result]
+      68 |         vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_vga.c:93:2: error: ignoring return va=
+lue of function declared with 'warn_unused_result' attribute [-Werror,-Wunu=
+sed-result]
+      93 |         vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
-      This series also uncovered a pre-existing UB instance thanks to an
-      `objtool` warning which I noticed while testing the series (details
-      in the mailing list).
 
-          - Miguel ]
+vim +/warn_unused_result +68 drivers/gpu/drm/i915/display/intel_vga.c
 
-    [ Some changes, apart from the rebase:
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  43 =20
+4fb8783165b7c6 Jani Nikula   2019-10-01  44  /* Disable the VGA plane that =
+we never use */
+4b6e05c43b7542 Ville Syrj=C3=A4l=C3=A4 2024-09-06  45  void intel_vga_disab=
+le(struct intel_display *display)
+4fb8783165b7c6 Jani Nikula   2019-10-01  46  {
+4b6e05c43b7542 Ville Syrj=C3=A4l=C3=A4 2024-09-06  47  	struct pci_dev *pde=
+v =3D to_pci_dev(display->drm->dev);
+4b6e05c43b7542 Ville Syrj=C3=A4l=C3=A4 2024-09-06  48  	i915_reg_t vga_reg =
+=3D intel_vga_cntrl_reg(display);
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  49  	enum pipe pipe;
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  50  	u32 tmp;
+4fb8783165b7c6 Jani Nikula   2019-10-01  51  	u8 sr1;
+4fb8783165b7c6 Jani Nikula   2019-10-01  52 =20
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  53  	tmp =3D intel_de_re=
+ad(display, vga_reg);
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  54  	if (tmp & VGA_DISP_=
+DISABLE)
+a3af0140663dc3 Emil Velikov  2021-06-04  55  		return;
+a3af0140663dc3 Emil Velikov  2021-06-04  56 =20
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  57  	if (display->platfo=
+rm.cherryview)
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  58  		pipe =3D REG_FIELD=
+_GET(VGA_PIPE_SEL_MASK_CHV, tmp);
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  59  	else if (has_vga_pi=
+pe_sel(display))
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  60  		pipe =3D REG_FIELD=
+_GET(VGA_PIPE_SEL_MASK, tmp);
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  61  	else
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  62  		pipe =3D PIPE_A;
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  63 =20
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  64  	drm_dbg_kms(display=
+->drm, "Disabling VGA plane on pipe %c\n",
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  65  		    pipe_name(pipe=
+));
+0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  66 =20
+4fb8783165b7c6 Jani Nikula   2019-10-01  67  	/* WaEnableVGAAccessThroughIO=
+Port:ctg,elk,ilk,snb,ivb,vlv,hsw */
+4fb8783165b7c6 Jani Nikula   2019-10-01 @68  	vga_get_uninterruptible(pdev,=
+ VGA_RSRC_LEGACY_IO);
+f0bb41fad02e03 Jani Nikula   2022-02-02  69  	outb(0x01, VGA_SEQ_I);
+f0bb41fad02e03 Jani Nikula   2022-02-02  70  	sr1 =3D inb(VGA_SEQ_D);
+f0bb41fad02e03 Jani Nikula   2022-02-02  71  	outb(sr1 | VGA_SR01_SCREEN_OF=
+F, VGA_SEQ_D);
+4fb8783165b7c6 Jani Nikula   2019-10-01  72  	vga_put(pdev, VGA_RSRC_LEGACY=
+_IO);
+4fb8783165b7c6 Jani Nikula   2019-10-01  73  	udelay(300);
+4fb8783165b7c6 Jani Nikula   2019-10-01  74 =20
+4b6e05c43b7542 Ville Syrj=C3=A4l=C3=A4 2024-09-06  75  	intel_de_write(disp=
+lay, vga_reg, VGA_DISP_DISABLE);
+4b6e05c43b7542 Ville Syrj=C3=A4l=C3=A4 2024-09-06  76  	intel_de_posting_re=
+ad(display, vga_reg);
+4fb8783165b7c6 Jani Nikula   2019-10-01  77  }
+4fb8783165b7c6 Jani Nikula   2019-10-01  78 =20
 
-      - Added "(EXPERIMENTAL)" to Kconfig as the commit mentions.
+:::::: The code at line 68 was first introduced by commit
+:::::: 4fb8783165b7c6fb4b52428dbb80da8554e5fd1e drm/i915/display: abstract =
+all vgaarb access to intel_vga.[ch]
 
-      - Added `depends on ARM64 || X86_64` and `!UML` for now, since this i=
-s
-        experimental, other architectures may require other changes (e.g.
-        the issues I mentioned in the mailing list for ARM and UML) and the=
-y
-        are not really tested so far. So let arch maintainers pick this up
-        if they think it is worth it.
+:::::: TO: Jani Nikula <jani.nikula@intel.com>
+:::::: CC: Jani Nikula <jani.nikula@intel.com>
 
-      - Gated the `cmd_ld_single` step also into the new mode, which also
-        means that any possible future `objcopy` step is done after the
-        translation, as expected.
-
-      - Added `.gitignore` for `.bc` with exception for existing script.
-
-      - Added `part-of-*` for helpers bitcode files as discussed, and
-        dropped `$(if $(filter %_module.bc,$@),-DMODULE)` since `-DMODULE`
-        is already there (would be duplicated otherwise).
-
-      - Moved `LLVM_LINK` to keep binutils list alphabetized.
-
-      - Fixed typo in title.
-
-      - Dropped second `cmd_ld_single` commit message paragraph.
-
-          - Miguel ]
-
-...to boldly go where no Rust build has gone before.
-
-Cheers,
-Miguel
+--=20
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
