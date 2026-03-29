@@ -1,171 +1,90 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5186737F019;
-	Sun, 29 Mar 2026 20:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A123803DE;
+	Sun, 29 Mar 2026 20:03:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774814633; cv=none; b=BVL5ZyfQOn5+o8hgPL2U0X8nnmyJXuW1CnH+KqlrqYXYwmiwmxpC6xy+C15+U2jxkUAobLZ/Zrga4bh2lQQDydnmSNaKrDhiLFkx7BrZIy5s0JUvhpqc+i97e0azkYNaO3x+VmeTPUGTS0impABjNOZ//5e9Uh5Ou+OSaySHJKI=
+	t=1774814635; cv=none; b=R+3zCwF+VXg7F3KsQUd7Lo9xYHkuZIC8B0qhA9GL5kn6+MwldYB9sm2VgqcdZkRriRlZBnP6hgDBVj9IOWf6BXCemWuhn4tqt7CUjOvh1IS4FL+LbbT/jqGJEALRM8VYgg+Fw6jpHG1GsWMuVwSjLf+v3S4Al8jLxmSZc2jUxKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774814633; c=relaxed/simple;
-	bh=q/qB0hRSdc8iLgrZTYUS7uvy+vi1WvhhaqNLFnacfJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=c9zOkvImM9TWM9WOvNTBAy98cNbprQAXA05BiTOA4o8ANurKFZ/0dsBKPGO+7BjvSdCw71N/3fEKKvHK3N1Onys4ThNO1kIg/PZG6Zkbn+77NAZnGRSBJUTguerc4H7Smy2jtc+I9p4eAj9AhvOl6r4z3HNzisEZQvn7evLst58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I63oxAiC; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1774814635; c=relaxed/simple;
+	bh=O7U2Bjoez/wHT4Uyw55BMWeW8hLhvS/pD2bS+x8l8x4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cfZQlZgmxxQK27AtOfc/ugX8ocz/c1JuY801OrXlTPxwp97/CxR2FFfpaVRkFH3gI4/cRoReiwjlhv+Oun0EFd/HIXB5ugoViwpsgSFphfIlI1iRIWhd0tLTuqdLRJP3ONSat51LlcbRcAQNQ3igJuUHbjqcMyRpbRj5E6PAmsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VUFVW3gk; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I63oxAiC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VUFVW3gk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774814632; x=1806350632;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=q/qB0hRSdc8iLgrZTYUS7uvy+vi1WvhhaqNLFnacfJU=;
-  b=I63oxAiCnbaIzxWtBouAWPfHA/KMVe/Ul4C14xsX6wQTY7gIfzZeI6ny
-   uz9K6IN4ik7DRJfBVTHuo2aq0L5Yx3bDGbxCEYO6GZXFWsnN5iBR+IlIP
-   MQCwVD/8TcJGM6iARkbGvmFZMBd9kMsAGotu4FP0fsNU7aYK6Y3YNO4Pt
-   3ogi2rttz8J6AorQtt4anc6UICigGeCols4lHwZ97Ju8FXqTpQnn+0H1b
-   oZplwD/Ex2TPQLPgczX0x8gRrJXhGp9LXoQx6mDQT2EnxdeqoCiHVWhJR
-   /uf2Rl57uN1y4gr6UpkHYKwVSA7MOUUQODXeXLi0ON6K/aSIoR8kc/CVK
-   Q==;
-X-CSE-ConnectionGUID: UPycBILZS1WOh0gyw7rxcg==
-X-CSE-MsgGUID: FZkSZTkJQbiJTyyiRrZGBQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="75708671"
+  t=1774814634; x=1806350634;
+  h=date:from:to:cc:subject:message-id;
+  bh=O7U2Bjoez/wHT4Uyw55BMWeW8hLhvS/pD2bS+x8l8x4=;
+  b=VUFVW3gkUEsMarPqrMpbhYcHl/GXBvwNTcSrFfxZoGeRARoX0vNwHeD9
+   bx9Q/3dyTMfWNMqcWqBDArd4tUXma5X6PnnP+PsNy6VyBdb/8QXd/4UEb
+   DXCOVMJo0VBRAnlVKD/ccBWKjim1kzPfpf8HliOUgNW/9HjQO0lV+NGR0
+   LUeMm3lsMwaRBKpY7VzE9Zuz7j70g+3R8yt/TXDokhv8jMHCXrHerUAPF
+   XbwZP1ZIdCG9sVVCU7C+txo2ERWCCQsfNhpOp4PDoUj3QADgjer4d22fh
+   WZZr3RoKp5gxtANPvWhHVdUW8t98CuZ+hBGb1lDEt8mHabERr9HQwMqXJ
+   g==;
+X-CSE-ConnectionGUID: KxylrIV6QSetgj4R5CxhXw==
+X-CSE-MsgGUID: xtZplPTJQ22Us+P50U/4oA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="75708674"
 X-IronPort-AV: E=Sophos;i="6.23,148,1770624000"; 
-   d="scan'208";a="75708671"
+   d="scan'208";a="75708674"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
   by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2026 13:03:52 -0700
-X-CSE-ConnectionGUID: 8xNt/3fWSzmEU6QOZpoiWg==
-X-CSE-MsgGUID: Xc7xvKgWRpqexbOk/sMx2A==
+X-CSE-ConnectionGUID: iYZk8nNxSGmjqWBSHgjjVw==
+X-CSE-MsgGUID: SOYAjNX0Qr20rbcAyHnU1g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,148,1770624000"; 
-   d="scan'208";a="229927052"
+   d="scan'208";a="229927056"
 Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
   by orviesa003.jf.intel.com with ESMTP; 29 Mar 2026 13:03:49 -0700
 Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w6wMM-0000000007H-2vro;
+	id 1w6wMM-0000000007F-2m0M;
 	Sun, 29 Mar 2026 20:03:46 +0000
-Date: Mon, 30 Mar 2026 04:02:59 +0800
+Date: Mon, 30 Mar 2026 04:03:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Simon Richter <Simon.Richter@hogyros.de>
+To: Alice Ryhl <aliceryhl@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
-Subject: [pci:vga 3/5] drivers/gpu/drm/i915/display/intel_vga.c:68:2:
- error: ignoring return value of function declared with 'warn_unused_result'
- attribute
-Message-ID: <202603300336.G53JumVL-lkp@intel.com>
+ linux-kernel@vger.kernel.org, Wedson Almeida Filho <wedsonaf@gmail.com>,
+ Matt Gilbride <mattgilbride@google.com>
+Subject: Warning: drivers/android/binder/rust_binderfs.c:229 function
+ parameter 'arg' not described in 'binder_ctl_ioctl'
+Message-ID: <202603300355.MIT20sJc-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-Hi Simon,
+Hi Alice,
 
-First bad commit (maybe !=3D root cause):
+First bad commit (maybe != root cause):
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git vga
-head:   21b082bd2a45704a6f7e69c190c8287a3d011ea9
-commit: dc582b5ed4b749335b947258d4874df628726632 [3/5] PCI/VGA: Mark vga_ge=
-t() and wrappers as __must_check
-config: x86_64-randconfig-011-20260329 (https://download.01.org/0day-ci/arc=
-hive/20260330/202603300336.G53JumVL-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f022=
-7cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
-/20260330/202603300336.G53JumVL-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f242ac4a09443c6e2e0ec03d7e2a21b00cbb3907
+commit: eafedbc7c050c44744fbdf80bdf3315e860b7513 rust_binder: add Rust Binder driver
+date:   6 months ago
+config: x86_64-randconfig-003-20260329 (https://download.01.org/0day-ci/archive/20260330/202603300355.MIT20sJc-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260330/202603300355.MIT20sJc-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new versio=
-n of
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603300336.G53JumVL-lkp@i=
-ntel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603300355.MIT20sJc-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_vga.c:68:2: error: ignoring return va=
-lue of function declared with 'warn_unused_result' attribute [-Werror,-Wunu=
-sed-result]
-      68 |         vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_vga.c:93:2: error: ignoring return va=
-lue of function declared with 'warn_unused_result' attribute [-Werror,-Wunu=
-sed-result]
-      93 |         vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+   Warning: drivers/android/binder/rust_binderfs.c:229 function parameter 'file' not described in 'binder_ctl_ioctl'
+   Warning: drivers/android/binder/rust_binderfs.c:229 function parameter 'cmd' not described in 'binder_ctl_ioctl'
+>> Warning: drivers/android/binder/rust_binderfs.c:229 function parameter 'arg' not described in 'binder_ctl_ioctl'
 
-
-vim +/warn_unused_result +68 drivers/gpu/drm/i915/display/intel_vga.c
-
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  43 =20
-4fb8783165b7c6 Jani Nikula   2019-10-01  44  /* Disable the VGA plane that =
-we never use */
-4b6e05c43b7542 Ville Syrj=C3=A4l=C3=A4 2024-09-06  45  void intel_vga_disab=
-le(struct intel_display *display)
-4fb8783165b7c6 Jani Nikula   2019-10-01  46  {
-4b6e05c43b7542 Ville Syrj=C3=A4l=C3=A4 2024-09-06  47  	struct pci_dev *pde=
-v =3D to_pci_dev(display->drm->dev);
-4b6e05c43b7542 Ville Syrj=C3=A4l=C3=A4 2024-09-06  48  	i915_reg_t vga_reg =
-=3D intel_vga_cntrl_reg(display);
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  49  	enum pipe pipe;
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  50  	u32 tmp;
-4fb8783165b7c6 Jani Nikula   2019-10-01  51  	u8 sr1;
-4fb8783165b7c6 Jani Nikula   2019-10-01  52 =20
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  53  	tmp =3D intel_de_re=
-ad(display, vga_reg);
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  54  	if (tmp & VGA_DISP_=
-DISABLE)
-a3af0140663dc3 Emil Velikov  2021-06-04  55  		return;
-a3af0140663dc3 Emil Velikov  2021-06-04  56 =20
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  57  	if (display->platfo=
-rm.cherryview)
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  58  		pipe =3D REG_FIELD=
-_GET(VGA_PIPE_SEL_MASK_CHV, tmp);
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  59  	else if (has_vga_pi=
-pe_sel(display))
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  60  		pipe =3D REG_FIELD=
-_GET(VGA_PIPE_SEL_MASK, tmp);
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  61  	else
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  62  		pipe =3D PIPE_A;
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  63 =20
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  64  	drm_dbg_kms(display=
-->drm, "Disabling VGA plane on pipe %c\n",
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  65  		    pipe_name(pipe=
-));
-0c80d60ae63461 Ville Syrj=C3=A4l=C3=A4 2025-04-17  66 =20
-4fb8783165b7c6 Jani Nikula   2019-10-01  67  	/* WaEnableVGAAccessThroughIO=
-Port:ctg,elk,ilk,snb,ivb,vlv,hsw */
-4fb8783165b7c6 Jani Nikula   2019-10-01 @68  	vga_get_uninterruptible(pdev,=
- VGA_RSRC_LEGACY_IO);
-f0bb41fad02e03 Jani Nikula   2022-02-02  69  	outb(0x01, VGA_SEQ_I);
-f0bb41fad02e03 Jani Nikula   2022-02-02  70  	sr1 =3D inb(VGA_SEQ_D);
-f0bb41fad02e03 Jani Nikula   2022-02-02  71  	outb(sr1 | VGA_SR01_SCREEN_OF=
-F, VGA_SEQ_D);
-4fb8783165b7c6 Jani Nikula   2019-10-01  72  	vga_put(pdev, VGA_RSRC_LEGACY=
-_IO);
-4fb8783165b7c6 Jani Nikula   2019-10-01  73  	udelay(300);
-4fb8783165b7c6 Jani Nikula   2019-10-01  74 =20
-4b6e05c43b7542 Ville Syrj=C3=A4l=C3=A4 2024-09-06  75  	intel_de_write(disp=
-lay, vga_reg, VGA_DISP_DISABLE);
-4b6e05c43b7542 Ville Syrj=C3=A4l=C3=A4 2024-09-06  76  	intel_de_posting_re=
-ad(display, vga_reg);
-4fb8783165b7c6 Jani Nikula   2019-10-01  77  }
-4fb8783165b7c6 Jani Nikula   2019-10-01  78 =20
-
-:::::: The code at line 68 was first introduced by commit
-:::::: 4fb8783165b7c6fb4b52428dbb80da8554e5fd1e drm/i915/display: abstract =
-all vgaarb access to intel_vga.[ch]
-
-:::::: TO: Jani Nikula <jani.nikula@intel.com>
-:::::: CC: Jani Nikula <jani.nikula@intel.com>
-
---=20
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
