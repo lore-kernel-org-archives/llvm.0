@@ -1,198 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EB826AF4;
-	Sun, 29 Mar 2026 02:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CC79282F16
+	for <llvm@lists.linux.dev>; Sun, 29 Mar 2026 05:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774752267; cv=none; b=ra8nDYx2o9nZ/Sb3nEbXeIWDUbap81CbG53WjGEnbAARjUwAMFzL7hZBc7lAgrhBJiw3DAc9XsJTeqbKcEZOHepVUWgQbYV2/aOjiFiuCBdMF/IimY1JUSJwQa4iwfVn3Z6tU2eTEkjeZ109g8sH4GEmlZnIrEWdSNDFTO7bQL8=
+	t=1774762989; cv=none; b=K9+Gg1UnI8twvf7DcifVcGjwlxaAskNfnminb8O9znbPbLd2LuR7so5TKDdAE4lBYIYtuLTJd2BD4091pdgnJHn8aKMLtgA4YT8zbeu/aKT1u8c/RDg9ACRTKNkKuOtu44ZzfrjlwlVPdf4lCo1slIQO4PRmBG4ImsqTGn77PS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774752267; c=relaxed/simple;
-	bh=zP8pKciSR07cE+zE4CuckNxlz1naeSv/P8AgYFY+L+0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DEUIlqtvcJhBJKK9gQg6HVh8gsJr9+oPTnjL/XSW/iwGFwdpf40k9YQvZtHGiEAlT8Dq4J3GRZn8F/eP5WCWkiskgJXZwbmaxgqZeOsbL533mTfTLVeeRsTrDfP2HBCqhg0wmBiZWKjIUizp8VInyZASOaXzMLk2qY8Rc98l/yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lJWFP9vO; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774762989; c=relaxed/simple;
+	bh=CDPhr6bD+9XCt8CT2wO+8BE2mSXylllogQGtQlBHF5E=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Qvlr78XugeTy/h0bZBjsnk7/mGKtTq2GQQnFF6T//TKFaD5MmmkqO7jkXQwv/JJzaPnDn0AfmSJSRT0IVQ3xeEZH8F97dahfSgG0OR576BBNJAP6jC0iNasPb7FHem1TdKTGmdbusfXIxwXs3A9kn6VrpyNN4j0+3Mq28HO6ANs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UvAeav0o; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lJWFP9vO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774752266; x=1806288266;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zP8pKciSR07cE+zE4CuckNxlz1naeSv/P8AgYFY+L+0=;
-  b=lJWFP9vOPi5B8ij+TirJ1RfGtpFn6xCB76oo7hfifZMHJoQhF4YR8MVW
-   6tNSR15i+UzUwSRySedtAIs8P7JFqz/uqQIq8h3kYBliN/4PqHWZ6AwEq
-   trWPnIEqXhMP0eKhK7ZGwmVPKSJg4jvZ9lOd695/SXfqn2lbabOFMJAY/
-   vgYepJGigPl0AUAwPL+uLKtAuNR13BBtMLKlftnDTw/3gH0AW7AA8LvrH
-   +pokTqnVGG0FD7Z4LcyXmZEBjTHrk7ifRwaCgYfT1+1n+i0XlEfIsQ2ZS
-   7WdKHNDfKqYk09taY5vYBG35rK/EraQiVWa1emwackQY3cBm3zjpnOwPn
-   g==;
-X-CSE-ConnectionGUID: jyw2IWaVRc2yqrfOC3tEzA==
-X-CSE-MsgGUID: FSMAdOSYRhG3IR1Or24xPQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="93165224"
-X-IronPort-AV: E=Sophos;i="6.23,147,1770624000"; 
-   d="scan'208";a="93165224"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 19:44:25 -0700
-X-CSE-ConnectionGUID: /GOkUf93RbSK9TYX5Vm+Zw==
-X-CSE-MsgGUID: PiBYSUfHRqK2zAYwZmdP0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,147,1770624000"; 
-   d="scan'208";a="224730212"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 28 Mar 2026 19:44:21 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w6g8P-00000000C1B-46D9;
-	Sun, 29 Mar 2026 02:44:17 +0000
-Date: Sun, 29 Mar 2026 10:43:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
-Subject: Re: [PATCH v2 3/5] mfd: sprd-sc27xx: Switch to devm_mfd_add_devices()
-Message-ID: <202603291013.6DnmGjG3-lkp@intel.com>
-References: <20260325-sc27xx-mfd-cells-v2-3-d0ebb60aa4a7@abscue.de>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UvAeav0o"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774762986;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KccbMQR/6JVWVFpCc4O3P/WZ4UCWAclJKOkutvSgBdY=;
+	b=UvAeav0oP4s4Q7oW4mk50qRG89zUsyp8wA1VtSkAdY9b5QMi2bn7AzmR6qJDlvQ30R/gZb
+	qInEahGFedVDwdIvM/gMeeqFPuA+lxwcU+5LdO+P9edhE/GjtRhlkioyVNE4iRFQT9P0Vc
+	WLd+CWlnsgV91XrD7Z2HsRHc//LehTo=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-396-tLBfH9TPP_evPfqNKMcFYw-1; Sun,
+ 29 Mar 2026 01:43:04 -0400
+X-MC-Unique: tLBfH9TPP_evPfqNKMcFYw-1
+X-Mimecast-MFC-AGG-ID: tLBfH9TPP_evPfqNKMcFYw_1774762984
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1027C1800365
+	for <llvm@lists.linux.dev>; Sun, 29 Mar 2026 05:43:04 +0000 (UTC)
+Received: from [172.20.201.103] (unknown [10.30.44.137])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B2C501955D84;
+	Sun, 29 Mar 2026 05:43:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc5,
+ upstream-mainline, cbfffcca)
+Date: Sun, 29 Mar 2026 05:43:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260325-sc27xx-mfd-cells-v2-3-d0ebb60aa4a7@abscue.de>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <28347.126032901430400120@us-mta-396.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 1x2XmGh5kgNXs0YdkzoW-TAnHlYg6DolNqTSJE0GXPA_1774762984
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Otto,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 85964cdcad0fac9a0eb7b87a0f9d88cc074b854c]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Otto-Pfl-ger/dt-bindings-rtc-sc2731-Add-compatible-for-SC2730/20260327-162827
-base:   85964cdcad0fac9a0eb7b87a0f9d88cc074b854c
-patch link:    https://lore.kernel.org/r/20260325-sc27xx-mfd-cells-v2-3-d0ebb60aa4a7%40abscue.de
-patch subject: [PATCH v2 3/5] mfd: sprd-sc27xx: Switch to devm_mfd_add_devices()
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260329/202603291013.6DnmGjG3-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260329/202603291013.6DnmGjG3-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603291013.6DnmGjG3-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/mfd/sprd-sc27xx-spi.c:188:14: warning: cast to smaller integer type 'enum sprd_pmic_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-     188 |         pmic_type = (enum sprd_pmic_type)of_device_get_match_data(&spi->dev);
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +188 drivers/mfd/sprd-sc27xx-spi.c
+Kernel information:
+    Commit message: Merge tag 'trace-v7.0-rc5' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/trace/linux-trace
 
-   179	
-   180	static int sprd_pmic_probe(struct spi_device *spi)
-   181	{
-   182		struct sprd_pmic *ddata;
-   183		enum sprd_pmic_type pmic_type;
-   184		const struct sprd_pmic_data *pdata;
-   185		const struct mfd_cell *cells;
-   186		int ret, i, num_cells;
-   187	
- > 188		pmic_type = (enum sprd_pmic_type)of_device_get_match_data(&spi->dev);
-   189	
-   190		switch (pmic_type) {
-   191		case PMIC_TYPE_SC2730:
-   192			pdata = &sc2730_data;
-   193			cells = sc2730_devices;
-   194			num_cells = ARRAY_SIZE(sc2730_devices);
-   195			break;
-   196		case PMIC_TYPE_SC2731:
-   197			pdata = &sc2731_data;
-   198			cells = sc2731_devices;
-   199			num_cells = ARRAY_SIZE(sc2731_devices);
-   200			break;
-   201		default:
-   202			dev_err(&spi->dev, "Invalid device ID\n");
-   203			return -EINVAL;
-   204		}
-   205	
-   206		ddata = devm_kzalloc(&spi->dev, sizeof(*ddata), GFP_KERNEL);
-   207		if (!ddata)
-   208			return -ENOMEM;
-   209	
-   210		ddata->regmap = devm_regmap_init(&spi->dev, &sprd_pmic_regmap,
-   211						 &spi->dev, &sprd_pmic_config);
-   212		if (IS_ERR(ddata->regmap)) {
-   213			ret = PTR_ERR(ddata->regmap);
-   214			dev_err(&spi->dev, "Failed to allocate register map %d\n", ret);
-   215			return ret;
-   216		}
-   217	
-   218		spi_set_drvdata(spi, ddata);
-   219		ddata->dev = &spi->dev;
-   220		ddata->irq = spi->irq;
-   221		ddata->pdata = pdata;
-   222	
-   223		ddata->irq_chip.name = dev_name(&spi->dev);
-   224		ddata->irq_chip.status_base =
-   225			pdata->irq_base + SPRD_PMIC_INT_MASK_STATUS;
-   226		ddata->irq_chip.unmask_base = pdata->irq_base + SPRD_PMIC_INT_EN;
-   227		ddata->irq_chip.ack_base = 0;
-   228		ddata->irq_chip.num_regs = 1;
-   229		ddata->irq_chip.num_irqs = pdata->num_irqs;
-   230	
-   231		ddata->irqs = devm_kcalloc(&spi->dev,
-   232					   pdata->num_irqs, sizeof(struct regmap_irq),
-   233					   GFP_KERNEL);
-   234		if (!ddata->irqs)
-   235			return -ENOMEM;
-   236	
-   237		ddata->irq_chip.irqs = ddata->irqs;
-   238		for (i = 0; i < pdata->num_irqs; i++)
-   239			ddata->irqs[i].mask = BIT(i);
-   240	
-   241		ret = devm_regmap_add_irq_chip(&spi->dev, ddata->regmap, ddata->irq,
-   242					       IRQF_ONESHOT, 0,
-   243					       &ddata->irq_chip, &ddata->irq_data);
-   244		if (ret) {
-   245			dev_err(&spi->dev, "Failed to add PMIC irq chip %d\n", ret);
-   246			return ret;
-   247		}
-   248	
-   249		ret = devm_mfd_add_devices(&spi->dev, PLATFORM_DEVID_AUTO,
-   250					   cells, num_cells, NULL, 0,
-   251					   regmap_irq_get_domain(ddata->irq_data));
-   252		if (ret) {
-   253			dev_err(&spi->dev, "Failed to populate sub-devices %d\n", ret);
-   254			return ret;
-   255		}
-   256	
-   257		ret = devm_device_init_wakeup(&spi->dev);
-   258		if (ret)
-   259			return dev_err_probe(&spi->dev, ret, "Failed to init wakeup\n");
-   260	
-   261		return 0;
-   262	}
-   263	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2415527445
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2415527445_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
