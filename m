@@ -1,64 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1FE313551;
-	Sun, 29 Mar 2026 10:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607883101A9;
+	Sun, 29 Mar 2026 10:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774781389; cv=none; b=NVeqa+bXX3GBDnNSJvU6/xCkKZCrUKaVBU/stNffikqiXpCBriORsmJMBWE3qSgKoVWjw/1M5PkFWM/XYEPcmNmHlmYN6lz6B4UdmQt3vmDq4sRbc3UFndQiq2CjKdDwvHmM1rqQiOmwnyVahVDexGj2cqu8yTi+666dsK9OuVY=
+	t=1774781390; cv=none; b=pqAIDU0Rd+4/NC7/oCeCVx4EDEGfpmVWmFsQmt5Q5Ry+afDSqiW5Yeuf4PiQaKCNEC8Y/gwjD5/Cakh6g1cqIg+/zoJmizzssCiFUU96G4tsgg2z1QWk9nw47klNlqdO/PF2FENtrknEfS54LagRkgg7EPHvVK+dauwEeurwdMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774781389; c=relaxed/simple;
-	bh=0jS+lxhtNLNxmUvtXwaJU9vXoM22BiN5K4t003u6/vY=;
+	s=arc-20240116; t=1774781390; c=relaxed/simple;
+	bh=Wo9L+4YxAfzYxpX8JuNszX9GlkiF3V/LfsPNcswQzMA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cMqi1t9E7qVijIvEIt5MQr+92Zj9aU4YEPjMG7xvSXAltLkOj6N3+TiBTjdTHy42G/hJ1ONwPTqpf9KqEc9c1cRYH5G9ROKidVpT8ZzktRDeDA9WJ4+T4bYT7XKdQS18BAcXDuqNxesNCn7mKmvxxlsgrjHyQP/70wJfs5UDi0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nPdaLZbl; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=OsvnokLliE3SG9I1NwUqJRZdZuhnANgbW9XqDir3/d7enrKi8Jc31HcPQVjJt8HZwKgxllVS6E3GUowiYlYJvfXghd7mqOBBzhkqCX9LI8EtCQpQZK8l8AkHFSqXvpJ8N6biXkrTavAEMZEJS2aUYdw91rqUb7dbMp/Df+56a/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E6gNuJPS; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nPdaLZbl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E6gNuJPS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774781387; x=1806317387;
+  t=1774781389; x=1806317389;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=0jS+lxhtNLNxmUvtXwaJU9vXoM22BiN5K4t003u6/vY=;
-  b=nPdaLZblc0DN1u7aQ9NsS1dtJQmPTRj7TtE0DJUxwLUQdDdmER4Ur2JP
-   1dSCzhWir4xD+B42lVh84ajPomvaPndIkTnQoeDPWlAgmtK7BBjnNAjpH
-   F4Cn0XocIBqqXY9h43einHOW51n7dRy4+BxP4EP/F4TKVWquOREkDWsHl
-   l0uE3N+Lg8YaUPCVYK41mRI81Zu1sq4e8s5pvOp0Dj3k/XdxWpWPm+GFn
-   FPGLyvdjbhA3Sl32lLhsYQ1Z//iZzHXjS+T5ZqFaJClpJkqtXIaMmQ6al
-   fKZJmRJ+LQU01BuIFSWSFMG8e6xiJtVEUl+wOIiuIWcebzRx28QFR+nNr
-   w==;
-X-CSE-ConnectionGUID: VpBzxNb2RDKOAcyGZmRedQ==
-X-CSE-MsgGUID: j7oiiiFTTtOXO/+E47jtAw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="86870759"
+  bh=Wo9L+4YxAfzYxpX8JuNszX9GlkiF3V/LfsPNcswQzMA=;
+  b=E6gNuJPSkI3qB846e/UZDwHdABAxVGU1AFtxwQFv4MmW1aeEwmPD2kny
+   hBnm/1jiiWZwSYpG8K8q0DxSdP4AM8HM6EKDFOr8/Shm6XkJmb/Cp4eif
+   KzjXWCpWD+uQpo2epA++Y2xx4f4eIx/or8u71zdB9uk91Dfe4gsg05xdN
+   JH3ePCuF8L5kt+fQi2AQN7fPymra2xCQ6qlD+l/lC+tjn1loBqlDDgKq/
+   rK59Ok7r6j67ebd4lpKCqKVbDJOC1myvKYmxsmZfsQCLP0vG3YiuXZEJH
+   ZlhHAXGA+PO5BbCQCTvPI4Y5oVuKsmy2lH8gYTsduFSrDSOUwtLvb9mR1
+   g==;
+X-CSE-ConnectionGUID: d6S7EmXTTvWAV9hTdaJm6Q==
+X-CSE-MsgGUID: ufCFnQnKQIyoDJsFQJQMgw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="93374059"
 X-IronPort-AV: E=Sophos;i="6.23,148,1770624000"; 
-   d="scan'208";a="86870759"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2026 03:49:47 -0700
-X-CSE-ConnectionGUID: xMZyIx/uQNi/bVUaLyn0PQ==
-X-CSE-MsgGUID: aNcT5voZTsq2WxuqnuWh7g==
+   d="scan'208";a="93374059"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2026 03:49:48 -0700
+X-CSE-ConnectionGUID: 4DZ0cFH/QmyjtdyajyTJuQ==
+X-CSE-MsgGUID: UnsA4Ta0QEe71fYcLSvvPg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,148,1770624000"; 
-   d="scan'208";a="224955420"
+   d="scan'208";a="225782046"
 Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 29 Mar 2026 03:49:43 -0700
+  by orviesa008.jf.intel.com with ESMTP; 29 Mar 2026 03:49:43 -0700
 Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w6ni8-00000000CID-0iui;
+	id 1w6ni8-00000000CIF-0opa;
 	Sun, 29 Mar 2026 10:49:40 +0000
-Date: Sun, 29 Mar 2026 18:49:02 +0800
+Date: Sun, 29 Mar 2026 18:49:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Barry Song <21cnbao@gmail.com>, akpm@linux-foundation.org,
-	linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bhe@redhat.com,
-	baohua@kernel.org, chrisl@kernel.org, kasong@tencent.com,
-	nphamcs@gmail.com, shikemeng@huaweicloud.com, youngjun.park@lge.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] mm/swap: use swap_ops to register swap device's
- methods
-Message-ID: <202603291844.TWh2Ellp-lkp@intel.com>
-References: <20260328075812.11060-3-21cnbao@gmail.com>
+To: Youngjun Park <youngjun.park@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Chris Li <chrisl@kernel.org>, Youngjun Park <youngjun.park@lge.com>,
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kasong@tencent.com, hannes@cmpxchg.org, mhocko@kernel.org,
+	roman.gushchin@linux.dev, shakeel.butt@linux.dev,
+	muchun.song@linux.dev, shikemeng@huaweicloud.com, nphamcs@gmail.com,
+	bhe@redhat.com, baohua@kernel.org, gunho.lee@lge.com,
+	taejoon.song@lge.com, hyungjun.cho@lge.com, mkoutny@suse.com
+Subject: Re: [PATCH v5 1/4] mm: swap: introduce swap tier infrastructure
+Message-ID: <202603291831.wZLe8bqg-lkp@intel.com>
+References: <20260325175453.2523280-2-youngjun.park@lge.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,158 +71,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260328075812.11060-3-21cnbao@gmail.com>
+In-Reply-To: <20260325175453.2523280-2-youngjun.park@lge.com>
 
-Hi Barry,
+Hi Youngjun,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test WARNING on 6381a729fa7dda43574d93ab9c61cec516dd885b]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Barry-Song/mm-swap-rename-mm-page_io-c-to-mm-swap_io-c/20260328-170852
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260328075812.11060-3-21cnbao%40gmail.com
-patch subject: [PATCH v2 2/3] mm/swap: use swap_ops to register swap device's methods
-config: arm-randconfig-001-20260329 (https://download.01.org/0day-ci/archive/20260329/202603291844.TWh2Ellp-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Youngjun-Park/mm-swap-introduce-swap-tier-infrastructure/20260327-203639
+base:   6381a729fa7dda43574d93ab9c61cec516dd885b
+patch link:    https://lore.kernel.org/r/20260325175453.2523280-2-youngjun.park%40lge.com
+patch subject: [PATCH v5 1/4] mm: swap: introduce swap tier infrastructure
+config: hexagon-randconfig-002-20260329 (https://download.01.org/0day-ci/archive/20260329/202603291831.wZLe8bqg-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260329/202603291844.TWh2Ellp-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260329/202603291831.wZLe8bqg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603291844.TWh2Ellp-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603291831.wZLe8bqg-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/zswap.c:1057:19: error: use of undeclared identifier 'sis'; did you mean 'si'?
-    1057 |         VM_WARN_ON_ONCE(!sis->ops || !sis->ops->write_folio);
-         |                          ^~~
-         |                          si
-   include/linux/mmdebug.h:133:52: note: expanded from macro 'VM_WARN_ON_ONCE'
-     133 | #define VM_WARN_ON_ONCE(cond) BUILD_BUG_ON_INVALID(cond)
-         |                                                    ^~~~
-   include/linux/build_bug.h:30:63: note: expanded from macro 'BUILD_BUG_ON_INVALID'
-      30 | #define BUILD_BUG_ON_INVALID(e) ((void)(sizeof((__force long)(e))))
-         |                                                               ^
-   mm/zswap.c:995:27: note: 'si' declared here
-     995 |         struct swap_info_struct *si;
-         |                                  ^
-   mm/zswap.c:1057:32: error: use of undeclared identifier 'sis'; did you mean 'si'?
-    1057 |         VM_WARN_ON_ONCE(!sis->ops || !sis->ops->write_folio);
-         |                                       ^~~
-         |                                       si
-   include/linux/mmdebug.h:133:52: note: expanded from macro 'VM_WARN_ON_ONCE'
-     133 | #define VM_WARN_ON_ONCE(cond) BUILD_BUG_ON_INVALID(cond)
-         |                                                    ^~~~
-   include/linux/build_bug.h:30:63: note: expanded from macro 'BUILD_BUG_ON_INVALID'
-      30 | #define BUILD_BUG_ON_INVALID(e) ((void)(sizeof((__force long)(e))))
-         |                                                               ^
-   mm/zswap.c:995:27: note: 'si' declared here
-     995 |         struct swap_info_struct *si;
-         |                                  ^
-   2 errors generated.
+>> mm/swap_tier.c:118:10: warning: format specifies type 'long' but the argument has type '__ptrdiff_t' (aka 'int') [-Wformat]
+     116 |                 len += sysfs_emit_at(buf, len, "%-16s %-5ld %-11d %-11d\n",
+         |                                                       ~~~~~
+         |                                                       %-5td
+     117 |                                      tier->name,
+     118 |                                      TIER_IDX(tier),
+         |                                      ^~~~~~~~~~~~~~
+   mm/swap_tier.c:33:24: note: expanded from macro 'TIER_IDX'
+      33 | #define TIER_IDX(tier)  ((tier) - swap_tiers)
+         |                         ^~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +1057 mm/zswap.c
+vim +118 mm/swap_tier.c
 
-   971	
-   972	/*********************************
-   973	* writeback code
-   974	**********************************/
-   975	/*
-   976	 * Attempts to free an entry by adding a folio to the swap cache,
-   977	 * decompressing the entry data into the folio, and issuing a
-   978	 * bio write to write the folio back to the swap device.
-   979	 *
-   980	 * This can be thought of as a "resumed writeback" of the folio
-   981	 * to the swap device.  We are basically resuming the same swap
-   982	 * writeback path that was intercepted with the zswap_store()
-   983	 * in the first place.  After the folio has been decompressed into
-   984	 * the swap cache, the compressed version stored by zswap can be
-   985	 * freed.
-   986	 */
-   987	static int zswap_writeback_entry(struct zswap_entry *entry,
-   988					 swp_entry_t swpentry)
-   989	{
-   990		struct xarray *tree;
-   991		pgoff_t offset = swp_offset(swpentry);
-   992		struct folio *folio;
-   993		struct mempolicy *mpol;
-   994		bool folio_was_allocated;
-   995		struct swap_info_struct *si;
-   996		int ret = 0;
-   997	
-   998		/* try to allocate swap cache folio */
-   999		si = get_swap_device(swpentry);
-  1000		if (!si)
-  1001			return -EEXIST;
-  1002	
-  1003		mpol = get_task_policy(current);
-  1004		folio = swap_cache_alloc_folio(swpentry, GFP_KERNEL, mpol,
-  1005					       NO_INTERLEAVE_INDEX, &folio_was_allocated);
-  1006		put_swap_device(si);
-  1007		if (!folio)
-  1008			return -ENOMEM;
-  1009	
-  1010		/*
-  1011		 * Found an existing folio, we raced with swapin or concurrent
-  1012		 * shrinker. We generally writeback cold folios from zswap, and
-  1013		 * swapin means the folio just became hot, so skip this folio.
-  1014		 * For unlikely concurrent shrinker case, it will be unlinked
-  1015		 * and freed when invalidated by the concurrent shrinker anyway.
-  1016		 */
-  1017		if (!folio_was_allocated) {
-  1018			ret = -EEXIST;
-  1019			goto out;
-  1020		}
-  1021	
-  1022		/*
-  1023		 * folio is locked, and the swapcache is now secured against
-  1024		 * concurrent swapping to and from the slot, and concurrent
-  1025		 * swapoff so we can safely dereference the zswap tree here.
-  1026		 * Verify that the swap entry hasn't been invalidated and recycled
-  1027		 * behind our backs, to avoid overwriting a new swap folio with
-  1028		 * old compressed data. Only when this is successful can the entry
-  1029		 * be dereferenced.
-  1030		 */
-  1031		tree = swap_zswap_tree(swpentry);
-  1032		if (entry != xa_load(tree, offset)) {
-  1033			ret = -ENOMEM;
-  1034			goto out;
-  1035		}
-  1036	
-  1037		if (!zswap_decompress(entry, folio)) {
-  1038			ret = -EIO;
-  1039			goto out;
-  1040		}
-  1041	
-  1042		xa_erase(tree, offset);
-  1043	
-  1044		count_vm_event(ZSWPWB);
-  1045		if (entry->objcg)
-  1046			count_objcg_events(entry->objcg, ZSWPWB, 1);
-  1047	
-  1048		zswap_entry_free(entry);
-  1049	
-  1050		/* folio is up to date */
-  1051		folio_mark_uptodate(folio);
-  1052	
-  1053		/* move it to the tail of the inactive list after end_writeback */
-  1054		folio_set_reclaim(folio);
-  1055	
-  1056		/* start writeback */
-> 1057		VM_WARN_ON_ONCE(!sis->ops || !sis->ops->write_folio);
-  1058		si->ops->write_folio(si, folio, NULL);
-  1059	
-  1060	out:
-  1061		if (ret && ret != -EEXIST) {
-  1062			swap_cache_del_folio(folio);
-  1063			folio_unlock(folio);
-  1064		}
-  1065		folio_put(folio);
-  1066		return ret;
-  1067	}
-  1068	
+   105	
+   106	ssize_t swap_tiers_sysfs_show(char *buf)
+   107	{
+   108		struct swap_tier *tier;
+   109		ssize_t len = 0;
+   110	
+   111		len += sysfs_emit_at(buf, len, "%-16s %-5s %-11s %-11s\n",
+   112				 "Name", "Idx", "PrioStart", "PrioEnd");
+   113	
+   114		spin_lock(&swap_tier_lock);
+   115		for_each_active_tier(tier) {
+   116			len += sysfs_emit_at(buf, len, "%-16s %-5ld %-11d %-11d\n",
+   117					     tier->name,
+ > 118					     TIER_IDX(tier),
+   119					     tier->prio,
+   120					     TIER_END_PRIO(tier));
+   121		}
+   122		spin_unlock(&swap_tier_lock);
+   123	
+   124		return len;
+   125	}
+   126	
 
 -- 
 0-DAY CI Kernel Test Service
