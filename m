@@ -1,214 +1,228 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43973D9036
-	for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 14:17:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202A73A4518;
+	Mon, 30 Mar 2026 14:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774880254; cv=none; b=bJuZT7xWh60UwK9/U+fy3xsjhCHQ3QIEHqMzolPsMeMP/irksJsBpqgBXM4yqve1HPJ0AxnjKQXTFBBVHHs/2I/vvfQU72dZzrVCBdzirKeytOEviCc8sBK9/TCAAz+K4igq2OpyvuUIlefXWwT/C89Dv0Z7VfyKR2WH13UFsS4=
+	t=1774880309; cv=none; b=cfG0UhOezTDbp84CM/p1YC0L03+zE/bQNPF54QTd45V6RXYxdBEwUaVdAyC0nuCIFnWFX1jKaSDj/C3/DV4ySRJ0g4dRtWURhsqSFiebgbCjMuC7Y7Ljs52raV7khLx7ZUl2cpR0Ba74o1BTkJGjPjsDrHAHKiJEKDaSY1l3WZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774880254; c=relaxed/simple;
-	bh=YXD0cPHX7FzEdOQwXJrWO33JjySneVnOOD3EPxs1EoY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=k7DaMEFQMQkzjFJdB5W5VKHU6KtvwNbDG4iVyCkSE8r2FD8Crpl9I3gxVG+sovWpzzvNy1kc+td0S+cNEwYt1uHt8D9ow2b6yLkO+di6bL9P34Eb9Y1yP7UP0EY3wmnxvFvscARIAshvQHvVh/3FXg9oFl8ozqstwaVj/H55E1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=fK97Qm2w; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1774880309; c=relaxed/simple;
+	bh=FAmodYWETLW48mXuJRfoZx01vfV0as0xnGxbZB/f/Nc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SpaNyjEPCRpCov716rgdm1e6fJzoPjj+J2j5a8GYO8cL6maTpxWi6QjjgOlzPpEHqN++YeFzZrj41Lev5a4T0tU4jiO9VxXEhJFtJ0CgS8SAZ8tGZtNn/ozsE2kpF49uNUCeWw2E66Mtv9SSr8bFfFTx5eh9pGsZO38J7m1dKdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U32uBhRd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fK97Qm2w"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1774880251;
-	bh=YXD0cPHX7FzEdOQwXJrWO33JjySneVnOOD3EPxs1EoY=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=fK97Qm2wvpdCOdiM3bHzyQ6O171iALrqVd43ZjNhW1jyvVmbT5I2RTOj0tnLJagSV
-	 4MkeRWKdMR+dW9/OKSUj14m+CWW+PV365Lw1Gg/Zq6HZEWavUKd7olgJ9PjjBMWzQG
-	 dO0iRxrgC1xuq1+ocvuqQXe8sQ+K7UH00ZJWvakonhpJY0IwXQ/lNHFW1LKz+URXLR
-	 qzOW5CSpjvfQNTxT4y46Np1DpriMNxgdwWjjUZhLsH23HZE4Glv9bXGby8SwFCmvJA
-	 X8lRcLyGeL4IMgwPJItaqhdTgVH4W0RAVR3ny+Z0CYMm57iv+yqRfj/jl0Z2GsmMUU
-	 DBHrpsOJkhzAg==
-Received: from [IPv6:2606:6d00:15:e06b::c41] (unknown [IPv6:2606:6d00:15:e06b::c41])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 1671317E4686;
-	Mon, 30 Mar 2026 16:17:28 +0200 (CEST)
-Message-ID: <c177cd8ffb59ea63a26906577ba737677551cd0d.camel@collabora.com>
-Subject: Re: [PATCH 1/4] media: rkvdec: Introduce a global bitwriter helper
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: Detlev Casanova <detlev.casanova@collabora.com>, Ezequiel Garcia	
- <ezequiel@vanguardiasur.com.ar>, Mauro Carvalho Chehab
- <mchehab@kernel.org>,  Heiko Stuebner	 <heiko@sntech.de>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers	 <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jonas Karlman <jonas@kwiboo.se>
-Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev, kernel@collabora.com
-Date: Mon, 30 Mar 2026 10:17:26 -0400
-In-Reply-To: <20260327-rkvdec-use-bitwriter-v1-1-982cf872b590@collabora.com>
-References: <20260327-rkvdec-use-bitwriter-v1-0-982cf872b590@collabora.com>
-	 <20260327-rkvdec-use-bitwriter-v1-1-982cf872b590@collabora.com>
-Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
- keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
- /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
- cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
- CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
- abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
- nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
- AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
- smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
- AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
- iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
- ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
- bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
-Organization: Collabora Canada
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-yBgy0sQvaoJVzhLo4NBc"
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U32uBhRd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F544C4CEF7;
+	Mon, 30 Mar 2026 14:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774880309;
+	bh=FAmodYWETLW48mXuJRfoZx01vfV0as0xnGxbZB/f/Nc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=U32uBhRdV7VPnMLsLvvvJI/sFe19DUA5gX/UNVOmPMsxNjhAV/JbXOpeNwIsbOSuz
+	 XnMW2TMbplF5wprvek1t/p0+l2at8zT+XSMwSD+M/idh5p5Iv027oIL0uaXE2tIFRd
+	 7Bqw8cILh75RiTJZQXIjO3E3ZeyY4UxQURPkl6cccRp40os+5s2iZkPmcja88h3q71
+	 dt+QjpHcnmB1PUzY1I3cN/Y5Mt6z7pUp2Wy35yV7bA6BNht7/F7kj/ClkIB/Lf4lm/
+	 nk2O69U3SONAiDNy7bB0dmEbMlZw4ri6/8p/2sx0Y++qDdPZ4CfbXRbfvQgpd61swT
+	 XhhH+6Xg9ALew==
+Date: Mon, 30 Mar 2026 16:18:24 +0200
+From: Nathan Chancellor <nathan@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH tip/locking/core] compiler-context-analysis: Bump
+ required Clang version to 23
+Message-ID: <20260330141824.GC1990358@ax162>
+References: <20260323153351.1412355-1-elver@google.com>
+ <CANpmjNMo5kX=2B7UTo-gbiBSTAF0JPwWRZNf=KWpRP4tRA2FAg@mail.gmail.com>
+ <20260325152000.GG3738786@noisy.programming.kicks-ass.net>
+ <acqELlVC6vEeEF-W@elver.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acqELlVC6vEeEF-W@elver.google.com>
 
+On Mon, Mar 30, 2026 at 04:09:50PM +0200, Marco Elver wrote:
+> Clang 23 introduces support for multiple arguments in the `guarded_by`
+> and `pt_guarded_by` attributes [1]. This allows defining variables
+> protected by multiple context locks, where read access requires holding
+> at least one lock (shared or exclusive), and write access requires
+> holding all of them exclusively.
+> 
+> Clang 23 also provides a few other improvements (such as being able to
+> deal with arrays of locks [2]) that make it worthwhile bumping the
+> compiler version instead of trying to make both Clang 22 and later work
+> while supporting these new features.
+> 
+> Link: https://github.com/llvm/llvm-project/pull/186838 [1]
+> Link: https://github.com/llvm/llvm-project/pull/148551 [2]
+> Requested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Marco Elver <elver@google.com>
 
---=-yBgy0sQvaoJVzhLo4NBc
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Fair enough. I will upload a new main snapshot to kernel.org to make it
+more accessible to folks for testing.
 
-Le vendredi 27 mars 2026 =C3=A0 11:16 -0400, Detlev Casanova a =C3=A9crit=
-=C2=A0:
-> The use of structures with bitfields is good when the values are
-> somewhat aligned.
-> More mis-alignement means that compilers need to do more gymanstics
-> to edit the fields values.
->=20
-> Some cases have been reported with CLang on specific architectures
-> like armhf and hexagon, where the compiler would allocate a bigger
-> local stack than needed or even completely freeze during compilation.
->=20
-> Some fixes have been provided to ease the issues, but the real fix
-> here is to use a bitwriter instead of heavily unaligned bitfields.
->=20
-> This is a preparation commit to provide a global bitwriter interface
-> for the whole driver.
->=20
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
 > ---
-> =C2=A0drivers/media/platform/rockchip/rkvdec/Makefile=C2=A0=C2=A0=C2=A0 |=
-=C2=A0 1 +
-> =C2=A0.../platform/rockchip/rkvdec/rkvdec-bitwriter.c=C2=A0=C2=A0=C2=A0 |=
- 30 ++++++++++++++++++++++
-> =C2=A0.../platform/rockchip/rkvdec/rkvdec-bitwriter.h=C2=A0=C2=A0=C2=A0 |=
- 25 ++++++++++++++++++
-> =C2=A03 files changed, 56 insertions(+)
->=20
-> diff --git a/drivers/media/platform/rockchip/rkvdec/Makefile b/drivers/me=
-dia/platform/rockchip/rkvdec/Makefile
-> index e629d571e4d8..11e2122bcbbf 100644
-> --- a/drivers/media/platform/rockchip/rkvdec/Makefile
-> +++ b/drivers/media/platform/rockchip/rkvdec/Makefile
-> @@ -2,6 +2,7 @@ obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC) +=3D rockchip-vdec.o
-> =C2=A0
-> =C2=A0rockchip-vdec-y +=3D \
-> =C2=A0		=C2=A0=C2=A0 rkvdec.o \
-> +		=C2=A0=C2=A0 rkvdec-bitwriter.o \
-
-Its just one function, with 10 lines of code, can we inline it in the heade=
-r and
-drop the object ?
-
-> =C2=A0		=C2=A0=C2=A0 rkvdec-cabac.o \
-> =C2=A0		=C2=A0=C2=A0 rkvdec-h264.o \
-> =C2=A0		=C2=A0=C2=A0 rkvdec-h264-common.o \
-> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.c b/=
-drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.c
-> new file mode 100644
-> index 000000000000..673ebb89002b
-> --- /dev/null
-> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.c
-> @@ -0,0 +1,30 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Rockchip Video Decoder bit writer
+> v2:
+> * Bump version instead of __guarded_by_any workaround.
+> ---
+>  Documentation/dev-tools/context-analysis.rst |  2 +-
+>  include/linux/compiler-context-analysis.h    | 30 ++++++++++++++------
+>  lib/Kconfig.debug                            |  4 +--
+>  lib/test_context-analysis.c                  | 24 ++++++++++++++++
+>  4 files changed, 49 insertions(+), 11 deletions(-)
+> 
+> diff --git a/Documentation/dev-tools/context-analysis.rst b/Documentation/dev-tools/context-analysis.rst
+> index 54d9ee28de98..8e71e1e75b5b 100644
+> --- a/Documentation/dev-tools/context-analysis.rst
+> +++ b/Documentation/dev-tools/context-analysis.rst
+> @@ -17,7 +17,7 @@ features. To enable for Clang, configure the kernel with::
+>  
+>      CONFIG_WARN_CONTEXT_ANALYSIS=y
+>  
+> -The feature requires Clang 22 or later.
+> +The feature requires Clang 23 or later.
+>  
+>  The analysis is *opt-in by default*, and requires declaring which modules and
+>  subsystems should be analyzed in the respective `Makefile`::
+> diff --git a/include/linux/compiler-context-analysis.h b/include/linux/compiler-context-analysis.h
+> index 00c074a2ccb0..1ab2622621c3 100644
+> --- a/include/linux/compiler-context-analysis.h
+> +++ b/include/linux/compiler-context-analysis.h
+> @@ -39,12 +39,14 @@
+>  # define __assumes_shared_ctx_lock(...)	__attribute__((assert_shared_capability(__VA_ARGS__)))
+>  
+>  /**
+> - * __guarded_by - struct member and globals attribute, declares variable
+> - *                only accessible within active context
+> + * __guarded_by() - struct member and globals attribute, declares variable
+> + *                  only accessible within active context
+> + * @...: context lock instance pointer(s)
+>   *
+>   * Declares that the struct member or global variable is only accessible within
+> - * the context entered by the given context lock. Read operations on the data
+> - * require shared access, while write operations require exclusive access.
+> + * the context entered by the given context lock(s). Read operations on the data
+> + * require shared access to at least one of the context locks, while write
+> + * operations require exclusive access to all listed context locks.
+>   *
+>   * .. code-block:: c
+>   *
+> @@ -52,17 +54,24 @@
+>   *		spinlock_t lock;
+>   *		long counter __guarded_by(&lock);
+>   *	};
 > + *
-> + * Copyright (C) 2026 Collabora, Ltd.
-> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Detlev Casanova <detlev.casanova@collab=
-ora.com>
-> + * Copyright (C) 2019 Collabora, Ltd.
-> + *	Boris Brezillon <boris.brezillon@collabora.com>
-> + */
+> + *	struct some_state {
+> + *		spinlock_t lock1, lock2;
+> + *		long counter __guarded_by(&lock1, &lock2);
+> + *	};
+>   */
+>  # define __guarded_by(...)		__attribute__((guarded_by(__VA_ARGS__)))
+>  
+>  /**
+> - * __pt_guarded_by - struct member and globals attribute, declares pointed-to
+> - *                   data only accessible within active context
+> + * __pt_guarded_by() - struct member and globals attribute, declares pointed-to
+> + *                     data only accessible within active context
+> + * @...: context lock instance pointer(s)
+>   *
+>   * Declares that the data pointed to by the struct member pointer or global
+>   * pointer is only accessible within the context entered by the given context
+> - * lock. Read operations on the data require shared access, while write
+> - * operations require exclusive access.
+> + * lock(s). Read operations on the data require shared access to at least one
+> + * of the context locks, while write operations require exclusive access to all
+> + * listed context locks.
+>   *
+>   * .. code-block:: c
+>   *
+> @@ -70,6 +79,11 @@
+>   *		spinlock_t lock;
+>   *		long *counter __pt_guarded_by(&lock);
+>   *	};
+> + *
+> + *	struct some_state {
+> + *		spinlock_t lock1, lock2;
+> + *		long *counter __pt_guarded_by(&lock1, &lock2);
+> + *	};
+>   */
+>  # define __pt_guarded_by(...)		__attribute__((pt_guarded_by(__VA_ARGS__)))
+>  
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 93f356d2b3d9..09e9bd003c70 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -630,7 +630,7 @@ config DEBUG_FORCE_WEAK_PER_CPU
+>  
+>  config WARN_CONTEXT_ANALYSIS
+>  	bool "Compiler context-analysis warnings"
+> -	depends on CC_IS_CLANG && CLANG_VERSION >= 220100
+> +	depends on CC_IS_CLANG && CLANG_VERSION >= 230000
+>  	# Branch profiling re-defines "if", which messes with the compiler's
+>  	# ability to analyze __cond_acquires(..), resulting in false positives.
+>  	depends on !TRACE_BRANCH_PROFILING
+> @@ -641,7 +641,7 @@ config WARN_CONTEXT_ANALYSIS
+>  	  and releasing user-definable "context locks".
+>  
+>  	  Clang's name of the feature is "Thread Safety Analysis". Requires
+> -	  Clang 22.1.0 or later.
+> +	  Clang 23 or later.
+>  
+>  	  Produces warnings by default. Select CONFIG_WERROR if you wish to
+>  	  turn these warnings into errors.
+> diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
+> index 06b4a6a028e0..316f4dfcda65 100644
+> --- a/lib/test_context-analysis.c
+> +++ b/lib/test_context-analysis.c
+> @@ -159,6 +159,10 @@ TEST_SPINLOCK_COMMON(read_lock,
+>  struct test_mutex_data {
+>  	struct mutex mtx;
+>  	int counter __guarded_by(&mtx);
 > +
-> +#include <linux/types.h>
-> +#include <linux/bits.h>
-> +
-> +#include "rkvdec-bitwriter.h"
-> +
-> +void rkvdec_set_bw_field(u32 *buf, struct rkvdec_bw_field field, u32 val=
-ue)
+> +	struct mutex mtx2;
+> +	int anyread __guarded_by(&mtx, &mtx2);
+> +	int *anyptr __pt_guarded_by(&mtx, &mtx2);
+>  };
+>  
+>  static void __used test_mutex_init(struct test_mutex_data *d)
+> @@ -219,6 +223,26 @@ static void __used test_mutex_cond_guard(struct test_mutex_data *d)
+>  	}
+>  }
+>  
+> +static void __used test_mutex_multiguard(struct test_mutex_data *d)
 > +{
-> +	u8 bit =3D field.offset % 32;
-> +	u16 word =3D field.offset / 32;
-> +	u64 mask =3D GENMASK_ULL(bit + field.len - 1, bit);
-> +	u64 val =3D ((u64)value << bit) & mask;
+> +	mutex_lock(&d->mtx);
+> +	(void)d->anyread;
+> +	(void)*d->anyptr;
+> +	mutex_unlock(&d->mtx);
 > +
-> +	buf[word] &=3D ~mask;
-> +	buf[word] |=3D val;
-> +	if (bit + field.len > 32) {
-> +		buf[word + 1] &=3D ~(mask >> 32);
-> +		buf[word + 1] |=3D val >> 32;
-> +	}
+> +	mutex_lock(&d->mtx2);
+> +	(void)d->anyread;
+> +	(void)*d->anyptr;
+> +	mutex_unlock(&d->mtx2);
+> +
+> +	mutex_lock(&d->mtx);
+> +	mutex_lock(&d->mtx2);
+> +	d->anyread++;
+> +	(*d->anyptr)++;
+> +	mutex_unlock(&d->mtx2);
+> +	mutex_unlock(&d->mtx);
 > +}
 > +
-> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.h b/=
-drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.h
-> new file mode 100644
-> index 000000000000..44154f1ebc65
-> --- /dev/null
-> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.h
-> @@ -0,0 +1,25 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Rockchip Video Decoder bit writer
-> + *
-> + * Copyright (C) 2026 Collabora, Ltd.
-> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Detlev Casanova <detlev.casanova@collab=
-ora.com>
-> + * Copyright (C) 2019 Collabora, Ltd.
-> + *	Boris Brezillon <boris.brezillon@collabora.com>
-> + */
-> +
-> +#ifndef RKVDEC_BIT_WRITER_H_
-> +#define RKVDEC_BIT_WRITER_H_
-> +
-> +#include <linux/types.h>
-> +
-> +struct rkvdec_bw_field {
-> +	u16 offset;
-> +	u8 len;
-> +};
-> +
-> +#define BW_FIELD(_offset, _len) ((struct rkvdec_bw_field){ _offset, _len=
- })
-> +
-> +void rkvdec_set_bw_field(u32 *buf, struct rkvdec_bw_field field, u32 val=
-ue);
-> +
-> +#endif /* RKVDEC_BIT_WRITER_H_ */
-
---=-yBgy0sQvaoJVzhLo4NBc
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCacqF9gAKCRDZQZRRKWBy
-9NNPAP9m/C7TMvFwXyQT8rK+UCGFvzuLY32by5+QAQwsH+fP4wEAoC19z0cPX+2k
-voSc2sk6B5FI6fzPOJXJX9z9XlPO0go=
-=/Y4+
------END PGP SIGNATURE-----
-
---=-yBgy0sQvaoJVzhLo4NBc--
+>  struct test_seqlock_data {
+>  	seqlock_t sl;
+>  	int counter __guarded_by(&sl);
+> -- 
+> 2.53.0.1018.g2bb0e51243-goog
