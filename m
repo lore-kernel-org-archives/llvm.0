@@ -1,109 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AD5391E44;
-	Mon, 30 Mar 2026 03:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5532611E
+	for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 04:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774843192; cv=none; b=OyZPjzQxzvP1URAuova619/AGF2GFy7HmTSBAO5Hwxo7+sTOKRkJgD5+4qbpEoGRovxus9vQUdl7sG9pHw+FhAE1179UFfzatGClfdAAOxY9bX6gVEcdXvQEJGP09OLQxqUs+LMLkVvDRM2KAPF2vieZOiugTLrBPj6G63HZ7Fk=
+	t=1774846395; cv=none; b=Yj1ZB5JIQHjWn05Neqirt9xhvjG4/skC4AQ5/l0Xs9y5NORvtVDR2AE5j8gmko3RZtINizu2XR68YfVvOpOl9OF/kI68cHTVqMviaVQ18/P/bg7Jy9nh/9ZJOL7B6+opXzPtKntJ8HZ/CfbIHY/+eKLlKmo9N5R/S34px+kTJNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774843192; c=relaxed/simple;
-	bh=rYn9Qj89E+82dsSYK9QxN7k3AGhMaODdrwEQscNw3w4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c1A3ZAnsbQOTYq9ViTcFJ0jS54Mg28WnyGUwbAVlY5Hsh93MLoLyq7vIe7t747fTvSYobluk9wRLoDC0U7vyUy9MXhZipwWfPtw4YvQpooyEpa8kuqnysATXWzZzZmdhp6lk7pA+bxrSgMyo0gyLc+TXk7UUE8YRNyjQBPklunk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EfyxSy7D; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774846395; c=relaxed/simple;
+	bh=/zcOzAvdo9RNI+tgyNmHaS6nq0dg6EHUkJf4nYXLWOo=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=YS94UO6qJA3tkidpuDrGJ7nPWFtdJKuXBFfyB3f1lw4uN7johXbyPQSFgwEHL7Uok3rmjQfYUZI8mN9l6Z0QyTLIIqDzdAAsYxgYAENA2HXcQJJ2hQP1Hh3qmb4tj+OD8RYYU5/9Vx6RQW5MyTym3rlv+5F+YalxgVfV30ibOFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C7YpdOE2; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfyxSy7D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA13C4CEF7;
-	Mon, 30 Mar 2026 03:59:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774843192;
-	bh=rYn9Qj89E+82dsSYK9QxN7k3AGhMaODdrwEQscNw3w4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EfyxSy7D9q7IOlb1cy+hEvX02aZijVDreV7DeObat8NK0TYB9v4W+of+a8jephKpE
-	 VNRVNjJY2SpFr55eJLRJTp6gi1TCN+LTr0OAX5OCiwSSU9t/dmX5xIM3f1dI2io3FH
-	 7okLiEz1Jwl2sDz6JZ++jqtXoiCsGcvm7hzgu4tkminAMnCq49BOJx6w4PF7dztrxV
-	 XLE2him2m3vKPSQpCLDJMn3Msc3HVfOoUi0Wjv1mPqIrwGBtQZ++m4J9hIVE3edbkP
-	 d02orqhJZ6YaTLa1F6IaWGtS5XeO2mFk7j0LuWfukjGrvz/XDg1yTTOx+2+Ar1mSGr
-	 jA4qVhqHPqyzQ==
-Date: Sun, 29 Mar 2026 20:59:51 -0700
-From: Kees Cook <kees@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] kbuild: add -fdiagnostics-show-inlining-chain for
- FORTIFY_SOURCE
-Message-ID: <202603292059.01A4CB14F2@keescook>
-References: <20260327-kbuild-show-inlining-v1-1-730ac2cae571@google.com>
- <20260327221837.GA3622500@ax162>
- <CAFhGd8pWwbjjLt=FSaDtFysqRU5k_YozDgBFMJBN4YmnAEaktw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C7YpdOE2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1774846392;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WPLHScVN2iGFR8wQcpcCUQTr+0PuldHtRP8Rz/rvmCo=;
+	b=C7YpdOE2DnmPo3QEuBByk2ZeiaMnszKO8BoI++5mNwYMr0PBXajb2nfDn48/p1+sKQx23c
+	rEnMaL6PrZzeWaywLOpeTQksMZpHTJvmM5EWZNmtL3nx8PzJUmPIXNA9ISivIDquRGBIRH
+	vLukI/Y6h728/j56uBct3DfyTzhO9jM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-626-Jn2ssT0LMbOnraTU006Hrg-1; Mon,
+ 30 Mar 2026 00:53:06 -0400
+X-MC-Unique: Jn2ssT0LMbOnraTU006Hrg-1
+X-Mimecast-MFC-AGG-ID: Jn2ssT0LMbOnraTU006Hrg_1774846385
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8B2BE1800365
+	for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 04:53:05 +0000 (UTC)
+Received: from [172.20.201.103] (unknown [10.30.44.137])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3F7201800361;
+	Mon, 30 Mar 2026 04:53:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc5,
+ upstream-mainline, f242ac4a)
+Date: Mon, 30 Mar 2026 04:53:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFhGd8pWwbjjLt=FSaDtFysqRU5k_YozDgBFMJBN4YmnAEaktw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <62730.126033000530600805@us-mta-626.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: DjsE8y9czlLIasIyHZkrPxJBHTuGKReO3TVL8ANCHZY_1774846385
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 27, 2026 at 03:29:18PM -0700, Justin Stitt wrote:
-> On Fri, Mar 27, 2026 at 3:18 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Fri, Mar 27, 2026 at 02:59:20PM -0700, Justin Stitt wrote:
-> > > Clang recently added -fdiagnostics-show-inlining-chain [1] to improve
-> > > the visibility of inlining chains in diagnostics. This is particularly
-> > > useful for CONFIG_FORTIFY_SOURCE where detections can happen deep in
-> > > inlined functions.
-> > >
-> > > Add this flag to KBUILD_CFLAGS when CONFIG_FORTIFY_SOURCE is enabled
-> > > and the compiler supports it.
-> > >
-> > > Link: https://github.com/llvm/llvm-project/pull/174892 [1]
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1571
-> > > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > > ---
-> > >  Makefile | 6 ++++++
-> > >  1 file changed, 6 insertions(+)
-> > >
-> > > diff --git a/Makefile b/Makefile
-> > > index e1279c4d5b24..978726aeb1ef 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -973,6 +973,12 @@ KBUILD_CFLAGS    += $(call cc-option, -fno-stack-clash-protection)
-> > >  # Get details on warnings generated due to GCC value tracking.
-> > >  KBUILD_CFLAGS        += $(call cc-option, -fdiagnostics-show-context=2)
-> > >
-> > > +# Show inlining chain notes for FORTIFY_SOURCE-related diagnostics.
-> > > +# GCC does this by default while Clang 23+ supports a flag.
-> > > +ifdef CONFIG_FORTIFY_SOURCE
-> >
-> > While this is indeed particularly useful for CONFIG_FORTIFY_SOURCE, this
-> > impacts the warning and error attributes, which can be used anywhere
-> > (see __bad_copy_from() for example). Is this being wrapped due to the
-> > potential compile time impact? Can we use something like hyperfine to
-> > quantify it and see if the impact is worth the trade off of always
-> > having it enabled for friendlier diagnostics?
-> 
-> The compile time impact is not measurable (within expected noise). The
-> peak memory usage may increase by somewhere in the 0.5% to 1.5% range
-> depending on build configuration.
-> 
-> I bundled this under fortify to limit initial impact as its had
-> virtually no real-world testing and may produce unhelpful diagnostic
-> notes under its heuristic mode. I don't expect folks to use `-g1` in
-> the kernel (which would enable full-proof diagnostic notes).
-> 
-> > If not, maybe worth adding a Kconfig option that is force selected by FORTIFY_SOURCE with
-> > clang or can be optionally enabled by a user?
-> 
-> I'll defer to you on this one. We could add
-> CONFIG_SHOW_INLINING_CHAIN_NOTES or something similar?
+Hi, we tested your kernel and here are the results:
 
-I would prefer to just unconditionally enable this when it is supported.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
--- 
-Kees Cook
+
+Kernel information:
+    Commit message: Merge tag 'x86-urgent-2026-03-29' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2416492232
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2416492232_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
