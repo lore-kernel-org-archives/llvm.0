@@ -1,281 +1,271 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD1A3A1A55
-	for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 14:23:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774880584; cv=pass; b=FQSsPClcs9USCly9VWYGiYKJhO0i4ksrLjvMxdRFgLB7FUqPLgerah749ajpA7RamXs64/xtAN4Yhqzm+1v7T29PBfQV6/mieU+L9L5AYYmNOl8oWyIz6gMvF/3yk0R/PPltTLcpRTkRul4kbufi3MfRBdDl26ghOxHkiGS7VHM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774880584; c=relaxed/simple;
-	bh=3+spLPqSq4+Ek/BqQMcIlDteSDi+tNmeqBd5QOGG8CY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qsniZ2XtbnevwA06V8ZhG4+eM7YubV4EyzShVRtE/wa7MklwGzfL6L7014I52Tj54LuEOwdwAIv5DKkv3m0t8T6J0k0ZDVnYjOv17UXmHoIZ3vEysFlU+7EOnKsdV7JknkagsFmyJuufSAad46Pqs+HZpqdAyWBsBnrCQH9uTmE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rRqlaH9U; arc=pass smtp.client-ip=74.125.82.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322243D75CD;
+	Mon, 30 Mar 2026 14:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774880721; cv=none; b=A0JQtPpt/HbKbXEVTDCwHHlBD0lM1N0l4/iDc3moKgm1jtb3+4lxGA9ObzxBrzOv37G30K4how6VM8CAFo3sXNNMEyNXekwgqhFifxqYR2Ul/MK0GF/qaYoBY+IKqksMxjkDUVE6oGo4JjMBFzGtA52Ejy+UBniiniLb61Ku/N4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774880721; c=relaxed/simple;
+	bh=QH10yRGAVzS+PQP/8ZikuQtV9dbujtylfk6oGi2fFUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b4Fh9hiaTpXqHbBHGUK0EEVcguSb51Z1kb5f7weDsjnwiR0MuFcAHG6/cTdCogI+9c+ZnAgehcU8tJBUGIxh5ejwaMRj04LihvHrI7J9PTIn4/fznka+Ak+sP5YvTb4tPIsJ+BKseKb2gCZeVkdDdodPh28a5c/TLVc+aTyMPfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a5Hl7lxy; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rRqlaH9U"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-128b9b7e3edso3429049c88.0
-        for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 07:23:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774880582; cv=none;
-        d=google.com; s=arc-20240605;
-        b=F1UQfYJ7HzMwVI60oJ1J4k/zyKZEEfyj2quJRZFrrTRmAyeljvYvIuSneT4/ca/hM4
-         gTHauA7lYylWdDfHuKySGqrKXQV4pvdKc92eadqfIFm/vLOenjtJLTdjdVnRi+aaayLX
-         zMf9bA4W2TrtEYwnsH/vkH5/Mm64V8vZHbSQ+JG4OyLZNDGG3naa4HjziPWum95mW4lI
-         YN9Mvr2Z0TeFshh6vi5GdwG2pY+Qax508bXgLeikNVMinKpcB0Hgg/j2pb5UYLdttaUy
-         c3zaouhBWEOc5cwJafFilMNsxJv1b7gsefVsC+JMYLCcZOA7vFk+J9vtd0RGgToR+rqZ
-         J2oA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=fs+vNtBq4yM8jaXTLXbgwHhyICbh57/ZxTsW93W0+YY=;
-        fh=3v9Xkqwdl+KstDHGSxuptLHo4/CmFHl2ruYl8d5smRo=;
-        b=RYQ4lqoxm3lkdzstY85eRAp8t72KvgnWMj0c3oWJMY/8mG2FDuaAaCM7wmhkNCQ+y7
-         TkDQdTIeMNrcYU7pZ66nTnrw+zx5K3GhnPnGihfqCDWdjsiJ04LAEloHxN4VXU3PYjA7
-         GrqT6coQjv0RBFcELiVUvrsSjWeo0sv8ldhtYTJaY80V5iqbJD2J6xXq9DRfCLnUOc3a
-         BFJ7j4qTPKyc5WLGnUeVu3P5Jc0CjIIh1Byg2UBnWL2eQluIL4rHOvtq63n1pnIlsqvY
-         nTGxScFBt2ocl3t3DVUmEUNMJdWXrn61AjGyA5LAGvSVlg5rs677iUPuHGtxEZ0nx+Ja
-         +Drg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774880582; x=1775485382; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fs+vNtBq4yM8jaXTLXbgwHhyICbh57/ZxTsW93W0+YY=;
-        b=rRqlaH9UUIYFpEMNNpOSWtPt4j5ZOyy4UsUHNIAq0y3wH3aWea5JBZbJT7ytOMRLeB
-         Jqw9wUFnrPPe0WuUt2oMSa7GnDtDRUnwN/R69YrTEuCHur7QpjOS1v1njBT2jSJ22YBQ
-         OwXjRfm9qcvFEFNiPf7CyoslUZswZuxuiXrjOmOIpuxUVQwW2FvoD+K+3G0CLNqyvt9I
-         2g2RZXabdPkg7zRZdp7yiIYyUmKAM5zFMrIeFF2YXLNA+vmsUqzOCUjUuR8SMzX8HF6L
-         OUBRdTkBKWyaHmtRFDdf/GPqacL3Gf7oL0NhFS5fsfPU5CHeg5ZfVI44y80pdvpE1Obz
-         hNcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774880582; x=1775485382;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fs+vNtBq4yM8jaXTLXbgwHhyICbh57/ZxTsW93W0+YY=;
-        b=i0XMdoBw6HiUQ2X2oDj8bhTPFf0vMBL1Z3oSP5oehObQhfU+tmav5IgTaW+fDw9pef
-         jlnBsbLXxfTsLLu7FjRCPzHTcATQuY5APaBh+7yP2iyvq6sn7gBQlWRHfVLw7V6c18Yc
-         m6jTU9UIU9ZdzITzj09y9qk/IztkJv0awEMW+TusNslaeZsBEDjPv5qfd9gyWDocFsas
-         IPktYlGXTsxiR7+Fdo6fDltRaTn3ccEm6aByPjEJ4URxWV0tXHFaM8RE7lAwMpAV48Qe
-         3EP+RRWBCqq89z1hu4vKghPJ/9TYn+AXgMzaujmWheF5fBjOLNY/epvh557Oj9nmfdDH
-         yQFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWuEKwYEldMCnQISVL+zymrUJM57A198X/xHd+xNf3hyPGa9EibW2BSaOVPRFikV9eayjRQ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw3lRSew07LPXTAcIOM0aHVA2r3G85xkbU5zvgieS6X8fiksP+h
-	aREeAQXYDEWCDCOELh37KZxdh4RrJxMFUgvQ7LR3aiQDuyCFBXLo87Nl1oMjd7rKMAO9BqUyTPi
-	38LsGTDeHIBZa+5nXdnXA84WQTWU0MQlVBRks8BLB
-X-Gm-Gg: ATEYQzx1kdjOetsvTwo2tuRX8cYwGimpFWGNV7fiGkrFQzNPyfA6vIWlPZOSD/X61a1
-	mT5Wd4Wa8O1LwZ5ZVMUvIDIXp1HT4g4BFjZEUk5SIABPfq3mR4H7fZ1hiPfr653gIcvZWvrJzoJ
-	/xR1xvcwA5U6r/TxP49vTFrm0EO0oNJIPNwme0OCqOYYKlJLUh5/gZUxvj/a1eqMs9t63yn9K8p
-	wKNIlYb6WeSrbZjFByYYCZ6zAwuGUCg7Zu4XQKamHs0fJf4JSdd2EXEYh0o153n1GRmw8O0ApSX
-	ElG2P0Rd2ZeoNpfo3tOQP4MLEiWPvamPGNIVxA==
-X-Received: by 2002:a05:7022:eacf:b0:123:2c98:f6af with SMTP id
- a92af1059eb24-12ab28cad4bmr7955796c88.14.1774880580925; Mon, 30 Mar 2026
- 07:23:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a5Hl7lxy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774880720; x=1806416720;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QH10yRGAVzS+PQP/8ZikuQtV9dbujtylfk6oGi2fFUU=;
+  b=a5Hl7lxyOX1BRGe6PzzXLxWWd5sZHS4z+WbjMg3Axv0A6VsK+ikE8MwP
+   70by1oYl6iJMSOQE6m8T3aRMHlwWsFAFyqZbfiDINUzNiyGxyHKolYv8i
+   sj+LlpV4pV97Bnb9P8Kv1BuEtuxEyL8rE2w7vGRbKuYHiTqoS7cV3sVDv
+   2t4FkQrXib2z1+oSi4Pf6gQSeSQMxUarEL7cSSPWW9nhLej+lSimZV5pv
+   c14OYzkdxsFazBsCoJMUpSCn6wVBPjkPeKTugHBu9gj6nDrcAJP7sh47n
+   qGhV34WmulOm+HIjXzy+6oFfeWg6PfvRMr97v72n88fZQX8kSiNQaKhJV
+   Q==;
+X-CSE-ConnectionGUID: M8POmK0fRmSC7hAziAiQUQ==
+X-CSE-MsgGUID: hS8r+gB4TXe9wGrYPsdQmw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="86492795"
+X-IronPort-AV: E=Sophos;i="6.23,150,1770624000"; 
+   d="scan'208";a="86492795"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 07:25:20 -0700
+X-CSE-ConnectionGUID: y0ndFcvOS1GJe3cFu5sXeA==
+X-CSE-MsgGUID: DtqttdzHRVqM+uhyof1oLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,150,1770624000"; 
+   d="scan'208";a="226051123"
+Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 30 Mar 2026 07:25:16 -0700
+Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w7DYH-000000001CP-1dfd;
+	Mon, 30 Mar 2026 14:25:13 +0000
+Date: Mon, 30 Mar 2026 22:24:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kangzheng Gu <xiaoguai0992@gmail.com>, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, kees@kernel.org, thorsten.blum@linux.dev,
+	arnd@arndb.de, sjur.brandeland@stericsson.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3] net: caif: fix stack out-of-bounds write in
+ cfctrl_link_setup()
+Message-ID: <202603302217.BEd0DrgM-lkp@intel.com>
+References: <20260329190350.19065-1-xiaoguai0992@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260323153351.1412355-1-elver@google.com> <CANpmjNMo5kX=2B7UTo-gbiBSTAF0JPwWRZNf=KWpRP4tRA2FAg@mail.gmail.com>
- <20260325152000.GG3738786@noisy.programming.kicks-ass.net>
- <acqELlVC6vEeEF-W@elver.google.com> <20260330141824.GC1990358@ax162>
-In-Reply-To: <20260330141824.GC1990358@ax162>
-From: Marco Elver <elver@google.com>
-Date: Mon, 30 Mar 2026 16:22:24 +0200
-X-Gm-Features: AQROBzD4BNoYGZ5_h8-1gUbt1CjDQ_dDBgUySdMBkNozgh5zqxk-hJpZKL1kpcQ
-Message-ID: <CANpmjNPqHRO6ckSbE-Lpyg+GL27V6risE8s0x-5soGrgQaoZSQ@mail.gmail.com>
-Subject: Re: [PATCH tip/locking/core] compiler-context-analysis: Bump required
- Clang version to 23
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
-	Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260329190350.19065-1-xiaoguai0992@gmail.com>
 
-On Mon, 30 Mar 2026 at 16:18, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Mon, Mar 30, 2026 at 04:09:50PM +0200, Marco Elver wrote:
-> > Clang 23 introduces support for multiple arguments in the `guarded_by`
-> > and `pt_guarded_by` attributes [1]. This allows defining variables
-> > protected by multiple context locks, where read access requires holding
-> > at least one lock (shared or exclusive), and write access requires
-> > holding all of them exclusively.
-> >
-> > Clang 23 also provides a few other improvements (such as being able to
-> > deal with arrays of locks [2]) that make it worthwhile bumping the
-> > compiler version instead of trying to make both Clang 22 and later work
-> > while supporting these new features.
-> >
-> > Link: https://github.com/llvm/llvm-project/pull/186838 [1]
-> > Link: https://github.com/llvm/llvm-project/pull/148551 [2]
-> > Requested-by: Peter Zijlstra <peterz@infradead.org>
-> > Signed-off-by: Marco Elver <elver@google.com>
->
-> Fair enough. I will upload a new main snapshot to kernel.org to make it
-> more accessible to folks for testing.
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Hi Kangzheng,
 
-Thanks.  I always suspected we'll need to bump the Clang version here,
-which is a bit inconvenient for now. But I think it's better to do now
-than find odd workarounds in the kernel tree later that we need to
-revert.
+kernel test robot noticed the following build warnings:
 
-> > ---
-> > v2:
-> > * Bump version instead of __guarded_by_any workaround.
-> > ---
-> >  Documentation/dev-tools/context-analysis.rst |  2 +-
-> >  include/linux/compiler-context-analysis.h    | 30 ++++++++++++++------
-> >  lib/Kconfig.debug                            |  4 +--
-> >  lib/test_context-analysis.c                  | 24 ++++++++++++++++
-> >  4 files changed, 49 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/Documentation/dev-tools/context-analysis.rst b/Documentation/dev-tools/context-analysis.rst
-> > index 54d9ee28de98..8e71e1e75b5b 100644
-> > --- a/Documentation/dev-tools/context-analysis.rst
-> > +++ b/Documentation/dev-tools/context-analysis.rst
-> > @@ -17,7 +17,7 @@ features. To enable for Clang, configure the kernel with::
-> >
-> >      CONFIG_WARN_CONTEXT_ANALYSIS=y
-> >
-> > -The feature requires Clang 22 or later.
-> > +The feature requires Clang 23 or later.
-> >
-> >  The analysis is *opt-in by default*, and requires declaring which modules and
-> >  subsystems should be analyzed in the respective `Makefile`::
-> > diff --git a/include/linux/compiler-context-analysis.h b/include/linux/compiler-context-analysis.h
-> > index 00c074a2ccb0..1ab2622621c3 100644
-> > --- a/include/linux/compiler-context-analysis.h
-> > +++ b/include/linux/compiler-context-analysis.h
-> > @@ -39,12 +39,14 @@
-> >  # define __assumes_shared_ctx_lock(...)      __attribute__((assert_shared_capability(__VA_ARGS__)))
-> >
-> >  /**
-> > - * __guarded_by - struct member and globals attribute, declares variable
-> > - *                only accessible within active context
-> > + * __guarded_by() - struct member and globals attribute, declares variable
-> > + *                  only accessible within active context
-> > + * @...: context lock instance pointer(s)
-> >   *
-> >   * Declares that the struct member or global variable is only accessible within
-> > - * the context entered by the given context lock. Read operations on the data
-> > - * require shared access, while write operations require exclusive access.
-> > + * the context entered by the given context lock(s). Read operations on the data
-> > + * require shared access to at least one of the context locks, while write
-> > + * operations require exclusive access to all listed context locks.
-> >   *
-> >   * .. code-block:: c
-> >   *
-> > @@ -52,17 +54,24 @@
-> >   *           spinlock_t lock;
-> >   *           long counter __guarded_by(&lock);
-> >   *   };
-> > + *
-> > + *   struct some_state {
-> > + *           spinlock_t lock1, lock2;
-> > + *           long counter __guarded_by(&lock1, &lock2);
-> > + *   };
-> >   */
-> >  # define __guarded_by(...)           __attribute__((guarded_by(__VA_ARGS__)))
-> >
-> >  /**
-> > - * __pt_guarded_by - struct member and globals attribute, declares pointed-to
-> > - *                   data only accessible within active context
-> > + * __pt_guarded_by() - struct member and globals attribute, declares pointed-to
-> > + *                     data only accessible within active context
-> > + * @...: context lock instance pointer(s)
-> >   *
-> >   * Declares that the data pointed to by the struct member pointer or global
-> >   * pointer is only accessible within the context entered by the given context
-> > - * lock. Read operations on the data require shared access, while write
-> > - * operations require exclusive access.
-> > + * lock(s). Read operations on the data require shared access to at least one
-> > + * of the context locks, while write operations require exclusive access to all
-> > + * listed context locks.
-> >   *
-> >   * .. code-block:: c
-> >   *
-> > @@ -70,6 +79,11 @@
-> >   *           spinlock_t lock;
-> >   *           long *counter __pt_guarded_by(&lock);
-> >   *   };
-> > + *
-> > + *   struct some_state {
-> > + *           spinlock_t lock1, lock2;
-> > + *           long *counter __pt_guarded_by(&lock1, &lock2);
-> > + *   };
-> >   */
-> >  # define __pt_guarded_by(...)                __attribute__((pt_guarded_by(__VA_ARGS__)))
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 93f356d2b3d9..09e9bd003c70 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -630,7 +630,7 @@ config DEBUG_FORCE_WEAK_PER_CPU
-> >
-> >  config WARN_CONTEXT_ANALYSIS
-> >       bool "Compiler context-analysis warnings"
-> > -     depends on CC_IS_CLANG && CLANG_VERSION >= 220100
-> > +     depends on CC_IS_CLANG && CLANG_VERSION >= 230000
-> >       # Branch profiling re-defines "if", which messes with the compiler's
-> >       # ability to analyze __cond_acquires(..), resulting in false positives.
-> >       depends on !TRACE_BRANCH_PROFILING
-> > @@ -641,7 +641,7 @@ config WARN_CONTEXT_ANALYSIS
-> >         and releasing user-definable "context locks".
-> >
-> >         Clang's name of the feature is "Thread Safety Analysis". Requires
-> > -       Clang 22.1.0 or later.
-> > +       Clang 23 or later.
-> >
-> >         Produces warnings by default. Select CONFIG_WERROR if you wish to
-> >         turn these warnings into errors.
-> > diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
-> > index 06b4a6a028e0..316f4dfcda65 100644
-> > --- a/lib/test_context-analysis.c
-> > +++ b/lib/test_context-analysis.c
-> > @@ -159,6 +159,10 @@ TEST_SPINLOCK_COMMON(read_lock,
-> >  struct test_mutex_data {
-> >       struct mutex mtx;
-> >       int counter __guarded_by(&mtx);
-> > +
-> > +     struct mutex mtx2;
-> > +     int anyread __guarded_by(&mtx, &mtx2);
-> > +     int *anyptr __pt_guarded_by(&mtx, &mtx2);
-> >  };
-> >
-> >  static void __used test_mutex_init(struct test_mutex_data *d)
-> > @@ -219,6 +223,26 @@ static void __used test_mutex_cond_guard(struct test_mutex_data *d)
-> >       }
-> >  }
-> >
-> > +static void __used test_mutex_multiguard(struct test_mutex_data *d)
-> > +{
-> > +     mutex_lock(&d->mtx);
-> > +     (void)d->anyread;
-> > +     (void)*d->anyptr;
-> > +     mutex_unlock(&d->mtx);
-> > +
-> > +     mutex_lock(&d->mtx2);
-> > +     (void)d->anyread;
-> > +     (void)*d->anyptr;
-> > +     mutex_unlock(&d->mtx2);
-> > +
-> > +     mutex_lock(&d->mtx);
-> > +     mutex_lock(&d->mtx2);
-> > +     d->anyread++;
-> > +     (*d->anyptr)++;
-> > +     mutex_unlock(&d->mtx2);
-> > +     mutex_unlock(&d->mtx);
-> > +}
-> > +
-> >  struct test_seqlock_data {
-> >       seqlock_t sl;
-> >       int counter __guarded_by(&sl);
-> > --
-> > 2.53.0.1018.g2bb0e51243-goog
+[auto build test WARNING on net-next/main]
+[also build test WARNING on net/main soc/for-next linus/master v7.0-rc6 next-20260327]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kangzheng-Gu/net-caif-fix-stack-out-of-bounds-write-in-cfctrl_link_setup/20260330-163130
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260329190350.19065-1-xiaoguai0992%40gmail.com
+patch subject: [PATCH v3] net: caif: fix stack out-of-bounds write in cfctrl_link_setup()
+config: hexagon-randconfig-001-20260330 (https://download.01.org/0day-ci/archive/20260330/202603302217.BEd0DrgM-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 2cd67b8b69f78e3f95918204320c3075a74ba16c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260330/202603302217.BEd0DrgM-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603302217.BEd0DrgM-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/caif/cfctrl.c:423:6: warning: format specifies type 'unsigned long' but the argument has type '__size_t' (aka 'unsigned int') [-Wformat]
+     422 |                                 pr_warn("Request reject, volume name length exceeds %lu\n",
+         |                                                                                     ~~~
+         |                                                                                     %zu
+     423 |                                         sizeof(linkparam.u.rfm.volume));
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:564:37: note: expanded from macro 'pr_warn'
+     564 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+         |                                    ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:511:60: note: expanded from macro 'printk'
+     511 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:483:19: note: expanded from macro 'printk_index_wrap'
+     483 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +423 net/caif/cfctrl.c
+
+   351	
+   352	static int cfctrl_link_setup(struct cfctrl *cfctrl, struct cfpkt *pkt, u8 cmdrsp)
+   353	{
+   354		u8 len;
+   355		u8 linkid = 0;
+   356		enum cfctrl_srv serv;
+   357		enum cfctrl_srv servtype;
+   358		u8 endpoint;
+   359		u8 physlinkid;
+   360		u8 prio;
+   361		u8 tmp;
+   362		u8 *cp;
+   363		int i;
+   364		struct cfctrl_link_param linkparam;
+   365		struct cfctrl_request_info rsp, *req;
+   366	
+   367		memset(&linkparam, 0, sizeof(linkparam));
+   368	
+   369		tmp = cfpkt_extr_head_u8(pkt);
+   370	
+   371		serv = tmp & CFCTRL_SRV_MASK;
+   372		linkparam.linktype = serv;
+   373	
+   374		servtype = tmp >> 4;
+   375		linkparam.chtype = servtype;
+   376	
+   377		tmp = cfpkt_extr_head_u8(pkt);
+   378		physlinkid = tmp & 0x07;
+   379		prio = tmp >> 3;
+   380	
+   381		linkparam.priority = prio;
+   382		linkparam.phyid = physlinkid;
+   383		endpoint = cfpkt_extr_head_u8(pkt);
+   384		linkparam.endpoint = endpoint & 0x03;
+   385	
+   386		switch (serv) {
+   387		case CFCTRL_SRV_VEI:
+   388		case CFCTRL_SRV_DBG:
+   389			if (CFCTRL_ERR_BIT & cmdrsp)
+   390				break;
+   391			/* Link ID */
+   392			linkid = cfpkt_extr_head_u8(pkt);
+   393			break;
+   394		case CFCTRL_SRV_VIDEO:
+   395			tmp = cfpkt_extr_head_u8(pkt);
+   396			linkparam.u.video.connid = tmp;
+   397			if (CFCTRL_ERR_BIT & cmdrsp)
+   398				break;
+   399			/* Link ID */
+   400			linkid = cfpkt_extr_head_u8(pkt);
+   401			break;
+   402	
+   403		case CFCTRL_SRV_DATAGRAM:
+   404			linkparam.u.datagram.connid = cfpkt_extr_head_u32(pkt);
+   405			if (CFCTRL_ERR_BIT & cmdrsp)
+   406				break;
+   407			/* Link ID */
+   408			linkid = cfpkt_extr_head_u8(pkt);
+   409			break;
+   410		case CFCTRL_SRV_RFM:
+   411			/* Construct a frame, convert
+   412			 * DatagramConnectionID
+   413			 * to network format long and copy it out...
+   414			 */
+   415			linkparam.u.rfm.connid = cfpkt_extr_head_u32(pkt);
+   416			cp = (u8 *) linkparam.u.rfm.volume;
+   417			for (tmp = cfpkt_extr_head_u8(pkt);
+   418			     cfpkt_more(pkt) && tmp != '\0';
+   419			     tmp = cfpkt_extr_head_u8(pkt)) {
+   420				if (cp >= (u8 *)linkparam.u.rfm.volume +
+   421				    sizeof(linkparam.u.rfm.volume) - 1) {
+   422					pr_warn("Request reject, volume name length exceeds %lu\n",
+ > 423						sizeof(linkparam.u.rfm.volume));
+   424					cmdrsp |= CFCTRL_ERR_BIT;
+   425					break;
+   426				}
+   427				*cp++ = tmp;
+   428			}
+   429			*cp = '\0';
+   430	
+   431			if (CFCTRL_ERR_BIT & cmdrsp)
+   432				break;
+   433			/* Link ID */
+   434			linkid = cfpkt_extr_head_u8(pkt);
+   435	
+   436			break;
+   437		case CFCTRL_SRV_UTIL:
+   438			/* Construct a frame, convert
+   439			 * DatagramConnectionID
+   440			 * to network format long and copy it out...
+   441			 */
+   442			/* Fifosize KB */
+   443			linkparam.u.utility.fifosize_kb = cfpkt_extr_head_u16(pkt);
+   444			/* Fifosize bufs */
+   445			linkparam.u.utility.fifosize_bufs = cfpkt_extr_head_u16(pkt);
+   446			/* name */
+   447			cp = (u8 *) linkparam.u.utility.name;
+   448			caif_assert(sizeof(linkparam.u.utility.name)
+   449				     >= UTILITY_NAME_LENGTH);
+   450			for (i = 0; i < UTILITY_NAME_LENGTH && cfpkt_more(pkt); i++) {
+   451				tmp = cfpkt_extr_head_u8(pkt);
+   452				*cp++ = tmp;
+   453			}
+   454			/* Length */
+   455			len = cfpkt_extr_head_u8(pkt);
+   456			linkparam.u.utility.paramlen = len;
+   457			/* Param Data */
+   458			cp = linkparam.u.utility.params;
+   459			while (cfpkt_more(pkt) && len--) {
+   460				tmp = cfpkt_extr_head_u8(pkt);
+   461				*cp++ = tmp;
+   462			}
+   463			if (CFCTRL_ERR_BIT & cmdrsp)
+   464				break;
+   465			/* Link ID */
+   466			linkid = cfpkt_extr_head_u8(pkt);
+   467			/* Length */
+   468			len = cfpkt_extr_head_u8(pkt);
+   469			/* Param Data */
+   470			cfpkt_extr_head(pkt, NULL, len);
+   471			break;
+   472		default:
+   473			pr_warn("Request setup, invalid type (%d)\n", serv);
+   474			return -1;
+   475		}
+   476	
+   477		rsp.cmd = CFCTRL_CMD_LINK_SETUP;
+   478		rsp.param = linkparam;
+   479		spin_lock_bh(&cfctrl->info_list_lock);
+   480		req = cfctrl_remove_req(cfctrl, &rsp);
+   481	
+   482		if (CFCTRL_ERR_BIT == (CFCTRL_ERR_BIT & cmdrsp) ||
+   483			cfpkt_erroneous(pkt)) {
+   484			pr_err("Invalid O/E bit or parse error "
+   485					"on CAIF control channel\n");
+   486			cfctrl->res.reject_rsp(cfctrl->serv.layer.up, 0,
+   487					       req ? req->client_layer : NULL);
+   488		} else {
+   489			cfctrl->res.linksetup_rsp(cfctrl->serv.layer.up, linkid,
+   490						  serv, physlinkid,
+   491						  req ?  req->client_layer : NULL);
+   492		}
+   493	
+   494		kfree(req);
+   495	
+   496		spin_unlock_bh(&cfctrl->info_list_lock);
+   497	
+   498		return 0;
+   499	}
+   500	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
