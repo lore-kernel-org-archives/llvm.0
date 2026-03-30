@@ -1,273 +1,253 @@
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483E53D75D4;
-	Mon, 30 Mar 2026 14:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714573A3819
+	for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 14:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774879631; cv=none; b=KXkEdajUbi/LkZhy8KEYOBSUjUarRNUKHGuy8KLJcGGbt8Fbz4DpNRhQay84f2f8l0f80booUjxQkT6eYAzHK605GUtLbeCv/ZaWY9QqeAbm+MFuTgklHFCmzMWmtoGTdblY0KAmJqR7gcxNb3wYCwN3QFoXC4+gsFc3gPBwXbY=
+	t=1774879804; cv=none; b=hvQBmoKiuRop9Q8w1Y17drFC3g36b7zQp2aO5J8ckdMyElX2pe4S90SJWrpG/l6NakRItkJLHTUOxSpCIn4ALwljj6UwZ8c4x4SCC8pmARda4oapS/1O3+J0kiNj6jC/hbD76/eRu/67tJFUJfEcO7YCt+Pw8drUez8ojeAo9V8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774879631; c=relaxed/simple;
-	bh=+bMs9ERIQVvkRwL+VZTTfiM9gzFfjTvT1aLgqMVLC9g=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=VGNyBcu7/HTXFjWbkUCjiGByqIevkNQjHW1T3DPptiuDRF6Xt6+tKecMRvbqJyPSQqKhvb2y/TIzpeZh7fBQy1yFb8L6op6Zxlx2DaDvGoPFrrC2xJLsSspns7M2/BJvLiIv8ihYtla/m3sbYFZGhXTcOxfUBSCT+/qTuz9SJLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=NIeeXjtL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=c0XIy9Sg; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1774879804; c=relaxed/simple;
+	bh=pTCJHJX8bTl7q3lpIGFz0+hvyyonxW9EtJZoTs2vgbM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qr4Juk9CUYVFMwCHYfZojcpkptYxylTm+oMHRnyIVlHWE2ckM5y0YNvx5ovwt6hhNmk4NfTa6M7Qki22TGqPuRXIy+8WC2Xl1EhEroAZmKLOFKANjgGaBFZfJ5p/EcnynLdqmX9RWj796U0YLKOjGOcpWCyUqE7y36khzSKkdHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=n2c4MT7e; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="NIeeXjtL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="c0XIy9Sg"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 2F7E0EC0175;
-	Mon, 30 Mar 2026 10:07:05 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Mon, 30 Mar 2026 10:07:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1774879625;
-	 x=1774966025; bh=tsLsTO59F2hU31zYvDPNmjaJK05UWmO5S1juGVgsTJU=; b=
-	NIeeXjtLCGuQhwSHisxJkuDVeo6sAx3zUMNU/ADq9spNGlOKkx/o3htMIxzJSAIL
-	fkPqlhhtsnakwpIxYC5OsybjswJo4rsW+jggqt7bSNoy65L04VKfHkSafX0OzS1k
-	0ombQD8KN/GP4ea6n17u/JsH31a0uacjCSig5WShoXB4GtlEsl5zEKqgPqeXkfir
-	rJDevay4iZs7rPq8xDZokkzXHiMulKbxv6coYPIB0dJbPiR2WtFyBgSBv5X+caCD
-	TEjzpZDwZGxCwIpcxW53fFZNSh5sf8YR3bpG/DNn/P051CqBtgC+HrogEbbZ2j/B
-	c0+CBgEQ+oYyfcOsgWMDGg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1774879625; x=
-	1774966025; bh=tsLsTO59F2hU31zYvDPNmjaJK05UWmO5S1juGVgsTJU=; b=c
-	0XIy9Sgh/cj7ZY52cwbUVbDiTpcGbJf0ZdX8JYcdQoRb+SQSZt1f4RbV8eN6WVPK
-	nKVpCEpIfExrSJMbBfIFsi66x44ZS5qF7IGnJMGg7OXZHJTOLi/+bQlggvnd3iiZ
-	uNi2gfhA4mRSM+QLg2LnNr/56BkonZ+L4fBwj+AfspKDcFHtRUE5Xc1IWCTCCKgh
-	CjYhIVlmabr/zaGH8lRnbTJ4XVN28ljat+FvA2TiVNm3Wpm8B9Lmn23xCzRLtxcH
-	eRpH05JbBRkMH2Zx3l0ZZ19KZzfXUm3YArIvYdb0i5YQ03KlbQHRd2Kyc/l50rat
-	fOmw2kZ9/LVbdQ83kGySg==
-X-ME-Sender: <xms:iIPKaZFB-GrhmTvzoq3ienoTBxnJqZAb20GweeiGjg3e9nox3EJrqg>
-    <xme:iIPKaZIE16FwTv2EDHa1Qe_DiWSQp4GgPo4QnKJ8UubMCYvhdeDyC5k4DeXwsT0gO
-    C1yEvBWyV74_HJ9J0UI2zkiMfqohDteW9VB-hOCMXb1T194T_Qhoi0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeffeeludekucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepkedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepmhgrthhhihgvuhdruggvshhnohihvghrshesvghffhhitghiohhsrd
-    gtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdrohhrghdprhgtphht
-    thhopehlkhhpsehinhhtvghlrdgtohhmpdhrtghpthhtohepmhhhihhrrghmrghtsehkvg
-    hrnhgvlhdrohhrghdprhgtphhtthhopehllhhvmheslhhishhtshdrlhhinhhugidruggv
-    vhdprhgtphhtthhopehovgdqkhgsuhhilhguqdgrlhhlsehlihhsthhsrdhlihhnuhigrd
-    guvghvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtoheplhhinhhugidqthhrrggtvgdqkhgvrhhnvghlsehvghgvrh
-    drkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:iIPKaVgxx2YIb7Eo34DZYTkCb_DCUybuNOU3h0EUrXUPQL7XFUjr6A>
-    <xmx:iIPKae_H0ZP10XVWCYIgsqCdMgwKSXuvDWUtDCtN_Arugq_AX_K1CA>
-    <xmx:iIPKaZUKx31MOjEoEIv960EQd-aUylA9XZyT8cVpcePjPaiHT2nBsg>
-    <xmx:iIPKaaAVP2qZrggdO8qtkck_-H0WCwX6iJckLpwFM5ABjgyYteSuMw>
-    <xmx:iYPKaZk2n22YNcnWWCs43uD9GDJRwJgDOWq_lroZEC7YMbEkPWJOfbPa>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id A6021700065; Mon, 30 Mar 2026 10:07:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="n2c4MT7e"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-439d8dc4ae4so4472314f8f.2
+        for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 07:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774879799; x=1775484599; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ofGeXPfaVRXCWGVBncjC8OxpQsdvZbUIW7I2SC9DA3M=;
+        b=n2c4MT7ehDPEnbhcFi2pluN/U4AN8N9j0nCp4FUSX30cLYIW9qWTCfXi3xSxx408yX
+         4LIh4myqWq5d5XHXQBqOmwplR3evIvPU9MG8FTaA6oBJIGlYUZHzQ0ZiuoYqU17EXABY
+         jNsUvb+xoXkMjuPrXZ127vGRDf8nId1Lf4u/+WPEicGOKgaZu7zj4RrqIABDeImGa43e
+         BYX6OB2IaOYTJIrq+y0HVRAe2x6qYNJo8gSa0uZ00BlKd/q6BqEJ8+S6nDIxOWfyr7OO
+         +OkNqS8DALEdWewVAe7vdDZnKgZt7RqN5G9Gha/OrfC/F3EZQeAyoJe6lMpmbxhrjYx2
+         cYjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774879799; x=1775484599;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ofGeXPfaVRXCWGVBncjC8OxpQsdvZbUIW7I2SC9DA3M=;
+        b=LUzvzJzcWX9EHXHnsgAww2JRCzftO6j30FXcKoJDM5KYm6COWs5s/w49qBIEoGFtBR
+         XOyBAAR+tsw3xBPLDRq0jayELK238eDJ8+2wGx0YGdboyqBp6TMVbNNv3VbIwfAFCYeD
+         3Ol4i6fTJ92IUvu1WZsovzG/w+UBUc1m46orBvQPRu9GEjH9IXDui1ErlihthR4DqJ+N
+         bIMldAQ3w2intNAV8RWpoY8UbMy2ELCocSutmBpRNGCDpL9Ef4KrDTgkHeOE9eDh9lZv
+         9jbvn1y/sUXJMgEuRmTDzYbz9C13MvO9BYhFNKhJn/6lnEtch5wNdADE01rW/uipWdaw
+         176Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWFCB7PqdUbUGwu+n9puoV+hQg+/P8A1kkE4pGKsM5sRlvL0ivO11QGKcgNhov48zKMctYC@lists.linux.dev
+X-Gm-Message-State: AOJu0YxQLwvbDF59wlN83oo7fXoT9QJjttMZ1RLKV1DxQ502accBdOBg
+	QVe4fDCDaDF49OoztSuHme8g0flkzG6kfl8WG/tAgt3/Nc1lYesZLBd/1HAtK9UBDQ==
+X-Gm-Gg: ATEYQzwREE8n0KEGv/LUd2pvdwK3Zs/3dd+FIzWnR2AKKAyiHAL/RcXJJpQHWQ30x7m
+	2mvFdPd6YMB1JNFlR7hJSyhfwxeJT/nJJDv2cZq6ztKVTi1H0Uw/B10FrERDASMfQdgpYxjOE3/
+	5Bs78CRD1eXlBilTLfmeJduKwoO1KwZtEYe6YFkDMcz5mn/rkqKq3JGneG0RRZmbjaPKJlgnpqC
+	P/3ypl4K1SyhRWifWbgVXzWCP5qsDnQHKDrzMfSRCU53Xboqx0ANXyRdb9WGcUjkozHS5vUz7fF
+	01qU09JZdA1Op6uXRyafrh69coeDRrF1BGEQmj8sUKDmGQbjaMsw6feKGIULZUXwzJ8/NhHrwvb
+	WovnwhLzsqEXn5S2iGfZ9qHjcZnXB+DAle5YH5O7zuJ8/9uUl7diMeFP4x81zeyt80zrn0TVF5S
+	SJGiqbDCFivIJMitLsdpNEQhZ4nLTyfz6DDOPClq6lsJwoUz7RoPiIXoDo0BKU
+X-Received: by 2002:a5d:5389:0:b0:43c:f52b:7ff7 with SMTP id ffacd0b85a97d-43cf52b80f8mr9346306f8f.50.1774879798389;
+        Mon, 30 Mar 2026 07:09:58 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:2834:9:a898:3d0d:784b:16c3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf21eb95fsm21396329f8f.12.2026.03.30.07.09.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 07:09:57 -0700 (PDT)
+Date: Mon, 30 Mar 2026 16:09:50 +0200
+From: Marco Elver <elver@google.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH tip/locking/core] compiler-context-analysis: Bump required
+ Clang version to 23
+Message-ID: <acqELlVC6vEeEF-W@elver.google.com>
+References: <20260323153351.1412355-1-elver@google.com>
+ <CANpmjNMo5kX=2B7UTo-gbiBSTAF0JPwWRZNf=KWpRP4tRA2FAg@mail.gmail.com>
+ <20260325152000.GG3738786@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: A1v9eCq-71EB
-Date: Mon, 30 Mar 2026 16:06:44 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "kernel test robot" <lkp@intel.com>,
- "Steven Rostedt" <rostedt@goodmis.org>, LKML <linux-kernel@vger.kernel.org>,
- "Linux trace kernel" <linux-trace-kernel@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-Message-Id: <8580f943-4c37-4c66-937d-adee13b72201@app.fastmail.com>
-In-Reply-To: <202603070230.Zz4BBLtb-lkp@intel.com>
-References: <20260305211810.3f48aa07@robin>
- <202603070230.Zz4BBLtb-lkp@intel.com>
-Subject: Re: [PATCH] tracing: Move snapshot code out of trace.c and into
- trace_snapshot.c
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260325152000.GG3738786@noisy.programming.kicks-ass.net>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On Fri, Mar 6, 2026, at 20:07, kernel test robot wrote:
->>> kernel/trace/trace.c:820:5: warning: no previous prototype for function 'tracing_alloc_snapshot' [-Wmissing-prototypes]
->      820 | int tracing_alloc_snapshot(void)
->          |     ^
->    kernel/trace/trace.c:820:1: note: declare 'static' if the function 
-> is not intended to be used outside of this translation unit
->      820 | int tracing_alloc_snapshot(void)
->          | ^
->          | static 
->    1 warning generated.
+Clang 23 introduces support for multiple arguments in the `guarded_by`
+and `pt_guarded_by` attributes [1]. This allows defining variables
+protected by multiple context locks, where read access requires holding
+at least one lock (shared or exclusive), and write access requires
+holding all of them exclusively.
 
-I saw the same thing and worked around it by removing the function.
-I then noticed that a bunch of code surrounding it is also unused
-and I removed that as well (see below). This version passes
-my randconfig build tests, but I suspect it is still wrong,
-since the code never had any callers and I don't understand
-why.
+Clang 23 also provides a few other improvements (such as being able to
+deal with arrays of locks [2]) that make it worthwhile bumping the
+compiler version instead of trying to make both Clang 22 and later work
+while supporting these new features.
 
-       Arnd
+Link: https://github.com/llvm/llvm-project/pull/186838 [1]
+Link: https://github.com/llvm/llvm-project/pull/148551 [2]
+Requested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Marco Elver <elver@google.com>
+---
+v2:
+* Bump version instead of __guarded_by_any workaround.
+---
+ Documentation/dev-tools/context-analysis.rst |  2 +-
+ include/linux/compiler-context-analysis.h    | 30 ++++++++++++++------
+ lib/Kconfig.debug                            |  4 +--
+ lib/test_context-analysis.c                  | 24 ++++++++++++++++
+ 4 files changed, 49 insertions(+), 11 deletions(-)
 
-
-diff --git a/include/linux/trace_printk.h b/include/linux/trace_printk.h
-index 2670ec7f4262..87466d8df147 100644
---- a/include/linux/trace_printk.h
-+++ b/include/linux/trace_printk.h
-@@ -38,8 +38,6 @@ enum ftrace_dump_mode {
- void tracing_on(void);
- void tracing_off(void);
- int tracing_is_on(void);
--void tracing_snapshot(void);
--void tracing_snapshot_alloc(void);
+diff --git a/Documentation/dev-tools/context-analysis.rst b/Documentation/dev-tools/context-analysis.rst
+index 54d9ee28de98..8e71e1e75b5b 100644
+--- a/Documentation/dev-tools/context-analysis.rst
++++ b/Documentation/dev-tools/context-analysis.rst
+@@ -17,7 +17,7 @@ features. To enable for Clang, configure the kernel with::
  
- extern void tracing_start(void);
- extern void tracing_stop(void);
-@@ -184,8 +182,6 @@ static inline void trace_dump_stack(int skip) { }
- static inline void tracing_on(void) { }
- static inline void tracing_off(void) { }
- static inline int tracing_is_on(void) { return 0; }
--static inline void tracing_snapshot(void) { }
--static inline void tracing_snapshot_alloc(void) { }
+     CONFIG_WARN_CONTEXT_ANALYSIS=y
  
- static inline __printf(1, 2)
- int trace_printk(const char *fmt, ...)
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index ec2b926436a7..76fe2c758734 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -767,70 +767,6 @@ void tracing_on(void)
- }
- EXPORT_SYMBOL_GPL(tracing_on);
+-The feature requires Clang 22 or later.
++The feature requires Clang 23 or later.
  
--#ifdef CONFIG_TRACER_SNAPSHOT
--/**
-- * tracing_snapshot - take a snapshot of the current buffer.
-- *
-- * This causes a swap between the snapshot buffer and the current live
-- * tracing buffer. You can use this to take snapshots of the live
-- * trace when some condition is triggered, but continue to trace.
-- *
-- * Note, make sure to allocate the snapshot with either
-- * a tracing_snapshot_alloc(), or by doing it manually
-- * with: echo 1 > /sys/kernel/tracing/snapshot
-- *
-- * If the snapshot buffer is not allocated, it will stop tracing.
-- * Basically making a permanent snapshot.
-- */
--void tracing_snapshot(void)
--{
--	struct trace_array *tr = &global_trace;
--
--	tracing_snapshot_instance(tr);
--}
--EXPORT_SYMBOL_GPL(tracing_snapshot);
--
--/**
-- * tracing_alloc_snapshot - allocate snapshot buffer.
-- *
-- * This only allocates the snapshot buffer if it isn't already
-- * allocated - it doesn't also take a snapshot.
-- *
-- * This is meant to be used in cases where the snapshot buffer needs
-- * to be set up for events that can't sleep but need to be able to
-- * trigger a snapshot.
-- */
--int tracing_alloc_snapshot(void)
--{
--	struct trace_array *tr = &global_trace;
--	int ret;
--
--	ret = tracing_alloc_snapshot_instance(tr);
--	WARN_ON(ret < 0);
--
--	return ret;
--}
--EXPORT_SYMBOL_GPL(tracing_alloc_snapshot);
--#else
--void tracing_snapshot(void)
--{
--	WARN_ONCE(1, "Snapshot feature not enabled, but internal snapshot used");
--}
--EXPORT_SYMBOL_GPL(tracing_snapshot);
--int tracing_alloc_snapshot(void)
--{
--	WARN_ONCE(1, "Snapshot feature not enabled, but snapshot allocation used");
--	return -ENODEV;
--}
--EXPORT_SYMBOL_GPL(tracing_alloc_snapshot);
--void tracing_snapshot_alloc(void)
--{
--	/* Give warning */
--	tracing_snapshot();
--}
--EXPORT_SYMBOL_GPL(tracing_snapshot_alloc);
--#endif /* CONFIG_TRACER_SNAPSHOT */
--
- void tracer_tracing_off(struct trace_array *tr)
- {
- 	if (tr->array_buffer.buffer)
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index e4cf6703b301..6abd9e16ef21 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -2306,7 +2306,6 @@ static inline int register_snapshot_cmd(void) { return 0; }
- # endif
- #else /* !CONFIG_TRACER_SNAPSHOT */
- static inline int trace_allocate_snapshot(struct trace_array *tr, int size) { return 0; }
--static inline int tracing_alloc_snapshot(void) { return 0; }
- static inline void tracing_snapshot_instance(struct trace_array *tr) { }
- static inline int tracing_alloc_snapshot_instance(struct trace_array *tr)
- {
-diff --git a/kernel/trace/trace_snapshot.c b/kernel/trace/trace_snapshot.c
-index 8865b2ef2264..926f395e5af4 100644
---- a/kernel/trace/trace_snapshot.c
-+++ b/kernel/trace/trace_snapshot.c
-@@ -237,29 +237,6 @@ void tracing_disarm_snapshot(struct trace_array *tr)
- 	spin_unlock(&tr->snapshot_trigger_lock);
- }
+ The analysis is *opt-in by default*, and requires declaring which modules and
+ subsystems should be analyzed in the respective `Makefile`::
+diff --git a/include/linux/compiler-context-analysis.h b/include/linux/compiler-context-analysis.h
+index 00c074a2ccb0..1ab2622621c3 100644
+--- a/include/linux/compiler-context-analysis.h
++++ b/include/linux/compiler-context-analysis.h
+@@ -39,12 +39,14 @@
+ # define __assumes_shared_ctx_lock(...)	__attribute__((assert_shared_capability(__VA_ARGS__)))
  
--/**
-- * tracing_snapshot_alloc - allocate and take a snapshot of the current buffer.
-- *
-- * This is similar to tracing_snapshot(), but it will allocate the
-- * snapshot buffer if it isn't already allocated. Use this only
-- * where it is safe to sleep, as the allocation may sleep.
-- *
-- * This causes a swap between the snapshot buffer and the current live
-- * tracing buffer. You can use this to take snapshots of the live
-- * trace when some condition is triggered, but continue to trace.
-- */
--void tracing_snapshot_alloc(void)
--{
--	int ret;
--
--	ret = tracing_alloc_snapshot();
--	if (ret < 0)
--		return;
--
--	tracing_snapshot();
--}
--EXPORT_SYMBOL_GPL(tracing_snapshot_alloc);
--
  /**
-  * tracing_snapshot_cond_enable - enable conditional snapshot for an instance
-  * @tr:		The tracing instance
-@@ -391,8 +368,6 @@ void latency_fsnotify(struct trace_array *tr)
- 	 */
- 	irq_work_queue(&tr->fsnotify_irqwork);
- }
--#else
--static inline void latency_fsnotify(struct trace_array *tr) { }
- #endif /* LATENCY_FS_NOTIFY */
- static const struct file_operations tracing_max_lat_fops;
+- * __guarded_by - struct member and globals attribute, declares variable
+- *                only accessible within active context
++ * __guarded_by() - struct member and globals attribute, declares variable
++ *                  only accessible within active context
++ * @...: context lock instance pointer(s)
+  *
+  * Declares that the struct member or global variable is only accessible within
+- * the context entered by the given context lock. Read operations on the data
+- * require shared access, while write operations require exclusive access.
++ * the context entered by the given context lock(s). Read operations on the data
++ * require shared access to at least one of the context locks, while write
++ * operations require exclusive access to all listed context locks.
+  *
+  * .. code-block:: c
+  *
+@@ -52,17 +54,24 @@
+  *		spinlock_t lock;
+  *		long counter __guarded_by(&lock);
+  *	};
++ *
++ *	struct some_state {
++ *		spinlock_t lock1, lock2;
++ *		long counter __guarded_by(&lock1, &lock2);
++ *	};
+  */
+ # define __guarded_by(...)		__attribute__((guarded_by(__VA_ARGS__)))
  
+ /**
+- * __pt_guarded_by - struct member and globals attribute, declares pointed-to
+- *                   data only accessible within active context
++ * __pt_guarded_by() - struct member and globals attribute, declares pointed-to
++ *                     data only accessible within active context
++ * @...: context lock instance pointer(s)
+  *
+  * Declares that the data pointed to by the struct member pointer or global
+  * pointer is only accessible within the context entered by the given context
+- * lock. Read operations on the data require shared access, while write
+- * operations require exclusive access.
++ * lock(s). Read operations on the data require shared access to at least one
++ * of the context locks, while write operations require exclusive access to all
++ * listed context locks.
+  *
+  * .. code-block:: c
+  *
+@@ -70,6 +79,11 @@
+  *		spinlock_t lock;
+  *		long *counter __pt_guarded_by(&lock);
+  *	};
++ *
++ *	struct some_state {
++ *		spinlock_t lock1, lock2;
++ *		long *counter __pt_guarded_by(&lock1, &lock2);
++ *	};
+  */
+ # define __pt_guarded_by(...)		__attribute__((pt_guarded_by(__VA_ARGS__)))
+ 
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 93f356d2b3d9..09e9bd003c70 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -630,7 +630,7 @@ config DEBUG_FORCE_WEAK_PER_CPU
+ 
+ config WARN_CONTEXT_ANALYSIS
+ 	bool "Compiler context-analysis warnings"
+-	depends on CC_IS_CLANG && CLANG_VERSION >= 220100
++	depends on CC_IS_CLANG && CLANG_VERSION >= 230000
+ 	# Branch profiling re-defines "if", which messes with the compiler's
+ 	# ability to analyze __cond_acquires(..), resulting in false positives.
+ 	depends on !TRACE_BRANCH_PROFILING
+@@ -641,7 +641,7 @@ config WARN_CONTEXT_ANALYSIS
+ 	  and releasing user-definable "context locks".
+ 
+ 	  Clang's name of the feature is "Thread Safety Analysis". Requires
+-	  Clang 22.1.0 or later.
++	  Clang 23 or later.
+ 
+ 	  Produces warnings by default. Select CONFIG_WERROR if you wish to
+ 	  turn these warnings into errors.
+diff --git a/lib/test_context-analysis.c b/lib/test_context-analysis.c
+index 06b4a6a028e0..316f4dfcda65 100644
+--- a/lib/test_context-analysis.c
++++ b/lib/test_context-analysis.c
+@@ -159,6 +159,10 @@ TEST_SPINLOCK_COMMON(read_lock,
+ struct test_mutex_data {
+ 	struct mutex mtx;
+ 	int counter __guarded_by(&mtx);
++
++	struct mutex mtx2;
++	int anyread __guarded_by(&mtx, &mtx2);
++	int *anyptr __pt_guarded_by(&mtx, &mtx2);
+ };
+ 
+ static void __used test_mutex_init(struct test_mutex_data *d)
+@@ -219,6 +223,26 @@ static void __used test_mutex_cond_guard(struct test_mutex_data *d)
+ 	}
+ }
+ 
++static void __used test_mutex_multiguard(struct test_mutex_data *d)
++{
++	mutex_lock(&d->mtx);
++	(void)d->anyread;
++	(void)*d->anyptr;
++	mutex_unlock(&d->mtx);
++
++	mutex_lock(&d->mtx2);
++	(void)d->anyread;
++	(void)*d->anyptr;
++	mutex_unlock(&d->mtx2);
++
++	mutex_lock(&d->mtx);
++	mutex_lock(&d->mtx2);
++	d->anyread++;
++	(*d->anyptr)++;
++	mutex_unlock(&d->mtx2);
++	mutex_unlock(&d->mtx);
++}
++
+ struct test_seqlock_data {
+ 	seqlock_t sl;
+ 	int counter __guarded_by(&sl);
+-- 
+2.53.0.1018.g2bb0e51243-goog
