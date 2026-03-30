@@ -1,89 +1,214 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB403D88F4;
-	Mon, 30 Mar 2026 14:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43973D9036
+	for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 14:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774880186; cv=none; b=MRDX0/2usAiHul21RKnhCMZZ5wieeYjg8nGAb9Dn+7rIp0fokCF6HW3a/bh3S79sUHKC0HnDZNZKVYYmEG3C1vLOG+yDjJFKtXp6AnwfIkH1/OEXtw13Kac2wZczX7n7dsIN1IsYp2quZuyo2RVflyeZhH3ub2Ysqt6+VE6+ZVc=
+	t=1774880254; cv=none; b=bJuZT7xWh60UwK9/U+fy3xsjhCHQ3QIEHqMzolPsMeMP/irksJsBpqgBXM4yqve1HPJ0AxnjKQXTFBBVHHs/2I/vvfQU72dZzrVCBdzirKeytOEviCc8sBK9/TCAAz+K4igq2OpyvuUIlefXWwT/C89Dv0Z7VfyKR2WH13UFsS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774880186; c=relaxed/simple;
-	bh=OZwA9LX64oU0rjcQ/xGojr0ysWNIRLqBgjf2L9V8WS8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bqCxzIln29ZdVRNdXNCFGHC9Dqlmp45a6mr91DZreIPzxcLyLvob8UnEoRfBP4tpLbyR3xt3Gx6FJFann/ZlGxwiYPr3F6iVbpU/2fjhy0OMurqLD/k7HjRCIVVSgrjEqlPnVgHE8KAON7yUgL9u11Heq5SN0jfaTc+Bsy7vW+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AnzLTqSW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774880254; c=relaxed/simple;
+	bh=YXD0cPHX7FzEdOQwXJrWO33JjySneVnOOD3EPxs1EoY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=k7DaMEFQMQkzjFJdB5W5VKHU6KtvwNbDG4iVyCkSE8r2FD8Crpl9I3gxVG+sovWpzzvNy1kc+td0S+cNEwYt1uHt8D9ow2b6yLkO+di6bL9P34Eb9Y1yP7UP0EY3wmnxvFvscARIAshvQHvVh/3FXg9oFl8ozqstwaVj/H55E1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=fK97Qm2w; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AnzLTqSW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85151C4CEF7;
-	Mon, 30 Mar 2026 14:16:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774880186;
-	bh=OZwA9LX64oU0rjcQ/xGojr0ysWNIRLqBgjf2L9V8WS8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AnzLTqSW3JI4wm0Gcq8Shu/IGh0tUhJLNhnPe/4fMS1BQvFXwLkqaFavjRkMTg+ke
-	 35GfCFAZzvJVdPppri8AkN54iXVQybARLeaZU3XtOzFYGGeQcJsFcdKLCWHylHTggF
-	 2o9PG2Qe+35r+OzCRD17BB6yZ4zgqp4t7+rZIv2f/1Z88jYu1xxAveqnKYu8pwJBbK
-	 KrWMwPXEJ8SLXIe5Da4Wvbozat4m6eZQHT2DSKLXaVq/0AqkESQ6cylwCNQsRV8TXw
-	 Qwv7cajU/bVi6RqCmse5cHQDJVFwZI7/D8410l65KmIC9kwa88S/xFl9cRRRTOgY2k
-	 drY3J7QcDRXsw==
-Date: Mon, 30 Mar 2026 16:16:21 +0200
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Saravana Kannan <saravanak@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] scripts/dtc: Remove unused dts_version in dtc-lexer.l
-Message-ID: <20260330141621.GB1990358@ax162>
-References: <20260327-dtc-drop-dts_version-v1-1-41066690aefd@kernel.org>
- <CAL_Jsq+r6DvXMoJ+qPOLJvosrgbyOVjw8nn453wUi7bXQOZNog@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fK97Qm2w"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1774880251;
+	bh=YXD0cPHX7FzEdOQwXJrWO33JjySneVnOOD3EPxs1EoY=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=fK97Qm2wvpdCOdiM3bHzyQ6O171iALrqVd43ZjNhW1jyvVmbT5I2RTOj0tnLJagSV
+	 4MkeRWKdMR+dW9/OKSUj14m+CWW+PV365Lw1Gg/Zq6HZEWavUKd7olgJ9PjjBMWzQG
+	 dO0iRxrgC1xuq1+ocvuqQXe8sQ+K7UH00ZJWvakonhpJY0IwXQ/lNHFW1LKz+URXLR
+	 qzOW5CSpjvfQNTxT4y46Np1DpriMNxgdwWjjUZhLsH23HZE4Glv9bXGby8SwFCmvJA
+	 X8lRcLyGeL4IMgwPJItaqhdTgVH4W0RAVR3ny+Z0CYMm57iv+yqRfj/jl0Z2GsmMUU
+	 DBHrpsOJkhzAg==
+Received: from [IPv6:2606:6d00:15:e06b::c41] (unknown [IPv6:2606:6d00:15:e06b::c41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 1671317E4686;
+	Mon, 30 Mar 2026 16:17:28 +0200 (CEST)
+Message-ID: <c177cd8ffb59ea63a26906577ba737677551cd0d.camel@collabora.com>
+Subject: Re: [PATCH 1/4] media: rkvdec: Introduce a global bitwriter helper
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Detlev Casanova <detlev.casanova@collabora.com>, Ezequiel Garcia	
+ <ezequiel@vanguardiasur.com.ar>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>,  Heiko Stuebner	 <heiko@sntech.de>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers	 <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Jonas Karlman <jonas@kwiboo.se>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev, kernel@collabora.com
+Date: Mon, 30 Mar 2026 10:17:26 -0400
+In-Reply-To: <20260327-rkvdec-use-bitwriter-v1-1-982cf872b590@collabora.com>
+References: <20260327-rkvdec-use-bitwriter-v1-0-982cf872b590@collabora.com>
+	 <20260327-rkvdec-use-bitwriter-v1-1-982cf872b590@collabora.com>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-yBgy0sQvaoJVzhLo4NBc"
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_Jsq+r6DvXMoJ+qPOLJvosrgbyOVjw8nn453wUi7bXQOZNog@mail.gmail.com>
 
-On Mon, Mar 30, 2026 at 07:19:16AM -0500, Rob Herring wrote:
-> On Fri, Mar 27, 2026 at 4:39 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > A recent strengthening of -Wunused-but-set-variable (enabled with -Wall)
-> > in clang under a new subwarning, -Wunused-but-set-global, points out an
-> > unused static global variable in dtc-lexer.lex.c (compiled from
-> > dtc-lexer.l):
-> >
-> >   scripts/dtc/dtc-lexer.lex.c:641:12: warning: variable 'dts_version' set but not used [-Wunused-but-set-global]
-> >     641 | static int dts_version = 1;
-> >         |            ^
-> >
-> > This variable has been unused since commit 658f29a51e98 ("of/flattree:
-> > Update dtc to current mainline."). Remove it to clear up the warning.
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> > This is commit 53373d1 ("dtc: Remove unused dts_version in dtc-lexer.l")
-> > in upstream dtc. I sent it separately to make it easier to backport to
-> > stable, along with updating the warning and hash to match the kernel's
-> > version.
-> > ---
-> >  scripts/dtc/dtc-lexer.l | 3 ---
-> >  1 file changed, 3 deletions(-)
-> 
-> We don't take changes to dtc as we just sync with the upstream copy. I
-> saw you already submitted this upstream, so I will do a sync to pull
-> this in.
 
-Fair enough. As I mentioned in the fold, I will need this in stable so I
-figured having a separate patch would make that easier while not
-impacting a future sync (since it is already there). I can just wait to
-send this to stable directly until the sync lands in Linus's tree.
+--=-yBgy0sQvaoJVzhLo4NBc
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Cheers,
-Nathan
+Le vendredi 27 mars 2026 =C3=A0 11:16 -0400, Detlev Casanova a =C3=A9crit=
+=C2=A0:
+> The use of structures with bitfields is good when the values are
+> somewhat aligned.
+> More mis-alignement means that compilers need to do more gymanstics
+> to edit the fields values.
+>=20
+> Some cases have been reported with CLang on specific architectures
+> like armhf and hexagon, where the compiler would allocate a bigger
+> local stack than needed or even completely freeze during compilation.
+>=20
+> Some fixes have been provided to ease the issues, but the real fix
+> here is to use a bitwriter instead of heavily unaligned bitfields.
+>=20
+> This is a preparation commit to provide a global bitwriter interface
+> for the whole driver.
+>=20
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> ---
+> =C2=A0drivers/media/platform/rockchip/rkvdec/Makefile=C2=A0=C2=A0=C2=A0 |=
+=C2=A0 1 +
+> =C2=A0.../platform/rockchip/rkvdec/rkvdec-bitwriter.c=C2=A0=C2=A0=C2=A0 |=
+ 30 ++++++++++++++++++++++
+> =C2=A0.../platform/rockchip/rkvdec/rkvdec-bitwriter.h=C2=A0=C2=A0=C2=A0 |=
+ 25 ++++++++++++++++++
+> =C2=A03 files changed, 56 insertions(+)
+>=20
+> diff --git a/drivers/media/platform/rockchip/rkvdec/Makefile b/drivers/me=
+dia/platform/rockchip/rkvdec/Makefile
+> index e629d571e4d8..11e2122bcbbf 100644
+> --- a/drivers/media/platform/rockchip/rkvdec/Makefile
+> +++ b/drivers/media/platform/rockchip/rkvdec/Makefile
+> @@ -2,6 +2,7 @@ obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC) +=3D rockchip-vdec.o
+> =C2=A0
+> =C2=A0rockchip-vdec-y +=3D \
+> =C2=A0		=C2=A0=C2=A0 rkvdec.o \
+> +		=C2=A0=C2=A0 rkvdec-bitwriter.o \
+
+Its just one function, with 10 lines of code, can we inline it in the heade=
+r and
+drop the object ?
+
+> =C2=A0		=C2=A0=C2=A0 rkvdec-cabac.o \
+> =C2=A0		=C2=A0=C2=A0 rkvdec-h264.o \
+> =C2=A0		=C2=A0=C2=A0 rkvdec-h264-common.o \
+> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.c b/=
+drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.c
+> new file mode 100644
+> index 000000000000..673ebb89002b
+> --- /dev/null
+> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.c
+> @@ -0,0 +1,30 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Rockchip Video Decoder bit writer
+> + *
+> + * Copyright (C) 2026 Collabora, Ltd.
+> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Detlev Casanova <detlev.casanova@collab=
+ora.com>
+> + * Copyright (C) 2019 Collabora, Ltd.
+> + *	Boris Brezillon <boris.brezillon@collabora.com>
+> + */
+> +
+> +#include <linux/types.h>
+> +#include <linux/bits.h>
+> +
+> +#include "rkvdec-bitwriter.h"
+> +
+> +void rkvdec_set_bw_field(u32 *buf, struct rkvdec_bw_field field, u32 val=
+ue)
+> +{
+> +	u8 bit =3D field.offset % 32;
+> +	u16 word =3D field.offset / 32;
+> +	u64 mask =3D GENMASK_ULL(bit + field.len - 1, bit);
+> +	u64 val =3D ((u64)value << bit) & mask;
+> +
+> +	buf[word] &=3D ~mask;
+> +	buf[word] |=3D val;
+> +	if (bit + field.len > 32) {
+> +		buf[word + 1] &=3D ~(mask >> 32);
+> +		buf[word + 1] |=3D val >> 32;
+> +	}
+> +}
+> +
+> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.h b/=
+drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.h
+> new file mode 100644
+> index 000000000000..44154f1ebc65
+> --- /dev/null
+> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.h
+> @@ -0,0 +1,25 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Rockchip Video Decoder bit writer
+> + *
+> + * Copyright (C) 2026 Collabora, Ltd.
+> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Detlev Casanova <detlev.casanova@collab=
+ora.com>
+> + * Copyright (C) 2019 Collabora, Ltd.
+> + *	Boris Brezillon <boris.brezillon@collabora.com>
+> + */
+> +
+> +#ifndef RKVDEC_BIT_WRITER_H_
+> +#define RKVDEC_BIT_WRITER_H_
+> +
+> +#include <linux/types.h>
+> +
+> +struct rkvdec_bw_field {
+> +	u16 offset;
+> +	u8 len;
+> +};
+> +
+> +#define BW_FIELD(_offset, _len) ((struct rkvdec_bw_field){ _offset, _len=
+ })
+> +
+> +void rkvdec_set_bw_field(u32 *buf, struct rkvdec_bw_field field, u32 val=
+ue);
+> +
+> +#endif /* RKVDEC_BIT_WRITER_H_ */
+
+--=-yBgy0sQvaoJVzhLo4NBc
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCacqF9gAKCRDZQZRRKWBy
+9NNPAP9m/C7TMvFwXyQT8rK+UCGFvzuLY32by5+QAQwsH+fP4wEAoC19z0cPX+2k
+voSc2sk6B5FI6fzPOJXJX9z9XlPO0go=
+=/Y4+
+-----END PGP SIGNATURE-----
+
+--=-yBgy0sQvaoJVzhLo4NBc--
