@@ -1,154 +1,98 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C064B1D5CC9
-	for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 12:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E8A3D333C;
+	Mon, 30 Mar 2026 13:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774873489; cv=none; b=KksiGOr4nSGUbWpdNNDy41tXleMisVL7rSFV2JSen57DCGqVPJ3bru/2FTWax7g3GGFEh6Eyv4miJM3bW+6qogN54ev6SQtAsWskf74081bQhCFRqZv35kHBlq3n2F+V8Y5dhNGBlqMH+AYnvdUbPPXl2VIen73fxgCCvVtSIOY=
+	t=1774877354; cv=none; b=T3w79a5H9z5exQtUMJZepxuOVhMCKyCKJZW90qRDTWPyflYpeax55UC4KLNULGV9YY7PsI/FsEVqzTe0207M3I9NhRbkalWuJ485JrFLcvGPRAErXVkw5jr6+lCd8IaWXaLVrT7jgpJlL6Wjk775O0rD+uW7wnHMha5R7iskSBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774873489; c=relaxed/simple;
-	bh=mA3ZR1DLbQrQkL9PKCipYpYPc8aTCrcmFCztxVCijFA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bKzkwHwEqYJPfJOsY7PgS8KLfDtSYQH/DAhv21bXHt2qMPqSdDoSnftI9tuDz8Rp+MmYAvALE5YcvEPaxIQu34/IiAka1+ajfcKeDKWR54mHIy3Vx0+jMlLXu7Sd7N4VBKrlD8b9flrhLMwPbnYEbdLW8Qey1UbrBfFkAuWEvwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-4645dde00a7so3988507b6e.1
-        for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 05:24:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774873487; x=1775478287;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=woUempTeRL+MJtlKxpfNaT94H+rNPuTZjIMDTveSMCs=;
-        b=Nr/rkQxOLH0KUiy9wDAUM4G2Mgtb/nrG1zgYsvh6AQ3kh2UBseQbxy8EgvRElANm7D
-         vNFCUwXml90g0EYrfixWG4h3D89q4QbCeTwS++8XUE34eDXNos+b9spDfcf55lkFoNKU
-         7cvwEjq3175rEY/V1UM+KlWJITxAQ9tnRGjb8qzFzbdruxajtivrgr/4ou67ylfTBKvo
-         38TqB84kHTDzFn78KeFFTI3IvjYNGjXaF6rtoYHWW+E7VkrgUNxn0m8gade5Y/3UDnJb
-         1en6xmq+/vGiL0xjTOAB5teqthosx2w94wZxVqFWKUAC2XkxWaOtO+bjq8PnLSggVMQO
-         3U7A==
-X-Forwarded-Encrypted: i=1; AJvYcCXIPo2QqljfasL2BGL3/ruPd0dTKiu65iVloBX2s5fRtJ5HiLZHYPEfrv5SibgIDm8YGwD9@lists.linux.dev
-X-Gm-Message-State: AOJu0YylyJJfYeCa+6HVXalcI70/pDJ3W5bwzVNBDNwNkKNRSGmFF9Y2
-	uF4Vr6RE8319innENWzjMwYhAt59Ss/rRsX0wkcWiIrbsmsGB8umJS0GR8FeDZxR
-X-Gm-Gg: ATEYQzyCLoRMRd9dFm3aqvIg3+ff5dqIkkCMnyc/dYtJBj59Wq2uiS24rkHgCDy+7JF
-	ehLagtBIaX15agYmhtk1da0OsDGaMZVDPbv78tp0/IgSmHyEwOWAVMNBVxLnZ/ncbZYg+57w48C
-	mhaPhzX6NmrKEye7Bw0zFGlPa/KVck7o2oKDVBWmcR6nmtbo2XUU3iBTJTbwZ6xn2UBDZOUqVn5
-	ZFXW1jOqBWXJzN1B17PZnS2Z55sKWI1UsINFx93rNB/s8rkLZ4IHt2b4b3R5MFcKmFgbXSvfAca
-	ID15Cco1ksaPdr5U5pfWG5cGuLRNldforL0tKl+egeFxjkoERPOpB7kd6hdFybtzdYtPn4NIZIv
-	PdMvOdQdAmNr7fR5ub6DhCkLVT0X+62oOu3itdPF4uP1R0TD6kVpYHRxyvKp2Y/texOwzQFl26P
-	5QqCrbVVPNfi20jL/TIf2L+ChGyw8HNNWyL4P8chWPv5TwVT6pXKw8C/Y9HsC3
-X-Received: by 2002:a05:6820:826:b0:67e:3251:d70f with SMTP id 006d021491bc7-67e3251d9damr1592271eaf.4.1774873486566;
-        Mon, 30 Mar 2026 05:24:46 -0700 (PDT)
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com. [209.85.210.52])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41d0494be33sm4969184fac.5.2026.03.30.05.24.46
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Mar 2026 05:24:46 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7d1872504cbso4328230a34.0
-        for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 05:24:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVugt+vX7ng/Kv1lHc0zKB6bI2PQ2AVBa2AY5PfRhYMXpgt46lWrkbKJBNsCQWrBCevaK+N@lists.linux.dev
-X-Received: by 2002:a05:6102:4498:b0:602:896a:84ba with SMTP id
- ada2fe7eead31-604e4df3704mr5271926137.17.1774873037674; Mon, 30 Mar 2026
- 05:17:17 -0700 (PDT)
+	s=arc-20240116; t=1774877354; c=relaxed/simple;
+	bh=c/H7eZzJCEUtEK5OvU2JaJguCWCJlKN99jebwrjoZGo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BZOT7wsXpha556gF478q6/yRU2tG5do+hlx7t+86BTRF72vLU6w/r1ekSk19F4BtSbfFzVF+PLSfKR48q5rUx2RhanW2objoD7c+whrkbQ4awsf2yKg9uBVAHLl4maBh+ipxoqsqIsk72h660l4ufZxuPXaWpFXxvX6sCTYG+So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kjiREykZ; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kjiREykZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774877354; x=1806413354;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c/H7eZzJCEUtEK5OvU2JaJguCWCJlKN99jebwrjoZGo=;
+  b=kjiREykZ4ICvzgBjPnd9xFCHq3vyIsV1qSsg/qt57/76yknL0FRqNe6J
+   ijuwKxE8pjCRtLFgd1viDL2tfykUvSOkhJ1xT2d6Xc8h9fIz4ky7GTq+A
+   V6LkpW/4qBQrEIR7a6eT55NneQhWgfT1vrx1zLElPIWWMD78Kx9rXRHUy
+   o9zj5s8xFfhsJ/0oJvlIgquTrdg7lRFP3ZaCc4WShPmwAydjSmfG++zu6
+   Jv8FOsxAKabXw3mp6AfWf7152fjxbEWQkZ02uX5Et/Fz1wGw/sYAd5ycY
+   XVP6Rgmoav/HIXHpQp8QsNmcQSRwqTJhGF8tKXCL3MFD5/9KHsYSHuA9N
+   g==;
+X-CSE-ConnectionGUID: 6J+6YzY0Rpmy5Kf5THXdiA==
+X-CSE-MsgGUID: YifejAFIQLqV4Tl09nliuA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="75755423"
+X-IronPort-AV: E=Sophos;i="6.23,150,1770624000"; 
+   d="scan'208";a="75755423"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 06:29:14 -0700
+X-CSE-ConnectionGUID: Ndcc8QuNR8OM/+QifztGaA==
+X-CSE-MsgGUID: jusKlcyyTbmza3NTT4uAOQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,150,1770624000"; 
+   d="scan'208";a="221186359"
+Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 30 Mar 2026 06:29:12 -0700
+Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w7Cg1-00000000193-3oKk;
+	Mon, 30 Mar 2026 13:29:09 +0000
+Date: Mon, 30 Mar 2026 21:28:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qinxin Xia <xiaqinxin@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v2 1/5] iommu/arm-smmu-v3: Add basic debugfs framework
+Message-ID: <202603302143.tkiQ3kEk-lkp@intel.com>
+References: <20260328100953.3441915-2-xiaqinxin@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260322192159.88138-1-ojeda@kernel.org> <20260323000327.111235-1-ojeda@kernel.org>
- <acEP7tl8pqFA3tK8@shell.armlinux.org.uk> <acUGAsjYvNvTEO92@google.com>
- <CANiq72mzPpkELXis1CiSbKUmBXNQYMiMmjj-7-sYiLh4T_JSOQ@mail.gmail.com>
- <9cf5a94c-0f37-446c-b63d-ddac5674d220@gmail.com> <acVOL5Psz6kHlhq2@shell.armlinux.org.uk>
- <641592e3-2354-4238-9eb8-a1f5c2a13126@app.fastmail.com> <CAMuHMdUUfVCBZFi2WoOYibJLVnyPY-joRDJDowgHwjN_DGeEzw@mail.gmail.com>
- <93439e91-cf81-477b-b880-a813bb01ad7c@app.fastmail.com> <CAMuHMdU-+dm83TVttfarT7QxE5ySpQ2LJ_k6oFKMWRcbaWcCdA@mail.gmail.com>
- <26d690ab-d68f-401f-ae2d-7aa4de081bce@app.fastmail.com>
-In-Reply-To: <26d690ab-d68f-401f-ae2d-7aa4de081bce@app.fastmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 30 Mar 2026 14:17:06 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWDy9mNuzDaYfE6r+P8MSTBEGsyRzisLF_d_FWX+6qCVQ@mail.gmail.com>
-X-Gm-Features: AQROBzD1En3iKQ5LsAPqOXpbj6O32MjUPo3QPwr0lgIQkMqaR2Lx1_ZSwol-K3A
-Message-ID: <CAMuHMdWDy9mNuzDaYfE6r+P8MSTBEGsyRzisLF_d_FWX+6qCVQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Inline helpers into Rust without full LTO
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Russell King <linux@armlinux.org.uk>, Christian Schrefl <chrisi.schrefl@gmail.com>, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Jamie Cunliffe <Jamie.Cunliffe@arm.com>, Will Deacon <will@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, acourbot@nvidia.com, 
-	Andrew Morton <akpm@linux-foundation.org>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Danilo Krummrich <dakr@kernel.org>, David Gow <david@davidgow.net>, 
-	Gary Guo <gary@garyguo.net>, Johannes Berg <johannes@sipsolutions.net>, 
-	Justin Stitt <justinstitt@google.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-um@lists.infradead.org, llvm@lists.linux.dev, 
-	Benno Lossin <lossin@kernel.org>, Mark Rutland <mark.rutland@arm.com>, mmaurer@google.com, 
-	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nicolas Schier <nsc@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Richard Weinberger <richard@nod.at>, rust-for-linux@vger.kernel.org, 
-	Trevor Gross <tmgross@umich.edu>, "Uladzislau Rezki (Sony)" <urezki@gmail.com>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260328100953.3441915-2-xiaqinxin@huawei.com>
 
-Hi Arnd,
+Hi Qinxin,
 
-On Mon, 30 Mar 2026 at 14:14, Arnd Bergmann <arnd@arndb.de> wrote:
-> On Mon, Mar 30, 2026, at 14:03, Geert Uytterhoeven wrote:
-> > On Fri, 27 Mar 2026 at 10:02, Arnd Bergmann <arnd@arndb.de> wrote:
-> >>
-> >> echo 'struct { short a : 3; short b :15; short c :14; } x; int y = sizeof(x);' | m68k-linux-gcc -xc - -S -o-
-> >>
-> >> this produces '4' on m68k-linux-gcc, but '6' everywhere else. I originally
-> >> thought this was related to this 2009 change in both compilers
-> >
-> > Oh, now I remember.  AFAIK (holding wood and a rabbit leg) we don't
-> > have any bitfield members spanning multiple base type instances in
-> > the kernel.
->
-> There are certainly very few of those, but two example I found in
-> UAPI are
->
-> struct dvd_layer {
->         __u8 book_version       : 4;
->         __u8 book_type          : 4;
->
->         __u8 min_rate           : 4;
->         __u8 disc_size          : 4;
->
->         __u8 layer_type         : 4;
->         __u8 track_path         : 1;
->         __u8 nlayers            : 2;
->
->         __u8 track_density      : 4; // crosses u8 boundary
->         __u8 linear_density     : 4;
->         __u8 bca                : 1;
->         __u32 start_sector;
->         __u32 end_sector;
->         __u32 end_sector_l0;
-> };
->
-> struct usb_raw_ep_caps {
->         __u32   type_control    : 1;
->         __u32   type_iso        : 1;
->         __u32   type_bulk       : 1;
->         __u32   type_int        : 1;
->         __u32   dir_in          : 1;
->         __u32   dir_out         : 1;
->        // 2 bit padding on m68k, 26 bits elsewhere
-> };
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-So we just need to make padding explicit? Sounds familiar ;-)
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v7.0-rc6 next-20260327]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Gr{oetje,eeting}s,
+url:    https://github.com/intel-lab-lkp/linux/commits/Qinxin-Xia/iommu-arm-smmu-v3-Add-basic-debugfs-framework/20260328-191149
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20260328100953.3441915-2-xiaqinxin%40huawei.com
+patch subject: [RFC PATCH v2 1/5] iommu/arm-smmu-v3: Add basic debugfs framework
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260330/202603302143.tkiQ3kEk-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260330/202603302143.tkiQ3kEk-lkp@intel.com/reproduce)
 
-                        Geert
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603302143.tkiQ3kEk-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-debugfs.c:33 function parameter 'unused' not described in 'smmu_debugfs_capabilities_show'
+>> Warning: drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-debugfs.c:33 function parameter 'unused' not described in 'smmu_debugfs_capabilities_show'
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
