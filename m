@@ -1,79 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99431F30BB;
-	Mon, 30 Mar 2026 05:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495303B19CB;
+	Mon, 30 Mar 2026 09:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774848969; cv=none; b=JhwgaWrKEqigqIY1G25UCjQhyCjcLKbky/atkYweKINUybVnEOVQauPzfO9VOLTBPZG/KrYaJB7fqfNg/JKRvzvYpdUBajZLKpNEfMpKpV3/kPiM3Jv0JzBAfDWA4a0PVBZxEFqSlyjnMy9+dX8H1nKOHE1HZFibZdz+aSmlxNw=
+	t=1774861545; cv=none; b=fWrFPj/6MM9w1Mxb8qZnbE1iDEji0q5gY9+FwIUwJd9SK4XwmYlHwc8J1TdApKFySfKBrFUQ2UeB9ygcA9zqUSA37GuyLsqNFpE80FMoxaxGumleiZzNJZKbNcjnRWyymKXDY0KNgi5E6VT9ZfcKAxVBl/MJv232leAhxC1BwmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774848969; c=relaxed/simple;
-	bh=37J2FedFq2slx06L2Z6thQB9dbAq/5grAfI/7vhrH9c=;
+	s=arc-20240116; t=1774861545; c=relaxed/simple;
+	bh=LQFsVa0GiyxQOzBHFWK9c0/VdHyOQPZGRYyAKUrITUA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BXuc6Gt8bG4drkOLruf6IffNrh7n14sCJoKp04vDo/19dTgAOTSn4+Z0NtgZ/bjtXgESkQSlmefqpE/zHPqox2srmb5XJr1o5ypRidJPJb5MPdTAOpM5HhJOLWFWniz3876hvddB50Oyz6HDU+O3ITI9dz5ZzL911nnwC+GAxGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M0bfKkfZ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=fZa1c5wr+8kVySAYMUBxsRtXZPSTjf/BevT8OcgT/qnPW0Tu0ls9ggm6zjD+KH/vWRmXvheTBEK8VFNXgJRnvheTNkn20LCxyu4V6x7APRSGH8B1fFWSGPDV9IVkvvjtOWrC509JtRSeCyPGWvUaxiIU3ss2ZUPHioI/EWm+bVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PFJFxRnJ; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M0bfKkfZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5EEC4CEF7;
-	Mon, 30 Mar 2026 05:36:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774848969;
-	bh=37J2FedFq2slx06L2Z6thQB9dbAq/5grAfI/7vhrH9c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M0bfKkfZfjuZwn6mM1WTeEaAxriNLOFG6mfcBIGKQ+khth0ZMNmyj61tqmtc3UAYA
-	 8IxXapWKrI97J2BG7lJ+Dcf1u/KVgsLscMsc6gygfPqnwYT24Ucb3/skS8B63aHZSG
-	 DK6UVV6fGoeoyzq7ryj4AegEIaWs85CPn/lk4+T7vkWrh0OhhXC9IHQ9Zgy77aAoJZ
-	 S3EQkvtHybOTa1eTT6pLPHY9WWiifHbW2mu6yCOwx0l6tKMDcK1BCb8hjfNdmUXijs
-	 uYRwrXbbrYqcQyfgSd1T+DYh6PxsTGSJkYMQC5n+YRy0McZP2BR7PgVlBF4vagEiq9
-	 9yFXxg2+L+/EA==
-Date: Mon, 30 Mar 2026 07:36:04 +0200
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Justin Stitt <justinstitt@google.com>, Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] kbuild: add -fdiagnostics-show-inlining-chain for
- FORTIFY_SOURCE
-Message-ID: <20260330053604.GA879042@ax162>
-References: <20260327-kbuild-show-inlining-v1-1-730ac2cae571@google.com>
- <20260327221837.GA3622500@ax162>
- <CAFhGd8pWwbjjLt=FSaDtFysqRU5k_YozDgBFMJBN4YmnAEaktw@mail.gmail.com>
- <202603292059.01A4CB14F2@keescook>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PFJFxRnJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774861544; x=1806397544;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LQFsVa0GiyxQOzBHFWK9c0/VdHyOQPZGRYyAKUrITUA=;
+  b=PFJFxRnJChJrd0sGf0ixoQWbI8oCrI3wOZkgSadM7yFVYgerTuhMmtty
+   4uWgwsq69hDo9xKXe8sg8A9EcdTF23l5++ODE5zpxCLznqR1mrT8+t9jV
+   htMLswAkqq5eCiaERv4mB53DVMdK0v3TJNYzBrzxdAyIJ3EQRBWcv+40v
+   dt27LTRHplzbAqw13U+AHXuNFUglrAc07W+msVix5Ywrym/SiKtkubvof
+   C9bd6kT+dyQke2X54AFtkwjyLPhAkI8iYpdls3EGeqsuiYfZMn4CEs4nK
+   VarxDrO4venFP4y4d5mFGAps2Al/gnHco6lRlkASpEWaYDDMlu3gY5f1Z
+   Q==;
+X-CSE-ConnectionGUID: zzhjOhudS0SqT+G5WHBNag==
+X-CSE-MsgGUID: X4kanSQDRvuiT3kTAaB3IQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="86922791"
+X-IronPort-AV: E=Sophos;i="6.23,149,1770624000"; 
+   d="scan'208";a="86922791"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 02:05:43 -0700
+X-CSE-ConnectionGUID: plf186KNSTa03aWvx3VKgg==
+X-CSE-MsgGUID: 8xMGguU9SAqcqH8Fltw1yQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,149,1770624000"; 
+   d="scan'208";a="219350230"
+Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 30 Mar 2026 02:05:41 -0700
+Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w78Z0-000000000sz-1yFP;
+	Mon, 30 Mar 2026 09:05:38 +0000
+Date: Mon, 30 Mar 2026 17:04:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: j0sh1x <aljoshua.hell@gmail.com>, tglx@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, subsystem@vger.kernel.org,
+	dominikkobinski314@gmail.com, j0sh1x <aljoshua.hell@gmail.com>
+Subject: Re: [PATCH 3/5] irqchip: Add Kconfig and Makefile entries for MSM VIC
+Message-ID: <202603301621.gUNo2RD7-lkp@intel.com>
+References: <20260315111705.118544-3-aljoshua.hell@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202603292059.01A4CB14F2@keescook>
+In-Reply-To: <20260315111705.118544-3-aljoshua.hell@gmail.com>
 
-On Sun, Mar 29, 2026 at 08:59:51PM -0700, Kees Cook wrote:
-> On Fri, Mar 27, 2026 at 03:29:18PM -0700, Justin Stitt wrote:
-> > On Fri, Mar 27, 2026 at 3:18 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > The compile time impact is not measurable (within expected noise). The
-> > peak memory usage may increase by somewhere in the 0.5% to 1.5% range
-> > depending on build configuration.
-> > 
-> > I bundled this under fortify to limit initial impact as its had
-> > virtually no real-world testing and may produce unhelpful diagnostic
-> > notes under its heuristic mode. I don't expect folks to use `-g1` in
-> > the kernel (which would enable full-proof diagnostic notes).
-> > 
-> > > If not, maybe worth adding a Kconfig option that is force selected by FORTIFY_SOURCE with
-> > > clang or can be optionally enabled by a user?
-> > 
-> > I'll defer to you on this one. We could add
-> > CONFIG_SHOW_INLINING_CHAIN_NOTES or something similar?
-> 
-> I would prefer to just unconditionally enable this when it is supported.
+Hi j0sh1x,
 
-Agreed. It cannot possibly be worse than the status quo, right? :) This
-feels very similar to -fdiagnostics-show-context=2, so maybe add it near
-there?
+kernel test robot noticed the following build errors:
 
-Cheers,
-Nathan
+[auto build test ERROR on tip/irq/core]
+[also build test ERROR on linus/master v7.0-rc6 next-20260327]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/j0sh1x/irqchip-Add-Qualcomm-MSM-VIC-driver/20260315-192045
+base:   tip/irq/core
+patch link:    https://lore.kernel.org/r/20260315111705.118544-3-aljoshua.hell%40gmail.com
+patch subject: [PATCH 3/5] irqchip: Add Kconfig and Makefile entries for MSM VIC
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260330/202603301621.gUNo2RD7-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260330/202603301621.gUNo2RD7-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603301621.gUNo2RD7-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/irqchip/irq-msm-vic.c:33:10: fatal error: 'asm/exception.h' file not found
+      33 | #include <asm/exception.h>
+         |          ^~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +33 drivers/irqchip/irq-msm-vic.c
+
+6daa7dfc644629e j0sh1x 2026-03-15  32  
+6daa7dfc644629e j0sh1x 2026-03-15 @33  #include <asm/exception.h>
+6daa7dfc644629e j0sh1x 2026-03-15  34  #include <asm/irq.h>
+6daa7dfc644629e j0sh1x 2026-03-15  35  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
