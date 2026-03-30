@@ -1,126 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499BA377ECC;
-	Mon, 30 Mar 2026 16:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42814383C60
+	for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 17:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774889011; cv=none; b=OajMLmwAg1pvhGGSNj+EIEHULKFgyl5hKKSvN4E+TPOo8HhkGOQu5jaYT7M4o5oCuGpIdF5J1qzSgWpVpfS38maHL1KS7nCSr7+Vv5dpjprnjYs2AVpHg5WbVEU51Ij8F8ibCVjoOHOfwKOoshEtL6ELaV/enpYfq82Xpq3Qcg4=
+	t=1774891167; cv=none; b=EUXxCNvIGUNOtKkY1mzP18VCIpn8mu0mP16mRUg7+nFkkVxYcu3/iwKOPh59FkkrutVgdN2PMWrSyWNouQJgKXNRpgy3bWbjYOVVkgO1CPsLpZhaorsPrj11TD+R5ke2j/Xue14WejHHfMn5KOUUf0KU8PrzfawYcYQSEkGfNpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774889011; c=relaxed/simple;
-	bh=p1jo0copgAEo8xrTWfLXOYQHLuRM6ONtDy8aiRv2lQ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=PeAtg851Mu99KqVGsRjtrH7DQ4hDkq/9Evp/r9s6VUs4T8LgAt2OVYb5ywF6M6wmhXP4qKtNS+7rXiY6Os0KxgpXCdKXVUomHkh6taFWikw2FRvrSpDv073YxQixCw7iqTkapVv1KzncwC3hvDtOX+nrmwTODzCY1m8etjLBSqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f2IVOxLR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774891167; c=relaxed/simple;
+	bh=5ck/FR28yMeqziHcX6QP2KCqS3TT49rCLIznZg7DIaQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NINDhpCcyVrvJipY27B8PeEJtc6xWb86ETVpFWVGcOs9jZfLmupp+kcfMAvEYJOaFNmxVK0K07D0YJvOp3tayqMT3e0uY8B9PttncUH9/JCPXFEu/RCrNU27fpuFmr4jxSQ3Bk0+3HI/y5zGAlXNFu5wMK8Rpoc+qXB2vblxy5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hX+HiVFh; arc=none smtp.client-ip=74.125.82.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f2IVOxLR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D836C4CEF7;
-	Mon, 30 Mar 2026 16:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774889010;
-	bh=p1jo0copgAEo8xrTWfLXOYQHLuRM6ONtDy8aiRv2lQ8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=f2IVOxLR6fhfrRkVXW7aZqz9z0nY+Tu32lPSojGKbpcR/PKUXKv1Uh4IvfneuqA3V
-	 33e8otrxJFUKEt+YcyI1rEQz/k0l/bga4kWvFB1gQ/PZEpJo9781A5bA+zCaXho0Lb
-	 XGzljxjoeFrDZe6GgsnmznfrLGA2GF72TsqmlJuWM4EOLliSCUCtVBlJ328eT19huU
-	 PtxPKhddWi43eKbqNS8HEuR9ZKNZZaEtl0p5vxoWvR06HgPN+TRLkFAXAbd6KpGpl5
-	 DSgi2zdC/c2uEmuFUrf1aOfI8Ubgu84xoNR/CmzpuevVuUY86ATQADKxwu7tim1enx
-	 JO+VlMbO3dVTQ==
-Date: Mon, 30 Mar 2026 11:43:27 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Simon Richter <Simon.Richter@hogyros.de>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-pci@vger.kernel.org
-Subject: Re: [pci:vga 3/5] drivers/gpu/drm/i915/display/intel_vga.c:68:2:
- error: ignoring return value of function declared with 'warn_unused_result'
- attribute
-Message-ID: <20260330164327.GA81786@bhelgaas>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hX+HiVFh"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2c16233ee11so4764619eec.1
+        for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 10:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774891164; x=1775495964; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=G05DSpbW2+WuvU/zQwgPs9wiMjlPCBEOvZkM0+puVoU=;
+        b=hX+HiVFhI3NAr1oyD9p9L6R/HuSdEg7+ToD+bOEwoXdaAH+qgL5/fq2Z4Cq6ku48F5
+         L+ECBg9BEiSFMdB7s2iCqc5gDDOzTfQOkH/0d0VEhNj4EadVhWjlNeVu+x2cvVGvXtvl
+         n7DCY5XU7XCvoOOurydFbzAMhTns2jNOlpSs7kmL4rtFqp+YNK1is9wgmHYW/BdyNBie
+         UNvDXMn+m2gN/KT5+yzZf56+tr2sGDyg6ebZfeb8gaBja9hHFyAFd71teBnvVq/prL3g
+         bwgwjrd6aNWGO9/16LS2bJsVcaFiQYai8xdiD3GtYXpwyyOMkVfbiYfsDswvAATMA9ZQ
+         dlgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774891164; x=1775495964;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G05DSpbW2+WuvU/zQwgPs9wiMjlPCBEOvZkM0+puVoU=;
+        b=ZHv5ty65bVcLMbmsMu3YDa2aa5VR3JVM9Dj9ikxeU+UZz8BAMWPHErD1gI60l9yDwF
+         ldJvAba+a8EPk34Sdmk8brdvpcKzzaP3okYE+QTghnp3kLJEvuqywcrHLdg+F89AbKXU
+         w6Sg5gHS4XKWnMcUb5q4iwJ1yOmxplQYqMS6K3Siywxc0LEY71nJXxh7LLABlKmPkLr7
+         Qju0tyx24F/rFGjW8hRoKbapaDfKUaQ1aY20EixqNxB63tIio89v0W9Wp0o0TlkAE1N7
+         vju5IG8ab8SlzCVgrfolKAk4L+hqliXuQOEw3jzMmW+XuYLeRwhIuh0s/pCPHldMVNb5
+         EdzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUVSyzN1/KGsf92yYtIqsLtT6uyjGJIqikFtxBkl8A1ORx421qGFMfThrXoGxKfLU+oHo0j@lists.linux.dev
+X-Gm-Message-State: AOJu0YxUOH902ZREanHbPxSCMsSB5sl70doOn4aG+m1t2iJCm5y0aL7X
+	Ol6si3YdmWX41BpeEm6/WeZFt+mZp2q6N8VGPPHWo8bVUiSd4t2qzLY+Zf7geAtq5iEa+w==
+X-Received: from dybmt4.prod.google.com ([2002:a05:7300:d584:b0:2c0:b626:c453])
+ (user=xur job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:d512:b0:2b7:2664:ae9f
+ with SMTP id 5a478bee46e88-2c185cdd05fmr7275474eec.1.1774891163845; Mon, 30
+ Mar 2026 10:19:23 -0700 (PDT)
+Date: Mon, 30 Mar 2026 17:19:16 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202603300336.G53JumVL-lkp@intel.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.1018.g2bb0e51243-goog
+Message-ID: <20260330171920.2026779-1-xur@google.com>
+Subject: [PATCH v8 0/3] kbuild: distributed build support for Clang ThinLTO
+From: xur@google.com
+To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
+	Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Stafford Horne <shorne@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Piotr Gorski <piotrgorski@cachyos.org>, Rong Xu <xur@google.com>, 
+	Venkat Rao Bagalkote <venkat88@linux.ibm.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Teresa Johnson <tejohnson@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 30, 2026 at 04:02:59AM +0800, kernel test robot wrote:
-> Hi Simon,
-> 
-> First bad commit (maybe != root cause):
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git vga
-> head:   21b082bd2a45704a6f7e69c190c8287a3d011ea9
-> commit: dc582b5ed4b749335b947258d4874df628726632 [3/5] PCI/VGA: Mark vga_get() and wrappers as __must_check
-> config: x86_64-randconfig-011-20260329 (https://download.01.org/0day-ci/archive/20260330/202603300336.G53JumVL-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260330/202603300336.G53JumVL-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202603300336.G53JumVL-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/gpu/drm/i915/display/intel_vga.c:68:2: error: ignoring return value of function declared with 'warn_unused_result' attribute [-Werror,-Wunused-result]
->       68 |         vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
->          |         ^~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/gpu/drm/i915/display/intel_vga.c:93:2: error: ignoring return value of function declared with 'warn_unused_result' attribute [-Werror,-Wunused-result]
->       93 |         vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
->          |         ^~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
->    2 errors generated.
+From: Rong Xu <xur@google.com>
 
-Dropped the commits related to this, see
-https://lore.kernel.org/all/20260330161802.GA79047@bhelgaas
+ChangeLog:
 
-> vim +/warn_unused_result +68 drivers/gpu/drm/i915/display/intel_vga.c
-> 
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  43  
-> 4fb8783165b7c6 Jani Nikula   2019-10-01  44  /* Disable the VGA plane that we never use */
-> 4b6e05c43b7542 Ville Syrjälä 2024-09-06  45  void intel_vga_disable(struct intel_display *display)
-> 4fb8783165b7c6 Jani Nikula   2019-10-01  46  {
-> 4b6e05c43b7542 Ville Syrjälä 2024-09-06  47  	struct pci_dev *pdev = to_pci_dev(display->drm->dev);
-> 4b6e05c43b7542 Ville Syrjälä 2024-09-06  48  	i915_reg_t vga_reg = intel_vga_cntrl_reg(display);
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  49  	enum pipe pipe;
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  50  	u32 tmp;
-> 4fb8783165b7c6 Jani Nikula   2019-10-01  51  	u8 sr1;
-> 4fb8783165b7c6 Jani Nikula   2019-10-01  52  
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  53  	tmp = intel_de_read(display, vga_reg);
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  54  	if (tmp & VGA_DISP_DISABLE)
-> a3af0140663dc3 Emil Velikov  2021-06-04  55  		return;
-> a3af0140663dc3 Emil Velikov  2021-06-04  56  
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  57  	if (display->platform.cherryview)
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  58  		pipe = REG_FIELD_GET(VGA_PIPE_SEL_MASK_CHV, tmp);
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  59  	else if (has_vga_pipe_sel(display))
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  60  		pipe = REG_FIELD_GET(VGA_PIPE_SEL_MASK, tmp);
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  61  	else
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  62  		pipe = PIPE_A;
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  63  
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  64  	drm_dbg_kms(display->drm, "Disabling VGA plane on pipe %c\n",
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  65  		    pipe_name(pipe));
-> 0c80d60ae63461 Ville Syrjälä 2025-04-17  66  
-> 4fb8783165b7c6 Jani Nikula   2019-10-01  67  	/* WaEnableVGAAccessThroughIOPort:ctg,elk,ilk,snb,ivb,vlv,hsw */
-> 4fb8783165b7c6 Jani Nikula   2019-10-01 @68  	vga_get_uninterruptible(pdev, VGA_RSRC_LEGACY_IO);
-> f0bb41fad02e03 Jani Nikula   2022-02-02  69  	outb(0x01, VGA_SEQ_I);
-> f0bb41fad02e03 Jani Nikula   2022-02-02  70  	sr1 = inb(VGA_SEQ_D);
-> f0bb41fad02e03 Jani Nikula   2022-02-02  71  	outb(sr1 | VGA_SR01_SCREEN_OFF, VGA_SEQ_D);
-> 4fb8783165b7c6 Jani Nikula   2019-10-01  72  	vga_put(pdev, VGA_RSRC_LEGACY_IO);
-> 4fb8783165b7c6 Jani Nikula   2019-10-01  73  	udelay(300);
-> 4fb8783165b7c6 Jani Nikula   2019-10-01  74  
-> 4b6e05c43b7542 Ville Syrjälä 2024-09-06  75  	intel_de_write(display, vga_reg, VGA_DISP_DISABLE);
-> 4b6e05c43b7542 Ville Syrjälä 2024-09-06  76  	intel_de_posting_read(display, vga_reg);
-> 4fb8783165b7c6 Jani Nikula   2019-10-01  77  }
-> 4fb8783165b7c6 Jani Nikula   2019-10-01  78  
-> 
-> :::::: The code at line 68 was first introduced by commit
-> :::::: 4fb8783165b7c6fb4b52428dbb80da8554e5fd1e drm/i915/display: abstract all vgaarb access to intel_vga.[ch]
-> 
-> :::::: TO: Jani Nikula <jani.nikula@intel.com>
-> :::::: CC: Jani Nikula <jani.nikula@intel.com>
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+V8:  Disabled -always-rename-promoted-locals=false for the distrubute
+     mode, based on Yonghong and Nathan's comments.
+V7: (1) Resolved a conflict by rebasing to kbuild/kbuild-next-unstable.
+    (2) Separated the '--thin' to 'T' change into its own patch to
+        preserve Masahiro's original version.
+V6: Change '--thin' back to 'T' in Makefile.vmlinux_a to fix
+    reported the build error from old ar.
+V5: Handle single quote escaping in echo _c_flags to fix
+    Piotr Gorski's reported error.
+V4: This is based on the reimplementation provided by Masahiro Yamada
+on May 26. The difference is that this version now saves the compiler
+flags (_c_flags) from the Front-End (FE) compilation and re-uses them
+for the subsequent Back-End (BE) compilation.
+
+Rong Xu (3):
+  kbuild: move vmlinux.a build rule to scripts/Makefile.vmlinux_a
+  kbuild: change --thin back to 'T' in $(AR)
+  kbuild: distributed build support for Clang ThinLTO
+
+ .gitignore                 |  2 +
+ Makefile                   | 27 ++++++-------
+ arch/Kconfig               | 19 +++++++++
+ scripts/Makefile.lib       |  7 ++++
+ scripts/Makefile.thinlto   | 40 ++++++++++++++++++
+ scripts/Makefile.vmlinux_a | 83 ++++++++++++++++++++++++++++++++++++++
+ scripts/mod/modpost.c      | 15 +++++--
+ 7 files changed, 176 insertions(+), 17 deletions(-)
+ create mode 100644 scripts/Makefile.thinlto
+ create mode 100644 scripts/Makefile.vmlinux_a
+
+
+base-commit: dcc99abebfa1e9ca70f8af8695b6682ad7597bf2
+-- 
+2.53.0.1018.g2bb0e51243-goog
+
