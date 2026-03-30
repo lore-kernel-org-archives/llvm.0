@@ -1,108 +1,101 @@
-Received: from mail-10630.protonmail.ch (mail-10630.protonmail.ch [79.135.106.30])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F712E7F3A
-	for <llvm@lists.linux.dev>; Mon, 30 Mar 2026 14:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A0B2E03F1;
+	Mon, 30 Mar 2026 14:37:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774881217; cv=none; b=QvUM4Q+791LCZhxBvWZzhG4J7ED/DEb08DbtDPy0kPXVhI2ZVZ9kApgoZJeAHsiH9ItmTaV/kxKyKYYQ2xEl+5Yq50rPxwlMvfN6kfXhpzGX278FGjJHpyxg6O5bXOBHY5A0yGpMqQDpxdqxZfMs5sBRFMvFekkqXpWcDJhSRpM=
+	t=1774881440; cv=none; b=d8DIJ9H2mDlpvtXz044BjvS6Vi8/3frvSJopWH7TtdvyU6wgmmlbY2ddWxccgdF5hkqqbyLJed+4ehy07iiDlkxnODVuTDu1//IdDX5pK3+XKkjHoRixJkORvaTBIAdg5+iDgf1s9JAWlcR3SSby+qLxZUXPCvgNdQQSNMddZvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774881217; c=relaxed/simple;
-	bh=dx/n2ZSnVbr5KLV93z31YExmyUZ4EQEgGgGeMkJk0wo=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q4lE77UvNCxyaRwBH/OJDYq9mH6CqdsVc38z5CM+RAafGOey9Pjf8LyGx6X6TKhHYLbIO2WVcQ9vuhiRliGIzPrScbBjmN9YSUim7zDUpx5cMyouhNuZmmLo1Lml4RYbiPt6hIn6unR3gHPXl+ZhuMrw19VdpgrAOklVTCtMaHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=LC80pBPy; arc=none smtp.client-ip=79.135.106.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1774881440; c=relaxed/simple;
+	bh=CxtORT4vZ8DoLpX+xgZNg+9MtD032dRr+Y9klRWyb0Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RLadMnvreKzB4tXeLGCRLPG8WJScfK6jBH3+DqliRqTUOG3c0nqLi8jacupb5tf1OiQc8sOD4ES78iBe5URjrRk+UWJW7bglJgaxnh5xDP4sOyLjNp11vG2yZLaBezZSkTgSefmoRpXixyqH3CxTEKxsdVtTg+eUQoSd7MaMH5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c9t4r0hg; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="LC80pBPy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1774881208; x=1775140408;
-	bh=xt/M6F0af0Aewj/HTy9bWBamZzfKiE3bbOG01o2uFtM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=LC80pBPy4BmziJKHqKEqiLF6xF18Cp63k0+InoceeharrEBZgIYnFP/wjH/77cIqm
-	 lwXQcpYXekzSNvRP4YIWh4PhFgPbspUKx7GSMKBh/bMT2uOWplWw1+kvvXJdyo9W1w
-	 57IIQZ8Sxzoc+rL7PO3pLhR0WxpaTZMPQNsIf7xa+GQgTrk3/LPbsyfwEekjDarONY
-	 L5rqdCHFhc55hhiWTv5+qj0IojpCkkDHyssUgOzCheFbnVSxeKKJJbK8K7qi4Agl0r
-	 uGQO66IQ0p+OdxcaGatVn5afuMoWZHDJLRFv7WtNhxMMhqBFCmxZKszapfxjznrZlG
-	 rccoEPcuUs4GA==
-Date: Mon, 30 Mar 2026 14:33:23 +0000
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: m.wieczorretman@pm.me, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, kasan-dev@googlegroups.com, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v12 03/15] kasan: Fix inline mode for x86 tag-based mode
-Message-ID: <a2b6cbbda918e89a700da4b0795dd026fda1e279.1774872838.git.m.wieczorretman@pm.me>
-In-Reply-To: <cover.1774872838.git.m.wieczorretman@pm.me>
-References: <cover.1774872838.git.m.wieczorretman@pm.me>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 8d210f735811de14587def33e98946c0bddc794f
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c9t4r0hg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774881438; x=1806417438;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CxtORT4vZ8DoLpX+xgZNg+9MtD032dRr+Y9klRWyb0Q=;
+  b=c9t4r0hgk2MZWsIM3i0wbkgP2NZVi3TNrEgJc/J0PI0P+o1yzlaa+ARi
+   pY6ucVxsPtA/wSyF3oA1mj2aS9EHRwXHjAR3w9Sl1YveMyUrGjylLPuB8
+   5uBr6H8JL5N9REbFKCHjFGKmoLHR1PLz57PIes55LGmmguN4p1fUs+BVS
+   Ym61bjxFaLLkoG9mKmyedpaVZLQp7/kW7hGCmzi/lAgWtMErF5sJAbXcH
+   8WYW7WTQ5yUR1DeLiRWUb2ny9kgzlf84ZjiS0LE8gqWPZbFahDTmQDJ0J
+   wV/nfcHqmrtUB/IAhBEUj2bv4euB0QKyhIgXIRhSr9j2mNy0QSk/jAxxe
+   w==;
+X-CSE-ConnectionGUID: TMF83ToiSa+rQV2bcrvWsw==
+X-CSE-MsgGUID: O/rXrbQoSXmgL64/m5uGlw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="75770632"
+X-IronPort-AV: E=Sophos;i="6.23,150,1770624000"; 
+   d="scan'208";a="75770632"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 07:37:17 -0700
+X-CSE-ConnectionGUID: kft0ZU5hStmC1IpaWUTXPA==
+X-CSE-MsgGUID: qqqVb/9MTQKrhOIt1OhzoA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,150,1770624000"; 
+   d="scan'208";a="225245199"
+Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 30 Mar 2026 07:37:16 -0700
+Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w7Dju-000000001DP-0CBC;
+	Mon, 30 Mar 2026 14:37:14 +0000
+Date: Mon, 30 Mar 2026 22:37:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qinxin Xia <xiaqinxin@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v2 2/5] iommu/arm-smmu-v3: Add register display to
+ debugfs
+Message-ID: <202603302250.vzn0FbYH-lkp@intel.com>
+References: <20260328100953.3441915-3-xiaqinxin@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260328100953.3441915-3-xiaqinxin@huawei.com>
 
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Hi Qinxin,
 
-The LLVM compiler uses hwasan-instrument-with-calls parameter to setup
-inline or outline mode in tag-based KASAN. If zeroed, it means the
-instrumentation implementation will be pasted into each relevant
-location along with KASAN related constants during compilation. If set
-to one all function instrumentation will be done with function calls
-instead.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-The default hwasan-instrument-with-calls value for the x86 architecture
-in the compiler is "1", which is not true for other architectures.
-Because of this, enabling inline mode in software tag-based KASAN
-doesn't work on x86 as the kernel script doesn't zero out the parameter
-and always sets up the outline mode.
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v7.0-rc6 next-20260327]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Explicitly zero out hwasan-instrument-with-calls when enabling inline
-mode in tag-based KASAN.
+url:    https://github.com/intel-lab-lkp/linux/commits/Qinxin-Xia/iommu-arm-smmu-v3-Add-basic-debugfs-framework/20260328-191149
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20260328100953.3441915-3-xiaqinxin%40huawei.com
+patch subject: [RFC PATCH v2 2/5] iommu/arm-smmu-v3: Add register display to debugfs
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260330/202603302250.vzn0FbYH-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260330/202603302250.vzn0FbYH-lkp@intel.com/reproduce)
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
-Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
----
-Changelog v9:
-- Add Andrey Ryabinin's Reviewed-by tag.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603302250.vzn0FbYH-lkp@intel.com/
 
-Changelog v7:
-- Add Alexander's Reviewed-by tag.
+All warnings (new ones prefixed by >>):
 
-Changelog v6:
-- Add Andrey's Reviewed-by tag.
+   Warning: drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-debugfs.c:38 function parameter 'unused' not described in 'smmu_debugfs_capabilities_show'
+>> Warning: drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-debugfs.c:103 function parameter 'unused' not described in 'smmu_debugfs_registers_show'
+   Warning: drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-debugfs.c:38 function parameter 'unused' not described in 'smmu_debugfs_capabilities_show'
+>> Warning: drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-debugfs.c:103 function parameter 'unused' not described in 'smmu_debugfs_registers_show'
 
-Changelog v3:
-- Add this patch to the series.
-
- scripts/Makefile.kasan | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
-index 0ba2aac3b8dc..e485814df3e9 100644
---- a/scripts/Makefile.kasan
-+++ b/scripts/Makefile.kasan
-@@ -76,8 +76,11 @@ CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress
- RUSTFLAGS_KASAN :=3D -Zsanitizer=3Dkernel-hwaddress \
- =09=09   -Zsanitizer-recover=3Dkernel-hwaddress
-=20
-+# LLVM sets hwasan-instrument-with-calls to 1 on x86 by default. Set it to=
- 0
-+# when inline mode is enabled.
- ifdef CONFIG_KASAN_INLINE
- =09kasan_params +=3D hwasan-mapping-offset=3D$(KASAN_SHADOW_OFFSET)
-+=09kasan_params +=3D hwasan-instrument-with-calls=3D0
- else
- =09kasan_params +=3D hwasan-instrument-with-calls=3D1
- endif
---=20
-2.53.0
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
