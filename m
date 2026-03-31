@@ -1,67 +1,80 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6987B2FFDE3
-	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 17:17:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774977432; cv=none; b=qGpfSIrzVUJaeo53KY90VT/fnp8K1GfFR2vfHMpD24KdMcHpM9fzJfiEuI05i9uJQPOe8ZfwbIz1XH0fuTTzqnjNxNIz9URTQiusPqIzCAlIcsPBYMNUlzbj4FoLIuvrCPbrjclrb/ZzIlqD0Ce0EkePgt751/oMH3vfz7lZ2t0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774977432; c=relaxed/simple;
-	bh=X8mgB91EilmZX84/+DAl/QEGzBiT68+EQBIZrGj6ois=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAE0340260
+	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 17:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774977477; cv=pass; b=a/PVfPYEXScqgDIJOGzZMgc9A1Alf5+vTXr/J1b4UBy308+D2a+xZZRtYLsseUiQseZEIgq/l72NFND0KW8+4lSG6CLC4ZOqU3Xenp8LB17tnIk1RvC062xr4o0CAHLl1foHmZkAdzalzzvbiZLwCvCkv2Tj1cgkMaD1NccrInE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774977477; c=relaxed/simple;
+	bh=XfvO/nNrfp6wJ8ltBre7ekP/xZ/Y79d2E/5o49cgJb8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QeZ1CWDh8hu04ABgi9om2QrNq+MqSPzeRupgSQBGQ9C+/7fA7l3OcmveffLiSnQv47sSPO7QbE/T943LoZiDZ07fSq0HpKWKM/wMqZBdXgWL006uE38SPDqPeN0vs87mTOzQR3X9HQpUd5be7zHqROwNHHOHSYS3Jylk/k57704=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Hh2J2Anh; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 To:Cc:Content-Type; b=kGXPnmm9KsswOQGjY0jLDCGLhCH9RMllpW7nY/DcSvCyWquIp2uUb4lrZi7gw69IorwekEXYYi8AAi7GaCTRzWKut3IKAzG0LcrfNrEiTvlxDdoxLPdV/SOygTEWzYZjjO+7JKYEp46EO/FoMB2OeLeq2Dm86mUVhiFTatefjFI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Yc9aKV7q; arc=pass smtp.client-ip=209.85.222.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Hh2J2Anh"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b9358dd7f79so54296466b.1
-        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 10:17:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yc9aKV7q"
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-94e578a0fa5so3028640241.0
+        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 10:17:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774977475; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ld0uYMuTBe/4bNkorbwVy/k3Qv+WcSpZ3vic0qhcqGwKszpbIp0pmWvbN5lvIBEOHo
+         BvqMJW+eoMm4gctSZWXkt8uU9QK9zUbT6HSdE/A/rsLcjdMhR3+8zXSxAn9e1y2fFRwj
+         FPqLmB9JyF2LdGTfA59JCcYqGAUXQwhMvPVxDUpCqvUhnJca7BebkqxFiajaJIx9ZGSd
+         7MWwv55mfUf4Z7uELF7MSkN7etP/KiGIV+HESdCk/paitcnVmiukEeyL5ySUPHi5kW8w
+         mkEAWrYpvzeVsYAES6hfVIpyOxqoi/2A9QZdyLhZAA5AvxNxiQsVDsKWAqG2Azuw3JS8
+         RKCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=XfvO/nNrfp6wJ8ltBre7ekP/xZ/Y79d2E/5o49cgJb8=;
+        fh=rfppOaYX/9jlND5bLCnOWZzFIxiMKTt/G7fD+zDwwq0=;
+        b=d3uRyv2/nHmrsZKf6596bKLlAd/TDhHr35WIw8q8yYNpaLKHpV8eW7m2ZihEnNSTj9
+         mZ7EXOaltGNwhZ1vlj5RV4bWM9TJidmYVxb8lfBUhxfmZnvzKb0Ev5TXL0kd6zxRrpkU
+         wJ+FWa2+LLNjkDnan5l4VZT8Twj+nnsKEzEQN11jz4JzWhG+PLplCsoZTrvDoxtjgA1k
+         c3DB2mKdJitWlTr6HjpOiIzQ6Bg2B3zrBkG+zR4mnzCmLkYn2R3QWMsqqMvXBAQPwBLA
+         sX8Ghs3ShRWCOIxC6O2QoSgiaEz2thU01dfwqGhTBFwe2L+i5o6xmEgAHH5p9EYQALro
+         vC1w==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1774977429; x=1775582229; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RzhkbeYcTn/pueZLzsl1uKI6wC45DhSkVKoC+DMZrjs=;
-        b=Hh2J2AnhXD7u679lIxM1ZGmdISz/6RBjYeq+1c5TTVTwLTxfOIIire4meETEgNGjk1
-         Ngsre2DyLTlF+7N7JihH17cHnneG5Iz1i4cjoUDai1JbfwFmR4DaRS1xGcsklcAfKivV
-         P+ocUHwafZX1gGHvXZOCK1L9phQVlpwPlfzMU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774977429; x=1775582229;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1774977475; x=1775582275; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RzhkbeYcTn/pueZLzsl1uKI6wC45DhSkVKoC+DMZrjs=;
-        b=U5llRyqCB/i63j32j4BRHtptRR3feDhlYaB2bjME/ZPsqWrxv99n0aWzYrnFhZ21on
-         DULrwMtf6PUh+SW5df17MEbznvsWnSZFlCEOZouYF1G8cUo1+J0EDwbOEyaYzcoYJYFt
-         67AzpqxEFIcZmtuCUyQNVc/F9MfWVhYxh5Sqm5tHAsSbnw6JEtGRSrmT3w7bGJGqrCWN
-         E/F3lPyjhL3X3G4W7++HUJ+VsP0XiTH7m5PVpqK655xalvtDLySOxQvIX2yPS2R9bBcA
-         3uB7kUC2d+E3PqjFhSatbB372fXRoikhZtp1WViNMeDTTk5gnJi3vW2P5N2Gf1E+XPZz
-         ldBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUrPUmXt+RYptKnRy1ex2wiiei73aR9ZUlOURR38tENxynYqlGJutHKD/ckKLq6ywe9W3sw@lists.linux.dev
-X-Gm-Message-State: AOJu0YyLYmldPNJfxT1LwcaxQqCNA2fRBrOaznvZZK+h61oqqUXNGycf
-	0UGETLh3Zz3pEX7qYDRVQIFPYkakdKS9PPHLnwV9hwxza2LUo7YGiI4O4j0OGLMDF9TH8Uqaa4t
-	tYPRVPk7QVw==
-X-Gm-Gg: ATEYQzzn4TXC9/mMO/wZcljX9RL98pXiy3PEK2ZVT06/8KkV9+GuZ0BSHL4Jvx0J8g7
-	RvkzRXrXGBKbSzeyA106s2Lw6AkwU5ZnF9P6SAdnikO5USAQZolZowi+fPUTI9X04FOpgvNd6Ek
-	+53bX0jW5DiS8tTjAOb2vHklVcYvCB0AoQ69E8LU6EW0vOoKZTwjkhgpLbA7KTfJbfH5j0kIxZa
-	i4y6BwohOzU0rip3noDw9Sqa+sjZkAwvFkU8Lsuo+ssVwRYWFDiJFc2ly6RMUsSII0h6p3vl+mH
-	kREQN2ZDHKgdPeoe1Yc3+23VIhlGeNxPaS0V8VmYbSLsGUmr+JJvDHFVby+QKILFMdITKRVR/DZ
-	UqFvbMYBwUOKPy7gWryCE2i9HAY/Rp/Im+xY5euui+5gMq1iHn7Lx4dJSHcVUzUSiXrh5i14u0D
-	w/00zyZ/iJQsm4xff+MEUZRHJrgky/1lMT5NFjm8qM/GXvD2upLhf50sdbTda9mXJg4rcIfNcU
-X-Received: by 2002:a17:907:119b:b0:b9b:fa57:d5bb with SMTP id a640c23a62f3a-b9c13cb5ef6mr28081266b.46.1774977428849;
-        Tue, 31 Mar 2026 10:17:08 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7b22530dsm429134266b.54.2026.03.31.10.17.07
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 10:17:08 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b97ed4ad579so940990266b.3
-        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 10:17:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU2T9PYmfCdeYRNivLkoDdcfvOfmGkWJhF1Sm55fBm/bI/MMVb0sHpTifUQgIr2lk7+1GFU@lists.linux.dev
-X-Received: by 2002:a17:907:a604:b0:b97:b9d5:4ae4 with SMTP id
- a640c23a62f3a-b9c138e5f3bmr33991866b.20.1774977427566; Tue, 31 Mar 2026
- 10:17:07 -0700 (PDT)
+        bh=XfvO/nNrfp6wJ8ltBre7ekP/xZ/Y79d2E/5o49cgJb8=;
+        b=Yc9aKV7qtx3u+ABafjmH951NL2OCqDsURG46A7+Y9+qo9ocRfgMlhdU0zZNDgPgN6V
+         CulMfCUKYoz6NvfGUvnDyX91XNShkjvKHVCOA7obPgzog+8ktYiiBets68NzvEV54pMZ
+         IYgWvYo/rJyS/X5EYIQxvmDFnoUFodDKj41CfuG3FT36pfFpRKFX2Axfbrj61P0T8q2O
+         VsWwuRMe80q2kp8auiTmvKlv7+Id8Q7hwL5elPKD/wSOlQ8sB2EmKOR7wJMjG7e7DKEw
+         kwYfWhIWHLrpZP8G8hu6xLXkyufvP1gLI3EMhB4wpYWStzozGSwXylEDTES/mkNPANDv
+         zl5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774977475; x=1775582275;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=XfvO/nNrfp6wJ8ltBre7ekP/xZ/Y79d2E/5o49cgJb8=;
+        b=dNGe/ZVOj+GNbXJazMsnofNnSQoKzMCG3c/U6wiqG0kb2sy+MimzhyFfrw3Xqp6gDG
+         lMM4eFr+/jo6hZfPYQL+Gyl+ePWpPiPgavFGlXmzMnzIgibpAHIElqYUvBEKFPeGIrQ0
+         Kx6Z+fvqn4WPQyWe7lD32j28QsslUs6sd1JEIPTEnbMT8GPN1DYlB0D2ILIvRxPgv4Wf
+         53oqfmIvFnjm3XS/o6/z68aBp1/dPt/xnzq0snsfIYWd/8bpmoRGeS114ht3XJ/Ro3WE
+         4NfSk4J6AlC7yGybyLKquGRPacoivqtMjZiN0cHCdxhRNmMDhjZ00kKI/oe/vlFtJXwp
+         pgfA==
+X-Forwarded-Encrypted: i=1; AJvYcCWmVwSfXFdNrfIh64lfQmUFEaWJCkxBDQsRrY3NHmK0ZLQH0GwxoTy29wmm4VzEQRPf6YYT@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw0vVpG/Me2p/qN3NKp+2UPWNQKXEnUlikbI9lovRM2piQw4evK
+	ZbV2dI53j5wG4DEAX26E8Eebl22QLqNdp0xOorDld76WhigNiiB8yBOjUbd1pyZ4XK2lTIZSTBj
+	LV73oz9si3uKU+pOC63JOCmkqS4YFtPkC94sR7dpt
+X-Gm-Gg: ATEYQzwg9tmQXEJ37Ot5eDb1+wu+Px7RAZgs6kJAz1OytWaLmLki8bfzLntPLxdOeV4
+	OV57/YbUkP3PphWaVs3/q3jUhhiKe/2y6yd0q7K+0MildXYpYVICRatMvjco/nHOfhoqVtu/U2c
+	D+vJpi0ahk+5J6FjoEQcmM3WNuwPJHwd6C2zuuJXSCdaqbkWPZUcbQtdPESQC9kJ/LxGA4Jt/o8
+	FIu/VI9HEPPnM6bJiVXXkN+X8U/5hnObvMilCjupGNt0OO/9Ggy8kzs6QeoPm0QfhG8H7ACc/RA
+	PH4u0zc=
+X-Received: by 2002:a05:6102:c94:b0:602:ace8:f20e with SMTP id
+ ada2fe7eead31-60567e8d127mr40188137.14.1774977473726; Tue, 31 Mar 2026
+ 10:17:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,56 +82,62 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20260331163716.work.696-kees@kernel.org> <20260331163725.2765789-3-kees@kernel.org>
-In-Reply-To: <20260331163725.2765789-3-kees@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 31 Mar 2026 10:16:51 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg=q7ptcMyUAqPGDbX_DKHivJVppc8bP0zpQqzOky_avA@mail.gmail.com>
-X-Gm-Features: AQROBzBItZBmx5_N-ynlPw8E_7o3PG43Wcm0ba7e3I2MR7-9HUZsFelf3Nv9M7s
-Message-ID: <CAHk-=wg=q7ptcMyUAqPGDbX_DKHivJVppc8bP0zpQqzOky_avA@mail.gmail.com>
+ <CANiq72mK9fz6Spmgt4js3hScqhqvZb2YP2T7tDfR0fHPDFWJ7g@mail.gmail.com>
+ <CAFhGd8paijFboDVr8rJDjScob047q+zgYAs038WuVozOG0aYaQ@mail.gmail.com> <CANiq72mQPU2Uyz27mBtfT6UF4Zgoq_osodALs21kJ4qOFLVhUQ@mail.gmail.com>
+In-Reply-To: <CANiq72mQPU2Uyz27mBtfT6UF4Zgoq_osodALs21kJ4qOFLVhUQ@mail.gmail.com>
+From: Justin Stitt <justinstitt@google.com>
+Date: Tue, 31 Mar 2026 10:17:41 -0700
+X-Gm-Features: AQROBzDziq6Gf2V5ut4O-Crb8XfwsiZEe1mK1jC7L_WO2ZUVxZo1u0OLGaY1nqw
+Message-ID: <CAFhGd8o2C5T4_-p3zsSbygwi=yDPOdpDBPC69X=R8qoefbVXew@mail.gmail.com>
 Subject: Re: [PATCH 3/5] compiler_attributes: Add overflow_behavior macros
  __ob_trap and __ob_wrap
-To: Kees Cook <kees@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Justin Stitt <justinstitt@google.com>, 
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
 	Marco Elver <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
 	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
 	Shuah Khan <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
 	Nathan Chancellor <nathan@kernel.org>, kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
-	llvm@lists.linux.dev, Nicolas Schier <nsc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	llvm@lists.linux.dev, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Nicolas Schier <nsc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
 	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
 	linux-kbuild@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 31 Mar 2026 at 09:37, Kees Cook <kees@kernel.org> wrote:
->> +
-> +  typedef unsigned int __attribute__((overflow_behavior(trap))) safe_uint;
-> +  typedef unsigned int __attribute__((overflow_behavior(wrap))) wrapping_uint;
+Hi,
 
-This is fundamentally broken sh*t.
+On Tue, Mar 31, 2026 at 10:14=E2=80=AFAM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Tue, Mar 31, 2026 at 7:09=E2=80=AFPM Justin Stitt <justinstitt@google.=
+com> wrote:
+> >
+> > __ob_trap and __ob_wrap are defined by the compiler.
+> >
+> > There are some examples within the documentation additions of this patc=
+h.
+> >
+> > Kees, is it possible to make it more clear about what we expect of
+> > kernel developers in terms of style? Should they use keyword
+> > spellings? attribute spellings? only use custom types?
+>
+> Yeah, I noticed that right after sending the email, sorry.
+>
+> So I tried to use a macro even if happens to have the same name as the
+> keyword, since that form is a bit more flexible, but it is fine either
+> way.
+>
+> What I would suggest is adding to the comment that these were decided
+> to be used as keywords, and thus we only need to define them as empty
+> in the disabled case.
 
-Stop thinking that trapping is "safe".
+Agreed.
 
-It damn well isn't. A dead machine is not a safe machine.
+>
+> Thanks!
+>
+> Cheers,
+> Miguel
 
-Any patches that call trapping behavior safe will ne NAK'ed by me.,
-
-We have decades of peoiple using BUG_ON() as a safety measure, and it
-has been a HUGE PROBLEM.
-
-There is no way in hell that we are ever adding implicit BUG_ON()
-things that are this hidden, this easy to use, and then mislabeled as
-being "safe".
-
-Guys, that's the same logic as having a airbag in your car that just
-shoots you in the head. You're certainly "safe" from the vagaries of
-bad healthcare. But dammit, if anybody thinks that a "bullet to the
-head" should be called "safe", then that person damn well shouldn't be
-involved with kernel development.
-
-So NAK NAK NAK NAK.
-
-The only safe trapping behavior is something that has a clear an
-unambiguous and simple to use way to *HANDLE* it. Not just "mark it
-trapping".
-
-              Linus
+Justin
