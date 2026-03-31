@@ -1,154 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459003803FC;
-	Tue, 31 Mar 2026 18:32:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2403738E121
+	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 18:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774981921; cv=none; b=A/AwNi9naoAKO1h0ZN2x45la5ddZ42cmKPPrAaQFlX/uSlaX7q6gy6bo90CAsb5KxSykJElu5Qb7DM/8uUjfhA9ItBRvYcftKAEF+X+JDhlTlo8g+niBO0my+vy5vvaAkrD0J1VXHIFHIHX22ZP/sGoadFCd+qaEN2rl3Af6pLA=
+	t=1774982197; cv=none; b=ETMprDXZmI+n67LDz4EBFKbTB/pZo05Zbmp6wQgrj0uOn/ntDJe0bSJ0tOH2SEQo/5RSLDrAjfpstL/u8WC0+26l9LRN04Rcar6fkkGIsPErnr1csnrZK96J9m34xa2qshOWr0EvFuH50Z+P31xoeAfXPUia9IkFJZ/3Sh6/xjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774981921; c=relaxed/simple;
-	bh=A2t9VhjuxMDE/XMt5PYCBejiat0YUkyfDYUPy8IkQRY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ds5dbn1p4rDS1vBFcq5MB+ich2/XbjauRy5zFgHSWTm8NOm4/6VVjLMBkyhKLOF9T0vx1uzo7cbd2v6u23C0DWIpH6F7ZCd7TssdRMMcHj4qWNtuwC+2Fqy+bPUAk48Hxalti5pINppH+eos+48gK3ya99rAIB+c5Qtf2O76pc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bJLR11sI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774982197; c=relaxed/simple;
+	bh=DwEKjICeDkCjJOVrt0+LZu6p2US33YhraP63lKerfiE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kcgsCthI2cBIk+u0RuL94w6mG+qtFoL0g+VAqdzT8RM2wo5Apc+eV3L1+QU1Q42INgtjJwRi5fW/smgja8hYl7OzLuhk5AAlxdOyKppXAaGdodoXUJp9q+P8y3rBdiUZz09FuyKBdUsmv6zMaKooLEu4kC0GzaupnfhyJsqFCz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Wq/nacdx; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bJLR11sI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC90DC19423;
-	Tue, 31 Mar 2026 18:32:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774981920;
-	bh=A2t9VhjuxMDE/XMt5PYCBejiat0YUkyfDYUPy8IkQRY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bJLR11sIrG+3ZA6DcWQvu5/96VaRX7/phSI67+CYerRFyZa2SDEwcR3llwEvLjI+f
-	 wCBcvN0O13jOXpruGlDDUVl6AD1+56DzDiVt32rchEALYDE0mOWsfyNu70xlfEpcnB
-	 3iPR5oX6YPHpKPlfkyR05pjVgxL32J/oW7l0hJsV3rvCMduoN4WIITGpmSZuY5QVAy
-	 KS0YzxfGnlpa97ewzMIP1s0aMjMCFGX4gyyjsfTCYmR7fXByYpveEkEzjRNv2Xh+/u
-	 RMUz3b0iHnRY4NPIuGFp0mF5qCTE6OiM7RSmezbtDi54n3qlnr4vD+PJ1CnNM/x+BT
-	 j1u23wH7OpbJw==
-Date: Tue, 31 Mar 2026 11:32:00 -0700
-From: Kees Cook <kees@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Arnd Bergmann <arnd@arndb.de>, Mark Rutland <mark.rutland@arm.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Finn Thain <fthain@linux-m68k.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-	Jonathan Corbet <corbet@lwn.net>, Nicolas Schier <nsc@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH 5/5] types: Add standard __ob_trap and __ob_wrap scalar
- types
-Message-ID: <202603311117.454F578@keescook>
-References: <20260331163716.work.696-kees@kernel.org>
- <20260331163725.2765789-5-kees@kernel.org>
- <CAHk-=wiJ6Q_qMHSe-hs+QvqKVZphvDZjvFP_gQLw1eaWimv8+w@mail.gmail.com>
- <CANiq72kL3rTKyDNYmD7wXiKCVJSfa1bnp2L8NShXU7OPmWjJ4w@mail.gmail.com>
- <CAHk-=whjwHjmB0_2yXsOjDa7Mi_yFSx3AMd3vGk5r70WocvZZg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Wq/nacdx"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b8f9568e074so847508166b.0
+        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 11:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1774982194; x=1775586994; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Jwbq+7LR0mSJFQk5uCurdhkOuVoq3zAKj7b6at5J18=;
+        b=Wq/nacdxUYeWLr40tD0pMOAbU0e8MzRhJfoxvCmdFzGGvzjdrHGoV+a2fwvru+c2mx
+         21SNwzWRA9p4+PvZMTdvYKOmWqRLXY8os64D46WMQ7NbMsh4wX+aMJbA6XT6VCZWmndV
+         CKsrelLJCUJEK3IOTx/Mo6ybPhU7Lq+7xoDGw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774982194; x=1775586994;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Jwbq+7LR0mSJFQk5uCurdhkOuVoq3zAKj7b6at5J18=;
+        b=mQ4PedwOR1I+nfbSma7+FF5ij2QSClZdgNXRLkMdSR72Iubu88xArcpSInU4svTQsJ
+         f4NRGBZsTaNG4AfjhYBIN1/EoBXSmYvfEOUOUXjhmye4B+Tj9aOW1XjjYEEQsYWkmjeg
+         gCJ5dWStiw3SsfreLhoIGIWuAyF+Led6Tbr+ReS143+QZac8FYc8qnLhygAVvrTWSPia
+         niuJsGrkez2xgTI1dtObtfj8NTRwVabWDeMz8GqE4swsE2gCgd+ou7VMS6UOdPlbLylW
+         kJ6woo9wiwEVC+90MpYheV0eEQcAY9vFJMQwPfO2IPWWaTveao0ORtPkGIkIcaMzgVQw
+         Bieg==
+X-Forwarded-Encrypted: i=1; AJvYcCXpJh9PYMtSWbzRaxydC6PTB4f0kXlHC1ZdYwd8bYfF8aafHAlregarXJduxFtPC3YCeB/v@lists.linux.dev
+X-Gm-Message-State: AOJu0YxMZCaIYen/bP0KdgFgATPWRSolY0GN+CVqZ3zdSY51KnkE6zVD
+	SAMkhfQMk2LuwHbKqqE+DUbeaHrUFNJqZbFJzdJxxDfN3MbWgMCRpfRRtwK++mnTqsk9gMGzxhy
+	YJ7KQ2IDwBQ==
+X-Gm-Gg: ATEYQzzyYcJkXDlK3SFJtR35uoc3N0TYNgZe6SiLdZ+SAfdtBeJaM1XoKjtxmdPHuBh
+	wKmG/qMP9WOND9otJECsyTuouoO1zqXM7PaOhh+Gjtiy0q+zXVYNhLIsd70T81tDQlH/D87A/z0
+	DCFaEO4UPu7ZJ3hdE1zNuFoohI24Ym2SyCYI63tLUac0BkiBtEr1DWr9K65cBLEfniIi1rrFe2n
+	ajSW7qrgeJR9+bUOuGYD9LQRMmcrrcgTgHuC+noJmiax9roeZAxFL9Vgw/NOC2yTbbchAqliQ26
+	C6K9Gk9IqacxGtTCQoMp/2hIlpx75xMp9D+4OJW8MYEUk0LInZkUVK0kCBGBNtvRHn6/1F3ewq3
+	1TmNyFY7jTd3A1RIQvfVC3rpqV13uaZFgF5AhSLBgFBkcv40SnPYM9CnC1sU359V9MTe03lZDBb
+	/Um16Di0Rrdup6VCdy6mh7cg4Y5ro9bq54ItfvGGBkE83eIjohULgz6R5R7eNkFbbyTeGvUi+7
+X-Received: by 2002:a17:906:7d56:b0:b9b:fa57:d5b0 with SMTP id a640c23a62f3a-b9c13ca1993mr30840866b.43.1774982194196;
+        Tue, 31 Mar 2026 11:36:34 -0700 (PDT)
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7ae23dfesm443676466b.13.2026.03.31.11.36.33
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Mar 2026 11:36:33 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b9c098328acso90721366b.3
+        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 11:36:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWHvD7FnpTNVgVmPQHTH4hD/wgTr3vZKOu1+TDyIdhL81kKndY0fyAWO4kD8EDUS4bcDG2S@lists.linux.dev
+X-Received: by 2002:a17:907:c789:b0:b97:d126:c007 with SMTP id
+ a640c23a62f3a-b9c13b2c4a6mr48468766b.30.1774982192841; Tue, 31 Mar 2026
+ 11:36:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whjwHjmB0_2yXsOjDa7Mi_yFSx3AMd3vGk5r70WocvZZg@mail.gmail.com>
+References: <20260331163716.work.696-kees@kernel.org> <20260331163725.2765789-5-kees@kernel.org>
+ <CAHk-=wiJ6Q_qMHSe-hs+QvqKVZphvDZjvFP_gQLw1eaWimv8+w@mail.gmail.com>
+ <CANiq72kL3rTKyDNYmD7wXiKCVJSfa1bnp2L8NShXU7OPmWjJ4w@mail.gmail.com>
+ <CAHk-=whjwHjmB0_2yXsOjDa7Mi_yFSx3AMd3vGk5r70WocvZZg@mail.gmail.com> <202603311117.454F578@keescook>
+In-Reply-To: <202603311117.454F578@keescook>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 31 Mar 2026 11:36:16 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wizJdr1qgJ9NKNjtbH=ugL3umA9JRW9ifrQaD+PpWCMuQ@mail.gmail.com>
+X-Gm-Features: AQROBzBUflXPh777BM9crSo8MSIUJXluDEJ78_cVjfj9YSXDGlWfMakjxHiYmFw
+Message-ID: <CAHk-=wizJdr1qgJ9NKNjtbH=ugL3umA9JRW9ifrQaD+PpWCMuQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] types: Add standard __ob_trap and __ob_wrap scalar types
+To: Kees Cook <kees@kernel.org>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Mark Rutland <mark.rutland@arm.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Thomas Gleixner <tglx@kernel.org>, Finn Thain <fthain@linux-m68k.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+	llvm@lists.linux.dev, Marco Elver <elver@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Nicolas Schier <nsc@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
+	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 31, 2026 at 11:02:03AM -0700, Linus Torvalds wrote:
-> On Tue, 31 Mar 2026 at 10:48, Miguel Ojeda
-> <miguel.ojeda.sandonis@gmail.com> wrote:
-> >
-> > In the Rust side, even if those "explicit" types like the
-> > `wrapping_u32` you suggest exist, we generally use the methods on the
-> > normal integers instead, e.g.
-> 
-> In that case the types in question should always be very much opaque,
-> and not usable as-is by existing compilers that don't have attributes.
-> 
-> My feeling is that that will discourage use enormously for when people
-> want to just say "yes, I know this wraps, and it's ok".
-> 
-> That said, for the *trapping* types, I do think that we likely need an
-> opaque type, because I really feel like using
-> 
->    trapping_u32 x;
->    ...
->    x++;
-> 
-> is a complete and utter mis-design. It makes the "x++' have random behavior that
-> 
->  (a) cannot be recovered from (maybe we're holding random locks)
-> 
->  (b) is completely invisible in the context of the code, because the
-> type may be somewhere very different
-> 
-> and I think both of those are fundamental design mistakes.
+On Tue, 31 Mar 2026 at 11:32, Kees Cook <kees@kernel.org> wrote:
+>
+> If the code was written perfectly, then there's no problem.
 
-This design is specifically what Peter was requesting, and what actually
-integrates with C. I agree with you that the core problem is "cannot be
-recovered from", but that misses the point of these types. The point is
-that all of their uses are _supposed_ to have been written in a way that
-no overflow is possible (just like all the other types). But this is
-the problem: bugs keep happening, no matter what people try to do. And
-in fact, to support these kinds of in-code overflow checking, there are
-even idiom exclusions for these types (based on what you pointed out in
-the original RFC) to allow for things like:
+My point is that BUG_ON() DOES NTO SOLVE THE PROBLEM.
 
-	if (var + offset < var) { ... }
+> The point is to make a type that still works with C and all the associated
+> APIs (e.g. format strings, native arithmetic, etc) without creating the
+> mess that Jakub, Peter, and others (correctly) balked at around accessors
+> for doing function based math.
 
-If the code was written perfectly, then there's no problem. If there was
-a bug that allows for overflow then you get a crash instead of totally
-insane behavior that is almost always exploitable in a way that the
-system gets compromised. That is a net benefit, even if crashes are
-still bad.
+Has anybody tried to suggest that "use a label" model?
 
-The point is to make a type that still works with C and all the associated
-APIs (e.g. format strings, native arithmetic, etc) without creating the
-mess that Jakub, Peter, and others (correctly) balked at around accessors
-for doing function based math.
+Because I 100% agree that the current overflow handling is pure
+garbage, and doesn't allow the code to be used in any kind of sane
+code.
 
-> So I think wrapping and trapping are fundamentally very different. The
-> words may look the same. The semantics may often be discussed
-> together. But one is explicitly marking something as "overflow is safe
-> and expected", and that's the actual real SAFE case.
+But I think that's solvable with the "branch out on error to be
+handled elsewhere" model.
 
-Right. Mixing the term "safe" between these is certainly a mistake in
-the documentation. We can fix all of that.
-
-> The other is saying "overflow needs special handling". And the key
-> here is that we need to have some way to *state* what said special
-> handling is, and we need to do it at the point where that special
-> handling is needed. Not some generic exception handler that has to
-> figure things out from some unknown context.
-
-The generic exception handler, right now, is the distant back-stop to
-catch exceptional cases that nothing else was written to catch. Like
-uncorrectable RAM errors. Using a trapping type isn't there for people
-to _intend_ to crash the system. :)
-
-But, yes, I agree that having a way to require in-place overflow
-management would be the perfect solution, but no one seems to be able to
-agree on it. The trouble with C arithmetic is that the overflow state is
-"hidden". It's like the remainder from division: math statements need an
-overflow case built in, almost like a ?:, but from a syntax perspective,
-there's not been anything that stuck. The state of the art in C is
-"make sure you test for overflow manually first", and these types allow
-for that.
-
--Kees
-
--- 
-Kees Cook
+               Linus
