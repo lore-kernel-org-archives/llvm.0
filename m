@@ -1,155 +1,129 @@
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011070.outbound.protection.outlook.com [40.107.208.70])
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB963A1A38;
-	Tue, 31 Mar 2026 10:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774951777; cv=fail; b=gcbZ9tHVbxySP0LpUIRFDCkDtWNvU7zavIYkucEfmsxEfI9Gcjzt7X9ntYo6E27/nCRu0m/vVtEl2r0xWzl+eYh/IyBMOAoHdvOrrsipRsmcu54nYqbKieRHluWc0Y5LC9SH3nlPxVLpyRt2V8GVyf35orJskDg6pKE63bKXlNw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774951777; c=relaxed/simple;
-	bh=/Q7VyRE0kz2w0ERqr2gblIsDYOpcA2IW9vANTQE8nLg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J5wmrEb6t/8sI6sKdTHRY1pRlBBzhL7jqKrxDEEqKaPVYhCHwrsz6kDAByeDLjtPOLIgNKPH7Uo8Gq1VoTwVU/4xn8RszR0a4Mwbhd27oEVnZAPmCxQlnCQeSmqSoU9i3jfj4DMO3KZ1bpZ42IIHQzd2WYYXkbjvQSy7UqlEo4w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=i3oxRlQ5; arc=fail smtp.client-ip=40.107.208.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5359E3A9DB1;
+	Tue, 31 Mar 2026 10:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774954441; cv=none; b=A7hThfwN+xuZznjXXSosmAZ0hmNR98Hj69nKEdmv1RokXWaApu3MOvPukjOVQu5YkXuq0bmpKDxK2L0RRAOoh1cbMPF4/dW3xpoawNOrVEJ9cisfGa/Ess5M1RkkpgfTfTapj6ZYzS5uVcq24BES05leQGCPybcPv3FZyvISrQE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774954441; c=relaxed/simple;
+	bh=amEmg934H9HD4owWVyAuDEOFmw6M2IeeWp79hup+Dnw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=elEgPiN5SjfHBFa+8q5FGe+9QO7LaxLWyQFe+i/L0R1xAE9h9pi339FPqTN1t+/AOTFTRZWKAV/HtsVcKAmp63oNIrahB+fUI3SZrBixhj1D9Nr1Tcf1Bn4r09Tu9+nLKJMbtefZBlZosWuKmu7MDozFjmzz1U7745DyTH4f6lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=HSicztta; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qmIKNVj1; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="i3oxRlQ5"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Qb48zAQFIXMpKf3cbZoXyNcvHYh4ut0s5sEDVbVdpPMBq8euubYbuNl3KBOXyCdBsyY6FAN/+0soK0ZwkVGMfDKQgkgtUBUShNuUjwrvu0dmP53VkeTPZQdQ6xTdG8K0O8ySpTfrosKrIo7FqWsq/8rbqIwkacNNzarCM/pZ9hob3Fog8RxafZVhJOQ9ikIJf5+4c17Z2pRQp5EmUSQKnDgSzCLU5trPokh+wKNpGQuUn9w+OsM8Nd7H4w5SN+nPgoEcy1EbrjlRt0kQwskodV/5WSXJhOOBnqkOeW5xowJ9fazAVlCtGclR+oeLofAaUaSVFSVuhfjTCc2b5hQTFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rkzTy732sh6+Kc/GptaD4U1dc5kPwfd1HhpxUZvmFdo=;
- b=URz4UjvfyeM00mJ4WmE698Cl/zpSXj1B2HlfQGUzJdLw9axw/m35oEo8tnJtC4fN0Zg99TYgFfvs0PzGJH4Ac4uMxf/LK+TMecl1tba9kTdnxQ/gngJIO5GzVi6QQcWUz8eHO2J5ilcH59T9ezGWnvUBsK70sUsLOdBY31LgY/Dc/EhuA1GrHq3WlTA/Qpmbdmvs92rVn2CVkjn3UgcOwj9Sqqm1Guedf6ghlbpaGRdPwZqG83iu4UANoFJlOTJwIRL5NR7cffAZMFyTdLGU/exugbUxJcu3SE8lXevJOs2uYHMe1HMuhWKLVW/D5Wf4AvsspBhQsuz6O1uNMBqVNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rkzTy732sh6+Kc/GptaD4U1dc5kPwfd1HhpxUZvmFdo=;
- b=i3oxRlQ5X45WCdGHStooJwcWzz0HzQq2vf+Wl+rZcjbPkfqX9b7d7x7uo1UPZnxfmOIL8orTd2RynKeDRMFqoYU3umZwW7kuV93m87FetdBwOZ9zGcozWEWSOX9dlb7is7eh/QD1ZQgTEeJiP1BNZ/8z5xZ/jmdElCQjrdZh+4DcoL4CXJO83dN24BFiXHsrXEhlKl8kxUl5fKH03H7QXSKUpdlBQwAiPeFmk8heVNIoTIsyF0p0ZAi7hRi+fP7MmwSNdBOTPNGER9bmI8Jj7MGul2+g02s0kFRBVV7/8xwZAFA37FwILSO1+/BnoGt6GGXstfStAfF55OUIL8utnw==
-Received: from MN0PR03CA0009.namprd03.prod.outlook.com (2603:10b6:208:52f::14)
- by IA1PR12MB6138.namprd12.prod.outlook.com (2603:10b6:208:3ea::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Tue, 31 Mar
- 2026 10:09:29 +0000
-Received: from BL02EPF0001A104.namprd05.prod.outlook.com
- (2603:10b6:208:52f::4) by MN0PR03CA0009.outlook.office365.com
- (2603:10b6:208:52f::14) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.29 via Frontend Transport; Tue,
- 31 Mar 2026 10:09:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF0001A104.mail.protection.outlook.com (10.167.241.135) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9745.21 via Frontend Transport; Tue, 31 Mar 2026 10:09:29 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 31 Mar
- 2026 03:09:13 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 31 Mar
- 2026 03:09:12 -0700
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Tue, 31 Mar 2026 03:09:05 -0700
-From: Akhil R <akhilrajeev@nvidia.com>
-To: <thierry.reding@kernel.org>
-CC: <Frank.Li@nxp.com>, <acpica-devel@lists.linux.dev>,
-	<akhilrajeev@nvidia.com>, <alexandre.belloni@bootlin.com>,
-	<conor+dt@kernel.org>, <devicetree@vger.kernel.org>, <ebiggers@kernel.org>,
-	<fredrik.markstrom@est.tech>, <jonathanh@nvidia.com>, <krzk@kernel.org>,
-	<lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <linux-i3c@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-	<linux@roeck-us.net>, <lkp@intel.com>, <llvm@lists.linux.dev>,
-	<miquel.raynal@bootlin.com>, <oe-kbuild-all@lists.linux.dev>,
-	<p.zabel@pengutronix.de>, <rafael@kernel.org>, <robert.moore@intel.com>,
-	<robh@kernel.org>
-Subject: Re: [PATCH 04/12] i3c: master: Support ACPI enumeration
-Date: Tue, 31 Mar 2026 15:39:04 +0530
-Message-ID: <20260331100904.30932-1-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <acO_PUjS_VG07qcS@orome>
-References: <acO_PUjS_VG07qcS@orome>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="HSicztta";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qmIKNVj1"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id ACC53EC010D;
+	Tue, 31 Mar 2026 06:53:59 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 31 Mar 2026 06:53:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1774954439;
+	 x=1775040839; bh=C+IzGmq39t+VP216mNiLCQFGv/FuetYgb6ni6li9zdI=; b=
+	HSiczttannIQBUir2XfxfkJfhkIRAYZo02WhyK+qIJ7/nTFJzdhusGVQ+fSUvtvd
+	+cW+UzV9dYaquveuSwWsE0PYdlXB32xDnxNWoM1ZkcDwFeb9n63OHU9fqFojc29e
+	xNKabMTt3jA0/5jJGlEdk6zCSqQnUtQ5Z8HotTgwJmByA8uNjS3Hbv/izya4ZlW0
+	mdz9KzxPWCuxhhQYOhg8Q+7upZnY9o9TK5upajWXpwc8q1EVbSx/74dhIX/OCcpq
+	cIQoRvUNZTwJahKCVRlb8DRmIyrheKz3/UMc8odPfzonvANWXHp1v82AWlX5vTIL
+	iZALrAVM70h7EO3wJQiBXQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1774954439; x=
+	1775040839; bh=C+IzGmq39t+VP216mNiLCQFGv/FuetYgb6ni6li9zdI=; b=q
+	mIKNVj1fhpvejq2rWn7WkkMJg72IOv8Y4vCsMe0bv3CX2b2E7FAXMV4TpZ+Qt6hy
+	wX6wTC769KhGWm4hMTjwWTCJhIUFx9epa8U7r6jMMD2Lis1REF3II6ELYo4FHc+H
+	LpVLHIXfdpAA7HTt/VQovZrFR+sJjZktpu2JTGtjK5kRls/6GIw50OeXe6lF4nrU
+	PsctaOlnewJ/Gm6TkePU9OSYdu6dqXxECcGazy8yc/Eh0DAjJxyswAFPF3f0m1aS
+	CNb7JXDntuFE5ijDge4m5El/b1b7rfLOlAFjt6OoMDVdH63ZAeeTWA3lzTu/fhfu
+	jgExkyZl7b1sx90mxJdTg==
+X-ME-Sender: <xms:x6fLaXh8u4M3xN3yhCBCMVOdFDWECCS57RPlSPECIbP8bPbPyayOOA>
+    <xme:x6fLae2i1jIXeoxgWN8Nl4g8p1tiHgQA7bdu4Jla8vmGRlKq2E_nJGnfXkTyUmptF
+    y6gJG1CC9yzOPlQE0wDYM3e7Lhq4j9VmwPk9TvzBr7Wg7hImdwnjDw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegrihhl
+    ohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpe
+    foggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegv
+    rhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpe
+    fhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrg
+    hrnhgusgdruggvpdhnsggprhgtphhtthhopeekpdhmohguvgepshhmthhpohhuthdprhgt
+    phhtthhopehmrghthhhivghurdguvghsnhhohigvrhhssegvfhhfihgtihhoshdrtghomh
+    dprhgtphhtthhopehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhrtghpthhtohep
+    lhhkphesihhnthgvlhdrtghomhdprhgtphhtthhopehmhhhirhgrmhgrtheskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhr
+    tghpthhtohepohgvqdhksghuihhlugdqrghllheslhhishhtshdrlhhinhhugidruggvvh
+    dprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehlihhnuhigqdhtrhgrtggvqdhkvghrnhgvlhesvhhgvghrrdhkvg
+    hrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:x6fLaTcamxn3Y5ms-Bgyh2Vas3930ISqu3c2kcUpFgVNaqvA6Mh6FQ>
+    <xmx:x6fLaeJI2CrUUdWOZQWZC7IXYn2SNliBF7ZQbPimQyS_256MrywpEw>
+    <xmx:x6fLaQxEaj3SajuAtVNUC3W7zEw1GDq-fhMFW0sD2gGk49b2axiFjQ>
+    <xmx:x6fLaUt3E9SkWayamyStIv5d0tSTQ6o_IOx_tNrudK3mDW32xEIvUA>
+    <xmx:x6fLaRwQybzSprLjOPq2kiKiOgkXv-MyNdawxv4e9AhL_XzAQELveiIm>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 54DD6700065; Tue, 31 Mar 2026 06:53:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: A1v9eCq-71EB
+Date: Tue, 31 Mar 2026 12:53:38 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Steven Rostedt" <rostedt@goodmis.org>
+Cc: "kernel test robot" <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+ "Linux trace kernel" <linux-trace-kernel@vger.kernel.org>,
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+Message-Id: <6efebcb6-194e-4c21-8808-fdf09160eac0@app.fastmail.com>
+In-Reply-To: <20260330120516.73aede9b@gandalf.local.home>
+References: <20260305211810.3f48aa07@robin>
+ <202603070230.Zz4BBLtb-lkp@intel.com>
+ <8580f943-4c37-4c66-937d-adee13b72201@app.fastmail.com>
+ <20260330120516.73aede9b@gandalf.local.home>
+Subject: Re: [PATCH] tracing: Move snapshot code out of trace.c and into
+ trace_snapshot.c
 Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A104:EE_|IA1PR12MB6138:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0178985a-f202-4647-67ff-08de8f0d98e0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|7416014|376014|1800799024|82310400026|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	o66Hi730BBYN4PsXul8TRyNJNTRWyLlrDJxFC9jpJpF7I2Ob1qgIhUAHDNEGvPsYARzSEHcnZt092aTt+96hjjiLf7mlmwdaByLY7eBVc2s7T2Jb3YML/tXN2VtIOSDuyPFrW5qflpO2njlIXJ4sG3/MgqydVZks9ZO585NZZMj9DLL+QtPf1/bDdPICX6DwSorO2tXq5683ky8JaoTTGG0eLG8vlnJwbWikQJrLgsSWsHJcUTLuA4j0PEUti6fcMlL/LWmgNtkJ9H3ywb6c5GgMTQTBhKDqQgktXTbWHTABJxrZJVFoogO1v5w9wx8xDQr4UUe1G4xcNpx6nSwBFyuSdzLiRQmrIJkyfKcp1Ah6wPiFNkOIVZwFI3N8vGSwe0k3URYhDh/WbNojFneEHdyJLrpy9p5IApDIcGK+w02TA0WGbXEkocqzOvXz+rsbZ90yEWm1u50syx/JPt5qEVsQZPOdCN27mZDscJ0qB+YYXyQ7l8bLpCf1a8avGzLsUCBZxfvwIo7HVxIcmJMwDUsSwj9VGkbdtcgexWh2OwLec0PmLaX44rsh6cbZLPSofntEpyHq7gzi7uIiYrQQDQAXFlm4hrxfjBKIFIhVgpyA5rVkYAtvnBvJyxQrY4H4YTXhSkXxrAa1mMJSP28QnRXH3P95oWM/Z276ZJZEpentn8QoIoZj8Q5v3AODjYSyjtoUVd+P1qsuud8t/wtGG0NJdKciQUiFcek1g+Rzh8JCB9OIqrSdlieNSjWeRG5PDBUGg76+wRlSBnmq8rFYQA==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(7416014)(376014)(1800799024)(82310400026)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	xTvS9JM/gPYed1yWoTFxG5DSrVMgL4FXA3s4LiLXzwutjkK9D6irMDTUKWs+M2woxZKj63S8KrY57S+e2Nu8vT2iKwhOwFdJskM8NUywTRSU/0EmyJA33ZILjM91aZLsl2dg2/QMZuzRcMARhBB7BfOHTrikfoeCLkyDb3PSkxUN4nMxHB1U42NQLilTBfnH6q6dVfPOTQ67NOwRGHzdDBVPzo8r+vpzQKMH5V/YV4TZLV1NvNpxOEhtPtdTXkegLDziuJszpEiDrMjehM2iyZPE6wxYmOJzfL6NorQZ1RdI3mbzlf/gvhZl7Ot/pGEcIZqzxKtrq1tO/0Pd/8spLM6pvVrRH7cWUWhqm+j2/lsWxR/F041phU0K6m57TagWXlNA/XAYTjl6nQiwGIHtE1kZ9xzo+FYWjxHcG8TgvB8VuLyV8/WbEr3svc+ga+n2
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2026 10:09:29.3415
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0178985a-f202-4647-67ff-08de8f0d98e0
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A104.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6138
+Content-Transfer-Encoding: 7bit
 
-On Wed, 25 Mar 2026 11:59:12 +0100, Thierry Reding wrote:
-> On Tue, Mar 24, 2026 at 10:52:15PM +0530, Akhil R wrote:
->> On Tue, 24 Mar 2026 09:43:27 +0100, Alexandre Belloni wrote:
->> 
->> ...
->> 
->> >> #include <linux/acpi.h> is added in PATCH 03/12. The functions' prototypes
->> >> are present in acpi.h. I think the bot checked this patch individually,
->> >> or did I miss something?
->> >> 
->> > 
->> > #include <acpi/acpi_bus.h> is behind an #ifdef in acpi.h and your code
->> > is not.
->> 
->> Thanks for pointing Alexandre and Guenter. I also noticed that we do not
->> have stub functions for a few of the acpi_* functions in #else.
->> 
->> Looks like I will have to guard calls to these functions under
->> #ifdef CONFIG_ACPI.
-> 
-> Alternatively it might make sense to add the stubs in a separate patch.
-> I don't know if they were purposefully left out or nobody's ever run
-> into the lack of these before.
+On Mon, Mar 30, 2026, at 18:05, Steven Rostedt wrote:
+> On Mon, 30 Mar 2026 16:06:44 +0200 "Arnd Bergmann" <arnd@arndb.de> wrote:
+>
+>> I saw the same thing and worked around it by removing the function.
+>> I then noticed that a bunch of code surrounding it is also unused
+>> and I removed that as well (see below). This version passes
+>> my randconfig build tests, but I suspect it is still wrong,
+>> since the code never had any callers and I don't understand
+>> why.
+>
+> Note, this code is in include/linux/tracing_printk.h, and is for debugging
+> purposes (just like trace_printk() is). Hence, it shouldn't be removed.
+>
+> The purpose is to call tracing_snapshot() when your code detects something
+> isn't right (but it doesn't crash), and this will take a snapshot of the
+> current trace that lead up to the anomaly.
 
-I looked into this and it turns out to be more involved than expected,
-and requires adding stubs at multiple layers. We may end up either
-sneaking in only what we require or a non-trivial change which may
-involve too many parameters.
+Right, I assumed it had to be something like that, just didn't immediately
+see what. I've sent a patch to just remove the duplicate inline
+function now.
 
-If you would agree, I will guard the ACPI calls used in this patchset with
-#ifdef CONFIG_ACPI to keep things self-contained. If you think adding the
-stubs is worthwhile, we can take them up as a separate series.
+> If anything, I should add more to Documentation/trace/debugging.rst about it.
 
-Best Regards,
-Akhil
+Or maybe a samples module that serves to show how the interface
+gets used?
+
+      Arnd
