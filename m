@@ -1,161 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5652426686;
-	Tue, 31 Mar 2026 16:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B50D4266A5;
+	Tue, 31 Mar 2026 16:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774975046; cv=none; b=PnbO255MRcW+aRP4ryirODdgsKypg/t2BycE/ZK6yRzO9tBcwQ0e3CqejguL//uEyT1nWX0jX3nwLwYXakZnRkObzYtR/qUfV0jFkLjIGeaO560HPDayFiuj4f5f916UtogMXt5tmEbZvbO4+xM3sSLWsoMiQywkZSy3KCSxTjM=
+	t=1774975972; cv=none; b=bO48wH9/IwxI/IvDs9veF12o3hYtN+4Y6F9uLjOpo96YlVXW0T8Jn3yB2YZl4j8pJFONNLdN1qFwS5gUJqz7jz7buFRz0rM+57sSdadufeJ4EvmAQw3SKAomS8GPwkJKhw0yVzzXTB1Ksq+v+LX8heKOQ0z5pP34xLh4nvvsG+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774975046; c=relaxed/simple;
-	bh=a4JG7usT6Z6N0Znenn9HJ2Ff5uUsHYvIsmUVVM1ha74=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q3uNRHeQL6hciqVKt9AJQIHfRZgZ21+yHWFzpqTkcftt7qWRahBHkNTkvSmhz5eq6/QTDfTpSCG7A6A4yiRk2xwLeL5L9zK2JHKR5wbUgy2k4UOYqFhKBKWGkVyCu7DZm7XZMNXxvMq+PPGJowk4xn7o5tWYOywPpijfv84g9Eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uqAi4pN1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774975972; c=relaxed/simple;
+	bh=Lfkw22piQF1Hnab39FNJQNBXwCljMCpCQxPx6A77SCo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UspMfp0SHQ7fT+k7tEhHgZYQ4YmzJ/Hwu603MCquCWqJgXe88I7aaFegQaYOpVY1VyHKKk6PO3AZTtA+lk64Tw3EBngPIsdvFZ0LOQik1aCeCIwrqEmYxWqTG5RD897FhBwWhKHKaYFDbCb8kbOLbra+KivjsUpFJBnepqAKDo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X4AZlpVN; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uqAi4pN1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 721D1C4AF10;
-	Tue, 31 Mar 2026 16:37:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774975046;
-	bh=a4JG7usT6Z6N0Znenn9HJ2Ff5uUsHYvIsmUVVM1ha74=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uqAi4pN1Z8ucCsiUu+1eUEmYdhAcjaNzGIJbAW+vfqMgV8q3KsXOGzY9mWLYYBh4X
-	 ZQmhGSdJI0TaVO58Lqu8FphqRR/iCQuxsIEoFxRTMV10UPeK1QpZHaoQc6t4W1XQkq
-	 BFU35lt9z23/4W+IlSN/mxlZGuzkQtOetnlmjbx7J4KDGU1y1i09LU3wc+GH515fgH
-	 Ln57eaoQYAeAdygThC3LXzzmc3niIpq/H6kXByGfjh4w6u/KVwFJYl4klVEYZPDgNk
-	 SK8qHE5w7mFovWtXo0waaUNjsVuo8A08pE+SHHf1H908opsLv2laztVDYGj754m/W8
-	 SQZuSHzyfBFTA==
-From: Kees Cook <kees@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Mark Rutland <mark.rutland@arm.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Finn Thain <fthain@linux-m68k.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	llvm@lists.linux.dev,
-	Marco Elver <elver@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Nicolas Schier <nsc@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: [PATCH 5/5] types: Add standard __ob_trap and __ob_wrap scalar types
-Date: Tue, 31 Mar 2026 09:37:23 -0700
-Message-Id: <20260331163725.2765789-5-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260331163716.work.696-kees@kernel.org>
-References: <20260331163716.work.696-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X4AZlpVN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774975971; x=1806511971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lfkw22piQF1Hnab39FNJQNBXwCljMCpCQxPx6A77SCo=;
+  b=X4AZlpVNWWEAMWpb8hPKHQ9n1/Xn4xhzARuhzxyqTBO2IH0Pdq26JOAy
+   23Iv56tok36Hzak2WC7PiD8WZnjK+8d1Lm1CP52OcDscpurMtqBtJlGMC
+   w1s2OqME/lu6E9tWSq9Md1Vmo2FhyjGwVh08hKnydlTyVSZlITHfP6cXE
+   YafgvteVsh4TOfwatUoU2LYZAEus8DC/NBDw8cl4G1m3MEKpL8k2p87fE
+   /oHdq0lL09/kK/rf3fKr4U++S6yNZH8RlTFdTkOhnKj/naDjev6IUXHVw
+   6qGOELv6g5OlJ1xu0rIe0JpnsGKNbJJAs4p2vFmFWd37ogDht0k0QC9U+
+   A==;
+X-CSE-ConnectionGUID: H26Vwe8+Rkal+HdxV9O3dA==
+X-CSE-MsgGUID: CAGrg7sHR7i5s/LtNgMFqw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="76011987"
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="76011987"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 09:52:50 -0700
+X-CSE-ConnectionGUID: wmrsDVQhSdaqqR9AcLAxQw==
+X-CSE-MsgGUID: Q6H8HRIDSP+9SoiiVpzixw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="230863703"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa004.jf.intel.com with ESMTP; 31 Mar 2026 09:52:46 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w7cKb-000000008SD-12F6;
+	Tue, 31 Mar 2026 16:52:45 +0000
+Date: Tue, 31 Mar 2026 18:51:52 +0200
+From: kernel test robot <lkp@intel.com>
+To: Jordan Rife <jrife@google.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jordan Rife <jrife@google.com>, bpf@vger.kernel.org,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Yusuke Suzuki <yusuke.suzuki@isovalent.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>
+Subject: Re: [PATCH net-next v3 2/4] udp: Remove disconnected sockets from
+ the 4-tuple hash
+Message-ID: <202603311827.nefybt0I-lkp@intel.com>
+References: <20260330215707.2374657-3-jrife@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3375; i=kees@kernel.org; h=from:subject; bh=a4JG7usT6Z6N0Znenn9HJ2Ff5uUsHYvIsmUVVM1ha74=; b=owGbwMvMwCVmps19z/KJym7G02pJDJmnfzgZ57sa8O8X3MkZ/Vz6c6bB4oNsS4PMX3XHaUXdd 3ZlaXrbUcrCIMbFICumyBJk5x7n4vG2Pdx9riLMHFYmkCEMXJwCMBG3aEaGzeJcdxR3hV4+v/KV nrJlaC3f6y/mnHum/TX2kJ0qnP/oCcMfnoIja5QXO+2M6nzmfkX759RuaybtVE0Zge6GW/u+tpi xAAA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260330215707.2374657-3-jrife@google.com>
 
-While Linux's use of -fno-strict-overflow means that all arithmetic
-operations have a defined behavior (2's-complement wrapping), there
-isn't a way to unambiguously specify if a given variable was designed
-or intended to wrap around by the author.
+Hi Jordan,
 
-Introduce explicit trapping and wrapping types for all bit widths
-including architecture word length (i.e. "long"), signed and unsigned,
-for use going forward for unambiguous arithmetic, now available via
-Clang 23+'s Overflow Behavior Types[1] (CONFIG_OVERFLOW_BEHAVIOR_TYPES=y).
+kernel test robot noticed the following build errors:
 
-Bike shedding time! How should these be named? We already have the short
-bit width types, named as: {u,s}{8,16,32,64}. We need to construct new
-type names that also indicate their overflow behavior: "trapping" or
-"wrapping". And we need to capture the "architectural word" length type
-too (i.e. what "unsigned long" or "size_t" captures).
+[auto build test ERROR on net-next/main]
 
-Whole word addition:
-- Pro: Unambiguous
-- Con: Long. E.g. suffixed "u16_trap", or prefixed "wrap_u16"
+url:    https://github.com/intel-lab-lkp/linux/commits/Jordan-Rife/udp-Only-compare-daddr-dport-when-sk_state-TCP_ESTABLISHED/20260331-082300
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260330215707.2374657-3-jrife%40google.com
+patch subject: [PATCH net-next v3 2/4] udp: Remove disconnected sockets from the 4-tuple hash
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260331/202603311827.nefybt0I-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260331/202603311827.nefybt0I-lkp@intel.com/reproduce)
 
-Single letter addition, "t" for "trap" and "w" for "wrap":
-- At the end: but "u8t" looks like the "t" is "type", like "uint8_t".
-- At the front: but "wu8" looks like the "w" is "wide", like "wchar_t".
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603311827.nefybt0I-lkp@intel.com/
 
-Current straw-man proposal is single letter suffix because it vaguely
-felt like the least bad of all choices, and they should be short or
-everyone will just continue to type "int". :)
+All errors (new ones prefixed by >>):
 
-Link: https://clang.llvm.org/docs/OverflowBehaviorTypes.html [1]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Thomas Gleixner <tglx@kernel.org>
-Cc: Finn Thain <fthain@linux-m68k.org>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: "Thomas Weißschuh" <thomas.weissschuh@linutronix.de>
-Cc: <llvm@lists.linux.dev>
----
- include/linux/types.h | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+>> net/ipv4/udp.c:2182:31: error: call to undeclared function 'udp_get_table_prot'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2182 |         struct udp_table *udptable = udp_get_table_prot(sk);
+         |                                      ^
+   net/ipv4/udp.c:2182:31: note: did you mean 'vm_get_page_prot'?
+   include/linux/mm.h:4105:10: note: 'vm_get_page_prot' declared here
+    4105 | pgprot_t vm_get_page_prot(vm_flags_t vm_flags);
+         |          ^
+>> net/ipv4/udp.c:2182:20: error: incompatible integer to pointer conversion initializing 'struct udp_table *' with an expression of type 'int' [-Wint-conversion]
+    2182 |         struct udp_table *udptable = udp_get_table_prot(sk);
+         |                           ^          ~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
-diff --git a/include/linux/types.h b/include/linux/types.h
-index 7e71d260763c..786eb2c9775f 100644
---- a/include/linux/types.h
-+++ b/include/linux/types.h
-@@ -94,6 +94,30 @@ typedef unsigned int		uint;
- typedef unsigned long		ulong;
- typedef unsigned long long	ullong;
- 
-+/* Trapping types. */
-+typedef u8 __ob_trap		u8t;
-+typedef u16 __ob_trap		u16t;
-+typedef u32 __ob_trap		u32t;
-+typedef u64 __ob_trap		u64t;
-+typedef unsigned long __ob_trap	ulongt;
-+typedef s8 __ob_trap		s8t;
-+typedef s16 __ob_trap		s16t;
-+typedef s32 __ob_trap		s32t;
-+typedef s64 __ob_trap		s64t;
-+typedef signed long __ob_trap	slongt;
-+
-+/* Wrapping types. */
-+typedef u8 __ob_wrap		u8w;
-+typedef u16 __ob_wrap		u16w;
-+typedef u32 __ob_wrap		u32w;
-+typedef u64 __ob_wrap		u64w;
-+typedef unsigned long __ob_wrap	ulongw;
-+typedef s8 __ob_wrap		s8w;
-+typedef s16 __ob_wrap		s16w;
-+typedef s32 __ob_wrap		s32w;
-+typedef s64 __ob_wrap		s64w;
-+typedef signed long __ob_wrap	slongw;
-+
- #ifndef __BIT_TYPES_DEFINED__
- #define __BIT_TYPES_DEFINED__
- 
+
+vim +/udp_get_table_prot +2182 net/ipv4/udp.c
+
+  2179	
+  2180	static int udp_disconnect_unhash4(struct sock *sk, int flags)
+  2181	{
+> 2182		struct udp_table *udptable = udp_get_table_prot(sk);
+  2183	
+  2184		udp_unhash4(udptable, sk);
+  2185		__udp_disconnect(sk, flags);
+  2186	
+  2187		return 0;
+  2188	}
+  2189	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
