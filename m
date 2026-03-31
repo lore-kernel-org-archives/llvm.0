@@ -1,81 +1,80 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B7B314D34
-	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 17:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0FC32142B
+	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 17:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774976970; cv=pass; b=JXB+C3ITq6+UqrkZoa996Vs6Q0NUJsPsnUm4DwkSYht5tAju53e4/Rt0uMTq7jsuVAqmmu430EQoZXLDtHR3MGTXe2BVF5H3WE0/1O51Kf11dgbDigaNT9qh/QaAdRYj3ZsixvH5M9bLv3HK16RN8oED7FOR9Y4edZiOaBK0frY=
+	t=1774976989; cv=pass; b=azhlFct8GIXH1CDpw+Ri9dp/J/qUokvbuZG0EMCfrN/s/ZLM666D//8c4ODFwlwMtqnfumU3/jAy0zJateZ8DOBgRMHb6xyZhUikG0ivDIfH/Z1lYgiZeFKapYymTLVbhNAyJC8xKvVN+xTt8G4INGEgE2/ILdN/qfZ4pGjnU6I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774976970; c=relaxed/simple;
-	bh=WTRVHRp3YZnZVbE+0ZoSdIPjJ/az35/laG/IbVwaY3A=;
+	s=arc-20240116; t=1774976989; c=relaxed/simple;
+	bh=8EmbocqF6Vdb3h0BM5UKxGb7Zum+nJE7yig8zb0/EBY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qtaBYMyZAxAclWY/cGN1f40+82OUbUXwLwNcJoBAyS45txLbaEUJKl9TG0DVnyKUb1jIfZWK6s5WHhQqGzw0DiOs5jFQmCYTEPxLDrNcRllLPhKeFQkXbxvqcmL1v3SdQPSvYv6XwEV1At8SJT2u63CxPkhUbQDUDuc3/JojK/E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W/dpLa17; arc=pass smtp.client-ip=74.125.82.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=rMalxtH0XPVTduH+IT//9VS4GTdo2c5+M4EphJoZgoHuF5ujWOUf+18I5Ozdv/V5VHie3PoXG/IBzoSUlhAsM0/9/+5eyvxTtaN8p2RStDEIfc7y5+G2xlSnGFVbrvBFHAIWBxQWOu57VuY76WGxuI0ds2Um4HwpPyFfTiFRjCc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SNQIxnKX; arc=pass smtp.client-ip=209.85.217.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W/dpLa17"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-12734af2cdcso219237c88.0
-        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 10:09:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774976966; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SNQIxnKX"
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-60525a93444so873608137.3
+        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 10:09:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774976986; cv=none;
         d=google.com; s=arc-20240605;
-        b=XWOhvc3mfC41fo1BC+VNXaHq3vXXTVWcZBJWamW/j/kKNTollKAQ2Q5uMqjHb76YQx
-         yR/5mqsFftNIKZ6IY8agCBY8J8usB2fPDZ+N/ktom1KiWBdueKJQfxsJmmFiLEbaX6Dk
-         HOlPDLVUW3bFz7EzNsX6920RGxzzklakTOiBmum9xKCmXXwV1w5xMb9sIjTktaAmG8nq
-         9uYw4h1VFiFhea26UKbMcSbdqLkB3fUiJqvaQFY9x58Jjq2ybVSICMJs9bA7jrclnJGZ
-         NCJnKXEjuPjJr1SauPfoCYCEGuTDcXsISQUhS8zn5MIitvDhCMedfOOoHw3I4orR8od/
-         DufQ==
+        b=CcvI4Ld3CvWTvyDWwIqc8lxaeMxBhN0ZbYkURKYFxRjjtGPAcSo2sFIjHkT5h0UYDM
+         pj8f3pzebc3Dbpbk0NsBlcf5Po/hZDqOVoiLY3MjWvl+9FsGNk0LFv35C+Vqg339l+g5
+         FcYiZP1eEC00ajXRQMAiCpKDFtiG9QWbAMG59iWH3H1GkBIl/y5Lk2qrjLW95kl2Nmrk
+         jUH7np7N49OEIAZAhfuAwsXaXM/UJzKD3uXQb/09rFAnltyRrDIyqN/NkEPmljYq1KXG
+         fNCDSZRg3FT+E7ZpFj5Xemp5rkGnM9WRA3oe5Jxe0ld1EkBEsrIGj1LDImmxwKUvOcX/
+         i2XA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=hmCH9wEuQvIKAkIe3dk/Nd8jQ97KUjGLE+pTGY9wyZI=;
-        fh=gGv5/byusobBrvjjGid4Xg9a+T+4/mI9+u2dDPDd5/w=;
-        b=XFN6fCWkWXYpQLgHgTKqLhoW7eYCzHAphGan/6y8YSnN8CXxdzNNpQmbBZYuSNDh/J
-         yECcODORnzIzD7fBr/h5X+N6XyCagVP1GMnlWAkK80Wm+R9BBJPZtNLpSf/E9Cn/YSdJ
-         imcU6lEJRZmfiUgUOnNqy6dFN0rjcN8ZrEwKDlkM2Keh1Bd0sDQ7QoQadk+cl6BeJiJV
-         wET6zUJd9Opgl+Efz4o1aKXcod+IGNqM8lT7QN0BjK+K69V42J2bp1R67qQfAna6I1dw
-         yNcs7QrXyVHCWQdGnr/6RlUGdryJCZkOnPZomVll8cypJPaeG2UAmxBOg1YTcywBRM/n
-         raOQ==;
+        bh=N69dcykYCh53+bqwu3dyzBFgXRPQQLJXWFG4whULut8=;
+        fh=Pph0P2uBTlTdBo/a7XNuVL0sSAiKOIzQkFFxK749nFY=;
+        b=k2zaqwIINOWEHfRsW3j0B8y4wBQTYWLdRdz5ppiurYn9bggCFhwxYzzYXVl6wORtq+
+         7jUwuXOmmC5OFR7nr31GfOnuwyxvywWaV74a/iw9SFp9UxqYf2iuFn5+x4KnlPGJ2rWv
+         L0OzTZWx+RT051XafCwrhdzH4mmXDdimjf6FWAXW7xJXQ6vY7oAXdNLyAmuj1/5nAlR+
+         114YEk6ObKUKk6EFmzZWnQWEEo6kM8c/1hfxj93cMh9DrD+mLB7VM4fGcq+ISSaMSlC1
+         mJLlM75nwwuD5DL11rug3GzaIk1xgAReXC09wXXd9YJjv+9YB3ySVa3CTKUpTbTJ8ZlI
+         Yf0Q==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774976966; x=1775581766; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1774976986; x=1775581786; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hmCH9wEuQvIKAkIe3dk/Nd8jQ97KUjGLE+pTGY9wyZI=;
-        b=W/dpLa17eDVWiKO4tHTG3RKjXmVIrlzyplPPEFHeOZYAHgn5dR83IiCdMBZqgns841
-         XXsPeNRI9VQ2AtuEzADfKVmrNUf2peHzXfKJb4Z+tFq0Ow9p4idSt/BLu/HqyFPIEZ84
-         7gu5XwKsVMhNRbQ9PzIjhxO8Cj1VbRskEnR7SyRHEUu0ob0avvSMKJOaqZshDU+MT4qA
-         HmdlsojaAjS6kO6cXVkeuSZKXgBcd2eI3cZ18lBwKDMbp/pTTUI349mWcP9FTqefam2B
-         wWOXJOhhDemzvD0U2rRuR2UkGS/W7G8HtWhH1Eh6NFlHe0VSrB5D5QoLcZyXGz9ZBq9P
-         88bA==
+        bh=N69dcykYCh53+bqwu3dyzBFgXRPQQLJXWFG4whULut8=;
+        b=SNQIxnKXUTYpr7xsHdf6JEpwfvOdOaAbMLwnyEUeC2T5QJh0UMq5+KKHbkuq66Lk16
+         mNR3rOAQByZj0KgwXOrhpIUBhTWO2abTq8fxMw5StXrJp6fvwNlpjNRMBn4x4U6WUQY4
+         rovVHqrOgg6wbEA20R+Gp1ZS/rsQvx2Rg9FxTxmAnmErbi6xLdQx63gBXbCNkWarDGJ3
+         pzcCPaR8PvxEOFvrrWEZ9om/a5rQ2k+h+9IoZLzUaaGiXVE0m/NEapDJlq2nb8aosSy6
+         m1LAbRzqRapAPNFaQUeDWVPx/xRpMcsUdoEdhXYXU5NJ4vzPX+boLZKoej9F6ENzB2v4
+         PN0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774976966; x=1775581766;
+        d=1e100.net; s=20251104; t=1774976986; x=1775581786;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=hmCH9wEuQvIKAkIe3dk/Nd8jQ97KUjGLE+pTGY9wyZI=;
-        b=NC3gd6/RiiYY2GLYAG6vRCy7oX8CnQefvmXJ5dPHSQPBC+tOP3pqg9ie5G3wE7dCH4
-         upDf8JU5dE5HPZA9XVZhoWaOFVGAE/e3TR/4kovDSkAAnIYPyLlTEXilUzbCyYk51NY0
-         z+usUlwp/3/GvFlGVlkSzvDw/wFk1TB+wQwfr8+iu5kSHyD4cnMErLjRaDC1NZ63ycGk
-         XeQiDQQs8zbQdGVDjrCZ0ChLhNQKQUoP3VGM51twAuP5lk0ijBx+oU3H9Z373MyBimdo
-         VnAgsAioS/CnB4v5rjp7hY2LGqG80+ce6ti3490sg/VtgQ77kHhh10ATM9JEhCGreoPB
-         xKqA==
-X-Forwarded-Encrypted: i=1; AJvYcCVVUrPxFRkIQG1HAzRtVqPsllqTZhYdDHwoPGoPl/quePAXBfMCqzJeqFNQ4YOkGUNK+m3d@lists.linux.dev
-X-Gm-Message-State: AOJu0YxcO+eJ6D/zgGOU2zNCnzjmuEgaZMwEBtwT7ADbNZSHVy0WNk+G
-	WYAg0xjPu50Mgs77H3j9uZabd217igBRL+zu8uO3Yh8zyXSjcg8hy9avYLMy1RjkjDxtdbSKdAM
-	pkaAgMiGl/xedXGT8zEfnd70zYmMlC5Q=
-X-Gm-Gg: ATEYQzx89z74uOBAk9lnF+2SeGh7hm4ncKxx1kKfWx5R248b4U6P7+8D8cdrnB3uh3l
-	TPAMu/1iDn07vGh9el3yoiztw4xs5u2pcgXwEah3s3LZBBW8P9zqqSPCn9nNpSgKUePfG2El4SC
-	urn9jkLsCjGla5pejtlfH5yCSyuQaIinVEUofbm6VLPdoyYZ3EhCFkrpZo1MdnMmQ9B+UhbI6jW
-	/igHblsb7vTvbdE3I2NQVfsphnD8NJj5I46SS8bpPu8BSV+qEgvdULKd3VrJEM1Hpe0aMMvRgaD
-	fvnV/LWse1K1LMm2g4HTZLoA6nhB2hnqpXh48/1hYFp+gQFaFgWh72Ulpdsn/nZZczdkb1Kx5Cl
-	KVvQUITzgTBoCQ0oSmIbKsqA5e67EgYKwsA==
-X-Received: by 2002:a05:7022:660d:b0:128:d279:b8ea with SMTP id
- a92af1059eb24-12be65beca8mr58281c88.5.1774976966237; Tue, 31 Mar 2026
- 10:09:26 -0700 (PDT)
+        bh=N69dcykYCh53+bqwu3dyzBFgXRPQQLJXWFG4whULut8=;
+        b=f6FQKrq8NUN3aCp0KNF9/54z8WjXdLoLsaPXSO1PRG0afKlj0TJD6Ka8vXzePnvcQF
+         M+8xCd9Gt5Mk8qcT7XD2yxgVgd4F5sRBhwnME9Ccfpqzb8zdRaNZpSYb2bveRQtqLZmK
+         BHodZ5dnqO5vkMJepU0Tq08u0xfDfWObpouKdUrBDcVZ1rAu2cIhS9w17nTDAG8mh974
+         yYbrggN2D5ZXmzqZOwgopyToamQnhkyrthDUODDBdMN2o8OIisE5jZTr2sAC4L+t1kAp
+         H6HgMsvFY+JzWeigL/jrhaqvGecb9JrvQmmXh5ZRbzYHD3U9vpU0WRXP8NUdM9HB7/Ul
+         66/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVOGhZeek8vDQCkpubOZmEZaksXSc8noVxfEtqEVAz3ud5rKx++MQmWORjJXhP8IU7xEfnH@lists.linux.dev
+X-Gm-Message-State: AOJu0YxBwH9atTt8bQQYKKQVizpx4t8B6SDaVQt4rg/0HsDgkHN+uI6N
+	udWVs1rV4YzWDoAwhNw0DOAtZNsXm99PGB+kPzhp+3TaHQAn0kktLJQrsT2UdmoQWpKf2xubkKA
+	T3/ZKvqb/sEasAbR326HAZxF+uo3AVFeZ8bRRrxA0
+X-Gm-Gg: ATEYQzxzm/0aw7zU7wex2WpbAW4aSpgvTCsdoXuuYiUH0aQ6A29ogfimSGQpRNQWfxy
+	9NigeU3+PEFUVxS94bIGB0crwgM/UPKL5/0WyLZgtIO5qT/kg8a+1w0kccilFqlOFYnrgepQqe9
+	0w+KQcRrtcyAn8Js2WCyBEEQXgajFekZbLhHhMueaErUQxVHlJFa6c6XMdVS/o/bqenAU4HM5bh
+	JQUAnvtacFXBsi6WW/AkOuqExUZfcjpLVjTNCVKsqw5CBqe3aSHDmbQAqscxrPSnDJAxrOHmA4E
+	TsX9bpg=
+X-Received: by 2002:a05:6102:c92:b0:5db:dd12:3d16 with SMTP id
+ ada2fe7eead31-60567cf5e34mr47219137.6.1774976985230; Tue, 31 Mar 2026
+ 10:09:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -85,14 +84,14 @@ MIME-Version: 1.0
 References: <20260331163716.work.696-kees@kernel.org> <20260331163725.2765789-3-kees@kernel.org>
  <CANiq72mK9fz6Spmgt4js3hScqhqvZb2YP2T7tDfR0fHPDFWJ7g@mail.gmail.com>
 In-Reply-To: <CANiq72mK9fz6Spmgt4js3hScqhqvZb2YP2T7tDfR0fHPDFWJ7g@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 31 Mar 2026 19:09:11 +0200
-X-Gm-Features: AQROBzBS6-knL1zyoKnZ9aw9c60rLyHZCDFo7ofTsu_CS53BZFovGzzWB07mGSA
-Message-ID: <CANiq72nH1cMgpQGGkbwCQd4bSEVarWteaQaXeZh3FNyNKauKKA@mail.gmail.com>
+From: Justin Stitt <justinstitt@google.com>
+Date: Tue, 31 Mar 2026 10:09:33 -0700
+X-Gm-Features: AQROBzCWRSbSGajmdyoAKTTcnG8_jXsUZoBJguhEnhg_UEbHXmjODVo4uOcztkk
+Message-ID: <CAFhGd8paijFboDVr8rJDjScob047q+zgYAs038WuVozOG0aYaQ@mail.gmail.com>
 Subject: Re: [PATCH 3/5] compiler_attributes: Add overflow_behavior macros
  __ob_trap and __ob_wrap
-To: Kees Cook <kees@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Justin Stitt <justinstitt@google.com>, 
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
 	Marco Elver <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
 	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
 	Shuah Khan <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
@@ -105,8 +104,52 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 31, 2026 at 7:01=E2=80=AFPM Miguel Ojeda
+Hi,
+
+On Tue, Mar 31, 2026 at 10:02=E2=80=AFAM Miguel Ojeda
 <miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Tue, Mar 31, 2026 at 6:37=E2=80=AFPM Kees Cook <kees@kernel.org> wrote=
+:
+> >
+> > +/*
+> > + * Optional: only supported by Clang with -Xclang -experimental-foverf=
+low-behavior-types
+> > + * passed via CONFIG_OVERFLOW_BEHAVIOR_TYPES. When not available, defi=
+ne empty macros for
+> > + * the trap/wrap annotations.
+> > + *
+> > + * clang: https://clang.llvm.org/docs/OverflowBehaviorTypes.html
+> > + */
+> > +#if !__has_attribute(overflow_behavior) || !defined(OVERFLOW_BEHAVIOR_=
+TYPES)
+> > +# define __ob_trap
+> > +# define __ob_wrap
+> > +#endif
+>
+> Should that have `CONFIG_*`? i.e.
+>
+>      !defined(CONFIG_OVERFLOW_BEHAVIOR_TYPES)
+>
+> In addition, since this depends on a `CONFIG_`, with the current setup
+> we would put them elsewhere instead of `compiler_attributes.h` until
+> they are promoted to be "unconditional" (i.e. without the compiler
+> flag):
+>
+>      * Any other "attributes" (i.e. those that depend on a configuration =
+option,
+>      * on a compiler, on an architecture, on plugins, on other attributes=
+...)
+>      * should be defined elsewhere (e.g. compiler_types.h or compiler-*.h=
+).
+>      * The intention is to keep this file as simple as possible, as well =
+as
+>      * compiler- and version-agnostic (e.g. avoiding GCC_VERSION checks).
+>
+> However, thinking about it, why is the config needed?
+>
+> i.e. if the compiler is not passed that flag, shouldn't the
+> `__has_attribute` simply return false?
 >
 > Also, I am a bit confused -- does the compiler flag automatically
 > recognize the names like `__ob_trap`? i.e. I see the docs mention
@@ -119,18 +162,21 @@ g_uint;
 >
 > But then we don't actually use it?
 
-Ah, it does, it is a keyword, and I should have read the docs better.
+__ob_trap and __ob_wrap are defined by the compiler.
 
-From a quick test in Compiler Explorer it seems to be fine to define a
-macro like the keyword:
+There are some examples within the documentation additions of this patch.
 
-    #define __ob_trap __attribute__((overflow_behavior(trap)))
-    #define __ob_wrap __attribute__((overflow_behavior(wrap)))
+Kees, is it possible to make it more clear about what we expect of
+kernel developers in terms of style? Should they use keyword
+spellings? attribute spellings? only use custom types?
 
-That could be a bit more flexible in the name we pick on our side and
-more like the rest of the attributes, but if the intention is to
-eventually use that keyword in standard C or similar, I guess it is
-fine.
+>
+> Or should this just be like the rest of the attributes, i.e. we
+> actually define them here?
+>
+> Thanks!
+>
+> Cheers,
+> Miguel
 
-Cheers,
-Miguel
+Justin
