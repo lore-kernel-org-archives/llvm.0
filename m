@@ -1,126 +1,164 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CFC3E92A5;
-	Tue, 31 Mar 2026 16:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77249423A80;
+	Tue, 31 Mar 2026 16:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774974456; cv=none; b=QSt2dlty/UtyCccivWaWsViN/Havz5SRuKewzVj1Vh4x5eO+VEt+Vzd8ZTDZv7qwoJGvVCxj2Uq0B0tul8xM4AZubECsXu5O1MOvv2PVAwaYxo8/fS0BIRlcU9liDLvT1lPbdFDWJYhhS7CbmrQBiSKkCwSptmS9bQVYMYIVnN4=
+	t=1774975046; cv=none; b=pFgCBRxGj4zcpNgNdpeLPJL0UmgUbx3bLhyg29U2nJZjWfYNLsg1Yf5g2Geh3c9RZVrkBgb0xQnp7dWnpmCWMZ19APGmZEzfpif/yW0OwvGp/BVPmFinW60VUE/xhXBKhIxGmhd58mqMdc4xhUaxfWtQAi+XcUv4sQW0ClHSf6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774974456; c=relaxed/simple;
-	bh=gwGsC8gfuBfgQ5XY3v9OpkZF1IjD9jGcUhRLXX0GzwA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hXeoQFzg0xxWWQLVA/7x+wGDmWTuISecilmEJ0G3Pw+0aVU9R6yt7Iv5FD1ZNtUSOacR83r5pWgO7zs8Wgl7lGgE9VcGE+FSGdlYeV/wi6BDnEyZB7iwiig37kk5g2bzoB0Sm+yUBO/sCMRnt/rHcIJmD8Ne0+6+BUOlD9IujSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rn5zDNmj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774975046; c=relaxed/simple;
+	bh=dRUACUfYM3hpUKt4oHZzZpLCHG7xwGYcgN8GkPASyZU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=bJk8f3MQYkxoOV5OM7obEFxluB1mjvNs2TN1QZae8uqW31e91ZV+Qo6otZpqoYruJUneNOMi598h8Kt6bnQtKtegDG6jUd3fIeGKLDLH2/v6XXADaGuo3tLKvsbBAIUW6L3WyOJq4uHKT5QHdS37Sb3gDSa8qa6tpMSIHbj51iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mx9+0th8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rn5zDNmj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8DB1C2BCB2;
-	Tue, 31 Mar 2026 16:27:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mx9+0th8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34C23C19424;
+	Tue, 31 Mar 2026 16:37:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774974456;
-	bh=gwGsC8gfuBfgQ5XY3v9OpkZF1IjD9jGcUhRLXX0GzwA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rn5zDNmjYAYfmZdyCTz7xEy3t/bijG8g0RKCuF1KoxHUEJHYO0OMHhQFVwMrOWj8P
-	 So68SIDPXk2bPnsHTTQDw0PM+TBow6K4kQ5tWggWwX/mjIyt3qftNjB2UoJH6NN/0V
-	 XyVadomQf2PKTT3uAGFwNnwSvhO52bVVVdcwLcffDYF8P/m/GDp8XDVGmQhBtYnELm
-	 Eka3HyPWq2jiFPSLI5mrQGrpHx/ea6Z/X7GVry6Tt+3yjPspD4BAM/w0vxgyczi0o+
-	 1E5AkA86lybXcwLEQujk7uuMbG291wFQ4mfSvEpGLmfucvsvUF2hZ7xOhC0BtddqZk
-	 0TsD3xLwfumUg==
-Date: Tue, 31 Mar 2026 18:27:29 +0200
-From: Nathan Chancellor <nathan@kernel.org>
-To: xur@google.com
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
+	s=k20201202; t=1774975046;
+	bh=dRUACUfYM3hpUKt4oHZzZpLCHG7xwGYcgN8GkPASyZU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Mx9+0th8pvcSxWRvrrGWA1SxYzlIrfH/HDcZF3Sfp4ilvNE70PI8fbV60dps73LV+
+	 ql9/kGvtatJYWvGiTq03UQSnhF6rPVLKOezvLBT3BqkAzS48eqZxIvJ+jelzsjAwqI
+	 HKK/EtEZNMOWtzo2Uh7xw3ewdW6WtOF9f2mdtVayiBui2ykpfK/xOybWsgvQAn/jUy
+	 eFIIF7fswGILddpC2a0Tg3klWU7b6oAQUAEkxQ5gbKAg1ob6O6NjzDNwOxYyjNb8EC
+	 r34iZKrLorKyjejfdidY4GK/skyXXVzCIGktFY9p7sBXIAvsmXUVKpZXNzMLEomdDW
+	 LQRKlfpq38Tfw==
+From: Kees Cook <kees@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Gary Guo <gary@garyguo.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Marco Elver <elver@google.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Rafael Aquini <aquini@redhat.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Stafford Horne <shorne@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Piotr Gorski <piotrgorski@cachyos.org>,
-	Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v9 3/3] kbuild: distributed build support for Clang
- ThinLTO
-Message-ID: <20260331162729.GA2006419@ax162>
-References: <20260331154827.2793269-1-xur@google.com>
- <20260331154827.2793269-4-xur@google.com>
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nicolas Schier <nsc@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-hardening@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 1/5] refcount: Remove unused __signed_wrap function annotations
+Date: Tue, 31 Mar 2026 09:37:19 -0700
+Message-Id: <20260331163725.2765789-1-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260331163716.work.696-kees@kernel.org>
+References: <20260331163716.work.696-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260331154827.2793269-4-xur@google.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3451; i=kees@kernel.org; h=from:subject; bh=dRUACUfYM3hpUKt4oHZzZpLCHG7xwGYcgN8GkPASyZU=; b=owGbwMvMwCVmps19z/KJym7G02pJDJmnfzjK7LzR55a3/gbn9ZMvGFiuWGzI0L91uq5bYbeS1 doc6dAJHaUsDGJcDLJiiixBdu5xLh5v28Pd5yrCzGFlAhnCwMUpABPpKGVkWN5yPK/dyLb64jZ7 Wb3rJw8LhXBf31h2mFeiSj1j4grZdEaGiXtDoi15rZQu3+QMezF3PpN/T/7xYPbvD9ilrEoPe+z hBAA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hi Rong,
+With CONFIG_UBSAN_INTEGER_WRAP being replaced by Overflow Behavior
+Types, remove the __signed_wrap function annotation as it is already
+unused, and any future work here will use OBT annotations instead.
 
-On Tue, Mar 31, 2026 at 03:48:27PM +0000, xur@google.com wrote:
-> diff --git a/Makefile b/Makefile
-> index 69ccf9b8507d..26005c64016d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1047,11 +1047,13 @@ export CC_FLAGS_SCS
->  endif
->  
->  ifdef CONFIG_LTO_CLANG
-> -ifdef CONFIG_LTO_CLANG_THIN
-> +ifdef CONFIG_LTO_CLANG_FULL
-> +CC_FLAGS_LTO	:= -flto
-> +else
->  CC_FLAGS_LTO	:= -flto=thin -fsplit-lto-unit
-> +if CONFIG_LTO_CLANG_THIN
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Gary Guo <gary@garyguo.net>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Marco Elver <elver@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+---
+ include/linux/compiler_types.h |  9 +--------
+ include/linux/refcount.h       | 10 +++++-----
+ 2 files changed, 6 insertions(+), 13 deletions(-)
 
-This should be an 'ifdef', not an 'if'. You copied Yonghong's mistake:
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 890076d0974b..e8fd77593b68 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -432,18 +432,11 @@ struct ftrace_likely_data {
+ #define at_least
+ #endif
+ 
+-/* Do not trap wrapping arithmetic within an annotated function. */
+-#ifdef CONFIG_UBSAN_INTEGER_WRAP
+-# define __signed_wrap __attribute__((no_sanitize("signed-integer-overflow")))
+-#else
+-# define __signed_wrap
+-#endif
+-
+ /* Section for code which can't be instrumented at all */
+ #define __noinstr_section(section)					\
+ 	noinline notrace __attribute((__section__(section)))		\
+ 	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage \
+-	__no_sanitize_memory __signed_wrap
++	__no_sanitize_memory
+ 
+ #define noinstr __noinstr_section(".noinstr.text")
+ 
+diff --git a/include/linux/refcount.h b/include/linux/refcount.h
+index 3da377ffb0c2..ba7657ced281 100644
+--- a/include/linux/refcount.h
++++ b/include/linux/refcount.h
+@@ -170,7 +170,7 @@ static inline unsigned int refcount_read(const refcount_t *r)
+ 	return atomic_read(&r->refs);
+ }
+ 
+-static inline __must_check __signed_wrap
++static inline __must_check
+ bool __refcount_add_not_zero(int i, refcount_t *r, int *oldp)
+ {
+ 	int old = refcount_read(r);
+@@ -212,7 +212,7 @@ static inline __must_check bool refcount_add_not_zero(int i, refcount_t *r)
+ 	return __refcount_add_not_zero(i, r, NULL);
+ }
+ 
+-static inline __must_check __signed_wrap
++static inline __must_check
+ bool __refcount_add_not_zero_limited_acquire(int i, refcount_t *r, int *oldp,
+ 					     int limit)
+ {
+@@ -244,7 +244,7 @@ __refcount_inc_not_zero_limited_acquire(refcount_t *r, int *oldp, int limit)
+ 	return __refcount_add_not_zero_limited_acquire(1, r, oldp, limit);
+ }
+ 
+-static inline __must_check __signed_wrap
++static inline __must_check
+ bool __refcount_add_not_zero_acquire(int i, refcount_t *r, int *oldp)
+ {
+ 	return __refcount_add_not_zero_limited_acquire(i, r, oldp, INT_MAX);
+@@ -277,7 +277,7 @@ static inline __must_check bool refcount_add_not_zero_acquire(int i, refcount_t
+ 	return __refcount_add_not_zero_acquire(i, r, NULL);
+ }
+ 
+-static inline __signed_wrap
++static inline
+ void __refcount_add(int i, refcount_t *r, int *oldp)
+ {
+ 	int old = atomic_fetch_add_relaxed(i, &r->refs);
+@@ -383,7 +383,7 @@ static inline void refcount_inc(refcount_t *r)
+ 	__refcount_inc(r, NULL);
+ }
+ 
+-static inline __must_check __signed_wrap
++static inline __must_check
+ bool __refcount_sub_and_test(int i, refcount_t *r, int *oldp)
+ {
+ 	int old = atomic_fetch_sub_release(i, &r->refs);
+-- 
+2.34.1
 
-  https://lore.kernel.org/abgRRX3PH9IaExi8@sirena.org.uk/
-  https://lore.kernel.org/6db3a2f6-d61c-42f1-9b9d-0aca021cc2d7@linux.dev/
-
-Please slow down and test build your changes before sending them. Each
-revision adds four new emails to everyone's inbox, which is just noise
-when there are obvious, basic problems. 'b4 diff' shows no actual
-difference from v8 and v9, which should have been caught by a simple
-build test right before 'git send-email'.
-
->  KBUILD_LDFLAGS += $(call ld-option,--lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false)
-> -else
-> -CC_FLAGS_LTO	:= -flto
-> +endif
->  endif
->  CC_FLAGS_LTO	+= -fvisibility=hidden
->  
-> @@ -1657,6 +1659,7 @@ endif # CONFIG_MODULES
->  CLEAN_FILES += vmlinux.symvers modules-only.symvers \
->  	       modules.builtin modules.builtin.modinfo modules.nsdeps \
->  	       modules.builtin.ranges vmlinux.o.map vmlinux.unstripped \
-> +	       vmlinux.thinlto-index builtin.order \
->  	       compile_commands.json rust/test \
->  	       rust-project.json .vmlinux.objs .vmlinux.export.c \
->                 .builtin-dtbs-list .builtin-dtb.S
-> @@ -2118,7 +2121,7 @@ clean: $(clean-dirs)
->  	$(call cmd,rmfiles)
->  	@find . $(RCS_FIND_IGNORE) \
->  		\( -name '*.[aios]' -o -name '*.rsi' -o -name '*.ko' -o -name '.*.cmd' \
-> -		-o -name '*.ko.*' \
-> +		-o -name '*.ko.*' -o -name '*.o.thinlto.bc' \
->  		-o -name '*.dtb' -o -name '*.dtbo' \
->  		-o -name '*.dtb.S' -o -name '*.dtbo.S' \
->  		-o -name '*.dt.yaml' -o -name 'dtbs-list' \
-
-With that addressed above, the series survives my basic LLVM 22.1.2
-build test with my distribution configuration. I'll provide formal tags
-on a properly tested and fixed revision.
-
-Cheers,
-Nathan
