@@ -1,81 +1,81 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E552FDC5E
-	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 17:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B7B314D34
+	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 17:09:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774976530; cv=pass; b=GYOma3MOHEBzddXi2mz/AR1XXRpXHzJFgHnnzklFqB+mqXOZKn5cq7hJkm+a8dH+IhjSn1q8ULXTWTq5geZy9Jv1hU7oyKjq4XBb7fnrfcSVbT+ryRiuMWbs9AiadAwdRyRqcCkS2VwlCNzWMOiwXtanGqsx/RQEPyZVOEPWXb4=
+	t=1774976970; cv=pass; b=JXB+C3ITq6+UqrkZoa996Vs6Q0NUJsPsnUm4DwkSYht5tAju53e4/Rt0uMTq7jsuVAqmmu430EQoZXLDtHR3MGTXe2BVF5H3WE0/1O51Kf11dgbDigaNT9qh/QaAdRYj3ZsixvH5M9bLv3HK16RN8oED7FOR9Y4edZiOaBK0frY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774976530; c=relaxed/simple;
-	bh=g/vQPQS0w9Xxi55W5EhGbOlAIubJN7tvka1LWWLiAXc=;
+	s=arc-20240116; t=1774976970; c=relaxed/simple;
+	bh=WTRVHRp3YZnZVbE+0ZoSdIPjJ/az35/laG/IbVwaY3A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rN2tbTwWctFiikgrwRk7oxeaUqq/edqtRK+Uf2eqUvdaWzhT+x/iCXAl/EJf7yxevNkxfgErdsh1HNQnoGfvAnd8lE7fvzyJxx+BtGTJeTKWDgIySAxOBxWOv4ufjwpiSYR2Wixptqo1B1bCR2u0vVlz7lf4zAiNHxS3whIMzQQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bU0fJp+p; arc=pass smtp.client-ip=74.125.82.175
+	 To:Cc:Content-Type; b=qtaBYMyZAxAclWY/cGN1f40+82OUbUXwLwNcJoBAyS45txLbaEUJKl9TG0DVnyKUb1jIfZWK6s5WHhQqGzw0DiOs5jFQmCYTEPxLDrNcRllLPhKeFQkXbxvqcmL1v3SdQPSvYv6XwEV1At8SJT2u63CxPkhUbQDUDuc3/JojK/E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W/dpLa17; arc=pass smtp.client-ip=74.125.82.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bU0fJp+p"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2b8095668ebso141177eec.2
-        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 10:02:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774976528; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W/dpLa17"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-12734af2cdcso219237c88.0
+        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 10:09:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774976966; cv=none;
         d=google.com; s=arc-20240605;
-        b=WG73o39qZaczq62krGd76tIIKDgT4ZZDJ/XppC1Mh0oTaD8GK7trUen79wpCkOveLa
-         r5CF+CvWwzqSgpVmFE+NT3yxxSOYpJ/EiiYXJ/TyGds6PK0lQvrqIE5GGa/7aUV9vw2L
-         JZA6iEm4zKeNk88/g/Y4EBvDY1iACookgLAgv9wki9r172GOx6MeM5+7XxF4nFJpS3II
-         HCSDn4gWOSKuHE21zQOYjyorXNYOzdyM7uNedBT81bdITs4vGhxfR/ORjPp7Svgwwb39
-         vceLLG9sU0uLPFyNziUh6l1GKhN1In/QoKd0H66rvywDvETgb25OOYkzCrOEVxfmLs88
-         cClg==
+        b=XWOhvc3mfC41fo1BC+VNXaHq3vXXTVWcZBJWamW/j/kKNTollKAQ2Q5uMqjHb76YQx
+         yR/5mqsFftNIKZ6IY8agCBY8J8usB2fPDZ+N/ktom1KiWBdueKJQfxsJmmFiLEbaX6Dk
+         HOlPDLVUW3bFz7EzNsX6920RGxzzklakTOiBmum9xKCmXXwV1w5xMb9sIjTktaAmG8nq
+         9uYw4h1VFiFhea26UKbMcSbdqLkB3fUiJqvaQFY9x58Jjq2ybVSICMJs9bA7jrclnJGZ
+         NCJnKXEjuPjJr1SauPfoCYCEGuTDcXsISQUhS8zn5MIitvDhCMedfOOoHw3I4orR8od/
+         DufQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=IU4m3ma81SYxNj71QUeHGIKcLWU6SzNh0VTIbMzWeYY=;
-        fh=KiwEebbrYBiPHupXE+8tUKTteyjmyDw+QPCpTOEKyuo=;
-        b=I64bls8uLefqz6JmbpSuIR5xNXUtlYP+d/8Rzg8i4XIW5yR3KmdbF+r6B/m9fa+mrA
-         OFvDD22/FJcsV3j0cafEZw4YOWDDpUi6StTcw1l3B3gNq1Bx5N3EWUjxHV7qVKx6FKIX
-         DivRCMskfSUv7lZwb4dDLhOr7t08wAT1HNaJ1ghmqgzIqybEvfu8l3Fb0f3dq5tXUc+Z
-         oNMPpV14uvQydn4AjohtHAKYBk3DaV0iau7laVnSOBnAC+UZYDJs0ylR0+9+8217PXYH
-         nUnI9vG8I67nV3mgp0jL/1FQE0zxWmZ3BC7rk1h1YsErlVPI3R8bDpW/d3YLu3YMxJyz
-         3G8g==;
+        bh=hmCH9wEuQvIKAkIe3dk/Nd8jQ97KUjGLE+pTGY9wyZI=;
+        fh=gGv5/byusobBrvjjGid4Xg9a+T+4/mI9+u2dDPDd5/w=;
+        b=XFN6fCWkWXYpQLgHgTKqLhoW7eYCzHAphGan/6y8YSnN8CXxdzNNpQmbBZYuSNDh/J
+         yECcODORnzIzD7fBr/h5X+N6XyCagVP1GMnlWAkK80Wm+R9BBJPZtNLpSf/E9Cn/YSdJ
+         imcU6lEJRZmfiUgUOnNqy6dFN0rjcN8ZrEwKDlkM2Keh1Bd0sDQ7QoQadk+cl6BeJiJV
+         wET6zUJd9Opgl+Efz4o1aKXcod+IGNqM8lT7QN0BjK+K69V42J2bp1R67qQfAna6I1dw
+         yNcs7QrXyVHCWQdGnr/6RlUGdryJCZkOnPZomVll8cypJPaeG2UAmxBOg1YTcywBRM/n
+         raOQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774976528; x=1775581328; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1774976966; x=1775581766; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IU4m3ma81SYxNj71QUeHGIKcLWU6SzNh0VTIbMzWeYY=;
-        b=bU0fJp+p8elZTWQzbaBdeW0ncH/N4H86Ov+UuvDBOTjNHy0EWf+WIpdhX+aACg9ViA
-         KFphjrPRe4xKJ0H7FNUTvuFhI0b0mN3uEffk/XyTWeYEmcZfCnT8KEj+p73nLds4S52k
-         CWR7hTl0O1Bkh+tJpwPHTPDXueQ2UV75jMvJ/PHjzLy+r4Z4XYiZOTeu2aAJwTFbtVF+
-         GxNvcuPAy8t3zbM6kdHq50JygaJrwAUyP2/7Ce7HQrLgEy6RT5h54CJn3kWHbxdxxX9u
-         51TA+5CbqR0xkVJs2NKn029VUjTBs5ZOJmWsGoNd81spzR6BO3I0iIJhbrhz8Ju0kiz6
-         VKYw==
+        bh=hmCH9wEuQvIKAkIe3dk/Nd8jQ97KUjGLE+pTGY9wyZI=;
+        b=W/dpLa17eDVWiKO4tHTG3RKjXmVIrlzyplPPEFHeOZYAHgn5dR83IiCdMBZqgns841
+         XXsPeNRI9VQ2AtuEzADfKVmrNUf2peHzXfKJb4Z+tFq0Ow9p4idSt/BLu/HqyFPIEZ84
+         7gu5XwKsVMhNRbQ9PzIjhxO8Cj1VbRskEnR7SyRHEUu0ob0avvSMKJOaqZshDU+MT4qA
+         HmdlsojaAjS6kO6cXVkeuSZKXgBcd2eI3cZ18lBwKDMbp/pTTUI349mWcP9FTqefam2B
+         wWOXJOhhDemzvD0U2rRuR2UkGS/W7G8HtWhH1Eh6NFlHe0VSrB5D5QoLcZyXGz9ZBq9P
+         88bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774976528; x=1775581328;
+        d=1e100.net; s=20251104; t=1774976966; x=1775581766;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=IU4m3ma81SYxNj71QUeHGIKcLWU6SzNh0VTIbMzWeYY=;
-        b=ZI1/TwWFxzqq1sVxIAjDQltWZxhbFRGdQ49NhmLBMj1Tzwk3ND10QmC5aJv01xuqd5
-         p/aYeYu7bnTkKZkIzXqGU1RrbsteZLi/8DTtkeaebsYJItTGEhCP6W61YWH8molUCWIr
-         wAGTKpWBjUP/nSZL8IX+XNJPyJXiLsOOXhmFyAK5laEnKoFHk5uBUHxMDvMMilVKdAHu
-         3MxOhSgSw/svdMINAHN/CRxQyLKoGeQLtw7nDn/iJ8BM3lhwIzPAnmM+xoo3I4nG/AOn
-         TD9CCJPOdl38AFe0a3GeaTR8/nRm7g+5cQNfZnBQWrMzpYuKbBHuQWZ/qSxaHHNCVQ1i
-         MGQA==
-X-Forwarded-Encrypted: i=1; AJvYcCXBMQ0K68cHK6yC8nXVyLj4vs1KIPvPW3Qzd0kW7Nyx3ZnoymQ2IQosR3pzmGM+OGi6cT8b@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw3kjPg4i+hyrR3MeqpJjKTvFx670Je+ONunrek6Ipvoj8LOd1n
-	mzaWtp6WyDU+J4yNkLHf2QKJkwCYOjpKR0Uc0QLB7RUYSxV9CjcLVtppwH/Esizy4eMmLRfKaRl
-	Gu+qG3AaXadqIfXvXLUafJQ2O1CilGnc=
-X-Gm-Gg: ATEYQzwQlXcxVEMCnxdF706r81ei6r96m4WKMpZ3sEfg1PhWxJcsym5pdyccw7tYeMk
-	oe3oDhWNLAgRwqUQ4XdJbHNrvIi97aiUcXZZSPxM+nAPV7Y34p7BjcxAaak1JjFy38wSMT4WrXA
-	co18+VNcbq94p3celQEkEz1pk1fcPqj9tMMxRJjH87LDeBPi835ChoDSy2WOIxMb+cZXOewpBNC
-	vfAVkT8C4HLqGgWrPyHbcHCaX8Sh0f95840P7LCO5T60mUUACznfKblWt5C5+IfNUkvy4K262Nm
-	VvOuvMECv5kPh+fu8cBe0eB1Gxidlitn57//f8k3cMWjZDPz0CwwIX/jc9oakL+GJ+h4JiGaIz+
-	4tuzWlCl8zMHF7A5AhWBe9BQ=
-X-Received: by 2002:a05:7300:8c05:b0:2c8:aef9:cf3c with SMTP id
- 5a478bee46e88-2c8aef9d5bbmr578311eec.8.1774976528009; Tue, 31 Mar 2026
- 10:02:08 -0700 (PDT)
+        bh=hmCH9wEuQvIKAkIe3dk/Nd8jQ97KUjGLE+pTGY9wyZI=;
+        b=NC3gd6/RiiYY2GLYAG6vRCy7oX8CnQefvmXJ5dPHSQPBC+tOP3pqg9ie5G3wE7dCH4
+         upDf8JU5dE5HPZA9XVZhoWaOFVGAE/e3TR/4kovDSkAAnIYPyLlTEXilUzbCyYk51NY0
+         z+usUlwp/3/GvFlGVlkSzvDw/wFk1TB+wQwfr8+iu5kSHyD4cnMErLjRaDC1NZ63ycGk
+         XeQiDQQs8zbQdGVDjrCZ0ChLhNQKQUoP3VGM51twAuP5lk0ijBx+oU3H9Z373MyBimdo
+         VnAgsAioS/CnB4v5rjp7hY2LGqG80+ce6ti3490sg/VtgQ77kHhh10ATM9JEhCGreoPB
+         xKqA==
+X-Forwarded-Encrypted: i=1; AJvYcCVVUrPxFRkIQG1HAzRtVqPsllqTZhYdDHwoPGoPl/quePAXBfMCqzJeqFNQ4YOkGUNK+m3d@lists.linux.dev
+X-Gm-Message-State: AOJu0YxcO+eJ6D/zgGOU2zNCnzjmuEgaZMwEBtwT7ADbNZSHVy0WNk+G
+	WYAg0xjPu50Mgs77H3j9uZabd217igBRL+zu8uO3Yh8zyXSjcg8hy9avYLMy1RjkjDxtdbSKdAM
+	pkaAgMiGl/xedXGT8zEfnd70zYmMlC5Q=
+X-Gm-Gg: ATEYQzx89z74uOBAk9lnF+2SeGh7hm4ncKxx1kKfWx5R248b4U6P7+8D8cdrnB3uh3l
+	TPAMu/1iDn07vGh9el3yoiztw4xs5u2pcgXwEah3s3LZBBW8P9zqqSPCn9nNpSgKUePfG2El4SC
+	urn9jkLsCjGla5pejtlfH5yCSyuQaIinVEUofbm6VLPdoyYZ3EhCFkrpZo1MdnMmQ9B+UhbI6jW
+	/igHblsb7vTvbdE3I2NQVfsphnD8NJj5I46SS8bpPu8BSV+qEgvdULKd3VrJEM1Hpe0aMMvRgaD
+	fvnV/LWse1K1LMm2g4HTZLoA6nhB2hnqpXh48/1hYFp+gQFaFgWh72Ulpdsn/nZZczdkb1Kx5Cl
+	KVvQUITzgTBoCQ0oSmIbKsqA5e67EgYKwsA==
+X-Received: by 2002:a05:7022:660d:b0:128:d279:b8ea with SMTP id
+ a92af1059eb24-12be65beca8mr58281c88.5.1774976966237; Tue, 31 Mar 2026
+ 10:09:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,11 +83,12 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20260331163716.work.696-kees@kernel.org> <20260331163725.2765789-3-kees@kernel.org>
-In-Reply-To: <20260331163725.2765789-3-kees@kernel.org>
+ <CANiq72mK9fz6Spmgt4js3hScqhqvZb2YP2T7tDfR0fHPDFWJ7g@mail.gmail.com>
+In-Reply-To: <CANiq72mK9fz6Spmgt4js3hScqhqvZb2YP2T7tDfR0fHPDFWJ7g@mail.gmail.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 31 Mar 2026 19:01:55 +0200
-X-Gm-Features: AQROBzACBmAh1Gj6cURe9fgjRYkC4LMT-gxdC_n35omwVPBYsPI5mIuUgNZG76o
-Message-ID: <CANiq72mK9fz6Spmgt4js3hScqhqvZb2YP2T7tDfR0fHPDFWJ7g@mail.gmail.com>
+Date: Tue, 31 Mar 2026 19:09:11 +0200
+X-Gm-Features: AQROBzBS6-knL1zyoKnZ9aw9c60rLyHZCDFo7ofTsu_CS53BZFovGzzWB07mGSA
+Message-ID: <CANiq72nH1cMgpQGGkbwCQd4bSEVarWteaQaXeZh3FNyNKauKKA@mail.gmail.com>
 Subject: Re: [PATCH 3/5] compiler_attributes: Add overflow_behavior macros
  __ob_trap and __ob_wrap
 To: Kees Cook <kees@kernel.org>
@@ -104,60 +105,32 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 31, 2026 at 6:37=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
+On Tue, Mar 31, 2026 at 7:01=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> +/*
-> + * Optional: only supported by Clang with -Xclang -experimental-foverflo=
-w-behavior-types
-> + * passed via CONFIG_OVERFLOW_BEHAVIOR_TYPES. When not available, define=
- empty macros for
-> + * the trap/wrap annotations.
-> + *
-> + * clang: https://clang.llvm.org/docs/OverflowBehaviorTypes.html
-> + */
-> +#if !__has_attribute(overflow_behavior) || !defined(OVERFLOW_BEHAVIOR_TY=
-PES)
-> +# define __ob_trap
-> +# define __ob_wrap
-> +#endif
+> Also, I am a bit confused -- does the compiler flag automatically
+> recognize the names like `__ob_trap`? i.e. I see the docs mention
+> using the attribute,
+>
+>     typedef unsigned int __attribute__((overflow_behavior(trap))) safe_ui=
+nt;
+>     typedef unsigned int __attribute__((overflow_behavior(wrap))) wrappin=
+g_uint;
+>
+> But then we don't actually use it?
 
-Should that have `CONFIG_*`? i.e.
+Ah, it does, it is a keyword, and I should have read the docs better.
 
-     !defined(CONFIG_OVERFLOW_BEHAVIOR_TYPES)
+From a quick test in Compiler Explorer it seems to be fine to define a
+macro like the keyword:
 
-In addition, since this depends on a `CONFIG_`, with the current setup
-we would put them elsewhere instead of `compiler_attributes.h` until
-they are promoted to be "unconditional" (i.e. without the compiler
-flag):
+    #define __ob_trap __attribute__((overflow_behavior(trap)))
+    #define __ob_wrap __attribute__((overflow_behavior(wrap)))
 
-     * Any other "attributes" (i.e. those that depend on a configuration op=
-tion,
-     * on a compiler, on an architecture, on plugins, on other attributes..=
-.)
-     * should be defined elsewhere (e.g. compiler_types.h or compiler-*.h).
-     * The intention is to keep this file as simple as possible, as well as
-     * compiler- and version-agnostic (e.g. avoiding GCC_VERSION checks).
-
-However, thinking about it, why is the config needed?
-
-i.e. if the compiler is not passed that flag, shouldn't the
-`__has_attribute` simply return false?
-
-Also, I am a bit confused -- does the compiler flag automatically
-recognize the names like `__ob_trap`? i.e. I see the docs mention
-using the attribute,
-
-    typedef unsigned int __attribute__((overflow_behavior(trap))) safe_uint=
-;
-    typedef unsigned int __attribute__((overflow_behavior(wrap))) wrapping_=
-uint;
-
-But then we don't actually use it?
-
-Or should this just be like the rest of the attributes, i.e. we
-actually define them here?
-
-Thanks!
+That could be a bit more flexible in the name we pick on our side and
+more like the rest of the attributes, but if the intention is to
+eventually use that keyword in standard C or similar, I guess it is
+fine.
 
 Cheers,
 Miguel
