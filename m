@@ -1,67 +1,67 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84DB12D46CE
-	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 20:18:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863752D46CE
+	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 20:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774988328; cv=none; b=BZt6tKk0viNizYc2LoL6xhltQU/VZvaH2XkYwxw6EngC6grDU0hFpGce5vfmwnXhEBdH6VlKDLlMgYFBuAkZhEQXJWDYFj/aJfzJJnkTqMpcG2hpvlvQvLb+LPNvC6XElbh3nG+GsB6br9g7bB5XGH4HvmoVr9EXUSbpuTe7fAU=
+	t=1774988362; cv=none; b=dnU2TIWbEHnxP+0cK/k65wZUkii10YGlzWDgJHaLHwdPRsVZOrFLjlIzMbgZk3Dt8DnMJ/dII3ihB/rfVcHPK/Q+K5lkYLVhZb10Nqvi6evLAkWOEqfXqi4STuVmD1soNbTjNx1TBcQlTNRAulTPFMs0TIvaU3xlfI62G4Kbsgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774988328; c=relaxed/simple;
-	bh=MXnPS0QnV07SSDgjwdHCBKIla0I+UMjxd6c/XOBUKPI=;
+	s=arc-20240116; t=1774988362; c=relaxed/simple;
+	bh=Y/YFED/0OtgPfgeV4gPZ7asbBZssxn6FNaeq1L4CVTM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cJddn5G3oC4b6cVworhuJezlN81lT97US7LvYxNAMPrRgaiBHQ9tj1IQnymyv9pnihmKEa+hyqnDc+UWf+nIUMs69q4jWiLmAl2VEuquzVQfYzs8GNpnrVZ3ubFmA8viB3AzDt5v/ypmyPH7rdI+MPx5sYn6+oSQD+v0DhYJBCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=DkfKDCqa; arc=none smtp.client-ip=209.85.218.48
+	 To:Cc:Content-Type; b=KoIS8mSIE24Gn+/b6uegabMdAZwSDlXqgqzK5ZvP5MaFx4RwklBomVFrZOyhtwRNadoN5mPGB57RyHjCd1jxJZyB8lv8WVDQjaZgYlwGp7j3YS0G8YSpP5axdvOpXJBpxOMh5UJJfnqohak8Ojnonm8+TSa/Fmn1VW6Y2Pqmg0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=h1bPKEDB; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="DkfKDCqa"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b93698bb57aso50773766b.0
-        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 13:18:46 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="h1bPKEDB"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b982b0889d8so743912566b.2
+        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 13:19:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1774988325; x=1775593125; darn=lists.linux.dev;
+        d=linux-foundation.org; s=google; t=1774988359; x=1775593159; darn=lists.linux.dev;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c2ktyrPBG7CFlGMbOR9QYSgdZ9nvYimpNIw5oGP8BII=;
-        b=DkfKDCqaV14VpLzWXNd/eo1PW0mfZqLgaoGTPWevUuJqgXZf3XRo3C/bPqpftAQHCw
-         2Hst/ZkTWnErmewKb9eoh/UnQ8gHrMK1UHUu72vBOnoXtBNM+PAGBfUM4eumr14aj/50
-         NhtQytlCB6FfS3/o8OIzAVOkrP+/hya+XF0y0=
+        bh=VcN9sER3VoMAwC3I5Sh98SVftLUl9If6/CrHtfP+ol0=;
+        b=h1bPKEDBin589TarlCpONhSTtadEu46iU6RNbVcPg3bs8UjnofI+ME6RORsDvBoDP1
+         AOL2mghYue5K0J3vz2gWTV3Y8e8QcTvRXC7TSpD+i0/jb4yMvb+tUwZib5wWCILWsdgM
+         qZ74lndI3fFGL0GHZClqelAFaEAY91Wf4xEr8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774988325; x=1775593125;
+        d=1e100.net; s=20251104; t=1774988359; x=1775593159;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=c2ktyrPBG7CFlGMbOR9QYSgdZ9nvYimpNIw5oGP8BII=;
-        b=pcPMEZ4VMxPef1HlYxE++d/t/8clkGfVobnFH6gXcLHMTkljgDWapGzOr5jRGq+e/F
-         eVA9dgppRbw+SE6nwKQW19ckMpR1M0l8lgQVCkouFXazPBQx8T4Rs0Drs5SSQPSxwCWK
-         K/Jeo5cXTZoHBwntzURIE1xY3cjOWwE9TjdJCjpFFmM3ZIE8h2Rn9/O6Ffmt61fqs0P8
-         ikCt3UGqwhNJKeIfFMZ6RDnvuTK1yGrlSD7Py9cD4OoljqlCt6/QwGwSELncdqnP+76+
-         R8SKKPMHJ7eEx9R5965sGdRc9yKMx4FiH4aMNnExeM44ajdHBcqcTPVYn80031DYStiM
-         o1ow==
-X-Forwarded-Encrypted: i=1; AJvYcCWp41WPa7oJFrQ2AqPhceA3mdoJEqODi+8BQwq5sqgXEvrVLFHAMY8IfpwEF9KDiINO13Ui@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz/zlktbtTnfXPgvExHkB3VMb9r9qANDECTSatX0cT/9u6u2DBq
-	Hxo2FDXz9m18uzjFd0tdiqEVLVZttkrtSKJTYAgLpJ1AfJLkyiH/L4856XoifaJWYeTgzAUqNNX
-	S0ZHAUYRuXg==
-X-Gm-Gg: ATEYQzzRma4KMzx/J2V42PCTDqfytguNe9zJ9+SnUEwakBX2vXjvK/o2Ntx++1yIcPy
-	8DH0S4z9sGnNS0SmACQyGJH+k8o88DqAoRd6LKXROMPOxF0lBKTSN8DXr5GJoPgGGLOp2mwAYw4
-	RLtHkdAdYehD7BJjm9wPWPDMhw/i2RSMYGrleKUrGLXfghZAwHgIPngtFIM8pRDwBYSDm8Z3aEP
-	0YMAkzasUhUK8Lm8FeXM7v3q1GWZfs5zLKpoCso3f4eXcXe8j18J9bNkdpV7PEgQqRxKGNv1hQl
-	3dVOAGRCyYMS9a7IaRqO+7iBe7x9wEb1WRthlkM+7L/3WhfkzAweEs+znirOou/DoJTAhq/kScF
-	W+RlEl1jCBFjDRViHDxf7mnucrHoYjIyJHTkl++jJpJA6/FhqhMCr51bYgGYxSJ08i4gvLVpLGX
-	I1Z073vmbJDqNrkdsPezEib1bzk9sfl1vCvg28KOdAsbV/vCMyjObQRlXXzIDmInnPjaOM2uuP
-X-Received: by 2002:a17:906:fe0e:b0:b98:654:d9eb with SMTP id a640c23a62f3a-b9be88c0daamr265121666b.22.1774988324715;
-        Tue, 31 Mar 2026 13:18:44 -0700 (PDT)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7b225327sm436256566b.58.2026.03.31.13.18.43
+        bh=VcN9sER3VoMAwC3I5Sh98SVftLUl9If6/CrHtfP+ol0=;
+        b=bnm3NcjvRZdUgfzL4ns0N8csEFyy50zVaStw/AYKHMnE38hiajPg/YyfC7SvsxFO+F
+         O5mjnpZzmhGhR0IKlyksYtthFfmW9X8y+W7d/ljJkogiYFFQtk+8memMpEE0WGXt899z
+         UtcTF9oAxK3d+Dm0K16RleEfqJSv0IlE3KtPS0BjgRlfSHmHKsuoaQZQo3D0ptSqUfno
+         6FzQvV6d3EwKrDihy7XK5xqNi/Pu//yIHYbYpyK1iIb6lWB+vxsHEi0HEH9C9JIcg6TT
+         Otf7jJM492cpOhwJLpUGHvQNlw5SRi5U8lu+S7jde6F/CRPsOqoFA0UvglYLY+64Aoki
+         ectQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUxnYHlIe/HgsiT6BKz9ltro+6hfe+hKagxgz1uzQrzNLYk+o8uitavULkjhJd08wAU0bBD@lists.linux.dev
+X-Gm-Message-State: AOJu0YzHNVMiFa409L2PjwrNUQaHvQPwT+AS0Vacm4GxpHJg7x9hSzae
+	DTwGKBF9gEnpQMvX1NymT/JdPDp3A+GRcNUHP3PDk0DP5rXSazdsJv2VboMn3GNSj44fA0q08Q1
+	PIduzSW6GpQ==
+X-Gm-Gg: ATEYQzzN+8bsetl5MqI4t65/uWCi/r1JzV2vVQcQSTMBRtcBEhCHFWDZb1IAqxT/AUC
+	IPGwY5L1F1Bv9Kxpgl/jtrCNirE5Lxu+wV48lzcxnqJzrfYZBekCIrycUigauwZQFw/67SgGpUe
+	IRZE290s5SULBs3ixxoutmueW/t/lEwaWrh8xUn+AzAjYbtdSgfsvEax7WKuNu16ZXI+o1cXk1K
+	n7Mp2UsLGD7gOwvHX/Z+eKJ0Eeia9zkP6/Xa+kOCDM9MI/Y0nCZvczhkMLvqMxorYOWXazDAGue
+	AYlCpUkR2ObTaNc8dKEM5SqakUpBc+Or2QpPwsPS4Rykaz9XbOMT579CIbLbPFY9aR/fdzP2Tu1
+	+KulTb2nTRnsIx1pmgZprz7SPBkZ2e+rsvAsRFciZOnoKWbQHYjahP9tVtYBCP2ts/9hNnDqc2V
+	ejxZByeea6fCouFjuNO3Q/nFcnU4XJuJpJUTO+RYsQOXuG67xkLcWY8S6SiC9OmKIvXPf7Fv/V
+X-Received: by 2002:a17:907:e112:b0:b98:36cd:7e11 with SMTP id a640c23a62f3a-b9c13cbc953mr47645566b.45.1774988358506;
+        Tue, 31 Mar 2026 13:19:18 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7ae25b08sm437641166b.7.2026.03.31.13.19.18
         for <llvm@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 13:18:44 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-66d65646c65so589004a12.1
-        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 13:18:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVdzFQnBSa91tw0Qt+bIGGQMw655o1IjqQuQojFu7HwC1l5J5dySJnTtALt9IXImYhRsOcp@lists.linux.dev
-X-Received: by 2002:a05:6402:4489:b0:667:f151:2efa with SMTP id
- 4fb4d7f45d1cf-66c338618b1mr3066306a12.12.1774988323206; Tue, 31 Mar 2026
- 13:18:43 -0700 (PDT)
+        Tue, 31 Mar 2026 13:19:18 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b9358bc9c50so833528166b.1
+        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 13:19:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXOe5U9r5rVGmzyw7WMf61OXAplND6Dzu1nsolJH/Ze531iCGNMrzfNx5euDC1m9g8S6OMO@lists.linux.dev
+X-Received: by 2002:a05:6402:210f:b0:66b:a9bf:41 with SMTP id
+ 4fb4d7f45d1cf-66db9efda06mr583269a12.27.1774987898160; Tue, 31 Mar 2026
+ 13:11:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,14 +69,13 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20260331163716.work.696-kees@kernel.org> <20260331163725.2765789-5-kees@kernel.org>
- <CAHk-=wiJ6Q_qMHSe-hs+QvqKVZphvDZjvFP_gQLw1eaWimv8+w@mail.gmail.com>
- <202603311253.95C54588E@keescook> <CAHk-=wjSOGaausLeTD13yAqso7qM09EnkDFiN7wF15kH0VWmZQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wjSOGaausLeTD13yAqso7qM09EnkDFiN7wF15kH0VWmZQ@mail.gmail.com>
+ <CAHk-=wiJ6Q_qMHSe-hs+QvqKVZphvDZjvFP_gQLw1eaWimv8+w@mail.gmail.com> <202603311253.95C54588E@keescook>
+In-Reply-To: <202603311253.95C54588E@keescook>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 31 Mar 2026 13:18:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjo0gB6jVdRKj310atcM9jmmyr3t3VDut=FW0S9+v467A@mail.gmail.com>
-X-Gm-Features: AQROBzAUONdaqkEjwnLXeyVn7Wp-adEWlZELPlH8sCIkK0YvCJHIOwC67Ju1r6A
-Message-ID: <CAHk-=wjo0gB6jVdRKj310atcM9jmmyr3t3VDut=FW0S9+v467A@mail.gmail.com>
+Date: Tue, 31 Mar 2026 13:11:22 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjSOGaausLeTD13yAqso7qM09EnkDFiN7wF15kH0VWmZQ@mail.gmail.com>
+X-Gm-Features: AQROBzCgLuTpLW2yBmTolIYlFODjWyPAxSyS-qNDPcZnOIgx-hYNdl2uT2sLn6M
+Message-ID: <CAHk-=wjSOGaausLeTD13yAqso7qM09EnkDFiN7wF15kH0VWmZQ@mail.gmail.com>
 Subject: Re: [PATCH 5/5] types: Add standard __ob_trap and __ob_wrap scalar types
 To: Kees Cook <kees@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>, Justin Stitt <justinstitt@google.com>, 
@@ -94,36 +93,38 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Justin Stitt <justinstitt@google.com>
 	linux-kbuild@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 31 Mar 2026 at 13:11, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Tue, 31 Mar 2026 at 13:03, Kees Cook <kees@kernel.org> wrote:
 >
-> We have a few years of experience with "unsafe_get_user()" and
-> friends, and a few hundred places that use it, and while it's common
-> to have several cases in one function, I can't think of a single case
-> where we actually had more than one error target.
->
-> I tried a quick grep, and nothing jumped out at me.
+> Mark Rutland had strong reservations about function-level annotations,
+> but I wonder if the combination of new type _and_ function-level
+> annotation could get us something near what would be palatable:
 
-And the *moment* I sent that reply, I went "Wait a minute", and looked
-at strncpy_from_user().
+Yes, if we had some way to specify the label, that actually looks
+really nice to me.
 
-So we do actually have at least one case of multiple exception labels:
-the first one in that function handles the "potentially unaligned word
-access causes page fault, fall back to byte-at-a-time" while the
-second one is final and fatal and results in -EFAULT.
+So with _this_ kind of interface, all my reservations about it go away.
 
-But that case could have been written with the byte-at-a-time case as
-a separate inline function, so it would all have worked fine even
-without explicitly named exception entries.
+And as long as the compiler actually requires that label to exist when
+trapping arithmetic is done, I don't think people will use it without
+having fixups.
 
-In some situations, the explicit names may be very useful just to
-document things: in that case the 'byte_at_a_time" label does do that,
-but I don't think it's a very big issue.
+> Or we could make the label a global part of the language itself so it
+> wouldn't need to be a function annotation, but rather a _required_
+> element of any function that uses a trapping type?
 
-And it's likely even less of an issue for arithmetic overflows than it
-is for user space accesses.
+Yes, I'd be ok with that too, because I think in practice you
+typically only ever have one, and I guess you could use local labels -
+or multiple functions - if you really needed to have different
+targets.
 
-So yeah, with better compiler support, I think that whole trapping
-behavior would be great.
+We have a few years of experience with "unsafe_get_user()" and
+friends, and a few hundred places that use it, and while it's common
+to have several cases in one function, I can't think of a single case
+where we actually had more than one error target.
 
-               Linus
+I tried a quick grep, and nothing jumped out at me.
+
+(And a lot of them use "Efault" or "efault" as the target name, so it
+probably would have been fine with a default name)
+
+            Linus
