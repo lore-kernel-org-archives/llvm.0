@@ -1,178 +1,163 @@
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37B7423A91
-	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 21:50:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774993854; cv=pass; b=dVCSt1W6ipr8GaYeJ77bTlMvBoViEm+6L0LRCPvmy8yHli1Gl0fF5UnnX4n5Re/2sC8vXaKJrvQ2Q1lyyliDjiTG+kot3FBwrK53W+pdd1PPLWgZUOHdTsgV2wL6nZbc+5Ia5VSaH2xh5hBrUmUv4TB61xLAKSwEK+MgvOcnA+o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774993854; c=relaxed/simple;
-	bh=wV2XHf4d1mRiH6xWNqUuoF9pM1xd5tcDK3VA/1dQDZ0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EUJsg19P7u1nXqXxJKfxCHrdXB6v5BeC7qr4MecJ0n9a4fwpcXvPGs/Xo4sdK4CIeXcJgEX9mY0+1wXdgjcawS+Imci+hrtMQ8sWe9GtHXYKWZxcisPM1/GJzNvocsOG1z5ZRfs+KxDcw695n8yr/al18mMG1shnv+vnUHumTyo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jm14ynI7; arc=pass smtp.client-ip=209.85.222.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D544534A2;
+	Tue, 31 Mar 2026 22:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774994933; cv=none; b=XRifi1XbvowNp74os0PyrWWSKt8ZtAnsfpTB9IdH+IzpEzSJI5nyLRtH2EIhbm8yaGzG5wGS/5jVCAJML9k3xLWcOCAohGDHMgJGB6WKd0MzqVT0wxrdi4SAqDEYMheooU2n8BLAyhwv//vHOScs+eMAhcvPz56RuBhh7K26nkA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774994933; c=relaxed/simple;
+	bh=zK9zUD5uzq1VcBYKOgMyvNkCuXxfcS51dZ/NleWPfM4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=awvzmb1W0l0mR0zONtcenAgFF93W0MrjT+/IyiEg33tmDa1psGa1e5xigZ5lEzLmSH9ph1B10FuZMzN1bXyou6PlnH2+Ckigy+ZZNJiw/Y+Jim5zUJ8rpjhUdprR1+rz4/YCXzsGcejw5cxCJvGaESUXJKR1OMwwB9z03Pvk3bY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PptHxQHa; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jm14ynI7"
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-951c5ac6253so1888523241.0
-        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 14:50:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774993852; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FIGgmgyyAm+46U8R4rmakPyfcdIicrECJA5QRoxgaXCNWT5g+KBplfmQMbsUYwWBFB
-         xTWczt7vxsi8opOM/26wmAT32mxTRjm55/1SeNC/gU7RYLPrF9c6Vv7vryLdii7wgywt
-         ZpmnWav4v9nOz9tMb9swhTe86kuDSivCPVUi9a7zUoSmptNiecTMPNmbwRBW3RVwUBAq
-         XQHo7X/lqHl+ZUDBbave3YApbRjk8KzqsK3kPzDxZbPmFiTYbtTqCjTrVh4YbXm5LQes
-         zuLT+AqhC5Z55CpetF+MQKkPrkfXfetZN/oMe/Xg8ioeT+Y//nkqjL9TGqzIb76q4Gam
-         Im4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fvGGAAIkJYXYlK2HRa+mui/7ZxP8IFY7+ERdHeXnYJQ=;
-        fh=qM8cfzsMC9DYApSNAKEByFAsF/vkbgBjow+lq4PvvCw=;
-        b=KZzVvEF4wpdOr6qi7kT+F6MyFV5tPA8weMEcrqWzqfsFmWJNpkISEj9DawYKFPWqcF
-         mf41KgreZk3LLfZSeJcgdqPhU0e27f0OvIbL6dyV4VwSCxfRzsmxxQRAs1Heju1DGTOl
-         Er3FjBmcptc1YK9cXBou9LKybuHy+crx0EtHwdE4sKyWf7JtQ1b+nodytWsjwwlkDepC
-         X//hbG192DIEuHGgiEgeopIs9PXhF+4W3B9gyzlgCYPkPcvIKvdTkT53MhDb71594Xeb
-         2plOHxP+6YARFKngGYkhbt+mfo1NND+66CJDnxXit7J7Qv3ZB/AaLF7L53M4SGvi81uU
-         Za6g==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774993852; x=1775598652; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fvGGAAIkJYXYlK2HRa+mui/7ZxP8IFY7+ERdHeXnYJQ=;
-        b=jm14ynI7wni/ji3JZWt8wipj6ncuGnU0VMvUdI53vIUXjn/97GDq4ed9RqGxTd6Pix
-         ImYRQCvbdkTjoeoRXJsTNJoweiq11XB5PfZyzgmzvQxRhGjYzHLq2jttUtb930E0wfun
-         g5NPPaKpuzNZr4XqfCOtVBMpYpZn3BrfuH455Mqbw9M5VO80mz/47VKach3XC1u6OW1u
-         A1pMtLZkZhayfxJV3OTeAQVRifPxVW+B8QzMbzw69+lV9q15f5XPEb9ubx9nrCZM7Su6
-         OD2UeH0QdS5/spxbl3PNjfJlux2tpgpc+40u2nHQvyB+drgnsRhWRHv16f+wTtGCDneb
-         IE6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774993852; x=1775598652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fvGGAAIkJYXYlK2HRa+mui/7ZxP8IFY7+ERdHeXnYJQ=;
-        b=W4tej1S88z/B6Fo04EFXnDl6LTzwEZGGG/80nvFVoJZOYpxg71eWbH0qqj38Y0pQCa
-         uyUv6PPky0NtNW3CfngZeawKumBzvwIcfDA+AiapjYqjEGX0yNS9muzGNhdG33p1YO6e
-         RDYlqsIcLJJ+c1QHG5FJcL3PK+WlqhmuNUoX7kd9VxcQGUrNSJ4OV8E5jgVZriqEYPfS
-         THsqNsWWQGTLeUatZpo36v7vlylbG4WnVhQOhRnfgysXxu6vzH+SMQMS3aEaCqFSnhEG
-         cSOserQIyF46D7lYJKeCO+AtIGDK9c3DPnHzecExNSp6nvy31J3yzyKKyZz/IIyVY4t4
-         HaQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXFSSSV4dcAFElNGKyn9EHnXU4YVNRu/B5BrYI8+dhCakNeYVH9a4+fpm7JNckD8+FyVADz@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzyp9EhSBukSyhCv9ii7WN9LlS+TXWeZFT2upTZLe+agSgPqhTU
-	e+FNCfwrBFgZx+ONrpRjtb2KlWUVfU0WYNeXwu+bGjXf82URl64PXAD/2fJtnWwXU20OZuox2Vl
-	KlO0IxnifT9pjsA+HzCuSFadIJlsc+SlpxH4P7psn
-X-Gm-Gg: ATEYQzzVtBzxtuDJnAXbyEI1c3308QFXKtAhkYWEb9/8cn9uUWQVQsrM4CnUfSwtEij
-	Nbyy3wf6sF/virR4p0dbCDifkQlDYOoy8aoxfvZ0KHiYryeNfzaxkQ7aWUWg40EdRUunCO7wHGT
-	DA65yex2Y8yTsu7C2ubP1PdNE0NARlwxeb4rIzXhZEM0RfHUk8MKBbNMm0xjAcPL2T5k5XTu293
-	VOK9pD4Gg/RaawizQwqzQkpLeCADSFert/JboT41mVDByjt9k/anMoTwDqIGyadexZeh1t/L9QG
-	tWiwRIY=
-X-Received: by 2002:a05:6102:2920:b0:5f5:40ab:2d65 with SMTP id
- ada2fe7eead31-60567fb080emr381935137.22.1774993851331; Tue, 31 Mar 2026
- 14:50:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PptHxQHa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774994932; x=1806530932;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zK9zUD5uzq1VcBYKOgMyvNkCuXxfcS51dZ/NleWPfM4=;
+  b=PptHxQHaRvm4oiTRKuQj1PZV20G0tAYFacpQariInMUP2qDiBwHXlFw2
+   lnlLRRXI72IwtLYRzcGTO/o5DjcvQSeL4evjkKZRUXSvuusrfRYvuICWg
+   zVOkyekgnZ6W4qWYZy1BskLQzqObygOf1Ei+6Ki2SMfjs0zEGHrJIlUIQ
+   aXRdRNDzXbuXcYnj7iATA1rrRoO2JuEIC0XS3IZAnVss848/nFD5JkmlI
+   nPy5zFW7JcVvfPg7f4AwUJVtAztw4wJMB0zDZaNhg7V8i2Xo2rQGhIalp
+   1Xs9XHqN1FqzX706aiquGAMMPfDW/p6r+ZaPz2gj0OHvGdfPlTlV+/UCb
+   Q==;
+X-CSE-ConnectionGUID: 0f/QQOS6ScG7Avxj7B+tBQ==
+X-CSE-MsgGUID: Na1GCPgRTWWaMcOChRoqyA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="93417534"
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="93417534"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 15:08:50 -0700
+X-CSE-ConnectionGUID: PLIi6lHgTPm2/kZ3ZQ83Kg==
+X-CSE-MsgGUID: 7SzXoGxzTw+NK/M5aVgYwg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="222095554"
+Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 31 Mar 2026 15:08:48 -0700
+Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w7hGP-000000004LD-0rg9;
+	Tue, 31 Mar 2026 22:08:45 +0000
+Date: Wed, 1 Apr 2026 06:07:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oliver Neukum <oneukum@suse.com>, mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH] usb: xhci: use BIT macro
+Message-ID: <202604010611.oXcU3y6m-lkp@intel.com>
+References: <20260312150649.2138749-1-oneukum@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260331163716.work.696-kees@kernel.org> <20260331163725.2765789-5-kees@kernel.org>
- <CAHk-=wiJ6Q_qMHSe-hs+QvqKVZphvDZjvFP_gQLw1eaWimv8+w@mail.gmail.com>
- <202603311253.95C54588E@keescook> <CAHk-=wjSOGaausLeTD13yAqso7qM09EnkDFiN7wF15kH0VWmZQ@mail.gmail.com>
- <202603311321.4EE9FEA@keescook> <CAHk-=wj9pWsgsbrLDOk7ipKnHbz3JvuqsmQ3DhGg-OKgKS9DUA@mail.gmail.com>
-In-Reply-To: <CAHk-=wj9pWsgsbrLDOk7ipKnHbz3JvuqsmQ3DhGg-OKgKS9DUA@mail.gmail.com>
-From: Justin Stitt <justinstitt@google.com>
-Date: Tue, 31 Mar 2026 14:50:39 -0700
-X-Gm-Features: AQROBzCZD3X4CkUD9sEd-qirDA1mrMa-OH7YNrOM0p4tLkqwVMQeCLGoKwyIRLE
-Message-ID: <CAFhGd8rE+ggYghcwUphSRc2ftQMaX7LbKKPwQZzsw43bg9VVmA@mail.gmail.com>
-Subject: Re: [PATCH 5/5] types: Add standard __ob_trap and __ob_wrap scalar types
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Mark Rutland <mark.rutland@arm.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Thomas Gleixner <tglx@kernel.org>, Finn Thain <fthain@linux-m68k.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	llvm@lists.linux.dev, Marco Elver <elver@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Nicolas Schier <nsc@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
-	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260312150649.2138749-1-oneukum@suse.com>
 
-Hi,
+Hi Oliver,
 
-On Tue, Mar 31, 2026 at 2:05=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, 31 Mar 2026 at 13:31, Kees Cook <kees@kernel.org> wrote:
-> >
-> > (Isn't this just an implicit "try"?)
->
-> Yes. And I think that's ok.
->
-> I think try/catch is broken for a few reasons, but the fact that catch
-> and try are tied together so closely is the main one. You can't "try"
-> inside a scope without having the "catch" inside the same scope.
->
-> So then the solution is to just move the try to the outermost layer,
-> and I think that's pretty much what everybody does.
->
-> But at that point, why not just move it *all* the way out, and make it
-> implicit and invisible?
+kernel test robot noticed the following build warnings:
 
-How do we feel about type-defined labels? We can specify sane default
-handlers where we define the types:
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus linus/master v7.0-rc6 next-20260330]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-        typedef int __attribute__((overflow_behavior(trap, __handle_me)));
+url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Neukum/usb-xhci-use-BIT-macro/20260314-143843
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20260312150649.2138749-1-oneukum%40suse.com
+patch subject: [PATCH] usb: xhci: use BIT macro
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260401/202604010611.oXcU3y6m-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 2cd67b8b69f78e3f95918204320c3075a74ba16c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260401/202604010611.oXcU3y6m-lkp@intel.com/reproduce)
 
-... and define specialized handlers later on
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604010611.oXcU3y6m-lkp@intel.com/
 
-int func()
-{
-        ...
-        u8 __attribute__((overflow_behavior(trap, __BOOOOM))) product =3D 5=
-;
-        ...
-        product =3D a * b; // if store is truncated, goto __overflow
-        ...
-        return product;
+All warnings (new ones prefixed by >>):
 
-__BOOOOM:
-        pr_info("%u\n", product); // shows "5"
-        return -1;
-}
-
-We would then probably want a kernel shorthand to avoid long type definitio=
-ns.
-
-        #define __TRAP(handler) __attribute__((overflow_behavior(trap,
-handler)))
+   In file included from drivers/usb/host/xhci.c:25:
+>> drivers/usb/host/xhci.h:2345:4: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+    2321 |                         (info & LAST_CTX_MASK) >> 27,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+--
+   In file included from drivers/usb/cdns3/host.c:18:
+>> drivers/usb/cdns3/../host/xhci.h:2345:4: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+    2321 |                         (info & LAST_CTX_MASK) >> 27,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-At least this way the label is always defined somewhere in-source
-rather than by a magic -fhandle-my-overflow-at=3D__overflow
+vim +2345 drivers/usb/host/xhci.h
 
+90d6d5731da79a Mathias Nyman 2019-04-26  2308  
+4843b4b5ec64b8 Mathias Nyman 2021-08-20  2309  static inline const char *xhci_decode_slot_context(char *str,
+4843b4b5ec64b8 Mathias Nyman 2021-08-20  2310  		u32 info, u32 info2, u32 tt_info, u32 state)
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2311  {
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2312  	u32 speed;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2313  	u32 hub;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2314  	u32 mtt;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2315  	int ret = 0;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2316  
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2317  	speed = info & DEV_SPEED;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2318  	hub = info & DEV_HUB;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2319  	mtt = info & DEV_MTT;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2320  
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2321  	ret = sprintf(str, "RS %05x %s%s%s Ctx Entries %d MEL %d us Port# %d/%d",
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2322  			info & ROUTE_STRING_MASK,
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2323  			({ char *s;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2324  			switch (speed) {
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2325  			case SLOT_SPEED_FS:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2326  				s = "full-speed";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2327  				break;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2328  			case SLOT_SPEED_LS:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2329  				s = "low-speed";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2330  				break;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2331  			case SLOT_SPEED_HS:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2332  				s = "high-speed";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2333  				break;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2334  			case SLOT_SPEED_SS:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2335  				s = "super-speed";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2336  				break;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2337  			case SLOT_SPEED_SSP:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2338  				s = "super-speed plus";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2339  				break;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2340  			default:
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2341  				s = "UNKNOWN speed";
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2342  			} s; }),
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2343  			mtt ? " multi-TT" : "",
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2344  			hub ? " Hub" : "",
+19a7d0d65c4a81 Felipe Balbi  2017-04-07 @2345  			(info & LAST_CTX_MASK) >> 27,
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2346  			info2 & MAX_EXIT,
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2347  			DEVINFO_TO_ROOT_HUB_PORT(info2),
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2348  			DEVINFO_TO_MAX_PORTS(info2));
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2349  
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2350  	ret += sprintf(str + ret, " [TT Slot %d Port# %d TTT %d Intr %d] Addr %d State %s",
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2351  			tt_info & TT_SLOT, (tt_info & TT_PORT) >> 8,
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2352  			GET_TT_THINK_TIME(tt_info), GET_INTR_TARGET(tt_info),
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2353  			state & DEV_ADDR_MASK,
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2354  			xhci_slot_state_string(GET_SLOT_STATE(state)));
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2355  
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2356  	return str;
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2357  }
+19a7d0d65c4a81 Felipe Balbi  2017-04-07  2358  
 
->
-> Which is kind of exactly what your suggestion is all about, and that's
-> why I like it so much.
->
-> It *literally* fixes try/catch. It makes the only really valid usage
-> model just work better.
->
-> (There are other reasons I dislike try/catch too, the whole
-> "exceptions across function boundaries" being another one that your
-> model avoids).
->
->                 Linus
-
-Justin
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
