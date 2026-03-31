@@ -1,118 +1,128 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2403738E121
-	for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 18:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F3138B13E;
+	Tue, 31 Mar 2026 18:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774982197; cv=none; b=ETMprDXZmI+n67LDz4EBFKbTB/pZo05Zbmp6wQgrj0uOn/ntDJe0bSJ0tOH2SEQo/5RSLDrAjfpstL/u8WC0+26l9LRN04Rcar6fkkGIsPErnr1csnrZK96J9m34xa2qshOWr0EvFuH50Z+P31xoeAfXPUia9IkFJZ/3Sh6/xjY=
+	t=1774982982; cv=none; b=buWWb1z3w8eW1FJEr3HWP4pVTcOpbkSSCqt/JtgArb6AdcxhwgsBhzRgMF+vymPJ/pQfTeCzbGkF+XBSlomajnWbbCsJPgZgDT5vcsm4lMXoMTG5bkFYfl0f8sd222q1hcNZB7aaKDHnuDcwyrhQeZo/pxvgP3LI9X05JHw/AYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774982197; c=relaxed/simple;
-	bh=DwEKjICeDkCjJOVrt0+LZu6p2US33YhraP63lKerfiE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kcgsCthI2cBIk+u0RuL94w6mG+qtFoL0g+VAqdzT8RM2wo5Apc+eV3L1+QU1Q42INgtjJwRi5fW/smgja8hYl7OzLuhk5AAlxdOyKppXAaGdodoXUJp9q+P8y3rBdiUZz09FuyKBdUsmv6zMaKooLEu4kC0GzaupnfhyJsqFCz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Wq/nacdx; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1774982982; c=relaxed/simple;
+	bh=5SKQoGxZ2Np4n4qJpn+lEqUim0Gn5U2UIHOvwizikpo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f7Jrlf3MI2VWnCQAa3vjWMEjqOKZa/t+p8S4LCfXYPqiA62Dq/Qw7SCgIbeRArCI4WMqPxKjyWr/lRrj8unUpYYFFj+tDIckwuW7xSZLCL0uQ1gel+8cf5eTaWN3OjdFV+5uZwoaOlt2FjG4neMtsPT1dfpSN6a+PStX0LBSwgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AHl1JZCv; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Wq/nacdx"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b8f9568e074so847508166b.0
-        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 11:36:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1774982194; x=1775586994; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Jwbq+7LR0mSJFQk5uCurdhkOuVoq3zAKj7b6at5J18=;
-        b=Wq/nacdxUYeWLr40tD0pMOAbU0e8MzRhJfoxvCmdFzGGvzjdrHGoV+a2fwvru+c2mx
-         21SNwzWRA9p4+PvZMTdvYKOmWqRLXY8os64D46WMQ7NbMsh4wX+aMJbA6XT6VCZWmndV
-         CKsrelLJCUJEK3IOTx/Mo6ybPhU7Lq+7xoDGw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774982194; x=1775586994;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6Jwbq+7LR0mSJFQk5uCurdhkOuVoq3zAKj7b6at5J18=;
-        b=mQ4PedwOR1I+nfbSma7+FF5ij2QSClZdgNXRLkMdSR72Iubu88xArcpSInU4svTQsJ
-         f4NRGBZsTaNG4AfjhYBIN1/EoBXSmYvfEOUOUXjhmye4B+Tj9aOW1XjjYEEQsYWkmjeg
-         gCJ5dWStiw3SsfreLhoIGIWuAyF+Led6Tbr+ReS143+QZac8FYc8qnLhygAVvrTWSPia
-         niuJsGrkez2xgTI1dtObtfj8NTRwVabWDeMz8GqE4swsE2gCgd+ou7VMS6UOdPlbLylW
-         kJ6woo9wiwEVC+90MpYheV0eEQcAY9vFJMQwPfO2IPWWaTveao0ORtPkGIkIcaMzgVQw
-         Bieg==
-X-Forwarded-Encrypted: i=1; AJvYcCXpJh9PYMtSWbzRaxydC6PTB4f0kXlHC1ZdYwd8bYfF8aafHAlregarXJduxFtPC3YCeB/v@lists.linux.dev
-X-Gm-Message-State: AOJu0YxMZCaIYen/bP0KdgFgATPWRSolY0GN+CVqZ3zdSY51KnkE6zVD
-	SAMkhfQMk2LuwHbKqqE+DUbeaHrUFNJqZbFJzdJxxDfN3MbWgMCRpfRRtwK++mnTqsk9gMGzxhy
-	YJ7KQ2IDwBQ==
-X-Gm-Gg: ATEYQzzyYcJkXDlK3SFJtR35uoc3N0TYNgZe6SiLdZ+SAfdtBeJaM1XoKjtxmdPHuBh
-	wKmG/qMP9WOND9otJECsyTuouoO1zqXM7PaOhh+Gjtiy0q+zXVYNhLIsd70T81tDQlH/D87A/z0
-	DCFaEO4UPu7ZJ3hdE1zNuFoohI24Ym2SyCYI63tLUac0BkiBtEr1DWr9K65cBLEfniIi1rrFe2n
-	ajSW7qrgeJR9+bUOuGYD9LQRMmcrrcgTgHuC+noJmiax9roeZAxFL9Vgw/NOC2yTbbchAqliQ26
-	C6K9Gk9IqacxGtTCQoMp/2hIlpx75xMp9D+4OJW8MYEUk0LInZkUVK0kCBGBNtvRHn6/1F3ewq3
-	1TmNyFY7jTd3A1RIQvfVC3rpqV13uaZFgF5AhSLBgFBkcv40SnPYM9CnC1sU359V9MTe03lZDBb
-	/Um16Di0Rrdup6VCdy6mh7cg4Y5ro9bq54ItfvGGBkE83eIjohULgz6R5R7eNkFbbyTeGvUi+7
-X-Received: by 2002:a17:906:7d56:b0:b9b:fa57:d5b0 with SMTP id a640c23a62f3a-b9c13ca1993mr30840866b.43.1774982194196;
-        Tue, 31 Mar 2026 11:36:34 -0700 (PDT)
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9b7ae23dfesm443676466b.13.2026.03.31.11.36.33
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 11:36:33 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b9c098328acso90721366b.3
-        for <llvm@lists.linux.dev>; Tue, 31 Mar 2026 11:36:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWHvD7FnpTNVgVmPQHTH4hD/wgTr3vZKOu1+TDyIdhL81kKndY0fyAWO4kD8EDUS4bcDG2S@lists.linux.dev
-X-Received: by 2002:a17:907:c789:b0:b97:d126:c007 with SMTP id
- a640c23a62f3a-b9c13b2c4a6mr48468766b.30.1774982192841; Tue, 31 Mar 2026
- 11:36:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AHl1JZCv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774982981; x=1806518981;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5SKQoGxZ2Np4n4qJpn+lEqUim0Gn5U2UIHOvwizikpo=;
+  b=AHl1JZCvkPXv7avgx6mTLL/t2PvjQOVLHstgs88GfI8Q0uCEIUfEUBfx
+   Kzmn9hIYO3iNWOsV+okpFCB8iundkNQw+ypvkD5Bcb88biEpz6rbfDUdt
+   XCaSBaEp+9AcY/R0v+dFhTHgETRY5tLXH5JxpfWhpqOFYZwXSCz9ktjvb
+   ZEDXvxiKdnlIqqJK/TM00Zu4gB4cdUPMbCLEkeK8eVK3CW+m+Vp6+IkQa
+   j2q8FRwqGml7sfSEB8j4Ho6ork4e0mzp5Tu+bg2S0vbSfUnXUYLiFm4iE
+   6bvq62iXZJSsT7OxOFNmmvP/EnKTjkziWNw+inHKl99PTYK1lbtXCDS8i
+   w==;
+X-CSE-ConnectionGUID: 1CjitYiZTbKXBEMvAU5EMw==
+X-CSE-MsgGUID: 2znftap+RZSwDDvQsDfVyA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="76122469"
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="76122469"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 11:49:41 -0700
+X-CSE-ConnectionGUID: E6a592iPSS6kQGrB5r9dKw==
+X-CSE-MsgGUID: bbo3wJeKT3yDy1GiktAoXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="230882169"
+Received: from lkp-server01.sh.intel.com (HELO 283bf2e1b94a) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 31 Mar 2026 11:49:37 -0700
+Received: from kbuild by 283bf2e1b94a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w7e9e-0000000049R-3eTN;
+	Tue, 31 Mar 2026 18:49:34 +0000
+Date: Wed, 1 Apr 2026 02:49:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jordan Rife <jrife@google.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jordan Rife <jrife@google.com>, bpf@vger.kernel.org,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Yusuke Suzuki <yusuke.suzuki@isovalent.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>
+Subject: Re: [PATCH net-next v3 2/4] udp: Remove disconnected sockets from
+ the 4-tuple hash
+Message-ID: <202604010240.xuggtnr1-lkp@intel.com>
+References: <20260330215707.2374657-3-jrife@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260331163716.work.696-kees@kernel.org> <20260331163725.2765789-5-kees@kernel.org>
- <CAHk-=wiJ6Q_qMHSe-hs+QvqKVZphvDZjvFP_gQLw1eaWimv8+w@mail.gmail.com>
- <CANiq72kL3rTKyDNYmD7wXiKCVJSfa1bnp2L8NShXU7OPmWjJ4w@mail.gmail.com>
- <CAHk-=whjwHjmB0_2yXsOjDa7Mi_yFSx3AMd3vGk5r70WocvZZg@mail.gmail.com> <202603311117.454F578@keescook>
-In-Reply-To: <202603311117.454F578@keescook>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 31 Mar 2026 11:36:16 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wizJdr1qgJ9NKNjtbH=ugL3umA9JRW9ifrQaD+PpWCMuQ@mail.gmail.com>
-X-Gm-Features: AQROBzBUflXPh777BM9crSo8MSIUJXluDEJ78_cVjfj9YSXDGlWfMakjxHiYmFw
-Message-ID: <CAHk-=wizJdr1qgJ9NKNjtbH=ugL3umA9JRW9ifrQaD+PpWCMuQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] types: Add standard __ob_trap and __ob_wrap scalar types
-To: Kees Cook <kees@kernel.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Mark Rutland <mark.rutland@arm.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Thomas Gleixner <tglx@kernel.org>, Finn Thain <fthain@linux-m68k.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	llvm@lists.linux.dev, Marco Elver <elver@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Nicolas Schier <nsc@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
-	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260330215707.2374657-3-jrife@google.com>
 
-On Tue, 31 Mar 2026 at 11:32, Kees Cook <kees@kernel.org> wrote:
->
-> If the code was written perfectly, then there's no problem.
+Hi Jordan,
 
-My point is that BUG_ON() DOES NTO SOLVE THE PROBLEM.
+kernel test robot noticed the following build errors:
 
-> The point is to make a type that still works with C and all the associated
-> APIs (e.g. format strings, native arithmetic, etc) without creating the
-> mess that Jakub, Peter, and others (correctly) balked at around accessors
-> for doing function based math.
+[auto build test ERROR on net-next/main]
 
-Has anybody tried to suggest that "use a label" model?
+url:    https://github.com/intel-lab-lkp/linux/commits/Jordan-Rife/udp-Only-compare-daddr-dport-when-sk_state-TCP_ESTABLISHED/20260331-082300
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260330215707.2374657-3-jrife%40google.com
+patch subject: [PATCH net-next v3 2/4] udp: Remove disconnected sockets from the 4-tuple hash
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260401/202604010240.xuggtnr1-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260401/202604010240.xuggtnr1-lkp@intel.com/reproduce)
 
-Because I 100% agree that the current overflow handling is pure
-garbage, and doesn't allow the code to be used in any kind of sane
-code.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604010240.xuggtnr1-lkp@intel.com/
 
-But I think that's solvable with the "branch out on error to be
-handled elsewhere" model.
+All errors (new ones prefixed by >>):
 
-               Linus
+>> net/ipv4/udp.c:2182:31: error: call to undeclared function 'udp_get_table_prot'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2182 |         struct udp_table *udptable = udp_get_table_prot(sk);
+         |                                      ^
+   net/ipv4/udp.c:2182:31: note: did you mean 'vm_get_page_prot'?
+   include/linux/mm.h:4105:10: note: 'vm_get_page_prot' declared here
+    4105 | pgprot_t vm_get_page_prot(vm_flags_t vm_flags);
+         |          ^
+>> net/ipv4/udp.c:2182:20: error: incompatible integer to pointer conversion initializing 'struct udp_table *' with an expression of type 'int' [-Wint-conversion]
+    2182 |         struct udp_table *udptable = udp_get_table_prot(sk);
+         |                           ^          ~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/udp_get_table_prot +2182 net/ipv4/udp.c
+
+  2179	
+  2180	static int udp_disconnect_unhash4(struct sock *sk, int flags)
+  2181	{
+> 2182		struct udp_table *udptable = udp_get_table_prot(sk);
+  2183	
+  2184		udp_unhash4(udptable, sk);
+  2185		__udp_disconnect(sk, flags);
+  2186	
+  2187		return 0;
+  2188	}
+  2189	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
