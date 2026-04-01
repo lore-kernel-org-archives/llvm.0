@@ -1,116 +1,125 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570E93D3CEE
-	for <llvm@lists.linux.dev>; Wed,  1 Apr 2026 09:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E39C3BAD89;
+	Wed,  1 Apr 2026 09:38:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775035992; cv=none; b=VqkwZ5LdgX5rIrQwwvn4QY9NgXtLBfh7flWo5ffQO4FbAtKZ2eLj6ivgoRfSair/rzoL/8VVcV+DLvvcsWihPtLwHzDEmr60zauY41MwBMoXnUl15d9bWNDKHEZLrdr8bdh2cFLrygvTuhiyAh8oLLLaNfCoZ/l5Ljt+w060xrM=
+	t=1775036315; cv=none; b=JnwfpmX4fErUfrucASC5FjtJ9lm7+Thr0QyCSWImjqIiEwZGFLvNc+j2AcisybLEELoxw5YU23VDJN7h3IVgDmb7MVVHLDuE+4AibQ2BhI/11DzB4VkpFGOElkIfbgdcjtHRXwJfZ4D5gipJ7f5vawvxxgXLJH8L5mMTbWgzKRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775035992; c=relaxed/simple;
-	bh=MFtg1emUeucLC5RSIu21nxOCG0W4wmfv4xYsj8/jrxI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=osYSfUWBsdy1lXp16ERTyERA4gCXQEB6lpbUvt6p3fv3RA9GcA2jfhvoqX9CDT/SGyJSPsNpA2DZgLvtlJQbXTDTrpH+oRMEB6G5dNgyQLriJSsniRmLjGeD+lj7PJW/PiiRPId5sIhBHB+GqEeG8vq2vGfE1vB+rOIq0M0K64g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Jxag5y7e; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775036315; c=relaxed/simple;
+	bh=S5UG8dJ7Ck4Vf/JeKcjjHBUeBzp8hqY3Luo1ezTn8r0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sIekebq8AoP2FkRmULISs+fDcOyCOrUJSMANa0BowUJCEhk/cv823Aux+9ZDZWzV2xd6ew2FuEoD+wMBTb4HkMHJ/Bppad1+P2Q0zS3pfzTyt361fm+6R+H0NDoD06eKSMn3nj6a2nne12QedVkesZPqcd1N4Xfa2I9E+rE33mI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cOhq5+xc; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Jxag5y7e"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775035988;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tZilAT3NsSDS/f+5vp1KifA4Baeqktax6PWPnWoNfFA=;
-	b=Jxag5y7e/nXeJdLB4OiQltHp8NbCOg/LJLgAnM1lhhwo5LYcktxmkXTZ3DGqwg2Va6ecfh
-	d+Dwt8ejyYt5BHjrBOuvFn7HnogSQvZfxtPema/hOZg3K/J/gtI03F6qzn3n5Qxv5vMEzK
-	f+tUtY0OgD9zsySX2yCz8z2Y+8vFSY4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-583-o3-HYU26MnOx8mbms30Aqg-1; Wed,
- 01 Apr 2026 05:33:06 -0400
-X-MC-Unique: o3-HYU26MnOx8mbms30Aqg-1
-X-Mimecast-MFC-AGG-ID: o3-HYU26MnOx8mbms30Aqg_1775035986
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E63A11800281
-	for <llvm@lists.linux.dev>; Wed,  1 Apr 2026 09:33:05 +0000 (UTC)
-Received: from [172.20.201.103] (unknown [10.30.44.137])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 82D0C180075B;
-	Wed,  1 Apr 2026 09:33:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc6,
- upstream-mainline, 9147566d)
-Date: Wed, 01 Apr 2026 09:33:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cOhq5+xc"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=m3TISuomgoe0SUdyDD+xWo6RRl4JcWzzeqjoC2TU2Lk=; b=cOhq5+xc28XN5RXGUt8q+tDp41
+	Z+Nl0I2QfNhsFUJSfArRTil+zjOK7CToBs4x75Ae6nzazDnyiXMuoT/BNedZ0ZyibtSTjWh4Vx3o7
+	V+SL0PwFr048uWkhBoVE3HWhpidavI14kQ48rnP5sQdvMRwG7/1YTIHFVO9cQAFYfUWGh+6nuCrVz
+	JqtyY7ZaDFx9d+i7vcVS4PYKj2YGV9KS+y0KMU6iKNmMiAlI3saus5gyqMUZ5C4XckDX/4dIVVyp+
+	WuftGc+5k/Gfx+PRbavzDtxarwgaW0xK/QWK8/QJjTmYyRu2iV5aalcmecrF3QbNfr46ebupefWWA
+	AzeZIj7A==;
+Received: from 2001-1c00-8d85-4b00-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:4b00:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1w7s1r-0000000A8qA-0g1E;
+	Wed, 01 Apr 2026 09:38:27 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B36763032E1; Wed, 01 Apr 2026 11:38:20 +0200 (CEST)
+Date: Wed, 1 Apr 2026 11:38:20 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Arnd Bergmann <arnd@arndb.de>, Mark Rutland <mark.rutland@arm.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Finn Thain <fthain@linux-m68k.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+	Jonathan Corbet <corbet@lwn.net>, Nicolas Schier <nsc@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH 5/5] types: Add standard __ob_trap and __ob_wrap scalar
+ types
+Message-ID: <20260401093820.GX3738786@noisy.programming.kicks-ass.net>
+References: <20260331163716.work.696-kees@kernel.org>
+ <20260331163725.2765789-5-kees@kernel.org>
+ <CAHk-=wiJ6Q_qMHSe-hs+QvqKVZphvDZjvFP_gQLw1eaWimv8+w@mail.gmail.com>
+ <202603311253.95C54588E@keescook>
+ <CAHk-=wjSOGaausLeTD13yAqso7qM09EnkDFiN7wF15kH0VWmZQ@mail.gmail.com>
+ <202603311321.4EE9FEA@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <01901.126040105330601212@us-mta-583.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: i7HnwZwR1bjW8bhWeE8B_khkLO2-JoxAxyfpN14GOFk_1775035986
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202603311321.4EE9FEA@keescook>
 
-Hi, we tested your kernel and here are the results:
+On Tue, Mar 31, 2026 at 01:31:16PM -0700, Kees Cook wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+> int func()
+> {
+> 	...
+> 	u8 __ob_trap product = 5;
+> 	...
+> 	product = a * b; // if store is truncated, goto __overflow
+> 	...
+> 	return product;
+> 
+> __overflow:
+> 	pr_info("%u\n", product); // shows "5"
+> 	return -1;
+> }
+> 
+> (Isn't this just an implicit "try"?)
 
+So I like this implicit try with a default label, and mostly I expect
+this will be fine.
 
-Kernel information:
-    Commit message: Merge tag 'sched_ext-for-7.0-rc6-fixes' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/tj/sched_ext
+But as Linus already mentioned, sometimes you might want more. Could we
+perhaps also have an explicit version, something along the lines of:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2422041829
+int func()
+{
+	int __ob_trap size;
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2422041829_ppc64le_kernel
+	size = try(count * flex_size, __mul_overflow);
+	size = try(size + base_size, __add_overflow);
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+	obj = kzalloc(size,...);
 
+}
 
+where we have something like:
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+#define try(stmt, _label) ({		\
+	__label __overflow; 		\
+	if (0) {			\
+__overflow:				\
+		goto _label;		\
+	}				\
+	stmt; })
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+That is, have the overflow trapped and confined in the
+statement-expression by using the overflow label as a local label and
+use this little trampoline to re-direct to a custom label.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
