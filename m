@@ -1,95 +1,95 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AA4477E53
-	for <llvm@lists.linux.dev>; Wed,  1 Apr 2026 17:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740BF47DD58
+	for <llvm@lists.linux.dev>; Wed,  1 Apr 2026 17:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.172
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775065000; cv=pass; b=C8oGsVVgTBPdC1Ms7945EdtFwMGbmXWkZ1RrMh9EQWaH4VgXI6tkhuxoRd++XmsDglgP46D0fTewvJGxOS1EWfGOAgl/V/lw5wOfd4A5/zHo9GaXOAGK+rOK2lSZEC/1jbEt77mZhtCZ1zjWopBW8Dz1Rs56CG6WQ1FJc7ztvJ0=
+	t=1775065188; cv=pass; b=Ka1E3aOJvux47S2FplQVaJ9AaXlW9LmVS1Q59OcNbh64cfad9ATZKDM/LFOVy+9p9fYBzNugmCwhvq15i8aoOMR5qtI21LZqtIEGzL37OAwTmVP7bfJMhNJaAhpHvm0Jon88/tFuv8kMV7qvedowcIbyl1UGwprUYHbnvfSMmmk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775065000; c=relaxed/simple;
-	bh=Madpyzu+7zvyLSmbgHorRXu83g1kA3bqkxQ/QKvvzXA=;
+	s=arc-20240116; t=1775065188; c=relaxed/simple;
+	bh=jYUaVSUk5Sb3SOTuQeoUN5R4tL+13WiT/Hvm7LoUgnk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bWZC0YERdfOJ13u4gPXlFLbijEK7ujvnCzxGV4/aJRrRLUqUeagUYVeDzdcq93mAUmc/pAvcqX7Bv1PPdvCTfbiWr4deHc01m7XrBgIcTRh+rWNprkYjvUzhwCI/hdFkhrN4lUdB6MyrtUWx42KZMiKBPWZg2C3BN5dluTRtdeY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RO/Ic9Dt; arc=pass smtp.client-ip=74.125.82.45
+	 To:Cc:Content-Type; b=ckSn63ovgKAFIVhTBdBU5dgAdTM6BuppDVlUBoZ4Z13PmiFcW1dsKyq4eNOcg2bgaCb6G7NYVVRilFpmfX2y0vz+8yQYFeU5X4xCs2RX/2AaHxUSWCwIVHhx09P73dxKcjwElq5UDd8IrQBdVwe7TsEAZWKCxPuTDlYVbpNTgjk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OYoe5wxx; arc=pass smtp.client-ip=74.125.82.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RO/Ic9Dt"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-124a7216c9cso5567c88.0
-        for <llvm@lists.linux.dev>; Wed, 01 Apr 2026 10:36:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775064998; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OYoe5wxx"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2bd801b40dbso11143eec.0
+        for <llvm@lists.linux.dev>; Wed, 01 Apr 2026 10:39:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775065187; cv=none;
         d=google.com; s=arc-20240605;
-        b=CQjKC/qltO6UIvh30cCCL74eUPx8n1tFQfmq+27M+w5UGggFFpC5MJFgad2ThqVT2s
-         ElgTD0G5H/NNWbcjAEYtzlItxmuPBsiRiehGyPavz1da8CWKlMAgM6Hok52Hsu0DOUmI
-         bXgncbjDlpwMyz5mtPHYNr4+BnfJwhsGU3JW/3yj5q2i6SkQkllUGAQ9lcTJqhYet2u6
-         a2U9sev3yFY3CzCxcWbL8CEKchE9KlxouO8QUH6kVlYgCNbxRyBPcsV7l4WuKjRwR4OM
-         LAvrGWvh6XEoUlrS4hyw56+nErIZr4JfhlT5f8galIVis2h70jOcorzn/AvUCuEtsnBl
-         0csA==
+        b=GBqss495x8HLLCEKF0WeXyyuTaBecaOLyO7aEQXpKkSa8n/Ny3BoppZZkVNTkvuvxu
+         BKhA1zlOyQzN0zgjkN4Ue7l/9VmfVEtwXvVRYVPeoifw19ikXXY7zrf2w2HqE+/EbIXy
+         q52NVNnvM/L56zdplUFcIO96KfG4m+NODrz2Cjv6pkZSLfFnRzWc0RfE3ecHHIouLVGB
+         GZOVGO264AorpMRy1nSCxtv6aoMla6E9gdFKpHE3I6BxtuG8U6XH3Ej91Kr+M+Z1CVPu
+         ufj1clNjUpy1N6Yk2j/A8wTG01TUVHCEr+7bxtl1UP2t1DeioD5xcJ3NUMLLSa/JNaRV
+         et4Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Madpyzu+7zvyLSmbgHorRXu83g1kA3bqkxQ/QKvvzXA=;
-        fh=NFLoiMYP0ZC++Q7wBLVirdfb/3k3wmJUOTdEHeQ96jg=;
-        b=OBT7lljwe2pwTHKdGnghoj4j9P2lH2P/7r57ViWd18RGDIlIVU+8K800o7NbZPRCWx
-         DnuSwMJ9IGWYfyCGp1K3Oc14ruYarC0VJetGweEq8MZ64pvH6URpzO6OF5/mBenjRSS+
-         mNXSnzOqYa2Q/62jgK6llxQkk2eeoBV6BuFKXJJTrUpfip/xXMkyLrnIPCcnkDCN0A7Y
-         W6jiW7sBEN0klvf9ZEBZwG1wyqDp9bxW+gwlwz5iz9AhF25NsJ5rBnW/JFnwVYY3GOCp
-         +WX+Z2s8eGzOhE6/nisdF/0epzN9/Jfz95ctlZ8ZRJNKwQ3SXQdFMnmTgQh2KElh0yJK
-         tr+Q==;
+        bh=jYUaVSUk5Sb3SOTuQeoUN5R4tL+13WiT/Hvm7LoUgnk=;
+        fh=npQCaR403wZISSk25TwjMRUH/pCndIJx0oa2p4PMVdQ=;
+        b=hlejBUgE3jNtPXChr76j0b2GZkh15Yr/gAd3SF7vTimwoNpsU0fLWwXk50cqLtJAkx
+         K3LgB23aWjbfUa5kAoHPlQL2DzmO3ZaCVhe9AczKLbdvxL6GkT672Gw96/gdF/MPtDI5
+         ShgT4eK6T95lCshdRtOsMKBRQuiANIUbTT9VCRZ1npmx/S1wQxa6bMwwYqZBG67rZ2DQ
+         OcX8wZqao9syYRblmQEO4T0XqAhMmIwsNliCnGKzEwo0wKEOOG5ppxKcG9xSgknzJSze
+         gGXBipJT8qI/wrHPwtEXZM5m8PdLNcvL7aXvHMC5+jhmR1gZ0Gp/i44Q4x+A6g5RV+Qf
+         RZSA==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775064998; x=1775669798; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1775065187; x=1775669987; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Madpyzu+7zvyLSmbgHorRXu83g1kA3bqkxQ/QKvvzXA=;
-        b=RO/Ic9DtQ5ICAEhGMCoERl8F7tQF/Lg98rvvDKAA429Y0xk9F8y+4OEpCL+6OJQyL5
-         KM1E+oM8WynwUcXYxBrvxSgPlyKGH2vkqtl5VK0f4+xI46hgGyhLxUj/6yuIuXjCJglm
-         ew4qPskoInLWSFK+AlvoTlkP9FCzpmf2PjGZGnMSFmNxMbXrTX+LKIYC1gXPMgfPsDmy
-         VNhHQEWH+iJ8KG9jhNNqstx/sDrB+NcGuQPnGwQiuBipHLF7TV6TV75v/G8T/nZ/Rekm
-         imEZ/xXWq4GmDqBnVTA3NdAODL+BEw2iA5yJBeh0qSJS/63kyrR2/pv9cKzIRDTCok02
-         rqQA==
+        bh=jYUaVSUk5Sb3SOTuQeoUN5R4tL+13WiT/Hvm7LoUgnk=;
+        b=OYoe5wxx2eZx3hWRbGzkQEkZE56igOTkWHOuvCELlhLjBA3Xxlr9gE7cv4g7sGN241
+         kmXxK4LTzHqrRJrXCXQJY0OQFubJtoQ9PiuwIqpGhZYo9JQRHpP07eXpiZtuwVI4oWbi
+         5CKdYCb4Sjgf1WYSELU3hQReGUDf6NL/LJhaKHmVLSDB+uaci01aA6x7S+gsE1ByBKH4
+         Cq1gVNL/WTi4wYdza2Z5/pdti+zDPlJhaUnZ5vijf4B7JNxN7J0x1C2HONBA+ccw5jX2
+         dZJp/rTXP/WV2uwniZamrKCmPRxWOWB9Ygq35y/RLY2UXhmiyKSDRGby5AjbznxcdZkw
+         aAcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775064998; x=1775669798;
+        d=1e100.net; s=20251104; t=1775065187; x=1775669987;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Madpyzu+7zvyLSmbgHorRXu83g1kA3bqkxQ/QKvvzXA=;
-        b=I7qbPYenhL50ubSnif5VDoirYzonov1i3tC5izYVM3RSzk2tTZPkxaz4kx0mQI8YRg
-         PeoO4kHFNaKfVWy9pAL0cu+5h2kK+wECsmn5OiH89yr27xLhKdc60Kn2Xfq760kKsFFh
-         IZEhH3rV6zbSduUkMDuVwIz3/KGtfh5g+CR5I8+RQhYn3ilTmE4qpUgDvMzvgrpER5t2
-         KluCfaNm68j1vqRyFSBTDBxWJkV0FArgjboqLVRvw+2RtSvCZS1npX1+LT7Yv2OwIy2x
-         wWIz314ZcLw/Ci0eCmZvgoFufPghwEr89A5C3eiOTPoGby9gN8WEyP+sbR/MYFESaqLz
-         PQAA==
-X-Forwarded-Encrypted: i=1; AJvYcCUewPGbfQQTmnkwQmWZRiGdFPq3utgEicrWwcDmIC7ksxSBAPlEEWi3UNMnW+q8ZpfMQ5bI@lists.linux.dev
-X-Gm-Message-State: AOJu0YwmAPAfxO8ecB1PcPw4DjpHKisBmKi0f7sNWwA9ZzAH95H/H0QY
-	CTjjaFYYyNMKcKY+pgTlM7Hi1XtAGiJ8SlZWX6u/ZFJUl89dWIx8w/VW3G1tsuZlV2NGhlaN3jJ
-	y+JJnxeTmlcSSUOvoSCNc5Bh6Ck0dyAE=
-X-Gm-Gg: ATEYQzxsw1FOR0B27EcDCpLDTihXqx+cSRumlVGFJs+3kZbCOl6oU1Rgzpny0uO0YoZ
-	CG0KWPc7VKdiH/M/Bib5wHrSz844ZlvsE0snrfPlj3kS3gsR+iOhpRA9kqICc8nGwDE1M5ZJetn
-	XhJPkDrAYhmYiK/2Xc0bqTf0MkfPTlQlnoUewl5e2ZH5U/iT4P9AgFsev6LBxgHUN9an2itbEye
-	RbFaTutwTGRrAKLJJsafi0QQXbiv6KhFqcQ/F7mep69lDt4eW2HTN/rYu7svmiFl+w9UpIgVVin
-	2FRfhFsDV5Io9UlfUtg/Ulf+Dz4xSREhqg0t2LZX3tGBo9OLbSj4yVJRkSAiuCH5xHySXpsK3/L
-	NiJnFQ63bkaPJx6rZ8x1DnYk=
-X-Received: by 2002:a05:693c:2c97:b0:2c7:2cac:8162 with SMTP id
- 5a478bee46e88-2c9326aa500mr1010168eec.5.1775064998156; Wed, 01 Apr 2026
- 10:36:38 -0700 (PDT)
+        bh=jYUaVSUk5Sb3SOTuQeoUN5R4tL+13WiT/Hvm7LoUgnk=;
+        b=r5qSHwD4RIffapcr7MsAaaSe9FyShe8ruco4M2aEuzGwyfZVgGtrlnI0iBaGhHS1aH
+         jujg3sGgU1pX7FtOnH4fKFovBEj94iOLzMLbOYmhZgl3yEQW3wk47/r5x2EphYLCK2dt
+         WLhqEgzESVjZba+1YFQMHEVLmXTFryBXkOsp6puCjFukSu0Kd6H92NnqS0CU+lu8ntQc
+         wAbiER5yRbLF82sQUR1AsW/pEgM/EBDDwoQLkVZAkgg9+4k++Ab8OKBvWbcK32qRAsjE
+         g/OKH7GyunkUJ+q79jXS6Yw4b++9n360VcRAp5W2/WWJMAnDE3HKUS+SmXK8iG/J/VO1
+         nLOw==
+X-Forwarded-Encrypted: i=1; AJvYcCUerFukOfp4qcx67UfBHO9ef6EARcnOnZgbmLiifvcTDcBqnsJG+ymknGUZ7Uw5wx2k6nJP@lists.linux.dev
+X-Gm-Message-State: AOJu0YzmDtP1M/A3dj2lwOAajI8LUVG36/paPl3uZi008PUlnG4j/tib
+	2czXdRa0ZZi6C1QMZFvsSqBhiEx5t5ijIrKNIBYU6ZFFyAe8j9DUskXtvVew6CbGb1xS5ybGDqI
+	4bLIIyjOy6QKoiCYEd4Ty0NpSetNW3Es=
+X-Gm-Gg: ATEYQzzuVCDv5p+jNGCpKWd905ARfBy3tRuXLYjqoyiPmNYRIdvRy/EK2mVf+3z9Q+A
+	pnRG9UgU7PWrz73KBd90AMm9AE0aKrRH4IhgewD2niLryud2I4ZEmlJsJm2hYvyJEvYisUebwk6
+	GsD0/gNju2f63+Dz6Ur/XoGYC42i1Ek+DyT9vKbf4R9XQnw5tWU947l0IcB9clez8eT552HUr/r
+	w2gGnWMbMBfLx5zQb1arOznGjCqww6VHVRqImFk4cMkFNkt+OGUSC/KoxOgo/WtRjNPjrGp9WPe
+	u3ScfG1LYKOL0HnzoQ/9ieEzxS3DWftjDEsrqnM9wfcOwZOk9QtO4T5ytzZcq8CYIwjCotiL2sH
+	imh7NckKAEBEJewuJ3tBoVqGF+DAqs8pAmQ==
+X-Received: by 2002:a05:7301:4586:b0:2c7:2cac:8147 with SMTP id
+ 5a478bee46e88-2c932cb3abamr970192eec.5.1775065186457; Wed, 01 Apr 2026
+ 10:39:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260401114540.30108-1-ojeda@kernel.org> <20260401114540.30108-9-ojeda@kernel.org>
- <DHHVEPJHLGDW.1E6KDP9BUFG5U@garyguo.net>
-In-Reply-To: <DHHVEPJHLGDW.1E6KDP9BUFG5U@garyguo.net>
+References: <20260401114540.30108-1-ojeda@kernel.org> <20260401114540.30108-10-ojeda@kernel.org>
+ <DHHVLQAOMLWB.3FHHSYKNM5TNP@garyguo.net>
+In-Reply-To: <DHHVLQAOMLWB.3FHHSYKNM5TNP@garyguo.net>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 1 Apr 2026 19:36:25 +0200
-X-Gm-Features: AQROBzBeO_yfCUmMruxpBPrHPRt9Z-RBtWsQqT4MIRVUyc-eOkOj6bAx0WG8aNs
-Message-ID: <CANiq72mnnro6UD3SYgTOG+kipwkTBvbEAGH+jXUa3kLTUNje2A@mail.gmail.com>
-Subject: Re: [PATCH 08/33] rust: kbuild: simplify `--remap-path-prefix` workaround
+Date: Wed, 1 Apr 2026 19:39:33 +0200
+X-Gm-Features: AQROBzBO7Aafw_pbzha_JEZl4Ht2QE7dpytXYa0WjnL8RQv-FxGnezpSMqEOLn0
+Message-ID: <CANiq72kSYFiS6zN+VLs2URhAeHy8_-aEXki1pyR0qoj7jO-qSQ@mail.gmail.com>
+Subject: Re: [PATCH 09/33] rust: kbuild: make `--remap-path-prefix` workaround conditional
 To: Gary Guo <gary@garyguo.net>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
 	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
@@ -116,39 +116,18 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nico
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 1, 2026 at 3:59=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+On Wed, Apr 1, 2026 at 4:08=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
 >
-> I'm not sure that I parse this. You do remove the filter-out completely b=
-elow?
+> Okay, I see what the comments mean now. Perhaps squash this to the previo=
+us
+> commit?
 
-(I see you saw the other commit)
+This one was mostly to ensure the workaround was not needed anymore,
+i.e. it is more "optional" than the other.
 
-> Looks like this is going to conflict with rust-fixes (which adds the
-> --remap-path-scope). Perhaps worth doing a back merge?
-
-It would be only a couple lines conflicting, so it should be fine.
-
-Having said that, when I was doing this, I wondered if we should even
-consider keeping the workaround. In other words, locally for
-`rust-next`, the "normal" commit would be to remove the workaround
-entirely because there the flag doesn't exist to begin with (i.e. the
-workaround should have been removed back when the revert landed).
-
-Then, when conflict happens in linux-next, we can just keep the
-addition of the flag from your commit -- the rest can say as-is, i.e.
-no workaround needed, because you only enable both flags in a version
-(1.95.0) where there is no need for the workaround (which was for <
-1.87.0).
-
-It is also why I added the second commit here, i.e. the "make it
-conditional", because I was testing that indeed we didn't need the
-workaround anymore.
-
-So it may just simpler to do that. What I thought was that perhaps the
-workaround is good even if we ourselves don't pass the flag, e.g.
-someone else may be passing it. But the chances are very low,
-restricted to a couple versions, and the error is obvious and at build
-time anyway.
+In fact, we may want to just not have neither of the patches, i.e. we
+could just remove the workaround given the timelines of the branches
+-- please see my reply on the previous one on this.
 
 Cheers,
 Miguel
