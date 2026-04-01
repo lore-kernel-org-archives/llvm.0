@@ -1,131 +1,93 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF51C47D951
-	for <llvm@lists.linux.dev>; Wed,  1 Apr 2026 16:16:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4DBD45BD4E
+	for <llvm@lists.linux.dev>; Wed,  1 Apr 2026 16:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775060175; cv=none; b=rvTbi+DPE3k/3TYZ0txq1DPPCztaZ2XOrUhCBAPoXlp6nzZMYr7B0bdH5ttARWCys3xE9XgVB2WSzHs7zrxhrEspkuF/4uyGtnPBNWEffi9LriW9BqOejdb+FPqxEJ4ypnjns3uw6IefEFc+cyQCud4QuISJwV73DHE2JR/9T00=
+	t=1775062456; cv=none; b=iwQ/Vz0wsI6c5ys5FxzOX8C3UX/oV/nx9IDgxsRasvd9KLPDfxWR0PHlftS5q6Kxo8Vm8GnBEIc5/9qtknwDPNqx/FRX1+IuAOLqSKiQHo1+02Iz95w4o+EjzKu231FwtdYAMVj2Q61oUusez5FTnQbbAUynL+9ZTpOREI38HKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775060175; c=relaxed/simple;
-	bh=yVagyWKvjPbOTMFBAGYFdTOqwRpe3t1YiqqD3RZmsw8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iO3dOBeapIGtW1FseGgFkY4gtBtLlab+mpvXe7dQ0Ufhbyef4kYjhsbFmR+lYi8BfKmgN02P45U9ZGnW/dykwv0eUrwGENyG6pUuKQbH4zbIazaWu3HyB+RdAuyk0l/9atPKBrzKp7H73ArSYO1YYdwNfCmCp6PTQmYEvmCkxcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XhyNGAJC; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1775062456; c=relaxed/simple;
+	bh=xPdtfsh6DtiJKw3NNWgGtI+kfvS8+Uh8OTR0ljg4pcE=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=bAAvak0kWgvu3z1Kgs5peB4SOUNLK7d81tsn4ObwPzeI9wklj1JQnuOcspaxO5wE9qOmYBxfcRN0L4g1kdxVZRcC3PkO1iGPt4L/QAzIYQw0eTQaXja+yT5Du+WO68RCZRQtZ2rcX9oyyowFly4GMImrdf7qahgj6p/xvWaGjrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=OnyUhngE; arc=none smtp.client-ip=195.121.94.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XhyNGAJC"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-66bd4e0560fso1607958a12.0
-        for <llvm@lists.linux.dev>; Wed, 01 Apr 2026 09:16:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="OnyUhngE"
+X-KPN-MessageId: 683a3a0b-2deb-11f1-afda-005056994fde
+Received: from mta.kpnmail.nl (unknown [10.31.161.188])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 683a3a0b-2deb-11f1-afda-005056994fde;
+	Wed, 01 Apr 2026 18:54:11 +0200 (CEST)
+Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.190])
+	by mta.kpnmail.nl (Halon) with ESMTP
+	id 683a189e-2deb-11f1-80ef-00505699693e;
+	Wed, 01 Apr 2026 18:54:11 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775060170; x=1775664970; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3FvjqJGRUGf5rvJLMczRoDDubOCSWcD2sRCL5wLsrmc=;
-        b=XhyNGAJCNvSJ3pf/JJQMT45o95gLfqInIGccp6NH0I4lN1SJIRnQICX7KygslT4wby
-         Zn1VkUqAHaQ7rAfT5viHGf08yI6iDaAiIT3UTpWjQMYxcCTs0rylgvdZ2Fu8DA7ZTgiz
-         XpbDCYTsbF/oogFBNXaexmuqwWKtVa0q/7wGuEVNboizkJNmPxvml3F9hI72/hG8giui
-         V8flVNVZ80AlxD9C613XKRM1vdHhrcQyKXLwbcNRVJMqwAgvRfNYizSzedJVt2vz9hjK
-         iM9BGo8ZGbgGtaghkTlP3SxBQ2v4nkd31orCsDPhNK85O5HXp82GCC3GuNB9L6vHlep5
-         Ej2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775060170; x=1775664970;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3FvjqJGRUGf5rvJLMczRoDDubOCSWcD2sRCL5wLsrmc=;
-        b=jKSeNv2MvzyGlQjU+3gD6IsIECHxVHpS9MEMvlmaZkAnEyeFb00Fj9KnGpJOLb6pUy
-         oxut2NBzVAGbsNAoyRFNl8fY5BKFoITQcobCkCt16AJbW0UY1oQrQ0lWwF9l89cBP8ik
-         XiyX1+HpqmGk6A7xLchAaB+MCKnS6K3pVUYf2u4IzjT5gjKTehDRW9kLLqTSlnNK++7/
-         vlayyjY+RYgxs+B8O7GaoAIh62Lqvqjklr99+7uoadXdSDesIlfMH4jlXbaVCzQzghGu
-         oM6fvyq1FW8l7DUCCkfyuL7le/nE2SK0tb9ZEnTbpwdD5aITtxMAYS53Ej1+8wsbiKe1
-         spWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVzNJRFfHOLr5Unz8eLkbwNwmRSpExnFDkuzVqzW+CjsksQOI/JGtr8RoqXzjblwP/Ley9Y@lists.linux.dev
-X-Gm-Message-State: AOJu0YyRcJSzlq8P5ReqtMjBX8xlMNl6TXHKpj9AAKVP8oROJKA2DQSz
-	6pAaKMkIwEHfZEwz/YrxaofZAnAeA85h/MpSrgcCyhGDpMSYM+o/UCvpzgX9FZTi4iM=
-X-Gm-Gg: ATEYQzzuzJTYD9Dj6jN3zVcVkHp0qwQqstjrwn5UNrMxdMieqxNa2fpktRfjkL37zWw
-	QU4nW1E2Ih5PQO2mJD7QSEGo3PEHBOHQFEBKclw1ueWKJd5LirPCQHA57nPJv30QrEULrHvbVup
-	Mf+cNnBK3nHuT/F6TlS1LJzLL8zAf51CQmlWgEGLEnCorCdOm+1hSd3HSlO9IHEgIYafaVVy0aM
-	9vC4+It+9+B4u+oYo7td0E86j/XrOCnD6SSC7WRybgrXiQBk6qEX+W08+bcAV0ootHaTdcoUoi7
-	i8Jc7aZDhhPshYiNhJGbmBPiujMIX7t0N+MFGyftQ6qTKbQqUbC5GtwdUnkQ3B1FETB1bMr8xIO
-	hiO9chfiRcSwULLbFYYaEMKtnRdgtON08LmlnVU8AbAX0/RvIrN0DBVaC14b/jDdF8/blDEdL0L
-	1GEi5g0lHL
-X-Received: by 2002:a17:907:80d:b0:b97:b88c:386b with SMTP id a640c23a62f3a-b9be88fea21mr486276566b.29.1775060169798;
-        Wed, 01 Apr 2026 09:16:09 -0700 (PDT)
-Received: from localhost ([189.99.238.3])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-953fb4fb62esm539517241.0.2026.04.01.09.16.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 09:16:08 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Wed, 01 Apr 2026 13:15:17 -0300
-Subject: [PATCH 10/10] selftests/bpf: Tolerate missing files during install
+	d=xs4all.nl; s=xs4all01;
+	h=content-type:mime-version:subject:message-id:to:from:date;
+	bh=JDtkHVtdaqDtGFKDRrHTKel3gvzMpvxr6qe6ySWOnTM=;
+	b=OnyUhngEPxjY2LVqiLsAIx0O9Xc6lrcXncXCGcSJqn48S97IVQjVmqtDrwTRHiavPWSl3hmS5D01I
+	 yKo8hfybwkcVObiH7tlv/To4GUpiU3CRWU730JETAaAQZpNWEmZ0gbuutLLAAAtVwJNe1UUlyFKQEN
+	 aEa/OT623DXRLYz/inaUVpTQJ9NoF6bl+x4IYrAhyk74cZUcNrnl9wOK6VX2hHjPr4FAD0Rh6RsKYZ
+	 CNAckyvV6UMRVP6fGfJS6xKKGXDyT4F6W3YwhyT6LY6lUcpIUkO+i5nY05Q7ha8tfyRANzxhZSZNVE
+	 yaLsInZQzAiKSrnBaTCTnom32FJngew==
+X-KPN-MID: 33|JYhc+jiArJy7o/gsp9OstXSXwoeGBS8y4SNW5FdgI/rF8etAF2G9bICdgE6YjWZ
+ lRJT4xGYVcl8Okz08m8m1iqxV91WprD9VwusCmN46Vj4=
+X-CMASSUN: 33|jQXQ+v9pdp0jGDjz0K2w3iDs8dqB7d6UDlXmDn1qDOLXRLozaL96xX17LG3gKNC
+ IWF+Tg31S2nNxYXwmB4zbSQ==
+X-KPN-VerifiedSender: Yes
+Received: from cpxoxapps-mh04 (cpxoxapps-mh04.personalcloud.so.kpn.org [10.128.135.210])
+	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
+	id 682fc9fc-2deb-11f1-b8d7-005056995d6c;
+	Wed, 01 Apr 2026 18:54:11 +0200 (CEST)
+Date: Wed, 1 Apr 2026 18:54:11 +0200 (CEST)
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Chanwoo Choi <chanwoo@kernel.org>, kernel test robot <lkp@intel.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>
+Message-ID: <890652743.852439.1775062451369@kpc.webmail.kpnmail.nl>
+In-Reply-To: <CAGTfZH0bZMGpdKjvgw7S54NF+KeXPtvhsanKmSs1vHDhx7F7Lg@mail.gmail.com>
+References: <202603211336.i375F7lD-lkp@intel.com>
+ <CAGTfZH0bZMGpdKjvgw7S54NF+KeXPtvhsanKmSs1vHDhx7F7Lg@mail.gmail.com>
+Subject: Re: [chanwoo:devfreq-next 5/5] drivers/devfreq/devfreq.c:1946:37:
+ error: redefinition of 'devfreq_group'
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260401-selftests-bpf_misconfig-v1-10-3ae42c0af76f@suse.com>
-References: <20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com>
-In-Reply-To: <20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openssh-sha256; t=1775060128; l=1301;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=yVagyWKvjPbOTMFBAGYFdTOqwRpe3t1YiqqD3RZmsw8=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QJqWMuDkW7CGJ4c4k1sKyalpyIqTV3VBzKB/br2/xyUcVyk8o5hnm2bUhNHeFiX5vKvdQ7v/CyK
- tdCTirSltDAU=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
 
-With partial builds, some TEST_GEN_FILES entries can be absent at install
-time. rsync treats missing source arguments as fatal and aborts kselftest
-installation.
 
-Override INSTALL_SINGLE_RULE in selftests/bpf to use --ignore-missing-args,
-while keeping the existing bpf-specific INSTALL_RULE extension logic.
+> Op 21-03-2026 16:11 CET schreef Chanwoo Choi <chanwoo@kernel.org>:
+> 
+>  
+> HI Jori,
+> 
+> There are build errors in your patches.
+> DId you test it? I hope to fix and test the patch before posting.
+> 
 
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
- tools/testing/selftests/bpf/Makefile | 7 +++++++
- 1 file changed, 7 insertions(+)
+Yes, I have no built issues. Can it be the test bot did not apply the patch
+correctly?
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3d5b88435446..ec24bad44017 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -951,6 +951,13 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- # Delete partially updated (corrupted) files on error
- .DELETE_ON_ERROR:
- 
-+# Some generated files might be absent when only a subset of BPF objects
-+# could be built. Tell rsync to ignore missing source arguments.
-+override define INSTALL_SINGLE_RULE
-+	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-+	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-+endef
-+
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
+Looking at the build error it seems that ATTRIBUTE_GROUPS(devfreq) is duplicated,
+not moved.
 
--- 
-2.53.0
+> 
+> 
+> -- 
+> Best Regards,
+> Chanwoo Choi
+> Samsung Electronics
 
+Thanks,
+Jori.
