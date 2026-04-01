@@ -1,87 +1,165 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1ACB3BC693;
-	Wed,  1 Apr 2026 09:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775034510; cv=none; b=qPAQQ5DeRcvkdrx/9AUZooyE98v4p2mv/5g+GC42n8E6mFkjX7tnQ3az1axW6WX/03b2Bd3hZRdzETy4KmNv3ueDfgivu9Woli23bUgPJF+/t0HElUbsm/NeJ8+vDT5YDMRBb/afRL1uTUII3vFTCi76BCCnqnFtqNV+rD8uvnI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775034510; c=relaxed/simple;
-	bh=3LLAPWAYbZO7e389qVAkSxpu6fTCAdD2m4xwSDRe09M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZFIb/7JRbJ3bKXSUmyqvDhnUw/wlTb4bEGKmasDyj7nAm06m515Tf4VqRu5GHbQPad8JeEFTUgg70C4MniAuRC0wk2XL2q0n3oqMzEknqh9RCKL91kHR8otR/qbvSniyU8uo6l2Cb6uezONkch5SSgO0tQHF/Lz4JFsEuBgbTz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZtMwKSn/; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C853C942F
+	for <llvm@lists.linux.dev>; Wed,  1 Apr 2026 09:13:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775034818; cv=pass; b=W0GSBs4S53ZEFudjb1rnuLnSu/Ic5u0ovKEDm69+3uMTKRr1N55HxCSBiIVYxA8SHksr2w1m99hsmG2cKDMmVXZA/NYyqlxf0WQnfj9ZO8KN149c/v40i4ebkWPRAkfDjEFJ7OKQBUClaMK9unaSDC95UUdAw1rZM47Bv8zQpvo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775034818; c=relaxed/simple;
+	bh=QFYF7XZi4JO1uWyMujqTYJc6fNoJQQoTSICnhUPxTgA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N/akxyXXtVhWJ/gItJKR0U7eqIJ5YuAhbS24FvnxrU05XXxMDBZUwRS+cWS958kfD/rdIDTWDYr5fwK3Rx7vpQNq8P9ugOOUWrX2fD33zkVSVaCx3NaiWEp3N3P5BRDxEuWaxHmZFlu4MXM4qNIH0YGcjRUTXdC5+W4lIWy75jw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HK+VTPHA; arc=pass smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZtMwKSn/"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Dy5F2xOgf5sDAMW36PnFeNCX4KH4DzWDRyg/Apw8tTg=; b=ZtMwKSn/uOy7LsxrQ+7UB+C92o
-	fvLIHexT3M430ciafifuis2tJqwvmDWA7dvZwlcXBYfMK7kR1tOhQGDv5ifJysG5wz0zwypzPmS6W
-	OMWb/BNIjXcWCNJitJfMjHBA9QMIdxbMkFg6bvw5D0JCcLvFh1yT8g7gl2OkZklaUf84oKTIpnN+o
-	732DH6p5oDPGzsKsUTC4g3lYb1GiEFwLU8LhvJml292Uv6xWz4Dee6M4fPQe8yiF1vECo9dRTicSw
-	MrnLu/QI4r+c68MP89Nxdf9pr8QlISU2JYZmUMIHPx5FBcTOY6zh2QloExnzxIJpOrrvVJBKbBm3A
-	Lkr9+BxA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w7rYm-0000000A6Xt-1LQ0;
-	Wed, 01 Apr 2026 09:08:24 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C3FA13032D8; Wed, 01 Apr 2026 11:08:15 +0200 (CEST)
-Date: Wed, 1 Apr 2026 11:08:15 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, kasan-dev@googlegroups.com,
-	linux-doc@vger.kernel.org, llvm@lists.linux.dev,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Nicolas Schier <nsc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH 3/5] compiler_attributes: Add overflow_behavior macros
- __ob_trap and __ob_wrap
-Message-ID: <20260401090815.GV3738786@noisy.programming.kicks-ass.net>
-References: <20260331163716.work.696-kees@kernel.org>
- <20260331163725.2765789-3-kees@kernel.org>
- <CANiq72mK9fz6Spmgt4js3hScqhqvZb2YP2T7tDfR0fHPDFWJ7g@mail.gmail.com>
- <CAFhGd8paijFboDVr8rJDjScob047q+zgYAs038WuVozOG0aYaQ@mail.gmail.com>
- <202603311249.30B44C66@keescook>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HK+VTPHA"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43cfac48bc7so1986666f8f.0
+        for <llvm@lists.linux.dev>; Wed, 01 Apr 2026 02:13:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775034815; cv=none;
+        d=google.com; s=arc-20240605;
+        b=DIKYrmJs1ProFUpRg0mUAOqUqg23zhaCyZ+C/7ZNFfHe6oo2QyBw61KcP0xaisSg2O
+         n5tqKaAt/J+rBWz4u2q/zlGU9PPKLZu2l2Eq3KdxveS9fKcmV3M8pCGegXZYJt293nO4
+         XWYg+Tu2EzigC08JiS73l5VnT/b76C+N0tNG6Qh3yrOksAjlPy6luyP0WuikvYItCfGj
+         F68CjIIe7/8ttu1Npnxqsvbmx46TcaW7n1L8HK0tAk6fLaSAE1sHoRHmagAa7d2NrcS5
+         Zp3h0dpDwifuwY4v7HGxzPQAwGUVmGGhsMp6HZ2JmP3c3WM2lkpCo7sSixJX3VgxSwuW
+         2t2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0z9rCSZjhzgqsDij4dO9eDyirD7l3D3m+OFxXCVSvB0=;
+        fh=rJGm8nyePWaWN0Ht1FeuYayWsd1A8/l+MH/IotVY180=;
+        b=DHjWOJEhpoIe9OdzsfuctpJ39nIkgJLL8YaWKEMc8u6LXjvfnOxZ+rpzJ1mQ4wetEg
+         94whbwkmXikzLGskbevYbuQC44TP9PWCNY9lqovSYpAa38mo/MLOMENODk5+eQmXAaAN
+         xJ47PauVBMWNGkWPgffkkNoeibXGLRHC7OfTM9VDakUBC/4uhIIHmqareF+qBERFaksZ
+         3a2/tObplyvZ8H1RIcRU3jCdkUr7B6EVu/DrHMoCRbHLqeiqTWb0KCG/QsNLGNqIXdFF
+         NdsvM3arW3ZNIubqjG4LvOoMrFc54vcGaH3yvPTHBPdUM/IqdLTH+UwbXwOAhA0VGyKb
+         o/cw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775034815; x=1775639615; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0z9rCSZjhzgqsDij4dO9eDyirD7l3D3m+OFxXCVSvB0=;
+        b=HK+VTPHAT7nq2edC6NRFJv4D71ItGyny46BMxZvvOZrAlRBmmMrUsUXtEv2rvv2qgr
+         JMTmXegsBioHe3xOcAi0fM2dBQlJ45AaiLmcCs1OSrEljkYN9DP5L3kSNbsO1Gv3M6XU
+         Vp+exClZ0i9+fP96CvGRNrgcOwoEBIRHfSvcfveSNPaaJXuCSvfPYGMygeryxD+Muns0
+         /vvpbujh0ZJDy22PuKiMnQ5a6ouQl6IxvLwEkuoXD7s6xHw/xUeKHvMUNert9cdQFwyf
+         8KZc+FwMv/zdIdeAsM3gBYKqRFgqxN84EXtvJyt+0VESOb99uZj2cor7AIrglP90OEqz
+         mOFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775034815; x=1775639615;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0z9rCSZjhzgqsDij4dO9eDyirD7l3D3m+OFxXCVSvB0=;
+        b=gDX3u1hFYW6gn6Py4H13WkfrN5hvidFEFlJ/Gz8oWBzSiVmZWb4RK4KpXrQdMEkI0V
+         /H+VjIDbViZgV3NWd3QUzv8J4wYA/IlgRRybvPonFvShg8rjcgA1qqxMk6Kp2TU6R2CP
+         0r/di9vutMdgFV+1lC236L/y0pIwlZcWTHbQ/QM+ikQB+i/vX6oMjTRJZKLFH2mJg6q8
+         G3aYltjwKYv3MxPLfNSRFN96JMQd6u3454vuDvso7CbTlTxDtYsD5VkKHeN/3s219leM
+         DKFcnM1DAaJugn/HCup00Pipcbsn8sSWZGEex25GHYt/oM8ra0WF8d4H2uY4iQg6neuD
+         IU+w==
+X-Forwarded-Encrypted: i=1; AJvYcCXthEFBvI+83fpMQ5W/NPgQ9VuBDvpJPMyY+CXmZvoHTe6mHg2MvFTu+NR/ZyLApZyK1zHB@lists.linux.dev
+X-Gm-Message-State: AOJu0YzHM1LZqFQeHCnZB/+O166sFRsN1RRcPt4CLGbyJuycwAFc1tpt
+	8dRPxEDTpxo4DBaBYjn5Yt13abwIU5dlp90nUZZ3ThtRwSnfDyUGI21wM/icVp1Ix1FTPBnbUeK
+	vukckTBKprxLJWW5YAec5bFCdhuuQWJ3n/Ok/rT+7
+X-Gm-Gg: ATEYQzw5L1k95XQJ4bRW25QpD4bUC4ytVuFG1Tkap9nN3Fqd05/w6tcDrFZVR8NBYID
+	gYUwIMqCIdVFx5u9YcTspuNp3sre5YD46fjBmA21Ghq86GC+eviuZAkETyxsqeHMGnX3WO00Fi+
+	XeO3Y9qqe9V7oWJGKy6SkepjoIulBZP4vYCxmIRWzeK5h+k8hgdTF/uDKLUfq3M/5c5geWqcgn+
+	M/0ynD5XlsQ6Sy7C2/0MkIUBJu2h6F6DhYkvarqLoWn7p0T4IBFjw1hsrOB5jngz61Ccm0yEksr
+	MX9xKZfoTq8V7vSZDv3x7fpSJJasZDqlz6OjyUG8c5sdhLlF
+X-Received: by 2002:a05:6000:2909:b0:43d:29a:e42a with SMTP id
+ ffacd0b85a97d-43d150c211dmr5076261f8f.29.1775034814196; Wed, 01 Apr 2026
+ 02:13:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202603311249.30B44C66@keescook>
+References: <20260331-kasan-rust-sw-tags-v2-1-f6765e3e1a2f@google.com>
+In-Reply-To: <20260331-kasan-rust-sw-tags-v2-1-f6765e3e1a2f@google.com>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Wed, 1 Apr 2026 11:13:20 +0200
+X-Gm-Features: AQROBzB-8BzV3gKkJjU-4FV5-TqIn6Zpz4iTvD2IP9jhw3sFZ4zvgCLsfrZ52lM
+Message-ID: <CAH5fLgjbrFsJxikTe-94x4a9Q3K6V5rCJBK=0pmZ2_qjfreBBg@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: kasan: add support for Software Tag-Based KASAN
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org, 
+	kasan-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 31, 2026 at 12:52:10PM -0700, Kees Cook wrote:
+On Tue, Mar 31, 2026 at 2:09=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
+rote:
+>
+> This adds support for Software Tag-Based KASAN (KASAN_SW_TAGS) when
+> CONFIG_RUST is enabled. This requires that rustc includes support for
+> the kernel-hwaddress sanitizer, which is available since 1.96.0 [1].
+>
+> Unlike with clang, we need to pass -Zsanitizer-recover in addition to
+> -Zsanitizer because the option is not implied automatically.
+>
+> Link: https://github.com/rust-lang/rust/pull/153049 [1]
+> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> ---
+> Changes in v2:
+> - Drop the first patch for -Zsanitizer-recover, and mention why in
+>   commit message for remaining patch.
+> - Pick up tags.
+> - Link to v1: https://lore.kernel.org/r/20260325-kasan-rust-sw-tags-v1-0-=
+7d3a765a72aa@google.com
+> ---
+>  init/Kconfig           | 2 +-
+>  scripts/Makefile.kasan | 2 --
+>  2 files changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 444ce811ea67..545cbe889a52 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -2179,7 +2179,7 @@ config RUST
+>         depends on !CFI || HAVE_CFI_ICALL_NORMALIZE_INTEGERS_RUSTC
+>         select CFI_ICALL_NORMALIZE_INTEGERS if CFI
+>         depends on !CALL_PADDING || RUSTC_VERSION >=3D 108100
+> -       depends on !KASAN_SW_TAGS
+> +       depends on !KASAN_SW_TAGS || RUSTC_VERSION >=3D 109600
+>         depends on !(MITIGATION_RETHUNK && KASAN) || RUSTC_VERSION >=3D 1=
+08300
+>         help
+>           Enables Rust support in the kernel.
+> diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+> index 0ba2aac3b8dc..91504e81247a 100644
+> --- a/scripts/Makefile.kasan
+> +++ b/scripts/Makefile.kasan
+> @@ -71,8 +71,6 @@ ifdef CONFIG_KASAN_SW_TAGS
+>
+>  CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress
+>
+> -# This sets flags that will enable SW_TAGS KASAN once enabled in Rust. T=
+hese
+> -# will not work today, and is guarded against in dependencies for CONFIG=
+_RUST.
+>  RUSTFLAGS_KASAN :=3D -Zsanitizer=3Dkernel-hwaddress \
+>                    -Zsanitizer-recover=3Dkernel-hwaddress
 
-> I think for this series, __ob_trap/__ob_wrap is what should be used.
-> 
-> And for other folks, the background here is that we originally wanted
-> to use macros for "__trap" and "__wrap", but the powerpc C compiler
-> (both Clang and GCC) have a builtin macro named "__trap" already. So
-> I switched to just using the Clang-native type qualifier. We can use
-> the attribute style too, but there was a lot of confusion during the
-> Clang development phases where people kept forgetting this was a type
-> qualifier, not an attribute (i.e. the attribute is an internal alias
-> for the qualifier, and the qualifier is a new type).
+Sashiko is asking what happens when GCC is enabled. I think we just
+don't want this enabled together with GCC. Miguel how do we usually
+handle such cases? I imagine we have quite a few options that are
+probably not compatible with gcc, but I'm not sure we explicitly list
+all those cases in Kconfig.
 
-Since you mention qualifiers...
-
-What is the result of __typeof_unqual__(int __ob_trap) ?
+Alice
