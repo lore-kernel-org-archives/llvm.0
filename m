@@ -1,95 +1,95 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740BF47DD58
-	for <llvm@lists.linux.dev>; Wed,  1 Apr 2026 17:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDB830B51A
+	for <llvm@lists.linux.dev>; Wed,  1 Apr 2026 17:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.180
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775065188; cv=pass; b=Ka1E3aOJvux47S2FplQVaJ9AaXlW9LmVS1Q59OcNbh64cfad9ATZKDM/LFOVy+9p9fYBzNugmCwhvq15i8aoOMR5qtI21LZqtIEGzL37OAwTmVP7bfJMhNJaAhpHvm0Jon88/tFuv8kMV7qvedowcIbyl1UGwprUYHbnvfSMmmk=
+	t=1775065562; cv=pass; b=lSJxhXScNw1VX/+gBtGxCiX1Tv1Bfr7RvxU/XVHrYOoUqXFCOMpIfBKg9NDKr/NzgmI3qcTmY0cVnrUkJsiscHzPLH/k7F5aFsvFZ8NfYmnzQlbig/qXmtWZ8bE7Lvt1JDWaw1Y+3dPymSKb0PNxRwsM1dZ0INbgekPUWDtJRIw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775065188; c=relaxed/simple;
-	bh=jYUaVSUk5Sb3SOTuQeoUN5R4tL+13WiT/Hvm7LoUgnk=;
+	s=arc-20240116; t=1775065562; c=relaxed/simple;
+	bh=QI4ZvYmbpYFMS5F4DxWr2Qtcv3EtByJoEsfGF8Isxow=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ckSn63ovgKAFIVhTBdBU5dgAdTM6BuppDVlUBoZ4Z13PmiFcW1dsKyq4eNOcg2bgaCb6G7NYVVRilFpmfX2y0vz+8yQYFeU5X4xCs2RX/2AaHxUSWCwIVHhx09P73dxKcjwElq5UDd8IrQBdVwe7TsEAZWKCxPuTDlYVbpNTgjk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OYoe5wxx; arc=pass smtp.client-ip=74.125.82.172
+	 To:Cc:Content-Type; b=GfnnQ6Uol8OxGeUg+ifuHBqc2Gfp5RaFouwkmfOsCYj7av9jYwuiKvtQlz0QcoOZmBdoiZeB4fUgKmwDiwsGFzGXP0CYTkusVBhXxpr+tFxz6aeCwiXMS/pWJBzTddlUO3pznEFZlvUPQDaYiGzhGBz2Lk7eOw7wvw+CnFlOkq0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TSlcSBBz; arc=pass smtp.client-ip=74.125.82.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OYoe5wxx"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2bd801b40dbso11143eec.0
-        for <llvm@lists.linux.dev>; Wed, 01 Apr 2026 10:39:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775065187; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TSlcSBBz"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2bda3b4318dso5599eec.1
+        for <llvm@lists.linux.dev>; Wed, 01 Apr 2026 10:46:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775065560; cv=none;
         d=google.com; s=arc-20240605;
-        b=GBqss495x8HLLCEKF0WeXyyuTaBecaOLyO7aEQXpKkSa8n/Ny3BoppZZkVNTkvuvxu
-         BKhA1zlOyQzN0zgjkN4Ue7l/9VmfVEtwXvVRYVPeoifw19ikXXY7zrf2w2HqE+/EbIXy
-         q52NVNnvM/L56zdplUFcIO96KfG4m+NODrz2Cjv6pkZSLfFnRzWc0RfE3ecHHIouLVGB
-         GZOVGO264AorpMRy1nSCxtv6aoMla6E9gdFKpHE3I6BxtuG8U6XH3Ej91Kr+M+Z1CVPu
-         ufj1clNjUpy1N6Yk2j/A8wTG01TUVHCEr+7bxtl1UP2t1DeioD5xcJ3NUMLLSa/JNaRV
-         et4Q==
+        b=AWmYMMts1Jw24OWkmlap0wd0mNIJAW4upXcJlobbxVeUcazhLGzqrLqkWzLRGwwyP6
+         kbs+oV33zQZHr3e11BqBhZhng/THu/LwjHrUusrIhWd7CP2CdXyT4649qomT1SWFyy7o
+         EMbUjmWC81b50hvV8y39naRO2bdZ06LLmzsjR+Kkv1E/VswdrTj9GT+CR4Fb+JUE8INt
+         EOnlzEeJOq1vAGqpVNOsokRdpPOc/MfU7EePoyO9kF57LL7288GpbV59X7IK6YkuZOkv
+         1G6yPu1AgO4LnsIY3ci/IUbLz+XXWJC4vk9L0GICbg7uvisoQwSYc34iJOyzR2e8Lpme
+         Vq6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=jYUaVSUk5Sb3SOTuQeoUN5R4tL+13WiT/Hvm7LoUgnk=;
-        fh=npQCaR403wZISSk25TwjMRUH/pCndIJx0oa2p4PMVdQ=;
-        b=hlejBUgE3jNtPXChr76j0b2GZkh15Yr/gAd3SF7vTimwoNpsU0fLWwXk50cqLtJAkx
-         K3LgB23aWjbfUa5kAoHPlQL2DzmO3ZaCVhe9AczKLbdvxL6GkT672Gw96/gdF/MPtDI5
-         ShgT4eK6T95lCshdRtOsMKBRQuiANIUbTT9VCRZ1npmx/S1wQxa6bMwwYqZBG67rZ2DQ
-         OcX8wZqao9syYRblmQEO4T0XqAhMmIwsNliCnGKzEwo0wKEOOG5ppxKcG9xSgknzJSze
-         gGXBipJT8qI/wrHPwtEXZM5m8PdLNcvL7aXvHMC5+jhmR1gZ0Gp/i44Q4x+A6g5RV+Qf
-         RZSA==;
+        bh=QI4ZvYmbpYFMS5F4DxWr2Qtcv3EtByJoEsfGF8Isxow=;
+        fh=Hlhs8wkogMCxk0GOpvFGhC2YxgsrT6Bl6dzXGjY7I6M=;
+        b=fqL9Ow8TY3PPLtQ9NEadn4HaB7Cu6g6tCiywp9BgzDWJ7UIed13kACGIM/fO6IEPEm
+         XAIsUuAPxOiJ5z/iTyfY4+F8O576yWyDG/ufvFo5EoUEAdQBIBmisoX3fdZTvBJf2EIU
+         L5133vt0xo054IooN0Hu5RHCdyc9dGmR7ZSfSFxg5YbzwW8ghei7+3k7CdwSQwKalBkh
+         H5QMoUteF04tT3LcaySvSLlYn2bE19PFhgP8ulUqlMQ+YgnoXxwYoQa2z6Wzgks83jym
+         hL6usmKpoGcRG6qYAZOf9xdkeoXTlVoIAWBTy2d7lubI0+OxJ5HsClCRzjadDEA5ZVpG
+         w0sQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775065187; x=1775669987; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1775065560; x=1775670360; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jYUaVSUk5Sb3SOTuQeoUN5R4tL+13WiT/Hvm7LoUgnk=;
-        b=OYoe5wxx2eZx3hWRbGzkQEkZE56igOTkWHOuvCELlhLjBA3Xxlr9gE7cv4g7sGN241
-         kmXxK4LTzHqrRJrXCXQJY0OQFubJtoQ9PiuwIqpGhZYo9JQRHpP07eXpiZtuwVI4oWbi
-         5CKdYCb4Sjgf1WYSELU3hQReGUDf6NL/LJhaKHmVLSDB+uaci01aA6x7S+gsE1ByBKH4
-         Cq1gVNL/WTi4wYdza2Z5/pdti+zDPlJhaUnZ5vijf4B7JNxN7J0x1C2HONBA+ccw5jX2
-         dZJp/rTXP/WV2uwniZamrKCmPRxWOWB9Ygq35y/RLY2UXhmiyKSDRGby5AjbznxcdZkw
-         aAcA==
+        bh=QI4ZvYmbpYFMS5F4DxWr2Qtcv3EtByJoEsfGF8Isxow=;
+        b=TSlcSBBzN7xyiiSdD3kAIz6B0uU+JGYGPr0E7Fn8f2CjR4e7w4smuYLU1e+enENtjm
+         4Qvo4ZBHJJyWY3IWctqX+TQvN1lTel1CArztkIR6tIE80jy5rgw5XNnhOG1icf7uN2PO
+         VzixTR4Ik2XpZuOXdBfXVnS6vdtugYx3w2RvDm5miV1DKjuIlvXLohxDydjJd+ly5D9p
+         Fvc85M3bpTtmB31ud5A8xtqi9YInagqxGVJAwQDx/Fi5QD9wQd1a7txJGm1RB5TyUeae
+         Mv4i8UFqRtBrDEVshu7mL9M3VQ9K3aoGwFn1ExlC1EinB9siNQUrIIykp+rww05/ImIy
+         RmqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775065187; x=1775669987;
+        d=1e100.net; s=20251104; t=1775065560; x=1775670360;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jYUaVSUk5Sb3SOTuQeoUN5R4tL+13WiT/Hvm7LoUgnk=;
-        b=r5qSHwD4RIffapcr7MsAaaSe9FyShe8ruco4M2aEuzGwyfZVgGtrlnI0iBaGhHS1aH
-         jujg3sGgU1pX7FtOnH4fKFovBEj94iOLzMLbOYmhZgl3yEQW3wk47/r5x2EphYLCK2dt
-         WLhqEgzESVjZba+1YFQMHEVLmXTFryBXkOsp6puCjFukSu0Kd6H92NnqS0CU+lu8ntQc
-         wAbiER5yRbLF82sQUR1AsW/pEgM/EBDDwoQLkVZAkgg9+4k++Ab8OKBvWbcK32qRAsjE
-         g/OKH7GyunkUJ+q79jXS6Yw4b++9n360VcRAp5W2/WWJMAnDE3HKUS+SmXK8iG/J/VO1
-         nLOw==
-X-Forwarded-Encrypted: i=1; AJvYcCUerFukOfp4qcx67UfBHO9ef6EARcnOnZgbmLiifvcTDcBqnsJG+ymknGUZ7Uw5wx2k6nJP@lists.linux.dev
-X-Gm-Message-State: AOJu0YzmDtP1M/A3dj2lwOAajI8LUVG36/paPl3uZi008PUlnG4j/tib
-	2czXdRa0ZZi6C1QMZFvsSqBhiEx5t5ijIrKNIBYU6ZFFyAe8j9DUskXtvVew6CbGb1xS5ybGDqI
-	4bLIIyjOy6QKoiCYEd4Ty0NpSetNW3Es=
-X-Gm-Gg: ATEYQzzuVCDv5p+jNGCpKWd905ARfBy3tRuXLYjqoyiPmNYRIdvRy/EK2mVf+3z9Q+A
-	pnRG9UgU7PWrz73KBd90AMm9AE0aKrRH4IhgewD2niLryud2I4ZEmlJsJm2hYvyJEvYisUebwk6
-	GsD0/gNju2f63+Dz6Ur/XoGYC42i1Ek+DyT9vKbf4R9XQnw5tWU947l0IcB9clez8eT552HUr/r
-	w2gGnWMbMBfLx5zQb1arOznGjCqww6VHVRqImFk4cMkFNkt+OGUSC/KoxOgo/WtRjNPjrGp9WPe
-	u3ScfG1LYKOL0HnzoQ/9ieEzxS3DWftjDEsrqnM9wfcOwZOk9QtO4T5ytzZcq8CYIwjCotiL2sH
-	imh7NckKAEBEJewuJ3tBoVqGF+DAqs8pAmQ==
-X-Received: by 2002:a05:7301:4586:b0:2c7:2cac:8147 with SMTP id
- 5a478bee46e88-2c932cb3abamr970192eec.5.1775065186457; Wed, 01 Apr 2026
- 10:39:46 -0700 (PDT)
+        bh=QI4ZvYmbpYFMS5F4DxWr2Qtcv3EtByJoEsfGF8Isxow=;
+        b=tKMCT2XQ5BBAtVBa/iwkceeJMD/yqRZTJ6lo4fu6OVVw2u04W+jZV+IUksGnDhIcIv
+         bXDktfkvhhlJSFaQQTbtepnECxW8YAqYpI/Dm9p/2h2uv9tK3Aa9J9oyxd/FYNPNNoNs
+         23SJxeNFuZIKPNcNThGHmJYr/fuPfUpBRaRBgVy5kb3Az/O1WfITJt36DI+5hkZzRKxe
+         YKCzAupm0kYoVt01FWWaX2y+HGp9MP8KiEeSImONb7CZQ6cbtiGxzTxTFV3tcK1mw8C3
+         0xcAS1pK7IwOYHkDt/lmc/EJ5q7nAIq51CxS3egaMnoJLZsStbhqcBa2H+KXDYuEMDzy
+         zQHA==
+X-Forwarded-Encrypted: i=1; AJvYcCVA7k35yiE0Rgu9tZ49v4WBUeaA2QKYpFJk4EM5QGTtbWC3WEf4LMGMwtTMmxZbNevIwMaM@lists.linux.dev
+X-Gm-Message-State: AOJu0YwsR+nH2yO/SMCUMrvMVesZL3B5Sv7T3N8DvQK62v0UFdaSe1Io
+	DYHvw0Xr+oRdh9CoyGpwnc4bsyMGYTJYw9b9TYcCKadw1vLSQxbSTNsCoZti5AuuyAAhKpnwSXW
+	w4BLwI79mT4zv9BzGwTWGFuhsGoQSZyU=
+X-Gm-Gg: ATEYQzyT28sdEwlfGbXdKvnqPayNUSV+7WWfeYtSTkX/bbrr6i0Ue0LrrSghxiG5G/4
+	KYd92Rm2BWpPKSJbDzINuC5Z7lyYIyJVirPgRa7wez+Bj9KOxdefKWMqw+rAjyq7PxmIoyIB6Av
+	bS/Jmh3FJ7SZQoUyQwxTkUE8/skXWgj+LmY76RlBt5n99ZA8HcKfX3z2yJbZfXmjEeuiUXYY/ve
+	Old2IqQuVFb7YhCG2dULgxVL39lgpGRDDwd7kf9lo+ERcwK5iODczD8AHd6+tbZk5Yv1DYRrnku
+	+GIhT5XEHzMzoR6IKbNifcmsrY1OQ2ruT8lRlhvuuP41XGxlWHpBFg5JTRKd5meKPtgBigMTQAi
+	g02Y0xh4ZPaKGaiIvYn3FVX9tU49wESU6hQ==
+X-Received: by 2002:a05:7301:2c05:b0:2c6:7f49:a840 with SMTP id
+ 5a478bee46e88-2c930798a4dmr1033595eec.1.1775065559731; Wed, 01 Apr 2026
+ 10:45:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260401114540.30108-1-ojeda@kernel.org> <20260401114540.30108-10-ojeda@kernel.org>
- <DHHVLQAOMLWB.3FHHSYKNM5TNP@garyguo.net>
-In-Reply-To: <DHHVLQAOMLWB.3FHHSYKNM5TNP@garyguo.net>
+References: <20260401114540.30108-1-ojeda@kernel.org> <20260401114540.30108-13-ojeda@kernel.org>
+ <DHHVSX66206Y.3E7I9QUNTCJ8I@garyguo.net>
+In-Reply-To: <DHHVSX66206Y.3E7I9QUNTCJ8I@garyguo.net>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 1 Apr 2026 19:39:33 +0200
-X-Gm-Features: AQROBzBO7Aafw_pbzha_JEZl4Ht2QE7dpytXYa0WjnL8RQv-FxGnezpSMqEOLn0
-Message-ID: <CANiq72kSYFiS6zN+VLs2URhAeHy8_-aEXki1pyR0qoj7jO-qSQ@mail.gmail.com>
-Subject: Re: [PATCH 09/33] rust: kbuild: make `--remap-path-prefix` workaround conditional
+Date: Wed, 1 Apr 2026 19:45:44 +0200
+X-Gm-Features: AQROBzDasvNfwm3irNcxLclKgLrVzocIHNQudR_c4deB-93-CSbalwIa-aYY_TU
+Message-ID: <CANiq72=8eVKk0gqyvgWM_-VSsRZY1s2e7gx9AbAg+q0dRRYO=Q@mail.gmail.com>
+Subject: Re: [PATCH 12/33] rust: macros: update `extract_if` MSRV TODO comment
 To: Gary Guo <gary@garyguo.net>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
 	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
@@ -116,18 +116,19 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nico
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 1, 2026 at 4:08=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+On Wed, Apr 1, 2026 at 4:18=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
 >
-> Okay, I see what the comments mean now. Perhaps squash this to the previo=
-us
-> commit?
+> When I write the comment the intention is to enable the unstable feature =
+and
+> switch.
 
-This one was mostly to ensure the workaround was not needed anymore,
-i.e. it is more "optional" than the other.
+Yeah, that is what I meant as the alternative in the commit message.
 
-In fact, we may want to just not have neither of the patches, i.e. we
-could just remove the workaround given the timelines of the branches
--- please see my reply on the previous one on this.
+I am OK with either.
+
+(By the way, I wondered why you mentioned 1.85 in the comment, I guess
+it was supposed to be 1.86 instead originally, i.e. "above" as in >
+1.86)
 
 Cheers,
 Miguel
