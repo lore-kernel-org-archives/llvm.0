@@ -1,183 +1,128 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DD43C13F6
-	for <llvm@lists.linux.dev>; Thu,  2 Apr 2026 14:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7B03E4C77
+	for <llvm@lists.linux.dev>; Thu,  2 Apr 2026 14:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775138569; cv=none; b=UqJoYnrvIcIDePws75Tv1mF4u6gzNko/LbLed7/uUFsl3zFbyWQJXbvYdaiQqbmXym2Q2BtBI3cTzv/NbeVWJFmCwWK2ALanJpwnw80Py+kRwDdtxdcEELF1+E6mw4DuS7yQqSGgQxVd4IHqM8/b4ZzDAjRkYcUKJILwThkL16k=
+	t=1775138813; cv=none; b=n4ZbrdWkZ2U2tsp3PfMkjyla7VLQIrEKJNp+wjsXAIJDx3zsgmHgLn+H6H2JLFnqPvuFcpb3IgDU8ZG0bsxgoE4atbT0bhcJomDzY/ZGlEqF+5rj+6CuTn1c1QZ0BoTUwOGWILowf+G/7YCOlH2rn9nDUbS2iyxjxwSAHHvxX8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775138569; c=relaxed/simple;
-	bh=QuDJlFmHBgvStEeocMY+izf+6lwz4dximZB3hxaYZr4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M1ZAnSe8gUEyycv4OuN7wry3lwzaB4/f8J2RQe6lrynMemMwL9lGR6SRZdcbRkR+6zP5TgjLH2fPKJrHUuwek/lgRjMqNNQVtC3CijmuF7YjNWEGu5y/ECfCJg8gikuBQjHvzGnzWBuDUyYmFXJZJI5EYhjaPkwF77LKl6aZpnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lwDdJOGH; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775138813; c=relaxed/simple;
+	bh=QK06DeIrGJLo+skpQxZiMaOTbSFroKiAVBO1zjQLL8s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ef+pVhCc5OjyYpzBRpuKdQ18yZggRB7HQOVOSTeSWgLmcZZpebIOkATkH9MsBrETtUZ2P2TuDiWdRWw7eaBCZ2IveUVeFqYY4FiGeaLxA+pid8FPPaZKul0bQhayFclso7oyXPvcE5qNqD/3iKaavbExOfPz93m9ySArXDO8Qac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=LFogEVTI; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lwDdJOGH"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4836cd6e0d4so1093505e9.3
-        for <llvm@lists.linux.dev>; Thu, 02 Apr 2026 07:02:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775138566; x=1775743366; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fjebN745cPTznKlBAtXhIYhg+ckfnG5/mIokgKeD9ZM=;
-        b=lwDdJOGH8csA7gGI6WfPSLaqHP106goOrzCv6V74djDqB6ssvApaqv1CqR1uiMCi2U
-         cKgylnHjQlywh7XIDG5OyGkqemluOdKurvR9P6MtfxRsywZqjMTbEkxqXrmYEGpcgNTZ
-         6IQgmt8gGmpLPl/ntoXjkvgvjEyEa5fQasD+cIEIsRUYBl+CNEuZzhrR+p4CV7ylxOJv
-         un4m/gj4MZ1BPo3ee4fCXLJEGpphRas5RyEzO0g6HLsGu4+fuxzvGb/kES8MP2tJSw4S
-         1g+UaA9mbPi2S8O1banWoplx4ouYEeZEAQL5Ns8qSgLOeayBsT0/PhzHcUBq2GgFehoD
-         sSJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775138566; x=1775743366;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fjebN745cPTznKlBAtXhIYhg+ckfnG5/mIokgKeD9ZM=;
-        b=Zig80wC82+nMaijTQGBUm+nMtnPkzvgj1xKXWtSH23uUjtlKeD+Ekc4Olrx+Gf0roU
-         v9rEGuP3GuOmY5GS0fn245YGWC5T465T30KA7TcSAWiDYBIiWB2VPAlNcQM8z0asDsqk
-         6OSbZiX0erNbgXGHaRsc/y6esXUnwM6ODNrUaTwi6pjwSNVrfPWjmNwCel/AQbWYKWCD
-         oLl0MSjh58jruHp1DKzgbJM3CnzVIIGjXGH7DZv9+ZJXSl4RyybzY7zY74einxfs371g
-         DVxTfDzJnjWKD/hvvScjs997mx+syIuoAD+rG4qvpReR3Uxcn1nJop6rVKNT4eY972HP
-         4FSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX0SeWo+3kd7lbhJTIvqJp9EcpQ4F3Bpm63z75yXElAzmTfZVdcqw88zacWXvDhodgOC+vP@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx7Nbm0Drm5srzflX79GVrv/jP+FAHoGFhKyTKzZFKHgrbj0ABU
-	265BxU98coGF1DlHixjfZTIKUvdc382F32p8Qk1oHqQJsDYoUtjs5Rv0
-X-Gm-Gg: ATEYQzxrgm5jmL7hfDSdH4W/6ScUDpaEHyQ3ikihQC6ctM0nKNgGKSWJnt1m4oH0pmT
-	pC+akQ46dYX09s2SrPeRnXUcqaHflm6hFgnPU10YC1QJincxfJ2GtfGz9aKPXzMJXPSW49ivnq5
-	cMs8wTH3xa7FMSnOuDgVojpP+wbLqeI3e7qGG8+Uc8PgVmecmpWO1Nj07nFdBl48WxO5YszcD8K
-	ewIL+xYpQ7FeAmfN5vNN7OynqDgj9growcxhXa30s6ZPgz60sKFnx8fI1L94piDT6YgyXqprql9
-	jvWqfnEjEEIBJJlt0PKXSLlLSWHCe1/SLNOD/Zh/J3/e9P583j4q8JmqbuJxeO3bodb6KGgYr6O
-	1a1rj7Y02WKjSEt58at0btKWRAO4Ba8Z41y1bDBSX67Nb59GXNTFXCIM+Fye48PZkxEKPT+V5qw
-	GVhb/QQLi8Gbweb8N9LGB2+EQXT/is5qemLp42UqxRGeB9I30Zh/OZDrefjdHysFj3Uh1wjb4g3
-	9ihF/k=
-X-Received: by 2002:a05:600c:474f:b0:485:3fc3:e8e9 with SMTP id 5b1f17b1804b1-48883592bf9mr79660525e9.3.1775138566110;
-        Thu, 02 Apr 2026 07:02:46 -0700 (PDT)
-Received: from ast-epyc4.inf.ethz.ch (ast-epyc4.inf.ethz.ch. [129.132.161.179])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e1fe0b0sm7683269f8f.0.2026.04.02.07.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 07:02:45 -0700 (PDT)
-From: Zijing Yin <yzjaurora@gmail.com>
-To: netdev@vger.kernel.org
-Cc: bridge@lists.linux.dev,
-	razor@blackwall.org,
-	idosch@nvidia.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	petrm@nvidia.com,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Zijing Yin <yzjaurora@gmail.com>
-Subject: [PATCH net] bridge: guard local VLAN-0 FDB helpers against NULL vlan group
-Date: Thu,  2 Apr 2026 07:01:53 -0700
-Message-ID: <20260402140153.3925663-1-yzjaurora@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="LFogEVTI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1775138810;
+	bh=QK06DeIrGJLo+skpQxZiMaOTbSFroKiAVBO1zjQLL8s=;
+	h=From:Subject:Date:To:Cc:From;
+	b=LFogEVTIizHA9dz8cc7MtMaY27t1BL8kIFa3b2Dah2VYrBHqYyeWwlhC9njLL/YwN
+	 CYzUAxIrgSTmwkSLCGwmJvhnrgiIXEs4hFf4M/8lVRe3B+k4XR5whz0A9QX4gDvr7F
+	 /VfWhjLBiZSyw4eU6pslcWytUeG7/GW92jdigFhln/PQyLhlfY46zvoSAE7TLFuWYy
+	 h5okdLGQdiXV2Derhst7wleIeWhSHR8k0WB6e39hs6r9O8hbD2qoM0dCQlRzzCBxjf
+	 eqoO+YzAzGvbRKp5gIolZYwnQQNGhA28QYAaLMSBFN6gklMqwORefb7AZbwCnnGFre
+	 PVs9V1yfe8MQQ==
+Received: from [192.168.0.15] (modemcable014.2-22-96.mc.videotron.ca [96.22.2.14])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: detlev)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 71C5D17E7827;
+	Thu,  2 Apr 2026 16:06:48 +0200 (CEST)
+From: Detlev Casanova <detlev.casanova@collabora.com>
+Subject: [PATCH v3 0/4] media: rkvdec: Switch to using a bitwriter
+Date: Thu, 02 Apr 2026 10:06:35 -0400
+Message-Id: <20260402-rkvdec-use-bitwriter-v3-0-2072474ceaf4@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42NQQ7CIBQFr9KwFgO02NaV9zAugH4sWosBipqmd
+ xfqzo0uJ3lvZkYenAGP9sWMHETjjR0TlJsCqV6MZ8CmS4wYYTtSshq7a+xA4ckDliY8nAngsKY
+ drVpZKl0rlK53B9o8V+3x9GE/yQuokF150RsfrHut3Ujz7kciUkxw2zClm5pJ3pKDssMgpHViq
+ +wN5Uxk/4hYEgkuqppXknDafIuWZXkD4F6jABcBAAA=
+X-Change-ID: 20260327-rkvdec-use-bitwriter-f1d149b3cf7c
+To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Heiko Stuebner <heiko@sntech.de>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Jonas Karlman <jonas@kwiboo.se>, 
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ llvm@lists.linux.dev, kernel@collabora.com, 
+ Detlev Casanova <detlev.casanova@collabora.com>
+X-Mailer: b4 0.15.0
 
-When CONFIG_BRIDGE_VLAN_FILTERING is not set, br_vlan_group() and
-nbp_vlan_group() return NULL (br_private.h stub definitions). The
-BR_BOOLOPT_FDB_LOCAL_VLAN_0 toggle code is compiled unconditionally and
-reaches br_fdb_delete_locals_per_vlan_port() and
-br_fdb_insert_locals_per_vlan_port(), where the NULL vlan group pointer
-is dereferenced via list_for_each_entry(v, &vg->vlan_list, vlist).
+Using bitfields in large structures where fields are mostly unaligned can
+be hard on the compiler.
 
-The observed crash is in the delete path, triggered when creating a
-bridge with IFLA_BR_MULTI_BOOLOPT containing BR_BOOLOPT_FDB_LOCAL_VLAN_0
-via RTM_NEWLINK. The insert helper has the same bug pattern.
+Issues have been reported with clang ([1], [2]) and, even though those
+issues are addressed by clang devs, some setup can't or won't update clang
+just to compile a driver.
 
-  Oops: general protection fault, probably for non-canonical address 0xdffffc0000000056: 0000 [#1] KASAN NOPTI
-  KASAN: null-ptr-deref in range [0x00000000000002b0-0x00000000000002b7]
-  RIP: 0010:br_fdb_delete_locals_per_vlan+0x2b9/0x310
-  Call Trace:
-   br_fdb_toggle_local_vlan_0+0x452/0x4c0
-   br_toggle_fdb_local_vlan_0+0x31/0x80 net/bridge/br.c:276
-   br_boolopt_toggle net/bridge/br.c:313
-   br_boolopt_multi_toggle net/bridge/br.c:364
-   br_changelink net/bridge/br_netlink.c:1542
-   br_dev_newlink net/bridge/br_netlink.c:1575
+Even when fixed, the compiler still might have to allocate a bigger stack
+frame to manage misalignement. Coupled with other features like KASAN, the
+stack becomes larger than the kernel's maximum [3].
 
-Add NULL checks for the vlan group pointer in both helpers, returning
-early when there are no VLANs to iterate. This matches the existing
-pattern used by other bridge FDB functions such as br_fdb_add() and
-br_fdb_delete().
+To avoid this, let's drop the bitfield implementation and switch to a
+bitwriter. There is already one for the older variants, so make it global
+and use it in other variants.
 
-Fixes: 21446c06b441 ("net: bridge: Introduce UAPI for BR_BOOLOPT_FDB_LOCAL_VLAN_0")
-Signed-off-by: Zijing Yin <yzjaurora@gmail.com>
+Note that only buffer structures are switched to the bitwriter. The
+registers representation structures are kept with bitfields, as they are
+properly aligned every 32 bits and don't require heavy stack overhead.
+
+Also note that the VDPU381 SPS and PPS structs are kept with bitfields,
+for the same reason that they are small and aligned enough not to require
+heavy stack overhead.
+
+[1]: https://lore.kernel.org/oe-kbuild-all/202601211924.rqKS2Ihm-lkp@intel.com/
+[2]: https://github.com/llvm/llvm-project/issues/178535
+[3]: https://yhbt.net/lore/llvm/20260121230406.GA2625738@ax162/T/#mad878ec24a8224e1387ef5e73cb77b9ada55e3f2
+
+Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 ---
-Tested on Linux v7.0-rc5 (upstream tag) with clang 20.1.0, KASAN
-enabled, CONFIG_BRIDGE_VLAN_FILTERING=n.
+Changes in v3:
+- Change bitwriter function to static inline instead of its own object
+- Link to v2: https://patch.msgid.link/20260327-rkvdec-use-bitwriter-v2-0-a5a4754b0518@collabora.com
 
-Bug independently reproduced with the attached C reproducer
-(repro_br_fdb.c). The crash triggers deterministically on the first
-run with CONFIG_BRIDGE_VLAN_FILTERING=n on a clang-built kernel.
+Changes in v2:
+- Don't use BW_FIELD to compute buffer size
+- Use correct size for buffers
+- Fix missed indentation issues
+- Link to v1: https://patch.msgid.link/20260327-rkvdec-use-bitwriter-v1-0-982cf872b590@collabora.com
 
-Exact crash signature from reproduction:
+---
+Detlev Casanova (4):
+      media: rkvdec: Introduce a global bitwriter helper
+      media: rkvdec: Use the global bitwriter instead of local one
+      media: rkvdec: common: Drop bitfields for the bitwriter
+      media: rkvdec: vdpu383: Drop bitfields for the bitwriter
 
-  Oops: general protection fault, probably for non-canonical address 0xdffffc0000000056: 0000 [#1] KASAN NOPTI
-  KASAN: null-ptr-deref in range [0x00000000000002b0-0x00000000000002b7]
-  RIP: 0010:br_fdb_delete_locals_per_vlan+0x72/0x3f0
-  Call Trace:
-   br_fdb_toggle_local_vlan_0+0x3d/0x1d0
-   br_boolopt_toggle+0xba/0x1a0
-   br_boolopt_multi_toggle+0x129/0x250
-   br_changelink+0x1100/0x1490
-   br_dev_newlink+0x115/0x190
-   rtnl_newlink+0xe15/0x25c0
+ .../platform/rockchip/rkvdec/rkvdec-bitwriter.h    |  39 ++
+ .../platform/rockchip/rkvdec/rkvdec-h264-common.c  |  51 +--
+ .../platform/rockchip/rkvdec/rkvdec-h264-common.h  |  40 +-
+ .../media/platform/rockchip/rkvdec/rkvdec-h264.c   | 109 ++---
+ .../platform/rockchip/rkvdec/rkvdec-hevc-common.c  |  93 +---
+ .../platform/rockchip/rkvdec/rkvdec-hevc-common.h  |  57 +--
+ .../media/platform/rockchip/rkvdec/rkvdec-hevc.c   | 171 +++----
+ .../platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c | 351 ++++++--------
+ .../platform/rockchip/rkvdec/rkvdec-vdpu383-hevc.c | 502 +++++++++------------
+ 9 files changed, 562 insertions(+), 851 deletions(-)
+---
+base-commit: d0c3bcd5b8976159d835a897254048e078f447e6
+change-id: 20260327-rkvdec-use-bitwriter-f1d149b3cf7c
 
-Note: gcc 13.3 with the same config optimizes away the NULL dereference
-path (UB elimination), so the crash does not trigger on gcc-built
-kernels. The code is still incorrect regardless of compiler behavior.
-
-Reproducer (C source): [PASTE_URL_HERE]
-Kernel .config:        [PASTE_URL_HERE]
-
-To reproduce: compile the C reproducer with `gcc -static -o repro repro.c`,
-run as root on a clang-built kernel. The crash triggers during
-br_dev_newlink() -> br_changelink() when the boolopt toggle reaches
-br_fdb_delete_locals_per_vlan_port() with a NULL vlan group. Note:
-RTM_SETLINK on an existing bridge may not trigger it due to different
-code ordering.
-
- net/bridge/br_fdb.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-index 0501ffcb8..e2c17f620 100644
---- a/net/bridge/br_fdb.c
-+++ b/net/bridge/br_fdb.c
-@@ -597,6 +597,9 @@ static void br_fdb_delete_locals_per_vlan_port(struct net_bridge *br,
- 		dev = br->dev;
- 	}
- 
-+	if (!vg)
-+		return;
-+
- 	list_for_each_entry(v, &vg->vlan_list, vlist)
- 		br_fdb_find_delete_local(br, p, dev->dev_addr, v->vid);
- }
-@@ -630,6 +633,9 @@ static int br_fdb_insert_locals_per_vlan_port(struct net_bridge *br,
- 		dev = br->dev;
- 	}
- 
-+	if (!vg)
-+		return 0;
-+
- 	list_for_each_entry(v, &vg->vlan_list, vlist) {
- 		if (!br_vlan_should_use(v))
- 			continue;
--- 
-2.43.0
+Best regards,
+--  
+Detlev Casanova <detlev.casanova@collabora.com>
 
