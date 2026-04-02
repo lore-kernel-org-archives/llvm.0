@@ -1,200 +1,140 @@
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005EF3630AE
-	for <llvm@lists.linux.dev>; Thu,  2 Apr 2026 09:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C3D371CED
+	for <llvm@lists.linux.dev>; Thu,  2 Apr 2026 09:13:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775121172; cv=none; b=QWJShmLIONF5Ayb917vJcaoDCSnOzlXICRbJqcdQ3fWc8PBrOXmyk4ibzlmm9Z1HxVanX1RhppbCzHB0qutFgLI5yKDm50QXLVxEs+nv4dftvp32zOv0A0zSCMzx7Iadz4/kSgwZ5+nhB2QzX3U+K3ArvGV/KIiLM3APkBFqWmY=
+	t=1775121236; cv=none; b=ps9afPZXGSZ39Y38+wRG2RUhT1zAax1PcOW5BGZrnc4Dpprz1fOxaSPJwVZf8o5sVRaFnNHkAQNigyG2KmyUHcAGt3CkKwhK9dv+hz6sAJaW10vRryYfQcVqjMDqPeonCg3c671u14zu2sxGPK3m107q7+sGAo1s3rPs58EKuUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775121172; c=relaxed/simple;
-	bh=sEherq6mpoZoc7L3YQ8XNUEWLw9suS70+AlIhcU0vQ8=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=ZgX5yF5EAvZFK2zh2eav0hMLaYY5RB1RGgT4e93K9O15a9osFMbtZi2n189RR1184dXYFXxvx9RzdMvCE7Xl4c0/LFrlIPFTcdDFeX73z5MCNkvtJufllLM+c46hFJBIiNoM9y4+WIJ3UVcXjAU0qREExJ+yjsLEbJSrcqyzfIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=tB2qsyyT; arc=none smtp.client-ip=195.121.94.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+	s=arc-20240116; t=1775121236; c=relaxed/simple;
+	bh=Ue86H1KysRcjf2OINDQFXuIhBR4ESQnxLFwGpvhWUfw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YEQmJTvER2iIi7Hivyh+1Xb0u1Mdc0b5ZBSrEobH7COlcTze2YobW2WypehOdV6PgWfYcUBAp+YATMY44tsxjgHpEiOBMslG8kXf0FPSZjEkXWZb4at5v1vYs2MGCKRKKWdnefcJc9gZ7xt6N8zWEOiRtxKeNHHsMAiCvDpfmEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YiehFvdL; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="tB2qsyyT"
-X-KPN-MessageId: 1de1f0af-2e74-11f1-bea8-005056992ed3
-Received: from mta.kpnmail.nl (unknown [10.31.161.189])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 1de1f0af-2e74-11f1-bea8-005056992ed3;
-	Thu, 02 Apr 2026 11:12:47 +0200 (CEST)
-Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.190])
-	by mta.kpnmail.nl (Halon) with ESMTP
-	id 1e0be50b-2e74-11f1-b5d0-0050569981f5;
-	Thu, 02 Apr 2026 11:12:48 +0200 (CEST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YiehFvdL"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4853e1ce427so6958695e9.3
+        for <llvm@lists.linux.dev>; Thu, 02 Apr 2026 02:13:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=content-type:mime-version:subject:message-id:to:from:date;
-	bh=YhpNgmP0kyOBY7UtwKYc84SximQyn1kpmW6JvS5K8wc=;
-	b=tB2qsyyTYUrZqa/2kDAjA7sID1pamk57hYbeWv42ht799P58cOxDuj9APBgl/z9EtcIaSnZ1TfqAw
-	 Xx9Fx0U1hhw8wrROyHEeome3yEBQB3W0ASAVQIL83z8rhhfm2Kfr1NODIzbvqIqxdICbiF82IwV/Fi
-	 MM7oC5FysqNxfVvikm1UsLWVU8ClBWA/WEdUJVkTLEpj80PQYZ4e9I5SWohkQYk1f73jxuw8k59PtE
-	 rE2GxA1bfuZ6C9oJ8IDmKqDpkOEcKQa8JFl13WRG36r/MnzC5im/XvdqIij1l6w71k0oAobxsmduGt
-	 jwP6Tn8SSucjKidGu2U0n/TOLFhBF/Q==
-X-KPN-MID: 33|YaZqOUkfv5lEBLIoUEwY7FtowS5+SAP1Z7Oazmx8glMnm1V0O4J0jU/ob5meAxZ
- zTsCisAFrCSmPh0Arknr9Jc9Bqpm6B1NEzE14BFO0waQ=
-X-CMASSUN: 33|W6dXBSlPa9VgGlFR26h8LJAMFYxvKMyez48k8C+GPoCcmS/P/TvrtuTimCM+k+c
- GrqOzRUe+jvQ5FwjVCdry1g==
-X-KPN-VerifiedSender: Yes
-Received: from cpxoxapps-mh07 (cpxoxapps-mh07.personalcloud.so.kpn.org [10.128.135.213])
-	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
-	id 1e05d7ff-2e74-11f1-b8d7-005056995d6c;
-	Thu, 02 Apr 2026 11:12:48 +0200 (CEST)
-Date: Thu, 2 Apr 2026 11:12:47 +0200 (CEST)
-From: Jori Koolstra <jkoolstra@xs4all.nl>
-To: kernel test robot <lkp@intel.com>, gregkh@linuxfoundation.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	NeilBrown <neil@brown.name>, Amir Goldstein <amir73il@gmail.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Mateusz Guzik <mjguzik@gmail.com>,
-	"open list:FILESYSTEMS (VFS and infrastructure)"
- <linux-fsdevel@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Message-ID: <1499602884.918603.1775121167994@kpc.webmail.kpnmail.nl>
-In-Reply-To: <202604020519.RLV5cfGp-lkp@intel.com>
-References: <20260331173726.3517440-1-jkoolstra@xs4all.nl>
- <202604020519.RLV5cfGp-lkp@intel.com>
-Subject: Re: [PATCH] vfs: replace ints with enum component_type for LAST_XXX
+        d=gmail.com; s=20251104; t=1775121231; x=1775726031; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qr0tec9oGf/SBDgbf+2rD33HNBftwB6KGbVP3Dhy5ew=;
+        b=YiehFvdLRRStmG2oVeqFu9WXKIDX2xJXv8BMKJf88tET3M0wWetucQCZ4PrZo75Bl1
+         i/4R/u3f1yupw9Jl5DPB4vfownXI9JyHM/wx9zYSenllbDxrFVwWz3HaiJMb05oqK4Ke
+         kfUzAzU+AbB3dLBVtPNzP8WQsnoCCwLaxW2QDdQeeRelDCvnMs93ttkC8uYlUQoeqjMx
+         b0eCNKeOLeCnUA4zwXU3NjI8BlVWBFPHZTWgIakq+0hP5st28g3LA2gMSgn5Iede8vQ7
+         MRkuEcui6NPgU8fE5e+RGq86kDCjymiRnHoaRr4odCNioPSyCRsTzX8nZHSRZPt+vdbU
+         XzeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775121231; x=1775726031;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Qr0tec9oGf/SBDgbf+2rD33HNBftwB6KGbVP3Dhy5ew=;
+        b=iXRiDZwhB5gjLZdQRYuIw7smjAz/eOtiTCbFmcUjqaDr4Y1mczMh7qGBnlNdWKmM93
+         zw/9Dy4PO3Kmrcih8uPfGvbDCE85eQBfeheldy22FE//eUFKycRjEvRiGJhqYIvcRznt
+         4JRltkCcchYxMMFAxnAEChs9mQUN39CDotbPgfNQjZSbzCCqEOVWxzFmDCU3KPZeMkCj
+         UIfOpm74YR5NRN7MvaunZuvVxgCw+7ZWsBC56+GmUjnWSylRyt8KzQbDMFmFBDopJ9s/
+         3YCVAr8Jb8+CwplgHkeLCy7oilioXcBwqK5DL9gapb+Z8/QX9PbOjc7XJVF1rIFu2fI8
+         rHEw==
+X-Forwarded-Encrypted: i=1; AJvYcCUx4D0g+kqPKOFKVfHaEODtJ0lVZgl5a8BrJ56Xr7nkmDAyV+gLYW4eZ9DxngTmGxsv+i4O@lists.linux.dev
+X-Gm-Message-State: AOJu0YwBWpjJwnGaf4pRFSewdPNr2tXa3qRcyTYVyxPcyTntEAN4I91A
+	1mvpcYBSbdCKEPxMy4dkih8TwdP/g8jlO3pDykvC2N81twPdavjNUrgK
+X-Gm-Gg: ATEYQzyx+FC86NBhHRLvqXm4Pb1iW+Li6+bvvIWKmtRrQFWXB35GzXMA+l41eiZpgOO
+	51GIcq5TiVgENNaH7LjklmyhIUbWGX2S3MykVfKNWNVhrAKIKlABewCxfgo0V4G9qNJtQ7HUKnR
+	ReSNTnavW+hwuzalfiE/U05mMMrjnTHdIa1WBLYAP8BJbFWRRvj+NUuDyXRIbWxhojw0GUG0zpR
+	IRjwsTeDQKMNByDIOsD7NkjkdTKlni4BR3moujthIn+QjuZM9ao9PCop1kPLuLoVzcn42RmPd6U
+	Aw8fblpjg/1uGM4oCrEBtROs8tnkelauSKx2LcM/x9Y2gTgpSTCff+rApOdYEs6DdrEeuecRmnx
+	w7kqlt6PjZqT1O4aZfLu+21jGtc3tBakgKbCRmnZrNSYJF9sWnZO8YZbVuq+pqfqcY4ekDiz81f
+	vqZkz6zgHikAB1VrPDGrSyOp6DIT3I75OmmuO6dSYvGajDuzS/FFVpY/0vLw/cnjC3kkVSZSc=
+X-Received: by 2002:a05:600c:3514:b0:47e:e48b:506d with SMTP id 5b1f17b1804b1-4888358c8b3mr115476365e9.16.1775121230625;
+        Thu, 02 Apr 2026 02:13:50 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e952b0bsm162303495e9.12.2026.04.02.02.13.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 02:13:50 -0700 (PDT)
+Date: Thu, 2 Apr 2026 10:13:48 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Kees Cook <kees@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Justin Stitt
+ <justinstitt@google.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+ Marco Elver <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, kasan-dev@googlegroups.com,
+ linux-doc@vger.kernel.org, llvm@lists.linux.dev, Linus Torvalds
+ <torvalds@linux-foundation.org>, Nicolas Schier <nsc@kernel.org>, Arnd
+ Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH 3/5] compiler_attributes: Add overflow_behavior macros
+ __ob_trap and __ob_wrap
+Message-ID: <20260402101348.2f758a58@pumpkin>
+In-Reply-To: <202604011313.AD471BC8@keescook>
+References: <20260331163716.work.696-kees@kernel.org>
+	<20260331163725.2765789-3-kees@kernel.org>
+	<CANiq72mK9fz6Spmgt4js3hScqhqvZb2YP2T7tDfR0fHPDFWJ7g@mail.gmail.com>
+	<CAFhGd8paijFboDVr8rJDjScob047q+zgYAs038WuVozOG0aYaQ@mail.gmail.com>
+	<202603311249.30B44C66@keescook>
+	<20260401090815.GV3738786@noisy.programming.kicks-ass.net>
+	<202604011313.AD471BC8@keescook>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
 
+On Wed, 1 Apr 2026 13:21:17 -0700
+Kees Cook <kees@kernel.org> wrote:
 
-> Op 02-04-2026 08:25 CEST schreef kernel test robot <lkp@intel.com>:
+> On Wed, Apr 01, 2026 at 11:08:15AM +0200, Peter Zijlstra wrote:
+> > On Tue, Mar 31, 2026 at 12:52:10PM -0700, Kees Cook wrote:
+> >   
+> > > I think for this series, __ob_trap/__ob_wrap is what should be used.
+> > > 
+> > > And for other folks, the background here is that we originally wanted
+> > > to use macros for "__trap" and "__wrap", but the powerpc C compiler
+> > > (both Clang and GCC) have a builtin macro named "__trap" already. So
+> > > I switched to just using the Clang-native type qualifier. We can use
+> > > the attribute style too, but there was a lot of confusion during the
+> > > Clang development phases where people kept forgetting this was a type
+> > > qualifier, not an attribute (i.e. the attribute is an internal alias
+> > > for the qualifier, and the qualifier is a new type).  
+> > 
+> > Since you mention qualifiers...
+> > 
+> > What is the result of __typeof_unqual__(int __ob_trap) ?  
 > 
->  
-> Hi Jori,
+> Hmm, it seems like "const" doesn't get peeled off. That can be fixed, if
+> that's needed?
 > 
-> kernel test robot noticed the following build errors:
+> 'typeof_unqual(int)' (aka 'int')
+> 'typeof_unqual(__ob_trap int)' (aka '__ob_trap int')
+> 'typeof_unqual(const int)' (aka 'int')
+> 'typeof_unqual(__ob_trap const int)' (aka '__ob_trap const int')
 > 
-> [auto build test ERROR on brauner-vfs/vfs.all]
-> [also build test ERROR on linus/master viro-vfs/for-next v7.0-rc6 next-20260331]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> -Kees
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jori-Koolstra/vfs-replace-ints-with-enum-component_type-for-LAST_XXX/20260401-024525
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-> patch link:    https://lore.kernel.org/r/20260331173726.3517440-1-jkoolstra%40xs4all.nl
-> patch subject: [PATCH] vfs: replace ints with enum component_type for LAST_XXX
-> config: hexagon-allmodconfig
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build):
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202604020519.RLV5cfGp-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> fs/smb/server/vfs.c:71:23: error: incompatible pointer types passing 'int *' to parameter of type 'enum component_type *' [-Werror,-Wincompatible-pointer-types]
->       71 |                                      path, &last, &type,
->          |                                                   ^~~~~
->    include/linux/namei.h:70:68: note: passing argument to parameter 'type' here
->       70 |                            struct path *parent, struct qstr *last, enum component_type *type,
->          |                                                                                         ^
-> >> fs/smb/server/vfs.c:76:23: error: use of undeclared identifier 'LAST_NORM'
->       76 |         if (unlikely(type != LAST_NORM)) {
->          |                              ^
->    fs/smb/server/vfs.c:681:32: error: incompatible pointer types passing 'int *' to parameter of type 'enum component_type *' [-Werror,-Wincompatible-pointer-types]
->      681 |                                      &new_path, &new_last, &new_type,
->          |                                                            ^~~~~~~~~
->    include/linux/namei.h:70:68: note: passing argument to parameter 'type' here
->       70 |                            struct path *parent, struct qstr *last, enum component_type *type,
->          |                                                                                         ^
->    3 errors generated.
-> 
-> 
-> vim +71 fs/smb/server/vfs.c
-> 
-> f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16   52  
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   53  static int ksmbd_vfs_path_lookup(struct ksmbd_share_config *share_conf,
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   54  				 char *pathname, unsigned int flags,
-> 1ead2213dd7d14 fs/smb/server/vfs.c NeilBrown   2025-11-13   55  				 struct path *path, bool for_remove)
-> f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16   56  {
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   57  	struct qstr last;
-> 94cb22d109d517 fs/smb/server/vfs.c Al Viro     2025-07-06   58  	const struct path *root_share_path = &share_conf->vfs_path;
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   59  	int err, type;
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   60  	struct dentry *d;
-> f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16   61  
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   62  	if (pathname[0] == '\0') {
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   63  		pathname = share_conf->path;
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   64  		root_share_path = NULL;
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   65  	} else {
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   66  		flags |= LOOKUP_BENEATH;
-> ff1d57272552e4 fs/cifsd/vfs.c      Namjae Jeon 2021-04-13   67  	}
-> f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16   68  
-> 39537a335a6189 fs/smb/server/vfs.c Al Viro     2025-12-14   69  	CLASS(filename_kernel, filename)(pathname);
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   70  	err = vfs_path_parent_lookup(filename, flags,
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  @71  				     path, &last, &type,
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   72  				     root_share_path);
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   73  	if (err)
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   74  		return err;
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   75  
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21  @76  	if (unlikely(type != LAST_NORM)) {
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   77  		path_put(path);
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   78  		return -ENOENT;
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   79  	}
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   80  
-> 1ead2213dd7d14 fs/smb/server/vfs.c NeilBrown   2025-11-13   81  	if (for_remove) {
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   82  		err = mnt_want_write(path->mnt);
-> 864fb5d3716303 fs/smb/server/vfs.c Namjae Jeon 2023-11-20   83  		if (err) {
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   84  			path_put(path);
-> 864fb5d3716303 fs/smb/server/vfs.c Namjae Jeon 2023-11-20   85  			return -ENOENT;
-> 864fb5d3716303 fs/smb/server/vfs.c Namjae Jeon 2023-11-20   86  		}
-> 864fb5d3716303 fs/smb/server/vfs.c Namjae Jeon 2023-11-20   87  
-> 1ead2213dd7d14 fs/smb/server/vfs.c NeilBrown   2025-11-13   88  		d = start_removing_noperm(path->dentry, &last);
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   89  
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   90  		if (!IS_ERR(d)) {
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   91  			dput(path->dentry);
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   92  			path->dentry = d;
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   93  			return 0;
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   94  		}
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   95  		mnt_drop_write(path->mnt);
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   96  		path_put(path);
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   97  		return -ENOENT;
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   98  	}
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   99  
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  100  	d = lookup_noperm_unlocked(&last, path->dentry);
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  101  	if (!IS_ERR(d) && d_is_negative(d)) {
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  102  		dput(d);
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  103  		d = ERR_PTR(-ENOENT);
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  104  	}
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  105  	if (IS_ERR(d)) {
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  106  		path_put(path);
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  107  		return -ENOENT;
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  108  	}
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  109  	dput(path->dentry);
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21  110  	path->dentry = d;
-> 2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  111  
-> 2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  112  	if (test_share_config_flag(share_conf, KSMBD_SHARE_FLAG_CROSSMNT)) {
-> 2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  113  		err = follow_down(path, 0);
-> 2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  114  		if (err < 0) {
-> 2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  115  			path_put(path);
-> 4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  116  			return -ENOENT;
-> 2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  117  		}
-> 2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  118  	}
-> 74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21  119  	return 0;
-> f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16  120  }
-> f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16  121  
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
 
-These should have been resolved in the v2 patch already. I missed the reference in
-fs/smb/sever/vfs.c initially. My LSP config was off, probably should've just rg'ed
-it in the first place...
+Adding all the required cases to the _Generic() doesn't scale.
+
+typeof_unqual() needs to die.
+Just using 'auto a = b;' should remove const and volatile - but gcc is buggy.
+There are some alternatives that work in many cases.
+(It has all been discussed before.)
+In most cases you can use 'auto a = (b) + 0'.
+That does do integer promotions - but they happen as soon as 'a' is
+used; so it pretty much doesn't change the type of value, just the
+type of the variable.
+
+	David
+
