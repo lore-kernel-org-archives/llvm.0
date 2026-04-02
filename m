@@ -1,140 +1,138 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C3D371CED
-	for <llvm@lists.linux.dev>; Thu,  2 Apr 2026 09:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6971E3C6616;
+	Thu,  2 Apr 2026 11:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775121236; cv=none; b=ps9afPZXGSZ39Y38+wRG2RUhT1zAax1PcOW5BGZrnc4Dpprz1fOxaSPJwVZf8o5sVRaFnNHkAQNigyG2KmyUHcAGt3CkKwhK9dv+hz6sAJaW10vRryYfQcVqjMDqPeonCg3c671u14zu2sxGPK3m107q7+sGAo1s3rPs58EKuUo=
+	t=1775130573; cv=none; b=H0Cdbq/XSeabQjZTFSFshER4XH/iLqfig4z+bdyhO0mCy7cGHWBOidY5dSPDAonEL55kn/CNQLv2xx1DQfpfwuir4U59NR+nTkg8KmSCqsFH9+p7tGtnY7ZzGVu4lTLAjc5+hn/Wv5SssxqXrlZDnPYgetakaUs712AMg8G6hCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775121236; c=relaxed/simple;
-	bh=Ue86H1KysRcjf2OINDQFXuIhBR4ESQnxLFwGpvhWUfw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YEQmJTvER2iIi7Hivyh+1Xb0u1Mdc0b5ZBSrEobH7COlcTze2YobW2WypehOdV6PgWfYcUBAp+YATMY44tsxjgHpEiOBMslG8kXf0FPSZjEkXWZb4at5v1vYs2MGCKRKKWdnefcJc9gZ7xt6N8zWEOiRtxKeNHHsMAiCvDpfmEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YiehFvdL; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775130573; c=relaxed/simple;
+	bh=CViUaGXqBzO9IDq+XmKAUho55AZwmoW26H8wGK9LrOI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bqXLMb/A7mTeSe7qu0jbO107fQp9wrIWCID3u6rAa1RHPifmwvpof2byzyCE+Sv+Te/sNZCIPs2P9Uq1x6cuc3rYTjpwXa/0aCsJtrIzsFPVcaJfaXUlI36MZxb4PDKxmPjydu/x5pk8SlT7LQ/lJj82Ff9/z7tmlWbVnI1+AQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fdeNdFKB; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YiehFvdL"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4853e1ce427so6958695e9.3
-        for <llvm@lists.linux.dev>; Thu, 02 Apr 2026 02:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775121231; x=1775726031; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qr0tec9oGf/SBDgbf+2rD33HNBftwB6KGbVP3Dhy5ew=;
-        b=YiehFvdLRRStmG2oVeqFu9WXKIDX2xJXv8BMKJf88tET3M0wWetucQCZ4PrZo75Bl1
-         i/4R/u3f1yupw9Jl5DPB4vfownXI9JyHM/wx9zYSenllbDxrFVwWz3HaiJMb05oqK4Ke
-         kfUzAzU+AbB3dLBVtPNzP8WQsnoCCwLaxW2QDdQeeRelDCvnMs93ttkC8uYlUQoeqjMx
-         b0eCNKeOLeCnUA4zwXU3NjI8BlVWBFPHZTWgIakq+0hP5st28g3LA2gMSgn5Iede8vQ7
-         MRkuEcui6NPgU8fE5e+RGq86kDCjymiRnHoaRr4odCNioPSyCRsTzX8nZHSRZPt+vdbU
-         XzeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775121231; x=1775726031;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Qr0tec9oGf/SBDgbf+2rD33HNBftwB6KGbVP3Dhy5ew=;
-        b=iXRiDZwhB5gjLZdQRYuIw7smjAz/eOtiTCbFmcUjqaDr4Y1mczMh7qGBnlNdWKmM93
-         zw/9Dy4PO3Kmrcih8uPfGvbDCE85eQBfeheldy22FE//eUFKycRjEvRiGJhqYIvcRznt
-         4JRltkCcchYxMMFAxnAEChs9mQUN39CDotbPgfNQjZSbzCCqEOVWxzFmDCU3KPZeMkCj
-         UIfOpm74YR5NRN7MvaunZuvVxgCw+7ZWsBC56+GmUjnWSylRyt8KzQbDMFmFBDopJ9s/
-         3YCVAr8Jb8+CwplgHkeLCy7oilioXcBwqK5DL9gapb+Z8/QX9PbOjc7XJVF1rIFu2fI8
-         rHEw==
-X-Forwarded-Encrypted: i=1; AJvYcCUx4D0g+kqPKOFKVfHaEODtJ0lVZgl5a8BrJ56Xr7nkmDAyV+gLYW4eZ9DxngTmGxsv+i4O@lists.linux.dev
-X-Gm-Message-State: AOJu0YwBWpjJwnGaf4pRFSewdPNr2tXa3qRcyTYVyxPcyTntEAN4I91A
-	1mvpcYBSbdCKEPxMy4dkih8TwdP/g8jlO3pDykvC2N81twPdavjNUrgK
-X-Gm-Gg: ATEYQzyx+FC86NBhHRLvqXm4Pb1iW+Li6+bvvIWKmtRrQFWXB35GzXMA+l41eiZpgOO
-	51GIcq5TiVgENNaH7LjklmyhIUbWGX2S3MykVfKNWNVhrAKIKlABewCxfgo0V4G9qNJtQ7HUKnR
-	ReSNTnavW+hwuzalfiE/U05mMMrjnTHdIa1WBLYAP8BJbFWRRvj+NUuDyXRIbWxhojw0GUG0zpR
-	IRjwsTeDQKMNByDIOsD7NkjkdTKlni4BR3moujthIn+QjuZM9ao9PCop1kPLuLoVzcn42RmPd6U
-	Aw8fblpjg/1uGM4oCrEBtROs8tnkelauSKx2LcM/x9Y2gTgpSTCff+rApOdYEs6DdrEeuecRmnx
-	w7kqlt6PjZqT1O4aZfLu+21jGtc3tBakgKbCRmnZrNSYJF9sWnZO8YZbVuq+pqfqcY4ekDiz81f
-	vqZkz6zgHikAB1VrPDGrSyOp6DIT3I75OmmuO6dSYvGajDuzS/FFVpY/0vLw/cnjC3kkVSZSc=
-X-Received: by 2002:a05:600c:3514:b0:47e:e48b:506d with SMTP id 5b1f17b1804b1-4888358c8b3mr115476365e9.16.1775121230625;
-        Thu, 02 Apr 2026 02:13:50 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e952b0bsm162303495e9.12.2026.04.02.02.13.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 02:13:50 -0700 (PDT)
-Date: Thu, 2 Apr 2026 10:13:48 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Kees Cook <kees@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Justin Stitt
- <justinstitt@google.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Marco Elver <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, kasan-dev@googlegroups.com,
- linux-doc@vger.kernel.org, llvm@lists.linux.dev, Linus Torvalds
- <torvalds@linux-foundation.org>, Nicolas Schier <nsc@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH 3/5] compiler_attributes: Add overflow_behavior macros
- __ob_trap and __ob_wrap
-Message-ID: <20260402101348.2f758a58@pumpkin>
-In-Reply-To: <202604011313.AD471BC8@keescook>
-References: <20260331163716.work.696-kees@kernel.org>
-	<20260331163725.2765789-3-kees@kernel.org>
-	<CANiq72mK9fz6Spmgt4js3hScqhqvZb2YP2T7tDfR0fHPDFWJ7g@mail.gmail.com>
-	<CAFhGd8paijFboDVr8rJDjScob047q+zgYAs038WuVozOG0aYaQ@mail.gmail.com>
-	<202603311249.30B44C66@keescook>
-	<20260401090815.GV3738786@noisy.programming.kicks-ass.net>
-	<202604011313.AD471BC8@keescook>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fdeNdFKB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775130563; x=1806666563;
+  h=date:from:to:cc:subject:message-id;
+  bh=CViUaGXqBzO9IDq+XmKAUho55AZwmoW26H8wGK9LrOI=;
+  b=fdeNdFKB+x3D/+c0cDYUb8JqP2kgheMAQqB4ZgJrqoOZ3ow5WmTMcoep
+   ImvcyyzMp47mGX9Hsbz/+KHD5ld1+RHSEpoo5D7x5CmcO7Op4k4/9Avi7
+   JQiRcVAR2ZA+kpmZsK8oSecMGD4kjN0mLwrXt74T6/Y0i3a4hQxFW3Dgn
+   FPy/+aZn0JZRDnm+btUHsiA2a7GSFCh8pPMvmJoCxjSlzMAYX95r9meyK
+   dFva3crO6t6LszuCvZE2cl1pLYj3jS1r72HNrjpnZW7eiRXsbR0Fzz2Zt
+   2kM0lJ+vXTVSbsOI5Ke5h0Xqc5Sd9oHwPRxERVfyqgR8oFyyJZFpa0RUd
+   Q==;
+X-CSE-ConnectionGUID: Ih5Yau34TT6sEKkt3FepBA==
+X-CSE-MsgGUID: A4xpWEzNS7iM1ajQX4iFiA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11746"; a="76074749"
+X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
+   d="scan'208";a="76074749"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 04:49:21 -0700
+X-CSE-ConnectionGUID: 56nZAPHcTK+fGOPM+dVadQ==
+X-CSE-MsgGUID: +uhD+oArTCGyIeT7hjEAxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
+   d="scan'208";a="220303995"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by fmviesa009.fm.intel.com with ESMTP; 02 Apr 2026 04:49:19 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w8GY1-0000000092T-2FEz;
+	Thu, 02 Apr 2026 11:49:17 +0000
+Date: Thu, 02 Apr 2026 13:48:28 +0200
+From: kernel test robot <lkp@intel.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mark:arm64/entry/rework 2/11]
+ include/linux/entry-common.h:324:2: error: call to undeclared function
+ 'local_irq_disable_exit_to_user'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202604021323.WS9SEJPr-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Wed, 1 Apr 2026 13:21:17 -0700
-Kees Cook <kees@kernel.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/entry/rework
+head:   1e10c666f8f7ec4524fd226186a6ae0ad495aad5
+commit: be5c2d5a23beab5211c64f1237c238a1df622c47 [2/11] entry: Remove local_irq_{enable,disable}_exit_to_user()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260402/202604021323.WS9SEJPr-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260402/202604021323.WS9SEJPr-lkp@intel.com/reproduce)
 
-> On Wed, Apr 01, 2026 at 11:08:15AM +0200, Peter Zijlstra wrote:
-> > On Tue, Mar 31, 2026 at 12:52:10PM -0700, Kees Cook wrote:
-> >   
-> > > I think for this series, __ob_trap/__ob_wrap is what should be used.
-> > > 
-> > > And for other folks, the background here is that we originally wanted
-> > > to use macros for "__trap" and "__wrap", but the powerpc C compiler
-> > > (both Clang and GCC) have a builtin macro named "__trap" already. So
-> > > I switched to just using the Clang-native type qualifier. We can use
-> > > the attribute style too, but there was a lot of confusion during the
-> > > Clang development phases where people kept forgetting this was a type
-> > > qualifier, not an attribute (i.e. the attribute is an internal alias
-> > > for the qualifier, and the qualifier is a new type).  
-> > 
-> > Since you mention qualifiers...
-> > 
-> > What is the result of __typeof_unqual__(int __ob_trap) ?  
-> 
-> Hmm, it seems like "const" doesn't get peeled off. That can be fixed, if
-> that's needed?
-> 
-> 'typeof_unqual(int)' (aka 'int')
-> 'typeof_unqual(__ob_trap int)' (aka '__ob_trap int')
-> 'typeof_unqual(const int)' (aka 'int')
-> 'typeof_unqual(__ob_trap const int)' (aka '__ob_trap const int')
-> 
-> -Kees
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604021323.WS9SEJPr-lkp@intel.com/
 
-Adding all the required cases to the _Generic() doesn't scale.
+All errors (new ones prefixed by >>):
 
-typeof_unqual() needs to die.
-Just using 'auto a = b;' should remove const and volatile - but gcc is buggy.
-There are some alternatives that work in many cases.
-(It has all been discussed before.)
-In most cases you can use 'auto a = (b) + 0'.
-That does do integer promotions - but they happen as soon as 'a' is
-used; so it pretty much doesn't change the type of value, just the
-type of the variable.
+   In file included from arch/x86/entry/syscall_64.c:8:
+>> include/linux/entry-common.h:324:2: error: call to undeclared function 'local_irq_disable_exit_to_user'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     324 |         local_irq_disable_exit_to_user();
+         |         ^
+   1 error generated.
 
-	David
 
+vim +/local_irq_disable_exit_to_user +324 include/linux/entry-common.h
+
+c6156e1da633f2 Sven Schnelle     2020-12-01  288  
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  289  /**
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  290   * syscall_exit_to_user_mode - Handle work before returning to user mode
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  291   * @regs:	Pointer to currents pt_regs
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  292   *
+e1647100c22eb7 Jinjie Ruan       2026-01-28  293   * Invoked with interrupts enabled and fully valid @regs. Returns with all
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  294   * work handled, interrupts disabled such that the caller can immediately
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  295   * switch to user mode. Called from architecture specific syscall and ret
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  296   * from fork code.
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  297   *
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  298   * The call order is:
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  299   *  1) One-time syscall exit work:
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  300   *	- rseq syscall exit
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  301   *      - audit
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  302   *	- syscall tracing
+0cfcb2b9ef48bb Eric W. Biederman 2022-01-27  303   *	- ptrace (single stepping)
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  304   *
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  305   *  2) Preparatory work
+e1647100c22eb7 Jinjie Ruan       2026-01-28  306   *	- Disable interrupts
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  307   *	- Exit to user mode loop (common TIF handling). Invokes
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  308   *	  arch_exit_to_user_mode_work() for architecture specific TIF work
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  309   *	- Architecture specific one time work arch_exit_to_user_mode_prepare()
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  310   *	- Address limit and lockdep checks
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  311   *
+310de1a678b218 Sven Schnelle     2020-12-01  312   *  3) Final transition (lockdep, tracing, context tracking, RCU), i.e. the
+310de1a678b218 Sven Schnelle     2020-12-01  313   *     functionality in exit_to_user_mode().
+c6156e1da633f2 Sven Schnelle     2020-12-01  314   *
+e1647100c22eb7 Jinjie Ruan       2026-01-28  315   * This is a combination of syscall_exit_to_user_mode_work() (1), disabling
+e1647100c22eb7 Jinjie Ruan       2026-01-28  316   * interrupts followed by syscall_exit_to_user_mode_prepare() (2) and
+e1647100c22eb7 Jinjie Ruan       2026-01-28  317   * exit_to_user_mode() (3). This function is preferred unless there is a
+e1647100c22eb7 Jinjie Ruan       2026-01-28  318   * compelling architectural reason to invoke the functions separately.
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  319   */
+e43b8bb56e537b Charlie Jenkins   2025-03-20  320  static __always_inline void syscall_exit_to_user_mode(struct pt_regs *regs)
+e43b8bb56e537b Charlie Jenkins   2025-03-20  321  {
+e43b8bb56e537b Charlie Jenkins   2025-03-20  322  	instrumentation_begin();
+e43b8bb56e537b Charlie Jenkins   2025-03-20  323  	syscall_exit_to_user_mode_work(regs);
+e1647100c22eb7 Jinjie Ruan       2026-01-28 @324  	local_irq_disable_exit_to_user();
+e1647100c22eb7 Jinjie Ruan       2026-01-28  325  	syscall_exit_to_user_mode_prepare(regs);
+e43b8bb56e537b Charlie Jenkins   2025-03-20  326  	instrumentation_end();
+e43b8bb56e537b Charlie Jenkins   2025-03-20  327  	exit_to_user_mode();
+e43b8bb56e537b Charlie Jenkins   2025-03-20  328  }
+a9f3a74a29af09 Thomas Gleixner   2020-07-22  329  
+
+:::::: The code at line 324 was first introduced by commit
+:::::: e1647100c22eb718e9833211722cbb78e339047c entry: Rework syscall_exit_to_user_mode_work() for architecture reuse
+
+:::::: TO: Jinjie Ruan <ruanjinjie@huawei.com>
+:::::: CC: Thomas Gleixner <tglx@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
