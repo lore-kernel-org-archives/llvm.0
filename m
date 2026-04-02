@@ -1,93 +1,97 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56CE31B101;
-	Thu,  2 Apr 2026 06:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D3B319860;
+	Thu,  2 Apr 2026 06:30:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775111454; cv=none; b=D//Ld+HuEMoCbD3g4BFVAk8WtsKNR5UI7OnJrs5S6eBofSE2bRXCEjWFDqG0PaQeh2ncBnQDt6FTc7Y6Re81RVHUuMWPt221CV1Tdnlcsk2LQuKj5WSIF8r/WRAm96yJG1JAoMVP+JlblLRnElEgenkAiuSR0OXDDbqFcAhjAJ0=
+	t=1775111456; cv=none; b=fbXf4nyhJ3AotmR+BZuMhLL2qWjoPCIPx/CygGqjeoQvmRXpX0iPc8yX5jflmlvTjpAmyvdKGKeAF/VmW2cz0bbk10s6J1Xe3cWfch3K0YuAKIUtr16vhN4LfBxDN5oxaFCvfGBYuwVzlO/aazqYq6ME0yiq+aPdMEB3F6cefiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775111454; c=relaxed/simple;
-	bh=xv0vovKuP+UU3+XdfR/M+VlPi1lg6fJhRSJtesKLkyg=;
+	s=arc-20240116; t=1775111456; c=relaxed/simple;
+	bh=t8NOxzINpyXX1KlRm3Y+f2wg37zY1X5w3PmmWBaVGeE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rM5T3FAyInaV+oNH1fNHnKQah4GgXyggW50rdaH1Xsh5sLWdzX29Ro66n/31KRPv4d9BiB1GUKwSg38KAG9n8CARxFHw0RQa+TM68OYu4nsrBGZ4vD2E6oiq2sdhwKmPGNJlyVXo8ysFq4UUGDYsBu0cuFT3v4r/sOHkNGMUN18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kqS19NTD; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=hlcn1tSCd+RcCXreVsSyk0m56bga8IijGQvj39J+XbN7B1PDFNRWy7tLiLqqcyGjJUbzvJQhrR/SPVSMOBivfkr9pihpc+UkktjZnLQ9D/+Nr1ow2+GnxgWTUu+d95z5lA/IRnDP6shVtpmZLi0W9T0t/cBsjl6n4P989uOAGoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U7rlHD5L; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kqS19NTD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U7rlHD5L"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775111435; x=1806647435;
+  t=1775111439; x=1806647439;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xv0vovKuP+UU3+XdfR/M+VlPi1lg6fJhRSJtesKLkyg=;
-  b=kqS19NTDFiJA37WdNamW5ZuT3dax46qxJjIgXqW5Nn2WphMc9vDSCnGE
-   yrG+7aMDefzrTHpmQoV+T7QsSoqmRGKsatT7t37791+XlXFe68KNww7lU
-   jDqCe7NnhO4O5lsQntNrEljfZ1hGqZZlcYBqr3UlgI7YLozrL9AKO8RzW
-   bpDuke6z8Ha7Iq+zjTNud4TLP67rFchE45ChEGDFsztqRZQyXciYtU8eC
-   od2JKMnxR9I1/GEehct+VRMndfjPByfJjhlA9o663NchwZZFX5WaBr1HA
-   ewvI02J/9uHde6GSLMChh/qBE5t5U66qqI0596U6nJcCI9Ac7oayB50nr
-   g==;
-X-CSE-ConnectionGUID: qgGU3ZABRBadBdw83lnURg==
-X-CSE-MsgGUID: RWAW+ja+QjWcgObc8V9nqw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11746"; a="80021919"
+  bh=t8NOxzINpyXX1KlRm3Y+f2wg37zY1X5w3PmmWBaVGeE=;
+  b=U7rlHD5LM/1IVxbAk9AYn3xeTnxtXdxEk+Yb6YXt/XIU5inhGKbkY+yP
+   pxFRGsvvlujDBFKL8kQy5mZnXZyX16ZX0RZl84/bnwY/XfccYTWjG0A11
+   y+KYW19Y/9Cpq0UILyr/egP20hvMR0vGCYHTpsNV1KQrLtvLN7WVEnatM
+   sWs2vlJTYAnkRiQFyxpZHxW5da2Zt5VWFdflnTVMFyjm8/jrW2pjl3Yjm
+   Wk4dEg8lvaIzzvQ4lkzfZebhtunFX/7iADfZoROfKN6sxdmf0IIeIQ+1D
+   TGTy9K2cv74SUS8jfP7oZOCcPhNbI/HhiobIomrdvm5+UE3F/sw6XQ4qm
+   w==;
+X-CSE-ConnectionGUID: bHDjh8/ISEiEcLSsWDLznQ==
+X-CSE-MsgGUID: oXFz8MIoQ+2LPvSTi7CP1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11746"; a="80021932"
 X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
-   d="scan'208";a="80021919"
+   d="scan'208";a="80021932"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 23:30:11 -0700
-X-CSE-ConnectionGUID: 6DNytT3wRziaarr6bcS2/w==
-X-CSE-MsgGUID: L/Lr1/ZASue2FAG3X/55LA==
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 23:30:12 -0700
+X-CSE-ConnectionGUID: BNy/E2bgQFOT8oPII03ybg==
+X-CSE-MsgGUID: JCJHsPhIRZCHZVAc+VWTjw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
-   d="scan'208";a="228510477"
+   d="scan'208";a="228510472"
 Received: from lkp-server02.sh.intel.com (HELO cedfeeed6c12) ([10.239.97.151])
   by fmviesa004.fm.intel.com with ESMTP; 01 Apr 2026 23:30:05 -0700
 Received: from kbuild by cedfeeed6c12 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w8BZ4-0000000001j-2gqr;
+	id 1w8BZ4-0000000001V-1iNT;
 	Thu, 02 Apr 2026 06:30:02 +0000
-Date: Thu, 2 Apr 2026 14:20:12 +0800
+Date: Thu, 2 Apr 2026 14:25:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: George Anthony Vernon <contact@gvernon.com>, slava@dubeyko.com,
-	glaubitz@physik.fu-berlin.de, frank.li@vivo.com
+To: Jori Koolstra <jkoolstra@xs4all.nl>, gregkh@linuxfoundation.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	penguin-kernel@i-love.sakura.ne.jp,
-	George Anthony Vernon <contact@gvernon.com>,
-	syzbot+97e301b4b82ae803d21b@syzkaller.appspotmail.com
-Subject: Re: [PATCH v5] hfs: Validate CNIDs in hfs_read_inode
-Message-ID: <202604020046.baBKWIUX-lkp@intel.com>
-References: <20260329205949.701267-1-contact@gvernon.com>
+	Jori Koolstra <jkoolstra@xs4all.nl>, NeilBrown <neil@brown.name>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	"open list:FILESYSTEMS (VFS and infrastructure)" <linux-fsdevel@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] vfs: replace ints with enum component_type for LAST_XXX
+Message-ID: <202604020519.RLV5cfGp-lkp@intel.com>
+References: <20260331173726.3517440-1-jkoolstra@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="R5uO4uZJEOXMm+AW"
+Content-Type: multipart/mixed; boundary="YFm6NSCnJQ+Ncr2O"
 Content-Disposition: inline
-In-Reply-To: <20260329205949.701267-1-contact@gvernon.com>
+In-Reply-To: <20260331173726.3517440-1-jkoolstra@xs4all.nl>
 
 
---R5uO4uZJEOXMm+AW
+--YFm6NSCnJQ+Ncr2O
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi George,
+Hi Jori,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on linus/master v7.0-rc6 next-20260331]
+[auto build test ERROR on brauner-vfs/vfs.all]
+[also build test ERROR on linus/master viro-vfs/for-next v7.0-rc6 next-20260331]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/George-Anthony-Vernon/hfs-Validate-CNIDs-in-hfs_read_inode/20260330-162217
+url:    https://github.com/intel-lab-lkp/linux/commits/Jori-Koolstra/vfs-replace-ints-with-enum-component_type-for-LAST_XXX/20260401-024525
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20260329205949.701267-1-contact%40gvernon.com
-patch subject: [PATCH v5] hfs: Validate CNIDs in hfs_read_inode
+patch link:    https://lore.kernel.org/r/20260331173726.3517440-1-jkoolstra%40xs4all.nl
+patch subject: [PATCH] vfs: replace ints with enum component_type for LAST_XXX
 config: hexagon-allmodconfig
 compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
 reproduce (this is a W=1 build):
@@ -95,112 +99,106 @@ reproduce (this is a W=1 build):
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604020046.baBKWIUX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604020519.RLV5cfGp-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/hfs/inode.c:435:44: warning: format specifies type 'unsigned long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
-     435 |                 pr_warn("Invalid inode with cnid %lu\n", cnid);
-         |                                                  ~~~     ^~~~
-         |                                                  %u
-   include/linux/printk.h:564:37: note: expanded from macro 'pr_warn'
-     564 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                    ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:511:60: note: expanded from macro 'printk'
-     511 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:483:19: note: expanded from macro 'printk_index_wrap'
-     483 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+>> fs/smb/server/vfs.c:71:23: error: incompatible pointer types passing 'int *' to parameter of type 'enum component_type *' [-Werror,-Wincompatible-pointer-types]
+      71 |                                      path, &last, &type,
+         |                                                   ^~~~~
+   include/linux/namei.h:70:68: note: passing argument to parameter 'type' here
+      70 |                            struct path *parent, struct qstr *last, enum component_type *type,
+         |                                                                                         ^
+>> fs/smb/server/vfs.c:76:23: error: use of undeclared identifier 'LAST_NORM'
+      76 |         if (unlikely(type != LAST_NORM)) {
+         |                              ^
+   fs/smb/server/vfs.c:681:32: error: incompatible pointer types passing 'int *' to parameter of type 'enum component_type *' [-Werror,-Wincompatible-pointer-types]
+     681 |                                      &new_path, &new_last, &new_type,
+         |                                                            ^~~~~~~~~
+   include/linux/namei.h:70:68: note: passing argument to parameter 'type' here
+      70 |                            struct path *parent, struct qstr *last, enum component_type *type,
+         |                                                                                         ^
+   3 errors generated.
 
 
-vim +435 fs/hfs/inode.c
+vim +71 fs/smb/server/vfs.c
 
-   367	
-   368	/*
-   369	 * hfs_read_inode
-   370	 */
-   371	static int hfs_read_inode(struct inode *inode, void *data)
-   372	{
-   373		struct hfs_iget_data *idata = data;
-   374		struct hfs_sb_info *hsb = HFS_SB(inode->i_sb);
-   375		hfs_cat_rec *rec;
-   376		u32 cnid;
-   377	
-   378		HFS_I(inode)->flags = 0;
-   379		HFS_I(inode)->rsrc_inode = NULL;
-   380		mutex_init(&HFS_I(inode)->extents_lock);
-   381		INIT_LIST_HEAD(&HFS_I(inode)->open_dir_list);
-   382		spin_lock_init(&HFS_I(inode)->open_dir_lock);
-   383	
-   384		/* Initialize the inode */
-   385		inode->i_uid = hsb->s_uid;
-   386		inode->i_gid = hsb->s_gid;
-   387		set_nlink(inode, 1);
-   388	
-   389		if (idata->key)
-   390			HFS_I(inode)->cat_key = *idata->key;
-   391		else
-   392			HFS_I(inode)->flags |= HFS_FLG_RSRC;
-   393		HFS_I(inode)->tz_secondswest = sys_tz.tz_minuteswest * 60;
-   394	
-   395		rec = idata->rec;
-   396		switch (rec->type) {
-   397		case HFS_CDR_FIL:
-   398			cnid = be32_to_cpu(rec->file.FlNum);
-   399			if (!is_valid_catalog_record(cnid, rec->type))
-   400				goto make_bad_inode;
-   401			if (!HFS_IS_RSRC(inode)) {
-   402				hfs_inode_read_fork(inode, rec->file.ExtRec, rec->file.LgLen,
-   403						    rec->file.PyLen, be16_to_cpu(rec->file.ClpSize));
-   404			} else {
-   405				hfs_inode_read_fork(inode, rec->file.RExtRec, rec->file.RLgLen,
-   406						    rec->file.RPyLen, be16_to_cpu(rec->file.ClpSize));
-   407			}
-   408	
-   409			inode->i_ino = cnid;
-   410			inode->i_mode = S_IRUGO | S_IXUGO;
-   411			if (!(rec->file.Flags & HFS_FIL_LOCK))
-   412				inode->i_mode |= S_IWUGO;
-   413			inode->i_mode &= ~hsb->s_file_umask;
-   414			inode->i_mode |= S_IFREG;
-   415			inode_set_mtime_to_ts(inode,
-   416					      inode_set_atime_to_ts(inode, inode_set_ctime_to_ts(inode, hfs_m_to_utime(rec->file.MdDat))));
-   417			inode->i_op = &hfs_file_inode_operations;
-   418			inode->i_fop = &hfs_file_operations;
-   419			inode->i_mapping->a_ops = &hfs_aops;
-   420			break;
-   421		case HFS_CDR_DIR:
-   422			cnid = be32_to_cpu(rec->dir.DirID);
-   423			if (!is_valid_catalog_record(cnid, rec->type))
-   424				goto make_bad_inode;
-   425			inode->i_ino = cnid;
-   426			inode->i_size = be16_to_cpu(rec->dir.Val) + 2;
-   427			HFS_I(inode)->fs_blocks = 0;
-   428			inode->i_mode = S_IFDIR | (S_IRWXUGO & ~hsb->s_dir_umask);
-   429			inode_set_mtime_to_ts(inode,
-   430					      inode_set_atime_to_ts(inode, inode_set_ctime_to_ts(inode, hfs_m_to_utime(rec->dir.MdDat))));
-   431			inode->i_op = &hfs_dir_inode_operations;
-   432			inode->i_fop = &hfs_dir_operations;
-   433			break;
-   434	make_bad_inode:
- > 435			pr_warn("Invalid inode with cnid %lu\n", cnid);
-   436			pr_warn("Volume is probably corrupted, try performing fsck.\n");
-   437			fallthrough;
-   438		default:
-   439			make_bad_inode(inode);
-   440			break;
-   441		}
-   442		return 0;
-   443	}
-   444	
+f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16   52  
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   53  static int ksmbd_vfs_path_lookup(struct ksmbd_share_config *share_conf,
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   54  				 char *pathname, unsigned int flags,
+1ead2213dd7d14 fs/smb/server/vfs.c NeilBrown   2025-11-13   55  				 struct path *path, bool for_remove)
+f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16   56  {
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   57  	struct qstr last;
+94cb22d109d517 fs/smb/server/vfs.c Al Viro     2025-07-06   58  	const struct path *root_share_path = &share_conf->vfs_path;
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   59  	int err, type;
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   60  	struct dentry *d;
+f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16   61  
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   62  	if (pathname[0] == '\0') {
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   63  		pathname = share_conf->path;
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   64  		root_share_path = NULL;
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   65  	} else {
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   66  		flags |= LOOKUP_BENEATH;
+ff1d57272552e4 fs/cifsd/vfs.c      Namjae Jeon 2021-04-13   67  	}
+f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16   68  
+39537a335a6189 fs/smb/server/vfs.c Al Viro     2025-12-14   69  	CLASS(filename_kernel, filename)(pathname);
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   70  	err = vfs_path_parent_lookup(filename, flags,
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  @71  				     path, &last, &type,
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   72  				     root_share_path);
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   73  	if (err)
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   74  		return err;
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   75  
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21  @76  	if (unlikely(type != LAST_NORM)) {
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   77  		path_put(path);
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   78  		return -ENOENT;
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   79  	}
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   80  
+1ead2213dd7d14 fs/smb/server/vfs.c NeilBrown   2025-11-13   81  	if (for_remove) {
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   82  		err = mnt_want_write(path->mnt);
+864fb5d3716303 fs/smb/server/vfs.c Namjae Jeon 2023-11-20   83  		if (err) {
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   84  			path_put(path);
+864fb5d3716303 fs/smb/server/vfs.c Namjae Jeon 2023-11-20   85  			return -ENOENT;
+864fb5d3716303 fs/smb/server/vfs.c Namjae Jeon 2023-11-20   86  		}
+864fb5d3716303 fs/smb/server/vfs.c Namjae Jeon 2023-11-20   87  
+1ead2213dd7d14 fs/smb/server/vfs.c NeilBrown   2025-11-13   88  		d = start_removing_noperm(path->dentry, &last);
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21   89  
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   90  		if (!IS_ERR(d)) {
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   91  			dput(path->dentry);
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   92  			path->dentry = d;
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   93  			return 0;
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   94  		}
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   95  		mnt_drop_write(path->mnt);
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   96  		path_put(path);
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   97  		return -ENOENT;
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   98  	}
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24   99  
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  100  	d = lookup_noperm_unlocked(&last, path->dentry);
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  101  	if (!IS_ERR(d) && d_is_negative(d)) {
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  102  		dput(d);
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  103  		d = ERR_PTR(-ENOENT);
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  104  	}
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  105  	if (IS_ERR(d)) {
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  106  		path_put(path);
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  107  		return -ENOENT;
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  108  	}
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  109  	dput(path->dentry);
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21  110  	path->dentry = d;
+2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  111  
+2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  112  	if (test_share_config_flag(share_conf, KSMBD_SHARE_FLAG_CROSSMNT)) {
+2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  113  		err = follow_down(path, 0);
+2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  114  		if (err < 0) {
+2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  115  			path_put(path);
+4e45cca31d4e70 fs/smb/server/vfs.c NeilBrown   2025-07-24  116  			return -ENOENT;
+2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  117  		}
+2b57a4322b1b14 fs/smb/server/vfs.c Namjae Jeon 2023-07-17  118  	}
+74d7970febf7e9 fs/ksmbd/vfs.c      Namjae Jeon 2023-04-21  119  	return 0;
+f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16  120  }
+f44158485826c0 fs/cifsd/vfs.c      Namjae Jeon 2021-03-16  121  
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
 
---R5uO4uZJEOXMm+AW
+--YFm6NSCnJQ+Ncr2O
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=reproduce
 
@@ -208,16 +206,16 @@ reproduce (this is a W=1 build):
         git remote add brauner-vfs https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
         git fetch brauner-vfs vfs.all
         git checkout brauner-vfs/vfs.all
-        b4 shazam https://lore.kernel.org/r/20260329205949.701267-1-contact@gvernon.com
+        b4 shazam https://lore.kernel.org/r/20260331173726.3517440-1-jkoolstra@xs4all.nl
 
         git clone https://github.com/intel/lkp-tests.git ~/lkp-tests
 
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang-17 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang-17 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/hfs/ 
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang-17 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/smb/server/ 
 
---R5uO4uZJEOXMm+AW
+--YFm6NSCnJQ+Ncr2O
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -14197,4 +14195,4 @@ CONFIG_WARN_ABI_ERRORS=y
 CONFIG_IO_URING_ZCRX=y
 CONFIG_IO_URING_BPF=y
 
---R5uO4uZJEOXMm+AW--
+--YFm6NSCnJQ+Ncr2O--
