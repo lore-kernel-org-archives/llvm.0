@@ -1,122 +1,121 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1036302146
-	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 07:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4912D9ECD
+	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 08:23:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775200332; cv=none; b=EIJ7fLR8QFkalYP4DVP2v/bZhWIWk0X78AZMi2yr3pBF1BWTBVo9VrpwMrHT1VDUnoUX65oXXSmHL4iMFJY8ayu3Ag3qLCLwysc5e/T+/j4BwhUtSb7GfF9mCv17F1z6C7TSg5gczCsbd8EeLxmQnPqS8RQN31cqBt6j91D0b/4=
+	t=1775204615; cv=none; b=ZsgYiYHnWO7gSLAykUlYhqbzupPy9YjbWBSJyX3++UNBsanW72kpDx4BRYkIFtnK7GmX2JMwtwgihBnwYqQe1QSl7moqcpaKtFY3mg7pb8VVlD0hC/NCAVhVAxTqWLU/HJLGsiJ6EOW/owg992seZmwUTUgatf0f/9LFZBiczfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775200332; c=relaxed/simple;
-	bh=lkx/EPu9RCjHFejtE1olO9afGX3m4zBn7OJsN2o0/rQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=KEnR5KHGNGQu7Csvhceao2j2Rqna56Xih7nNKwxgY5pE175wVxYUY6jlypy6EgxHYaumPTDvJsiqm5/CtB97AhZzZ5MRM9LzzdTFDLGbOR5UVe1AO1uo04RPi7OFzXWrzPP24H3jMF+tTwOcaSLYRsJ44EidH4hMXe2kHS8Nujs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gg2cnmJL; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775204615; c=relaxed/simple;
+	bh=+9CZK+gYzdke0WanUIsRXs+ijCNvWG8v6vSqD5cwkZ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jZAV/w1WZSAKMD4aCjQHG/4ojT6bl9A1KfYwVKS9L5CXqztf9LpfjAfDWhYoti5LRKbOPr4J5OjlBj2VFZ5jPbmrq4EzLtERSh1GKhk0em76+jxIYG9x1DzbsVe6SqiDGUkYYY+/NDRapjmNJyOqnW7Uwo9i8Tdl7p355vzIq4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WXwZdwJP; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gg2cnmJL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775200330;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lhndI3Hm5s+prPYlhDFtLoxdfhuIDRwaBnjrdv4DLiE=;
-	b=Gg2cnmJLK4wNu4nHJJwI2uFM2Z9/76Thrmi25MuDMKDP76bKlQS+24h+8MD90IdxxfDpb9
-	DxiaKbBOS+vuUv050QKQTpj4LLkj0WZSW+YYkzXG2RhyCZh/t/qmZvcY8VNdYox7Q3yKU1
-	JRrnMv37BiF9+otgwJzFXKSIJr4nHKU=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-534-6OZFmnLgM32ijuXKP9AN6A-1; Fri,
- 03 Apr 2026 03:12:08 -0400
-X-MC-Unique: 6OZFmnLgM32ijuXKP9AN6A-1
-X-Mimecast-MFC-AGG-ID: 6OZFmnLgM32ijuXKP9AN6A_1775200327
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6E7EE19560A1
-	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 07:12:07 +0000 (UTC)
-Received: from [172.20.155.76] (unknown [10.30.44.186])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 12D9818001FE;
-	Fri,  3 Apr 2026 07:12:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc6,
- upstream-mainline, 5619b098)
-Date: Fri, 03 Apr 2026 07:12:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WXwZdwJP"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-48558d6ef83so16632445e9.3
+        for <llvm@lists.linux.dev>; Fri, 03 Apr 2026 01:23:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775204613; x=1775809413; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RnwWJRlzvo+TcqTX7rjkQ/PhcRI0dDJhSQ3DGzMwyDA=;
+        b=WXwZdwJPZf24BstYrE8qFKcu/uG0N+I5+ciKqq1Z1nvEiGh61SVrwN9YqVkPGXbzbh
+         k8mbHu/mPE8ZDhi/rXWi3u1oTk6acXmKw623zheg+oCTd/KKyU3LdpkpU7atlkSwYuSc
+         2nt0Vo3ava7btJ7DVJq33fIRb70CQQHSBhF0t7EJeiXaSKsGIgZ071lp4yEq9DBSOr2Q
+         Cei9PqVkisttMusUO24uTkYgbrBbK6Xa5s03O0P6MQT0n/1ZrfBuPX8oOJs+VeTaQV/w
+         vlrBmjCN9KlFwjw1gSn4u9ZCoU7yAFVNuQWWEDmeOo4nS7TRc6G7HrC5QLDNyrhKNXzf
+         6oeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775204613; x=1775809413;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RnwWJRlzvo+TcqTX7rjkQ/PhcRI0dDJhSQ3DGzMwyDA=;
+        b=eXqODRg8vmQ0HLrNulN1d3XDno03F+TMz7JVGK41oSWKxswOPS+2Ts7HPNa0NMw7iZ
+         alQLOzBIDLQ33cPeOPYcw+D+NBw5VIHX6aZ0xrmGeB72cuiNdoOg5Q3Tz1aTebPIfqk0
+         YjYnsxTHJwXHH7FYXsG0ooq0YQ1X1n+QDO4B2q9n+Mi/JcSwtvpFPfOFU4QQxw2NE70o
+         4ggeCRaA+R0XgX2u1goizVnZkF6T3L/I+qWYfhs/GKZVtnaQ1LUAzBwq8KqytZB8HfZ/
+         bP4Xt8A96zTmcm7zfT63xwKj8fsf6ofm05bU3jpLCWIpHQn95mSXIVDDdCv8J4swKSmG
+         Z0CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWCPhUTWsxV9CWSNHJTNUHj68psyzQsH6ZVuatfxavJ4aoYXMq4MATaodZ+3fCasZuvHev6@lists.linux.dev
+X-Gm-Message-State: AOJu0YxDhlS3JNozKUFwnjdL1M10bL43EWPSFUpBI4+ffIh3GNRaYGLS
+	iqZgKPJEOdhnlR06gz7YkzFbIgBxM5n4soh77OLpbE66nGBs+YR6WfAO
+X-Gm-Gg: ATEYQzx+Z/MDudvBbZhNeW6KaqaA9jVngl8/YkOwKDPH86tCEF+98S2EOyT4NIVbP9o
+	b89iw0DxdSVNLpWmsEnjh+Fh+3nejufQrYrQouvnZkPgsMeqTQQ4+Tj5ZLqspKYC1Y5bJU9ytnY
+	jBKN5LZbwO+dlKvOUMpWERYuswKL4+Bav/tWLQQH6xvXwySPGV/fqS9gU/z6ExeTJxbE1Rh4Mwa
+	XY0n5zuLU8cyMwtlv80yHGzFx52/UdvVlJkPHlxq/fHG+KaLk8Dx6HJZH6pwhAWj+h+69549J1H
+	x4IKlJWsjkYLQfKpE3QSy1EZ+j7z5obRiVhHasjTmyXDBTn9LEtLWvPoHwTZH6iCColm+iGYZXa
+	HJ664Q2QpQehnuoTk1Za6UgTP1MIo8Sq9dn+g9ntDOUpVmD/+ms6EV4/1cdrPE4hO3srh3fQIMZ
+	toOBV9UHRFgyM8Jmp+vg9pJ4iy60bjfMGj0oxudHia6B0qqEcmE8Gt1roe3qrl
+X-Received: by 2002:a05:600c:1d1d:b0:488:7ebd:78 with SMTP id 5b1f17b1804b1-4889977cbb7mr32423555e9.14.1775204612546;
+        Fri, 03 Apr 2026 01:23:32 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e80a63esm327110915e9.3.2026.04.03.01.23.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Apr 2026 01:23:32 -0700 (PDT)
+Date: Fri, 3 Apr 2026 09:23:30 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Kees Cook <kees@kernel.org>, linux-hardening@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH next 2/3] fortify: Optimise strnlen()
+Message-ID: <20260403092330.0382a39e@pumpkin>
+In-Reply-To: <202604010835.IWCsUV7z-lkp@intel.com>
+References: <20260330132003.3379-3-david.laight.linux@gmail.com>
+	<202604010835.IWCsUV7z-lkp@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <12868.126040303120800178@us-mta-534.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: QV1rrobge1DInd0GDaqd7LY5unnsy406wQtHZHcV-DA_1775200327
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On Wed, 1 Apr 2026 08:15:22 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+> Hi,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on next-20260327]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/david-laight-linux-gmail-com/fortify-replace-__compiletime_lessthan-with-statically_true/20260331-041123
+> base:   next-20260327
+> patch link:    https://lore.kernel.org/r/20260330132003.3379-3-david.laight.linux%40gmail.com
+> patch subject: [PATCH next 2/3] fortify: Optimise strnlen()
+> config: x86_64-buildonly-randconfig-001-20260331 (https://download.01.org/0day-ci/archive/20260401/202604010835.IWCsUV7z-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260401/202604010835.IWCsUV7z-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202604010835.IWCsUV7z-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: undefined symbol: __fortify_undefined  
+>    >>> referenced by fortify-string.h:290 (include/linux/fortify-string.h:290)
+>    >>>               vmlinux.o:(parse_early_param)
+>    >>> referenced by fortify-string.h:218 (include/linux/fortify-string.h:218)
+>    >>>               vmlinux.o:(parse_early_param)
+>    >>> referenced by fortify-string.h:290 (include/linux/fortify-string.h:290)
+>    >>>               vmlinux.o:(setup_boot_config)
+>    >>> referenced 2103 more times  
+> 
 
+I'm not sure how this can happen.
+The references are all behind a __builtin_constant_p() check.
+I haven't tested the actual config, but allmodconfig compiled for me
+with clang 18.
 
-Kernel information:
-    Commit message: Merge tag 'for-7.0-rc6-tag' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/kdave/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2426687180
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2426687180_ppc64le_kernel
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+	David
