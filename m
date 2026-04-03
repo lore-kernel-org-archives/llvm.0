@@ -1,28 +1,27 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CF839657C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E4E3932FA
 	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 09:48:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775209735; cv=none; b=a6RizqvYHKZYNA+z2wxUmfh13bE7qLOlzeiqrkeFfHYJwbQLu5RwQHB2+jc6DCLyiQtfz+3rlWZmGN3TbxV6i/02ubRWXxrmbb+PU3GQb/PryCz72KgGIIfR9nQ9oCKHm/lzpkYjjwsVsLjsLhyY/9Yv7i7NZl0WRac6zdch6c0=
+	t=1775209735; cv=none; b=jSYjZhxlltJBNI/4JtMqk/9VvyNT/xdLlBZDDLvKbhZXKgrTi+ck6xGXhBnSyhs15LOdfJ+R4X48l9UBzW8ypKN2RopSkwgU8hlHedACEgTsAO7mA6rh8skNb42CISWdlOpYeaUD2kaPulxgBiG837jjjAHT1QCQkK870MotCHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775209735; c=relaxed/simple;
-	bh=sYdJ4JgRb9FfIMhXQOwR/uePWEnfu+fttCVSfbZNBe4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pVWH96BZoSNO7gKpUuWqLjBrYnppYN0PFjUjteoe8xYg0FdwKf9HCYVsGu78TrAKCGUeKNu5vKTyTxhlAhBg6HS+RUuomxoAuyYmelX5163rSXC8E32Et3mewSJnuFLQ+NmBxkWSyOU8G92yhRy+0KnX76pLmrbLvnTR+UKhNC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	bh=3/Fg+g7WYNbO7097jar1RZcnmLXYfNQkQCBM0h6enO8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ghQY8uv/xYUYVY9aHvz+qeouPL28Vd2eJzpw9Yy70IJ6Raijic+Xz0nDmXicRRxwi5ZHzKJopOMUL7Nm7pOiajzFh8Jdu990PU7ogmRA56AimMIcowriJEoJuybcUc1K1fH1E4DVk9M4n+jbNLOXfiXEGsj7vj5EB5M2cuIjTpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fnDS76y8jzYQttl
-	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 17:48:23 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fnDRc2qvmzKHMT0
+	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 17:47:56 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 6006A4058C
+	by mail.maildlp.com (Postfix) with ESMTP id 02AB740576
 	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 17:48:49 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP3 (Coremail) with SMTP id _Ch0CgAnB1TwjM9p8K_UDA--.49742S6;
-	Fri, 03 Apr 2026 17:48:49 +0800 (CST)
+	by APP3 (Coremail) with SMTP id _Ch0CgAnB1TwjM9p8K_UDA--.49742S2;
+	Fri, 03 Apr 2026 17:48:46 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Namhyung Kim <namhyung@kernel.org>,
@@ -42,12 +41,10 @@ Cc: Bill Wendling <morbo@google.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v2 04/16] perf annotate-arm64: Handle load and store instructions
-Date: Fri,  3 Apr 2026 09:47:48 +0000
-Message-Id: <20260403094800.1418825-5-wutengda@huaweicloud.com>
+Subject: [PATCH v2 00/16] perf arm64: Support data type profiling
+Date: Fri,  3 Apr 2026 09:47:44 +0000
+Message-Id: <20260403094800.1418825-1-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260403094800.1418825-1-wutengda@huaweicloud.com>
-References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,162 +52,156 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgAnB1TwjM9p8K_UDA--.49742S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxXw4ftrWUGr4ruFWfZr1xGrg_yoWrZr1kpa
-	nFk345Jr4UWr4Fg3WfXFsru34fKw4UJw1a9ry8J3s3Ca4Ivr97tF4kKr1akF4rGrWkCw4U
-	XFn0vry8Wry5ArJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQm14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-	z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-	3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-	IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-	M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-	kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcV
-	CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRGMKuUUUUU
+X-CM-TRANSID:_Ch0CgAnB1TwjM9p8K_UDA--.49742S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKF1fGr1UWr4fXw43GFW8Crg_yoW7CF15pF
+	sxC3yfJr4UJrWFkwnxZrWxXrW3Kw4fJayfKryrt3ySkF429F95tFyxtF1SyFWrCr9xZw47
+	Aw1qqr1UWF18CFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBq14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc7CjxVAKzI0EY4vE52x082I5MxAIw28Icx
+	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42
+	IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF
+	0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87
+	Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7sR_DUUUUUUUU==
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Add ldst_ops to handle load and store instructions in order to parse
-the data types and offsets associated with PMU events for memory access
-instructions. There are many variants of load and store instructions in
-ARM64, making it difficult to match all of these instruction names
-completely. Therefore, only the instruction prefixes are matched. The
-prefix 'ld|st' covers most of the memory access instructions, 'cas|swp'
-matches atomic instructions, and 'prf' matches memory prefetch
-instructions.
+This patch series implements data type profiling support for arm64,
+building upon the foundational work previously contributed by Huafei [1].
+While the initial version laid the groundwork for arm64 data type analysis,
+this series iterates on that work by refining instruction parsing and
+extending support for core architectural features.
 
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+The series is organized as follows:
+
+1. Fix disassembly mismatches (Patches 01-02)
+   Current perf annotate supports three disassembly backends: llvm,
+   capstone, and objdump. On arm64, inconsistencies between the output
+   of these backends (specifically llvm/capstone vs. objdump) often
+   prevent the tracker from correctly identifying registers and offsets.
+   These patches resolve these mismatches, ensuring consistent instruction
+   parsing across all supported backends.
+
+2. Infrastructure for arm64 operand parsing (Patches 03-07)
+   These patches establish the necessary infrastructure for arm64-specific
+   operand handling. This includes implementing new callbacks and data
+   structures to manage arm64's unique addressing modes and register sets.
+   This foundation is essential for the subsequent type-tracking logic.
+
+3. Core instruction tracking (Patches 08-16)
+   These patches implement the core logic for type tracking on arm64,
+   covering a wide range of instructions including:
+
+   * Memory Access: ldr/str variants (including stack-based access).
+   * Arithmetic & Data Processing: mov, add, and adrp.
+   * Special Access: System register access (mrs) and per-cpu variable
+     tracking.
+
+The implementation draws inspiration from the existing x86 logic while
+adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
+perf annotate can successfully resolve memory locations and register
+types, enabling comprehensive data type profiling on arm64 platforms.
+
+Example Result
+==============
+
+# perf mem record -a -K -- sleep 1
+# perf annotate --data-type --type-stat --stdio
+Annotate data type stats:
+total 6204, ok 5091 (82.1%), bad 1113 (17.9%)
+-----------------------------------------------------------
+        29 : no_sym
+       196 : no_var
+       806 : no_typeinfo
+        82 : bad_offset
+      1370 : insn_track
+
+Annotate type: 'struct page' in [kernel.kallsyms] (59208 samples):
+============================================================================
+ Percent     offset       size  field
+  100.00          0       0x40  struct page      {
+    9.95          0        0x8      long unsigned int   flags;
+   52.83        0x8       0x28      union        {
+   52.83        0x8       0x28          struct   {
+   37.21        0x8       0x10              union        {
+   37.21        0x8       0x10                  struct list_head        lru {
+   37.21        0x8        0x8                      struct list_head*   next;
+    0.00       0x10        0x8                      struct list_head*   prev;
+                                                };
+   37.21        0x8       0x10                  struct   {
+   37.21        0x8        0x8                      void*       __filler;
+    0.00       0x10        0x4                      unsigned int        mlock_count;
+   ...
+
+Changes since v1: (reworked from Huafei's series):
+
+ - Fix inconsistencies in arm64 instruction output across llvm, capstone,
+   and objdump disassembly backends.
+ - Support arm64-specific addressing modes and operand formats. (Leo Yan)
+ - Extend instruction tracking to support mov and add instructions,
+   along with per-cpu and stack variables.
+ - Include real-world examples in commit messages to demonstrate
+   practical effects. (Namhyung Kim)
+ - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
+   https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
+
+Please let me know if you have any feedback.
+
+Thanks,
+Tengda
+
+[1] https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
+[2] https://developer.arm.com/documentation/102374/0103
+[3] https://github.com/flynd/asmsheets/releases/tag/v8
+
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index 4c42323b0c18..8209faaa6086 100644
---- a/tools/perf/util/annotate-arch/annotate-arm64.c
-+++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -3,7 +3,9 @@
- #include <errno.h>
- #include <stdlib.h>
- #include <string.h>
-+#include <ctype.h>
- #include <linux/zalloc.h>
-+#include <linux/string.h>
- #include <regex.h>
- #include "../annotate.h"
- #include "../disasm.h"
-@@ -12,6 +14,7 @@ struct arch_arm64 {
- 	struct arch arch;
- 	regex_t call_insn;
- 	regex_t jump_insn;
-+	regex_t ldst_insn; /* load and store instruction */
- };
- 
- static bool arm64__check_multi_regs(const char *op)
-@@ -114,6 +117,59 @@ static const struct ins_ops arm64_mov_ops = {
- 	.scnprintf = mov__scnprintf,
- };
- 
-+static int arm64_ldst__parse(const struct arch *arch __maybe_unused,
-+			     struct ins_operands *ops,
-+			     struct map_symbol *ms __maybe_unused,
-+			     struct disasm_line *dl __maybe_unused)
-+{
-+	char *s, *target;
-+
-+	/*
-+	 * The part starting from the memory access annotation '[' is parsed
-+	 * as 'target', while the part before it is parsed as 'source'.
-+	 */
-+	target = s = strchr(ops->raw, arch->objdump.memory_ref_char);
-+	if (!s)
-+		return -1;
-+
-+	while (s > ops->raw && *s != ',')
-+		--s;
-+
-+	if (s == ops->raw)
-+		return -1;
-+
-+	*s = '\0';
-+	ops->source.raw = strdup(ops->raw);
-+
-+	*s = ',';
-+	if (!ops->source.raw)
-+		return -1;
-+
-+	ops->source.multi_regs = arm64__check_multi_regs(ops->source.raw);
-+
-+	ops->target.raw = strdup(target);
-+	if (!ops->target.raw) {
-+		zfree(&ops->source.raw);
-+		return -1;
-+	}
-+	ops->target.mem_ref = true;
-+	ops->target.multi_regs = arm64__check_multi_regs(ops->target.raw);
-+
-+	return 0;
-+}
-+
-+static int arm64_ldst__scnprintf(const struct ins *ins, char *bf, size_t size,
-+				 struct ins_operands *ops, int max_ins_name)
-+{
-+	return scnprintf(bf, size, "%-*s %s,%s", max_ins_name, ins->name,
-+			 ops->source.raw, ops->target.raw);
-+}
-+
-+static struct ins_ops arm64_ldst_ops = {
-+	.parse	   = arm64_ldst__parse,
-+	.scnprintf = arm64_ldst__scnprintf,
-+};
-+
- static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch, const char *name)
- {
- 	struct arch_arm64 *arm = container_of(arch, struct arch_arm64, arch);
-@@ -124,6 +180,8 @@ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch,
- 		ops = &jump_ops;
- 	else if (!regexec(&arm->call_insn, name, 2, match, 0))
- 		ops = &call_ops;
-+	else if (!regexec(&arm->ldst_insn, name, 2, match, 0))
-+		ops = &arm64_ldst_ops;
- 	else if (!strcmp(name, "ret"))
- 		ops = &ret_ops;
- 	else
-@@ -148,6 +206,8 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 	arch->id = *id;
- 	arch->objdump.comment_char	  = '/';
- 	arch->objdump.skip_functions_char = '+';
-+	arch->objdump.memory_ref_char	  = '[';
-+	arch->objdump.imm_char		  = '#';
- 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
- 
- 	/* bl, blr */
-@@ -161,8 +221,20 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 	if (err)
- 		goto out_free_call;
- 
-+	/*
-+	 * The ARM64 architecture has many variants of load/store instructions.
-+	 * It is quite challenging to match all of them completely. Here, we
-+	 * only match the prefixes of these instructions.
-+	 */
-+	err = regcomp(&arm->ldst_insn, "^(ld|st|cas|prf|swp)",
-+		      REG_EXTENDED);
-+	if (err)
-+		goto out_free_jump;
-+
- 	return arch;
- 
-+out_free_jump:
-+	regfree(&arm->jump_insn);
- out_free_call:
- 	regfree(&arm->call_insn);
- out_free_arm:
+Tengda Wu (16):
+  perf llvm: Fix arm64 adrp instruction disassembly mismatch with
+    objdump
+  perf capstone: Fix arm64 jump/adrp disassembly mismatch with objdump
+  perf annotate-arm64: Generalize arm64_mov__parse to support standard
+    operands
+  perf annotate-arm64: Handle load and store instructions
+  perf annotate: Introduce extract_op_location callback for
+    arch-specific parsing
+  perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
+  perf annotate-arm64: Implement extract_op_location() callback
+  perf annotate-arm64: Enable instruction tracking support
+  perf annotate-arm64: Support load instruction tracking
+  perf annotate-arm64: Support store instruction tracking
+  perf annotate-arm64: Support stack variable tracking
+  perf annotate-arm64: Support 'mov' instruction tracking
+  perf annotate-arm64: Support 'add' instruction tracking
+  perf annotate-arm64: Support 'adrp' instruction to track global
+    variables
+  perf annotate-arm64: Support per-cpu variable access tracking
+  perf annotate-arm64: Support 'mrs' instruction to track 'current'
+    pointer
+
+ .../perf/util/annotate-arch/annotate-arm64.c  | 642 +++++++++++++++++-
+ .../util/annotate-arch/annotate-powerpc.c     |  10 +
+ tools/perf/util/annotate-arch/annotate-x86.c  |  88 ++-
+ tools/perf/util/annotate-data.c               |  72 +-
+ tools/perf/util/annotate-data.h               |   7 +-
+ tools/perf/util/annotate.c                    | 108 +--
+ tools/perf/util/annotate.h                    |  12 +
+ tools/perf/util/capstone.c                    | 107 ++-
+ tools/perf/util/disasm.c                      |   5 +
+ tools/perf/util/disasm.h                      |   5 +
+ .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |  20 +
+ tools/perf/util/dwarf-regs.c                  |   2 +-
+ tools/perf/util/include/dwarf-regs.h          |   1 +
+ tools/perf/util/llvm.c                        |  50 ++
+ 14 files changed, 984 insertions(+), 145 deletions(-)
+
+
+base-commit: cf7c3c02fdd0dfccf4d6611714273dcb538af2cb
 -- 
 2.34.1
 
