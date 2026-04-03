@@ -1,182 +1,180 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540CF372B57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD1D3C555D
 	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 14:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775228352; cv=none; b=VUV/i7PY5xG/qI3qkGN2fPbH9+RmMbmEthv9onbWm5IHQQNf9HZkznquScL4EqCKuG4Yw9z+TYEdHs4kPK9vcVormLBbgTSePGf2z5axNEb50K0Z4DstGntuRu9b8tk3/aAnHJN4lhmm44atId/DeAfq5qDphhABo6V8CKoaplw=
+	t=1775228353; cv=none; b=qLBu0kTBctKJFFhj+KWNYKlkYkIJRzMTRAxwTzWp8WiluridR3yrp0XIk7JH+fOqcGta7cloR5wbHLUUuTAUdwmxXfAU02LeK8McvcEFi3movnxDxjPyUyIWFdRqbv3qowki4KpvbC2HinVuXNLAfAJRMwGrUWmOZeed96srZRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775228352; c=relaxed/simple;
-	bh=89ji6KrXytsoyroMrXYgsYDJJAfuNLm0CiKJEhTy/wQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HB2HGTj8WSmSX1blLlY20d2Z6cJQr9DMQZzZMSMKbvNuVOf7v1hMoA637GtrSqHIXbgJvLQWbZjGwHbvbgoIN5VwpbKpC1woarf+t+9e7Ln7mou3LE3l0FmS4G0jw6dg5iSyrWM6tvyG9xGdNWs/o21SqiU8h1WR5lnP21rjdr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cHD6yLJA; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1775228353; c=relaxed/simple;
+	bh=Xbc4Ra681nc48aNuM3ATdRJApIcuteTB0BIdE8dIwPE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b6cdxXrQJifurRbU2XM2dX/lw1CMVRrZQraaGm/pmuGniqbjc5Iqm7GkfVdngfgYeeGwaFpunh9iD5fuo42EERjJi+KLd3rVOEnlyBphRmz8UUiP5ddyz3C8bzOIfnGbgrdK2Ziwn2rwIinBRFA5MWPPeDHt0cGFQMlpKsqxNMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=NYJxPhOe; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cHD6yLJA"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43b8982c2f4so1198094f8f.2
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="NYJxPhOe"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43cfb723793so1284872f8f.2
         for <llvm@lists.linux.dev>; Fri, 03 Apr 2026 07:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775228349; x=1775833149; darn=lists.linux.dev;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=H+OgrwFlApvpqkLRR93ZwtakkLIUZgZQlxVrJ4qAo4U=;
-        b=cHD6yLJA/lQtPvBaHlNklQwd5e4EKtMrrQ2jnGgodMz/AKVxv9lmWCJnfpB1iYhyB6
-         IWRrB6R9GlnlSGFOFXD0xu33Obs3JE3yedUZTEEDcqaFKuTSxQcZyDwicmHcjljRCj1t
-         X/2Cgk6T5bqZ0CG7nILbgnd8EmqQm9Rf2VPInXQzkRFTAvipjUTbluHBE9FcaDIEdqRQ
-         qIPwUMb6iJkda/KbABxkb76bZQWBswob+ZyFI9yS44ePbXSy5CF0IpbfLH/MV6kzq8Fq
-         Qs6pdnedy24BZMvTOVx2kz7s7raiF3feiAnkY94Dl45O2vDQa0mPFCresSeIR+ylJCJN
-         vT+Q==
+        d=blackwall.org; s=google; t=1775228349; x=1775833149; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kGPv9Bco5NsmxbV6+XT6L0Y0xbtKDX3C4wt1tJqNE8Q=;
+        b=NYJxPhOeuAO5Tub0uXv9aZ5RPR8qdf2KpqXowvjkhCoAybaESOEtA8Qfk809kOY+T0
+         pwFfewioCfngcZVg8BhMvlWvRzBzfljLWnrI2/5SOTv/PbHdvV/h0LSLeuGiPJQF/J8i
+         v4meRUbpozMt83hQAylxHsn0VaUwhz9oiHyN+6fvKljLJ8CB9gp8ZTU9OCGM9MH8jojA
+         7jOXqipUX0f6dC1aY51DUdR103JB0rF4C8gHGOgTxPOltYkZ8bmZEQ3akk0Q2ceR4Y70
+         vMPkQmiKcxCJiHXDrE9EgOWMBWt16JfvuJ/OcKzVRZWCB5mEhCpulGQ1p6Ohli0m4xLQ
+         qbGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1775228349; x=1775833149;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H+OgrwFlApvpqkLRR93ZwtakkLIUZgZQlxVrJ4qAo4U=;
-        b=MA2oEiOurgAX5Al33ZlbiYy3IFlmQilHKXoxNx0EoJoqKhSr0kfPRpakSdbpXPYZbP
-         tQJNXU4t+0Iy2yNZV1pe6zhdbfgdrgOuchNU7NgiEPXCp+hTeJNtGwDIBlqh5pe2mqcW
-         XiYETgNg+BXR/eAEiAsJ/SE8JdD3JMRyHQIAfBm0c1vuGfnpVrTMm8tAVI8vBtbTaDmA
-         T26JLcKDARTphOelHmF1HrzH6G7mxnDZ8i+FvlXx/0zcfb9jroPtE+Wa/XUs62rzVawO
-         Y/Ni6f9WPGijzGkxJkxSJwEEZfJgcFun5/RZy7XPiSDrzLvEfo+CokskGIck1A06aXYV
-         8JYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUlZ52ApcjbuOMAF5XXAkI40d9gixSygLAytXeEHGxsBXIyT5b4/EzHzimrAjuY4+dGbNox@lists.linux.dev
-X-Gm-Message-State: AOJu0YzryUmtG0wQXfrNshgZWO/UHWVRz1UVNdG8lJM20Psd6D6erhtu
-	+sDzxm08ACgBwJZlgogCph5nuq88CJp4r/zHIdb/yPRHEOoItKh58NkZtrmuOM+2jEU=
-X-Gm-Gg: ATEYQzwJxqw3mdDjtQMgPQv0u/fc0edyIGHEzuF13AD/Tc8wPdie0/dED7GsF3cfIAm
-	MZCP+OHt4Aj7witpazLnPpx1lXODcYFnGZuu35I6THDpXrbG3v6zAkoGLtDuG9hIcy78zseKtPh
-	7iNX8pc8lKBmfMjS16w/0I2s226iGI+C0vPk/K2+UMc7bhuSjUCcvysWHZ/SYuYsVUwMHR1851v
-	2vV98FfbRLgA7mupIjssyNE9ZTb8S8C+NEGmTCyEqMRF0rfyte7rShFU4qe42eieVHf62Qk6rwp
-	26j06a9cjFL5dD9qguzG9fe5SkBd8o124dnW4ATRMIwAvhrAFHUTXox4NKmnxdwvP7DkVhxFigC
-	u7XGLBU5YPzI+CsgNgHDRQcXJgCHqS50ScyU1+l2Sb2cBT7KTEjG783CQUxhLoVcB0CYPBTy0it
-	5xW9dkavoh
-X-Received: by 2002:a05:600c:3e83:b0:485:2fc5:3a5 with SMTP id 5b1f17b1804b1-488997bd938mr55388085e9.26.1775228348640;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kGPv9Bco5NsmxbV6+XT6L0Y0xbtKDX3C4wt1tJqNE8Q=;
+        b=TSi4BlzcRbQ/LUXv7VPlkf2G5k+toebH5qwQ53MDHTPiPALBAsF+tklKt2toEiviQ7
+         pFX4/pfQcsSvBAIbU64LFKd17YCLT2eiB/IJ0wL6tB6jVMzlH2YH3fjqDEQbQXO6YRuQ
+         sXllUxc6o1XqxJbImDEuX1Tt6nJuEFPz238K6sQmHU9c+zXNR6l6vKYxbvwNS2QHY7JN
+         aHN6XNQKideIDXdiysFWR9hhJFROcJWqSQ/QDro17sXgRuza3RCUvQjQmBOpjxqQPG6J
+         Hm+XIlS6H2zHSW9OdMMwRchXm1TDShdxpq96b2p9ubhqQhXkkNRvLRa+w9hgF2ooNDf+
+         8PVg==
+X-Forwarded-Encrypted: i=1; AJvYcCU5+96SZmawLgaj021FDUmam/zWCkmu97d/njckVoWHp2wlf1/7GiFpsJdTVrBiisWRgQRJ@lists.linux.dev
+X-Gm-Message-State: AOJu0YycDl+J53g1TiVB8JNpUW14GamnTIQswXx5tp8NTnVSxt7NeAMn
+	ff0o67IdL3nnVotFoT6JSv/H0jbYyZMDzmxaxcUPAjkDi7DkJJrB51HeSl+8RIUS6I8=
+X-Gm-Gg: AeBDievVu4lAgerdi/oB7/WsWPju9zHxU7doMutnn+nMVVfhHouALoPpjl+uXFOTFiW
+	E83j5CPar+AEUUHBCqrTw7Bw9xcj41LJaYEPCxvtsv8xdH+vSgMaYwMuk+vQvoyexWHiTsDXheQ
+	UJ+/IOfafACnCOaYm/oYGvrt9XoRPVoiA43lfKi2bmq4LnfAMI6t06zGMmuvfRUhMPNSHORGrMO
+	xzp1mJGaoPNayJRLJpO7xYe0Emw/ev99wToZpZY1amnOviYwTAEhHXYV19nF9+L0oEodsLZONH3
+	3pPfwaVJ5kbWfn545feE0dHZC9Uyjzhp2lOio/lpshDpMFoWfXRdFHO2m7Y5EXsc5ByIqBDLs5x
+	y/ABHRJKHVhVFU3jOPcal5Ny5nGz3oG42sJDHVG86dK86pJDsgt7RGFHDsUptQX2OBZxHzIKmK3
+	HNL+hiDV3954pNtX1HG0z9+qht4pDsuihv2b3D/gOK+cLULwho1XRdXg==
+X-Received: by 2002:a05:6000:4382:b0:43d:60d:944b with SMTP id ffacd0b85a97d-43d292f1452mr5756991f8f.37.1775228348596;
         Fri, 03 Apr 2026 07:59:08 -0700 (PDT)
-Received: from localhost ([189.99.238.3])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56d9bc9bc41sm6877313e0c.11.2026.04.03.07.59.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 07:59:07 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Subject: [PATCH v2 00/10] selftests/bpf: Tolerate partial builds across
- kernel configs
-Date: Fri, 03 Apr 2026 11:58:53 -0300
-Message-Id: <20260403-selftests-bpf_misconfig-v2-0-f06700380a9d@suse.com>
+Received: from [192.168.0.161] (78-154-15-182.ip.btc-net.bg. [78.154.15.182])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4f1a99sm18426635f8f.32.2026.04.03.07.59.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Apr 2026 07:59:08 -0700 (PDT)
+Message-ID: <98bdaf08-6bff-4ea3-9e74-65b41da1447b@blackwall.org>
+Date: Fri, 3 Apr 2026 17:59:06 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAK7Vz2kC/4WOWw6CMBREt0L67dVSHiZ+uQ9DTCm3UCMt6S0EQ
- 9i7LS7AzzOZOZmNEXqDxG7ZxjwuhoyzEcQpY2qQtkcwXWQmuKh5yXMgfOuAFAjaST9HQ8pZbXo
- oVVGgrlRVd5LF9eRRm/UwP5of09y+UIWkS41WEkLrpVVDiqIOLK7hMkoK6FNjMBSc/xznljyZ/
- v9YcuBQSCyF4lJfa32nmfCs3Miafd+/mh4j1vEAAAA=
-X-Change-ID: 20260401-selftests-bpf_misconfig-4c33ef5c56da
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openssh-sha256; t=1775228344; l=3685;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=89ji6KrXytsoyroMrXYgsYDJJAfuNLm0CiKJEhTy/wQ=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QOX84k2QeUwuO8dcrNzMtD1XuDwQUFz8m1vv5l9tXa8jO8hI0wgfABLN8BJzTmBx68QP3xhU36b
- 527bSAbwGbg0=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] bridge: guard local VLAN-0 FDB helpers against NULL
+ vlan group
+To: Zijing Yin <yzjaurora@gmail.com>, netdev@vger.kernel.org
+Cc: bridge@lists.linux.dev, idosch@nvidia.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+ justinstitt@google.com, petrm@nvidia.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260402140153.3925663-1-yzjaurora@gmail.com>
+Content-Language: en-US
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20260402140153.3925663-1-yzjaurora@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Currently the BPF selftests can only be built by using the minimum kernel
-configuration defined in tools/testing/selftests/bpf/config*. This poses a
-problem in distribution kernels that may have some of the flags disabled or
-set as module. For example, we have been running the tests regularly in
-openSUSE Tumbleweed [1] [2] but to work around this fact we created a
-special package [3] that build the tests against an auxiliary vmlinux with
-the BPF Kconfig. We keep a list of known issues that may happen due to,
-amongst other things, configuration mismatches [4] [5].
+On 02/04/2026 17:01, Zijing Yin wrote:
+> When CONFIG_BRIDGE_VLAN_FILTERING is not set, br_vlan_group() and
+> nbp_vlan_group() return NULL (br_private.h stub definitions). The
+> BR_BOOLOPT_FDB_LOCAL_VLAN_0 toggle code is compiled unconditionally and
+> reaches br_fdb_delete_locals_per_vlan_port() and
+> br_fdb_insert_locals_per_vlan_port(), where the NULL vlan group pointer
+> is dereferenced via list_for_each_entry(v, &vg->vlan_list, vlist).
+> 
+> The observed crash is in the delete path, triggered when creating a
+> bridge with IFLA_BR_MULTI_BOOLOPT containing BR_BOOLOPT_FDB_LOCAL_VLAN_0
+> via RTM_NEWLINK. The insert helper has the same bug pattern.
+> 
+>    Oops: general protection fault, probably for non-canonical address 0xdffffc0000000056: 0000 [#1] KASAN NOPTI
+>    KASAN: null-ptr-deref in range [0x00000000000002b0-0x00000000000002b7]
+>    RIP: 0010:br_fdb_delete_locals_per_vlan+0x2b9/0x310
+>    Call Trace:
+>     br_fdb_toggle_local_vlan_0+0x452/0x4c0
+>     br_toggle_fdb_local_vlan_0+0x31/0x80 net/bridge/br.c:276
+>     br_boolopt_toggle net/bridge/br.c:313
+>     br_boolopt_multi_toggle net/bridge/br.c:364
+>     br_changelink net/bridge/br_netlink.c:1542
+>     br_dev_newlink net/bridge/br_netlink.c:1575
+> 
+> Add NULL checks for the vlan group pointer in both helpers, returning
+> early when there are no VLANs to iterate. This matches the existing
+> pattern used by other bridge FDB functions such as br_fdb_add() and
+> br_fdb_delete().
+> 
+> Fixes: 21446c06b441 ("net: bridge: Introduce UAPI for BR_BOOLOPT_FDB_LOCAL_VLAN_0")
+> Signed-off-by: Zijing Yin <yzjaurora@gmail.com>
+> ---
+> Tested on Linux v7.0-rc5 (upstream tag) with clang 20.1.0, KASAN
+> enabled, CONFIG_BRIDGE_VLAN_FILTERING=n.
+> 
+> Bug independently reproduced with the attached C reproducer
+> (repro_br_fdb.c). The crash triggers deterministically on the first
+> run with CONFIG_BRIDGE_VLAN_FILTERING=n on a clang-built kernel.
+> 
+> Exact crash signature from reproduction:
+> 
+>    Oops: general protection fault, probably for non-canonical address 0xdffffc0000000056: 0000 [#1] KASAN NOPTI
+>    KASAN: null-ptr-deref in range [0x00000000000002b0-0x00000000000002b7]
+>    RIP: 0010:br_fdb_delete_locals_per_vlan+0x72/0x3f0
+>    Call Trace:
+>     br_fdb_toggle_local_vlan_0+0x3d/0x1d0
+>     br_boolopt_toggle+0xba/0x1a0
+>     br_boolopt_multi_toggle+0x129/0x250
+>     br_changelink+0x1100/0x1490
+>     br_dev_newlink+0x115/0x190
+>     rtnl_newlink+0xe15/0x25c0
+> 
+> Note: gcc 13.3 with the same config optimizes away the NULL dereference
+> path (UB elimination), so the crash does not trigger on gcc-built
+> kernels. The code is still incorrect regardless of compiler behavior.
+> 
+> Reproducer (C source): [PASTE_URL_HERE]
+> Kernel .config:        [PASTE_URL_HERE]
+> 
+> To reproduce: compile the C reproducer with `gcc -static -o repro repro.c`,
+> run as root on a clang-built kernel. The crash triggers during
+> br_dev_newlink() -> br_changelink() when the boolopt toggle reaches
+> br_fdb_delete_locals_per_vlan_port() with a NULL vlan group. Note:
+> RTM_SETLINK on an existing bridge may not trigger it due to different
+> code ordering.
+> 
+>   net/bridge/br_fdb.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+> index 0501ffcb8..e2c17f620 100644
+> --- a/net/bridge/br_fdb.c
+> +++ b/net/bridge/br_fdb.c
+> @@ -597,6 +597,9 @@ static void br_fdb_delete_locals_per_vlan_port(struct net_bridge *br,
+>   		dev = br->dev;
+>   	}
+>   
+> +	if (!vg)
+> +		return;
+> +
+>   	list_for_each_entry(v, &vg->vlan_list, vlist)
+>   		br_fdb_find_delete_local(br, p, dev->dev_addr, v->vid);
+>   }
+> @@ -630,6 +633,9 @@ static int br_fdb_insert_locals_per_vlan_port(struct net_bridge *br,
+>   		dev = br->dev;
+>   	}
+>   
+> +	if (!vg)
+> +		return 0;
+> +
+>   	list_for_each_entry(v, &vg->vlan_list, vlist) {
+>   		if (!br_vlan_should_use(v))
+>   			continue;
 
-The maintenance of this package is far from ideal, especially for
-enterprise kernels. The goal of this series is to enable the common usecase
-of running the following in any system:
-
-```sh
-make -C tools/testing/selftests install \
-        SKIP_TARGETS= \
-        TARGETS=bpf \
-        O=/lib/modules/$(uname -r)/build
-```
-
-As an example, the following script targeting a minimal config can be used
-for testing:
-
-```sh
-make defconfig
-scripts/config --file .config \
-               --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
-               --enable DEBUG_INFO_BTF \
-               --enable BPF_SYSCALL \
-               --enable BPF_JIT
-make olddefconfig
-make -j$(nproc)
-make -j$(nproc) -C tools/testing/selftests SKIP_TARGETS= TARGETS=bpf install
-```
-
-This produces a test_progs binary with 579 subtests, against the total of
-708. Many of them will still fail or be skipped at runtime due to lack of
-symbols, but at least there will be a clear way of building the tests.
-
-[1]: https://openqa.opensuse.org/tests/5811715
-[2]: https://openqa.opensuse.org/tests/5811730
-[3]: https://src.opensuse.org/rmarliere/kselftests
-[4]: https://github.com/openSUSE/kernel-qe/blob/main/kselftests_known_issues.yaml
-[5]: https://openqa.opensuse.org/tests/5811730/logfile?filename=run_kselftests-config_mismatches.txt
-
-Assisted-by: {codex,claude}
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
-Changes in v2:
-- Skip test_kmods build/clean when KDIR directory does not exist
-- Use `Module.symvers` instead of `.config` for in-tree detection
-- Fix skeleton order-only prereqs commit message
-- Guard BTFIDS step when .test.o is absent
-- Add `__weak stack_mprotect()` stubs in `bpf_cookie.c` and `iters.c`
-- Link to v1: https://patch.msgid.link/20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com
-
----
-Ricardo B. Marlière (10):
-      selftests/bpf: Fall back to distro build directory for test_kmods
-      selftests/bpf: Tolerate BPF and skeleton generation failures
-      selftests/bpf: Avoid rebuilds when running emit_tests
-      selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
-      selftests/bpf: Tolerate test file compilation failures
-      selftests/bpf: Allow test_progs to link with a partial object set
-      selftests/bpf: Tolerate benchmark build failures
-      selftests/bpf: Provide weak definitions for cross-test functions
-      selftests/bpf: Skip tests whose objects were not built
-      selftests/bpf: Tolerate missing files during install
-
- tools/testing/selftests/bpf/Makefile               | 111 ++++++++++++++-------
- .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  20 +++-
- tools/testing/selftests/bpf/prog_tests/iters.c     |  10 +-
- tools/testing/selftests/bpf/test_kmods/Makefile    |   8 +-
- tools/testing/selftests/bpf/test_progs.c           |   7 +-
- 5 files changed, 110 insertions(+), 46 deletions(-)
----
-base-commit: 6f6c794d0ff05dab1fa4677f39043de8a6a80da3
-change-id: 20260401-selftests-bpf_misconfig-4c33ef5c56da
-
-Best regards,
---  
-Ricardo B. Marlière <rbm@suse.com>
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
 
