@@ -1,27 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F988396D1B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F5E3947BD
 	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 09:48:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775209736; cv=none; b=nkzixrEmFuTz/91Pli2c+S+QbmsGKcikMRGKKMCrxPo1a5aIbNPH6BuK/Ecg/9F5tPOAGPZIbE5swtDjMNVAQxOYI9QqAG23baHt8mGamptmG5wCXN9sr9lC+x40HxGahIuIIgzopHhRb+AkXXmOnXN8f2dpPdmTrO0ewei7P6E=
+	t=1775209736; cv=none; b=C8zI6J+YOHkut7OPCs9HY3SxeM/LWj6O6AnJkopk97mXaYHcroML4Y0xLQxa58mCYzBHa3aVXMLdVL3uXtcxfIokG19Xxqmkk6H45q3ZQAhrAGuARlnWRs/YRUnltb31zc2muHRviEuj4HhJhTeNzXbDRBC74Vg1a8iVyjcgc+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775209736; c=relaxed/simple;
-	bh=satA8hu4LdtxjRRIBv1FmksXC6dIYImV6/HnLYpwsok=;
+	bh=CP/NbafyqnF4Hdetr8HN6E963hPsmSsryQwjgKakKaQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZYMyINRWEN+9XH700cZsTf17kZXqakHjPFe8YV7Ni5GtJNduglQe2VzjhsFaZfuQxeV7pvHYiYdSWshAAnCNWbPFdIrGleEEBFmXGsaQhvZg9bIE1eYGL8Uu7NWbyRZ0uc9De5Xt8RtgONaIh21VhsskBRCiLQ9yYMbcU0cNx7U=
+	 MIME-Version; b=qGDU97elfZSzxOSHYiDXE1EL2ub5Nx8HRB5SBd9nnyvveheGm5V6ZtIR1O6S3I0mK2kuXWGBdjgC+Ok51NvES2niHKUwKO2z8MAK/RKamotVUDj0feTtQTURKNu/RPpmNPGqZ8cXVovnI/2bWhXSl1sx3KZkeS9fJaR+8l9KYVk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fnDRd1dSrzKHMXQ
-	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 17:47:57 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fnDRc549mzKHMVp
+	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 17:47:56 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id CF6294056E
+	by mail.maildlp.com (Postfix) with ESMTP id 4E6FB40594
 	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 17:48:49 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP3 (Coremail) with SMTP id _Ch0CgAnB1TwjM9p8K_UDA--.49742S11;
+	by APP3 (Coremail) with SMTP id _Ch0CgAnB1TwjM9p8K_UDA--.49742S5;
 	Fri, 03 Apr 2026 17:48:49 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Peter Zijlstra <peterz@infradead.org>,
@@ -42,9 +42,9 @@ Cc: Bill Wendling <morbo@google.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v2 09/16] perf annotate-arm64: Support load instruction tracking
-Date: Fri,  3 Apr 2026 09:47:53 +0000
-Message-Id: <20260403094800.1418825-10-wutengda@huaweicloud.com>
+Subject: [PATCH v2 03/16] perf annotate-arm64: Generalize arm64_mov__parse to support standard operands
+Date: Fri,  3 Apr 2026 09:47:47 +0000
+Message-Id: <20260403094800.1418825-4-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260403094800.1418825-1-wutengda@huaweicloud.com>
 References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
@@ -55,180 +55,155 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgAnB1TwjM9p8K_UDA--.49742S11
-X-Coremail-Antispam: 1UD129KBjvJXoW3WF1xtFy5XFWxWFyDGrWDXFb_yoW7Wr1rpa
-	1DC3s8Kr47tr4agFs3XFZ7Xry3Kw1Dur1YkrZ8uwsIyFWIyr1rta1kKryakFWrJrZrCry7
-	JF4ktryUWw1DCaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQm14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-	z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-	3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-	IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-	M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-	kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcV
-	CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRGMKuUUUUU
+X-CM-TRANSID:_Ch0CgAnB1TwjM9p8K_UDA--.49742S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr48ArWDJr4UKFyDAF1xAFb_yoWrJryrpw
+	4qk34DKr48KrZ5Kw43JanYqryfWwsag3yfWFyxtwn5Aw4fKryrJ3Z3KF12kFs5GFy8CrWU
+	JFnYyr15CF4UGaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQS14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+	IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
+	xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04
+	k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7Cj
+	xVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRXpnmUUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Implement update_insn_state() for arm64 to track register state changes
-during load (LDR) instructions. This is essential for maintaining accurate
-type information when data is moved from memory to registers.
+The current arm64_mov__parse() implementation strictly requires the
+operand to contain a symbol suffix in the "<symbol>" format. This
+causes the parser to fail for standard instructions that only contain
+raw immediates or registers without symbolic annotations.
 
-The implementation handles the three primary arm64 addressing modes:
-1. Signed offset: [base, #imm]
-2. Pre-index: [base, #imm]!
-3. Post-index: [base], #imm
+Refactor the function to make symbol matching optional. The parser now
+correctly extracts the target operand and only attempts to parse the
+"<symbol>" suffix if it exists. This change also introduces better
+handling for whitespace and comments, and adds support for multi-register
+check via arm64__check_multi_regs(), ensuring compatibility with a
+wider range of arm64 instruction formats.
 
-Introduce adjust_reg_index_state() to handle the side effects of pre-index
-and post-index addressing, where the base register is updated with the
-offset after or before the memory access. This ensures that the register's
-offset within a structure is correctly tracked across sequential
-instructions.
-
-A real-world example is shown below:
-
-  ffff80008011f5b0 <pick_task_stop>:
-  ffff80008011f5b8:  ldr  x0, [x0, #2712] // x0: struct rq* -> task_struct*
-  ffff80008011f5c0:  ldr  w1, [x0, #104]  // PMU sample at offset 0x68
-
-Before this commit, the type of x0 was incorrectly inferred as 'struct rq':
-
-  find data type for 0x68(reg0) at pick_task_stop+0x10
-  var [8] reg0 offset 0 type='struct rq*'
-  chk [10] reg0 offset=0x68 ok=1 kind=1 (struct rq*) : Good!
-  final result:  type='struct rq'
-
-After this commit, the type of x0 is correctly inferred as 'struct task_struct':
-
-  find data type for 0x68(reg0) at pick_task_stop+0x10
-  var [8] reg0 offset 0 type='struct rq*'
-  ldr [8] 0xa98(reg0) -> reg0 type='struct task_struct*'
-  chk [10] reg0 offset=0x68 ok=1 kind=1 (struct task_struct*) : Good!
-  final result: type='struct task_struct'
-
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 87 +++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 85 ++++++++++++++-----
+ 1 file changed, 65 insertions(+), 20 deletions(-)
 
 diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index 1fe4c503431b..cac2bf0021c9 100644
+index 33080fdca125..4c42323b0c18 100644
 --- a/tools/perf/util/annotate-arch/annotate-arm64.c
 +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -9,6 +9,8 @@
- #include <regex.h>
- #include "../annotate.h"
- #include "../disasm.h"
-+#include "../annotate-data.h"
-+#include "../debug.h"
+@@ -14,12 +14,38 @@ struct arch_arm64 {
+ 	regex_t jump_insn;
+ };
  
- struct arch_arm64 {
- 	struct arch arch;
-@@ -254,6 +256,88 @@ static int extract_op_location_arm64(const struct arch *arch,
- 	return 0;
- }
- 
-+#ifdef HAVE_LIBDW_SUPPORT
-+static int get_mem_offset(struct annotated_op_loc *op_loc, int type_offset)
++static bool arm64__check_multi_regs(const char *op)
 +{
-+	if (op_loc->addr_mode == INSN_ADDR_POST_INDEX)
-+		return type_offset;
++	char *comma = strchr(op, ',');
 +
-+	return op_loc->offset + type_offset;
-+}
++	while (comma) {
++		char *next = comma + 1;
 +
-+static void adjust_reg_index_state(struct type_state *state, int reg,
-+				   struct annotated_op_loc *op_loc,
-+				   const char *insn_name, u32 insn_offset)
-+{
-+	struct type_state_reg *tsr;
++		next = skip_spaces(next);
 +
-+	if (!has_reg_type(state, reg) ||
-+	    (op_loc->addr_mode != INSN_ADDR_PRE_INDEX &&
-+	    op_loc->addr_mode != INSN_ADDR_POST_INDEX))
-+		return;
++		/*
++		 * Check the first valid character after the comma:
++		 * - If it is '#', it indicates an immediate offset (e.g., [x1, #16]).
++		 * - If it is an alphabetic character, it is highly likely a
++		 *   register name (e.g., x, w, s, d, q, v, p, z).
++		 * - Special cases: Alias and control registers like sp, xzr,
++		 *   and wzr all start with an alphabetic character.
++		 */
++		if (*next && *next != '#' && isalpha(*next))
++			return true;
 +
-+	tsr = &state->regs[reg];
-+	tsr->offset = op_loc->offset + tsr->offset;
-+	tsr->ok = true;
-+
-+	pr_debug_dtp("%s [%x] %s-index %#x(reg%d) -> reg%d", insn_name,
-+		     insn_offset, op_loc->addr_mode == INSN_ADDR_PRE_INDEX ?
-+		     "pre" : "post", op_loc->offset, reg, reg);
-+	pr_debug_type_name(&tsr->type, tsr->kind);
-+}
-+
-+static void update_insn_state_arm64(struct type_state *state,
-+				    struct data_loc_info *dloc, Dwarf_Die * cu_die __maybe_unused,
-+				    struct disasm_line *dl)
-+{
-+	struct annotated_insn_loc loc;
-+	struct annotated_op_loc *src = &loc.ops[INSN_OP_SOURCE];
-+	struct annotated_op_loc *dst = &loc.ops[INSN_OP_TARGET];
-+	struct type_state_reg *tsr;
-+	Dwarf_Die type_die;
-+	u32 insn_offset = dl->al.offset;
-+	int sreg, dreg;
-+
-+	if (annotate_get_insn_location(dloc->arch, dl, &loc) < 0)
-+		return;
-+
-+	sreg = src->reg1;
-+	dreg = dst->reg1;
-+
-+	/* Memory to register transfers */
-+	if (!strncmp(dl->ins.name, "ld", 2)) {
-+		struct type_state_reg dst_tsr;
-+
-+		if (!has_reg_type(state, sreg) ||
-+		    !has_reg_type(state, dreg) ||
-+		    !state->regs[dreg].ok)
-+			return;
-+
-+		tsr = &state->regs[sreg];
-+		tsr->copied_from = -1;
-+		dst_tsr = state->regs[dreg];
-+
-+		/* Dereference the pointer if it has one */
-+		if (dst_tsr.kind == TSR_KIND_TYPE &&
-+		    die_deref_ptr_type(&dst_tsr.type,
-+				       get_mem_offset(dst, dst_tsr.offset),
-+				       &type_die)) {
-+			tsr->type = type_die;
-+			tsr->kind = TSR_KIND_TYPE;
-+			tsr->offset = 0;
-+			tsr->ok = true;
-+
-+			pr_debug_dtp("ldr [%x] %#x(reg%d) -> reg%d",
-+				     insn_offset, dst->offset, dreg, sreg);
-+			pr_debug_type_name(&tsr->type, tsr->kind);
-+
-+			adjust_reg_index_state(state, dreg, dst, "ldr", insn_offset);
-+		}
-+		return;
++		comma = strchr(next, ',');
 +	}
-+}
-+#endif
 +
- const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 				   const char *cpuid __maybe_unused)
++	return false;
++}
++
+ static int arm64_mov__parse(const struct arch *arch __maybe_unused,
+ 			    struct ins_operands *ops,
+ 			    struct map_symbol *ms __maybe_unused,
+ 			    struct disasm_line *dl __maybe_unused)
  {
-@@ -273,6 +357,9 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 	arch->objdump.imm_char		  = '#';
- 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
- 	arch->extract_op_location	  = extract_op_location_arm64;
-+#ifdef HAVE_LIBDW_SUPPORT
-+	arch->update_insn_state		  = update_insn_state_arm64;
-+#endif
+-	char *s = strchr(ops->raw, ','), *target, *endptr;
++	char *s = strchr(ops->raw, ','), *target, *endptr, *comment, prev;
  
- 	/* bl, blr */
- 	err = regcomp(&arm->call_insn, "^blr?$", REG_EXTENDED);
+ 	if (s == NULL)
+ 		return -1;
+@@ -31,29 +57,48 @@ static int arm64_mov__parse(const struct arch *arch __maybe_unused,
+ 	if (ops->source.raw == NULL)
+ 		return -1;
+ 
+-	target = ++s;
++	target = skip_spaces(++s);
++	comment = strchr(s, arch->objdump.comment_char);
++
++	if (comment != NULL)
++		s = comment - 1;
++	else
++		s = strchr(s, '\0') - 1;
++
++	while (s > target && isspace(s[0]))
++		--s;
++	s++;
++	prev = *s;
++	*s = '\0';
+ 	ops->target.raw = strdup(target);
++	*s = prev;
++
+ 	if (ops->target.raw == NULL)
+ 		goto out_free_source;
+ 
+-	ops->target.addr = strtoull(target, &endptr, 16);
+-	if (endptr == target)
+-		goto out_free_target;
+-
+-	s = strchr(endptr, '<');
+-	if (s == NULL)
+-		goto out_free_target;
+-	endptr = strchr(s + 1, '>');
+-	if (endptr == NULL)
+-		goto out_free_target;
+-
+-	*endptr = '\0';
+-	*s = ' ';
+-	ops->target.name = strdup(s);
+-	*s = '<';
+-	*endptr = '>';
+-	if (ops->target.name == NULL)
+-		goto out_free_target;
++	ops->target.multi_regs = arm64__check_multi_regs(ops->target.raw);
++
++	/* Parse address followed by symbol name, e.g. "addr <symbol>" */
++	if (strchr(target, '<') != NULL) {
++		ops->target.addr = strtoull(target, &endptr, 16);
++		if (endptr == target)
++			goto out_free_target;
++
++		s = strchr(endptr, '<');
++		if (s == NULL)
++			goto out_free_target;
++		endptr = strchr(s + 1, '>');
++		if (endptr == NULL)
++			goto out_free_target;
++
++		*endptr = '\0';
++		*s = ' ';
++		ops->target.name = strdup(s);
++		*s = '<';
++		*endptr = '>';
++		if (ops->target.name == NULL)
++			goto out_free_target;
++	}
+ 
+ 	return 0;
+ 
 -- 
 2.34.1
 
