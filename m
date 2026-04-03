@@ -1,109 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26AC93CB2C1;
-	Fri,  3 Apr 2026 15:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A6E33C19E;
+	Fri,  3 Apr 2026 16:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775230313; cv=none; b=UmP39bAAVfBXR30mtBXOPxXyVlu+zHzHu1JFFNYHTJ4yguMnZpIqvjl5frddI/olp1d0kvoMK+hUQeJPpbsfoXGhUMkj9dBxTqKMrnfmRhTH4rDp1C3QLeU/9erS6U0ZpJh+QegDxk7sk2xzyTgThGpBtrSQLxcShVVinwTTo1w=
+	t=1775235042; cv=none; b=rv8BRA1MxKCSKCyfVaFxvunGOnyHQ8GCFcP8pn1BudTQvz0xY+UEQ7W1PlUzSW/js5g4cs0wzOOmcsnVgZRbxxmUAz4tdEAR9pEKQbdsyo3xAzwbV9M8nv28TJpdAwY8jCJq37Q9Y0p4Zc80NOoYQS9SgO3CLeH66U59z5w4dFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775230313; c=relaxed/simple;
-	bh=Mp3ntR/iCOy4NhXi36GY202qgx9qFfoM+yk8F8xJzuI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=CF6fnAJyhVkKOg/Pk2/F5p2Xhnn2hmkuX9UA5g01t2UDlcMNFmnbNxGumFp0vc7bwYLjAp8qFfcVzCtQbbVZcYzHouPm6hEdC5a88+xn9P/GA/UrUkz9rB7iXLcftbbfeXMhZXLOs2VNJcUs+6ooYXOTqAnFkdzGzrhK/pxHEic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FyPlX8x/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775235042; c=relaxed/simple;
+	bh=2xqBDOykXD1kBTCGt2dwa2sovl9p54P5tmdA/MPdlfc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Osd3iudJ/fsz1Ulck1G6Myt2zn4ENnlJ0p2nP26G1cOHrdFCnQ4mUi6pma2X5IueY+pNjPlzMD7QLpe2bM1rJh0uHDTleWFFHK/p00lQsqSj9qJisSR6Kv6uIUFBT5ecSE8kdcocys8077iYmEs5mK0QE5/n7JKYNeXf85k517I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lfvAlwoQ; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FyPlX8x/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A89BC4CEF7;
-	Fri,  3 Apr 2026 15:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775230312;
-	bh=Mp3ntR/iCOy4NhXi36GY202qgx9qFfoM+yk8F8xJzuI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=FyPlX8x/gn+eo5S1Rg7TwWp8VogVOaiYXTlhKqr3DbR6o3KJGZdB19twzdr9LdnIo
-	 lYfQJAfM1Cne3fHPRAHOgAMYEnGkPHwjGYxu9kninU8llAPDyVCpFFAf9uaag69F4+
-	 1XoxXp6ZEH5se8q8V/9jSADRdDbTWwXc6UY0yp6TnC4deKF/adO1Dfs0J69JP5xP9e
-	 OZpgSyvpzFzMiAtUIQseh2yMqJrqKTlokHKn/Tsu1uChF6/UUBrTbFWGK0k1l19fL/
-	 nJjio8MpRxD+SHgb9hY5DqRm03/e5IwZB6ArhofNnzi+Gtmvp9zOkMlsbjVvKDmHts
-	 XRkWmIVEX7liw==
-Content-Type: multipart/mixed; boundary="===============6298061062702668847=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lfvAlwoQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775235041; x=1806771041;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2xqBDOykXD1kBTCGt2dwa2sovl9p54P5tmdA/MPdlfc=;
+  b=lfvAlwoQibRDplOVNQQTbDgoQillwmIczcD+rqrqGtZXTpafVN8+wEFz
+   x/tDaETI5HAl3jpfpR7+VI2OxPgaX2/6tJsmzodRllR9aP41BE5KPJeSS
+   1fi01VzD/v73/12Lu/szibr/M6xjdZX7EavzsdDh6w65Cig6FC9P8qmEK
+   Fbe8YvJGY2NhqgqfP1VYNbduotHBymRDl35HI2ADPd0FFdqYQ0PaYhqOI
+   rco07dH0StjgcjCMOIxaTnVbPdzCTJJBIO5iSzE9zc8XbXcDsy9SSD5lX
+   713RROP/SoMYzIhIsGSnqd99EardHb+RHZngABag9Di8eycA7ORUf4Hxe
+   g==;
+X-CSE-ConnectionGUID: hmtpxipRTuyEtnwuQ4Avpg==
+X-CSE-MsgGUID: OisQuxd2Toe9nBWerRbMiQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="80183167"
+X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
+   d="scan'208";a="80183167"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 09:50:41 -0700
+X-CSE-ConnectionGUID: DtI/I18XSQG81Ka/bjzRHg==
+X-CSE-MsgGUID: K895qlu2R0SOuQ2phOp8Qg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
+   d="scan'208";a="232227048"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa005.jf.intel.com with ESMTP; 03 Apr 2026 09:50:38 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w8hj9-000000009LR-2bbQ;
+	Fri, 03 Apr 2026 16:50:35 +0000
+Date: Fri, 3 Apr 2026 18:50:17 +0200
+From: kernel test robot <lkp@intel.com>
+To: tejas bharambe <tejas.bharambe@outlook.com>,
+	"ocfs2-devel@lists.linux.dev" <ocfs2-devel@lists.linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"mark@fasheh.com" <mark@fasheh.com>,
+	"jlbec@evilplan.org" <jlbec@evilplan.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"syzbot+a49010a0e8fcdeea075f@syzkaller.appspotmail.com" <syzbot+a49010a0e8fcdeea075f@syzkaller.appspotmail.com>,
+	Joseph Qi <joseph.qi@linux.alibaba.com>
+Subject: Re: [PATCH v2] ocfs2: fix use-after-free in ocfs2_fault() when
+ VM_FAULT_RETRY
+Message-ID: <202604031809.3cnzRidc-lkp@intel.com>
+References: <JH0PR06MB66325344CF84BBC38B2973C38950A@JH0PR06MB6632.apcprd06.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <dc2906a8892a559e96eb401e2c334cd01e61027ce9c280a53ab890eed906de36@mail.kernel.org>
-In-Reply-To: <20260403-selftests-bpf_misconfig-v2-6-f06700380a9d@suse.com>
-References: <20260403-selftests-bpf_misconfig-v2-6-f06700380a9d@suse.com>
-Subject: Re: [PATCH v2 06/10] selftests/bpf: Allow test_progs to link with a partial object set
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  3 Apr 2026 15:31:52 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <JH0PR06MB66325344CF84BBC38B2973C38950A@JH0PR06MB6632.apcprd06.prod.outlook.com>
 
---===============6298061062702668847==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi tejas,
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6a3835a58f87..ca64a7678dfe 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
+kernel test robot noticed the following build errors:
 
-[ ... ]
+[auto build test ERROR on brauner-vfs/vfs.all]
+[also build test ERROR on linus/master v7.0-rc6]
+[cannot apply to next-20260403]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> -$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
-> -			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
-> +$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
->  			     $(TRUNNER_LIB_OBJS)			\
->  			     $(TRUNNER_BPFTOOL)				\
->  			     $(OUTPUT)/veristat				\
-> -			     | $(TRUNNER_BINARY)-extras
-> +			     | $(TRUNNER_BINARY)-extras			\
-> +			     $(TRUNNER_TEST_OBJS)
->  	$$(call msg,BINARY,,$$@)
-> -	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
-> +	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^ $$(wildcard $(TRUNNER_TEST_OBJS))) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+url:    https://github.com/intel-lab-lkp/linux/commits/tejas-bharambe/ocfs2-fix-use-after-free-in-ocfs2_fault-when-VM_FAULT_RETRY/20260403-161805
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/JH0PR06MB66325344CF84BBC38B2973C38950A%40JH0PR06MB6632.apcprd06.prod.outlook.com
+patch subject: [PATCH v2] ocfs2: fix use-after-free in ocfs2_fault() when VM_FAULT_RETRY
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260403/202604031809.3cnzRidc-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260403/202604031809.3cnzRidc-lkp@intel.com/reproduce)
 
-Does this change the link order in a way that breaks GNU ld builds?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604031809.3cnzRidc-lkp@intel.com/
 
-Before this patch, $^ expanded to:
+All errors (new ones prefixed by >>):
 
-    TRUNNER_TEST_OBJS TRUNNER_EXTRA_OBJS BPFOBJ TRUNNER_LIB_OBJS ...
-
-After the filter, the linker saw:
-
-    test*.test.o extra*.o libbpf.a lib*.o
-
-After this patch, the filter over "$^ $(wildcard TEST_OBJS)" produces:
-
-    extra*.o libbpf.a lib*.o test*.test.o
-
-BPFOBJ is libbpf/libbpf.a (a static archive). GNU ld scans archives
-once, left to right, pulling in only the members that resolve symbols
-unresolved at that point. With the new ordering, libbpf.a is scanned
-before any test object is seen, so libbpf symbols referenced
-exclusively by test objects will remain unresolved.
-
-For example, ring_buffer__new() (in libbpf's ringbuf.c) is called by
-prog_tests/ringbuf.c, prog_tests/test_ima.c, and others, but is not
-referenced by any TRUNNER_EXTRA_SOURCES file. With this link order,
-the ringbuf.o archive member is never pulled in and the link fails
-with unresolved symbols.
-
-There is no --start-group or --whole-archive in the link flags, and
-LDLIBS (-lelf -lz -lrt -lpthread) does not provide libbpf symbols.
-
-One possible fix would be to append $$(BPFOBJ) after the wildcard
-expansion in the filter expression, or to place the test objects
-before libbpf.a in the argument list.
+>> fs/ocfs2/mmap.c:41:28: error: use of undeclared identifier 'inode'
+      41 |         trace_ocfs2_fault(OCFS2_I(inode)->ip_blkno,
+         |                                   ^
+   1 error generated.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+vim +/inode +41 fs/ocfs2/mmap.c
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23951016185
---===============6298061062702668847==--
+    29	
+    30	
+    31	static vm_fault_t ocfs2_fault(struct vm_fault *vmf)
+    32	{
+    33		struct vm_area_struct *vma = vmf->vma;
+    34		sigset_t oldset;
+    35		vm_fault_t ret;
+    36	
+    37		ocfs2_block_signals(&oldset);
+    38		ret = filemap_fault(vmf);
+    39		ocfs2_unblock_signals(&oldset);
+    40	
+  > 41		trace_ocfs2_fault(OCFS2_I(inode)->ip_blkno,
+    42				  vmf->page, vmf->pgoff);
+    43		return ret;
+    44	}
+    45	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
