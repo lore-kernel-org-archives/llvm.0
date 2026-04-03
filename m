@@ -1,131 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168CC317165;
-	Fri,  3 Apr 2026 06:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1036302146
+	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 07:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775197709; cv=none; b=NIlRMqNd2MN8UhslVq5VpcIX/ifAPqpY9h4WVEoQ4OsfP4zQHxY0MA+ih5UQrSuBNi6vYsuBkLyvWzBgSU2Y0d00sWXo+hxNTvyoD+pI41s/vRA/STDY4zKaYWQhTswTLaagROTDYBJ/f6g3ZudafRoJdzr2j7goqlQXXcfkaeo=
+	t=1775200332; cv=none; b=EIJ7fLR8QFkalYP4DVP2v/bZhWIWk0X78AZMi2yr3pBF1BWTBVo9VrpwMrHT1VDUnoUX65oXXSmHL4iMFJY8ayu3Ag3qLCLwysc5e/T+/j4BwhUtSb7GfF9mCv17F1z6C7TSg5gczCsbd8EeLxmQnPqS8RQN31cqBt6j91D0b/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775197709; c=relaxed/simple;
-	bh=EDKbDUM1va14MDdISCCEcbu9DRzxd+M/3/KumOtFn0U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=azGM6qT7XfCQ3oPwi7wqBjqAQdZH3a49whqrSkgkXRst4DOxoZka6WDIQ48CCaWSLitvLVSJ3CSa7A60S2uKZr3pK+iq3IZ7ngLk0WhS5slFqZ1gVms65Acsgtos1bhLPPa1w/Usj2QnLlKfIdKTBcMRFycoPzSqsasi1K4qp8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DanqkANJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775200332; c=relaxed/simple;
+	bh=lkx/EPu9RCjHFejtE1olO9afGX3m4zBn7OJsN2o0/rQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=KEnR5KHGNGQu7Csvhceao2j2Rqna56Xih7nNKwxgY5pE175wVxYUY6jlypy6EgxHYaumPTDvJsiqm5/CtB97AhZzZ5MRM9LzzdTFDLGbOR5UVe1AO1uo04RPi7OFzXWrzPP24H3jMF+tTwOcaSLYRsJ44EidH4hMXe2kHS8Nujs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gg2cnmJL; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DanqkANJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DEDC4CEF7;
-	Fri,  3 Apr 2026 06:28:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775197708;
-	bh=EDKbDUM1va14MDdISCCEcbu9DRzxd+M/3/KumOtFn0U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DanqkANJAv/p4747ceEo4NiyHCyXTNuIVxqmrdP6rant/XCjDo2CzwtmbOD9Zz2cZ
-	 Eh1/q+uCKk6qJjlC650pXBD5+/r3fIQOOU/ntFVFe/OAlsMpHEJIxpWF4aLmcw0y0z
-	 4MDr+Q9Tew7x3K5tDWu7XmZZO4lbXdFzKEAtJ7rswVZ1K09URrAy7DnSYuODP8TfqC
-	 dzwCh32bZvHNIwUQ6aelmzqJoGessmqA2Q8PmT9LVnw6egPO4nxruQZdo2DPAQvbNo
-	 dEZa2pdtLShjcbl3JNj99YxmX6Qt6UZXG1X59wDLE6qTlZtozzPMAHeEa1SUiJNV7l
-	 oO8uymPhkojww==
-Date: Fri, 3 Apr 2026 15:28:26 +0900
-From: "Harry Yoo (Oracle)" <harry@kernel.org>
-To: Marco Elver <elver@google.com>
-Cc: Vlastimil Babka <vbabka@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
-	Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Alexander Potapenko <glider@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
-	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>,
-	Florent Revest <revest@google.com>,
-	GONG Ruiqi <gongruiqi@huaweicloud.com>,
-	Jann Horn <jannh@google.com>, KP Singh <kpsingh@kernel.org>,
-	Matteo Rizzo <matteorizzo@google.com>
-Subject: Re: [PATCH v1] slab: support for compiler-assisted type-based slab
- cache partitioning
-Message-ID: <ac9eCi0b33CYENpX@hyeyoo>
-References: <20260331111240.153913-1-elver@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gg2cnmJL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775200330;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lhndI3Hm5s+prPYlhDFtLoxdfhuIDRwaBnjrdv4DLiE=;
+	b=Gg2cnmJLK4wNu4nHJJwI2uFM2Z9/76Thrmi25MuDMKDP76bKlQS+24h+8MD90IdxxfDpb9
+	DxiaKbBOS+vuUv050QKQTpj4LLkj0WZSW+YYkzXG2RhyCZh/t/qmZvcY8VNdYox7Q3yKU1
+	JRrnMv37BiF9+otgwJzFXKSIJr4nHKU=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-534-6OZFmnLgM32ijuXKP9AN6A-1; Fri,
+ 03 Apr 2026 03:12:08 -0400
+X-MC-Unique: 6OZFmnLgM32ijuXKP9AN6A-1
+X-Mimecast-MFC-AGG-ID: 6OZFmnLgM32ijuXKP9AN6A_1775200327
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6E7EE19560A1
+	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 07:12:07 +0000 (UTC)
+Received: from [172.20.155.76] (unknown [10.30.44.186])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 12D9818001FE;
+	Fri,  3 Apr 2026 07:12:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc6,
+ upstream-mainline, 5619b098)
+Date: Fri, 03 Apr 2026 07:12:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260331111240.153913-1-elver@google.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <12868.126040303120800178@us-mta-534.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: QV1rrobge1DInd0GDaqd7LY5unnsy406wQtHZHcV-DA_1775200327
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Now somewhat out-of-scope (or at least pre-existing) review comments
-from Sashiko that I think are still worth mentioning...
+Hi, we tested your kernel and here are the results:
 
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -662,9 +662,20 @@ extern kmem_buckets kmalloc_caches[NR_KMALLOC_TYPES];
-> -static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags, unsigned long caller)
-> +static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags, kmalloc_token_t token)
->  {
->  	/*
->  	 * The most common case is KMALLOC_NORMAL, so test for it
-> @@ -672,9 +683,11 @@ static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags, unsigne
->  	 */
->  	if (likely((flags & KMALLOC_NOT_NORMAL_BITS) == 0))
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-Sashiko pointed out KMALLOC_CGROUP caches are not partitioned [1]:
-| Do allocations with the __GFP_ACCOUNT flag completely bypass typed
-| and random partitioning? KMALLOC_NOT_NORMAL_BITS includes __GFP_ACCOUNT.
 
-Right.
+Kernel information:
+    Commit message: Merge tag 'for-7.0-rc6-tag' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/kdave/linux
 
-| If this bit is set, the code bypasses the partitioning logic and routes
-| the allocation to the KMALLOC_CGROUP cache.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2426687180
 
-Right.
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2426687180_ppc64le_kernel
 
-| Since user-controllable objects
-| like msg_msg, file descriptors, and pipes are allocated with __GFP_ACCOUNT,
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
-Right.
 
-| they will all be clustered in the exact same unpartitioned cache.
 
-Right.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-From security perspective do you think it'd be worthwhile to partition
-KMALLOC_CGROUP caches? (I see at least few hundreds of users, unlike
-KMALLOC_RECLAIM where there are only few users).
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Another valid concern from Sashiko [1]:
-| Does this leave reallocation functions like krealloc() and kvrealloc()
-| without allocation token propagation?
-|
-| When an object is reallocated and requires memory expansion, the underlying
-| generic SLUB code allocates a new buffer. Because the token macro is not
-| applied to these realloc paths, __builtin_infer_alloc_token() evaluates
-| locally on a generic size_t variable rather than the original type.
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-I think this is a valid point and worth addressing.
-
-| This causes it to return the fallback token (0), which silently migrates the
-| object from its isolated typed cache to the shared fallback cache
-| (kmalloc-part-00) when resized.
-
-[1] https://sashiko.dev/#/patchset/20260331111240.153913-1-elver%40google.com
-
--- 
-Cheers,
-Harry / Hyeonggon
