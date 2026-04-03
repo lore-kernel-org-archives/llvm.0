@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD4937EFF3;
-	Fri,  3 Apr 2026 08:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5414381AF9;
+	Fri,  3 Apr 2026 08:44:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775205786; cv=none; b=pOCJK25abE3796EBtJyTdYFerIpVeeKag/mn/GH1TqRDDrlvh59Y57HrNMblhHSTfjLu2SQX4XKBMuvEeA7fGswjCteAG9dqVPWhp72579RFeA3kZkZ3O2CWOpVphr8LljT2Zi5dDB3EmvJeQrJReGp8tVvsBCoQ7WELjNgGyz4=
+	t=1775205848; cv=none; b=Kn+J53GZeios58jxeYqF4X3UPaol/8kwj39WrV/frpijll2m7i+WZVWnx77GZM4tjh8iFL4Sgysxrxd97oAU+NXNq0JK+iefNafAKp5AdiyG5doBtWzrc0W4MM3FFOyoLRckG98iIWCttwFNgMfmMQVtB8xg9th+cxc/dm3eI30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775205786; c=relaxed/simple;
-	bh=Qtrota7FcU4wS9AgYs1+25wSQW7a/82QFfSTcR7zoGQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=J2w//QkuQAisdf/tHjJ+twHqQjgIJT6ZpR900rGGTPvOB9pYEfjdDaj3mNsLIL42noatDH4yKIeNRaWKorqPz0Hysdpbh+MZ92aUEuwXuZbYoMA4q3T177h46C++oreUIkxuZrlky2pc8Qjh+SMA4LS10SVYL9EA0ZQ9AIbKQl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D6Ql/0IQ; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1775205848; c=relaxed/simple;
+	bh=pTPqZhOaMgTEXrfFaxlIcHBzK4Roy3McN/4LyZ5dkJU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=koWIApqYFf87yq1Nxnn2eucKX6NnyR6bbUuqL5wWLd03L1b4UAGYaMvsSzho8thLUHf+niMCEZsd/SAJLvdLN37RlKAcLsGvLRqO7grUVjZKLS+F9HD5HiDEDug9yoaJffJMFWkkdI6JjckYw8g3c/YuvLOgN+PYW5g+2u/KSfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SbYJRKr9; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D6Ql/0IQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SbYJRKr9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775205785; x=1806741785;
+  t=1775205845; x=1806741845;
   h=date:from:to:cc:subject:message-id;
-  bh=Qtrota7FcU4wS9AgYs1+25wSQW7a/82QFfSTcR7zoGQ=;
-  b=D6Ql/0IQAt4izdZP4v4WBTdbgDf912WJPEcys5x5exxfZ0JWJacVFuSq
-   OuqQBm9kMdK5ZLq/8ToMSyUjZZmaBpRIV8aAgVlzES0d1lq0UgjInEr6N
-   fBYFZBmAWY5+g6pghVMu596he2/TgVmW0hq1CtN89vLEi8aFfEQMeCFNJ
-   Mhuc9ZlZ7lnfyJRqRQ0QHJxyk5vysVLW5JjvAVmIuK+a/cVW31YNf0sl9
-   1iQ64CBrBEe3gUvuMmFK0Lf+dwvGrdSYcai2Xw4nr3XRQ0jGaUvMWgNgC
-   MoW5fm8vH/H3Tbges4lA0hHhJ4Pn62PXNjyrEblzohR5dY3SAYqgcY2Y/
+  bh=pTPqZhOaMgTEXrfFaxlIcHBzK4Roy3McN/4LyZ5dkJU=;
+  b=SbYJRKr9OwUclILhoxZKJYbtjESfy3R7TWAKALBMRm4NF5fWX3MsgUQp
+   wlUfgbwXsP1LC+77Rqnj4BC54YMEplbXwdTYN/J3IpZoZ0GZmQXqCQoE6
+   OpGMUtqpvJcmMQlS962rf4cy9la1qWlIfTozk1Zvlid2Q7/HmTIuL0cxd
+   OIlxafz0H0A4vpkYwhRyAOjSp6iLMsNyQk7hjPqTWkPmSG7Pw9m11FMu6
+   /zaZi2TtyZyQG/qHMG6a/nIJ+BO0l85J6p0QsKildnMTt8hpvl2etgHXT
+   1b5g1UteexJgqMFi2sWSRfhMFfBQpNqE5i8FhLxW0PnMVfM7o8xM9sIOr
    A==;
-X-CSE-ConnectionGUID: 4i7iLnY5QrC32ZQ7j4t9gw==
-X-CSE-MsgGUID: iTUYLmVjQTGwhdj0B7yLSQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11747"; a="75311903"
+X-CSE-ConnectionGUID: U6eV19TmSp+qEmM1Fe0T+A==
+X-CSE-MsgGUID: 7f7cG0XFREudQzcnfpJVPw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11747"; a="93852256"
 X-IronPort-AV: E=Sophos;i="6.23,157,1770624000"; 
-   d="scan'208";a="75311903"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 01:42:59 -0700
-X-CSE-ConnectionGUID: 3G6fGevZQ0e8KnYQUnEnYQ==
-X-CSE-MsgGUID: SFOqt7veQz+WKY3tOZFQgQ==
+   d="scan'208";a="93852256"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 01:44:01 -0700
+X-CSE-ConnectionGUID: lZkrJq+oTuKH01t2yCrMoA==
+X-CSE-MsgGUID: R5YMWp32S5ucjDJisfmj0A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,157,1770624000"; 
-   d="scan'208";a="250286608"
+   d="scan'208";a="223943439"
 Received: from lkp-server01.sh.intel.com (HELO 064ad336901d) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Apr 2026 01:42:57 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 03 Apr 2026 01:43:59 -0700
 Received: from kbuild by 064ad336901d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w8a7D-0000000013j-2BXB;
-	Fri, 03 Apr 2026 08:42:55 +0000
-Date: Fri, 03 Apr 2026 16:42:12 +0800
+	id 1w8a8C-0000000014k-0f8Q;
+	Fri, 03 Apr 2026 08:43:56 +0000
+Date: Fri, 03 Apr 2026 16:43:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Ming Lei <ming.lei@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-media@vger.kernel.org
-Subject: [sailus-media-tree:pld 32/32]
- drivers/media/pci/intel/ipu-bridge.c:300:33: error: use of undeclared
- identifier 'dev'; did you mean 'adev'?
-Message-ID: <202604022341.WvI89Nd5-lkp@intel.com>
+ linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+ Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+ Nilay Shroff <nilay@linux.ibm.com>
+Subject: arch/um/drivers/ubd_kern.c:780:13: warning: stack frame size
+ (2152) exceeds limit (2048) in 'ubd_device_release'
+Message-ID: <202604030228.nSQwaWdx-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,216 +62,124 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   git://linuxtv.org/sailus/media_tree.git pld
-head:   b8c5b499767feb946c184029ff272276a036623e
-commit: b8c5b499767feb946c184029ff272276a036623e [32/32] media: ipu-bridge: Prioritise _PLD over SSDB in rotation
-config: loongarch-randconfig-002-20260402 (https://download.01.org/0day-ci/archive/20260402/202604022341.WvI89Nd5-lkp@intel.com/config)
+Hi Ming,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5619b098e2fbf3a23bf13d91897056a1fe238c6d
+commit: 98e68f67020ce30e1a4d8e2d05d85a453738dfb8 block: prevent adding/deleting disk during updating nr_hw_queues
+date:   11 months ago
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260403/202604030228.nSQwaWdx-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260402/202604022341.WvI89Nd5-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260403/202604030228.nSQwaWdx-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
+| Fixes: 98e68f67020c ("block: prevent adding/deleting disk during updating nr_hw_queues")
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604022341.WvI89Nd5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604030228.nSQwaWdx-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/media/pci/intel/ipu-bridge.c:300:33: error: use of undeclared identifier 'dev'; did you mean 'adev'?
-     300 |                 acpi_handle_debug(ACPI_HANDLE(dev),
-         |                                               ^~~
-         |                                               adev
-   include/linux/acpi.h:61:61: note: expanded from macro 'ACPI_HANDLE'
-      61 | #define ACPI_HANDLE(dev)                acpi_device_handle(ACPI_COMPANION(dev))
-         |                                                                           ^
-   include/linux/acpi.h:58:51: note: expanded from macro 'ACPI_COMPANION'
-      58 | #define ACPI_COMPANION(dev)             to_acpi_device_node((dev)->fwnode)
-         |                                                              ^
-   include/acpi/acpi_bus.h:524:10: note: expanded from macro 'to_acpi_device_node'
-     524 |                 typeof(__fwnode) __to_acpi_device_node_fwnode = __fwnode; \
-         |                        ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^
-   drivers/media/pci/intel/ipu-bridge.c:287:58: note: 'adev' declared here
-     287 | static u32 ipu_bridge_parse_rotation(struct acpi_device *adev,
-         |                                                          ^
->> drivers/media/pci/intel/ipu-bridge.c:300:33: error: use of undeclared identifier 'dev'; did you mean 'adev'?
-     300 |                 acpi_handle_debug(ACPI_HANDLE(dev),
-         |                                               ^~~
-         |                                               adev
-   include/linux/acpi.h:61:61: note: expanded from macro 'ACPI_HANDLE'
-      61 | #define ACPI_HANDLE(dev)                acpi_device_handle(ACPI_COMPANION(dev))
-         |                                                                           ^
-   include/linux/acpi.h:58:51: note: expanded from macro 'ACPI_COMPANION'
-      58 | #define ACPI_COMPANION(dev)             to_acpi_device_node((dev)->fwnode)
-         |                                                              ^
-   include/acpi/acpi_bus.h:524:51: note: expanded from macro 'to_acpi_device_node'
-     524 |                 typeof(__fwnode) __to_acpi_device_node_fwnode = __fwnode; \
-         |                                                                 ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^
-   drivers/media/pci/intel/ipu-bridge.c:287:58: note: 'adev' declared here
-     287 | static u32 ipu_bridge_parse_rotation(struct acpi_device *adev,
-         |                                                          ^
->> drivers/media/pci/intel/ipu-bridge.c:300:21: error: passing 'typeof ((adev)->fwnode)' (aka 'struct fwnode_handle') to parameter of incompatible type 'const struct fwnode_handle *'; take the address with &
-     300 |                 acpi_handle_debug(ACPI_HANDLE(dev),
-         |                                   ^~~~~~~~~~~~~~~~
-   include/linux/acpi.h:61:46: note: expanded from macro 'ACPI_HANDLE'
-      61 | #define ACPI_HANDLE(dev)                acpi_device_handle(ACPI_COMPANION(dev))
-         |                                                            ^~~~~~~~~~~~~~~~~~~
-   include/linux/acpi.h:58:30: note: expanded from macro 'ACPI_COMPANION'
-      58 | #define ACPI_COMPANION(dev)             to_acpi_device_node((dev)->fwnode)
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/acpi/acpi_bus.h:526:23: note: expanded from macro 'to_acpi_device_node'
-     526 |                 is_acpi_device_node(__to_acpi_device_node_fwnode) ?     \
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   include/acpi/acpi_bus.h:514:54: note: passing argument to parameter 'fwnode' here
-     514 | bool is_acpi_device_node(const struct fwnode_handle *fwnode);
-         |                                                      ^
->> drivers/media/pci/intel/ipu-bridge.c:300:21: error: operand of type 'typeof ((adev)->fwnode)' (aka 'struct fwnode_handle') where arithmetic or pointer type is required
-     300 |                 acpi_handle_debug(ACPI_HANDLE(dev),
-         |                 ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
-     301 |                                   "_PLD exists; not use rotation %u from SSDB\n",
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     302 |                                   ssdb->degree);
-         |                                   ~~~~~~~~~~~~~
-   include/linux/acpi.h:61:46: note: expanded from macro 'ACPI_HANDLE'
-      61 | #define ACPI_HANDLE(dev)                acpi_device_handle(ACPI_COMPANION(dev))
-         |                                                            ^
-   include/linux/acpi.h:58:30: note: expanded from macro 'ACPI_COMPANION'
-      58 | #define ACPI_COMPANION(dev)             to_acpi_device_node((dev)->fwnode)
-         |                                         ^
-   include/acpi/acpi_bus.h:527:4: note: expanded from macro 'to_acpi_device_node'
-     527 |                         container_of(__to_acpi_device_node_fwnode,      \
-         |                         ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
->> drivers/media/pci/intel/ipu-bridge.c:300:21: error: indirection requires pointer operand ('typeof ((adev)->fwnode)' (aka 'struct fwnode_handle') invalid)
-     300 |                 acpi_handle_debug(ACPI_HANDLE(dev),
-         |                 ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
-     301 |                                   "_PLD exists; not use rotation %u from SSDB\n",
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     302 |                                   ssdb->degree);
-         |                                   ~~~~~~~~~~~~~
-   include/linux/acpi.h:61:46: note: expanded from macro 'ACPI_HANDLE'
-      61 | #define ACPI_HANDLE(dev)                acpi_device_handle(ACPI_COMPANION(dev))
-         |                                                            ^
-   include/linux/acpi.h:58:30: note: expanded from macro 'ACPI_COMPANION'
-      58 | #define ACPI_COMPANION(dev)             to_acpi_device_node((dev)->fwnode)
-         |                                         ^
-   include/acpi/acpi_bus.h:527:4: note: expanded from macro 'to_acpi_device_node'
-     527 |                         container_of(__to_acpi_device_node_fwnode,      \
-         |                         ^
-   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
->> drivers/media/pci/intel/ipu-bridge.c:300:21: error: indirection requires pointer operand ('typeof ((adev)->fwnode)' (aka 'struct fwnode_handle') invalid)
-     300 |                 acpi_handle_debug(ACPI_HANDLE(dev),
-         |                 ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
-     301 |                                   "_PLD exists; not use rotation %u from SSDB\n",
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     302 |                                   ssdb->degree);
-         |                                   ~~~~~~~~~~~~~
-   include/linux/acpi.h:61:46: note: expanded from macro 'ACPI_HANDLE'
-      61 | #define ACPI_HANDLE(dev)                acpi_device_handle(ACPI_COMPANION(dev))
-         |                                                            ^
-   include/linux/acpi.h:58:30: note: expanded from macro 'ACPI_COMPANION'
-      58 | #define ACPI_COMPANION(dev)             to_acpi_device_node((dev)->fwnode)
-         |                                         ^
-   include/acpi/acpi_bus.h:527:4: note: expanded from macro 'to_acpi_device_node'
-     527 |                         container_of(__to_acpi_device_node_fwnode,      \
-         |                         ^
-   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   6 errors generated.
+   In file included from arch/um/drivers/ubd_kern.c:26:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from arch/um/drivers/ubd_kern.c:26:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from arch/um/drivers/ubd_kern.c:26:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> arch/um/drivers/ubd_kern.c:780:13: warning: stack frame size (2152) exceeds limit (2048) in 'ubd_device_release' [-Wframe-larger-than]
+     780 | static void ubd_device_release(struct device *dev)
+         |             ^
+   13 warnings generated.
 
 
-vim +300 drivers/media/pci/intel/ipu-bridge.c
+vim +/ubd_device_release +780 arch/um/drivers/ubd_kern.c
 
-   286	
-   287	static u32 ipu_bridge_parse_rotation(struct acpi_device *adev,
-   288					     struct ipu_sensor_ssdb *ssdb,
-   289					     struct v4l2_fwnode_device_properties *props)
-   290	{
-   291		const struct dmi_system_id *dmi_id;
-   292		struct acpi_pld_info *pld;
-   293	
-   294		dmi_id = dmi_first_match(upside_down_sensor_dmi_ids);
-   295		if (dmi_id && acpi_dev_hid_match(adev, dmi_id->driver_data))
-   296			return 180;
-   297	
-   298		if (acpi_get_physical_device_location(adev->handle, &pld) &&
-   299		    pld->rotation < 8) {
- > 300			acpi_handle_debug(ACPI_HANDLE(dev),
-   301					  "_PLD exists; not use rotation %u from SSDB\n",
-   302					  ssdb->degree);
-   303			return 0;
-   304		}
-   305	
-   306		if (props->rotation != V4L2_FWNODE_PROPERTY_UNSET)
-   307			return props->rotation;
-   308	
-   309		switch (ssdb->degree) {
-   310		case IPU_SENSOR_ROTATION_NORMAL:
-   311			return 0;
-   312		case IPU_SENSOR_ROTATION_INVERTED:
-   313			return 180;
-   314		}
-   315	
-   316		acpi_handle_warn(acpi_device_handle(adev),
-   317				 "Unknown rotation %d. Assume 0 degree rotation\n",
-   318				 ssdb->degree);
-   319		return 0;
-   320	}
-   321	
+^1da177e4c3f415 Linus Torvalds     2005-04-16  779  
+2e3f5251ac71687 Jeff Dike          2007-05-06 @780  static void ubd_device_release(struct device *dev)
+2e3f5251ac71687 Jeff Dike          2007-05-06  781  {
+5bee35e5389f450 Tiwei Bie          2024-11-05  782  	struct ubd *ubd_dev = container_of(dev, struct ubd, pdev.dev);
+2e3f5251ac71687 Jeff Dike          2007-05-06  783  
+4e6da0fe8058df9 Richard Weinberger 2017-11-26  784  	blk_mq_free_tag_set(&ubd_dev->tag_set);
+2e3f5251ac71687 Jeff Dike          2007-05-06  785  	*ubd_dev = ((struct ubd) DEFAULT_UBD);
+2e3f5251ac71687 Jeff Dike          2007-05-06  786  }
+2e3f5251ac71687 Jeff Dike          2007-05-06  787  
+
+:::::: The code at line 780 was first introduced by commit
+:::::: 2e3f5251ac716879df6b6271f243f657c6e02e9a uml: drivers get release methods
+
+:::::: TO: Jeff Dike <jdike@addtoit.com>
+:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
