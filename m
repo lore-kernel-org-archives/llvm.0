@@ -1,128 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A6E33C19E;
-	Fri,  3 Apr 2026 16:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2B93CA4B3
+	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 17:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775235042; cv=none; b=rv8BRA1MxKCSKCyfVaFxvunGOnyHQ8GCFcP8pn1BudTQvz0xY+UEQ7W1PlUzSW/js5g4cs0wzOOmcsnVgZRbxxmUAz4tdEAR9pEKQbdsyo3xAzwbV9M8nv28TJpdAwY8jCJq37Q9Y0p4Zc80NOoYQS9SgO3CLeH66U59z5w4dFs=
+	t=1775238129; cv=none; b=hLdMoUc294RVot7D4djGgIrP5fD8cf/nRJPC1/HlU4R+DaRe1F4sIIt+fyHGnCo7yOQtbSernyEYxdRIJofe4WSykOsGaBm6GiqBE0Ozs+ZRzDQ+V5bZVnlzxpa+dOpykj5qpDYUBi0p+vohGX+DOxPHdSr5PJXyLpJtWYdyhbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775235042; c=relaxed/simple;
-	bh=2xqBDOykXD1kBTCGt2dwa2sovl9p54P5tmdA/MPdlfc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Osd3iudJ/fsz1Ulck1G6Myt2zn4ENnlJ0p2nP26G1cOHrdFCnQ4mUi6pma2X5IueY+pNjPlzMD7QLpe2bM1rJh0uHDTleWFFHK/p00lQsqSj9qJisSR6Kv6uIUFBT5ecSE8kdcocys8077iYmEs5mK0QE5/n7JKYNeXf85k517I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lfvAlwoQ; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1775238129; c=relaxed/simple;
+	bh=u1llM5/OrCB7Ne+7b5e0C1YVEv+YDkK8qzqeTbQ6qnA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MsdGyzrYuAOs+upNXdVNw5h0N0fRO2riTK+PouXxJHMdTFhGQTj5Z/WTQ8WRVxYh6VVmN9VGgeT7OC9zXUoRucriK/gu2zgTwNigr+08OE04UIHLn1VM6HaIl81fztMk938EL3HNKBfJQnsAWgmywKp2YcHO5tZ8bRgRdF/pRCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=faqsywcL; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lfvAlwoQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775235041; x=1806771041;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2xqBDOykXD1kBTCGt2dwa2sovl9p54P5tmdA/MPdlfc=;
-  b=lfvAlwoQibRDplOVNQQTbDgoQillwmIczcD+rqrqGtZXTpafVN8+wEFz
-   x/tDaETI5HAl3jpfpR7+VI2OxPgaX2/6tJsmzodRllR9aP41BE5KPJeSS
-   1fi01VzD/v73/12Lu/szibr/M6xjdZX7EavzsdDh6w65Cig6FC9P8qmEK
-   Fbe8YvJGY2NhqgqfP1VYNbduotHBymRDl35HI2ADPd0FFdqYQ0PaYhqOI
-   rco07dH0StjgcjCMOIxaTnVbPdzCTJJBIO5iSzE9zc8XbXcDsy9SSD5lX
-   713RROP/SoMYzIhIsGSnqd99EardHb+RHZngABag9Di8eycA7ORUf4Hxe
-   g==;
-X-CSE-ConnectionGUID: hmtpxipRTuyEtnwuQ4Avpg==
-X-CSE-MsgGUID: OisQuxd2Toe9nBWerRbMiQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="80183167"
-X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="80183167"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 09:50:41 -0700
-X-CSE-ConnectionGUID: DtI/I18XSQG81Ka/bjzRHg==
-X-CSE-MsgGUID: K895qlu2R0SOuQ2phOp8Qg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="232227048"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa005.jf.intel.com with ESMTP; 03 Apr 2026 09:50:38 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w8hj9-000000009LR-2bbQ;
-	Fri, 03 Apr 2026 16:50:35 +0000
-Date: Fri, 3 Apr 2026 18:50:17 +0200
-From: kernel test robot <lkp@intel.com>
-To: tejas bharambe <tejas.bharambe@outlook.com>,
-	"ocfs2-devel@lists.linux.dev" <ocfs2-devel@lists.linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"mark@fasheh.com" <mark@fasheh.com>,
-	"jlbec@evilplan.org" <jlbec@evilplan.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"syzbot+a49010a0e8fcdeea075f@syzkaller.appspotmail.com" <syzbot+a49010a0e8fcdeea075f@syzkaller.appspotmail.com>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>
-Subject: Re: [PATCH v2] ocfs2: fix use-after-free in ocfs2_fault() when
- VM_FAULT_RETRY
-Message-ID: <202604031809.3cnzRidc-lkp@intel.com>
-References: <JH0PR06MB66325344CF84BBC38B2973C38950A@JH0PR06MB6632.apcprd06.prod.outlook.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="faqsywcL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775238127;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MRv/apSfdxrXrfWuixlAT5ggXLesNLvR7frUPh4/BU0=;
+	b=faqsywcL3TWS1tYJ/bLmHtxWYY/bfavjqsQ9pZV2r08MiD3SyMrr16Z5BiCSrETLomclmG
+	iJGrjcOxCYwbW6WuGnsoq3QYK8tQD1NQVJ5NKHLsYofWOgk6QL/WwsoaFusAYSUV8b1AtY
+	zriyA1lLh0D4VMa775ItdjlGbUY+TxM=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-56-jGWY8zzmMCOtpvReg3vaFw-1; Fri,
+ 03 Apr 2026 13:42:05 -0400
+X-MC-Unique: jGWY8zzmMCOtpvReg3vaFw-1
+X-Mimecast-MFC-AGG-ID: jGWY8zzmMCOtpvReg3vaFw_1775238125
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DB6C219560B2
+	for <llvm@lists.linux.dev>; Fri,  3 Apr 2026 17:42:04 +0000 (UTC)
+Received: from [172.20.155.76] (unknown [10.30.44.186])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8DDC01955D84;
+	Fri,  3 Apr 2026 17:42:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc6,
+ upstream-mainline, d8a9a4b1)
+Date: Fri, 03 Apr 2026 17:42:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <JH0PR06MB66325344CF84BBC38B2973C38950A@JH0PR06MB6632.apcprd06.prod.outlook.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <16179.126040313420502237@us-mta-56.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: Hf21PyC_55MJBTb9UO9pdcMlG5D1_oK0wqx73jM5BlA_1775238125
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi tejas,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on linus/master v7.0-rc6]
-[cannot apply to next-20260403]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/tejas-bharambe/ocfs2-fix-use-after-free-in-ocfs2_fault-when-VM_FAULT_RETRY/20260403-161805
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/JH0PR06MB66325344CF84BBC38B2973C38950A%40JH0PR06MB6632.apcprd06.prod.outlook.com
-patch subject: [PATCH v2] ocfs2: fix use-after-free in ocfs2_fault() when VM_FAULT_RETRY
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260403/202604031809.3cnzRidc-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260403/202604031809.3cnzRidc-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604031809.3cnzRidc-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/ocfs2/mmap.c:41:28: error: use of undeclared identifier 'inode'
-      41 |         trace_ocfs2_fault(OCFS2_I(inode)->ip_blkno,
-         |                                   ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +/inode +41 fs/ocfs2/mmap.c
+Kernel information:
+    Commit message: Merge tag 'v7.0-rc6-smb3-client-fix' of git://git.samba=
+.org/sfrench/cifs-2.6
 
-    29	
-    30	
-    31	static vm_fault_t ocfs2_fault(struct vm_fault *vmf)
-    32	{
-    33		struct vm_area_struct *vma = vmf->vma;
-    34		sigset_t oldset;
-    35		vm_fault_t ret;
-    36	
-    37		ocfs2_block_signals(&oldset);
-    38		ret = filemap_fault(vmf);
-    39		ocfs2_unblock_signals(&oldset);
-    40	
-  > 41		trace_ocfs2_fault(OCFS2_I(inode)->ip_blkno,
-    42				  vmf->page, vmf->pgoff);
-    43		return ret;
-    44	}
-    45	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2427483782
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2427483782_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
