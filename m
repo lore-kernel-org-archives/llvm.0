@@ -1,132 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76BB3D6CCE;
-	Thu,  2 Apr 2026 22:57:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4002826ACC;
+	Fri,  3 Apr 2026 02:06:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775170652; cv=none; b=mQdjQUEAUTgFH9DhQBkqFl1NYfi2IGle5lWpgKALeNRW5Jf0yWf+dpbdFhCdBs+Z9lFusoBx/aaJ/uXjwm14Dx4kCC29OcoBfs8TjbugAYnk2jqLYWJ80TkchF1p2wee15yvK6i0cC9ACmlCgm07DNZyA0FDQHKgUMOzqW5B2pI=
+	t=1775181994; cv=none; b=up6mnOVQi6AH83j4OoOJpdnXMRnDTpZHVzSGzt3HjEQWIArpbA+lr0gcZ0rd2LwK7mptfMHpN/UxIOwbni6JvBKKshpJ0tP8r/C/MpN7jh5RUWFtEY4kHIeFG9bw8llwBiNnNYaUhjTKuSWWmN9OM13Pvf18Rbbe8NHWjB1ofBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775170652; c=relaxed/simple;
-	bh=15K8mXYMWJzSX7LYoqjquZFaGkWetpo55iEai3+MFH8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GJTdHdRiQmOc31en90OsV+jWtSFS3FVjNNJpuNY9ol1AUQDmdKecmD+7IZRlldZjTJPDnH+pq64FFFGSJVm6qeln+9IwXmqp2PUizbxck0aV46qSU6ixmcNieRq0Q3MEEre/Q2UhPRodwXat4kHwFE4q/AZG9xvRQ8CY6ZXak6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K0l2V328; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1775181994; c=relaxed/simple;
+	bh=1W4tjBqf5BvAuPYHUBY1miuc02LtiNRpTu/6mPCNpFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NWuLA0T3MQ2K8Y+LU2DI5e5DvMOCEHqxZBuETReWRTJdqf/EUn2nae0XVnY/rujQPEupWbiqEBGajzOxM6bVw2UrS/1Iivwd3+LKVwf14n9wqIG7jyqf9lIK/x8BMpiRxnvH3gG09jPV41uoGEDOf/qMa7uotHbMK/ifs3wA78o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=JwAu2icc; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K0l2V328"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775170650; x=1806706650;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=15K8mXYMWJzSX7LYoqjquZFaGkWetpo55iEai3+MFH8=;
-  b=K0l2V328izJFTWpVnKaqLLI2Fr94OWrUH+Z+thAlhKyhzGbPOnOZuxTo
-   VjbBXNTJm6ljWkQj7/FpHxX+ngJSbBFBGjSmeqMo2djIh9DXaJUNqZhaJ
-   coiNomsIu95dq5TGUhGk5es0DbTLStpz45rOJ1vC6gwWAGc21tX6y9oNn
-   B4q/HIx725roB5971KObTR8LSfsftpw79dVPs+4ekHYrDUv8Zt85QZbPC
-   Hw703mYtJXvSa9HCUQBlLzAJEqqHXsikPB9xmC64vtFZXwF1ZpS+muYln
-   lOZ9x4/Jy1lzXQSQGFwL67BZ3/A1GtVh+Ug4I8I+47G1dIDgG4r1whm/y
-   g==;
-X-CSE-ConnectionGUID: p2beZRa6Tbeho1Np0Ge1tw==
-X-CSE-MsgGUID: O/xvtzycRCetHrh5t9irKg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11747"; a="76304290"
-X-IronPort-AV: E=Sophos;i="6.23,156,1770624000"; 
-   d="scan'208";a="76304290"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 15:57:29 -0700
-X-CSE-ConnectionGUID: WO6gRj2yTGG9Demu2aQJcA==
-X-CSE-MsgGUID: bNGBqwP6SKys7vrNq2UD7Q==
-X-ExtLoop1: 1
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa003.fm.intel.com with ESMTP; 02 Apr 2026 15:57:27 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w8Qya-000000009B7-3Fm6;
-	Thu, 02 Apr 2026 22:57:24 +0000
-Date: Fri, 3 Apr 2026 00:56:47 +0200
-From: kernel test robot <lkp@intel.com>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
-	brgl@kernel.org, robh@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-	mani@kernel.org,
-	Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 3/3] power: sequencing: pcie-m2: Guard the helper
- functions making use of PCI bus notifier
-Message-ID: <202604030008.5exLAPFm-lkp@intel.com>
-References: <20260401070735.107162-4-manivannan.sadhasivam@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="JwAu2icc"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 632Nfkuu3751116;
+	Fri, 3 Apr 2026 02:05:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=rQA2c0EYdpJ+hfmV5uQX+x/eS6J7CMXiAI3R4R8GMgo=; b=
+	JwAu2icc0n6otSL+QqMZH5ABHWLK9A7283OEQ5PVe7yypXNAqsE+PFIQaSfmrhSj
+	ID2PdIsPjlE2Zmw3PfXvJaaikdFvc7YJJKldLN1Rjm16cTScllGtbv//5/exSb2+
+	KFhF0kwn7doxpCWVF9RJc167atndvButy3HpgX4oki5NRFGsfA1UqGaS85RDgS+/
+	VbD5NQQhNdoWYHRD/jzZYaUc/a85Dmt0uROlSa+WXvRqZFin/Vko+nQrS06SUh5J
+	dmnR7vieBaFFq3/7lhh1NQ9gAC62iusyRqHi4UlBkSJ3yHKoy1ePlURlHmu6d8Z8
+	5DrLmQfJvIden05Jr8Bl3w==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d65s11gad-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 03 Apr 2026 02:05:41 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 6330mRh9029210;
+	Fri, 3 Apr 2026 02:05:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4d65eddp4e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 03 Apr 2026 02:05:40 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 63325cqZ017364;
+	Fri, 3 Apr 2026 02:05:39 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4d65eddp33-2;
+	Fri, 03 Apr 2026 02:05:39 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: Bradley Grove <linuxdrivers@attotech.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] scsi: esas2r: fix __printf annotation on esas2r_log_master()
+Date: Thu,  2 Apr 2026 22:05:25 -0400
+Message-ID: <177517593428.3522679.17660227397593974614.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260323100027.1975646-1-arnd@kernel.org>
+References: <20260323100027.1975646-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260401070735.107162-4-manivannan.sadhasivam@oss.qualcomm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-02_04,2026-04-02_05,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 mlxlogscore=922 phishscore=0 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
+ definitions=main-2604030017
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAzMDAxNyBTYWx0ZWRfXwv8RfEZpLQAQ
+ quzNcEj4OrMFeAn/SsGJUGoocuftV47wFqTntziCWMlEPLWJkUgu5n85i7W77hOpgGNDYgvC2f7
+ 5mBuKQ0ta6Dj3YVZAXyRC1xE2mL8drv+vgInImuzzVXgXs7yEt0UZodqkBkXq68oJ3/63TPSmZZ
+ /O2YDttwtqyYOlT1ak+Lazm3SzLlJi2b58Daimm8l7iaUSyduZNPUVlBA6jJ5XcUaFT3fqgeUbZ
+ KjFSrV9pwMzvrhWHB6NOGgLODHgKPOaE20luE3+GNO24cW0WI0QryUIrSt/aONhac2x9KLYocou
+ mXRFvApPFr6IhhvlUxqM4eiZnks4fLYCrbOoVgYIx1UHgLfe4KuLridQt0aHflVCnsOLrr8AJHs
+ WuZjNqzk8trpQHJzq0HnZJ2W0EOrlg2OrSe9Mb6HWAyP5hJyyS7AucmbD+/9ymYlPvw1DSovpol
+ im7+XQ01Fwa5yp9hn/g==
+X-Proofpoint-ORIG-GUID: CWRzmXaqJyZyhxzv4bgjpd97QZMjIkz4
+X-Authority-Analysis: v=2.4 cv=BvOQAIX5 c=1 sm=1 tr=0 ts=69cf2075 b=1 cx=c_pps
+ a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=o5oIOnhZENCTenyL_yNV:22 a=VwQbUJbxAAAA:8
+ a=Er6j1MMAQklbVYpzFGkA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: CWRzmXaqJyZyhxzv4bgjpd97QZMjIkz4
 
-Hi Manivannan,
+On Mon, 23 Mar 2026 10:57:39 +0100, Arnd Bergmann wrote:
 
-kernel test robot noticed the following build warnings:
+> clang-22 started warning about functions that take printf format strings:
+> 
+> drivers/scsi/esas2r/esas2r_log.c:160:50: error: diagnostic behavior may be improved by adding the 'format(printf, 3, 0)' attribute to the declaration of 'esas2r_log_master' [-Werror,-Wmissing-format-attribute]
+>   121 |                 retval = vsnprintf(buffer, buflen, format, args);
+>       |                                                                ^
+> drivers/scsi/esas2r/esas2r_log.c:121:12: note: 'esas2r_log_master' declared here
+>   121 | static int esas2r_log_master(const long level,
+>       |            ^
+> 
+> [...]
 
-[auto build test WARNING on linux-next/master]
-[also build test WARNING on linus/master v6.16-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Applied to 7.1/scsi-queue, thanks!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Manivannan-Sadhasivam/serdev-Add-missing-stubs-for-serdev-APIs-when-CONFIG_SERIAL_DEV_BUS-is-not-selected/20260402-225703
-base:   linux-next/master
-patch link:    https://lore.kernel.org/r/20260401070735.107162-4-manivannan.sadhasivam%40oss.qualcomm.com
-patch subject: [PATCH 3/3] power: sequencing: pcie-m2: Guard the helper functions making use of PCI bus notifier
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260403/202604030008.5exLAPFm-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260403/202604030008.5exLAPFm-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604030008.5exLAPFm-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/tty/tty_port.c:20:
->> include/linux/serdev.h:268:83: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     268 | static inline struct serdev_device *serdev_device_alloc(struct serdev_controller *)
-         |                                                                                   ^
-   include/linux/serdev.h:272:59: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     272 | static inline int serdev_device_add(struct serdev_device *)
-         |                                                           ^
-   include/linux/serdev.h:276:63: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     276 | static inline void serdev_device_remove(struct serdev_device *) {}
-         |                                                               ^
-   include/linux/serdev.h:284:67: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     284 | static inline int serdev_controller_add(struct serdev_controller *)
-         |                                                                   ^
-   include/linux/serdev.h:288:71: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     288 | static inline void serdev_controller_remove(struct serdev_controller *) {}
-         |                                                                       ^
-   5 warnings generated.
-
-
-vim +268 include/linux/serdev.h
-
-   267	
- > 268	static inline struct serdev_device *serdev_device_alloc(struct serdev_controller *)
-   269	{
-   270		return NULL;
-   271	}
-   272	static inline int serdev_device_add(struct serdev_device *)
-   273	{
-   274		return -ENODEV;
-   275	}
-   276	static inline void serdev_device_remove(struct serdev_device *) {}
-   277	
+[1/1] scsi: esas2r: fix __printf annotation on esas2r_log_master()
+      https://git.kernel.org/mkp/scsi/c/67557418905b
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Martin K. Petersen
