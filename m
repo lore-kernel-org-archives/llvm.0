@@ -1,156 +1,105 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011059.outbound.protection.outlook.com [52.101.57.59])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604AF39B4BC;
-	Fri,  3 Apr 2026 09:56:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775210210; cv=fail; b=EMCeyieABWOLFxe8kWPnBXwbO3YsJhBIm1gw1HJA2LHP2rDkHxrwXC2zygzGQRfR1N4w80YAgJRxqcT5S0ku6jt0beuJjJm6/aME9eIUhk1nkZnn5VUa4d7qtwvOpASYlI4PB293GdP90sd6LRYzqnOGyaCwq5yy/Vx8x+HQ1zg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775210210; c=relaxed/simple;
-	bh=dUOE+A3ZF64KYQA5eiNPQhtFU+848elqHlv0N3kndbU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=RLjNRqSyCYByStcD3EtfiQ/judnfwC9ueQ6ev9jcUT82uYGVSIjojCxLiHil0WRVfdQT1lLNESy5jjMXI75aNgna0Heamr+KXNUZq7y8qDTv8qKp3hVe4HmXXT5bu1BM/uphonEFDxI/G8b2ePkYbCYwW9kb5VM9WfRd3H1lvjk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=EjjZdOcS; arc=fail smtp.client-ip=52.101.57.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDED3AD539;
+	Fri,  3 Apr 2026 13:38:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775223519; cv=none; b=fZEvq1F91n2FaGieG9oCJ8fijIBjMA8XdM8zVJ7YsQPXfX4bN5sR3WZ+43bR4iFWrefSqT3P5vHK/tT8OUdLneRJpaIIuUy0XQyVzoDaAzP5iWNxprPOj6ZSDUeLp9zJu3zIk735FY4dh54sDZ7q6i23gzLRdjGRsZtK9L2GOhA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775223519; c=relaxed/simple;
+	bh=AwOA4SLRxZRisk1NDPzgFXl9cwWqTfVaYRf2Q2i40g0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iysh5fTaVrHoE2EA6jEpD08R0QjlnmEEW09CoJgLFADOTPPFssJEe+DQMk/W3QFSP587giEx5GIbTpYC7owYKmo6cGH9qxny9M4gOCckFJFlNBsE1dEald+Lx/QcP7Ieq3y7NHNcysotDKbmZK7vTPTea8vwBoJ2H/PpK3/DWk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SwRVa8gE; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="EjjZdOcS"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rq7aJPHNelb9E6mq4PxN9V4kVcydabaGNkd5h2u/VRcAHJmvzmjTt2zgxyngd1QaSzAMJy8EcUiEyzjq5t7aPbayvlx9q+100Sd7NiPiGYfTzsKUJKm1mNIqF/woqaFOI5gbcN7iQA8SuXenx93DEWf0TdofgFsFOT9LhT6xv+nGNdfqc/fJhbhMMZ/NL0s0ZiKZ5jJcRA7iQGLQ9fp09F0pNIkgpXPNbWnJCf12tZutCngz64+KS2Vi967g9Gf2WK7guq2cdkk5LwdUIGmCZActJVAh45hOnxNGHG/IkFtuPp8ZxUvKb7g3i/nxUgezJY1sLp03Cbn8X7pBkvt/Pw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SzxX+pwHU4KPonECuRk13YVR6oijexhs/wEvnCyItqU=;
- b=Cs6Ls+Jtr/CXMq//JinoepIYUV5tg3TPu/C1VXpBQXK2rbjianvEUut42jyDv8lptRSx8AJMMaMAKrWUQmkOpPmQB1GQOOJ/v4sFjOB/qsRJpznsqi7cmbZSP+fI7oQ3Ywf+l76G29VqS9cHmfJVbIlvU2bThSyuLMPx+NfyViyTpA6k9o5rWYJZdBaBJgEHIOQsXvNvlGjgo9x/CDikmH5WXA91vlCA3NruAHCj0T8pimLAkHY0fTRwmMJPD1YwthSVAUK/lP63bb/E0yS7SJ43RRU2rBNO/VPwidjD+PfFFvRxTRfcaViSNjB3M3wn3hK28ASUnvbHkMFZdXEo7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SzxX+pwHU4KPonECuRk13YVR6oijexhs/wEvnCyItqU=;
- b=EjjZdOcS6fUUQT+lJ+sTKvlw2hWDHxwwAtF4weV0LdEwL/VHpMQL3LeZq2LX1mEh8tHRayVAZ9dF7lH2yPKzIGJX85MtgmXjQOo87y+TbiFk94n7oAGoIOTM38+ARW42gK5aAuW8ojRofH8wGjuzq+MNfILbR5DIobLM0EGdCfHaWeWG+x0obdfiuf+T0NJMAqTCHWbbjTyZZniCxDFHWjrjLlQ8bSUq6oaIpQLUlaxItx1xj8DqWkDOq9GcolAjL+FUSmd8YILPqBufoSRoS3dWrA4hKM/mKm2dssnumTM8Mbgh97W8s3MljJ8gZDhGmoZvrAjL+2kCYVFuh8HVvA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by DM4PR12MB5746.namprd12.prod.outlook.com (2603:10b6:8:5d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.20; Fri, 3 Apr
- 2026 09:56:39 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%6]) with mapi id 15.20.9769.016; Fri, 3 Apr 2026
- 09:56:39 +0000
-Date: Fri, 3 Apr 2026 12:56:29 +0300
-From: Ido Schimmel <idosch@nvidia.com>
-To: Zijing Yin <yzjaurora@gmail.com>
-Cc: netdev@vger.kernel.org, bridge@lists.linux.dev, razor@blackwall.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com, morbo@google.com,
-	justinstitt@google.com, petrm@nvidia.com,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net] bridge: guard local VLAN-0 FDB helpers against NULL
- vlan group
-Message-ID: <20260403095629.GA65129@shredder>
-References: <20260402140153.3925663-1-yzjaurora@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260402140153.3925663-1-yzjaurora@gmail.com>
-X-ClientProxiedBy: TL0P290CA0012.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:5::12) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SwRVa8gE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775223517; x=1806759517;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AwOA4SLRxZRisk1NDPzgFXl9cwWqTfVaYRf2Q2i40g0=;
+  b=SwRVa8gE8RrrnWRL23Mlof6il78o6HToUSWt4Z4FuVWiKPqQIviCOtV4
+   +ggybPEMLvMGjYC0NBW8+mVklIqFyV0318TpSmrZg/p8rR3l6lXDvbAfj
+   Em16hf9Cqcsgf3g7uGsogwbkxwm6GvRmJxMkQNbsDvoq2q+2cXKGV/KqM
+   N8oT+DyCQAKFUHeCNbrH+rilrFN82FmOHt5ouBFlG9V3ljXXqkif63DMI
+   GUFgq6XFtSFsD6bHXy1SKd004YoO4O5cRtD9kbMG0Kr9sa6mHkp515U+v
+   wsj229rxsDj8FEhJu1czjwhJ5Y9jxGf6X7Crh8R9PPcwx/xJHMUG22oe8
+   A==;
+X-CSE-ConnectionGUID: WuVgYYlXRUOOMohRZkU+UQ==
+X-CSE-MsgGUID: QE3ZCjQ7SLKeSI8nBiE4Fw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11747"; a="63834064"
+X-IronPort-AV: E=Sophos;i="6.23,157,1770624000"; 
+   d="scan'208";a="63834064"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 06:38:37 -0700
+X-CSE-ConnectionGUID: 8ZosNzQ5Rc+K9dhmTDnJCw==
+X-CSE-MsgGUID: HrPefFyFRrqRqL3YvD0pCA==
+X-ExtLoop1: 1
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by fmviesa003.fm.intel.com with ESMTP; 03 Apr 2026 06:38:35 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w8ejJ-000000009JF-0gPc;
+	Fri, 03 Apr 2026 13:38:33 +0000
+Date: Fri, 03 Apr 2026 15:37:50 +0200
+From: kernel test robot <lkp@intel.com>
+To: Rong Xu <xur@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>, Masahiro Yamada <masahiroy@kernel.org>
+Subject: Makefile:2254: *** extraneous 'endif'.  Stop.
+Message-ID: <202604031539.Wm2bolgE-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|DM4PR12MB5746:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2db2f7d0-c108-4442-d676-08de91674ce6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	gZ8xPir8vfYhA6PTGOXV5IZbwJ5D6CRuYKRpVNkOqCjaA+aVf2uOt9RbJEWuJqE0zJGiUyh/ggHydD8CY/v+MT+AUzcar80wVH/B699F8uxr0F3MsEBR64gg8iqqAajHnsGk5LqubasOkpupGPb6uKjmKO0sIh24/wOtF8eMtKUfgG2pQw2c+ZNGqP5+YCLDQxeYFXWmm5iFD6SwTfYnIjFO/fwAl/iHdPOcGdNKriBAmNrT6+qzgeFLxTEM++gri+fhR1n81VmFq9RtNoft/bdMXjerPNjzSKPi0adwc9j5VfUyKb0xyZooInZ4uITXZw4/vj6ARmF9wTrCk2DYimZ+m4CArLE6JNTe1a6XJzDSnWR6C9BOpeoToadOGhHNdUeg+89D4nHWQefe5fjYxavS/4IsjPkldOPsrQKD+L4eJbv/qN8z8Ybwv3HRnqp4EutAasd7bRr5y2ePYDl/SIo1zFPL6lNHLIIMWBtxz4ahKxPMMV1Jj4I5Y7NKHjch5T9/Pu9izRTYFO5auSB7EY4RyNW4Tpa67C4XDGQRc0zxBvD2XcAfr/BdLKHqOuAZKKAowMC9z2jPegUZTHX4fiTl7bXnoutGMaqDyUvXf+AsPBmN8u2/EhREHyyDdMjl+a0jI90e290im+XDyHf5S5k85GiIo7WruLboN7FdQwHH7QLx8MPhW8iQh9VaL9smEIl0I3RwNPVlKgItBcqHfmi25v/WE8OzsuAYLRLTQZY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?hVAOfMiQjvd2PaPNhm+F8vUvZUBm9OPHZEw6ZrBdHD7CUijp3OOtw6fyTFEn?=
- =?us-ascii?Q?/m61vFVbDR3W3xzXBe7VJlj4BCYqQjFR8UUufA5wS2Bu5d7tfbS3Du4Izd8M?=
- =?us-ascii?Q?cdgR1dR6X7hKWykkpE3odwe8tf/Qj0jKmoIkxGJ1MjlKY4B8AB7ZpN/iv6f9?=
- =?us-ascii?Q?eVeLBUkwq72Xm8PO9KASJpp8UBXT6WhLpKTWk725NnakXWiKynH8NkXmx1b4?=
- =?us-ascii?Q?RRt8XP53BLYsSSd2PBbiQ1l3624vidAtNptAyJJq4S6i4EHNGQC9jeqU8k7I?=
- =?us-ascii?Q?QwhZJnm1zYwZjE0UP2Q4wXWj+sHDS5MnqpYctek+LLfl+KE7UUfSDNWBCKS9?=
- =?us-ascii?Q?9JRa8kZBCzdBnwAdNJnN6W7xGgHHYpaYIf7kRycjowHPLpQwureGrsg+pbmZ?=
- =?us-ascii?Q?HOLVY4oylIy6hSMsc3ClV46ZszEOb5Jn9DUchg5A661Gr94beyzWNPJ9BaCL?=
- =?us-ascii?Q?0GCh0j8dA3OKqGIu/4x6ql3EMW4fhHU3m2Ue2k5jD4keA8HMJQ3WZrlEuOon?=
- =?us-ascii?Q?LcMrPmFm3VOENEdlQQN1APiKb45JFbngXw0+T5/y9gx2thZ1z0viBrlUiT6I?=
- =?us-ascii?Q?2MC4YY/H+7axYS0qIM+DjAD0K+4pK8dOQQ8x4zAbW9g4YCteBVt177nkT1Lz?=
- =?us-ascii?Q?Ye4DB/KSy/Pqo0p4YrLx3pndTbhveYXFrp/yhR/9oGNdTJCYaidHqM5sqHLa?=
- =?us-ascii?Q?IuMCwCMTpH6Pe4nYcg5neEJ2SJvk6w02Yt86WT4Za2tn1vXdHxXBQ4r1Q8mp?=
- =?us-ascii?Q?RN/PvcGXXK7yDbjqUPA3OsZjQFQeqeJC475MxmYJywnXqH93zAIfHVZ4Bl9D?=
- =?us-ascii?Q?7LAROE/edsj1hsIl/NaNGNlBtDSLg3Q7mSPlngS3KSNSXF79h365ywHBY/3b?=
- =?us-ascii?Q?qISNtGfh3/lFvg/xHw1FQ/Ak8aEb0GiQwJ8dYHkJ84V/DwErz988LV6cSbbi?=
- =?us-ascii?Q?mk2WJiR8eQiLvtiVMEHZsvspegKBjTPxn4Rnji9vXEYygZHtMKe/de69D3uk?=
- =?us-ascii?Q?n3bg2bZ2xc7W7EvShoxc0H7DBKwZDhPMXmfV4FV2NaltDuMdp2FFuCRHMa7z?=
- =?us-ascii?Q?vpjHBJbiO+cCwmxgG6My6KIOpIwG9jBHHu1lLsXUCNXTzbgOAPQf5nfvM0q0?=
- =?us-ascii?Q?pkPvjFORriTiNWhsuLhUcDX0BBgk78foQ89O1qnEQhCcq0L8jIfOVKOMGudl?=
- =?us-ascii?Q?jCOyUvfCjJojaifZSW6IYCS00kh2ftp4N3qVdK8P7fddoYo4T0QZ2Ck5QB7W?=
- =?us-ascii?Q?sMID/pmH0DGcl9jcV7bBu9Lp1SkeLHNi/hp1Or5Ez5luwQYDNpeqJHZDrZua?=
- =?us-ascii?Q?rHIlHBY6dYrR+/RBCBdolBjcsDvP3Le0YiltSdHCPos2Mj1ktpPg/x7C+9WG?=
- =?us-ascii?Q?pKxJ7TggAJROVP/1C4Ja5Ob2ZVXrr3nFRx5CaVv6CdFHeOi5+nN6350Gq0Rz?=
- =?us-ascii?Q?DWU8tbBF4xLSfyPbVy/1LtUIHuwR6uTPUsVPudlcAZrByJp3omXEqmK1oyEy?=
- =?us-ascii?Q?zcvtRIIozcqghMmHweGytHBKy58CDP3OwbkUlO5rkmJSlNjm3sLrvYckpijy?=
- =?us-ascii?Q?fQTGCj0Mz6S8Wnj8VQtg0BaGWMJukxkWD3jWzAYV8rg0IYIXLR7uMNQl5FYV?=
- =?us-ascii?Q?SltF6etRC2ZNcvOhZrrVeSKnNpQTZDcBrKHzPZ9Gw7Q9+Rzum2vOhexDX8M8?=
- =?us-ascii?Q?yog/e5OuH0M1843O6c4tINNL+v5UBb+frs4OiDS6pntudxZ1bGlYRbJbxaih?=
- =?us-ascii?Q?9mHX9HoKGg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2db2f7d0-c108-4442-d676-08de91674ce6
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2026 09:56:39.2512
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JnZWbwurDa/Y8gSOii47qkHkc6h0AjyFoCNDBKbI7FkZM5tybEN6+2qXfVQsMxd65x/QDJ1eGToGGAmVhjZZDA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5746
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 02, 2026 at 07:01:53AM -0700, Zijing Yin wrote:
-> When CONFIG_BRIDGE_VLAN_FILTERING is not set, br_vlan_group() and
-> nbp_vlan_group() return NULL (br_private.h stub definitions). The
-> BR_BOOLOPT_FDB_LOCAL_VLAN_0 toggle code is compiled unconditionally and
-> reaches br_fdb_delete_locals_per_vlan_port() and
-> br_fdb_insert_locals_per_vlan_port(), where the NULL vlan group pointer
-> is dereferenced via list_for_each_entry(v, &vg->vlan_list, vlist).
-> 
-> The observed crash is in the delete path, triggered when creating a
-> bridge with IFLA_BR_MULTI_BOOLOPT containing BR_BOOLOPT_FDB_LOCAL_VLAN_0
-> via RTM_NEWLINK. The insert helper has the same bug pattern.
-> 
->   Oops: general protection fault, probably for non-canonical address 0xdffffc0000000056: 0000 [#1] KASAN NOPTI
->   KASAN: null-ptr-deref in range [0x00000000000002b0-0x00000000000002b7]
->   RIP: 0010:br_fdb_delete_locals_per_vlan+0x2b9/0x310
->   Call Trace:
->    br_fdb_toggle_local_vlan_0+0x452/0x4c0
->    br_toggle_fdb_local_vlan_0+0x31/0x80 net/bridge/br.c:276
->    br_boolopt_toggle net/bridge/br.c:313
->    br_boolopt_multi_toggle net/bridge/br.c:364
->    br_changelink net/bridge/br_netlink.c:1542
->    br_dev_newlink net/bridge/br_netlink.c:1575
-> 
-> Add NULL checks for the vlan group pointer in both helpers, returning
-> early when there are no VLANs to iterate. This matches the existing
-> pattern used by other bridge FDB functions such as br_fdb_add() and
-> br_fdb_delete().
-> 
-> Fixes: 21446c06b441 ("net: bridge: Introduce UAPI for BR_BOOLOPT_FDB_LOCAL_VLAN_0")
-> Signed-off-by: Zijing Yin <yzjaurora@gmail.com>
+tree:   https://github.com/intel-lab-lkp/linux/commits/xur-google-com/kbuil=
+d-move-vmlinux-a-build-rule-to-scripts-Makefile-vmlinux_a/20260403-055837
+head:   d1f7b869b59d7f31d1d0ab5021809fcc11b69ca7
+commit: d1f7b869b59d7f31d1d0ab5021809fcc11b69ca7 kbuild: distributed build =
+support for Clang ThinLTO
+date:   16 hours ago
+config: x86_64-kexec (attached as .config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f022=
+7cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
+/20260403/202604031539.Wm2bolgE-lkp@intel.com/reproduce)
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new versio=
+n of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604031539.Wm2bolgE-lkp@i=
+ntel.com/
+
+All errors (new ones prefixed by >>):
+
+>> Makefile:2254: *** extraneous 'endif'.  Stop.
+--
+>> Makefile:2254: *** extraneous 'endif'.  Stop.
+--
+>> Makefile:2254: *** extraneous 'endif'.  Stop.
+--
+>> Makefile:2254: *** extraneous 'endif'.  Stop.
+
+
+vim +/endif +2254 Makefile
+
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2251 =20
+46b7c49254f89d SZ Lin (=E6=9E=97=E4=B8=8A=E6=99=BA  2020-03-01  2252) endif=
+ # config-build
+2042b5486bd311 Masahiro Yamada 2019-08-11  2253  endif # mixed-build
+688931a5ad4e55 Masahiro Yamada 2019-03-19 @2254  endif # need-sub-make
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2255 =20
+
+--=20
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
