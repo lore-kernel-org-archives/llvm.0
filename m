@@ -1,125 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405662D0C9C;
-	Fri,  3 Apr 2026 08:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FB537B00E;
+	Fri,  3 Apr 2026 08:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775205602; cv=none; b=NO01YBXGk0vV3V1AeMRtS8QKMGUUGlvknZzNcteyANc7HdNgYd+6yooRHWW/sjK3ZN09PHHgMJkFFM3bwJ/o3/StZ4z3S9SUfsfrKxLHJ92vdcWWw2MH9GlTLz0VRTaUV8MW0URB1e9EvveEYn47/nI8ZPNd5ZwEHW+VgWpLibE=
+	t=1775205603; cv=none; b=qy5ZHxtH0+Hwer0nEvSA3r9xbrw2XNrcvh3bvdK7Gq+MPj5RNwoktSYDGw77uYmeQMwYPB7+UyUKC4WC9tmb6vhFSLYIJ+iJqioKT4Hr8tpylAMxbXTGRK8fqOdgjJjjfs9p7XcxwpBhMcgN1A2dXEuyZFKcMiRR/rdvjTZn94U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775205602; c=relaxed/simple;
-	bh=W6AAC1cFGrVaftZaq2zuawySYDraS9aSNOJr+kIsTgY=;
+	s=arc-20240116; t=1775205603; c=relaxed/simple;
+	bh=4NpuTgtQubgd0Goa0gz+SlCjolrad5ID45WJmtv8lns=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ocwl9JOEmOjFO3yx/Z8QW18u1vTIyoBO0adOMPv0pD/nGlKJ27+nS1WIXgJ0WV1klaif0cgueof/FMtbn9aDJDxe2We6MRbu9xzq5TfnSfcF7fk5ovbT3Did4FUPQDWoEK4SA8k6WWx8gZbaasqWXJ1WYbfR8oy8qCW9biuD43o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zi3AlIWD; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=TGXEb8mg9s1Rj/UuzDwhGPkUq0nd0hIVf8NqIYlmddrcUAu97rf+2Mna21/37xFGBF78qSdOr1lUsmv6Ck2npnd802Bkffb6xEiUJfiaxrZWx1TOJWD8YDvRdFrBVcRZ9SoDGjiyTU8FGInuk+7SRiJ0rg7uSJseKxC62oiIlLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bapWy+zv; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zi3AlIWD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bapWy+zv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1775205602; x=1806741602;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=W6AAC1cFGrVaftZaq2zuawySYDraS9aSNOJr+kIsTgY=;
-  b=Zi3AlIWD3wOa/pECFl5CD9u6WFEDc6GewF2BCTBw1MyxpX62n99zr1A7
-   lTNroSTdDFzQHLD4cF4xBd2lCgNbtNBsWswu41JUebNesxvxCIB0wm8/w
-   W7dV2qLY+gsBwSnFM8R6aDWVux8VbpX2kubLZid6B6UEWBTz+R/CK9o2M
-   pVRQQ0vHWw9SqffZP68xAmqetI+bg6XsOeQ1eSxVcLLV/w1ACUHiqkaA3
-   wXS20+wfBuOe6sIUIu1blpYXLHF5CGXiTUnPIAZ9K6A8Ka8sEdXDOHer+
-   ZDolNF4C1KaR4nkSODDEg29Wxzh21Av8d08ovit/bfMvcjDhZ8NlR19Du
-   g==;
-X-CSE-ConnectionGUID: FnVBTTA9QhCi3Lb8iFXBuA==
-X-CSE-MsgGUID: CRgyDY94TuqvZ/PCTS+WIQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11747"; a="76153056"
+   mime-version:in-reply-to;
+  bh=4NpuTgtQubgd0Goa0gz+SlCjolrad5ID45WJmtv8lns=;
+  b=bapWy+zvFFcTPGKC0K+TYwSBowVyamQ973AxJG/p9ZK324qPakCZhILR
+   ftgdq1xXwJSzVlrc/Mi6On1dv9eGitA/6AJO3w0J4a4fYOOGQtwlkaDfh
+   4Xh+WakqCIqxdI83TrYSo9ww+qIT9hPED9GgGWHcRykrjS6GAcJcDH0Xg
+   /o/rUAiBfkUMg56+Y/zjciFG05bL1kZe7ld08ljH8FMtPXw5ybnSBCHwV
+   rF+fLMPSNXZctURSv+5GCfXF7gOXwyq0xhD8IEX5Rx9u5v3u6F9uWESiM
+   3hgC7nBXSqejUEvq9CxVGSk0EbD3A/TcBsSExfEOFqxEeJOFkSFrfz8pS
+   Q==;
+X-CSE-ConnectionGUID: ekHQc0P3RluHEHPQ5o1GmA==
+X-CSE-MsgGUID: YtiSRa9zSae1ccaUHD51ow==
+X-IronPort-AV: E=McAfee;i="6800,10657,11747"; a="76156550"
 X-IronPort-AV: E=Sophos;i="6.23,157,1770624000"; 
-   d="scan'208";a="76153056"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 01:39:59 -0700
-X-CSE-ConnectionGUID: O1ijKYzWRyyhp/jUp/q4aw==
-X-CSE-MsgGUID: AmcFNb/UTg+SshydyO7axw==
+   d="scan'208";a="76156550"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 01:40:01 -0700
+X-CSE-ConnectionGUID: iSOUjhXaQa+Zvz7mT/XTYQ==
+X-CSE-MsgGUID: YTH3wLz/SV6dN90yKBKubg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,157,1770624000"; 
-   d="scan'208";a="257678123"
+   d="scan'208";a="220570282"
 Received: from lkp-server01.sh.intel.com (HELO 064ad336901d) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 03 Apr 2026 01:39:56 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 03 Apr 2026 01:39:57 -0700
 Received: from kbuild by 064ad336901d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w8a4H-0000000011X-3GiD;
+	id 1w8a4H-0000000011b-3VXz;
 	Fri, 03 Apr 2026 08:39:53 +0000
-Date: Fri, 3 Apr 2026 16:39:07 +0800
+Date: Fri, 3 Apr 2026 16:39:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?utf-8?Q?Micha=C5=82?= Grzelak <michal.grzelak@intel.com>,
-	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org
+To: Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Yosry Ahmed <yosry@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	=?utf-8?Q?Micha=C5=82?= Grzelak <michal.grzelak@intel.com>
-Subject: Re: [PATCH v1 08/16] drm/i915/bios: support VS/PE Override per each
- ddi port
-Message-ID: <202604021026.aZi3LxDW-lkp@intel.com>
-References: <20260331183332.1773886-9-michal.grzelak@intel.com>
+	Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v6 01/10] KVM: x86: Define
+ KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
+Message-ID: <202604021052.kPiiRT2h-lkp@intel.com>
+References: <20260326174944.3820245-2-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260331183332.1773886-9-michal.grzelak@intel.com>
+In-Reply-To: <20260326174944.3820245-2-jmattson@google.com>
 
-Hi Michał,
+Hi Jim,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on drm-i915/for-linux-next]
-[also build test ERROR on drm-i915/for-linux-next-fixes drm-tip/drm-tip linus/master v7.0-rc6 next-20260331]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 3d6cdcc8883b5726513d245eef0e91cabfc397f7]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Micha-Grzelak/drm-i915-lt-align-xe3plpd-with-VS-PE-Override-layout/20260401-092928
-base:   https://gitlab.freedesktop.org/drm/i915/kernel.git for-linux-next
-patch link:    https://lore.kernel.org/r/20260331183332.1773886-9-michal.grzelak%40intel.com
-patch subject: [PATCH v1 08/16] drm/i915/bios: support VS/PE Override per each ddi port
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260402/202604021026.aZi3LxDW-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260402/202604021026.aZi3LxDW-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jim-Mattson/KVM-x86-Define-KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT/20260330-195326
+base:   3d6cdcc8883b5726513d245eef0e91cabfc397f7
+patch link:    https://lore.kernel.org/r/20260326174944.3820245-2-jmattson%40google.com
+patch subject: [PATCH v6 01/10] KVM: x86: Define KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260402/202604021052.kPiiRT2h-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260402/202604021052.kPiiRT2h-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604021026.aZi3LxDW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604021052.kPiiRT2h-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_bios.c:2767:34: error: cast to union type from type 'int' not present in union
-    2767 |         devdata->vswing_preemph.index = (union ddi_vswing_preemph_index) -1;
-         |                                         ^                                ~~
-   drivers/gpu/drm/i915/display/intel_bios.c:3178:4: error: cast to union type from type 'int' not present in union
-    3178 |                         (union ddi_vswing_preemph_index) -1;
-         |                         ^                                ~~
+   In file included from arch/x86/kvm/svm/svm_onhyperv.c:11:
+>> arch/x86/kvm/svm/svm.h:622:4: error: call to undeclared function 'kvm_check_has_quirk'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     622 |                 !kvm_check_has_quirk(svm->vcpu.kvm,
+         |                  ^
+   In file included from arch/x86/kvm/svm/svm_onhyperv.c:12:
+   In file included from arch/x86/kvm/svm/svm_ops.h:7:
+>> arch/x86/kvm/x86.h:429:20: error: conflicting types for 'kvm_check_has_quirk'
+     429 | static inline bool kvm_check_has_quirk(struct kvm *kvm, u64 quirk)
+         |                    ^
+   arch/x86/kvm/svm/svm.h:622:4: note: previous implicit declaration is here
+     622 |                 !kvm_check_has_quirk(svm->vcpu.kvm,
+         |                  ^
    2 errors generated.
 
 
-vim +/int +2767 drivers/gpu/drm/i915/display/intel_bios.c
+vim +/kvm_check_has_quirk +622 arch/x86/kvm/svm/svm.h
 
-  2761	
-  2762	static void override_vswing_preemph(struct intel_bios_encoder_data *devdata)
-  2763	{
-  2764		struct intel_ddi_buf_trans *buf_trans;
-  2765	
-  2766		devdata->vswing_preemph.buf_trans = NULL;
-> 2767		devdata->vswing_preemph.index = (union ddi_vswing_preemph_index) -1;
-  2768	
-  2769		if (!intel_bios_encoder_overrides_vswing(devdata))
-  2770			return;
-  2771	
-  2772		buf_trans = kzalloc(sizeof(*buf_trans), GFP_KERNEL);
-  2773		devdata->vswing_preemph.buf_trans = buf_trans;
-  2774	}
-  2775	
+   618	
+   619	static inline bool l2_has_separate_pat(struct vcpu_svm *svm)
+   620	{
+   621		return nested_npt_enabled(svm) &&
+ > 622			!kvm_check_has_quirk(svm->vcpu.kvm,
+   623					     KVM_X86_QUIRK_NESTED_SVM_SHARED_PAT);
+   624	}
+   625	
 
 -- 
 0-DAY CI Kernel Test Service
