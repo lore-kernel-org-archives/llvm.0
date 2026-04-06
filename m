@@ -1,163 +1,183 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427F33019A6
-	for <llvm@lists.linux.dev>; Mon,  6 Apr 2026 09:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775466204; cv=pass; b=kWIn6pKbWjpZi/IJCQpDmB3XLl92SSvebQeAgynVQjaaHS3cfJdajON5G9m1o2HMI+JeeyBX2y2g74PjG5ZbdR8klg1+IqRS7+FXvSGtX0wA3JwSk2LzwdV2pcswc/Kj7gr5ErmwTjQ18NUhfNldICwAtR6DLI4u7pQWSTUFwAo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775466204; c=relaxed/simple;
-	bh=R2dHTJQnBLz14FBWbb+c8la9tQYirU1vpp38y1sgoA4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HnsYx/Sg9ttGwZac/BE/pVpXIXoe6gtlBEisgTBmx2cQErbuYPB1RXcBC9QH8titVp+K2Sw2wtXddrTncubCF2VlyoV0tvuMFdxCTLhsKZ+GgTySAMHd1aB8R97KwMnYQpGJcRt2dt2+2Vhjc3oY2ERV8lLebvalw00HFyxSF5k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hCUcWAD6; arc=pass smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91D6313E29
+	for <llvm@lists.linux.dev>; Mon,  6 Apr 2026 09:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775466500; cv=none; b=cXwALnZniTraGfjrEcnwrTkT4D4HIjtqzerEefX53XKrH80ifAh85v48BXZ5VdFBE/S+aqsgz5OpeZhkM1k2G9RIAP1WlK1kvzmzxVYg7/uxKkzXCadx+uvJkUVpbNrZ0GIQepr2DxOJaWduhEG2/lWvuxEYcR6tXOP6a9avcYQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775466500; c=relaxed/simple;
+	bh=3YZIVULe2x3GuZ5FghsA/nQqzGCzL7FbP1sL15aYCEU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mai4sSyNtG1skLW3hw7eRiT4SkvuSP/XT9qGnaho95OhxtZEEeS9UU+eF53EgetTGWP6DVA4pStbLAhDYatsAGTIsd9vppxj9coYNbSEAJTW/GQq+JeBVG32hPg+FiNF1icIuvi5SSn5OBz0reZm0qf1ZEED3mSRquFdrnO7qZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lp0Zr/o1; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hCUcWAD6"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2b8095668ebso275406eec.2
-        for <llvm@lists.linux.dev>; Mon, 06 Apr 2026 02:03:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775466202; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MiSMxGEfuHqdjffh2gikS5xgwRjckeyfZ8IBbP3ZGIEiXhrxkaxl+1cXtay2PhEffI
-         BfpvakotKbM/yY9CYahdiT2U4mXaGy4Kg/2KjlH2i6s3pnBK3ogNAODNumabkce/+F2x
-         87wtT8t5xhKjtBoNl7ph32DnjuGqbLeBcUlxBVQtnkOrQXFdXJ33dPFheqWhRuz4vatj
-         IUCtdL0pIhHncYCMUXxdElIsMuTotn95hN4EcIVYDxgIGN+Ulefe6oS/0PiJBwm2Qoor
-         n8NWnaSyDZEmN+s/ZnCj8z36K/dMPMEZeLHRAgza5TnoniawpM3RoqeTGaxn3RN9a4SU
-         iBkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=iVamUPJfkbP2PYNa14ddDsteyLquBt95MrPlozlxwT4=;
-        fh=2UBSp36fGOF0R2kPoWStESdM0b4b8FkiirvFHfKzdmk=;
-        b=Q8fRM0hVvV5XPCjxDtRMkRe7/VYZQybhp1HiHvIqWQyXkHUcAfV73I5Jaknb18PE0e
-         4czB9el/Edv/thE6qoQNLN7j28thEgGCzgnQZS5TSFwHcEpF9UcZ1aZNOOmJG7IAJK53
-         xnZ9CaGl82YdiCsxXxssybrBfO9CfYmHLZQ4SXbNpcTJg4KYN4GpI5DCt3yMA9GAHw+o
-         CKQIaBP4cznYkPB4yvXELg2g15Jm2z8AE9kCTxu19d8xJygTBhs9Euod+8DIaMItOSEh
-         Z9af8ur9z8iwhxpqG7wpfRsPUpIKLflOWzkjO2RRXlhHEtz+SdqP2nPmrxLRN7Bq884a
-         c3QA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lp0Zr/o1"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-82ce09b4197so1507225b3a.2
+        for <llvm@lists.linux.dev>; Mon, 06 Apr 2026 02:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775466202; x=1776071002; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iVamUPJfkbP2PYNa14ddDsteyLquBt95MrPlozlxwT4=;
-        b=hCUcWAD6Yt2lqSnujUm4nL3QJ3IL+LhhpCeMrcLxNTsmGwUMHvTqRpHkTLtCXC4NlW
-         hPUN4mNnisHQZT1M1xcN1AuDpwrcahfEQTNyXG31xm49StHoLBLna6Naz9mWTNtsUYkF
-         vHvq/Z/g0XVmrljnswe1qdwTLWq/EgoRzRNLCI3kAeNY4xD/onaIGrqHX4KFcs3YqcIc
-         33Nii9SWzrUGyTlwCzRN3LiK34RdCJPEnSdO07iaNYZ5PSTl/M8NbvUkHT39jTMevtSR
-         pDObLzviW7ez3cqQY2IOJ/FFI0H5jaUND1TvvP+skm2XWIWjIsv3FXCJH2/Ym97pte8H
-         4AIA==
+        d=gmail.com; s=20251104; t=1775466498; x=1776071298; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2DC9+ivYheyMqrfOIx67QW7cPRjoGiCh9Shramalnog=;
+        b=Lp0Zr/o1JFk8x8iR831iLzwDcEIu6cxIxm8JyDyIxcLDJBM+x+HrZJDv2kc8Ajvb6i
+         D8HC68ysiA4IVOXGHxfK+zzf+tikRRgZfIGEF3wPaklRHgSujWVy/fb7DRPtnniTr5KR
+         lE9WA3Ie6XVVlhAFGBHL6WBViXvUsgLFkSb1Ry10i4G9Y4mSWPENfuFnFvn10YtrDq/1
+         htTOJKigy7QxoGbBf5fcpuf8toNv4XmSulTolHvBxda3vKIQ+4T/eC/T4pwNvM3cGuux
+         ot1NdLiDpa+PoE7TMZ8YBXDDM6I92JveuOgBsUg+Np/FwcAV+fUD0PBl8CmZWaLBTHMz
+         8lNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775466202; x=1776071002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iVamUPJfkbP2PYNa14ddDsteyLquBt95MrPlozlxwT4=;
-        b=ECrSGL0ZFeId/A+qONa9ohk4lTq6DTvFewZVgsGv84hH/Fss2S/oQmFK6Jk+hX+BxQ
-         K/sWfrkcipYcY87DB9ICWjDCq1o7ByMEu9QRIK/A59eaGsS5hqhKCymnWWE3E1g5uI0E
-         MV5GNWd+JAWkDS3dHog1qzflecKTFPzxFID36WYXg23FDtISz/ACtwxKFdTpbsaeMWxa
-         JwB5U9LBROGkz+ZBUMUMS1oMPHwAS6+SgY8fxAN0owNClQz+8FlGGZ9/fk2Ba7Ql+WSM
-         QXd5CMs2M1pp6y26ryGZdBxhy1i76+tKatgYNEhRBOATyk/nkp1M9DTINyxdeQQlIpzz
-         YCBA==
-X-Forwarded-Encrypted: i=1; AJvYcCUvg59JZN1AovzcFhDV/YB3kQET+ujghBGTz90aTkQwrKwwecbRSLvpyQPfibJAUf6qyy8k@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxwhi4cy06uYzvCkWpQyegE3REv8efk6g+UUd/9z+cMgiIoAlVU
-	KylKUbVGWCZYNqfAY5yjhtMwnhKwpMtkoKYsmc6ee3Cq9AzrjPDdV8HPbPlGgpmxubVESbnGmp2
-	gWbpxZjcUBkQviOHs/10FRqtfkpKDzDc=
-X-Gm-Gg: AeBDietp8sFZK9FJotkz6rzil7LwKhkt3SgixzmRqnp2RV6CszMfWx6DIA+sQYTqYZN
-	lQEVI8emZPR/OMmp8EfYt+hmLpaD2BvgbGG7VLjz8a2QQpudqTfyKR6LusPZFwdlUE/lkh41YPV
-	+2ovK66xIydO4f7eMN2lfynm14X62QpgdbOzKK26vLLXuJ2TfUVGV70AI+jjaMqb8nvWCw3lJN8
-	kuHu6TMxKjSa8tb0CbuqPdmThF4eqTs30acIh7oKZv1fcfSSVWYjZsXP3LcsKWG0fnocW43zXM1
-	LYms1aaDIPw+qV4SxxXd89n1F0b26vn1UG2aGIdQ2Ws7Yw+uW1s8EHVgh8YbCARNKFBqUiVg//0
-	LiFBr/xkKzUsLT9YB9QzuZRA=
-X-Received: by 2002:a05:7300:2315:b0:2c4:76a3:bdfc with SMTP id
- 5a478bee46e88-2cbf6897126mr2280931eec.0.1775466202269; Mon, 06 Apr 2026
- 02:03:22 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775466498; x=1776071298;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2DC9+ivYheyMqrfOIx67QW7cPRjoGiCh9Shramalnog=;
+        b=i3S6F3kjlNlx8qyDbow60yiWd5O4wq8I8SxDafim4zjcb0HypLhwkApOxd8YJIxALv
+         JQ2Sr5kfYGTi7CtX08oIFEpKD2vh6UusWJ05/kOE8yjUZXgfZYfsNu1hwVBv5v+6yn/F
+         6BeqcvnF0pBYupjeN7iaHIh7KxMexaU8M+XbO4bpmk3fDAn9aURDfbAWhA/1AQnFHt+G
+         T3RHB7AaQ61s8Hg+06uXjQL4es/4+qBNCbPtchf1vCML+cRFQSyp3qUXeeWAnuZsbjCr
+         wKDhtE0WAWPX41ipKHR+DxxdKhTMCPbP4a7ZC6ZZVF2X6Q2VWwZFeEQTx2RLToQGkPjw
+         1vyA==
+X-Forwarded-Encrypted: i=1; AJvYcCXNp5KCEbhLD0HNBVSYCmYKz6yZeykbq7EEMDNsSobAEdXOHD17obCrUlQkExqvscksejHq@lists.linux.dev
+X-Gm-Message-State: AOJu0YwDfteTt9d2PJp9/y2YWznS6TG4+tX4YFPfCxOxA7W9z6JdIo9u
+	ttNQm0igmH6y/ZKKlQmsR7TNAySvevMUG66JLoBijjmqgZbdHiC/hzYw
+X-Gm-Gg: AeBDievUai7fbf+2taAuJYywYNFy9+hjqIoEvEPgK/p7s2A6M79afxn/Oz6bRI6Jvkx
+	K/2ebJ5k2Uisbfnzc71Szh6Z3iQjjHwb7ioc7THaVGEzbE2MOLo1uvxEUeSGt38u2CqFDtKp5B+
+	N22KTodUtvf6xRsfJNx99sJ6rzpmNarWyUYUjjAO0Rcc8GZPVGwzD55eW8rTN6/HuTzDVK78ilD
+	UMn9MxM5jAufUx6yhpdTuJ/EwWcFpTCYj1kb39XvgjHG5Z4bs0DMPVxkOVnfz8s54meS9JohR75
+	lsM/m1+AzPG2hz2G15RuZOAatNiyKheXvVgXyo8c+IvgGyS/74BuQpp74i4F/i4bTgHjBI1CcwQ
+	7QC3InXygkTmNvynRgCvFBMp6VkyZuqVDda2A6UQN4wawlDZJvKgjr3VypAThmD3VOitwO1qXOd
+	hAlMLoRwuErzJNRl2GYrcUnFDdC4Izen7myYtWG5ur6QKsDepTvHH9jjDJdMQj7TbV+10=
+X-Received: by 2002:a05:6a00:4649:b0:82c:ddbb:7db3 with SMTP id d2e1a72fcca58-82d0da8bc37mr11678758b3a.25.1775466498220;
+        Mon, 06 Apr 2026 02:08:18 -0700 (PDT)
+Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([129.41.58.4])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9cf065asm12787649b3a.8.2026.04.06.02.08.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2026 02:08:17 -0700 (PDT)
+Date: Mon, 6 Apr 2026 14:38:06 +0530
+From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
+	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com, 
+	aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org, 
+	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
+	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH V9 1/4] rust: Fix "multiple candidates for rmeta
+ dependency core" error
+Message-ID: <adNuUxsGl_Tm4Nd7@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+References: <20260404121610.1956528-1-mkchauras@gmail.com>
+ <20260404121610.1956528-2-mkchauras@gmail.com>
+ <CANiq72k1KN68wG_dh0GcTyfiXUyrVUErJ5D8AOaV6z6=sX4BAg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260405235309.418950-1-ojeda@kernel.org>
-In-Reply-To: <20260405235309.418950-1-ojeda@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 6 Apr 2026 11:03:08 +0200
-X-Gm-Features: AQROBzDwpcCEtASRfptsJ0WJ2jdyaJlOCl6SPsL-e-w0TnWmNnUbHOjTvtft1Wo
-Message-ID: <CANiq72mnGArtgAbe7xXZCYW1x7Zd5hozfnzoftaGy9rxoLO4ew@mail.gmail.com>
-Subject: Re: [PATCH v2 00/33] rust: bump minimum Rust and `bindgen` versions
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Courbot <acourbot@nvidia.com>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
-	Todd Kjos <tkjos@android.com>, Christian Brauner <christian@brauner.io>, 
-	Carlos Llamas <cmllamas@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org, 
-	moderated for non-subscribers <linux-arm-kernel@lists.infradead.org>, Alexandre Ghiti <alex@ghiti.fr>, 
-	linux-riscv@lists.infradead.org, nouveau@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, Rae Moar <raemoar63@gmail.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72k1KN68wG_dh0GcTyfiXUyrVUErJ5D8AOaV6z6=sX4BAg@mail.gmail.com>
 
-On Mon, Apr 6, 2026 at 1:53=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wrot=
-e:
->
-> As proposed in the past in e.g. LPC 2025 and the Maintainers Summit [1],
-> we are going to follow Debian Stable's Rust versions as our minimum
-> supported version.
->
-> Debian Trixie was released with a Rust 1.85.0 toolchain [2], which it
-> still uses to this day [3] (i.e. no update to Rust 1.85.1).
->
-> Debian Trixie was released with `bindgen` 0.71.1, which it also still
-> uses to this day [4].
->
-> Debian Trixie's release happened on 2025-08-09 [5], which means that a
-> fair amount of time has passed since its release for kernel developers
-> to upgrade.
->
-> Thus bump the minimum to the new versions, i.e.
->
->   - Rust: 1.78.0 -> 1.85.0
->   - bindgen: 0.65.1 -> 0.71.1
->
-> There are a few main parts to the series, in this order:
->
->   - A few cleanups that can be performed before the bumps.
->   - The Rust bump (and its cleanups).
->   - The `bindgen` bump (and its cleanups).
->   - Documentation updates.
->   - The `cfi_encoding` patch, added here, which needs the bump.
->   - The per-version flags support and a Clippy cleanup on top.
->
-> Link: https://lwn.net/Articles/1050174/ [1]
-> Link: https://www.debian.org/releases/trixie/release-notes/whats-new.en.h=
-tml#desktops-and-well-known-packages [2]
-> Link: https://packages.debian.org/trixie/rustc [3]
-> Link: https://packages.debian.org/trixie/bindgen [4]
-> Link: https://www.debian.org/releases/trixie/ [5]
+On Sat, Apr 04, 2026 at 11:04:08PM +0200, Miguel Ojeda wrote:
+> On Sat, Apr 4, 2026 at 2:16 PM Mukesh Kumar Chaurasiya (IBM)
+> <mkchauras@gmail.com> wrote:
+> >
+> > When building Rust code with LLVM=1 with -j1, rustc was encountering
+> > an error:
+> > "multiple candidates for `rmeta` dependency `core` found", with two
+> > candidates:
+> > 1. The host's standard library from the rustup toolchain
+> > 2. The kernel's custom libcore.rmeta in the rust/ directory
+> 
+> Please clarify in what conditions this happens, e.g. when building
+> natively in an architecture like powerpc for which the target (...)
+> 
+> Otherwise, it sounds like this is something that would be happening to
+> essentially everyone just by building with `-j1`, which is not the
+> case.
+> 
+> Also, since you may need to reword a bit, please take the chance to
+> use the present tense to describe the current state, and then the
+> imperative for what is changed. (The past is usually used for
+> something that already changed in the past, not for something that
+> still happens before the patch is applied -- I hope that makes sense).
+> 
+Yeah this makes sense. Will reword the whole thing and send out a new
+revision.
 
-Applied series to `rust-next` -- thanks everyone!
+> > - Update rustdoc-pin_init to use explicit --extern paths for proc macros
+> >   as pin-init also needs alloc crate from -L$(objtree)/rust. So the proc
+> >   macros needs an absolute path
+> 
+> As Gary mentioned, this list may be too exhaustive, i.e. one needs to
+> see it in the diff anyway. Usually what we do is try to summarize, and
+> most importantly, explain the "why".
+> 
+> Also, it doesn't seem like the list covers every change anyway if that
+> was the intention, e.g. the removal of `--out-dir`.
+>
+Ohk, will rewrite this part also.
 
-Let's see if we find any issue in -next.
+> > -rustdoc-quote: private rustc_target_flags = $(quote-flags)
+> > +rustdoc-quote: private rustc_target_flags = $(quote-flags) \
+> > +    --extern proc_macro2
+> 
+> Hmm... why is this needed? The variable already carries the flag, no?
+> 
+Oh yeah. Will fix this.
+> > -               --out-dir $(objtree)/$(obj) -L$(objtree)/$(obj) \
+> 
+> This looks like an important removal that is not explained/mentioned elsewhere.
+> 
+Ohk, will explain this in commit message.
 
-(If someone wants to give tags today, then I am happy to pick them up)
+> Also, is there a reason why we cannot keep the `-L` here instead of
+> adding it in every proc macro library?
+> 
+Will move the `-L` here instead of each lib.
+> > +    --extern pin_init_internal=$(abspath $(objtree)/$(obj)/$(libpin_init_internal_name)) \
+> > +    --extern macros=$(abspath $(objtree)/$(obj)/$(libmacros_name)) \
+> > +    $(call cfgs-to-flags,$(pin_init-cfgs)) \
+> 
+> Hmm... This special handling isn't great, and the fact that it means
+> hardcoding/duplicating `pin_init-flags`.
+> 
+> Should we move the proc macros too?
+> 
+Let me find a cleaner way to do this. Will do something about this in
+next revision.
 
-Cheers,
-Miguel
+> > -               --crate-type proc-macro -L$(objtree)/$(obj) \
+> > +               --crate-type proc-macro \
+> > +               -L$(objtree)/$(obj)/host \
+> 
+> Spurious newline added?
+> 
+Will remove this.
+
+> > -               @$(objtree)/include/generated/rustc_cfg $<
+> > +               @$(objtree)/include/generated/rustc_cfg \
+> > +               $(rustc_target_flags) \
+> > +               $<
+> 
+> Why is the variable moved here?
+> 
+Will fix this too.
+
+> Thanks!
+> 
+> Cheers,
+> Miguel
+
+Thanks for the detailed review.
+
+Regards,
+Mukesh
