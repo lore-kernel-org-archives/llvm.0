@@ -1,367 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216132BD5A8;
-	Mon,  6 Apr 2026 09:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775469550; cv=none; b=WGqZhHN24Lxgb7h8YkNhOM+EFluyPByot5qxoLQXka7oUCJaWn0ELOoPQ1eIMbQ0PBdpjSb7E0q5ApHOcJPhTGLgm/3VqsVQ5oLToY8lcWmHOWF51aaHCD6Ia19X2PIvzL0Z3BIMVZmcKG9qPmaQ5yMWhMmmm8PyU4hrlVlNpeg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775469550; c=relaxed/simple;
-	bh=BqiLEP09AKvG969whbIG1u+A5g/ONyHOggYO35dEaW4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BVFmgScbHjnGwhOlEFYDix9ZAHyb7wY4aWOhS17aAwVWa4a5n2rF7gwcTodnuzPA6wuf8rNWGWhNrOC031MasMchjNr7WOhg4/Klzdb1d7WXOvJeM2VdClHdHfKmEZC4Q38nKI0vgCh+pgMb6XTaArtK1UbNZGRH3ofYN1tDzRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K4wykqp2; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDC3372671
+	for <llvm@lists.linux.dev>; Mon,  6 Apr 2026 13:21:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775481690; cv=pass; b=LzGhQRhDgzd4HjGaGBZitmZSCDZ+EKicn30J2U+1OTqWuLep4RttO53JQTM5wui3Bj3f6+CQyAWzcEOmFq130p+eZmS+4WLRHLegCt0myzTjrF3YN5pcRv/XUpQ8kplxBke5MTqSrkGyOKwxneJL9tbaupTYq0bzC87jAuTnGLs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775481690; c=relaxed/simple;
+	bh=Xy7FALhcYqLgXu4fKO0MtrrfIdEU0qZJHPfoz//MdsY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Od3Sl8y+EfuNZoKTasErAdkBA/FOiV3IxSZoya0HTYw0UtPDhFDnDOJ/KMSK5JO+qpeDC4G0zbRwLySXQIMPO4HNAJwUT1tkms9skAd8MNOZrbclNPVueDTd60sVUEm0ZefSgaGN8IM/gP55sNB/RUKKgjDdgbkngFkawaXWY0U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NAGNmv+z; arc=pass smtp.client-ip=74.125.82.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K4wykqp2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E76AC19425;
-	Mon,  6 Apr 2026 09:59:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775469549;
-	bh=BqiLEP09AKvG969whbIG1u+A5g/ONyHOggYO35dEaW4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=K4wykqp2zRA2+y8Ffqksez2DNLFnVFvLoKcMhjmee4mp90RKAWwPSY9r+0KLgfGyS
-	 yMZPeZIBV4hNZvPRg36KNM9NwhzQJUV8ALWlGi6PmXeOdNZz6SVR3EMP1zTZAulN0g
-	 ndpzjucT4ncmjmWKVTapl2kKdJOmgNDiItedadmXXVlNINLe3WCITEymO/M2wugqDU
-	 HJ509rkgpc0wAtYH42sVMTbDuuqejkBvWPweFg3xmUB3Ksx0DuEWq9nkM+f/b1u3kp
-	 1sESJEuVMXDvlM788W9QBR98E9F827O3LwntlMWeeGOqOeDRXHcrSSxwPdNOplV1EY
-	 p/oSLIonOO0gA==
-From: Miguel Ojeda <ojeda@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	rust-for-linux@vger.kernel.org,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 2/2] rust: std_vendor: add `likely()`, `unlikely()` and `cold_path()`
-Date: Mon,  6 Apr 2026 11:58:20 +0200
-Message-ID: <20260406095820.465994-2-ojeda@kernel.org>
-In-Reply-To: <20260406095820.465994-1-ojeda@kernel.org>
-References: <20260406095820.465994-1-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NAGNmv+z"
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-127337e3870so199851c88.2
+        for <llvm@lists.linux.dev>; Mon, 06 Apr 2026 06:21:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775481689; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZHdXiF5Vqet6gG7+XozgrEI9WgNwR0A1out0qnE5kGOR0urc1n7m87auDgWDr+R1Te
+         WpDPohd0ddMxBH4JyB02P5sv4ozZp4GDh/qGefIYGv1iqcm+BHJI/EAELEToD16/Ptw/
+         6uGqZRyobegv1QbQoU9Y6cE9exVQI+6kepXhRr9csJADg53aIy6Bj++Q9Z229yqzEy0u
+         nM2NmjjGmPnrEg5kdb3m2JbQ6AMEka36lcfIDAhsB7+cBTP75jyJV9VsrCJVU6EnWSLu
+         p11/Bup66aPlxZx0TkoTDoyxw8QHrzVcWhneHnd4ARcBIfDlJ2u9t2yUNu9BQQNJP4vc
+         NWRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Xy7FALhcYqLgXu4fKO0MtrrfIdEU0qZJHPfoz//MdsY=;
+        fh=xFEZWXxyqfMZI3IquW6SYAfCUWqdzJp1R/u75RBil20=;
+        b=IAmfH/KimXey4mq8oFFW3Bt+tsuycLJyXCHmQRjWkPBoUghO9eefwEbPNKJ990B2Jm
+         KpA4AxdozcfxTPtIxFwt8ScFt7Y+7i9W7+hNn0miZQkedLJIUoBlj8n2nh8TI54D2g0c
+         Ajm+GZBNq6zH2MQTDNtf+LJ4nVnPN/Qb76KXcsrup6etXs25WJi6Y5rajTZf6J7SpR2G
+         +h6YgU2qAqaUidotFTS196sDV5g9OdxgNWjCqtLT3VGdoxQEmhpuMME4a1JZeTCehIdT
+         Zy3l6ReKJbtuPlsFrZJUsjyh5Xdnp4QFDuz5SzALfRpeGJrjWKIngmjyUnoMyawyzbrB
+         b0qA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775481689; x=1776086489; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xy7FALhcYqLgXu4fKO0MtrrfIdEU0qZJHPfoz//MdsY=;
+        b=NAGNmv+zSpYI/gce68yJYDW9SghueJpnvbVA7FhhLffW5IURVrco0R9tHwcZuhHnFw
+         u46rLv2jHa6Adq9VNzKWLcPARgICZkK0P2KmDqywgrua4IoVh63WzY7WPvvSZA9lCnoN
+         HL0EP7gKVLFrcMJO9Oqdzm1hUYCLsq+tkJIVMOlpD6Pdg+3zM/MprLfT3zJ5tQdao4xm
+         Wlp5QleLTmYOWtNk3cTLK8FjGQIUzsffyU6hHRnVrhkIMUxMUoAyG2UtkeeV4Wdzq7pO
+         0fNodNYiiOZSEE2MdGjXPxpifm0eQSLzr9wEzrBHhmdOYxiXBhqVoQdO3gQH72oyaNBJ
+         poaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775481689; x=1776086489;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Xy7FALhcYqLgXu4fKO0MtrrfIdEU0qZJHPfoz//MdsY=;
+        b=GhJ8zNQMSis6r8yN6didud1y6mw/krhJuxX9ehXDwIHIXmvBk2YhaotoQN0Oe/awMq
+         sfRPhfp0sop2ikR3ZgNwM7tBtG+UVFMhI8WNf257iqyav5EpBm2M/DIck7DPItyvKpTm
+         jNUdlbs33DOWtbTMRo4sHcOurwNkBG5CaDzfI9ILrbZ4GxLuaGqOAywXwxTHqB1camz3
+         4toDFd2BjAzt7F7ToaPfEOEbwmrywfa7LMxoWXc7mkekhMUxSMfCMP35HitLHhxrOl6I
+         fir7ZZYyuSWR9xtNJKEjU7II5yOND4x8TBRQGbx1bxcgfyOVL7K3/gYPwGqZmxfxusq9
+         4oFw==
+X-Forwarded-Encrypted: i=1; AJvYcCXaVPL5JRTNCuTUfZxb/Cor643vK41oYLVWHmpiz9u7+f95I4Vgf6KnX29eRg580qtGVcAd@lists.linux.dev
+X-Gm-Message-State: AOJu0YyovlnBJZJwrHCwOeURhYOZUQ7WyWAu9koJMIQM6+SdR3jPXSib
+	kyfK0Wo4Ll8u2Y/1wQfu2OQQWthqPB8Ol44f/kE369vhK6SqXVdXHTR1wi64nVJ5wM4XlF4kd46
+	SnSJL/6NLm2jI/mQ++3at7KaxFHXFRNw=
+X-Gm-Gg: AeBDievPjUAvqDOEgDr9+ah32+fgXKbU0VMjzTGWUMbJcSXt2BKI3+ufD1nSNBi6OVM
+	wg4264BSl3GN4ngzwWnXKS1lOl52w+RaoVAnDdROCdp5yaDTDx+Ged5q3SuGGWdeO3eV+bizvF4
+	jwNYSvHt9UbydpmTVq3b5D8u8xzxYAQPFA1FrD4jGeMrd0xcSSucqNIB8qQ/mQvWEvlLdbaHrhn
+	VTArwdsBSvyg2Ta+hW7sLpJoB64bbPH8OPLjTcTIRv+z9Wwlfcm7lLdkzet9KUZlmwizpGZYXQG
+	gAnRFy3D4fhN56y5w4UKmSPuzHaOQc5ElLRdSJrkmLSDrV4fm4v4vbQjxjb8X1ixvM190ncVngA
+	jW9QuwFKoWqPiIguOEGqIoEw=
+X-Received: by 2002:a05:7301:1007:b0:2be:298c:a11 with SMTP id
+ 5a478bee46e88-2cbfcf52a13mr2965052eec.3.1775481688630; Mon, 06 Apr 2026
+ 06:21:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260401114540.30108-1-ojeda@kernel.org> <20260401114540.30108-34-ojeda@kernel.org>
+ <177508434476.73816.11744805605122440072.b4-review@b4>
+In-Reply-To: <177508434476.73816.11744805605122440072.b4-review@b4>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 6 Apr 2026 15:21:15 +0200
+X-Gm-Features: AQROBzA0LUfPYuEZWH9uKj1KexaW3DTNKfQ_If4tWD7xnq1YUXDcYUMRbV47V4E
+Message-ID: <CANiq72=25GRao7NciojymdbZN_=f-U3hp2+2qBMjb4VCaOgR2w@mail.gmail.com>
+Subject: Re: [PATCH 33/33] rust: kbuild: allow `clippy::precedence` for Rust < 1.86.0
+To: Tamir Duberstein <tamird@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Courbot <acourbot@nvidia.com>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
+	Todd Kjos <tkjos@android.com>, Christian Brauner <christian@brauner.io>, 
+	Carlos Llamas <cmllamas@google.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, Alexandre Ghiti <alex@ghiti.fr>, 
+	linux-riscv@lists.infradead.org, nouveau@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, Rae Moar <raemoar63@gmail.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-`feature(cold_path)` is becoming stable [1] in the upcoming Rust 1.95.0
-(expected 2026-04-16).
+On Thu, Apr 2, 2026 at 1:02=E2=80=AFAM Tamir Duberstein <tamird@kernel.org>=
+ wrote:
+>
+> Might be good to retain some of this in a code comment.
 
-`cold_path()` can be used directly, but it also allows us to provide
-`likely()` and `unlikely()`, based on `cold_path()`, similar to the C
-side ones.
+Bah, I missed this note among the rest, sorry (I didn't reply to the
+ones where the commit went away due to the changes in v2) -- I agree
+it wouldn't hurt to remember why it is there, even if it is already in
+the Git log.
 
-For instance, given:
+I will probably add it for tomorrow, especially if I have to rebase.
 
-    fn f1(a: i32) -> i32 {
-        if a < 0 {
-            return 123;
-        }
+Thanks!
 
-        42
-    }
-
-    fn f2(a: i32) -> i32 {
-        if likely(a < 0) {
-            return 124;
-        }
-
-        42
-    }
-
-    fn f3(a: i32) -> i32 {
-        if unlikely(a < 0) {
-            return 125;
-        }
-
-        42
-    }
-
-LLVM emits the same code it would for similar C functions:
-
-    f1:
-            test   %edi,%edi
-            mov    $0x7b,%ecx
-            mov    $0x2a,%eax
-            cmovs  %ecx,%eax
-            ret
-
-    f2:
-            mov    $0x7c,%eax
-            test   %edi,%edi
-        /-- jns    <f2+0xa>
-        |   ret
-        \-> mov    $0x2a,%eax
-            ret
-
-    f3:
-            test   %edi,%edi
-        /-- js     <f3+0xa>
-        |   mov    $0x2a,%eax
-        |   ret
-        \-> mov    $0x7d,%eax
-            ret
-
-The feature itself, `feature(cold_path)`, was added in Rust 1.86.0 [2].
-
-Previously, a PR in Rust 1.84.0 [3] fixed a number of issues with the
-`likely()` and `unlikely()` intrinsics (by implementing them on top of
-the new `cold_path()` intrinsic). So we could use that, in principle,
-for Rust 1.85.0. However, it is just a single version, and it is simpler
-to avoid intrinsics. Instead, approximate it with `#[cold]` [4].
-
-Thus add support for `cold_path()` by applying several approaches:
-
-  - For Rust >= 1.86.0, `use` directly `core`'s `cold_path()`.
-
-  - For Rust 1.85, provide a `#[cold]` no-op, and vendor `core`s
-    documentation.
-
-And, for all versions, simply provide `likely()` and `unlikely()` based
-on `cold_path()`, by vendoring `core`'s unstable ones (the one from
-`intrinsics`, not the `hint` wrapper, to save a layer).
-
-In the future, if `likely()` and `unlikely()` become stable [5], we may
-want to use them directly as well.
-
-Now, in the C side, the `likely()` and `unlikely()` macros come
-from `compiler.h`, which means it is pretty much available everywhere
-directly. Thus just add these to the prelude (instead of e.g. re-exporting
-them in the root or in a new `hint` module).
-
-This will also mean less churn when we can remove the `cold_path()`
-version from `std_vendor` (and potentially the other two too).
-
-I tested that Rust 1.93.0 generate the code above and, in a previous
-version of the patch, that Rust 1.83.0 and 1.78.0 do not, as expected.
-
-Link: https://github.com/rust-lang/rust/pull/151576 [1]
-Link: https://github.com/rust-lang/rust/pull/133695 [2]
-Link: https://github.com/rust-lang/rust/pull/120370 [3]
-Link: https://lore.kernel.org/rust-for-linux/DGA6GUR58QJ7.1XZZ0P4VZNW86@garyguo.net/ [4]
-Link: https://github.com/rust-lang/rust/issues/151619 [5]
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
----
-v1: https://lore.kernel.org/rust-for-linux/20260208224659.18406-3-ojeda@kernel.org/
-v2:
-  - Drop the intrinsics and use `#[cold]` for Rust 1.85.0.
-
-  - Sorted after `feature(file_with_nul)` since now we know which was
-    the stable version when it happened (Rust 1.92.0).
-
-  - Rebased and reworded accordingly.
-
- init/Kconfig              |   3 +
- rust/kernel/lib.rs        |   4 ++
- rust/kernel/prelude.rs    |   5 ++
- rust/kernel/std_vendor.rs | 142 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 154 insertions(+)
-
-diff --git a/init/Kconfig b/init/Kconfig
-index d9b795f70a38..f4c3368bf585 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -178,6 +178,9 @@ config LD_CAN_USE_KEEP_IN_OVERLAY
- 	# https://github.com/llvm/llvm-project/pull/130661
- 	def_bool LD_IS_BFD || LLD_VERSION >= 210000
-
-+config RUSTC_HAS_COLD_PATH
-+	def_bool RUSTC_VERSION >= 108600
-+
- config RUSTC_HAS_SPAN_FILE
- 	def_bool RUSTC_VERSION >= 108800
-
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 0fa9d820fe7c..0615f741fcd4 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -26,6 +26,10 @@
- // `feature(file_with_nul)` is stable since Rust 1.92.0. Before Rust 1.89.0, it did not exist, so
- // enable it conditionally.
- #![cfg_attr(CONFIG_RUSTC_HAS_FILE_WITH_NUL, feature(file_with_nul))]
-+//
-+// `feature(cold_path)` is stable since Rust 1.95.0. Before Rust 1.86.0, it did not exist, so
-+// enable it conditionally.
-+#![cfg_attr(CONFIG_RUSTC_HAS_COLD_PATH, feature(cold_path))]
-
- // Ensure conditional compilation based on the kernel configuration works;
- // otherwise we may silently break things like initcall handling.
-diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-index 44edf72a4a24..f5d6d9d9b629 100644
---- a/rust/kernel/prelude.rs
-+++ b/rust/kernel/prelude.rs
-@@ -97,6 +97,11 @@
-     pr_notice,
-     pr_warn,
-     static_assert,
-+    std_vendor::{
-+        cold_path,
-+        likely,
-+        unlikely, //
-+    },
-     str::CStrExt as _,
-     try_init,
-     try_pin_init,
-diff --git a/rust/kernel/std_vendor.rs b/rust/kernel/std_vendor.rs
-index abbab5050cc5..58d2db5b46a4 100644
---- a/rust/kernel/std_vendor.rs
-+++ b/rust/kernel/std_vendor.rs
-@@ -162,3 +162,145 @@ macro_rules! dbg {
-         ($($crate::dbg!($val)),+,)
-     };
- }
-+
-+/// Hints to the compiler that a branch condition is likely to be true.
-+/// Returns the value passed to it.
-+///
-+/// It can be used with `if` or boolean `match` expressions.
-+///
-+/// When used outside of a branch condition, it may still influence a nearby branch, but
-+/// probably will not have any effect.
-+///
-+/// It can also be applied to parts of expressions, such as `likely(a) && unlikely(b)`, or to
-+/// compound expressions, such as `likely(a && b)`. When applied to compound expressions, it has
-+/// the following effect:
-+/// ```text
-+///     likely(!a) => !unlikely(a)
-+///     likely(a && b) => likely(a) && likely(b)
-+///     likely(a || b) => a || likely(b)
-+/// ```
-+///
-+/// See also the function [`cold_path()`] which may be more appropriate for idiomatic Rust code.
-+///
-+/// # Examples
-+///
-+/// ```
-+/// fn foo(x: i32) {
-+///     if likely(x > 0) {
-+///         pr_info!("this branch is likely to be taken\n");
-+///     } else {
-+///         pr_info!("this branch is unlikely to be taken\n");
-+///     }
-+///
-+///     match likely(x > 0) {
-+///         true => pr_info!("this branch is likely to be taken\n"),
-+///         false => pr_info!("this branch is unlikely to be taken\n"),
-+///     }
-+///
-+///     // Use outside of a branch condition may still influence a nearby branch
-+///     let cond = likely(x != 0);
-+///     if cond {
-+///         pr_info!("this branch is likely to be taken\n");
-+///     }
-+/// }
-+/// ```
-+// This implementation is taken from `core::intrinsics::likely()`, not the `hint` wrapper.
-+#[inline(always)]
-+pub const fn likely(b: bool) -> bool {
-+    if b {
-+        true
-+    } else {
-+        cold_path();
-+        false
-+    }
-+}
-+
-+/// Hints to the compiler that a branch condition is unlikely to be true.
-+/// Returns the value passed to it.
-+///
-+/// It can be used with `if` or boolean `match` expressions.
-+///
-+/// When used outside of a branch condition, it may still influence a nearby branch, but
-+/// probably will not have any effect.
-+///
-+/// It can also be applied to parts of expressions, such as `likely(a) && unlikely(b)`, or to
-+/// compound expressions, such as `unlikely(a && b)`. When applied to compound expressions, it has
-+/// the following effect:
-+/// ```text
-+///     unlikely(!a) => !likely(a)
-+///     unlikely(a && b) => a && unlikely(b)
-+///     unlikely(a || b) => unlikely(a) || unlikely(b)
-+/// ```
-+///
-+/// See also the function [`cold_path()`] which may be more appropriate for idiomatic Rust code.
-+///
-+/// # Examples
-+///
-+/// ```
-+/// fn foo(x: i32) {
-+///     if unlikely(x > 0) {
-+///         pr_info!("this branch is unlikely to be taken\n");
-+///     } else {
-+///         pr_info!("this branch is likely to be taken\n");
-+///     }
-+///
-+///     match unlikely(x > 0) {
-+///         true => pr_info!("this branch is unlikely to be taken\n"),
-+///         false => pr_info!("this branch is likely to be taken\n"),
-+///     }
-+///
-+///     // Use outside of a branch condition may still influence a nearby branch
-+///     let cond = unlikely(x != 0);
-+///     if cond {
-+///         pr_info!("this branch is likely to be taken\n");
-+///     }
-+/// }
-+/// ```
-+// This implementation is taken from `core::intrinsics::unlikely()`, not the `hint` wrapper.
-+#[inline(always)]
-+pub const fn unlikely(b: bool) -> bool {
-+    if b {
-+        cold_path();
-+        true
-+    } else {
-+        false
-+    }
-+}
-+
-+/// Hints to the compiler that given path is cold, i.e., unlikely to be taken. The compiler may
-+/// choose to optimize paths that are not cold at the expense of paths that are cold.
-+///
-+/// Note that like all hints, the exact effect to codegen is not guaranteed. Using `cold_path`
-+/// can actually *decrease* performance if the branch is called more than expected. It is advisable
-+/// to perform benchmarks to tell if this function is useful.
-+///
-+/// # Examples
-+///
-+/// ```
-+/// fn foo(x: &[i32]) {
-+///     if let Some(first) = x.first() {
-+///         // this is the fast path
-+///     } else {
-+///         // this path is unlikely
-+///         cold_path();
-+///     }
-+/// }
-+///
-+/// fn bar(x: i32) -> i32 {
-+///     match x {
-+///         1 => 10,
-+///         2 => 100,
-+///         3 => { cold_path(); 1000 }, // this branch is unlikely
-+///         _ => { cold_path(); 10000 }, // this is also unlikely
-+///     }
-+/// }
-+/// ```
-+///
-+/// See also the [`likely()`] and [`unlikely()`] functions, which are similar to the C side macros.
-+#[cfg(not(CONFIG_RUSTC_HAS_COLD_PATH))]
-+#[inline(always)]
-+#[cold]
-+pub const fn cold_path() {}
-+
-+#[cfg(CONFIG_RUSTC_HAS_COLD_PATH)]
-+pub use core::hint::cold_path;
---
-2.53.0
+Cheers,
+Miguel
