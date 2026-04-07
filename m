@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6A83750C4;
-	Tue,  7 Apr 2026 03:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73F73750BC;
+	Tue,  7 Apr 2026 03:54:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775534012; cv=none; b=p2YZpq5YVX57U7S0MRSj9IiqGrtivx2w/2eye0lU8Akf+9FEqNV4Km4Kwv1ezHmi7rlwjNcVwriC4DqJTDKP19yibJyflQV8Vcn66WrBlIy/573VPZnyTkIz4pRvSAKxp623nbRkJuM5Fbn2gbNchmpnWcyB5Ldk+vwvnjU16ac=
+	t=1775534069; cv=none; b=Ihwi3ZEdXJPaGZaW9nvrI/8gxlxu8eQ/NCKaQnFBBgo26f65441IPDakSCeuvb4y4tH422dDMZRXpSNkaq31ISOIIxiNXr2DDp1IYyQEQWeLAum8ecA9WG15KX4uGJPHbJw3CJFYg2DhpnA1lQ91zh+o34R9Hi6Yw6Fpn4f90AU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775534012; c=relaxed/simple;
-	bh=O4CG9a4o9kyZghvY7/Mtw1QVmUnry1erfOtRNYNo7Kw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=VB5y/qZ5BTiIvtU1ZZQnBIZuUkt7Jb+OYVIT4VZXT8X03nnQtPPZTHrm3ngUYU0Uq3xYOc7QrQ8BGk3fWifPfK+kvWoGVQrpj40qGosDh7mvf9kVA3lCGC8uElc9Pv9kr8R2tXArbLs4emDZLLDd5Pn+veW1obzZogexgT9aoYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EL6C88u8; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1775534069; c=relaxed/simple;
+	bh=H/HZ1EX+Ot7vOWn4BbcSvCzJwKyy+Bhg+3NT492hkIk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=uuWOMCjXikQdW+YB9EdGNKfMlLQt9j5Ty4Hd+EHnYICUEtZr2MOvvB1EuI+q7W1thfD+jCMt2xipFrSTj5PgLnbFEE9eQp3zgUt73eblFk2+HHByDlCqY0PUd87MdFZsyd0qR5qaax5C/q7tOqy8E0bL47/KtB8HW0LlJYusMBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m+KRPkTA; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EL6C88u8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m+KRPkTA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775534011; x=1807070011;
+  t=1775534068; x=1807070068;
   h=date:from:to:cc:subject:message-id;
-  bh=O4CG9a4o9kyZghvY7/Mtw1QVmUnry1erfOtRNYNo7Kw=;
-  b=EL6C88u8hiOyoHFTGhxUCfJnSJ/SKmX+8L1NWxdNNpgKr+WL44NsKib+
-   d0/2arveiCh3ubYA7AsIQWVFbALNe41MjltPPRwTM5QCOU6GN8mILJG0D
-   AkkWEi4VUnvG/XRahshcdP3QokYbfaKUikCuDPNEZzmFLXiN/ZuHh/UFC
-   Go22OOBjmeSzY/YBLORkZkIdgjDfCEGzjPXdRsh3AHvaP/+G69HL2sEmV
-   wbnZsAzSPROsSk4YhEy259zjr0aOvKrT+q6AN3wJd/P934eqZ2ZCMFNAB
-   X7nSI5qqfkYupQ3PxjdEzL+5/JfvPNG8PQ/Zveuaj39b6j9H0J8FmL74D
+  bh=H/HZ1EX+Ot7vOWn4BbcSvCzJwKyy+Bhg+3NT492hkIk=;
+  b=m+KRPkTACwTcmFzPCWd0+jhdM9Unv8oDx/N7WiJgsaLF85r8cveRpBm3
+   HBhwlu26Ib99FBOuNQ0QHUxd4N7u31qGUXxFS5aZtfkAhVHdCGdkY4jJC
+   n82BxOfGBqbK42cCpSxbsS8eeUYAmvHXWmcgucjl8EFAZgDzWLfGIIs5O
+   4b+UIVRA8aK8Hvx/qyLVhj/OBwVF1Ia02k3e3468VipYWNrMoZDhVzn9S
+   LRLqX+X28gzYNvmECBNUda521rgVc7ae+gYdvYSyyNgWR+Cb9i554vqrA
+   wXGmfM04y0EHY/nSctvQOcGh0lnnDKA0qXi+KrinWjLalh/IHDoEUAdsg
    g==;
-X-CSE-ConnectionGUID: lrljtBc4TJWomV1ji1Il3w==
-X-CSE-MsgGUID: 0ZRrfsdxTnCNWigXP68BRw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11751"; a="86781631"
+X-CSE-ConnectionGUID: qW4RoJ0ES5ys2/zFkMJu2g==
+X-CSE-MsgGUID: XGrjsKoHTuWKXoJrPU+GRA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11751"; a="80080775"
 X-IronPort-AV: E=Sophos;i="6.23,164,1770624000"; 
-   d="scan'208";a="86781631"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2026 20:53:26 -0700
-X-CSE-ConnectionGUID: C1JbWrIGTiC64GINcI7rHg==
-X-CSE-MsgGUID: R7gcf58WS/mDfMnUaes1rA==
+   d="scan'208";a="80080775"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2026 20:54:27 -0700
+X-CSE-ConnectionGUID: zmU6SGvRRcefyn6LyuH36g==
+X-CSE-MsgGUID: P7MjfjUMS1uOWVI/5icbLQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,164,1770624000"; 
-   d="scan'208";a="225303591"
+   d="scan'208";a="227994786"
 Received: from lkp-server01.sh.intel.com (HELO d00eb8a6782a) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 06 Apr 2026 20:53:24 -0700
+  by orviesa008.jf.intel.com with ESMTP; 06 Apr 2026 20:54:25 -0700
 Received: from kbuild by d00eb8a6782a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w9xVB-0000000003R-3HNf;
-	Tue, 07 Apr 2026 03:53:21 +0000
-Date: Tue, 07 Apr 2026 11:52:40 +0800
+	id 1w9xWA-00000000040-0YNK;
+	Tue, 07 Apr 2026 03:54:22 +0000
+Date: Tue, 07 Apr 2026 11:54:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:q/future_nested 21/28] arch/x86/kvm/xen.c:1687:6:
- warning: variable 'input' is used uninitialized whenever 'if' condition is
- false
-Message-ID: <202604040903.VcDtbfIf-lkp@intel.com>
+Subject: [koverstreet-bcachefs:bcachefs-testing 36/36]
+ fs/bcachefs/init/dev.c:978:5: warning: stack frame size (1040) exceeds limit
+ (1024) in 'bch2_dev_add'
+Message-ID: <202604041202.bKcXxzJY-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,142 +60,194 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/sean-jc/linux q/future_nested
-head:   f0450993519d901739b7014042b6620b1ef1fe6d
-commit: 366718c9acb94b80773c6575ba3138cc712b4a75 [21/28] KVM: x86/xen: Don't truncate RAX when handling hypercall from protected guest
-config: i386-randconfig-014-20260404 (https://download.01.org/0day-ci/archive/20260404/202604040903.VcDtbfIf-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260404/202604040903.VcDtbfIf-lkp@intel.com/reproduce)
+tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
+head:   58bb946d535130188a8558ac82889d1daa2ad56b
+commit: 58bb946d535130188a8558ac82889d1daa2ad56b [36/36] bcachefs: record device serial number in superblock
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260404/202604041202.bKcXxzJY-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260404/202604041202.bKcXxzJY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604040903.VcDtbfIf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604041202.bKcXxzJY-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/xen.c:1687:6: warning: variable 'input' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1687 |         if (!longmode) {
-         |             ^~~~~~~~~
-   arch/x86/kvm/xen.c:1708:31: note: uninitialized use occurs here
-    1708 |         trace_kvm_xen_hypercall(cpl, input, params[0], params[1], params[2],
-         |                                      ^~~~~
-   arch/x86/kvm/xen.c:1687:2: note: remove the 'if' if its condition is always true
-    1687 |         if (!longmode) {
-         |         ^~~~~~~~~~~~~~
-   arch/x86/kvm/xen.c:1677:11: note: initialize the variable 'input' to silence this warning
-    1677 |         u64 input, params[6], r = -ENOSYS;
-         |                  ^
-         |                   = 0
+>> fs/bcachefs/init/dev.c:978:5: warning: stack frame size (1040) exceeds limit (1024) in 'bch2_dev_add' [-Wframe-larger-than]
+     978 | int bch2_dev_add(struct bch_fs *c, const char *path, struct printbuf *err)
+         |     ^
    1 warning generated.
 
 
-vim +1687 arch/x86/kvm/xen.c
+vim +/bch2_dev_add +978 fs/bcachefs/init/dev.c
 
-536395260582be Joao Martins        2022-03-03  1673  
-23200b7a30de31 Joao Martins        2018-06-13  1674  int kvm_xen_hypercall(struct kvm_vcpu *vcpu)
-23200b7a30de31 Joao Martins        2018-06-13  1675  {
-23200b7a30de31 Joao Martins        2018-06-13  1676  	bool longmode;
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1677  	u64 input, params[6], r = -ENOSYS;
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1678  	bool handled = false;
-c2b8cdfaf3a672 David Woodhouse     2022-11-12  1679  	u8 cpl;
-23200b7a30de31 Joao Martins        2018-06-13  1680  
-79033bebf6fa30 Joao Martins        2018-06-13  1681  	/* Hyper-V hypercalls get bit 31 set in EAX */
-366718c9acb94b Sean Christopherson 2026-04-03  1682  	if ((kvm_rax_read(vcpu) & 0x80000000) &&
-8f014550dfb114 Vitaly Kuznetsov    2021-01-26  1683  	    kvm_hv_hypercall_enabled(vcpu))
-79033bebf6fa30 Joao Martins        2018-06-13  1684  		return kvm_hv_hypercall(vcpu);
-79033bebf6fa30 Joao Martins        2018-06-13  1685  
-b5aead0064f33a Tom Lendacky        2021-05-24  1686  	longmode = is_64_bit_hypercall(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13 @1687  	if (!longmode) {
-366718c9acb94b Sean Christopherson 2026-04-03  1688  		input = (u32)kvm_rax_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1689  		params[0] = (u32)kvm_rbx_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1690  		params[1] = (u32)kvm_rcx_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1691  		params[2] = (u32)kvm_rdx_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1692  		params[3] = (u32)kvm_rsi_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1693  		params[4] = (u32)kvm_rdi_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1694  		params[5] = (u32)kvm_rbp_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1695  	}
-23200b7a30de31 Joao Martins        2018-06-13  1696  #ifdef CONFIG_X86_64
-23200b7a30de31 Joao Martins        2018-06-13  1697  	else {
-366718c9acb94b Sean Christopherson 2026-04-03  1698  		input = (u64)kvm_rax_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1699  		params[0] = (u64)kvm_rdi_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1700  		params[1] = (u64)kvm_rsi_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1701  		params[2] = (u64)kvm_rdx_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1702  		params[3] = (u64)kvm_r10_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1703  		params[4] = (u64)kvm_r8_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1704  		params[5] = (u64)kvm_r9_read(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1705  	}
-23200b7a30de31 Joao Martins        2018-06-13  1706  #endif
-896046474f8d2e Wei Wang            2024-05-07  1707  	cpl = kvm_x86_call(get_cpl)(vcpu);
-c3f3719952b9ab David Woodhouse     2022-11-14  1708  	trace_kvm_xen_hypercall(cpl, input, params[0], params[1], params[2],
-23200b7a30de31 Joao Martins        2018-06-13  1709  				params[3], params[4], params[5]);
-23200b7a30de31 Joao Martins        2018-06-13  1710  
-c2b8cdfaf3a672 David Woodhouse     2022-11-12  1711  	/*
-c2b8cdfaf3a672 David Woodhouse     2022-11-12  1712  	 * Only allow hypercall acceleration for CPL0. The rare hypercalls that
-c2b8cdfaf3a672 David Woodhouse     2022-11-12  1713  	 * are permitted in guest userspace can be handled by the VMM.
-c2b8cdfaf3a672 David Woodhouse     2022-11-12  1714  	 */
-c2b8cdfaf3a672 David Woodhouse     2022-11-12  1715  	if (unlikely(cpl > 0))
-c2b8cdfaf3a672 David Woodhouse     2022-11-12  1716  		goto handle_in_userspace;
-c2b8cdfaf3a672 David Woodhouse     2022-11-12  1717  
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1718  	switch (input) {
-28d1629f751c4a David Woodhouse     2022-03-03  1719  	case __HYPERVISOR_xen_version:
-28d1629f751c4a David Woodhouse     2022-03-03  1720  		if (params[0] == XENVER_version && vcpu->kvm->arch.xen.xen_version) {
-28d1629f751c4a David Woodhouse     2022-03-03  1721  			r = vcpu->kvm->arch.xen.xen_version;
-28d1629f751c4a David Woodhouse     2022-03-03  1722  			handled = true;
-28d1629f751c4a David Woodhouse     2022-03-03  1723  		}
-28d1629f751c4a David Woodhouse     2022-03-03  1724  		break;
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1725  	case __HYPERVISOR_event_channel_op:
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1726  		if (params[0] == EVTCHNOP_send)
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1727  			handled = kvm_xen_hcall_evtchn_send(vcpu, params[1], &r);
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1728  		break;
-0ec6c5c5bb6585 Joao Martins        2022-03-03  1729  	case __HYPERVISOR_sched_op:
-1a65105a5aba9f Boris Ostrovsky     2022-03-03  1730  		handled = kvm_xen_hcall_sched_op(vcpu, longmode, params[0],
-1a65105a5aba9f Boris Ostrovsky     2022-03-03  1731  						 params[1], &r);
-0ec6c5c5bb6585 Joao Martins        2022-03-03  1732  		break;
-536395260582be Joao Martins        2022-03-03  1733  	case __HYPERVISOR_vcpu_op:
-536395260582be Joao Martins        2022-03-03  1734  		handled = kvm_xen_hcall_vcpu_op(vcpu, longmode, params[0], params[1],
-536395260582be Joao Martins        2022-03-03  1735  						params[2], &r);
-536395260582be Joao Martins        2022-03-03  1736  		break;
-536395260582be Joao Martins        2022-03-03  1737  	case __HYPERVISOR_set_timer_op: {
-536395260582be Joao Martins        2022-03-03  1738  		u64 timeout = params[0];
-536395260582be Joao Martins        2022-03-03  1739  		/* In 32-bit mode, the 64-bit timeout is in two 32-bit params. */
-536395260582be Joao Martins        2022-03-03  1740  		if (!longmode)
-536395260582be Joao Martins        2022-03-03  1741  			timeout |= params[1] << 32;
-536395260582be Joao Martins        2022-03-03  1742  		handled = kvm_xen_hcall_set_timer_op(vcpu, timeout, &r);
-536395260582be Joao Martins        2022-03-03  1743  		break;
-536395260582be Joao Martins        2022-03-03  1744  	}
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1745  	default:
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1746  		break;
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1747  	}
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1748  
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1749  	if (handled)
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1750  		return kvm_xen_hypercall_set_result(vcpu, r);
-2fd6df2f2b47d4 Joao Martins        2022-03-03  1751  
-c2b8cdfaf3a672 David Woodhouse     2022-11-12  1752  handle_in_userspace:
-23200b7a30de31 Joao Martins        2018-06-13  1753  	vcpu->run->exit_reason = KVM_EXIT_XEN;
-23200b7a30de31 Joao Martins        2018-06-13  1754  	vcpu->run->xen.type = KVM_EXIT_XEN_HCALL;
-23200b7a30de31 Joao Martins        2018-06-13  1755  	vcpu->run->xen.u.hcall.longmode = longmode;
-c2b8cdfaf3a672 David Woodhouse     2022-11-12  1756  	vcpu->run->xen.u.hcall.cpl = cpl;
-23200b7a30de31 Joao Martins        2018-06-13  1757  	vcpu->run->xen.u.hcall.input = input;
-23200b7a30de31 Joao Martins        2018-06-13  1758  	vcpu->run->xen.u.hcall.params[0] = params[0];
-23200b7a30de31 Joao Martins        2018-06-13  1759  	vcpu->run->xen.u.hcall.params[1] = params[1];
-23200b7a30de31 Joao Martins        2018-06-13  1760  	vcpu->run->xen.u.hcall.params[2] = params[2];
-23200b7a30de31 Joao Martins        2018-06-13  1761  	vcpu->run->xen.u.hcall.params[3] = params[3];
-23200b7a30de31 Joao Martins        2018-06-13  1762  	vcpu->run->xen.u.hcall.params[4] = params[4];
-23200b7a30de31 Joao Martins        2018-06-13  1763  	vcpu->run->xen.u.hcall.params[5] = params[5];
-23200b7a30de31 Joao Martins        2018-06-13  1764  	vcpu->arch.xen.hypercall_rip = kvm_get_linear_rip(vcpu);
-23200b7a30de31 Joao Martins        2018-06-13  1765  	vcpu->arch.complete_userspace_io =
-23200b7a30de31 Joao Martins        2018-06-13  1766  		kvm_xen_hypercall_complete_userspace;
-23200b7a30de31 Joao Martins        2018-06-13  1767  
-23200b7a30de31 Joao Martins        2018-06-13  1768  	return 0;
-23200b7a30de31 Joao Martins        2018-06-13  1769  }
-14243b387137a4 David Woodhouse     2021-12-10  1770  
+bf25974be5b42c Kent Overstreet 2025-10-04   976  
+bf25974be5b42c Kent Overstreet 2025-10-04   977  /* Add new device to running filesystem: */
+bf25974be5b42c Kent Overstreet 2025-10-04  @978  int bch2_dev_add(struct bch_fs *c, const char *path, struct printbuf *err)
+bf25974be5b42c Kent Overstreet 2025-10-04   979  {
+bf25974be5b42c Kent Overstreet 2025-10-04   980  	int ret = 0;
+bf25974be5b42c Kent Overstreet 2025-10-04   981  
+f5a0454134f4f4 Kent Overstreet 2026-01-07   982  	struct bch_opts opts = bch2_opts_empty();
+f5a0454134f4f4 Kent Overstreet 2026-01-07   983  	struct bch_sb_handle sb __cleanup(bch2_free_super) = {};
+bf25974be5b42c Kent Overstreet 2025-10-04   984  	ret = bch2_read_super(path, &opts, &sb);
+bf25974be5b42c Kent Overstreet 2025-10-04   985  	if (ret) {
+bf25974be5b42c Kent Overstreet 2025-10-04   986  		prt_printf(err, "error reading superblock: %s\n", bch2_err_str(ret));
+f5a0454134f4f4 Kent Overstreet 2026-01-07   987  		return ret;
+bf25974be5b42c Kent Overstreet 2025-10-04   988  	}
+bf25974be5b42c Kent Overstreet 2025-10-04   989  
+bf25974be5b42c Kent Overstreet 2025-10-04   990  	struct bch_member dev_mi = bch2_sb_member_get(sb.sb, sb.sb->dev_idx);
+bf25974be5b42c Kent Overstreet 2025-10-04   991  
+f5a0454134f4f4 Kent Overstreet 2026-01-07   992  	CLASS(printbuf, label)();
+bf25974be5b42c Kent Overstreet 2025-10-04   993  	if (BCH_MEMBER_GROUP(&dev_mi)) {
+bf25974be5b42c Kent Overstreet 2025-10-04   994  		bch2_disk_path_to_text_sb(&label, sb.sb, BCH_MEMBER_GROUP(&dev_mi) - 1);
+f5a0454134f4f4 Kent Overstreet 2026-01-07   995  		if (label.allocation_failure)
+f5a0454134f4f4 Kent Overstreet 2026-01-07   996  			return -ENOMEM;
+bf25974be5b42c Kent Overstreet 2025-10-04   997  	}
+bf25974be5b42c Kent Overstreet 2025-10-04   998  
+bf25974be5b42c Kent Overstreet 2025-10-04   999  	if (list_empty(&c->list)) {
+bf25974be5b42c Kent Overstreet 2025-10-04  1000  		scoped_guard(mutex, &bch2_fs_list_lock) {
+bf25974be5b42c Kent Overstreet 2025-10-04  1001  			if (__bch2_uuid_to_fs(c->sb.uuid))
+bf25974be5b42c Kent Overstreet 2025-10-04  1002  				ret = bch_err_throw(c, filesystem_uuid_already_open);
+bf25974be5b42c Kent Overstreet 2025-10-04  1003  			else
+bf25974be5b42c Kent Overstreet 2025-10-04  1004  				list_add(&c->list, &bch2_fs_list);
+bf25974be5b42c Kent Overstreet 2025-10-04  1005  		}
+bf25974be5b42c Kent Overstreet 2025-10-04  1006  
+bf25974be5b42c Kent Overstreet 2025-10-04  1007  		if (ret) {
+bf25974be5b42c Kent Overstreet 2025-10-04  1008  			prt_printf(err, "cannot go multidevice: filesystem UUID already open\n");
+f5a0454134f4f4 Kent Overstreet 2026-01-07  1009  			return ret;
+bf25974be5b42c Kent Overstreet 2025-10-04  1010  		}
+bf25974be5b42c Kent Overstreet 2025-10-04  1011  	}
+bf25974be5b42c Kent Overstreet 2025-10-04  1012  
+f5a0454134f4f4 Kent Overstreet 2026-01-07  1013  	try(bch2_dev_may_add(sb.sb, c));
+bf25974be5b42c Kent Overstreet 2025-10-04  1014  
+f5a0454134f4f4 Kent Overstreet 2026-01-07  1015  	struct bch_dev *ca = __bch2_dev_alloc(c, &dev_mi);
+f5a0454134f4f4 Kent Overstreet 2026-01-07  1016  	if (!ca)
+f5a0454134f4f4 Kent Overstreet 2026-01-07  1017  		return -ENOMEM;
+bf25974be5b42c Kent Overstreet 2025-10-04  1018  
+2d5b91710aa7ad Kent Overstreet 2025-11-10  1019  	ret = __bch2_dev_attach_bdev(c, ca, &sb, err);
+bf25974be5b42c Kent Overstreet 2025-10-04  1020  	if (ret)
+bf25974be5b42c Kent Overstreet 2025-10-04  1021  		goto err;
+bf25974be5b42c Kent Overstreet 2025-10-04  1022  
+b5bc9e176a2cdf Kent Overstreet 2025-11-13  1023  	struct reconcile_scan s = { .type = RECONCILE_SCAN_pending };
+463dd674455875 Kent Overstreet 2025-10-27  1024  	if (test_bit(BCH_FS_started, &c->flags)) {
+463dd674455875 Kent Overstreet 2025-10-27  1025  		/*
+463dd674455875 Kent Overstreet 2025-10-27  1026  		 * Technically incorrect, but 'bcachefs image update' is the
+463dd674455875 Kent Overstreet 2025-10-27  1027  		 * only thing that adds a device to a not-started filesystem:
+463dd674455875 Kent Overstreet 2025-10-27  1028  		 */
+581f7e27bc9728 Kent Overstreet 2025-11-12  1029  		try(bch2_set_reconcile_needs_scan(c, s, false));
+463dd674455875 Kent Overstreet 2025-10-27  1030  	}
+463dd674455875 Kent Overstreet 2025-10-27  1031  
+bf25974be5b42c Kent Overstreet 2025-10-04  1032  	scoped_guard(rwsem_write, &c->state_lock) {
+84968c2bb32fef Kent Overstreet 2026-01-07  1033  		scoped_guard(memalloc_flags, PF_MEMALLOC_NOFS) {
+84968c2bb32fef Kent Overstreet 2026-01-07  1034  			guard(mutex)(&c->sb_lock);
+bf25974be5b42c Kent Overstreet 2025-10-04  1035  			SET_BCH_SB_MULTI_DEVICE(c->disk_sb.sb, true);
+bf25974be5b42c Kent Overstreet 2025-10-04  1036  
+bf25974be5b42c Kent Overstreet 2025-10-04  1037  			ret = bch2_sb_from_fs(c, ca);
+bf25974be5b42c Kent Overstreet 2025-10-04  1038  			if (ret) {
+bf25974be5b42c Kent Overstreet 2025-10-04  1039  				prt_printf(err, "error setting up new superblock: %s\n", bch2_err_str(ret));
+bf25974be5b42c Kent Overstreet 2025-10-04  1040  				goto err;
+bf25974be5b42c Kent Overstreet 2025-10-04  1041  			}
+bf25974be5b42c Kent Overstreet 2025-10-04  1042  
+bf25974be5b42c Kent Overstreet 2025-10-04  1043  			if (dynamic_fault("bcachefs:add:no_slot"))
+bf25974be5b42c Kent Overstreet 2025-10-04  1044  				goto err;
+bf25974be5b42c Kent Overstreet 2025-10-04  1045  
+bf25974be5b42c Kent Overstreet 2025-10-04  1046  			ret = bch2_sb_member_alloc(c);
+bf25974be5b42c Kent Overstreet 2025-10-04  1047  			if (ret < 0) {
+bf25974be5b42c Kent Overstreet 2025-10-04  1048  				prt_printf(err, "error allocating superblock member slot: %s\n", bch2_err_str(ret));
+bf25974be5b42c Kent Overstreet 2025-10-04  1049  				goto err;
+bf25974be5b42c Kent Overstreet 2025-10-04  1050  			}
+bf25974be5b42c Kent Overstreet 2025-10-04  1051  			unsigned dev_idx = ret;
+bf25974be5b42c Kent Overstreet 2025-10-04  1052  			ret = 0;
+bf25974be5b42c Kent Overstreet 2025-10-04  1053  
+bf25974be5b42c Kent Overstreet 2025-10-04  1054  			/* success: */
+bf25974be5b42c Kent Overstreet 2025-10-04  1055  
+bf25974be5b42c Kent Overstreet 2025-10-04  1056  			dev_mi.last_mount = cpu_to_le64(ktime_get_real_seconds());
+bf25974be5b42c Kent Overstreet 2025-10-04  1057  			*bch2_members_v2_get_mut(c->disk_sb.sb, dev_idx) = dev_mi;
+bf25974be5b42c Kent Overstreet 2025-10-04  1058  
+bf25974be5b42c Kent Overstreet 2025-10-04  1059  			ca->disk_sb.sb->dev_idx	= dev_idx;
+bf25974be5b42c Kent Overstreet 2025-10-04  1060  			bch2_dev_attach(c, ca, dev_idx);
+bf25974be5b42c Kent Overstreet 2025-10-04  1061  
+f08ffce1e114f9 Kent Overstreet 2025-11-29  1062  			set_bit(ca->dev_idx, c->devs_online.d);
+bf25974be5b42c Kent Overstreet 2025-10-04  1063  
+bf25974be5b42c Kent Overstreet 2025-10-04  1064  			if (BCH_MEMBER_GROUP(&dev_mi)) {
+bf25974be5b42c Kent Overstreet 2025-10-04  1065  				ret = __bch2_dev_group_set(c, ca, label.buf);
+bf25974be5b42c Kent Overstreet 2025-10-04  1066  				prt_printf(err, "error creating new label: %s\n", bch2_err_str(ret));
+bf25974be5b42c Kent Overstreet 2025-10-04  1067  				if (ret)
+bf25974be5b42c Kent Overstreet 2025-10-04  1068  					goto err_late;
+bf25974be5b42c Kent Overstreet 2025-10-04  1069  			}
+bf25974be5b42c Kent Overstreet 2025-10-04  1070  
+e12a4b5e98b5a2 Kent Overstreet 2025-11-26  1071  
+e12a4b5e98b5a2 Kent Overstreet 2025-11-26  1072  			bool write_sb = false;
+e12a4b5e98b5a2 Kent Overstreet 2025-11-26  1073  			__bch2_dev_mi_field_upgrades(c, ca, &write_sb);
+e12a4b5e98b5a2 Kent Overstreet 2025-11-26  1074  
+bf25974be5b42c Kent Overstreet 2025-10-04  1075  			bch2_write_super(c);
+bf25974be5b42c Kent Overstreet 2025-10-04  1076  		}
+bf25974be5b42c Kent Overstreet 2025-10-04  1077  
+bf25974be5b42c Kent Overstreet 2025-10-04  1078  		ret = bch2_dev_usage_init(ca, false);
+bf25974be5b42c Kent Overstreet 2025-10-04  1079  		if (ret)
+bf25974be5b42c Kent Overstreet 2025-10-04  1080  			goto err_late;
+bf25974be5b42c Kent Overstreet 2025-10-04  1081  
+bf25974be5b42c Kent Overstreet 2025-10-04  1082  		if (test_bit(BCH_FS_started, &c->flags)) {
+bf25974be5b42c Kent Overstreet 2025-10-04  1083  			ret = bch2_trans_mark_dev_sb(c, ca, BTREE_TRIGGER_transactional);
+bf25974be5b42c Kent Overstreet 2025-10-04  1084  			if (ret) {
+bf25974be5b42c Kent Overstreet 2025-10-04  1085  				prt_printf(err, "error marking new superblock: %s\n", bch2_err_str(ret));
+bf25974be5b42c Kent Overstreet 2025-10-04  1086  				goto err_late;
+bf25974be5b42c Kent Overstreet 2025-10-04  1087  			}
+bf25974be5b42c Kent Overstreet 2025-10-04  1088  
+bf25974be5b42c Kent Overstreet 2025-10-04  1089  			ret = bch2_fs_freespace_init(c);
+bf25974be5b42c Kent Overstreet 2025-10-04  1090  			if (ret) {
+bf25974be5b42c Kent Overstreet 2025-10-04  1091  				prt_printf(err, "error initializing free space: %s\n", bch2_err_str(ret));
+bf25974be5b42c Kent Overstreet 2025-10-04  1092  				goto err_late;
+bf25974be5b42c Kent Overstreet 2025-10-04  1093  			}
+bf25974be5b42c Kent Overstreet 2025-10-04  1094  
+bf25974be5b42c Kent Overstreet 2025-10-04  1095  			if (ca->mi.state == BCH_MEMBER_STATE_rw)
+bf25974be5b42c Kent Overstreet 2025-10-04  1096  				__bch2_dev_read_write(c, ca);
+bf25974be5b42c Kent Overstreet 2025-10-04  1097  
+bf25974be5b42c Kent Overstreet 2025-10-04  1098  			ret = bch2_dev_journal_alloc(ca, false);
+bf25974be5b42c Kent Overstreet 2025-10-04  1099  			if (ret) {
+bf25974be5b42c Kent Overstreet 2025-10-04  1100  				prt_printf(err, "error allocating journal: %s\n", bch2_err_str(ret));
+bf25974be5b42c Kent Overstreet 2025-10-04  1101  				goto err_late;
+bf25974be5b42c Kent Overstreet 2025-10-04  1102  			}
+bf25974be5b42c Kent Overstreet 2025-10-04  1103  		}
+bf25974be5b42c Kent Overstreet 2025-10-04  1104  
+bf25974be5b42c Kent Overstreet 2025-10-04  1105  		/*
+bf25974be5b42c Kent Overstreet 2025-10-04  1106  		 * We just changed the superblock UUID, invalidate cache and send a
+bf25974be5b42c Kent Overstreet 2025-10-04  1107  		 * uevent to update /dev/disk/by-uuid
+bf25974be5b42c Kent Overstreet 2025-10-04  1108  		 */
+bf25974be5b42c Kent Overstreet 2025-10-04  1109  		invalidate_bdev(ca->disk_sb.bdev);
+bf25974be5b42c Kent Overstreet 2025-10-04  1110  
+bf25974be5b42c Kent Overstreet 2025-10-04  1111  		char uuid_str[37];
+bf25974be5b42c Kent Overstreet 2025-10-04  1112  		snprintf(uuid_str, sizeof(uuid_str), "UUID=%pUb", &c->sb.uuid);
+bf25974be5b42c Kent Overstreet 2025-10-04  1113  
+bf25974be5b42c Kent Overstreet 2025-10-04  1114  		char *envp[] = {
+bf25974be5b42c Kent Overstreet 2025-10-04  1115  			"CHANGE=uuid",
+bf25974be5b42c Kent Overstreet 2025-10-04  1116  			uuid_str,
+bf25974be5b42c Kent Overstreet 2025-10-04  1117  			NULL,
+bf25974be5b42c Kent Overstreet 2025-10-04  1118  		};
+bf25974be5b42c Kent Overstreet 2025-10-04  1119  		kobject_uevent_env(&ca->disk_sb.bdev->bd_device.kobj, KOBJ_CHANGE, envp);
+bf25974be5b42c Kent Overstreet 2025-10-04  1120  	}
+463dd674455875 Kent Overstreet 2025-10-27  1121  
+463dd674455875 Kent Overstreet 2025-10-27  1122  	if (test_bit(BCH_FS_started, &c->flags))
+581f7e27bc9728 Kent Overstreet 2025-11-12  1123  		try(bch2_set_reconcile_needs_scan(c, s, true));
+bf25974be5b42c Kent Overstreet 2025-10-04  1124  out:
+bf25974be5b42c Kent Overstreet 2025-10-04  1125  	bch_err_fn(c, ret);
+bf25974be5b42c Kent Overstreet 2025-10-04  1126  	return ret;
+bf25974be5b42c Kent Overstreet 2025-10-04  1127  err:
+bf25974be5b42c Kent Overstreet 2025-10-04  1128  	if (ca)
+bf25974be5b42c Kent Overstreet 2025-10-04  1129  		bch2_dev_free(ca);
+bf25974be5b42c Kent Overstreet 2025-10-04  1130  	goto out;
+bf25974be5b42c Kent Overstreet 2025-10-04  1131  err_late:
+bf25974be5b42c Kent Overstreet 2025-10-04  1132  	ca = NULL;
+bf25974be5b42c Kent Overstreet 2025-10-04  1133  	goto err;
+bf25974be5b42c Kent Overstreet 2025-10-04  1134  }
+bf25974be5b42c Kent Overstreet 2025-10-04  1135  
 
-:::::: The code at line 1687 was first introduced by commit
-:::::: 23200b7a30de315d0e9a40663c905869d29d833c KVM: x86/xen: intercept xen hypercalls if enabled
+:::::: The code at line 978 was first introduced by commit
+:::::: bf25974be5b42c0341a7f17cb7e6e835d80b41e6 bcachefs: split out init/dev.c
 
-:::::: TO: Joao Martins <joao.m.martins@oracle.com>
-:::::: CC: David Woodhouse <dwmw@amazon.co.uk>
+:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
+:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
 
 -- 
 0-DAY CI Kernel Test Service
