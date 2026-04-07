@@ -1,160 +1,209 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E85374170;
-	Tue,  7 Apr 2026 04:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D4933263A;
+	Tue,  7 Apr 2026 06:31:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775534683; cv=none; b=cd//Eald4tn+0XEGOeIcT+JFnmBzwQlw19Q75qWKZJsKpYleyoVVwKEL+mA1ek1Vd8j+iNzKwDq8rPT0CmqGxRq/P8sm8fuUrML5DLleNaA9xsh/T9uI0duBisZIormhyhnOygkJpQsJI04HF3mEbyzX1IbPrTCkLoc+imYRgfA=
+	t=1775543463; cv=none; b=sGF0shQAng/XKhzikvMq6jkOBvuC2utp5xLAiurjzOB6lOth+jBm144U1CtcUKlxM6ev11vVNXZODMoRN9k78u0OIkjOXK1VH7gdv/7b+dy6sX50j9HrUVQQTsch6J61H8oFCq41Siy4Sby8jUwqHyFhu6IRkeZi2wvfbvHqoBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775534683; c=relaxed/simple;
-	bh=xO/Rk3YZ1Xz2//xBVTNEIxCH8LcFtvV76leECoMGjGw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=VtvYcsRulf5lBouaKAYRxox69vx1Z2Z2x2wdBl0A7JlSQAhl80yjhLu1Xhs99tPaUn+nWAYhMTY5HijC9qFvk6dd0FrfACT8pMSi9M7HzFMT3gFo4exJfXdVNst8lWOY6thIFC6UuhgxcT9T7AjQhyrUgMtxdBlI4Swc3vmHqaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IHxhX28Y; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1775543463; c=relaxed/simple;
+	bh=ZjDuRFze+AHugvjB7qruDfFAWxga1V7Fm3W1dbFGhZg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gKMc+89PjV7IouAk+PV5Ce0+HkxeFgFfJdwx6qm+dlDBmy02uGteT99qzxrfhOgb/Rj+ONcBR6XsSH0tDoK40nXdmDJcxHppPGkyTID9/dA7mB+1+47lCpcKOeA0PRdU7PqV+r3Wc4MLfydDjQGax69RqB6eQQ83XOOan/lmPGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UYJ2V1jK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IHxhX28Y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775534681; x=1807070681;
-  h=date:from:to:cc:subject:message-id;
-  bh=xO/Rk3YZ1Xz2//xBVTNEIxCH8LcFtvV76leECoMGjGw=;
-  b=IHxhX28YTFOTWbLUf9LXVjbzHZEm/NJMshv9aPAd/WKEqLoxGWXDousa
-   6qmhSXyg1Tpk74CYGRVJC6Oab0P6K6eO6pP7Z4X4yDOEqdyZjP017V86O
-   R9pua5lqeaB5qrC33oouchhRZiyBbRslutvU/TkVLlXVmYTNe0mrggkM4
-   6m4fNktwVbG4whij/nnOicQ+qlZoL8QRqlgh+2Shmf31uJudHN8w1CN+T
-   wBFz0ZCVWtktkLVg7HPk3xXUbWSlYcNaMoFoj1gs0FZewlw+PhEr1Xggj
-   TfLk2xbHNoQ+cZ8LQ5WMtVbDmFuP4sOVRjkrgAR1P2fYexm7UYk+imuI9
-   w==;
-X-CSE-ConnectionGUID: old7+jHbSZy6n0h15LlESw==
-X-CSE-MsgGUID: dVnfFvoGSF2rTmaKcENxCw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11751"; a="87193705"
-X-IronPort-AV: E=Sophos;i="6.23,164,1770624000"; 
-   d="scan'208";a="87193705"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2026 21:04:38 -0700
-X-CSE-ConnectionGUID: o0X8ymqaTGO2Vnj6Ki8JBQ==
-X-CSE-MsgGUID: jWoTY36/Qf2vh8gDkteqrQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,164,1770624000"; 
-   d="scan'208";a="228319732"
-Received: from lkp-server01.sh.intel.com (HELO d00eb8a6782a) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 06 Apr 2026 21:04:37 -0700
-Received: from kbuild by d00eb8a6782a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w9xg2-0000000009P-10Kz;
-	Tue, 07 Apr 2026 04:04:34 +0000
-Date: Tue, 07 Apr 2026 12:03:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:kdevops 4/27] fs/namei.c:4173:31: error: use of
- undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-Message-ID: <202604071143.P8NeOS1a-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UYJ2V1jK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7455DC116C6;
+	Tue,  7 Apr 2026 06:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775543463;
+	bh=ZjDuRFze+AHugvjB7qruDfFAWxga1V7Fm3W1dbFGhZg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UYJ2V1jKJb7okmaQx+prequ0kdbPIp9XLsd5sS0qlt/XdHQh4SENMm1rD/p+1lv9I
+	 Yx9uFmry1tOtn36QRC+5187jx1ogut9luleFYBN5E9HWDviaw/aCxFs73FPl6VHIca
+	 BEEBBMMAc05rz29IubGdKtHOqrpulk1r1nkt605qpKimxMKSeTgOJzrX6JugDbnRjE
+	 UONo2a6jOJsTGszmWny3f4af20rwUCGtwdy/NAsLjjwEie8puqHpekYPW58YYe/ccF
+	 m1PybxcTgcS5CmG1eWMEmWRDEBvyqj3pPf1NUy1zB+5QW2WZnlAuJzqZr+otVqHfEw
+	 OZjdf7BDVzxuQ==
+Date: Mon, 6 Apr 2026 23:31:00 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Tengda Wu <wutengda@huaweicloud.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+	Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 00/16] perf arm64: Support data type profiling
+Message-ID: <adSkpI9AoTNgISU5@z2>
+References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260403094800.1418825-1-wutengda@huaweicloud.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
-head:   4c7561ebe642f97bf42406cdbbda294c0b7b4a63
-commit: 6c5b0d9e45361e997bfb76a078bc1013a04ac0b3 [4/27] filelock: add support for ignoring deleg breaks for dir change events
-config: s390-randconfig-002-20260407 (https://download.01.org/0day-ci/archive/20260407/202604071143.P8NeOS1a-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260407/202604071143.P8NeOS1a-lkp@intel.com/reproduce)
+Hello,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604071143.P8NeOS1a-lkp@intel.com/
+On Fri, Apr 03, 2026 at 09:47:44AM +0000, Tengda Wu wrote:
+> This patch series implements data type profiling support for arm64,
+> building upon the foundational work previously contributed by Huafei [1].
+> While the initial version laid the groundwork for arm64 data type analysis,
+> this series iterates on that work by refining instruction parsing and
+> extending support for core architectural features.
 
-All errors (new ones prefixed by >>):
+Thanks for working on this!  I'm happy to see that the changes are well
+organized and each commit explained the issues clearly.  
 
->> fs/namei.c:4173:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    4173 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, di);
-         |                                      ^
-   fs/namei.c:4472:38: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    4472 |                 error = try_break_deleg(dir_inode, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                                    ^
-   fs/namei.c:5088:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    5088 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                      ^
-   fs/namei.c:5229:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    5229 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                      ^
->> fs/namei.c:5334:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
-    5334 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
-         |                                      ^
-   fs/namei.c:5464:33: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
-    5464 |                         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
-         |                                                      ^
-   fs/namei.c:5611:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    5611 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                      ^
-   fs/namei.c:5742:32: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    5742 |                 error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                              ^
->> fs/namei.c:6009:26: error: use of undeclared identifier 'LEASE_BREAK_DIR_RENAME'
-    6009 |                                 old_dir == new_dir ? LEASE_BREAK_DIR_RENAME :
-         |                                                      ^
-   fs/namei.c:6010:12: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
-    6010 |                                                      LEASE_BREAK_DIR_DELETE,
-         |                                                      ^
-   fs/namei.c:6015:36: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
-    6015 |                 error = try_break_deleg(new_dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
-         |                                                  ^
-   11 errors generated.
+> 
+> The series is organized as follows:
+> 
+> 1. Fix disassembly mismatches (Patches 01-02)
+>    Current perf annotate supports three disassembly backends: llvm,
+>    capstone, and objdump. On arm64, inconsistencies between the output
+>    of these backends (specifically llvm/capstone vs. objdump) often
+>    prevent the tracker from correctly identifying registers and offsets.
+>    These patches resolve these mismatches, ensuring consistent instruction
+>    parsing across all supported backends.
+> 
+> 2. Infrastructure for arm64 operand parsing (Patches 03-07)
+>    These patches establish the necessary infrastructure for arm64-specific
+>    operand handling. This includes implementing new callbacks and data
+>    structures to manage arm64's unique addressing modes and register sets.
+>    This foundation is essential for the subsequent type-tracking logic.
+
+I've only checked up to this part so far.  Let me write replies soon.
+I'll continue to review later in this week.
+
+> 
+> 3. Core instruction tracking (Patches 08-16)
+>    These patches implement the core logic for type tracking on arm64,
+>    covering a wide range of instructions including:
+> 
+>    * Memory Access: ldr/str variants (including stack-based access).
+>    * Arithmetic & Data Processing: mov, add, and adrp.
+>    * Special Access: System register access (mrs) and per-cpu variable
+>      tracking.
+> 
+> The implementation draws inspiration from the existing x86 logic while
+> adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
+> perf annotate can successfully resolve memory locations and register
+> types, enabling comprehensive data type profiling on arm64 platforms.
+> 
+> Example Result
+> ==============
+> 
+> # perf mem record -a -K -- sleep 1
+> # perf annotate --data-type --type-stat --stdio
+> Annotate data type stats:
+> total 6204, ok 5091 (82.1%), bad 1113 (17.9%)
+
+I'm impressed that the success rate is quite high.  But I think you need
+to confirm that the findings are correct by taking a close look at each
+result.  You can try `perf annotate --code-with-type`.
+
+Thanks,
+Namhyung
 
 
-vim +/LEASE_BREAK_DIR_CREATE +4173 fs/namei.c
-
-  4140	
-  4141	/**
-  4142	 * vfs_create - create new file
-  4143	 * @idmap:	idmap of the mount the inode was found from
-  4144	 * @dentry:	dentry of the child file
-  4145	 * @mode:	mode of the child file
-  4146	 * @di:		returns parent inode, if the inode is delegated.
-  4147	 *
-  4148	 * Create a new file.
-  4149	 *
-  4150	 * If the inode has been found through an idmapped mount the idmap of
-  4151	 * the vfsmount must be passed through @idmap. This function will then take
-  4152	 * care to map the inode according to @idmap before checking permissions.
-  4153	 * On non-idmapped mounts or if permission checking is to be performed on the
-  4154	 * raw inode simply pass @nop_mnt_idmap.
-  4155	 */
-  4156	int vfs_create(struct mnt_idmap *idmap, struct dentry *dentry, umode_t mode,
-  4157		       struct delegated_inode *di)
-  4158	{
-  4159		struct inode *dir = d_inode(dentry->d_parent);
-  4160		int error;
-  4161	
-  4162		error = may_create_dentry(idmap, dir, dentry);
-  4163		if (error)
-  4164			return error;
-  4165	
-  4166		if (!dir->i_op->create)
-  4167			return -EACCES;	/* shouldn't it be ENOSYS? */
-  4168	
-  4169		mode = vfs_prepare_mode(idmap, dir, mode, S_IALLUGO, S_IFREG);
-  4170		error = security_inode_create(dir, dentry, mode);
-  4171		if (error)
-  4172			return error;
-> 4173		error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, di);
-  4174		if (error)
-  4175			return error;
-  4176		error = dir->i_op->create(idmap, dir, dentry, mode, true);
-  4177		if (!error)
-  4178			fsnotify_create(dir, dentry);
-  4179		return error;
-  4180	}
-  4181	EXPORT_SYMBOL(vfs_create);
-  4182	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> -----------------------------------------------------------
+>         29 : no_sym
+>        196 : no_var
+>        806 : no_typeinfo
+>         82 : bad_offset
+>       1370 : insn_track
+> 
+> Annotate type: 'struct page' in [kernel.kallsyms] (59208 samples):
+> ============================================================================
+>  Percent     offset       size  field
+>   100.00          0       0x40  struct page      {
+>     9.95          0        0x8      long unsigned int   flags;
+>    52.83        0x8       0x28      union        {
+>    52.83        0x8       0x28          struct   {
+>    37.21        0x8       0x10              union        {
+>    37.21        0x8       0x10                  struct list_head        lru {
+>    37.21        0x8        0x8                      struct list_head*   next;
+>     0.00       0x10        0x8                      struct list_head*   prev;
+>                                                 };
+>    37.21        0x8       0x10                  struct   {
+>    37.21        0x8        0x8                      void*       __filler;
+>     0.00       0x10        0x4                      unsigned int        mlock_count;
+>    ...
+> 
+> Changes since v1: (reworked from Huafei's series):
+> 
+>  - Fix inconsistencies in arm64 instruction output across llvm, capstone,
+>    and objdump disassembly backends.
+>  - Support arm64-specific addressing modes and operand formats. (Leo Yan)
+>  - Extend instruction tracking to support mov and add instructions,
+>    along with per-cpu and stack variables.
+>  - Include real-world examples in commit messages to demonstrate
+>    practical effects. (Namhyung Kim)
+>  - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
+>    https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
+> 
+> Please let me know if you have any feedback.
+> 
+> Thanks,
+> Tengda
+> 
+> [1] https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
+> [2] https://developer.arm.com/documentation/102374/0103
+> [3] https://github.com/flynd/asmsheets/releases/tag/v8
+> 
+> ---
+> 
+> Tengda Wu (16):
+>   perf llvm: Fix arm64 adrp instruction disassembly mismatch with
+>     objdump
+>   perf capstone: Fix arm64 jump/adrp disassembly mismatch with objdump
+>   perf annotate-arm64: Generalize arm64_mov__parse to support standard
+>     operands
+>   perf annotate-arm64: Handle load and store instructions
+>   perf annotate: Introduce extract_op_location callback for
+>     arch-specific parsing
+>   perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
+>   perf annotate-arm64: Implement extract_op_location() callback
+>   perf annotate-arm64: Enable instruction tracking support
+>   perf annotate-arm64: Support load instruction tracking
+>   perf annotate-arm64: Support store instruction tracking
+>   perf annotate-arm64: Support stack variable tracking
+>   perf annotate-arm64: Support 'mov' instruction tracking
+>   perf annotate-arm64: Support 'add' instruction tracking
+>   perf annotate-arm64: Support 'adrp' instruction to track global
+>     variables
+>   perf annotate-arm64: Support per-cpu variable access tracking
+>   perf annotate-arm64: Support 'mrs' instruction to track 'current'
+>     pointer
+> 
+>  .../perf/util/annotate-arch/annotate-arm64.c  | 642 +++++++++++++++++-
+>  .../util/annotate-arch/annotate-powerpc.c     |  10 +
+>  tools/perf/util/annotate-arch/annotate-x86.c  |  88 ++-
+>  tools/perf/util/annotate-data.c               |  72 +-
+>  tools/perf/util/annotate-data.h               |   7 +-
+>  tools/perf/util/annotate.c                    | 108 +--
+>  tools/perf/util/annotate.h                    |  12 +
+>  tools/perf/util/capstone.c                    | 107 ++-
+>  tools/perf/util/disasm.c                      |   5 +
+>  tools/perf/util/disasm.h                      |   5 +
+>  .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |  20 +
+>  tools/perf/util/dwarf-regs.c                  |   2 +-
+>  tools/perf/util/include/dwarf-regs.h          |   1 +
+>  tools/perf/util/llvm.c                        |  50 ++
+>  14 files changed, 984 insertions(+), 145 deletions(-)
+> 
+> 
+> base-commit: cf7c3c02fdd0dfccf4d6611714273dcb538af2cb
+> -- 
+> 2.34.1
+> 
