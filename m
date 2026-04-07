@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51A81714AA;
-	Tue,  7 Apr 2026 06:43:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C065733E;
+	Tue,  7 Apr 2026 06:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775544206; cv=none; b=URL/cFkSOPfgb1CfVZfiLolXxnai3+Ee7EeZH/5sZ0aCrSMhw7uqt0Q9YxiX3og979STeY6h5nuTZfPfgjRObDHO3sIfDIsNTAp32hv/7VBzObIp0gS6XYHEfB4l4K+YlZ55NYcWxy/fkHBnreu2aX8ZS8z6nWqGH6zlcuQPKlU=
+	t=1775545138; cv=none; b=e5/1BfgK5j4I+Vd9qhog+TsrIc9Fhdzv8CLCtAT8FjBFiK4YxK9+sYvvzKRGZi1oEulzVl7RdjLcMWDtprKOjN7egJcFBPT81gCupxs6Hkx0TGF4TKur2t6KvJRVgXWiknxzrNwFTMaVjDN6sxGiQNVCUPeJRzOKk2mJdnE2Tj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775544206; c=relaxed/simple;
-	bh=RJY0OI3iws38tWzphXWx5YaOjiybb8QfQfQzYz02fl8=;
+	s=arc-20240116; t=1775545138; c=relaxed/simple;
+	bh=g7bkjH66o4SeSNHDvgXzoUbrOwo6ZCxKoLQk02t+TQU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KCYQVKoPDC/qhpAINhXmY7VTD1zjF8HembfllJwyjsBBbvbNFH20Kbyr3ttaEtDd3DojsDvl+c1o3J3GAb3TiSyRYIvPPXAN8fd29P2jvcbt1bbMcDXxlqhsH6+/Fz6FJQ1nj4k/wWRmfPDIoI8IM4QU49PYMPmI7GoJH9pnCKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YL7lSwf/; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=lXYGzNYkmI584Q/QXOBs6GaCZIyTgJi2EIEAJQ0XIxo2cLhvbT1TUG+MkPr3kcWaVQ4Md+4yrKEMu4FHgapIZbBJZbS83TKcU094BzPkS3VApzs3n8pptzKK8oFkOazZcJ6U/xyZK21GB4r3qqHpaCQmw0el7ItnsPng6KgUcuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rSwF8f7x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YL7lSwf/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E00D4C116C6;
-	Tue,  7 Apr 2026 06:43:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rSwF8f7x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D28C116C6;
+	Tue,  7 Apr 2026 06:58:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775544206;
-	bh=RJY0OI3iws38tWzphXWx5YaOjiybb8QfQfQzYz02fl8=;
+	s=k20201202; t=1775545137;
+	bh=g7bkjH66o4SeSNHDvgXzoUbrOwo6ZCxKoLQk02t+TQU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YL7lSwf/yk17uq3SkbXpqZfBMJW2OPXL8Vm7lYsBTtpUsVi4BvPM/k5Ki79rfZscg
-	 WncoMY6GEbK0prfAVjETeiqnF0OHjLjsH3uXsl2phSD12p/qNrTjaSjTsJCGq1uLOW
-	 CNscASMEjDxShlfegDEyP07OJ+RXN62Z73fQJ8DG8pvVTEX1BqjtiLWU5D9KtIXV+o
-	 lSg6ExdG1W7HtbZBpxLB6YfZnEubJDfBp10fTulK1KIZodZBLvg58dLieb8vU09M7E
-	 Gl/ZUWnc7DnNfoNg49YIZLtlaDWr2Y1iMpmjFATs4qfpFTvVSx2jP7X0cmfI5qv2z+
-	 XPMGIQ+lGV61w==
-Date: Mon, 6 Apr 2026 23:43:24 -0700
+	b=rSwF8f7xbRNG4PllD0FQ8BwsNIpo5Oy8FJcY39oDva/0c9TDy4mo8qn7CtJbLizSC
+	 i4NfA4g3ejDe92BhHITJL8LlvI9Tc6qAlSu2sXWLxNysNQZyN99xgIVhgH5qZT9oqB
+	 wI1V/FhZHggE0ewVuZQd66wcK1MXa0afGOzhaHQ7AwiR+4OgEHHhF8XEDVMdoGL6g8
+	 k9Z+c8bOSdgd5It6wq+JS6rNi32nnz2DQ1aIEWxcKECplchF8hobyFd/gs7ntgk8An
+	 vcmy9PndjbDDsY7qMe7pMlCVLzdY9P9FHY7Yf0AFFyvahn0zz2QKx5UvgBdt4QSA9l
+	 C1gtS0+5Eh1rw==
+Date: Mon, 6 Apr 2026 23:58:55 -0700
 From: Namhyung Kim <namhyung@kernel.org>
 To: Tengda Wu <wutengda@huaweicloud.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
@@ -40,11 +40,11 @@ Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
 	Adrian Hunter <adrian.hunter@intel.com>,
 	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 02/16] perf capstone: Fix arm64 jump/adrp disassembly
- mismatch with objdump
-Message-ID: <adSnjABSDeeg-9O8@z2>
+Subject: Re: [PATCH v2 03/16] perf annotate-arm64: Generalize
+ arm64_mov__parse to support standard operands
+Message-ID: <adSrL-iZna3pyDrY@z2>
 References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
- <20260403094800.1418825-3-wutengda@huaweicloud.com>
+ <20260403094800.1418825-4-wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,202 +53,164 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260403094800.1418825-3-wutengda@huaweicloud.com>
+In-Reply-To: <20260403094800.1418825-4-wutengda@huaweicloud.com>
 
-On Fri, Apr 03, 2026 at 09:47:46AM +0000, Tengda Wu wrote:
-> The jump and adrp instructions parsed by libcapstone currently lack
-> symbolic representation and use a '#' prefix for addresses. This
-> format is inconsistent with objdump's output, which causes subsequent
-> parsing in jump__parse() and arm64_mov__parse() to fail.
+On Fri, Apr 03, 2026 at 09:47:47AM +0000, Tengda Wu wrote:
+> The current arm64_mov__parse() implementation strictly requires the
+> operand to contain a symbol suffix in the "<symbol>" format. This
+> causes the parser to fail for standard instructions that only contain
+> raw immediates or registers without symbolic annotations.
 > 
-> Example mismatch:
->   Current: b #0xffff8000800114c8
->   Fix:     b ffff8000800114c8 <el0t_64_sync+0x108>
-> 
->   Current: adrp x18, #0xffff800081f5f000
->   Fix:     adrp x18, ffff800081f5f000 <this_cpu_vector>
-> 
-> Fix this by implementing extended formatting for these arm64
-> instructions during symbol__disassemble_capstone(). This ensures
-> the output matches objdump's expected style, including the raw
-> address and the associated <symbol+offset> suffix.
+> Refactor the function to make symbol matching optional. The parser now
+> correctly extracts the target operand and only attempts to parse the
+> "<symbol>" suffix if it exists. This change also introduces better
+> handling for whitespace and comments, and adds support for multi-register
+> check via arm64__check_multi_regs(), ensuring compatibility with a
+> wider range of arm64 instruction formats.
 > 
 > Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 > ---
->  tools/perf/util/capstone.c | 107 ++++++++++++++++++++++++++++++++-----
->  tools/perf/util/disasm.c   |   5 ++
->  tools/perf/util/disasm.h   |   1 +
->  3 files changed, 101 insertions(+), 12 deletions(-)
+>  .../perf/util/annotate-arch/annotate-arm64.c  | 85 ++++++++++++++-----
+>  1 file changed, 65 insertions(+), 20 deletions(-)
 > 
-> diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
-> index 25cf6e15ec27..1d8421d2d98c 100644
-> --- a/tools/perf/util/capstone.c
-> +++ b/tools/perf/util/capstone.c
-> @@ -255,10 +255,6 @@ static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
->  	struct map *map = args->ms->map;
->  	struct symbol *sym;
+> diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+> index 33080fdca125..4c42323b0c18 100644
+> --- a/tools/perf/util/annotate-arch/annotate-arm64.c
+> +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+> @@ -14,12 +14,38 @@ struct arch_arm64 {
+>  	regex_t jump_insn;
+>  };
 >  
-> -	/* TODO: support more architectures */
-> -	if (!arch__is_x86(args->arch))
-> -		return;
-> -
->  	if (insn->detail == NULL)
->  		return;
->  
-> @@ -305,6 +301,98 @@ static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
->  	}
->  }
->  
-> +static void format_capstone_insn_x86(struct cs_insn *insn, char *buf,
-> +				     size_t len, struct annotate_args *args,
-> +				     u64 addr)
+> +static bool arm64__check_multi_regs(const char *op)
 > +{
-> +	int printed;
+> +	char *comma = strchr(op, ',');
 > +
-> +	printed = scnprintf(buf, len, "       %-7s %s",
-> +			    insn->mnemonic, insn->op_str);
-> +	buf += printed;
-> +	len -= printed;
+> +	while (comma) {
+> +		char *next = comma + 1;
 > +
-> +	print_capstone_detail(insn, buf, len, args, addr);
+> +		next = skip_spaces(next);
+> +
+> +		/*
+> +		 * Check the first valid character after the comma:
+> +		 * - If it is '#', it indicates an immediate offset (e.g., [x1, #16]).
+> +		 * - If it is an alphabetic character, it is highly likely a
+> +		 *   register name (e.g., x, w, s, d, q, v, p, z).
+> +		 * - Special cases: Alias and control registers like sp, xzr,
+> +		 *   and wzr all start with an alphabetic character.
+> +		 */
+> +		if (*next && *next != '#' && isalpha(*next))
+> +			return true;
+
+It seems you check any alphabet charactor after a comma for multi-regs.
+Does that mean the first component before the comma should be another
+register?
+
+> +
+> +		comma = strchr(next, ',');
+> +	}
+> +
+> +	return false;
 > +}
 > +
-> +static void format_capstone_insn_arm64(struct cs_insn *insn, char *buf,
-> +				       size_t len, struct annotate_args *args,
-> +				       u64 addr)
-> +{
-> +	struct map *map = args->ms->map;
-> +	struct symbol *sym;
-> +	char *last_imm, *endptr;
-> +	u64 orig_addr;
+>  static int arm64_mov__parse(const struct arch *arch __maybe_unused,
+>  			    struct ins_operands *ops,
+>  			    struct map_symbol *ms __maybe_unused,
+>  			    struct disasm_line *dl __maybe_unused)
+>  {
+> -	char *s = strchr(ops->raw, ','), *target, *endptr;
+> +	char *s = strchr(ops->raw, ','), *target, *endptr, *comment, prev;
+>  
+>  	if (s == NULL)
+>  		return -1;
+> @@ -31,29 +57,48 @@ static int arm64_mov__parse(const struct arch *arch __maybe_unused,
+>  	if (ops->source.raw == NULL)
+>  		return -1;
+>  
+> -	target = ++s;
+> +	target = skip_spaces(++s);
+> +	comment = strchr(s, arch->objdump.comment_char);
 > +
-> +	scnprintf(buf, len, "       %-7s %s",
-> +		  insn->mnemonic, insn->op_str);
-> +	/*
-> +	 * Adjust instructions to keep the existing behavior with objdump.
-> +	 *
-> +	 * Example conversion:
-> +	 * From: b #0xffff8000800114c8
-> +	 * To:   b ffff8000800114c8 <el0t_64_sync+0x108>
-> +	 */
-> +	switch (insn->id) {
-> +	case ARM64_INS_B:
-> +	case ARM64_INS_BL:
-> +	case ARM64_INS_CBNZ:
-> +	case ARM64_INS_CBZ:
-> +	case ARM64_INS_TBNZ:
-> +	case ARM64_INS_TBZ:
-> +	case ARM64_INS_ADRP:
-> +		/* Extract last immediate value as address */
-> +		last_imm = strrchr(buf, '#');
-> +		if (!last_imm)
-> +			return;
-> +
-> +		orig_addr = strtoull(last_imm + 1, &endptr, 16);
-> +		if (endptr == last_imm + 1)
-> +			return;
-> +
-> +		/* Relocate map that contains the address */
-> +		if (dso__kernel(map__dso(map))) {
-> +			map = maps__find(map__kmaps(map), orig_addr);
-> +			if (map == NULL)
-> +				return;
+> +	if (comment != NULL)
+> +		s = comment - 1;
+> +	else
+> +		s = strchr(s, '\0') - 1;
 
-I know you copied the logic from x86, but I've realized that it leaks a
-refcount for the new kernel map returned from maps__find().  This needs
-to be fixed separately.
+An interesting use of strchr().  Oh, I found the strchr(3) man page
+also mentions that it's a supported use case.  TIL.
+
+
+> +
+> +	while (s > target && isspace(s[0]))
+> +		--s;
+> +	s++;
+> +	prev = *s;
+> +	*s = '\0';
+>  	ops->target.raw = strdup(target);
+> +	*s = prev;
+> +
+>  	if (ops->target.raw == NULL)
+>  		goto out_free_source;
+>  
+> -	ops->target.addr = strtoull(target, &endptr, 16);
+> -	if (endptr == target)
+> -		goto out_free_target;
+> -
+> -	s = strchr(endptr, '<');
+> -	if (s == NULL)
+> -		goto out_free_target;
+> -	endptr = strchr(s + 1, '>');
+> -	if (endptr == NULL)
+> -		goto out_free_target;
+> -
+> -	*endptr = '\0';
+> -	*s = ' ';
+> -	ops->target.name = strdup(s);
+> -	*s = '<';
+> -	*endptr = '>';
+> -	if (ops->target.name == NULL)
+> -		goto out_free_target;
+> +	ops->target.multi_regs = arm64__check_multi_regs(ops->target.raw);
+> +
+> +	/* Parse address followed by symbol name, e.g. "addr <symbol>" */
+> +	if (strchr(target, '<') != NULL) {
+> +		ops->target.addr = strtoull(target, &endptr, 16);
+> +		if (endptr == target)
+> +			goto out_free_target;
+
+Hmm.. shouldn't this part be executed regardless of presence of a symbol
+name?
+
+> +
+> +		s = strchr(endptr, '<');
+> +		if (s == NULL)
+> +			goto out_free_target;
+
+It'd be safer to check `if (*skip_spaces(endptr) == '<')` rather than
+strchr().
+
+
+> +		endptr = strchr(s + 1, '>');
+> +		if (endptr == NULL)
+> +			goto out_free_target;
+
+I'm afraid C++ programs can have symbols with <> for templates.
+Probably strrchr() would work.
 
 Thanks,
 Namhyung
 
-
-> +		}
 > +
-> +		/* Convert it to map-relative address for search */
-> +		addr = map__map_ip(map, orig_addr);
-> +
-> +		sym = map__find_symbol(map, addr);
-> +		if (sym == NULL)
-> +			return;
-> +
-> +		/* Symbolize the resolved address */
-> +		len = len - (last_imm - buf);
-> +		if (addr == sym->start) {
-> +			scnprintf(last_imm, len, "%"PRIx64" <%s>",
-> +				  orig_addr, sym->name);
-> +		} else {
-> +			scnprintf(last_imm, len, "%"PRIx64" <%s+%#"PRIx64">",
-> +				  orig_addr, sym->name, addr - sym->start);
-> +		}
-> +		break;
-> +	default:
-> +		break;
+> +		*endptr = '\0';
+> +		*s = ' ';
+> +		ops->target.name = strdup(s);
+> +		*s = '<';
+> +		*endptr = '>';
+> +		if (ops->target.name == NULL)
+> +			goto out_free_target;
 > +	}
-> +}
-> +
-> +static void format_capstone_insn(struct cs_insn *insn, char *buf, size_t len,
-> +				 struct annotate_args *args, u64 addr)
-> +{
-> +	/* TODO: support more architectures */
-> +	if (arch__is_x86(args->arch))
-> +		format_capstone_insn_x86(insn, buf, len, args, addr);
-> +	else if (arch__is_arm64(args->arch))
-> +		format_capstone_insn_arm64(insn, buf, len, args, addr);
-> +	else {
-> +		scnprintf(buf, len, "       %-7s %s",
-> +			  insn->mnemonic, insn->op_str);
-> +	}
-> +}
-> +
->  struct find_file_offset_data {
->  	u64 ip;
->  	u64 offset;
-> @@ -381,14 +469,9 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
 >  
->  	free_count = count = perf_cs_disasm(handle, buf, buf_len, start, buf_len, &insn);
->  	for (i = 0, offset = 0; i < count; i++) {
-> -		int printed;
-> -
-> -		printed = scnprintf(disasm_buf, sizeof(disasm_buf),
-> -				    "       %-7s %s",
-> -				    insn[i].mnemonic, insn[i].op_str);
-> -		print_capstone_detail(&insn[i], disasm_buf + printed,
-> -				      sizeof(disasm_buf) - printed, args,
-> -				      start + offset);
-> +		format_capstone_insn(&insn[i], disasm_buf,
-> +				     sizeof(disasm_buf), args,
-> +				     start + offset);
+>  	return 0;
 >  
->  		args->offset = offset;
->  		args->line = disasm_buf;
-> diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-> index 40fcaed5d0b1..988b2b748e11 100644
-> --- a/tools/perf/util/disasm.c
-> +++ b/tools/perf/util/disasm.c
-> @@ -202,6 +202,11 @@ bool arch__is_powerpc(const struct arch *arch)
->  	return arch->id.e_machine == EM_PPC || arch->id.e_machine == EM_PPC64;
->  }
->  
-> +bool arch__is_arm64(const struct arch *arch)
-> +{
-> +	return arch->id.e_machine == EM_AARCH64;
-> +}
-> +
->  static void ins_ops__delete(struct ins_operands *ops)
->  {
->  	if (ops == NULL)
-> diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
-> index a6e478caf61a..d3730ed86dba 100644
-> --- a/tools/perf/util/disasm.h
-> +++ b/tools/perf/util/disasm.h
-> @@ -111,6 +111,7 @@ struct annotate_args {
->  const struct arch *arch__find(uint16_t e_machine, uint32_t e_flags, const char *cpuid);
->  bool arch__is_x86(const struct arch *arch);
->  bool arch__is_powerpc(const struct arch *arch);
-> +bool arch__is_arm64(const struct arch *arch);
->  
->  extern const struct ins_ops call_ops;
->  extern const struct ins_ops dec_ops;
 > -- 
 > 2.34.1
 > 
