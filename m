@@ -1,120 +1,190 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458413A872B
-	for <llvm@lists.linux.dev>; Tue,  7 Apr 2026 10:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C371F5847
+	for <llvm@lists.linux.dev>; Tue,  7 Apr 2026 11:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775558452; cv=pass; b=UXuHNzPJmZBGH1dfdgv/QhpEDBy7nbpUhnFgKfzwTucOQLxc0xKMu2o5TKscQXxIv7lxr5CGBjlmNIqw6PCIWLViNOTA8iZ+EKT4XazIOzlcK16PX3EMLpXEdetbaD4ENG/GNu0+Z/OK3ffqrTqyUs3pAEj9r2h8x0r94ENXbPY=
+	t=1775560673; cv=pass; b=VY1RhyOz2pT92B8HHo+E4u68hTU+HtMxInrW8I1RJAwOkvh/5KQ3xkEXCr8i1vT+x28npn3fueD8XumG+uocpVzcVsDwQKynQ8n65VPJ8N+HsozHUhHqEFSunBwvdGuMh+p5sVQnsWQr6HtAJ2/eVkvaFBGraEXFLk4uZcbHvAY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775558452; c=relaxed/simple;
-	bh=IUoS/yALZHd4OmyTEbMHMatU0Sk8QqyqN5AUIDsRgWY=;
+	s=arc-20240116; t=1775560673; c=relaxed/simple;
+	bh=ZqkWlF3HcKw9IeQbnlO7Z8vKgfQ7zuIoMkMXPESU5qE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RtKwHXpYNok1MRd8fpMxzfvBpfs+JrYbTQHIPJhu+EmdQ0wXH61m4yJJaBiJvbsDJpssJTSJ1fZAZr7fFNXjKE7tlCeIuDcWa8TQ3xHuhXTZq07taD51346Ov+CQzJYdkhZfx3HLt15aSYj3UJw6j4pbgrztW9lM+DIdmjY857A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jV86Mq5v; arc=pass smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=EIj8A9uJXtYzQ4tick587U6Sl4g6qc9ABWHv2IqHp0i+Ha3taWxAcQtFXjx3jkqzzRjjVvAt7HWx5UH7jadHbSvWqXJxA1iDoR5nMc3qH+iHlfuZg/KyKACkUy4N/rVk/V7sTgurwZxIdl+jXArkOfKEW9EBdEUuWuo6F5VeTUA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=n/gBJX82; arc=pass smtp.client-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jV86Mq5v"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-128bae6a35aso250987c88.1
-        for <llvm@lists.linux.dev>; Tue, 07 Apr 2026 03:40:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775558450; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="n/gBJX82"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-12776bebe9fso193531c88.1
+        for <llvm@lists.linux.dev>; Tue, 07 Apr 2026 04:17:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775560671; cv=none;
         d=google.com; s=arc-20240605;
-        b=GNsXwQb2upuk84BXpChRBxEGyYgCCawxV0OcY09bixnWlQvoEp25EGaISWprJc1Tz3
-         4ebAaB9a+yPePtGDcQR2Bc6NbeVCUyWt0C2HDckhtQ2/UdkEcFyfX8+wQv5KHcS5YNxw
-         +r8lJfrtOJj1JDhBPKWiIYECGS4b1wlW5qQf8/jDyu8V+j5+xJoPVaKEE+gerga/GNMH
-         4TnUhBlvbJCiAtmc44qP4CK7c39yGbufjUyHicn914Sky/YaoAk7Q9Glf2FXBixj+46d
-         OvAoIkQSvl/C/4/i3/baeVJZ7IyaVLvlx3ZLs09I1RWDLkpu3Qp55YNPgrr4VcOwWNX0
-         3JEA==
+        b=KLKyKRAGs3eJBlS94u05eZDJYtaXlth1Sf0bwbdQ9l3XqJm8Tn58sBtVNUp3zo0856
+         xOscw8Zfd9i50IVQiCjviUUiRk0sS2jKDurl7BGVjHo5mnKqguNEy5920B9O1fQrkCse
+         8p5hBpHQV2y65QTq6sr0hINoCbIgikavE887pxLbEVG8rzEOszA8JtELMdA9iy3jsr9B
+         6NEAcDALpO/LJRpFzqv2SNOrhb+cIth6XplmyBvMYS7/gR6PXQBZkmWvA7nEBszCYS2x
+         vPAveTofBPB0gqong8DXTxYS4Oz2Upf1CoQGlW7WvgVcHgnw2xAI5Eiw+LZzpTFKUcf5
+         EVnw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=IUoS/yALZHd4OmyTEbMHMatU0Sk8QqyqN5AUIDsRgWY=;
-        fh=r3ZltKJsuzz3NwjNVt02fzArdbkIHgzYpNIpSv3yNo4=;
-        b=TTt0CMsZuwWM0sm4c5kbporVUHaUUFZNTDpHAKPGGA+P3UpeToVcrhcswUGjzDrENd
-         +ov5XVqaFcUp9nsMvusc+P5qL3hlofHtplNP2BWiSo4DCrkox+OBD7c6z2pBVcEP/lrZ
-         KDiVNEV3rTjaOYJ4i4Df4sF0yX/pThKsh9SdGnwAQPjR9hWBaopHnDPxz7xQzsasfuTd
-         gx0CUP1OzmxWYr5xBzy1z8o/VaNPFXqfu/QOd5Xs5tDWt+mXPhM0VOdhuAOAXYLiDIgf
-         DuA3ZcnM8SeNwF9ZwexebTRiBx7+F8SEi1DYBsv2yRjN2PZSThBwYNJaUioE/6bPzElm
-         HQ2w==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=7Ot/6cmUyAYlu4w3F36LFgW3QWHoYVPnUsR/JCweN/I=;
+        fh=b8knZDJSGrsmVcjxSIBNuIsC7sHZ361z9BGmtc/rY4k=;
+        b=E5gQpakM+YNijlJfMBdJRWUrVDIpA66UB6piRNtOfn+2jlUHHXT+pihnnEZm8w61ka
+         TYx+NTZyE+TALwj1jFp7zsSqbCJpdJ2gGWetPtINh9mXAjaLuBN6ZWNkJu+I1Cthf6/a
+         7KkaaA3ZEwIN6hJlOm5ncHs0uRJHrp3qID0mbaxVoKuDAPhZ51ZgTPOX7GOGSMwUu7P6
+         gytLcS1QnHnNH6VKGECdBW+AVs39bGryR1eQ4sUaY9aGQ1hvuI/1qJiafK5/h4TL+7/P
+         pPi/J7Qxrt5BGivU1nErV9fvl+zf1oFNhf+DOzzG2e5RyFfCc2JHF7gw/l39/P+8JtoL
+         RYIQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775558450; x=1776163250; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IUoS/yALZHd4OmyTEbMHMatU0Sk8QqyqN5AUIDsRgWY=;
-        b=jV86Mq5v8bJa+FSfMqqirRvUB57N+e+KshkWzp0sNJmJ/DjCBuG8Ed83Kux/lrf0L1
-         Ep9Fjv04dThUmDhRLWkexHgeFL6oLL6PEfWQvZreKNxb1k+3VU7PDNpZWtl9Lp9dUcwQ
-         3ndvcTOyPWXRImz34Srwa3KQ/G0HU+3PtdNB1O0bUQhcr2XKO5w64VVAbOZXSzuH0zuN
-         2wVfbtp1SAobaLnhEdFBJisjhPsEpFCY9bvrNQU9mCW4hCDUOZL1XKOIii9oD1qsEABb
-         wHIn+PRYdh7I7imZuzcMtgYiFvIrARKkO4BYkT7hCq6PqOF0peMp5qLzl4Dw9LHRKb11
-         72hQ==
+        d=google.com; s=20251104; t=1775560671; x=1776165471; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Ot/6cmUyAYlu4w3F36LFgW3QWHoYVPnUsR/JCweN/I=;
+        b=n/gBJX82yGya0xk+SsqjEe9cWvOB/Kqvy/OYKuhtK9Y9E9t5/W6lhfPJ1++B6zTIqC
+         gTE92upioMrLapAnAU3+NyDqP36/64XhhUWBR8SNPX7n/fcJq24ek4CLZjXvGTfbndmj
+         7BzxAv7HsgID8q/Eyj4ok/hb6HIOryOLYfz6C5elGCGYK4E3bZ+En/yUM/Tucbw4Np3z
+         BjVBMgdU8fniHZqO3HbDHoe87NwIjo7bXoD/GoF8abdT30WH2qLGUvCrwVjYRgr++Eeh
+         paNFBYxvEa5JiFseuoBsGFjECMEs22WjPZMcGBCuDaIWg3344/ZMEJR87pFbmgtQLIqL
+         5hhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775558450; x=1776163250;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=IUoS/yALZHd4OmyTEbMHMatU0Sk8QqyqN5AUIDsRgWY=;
-        b=CkQjHTh2k9n4KRiq4H1Fynzk0VwP7ZITc/BIOAb7LfSrWcKbgEYF3wtQgPsAIgIZbg
-         Pho2LjtpKA5b5Fitl04VJEBtDsQl/K5a3g5onjk4NyZeLSHddq0zZkv7BlVUSDJNel+p
-         UyRMe2AW924ed8TtIUG5gycPA21y437kIN5/2SMkXH0aO8WC84LvcS1GqP6MdXcD/ARY
-         oIUAxtePeaJcDlZCeNdyf1Ye6HH/yWjrmFB5mjyHdkvGU1uMKk15gez9DoYO+yM6Ma4c
-         NMpg6f6aIc9dZpBnxhQu/jQVYRScFoHI+opPlPdUb8NMA1B7IonghOzsflL1DUcK6TYW
-         HwLA==
-X-Forwarded-Encrypted: i=1; AJvYcCWb5/6tSjGU6EtUtJnKXsEGJ9wpkFcqsH8zw76eghLFkzHOv3/Jydj/vd3qrxzs1k0WMwfj@lists.linux.dev
-X-Gm-Message-State: AOJu0YzaGnVXP/WOdTafryg2A9mg4usfxoi/MCzSo7k4Wg3uhby9OqMh
-	34JwAIRvBchW7dgzzlsCJu5kTgXl4skvq/HgCdB1IQ/3A0FD/jPdqqONStFSSyReVi5qCS8k6ht
-	RR2w+T2VFGPOqR1U/0Cy5KhhkcjA7Nnk=
-X-Gm-Gg: AeBDieuCSXGe5LHC91iQF91u5hDf0Arzoz9aBJyFdpZ0ntCfUysm7Zxjyyiu9nRK5RB
-	bEn8cxj9srlqBFkS0kiHNECa9nBu2o8CUKG9TzdPyqYO2n5h8Wx+QELPPUzV4qfGtJoDFsyUpzm
-	pJ5cuUq0xEbsswy/FmWKNcWgec1tity0IGQ8/4qli7Qts1mIn0bQxVogN4TgfYNrUhR7pDd9Y9U
-	DYQ7kT4GfvsrJcio+f/z88pcTx2D1wwQgofjvINkxYJsLQVt3guTj5mcpWnlJRoeM7wYnwDfhO3
-	VNaIyJKvqaVZbVdLFfjOlysoyTWJy9tyr6nvUCxX9nn+hlfT7tu04a4v7v+2/RMl/97tYtvzlxg
-	vcYKjQyKqXh6kDbbO88LPoQM=
-X-Received: by 2002:a05:7301:1986:b0:2c8:d228:3df5 with SMTP id
- 5a478bee46e88-2cbfc95a6a6mr3515468eec.8.1775558450253; Tue, 07 Apr 2026
- 03:40:50 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775560671; x=1776165471;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7Ot/6cmUyAYlu4w3F36LFgW3QWHoYVPnUsR/JCweN/I=;
+        b=TsTQMtrORwc2PnkELKCGKCzm1oyqNFepOfE6Zg1qJOYKutFXiVPlVf4zcbWfjv8292
+         1OYlXdLfkTuiSVDqCGgyVq4ZzNFtpxR+D/IC32gwgQMKq/8JaNyznoi13jmRts2UqJoe
+         W+zNYOdfA1jR595OcKPQORbvM+vbn5r4kwcIpcnmCB9Mwn93fMoTeGbS+6PxHRCPmtLC
+         STXa4/ix2uEvb5SImOvYLcwgOFLjXYNjHNryMuNnBnj/SPVoZVlL/RRCfMyGQ98slfiH
+         SGVW22AwmNktxdY6COEChpuqEhZcHJf/Z432RbVborhkv4TlILeCSGicllUXNcbbspwg
+         M34A==
+X-Forwarded-Encrypted: i=1; AJvYcCU7bo+s+LlzdLXetq/mpD5iI1Gu0T+saFGw5Z2XycxFGgNQW6dlhAHyLXLK0Fu9dUJCP1bV@lists.linux.dev
+X-Gm-Message-State: AOJu0YyyFNb7BoOtwtwM5f9nKE1NOaR7yAro4OQUHBch4RV+bgbo09yj
+	14CBmbQ3/6dZ+GwMw9a8C+EHek2OxzSQ/hiv29mJcxCzITYcjsbFOrXS2jkjotPg8Uo/i+E8Ur4
+	MLja4xPOwmzjS5J45WVxreldZVzzBl0AlfphudQXY
+X-Gm-Gg: AeBDiet3S9bTDwlbd1QtuYzwLCoFLV3jh/t37YbTLWYvOB1Zt0T/Lxf4GTe98KtsJ7H
+	H5APAxi4oxSpiohTnA4/226aB7xr3QJMv6Pc/T9UcDAGmvZKue4X7ARdZWy8+APXVU6pWI4yNNU
+	41Rtn2dDmwCd3LKvIQBWpxRCTSA0sJy0afdewiThfF7LDfE1qwgpJiItMh21Jz9oY4XkGtKDijr
+	rtY6IKpTT2M6/jDbcKiwtE/svRqbLysvKZEcGM9kYlr7S9C5E/GnyFzhXEW2451sEc7hg095+oZ
+	+Hlh6rnw8clxmGIr6dIE6niooDzrOLsL9dxzwRg=
+X-Received: by 2002:a05:701b:270e:b0:12b:fc21:874d with SMTP id
+ a92af1059eb24-12bfc218ac5mr4490405c88.19.1775560670230; Tue, 07 Apr 2026
+ 04:17:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260406095820.465994-1-ojeda@kernel.org>
-In-Reply-To: <20260406095820.465994-1-ojeda@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 7 Apr 2026 12:40:36 +0200
-X-Gm-Features: AQROBzBg5spyA6BYVGexDTp86I9n7gLDQThc9PTpTkz0AO6nnJln4y8vROYE75Q
-Message-ID: <CANiq72nK2GwLdscU=Xs1Q=XuNk4QK1_MzO9OzJqAU1sydeP_nA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] rust: kernel: update `file_with_nul` comment
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
+References: <20260331111240.153913-1-elver@google.com> <ac9d5O5XehnXRc5A@hyeyoo>
+ <d0fe363c-2e8f-44a4-9b64-3fa3ba9a5773@kernel.org> <adM2XVZf1DekahlY@hyeyoo>
+In-Reply-To: <adM2XVZf1DekahlY@hyeyoo>
+From: Marco Elver <elver@google.com>
+Date: Tue, 7 Apr 2026 13:17:14 +0200
+X-Gm-Features: AQROBzAgGN0NN5VZKje-TIGicheiDUli6J3RmxbH29tvqb2R9oxdlLQMmt6dDl8
+Message-ID: <CANpmjNMeaWWuDMAj_n38U9XRqgZQz30ca82Vy10Bg=NoDfZ5ng@mail.gmail.com>
+Subject: Re: [PATCH v1] slab: support for compiler-assisted type-based slab
+ cache partitioning
+To: "Harry Yoo (Oracle)" <harry@kernel.org>
+Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, Hao Li <hao.li@linux.dev>, 
+	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com, 
+	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Florent Revest <revest@google.com>, GONG Ruiqi <gongruiqi@huaweicloud.com>, 
+	Jann Horn <jannh@google.com>, KP Singh <kpsingh@kernel.org>, 
+	Matteo Rizzo <matteorizzo@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 6, 2026 at 11:59=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wro=
-te:
+On Mon, 6 Apr 2026 at 06:28, 'Harry Yoo (Oracle)' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+> On Fri, Apr 03, 2026 at 08:29:22PM +0200, Vlastimil Babka (SUSE) wrote:
+> > On 4/3/26 08:27, Harry Yoo (Oracle) wrote:
+> > >> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> > >> index 15a60b501b95..c0bf00ee6025 100644
+> > >> --- a/include/linux/slab.h
+> > >> +++ b/include/linux/slab.h
+> > >> @@ -864,10 +877,10 @@ unsigned int kmem_cache_sheaf_size(struct slab_sheaf *sheaf);
+> > >>   * with the exception of kunit tests
+> > >>   */
+> > >>
+> > >> -void *__kmalloc_noprof(size_t size, gfp_t flags)
+> > >> +void *__kmalloc_noprof(size_t size, gfp_t flags, kmalloc_token_t token)
+> > >>                            __assume_kmalloc_alignment __alloc_size(1);
+> > >>
+> > >> -void *__kmalloc_node_noprof(DECL_BUCKET_PARAMS(size, b), gfp_t flags, int node)
+> > >> +void *__kmalloc_node_noprof(DECL_BUCKET_PARAMS(size, b), gfp_t flags, int node, kmalloc_token_t token)
+> > >>                            __assume_kmalloc_alignment __alloc_size(1);
+> > >
+> > > So the @token parameter is unused when CONFIG_PARTITION_KMALLOC_CACHES is
+> > > disabled but still increases the kernel size by a few kilobytes...
+> > > but yeah I'm not sure if we can get avoid it without hurting readability.
+> > >
+> > > Just saying. (does anybody care?)
+> >
+> > Well we did care enough with CONFIG_SLAB_BUCKETS to hide the unused param
+> > using DECL_BUCKET_PARAMS(),
 >
-> `feature(file_with_nul)` [1] has been stabilized in Rust 1.92.0 [2].
+> Hmm yeah.
 >
-> Thus update the comment to keep track of it.
+> I wasn't sure if we could do this without hurting readability,
+> but perhaps we could...
 >
-> In addition, this will help to sort new conditionally enabled features
-> (i.e. `cfg_attr`) around it appropiately.
->
-> Link: https://github.com/rust-lang/rust/issues/141727 [1]
-> Link: https://github.com/rust-lang/rust/pull/145664 [2]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> > so maybe extend that idea?
+> > I think it's not just kernel size, but increased register pressure etc.
 
-Applied (just this one) to `rust-next` -- thanks everyone!
+I'll take a closer look at generated code. In some cases the compiler
+ought to omit zero-sized arguments, so I want to be sure we're not
+prematurely optimizing and the size increase is not some other effect.
 
-Cheers,
-Miguel
+> Something like this should work? (diff on top of this patch)
+
+Thanks, I'll consider it.
+
+Re your other comments:
+
+> Assuming not all people building the kernel are security experts...
+> (including myself) could you please add some insights/guidance on how to
+> decide between RANDOM_KMALLOC_CACHES and TYPED_KMALLOC_CACHES?
+
+You can find different arguments for either, and in the original RFC
+that was part of the discussion. However, my biased view is that
+type-based partitioning in general is the stronger security boundary.
+Because it creates a deterministic separation; specifically isolating
+pointer-containing objects from pointerless ones: it effectively kills
+certain classes of exploit techniques that probabilistic defenses
+(like randomization) only delay, especially in environments where
+attackers can retry or use side-channels.
+
+The current pointer/non-pointer scheme is relatively intuitive with
+well-understood properties, and a good start. However, an open
+research question is if better alloc-token ID schemes exist: one that
+is tailored to kernel data structures that would meaningfully increase
+exploitation difficulty further without increasing the number of
+partitions. Since an improved scheme could simply be activated with a
+compiler flag, having the baseline infrastructure available and
+maintained is the first step.
+
+> Now somewhat out-of-scope (or at least pre-existing) review comments
+> from Sashiko that I think are still worth mentioning...
+
+Indeed, these are pre-existing issues with RANDOM_KMALLOC_CACHES.
+Worth follow-up patches, but this patch here wants to just get the
+TYPED_KMALLOC_CACHES infrastructure in place so we can build on top of
+it.
+
+Thanks,
+-- Marco
