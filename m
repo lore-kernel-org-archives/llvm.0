@@ -1,174 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB5F2B9A4;
-	Tue,  7 Apr 2026 00:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775522961; cv=none; b=bTT7eEpfqXmjW+eDl3oOMdwvRjN/7JIUumBbopPqckY3E5x4O3LTL9ck1dWw0syhoA93qQQ6ROa+pTqKv6uBV9su91lhqVmmwbqC9wi5IZPp8K3wbf3JT4IoRESIi+YhSnpoCtwPnsZT6Efah1flB3p05UxJD/hVhucEmbMN8RQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775522961; c=relaxed/simple;
-	bh=XmGhm0tvIfgLvqP5Iv0OjVZ+bxUm/Xf/rXubccaqgrU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GxZmfl2aLJzvqHrFujR9hXSqrsi+KYPD5BUICaLGxw/35Jnj/9aSZWOfJ9GmrAIv9t1jahnQ2WIBUfr2v03899zMJbKm/sTtSBI1FsDymP/NMSR740uEm1WkZitKwn9U2prnNBOJn+9zDDDWqc+6sHIctNWmeyG/rrpJn5uHrU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hBljbSm3; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226841E1DF0
+	for <llvm@lists.linux.dev>; Tue,  7 Apr 2026 01:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775524523; cv=pass; b=s2WZux5oB2YkXpAz/s+bnQXp8/3bhEeWu2aHr0U2UWzyj2JXdyWNotfkk8Ozyo497U9et/rlrU/K6oauq9bDxhDWqhKjNoraOBdggexoCnrFLQH3MwrP8Dpw35XN9kOeG5q5zjlzI4lWjQxWJz6xkBIZ4lKosO/4UafIYiI8eU8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775524523; c=relaxed/simple;
+	bh=C6sODPPjnlrZIOKdwziurbw8hAdqBwTpglq0vQMQ05A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RIWbqUok76OdEh3d+RUcfxqaYxIf731uwoqACI8khm0y0InehNvsSnHFDKPGYd5JPD0ZDUhSYaA/D0FWE3q3B66rUWI/Y4U6o3jKUbDspB0dhEbvRZsRUvgdNeC6cr5T+7mil0cV4IVymBoRvJL0jAk6o2mIV8k45vw8PiMy37w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F7lDSo3v; arc=pass smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hBljbSm3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3FB7C4CEF7;
-	Tue,  7 Apr 2026 00:49:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775522961;
-	bh=XmGhm0tvIfgLvqP5Iv0OjVZ+bxUm/Xf/rXubccaqgrU=;
-	h=From:Date:Subject:To:Cc:From;
-	b=hBljbSm381tbmlVVp5EDa8lJAHQsAoxLbpIlGJx4q7dyBbPg1sibAS7GMTnXWkySa
-	 faT7UXPZVb830/6oehZ0YS559Vt+1upYFg3REq56FWH8BAn4xqQskuk3SmIXCWhNdi
-	 pgGduUHlmfQR5D+w5TwJb3VyFt7LIIxCXQKaq5QrO/O8FI8oU6S7EQNyOG8TsE1Hpd
-	 e7xkVZOd0Eq/R8CF6UyZT2wH7wajJPxw3swlOSMUa5DI+ZANPoAQWuhos3yzG6DNYT
-	 wGhuCbEE/HKcSBSoJyfOdq12NYEoinab8AwIjVZVk6FwZfbqc9ZEala355lIGPuWis
-	 XuNn/6MB5Gxqw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 06 Apr 2026 17:49:08 -0700
-Subject: [PATCH linux-5.10.y] drm/amd/display: Do not add '-mhard-float' to
- calcs, dsc, and dcn30 FP files for clang
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F7lDSo3v"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2ce4b60f855so72252eec.2
+        for <llvm@lists.linux.dev>; Mon, 06 Apr 2026 18:15:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775524521; cv=none;
+        d=google.com; s=arc-20240605;
+        b=N6j1k5+KKbVPwVB4Hp0mvqKa1hG9k3/UU92F7FN1wq9SUdMYhU3wNWkczZqOQlZpdz
+         jhD/YgAtlDKULFJdc4RM0H1lkFDHhOz8aJKWeHBPi5iV8fYwmuDN6S1Pi7qnOKRv+aGH
+         hI7Yv05BfETgZFZc1FuE8W4uHj0llc4XnWSxtDJ6LZGCf41M56hjoBwDFQLync/HA0dS
+         vCfDZjkjhpM7xbt79CJxInCXGYFghefZu0qBNzuPfui4mlYd/BsH5MgMPoIY0nvi8Sfq
+         ULpGGx9EdSfVhAomn2reeMbBWGSc4aNv4JDtZpsd06meDRHPoJyBhxqXWYMIQKWHZQHv
+         kr3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=C6sODPPjnlrZIOKdwziurbw8hAdqBwTpglq0vQMQ05A=;
+        fh=ZvCTDEazF3Twf1193yyPJqYPOhcSypLLt2C0rl35nUY=;
+        b=BinS3HicgOkEQG1f67CCj65I7cZiocm0IQtG6T0jmlQ2xcWKLBWSUt42aMBniUPrcN
+         +XM7ONvyWd15d7ab7bXvhw7btishC8D/PYT3JJb40Ii7sp3QGAs5z2pncpQyeBLeTmI+
+         gupNxneaG6XKHuVoPmvZiaGEMbd5SjYtDOp59WkCr1VGvONhhRIXfznwrT1YuOloY5DW
+         M+aUUB+yhxi84DiiBQld2YUfol8Gi45M0nU3+6t9I2l3jpNlEwsJ3eM+UwC1Mj7Mg9c3
+         Hrp2/sHnmSN3nzcJ0/II9nuXzxCfGtn0SNq+IBq7IHdesgYMl580JHZNcwpDySpRYpy/
+         MopQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775524521; x=1776129321; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C6sODPPjnlrZIOKdwziurbw8hAdqBwTpglq0vQMQ05A=;
+        b=F7lDSo3vfTXFCp9X8ZAc+8IpThK0P4LoHCbTdynjdvKEocl6J/lg5M/5zvMSogYhwU
+         RKATv9tsQ4KcojiHh8JjMmNJlx0j+IMV2VcNsy010aeFafvM4UfXBXBGKCprio6Jk+yc
+         tPWL2byVa2uqqnVDxUkTQQX28U3MZ5HRFnt0RS59brBltPPIl96bVDB0hJRbmVnd5FiH
+         48WkhgbQGveTdLEeJQzyYVCZVpFkHbrErmg73GVUBvTYcUFztYOUKt+EL91NsN6n6h9S
+         LDTMQrrdmhLF3xHEXrjN0Upp9YOODK2hnd8bsZffIMP9XjNTDbhciktdDUaADEWAuLVs
+         KG2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775524521; x=1776129321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=C6sODPPjnlrZIOKdwziurbw8hAdqBwTpglq0vQMQ05A=;
+        b=ESke5fK67Fljlk9dlqNahRv8SxTACAKdFu2Xs1bQMIX4ypLiTGj1ZvHORDgL9tcx7t
+         Nwd4TSchBPktFZfdL2Q0o3+Hpk+aSGw1Y5tRMRgkyAIdF3/tMmL8wRk3HCDAVTIRu+bS
+         +x70p1ys4sEFYXVGCoHKi36hBFQUVL77eU3bNwM8kApGZ4/Tk/WsKKFFaSzqtdnKbA0R
+         /KOjdu3/D8zV5eOmwF6LS1sI3TNfaCO8nI9svoSiIPpIZPyoIFGyLmxC2rr+axZb6quh
+         DLz7VdHJJLm9pipsxjszU9xFwUzF7mMFb5udBYq4GwjGlZq52Id5PI/8HZSuqGsNFx4V
+         Uz0w==
+X-Forwarded-Encrypted: i=1; AJvYcCV9RN7+HX9ZoknRdRHW8MyiFWZMipGv78oHGvVunYlPsbhYQG13lvlcmyFjIh+ZH1yxEcst@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzb6z7AgKvgQQxJWoRhSPGE7VsHZYLCGn0186+DHyLkLJts7qpf
+	JRDMtVkZo793OuIluN5qHWB5GIZcXmkLArpezKIzbhRp5qIqekbzm4ESQDiODhoJGnUWdvcI/br
+	+G70Cz4+j0o0Z8VS6uqF3wZ+CF5ZDzfY=
+X-Gm-Gg: AeBDiesSNCTBH/WyK0ruaANyKmlvHcXcKxGsOEnt4xQ/LkXgMBmk+etq5jjwIIhQdX7
+	MDdB3fNUpCipXRah1coiW/9DhorXeS8Yf8iyMqhUFZTUxj8yZVe1oq7+zj8jAcbZqBF3hxIlaIJ
+	m397aEQyeaKBB7xNKOb3IaqEJ/gvfjKydSQcWcYMZznNn6oy26+u+8JALei+mTqkboyiCR1MXxN
+	nJul2lko6dPHnimVjBMH23V77pQrTAcgwocTEE8lyNU2sV0dm65s4KjBbLF2dRTtKof0GUxvczW
+	p7/E4GGiutRigTzBXjJtsYoAFmhMjQqZhF6ZEm/akAYlViovTcMY93lDpx7tbOffv0lH1/OUwf5
+	ncIuF5LGrll19OaqiWpBOv2g=
+X-Received: by 2002:a05:7301:1007:b0:2be:298c:a11 with SMTP id
+ 5a478bee46e88-2cbfcf52a13mr3516734eec.3.1775524521173; Mon, 06 Apr 2026
+ 18:15:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260406-5-10-clang-amdgpu-hard-float-errors-v1-1-09c4c045f848@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNQQ6DIBAAv2L23DVgFEy/0nigsCgNVbNIY2P8e
- 2l7nEwyc0AiDpTgWh3A9AopLHMBeanATmYeCYMrDI1olGiFwg6lQBuLQvN045pxMuzQx8VsSMw
- LJ2xb02svjdaqh1JamXzYf5cbxDDnHbtaivoNw9+mfH+Q3b4jOM8PQm084JUAAAA=
-X-Change-ID: 20260406-5-10-clang-amdgpu-hard-float-errors-44a87f1a7768
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Sasha Levin <sashal@kernel.org>
-Cc: stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
- amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5282; i=nathan@kernel.org;
- h=from:subject:message-id; bh=XmGhm0tvIfgLvqP5Iv0OjVZ+bxUm/Xf/rXubccaqgrU=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJlXQvrnlm9w/vXBc6KnDH+K4p1wbZ4VsSvzjiekvRB6c
- 8dCLZOno5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEyEI4KRYf27DVsTHj/TfnTn
- V83qr8dX2zGe3HOO5Z/mzibRVzcarqkxMvR9LDgUKWffMrmh4MaVSSmzneYEbmTJm1C2/NkftYM
- 78tgA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <20260405235309.418950-1-ojeda@kernel.org> <CANiq72mnGArtgAbe7xXZCYW1x7Zd5hozfnzoftaGy9rxoLO4ew@mail.gmail.com>
+ <cf28afe0-ede5-4d1a-9824-65a1448f8161@nvidia.com> <CANiq72n4tmTzqbcHCnzUBFyLVmJzB-AJng_1FgELJCWr7hDg4A@mail.gmail.com>
+ <efe61810-2b28-4acd-b69f-d577042c0b62@nvidia.com>
+In-Reply-To: <efe61810-2b28-4acd-b69f-d577042c0b62@nvidia.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 7 Apr 2026 03:15:06 +0200
+X-Gm-Features: AQROBzCpjGVGSHiqD6WWW0AkLWSnE3ic7jf8UnYoPnV_5tut3XVgaNfJWwQj0o4
+Message-ID: <CANiq72n84On9UxQ9CNqyFb5wpJZKrBzb1Xej9ZRqhLim--ftAQ@mail.gmail.com>
+Subject: Re: [PATCH v2 00/33] rust: bump minimum Rust and `bindgen` versions
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Courbot <acourbot@nvidia.com>, Simona Vetter <simona@ffwll.ch>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
+	Todd Kjos <tkjos@android.com>, Christian Brauner <christian@brauner.io>, 
+	Carlos Llamas <cmllamas@google.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org, 
+	moderated for non-subscribers <linux-arm-kernel@lists.infradead.org>, Alexandre Ghiti <alex@ghiti.fr>, 
+	linux-riscv@lists.infradead.org, nouveau@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, Rae Moar <raemoar63@gmail.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch is for linux-5.10.y only. It is functionally equivalent to
-upstream commit 7db038d9790e ("drm/amd/display: Do not add
-'-mhard-float' to dml_ccflags for clang"), which was created after all
-files that require '-mhard-float' were moved under the dml folder. In
-linux-5.10.y, which does not contain upstream commits
+On Mon, Apr 6, 2026 at 9:07=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> w=
+rote:
+>
+> That's what I thought I recalled, too. Weird that it is not in rust-next
+> already, though.
 
-  b4bab46400a0 ("drm/amd/display: move calcs folder into DML")
-  27e01f10d183 ("drm/amd/display: move FPU associated DSC code to DML folder")
-  40b31e5355ba ("drm/amd/display: Remove FPU flags from DCN30 Makefile")
+It is normal -- in the kernel back merges are generally to be avoided.
 
-clang-21 or newer errors with
-
-  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
-  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calc_math.o] Error 1
-  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
-  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calcs.o] Error 1
-  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
-  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calc_auto.o] Error 1
-  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
-  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/dsc/rc_calc.o] Error 1
-  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
-  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.o] Error 1
-  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
-  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.o] Error 1
-
-Apply a functionally equivalent change to prevent adding '-mhard-float'
-with clang for these files.
-
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2156
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Hi stable folks,
-
-The ChromeOS folks raised an issue due to build failures in linux-5.10.y
-when building with clang-21 or newer:
-
-  https://github.com/ClangBuiltLinux/linux/issues/2156
-
-I thought I previously addressed this in all stable trees:
-
-  https://lore.kernel.org/20250604233141.GA2374479@ax162/
-
-But our build coverage in 5.10 missed these files because allmodconfig
-enables KCOV, which was incompatible with these files until upstream
-commit 3876a8b5e241 ("drm/amd/display: Enable building new display
-engine with KCOV enabled").
-
-This change addresses the remaining errors in a functionally equivalent
-manner as my original upstream commit 7db038d9790e ("drm/amd/display: Do
-not add '-mhard-float' to dml_ccflags for clang"), similar to what I did
-before in 5.10 commit 0c3939b00253 ("drm/amd/display: Do not add
-'-mhard-float' to dcn2{1,0}_resource.o for clang"). There is technically
-an upstream change that addresses the dcn30 error but it was done after
-aarch64 support was dropped from the new display engine code, so I
-preferred to do this to minimize potential regressions.
-
-If there are any issues, please let me know.
----
- drivers/gpu/drm/amd/display/dc/calcs/Makefile | 3 ++-
- drivers/gpu/drm/amd/display/dc/dcn30/Makefile | 4 ++--
- drivers/gpu/drm/amd/display/dc/dsc/Makefile   | 3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/calcs/Makefile b/drivers/gpu/drm/amd/display/dc/calcs/Makefile
-index cb7c37ef8735..1b3e3926b706 100644
---- a/drivers/gpu/drm/amd/display/dc/calcs/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/calcs/Makefile
-@@ -26,7 +26,8 @@
- #
- 
- ifdef CONFIG_X86
--calcs_ccflags := -mhard-float -msse
-+calcs_ccflags-$(CONFIG_CC_IS_GCC) := -mhard-float
-+calcs_ccflags := $(calcs_ccflags-y) -msse
- endif
- 
- ifdef CONFIG_PPC64
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/Makefile b/drivers/gpu/drm/amd/display/dc/dcn30/Makefile
-index a71c0f298380..52d5826b2970 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn30/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dcn30/Makefile
-@@ -32,8 +32,8 @@ DCN30 = dcn30_init.o dcn30_hubbub.o dcn30_hubp.o dcn30_dpp.o dcn30_optc.o \
- 
- 
- ifdef CONFIG_X86
--CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_resource.o := -mhard-float -msse
--CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_optc.o := -mhard-float -msse
-+CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_resource.o := $(if $(CONFIG_CC_IS_GCC),-mhard-float) -msse
-+CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_optc.o := $(if $(CONFIG_CC_IS_GCC),-mhard-float) -msse
- endif
- 
- ifdef CONFIG_PPC64
-diff --git a/drivers/gpu/drm/amd/display/dc/dsc/Makefile b/drivers/gpu/drm/amd/display/dc/dsc/Makefile
-index 6207809f293b..4fc6d9c32d16 100644
---- a/drivers/gpu/drm/amd/display/dc/dsc/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dsc/Makefile
-@@ -3,7 +3,8 @@
- # Makefile for the 'dsc' sub-component of DAL.
- 
- ifdef CONFIG_X86
--dsc_ccflags := -mhard-float -msse
-+dsc_ccflags-$(CONFIG_CC_IS_GCC) := -mhard-float
-+dsc_ccflags := $(dsc_ccflags-y) -msse
- endif
- 
- ifdef CONFIG_PPC64
-
----
-base-commit: aed5c3b77cd53ba74f66767b03bfb9177662af4b
-change-id: 20260406-5-10-clang-amdgpu-hard-float-errors-44a87f1a7768
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+Cheers,
+Miguel
