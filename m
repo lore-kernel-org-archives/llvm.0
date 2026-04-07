@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377113A0E8F;
-	Mon,  6 Apr 2026 23:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB5F2B9A4;
+	Tue,  7 Apr 2026 00:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775517959; cv=none; b=TjomZRCb8ksVwMLLWBIS/Cpvb+5XuCy5PAy5ppXxWWXnibv0MP/Et23qeZBTfBZMbHTrGd6l/2eOj89CknCIK+3s3RK8AKDX/EPjGs28ojschxkhrl41ZdHGn5ta+6dPG0sG7U+PO5w8PKhuc2/HQVpxoUNBdYuzrEa1pFBWEPo=
+	t=1775522961; cv=none; b=bTT7eEpfqXmjW+eDl3oOMdwvRjN/7JIUumBbopPqckY3E5x4O3LTL9ck1dWw0syhoA93qQQ6ROa+pTqKv6uBV9su91lhqVmmwbqC9wi5IZPp8K3wbf3JT4IoRESIi+YhSnpoCtwPnsZT6Efah1flB3p05UxJD/hVhucEmbMN8RQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775517959; c=relaxed/simple;
-	bh=8+bdlf8JFuMtYhnjy/F+fkhfKqlSWemei3QvSYQNKMk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HsIDkJUu3uB32qv9fjasYS6feDzIaACbwJq1NrN6VdFFFjLS5oogk2xWMbRubq9241nv88CQAq0NZ8y7TRfa9niFo6lMBPY+FwBRTT5IQsSEfzJFrGhwEv73kvvzs80X1cIk8AFo9dp1kIAUc5V0VXCLyoJsawIRoL2EPq+Rn38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FWxsGTfZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775522961; c=relaxed/simple;
+	bh=XmGhm0tvIfgLvqP5Iv0OjVZ+bxUm/Xf/rXubccaqgrU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GxZmfl2aLJzvqHrFujR9hXSqrsi+KYPD5BUICaLGxw/35Jnj/9aSZWOfJ9GmrAIv9t1jahnQ2WIBUfr2v03899zMJbKm/sTtSBI1FsDymP/NMSR740uEm1WkZitKwn9U2prnNBOJn+9zDDDWqc+6sHIctNWmeyG/rrpJn5uHrU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hBljbSm3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FWxsGTfZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01224C2BC9E;
-	Mon,  6 Apr 2026 23:25:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hBljbSm3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3FB7C4CEF7;
+	Tue,  7 Apr 2026 00:49:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775517958;
-	bh=8+bdlf8JFuMtYhnjy/F+fkhfKqlSWemei3QvSYQNKMk=;
+	s=k20201202; t=1775522961;
+	bh=XmGhm0tvIfgLvqP5Iv0OjVZ+bxUm/Xf/rXubccaqgrU=;
 	h=From:Date:Subject:To:Cc:From;
-	b=FWxsGTfZvLhTutwyA/JtloZPRQ8FnDXAVDemUBwHpvYl6aJ17UZMJy4miDQpEupq3
-	 rjN6mVc1EVU5dbUFWPOPu5idPM9BM4JMUfSQz5wQNsUVugsEhj4rDCCdQ5G8MX98f7
-	 MNR7xHapLA+aJkHJiAtfMZl9ytLuLQEgcN8AQYOldgS7zTINo3ldg/tiald2PwGZgC
-	 PNtZj/GOAzDctDOciiNWDn2xBcON3dLgYegRuBSiwKrKNVonLtcqC1Jem9m3sDTkLf
-	 bjZ7uSLsGucHbeiTmLUOuBVeGkxs0TPsfvZ3ixIc+3jcLy/M39+yyQji6M+KTvArAf
-	 hdaJPO6cIKHTQ==
+	b=hBljbSm381tbmlVVp5EDa8lJAHQsAoxLbpIlGJx4q7dyBbPg1sibAS7GMTnXWkySa
+	 faT7UXPZVb830/6oehZ0YS559Vt+1upYFg3REq56FWH8BAn4xqQskuk3SmIXCWhNdi
+	 pgGduUHlmfQR5D+w5TwJb3VyFt7LIIxCXQKaq5QrO/O8FI8oU6S7EQNyOG8TsE1Hpd
+	 e7xkVZOd0Eq/R8CF6UyZT2wH7wajJPxw3swlOSMUa5DI+ZANPoAQWuhos3yzG6DNYT
+	 wGhuCbEE/HKcSBSoJyfOdq12NYEoinab8AwIjVZVk6FwZfbqc9ZEala355lIGPuWis
+	 XuNn/6MB5Gxqw==
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 06 Apr 2026 16:25:49 -0700
-Subject: [PATCH] riscv: Define
- __riscv_copy_{,vec_}{words,bytes}_unaligned() using SYM_TYPED_FUNC_START
+Date: Mon, 06 Apr 2026 17:49:08 -0700
+Subject: [PATCH linux-5.10.y] drm/amd/display: Do not add '-mhard-float' to
+ calcs, dsc, and dcn30 FP files for clang
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,111 +37,136 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260406-measure_cycles-cfi-failure-v1-1-03e0234ae02f@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQ6CQAxA0auQrm0ylgkEr2IMGUsHaxDNFAiGc
- HdHXb6/+BuYJBWDU7FBkkVNn2PG8VAA38LYC2qXDeSoct5V+JBgc5KW3zyIIUfFGHTICTvywRE
- 1tW9KyINXkqjrb36+/G3z9S48fY+w7x9GJWY5fgAAAA==
-X-Change-ID: 20260406-measure_cycles-cfi-failure-d24a02297493
-To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Nam Cao <namcao@linutronix.de>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Message-Id: <20260406-5-10-clang-amdgpu-hard-float-errors-v1-1-09c4c045f848@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNQQ6DIBAAv2L23DVgFEy/0nigsCgNVbNIY2P8e
+ 2l7nEwyc0AiDpTgWh3A9AopLHMBeanATmYeCYMrDI1olGiFwg6lQBuLQvN045pxMuzQx8VsSMw
+ LJ2xb02svjdaqh1JamXzYf5cbxDDnHbtaivoNw9+mfH+Q3b4jOM8PQm084JUAAAA=
+X-Change-ID: 20260406-5-10-clang-amdgpu-hard-float-errors-44a87f1a7768
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+ amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3768; i=nathan@kernel.org;
- h=from:subject:message-id; bh=8+bdlf8JFuMtYhnjy/F+fkhfKqlSWemei3QvSYQNKMk=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJlXHFmuCOm3/DmS8Md1ec/Ugq37xS+ZSp3dNVluLa9Bl
- YLOm9VGHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAifSkM//2evVBP0gqqXCF5
- nim95vnDENNlu+a9O7+z4W93+Sm+d8IM/xQfL1IqFgtf4byldfnvzP/SLc5vi9OV90wrMVh/oDj
- vNi8A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5282; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=XmGhm0tvIfgLvqP5Iv0OjVZ+bxUm/Xf/rXubccaqgrU=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJlXQvrnlm9w/vXBc6KnDH+K4p1wbZ4VsSvzjiekvRB6c
+ 8dCLZOno5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEyEI4KRYf27DVsTHj/TfnTn
+ V83qr8dX2zGe3HOO5Z/mzibRVzcarqkxMvR9LDgUKWffMrmh4MaVSSmzneYEbmTJm1C2/NkftYM
+ 78tgA
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-After commit 67bdd7b01387 ("riscv: Split out measure_cycles() for
-reuse") and commit c03ad15f7cf6 ("riscv: Reuse measure_cycles() in
-check_vector_unaligned_access()"), there are CFI failure when booting
-kernels with CONFIG_CFI=y:
+This patch is for linux-5.10.y only. It is functionally equivalent to
+upstream commit 7db038d9790e ("drm/amd/display: Do not add
+'-mhard-float' to dml_ccflags for clang"), which was created after all
+files that require '-mhard-float' were moved under the dml folder. In
+linux-5.10.y, which does not contain upstream commits
 
-  CFI failure at measure_cycles+0x38/0xe0 (target: __riscv_copy_words_unaligned+0x0/0x50; expected type: ...)
-  CFI failure at measure_cycles+0x38/0xe0 (target: __riscv_copy_vec_words_unaligned+0x0/0x24; expected type: ...)
+  b4bab46400a0 ("drm/amd/display: move calcs folder into DML")
+  27e01f10d183 ("drm/amd/display: move FPU associated DSC code to DML folder")
+  40b31e5355ba ("drm/amd/display: Remove FPU flags from DCN30 Makefile")
 
-The __riscv_copy_*_unaligned() functions are now called indirectly but
-they are not defined with SYM_TYPED_FUNC_START, which is required for
-assembly functions called indirectly from C to pass CFI checking. Switch
-to SYM_TYPED_FUNC_START to clear up the CFI failures.
+clang-21 or newer errors with
 
-Fixes: 67bdd7b01387 ("riscv: Split out measure_cycles() for reuse")
-Fixes: c03ad15f7cf6 ("riscv: Reuse measure_cycles() in check_vector_unaligned_access()")
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calc_math.o] Error 1
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calcs.o] Error 1
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calc_auto.o] Error 1
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/dsc/rc_calc.o] Error 1
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.o] Error 1
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.o] Error 1
+
+Apply a functionally equivalent change to prevent adding '-mhard-float'
+with clang for these files.
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2156
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- arch/riscv/kernel/copy-unaligned.S     | 5 +++--
- arch/riscv/kernel/vec-copy-unaligned.S | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Hi stable folks,
 
-diff --git a/arch/riscv/kernel/copy-unaligned.S b/arch/riscv/kernel/copy-unaligned.S
-index 2b3d9398c113..90f3549621f7 100644
---- a/arch/riscv/kernel/copy-unaligned.S
-+++ b/arch/riscv/kernel/copy-unaligned.S
-@@ -1,6 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /* Copyright (C) 2023 Rivos Inc. */
+The ChromeOS folks raised an issue due to build failures in linux-5.10.y
+when building with clang-21 or newer:
+
+  https://github.com/ClangBuiltLinux/linux/issues/2156
+
+I thought I previously addressed this in all stable trees:
+
+  https://lore.kernel.org/20250604233141.GA2374479@ax162/
+
+But our build coverage in 5.10 missed these files because allmodconfig
+enables KCOV, which was incompatible with these files until upstream
+commit 3876a8b5e241 ("drm/amd/display: Enable building new display
+engine with KCOV enabled").
+
+This change addresses the remaining errors in a functionally equivalent
+manner as my original upstream commit 7db038d9790e ("drm/amd/display: Do
+not add '-mhard-float' to dml_ccflags for clang"), similar to what I did
+before in 5.10 commit 0c3939b00253 ("drm/amd/display: Do not add
+'-mhard-float' to dcn2{1,0}_resource.o for clang"). There is technically
+an upstream change that addresses the dcn30 error but it was done after
+aarch64 support was dropped from the new display engine code, so I
+preferred to do this to minimize potential regressions.
+
+If there are any issues, please let me know.
+---
+ drivers/gpu/drm/amd/display/dc/calcs/Makefile | 3 ++-
+ drivers/gpu/drm/amd/display/dc/dcn30/Makefile | 4 ++--
+ drivers/gpu/drm/amd/display/dc/dsc/Makefile   | 3 ++-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/calcs/Makefile b/drivers/gpu/drm/amd/display/dc/calcs/Makefile
+index cb7c37ef8735..1b3e3926b706 100644
+--- a/drivers/gpu/drm/amd/display/dc/calcs/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/calcs/Makefile
+@@ -26,7 +26,8 @@
+ #
  
-+#include <linux/cfi_types.h>
- #include <linux/linkage.h>
- #include <asm/asm.h>
+ ifdef CONFIG_X86
+-calcs_ccflags := -mhard-float -msse
++calcs_ccflags-$(CONFIG_CC_IS_GCC) := -mhard-float
++calcs_ccflags := $(calcs_ccflags-y) -msse
+ endif
  
-@@ -9,7 +10,7 @@
- /* void __riscv_copy_words_unaligned(void *, const void *, size_t) */
- /* Performs a memcpy without aligning buffers, using word loads and stores. */
- /* Note: The size is truncated to a multiple of 8 * SZREG */
--SYM_FUNC_START(__riscv_copy_words_unaligned)
-+SYM_TYPED_FUNC_START(__riscv_copy_words_unaligned)
- 	andi  a4, a2, ~((8*SZREG)-1)
- 	beqz  a4, 2f
- 	add   a3, a1, a4
-@@ -41,7 +42,7 @@ SYM_FUNC_END(__riscv_copy_words_unaligned)
- /* void __riscv_copy_bytes_unaligned(void *, const void *, size_t) */
- /* Performs a memcpy without aligning buffers, using only byte accesses. */
- /* Note: The size is truncated to a multiple of 8 */
--SYM_FUNC_START(__riscv_copy_bytes_unaligned)
-+SYM_TYPED_FUNC_START(__riscv_copy_bytes_unaligned)
- 	andi a4, a2, ~(8-1)
- 	beqz a4, 2f
- 	add  a3, a1, a4
-diff --git a/arch/riscv/kernel/vec-copy-unaligned.S b/arch/riscv/kernel/vec-copy-unaligned.S
-index 7ce4de6f6e69..361039f7b944 100644
---- a/arch/riscv/kernel/vec-copy-unaligned.S
-+++ b/arch/riscv/kernel/vec-copy-unaligned.S
-@@ -2,6 +2,7 @@
- /* Copyright (C) 2024 Rivos Inc. */
+ ifdef CONFIG_PPC64
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/Makefile b/drivers/gpu/drm/amd/display/dc/dcn30/Makefile
+index a71c0f298380..52d5826b2970 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn30/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dcn30/Makefile
+@@ -32,8 +32,8 @@ DCN30 = dcn30_init.o dcn30_hubbub.o dcn30_hubp.o dcn30_dpp.o dcn30_optc.o \
  
- #include <linux/args.h>
-+#include <linux/cfi_types.h>
- #include <linux/linkage.h>
- #include <asm/asm.h>
  
-@@ -16,7 +17,7 @@
- /* void __riscv_copy_vec_words_unaligned(void *, const void *, size_t) */
- /* Performs a memcpy without aligning buffers, using word loads and stores. */
- /* Note: The size is truncated to a multiple of WORD_EEW */
--SYM_FUNC_START(__riscv_copy_vec_words_unaligned)
-+SYM_TYPED_FUNC_START(__riscv_copy_vec_words_unaligned)
- 	andi  a4, a2, ~(WORD_EEW-1)
- 	beqz  a4, 2f
- 	add   a3, a1, a4
-@@ -38,7 +39,7 @@ SYM_FUNC_END(__riscv_copy_vec_words_unaligned)
- /* void __riscv_copy_vec_bytes_unaligned(void *, const void *, size_t) */
- /* Performs a memcpy without aligning buffers, using only byte accesses. */
- /* Note: The size is truncated to a multiple of 8 */
--SYM_FUNC_START(__riscv_copy_vec_bytes_unaligned)
-+SYM_TYPED_FUNC_START(__riscv_copy_vec_bytes_unaligned)
- 	andi a4, a2, ~(8-1)
- 	beqz a4, 2f
- 	add  a3, a1, a4
+ ifdef CONFIG_X86
+-CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_resource.o := -mhard-float -msse
+-CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_optc.o := -mhard-float -msse
++CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_resource.o := $(if $(CONFIG_CC_IS_GCC),-mhard-float) -msse
++CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_optc.o := $(if $(CONFIG_CC_IS_GCC),-mhard-float) -msse
+ endif
+ 
+ ifdef CONFIG_PPC64
+diff --git a/drivers/gpu/drm/amd/display/dc/dsc/Makefile b/drivers/gpu/drm/amd/display/dc/dsc/Makefile
+index 6207809f293b..4fc6d9c32d16 100644
+--- a/drivers/gpu/drm/amd/display/dc/dsc/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dsc/Makefile
+@@ -3,7 +3,8 @@
+ # Makefile for the 'dsc' sub-component of DAL.
+ 
+ ifdef CONFIG_X86
+-dsc_ccflags := -mhard-float -msse
++dsc_ccflags-$(CONFIG_CC_IS_GCC) := -mhard-float
++dsc_ccflags := $(dsc_ccflags-y) -msse
+ endif
+ 
+ ifdef CONFIG_PPC64
 
 ---
-base-commit: 9b3a2be84803cf18c4b4d1efc695991f0daa153c
-change-id: 20260406-measure_cycles-cfi-failure-d24a02297493
+base-commit: aed5c3b77cd53ba74f66767b03bfb9177662af4b
+change-id: 20260406-5-10-clang-amdgpu-hard-float-errors-44a87f1a7768
 
 Best regards,
 --  
