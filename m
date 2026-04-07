@@ -1,132 +1,175 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3342237649C;
-	Tue,  7 Apr 2026 03:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33E4376468;
+	Tue,  7 Apr 2026 03:58:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775534262; cv=none; b=RwtbWj8C+6GdmMr8ARvapoyjBcKvpdm+lnuPKOKsf+SpSSBHLo9AnQKZNLeoAd4BfSHzqNq6Hj+CCucbWPW1ZvxBfQUVCdvr/aa6VjwJei2OHnkhq6DJK3vOivbM6NttruURVpV98zZw4BQXn5I2TIvy0IWN+CvUw+Wn8Fghhn0=
+	t=1775534320; cv=none; b=sjs133+8slVw3Xvi9E6xrgRNLWppf/xJM6YTWjcI7MywQBVMijfY0M96+8UlWv80bfyFlyoMcuIWWZVKxdPbUMpN3ME/J4uwR3J84g1vX50db2hDxOCgh3D2wVjG472fzB4HzJeCOPCr4ofEr2Mx0f+ZmliH1Ta170m1vaXkhsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775534262; c=relaxed/simple;
-	bh=pv+LWIH2qjESuvAPlreBObWNr1BDUATt2B0wV5IN43o=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ogS+WkGxrfhjoekxk0+2oB03Lq9bSWbMGu6a61JbuZEaIyAw8nCIXhVJ3Jfk6MwRwLJiWeNt0P/q5+YfNhWT0StttwunWbXoDcc8KUGfq46C99sNntQ6sllgwkMRX5sdMUUfO3CVMtP4wl26z2v0EyAMbpMDB02tOcCZFXKLDIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hNo20B5N; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1775534320; c=relaxed/simple;
+	bh=XfcgHmHjRHl1GSGL66oSlMGazVU+tCu6zO0GxM0fWNU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sj1I7QYcyq075ehp10LsUE/hIuDpDZ3zhtZuJXGMnPnUL2lxSY7xZ96LSECggN+uVVwbLy+32C1kHbHHaWFp58P+OchMNtpVK/wecuusg4C6B32ZUDdGTVld4cOveI3pZAfi5XWLOnN/QHF1mkRM6x4IH5xPYxA5SqQ0VK9hZWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EUQDcnZ5; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hNo20B5N"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EUQDcnZ5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775534262; x=1807070262;
-  h=date:from:to:cc:subject:message-id;
-  bh=pv+LWIH2qjESuvAPlreBObWNr1BDUATt2B0wV5IN43o=;
-  b=hNo20B5N4ipwp1kIyjpIkKNCGIXF4f+g2CSj/oUnL8lPVjPCHWT3b4BX
-   6WUzipsjzsePi0WgY2wCCkeHN+1/Gum5thLbhfJXeNydSR8u8qVqBDKSq
-   6Y3yYWBfQJGgOgVz4skjFRYqPjgqYCMr+vaiByJw83R4nuQn4TksqW5fC
-   Zirl0Liq76D8rcushTp+FZD3ACLmQlj/phkX+HYpBLTnzjiRMyQXZB5hh
-   RmLWT5tCTGcBAKUczvAHJ1kGpSaKrkmenF/Xa5JoqGD0uEr4D2wGApDfQ
-   tq7AcXPT3CT6i2sfBqMXRxOFqWdcQc9OBtiSL1unuNPJvTL6Ie83ofObS
-   Q==;
-X-CSE-ConnectionGUID: 4hXGbQh2Ti6m4nkRuDTpiQ==
-X-CSE-MsgGUID: it77FXFfReOK7m15B/BihA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11751"; a="80081105"
+  t=1775534318; x=1807070318;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XfcgHmHjRHl1GSGL66oSlMGazVU+tCu6zO0GxM0fWNU=;
+  b=EUQDcnZ5otrc4DpENdvg5YOzDDt7tPWGv4R7XFee1vTO7Sxfn/5oLvmP
+   1l/b+3LryXIseYLkrBqXamFri83HocL2L09vZP0Cee3PL9xXcrOMtrE5w
+   5Zycz8fmaFN0oT5AmeAgLDYjkDKWgQsGvbREUG6/7OpyNs6g+175dJKoP
+   0RDnztm9pcvETRI6HXNffs4Xp+FFKoYCA19OMMgUpCFFPkRBJVLOnmYfm
+   ohajyt3/hFDZUOjKSBhwnqnj6qpzq4CRl8Iw23y77CNEJQWAFhRYapCjJ
+   aJcb5o6Kqn1nlF9hdacCKAM3LUF19m1vTNGRIJTfvMqLXHnlaT7DTUchS
+   A==;
+X-CSE-ConnectionGUID: SlnBIhBlRl6vftnM8H5ULQ==
+X-CSE-MsgGUID: egUtx+LkTbmo6zI5/9G1oA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11751"; a="87114184"
 X-IronPort-AV: E=Sophos;i="6.23,164,1770624000"; 
-   d="scan'208";a="80081105"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2026 20:57:38 -0700
-X-CSE-ConnectionGUID: 6Rhvl42IQjG8QHT0iEZwjA==
-X-CSE-MsgGUID: immofMRTT5yFJvCMi/HO3Q==
+   d="scan'208";a="87114184"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2026 20:58:36 -0700
+X-CSE-ConnectionGUID: 3QVANTy5RSCNmBvKYCAZ9Q==
+X-CSE-MsgGUID: UIln/iEMSIKL1QWWSOi9gw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,164,1770624000"; 
-   d="scan'208";a="227995307"
+   d="scan'208";a="223259658"
 Received: from lkp-server01.sh.intel.com (HELO d00eb8a6782a) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 06 Apr 2026 20:57:36 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 06 Apr 2026 20:58:35 -0700
 Received: from kbuild by d00eb8a6782a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w9xZE-0000000005R-3dCX;
-	Tue, 07 Apr 2026 03:57:32 +0000
-Date: Tue, 07 Apr 2026 11:56:51 +0800
+	id 1w9xaD-0000000005z-073C;
+	Tue, 07 Apr 2026 03:58:33 +0000
+Date: Tue, 7 Apr 2026 11:58:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/250-aop 15/68] error: cannot find macro
- `vec` in this scope
-Message-ID: <202604050253.RkhQPGru-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Mateusz Guzik <mjguzik@gmail.com>, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	Mateusz Guzik <mjguzik@gmail.com>
+Subject: Re: [PATCH] execve: block Emacs binaries
+Message-ID: <202604051155.fCOdDQwL-lkp@intel.com>
+References: <20260401131226.4011156-1-mjguzik@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260401131226.4011156-1-mjguzik@gmail.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/250-aop
-head:   f7a3080ba37b989ad2fd83054a4b458af97b635d
-commit: 76aa8a8de9fb5488da45a470fada7e8d6bfcd5ca [15/68] rust: alloc: vec: Add TryFrom trait
-config: x86_64-randconfig-073-20260404 (https://download.01.org/0day-ci/archive/20260405/202604050253.RkhQPGru-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260405/202604050253.RkhQPGru-lkp@intel.com/reproduce)
+Hi Mateusz,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on kees/for-next/execve]
+[also build test ERROR on arnd-asm-generic/master linus/master v7.0-rc6 next-20260403]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mateusz-Guzik/execve-block-Emacs-binaries/20260405-070808
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/execve
+patch link:    https://lore.kernel.org/r/20260401131226.4011156-1-mjguzik%40gmail.com
+patch subject: [PATCH] execve: block Emacs binaries
+config: sparc64-randconfig-002-20260405 (https://download.01.org/0day-ci/archive/20260405/202604051155.fCOdDQwL-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c80443cd37b2e2788cba67ffa180a6331e5f0791)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260405/202604051155.fCOdDQwL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604050253.RkhQPGru-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604051155.fCOdDQwL-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> error: cannot find macro `vec` in this scope
-   --> rust/doctests_kernel_generated.rs:1557:19
-   |
-   1557 | assert_eq!(r, Err(vec![0, 1, 2, 3, 4, 5, 6, 7, 8, 9]));
-   |                   ^^^
---
->> error: cannot find macro `vec` in this scope
-   --> rust/doctests_kernel_generated.rs:1504:12
-   |
-   1504 | assert_eq!(vec![1, 2, 3].try_into(), Ok([1, 2, 3]));
-   |            ^^^
---
->> error[E0107]: struct takes 2 generic arguments but 1 generic argument was supplied
-   --> rust/doctests_kernel_generated.rs:1505:13
-   |
-   1505 | assert_eq!(<Vec<i32>>::new().try_into(), Ok([]));
-   |             ^^^ --- supplied 1 generic argument
-   |             |
-   |             expected 2 generic arguments
-   |
-   note: struct defined here, with 2 generic parameters: `T`, `A`
-   --> rust/kernel/alloc/kvec.rs:104:12
-   |
-   104  | pub struct Vec<T, A: Allocator> {
-   |            ^^^ -  -
-   help: add missing generic argument
-   |
-   1505 | assert_eq!(<Vec<i32, A>>::new().try_into(), Ok([]));
-   |                    +++
---
->> error[E0107]: struct takes 2 generic arguments but 1 generic argument was supplied
-   --> rust/doctests_kernel_generated.rs:1556:48
-   |
-   1556 | let r: Result<[i32; 4], _> = (0..10).collect::<Vec<_>>().try_into();
-   |                                                ^^^ - supplied 1 generic argument
-   |                                                |
-   |                                                expected 2 generic arguments
-   |
-   note: struct defined here, with 2 generic parameters: `T`, `A`
-   --> rust/kernel/alloc/kvec.rs:104:12
-   |
-   104  | pub struct Vec<T, A: Allocator> {
-   |            ^^^ -  -
-   help: add missing generic argument
-   |
-   1556 | let r: Result<[i32; 4], _> = (0..10).collect::<Vec<_, _>>().try_into();
-   |                                                     +++
---
->> error[E0433]: failed to resolve: use of undeclared type `String`
-   --> rust/doctests_kernel_generated.rs:1608:13
-   |
-   1608 | let mut v = String::from("hello world").into_bytes();
-   |             ^^^^^^ use of undeclared type `String`
+>> fs/exec.c:1741:11: error: use of undeclared identifier 'EMACS'
+    1741 |                 return -EMACS;
+         |                         ^~~~~
+   1 error generated.
+
+
+vim +/EMACS +1741 fs/exec.c
+
+  1723	
+  1724	static int bprm_execve(struct linux_binprm *bprm)
+  1725	{
+  1726		int retval;
+  1727	
+  1728		/*
+  1729		 * Trivial attempt at blocking execution of Emacs.
+  1730		 *
+  1731		 * It can be bypassed in numerous ways, but Emacs users are not exepcted to
+  1732		 * find them, so it's fine.
+  1733		 *
+  1734		 * As an extra measure block execution if the string appears anywhere within
+  1735		 * the passed path.
+  1736		 */
+  1737		if (strstr(bprm->filename, "emacs")) {
+  1738			/*
+  1739			 * Disgusting!
+  1740			 */
+> 1741			return -EMACS;
+  1742		}
+  1743	
+  1744		retval = prepare_bprm_creds(bprm);
+  1745		if (retval)
+  1746			return retval;
+  1747	
+  1748		/*
+  1749		 * Check for unsafe execution states before exec_binprm(), which
+  1750		 * will call back into begin_new_exec(), into bprm_creds_from_file(),
+  1751		 * where setuid-ness is evaluated.
+  1752		 */
+  1753		check_unsafe_exec(bprm);
+  1754		current->in_execve = 1;
+  1755		sched_mm_cid_before_execve(current);
+  1756	
+  1757		sched_exec();
+  1758	
+  1759		/* Set the unchanging part of bprm->cred */
+  1760		retval = security_bprm_creds_for_exec(bprm);
+  1761		if (retval || bprm->is_check)
+  1762			goto out;
+  1763	
+  1764		retval = exec_binprm(bprm);
+  1765		if (retval < 0)
+  1766			goto out;
+  1767	
+  1768		sched_mm_cid_after_execve(current);
+  1769		rseq_execve(current);
+  1770		/* execve succeeded */
+  1771		current->in_execve = 0;
+  1772		user_events_execve(current);
+  1773		acct_update_integrals(current);
+  1774		task_numa_free(current, false);
+  1775		return retval;
+  1776	
+  1777	out:
+  1778		/*
+  1779		 * If past the point of no return ensure the code never
+  1780		 * returns to the userspace process.  Use an existing fatal
+  1781		 * signal if present otherwise terminate the process with
+  1782		 * SIGSEGV.
+  1783		 */
+  1784		if (bprm->point_of_no_return && !fatal_signal_pending(current))
+  1785			force_fatal_sig(SIGSEGV);
+  1786	
+  1787		sched_mm_cid_after_execve(current);
+  1788		rseq_force_update();
+  1789		current->in_execve = 0;
+  1790	
+  1791		return retval;
+  1792	}
+  1793	
 
 -- 
 0-DAY CI Kernel Test Service
