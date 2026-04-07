@@ -1,217 +1,78 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A26F38F936;
-	Tue,  7 Apr 2026 07:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBCBA3921C7
+	for <llvm@lists.linux.dev>; Tue,  7 Apr 2026 07:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775545761; cv=none; b=kJaNYDgL7YcFNKmACesaLePthyy1JS5o1BwUMLVIv2R2w47RVVObHLz5yWXeetFrfUE+FNi1ryGvz1pBLT+jY9xUcmprLhLuKN+AOlOolDbmqUNdQgXTAo7IF78mT4XIEyb2iTG06NcZJngAlL+e/LeRXzdKu4vA2rkJOmxC7So=
+	t=1775546141; cv=none; b=lWtN5VPlKZN+VouLvlmEgH29AbLRv1Mk/1p7X8KDJg8fdvaZvih0I5vX9bsbOaMDkFfMZnEbsrgoXbG1n4Wv9javeiCMjbL1BZXxi2JAflNayqircWnSE0VanMCDrNhQ6WgF8ZabO6OI4wmnW0gOqcMXdi6tHS4m25mCOOR7JKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775545761; c=relaxed/simple;
-	bh=yjqn7mxpmMG0XkkF6uF5LUIaTVIZDAEWzbEU7g3jtMs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uDZeTO/6a26JZpmhldR2BHWOLwAJb1CuSUlS4STSCRfcGczWHFjaTQUx4mZAXHXUIhk/9v4WfEcIsQjv4J1OWlX6p1XvprNJxiFXc9dSos2hsB6vGA3n1RsL4ruaXaEbipq3yMH8TDNwU2xf5wZc9ZH2q+BatdM/rbOJ07NBCIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f1jEdXwk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775546141; c=relaxed/simple;
+	bh=bppB/h3Z5J342NzpmUMAPQd/fD8oY6yWw6XBNpZTEOs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=sJagExtfEGQojFfcfRbTcITD1opLcLW2gfnYCmANBMlpUoJwNcQfnV6rCFXQ2fOw/dYVmG4tphZvOH24zVE5XRLMm0rjwGMS5beiE95OldfN9Y/aWuFpbePo82mF/ZcGq6kcMzoTebl1d3TxQvTumx+tmMOojhfq1oRL5C4EshM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OV5cZRu/; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3KEWudwq; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f1jEdXwk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 355DFC116C6;
-	Tue,  7 Apr 2026 07:09:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775545760;
-	bh=yjqn7mxpmMG0XkkF6uF5LUIaTVIZDAEWzbEU7g3jtMs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f1jEdXwkvyAtoDAL1qIsKRo6JnBiJ6XjEWtNvjXO/BQ/ylys3bbn8hBfpxcDCmusu
-	 rPn1ChSdmjnM6rnh7WhITrs6netoHeKFqtBWrbP3rNykY3EelsM7MypfVzLxl7z63b
-	 MnKl/wDJQaLJyo+IJdTCFJwAE4oNcl13EwtPqgTKA2TwhdWA/05NQMaGfRvu8YIk1G
-	 dQs9E5kFEzhOqZyf9gi4l5XMA1HwV4kmRBJcTsRpBN7mhuT01GZccWP3IzY6CDAqJA
-	 b4OL9UPj5qQ3ImqBZnJLuD0DVIylVK6M+i/CIoAV1dhWBe+i2eiq3LGmNDkBG9I2Ta
-	 Spj1af/ztiaFg==
-Date: Tue, 7 Apr 2026 00:09:18 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Tengda Wu <wutengda@huaweicloud.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
-	Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
-	Kim Phillips <kim.phillips@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 04/16] perf annotate-arm64: Handle load and store
- instructions
-Message-ID: <adStnrfA6IxkOfRN@z2>
-References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
- <20260403094800.1418825-5-wutengda@huaweicloud.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OV5cZRu/";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3KEWudwq"
+From: Nam Cao <namcao@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1775546138;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iUFp+O5EtBAiEaUUWnqZaZkuO8VjWkhg5QNOTwvremo=;
+	b=OV5cZRu/Gww7Ff+EMZDyC/de8sRB24qQsA+lN8H6qbntBmYXpZLdzV0lHG8u37u2wDM8VA
+	1htROkf/O7YbbMJVmhqofGSkZwRb2ZEGGrxJo+xGJ56+mjnRSLdcD3E3YvTE1vqDLIXv1w
+	gIN+DL83FbBOqJ/TnVDDqnaeC3ikkR/B6NBXA4eOQtHyl0i7iSME3BLYHQV74f7khVA43O
+	TseePlh9SKSBOe1gFLJnTP95rtTZc3kMHrATcVQRNaBMaZbDekYG8jpcJegOAVZSGnYFg/
+	zVjGkiy7/3Qi5OfJYQt2PIWtLaIelYpGuY3ETYo283fVNIBOAtRJAVQVL4g7Pg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1775546138;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iUFp+O5EtBAiEaUUWnqZaZkuO8VjWkhg5QNOTwvremo=;
+	b=3KEWudwqnkedlRGGf1CsSEHnWvY3mWEzZ82YB0LL6OrC9KgURmSKCHBhmSaaoDoIiRA1xx
+	9ezsHPtAVV6qPsCA==
+To: Nathan Chancellor <nathan@kernel.org>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] riscv: Define
+ __riscv_copy_{,vec_}{words,bytes}_unaligned() using SYM_TYPED_FUNC_START
+In-Reply-To: <20260406-measure_cycles-cfi-failure-v1-1-03e0234ae02f@kernel.org>
+References: <20260406-measure_cycles-cfi-failure-v1-1-03e0234ae02f@kernel.org>
+Date: Tue, 07 Apr 2026 09:15:37 +0200
+Message-ID: <87zf3f44x2.fsf@yellow.woof>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260403094800.1418825-5-wutengda@huaweicloud.com>
+Content-Type: text/plain
 
-On Fri, Apr 03, 2026 at 09:47:48AM +0000, Tengda Wu wrote:
-> Add ldst_ops to handle load and store instructions in order to parse
-> the data types and offsets associated with PMU events for memory access
-> instructions. There are many variants of load and store instructions in
-> ARM64, making it difficult to match all of these instruction names
-> completely. Therefore, only the instruction prefixes are matched. The
-> prefix 'ld|st' covers most of the memory access instructions, 'cas|swp'
-> matches atomic instructions, and 'prf' matches memory prefetch
-> instructions.
-> 
-> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
-> ---
->  .../perf/util/annotate-arch/annotate-arm64.c  | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
-> 
-> diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-> index 4c42323b0c18..8209faaa6086 100644
-> --- a/tools/perf/util/annotate-arch/annotate-arm64.c
-> +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-> @@ -3,7 +3,9 @@
->  #include <errno.h>
->  #include <stdlib.h>
->  #include <string.h>
-> +#include <ctype.h>
->  #include <linux/zalloc.h>
-> +#include <linux/string.h>
->  #include <regex.h>
->  #include "../annotate.h"
->  #include "../disasm.h"
-> @@ -12,6 +14,7 @@ struct arch_arm64 {
->  	struct arch arch;
->  	regex_t call_insn;
->  	regex_t jump_insn;
-> +	regex_t ldst_insn; /* load and store instruction */
->  };
->  
->  static bool arm64__check_multi_regs(const char *op)
-> @@ -114,6 +117,59 @@ static const struct ins_ops arm64_mov_ops = {
->  	.scnprintf = mov__scnprintf,
->  };
->  
-> +static int arm64_ldst__parse(const struct arch *arch __maybe_unused,
+Nathan Chancellor <nathan@kernel.org> writes:
 
-The 'arch' is used. :)
+> After commit 67bdd7b01387 ("riscv: Split out measure_cycles() for
+> reuse") and commit c03ad15f7cf6 ("riscv: Reuse measure_cycles() in
+> check_vector_unaligned_access()"), there are CFI failure when booting
+> kernels with CONFIG_CFI=y:
+>
+>   CFI failure at measure_cycles+0x38/0xe0 (target: __riscv_copy_words_unaligned+0x0/0x50; expected type: ...)
+>   CFI failure at measure_cycles+0x38/0xe0 (target: __riscv_copy_vec_words_unaligned+0x0/0x24; expected type: ...)
+>
+> The __riscv_copy_*_unaligned() functions are now called indirectly but
+> they are not defined with SYM_TYPED_FUNC_START, which is required for
+> assembly functions called indirectly from C to pass CFI checking. Switch
+> to SYM_TYPED_FUNC_START to clear up the CFI failures.
+>
+> Fixes: 67bdd7b01387 ("riscv: Split out measure_cycles() for reuse")
+> Fixes: c03ad15f7cf6 ("riscv: Reuse measure_cycles() in check_vector_unaligned_access()")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-
-> +			     struct ins_operands *ops,
-> +			     struct map_symbol *ms __maybe_unused,
-> +			     struct disasm_line *dl __maybe_unused)
-> +{
-> +	char *s, *target;
-> +
-> +	/*
-> +	 * The part starting from the memory access annotation '[' is parsed
-> +	 * as 'target', while the part before it is parsed as 'source'.
-
-It'd be nice if you can show some examples.  So it always looks like:
-
-	LDR  x1, [x2, #4]
-	STR  x1, [x3], #8
-
-Right?  What about other instructions?
-
-
-> +	 */
-> +	target = s = strchr(ops->raw, arch->objdump.memory_ref_char);
-> +	if (!s)
-> +		return -1;
-> +
-> +	while (s > ops->raw && *s != ',')
-> +		--s;
-> +
-> +	if (s == ops->raw)
-> +		return -1;
-> +
-> +	*s = '\0';
-> +	ops->source.raw = strdup(ops->raw);
-> +
-> +	*s = ',';
-> +	if (!ops->source.raw)
-> +		return -1;
-> +
-> +	ops->source.multi_regs = arm64__check_multi_regs(ops->source.raw);
-
-Probably it's better to set ops->source.mem_ref to false.  Then you
-won't need to set multi_regs.
-
-Thanks,
-Namhyung
-
-> +
-> +	ops->target.raw = strdup(target);
-> +	if (!ops->target.raw) {
-> +		zfree(&ops->source.raw);
-> +		return -1;
-> +	}
-> +	ops->target.mem_ref = true;
-> +	ops->target.multi_regs = arm64__check_multi_regs(ops->target.raw);
-> +
-> +	return 0;
-> +}
-> +
-> +static int arm64_ldst__scnprintf(const struct ins *ins, char *bf, size_t size,
-> +				 struct ins_operands *ops, int max_ins_name)
-> +{
-> +	return scnprintf(bf, size, "%-*s %s,%s", max_ins_name, ins->name,
-> +			 ops->source.raw, ops->target.raw);
-> +}
-> +
-> +static struct ins_ops arm64_ldst_ops = {
-> +	.parse	   = arm64_ldst__parse,
-> +	.scnprintf = arm64_ldst__scnprintf,
-> +};
-> +
->  static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch, const char *name)
->  {
->  	struct arch_arm64 *arm = container_of(arch, struct arch_arm64, arch);
-> @@ -124,6 +180,8 @@ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch,
->  		ops = &jump_ops;
->  	else if (!regexec(&arm->call_insn, name, 2, match, 0))
->  		ops = &call_ops;
-> +	else if (!regexec(&arm->ldst_insn, name, 2, match, 0))
-> +		ops = &arm64_ldst_ops;
->  	else if (!strcmp(name, "ret"))
->  		ops = &ret_ops;
->  	else
-> @@ -148,6 +206,8 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
->  	arch->id = *id;
->  	arch->objdump.comment_char	  = '/';
->  	arch->objdump.skip_functions_char = '+';
-> +	arch->objdump.memory_ref_char	  = '[';
-> +	arch->objdump.imm_char		  = '#';
->  	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
->  
->  	/* bl, blr */
-> @@ -161,8 +221,20 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
->  	if (err)
->  		goto out_free_call;
->  
-> +	/*
-> +	 * The ARM64 architecture has many variants of load/store instructions.
-> +	 * It is quite challenging to match all of them completely. Here, we
-> +	 * only match the prefixes of these instructions.
-> +	 */
-> +	err = regcomp(&arm->ldst_insn, "^(ld|st|cas|prf|swp)",
-> +		      REG_EXTENDED);
-> +	if (err)
-> +		goto out_free_jump;
-> +
->  	return arch;
->  
-> +out_free_jump:
-> +	regfree(&arm->jump_insn);
->  out_free_call:
->  	regfree(&arm->call_insn);
->  out_free_arm:
-> -- 
-> 2.34.1
-> 
+Reviewed-by: Nam Cao <namcao@linutronix.de>
