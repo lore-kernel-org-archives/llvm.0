@@ -1,57 +1,57 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C27375F87;
-	Tue,  7 Apr 2026 03:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7592A376464;
+	Tue,  7 Apr 2026 03:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775534192; cv=none; b=NTTWtF5QnHjHxJyvnM+2jmCAy80OcbOQAruHrHE3IdqEGzCA9zlhYN16wVO4arYVMDLvUnBqLLnUeNEYe7wFn3+Mv9+R4o5t886iedB40pKATWflLildhiGTfn6JzcqVUy9pJLl6JGvxmI/7qC/YTaZvbReDX2KO03ndWBaNhzA=
+	t=1775534194; cv=none; b=mUCMkubpduEcQWBfeAjDr35apjqmJVWodRDtTjuMvCJoq6Uw5j3LOvlTQ95v9WD3teBNxSvpmxdpwQcO8k6AilWAKV+uXmbHNYLzDJER28rPHB5HpjUUhBOb3dEMU6fVgWpn4iG11WouC7RxTk+MvUzCfUjZQcXYr4edWywBndk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775534192; c=relaxed/simple;
-	bh=PTXyRr9rBTwxOyuvCTnSbuulC2raqd+t3xNCPns/gHo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=LIULe840GPy8nUB7KJjFeIBmRWBv8Nu4MeHbgxcL2SxzOeODbxenx4js6n5sOW4wz8iSGcVdc4846V6xe100yYap7ixJHz0Mt7ZyL3Vgu8J/U8ebcMbbjP3gUdZobZurwlj8DxOPD/Mq8OgSwEMsN78EZJJz1jgUkMc+pJexrqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y7Z0Lc8T; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1775534194; c=relaxed/simple;
+	bh=RBauETFmh3BJTkOK3gqsKGLxNeehv5jmxb/GEdTVGAo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=gWG8QPcpzGj1cbXFBzNLWV3zzQbHjCI+i0/Jcb4aSsWYvjGBKp24wohcLqQYCIx6xgzNzk3L9svsoH/BiIlxsPTQkYkA+UewJmCRD0XkSbB+9RXN/BrxYALzWF0HMmWEmHqADzo1tX1mI+g7bB8ERlrb9AYHRuq7QysCfzlpPQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X7TQALf0; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y7Z0Lc8T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X7TQALf0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775534191; x=1807070191;
+  t=1775534193; x=1807070193;
   h=date:from:to:cc:subject:message-id;
-  bh=PTXyRr9rBTwxOyuvCTnSbuulC2raqd+t3xNCPns/gHo=;
-  b=Y7Z0Lc8TZALhpHRx0hc9InqMRFRi5uxtje4my6kTsMWTlyk4N4KY05AY
-   zg31slQ5gRE1Vepl0EHQehjLefPdrQPXGcvLKhX6+ivCjtG2Qg6jprcne
-   yY31qSj6ZjIjSQQFHAjnHZepdTM2jXeMl7qivCeusRob7GjJ3dxdXqYJ3
-   psp2XC9PrAMnlnYB78cs0l75Ssv0K1GAWpAW4TRSrwbLkdRoXj4yy9ryo
-   vpebKhMQot/kSXFYrJWXcn+57mB3/ksV2Cjl1GZHq5aLfVdaVWg5YHy+Z
-   4Vq9z+afOaKTE4hZCPp/udU9MYT9BVDc4d41CxW5wiYB3QEMZg3+KU318
+  bh=RBauETFmh3BJTkOK3gqsKGLxNeehv5jmxb/GEdTVGAo=;
+  b=X7TQALf0rWXLo0wcFZnTzYGlLlskHsYgoS5oOvnT4teiEdHk77INB93N
+   4YE8kZ+o0LVvGi1MfncixlvZWzaRG7fG05l2v3aFwOPQ8H4essVC2s4lp
+   sUefWiqsAtY6dBn1b3wrmOqxE5MdwQF/4CHde3PRyC+ssF8eBEhp8VtVh
+   V6JhjwEI5NhZ2B/EDhlaKeV3DGXvpAAp6IHfJnBtR2uEjACxHj+6tclTF
+   ca9xSmmYXV7eQ3l1F8A3WY36/1xuCwdTT0e/KK3/SRBhCDNYkeaJKafv0
+   h2Xn674MOA8zgjFru0oZe0XiiO0+zvSX3PfTYnyg83P580uWizdaMVbl5
    w==;
-X-CSE-ConnectionGUID: C4TEqWbcQkqUNaHJOZ/P5Q==
-X-CSE-MsgGUID: zRE1EStcTD2k6lSplrAUgQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11751"; a="87563830"
+X-CSE-ConnectionGUID: QxqT+kzKRECcAj+yYo0rAQ==
+X-CSE-MsgGUID: qKyttvt1Tny2ZA8zjmbvxQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11751"; a="87563835"
 X-IronPort-AV: E=Sophos;i="6.23,164,1770624000"; 
-   d="scan'208";a="87563830"
+   d="scan'208";a="87563835"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2026 20:56:28 -0700
-X-CSE-ConnectionGUID: KPsII7cYRaS9nSIaZ35a4g==
-X-CSE-MsgGUID: KcHxPuV5SmaFCmbpohq6EA==
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2026 20:56:31 -0700
+X-CSE-ConnectionGUID: gzjhLw1JRjC2s5TBAzFM8g==
+X-CSE-MsgGUID: aPAbjzsvQK2YbvDb5pKFsw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,164,1770624000"; 
-   d="scan'208";a="232926680"
+   d="scan'208";a="232926704"
 Received: from lkp-server01.sh.intel.com (HELO d00eb8a6782a) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 06 Apr 2026 20:56:26 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 06 Apr 2026 20:56:29 -0700
 Received: from kbuild by d00eb8a6782a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1w9xY8-0000000004h-02hq;
+	id 1w9xY8-0000000004l-0DC7;
 	Tue, 07 Apr 2026 03:56:24 +0000
-Date: Tue, 07 Apr 2026 11:55:40 +0800
+Date: Tue, 07 Apr 2026 11:55:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
+To: Bart Van Assche <bvanassche@acm.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/250-aop 31/68] warning: unused import:
- `crate::error::to_result`
-Message-ID: <202604042143.fIJjtmrN-lkp@intel.com>
+Subject: [bvanassche:thread-safety 96/98] ld.lld: error: unknown
+ --orphan-handling mode:
+Message-ID: <202604041721.H4cI9tla-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,32 +59,37 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/AsahiLinux/linux bits/250-aop
-head:   f7a3080ba37b989ad2fd83054a4b458af97b635d
-commit: 3fbc0c3a68510319d0b8cd6e63ebe903ec41ef25 [31/68] rust: of: Add reserved_mem_region_to_resource_byname()
-config: x86_64-buildonly-randconfig-001-20260404 (https://download.01.org/0day-ci/archive/20260404/202604042143.fIJjtmrN-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260404/202604042143.fIJjtmrN-lkp@intel.com/reproduce)
+tree:   https://github.com/bvanassche/linux thread-safety
+head:   dbf3e2d8d5ab9b4a26ad41d244565a4970faec68
+commit: 3de0f89760cd13c036f3d39a32763f2b5088823a [96/98] treewide: Suppress randconfig failures
+config: arm64-randconfig-003-20260404 (https://download.01.org/0day-ci/archive/20260404/202604041721.H4cI9tla-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c80443cd37b2e2788cba67ffa180a6331e5f0791)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260404/202604041721.H4cI9tla-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604042143.fIJjtmrN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604041721.H4cI9tla-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   rust/core.o: warning: objtool: asan.module_ctor+0xd: call without frame pointer save/setup
-   rust/core.o: warning: objtool: asan.module_dtor+0xd: call without frame pointer save/setup
-   rust/build_error.o: warning: objtool: asan.module_ctor+0xd: call without frame pointer save/setup
-   rust/build_error.o: warning: objtool: asan.module_dtor+0xd: call without frame pointer save/setup
->> warning: unused import: `crate::error::to_result`
-   --> rust/kernel/of.rs:19:5
-   |
-   19 | use crate::error::to_result;
-   |     ^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = note: `#[warn(unused_imports)]` on by default
+   scripts/dtc/dtc-lexer.lex.c:641:12: warning: variable 'dts_version' set but not used [-Wunused-but-set-global]
+     641 | static int dts_version = 1;
+         |            ^
+   1 warning generated.
+   scripts/mod/modpost.c:59:13: warning: variable 'extra_warn' set but not used [-Wunused-but-set-global]
+      59 | static bool extra_warn;
+         |             ^
+   1 warning generated.
+>> ld.lld: error: unknown --orphan-handling mode: 
+   make[3]: *** [arch/arm64/kernel/vdso32/Makefile:129: arch/arm64/kernel/vdso32/vdso.so.raw] Error 1 shuffle=3591483259
+   make[3]: Target 'arch/arm64/kernel/vdso32/vdso.so' not remade because of errors.
+   make[2]: *** [arch/arm64/Makefile:208: vdso_prepare] Error 2 shuffle=3591483259
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=3591483259
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=3591483259
+   make: Target 'prepare' not remade because of errors.
 
 -- 
 0-DAY CI Kernel Test Service
