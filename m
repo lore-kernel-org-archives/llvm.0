@@ -1,151 +1,198 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E11023EABC
-	for <llvm@lists.linux.dev>; Tue,  7 Apr 2026 08:37:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775551063; cv=pass; b=M4DtEAmh/K8CFu/M0GE1MjfYY6GVCtVymZVwsiDaSVAipbCxYXvrJgjXVXFV8tfPNEyU16bbxzupm9Jq7yqHp7NnXQQrlj1S1JXKGynJCp1bY2Wq6L+zS58EdGiNGdTYwv1w1ViI2TFXhUrlv9iau9dYpl/ZITRAsAwlY0AJ+Bw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775551063; c=relaxed/simple;
-	bh=DfoJvrhbR9/q+l6t1NPKmCnTz4p/S80iMM1QrEsDKz8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tJtVlKTJnfHFhY8oCtHtDb+sNOhtwNqod9J8FCk/zuebDCuV2s3HBW2Yc1EKqBI6OrHKmAjVo7o4CnEfw5teSvMfd7L4KK+B7cdCk+OXxXGhb8SHvH9jBvGwAACz21ShOSSfjciJoD7UZSR1iUm+CnHlE27Kcz/NLo8jV2n8Vjg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mlF9tBwJ; arc=pass smtp.client-ip=74.125.82.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F453A3E98;
+	Tue,  7 Apr 2026 10:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775558367; cv=none; b=agBOjGOeyB/q4YEQsoTWGlTrLXqmWm9Q8iqRMEICc0NDR6yX2iOVq23jz4nK1AmlI7oCdvipn+nu+HBwVH5O4MiQj4gPGeEEDQRGeDEewIm9ehGool7f3TP1hkXjzA80rPEF7TWLWptZ7lm6nsuWKQANkBOjYtcvzvil+MWHEAw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775558367; c=relaxed/simple;
+	bh=SruMI2y79sLlPodtF2vCeK6b3gWjempRR3i3UjXYjDQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=i6+/c4ZzZVOFmspXyrXfwq1LQ/UiF2imzpvKcQlpUhI2x4thDA164fWEngl9IzlhWNR/p9lAWvuac6s3K+wjs+s58KsCsQ7yMYY9ct4V/Nq9GCv0XbcPg084qD1cEa/D0nEVWDuwBwr1O+gQq1KrWvQr4Z486Rf5H+wJYEopGsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=anjBdjLV; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mlF9tBwJ"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2c7e5f38a69so326003eec.1
-        for <llvm@lists.linux.dev>; Tue, 07 Apr 2026 01:37:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775551062; cv=none;
-        d=google.com; s=arc-20240605;
-        b=cJe+ux5Apy9UxQ8ILRPjAWu9SmoQkl5hV1FDWiOoDxHBEqia243PzvghMnCtbu+rWE
-         pTzH09UbDF0gcXQCbLNIzzu9DWBt8kaQfyFv6hC/o3otAUlJ8RPdIjVXx9MRRfAvur7b
-         Ty2Pg9EHmptCyaYAzz/78cO7opqhevUeU4R+9xSpxZXQuqtneGIX1GR4lxMlYREmCB7S
-         JuacUNTqf5QR6pDVRLY1bDv32tOHdMCcOnOJKAHo0fNVPaDFMLTKBY8cen3UEFBIkgh2
-         dfLfnw4FSssMtc0QIYCF7hPpHWG3sQalZF1A81Y3psYrYHuRXyQqfV0sDuVMbmkjJRpR
-         pjSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Gy0ttEzqHnoPOGT+UhllrpZ7VKqpJE2isFAosOgHjU4=;
-        fh=z6XZ+BDBOozU8IpY7hBvTQyUhWG9e9D0Ao7nonS3Qho=;
-        b=PxbcJTllIlOFeqdEVHfE5m3RyMHd0KuTicjH2d+FuB2xvNGCB7YDybhbiQuPVUCcoP
-         BsDw4kYoi6l0BSc1EqFpd39v5zjj9Bmx37GbpSglH0D14NHkVl1wDxnzTHxn4QHKrguT
-         08dyZSW3jUINUwxIVAnfsif4I5eImoGx8vLkGOBjhAgJc7KwtjCf0vPXOYzl14+sUZ9H
-         WOpM/WuE4mJiqoNbnkVtHCMtp6H57pG2I9IXaKOtvMurd1Jv7PAzXtZ1kwZ34hXmx8Io
-         nzp/vY3G8Snsq0dee/ohxOyJM7Zihic5ltgizCKtYOOAaIDILExC53CKLSMxMoMIXJjN
-         h1Yg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775551062; x=1776155862; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gy0ttEzqHnoPOGT+UhllrpZ7VKqpJE2isFAosOgHjU4=;
-        b=mlF9tBwJX7Yr9v3FQXzWTjWiHtpny3ia33ngr3KUw6HkKiWkOLAShI3LlqBBDRJBpp
-         TMk+G7ilPZW7yHaK372B7zCNQdiqj+3aoBLR2ocZb2v0ic2/O2eBAUyTcOZnOesUfPKK
-         dE17mKHzFThvh68b875tuLcCB8mYA2vWfNi2lWdk4TYRtcd14ht57cRgRve+p5rmA94G
-         SVp+bA4ZTeFefaOCJYw55rN9BljNIS9vH8f4QUoLfKYyzA8uu7QpYsBfRs6jukRZJXON
-         FN4u49bo+Spd6Gz4mGstRw9PKkE3p60T8OckQg/Jhmgk/2UP1XVIL4pcbFhcS1zHMnHx
-         5z7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775551062; x=1776155862;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Gy0ttEzqHnoPOGT+UhllrpZ7VKqpJE2isFAosOgHjU4=;
-        b=idGoakzJLXkdY1Eyc8AWpt2JuO/wBoas1ijt1LAdXXmiczT9sDK8HghCSM2jhybmtd
-         jr5PfWTRbQFgnWdBmdmj31v5B+3jvpgZTDxrjbu03XwoMilfTDkE5nttGgs7P1IGXQRB
-         cWAR5PB8BWwtxP9uSWUMwnvF8s+ErYVlEf7w+DPpulDyIMS/pSgGcx5/kl/4RthRtUdo
-         +Y/xWLYzV9CBMinNzzENEspg+Jpqy51sDgsJ/VWtmr+Ppru2QsD2ck0+iks+C2SiBNCc
-         xOrCdkkMBiKg6vkNBLbimR4dLBla7tMdFS/7GPB9jAq63cfTiZCWaCQzkwX4Pc04E25d
-         BKVw==
-X-Forwarded-Encrypted: i=1; AJvYcCW/8oDsxg2bzhRwgl3D/XHmUdaC7OIu2m+nwZM0nD0pmb2h1gVV/urAPqUbjuokBVr/5kpj@lists.linux.dev
-X-Gm-Message-State: AOJu0YxUlqS7gYz34r0QYqTcdvDjmDQ330Y438VEd1wF8ed66/cp+nP6
-	lOJwGOwlS3EC8Zd4WZds/hJkmMwreA8impyKp2uusJqh4i8UEjGCz3P8mbaoD/bBVx+E7jLMtC2
-	A761Z1nfpRljw87YgQYUbY5h0AtVMipk=
-X-Gm-Gg: AeBDies+ZtzZAXFvdX0Ghk82/VoXo661dtpRLGX9osqqjgLb8fRx1X60ozNFdOpxecT
-	R6o6kIXSlq987Akw5+70+BpWv1Y1ZZzTlXn56JC1/RliwtAnU9kNEDasUGl/2AnMKJszVHmIROD
-	6mMzaflKvIn6LVDWJkpWQJk0PYiyNDCbNzyniK8i5VQEMTLJBe/6V6Zgtps9ABy2V1reYdpz70s
-	puzDWiTjCD1E6RP9kFHH4e9BfVhOx1g81MBo3ygvxsXmhytRxDwLun18ODwSyWYRr4KzgpFEi/e
-	WZYqPDI8TjgHk/XJWVvFYfSHlfX25OHrEuLVCziUHamJSCMVgNFQuUHUomUezGfeFyUdNbE9shN
-	hQQSVx2eyz1bqxtYAhbFZpog=
-X-Received: by 2002:a05:7301:d1b:b0:2bd:db75:c28b with SMTP id
- 5a478bee46e88-2cbfcd54f9bmr3830933eec.7.1775551061539; Tue, 07 Apr 2026
- 01:37:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="anjBdjLV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775558365; x=1807094365;
+  h=date:from:to:cc:subject:message-id;
+  bh=SruMI2y79sLlPodtF2vCeK6b3gWjempRR3i3UjXYjDQ=;
+  b=anjBdjLVOHxAnAIfeMOupC6ulrgvl1xQJ2m6taTIF0U+SeQXopwS4BLP
+   zx6uShypIfiuEuWSrN9pVrXJnzlYcd62tSjtkVVh2eRaF9gUh5wkzeGHN
+   RMqqPxPtMvlSfG5ebF5yZVGt61SDmhSOGX4RWVfUeu8zbzuWcGMA1iqVf
+   5tb6Ucp085QFrj5favgM4l2BF3dX8UXrCyJ3CzQyVFIJalSthSNQVN05l
+   IcC7zziwBwFsrwHF4TDGukb7lSpkfKfmdYXI46rTHoD0DHt4uj3gjZqL2
+   SmWCTl0myW4Hl/RicEF9gJ+k8Od9zYoytM/IWWIwi9/KHxYwHk33JzWOG
+   A==;
+X-CSE-ConnectionGUID: zGMEQLzoQ8aV8vIOQ6EjGw==
+X-CSE-MsgGUID: Kt1cPYfsQoyQLcE1ykE27Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11751"; a="94098379"
+X-IronPort-AV: E=Sophos;i="6.23,165,1770624000"; 
+   d="scan'208";a="94098379"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2026 03:39:25 -0700
+X-CSE-ConnectionGUID: ReGKmIR9Qw+hcI2lLMcPZg==
+X-CSE-MsgGUID: tGHm5FQfT96kjdN/H/DECg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,165,1770624000"; 
+   d="scan'208";a="228405595"
+Received: from lkp-server01.sh.intel.com (HELO d00eb8a6782a) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 07 Apr 2026 03:39:22 -0700
+Received: from kbuild by d00eb8a6782a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wA3q4-000000000Tt-0AK4;
+	Tue, 07 Apr 2026 10:39:20 +0000
+Date: Tue, 07 Apr 2026 18:38:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zach Brown <zab@zabbo.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [zab-rpdfs:rpdfs-initial 44/51] fs/rpdfs/block.c:978:2:
+ error: use of undeclared identifier 'u128'
+Message-ID: <202604071828.OZaTFess-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260405235309.418950-1-ojeda@kernel.org> <20260405235309.418950-8-ojeda@kernel.org>
- <177548573697.95472.13544191227699996309.b4-review@b4> <CANiq72ne_JYPodnROckyNto10ZF0PqadRxSrng5-mZyqVovxFg@mail.gmail.com>
- <CAJ-ks9kbHz_KYAXx02vgW1dN2pfb5MFoaSoU1HbJbJg2O8EUaw@mail.gmail.com>
-In-Reply-To: <CAJ-ks9kbHz_KYAXx02vgW1dN2pfb5MFoaSoU1HbJbJg2O8EUaw@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 7 Apr 2026 10:37:28 +0200
-X-Gm-Features: AQROBzD3OQzI1eA28hVCCiGMvz4r5THmhHuU5dUr3xJV-N5wbeOjrOxDF8RLuuQ
-Message-ID: <CANiq72mJTT7xFnhm-CeOZM_3ZwGdaQ8F2zUbONpPbqJ8g7DokQ@mail.gmail.com>
-Subject: Re: [PATCH v2 07/33] rust: allow globally `clippy::incompatible_msrv`
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Courbot <acourbot@nvidia.com>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
-	Todd Kjos <tkjos@android.com>, Christian Brauner <christian@brauner.io>, 
-	Carlos Llamas <cmllamas@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, linux-block@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Alexandre Ghiti <alex@ghiti.fr>, 
-	linux-riscv@lists.infradead.org, nouveau@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, Rae Moar <raemoar63@gmail.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 6, 2026 at 5:31=E2=80=AFPM Tamir Duberstein <tamird@kernel.org>=
- wrote:
->
-> You're welcome! Actually it seems the lint was already improved
-> upstream, starting with 1.90.0.
->
-> Link: https://github.com/rust-lang/rust-clippy/commit/c0dc3b61 [0]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zab/linux-rpdfs.git rpdfs-initial
+head:   9a0627207ad856d2a5eb09f3458afb1e34ac10a3
+commit: cd9dddd9348e8c1bbbdedf8547a6c42b73b03f82 [44/51] rpdfs: serialize write handles and flushing
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260407/202604071828.OZaTFess-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260407/202604071828.OZaTFess-lkp@intel.com/reproduce)
 
-Indeed, I had the PR linked in
-https://github.com/Rust-for-Linux/linux/issues/349, and it is nicer,
-but it would still fire in a case like this patch :(
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604071828.OZaTFess-lkp@intel.com/
 
-So we could conditionally enable it for Rust >=3D 1.90.0 now that we
-have support for that (and allow locally some cases like this one when
-they pop up), but it is still simpler to just ignore it (especially
-since it can be quite confusing for other developers to see it
-triggering).
+All errors (new ones prefixed by >>):
 
-I think we may want to eventually re-enable it when we use no unstable
-language features.
+   In file included from fs/rpdfs/block.c:10:
+   In file included from fs/rpdfs/balloc.h:10:
+   In file included from fs/rpdfs/txn.h:7:
+   In file included from fs/rpdfs/block.h:8:
+   fs/rpdfs/place.h:17:15: error: unknown type name 'u128'
+      17 | static inline u128 rpdfs_place_full(u8 type, u64 ino, u8 depth, u64 off)
+         |               ^
+   fs/rpdfs/place.h:19:11: error: use of undeclared identifier 'u128'
+      19 |         return ((u128)rpdfs_place_hi(type, ino, depth) << 64) | off;
+         |                  ^
+   fs/rpdfs/place.h:32:65: error: unknown type name 'u128'
+      32 | static inline void rpdfs_place_split_le(__le64 *lo, __le64 *hi, u128 full)
+         |                                                                 ^
+   fs/rpdfs/place.h:38:15: error: unknown type name 'u128'
+      38 | static inline u128 rpdfs_place_combine_le(__le64 lo, __le64 hi)
+         |               ^
+   fs/rpdfs/place.h:40:11: error: use of undeclared identifier 'u128'
+      40 |         return ((u128)le64_to_cpu(hi) << 64) | le64_to_cpu(lo);
+         |                  ^
+   In file included from fs/rpdfs/block.c:10:
+   In file included from fs/rpdfs/balloc.h:10:
+   In file included from fs/rpdfs/txn.h:7:
+   fs/rpdfs/block.h:79:2: error: unknown type name 'u128'
+      79 |         u128 place;
+         |         ^
+>> fs/rpdfs/block.c:978:2: error: use of undeclared identifier 'u128'
+     978 |         u128 place;
+         |         ^
+>> fs/rpdfs/block.c:982:3: error: use of undeclared identifier 'place'
+     982 |                 place = bk->hnd.place;
+         |                 ^
+   fs/rpdfs/block.c:984:3: error: use of undeclared identifier 'place'
+     984 |                 place = 0;
+         |                 ^
+   fs/rpdfs/block.c:991:28: error: use of undeclared identifier 'place'
+     991 |                         BUG_ON(bk->hnd.place == place);
+         |                                                 ^
+   fs/rpdfs/block.c:992:30: error: use of undeclared identifier 'place'
+     992 |                         ordered = bk->hnd.place > place;
+         |                                                   ^
+   fs/rpdfs/block.c:1001:5: error: use of undeclared identifier 'place'
+    1001 |                                 place = bk->hnd.place;
+         |                                 ^
+   fs/rpdfs/block.c:1012:24: error: use of undeclared identifier 'place'
+    1012 |                         if (bk->hnd.place < place)
+         |                                             ^
+   13 errors generated.
 
-Added:
 
-    [ In addition, the lint fired without taking into account the features
-      that have been enabled in a crate [2]. While this was improved in Rus=
-t
-      1.90.0 [3], it would still fire in a case like this patch. ]
+vim +/u128 +978 fs/rpdfs/block.c
 
-Thanks!
+   957	
+   958	/*
+   959	 * Walk the clear list and set write on each block as long as they're
+   960	 * sorted by place.
+   961	 *
+   962	 * If we hit a block in the clear list that isn't sorted by place then
+   963	 * we unwind all the blocks in the set list greater than the out of
+   964	 * order block.  The caller will sort the clear list and try again.
+   965	 *
+   966	 * As we set write we also see if we need to extend the boundary to
+   967	 * cover more dependent blocks.  As the caller retries they also check
+   968	 * their boundary against the dirty list.
+   969	 */
+   970	static bool set_write_in_order(struct list_head *set_list, struct list_head *clear_list,
+   971				       struct rpdfs_dist_write *wri, struct rpdfs_dirty_boundary *bnd)
+   972	{
+   973		struct rpdfs_block *bk;
+   974		struct rpdfs_block *_bk_;
+   975		bool ordered = true;
+   976		bool extended = false;
+   977		bool writer;
+ > 978		u128 place;
+   979	
+   980		if (!list_empty(set_list)) {
+   981			bk = list_last_entry(set_list, struct rpdfs_block, dirty_head);
+ > 982			place = bk->hnd.place;
+   983		} else {
+   984			place = 0;
+   985		}
+   986	
+   987		list_for_each_entry_safe(bk, _bk_, clear_list, dirty_head) {
+   988			do {
+   989				write_seqlock(&bk->seqlock);
+   990				/* would be.. corruption error? but we don't have io errors wired up */
+   991				BUG_ON(bk->hnd.place == place);
+   992				ordered = bk->hnd.place > place;
+   993				writer = bk->writer;
+   994				if (ordered && !writer) {
+   995					bk->wri = wri;
+   996					extended |= extend_boundary(bnd, &bk->dirty_bnd);
+   997					list_move_tail(&bk->dirty_head, set_list);
+   998				}
+   999				/* save for unwinding or for continuing ordered test */
+  1000				if (!ordered || !writer)
+  1001					place = bk->hnd.place;
+  1002				write_sequnlock(&bk->seqlock);
+  1003				if (ordered && writer)
+  1004					wait_event(bk->waitq, !block_has_writer(bk));
+  1005			} while (ordered && writer);
+  1006			if (!ordered)
+  1007				break;
+  1008		}
+  1009	
+  1010		if (!ordered) {
+  1011			list_for_each_entry_safe_reverse(bk, _bk_, set_list, dirty_head) {
+  1012				if (bk->hnd.place < place)
+  1013					break;
+  1014				write_seqlock(&bk->seqlock);
+  1015				bk->wri = NULL;
+  1016				list_move(&bk->dirty_head, clear_list);
+  1017				write_sequnlock(&bk->seqlock);
+  1018				wake_up_all(&bk->waitq);
+  1019			}
+  1020		}
+  1021	
+  1022		return extended || !ordered;
+  1023	}
+  1024	
 
-Cheers,
-Miguel
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
