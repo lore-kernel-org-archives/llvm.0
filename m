@@ -1,112 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863723D1CD5;
-	Wed,  8 Apr 2026 14:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9184348465;
+	Wed,  8 Apr 2026 16:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775658088; cv=none; b=tQirRMfO1GJIDjoL9VeEx3D53IBr7cLM7QkJTLIaxHSzEXn6B8wwLP0r8T0b2FnpQfG8GYZqjL/yCw4a56heWO84CsahhFZocYNKHcAnWmQ+4oB6IIGoIE1xAarmLLUYjM+MYLIF4jnHG8e1j6JzNdH9XwYumv+y2/iW1QlpQKo=
+	t=1775665583; cv=none; b=OPKyq44AVIu1wE4IwKcEKkwXI49ZnK3FaxwJ4ey+xbzXR1hxnKwIcBYJ3fRaqPuEtMMTLJ3cluv7+XYVow4VZ4YqaSJ3JEo8Ba21qRwlwHUxmXkbz2x4XLpbBdL+9tdeDYUQkP4A8BTZZCnzsM2s+x2gMOJ0kVuaYuZDWNVa2P0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775658088; c=relaxed/simple;
-	bh=6NXNG+Zc/tVsYcATUfAIaCF6TmpkBx/HH5iegrgNWwA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BcJatfoY6tXI/mT63EB5UgKz8aaNSBY+Q8rEWDrHFisyNppYdO41ijk38Hht/KYMa2AWvHHIkfDMPexLZV+KwpoSp9Rj/cPnSAIRxcwyTMUZJpAEHd06mPkBVCbjqSbGclUNpkMw2SM1pFTnlieygKGX7Yn5aANfB9cwtg8zN0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e2SfUIuA; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1775665583; c=relaxed/simple;
+	bh=paRGL9e82dHaLbjAcC4/Vy1sJ+vwpBDGXlAEv2gx80I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=D+15415y5BTZ9mzGbrODxtGv39Okh4qhwDF5r5yQRomApfHxE6h+acTiCrjC9wfSm31HNXXnAKlueH/H34qsA8ndjOziH0E1Qc0h4Rn/oQmvEbCBkmclp9dIl3LmNeHiSf0EWSlod6N4Hdd9JpNiTXMgw2DbcJjBRMcniW3HFvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RvQlyg/T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e2SfUIuA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775658086; x=1807194086;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6NXNG+Zc/tVsYcATUfAIaCF6TmpkBx/HH5iegrgNWwA=;
-  b=e2SfUIuA5TCVApSneWGtDzARnMArDVZHuzB8AFk6NTmwy5CrNyTPehgg
-   Xau/QYK7JbTH45MklbD/wAAVtMa7jNkm9lMFUSkY030+CtvsBx1ZR5NgW
-   5xwZGe47sD/j+v6JkEkQf6DqqWVx+5jk0/Yu82CxzbYjSEg/eDQN4c2qY
-   MDHncf2b/taUHgLzL8MKvSCdvDmtY/jDJU6xeHwD77sfdurTxYRx5vtzA
-   330gpnBeiSlTn/iUFyFn0pxw4hN7x1NlDIrFz3LAhTzyfZVDjHFM4Uaqv
-   gaaSyI7AcgJwEXaQdG7BkpzWN4M+z/yLDKGQbhgHdGqhPJN59yj8Tsr/F
-   w==;
-X-CSE-ConnectionGUID: +eLvyqiESGO83vC8pTS8Eg==
-X-CSE-MsgGUID: ImT01UWZRzyOUv783OiTZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11753"; a="76656149"
-X-IronPort-AV: E=Sophos;i="6.23,167,1770624000"; 
-   d="scan'208";a="76656149"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2026 07:21:26 -0700
-X-CSE-ConnectionGUID: clm0u3PbSd2snKo0C8ugHA==
-X-CSE-MsgGUID: cJFbl3a3SuWdl8gUunITWA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,167,1770624000"; 
-   d="scan'208";a="227629563"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO localhost) ([10.245.245.72])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2026 07:21:23 -0700
-Date: Wed, 8 Apr 2026 17:21:20 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Alexandru-Catalin Ionita <alexandru-catalin.ionita@nxp.com>,
-	Ciprian Costea <ciprianmarian.costea@nxp.com>,
-	"Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
-Subject: Re: ld.lld: error: undefined symbol: __bad_ndelay
-Message-ID: <adZkYM2MUiUFlI5M@ashevche-desk.local>
-References: <202603311958.ly6uROit-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RvQlyg/T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5157AC19421;
+	Wed,  8 Apr 2026 16:26:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775665583;
+	bh=paRGL9e82dHaLbjAcC4/Vy1sJ+vwpBDGXlAEv2gx80I=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RvQlyg/TcZxLExv0BhOJYAApo8cdiTt5ZMJxVYUjGkUW8odOezy6eRHTFMbHiYKUt
+	 iROBSA64nPjMoHMt9GDy0rLyteW9sEzs7UerFelVZAX8uga0hXRo0pqz49/6KEYcTA
+	 PenYCtcFTynJs97l8picYVMwDzEaNQfnR+XieyoNIUXvPdbFcTVEauS1N8I6qb+5Tw
+	 YVQmVyToWhig9Ggi29rttEXIRqBiG0+eTHG7YIMxDH/1/bBc3Ss29P0ZQ7rePp55oy
+	 ybJXE0SoB98VDMoK8pZ77gvk/j8nc1iuavmmbZoiSPA3VKTCM2rDB6FRT5RH0ty7P5
+	 gSIzA2Tkmv9fw==
+From: Kees Cook <kees@kernel.org>
+To: Peter Oberparleiter <oberpar@linux.ibm.com>
+Cc: Kees Cook <kees@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v2] gcov: Disable GCOV_PROFILE_ALL on 32-bit UML with Clang 20/21
+Date: Wed,  8 Apr 2026 09:26:12 -0700
+Message-Id: <20260408162607.it.347-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202603311958.ly6uROit-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2387; i=kees@kernel.org; h=from:subject:message-id; bh=paRGL9e82dHaLbjAcC4/Vy1sJ+vwpBDGXlAEv2gx80I=; b=owGbwMvMwCVmps19z/KJym7G02pJDJnXGhevdv8z6bu6lLhPx4QY5zn75yyLtjBbHNTSKGP84 vsiTzePjlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgIlor2BkOK7UoLPBc+WJCo+Q OYvMPu5axrp4qswLz55FRz9leHYqZDP8M+c97jD5+u+/x0qyXt8VtF61eBbn+Sknv036s2HPqbc aF9kA
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 31, 2026 at 07:21:42PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   d0c3bcd5b8976159d835a897254048e078f447e6
-> commit: 4434072a893e4864519c167947083ff3e4cc2d95 iio: adc: Add the NXP SAR ADC support for the s32g2/3 platforms
-> date:   3 months ago
-> config: x86_64-buildonly-randconfig-001-20260331 (https://download.01.org/0day-ci/archive/20260331/202603311958.ly6uROit-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260331/202603311958.ly6uROit-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202603311958.ly6uROit-lkp@intel.com/
+Clang 20 and 21 miscompute __builtin_object_size() when -fprofile-arcs
+is active on 32-bit UML targets, which passes incorrect object size
+calculations for local variables through always_inline copy_to_user()
+and check_copy_size(), causing spurious compile-time errors:
 
-My understanding that in some interesting cases (CONFIG_COMMON_CLK=n) this
-leads to division by 0 that compiler prevents by saturating the value. Note,
-I haven't checked the real assembly for that, just a speculation based on
-the code reading and kernel configuration (*).
+  include/linux/ucopysize.h:52:4: error: call to '__bad_copy_from' declared with 'error' attribute: copy source size is too small
 
-With saturated value it's obviously is over any given threshold which is
-currently 20000.
+The regression was introduced in LLVM commit 02b8ee281947 ("[llvm]
+Improve llvm.objectsize computation by computing GEP, alloca and malloc
+parameters bound"), which shipped in Clang 20. It was fixed in LLVM
+by commit 45b697e610fd ("[MemoryBuiltins] Consider index type size
+when aggregating gep offsets"), which was backported to the LLVM 22.x
+release branch.
 
-*Yes, seems the specifications says that this is UB (as unspecified)
-and compiler may do whatever it wants in such a case. Here it seems does
-the saturation (which is logically okay as 0 is compile-time constant).
-Related: https://github.com/llvm/llvm-project/issues/136679.
+The bug requires 32-bit UML + GCOV_PROFILE_ALL (which uses -fprofile-arcs),
+though the exact trigger depends on optimizer decisions influenced by other
+enabled configs.
 
-> All errors (new ones prefixed by >>):
-> 
-> >> ld.lld: error: undefined symbol: __bad_ndelay
->    >>> referenced by delay.h:78 (include/asm-generic/delay.h:78)
->    >>>               vmlinux.o:(nxp_sar_adc_probe)
->    >>> referenced by delay.h:78 (include/asm-generic/delay.h:78)
->    >>>               vmlinux.o:(nxp_sar_adc_read_raw)
->    >>> referenced by delay.h:78 (include/asm-generic/delay.h:78)
->    >>>               vmlinux.o:(nxp_sar_adc_read_raw)
->    >>> referenced 2 more times
+Prevent the broken combination by disabling GCOV_PROFILE_ALL on 32-bit
+UML when using Clang 20.x or 21.x.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202604030531.O6FveVgn-lkp@intel.com/
+Assisted-by: Claude:claude-opus-4-6[1m]
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+ v2: fixed typo in version comparison: needed < not <= (Sashiko)
+ v1: https://lore.kernel.org/lkml/20260408005958.work.271-kees@kernel.org/
+Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: Bill Wendling <morbo@google.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: <llvm@lists.linux.dev>
+---
+ kernel/gcov/Kconfig | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/kernel/gcov/Kconfig b/kernel/gcov/Kconfig
+index 04f4ebdc3cf5..56abff785654 100644
+--- a/kernel/gcov/Kconfig
++++ b/kernel/gcov/Kconfig
+@@ -42,6 +42,9 @@ config GCOV_PROFILE_ALL
+ 	depends on !COMPILE_TEST
+ 	depends on GCOV_KERNEL
+ 	depends on ARCH_HAS_GCOV_PROFILE_ALL
++	# Clang 20 & 21 miscompute __builtin_object_size() under -fprofile-arcs
++	# on 32-bit UML, causing spurious compile-time errors in check_copy_size().
++	depends on !(UML && !64BIT && CC_IS_CLANG && CLANG_VERSION >= 200000 && CLANG_VERSION < 220100)
+ 	default n
+ 	help
+ 	This options activates profiling for the entire kernel.
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
