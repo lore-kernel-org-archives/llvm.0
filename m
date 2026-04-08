@@ -1,107 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9184348465;
-	Wed,  8 Apr 2026 16:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A8C37C0F2;
+	Wed,  8 Apr 2026 20:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775665583; cv=none; b=OPKyq44AVIu1wE4IwKcEKkwXI49ZnK3FaxwJ4ey+xbzXR1hxnKwIcBYJ3fRaqPuEtMMTLJ3cluv7+XYVow4VZ4YqaSJ3JEo8Ba21qRwlwHUxmXkbz2x4XLpbBdL+9tdeDYUQkP4A8BTZZCnzsM2s+x2gMOJ0kVuaYuZDWNVa2P0=
+	t=1775678517; cv=none; b=gWLb6yc5FR2SOntB+DrEMA3x527B67S9ypfKqgXO9xsaNKqDGtrnbJ/gDbnXHI3lnC6WHRVD0Xh0Gdc6Z0eX4ZzhMk8JVD1ubwQZCRhsUNffRyLQ2iL4rUjL3ZUhy7E1KQ2RfIbHeOv9a7zrf4BaPiRXl3Nxoou9WvZHX4JqVwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775665583; c=relaxed/simple;
-	bh=paRGL9e82dHaLbjAcC4/Vy1sJ+vwpBDGXlAEv2gx80I=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=D+15415y5BTZ9mzGbrODxtGv39Okh4qhwDF5r5yQRomApfHxE6h+acTiCrjC9wfSm31HNXXnAKlueH/H34qsA8ndjOziH0E1Qc0h4Rn/oQmvEbCBkmclp9dIl3LmNeHiSf0EWSlod6N4Hdd9JpNiTXMgw2DbcJjBRMcniW3HFvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RvQlyg/T; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775678517; c=relaxed/simple;
+	bh=TKOGRv83aezUYgRVaCUddSGynEC0PHVtILHJuBVHM+M=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=U8TLZNinBF1cRCFXmWTC8YsqagZDSEuNqiZhImqpVOKXLNZOXUgtPaDIvmqMsEndCjTAva7LaPdc3dA2/0H4qIq9ogirdwRZZiRLn2NEmIw7TtRjOSe4AY2A8DVW5DkSySg7hJ9mnXkIbOQJ5O5rkdweq/KogbgTLyzYLekr09A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Ty46K5P2; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RvQlyg/T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5157AC19421;
-	Wed,  8 Apr 2026 16:26:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775665583;
-	bh=paRGL9e82dHaLbjAcC4/Vy1sJ+vwpBDGXlAEv2gx80I=;
-	h=From:To:Cc:Subject:Date:From;
-	b=RvQlyg/TcZxLExv0BhOJYAApo8cdiTt5ZMJxVYUjGkUW8odOezy6eRHTFMbHiYKUt
-	 iROBSA64nPjMoHMt9GDy0rLyteW9sEzs7UerFelVZAX8uga0hXRo0pqz49/6KEYcTA
-	 PenYCtcFTynJs97l8picYVMwDzEaNQfnR+XieyoNIUXvPdbFcTVEauS1N8I6qb+5Tw
-	 YVQmVyToWhig9Ggi29rttEXIRqBiG0+eTHG7YIMxDH/1/bBc3Ss29P0ZQ7rePp55oy
-	 ybJXE0SoB98VDMoK8pZ77gvk/j8nc1iuavmmbZoiSPA3VKTCM2rDB6FRT5RH0ty7P5
-	 gSIzA2Tkmv9fw==
-From: Kees Cook <kees@kernel.org>
-To: Peter Oberparleiter <oberpar@linux.ibm.com>
-Cc: Kees Cook <kees@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v2] gcov: Disable GCOV_PROFILE_ALL on 32-bit UML with Clang 20/21
-Date: Wed,  8 Apr 2026 09:26:12 -0700
-Message-Id: <20260408162607.it.347-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ty46K5P2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1775678514;
+	bh=TKOGRv83aezUYgRVaCUddSGynEC0PHVtILHJuBVHM+M=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=Ty46K5P2M7B//Rz4Qtaz7YXVolOntx0RHmISqN7U+OR886tEP6DHV1WizoImBySH/
+	 /Z7kdDuUFr4mh9E9PAmf8ezf4uXv0R+IOuMysZEdO4lyeAw9MzhstSmt+50zGDHGbj
+	 cmVC/owu3Igp9/8ZWWtJgB922/5tvyqS+xbCJ7tQERs8Eva5A0ofu06mWtqHDLt+nK
+	 zfoIj5ljU186Wd/qkaju0fGnYSUzMghtrmIw0g/2OCEe8o9XZSevG8ILbSmFDsugwt
+	 C1Meqbgd6BiC//qwl8YDHxqfPsuUfOj/UIGCNGZI6ImKrjw+Pspl+0yY/CUNKeJBrL
+	 5U5NcJXlxg7Lw==
+Received: from [100.64.0.214] (unknown [100.64.0.214])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2C67517E069B;
+	Wed,  8 Apr 2026 22:01:53 +0200 (CEST)
+Message-ID: <51d6a9672ee95c9e4ded409c65eae339e506d765.camel@collabora.com>
+Subject: Re: [PATCH v3] media: v4l2-ctrls: validate HEVC active reference
+ counts
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Pengpeng Hou <pengpeng@iscas.ac.cn>, mchehab@kernel.org
+Cc: hverkuil@kernel.org, sakari.ailus@linux.intel.com, 
+	laurent.pinchart@ideasonboard.com, opensource206@gmail.com, 
+	jernej.skrabec@gmail.com, lkp@intel.com, oe-kbuild-all@lists.linux.dev, 
+	llvm@lists.linux.dev, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Wed, 08 Apr 2026 16:01:52 -0400
+In-Reply-To: <20260324031326.7274-1-pengpeng@iscas.ac.cn>
+References: <20260323083031.30941-1-pengpeng@iscas.ac.cn>
+	 <20260324031326.7274-1-pengpeng@iscas.ac.cn>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-1QSFccg8FPtl66oVYiCb"
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2387; i=kees@kernel.org; h=from:subject:message-id; bh=paRGL9e82dHaLbjAcC4/Vy1sJ+vwpBDGXlAEv2gx80I=; b=owGbwMvMwCVmps19z/KJym7G02pJDJnXGhevdv8z6bu6lLhPx4QY5zn75yyLtjBbHNTSKGP84 vsiTzePjlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgIlor2BkOK7UoLPBc+WJCo+Q OYvMPu5axrp4qswLz55FRz9leHYqZDP8M+c97jD5+u+/x0qyXt8VtF61eBbn+Sknv036s2HPqbc aF9kA
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
 
-Clang 20 and 21 miscompute __builtin_object_size() when -fprofile-arcs
-is active on 32-bit UML targets, which passes incorrect object size
-calculations for local variables through always_inline copy_to_user()
-and check_copy_size(), causing spurious compile-time errors:
 
-  include/linux/ucopysize.h:52:4: error: call to '__bad_copy_from' declared with 'error' attribute: copy source size is too small
+--=-1QSFccg8FPtl66oVYiCb
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The regression was introduced in LLVM commit 02b8ee281947 ("[llvm]
-Improve llvm.objectsize computation by computing GEP, alloca and malloc
-parameters bound"), which shipped in Clang 20. It was fixed in LLVM
-by commit 45b697e610fd ("[MemoryBuiltins] Consider index type size
-when aggregating gep offsets"), which was backported to the LLVM 22.x
-release branch.
+Le mardi 24 mars 2026 =C3=A0 11:13 +0800, Pengpeng Hou a =C3=A9crit=C2=A0:
+> HEVC slice parameters are shared stateless V4L2 controls, but the common
+> validation path does not verify the active L0/L1 reference counts before
+> driver-specific code consumes them.
+>=20
+> The original report came from Cedrus, but the active count bounds are
+> not Cedrus-specific. Validate them in the common HEVC slice control path
+> so stateless HEVC drivers get the same basic guarantees as soon as the
+> control is queued.
+>=20
+> Do not reject ref_idx_l0/ref_idx_l1 entries here. Existing userspace may
+> use out-of-range sentinel values such as 0xff for missing references, and
+> some hardware can use that information for concealment. Keep this common
+> check limited to the active reference counts.
+>=20
+> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
 
-The bug requires 32-bit UML + GCOV_PROFILE_ALL (which uses -fprofile-arcs),
-though the exact trigger depends on optimizer decisions influenced by other
-enabled configs.
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-Prevent the broken combination by disabling GCOV_PROFILE_ALL on 32-bit
-UML when using Clang 20.x or 21.x.
+> ---
+> v3:
+> - add the missing `p_hevc_slice_params` declaration to fix the build brea=
+k
+> =C2=A0 reported by lkp
+> - keep only the active L0/L1 reference count validation in common code
+> - drop the ref_idx_l0/ref_idx_l1 rejection per Nicolas Dufresne's review,
+> =C2=A0 since existing userspace may use out-of-range sentinel values such=
+ as
+> =C2=A0 0xff for missing references
+>=20
+> =C2=A0drivers/media/v4l2-core/v4l2-ctrls-core.c | 13 +++++++++++++
+> =C2=A01 file changed, 13 insertions(+)
+>=20
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4=
+l2-
+> core/v4l2-ctrls-core.c
+> index 6b375720e395..ba047d7d8601 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> @@ -971,6 +971,7 @@ static int std_validate_compound(const struct v4l2_ct=
+rl
+> *ctrl, u32 idx,
+> =C2=A0	struct v4l2_ctrl_hevc_ext_sps_st_rps *p_hevc_st_rps;
+> =C2=A0	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
+> =C2=A0	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
+> +	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
+> =C2=A0	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
+> =C2=A0	struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
+> =C2=A0	struct v4l2_area *area;
+> @@ -1260,6 +1261,18 @@ static int std_validate_compound(const struct v4l2=
+_ctrl
+> *ctrl, u32 idx,
+> =C2=A0		break;
+> =C2=A0
+> =C2=A0	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
+> +		p_hevc_slice_params =3D p;
+> +
+> +		if (p_hevc_slice_params->num_ref_idx_l0_active_minus1 >=3D
+> +		=C2=A0=C2=A0=C2=A0 V4L2_HEVC_DPB_ENTRIES_NUM_MAX)
+> +			return -EINVAL;
+> +
+> +		if (p_hevc_slice_params->slice_type !=3D
+> V4L2_HEVC_SLICE_TYPE_B)
+> +			break;
+> +
+> +		if (p_hevc_slice_params->num_ref_idx_l1_active_minus1 >=3D
+> +		=C2=A0=C2=A0=C2=A0 V4L2_HEVC_DPB_ENTRIES_NUM_MAX)
+> +			return -EINVAL;
+> =C2=A0		break;
+> =C2=A0
+> =C2=A0	case V4L2_CTRL_TYPE_HEVC_EXT_SPS_ST_RPS:
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202604030531.O6FveVgn-lkp@intel.com/
-Assisted-by: Claude:claude-opus-4-6[1m]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
- v2: fixed typo in version comparison: needed < not <= (Sashiko)
- v1: https://lore.kernel.org/lkml/20260408005958.work.271-kees@kernel.org/
-Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: <llvm@lists.linux.dev>
----
- kernel/gcov/Kconfig | 3 +++
- 1 file changed, 3 insertions(+)
+--=-1QSFccg8FPtl66oVYiCb
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-diff --git a/kernel/gcov/Kconfig b/kernel/gcov/Kconfig
-index 04f4ebdc3cf5..56abff785654 100644
---- a/kernel/gcov/Kconfig
-+++ b/kernel/gcov/Kconfig
-@@ -42,6 +42,9 @@ config GCOV_PROFILE_ALL
- 	depends on !COMPILE_TEST
- 	depends on GCOV_KERNEL
- 	depends on ARCH_HAS_GCOV_PROFILE_ALL
-+	# Clang 20 & 21 miscompute __builtin_object_size() under -fprofile-arcs
-+	# on 32-bit UML, causing spurious compile-time errors in check_copy_size().
-+	depends on !(UML && !64BIT && CC_IS_CLANG && CLANG_VERSION >= 200000 && CLANG_VERSION < 220100)
- 	default n
- 	help
- 	This options activates profiling for the entire kernel.
--- 
-2.34.1
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCada0MAAKCRDZQZRRKWBy
+9EpsAQCOlmewyVjNKASHKbALiVIK0wPX1bQFYP6raNCAGOEZYAD9EuycOjVf8Vko
+kr1mXdmVdJR3qUtSqS2M0eAGpB69wgQ=
+=Yu9t
+-----END PGP SIGNATURE-----
+
+--=-1QSFccg8FPtl66oVYiCb--
