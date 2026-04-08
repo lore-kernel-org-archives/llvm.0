@@ -1,73 +1,44 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37AA38F623
-	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 20:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442392153EA;
+	Wed,  8 Apr 2026 22:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775679920; cv=none; b=phPzBFHsBXmA6DjJQglaI/63gdvGgL8qAk8CzZEYeKEOsyk+ZO1aRAoFu5BXYCyt7gVi3/nqlaupS581lHrax0UF9oHyIOz/BvqHqsTyym/FEhbNFdYiHANUDWYz1/GsJflAmZImch/RqiQRNIP8q8vssgXGA9//SuKjSwrqvKc=
+	t=1775685819; cv=none; b=mTZMKtppChVZwWALpTV+okwdb+aDmCQuXDSzqhx+q4X5JGWTjxJ4lfmZ4WZ2WXBZSOQwINVbCn/vvtJeCxTAtOY2ANjnB0bF/FEa70D+jzszYhW3iZW6jPqtsmqT38g1/aW/gl1mxbO5ewUNLSqWoq891DjTuP6VMNZ4OcKk5gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775679920; c=relaxed/simple;
-	bh=YK2ErFGtqJmjNXRFUKyoD+PTGXRuF4JLe0eoAfWTn3o=;
+	s=arc-20240116; t=1775685819; c=relaxed/simple;
+	bh=Yjer5woEh3mw3RtpKNVTvZ9uyG6f8sJECUD6FN73R+Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EANSSR8xAIgJ8+94Qe/zam+yRWcufw8cAVtdVgTRZTgO+C0TJjWm24Jf62t+Uyejkk1PwHLL+Njw4lW9YWm28oneQXeIOzFF0ybPOjVUYxIld8GLgy/hwQdGpMcFRpQ0u1Ck1o5PACrrVT3xN7oqV8Itnlx8tOWIG08PN7CBOCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OX3/iLmZ; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=NIOWb1I8ZdvOmigIaVOpPQGZ+UQBYk8gwuEHoNxCCsLcDIgMZcIP6t1scZ0cWZXHW++9QOiUB4qQCcjRvVAUW6pjZ7HoA5l/qOtW+dbTsH9GnpCgfLzVXi6sSZKAJPPLpdnipPTMUbT8HhXcQjHjMw4NHukes9lqFuAyzen5rgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pp5wLYIt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OX3/iLmZ"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82c20b9fb15so121979b3a.3
-        for <llvm@lists.linux.dev>; Wed, 08 Apr 2026 13:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775679918; x=1776284718; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qtez7uO2X5FjsGHqGis7qBChcDlylFjTSAlBvJbABwk=;
-        b=OX3/iLmZ08gv2g/povqk9zvmWCjntIcpaPJ1TyXrIOPuYNMcMo83BPRA7BOyCgTa8J
-         XiYK6yLtf4w5XZI0knCcAMmUZ5Dh4PIbGAw+100fl2TNdFX2Ckw4x5XvZSw6Q4y2/FgR
-         EKMhpHnnKr/Uu1UjWJD70s9mD6qcEmIutAxzGH1hy7Ziq8ci5ys3BSxoX3YY/e0YsEA6
-         MMaSFMvPOQuE/q8w7PkQaB/zv9w8OWcSKAH7Ad/rRTKlk8YZwLkTd0biDiDY7VE6GPYu
-         nOqzzP0P1jvsM4Uv5QX+Wx7mlh5W9BDeixptYngrfkRp2rpMI1CVm3y8259XIE/8Cwjr
-         Gyog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775679918; x=1776284718;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qtez7uO2X5FjsGHqGis7qBChcDlylFjTSAlBvJbABwk=;
-        b=p9ZQ610IEUxaa/KkChbDzxXtNZFy9R1iqk+uMGhoH1imtbifg1xUGx7p0ZmpR8ypqW
-         IYERAwoZY/Ej6rbCrkKQ+j3nkSbbs+UoVwGmio05G2G7/gUPN1S0/oVV16WmawuEFaKd
-         YEI+W47afN4f+r547om5VLyy1xGvk9Jbmz4rKKlxlZujTsikA0OBSPxMYLBu+xn18MTi
-         rXQXO3pGt+xezUKlSQJNN3DaKL66zhQogjhX5KAy0qICUUJ0uaOKiNpNlMhmJIpkvwJd
-         9rMBYjbNSOhMJHOoSxuDDQSFT5fMhfFgjga3ddPoEcYJwSbwQtHMZ444k/bMxHdnWBIr
-         eMfA==
-X-Forwarded-Encrypted: i=1; AJvYcCXPNhnWVJUm77KBtlZYOyJ1iynIht5HRf0DLK+Sqybh85vbQlaLeY4dW3aXGxiJ7PvX7wgt@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyr2A4saYvU7X4jS1sMU+oGiA1UuPOZHrwOr+5hLVX3bkyAImoZ
-	lWe3eQYgtBLabmff+FIc9GlXlmvL5EiWfwSZrQzmeIe7EsJ3WykOHe9Web2oXNyNeA==
-X-Gm-Gg: AeBDievbPCd4B2zpCoR1nMVZNESMMFE/cvFOh/Sc2C2o8Y0GP2ytrXdlvTFzmOA3gD6
-	ysbM35g9OjXcDevUUaAjbVhILeVQ0fvAvY3pyETnGk08Y0rJto/MGZ0/25a2d/FlaoVvg6jFLzP
-	c2de5jcbhL+kcnw9df0BmSnBs11myTaanLD4AOeu9rTmXPj7h6CKqgCT7k64S72y1WgZV/mtC9+
-	ixWog788Y5/6Mr8oIIBFNv/WOByBE/cCUVQmup8LOlDh8ql2TzVBPaSLoA+aD6rWHzDBvOBuvGe
-	O07V4KC6E7IuG24ps3KMMeGLiljmNE5BwCSsQ0YZBe50PNDq5ZQLgfhcBM88r+RyQT2/+Vuh9sn
-	hbRwS315YcwW1Lt0fskbz8U0XkNWgzY5Jkvs3nxmCh/NSgivJ95v3HoEO6rGQ2eL2l+eBR9bCWh
-	CsTCV0do1YmKtF+z7yxfz/MQInLqkBsoaJ9KlmQ9x8zEoVKHFjFIe1Y7EU9AyYMg7G
-X-Received: by 2002:a05:7022:40b:b0:12a:8ea4:252 with SMTP id a92af1059eb24-12c28b7f511mr541759c88.4.1775679917525;
-        Wed, 08 Apr 2026 13:25:17 -0700 (PDT)
-Received: from google.com (78.93.125.34.bc.googleusercontent.com. [34.125.93.78])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12bfea5f860sm21165384c88.2.2026.04.08.13.25.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2026 13:25:16 -0700 (PDT)
-Date: Wed, 8 Apr 2026 20:25:12 +0000
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, 
-	David Woodhouse <dwmw2@infradead.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] extract-cert: Wrap key_pass with '#ifdef
- USE_PKCS11_ENGINE'
-Message-ID: <ada5jlwkMYrtfRHv@google.com>
-References: <20260325-certs-extract-cert-key_pass-unused-but-set-global-v1-1-ecf94326d532@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pp5wLYIt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005AEC19421;
+	Wed,  8 Apr 2026 22:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775685818;
+	bh=Yjer5woEh3mw3RtpKNVTvZ9uyG6f8sJECUD6FN73R+Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pp5wLYIt1R7KEOiJQQnXW6ZhJEmjf9UvC06DcsgIrDzefnDIeilwMVXldNCwWtFt4
+	 uNVmQ0+glAJB5Db5wzHoDlmnmC3M8IdK9/qXJEtnwQsntoI2MBPp1TfmeM/BUo95fR
+	 KDqeF6riY5+LsrJ1r+DJeNZ890kQRurbE1c7I163hs/oNGExGQVy5mb7Kxqt9HSb90
+	 3rz3Q+F3lmb2gxwpP1FDt+wioHBLLtRdyhANIn2ZUARYPWvglVD2owgocjtsmbIleD
+	 hVHwwiktZDlsAmEMCfdnc9IBDHHOaujHTpShcIdyn7QDDdLTLmQd8eUfkSqIyO+MA/
+	 yhlcfB71P7Oyg==
+Date: Wed, 8 Apr 2026 15:03:34 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Peter Oberparleiter <oberpar@linux.ibm.com>,
+	kernel test robot <lkp@intel.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] gcov: Disable GCOV_PROFILE_ALL on 32-bit UML with
+ Clang 20/21
+Message-ID: <20260408220334.GA3962465@ax162>
+References: <20260408162607.it.347-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,73 +47,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260325-certs-extract-cert-key_pass-unused-but-set-global-v1-1-ecf94326d532@kernel.org>
+In-Reply-To: <20260408162607.it.347-kees@kernel.org>
 
-On Wed, Mar 25, 2026 at 06:19:15PM -0700, Nathan Chancellor wrote:
-> A recent strengthening of -Wunused-but-set-variable (enabled with -Wall)
-> in clang under a new subwarning, -Wunused-but-set-global, points out an
-> unused static global variable in certs/extract-cert.c:
+On Wed, Apr 08, 2026 at 09:26:12AM -0700, Kees Cook wrote:
+> Clang 20 and 21 miscompute __builtin_object_size() when -fprofile-arcs
+> is active on 32-bit UML targets, which passes incorrect object size
+> calculations for local variables through always_inline copy_to_user()
+> and check_copy_size(), causing spurious compile-time errors:
 > 
->   certs/extract-cert.c:46:20: error: variable 'key_pass' set but not used [-Werror,-Wunused-but-set-global]
->      46 | static const char *key_pass;
->         |                    ^
+>   include/linux/ucopysize.h:52:4: error: call to '__bad_copy_from' declared with 'error' attribute: copy source size is too small
 > 
-> After commit 558bdc45dfb2 ("sign-file,extract-cert: use pkcs11 provider
-> for OPENSSL MAJOR >= 3"), key_pass is only used with the OpenSSL engine
-> API, not the new provider API. Wrap key_pass's declaration and
-> assignment with '#ifdef USE_PKCS11_ENGINE' so that it is only included
-> with its use to clear up the warning. While this is a little uglier than
-> just marking key_pass with the unused attribute, this will make it
-> easier to clean up all code associated with the use of the engine API if
-> it were ever removed in the future. While in the area, use a tab for
-> the key_pass assignment line to match the rest of the file.
+> The regression was introduced in LLVM commit 02b8ee281947 ("[llvm]
+> Improve llvm.objectsize computation by computing GEP, alloca and malloc
+> parameters bound"), which shipped in Clang 20. It was fixed in LLVM
+> by commit 45b697e610fd ("[MemoryBuiltins] Consider index type size
+> when aggregating gep offsets"), which was backported to the LLVM 22.x
+> release branch.
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 558bdc45dfb2 ("sign-file,extract-cert: use pkcs11 provider for OPENSSL MAJOR >= 3")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> The bug requires 32-bit UML + GCOV_PROFILE_ALL (which uses -fprofile-arcs),
+> though the exact trigger depends on optimizer decisions influenced by other
+> enabled configs.
+> 
+> Prevent the broken combination by disabling GCOV_PROFILE_ALL on 32-bit
+> UML when using Clang 20.x or 21.x.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202604030531.O6FveVgn-lkp@intel.com/
+> Assisted-by: Claude:claude-opus-4-6[1m]
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+>  v2: fixed typo in version comparison: needed < not <= (Sashiko)
+>  v1: https://lore.kernel.org/lkml/20260408005958.work.271-kees@kernel.org/
+> Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: <llvm@lists.linux.dev>
+> ---
+>  kernel/gcov/Kconfig | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/kernel/gcov/Kconfig b/kernel/gcov/Kconfig
+> index 04f4ebdc3cf5..56abff785654 100644
+> --- a/kernel/gcov/Kconfig
+> +++ b/kernel/gcov/Kconfi
+> @@ -42,6 +42,9 @@ config GCOV_PROFILE_ALL
+>  	depends on !COMPILE_TEST
+>  	depends on GCOV_KERNEL
+>  	depends on ARCH_HAS_GCOV_PROFILE_ALL
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+Would it be better to avoid selecting this symbol in arch/um/Kconfig
+when we have this condition?
 
-> ---
-> I am taking a fix for a similar warning in modpost through the kbuild
-> tree so I don't mind picking this up with an appropriate Ack or it can
-> just go through the keyring tree, does not matter to me.
-> ---
->  certs/extract-cert.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/certs/extract-cert.c b/certs/extract-cert.c
-> index 7d6d468ed612..54ecd1024274 100644
-> --- a/certs/extract-cert.c
-> +++ b/certs/extract-cert.c
-> @@ -43,7 +43,9 @@ void format(void)
->  	exit(2);
->  }
->  
-> +#ifdef USE_PKCS11_ENGINE
->  static const char *key_pass;
-> +#endif
->  static BIO *wb;
->  static char *cert_dst;
->  static bool verbose;
-> @@ -135,7 +137,9 @@ int main(int argc, char **argv)
->  	if (verbose_env && strchr(verbose_env, '1'))
->  		verbose = true;
->  
-> -        key_pass = getenv("KBUILD_SIGN_PIN");
-> +#ifdef USE_PKCS11_ENGINE
-> +	key_pass = getenv("KBUILD_SIGN_PIN");
-> +#endif
->  
->  	if (argc != 3)
->  		format();
-> 
-> ---
-> base-commit: d2a43e7f89da55d6f0f96aaadaa243f35557291e
-> change-id: 20260325-certs-extract-cert-key_pass-unused-but-set-global-23007ecfadf9
-> 
-> Best regards,
-> --  
-> Nathan Chancellor <nathan@kernel.org>
-> 
+> +	# Clang 20 & 21 miscompute __builtin_object_size() under -fprofile-arcs
+> +	# on 32-bit UML, causing spurious compile-time errors in check_copy_size().
+> +	depends on !(UML && !64BIT && CC_IS_CLANG && CLANG_VERSION >= 200000 && CLANG_VERSION < 220100)
+
+Given that you have an inclusive range above 0, you could drop the CC_IS_CLANG.
+
+With the suggestion above it would just become:
+
+diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+index 098cda44db22..d9541d13d9eb 100644
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@ -11,7 +11,9 @@ config UML
+ 	select ARCH_HAS_CACHE_LINE_SIZE
+ 	select ARCH_HAS_CPU_FINALIZE_INIT
+ 	select ARCH_HAS_FORTIFY_SOURCE
+-	select ARCH_HAS_GCOV_PROFILE_ALL
++	# Clang 20 & 21 miscompute __builtin_object_size() under -fprofile-arcs
++	# on 32-bit, causing spurious compile-time errors in check_copy_size().
++	select ARCH_HAS_GCOV_PROFILE_ALL if !(!64BIT && CLANG_VERSION >= 200000 && CLANG_VERSION < 220100)
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_STRNCPY_FROM_USER
+ 	select ARCH_HAS_STRNLEN_USER
+--
+
+Cheers,
+Nathan
