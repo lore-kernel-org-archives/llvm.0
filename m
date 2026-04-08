@@ -1,236 +1,158 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5438B26290
-	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 11:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E1B3B9600;
+	Wed,  8 Apr 2026 11:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775648131; cv=none; b=YZaxZJd5eHNC9ELM95obcUiMlMCFpCvD/zYwINANSD3ids68gGoMs/iqh+uXM5aFmhvZZhLdca6V52BYWd96BAZrpiuru4409ynuIgBXR0Ms+ty4X9ntLuKESAIuIyJh4BGpaIBXvftiqPDthsN0nOmQhVwMQzEiFIgkfcDy7Lk=
+	t=1775648401; cv=none; b=SMDZUMBebeVLvjVaYKQA2qJwyOl2MAiU8iuk9i1twj++8aAJrgX2p2BWYTeLBdvgRLJCyDnZviASXOn3jospy9e3PZYWg50H4NZK9wj6lP1C5V8R/4KYJJ1Q0RybeFtuno1d97wjDOCZJecdrP8JAaujV87kSyHaKtFunaq6Bg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775648131; c=relaxed/simple;
-	bh=ubx+mnYpUiL459SgD+QiTTaXpcbT44WpOX2D0QFbR3c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oCekR50xuejZCmeUj+rwHC8J0TF1x6ffTp7ISsaiuK9DNIHM7ncgM1oZTp1v1x/sbu/RTMhSDM695Om3DHxuap9GIO+JrUoItfyRya0UmDb8XSnnHV06Af/b3hvVsR4MGmooWrux6TkP6fo0bRSNqLJdqAykoTIKltoCTzcNDRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4frLZh6FkPzYQtwm
-	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 19:34:52 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id E10554058C
-	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 19:35:26 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP2 (Coremail) with SMTP id Syh0CgCXwQZ7PdZpOmlKDw--.29321S2;
-	Wed, 08 Apr 2026 19:35:24 +0800 (CST)
-Message-ID: <5fa89ec2-122e-4937-bec6-fe5dbe3ae07f@huaweicloud.com>
-Date: Wed, 8 Apr 2026 19:35:22 +0800
+	s=arc-20240116; t=1775648401; c=relaxed/simple;
+	bh=b+RecTKEamqmyLaTPX3iCg4q4fZ77CppkFB3CIgG9qw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=PcQvLqJTEv4nAY9X36/fg3gNfVjFeo/aBUjjeMbFniqWHVWhwaQpf0j1XSkRiwEJ7IDXROGaHSlhkyhJM9cZa97p+5yM8CrWCl4mgFyCvq6VhC+Tiuo5sGRw6Ln/h+W+iBo2/4xoMF2khFhVf/wZWzxAxXx4or33EjFBrZe66Vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R+ecEV57; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R+ecEV57"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775648397; x=1807184397;
+  h=date:from:to:cc:subject:message-id;
+  bh=b+RecTKEamqmyLaTPX3iCg4q4fZ77CppkFB3CIgG9qw=;
+  b=R+ecEV57ifKlat0OdAuLxmRR1Y17LfWdUo/erHkOMWnf6nOC9j0Yx0mk
+   2ylzUssLDmtExWX+IEI6ECyCxRox+gUoh/me5VDxGyxWH41OzYLk1rR6x
+   Zw9N7XZLfawErh/wpQ5ADw7j9vGmcBwRjOy6g8l7s3i+qEx3URa03mMt9
+   0YXq6/f9WQmRwDtc6uX20OodmThKqGPkHqx9qnBYCBtYRf8UImRXA79k8
+   QRPg12VSZ4f7C8OG/6Se39z749QgaU8ogkndYT0bDIvnzsE5fp+EE150c
+   JyPX21yDZ5xbqnTMEAKNUhUmE36aQ0HvMIbXkHJsvpOol4u7rdu4IBG2/
+   g==;
+X-CSE-ConnectionGUID: zb0nbnRxQp2rzKF9o6Nayg==
+X-CSE-MsgGUID: d60oHEa7ROmBpC81pHYDGg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="76520518"
+X-IronPort-AV: E=Sophos;i="6.23,167,1770624000"; 
+   d="scan'208";a="76520518"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2026 04:39:55 -0700
+X-CSE-ConnectionGUID: UIJ01+qERzqtIMNMCKd7Iw==
+X-CSE-MsgGUID: XpxJCpgGTrGUlTeN6AHcuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,167,1770624000"; 
+   d="scan'208";a="223684346"
+Received: from lkp-server01.sh.intel.com (HELO d00eb8a6782a) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 08 Apr 2026 04:39:53 -0700
+Received: from kbuild by d00eb8a6782a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wARGA-000000001nN-3hUZ;
+	Wed, 08 Apr 2026 11:39:50 +0000
+Date: Wed, 08 Apr 2026 19:39:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Chen-Yu Tsai" <wenst@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ dri-devel@lists.freedesktop.org, Inki Dae <inki.dae@samsung.com>
+Subject: [daeinki-drm-exynos:exynos-drm-next 3/4]
+ drivers/gpu/drm/exynos/exynos_drm_gem.c:70:41: warning: format specifies type
+ 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int')
+Message-ID: <202604081946.qVUp1v71-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/16] perf arm64: Support data type profiling
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
- Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
- Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
- <adSkpI9AoTNgISU5@z2>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <adSkpI9AoTNgISU5@z2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgCXwQZ7PdZpOmlKDw--.29321S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ary3uw18Jr13Wr4ktF4kXrb_yoWxAr18pa
-	9xCayfGr4UJrWF9w13JrZ7XFW3Kw4fJFWfGryrt3ySkF4jkF98tFWxtF1IkFWkGr98Aw47
-	Aw4Dtr1UWF1rCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Hi Namhyung,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
+head:   0867757f1eec0a246c70b2407a1bbed949170821
+commit: 11e898373fba6b1d27b15ab4beff592701a57293 [3/4] drm/exynos: Drop exynos_drm_gem.size field
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260408/202604081946.qVUp1v71-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260408/202604081946.qVUp1v71-lkp@intel.com/reproduce)
 
-Thank you for the feedback.
-I have received your comments and will get back to this as soon as I can.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604081946.qVUp1v71-lkp@intel.com/
 
-Best regards,
-Tengda
+All warnings (new ones prefixed by >>):
 
-On 2026/4/7 14:31, Namhyung Kim wrote:
-> Hello,
-> 
-> On Fri, Apr 03, 2026 at 09:47:44AM +0000, Tengda Wu wrote:
->> This patch series implements data type profiling support for arm64,
->> building upon the foundational work previously contributed by Huafei [1].
->> While the initial version laid the groundwork for arm64 data type analysis,
->> this series iterates on that work by refining instruction parsing and
->> extending support for core architectural features.
-> 
-> Thanks for working on this!  I'm happy to see that the changes are well
-> organized and each commit explained the issues clearly.  
-> 
->>
->> The series is organized as follows:
->>
->> 1. Fix disassembly mismatches (Patches 01-02)
->>    Current perf annotate supports three disassembly backends: llvm,
->>    capstone, and objdump. On arm64, inconsistencies between the output
->>    of these backends (specifically llvm/capstone vs. objdump) often
->>    prevent the tracker from correctly identifying registers and offsets.
->>    These patches resolve these mismatches, ensuring consistent instruction
->>    parsing across all supported backends.
->>
->> 2. Infrastructure for arm64 operand parsing (Patches 03-07)
->>    These patches establish the necessary infrastructure for arm64-specific
->>    operand handling. This includes implementing new callbacks and data
->>    structures to manage arm64's unique addressing modes and register sets.
->>    This foundation is essential for the subsequent type-tracking logic.
-> 
-> I've only checked up to this part so far.  Let me write replies soon.
-> I'll continue to review later in this week.
-> 
->>
->> 3. Core instruction tracking (Patches 08-16)
->>    These patches implement the core logic for type tracking on arm64,
->>    covering a wide range of instructions including:
->>
->>    * Memory Access: ldr/str variants (including stack-based access).
->>    * Arithmetic & Data Processing: mov, add, and adrp.
->>    * Special Access: System register access (mrs) and per-cpu variable
->>      tracking.
->>
->> The implementation draws inspiration from the existing x86 logic while
->> adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
->> perf annotate can successfully resolve memory locations and register
->> types, enabling comprehensive data type profiling on arm64 platforms.
->>
->> Example Result
->> ==============
->>
->> # perf mem record -a -K -- sleep 1
->> # perf annotate --data-type --type-stat --stdio
->> Annotate data type stats:
->> total 6204, ok 5091 (82.1%), bad 1113 (17.9%)
-> 
-> I'm impressed that the success rate is quite high.  But I think you need
-> to confirm that the findings are correct by taking a close look at each
-> result.  You can try `perf annotate --code-with-type`.
-> 
-> Thanks,
-> Namhyung
-> 
-> 
->> -----------------------------------------------------------
->>         29 : no_sym
->>        196 : no_var
->>        806 : no_typeinfo
->>         82 : bad_offset
->>       1370 : insn_track
->>
->> Annotate type: 'struct page' in [kernel.kallsyms] (59208 samples):
->> ============================================================================
->>  Percent     offset       size  field
->>   100.00          0       0x40  struct page      {
->>     9.95          0        0x8      long unsigned int   flags;
->>    52.83        0x8       0x28      union        {
->>    52.83        0x8       0x28          struct   {
->>    37.21        0x8       0x10              union        {
->>    37.21        0x8       0x10                  struct list_head        lru {
->>    37.21        0x8        0x8                      struct list_head*   next;
->>     0.00       0x10        0x8                      struct list_head*   prev;
->>                                                 };
->>    37.21        0x8       0x10                  struct   {
->>    37.21        0x8        0x8                      void*       __filler;
->>     0.00       0x10        0x4                      unsigned int        mlock_count;
->>    ...
->>
->> Changes since v1: (reworked from Huafei's series):
->>
->>  - Fix inconsistencies in arm64 instruction output across llvm, capstone,
->>    and objdump disassembly backends.
->>  - Support arm64-specific addressing modes and operand formats. (Leo Yan)
->>  - Extend instruction tracking to support mov and add instructions,
->>    along with per-cpu and stack variables.
->>  - Include real-world examples in commit messages to demonstrate
->>    practical effects. (Namhyung Kim)
->>  - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
->>    https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
->>
->> Please let me know if you have any feedback.
->>
->> Thanks,
->> Tengda
->>
->> [1] https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
->> [2] https://developer.arm.com/documentation/102374/0103
->> [3] https://github.com/flynd/asmsheets/releases/tag/v8
->>
->> ---
->>
->> Tengda Wu (16):
->>   perf llvm: Fix arm64 adrp instruction disassembly mismatch with
->>     objdump
->>   perf capstone: Fix arm64 jump/adrp disassembly mismatch with objdump
->>   perf annotate-arm64: Generalize arm64_mov__parse to support standard
->>     operands
->>   perf annotate-arm64: Handle load and store instructions
->>   perf annotate: Introduce extract_op_location callback for
->>     arch-specific parsing
->>   perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
->>   perf annotate-arm64: Implement extract_op_location() callback
->>   perf annotate-arm64: Enable instruction tracking support
->>   perf annotate-arm64: Support load instruction tracking
->>   perf annotate-arm64: Support store instruction tracking
->>   perf annotate-arm64: Support stack variable tracking
->>   perf annotate-arm64: Support 'mov' instruction tracking
->>   perf annotate-arm64: Support 'add' instruction tracking
->>   perf annotate-arm64: Support 'adrp' instruction to track global
->>     variables
->>   perf annotate-arm64: Support per-cpu variable access tracking
->>   perf annotate-arm64: Support 'mrs' instruction to track 'current'
->>     pointer
->>
->>  .../perf/util/annotate-arch/annotate-arm64.c  | 642 +++++++++++++++++-
->>  .../util/annotate-arch/annotate-powerpc.c     |  10 +
->>  tools/perf/util/annotate-arch/annotate-x86.c  |  88 ++-
->>  tools/perf/util/annotate-data.c               |  72 +-
->>  tools/perf/util/annotate-data.h               |   7 +-
->>  tools/perf/util/annotate.c                    | 108 +--
->>  tools/perf/util/annotate.h                    |  12 +
->>  tools/perf/util/capstone.c                    | 107 ++-
->>  tools/perf/util/disasm.c                      |   5 +
->>  tools/perf/util/disasm.h                      |   5 +
->>  .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |  20 +
->>  tools/perf/util/dwarf-regs.c                  |   2 +-
->>  tools/perf/util/include/dwarf-regs.h          |   1 +
->>  tools/perf/util/llvm.c                        |  50 ++
->>  14 files changed, 984 insertions(+), 145 deletions(-)
->>
->>
->> base-commit: cf7c3c02fdd0dfccf4d6611714273dcb538af2cb
->> -- 
->> 2.34.1
->>
+>> drivers/gpu/drm/exynos/exynos_drm_gem.c:70:41: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+      69 |         DRM_DEV_DEBUG_KMS(drm_dev_dma_dev(dev), "dma_addr(0x%lx), size(0x%lx)\n",
+         |                                                                          ~~~
+         |                                                                          %zx
+      70 |                         (unsigned long)exynos_gem->dma_addr, exynos_gem->base.size);
+         |                                                              ^~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:599:38: note: expanded from macro 'DRM_DEV_DEBUG_KMS'
+     599 |         drm_dev_dbg(dev, DRM_UT_KMS, fmt, ##__VA_ARGS__)
+         |                                      ~~~    ^~~~~~~~~~~
+   include/drm/drm_print.h:563:39: note: expanded from macro 'drm_dev_dbg'
+     563 |         __drm_dev_dbg(NULL, dev, cat, fmt, ##__VA_ARGS__)
+         |                                       ~~~    ^~~~~~~~~~~
+   drivers/gpu/drm/exynos/exynos_drm_gem.c:84:41: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+      83 |         DRM_DEV_DEBUG_KMS(dev->dev, "dma_addr(0x%lx), size(0x%lx)\n",
+         |                                                              ~~~
+         |                                                              %zx
+      84 |                         (unsigned long)exynos_gem->dma_addr, exynos_gem->base.size);
+         |                                                              ^~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:599:38: note: expanded from macro 'DRM_DEV_DEBUG_KMS'
+     599 |         drm_dev_dbg(dev, DRM_UT_KMS, fmt, ##__VA_ARGS__)
+         |                                      ~~~    ^~~~~~~~~~~
+   include/drm/drm_print.h:563:39: note: expanded from macro 'drm_dev_dbg'
+     563 |         __drm_dev_dbg(NULL, dev, cat, fmt, ##__VA_ARGS__)
+         |                                       ~~~    ^~~~~~~~~~~
+   2 warnings generated.
 
+
+vim +70 drivers/gpu/drm/exynos/exynos_drm_gem.c
+
+    26	
+    27	static int exynos_drm_alloc_buf(struct exynos_drm_gem *exynos_gem, bool kvmap)
+    28	{
+    29		struct drm_device *dev = exynos_gem->base.dev;
+    30		unsigned long attr = 0;
+    31	
+    32		if (exynos_gem->dma_addr) {
+    33			DRM_DEV_DEBUG_KMS(drm_dev_dma_dev(dev), "already allocated.\n");
+    34			return 0;
+    35		}
+    36	
+    37		/*
+    38		 * if EXYNOS_BO_CONTIG, fully physically contiguous memory
+    39		 * region will be allocated else physically contiguous
+    40		 * as possible.
+    41		 */
+    42		if (!(exynos_gem->flags & EXYNOS_BO_NONCONTIG))
+    43			attr |= DMA_ATTR_FORCE_CONTIGUOUS;
+    44	
+    45		/*
+    46		 * if EXYNOS_BO_WC or EXYNOS_BO_NONCACHABLE, writecombine mapping
+    47		 * else cachable mapping.
+    48		 */
+    49		if (exynos_gem->flags & EXYNOS_BO_WC ||
+    50				!(exynos_gem->flags & EXYNOS_BO_CACHABLE))
+    51			attr |= DMA_ATTR_WRITE_COMBINE;
+    52	
+    53		/* FBDev emulation requires kernel mapping */
+    54		if (!kvmap)
+    55			attr |= DMA_ATTR_NO_KERNEL_MAPPING;
+    56	
+    57		exynos_gem->dma_attrs = attr;
+    58		exynos_gem->cookie = dma_alloc_attrs(drm_dev_dma_dev(dev), exynos_gem->base.size,
+    59						     &exynos_gem->dma_addr, GFP_KERNEL,
+    60						     exynos_gem->dma_attrs);
+    61		if (!exynos_gem->cookie) {
+    62			DRM_DEV_ERROR(drm_dev_dma_dev(dev), "failed to allocate buffer.\n");
+    63			return -ENOMEM;
+    64		}
+    65	
+    66		if (kvmap)
+    67			exynos_gem->kvaddr = exynos_gem->cookie;
+    68	
+    69		DRM_DEV_DEBUG_KMS(drm_dev_dma_dev(dev), "dma_addr(0x%lx), size(0x%lx)\n",
+  > 70				(unsigned long)exynos_gem->dma_addr, exynos_gem->base.size);
+    71		return 0;
+    72	}
+    73	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
