@@ -1,123 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A6337FF46;
-	Wed,  8 Apr 2026 07:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4D439EF12
+	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 08:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775632727; cv=none; b=Vjyu+eYjbWcbPSlQdQktkXaTddAJYewASlS7IoNrtJbmiJW2a1We8GPFdDrt9EMTPre95iyc8K0fr1x8YYErnRt7M4zb06t9oO70UUZ734NJEjl6IrPbuBBpUzOkKTCsU0lD3AJSSyDzvOFxCM++0+PHEKS07ZYYhn7m+dDJHoQ=
+	t=1775636532; cv=none; b=m8CoSQ682AiPO5OjYDNUJqvH+zpELg/YMccJBFe4HJQrePfwtqWmbMJyh/ng1SpzKx8U0UFivtMltDsqeneVMQgg1LActmBBJIua+0226I7INeVZwkiLSIUBQ07sPZHJ+x7o819Aseipw6QVUc2Rsp7qQH44uKvXm9Uj4VzSvBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775632727; c=relaxed/simple;
-	bh=AtgegxOX0KuecyL009bOjNrgq02ohPSbazAjF+ng244=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=o/2+0ffK9X1s0uvLeQSysO9Yb+aBgW5AjNRk5YmJxq/izGXZKvBus9Z5iuQEwTnFbqJNcUX9JwgyAW7HV27LnI/PPikjZIkylT0otuUY9ZMiaPyYxkADUhgXSeJoL/0CdXwa15yYmNoCcSWzN8DipPbearRrW4nKWPD+rb2FkRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fOWrCXbl; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1775636532; c=relaxed/simple;
+	bh=bzy31xQKDU1QllsKpr123MDsL194SrOWbf1PilFMjjE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=snrx7AvRHtrsFYSmd0SxyQBRoWH5kxSSVZpT/d0gPusBRLG61+ajg2iIglouXIN1ogir+7RmcjUMKOoO+H1E91Nap3nebnGmlxRJUzsW/wOkwHSOdDhCLpqBZNzCHVDZGQxEAiVBamaiheVofY+cDatuxohjG0Firo5ykgXHcuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hs9L8EUV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fOWrCXbl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775632726; x=1807168726;
-  h=date:from:to:cc:subject:message-id;
-  bh=AtgegxOX0KuecyL009bOjNrgq02ohPSbazAjF+ng244=;
-  b=fOWrCXbloLdy4d/lxgPptxESeVqQ7xpX8x+JX4E+E3zDvJeptD+aOe1w
-   FnIH8sfGqFGNJ5tfXjrF+7lvCVRVG6RfGxwUGG6scY+lXqPe/1t9XJwpn
-   PqnjfeGDaO+hDHLRg5wWRWR3wZRc9ATYODIp41f+w3bt2Yb8cuOz1RYg6
-   I+Z6UvcMhcNuWdZ4aL13CFd2hw+BCxhcCAinzgRqhY8bugprSZ7gs+3cw
-   rkJP8yt+s3Lb+vyrkyVpR8N6LhQvIDRLBoeN/6bJ5GYpl1jPCaoWTFIn0
-   9SUXaw/mEDZQWWzRXFlkgRTR7jz72RQ7jjdlYK/2YhZl0ZU6bz/+hyPOB
-   Q==;
-X-CSE-ConnectionGUID: 63ZyQkgzSBybTlr9JAWlkw==
-X-CSE-MsgGUID: S8RWR0dQS+a0o5rsLSMSBw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="75646098"
-X-IronPort-AV: E=Sophos;i="6.23,167,1770624000"; 
-   d="scan'208";a="75646098"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2026 00:18:46 -0700
-X-CSE-ConnectionGUID: xD73TkOeTuOQXeW8UkfEZg==
-X-CSE-MsgGUID: ohmiRmwpTkOqYt7fw3tXHg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,167,1770624000"; 
-   d="scan'208";a="232435959"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by orviesa003.jf.intel.com with ESMTP; 08 Apr 2026 00:18:44 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wANBR-00000000AQ9-3wOj;
-	Wed, 08 Apr 2026 07:18:41 +0000
-Date: Wed, 08 Apr 2026 09:18:00 +0200
-From: kernel test robot <lkp@intel.com>
-To: Justin Suess <utilityemal77@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: kernel/bpf/verifier.c:2276:19: error: use of undeclared
- identifier 'bpf_landlock_ruleset_btf_ids'
-Message-ID: <202604080920.Cm9eXBu4-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hs9L8EUV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775636529;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6HHz2usIvlJ2z/WnRL2Z/+97/OwseG2KARJOVUsSEC0=;
+	b=hs9L8EUV0JG9gRQpcerTBr+BP+PVfw8WYN72NI2g8Wg4u9zhdR+NLXwAq/e2TVXbbJc0hU
+	2P0G1IhKuhmo5aTLGVpmyMIXl2qfkxpz+8bSXIicY495ebfngECAHQq2P+Ug9QCffR8wuQ
+	7xbIgtqjjQ22Sn/ZDrRU4IX3D7x4DIQ=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-264-7MZqjAh_NxuR2rBpB22Lvw-1; Wed,
+ 08 Apr 2026 04:22:08 -0400
+X-MC-Unique: 7MZqjAh_NxuR2rBpB22Lvw-1
+X-Mimecast-MFC-AGG-ID: 7MZqjAh_NxuR2rBpB22Lvw_1775636527
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9D0531800372
+	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 08:22:07 +0000 (UTC)
+Received: from [172.20.155.76] (unknown [10.30.44.186])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 38AC61800762;
+	Wed,  8 Apr 2026 08:22:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-rc7,
+ upstream-mainline, 3036cd0d)
+Date: Wed, 08 Apr 2026 08:22:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <95607.126040804220800223@us-mta-264.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 8P633vWlpg8KQGzQ_1mNiBGjILHPrUhVWKP29aL7j7Q_1775636527
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Justin-Suess/landlock-Move-operations-from-syscall-into-ruleset-code/20260408-053705
-head:   7423cdaa89895ef6399743cfef9c7bfe1c22b8ad
-commit: a0c8fd8936e1475411b42961f95d16772832b543 bpf: verifier: Add Landlock ruleset map support
-date:   10 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260408/202604080920.Cm9eXBu4-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260408/202604080920.Cm9eXBu4-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604080920.Cm9eXBu4-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/bpf/verifier.c:2276:19: error: use of undeclared identifier 'bpf_landlock_ruleset_btf_ids'
-    2276 |                         reg->btf_id = *bpf_landlock_ruleset_btf_ids;
-         |                                        ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +/bpf_landlock_ruleset_btf_ids +2276 kernel/bpf/verifier.c
+Kernel information:
+    Commit message: Merge tag 'ata-7.0-final' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/libata/linux
 
-  2252	
-  2253	static void mark_ptr_not_null_reg(struct bpf_reg_state *reg)
-  2254	{
-  2255		if (base_type(reg->type) == PTR_TO_MAP_VALUE) {
-  2256			const struct bpf_map *map = reg->map_ptr;
-  2257	
-  2258			if (map->inner_map_meta) {
-  2259				reg->type = CONST_PTR_TO_MAP;
-  2260				reg->map_ptr = map->inner_map_meta;
-  2261				/* transfer reg's id which is unique for every map_lookup_elem
-  2262				 * as UID of the inner map.
-  2263				 */
-  2264				if (btf_record_has_field(map->inner_map_meta->record,
-  2265							 BPF_TIMER | BPF_WORKQUEUE | BPF_TASK_WORK)) {
-  2266					reg->map_uid = reg->id;
-  2267				}
-  2268			} else if (map->map_type == BPF_MAP_TYPE_XSKMAP) {
-  2269				reg->type = PTR_TO_XDP_SOCK;
-  2270			} else if (map->map_type == BPF_MAP_TYPE_SOCKMAP ||
-  2271				   map->map_type == BPF_MAP_TYPE_SOCKHASH) {
-  2272				reg->type = PTR_TO_SOCKET;
-  2273			} else if (map->map_type == BPF_MAP_TYPE_LANDLOCK_RULESET) {
-  2274				reg->type = PTR_TO_BTF_ID | PTR_TRUSTED;
-  2275				reg->btf = btf_vmlinux;
-> 2276				reg->btf_id = *bpf_landlock_ruleset_btf_ids;
-  2277			} else {
-  2278				reg->type = PTR_TO_MAP_VALUE;
-  2279			}
-  2280			return;
-  2281		}
-  2282	
-  2283		reg->type &= ~PTR_MAYBE_NULL;
-  2284	}
-  2285	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2435608516
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2435608516_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
