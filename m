@@ -1,104 +1,213 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93EE73B6C1C;
-	Wed,  8 Apr 2026 11:40:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA773ACA43
+	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 11:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775648407; cv=none; b=RVHflIKTB9fpIyO7mPvUTqg+NwYdMTKxzjt2hx2/A5xmZto6t1FloL6p2+A9T0ZFpisRt8iVL7pyXgA/KvbMqXAtaTc6QPd8VExO6Gm2pVRodk8nYeVVQSMgHJQ48dCSNMuH0MfFildhkBCu+rYyLBr5jClfDxJJVLhqKVLH3zg=
+	t=1775649233; cv=none; b=teBzhAO7lyCKIEWQJrvxg/ij6cd8NqLeJCyzaXDQznuLbQE+yxkUIUGvJSYFPmypyQufvWRZjNmbKpTdcmGf8tRCQIb6a8Olt3/mVbhPNC2w1NFsmy4ZNKCah2VDDBZgpMPtUMaYl24RbdB4P3Ux/kkrfw3cDxawXbv4BNkgDBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775648407; c=relaxed/simple;
-	bh=M44PhwDlWKWyqOa96JhxJQdu8Mt5eTXDoByuV4Pch0s=;
+	s=arc-20240116; t=1775649233; c=relaxed/simple;
+	bh=l5pRn8VKgWrs9WZBeUglbsiiC+XjHh/0pSnjInVvhmk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J05hwh/biQcuRwnio7JjTNBpCXkRKQ1XeoJ9pSvlbOhs9tXI5uXiplDXSfHk1czJsWSQdxqNRLtB8qKzfEDdimbSUFTsdTNSZb8kwBC3c1KWxQ3WWLUBHMCOrNR5Fdknrku9bLfVNxbET+UPwBsnzsXH+Ovn1mhzvwY5hFTMhqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HAK28N/G; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=qRNm0S6Hf80rXOXxZgQvuTtDicQIQ4D4Wpn9zvAQejDeR66waiJT8oyU7p6ZfBYACPUJ0tABfDQX8QjBVPk7KFYerK085MSjRD6t4ig+juS3jA3Rc0fKpDpZYNe+QjM0QnURJdmfN7FQUg3tFYNnTqQan3qqP9+p2qUHvIwuk3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V8cwHdy3; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HAK28N/G"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775648404; x=1807184404;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M44PhwDlWKWyqOa96JhxJQdu8Mt5eTXDoByuV4Pch0s=;
-  b=HAK28N/GWon4w/VLb1KdkHvGwRe8MuTUScnuHf8EOTwUKsbP4OAKGrEl
-   l+MQcwUO/WTjKNzANBEcNdGF4s+G+nsbRLoAYcPhCbKGHs+z6z1Xr0mxg
-   5Ln/C563eBRSWRDk767eS0RyqbXyMtNxTyjOEb/ADFJ/ysmv/UmUv2/Cx
-   nwIC/jsLuZ2nXIkyJTFXrMDQffldKmK5ikwQ7Vgvr0bEUvQ0kLe7eNB2z
-   JFs1HV2lmubu+utqJNonBSFhvvda+mA+2u6HHIc2+HoeVl9wEG3h/YaQt
-   MJC2LPTE3j1yTQXZb3DjR0nrLfrV/LhbyiARYu/E5sVOnXC4kIuQBhHzd
-   Q==;
-X-CSE-ConnectionGUID: jJ/nn9BBQLmpuOXFtAiggw==
-X-CSE-MsgGUID: +GY7Xbt8T6SDz6P1gSCzeQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="86919989"
-X-IronPort-AV: E=Sophos;i="6.23,167,1770624000"; 
-   d="scan'208";a="86919989"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2026 04:39:56 -0700
-X-CSE-ConnectionGUID: KWFlwwkLT9uaqbmyJtJbuQ==
-X-CSE-MsgGUID: 1TqoiT1iTqu2scY79dY+Ig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,167,1770624000"; 
-   d="scan'208";a="230116190"
-Received: from lkp-server01.sh.intel.com (HELO d00eb8a6782a) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 08 Apr 2026 04:39:53 -0700
-Received: from kbuild by d00eb8a6782a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wARGA-000000001nL-3cxM;
-	Wed, 08 Apr 2026 11:39:50 +0000
-Date: Wed, 8 Apr 2026 19:39:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shuvam Pandey <shuvampandey1@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	Shuvam Pandey <shuvampandey1@gmail.com>
-Subject: Re: [PATCH] seq_buf: add KUnit tests for seq_buf_putmem_hex()
-Message-ID: <202604081907.Ko14RCaV-lkp@intel.com>
-References: <20260406033728.25998-1-shuvampandey1@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V8cwHdy3"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-35c2fe0d90fso3856042a91.1
+        for <llvm@lists.linux.dev>; Wed, 08 Apr 2026 04:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775649230; x=1776254030; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Eoc0I6ZFUNdwIm009oH3G2THpKBnhPvBaJWle5ck1ck=;
+        b=V8cwHdy3soJ48S5q6kv2mJZTCwO67XmO9cgmZiFjww+z+Z6J/EB1V8KD+0d+7Trzkz
+         uJkqU2UNt1waFV8zaLBpgY/xDmtz6tiefOwFb1EpqyXZzWR19+EbOnCKXobvz0ni/QIX
+         hq3JaQ0ud8x1iD2sJIwuqb37hOCQB9cQ2lgBQR9POHZR8kNug5Mq0UOwWyJvxZPcvQIS
+         mI0Xk4GoKMRY+FME81gB+Q50DFQ0DqqBc1f3DbJ7pcu67MrVTNGZrRJdZzliPc6omFkq
+         nOp/xsIC/3UIWfGADJh7CiwZaICi/WYF3YnpaDsshDqQ44kCQtuN0O3Jm4oyNDEGOxjk
+         kh1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775649230; x=1776254030;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Eoc0I6ZFUNdwIm009oH3G2THpKBnhPvBaJWle5ck1ck=;
+        b=RDcok9yEp0D9IqfObhZln9oDW3Nr5CQ3voeduDnhgp14y4K48z7pySjOLLeoKlIWWh
+         ZRA9K1BaRain1To18HlcnYAGXzrwARd5owep01s0z1A/rsNr+QCV0oQz0Hn5YF1IBwTI
+         qjXIjLRWlnQQXX8XeipwaIAzhDllzcyz0m7C0lwVnzX6/Dx4FRwYHoCgtp4485N9S/C4
+         WmugTtdvsm3dNtCn+caFqFasfk+WVRfl0UvLkNafal3l1iTjbJ6O56eftezwj8+rOXHi
+         gdVX17YpE0GRsvsn0qdlx82zytHKn8POZxuS8grvTvh+A7LVRV4K+SAYQkg4I9M4sEno
+         Chjg==
+X-Forwarded-Encrypted: i=1; AJvYcCWpBR8SCsWStcfbjJesuIMSY+ks9XGFZdjF/G0RpI2QA2MuzOgLxaVjTjt84SJdMWaYkN7/@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz3AHCFrHt0BwHOtozNh2qT5ttUf8kQFI3wdvrxY34sxaumUat7
+	/5dDxrAqZ3BFS1OjxPLlKVzBizO7SV7dfIQnAA9koEh3HtZs5tdZVAbh
+X-Gm-Gg: AeBDietEyvh72Lq1thuTKEl+NwlUFcjlB10LvBufEepnzukHKwXa2n7CQPkQ18oLPTn
+	d7KvVOpgn0pY1SS/3M53N37n/FzNFt3VtHtNQSWH1FU7F6iA9AkTC/o84YD5HXKP1Ux4/r6dOde
+	ZOC8QLItqQLc5dgoptDL/AIkIEK3o92r9n9s71sSn/uuaMU2kXMLMyj7Fj/7QVZpyqzJK9Ju1U/
+	cvRNw9IsCd1mePrpihUsbjzDobzBLIfzT3HDnQ0lm7KG55g4McFBwr/y6d9CTU1trOuk7dmWgYb
+	f/R3dqzOZj5XUTqaLtetEfkxZRTgR2CHhrQJeP5Zl6oiVfm1dzGlI4Na/L2JyOkVXeiv2UXRqoJ
+	XXZvGHWzdvhZN6yT48GdxXi/FeC8IIBAIXvkwC760En0w0D7EbH1zHathO59DyffOF+aXI4QrSU
+	bj17vdCyoGMvSRuMCOcdp4STtO7OaKxBn5a8bzoxikMX0jziJZAPZEIvbGUo1MbkdA8LU=
+X-Received: by 2002:a17:90b:54cc:b0:35d:a542:2dc0 with SMTP id 98e67ed59e1d1-35de67dde76mr20971504a91.8.1775649229978;
+        Wed, 08 Apr 2026 04:53:49 -0700 (PDT)
+Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([129.41.58.4])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe9379f3sm25672851a91.9.2026.04.08.04.53.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Apr 2026 04:53:49 -0700 (PDT)
+Date: Wed, 8 Apr 2026 17:23:39 +0530
+From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
+To: Link Mauve <linkmauve@linkmauve.fr>
+Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
+	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com, 
+	aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org, 
+	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
+	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH V10 0/4] Rust support for powerpc [RESEND]
+Message-ID: <adZBWoVVoJefiTcM@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+References: <20260406200149.3727922-1-mkchauras@gmail.com>
+ <adYlLLfRgSyxus3n@luna>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260406033728.25998-1-shuvampandey1@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <adYlLLfRgSyxus3n@luna>
 
-Hi Shuvam,
+On Wed, Apr 08, 2026 at 11:51:40AM +0200, Link Mauve wrote:
+> Hi,
+> 
+> (This email is a resent, my IP address got flagged by spamhaus again
+> because I’m on a residential range, hopefully this incident is
+> resolved…)
+> 
+> On Tue, Apr 07, 2026 at 01:31:45AM +0530, Mukesh Kumar Chaurasiya (IBM) wrote:
+> > Enable experimental rust support for ppc64le and ppc32be. The patch for
+> > ppc32 has been provided by Link Mauve[1] and ppc64le support[2] has been
+> > merged over it. ppc32 needs some toolchain fixes mentioned in the patch
+> > `rust: Add PowerPC support` and the discussion for that is done here[1].
+> > 
+> > This has been tested on
+> > - powernv9 hardware
+> > - pseries P11 hardware
+> > - pseries(9, 10) qemu
+> > - powernv(9, 10) qemu
+> > - rustdoc on x86 and powerpc64le
+> > - rusttest on x86 and powerpc64le
+> 
+> I just tested your series for the Wii, so targeting powerpc (32, be),
+> and got this error:
+> ```
+> error[E0463]: can't find crate for `pin_init_internal`
+>    --> ../rust/pin-init/src/lib.rs:365:11
+>     |
+> 365 | pub use ::pin_init_internal::pin_data;
+>     |           ^^^^^^^^^^^^^^^^^ can't find crate
+> 
+> error: aborting due to 1 previous error
+> 
+> For more information about this error, try `rustc --explain E0463`.
+> ```
+> 
+> I didn’t get this error in a previous version of your series, would you
+> want me to bisect them?
+> 
+> Thanks for your continuous work on it anyway!
+> 
 
-kernel test robot noticed the following build errors:
+Hey Link,
 
-[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
-[also build test ERROR on akpm-mm/mm-everything linus/master v7.0-rc7 next-20260407]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for testing this.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shuvam-Pandey/seq_buf-add-KUnit-tests-for-seq_buf_putmem_hex/20260408-090623
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-patch link:    https://lore.kernel.org/r/20260406033728.25998-1-shuvampandey1%40gmail.com
-patch subject: [PATCH] seq_buf: add KUnit tests for seq_buf_putmem_hex()
-config: arm-randconfig-002-20260408 (https://download.01.org/0day-ci/archive/20260408/202604081907.Ko14RCaV-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c80443cd37b2e2788cba67ffa180a6331e5f0791)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260408/202604081907.Ko14RCaV-lkp@intel.com/reproduce)
+Can you give me the command generated via make with V=1
+e.g. `make LLVM=1 V=1`
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604081907.Ko14RCaV-lkp@intel.com/
+Regards,
+Mukesh
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/arm/probes/kprobes/test-kprobes.o
->> ERROR: modpost: "seq_buf_putmem_hex" [lib/tests/seq_buf_kunit.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > 
+> > We are actively working with our LLVM team to get the target for ppc,
+> > ppc64 and ppc64le in the rust compiler.
+> > 
+> > 
+> > [1] https://lore.kernel.org/all/20260204030507.8203-1-linkmauve@linkmauve.fr
+> > [2] https://lore.kernel.org/all/20260204042417.83903-1-mkchauras@gmail.com
+> > 
+> > Changelog:
+> > V9 -> V10:
+> > - rust/Makefile updated with review comments from Miguel
+> > - Patch 1/4 updated with commit message and subject
+> > V9: https://lore.kernel.org/all/20260404121610.1956528-1-mkchauras@gmail.com/
+> > 
+> > V8 -> V9:
+> > - rust/Makefile updated with a directory instead of abspath
+> > V8: https://lore.kernel.org/all/20260403145308.1042622-1-mkchauras@gmail.com/
+> > 
+> > V7 -> V8:
+> > - rust/Makefile updated to separate host libraries from target
+> > V7: https://lore.kernel.org/all/20260329160254.2592207-1-mkchauras@gmail.com/
+> > 
+> > Changelog:
+> > V6 -> V7:
+> > - Documentation removed as powerpc is still under development
+> > - Added a fix for race condition in rust/Makefile
+> > V6: https://lore.kernel.org/all/20260210090023.2587534-1-mkchauras@gmail.com
+> > 
+> > V5 -> V6:
+> > - Added a missing Tested by from Venkat which got missed since V3
+> > - Support is marked as Maintained instead of experimental
+> > V5: https://lore.kernel.org/all/20260210053756.2088302-1-mkchauras@gmail.com
+> > 
+> > V4 -> V5:
+> > - Removed a nested ifdef from PPC64 for Little endian toolchain
+> > V4: https://lore.kernel.org/all/20260209105456.1551677-1-mkchauras@gmail.com
+> > 
+> > V3 -> V4:
+> > - Co-developed-by header added in patch 1
+> > V3: https://lore.kernel.org/all/20260205180429.3280657-1-mkchauras@gmail.com
+> > 
+> > V2 -> V3:
+> > - Splited HAVE_RUST in 2 lines
+> > - BINDGEN_TARGET_powerpc initialized before assigning the same to
+> >   BINDGEN_TARGET
+> > V2: https://lore.kernel.org/all/20260204210125.613350-1-mkchauras@gmail.com
+> > 
+> > V1 -> V2:
+> > - jump label fix for rust has been moved to a separate patch
+> > - PPC32 support has been taken
+> > - rust support has been marked experimental
+> > - target.json dependency has been removed
+> > - HAVE_RUST now depends on CPU_LITTLE_ENDIAN for PPC64
+> > 
+> > Link Mauve (1):
+> >   rust: Add PowerPC support
+> > 
+> > Mukesh Kumar Chaurasiya (IBM) (3):
+> >   rust: Fix "multiple candidates for rmeta dependency core" error
+> >   powerpc/jump_label: adjust inline asm to be consistent
+> >   powerpc: Enable Rust for ppc64le
+> > 
+> >  arch/powerpc/Kconfig                  |  2 +
+> >  arch/powerpc/Makefile                 |  7 +++
+> >  arch/powerpc/include/asm/jump_label.h | 23 ++++++----
+> >  rust/Makefile                         | 66 ++++++++++++++++-----------
+> >  4 files changed, 61 insertions(+), 37 deletions(-)
+> > 
+> > -- 
+> > 2.53.0
+> > 
+> > 
+> 
+> -- 
+> Link Mauve
+> 
