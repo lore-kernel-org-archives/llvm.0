@@ -1,167 +1,236 @@
-Received: from mail-24417.protonmail.ch (mail-24417.protonmail.ch [109.224.244.17])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC6F3793BE
-	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 10:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5438B26290
+	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 11:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775643560; cv=none; b=fODJ4ikReNn1ISziXZ7z22dQDF+7TeB9L2eRbB56aKWXp87yFFkHc5jt2nyb4mb5ZiJFmb/Dz8Rs+RDkk298C9XZDc3jscpxNgxtZsqKbM2DRxk/azIGqcL1dTZClb+0VE/2Jy78Wg04llNFdr5zfIZo8I8QYd2f2L9CdPbdOWU=
+	t=1775648131; cv=none; b=YZaxZJd5eHNC9ELM95obcUiMlMCFpCvD/zYwINANSD3ids68gGoMs/iqh+uXM5aFmhvZZhLdca6V52BYWd96BAZrpiuru4409ynuIgBXR0Ms+ty4X9ntLuKESAIuIyJh4BGpaIBXvftiqPDthsN0nOmQhVwMQzEiFIgkfcDy7Lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775643560; c=relaxed/simple;
-	bh=dre3rW09kmKIPewO51tT+umscmYa5BiVPC3lw2HO+wI=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h6yU33zxKmDrwJwWFdIHt1oAXZpe/WQJydh/Z+g15PzaHZRjendtRcMOXs+hirESkrobf7ZBjjiNyn/eOggVBqqc1kk0Dj9iyPBPizBfM6y2nJr++5UUmRo30ORViiVGJR0sU+0sadDkiGdRUS9tzne6CieE+hcsbcmXpHqNADw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=n/e/4rUS; arc=none smtp.client-ip=109.224.244.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="n/e/4rUS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1775643550; x=1775902750;
-	bh=rBVnsKBA+0u3UnYtAa1qrYzIEPQ/2sPw8CkzUVbdSgY=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=n/e/4rUSYHIYkxPqBaQ3HGmwx8gJZQ/DMQRKbnPQdovN/EdCgjSxNW5xGcKt732Cl
-	 84kTuzPbZrvoTKXw3UZz2jxxpurrd3Rp3pHRPduCbwss5GjzoFN+94jfTcJjjXG/aE
-	 CCMWQst5bLVYrh9E8zrJyujFkbqcW/pbY4aOOECy/4FuXjtGvKFzfo8U2xtGJT/drX
-	 gqC2fSWilW0n3Q2F7b0tR1yoT9IBeOUasRRt0pzITqh+snwCMiIA2My3LPDkkIsv6a
-	 fkKZ5V2rGITdy0j6Tt+cgjFV4TophFnK6NQFqNYm10D5a/XNNyXbduG/6DV77WPSPG
-	 nKFvavrV0Za9Q==
-Date: Wed, 08 Apr 2026 10:19:03 +0000
-To: David Laight <david.laight.linux@gmail.com>
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: houwenlong.hwl@antgroup.com, dave.hansen@linux.intel.com, ryan.roberts@arm.com, nick.desaulniers+lkml@gmail.com, bp@alien8.de, will@kernel.org, maciej.wieczor-retman@intel.com, david@kernel.org, nathan@kernel.org, justinstitt@google.com, seanjc@google.com, perry.yuan@amd.com, oleg@redhat.com, tglx@kernel.org, hpa@zytor.com, james.morse@arm.com, mingo@redhat.com, akpm@linux-foundation.org, jgross@suse.com, peterz@infradead.org, morbo@google.com, ilpo.jarvinen@linux.intel.com, xin@zytor.com, shuah@kernel.org, x86@kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 1/3] x86/process: Shorten the default LAM tag width
-Message-ID: <adYi_iBbwq4t-ADP@wieczorr-mobl1.localdomain>
-In-Reply-To: <20260408095144.41ee4cbc@pumpkin>
-References: <cover.1775581451.git.m.wieczorretman@pm.me> <bf872c3f7591dc7580679e35b343b08534be2d5a.1775581451.git.m.wieczorretman@pm.me> <20260407223653.2d3d3c60@pumpkin> <adV6bnZC_2BEZxjk@wieczorr-mobl1.localdomain> <20260408095144.41ee4cbc@pumpkin>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: cf08e65c10d0b14a89340bc02ef5d1d14a756597
+	s=arc-20240116; t=1775648131; c=relaxed/simple;
+	bh=ubx+mnYpUiL459SgD+QiTTaXpcbT44WpOX2D0QFbR3c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oCekR50xuejZCmeUj+rwHC8J0TF1x6ffTp7ISsaiuK9DNIHM7ncgM1oZTp1v1x/sbu/RTMhSDM695Om3DHxuap9GIO+JrUoItfyRya0UmDb8XSnnHV06Af/b3hvVsR4MGmooWrux6TkP6fo0bRSNqLJdqAykoTIKltoCTzcNDRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4frLZh6FkPzYQtwm
+	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 19:34:52 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id E10554058C
+	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 19:35:26 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP2 (Coremail) with SMTP id Syh0CgCXwQZ7PdZpOmlKDw--.29321S2;
+	Wed, 08 Apr 2026 19:35:24 +0800 (CST)
+Message-ID: <5fa89ec2-122e-4937-bec6-fe5dbe3ae07f@huaweicloud.com>
+Date: Wed, 8 Apr 2026 19:35:22 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/16] perf arm64: Support data type profiling
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+ Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
+ Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
+ <adSkpI9AoTNgISU5@z2>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <adSkpI9AoTNgISU5@z2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:Syh0CgCXwQZ7PdZpOmlKDw--.29321S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Ary3uw18Jr13Wr4ktF4kXrb_yoWxAr18pa
+	9xCayfGr4UJrWF9w13JrZ7XFW3Kw4fJFWfGryrt3ySkF4jkF98tFWxtF1IkFWkGr98Aw47
+	Aw4Dtr1UWF1rCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-On 2026-04-08 at 09:51:44 +0100, David Laight wrote:
->On Tue, 07 Apr 2026 21:53:32 +0000
->Maciej Wieczor-Retman <m.wieczorretman@pm.me> wrote:
->
->> On 2026-04-07 at 22:36:53 +0100, David Laight wrote:
->> >On Tue, 07 Apr 2026 17:45:20 +0000
->> >Maciej Wieczor-Retman <m.wieczorretman@pm.me> wrote:
->> > =20
->> >> From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
->> >>
->> >> With the announcement of ChkTag, it's worth preparing a stable x86
->> >> linear address masking (lam) user interface. One important aspect of =
-lam
->> >> is the tag width, and aligning it with other industry solutions can
->> >> provide a more popular, generalized interface that other technologies
->> >> could utilize.
->> >>
->> >> ChkTag will use 4-bit tags and since that's the direction other memor=
-y
->> >> tagging implementations seem to be taking too (for example Arm's MTE)
->> >> it's reasonable to converge lam in linux to the same specification. E=
-ven
->> >> though x86's LAM supports 6-bit tags it is beneficial to shorten lam =
-to
->> >> 4 bits as ChkTag will likely be the main user of the interface and su=
-ch
->> >> connection should simplify things in the future.
->> >>
->> >> Shrink the maximum acceptable tag width from 6 to 4.
->> >>
->> >> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com=
->
->> >> ---
->> >> Changelog v4:
->> >> - Ditch the default wording in the patch message.
->> >> - Add the imperative last line as Dave suggested.
->> >>
->> >> Changelog v3:
->> >> - Remove the variability of the lam width after the debugfs part was
->> >>   removed from the patchset.
->> >>
->> >>  arch/x86/kernel/process_64.c | 8 ++++----
->> >>  1 file changed, 4 insertions(+), 4 deletions(-)
->> >>
->> >> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_6=
-4.c
->> >> index 08e72f429870..1a0e96835bbc 100644
->> >> --- a/arch/x86/kernel/process_64.c
->> >> +++ b/arch/x86/kernel/process_64.c
->> >> @@ -797,7 +797,7 @@ static long prctl_map_vdso(const struct vdso_imag=
-e *image, unsigned long addr)
->> >>
->> >>  #ifdef CONFIG_ADDRESS_MASKING
->> >>
->> >> -#define LAM_U57_BITS 6
->> >> +#define LAM_DEFAULT_BITS=094
->> >>
->> >>  static void enable_lam_func(void *__mm)
->> >>  {
->> >> @@ -814,7 +814,7 @@ static void enable_lam_func(void *__mm)
->> >>  static void mm_enable_lam(struct mm_struct *mm)
->> >>  {
->> >>  =09mm->context.lam_cr3_mask =3D X86_CR3_LAM_U57;
->> >> -=09mm->context.untag_mask =3D  ~GENMASK(62, 57);
->> >> +=09mm->context.untag_mask =3D  ~GENMASK(57 + LAM_DEFAULT_BITS - 1, 5=
-7); =20
->> >
->> >I'm not sure that GENMASK() is really the best way to describe that val=
-ue.
->> >It really is ((1ul << LAM_BITS) - 1) << 57 and even the 57 shouldn't be
->> >a magic constant. =20
->>=20
->> I recall people were annoyed when I previously open coded something that=
- could
->> have been a GENMASK() instead. Is there a downside to using GENMASK() he=
-re?
->
->Some people do like GENMASK(), personally I don't think it helps in many c=
-ases.
->Fine if you are describing a hardware register that has some single bit
->fields and some multi-bit fields - especially if the documentation uses
->bit numbers (which is often true).
->But here you want something that has a base bit number (57) and a width
->(LAM_BITS) and that isn't GENMASK().
+Hi Namhyung,
 
-Would GENMASK() be okay if I put a define on the bit numbers?
+Thank you for the feedback.
+I have received your comments and will get back to this as soon as I can.
 
-=09#define LAM_LS_BIT=0957
-=09#define LAM_MS_BIT=09LAM_LS_BIT + LAM_DEFAULT_BITS - 1 /* 60 */
-=09...
-=09mm->context.untag_mask =3D  ~GENMASK(LAM_MS_BIT, LAM_LS_BIT);
+Best regards,
+Tengda
 
-LS/MS as in least/most significant bit.
-
->>=20
->> >I also wonder how userspace knows which bits to use. The other patches
->> >just seem to handle a count from userspace, but you aren't giving out
->> >the highest available bits. =20
->>=20
->> I'd imagine if someone was writing a userspace program that'd interface =
-with LAM
->> they'd have to know which bits are okay to use.
->>=20
->> But maybe I'm misunderstanding what you meant.
->
->That is exactly what I meant, how do they find out which bits to use.
->The API seems so let them say how many they want, but not which ones.
->
->=09David
-
-Oh then the arch_prctl() call for ARCH_GET_UNTAG_MASK is what they'd want t=
-o
-use. It returns the untag_mask.
-
---=20
-Kind regards
-Maciej Wiecz=C3=B3r-Retman
+On 2026/4/7 14:31, Namhyung Kim wrote:
+> Hello,
+> 
+> On Fri, Apr 03, 2026 at 09:47:44AM +0000, Tengda Wu wrote:
+>> This patch series implements data type profiling support for arm64,
+>> building upon the foundational work previously contributed by Huafei [1].
+>> While the initial version laid the groundwork for arm64 data type analysis,
+>> this series iterates on that work by refining instruction parsing and
+>> extending support for core architectural features.
+> 
+> Thanks for working on this!  I'm happy to see that the changes are well
+> organized and each commit explained the issues clearly.  
+> 
+>>
+>> The series is organized as follows:
+>>
+>> 1. Fix disassembly mismatches (Patches 01-02)
+>>    Current perf annotate supports three disassembly backends: llvm,
+>>    capstone, and objdump. On arm64, inconsistencies between the output
+>>    of these backends (specifically llvm/capstone vs. objdump) often
+>>    prevent the tracker from correctly identifying registers and offsets.
+>>    These patches resolve these mismatches, ensuring consistent instruction
+>>    parsing across all supported backends.
+>>
+>> 2. Infrastructure for arm64 operand parsing (Patches 03-07)
+>>    These patches establish the necessary infrastructure for arm64-specific
+>>    operand handling. This includes implementing new callbacks and data
+>>    structures to manage arm64's unique addressing modes and register sets.
+>>    This foundation is essential for the subsequent type-tracking logic.
+> 
+> I've only checked up to this part so far.  Let me write replies soon.
+> I'll continue to review later in this week.
+> 
+>>
+>> 3. Core instruction tracking (Patches 08-16)
+>>    These patches implement the core logic for type tracking on arm64,
+>>    covering a wide range of instructions including:
+>>
+>>    * Memory Access: ldr/str variants (including stack-based access).
+>>    * Arithmetic & Data Processing: mov, add, and adrp.
+>>    * Special Access: System register access (mrs) and per-cpu variable
+>>      tracking.
+>>
+>> The implementation draws inspiration from the existing x86 logic while
+>> adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
+>> perf annotate can successfully resolve memory locations and register
+>> types, enabling comprehensive data type profiling on arm64 platforms.
+>>
+>> Example Result
+>> ==============
+>>
+>> # perf mem record -a -K -- sleep 1
+>> # perf annotate --data-type --type-stat --stdio
+>> Annotate data type stats:
+>> total 6204, ok 5091 (82.1%), bad 1113 (17.9%)
+> 
+> I'm impressed that the success rate is quite high.  But I think you need
+> to confirm that the findings are correct by taking a close look at each
+> result.  You can try `perf annotate --code-with-type`.
+> 
+> Thanks,
+> Namhyung
+> 
+> 
+>> -----------------------------------------------------------
+>>         29 : no_sym
+>>        196 : no_var
+>>        806 : no_typeinfo
+>>         82 : bad_offset
+>>       1370 : insn_track
+>>
+>> Annotate type: 'struct page' in [kernel.kallsyms] (59208 samples):
+>> ============================================================================
+>>  Percent     offset       size  field
+>>   100.00          0       0x40  struct page      {
+>>     9.95          0        0x8      long unsigned int   flags;
+>>    52.83        0x8       0x28      union        {
+>>    52.83        0x8       0x28          struct   {
+>>    37.21        0x8       0x10              union        {
+>>    37.21        0x8       0x10                  struct list_head        lru {
+>>    37.21        0x8        0x8                      struct list_head*   next;
+>>     0.00       0x10        0x8                      struct list_head*   prev;
+>>                                                 };
+>>    37.21        0x8       0x10                  struct   {
+>>    37.21        0x8        0x8                      void*       __filler;
+>>     0.00       0x10        0x4                      unsigned int        mlock_count;
+>>    ...
+>>
+>> Changes since v1: (reworked from Huafei's series):
+>>
+>>  - Fix inconsistencies in arm64 instruction output across llvm, capstone,
+>>    and objdump disassembly backends.
+>>  - Support arm64-specific addressing modes and operand formats. (Leo Yan)
+>>  - Extend instruction tracking to support mov and add instructions,
+>>    along with per-cpu and stack variables.
+>>  - Include real-world examples in commit messages to demonstrate
+>>    practical effects. (Namhyung Kim)
+>>  - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
+>>    https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
+>>
+>> Please let me know if you have any feedback.
+>>
+>> Thanks,
+>> Tengda
+>>
+>> [1] https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
+>> [2] https://developer.arm.com/documentation/102374/0103
+>> [3] https://github.com/flynd/asmsheets/releases/tag/v8
+>>
+>> ---
+>>
+>> Tengda Wu (16):
+>>   perf llvm: Fix arm64 adrp instruction disassembly mismatch with
+>>     objdump
+>>   perf capstone: Fix arm64 jump/adrp disassembly mismatch with objdump
+>>   perf annotate-arm64: Generalize arm64_mov__parse to support standard
+>>     operands
+>>   perf annotate-arm64: Handle load and store instructions
+>>   perf annotate: Introduce extract_op_location callback for
+>>     arch-specific parsing
+>>   perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
+>>   perf annotate-arm64: Implement extract_op_location() callback
+>>   perf annotate-arm64: Enable instruction tracking support
+>>   perf annotate-arm64: Support load instruction tracking
+>>   perf annotate-arm64: Support store instruction tracking
+>>   perf annotate-arm64: Support stack variable tracking
+>>   perf annotate-arm64: Support 'mov' instruction tracking
+>>   perf annotate-arm64: Support 'add' instruction tracking
+>>   perf annotate-arm64: Support 'adrp' instruction to track global
+>>     variables
+>>   perf annotate-arm64: Support per-cpu variable access tracking
+>>   perf annotate-arm64: Support 'mrs' instruction to track 'current'
+>>     pointer
+>>
+>>  .../perf/util/annotate-arch/annotate-arm64.c  | 642 +++++++++++++++++-
+>>  .../util/annotate-arch/annotate-powerpc.c     |  10 +
+>>  tools/perf/util/annotate-arch/annotate-x86.c  |  88 ++-
+>>  tools/perf/util/annotate-data.c               |  72 +-
+>>  tools/perf/util/annotate-data.h               |   7 +-
+>>  tools/perf/util/annotate.c                    | 108 +--
+>>  tools/perf/util/annotate.h                    |  12 +
+>>  tools/perf/util/capstone.c                    | 107 ++-
+>>  tools/perf/util/disasm.c                      |   5 +
+>>  tools/perf/util/disasm.h                      |   5 +
+>>  .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |  20 +
+>>  tools/perf/util/dwarf-regs.c                  |   2 +-
+>>  tools/perf/util/include/dwarf-regs.h          |   1 +
+>>  tools/perf/util/llvm.c                        |  50 ++
+>>  14 files changed, 984 insertions(+), 145 deletions(-)
+>>
+>>
+>> base-commit: cf7c3c02fdd0dfccf4d6611714273dcb538af2cb
+>> -- 
+>> 2.34.1
+>>
 
