@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B82F9C0;
-	Wed,  8 Apr 2026 02:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6CA1A239A;
+	Wed,  8 Apr 2026 02:53:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775615626; cv=none; b=CHJ7z6TerDlLQUiQlmeWc6Bpk84/f3Kbrmk6TyHmCMxDwdXxKJ6Yb1OgBvznUuzEM1hONoKF+GZloGarNTtyd/vGJ+9CvRAGRj1FpnFL6AqGsZRA586mnk6Ngw/PvpCOPCCXq37gPKOOT8OBGGjgkAfP/9JL6w4cJ/RGRJPMp7w=
+	t=1775616827; cv=none; b=OrdFXfAfUqZtGesgndcp0AHtZci4E0jYKQiqnh3OwdF3CGtABf12qZrmLKT8cxXAukHaBoEC020P4GIvJSUB89uKpeA+YZbpasLNRQS6lSnJtPd34Bg072bA8asT70fdgnGApk2Qv6HE+1/Pden0uqbgmIEKpVM4Sv1AevCycPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775615626; c=relaxed/simple;
-	bh=Tng5YI3IY4nele2hIFbI0VyQXKyPo6/7592LHNo7t3M=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=mjmp3oVqDe057mOoR4j7tPbZusQ6RGcwrIq7j/YYhY4LZwoYCUUCyENgnh37qDBg4A3QdTz948BgJ4+k1mmbRNMOlcnmfQHa+SRCGFYaDUZv1Cg1SPQjbvwaM2KxIppp4tJ2Q0vRLg6NlBo7LUfjtPrfeRLyONortFtyFodk3oY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MZrZJxFO; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1775616827; c=relaxed/simple;
+	bh=W/q8yDzNKaB97FsCk47S1WxXRftQjKwIPb0Z+4wOefo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=GMC30T4dr6LVxDf8oq1YePA8xKqx57XTK1A37pHmBe/9QgN4iuATn/Ttqy2k3+PxozDI0rw1pSWjJJHeIpGM/6OfluERT0yhvxkRwxe4OdSF0c7WzppJ9Y66oX86f/hhriQSH7upezaD/rR0uS4HrvDTfxcCd7hJ2vd+PFoUD68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QKgbuSmv; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MZrZJxFO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QKgbuSmv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775615625; x=1807151625;
+  t=1775616825; x=1807152825;
   h=date:from:to:cc:subject:message-id;
-  bh=Tng5YI3IY4nele2hIFbI0VyQXKyPo6/7592LHNo7t3M=;
-  b=MZrZJxFOVKImvnFMKpfWEYwHguwcjPXtqQyz4x9W3vhfa+lg/V/NIq14
-   Kn3MvpXAi6SmhKjwuYhyxEOBeRMXMKsY++CQU6VEFV8pwZvyHQwXcQnb6
-   TaY1+6zVfQuwXouAX+/ll/68eqKD4IVsGcqqq8hVXhRjtyRKlNaWEqCi9
-   vsbnC0Fa23PlMfNLD0+uLXq6LZdeQHeANpkcAmIM3/utNy1VNJJOp46iX
-   ayeAVoQ6FearndPGUPr6BQo+DJPlo+nCPI82UHJTQZrS12kCNPJgX65BF
-   /uVMCeDitJU+iiEa5tx0ZwwARcOKuLUYOW6iKrvjDGhj8qUGFgBZdC2cH
-   g==;
-X-CSE-ConnectionGUID: ZqQYo3vcT46QVfpoL8S6jw==
-X-CSE-MsgGUID: haF53CRhQTmTVzcLccBQhQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="80475253"
+  bh=W/q8yDzNKaB97FsCk47S1WxXRftQjKwIPb0Z+4wOefo=;
+  b=QKgbuSmvNajc+adaMGpM34XRMzROX9qwWRGjHuOsiIfOT41i5FhMBe0B
+   0Q9dJOBlhM3y0vvQQaVqibeYtQo7qHSoYcAeAet1ut1GcjRoGnDkH9tXL
+   k99uRcINHz3sGPbHh4QhXX1e+zOP3ashMSmSRZRsQKQJADczvHoUFmRcy
+   dHxO5i6tWIlyCYzlLUkHvUvc0v8/G6w2BAoZVnSljqmMBVPfL0WOTBO8c
+   /5xhXvuvrQA+kyZ4b4jFfA0puCUou2C6omfHGfzqOKPOMOzFMBG1hBQqA
+   mOcH7G2/Y4xzfn5Bx1uklrB/J94F5je1ma4ai8Z2/qOM2zaJS74fc5ZoQ
+   w==;
+X-CSE-ConnectionGUID: uJ0RqFb7SYyMFqnaapBgSQ==
+X-CSE-MsgGUID: kbuaGxjSTYGm4ErpMXxi1g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="76662928"
 X-IronPort-AV: E=Sophos;i="6.23,166,1770624000"; 
-   d="scan'208";a="80475253"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2026 19:33:45 -0700
-X-CSE-ConnectionGUID: kDvw0yVhRYeKCo/BwdcPNw==
-X-CSE-MsgGUID: F3v5Q9q0R8GM+jYAjIFHog==
+   d="scan'208";a="76662928"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2026 19:53:45 -0700
+X-CSE-ConnectionGUID: P+8aSRA0T+iP26hg0d+kFw==
+X-CSE-MsgGUID: +EtGsI7RQqmHJ/viBggvFw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,166,1770624000"; 
-   d="scan'208";a="227497853"
-Received: from lkp-server01.sh.intel.com (HELO d00eb8a6782a) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 07 Apr 2026 19:33:44 -0700
-Received: from kbuild by d00eb8a6782a with local (Exim 4.98.2)
+   d="scan'208";a="232386234"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 07 Apr 2026 19:53:42 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wAIjc-000000001KX-2LaD;
-	Wed, 08 Apr 2026 02:33:40 +0000
-Date: Wed, 08 Apr 2026 10:32:57 +0800
+	id 1wAJ2y-00000000AOR-2FRQ;
+	Wed, 08 Apr 2026 02:53:40 +0000
+Date: Wed, 08 Apr 2026 04:53:33 +0200
 From: kernel test robot <lkp@intel.com>
 To: Helge Deller <deller@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [deller-parisc:for-next 2/9] net/ipv4/af_inet.c:1503:6:
  warning: variable 'flush' is used uninitialized whenever 'if' condition is
  true
-Message-ID: <202604081003.KPd0fpBI-lkp@intel.com>
+Message-ID: <202604080419.GgJe0xs5-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -63,14 +63,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git for-next
 head:   bc8a19a194d5a72df5982c04f8a9e7bcff1306ca
 commit: 595407f94f5e5b778a349bd5a323c5051920b864 [2/9] net: Avoid unaligned access in inet_gro_receive()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260408/202604081003.KPd0fpBI-lkp@intel.com/config)
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260408/202604080419.GgJe0xs5-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260408/202604081003.KPd0fpBI-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260408/202604080419.GgJe0xs5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604081003.KPd0fpBI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604080419.GgJe0xs5-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
@@ -223,7 +223,7 @@ be008726d0ac33 Willem de Bruijn 2024-05-23  1531  	NAPI_GRO_CB(skb)->network_off
 028e0a4766844e Paolo Abeni      2018-12-14  1540  				       ops->callbacks.gro_receive, head, skb);
 73cc19f1556b95 Herbert Xu       2008-12-15  1541  
 73cc19f1556b95 Herbert Xu       2008-12-15  1542  out:
-5f114163f2f5eb Steffen Klassert 2017-02-15  1543  	skb_gro_flush_final(skb, pp, flush);
+5f114163f2f5eb Steffen Klassert 2017-02-15 @1543  	skb_gro_flush_final(skb, pp, flush);
 73cc19f1556b95 Herbert Xu       2008-12-15  1544  
 73cc19f1556b95 Herbert Xu       2008-12-15  1545  	return pp;
 73cc19f1556b95 Herbert Xu       2008-12-15  1546  }
