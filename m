@@ -1,157 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E1B3B9600;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CDD3B960B;
 	Wed,  8 Apr 2026 11:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775648401; cv=none; b=SMDZUMBebeVLvjVaYKQA2qJwyOl2MAiU8iuk9i1twj++8aAJrgX2p2BWYTeLBdvgRLJCyDnZviASXOn3jospy9e3PZYWg50H4NZK9wj6lP1C5V8R/4KYJJ1Q0RybeFtuno1d97wjDOCZJecdrP8JAaujV87kSyHaKtFunaq6Bg8=
+	t=1775648402; cv=none; b=d34SqLutGk+cBm204tmkBxaCvWT1sgtjYw6UUgQwSy9/Q1NxB4dOHAqZeZ4tjGBfeQW/yVnbUjdqYhqEHcTG/b0FX3TT3IhbEQxoV9d93wgYnzsHVDDmr6/w1ehARmVPqJyLj3x0hCPcIPYyRMHIkm2eQM94wu+JUNaKTg3gIWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775648401; c=relaxed/simple;
-	bh=b+RecTKEamqmyLaTPX3iCg4q4fZ77CppkFB3CIgG9qw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=PcQvLqJTEv4nAY9X36/fg3gNfVjFeo/aBUjjeMbFniqWHVWhwaQpf0j1XSkRiwEJ7IDXROGaHSlhkyhJM9cZa97p+5yM8CrWCl4mgFyCvq6VhC+Tiuo5sGRw6Ln/h+W+iBo2/4xoMF2khFhVf/wZWzxAxXx4or33EjFBrZe66Vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R+ecEV57; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1775648402; c=relaxed/simple;
+	bh=BUioR/XgKoUAPtzCym7DZM1FsOS/cvLTkuYQ6tBQKgM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dLkAUMyiwyOLGfwceL+YJLUSRwGgrtC5OFcSPglSZmn78sVZHaDK4nnMok3r9jilQ6L0WFzjlYy5JthXHpxFA+qQq57TK1oQNgxMPptblFBSxFc8E+3j4iILEfNBzEwChTpjjeaKAV8o+RgFK4z3vQIdb6qJxbPXDDch82biU70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D9cSIVQY; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R+ecEV57"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D9cSIVQY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775648397; x=1807184397;
-  h=date:from:to:cc:subject:message-id;
-  bh=b+RecTKEamqmyLaTPX3iCg4q4fZ77CppkFB3CIgG9qw=;
-  b=R+ecEV57ifKlat0OdAuLxmRR1Y17LfWdUo/erHkOMWnf6nOC9j0Yx0mk
-   2ylzUssLDmtExWX+IEI6ECyCxRox+gUoh/me5VDxGyxWH41OzYLk1rR6x
-   Zw9N7XZLfawErh/wpQ5ADw7j9vGmcBwRjOy6g8l7s3i+qEx3URa03mMt9
-   0YXq6/f9WQmRwDtc6uX20OodmThKqGPkHqx9qnBYCBtYRf8UImRXA79k8
-   QRPg12VSZ4f7C8OG/6Se39z749QgaU8ogkndYT0bDIvnzsE5fp+EE150c
-   JyPX21yDZ5xbqnTMEAKNUhUmE36aQ0HvMIbXkHJsvpOol4u7rdu4IBG2/
-   g==;
-X-CSE-ConnectionGUID: zb0nbnRxQp2rzKF9o6Nayg==
-X-CSE-MsgGUID: d60oHEa7ROmBpC81pHYDGg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="76520518"
+  t=1775648398; x=1807184398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BUioR/XgKoUAPtzCym7DZM1FsOS/cvLTkuYQ6tBQKgM=;
+  b=D9cSIVQYqA3hLX1UnnQ9eC7BRbolnZogZIWg6WOQ8h80OAGsdW/ezcEP
+   xM49FIFubxs0ANMnBwC9C+ChCYEwR6B60Wor9GCvMhD7Rj+nFhgT0Hw5B
+   qnihH8lcuC91BO6nZmKUT8QX26f2MWv7aTT+5rVG597Lyw5wxFWjFudNm
+   uOv0ztif3hCh4zhgBaOuYiuX0Mc0Mb+q8uG6YvQdAiPlubGlGlzIuH48T
+   xTIgtb3bwZ+W7Avpyap3rjdmYw2QJRIUrbEfP5nxqkFB4KLW2BDtY4F+o
+   TwC4XbeXh2YK2beA+pN1QxuQUyxfe6te9rzUrtBg9NzQiJavK5M0mHe2t
+   A==;
+X-CSE-ConnectionGUID: aNQ8//tBQMmhJE/80c/qaQ==
+X-CSE-MsgGUID: 0ysy7RrlTEaziODQsCTynw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="86919982"
 X-IronPort-AV: E=Sophos;i="6.23,167,1770624000"; 
-   d="scan'208";a="76520518"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2026 04:39:55 -0700
-X-CSE-ConnectionGUID: UIJ01+qERzqtIMNMCKd7Iw==
-X-CSE-MsgGUID: XpxJCpgGTrGUlTeN6AHcuQ==
+   d="scan'208";a="86919982"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2026 04:39:56 -0700
+X-CSE-ConnectionGUID: uKkfM7wQQjaSs+vzkvblNg==
+X-CSE-MsgGUID: HCxBRTACRd+9WDQgXFj35Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,167,1770624000"; 
-   d="scan'208";a="223684346"
+   d="scan'208";a="230116189"
 Received: from lkp-server01.sh.intel.com (HELO d00eb8a6782a) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 08 Apr 2026 04:39:53 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 08 Apr 2026 04:39:53 -0700
 Received: from kbuild by d00eb8a6782a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wARGA-000000001nN-3hUZ;
+	id 1wARGA-000000001nJ-3X2T;
 	Wed, 08 Apr 2026 11:39:50 +0000
-Date: Wed, 08 Apr 2026 19:39:39 +0800
+Date: Wed, 8 Apr 2026 19:39:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Chen-Yu Tsai" <wenst@chromium.org>
+To: Ben Roberts <ben.roberts@gsacapital.com>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- dri-devel@lists.freedesktop.org, Inki Dae <inki.dae@samsung.com>
-Subject: [daeinki-drm-exynos:exynos-drm-next 3/4]
- drivers/gpu/drm/exynos/exynos_drm_gem.c:70:41: warning: format specifies type
- 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int')
-Message-ID: <202604081946.qVUp1v71-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Ben Roberts <ben.roberts@gsacapital.com>
+Subject: Re: [PATCH] pNFS: deadlock in pnfs_send_layoutreturn
+Message-ID: <202604081929.yB1AglTU-lkp@intel.com>
+References: <20260407152035.4034628-1-ben.roberts@gsacapital.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260407152035.4034628-1-ben.roberts@gsacapital.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
-head:   0867757f1eec0a246c70b2407a1bbed949170821
-commit: 11e898373fba6b1d27b15ab4beff592701a57293 [3/4] drm/exynos: Drop exynos_drm_gem.size field
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260408/202604081946.qVUp1v71-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260408/202604081946.qVUp1v71-lkp@intel.com/reproduce)
+Hi Ben,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on linus/master v7.0-rc7 next-20260407]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ben-Roberts/pNFS-deadlock-in-pnfs_send_layoutreturn/20260408-135718
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/20260407152035.4034628-1-ben.roberts%40gsacapital.com
+patch subject: [PATCH] pNFS: deadlock in pnfs_send_layoutreturn
+config: powerpc-motionpro_defconfig (https://download.01.org/0day-ci/archive/20260408/202604081929.yB1AglTU-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c80443cd37b2e2788cba67ffa180a6331e5f0791)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260408/202604081929.yB1AglTU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604081946.qVUp1v71-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604081929.yB1AglTU-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/exynos/exynos_drm_gem.c:70:41: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-      69 |         DRM_DEV_DEBUG_KMS(drm_dev_dma_dev(dev), "dma_addr(0x%lx), size(0x%lx)\n",
-         |                                                                          ~~~
-         |                                                                          %zx
-      70 |                         (unsigned long)exynos_gem->dma_addr, exynos_gem->base.size);
-         |                                                              ^~~~~~~~~~~~~~~~~~~~~
-   include/drm/drm_print.h:599:38: note: expanded from macro 'DRM_DEV_DEBUG_KMS'
-     599 |         drm_dev_dbg(dev, DRM_UT_KMS, fmt, ##__VA_ARGS__)
-         |                                      ~~~    ^~~~~~~~~~~
-   include/drm/drm_print.h:563:39: note: expanded from macro 'drm_dev_dbg'
-     563 |         __drm_dev_dbg(NULL, dev, cat, fmt, ##__VA_ARGS__)
-         |                                       ~~~    ^~~~~~~~~~~
-   drivers/gpu/drm/exynos/exynos_drm_gem.c:84:41: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-      83 |         DRM_DEV_DEBUG_KMS(dev->dev, "dma_addr(0x%lx), size(0x%lx)\n",
-         |                                                              ~~~
-         |                                                              %zx
-      84 |                         (unsigned long)exynos_gem->dma_addr, exynos_gem->base.size);
-         |                                                              ^~~~~~~~~~~~~~~~~~~~~
-   include/drm/drm_print.h:599:38: note: expanded from macro 'DRM_DEV_DEBUG_KMS'
-     599 |         drm_dev_dbg(dev, DRM_UT_KMS, fmt, ##__VA_ARGS__)
-         |                                      ~~~    ^~~~~~~~~~~
-   include/drm/drm_print.h:563:39: note: expanded from macro 'drm_dev_dbg'
-     563 |         __drm_dev_dbg(NULL, dev, cat, fmt, ##__VA_ARGS__)
-         |                                       ~~~    ^~~~~~~~~~~
-   2 warnings generated.
+>> fs/nfs/pnfs.c:1364:35: error: expected ';' after expression
+    1364 |                 pnfs_clear_layoutreturn_info(lo)
+         |                                                 ^
+         |                                                 ;
+   1 error generated.
 
 
-vim +70 drivers/gpu/drm/exynos/exynos_drm_gem.c
+vim +1364 fs/nfs/pnfs.c
 
-    26	
-    27	static int exynos_drm_alloc_buf(struct exynos_drm_gem *exynos_gem, bool kvmap)
-    28	{
-    29		struct drm_device *dev = exynos_gem->base.dev;
-    30		unsigned long attr = 0;
-    31	
-    32		if (exynos_gem->dma_addr) {
-    33			DRM_DEV_DEBUG_KMS(drm_dev_dma_dev(dev), "already allocated.\n");
-    34			return 0;
-    35		}
-    36	
-    37		/*
-    38		 * if EXYNOS_BO_CONTIG, fully physically contiguous memory
-    39		 * region will be allocated else physically contiguous
-    40		 * as possible.
-    41		 */
-    42		if (!(exynos_gem->flags & EXYNOS_BO_NONCONTIG))
-    43			attr |= DMA_ATTR_FORCE_CONTIGUOUS;
-    44	
-    45		/*
-    46		 * if EXYNOS_BO_WC or EXYNOS_BO_NONCACHABLE, writecombine mapping
-    47		 * else cachable mapping.
-    48		 */
-    49		if (exynos_gem->flags & EXYNOS_BO_WC ||
-    50				!(exynos_gem->flags & EXYNOS_BO_CACHABLE))
-    51			attr |= DMA_ATTR_WRITE_COMBINE;
-    52	
-    53		/* FBDev emulation requires kernel mapping */
-    54		if (!kvmap)
-    55			attr |= DMA_ATTR_NO_KERNEL_MAPPING;
-    56	
-    57		exynos_gem->dma_attrs = attr;
-    58		exynos_gem->cookie = dma_alloc_attrs(drm_dev_dma_dev(dev), exynos_gem->base.size,
-    59						     &exynos_gem->dma_addr, GFP_KERNEL,
-    60						     exynos_gem->dma_attrs);
-    61		if (!exynos_gem->cookie) {
-    62			DRM_DEV_ERROR(drm_dev_dma_dev(dev), "failed to allocate buffer.\n");
-    63			return -ENOMEM;
-    64		}
-    65	
-    66		if (kvmap)
-    67			exynos_gem->kvaddr = exynos_gem->cookie;
-    68	
-    69		DRM_DEV_DEBUG_KMS(drm_dev_dma_dev(dev), "dma_addr(0x%lx), size(0x%lx)\n",
-  > 70				(unsigned long)exynos_gem->dma_addr, exynos_gem->base.size);
-    71		return 0;
-    72	}
-    73	
+  1345	
+  1346	static int
+  1347	pnfs_send_layoutreturn(struct pnfs_layout_hdr *lo,
+  1348			       const nfs4_stateid *stateid,
+  1349			       const struct cred **pcred,
+  1350			       enum pnfs_iomode iomode,
+  1351			       unsigned int flags)
+  1352	{
+  1353		struct inode *ino = lo->plh_inode;
+  1354		struct pnfs_layoutdriver_type *ld = NFS_SERVER(ino)->pnfs_curr_ld;
+  1355		struct nfs4_layoutreturn *lrp;
+  1356		const struct cred *cred = *pcred;
+  1357		int status = 0;
+  1358	
+  1359		*pcred = NULL;
+  1360		lrp = kzalloc_obj(*lrp, nfs_io_gfp_mask());
+  1361		if (unlikely(lrp == NULL)) {
+  1362			status = -ENOMEM;
+  1363			spin_lock(&ino->i_lock);
+> 1364			pnfs_clear_layoutreturn_info(lo)
+  1365			pnfs_clear_layoutreturn_waitbit(lo);
+  1366			spin_unlock(&ino->i_lock);
+  1367			put_cred(cred);
+  1368			pnfs_put_layout_hdr(lo);
+  1369			goto out;
+  1370		}
+  1371	
+  1372		pnfs_init_layoutreturn_args(&lrp->args, lo, stateid, iomode);
+  1373		lrp->args.ld_private = &lrp->ld_private;
+  1374		lrp->clp = NFS_SERVER(ino)->nfs_client;
+  1375		lrp->cred = cred;
+  1376		if (ld->prepare_layoutreturn)
+  1377			ld->prepare_layoutreturn(&lrp->args);
+  1378	
+  1379		status = nfs4_proc_layoutreturn(lrp, flags);
+  1380	out:
+  1381		dprintk("<-- %s status: %d\n", __func__, status);
+  1382		return status;
+  1383	}
+  1384	
 
 -- 
 0-DAY CI Kernel Test Service
