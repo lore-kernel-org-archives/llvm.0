@@ -1,164 +1,148 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A8C37C0F2;
-	Wed,  8 Apr 2026 20:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37AA38F623
+	for <llvm@lists.linux.dev>; Wed,  8 Apr 2026 20:25:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775678517; cv=none; b=gWLb6yc5FR2SOntB+DrEMA3x527B67S9ypfKqgXO9xsaNKqDGtrnbJ/gDbnXHI3lnC6WHRVD0Xh0Gdc6Z0eX4ZzhMk8JVD1ubwQZCRhsUNffRyLQ2iL4rUjL3ZUhy7E1KQ2RfIbHeOv9a7zrf4BaPiRXl3Nxoou9WvZHX4JqVwk=
+	t=1775679920; cv=none; b=phPzBFHsBXmA6DjJQglaI/63gdvGgL8qAk8CzZEYeKEOsyk+ZO1aRAoFu5BXYCyt7gVi3/nqlaupS581lHrax0UF9oHyIOz/BvqHqsTyym/FEhbNFdYiHANUDWYz1/GsJflAmZImch/RqiQRNIP8q8vssgXGA9//SuKjSwrqvKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775678517; c=relaxed/simple;
-	bh=TKOGRv83aezUYgRVaCUddSGynEC0PHVtILHJuBVHM+M=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=U8TLZNinBF1cRCFXmWTC8YsqagZDSEuNqiZhImqpVOKXLNZOXUgtPaDIvmqMsEndCjTAva7LaPdc3dA2/0H4qIq9ogirdwRZZiRLn2NEmIw7TtRjOSe4AY2A8DVW5DkSySg7hJ9mnXkIbOQJ5O5rkdweq/KogbgTLyzYLekr09A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Ty46K5P2; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1775679920; c=relaxed/simple;
+	bh=YK2ErFGtqJmjNXRFUKyoD+PTGXRuF4JLe0eoAfWTn3o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EANSSR8xAIgJ8+94Qe/zam+yRWcufw8cAVtdVgTRZTgO+C0TJjWm24Jf62t+Uyejkk1PwHLL+Njw4lW9YWm28oneQXeIOzFF0ybPOjVUYxIld8GLgy/hwQdGpMcFRpQ0u1Ck1o5PACrrVT3xN7oqV8Itnlx8tOWIG08PN7CBOCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OX3/iLmZ; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ty46K5P2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1775678514;
-	bh=TKOGRv83aezUYgRVaCUddSGynEC0PHVtILHJuBVHM+M=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=Ty46K5P2M7B//Rz4Qtaz7YXVolOntx0RHmISqN7U+OR886tEP6DHV1WizoImBySH/
-	 /Z7kdDuUFr4mh9E9PAmf8ezf4uXv0R+IOuMysZEdO4lyeAw9MzhstSmt+50zGDHGbj
-	 cmVC/owu3Igp9/8ZWWtJgB922/5tvyqS+xbCJ7tQERs8Eva5A0ofu06mWtqHDLt+nK
-	 zfoIj5ljU186Wd/qkaju0fGnYSUzMghtrmIw0g/2OCEe8o9XZSevG8ILbSmFDsugwt
-	 C1Meqbgd6BiC//qwl8YDHxqfPsuUfOj/UIGCNGZI6ImKrjw+Pspl+0yY/CUNKeJBrL
-	 5U5NcJXlxg7Lw==
-Received: from [100.64.0.214] (unknown [100.64.0.214])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2C67517E069B;
-	Wed,  8 Apr 2026 22:01:53 +0200 (CEST)
-Message-ID: <51d6a9672ee95c9e4ded409c65eae339e506d765.camel@collabora.com>
-Subject: Re: [PATCH v3] media: v4l2-ctrls: validate HEVC active reference
- counts
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: Pengpeng Hou <pengpeng@iscas.ac.cn>, mchehab@kernel.org
-Cc: hverkuil@kernel.org, sakari.ailus@linux.intel.com, 
-	laurent.pinchart@ideasonboard.com, opensource206@gmail.com, 
-	jernej.skrabec@gmail.com, lkp@intel.com, oe-kbuild-all@lists.linux.dev, 
-	llvm@lists.linux.dev, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Wed, 08 Apr 2026 16:01:52 -0400
-In-Reply-To: <20260324031326.7274-1-pengpeng@iscas.ac.cn>
-References: <20260323083031.30941-1-pengpeng@iscas.ac.cn>
-	 <20260324031326.7274-1-pengpeng@iscas.ac.cn>
-Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
- keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
- /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
- cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
- CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
- abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
- nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
- AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
- smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
- AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
- iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
- ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
- bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
-Organization: Collabora Canada
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-1QSFccg8FPtl66oVYiCb"
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OX3/iLmZ"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82c20b9fb15so121979b3a.3
+        for <llvm@lists.linux.dev>; Wed, 08 Apr 2026 13:25:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775679918; x=1776284718; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qtez7uO2X5FjsGHqGis7qBChcDlylFjTSAlBvJbABwk=;
+        b=OX3/iLmZ08gv2g/povqk9zvmWCjntIcpaPJ1TyXrIOPuYNMcMo83BPRA7BOyCgTa8J
+         XiYK6yLtf4w5XZI0knCcAMmUZ5Dh4PIbGAw+100fl2TNdFX2Ckw4x5XvZSw6Q4y2/FgR
+         EKMhpHnnKr/Uu1UjWJD70s9mD6qcEmIutAxzGH1hy7Ziq8ci5ys3BSxoX3YY/e0YsEA6
+         MMaSFMvPOQuE/q8w7PkQaB/zv9w8OWcSKAH7Ad/rRTKlk8YZwLkTd0biDiDY7VE6GPYu
+         nOqzzP0P1jvsM4Uv5QX+Wx7mlh5W9BDeixptYngrfkRp2rpMI1CVm3y8259XIE/8Cwjr
+         Gyog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775679918; x=1776284718;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qtez7uO2X5FjsGHqGis7qBChcDlylFjTSAlBvJbABwk=;
+        b=p9ZQ610IEUxaa/KkChbDzxXtNZFy9R1iqk+uMGhoH1imtbifg1xUGx7p0ZmpR8ypqW
+         IYERAwoZY/Ej6rbCrkKQ+j3nkSbbs+UoVwGmio05G2G7/gUPN1S0/oVV16WmawuEFaKd
+         YEI+W47afN4f+r547om5VLyy1xGvk9Jbmz4rKKlxlZujTsikA0OBSPxMYLBu+xn18MTi
+         rXQXO3pGt+xezUKlSQJNN3DaKL66zhQogjhX5KAy0qICUUJ0uaOKiNpNlMhmJIpkvwJd
+         9rMBYjbNSOhMJHOoSxuDDQSFT5fMhfFgjga3ddPoEcYJwSbwQtHMZ444k/bMxHdnWBIr
+         eMfA==
+X-Forwarded-Encrypted: i=1; AJvYcCXPNhnWVJUm77KBtlZYOyJ1iynIht5HRf0DLK+Sqybh85vbQlaLeY4dW3aXGxiJ7PvX7wgt@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyr2A4saYvU7X4jS1sMU+oGiA1UuPOZHrwOr+5hLVX3bkyAImoZ
+	lWe3eQYgtBLabmff+FIc9GlXlmvL5EiWfwSZrQzmeIe7EsJ3WykOHe9Web2oXNyNeA==
+X-Gm-Gg: AeBDievbPCd4B2zpCoR1nMVZNESMMFE/cvFOh/Sc2C2o8Y0GP2ytrXdlvTFzmOA3gD6
+	ysbM35g9OjXcDevUUaAjbVhILeVQ0fvAvY3pyETnGk08Y0rJto/MGZ0/25a2d/FlaoVvg6jFLzP
+	c2de5jcbhL+kcnw9df0BmSnBs11myTaanLD4AOeu9rTmXPj7h6CKqgCT7k64S72y1WgZV/mtC9+
+	ixWog788Y5/6Mr8oIIBFNv/WOByBE/cCUVQmup8LOlDh8ql2TzVBPaSLoA+aD6rWHzDBvOBuvGe
+	O07V4KC6E7IuG24ps3KMMeGLiljmNE5BwCSsQ0YZBe50PNDq5ZQLgfhcBM88r+RyQT2/+Vuh9sn
+	hbRwS315YcwW1Lt0fskbz8U0XkNWgzY5Jkvs3nxmCh/NSgivJ95v3HoEO6rGQ2eL2l+eBR9bCWh
+	CsTCV0do1YmKtF+z7yxfz/MQInLqkBsoaJ9KlmQ9x8zEoVKHFjFIe1Y7EU9AyYMg7G
+X-Received: by 2002:a05:7022:40b:b0:12a:8ea4:252 with SMTP id a92af1059eb24-12c28b7f511mr541759c88.4.1775679917525;
+        Wed, 08 Apr 2026 13:25:17 -0700 (PDT)
+Received: from google.com (78.93.125.34.bc.googleusercontent.com. [34.125.93.78])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12bfea5f860sm21165384c88.2.2026.04.08.13.25.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Apr 2026 13:25:16 -0700 (PDT)
+Date: Wed, 8 Apr 2026 20:25:12 +0000
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, 
+	David Woodhouse <dwmw2@infradead.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, keyrings@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] extract-cert: Wrap key_pass with '#ifdef
+ USE_PKCS11_ENGINE'
+Message-ID: <ada5jlwkMYrtfRHv@google.com>
+References: <20260325-certs-extract-cert-key_pass-unused-but-set-global-v1-1-ecf94326d532@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260325-certs-extract-cert-key_pass-unused-but-set-global-v1-1-ecf94326d532@kernel.org>
 
+On Wed, Mar 25, 2026 at 06:19:15PM -0700, Nathan Chancellor wrote:
+> A recent strengthening of -Wunused-but-set-variable (enabled with -Wall)
+> in clang under a new subwarning, -Wunused-but-set-global, points out an
+> unused static global variable in certs/extract-cert.c:
+> 
+>   certs/extract-cert.c:46:20: error: variable 'key_pass' set but not used [-Werror,-Wunused-but-set-global]
+>      46 | static const char *key_pass;
+>         |                    ^
+> 
+> After commit 558bdc45dfb2 ("sign-file,extract-cert: use pkcs11 provider
+> for OPENSSL MAJOR >= 3"), key_pass is only used with the OpenSSL engine
+> API, not the new provider API. Wrap key_pass's declaration and
+> assignment with '#ifdef USE_PKCS11_ENGINE' so that it is only included
+> with its use to clear up the warning. While this is a little uglier than
+> just marking key_pass with the unused attribute, this will make it
+> easier to clean up all code associated with the use of the engine API if
+> it were ever removed in the future. While in the area, use a tab for
+> the key_pass assignment line to match the rest of the file.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 558bdc45dfb2 ("sign-file,extract-cert: use pkcs11 provider for OPENSSL MAJOR >= 3")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
---=-1QSFccg8FPtl66oVYiCb
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Le mardi 24 mars 2026 =C3=A0 11:13 +0800, Pengpeng Hou a =C3=A9crit=C2=A0:
-> HEVC slice parameters are shared stateless V4L2 controls, but the common
-> validation path does not verify the active L0/L1 reference counts before
-> driver-specific code consumes them.
->=20
-> The original report came from Cedrus, but the active count bounds are
-> not Cedrus-specific. Validate them in the common HEVC slice control path
-> so stateless HEVC drivers get the same basic guarantees as soon as the
-> control is queued.
->=20
-> Do not reject ref_idx_l0/ref_idx_l1 entries here. Existing userspace may
-> use out-of-range sentinel values such as 0xff for missing references, and
-> some hardware can use that information for concealment. Keep this common
-> check limited to the active reference counts.
->=20
-> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
-
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
 > ---
-> v3:
-> - add the missing `p_hevc_slice_params` declaration to fix the build brea=
-k
-> =C2=A0 reported by lkp
-> - keep only the active L0/L1 reference count validation in common code
-> - drop the ref_idx_l0/ref_idx_l1 rejection per Nicolas Dufresne's review,
-> =C2=A0 since existing userspace may use out-of-range sentinel values such=
- as
-> =C2=A0 0xff for missing references
->=20
-> =C2=A0drivers/media/v4l2-core/v4l2-ctrls-core.c | 13 +++++++++++++
-> =C2=A01 file changed, 13 insertions(+)
->=20
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4=
-l2-
-> core/v4l2-ctrls-core.c
-> index 6b375720e395..ba047d7d8601 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> @@ -971,6 +971,7 @@ static int std_validate_compound(const struct v4l2_ct=
-rl
-> *ctrl, u32 idx,
-> =C2=A0	struct v4l2_ctrl_hevc_ext_sps_st_rps *p_hevc_st_rps;
-> =C2=A0	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
-> =C2=A0	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
-> +	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
-> =C2=A0	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
-> =C2=A0	struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
-> =C2=A0	struct v4l2_area *area;
-> @@ -1260,6 +1261,18 @@ static int std_validate_compound(const struct v4l2=
-_ctrl
-> *ctrl, u32 idx,
-> =C2=A0		break;
-> =C2=A0
-> =C2=A0	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
-> +		p_hevc_slice_params =3D p;
-> +
-> +		if (p_hevc_slice_params->num_ref_idx_l0_active_minus1 >=3D
-> +		=C2=A0=C2=A0=C2=A0 V4L2_HEVC_DPB_ENTRIES_NUM_MAX)
-> +			return -EINVAL;
-> +
-> +		if (p_hevc_slice_params->slice_type !=3D
-> V4L2_HEVC_SLICE_TYPE_B)
-> +			break;
-> +
-> +		if (p_hevc_slice_params->num_ref_idx_l1_active_minus1 >=3D
-> +		=C2=A0=C2=A0=C2=A0 V4L2_HEVC_DPB_ENTRIES_NUM_MAX)
-> +			return -EINVAL;
-> =C2=A0		break;
-> =C2=A0
-> =C2=A0	case V4L2_CTRL_TYPE_HEVC_EXT_SPS_ST_RPS:
-
---=-1QSFccg8FPtl66oVYiCb
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCada0MAAKCRDZQZRRKWBy
-9EpsAQCOlmewyVjNKASHKbALiVIK0wPX1bQFYP6raNCAGOEZYAD9EuycOjVf8Vko
-kr1mXdmVdJR3qUtSqS2M0eAGpB69wgQ=
-=Yu9t
------END PGP SIGNATURE-----
-
---=-1QSFccg8FPtl66oVYiCb--
+> I am taking a fix for a similar warning in modpost through the kbuild
+> tree so I don't mind picking this up with an appropriate Ack or it can
+> just go through the keyring tree, does not matter to me.
+> ---
+>  certs/extract-cert.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/certs/extract-cert.c b/certs/extract-cert.c
+> index 7d6d468ed612..54ecd1024274 100644
+> --- a/certs/extract-cert.c
+> +++ b/certs/extract-cert.c
+> @@ -43,7 +43,9 @@ void format(void)
+>  	exit(2);
+>  }
+>  
+> +#ifdef USE_PKCS11_ENGINE
+>  static const char *key_pass;
+> +#endif
+>  static BIO *wb;
+>  static char *cert_dst;
+>  static bool verbose;
+> @@ -135,7 +137,9 @@ int main(int argc, char **argv)
+>  	if (verbose_env && strchr(verbose_env, '1'))
+>  		verbose = true;
+>  
+> -        key_pass = getenv("KBUILD_SIGN_PIN");
+> +#ifdef USE_PKCS11_ENGINE
+> +	key_pass = getenv("KBUILD_SIGN_PIN");
+> +#endif
+>  
+>  	if (argc != 3)
+>  		format();
+> 
+> ---
+> base-commit: d2a43e7f89da55d6f0f96aaadaa243f35557291e
+> change-id: 20260325-certs-extract-cert-key_pass-unused-but-set-global-23007ecfadf9
+> 
+> Best regards,
+> --  
+> Nathan Chancellor <nathan@kernel.org>
+> 
