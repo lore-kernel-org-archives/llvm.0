@@ -1,105 +1,240 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85C932D0CC;
-	Wed,  8 Apr 2026 01:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B82F9C0;
+	Wed,  8 Apr 2026 02:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775610009; cv=none; b=LKtTZFxMiFVvfmGfuFtnNDiUjMfkTEKDg121nlDM7B0ypQEwzsmpqL6QR1aTI0LtAG0LM4cTIS1eZte1EHqsZtBqAiwJ97z0Iah63GW7xy6sDHblHUsn695vmiagxriIgenBNrF3TfhHWrjBdZahYrGM/O7Kh/RpwyOO/HhDlxg=
+	t=1775615626; cv=none; b=CHJ7z6TerDlLQUiQlmeWc6Bpk84/f3Kbrmk6TyHmCMxDwdXxKJ6Yb1OgBvznUuzEM1hONoKF+GZloGarNTtyd/vGJ+9CvRAGRj1FpnFL6AqGsZRA586mnk6Ngw/PvpCOPCCXq37gPKOOT8OBGGjgkAfP/9JL6w4cJ/RGRJPMp7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775610009; c=relaxed/simple;
-	bh=0HDIYdAS3TdACnQ7Zzuvd6WtzLpKicWfd2xZMNjdbmE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YLNBvXWLJw6sQ+NJaR3mUKz+ga0ABvMmoVjLTdPXW9W1ZgD0JO4wm7OEtI/CBGRiDSKYhSw0qNhefVgZfK3tGyvx6tWv2tTNtq7edKjn9oV3QluoHyo+79hHbxAZq3Tdk41rSjSVzlphxAcfFXLb0QL3ZdJIjdKMCQvrOiDR1uU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HDveATMt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775615626; c=relaxed/simple;
+	bh=Tng5YI3IY4nele2hIFbI0VyQXKyPo6/7592LHNo7t3M=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mjmp3oVqDe057mOoR4j7tPbZusQ6RGcwrIq7j/YYhY4LZwoYCUUCyENgnh37qDBg4A3QdTz948BgJ4+k1mmbRNMOlcnmfQHa+SRCGFYaDUZv1Cg1SPQjbvwaM2KxIppp4tJ2Q0vRLg6NlBo7LUfjtPrfeRLyONortFtyFodk3oY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MZrZJxFO; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HDveATMt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A898C116C6;
-	Wed,  8 Apr 2026 01:00:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775610005;
-	bh=0HDIYdAS3TdACnQ7Zzuvd6WtzLpKicWfd2xZMNjdbmE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=HDveATMtP6e8TE6Gr7ebwzSv1XaXgaPrBrQqC23CriT11y1DVygwgjpSy5xev0sLR
-	 FdLn7m9O2AbiYUCXZ//NSjQyUihyKcvlli9tHUgnMZnqCjIyWv80LdyUTOJzkPAtYU
-	 H0rQrCfBkCLN3YXeUrPQG0fVbODDt9vvTjN9dku056acHoNKCdJY4yqNH0PqGveDkP
-	 Nw5g7lgyh+tnAu0l7HbX4vWDJua4EToc6KIT+22HXbyNT5Q4gANzOVeH8U7QvenLVq
-	 ICCNIdBuC9AnVp3rnU+zD8h6FFGbKuHIqM6rJml+hlZpqda58wPhJEhK9MyTsvmVcX
-	 HbjYbeUEU7HWQ==
-From: Kees Cook <kees@kernel.org>
-To: Peter Oberparleiter <oberpar@linux.ibm.com>
-Cc: Kees Cook <kees@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] gcov: Disable GCOV_PROFILE_ALL on 32-bit UML with Clang 20/21
-Date: Tue,  7 Apr 2026 18:00:02 -0700
-Message-Id: <20260408005958.work.271-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MZrZJxFO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775615625; x=1807151625;
+  h=date:from:to:cc:subject:message-id;
+  bh=Tng5YI3IY4nele2hIFbI0VyQXKyPo6/7592LHNo7t3M=;
+  b=MZrZJxFOVKImvnFMKpfWEYwHguwcjPXtqQyz4x9W3vhfa+lg/V/NIq14
+   Kn3MvpXAi6SmhKjwuYhyxEOBeRMXMKsY++CQU6VEFV8pwZvyHQwXcQnb6
+   TaY1+6zVfQuwXouAX+/ll/68eqKD4IVsGcqqq8hVXhRjtyRKlNaWEqCi9
+   vsbnC0Fa23PlMfNLD0+uLXq6LZdeQHeANpkcAmIM3/utNy1VNJJOp46iX
+   ayeAVoQ6FearndPGUPr6BQo+DJPlo+nCPI82UHJTQZrS12kCNPJgX65BF
+   /uVMCeDitJU+iiEa5tx0ZwwARcOKuLUYOW6iKrvjDGhj8qUGFgBZdC2cH
+   g==;
+X-CSE-ConnectionGUID: ZqQYo3vcT46QVfpoL8S6jw==
+X-CSE-MsgGUID: haF53CRhQTmTVzcLccBQhQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="80475253"
+X-IronPort-AV: E=Sophos;i="6.23,166,1770624000"; 
+   d="scan'208";a="80475253"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2026 19:33:45 -0700
+X-CSE-ConnectionGUID: kDvw0yVhRYeKCo/BwdcPNw==
+X-CSE-MsgGUID: F3v5Q9q0R8GM+jYAjIFHog==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,166,1770624000"; 
+   d="scan'208";a="227497853"
+Received: from lkp-server01.sh.intel.com (HELO d00eb8a6782a) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 07 Apr 2026 19:33:44 -0700
+Received: from kbuild by d00eb8a6782a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wAIjc-000000001KX-2LaD;
+	Wed, 08 Apr 2026 02:33:40 +0000
+Date: Wed, 08 Apr 2026 10:32:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Helge Deller <deller@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [deller-parisc:for-next 2/9] net/ipv4/af_inet.c:1503:6:
+ warning: variable 'flush' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202604081003.KPd0fpBI-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2246; i=kees@kernel.org; h=from:subject:message-id; bh=0HDIYdAS3TdACnQ7Zzuvd6WtzLpKicWfd2xZMNjdbmE=; b=owGbwMvMwCVmps19z/KJym7G02pJDJlXV0yseverZeKngreb00XTgzeopsd7dOUFrD/sVRDmE PE5JOZtRykLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwEUWMDLssWnV/m0+KURQrnLL khpRjf77vVOOFJ09kemXKx9UrazHyPCo4ebPmlmBXV6W1pOjf/4S41lq/2PJY6WXO5hSVW5c/88 IAA==
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
 
-Clang 20 and 21 miscompute __builtin_object_size() when -fprofile-arcs
-is active on 32-bit UML targets, which passes incorrect object size
-calculations for local variables through always_inline copy_to_user()
-and check_copy_size(), causing spurious compile-time errors:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git for-next
+head:   bc8a19a194d5a72df5982c04f8a9e7bcff1306ca
+commit: 595407f94f5e5b778a349bd5a323c5051920b864 [2/9] net: Avoid unaligned access in inet_gro_receive()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260408/202604081003.KPd0fpBI-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260408/202604081003.KPd0fpBI-lkp@intel.com/reproduce)
 
-  include/linux/ucopysize.h:52:4: error: call to '__bad_copy_from' declared with 'error' attribute: copy source size is too small
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604081003.KPd0fpBI-lkp@intel.com/
 
-The regression was introduced in LLVM commit 02b8ee281947 ("[llvm]
-Improve llvm.objectsize computation by computing GEP, alloca and malloc
-parameters bound"), which shipped in Clang 20. It was fixed in LLVM
-by commit 45b697e610fd ("[MemoryBuiltins] Consider index type size
-when aggregating gep offsets"), which was backported to the LLVM 22.x
-release branch.
+All warnings (new ones prefixed by >>):
 
-The bug requires 32-bit UML + GCOV_PROFILE_ALL (which uses -fprofile-arcs),
-though the exact trigger depends on optimizer decisions influenced by other
-enabled configs.
+>> net/ipv4/af_inet.c:1503:6: warning: variable 'flush' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1503 |         if (unlikely(ip_fast_csum((u8 *)iph, 5)))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:77:22: note: expanded from macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/ipv4/af_inet.c:1543:31: note: uninitialized use occurs here
+    1543 |         skb_gro_flush_final(skb, pp, flush);
+         |                                      ^~~~~
+   net/ipv4/af_inet.c:1503:2: note: remove the 'if' if its condition is always false
+    1503 |         if (unlikely(ip_fast_csum((u8 *)iph, 5)))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1504 |                 goto out;
+         |                 ~~~~~~~~
+   net/ipv4/af_inet.c:1500:6: warning: variable 'flush' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1500 |         if (ip_is_fragment(iph))
+         |             ^~~~~~~~~~~~~~~~~~~
+   net/ipv4/af_inet.c:1543:31: note: uninitialized use occurs here
+    1543 |         skb_gro_flush_final(skb, pp, flush);
+         |                                      ^~~~~
+   net/ipv4/af_inet.c:1500:2: note: remove the 'if' if its condition is always false
+    1500 |         if (ip_is_fragment(iph))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+    1501 |                 goto out;
+         |                 ~~~~~~~~
+   net/ipv4/af_inet.c:1497:6: warning: variable 'flush' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1497 |         if (*(u8 *)iph != 0x45)
+         |             ^~~~~~~~~~~~~~~~~~
+   net/ipv4/af_inet.c:1543:31: note: uninitialized use occurs here
+    1543 |         skb_gro_flush_final(skb, pp, flush);
+         |                                      ^~~~~
+   net/ipv4/af_inet.c:1497:2: note: remove the 'if' if its condition is always false
+    1497 |         if (*(u8 *)iph != 0x45)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+    1498 |                 goto out;
+         |                 ~~~~~~~~
+   net/ipv4/af_inet.c:1494:6: warning: variable 'flush' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1494 |         if (!ops || !ops->callbacks.gro_receive)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/ipv4/af_inet.c:1543:31: note: uninitialized use occurs here
+    1543 |         skb_gro_flush_final(skb, pp, flush);
+         |                                      ^~~~~
+   net/ipv4/af_inet.c:1494:2: note: remove the 'if' if its condition is always false
+    1494 |         if (!ops || !ops->callbacks.gro_receive)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1495 |                 goto out;
+         |                 ~~~~~~~~
+>> net/ipv4/af_inet.c:1494:6: warning: variable 'flush' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    1494 |         if (!ops || !ops->callbacks.gro_receive)
+         |             ^~~~
+   net/ipv4/af_inet.c:1543:31: note: uninitialized use occurs here
+    1543 |         skb_gro_flush_final(skb, pp, flush);
+         |                                      ^~~~~
+   net/ipv4/af_inet.c:1494:6: note: remove the '||' if its condition is always false
+    1494 |         if (!ops || !ops->callbacks.gro_receive)
+         |             ^~~~~~~
+   net/ipv4/af_inet.c:1488:6: warning: variable 'flush' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1488 |         if (unlikely(!iph))
+         |             ^~~~~~~~~~~~~~
+   include/linux/compiler.h:77:22: note: expanded from macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/ipv4/af_inet.c:1543:31: note: uninitialized use occurs here
+    1543 |         skb_gro_flush_final(skb, pp, flush);
+         |                                      ^~~~~
+   net/ipv4/af_inet.c:1488:2: note: remove the 'if' if its condition is always false
+    1488 |         if (unlikely(!iph))
+         |         ^~~~~~~~~~~~~~~~~~~
+    1489 |                 goto out;
+         |                 ~~~~~~~~
+   net/ipv4/af_inet.c:1482:13: note: initialize the variable 'flush' to silence this warning
+    1482 |         __u16 flush;
+         |                    ^
+         |                     = 0
+   6 warnings generated.
 
-Prevent the broken combination by disabling GCOV_PROFILE_ALL on 32-bit
-UML when using Clang 20.x or 21.x.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202604030531.O6FveVgn-lkp@intel.com/
-Assisted-by: Claude:claude-opus-4-6[1m]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: <llvm@lists.linux.dev>
----
- kernel/gcov/Kconfig | 3 +++
- 1 file changed, 3 insertions(+)
+vim +1503 net/ipv4/af_inet.c
 
-diff --git a/kernel/gcov/Kconfig b/kernel/gcov/Kconfig
-index 04f4ebdc3cf5..11c377019d01 100644
---- a/kernel/gcov/Kconfig
-+++ b/kernel/gcov/Kconfig
-@@ -42,6 +42,9 @@ config GCOV_PROFILE_ALL
- 	depends on !COMPILE_TEST
- 	depends on GCOV_KERNEL
- 	depends on ARCH_HAS_GCOV_PROFILE_ALL
-+	# Clang 20 & 21 miscompute __builtin_object_size() under -fprofile-arcs
-+	# on 32-bit UML, causing spurious compile-time errors in check_copy_size().
-+	depends on !(UML && !64BIT && CC_IS_CLANG && CLANG_VERSION >= 200000 && CLANG_VERSION <= 220100)
- 	default n
- 	help
- 	This options activates profiling for the entire kernel.
+418e897e0716b2 Willem de Bruijn 2019-02-20  1473  
+d4546c2509b1e9 David Miller     2018-06-24  1474  struct sk_buff *inet_gro_receive(struct list_head *head, struct sk_buff *skb)
+73cc19f1556b95 Herbert Xu       2008-12-15  1475  {
+bca49f843eac59 Vlad Yasevich    2012-11-15  1476  	const struct net_offload *ops;
+d4546c2509b1e9 David Miller     2018-06-24  1477  	struct sk_buff *pp = NULL;
+b71d1d426d263b Eric Dumazet     2011-04-22  1478  	const struct iphdr *iph;
+d4546c2509b1e9 David Miller     2018-06-24  1479  	struct sk_buff *p;
+a5b1cf288d4200 Herbert Xu       2009-05-26  1480  	unsigned int hlen;
+a5b1cf288d4200 Herbert Xu       2009-05-26  1481  	unsigned int off;
+595407f94f5e5b Helge Deller     2026-04-07  1482  	__u16 flush;
+73cc19f1556b95 Herbert Xu       2008-12-15  1483  	int proto;
+73cc19f1556b95 Herbert Xu       2008-12-15  1484  
+a5b1cf288d4200 Herbert Xu       2009-05-26  1485  	off = skb_gro_offset(skb);
+a5b1cf288d4200 Herbert Xu       2009-05-26  1486  	hlen = off + sizeof(*iph);
+35ffb66547295c Richard Gobert   2022-08-23  1487  	iph = skb_gro_header(skb, hlen, off);
+86911732d3996a Herbert Xu       2009-01-29  1488  	if (unlikely(!iph))
+73cc19f1556b95 Herbert Xu       2008-12-15  1489  		goto out;
+73cc19f1556b95 Herbert Xu       2008-12-15  1490  
+f9242b6b28d612 David S. Miller  2012-06-19  1491  	proto = iph->protocol;
+73cc19f1556b95 Herbert Xu       2008-12-15  1492  
+bca49f843eac59 Vlad Yasevich    2012-11-15  1493  	ops = rcu_dereference(inet_offloads[proto]);
+f191a1d17f2270 Vlad Yasevich    2012-11-15 @1494  	if (!ops || !ops->callbacks.gro_receive)
+fc1ca3348a74a1 Eric Dumazet     2021-11-23  1495  		goto out;
+73cc19f1556b95 Herbert Xu       2008-12-15  1496  
+a5ad24be728d43 Herbert Xu       2009-02-08  1497  	if (*(u8 *)iph != 0x45)
+fc1ca3348a74a1 Eric Dumazet     2021-11-23  1498  		goto out;
+73cc19f1556b95 Herbert Xu       2008-12-15  1499  
+9b83e0319840ec Steffen Klassert 2017-04-28  1500  	if (ip_is_fragment(iph))
+fc1ca3348a74a1 Eric Dumazet     2021-11-23  1501  		goto out;
+9b83e0319840ec Steffen Klassert 2017-04-28  1502  
+a9e050f4e7f9d3 Eric Dumazet     2012-08-05 @1503  	if (unlikely(ip_fast_csum((u8 *)iph, 5)))
+fc1ca3348a74a1 Eric Dumazet     2021-11-23  1504  		goto out;
+73cc19f1556b95 Herbert Xu       2008-12-15  1505  
+b1a78b9b98862c Xin Long         2023-01-28  1506  	NAPI_GRO_CB(skb)->proto = proto;
+595407f94f5e5b Helge Deller     2026-04-07  1507  	flush = (get_unaligned_be16(&iph->tot_len) ^ skb_gro_len(skb)) |
+595407f94f5e5b Helge Deller     2026-04-07  1508  	        (get_unaligned_be16(&iph->frag_off) & ~IP_DF);
+73cc19f1556b95 Herbert Xu       2008-12-15  1509  
+d4546c2509b1e9 David Miller     2018-06-24  1510  	list_for_each_entry(p, head, list) {
+73cc19f1556b95 Herbert Xu       2008-12-15  1511  		struct iphdr *iph2;
+73cc19f1556b95 Herbert Xu       2008-12-15  1512  
+73cc19f1556b95 Herbert Xu       2008-12-15  1513  		if (!NAPI_GRO_CB(p)->same_flow)
+73cc19f1556b95 Herbert Xu       2008-12-15  1514  			continue;
+73cc19f1556b95 Herbert Xu       2008-12-15  1515  
+299603e8370a93 Jerry Chu        2013-12-11  1516  		iph2 = (struct iphdr *)(p->data + off);
+299603e8370a93 Jerry Chu        2013-12-11  1517  		/* The above works because, with the exception of the top
+299603e8370a93 Jerry Chu        2013-12-11  1518  		 * (inner most) layer, we only aggregate pkts with the same
+299603e8370a93 Jerry Chu        2013-12-11  1519  		 * hdr length so all the hdrs we'll need to verify will start
+299603e8370a93 Jerry Chu        2013-12-11  1520  		 * at the same offset.
+299603e8370a93 Jerry Chu        2013-12-11  1521  		 */
+a5ad24be728d43 Herbert Xu       2009-02-08  1522  		if ((iph->protocol ^ iph2->protocol) |
+595407f94f5e5b Helge Deller     2026-04-07  1523  		    (get_unaligned(&iph->saddr) ^ get_unaligned(&iph2->saddr)) |
+595407f94f5e5b Helge Deller     2026-04-07  1524  		    (get_unaligned(&iph->daddr) ^ get_unaligned(&iph2->daddr))) {
+73cc19f1556b95 Herbert Xu       2008-12-15  1525  			NAPI_GRO_CB(p)->same_flow = 0;
+73cc19f1556b95 Herbert Xu       2008-12-15  1526  			continue;
+73cc19f1556b95 Herbert Xu       2008-12-15  1527  		}
+73cc19f1556b95 Herbert Xu       2008-12-15  1528  	}
+73cc19f1556b95 Herbert Xu       2008-12-15  1529  
+73cc19f1556b95 Herbert Xu       2008-12-15  1530  	NAPI_GRO_CB(skb)->flush |= flush;
+be008726d0ac33 Willem de Bruijn 2024-05-23  1531  	NAPI_GRO_CB(skb)->network_offsets[NAPI_GRO_CB(skb)->encap_mark] = off;
+299603e8370a93 Jerry Chu        2013-12-11  1532  
+2c804d0f8fc779 Eric Dumazet     2014-09-30  1533  	/* Note : No need to call skb_gro_postpull_rcsum() here,
+2c804d0f8fc779 Eric Dumazet     2014-09-30  1534  	 * as we already checked checksum over ipv4 header was 0
+2c804d0f8fc779 Eric Dumazet     2014-09-30  1535  	 */
+86911732d3996a Herbert Xu       2009-01-29  1536  	skb_gro_pull(skb, sizeof(*iph));
+86911732d3996a Herbert Xu       2009-01-29  1537  	skb_set_transport_header(skb, skb_gro_offset(skb));
+73cc19f1556b95 Herbert Xu       2008-12-15  1538  
+028e0a4766844e Paolo Abeni      2018-12-14  1539  	pp = indirect_call_gro_receive(tcp4_gro_receive, udp4_gro_receive,
+028e0a4766844e Paolo Abeni      2018-12-14  1540  				       ops->callbacks.gro_receive, head, skb);
+73cc19f1556b95 Herbert Xu       2008-12-15  1541  
+73cc19f1556b95 Herbert Xu       2008-12-15  1542  out:
+5f114163f2f5eb Steffen Klassert 2017-02-15  1543  	skb_gro_flush_final(skb, pp, flush);
+73cc19f1556b95 Herbert Xu       2008-12-15  1544  
+73cc19f1556b95 Herbert Xu       2008-12-15  1545  	return pp;
+73cc19f1556b95 Herbert Xu       2008-12-15  1546  }
+73cc19f1556b95 Herbert Xu       2008-12-15  1547  
+
+:::::: The code at line 1503 was first introduced by commit
+:::::: a9e050f4e7f9d36afe0dcc0bddba864ee442715e net: tcp: GRO should be ECN friendly
+
+:::::: TO: Eric Dumazet <edumazet@google.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
