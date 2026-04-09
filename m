@@ -1,129 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442392153EA;
-	Wed,  8 Apr 2026 22:03:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42011C7012;
+	Thu,  9 Apr 2026 01:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775685819; cv=none; b=mTZMKtppChVZwWALpTV+okwdb+aDmCQuXDSzqhx+q4X5JGWTjxJ4lfmZ4WZ2WXBZSOQwINVbCn/vvtJeCxTAtOY2ANjnB0bF/FEa70D+jzszYhW3iZW6jPqtsmqT38g1/aW/gl1mxbO5ewUNLSqWoq891DjTuP6VMNZ4OcKk5gU=
+	t=1775696996; cv=none; b=eQRVTFRETlXwD3+PHUIb/dlYlHseGqLytgoQ5AXWgSZUWf3XzXFExvNoYETL49DE23t29XjFg9KW0NbkUzHBvC0IfH67/5BcOTKXayEezicFKwBQEfcYhc2dMn9uWQlJA2ziDJn6s0+XhWsZmRRTilA8we3sIozOQ078syWvAbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775685819; c=relaxed/simple;
-	bh=Yjer5woEh3mw3RtpKNVTvZ9uyG6f8sJECUD6FN73R+Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NIOWb1I8ZdvOmigIaVOpPQGZ+UQBYk8gwuEHoNxCCsLcDIgMZcIP6t1scZ0cWZXHW++9QOiUB4qQCcjRvVAUW6pjZ7HoA5l/qOtW+dbTsH9GnpCgfLzVXi6sSZKAJPPLpdnipPTMUbT8HhXcQjHjMw4NHukes9lqFuAyzen5rgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pp5wLYIt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775696996; c=relaxed/simple;
+	bh=1ocGCLkK05gThQJp1l+GnQEgV5TyowrtBkYJaMdXK6U=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=AcMzTxZe8L4NXVYFumptaIaQsng+0RviJ6o3qeHEBhavSthuxS5e22hbLl3J8w/qdLUBJSPXapkjwsypjtx0Px1KXsMPPOD/oqgPVriol+sj3pjsgafkcbNyhotfOXafzPK8HVhQyoS+6CR9C/3nPWqDlNkc25wTmPPGNxbJdkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KrRS5/cy; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pp5wLYIt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005AEC19421;
-	Wed,  8 Apr 2026 22:03:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775685818;
-	bh=Yjer5woEh3mw3RtpKNVTvZ9uyG6f8sJECUD6FN73R+Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pp5wLYIt1R7KEOiJQQnXW6ZhJEmjf9UvC06DcsgIrDzefnDIeilwMVXldNCwWtFt4
-	 uNVmQ0+glAJB5Db5wzHoDlmnmC3M8IdK9/qXJEtnwQsntoI2MBPp1TfmeM/BUo95fR
-	 KDqeF6riY5+LsrJ1r+DJeNZ890kQRurbE1c7I163hs/oNGExGQVy5mb7Kxqt9HSb90
-	 3rz3Q+F3lmb2gxwpP1FDt+wioHBLLtRdyhANIn2ZUARYPWvglVD2owgocjtsmbIleD
-	 hVHwwiktZDlsAmEMCfdnc9IBDHHOaujHTpShcIdyn7QDDdLTLmQd8eUfkSqIyO+MA/
-	 yhlcfB71P7Oyg==
-Date: Wed, 8 Apr 2026 15:03:34 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Peter Oberparleiter <oberpar@linux.ibm.com>,
-	kernel test robot <lkp@intel.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] gcov: Disable GCOV_PROFILE_ALL on 32-bit UML with
- Clang 20/21
-Message-ID: <20260408220334.GA3962465@ax162>
-References: <20260408162607.it.347-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KrRS5/cy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775696995; x=1807232995;
+  h=date:from:to:cc:subject:message-id;
+  bh=1ocGCLkK05gThQJp1l+GnQEgV5TyowrtBkYJaMdXK6U=;
+  b=KrRS5/cydOZCBrn3GQm8dwY7viDG/xMLbXTFOZppFH0VNJS1kN8VATU0
+   kR1yGeM7KyWIG8H0f9610j7UyzjgFrM7x0Ald8mRbAYivx1rYEOP9bEib
+   VHjWemSHFqgwSV1yPJtbCitVlufvJSOdHvS6TgdYvP25x0hIFBER/cC3L
+   VCFe/0Mztfb40K/CYWgxx1V2kFgTW/L5VT1l2lkU8lyVlprKG7McDseEr
+   KwDi9hr/QYKgFZOIdgZwr0BT5sU79ktvmqaVlcwE1sixzB3OefZH8lt6c
+   ChTLtUfCphx2C1uQLGdFSJ2iBmmSNEJ3u9Vj0ejehwymmUhshadscER0z
+   w==;
+X-CSE-ConnectionGUID: 6dcO7+O4S526ty4wq/WqUw==
+X-CSE-MsgGUID: Mf9IJb/IS/CwQ3phwxZVnQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11753"; a="102147164"
+X-IronPort-AV: E=Sophos;i="6.23,168,1770624000"; 
+   d="scan'208";a="102147164"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2026 18:09:54 -0700
+X-CSE-ConnectionGUID: 1tq0T719TsavwYhrlfDMxw==
+X-CSE-MsgGUID: fbSjKIngSpKE5W9hyJdQyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,168,1770624000"; 
+   d="scan'208";a="228857879"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa007.jf.intel.com with ESMTP; 08 Apr 2026 18:09:53 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wAdu1-00000000AZN-47PZ;
+	Thu, 09 Apr 2026 01:09:49 +0000
+Date: Thu, 09 Apr 2026 03:09:28 +0200
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Christian Brauner <christianvanbrauner@gmail.com>
+Subject: [brauner-github:vfs.fixes 3/5] fs/sysfs/mount.c:75:23:
+ error: call to undeclared function 'to_net_ns'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202604090340.OgYnFPAR-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260408162607.it.347-kees@kernel.org>
 
-On Wed, Apr 08, 2026 at 09:26:12AM -0700, Kees Cook wrote:
-> Clang 20 and 21 miscompute __builtin_object_size() when -fprofile-arcs
-> is active on 32-bit UML targets, which passes incorrect object size
-> calculations for local variables through always_inline copy_to_user()
-> and check_copy_size(), causing spurious compile-time errors:
-> 
->   include/linux/ucopysize.h:52:4: error: call to '__bad_copy_from' declared with 'error' attribute: copy source size is too small
-> 
-> The regression was introduced in LLVM commit 02b8ee281947 ("[llvm]
-> Improve llvm.objectsize computation by computing GEP, alloca and malloc
-> parameters bound"), which shipped in Clang 20. It was fixed in LLVM
-> by commit 45b697e610fd ("[MemoryBuiltins] Consider index type size
-> when aggregating gep offsets"), which was backported to the LLVM 22.x
-> release branch.
-> 
-> The bug requires 32-bit UML + GCOV_PROFILE_ALL (which uses -fprofile-arcs),
-> though the exact trigger depends on optimizer decisions influenced by other
-> enabled configs.
-> 
-> Prevent the broken combination by disabling GCOV_PROFILE_ALL on 32-bit
-> UML when using Clang 20.x or 21.x.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202604030531.O6FveVgn-lkp@intel.com/
-> Assisted-by: Claude:claude-opus-4-6[1m]
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
->  v2: fixed typo in version comparison: needed < not <= (Sashiko)
->  v1: https://lore.kernel.org/lkml/20260408005958.work.271-kees@kernel.org/
-> Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> Cc: Bill Wendling <morbo@google.com>
-> Cc: Justin Stitt <justinstitt@google.com>
-> Cc: <llvm@lists.linux.dev>
-> ---
->  kernel/gcov/Kconfig | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/kernel/gcov/Kconfig b/kernel/gcov/Kconfig
-> index 04f4ebdc3cf5..56abff785654 100644
-> --- a/kernel/gcov/Kconfig
-> +++ b/kernel/gcov/Kconfi
-> @@ -42,6 +42,9 @@ config GCOV_PROFILE_ALL
->  	depends on !COMPILE_TEST
->  	depends on GCOV_KERNEL
->  	depends on ARCH_HAS_GCOV_PROFILE_ALL
+tree:   https://github.com/brauner/linux.git vfs.fixes
+head:   98d1a51c628ef056c2d5a06d39c2d5b38aff9237
+commit: 9a8098b1d5023ca94d91ce9b7c3dbf762fe3b3fb [3/5] kernfs: pass struct ns_common instead of const void * for namespace tags
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260409/202604090340.OgYnFPAR-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260409/202604090340.OgYnFPAR-lkp@intel.com/reproduce)
 
-Would it be better to avoid selecting this symbol in arch/um/Kconfig
-when we have this condition?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604090340.OgYnFPAR-lkp@intel.com/
 
-> +	# Clang 20 & 21 miscompute __builtin_object_size() under -fprofile-arcs
-> +	# on 32-bit UML, causing spurious compile-time errors in check_copy_size().
-> +	depends on !(UML && !64BIT && CC_IS_CLANG && CLANG_VERSION >= 200000 && CLANG_VERSION < 220100)
+All errors (new ones prefixed by >>):
 
-Given that you have an inclusive range above 0, you could drop the CC_IS_CLANG.
+>> fs/sysfs/mount.c:75:23: error: call to undeclared function 'to_net_ns'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      75 |                 struct net *netns = to_net_ns(ns);
+         |                                     ^
+>> fs/sysfs/mount.c:75:15: error: incompatible integer to pointer conversion initializing 'struct net *' with an expression of type 'int' [-Wint-conversion]
+      75 |                 struct net *netns = to_net_ns(ns);
+         |                             ^       ~~~~~~~~~~~~~
+   2 errors generated.
 
-With the suggestion above it would just become:
 
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index 098cda44db22..d9541d13d9eb 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -11,7 +11,9 @@ config UML
- 	select ARCH_HAS_CACHE_LINE_SIZE
- 	select ARCH_HAS_CPU_FINALIZE_INIT
- 	select ARCH_HAS_FORTIFY_SOURCE
--	select ARCH_HAS_GCOV_PROFILE_ALL
-+	# Clang 20 & 21 miscompute __builtin_object_size() under -fprofile-arcs
-+	# on 32-bit, causing spurious compile-time errors in check_copy_size().
-+	select ARCH_HAS_GCOV_PROFILE_ALL if !(!64BIT && CLANG_VERSION >= 200000 && CLANG_VERSION < 220100)
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_STRNCPY_FROM_USER
- 	select ARCH_HAS_STRNLEN_USER
---
+vim +/to_net_ns +75 fs/sysfs/mount.c
 
-Cheers,
-Nathan
+    54	
+    55	static int sysfs_init_fs_context(struct fs_context *fc)
+    56	{
+    57		struct kernfs_fs_context *kfc;
+    58		struct ns_common *ns;
+    59	
+    60		if (!(fc->sb_flags & SB_KERNMOUNT)) {
+    61			if (!kobj_ns_current_may_mount(KOBJ_NS_TYPE_NET))
+    62				return -EPERM;
+    63		}
+    64	
+    65		kfc = kzalloc_obj(struct kernfs_fs_context);
+    66		if (!kfc)
+    67			return -ENOMEM;
+    68	
+    69		kfc->ns_tag = ns = kobj_ns_grab_current(KOBJ_NS_TYPE_NET);
+    70		kfc->root = sysfs_root;
+    71		kfc->magic = SYSFS_MAGIC;
+    72		fc->fs_private = kfc;
+    73		fc->ops = &sysfs_fs_context_ops;
+    74		if (ns) {
+  > 75			struct net *netns = to_net_ns(ns);
+    76	
+    77			put_user_ns(fc->user_ns);
+    78			fc->user_ns = get_user_ns(netns->user_ns);
+    79		}
+    80		fc->global = true;
+    81		return 0;
+    82	}
+    83	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
