@@ -1,155 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6815D317158;
-	Fri, 10 Apr 2026 05:18:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD360312815;
+	Fri, 10 Apr 2026 06:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775798317; cv=none; b=T5UAgPCBEgolpH92zEetzcaGHK0Nbr4aK/qKVCKGFIhGHulvEJTypNzvlZxT8yxEkHYq49O32tg7s/+Ex4qQ4xDe2/Fa5Xm2McVZmUhNnS2+f+EpEYWFobVu62iaGgrBiNRldhB7t8/8suz/FBNAjLkDgB7k/istW19lnzFuPco=
+	t=1775801387; cv=none; b=ENmKMGJ61qIDzYeXSsljjZmNvJXHIQ7zMhxvVsn6DE6eU+oRw/D9TBR+Ypbf+iCDC1oBbYl818GughCyT8Rq9k2x8JWD4bxVPex0buAbKCMkTNQ94cS6/irfY13BVcHQQ4cMavcKIQ3hGqAw0UsRyN6fUBWpjwDrdejGhAO0TAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775798317; c=relaxed/simple;
-	bh=+VFzieqwPc38woKRp/YU4bLMMVy9GAHhcCD1vG/tSzs=;
+	s=arc-20240116; t=1775801387; c=relaxed/simple;
+	bh=T5EvhFrIxER2QFYEsToO2rIyzFLR2rYS9S072vD0lHg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BJ/bnzarfZFtggnSXOYoRV1nTjTB9cagNr+enKnBAQ/FO9y4dl3SWPrb8OhSpDZB9jaXb0zI7XTtk0fJuDQqAigx80rhtpWpZIhhaRd5kXycR4Wt8FY+pkknr/NV3O9Y1j2Kh6uOuhbVOpdqLdMeE5hxS7LbduEOzy3pQtJTlfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LW/G7e7F; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=TagLSHgeKdJNwAJfyURYKwIfkZFnW+EEj1cOM/F6yKUIuy4pyXvM+92ZxdcCq8hGgTHE/VxsGGh3BX8VmQySMQ6E0M/8l8/nzumpZEMasj8TJXpWIRgLcQjsLJb4LDctYUP6VZcJmXHBnKfFc4++bJGw8ncHjHLHycwfHKOhRPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ph2dbOqU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LW/G7e7F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775798315; x=1807334315;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+VFzieqwPc38woKRp/YU4bLMMVy9GAHhcCD1vG/tSzs=;
-  b=LW/G7e7Fo4qA2723Yw/aSqEdQPdZyvvMnJrdZe/0NGvNSZQ5iY86kmsg
-   thW6Lon8z1krKEhnw/VT9JKTrGxgaPjyB81cF74G4vsE+wIStltWVl0MX
-   hMQKkhZbtZYDH1UYoU1qzxM0w2GHeNXj5bTBoXzVGxMt0eIWPhLUDJO9q
-   rgzDprPrkmW2J8HDKIjR8w5MdqoUYvUm9oJLz1jDLI80f73tWeXGbhqBi
-   68fOMn2dNQP7EA3nf2EoewjYdiWQ/W8TjqIevv72WuLHXhxY02qF71o5X
-   9oCToBq0MkrS2p+htid9jhCxhVD0QINDcpuS4oKVfQGPbItGmDVzJ0hLq
-   A==;
-X-CSE-ConnectionGUID: sUyhvwlJQNu3MOTlyeChkg==
-X-CSE-MsgGUID: 8LvBwYz8QKmnQ4v888148g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11754"; a="87513393"
-X-IronPort-AV: E=Sophos;i="6.23,171,1770624000"; 
-   d="scan'208";a="87513393"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2026 22:18:35 -0700
-X-CSE-ConnectionGUID: ebBuAvOQS56oQe+1J7RS9g==
-X-CSE-MsgGUID: TvHR1cDkTOyP3Ua2IqVpow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,171,1770624000"; 
-   d="scan'208";a="233382321"
-Received: from lkp-server01.sh.intel.com (HELO 6449335cace3) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 09 Apr 2026 22:18:32 -0700
-Received: from kbuild by 6449335cace3 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wB4GD-000000002T3-1TcW;
-	Fri, 10 Apr 2026 05:18:29 +0000
-Date: Fri, 10 Apr 2026 13:17:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Birger Koblitz <mail@birger-koblitz.de>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Birger Koblitz <mail@birger-koblitz.de>
-Subject: Re: [PATCH net-next 2/9] r8152: Add support for RTL8157 SRAM access
- and ADV indirect access
-Message-ID: <202604101309.B9mdviRN-lkp@intel.com>
-References: <20260314-rtl8157_next-v1-2-9ba77b428afd@birger-koblitz.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ph2dbOqU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DD9FC19421;
+	Fri, 10 Apr 2026 06:09:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775801387;
+	bh=T5EvhFrIxER2QFYEsToO2rIyzFLR2rYS9S072vD0lHg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ph2dbOqU3FDowtMVikm8ZV+Ct7/KHyYCCQKCh6qWPuT9h8+7+eLW55WfbQDTdyWaw
+	 7hDwJv220/NiR8RLgFJpBftAO7MJh6lYsSWxVEbXoITw1LeIqCHOh6ikw/uOCFB6HQ
+	 V1DddC2fg0YMD/BcTEOk25oscV7YdXpKIYvNdda8zk9Z+bekJ9+HbBSMm8bU+OlPNj
+	 lvhH9gVFpfF/WuV8yDl2W/IyAUUTDmKV9iq+R9VsASQysbdQtKtg2yaeVg9ELAFoEW
+	 zleieLAEqBAvBgePupp7j0DZ/k6ZMtfkQ2kEGwJMjPBdWI5cw1RoTTdenWullfN8XG
+	 w79ILjyrfKiNQ==
+Date: Thu, 9 Apr 2026 23:09:44 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Tengda Wu <wutengda@huaweicloud.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+	Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 08/16] perf annotate-arm64: Enable instruction
+ tracking support
+Message-ID: <adiUKB1CTkDAGrB_@google.com>
+References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
+ <20260403094800.1418825-9-wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260314-rtl8157_next-v1-2-9ba77b428afd@birger-koblitz.de>
+In-Reply-To: <20260403094800.1418825-9-wutengda@huaweicloud.com>
 
-Hi Birger,
+On Fri, Apr 03, 2026 at 09:47:52AM +0000, Tengda Wu wrote:
+> Enable instruction tracking for the arm64 architecture in 'perf annotate'
+> to support data type profiling.
+> 
+> Define ARM64_REG_SP as 31 to correctly identify the stack pointer
+> register during type state initialization. Update
+> arch_supports_insn_tracking() to include arm64, which allows
+> find_data_type_block() to process the instruction scope for arm64.
+> 
+> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+> ---
+>  tools/perf/util/annotate-data.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
+> index 1eff0a27237d..fd6416d43a2e 100644
+> --- a/tools/perf/util/annotate-data.c
+> +++ b/tools/perf/util/annotate-data.c
+> @@ -28,6 +28,7 @@
+>  
+>  /* register number of the stack pointer */
+>  #define X86_REG_SP 7
+> +#define ARM64_REG_SP 31
+>  
+>  static void delete_var_types(struct die_var_type *var_types);
+>  
+> @@ -177,7 +178,8 @@ static void init_type_state(struct type_state *state, const struct arch *arch)
+>  		state->regs[11].caller_saved = true;
+>  		state->ret_reg = 0;
+>  		state->stack_reg = X86_REG_SP;
+> -	}
+> +	} else if (arch__is_arm64(arch))
+> +		state->stack_reg = ARM64_REG_SP;
 
-kernel test robot noticed the following build warnings:
+Probably you want to setup caller-saved registers and the return
+register as well.
 
-[auto build test WARNING on 5c9e55fecf9365890c64f14761a80f9413a3b1d1]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Birger-Koblitz/r8152-Add-support-for-RTL8157-RX-TX-descriptor-format/20260315-014044
-base:   5c9e55fecf9365890c64f14761a80f9413a3b1d1
-patch link:    https://lore.kernel.org/r/20260314-rtl8157_next-v1-2-9ba77b428afd%40birger-koblitz.de
-patch subject: [PATCH net-next 2/9] r8152: Add support for RTL8157 SRAM access and ADV indirect access
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260410/202604101309.B9mdviRN-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c80443cd37b2e2788cba67ffa180a6331e5f0791)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260410/202604101309.B9mdviRN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604101309.B9mdviRN-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/usb/r8152.c:1682:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1682 |         if (i == 10)
-         |             ^~~~~~~
-   drivers/net/usb/r8152.c:1685:9: note: uninitialized use occurs here
-    1685 |         return ret;
-         |                ^~~
-   drivers/net/usb/r8152.c:1682:2: note: remove the 'if' if its condition is always true
-    1682 |         if (i == 10)
-         |         ^~~~~~~~~~~~
-    1683 |                 ret = -ETIMEDOUT;
-   drivers/net/usb/r8152.c:1672:12: note: initialize the variable 'ret' to silence this warning
-    1672 |         int i, ret;
-         |                   ^
-         |                    = 0
-   drivers/net/usb/r8152.c:1757:12: warning: unused function 'rtl_bmu_clr_bits' [-Wunused-function]
-    1757 | static int rtl_bmu_clr_bits(struct r8152 *tp, u16 addr, u32 clear)
-         |            ^~~~~~~~~~~~~~~~
-   drivers/net/usb/r8152.c:1788:12: warning: unused function 'rtl_ip_clr_bits' [-Wunused-function]
-    1788 | static int rtl_ip_clr_bits(struct r8152 *tp, u16 addr, u32 clear)
-         |            ^~~~~~~~~~~~~~~
-   drivers/net/usb/r8152.c:1793:12: warning: unused function 'rtl_ip_set_bits' [-Wunused-function]
-    1793 | static int rtl_ip_set_bits(struct r8152 *tp, u16 addr, u32 set)
-         |            ^~~~~~~~~~~~~~~
-   drivers/net/usb/r8152.c:1810:13: warning: unused function 'sram_write_w0w1' [-Wunused-function]
-    1810 | static void sram_write_w0w1(struct r8152 *tp, u16 addr, u16 clear, u16 set)
-         |             ^~~~~~~~~~~~~~~
-   drivers/net/usb/r8152.c:1824:13: warning: unused function 'sram2_write_w0w1' [-Wunused-function]
-    1824 | static void sram2_write_w0w1(struct r8152 *tp, u16 addr, u16 clear, u16 set)
-         |             ^~~~~~~~~~~~~~~~
-   drivers/net/usb/r8152.c:9807:12: warning: unused function 'r8157_desc_init' [-Wunused-function]
-    9807 | static int r8157_desc_init(struct r8152 *tp)
-         |            ^~~~~~~~~~~~~~~
-   7 warnings generated.
+Thanks,
+Namhyung
 
 
-vim +1682 drivers/net/usb/r8152.c
-
-  1669	
-  1670	static int wait_cmd_ready(struct r8152 *tp, u16 cmd)
-  1671	{
-  1672		int i, ret;
-  1673	
-  1674		for (i = 0; i < 10; i++) {
-  1675			u16 ocp_data = ocp_read_word(tp, MCU_TYPE_USB, cmd);
-  1676	
-  1677			if (!(ocp_data & ADV_CMD_BUSY))
-  1678				break;
-  1679			usleep_range(1000, 2000);
-  1680		}
-  1681	
-> 1682		if (i == 10)
-  1683			ret = -ETIMEDOUT;
-  1684	
-  1685		return ret;
-  1686	}
-  1687	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  }
+>  
+>  static void exit_type_state(struct type_state *state)
+> @@ -1421,7 +1423,8 @@ static enum type_match_result find_data_type_insn(struct data_loc_info *dloc,
+>  
+>  static int arch_supports_insn_tracking(struct data_loc_info *dloc)
+>  {
+> -	if ((arch__is_x86(dloc->arch)) || (arch__is_powerpc(dloc->arch)))
+> +	if ((arch__is_x86(dloc->arch)) || (arch__is_powerpc(dloc->arch)) ||
+> +	    (arch__is_arm64(dloc->arch)))
+>  		return 1;
+>  	return 0;
+>  }
+> -- 
+> 2.34.1
+> 
