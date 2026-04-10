@@ -1,115 +1,156 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51FC1A3172
-	for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 01:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4814B3290DC;
+	Fri, 10 Apr 2026 02:10:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775784789; cv=none; b=mMyZRXADsQqhpEcQTOHeJ0xnn2S83P+wP+ao9fFBEY0ew0BR9tR4S/pRUyJex8wqvFmD30JA+EWE/lVT4ocoP/qR7CbUbUg2P5n8D6xtoxO9RJG1Y3h7+jBo5jDqtsVesjzQiFzjPFI4wkvN3Wxg60SBNH28i+DEImifXUSoQyQ=
+	t=1775787052; cv=none; b=o+osE7gGbQ5P33dBj3biP56VKDlmIOQTyiYJ/qTR/wvlu0xhLDYp8qBwKNmG5gLKJ+KsyucXvjxu8isDdZIGe5dOeFTHYZOfUYTm3/SIY/ben4bTigyobBzn5OqcFtyLkQ8j54qcOQfIiB6A1VKcX0VlDxI1PAAmy8ekQzv0to4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775784789; c=relaxed/simple;
-	bh=Y5LbLMSvp3yYix5NXE0BPlq11KIdCMv0RWR2KZmK9+w=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MZKFg8q0a8Bu5/+2kPp37PG1m8G+fY5WbMnCnCmWMSYW37/8dUGUDx/whQ2wavEsHR1ivApYQ4hRKwZ+FSql3+YzG6EYfluMyJUWWIuQMoRXkvQSq/miwEmFM4D+6l6LWhNdduvx1HdNtNbyniOgY8YITt5MlRVMk4EfegyoZHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DvEKrSRg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775787052; c=relaxed/simple;
+	bh=sYEJlC+80a5TUPCyGZHLWRArwG8vmKPmnR+IrEgx5A4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pd8iV84RO7G4jQYJCkxGgX8WH+F6BDCfPzbhsf5ZM6DHxE68whp4fw+hXUFHaOW5F8nha3P5fkCvLC4YXrV8xaf2NpyNboly9yXYE14MQC10K7nf5tKUUbj+rA1gK9onO1Db/PvP5I80MEI2r4mig28TzMRLs9Lt+k3dDyuEDQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r4tLeQJf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DvEKrSRg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775784786;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=h5P57SZzjFEVN4WxxSpgIyc+KinOxXjdLY7d1HVtKl0=;
-	b=DvEKrSRgA1iZXCaqAW6tTMtSEi27C0OYQDi9NjwYh+KLEXe1nlSeCzlltg6WYSLuxSpc1k
-	gaVuq2RrQLtdRd6F+lcZm512H6B8sJ+3ocsufWLyRXJxjgVHiCMwv9Ac+0aA9K4A/CZrCA
-	x+2kS7VUYB7jKUvEfr/MvBHbK+1sPNY=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-245-0K1-epaTObKVGZf5QQut7Q-1; Thu,
- 09 Apr 2026 21:33:04 -0400
-X-MC-Unique: 0K1-epaTObKVGZf5QQut7Q-1
-X-Mimecast-MFC-AGG-ID: 0K1-epaTObKVGZf5QQut7Q_1775784784
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C95C71801301
-	for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 01:33:03 +0000 (UTC)
-Received: from [172.20.155.76] (unknown [10.30.44.186])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5F66019560AB;
-	Fri, 10 Apr 2026 01:33:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 88 of 97): Test report for master
- (7.0.0-rc7, upstream-mainline, b42ed3bb)
-Date: Fri, 10 Apr 2026 01:33:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r4tLeQJf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 799ACC4CEF7;
+	Fri, 10 Apr 2026 02:10:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775787051;
+	bh=sYEJlC+80a5TUPCyGZHLWRArwG8vmKPmnR+IrEgx5A4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=r4tLeQJfd+vN9qPkw7uJDjgl7R1cWD7iGKz3zMVvIUlierwn/u/iPnlSeDHMZHxwP
+	 F/bz5k3nRbvK5s3c3ZL/V4w8iYT/lZ4nouO/LlhquLbR8R9xz5YCAfnhy5gaWGZYHy
+	 CLhOTZ2JjllHI3lQDgvAzZgMHzRc8M5d9I0eN0ggS8SyDhnBHiR6Sx4ijxq8YDKLXh
+	 qEHnTm45l/RcSxwgCIDoSjB+Y4ZNA43eGpD4V8pwxyIRDNVBGtPLacCzOYsmYz6Qyp
+	 WmlO4XdncK7IPKPYCuqglYMgN3oYZuS96duJOS0SMh9xqWhYmMezOOt9TnZV1eC7iE
+	 CNjvptAiRAk5g==
+Date: Fri, 10 Apr 2026 11:10:49 +0900
+From: "Harry Yoo (Oracle)" <harry@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+	Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Alexander Potapenko <glider@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
+	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>,
+	Florent Revest <revest@google.com>,
+	GONG Ruiqi <gongruiqi@huaweicloud.com>,
+	Jann Horn <jannh@google.com>, KP Singh <kpsingh@kernel.org>,
+	Matteo Rizzo <matteorizzo@google.com>
+Subject: Re: [PATCH v1] slab: support for compiler-assisted type-based slab
+ cache partitioning
+Message-ID: <adhcKZGytWdaLxJu@hyeyoo>
+References: <20260331111240.153913-1-elver@google.com>
+ <ac9d5O5XehnXRc5A@hyeyoo>
+ <d0fe363c-2e8f-44a4-9b64-3fa3ba9a5773@kernel.org>
+ <adM2XVZf1DekahlY@hyeyoo>
+ <CANpmjNMeaWWuDMAj_n38U9XRqgZQz30ca82Vy10Bg=NoDfZ5ng@mail.gmail.com>
+ <adT-gkVmVDDXR1h_@hyeyoo>
+ <CANpmjNO1aNm3mKphDGWasK_NUfVY8q4K9GCjyREZFqrOu9WLcw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <37182.126040921330400343@us-mta-245.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 4f2B_bNkk9V_ubg9C4enIHAVsZiyvRw_JEPSObMc_3c_1775784784
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNO1aNm3mKphDGWasK_NUfVY8q4K9GCjyREZFqrOu9WLcw@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+On Thu, Apr 09, 2026 at 10:19:09PM +0200, Marco Elver wrote:
+> On Tue, 7 Apr 2026 at 14:54, 'Harry Yoo (Oracle)' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
+> >
+> > On Tue, Apr 07, 2026 at 01:17:14PM +0200, Marco Elver wrote:
+> > > On Mon, 6 Apr 2026 at 06:28, 'Harry Yoo (Oracle)' via kasan-dev
+> > > <kasan-dev@googlegroups.com> wrote:
+> > > > On Fri, Apr 03, 2026 at 08:29:22PM +0200, Vlastimil Babka (SUSE) wrote:
+> > > > > On 4/3/26 08:27, Harry Yoo (Oracle) wrote:
+> > > > > >> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> > > > > >> index 15a60b501b95..c0bf00ee6025 100644
+> > > > > >> --- a/include/linux/slab.h
+> > > > > >> +++ b/include/linux/slab.h
+> > > > > >> @@ -864,10 +877,10 @@ unsigned int kmem_cache_sheaf_size(struct slab_sheaf *sheaf);
+> > > > > >>   * with the exception of kunit tests
+> > > > > >>   */
+> > > > > >>
+> > > > > >> -void *__kmalloc_noprof(size_t size, gfp_t flags)
+> > > > > >> +void *__kmalloc_noprof(size_t size, gfp_t flags, kmalloc_token_t token)
+> > > > > >>                            __assume_kmalloc_alignment __alloc_size(1);
+> > > > > >>
+> > > > > >> -void *__kmalloc_node_noprof(DECL_BUCKET_PARAMS(size, b), gfp_t flags, int node)
+> > > > > >> +void *__kmalloc_node_noprof(DECL_BUCKET_PARAMS(size, b), gfp_t flags, int node, kmalloc_token_t token)
+> > > > > >>                            __assume_kmalloc_alignment __alloc_size(1);
+> > > > > >
+> > > > > > So the @token parameter is unused when CONFIG_PARTITION_KMALLOC_CACHES is
+> > > > > > disabled but still increases the kernel size by a few kilobytes...
+> > > > > > but yeah I'm not sure if we can get avoid it without hurting readability.
+> > > > > >
+> > > > > > Just saying. (does anybody care?)
+> > > > >
+> > > > > Well we did care enough with CONFIG_SLAB_BUCKETS to hide the unused param
+> > > > > using DECL_BUCKET_PARAMS(),
+> > > >
+> > > > Hmm yeah.
+> > > >
+> > > > I wasn't sure if we could do this without hurting readability,
+> > > > but perhaps we could...
+> > > >
+> > > > > so maybe extend that idea?
+> > > > > I think it's not just kernel size, but increased register pressure etc.
+> > >
+> > > I'll take a closer look at generated code.
+> >
+> > > In some cases the compiler ought to omit zero-sized arguments,
+> >
+> > Oh, didn't know that was a thing.
+> 
+> So I checked with Clang and GCC. Looks like Clang does omit the
+> zero-sized struct argument, i.e. generated code is identical to
+> before. Whereas GCC wastes a few bytes of stack space at callsites.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thanks for confirming that.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+> Which is sad, because that means we need the macro workaround.
+> 
+> Do you want to be credited with Co-authored-by
 
-Kernel information:
-    Commit message: Merge tag 'efi-fixes-for-v7.0-4' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/efi/efi
+I'd appreciate that. (I guess you meant Co-developed-by)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2442584551
+> - in which case I need your Signed-off-by.
 
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
-    /distribution/command [aarch64, ppc64le, s390x, x86_64]
-    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
-    Boot test [aarch64, ppc64le, s390x, x86_64]
-    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
-    Reboot test [aarch64, ppc64le, s390x, x86_64]
-    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x, x86_64]
-    Storage - blktests - throtl [aarch64, s390x, x86_64]
-    Storage - blktests - ublk [aarch64, s390x, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
-    stress: stress-ng - memory [aarch64, s390x, x86_64]
-    xfstests - btrfs [aarch64, x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [aarch64, x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [aarch64, x86_64]
+Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
 
+> > Not sure if it's safe to do that for exported functions though (since
+> > modules can be built w/ a different compiler).
+> 
+> Kernel modules built with a different config (implicit if different
+> compiler) are not supported, and never have been. If it works, it's
+> just luck (I know people do this, but it's just a disaster waiting to
+> happen).
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+And if GCC folks somehow fix this at some point, even kernel modules
+built with a different version of GCC might not be supported?
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+Cheers,
+Harry / Hyeonggon
