@@ -1,126 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BB63DFC88;
-	Fri, 10 Apr 2026 17:09:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775840947; cv=none; b=imA2KOVhhUoxttSzmtzVvTy8iq8vp5b6z4Man+Yi5cgHCodTFEXrY7yQtC7nJvfvxSKZ+Zry9lEJaAVxIGXyOt0bGqKcf6eGMYEWdrnx7NL+SvhOincXp/JIz0h7QhHHd7Fzj/bjyQONm3GLWaw7oOArF02iuKiP79c9u3tt5I0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775840947; c=relaxed/simple;
-	bh=Or6isq0RdiHFUt5VGq3PE2xmwnErovWmQesaxc5lnQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ZmVb2rMc6/6Z/S6FMMvZgHt4vMjMkjh2lNcE6uEvNjfpq1Wg8j4kol91DFbpyOGQg3P22+z6fkf7VOmRbUlY2KrazdSjkQzr7kVw0z8jkm+m7e9sT6rR77hr8VjS3R3/dx12jO83JG7cYMIQYIG/aCJc30eLH/VNpOxIVuITUBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YPVXwL8m; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729363B9D94
+	for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 17:48:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775843308; cv=pass; b=SGO+oHEyCVvN86Hdb89rtU1qk7MAznAM3Jpr/q4FlAqAX49ROUFmOkcyEffcBVwpjDXRGcxHRzqSLMqugDWuIFG1ifv7+7JJVXw5rFSKUhaw7/vPZi+GYKzLol9CFklYD3CrV9VJsaghLI6KVOn8sVU8rRTz35I7bYFLcRKpwgg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775843308; c=relaxed/simple;
+	bh=fP8aWal1X6Qsox11Ia6GNPWsn7HNwxIrcnSxBo1eXxA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nbCH2i8jteDm/gAuUSltzBcujbjVHCtkLU2jlH7Zhpyat0Pn/ePo0h6YySlWwZL4fCPct3GJTmgN/rfrDkb3LtMv4OJJ/FpFw7XenT0IbpIcuUtjp0k+1KJtmUagZNR66CcMjPNtBfVFVlaHLkVvAjHFlnz4qzUfgG6NsXqN+cQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v6fX/Ze/; arc=pass smtp.client-ip=209.85.222.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YPVXwL8m"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775840945; x=1807376945;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Or6isq0RdiHFUt5VGq3PE2xmwnErovWmQesaxc5lnQU=;
-  b=YPVXwL8mdHjLf+uVJslsl5sdIe+IW0pjJfXu69NACC6EB+wqC0Xr/Jd+
-   HrkmySSR2UwpiylMom8yw1s5Y7tC0L596Mk2VHF0r29JMCHDFrLYQ4Ssn
-   6Pa+OQJpLZFsO5VIu6L8L0amD0VsxeOiWpHUvb9df1hlw5bi2wPXh2kRj
-   YTHapf/NtkQktdSrIJkLsq651yGtF4WaDzwEGgn+iOkDkhdYWPTacIGBK
-   3PYHuUeYZ9EO0+J/a7Hu7n3oG7mo95VA//oiQsTYCWHF6hcNsoO/iLW15
-   GPEwTu5b9mLrS0539Ph2YRTBqO2N5bvRUUhve7C9cedtc1nCb3u7nuCBa
-   g==;
-X-CSE-ConnectionGUID: BCsu/egFSPSKOOOjngUp4A==
-X-CSE-MsgGUID: /+RG2ouAQJKHaA342Opeug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11755"; a="88308784"
-X-IronPort-AV: E=Sophos;i="6.23,171,1770624000"; 
-   d="scan'208";a="88308784"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2026 10:09:04 -0700
-X-CSE-ConnectionGUID: Ro7A8iE+Rwu8Bjvl6W9wyQ==
-X-CSE-MsgGUID: TKKMdpbHR2GNPaYeuaRHdQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,171,1770624000"; 
-   d="scan'208";a="234065603"
-Received: from lkp-server01.sh.intel.com (HELO 6449335cace3) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 10 Apr 2026 10:09:02 -0700
-Received: from kbuild by 6449335cace3 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wBFLn-00000000429-4ANj;
-	Fri, 10 Apr 2026 17:08:59 +0000
-Date: Sat, 11 Apr 2026 01:08:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Christian =?utf-8?Q?K=C3=B6nig"?= <christian.koenig@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Boris Brezillon <bbrezillon@kernel.org>
-Subject: [linux-next:master 728/13151]
- drivers/gpu/drm/i915/selftests/i915_active.c:326:23: error: no member named
- 'lock' in 'struct dma_fence'
-Message-ID: <202604110107.XKR8jZTJ-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v6fX/Ze/"
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-953b7d2c820so767614241.3
+        for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 10:48:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775843305; cv=none;
+        d=google.com; s=arc-20240605;
+        b=N1kmGW574E+vvzagtsbxTb9qknrAS+QCtDx8MYS7OtEIjNpF+8rCSTFh28ZU10FidT
+         A63gRnJ+f/0u+De/qM+ON5sdzlBb08xIWHmDLdzRMGfOVqA/d6YAHTzYE3qhB8qA/9XN
+         i+x0YPohyFbS3bbzhzv1AISb8RHkri0+KdWMe0PFcquS8xvLwn5W68JkRq6KB7r357HE
+         41fzoBZWjJIZ2kn98M4aNMzmQbRacLIDEaSnDPLbTz1faNCvS+Ek91H1xQ89ER4iUnnK
+         P68qjfIGyv2F5lR2qKc6xrJcpq6ILe3HfTD+vE9/78iAXuZQK05+rEaxb7cD8iMlSUTQ
+         uteA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/l4nSTrukrhbCr2YaIjwfXniIaAMtCTR7SdWmyWxQV4=;
+        fh=+xU/oINOHfRuRRK3g0qUIJsMxnBhm5n7bFW2vVdTuMg=;
+        b=S6w3c63HiDdYrSQFHDz4CN640BwFRUHdM7TWLA0InEs9cZr+Z4sLOfWiAGIiibTXr8
+         m8nGBy49CKD/sPrJD8O5Cq/zilmC6EqoepiN3YltE9SCaTpQcDlUgAvASahQbX6vqbRt
+         PwP+iZu3wJCMtZki6qUpzWyO49ITAoKa9Itqd02A9nhKhUTxC6Xk+Y+1iEAthQkWGKsA
+         xzNX3BPNLTDIQWJnp9FFwc5305srJ/NU6zihA8hSBoMg+qIs8dksS3woxj4o8AcVhNhR
+         knsM/qW8PACc2DsAfUoN9xKPtoJ60wERSV7ELSkuOiTdixXs+nKjPg9PF0CiTUbru858
+         DIKw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775843305; x=1776448105; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/l4nSTrukrhbCr2YaIjwfXniIaAMtCTR7SdWmyWxQV4=;
+        b=v6fX/Ze/e0xHjtlAT2D8m6JWd3cf/rfvO6I8Bi967LzzzUgTSsDCi50N6/RD+nOGBo
+         BjWmW3g1rnQ+WDoD8xpB5vA0p7FPKvECkITahKv8mtu/8nFKv5sgRZnKfNaSEMdfeIfP
+         76lIBeHhPCLpNEfC0L4yTndFVfPt4cKZiDTnrXy8pmk9hLmjCFkI7k90q0rhi0/vn6w4
+         cxsQYXXohZ522BBTUzMXesLCQH+lZox5+LXWsVTkYUmxqETjx2Co6FQChHfUoXyAGc0l
+         jFi9BugB9EB1OydleY9b1hce/p4Cm4uICt5g92wvUMvzEHWjyuxqOKhlf63LVmd8M9sK
+         s23w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775843305; x=1776448105;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/l4nSTrukrhbCr2YaIjwfXniIaAMtCTR7SdWmyWxQV4=;
+        b=HJmkgNgiKNC2Mj/JhjsqTF3PStqPu+b5xkzT+5S7Wy7DveQi9KumMMfmfD6E0Yvqa4
+         MZ0G25RHrgToUYjI64n/MERO3ie4JKh//mEfa54bxHVR81bXoBkK/jz+3gq5TBahKQnz
+         JVqNBKfSV7c+GVtOmA0QrtjNZP9hN044Lu/HnCIOtUpBZDpIF2gjar5XFf3dYV/g61zg
+         ntXLrqp+oBeVVDI0Ak+8X+ixH0DzoerXt0E/CfywX2aHdr4Swvi3wVSjFvSt1X3oKCNM
+         m4+B73dsgGuRK8A5XDl2RDvgj0RTW7Tw3a9NireKqTcEVysZK5LjnYMM1h1GvlofrsVb
+         QjRg==
+X-Forwarded-Encrypted: i=1; AJvYcCUK1CR535//SPXiPvbnENQ0ptPRwW4sDbFJGNCl8S89/FDxfvsctRyvW9TSAUBlOykxz2dT@lists.linux.dev
+X-Gm-Message-State: AOJu0YwdtEPZ1LpocbhCAgEgT8xg90qn5NlPS6Ok5HSkiI+rSvoJjcO0
+	RZ8sYcTjHfe3+jPfXrXi37OkPiWdgklQFIDZFZW1tLYi/And/djRaeWo8NysM6Xuekq+g9hD5YS
+	lKBwGnN57uJMq9pradsSJqVKvEs2woLSIalDl9V7a
+X-Gm-Gg: AeBDieso2fc1Jecq3rc9dpIO5UM8mIH5/N1KUSKV177NQu/SobqVQQ7/lT5rnZ7gLsw
+	ClhWdMFyZsAGWDr5Qb+XeFkCxqt4CV3U2OJ4GF9m3alEUN0z8CxrZ7m9Ad2CC6AGeKXXnZcIb/Y
+	f0ICN8kyB9KYDZCWbVMs2naFznyXb03VxU/5aGLnLZopGCxdiHqcdCSlCWfMCU9qI6ZROJ7JCAO
+	qN7p2E/U9idhwvofTS17SgXQo4gfZlTpm00GSjBEgI4Q+K1yuD/HNX1hVJOTss/pXZZv+1ZhUwU
+	TUwirnkl9lx1JlV+NQ==
+X-Received: by 2002:a67:e7c1:0:b0:607:7991:f02e with SMTP id
+ ada2fe7eead31-60a0125a157mr1913972137.26.1775843305006; Fri, 10 Apr 2026
+ 10:48:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+References: <20260331163716.work.696-kees@kernel.org> <20260331163725.2765789-5-kees@kernel.org>
+ <CAHk-=wiJ6Q_qMHSe-hs+QvqKVZphvDZjvFP_gQLw1eaWimv8+w@mail.gmail.com>
+ <202603311253.95C54588E@keescook> <CAHk-=wjSOGaausLeTD13yAqso7qM09EnkDFiN7wF15kH0VWmZQ@mail.gmail.com>
+ <202603311321.4EE9FEA@keescook> <20260401083137.GT3738786@noisy.programming.kicks-ass.net>
+ <202604011328.D3821379@keescook> <20260402053840.GD3254421@noisy.programming.kicks-ass.net>
+In-Reply-To: <20260402053840.GD3254421@noisy.programming.kicks-ass.net>
+From: Justin Stitt <justinstitt@google.com>
+Date: Fri, 10 Apr 2026 10:48:13 -0700
+X-Gm-Features: AQROBzBa6VKBq4ACJ1_R_EdvKeRsco9AeWVrSeipdWQAbkoYS53l26rCnLm5lXU
+Message-ID: <CAFhGd8q_avLPfOsFkOd52eVJ7A50eKZ0HJo8ehqhG9P-s7P4-A@mail.gmail.com>
+Subject: Re: [PATCH 5/5] types: Add standard __ob_trap and __ob_wrap scalar types
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Kees Cook <kees@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Mark Rutland <mark.rutland@arm.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Thomas Gleixner <tglx@kernel.org>, Finn Thain <fthain@linux-m68k.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+	llvm@lists.linux.dev, Marco Elver <elver@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Nicolas Schier <nsc@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
+	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Christian,
+Hi,
 
-First bad commit (maybe != root cause):
+On Wed, Apr 1, 2026 at 10:38=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Wed, Apr 01, 2026 at 01:52:26PM -0700, Kees Cook wrote:
+>
+> > (Though I would note that GCC does _not_ refuse the jump when there is =
+a
+> > cleanup; it only see the other two uninitialized values.)
+>
+> Yeah.. I know, but since we also build with clang, any such issue will
+> get discovered.
+>
+> > So that makes it not totally broken, but it does make it a bit fragile.
+>
+> Right.
+>
+> > Another concern I have is dealing with older compilers and how to
+> > "hide" the label and its code. e.g. if I remove the "goto" from above:
+> >
+> > ../drivers/misc/lkdtm/bugs.c:1060:1: warning: label 'weird' defined but=
+ not used [-Wunused-label]
+> >  1060 | weird:
+> >       | ^~~~~
+> >
+> > Oddly, the unreachable code isn't a problem, so we could just wrap the
+> > label is some macro like:
+> >
+> > #define force_label(x) if (0) goto x; x
+> >
+> > force_label(weird):
+> >         pr_info("value: %lu\n", value);
+> >         pr_info("outcome: %zu\n", outcome);
+> >
+>
+> __maybe_unused also works on labels. Like:
+>
+> __overflow: __maybe_unused
+>         dead-code-here;
+>
+>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3fa7d958829eb9bc3b469ed07f11de3d2804ef71
-commit: 1f32f310a13c9fb67a9993ab67f596b3f960206f [728/13151] dma-buf: inline spinlock for fence protection v5
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260411/202604110107.XKR8jZTJ-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260411/202604110107.XKR8jZTJ-lkp@intel.com/reproduce)
+Completing the loop: Here's the Clang RFC discussing obt label handler
+design [1]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604110107.XKR8jZTJ-lkp@intel.com/
+[1]: https://discourse.llvm.org/t/rfc-linux-kernel-discusses-overflowbehavi=
+ortypes/90486
 
-Note: the linux-next/master HEAD 3fa7d958829eb9bc3b469ed07f11de3d2804ef71 builds fine.
-      It may have been fixed somewhere.
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/i915/i915_active.c:1177:
->> drivers/gpu/drm/i915/selftests/i915_active.c:326:23: error: no member named 'lock' in 'struct dma_fence'
-     326 |         spin_lock_irq(fence->lock);
-         |                       ~~~~~  ^
-   drivers/gpu/drm/i915/selftests/i915_active.c:328:25: error: no member named 'lock' in 'struct dma_fence'
-     328 |         spin_unlock_irq(fence->lock); /* serialise with fence->cb_list */
-         |                         ~~~~~  ^
-   2 errors generated.
-
-
-vim +326 drivers/gpu/drm/i915/selftests/i915_active.c
-
-38813767c7c5d9 Chris Wilson 2019-11-01  316  
-e3e7aeec3281af Chris Wilson 2020-03-06  317  static void active_flush(struct i915_active *ref,
-e3e7aeec3281af Chris Wilson 2020-03-06  318  			 struct i915_active_fence *active)
-e3e7aeec3281af Chris Wilson 2020-03-06  319  {
-e3e7aeec3281af Chris Wilson 2020-03-06  320  	struct dma_fence *fence;
-e3e7aeec3281af Chris Wilson 2020-03-06  321  
-e3e7aeec3281af Chris Wilson 2020-03-06  322  	fence = xchg(__active_fence_slot(active), NULL);
-e3e7aeec3281af Chris Wilson 2020-03-06  323  	if (!fence)
-e3e7aeec3281af Chris Wilson 2020-03-06  324  		return;
-e3e7aeec3281af Chris Wilson 2020-03-06  325  
-e3e7aeec3281af Chris Wilson 2020-03-06 @326  	spin_lock_irq(fence->lock);
-e3e7aeec3281af Chris Wilson 2020-03-06  327  	__list_del_entry(&active->cb.node);
-e3e7aeec3281af Chris Wilson 2020-03-06  328  	spin_unlock_irq(fence->lock); /* serialise with fence->cb_list */
-e3e7aeec3281af Chris Wilson 2020-03-06  329  	atomic_dec(&ref->count);
-e3e7aeec3281af Chris Wilson 2020-03-06  330  
-e3e7aeec3281af Chris Wilson 2020-03-06  331  	GEM_BUG_ON(!test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags));
-e3e7aeec3281af Chris Wilson 2020-03-06  332  }
-e3e7aeec3281af Chris Wilson 2020-03-06  333  
-
-:::::: The code at line 326 was first introduced by commit
-:::::: e3e7aeec3281af446d7410d6982020e1aa5795fc drm/i915/selftests: Apply a heavy handed flush to i915_active
-
-:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
-:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jusin
