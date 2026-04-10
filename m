@@ -1,281 +1,143 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46EF83B47EB
-	for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 09:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775812114; cv=none; b=W6ITiFAzZaUO3OqplHjCs6/lBxmti3b+s41F0i6VNDqpLFZmhMkKM3WsmJVM6N7fa+4OVw1Pcetu8vuEJcGqUq06cZFAFMBazvw4jRt91EE/XBKw/ldhhNYmJ162utk8E4rh4LZ5/1B2PsrbUwkEnTQmlKElfyXfgYc4ahtuLbg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775812114; c=relaxed/simple;
-	bh=3dk6a/n5Gd8Q03nlTuhA9GomF95xRQbOqn9vRORgEqQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ooZqJYMz6Hhb4vcpMzc7m/oYBFEr7Wpmxhh6JkEET36FlTJ1cZyZwDNYDaJk3z2Ok1OOdvGrijXmIBe32XOxXtc+eQo4M8kc9HxS0zzrBiAIg6nwdXIfhZm1gcwVHNkFE52F+B7eRXaBgeplG8KR82U/pURIRkaC56eYaEVBHN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fsWD64nqCzYQtr5
-	for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 17:07:50 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id E7E0140539
-	for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 17:08:27 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP1 (Coremail) with SMTP id cCh0CgAXGdkKvthpbCUxEA--.45882S2;
-	Fri, 10 Apr 2026 17:08:27 +0800 (CST)
-Message-ID: <95ffff3d-189f-4e86-98b8-83b255410196@huaweicloud.com>
-Date: Fri, 10 Apr 2026 17:08:26 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BBB73B52E1
+	for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 09:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775812248; cv=pass; b=B/PxbyEgn22a+4wy07CLKtBI1lvW5p7atuqoKmXJQzBtMvckZaw1/Kb6DsPQcmzxlrgb2AnJZbo55zfnXdRt7UHwGuHKDtOaQZLhVVAhA5kgb0N/jizA0b5FoIMaQY27OmJNkkK3qW0EyGIEmlARKJCwcDReP56/WtKFxjy6AS4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775812248; c=relaxed/simple;
+	bh=naitCC6swSoBy1VNvSZ66ZypJ+ORfAmYMB1nrf5YPCM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ult3bkedHicWl0ZeMat3pjxrtMbm14Dkw632LWvMiJgst8vMQD7xn3lZkB/lPwM3Fn5Ilvy2VuYxAENetqy9nr2qQiqMSnGbLf7uS2lbI7WaqpvM5INIEEF1/SG7Cm2QVENWxyYknQNwOEm1Ro3v+qtnyMEge7BNxt4YeKY21fg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JWFZME0b; arc=pass smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JWFZME0b"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-128e4d0cc48so9136863c88.1
+        for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 02:10:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775812246; cv=none;
+        d=google.com; s=arc-20240605;
+        b=i5pgW6jRymt/1XJSwSM6QdwV98C6Kil4Xg07jcg/GYoxsgMiBXjgEBwfJFo/xqPaGN
+         oo4B4l9dU0b0yTKDBF1y2kvOATes4+CJT7chPQuX4wSnSBu1hGypJ58KTGQBvNZGtphJ
+         3hhcMMpZ8yWYm2O2tHj+1T75ybMhTZEJCgbc5J20wFtuyyMJDpJ+p1mLki5WTSo/Gwe1
+         gkpgjska0/otkXfb+Xgs/v7+eL0fgcgtzDqv5xPBy+Dso1+zc8nWrywTbX4BdCt4DCRv
+         hg3oMjrgVPx3Dxna6IA8l8FyCbSMnxYhA/8OcMYadir4yALiwE23M3cwK+BIC5ncIqAH
+         WfjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=naitCC6swSoBy1VNvSZ66ZypJ+ORfAmYMB1nrf5YPCM=;
+        fh=UC+iAUETeJx69W2+ASIVbfheOhl2PDM3ilvYHzzeem8=;
+        b=PLYklGCj8fYmmnfDE9TTp83D1Lhp5mC5DuTNBd0X3/FfaOBLCt5RXrW/tr78IpXKVc
+         FFGODMH7ycNwYO3WVU5vBrtRJ/mIhDXiCUkZpldCLwe+jX14G12zA9/z4Q+aGO7D+Wxu
+         XMtoFsr/uIwSL2MAVpN4oMMac+EKtgbE0lqo0ZL+92QFXeChVXmnrg6iUXT85NQ1wa+q
+         dNjacUgBNBGi3XMHOMplAPi38TnzGZgHUqfIOkWx0d+hWd4YBe0wup2RTPyrXIeksdpb
+         mUGT17b74hXnFnZAps26dCNuShgDvqGoeufecJXv8ojKrX6jgu12iwOYpSGLBt5M9a8a
+         hkww==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775812246; x=1776417046; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=naitCC6swSoBy1VNvSZ66ZypJ+ORfAmYMB1nrf5YPCM=;
+        b=JWFZME0bg0mxXaM7c/PhYvuXzkY6n5WNejaSUlZi+GtxXEAm1By/B5rFXqEvR2tYwk
+         sl85/nx9WUoUmG67EShybVu6eEJatJmhLm86r3cjwY2tt2jMvf7sAlSAzXmeq37eNxY5
+         Z+s/ouTAGYevf8GeNfd0fTOeglueG5mkx5/gW7DmrrZ2EeRO7tFzmq6HchWraRbga5ib
+         MzEzR/zM+7CB5KkuQNdun2UGOIxiJvNbIMnzEbAPD3Cf/2Hiwt/XgGtVIqVt59bR+b3d
+         Nv3ymwu8uoVKmRsdgLgfOxcdciQjB3r7tWWgISM0lMPdZ2VeFUFUr2qbm10R1jrfuz7B
+         7lxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775812246; x=1776417046;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=naitCC6swSoBy1VNvSZ66ZypJ+ORfAmYMB1nrf5YPCM=;
+        b=TAREkCmC95CniyAmB2DyRUkZdVF7K7qty3n+HxFdXvhYhqBlyqM+ZdQJ+quzNE++UK
+         R8KFPAPaaXPbwg9OPxvT8MHikWAQ7L2MVoXaKa1PfPD4j0JhWNREeSiyTnIGvywxaoCE
+         oueAP041iN7FaI69cQ3LnhDJno9SahQg1ZSAjerWRlvH/pZVH8QQMZLIeTOe51dYROBF
+         lB7cU57mt7B/L7b+lOsx4NdxNq/Ugn0pUbaNIsP42wHSitQm8IQxm5qxho3uZzRO1tD/
+         bO1xJqbavDzQxc78A/1/G0OLcFPR8537baii/qm4sc5WXSwO9NKBG8vMMU41q4hyk9eh
+         KbZw==
+X-Forwarded-Encrypted: i=1; AJvYcCXeN9q6F3BIio/tgWRle5xxiEjqDFbsYhCb/S2IoNd9gHPZzvWn+PtmzhKKkpPyK9p+tcQy@lists.linux.dev
+X-Gm-Message-State: AOJu0YxESsOALHpaHX0Xwu8vKeeYNYSag3Cb28q6zUHXTODtZy2BpeMg
+	Xx9yjK+ni67g/w6s2aWSvPUiR/315D9rRv64iVUHNyegEZY1zupl4WfTbBhhbpXrXucnrcavh+Q
+	ugm7y37acYtsJ9JPRpionQrioU0AV5PMPw7X6gQMw
+X-Gm-Gg: AeBDieuvK/Z3RIggTrAnM43XmcY9qZ0sPaTkTqNP6gn8PqdeDumQqXOFOgKJpzvORvX
+	GC64+xlm9pmL8nm2ClyRySFDFkUAC30nQiRtyPJ0P0mhygeAteZtvd7CHOk1AsmDCAt8JQhsBZH
+	Brva32XBvZ8HeZqlBLgyOpDZ9YqQKU5JFjdrLbgsCAMcbGXLsdNKCmBOyvdYIwgQUcomcmZM8Vx
+	ReEL9WM+5lzPivSZejzxscK5F9+p/2vGV2beIjdiEVD097eNLcNkOFTGlQOp+1zoCxFWStlOtHi
+	/pZCU5hWAj1/jnD4u6gsAFfsbyjDNmg4j8bVpR8pvfyjCxXR
+X-Received: by 2002:a05:7022:250d:b0:11b:b3a1:714a with SMTP id
+ a92af1059eb24-12c34e8f8a4mr1549057c88.12.1775812245709; Fri, 10 Apr 2026
+ 02:10:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/16] perf capstone: Fix arm64 jump/adrp disassembly
- mismatch with objdump
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
- Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
- Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
- <20260403094800.1418825-3-wutengda@huaweicloud.com> <adSnjABSDeeg-9O8@z2>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <adSnjABSDeeg-9O8@z2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgAXGdkKvthpbCUxEA--.45882S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3WFykJF43Kr4xJry7Wr1fXrb_yoWxAr17p3
-	4DC3W3Xa18Xr1Sgw1aqa1DXwnagrWrJF1Yk3yfKaySkrnavrn3GFyxKFya9F98CryDGw4I
-	vF4jvF13Wrn5JrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+References: <20260331111240.153913-1-elver@google.com> <ac9d5O5XehnXRc5A@hyeyoo>
+ <d0fe363c-2e8f-44a4-9b64-3fa3ba9a5773@kernel.org> <adM2XVZf1DekahlY@hyeyoo>
+ <CANpmjNMeaWWuDMAj_n38U9XRqgZQz30ca82Vy10Bg=NoDfZ5ng@mail.gmail.com>
+ <adT-gkVmVDDXR1h_@hyeyoo> <CANpmjNO1aNm3mKphDGWasK_NUfVY8q4K9GCjyREZFqrOu9WLcw@mail.gmail.com>
+ <adhcKZGytWdaLxJu@hyeyoo>
+In-Reply-To: <adhcKZGytWdaLxJu@hyeyoo>
+From: Marco Elver <elver@google.com>
+Date: Fri, 10 Apr 2026 11:10:07 +0200
+X-Gm-Features: AQROBzC2BBHkcPy4ngHl5oxQazFqhMF2xdQ6OJLOxqq2BaVLmQUNSpLtUA2DJOM
+Message-ID: <CANpmjNODn64zxhs8eQM5t_y6GUCbvBK+feAAM6GVDX3-Z8aTGg@mail.gmail.com>
+Subject: Re: [PATCH v1] slab: support for compiler-assisted type-based slab
+ cache partitioning
+To: "Harry Yoo (Oracle)" <harry@kernel.org>
+Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, Hao Li <hao.li@linux.dev>, 
+	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com, 
+	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Florent Revest <revest@google.com>, GONG Ruiqi <gongruiqi@huaweicloud.com>, 
+	Jann Horn <jannh@google.com>, KP Singh <kpsingh@kernel.org>, 
+	Matteo Rizzo <matteorizzo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
+On Fri, 10 Apr 2026 at 04:10, Harry Yoo (Oracle) <harry@kernel.org> wrote:
+[...]
+> > Which is sad, because that means we need the macro workaround.
+> >
+> > Do you want to be credited with Co-authored-by
+>
+> I'd appreciate that. (I guess you meant Co-developed-by)
 
+Thanks (and yes).
 
-On 2026/4/7 14:43, Namhyung Kim wrote:
-> On Fri, Apr 03, 2026 at 09:47:46AM +0000, Tengda Wu wrote:
->> The jump and adrp instructions parsed by libcapstone currently lack
->> symbolic representation and use a '#' prefix for addresses. This
->> format is inconsistent with objdump's output, which causes subsequent
->> parsing in jump__parse() and arm64_mov__parse() to fail.
->>
->> Example mismatch:
->>   Current: b #0xffff8000800114c8
->>   Fix:     b ffff8000800114c8 <el0t_64_sync+0x108>
->>
->>   Current: adrp x18, #0xffff800081f5f000
->>   Fix:     adrp x18, ffff800081f5f000 <this_cpu_vector>
->>
->> Fix this by implementing extended formatting for these arm64
->> instructions during symbol__disassemble_capstone(). This ensures
->> the output matches objdump's expected style, including the raw
->> address and the associated <symbol+offset> suffix.
->>
->> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
->> ---
->>  tools/perf/util/capstone.c | 107 ++++++++++++++++++++++++++++++++-----
->>  tools/perf/util/disasm.c   |   5 ++
->>  tools/perf/util/disasm.h   |   1 +
->>  3 files changed, 101 insertions(+), 12 deletions(-)
->>
->> diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
->> index 25cf6e15ec27..1d8421d2d98c 100644
->> --- a/tools/perf/util/capstone.c
->> +++ b/tools/perf/util/capstone.c
->> @@ -255,10 +255,6 @@ static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
->>  	struct map *map = args->ms->map;
->>  	struct symbol *sym;
->>  
->> -	/* TODO: support more architectures */
->> -	if (!arch__is_x86(args->arch))
->> -		return;
->> -
->>  	if (insn->detail == NULL)
->>  		return;
->>  
->> @@ -305,6 +301,98 @@ static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
->>  	}
->>  }
->>  
->> +static void format_capstone_insn_x86(struct cs_insn *insn, char *buf,
->> +				     size_t len, struct annotate_args *args,
->> +				     u64 addr)
->> +{
->> +	int printed;
->> +
->> +	printed = scnprintf(buf, len, "       %-7s %s",
->> +			    insn->mnemonic, insn->op_str);
->> +	buf += printed;
->> +	len -= printed;
->> +
->> +	print_capstone_detail(insn, buf, len, args, addr);
->> +}
->> +
->> +static void format_capstone_insn_arm64(struct cs_insn *insn, char *buf,
->> +				       size_t len, struct annotate_args *args,
->> +				       u64 addr)
->> +{
->> +	struct map *map = args->ms->map;
->> +	struct symbol *sym;
->> +	char *last_imm, *endptr;
->> +	u64 orig_addr;
->> +
->> +	scnprintf(buf, len, "       %-7s %s",
->> +		  insn->mnemonic, insn->op_str);
->> +	/*
->> +	 * Adjust instructions to keep the existing behavior with objdump.
->> +	 *
->> +	 * Example conversion:
->> +	 * From: b #0xffff8000800114c8
->> +	 * To:   b ffff8000800114c8 <el0t_64_sync+0x108>
->> +	 */
->> +	switch (insn->id) {
->> +	case ARM64_INS_B:
->> +	case ARM64_INS_BL:
->> +	case ARM64_INS_CBNZ:
->> +	case ARM64_INS_CBZ:
->> +	case ARM64_INS_TBNZ:
->> +	case ARM64_INS_TBZ:
->> +	case ARM64_INS_ADRP:
->> +		/* Extract last immediate value as address */
->> +		last_imm = strrchr(buf, '#');
->> +		if (!last_imm)
->> +			return;
->> +
->> +		orig_addr = strtoull(last_imm + 1, &endptr, 16);
->> +		if (endptr == last_imm + 1)
->> +			return;
->> +
->> +		/* Relocate map that contains the address */
->> +		if (dso__kernel(map__dso(map))) {
->> +			map = maps__find(map__kmaps(map), orig_addr);
->> +			if (map == NULL)
->> +				return;
-> 
-> I know you copied the logic from x86, but I've realized that it leaks a
-> refcount for the new kernel map returned from maps__find().  This needs
-> to be fixed separately.
-> 
-> Thanks,
-> Namhyung
-> 
+> > - in which case I need your Signed-off-by.
+>
+> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+>
+> > > Not sure if it's safe to do that for exported functions though (since
+> > > modules can be built w/ a different compiler).
+> >
+> > Kernel modules built with a different config (implicit if different
+> > compiler) are not supported, and never have been. If it works, it's
+> > just luck (I know people do this, but it's just a disaster waiting to
+> > happen).
+>
+> And if GCC folks somehow fix this at some point, even kernel modules
+> built with a different version of GCC might not be supported?
 
-Oh, right.
-I will send a separate patch to fix this issue in the existing x86 logic and
-will make sure the arm64 implementation follows the fix.
-
--- Tengda
-
-> 
->> +		}
->> +
->> +		/* Convert it to map-relative address for search */
->> +		addr = map__map_ip(map, orig_addr);
->> +
->> +		sym = map__find_symbol(map, addr);
->> +		if (sym == NULL)
->> +			return;
->> +
->> +		/* Symbolize the resolved address */
->> +		len = len - (last_imm - buf);
->> +		if (addr == sym->start) {
->> +			scnprintf(last_imm, len, "%"PRIx64" <%s>",
->> +				  orig_addr, sym->name);
->> +		} else {
->> +			scnprintf(last_imm, len, "%"PRIx64" <%s+%#"PRIx64">",
->> +				  orig_addr, sym->name, addr - sym->start);
->> +		}
->> +		break;
->> +	default:
->> +		break;
->> +	}
->> +}
->> +
->> +static void format_capstone_insn(struct cs_insn *insn, char *buf, size_t len,
->> +				 struct annotate_args *args, u64 addr)
->> +{
->> +	/* TODO: support more architectures */
->> +	if (arch__is_x86(args->arch))
->> +		format_capstone_insn_x86(insn, buf, len, args, addr);
->> +	else if (arch__is_arm64(args->arch))
->> +		format_capstone_insn_arm64(insn, buf, len, args, addr);
->> +	else {
->> +		scnprintf(buf, len, "       %-7s %s",
->> +			  insn->mnemonic, insn->op_str);
->> +	}
->> +}
->> +
->>  struct find_file_offset_data {
->>  	u64 ip;
->>  	u64 offset;
->> @@ -381,14 +469,9 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
->>  
->>  	free_count = count = perf_cs_disasm(handle, buf, buf_len, start, buf_len, &insn);
->>  	for (i = 0, offset = 0; i < count; i++) {
->> -		int printed;
->> -
->> -		printed = scnprintf(disasm_buf, sizeof(disasm_buf),
->> -				    "       %-7s %s",
->> -				    insn[i].mnemonic, insn[i].op_str);
->> -		print_capstone_detail(&insn[i], disasm_buf + printed,
->> -				      sizeof(disasm_buf) - printed, args,
->> -				      start + offset);
->> +		format_capstone_insn(&insn[i], disasm_buf,
->> +				     sizeof(disasm_buf), args,
->> +				     start + offset);
->>  
->>  		args->offset = offset;
->>  		args->line = disasm_buf;
->> diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
->> index 40fcaed5d0b1..988b2b748e11 100644
->> --- a/tools/perf/util/disasm.c
->> +++ b/tools/perf/util/disasm.c
->> @@ -202,6 +202,11 @@ bool arch__is_powerpc(const struct arch *arch)
->>  	return arch->id.e_machine == EM_PPC || arch->id.e_machine == EM_PPC64;
->>  }
->>  
->> +bool arch__is_arm64(const struct arch *arch)
->> +{
->> +	return arch->id.e_machine == EM_AARCH64;
->> +}
->> +
->>  static void ins_ops__delete(struct ins_operands *ops)
->>  {
->>  	if (ops == NULL)
->> diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
->> index a6e478caf61a..d3730ed86dba 100644
->> --- a/tools/perf/util/disasm.h
->> +++ b/tools/perf/util/disasm.h
->> @@ -111,6 +111,7 @@ struct annotate_args {
->>  const struct arch *arch__find(uint16_t e_machine, uint32_t e_flags, const char *cpuid);
->>  bool arch__is_x86(const struct arch *arch);
->>  bool arch__is_powerpc(const struct arch *arch);
->> +bool arch__is_arm64(const struct arch *arch);
->>  
->>  extern const struct ins_ops call_ops;
->>  extern const struct ins_ops dec_ops;
->> -- 
->> 2.34.1
->>
-
+Yes, and different compiler version also implies different compiler
+(so even GCC A.B != GCC X.Y), because newer compiler versions may
+activate different codegen options (some of which we auto-enable if
+available).
