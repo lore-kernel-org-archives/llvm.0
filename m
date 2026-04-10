@@ -1,115 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bkemail.birger-koblitz.de (bkemail.birger-koblitz.de [23.88.97.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD360312815;
-	Fri, 10 Apr 2026 06:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621D733260F;
+	Fri, 10 Apr 2026 06:11:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.97.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775801387; cv=none; b=ENmKMGJ61qIDzYeXSsljjZmNvJXHIQ7zMhxvVsn6DE6eU+oRw/D9TBR+Ypbf+iCDC1oBbYl818GughCyT8Rq9k2x8JWD4bxVPex0buAbKCMkTNQ94cS6/irfY13BVcHQQ4cMavcKIQ3hGqAw0UsRyN6fUBWpjwDrdejGhAO0TAs=
+	t=1775801473; cv=none; b=oOc4loMz+iPi4y/Z2utmfSNkQwfoKkbF/iwYJY5bxgXcil9p7udG+WYcTcFpea0rbm3nmTiUniyB2+JAUIIB1qF/7n2OQxDKCc9a1OCpl5J2PtY1GqKjK51y7mCBjid+wAzH+BHk188/BNtkpMuJqmPQ2fV8EeUtORt3jGHme6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775801387; c=relaxed/simple;
-	bh=T5EvhFrIxER2QFYEsToO2rIyzFLR2rYS9S072vD0lHg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TagLSHgeKdJNwAJfyURYKwIfkZFnW+EEj1cOM/F6yKUIuy4pyXvM+92ZxdcCq8hGgTHE/VxsGGh3BX8VmQySMQ6E0M/8l8/nzumpZEMasj8TJXpWIRgLcQjsLJb4LDctYUP6VZcJmXHBnKfFc4++bJGw8ncHjHLHycwfHKOhRPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ph2dbOqU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775801473; c=relaxed/simple;
+	bh=bHNbWMueZfUuYJdYPoX5RMXp1JV1ye+G1T6K+YUSiR4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tK5g5dQrA1W+plHWECHyHsqFSoeyewZ1TlEeJ8F3R0IGm0DZPyzICGFUZzH8+QQqoOIIzDHj4DmxL7BypfGYISM97jpJGtBOTymP+lRHhDucg5wHzCcMyxwJcYwwt3cNgSYeiodTPjyjj2qheEhUlX65dvD6ZZA6Y6e1sLVNneQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de; spf=pass smtp.mailfrom=birger-koblitz.de; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=BbjEunfA; dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b=t/n5YiwY; arc=none smtp.client-ip=23.88.97.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=birger-koblitz.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=birger-koblitz.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ph2dbOqU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DD9FC19421;
-	Fri, 10 Apr 2026 06:09:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775801387;
-	bh=T5EvhFrIxER2QFYEsToO2rIyzFLR2rYS9S072vD0lHg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ph2dbOqU3FDowtMVikm8ZV+Ct7/KHyYCCQKCh6qWPuT9h8+7+eLW55WfbQDTdyWaw
-	 7hDwJv220/NiR8RLgFJpBftAO7MJh6lYsSWxVEbXoITw1LeIqCHOh6ikw/uOCFB6HQ
-	 V1DddC2fg0YMD/BcTEOk25oscV7YdXpKIYvNdda8zk9Z+bekJ9+HbBSMm8bU+OlPNj
-	 lvhH9gVFpfF/WuV8yDl2W/IyAUUTDmKV9iq+R9VsASQysbdQtKtg2yaeVg9ELAFoEW
-	 zleieLAEqBAvBgePupp7j0DZ/k6ZMtfkQ2kEGwJMjPBdWI5cw1RoTTdenWullfN8XG
-	 w79ILjyrfKiNQ==
-Date: Thu, 9 Apr 2026 23:09:44 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Tengda Wu <wutengda@huaweicloud.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
-	Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
-	Kim Phillips <kim.phillips@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 08/16] perf annotate-arm64: Enable instruction
- tracking support
-Message-ID: <adiUKB1CTkDAGrB_@google.com>
-References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
- <20260403094800.1418825-9-wutengda@huaweicloud.com>
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="BbjEunfA";
+	dkim=pass (2048-bit key) header.d=birger-koblitz.de header.i=@birger-koblitz.de header.b="t/n5YiwY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1775801470;
+	bh=bHNbWMueZfUuYJdYPoX5RMXp1JV1ye+G1T6K+YUSiR4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BbjEunfA6wycr02x6Xlm1xIb/3ytIykKN8zFXBftLKglCIk5l6F2J6qVx6n6w2q0Z
+	 0Ty1R6Ehy6yCKkK5EcxGX2a6NXKa4wRdTeczqe/ATvjG+JkRWRV1b0geAztAW8M5iK
+	 SbYpyGbjucR2hJxRuypvqsrQEf+LfDqh/HqjgQzWPE6xFwfV6Ayti0o/MqfRp5qgfm
+	 OTKYLTCtCD2xT1IGYDYBQC0dJVNQtoVSIK3pjKqz5WyjF5/lNSorO6U8+ja9OlboFU
+	 SdtNGqkv94U0iirURCB89xsZFmnUPKg4IbQnSmhjoSQLWE6qNch4K1me+6Unqk6BXm
+	 8tF1msr0gMmPw==
+Received: by bkemail.birger-koblitz.de (Postfix, from userid 109)
+	id 7F8A54116E; Fri, 10 Apr 2026 06:11:10 +0000 (UTC)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=birger-koblitz.de;
+	s=default; t=1775801469;
+	bh=bHNbWMueZfUuYJdYPoX5RMXp1JV1ye+G1T6K+YUSiR4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=t/n5YiwYiBrYCd0n4QkXIUKaYA4zrlMgeqACi9VI2Ezy/wHeHcQpFxscrpr/b+HYq
+	 2a7ZC+Hr2JCHEbwTyonTuRhMRb7hcbC8QNpvXwTHeSFxCO5foR7V2faOXTdNxPVlXt
+	 Z5CmuRB9dsqGT0PshOJ6YSIqQ80fwIN8XBAiK53qb3b0/lDuF9YBDLjiKaoUh/z+pZ
+	 83VK+kw2cOKEPI3lrC+V9vuj0l2BF7s1BYwWuJge62E4hiTW7JZP2TJmLhTmbF5kVp
+	 DkG12C60MBWZ4mafWUsn+ARrwVf0XoWd/5ZiVgmYTzfN/iVYhn/Eo49/edDhS7jDre
+	 5PuMUTsabX5oA==
+Received: from [IPV6:2003:c6:9f04:eb00:d892:db88:9ecc:d39a] (p200300c69f04eb00d892db889eccd39a.dip0.t-ipconnect.de [IPv6:2003:c6:9f04:eb00:d892:db88:9ecc:d39a])
+	by bkemail.birger-koblitz.de (Postfix) with ESMTPSA id B3BD34116D;
+	Fri, 10 Apr 2026 06:11:09 +0000 (UTC)
+Message-ID: <2929dbc0-dd40-45de-908a-25f934738667@birger-koblitz.de>
+Date: Fri, 10 Apr 2026 08:11:08 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260403094800.1418825-9-wutengda@huaweicloud.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 2/9] r8152: Add support for RTL8157 SRAM access
+ and ADV indirect access
+To: kernel test robot <lkp@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260314-rtl8157_next-v1-2-9ba77b428afd@birger-koblitz.de>
+ <202604101309.B9mdviRN-lkp@intel.com>
+From: Birger Koblitz <mail@birger-koblitz.de>
+Content-Language: en-US
+In-Reply-To: <202604101309.B9mdviRN-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 03, 2026 at 09:47:52AM +0000, Tengda Wu wrote:
-> Enable instruction tracking for the arm64 architecture in 'perf annotate'
-> to support data type profiling.
+On 10/04/2026 07:17, kernel test robot wrote:
+> Hi Birger,
 > 
-> Define ARM64_REG_SP as 31 to correctly identify the stack pointer
-> register during type state initialization. Update
-> arch_supports_insn_tracking() to include arm64, which allows
-> find_data_type_block() to process the instruction scope for arm64.
+> kernel test robot noticed the following build warnings:
 > 
-> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
-> ---
->  tools/perf/util/annotate-data.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+> [auto build test WARNING on 5c9e55fecf9365890c64f14761a80f9413a3b1d1]
 > 
-> diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-> index 1eff0a27237d..fd6416d43a2e 100644
-> --- a/tools/perf/util/annotate-data.c
-> +++ b/tools/perf/util/annotate-data.c
-> @@ -28,6 +28,7 @@
->  
->  /* register number of the stack pointer */
->  #define X86_REG_SP 7
-> +#define ARM64_REG_SP 31
->  
->  static void delete_var_types(struct die_var_type *var_types);
->  
-> @@ -177,7 +178,8 @@ static void init_type_state(struct type_state *state, const struct arch *arch)
->  		state->regs[11].caller_saved = true;
->  		state->ret_reg = 0;
->  		state->stack_reg = X86_REG_SP;
-> -	}
-> +	} else if (arch__is_arm64(arch))
-> +		state->stack_reg = ARM64_REG_SP;
+> url:    https://github.com/intel-lab-lkp/linux/commits/Birger-Koblitz/r8152-Add-support-for-RTL8157-RX-TX-descriptor-format/20260315-014044
+> base:   5c9e55fecf9365890c64f14761a80f9413a3b1d1
+> patch link:    https://lore.kernel.org/r/20260314-rtl8157_next-v1-2-9ba77b428afd%40birger-koblitz.de
+> patch subject: [PATCH net-next 2/9] r8152: Add support for RTL8157 SRAM access and ADV indirect access
 
-Probably you want to setup caller-saved registers and the return
-register as well.
+This refers to the initial version of the patch, possibly v1, but v7 was applied, which did not even
+have this particular patch. This is probably a configuration issue of what the robot sees.
 
-Thanks,
-Namhyung
-
-
->  }
->  
->  static void exit_type_state(struct type_state *state)
-> @@ -1421,7 +1423,8 @@ static enum type_match_result find_data_type_insn(struct data_loc_info *dloc,
->  
->  static int arch_supports_insn_tracking(struct data_loc_info *dloc)
->  {
-> -	if ((arch__is_x86(dloc->arch)) || (arch__is_powerpc(dloc->arch)))
-> +	if ((arch__is_x86(dloc->arch)) || (arch__is_powerpc(dloc->arch)) ||
-> +	    (arch__is_arm64(dloc->arch)))
->  		return 1;
->  	return 0;
->  }
-> -- 
-> 2.34.1
-> 
+Birger
