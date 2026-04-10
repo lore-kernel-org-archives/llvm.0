@@ -1,39 +1,43 @@
-Received: from mail-106118.protonmail.ch (mail-106118.protonmail.ch [79.135.106.118])
+Received: from mail-106120.protonmail.ch (mail-106120.protonmail.ch [79.135.106.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CA4378831
-	for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 09:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDCE3783C1
+	for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 09:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775814935; cv=none; b=r8QEw/Ka1Jw6yBwZqN3JtoS3j9AWIcabCatIJ1+jUb8WUu+8Cy/CODpDpvtsBo8evZZgpmn+XqKelzm8wq+rplt/SNVPYhPYPaIY96pCQ9zSVXD9Rth5QUqOkttb561bufpWPBndzT5okuKf6LIqyvG9AAtpZR4Q+TvLYej4ldo=
+	t=1775814947; cv=none; b=jCHTj3Q1kuO5jtgGOz6JLrx9SBeQTcPOoftMwjOnO2N7ReczTXIERBJwGgvjOrIA0RrxRzn+k2Rp2wHM4ZNargLn0E0H+vtU7hxfimB3VDqrFoHO5OEojJZYdqtYYSmOY4ZmB587a11Ubo31ZH5OpI6cq4fSnPmLI/w1zAbiW00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775814935; c=relaxed/simple;
-	bh=5B6kQ0eNONQ0vKFLrZkgSIkTwQ3ULHzzu4BiJhdsFoU=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=KI2X53SOMxfa4gwj09p9yKlqUQzGWw4PwctePMFU7tmfcL5wrd8cpC8UZXXZtmFH5/k2B4+iQQTXSLNJI4+aHlz8tQO6wRa3sBlCAAHDLAA4FZ0l0EiYVBM/YfnH95DO/Ul7LoiB4+sCEVdQmjX7+6Jf7KaFKXIWBtx4wXffdKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=mzehQlae; arc=none smtp.client-ip=79.135.106.118
+	s=arc-20240116; t=1775814947; c=relaxed/simple;
+	bh=a2pHJs2qA0ZtKDeSchRhJe00tuLQzf19+B4gHWLiYxc=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DGum5C6FPsIwYA0PkTZqAevL3795dUrqMjy8eSNtk1byZw3xw1/F++oW2sOErWCHPuKolJ+QHQg7oNk7CxD7nYcQ8a3nvqNPtnQYT+hpgZ5mzWF+958Hb/oABmJT6SYnNt7SjDlD0oKpuPKPIB8d0DVjJA9cIhSWpzdm8fuWr/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=D2JA9MW5; arc=none smtp.client-ip=79.135.106.120
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="mzehQlae"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="D2JA9MW5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1775814922; x=1776074122;
-	bh=dqSlRuqCc3tGzZkZGoD4bgnEZGc7L10HooG+3oLotk8=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=mzehQlaeNkETcPK7kflXRdWigjM7S66NWZEgKCFb+QxFyBDTdJwOSD9G5xW7xHnM9
-	 aVW1Y0uVe9Qvlh8qdQBnllAbkJxWUc+0uSjN1ZKLGyBy73W7oKVI5SUIw2GaCsGIXE
-	 LCXhgztUlF04NxWcvzddD8dgJdDEdR526I+PZofzEbdmg7lpmVnyTG2gukRoqLR7yq
-	 qeJhcViAyg8gP0DxSC69nKrcz3mc7AqbeoEh31/Kr1ntgqnwW85V+x7KQIYDOQWFwF
-	 pk1GMZjwxM95Ipwq4gJoZgHGKsLFdHogl1NzQuYspK2n7WrDFqbQo/4A3stPt9S13x
-	 mfH5cXKqGziGQ==
-Date: Fri, 10 Apr 2026 09:55:17 +0000
+	s=protonmail3; t=1775814943; x=1776074143;
+	bh=O068SfSii2/1GBWY8nC2eioHN+7tVaZriZSWNDGm94o=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=D2JA9MW58BzGSdlnqzWtcwvw1+j0TDuX19R+jw4DteJ9Isa1XBlYmu93tqZbMpgP8
+	 JnzztbUzNZesxDqi8JtcNa0eQK9b7E9Z5V/zVfWExcOaCZxe+mVlhCFpsMilLLj6Ja
+	 oVfKdxBngyjOUjMwx+ADxQQAagQyioHdmB/iU10dCbKXuQe2XbyJlE+tx+5ycIygYv
+	 8Eyq/Muf4+nFbNnzY8XjKgeTcIxP43XGaNYHVkGKkzvnquxGVpQfLv0wkFYzQMaJIT
+	 g1aqxY0O/PBol5umcVXkklLxrF5cDigOPkZRu64xg1PbV8Z1vjBTQKkAmtKE3YUPDi
+	 rjb4tbTCVUCWA==
+Date: Fri, 10 Apr 2026 09:55:35 +0000
 To: peterz@infradead.org, ryan.roberts@arm.com, ilpo.jarvinen@linux.intel.com, maciej.wieczor-retman@intel.com, jgross@suse.com, morbo@google.com, mingo@redhat.com, ljs@kernel.org, nathan@kernel.org, shuah@kernel.org, akpm@linux-foundation.org, james.morse@arm.com, oleg@redhat.com, houwenlong.hwl@antgroup.com, xin@zytor.com, justinstitt@google.com, seanjc@google.com, hpa@zytor.com, perry.yuan@amd.com, bp@alien8.de, dave.hansen@linux.intel.com, sohil.mehta@intel.com, tglx@kernel.org, nick.desaulniers+lkml@gmail.com
 From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org, m.wieczorretman@pm.me
-Subject: [PATCH v6 0/3] x86: Simplifying LAM
-Message-ID: <cover.1775813245.git.m.wieczorretman@pm.me>
+Subject: [PATCH v6 2/3] x86/mm: Cleanup comments where LAM_U48 is mentioned
+Message-ID: <21904e9d5ad5d4939cf11a9fdd35d3a883154a12.1775813245.git.m.wieczorretman@pm.me>
+In-Reply-To: <cover.1775813245.git.m.wieczorretman@pm.me>
+References: <cover.1775813245.git.m.wieczorretman@pm.me>
 Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 3bcc0e963dac299f1175314314caf9f938397d67
+X-Pm-Message-ID: a2c67812187a028a33fb4de6f65447bde24c4308
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,93 +47,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-After ChkTag [1] announcement, it's worth preparing a stable x86 linear add=
-ress
-masking (lam) user interface. One important aspect of lam is the tag width,=
- and
-aligning it with other industry solutions can provide a more popular,
-generalized interface that other technologies could utilize.
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 
-ChkTag will use 4-bit tags and since that's the direction other memory tagg=
-ing
-implementations seem to be taking too (for example Arm's MTE) it's reasonab=
-le to
-converge lam in linux to the same specification. Even though x86's LAM supp=
-orts
-6-bit tags it is beneficial to shorten lam to 4 bits as ChkTag will likely =
-be
-the main user of the interface and such connection should simplify things i=
-n the
-long run.
+For simplicity only the LAM_U57 mode is implemented in the kernel. No
+matter whether the enabled paging mode is 5-level or 4-level the masked
+tag bits are the same as on a 5-level system.
 
-If a usecase arises in the future, the 6-bit tags can be made available as =
-a
-debug feature and possible to enable through debugfs.
+Remove two mentions of LAM_U48 which implied that it could be enabled.
 
-Changing the tag width at the moment has no effect on userspace programs. D=
-ue to
-LAM being disabled until LASS is fully supported in the kernel there are ye=
-t no
-userspace projects relying on a specific LAM tag width. One known exception=
- is
-the clang compiler and its hwasan support. It is however not a problem sinc=
-e
-there are both no users of hwasan on x86 yet and upon closer inspection (wh=
-en
-working on x86 KASAN software tag-based mode) I found it's not working corr=
-ectly
-and needs to be patched.
-
-The patchset also cleans up some comments referencing LAM_U48 which was not
-implemented in the kernel and the comments shouldn't imply it can be enable=
-d.
-
-Patches are based on v7.0-rc7
-
+Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Reviewed-by: Sohil Mehta <sohil.mehta@intel.com>
+---
 Changelog v6:
-- 1/3
-=09- Change define names so they match the arch_prctl() cases for
-=09  LAM.
-=09- Add more defines so they build into the GENMASK() more
-=09  properly.
-- 2/3
-=09- Add one reviewed-by.
-- 3/3
-=09- Update the patch subject after removing additional test cases
-=09  during v3.
-=09- Change bit width and untag mask defines so they match the
-=09  kernel ones in name and add GENMASK() to x86 selftests so
-=09  they match the kernel in form. Update the patch description.
+- Add Sohil's Reviewed-by.
 
-Changelog v5:
-- Rebase onto v7.0-rc7.
+ arch/x86/include/asm/mmu.h      | 2 +-
+ arch/x86/include/asm/tlbflush.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Changelog v4:
-- Remove the 'default' wording from the cover letter and patch messages.
-- Add a paragraph to the cover letter about userspace impact.
-
-Changelog v3:
-- Remove the debugfs part and update the rest of the code and patch
-  messages accordingly.
-
-Changelog v2:
-- Extend a char buffer in debugfs read callback to fit the format
-  string.
-
-[1] https://community.intel.com/t5/Blogs/Tech-Innovation/open-intel/ChkTag-=
-x86-Memory-Safety/post/1721490
-
-Maciej Wieczor-Retman (3):
-  x86/process: Shorten the default LAM tag width
-  x86/mm: Cleanup comments where LAM_U48 is mentioned
-  selftests/lam: Update LAM tag width and cleanup names
-
- arch/x86/include/asm/mmu.h        |  2 +-
- arch/x86/include/asm/tlbflush.h   |  2 +-
- arch/x86/kernel/process_64.c      | 11 ++--
- tools/testing/selftests/x86/lam.c | 94 ++++++++++++++++---------------
- 4 files changed, 58 insertions(+), 51 deletions(-)
-
+diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+index 0fe9c569d171..9dcfce439c19 100644
+--- a/arch/x86/include/asm/mmu.h
++++ b/arch/x86/include/asm/mmu.h
+@@ -49,7 +49,7 @@ typedef struct {
+ =09unsigned long flags;
+=20
+ #ifdef CONFIG_ADDRESS_MASKING
+-=09/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled)=
+ */
++=09/* Active LAM mode: X86_CR3_LAM_U57 or 0 (disabled) */
+ =09unsigned long lam_cr3_mask;
+=20
+ =09/* Significant bits of the virtual address. Excludes tag bits. */
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflus=
+h.h
+index 5a3cdc439e38..94c5ca1febaf 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -110,7 +110,7 @@ struct tlb_state {
+ =09/*
+ =09 * Active LAM mode.
+ =09 *
+-=09 * X86_CR3_LAM_U57/U48 shifted right by X86_CR3_LAM_U57_BIT or 0 if LAM
++=09 * X86_CR3_LAM_U57 shifted right by X86_CR3_LAM_U57_BIT or 0 if LAM
+ =09 * disabled.
+ =09 */
+ =09u8 lam;
 --=20
 2.53.0
 
