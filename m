@@ -1,114 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA33C33C53D;
-	Fri, 10 Apr 2026 09:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CE8345CCE
+	for <llvm@lists.linux.dev>; Fri, 10 Apr 2026 09:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775814448; cv=none; b=Ah8K3XQG38zCDVBwUM670B2lIZ1qBOnAlerTK/Bt7jdsbUX/KfbOTKEsy0BtUvmfJN1Q8BhoNluxkyTRczFLTD0r8B5lH6/KLlsULcEbqo+dUKhaVcchVud+cd2IeBQMnBuoLjydQV09VGTXrAMEyN9CsRnvJzGX6m0DAXNP1cQ=
+	t=1775814677; cv=none; b=aVtveRGhkxhpx595/qa4UJYMwslvLQfV3y3U5gZ/R00BZFiLLbNc3wMHU9O08WxgehRu4pneMlCqVGrm2jZghnLj4HgFY8V3iUgI1JXn9bs3v0PbGgO6M54OMnhf4UbSsF9BK9edLocEIuDo0BsIzhzdVxQvs0J2oosSsueu28Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775814448; c=relaxed/simple;
-	bh=RReHJ4AH92iTEwFJ3sbwpLODm767RLjpSsMx7TUU1kY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ZCuDEHS5CT0mIiPW655Bl2Fe1WevPzSkDWzz1SYkIArNesNip3t+w4txINfD+8Nvg/uAk41ZAszcQjMnTzDLu4V3zA6H2ZlxaeJfmHYi+ug1ZeDuSD0t7DZ4oa884QDyzBGWDSK3zwQ7hTPtcUH7871o5PeNNANMd7tcWNeUmvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hRct0VIe; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1775814677; c=relaxed/simple;
+	bh=2SwEKP0JRIcUT9VZfJQVDXhGVxwFzyl3yI/jYziHn3U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=jirBaqE/J5xq9wHFmD17b7LP2jFy14nXrQRDJHsMvtVLPcEITx5Ke2Kae7r+Wfu/rGeJYOJ0v6ZG6DPsLHxEvUNo4kDaNJIpUOBQyUWlZs0T9FNLW+AohYD/FpjTCBEy4snHlZZ5UQV3//bQ8VeUOxBhqHEAPxRpkF3I2oBqwtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=EaWRdwuk; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hRct0VIe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775814447; x=1807350447;
-  h=date:from:to:cc:subject:message-id;
-  bh=RReHJ4AH92iTEwFJ3sbwpLODm767RLjpSsMx7TUU1kY=;
-  b=hRct0VIeykM0cs3WL4dECklD5j8XhCJVSGs7LIoyuWv2cAzXfHC0MfOm
-   Hv6fZW1WqTEPDGhV8Cucxc3Xc/pM6YGUx8So4P6Nwkacq71MBCViFXTAi
-   mtpSFvd06Ncq9QJo9eFJDWOR4SruJhvXGrz72QsgzNzJ8/iPyao6DE3pS
-   1Y7zWEB/9Kbb9LSzctUvskP40QcLwrcGB2mKDLtAHjyGV9pQ8gyfNUGIX
-   sMVbZSrSzReneM2Jt9VHp8swtapewSolGiguAMuPyYJCr7m5pSUq+u4Fy
-   PKFx12XK5mn55ZFFJrOA7QKB9w/NIqDV6G+dNwyIJ0PaRr76FcPtq+RU/
-   Q==;
-X-CSE-ConnectionGUID: NPQpq3HgSNWGayFI0gIITQ==
-X-CSE-MsgGUID: fUx8I83TTvSA4LaoAg3J/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11754"; a="80691241"
-X-IronPort-AV: E=Sophos;i="6.23,171,1770624000"; 
-   d="scan'208";a="80691241"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2026 02:47:26 -0700
-X-CSE-ConnectionGUID: 4G2FDwYZQpy3Mw8tEHUy/g==
-X-CSE-MsgGUID: mJDihN5MTFGO7EXl2hOKDw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,171,1770624000"; 
-   d="scan'208";a="224742458"
-Received: from lkp-server01.sh.intel.com (HELO 6449335cace3) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 10 Apr 2026 02:47:25 -0700
-Received: from kbuild by 6449335cace3 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wB8SQ-000000003Zd-2Wid;
-	Fri, 10 Apr 2026 09:47:22 +0000
-Date: Fri, 10 Apr 2026 17:47:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [cilium:pr/netkit-iouring28 16/16] net/xdp/xsk.c:132:7:
- error: call to undeclared function 'netif_rxq_is_leased'; ISO C99 and later
- do not support implicit function declarations
-Message-ID: <202604101724.5hKWMpJM-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="EaWRdwuk"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=9YC5+Ls1swOHaWJ8ErNBeIulZ4tAA8sac7Dx5bn0SAs=;
+	b=EaWRdwukgWLF/ovt/GfYhXVnX9klWxHa038NdZau8kzA8ZAxqerDxQ/8SzCc4u9aMJzey1Qda
+	2QXPpIswZbgspzkY/KgFpFHgDMv6EjcsNxAlP7CrMxlJJ1/+LSZc44wpRWJiouLTv9OUnyRr2Hi
+	NNMJD569jlD1cmiZFSW0wiw=
+Received: from mail.maildlp.com (unknown [172.19.162.92])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4fsX2q2BcwzLlVQ;
+	Fri, 10 Apr 2026 17:44:51 +0800 (CST)
+Received: from kwepemk100018.china.huawei.com (unknown [7.202.194.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id C8C3C40565;
+	Fri, 10 Apr 2026 17:51:05 +0800 (CST)
+Received: from [10.67.108.67] (10.67.108.67) by kwepemk100018.china.huawei.com
+ (7.202.194.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Fri, 10 Apr
+ 2026 17:51:04 +0800
+Message-ID: <69a902f1-3793-4c71-ac3c-27f8cd5eeef8@huawei.com>
+Date: Fri, 10 Apr 2026 17:50:59 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] slab: support for compiler-assisted type-based slab
+ cache partitioning
+To: Marco Elver <elver@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+CC: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter
+	<cl@gentwo.org>, Harry Yoo <harry.yoo@oracle.com>, Hao Li <hao.li@linux.dev>,
+	David Rientjes <rientjes@google.com>, Roman Gushchin
+	<roman.gushchin@linux.dev>, Kees Cook <kees@kernel.org>, "Gustavo A. R.
+ Silva" <gustavoars@kernel.org>, David Hildenbrand <david@kernel.org>, Lorenzo
+ Stoakes <ljs@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike
+ Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
+ Hocko <mhocko@suse.com>, Alexander Potapenko <glider@google.com>, Dmitry
+ Vyukov <dvyukov@google.com>, Nick Desaulniers
+	<nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, <linux-kbuild@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-hardening@vger.kernel.org>, <kasan-dev@googlegroups.com>,
+	<llvm@lists.linux.dev>, Andrey Konovalov <andreyknvl@gmail.com>, Florent
+ Revest <revest@google.com>, Jann Horn <jannh@google.com>, KP Singh
+	<kpsingh@kernel.org>, Matteo Rizzo <matteorizzo@google.com>
+References: <20260331111240.153913-1-elver@google.com>
+Content-Language: en-US
+From: GONG Ruiqi <gongruiqi1@huawei.com>
+In-Reply-To: <20260331111240.153913-1-elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemk100018.china.huawei.com (7.202.194.66)
 
-tree:   https://github.com/cilium/linux.git pr/netkit-iouring28
-head:   28fb61aaf5d0f6b9ca1d5b686cdbd5a8f0cfc750
-commit: 28fb61aaf5d0f6b9ca1d5b686cdbd5a8f0cfc750 [16/16] errata
-config: arm64-randconfig-002-20260410 (https://download.01.org/0day-ci/archive/20260410/202604101724.5hKWMpJM-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project ae825cb8cea7f3ac8e5e4096f22713845cf5e501)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260410/202604101724.5hKWMpJM-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604101724.5hKWMpJM-lkp@intel.com/
+On 3/31/2026 7:12 PM, Marco Elver wrote:
+> ...
+> @@ -662,9 +662,20 @@ extern kmem_buckets kmalloc_caches[NR_KMALLOC_TYPES];
+>  	(IS_ENABLED(CONFIG_ZONE_DMA)   ? __GFP_DMA : 0) |	\
+>  	(IS_ENABLED(CONFIG_MEMCG) ? __GFP_ACCOUNT : 0))
+>  
+> +#ifdef CONFIG_RANDOM_KMALLOC_CACHES
+>  extern unsigned long random_kmalloc_seed;
+> +typedef struct { unsigned long ip; } kmalloc_token_t;
+> +#define __kmalloc_token(...) ((kmalloc_token_t) { .ip = _RET_IP_ })
+> +#elif defined(CONFIG_TYPED_KMALLOC_CACHES)
+> +typedef struct { unsigned long v; } kmalloc_token_t;
+> +#define __kmalloc_token(...) ((kmalloc_token_t){ .v = __builtin_infer_alloc_token(__VA_ARGS__) })
 
-All errors (new ones prefixed by >>):
+One tiny suggestion: we could use the same name for kmalloc_token_t's
+member in both cases, which would make the code a bit more concise.
 
->> net/xdp/xsk.c:132:7: error: call to undeclared function 'netif_rxq_is_leased'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     132 |         if (!netif_rxq_is_leased(dev, queue_id))
-         |              ^
-   net/xdp/xsk.c:173:7: error: call to undeclared function 'netif_rxq_is_leased'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     173 |             !netif_rxq_is_leased(dev, queue_id))
-         |              ^
-   2 errors generated.
+Acked-by: GONG Ruiqi <gongruiqi1@huawei.com>
 
-
-vim +/netif_rxq_is_leased +132 net/xdp/xsk.c
-
-f785e9937db541 Jakub Kicinski  2026-04-08  127  
-1c1efc2af15886 Magnus Karlsson 2020-08-28  128  void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
-1c1efc2af15886 Magnus Karlsson 2020-08-28  129  {
-f785e9937db541 Jakub Kicinski  2026-04-08  130  	struct netdev_rx_queue *hw_rxq;
-3224a26004da42 Daniel Borkmann 2026-04-03  131  
-f785e9937db541 Jakub Kicinski  2026-04-08 @132  	if (!netif_rxq_is_leased(dev, queue_id))
-f785e9937db541 Jakub Kicinski  2026-04-08  133  		return __xsk_clear_pool_at_qid(dev, queue_id);
-f785e9937db541 Jakub Kicinski  2026-04-08  134  	WARN_ON_ONCE(!netif_is_queue_leasee(dev));
-3224a26004da42 Daniel Borkmann 2026-04-03  135  
-f785e9937db541 Jakub Kicinski  2026-04-08  136  	hw_rxq = __netif_get_rx_queue(dev, queue_id)->lease;
-3224a26004da42 Daniel Borkmann 2026-04-03  137  
-f785e9937db541 Jakub Kicinski  2026-04-08  138  	netdev_lock(hw_rxq->dev);
-f785e9937db541 Jakub Kicinski  2026-04-08  139  	queue_id = get_netdev_rx_queue_index(hw_rxq);
-f785e9937db541 Jakub Kicinski  2026-04-08  140  	__xsk_clear_pool_at_qid(hw_rxq->dev, queue_id);
-f785e9937db541 Jakub Kicinski  2026-04-08  141  	netdev_unlock(hw_rxq->dev);
-f785e9937db541 Jakub Kicinski  2026-04-08  142  }
-f785e9937db541 Jakub Kicinski  2026-04-08  143  
-
-:::::: The code at line 132 was first introduced by commit
-:::::: f785e9937db541632ce741099e1573a297a1c161 net: Remove the netif_get_rx_queue_lease_locked() helpers
-
-:::::: TO: Jakub Kicinski <kuba@kernel.org>
-:::::: CC: Daniel Borkmann <daniel@iogearbox.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +#else
+> +/* no-op */
+> +typedef struct {} kmalloc_token_t;
+> +#define __kmalloc_token(...) ((kmalloc_token_t){})
+> +#endif
+>  
+> -static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags, unsigned long caller)
+> +static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags, kmalloc_token_t token)
+>  {
+>  	/*
+>  	 * The most common case is KMALLOC_NORMAL, so test for it
+> @@ -672,9 +683,11 @@ static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags, unsigne
+>  	 */
+>  	if (likely((flags & KMALLOC_NOT_NORMAL_BITS) == 0))
+>  #ifdef CONFIG_RANDOM_KMALLOC_CACHES
+> -		/* RANDOM_KMALLOC_CACHES_NR (=15) copies + the KMALLOC_NORMAL */
+> -		return KMALLOC_RANDOM_START + hash_64(caller ^ random_kmalloc_seed,
+> -						      ilog2(RANDOM_KMALLOC_CACHES_NR + 1));
+> +		/* PARTITION_KMALLOC_CACHES_NR (=15) copies + the KMALLOC_NORMAL */
+> +		return KMALLOC_PARTITION_START + hash_64(token.ip ^ random_kmalloc_seed,
+> +							 ilog2(PARTITION_KMALLOC_CACHES_NR + 1));
+> +#elif defined(CONFIG_TYPED_KMALLOC_CACHES)
+> +		return KMALLOC_PARTITION_START + token.v;
+>  #else
+>  		return KMALLOC_NORMAL;
+>  #endif
+> ...
