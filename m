@@ -1,65 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2842E4257;
-	Sat, 11 Apr 2026 10:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE7533F587;
+	Sat, 11 Apr 2026 11:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775904385; cv=none; b=RuNNcXTO5ad+CuHhOcmSwmyIXSjlQI7rhNCztYKpL+gV6uRpsTVyuxqTE8yxkKyEENfmdgkD7HxFZfM1ruQcaSCoLNj5zDK6a+qYBfEQlEI/jfXudfvg9EGFd6WobmUxKVRpkalb+LT34AlIvn2g352LLMxgZpHOM4VrXSMcW68=
+	t=1775905708; cv=none; b=NwH3UvLG/QmW8DjH4vy8Fsrkh5O0MDlY4BwSVgE2eYUS8cwbEpnPi9m+pRUsKOi9aq1WZDa0+Y0e00UwCG12wCuWw70dO49H490yXIpTGjPliOHsQUu45q/Mhxhzgcug/Vj+o4HfCpNsnzw5YPdhvLZ2hUj5gK3bMWN7Lml9tBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775904385; c=relaxed/simple;
-	bh=yfup+R+Hy7kL/EVQORGNoDyl5Kw0LcEhlJSNpUE5f5M=;
+	s=arc-20240116; t=1775905708; c=relaxed/simple;
+	bh=n4jCbvoXHQzLUfxIsK52UWT/ZiXsVp9w9lmDCQOl8PU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jkwhhEm+u+Bsf1EgH9m16nxzdTZAQMdzzrD5yEM52wqud6DnUfv6OQzh2Z+VtN3bfSB8BY0eCJwxvl9DXoNle2PZyyYiNcqrptipHlLmL+LdgeJWX1yXMZRwNmbdheReIg1NeYgRvs/Xi3I7P3wBhidXuKPlLweq2rYa7rTikVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WR/5Rn4v; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=pSzh/8fgaryJ1LLC1mfAOYziDjIaqFenmNEHEdc/bhFy/qAEdTSuZWWqbZovWYHxZnDXARZT8Oi6N6bhWUmO5ci82bBv7MfOSw5O2q7CFlTxdgf2wFU7h454GlRd8YqTObCohaOb3GpvQIQDeThMJh+NTH20B0oh77691+EFMeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QnxUJeeR; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WR/5Rn4v"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QnxUJeeR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775904385; x=1807440385;
+  t=1775905706; x=1807441706;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yfup+R+Hy7kL/EVQORGNoDyl5Kw0LcEhlJSNpUE5f5M=;
-  b=WR/5Rn4vNkRd5Vk8IGXkJ5Kg1I2ZQWFByKX4BX2NlmUQgQ6MkV1bX6x8
-   7gTjXXUVLKWqLrez1csoToJ2J9Ksm6GblipAIVk7vQJHPywFf6JCntgPv
-   S56sSqs3nJ9WDpkoVnZDruwBfmUSQ3D3AnJW9jIFORdiuWcdAvCtE+Eml
-   WseXFFRvvIS7fx17Rcxd7XYlA0/PltEuTKetgUWEVvaDmWJ2bfyd9sRNb
-   Jev3wu2j7t8Xgh4xS0hlfe2+T6L62MHgcJGXPggSoiz52msNgEP1rHvrF
-   r4jnLaOs3GBYyN/TbxnutinGcq8WMrGrmGz+up6dKlRIv/whfx3VD2HlV
-   Q==;
-X-CSE-ConnectionGUID: hHyzNUrGQjKHswmvsJ7HGA==
-X-CSE-MsgGUID: HSeTIuNgQWy9oyfog6+n0A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11755"; a="88297091"
+  bh=n4jCbvoXHQzLUfxIsK52UWT/ZiXsVp9w9lmDCQOl8PU=;
+  b=QnxUJeeR6waH1n/Of3dR9LyGueL8EUPIEsbADQ+3EKdP4VyS+07qLpOp
+   5Ic7cZBH+f3ItRWWmCRjipM1vynUzCzgyaNxjjXSbyS0DujvGkT3PHWcm
+   6SpiALCtfbJO95RBhZH6SDpvM5BTaXn8NWJvqzbcvobsLnqrOPMqhjQ+M
+   d2x9IGJcAl/fwPRNYYezh3+Z732ZPYkxffLiwN5nLLCiqnBxsA6qVbsdm
+   K58QnPSWpSHg7HQA6628x97MtFSd+uG+rr1hC08RmEFqTWv2kPjPReY/s
+   K7nOlQtCskOm3yIUaaZ0WBIV+u60PuDc6Djbwo4JUdoAtSB+HuUDOJ9u1
+   w==;
+X-CSE-ConnectionGUID: nCHvrrc/TtGLJMj4EdDbkA==
+X-CSE-MsgGUID: +7wsH4rzQimpANRoxZYF+Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11755"; a="79497582"
 X-IronPort-AV: E=Sophos;i="6.23,173,1770624000"; 
-   d="scan'208";a="88297091"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2026 03:46:24 -0700
-X-CSE-ConnectionGUID: cSlGkiyNTvmFeLPPAlNDLg==
-X-CSE-MsgGUID: MRnAW5IERXaHc+Puwf/vIw==
+   d="scan'208";a="79497582"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2026 04:08:25 -0700
+X-CSE-ConnectionGUID: mO4RSQk1QveiwXCLDsf7pg==
+X-CSE-MsgGUID: ij0+y2IPSXy2yQ9but4jCA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,173,1770624000"; 
-   d="scan'208";a="226163658"
+   d="scan'208";a="228477001"
 Received: from lkp-server01.sh.intel.com (HELO 3eaaf1a74b89) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 11 Apr 2026 03:46:21 -0700
+  by orviesa010.jf.intel.com with ESMTP; 11 Apr 2026 04:08:23 -0700
 Received: from kbuild by 3eaaf1a74b89 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wBVr0-0000000015B-3f1P;
-	Sat, 11 Apr 2026 10:46:18 +0000
-Date: Sat, 11 Apr 2026 18:45:39 +0800
+	id 1wBWCJ-00000000169-1p3K;
+	Sat, 11 Apr 2026 11:08:19 +0000
+Date: Sat, 11 Apr 2026 19:07:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>
+To: Cao Ruichuang <create0818@163.com>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf v1] bpf: Avoid faultable build ID reads under mm locks
-Message-ID: <202604111812.ms5JQMgD-lkp@intel.com>
-References: <20260407223003.720428-1-ihor.solodrai@linux.dev>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org,
+	Cao Ruichuang <create0818@163.com>
+Subject: Re: [PATCH] mm/vmstat: reject invalid stat_interval values
+Message-ID: <202604111816.CsqTatIh-lkp@intel.com>
+References: <20260410112554.23165-1-create0818@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,62 +72,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260407223003.720428-1-ihor.solodrai@linux.dev>
+In-Reply-To: <20260410112554.23165-1-create0818@163.com>
 
-Hi Ihor,
+Hi Cao,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on bpf/master]
+[auto build test WARNING on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ihor-Solodrai/bpf-Avoid-faultable-build-ID-reads-under-mm-locks/20260411-130435
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-patch link:    https://lore.kernel.org/r/20260407223003.720428-1-ihor.solodrai%40linux.dev
-patch subject: [PATCH bpf v1] bpf: Avoid faultable build ID reads under mm locks
-config: i386-buildonly-randconfig-002-20260411 (https://download.01.org/0day-ci/archive/20260411/202604111812.ms5JQMgD-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260411/202604111812.ms5JQMgD-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Cao-Ruichuang/mm-vmstat-reject-invalid-stat_interval-values/20260411-085547
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260410112554.23165-1-create0818%40163.com
+patch subject: [PATCH] mm/vmstat: reject invalid stat_interval values
+config: arm-randconfig-004-20260411 (https://download.01.org/0day-ci/archive/20260411/202604111816.CsqTatIh-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project ae825cb8cea7f3ac8e5e4096f22713845cf5e501)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260411/202604111816.CsqTatIh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604111812.ms5JQMgD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604111816.CsqTatIh-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/bpf/stackmap.c:172:35: error: call to undeclared function 'vma_start_read_locked'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     172 |         if (range_in_vma(vma, ip, ip) && vma_start_read_locked(vma))
-         |                                          ^
-   kernel/bpf/stackmap.c:172:35: note: did you mean 'vma_assert_write_locked'?
-   include/linux/mmap_lock.h:507:20: note: 'vma_assert_write_locked' declared here
-     507 | static inline void vma_assert_write_locked(struct vm_area_struct *vma)
-         |                    ^
-   1 error generated.
+>> mm/vmstat.c:1968:18: warning: unused variable 'sysctl_stat_interval_max' [-Wunused-const-variable]
+    1968 | static const int sysctl_stat_interval_max = INT_MAX / HZ;
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/vma_start_read_locked +172 kernel/bpf/stackmap.c
+vim +/sysctl_stat_interval_max +1968 mm/vmstat.c
 
-   161	
-   162	static struct vm_area_struct *stack_map_lock_vma(struct mm_struct *mm, unsigned long ip)
-   163	{
-   164		struct vm_area_struct *vma;
-   165	
-   166		vma = lock_vma_under_rcu(mm, ip);
-   167		if (vma)
-   168			return vma;
-   169	
-   170		mmap_read_lock(mm);
-   171		vma = find_vma(mm, ip);
- > 172		if (range_in_vma(vma, ip, ip) && vma_start_read_locked(vma))
-   173			goto out;
-   174	
-   175		vma = NULL;
-   176	out:
-   177		mmap_read_unlock(mm);
-   178	
-   179		return vma;
-   180	}
-   181	
+  1964	
+  1965	#ifdef CONFIG_SMP
+  1966	static DEFINE_PER_CPU(struct delayed_work, vmstat_work);
+  1967	static int sysctl_stat_interval __read_mostly = HZ;
+> 1968	static const int sysctl_stat_interval_max = INT_MAX / HZ;
+  1969	static int vmstat_late_init_done;
+  1970	
 
 -- 
 0-DAY CI Kernel Test Service
