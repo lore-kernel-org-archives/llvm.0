@@ -1,115 +1,113 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858832A1AA
-	for <llvm@lists.linux.dev>; Sun, 12 Apr 2026 05:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DC12BEC2B;
+	Sun, 12 Apr 2026 06:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775971932; cv=none; b=fG+4LwpDr4pvuIKTNNirnVJ+bBN21tz0XdxjH+ZPsJ0KhNCUaDzOol2NNf+EkrE0scAuBCJ5BJ4d5tPiCX2wQmMJ9qiVl/GsIIvekez4lwfJPjoielcBLGR1ANXiCUpabqzmBcC66sFF4IJUI4Q6ebDS541KLGvAVDY1Q50qVss=
+	t=1775975434; cv=none; b=QKaLoqC5t7uLFeBqV/AQnkIs9/miwTxoI9YK5+T1sFdTa2iOsY+vD6KrKpCLv7BwFc0QpX3wroAlq3ChlZ9hrRkYgfXhLaw1vxtZFxcZZA8qqd4IQ30CehCnd71vFfejypkOSu1c8oKJCXD62dknlq7i94iLyOoRohYixUg+F+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775971932; c=relaxed/simple;
-	bh=VPhPPoYWdIY4md/31VtDlB3tvMR5txSOWbtsA+dcTpY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=AD4O1rn/qKegdo2LPZeHppJu3X6o9YSw1Fb+5ES8TqubsKTaO/PLzx0rZadWrRG4OZ3ea9p3iHqVujaDn1AJocDevzPlTI7E8pJ+d5UfHlPpF3d9ZsctOKQzj9PMJId48A8RRf5+R3xn3fjvAkVtq/HpkXb6+TvB63nb7tWqLHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XFMTPbjA; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775975434; c=relaxed/simple;
+	bh=zZUOzQCvBMLwLfRY/WvKSRnkFI3WeBswwLP1YKrA3So=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=j8vrMSjWiPPEZD9J5yXmKClZ6C4eTmEmMV5WWcEQ9S+Y8ULNvBFUQ2rFBZR0R6D50M69o4UHMaqG+ujIXQ1pUeC+ULi5FR+BvGCueDg2Xlgiq6KNntL+9a4YFA5jvqENjESWgFz1GGb7zmIUiLKERmzuue/+vYqPMMbBkrtBTaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aXScUBo7; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XFMTPbjA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775971929;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Kk8lK6313W1rPUnxTL2wQHVi6dYOYRT9W5nwOtMnLt8=;
-	b=XFMTPbjAjCLWeGNRzuZl9fWvW7LiHsdwit6dAOICMMoGtVAoVtV/OWZAImchUoiakpAW4k
-	H0ON+ofXReqpnpGNdX5mQGPefpR9UJRHgAIHuru7fM+OVyX6URUltYPs+0Xo3RzmlbG0OC
-	6PyLLd24yrFndtLwQwfEqdOjLI267NU=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-sTdqqEEjPIiX07r8BKza-Q-1; Sun,
- 12 Apr 2026 01:32:08 -0400
-X-MC-Unique: sTdqqEEjPIiX07r8BKza-Q-1
-X-Mimecast-MFC-AGG-ID: sTdqqEEjPIiX07r8BKza-Q_1775971927
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2B8521956095
-	for <llvm@lists.linux.dev>; Sun, 12 Apr 2026 05:32:07 +0000 (UTC)
-Received: from [172.20.155.76] (unknown [10.30.44.186])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BEEF2195608E;
-	Sun, 12 Apr 2026 05:32:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 88 of 97): Test report for master
- (7.0.0-rc7, upstream-mainline, f5459048)
-Date: Sun, 12 Apr 2026 05:32:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aXScUBo7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775975432; x=1807511432;
+  h=date:from:to:cc:subject:message-id;
+  bh=zZUOzQCvBMLwLfRY/WvKSRnkFI3WeBswwLP1YKrA3So=;
+  b=aXScUBo7naCDByXeMWN0h9ngfy6/m6MPrI7FysNGwH3SSVlo6yvpkQoz
+   x29NsUgH6zzY+V9xO9tqHrTLBqAYDszdS/L79Klm6nXSTLzD6aPyLJGjq
+   +ISeNn18IDfcDig1wOkH3Z4Qb6EJJ5IZlGLzXLNlxcKYyhzrgIAcFamoR
+   QCaqsbS5aB3yMk6IqDwmZovW+iZ0wTFlJA/XYWc8C6Xp9HbsgNcIDcnhV
+   yyR0wgbE4bngL9muP6nTYx63nikO9IabiEfDi330GtKftQFwwYH6DZwmY
+   nfpox2UqASclzn4HDiMmRGEg/dJidsPlY6Mp8h0A84n32yR2baNl11Qou
+   A==;
+X-CSE-ConnectionGUID: 7qmao6WiRv6OP9TJD8xh2w==
+X-CSE-MsgGUID: 36FhnHDoQB+SW7tmtI8/QA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11755"; a="102400092"
+X-IronPort-AV: E=Sophos;i="6.23,174,1770624000"; 
+   d="scan'208";a="102400092"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2026 23:30:30 -0700
+X-CSE-ConnectionGUID: 0k7bH4ZpR8Ce5ib1DuasTg==
+X-CSE-MsgGUID: yowh6fsVSe6I7+nCBv+lsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,174,1770624000"; 
+   d="scan'208";a="231217078"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by fmviesa004.fm.intel.com with ESMTP; 11 Apr 2026 23:30:29 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wBoKw-00000000BGJ-2pCf;
+	Sun, 12 Apr 2026 06:30:26 +0000
+Date: Sun, 12 Apr 2026 08:29:40 +0200
+From: kernel test robot <lkp@intel.com>
+To: Ye Bin <yebin10@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: fs/ext4/orphan.c:745:6: warning: format specifies type
+ 'unsigned long long' but the argument has type 'unsigned long'
+Message-ID: <202604120805.LcpcTk0i-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <00091.126041201320800147@us-mta-588.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: DyIW95MW8P8SiuO0C32z0jSyHxkrNInDVCsY1sD22Ls_1775971927
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/intel-lab-lkp/linux/commits/Ye-Bin/ext4-register-orphan_list-procfs/20260412-043155
+head:   40c8b08a765262ff0c3d84ac9ac0ec5110487e8c
+commit: cf76577bfa266ccf03e5c8ab1775327709c32984 ext4: show inode orphan list detail information
+date:   10 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260412/202604120805.LcpcTk0i-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260412/202604120805.LcpcTk0i-lkp@intel.com/reproduce)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604120805.LcpcTk0i-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'i2c-for-7.0-final' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/wsa/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2446719726
-
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
-    /distribution/command [aarch64, ppc64le, s390x, x86_64]
-    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
-    Boot test [aarch64, ppc64le, s390x, x86_64]
-    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
-    Reboot test [aarch64, ppc64le, s390x, x86_64]
-    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x, x86_64]
-    Storage - blktests - throtl [aarch64, s390x, x86_64]
-    Storage - blktests - ublk [aarch64, s390x, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
-    stress: stress-ng - memory [aarch64, s390x, x86_64]
-    xfstests - btrfs [aarch64, x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [aarch64, x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [aarch64, x86_64]
+>> fs/ext4/orphan.c:745:6: warning: format specifies type 'unsigned long long' but the argument has type 'unsigned long' [-Wformat]
+     744 |         seq_printf(seq, "%llu\t%u\t%llu\t%llu\t%u\t",
+         |                          ~~~~
+         |                          %lu
+     745 |                    inode->i_ino, inode->i_nlink,
+         |                    ^~~~~~~~~~~~
+   1 warning generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +745 fs/ext4/orphan.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   733	
+   734	static int ext4_orphan_seq_show(struct seq_file *seq, void *v)
+   735	{
+   736		struct inode *inode = v;
+   737		struct ext4_proc_orphan *s = seq->private;
+   738	
+   739		if (s->print_title) {
+   740			seq_puts(seq, "INO\tNLINK\tSIZE\tBLOCKS\tPROJID\tPATH\n");
+   741			s->print_title = false;
+   742		}
+   743	
+   744		seq_printf(seq, "%llu\t%u\t%llu\t%llu\t%u\t",
+ > 745			   inode->i_ino, inode->i_nlink,
+   746			   i_size_read(inode), inode->i_blocks,
+   747			   __kprojid_val(EXT4_I(inode)->i_projid));
+   748	
+   749		ext4_show_filename(seq, inode);
+   750	
+   751		return 0;
+   752	}
+   753	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
