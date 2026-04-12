@@ -1,107 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13C23115BC;
-	Sun, 12 Apr 2026 14:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCFC11D130E
+	for <llvm@lists.linux.dev>; Sun, 12 Apr 2026 14:11:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776002928; cv=none; b=cLLnf5FuWir7viNlCndtvXl81vdjya5qYTSo5bUQlQodqDxMSqKC+UMy+duF7u1O6NBH8crZqIJYQgMKmgUoEdotYpZsagGHQLLVbckZcMJ2v3pX6zSUX2a4Q0QOlSkmY9kd0r61yButXoBOGQfIVqhDYn7c2YSq5hyFtS0cmHw=
+	t=1776003063; cv=none; b=aa6GVxw4Gv9dHxA3bzIlYJf2NPr+zwHZWdtEDGONeGw9NPCYJxwKSyNpZ1CP9JOS5h+3h2RQB34piJyhqFmbtdyvmLdIZF1tCoSxI5N0gmM+LtE3lPj7s3CRoStUWseGLKMrNOvKvkQxPLmZG6Jm8DNfdS0v9Ki0Xa9X5Xm8y/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776002928; c=relaxed/simple;
-	bh=VY4FvtYX9a5WZ1xa6Vy+0vBfFjNoMNioD5mV53SqYj0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WH7Q2klaeR51l2qA13mJMCS3mXMkMa4wYW3qR9xvLNqkuNledl42uFgT2QJhu8CczF3w6zx4JDIu4lvlDMZ5f5lSTSGQmk8HQD5m48Ml4wQJbOouBbtCefAqjSeWpwN6Rdw8Bu4mj3BjpeoteFPdnGw5YRC9xj7flXz6r45oVj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g85NJjCK; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1776003063; c=relaxed/simple;
+	bh=WJHNicUIa0RvAOGUJWcYH16AKm8wpNVQ40hrO98JoZw=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=YjhXovOw5jeT+9Ar2m5NmcOF9M9Zt6VM2zvqhal560fwUNvBuiSf6fsoMucVlNxf6sy+hG3Aux71KFlAVfNqpixW3aWCrgIDqfI03P8zIt7w9T/+yvNhIlI2uSl1XfBKD3wFJBzYIg/Atyx8Hul/6HFoctXKAJVQk0UuS8U/pjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=PrOFffjy; arc=none smtp.client-ip=195.121.94.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g85NJjCK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776002927; x=1807538927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VY4FvtYX9a5WZ1xa6Vy+0vBfFjNoMNioD5mV53SqYj0=;
-  b=g85NJjCKIIoDPjjY21YLYtnDLrVIdytV1hRJQJxzGpKxDxj/DJHuVw//
-   Nq7V4IXRhG62CfBp6CZSvXAgnOjEPWQnT++t9YvQuvwUBWdq0sRRCMToo
-   +jg8BUQ7NGKfQSGe7vexz9F1D0A4TsBtKVe6q3qIQbJ3DIpziJaBRzBkb
-   /86m6xBYCy77b3ullkzgG/3i6ULtI+E6xs2dK6mktA+uD2ov0faOSiJRM
-   Ba1SdKSbFShEw23nExutB18i7MGF1OZSokUzdggzj8Wsr3k8CIybODTo3
-   4Dprl7PJzl+HKPhNf2Du52KkGBuGHPFk+zDLh+PE6YzBHkc8ZW65JKOg9
-   Q==;
-X-CSE-ConnectionGUID: tXp4TK6CTOiLiaxe+6mmwg==
-X-CSE-MsgGUID: xm3eQFR/SJS8WnXijJQEdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11757"; a="88403223"
-X-IronPort-AV: E=Sophos;i="6.23,175,1770624000"; 
-   d="scan'208";a="88403223"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2026 07:08:46 -0700
-X-CSE-ConnectionGUID: Dnv30C5WRdiTPrWnKrfKPQ==
-X-CSE-MsgGUID: A8rY8/GvRNOKqrrzyEsnTQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,175,1770624000"; 
-   d="scan'208";a="226841295"
-Received: from lkp-server01.sh.intel.com (HELO 3eaaf1a74b89) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 12 Apr 2026 07:08:44 -0700
-Received: from kbuild by 3eaaf1a74b89 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wBvUP-000000002FB-3J2a;
-	Sun, 12 Apr 2026 14:08:41 +0000
-Date: Sun, 12 Apr 2026 22:08:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Taegu Ha <hataegu0826@gmail.com>, linux-usb@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, kees@kernel.org,
-	linux-kernel@vger.kernel.org, Taegu Ha <hataegu0826@gmail.com>
-Subject: Re: [PATCH] usb: gadget: f_uac1_legacy: validate control request size
-Message-ID: <202604122157.EGkANVeB-lkp@intel.com>
-References: <20260401104611.3375330-1-hataegu0826@gmail.com>
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="PrOFffjy"
+X-KPN-MessageId: 46378645-3679-11f1-8ff2-005056999439
+Received: from mta.kpnmail.nl (unknown [10.31.161.191])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 46378645-3679-11f1-8ff2-005056999439;
+	Sun, 12 Apr 2026 16:09:52 +0200 (CEST)
+Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.190])
+	by mta.kpnmail.nl (Halon) with ESMTP
+	id 46398d28-3679-11f1-83d8-00505699891e;
+	Sun, 12 Apr 2026 16:09:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xs4all.nl; s=xs4all01;
+	h=content-type:mime-version:subject:message-id:to:from:date;
+	bh=uQPQKBmsmHuREHix+TshyR67DOumQIwtgo4jB9DzxbA=;
+	b=PrOFffjywsrIsYHNSFpFhCqrIQwWBKYLTQYuKGgrzqO1YZnpBcz/ceo5Y31C+uppPXPNRv0lCnWfY
+	 ITFLYB8tGGs5gygcCoFiscV3qHKlNVh0UqG0D9lC7lqUhuZgUZNZ75D8QReAEd3c2GOyrc79rHytBs
+	 7V6Ms6BUyNc8CLzaq1VNxP76TTPgX+9WtzVVfhTIxkjzc1r2zVr0d8JzOHAQu4uV1PTFCm1Xx9FrtR
+	 yZRD/KuDV/tBMRhwtQwx1NH0O81k4OUdfszljGv9W4Fzfcv2KmY0m1kdxVzX5RDlxl7hN0rhiuJo2o
+	 MQY0H5Af+85IytuMmGtR0Sg1xiqBb2A==
+X-KPN-MID: 33|38Wc9e1JKeq3H9eYTFMVGICy3rH+0LLI6uS/0RLFcDUG6sQRzeBTdE/3QWWODQG
+ Rp2kqaaYK6ZlDdmSD5R/rujT3vVT9xSe5Efue1e6IDdc=
+X-CMASSUN: 33|xlCGv98JpPgXi8VxQKiUBeg/fJkOFjpWuC1JkFLUuGsgHX1JlKgLsjBiIXf8DyS
+ mRY0gfiAU0SI7Z6c2BBU3mQ==
+X-KPN-VerifiedSender: Yes
+Received: from cpxoxapps-mh07 (cpxoxapps-mh07.personalcloud.so.kpn.org [10.128.135.213])
+	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
+	id 462c0130-3679-11f1-b8d7-005056995d6c;
+	Sun, 12 Apr 2026 16:09:52 +0200 (CEST)
+Date: Sun, 12 Apr 2026 16:09:52 +0200 (CEST)
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Chanwoo Choi <chanwoo@kernel.org>, kernel test robot <lkp@intel.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>
+Message-ID: <1451499330.2050120.1776002992138@kpc.webmail.kpnmail.nl>
+In-Reply-To: <890652743.852439.1775062451369@kpc.webmail.kpnmail.nl>
+References: <202603211336.i375F7lD-lkp@intel.com>
+ <CAGTfZH0bZMGpdKjvgw7S54NF+KeXPtvhsanKmSs1vHDhx7F7Lg@mail.gmail.com>
+ <890652743.852439.1775062451369@kpc.webmail.kpnmail.nl>
+Subject: Re: [chanwoo:devfreq-next 5/5] drivers/devfreq/devfreq.c:1946:37:
+ error: redefinition of 'devfreq_group'
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260401104611.3375330-1-hataegu0826@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
 
-Hi Taegu,
+Hi Chanwoo,
 
-kernel test robot noticed the following build errors:
+I replied to your email a bit ago. Just sending this as a reminder again:
 
-[auto build test ERROR on westeri-thunderbolt/next]
-[cannot apply to usb/usb-testing usb/usb-next usb/usb-linus linus/master v7.0-rc7 next-20260410]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Op 21-03-2026 16:11 CET schreef Chanwoo Choi <chanwoo@kernel.org>:
+> 
+>  
+> HI Jori,
+> 
+> There are build errors in your patches.
+> DId you test it? I hope to fix and test the patch before posting.
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Taegu-Ha/usb-gadget-f_uac1_legacy-validate-control-request-size/20260412-113035
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
-patch link:    https://lore.kernel.org/r/20260401104611.3375330-1-hataegu0826%40gmail.com
-patch subject: [PATCH] usb: gadget: f_uac1_legacy: validate control request size
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260412/202604122157.EGkANVeB-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260412/202604122157.EGkANVeB-lkp@intel.com/reproduce)
+Yes, I have no built issues. Can it be the test bot did not apply the patch
+correctly?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604122157.EGkANVeB-lkp@intel.com/
+Looking at the build error it seems that ATTRIBUTE_GROUPS(devfreq) is duplicated,
+not moved.
 
-All errors (new ones prefixed by >>):
+> 
+> 
+> -- 
+> Best Regards,
+> Chanwoo Choi
+> Samsung Electronics
 
->> drivers/usb/gadget/function/f_uac1_legacy.c:14:10: fatal error: 'asm/unaligned.h' file not found
-      14 | #include <asm/unaligned.h>
-         |          ^~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +14 drivers/usb/gadget/function/f_uac1_legacy.c
-
-  > 14	#include <asm/unaligned.h>
-    15	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Jori.
