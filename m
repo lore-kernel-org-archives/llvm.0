@@ -1,142 +1,144 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E900636EA9F
-	for <llvm@lists.linux.dev>; Mon, 13 Apr 2026 17:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776102676; cv=pass; b=HoHhQvsJZ2gzCK6RDPKwyLV0bg82XsOKuBHzRmdgMxqaeY9PXSBwSVFgmj2nvaiENcwkl0oA7MUngGBQPayeEXcKaAHZsSRfvgDzBtgkBIQpZIqEcAmm3S9x+LjbWb6iBJOuFribHhzVkYaBf7cXBMjEtwkkf6UzLt6KKts3xjI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776102676; c=relaxed/simple;
-	bh=kK9NR0IgY6j5zF8S249PN4+ualmtOPXk+aSV0TH/7O4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rgY3HDXigi3ymo0TFkE5RXoRP03tMxQWUxDtbjQUwfpukNhK6zX6o2SRHuMZgrD6oRAlO89/3tYckiDJTJYr51vy64FOQNGKC3gfysZfRXRNCQq4FHIC7daTyZvuq3X352pQE3zqwXpcqhkd8JcHg1S4NdGyS28e/asR5XnEeNc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ze3xhlsJ; arc=pass smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50893612EE;
+	Mon, 13 Apr 2026 19:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776108352; cv=none; b=gHah/KxXYuGgLnnW7Jtwg/9JaTAkTrreKOkAkjKy94eAR5XSHD+u37NU6Va0sahnGMxAMAXSH9vcJKtJbECEcf1qo3w7i7JWV8Tzw7Gi+cVTOp3fUroZIo2wdc9OfDhkzSuF4BSLNStC/UY+xzEPlDNNA/rDMjHwa5ZyvwSwLFE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776108352; c=relaxed/simple;
+	bh=1d/k8sSVUb2XFFg/TCA2ozMs9Hh0g0decK8/VA83QQs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Gi2aNqjE3OhTN9fPyfuan2YauJxs1LaTf7mCyY81gDM3TEtbe9eut6T5UyyPZ6jMteJtpj6o6X806iGBX8XmDDNHloVF3k6lnIjk3LpbjSaf1JxAvUJS/8Wk0Aek/zAqFhzKkShdJ8AB8k1a20W6mi9523o/4BfY9gR33EFRH4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VNqu6OXn; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ze3xhlsJ"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2b2e8b95bdbso135425ad.0
-        for <llvm@lists.linux.dev>; Mon, 13 Apr 2026 10:51:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776102672; cv=none;
-        d=google.com; s=arc-20240605;
-        b=heWcea4ZaEnAlb27EHjBFUoaqaSxQymigkVYI4Vy+LH5J6S3vXa9NxsfINZfATzgJ3
-         jX0FFmdy95qiyqIMiRnNSp5pbOEl8VzAvh/j40l+HmZMefESjV+W6UgfbNOCDXcYvyva
-         Es3OAZ6VF1zxKuCCEWu7H/Sx6ddkgr/PKd5R6fF9nmxfDMo4HQuj0D3FWCuOepRT02JB
-         SyJLuodIj4B4Oi9RPkcg97ZHQi+KnRkKWkGIBwyarktmlMcX9oUB9K6Cs+ITnBCW7iIK
-         PgGEenPSSv2sa+am1vgwO5cNZFnSuFq5NIoFoGzIdAuimFwnlo68XgsNaG5sIk0bK0pF
-         ytcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kK9NR0IgY6j5zF8S249PN4+ualmtOPXk+aSV0TH/7O4=;
-        fh=zijQXDZBJdaqcNCmDDOQyOv5L0z5cP7JSF8O1afMobc=;
-        b=SOv4b4qaA4Bv9Jx6094TKPCQvizj+RM02a4gkelzJQ5Jz4a4yMikaUu/siTEXcvrwJ
-         S/sYt8Khr9OOaDZDBQS6anwcFj85asLw8cUmP4C26NXEdkSnfCQhnOU39BA/w+YvEnBd
-         YezM7J/LW52rRUGKIKxqrHQGgtMn8fyWbRamHudGAAffNXtI4W9YVdE7lrxHOQptqVqr
-         2xeGYT5COiu9fdWIjQrMwhwqKaWiPDoSUe3ieD8UyIEeBaXm+jdNL3l1jrgKD77ycQk+
-         HgThBSsq48T3amqvlMzL56iLomUQsuewPWjeHUOGpjhem4ub7frV3mM4+mvWSNHcXXd6
-         +rwg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776102672; x=1776707472; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kK9NR0IgY6j5zF8S249PN4+ualmtOPXk+aSV0TH/7O4=;
-        b=Ze3xhlsJhKZ6TkA1hm8+WRspZCBsU+pGvIn4oJdn6g3tQxChuxSTER87Gwx0/lMNYi
-         v4TV3hib1UlnVvAUsSQbkdqKSRVE8dHSinO2Gt7bGEkPyXpW7Ch6s0ZYsD0neGNpK3A0
-         u0NiKY9pDfWwp5UgH+XJM9RPpMLSnyGst7MsLwy4PlHZlt9cnMOpNC+vjLjRCBGsNad3
-         yoUSyl2dqn4gNEyMYEqX2AG3kL29QQfqD0ib6Wt1jrJdx+U9NLzqPPLde/SJAhz+Q60N
-         UXIohyGH3qJvGitzN5/5NxwW9ajoHs4zn97l2czV37UUtb1XlF+MyKOtWBXOGXnAv9Fv
-         /FUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776102672; x=1776707472;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kK9NR0IgY6j5zF8S249PN4+ualmtOPXk+aSV0TH/7O4=;
-        b=ZEpQR7IU2X0G1+T2avDHu/dMLp5CxlIE5XSIyWQEUqPUrehCyQAtOWElfLk3ax4NA0
-         w6L4RBjiz31MGdpjvTWLNK8hjTlZS7bykDm2Gdp83/T2nsVnRrGI/RuN2gsRvKLe8qVf
-         XVR78dOzD8+QzUEXk8MUiZEdjg7uqfHWD6R5Sh0IGIg+pqSIwfLuW6tk0yP5HRRe/e0E
-         qZZwDCLlnGaRkPbdlDIJtwkzIPinkIyG5cjCEs4xVK6qY+t6TEViUf+Mew56fRLAonQX
-         fDSLiCXqNZmQbd7Wt1t6TTsfE05hIK/hKmlPw6ooJ/OGRwdWsGNcaJtN+PYNimytNkeX
-         zUZA==
-X-Forwarded-Encrypted: i=1; AFNElJ90mHC0dcwd319fhxbI7ZT1h7zQqozU6YVhO+juWV6E91IynC5+BOF34jl1zFe6BtTJKTmM@lists.linux.dev
-X-Gm-Message-State: AOJu0YwjIHclJkV1yEqB19XKA9Fm5vRaWbUxLxcpc1jIw0vDY7BdO85D
-	utUgOn1OKAWawTysCHqYMH0poFAGO4ZQygb7umOmOtHrZJSQE6GCD3gSiJKXtPqrwWq3rGgHYI5
-	tkywutaJn9d0knsukN0THXnx/4qUGZEzVATS9FJCz
-X-Gm-Gg: AeBDievYtCigkGW5DLibK3ksvXlr672fnDaqqR9CaHIPgORyX8tMoRid141e9JFYhZ3
-	a7Os3PmlDmzqd4vDCvKDgx37E9R9UedcnVrPJfHHHjajI0n8CHc6wnQgqAvdcJrB+5VGaZgcfL1
-	UgBEg5W5qd/+R/1Bsy8NseaPZ3Vs+/67vYxbkAkn1njVI692rBoJnEKc2tofzi4bwnnbsoZBlt/
-	y/o6uyFNj/JEgfZzyReKjISn0x5668Y+AILH9oDEDSYMIzHedqJf7MUIe1Gw2ULGh79WDtqvTDu
-	5IQxK8p401jgoJwcGgYTkUUy92dx4tZHYJdSFBY7GxbZXQKo
-X-Received: by 2002:a17:902:e78f:b0:2b2:938a:9350 with SMTP id
- d9443c01a7336-2b2c8cd36bbmr12367425ad.23.1776102671339; Mon, 13 Apr 2026
- 10:51:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VNqu6OXn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776108351; x=1807644351;
+  h=date:from:to:cc:subject:message-id;
+  bh=1d/k8sSVUb2XFFg/TCA2ozMs9Hh0g0decK8/VA83QQs=;
+  b=VNqu6OXnUZuYi16paSJeeUmwWPpbwvEuDOZBKi8wsEw1RqZAYBKRmr6w
+   BkoZcIuen76pNWnktgJfhvsUhJrTRgpytnaJTEd50p1xtV5nqSMDqnhL/
+   CBcM/Yh8v8OWgBOHPYvIrPc20B+Fm3pKT/tQg/poSizs71EFdmhEBwRMR
+   VAKiglKEnUQiL5Yn46Rgam+XGCSpXCR62BIlnHI0iHY8XzqVab16VewMH
+   /peOQsfo40wOY/WIIhlqJCvSPgZP2cPF3QXB5cwYn5/RRouBTBVZyACMQ
+   /znVFsS+NyEYprRHUnmvR6ILMTR+cLKD6AZZlHgOhfZdFID4ki2/Mr5AB
+   A==;
+X-CSE-ConnectionGUID: K3q6Azx8S6GvEcDL9Afpdw==
+X-CSE-MsgGUID: V8mBM6rkTda90I1wSCoY8w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11758"; a="102510320"
+X-IronPort-AV: E=Sophos;i="6.23,177,1770624000"; 
+   d="scan'208";a="102510320"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2026 12:25:50 -0700
+X-CSE-ConnectionGUID: 6tkEdooPQRu21ejykO9PLg==
+X-CSE-MsgGUID: 6elYWfchRgyYwu/DfJ9Faw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,177,1770624000"; 
+   d="scan'208";a="228834307"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa006.jf.intel.com with ESMTP; 13 Apr 2026 12:25:48 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wCMuo-0000000008r-0kcu;
+	Mon, 13 Apr 2026 19:25:46 +0000
+Date: Mon, 13 Apr 2026 21:25:44 +0200
+From: kernel test robot <lkp@intel.com>
+To: Prakash Sangappa <prakash.sangappa@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: kernel/cgroup/cgroup.c:2985:3: error: call to undeclared
+ function 'proc_cgroup_migrate_connector'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202604132122.t9CkPsUA-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260407165551.3075684-1-irogers@google.com> <672710335e73ed76ddcd176a5879817c40d1c314.camel@perches.com>
- <CAP-5=fX92ncYELs_XQXw55A=PYxBnLY2V1CqSpCV71Zc9Pf3oA@mail.gmail.com>
- <404f559a885169513b7e3526eeff77148ee55bb8.camel@perches.com>
- <CAP-5=fWteCfNQ7DmwLorcs9h3iH__XK01CrwnJ4-qUfcDCsSSA@mail.gmail.com> <b4e9f338b8cdc168f90848b8daf321386b863915.camel@perches.com>
-In-Reply-To: <b4e9f338b8cdc168f90848b8daf321386b863915.camel@perches.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 13 Apr 2026 10:50:59 -0700
-X-Gm-Features: AQROBzBih8lCxudn3cL601yrvS_TdhTnfQLvVTF9WGN0G5UZD7mK-B71W1tnidc
-Message-ID: <CAP-5=fUfhcmt=kzY0GsAZm5J_EiyttMHOTbUyFkp+CjiRcitWg@mail.gmail.com>
-Subject: Re: [PATCH v1] tools clang-format: Add a tools clang-format that
- overrides some kernel behaviors
-To: Joe Perches <joe@perches.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 13, 2026 at 9:54=E2=80=AFAM Joe Perches <joe@perches.com> wrote=
-:
->
-> On Mon, 2026-04-13 at 09:19 -0700, Ian Rogers wrote:
-> > On Mon, Apr 13, 2026 at 8:45=E2=80=AFAM Joe Perches <[joe@perches.com](=
-mailto:joe@perches.com)> wrote:
-> > > On Mon, 2026-04-13 at 08:39 -0700, Ian Rogers wrote:
-> > On Tue, Apr 7, 2026 at 10:11=E2=80=AFAM Joe Perches <[[joe@perches.com]=
-(mailto:joe@perches.com)](mailto:[joe@perches.com](mailto:joe@perches.com))=
-> wrote:
-> > On Tue, 2026-04-07 at 09:55 -0700, Ian Rogers wrote:
-> > > > Sorting headers is desirable to avoid issues like duplicate include=
-s.
-> > > > > Perhaps.
-> > > > > Some others prefer reverse-christmas-tree by length ordering for =
-#includes
-> > > > > though I think it's poor style.
-> > > > Thanks Joe. I second not switching to a reverse-christmas-tree styl=
-e :-)
-> > > > If this patch is okay, could we bring it in through the perf tree?
-> > > It's likely better to avoid this suggestion.
-> > > The issue is that others strongly prefer that reverse-christmas-tree
-> > > style and would object so nak.
-> > Presumably that is a kernel suggestion rather than a tools directory
-> > suggestion. We can move the file into tools/perf, tools/lib/perf, etc.
-> > if that removes more global concerns. perf hasn't adopted a
-> > reverse-christmas-tree style.
->
-> Fine by me.
-> Just curious: is this a style control file used by directory depth/path?
+tree:   https://github.com/intel-lab-lkp/linux/commits/Prakash-Sangappa/netlink-Add-Netlink-process-event-for-cgroup-migration/20260413-212045
+head:   819518d4c1d85b9d68bd1935a28a3a3ee9c46f8d
+commit: 819518d4c1d85b9d68bd1935a28a3a3ee9c46f8d netlink: Add Netlink process event for cgroup migration
+date:   6 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260413/202604132122.t9CkPsUA-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260413/202604132122.t9CkPsUA-lkp@intel.com/reproduce)
 
-clang-format searches from the directory containing the file to be
-formatted upwards until it finds a .clang-format file. This change
-places the style in tools/, which is my preferred location for
-consistency across different tools and libraries. Header file ordering
-is a different issue within the kernel tree because it generally only
-references itself.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604132122.t9CkPsUA-lkp@intel.com/
 
-Thanks,
-Ian
+All errors (new ones prefixed by >>):
+
+>> kernel/cgroup/cgroup.c:2985:3: error: call to undeclared function 'proc_cgroup_migrate_connector'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2985 |                 proc_cgroup_migrate_connector(leader, dst_cgrp);
+         |                 ^
+   kernel/cgroup/cgroup.c:2985:3: note: did you mean 'proc_cgrp_migrate_connector'?
+   include/linux/cn_proc.h:58:20: note: 'proc_cgrp_migrate_connector' declared here
+      58 | static inline void proc_cgrp_migrate_connector(struct task_struct *task)
+         |                    ^
+   1 error generated.
+--
+>> kernel/cgroup/cgroup-v1.c:153:5: error: call to undeclared function 'proc_cgroup_migrate_connector'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     153 |                                 proc_cgroup_migrate_connector(task, to);
+         |                                 ^
+   kernel/cgroup/cgroup-v1.c:153:5: note: did you mean 'proc_cgrp_migrate_connector'?
+   include/linux/cn_proc.h:58:20: note: 'proc_cgrp_migrate_connector' declared here
+      58 | static inline void proc_cgrp_migrate_connector(struct task_struct *task)
+         |                    ^
+   1 error generated.
+
+
+vim +/proc_cgroup_migrate_connector +2985 kernel/cgroup/cgroup.c
+
+  2951	
+  2952	/**
+  2953	 * cgroup_attach_task - attach a task or a whole threadgroup to a cgroup
+  2954	 * @dst_cgrp: the cgroup to attach to
+  2955	 * @leader: the task or the leader of the threadgroup to be attached
+  2956	 * @threadgroup: attach the whole threadgroup?
+  2957	 *
+  2958	 * Call holding cgroup_mutex and cgroup_threadgroup_rwsem.
+  2959	 */
+  2960	int cgroup_attach_task(struct cgroup *dst_cgrp, struct task_struct *leader,
+  2961			       bool threadgroup)
+  2962	{
+  2963		DEFINE_CGROUP_MGCTX(mgctx);
+  2964		struct task_struct *task;
+  2965		int ret = 0;
+  2966	
+  2967		/* look up all src csets */
+  2968		spin_lock_irq(&css_set_lock);
+  2969		task = leader;
+  2970		do {
+  2971			cgroup_migrate_add_src(task_css_set(task), dst_cgrp, &mgctx);
+  2972			if (!threadgroup)
+  2973				break;
+  2974		} while_each_thread(leader, task);
+  2975		spin_unlock_irq(&css_set_lock);
+  2976	
+  2977		/* prepare dst csets and commit */
+  2978		ret = cgroup_migrate_prepare_dst(&mgctx);
+  2979		if (!ret)
+  2980			ret = cgroup_migrate(leader, threadgroup, &mgctx);
+  2981	
+  2982		cgroup_migrate_finish(&mgctx);
+  2983	
+  2984		if (!ret) {
+> 2985			proc_cgroup_migrate_connector(leader, dst_cgrp);
+  2986			TRACE_CGROUP_PATH(attach_task, dst_cgrp, leader, threadgroup);
+  2987		}
+  2988	
+  2989		return ret;
+  2990	}
+  2991	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
