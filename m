@@ -1,196 +1,122 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01C8363C77
-	for <llvm@lists.linux.dev>; Mon, 13 Apr 2026 07:15:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522D537C107;
+	Mon, 13 Apr 2026 08:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776064519; cv=none; b=l+LtqKUYpMZ6UN1bPtm+2OsKxwIhr8oQug6bkaJ23KD6OwJYCZebOrzAIfT6UG8n9JFHvNatxwc4ckFv7ngyjhnEmZQPXbK6ZMQh42gHCFd1lXFrc/mDt4Vd0yqMZjmk/mBppGwHQdxunBL55v5kWGRzxUqjqb6E3K8a6c+D4LU=
+	t=1776069034; cv=none; b=QGqmvdLkdFC7oiTJDkZipwXFld3OmQVDUCyRyxtzL7Nh3f5xGvna9UBTeubXwgIykpgltm5cfNkqE8NGc/pl/Y5mTa40Oxl8VCoEHVcZgVOauU05FvMe2XFmqtJmY5DViUHQ+wlkwK2idMBtAGRDRRL3ShpbH8X6vx/2wEZkyvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776064519; c=relaxed/simple;
-	bh=tod54RQerlnJofGfV81hsaKAzeig/oqQ1xrLxgJt+o4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CMKWPmMXSL0hMcz7ZZJIHIEXTkY5CMk7RGMaOS3dJfwNNo8012J8yiBlkzxj1Ei7UMbQMkApiK9uMTPbmhJQM5kzlw9OQ7JBEMrDog3xTJTAKFIXZVWot/IpWrz/FsgkRTqcZhiYCqpbsbwADqupSdp+HZNXOgJOqFuRZYybPV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lWLMuDsV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=YPZjEfIf; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Ry8YTLQU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Ld2XamGr; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1776069034; c=relaxed/simple;
+	bh=basOywsiI3wh3nikVgiIweTGNU00sqZdqSpyaZlVRDk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AvwhVgO9s0YcsR3/AYgGlAPWu9kZXxUqHZSEXCz/MtqKMH+gNLP4p0lL6WLMmYCZKIS0UXSO90Y7ymWdoLDCdzNRTYPnXyEbEg67Xs8iHX08JTynT+hAinrOUGdf7GKmx9dtyzrOCIbMK3JDEozNkp8C+Nf9JRWtxoF+gSrfSjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I6qHjeuc; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lWLMuDsV";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="YPZjEfIf";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Ry8YTLQU";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Ld2XamGr"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id F32F76A88F;
-	Mon, 13 Apr 2026 07:15:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1776064516; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=dCHKoeJ3y61DWP9gxF2f3vF8sO5yy7UzLY7efyoo9Ng=;
-	b=lWLMuDsV3sGVdosaDreo7/e/N8mkfF09Yj4bg9o9APQTzCtJiGrSaV8AFkH159p2FHTvUY
-	cKmv+AUSDz1bE5e4i1qXFwChF9YapIaoe4n+M+7y9xm+eVgFrzRhipO4kxNFt+9opLIVv0
-	nfQlTu+GIvA2xqCUylIe6FhJ59EZ7lE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1776064516;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=dCHKoeJ3y61DWP9gxF2f3vF8sO5yy7UzLY7efyoo9Ng=;
-	b=YPZjEfIfQlKhllmxj5cZMcS5bGqCpmDWH3arO8o4V8JRFZqe5HAzLa+HjX6D/zAPaEl3eW
-	d6I+icK16kfr8UBA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1776064515; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=dCHKoeJ3y61DWP9gxF2f3vF8sO5yy7UzLY7efyoo9Ng=;
-	b=Ry8YTLQUZtO4P+gQXE+Z32yX2phDAR4RDYp+8lVju+rHRpeRUixL/XX3wyKDj4NQHio939
-	0Pk1LV+QqzQNvMgGroVergf6e7AEwq2f1eGWIbsRViwIsWB4gwc8cLWz0Q+rcA74G4td0x
-	VayinW7GijbqKm0KGVMb9U0URj8WxiY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1776064515;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=dCHKoeJ3y61DWP9gxF2f3vF8sO5yy7UzLY7efyoo9Ng=;
-	b=Ld2XamGrV9fgGZMgwXm+H2M0ptWYJ1H+PPxuIr5dBOKUcTlsuO+vmozXmZ7+8dAj2teC95
-	sUg645ZRt4aQc6BA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CF56E4AD6E;
-	Mon, 13 Apr 2026 07:15:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id VT67MAOY3GkAQwAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Mon, 13 Apr 2026 07:15:15 +0000
-Message-ID: <497baf5d-4955-4c42-a728-104419ad658c@suse.de>
-Date: Mon, 13 Apr 2026 09:15:15 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I6qHjeuc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776069033; x=1807605033;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=basOywsiI3wh3nikVgiIweTGNU00sqZdqSpyaZlVRDk=;
+  b=I6qHjeucVp5PtuWY0luEeZk9RNAK9f/87VvCqb/uQqtP7FkgLVaq2pIi
+   LnoPK6Ig6Td8fmvqkIWjiQXajFAWFVVXqtWIIIgmrZbh/Ua7Ai422meNK
+   YrwqGrijYCpMkKdKo9UOSCygtGQ6TL7uw022BaDbvmBwp3+sf+j0xU8A3
+   qBl2QkbGCRcRImzW+34HHvMf4LFbZvfi6X+JId3VGp6IdAP1QNaJQWytI
+   BCUZKG4hBJQDA4lV13d/CQ+rqEEAeJCGXe9IZAJWwGSy60QHQO2DRNCPY
+   FrNOFK+C+71TeqbpG0WWw2vKuxZI06ng813H/6EvjVxlgguSnHTR+UY/P
+   A==;
+X-CSE-ConnectionGUID: xhYxFpVNQryJAUx/pXye+A==
+X-CSE-MsgGUID: XFKe/P2eRg+F2yRlrykWnA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11757"; a="76959704"
+X-IronPort-AV: E=Sophos;i="6.23,176,1770624000"; 
+   d="scan'208";a="76959704"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2026 01:30:33 -0700
+X-CSE-ConnectionGUID: 1bgjYVYYSfuoredBAXI95A==
+X-CSE-MsgGUID: hDEnkYcgRTeTGqeTTd/4Tg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,176,1770624000"; 
+   d="scan'208";a="260167796"
+Received: from lkp-server01.sh.intel.com (HELO 7b0b59b3a0d4) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 13 Apr 2026 01:30:32 -0700
+Received: from kbuild by 7b0b59b3a0d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wCCgb-000000000DD-2uUe;
+	Mon, 13 Apr 2026 08:30:27 +0000
+Date: Mon, 13 Apr 2026 16:29:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC] fs: drop_caches: introduce per-node drop_caches
+ interface
+Message-ID: <202604130943.MLP9ZgAQ-lkp@intel.com>
+References: <20260409063503.3475420-1-wangkefeng.wang@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [deller-fbdev:for-next-v7.1 17/22] ERROR: modpost: "__end_rodata"
- [lib/fonts/font.ko] undefined!
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Helge Deller <deller@gmx.de>
-References: <202604112326.kWhH8Y7A-lkp@intel.com>
-Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <202604112326.kWhH8Y7A-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-4.10 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	SUBJECT_ENDS_EXCLAIM(0.20)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmx.de];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[lists.linux.dev,gmx.de];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,suse.de:mid,suse.com:url,imap1.dmz-prg2.suse.org:helo,01.org:url]
-X-Spam-Flag: NO
-X-Spam-Score: -4.10
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260409063503.3475420-1-wangkefeng.wang@huawei.com>
 
-Hi Helge
+Hi Kefeng,
 
-Am 11.04.26 um 17:54 schrieb kernel test robot:
-> Hi Thomas,
->
-> FYI, the error/warning still remains.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git for-next-v7.1
-> head:   26484b2fa418a002d099608e681aef86fc90990c
-> commit: a76e4bfc4b3586b47ede8e83bdb6050cd6b16025 [17/22] lib/fonts: Compare font data for equality with font_data_is_equal()
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-This is still the old v1 or v2 of the patch.
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on brauner-vfs/vfs.all driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v7.0-rc7 next-20260410]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260411/202604112326.kWhH8Y7A-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/fs-drop_caches-introduce-per-node-drop_caches-interface/20260412-192452
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260409063503.3475420-1-wangkefeng.wang%40huawei.com
+patch subject: [PATCH RFC] fs: drop_caches: introduce per-node drop_caches interface
+config: powerpc64-randconfig-002-20260413 (https://download.01.org/0day-ci/archive/20260413/202604130943.MLP9ZgAQ-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260413/202604130943.MLP9ZgAQ-lkp@intel.com/reproduce)
 
-Is it a recent warning? I'm asking because that config is for v7.0-rc2 
-and hence outdated.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604130943.MLP9ZgAQ-lkp@intel.com/
 
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260411/202604112326.kWhH8Y7A-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202604112326.kWhH8Y7A-lkp@intel.com/
->
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
->
->>> ERROR: modpost: "__end_rodata" [lib/fonts/font.ko] undefined!
+All errors (new ones prefixed by >>):
 
-This linker error came from the original implementation of 
-font_data_is_internal(). I've fixed it in v3 of the patch at
+>> fs/drop_caches.c:148:5: error: redefinition of 'drop_caches_register_node'
+     148 | int drop_caches_register_node(struct node *node)
+         |     ^
+   include/linux/fs.h:3661:19: note: previous definition is here
+    3661 | static inline int drop_caches_register_node(struct node *node) { return 0; }
+         |                   ^
+>> fs/drop_caches.c:153:6: error: redefinition of 'drop_caches_unregister_node'
+     153 | void drop_caches_unregister_node(struct node *node)
+         |      ^
+   include/linux/fs.h:3662:20: note: previous definition is here
+    3662 | static inline void drop_caches_unregister_node(struct node *node) {}
+         |                    ^
+   2 errors generated.
 
-https://lore.kernel.org/linux-fbdev/20260309141723.137364-10-tzimmermann@suse.de/
 
-That's also the version in fbdev's for-next branch. I think we're good 
-here, unless there's a way this still happens with v3.
+vim +/drop_caches_register_node +148 fs/drop_caches.c
 
-Best regards
-Thomas
-
+   146	
+   147	static DEVICE_ATTR_WO(drop_caches);
+ > 148	int drop_caches_register_node(struct node *node)
+   149	{
+   150		return device_create_file(&node->dev, &dev_attr_drop_caches);
+   151	}
+   152	
+ > 153	void drop_caches_unregister_node(struct node *node)
 
 -- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstr. 146, 90461 Nürnberg, Germany, www.suse.com
-GF: Jochen Jaser, Andrew McDonald, Werner Knoblich, (HRB 36809, AG Nürnberg)
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
