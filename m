@@ -1,132 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C26385527;
-	Tue, 14 Apr 2026 16:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A701E9B3D;
+	Tue, 14 Apr 2026 16:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776185103; cv=none; b=QI2wHq2AGOcY4/ZAMk+w4S0ipjm+Fe1ESTZWak69cP4dsvtfPskaluAEI2nHD+D27ikHK6Ur+S2/UC26ntkTrlsLLSHXP9bCTO+16szbpHm0XFfPLXzsur/W66Dcm4YtmVoRepGCtC4mpbScdDPI+U9XGSZBXFlyQGZSa9YdGKI=
+	t=1776185217; cv=none; b=pdAgQP00W7aV2qmbGWK04+Z3zCePLB0FWteitwDEtyuNNCrCP6sP9uLEXvje4/U6KXmcZ7SqZf1e7YwQx71bh6bxOTztWyW+5nJib09n7JlHwarLVEWadKzMz9mstKVVrOolEB+7Dc5hQb3aNxQZQDDApn/Vy0x+z8IblB77Xws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776185103; c=relaxed/simple;
-	bh=QzAwMTyBOgaTgjx9AUZMG2uXTXE0esl8k7CpBBTwxCE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=t56Xf37es/WzFqmjw2/jQaBcQPgZ8ad4Mz89FRUisKOYboqUkfU8pnfoo/uiplpKmGG7VF8PxtS3tJwllGMQHvUGTpo9l61n5erk0Qs2DCrHQC/6V4N/NuSPIVWheieiD7Zh2ugz2hkK8D6nh2cYHUeZ0G6bW6tEscRabWiqL1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LHbF8SSi; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1776185217; c=relaxed/simple;
+	bh=h5CUHLLZGJj1sqfzAOFN24P+lZAUpLgJCzAIP3pIVak=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=TJhsYDc1LuI96g4Pv3IOMy2YMu/9qwD8xm320Qnk2hMx8UnP6vfyf2YR/hM3ZdNmrz1Nlh7jOycQQlUkIhy2E+9K1x5Od9YMZZYmXTjzi1bL3JRY4Gf+atjw9jAACsb6aA1uIjN0YeK/JJyXPY+rk6Xt/2OPo9OoxKAYH41xD6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3XzHspl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LHbF8SSi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776185102; x=1807721102;
-  h=date:from:to:cc:subject:message-id;
-  bh=QzAwMTyBOgaTgjx9AUZMG2uXTXE0esl8k7CpBBTwxCE=;
-  b=LHbF8SSiekm8YloNgH6PTsTISjBUGDQ3lT+GTatQGY4GQySdS/iaXCEu
-   DUpH2zUQ9BGqvgQt+d1RrQYV3KmAFzp/HXqThRZaMP5brTpPGLIUryjrI
-   hyRSAa7DCr2CZ6uQnxoM43GR7u4DT3XaCAeZenzoAKStMAnu6crvSRvWf
-   1bkb/B0SGiAKCJoz4gLBtg6jr9sGvJDHAJPSY5sgTd3IvGTT9yaR/9aBQ
-   BP5M4Bu9i4DbRjK6KbF7xV4G7h30QmZGFosu6Dtp3dksEXnH21T50nUlS
-   M9KxgMrnvSGrHAPxu6aTOdWKw3lrONc14tbZ6AWddZTT2xJqPIletgMlh
-   Q==;
-X-CSE-ConnectionGUID: S3xV1jrmRrqwKEdJtNAAXQ==
-X-CSE-MsgGUID: YtecD8HXQpmjJ0gUtbLB2w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="99793462"
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="99793462"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 09:45:00 -0700
-X-CSE-ConnectionGUID: Qc+PS2iPSLyiGJROh95wzQ==
-X-CSE-MsgGUID: g6PPu6kMQPuBIFBEfcFuKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="223639856"
-Received: from lkp-server01.sh.intel.com (HELO 7b0b59b3a0d4) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 14 Apr 2026 09:44:58 -0700
-Received: from kbuild by 7b0b59b3a0d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wCgsi-000000001fN-0m3V;
-	Tue, 14 Apr 2026 16:44:56 +0000
-Date: Wed, 15 Apr 2026 00:44:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thermal:thermal/cooling-device-with-id 18/25]
- drivers/thermal/thermal_core.c:1200:10: warning: variable 'tcd' is
- uninitialized when used here
-Message-ID: <202604150002.sljttjeq-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3XzHspl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B62CC19425;
+	Tue, 14 Apr 2026 16:46:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776185217;
+	bh=h5CUHLLZGJj1sqfzAOFN24P+lZAUpLgJCzAIP3pIVak=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=M3XzHspleh86r3vzAE6YUI8iX7fuNondhwJgpVrbrS0Op2mj2wIUHrH6fREXFKsIG
+	 pem7Y2vx+7Y7xwcrJ53ciAxItrD22RLU7qrf8Hp2j1xmoJc8hIvngurUvXyS+qkBub
+	 09nlGhcwM6sBuxJtfeY0yNha/v0y2nM1OpuMFM/Zr94Pf2tTnISy5Y3xt0Ci2EKXuG
+	 vKqkWXd08DrAsFfVL/8q1rNyTPsVxR/M6KO84zqoDqRYb4tOiaVJZBICeda8HWuSed
+	 ECCuMdETCSR6E3e0oPEVWgRNlqQU9u7DIt6JDR+Yv+2AaB+z66VFmF1bo5P7C02lT1
+	 Sx30d41kHGYgg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA1313809A07;
+	Tue, 14 Apr 2026 16:46:28 +0000 (UTC)
+Subject: Re: [GIT PULL] Kbuild and Kconfig changes for v7.1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <adu-ZyIv47FnsVLI@levanger>
+References: <adu-ZyIv47FnsVLI@levanger>
+X-PR-Tracked-List-Id: <linux-s390.vger.kernel.org>
+X-PR-Tracked-Message-Id: <adu-ZyIv47FnsVLI@levanger>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git tags/kbuild-7.1-1
+X-PR-Tracked-Commit-Id: 404927758daac5ec4594071e033c1fa6ee9ca9b6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5d0d3623303775d750e122a2542d1a26c8573d38
+Message-Id: <177618518744.1376142.6209842916194520385.pr-tracker-bot@kernel.org>
+Date: Tue, 14 Apr 2026 16:46:27 +0000
+To: Nicolas Schier <nsc@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Alexander Coffin <alex@cyberialabs.net>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, David Howells <dhowells@redhat.com>, Dodji Seketeli <dodji@seketeli.org>, "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>, John Moon <john@jmoon.dev>, Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>, Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>, Yonghong Song <yonghong.song@linux.dev>, kernel-team@fb.com, linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org, linux-hexagon@vger.kernel.org, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-parisc@vger.kernel
+ .org, linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev, loongarch@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git thermal/cooling-device-with-id
-head:   4fea531ae8a1095b1fc1122441fc173a33b93005
-commit: 10ad4e2ee1d7bd68d2c7c0d50cb052920305f455 [18/25] thermal/core: Register cooling device non-OF drivers
-config: x86_64-buildonly-randconfig-004-20260414 (https://download.01.org/0day-ci/archive/20260415/202604150002.sljttjeq-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260415/202604150002.sljttjeq-lkp@intel.com/reproduce)
+The pull request you sent on Sun, 12 Apr 2026 17:46:47 +0200:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604150002.sljttjeq-lkp@intel.com/
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git tags/kbuild-7.1-1
 
-All warnings (new ones prefixed by >>):
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5d0d3623303775d750e122a2542d1a26c8573d38
 
->> drivers/thermal/thermal_core.c:1200:10: warning: variable 'tcd' is uninitialized when used here [-Wuninitialized]
-    1200 |                 return tcd;
-         |                        ^~~
-   drivers/thermal/thermal_core.c:1190:43: note: initialize the variable 'tcd' to silence this warning
-    1190 |         struct thermal_cooling_device **ptr, *tcd;
-         |                                                  ^
-         |                                                   = NULL
-   1 warning generated.
-
-
-vim +/tcd +1200 drivers/thermal/thermal_core.c
-
-  1170	
-  1171	/**
-  1172	 * devm_thermal_cooling_device_register() - register a thermal cooling device
-  1173	 * @dev:	a valid struct device pointer of a sensor device.
-  1174	 * @type:	the thermal cooling device type.
-  1175	 * @devdata:	device private data.
-  1176	 * @ops:	standard thermal cooling devices callbacks.
-  1177	 *
-  1178	 * This function will register a cooling device with device tree node reference.
-  1179	 * This interface function adds a new thermal cooling device (fan/processor/...)
-  1180	 * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
-  1181	 * to all the thermal zone devices registered at the same time.
-  1182	 *
-  1183	 * Return: a pointer to the created struct thermal_cooling_device or an
-  1184	 * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
-  1185	 */
-  1186	struct thermal_cooling_device *
-  1187	devm_thermal_cooling_device_register(struct device *dev, const char *type,
-  1188					     void *devdata, const struct thermal_cooling_device_ops *ops)
-  1189	{
-  1190		struct thermal_cooling_device **ptr, *tcd;
-  1191	
-  1192		ptr = devres_alloc(thermal_cooling_device_release, sizeof(*ptr),
-  1193				   GFP_KERNEL);
-  1194		if (!ptr)
-  1195			return ERR_PTR(-ENOMEM);
-  1196	
-  1197		thermal_cooling_device_register(type, devdata, ops);
-  1198		if (IS_ERR(tcd)) {
-  1199			devres_free(ptr);
-> 1200			return tcd;
-  1201		}
-  1202	
-  1203		*ptr = tcd;
-  1204		devres_add(dev, ptr);
-  1205	
-  1206		return tcd;
-  1207	}
-  1208	EXPORT_SYMBOL_GPL(devm_thermal_cooling_device_register);
-  1209	
+Thank you!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
