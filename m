@@ -1,300 +1,239 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A82A37EFE4
-	for <llvm@lists.linux.dev>; Tue, 14 Apr 2026 13:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D63242D7F;
+	Tue, 14 Apr 2026 14:01:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776174699; cv=none; b=kiBtC4TLor3QrS8vBqh1Ee1NwrYAErZb6TjFQeOSjUyeIGOf9dhLHKU8JpOcOhETP8kRw8XEBsRFGfEel+QOpLnp0kg4KPOZDlDpAQlKFcW8J9wN6SUL03LJlZ8yqaasvQ2mweiZMGgG9ZnbP8nctd+ec/DAZ2MVyq+wt6Xh3kI=
+	t=1776175268; cv=none; b=n4ZYSTW5o9I66dNfZO9cc9y2bOXucbkVdx6YVZeoRcSBv/OdI6Xbl5HEUzs2Ibr5v76OSX6QSdkysterw+FbV2b3z4lSFmanbytHd9opsMfsRTAgbNI4WQT6r6LaLjoKb5rbgqzHyJfG05v7xcoRtLmwj1/6riWC4n2vl+6v23Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776174699; c=relaxed/simple;
-	bh=NLSlLrSMZI3cUmOb7DTz8GAbCCesV31zq8QSjsFga28=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AlLvf9L+IsJGPa6O/WY+hq/fRAnjlelPtWxW3jU1gGo02yvdMl6jqV5NPCJE9mGY+7bjmfdnkntYB9GZHuOJikQjqHhvxd89D8/Pmpf6nokTf/NzyYXHsfagNpoCHr+8+nX5ROeSv7gghu9tB0GGtxVbLst3owNUux0Ucl9KD3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BoSub6dR; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1776175268; c=relaxed/simple;
+	bh=TjIBq3qB1eaYJhbikgTt6mGmN8nmHrC54WbTaGjeRwg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Lr9d7OJSlay7a8a2bzjJSdYzNTLtkmbNQL7iJcgBi4N275AXZlIaZcZl/nJTgz++nECSs5/U0lrhpSuzxZlfF+8ql+xMelZu7rQZj+hnW1pkXFbl7mGceL3dtvwcXSej5X27ZNV8j3ZOf67/Bc8dVFdeP2phF6A063rafCVYWQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DXp3SeOM; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BoSub6dR"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-67210f0cd01so154821a12.2
-        for <llvm@lists.linux.dev>; Tue, 14 Apr 2026 06:51:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1776174697; x=1776779497; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YPz3m1xG2VmGGvoQqOrcAUr+iF4l5uhVzIGYSCshb3I=;
-        b=BoSub6dR9pcQ4Ti0RZUSBi1dGGiEp8rbfIviFovs6wW+cHX9DyGybl7MyzjXoxAc68
-         fGAARsOKreU7uDIT6cBN5NeBaOgN4jhnGGaGKIQ7FB/k/gy3aloK0GZ2a6PidSKg0ulR
-         pZ5ceqEnWERg1XadwK8fOFQZPjafqlwffuRRUs9iXaWeYdZrpHp1Nz6Pp1vnMH12PgMX
-         goYORsPiWZbaIKz5FtRdzKc7YPsTSYa4qzVik6GwE0Qum0wG3zTUnjGj8hheOrJh53pn
-         HLpET4Mkwgw6teosDNU0jbJSGkOygbCmpHWE/2ol238/flrY2fN2nxoLMEWxYLt3mETp
-         nmww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776174697; x=1776779497;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YPz3m1xG2VmGGvoQqOrcAUr+iF4l5uhVzIGYSCshb3I=;
-        b=RE2ljJh5bn7YQB3xg9c7YTapSly++kM7VXYlRbIm3PXFNvm5h1DMWvfdohr/AKlBB8
-         aDPOiUnMJ5vhISBRjvs6l43vWf0n0M1DdYjWutDLmGDqYyOuYiaconHdA6DGdwonixgg
-         HxKbKNZ8TfJabu9SIbR2mpLopi1uqvhthjvGGZXiYdoXg39eWzWkAqk7lfEJz1e2E9jG
-         opc/e6thFxG5zpnVsLuyrTKOPRz+dQx5R8qiAl264YFs/o0D7InzW6TGCezJypOASiwt
-         GTm0L2C6DOBQkCMjgMkbU1UfPKWA4npbGZNkB4vC3vTNg/FBd1S8kEYlor3dy+X9/k/i
-         rGvw==
-X-Forwarded-Encrypted: i=1; AFNElJ+C+Z7hoOzHI9fU+NSxcXKsI3kI2SUghmnNfWBzRWxA/9MyUoj1NBl0/wv84CnwEOct+1g/@lists.linux.dev
-X-Gm-Message-State: AOJu0YzQr51Lc1KtG0qRbf8aSZSPigHsnZYudCrHTIb8RP8PNwVqjqx0
-	lSVP6ZbWaRNk1CBRhXkLeGXbF7JUCrU2MNzVmRjY/Ff5v9vcLMjphGMB7DA6gmQrmY0=
-X-Gm-Gg: AeBDiesv2Z8YEvRVbp8IyMre/Ckptg/kZ8+7v08N4xcEWuv6JCh1M8/jOOpcpkW6KpS
-	1xgIh5X54pf1hKgttzV5Gi3Hmjc/GsnVjDoMcXwqoMdUbm3gtnnBPt+GdXYfM9sn071y+74PCr+
-	DwFjHm/V3DATE1Px0Fa3NjabmxqtvZU+uVFZ+bko0XKTmCyDrTCew1FcWKbYAER6GGHdLI3PB3z
-	scUzhi8Earbjic1JqGHQc8BGGPW5aa8Rv+mw/Dj7OAbv8dH7NJ7x2qxWbP8Mvz+sZkwHq0MePin
-	Utb7FADrTmF/dOEGQJqlREM3vQh+td5zlJ6lPldA+F2PfRj/S+oGlrD4hRdg6U4krwu2HghEjRx
-	HqNPrskg7EKpy3hRxQxfhJZInXzVb5mpSqMFeHzcYEPE+jkO0Wj8M37GYZAszq6KwPnIBqFIKpn
-	ui2EXIt02fqNxIQ7KDYuBCgt08P0hWjoxql8Mx0anQ
-X-Received: by 2002:a05:6402:46cd:b0:670:2678:680f with SMTP id 4fb4d7f45d1cf-670786a3684mr5764211a12.5.1776174696416;
-        Tue, 14 Apr 2026 06:51:36 -0700 (PDT)
-Received: from [172.17.16.20] ([213.137.22.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-670703f1340sm3248786a12.10.2026.04.14.06.51.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Apr 2026 06:51:35 -0700 (PDT)
-Message-ID: <774cb091-cc24-420d-8cc6-88780746bceb@linaro.org>
-Date: Tue, 14 Apr 2026 14:51:34 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DXp3SeOM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776175267; x=1807711267;
+  h=date:from:to:cc:subject:message-id;
+  bh=TjIBq3qB1eaYJhbikgTt6mGmN8nmHrC54WbTaGjeRwg=;
+  b=DXp3SeOMvmNagfw+DE0OHb5ZfoCv8R4RZ24iBQAKYP8ku6NOfa6fd6Kn
+   GxUNw50smB/8EBBsqUiA1ivGPq69uO9ffHGDk5shSwvKTiVQsVssf3Ycr
+   ZztAs9pfcBOqyGslZZFfXwtDwMLn55Hlog86LFUU9Sa6HoQdc2LxpZQ9w
+   niBS43iZm1AbZpwAffpxy5lWyg0nmuwiw2wT6b1v1gzyXzjrjmd+gvaVN
+   DlgFVUozvPNN3Uaclguwc6O46unKZbs8X8BTUKjI55AI7Qp1tMdLj7WkF
+   F1gm5+pXLnig+1LV8i61DVDQTEi+3D3Uf0BIGbHa8CZXmXe4vBLZgumFC
+   w==;
+X-CSE-ConnectionGUID: EGG+M6ztQ7uGV3QAj5yfXA==
+X-CSE-MsgGUID: bn3nwUGwTgaoNa6Pg9H80g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="77099874"
+X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
+   d="scan'208";a="77099874"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 07:01:04 -0700
+X-CSE-ConnectionGUID: ZmOXl0WxQ32ukuM/uHOWXg==
+X-CSE-MsgGUID: fzm0POEeSte790MkB0/m4g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
+   d="scan'208";a="229075871"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa006.jf.intel.com with ESMTP; 14 Apr 2026 07:01:03 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wCeK3-000000000Pz-4A3f;
+	Tue, 14 Apr 2026 14:00:59 +0000
+Date: Tue, 14 Apr 2026 16:00:29 +0200
+From: kernel test robot <lkp@intel.com>
+To: "Pablo Martin-Gomez" <pmartin-gomez@freebox.fr>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: net/mac80211/he.c:112:1: error: conflicting types for
+ '_ieee80211_he_cap_ie_to_sta_he_cap'
+Message-ID: <202604141500.InyCG9L4-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/16] perf capstone: Fix arm64 jump/adrp disassembly
- mismatch with objdump
-To: Tengda Wu <wutengda@huaweicloud.com>
-Cc: Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Peter Zijlstra <peterz@infradead.org>,
- Namhyung Kim <namhyung@kernel.org>, leo.yan@linux.dev,
- Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
- Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>
-References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
- <20260403094800.1418825-3-wutengda@huaweicloud.com>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20260403094800.1418825-3-wutengda@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+
+tree:   https://github.com/intel-lab-lkp/linux/commits/Pablo-Martin-Gomez/wifi-nl80211-remove-EHT-IE-size-validation/20260414-014056
+head:   27802dfbd9cea5146c1de2ae0dae896fb8e15a40
+commit: 487358ffe18b5e9426c7620f6cb86f6b24c7828f wifi: make HE capa size check not read reserved bits
+date:   20 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260414/202604141500.InyCG9L4-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260414/202604141500.InyCG9L4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604141500.InyCG9L4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/mac80211/he.c:112:1: error: conflicting types for '_ieee80211_he_cap_ie_to_sta_he_cap'
+     112 | _ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
+         | ^
+   net/mac80211/ieee80211_i.h:2339:1: note: previous declaration is here
+    2339 | _ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
+         | ^
+>> net/mac80211/he.c:226:9: error: too many arguments to function call, expected 6, have 7
+     221 |         _ieee80211_he_cap_ie_to_sta_he_cap(sdata, own_he_cap, he_cap_ie,
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     222 |                                            he_cap_len,
+     223 |                                            (sband->band == NL80211_BAND_6GHZ) ?
+     224 |                                                 he_6ghz_capa : NULL,
+     225 |                                            link_sta,
+     226 |                                            sband->band);
+         |                                            ^~~~~~~~~~~
+   net/mac80211/ieee80211_i.h:2339:1: note: '_ieee80211_he_cap_ie_to_sta_he_cap' declared here
+    2339 | _ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
+         | ^                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2340 |                                    const struct ieee80211_sta_he_cap *own_he_cap,
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2341 |                                    const u8 *he_cap_ie, u8 he_cap_len,
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2342 |                                    const struct ieee80211_he_6ghz_capa *he_6ghz_capa,
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2343 |                                    struct link_sta_info *link_sta);
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+--
+>> net/wireless/nl80211.c:295:62: error: too few arguments to function call, expected 3, have 2
+     295 |         if (!ieee80211_he_capa_size_ok(nla_data(attr), nla_len(attr)))
+         |              ~~~~~~~~~~~~~~~~~~~~~~~~~                              ^
+   include/linux/ieee80211-he.h:512:20: note: 'ieee80211_he_capa_size_ok' declared here
+     512 | static inline bool ieee80211_he_capa_size_ok(const u8 *data, u8 len, enum nl80211_band band)
+         |                    ^                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +/_ieee80211_he_cap_ie_to_sta_he_cap +112 net/mac80211/he.c
 
-On 03/04/2026 10:47, Tengda Wu wrote:
-> The jump and adrp instructions parsed by libcapstone currently lack
-> symbolic representation and use a '#' prefix for addresses. This
-> format is inconsistent with objdump's output, which causes subsequent
-> parsing in jump__parse() and arm64_mov__parse() to fail.
-> 
-> Example mismatch:
->    Current: b #0xffff8000800114c8
->    Fix:     b ffff8000800114c8 <el0t_64_sync+0x108>
-> 
->    Current: adrp x18, #0xffff800081f5f000
->    Fix:     adrp x18, ffff800081f5f000 <this_cpu_vector>
-> 
-> Fix this by implementing extended formatting for these arm64
-> instructions during symbol__disassemble_capstone(). This ensures
-> the output matches objdump's expected style, including the raw
-> address and the associated <symbol+offset> suffix.
-> 
-> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
-> ---
->   tools/perf/util/capstone.c | 107 ++++++++++++++++++++++++++++++++-----
->   tools/perf/util/disasm.c   |   5 ++
->   tools/perf/util/disasm.h   |   1 +
->   3 files changed, 101 insertions(+), 12 deletions(-)
-> 
-> diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
-> index 25cf6e15ec27..1d8421d2d98c 100644
-> --- a/tools/perf/util/capstone.c
-> +++ b/tools/perf/util/capstone.c
-> @@ -255,10 +255,6 @@ static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
->   	struct map *map = args->ms->map;
->   	struct symbol *sym;
->   
-> -	/* TODO: support more architectures */
-> -	if (!arch__is_x86(args->arch))
-> -		return;
-> -
->   	if (insn->detail == NULL)
->   		return;
->   
-> @@ -305,6 +301,98 @@ static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
->   	}
->   }
->   
-> +static void format_capstone_insn_x86(struct cs_insn *insn, char *buf,
-> +				     size_t len, struct annotate_args *args,
-> +				     u64 addr)
-> +{
-> +	int printed;
-> +
-> +	printed = scnprintf(buf, len, "       %-7s %s",
-> +			    insn->mnemonic, insn->op_str);
-> +	buf += printed;
-> +	len -= printed;
-> +
-> +	print_capstone_detail(insn, buf, len, args, addr);
-> +}
-> +
-> +static void format_capstone_insn_arm64(struct cs_insn *insn, char *buf,
-> +				       size_t len, struct annotate_args *args,
-> +				       u64 addr)
-> +{
-> +	struct map *map = args->ms->map;
-> +	struct symbol *sym;
-> +	char *last_imm, *endptr;
-> +	u64 orig_addr;
-> +
-> +	scnprintf(buf, len, "       %-7s %s",
-> +		  insn->mnemonic, insn->op_str);
-> +	/*
-> +	 * Adjust instructions to keep the existing behavior with objdump.
-> +	 *
-> +	 * Example conversion:
-> +	 * From: b #0xffff8000800114c8
-> +	 * To:   b ffff8000800114c8 <el0t_64_sync+0x108>
-> +	 */
-> +	switch (insn->id) {
-> +	case ARM64_INS_B:
-> +	case ARM64_INS_BL:
-> +	case ARM64_INS_CBNZ:
-> +	case ARM64_INS_CBZ:
-> +	case ARM64_INS_TBNZ:
-> +	case ARM64_INS_TBZ:
-> +	case ARM64_INS_ADRP:
+7f7aa94bcaf03d Wen Gong            2020-12-25  110  
+41cbb0f5a29592 Luca Coelho         2018-06-09  111  void
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20 @112  _ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  113  				   const struct ieee80211_sta_he_cap *own_he_cap_ptr,
+41cbb0f5a29592 Luca Coelho         2018-06-09  114  				   const u8 *he_cap_ie, u8 he_cap_len,
+1bb9a8a4c81d03 Johannes Berg       2020-05-28  115  				   const struct ieee80211_he_6ghz_capa *he_6ghz_capa,
+487358ffe18b5e Pablo Martin-Gomez  2026-04-10  116  				   struct link_sta_info *link_sta,
+487358ffe18b5e Pablo Martin-Gomez  2026-04-10  117  				   enum nl80211_band band)
+41cbb0f5a29592 Luca Coelho         2018-06-09  118  {
+c71420db653aba Johannes Berg       2022-06-15  119  	struct ieee80211_sta_he_cap *he_cap = &link_sta->pub->he_cap;
+95f83ee8d857f0 Abinaya Kalaiselvan 2021-06-23  120  	struct ieee80211_sta_he_cap own_he_cap;
+41cbb0f5a29592 Luca Coelho         2018-06-09  121  	struct ieee80211_he_cap_elem *he_cap_ie_elem = (void *)he_cap_ie;
+41cbb0f5a29592 Luca Coelho         2018-06-09  122  	u8 he_ppe_size;
+41cbb0f5a29592 Luca Coelho         2018-06-09  123  	u8 mcs_nss_size;
+41cbb0f5a29592 Luca Coelho         2018-06-09  124  	u8 he_total_size;
+7f7aa94bcaf03d Wen Gong            2020-12-25  125  	bool own_160, peer_160, own_80p80, peer_80p80;
+41cbb0f5a29592 Luca Coelho         2018-06-09  126  
+41cbb0f5a29592 Luca Coelho         2018-06-09  127  	memset(he_cap, 0, sizeof(*he_cap));
+41cbb0f5a29592 Luca Coelho         2018-06-09  128  
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  129  	if (!he_cap_ie || !own_he_cap_ptr || !own_he_cap_ptr->has_he)
+c37ab22bb1a43c Johannes Berg       2023-06-04  130  		return;
+c37ab22bb1a43c Johannes Berg       2023-06-04  131  
+27e9b326b67440 Miri Korenblit      2026-03-26  132  	/* NDI station are using the capabilities from the NMI station */
+27e9b326b67440 Miri Korenblit      2026-03-26  133  	if (WARN_ON_ONCE(sdata->vif.type == NL80211_IFTYPE_NAN_DATA))
+27e9b326b67440 Miri Korenblit      2026-03-26  134  		return;
+27e9b326b67440 Miri Korenblit      2026-03-26  135  
+c37ab22bb1a43c Johannes Berg       2023-06-04  136  	own_he_cap = *own_he_cap_ptr;
+95f83ee8d857f0 Abinaya Kalaiselvan 2021-06-23  137  
+41cbb0f5a29592 Luca Coelho         2018-06-09  138  	/* Make sure size is OK */
+487358ffe18b5e Pablo Martin-Gomez  2026-04-10  139  	mcs_nss_size = ieee80211_he_mcs_nss_size(he_cap_ie_elem, band);
+41cbb0f5a29592 Luca Coelho         2018-06-09  140  	he_ppe_size =
+41cbb0f5a29592 Luca Coelho         2018-06-09  141  		ieee80211_he_ppe_size(he_cap_ie[sizeof(he_cap->he_cap_elem) +
+41cbb0f5a29592 Luca Coelho         2018-06-09  142  						mcs_nss_size],
+41cbb0f5a29592 Luca Coelho         2018-06-09  143  				      he_cap_ie_elem->phy_cap_info);
+41cbb0f5a29592 Luca Coelho         2018-06-09  144  	he_total_size = sizeof(he_cap->he_cap_elem) + mcs_nss_size +
+41cbb0f5a29592 Luca Coelho         2018-06-09  145  			he_ppe_size;
+41cbb0f5a29592 Luca Coelho         2018-06-09  146  	if (he_cap_len < he_total_size)
+41cbb0f5a29592 Luca Coelho         2018-06-09  147  		return;
+41cbb0f5a29592 Luca Coelho         2018-06-09  148  
+41cbb0f5a29592 Luca Coelho         2018-06-09  149  	memcpy(&he_cap->he_cap_elem, he_cap_ie, sizeof(he_cap->he_cap_elem));
+41cbb0f5a29592 Luca Coelho         2018-06-09  150  
+41cbb0f5a29592 Luca Coelho         2018-06-09  151  	/* HE Tx/Rx HE MCS NSS Support Field */
+41cbb0f5a29592 Luca Coelho         2018-06-09  152  	memcpy(&he_cap->he_mcs_nss_supp,
+41cbb0f5a29592 Luca Coelho         2018-06-09  153  	       &he_cap_ie[sizeof(he_cap->he_cap_elem)], mcs_nss_size);
+41cbb0f5a29592 Luca Coelho         2018-06-09  154  
+41cbb0f5a29592 Luca Coelho         2018-06-09  155  	/* Check if there are (optional) PPE Thresholds */
+41cbb0f5a29592 Luca Coelho         2018-06-09  156  	if (he_cap->he_cap_elem.phy_cap_info[6] &
+41cbb0f5a29592 Luca Coelho         2018-06-09  157  	    IEEE80211_HE_PHY_CAP6_PPE_THRESHOLD_PRESENT)
+41cbb0f5a29592 Luca Coelho         2018-06-09  158  		memcpy(he_cap->ppe_thres,
+41cbb0f5a29592 Luca Coelho         2018-06-09  159  		       &he_cap_ie[sizeof(he_cap->he_cap_elem) + mcs_nss_size],
+41cbb0f5a29592 Luca Coelho         2018-06-09  160  		       he_ppe_size);
+41cbb0f5a29592 Luca Coelho         2018-06-09  161  
+41cbb0f5a29592 Luca Coelho         2018-06-09  162  	he_cap->has_he = true;
+cf2c9cc3980fb2 Johannes Berg       2020-01-31  163  
+c71420db653aba Johannes Berg       2022-06-15  164  	link_sta->cur_max_bandwidth = ieee80211_sta_cap_rx_bw(link_sta);
+27e9b326b67440 Miri Korenblit      2026-03-26  165  	if (sdata->vif.type != NL80211_IFTYPE_NAN)
+c71420db653aba Johannes Berg       2022-06-15  166  		link_sta->pub->bandwidth = ieee80211_sta_cur_vht_bw(link_sta);
+1bb9a8a4c81d03 Johannes Berg       2020-05-28  167  
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  168  	if (he_6ghz_capa)
+c71420db653aba Johannes Berg       2022-06-15  169  		ieee80211_update_from_he_6ghz_capa(he_6ghz_capa, link_sta);
+7f7aa94bcaf03d Wen Gong            2020-12-25  170  
+7f7aa94bcaf03d Wen Gong            2020-12-25  171  	ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
+7f7aa94bcaf03d Wen Gong            2020-12-25  172  				      &he_cap->he_mcs_nss_supp.rx_mcs_80,
+7f7aa94bcaf03d Wen Gong            2020-12-25  173  				      &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
+7f7aa94bcaf03d Wen Gong            2020-12-25  174  				      &he_cap->he_mcs_nss_supp.tx_mcs_80);
+7f7aa94bcaf03d Wen Gong            2020-12-25  175  
+7f7aa94bcaf03d Wen Gong            2020-12-25  176  	own_160 = own_he_cap.he_cap_elem.phy_cap_info[0] &
+7f7aa94bcaf03d Wen Gong            2020-12-25  177  		  IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+7f7aa94bcaf03d Wen Gong            2020-12-25  178  	peer_160 = he_cap->he_cap_elem.phy_cap_info[0] &
+7f7aa94bcaf03d Wen Gong            2020-12-25  179  		   IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+7f7aa94bcaf03d Wen Gong            2020-12-25  180  
+7f7aa94bcaf03d Wen Gong            2020-12-25  181  	if (peer_160 && own_160) {
+7f7aa94bcaf03d Wen Gong            2020-12-25  182  		ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
+7f7aa94bcaf03d Wen Gong            2020-12-25  183  					      &he_cap->he_mcs_nss_supp.rx_mcs_160,
+7f7aa94bcaf03d Wen Gong            2020-12-25  184  					      &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
+7f7aa94bcaf03d Wen Gong            2020-12-25  185  					      &he_cap->he_mcs_nss_supp.tx_mcs_160);
+7f7aa94bcaf03d Wen Gong            2020-12-25  186  	} else if (peer_160 && !own_160) {
+7f7aa94bcaf03d Wen Gong            2020-12-25  187  		ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
+7f7aa94bcaf03d Wen Gong            2020-12-25  188  		ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
+7f7aa94bcaf03d Wen Gong            2020-12-25  189  		he_cap->he_cap_elem.phy_cap_info[0] &=
+7f7aa94bcaf03d Wen Gong            2020-12-25  190  			~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+7f7aa94bcaf03d Wen Gong            2020-12-25  191  	}
+7f7aa94bcaf03d Wen Gong            2020-12-25  192  
+7f7aa94bcaf03d Wen Gong            2020-12-25  193  	own_80p80 = own_he_cap.he_cap_elem.phy_cap_info[0] &
+7f7aa94bcaf03d Wen Gong            2020-12-25  194  		    IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+7f7aa94bcaf03d Wen Gong            2020-12-25  195  	peer_80p80 = he_cap->he_cap_elem.phy_cap_info[0] &
+7f7aa94bcaf03d Wen Gong            2020-12-25  196  		     IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+7f7aa94bcaf03d Wen Gong            2020-12-25  197  
+7f7aa94bcaf03d Wen Gong            2020-12-25  198  	if (peer_80p80 && own_80p80) {
+7f7aa94bcaf03d Wen Gong            2020-12-25  199  		ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
+7f7aa94bcaf03d Wen Gong            2020-12-25  200  					      &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
+7f7aa94bcaf03d Wen Gong            2020-12-25  201  					      &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
+7f7aa94bcaf03d Wen Gong            2020-12-25  202  					      &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+7f7aa94bcaf03d Wen Gong            2020-12-25  203  	} else if (peer_80p80 && !own_80p80) {
+7f7aa94bcaf03d Wen Gong            2020-12-25  204  		ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
+7f7aa94bcaf03d Wen Gong            2020-12-25  205  		ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+7f7aa94bcaf03d Wen Gong            2020-12-25  206  		he_cap->he_cap_elem.phy_cap_info[0] &=
+7f7aa94bcaf03d Wen Gong            2020-12-25  207  			~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+7f7aa94bcaf03d Wen Gong            2020-12-25  208  	}
+41cbb0f5a29592 Luca Coelho         2018-06-09  209  }
+697f6c507c7499 John Crispin        2019-07-29  210  
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  211  void
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  212  ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  213  				  struct ieee80211_supported_band *sband,
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  214  				  const u8 *he_cap_ie, u8 he_cap_len,
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  215  				  const struct ieee80211_he_6ghz_capa *he_6ghz_capa,
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  216  				  struct link_sta_info *link_sta)
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  217  {
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  218  	const struct ieee80211_sta_he_cap *own_he_cap =
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  219  		ieee80211_get_he_iftype_cap_vif(sband, &sdata->vif);
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  220  
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  221  	_ieee80211_he_cap_ie_to_sta_he_cap(sdata, own_he_cap, he_cap_ie,
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  222  					   he_cap_len,
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  223  					   (sband->band == NL80211_BAND_6GHZ) ?
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  224  						he_6ghz_capa : NULL,
+487358ffe18b5e Pablo Martin-Gomez  2026-04-10  225  					   link_sta,
+487358ffe18b5e Pablo Martin-Gomez  2026-04-10 @226  					   sband->band);
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  227  }
+b5b5ffa94a3b04 Miri Korenblit      2026-03-20  228  
 
-Hi Tengda,
-
-Is this supposed to be an exhaustive list of branches? If so using 
-something like an is_branch() function might help make it work for new 
-instructions with only an update to capstone. I don't know if capstone 
-has a function like that but I did see it had instruction group types:
-
-	// Generic groups
-	// all jump instructions (conditional+direct+indirect jumps)
-	ARM64_GRP_JUMP,	///< = CS_GRP_JUMP
-	ARM64_GRP_CALL,
-	ARM64_GRP_RET,
-	ARM64_GRP_INT,
-	ARM64_GRP_PRIVILEGE = 6, ///< = CS_GRP_PRIVILEGE
-	ARM64_GRP_BRANCH_RELATIVE, ///< = CS_GRP_BRANCH_RELATIVE
-
-> +		/* Extract last immediate value as address */
-> +		last_imm = strrchr(buf, '#');
-> +		if (!last_imm)
-> +			return;
-> +
-> +		orig_addr = strtoull(last_imm + 1, &endptr, 16);
-> +		if (endptr == last_imm + 1)
-> +			return;
-> +
-> +		/* Relocate map that contains the address */
-> +		if (dso__kernel(map__dso(map))) {
-> +			map = maps__find(map__kmaps(map), orig_addr);
-> +			if (map == NULL)
-> +				return;
-> +		}
-> +
-> +		/* Convert it to map-relative address for search */
-> +		addr = map__map_ip(map, orig_addr);
-> +
-> +		sym = map__find_symbol(map, addr);
-> +		if (sym == NULL)
-> +			return;
-> +
-> +		/* Symbolize the resolved address */
-> +		len = len - (last_imm - buf);
-> +		if (addr == sym->start) {
-> +			scnprintf(last_imm, len, "%"PRIx64" <%s>",
-> +				  orig_addr, sym->name);
-> +		} else {
-> +			scnprintf(last_imm, len, "%"PRIx64" <%s+%#"PRIx64">",
-> +				  orig_addr, sym->name, addr - sym->start);
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +}
-> +
-> +static void format_capstone_insn(struct cs_insn *insn, char *buf, size_t len,
-> +				 struct annotate_args *args, u64 addr)
-> +{
-> +	/* TODO: support more architectures */
-> +	if (arch__is_x86(args->arch))
-> +		format_capstone_insn_x86(insn, buf, len, args, addr);
-> +	else if (arch__is_arm64(args->arch))
-> +		format_capstone_insn_arm64(insn, buf, len, args, addr);
-> +	else {
-> +		scnprintf(buf, len, "       %-7s %s",
-> +			  insn->mnemonic, insn->op_str);
-
-This is the same in three places. Maybe it could be a 
-print_default_format() function.
-
-> +	}
-> +}
-> +
->   struct find_file_offset_data {
->   	u64 ip;
->   	u64 offset;
-> @@ -381,14 +469,9 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
->   
->   	free_count = count = perf_cs_disasm(handle, buf, buf_len, start, buf_len, &insn);
->   	for (i = 0, offset = 0; i < count; i++) {
-> -		int printed;
-> -
-> -		printed = scnprintf(disasm_buf, sizeof(disasm_buf),
-> -				    "       %-7s %s",
-> -				    insn[i].mnemonic, insn[i].op_str);
-> -		print_capstone_detail(&insn[i], disasm_buf + printed,
-> -				      sizeof(disasm_buf) - printed, args,
-> -				      start + offset);
-> +		format_capstone_insn(&insn[i], disasm_buf,
-> +				     sizeof(disasm_buf), args,
-> +				     start + offset);
->   
->   		args->offset = offset;
->   		args->line = disasm_buf;
-> diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-> index 40fcaed5d0b1..988b2b748e11 100644
-> --- a/tools/perf/util/disasm.c
-> +++ b/tools/perf/util/disasm.c
-> @@ -202,6 +202,11 @@ bool arch__is_powerpc(const struct arch *arch)
->   	return arch->id.e_machine == EM_PPC || arch->id.e_machine == EM_PPC64;
->   }
->   
-> +bool arch__is_arm64(const struct arch *arch)
-> +{
-> +	return arch->id.e_machine == EM_AARCH64;
-> +}
-> +
->   static void ins_ops__delete(struct ins_operands *ops)
->   {
->   	if (ops == NULL)
-> diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
-> index a6e478caf61a..d3730ed86dba 100644
-> --- a/tools/perf/util/disasm.h
-> +++ b/tools/perf/util/disasm.h
-> @@ -111,6 +111,7 @@ struct annotate_args {
->   const struct arch *arch__find(uint16_t e_machine, uint32_t e_flags, const char *cpuid);
->   bool arch__is_x86(const struct arch *arch);
->   bool arch__is_powerpc(const struct arch *arch);
-> +bool arch__is_arm64(const struct arch *arch);
->   
->   extern const struct ins_ops call_ops;
->   extern const struct ins_ops dec_ops;
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
