@@ -1,120 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34EFD291864;
-	Tue, 14 Apr 2026 08:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585F0395256
+	for <llvm@lists.linux.dev>; Tue, 14 Apr 2026 09:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776157024; cv=none; b=dXZ/xmkXnILQclc/MavCCGtE9nd59HYlufKUCg07jcRJN2yaLHJHM7zCdfoD/DwZiZke9aDDK+FLwKeF6uueqLQjIxvE6aj0ew39VeZPnj+EhVwbWCNv59v6eLuKViR2A6ANMdaeRLFgiormObsp+T7F8M97wv1UvmGy0P7XhXo=
+	t=1776159792; cv=none; b=UNPIphB/Zor+Vgqgz46PN2Ip0ZSNRvOjvfSLG/zuz+KwVtoXCKb34O3qMmn/1uMS52NzVt/LvY/9QDJTSERcoyPkVG6/vXwbKsCv3D4QAeV+JfmfFY85GXSZUwB67jtYKLhFAryrJ6iWCkDsZZXlHOSD20sQQ8Wc3qEQF8aPmPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776157024; c=relaxed/simple;
-	bh=FV3qkFp35cDKooc0SSdquWO5BYkoZbJK4tx9CbGrBUI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=rKPy3pZRP3TFXD0CRhdb1nBcmfQww5tBtI6TmzAmzthQWM1YjK+hw3q6lj7S6QpaXCkNDZDXeD3eo/yfQFzAaMGfvCSpHFlQiF5m4ThFdcGb+1VG+5GYXCqFuwbQhQRPkzhmjdN6sf9+2TaRq1TkLNNR6pSvSRnzhzQ+QyhPzbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f86CiWpk; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1776159792; c=relaxed/simple;
+	bh=YWj2MIRzUgUCftDrA9uzLpwjwLwPaUfFCUD6GvtUpUc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RSYgQRsyIv0St4jlvquTGPO6uPp+gmkQ2iVE3nw4ipx41TGOCQdVK6cL03LVxoit8OdkZo873Fg8uhsy3jHWR6nmIA3c7D5Q9WND3EO2ygAXZwIM2HSkOadz3YieN3JRE4DpbhgybFcu3nqK5+2i5K5i6o4p1spO3A5mtePjLNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W74RmPz5; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f86CiWpk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776157024; x=1807693024;
-  h=date:from:to:cc:subject:message-id;
-  bh=FV3qkFp35cDKooc0SSdquWO5BYkoZbJK4tx9CbGrBUI=;
-  b=f86CiWpkbPTIVnHE+y/KqRYfyu7i4DzZUAUr4Aw/+JW4FowYqUkNprPq
-   ebrZ/0MD0W03cBJsI0LrJMmYKxg2FsCpNluwJFAz82euTOqYh9yItHuMo
-   T+/SCa588VdO93xiJZ3aQh6aLbqfyqBPPj0uGaNSfWG7Em9zeHd9LKy8n
-   XGiaa0sRvnfVwQoGOtPIxCeACaNBquSxHIrCFNNSQuFkaYxNvum989bsA
-   fjONUvrloPLYk/m99v8vzvJpzO7WeeL+w7zxHKA+csAZ4tnCGsnGpsNRB
-   I+1fYyPKGBZV0S3HlqM2fn80UeDJ8fMBh7UApEnT5gqYks5u7C0aUVMDc
-   g==;
-X-CSE-ConnectionGUID: 2SBTrSt6TB+mfJ+J1+slxw==
-X-CSE-MsgGUID: +pIAp0SoQlCdEh2MendDGg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11758"; a="88186561"
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="88186561"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 01:57:03 -0700
-X-CSE-ConnectionGUID: 5nPrVRHvQsmRBToMo20tcg==
-X-CSE-MsgGUID: dO3PMGwEReqLyVvyi21u4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="228999728"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa006.jf.intel.com with ESMTP; 14 Apr 2026 01:57:02 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wCZZp-000000000Nd-3ChQ;
-	Tue, 14 Apr 2026 08:56:57 +0000
-Date: Tue, 14 Apr 2026 10:56:06 +0200
-From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thermal:thermal/cooling-device-with-id 24/25]
- include/linux/thermal.h:242:1: warning: no previous prototype for function
- 'devm_thermal_of_cooling_device_register'
-Message-ID: <202604141053.csPgzNGF-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W74RmPz5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776159790;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lxR9kkFXmOra9yTVjgiw9iCpbnd3vTFyREPbRUQ1hyQ=;
+	b=W74RmPz5hMJ6D/QSO1UJ9GHipmLX2Gw0aoB+9b592Q3duuNYdo10lpNRFN2Du1cLkg1PqL
+	vIZcRgW6IQ+/JqNgYlOUgWCTDhUeNX/g68fDD2GZifMxl1K+JhGiibskrd/wxlYF3G6F9M
+	obAqoa388t7S+iEi1xpkfVZXMIcfwpA=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-536--zWis-43NleJQr9QD6UEog-1; Tue,
+ 14 Apr 2026 05:43:07 -0400
+X-MC-Unique: -zWis-43NleJQr9QD6UEog-1
+X-Mimecast-MFC-AGG-ID: -zWis-43NleJQr9QD6UEog_1776159786
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 224451956067
+	for <llvm@lists.linux.dev>; Tue, 14 Apr 2026 09:43:06 +0000 (UTC)
+Received: from [172.20.96.14] (unknown [10.30.44.37])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E5CF419560AB;
+	Tue, 14 Apr 2026 09:43:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 88 of 97): Test report for master
+ (7.0.0-0, upstream-mainline, d60bc140)
+Date: Tue, 14 Apr 2026 09:43:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <12796.126041405430700102@us-mta-536.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: WAV0Ub4KwTj88bcKieGaKNnWK9ojCXFwhgMXB8ZdNSo_1776159786
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git thermal/cooling-device-with-id
-head:   4fea531ae8a1095b1fc1122441fc173a33b93005
-commit: 1da9dad287e0abae276c2f8cacd7ad105b78293b [24/25] thermal/of: Pass the of_index and add a function to register with an index
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260414/202604141053.csPgzNGF-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260414/202604141053.csPgzNGF-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604141053.csPgzNGF-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All warnings (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
-   In file included from drivers/thermal/thermal_core.c:18:
->> include/linux/thermal.h:242:1: warning: no previous prototype for function 'devm_thermal_of_cooling_device_register' [-Wmissing-prototypes]
-     242 | devm_thermal_of_cooling_device_register(struct device *dev, int of_index,
-         | ^
-   include/linux/thermal.h:241:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     241 | struct thermal_cooling_device *
-         | ^
-         | static 
-   drivers/thermal/thermal_core.c:1200:10: warning: variable 'tcd' is uninitialized when used here [-Wuninitialized]
-    1200 |                 return tcd;
-         |                        ^~~
-   drivers/thermal/thermal_core.c:1190:43: note: initialize the variable 'tcd' to silence this warning
-    1190 |         struct thermal_cooling_device **ptr, *tcd;
-         |                                                  ^
-         |                                                   = NULL
-   2 warnings generated.
---
-   In file included from drivers/thermal/thermal_sysfs.c:23:
-   In file included from drivers/thermal/thermal_core.h:14:
->> include/linux/thermal.h:242:1: warning: no previous prototype for function 'devm_thermal_of_cooling_device_register' [-Wmissing-prototypes]
-     242 | devm_thermal_of_cooling_device_register(struct device *dev, int of_index,
-         | ^
-   include/linux/thermal.h:241:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     241 | struct thermal_cooling_device *
-         | ^
-         | static 
-   1 warning generated.
+Kernel information:
+    Commit message: Merge tag 'pwrseq-updates-for-v7.1-rc1' of git://git.ke=
+rnel.org/pub/scm/linux/kernel/git/brgl/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2450904930
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
+    /distribution/command [aarch64, ppc64le, s390x, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
+    Boot test [aarch64, ppc64le, s390x, x86_64]
+    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
+    Reboot test [aarch64, ppc64le, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x, x86_64]
+    Storage - blktests - throtl [aarch64, s390x, x86_64]
+    Storage - blktests - ublk [aarch64, s390x, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+    stress: stress-ng - memory [aarch64, s390x, x86_64]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
 
 
-vim +/devm_thermal_of_cooling_device_register +242 include/linux/thermal.h
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   240	
-   241	struct thermal_cooling_device *
- > 242	devm_thermal_of_cooling_device_register(struct device *dev, int of_index,
-   243						const char *type, void *devdata,
-   244						const struct thermal_cooling_device_ops *ops)
-   245	{
-   246		return ERR_PTR(-ENODEV);
-   247	}
-   248	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
