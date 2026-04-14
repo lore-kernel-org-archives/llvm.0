@@ -1,253 +1,224 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4463D6463;
-	Tue, 14 Apr 2026 12:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E8A3E6DC4;
+	Tue, 14 Apr 2026 12:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776170346; cv=none; b=NkYFw03btWXfWJQk6WUgWjakfLCyyGNzrtksaQgxBDOccdE/ZUkZUvVl9xlkKbbLPJ2nsugcUjvWIMPzSDid4dr226xJJ9Z2QSlw+30N+LpP96VvIV9orRwCwzsPMcWSLK9cpyCT/qMY6IaPrXxpkIegnRUECTIMaZJDCd9XUZY=
+	t=1776171408; cv=none; b=AJc3+7hfKePrH6f01aA7DakHqLw9VLIwawlPH4T+qPkP9bjL/rCEOMGIhlyrrEnD5yCikSANBQH4+BhNGa8UkXtYH7/bxjfuO5nhTaXm/KzceG6lWzQIl30XMhvlYYofhQFcDfoRqPhTzfm8IzAcohOP7qM5w5VJsp6ms0+HWsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776170346; c=relaxed/simple;
-	bh=Me8XBAB6i2VtdrDmQVZxTJNroonIeTj5KpxPAmdDdvg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=EtAtw28cX+1vMgCZvrrsdmmgo4gM8VoVNDAUHgPqnL+2ts+apFoArTqxXlYKbvdwfKfqQ+KsruQbN2Jam88+o2hgFApu191wAxcG5JLNy/LQ2NaS+1MAba67Qw1F1gn2sXD/xWMSJHEGzN5Y95ZHP59QME6aEslS4869U6cfAMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZNL3O01/; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1776171408; c=relaxed/simple;
+	bh=ZrXbyEyBK+P/hkY0BifiDpyfiYT2v++6HGybHpXFRBA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D4OUUPAsgQDmGOnZ569tFfiJxwvTeM+DKu2qUkktMnYBwYImdBif9TBEBRX29LZ4yGIN2iWVOOOuCFX44aY3anVJ3VcnVpEgEOdk26ClYIfFhw2pBMk69Mo4KGrP/FDBwGpAtokxrhXVD3yuTVEGIIeTzjH/IoAnNZER+jtNsGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RkCX86tv; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZNL3O01/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RkCX86tv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776170344; x=1807706344;
-  h=date:from:to:cc:subject:message-id;
-  bh=Me8XBAB6i2VtdrDmQVZxTJNroonIeTj5KpxPAmdDdvg=;
-  b=ZNL3O01/TEWJQywcNkMaUlxOl10K7BHdOz2+dQyFUOFewCy9ceXfmcjZ
-   FOJ15mmVsDDPio3LjYP9Y3ETTCS8Lm0BxrGbCfSxjZenojhV1bQfqduuk
-   8FSak6NsKeJIQEvzNluzxjeam3czTG5aupPdKibjZYIHpJUS3/EebdE+9
-   YSFcnR3zlVb66X38hYAIDFKJensGVLfnhHBQpSniZseyEl/yDPupBYtsg
-   CzuNexw0I9CZ8MYcKZJ45LWiKtEKaSWtFU+IiN+IbyXn0yrw8WfoktdXX
-   ayL2LcDm7CSZCJhRuPb0A/Vt9iKJILKyawHnjE4n/oi2e/qKcWXhJWhrc
-   g==;
-X-CSE-ConnectionGUID: UzcDVNb4RiqxIVNwWStzsQ==
-X-CSE-MsgGUID: zwBQ85u3SlWeXT9OjjVwhA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="87828412"
+  t=1776171404; x=1807707404;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZrXbyEyBK+P/hkY0BifiDpyfiYT2v++6HGybHpXFRBA=;
+  b=RkCX86tvO2gw1czTx1YX7paz66PB7AVycnjupiIy6vfm1R1KmF4dx6E0
+   GPEVDWEhCgx2af6O9598aZ+sN8G9UBPZpqspdsuMbhRH1P9F3SZ6MIPCK
+   O+QMyG4wzN+3+25h/bQgvTdpxI/Ca9+wJADRdPhZIKQxEckjig9Hzi24F
+   JSKxYtzUh6JrZ+qZqJYI0VdpkGik8N0GJhPlX/EMqvIBFtJohnHqTFgcG
+   WB2ecSXhFzjD7oZXjjETAKyOwE972AzbDKeFZ3Y4cM3uNd7C64nOFLA99
+   m0uPpl74uf6YY8H5FowaWCmir9a0smBMNbdd/97mCk+zNV6SRNwHi7OIM
+   w==;
+X-CSE-ConnectionGUID: OqPy8lynRHCZoTsn49yrOA==
+X-CSE-MsgGUID: Ig6zYAKUTdO6O5z7zVIPyw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="87431730"
 X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="87828412"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 05:39:03 -0700
-X-CSE-ConnectionGUID: sFEq7rodTCOqa+GB0ZDuYg==
-X-CSE-MsgGUID: gxl8ctolR5OJjaPHUSmHfQ==
+   d="scan'208";a="87431730"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 05:56:43 -0700
+X-CSE-ConnectionGUID: h2XqyPqIQkO2eSid3phC1w==
+X-CSE-MsgGUID: 9PPFWa7hSueoq7R3FaTvfA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="234485885"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa004.jf.intel.com with ESMTP; 14 Apr 2026 05:39:02 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+   d="scan'208";a="229214424"
+Received: from lkp-server01.sh.intel.com (HELO 7b0b59b3a0d4) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 14 Apr 2026 05:56:40 -0700
+Received: from kbuild by 7b0b59b3a0d4 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wCd2h-000000000PJ-1QTB;
-	Tue, 14 Apr 2026 12:38:59 +0000
-Date: Tue, 14 Apr 2026 14:38:58 +0200
+	id 1wCdJl-000000001ST-3s18;
+	Tue, 14 Apr 2026 12:56:37 +0000
+Date: Tue, 14 Apr 2026 20:55:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Pablo Martin-Gomez" <pmartin-gomez@freebox.fr>
+To: Advaith Neelacantan <advaith.neelacantan@gmail.com>,
+	Lars-Peter Clausen <lars@metafoo.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: net/mac80211/parse.c:134:28: error: too few arguments to
- function call, expected 5, have 4
-Message-ID: <202604141419.BVAQCnN1-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-iio@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Advaith Neelacantan <advaith.neelacantan@gmail.com>
+Subject: Re: [PATCH] staging: iio: frequency: ad9832:  use guard(mutex) for
+ locking
+Message-ID: <202604142016.fnd3WPI1-lkp@intel.com>
+References: <20260411072503.106621-2-advaith.neelacantan@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260411072503.106621-2-advaith.neelacantan@gmail.com>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Pablo-Martin-Gomez/wifi-nl80211-remove-EHT-IE-size-validation/20260414-014056
-head:   27802dfbd9cea5146c1de2ae0dae896fb8e15a40
-commit: 8a5d1b438dca787968156272f9bf7d0a9260bc58 wifi: make EHT capa size check not read reserved bits
-date:   19 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260414/202604141419.BVAQCnN1-lkp@intel.com/config)
+Hi Advaith,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on staging/staging-testing]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Advaith-Neelacantan/staging-iio-frequency-ad9832-use-guard-mutex-for-locking/20260414-074602
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20260411072503.106621-2-advaith.neelacantan%40gmail.com
+patch subject: [PATCH] staging: iio: frequency: ad9832:  use guard(mutex) for locking
+config: i386-buildonly-randconfig-002-20260414 (https://download.01.org/0day-ci/archive/20260414/202604142016.fnd3WPI1-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260414/202604141419.BVAQCnN1-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260414/202604142016.fnd3WPI1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604141419.BVAQCnN1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604142016.fnd3WPI1-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/mac80211/parse.c:134:28: error: too few arguments to function call, expected 5, have 4
-     132 |                 if (ieee80211_eht_capa_size_ok(elems->he_cap,
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
-     133 |                                                data, len,
-     134 |                                                params->from_ap)) {
-         |                                                               ^
-   include/linux/ieee80211-eht.h:357:1: note: 'ieee80211_eht_capa_size_ok' declared here
-     357 | ieee80211_eht_capa_size_ok(const u8 *he_capa, const u8 *data, u8 len,
-         | ^                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     358 |                            bool from_ap, enum nl80211_band band)
-         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/staging/iio/frequency/ad9832.c:182:3: error: cannot jump from this goto statement to its label
+     182 |                 goto error_ret;
+         |                 ^
+   drivers/staging/iio/frequency/ad9832.c:184:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     184 |         guard(mutex)(&st->lock);
+         |         ^
+   include/linux/cleanup.h:419:2: note: expanded from macro 'guard'
+     419 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:300:3: note: expanded from macro 'CLASS'
+     300 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:16:1: note: expanded from here
+      16 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:22:1: note: expanded from here
+      22 | __UNIQUE_ID_unlock_451
+         | ^
+   drivers/staging/iio/frequency/ad9832.c:184:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/cleanup.h:419:15: note: expanded from macro 'guard'
+     419 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
+     168 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:10:1: note: expanded from here
+      10 | __UNIQUE_ID_guard_450
+         | ^
    1 error generated.
 
 
-vim +134 net/mac80211/parse.c
+vim +182 drivers/staging/iio/frequency/ad9832.c
 
-5a21f0eae13515 Johannes Berg 2024-02-28   61  
-9d0480a7c05b64 Johannes Berg 2024-01-29   62  static void
-9d0480a7c05b64 Johannes Berg 2024-01-29   63  ieee80211_parse_extension_element(u32 *crc,
-9d0480a7c05b64 Johannes Berg 2024-01-29   64  				  const struct element *elem,
-5a21f0eae13515 Johannes Berg 2024-02-28   65  				  struct ieee80211_elems_parse *elems_parse,
-9d0480a7c05b64 Johannes Berg 2024-01-29   66  				  struct ieee80211_elems_parse_params *params)
-9d0480a7c05b64 Johannes Berg 2024-01-29   67  {
-5a21f0eae13515 Johannes Berg 2024-02-28   68  	struct ieee802_11_elems *elems = &elems_parse->elems;
-9d0480a7c05b64 Johannes Berg 2024-01-29   69  	const void *data = elem->data + 1;
-9d0480a7c05b64 Johannes Berg 2024-01-29   70  	bool calc_crc = false;
-9d0480a7c05b64 Johannes Berg 2024-01-29   71  	u8 len;
-9d0480a7c05b64 Johannes Berg 2024-01-29   72  
-9d0480a7c05b64 Johannes Berg 2024-01-29   73  	if (!elem->datalen)
-9d0480a7c05b64 Johannes Berg 2024-01-29   74  		return;
-9d0480a7c05b64 Johannes Berg 2024-01-29   75  
-9d0480a7c05b64 Johannes Berg 2024-01-29   76  	len = elem->datalen - 1;
-9d0480a7c05b64 Johannes Berg 2024-01-29   77  
-9d0480a7c05b64 Johannes Berg 2024-01-29   78  	switch (elem->data[0]) {
-9d0480a7c05b64 Johannes Berg 2024-01-29   79  	case WLAN_EID_EXT_HE_MU_EDCA:
-9d0480a7c05b64 Johannes Berg 2024-01-29   80  		if (params->mode < IEEE80211_CONN_MODE_HE)
-9d0480a7c05b64 Johannes Berg 2024-01-29   81  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29   82  		calc_crc = true;
-9d0480a7c05b64 Johannes Berg 2024-01-29   83  		if (len >= sizeof(*elems->mu_edca_param_set))
-9d0480a7c05b64 Johannes Berg 2024-01-29   84  			elems->mu_edca_param_set = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29   85  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29   86  	case WLAN_EID_EXT_HE_CAPABILITY:
-9d0480a7c05b64 Johannes Berg 2024-01-29   87  		if (params->mode < IEEE80211_CONN_MODE_HE)
-9d0480a7c05b64 Johannes Berg 2024-01-29   88  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29   89  		if (ieee80211_he_capa_size_ok(data, len)) {
-9d0480a7c05b64 Johannes Berg 2024-01-29   90  			elems->he_cap = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29   91  			elems->he_cap_len = len;
-9d0480a7c05b64 Johannes Berg 2024-01-29   92  		}
-9d0480a7c05b64 Johannes Berg 2024-01-29   93  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29   94  	case WLAN_EID_EXT_HE_OPERATION:
-9d0480a7c05b64 Johannes Berg 2024-01-29   95  		if (params->mode < IEEE80211_CONN_MODE_HE)
-9d0480a7c05b64 Johannes Berg 2024-01-29   96  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29   97  		calc_crc = true;
-9d0480a7c05b64 Johannes Berg 2024-01-29   98  		if (len >= sizeof(*elems->he_operation) &&
-9d0480a7c05b64 Johannes Berg 2024-01-29   99  		    len >= ieee80211_he_oper_size(data) - 1)
-9d0480a7c05b64 Johannes Berg 2024-01-29  100  			elems->he_operation = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  101  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  102  	case WLAN_EID_EXT_UORA:
-9d0480a7c05b64 Johannes Berg 2024-01-29  103  		if (params->mode < IEEE80211_CONN_MODE_HE)
-9d0480a7c05b64 Johannes Berg 2024-01-29  104  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  105  		if (len >= 1)
-9d0480a7c05b64 Johannes Berg 2024-01-29  106  			elems->uora_element = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  107  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  108  	case WLAN_EID_EXT_MAX_CHANNEL_SWITCH_TIME:
-9d0480a7c05b64 Johannes Berg 2024-01-29  109  		if (len == 3)
-9d0480a7c05b64 Johannes Berg 2024-01-29  110  			elems->max_channel_switch_time = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  111  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  112  	case WLAN_EID_EXT_MULTIPLE_BSSID_CONFIGURATION:
-9d0480a7c05b64 Johannes Berg 2024-01-29  113  		if (len >= sizeof(*elems->mbssid_config_ie))
-9d0480a7c05b64 Johannes Berg 2024-01-29  114  			elems->mbssid_config_ie = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  115  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  116  	case WLAN_EID_EXT_HE_SPR:
-9d0480a7c05b64 Johannes Berg 2024-01-29  117  		if (params->mode < IEEE80211_CONN_MODE_HE)
-9d0480a7c05b64 Johannes Berg 2024-01-29  118  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  119  		if (len >= sizeof(*elems->he_spr) &&
-0c2fd18f7ec552 Lingbo Kong   2024-05-16  120  		    len >= ieee80211_he_spr_size(data) - 1)
-9d0480a7c05b64 Johannes Berg 2024-01-29  121  			elems->he_spr = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  122  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  123  	case WLAN_EID_EXT_HE_6GHZ_CAPA:
-9d0480a7c05b64 Johannes Berg 2024-01-29  124  		if (params->mode < IEEE80211_CONN_MODE_HE)
-9d0480a7c05b64 Johannes Berg 2024-01-29  125  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  126  		if (len >= sizeof(*elems->he_6ghz_capa))
-9d0480a7c05b64 Johannes Berg 2024-01-29  127  			elems->he_6ghz_capa = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  128  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  129  	case WLAN_EID_EXT_EHT_CAPABILITY:
-9d0480a7c05b64 Johannes Berg 2024-01-29  130  		if (params->mode < IEEE80211_CONN_MODE_EHT)
-9d0480a7c05b64 Johannes Berg 2024-01-29  131  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  132  		if (ieee80211_eht_capa_size_ok(elems->he_cap,
-9d0480a7c05b64 Johannes Berg 2024-01-29  133  					       data, len,
-9d0480a7c05b64 Johannes Berg 2024-01-29 @134  					       params->from_ap)) {
-9d0480a7c05b64 Johannes Berg 2024-01-29  135  			elems->eht_cap = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  136  			elems->eht_cap_len = len;
-9d0480a7c05b64 Johannes Berg 2024-01-29  137  		}
-9d0480a7c05b64 Johannes Berg 2024-01-29  138  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  139  	case WLAN_EID_EXT_EHT_OPERATION:
-9d0480a7c05b64 Johannes Berg 2024-01-29  140  		if (params->mode < IEEE80211_CONN_MODE_EHT)
-9d0480a7c05b64 Johannes Berg 2024-01-29  141  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  142  		if (ieee80211_eht_oper_size_ok(data, len))
-9d0480a7c05b64 Johannes Berg 2024-01-29  143  			elems->eht_operation = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  144  		calc_crc = true;
-9d0480a7c05b64 Johannes Berg 2024-01-29  145  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  146  	case WLAN_EID_EXT_EHT_MULTI_LINK:
-9d0480a7c05b64 Johannes Berg 2024-01-29  147  		if (params->mode < IEEE80211_CONN_MODE_EHT)
-9d0480a7c05b64 Johannes Berg 2024-01-29  148  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  149  		calc_crc = true;
-9d0480a7c05b64 Johannes Berg 2024-01-29  150  
-9d0480a7c05b64 Johannes Berg 2024-01-29  151  		if (ieee80211_mle_size_ok(data, len)) {
-9d0480a7c05b64 Johannes Berg 2024-01-29  152  			const struct ieee80211_multi_link_elem *mle =
-9d0480a7c05b64 Johannes Berg 2024-01-29  153  				(void *)data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  154  
-9d0480a7c05b64 Johannes Berg 2024-01-29  155  			switch (le16_get_bits(mle->control,
-9d0480a7c05b64 Johannes Berg 2024-01-29  156  					      IEEE80211_ML_CONTROL_TYPE)) {
-9d0480a7c05b64 Johannes Berg 2024-01-29  157  			case IEEE80211_ML_CONTROL_TYPE_BASIC:
-99ca2c28e6b680 Johannes Berg 2025-02-21  158  				if (elems_parse->multi_link_inner) {
-9d0480a7c05b64 Johannes Berg 2024-01-29  159  					elems->parse_error |=
-9d0480a7c05b64 Johannes Berg 2024-01-29  160  						IEEE80211_PARSE_ERR_DUP_NEST_ML_BASIC;
-9d0480a7c05b64 Johannes Berg 2024-01-29  161  					break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  162  				}
-9d0480a7c05b64 Johannes Berg 2024-01-29  163  				break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  164  			case IEEE80211_ML_CONTROL_TYPE_RECONF:
-5a21f0eae13515 Johannes Berg 2024-02-28  165  				elems_parse->ml_reconf_elem = elem;
-9d0480a7c05b64 Johannes Berg 2024-01-29  166  				break;
-24711d60f8492a Ilan Peer     2025-01-02  167  			case IEEE80211_ML_CONTROL_TYPE_PRIO_ACCESS:
-24711d60f8492a Ilan Peer     2025-01-02  168  				elems_parse->ml_epcs_elem = elem;
-24711d60f8492a Ilan Peer     2025-01-02  169  				break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  170  			default:
-9d0480a7c05b64 Johannes Berg 2024-01-29  171  				break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  172  			}
-9d0480a7c05b64 Johannes Berg 2024-01-29  173  		}
-9d0480a7c05b64 Johannes Berg 2024-01-29  174  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  175  	case WLAN_EID_EXT_BANDWIDTH_INDICATION:
-9d0480a7c05b64 Johannes Berg 2024-01-29  176  		if (params->mode < IEEE80211_CONN_MODE_EHT)
-9d0480a7c05b64 Johannes Berg 2024-01-29  177  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  178  		if (ieee80211_bandwidth_indication_size_ok(data, len))
-9d0480a7c05b64 Johannes Berg 2024-01-29  179  			elems->bandwidth_indication = data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  180  		calc_crc = true;
-9d0480a7c05b64 Johannes Berg 2024-01-29  181  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  182  	case WLAN_EID_EXT_TID_TO_LINK_MAPPING:
-9d0480a7c05b64 Johannes Berg 2024-01-29  183  		if (params->mode < IEEE80211_CONN_MODE_EHT)
-9d0480a7c05b64 Johannes Berg 2024-01-29  184  			break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  185  		calc_crc = true;
-9d0480a7c05b64 Johannes Berg 2024-01-29  186  		if (ieee80211_tid_to_link_map_size_ok(data, len) &&
-9d0480a7c05b64 Johannes Berg 2024-01-29  187  		    elems->ttlm_num < ARRAY_SIZE(elems->ttlm)) {
-9d0480a7c05b64 Johannes Berg 2024-01-29  188  			elems->ttlm[elems->ttlm_num] = (void *)data;
-9d0480a7c05b64 Johannes Berg 2024-01-29  189  			elems->ttlm_num++;
-9d0480a7c05b64 Johannes Berg 2024-01-29  190  		}
-9d0480a7c05b64 Johannes Berg 2024-01-29  191  		break;
-a1085114715ee9 Johannes Berg 2026-01-30  192  	case WLAN_EID_EXT_UHR_OPER:
-a1085114715ee9 Johannes Berg 2026-01-30  193  		if (params->mode < IEEE80211_CONN_MODE_UHR)
-a1085114715ee9 Johannes Berg 2026-01-30  194  			break;
-a1085114715ee9 Johannes Berg 2026-01-30  195  		calc_crc = true;
-a1085114715ee9 Johannes Berg 2026-01-30  196  		if (ieee80211_uhr_oper_size_ok(data, len,
-a1085114715ee9 Johannes Berg 2026-01-30  197  					       params->type == (IEEE80211_FTYPE_MGMT |
-a1085114715ee9 Johannes Berg 2026-01-30  198  								IEEE80211_STYPE_BEACON))) {
-a1085114715ee9 Johannes Berg 2026-01-30  199  			elems->uhr_operation = data;
-a1085114715ee9 Johannes Berg 2026-01-30  200  			elems->uhr_operation_len = len;
-a1085114715ee9 Johannes Berg 2026-01-30  201  		}
-a1085114715ee9 Johannes Berg 2026-01-30  202  		break;
-a1085114715ee9 Johannes Berg 2026-01-30  203  	case WLAN_EID_EXT_UHR_CAPA:
-a1085114715ee9 Johannes Berg 2026-01-30  204  		if (params->mode < IEEE80211_CONN_MODE_UHR)
-a1085114715ee9 Johannes Berg 2026-01-30  205  			break;
-a1085114715ee9 Johannes Berg 2026-01-30  206  		calc_crc = true;
-a1085114715ee9 Johannes Berg 2026-01-30  207  		if (ieee80211_uhr_capa_size_ok(data, len, true)) {
-a1085114715ee9 Johannes Berg 2026-01-30  208  			elems->uhr_cap = data;
-a1085114715ee9 Johannes Berg 2026-01-30  209  			elems->uhr_cap_len = len;
-a1085114715ee9 Johannes Berg 2026-01-30  210  		}
-a1085114715ee9 Johannes Berg 2026-01-30  211  		break;
-9d0480a7c05b64 Johannes Berg 2024-01-29  212  	}
-9d0480a7c05b64 Johannes Berg 2024-01-29  213  
-9d0480a7c05b64 Johannes Berg 2024-01-29  214  	if (crc && calc_crc)
-9d0480a7c05b64 Johannes Berg 2024-01-29  215  		*crc = crc32_be(*crc, (void *)elem, elem->datalen + 2);
-9d0480a7c05b64 Johannes Berg 2024-01-29  216  }
-9d0480a7c05b64 Johannes Berg 2024-01-29  217  
+4a8e6c33e88b09a drivers/staging/iio/dds/ad9832.c       Cliff Cai           2010-10-27  170  
+f1b07cdf6ba396d drivers/staging/iio/frequency/ad9832.c Federico Di Pierro  2014-06-29  171  static ssize_t ad9832_write(struct device *dev, struct device_attribute *attr,
+f1b07cdf6ba396d drivers/staging/iio/frequency/ad9832.c Federico Di Pierro  2014-06-29  172  			    const char *buf, size_t len)
+4a8e6c33e88b09a drivers/staging/iio/dds/ad9832.c       Cliff Cai           2010-10-27  173  {
+b671bb3bf0d0165 drivers/staging/iio/frequency/ad9832.c Lars-Peter Clausen  2012-05-12  174  	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+638e59fc8c867b4 drivers/staging/iio/dds/ad9832.c       Jonathan Cameron    2011-10-06  175  	struct ad9832_state *st = iio_priv(indio_dev);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  176  	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
+4a8e6c33e88b09a drivers/staging/iio/dds/ad9832.c       Cliff Cai           2010-10-27  177  	int ret;
+e5e26dd5bb740c3 drivers/staging/iio/frequency/ad9832.c Jingoo Han          2013-08-20  178  	unsigned long val;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  179  
+e5e26dd5bb740c3 drivers/staging/iio/frequency/ad9832.c Jingoo Han          2013-08-20  180  	ret = kstrtoul(buf, 10, &val);
+4a8e6c33e88b09a drivers/staging/iio/dds/ad9832.c       Cliff Cai           2010-10-27  181  	if (ret)
+4a8e6c33e88b09a drivers/staging/iio/dds/ad9832.c       Cliff Cai           2010-10-27 @182  		goto error_ret;
+4a8e6c33e88b09a drivers/staging/iio/dds/ad9832.c       Cliff Cai           2010-10-27  183  
+baf560e48a75741 drivers/staging/iio/frequency/ad9832.c Advaith Neelacantan 2026-04-11  184  	guard(mutex)(&st->lock);
+e15fbc91a4304a9 drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-10-25  185  	switch ((u32)this_attr->address) {
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  186  	case AD9832_FREQ0HM:
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  187  	case AD9832_FREQ1HM:
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  188  		ret = ad9832_write_frequency(st, this_attr->address, val);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  189  		break;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  190  	case AD9832_PHASE0H:
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  191  	case AD9832_PHASE1H:
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  192  	case AD9832_PHASE2H:
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  193  	case AD9832_PHASE3H:
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  194  		ret = ad9832_write_phase(st, this_attr->address, val);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  195  		break;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  196  	case AD9832_PINCTRL_EN:
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  197  		st->ctrl_ss &= ~AD9832_SELSRC;
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  198  		st->ctrl_ss |= FIELD_PREP(AD9832_SELSRC, val ? 0 : 1);
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  199  
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  200  		st->data = cpu_to_be16(FIELD_PREP(AD9832_CMD_MSK, AD9832_CMD_SYNCSELSRC) |
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  201  						  st->ctrl_ss);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  202  		ret = spi_sync(st->spi, &st->msg);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  203  		break;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  204  	case AD9832_FREQ_SYM:
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  205  		if (val == 1 || val == 0) {
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  206  			st->ctrl_fp &= ~AD9832_FREQ;
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  207  			st->ctrl_fp |= FIELD_PREP(AD9832_FREQ, val ? 1 : 0);
+f1b07cdf6ba396d drivers/staging/iio/frequency/ad9832.c Federico Di Pierro  2014-06-29  208  		} else {
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  209  			ret = -EINVAL;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  210  			break;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  211  		}
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  212  		st->data = cpu_to_be16(FIELD_PREP(AD9832_CMD_MSK, AD9832_CMD_FPSELECT) |
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  213  						  st->ctrl_fp);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  214  		ret = spi_sync(st->spi, &st->msg);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  215  		break;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  216  	case AD9832_PHASE_SYM:
+260974704ea4c01 drivers/staging/iio/frequency/ad9832.c Sachin Kamat        2014-03-07  217  		if (val > 3) {
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  218  			ret = -EINVAL;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  219  			break;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  220  		}
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  221  
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  222  		st->ctrl_fp &= ~AD9832_PHASE_MASK;
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  223  		st->ctrl_fp |= FIELD_PREP(AD9832_PHASE_MASK, val);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  224  
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  225  		st->data = cpu_to_be16(FIELD_PREP(AD9832_CMD_MSK, AD9832_CMD_FPSELECT) |
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  226  						  st->ctrl_fp);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  227  		ret = spi_sync(st->spi, &st->msg);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  228  		break;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  229  	case AD9832_OUTPUT_EN:
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  230  		if (val)
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  231  			st->ctrl_src &= ~(AD9832_RESET | AD9832_SLEEP | AD9832_CLR);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  232  		else
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  233  			st->ctrl_src |= FIELD_PREP(AD9832_RESET, 1);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  234  
+85c9e6d592e1c17 drivers/staging/iio/frequency/ad9832.c Siddharth Menon     2025-04-16  235  		st->data = cpu_to_be16(FIELD_PREP(AD9832_CMD_MSK, AD9832_CMD_SLEEPRESCLR) |
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  236  						  st->ctrl_src);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  237  		ret = spi_sync(st->spi, &st->msg);
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  238  		break;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  239  	default:
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  240  		ret = -ENODEV;
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  241  	}
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  242  
+ea707584bac187c drivers/staging/iio/dds/ad9832.c       Michael Hennerich   2011-02-09  243  error_ret:
+4a8e6c33e88b09a drivers/staging/iio/dds/ad9832.c       Cliff Cai           2010-10-27  244  	return ret ? ret : len;
+4a8e6c33e88b09a drivers/staging/iio/dds/ad9832.c       Cliff Cai           2010-10-27  245  }
+4a8e6c33e88b09a drivers/staging/iio/dds/ad9832.c       Cliff Cai           2010-10-27  246  
 
 -- 
 0-DAY CI Kernel Test Service
