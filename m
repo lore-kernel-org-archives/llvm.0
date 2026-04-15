@@ -1,650 +1,254 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B002F9998;
-	Wed, 15 Apr 2026 20:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F8423370F
+	for <llvm@lists.linux.dev>; Wed, 15 Apr 2026 20:59:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776284145; cv=none; b=iO5TUOz2SmpBGp6Bqh2/VftQlnjHqNGdiSLxHa1LMBc1vauJib0CzO9jOiTXdfSOUUvhwQRGEW30FmCuMe537xbyjy+vDbKOMtFi7QiPrOLb5x5EV+Vhr0DFw+evwrfzciqiG2PQOOWExHRxxw8Fnc4ML8KG8UO4NfjmDPWAOy4=
+	t=1776286773; cv=none; b=b8P/DaUh3dRZKv4DBtpn+1rYdw2rbsekgxN10ncR2t9Xku1DKX0KbbX/VYn1OObJlZHavx4VYn7etDBDMUkeHyHVzK85/yRLxNi8BWZ0cFCzC4TnT7SuRQFaHahrPEE0yuWbHHt+XrNdN7chKkUqYLcbnCP1SGKpN6vhuI/KuzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776284145; c=relaxed/simple;
-	bh=JmLjGTYZ6lvQB+mf004De8KiadB1kEWQNLS82aICFDo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=tl3Ft86fAQNjSBEzrGj7/lQXwcSO8eIe2Cx/kfM52G7XrjsrQ4O2IDbAzVI+QVVLqt85ia1O5b7e9dBWfLyZqmpxrH+5zS5OXD5wkLDH5U6ooKM0H2/imNM/Z+hcsETLBP3ROQGgICAs5FHLVc0dXBtw0etGrltke7KgOsE1LdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HikoDJwa; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1776286773; c=relaxed/simple;
+	bh=C5gBCOFN02YFIPa38DguA50umMdPOwESOAOxPNJ9NUA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Kbv6Mb9YeSLg0hMr9tmC71q2XcSSZfF0K0mMliDX/f0Ufx3cBOwOZxTAJTTtUsW4EmrKqzwb5gjeUsH7WtbCHRXSjoibEIu8eGMKWFOXsbvtpuOmVySXgxZl0qhqIOOm8uLSnKSfPUdEUJP+37Uxdq0hwRmqVTU7d0WKimpiEtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZVdM/yxU; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HikoDJwa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776284143; x=1807820143;
-  h=date:from:to:cc:subject:message-id;
-  bh=JmLjGTYZ6lvQB+mf004De8KiadB1kEWQNLS82aICFDo=;
-  b=HikoDJwaeUklDP1RFISK6Um6vWc8eAd+uWZW4SAhaguRA5Z+4v/8t6n+
-   zohqIFD/3Kqo2puHgR2a/beCFvQPVpgWC5JAcrKfiIUTtU0dHqk1T/DW2
-   q0LX0XXBdbJVfxDy/PiC8fDJH8dIdkXGKQftPvAwwGkr3EV+wQiqU8LDg
-   P1I0TpA5t5DIZFLUBaiUKra1tHpN5bsLiVzVXpfOr6BJLkOWTg7bj2LSt
-   7YDjXjAFHJxc1CqpV390PSj+MdsIi0E18tWrlWqOKmKp6KqZDYR9SntIp
-   FTkUtEUmWxJa/X/FbnefmP3F+XeXmg9sZZ4vHdOXIr4/OZIzNntlfPyYQ
-   Q==;
-X-CSE-ConnectionGUID: KC7sJUCNSVi5Oz/GaTe/zA==
-X-CSE-MsgGUID: Upse5376RX+8dMh3AV9WmQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11760"; a="76975118"
-X-IronPort-AV: E=Sophos;i="6.23,181,1770624000"; 
-   d="scan'208";a="76975118"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2026 13:15:42 -0700
-X-CSE-ConnectionGUID: X24PYXXNTqunZNl/x1AAgA==
-X-CSE-MsgGUID: +7qU9e+jTp2DjXNXUvRfcA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,181,1770624000"; 
-   d="scan'208";a="232254082"
-Received: from lkp-server01.sh.intel.com (HELO 7f3b36e5d6a5) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 15 Apr 2026 13:15:39 -0700
-Received: from kbuild by 7f3b36e5d6a5 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wD6e9-000000000tU-1cMm;
-	Wed, 15 Apr 2026 20:15:37 +0000
-Date: Thu, 16 Apr 2026 04:15:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: kernel/futex/core.c:604:23: error: cannot jump from this asm
- goto statement to one of its possible targets
-Message-ID: <202604160412.f6SIMtr9-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZVdM/yxU"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-488a14c31eeso58199035e9.0
+        for <llvm@lists.linux.dev>; Wed, 15 Apr 2026 13:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1776286769; x=1776891569; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DO9HplCybn97GiKk5RDH2mrlnKl7NOYl76LLXkcuT3o=;
+        b=ZVdM/yxUrOhUyOfNT3HK/HrLVIDg6nFmUu1lAqRT/76HFhwL5MptOBX4ffrpr6eI90
+         5erMlnmHPWb3udZX6Ou0/+cq9G1Ne+4JsS99tdZLavrUUs1ZLO25WqFecpxvEFRf1tBV
+         l+9fCzCZ1W8haMKZQqdLsRkHRZrUdmOYU5G1EN5+BKKASFwqxrtLmMMFx+VuJj1Z4HIV
+         bOs3rF87iwLEtA0Bckz/9XQSVaNPOp3oFrmBYWHbIiMH29F/shyNRu4hks/dzGbgoguG
+         ZqYf0qY2tSQfbAmKelay1Gy235JahFBxEcm3iOCzHU9rmVLcACjKe0+fHyhZSwE3UrmE
+         0Zfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776286769; x=1776891569;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DO9HplCybn97GiKk5RDH2mrlnKl7NOYl76LLXkcuT3o=;
+        b=ik9b5E/Jkqs244SQ2yxBVp1tv6bY18fuRco1iuZFa3+IhjjeZ8DQmp0PpRkfxO24ak
+         Q7fkFJ6GziBYH1q//aP87BlYoqHuKCoZJ9sJ76ivLjwGcS355unm784FgXv/2ism3Z6H
+         qlrkxdGL4hTeR9mBW2DhBdcpORSVeeAJlNfBbzXJFuy15n1Ui8i4R99xTdINcR4I9l9p
+         UBgDl94pVG8zagcUFZABlrX7l4B1ezsmpCFygRK938QojA3aIWXx9QwFj4NCt8PUg/Me
+         P+5aSE7goApASVeiAzLEhaQbTzn9nbfGTS9C/FyAw5gRQ+wbrJPiIHeSn33WihQqeK2V
+         TI7Q==
+X-Forwarded-Encrypted: i=1; AFNElJ8n+nhaXVjHsIrw1YmHDkNZcGzZKQZlQZRbg+9/C/SFZdTDv7jhCP/xGLVLj9azzJN83u8m@lists.linux.dev
+X-Gm-Message-State: AOJu0YyjLOK3ebIdhba9dXzBOTxIRYFPGqvz0mFOpU4n7uSLU7HgVFm1
+	7DiZpQcWJMH5vsnyu/gSD8v8qxRUMJa7vGNDbii+XVse4S4jiAoXKbiU4f21he0lY+A=
+X-Gm-Gg: AeBDievQQCZoRuQ9p1d7AF/PDpkeU7v6bLK6enOmxIB9CX2ngZwUwFlb/5R37rw+q+H
+	BmfG2Qr8SpnBCRobVLtokjBwFE6O3O901gBH4wp5ra3IBG6Dh7DJA8lyCV2qu+9fHqvHxa9zbYY
+	xQI2/g3WfXtgqScj3X+3IB+gwuz7+LFXqfeIz4kJvfA69qtqJi8nTsmz2HyXURTHes5YN1zvW+D
+	ga/S0vGkFC/AQWSKM+GbXDA1LKZ+toQy2XU4rqUEwMNuLpZvddcTLxAprSQ0lEJ/r42INuXHixQ
+	rqyUnfYNp4hNNiEdsjKWzX6IW7EFj+5sZu98c/Yi+KdiHKtGrXtKDuoSVMOL2lRBEFZB6AeSbRf
+	5BThU75rl56stYcYLLGLU3Ebh0lnZN8P0f0q6Q99gAFZ8iQESJ0FoITnSHaZIS4xdPCtwfu62NK
+	JSmGNakvXnBag96tOl2ifehA==
+X-Received: by 2002:a05:600d:d:b0:488:d243:8da9 with SMTP id 5b1f17b1804b1-488d67b8cf3mr246577685e9.1.1776286769537;
+        Wed, 15 Apr 2026 13:59:29 -0700 (PDT)
+Received: from localhost ([2804:7f0:b765:e41:ce28:aaff:fe86:149c])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8eb8443csm4463723eec.14.2026.04.15.13.59.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2026 13:59:28 -0700 (PDT)
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+Subject: [PATCH bpf-next v5 00/11] selftests/bpf: Tolerate partial builds
+ across kernel configs
+Date: Wed, 15 Apr 2026 17:59:18 -0300
+Message-Id: <20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIACf832kC/43O3WrDMAwF4Fcpvp43/6fZ1d5jlOE4UuOxJMVyQ
+ 0vJu8/JGIRC2S4lHX2cGyNIEYi97m4swRQpjkMZ7NOOhc4PR+CxLTNTQjlhhOQEX5iBMvHmhB9
+ 9pDAOGI/cBK0BbbCu9ax8nxJgvKzyOytRPsAls8PPhc7NJ4S8wEu28QS8SX4I3bL6Tb/0njKkJ
+ dFFymO6rjUnuZp/NpokF1x7MCoIj5XDNzoTPIexX2tMasvox4wqDApXCaH3wtftHaO3jHvM6ML
+ YfeWllEY5He4Y80/GFKaupUErAFusNsw8z9+Q5+p40AEAAA==
+X-Change-ID: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Alan Maguire <alan.maguire@oracle.com>, 
+ "Ricardo B. Marliere" <rbm@suse.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openssh-sha256; t=1776286764; l=6888;
+ i=rbm@suse.com; h=from:subject:message-id;
+ bh=C5gBCOFN02YFIPa38DguA50umMdPOwESOAOxPNJ9NUA=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QHiVqXbsKTSDkzpDj3MdBOyhMdP9j9qW/Ti/+H3Ry57FO1XzI+JrpWyrQdnT2Oz3Jw2tFj1AxGv
+ IRaitS3fw7wU=
+X-Developer-Key: i=rbm@suse.com; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-Hi Thomas,
+Currently the BPF selftests can only be built by using the minimum kernel
+configuration defined in tools/testing/selftests/bpf/config*. This poses a
+problem in distribution kernels that may have some of the flags disabled or
+set as module. For example, we have been running the tests regularly in
+openSUSE Tumbleweed [1] [2] but to work around this fact we created a
+special package [3] that build the tests against an auxiliary vmlinux with
+the BPF Kconfig. We keep a list of known issues that may happen due to,
+amongst other things, configuration mismatches [4] [5].
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+The maintenance of this package is far from ideal, especially for
+enterprise kernels. The goal of this series is to enable the common usecase
+of running the following in any system:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1f5ffc672165ff851063a5fd044b727ab2517ae3
-commit: e4e28fd6986e8cf963ec4137e6c0b95403f636ab futex: Convert to get/put_user_inline()
-date:   5 months ago
-config: powerpc64-randconfig-001-20260416 (https://download.01.org/0day-ci/archive/20260416/202604160412.f6SIMtr9-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260416/202604160412.f6SIMtr9-lkp@intel.com/reproduce)
+```sh
+make -C tools/testing/selftests install \
+     SKIP_TARGETS= \
+     TARGETS=bpf \
+     BPF_STRICT_BUILD=0 \
+     O=/lib/modules/$(uname -r)/build
+```
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Fixes: e4e28fd6986e ("futex: Convert to get/put_user_inline()")
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604160412.f6SIMtr9-lkp@intel.com/
+As an example, the following script targeting a minimal config can be used
+for testing:
 
-All errors (new ones prefixed by >>):
+```sh
+make defconfig
+scripts/config --file .config \
+               --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
+               --enable DEBUG_INFO_BTF \
+               --enable BPF_SYSCALL \
+               --enable BPF_JIT
+make olddefconfig
+make -j$(nproc)
+make -j$(nproc) -C tools/testing/selftests install \
+     SKIP_TARGETS= \
+     TARGETS=bpf \
+     BPF_STRICT_BUILD=0
+```
 
->> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
-                   if (node_updated && put_user_inline(node, naddr))
-                                       ^
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
-           arch_unsafe_put_user(x, ptr, local_label);      \
-           ^
-   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
-           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
-           ^
-   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
-           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
-                   ^
-   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
-           asm goto(                                       \
-           ^
-   kernel/futex/core.c:604:23: note: possible target of asm goto statement
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
-           local_label:                                    \
-           ^
-   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
-   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
->> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
-                   if (node_updated && put_user_inline(node, naddr))
-                                       ^
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
-           arch_unsafe_put_user(x, ptr, local_label);      \
-           ^
-   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
-           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
-           ^
-   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
-           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
-                   ^
-   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
-           asm goto(                                       \
-           ^
-   kernel/futex/core.c:604:23: note: possible target of asm goto statement
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
-           local_label:                                    \
-           ^
-   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
-   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
->> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
-                   if (node_updated && put_user_inline(node, naddr))
-                                       ^
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
-           arch_unsafe_put_user(x, ptr, local_label);      \
-           ^
-   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
-           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
-           ^
-   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
-           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
-                   ^
-   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
-           asm goto(                                       \
-           ^
-   kernel/futex/core.c:604:23: note: possible target of asm goto statement
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
-           local_label:                                    \
-           ^
-   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
-   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
->> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
-                   if (node_updated && put_user_inline(node, naddr))
-                                       ^
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
-           arch_unsafe_put_user(x, ptr, local_label);      \
-           ^
-   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
-           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
-           ^
-   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
-           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
-                   ^
-   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
-           asm goto(                                       \
-           ^
-   kernel/futex/core.c:604:23: note: possible target of asm goto statement
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
-           local_label:                                    \
-           ^
-   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
-   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
->> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
-                   if (node_updated && put_user_inline(node, naddr))
-                                       ^
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
-           arch_unsafe_put_user(x, ptr, local_label);      \
-           ^
-   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
-           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
-           ^
-   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
-           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
-                   ^
-   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
-           asm goto(                                       \
-           ^
-   kernel/futex/core.c:604:23: note: possible target of asm goto statement
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
-           local_label:                                    \
-           ^
-   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
-   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
->> kernel/futex/core.c:604:23: error: cannot jump from this asm goto statement to one of its possible targets
-                   if (node_updated && put_user_inline(node, naddr))
-                                       ^
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:616:2: note: expanded from macro 'unsafe_put_user'
-           arch_unsafe_put_user(x, ptr, local_label);      \
-           ^
-   arch/powerpc/include/asm/uaccess.h:463:2: note: expanded from macro 'arch_unsafe_put_user'
-           __put_user_size_goto((__typeof__(*(p)))(x), (p), sizeof(*(p)), e)
-           ^
-   arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
-           case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
-                   ^
-   arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
-           asm goto(                                       \
-           ^
-   kernel/futex/core.c:604:23: note: possible target of asm goto statement
-   include/linux/uaccess.h:870:3: note: expanded from macro 'put_user_inline'
-                   unsafe_put_user(val, _tmpdst, efault);          \
-                   ^
-   include/linux/uaccess.h:618:2: note: expanded from macro 'unsafe_put_user'
-           local_label:                                    \
-           ^
-   kernel/futex/core.c:604:23: note: jump exits scope of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
-   kernel/futex/core.c:604:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/uaccess.h:869:2: note: expanded from macro 'put_user_inline'
-           scoped_user_write_access(_tmpdst, efault)               \
-           ^
-   include/linux/uaccess.h:803:2: note: expanded from macro 'scoped_user_write_access'
-           scoped_user_write_access_size(udst, sizeof(*(udst)), elbl)
-           ^
-   include/linux/uaccess.h:791:2: note: expanded from macro 'scoped_user_write_access_size'
-           __scoped_user_access(write, udst, size, elbl)
-           ^
-   include/linux/uaccess.h:755:36: note: expanded from macro '__scoped_user_access'
-                   for (CLASS(user_##mode##_access, scope)(_tmpptr); !done; done = true)   \
-                                                    ^
-   6 errors generated.
+This produces a test_progs binary with 583 subtests, against the total of
+714. Many of them will still fail or be skipped at runtime due to lack of
+symbols, but at least there will be a clear way of building the tests.
 
+[1]: https://openqa.opensuse.org/tests/5811715
+[2]: https://openqa.opensuse.org/tests/5811730
+[3]: https://src.opensuse.org/rmarliere/kselftests
+[4]: https://github.com/openSUSE/kernel-qe/blob/main/kselftests_known_issues.yaml
+[5]: https://openqa.opensuse.org/tests/5811730/logfile?filename=run_kselftests-config_mismatches.txt
 
-vim +604 kernel/futex/core.c
+Assisted-by: {codex,claude}
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Ricardo B. Marliere <rbm@suse.com>
+---
+Changes in v5:
+- Add BPF_STRICT_BUILD toggle as patch 1 so every subsequent patch
+  gates tolerance behind PERMISSIVE from the start, making the series
+  bisectable with strict-by-default at every point
+- Fix O= commit message; make parent cp conditional (patch 2)
+- Tolerate linked skeleton failures (patch 3)
+- Skip feature detection for emit_tests (patch 4)
+- Clarify bench is all-or-nothing in commit message (patch 8)
+- Move stack_mprotect() to testing_helpers.c, drop weak stubs (patch 9)
+- Report not-built tests as "SKIP (not built)" in output (patch 10)
+- Drop overly broad 2>/dev/null || true from install rsync; rely solely
+  on --ignore-missing-args which already handles absent files (patch 11)
+- Link to v4: https://patch.msgid.link/20260406-selftests-bpf_misconfig-v4-0-9914f50efdf7@suse.com
 
-   520	
-   521	/**
-   522	 * get_futex_key() - Get parameters which are the keys for a futex
-   523	 * @uaddr:	virtual address of the futex
-   524	 * @flags:	FLAGS_*
-   525	 * @key:	address where result is stored.
-   526	 * @rw:		mapping needs to be read/write (values: FUTEX_READ,
-   527	 *              FUTEX_WRITE)
-   528	 *
-   529	 * Return: a negative error code or 0
-   530	 *
-   531	 * The key words are stored in @key on success.
-   532	 *
-   533	 * For shared mappings (when @fshared), the key is:
-   534	 *
-   535	 *   ( inode->i_sequence, page offset within mapping, offset_within_page )
-   536	 *
-   537	 * [ also see get_inode_sequence_number() ]
-   538	 *
-   539	 * For private mappings (or when !@fshared), the key is:
-   540	 *
-   541	 *   ( current->mm, address, 0 )
-   542	 *
-   543	 * This allows (cross process, where applicable) identification of the futex
-   544	 * without keeping the page pinned for the duration of the FUTEX_WAIT.
-   545	 *
-   546	 * lock_page() might sleep, the caller should not hold a spinlock.
-   547	 */
-   548	int get_futex_key(u32 __user *uaddr, unsigned int flags, union futex_key *key,
-   549			  enum futex_access rw)
-   550	{
-   551		unsigned long address = (unsigned long)uaddr;
-   552		struct mm_struct *mm = current->mm;
-   553		struct page *page;
-   554		struct folio *folio;
-   555		struct address_space *mapping;
-   556		int node, err, size, ro = 0;
-   557		bool node_updated = false;
-   558		bool fshared;
-   559	
-   560		fshared = flags & FLAGS_SHARED;
-   561		size = futex_size(flags);
-   562		if (flags & FLAGS_NUMA)
-   563			size *= 2;
-   564	
-   565		/*
-   566		 * The futex address must be "naturally" aligned.
-   567		 */
-   568		key->both.offset = address % PAGE_SIZE;
-   569		if (unlikely((address % size) != 0))
-   570			return -EINVAL;
-   571		address -= key->both.offset;
-   572	
-   573		if (unlikely(!access_ok(uaddr, size)))
-   574			return -EFAULT;
-   575	
-   576		if (unlikely(should_fail_futex(fshared)))
-   577			return -EFAULT;
-   578	
-   579		node = FUTEX_NO_NODE;
-   580	
-   581		if (flags & FLAGS_NUMA) {
-   582			u32 __user *naddr = (void *)uaddr + size / 2;
-   583	
-   584			if (get_user_inline(node, naddr))
-   585				return -EFAULT;
-   586	
-   587			if ((node != FUTEX_NO_NODE) &&
-   588			    ((unsigned int)node >= MAX_NUMNODES || !node_possible(node)))
-   589				return -EINVAL;
-   590		}
-   591	
-   592		if (node == FUTEX_NO_NODE && (flags & FLAGS_MPOL)) {
-   593			node = futex_mpol(mm, address);
-   594			node_updated = true;
-   595		}
-   596	
-   597		if (flags & FLAGS_NUMA) {
-   598			u32 __user *naddr = (void *)uaddr + size / 2;
-   599	
-   600			if (node == FUTEX_NO_NODE) {
-   601				node = numa_node_id();
-   602				node_updated = true;
-   603			}
- > 604			if (node_updated && put_user_inline(node, naddr))
-   605				return -EFAULT;
-   606		}
-   607	
-   608		key->both.node = node;
-   609	
-   610		/*
-   611		 * PROCESS_PRIVATE futexes are fast.
-   612		 * As the mm cannot disappear under us and the 'key' only needs
-   613		 * virtual address, we dont even have to find the underlying vma.
-   614		 * Note : We do have to check 'uaddr' is a valid user address,
-   615		 *        but access_ok() should be faster than find_vma()
-   616		 */
-   617		if (!fshared) {
-   618			/*
-   619			 * On no-MMU, shared futexes are treated as private, therefore
-   620			 * we must not include the current process in the key. Since
-   621			 * there is only one address space, the address is a unique key
-   622			 * on its own.
-   623			 */
-   624			if (IS_ENABLED(CONFIG_MMU))
-   625				key->private.mm = mm;
-   626			else
-   627				key->private.mm = NULL;
-   628	
-   629			key->private.address = address;
-   630			return 0;
-   631		}
-   632	
-   633	again:
-   634		/* Ignore any VERIFY_READ mapping (futex common case) */
-   635		if (unlikely(should_fail_futex(true)))
-   636			return -EFAULT;
-   637	
-   638		err = get_user_pages_fast(address, 1, FOLL_WRITE, &page);
-   639		/*
-   640		 * If write access is not required (eg. FUTEX_WAIT), try
-   641		 * and get read-only access.
-   642		 */
-   643		if (err == -EFAULT && rw == FUTEX_READ) {
-   644			err = get_user_pages_fast(address, 1, 0, &page);
-   645			ro = 1;
-   646		}
-   647		if (err < 0)
-   648			return err;
-   649		else
-   650			err = 0;
-   651	
-   652		/*
-   653		 * The treatment of mapping from this point on is critical. The folio
-   654		 * lock protects many things but in this context the folio lock
-   655		 * stabilizes mapping, prevents inode freeing in the shared
-   656		 * file-backed region case and guards against movement to swap cache.
-   657		 *
-   658		 * Strictly speaking the folio lock is not needed in all cases being
-   659		 * considered here and folio lock forces unnecessarily serialization.
-   660		 * From this point on, mapping will be re-verified if necessary and
-   661		 * folio lock will be acquired only if it is unavoidable
-   662		 *
-   663		 * Mapping checks require the folio so it is looked up now. For
-   664		 * anonymous pages, it does not matter if the folio is split
-   665		 * in the future as the key is based on the address. For
-   666		 * filesystem-backed pages, the precise page is required as the
-   667		 * index of the page determines the key.
-   668		 */
-   669		folio = page_folio(page);
-   670		mapping = READ_ONCE(folio->mapping);
-   671	
-   672		/*
-   673		 * If folio->mapping is NULL, then it cannot be an anonymous
-   674		 * page; but it might be the ZERO_PAGE or in the gate area or
-   675		 * in a special mapping (all cases which we are happy to fail);
-   676		 * or it may have been a good file page when get_user_pages_fast
-   677		 * found it, but truncated or holepunched or subjected to
-   678		 * invalidate_complete_page2 before we got the folio lock (also
-   679		 * cases which we are happy to fail).  And we hold a reference,
-   680		 * so refcount care in invalidate_inode_page's remove_mapping
-   681		 * prevents drop_caches from setting mapping to NULL beneath us.
-   682		 *
-   683		 * The case we do have to guard against is when memory pressure made
-   684		 * shmem_writepage move it from filecache to swapcache beneath us:
-   685		 * an unlikely race, but we do need to retry for folio->mapping.
-   686		 */
-   687		if (unlikely(!mapping)) {
-   688			int shmem_swizzled;
-   689	
-   690			/*
-   691			 * Folio lock is required to identify which special case above
-   692			 * applies. If this is really a shmem page then the folio lock
-   693			 * will prevent unexpected transitions.
-   694			 */
-   695			folio_lock(folio);
-   696			shmem_swizzled = folio_test_swapcache(folio) || folio->mapping;
-   697			folio_unlock(folio);
-   698			folio_put(folio);
-   699	
-   700			if (shmem_swizzled)
-   701				goto again;
-   702	
-   703			return -EFAULT;
-   704		}
-   705	
-   706		/*
-   707		 * Private mappings are handled in a simple way.
-   708		 *
-   709		 * If the futex key is stored in anonymous memory, then the associated
-   710		 * object is the mm which is implicitly pinned by the calling process.
-   711		 *
-   712		 * NOTE: When userspace waits on a MAP_SHARED mapping, even if
-   713		 * it's a read-only handle, it's expected that futexes attach to
-   714		 * the object not the particular process.
-   715		 */
-   716		if (folio_test_anon(folio)) {
-   717			/*
-   718			 * A RO anonymous page will never change and thus doesn't make
-   719			 * sense for futex operations.
-   720			 */
-   721			if (unlikely(should_fail_futex(true)) || ro) {
-   722				err = -EFAULT;
-   723				goto out;
-   724			}
-   725	
-   726			key->both.offset |= FUT_OFF_MMSHARED; /* ref taken on mm */
-   727			key->private.mm = mm;
-   728			key->private.address = address;
-   729	
-   730		} else {
-   731			struct inode *inode;
-   732	
-   733			/*
-   734			 * The associated futex object in this case is the inode and
-   735			 * the folio->mapping must be traversed. Ordinarily this should
-   736			 * be stabilised under folio lock but it's not strictly
-   737			 * necessary in this case as we just want to pin the inode, not
-   738			 * update i_pages or anything like that.
-   739			 *
-   740			 * The RCU read lock is taken as the inode is finally freed
-   741			 * under RCU. If the mapping still matches expectations then the
-   742			 * mapping->host can be safely accessed as being a valid inode.
-   743			 */
-   744			rcu_read_lock();
-   745	
-   746			if (READ_ONCE(folio->mapping) != mapping) {
-   747				rcu_read_unlock();
-   748				folio_put(folio);
-   749	
-   750				goto again;
-   751			}
-   752	
-   753			inode = READ_ONCE(mapping->host);
-   754			if (!inode) {
-   755				rcu_read_unlock();
-   756				folio_put(folio);
-   757	
-   758				goto again;
-   759			}
-   760	
-   761			key->both.offset |= FUT_OFF_INODE; /* inode-based key */
-   762			key->shared.i_seq = get_inode_sequence_number(inode);
-   763			key->shared.pgoff = page_pgoff(folio, page);
-   764			rcu_read_unlock();
-   765		}
-   766	
-   767	out:
-   768		folio_put(folio);
-   769		return err;
-   770	}
-   771	
+Changes in v4:
+- Drop the test_kmods kselftest module flow patch: lib.mk gen_mods_dir
+  invokes $(MAKE) -C $(TEST_GEN_MODS_DIR) without forwarding
+  RESOLVE_BTFIDS, breaking ASAN and GCC BPF CI builds (Makefile.modfinal
+  cannot find resolve_btfids in the kbuild output tree)
+- Link to v3:
+  https://patch.msgid.link/20260406-selftests-bpf_misconfig-v3-0-587a1114263c@suse.com
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Changes in v3:
+- Split test_kmods patch into two: fix KDIR handling (O= passthrough,
+  EXTRA_CFLAGS/EXTRA_LDFLAGS clearing) and wire into lib.mk via
+  TEST_GEN_MODS_DIR
+- Pass O= through to the kernel module build so artifacts land in the
+  output tree, not the source tree
+- Clear EXTRA_CFLAGS and EXTRA_LDFLAGS when invoking the kernel build to
+  prevent host flags (e.g. -static) leaking into module compilation
+- Replace the bespoke test_kmods pattern rule with lib.mk module
+  infrastructure (TEST_GEN_MODS_DIR); lib.mk now drives build and clean
+  lifecycle
+- Make the .ko copy step resilient: emit SKIP instead of failing when a
+  module is absent
+- Expand the uprobe weak stub comment in bpf_cookie.c to explain why
+  noinline is required
+- Link to v2:
+  https://patch.msgid.link/20260403-selftests-bpf_misconfig-v2-0-f06700380a9d@suse.com
+
+Changes in v2:
+- Skip test_kmods build/clean when KDIR directory does not exist
+- Use `Module.symvers` instead of `.config` for in-tree detection
+- Fix skeleton order-only prereqs commit message
+- Guard BTFIDS step when .test.o is absent
+- Add `__weak stack_mprotect()` stubs in `bpf_cookie.c` and `iters.c`
+- Link to v1:
+  https://patch.msgid.link/20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com
+
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+To: Bill Wendling <morbo@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev
+
+---
+Ricardo B. Marlière (11):
+      selftests/bpf: Add BPF_STRICT_BUILD toggle
+      selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
+      selftests/bpf: Tolerate BPF and skeleton generation failures
+      selftests/bpf: Avoid rebuilds when running emit_tests
+      selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
+      selftests/bpf: Tolerate test file compilation failures
+      selftests/bpf: Allow test_progs to link with a partial object set
+      selftests/bpf: Tolerate benchmark build failures
+      selftests/bpf: Provide weak definitions for cross-test functions
+      selftests/bpf: Skip tests whose objects were not built
+      selftests/bpf: Tolerate missing files during install
+
+ tools/testing/selftests/bpf/Makefile               | 160 ++++++++++++++-------
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  17 ++-
+ tools/testing/selftests/bpf/prog_tests/iters.c     |   3 +-
+ tools/testing/selftests/bpf/prog_tests/test_lsm.c  |  22 ---
+ tools/testing/selftests/bpf/test_kmods/Makefile    |  24 +++-
+ tools/testing/selftests/bpf/test_progs.c           |  44 +++++-
+ tools/testing/selftests/bpf/test_progs.h           |   1 +
+ tools/testing/selftests/bpf/testing_helpers.c      |  17 +++
+ tools/testing/selftests/bpf/testing_helpers.h      |   1 +
+ 9 files changed, 199 insertions(+), 90 deletions(-)
+---
+base-commit: 1f5ffc672165ff851063a5fd044b727ab2517ae3
+change-id: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+
+Best regards,
+--  
+Ricardo B. Marlière <rbm@suse.com>
+
