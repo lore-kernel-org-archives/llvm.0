@@ -1,236 +1,738 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1B13DD522;
-	Wed, 15 Apr 2026 16:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F167A40DFD6;
+	Wed, 15 Apr 2026 16:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776270266; cv=none; b=JeO3ngMOtb5halbrVeQKI5JXrLSe3lytTOBGqeX09i+YbwSuZWL7gu3hi46lYFLMb1vodF395bL/8JeLmkcdY5Ch0Ju6OoKDvFpSPDsxWQZX5XOlaqC9LmGh1KpVKEZu5meK0Zop09eAHmSAgJ9vPS7nPhd5GYvANLvmbc7MCh8=
+	t=1776272203; cv=none; b=mm6cMXvagooE2suESsCNxYEMxrKAK4830l2WxzvDNuGWkmMFI4Zj6tfoOhUg7Gzv5i21DZB9ROqd0KAsIWVVrp6NrkuZrYH6oVKuLWEmUfcbGq7ysUfxjDYqZwCAMECxxBSva3oiZMLiXX12KLYhZ+qXNEfkCwzzwhpPXJDJ8Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776270266; c=relaxed/simple;
-	bh=9aVswNNA5NO7ZkXnuZuP82WLWBlGI6fqGaMQ6zk0dc0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=TpxeTJZ/uzkmElphzXmlkx0APMCguAMaRYUquwEUfrjPNbJQkJy10QPJ+aAmcmwRTu/UxhJG4EeILar510ejGl69Ww4et3D+1QxRfm4eQ/cyoa9DpYRTvliIZRNQxxn0uCC3+P10JF34oSpOJRV0AYDTaw2P2FUCJ2Wf9jE2Alc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nz+h78dW; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1776272203; c=relaxed/simple;
+	bh=SGp0XOaBVkQVpgegDk9HsXP7yhHMKHP6gmPz3OlevZQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OCqIHDDOadmbQdQmHXmNP2OGFCCX3DATgJPrZkPcX3QymPw7RE41Xi1gGcHE2/SN9dKDAqCdEleh+uDdu85Xsxz1zMmPrEQJ2Ns9TXcI5joiJUoESLbcefXY4i2Ew4UlBM5FUnbB538VQRFJ2r2ocH5+OCnYx5lyHHypR1MfT60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DzCcG+e7; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nz+h78dW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DzCcG+e7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776270265; x=1807806265;
-  h=date:from:to:cc:subject:message-id;
-  bh=9aVswNNA5NO7ZkXnuZuP82WLWBlGI6fqGaMQ6zk0dc0=;
-  b=Nz+h78dWEe4u9Apc9KobOPYs86TR5MtJHYXcKc1d5r+F2+c8R6NtAUzd
-   1TBWloyFE7O6UzsBHTYJ1f1xdluwgK53DDaHIxbvHrXV4cP8BKEyciYwX
-   q4QarsZmqgb9Osh9T20ZIqCd4QYXP2I1Vs8hqjkMkJ4Gfc0KGIV/sl5Jw
-   jt43KUgY56UpkwxISPBbFkQxI7Lc5o52APR5Qf76TyLvecblaNz56ZqSq
-   frG258atm6UPBjJeZsRKDQnlhG6MldO3udqNDZnNpQOj2pw+NQvtH3PCA
-   F5hjmJrpYRBc77tzdpLeZ+ob42WgUXfFYltw21wTsPoKBtwBtidLfm4d5
-   Q==;
-X-CSE-ConnectionGUID: +/aQyTaoTPSH7iLZoLJvnA==
-X-CSE-MsgGUID: D71SGFlORRicYVFrdnJx7A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11760"; a="77129975"
+  t=1776272201; x=1807808201;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SGp0XOaBVkQVpgegDk9HsXP7yhHMKHP6gmPz3OlevZQ=;
+  b=DzCcG+e7DoMNWupcsExIAy47IJ++aQ4kTWHE/eKS0iKvA/QgFdafg7YR
+   yNhSQD9T/emWf0J3WOkVvNDwqc7xFqk36C1uiMAggYFFXvE+HfRAnsVcW
+   1s/fFrMJapFGf8QLcnOYUzMx0CL5Ktf/Ut4/YhP+KhOt1BPq+1ZD/MTld
+   fM+y+ucrZB1tqgeOHfHNB8JX8kN0U5GlJ9UDHAdZ2KnMIoCZewd+Osmfk
+   uFRWl4i2OP/w1GHKhz1L1fu1BuecFBZw2AFt9kUE8isPWlqO9pg0tkJ8k
+   a2UZun1iVZHUTEN69IIs/hf/mOFlyYQmGZJHLKJMdxIX5ybkUcu51rOy1
+   g==;
+X-CSE-ConnectionGUID: sVKJ93/OR2y7KYFbZ2ARew==
+X-CSE-MsgGUID: nRtZfXTlTzu0GPxzyrcjNA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11760"; a="80858556"
 X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="77129975"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2026 09:24:24 -0700
-X-CSE-ConnectionGUID: uVBkPW4ORBSrLIxcWkXaoQ==
-X-CSE-MsgGUID: RtNdHFLtTb2GrK1VQlUxrg==
+   d="scan'208";a="80858556"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2026 09:56:27 -0700
+X-CSE-ConnectionGUID: 3egZ7QjBTr+iwKmmTvyAfA==
+X-CSE-MsgGUID: ZWl5qtGKS8K3KFkmM+7S0w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="234490279"
+   d="scan'208";a="232214306"
 Received: from lkp-server01.sh.intel.com (HELO 7f3b36e5d6a5) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 15 Apr 2026 09:24:22 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 15 Apr 2026 09:56:24 -0700
 Received: from kbuild by 7f3b36e5d6a5 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wD32J-000000000gy-3pfM;
-	Wed, 15 Apr 2026 16:24:19 +0000
-Date: Thu, 16 Apr 2026 00:23:36 +0800
+	id 1wD3XK-000000000jY-1z1n;
+	Wed, 15 Apr 2026 16:56:22 +0000
+Date: Thu, 16 Apr 2026 00:56:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Subhransu S. Prusty" <subhransu.sekhar.prusty@altera.com>
+To: Rosalie Wanders <rosalie@mailbox.org>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Dinh Nguyen <dinguyen@kernel.org>
-Subject: [dinguyen:hssi_patch_v2 5/5]
- drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:673:11: error: use
- of undeclared identifier 'cmdsts_write'; did you mean 'pmd_write'?
-Message-ID: <202604160014.82z6CIpJ-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	Rosalie Wanders <rosalie@mailbox.org>, linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: quirks: update hid-sony supported devices
+Message-ID: <202604160057.euPpXOLj-lkp@intel.com>
+References: <20260407144247.368567-2-rosalie@mailbox.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260407144247.368567-2-rosalie@mailbox.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git hssi_patch_v2
-head:   c2839fb083f7b0c330a385cc42be70bb2961b9cf
-commit: c2839fb083f7b0c330a385cc42be70bb2961b9cf [5/5] net: altr: hssiss: Add debugfs support
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260416/202604160014.82z6CIpJ-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260416/202604160014.82z6CIpJ-lkp@intel.com/reproduce)
+Hi Rosalie,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on v7.0]
+[also build test ERROR on linus/master]
+[cannot apply to hid/for-next next-20260414]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Rosalie-Wanders/HID-quirks-update-hid-sony-supported-devices/20260415-021759
+base:   v7.0
+patch link:    https://lore.kernel.org/r/20260407144247.368567-2-rosalie%40mailbox.org
+patch subject: [PATCH] HID: quirks: update hid-sony supported devices
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260416/202604160057.euPpXOLj-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260416/202604160057.euPpXOLj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604160014.82z6CIpJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604160057.euPpXOLj-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:43:45: error: too many arguments provided to function-like macro invocation
-   static ssize_t csr_read(struct file *filep, char __user *ubuf,
-                                               ^
-   arch/riscv/include/asm/csr.h:558:9: note: macro 'csr_read' defined here
-   #define csr_read(csr)                                           \
-           ^
-   drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:43:24: error: expected ';' after top level declarator
-   static ssize_t csr_read(struct file *filep, char __user *ubuf,
-                          ^
-                          ;
-   drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:65:5: error: too many arguments provided to function-like macro invocation
-                            size_t count, loff_t *offp)
-                            ^
-   arch/riscv/include/asm/csr.h:567:9: note: macro 'csr_write' defined here
-   #define csr_write(csr, val)                                     \
-           ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:673:11: error: use of undeclared identifier 'cmdsts_write'; did you mean 'pmd_write'?
-           .write = cmdsts_write,
-                    ^~~~~~~~~~~~
-                    pmd_write
-   arch/riscv/include/asm/pgtable.h:816:19: note: 'pmd_write' declared here
-   static inline int pmd_write(pmd_t pmd)
-                     ^
-   arch/riscv/include/asm/pgtable.h:815:19: note: expanded from macro 'pmd_write'
-   #define pmd_write pmd_write
-                     ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:674:10: error: use of undeclared identifier 'cmdsts_read'
-           .read = cmdsts_read
-                   ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:680:11: error: use of undeclared identifier 'csr_write'
-           .write = csr_write,
-                    ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:687:11: error: use of undeclared identifier 'wr_reg_write'; did you mean 'irq_reg_writel'?
-           .write = wr_reg_write,
-                    ^~~~~~~~~~~~
-                    irq_reg_writel
-   include/linux/irq.h:1224:20: note: 'irq_reg_writel' declared here
-   static inline void irq_reg_writel(struct irq_chip_generic *gc,
-                      ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:688:10: error: use of undeclared identifier 'wr_reg_read'; did you mean 'irq_reg_readl'?
-           .read = wr_reg_read
-                   ^~~~~~~~~~~
-                   irq_reg_readl
-   include/linux/irq.h:1233:19: note: 'irq_reg_readl' declared here
-   static inline u32 irq_reg_readl(struct irq_chip_generic *gc,
-                     ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:687:11: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, const char *, size_t, loff_t *)' (aka 'long (*)(struct file *, const char *, unsigned long, long long *)') with an expression of type 'void (struct irq_chip_generic *, u32, int)' (aka 'void (struct irq_chip_generic *, unsigned int, int)') [-Wincompatible-function-pointer-types]
-           .write = wr_reg_write,
-                    ^~~~~~~~~~~~
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:688:10: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, char *, size_t, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long, long long *)') with an expression of type 'u32 (struct irq_chip_generic *, int)' (aka 'unsigned int (struct irq_chip_generic *, int)') [-Wincompatible-function-pointer-types]
-           .read = wr_reg_read
-                   ^~~~~~~~~~~
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:694:11: error: use of undeclared identifier 'rd_reg_write'; did you mean 'irq_reg_writel'?
-           .write = rd_reg_write,
-                    ^~~~~~~~~~~~
-                    irq_reg_writel
-   include/linux/irq.h:1224:20: note: 'irq_reg_writel' declared here
-   static inline void irq_reg_writel(struct irq_chip_generic *gc,
-                      ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:695:10: error: use of undeclared identifier 'rd_reg_read'
-           .read = rd_reg_read
-                   ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:701:11: error: use of undeclared identifier 'sal_write'; did you mean 'seq_write'?
-           .write = sal_write,
-                    ^~~~~~~~~
-                    seq_write
-   include/linux/seq_file.h:113:5: note: 'seq_write' declared here
-   int seq_write(struct seq_file *seq, const void *data, size_t len);
-       ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:702:10: error: use of undeclared identifier 'sal_read'; did you mean 'seq_read'?
-           .read = sal_read
-                   ^~~~~~~~
-                   seq_read
-   include/linux/seq_file.h:109:9: note: 'seq_read' declared here
-   ssize_t seq_read(struct file *, char __user *, size_t, loff_t *);
-           ^
-   drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:701:11: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, const char *, size_t, loff_t *)' (aka 'long (*)(struct file *, const char *, unsigned long, long long *)') with an expression of type 'int (struct seq_file *, const void *, size_t)' (aka 'int (struct seq_file *, const void *, unsigned long)') [-Wincompatible-function-pointer-types]
-           .write = sal_write,
-                    ^~~~~~~~~
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:708:10: error: use of undeclared identifier 'readme_read'; did you mean 'readme_ops'?
-           .read = readme_read
-                   ^~~~~~~~~~~
-                   readme_ops
-   drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:705:37: note: 'readme_ops' declared here
-   static const struct file_operations readme_ops = {
-                                       ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:708:10: error: initializing 'ssize_t (*)(struct file *, char *, size_t, loff_t *)' (aka 'long (*)(struct file *, char *, unsigned long, long long *)') with an expression of incompatible type 'const struct file_operations'
-           .read = readme_read
-                   ^~~~~~~~~~~
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:714:10: error: use of undeclared identifier 'dumpcsr_read'
-           .read = dumpcsr_read
-                   ^
->> drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c:720:11: error: use of undeclared identifier 'direct_reg_write'
-           .write = direct_reg_write,
-                    ^
+>> drivers/hid/hid-quirks.c:698:19: error: use of undeclared identifier 'USB_VENDOR_ID_HARMONIX'
+     698 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB1_DRUMS) },
+         |                          ^
+>> drivers/hid/hid-quirks.c:698:43: error: use of undeclared identifier 'USB_DEVICE_ID_HARMONIX_WII_RB1_DRUMS'
+     698 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB1_DRUMS) },
+         |                                                  ^
+   drivers/hid/hid-quirks.c:699:19: error: use of undeclared identifier 'USB_VENDOR_ID_HARMONIX'
+     699 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB1_GUITAR) },
+         |                          ^
+>> drivers/hid/hid-quirks.c:699:43: error: use of undeclared identifier 'USB_DEVICE_ID_HARMONIX_WII_RB1_GUITAR'
+     699 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB1_GUITAR) },
+         |                                                  ^
+   drivers/hid/hid-quirks.c:700:19: error: use of undeclared identifier 'USB_VENDOR_ID_HARMONIX'
+     700 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB2_DRUMS) },
+         |                          ^
+>> drivers/hid/hid-quirks.c:700:43: error: use of undeclared identifier 'USB_DEVICE_ID_HARMONIX_WII_RB2_DRUMS'
+     700 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB2_DRUMS) },
+         |                                                  ^
+   drivers/hid/hid-quirks.c:701:19: error: use of undeclared identifier 'USB_VENDOR_ID_HARMONIX'
+     701 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB2_GUITAR) },
+         |                          ^
+>> drivers/hid/hid-quirks.c:701:43: error: use of undeclared identifier 'USB_DEVICE_ID_HARMONIX_WII_RB2_GUITAR'
+     701 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB2_GUITAR) },
+         |                                                  ^
+   drivers/hid/hid-quirks.c:702:19: error: use of undeclared identifier 'USB_VENDOR_ID_HARMONIX'
+     702 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_KEYBOARD) },
+         |                          ^
+>> drivers/hid/hid-quirks.c:702:43: error: use of undeclared identifier 'USB_DEVICE_ID_HARMONIX_WII_RB3_KEYBOARD'
+     702 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_KEYBOARD) },
+         |                                                  ^
+   drivers/hid/hid-quirks.c:703:19: error: use of undeclared identifier 'USB_VENDOR_ID_HARMONIX'
+     703 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_DRUMS_MODE) },
+         |                          ^
+>> drivers/hid/hid-quirks.c:703:43: error: use of undeclared identifier 'USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_DRUMS_MODE'
+     703 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_DRUMS_MODE) },
+         |                                                  ^
+   drivers/hid/hid-quirks.c:704:19: error: use of undeclared identifier 'USB_VENDOR_ID_HARMONIX'
+     704 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_KEYBOARD_MODE) },
+         |                          ^
+>> drivers/hid/hid-quirks.c:704:43: error: use of undeclared identifier 'USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_KEYBOARD_MODE'
+     704 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_KEYBOARD_MODE) },
+         |                                                  ^
+   drivers/hid/hid-quirks.c:705:19: error: use of undeclared identifier 'USB_VENDOR_ID_HARMONIX'
+     705 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_MUSTANG_MODE) },
+         |                          ^
+>> drivers/hid/hid-quirks.c:705:43: error: use of undeclared identifier 'USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_MUSTANG_MODE'
+     705 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_MUSTANG_MODE) },
+         |                                                  ^
+   drivers/hid/hid-quirks.c:706:19: error: use of undeclared identifier 'USB_VENDOR_ID_HARMONIX'
+     706 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_SQUIRE_MODE) },
+         |                          ^
+>> drivers/hid/hid-quirks.c:706:43: error: use of undeclared identifier 'USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_SQUIRE_MODE'
+     706 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_SQUIRE_MODE) },
+         |                                                  ^
+   drivers/hid/hid-quirks.c:707:19: error: use of undeclared identifier 'USB_VENDOR_ID_HARMONIX'
+     707 |         { HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MUSTANG_GUITAR) },
+         |                          ^
    fatal error: too many errors emitted, stopping now [-ferror-limit=]
    20 errors generated.
 
 
-vim +673 drivers/net/ethernet/altera/hssiss/altera_hssiss_debug.c
+vim +/USB_VENDOR_ID_HARMONIX +698 drivers/hid/hid-quirks.c
 
-   669	
-   670	static const struct file_operations cmdsts_ops = {
-   671		.owner = THIS_MODULE,
-   672		.open = simple_open,
- > 673		.write = cmdsts_write,
- > 674		.read = cmdsts_read
-   675	};
-   676	
-   677	static const struct file_operations csr_ops = {
-   678		.owner = THIS_MODULE,
-   679		.open = simple_open,
- > 680		.write = csr_write,
-   681		.read = csr_read
-   682	};
-   683	
-   684	static const struct file_operations wr_reg_ops = {
-   685		.owner = THIS_MODULE,
-   686		.open = simple_open,
- > 687		.write = wr_reg_write,
- > 688		.read = wr_reg_read
-   689	};
-   690	
-   691	static const struct file_operations rd_reg_ops = {
-   692		.owner = THIS_MODULE,
-   693		.open = simple_open,
- > 694		.write = rd_reg_write,
- > 695		.read = rd_reg_read
-   696	};
-   697	
-   698	static const struct file_operations sal_ops = {
-   699		.owner = THIS_MODULE,
-   700		.open = simple_open,
- > 701		.write = sal_write,
- > 702		.read = sal_read
-   703	};
-   704	
-   705	static const struct file_operations readme_ops = {
-   706		.owner = THIS_MODULE,
-   707		.open = simple_open,
- > 708		.read = readme_read
-   709	};
-   710	
-   711	static const struct file_operations dumpcsr_ops = {
-   712		.owner = THIS_MODULE,
-   713		.open = simple_open,
- > 714		.read = dumpcsr_read
-   715	};
-   716	
-   717	static const struct file_operations direct_reg_ops = {
-   718		.owner = THIS_MODULE,
-   719		.open = simple_open,
- > 720		.write = direct_reg_write,
-   721		.read = direct_reg_read
-   722	};
-   723	
+   223	
+   224	/*
+   225	 * A list of devices for which there is a specialized driver on HID bus.
+   226	 *
+   227	 * Please note that for multitouch devices (driven by hid-multitouch driver),
+   228	 * there is a proper autodetection and autoloading in place (based on presence
+   229	 * of HID_DG_CONTACTID), so those devices don't need to be added to this list,
+   230	 * as we are doing the right thing in hid_scan_usage().
+   231	 *
+   232	 * Autodetection for (USB) HID sensor hubs exists too. If a collection of type
+   233	 * physical is found inside a usage page of type sensor, hid-sensor-hub will be
+   234	 * used as a driver. See hid_scan_report().
+   235	 */
+   236	static const struct hid_device_id hid_have_special_driver[] = {
+   237	#if IS_ENABLED(CONFIG_APPLEDISPLAY)
+   238		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, 0x9218) },
+   239		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, 0x9219) },
+   240		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, 0x921c) },
+   241		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, 0x921d) },
+   242		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, 0x9222) },
+   243		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, 0x9226) },
+   244		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, 0x9236) },
+   245	#endif
+   246	#if IS_ENABLED(CONFIG_HID_A4TECH)
+   247		{ HID_USB_DEVICE(USB_VENDOR_ID_A4TECH, USB_DEVICE_ID_A4TECH_WCP32PU) },
+   248		{ HID_USB_DEVICE(USB_VENDOR_ID_A4TECH, USB_DEVICE_ID_A4TECH_X5_005D) },
+   249		{ HID_USB_DEVICE(USB_VENDOR_ID_A4TECH, USB_DEVICE_ID_A4TECH_RP_649) },
+   250		{ HID_USB_DEVICE(USB_VENDOR_ID_A4TECH, USB_DEVICE_ID_A4TECH_NB_95) },
+   251	#endif
+   252	#if IS_ENABLED(CONFIG_HID_ACCUTOUCH)
+   253		{ HID_USB_DEVICE(USB_VENDOR_ID_ELO, USB_DEVICE_ID_ELO_ACCUTOUCH_2216) },
+   254	#endif
+   255	#if IS_ENABLED(CONFIG_HID_ACRUX)
+   256		{ HID_USB_DEVICE(USB_VENDOR_ID_ACRUX, 0x0802) },
+   257		{ HID_USB_DEVICE(USB_VENDOR_ID_ACRUX, 0xf705) },
+   258	#endif
+   259	#if IS_ENABLED(CONFIG_HID_ALPS)
+   260		{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY, USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_U1_DUAL) },
+   261	#endif
+   262	#if IS_ENABLED(CONFIG_HID_APPLE)
+   263		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MIGHTYMOUSE) },
+   264		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_FOUNTAIN_ANSI) },
+   265		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_FOUNTAIN_ISO) },
+   266		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER_ANSI) },
+   267		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER_ISO) },
+   268		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER_JIS) },
+   269		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER3_ANSI) },
+   270		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER3_ISO) },
+   271		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER3_JIS) },
+   272		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_ANSI) },
+   273		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_ISO) },
+   274		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_JIS) },
+   275		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_MINI_ANSI) },
+   276		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_MINI_ISO) },
+   277		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_MINI_JIS) },
+   278		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_ANSI) },
+   279		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_ISO) },
+   280		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_JIS) },
+   281		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_HF_ANSI) },
+   282		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_HF_ISO) },
+   283		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER4_HF_JIS) },
+   284		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_ANSI) },
+   285		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_ISO) },
+   286		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_JIS) },
+   287		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING_ANSI) },
+   288		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING_ISO) },
+   289		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING_JIS) },
+   290		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING2_ANSI) },
+   291		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING2_ISO) },
+   292		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING2_JIS) },
+   293		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING3_ANSI) },
+   294		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING3_ISO) },
+   295		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING3_JIS) },
+   296		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4_ANSI) },
+   297		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4_ISO) },
+   298		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4_JIS) },
+   299		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4A_ANSI) },
+   300		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4A_ISO) },
+   301		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING4A_JIS) },
+   302		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5_ANSI) },
+   303		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5_ISO) },
+   304		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5_JIS) },
+   305		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5A_ANSI) },
+   306		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5A_ISO) },
+   307		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5A_JIS) },
+   308		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_REVB_ANSI) },
+   309		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_REVB_ISO) },
+   310		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_REVB_JIS) },
+   311		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6_ANSI) },
+   312		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6_ISO) },
+   313		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6_JIS) },
+   314		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6A_ANSI) },
+   315		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6A_ISO) },
+   316		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6A_JIS) },
+   317		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7_ANSI) },
+   318		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7_ISO) },
+   319		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7_JIS) },
+   320		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7A_ANSI) },
+   321		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7A_ISO) },
+   322		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7A_JIS) },
+   323		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING8_ANSI) },
+   324		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING8_ISO) },
+   325		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING8_JIS) },
+   326		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_ANSI) },
+   327		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_ISO) },
+   328		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS) },
+   329		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J140K) },
+   330		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J132) },
+   331		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J680) },
+   332		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J680_ALT) },
+   333		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J213) },
+   334		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J214K) },
+   335		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J223) },
+   336		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J230K) },
+   337		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J152F) },
+   338		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI) },
+   339		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ISO) },
+   340		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_JIS) },
+   341		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2011_ANSI) },
+   342		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2011_ISO) },
+   343		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2011_JIS) },
+   344		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2015) },
+   345		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_FOUNTAIN_TP_ONLY) },
+   346		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY) },
+   347		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021) },
+   348		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021) },
+   349	#endif
+   350	#if IS_ENABLED(CONFIG_HID_APPLEIR)
+   351		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL) },
+   352		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL2) },
+   353		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL3) },
+   354		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL4) },
+   355		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL5) },
+   356	#endif
+   357	#if IS_ENABLED(CONFIG_HID_APPLETB_BL)
+   358		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT) },
+   359	#endif
+   360	#if IS_ENABLED(CONFIG_HID_APPLETB_KBD)
+   361		{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY) },
+   362	#endif
+   363	#if IS_ENABLED(CONFIG_HID_ASUS)
+   364		{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_KEYBOARD) },
+   365		{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_TOUCHPAD) },
+   366		{ HID_USB_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_ROG_KEYBOARD1) },
+   367		{ HID_USB_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_ROG_KEYBOARD2) },
+   368		{ HID_USB_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_ROG_KEYBOARD3) },
+   369		{ HID_USB_DEVICE(USB_VENDOR_ID_JESS, USB_DEVICE_ID_ASUS_MD_5112) },
+   370		{ HID_USB_DEVICE(USB_VENDOR_ID_TURBOX, USB_DEVICE_ID_ASUS_MD_5110) },
+   371		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_T100CHI_KEYBOARD) },
+   372	#endif
+   373	#if IS_ENABLED(CONFIG_HID_AUREAL)
+   374		{ HID_USB_DEVICE(USB_VENDOR_ID_AUREAL, USB_DEVICE_ID_AUREAL_W01RN) },
+   375	#endif
+   376	#if IS_ENABLED(CONFIG_HID_BELKIN)
+   377		{ HID_USB_DEVICE(USB_VENDOR_ID_BELKIN, USB_DEVICE_ID_FLIP_KVM) },
+   378		{ HID_USB_DEVICE(USB_VENDOR_ID_LABTEC, USB_DEVICE_ID_LABTEC_WIRELESS_KEYBOARD) },
+   379	#endif
+   380	#if IS_ENABLED(CONFIG_HID_BETOP_FF)
+   381		{ HID_USB_DEVICE(USB_VENDOR_ID_BETOP_2185BFM, 0x2208) },
+   382		{ HID_USB_DEVICE(USB_VENDOR_ID_BETOP_2185PC, 0x5506) },
+   383		{ HID_USB_DEVICE(USB_VENDOR_ID_BETOP_2185V2PC, 0x1850) },
+   384		{ HID_USB_DEVICE(USB_VENDOR_ID_BETOP_2185V2BFM, 0x5500) },
+   385	#endif
+   386	#if IS_ENABLED(CONFIG_HID_CHERRY)
+   387		{ HID_USB_DEVICE(USB_VENDOR_ID_CHERRY, USB_DEVICE_ID_CHERRY_CYMOTION) },
+   388		{ HID_USB_DEVICE(USB_VENDOR_ID_CHERRY, USB_DEVICE_ID_CHERRY_CYMOTION_SOLAR) },
+   389	#endif
+   390	#if IS_ENABLED(CONFIG_HID_CHICONY)
+   391		{ HID_USB_DEVICE(USB_VENDOR_ID_CHICONY, USB_DEVICE_ID_CHICONY_TACTICAL_PAD) },
+   392		{ HID_USB_DEVICE(USB_VENDOR_ID_CHICONY, USB_DEVICE_ID_CHICONY_WIRELESS2) },
+   393		{ HID_USB_DEVICE(USB_VENDOR_ID_CHICONY, USB_DEVICE_ID_ASUS_AK1D) },
+   394		{ HID_USB_DEVICE(USB_VENDOR_ID_CHICONY, USB_DEVICE_ID_CHICONY_ACER_SWITCH12) },
+   395	#endif
+   396	#if IS_ENABLED(CONFIG_HID_CMEDIA)
+   397		{ HID_USB_DEVICE(USB_VENDOR_ID_CMEDIA, USB_DEVICE_ID_CM6533) },
+   398	#endif
+   399	#if IS_ENABLED(CONFIG_HID_CORSAIR)
+   400		{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_DEVICE_ID_CORSAIR_K90) },
+   401		{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_DEVICE_ID_CORSAIR_GLAIVE_RGB) },
+   402		{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_DEVICE_ID_CORSAIR_SCIMITAR_PRO_RGB) },
+   403	#endif
+   404	#if IS_ENABLED(CONFIG_HID_CP2112)
+   405		{ HID_USB_DEVICE(USB_VENDOR_ID_CYGNAL, USB_DEVICE_ID_CYGNAL_CP2112) },
+   406	#endif
+   407	#if IS_ENABLED(CONFIG_HID_CYPRESS)
+   408		{ HID_USB_DEVICE(USB_VENDOR_ID_CYPRESS, USB_DEVICE_ID_CYPRESS_BARCODE_1) },
+   409		{ HID_USB_DEVICE(USB_VENDOR_ID_CYPRESS, USB_DEVICE_ID_CYPRESS_BARCODE_2) },
+   410		{ HID_USB_DEVICE(USB_VENDOR_ID_CYPRESS, USB_DEVICE_ID_CYPRESS_BARCODE_3) },
+   411		{ HID_USB_DEVICE(USB_VENDOR_ID_CYPRESS, USB_DEVICE_ID_CYPRESS_BARCODE_4) },
+   412		{ HID_USB_DEVICE(USB_VENDOR_ID_CYPRESS, USB_DEVICE_ID_CYPRESS_MOUSE) },
+   413	#endif
+   414	#if IS_ENABLED(CONFIG_HID_DRAGONRISE)
+   415		{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, 0x0006) },
+   416		{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, 0x0011) },
+   417	#endif
+   418	#if IS_ENABLED(CONFIG_HID_ELAN)
+   419		{ HID_USB_DEVICE(USB_VENDOR_ID_ELAN, USB_DEVICE_ID_HP_X2_10_COVER) },
+   420	#endif
+   421	#if IS_ENABLED(CONFIG_HID_ELECOM)
+   422		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_BM084) },
+   423		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_XGL20DLBK) },
+   424		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_HT1MRBK_01AC) },
+   425		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_XT3URBK_00FB) },
+   426		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_XT3URBK_018F) },
+   427		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_XT3DRBK_00FC) },
+   428		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_XT3DRBK_018C) },
+   429		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_XT4DRBK) },
+   430		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_DT1URBK) },
+   431		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_DT1DRBK) },
+   432		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_DT2DRBK) },
+   433		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_HT1URBK_010C) },
+   434		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_HT1URBK_019B) },
+   435		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_HT1DRBK_010D) },
+   436		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_HT1DRBK_011C) },
+   437		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_HT1MRBK) },
+   438		{ HID_USB_DEVICE(USB_VENDOR_ID_ELECOM, USB_DEVICE_ID_ELECOM_M_HT1MRBK_01AB) },
+   439	#endif
+   440	#if IS_ENABLED(CONFIG_HID_ELO)
+   441		{ HID_USB_DEVICE(USB_VENDOR_ID_ELO, 0x0009) },
+   442		{ HID_USB_DEVICE(USB_VENDOR_ID_ELO, 0x0030) },
+   443	#endif
+   444	#if IS_ENABLED(CONFIG_HID_EMS_FF)
+   445		{ HID_USB_DEVICE(USB_VENDOR_ID_EMS, USB_DEVICE_ID_EMS_TRIO_LINKER_PLUS_II) },
+   446	#endif
+   447	#if IS_ENABLED(CONFIG_HID_EZKEY)
+   448		{ HID_USB_DEVICE(USB_VENDOR_ID_EZKEY, USB_DEVICE_ID_BTC_8193) },
+   449	#endif
+   450	#if IS_ENABLED(CONFIG_HID_GEMBIRD)
+   451		{ HID_USB_DEVICE(USB_VENDOR_ID_GEMBIRD, USB_DEVICE_ID_GEMBIRD_JPD_DUALFORCE2) },
+   452	#endif
+   453	#if IS_ENABLED(CONFIG_HID_GFRM)
+   454		{ HID_BLUETOOTH_DEVICE(0x58, 0x2000) },
+   455		{ HID_BLUETOOTH_DEVICE(0x471, 0x2210) },
+   456	#endif
+   457	#if IS_ENABLED(CONFIG_HID_GREENASIA)
+   458		{ HID_USB_DEVICE(USB_VENDOR_ID_GREENASIA, 0x0012) },
+   459	#endif
+   460	#if IS_ENABLED(CONFIG_HID_GT683R)
+   461		{ HID_USB_DEVICE(USB_VENDOR_ID_MSI, USB_DEVICE_ID_MSI_GT683R_LED_PANEL) },
+   462	#endif
+   463	#if IS_ENABLED(CONFIG_HID_GYRATION)
+   464		{ HID_USB_DEVICE(USB_VENDOR_ID_GYRATION, USB_DEVICE_ID_GYRATION_REMOTE) },
+   465		{ HID_USB_DEVICE(USB_VENDOR_ID_GYRATION, USB_DEVICE_ID_GYRATION_REMOTE_2) },
+   466		{ HID_USB_DEVICE(USB_VENDOR_ID_GYRATION, USB_DEVICE_ID_GYRATION_REMOTE_3) },
+   467	#endif
+   468	#if IS_ENABLED(CONFIG_HID_HOLTEK)
+   469		{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK, USB_DEVICE_ID_HOLTEK_ON_LINE_GRIP) },
+   470		{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK_ALT, USB_DEVICE_ID_HOLTEK_ALT_KEYBOARD) },
+   471		{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK_ALT, USB_DEVICE_ID_HOLTEK_ALT_MOUSE_A04A) },
+   472		{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK_ALT, USB_DEVICE_ID_HOLTEK_ALT_MOUSE_A067) },
+   473		{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK_ALT, USB_DEVICE_ID_HOLTEK_ALT_MOUSE_A070) },
+   474		{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK_ALT, USB_DEVICE_ID_HOLTEK_ALT_MOUSE_A072) },
+   475		{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK_ALT, USB_DEVICE_ID_HOLTEK_ALT_MOUSE_A081) },
+   476		{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK_ALT, USB_DEVICE_ID_HOLTEK_ALT_MOUSE_A0C2) },
+   477	#endif
+   478	#if IS_ENABLED(CONFIG_HID_ICADE)
+   479		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_ION, USB_DEVICE_ID_ICADE) },
+   480	#endif
+   481	#if IS_ENABLED(CONFIG_HID_JABRA)
+   482		{ HID_USB_DEVICE(USB_VENDOR_ID_JABRA, HID_ANY_ID) },
+   483	#endif
+   484	#if IS_ENABLED(CONFIG_HID_KENSINGTON)
+   485		{ HID_USB_DEVICE(USB_VENDOR_ID_KENSINGTON, USB_DEVICE_ID_KS_SLIMBLADE) },
+   486	#endif
+   487	#if IS_ENABLED(CONFIG_HID_KEYTOUCH)
+   488		{ HID_USB_DEVICE(USB_VENDOR_ID_KEYTOUCH, USB_DEVICE_ID_KEYTOUCH_IEC) },
+   489	#endif
+   490	#if IS_ENABLED(CONFIG_HID_KYE)
+   491		{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_GENIUS_GILA_GAMING_MOUSE) },
+   492		{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_GENIUS_MANTICORE) },
+   493		{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_GENIUS_GX_IMPERATOR) },
+   494		{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_KYE_ERGO_525V) },
+   495	#endif
+   496	#if IS_ENABLED(CONFIG_HID_LCPOWER)
+   497		{ HID_USB_DEVICE(USB_VENDOR_ID_LCPOWER, USB_DEVICE_ID_LCPOWER_LC1000) },
+   498	#endif
+   499	#if IS_ENABLED(CONFIG_HID_LENOVO)
+   500		{ HID_USB_DEVICE(USB_VENDOR_ID_LENOVO, USB_DEVICE_ID_LENOVO_TPKBD) },
+   501		{ HID_USB_DEVICE(USB_VENDOR_ID_LENOVO, USB_DEVICE_ID_LENOVO_CUSBKBD) },
+   502		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LENOVO, USB_DEVICE_ID_LENOVO_CBTKBD) },
+   503		{ HID_USB_DEVICE(USB_VENDOR_ID_LENOVO, USB_DEVICE_ID_LENOVO_TPPRODOCK) },
+   504	#endif
+   505	#if IS_ENABLED(CONFIG_HID_LOGITECH)
+   506		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_MX3000_RECEIVER) },
+   507		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_S510_RECEIVER) },
+   508		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_RECEIVER) },
+   509		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_DINOVO_DESKTOP) },
+   510		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_ELITE_KBD) },
+   511		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_CORDLESS_DESKTOP_LX500) },
+   512		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_EXTREME_3D) },
+   513		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_DUAL_ACTION) },
+   514		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_WHEEL) },
+   515		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_RUMBLEPAD_CORD) },
+   516		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_RUMBLEPAD) },
+   517		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_RUMBLEPAD2_2) },
+   518		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G29_WHEEL) },
+   519		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_WINGMAN_F3D) },
+   520		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_WINGMAN_FG) },
+   521		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_WINGMAN_FFG) },
+   522		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_FORCE3D_PRO) },
+   523		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_FLIGHT_SYSTEM_G940) },
+   524		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_MOMO_WHEEL) },
+   525		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_MOMO_WHEEL2) },
+   526		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_VIBRATION_WHEEL) },
+   527		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_DFP_WHEEL) },
+   528		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_DFGT_WHEEL) },
+   529		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G25_WHEEL) },
+   530		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G27_WHEEL) },
+   531		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_WII_WHEEL) },
+   532		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_RUMBLEPAD2) },
+   533		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_SPACETRAVELLER) },
+   534		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_SPACENAVIGATOR) },
+   535	#endif
+   536	#if IS_ENABLED(CONFIG_HID_LOGITECH_HIDPP)
+   537		{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G920_WHEEL) },
+   538	#endif
+   539	#if IS_ENABLED(CONFIG_HID_MAGICMOUSE)
+   540		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGICMOUSE) },
+   541		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGICTRACKPAD) },
+   542	#endif
+   543	#if IS_ENABLED(CONFIG_HID_MAYFLASH)
+   544		{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, USB_DEVICE_ID_DRAGONRISE_PS3) },
+   545		{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, USB_DEVICE_ID_DRAGONRISE_DOLPHINBAR) },
+   546		{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, USB_DEVICE_ID_DRAGONRISE_GAMECUBE1) },
+   547		{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, USB_DEVICE_ID_DRAGONRISE_GAMECUBE2) },
+   548		{ HID_USB_DEVICE(USB_VENDOR_ID_DRAGONRISE, USB_DEVICE_ID_DRAGONRISE_GAMECUBE3) },
+   549	#endif
+   550	#if IS_ENABLED(CONFIG_HID_MICROSOFT)
+   551		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_COMFORT_MOUSE_4500) },
+   552		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_COMFORT_KEYBOARD) },
+   553		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_SIDEWINDER_GV) },
+   554		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_NE4K) },
+   555		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_NE4K_JP) },
+   556		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_NE7K) },
+   557		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_LK6K) },
+   558		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_PRESENTER_8K_USB) },
+   559		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_DIGITAL_MEDIA_3K) },
+   560		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_WIRELESS_OPTICAL_DESKTOP_3_0) },
+   561		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_OFFICE_KB) },
+   562		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_DIGITAL_MEDIA_7K) },
+   563		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_DIGITAL_MEDIA_600) },
+   564		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_DIGITAL_MEDIA_3KV1) },
+   565		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_POWER_COVER) },
+   566		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_PRESENTER_8K_BT) },
+   567	#endif
+   568	#if IS_ENABLED(CONFIG_HID_MONTEREY)
+   569		{ HID_USB_DEVICE(USB_VENDOR_ID_MONTEREY, USB_DEVICE_ID_GENIUS_KB29E) },
+   570	#endif
+   571	#if IS_ENABLED(CONFIG_HID_MULTITOUCH)
+   572		{ HID_USB_DEVICE(USB_VENDOR_ID_LG, USB_DEVICE_ID_LG_MELFAS_MT) },
+   573	#endif
+   574	#if IS_ENABLED(CONFIG_HID_WIIMOTE)
+   575		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_NINTENDO, USB_DEVICE_ID_NINTENDO_WIIMOTE) },
+   576		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_NINTENDO, USB_DEVICE_ID_NINTENDO_WIIMOTE2) },
+   577	#endif
+   578	#if IS_ENABLED(CONFIG_HID_NTI)
+   579		{ HID_USB_DEVICE(USB_VENDOR_ID_NTI, USB_DEVICE_ID_USB_SUN) },
+   580	#endif
+   581	#if IS_ENABLED(CONFIG_HID_NTRIG)
+   582		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN) },
+   583		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_1) },
+   584		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_2) },
+   585		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_3) },
+   586		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_4) },
+   587		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_5) },
+   588		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_6) },
+   589		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_7) },
+   590		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_8) },
+   591		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_9) },
+   592		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_10) },
+   593		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_11) },
+   594		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_12) },
+   595		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_13) },
+   596		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_14) },
+   597		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_15) },
+   598		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_16) },
+   599		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_17) },
+   600		{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN_18) },
+   601	#endif
+   602	#if IS_ENABLED(CONFIG_HID_ORTEK)
+   603		{ HID_USB_DEVICE(USB_VENDOR_ID_ORTEK, USB_DEVICE_ID_ORTEK_PKB1700) },
+   604		{ HID_USB_DEVICE(USB_VENDOR_ID_ORTEK, USB_DEVICE_ID_ORTEK_WKB2000) },
+   605		{ HID_USB_DEVICE(USB_VENDOR_ID_ORTEK, USB_DEVICE_ID_ORTEK_IHOME_IMAC_A210S) },
+   606		{ HID_USB_DEVICE(USB_VENDOR_ID_SKYCABLE, USB_DEVICE_ID_SKYCABLE_WIRELESS_PRESENTER) },
+   607	#endif
+   608	#if IS_ENABLED(CONFIG_HID_PANTHERLORD)
+   609		{ HID_USB_DEVICE(USB_VENDOR_ID_GAMERON, USB_DEVICE_ID_GAMERON_DUAL_PSX_ADAPTOR) },
+   610		{ HID_USB_DEVICE(USB_VENDOR_ID_GAMERON, USB_DEVICE_ID_GAMERON_DUAL_PCS_ADAPTOR) },
+   611		{ HID_USB_DEVICE(USB_VENDOR_ID_GREENASIA, 0x0003) },
+   612		{ HID_USB_DEVICE(USB_VENDOR_ID_JESS2, USB_DEVICE_ID_JESS2_COLOR_RUMBLE_PAD) },
+   613	#endif
+   614	#if IS_ENABLED(CONFIG_HID_PENMOUNT)
+   615		{ HID_USB_DEVICE(USB_VENDOR_ID_PENMOUNT, USB_DEVICE_ID_PENMOUNT_6000) },
+   616	#endif
+   617	#if IS_ENABLED(CONFIG_HID_PETALYNX)
+   618		{ HID_USB_DEVICE(USB_VENDOR_ID_PETALYNX, USB_DEVICE_ID_PETALYNX_MAXTER_REMOTE) },
+   619	#endif
+   620	#if IS_ENABLED(CONFIG_HID_PICOLCD)
+   621		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROCHIP, USB_DEVICE_ID_PICOLCD) },
+   622		{ HID_USB_DEVICE(USB_VENDOR_ID_MICROCHIP, USB_DEVICE_ID_PICOLCD_BOOTLOADER) },
+   623	#endif
+   624	#if IS_ENABLED(CONFIG_HID_PLANTRONICS)
+   625		{ HID_USB_DEVICE(USB_VENDOR_ID_PLANTRONICS, HID_ANY_ID) },
+   626	#endif
+   627	#if IS_ENABLED(CONFIG_HID_PLAYSTATION)
+   628		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS4_CONTROLLER) },
+   629		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS4_CONTROLLER) },
+   630		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS4_CONTROLLER_2) },
+   631		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS4_CONTROLLER_2) },
+   632		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS4_CONTROLLER_DONGLE) },
+   633		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS5_CONTROLLER) },
+   634		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS5_CONTROLLER) },
+   635		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS5_CONTROLLER_2) },
+   636		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS5_CONTROLLER_2) },
+   637	#endif
+   638	#if IS_ENABLED(CONFIG_HID_PRIMAX)
+   639		{ HID_USB_DEVICE(USB_VENDOR_ID_PRIMAX, USB_DEVICE_ID_PRIMAX_KEYBOARD) },
+   640	#endif
+   641	#if IS_ENABLED(CONFIG_HID_PRODIKEYS)
+   642		{ HID_USB_DEVICE(USB_VENDOR_ID_CREATIVELABS, USB_DEVICE_ID_PRODIKEYS_PCMIDI) },
+   643	#endif
+   644	#if IS_ENABLED(CONFIG_HID_RETRODE)
+   645		{ HID_USB_DEVICE(USB_VENDOR_ID_FUTURE_TECHNOLOGY, USB_DEVICE_ID_RETRODE2) },
+   646	#endif
+   647	#if IS_ENABLED(CONFIG_HID_RMI)
+   648		{ HID_USB_DEVICE(USB_VENDOR_ID_LENOVO, USB_DEVICE_ID_LENOVO_X1_COVER) },
+   649		{ HID_USB_DEVICE(USB_VENDOR_ID_RAZER, USB_DEVICE_ID_RAZER_BLADE_14) },
+   650		{ HID_USB_DEVICE(USB_VENDOR_ID_PRIMAX, USB_DEVICE_ID_PRIMAX_REZEL) },
+   651	#endif
+   652	#if IS_ENABLED(CONFIG_HID_ROCCAT)
+   653		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_ARVO) },
+   654		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_ISKU) },
+   655		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_ISKUFX) },
+   656		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_KONE) },
+   657		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_KONEPLUS) },
+   658		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_KONEPURE) },
+   659		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_KONEPURE_OPTICAL) },
+   660		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_KONEXTD) },
+   661		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_KOVAPLUS) },
+   662		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_LUA) },
+   663		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_PYRA_WIRED) },
+   664		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_PYRA_WIRELESS) },
+   665		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_RYOS_MK) },
+   666		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_RYOS_MK_GLOW) },
+   667		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_RYOS_MK_PRO) },
+   668		{ HID_USB_DEVICE(USB_VENDOR_ID_ROCCAT, USB_DEVICE_ID_ROCCAT_SAVU) },
+   669	#endif
+   670	#if IS_ENABLED(CONFIG_HID_SAITEK)
+   671		{ HID_USB_DEVICE(USB_VENDOR_ID_SAITEK, USB_DEVICE_ID_SAITEK_PS1000) },
+   672		{ HID_USB_DEVICE(USB_VENDOR_ID_SAITEK, USB_DEVICE_ID_SAITEK_RAT7_OLD) },
+   673		{ HID_USB_DEVICE(USB_VENDOR_ID_SAITEK, USB_DEVICE_ID_SAITEK_RAT7) },
+   674		{ HID_USB_DEVICE(USB_VENDOR_ID_SAITEK, USB_DEVICE_ID_SAITEK_RAT9) },
+   675		{ HID_USB_DEVICE(USB_VENDOR_ID_SAITEK, USB_DEVICE_ID_SAITEK_MMO7) },
+   676		{ HID_USB_DEVICE(USB_VENDOR_ID_MADCATZ, USB_DEVICE_ID_MADCATZ_RAT5) },
+   677		{ HID_USB_DEVICE(USB_VENDOR_ID_MADCATZ, USB_DEVICE_ID_MADCATZ_RAT9) },
+   678		{ HID_USB_DEVICE(USB_VENDOR_ID_MADCATZ, USB_DEVICE_ID_MADCATZ_MMO7) },
+   679	#endif
+   680	#if IS_ENABLED(CONFIG_HID_SAMSUNG)
+   681		{ HID_USB_DEVICE(USB_VENDOR_ID_SAMSUNG, USB_DEVICE_ID_SAMSUNG_IR_REMOTE) },
+   682		{ HID_USB_DEVICE(USB_VENDOR_ID_SAMSUNG, USB_DEVICE_ID_SAMSUNG_WIRELESS_KBD_MOUSE) },
+   683	#endif
+   684	#if IS_ENABLED(CONFIG_HID_SMARTJOYPLUS)
+   685		{ HID_USB_DEVICE(USB_VENDOR_ID_PLAYDOTCOM, USB_DEVICE_ID_PLAYDOTCOM_EMS_USBII) },
+   686		{ HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_SMARTJOY_PLUS) },
+   687		{ HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_SUPER_JOY_BOX_3) },
+   688		{ HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_DUAL_USB_JOYPAD) },
+   689		{ HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP_LTD, USB_DEVICE_ID_SUPER_JOY_BOX_3_PRO) },
+   690		{ HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP_LTD, USB_DEVICE_ID_SUPER_DUAL_BOX_PRO) },
+   691		{ HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP_LTD, USB_DEVICE_ID_SUPER_JOY_BOX_5_PRO) },
+   692	#endif
+   693	#if IS_ENABLED(CONFIG_HID_SONY)
+   694		{ HID_USB_DEVICE(USB_VENDOR_ID_CRKD, USB_DEVICE_ID_CRKD_PS4_GIBSON_SG) },
+   695		{ HID_USB_DEVICE(USB_VENDOR_ID_CRKD, USB_DEVICE_ID_CRKD_PS4_GIBSON_SG_DONGLE) },
+   696		{ HID_USB_DEVICE(USB_VENDOR_ID_CRKD, USB_DEVICE_ID_CRKD_PS5_GIBSON_SG) },
+   697		{ HID_USB_DEVICE(USB_VENDOR_ID_CRKD, USB_DEVICE_ID_CRKD_PS5_GIBSON_SG_DONGLE) },
+ > 698		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB1_DRUMS) },
+ > 699		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB1_GUITAR) },
+ > 700		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB2_DRUMS) },
+ > 701		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB2_GUITAR) },
+ > 702		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_KEYBOARD) },
+ > 703		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_DRUMS_MODE) },
+ > 704		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_KEYBOARD_MODE) },
+ > 705		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_MUSTANG_MODE) },
+ > 706		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MPA_SQUIRE_MODE) },
+   707		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_MUSTANG_GUITAR) },
+   708		{ HID_USB_DEVICE(USB_VENDOR_ID_HARMONIX, USB_DEVICE_ID_HARMONIX_WII_RB3_SQUIRE_GUITAR) },
+   709		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_HARMONY_PS3) },
+   710		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MADCATZ, USB_DEVICE_ID_MADCATZ_PS4_STRATOCASTER) },
+   711		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_PDP, USB_DEVICE_ID_PDP_PS4_JAGUAR) },
+   712		{ HID_USB_DEVICE(USB_VENDOR_ID_PDP, USB_DEVICE_ID_PDP_PS4_RIFFMASTER) },
+   713		{ HID_USB_DEVICE(USB_VENDOR_ID_PDP, USB_DEVICE_ID_PDP_PS5_RIFFMASTER) },
+   714		{ HID_USB_DEVICE(USB_VENDOR_ID_REDOCTANE, USB_DEVICE_ID_REDOCTANE_GUITAR_DONGLE) },
+   715		{ HID_USB_DEVICE(USB_VENDOR_ID_REDOCTANE, USB_DEVICE_ID_REDOCTANE_PS4_GHLIVE_DONGLE) },
+   716		{ HID_USB_DEVICE(USB_VENDOR_ID_SINO_LITE, USB_DEVICE_ID_SINO_LITE_CONTROLLER) },
+   717		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SMK, USB_DEVICE_ID_SMK_NSG_MR5U_REMOTE) },
+   718		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SMK, USB_DEVICE_ID_SMK_NSG_MR7U_REMOTE) },
+   719		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SMK, USB_DEVICE_ID_SMK_PS3_BDREMOTE) },
+   720		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_BUZZ_CONTROLLER) },
+   721		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_MOTION_CONTROLLER) },
+   722		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_MOTION_CONTROLLER) },
+   723		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_NAVIGATION_CONTROLLER) },
+   724		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_NAVIGATION_CONTROLLER) },
+   725		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS3_BDREMOTE) },
+   726		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS3_CONTROLLER) },
+   727		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS3_CONTROLLER) },
+   728		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_VAIO_VGP_MOUSE) },
+   729		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_VAIO_VGX_MOUSE) },
+   730		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_WIRELESS_BUZZ_CONTROLLER) },
+   731		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3WIIU_GHLIVE) },
+   732		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_DJH_TURNTABLE) },
+   733		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_GH_DRUMS) },
+   734		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_GH_GUITAR) },
+   735		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_RB3_KEYBOARD) },
+   736		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_RB3_MPA_DRUMS_MODE) },
+   737		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_RB3_MPA_KEYBOARD_MODE) },
+   738		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_RB3_MPA_MUSTANG_MODE) },
+   739		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_RB3_MPA_SQUIRE_MODE) },
+   740		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_RB3_MUSTANG_GUITAR) },
+   741		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_RB3_SQUIRE_GUITAR) },
+   742		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_RB_DRUMS) },
+   743		{ HID_USB_DEVICE(USB_VENDOR_ID_SONY_RHYTHM, USB_DEVICE_ID_SONY_PS3_RB_GUITAR) },
+   744	#endif
+   745	#if IS_ENABLED(CONFIG_HID_SPEEDLINK)
+   746		{ HID_USB_DEVICE(USB_VENDOR_ID_X_TENSIONS, USB_DEVICE_ID_SPEEDLINK_VAD_CEZANNE) },
+   747	#endif
+   748	#if IS_ENABLED(CONFIG_HID_STEELSERIES)
+   749		{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1) },
+   750		{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_ARCTIS_1) },
+   751		{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_ARCTIS_9) },
+   752	#endif
+   753	#if IS_ENABLED(CONFIG_HID_SUNPLUS)
+   754		{ HID_USB_DEVICE(USB_VENDOR_ID_SUNPLUS, USB_DEVICE_ID_SUNPLUS_WDESKTOP) },
+   755	#endif
+   756	#if IS_ENABLED(CONFIG_HID_THRUSTMASTER)
+   757		{ HID_USB_DEVICE(USB_VENDOR_ID_THRUSTMASTER, 0xb300) },
+   758		{ HID_USB_DEVICE(USB_VENDOR_ID_THRUSTMASTER, 0xb304) },
+   759		{ HID_USB_DEVICE(USB_VENDOR_ID_THRUSTMASTER, 0xb323) },
+   760		{ HID_USB_DEVICE(USB_VENDOR_ID_THRUSTMASTER, 0xb324) },
+   761		{ HID_USB_DEVICE(USB_VENDOR_ID_THRUSTMASTER, 0xb605) },
+   762		{ HID_USB_DEVICE(USB_VENDOR_ID_THRUSTMASTER, 0xb651) },
+   763		{ HID_USB_DEVICE(USB_VENDOR_ID_THRUSTMASTER, 0xb653) },
+   764		{ HID_USB_DEVICE(USB_VENDOR_ID_THRUSTMASTER, 0xb654) },
+   765		{ HID_USB_DEVICE(USB_VENDOR_ID_THRUSTMASTER, 0xb65a) },
+   766		{ HID_USB_DEVICE(USB_VENDOR_ID_THRUSTMASTER, 0xb65d) },
+   767	#endif
+   768	#if IS_ENABLED(CONFIG_HID_TIVO)
+   769		{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_TIVO, USB_DEVICE_ID_TIVO_SLIDE_BT) },
+   770		{ HID_USB_DEVICE(USB_VENDOR_ID_TIVO, USB_DEVICE_ID_TIVO_SLIDE) },
+   771		{ HID_USB_DEVICE(USB_VENDOR_ID_TIVO, USB_DEVICE_ID_TIVO_SLIDE_PRO) },
+   772	#endif
+   773	#if IS_ENABLED(CONFIG_HID_TOPSEED)
+   774		{ HID_USB_DEVICE(USB_VENDOR_ID_BTC, USB_DEVICE_ID_BTC_EMPREX_REMOTE) },
+   775		{ HID_USB_DEVICE(USB_VENDOR_ID_BTC, USB_DEVICE_ID_BTC_EMPREX_REMOTE_2) },
+   776		{ HID_USB_DEVICE(USB_VENDOR_ID_CHICONY, USB_DEVICE_ID_CHICONY_WIRELESS) },
+   777		{ HID_USB_DEVICE(USB_VENDOR_ID_TOPSEED, USB_DEVICE_ID_TOPSEED_CYBERLINK) },
+   778		{ HID_USB_DEVICE(USB_VENDOR_ID_TOPSEED2, USB_DEVICE_ID_TOPSEED2_RF_COMBO) },
+   779	#endif
+   780	#if IS_ENABLED(CONFIG_HID_TWINHAN)
+   781		{ HID_USB_DEVICE(USB_VENDOR_ID_TWINHAN, USB_DEVICE_ID_TWINHAN_IR_REMOTE) },
+   782	#endif
+   783	#if IS_ENABLED(CONFIG_HID_UDRAW_PS3)
+   784		{ HID_USB_DEVICE(USB_VENDOR_ID_THQ, USB_DEVICE_ID_THQ_PS3_UDRAW) },
+   785	#endif
+   786	#if IS_ENABLED(CONFIG_HID_XINMO)
+   787		{ HID_USB_DEVICE(USB_VENDOR_ID_XIN_MO, USB_DEVICE_ID_XIN_MO_DUAL_ARCADE) },
+   788		{ HID_USB_DEVICE(USB_VENDOR_ID_XIN_MO, USB_DEVICE_ID_THT_2P_ARCADE) },
+   789	#endif
+   790	#if IS_ENABLED(CONFIG_HID_ZEROPLUS)
+   791		{ HID_USB_DEVICE(USB_VENDOR_ID_ZEROPLUS, 0x0005) },
+   792		{ HID_USB_DEVICE(USB_VENDOR_ID_ZEROPLUS, 0x0030) },
+   793	#endif
+   794	#if IS_ENABLED(CONFIG_HID_ZYDACRON)
+   795		{ HID_USB_DEVICE(USB_VENDOR_ID_ZYDACRON, USB_DEVICE_ID_ZYDACRON_REMOTE_CONTROL) },
+   796	#endif
+   797		{ }
+   798	};
+   799	
 
 -- 
 0-DAY CI Kernel Test Service
