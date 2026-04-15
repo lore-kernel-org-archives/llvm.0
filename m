@@ -1,119 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450BF2FE59B;
-	Wed, 15 Apr 2026 03:52:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E622F3A0B3F
+	for <llvm@lists.linux.dev>; Wed, 15 Apr 2026 07:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776225156; cv=none; b=HaFHLACMVD4fvcS97Y5v+iCDq2wcW+2wALIXT6QZ7kg3p0WSPMxVXvV1r/ur1AxDwV1V7Ak8BrdngFJGNw9wMh3rLxQqJhZK0MfY8YHGJce6PN4FAeTR03e+yzOle5OVL6r8hoUjIOAAwuooP6zC7wfn8bA8rxhdD0sGBZErNkI=
+	t=1776237731; cv=none; b=k1lA0LBr0F9eTyKzBN76Z4yr5ehKPqAbCt5I6dYefVehN8bBw/VnYHr7nwUKXqeb9XA2r3404ZHnwfAv6qlnN9uUQwzML7NITgRAUabK4RrRMD5LTFQBU84vp4S0iBqPR9mKcVwo/xJG6J1eJgZ91QoTYQLt61Qs+e7aDkA2XDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776225156; c=relaxed/simple;
-	bh=m99qQZ4dx7BtKKpohQv3Y87bczeOuN8Pk/9zrNr5G/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d8JNk01G6YXxbj/98kC0DLxqn5Tp2Z1zqEzK04wAgLpz7BgibmfNZR53NFWAHkFu8o/9O7zscSM178NjuGxFxG/1H4lBs++huZ/b48br5aZzq9EO7k0OmL/+9VUubRVV5jN4FWk6mgiEVQ2JxwlDyhvFSHfboSmEyafLtaQSeUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=grq5wOz4; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1776237731; c=relaxed/simple;
+	bh=NAg86QLfHVdkxc/GIXbIeaoVHNH4UOjTWDcrS8/sC0A=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=X35H1RB+zQHWjVZi8Bz4tJen595l8oSzFA+AE7z536K+7nwNc4x1rviXeuuEPLQjU2Zezl+Jx6Pg2ZyRtugm0V6aSyDiW3k7frtkIhmakzEOuLRk/VuXyAPRndNL60qPNzHC54+Mt8I0+k7GId8HCMw8GMLzeOIjCbx3a7rpzeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a9rNWqF6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="grq5wOz4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776225153; x=1807761153;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m99qQZ4dx7BtKKpohQv3Y87bczeOuN8Pk/9zrNr5G/Q=;
-  b=grq5wOz4UKwvSEaY3Ny//gwTL8l7cN9GfL5obi5PLtARk/wBPltwVicb
-   EKt/KHxSQOjIEca4+2Wj6gT9X7XSADNoXqWpAYEhQJ4eHa2976t8xusqX
-   3wk53GMDaYAmRGKkhpFFT1xfZ1v/BmODUSSo0/egnHvI4OEj7L9sVkXME
-   Fa6NbRAPXK9tLUjhKM6Ph6M1VLwVS0bFZ1lh7yCsMFVjbwHadPhdqQ3g5
-   88aCUQCmZv8ZcbWKwttFUJjgW6k0h4M+ecE5zFjEjhRcHNr8HdwvgnSkB
-   g55Ha3o3hrvIFGt80Dm+Wm3iWnaU5fOS0nSWen5kYBi9QkxB6GRzraGsS
-   A==;
-X-CSE-ConnectionGUID: hVIyKJg5Qse6FIknVSZCPQ==
-X-CSE-MsgGUID: KRrtHfH1RKCXN15j900Vlw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="81075962"
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="81075962"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 20:52:32 -0700
-X-CSE-ConnectionGUID: Hyw66PRaSJ2o2KSC0fSSww==
-X-CSE-MsgGUID: St9lG8kbRIe3aaTcAhVb/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="225590728"
-Received: from lkp-server01.sh.intel.com (HELO 7f3b36e5d6a5) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 14 Apr 2026 20:52:29 -0700
-Received: from kbuild by 7f3b36e5d6a5 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wCrIg-0000000007F-2owl;
-	Wed, 15 Apr 2026 03:52:26 +0000
-Date: Wed, 15 Apr 2026 11:51:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxwell Doose <m32285159@gmail.com>, gregkh@linuxfoundation.org,
-	tsbogend@alpha.franken.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	yoelvisoliveros@gmail.com, len.bao@gmx.us,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: octeon: remove SPI, POW, PKO, and Helper
- typedef enums
-Message-ID: <202604151159.fZkPsdWl-lkp@intel.com>
-References: <20260412000226.2711800-1-m32285159@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a9rNWqF6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776237728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wJ4PkAmafx8TZmMFel1sOVqrrl4GoxucHmhpwexR8+8=;
+	b=a9rNWqF6RMNud1ni7GYkBsjZK88+7Y0m4TtbICTnmdgEcbOBm5d9Ahe5qFWCiM1ao8Y8RC
+	98q/MbK9oK3PrfZ2aVXlgYi33eSzFQscGxdccD3gL2Xhy+HOgBu01sCfKS4hjTA6ldszOV
+	1YOhixr/UkRi0csPn+MINDcrwhtN8q0=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-679-6DSMBKQoO8SYy3DOBk20ng-1; Wed,
+ 15 Apr 2026 03:22:07 -0400
+X-MC-Unique: 6DSMBKQoO8SYy3DOBk20ng-1
+X-Mimecast-MFC-AGG-ID: 6DSMBKQoO8SYy3DOBk20ng_1776237726
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 596EC19560B0
+	for <llvm@lists.linux.dev>; Wed, 15 Apr 2026 07:22:06 +0000 (UTC)
+Received: from [172.20.96.14] (unknown [10.30.44.37])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EEFEA30001A4;
+	Wed, 15 Apr 2026 07:22:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 88 of 97): Test report for master
+ (7.0.0-0, upstream-mainline, e80d0338)
+Date: Wed, 15 Apr 2026 07:22:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260412000226.2711800-1-m32285159@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <10467.126041503220701211@us-mta-679.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: NNpYbsrmfgKKdDSEqf04nNqCaQfYS_8cAnTl2mb7BM0_1776237726
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Maxwell,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on staging/staging-testing]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Doose/staging-octeon-remove-SPI-POW-PKO-and-Helper-typedef-enums/20260415-004127
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20260412000226.2711800-1-m32285159%40gmail.com
-patch subject: [PATCH] staging: octeon: remove SPI, POW, PKO, and Helper typedef enums
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260415/202604151159.fZkPsdWl-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260415/202604151159.fZkPsdWl-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'smp-core-2026-04-12' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/tip/tip
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604151159.fZkPsdWl-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2452997968
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/staging/octeon/ethernet.c:23:
-   In file included from drivers/staging/octeon/octeon-ethernet.h:41:
->> drivers/staging/octeon/octeon-stubs.h:1270:15: error: use of 'cvmx_helper_interface_mode' with tag type that does not match previous declaration
-    1270 | static inline struct cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
-         |               ^
-   drivers/staging/octeon/octeon-stubs.h:225:6: note: previous use is here
-     225 | enum cvmx_helper_interface_mode {
-         |      ^
->> drivers/staging/octeon/octeon-stubs.h:1273:9: error: returning 'int' from a function with incompatible result type 'struct (unnamed struct at drivers/staging/octeon/octeon-stubs.h:1270:22)'
-    1273 |         return 0;
-         |                ^
-   2 errors generated.
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
+    /distribution/command [aarch64, ppc64le, s390x, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
+    Boot test [aarch64, ppc64le, s390x, x86_64]
+    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
+    Reboot test [aarch64, ppc64le, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x, x86_64]
+    Storage - blktests - throtl [aarch64, s390x, x86_64]
+    Storage - blktests - ublk [aarch64, s390x, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+    stress: stress-ng - memory [aarch64, s390x, x86_64]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
 
 
-vim +/cvmx_helper_interface_mode +1270 drivers/staging/octeon/octeon-stubs.h
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-  1269	
-> 1270	static inline struct cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
-  1271									   interface)
-  1272	{
-> 1273		return 0;
-  1274	}
-  1275	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
