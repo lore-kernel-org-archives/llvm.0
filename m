@@ -1,67 +1,67 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D31E38D6A3
-	for <llvm@lists.linux.dev>; Wed, 15 Apr 2026 21:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346F538F635
+	for <llvm@lists.linux.dev>; Wed, 15 Apr 2026 21:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776286806; cv=none; b=QXuwq9C2SeO5G+1rTlbKx5Tp5gcw+Ys62xf32uxjKxBjif37Y1JWgm+TiqHagskcLmjlEFs3iCvx1dleL4cyh/o6IwsO6OvKiyLxL4O0qc4NHv7eL+TVw4/SWd/g31ZBIrzMzHqlOv+CPBjzPimXrDfx5Ku0LNVGt8q2kzsF1Sc=
+	t=1776286810; cv=none; b=Jd/+XcPbsVk7dSJ11tdymFOaSjRgbDQ87hbC3tA2xS2FL3l8y6BPMrPUcg+Dl75/wk7Vgrppl1BTcK+99zqmrzTU9J0DsacTUdjrgk6weUqylgfDp9SWt9QSW/9HrgBvfXd7ZseWeq2oF+OnWA5qswXe/DI828lZw4dfRs9E4/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776286806; c=relaxed/simple;
-	bh=ku5U3Ka0ndjPXP92siQHnGkpd1bCq2hgtWQ4GejuUdw=;
+	s=arc-20240116; t=1776286810; c=relaxed/simple;
+	bh=lgzOSFWnfizXkJttevzQ4RKDDkBKg9+cgJB2nDOdEzA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kGoULGwwA8+uFScfdrErOm0dR9YMMf5gdYywYfgblhQKe/4ogX8/f73Kjuvx85n4UFFFiGAX2TJSZUF2GxtgFU7axtLXzUNwQOjMPnxNCLBal8OSpcPv4kJGAfnVGyAxPvmhwjd9Mmywxcbd+kCdi98XBHYLj6hLkyEAy//InFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AmbJdcws; arc=none smtp.client-ip=209.85.128.46
+	 In-Reply-To:To:Cc; b=nJpLhlZdwtDvdhymsFtdj+4lAyK/0BKup2Hgu5o/D8qMoPtZYb9AWpvkBVQ2RxFZizr5ZY+euB9SNdZ9glMJ6COBOuL+RpklJyUvYWKc6n5yK2YCbZz/bT/ohguV+MPMtpWf/e8nLl+o2IJ4TEWrVZ/H4rCx/deDnOrCNofaPvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KoJDtaHc; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AmbJdcws"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-483487335c2so80111705e9.2
-        for <llvm@lists.linux.dev>; Wed, 15 Apr 2026 14:00:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KoJDtaHc"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso68499465e9.3
+        for <llvm@lists.linux.dev>; Wed, 15 Apr 2026 14:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776286803; x=1776891603; darn=lists.linux.dev;
+        d=suse.com; s=google; t=1776286807; x=1776891607; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Oynt2x6SXKNaRU8MrrgQe7iSYgm0Zd6fxbgaEr/IL1k=;
-        b=AmbJdcwsseWDnMq9PnZ7wx6MuIUE2CUobXBFtJllIQCGugqwxU58J4zoMxJqBuUIoT
-         6G+7RuFMwh1ss6kreQoX6UeEkX1gzNjfV33kDXISU8iufIuUIi0W6vsn+bBo2N5TERD9
-         9MW+lJXQHNhIqOugNsIUnuvv6NTnGiGUXZGEle4lH1alOIk2KbaQ9xi50PODHC69D4I3
-         mQBEIT2CFCSrV09JNssLFKTYJtvdM43h+T4DXaIkCHzOjF2FuEdqAJ+M6Gbme3xuQd+n
-         taJz8oBviMowVWia6+OgRAFLwX8ICGngDMFIXdY3jtwFMITlBJeoAbsp1vQp0ma+ujgZ
-         4w9w==
+        bh=W17fl6DlylZsqZw79dVwMj/l25sGnBeZjcx83IwMViI=;
+        b=KoJDtaHca+8aDaCSnS9gQiaOYshwHswS9erQE1b/eiuBehgktQhG9MsIy7xTbfTJOI
+         YeWLtvolyk9SdhStGo36XpOVGY2gR6TMHXXNRi7KxgoE8b7Imyd9ESu7N0ybb2RnXtDe
+         LfREycRrD48Jplir6bMthnw10VqSI26YjLfS0sKU+zX+0XUlbaozNIgsMxbyckp2MYZC
+         peSzUGQOd57l85PZt84ynMOQoNEQ7ULXcu3/EOfY3RaNqI3yg+ijmZa0b2KowKXeRDSA
+         0NfQjYVTLcrtlIPkS+dogx9O/AW2nQruTjzgSEDLnakuVm7mwMT5kJ6mY33uxXGjLuhZ
+         CIaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776286803; x=1776891603;
+        d=1e100.net; s=20251104; t=1776286807; x=1776891607;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Oynt2x6SXKNaRU8MrrgQe7iSYgm0Zd6fxbgaEr/IL1k=;
-        b=GiunXLNJiE3mFPPLCruhpJ8j+ElmNxEIrxSyzBrZ9H89CINLljJ4LkjFTZyoaPhqNf
-         RaZgLy29VVTKlMb5uLJg7rqNJBFZD4D/QPcLL2aPB7l4N+tUQUSw2/6KeJ0rO9hMsQsh
-         jl+SvhSY4GbIMyS05Y4KT48hGjUAkRTO0PoP09UzgYXg+nHhx0CvNzXPTWqSciATOVEv
-         4+P22J41AQJjgW6CUFiywVjnxH78+KSIdM1a1ILL6OiaWUuH+y2u33NSOxJeL6cQH8tX
-         E/Ymid8xPSmXNh8jUYhfbdiJwoJ6t1APISvevxLIRr3Y1NP8PP+FEF9pP+7NzoDy7eJh
-         cBOw==
-X-Forwarded-Encrypted: i=1; AFNElJ+XhK/vE0fxFISAyjbEaOFXNkEvfVgBK0e0+CtkbMwAYKPuXH9QSd6fxEZ6ByxQ5GsRz9Iv@lists.linux.dev
-X-Gm-Message-State: AOJu0YwX5gxuncodNt1qVFMuenmH13wCxOG+/1rpFVIJoETqweXa7s2v
-	tFURr6OY9DidxarQKfpywKOlL1uPKZipEbSgz3s11UGy4/HJI6fWeBWZD/FCk4SuotE=
-X-Gm-Gg: AeBDies206fa2WyTermYsjUMPLfBY3oEB8nlOZIGK89DBnHVntKSYHFl4aSdljK6d/e
-	XbW7HpbVidSrvuxcDQsTY4+AzLQ4Wq4BYhtWppcJ2nlUJcr+TxK1LMt3yzqC8hSb9sVM3h4ZscA
-	TEw+oMqtD9Up2rocrJ1m6VjCnVVgSlj14f9BKTEG/L+Dgj+ENzoUt0uuvBXMhzT6mR62zP0FRs9
-	tZxfVOo5DqYh37ZeH/1EW8STQypJV/GYxxtL29Ag63fcoLyBm8nZD+rvok/xwSj7WE3jllYoCsy
-	2UQ5iVzlQIRBj7h2sMs7BjPNmCjO7GK2zsh0qE/GxwCyatJCjkr44JcOL/cy1Zq4iOR6HZHhSzq
-	E01EPyWXUpWszbQ2F2u+hBY2qhJoRjKOotvsTj6PDsmgg2TFYLxBe8kY+EmcuwRP34CAFQIZEZ7
-	yECUY2Juj2RvOwztO0h0l3wA==
-X-Received: by 2002:a05:600c:64cf:b0:485:b6dd:5066 with SMTP id 5b1f17b1804b1-488d67ce664mr310218145e9.7.1776286803497;
-        Wed, 15 Apr 2026 14:00:03 -0700 (PDT)
+        bh=W17fl6DlylZsqZw79dVwMj/l25sGnBeZjcx83IwMViI=;
+        b=GOm83YfDNhsyyUKk0skjoAdbeMlecQJTcCfiYY2nS1i5DX0wZy48JN6r4B1UE/Uj3V
+         mcfurD+JdKeDWaVCGPul6zg/hIpoq/xSR0XAVIiZebutmM1QGla0ZBeZ5TXipNoIuH85
+         DPT+knVu6wLTqqAYkzihKmRP8R13t3EvYNNOnQr7GQ/x9gF4E25XLA89+5McV35dXTXD
+         a8+u6UtQjsyr2H8sxEgCZtJr2bR45VmaKrnHyxOCpretudZO3uLM6WdssCFUcRJ+Hv5l
+         WpxNGd5AT7lQBNp7RzoOSB+AjFenz9j4vIXAbeGV5xeQ1LlK+jCykr69a1gH0qylTnFO
+         q9pA==
+X-Forwarded-Encrypted: i=1; AFNElJ9wbwsCC8v9o2x8pNy7wZOIEx5RamMxFpZcsMDLOg43PKBHb24MjwUalJI9qqEXJk6PC+90@lists.linux.dev
+X-Gm-Message-State: AOJu0YxB58aokACymfGVNt3Mm2zrf0vnpi17RjBoPLm7M+pxo1gPFfco
+	jnY292+Mp0C5R2VLE3uSK+BY3artghVcmR2QahRm98UTNNuPJ083XCGXei1WzszrtDo=
+X-Gm-Gg: AeBDietO2wDfsliB0wHqkmNUOInq6quOU7NK7H+y0g8efu+4cpguGhlwbcATD/JpfPj
+	fQjmwLopkKWGqIgvsO0xLnArwh9TQUZBmbtDgzV3RAkO60fpLJDYySBsw+7JDvzuk4FzijYmJ0c
+	51Y0YWQam93JDOY/95toZI3YC0JTwCeDNdTjEOT3Kik//Fe0wpYylx5pBVzcFZ8o5bP5bocpFKa
+	8wICuGuQHMENMgy/gDWHr0hNTEuGZzAtTxyeRrzYwM9Uhwn/lCUi1LlOTGdRYLEr6HCqDIza1tQ
+	HTyg1YyLlHpw28QXTy4jXR1xvfY+PiknoI/ftDBbvPPE/6Jruoq4KmGfmOpVdag5OuxCnfpxCQj
+	mPHqpN9VZUNGJ0+AQbFar2fcjlv1v/dIev1CwiCWOmkbSjO6eI618VJC4KS5kMNgC2iJ3izydqV
+	Mss1Qa2norL0w=
+X-Received: by 2002:a05:600c:8706:b0:488:b9c6:11ba with SMTP id 5b1f17b1804b1-488d6890cf9mr322699135e9.28.1776286807486;
+        Wed, 15 Apr 2026 14:00:07 -0700 (PDT)
 Received: from localhost ([2804:7f0:b765:e41:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c5e61cd32sm3511245c88.3.2026.04.15.14.00.02
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c5e630143sm5097630c88.6.2026.04.15.14.00.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 14:00:02 -0700 (PDT)
+        Wed, 15 Apr 2026 14:00:06 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Wed, 15 Apr 2026 17:59:27 -0300
-Subject: [PATCH bpf-next v5 09/11] selftests/bpf: Provide weak definitions
- for cross-test functions
+Date: Wed, 15 Apr 2026 17:59:28 -0300
+Subject: [PATCH bpf-next v5 10/11] selftests/bpf: Skip tests whose objects
+ were not built
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260415-selftests-bpf_misconfig-v5-9-03d0a52a898a@suse.com>
+Message-Id: <20260415-selftests-bpf_misconfig-v5-10-03d0a52a898a@suse.com>
 References: <20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com>
 In-Reply-To: <20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -87,176 +87,143 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Alan Maguire <alan.maguire@oracle.com>, 
  "Ricardo B. Marliere" <rbm@suse.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1776286765; l=5376;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1776286765; l=4693;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=ku5U3Ka0ndjPXP92siQHnGkpd1bCq2hgtWQ4GejuUdw=;
+ bh=lgzOSFWnfizXkJttevzQ4RKDDkBKg9+cgJB2nDOdEzA=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QO7e/UYxw746hiXYJlNuN3lkdDoM2pGfqMjqiIc/PWW1OKv557/Zt0rqGkWmOTbeCyjKNsW6hSl
- L8udp9uaFdQY=
+ QI6DqtYECtFIZePV7wEsQlMK4Xw7Pp9qXIgR8RtkUwkPTduEVxFa8hyszHy6EWsM+cqoBGPN3Ii
+ pux/llp8Mtww=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-Some test files reference functions defined in other translation units that
-may not be compiled when skeletons are missing. Replace forward
-declarations of uprobe_multi_func_{1,2,3}() with weak no-op stubs so the
-linker resolves them regardless of which objects are present.
+When both run_test and run_serial_test are NULL (because the corresponding
+.test.o was not compiled), mark the test as not built instead of fatally
+aborting.
 
-Move stack_mprotect() from test_lsm.c into testing_helpers.c so it is
-always available. The previous weak-stub approach returned 0, which would
-cause callers expecting -1/EPERM to fail their assertions
-deterministically. Having the real implementation in a shared utility
-avoids this problem entirely.
+Report these tests as "SKIP (not built)" in per-test output and include
+them in the skip count so they remain visible in CI results and JSON
+output. The summary line shows the not-built count when nonzero:
+
+  Summary: 50/55 PASSED, 5 SKIPPED (3 not built), 0 FAILED
+
+Tests filtered out by -t/-n remain invisible as before; only genuinely
+unbuilt tests are surfaced.
 
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
- .../testing/selftests/bpf/prog_tests/bpf_cookie.c  | 17 +++++++++++------
- tools/testing/selftests/bpf/prog_tests/iters.c     |  3 +--
- tools/testing/selftests/bpf/prog_tests/test_lsm.c  | 22 ----------------------
- tools/testing/selftests/bpf/testing_helpers.c      | 17 +++++++++++++++++
- tools/testing/selftests/bpf/testing_helpers.h      |  1 +
- 5 files changed, 30 insertions(+), 30 deletions(-)
+ tools/testing/selftests/bpf/test_progs.c | 44 ++++++++++++++++++++++++++++----
+ tools/testing/selftests/bpf/test_progs.h |  1 +
+ 2 files changed, 40 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index 35adc3f6d443..5a864cd8ad1b 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -252,10 +252,17 @@ static void kprobe_multi_attach_api_subtest(void)
- 	kprobe_multi__destroy(skel);
- }
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 7fe16b5131b1..759e76d76c57 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -165,6 +165,7 @@ struct prog_test_def {
+ 	void (*run_test)(void);
+ 	void (*run_serial_test)(void);
+ 	bool should_run;
++	bool not_built;
+ 	bool need_cgroup_cleanup;
+ 	bool should_tmon;
+ };
+@@ -372,6 +373,8 @@ static void print_test_result(const struct prog_test_def *test, const struct tes
+ 	fprintf(env.stdout_saved, "#%-*d %s:", TEST_NUM_WIDTH, test->test_num, test->test_name);
+ 	if (test_state->error_cnt)
+ 		fprintf(env.stdout_saved, "FAIL");
++	else if (test->not_built)
++		fprintf(env.stdout_saved, "SKIP (not built)");
+ 	else if (!skipped_cnt)
+ 		fprintf(env.stdout_saved, "OK");
+ 	else if (skipped_cnt == subtests_cnt || !subtests_cnt)
+@@ -1700,8 +1703,13 @@ static void calculate_summary_and_print_errors(struct test_env *env)
+ 	if (env->json)
+ 		fclose(env->json);
  
--/* defined in prog_tests/uprobe_multi_test.c */
--void uprobe_multi_func_1(void);
--void uprobe_multi_func_2(void);
--void uprobe_multi_func_3(void);
-+/*
-+ * Weak uprobe target stubs. noinline is required because
-+ * uprobe_multi_test_run() takes their addresses to configure the BPF
-+ * program's attachment points; an inlined function has no stable
-+ * address in the binary to probe. The strong definitions in
-+ * uprobe_multi_test.c take precedence when that translation unit is
-+ * linked.
-+ */
-+noinline __weak void uprobe_multi_func_1(void) {}
-+noinline __weak void uprobe_multi_func_2(void) {}
-+noinline __weak void uprobe_multi_func_3(void) {}
+-	printf("Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
+-	       succ_cnt, sub_succ_cnt, skip_cnt, fail_cnt);
++	if (env->not_built_cnt)
++		printf("Summary: %d/%d PASSED, %d SKIPPED (%d not built), %d FAILED\n",
++		       succ_cnt, sub_succ_cnt, skip_cnt, env->not_built_cnt,
++		       fail_cnt);
++	else
++		printf("Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
++		       succ_cnt, sub_succ_cnt, skip_cnt, fail_cnt);
  
- static void uprobe_multi_test_run(struct uprobe_multi *skel)
- {
-@@ -574,8 +581,6 @@ static void tracing_subtest(struct test_bpf_cookie *skel)
- 		close(fmod_ret_fd);
- }
+ 	env->succ_cnt = succ_cnt;
+ 	env->sub_succ_cnt = sub_succ_cnt;
+@@ -1772,6 +1780,19 @@ static void server_main(void)
+ 		run_one_test(i);
+ 	}
  
--int stack_mprotect(void);
--
- static void lsm_subtest(struct test_bpf_cookie *skel)
- {
- 	__u64 cookie;
-diff --git a/tools/testing/selftests/bpf/prog_tests/iters.c b/tools/testing/selftests/bpf/prog_tests/iters.c
-index a539980a2fbe..7c0b59fdf498 100644
---- a/tools/testing/selftests/bpf/prog_tests/iters.c
-+++ b/tools/testing/selftests/bpf/prog_tests/iters.c
-@@ -7,6 +7,7 @@
- #include <unistd.h>
- #include <malloc.h>
- #include <stdlib.h>
-+#include <linux/compiler.h>
- #include <test_progs.h>
- #include "cgroup_helpers.h"
- 
-@@ -202,8 +203,6 @@ static void subtest_task_iters(void)
- 	iters_task__destroy(skel);
- }
- 
--extern int stack_mprotect(void);
--
- static void subtest_css_task_iters(void)
- {
- 	struct iters_css_task *skel = NULL;
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-index bdc4fc06bc5a..d7495efd4a56 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-@@ -5,36 +5,14 @@
-  */
- 
- #include <test_progs.h>
--#include <sys/mman.h>
- #include <sys/wait.h>
- #include <unistd.h>
--#include <malloc.h>
--#include <stdlib.h>
- 
- #include "lsm.skel.h"
- #include "lsm_tailcall.skel.h"
- 
- char *CMD_ARGS[] = {"true", NULL};
- 
--#define GET_PAGE_ADDR(ADDR, PAGE_SIZE)					\
--	(char *)(((unsigned long) (ADDR + PAGE_SIZE)) & ~(PAGE_SIZE-1))
--
--int stack_mprotect(void)
--{
--	void *buf;
--	long sz;
--	int ret;
--
--	sz = sysconf(_SC_PAGESIZE);
--	if (sz < 0)
--		return sz;
--
--	buf = alloca(sz * 3);
--	ret = mprotect(GET_PAGE_ADDR(buf, sz), sz,
--		       PROT_READ | PROT_WRITE | PROT_EXEC);
--	return ret;
--}
--
- int exec_cmd(int *monitored_pid)
- {
- 	int child_pid, child_status;
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index 6fbe1e995660..3f7ae76c209b 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -5,6 +5,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <errno.h>
-+#include <sys/mman.h>
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
- #include "disasm.h"
-@@ -516,3 +517,19 @@ bool is_jit_enabled(void)
- 
- 	return enabled;
- }
++	/* mark not-built tests as skipped */
++	for (int i = 0; i < prog_test_cnt; i++) {
++		struct prog_test_def *test = &prog_test_defs[i];
++		struct test_state *state = &test_states[i];
 +
-+int stack_mprotect(void)
-+{
-+	void *buf;
-+	long sz;
-+	int ret;
++		if (test->not_built) {
++			state->tested = true;
++			state->skip_cnt = 1;
++			env.not_built_cnt++;
++			print_test_result(test, state);
++		}
++	}
 +
-+	sz = sysconf(_SC_PAGESIZE);
-+	if (sz < 0)
-+		return sz;
-+
-+	buf = alloca(sz * 3);
-+	ret = mprotect((void *)(((unsigned long)(buf + sz)) & ~(sz - 1)), sz,
-+		       PROT_READ | PROT_WRITE | PROT_EXEC);
-+	return ret;
-+}
-diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
-index 2ca2356a0b58..2edc6fb7fc52 100644
---- a/tools/testing/selftests/bpf/testing_helpers.h
-+++ b/tools/testing/selftests/bpf/testing_helpers.h
-@@ -59,5 +59,6 @@ struct bpf_insn;
- int get_xlated_program(int fd_prog, struct bpf_insn **buf, __u32 *cnt);
- int testing_prog_flags(void);
- bool is_jit_enabled(void);
-+int stack_mprotect(void);
+ 	/* generate summary */
+ 	fflush(stderr);
+ 	fflush(stdout);
+@@ -2049,12 +2070,16 @@ int main(int argc, char **argv)
+ 		test->should_run = should_run(&env.test_selector,
+ 					      test->test_num, test->test_name);
  
- #endif /* __TESTING_HELPERS_H */
+-		if ((test->run_test == NULL && test->run_serial_test == NULL) ||
+-		    (test->run_test != NULL && test->run_serial_test != NULL)) {
++		if (test->run_test && test->run_serial_test) {
+ 			fprintf(stderr, "Test %d:%s must have either test_%s() or serial_test_%sl() defined.\n",
+ 				test->test_num, test->test_name, test->test_name, test->test_name);
+ 			exit(EXIT_ERR_SETUP_INFRA);
+ 		}
++		if (!test->run_test && !test->run_serial_test) {
++			test->not_built = true;
++			test->should_run = false;
++			continue;
++		}
+ 		if (test->should_run)
+ 			test->should_tmon = should_tmon(&env.tmon_selector, test->test_name);
+ 	}
+@@ -2106,9 +2131,18 @@ int main(int argc, char **argv)
+ 
+ 	for (i = 0; i < prog_test_cnt; i++) {
+ 		struct prog_test_def *test = &prog_test_defs[i];
++		struct test_state *state = &test_states[i];
+ 
+-		if (!test->should_run)
++		if (!test->should_run) {
++			if (test->not_built && !env.get_test_cnt &&
++			    !env.list_test_names) {
++				state->tested = true;
++				state->skip_cnt = 1;
++				env.not_built_cnt++;
++				print_test_result(test, state);
++			}
+ 			continue;
++		}
+ 
+ 		if (env.get_test_cnt) {
+ 			env.succ_cnt++;
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 1a44467f4310..6ee10360e314 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -125,6 +125,7 @@ struct test_env {
+ 	int sub_succ_cnt; /* successful sub-tests */
+ 	int fail_cnt; /* total failed tests + sub-tests */
+ 	int skip_cnt; /* skipped tests */
++	int not_built_cnt; /* tests not built */
+ 
+ 	int saved_netns_fd;
+ 	int workers; /* number of worker process */
 
 -- 
 2.53.0
