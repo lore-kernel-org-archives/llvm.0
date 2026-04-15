@@ -1,66 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D4D2EB84E;
-	Wed, 15 Apr 2026 01:43:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450BF2FE59B;
+	Wed, 15 Apr 2026 03:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776217413; cv=none; b=h1qVotChqXUlGugkURzJnljlXaJhE6IbQaZxg58Q76b5lTyl2frRMAPdkQv08pamfIWVgy7TnoyWrN1qDseMg8PThRujAqS//pvWHVjeJYYKpEzpQ6h2ETzsZE9wRm0aVGLgXs6MBb1Uax0HCLFn5chuOtpud1ZPbvEbgu4Hfv0=
+	t=1776225156; cv=none; b=HaFHLACMVD4fvcS97Y5v+iCDq2wcW+2wALIXT6QZ7kg3p0WSPMxVXvV1r/ur1AxDwV1V7Ak8BrdngFJGNw9wMh3rLxQqJhZK0MfY8YHGJce6PN4FAeTR03e+yzOle5OVL6r8hoUjIOAAwuooP6zC7wfn8bA8rxhdD0sGBZErNkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776217413; c=relaxed/simple;
-	bh=KJ1dmm7JBQS8tm37XInqKorcvhoHPQHM2ZL56cx+0tc=;
+	s=arc-20240116; t=1776225156; c=relaxed/simple;
+	bh=m99qQZ4dx7BtKKpohQv3Y87bczeOuN8Pk/9zrNr5G/Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RNIBaQWIbBPrLt8QwXanN7iAfT/Y0s26bfOWlbKt5b4tICEAEQDCC1VNe0caw/5P9VmzbOxCxh3SWhu3IfapEOtAuf6Ot04EUouKMg0lY5jxcxNlXKPxN+yAHkvCAxdE/0bTBcAGqt1PqYo7fPcXzh9+F0qCy+dsZKiZ6UY8gLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ISGfLv1y; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=d8JNk01G6YXxbj/98kC0DLxqn5Tp2Z1zqEzK04wAgLpz7BgibmfNZR53NFWAHkFu8o/9O7zscSM178NjuGxFxG/1H4lBs++huZ/b48br5aZzq9EO7k0OmL/+9VUubRVV5jN4FWk6mgiEVQ2JxwlDyhvFSHfboSmEyafLtaQSeUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=grq5wOz4; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ISGfLv1y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="grq5wOz4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776217412; x=1807753412;
+  t=1776225153; x=1807761153;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KJ1dmm7JBQS8tm37XInqKorcvhoHPQHM2ZL56cx+0tc=;
-  b=ISGfLv1yhmoO5dILPKqcyW4sfx02z/I8zD/a5eVSZWlpQ4A7fwi0sO4k
-   /MJ/15/vWAnyULGeMhYgGagVFgLSrIVL8+NO8Hzcg76aDVjNxpbkaDyLP
-   q68FvjvXgea0y6IDxlUwgh+xIb2P8leCAnz0qQy3gfXUegnuvOVI5iLST
-   tb6bogdVtv8JmQeHWlGOX5pzMlzuzBRhYzj/XMf8NZdMRYpZb16DT1TCH
-   a2jBCpxLCfOqy44XTM2uqctn4A89WBNGr46rki2yJBNrBxGgq9nTJRC2T
-   +cwRchfmLXl6rjgV0jsRdbNZViCBV7krHI37WZoTeuCHKIIpeWIWbfMks
-   Q==;
-X-CSE-ConnectionGUID: xvbTMuA9RMS2vKSHERlWug==
-X-CSE-MsgGUID: bjhENvbRTNq8QEyLri2toQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="77092853"
+  bh=m99qQZ4dx7BtKKpohQv3Y87bczeOuN8Pk/9zrNr5G/Q=;
+  b=grq5wOz4UKwvSEaY3Ny//gwTL8l7cN9GfL5obi5PLtARk/wBPltwVicb
+   EKt/KHxSQOjIEca4+2Wj6gT9X7XSADNoXqWpAYEhQJ4eHa2976t8xusqX
+   3wk53GMDaYAmRGKkhpFFT1xfZ1v/BmODUSSo0/egnHvI4OEj7L9sVkXME
+   Fa6NbRAPXK9tLUjhKM6Ph6M1VLwVS0bFZ1lh7yCsMFVjbwHadPhdqQ3g5
+   88aCUQCmZv8ZcbWKwttFUJjgW6k0h4M+ecE5zFjEjhRcHNr8HdwvgnSkB
+   g55Ha3o3hrvIFGt80Dm+Wm3iWnaU5fOS0nSWen5kYBi9QkxB6GRzraGsS
+   A==;
+X-CSE-ConnectionGUID: hVIyKJg5Qse6FIknVSZCPQ==
+X-CSE-MsgGUID: KRrtHfH1RKCXN15j900Vlw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="81075962"
 X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="77092853"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 18:43:31 -0700
-X-CSE-ConnectionGUID: xDnDgNgmQHylQE5TEFOqqQ==
-X-CSE-MsgGUID: 0K3ensgWS3ubo6LrqDE3yw==
+   d="scan'208";a="81075962"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 20:52:32 -0700
+X-CSE-ConnectionGUID: Hyw66PRaSJ2o2KSC0fSSww==
+X-CSE-MsgGUID: St9lG8kbRIe3aaTcAhVb/g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="229401197"
-Received: from lkp-server01.sh.intel.com (HELO 7b0b59b3a0d4) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 14 Apr 2026 18:43:28 -0700
-Received: from kbuild by 7b0b59b3a0d4 with local (Exim 4.98.2)
+   d="scan'208";a="225590728"
+Received: from lkp-server01.sh.intel.com (HELO 7f3b36e5d6a5) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 14 Apr 2026 20:52:29 -0700
+Received: from kbuild by 7f3b36e5d6a5 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wCpHp-0000000023N-1IVW;
-	Wed, 15 Apr 2026 01:43:25 +0000
-Date: Wed, 15 Apr 2026 09:43:06 +0800
+	id 1wCrIg-0000000007F-2owl;
+	Wed, 15 Apr 2026 03:52:26 +0000
+Date: Wed, 15 Apr 2026 11:51:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Youling Tang <youling.tang@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>, Jonathan Corbet <corbet@lwn.net>
+To: Maxwell Doose <m32285159@gmail.com>, gregkh@linuxfoundation.org,
+	tsbogend@alpha.franken.de
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>,
-	kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, youling.tang@linux.dev,
-	Youling Tang <tangyouling@kylinos.cn>
-Subject: Re: [PATCH] crash: Support high memory reservation for range syntax
-Message-ID: <202604150941.oDguaP7A-lkp@intel.com>
-References: <20260404074103.506793-1-youling.tang@linux.dev>
+	yoelvisoliveros@gmail.com, len.bao@gmx.us,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev
+Subject: Re: [PATCH] staging: octeon: remove SPI, POW, PKO, and Helper
+ typedef enums
+Message-ID: <202604151159.fZkPsdWl-lkp@intel.com>
+References: <20260412000226.2711800-1-m32285159@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,95 +67,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260404074103.506793-1-youling.tang@linux.dev>
+In-Reply-To: <20260412000226.2711800-1-m32285159@gmail.com>
 
-Hi Youling,
+Hi Maxwell,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v7.0 next-20260414]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on staging/staging-testing]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Youling-Tang/crash-Support-high-memory-reservation-for-range-syntax/20260414-205035
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260404074103.506793-1-youling.tang%40linux.dev
-patch subject: [PATCH] crash: Support high memory reservation for range syntax
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20260415/202604150941.oDguaP7A-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260415/202604150941.oDguaP7A-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Doose/staging-octeon-remove-SPI-POW-PKO-and-Helper-typedef-enums/20260415-004127
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20260412000226.2711800-1-m32285159%40gmail.com
+patch subject: [PATCH] staging: octeon: remove SPI, POW, PKO, and Helper typedef enums
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260415/202604151159.fZkPsdWl-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260415/202604151159.fZkPsdWl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604150941.oDguaP7A-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604151159.fZkPsdWl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   kernel/crash_reserve.c:264:19: warning: expression which evaluates to zero treated as a null pointer constant of type 'char *' [-Wnon-literal-null-conversion]
-     264 |         char *first_gt = false;
-         |                          ^~~~~
->> kernel/crash_reserve.c:324:16: error: use of undeclared identifier 'DEFAULT_CRASH_KERNEL_LOW_SIZE'
-     324 |                         *low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+   In file included from drivers/staging/octeon/ethernet.c:23:
+   In file included from drivers/staging/octeon/octeon-ethernet.h:41:
+>> drivers/staging/octeon/octeon-stubs.h:1270:15: error: use of 'cvmx_helper_interface_mode' with tag type that does not match previous declaration
+    1270 | static inline struct cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
+         |               ^
+   drivers/staging/octeon/octeon-stubs.h:225:6: note: previous use is here
+     225 | enum cvmx_helper_interface_mode {
+         |      ^
+>> drivers/staging/octeon/octeon-stubs.h:1273:9: error: returning 'int' from a function with incompatible result type 'struct (unnamed struct at drivers/staging/octeon/octeon-stubs.h:1270:22)'
+    1273 |         return 0;
+         |                ^
+   2 errors generated.
 
 
-vim +/DEFAULT_CRASH_KERNEL_LOW_SIZE +324 kernel/crash_reserve.c
+vim +/cvmx_helper_interface_mode +1270 drivers/staging/octeon/octeon-stubs.h
 
-   282	
-   283	static int __init __parse_crashkernel(char *cmdline,
-   284				     unsigned long long system_ram,
-   285				     unsigned long long *crash_size,
-   286				     unsigned long long *crash_base,
-   287				     const char *suffix,
-   288				     bool *high,
-   289				     unsigned long long *low_size)
-   290	{
-   291		char *first_colon, *first_space;
-   292		char *ck_cmdline;
-   293		char *name = "crashkernel=";
-   294		unsigned long long boundary = 0;
-   295		int ret;
-   296	
-   297		BUG_ON(!crash_size || !crash_base);
-   298		*crash_size = 0;
-   299		*crash_base = 0;
-   300	
-   301		ck_cmdline = get_last_crashkernel(cmdline, name, suffix);
-   302		if (!ck_cmdline)
-   303			return -ENOENT;
-   304	
-   305		ck_cmdline += strlen(name);
-   306	
-   307		if (suffix)
-   308			return parse_crashkernel_suffix(ck_cmdline, crash_size,
-   309					suffix);
-   310		/*
-   311		 * if the commandline contains a ':', then that's the extended
-   312		 * syntax -- if not, it must be the classic syntax
-   313		 */
-   314		first_colon = strchr(ck_cmdline, ':');
-   315		first_space = strchr(ck_cmdline, ' ');
-   316		if (first_colon && (!first_space || first_colon < first_space)) {
-   317			ret = parse_crashkernel_mem(ck_cmdline, system_ram,
-   318					crash_size, crash_base);
-   319	
-   320			/* Handle optional ',>boundary' condition for range ':' syntax only. */
-   321			parse_crashkernel_boundary(ck_cmdline, &boundary);
-   322			if (!ret && *crash_size > boundary) {
-   323				*high = true;
- > 324				*low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
-   325			}
-   326	
-   327			return ret;
-   328		}
-   329	
-   330		return parse_crashkernel_simple(ck_cmdline, crash_size, crash_base);
-   331	}
-   332	
+  1269	
+> 1270	static inline struct cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
+  1271									   interface)
+  1272	{
+> 1273		return 0;
+  1274	}
+  1275	
 
 -- 
 0-DAY CI Kernel Test Service
