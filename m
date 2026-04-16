@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D4DAD24;
-	Thu, 16 Apr 2026 00:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A55242D6C;
+	Thu, 16 Apr 2026 03:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776297870; cv=none; b=J9yapTDmFa8zZlcbYSKXQ0iqqQVm3ZM2jr2E0rj6wPMVg3ZytWH2PbldwHlQDYYcmv+M0dGwctWm2XpprU02qxKa65S9iRRFBKNXTEAQAyt76GnoAHWaE8B59xbIehcNfY4CzKeIqJTIYJ/e5WYakJxSxHqDBVBC0XxRJqRSXjU=
+	t=1776308724; cv=none; b=nw9VXinCbQTyYqFU0boK6ie8FLcu+IX65ZXwdoiKVboSRtEEBulGxk8dWCb3bvMSmarnghm52qpLDSh0HIMdXC9Z4Fsu0/p9VxPjK9yqZF/tb1Mc6SPpAyUY6ZTT/0KWmIhSXEl0Pzu0oHx20BAc0447DTRIyiUhxfLmGmmVMAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776297870; c=relaxed/simple;
-	bh=FvxlXc3vhZxp3hDkvNzcNi5fSpd44SIr/sXNPDnZnQw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jCF7lEegdvGtMtoNy36P58LHVrsaKYdsj7fmh656mVmZS8Wk6JEArrotH636XhJWJhKfOqwLyYfyeGVtAX/fXOio7eRpOfmxjALxKHNJXx8Z74kcNg8Ie6uLdJ1ZfAMOLdVKfaaHzlST79JeZmy0ur9YApfmDS1c/ib548q2cq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R91O2n3C; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1776308724; c=relaxed/simple;
+	bh=oLlRjTggjSKGCdDYy8mh0XDo852VTrTFEUJ8S01rCTk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Dd8bp0zSeijFJdj56KpOXt2O3xlAbUmelLx7llYRx4y3aE7r7coL+PzUr++Q8l9Q8YgD/0zwTh62Yo7YCcCX6jwxEo+70V/lPwnJR6tlVRPVhBHjvrcg/DvRQtzH2IC75Tfn67DE9CTUZys3Nqzdx03fIZl9/sYsxc/9Jhlhe00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TwyJfxSR; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R91O2n3C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TwyJfxSR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776297867; x=1807833867;
+  t=1776308722; x=1807844722;
   h=date:from:to:cc:subject:message-id;
-  bh=FvxlXc3vhZxp3hDkvNzcNi5fSpd44SIr/sXNPDnZnQw=;
-  b=R91O2n3CbnXFNX1q6ROqDx75xA40JtKcB1HYCIZSpdIRHPUZgAg9EStu
-   LbpyoasFdQUb1cj3zpYUCYgCBb8wSzV3nI5peF6wm60HIM0T0eV+NcUf9
-   ceNnPbzNqguyLK2FAFeiChxBq5TQQB/6e2xm9C1O0v4pnUJUX4S5MsYaI
-   fg/EGjAgtd1B6zfSNGLHKUXhvIXfBpSszP7Iyj0Jzc06EIPhol1dAPdRr
-   ewGI+WdtUlGRi7UgeWpxZiW44eGRVYwUSqtF4ENt2fHnYmefRGDWO5zVM
-   KpGb0XKCdSSmAT/6oBQ/oGKG7niRBbJWnBS8vAvow2tHn+UYlfzKJx9WV
-   A==;
-X-CSE-ConnectionGUID: 1KvyemYzToOZ7Yrfo0vRQQ==
-X-CSE-MsgGUID: CF+tX+L6Qz69k46BztV6eA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11760"; a="76986991"
+  bh=oLlRjTggjSKGCdDYy8mh0XDo852VTrTFEUJ8S01rCTk=;
+  b=TwyJfxSR8AR8Z78EwvBkuTkNsb1QgN+Ipn1kzxJeLl/QIpqyYA2YYUIC
+   AC+OviMazNCTvZ3AnNsQzKalz1lcmxfwzU9HTDjayWmuUCRhH++pInbKQ
+   v6Wkz/b+qI5KdRaLYBaVYN3XxqylSkIvz5Pnmxitf6swE5bKebvbXAYrN
+   btMkGl7p1jS2HemG7H7ybHXzc7+g6No30J0Z86zk+Nd+JZOroqBVCVaP7
+   l4FTlp8k0019PMSqFPAcP8iQNY9CniTzgwJ0ebTadVuZkzJEtHBw3J8uf
+   zuTbW7+rumy0bjGAGB1CMTXjcK5EZJKhoaYnVIh4laYFrpNHR4PMspHq7
+   g==;
+X-CSE-ConnectionGUID: eTHQ/33VTxS0lWu+zVC8fQ==
+X-CSE-MsgGUID: fnOTRcd3TX+ntGowKnnYHA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11760"; a="87602010"
 X-IronPort-AV: E=Sophos;i="6.23,181,1770624000"; 
-   d="scan'208";a="76986991"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2026 17:04:27 -0700
-X-CSE-ConnectionGUID: IdgaC2bMS0iV+KIStGalCg==
-X-CSE-MsgGUID: MZmphOkDQ0mWnmCNaiKPkA==
+   d="scan'208";a="87602010"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2026 20:05:20 -0700
+X-CSE-ConnectionGUID: QTvpotYRRqGR7rMmBoQ6hw==
+X-CSE-MsgGUID: ylI335nnSi+jl2U5PyKpkA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,181,1770624000"; 
-   d="scan'208";a="226248411"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by fmviesa010.fm.intel.com with ESMTP; 15 Apr 2026 17:04:25 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+   d="scan'208";a="230534856"
+Received: from lkp-server01.sh.intel.com (HELO 7f3b36e5d6a5) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 15 Apr 2026 20:05:19 -0700
+Received: from kbuild by 7f3b36e5d6a5 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wDADX-000000000rq-3dFG;
-	Thu, 16 Apr 2026 00:04:23 +0000
-Date: Thu, 16 Apr 2026 02:03:52 +0200
+	id 1wDD2Z-000000001E8-3ztT;
+	Thu, 16 Apr 2026 03:05:15 +0000
+Date: Thu, 16 Apr 2026 11:04:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Amery Hung <ameryhung@gmail.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: net/core/bpf_sk_storage.c:140:57: error: too many arguments
- to function call, expected 4, have 5
-Message-ID: <202604160220.9glH3zwm-lkp@intel.com>
+ linux-kernel@vger.kernel.org
+Subject: crypto/hmac.c:251:12: warning: stack frame size (1152)
+ exceeds limit (1024) in 'hmac_setkey_ahash'
+Message-ID: <202604161035.PMTaI4Cg-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,72 +60,87 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Amery-Hung/selftests-bpf-Remove-kmalloc-tracing-from-local-storage-create-bench/20260415-163526
-head:   22bd953a5faeea8dd0780f885b234d987745e31b
-commit: 22bd953a5faeea8dd0780f885b234d987745e31b bpf: Remove gfp_flags plumbing from bpf_local_storage_update()
-date:   15 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260416/202604160220.9glH3zwm-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260416/202604160220.9glH3zwm-lkp@intel.com/reproduce)
+Hi Herbert,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9e1e9d660255d7216067193d774f338d08d8528d
+commit: c3103416d5217655d707d9417aaf66f184e3d72f crypto: hmac - Add ahash support
+date:   11 months ago
+config: mips-eyeq6_defconfig (https://download.01.org/0day-ci/archive/20260416/202604161035.PMTaI4Cg-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260416/202604161035.PMTaI4Cg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
+| Fixes: c3103416d521 ("crypto: hmac - Add ahash support")
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604160220.9glH3zwm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604161035.PMTaI4Cg-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/core/bpf_sk_storage.c:140:57: error: too many arguments to function call, expected 4, have 5
-     140 |         copy_selem = bpf_selem_alloc(smap, newsk, NULL, false, GFP_ATOMIC);
-         |                      ~~~~~~~~~~~~~~~                           ^~~~~~~~~~
-   include/linux/gfp_types.h:376:20: note: expanded from macro 'GFP_ATOMIC'
-     376 | #define GFP_ATOMIC      (__GFP_HIGH|__GFP_KSWAPD_RECLAIM)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf_local_storage.h:190:1: note: 'bpf_selem_alloc' declared here
-     190 | bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner, void *value,
-         | ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     191 |                 bool swap_uptrs);
-         |                 ~~~~~~~~~~~~~~~
-   net/core/bpf_sk_storage.c:205:59: error: too many arguments to function call, expected 3, have 4
-     205 |                         ret = bpf_local_storage_alloc(newsk, smap, copy_selem, GFP_ATOMIC);
-         |                               ~~~~~~~~~~~~~~~~~~~~~~~                          ^~~~~~~~~~
-   include/linux/gfp_types.h:376:20: note: expanded from macro 'GFP_ATOMIC'
-     376 | #define GFP_ATOMIC      (__GFP_HIGH|__GFP_KSWAPD_RECLAIM)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bpf_local_storage.h:197:1: note: 'bpf_local_storage_alloc' declared here
-     197 | bpf_local_storage_alloc(void *owner,
-         | ^                       ~~~~~~~~~~~~
-     198 |                         struct bpf_local_storage_map *smap,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     199 |                         struct bpf_local_storage_elem *first_selem);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> crypto/hmac.c:251:12: warning: stack frame size (1152) exceeds limit (1024) in 'hmac_setkey_ahash' [-Wframe-larger-than]
+     251 | static int hmac_setkey_ahash(struct crypto_ahash *parent,
+         |            ^
+   1 warning generated.
 
 
-vim +140 net/core/bpf_sk_storage.c
+vim +/hmac_setkey_ahash +251 crypto/hmac.c
 
-6ac99e8f23d4b1 Martin KaFai Lau        2019-04-26  132  
-1f00d375af84fb KP Singh                2020-08-25  133  static struct bpf_local_storage_elem *
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  134  bpf_sk_storage_clone_elem(struct sock *newsk,
-1f00d375af84fb KP Singh                2020-08-25  135  			  struct bpf_local_storage_map *smap,
-1f00d375af84fb KP Singh                2020-08-25  136  			  struct bpf_local_storage_elem *selem)
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  137  {
-1f00d375af84fb KP Singh                2020-08-25  138  	struct bpf_local_storage_elem *copy_selem;
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  139  
-0e854e55356908 Amery Hung              2025-11-14 @140  	copy_selem = bpf_selem_alloc(smap, newsk, NULL, false, GFP_ATOMIC);
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  141  	if (!copy_selem)
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  142  		return NULL;
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  143  
-db559117828d24 Kumar Kartikeya Dwivedi 2022-11-04  144  	if (btf_record_has_field(smap->map.record, BPF_SPIN_LOCK))
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  145  		copy_map_value_locked(&smap->map, SDATA(copy_selem)->data,
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  146  				      SDATA(selem)->data, true);
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  147  	else
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  148  		copy_map_value(&smap->map, SDATA(copy_selem)->data,
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  149  			       SDATA(selem)->data);
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  150  
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  151  	return copy_selem;
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  152  }
-8f51dfc73bf181 Stanislav Fomichev      2019-08-14  153  
+   250	
+ > 251	static int hmac_setkey_ahash(struct crypto_ahash *parent,
+   252				     const u8 *inkey, unsigned int keylen)
+   253	{
+   254		struct ahash_hmac_ctx *tctx = crypto_ahash_ctx(parent);
+   255		struct crypto_ahash *fb = crypto_ahash_fb(tctx->hash);
+   256		int ds = crypto_ahash_digestsize(parent);
+   257		int bs = crypto_ahash_blocksize(parent);
+   258		int ss = crypto_ahash_statesize(parent);
+   259		HASH_REQUEST_ON_STACK(req, fb);
+   260		u8 *opad = &tctx->pads[ss];
+   261		u8 *ipad = &tctx->pads[0];
+   262		int err, i;
+   263	
+   264		if (fips_enabled && (keylen < 112 / 8))
+   265			return -EINVAL;
+   266	
+   267		ahash_request_set_callback(req, 0, NULL, NULL);
+   268	
+   269		if (keylen > bs) {
+   270			ahash_request_set_virt(req, inkey, ipad, keylen);
+   271			err = crypto_ahash_digest(req);
+   272			if (err)
+   273				goto out_zero_req;
+   274	
+   275			keylen = ds;
+   276		} else
+   277			memcpy(ipad, inkey, keylen);
+   278	
+   279		memset(ipad + keylen, 0, bs - keylen);
+   280		memcpy(opad, ipad, bs);
+   281	
+   282		for (i = 0; i < bs; i++) {
+   283			ipad[i] ^= HMAC_IPAD_VALUE;
+   284			opad[i] ^= HMAC_OPAD_VALUE;
+   285		}
+   286	
+   287		ahash_request_set_virt(req, ipad, NULL, bs);
+   288		err = crypto_ahash_init(req) ?:
+   289		      crypto_ahash_update(req) ?:
+   290		      crypto_ahash_export(req, ipad);
+   291	
+   292		ahash_request_set_virt(req, opad, NULL, bs);
+   293		err = err ?:
+   294		      crypto_ahash_init(req) ?:
+   295		      crypto_ahash_update(req) ?:
+   296		      crypto_ahash_export(req, opad);
+   297	
+   298	out_zero_req:
+   299		HASH_REQUEST_ZERO(req);
+   300		return err;
+   301	}
+   302	
 
 -- 
 0-DAY CI Kernel Test Service
