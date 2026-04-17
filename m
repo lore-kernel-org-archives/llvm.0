@@ -1,183 +1,190 @@
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02ECC3A7F58
-	for <llvm@lists.linux.dev>; Fri, 17 Apr 2026 09:11:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776417109; cv=pass; b=LxzJjVwsbf8yTltaUyjJyyqsUiL8+qADxFOMrIVPZ9GnsFUwhNa+bHzdxrea2he1SZIH2LmtKAxknSpS/N7dmK9+XGMYqVG0DQHR520m4K7BHQW6zR0d+Azu3kithRz6hwptr42wwlFXheSPfKUrs+9a+hKPRX7zMQhTXGoY09E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776417109; c=relaxed/simple;
-	bh=hZqD33S6TaBeP1U8RwrHN4MgbX19/ibIMOcdz9Suo8U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sTWIezovP94FQgVv7IfCk4XyDWue3cROIb4M0IfGgLhC8gLLPIbNxrUQX1k9kPUmW0dXuAh3uFDWnKQmL4qprYg88zIGv44uZZYCetb8t4vpppPpwZT4tzN/B7tPEgy7kIAztBFGMHCxUe24INnM9/JDwKiCiLtBcoQ4DDsKbGc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q0p7Tq9m; arc=pass smtp.client-ip=74.125.224.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F4A3A4F20;
+	Fri, 17 Apr 2026 10:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776420818; cv=none; b=O7mzN6GTPf78/iJO8Nw9tU3+cz8tOkOh5FBQZx0x6ThZxtyXj/6FKLmRaqZQGyGiBk6WxUmP8slOSYqmteOf/43ladrhqBfxPiHf6BmyhhacSX+gL5KsolHzHM4SThR8Ok/y6C3ynX+fsVn1G/xKT1hetsuoZvJeAsly6/82AeE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776420818; c=relaxed/simple;
+	bh=VAJ2uGIyyrwmwqczusVqnrbguGnUeUQxNaqRqcRW/tA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=kHCl7wRLQsewhxuXJYtpmfAqFVkI/EK6XuLPOWXaJD3ZuCf9Kf6+ShNlGmZE32JxXDCRy+UbXaDXccK569uXmswcq4p7N7FQB1CX+TNZga6Rke9cGA4LY0v/R6Mole5v4O18fdgouXiXF9UShvJtqZRWQ0cNDUA5MKTW9qgJxMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AG0QSqhW; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q0p7Tq9m"
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-651c5d525f6so448478d50.3
-        for <llvm@lists.linux.dev>; Fri, 17 Apr 2026 02:11:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776417107; cv=none;
-        d=google.com; s=arc-20240605;
-        b=I30VOln8+Yzt99JPeY0y8UizPgCXheSd8ntRE95vItCc0QiosMrIkXhrNT85JoDtW0
-         RvktnAwkpv3eWkTFmb2i0LDgXbLpetRzWN++AUc63GtkyyedT/p9GxWwG8OnrA+ythJu
-         ZmTMsUFSGjv91kuzUFIHaF6sfFoGwZT3w9rzwGbfmIm3jPKOjOhkAM8Y0MQqE3LKeb1R
-         4/9yUu6zj9EE5If/hUwMuwZKDh+tIUtl0WmIrGk8mG1Km75IdfZYZg159nncNnU6sSL6
-         KwleJ2a+84w4LP2xV4qynDIxPOYbWkxXpcox3GOq2a3UERGuiMXEDrCMybnZry22BqEJ
-         FOQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ZZNEHLjnCSi0dTY0sR3/yoFnjW7rryZybDVgQX7Z80k=;
-        fh=Ruf922XaQRGcOhYHBxlVdRi0UwppxaDHwerbadW0dqc=;
-        b=lgnBCKG2LZaAQQq8rjDoNmW1hnanlaQa5i1Ki+eRCeS35ap1JmeZEGRE1wLex/DLuo
-         5oDtniXaEr7ppwPnOXLVu5figtWjmPEPcs8qgeeaNCuburu6l/2ceSiQItApKChXhLSM
-         NiZpBBdJJxsOS6Gq40vtSrnN7LIYU5gd359PB1VOqcBLdOadF+BNsLULscTqCTQkv44Z
-         APtAzedaOrP87EKHjGYpeG5xKEGNp6ngcrlyjIsln/TxddNHi72aSVDUaKlVujqmCKQt
-         c6YVxFGkDXeE93vqLnzCI3E0nIox1WC+XBM7ImEseevCiX+yL83Qe76K0LilEN1xJMN8
-         lIEg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776417107; x=1777021907; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZNEHLjnCSi0dTY0sR3/yoFnjW7rryZybDVgQX7Z80k=;
-        b=Q0p7Tq9mcKbWehC7s+FDYhZMZMNDgpkJUxm5V5Piq8V8c5Ft4gX+9yVEUbSOLkd4rD
-         LzVQ5sQn75MXCDV202YItEgRWMsxMwiY+7FJpctz3E6LXlk1l8ZAz9NGe0+KYW0/VMAe
-         eqTkq15DNNGTwGTtEoBn4YhoLNh2l8ySwQjOJtnzqEgHzWT5TZpAyCr18qMcLGwrUK4w
-         Ui/rUTdbHyJV64go0bvjXXVaoHneH/AN64bHH9xInE+okIlZpkTI8gEXOtIVA4/tctIW
-         qR4gWexs9DZ6h5fbh8nJKyr1p2FYDkLP0aVGJOHT5hpAJC596i0UQB6i1H2AN3cztpAV
-         Sofg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776417107; x=1777021907;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZZNEHLjnCSi0dTY0sR3/yoFnjW7rryZybDVgQX7Z80k=;
-        b=Obd6VPoYL4YCO5DYNUiwihvO4d9Y1P1uhUW7kBcY3Eik2VloAqBchBv47OVlhkn89i
-         uveNA3EQxtohJ8fRNlH4flk0HZhfg98brgtcazO3JWKgc/nSEfPSPMcYVgq5tm4pnNLF
-         yqjY4pOWqXPCnW9lVI9JnEI/TUCnBs2qxZNw6HPyyVrEvqOhGi7kpr5bcNnZX3tlsuTK
-         bsHuz0vQH3lyg/SCRV2Id1nK+Wn0kSnCfMP7yjtiInSw1YkRWHS3PeHi4rIi334z2HfI
-         Xllubtyjyy3gmBOXliNpF+NT0IAgAJbsTrM4C4UZ1+5NM83cLQvlrbjNGPsB6j4u3s5x
-         63Vw==
-X-Forwarded-Encrypted: i=1; AFNElJ96XY3S2c3nCbI8qPHNVSKGtpPSf/KFlGPIpIadadUes2PqkMhRgBeLVybkl8sfz0M/ukpQ@lists.linux.dev
-X-Gm-Message-State: AOJu0YwJ2mABmOACl71I1GzLTiAi/OB6QROF7j49SVHuZ5ZCHZoqSZbj
-	abAW6JphHI6Vz47LLB9I0BSVX0Tj1vvLK4w8nvPpZrilgnnNZPJEyUhzMZEnc74EPjrJw0ueSaj
-	YhWkyQ7uis6MUp13Dx7SGh9WY4mcc59k=
-X-Gm-Gg: AeBDieu6otY/tWjLubOmNHDdiTjdnV4CEhmkd6TUynvQiVvSO+Yv2rjLv7wwIoo4fMU
-	wb7kIcIipMl10ye/X8osIZ4bhvnIF8KmIu9ojl2AcFRj5bYh6Wpanjjo8PuDgiigrw9GGIysdKw
-	GHnOgaGHUWZ38NsB9LGe7hK5DadBTiQld3GU9flwztZXz2yks8ZVKDxN5qnH/yirQo3CJGLzADW
-	tZ+TgNAAHu/hHiLl+M6PQTDEw/kBXZ6Fjdty/4QGtOTBBtD+/97QKPfRm7ZD3eGwdwxrNa8D/pQ
-	gTd5YNuvxESg2LvOpvpO
-X-Received: by 2002:a05:690e:130e:b0:651:d634:6d32 with SMTP id
- 956f58d0204a3-6531085f25cmr1805344d50.20.1776417106750; Fri, 17 Apr 2026
- 02:11:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AG0QSqhW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776420811; x=1807956811;
+  h=date:from:to:cc:subject:message-id;
+  bh=VAJ2uGIyyrwmwqczusVqnrbguGnUeUQxNaqRqcRW/tA=;
+  b=AG0QSqhWZ2MGNN7IP41yePcQyOL/n5xylvdRq0OOhfxpo/yzd66T7SCj
+   dKXdDwxBcrRbZ6hv2WbYO0r2yrgS/JV0CHuWS99bo6STXjVMpy9pcyKDV
+   nKka85p5fxk5g8ovaWjxJFiPyOHnvpa9yEbajUX3xZY9FXzhTTZETv2cY
+   v80BNX5lOjyaP4Z4qOyM9xRWEGiFCeR7iQ7jqaO7uBerlkPiy3at+eDGa
+   rdckh63t/8kWzbqP+k7iVrKSEJuYpcBPofpNy7VF5vY2MPOwT/ASJCMzt
+   w9tbr9iTLD9XHa+D9wItUG/bcIhGvFFEz+7VThMPxaS8ZNuHEnirzhZCG
+   w==;
+X-CSE-ConnectionGUID: ECAcBqeXTeCmo9EW7qC3bA==
+X-CSE-MsgGUID: Lb0/vwH6RouPhJAeDo9wkQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11761"; a="88507964"
+X-IronPort-AV: E=Sophos;i="6.23,184,1770624000"; 
+   d="scan'208";a="88507964"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2026 03:13:30 -0700
+X-CSE-ConnectionGUID: X5ffpt5kSQi/bTCnth1X3A==
+X-CSE-MsgGUID: EE78naG4TFKbtWtIB5l/9A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,184,1770624000"; 
+   d="scan'208";a="269021647"
+Received: from lkp-server01.sh.intel.com (HELO 7e48d0ff8e22) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 17 Apr 2026 03:13:28 -0700
+Received: from kbuild by 7e48d0ff8e22 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wDgCT-000000000Dt-14iX;
+	Fri, 17 Apr 2026 10:13:25 +0000
+Date: Fri, 17 Apr 2026 18:12:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sean-jc:svm/rewrite_dbg_cmds 3/5]
+ arch/x86/kvm/svm/sev.c:1968:20: error: incompatible pointer types passing
+ 'struct page *' to parameter of type 'struct page **'; take the address with
+ &
+Message-ID: <202604171836.TgNX7ADT-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260415175038.3633384-1-lgs201920130244@gmail.com> <202604171609.wl8JLCit-lkp@intel.com>
-In-Reply-To: <202604171609.wl8JLCit-lkp@intel.com>
-From: Guangshuo Li <lgs201920130244@gmail.com>
-Date: Fri, 17 Apr 2026 17:11:36 +0800
-X-Gm-Features: AQROBzCVBYydseR7J8ekLAtPw3aL9_q0Qe5MzF8i8S3g1XrJyVxsBCHjMaTpGHI
-Message-ID: <CANUHTR8SyfZouETXFpDv4ivzin+DC8OTDYhbSQ1cRaoNqYPduA@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: fix reference leak on failed device registration
-To: kernel test robot <lkp@intel.com>
-Cc: Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Olof Johansson <olof@lixom.net>, chrome-platform@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hi Sean,
 
-On Fri, 17 Apr 2026 at 16:47, kernel test robot <lkp@intel.com> wrote:
->
-> Hi Guangshuo,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on chrome-platform/for-next]
-> [also build test ERROR on chrome-platform/for-firmware-next linus/master v7.0 next-20260416]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Guangshuo-Li/platform-chrome-fix-reference-leak-on-failed-device-registration/20260416-135638
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
-> patch link:    https://lore.kernel.org/r/20260415175038.3633384-1-lgs201920130244%40gmail.com
-> patch subject: [PATCH] platform/chrome: fix reference leak on failed device registration
-> config: x86_64-randconfig-013-20260417 (https://download.01.org/0day-ci/archive/20260417/202604171609.wl8JLCit-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260417/202604171609.wl8JLCit-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202604171609.wl8JLCit-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> drivers/platform/chrome/chromeos_pstore.c:131:3: error: use of undeclared identifier 'ret'
->      131 |                 ret = platform_device_register(&chromeos_ramoops);
->          |                 ^
->    drivers/platform/chrome/chromeos_pstore.c:132:7: error: use of undeclared identifier 'ret'
->      132 |                 if (ret)
->          |                     ^
->    drivers/platform/chrome/chromeos_pstore.c:135:10: error: use of undeclared identifier 'ret'
->      135 |                 return ret;
->          |                        ^
->    3 errors generated.
->
->
-> vim +/ret +131 drivers/platform/chrome/chromeos_pstore.c
->
->    119
->    120  static int __init chromeos_pstore_init(void)
->    121  {
->    122          bool acpi_dev_found;
->    123
->    124          if (ecc_size > 0)
->    125                  chromeos_ramoops_data.ecc_info.ecc_size = ecc_size;
->    126
->    127          /* First check ACPI for non-hardcoded values from firmware. */
->    128          acpi_dev_found = chromeos_check_acpi();
->    129
->    130          if (acpi_dev_found || dmi_check_system(chromeos_pstore_dmi_table)) {
->  > 131                  ret = platform_device_register(&chromeos_ramoops);
->    132                  if (ret)
->    133                          platform_device_put(&chromeos_ramoops);
->    134
->    135                  return ret;
->    136          }
->    137
->    138          return -ENODEV;
->    139  }
->    140
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Yes, the build error is because in the first version I accidentally
-forgot to declare the local variable ret in chromeos_pstore_init().
+tree:   https://github.com/sean-jc/linux svm/rewrite_dbg_cmds
+head:   1355c91eb47e8bea0a1addb82d3a7aed3288a5a3
+commit: d730a1d766569b0ab715eb4cfb175ccd64b2e570 [3/5] KVM: SEV: Add helper function to pin/unpin a single page
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260417/202604171836.TgNX7ADT-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260417/202604171836.TgNX7ADT-lkp@intel.com/reproduce)
 
-Sorry for the oversight, and thanks for the report.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604171836.TgNX7ADT-lkp@intel.com/
 
-Also, the underlying issue here appears to be related to the
-platform_device_register() core/API behavior. We are currently
-discussing in another similar case whether the better fix, if any,
-should be made in the core/API code rather than in individual callers:
+All error/warnings (new ones prefixed by >>):
 
-https://patchew.org/linux/20260415174159.3625777-1-lgs201920130244@gmail.com/
+>> arch/x86/kvm/svm/sev.c:1742:16: warning: unused variable 'n' [-Wunused-variable]
+    1742 |         unsigned long n;
+         |                       ^
+>> arch/x86/kvm/svm/sev.c:1968:20: error: incompatible pointer types passing 'struct page *' to parameter of type 'struct page **'; take the address with & [-Werror,-Wincompatible-pointer-types]
+    1968 |         sev_clflush_pages(guest_page, n);
+         |                           ^~~~~~~~~~
+         |                           &
+   arch/x86/kvm/svm/sev.c:837:44: note: passing argument to parameter 'pages' here
+     837 | static void sev_clflush_pages(struct page *pages[], unsigned long npages)
+         |                                            ^
+   arch/x86/kvm/svm/sev.c:1968:32: warning: variable 'n' is uninitialized when used here [-Wuninitialized]
+    1968 |         sev_clflush_pages(guest_page, n);
+         |                                       ^
+   arch/x86/kvm/svm/sev.c:1920:17: note: initialize the variable 'n' to silence this warning
+    1920 |         unsigned long n;
+         |                        ^
+         |                         = 0
+   2 warnings and 1 error generated.
 
-Once that discussion reaches a conclusion, we will revisit this and
-make the appropriate fix if needed.
 
-Thanks,
-Guangshuo
+vim +1968 arch/x86/kvm/svm/sev.c
+
+af43cbbf954b50 Brijesh Singh       2021-04-15  1913  
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1914  static int sev_receive_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1915  {
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1916  	struct kvm_sev_receive_update_data params;
+238eca821cee90 Sean Christopherson 2021-04-06  1917  	struct sev_data_receive_update_data data;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1918  	void *hdr = NULL, *trans = NULL;
+d730a1d766569b Sean Christopherson 2026-04-16  1919  	struct page *guest_page;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1920  	unsigned long n;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1921  	int ret, offset;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1922  
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1923  	if (!sev_guest(kvm))
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1924  		return -EINVAL;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1925  
+1ab157ce573f5a Paolo Bonzini       2024-02-26  1926  	if (copy_from_user(&params, u64_to_user_ptr(argp->data),
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1927  			sizeof(struct kvm_sev_receive_update_data)))
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1928  		return -EFAULT;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1929  
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1930  	if (!params.hdr_uaddr || !params.hdr_len ||
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1931  	    !params.guest_uaddr || !params.guest_len ||
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1932  	    !params.trans_uaddr || !params.trans_len)
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1933  		return -EINVAL;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1934  
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1935  	/* Check if we are crossing the page boundary */
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1936  	offset = params.guest_uaddr & (PAGE_SIZE - 1);
+f94f053aa3a5d6 Peter Gonda         2023-02-07  1937  	if (params.guest_len > PAGE_SIZE || (params.guest_len + offset) > PAGE_SIZE)
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1938  		return -EINVAL;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1939  
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1940  	hdr = psp_copy_user_blob(params.hdr_uaddr, params.hdr_len);
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1941  	if (IS_ERR(hdr))
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1942  		return PTR_ERR(hdr);
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1943  
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1944  	trans = psp_copy_user_blob(params.trans_uaddr, params.trans_len);
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1945  	if (IS_ERR(trans)) {
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1946  		ret = PTR_ERR(trans);
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1947  		goto e_free_hdr;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1948  	}
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1949  
+238eca821cee90 Sean Christopherson 2021-04-06  1950  	memset(&data, 0, sizeof(data));
+238eca821cee90 Sean Christopherson 2021-04-06  1951  	data.hdr_address = __psp_pa(hdr);
+238eca821cee90 Sean Christopherson 2021-04-06  1952  	data.hdr_len = params.hdr_len;
+238eca821cee90 Sean Christopherson 2021-04-06  1953  	data.trans_address = __psp_pa(trans);
+238eca821cee90 Sean Christopherson 2021-04-06  1954  	data.trans_len = params.trans_len;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1955  
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1956  	/* Pin guest memory */
+d730a1d766569b Sean Christopherson 2026-04-16  1957  	guest_page = sev_pin_page(kvm, params.guest_uaddr & PAGE_MASK, FOLL_WRITE);
+c7a1b2b678c54a Sean Christopherson 2021-05-06  1958  	if (IS_ERR(guest_page)) {
+c7a1b2b678c54a Sean Christopherson 2021-05-06  1959  		ret = PTR_ERR(guest_page);
+238eca821cee90 Sean Christopherson 2021-04-06  1960  		goto e_free_trans;
+c7a1b2b678c54a Sean Christopherson 2021-05-06  1961  	}
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1962  
+c8c340a9b4149f Masahiro Kozuka     2021-09-14  1963  	/*
+c8c340a9b4149f Masahiro Kozuka     2021-09-14  1964  	 * Flush (on non-coherent CPUs) before RECEIVE_UPDATE_DATA, the PSP
+c8c340a9b4149f Masahiro Kozuka     2021-09-14  1965  	 * encrypts the written data with the guest's key, and the cache may
+c8c340a9b4149f Masahiro Kozuka     2021-09-14  1966  	 * contain dirty, unencrypted data.
+c8c340a9b4149f Masahiro Kozuka     2021-09-14  1967  	 */
+c8c340a9b4149f Masahiro Kozuka     2021-09-14 @1968  	sev_clflush_pages(guest_page, n);
+c8c340a9b4149f Masahiro Kozuka     2021-09-14  1969  
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1970  	/* The RECEIVE_UPDATE_DATA command requires C-bit to be always set. */
+d730a1d766569b Sean Christopherson 2026-04-16  1971  	data.guest_address = page_to_phys(guest_page) + offset;
+238eca821cee90 Sean Christopherson 2021-04-06  1972  	data.guest_address |= sev_me_mask;
+238eca821cee90 Sean Christopherson 2021-04-06  1973  	data.guest_len = params.guest_len;
+8a01902a016824 Nikunj A Dadhania   2025-01-23  1974  	data.handle = to_kvm_sev_info(kvm)->handle;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1975  
+238eca821cee90 Sean Christopherson 2021-04-06  1976  	ret = sev_issue_cmd(kvm, SEV_CMD_RECEIVE_UPDATE_DATA, &data,
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1977  				&argp->error);
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1978  
+d730a1d766569b Sean Christopherson 2026-04-16  1979  	sev_unpin_page(kvm, guest_page);
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1980  
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1981  e_free_trans:
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1982  	kfree(trans);
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1983  e_free_hdr:
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1984  	kfree(hdr);
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1985  
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1986  	return ret;
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1987  }
+15fb7de1a7f5af Brijesh Singh       2021-04-15  1988  
+
+:::::: The code at line 1968 was first introduced by commit
+:::::: c8c340a9b4149fe5caa433f3b62463a1c8e07a46 KVM: SEV: Flush cache on non-coherent systems before RECEIVE_UPDATE_DATA
+
+:::::: TO: Masahiro Kozuka <masa.koz@kozuka.jp>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
