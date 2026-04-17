@@ -1,261 +1,143 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE712116F4
-	for <llvm@lists.linux.dev>; Fri, 17 Apr 2026 01:53:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91269BE5E;
+	Fri, 17 Apr 2026 02:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776390832; cv=none; b=IfOc+NZ2/MaM2LoJo9vSsopo5H1xF0IlGwdqpuThRTDST5C4ccJSIVtUZBc0HIgD1d5NET/6aM/FCY0iViguvI+URCtJmKxEg8UzGHi6Q9hztBicMO5gFshHxwTdZLpl18dIGW2ZkkoebIPRcifm+bsuOD41HAwTJStgPynBeoc=
+	t=1776392748; cv=none; b=WG8VGpnsBysOZBdvhfCSsbR3U700jIc53WptzjzX4Y6CsSK64/AvqontoqWbiuHJcjVf0qRKq0w1CwmqRBNvOFFGzq9AeQ22V8ayziMoweQchLxMaTAetNCSuMTgUCjLc5SFKG+lr4DMrDZzPPwdEK9RqYjkjLTNfQomsWXeKT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776390832; c=relaxed/simple;
-	bh=lL1fIYuHJdnxaEpGoyqD6hEpMyPEgADxhU5LLkKP4p8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pcz07vaP4uawVfHv4L1jcGNqyhkpMcsIBdJzHJNopK88M7bfoEPzKEeukQAsXI/VZwIc/gUpBdZVYXY1jv3hu8cAawyA2u0GN+ygQg508nKoTCKzL9WQsSXmPbBQJGMLt8SDYyTtxPyio4215NtsoQcUBj1hH32Q5Kkir5rhdXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fxdDy0VGCzYQtny
-	for <llvm@lists.linux.dev>; Fri, 17 Apr 2026 09:52:50 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id B5DEB40570
-	for <llvm@lists.linux.dev>; Fri, 17 Apr 2026 09:53:38 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP1 (Coremail) with SMTP id cCh0CgDniwafkuFpYd25Ag--.52386S2;
-	Fri, 17 Apr 2026 09:53:36 +0800 (CST)
-Message-ID: <7c6754bf-c544-4c27-bf7c-71b989f75273@huaweicloud.com>
-Date: Fri, 17 Apr 2026 09:53:34 +0800
+	s=arc-20240116; t=1776392748; c=relaxed/simple;
+	bh=mqZMr7mND8Q7gr/+k8exlXGf8usetvwdASnU+KuASgo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=V3QQ8/11Bpr0eUWSl0MhjhS6bTx4O4yb2mn54TlDqpKIUy67Gm44UYD++llDHAXPuRcXLxTO1R/hdHvLnU2oeePbNersbtGaVflBUHsCMxbs+CbMC9e+e3l69JK+xshKt4lGDjKT9UD8bUsEdTwa0fuqi/GeKP1/toRe7hq1miI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h3bVTH4A; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h3bVTH4A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776392746; x=1807928746;
+  h=date:from:to:cc:subject:message-id;
+  bh=mqZMr7mND8Q7gr/+k8exlXGf8usetvwdASnU+KuASgo=;
+  b=h3bVTH4A8w2YaRbbly4xOQfdHpmIjqlQh0CgdfRqrwAOCyJkseBVRAFx
+   N61LEv5TA4FCjbxlyg+B8WZkjGCQ2C6ViYLHDJqIOTW4r88rLMFYXn2Ck
+   RJYlZGcda94k1eY0P+9NG5o3+/kyxRZfJeHNX0PRlhzDcmrVF8Tr7MUDl
+   7RFqPIedYyf+KFLG63kq3nK/P+tKLPr9pFagSR5Rode4p/1dCGZiwXdyv
+   Dx/5IOVpKQVolwusy4tr00ugBrWs02+zlDSQ5OaZKZiOtjWY3Zw+aLmx3
+   eDEqXvawaItyIkeEN6GMtx73nSrl264w8+YmtwIMBtxSLR+1N+YA+g1AR
+   Q==;
+X-CSE-ConnectionGUID: 1nkuZozZQJ6zuDTuVFVEWw==
+X-CSE-MsgGUID: WOCRXagNQtCIEkhw6rUGxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11761"; a="77382962"
+X-IronPort-AV: E=Sophos;i="6.23,183,1770624000"; 
+   d="scan'208";a="77382962"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2026 19:25:46 -0700
+X-CSE-ConnectionGUID: d2pw5H6OTsC7UV6bxsZDyw==
+X-CSE-MsgGUID: /0vDbN01Q6KOQWEdkoBlSg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,183,1770624000"; 
+   d="scan'208";a="226218678"
+Received: from lkp-server01.sh.intel.com (HELO 7f3b36e5d6a5) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 16 Apr 2026 19:25:44 -0700
+Received: from kbuild by 7f3b36e5d6a5 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wDYtp-000000002F8-4BoJ;
+	Fri, 17 Apr 2026 02:25:42 +0000
+Date: Fri, 17 Apr 2026 10:25:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leon Romanovsky <leonro@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [leon-rdma:create-cq-entries-v1 12/16]
+ drivers/infiniband/hw/bnxt_re/ib_verbs.c:3460:30: warning: unused variable
+ 'dev_attr'
+Message-ID: <202604171039.4AqHMhkZ-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/16] perf arm64: Support data type profiling
-To: James Clark <james.clark@linaro.org>
-Cc: Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Peter Zijlstra <peterz@infradead.org>,
- Namhyung Kim <namhyung@kernel.org>, leo.yan@linux.dev,
- Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
- Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>
-References: <20260403094800.1418825-1-wutengda@huaweicloud.com>
- <55fde39f-36b4-44b4-bb9f-4179c6d2d066@linaro.org>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <55fde39f-36b4-44b4-bb9f-4179c6d2d066@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgDniwafkuFpYd25Ag--.52386S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxKF1fGr1UWr45tF4DAF15XFb_yoWfZw18pF
-	s3try7JrWUGr1ktr17Jr4UXry5Jr4UJw1UGr18JFy8Jr4UAr1jqr47Xr10gFy7GrWxAr1U
-	Jr1Utr1UZr1UJr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git create-cq-entries-v1
+head:   7f01f0ec98626108c0c8664dbbadac6789903051
+commit: c01b77c634fd7d0bce3baf6c8d6663ef3a13c224 [12/16] RDMA/bnxt_re: Rely on core to validate CQE count
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260417/202604171039.4AqHMhkZ-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260417/202604171039.4AqHMhkZ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604171039.4AqHMhkZ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/infiniband/hw/bnxt_re/ib_verbs.c:3460:30: warning: unused variable 'dev_attr' [-Wunused-variable]
+    3460 |         struct bnxt_qplib_dev_attr *dev_attr = rdev->dev_attr;
+         |                                     ^~~~~~~~
+   1 warning generated.
 
 
+vim +/dev_attr +3460 drivers/infiniband/hw/bnxt_re/ib_verbs.c
 
-On 2026/4/16 23:31, James Clark wrote:
-> 
-> 
-> On 03/04/2026 10:47, Tengda Wu wrote:
->> This patch series implements data type profiling support for arm64,
->> building upon the foundational work previously contributed by Huafei [1].
->> While the initial version laid the groundwork for arm64 data type analysis,
->> this series iterates on that work by refining instruction parsing and
->> extending support for core architectural features.
->>
->> The series is organized as follows:
->>
->> 1. Fix disassembly mismatches (Patches 01-02)
->>     Current perf annotate supports three disassembly backends: llvm,
->>     capstone, and objdump. On arm64, inconsistencies between the output
->>     of these backends (specifically llvm/capstone vs. objdump) often
->>     prevent the tracker from correctly identifying registers and offsets.
->>     These patches resolve these mismatches, ensuring consistent instruction
->>     parsing across all supported backends.
->>
->> 2. Infrastructure for arm64 operand parsing (Patches 03-07)
->>     These patches establish the necessary infrastructure for arm64-specific
->>     operand handling. This includes implementing new callbacks and data
->>     structures to manage arm64's unique addressing modes and register sets.
->>     This foundation is essential for the subsequent type-tracking logic.
->>
->> 3. Core instruction tracking (Patches 08-16)
->>     These patches implement the core logic for type tracking on arm64,
->>     covering a wide range of instructions including:
->>
->>     * Memory Access: ldr/str variants (including stack-based access).
->>     * Arithmetic & Data Processing: mov, add, and adrp.
->>     * Special Access: System register access (mrs) and per-cpu variable
->>       tracking.
->>
->> The implementation draws inspiration from the existing x86 logic while
->> adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
->> perf annotate can successfully resolve memory locations and register
->> types, enabling comprehensive data type profiling on arm64 platforms.
->>
->> Example Result
->> ==============
->>
->> # perf mem record -a -K -- sleep 1
->> # perf annotate --data-type --type-stat --stdio
-> 
-> Hi Tengda,
-> 
-> Did you run this with any itrace options? If I run your command I get repeated blocks of duplicate stats and types, which is very confusing. One for each sample type that we generate decoding SPE.
-> 
-> For example the default perf report output has all these groups:
-> 
->   Available samples
->   0 arm_spe_0/
->     ts_enable=1,pa_enable=1,load_filter=1,store_filter=1,min_latency=30/
->   0 dummy:u
->   3 l1d-miss
->   18 l1d-access
->   0 llc-miss
->   0 llc-access
->   0 tlb-miss
->   22 tlb-access
->   0 branch
->   0 remote-access
->   22 memory
->   22 instructions
-> 
-> Obviously there are 22 samples total (instructions) and they get duplicated into whatever other categories they happen to have flags for.
-> 
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3454  
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3455  int bnxt_re_create_cq(struct ib_cq *ibcq, const struct ib_cq_init_attr *attr,
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3456  		      struct uverbs_attr_bundle *attrs)
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3457  {
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3458  	struct bnxt_re_cq *cq = container_of(ibcq, struct bnxt_re_cq, ib_cq);
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3459  	struct bnxt_re_dev *rdev = to_bnxt_re_dev(ibcq->device, ibdev);
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02 @3460  	struct bnxt_qplib_dev_attr *dev_attr = rdev->dev_attr;
+2b2f078236a445 Leon Romanovsky       2026-03-18  3461  	int rc;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3462  	u32 active_cqs;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3463  
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3464  	if (attr->flags)
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3465  		return -EOPNOTSUPP;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3466  
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3467  	cq->rdev = rdev;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3468  	cq->qplib_cq.cq_handle = (u64)(unsigned long)(&cq->qplib_cq);
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3469  
+345f842771ff36 Leon Romanovsky       2026-03-18  3470  	cq->max_cql = attr->cqe + 1;
+e69609c5d46917 Leon Romanovsky       2026-03-18  3471  	cq->cql = kzalloc_objs(struct bnxt_qplib_cqe, cq->max_cql);
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3472  	if (!cq->cql)
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3473  		return -ENOMEM;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3474  
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3475  	cq->qplib_cq.sg_info.pgsize = SZ_4K;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3476  	cq->qplib_cq.sg_info.pgshft = __builtin_ctz(SZ_4K);
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3477  	cq->qplib_cq.dpi = &rdev->dpi_privileged;
+2b2f078236a445 Leon Romanovsky       2026-03-18  3478  	cq->qplib_cq.max_wqe = cq->max_cql;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3479  	cq->qplib_cq.coalescing = &rdev->cq_coalescing;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3480  	cq->qplib_cq.nq = bnxt_re_get_nq(rdev);
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3481  	cq->qplib_cq.cnq_hw_ring_id = cq->qplib_cq.nq->ring_id;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3482  
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3483  	rc = bnxt_qplib_create_cq(&rdev->qplib_res, &cq->qplib_cq);
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3484  	if (rc) {
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3485  		ibdev_err(&rdev->ibdev, "Failed to create HW CQ");
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3486  		goto fail;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3487  	}
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3488  
+2b2f078236a445 Leon Romanovsky       2026-03-18  3489  	cq->ib_cq.cqe = cq->max_cql;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3490  	cq->cq_period = cq->qplib_cq.period;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3491  	active_cqs = atomic_inc_return(&rdev->stats.res.cq_count);
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3492  	if (active_cqs > rdev->stats.res.cq_watermark)
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3493  		rdev->stats.res.cq_watermark = active_cqs;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3494  	spin_lock_init(&cq->cq_lock);
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3495  
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3496  	return 0;
+cec5157b6c73e3 Sriharsha Basavapatna 2026-03-02  3497  
+1ac5a404797523 Selvin Xavier         2017-02-10  3498  fail:
+1ac5a404797523 Selvin Xavier         2017-02-10  3499  	kfree(cq->cql);
+e39afe3d6dbd90 Leon Romanovsky       2019-05-28  3500  	return rc;
+1ac5a404797523 Selvin Xavier         2017-02-10  3501  }
+1ac5a404797523 Selvin Xavier         2017-02-10  3502  
 
-Yes, I agree. The duplication makes the type stats misleading.
-De-duplication is definitely necessary here.
+:::::: The code at line 3460 was first introduced by commit
+:::::: cec5157b6c73e3e43ce868b7726dfece8891c1f8 RDMA/bnxt_re: Separate kernel and user CQ creation paths
 
-> To remove the duplicates you have to do --itrace=i1i. Could that need to be default for perf annotate with SPE?
-> 
-I'll look into making this the default behavior for SPE data-type
-annotation.
+:::::: TO: Sriharsha Basavapatna <sriharsha.basavapatna@broadcom.com>
+:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
 
->> Annotate data type stats:
->> total 6204, ok 5091 (82.1%), bad 1113 (17.9%)
->> -----------------------------------------------------------
->>          29 : no_sym
->>         196 : no_var
->>         806 : no_typeinfo
->>          82 : bad_offset
->>        1370 : insn_track
->>
-
-Here are the results with --itrace=i1i (a slight decrease in accuracy):
-
-Annotate data type stats:
-total 1138, ok 877 (77.1%), bad 261 (22.9%)
------------------------------------------------------------
-         6 : no_sym
-        44 : no_var
-       197 : no_typeinfo
-        14 : bad_offset
-       238 : insn_track
-
-This will be the new baseline, and I will work on further optimizations
-from here.
-
-Best regards,
-Tengda
-
->> Annotate type: 'struct page' in [kernel.kallsyms] (59208 samples):
->> ============================================================================
->>   Percent     offset       size  field
->>    100.00          0       0x40  struct page      {
->>      9.95          0        0x8      long unsigned int   flags;
->>     52.83        0x8       0x28      union        {
->>     52.83        0x8       0x28          struct   {
->>     37.21        0x8       0x10              union        {
->>     37.21        0x8       0x10                  struct list_head        lru {
->>     37.21        0x8        0x8                      struct list_head*   next;
->>      0.00       0x10        0x8                      struct list_head*   prev;
->>                                                  };
->>     37.21        0x8       0x10                  struct   {
->>     37.21        0x8        0x8                      void*       __filler;
->>      0.00       0x10        0x4                      unsigned int        mlock_count;
->>     ...
->>
->> Changes since v1: (reworked from Huafei's series):
->>
->>   - Fix inconsistencies in arm64 instruction output across llvm, capstone,
->>     and objdump disassembly backends.
->>   - Support arm64-specific addressing modes and operand formats. (Leo Yan)
->>   - Extend instruction tracking to support mov and add instructions,
->>     along with per-cpu and stack variables.
->>   - Include real-world examples in commit messages to demonstrate
->>     practical effects. (Namhyung Kim)
->>   - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
->>     https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
->>
->> Please let me know if you have any feedback.
->>
->> Thanks,
->> Tengda
->>
->> [1] https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
->> [2] https://developer.arm.com/documentation/102374/0103
->> [3] https://github.com/flynd/asmsheets/releases/tag/v8
->>
->> ---
->>
->> Tengda Wu (16):
->>    perf llvm: Fix arm64 adrp instruction disassembly mismatch with
->>      objdump
->>    perf capstone: Fix arm64 jump/adrp disassembly mismatch with objdump
->>    perf annotate-arm64: Generalize arm64_mov__parse to support standard
->>      operands
->>    perf annotate-arm64: Handle load and store instructions
->>    perf annotate: Introduce extract_op_location callback for
->>      arch-specific parsing
->>    perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
->>    perf annotate-arm64: Implement extract_op_location() callback
->>    perf annotate-arm64: Enable instruction tracking support
->>    perf annotate-arm64: Support load instruction tracking
->>    perf annotate-arm64: Support store instruction tracking
->>    perf annotate-arm64: Support stack variable tracking
->>    perf annotate-arm64: Support 'mov' instruction tracking
->>    perf annotate-arm64: Support 'add' instruction tracking
->>    perf annotate-arm64: Support 'adrp' instruction to track global
->>      variables
->>    perf annotate-arm64: Support per-cpu variable access tracking
->>    perf annotate-arm64: Support 'mrs' instruction to track 'current'
->>      pointer
->>
->>   .../perf/util/annotate-arch/annotate-arm64.c  | 642 +++++++++++++++++-
->>   .../util/annotate-arch/annotate-powerpc.c     |  10 +
->>   tools/perf/util/annotate-arch/annotate-x86.c  |  88 ++-
->>   tools/perf/util/annotate-data.c               |  72 +-
->>   tools/perf/util/annotate-data.h               |   7 +-
->>   tools/perf/util/annotate.c                    | 108 +--
->>   tools/perf/util/annotate.h                    |  12 +
->>   tools/perf/util/capstone.c                    | 107 ++-
->>   tools/perf/util/disasm.c                      |   5 +
->>   tools/perf/util/disasm.h                      |   5 +
->>   .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |  20 +
->>   tools/perf/util/dwarf-regs.c                  |   2 +-
->>   tools/perf/util/include/dwarf-regs.h          |   1 +
->>   tools/perf/util/llvm.c                        |  50 ++
->>   14 files changed, 984 insertions(+), 145 deletions(-)
->>
->>
->> base-commit: cf7c3c02fdd0dfccf4d6611714273dcb538af2cb
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
