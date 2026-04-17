@@ -1,139 +1,139 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CB4346E4A
-	for <llvm@lists.linux.dev>; Fri, 17 Apr 2026 04:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008C031ED68;
+	Fri, 17 Apr 2026 07:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776399190; cv=none; b=YUyamsG4jlzUn/b9ab8atlKDOJaKtuw3+zN9h0aHD+bUS6IzxHHfaPzbZf6v2zzt05sDi8Qy0DubF9+GxtAJgeaRS9yisgqHEKurGH+J+ZKOJrOFOvd9pOH+GO5sn0GgCQBoJPOLntkBP6/iVGsQ8zlfqNaUJohJM7y6h6jNUQY=
+	t=1776411741; cv=none; b=hPH2NZRg2srFB2Bz8OQFIj0v2714v2AeM+OStatEbxT/LQJn6oY6yrneIMTYIJ6WIftX0iT02113N7W1AN/6EfF912LN9qcUcE8NiC5gC5olSrBOkQagi+Sdd0BsuTzYp4bTQ8EahPrRxu50eAZmW9NeGyyvJw0zJyg3b4x4DDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776399190; c=relaxed/simple;
-	bh=Y1DWFV5uYuQNeV3jXZNyvMJE4BOiTZYgQmfLjhD/fko=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=avNZkp9ksUgceK25cciO9Zg2ozE296/5mxgN3RGnGAsjn51r94AC5djbnSmBa5mQFVxVxRbmVM2WVmaETpeataoDR7rWGYq30nWfY46LaLAqmNNoUwrJrFEiAeWFq1/ej4F0M0CAjsb7scMW2V7k+DDr2MaXWy5iU2u/o77y5r8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YNt/1VBR; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1776411741; c=relaxed/simple;
+	bh=ejDOge0l5QaCfEcVJ7Z2q2z2Ssz0ehB7V+UpyCB6eBY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=p8ltp30iFOFRf1M+n1JGxrcgbOewVfY/S1+IGtZ5q7HC+57bX8gkgdRY3VWAETSqn6+TFQKKl+RCFeX67XHEn62dkG/IhELyJYNHo6Gr9/qYn7vyGnNrAIUTFADdRmEDMPAcshjrzLn05MwlIIjt6LbVmoKMw3XihvYiymSAspk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TzwHp+lO; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YNt/1VBR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776399188;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Bk1Y/oYRnKbWzrKM3Li2dWjGuCy1SrVtGlwgrUJKf3s=;
-	b=YNt/1VBR+brU7rBwGT1edYO9xSo/nJel7qAbSu4On62+BtBIerz3SO/4WIuyfoO96jlq3N
-	ZNVdjlLh4Yaxyz4UMz2a9UzMNJwFw6kUERGAMwbilsPF8J2FkCDUdT46ugeL1+Jz1NDaCD
-	LWro5ssv2f/mdeCVAED06ItroJJAnx8=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-258-vmSvnIXWPuqdGdm3dZ5Gdw-1; Fri,
- 17 Apr 2026 00:13:06 -0400
-X-MC-Unique: vmSvnIXWPuqdGdm3dZ5Gdw-1
-X-Mimecast-MFC-AGG-ID: vmSvnIXWPuqdGdm3dZ5Gdw_1776399186
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0B8E91800454
-	for <llvm@lists.linux.dev>; Fri, 17 Apr 2026 04:13:06 +0000 (UTC)
-Received: from [172.20.96.14] (unknown [10.30.44.37])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8B84A19560B1;
-	Fri, 17 Apr 2026 04:13:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 17 of 97): Test report for master
- (7.0.0-0, upstream-mainline, 3cd8b194)
-Date: Fri, 17 Apr 2026 04:13:05 -0000
-To: llvm@lists.linux.dev, yoyang@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TzwHp+lO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776411738; x=1807947738;
+  h=date:from:to:cc:subject:message-id;
+  bh=ejDOge0l5QaCfEcVJ7Z2q2z2Ssz0ehB7V+UpyCB6eBY=;
+  b=TzwHp+lOw1mHClEpIwILOEI4iTooX7SYlzCH9kBMqKT1HMI3EoeKNBXN
+   St5XaCCQ9EVOEI6G9ef9cD9VxLWQ1TBgCGM99IxOo1+pOoKliDS33pmY9
+   8PjeQNc5sCHrBmfYcBHhyLBybx0rU+C2FjkF4UazjNs9m43lJtJFFzuxy
+   Ihh759N39WPJgLYWBk9pvJgstw84lCX7tnjIM+8BvGhVq6FBzepsu4VLl
+   P7fpRNfkzl9pODNV5KlZHyms9XF1hqAcD5Ees0Ail9f22xyvyZDJWOLzG
+   xlyqWH6OP8YFn+rnaErF4VeJbmRJwm2835yrwLzNpK3boabKoUMiKrx0m
+   Q==;
+X-CSE-ConnectionGUID: Xwo1li3mSYqL0mq1LSKX3A==
+X-CSE-MsgGUID: qvzgTWSGRS+ak7bSzEEcBg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11761"; a="94992336"
+X-IronPort-AV: E=Sophos;i="6.23,183,1770624000"; 
+   d="scan'208";a="94992336"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2026 00:42:17 -0700
+X-CSE-ConnectionGUID: b0QfZt8zRPaOG6sU3/Aclw==
+X-CSE-MsgGUID: pERZDLasTzuXFgBCTqe3Zg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,183,1770624000"; 
+   d="scan'208";a="268988678"
+Received: from lkp-server01.sh.intel.com (HELO 7e48d0ff8e22) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 17 Apr 2026 00:42:17 -0700
+Received: from kbuild by 7e48d0ff8e22 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wDdqA-0000000005d-49k9;
+	Fri, 17 Apr 2026 07:42:15 +0000
+Date: Fri, 17 Apr 2026 15:41:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [cilium:pr/bpf-tproxy 8/8]
+ drivers/net/ethernet/intel/fm10k/fm10k_main.c:885:16: warning: division by
+ zero is undefined
+Message-ID: <202604171545.woUYCIGr-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <26412.126041700130600527@us-mta-258.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ldjpjKwrz_qoO7ilRMfdi6jfV-8HY8sypjK4TAHJUvE_1776399186
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/cilium/linux.git pr/bpf-tproxy
+head:   27d1eafb8d37f1b272a991077d3bd1bb312118a9
+commit: 27d1eafb8d37f1b272a991077d3bd1bb312118a9 [8/8] bpf: Support SOCK_RCU_FREE sockets in bpf_sk_assign on egress
+config: powerpc64-randconfig-001-20260417 (https://download.01.org/0day-ci/archive/20260417/202604171545.woUYCIGr-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260417/202604171545.woUYCIGr-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604171545.woUYCIGr-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'v7.1-rc-part1-smbdirect-fixes' of git://git.=
-samba.org/ksmbd
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2458418854
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2458418854_aarch64_kernel_kcidb_tool_21118805_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
-dated" and "ctime not updated"
-            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
-orniev@redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+   In file included from drivers/net/ethernet/intel/fm10k/fm10k_main.c:6:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:103:
+   In file included from include/linux/tcp.h:20:
+   In file included from include/net/inet_connection_sock.h:21:
+   In file included from include/net/inet_sock.h:24:
+   include/net/request_sock.h:117:29: error: use of undeclared identifier 'sock_pfree_ref'; did you mean 'sock_kfree_s'?
+     117 |                               skb->destructor == sock_pfree_ref;
+         |                                                  ^~~~~~~~~~~~~~
+         |                                                  sock_kfree_s
+   include/net/sock.h:1901:6: note: 'sock_kfree_s' declared here
+    1901 | void sock_kfree_s(struct sock *sk, void *mem, int size);
+         |      ^
+   In file included from drivers/net/ethernet/intel/fm10k/fm10k_main.c:6:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:103:
+   In file included from include/linux/tcp.h:20:
+   In file included from include/net/inet_connection_sock.h:21:
+   In file included from include/net/inet_sock.h:24:
+   include/net/request_sock.h:117:26: warning: comparison of distinct pointer types ('void (*)(struct sk_buff *)' and 'void (*)(struct sock *, void *, int)') [-Wcompare-distinct-pointer-types]
+     117 |                               skb->destructor == sock_pfree_ref;
+         |                               ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> drivers/net/ethernet/intel/fm10k/fm10k_main.c:885:16: warning: division by zero is undefined [-Wdivision-by-zero]
+     885 |         desc_flags |= FM10K_SET_FLAG(tx_flags, FM10K_TX_FLAGS_CSUM,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     886 |                                      FM10K_TXD_FLAG_CSUM);
+         |                                      ~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/fm10k/fm10k_main.c:877:26: note: expanded from macro 'FM10K_SET_FLAG'
+     877 |          ((u32)(_input & _flag) / (_flag / _result)))
+         |                                 ^ ~~~~~~~~~~~~~~~~~
+   2 warnings and 1 error generated.
 
 
-Tests that were not ran because of internal issues:
-    /distribution/check-install [ppc64le, x86_64]
-    /distribution/command [ppc64le, x86_64]
-    /test/misc/machineinfo [ppc64le, x86_64]
-    Boot test [ppc64le, x86_64]
-    CKI/restraint [ppc64le, x86_64]
-    Reboot test [ppc64le, x86_64]
-    SELinux Custom Module Setup [ppc64le, x86_64]
-    selinux-policy: serge-testsuite [ppc64le, x86_64]
+vim +885 drivers/net/ethernet/intel/fm10k/fm10k_main.c
 
+76a540d4728a379 Alexander Duyck 2014-09-20  873  
+76a540d4728a379 Alexander Duyck 2014-09-20  874  #define FM10K_SET_FLAG(_input, _flag, _result) \
+76a540d4728a379 Alexander Duyck 2014-09-20  875  	((_flag <= _result) ? \
+76a540d4728a379 Alexander Duyck 2014-09-20  876  	 ((u32)(_input & _flag) * (_result / _flag)) : \
+76a540d4728a379 Alexander Duyck 2014-09-20  877  	 ((u32)(_input & _flag) / (_flag / _result)))
+76a540d4728a379 Alexander Duyck 2014-09-20  878  
+76a540d4728a379 Alexander Duyck 2014-09-20  879  static u8 fm10k_tx_desc_flags(struct sk_buff *skb, u32 tx_flags)
+76a540d4728a379 Alexander Duyck 2014-09-20  880  {
+76a540d4728a379 Alexander Duyck 2014-09-20  881  	/* set type for advanced descriptor with frame checksum insertion */
+76a540d4728a379 Alexander Duyck 2014-09-20  882  	u32 desc_flags = 0;
+76a540d4728a379 Alexander Duyck 2014-09-20  883  
+76a540d4728a379 Alexander Duyck 2014-09-20  884  	/* set checksum offload bits */
+76a540d4728a379 Alexander Duyck 2014-09-20 @885  	desc_flags |= FM10K_SET_FLAG(tx_flags, FM10K_TX_FLAGS_CSUM,
+76a540d4728a379 Alexander Duyck 2014-09-20  886  				     FM10K_TXD_FLAG_CSUM);
+76a540d4728a379 Alexander Duyck 2014-09-20  887  
+76a540d4728a379 Alexander Duyck 2014-09-20  888  	return desc_flags;
+76a540d4728a379 Alexander Duyck 2014-09-20  889  }
+76a540d4728a379 Alexander Duyck 2014-09-20  890  
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+:::::: The code at line 885 was first introduced by commit
+:::::: 76a540d4728a379e022fb2e2e8766d502b6d345c fm10k: Add support for netdev offloads
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: TO: Alexander Duyck <alexander.h.duyck@intel.com>
+:::::: CC: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
