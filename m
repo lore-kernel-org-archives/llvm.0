@@ -1,256 +1,282 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2831A355F2D;
-	Sat, 18 Apr 2026 10:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776509758; cv=none; b=X2ER+zLVsNimh+06G8jmpN78XxSPtOKpFdnAIoKHcyt88S7vuOhs3UaqvuC+ny0ALm7UtdMba4kKc7BPB9kBIagk1i3Gjpex0jiUoT5+6V70FkTnIfkfT+qp0jHQhpbvByjAVT1n7pIqd04u1yLlKE8dS3+EKqLJjPuiMQ1+bpI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776509758; c=relaxed/simple;
-	bh=NpUYADwwj2olN1Aw0+Bltd+342Bh6H0raLMRiibBz80=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NL5Waf4G333uWifoIo2bmbt8RV5kv4sI39+5nO8Jo3vq3gj8xvGAUhUoPuz5L05uJPdESS2wztebu+1GU1vg7HWML6jahcnpYT4nTljoCQWUs2oJbazucAEZ0jjfwPO8fGWcFscHUEEQoE4JIUJZlEt9wLOwMbqqTd1jEmhaVkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gNzAW2L3; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7782E4274;
+	Sat, 18 Apr 2026 11:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776511749; cv=pass; b=HFLkZcUwzWY02GjnW1oTTn43UPPAhIwmhs5NsTf343dC1EaGf8Ot3GXELwnWm6QWuZR5tiM7LWx5k4W4Xw3NGCT7OLi7eZUbpMwDTK+Gt3F1f23KkK6CrdqzGu9wMF3yBm2StyVLZPxcNU9wUO/Eis3vlTKD+rixOkN3YgTqzOY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776511749; c=relaxed/simple;
+	bh=TsSomze2eYKPUCYN4b8KB1OylByI0nJFNwLMr2a5lh8=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=f8bS3W3Hd1chaJ/Z06KQKXbGRmE6l48f7SNSlivf/XoCWpcMrqvpYmUdvIHi0efZa7HW/P6PJJ9r5SYr0TaeeOJP6I7c8peLWG813qej9ldL520UKvZYdy3wwgNid7EFZ/INpVtbLhNcc7vBELyFdqagaqIW7ok9S56nNnzctqE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b=QbA5+dpy; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gNzAW2L3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776509756; x=1808045756;
-  h=date:from:to:cc:subject:message-id;
-  bh=NpUYADwwj2olN1Aw0+Bltd+342Bh6H0raLMRiibBz80=;
-  b=gNzAW2L3t+8HfBrpE/cRY+LcduvXmRMpyhcF4I9GxLKA/QZ0FCD16KZD
-   zao5HaItxTyQPnZDJSHwD6flf4X8TqaEGtXqrjLrI6Q3f20eAf1V4B/FM
-   uCMMbSaB3+5y2SZZwyz2Bb4l4Iw1wQj6wzLXhCjeTKUGkNO5rmnA45GfY
-   C5xC/xY3rp6WJfkw4f0Z86AZiV/oTZ0/Os6ObBKbKD/mmRWy8DxD0a6GO
-   5nR86T3k9xRhFNlJ8QtczEvpXQJTpKt/s8W24UzzP6Y5lJFk0Z3oY2X4q
-   yxLcxlfN8vZJqI65IfoBHel+x6xeSVIPTabJfqn0ucZeKPXwR4HpdsxBf
-   A==;
-X-CSE-ConnectionGUID: beMawlXvRFmc3EVh/XHB1Q==
-X-CSE-MsgGUID: RBt12m47TbirHXSF+2pPnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11762"; a="88883845"
-X-IronPort-AV: E=Sophos;i="6.23,186,1770624000"; 
-   d="scan'208";a="88883845"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2026 03:55:55 -0700
-X-CSE-ConnectionGUID: W/igQUInTeaHoDPReu4Nuw==
-X-CSE-MsgGUID: Kj6pWWTLRa6qpXUxoxcYMA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,186,1770624000"; 
-   d="scan'208";a="233009484"
-Received: from lkp-server01.sh.intel.com (HELO 7e48d0ff8e22) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 18 Apr 2026 03:55:53 -0700
-Received: from kbuild by 7e48d0ff8e22 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wE3L5-000000001BA-22UR;
-	Sat, 18 Apr 2026 10:55:51 +0000
-Date: Sat, 18 Apr 2026 18:55:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kas:uffd/rfc-v2 3/7] mm/memory.c:6347:7: error: call to
- undeclared function 'userfaultfd_rwp'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202604181821.IQDdBaRk-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b="QbA5+dpy"
+ARC-Seal: i=1; a=rsa-sha256; t=1776511745; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=j0OKdclz84Z6Cq68oCPSsrjEfe8om6+WXzibp6o/OsbmOT19pHf2X/5nB6L761ovp6NLOrXIw6OmaY7kdO+Ufw7oozYtBcSN9U53lS9+aVGKdV/3w4Qd0zk8yQWkevCp99sazutIkgrFUeA09U/bLRgXpzCuizmVIUzkf/xAHL4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1776511745; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=q79tK2r02sLbrzVnyGQ3Pk6+nx3R12Nmhqy43XEIP4E=; 
+	b=ODKdUZUgzxqQaniJiN5NsNN6uRmIFRcWs0R2uoIdsOQgsYWTe6Q+MzcbriDkZIwEEmr615yssfWNJN2wpHA/UwVvZb01ekVWokW9Y6z0S2c4T66m0LjUsJ3ay8kdiAcPWpHCvz6erZqnstDY5ZhEZe6WP/IAARcLm2nL6njHWLk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=rong.moe;
+	spf=pass  smtp.mailfrom=i@rong.moe;
+	dmarc=pass header.from=<i@rong.moe>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1776511745;
+	s=zmail2048; d=rong.moe; i=i@rong.moe;
+	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date:Date:MIME-Version:Message-Id:Reply-To;
+	bh=q79tK2r02sLbrzVnyGQ3Pk6+nx3R12Nmhqy43XEIP4E=;
+	b=QbA5+dpyP2d3A1/0qDTXChJBjtfAVDyX22qCdG3+BKliRaV+HJ1X0QpVMiV/hcMo
+	VzKv8qmg7Yc5N9HnDqmc/gYpD7ZRQjSEI567b4L3ndrjpkH8E6BuWYrpw3sGxd9+ghV
+	jtilDnNHetAi8bATl3aPp43ssBcZzh8Tz8Rro9qIWBnVCJCYRAPxRWbcs+cX7EK8+Mo
+	GX6wYvUI/n+wDeZZyoazWsrbHrmARSiGEGJzNpXwJXtJ3aRYRNUSF+e6SSYKDjS7tgu
+	fyClV3rt4R1CEqnqHzMvDPnvBK2y26to2LgDebtuDop0Oq+GfAvqz4DGMVSMDziGh+t
+	DsRDQpj2fw==
+Received: by mx.zohomail.com with SMTPS id 1776511744079819.9088638096537;
+	Sat, 18 Apr 2026 04:29:04 -0700 (PDT)
+Message-ID: <fed0feb4770f7fab8d4336eb349d8703839e8ce4.camel@rong.moe>
+Subject: Re: [PATCH v1] hwmon: (yogafan) Massive hardware expansion and
+ structural refactoring
+From: Rong Zhang <i@rong.moe>
+To: kernel test robot <lkp@intel.com>, Sergio Melas
+ <sergiomelas@gmail.com>,  Guenter Roeck <linux@roeck-us.net>, Jean Delvare
+ <jdelvare@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>, "Derek J .
+ Clark"	 <derekjohn.clark@gmail.com>
+In-Reply-To: <b876cbcce7763041d93f9cad28b8aa4cac0a001a.camel@rong.moe>
+References: <20260413060931.31091-2-sergiomelas@gmail.com>
+		 <202604180539.EuswNnjG-lkp@intel.com>
+	 <b876cbcce7763041d93f9cad28b8aa4cac0a001a.camel@rong.moe>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 18 Apr 2026 19:23:54 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Evolution 3.56.2-9 
+X-ZohoMailClient: External
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git uffd/rfc-v2
-head:   8f55f0ce2de130272cb80eee2434a185922b3340
-commit: a5a0f28bfc37d5fb52d9268238be0f8280ca737c [3/7] userfaultfd: add UFFDIO_REGISTER_MODE_RWP
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260418/202604181821.IQDdBaRk-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260418/202604181821.IQDdBaRk-lkp@intel.com/reproduce)
+Hi Sergio,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604181821.IQDdBaRk-lkp@intel.com/
+On Sat, 2026-04-18 at 18:31 +0800, Rong Zhang wrote:
+> Hi Sergio,
+>=20
+> On Sat, 2026-04-18 at 05:37 +0800, kernel test robot wrote:
+> > Hi Sergio,
+> >=20
+> > kernel test robot noticed the following build errors:
+> >=20
+> > [auto build test ERROR on groeck-staging/hwmon-next]
+> > [also build test ERROR on linus/master next-20260416]
+> > [cannot apply to v7.0]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >=20
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Sergio-Melas/hwm=
+on-yogafan-Massive-hardware-expansion-and-structural-refactoring/20260417-0=
+63319
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-st=
+aging.git hwmon-next
+> > patch link:    https://lore.kernel.org/r/20260413060931.31091-2-sergiom=
+elas%40gmail.com
+> > patch subject: [PATCH v1] hwmon: (yogafan) Massive hardware expansion a=
+nd structural refactoring
+> > config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive=
+/20260418/202604180539.EuswNnjG-lkp@intel.com/config)
+> > compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd=
+708029e0b2869e80abe31ddb175f7c35361f90)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20260418/202604180539.EuswNnjG-lkp@intel.com/reproduce)
+> >=20
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Closes: https://lore.kernel.org/oe-kbuild-all/202604180539.EuswNnjG-l=
+kp@intel.com/
+> >=20
+> > All errors (new ones prefixed by >>):
+> >=20
+> > > > drivers/hwmon/yogafan.c:712:6: error: call to undeclared function '=
+wmi_has_guid'; ISO C99 and later do not support implicit function declarati=
+ons [-Wimplicit-function-declaration]
+> >      712 |         if (wmi_has_guid(LENOVO_WMI_OTHER_MODE_GUID) ||
+> >          |             ^
+> >    1 error generated.
+>=20
+> Hmm, that's a bit troublesome. Usually we should have been able to
+> declare `depends on ACPI_WMI if ACPI_WMI' (new syntax since v7.0) or
+> `depends on ACPI_WMI || !ACPI_WMI' as an optional dependency to prevent
+> such an issue, but there is no static inline stubs for !ACPI_WMI...
+>=20
+> I'd suggest declaring `select ACPI_WMI if ACPI && X86' in Kconfig as
+> some drm drivers do, at least for the time being.
 
-All error/warnings (new ones prefixed by >>):
+Of course you'll still need to guard the wmi_has_guid() checks behind
+`#ifdef CONFIG_ACPI_WMI'. Just forgot to mention that.
 
->> mm/memory.c:1485:26: warning: shift count >= width of type [-Wshift-count-overflow]
-    1485 |         if (dst_vma->vm_flags & VM_COPY_ON_FORK)
-         |                                 ^~~~~~~~~~~~~~~
-   include/linux/mm.h:643:65: note: expanded from macro 'VM_COPY_ON_FORK'
-     643 | #define VM_COPY_ON_FORK (VM_PFNMAP | VM_MIXEDMAP | VM_UFFD_WP | VM_UFFD_RWP | \
-         |                                                                 ^~~~~~~~~~~
-   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
-     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
-     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   mm/memory.c:6069:31: warning: shift count >= width of type [-Wshift-count-overflow]
-    6069 |         return handle_userfault(vmf, VM_UFFD_RWP);
-         |                                      ^~~~~~~~~~~
-   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
-     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
-     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
->> mm/memory.c:6347:7: error: call to undeclared function 'userfaultfd_rwp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    6347 |                 if (userfaultfd_rwp(vmf->vma))
-         |                     ^
-   mm/memory.c:6347:7: note: did you mean 'userfaultfd_wp'?
-   include/linux/userfaultfd_k.h:369:20: note: 'userfaultfd_wp' declared here
-     369 | static inline bool userfaultfd_wp(struct vm_area_struct *vma)
-         |                    ^
-   mm/memory.c:6465:8: error: call to undeclared function 'userfaultfd_rwp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    6465 |                         if (userfaultfd_rwp(vma))
-         |                             ^
-   2 warnings and 2 errors generated.
+Hmm, in this way `depends on ACPI_WMI if ACPI_WMI' should also be OK...
 
+Thanks,
+Rong
 
-vim +/userfaultfd_rwp +6347 mm/memory.c
-
-  6242	
-  6243	/*
-  6244	 * The page faults may be spurious because of the racy access to the
-  6245	 * page table.  For example, a non-populated virtual page is accessed
-  6246	 * on 2 CPUs simultaneously, thus the page faults are triggered on
-  6247	 * both CPUs.  However, it's possible that one CPU (say CPU A) cannot
-  6248	 * find the reason for the page fault if the other CPU (say CPU B) has
-  6249	 * changed the page table before the PTE is checked on CPU A.  Most of
-  6250	 * the time, the spurious page faults can be ignored safely.  However,
-  6251	 * if the page fault is for the write access, it's possible that a
-  6252	 * stale read-only TLB entry exists in the local CPU and needs to be
-  6253	 * flushed on some architectures.  This is called the spurious page
-  6254	 * fault fixing.
-  6255	 *
-  6256	 * Note: flush_tlb_fix_spurious_fault() is defined as flush_tlb_page()
-  6257	 * by default and used as such on most architectures, while
-  6258	 * flush_tlb_fix_spurious_fault_pmd() is defined as NOP by default and
-  6259	 * used as such on most architectures.
-  6260	 */
-  6261	static void fix_spurious_fault(struct vm_fault *vmf,
-  6262				       enum pgtable_level ptlevel)
-  6263	{
-  6264		/* Skip spurious TLB flush for retried page fault */
-  6265		if (vmf->flags & FAULT_FLAG_TRIED)
-  6266			return;
-  6267		/*
-  6268		 * This is needed only for protection faults but the arch code
-  6269		 * is not yet telling us if this is a protection fault or not.
-  6270		 * This still avoids useless tlb flushes for .text page faults
-  6271		 * with threads.
-  6272		 */
-  6273		if (vmf->flags & FAULT_FLAG_WRITE) {
-  6274			if (ptlevel == PGTABLE_LEVEL_PTE)
-  6275				flush_tlb_fix_spurious_fault(vmf->vma, vmf->address,
-  6276							     vmf->pte);
-  6277			else
-  6278				flush_tlb_fix_spurious_fault_pmd(vmf->vma, vmf->address,
-  6279								 vmf->pmd);
-  6280		}
-  6281	}
-  6282	/*
-  6283	 * These routines also need to handle stuff like marking pages dirty
-  6284	 * and/or accessed for architectures that don't do it in hardware (most
-  6285	 * RISC architectures).  The early dirtying is also good on the i386.
-  6286	 *
-  6287	 * There is also a hook called "update_mmu_cache()" that architectures
-  6288	 * with external mmu caches can use to update those (ie the Sparc or
-  6289	 * PowerPC hashed page tables that act as extended TLBs).
-  6290	 *
-  6291	 * We enter with non-exclusive mmap_lock (to exclude vma changes, but allow
-  6292	 * concurrent faults).
-  6293	 *
-  6294	 * The mmap_lock may have been released depending on flags and our return value.
-  6295	 * See filemap_fault() and __folio_lock_or_retry().
-  6296	 */
-  6297	static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
-  6298	{
-  6299		pte_t entry;
-  6300	
-  6301		if (unlikely(pmd_none(*vmf->pmd))) {
-  6302			/*
-  6303			 * Leave __pte_alloc() until later: because vm_ops->fault may
-  6304			 * want to allocate huge page, and if we expose page table
-  6305			 * for an instant, it will be difficult to retract from
-  6306			 * concurrent faults and from rmap lookups.
-  6307			 */
-  6308			vmf->pte = NULL;
-  6309			vmf->flags &= ~FAULT_FLAG_ORIG_PTE_VALID;
-  6310		} else {
-  6311			pmd_t dummy_pmdval;
-  6312	
-  6313			/*
-  6314			 * A regular pmd is established and it can't morph into a huge
-  6315			 * pmd by anon khugepaged, since that takes mmap_lock in write
-  6316			 * mode; but shmem or file collapse to THP could still morph
-  6317			 * it into a huge pmd: just retry later if so.
-  6318			 *
-  6319			 * Use the maywrite version to indicate that vmf->pte may be
-  6320			 * modified, but since we will use pte_same() to detect the
-  6321			 * change of the !pte_none() entry, there is no need to recheck
-  6322			 * the pmdval. Here we choose to pass a dummy variable instead
-  6323			 * of NULL, which helps new user think about why this place is
-  6324			 * special.
-  6325			 */
-  6326			vmf->pte = pte_offset_map_rw_nolock(vmf->vma->vm_mm, vmf->pmd,
-  6327							    vmf->address, &dummy_pmdval,
-  6328							    &vmf->ptl);
-  6329			if (unlikely(!vmf->pte))
-  6330				return 0;
-  6331			vmf->orig_pte = ptep_get_lockless(vmf->pte);
-  6332			vmf->flags |= FAULT_FLAG_ORIG_PTE_VALID;
-  6333	
-  6334			if (pte_none(vmf->orig_pte)) {
-  6335				pte_unmap(vmf->pte);
-  6336				vmf->pte = NULL;
-  6337			}
-  6338		}
-  6339	
-  6340		if (!vmf->pte)
-  6341			return do_pte_missing(vmf);
-  6342	
-  6343		if (!pte_present(vmf->orig_pte))
-  6344			return do_swap_page(vmf);
-  6345	
-  6346		if (pte_protnone(vmf->orig_pte) && vma_is_accessible(vmf->vma)) {
-> 6347			if (userfaultfd_rwp(vmf->vma))
-  6348				return do_uffd_rwp(vmf);
-  6349			return do_numa_page(vmf);
-  6350		}
-  6351	
-  6352		spin_lock(vmf->ptl);
-  6353		entry = vmf->orig_pte;
-  6354		if (unlikely(!pte_same(ptep_get(vmf->pte), entry))) {
-  6355			update_mmu_tlb(vmf->vma, vmf->address, vmf->pte);
-  6356			goto unlock;
-  6357		}
-  6358		if (vmf->flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) {
-  6359			if (!pte_write(entry))
-  6360				return do_wp_page(vmf);
-  6361			else if (likely(vmf->flags & FAULT_FLAG_WRITE))
-  6362				entry = pte_mkdirty(entry);
-  6363		}
-  6364		entry = pte_mkyoung(entry);
-  6365		if (ptep_set_access_flags(vmf->vma, vmf->address, vmf->pte, entry,
-  6366					vmf->flags & FAULT_FLAG_WRITE))
-  6367			update_mmu_cache_range(vmf, vmf->vma, vmf->address,
-  6368					vmf->pte, 1);
-  6369		else
-  6370			fix_spurious_fault(vmf, PGTABLE_LEVEL_PTE);
-  6371	unlock:
-  6372		pte_unmap_unlock(vmf->pte, vmf->ptl);
-  6373		return 0;
-  6374	}
-  6375	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>=20
+> Thanks,
+> Rong
+>=20
+> >=20
+> >=20
+> > vim +/wmi_has_guid +712 drivers/hwmon/yogafan.c
+> >=20
+> >    697=09
+> >    698	static int yoga_fan_probe(struct platform_device *pdev)
+> >    699	{
+> >    700		const struct dmi_system_id *dmi_id;
+> >    701		const struct yogafan_config *cfg;
+> >    702		struct yoga_fan_data *data;
+> >    703		struct hwmon_chip_info *chip_info;
+> >    704		struct hwmon_channel_info *info;
+> >    705		u32 *fan_config;
+> >    706		acpi_status status;
+> >    707		int i;
+> >    708		const struct hwmon_channel_info **chip_info_array;
+> >    709=09
+> >    710		/* Check for WMI interfaces that handle fan/thermal management.=
+ */
+> >    711		/*  If present, we yield to the WMI driver to prevent double-re=
+porting. */
+> >  > 712		if (wmi_has_guid(LENOVO_WMI_OTHER_MODE_GUID) ||
+> >    713		    wmi_has_guid(LENOVO_CAPABILITY_DATA_00_GUID) ||
+> >    714		    wmi_has_guid(LENOVO_WMI_FAN_GUID)) {
+> >    715			dev_info(&pdev->dev, "Lenovo WMI management interface detected=
+; yielding to WMI driver\n");
+> >    716			return -ENODEV;
+> >    717		}
+> >    718=09
+> >    719		dmi_id =3D dmi_first_match(yogafan_quirks);
+> >    720		if (!dmi_id)
+> >    721			return -ENODEV;
+> >    722=09
+> >    723		cfg =3D dmi_id->driver_data;
+> >    724		data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> >    725		if (!data)
+> >    726			return -ENOMEM;
+> >    727=09
+> >    728		/* * 1. Hardware Calibration & Inertia Scaling (Note 3):
+> >    729		 * Dynamic parameters (TAU and SLEW) are calibrated relative to=
+ fan diameter
+> >    730		 * based on the moment of inertia relationship (J =E2=88=9D d=
+=C2=B2).
+> >    731		 */
+> >    732		data->config =3D cfg;
+> >    733		data->device_max_rpm =3D cfg->r_max ?: 5000;
+> >    734		data->internal_tau_ms =3D cfg->tau_ms ?: 1000; /* Robustness: P=
+revent zero-division */
+> >    735=09
+> >    736		/* Calculate Slew Rate based on time-to-max-RPM physics */
+> >    737		data->internal_max_slew_rpm_s =3D data->device_max_rpm / (cfg->=
+slew_time_s ?: 1);
+> >    738=09
+> >    739		/* * Log physical parameters for safety traceability (IEC 61508=
+):
+> >    740		 * Provides a deterministic baseline for the RLLag filter verif=
+ication.
+> >    741		 */
+> >    742		dev_info(&pdev->dev, "Identified hardware: %s\n", dmi_id->ident=
+);
+> >    743		dev_info(&pdev->dev, "HAL Profile: [Tau: %ums, Slew: %u RPM/s, =
+Max: %u RPM]\n",
+> >    744			 data->internal_tau_ms, data->internal_max_slew_rpm_s, data->d=
+evice_max_rpm);
+> >    745=09
+> >    746		/* * 2. Deterministic Multi-Path Discovery:
+> >    747		 * We iterate through the available paths to find physical hand=
+les.
+> >    748		 * This loop tests variations until data->fan_count matches the
+> >    749		 * cfg->fan_count expected for this model profile.
+> >    750		 */
+> >    751		for (i =3D 0; i < MAX_FANS && data->fan_count < cfg->fan_count;=
+ i++) {
+> >    752			acpi_handle handle;
+> >    753=09
+> >    754			/* Integrity check: End of defined paths in the quirk table */
+> >    755			if (!cfg->paths[i])
+> >    756				break;
+> >    757=09
+> >    758			status =3D acpi_get_handle(NULL, cfg->paths[i], &handle);
+> >    759			if (ACPI_SUCCESS(status)) {
+> >    760				data->active_handles[data->fan_count] =3D handle;
+> >    761				data->fan_count++;
+> >    762			} else {
+> >    763				/* Log variation failure for troubleshooting */
+> >    764				dev_dbg(&pdev->dev, "Fan path variation %s not found\n", cfg-=
+>paths[i]);
+> >    765			}
+> >    766		}
+> >    767=09
+> >    768		/* Integrity Check: Fail probe if no fans were successfully reg=
+istered */
+> >    769		if (data->fan_count =3D=3D 0) {
+> >    770			dev_err(&pdev->dev, "Hardware identification failed: No fans f=
+ound\n");
+> >    771			return -ENODEV;
+> >    772		}
+> >    773=09
+> >    774		/* * 3. HWMON Configuration:
+> >    775		 * Dynamically build the HWMON channel configuration based on t=
+he
+> >    776		 * number of fans actually discovered. We allocate one extra sl=
+ot
+> >    777		 * to serve as a null terminator for the HWMON core.
+> >    778		 */
+> >    779		fan_config =3D devm_kcalloc(&pdev->dev, data->fan_count + 1, si=
+zeof(u32), GFP_KERNEL);
+> >    780		if (!fan_config)
+> >    781			return -ENOMEM;
+> >    782=09
+> >    783		for (i =3D 0; i < data->fan_count; i++)
+> >    784			fan_config[i] =3D HWMON_F_INPUT | HWMON_F_MAX;
+> >    785=09
+> >    786		info =3D devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
+> >    787		if (!info)
+> >    788			return -ENOMEM;
+> >    789=09
+> >    790		info->type =3D hwmon_fan;
+> >    791		info->config =3D fan_config;
+> >    792=09
+> >    793		/* 4. Wrap it in chip_info for registration */
+> >    794		chip_info =3D devm_kzalloc(&pdev->dev, sizeof(*chip_info), GFP_=
+KERNEL);
+> >    795		if (!chip_info)
+> >    796			return -ENOMEM;
+> >    797=09
+> >    798		chip_info->ops =3D &yoga_fan_hwmon_ops;
+> >    799=09
+> >    800		chip_info_array =3D devm_kcalloc(&pdev->dev, 2, sizeof(*chip_in=
+fo_array), GFP_KERNEL);
+> >    801		if (!chip_info_array)
+> >    802			return -ENOMEM;
+> >    803=09
+> >    804		chip_info_array[0] =3D info;
+> >    805		chip_info_array[1] =3D NULL; /* Null terminated */
+> >    806=09
+> >    807		chip_info->info =3D chip_info_array;
+> >    808=09
+> >    809		/* 5. Finalize registration with the accurate hardware descript=
+ion */
+> >    810		return PTR_ERR_OR_ZERO(devm_hwmon_device_register_with_info(&pd=
+ev->dev,
+> >    811					DRVNAME, data, chip_info, NULL));
+> >    812	}
+> >    813=09
