@@ -1,202 +1,465 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30AB2E4247
-	for <llvm@lists.linux.dev>; Sat, 18 Apr 2026 15:49:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9963D176FB1;
+	Sun, 19 Apr 2026 00:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776527377; cv=none; b=mUChJGeIN1apKeZEE3VYyWwh+A1SUSS43al36nYYUF+D+dEB3kF6awi9KUmubqi59xHJmOlsfg9yOrkPwB0b4HCrp3lTeU3wJBn+aoc1hJjjeWZjZtMjejjVYIuzYDz2Q51CDQcgdMRPJyX3hfcCDaWJQGNqvP6FvCNkvoSByqQ=
+	t=1776557760; cv=none; b=IcTZ6IvExYtbPBroSDve0OBBJQJ4ZwUk+Gj/SFtxkOhkxACZQQUegB/5kk1PD7hBHzc92d5uksONjD4hMtVOeTgx+ipxY1qF0RXSeFWjVVr4VsLbTywatDYcCcse49b8lkfr0LZlcRjZWn59Eo3p7Hn21ntm8Q4YHjC/OuIuObQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776527377; c=relaxed/simple;
-	bh=Gc8LUIqFDOPIShSqQaDRlUqcJQ5FSr3KzP8QMFZFNnk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZnEKnAfJmule02i1+gBoKnRTAAGPRk+24f8t5mLMnCKpUlazD82QAn2Ir4vz+710DppTdOqmG0vIhatzExNpgtqH1soG0TwO+iuTpXOx0AMf2r4UBa+ZTGtULgYpV2QZRtLYwMRx9cZ7y82v1UHK5o8aBnh8rZ7OfNZCbgOATHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DypKIJmg; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776557760; c=relaxed/simple;
+	bh=61Y2NrOO5m0b4dv5cBIvkoZBlg4AOUpUSRtAdz0uP3g=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cKq7QuHdmrbeXhKbsrY9NCHwhikE5twJbMa8Da/32yNmNspz+IHT3aHXokYR6jkIHi5Q/t6PhBQcPWKypJC0xTLSn1vbelXfg0f8Ll7+vjC8xFZjEz08J2Jtf+gxDRMSNEuMYbeDnhSc77u9mRSq2OJAsZfwDIvhytEqwHVbbb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kgubJwRh; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DypKIJmg"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2b2429f98d0so8828875ad.2
-        for <llvm@lists.linux.dev>; Sat, 18 Apr 2026 08:49:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776527375; x=1777132175; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rrPn6UxPZBxRpYnhQkSmTP0wa8nccH72Tby/VYHj/MU=;
-        b=DypKIJmgP0xzjRp87UWPyk/Yl2iuMZ70kdphxPBoVR5XPnRw9szNDniAAT+f3/KxcR
-         lsRjIBRn+c1m81nBlIXFM0RwbiSjkfXsHWW5SsCb8J18/aPUTAYRi3btH5C0da3Lid7M
-         BCcGHdk4cC7Gdw9L00Dep00OKRs86Kkje1CeyCx6AAXBTNjYt1/5VSGM4wDKbeRrKMb7
-         qj0ZLuiT4z0Vrsnl3Z/l+7+uNkQuGEpfUSA9kxJfaqAJqVJ7QlxuiCl1wFmx+jFoql8i
-         Qldh0RGKy1sRrlgZ28er3yS1VpB0MZ1Pcqhp7OazGXa86Pz62OLl1cZaEsDLPAdwGyeM
-         rTKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776527375; x=1777132175;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rrPn6UxPZBxRpYnhQkSmTP0wa8nccH72Tby/VYHj/MU=;
-        b=ea4uFHtxqR2GZchUY1jGcGgohaPuAji9bxzKDWSd69KMtbDI5Z0hx6bPNnsUZKe8ZR
-         sA07KYBuW2nk2AnqTfUjXcbi+tIpeX3O8tX4rpAnQBf/sFe4GjhkKwlgHr8mHenGxjS1
-         08c//nZ1aVWJFy4AAsC0DrHwCkHydctkaKGjzdowExjqR/LeEodw8oSPStICLNtbH532
-         RU1YVd4qJyNGZgsQqzaLDG8I91h7XMeX863Kp6QBmZhPNWzeP6vRxQrIFo5vuILDp3Wd
-         S79sxIP3Xv+RHOpJH4/Snn6DSxU7rp7Fd/6G5VbXDB4gsdz1p9e7VP4ugzzn4Cf9CcqT
-         8WIQ==
-X-Gm-Message-State: AOJu0Ywoow2bENPhj1zgYCuOL7k7j+zuZOaTIGbaL+VJxvjKVw6b0j3c
-	7WZtvooorsFV6P1PcU1bkO4ZUx+3Gl+F0NjkvVGaV4x6L7jdPCrOkDB5vbAUlw==
-X-Gm-Gg: AeBDieuphyKMtG3HUCNG2i/mUSx/GwD5720Ti7knl8/Q1kWPGUmYbPM3SjCDffEz9f2
-	uNafxzrhVZ3GJ/GNlaTc6WS6mdTvSVieyjGZR7UG0xtI2u3mVJEKeiae2mf86TUB8rZi+XLkXB0
-	Uc4mmSx59XoYIqClKqFhUBiHuKZTALTBOMWI9JJO8E65l5Rr7y/5MVKzGlMs8uNgLIIQaFlnX3e
-	gRa0zYkaFTksNeo48JGPuzqpdsK1VYralh0NvjGwnrBr4p36ATIp9efwVy45fJC/XveAja3OYPn
-	EXzD9QFG/691tsJ7IL0buX3MSxBs2wuGMA7S0OUdsNy19haXZb7wo0Ff7K+2mS/7ByL411iWXHg
-	cpS+yZ1pc4YG2cVy9HzECVxzU4ZfDHjhyNzb3puMKrkIpIxBeG/XLcOdik446dKIBuyfSrWhkqk
-	u/gciaT4h0ivwYaCwnd57k7r6dK3/xWi6yxKGBDstNDrtkfyrFsjIESK2rSOSJtEvgrpwN3ViYx
-	R71zgvZkWg=
-X-Received: by 2002:a17:903:2f08:b0:2b0:7d3d:756a with SMTP id d9443c01a7336-2b5f9f64c9cmr81119105ad.35.1776527375158;
-        Sat, 18 Apr 2026 08:49:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab2112csm49261195ad.62.2026.04.18.08.49.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Apr 2026 08:49:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7fa7d4dd-7b05-4af2-a8da-6e605fa91f90@roeck-us.net>
-Date: Sat, 18 Apr 2026 08:49:33 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kgubJwRh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776557758; x=1808093758;
+  h=date:from:to:cc:subject:message-id;
+  bh=61Y2NrOO5m0b4dv5cBIvkoZBlg4AOUpUSRtAdz0uP3g=;
+  b=kgubJwRh6yQmv6US+WmRYAFIQGUubDAAQWXmMY3gXoensiyHJtHQMA+t
+   wblwDT3oUa7OQtFcj8F4PbKGbcpvdmYOn651weq1SdcoLp+B7jIUbQDHH
+   0OEAppxRCvz4AuWL4IcdfBmVlbVECmVYgJiJIYvqVah0lT1/PtS6sVymi
+   vAqnoh04CATbnbQa7hLBYgFHlqubhfRrrHqmpp5y+pD7PMaFk5gD8bH5y
+   IJNNkbXxPQCQm2dAfWTUIvgnAeZJ2hELTu715Zn5Biz5ihglkHCzwy79p
+   U/PXNiGJw3mVOzN+fYX9WKOfH4txap/xD6NpvgfUPIQmyclPlbKd9SqRg
+   Q==;
+X-CSE-ConnectionGUID: /gP4IXJiQpS9n20r44c31Q==
+X-CSE-MsgGUID: EqUE/pOITfqz5NKvIOoqlg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11762"; a="77228046"
+X-IronPort-AV: E=Sophos;i="6.23,187,1770624000"; 
+   d="scan'208";a="77228046"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2026 17:15:58 -0700
+X-CSE-ConnectionGUID: Tcl9XqwWQXS4Hyyvj8Murg==
+X-CSE-MsgGUID: 9Wpe2mxMRE2jCglgoJXXUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,187,1770624000"; 
+   d="scan'208";a="224868990"
+Received: from lkp-server01.sh.intel.com (HELO 7e48d0ff8e22) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 18 Apr 2026 17:15:56 -0700
+Received: from kbuild by 7e48d0ff8e22 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wEFpJ-000000001bv-3HHE;
+	Sun, 19 Apr 2026 00:15:53 +0000
+Date: Sun, 19 Apr 2026 08:15:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [kas:uffd/rfc-v2 3/7] include/linux/userfaultfd_k.h:167:55:
+ warning: shift count >= width of type
+Message-ID: <202604190854.w97I47Zr-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] hwmon: (yogafan) Massive hardware expansion and
- structural refactoring
-To: Rong Zhang <i@rong.moe>, kernel test robot <lkp@intel.com>,
- Sergio Melas <sergiomelas@gmail.com>, Jean Delvare <jdelvare@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-kernel@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
- "Derek J . Clark" <derekjohn.clark@gmail.com>
-References: <20260413060931.31091-2-sergiomelas@gmail.com>
- <202604180539.EuswNnjG-lkp@intel.com>
- <b876cbcce7763041d93f9cad28b8aa4cac0a001a.camel@rong.moe>
- <fed0feb4770f7fab8d4336eb349d8703839e8ce4.camel@rong.moe>
- <27b467c7-7ca0-4198-b4ea-efb38f2ac787@roeck-us.net>
- <b70674d5a2152ed6123966f96acbd2872518a6f1.camel@rong.moe>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <b70674d5a2152ed6123966f96acbd2872518a6f1.camel@rong.moe>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 4/18/26 08:14, Rong Zhang wrote:
-> Hi Guenter,
-> 
-> On Sat, 2026-04-18 at 06:49 -0700, Guenter Roeck wrote:
->> On 4/18/26 04:23, Rong Zhang wrote:
->>> Hi Sergio,
->>>
->>> On Sat, 2026-04-18 at 18:31 +0800, Rong Zhang wrote:
->>>> Hi Sergio,
->>>>
->>>> On Sat, 2026-04-18 at 05:37 +0800, kernel test robot wrote:
->>>>> Hi Sergio,
->>>>>
->>>>> kernel test robot noticed the following build errors:
->>>>>
->>>>> [auto build test ERROR on groeck-staging/hwmon-next]
->>>>> [also build test ERROR on linus/master next-20260416]
->>>>> [cannot apply to v7.0]
->>>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>>>> And when submitting patch, we suggest to use '--base' as documented in
->>>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>>>
->>>>> url:    https://github.com/intel-lab-lkp/linux/commits/Sergio-Melas/hwmon-yogafan-Massive-hardware-expansion-and-structural-refactoring/20260417-063319
->>>>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
->>>>> patch link:    https://lore.kernel.org/r/20260413060931.31091-2-sergiomelas%40gmail.com
->>>>> patch subject: [PATCH v1] hwmon: (yogafan) Massive hardware expansion and structural refactoring
->>>>> config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260418/202604180539.EuswNnjG-lkp@intel.com/config)
->>>>> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
->>>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260418/202604180539.EuswNnjG-lkp@intel.com/reproduce)
->>>>>
->>>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->>>>> the same patch/commit), kindly add following tags
->>>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>>> Closes: https://lore.kernel.org/oe-kbuild-all/202604180539.EuswNnjG-lkp@intel.com/
->>>>>
->>>>> All errors (new ones prefixed by >>):
->>>>>
->>>>>>> drivers/hwmon/yogafan.c:712:6: error: call to undeclared function 'wmi_has_guid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>>>>        712 |         if (wmi_has_guid(LENOVO_WMI_OTHER_MODE_GUID) ||
->>>>>            |             ^
->>>>>      1 error generated.
->>>>
->>>> Hmm, that's a bit troublesome. Usually we should have been able to
->>>> declare `depends on ACPI_WMI if ACPI_WMI' (new syntax since v7.0) or
->>>> `depends on ACPI_WMI || !ACPI_WMI' as an optional dependency to prevent
->>>> such an issue, but there is no static inline stubs for !ACPI_WMI...
->>>>
->>>> I'd suggest declaring `select ACPI_WMI if ACPI && X86' in Kconfig as
->>>> some drm drivers do, at least for the time being.
->>>
->>> Of course you'll still need to guard the wmi_has_guid() checks behind
->>> `#ifdef CONFIG_ACPI_WMI'. Just forgot to mention that.
->>>
->>> Hmm, in this way `depends on ACPI_WMI if ACPI_WMI' should also be OK...
->>
->> I don't know is this is a misspelling, but `depends on ACPI_WMI if ACPI_WMI'
->> doesn't make any sense.
-> 
-> This is the new syntax for optional dependencies since commit
-> 76df6815dab7 ("kconfig: Support conditional deps using "depends on X if
-> Y""), which is equivalent to the old-fashioned `depends on ACPI_WMI ||
-> !ACPI_WMI'.
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git uffd/rfc-v2
+head:   8f55f0ce2de130272cb80eee2434a185922b3340
+commit: a5a0f28bfc37d5fb52d9268238be0f8280ca737c [3/7] userfaultfd: add UFFDIO_REGISTER_MODE_RWP
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260419/202604190854.w97I47Zr-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260419/202604190854.w97I47Zr-lkp@intel.com/reproduce)
 
-Hmm, interesting. We live and learn. Thanks for the clarification.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604190854.w97I47Zr-lkp@intel.com/
 
-Guenter
+All warnings (new ones prefixed by >>):
 
+   In file included from fs/exec.c:82:
+   In file included from fs/../mm/internal.h:13:
+   In file included from include/linux/mm_inline.h:10:
+>> include/linux/userfaultfd_k.h:167:55: warning: shift count >= width of type [-Wshift-count-overflow]
+     167 |         return vma->vm_flags & (VM_UFFD_WP | VM_UFFD_MINOR | VM_UFFD_RWP);
+         |                                                              ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/exec.c:82:
+   In file included from fs/../mm/internal.h:13:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:199:25: warning: shift count >= width of type [-Wshift-count-overflow]
+     199 |         return vma->vm_flags & VM_UFFD_RWP;
+         |                                ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/exec.c:82:
+   In file included from fs/../mm/internal.h:13:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:216:25: warning: shift count >= width of type [-Wshift-count-overflow]
+     216 |         return vma->vm_flags & __VM_UFFD_FLAGS;
+         |                                ^~~~~~~~~~~~~~~
+   include/linux/userfaultfd_k.h:25:5: note: expanded from macro '__VM_UFFD_FLAGS'
+      25 |                          VM_UFFD_RWP)
+         |                          ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/exec.c:82:
+   In file included from fs/../mm/internal.h:13:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:223:14: warning: shift count >= width of type [-Wshift-count-overflow]
+     223 |         vm_flags &= __VM_UFFD_FLAGS;
+         |                     ^~~~~~~~~~~~~~~
+   include/linux/userfaultfd_k.h:25:5: note: expanded from macro '__VM_UFFD_FLAGS'
+      25 |                          VM_UFFD_RWP)
+         |                          ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/exec.c:82:
+   In file included from fs/../mm/internal.h:13:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:237:15: warning: shift count >= width of type [-Wshift-count-overflow]
+     237 |         vm_flags &= ~VM_UFFD_RWP;
+         |                      ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   5 warnings generated.
+--
+   In file included from fs/userfaultfd.c:18:
+   In file included from include/linux/mm_inline.h:10:
+>> include/linux/userfaultfd_k.h:167:55: warning: shift count >= width of type [-Wshift-count-overflow]
+     167 |         return vma->vm_flags & (VM_UFFD_WP | VM_UFFD_MINOR | VM_UFFD_RWP);
+         |                                                              ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/userfaultfd.c:18:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:199:25: warning: shift count >= width of type [-Wshift-count-overflow]
+     199 |         return vma->vm_flags & VM_UFFD_RWP;
+         |                                ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/userfaultfd.c:18:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:216:25: warning: shift count >= width of type [-Wshift-count-overflow]
+     216 |         return vma->vm_flags & __VM_UFFD_FLAGS;
+         |                                ^~~~~~~~~~~~~~~
+   include/linux/userfaultfd_k.h:25:5: note: expanded from macro '__VM_UFFD_FLAGS'
+      25 |                          VM_UFFD_RWP)
+         |                          ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/userfaultfd.c:18:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:223:14: warning: shift count >= width of type [-Wshift-count-overflow]
+     223 |         vm_flags &= __VM_UFFD_FLAGS;
+         |                     ^~~~~~~~~~~~~~~
+   include/linux/userfaultfd_k.h:25:5: note: expanded from macro '__VM_UFFD_FLAGS'
+      25 |                          VM_UFFD_RWP)
+         |                          ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from fs/userfaultfd.c:18:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:237:15: warning: shift count >= width of type [-Wshift-count-overflow]
+     237 |         vm_flags &= ~VM_UFFD_RWP;
+         |                      ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+>> fs/userfaultfd.c:220:15: warning: shift count >= width of type [-Wshift-count-overflow]
+     220 |         if (reason & VM_UFFD_RWP)
+         |                      ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   fs/userfaultfd.c:328:39: warning: shift count >= width of type [-Wshift-count-overflow]
+     328 |                 if (pmd_protnone(_pmd) && (reason & VM_UFFD_RWP))
+         |                                                     ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   fs/userfaultfd.c:357:39: warning: shift count >= width of type [-Wshift-count-overflow]
+     357 |         if (pte_protnone(ptent) && (reason & VM_UFFD_RWP))
+         |                                              ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   fs/userfaultfd.c:418:28: warning: shift count >= width of type [-Wshift-count-overflow]
+     418 |         VM_WARN_ON_ONCE(reason & ~__VM_UFFD_FLAGS);
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+   include/linux/userfaultfd_k.h:25:5: note: expanded from macro '__VM_UFFD_FLAGS'
+      25 |                          VM_UFFD_RWP)
+         |                          ^
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/mmdebug.h:123:50: note: expanded from macro 'VM_WARN_ON_ONCE'
+     123 | #define VM_WARN_ON_ONCE(cond) (void)WARN_ON_ONCE(cond)
+         |                                     ~~~~~~~~~~~~~^~~~~
+   include/asm-generic/bug.h:180:18: note: expanded from macro 'WARN_ON_ONCE'
+     180 |         DO_ONCE_LITE_IF(condition, WARN_ON, 1)
+         |         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/once_lite.h:28:27: note: expanded from macro 'DO_ONCE_LITE_IF'
+      28 |                 bool __ret_do_once = !!(condition);                     \
+         |                                         ^~~~~~~~~
+   fs/userfaultfd.c:1317:15: warning: shift count >= width of type [-Wshift-count-overflow]
+    1317 |                 vm_flags |= VM_UFFD_RWP;
+         |                             ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   fs/userfaultfd.c:1360:24: warning: shift count >= width of type [-Wshift-count-overflow]
+    1359 |                 VM_WARN_ON_ONCE(!!cur->vm_userfaultfd_ctx.ctx ^
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1360 |                                 !!(cur->vm_flags & __VM_UFFD_FLAGS));
+         |                                 ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+   include/linux/userfaultfd_k.h:25:5: note: expanded from macro '__VM_UFFD_FLAGS'
+      25 |                          VM_UFFD_RWP)
+         |                          ^
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/mmdebug.h:123:50: note: expanded from macro 'VM_WARN_ON_ONCE'
+     123 | #define VM_WARN_ON_ONCE(cond) (void)WARN_ON_ONCE(cond)
+         |                                     ~~~~~~~~~~~~~^~~~~
+   include/asm-generic/bug.h:180:18: note: expanded from macro 'WARN_ON_ONCE'
+     180 |         DO_ONCE_LITE_IF(condition, WARN_ON, 1)
+         |         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/once_lite.h:28:27: note: expanded from macro 'DO_ONCE_LITE_IF'
+      28 |                 bool __ret_do_once = !!(condition);                     \
+         |                                         ^~~~~~~~~
+   fs/userfaultfd.c:1511:24: warning: shift count >= width of type [-Wshift-count-overflow]
+    1510 |                 VM_WARN_ON_ONCE(!!cur->vm_userfaultfd_ctx.ctx ^
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1511 |                                 !!(cur->vm_flags & __VM_UFFD_FLAGS));
+         |                                 ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+   include/linux/userfaultfd_k.h:25:5: note: expanded from macro '__VM_UFFD_FLAGS'
+      25 |                          VM_UFFD_RWP)
+--
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm_inline.h:10:
+>> include/linux/userfaultfd_k.h:167:55: warning: shift count >= width of type [-Wshift-count-overflow]
+     167 |         return vma->vm_flags & (VM_UFFD_WP | VM_UFFD_MINOR | VM_UFFD_RWP);
+         |                                                              ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:199:25: warning: shift count >= width of type [-Wshift-count-overflow]
+     199 |         return vma->vm_flags & VM_UFFD_RWP;
+         |                                ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:216:25: warning: shift count >= width of type [-Wshift-count-overflow]
+     216 |         return vma->vm_flags & __VM_UFFD_FLAGS;
+         |                                ^~~~~~~~~~~~~~~
+   include/linux/userfaultfd_k.h:25:5: note: expanded from macro '__VM_UFFD_FLAGS'
+      25 |                          VM_UFFD_RWP)
+         |                          ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:223:14: warning: shift count >= width of type [-Wshift-count-overflow]
+     223 |         vm_flags &= __VM_UFFD_FLAGS;
+         |                     ^~~~~~~~~~~~~~~
+   include/linux/userfaultfd_k.h:25:5: note: expanded from macro '__VM_UFFD_FLAGS'
+      25 |                          VM_UFFD_RWP)
+         |                          ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm_inline.h:10:
+   include/linux/userfaultfd_k.h:237:15: warning: shift count >= width of type [-Wshift-count-overflow]
+     237 |         vm_flags &= ~VM_UFFD_RWP;
+         |                      ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   mm/memory.c:1485:26: warning: shift count >= width of type [-Wshift-count-overflow]
+    1485 |         if (dst_vma->vm_flags & VM_COPY_ON_FORK)
+         |                                 ^~~~~~~~~~~~~~~
+   include/linux/mm.h:643:65: note: expanded from macro 'VM_COPY_ON_FORK'
+     643 | #define VM_COPY_ON_FORK (VM_PFNMAP | VM_MIXEDMAP | VM_UFFD_WP | VM_UFFD_RWP | \
+         |                                                                 ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   mm/memory.c:6069:31: warning: shift count >= width of type [-Wshift-count-overflow]
+    6069 |         return handle_userfault(vmf, VM_UFFD_RWP);
+         |                                      ^~~~~~~~~~~
+   include/linux/mm.h:501:21: note: expanded from macro 'VM_UFFD_RWP'
+     501 | #define VM_UFFD_RWP     INIT_VM_FLAG(UFFD_RWP)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mm.h:402:28: note: expanded from macro 'INIT_VM_FLAG'
+     402 | #define INIT_VM_FLAG(name) BIT((__force int) VMA_ ## name ## _BIT)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+..
+
+
+vim +167 include/linux/userfaultfd_k.h
+
+   153	
+   154	/*
+   155	 * Never enable huge pmd sharing on some uffd registered vmas:
+   156	 *
+   157	 * - VM_UFFD_WP VMAs, because write protect information is per pgtable entry.
+   158	 *
+   159	 * - VM_UFFD_MINOR VMAs, because otherwise we would never get minor faults for
+   160	 *   VMAs which share huge pmds. (If you have two mappings to the same
+   161	 *   underlying pages, and fault in the non-UFFD-registered one with a write,
+   162	 *   with huge pmd sharing this would *also* setup the second UFFD-registered
+   163	 *   mapping, and we'd not get minor faults.)
+   164	 */
+   165	static inline bool uffd_disable_huge_pmd_share(struct vm_area_struct *vma)
+   166	{
+ > 167		return vma->vm_flags & (VM_UFFD_WP | VM_UFFD_MINOR | VM_UFFD_RWP);
+   168	}
+   169	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
