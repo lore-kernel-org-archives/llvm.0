@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79A53D76;
-	Tue, 21 Apr 2026 00:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57862253950;
+	Tue, 21 Apr 2026 03:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776729787; cv=none; b=QQORZgO2gme636wXhIug7N0rPWifOJQYMlbbCmo/1so/KMQbtNEOkzBKtaxhkOwvjl+ElxwIIeRF9FVaUF8xhR/ewbSyNJi71nPwKsA4gtxLNx9c/hnmntE6wFiMHW24JtBJDoVfyYI3iaI625GKOWzrSkwovYTzEWP251sAFqc=
+	t=1776742283; cv=none; b=fkShxdCHOqK7IQ2CQOz9jXKvalYxorsFruUGjW9FyCZChBEnxqhg0h9hzk16lPvLqNIUP9TUo84Z8iQbVoyD+I0nvqbVfEoB3o0RFaPtqyZ2ClP6yfsFwqKib7TGgZIlx/tGDQeLc/SyLosRH48atWlzNaF7m8nNdxvEce8x7aY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776729787; c=relaxed/simple;
-	bh=SJx2kf6D1+0QT92aMma83VleiJDCi/O6swIOtZouGQ0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=kyfaGPpvUOayRIRSGuL95+kYto07V4QMbnxhYOBLnIAdFBW7B1V2p47cdQH1pKh/tBaeC8SlNgPeiCwa2BkyjTm+epk1Lcvq0/krSx7EzPj77oetYsJPjcyVgC/6O+LPQgcpeDJHL1wB+ukM27sgDb8c0vP1ojhmqm1nul7Mzs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gs8wHIkr; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1776742283; c=relaxed/simple;
+	bh=BxYw6IyDjc/GoW7Tb90cjX0thjMKyiSYAeJDNEwCMd0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Zy2Iw8m6vFw8ziGQPGaWcRNaKxhbNR1tUHD61lOL0xJaUNwu4fFnVNakr/BmHVT4Hez3GK5o0GM+IN2waAq0qXl7vYV8pYCUjOLyMKZqj+HrTdqqd15yaLjzLj0/PvoSY4cx3guTFhKBZLv79OWrcfL78v3OGF511qzfpmd0Kds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UwZ6or3P; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gs8wHIkr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UwZ6or3P"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776729786; x=1808265786;
+  t=1776742282; x=1808278282;
   h=date:from:to:cc:subject:message-id;
-  bh=SJx2kf6D1+0QT92aMma83VleiJDCi/O6swIOtZouGQ0=;
-  b=gs8wHIkrHqgZLcaNn1LYjcG9X7CkufSe/rqX2WCqBZUwwVtX/N+Qnqf8
-   BGSZVw9burUPdSL/0EuI1fs1GjWSGhhAgxdveWifvvu6KfGYG0LPdDsLs
-   zcTa34exj+IXDxq2jE1NuJK5g7UFiII1cmlQZYevOzpzzgPAFWOfFJ5Np
-   bv1x9xmg7c6q55au+4PSxkjNhoBGPh2GyQ1KPglNA/aR8fGcGQAbOLR7H
-   tDmmCaQ5yCCR0UcTOuDTyexJ/Lsgv81j5TtM9Jq3iHAuU8diDYJeC6nBo
-   igFuJiv2i/aX2wIU+UabmLXtZ8aBQMthUAirXJsN+YoeNouEjQw7vAyKj
+  bh=BxYw6IyDjc/GoW7Tb90cjX0thjMKyiSYAeJDNEwCMd0=;
+  b=UwZ6or3PDUDySz74qF+988e0CHZjSRml5HbDCfyeQ6/KHaNyWVK22wgZ
+   DNVKV9sSIcsbMucSo9lPO9Fh+WSYv593qLyKtWeqaQGW+yVzxa4sqaGfd
+   S5NiR9iLEVPMk72nkQLS5YLYGu/SWz/W0MZxzn+yiCa3WTbKNjVMXLBKD
+   iSnZ1JwNt0mVVmmEH/eTGWbL7IHo6foTr82wIn9o6Zu/EsUOQ2cnuR8Lr
+   lMKo31CTJt2RG0yblcS/WkV0GwwSzMJCw1KT2JB7wrt71OT6Aq3H8CqtO
+   aXQ1oc0sOPjXtydDbqOuYD5cfocYkzha3JbyE+ntPnNVeOpEjveiT4VzS
    w==;
-X-CSE-ConnectionGUID: s7lbD01UTQiYkuqTdCbwNw==
-X-CSE-MsgGUID: 6I4DWpy5SqSbTXtFiJ2GBg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11762"; a="65191159"
-X-IronPort-AV: E=Sophos;i="6.23,190,1770624000"; 
-   d="scan'208";a="65191159"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2026 17:03:06 -0700
-X-CSE-ConnectionGUID: 2ORWJukxQJ2j3pLVyX4Ppg==
-X-CSE-MsgGUID: Uua7gTxsRse26Fr3EOLq0w==
+X-CSE-ConnectionGUID: 4dzQIy8jSKex5adQJhgFuw==
+X-CSE-MsgGUID: HopZIJDeTyCh1Wve2kHjRQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11762"; a="88367414"
+X-IronPort-AV: E=Sophos;i="6.23,191,1770624000"; 
+   d="scan'208";a="88367414"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2026 20:31:22 -0700
+X-CSE-ConnectionGUID: K4JXcVLaQEGlbpf6eMPabQ==
+X-CSE-MsgGUID: EPOBB6THT1am8bkyRNBi0w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,190,1770624000"; 
-   d="scan'208";a="236843948"
+X-IronPort-AV: E=Sophos;i="6.23,191,1770624000"; 
+   d="scan'208";a="230869760"
 Received: from lkp-server01.sh.intel.com (HELO 7e48d0ff8e22) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 20 Apr 2026 17:03:03 -0700
+  by orviesa006.jf.intel.com with ESMTP; 20 Apr 2026 20:31:20 -0700
 Received: from kbuild by 7e48d0ff8e22 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wEyZw-0000000031s-0TOW;
-	Tue, 21 Apr 2026 00:03:00 +0000
-Date: Tue, 21 Apr 2026 08:02:26 +0800
+	id 1wF1pV-000000003BQ-1hR4;
+	Tue, 21 Apr 2026 03:31:17 +0000
+Date: Tue, 21 Apr 2026 11:31:08 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [morimoto:sound-cleanup-2026-04-20 127/127]
- sound/soc/soc-component.c:1712:18: warning: variable 'card' is uninitialized
- when used here
-Message-ID: <202604210755.vDZ5fdMu-lkp@intel.com>
+ sound/soc/atmel/sam9x5_wm8731.c:95:21: warning: variable 'dai' is
+ uninitialized when used here
+Message-ID: <202604211119.8rdJyDuK-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -62,73 +62,142 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
 tree:   https://github.com/morimoto/linux sound-cleanup-2026-04-20
 head:   c0eca3aad838fa892c00ca5d3141b136aac51b91
-commit: bfa0d5aadb75033c0a6038d125e5e98d4d6311eb [127/127] ASoC: soc-component: move snd_soc_register_[un]component() to soc-component.c
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260421/202604210755.vDZ5fdMu-lkp@intel.com/config)
+commit: c0eca3aad838fa892c00ca5d3141b136aac51b91 [127/127] ASoC: atmel: sam9x5_wm8731: use snd_soc_card_register()
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260421/202604211119.8rdJyDuK-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260421/202604210755.vDZ5fdMu-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260421/202604211119.8rdJyDuK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604210755.vDZ5fdMu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604211119.8rdJyDuK-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> sound/soc/soc-component.c:1712:18: warning: variable 'card' is uninitialized when used here [-Wuninitialized]
-    1712 |         soc_card_rebind(card);
-         |                         ^~~~
-   sound/soc/soc-component.c:1684:27: note: initialize the variable 'card' to silence this warning
-    1684 |         struct snd_soc_card *card;
-         |                                  ^
-         |                                   = NULL
+>> sound/soc/atmel/sam9x5_wm8731.c:95:21: warning: variable 'dai' is uninitialized when used here [-Wuninitialized]
+      95 |         driver->dai_link = dai;
+         |                            ^~~
+   sound/soc/atmel/sam9x5_wm8731.c:79:30: note: initialize the variable 'dai' to silence this warning
+      79 |         struct snd_soc_dai_link *dai;
+         |                                     ^
+         |                                      = NULL
    1 warning generated.
 
 
-vim +/card +1712 sound/soc/soc-component.c
+vim +/dai +95 sound/soc/atmel/sam9x5_wm8731.c
 
-  1679	
-  1680	int snd_soc_component_add(struct snd_soc_component *component,
-  1681				  struct snd_soc_dai_driver *dai_drv,
-  1682				  int num_dai)
-  1683	{
-  1684		struct snd_soc_card *card;
-  1685		int ret;
-  1686		int i;
-  1687		guard(mutex)(&client_mutex);
-  1688	
-  1689		if (component->driver->endianness) {
-  1690			for (i = 0; i < num_dai; i++) {
-  1691				convert_endianness_formats(&dai_drv[i].playback);
-  1692				convert_endianness_formats(&dai_drv[i].capture);
-  1693			}
-  1694		}
-  1695	
-  1696		ret = soc_component_register_dais(component, dai_drv, num_dai);
-  1697		if (ret < 0) {
-  1698			dev_err(component->dev, "ASoC: Failed to register DAIs: %d\n",
-  1699				ret);
-  1700			goto err_cleanup;
-  1701		}
-  1702	
-  1703		if (!component->driver->write && !component->driver->read) {
-  1704			if (!component->regmap)
-  1705				component->regmap = dev_get_regmap(component->dev,
-  1706								   NULL);
-  1707		}
-  1708	
-  1709		/* see for_each_component */
-  1710		list_add(&component->list, soc_component_get_list_head());
-  1711	
-> 1712		soc_card_rebind(card);
-  1713	
-  1714	err_cleanup:
-  1715		if (ret < 0)
-  1716			snd_soc_component_del(component);
-  1717	
-  1718		return ret;
-  1719	}
-  1720	EXPORT_SYMBOL_GPL(snd_soc_component_add);
-  1721	
+    72	
+    73	static int sam9x5_wm8731_driver_probe(struct platform_device *pdev)
+    74	{
+    75		struct device_node *np = pdev->dev.of_node;
+    76		struct device_node *codec_np, *cpu_np;
+    77		struct snd_soc_card_driver *driver;
+    78		struct snd_soc_card *card;
+    79		struct snd_soc_dai_link *dai;
+    80		struct sam9x5_drvdata *priv;
+    81		struct snd_soc_dai_link_component *comp;
+    82		int ret;
+    83	
+    84		if (!np) {
+    85			dev_err(&pdev->dev, "No device node supplied\n");
+    86			return -EINVAL;
+    87		}
+    88	
+    89		driver = devm_kzalloc(&pdev->dev, sizeof(*driver), GFP_KERNEL);
+    90		if (!driver) {
+    91			ret = -ENOMEM;
+    92			goto out;
+    93		}
+    94	
+  > 95		driver->dai_link = dai;
+    96		driver->num_links = 1;
+    97		driver->dapm_widgets = sam9x5_dapm_widgets;
+    98		driver->num_dapm_widgets = ARRAY_SIZE(sam9x5_dapm_widgets);
+    99	
+   100		card = devm_snd_soc_card_alloc(&pdev->dev, THIS_MODULE, driver,
+   101					       NULL, NULL, NULL);
+   102		priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+   103		dai = devm_kzalloc(&pdev->dev, sizeof(*dai), GFP_KERNEL);
+   104		comp = devm_kzalloc(&pdev->dev, 3 * sizeof(*comp), GFP_KERNEL);
+   105		if (!dai || !card || !priv || !comp) {
+   106			ret = -ENOMEM;
+   107			goto out;
+   108		}
+   109		snd_soc_card_attach_priv(card, priv);
+   110	
+   111		dai->cpus = &comp[0];
+   112		dai->num_cpus = 1;
+   113		dai->codecs = &comp[1];
+   114		dai->num_codecs = 1;
+   115		dai->platforms = &comp[2];
+   116		dai->num_platforms = 1;
+   117	
+   118		dai->name = "WM8731";
+   119		dai->stream_name = "WM8731 PCM";
+   120		dai->codecs->dai_name = "wm8731-hifi";
+   121		dai->init = sam9x5_wm8731_init;
+   122		dai->dai_fmt = SND_SOC_DAIFMT_DSP_A | SND_SOC_DAIFMT_NB_NF
+   123			| SND_SOC_DAIFMT_CBP_CFP;
+   124	
+   125		ret = snd_soc_of_parse_card_name(card, "atmel,model");
+   126		if (ret) {
+   127			dev_err(&pdev->dev, "atmel,model node missing\n");
+   128			goto out;
+   129		}
+   130	
+   131		ret = snd_soc_of_parse_audio_routing(card, "atmel,audio-routing");
+   132		if (ret) {
+   133			dev_err(&pdev->dev, "atmel,audio-routing node missing\n");
+   134			goto out;
+   135		}
+   136	
+   137		codec_np = of_parse_phandle(np, "atmel,audio-codec", 0);
+   138		if (!codec_np) {
+   139			dev_err(&pdev->dev, "atmel,audio-codec node missing\n");
+   140			ret = -EINVAL;
+   141			goto out;
+   142		}
+   143	
+   144		dai->codecs->of_node = codec_np;
+   145	
+   146		cpu_np = of_parse_phandle(np, "atmel,ssc-controller", 0);
+   147		if (!cpu_np) {
+   148			dev_err(&pdev->dev, "atmel,ssc-controller node missing\n");
+   149			ret = -EINVAL;
+   150			goto out_put_codec_np;
+   151		}
+   152		dai->cpus->of_node = cpu_np;
+   153		dai->platforms->of_node = cpu_np;
+   154	
+   155		priv->ssc_id = of_alias_get_id(cpu_np, "ssc");
+   156	
+   157		ret = atmel_ssc_set_audio(priv->ssc_id);
+   158		if (ret != 0) {
+   159			dev_err(&pdev->dev, "Failed to set SSC %d for audio: %d\n",
+   160				ret, priv->ssc_id);
+   161			goto out_put_cpu_np;
+   162		}
+   163	
+   164		ret = devm_snd_soc_card_register(card);
+   165		if (ret) {
+   166			dev_err(&pdev->dev, "Platform device allocation failed\n");
+   167			goto out_put_audio;
+   168		}
+   169	
+   170		dev_dbg(&pdev->dev, "%s ok\n", __func__);
+   171	
+   172		goto out_put_cpu_np;
+   173	
+   174	out_put_audio:
+   175		atmel_ssc_put_audio(priv->ssc_id);
+   176	out_put_cpu_np:
+   177		of_node_put(cpu_np);
+   178	out_put_codec_np:
+   179		of_node_put(codec_np);
+   180	out:
+   181		return ret;
+   182	}
+   183	
 
 -- 
 0-DAY CI Kernel Test Service
