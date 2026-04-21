@@ -1,185 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6142E6CCD;
-	Tue, 21 Apr 2026 17:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A5D2F5468
+	for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 17:28:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776792163; cv=none; b=a5OccQyLKzv617W90gioHWgx6LxNO8iqZawVuQcNCHYFXHog1DhKbZxmshpRVztwoalnMZ5tu3x3JbPZGf3EdD9Dwn4drAqUo/7M+D9awMYjiQGixAxWx2VbMGonR6FqhdG9V8vpLVqxo290/0RsDyArHNnUA1nM0zYtfrHSSGQ=
+	t=1776792534; cv=none; b=Ok5e7oIMu2rSRoOIbOP1sJq4s2V4pQADH8iIxGYiHg8yLY/PHp4aF89tkNjFOq72i2q4Oth75YCgnyE4faNu/fKYnU3Apzg0mdfln/dYrg2hRjga7xmiai4SVOy3wL27l4MZLHlRERJhvlE8Od8oAo57hNhwWT4/ZEeZLl9Afn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776792163; c=relaxed/simple;
-	bh=nNMDSilb+/zXGXVw/f0Wvgf6NfzWoClrWzQe893lPEs=;
+	s=arc-20240116; t=1776792534; c=relaxed/simple;
+	bh=0CPNtG9KaV/mxXgWOlyTcx7Q+sWj/Qaq3yAUy0GQXkQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LoVrQXbpbNKmD6UPBoTE+bo5mXBmbGvImraPMQ1lqLs3JceOsnzZnWqTSrdJKtfbIdJ3qRNOM8CIxzS7KtiRaFhjtdj0wNQen/xqRPrmiwmorGFtZrbW+kfT12CthHgavfubmG4Bt8atF3ZEJ2KpSrw6KkjWVe3xEvoq47lcWbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=APakOZVU; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=eI/Wxyh8jOchQ+mjYhY3jr5oevn1JG5gcbzAJw/CfsDWuUW5At0CJ1v2kRJfdj4wfWKZFCQIMI0eUOHorv0NG0rPC++wX3Qwo1h7VQNpr/usmT/SHnw+A/FnQfnIJmGnB4E4eJK5A1jdtIYNcehkdfPlosB45TEBBNz2Dzmjx6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VkUKG9to; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="APakOZVU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31EBAC2BCB0;
-	Tue, 21 Apr 2026 17:22:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776792163;
-	bh=nNMDSilb+/zXGXVw/f0Wvgf6NfzWoClrWzQe893lPEs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=APakOZVU5qkL6vWUVTFAYa7wyo8CQ/+TvO3KSSP5ZRkDiG7GeNDpX9/D3iHleKfe1
-	 MLfTi0udDG+jOpm+5Xn4s1LPuyDV1GjPm5WyWeylmQcPRpTdUr4wN6Wphw9pRBWjvp
-	 AFg73IKKfpBPJxMEn0orz74mE/laLUKi9r0tIzNilLIjUUoRRx6ZmVFNLcpHJ2jhqO
-	 9u6201KZx3sh5Vh5HklBamSzUt8geRNlHbsS29kwq6LjTPzkRABmYgpIHbRj1EegtK
-	 3rpG+i7AR/Kg7ZinHcHxHHk8cKqG2KeeONe/KAX35msVFasIfncY2lD0aiM3rVQyVg
-	 VyqNHsIu0GGSQ==
-Date: Tue, 21 Apr 2026 10:22:42 -0700
-From: Kees Cook <kees@kernel.org>
-To: Marco Elver <elver@google.com>
-Cc: Vlastimil Babka <vbabka@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
-	Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Alexander Potapenko <glider@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
-	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>,
-	Florent Revest <revest@google.com>, Jann Horn <jannh@google.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matteo Rizzo <matteorizzo@google.com>,
-	GONG Ruiqi <gongruiqi1@huawei.com>
-Subject: Re: [PATCH v2] slab: support for compiler-assisted type-based slab
- cache partitioning
-Message-ID: <202604210954.84C57E5E0@keescook>
-References: <20260415143735.2974230-1-elver@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VkUKG9to"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c76cce85bd9so1674678a12.1
+        for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 10:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776792532; x=1777397332; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JNWTKUwnrU4f/1KWLuTJhziy5RXD7g4YKGqyBo+QdTo=;
+        b=VkUKG9toC2IiRxMZ6bO657iZ77bXY7Q6RgLmV9sFIhXvc8TKFLwLzQLteDXa2smmCl
+         bUoh++UXeEtFyTeYuJd0/OeEXj6h+v4nSO0ktRFM5ptKGiYcFfGzeBxoE1+1kO79P4pK
+         IYE/hfxUnzLZt7un+DJHbrxV14wgSICVnAQqPGP8DKI211dYYRj7r7Ab31TAEBP3DgJK
+         zLtzNk/6J+kc/PZfIYfUEbg7dzzmi0Eoe8jcLag1/KRjzJTfDYY12zrMvqLT0MdCnciO
+         xU4xolkHpCDAActJ7b4SvIVkhgLt1OHYFFL42+pVrg/oQJs25MMrNIyKDo2MUbldx0ox
+         0DIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776792532; x=1777397332;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JNWTKUwnrU4f/1KWLuTJhziy5RXD7g4YKGqyBo+QdTo=;
+        b=fkTtkHZMDaej8r7ZPnpljo36OOOl1eAJ0BQSSexF9PVctpcJkUJ5MoTTuWAx/HpuUI
+         NN+Q+kKWJnm51A7lQHylDg04HNPYyPEgOcxwtpkx0xcKE8K/fHgdNjLI0lU7JQjSmMvi
+         kzfeaJ9102j+/Srm6e23oGr12iGM6q8Dj+YU42pBo0xGe0JI5egFkIPj/tCISNsIeo4r
+         hePVBHN+YEva4+CWtgbVHvg0Ev/qaP789cvR0MBO1KBHQiGpJ4VUE2FY2Jlk6A7kt/ca
+         V4NuncQQRrpeszLnIIh1zoNSfywVptITUNJ63/Mh3mAiBSL2R2qaq/+e5DmFtbPeyZfi
+         wZLg==
+X-Forwarded-Encrypted: i=1; AFNElJ8GFmgUmUjAeDSEKl2MRKk7jTFOXqyaH+QiOHBxOqbu4fPjM4ZBlPh8CrPWihB4cslz9icQ@lists.linux.dev
+X-Gm-Message-State: AOJu0YzI15kYFYaXpnCth4eClSsneGcivGYQgwKVRT1qAA9FWUgRUAJj
+	1E2FwJs9YfLttqsk9gZ5IT96gk2D+U/mIaFogukaO9l/MnlNrFzpuiZa
+X-Gm-Gg: AeBDieteMoR08CMN8V+jwwtTH80OvcCWB43D5WrPt3RMeK1wN0YnyrmTdxhseo7tBxQ
+	OI3Ggc4aesfVdpLOZDKSsgY3nXdIMMR4g9O06gTQBxt8o15T1QL2hFUjGExs6XEVah+BRROEl9A
+	f/tvozeLiTMFqhIvBw6/5/4xfb+sk+/9rRVyr8DPMbOaCNDZwinsJ/Oajp0Ygcp36nqdNAPzToe
+	oog5QUceb0lJyycydlvyipRmUETeejZlFaS27XczjF3eM7/oJ16ZYVqapNpVq2JtzbO/Q6gq0GE
+	TZVVMxzbGlPbl1GG2dCmF5Ua1hb3RWT47pRDBG3s7y31ePsnRJeFhI45jnQ4Z+jjvYrEH9vDIf4
+	hxdlXuAYOu0ce3kJLdLHOqCnN1acghWIhxn6q/DXrdO20oHizoP4ZW8gaK/TK1Hzn/Xg3QQIN2U
+	40nrNPsFNu1MQNdrmOm9GT1e1M/P0DJtPj4ZC4qIJ+OWZYwjrfDO77DoD3iP7yX85L9oan+dWoq
+	QyvOcoNQA==
+X-Received: by 2002:a05:6a20:734c:b0:39b:dea7:5626 with SMTP id adf61e73a8af0-3a08d8a21bdmr21718680637.35.1776792532369;
+        Tue, 21 Apr 2026 10:28:52 -0700 (PDT)
+Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([106.51.164.157])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c797703ddf8sm10961055a12.28.2026.04.21.10.28.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 10:28:51 -0700 (PDT)
+Date: Tue, 21 Apr 2026 22:58:39 +0530
+From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Link Mauve <linkmauve@linkmauve.fr>, maddy@linux.ibm.com, 
+	mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org, peterz@infradead.org, 
+	jpoimboe@kernel.org, jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org, 
+	ardb@kernel.org, ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
+	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, tmgross@umich.edu, 
+	dakr@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
+	morbo@google.com, justinstitt@google.com, linuxppc-dev@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH V11 1/4] rust: Fix "multiple candidates for rmeta
+ dependency core" error
+Message-ID: <aeezhtH9PCaqfg7r@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+References: <20260417152253.2312961-1-mkchauras@gmail.com>
+ <20260417152253.2312961-2-mkchauras@gmail.com>
+ <aedFgEicDW6LAcuq@luna>
+ <aedJGuF9P2V1lOCZ@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <aedQ629D0x-5KuKw@luna>
+ <aedpk1iaeYyKPSOI@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <aeds6_8Mr_w38oYI@luna>
+ <aeec_IzVJwlfarN5@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <CANiq72n57hMF+0cATWgUiE1ccqJPwMYw_KAu=3PNJdG3=6yoDw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260415143735.2974230-1-elver@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72n57hMF+0cATWgUiE1ccqJPwMYw_KAu=3PNJdG3=6yoDw@mail.gmail.com>
 
-On Wed, Apr 15, 2026 at 04:37:05PM +0200, Marco Elver wrote:
-> The builtin __builtin_infer_alloc_token(<malloc-args>, ...) instructs
-> the compiler to infer an allocation type from arguments commonly passed
-> to memory-allocating functions and returns a type-derived token ID. The
-> implementation passes kmalloc-args to the builtin: the compiler performs
-> best-effort type inference, and then recognizes common patterns such as
-> `kmalloc(sizeof(T), ...)`, `kmalloc(sizeof(T) * n, ...)`, but also
-> `(T *)kmalloc(...)`. Where the compiler fails to infer a type the
-> fallback token (default: 0) is chosen.
+On Tue, Apr 21, 2026 at 06:00:50PM +0200, Miguel Ojeda wrote:
+> On Tue, Apr 21, 2026 at 5:54 PM Mukesh Kumar Chaurasiya
+> <mkchauras@gmail.com> wrote:
+> >
+> > The stable support is available on nightly.
+> > Refer https://github.com/rust-lang/rust/pull/147996
 > 
-> Note: kmalloc_obj(..) APIs fix the pattern how size and result type are
-> expressed, and therefore ensures there's not much drift in which
-> patterns the compiler needs to recognize. Specifically, kmalloc_obj()
-> and friends expand to `(TYPE *)KMALLOC(__obj_size, GFP)`, which the
-> compiler recognizes via the cast to TYPE*.
+> That PR was merged for 1.95.0, so it is already available in the
+> latest release, no? Or do you mean something else?
+> 
+> Thanks!
+> 
+> Cheers,
+> Miguel
 
-Great! I'm glad this gets deterministically handled for the kmalloc_obj*
-cases.
+Hey Miguel,
 
-> Additionally, when I compile my kernel with -Rpass=alloc-token, which
-> provides diagnostics where (after dead-code elimination) type inference
-> failed, I see 186 allocation sites where the compiler failed to identify
-> a type (down from 966 when I sent the RFC [4]). Some initial review
-> confirms these are mostly variable sized buffers, but also include
-> structs with trailing flexible length arrays.
+Yeah that's what i mean. It's available in 1.95.
 
-For the call-site-partitioning series[1] I sent before, I had
-per-site caches for fixed-sized allocations and size bucket caches for
-variably-sized allocations. I'd like to see something similar for this
-series. Specifically, I replaced "kmalloc_slab" with "choose_slab" that
-did O(1) to find the dedicated cache/bucket for the allocation[2].
-
-In this case, we now have a build-time-constant value that it should be
-possible to use to look up a _single_ dedicated cache/bucket for the
-given unique type: there is no need to do hashing.
-
-> [...]
-> -config RANDOM_KMALLOC_CACHES
-> -	default n
-> +config PARTITION_KMALLOC_CACHES
->  	depends on !SLUB_TINY
-> -	bool "Randomize slab caches for normal kmalloc"
-> +	bool "Partitioned slab caches for normal kmalloc"
->  	help
-> -	  A hardening feature that creates multiple copies of slab caches for
-> -	  normal kmalloc allocation and makes kmalloc randomly pick one based
-> -	  on code address, which makes the attackers more difficult to spray
-> -	  vulnerable memory objects on the heap for the purpose of exploiting
-> -	  memory vulnerabilities.
-> +	  A hardening feature that creates multiple isolated copies of slab
-> +	  caches for normal kmalloc allocations. This makes it more difficult
-> +	  to exploit memory-safety vulnerabilities by attacking vulnerable
-> +	  co-located memory objects. Several modes are provided.
->  
->  	  Currently the number of copies is set to 16, a reasonably large value
-
-The "16" buckets seems to hold for TYPED_KMALLOC_CACHES too? My goal
-with the earlier type-partitioning was to get _total_ isolation, not
-simply bucketed: 1 cache (or sizes-bucket) for each type. The "16"
-limitation from RANDOM_KMALLOC_CACHES was kind of arbitrary due to the
-hashing.
-
->  	  that effectively diverges the memory objects allocated for different
->  	  subsystems or modules into different caches, at the expense of a
-> -	  limited degree of memory and CPU overhead that relates to hardware and
-> -	  system workload.
-> +	  limited degree of memory and CPU overhead that relates to hardware
-> +	  and system workload.
-> +
-> +choice
-> +	prompt "Partitioned slab cache mode"
-> +	depends on PARTITION_KMALLOC_CACHES
-> +	default RANDOM_KMALLOC_CACHES
-
-I think this should be adjusted a bit:
-
-config CC_HAS_ALLOC_TOKEN
-	def_bool $(cc-option,-falloc-token-max=123)
-
-...
-choice
-	prompt "Partitioned slab cache mode"
-	depends on PARTITION_KMALLOC_CACHES
-	default TYPED_KMALLOC_CACHES if CC_HAS_ALLOC_TOKEN
-	default RANDOM_KMALLOC_CACHES
-
-And actually, perhaps a global rename of the options so the selection
-naming is at the end of the CONFIG phrase, and bundle the on/off into
-the choice:
-
-
-choice
-	prompt "Partitioned slab cache mode"
-	depends on PARTITION_KMALLOC_CACHES
-	default KMALLOC_PARTITION_TYPED if !SLUB_TINY && CC_HAS_ALLOC_TOKEN
-	default KMALLOC_PARTITION_RANDOM if !SLUB_TINY
-	default KMALLOC_PARTITION_NONE
-
-config KMALLOC_PARTITION_NONE
-...
-config KMALLOC_PARTITION_RANDOM
-	depends on !SLUB_TINY
-...
-config KMALLOC_PARTITION_TYPED
-	depends on !SLUB_TINY && CC_HAS_ALLOC_TOKEN
-
--Kees
-
-[1] https://lore.kernel.org/lkml/20240809072532.work.266-kees@kernel.org/
-[2] https://lore.kernel.org/lkml/20240809073309.2134488-5-kees@kernel.org/
-
--- 
-Kees Cook
+Regards,
+Mukesh
