@@ -1,340 +1,198 @@
-Received: from luna.linkmauve.fr (82-65-109-163.subs.proxad.net [82.65.109.163])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CAB3C062C
-	for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 12:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.65.109.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F15E3D7D7C;
+	Tue, 21 Apr 2026 14:06:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776774409; cv=none; b=VDP4w5Cyq9cVAF4YR4GrmRw2+SdpKKw/lsb/Cd599UecwVk5xc+OAcGzPCzD18T7Pz9XB12j/ajdXGahygKkWighhWxJQP9tFUhG2T7r/bfX4MLOgtxm2HS1u18HZYhtK1VZviGXL9nAiBymF+agHPqrlwg/AjHwTtDLC7Gppl0=
+	t=1776780369; cv=none; b=hEkWj8WcIYngm5RB0szKpT3Nu2fZLFd3dF/Y9VbJA4Lk3aMKcZ+KIzpO6T8yLpbqp1TLCtc1WSZC+9agBk1f9JZYqwjJ6fSvOacGTOeLlw9CXWFHmbMnbcafIK+xzQZQAwRo3yeAisTy53Vff33sSbbM7UvzAVKGwUVhdy7Eocw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776774409; c=relaxed/simple;
-	bh=VDTyB5dzcQfGUMUD4CwU/Zo6P6VSrI2EcNM9LeDBsR8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=knUeIK6w0cDpK4FQA8zYU/o5nJ1vVQsdrYg7NNUl5faC4knzyCbXD/hJKnAhWubnn0lCDFmOG4wrP7hHZG4/dHwgV6uoLgI7KbHvb9qXz1tphXNLn+OasW9h0P51c8X0lhVqGdUyMIcZ4d5qxLO7g+dLtXvJ7eU2UfclMY/LgH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linkmauve.fr; spf=pass smtp.mailfrom=linkmauve.fr; arc=none smtp.client-ip=82.65.109.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linkmauve.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linkmauve.fr
-Received: by luna.linkmauve.fr (Postfix, from userid 1000)
-	id C7310F40864; Tue, 21 Apr 2026 14:26:19 +0200 (CEST)
-Date: Tue, 21 Apr 2026 14:26:19 +0200
-From: Link Mauve <linkmauve@linkmauve.fr>
-To: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-Cc: Link Mauve <linkmauve@linkmauve.fr>, maddy@linux.ibm.com,
-	mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org,
-	peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com,
-	aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org,
-	ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net,
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
-	tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com, morbo@google.com,
-	justinstitt@google.com, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH V11 1/4] rust: Fix "multiple candidates for rmeta
- dependency core" error
-Message-ID: <aeds6_8Mr_w38oYI@luna>
-References: <20260417152253.2312961-1-mkchauras@gmail.com>
- <20260417152253.2312961-2-mkchauras@gmail.com>
- <aedFgEicDW6LAcuq@luna>
- <aedJGuF9P2V1lOCZ@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <aedQ629D0x-5KuKw@luna>
- <aedpk1iaeYyKPSOI@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+	s=arc-20240116; t=1776780369; c=relaxed/simple;
+	bh=5XrTxuwxrYcdeBLP7qIZ/NHSJM4QYjrOyP2GamuEmdM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gaU1DlDL1wvwA/rxJ9W+NC7syvFKqNNArtki8bxQ9hAUGMzA4MVh/bBlnydZxMk4hz3ZNh5XqaFxE5BuKXYPgW4cnVES3TRw8KSgK7jkocBMxy1MNxTZegx0KklCh3NY4+hANHAq9G+y0lwkV8VujMIrM1qkT+yMnRpyoBhqlkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PsFqF6of; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PsFqF6of"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776780366; x=1808316366;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5XrTxuwxrYcdeBLP7qIZ/NHSJM4QYjrOyP2GamuEmdM=;
+  b=PsFqF6ofIWYFf54efwYm8eQXbYvZxwUdLFGWWzS2b91u6rxiEDGlPdle
+   77O3+8AhqO0FO/OJoemPuRBavuuLCQmC377SvYBLqOsxhe6DIJnVMRkO3
+   rGxYdWcqtRtbQCi3a2R7xGhfSmvLoAsrgOvP9qMX6tbTn4bMNytaDc4Mm
+   3AwVX7qlKqTtaJd9qZwx0K68haYbDxELOiFMh1q1bef//Yndk49iZoT1o
+   /mjjVWuNRjNdQum1s1y4s947iuaBECRSQcc5YBi7pUvbReHecPjpdchzA
+   bxAzYsIbaQeBaXa8qovLex3kiDb876stDSHjibheVoV7YmFnbdtGzA8a4
+   A==;
+X-CSE-ConnectionGUID: vF68mnkeQSiUCstln39JaA==
+X-CSE-MsgGUID: z9jaq5u0R1aW2C+m5zqrlQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11762"; a="77892767"
+X-IronPort-AV: E=Sophos;i="6.23,191,1770624000"; 
+   d="scan'208";a="77892767"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2026 07:06:05 -0700
+X-CSE-ConnectionGUID: XxfnPY73QHit84Pd1eGDdA==
+X-CSE-MsgGUID: ZkcAaYpaQfGJYjnP2+tH1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,191,1770624000"; 
+   d="scan'208";a="227715055"
+Received: from lkp-server01.sh.intel.com (HELO 7e48d0ff8e22) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 21 Apr 2026 07:06:02 -0700
+Received: from kbuild by 7e48d0ff8e22 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wFBjk-000000003as-2UOi;
+	Tue, 21 Apr 2026 14:06:00 +0000
+Date: Tue, 21 Apr 2026 22:05:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Serin Yeh <serin.yeh@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ =?utf-8?Q?"=D0=94=D0=B0=D0=BC=D1=98=D0=B0=D0=BD?=
+ =?utf-8?Q?_=D0=93=D0=B5=D0=BE=D1=80=D0=B3=D0=B8=D0=B5=D0=B2=D1=81=D0?=
+ =?utf-8?Q?=BA=D0=B8"?= <gdamjan@gmail.com>
+Subject: [gdamjan:v7.0/imx471 3/4] drivers/media/i2c/imx471.c:932:15:
+ warning: variable 'props' is uninitialized when passed as a const pointer
+ argument here
+Message-ID: <202604212217.fsrKOa3z-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aedpk1iaeYyKPSOI@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-Jabber-ID: linkmauve@linkmauve.fr
+Content-Type: text/plain; charset=us-ascii
 
-On Tue, Apr 21, 2026 at 05:49:32PM +0530, Mukesh Kumar Chaurasiya wrote:
-> On Tue, Apr 21, 2026 at 12:26:51PM +0200, Link Mauve wrote:
-> > On Tue, Apr 21, 2026 at 03:25:22PM +0530, Mukesh Kumar Chaurasiya wrote:
-> > > On Tue, Apr 21, 2026 at 11:38:08AM +0200, Link Mauve wrote:
-> > > > Hi Mukesh,
-> > > > 
-> > > > This patch doesn’t apply on top of mainline, which tree did you base it
-> > > > off?
-> > > > 
-> > > It was on mainline v7.0 tag.
-> > 
-> > Great thanks, they do apply there!
-> > 
-> > I needed three more patches for the kernel to build on PPC32, I’ve
-> > attached them but they are absolutely not patches which could go into
-> > the kernel (except for the second, enabling asm_experimental_arch).
-> > 
-> > What do you think we should do about them?
-> > 
-> Regarding the 2nd patch you sent, As the support is experimental as of
-> now, Let's wait till we get everything stablized, till then we'll use
-> nightly build for all variants of powerpc. Once we mark it as
-> maintained, then we can try to push that patch.
+tree:   https://github.com/gdamjan/linux v7.0/imx471
+head:   c1b8b7df1d7235afa9bf2b853fd95e41c0b57c54
+commit: 66194d8e654533d19df9c4ab8cc17336d32b9808 [3/4] Add IMX471 mirror/flip functions for fitting camera module's orientation In order to meet Sony's init table and flip function, also modify registers as a better settings.
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260421/202604212217.fsrKOa3z-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260421/202604212217.fsrKOa3z-lkp@intel.com/reproduce)
 
-Enabling the feature is mandatory even on nightly or with
-RUSTC_BOOTSTRAP=1, otherwise no asm!() macro can be called and so the
-kernel crate can’t be built.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604212217.fsrKOa3z-lkp@intel.com/
 
-> 
-> Maybe Miguel can comment better on this.
-> 
-> Regarding other patches, I am planning to work on ppc32 once ppc64le
-> stabilizes.
+All warnings (new ones prefixed by >>):
 
-Thanks!
+>> drivers/media/i2c/imx471.c:932:15: warning: variable 'props' is uninitialized when passed as a const pointer argument here [-Wuninitialized-const-pointer]
+     932 |                                                               &props);
+         |                                                                ^~~~~
+   1 warning generated.
 
-> 
-> Regards,
-> Mukesh
-> 
-> > > On latest there is a confilict. I'll send out a rebased version.
-> > > 
-> > > > On Fri, Apr 17, 2026 at 08:52:50PM +0530, Mukesh Kumar Chaurasiya (IBM) wrote:
-> > > > > When building Rust code for powerpc64le with LLVM=1 and -j1, rustc
-> > > > > encounters an error: "multiple candidates for `rmeta` dependency `core`
-> > > > > found", with two candidates:
-> > > > > 1. The host's standard library from the rustup toolchain
-> > > > > 2. The kernel's custom libcore.rmeta in the rust/ directory
-> > > > > 
-> > > > > This occurs because the build system uses `-L$(objtree)/rust` for host
-> > > > > library builds (proc_macro2, quote, syn), which causes rustc to search
-> > > > > the rust/ directory. During this search, rustc finds both the kernel's
-> > > > > custom libcore.rmeta and gains access to the host's standard library,
-> > > > > creating a conflict.
-> > > > > 
-> > > > > The solution is to separate host libraries into a dedicated rust/host/
-> > > > > subdirectory and use `-L$(objtree)/rust/host` for host builds instead
-> > > > > of `-L$(objtree)/rust`. This ensures that:
-> > > > > 
-> > > > > 1. Host library builds (proc_macro2, quote, syn) only search rust/host/
-> > > > >    and never encounter the kernel's libcore.rmeta
-> > > > > 2. Proc macro builds use `-L$(objtree)/rust/host` to find their
-> > > > >    dependencies
-> > > > > 
-> > > > > Special handling is added for rustdoc-pin_init, which is a host build
-> > > > > (to access the alloc crate) but depends on proc macros from the main
-> > > > > rust/ directory. It uses explicit `--extern` paths to reference the
-> > > > > proc macros without adding `-L$(objtree)/rust`, which would reintroduce
-> > > > > the conflict.
-> > > > > 
-> > > > > The rust/host/ directory is added to clean-files to ensure it's removed
-> > > > > during `make clean`.
-> > > > > 
-> > > > > Link: https://github.com/Rust-for-Linux/linux/issues/105
-> > > > > Link: https://github.com/linuxppc/issues/issues/451
-> > > > > Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
-> > > > > ---
-> > > > >  rust/Makefile | 38 +++++++++++++++++++++-----------------
-> > > > >  1 file changed, 21 insertions(+), 17 deletions(-)
-> > > > > 
-> > > > > diff --git a/rust/Makefile b/rust/Makefile
-> > > > > index 9801af2e1e02..e234b8a39358 100644
-> > > > > --- a/rust/Makefile
-> > > > > +++ b/rust/Makefile
-> > > > > @@ -3,6 +3,9 @@
-> > > > >  # Where to place rustdoc generated documentation
-> > > > >  rustdoc_output := $(objtree)/Documentation/output/rust/rustdoc
-> > > > >  
-> > > > > +# Clean generated host directory
-> > > > > +clean-files := host/
-> > > > > +
-> > > > >  obj-$(CONFIG_RUST) += core.o compiler_builtins.o ffi.o
-> > > > >  always-$(CONFIG_RUST) += exports_core_generated.h
-> > > > >  
-> > > > > @@ -27,7 +30,7 @@ endif
-> > > > >  
-> > > > >  obj-$(CONFIG_RUST) += exports.o
-> > > > >  
-> > > > > -always-$(CONFIG_RUST) += libproc_macro2.rlib libquote.rlib libsyn.rlib
-> > > > > +always-$(CONFIG_RUST) += host/libproc_macro2.rlib host/libquote.rlib host/libsyn.rlib
-> > > > >  
-> > > > >  always-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated.rs
-> > > > >  always-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated_kunit.c
-> > > > > @@ -150,7 +153,7 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
-> > > > >  	OBJTREE=$(abspath $(objtree)) \
-> > > > >  	$(RUSTDOC) $(filter-out $(skip_flags) --remap-path-prefix=% --remap-path-scope=%, \
-> > > > >  			$(if $(rustdoc_host),$(rust_common_flags),$(rust_flags))) \
-> > > > 
-> > > > The issue is here ↑, --remap-path-prefix=% got removed and the two
-> > > > previous lines got merged into one.
-> > > > 
-> > > Yeah will fix this.
-> > > > > -		$(rustc_target_flags) -L$(objtree)/$(obj) \
-> > > > > +		$(rustc_target_flags) -L$(objtree)/$(obj)$(if $(rustdoc_host),/host) \
-> > > > >  		-Zunstable-options --generate-link-to-definition \
-> > > > >  		--output $(rustdoc_output) \
-> > > > >  		--crate-name $(subst rustdoc-,,$@) \
-> > > > […]
-> > > > 
-> > > > Thanks anyway for iterating on this series!  I’ve started writing a DRM
-> > > > driver based off a previous version. :)
-> > > > 
-> > > That's cool. Thanks.
-> > > 
-> > > Regards,
-> > > Mukesh
-> > > > -- 
-> > > > Link Mauve
-> > > > 
-> > 
-> > -- 
-> > Link Mauve
-> 
-> > From 79b614dd7be16a1108e1f0176a7bc235fa163a4e Mon Sep 17 00:00:00 2001
-> > From: Link Mauve <linkmauve@linkmauve.fr>
-> > Date: Wed, 8 Apr 2026 14:16:04 +0200
-> > Subject: [PATCH 1/3] XXX: Workaround sstep.c
-> > 
-> > These variables are used only on CONFIG_PPC64, which causes compilation
-> > to fail on PPC32.
-> > ---
-> >  arch/powerpc/lib/sstep.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/powerpc/lib/sstep.c b/arch/powerpc/lib/sstep.c
-> > index ac3ee19531d8..dc129f0cb6a0 100644
-> > --- a/arch/powerpc/lib/sstep.c
-> > +++ b/arch/powerpc/lib/sstep.c
-> > @@ -1354,15 +1354,15 @@ int analyse_instr(struct instruction_op *op, const struct pt_regs *regs,
-> >  #ifdef CONFIG_PPC64
-> >  	unsigned int suffixopcode, prefixtype, prefix_r;
-> >  #endif
-> > -	unsigned int opcode, ra, rb, rc, rd, spr, u;
-> > +	unsigned int opcode, ra, rb/*, rc*/, rd, spr, u;
-> >  	unsigned long int imm;
-> >  	unsigned long int val, val2;
-> >  	unsigned int mb, me, sh;
-> > -	unsigned int word, suffix;
-> > +	unsigned int word/*, suffix*/;
-> >  	long ival;
-> >  
-> >  	word = ppc_inst_val(instr);
-> > -	suffix = ppc_inst_suffix(instr);
-> > +	//suffix = ppc_inst_suffix(instr);
-> >  
-> >  	op->type = COMPUTE;
-> >  
-> > @@ -1480,7 +1480,7 @@ int analyse_instr(struct instruction_op *op, const struct pt_regs *regs,
-> >  	rd = (word >> 21) & 0x1f;
-> >  	ra = (word >> 16) & 0x1f;
-> >  	rb = (word >> 11) & 0x1f;
-> > -	rc = (word >> 6) & 0x1f;
-> > +	//rc = (word >> 6) & 0x1f;
-> >  
-> >  	switch (opcode) {
-> >  #ifdef __powerpc64__
-> > -- 
-> > 2.54.0
-> > 
-> 
-> > From d4e72fad43175bde99287b8efdece900e5b53444 Mon Sep 17 00:00:00 2001
-> > From: Link Mauve <linkmauve@linkmauve.fr>
-> > Date: Fri, 10 Apr 2026 13:05:24 +0200
-> > Subject: [PATCH 2/3] XXX: Enable asm_experimental_arch for PowerPC asm!()
-> > 
-> > This is needed to compile the kernel crate, otherwise this error
-> > happens:
-> > 
-> > error[E0658]: inline assembly is not stable yet on this architecture
-> >   --> ../rust/kernel/sync/barrier.rs:19:14
-> >    |
-> > 19 |     unsafe { core::arch::asm!("") };
-> >    |              ^^^^^^^^^^^^^^^^^^^^
-> >    |
-> >    = note: see issue #93335 <https://github.com/rust-lang/rust/issues/93335> for more information
-> >    = help: add `#![feature(asm_experimental_arch)]` to the crate attributes to enable
-> >    = note: this compiler was built on 2026-03-25; consider upgrading it if it is out of date
-> > 
-> > error: aborting due to 1 previous error
-> > 
-> > For more information about this error, try `rustc --explain E0658`.
-> > ---
-> >  rust/kernel/lib.rs     | 3 +++
-> >  scripts/Makefile.build | 2 +-
-> >  2 files changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> > index d93292d47420..92ccd47dc3ee 100644
-> > --- a/rust/kernel/lib.rs
-> > +++ b/rust/kernel/lib.rs
-> > @@ -47,6 +47,9 @@
-> >  // To be determined.
-> >  #![feature(used_with_arg)]
-> >  //
-> > +// Needed for PowerPC inline assembly.
-> > +#![feature(asm_experimental_arch)]
-> > +//
-> >  // `feature(derive_coerce_pointee)` is expected to become stable. Before Rust
-> >  // 1.84.0, it did not exist, so enable the predecessor features.
-> >  #![cfg_attr(CONFIG_RUSTC_HAS_COERCE_POINTEE, feature(derive_coerce_pointee))]
-> > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> > index 3652b85be545..c7cc21994c5a 100644
-> > --- a/scripts/Makefile.build
-> > +++ b/scripts/Makefile.build
-> > @@ -321,7 +321,7 @@ $(obj)/%.lst: $(obj)/%.c FORCE
-> >  #
-> >  # Please see https://github.com/Rust-for-Linux/linux/issues/2 for details on
-> >  # the unstable features in use.
-> > -rust_allowed_features := asm_const,asm_goto,arbitrary_self_types,lint_reasons,offset_of_nested,raw_ref_op,slice_ptr_len,strict_provenance,used_with_arg
-> > +rust_allowed_features := asm_const,asm_goto,asm_experimental_arch,arbitrary_self_types,lint_reasons,offset_of_nested,raw_ref_op,slice_ptr_len,strict_provenance,used_with_arg
-> >  
-> >  # `--out-dir` is required to avoid temporaries being created by `rustc` in the
-> >  # current working directory, which may be not accessible in the out-of-tree
-> > -- 
-> > 2.54.0
-> > 
-> 
-> > From 2c0a3ec3da6fa1f0151225c05159f7a812317d32 Mon Sep 17 00:00:00 2001
-> > From: Link Mauve <linkmauve@linkmauve.fr>
-> > Date: Fri, 10 Apr 2026 13:51:24 +0200
-> > Subject: [PATCH 3/3] XXX: Workaround for __udivdi3() and __umoddi3()
-> > MIME-Version: 1.0
-> > Content-Type: text/plain; charset=UTF-8
-> > Content-Transfer-Encoding: 8bit
-> > 
-> > The core crate currently depends on these two functions for i64/u64/
-> > i128/u128/core::time::Duration formatting, but we shouldn’t use that in
-> > the kernel so let’s panic if they are ever called.
-> > ---
-> >  rust/exports.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/rust/exports.c b/rust/exports.c
-> > index 587f0e776aba..5f1cdf13882e 100644
-> > --- a/rust/exports.c
-> > +++ b/rust/exports.c
-> > @@ -12,6 +12,7 @@
-> >   */
-> >  
-> >  #include <linux/export.h>
-> > +#include <linux/panic.h>
-> >  
-> >  #define EXPORT_SYMBOL_RUST_GPL(sym) extern int sym; EXPORT_SYMBOL_GPL(sym)
-> >  
-> > @@ -20,6 +21,14 @@
-> >  #include "exports_bindings_generated.h"
-> >  #include "exports_kernel_generated.h"
-> >  
-> > +void __udivdi3(void) {
-> > +	panic("__udivdi3() called but shouldn’t be made available on this architecture!\n");
-> > +}
-> > +
-> > +void __umoddi3(void) {
-> > +	panic("__umoddi3() called but shouldn’t be made available on this architecture!\n");
-> > +}
-> > +
-> >  // For modules using `rust/build_error.rs`.
-> >  #ifdef CONFIG_RUST_BUILD_ASSERT_ALLOW
-> >  EXPORT_SYMBOL_RUST_GPL(rust_build_error);
-> > -- 
-> > 2.54.0
-> > 
-> 
-> 
+
+vim +/props +932 drivers/media/i2c/imx471.c
+
+   842	
+   843	/* Initialize control handlers */
+   844	static int imx471_init_controls(struct imx471 *imx471)
+   845	{
+   846		struct i2c_client *client = v4l2_get_subdevdata(&imx471->sd);
+   847		struct v4l2_ctrl_handler *ctrl_hdlr;
+   848		struct v4l2_fwnode_device_properties props;
+   849	
+   850		s64 exposure_max;
+   851		s64 vblank_def;
+   852		s64 vblank_min;
+   853		s64 hblank;
+   854		u64 pixel_rate;
+   855		const struct imx471_mode *mode;
+   856		u32 max;
+   857		int ret;
+   858	
+   859		ctrl_hdlr = &imx471->ctrl_handler;
+   860		ret = v4l2_ctrl_handler_init(ctrl_hdlr, 10);
+   861		if (ret)
+   862			return ret;
+   863	
+   864		mutex_init(&imx471->mutex);
+   865		ctrl_hdlr->lock = &imx471->mutex;
+   866		max = ARRAY_SIZE(link_freq_menu_items) - 1;
+   867		imx471->link_freq = v4l2_ctrl_new_int_menu(ctrl_hdlr, &imx471_ctrl_ops,
+   868							   V4L2_CID_LINK_FREQ, max, 0,
+   869							   link_freq_menu_items);
+   870		if (imx471->link_freq)
+   871			imx471->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+   872	
+   873		/* pixel_rate = link_freq * 2 * nr_of_lanes / bits_per_sample */
+   874		pixel_rate = IMX471_LINK_FREQ_DEFAULT * 2 * 4;
+   875		do_div(pixel_rate, 10);
+   876		/* By default, PIXEL_RATE is read only */
+   877		imx471->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
+   878						       V4L2_CID_PIXEL_RATE, pixel_rate,
+   879						       pixel_rate, 1, pixel_rate);
+   880	
+   881		/* Initial vblank/hblank/exposure parameters based on current mode */
+   882		mode = imx471->cur_mode;
+   883		vblank_def = mode->fll_def - mode->height;
+   884		vblank_min = mode->fll_min - mode->height;
+   885		imx471->vblank = v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
+   886						   V4L2_CID_VBLANK, vblank_min,
+   887						   IMX471_FLL_MAX - mode->height,
+   888						   1, vblank_def);
+   889	
+   890		hblank = mode->llp - mode->width;
+   891		imx471->hblank = v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
+   892						   V4L2_CID_HBLANK, hblank, hblank,
+   893						   1, hblank);
+   894		if (imx471->hblank)
+   895			imx471->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+   896	
+   897		/* fll >= exposure time + adjust parameter (default value is 18) */
+   898		exposure_max = mode->fll_def - 18;
+   899		imx471->exposure = v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
+   900						     V4L2_CID_EXPOSURE,
+   901						     IMX471_EXPOSURE_MIN, exposure_max,
+   902						     IMX471_EXPOSURE_STEP,
+   903						     IMX471_EXPOSURE_DEFAULT);
+   904	
+   905		v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
+   906				  IMX471_ANA_GAIN_MIN, IMX471_ANA_GAIN_MAX,
+   907				  IMX471_ANA_GAIN_STEP, IMX471_ANA_GAIN_DEFAULT);
+   908	
+   909		/* Digital gain */
+   910		v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops, V4L2_CID_DIGITAL_GAIN,
+   911				  IMX471_DGTL_GAIN_MIN, IMX471_DGTL_GAIN_MAX,
+   912				  IMX471_DGTL_GAIN_STEP, IMX471_DGTL_GAIN_DEFAULT);
+   913	
+   914		v4l2_ctrl_new_std_menu_items(ctrl_hdlr, &imx471_ctrl_ops,
+   915					     V4L2_CID_TEST_PATTERN,
+   916					     ARRAY_SIZE(imx471_test_pattern_menu) - 1,
+   917					     0, 0, imx471_test_pattern_menu);
+   918	
+   919		/* HFLIP & VFLIP */
+   920		v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
+   921					V4L2_CID_HFLIP, 0, 1, 1, 0);
+   922		v4l2_ctrl_new_std(ctrl_hdlr, &imx471_ctrl_ops,
+   923					V4L2_CID_VFLIP, 0, 1, 1, 0);
+   924	
+   925		if (ctrl_hdlr->error) {
+   926			ret = ctrl_hdlr->error;
+   927			dev_err(&client->dev, "%s control init failed: %d", __func__, ret);
+   928			goto error;
+   929		}
+   930	
+   931		ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &imx471_ctrl_ops,
+ > 932								      &props);
+   933		if (ret)
+   934			goto error;
+   935	
+   936		imx471->sd.ctrl_handler = ctrl_hdlr;
+   937	
+   938		return 0;
+   939	
+   940	error:
+   941		v4l2_ctrl_handler_free(ctrl_hdlr);
+   942		mutex_destroy(&imx471->mutex);
+   943	
+   944		return ret;
+   945	}
+   946	
 
 -- 
-Link Mauve
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
