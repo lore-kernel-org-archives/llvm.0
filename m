@@ -1,64 +1,64 @@
 Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678CD29BDB4
-	for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 12:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0753043B2
+	for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 12:10:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776773431; cv=none; b=qFJUnLFFVSngy5uZjg6gp4hq3SZH9LiQKAwI/tKXhXe+d1RM0+kDly1DC3IK96l7RBnJKTRGV4IanMz9TtUVVAdhRZNwpIUcRU0pum7Mkz4hgD9ydJZp9o7onCYAuCr8e253RUUHbU1Mpzg47kkI+vEpEvbVAnR/Oc2Ea/5DukE=
+	t=1776773439; cv=none; b=sWwOOYwxBeYbUgnYchjNXgHiq2PHX/sAXu/2snesphIZxxZh1lGKuRYcT2rsJOUhICIZpxubkhH6BWJSmsJRmOUsy5ra5EdtcUcsifJS4YInseRFdUcKJKuSOu6ZN/ORMLdHDCsmssu7bupgh7SZwW4MzED3UBG0RGTU0I/1SXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776773431; c=relaxed/simple;
-	bh=8WQ7jEq8bJBsdnlHGUXrbWXnXrrr5Xxc2+zvN+1cF+Y=;
+	s=arc-20240116; t=1776773439; c=relaxed/simple;
+	bh=hGgphpE1DYmiUm/7ovOlTVs3V0qJFy1Wl3p3E1Kd9FE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JCU27YirmoWDK8P/aECRDq8gqntMkFpumYOwMrjjayVH8KN0l8MjMcn3DBnyND39CagLb7eXVTRwR/5PCEX5ejmeF2q5Zpk1T/YbRqVkcfTaioq36soRTOTZYK6HiLM/qH4nvTMx+dqXtMxU89sAFRpXUSrGBVnjprmtwCt6fEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hD95MBCI; arc=none smtp.client-ip=209.85.215.169
+	 MIME-Version:Content-Type; b=N532gkcgJAmnf3hCCnRIIwjDph8YMR9rBUz4VvluJjm1oDeRFn9b1OIrxEuegB5COUiyFWrHzhLbo8CM+EktQy7U1pM4MNqRGKCu2z6luVevsmsyk/sX5sHGW1YPdGOtFdTlaT5PaTOE11pP0RRG2ruIzkmQJB7SowZLL7TvFLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H+o5de3x; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hD95MBCI"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c741692db4cso1175835a12.1
-        for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 05:10:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H+o5de3x"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c79662668bbso1510847a12.1
+        for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 05:10:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776773429; x=1777378229; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1776773437; x=1777378237; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SIf376OZyXcpY0mdrIrP1nTWV/VE0v5g8114Fjjgl84=;
-        b=hD95MBCISHcljvEmFYVkEtEgSWbNqo+xLg440cLXhHw52IF72up9lsfId2U4Ip3FqZ
-         UMjhEKTDz6F60xDqk5v1knJ3Phz5AwjtTc+8jdNZBBHK2hIBW92YrEO5mZ5a0hCX4EzZ
-         Twyy7f7r92LzwZfJTwEPc6YNdHuiVT3SSZ3bmG2oOSXAqP09oV4BZthQhQ0ScMx5ISpL
-         WmgT6CgkWv3r/nlLDGFgI07WK2nVcSdLc+M5vLBwIwhRmMSSjtZ5z82+LZM9hgUrkcC5
-         kgnD/caLOAbeCarXGZynQK5qaNcn+zrzO9xT+W410YMcgKZSZhC5Zt54SXwoQhB8JFxE
-         AjaQ==
+        bh=3BeysMzI6zwGD6joEXhhGssagLKkCvhT6RVRv5CKQ4U=;
+        b=H+o5de3x7SaN1k1Ol/RBx7WTHHABqa1f5XsTVyPz/zlWpouQYOI5Bff1gGpw49MSav
+         Xrv6CXBaLMZIIO3n03B1GBHqPoFMbVbnFX83mz42o86RxUi3OGxngtxvH7RSrzoc5AyU
+         mYE8Xuuu/Sa+NHy+8cu4seSLZB6gFVnKXCVMIyLvGt568iDJNkHeC8adFjX3Sh3qDb6N
+         75j1bdJsNrW2QX2uBlBdmRKlkruXzT83HypWF37IpNFz4KnOo64cshhDWyGTqgL1vW3I
+         AlgU4VQOiM0tpMO+rJeLviW3QzdzKkt07aKooqUI0pQ3zcDIHH+t/rCs+a68C1lidg9o
+         +PiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776773429; x=1777378229;
+        d=1e100.net; s=20251104; t=1776773437; x=1777378237;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=SIf376OZyXcpY0mdrIrP1nTWV/VE0v5g8114Fjjgl84=;
-        b=cCzjQrktCzwEWFmolEgWwRzV4Q0SfeBM5F3nydqP0PjfuBRb5iHcGC+MPMYCWpSKdO
-         oEHo7f31+AbqLR0FsRG0PnWULUsMPq5Q6DhUVXg4ZbnxtKKsYSqpUCrFcEjmLfFd1Y1m
-         KtLgFeV06cgCIKVI/fu6wV0+82+DA7vpcVcN/RhAchch29IQGSda5Td8SzUs5b/TxgwV
-         658Ops+o2sQBCj5DioSeP+eRnQrU5zRyQYYeCQl++hzAYqT+iizCrCCh2NHaJAdLB6o4
-         JdLP2lNUV8KblEdYFcR0qu7i9UUrKV3rC8P9FVU4DJnXO7mu8RQE/N+mEz6ln4WX3J9i
-         JC6Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+mdQGzyoYLvwn8x6XStSrtk93MYdYgDL+6bkT/3cREK3vaJv14sXxDpymeCk8yv2gCVhvr@lists.linux.dev
-X-Gm-Message-State: AOJu0YyXuBPk65SyBJnaVOItUe1PpN7Y83dejVHrW6gXn2OdrWImDnQY
-	M0EVkC7Zqy2tBnUKHSOauhLYOGrTZNwCGM8u2QAQit6z8HaJEksZfn+r
-X-Gm-Gg: AeBDieuhBn9uiJOCG6Uxfh6hqESAb/B4guWInTb35Tcszvi8hOc5llr82puqo5LRYOb
-	+lmDV3Y2x8sUJRz99UjQBBwLjC1BPKdEfaPR2u+M20Mn6J1A6iWtSx0AxagI5s+tAbGExAe0fK8
-	WvhaZHF8FMtHKbjL6cnXThEyM/B3XrJbxcejZHIC+UjNvxeKrr35V6xflSD2wgzDa2kW7oTLzhf
-	spCPJ6AXUuwz741cQayzImPIhFX695bGE9r8lqSX11nyP2S+n3PMOQ49+4op/z6FYzLtPi0oM3v
-	FY1Bq4tEIk0b7Tr0fYhyTJOSJRYtstncodcAqI2tG3Pv0rYW0PEM8mYo92XYRj1MStUYzEh+JrD
-	1wRN+yHNQXO1Hq/NtDA65YKRz8w2TBuY6XA3rebsnQfIR/uJtKJT5wlQ8k5c0rHPYBu3JJVAjt+
-	UEHo2oQ6by5QmBmqzyScyhMQQfkI5HtdvVS23moqTL5K9c4gEEcgakmUBaaHef8jnPcpFkhLrKN
-	yjliXLv4EfQeNkqigOR4tRyvA==
-X-Received: by 2002:a05:6a20:6a10:b0:3a2:edff:296b with SMTP id adf61e73a8af0-3a2edff3a32mr1965327637.21.1776773428601;
-        Tue, 21 Apr 2026 05:10:28 -0700 (PDT)
+        bh=3BeysMzI6zwGD6joEXhhGssagLKkCvhT6RVRv5CKQ4U=;
+        b=V7tW3NGhF6u7eGBtJqPgHp89lbAXXmnMFXkrOIGtJGbnAxlV6+bbfdnvsx3kc3FgaO
+         61gV1xYNxhw7HHJjBjSDw9nfT3h2GtUfmY64r8xNkUhnQoOc6216cCQJXSUXruMG1CXu
+         iNdheu+oZdzGkYEh4K/w8Kgx0B0EgzejwckiNBbYbd5drbdAjJh4IZwqWw9pf7hiKeT3
+         MgQNIYtyIaHSgTN9Zp9rZG7zsO29A3YnIDgm0r+gk9WRYHXszGgOUYxPkjFLv1vHJ4zy
+         sia2w+hcsF1KOW3KzwNyGIQZC/MqALCCsUQIi6awbGBk5xtzT3sTUD7ZXZqyrom4WQ5K
+         MoOg==
+X-Forwarded-Encrypted: i=1; AFNElJ9g99f+WZtXBYMZafnzf7N2iihD/AR7RAWbSn5n/dHjaKF6QBixiEhtz3N2Nzmdkwsde1sn@lists.linux.dev
+X-Gm-Message-State: AOJu0YyyNoP3fOBlzMzJ7i3jF/x65Fwy2AqTFRUMU1XmRntd9FctuE6/
+	TWAXNZEcvQz+uZuvKTHKjAqWRmkncv2/U18h7GprbNqG7pcp/vZRjpQI
+X-Gm-Gg: AeBDieszNcGnYi8+AnHkIO69cfhjMWb+zECjjQd2oKsnMFhfsjSVl3dwSB7WnqGtNsS
+	HoTm0N5epPQfwQxDQjR90Tjh4RsfKm84ldrAT11G0WHZVi25TZZ/0kSpk2vk9bCCfj8QG93F56L
+	fCn38U93Y2Cz1hdUVW3Iiif/c3S/mkb6ctJpulkFp3LADhRqB5J+h7BF3Izw2hWwPXwf7YHcQzS
+	gx4abtXPnsH0m9ViPCY99DRNKRulEzuk8HpkP8+X5Cpz8zGvqu8avuo8bDY+OLH/ew4eUiR++ZL
+	whfxQU+83qYZjEJOW/oZqevmAdPPznnv0pIIBB/tE9Tw+K5L1iMLa47SoshdTJerWVI4DqIi2o0
+	3YIGNBGXmWSQa8DHF5bSZoCL6XBDduFeA9wr5jwGRTX341wPp5oOS9p58CjbwBTHCV5KD6H6vih
+	h0BUvkKZXrxJITjQtaE2QBM/9RmrVIf7pP32QqCm4bxgubqLnu5BGwwPvyGgdVHQnEiJX8l0Qgf
+	/o+BUhTX+aTWe8=
+X-Received: by 2002:a05:6a20:e211:b0:39c:783:e42b with SMTP id adf61e73a8af0-3a08d6eee6fmr19057917637.21.1776773436940;
+        Tue, 21 Apr 2026 05:10:36 -0700 (PDT)
 Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.bl1-in.ibm.com ([129.41.58.4])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c797701d9bfsm10045274a12.16.2026.04.21.05.10.20
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c797701d9bfsm10045274a12.16.2026.04.21.05.10.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2026 05:10:27 -0700 (PDT)
+        Tue, 21 Apr 2026 05:10:36 -0700 (PDT)
 From: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
 To: maddy@linux.ibm.com,
 	mpe@ellerman.id.au,
@@ -86,10 +86,11 @@ To: maddy@linux.ibm.com,
 	linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev
-Cc: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
-Subject: [PATCH V12 2/4] powerpc/jump_label: adjust inline asm to be consistent
-Date: Tue, 21 Apr 2026 17:39:56 +0530
-Message-ID: <20260421120958.190430-3-mkchauras@gmail.com>
+Cc: Link Mauve <linkmauve@linkmauve.fr>,
+	"Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
+Subject: [PATCH V12 3/4] rust: Add PowerPC support
+Date: Tue, 21 Apr 2026 17:39:57 +0530
+Message-ID: <20260421120958.190430-4-mkchauras@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260421120958.190430-1-mkchauras@gmail.com>
 References: <20260421120958.190430-1-mkchauras@gmail.com>
@@ -99,67 +100,78 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Added support for a new macro ARCH_STATIC_BRANCH_ASM in powerpc
-to avoid duplication of inline asm between C and Rust. This is
-inline with 'commit aecaf181651c ("jump_label: adjust inline asm to be consistent")'
+From: Link Mauve <linkmauve@linkmauve.fr>
 
-Co-developed-by: Madhavan Srinivasan <maddy@linux.ibm.com>
-Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Reviewed-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
-Reviewed-by: Gary Guo <gary@garyguo.net>
+For now only Big Endian 32-bit PowerPC is supported, as that is the only
+hardware I have.  This has been tested on the Nintendo Wii so far, but I
+plan on also using it on the GameCube, Wii U and Apple G4.
+
+These changes aren’t the only ones required to get the kernel to compile
+and link on PowerPC, libcore will also have to be changed to not use
+integer division to format u64, u128 and core::time::Duration, otherwise
+__udivdi3() and __umoddi3() will have to be added.  I have tested this
+change by replacing the three implementations with unimplemented!() and
+it linked just fine.
+
+Signed-off-by: Link Mauve <linkmauve@linkmauve.fr>
 Link: https://github.com/Rust-for-Linux/linux/issues/105
 Link: https://github.com/linuxppc/issues/issues/451
 Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
 ---
- arch/powerpc/include/asm/jump_label.h | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ arch/powerpc/Kconfig  | 1 +
+ arch/powerpc/Makefile | 2 ++
+ rust/Makefile         | 4 +++-
+ 3 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/include/asm/jump_label.h b/arch/powerpc/include/asm/jump_label.h
-index d4eaba459a0e..3016e9c8d6bc 100644
---- a/arch/powerpc/include/asm/jump_label.h
-+++ b/arch/powerpc/include/asm/jump_label.h
-@@ -15,14 +15,20 @@
- #define JUMP_ENTRY_TYPE		stringify_in_c(FTR_ENTRY_LONG)
- #define JUMP_LABEL_NOP_SIZE	4
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index e93df95b79e7..4ac897b650d4 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -285,6 +285,7 @@ config PPC
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
+ 	select HAVE_RELIABLE_STACKTRACE
+ 	select HAVE_RSEQ
++	select HAVE_RUST			if PPC32
+ 	select HAVE_SAMPLE_FTRACE_DIRECT	if HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ 	select HAVE_SETUP_PER_CPU_AREA		if PPC64
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index a58b1029592c..589613eaa5dc 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -61,6 +61,8 @@ else
+ KBUILD_LDFLAGS_MODULE += $(objtree)/arch/powerpc/lib/crtsavres.o
+ endif
  
-+#define JUMP_TABLE_ENTRY(key, label)			\
-+	".pushsection __jump_table,  \"aw\"	\n\t"	\
-+	".long 1b - ., " label " - .		\n\t"	\
-+	JUMP_ENTRY_TYPE key " - .		\n\t"	\
-+	".popsection 				\n\t"
++KBUILD_RUSTFLAGS 	+= --target=powerpc-unknown-linux-gnu
 +
-+#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-+	"1:	nop				\n\t"	\
-+	JUMP_TABLE_ENTRY(key, label)
-+
- static __always_inline bool arch_static_branch(struct static_key *key, bool branch)
- {
--	asm goto("1:\n\t"
--		 "nop # arch_static_branch\n\t"
--		 ".pushsection __jump_table,  \"aw\"\n\t"
--		 ".long 1b - ., %l[l_yes] - .\n\t"
--		 JUMP_ENTRY_TYPE "%c0 - .\n\t"
--		 ".popsection \n\t"
-+	asm goto(
-+		 ARCH_STATIC_BRANCH_ASM("%c0", "%l[l_yes]")
- 		 : :  "i" (&((char *)key)[branch]) : : l_yes);
+ ifdef CONFIG_CPU_LITTLE_ENDIAN
+ KBUILD_CPPFLAGS	+= -mlittle-endian
+ KBUILD_LDFLAGS	+= -EL
+diff --git a/rust/Makefile b/rust/Makefile
+index 2a5428a5503d..c90811a2f564 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -400,13 +400,15 @@ bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
+ 	-fstrict-flex-arrays=% -fmin-function-alignment=% \
+ 	-fzero-init-padding-bits=% -mno-fdpic \
+ 	-fdiagnostics-show-context -fdiagnostics-show-context=% \
+-	--param=% --param asan-% -fno-isolate-erroneous-paths-dereference
++	--param=% --param asan-% -fno-isolate-erroneous-paths-dereference \
++	-ffixed-r2 -mmultiple -mno-readonly-in-sdata
  
- 	return false;
-@@ -34,10 +40,7 @@ static __always_inline bool arch_static_branch_jump(struct static_key *key, bool
- {
- 	asm goto("1:\n\t"
- 		 "b %l[l_yes] # arch_static_branch_jump\n\t"
--		 ".pushsection __jump_table,  \"aw\"\n\t"
--		 ".long 1b - ., %l[l_yes] - .\n\t"
--		 JUMP_ENTRY_TYPE "%c0 - .\n\t"
--		 ".popsection \n\t"
-+		 JUMP_TABLE_ENTRY("%c0", "%l[l_yes]")
- 		 : :  "i" (&((char *)key)[branch]) : : l_yes);
+ # Derived from `scripts/Makefile.clang`.
+ BINDGEN_TARGET_x86	:= x86_64-linux-gnu
+ BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
+ BINDGEN_TARGET_arm	:= arm-linux-gnueabi
+ BINDGEN_TARGET_loongarch	:= loongarch64-linux-gnusf
++BINDGEN_TARGET_powerpc	:= powerpc-linux-gnu
+ BINDGEN_TARGET_um	:= $(BINDGEN_TARGET_$(SUBARCH))
+ BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
  
- 	return false;
 -- 
 2.53.0
 
