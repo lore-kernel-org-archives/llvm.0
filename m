@@ -1,123 +1,113 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E763451CE
-	for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 18:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776795382; cv=pass; b=FsYt9kf7mc2C7yDvb4AEVunXonPIzySPApWDpWjXwrLYk7QoVfywW21hWZKLxPlDCgG/IQ2McgJfVulDspa7IWisorzcPB39Z94LhgzHBQ662zLcdEU8h/6euQqxd41PJpmT3vJQwxPJWd6HDx7+KshV0jSicMDZuB1w1Mo8HNc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776795382; c=relaxed/simple;
-	bh=3GaZDx0rQ9Fksiy9siV3i5pz9Hl2Ce5uUtde21t7sAA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CDMm/A0xfmcmcUU8QGdKmD4xLo6x8sIwKNTnMSMatFS27gGlTuQIkhA8nhpNei1bKMCcgfysA5qL6bErv4XowicALcmpUUoezlY3eztQ/0YyIvM/q7nUHmiqmeT3ur0RkAY4YiThfpcxCs7MB0UDyGKd8xm4Y2Y0bO1SWj83/kY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYmNzdRy; arc=pass smtp.client-ip=74.125.82.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433D3361DA8
+	for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 19:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776798247; cv=none; b=kDPKo1X7CnaHTQtRs7HKGNBSCmUG6EKA+vpyECoLyb+Hb2LuiNXCGWeaMGP+C3abcZgi2Q/d2BAmF+MtF5DmldfG4Ua/tfsTayHsRlUugajt70IyQv2TAMEZxCXURsv/1j/RRDHaDda8XxQ+OnRuyBta7vb8jXDJNHqRx98aXlM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776798247; c=relaxed/simple;
+	bh=itmHKeYdTrXU9RgiqwsA1M7ZjCooCXj0hGK5wGYsCvg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=TDBcDetA7aWkFly6OiM1EAtI+Ft0iSKYpVC4WEl3joCxZKOMKy3UkEbNgWSHFaO+zcvS+IL2UYxTrH+QSuiA6OG8vXLKZP7+t96Mz0zeySDd4kwNyALH2R/WMmTt8H2pXX99vU0rQpvwAohjzsoa3c1izIlRIWBV5tt9IcF+nNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jM3sqME2; arc=none smtp.client-ip=209.85.221.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYmNzdRy"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2bda3b4318dso628510eec.1
-        for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 11:16:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776795380; cv=none;
-        d=google.com; s=arc-20240605;
-        b=EhjtgdEqPgL0G5q8rfnT2vzNFQiTvj4DsoVx5cblJWvjE7dsVpJWAZv72shTjmBOp8
-         tiKBnHndjA0weII4FleimtDtNnUNzvNJg9+Hw4KpptMC6pF+3lXQI0lwgQtNo3rLppfg
-         k/TlyzdpmsSP/YSEoBPoz4zwLIgY9yaHPHmXaarfphHbrP0UfQb/9Rz+jnEBk91rj8Fy
-         PVOIIoIbih5mO/uILEQMi4P3rofvByfsnjWbgnJOpc7IVof+NNTptel6zsW+/+yLpbvi
-         atZtHiGR/1xIcYbzrbOkQ5FGuKH5VRM2uMKuM1ljYNSJ69p2pKXiRZZVzGnyQO22tejI
-         U1MA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3GaZDx0rQ9Fksiy9siV3i5pz9Hl2Ce5uUtde21t7sAA=;
-        fh=0esMUhbxz0DFGLZKh71WWsd+GSsjFtgVQATvpy/mYE0=;
-        b=M4X0hbB9aVHeI30nPeBSExtq1rXHTgO17ku+m4UiYvKsphD6WNR4lyXcJEPH3zxcNy
-         McemfvJHPKDJEt2wp3OiJxLjgWGT7dPfL2IOgrgEqI5KksrgEEoVHbOqYthqnkKljs7+
-         jhe44gyZxgL+xEQKnNinODaNs+zuH3Be239Ms8P58wfbuq9270aaxPPqPndSKv5gyhKP
-         rObmwXMRaLPJPS464OOv+fcZBAoqJR1S/YAmDtSF6phFBmtvg4NFQXaiknk6hCa5+6nz
-         ReBqojqwcaknsY7yW9+qlBFikhzp9IYjbgmAasjW/BcOKu8206GAN4F8vKO07uU7Y+OD
-         +/fQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jM3sqME2"
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-43cff5ef652so2928090f8f.2
+        for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 12:04:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776795380; x=1777400180; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3GaZDx0rQ9Fksiy9siV3i5pz9Hl2Ce5uUtde21t7sAA=;
-        b=XYmNzdRyl/UBLOeCsi09M/Z+bK5QH3iz3YbOqU5b4obsJSUr5U8XflAmWmLelkbm4a
-         JuFioBV8sCotfWeY4O1FWnKpG4HquTjp5lAKPK80L7JwPbrCrGRj+33Wm4Q8PhwSN1+O
-         e8GgUXAcIf5kBiEAncPfUFhjw7FyiXTSCaKr8jLfKNDf1eabNq2IbF4ezMtFJ2xPTobt
-         q2gMEUaE9AgwDwyU27DHX4KzhWpz78KHP6yvzwoVMBXAEl+kxtVPxYe1Q0n4AVbN3/qx
-         TykkFLxtR0nlqyeLIrjfBmgiIj4g7kaYaJDKV7H2gaY1w31GW306lwBiTd0AiElhoch0
-         QL1w==
+        d=google.com; s=20251104; t=1776798244; x=1777403044; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZuYemzHrsE4FyqS0s1BFQk1xjd8CwS4JPKuxgVOhZ8o=;
+        b=jM3sqME2fQ+HyNayD24uF83p+PeOeE0bRbfNJ7CQ/c62s7oeACjGK1Dg9WuHdf27/3
+         XlL9rSSIXPphbYUiLVHa9tvCqaceuieJRsDq12r+EBWdM1qKVFlhUHyiILxMh6NbIeoA
+         X8Dfgic4s8FeeTfnfXsXLxABApwKDWfvRw68HmSwPom1FVe6/O+5mevTlDdpkoLjTjqj
+         cX16xLhlGSZ32CG+qkPKySq9TKH30fFE5IVQlx51qPpacx5J0ps1ksCQVxb4Vkn3rrNr
+         EU+YAxe48+kgu5SHq/i6HosiX3WJg+7HbYgCOHtavoZhEcb9Va3NDNuD7uHNbxmkKh2Q
+         5bPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776795380; x=1777400180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3GaZDx0rQ9Fksiy9siV3i5pz9Hl2Ce5uUtde21t7sAA=;
-        b=GveO2MdbS/G7/Y3Iq/gAZY0Y23xCGavdg2HrYYYGk/3esyXAVOsID5Mvh8Az24+Kg+
-         g46/vqUIQWv3azQnfDNMVlvMi40RLuT+Pw8lHJ5d68yWG8UEI97s9bGlG1eyhVmXRACj
-         Edn/m8E4b8gcXznGEVgGw2f2fPtXsWbi/bPlQvJHjLB499lapBNwS9iDOP8OjMXHmFyY
-         AYMLmGiWnFFEL97fVvpZ+rSXmBNfECvoDtmN/7N42/7kYa+9LZQUCgLhYxAt49UT01vA
-         tQfW0qt9pwBu+uGR3TKi9H3A6KrhJPD8jKON1IXMrxo6cinfN6A+S7TUm2tqvvVR0VUb
-         YX6A==
-X-Forwarded-Encrypted: i=1; AFNElJ+ji7Zoj09bICsF/q+aP5zlTAVk0tak+pWh1Z5xXgQwbJpRbLBd1eezYXnqb3OnO2lCaU0F@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy+QdPll5WwR4Fd9M6m0NsBo3+mEkrG3CjAbVJQTN7gqDMtI323
-	DzUuWTyEfk9fg3AVtFppA2ow3j+iSCMvqKWqD2YblbSIM7RPXLkD2aV+My7E8dnjh/tM7LWS5pb
-	4UMGxQ8MLOh8OXMRBzphFz4Xu7EpuQdQ=
-X-Gm-Gg: AeBDievagTc3HiKpWBxODh/PLR+KsgVHghMxn535sU0oZ1uOaXGxszzpkrMcBFg5Jy3
-	9k9y2hFt062iExLRgJ73Wn4NHOIsA+eFD0Ons9LPogBPS2LqJTdn7/vRJxTDTPMC8aBEKJfvEdA
-	DdjyYyvmKUwcH939UVAVfFB8cEJIj/Tp4QqnLm60g7+XNmeF3NIf6bk/qeFJ2AqMEgxC/YnwRFo
-	DArWWHuAzobLZIqy08Bqg/AsML+y5PsjU4PRsbYNE1YIV+XryWYg5kPmIIdTbtu6hKvJFWiiGYU
-	7ATuW+iiljcoFBbjI7HQG4ix/JcZXf2dwidJapzpmGTkLOCyJfFEb7mdrXK+IFaQInvxyXqChyP
-	h3OVJPDyfeUy/IxUbGCxyNrMEt1EWENGCyw==
-X-Received: by 2002:a05:693c:414c:20b0:2e5:5bf4:886c with SMTP id
- 5a478bee46e88-2e55bf49d87mr2808147eec.5.1776795380309; Tue, 21 Apr 2026
- 11:16:20 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776798244; x=1777403044;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZuYemzHrsE4FyqS0s1BFQk1xjd8CwS4JPKuxgVOhZ8o=;
+        b=AxM98cDnhbP1IbcGZt6Za1abH5LBHups3kQdhGo3m96nMwBgf+UR+itqVE9wNPrUjT
+         KkMOEHKmF6VJ038u3X4GP9UVbLVxjsso2zoKOjvOaAaP3XCa4FyYkb6Csgoh0nH6CYJ4
+         TMj6yDtM38N+woY5UaDqQHlAmzV8tXMFzmTj0N/w2xx/fO7R0dabbkviI3nVpjHsD1PY
+         nj5w8lOu8R5PZg3JTUjnhH06tU41/d/iX0fjKvOd9JNqrUV4/Q7DQr+Xp6doRBRD6meI
+         q0Ojp1YvGJDWzZ5XQ+r15ptsWkobtQEGD0s6LQMokIPpxbyAOKn9/p9gqRAMHoy6AmJl
+         oP5w==
+X-Forwarded-Encrypted: i=1; AFNElJ/PJo6D6/CWmenyNpTdZHg7iwN9BS5+4Ul4SSPgX7a4ONGfLYMBb0Hb+j+YcPoAHtQ2/+Xh@lists.linux.dev
+X-Gm-Message-State: AOJu0YzMxki45vTg1Az+3gELzwg3EGxolhZsSiEyiose4txwP4hsVrrM
+	iRff+7W3kaZ79EpTsts4CbMbEOVhCEuTxRKHC6OHCvhxFLgplJg71w1isoxA46bviSictE1Ih4F
+	+Cg==
+X-Received: from wmkz3.prod.google.com ([2002:a7b:c7c3:0:b0:488:7e69:14c1])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:6990:b0:48a:5970:1fe1
+ with SMTP id 5b1f17b1804b1-48a597021eamr12282985e9.4.1776798244496; Tue, 21
+ Apr 2026 12:04:04 -0700 (PDT)
+Date: Tue, 21 Apr 2026 21:03:47 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260417152253.2312961-1-mkchauras@gmail.com> <20260417152253.2312961-2-mkchauras@gmail.com>
- <aedFgEicDW6LAcuq@luna> <aedJGuF9P2V1lOCZ@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <aedQ629D0x-5KuKw@luna> <aedpk1iaeYyKPSOI@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <aeds6_8Mr_w38oYI@luna> <aeec_IzVJwlfarN5@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <DHYYG7A745M5.VQY4GMDJNC1Y@garyguo.net> <aee3ivM9VkbqdQby@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-In-Reply-To: <aee3ivM9VkbqdQby@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 21 Apr 2026 20:16:06 +0200
-X-Gm-Features: AQROBzC9mHOnbDZIzSWs7JSPScbJTWmOkJB9BCTbBPzo_hv4xsJtqwnMLc9zKx0
-Message-ID: <CANiq72k7HXYE+1hhbT8xfL+pwhBwVqCQaN=1xXUuTnMhH0J7QQ@mail.gmail.com>
-Subject: Re: [PATCH V11 1/4] rust: Fix "multiple candidates for rmeta
- dependency core" error
-To: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-Cc: Gary Guo <gary@garyguo.net>, Link Mauve <linkmauve@linkmauve.fr>, maddy@linux.ibm.com, 
-	mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org, 
-	peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com, 
-	aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org, 
-	boqun@kernel.org, bjorn3_gh@protonmail.com, lossin@kernel.org, 
-	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.rc2.533.g4f5dca5207-goog
+Message-ID: <20260421190351.1976329-1-elver@google.com>
+Subject: [PATCH 1/2] Compiler Attributes: Add __access macro
+From: Marco Elver <elver@google.com>
+To: elver@google.com
+Cc: kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 21, 2026 at 7:47=E2=80=AFPM Mukesh Kumar Chaurasiya
-<mkchauras@gmail.com> wrote:
->
-> There are some other build errors apart from this on 1.85. So few months
-> back in the meeting with LLVM team we concluded that for sometime
-> powerpc will be ahead of other archs at 1.95 till others catch up.
+Add support for the `__access__` attribute, which is supported since gcc
+>= 11 but not currently supported by clang.
 
-In that case you may want to modify `scripts/min-tool-version.sh` in
-this series too.
+The attribute allows specifying how a function accesses memory passed
+via a pointer argument (read_only, write_only, read_write, none) and
+optionally the size of the access. Per [1] these annotations only affect
+diagnostics, and should not affect code generation:
 
-I hope that helps!
+	"The access attribute enables the detection of invalid or unsafe
+	 accesses by functions or their callers, as well as write-only
+	 accesses to objects that are never read from. Such accesses may
+	 be diagnosed by warnings such as -Wstringop-overflow,
+	 -Wuninitialized, -Wunused, and others."
 
-Cheers,
-Miguel
+[1] https://gcc.gnu.org/onlinedocs/gcc/Common-Attributes.html#index-access
+
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ include/linux/compiler_attributes.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index c16d4199bf92..ef4e279e9872 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -20,6 +20,18 @@
+  * Provide links to the documentation of each supported compiler, if it exists.
+  */
+ 
++/*
++ * Optional: only supported since gcc >= 11
++ * Optional: not supported by clang
++ *
++ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Attributes.html#index-access
++ */
++#if __has_attribute(__access__)
++# define __access(x, ...)		__attribute__((__access__(x, ## __VA_ARGS__)))
++#else
++# define __access(x, ...)
++#endif
++
+ /*
+  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-alias-function-attribute
+  */
+-- 
+2.54.0.rc2.533.g4f5dca5207-goog
+
