@@ -1,98 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F132C0294;
-	Wed, 22 Apr 2026 05:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDB52505AA
+	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 06:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776837024; cv=none; b=Et7U9dCE+NCHA1Mz7EeyoCJbyf5dJqbPaG7vmPftgZVTIkXIfQz810yBMlY5lY1rs3Nrrk2Dz5dMpQfF09HwxnRk0sUblVfJ2qtgGEQ+erTFza++K0oRfO12BE8R0qFVbRhhgSSyXhSlIQT62P+m0B3uqX1NWxS0lRAa3ErqfH4=
+	t=1776837731; cv=none; b=SFe2IuRWL+2E4vRLZbrAT4I3mzyZO/W8i98mRMoL2ig8IrNUPsy4vdGemBGywJeSQJFj+W8idZJCNsK91+OpZ6MLBnhjSr/n0VgRgV45qwwIL7jwh2JGbkkWs7oQ9bSK2t2efdvW+LvOZOKf6WLDvQoaqsRbEko3qpk1gmR0kDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776837024; c=relaxed/simple;
-	bh=wCxI24RoSFR+H8hKXe+TeVNkx+LYrpHCkxRLGXxULEg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ShqP+NMZ4k9CedV6dplhZLy2IM0Eiv3jGt5n0lMOusCrfTjiFg9sRTtLaK26O5dL1aRVZKA7H+Mqj1bgNFDirt5pBzaxgRED1LBEzDGTJikP5lBVrtKiRvnid+o7HAqxWMSYuBFea0Q29aqSMwPdYmevQ8MG/5cjPw2uVc5sQsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nNrb9q55; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776837731; c=relaxed/simple;
+	bh=BAmn26+Yw4qWxrvSjVAQ5wu5iF1jjcSvCHARFZ11wDw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=VtT5NUjaO+m3ZgJV1rkfaQ9E1/TUhJo57CZGy8GLnum4VjRiiHKmsXGG6euqD3ek37xUb+t8CI8FKOAlL59eLKC42FUQhEmISTIOWj7WyMu+nV7XYDnMQ98qcntmJi3W24F8/SsumZmk39qbt48F1eR92GMO5PC6ziiytCj2gME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PGyqdbxv; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nNrb9q55"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF314C19425;
-	Wed, 22 Apr 2026 05:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776837024;
-	bh=wCxI24RoSFR+H8hKXe+TeVNkx+LYrpHCkxRLGXxULEg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nNrb9q55pTf1YmadbHp5PGpo/+nA0eFCK+P6VwVJNiWColCN4tj87lRyl5FLQ3Xfb
-	 OUTrYexVWZNz5IvVGhzA+/9S9VD4+7jma/B5hFU8IQye0J7ymSzxdPaR5Zy1pR5TyJ
-	 //sREpWQPd6IwTvhrV2jGBUbWzC4S5yvrEmqq4u6O0WV6z5/swJa++PcY+9XhTWYNK
-	 Ix1DiazH7dnaDVue2QZ6gFFy1IBahMs4trbrXapCUoq3i/lPZpjJ24UAkxg2TE2KWC
-	 IO34nhlq35kHyQer4diptgpCL44eJmHMTjxOP21QPo+StkGl3s+dqp7nYk0Jp+JFLe
-	 qHscMMMvwDHcQ==
-Date: Tue, 21 Apr 2026 22:50:20 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Marco Elver <elver@google.com>
-Cc: kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
-	Dmitry Vyukov <dvyukov@google.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] Compiler Attributes: Add __access macro
-Message-ID: <20260422055020.GA3392234@ax162>
-References: <20260421190351.1976329-1-elver@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PGyqdbxv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776837728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iV5BZnn5IEKnxRvKK90pM3OnAW49xY2byni+C1uH3X0=;
+	b=PGyqdbxv7mIHkgaqtLeQlRrhW1Tq3NFFoQKHfYVyevVl75yCF+cOfBN2N/CPUqUK6peI8d
+	KbLk9unVmntlyomEzl4bSP8WW/baTuqWiBUwIzCwNZ1jRssTQBmZ77uDPOFQlSE65gvK+b
+	tcDf8d8KXwNoJXJFCj5nlMglB00/Mko=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-530-MniJc0d_MZuHT6H5os5Snw-1; Wed,
+ 22 Apr 2026 02:02:06 -0400
+X-MC-Unique: MniJc0d_MZuHT6H5os5Snw-1
+X-Mimecast-MFC-AGG-ID: MniJc0d_MZuHT6H5os5Snw_1776837725
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7CEF91956080
+	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 06:02:05 +0000 (UTC)
+Received: from [172.20.96.14] (unknown [10.30.44.37])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2E29A19560AB;
+	Wed, 22 Apr 2026 06:02:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-0,
+ upstream-mainline, 4ee64205)
+Date: Wed, 22 Apr 2026 06:02:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260421190351.1976329-1-elver@google.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <10813.126042202020600337@us-mta-530.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: UP-kX9mjx2utK_wgle36Tau-f37y6it4z0NgqiGxnIw_1776837725
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 21, 2026 at 09:03:47PM +0200, Marco Elver wrote:
-> Add support for the `__access__` attribute, which is supported since gcc
-> >= 11 but not currently supported by clang.
-> 
-> The attribute allows specifying how a function accesses memory passed
-> via a pointer argument (read_only, write_only, read_write, none) and
-> optionally the size of the access. Per [1] these annotations only affect
-> diagnostics, and should not affect code generation:
-> 
-> 	"The access attribute enables the detection of invalid or unsafe
-> 	 accesses by functions or their callers, as well as write-only
-> 	 accesses to objects that are never read from. Such accesses may
-> 	 be diagnosed by warnings such as -Wstringop-overflow,
-> 	 -Wuninitialized, -Wunused, and others."
-> 
-> [1] https://gcc.gnu.org/onlinedocs/gcc/Common-Attributes.html#index-access
-> 
-> Signed-off-by: Marco Elver <elver@google.com>
+Hi, we tested your kernel and here are the results:
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-> ---
->  include/linux/compiler_attributes.h | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index c16d4199bf92..ef4e279e9872 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -20,6 +20,18 @@
->   * Provide links to the documentation of each supported compiler, if it exists.
->   */
->  
-> +/*
-> + * Optional: only supported since gcc >= 11
-> + * Optional: not supported by clang
-> + *
-> + *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Attributes.html#index-access
-> + */
-> +#if __has_attribute(__access__)
-> +# define __access(x, ...)		__attribute__((__access__(x, ## __VA_ARGS__)))
-> +#else
-> +# define __access(x, ...)
-> +#endif
-> +
->  /*
->   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-alias-function-attribute
->   */
-> -- 
-> 2.54.0.rc2.533.g4f5dca5207-goog
-> 
+
+Kernel information:
+    Commit message: Merge tag 'clk-for-linus' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/clk/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2468951595
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2468951595_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
