@@ -1,224 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AA7126C03;
-	Tue, 21 Apr 2026 23:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64CEB24887E
+	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 01:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776815159; cv=none; b=r3OBY3P3rw4ocOj7gNm/txjNCL47EGBtFx/opJFzlHtbRvOBGTiYoM78sx9R6f34zWBo9giAhoho2cghiI8O0zS8R46z8yD3D7QDp2FHmsgO7odV0RMFUrFVdZz1XeO5f808I+4yQwK/DfibYEx5oJMQ40zzb0nLCha+QXC4crs=
+	t=1776822859; cv=none; b=HiEanm3MNDipx0pp76tUXVIdTlI89SM1TPqV+XsbN4qb7JtFlpjNwaPWoJjjqlhAak9O0f1CXroWRf3DGqGVjO6CRq8FGucbbVVLDOB9fBPPSomqs6zPgmr11bu6z/Zr7iiiW45MJFE2/+MbuLNGmuXt7q28xSXjN0xYrDgObyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776815159; c=relaxed/simple;
-	bh=o3DKlon8CsCcGDGewW4cokmm2zbTOw0o0g1F4kT9e90=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=FpLqO86mKUaPDeoGSz0KlTe4tb3FKQoWPh2GlW1jB9fXpkdVP3lCctsEYoZXay5Ax+85yHBqr7JGKCO/sjpQ41RsV4Xkex0BME/LRfJmRofRzM80mf2E8k7rAcSNDI6myfzFFBJ4+XxwivVL3huU8bHT/5nywi49rM/aJDgRQl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nBu6tDJ5; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1776822859; c=relaxed/simple;
+	bh=pga0nwIInIYHT6h/lC6AisEpyFhl2DTt5O8CoOvgQD0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Oj9dpR/vRPgvAr6WVJvpbJobKggKv4uH/jOopn6+JFLiWTliLi9VIvgeOT1d6alOQPG1g5rAZamgx8EJkU8r2W+Jhyqifm08UbvvRrzIV+DofcZe4Q4iwitwDdie5fXgxMbzvqOJa0kfjidGCDLZJgFGX25P42tWx2MUelQjazI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=OtdRSAQS; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=imOb58Vt; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nBu6tDJ5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776815157; x=1808351157;
-  h=date:from:to:cc:subject:message-id;
-  bh=o3DKlon8CsCcGDGewW4cokmm2zbTOw0o0g1F4kT9e90=;
-  b=nBu6tDJ5vuEUkeyFe13d8JJba4W+UXI7oU/QtEFyUe3RyDa4U8Hj6AVK
-   DrhyWnBmob5rjzsOQzravu5Gf8Tt/M6Cv2gyxnmGJdiKVryJgzXUJeIsw
-   7OKAnQ7qWQsK22EhNl/B004VZtQamGzzJ57N0rp043PRx3/3wYcMRac/1
-   E3F4OgIaWKanIIjLIm7xEehKUHEM5uKDJKlLDOf4JlW9fZ5xvHykxneH6
-   X3Cg/PyW5dN2fbr8Ml92oRJJMCXDjWQMdhdm6m7JjsQVjlgU5E2E47/mq
-   qTDWBfe4neISAUM7oryGMBOhxF2lE9/PLnxWjjnav7AH+rDit47PRkCvD
-   w==;
-X-CSE-ConnectionGUID: 12XSALpXTIGYNly8/+0nLQ==
-X-CSE-MsgGUID: SvtiF4MoQsme4X8XIZ6plg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11763"; a="76795944"
-X-IronPort-AV: E=Sophos;i="6.23,192,1770624000"; 
-   d="scan'208";a="76795944"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2026 16:45:56 -0700
-X-CSE-ConnectionGUID: MC9yB7JSTf6EBQQtFLtyDA==
-X-CSE-MsgGUID: CSihvgSXRda/UrR8jIegew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,192,1770624000"; 
-   d="scan'208";a="270277523"
-Received: from lkp-server01.sh.intel.com (HELO 7e48d0ff8e22) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 21 Apr 2026 16:45:55 -0700
-Received: from kbuild by 7e48d0ff8e22 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wFKmu-0000000043g-12ao;
-	Tue, 21 Apr 2026 23:45:52 +0000
-Date: Wed, 22 Apr 2026 07:44:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:master 3/4]
- fs/bcachefs/vfs/direct.c:141:3: warning: label followed by a declaration is a
- C23 extension
-Message-ID: <202604220740.bjX3D5oN-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="OtdRSAQS";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="imOb58Vt"
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63LIZkDF2208731
+	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 01:54:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=1EVhPscDl7ppUgS3ObH0c8/S
+	ANPa07oJZissK0SnRo4=; b=OtdRSAQSnn5ks9g5mzd+1LRTi0D/e7c7gHpNFos6
+	iHiydNQJC1IdzI1DWb3ceT2D88FsjGX8R8QRumthXqsCQIWW+QorpL410rNzgYVn
+	wSKFqkS1h/gL+SiDF2Fj0ml1GGqpemyUdhjpqACuIvTk6+cfHbv+yj7L5lk24bHa
+	lqS0N27YWy366V4seWteWZmH8vknJsUjX8tDq+3kAm9WztPkl9RVNf2H47+7zSCO
+	uNce92GGsq+WwyqTqRbCgg6Qb/V3s7uNdXHvzgHYvUbCF1LN3Buo2vsmIQJNVdaM
+	3EndaELKYRfpJ0PuCmR8YKJI3pzYsRsyHscFux0UdgMaGQ==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4dpeng951x-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 01:54:17 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-8a8ea3f1becso29257356d6.0
+        for <llvm@lists.linux.dev>; Tue, 21 Apr 2026 18:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1776822857; x=1777427657; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1EVhPscDl7ppUgS3ObH0c8/SANPa07oJZissK0SnRo4=;
+        b=imOb58Vt0SEXd4DSt3ccN12cc8hfL38bhg7RHSMXq5VHB8LumAE+bAaiVvNJDG0NW1
+         gENVR6gaiEVoklBmOesTuIp92UjR8HrABHBOYWQ9WuLByrcsny67jqKo9kQg9wCzi8yV
+         0APuW42dClWkzd4bHC+tP1d4ZgQ+bli/lovRfm35iX0iBo3vppVjHnFfX8Z/7IGKtn3r
+         efDUaElM/ucqwLh+pMnV98ishla2SI/yoEW9KkEhUf/yYRzvD1molVLKmJiXaVbToIKm
+         gyAZQA6J7fURflHlwgqXo/2d7BU+sMrQxkr4ZSdhSPg+5QoD82Bu2usidkrNAuljz3BV
+         hfFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776822857; x=1777427657;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1EVhPscDl7ppUgS3ObH0c8/SANPa07oJZissK0SnRo4=;
+        b=gXiWB0GTUBbdpWcScTvFXQRRmOQ+99o0m+szwCFORtzOsByDzhvd79tj9uBsU4OaXs
+         5pw5TYmKxYA582MVoFa3642EiPE8ls67QRii2NQ9F1ycHcYyf+wntue0Ktm5SPrUrygz
+         SzEBB1tuL46kP11vP2aOvZiE+eM7nnRVYKtcvxTxkmzm9agJji2sJS6fkZcjGNjStRId
+         fzohloBlIw5SK0nobne9e23ezDEyD23WuLnQbBEEoO2BdtYT0yFwQae8d9hXM/48UYyy
+         QcA4SNc5EiKRsCVa+yVsp6PzLl1t92WRgs/p31lGw/YMxvxQ3+8r8s5Vj89fjncKRGVo
+         ySVA==
+X-Forwarded-Encrypted: i=1; AFNElJ9HkDkbaX0WYxNR8D7ezOSdfK2JSCEEvL+8abCDdO8igs544OZhRJPYOoOHK/29By1Zisbq@lists.linux.dev
+X-Gm-Message-State: AOJu0YyyUl4HufSoKKOeE2t9WkNYJYtEpyekQP20PrHQbd8JqvXy2ADi
+	VcbfIdWQKrPtvrpZDv2TmIG5RX4hOeaLkDSjdW2PPorv/QDj9yckWi5ThzSQqOs6QHJ4NM9Wrir
+	ozMRhM/70BnCSkgYXRxbYBsi+P3ijcb2BuPcXxfjbkoo2cz6ATomReF46
+X-Gm-Gg: AeBDievSS3O/mbCXw9oPpMQdqwaACOELmFB/DbnKkuuvPvVjV6DXACA1c20EwuPZ5vV
+	zfYEEUcc0rRTm7mM9xmD4tniUiDjIVJOisqmT4BsSVOM0AKUfcQ8w89Gemk8ZZNDsWHk4IMPz94
+	FYV+xPgwlKJ1/zw0NnbY6/7nYC0eXrDYrxcTeJI/3KUWN83KpL9WjDaCnyyNtgNW2OkO/NKiEpH
+	v6D8MPr8CXomS4Nk6+mGP/4bPEVUVWyL5YairXJKyzu+1+kb9fbyd8sDcjXtvua0cGj5nSEIs8v
+	SopdKuP6qDbQm/eirx9hXcWHqJw/YA3tK5d1DCLaxXqbXuNMv0+VWAiu4e9aCr7vpIJ2AYf+Lvk
+	wV/Lpv6zDhnHvZlv+yh1RtzucrGiQSuYZFDV0obACHxQ6Fw3spwD41iriGkpD+y1xDhFRtMBPMW
+	cwDP3gpbCk1RvqvXcvvph6ONOqLPy+m1cpTW/anMNZ2JwbLA==
+X-Received: by 2002:a05:6214:5691:b0:89c:a2b2:8d3a with SMTP id 6a1803df08f44-8b027fd9b67mr378068696d6.4.1776822856533;
+        Tue, 21 Apr 2026 18:54:16 -0700 (PDT)
+X-Received: by 2002:a05:6214:5691:b0:89c:a2b2:8d3a with SMTP id 6a1803df08f44-8b027fd9b67mr378068396d6.4.1776822856107;
+        Tue, 21 Apr 2026 18:54:16 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a4187e12c8sm4049951e87.49.2026.04.21.18.54.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 18:54:13 -0700 (PDT)
+Date: Wed, 22 Apr 2026 04:54:10 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Rob Clark <robin.clark@oss.qualcomm.com>
+Cc: dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Bill Wendling <morbo@google.com>, David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <lumag@kernel.org>,
+        Jessica Zhang <jesszhan0024@gmail.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Sean Paul <sean@poorly.run>, Simona Vetter <simona@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH 00/13] drm/msm: Add PERFCNTR_CONFIG ioctl
+Message-ID: <b4hkax45ohmz3dk4b2wgfmq73px7er66wqxixquxhwd64ngboa@zu4frfofekef>
+References: <20260420222621.417276-1-robin.clark@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260420222621.417276-1-robin.clark@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIyMDAxNiBTYWx0ZWRfX2uFRYgqfXc4X
+ TNHRgWBzqFPYjKknKVZSzIabQ0l1st9zMd+XmOotfW6KrCM1QON6GrBFkveEBCp9XktN+S5rqmT
+ dgVF8b68vrrudz6M7Ism1Ol2FzSOPFqzE4/aT+g57Xc8G+59JLPiqBF6RS9izXiZ6fVatwTuOtX
+ FCVN1wKZln9z/mVbvmeQEU1nmYjgCavgFVI+d3SmgihVo+6gnKIJEwlWA1rLNlbsA0AFVkNWD9g
+ EZQij5aVl4//LP0NF5MQgSRViBsioFecCrc2pvXVPtuVAp3t4nX8E0RQGcWDtDSAfF2XWUlsY+5
+ aG0yZ9dpJcDthUBx9PTesNCvWbEulksq7BUtNA4eurgmqqDqyWzs7P3YN0roA+DYLGUIpOSq8oW
+ TfMMP18dG7dg12Vp9MOCaD7B2ymKUsm+FjM4ZsFvZ5Q95Gaw3tHKFxFVmhx029+wk0nqAHcwyvH
+ nXaMCZwAXQTm3tiwUzg==
+X-Proofpoint-ORIG-GUID: sjf80ye4FFoSiKemBEXzGHvPCx43gQ_N
+X-Authority-Analysis: v=2.4 cv=RYygzVtv c=1 sm=1 tr=0 ts=69e82a49 cx=c_pps
+ a=wEM5vcRIz55oU/E2lInRtA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22 a=e5mUnYsNAAAA:8
+ a=vNHeVWmE5UuQZPkiQX4A:9 a=CjuIK1q_8ugA:10 a=OIgjcC2v60KrkQgK7BGD:22
+ a=Vxmtnl_E_bksehYqCbjh:22
+X-Proofpoint-GUID: sjf80ye4FFoSiKemBEXzGHvPCx43gQ_N
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-21_03,2026-04-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 malwarescore=0
+ suspectscore=0 bulkscore=0 clxscore=1011 priorityscore=1501 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604220016
 
-tree:   https://github.com/koverstreet/bcachefs master
-head:   cae96c4c2d98eba2e03a88b131406da23c213fe6
-commit: 92b3d152fe07e1f2a7060adb3f06afcae6135437 [3/4] bcachefs: fix __bch2_direct_IO_read() error path
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260422/202604220740.bjX3D5oN-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260422/202604220740.bjX3D5oN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604220740.bjX3D5oN-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/bcachefs/vfs/direct.c:141:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     141 |                 struct bch_read_bio *rbio =
-         |                 ^
-   1 warning generated.
-
-
-vim +141 fs/bcachefs/vfs/direct.c
-
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   64  
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24   65  static int __bch2_direct_IO_read(struct kiocb *req, struct iov_iter *iter,
-39fe245ff806f1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24   66  				enum bch_read_flags flags,
-39fe245ff806f1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24   67  				struct bch_read_err_report *err_report)
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   68  {
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   69  	struct file *file = req->ki_filp;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   70  	struct bch_inode_info *inode = file_bch_inode(file);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   71  	struct bch_fs *c = inode->v.i_sb->s_fs_info;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   72  	struct dio_read *dio;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   73  	struct bio *bio;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   74  	loff_t offset = req->ki_pos;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   75  	bool sync = is_sync_kiocb(req);
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15   76  	bool split = false;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   77  	size_t shorten;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   78  	ssize_t ret;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   79  
-e6479021dea40b fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-08-23   80  	struct bch_inode_opts opts;
-e6479021dea40b fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-08-23   81  	bch2_inode_opts_get_inode(c, &inode->ei_inode, &opts);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   82  
-00fff4dd586619 fs/bcachefs/fs-io-direct.c Kent Overstreet 2024-01-16   83  	/* bios must be 512 byte aligned: */
-00fff4dd586619 fs/bcachefs/fs-io-direct.c Kent Overstreet 2024-01-16   84  	if ((offset|iter->count) & (SECTOR_SIZE - 1))
-15be180f2638ee fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-03   85  		return bch_err_throw(c, EINVAL_unaligned_io);
-00fff4dd586619 fs/bcachefs/fs-io-direct.c Kent Overstreet 2024-01-16   86  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   87  	ret = min_t(loff_t, iter->count,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   88  		    max_t(loff_t, 0, i_size_read(&inode->v) - offset));
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   89  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   90  	if (!ret)
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   91  		return ret;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   92  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   93  	shorten = iov_iter_count(iter) - round_up(ret, block_bytes(c));
-b58b1b883b9b70 fs/bcachefs/fs-io-direct.c Brian Foster    2024-02-15   94  	if (shorten >= iter->count)
-b58b1b883b9b70 fs/bcachefs/fs-io-direct.c Brian Foster    2024-02-15   95  		shorten = 0;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   96  	iter->count -= shorten;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   97  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   98  	bio = bio_alloc_bioset(NULL,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   99  			       bio_iov_vecs_to_alloc(iter, BIO_MAX_VECS),
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  100  			       REQ_OP_READ,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  101  			       GFP_KERNEL,
-52d279ad5f3e4c fs/bcachefs/vfs/direct.c   Kent Overstreet 2025-11-30  102  			       &c->vfs.dio_read_bioset);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  103  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  104  	dio = container_of(bio, struct dio_read, rbio.bio);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  105  	closure_init(&dio->cl, NULL);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  106  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  107  	/*
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  108  	 * this is a _really_ horrible hack just to avoid an atomic sub at the
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  109  	 * end:
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  110  	 */
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  111  	if (!sync) {
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  112  		set_closure_fn(&dio->cl, bch2_dio_read_complete, NULL);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  113  		atomic_set(&dio->cl.remaining,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  114  			   CLOSURE_REMAINING_INITIALIZER -
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  115  			   CLOSURE_RUNNING +
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  116  			   CLOSURE_DESTRUCTOR);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  117  	} else {
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  118  		atomic_set(&dio->cl.remaining,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  119  			   CLOSURE_REMAINING_INITIALIZER + 1);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  120  	}
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  121  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  122  	dio->req	= req;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  123  	dio->ret	= ret;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  124  	/*
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  125  	 * This is one of the sketchier things I've encountered: we have to skip
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  126  	 * the dirtying of requests that are internal from the kernel (i.e. from
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  127  	 * loopback), because we'll deadlock on page_lock.
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  128  	 */
-8838999ccf4f6f fs/bcachefs/fs-io-direct.c Alan Huang      2025-07-19  129  	dio->should_dirty = user_backed_iter(iter);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  130  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  131  	goto start;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  132  	while (iter->count) {
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  133  		split = true;
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  134  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  135  		bio = bio_alloc_bioset(NULL,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  136  				       bio_iov_vecs_to_alloc(iter, BIO_MAX_VECS),
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  137  				       REQ_OP_READ,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  138  				       GFP_KERNEL,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  139  				       &c->bio_read);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  140  start:
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15 @141  		struct bch_read_bio *rbio =
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  142  			rbio_init(bio,
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  143  				  c,
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  144  				  opts,
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  145  				  split
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  146  				  ? bch2_direct_IO_read_split_endio
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  147  				  : bch2_direct_IO_read_endio);
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  148  
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  149  		BUG_ON(rbio->_state);
-39fe245ff806f1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  150  		rbio->err_report		= err_report;
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  151  		rbio->subvol			= inode_inum(inode).subvol;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  152  		rbio->bio.bi_opf		= REQ_OP_READ|REQ_SYNC;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  153  		rbio->bio.bi_iter.bi_sector	= offset >> 9;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  154  		rbio->bio.bi_private		= dio;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  155  
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  156  		ret = bch2_bio_iov_iter_get_pages(&rbio->bio, iter, 0);
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  157  		if (ret < 0) {
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  158  			/* XXX: fault inject this path */
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  159  			rbio->ret = ret;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  160  			bio_endio(&rbio->bio);
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  161  			break;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  162  		}
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  163  
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  164  		offset += rbio->bio.bi_iter.bi_size;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  165  
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  166  		if (dio->should_dirty)
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  167  			bio_set_pages_dirty(&rbio->bio);
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  168  
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  169  		if (iter->count)
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  170  			closure_get(&dio->cl);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  171  
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  172  		CLASS(btree_trans, trans)(c);
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  173  		bch2_read(trans, rbio, rbio->bio.bi_iter, inode_inum(inode),
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  174  			  NULL, NULL,
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  175  			  BCH_READ_retry_if_stale|
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  176  			  BCH_READ_may_promote|
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  177  			  BCH_READ_user_mapped|
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  178  			  flags);
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  179  	}
-27de0ee39f810d fs/bcachefs/fs-io-direct.c Kent Overstreet 2024-10-14  180  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  181  	iter->count += shorten;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  182  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  183  	if (sync) {
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  184  		closure_sync(&dio->cl);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  185  		closure_debug_destroy(&dio->cl);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  186  		ret = dio->ret;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  187  		bio_check_or_release(&dio->rbio.bio, dio->should_dirty);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  188  		return ret;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  189  	} else {
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  190  		return -EIOCBQUEUED;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  191  	}
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  192  }
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  193  
-
-:::::: The code at line 141 was first introduced by commit
-:::::: dfa204b169ed29e4cdcb5a20d4cba2f579235543 bcachefs: rbio_init() cleanup
-
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+On Mon, Apr 20, 2026 at 03:25:22PM -0700, Rob Clark wrote:
+> Add a new PERFCNTR_CONFIG ioctl, serving two functions:
+> 
+> 1. Global counter collection (restricted to perfmon_capable()) using the
+>    MSM_PERFCNTR_STREAM flag.  Global counter sampling is, global, across
+>    contexts.  Only a single global counter stream is allowed at a time.
+> 2. Reserve counters for local counter collection.  Local counter
+>    collection is local to a cmdstream (GEM_SUBMIT), and as such is
+>    allowed in all processes without additional privileges.
+> 
+> The kernel enforces that counters assigned for global counter collection
+> do not conflict with counters reserved for local counter collection, and
+> visa versa.  Since local counter collection is scoped to a single cmd-
+> stream, multiple UMD processes can overlap in their reserved counters.
+> But cannot conflict with global counter usage.
+> 
+> In the case of local counter collection, the UMD is still responsible
+> for programming the corresponding SELect registers, and sampling the
+> counter values, from it's cmdstream.  But by performing the reservation
+> step, the UMD protects itself from the kernel trying to use the same
+> SEL/counter regs for global counter collection.
+> 
+> For global counter collection, the kernel programs SEL regs, and sets up
+> a timer for counter sampling.  Userspace reads out the sampled values
+> from the returned perfcntr stream fd.  Releasing the global perfcntr
+> stream is simply a matter of close()ing the fd.
+> 
+> Since the counter sampling is done in the kernel, this prepares us for
+> not having to disable IFPC while global counter sampling is active.  But
+> wiring this up will come in a later patch.
+> 
+> The mesa side of this is at:
+> https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/40522
+> 
+> Rob Clark (13):
+>   drm/msm: Remove obsolete perf infrastructure
+>   drm/msm/adreno: Sync registers from mesa
+>   drm/msm/registers: Sync gen_header.py from mesa
+>   drm/msm/registers: Add perfcntr json
+>   drm/msm: Allow CAP_PERFMON for setting SYSPROF
+>   drm/msm: Add a6xx+ perfcntr tables
+>   drm/msm: Add sysprof accessors
+>   drm/msm/a6xx: Add yield & flush helper
+>   drm/msm: Add per-context perfcntr state
+>   drm/msm: Add basic perfcntr infrastructure
+>   drm/msm/a6xx+: Add support to configure perfcntrs
+>   drm/msm/a8xx: Add perfcntr flush sequence
+>   drm/msm: Add PERFCNTR_CONFIG ioctl
+> 
+The series doesn't apply to linux-next. Please switch to b4 and use b4
+--edit-deps to specify dependencies.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
