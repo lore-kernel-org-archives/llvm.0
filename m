@@ -1,41 +1,41 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55339391840
-	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 16:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9582399015
+	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 16:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776876608; cv=none; b=rp8wO06syVn5ufy2q/luG2Au6hTEMo1o9Le0yyQiQSh2QvXnJdn7Ps2MXb+LXObTVamH7TWx4uFFw/Hp+TZS6f5EgmJ969VzStORPD6kxwLbh1kQXWX9pH6fS7XHGhf5dpsvfjw35ASh9u0+wX0m1iBD9TpTkw6/WsYYjCLp/kQ=
+	t=1776876611; cv=none; b=iwL1npMVwvhk29CD2olidrIlFp3zknoZfIqkzVHRl4vZtV6lmu9qDbNQSg4uD1A6JbfMMXOy2j9Rqz4zHGk7VFS9uIzSYwqqQdlrCPsO633oKU//RqHA0/mgx+mlmTZZuhY7LcP2wmDgEd+kI34EPv8pv//tIolKreFeI5W1deQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776876608; c=relaxed/simple;
-	bh=iE3JOZY9HFHgADlFCa6q/HeYf4oju6vyl3wKOF2zS9Y=;
+	s=arc-20240116; t=1776876611; c=relaxed/simple;
+	bh=lksm9whBd8/+/SEcuotRyQgadwPvpjc7iphWmCaGH+4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MZZHDbBiYFo5mTnxH9T82POXuHWlyfMDoyNBxurLn71Y+Y3AmSZIclMI56f5Y4pGJR4Qnwv3dmiU+KPqvnuGnApFM64ixtP3U5vloYW8J3NU9kZwVWX12p6lbGpvLh2psAnRiPkCEYYjei7ILghNld09kgBsTxrCh/5icS0NZHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JmBpMWtQ; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=qK/6R6sQC/nxLEs/eCvsinY2oHqtMC6/Vq0n0S2AwR8EuFuDYHVS9XYfIUp3APBl0olftBr/6mWgnPppIW0rvXB5O7QZtkHvEP4GnpRf2QGzmVJEABlusdYGMB43yuryhy6tOCEW5YRfetGxobGSktxrSl5TP8PN2zK/vj3+42k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ctuzIHOW; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JmBpMWtQ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ctuzIHOW"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 66F541A33AD;
-	Wed, 22 Apr 2026 16:50:03 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 4F1B5C5EF07;
+	Wed, 22 Apr 2026 16:50:46 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3BE795FA8F;
-	Wed, 22 Apr 2026 16:50:03 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D9F42104609C6;
-	Wed, 22 Apr 2026 18:49:58 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 6DA7E5FA8F;
+	Wed, 22 Apr 2026 16:50:05 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D2FED10460C14;
+	Wed, 22 Apr 2026 18:50:01 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776876601; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1776876604; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=ywbK2HV2rBEQPkwJrBhO61M7IBwez+H9/FL3w+0c7J0=;
-	b=JmBpMWtQn+qbUs+h6OFIhRAzucxNfhVJQIHkxgbIS1VA28k3W6+xyrBTsDwbbMvsnthRfJ
-	6Xd4zxZzjB87GCqG3Rw15zCRCaaRAORQJtj0jTxXmFWTT8gFUIXvFHvUEV8Wjns1Yo3Fce
-	+ovdm3GJLqw1cWiFVYki4p2Ry1y85zIo7W1va5lYwIZVhtUKpezXDYSwK5Oinkefy2lWVr
-	IF/McKgW7NZ7SmN5Sq4EwilcgM9ObHajPYckJT1z+LzzdGu1S/6GD4Pb/EreTOwN2Orrgi
-	xnQtDtjP0+7x0NWkVHcL41WRZ4LEeDGx0OYAw4Av9RcnkhRGMjmHpD6f6bvpxQ==
+	bh=nIH2IFLqK8EjRaZhh4fVH1/L7vYxy0d3YQxfE1eulEU=;
+	b=ctuzIHOWqvqsQOZBsy9p1ty6Cd6Ft98S48KtrofL0JjnNdx5Q3pn1qAFubvxiUgMQVRzgE
+	rtZdrQkfW3alqZ1gbggBNxnU6ox1kTskIn6oNyeOp1hk7CpiYUlXLkipNrPqBBmG9BUVXZ
+	O6MMTp7Hrm6+EwJgmncrmIvFHmRrueBlh+XVyzDCREDhhoGFn15tqm6ayVKtBa9Fg22XUc
+	67G/jPNZ3cbl9Ybxy/zspLI/r/qDcDE8re7255OgbkdvAvl2i4yLBqDwCyWkdCLsLFl4dS
+	lRFdcIkJbNugZUalcYooAvyFu3uHBw7K5gmE+Tdbcg0jJQMqEwcSw/8q2A6w0w==
 From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Wed, 22 Apr 2026 18:48:23 +0200
-Subject: [PATCH v4 26/37] drm/vkms: Introduce config for connector type
+Date: Wed, 22 Apr 2026 18:48:24 +0200
+Subject: [PATCH v4 27/37] drm/vkms: Introduce configfs for connector type
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260422-vkms-all-config-v4-26-dbb52e9aadc3@bootlin.com>
+Message-Id: <20260422-vkms-all-config-v4-27-dbb52e9aadc3@bootlin.com>
 References: <20260422-vkms-all-config-v4-0-dbb52e9aadc3@bootlin.com>
 In-Reply-To: <20260422-vkms-all-config-v4-0-dbb52e9aadc3@bootlin.com>
 To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
@@ -64,171 +64,132 @@ Cc: victoria@system76.com, sebastian.wick@redhat.com, victoria@system76.com,
 X-Mailer: b4 0.16-dev
 X-Last-TLS-Session-Version: TLSv1.3
 
-In order to emulate connector-specific behavior, add connector type
-configuration.
+Add a new attribute to connector to change its type. This is mostly
+cosmetic and don't have direct effect in VKMS behavior.
 
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- drivers/gpu/drm/vkms/tests/vkms_config_test.c |  5 +++++
- drivers/gpu/drm/vkms/vkms_config.c            |  3 +++
- drivers/gpu/drm/vkms/vkms_config.h            | 24 ++++++++++++++++++++++++
- drivers/gpu/drm/vkms/vkms_connector.c         |  5 +++--
- drivers/gpu/drm/vkms/vkms_connector.h         |  4 +++-
- drivers/gpu/drm/vkms/vkms_output.c            |  2 +-
- 6 files changed, 39 insertions(+), 4 deletions(-)
+ Documentation/ABI/testing/configfs-vkms |  7 ++++
+ Documentation/gpu/vkms.rst              |  3 +-
+ drivers/gpu/drm/vkms/vkms_configfs.c    | 65 +++++++++++++++++++++++++++++++++
+ 3 files changed, 74 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/vkms/tests/vkms_config_test.c b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-index 4a5899b8ccfd..1900cc79db2b 100644
---- a/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-+++ b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-@@ -137,6 +137,7 @@ static void vkms_config_test_default_config(struct kunit *test)
- 	struct vkms_config *config;
- 	struct vkms_config_plane *plane_cfg;
- 	struct vkms_config_crtc *crtc_cfg;
-+	struct vkms_config_connector *connector_cfg;
- 	int n_primaries = 0;
- 	int n_cursors = 0;
- 	int n_overlays = 0;
-@@ -211,6 +212,10 @@ static void vkms_config_test_default_config(struct kunit *test)
+diff --git a/Documentation/ABI/testing/configfs-vkms b/Documentation/ABI/testing/configfs-vkms
+index 9f77a878aeef..7f0dd0789f0a 100644
+--- a/Documentation/ABI/testing/configfs-vkms
++++ b/Documentation/ABI/testing/configfs-vkms
+@@ -33,6 +33,13 @@ Description:
+ 	Connection status of the connector. Possible values:
+ 	1 - connected, 2 - disconnected, 3 - unknown.
  
- 	/* Connectors */
- 	KUNIT_EXPECT_EQ(test, vkms_config_get_num_connectors(config), 1);
-+	vkms_config_for_each_connector(config, connector_cfg) {
-+		KUNIT_EXPECT_EQ(test, vkms_config_connector_get_type(connector_cfg),
-+				DRM_MODE_CONNECTOR_VIRTUAL);
-+	}
++What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/type
++Date:		Nov 2025
++Contact:	dri-devel@lists.freedesktop.org
++Description:
++	Type of the connector. Possible values match those
++	exposed by the "type" field in drm_connector.
++
+ What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/possible_encoders
+ Date:		Nov 2025
+ Contact:	dri-devel@lists.freedesktop.org
+diff --git a/Documentation/gpu/vkms.rst b/Documentation/gpu/vkms.rst
+index c811290af983..db86a956e137 100644
+--- a/Documentation/gpu/vkms.rst
++++ b/Documentation/gpu/vkms.rst
+@@ -138,10 +138,11 @@ Last but not least, create one or more connectors::
  
- 	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
+   sudo mkdir /config/vkms/my-vkms/connectors/connector0
  
-diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
-index c2b0c99b620f..209e5d5c3b45 100644
---- a/drivers/gpu/drm/vkms/vkms_config.c
-+++ b/drivers/gpu/drm/vkms/vkms_config.c
-@@ -602,6 +602,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
- 		seq_puts(m, "connector:\n");
- 		seq_printf(m, "\tstatus=%s\n",
- 			   drm_get_connector_status_name(vkms_config_connector_get_status(connector_cfg)));
-+		seq_printf(m, "\ttype=%s\n",
-+			   drm_get_connector_type_name(vkms_config_connector_get_type(connector_cfg)));
- 	}
+-Connectors have 1 configurable attribute:
++Connectors have 2 configurable attribute:
  
- 	return 0;
-@@ -934,6 +936,7 @@ struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *c
+ - status: Connection status: 1 connected, 2 disconnected, 3 unknown (same values
+   as those exposed by the "status" property of a connector)
++- type: Type of connector. Same values as exposed by the "type" field in drm_connector.
  
- 	connector_cfg->config = config;
- 	connector_cfg->status = connector_status_connected;
-+	vkms_config_connector_set_type(connector_cfg, DRM_MODE_CONNECTOR_VIRTUAL);
- 	xa_init_flags(&connector_cfg->possible_encoders, XA_FLAGS_ALLOC);
+ To finish the configuration, link the different pipeline items::
  
- 	list_add_tail(&connector_cfg->link, &config->connectors);
-diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
-index df2ec432a1af..1f0fbd2d62eb 100644
---- a/drivers/gpu/drm/vkms/vkms_config.h
-+++ b/drivers/gpu/drm/vkms/vkms_config.h
-@@ -129,6 +129,7 @@ struct vkms_config_encoder {
-  * struct vkms_config_connector
-  *
-  * @link: Link to the others connector in vkms_config
-+ * @type: Store the type of connector using DRM_MODE_CONNECTOR_* values
-  * @config: The vkms_config this connector belongs to
-  * @status: Status (connected, disconnected...) of the connector
-  * @possible_encoders: Array of encoders that can be used with this connector
-@@ -141,6 +142,7 @@ struct vkms_config_connector {
- 	struct list_head link;
- 	struct vkms_config *config;
- 
-+	int type;
- 	enum drm_connector_status status;
- 	struct xarray possible_encoders;
- 
-@@ -343,6 +345,28 @@ vkms_config_plane_set_default_pipeline(struct vkms_config_plane *plane_cfg,
+diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
+index 832f73011353..a0b3347b2bd8 100644
+--- a/drivers/gpu/drm/vkms/vkms_configfs.c
++++ b/drivers/gpu/drm/vkms/vkms_configfs.c
+@@ -1173,10 +1173,75 @@ static ssize_t connector_status_store(struct config_item *item,
+ 	return (ssize_t)count;
  }
  
- /**
-+ * vkms_config_connector_get_type() - Return the connector type
-+ * @connector_cfg: Connector to get the type from
-+ */
-+static inline int
-+vkms_config_connector_get_type(const struct vkms_config_connector *connector_cfg)
++static ssize_t connector_type_show(struct config_item *item, char *page)
 +{
-+	return connector_cfg->type;
++	struct vkms_configfs_connector *connector;
++	int type;
++
++	connector = connector_item_to_vkms_configfs_connector(item);
++
++	scoped_guard(mutex, &connector->dev->lock) {
++		type = vkms_config_connector_get_type(connector->config);
++	}
++
++	return sprintf(page, "%u", type);
 +}
 +
-+/**
-+ * vkms_config_connector_set_type() - Set the connector type
-+ * @connector_cfg: Connector to set the type to
-+ * @type: New connector type
-+ */
-+static inline void
-+vkms_config_connector_set_type(struct vkms_config_connector *connector_cfg,
-+			       int type)
++static ssize_t connector_type_store(struct config_item *item,
++				    const char *page, size_t count)
 +{
-+	connector_cfg->type = type;
++	struct vkms_configfs_connector *connector;
++	int val, ret;
++
++	connector = connector_item_to_vkms_configfs_connector(item);
++
++	ret = kstrtouint(page, 10, &val);
++
++	if (ret)
++		return ret;
++
++	switch (val) {
++	case DRM_MODE_CONNECTOR_Unknown:
++	case DRM_MODE_CONNECTOR_VGA:
++	case DRM_MODE_CONNECTOR_DVII:
++	case DRM_MODE_CONNECTOR_DVID:
++	case DRM_MODE_CONNECTOR_DVIA:
++	case DRM_MODE_CONNECTOR_Composite:
++	case DRM_MODE_CONNECTOR_SVIDEO:
++	case DRM_MODE_CONNECTOR_LVDS:
++	case DRM_MODE_CONNECTOR_Component:
++	case DRM_MODE_CONNECTOR_9PinDIN:
++	case DRM_MODE_CONNECTOR_DisplayPort:
++	case DRM_MODE_CONNECTOR_HDMIA:
++	case DRM_MODE_CONNECTOR_HDMIB:
++	case DRM_MODE_CONNECTOR_TV:
++	case DRM_MODE_CONNECTOR_eDP:
++	case DRM_MODE_CONNECTOR_VIRTUAL:
++	case DRM_MODE_CONNECTOR_DSI:
++	case DRM_MODE_CONNECTOR_DPI:
++	case DRM_MODE_CONNECTOR_SPI:
++	case DRM_MODE_CONNECTOR_USB:
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	scoped_guard(mutex, &connector->dev->lock) {
++		if (connector->dev->enabled)
++			return -EBUSY;
++
++		vkms_config_connector_set_type(connector->config, val);
++	}
++
++	return count;
 +}
 +
-+/*
-  * vkms_config_plane_get_default_rotation() - Get the default rotation for a plane
-  * @plane_cfg: Plane to get the default rotation from
-  *
-diff --git a/drivers/gpu/drm/vkms/vkms_connector.c b/drivers/gpu/drm/vkms/vkms_connector.c
-index b0a6b212d3f4..5a87dc2d4c63 100644
---- a/drivers/gpu/drm/vkms/vkms_connector.c
-+++ b/drivers/gpu/drm/vkms/vkms_connector.c
-@@ -68,7 +68,8 @@ static const struct drm_connector_helper_funcs vkms_conn_helper_funcs = {
- 	.best_encoder = vkms_conn_best_encoder,
+ CONFIGFS_ATTR(connector_, status);
++CONFIGFS_ATTR(connector_, type);
+ 
+ static struct configfs_attribute *connector_item_attrs[] = {
+ 	&connector_attr_status,
++	&connector_attr_type,
+ 	NULL,
  };
  
--struct vkms_connector *vkms_connector_init(struct vkms_device *vkmsdev)
-+struct vkms_connector *vkms_connector_init(struct vkms_device *vkmsdev,
-+					   struct vkms_config_connector *connector_cfg)
- {
- 	struct drm_device *dev = &vkmsdev->drm;
- 	struct vkms_connector *connector;
-@@ -79,7 +80,7 @@ struct vkms_connector *vkms_connector_init(struct vkms_device *vkmsdev)
- 		return ERR_PTR(-ENOMEM);
- 
- 	ret = drmm_connector_init(dev, &connector->base, &vkms_connector_funcs,
--				  DRM_MODE_CONNECTOR_VIRTUAL, NULL);
-+				  vkms_config_connector_get_type(connector_cfg), NULL);
- 	if (ret)
- 		return ERR_PTR(ret);
- 
-diff --git a/drivers/gpu/drm/vkms/vkms_connector.h b/drivers/gpu/drm/vkms/vkms_connector.h
-index ed312f4eff3a..33253d29b1cc 100644
---- a/drivers/gpu/drm/vkms/vkms_connector.h
-+++ b/drivers/gpu/drm/vkms/vkms_connector.h
-@@ -4,6 +4,7 @@
- #define _VKMS_CONNECTOR_H_
- 
- #include "vkms_drv.h"
-+#include "vkms_config.h"
- 
- #define drm_connector_to_vkms_connector(target) \
- 	container_of(target, struct vkms_connector, base)
-@@ -24,7 +25,8 @@ struct vkms_connector {
-  * Returns:
-  * The connector or an error on failure.
-  */
--struct vkms_connector *vkms_connector_init(struct vkms_device *vkmsdev);
-+struct vkms_connector *vkms_connector_init(struct vkms_device *vkmsdev,
-+					   struct vkms_config_connector *connector_cfg);
- 
- /**
-  * vkms_trigger_connector_hotplug() - Update the device's connectors status
-diff --git a/drivers/gpu/drm/vkms/vkms_output.c b/drivers/gpu/drm/vkms/vkms_output.c
-index 86ce07a617f5..1288c8551bc8 100644
---- a/drivers/gpu/drm/vkms/vkms_output.c
-+++ b/drivers/gpu/drm/vkms/vkms_output.c
-@@ -97,7 +97,7 @@ int vkms_output_init(struct vkms_device *vkmsdev)
- 		struct vkms_config_encoder *possible_encoder;
- 		unsigned long idx = 0;
- 
--		connector_cfg->connector = vkms_connector_init(vkmsdev);
-+		connector_cfg->connector = vkms_connector_init(vkmsdev, connector_cfg);
- 		if (IS_ERR(connector_cfg->connector)) {
- 			DRM_ERROR("Failed to init connector\n");
- 			return PTR_ERR(connector_cfg->connector);
 
 -- 
 2.54.0
