@@ -1,261 +1,250 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D541D798E
-	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 15:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5105735295C
+	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 16:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776871603; cv=none; b=PWfRu83B2ShS3tc3YbPY4dG9YPHxl++e09HmJ3d3z7xe7KYMNBZ310rZ2ldKvyBQ2CECz6s7BCfjJRs8jyyX90fUwxRIoQe9901pPHXCt0veXg1vIC/6PTymQMEbBasNy6JwTSqEoegFUbWXTz7toBKS+LbEheyiHGsiXgzFxGc=
+	t=1776876534; cv=none; b=XW7H9fnR2Hb+Pt7S6gZ//d5LFXgFlm2O4nMBi972FxqhhzO1se64J06nYlb4aMX0Fl8MbdV2/G1sVpktVJdWrJ4XY6MP+OVoUMNSalV2picRzYjjYEg0iLtuJma3YX0MCDfNXLrEoBN8juE7MQI/F24d5BJpsDL3GBr/ZthIy+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776871603; c=relaxed/simple;
-	bh=rdCUpxrjSHkQ3T98egy1ZBC2mo3Rw+rJgkqg+TeHKq8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bd0+fwAA7ZFgfWXdclBKrbyKNefsFsoupjK0d/O4ytWqRQxWAUsQWOP83XySBjVmoJDrM8K5tVRmNV4INsoWvPWfwR3CRwUBHccL4UF1aunUSHeQv+coNbDAsGBe7DVv4XBpWLMdIAf0lnFjoaj2JjGLT6c9NVmbiX9WRsZTpxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JiQorV6+; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1776876534; c=relaxed/simple;
+	bh=Ag5T+7uI+QiVvyBlLMT3Uh/GKEHxbOA5OKp5bkJmTLo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=doXeokmwG249rBgq6a02z7+XieScKP+EeGJbCOXCtCi8w4OEVvgRo8cttGGfmjUGJbwHINCKcdu2taCefJ0mdz3AH2CJ+0NjuTDdxmiveQjRIariL8mFxZJxaR5PjafgLGLSYijKe1jD7aZxa48tOaqqbHmjlTFVxOci3dva80I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Nkv45CPl; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JiQorV6+"
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59e4a04f059so6379142e87.2
-        for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 08:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776871600; x=1777476400; darn=lists.linux.dev;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mguVNYCKn1UqNE6wCiBdJA3G/L2uqCAslGSj7SsF/bg=;
-        b=JiQorV6+/0KkZk5y84zXRMOxXseIktitjTElbBesAFWo4Zl/0Ats3SXtziWd5pgHFX
-         Y/UtauQM0UY+fG3yzkI61wgG38wRAPsi6IjtIfpYWmpuyoLHPUkl0aR9K9O336uh5lu/
-         rA2ytWUszU46ADI1Mv/M8+8YX3s4locevZEiGXlMhk1Eyk3rTefJuPgZKL6FMysOuaV+
-         PiCMok1KpPmfou+WoyVXtMo7zRALAyc+yaZZ02UtlD049kWQnWHzjZ4nyoRmkSaYCMt4
-         jvuKC97vtYbl0QzTvgILyXtcU5IX3zcsH+BZ37KXGe/LPZ+b339AgWqsXotQtP1PmCjw
-         W07w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776871600; x=1777476400;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mguVNYCKn1UqNE6wCiBdJA3G/L2uqCAslGSj7SsF/bg=;
-        b=e9mgdcmzEtg1teNFsYphBDFJ4E9WQsfWRe8PqCDjLlJGulIKY8aUxVruxp6aDTas0i
-         W3zqzh8xoMYhwRgCReIEte5e8BiGqxN3Ca9MaRjVfGOWc2n5W5OWFHwufdYHtaeHVqt2
-         rItgJJxPGOGM1CmnVpdtvkvihfeCZWO5gKLBwrwI6lDsYMJs/cDSlwVa++c/BxjnZXaG
-         NIM9T04IVZ/hQkaFMeCV80c3qSdlmSmzVzvcJChCf/wvgI/CNnzikWDzQy9mnT46BkVg
-         +u3TkTJPdEr9UWkmevqqcMtug/hGp6Bl/oFTMU9FxTTmQydsckkcisTsYCdA4OpT4kQA
-         OJVQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8Uml/OM+eHZQVsEQ9fpAPXWKF9VGU9IglQx497v5bJsyYcRIaVTGSlqRbpgc7RwPQJmRQO@lists.linux.dev
-X-Gm-Message-State: AOJu0YwuuekLkXwgIxb4k3RaD15N2vgf988/kmllgXDXtL/GJZ8UERFX
-	Pv915mI4EBnf5nZenoRPm/cJC5sIc92niLpD4+2B9r5S+S3FXArzxIomdtup7ccVyw==
-X-Gm-Gg: AeBDieuRZNAgBXeoTzv3/KRO0y+C4bVVmOjYvESXfvfNUF1bDw9WrT5xP3js80D+B2P
-	VpV3SruP/jFKeMfIHYMiOf/D9CER9KtvqETVaSizcWiPBqKQhNU6j1uQhSJxUyaVIbmQOexiN0C
-	DqOFNox538mAcOnRAPyXplJUoe4NqBEeHGmQUaBe/+8yj9H3FKIhlAfM3RRlBEehNfvHgfjNzqd
-	unteWL08Rez6+OIYxFTfUT8Nu+luNAtWo5CVqn/j/MyKJpTNi5WYeTO2jJKDqKUVgrSuoP5vbr/
-	xK1CbIGOfy/W2g7AZtHwtcQ+zWJlvxtTc0wAGK/zAW6jJBe6UjQNYYJRxiP3fx3/gySfE+JLu/W
-	M4MyNKgmCbJkE3SfgJMqzF7NZbaC9e07Utsb/7okjAy1aYHM6UYVqHLcyFYAFf1+3ij+JqTrROb
-	nmomMD7N91oeuba/1dGkjk22zoUqXpTZbGoPbgFajXfs4DxG/ncK0PehM3Eh/YqIB3aZLMiZmiO
-	9UuuLBZZVJJk741UqKx
-X-Received: by 2002:a05:6512:3d20:b0:5a3:ff44:f019 with SMTP id 2adb3069b0e04-5a4172ca21dmr9302999e87.11.1776871599679;
-        Wed, 22 Apr 2026 08:26:39 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:2834:9:ec7d:19d1:709a:2171])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a4185ad30asm4558169e87.16.2026.04.22.08.26.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2026 08:26:38 -0700 (PDT)
-Date: Wed, 22 Apr 2026 17:26:30 +0200
-From: Marco Elver <elver@google.com>
-To: Kees Cook <kees@kernel.org>
-Cc: Vlastimil Babka <vbabka@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
-	Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Alexander Potapenko <glider@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
-	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>,
-	Florent Revest <revest@google.com>, Jann Horn <jannh@google.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matteo Rizzo <matteorizzo@google.com>,
-	GONG Ruiqi <gongruiqi1@huawei.com>
-Subject: Re: [PATCH v2] slab: support for compiler-assisted type-based slab
- cache partitioning
-Message-ID: <aejopk23CsntyFOB@elver.google.com>
-References: <20260415143735.2974230-1-elver@google.com>
- <202604210954.84C57E5E0@keescook>
- <CANpmjNO8CcR56LXAQf4GQhGcbU4MQkRCa7gVvwuAfvVrzEUhQg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Nkv45CPl"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id A1D1FC5C3CC;
+	Wed, 22 Apr 2026 16:49:31 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A4DAD5FA8F;
+	Wed, 22 Apr 2026 16:48:50 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C55E3104609C6;
+	Wed, 22 Apr 2026 18:48:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1776876529; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=aO3H8MsXoKzfH918q1hawJrbjm/FDIsXu4wp10cCqs0=;
+	b=Nkv45CPl3r7QYNZytxIiCtMAXDTtZjYJ4M/1/zerDCxfSJUd27nNcoxl3gQZGXmw/0rrA4
+	bmdCTq7YNQelt0GNbGtIYjadA2Ml47wiU3yIz8ZR8luCBio55u0wfqinXuy3wcfu7vJd/o
+	w9iFDFWGL2QlzniklQ6xgp+uKFqHwTjQjZ3mmxkmnoZHmDjOF2MdyrDwO1KGSjCyD7N7Tp
+	IQu2feTom/RQvOJYVv7EDSqI1u0hbZDTxjP6QRxvc/wnMB12Qj8QP86u5SYrZehhFBvNiY
+	nfztgust4sKq1WSUClKYNBaopTukSOdhUTs3VvvHSS3qLTTM6kLk9wshIquh6g==
+From: Louis Chauvet <louis.chauvet@bootlin.com>
+Subject: [PATCH v4 00/37] VKMS: Introduce multiple configFS attributes
+Date: Wed, 22 Apr 2026 18:47:57 +0200
+Message-Id: <20260422-vkms-all-config-v4-0-dbb52e9aadc3@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNO8CcR56LXAQf4GQhGcbU4MQkRCa7gVvwuAfvVrzEUhQg@mail.gmail.com>
-User-Agent: Mutt/2.2.13 (2024-03-09)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAL776GkC/2XOzU4DIRQF4FeZsBaFO3+drnyPxgW/7Y0DVKCkp
+ pl3l041ambHITnfPTeSTESTyL65kWgKJgy+hu6pIeok/NFQ1DUTYNBzxkda3l2iYp6pCt7ikUr
+ NFAjGd91gSW2do7F4XcXD2yNH83GpcH58EimSqW3nMO8bHR11mNTLz4N6c83k3jxhyiF+rtMKX
+ 6vfK3abFYVTRsU4Dmzsez2BfpUh5Bn9cz20agX+CDBtBaiCNMDkJC3vBrMV2l8BALZCexdEB1q
+ 1Vk7W/heWZfkCDRKSgm4BAAA=
+X-Change-ID: 20251017-vkms-all-config-bd0c2a01846f
+To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, Melissa Wen <melissa.srw@gmail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, jose.exposito89@gmail.com, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: victoria@system76.com, sebastian.wick@redhat.com, victoria@system76.com, 
+ airlied@gmail.com, thomas.petazzoni@bootlin.com, 
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Louis Chauvet <louis.chauvet@bootlin.com>, 
+ llvm@lists.linux.dev, 
+ =?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito@redhat.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+X-Mailer: b4 0.16-dev
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, Apr 21, 2026 at 09:13PM +0200, Marco Elver wrote:
-[...]
-> > And actually, perhaps a global rename of the options so the selection
-> > naming is at the end of the CONFIG phrase, and bundle the on/off into
-> > the choice:
-> >
-> >
-> > choice
-> >         prompt "Partitioned slab cache mode"
-> >         depends on PARTITION_KMALLOC_CACHES
-> >         default KMALLOC_PARTITION_TYPED if !SLUB_TINY && CC_HAS_ALLOC_TOKEN
-> >         default KMALLOC_PARTITION_RANDOM if !SLUB_TINY
-> >         default KMALLOC_PARTITION_NONE
-> >
-> > config KMALLOC_PARTITION_NONE
-> > ...
-> > config KMALLOC_PARTITION_RANDOM
-> >         depends on !SLUB_TINY
-> > ...
-> > config KMALLOC_PARTITION_TYPED
-> >         depends on !SLUB_TINY && CC_HAS_ALLOC_TOKEN
-> 
-> There was a comment somewhere else that even introducing
-> PARTITION_KMALLOC_CACHES might confuse users of RANDOM_KMALLOC_CACHES.
-> I think completely getting rid of and renaming RANDOM_KMALLOC_CACHES
-> has marginal benefit, and will cause friction for existing users (even
-> moreso than already). I see little benefit here, and would prefer not
-> to break user configs more than needed: configs that already set
-> RANDOM_KMALLOC_CACHES, upon rebuild will be prompted to enable
-> PARTITION_KMALLOC_CACHES; if user says Y, then their previous
-> selection (RANDOM) would already be picked and they don't have to
-> rediscover that it exists under a new name.
-> 
-> I can make this change, but only if you're sure the benefit outweighs
-> the downsides here.
+VKMS have a wide range of options. The aim of this series is to introduce
+many configfs attribute so VKMS can be used to test a wide range of
+configurations.
 
-Upon further reflection, since the transition isn't smooth anyway, I'm
-probably going to rename, but have them all use the PARTITION_KMALLOC_*
-prefix so it's easy to just search for "CONFIG_PARTITION_KMALLOC_". I
-don't see the need for a "NONE" variant - I've seen this pattern
-elsewhere, and then you end up with users reading the .config and
-concluding "CONFIG_PARTITION_KMALLOC_CACHES is enabled ... but oh never
-mind actually it isn't" which I find confusing. This could be useful if
-we had a dynamic on/off toggle and the default is NONE, but that's not
-the case here.
+PATCH 1-5 are to expose human readable strings from drm core
+PATCH 6 is a fix for rotation value
+PATCH 7 is ABI documentation
+PATCH 8 added some error checks in plane configuration
+PATCH 9 cleanup in plane_release
+PATCH 10-12 change the display in configfs to be more readable
+PATCH 13,14 plane name
+PATCH 15,16 plane rotation
+PATCH 17,18 plane color encoding
+PATCH 19,20 plane color range
+PATCH 21,22 plane format
+PATCH 23 properly use zpos
+PATCH 24,25 plane zpos
+PATCH 26,27 connector type
+PATCH 28 preparation in connector initialization
+PATCH 29,30 connector supported colorspace
+PATCH 31,32 connector EDID
+PATCH 33-35 dynamic connectors
+PATCH 36-37 PATH property
 
-diff --git a/Makefile b/Makefile
-index f70170ed1522..d1f63ffb85f0 100644
---- a/Makefile
-+++ b/Makefile
-@@ -989,7 +989,7 @@ KBUILD_CFLAGS	+= $(CC_AUTO_VAR_INIT_ZERO_ENABLER)
- endif
- endif
- 
--ifdef CONFIG_TYPED_KMALLOC_CACHES
-+ifdef CONFIG_PARTITION_KMALLOC_TYPED
- # PARTITION_KMALLOC_CACHES_NR + 1
- KBUILD_CFLAGS	+= -falloc-token-max=16
- endif
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 0537c3596163..b46300037ca5 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -501,10 +501,10 @@ int kmem_cache_shrink(struct kmem_cache *s);
- 
- #ifdef CONFIG_PARTITION_KMALLOC_CACHES
- typedef struct { unsigned long v; } kmalloc_token_t;
--#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+#ifdef CONFIG_PARTITION_KMALLOC_RANDOM
- extern unsigned long random_kmalloc_seed;
- #define __kmalloc_token(...) ((kmalloc_token_t){ .v = _RET_IP_ })
--#elif defined(CONFIG_TYPED_KMALLOC_CACHES)
-+#elif defined(CONFIG_PARTITION_KMALLOC_TYPED)
- #define __kmalloc_token(...) ((kmalloc_token_t){ .v = __builtin_infer_alloc_token(__VA_ARGS__) })
- #endif
- #define DECL_TOKEN_PARAM(_token)	, kmalloc_token_t (_token)
-@@ -732,11 +732,11 @@ static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags, kmalloc
- 	 * with a single branch for all the relevant flags.
- 	 */
- 	if (likely((flags & KMALLOC_NOT_NORMAL_BITS) == 0))
--#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+#ifdef CONFIG_PARTITION_KMALLOC_RANDOM
- 		/* PARTITION_KMALLOC_CACHES_NR (=15) copies + the KMALLOC_NORMAL */
- 		return KMALLOC_PARTITION_START + hash_64(token.v ^ random_kmalloc_seed,
- 							 ilog2(PARTITION_KMALLOC_CACHES_NR + 1));
--#elif defined(CONFIG_TYPED_KMALLOC_CACHES)
-+#elif defined(CONFIG_PARTITION_KMALLOC_TYPED)
- 		return KMALLOC_PARTITION_START + token.v;
- #else
- 		return KMALLOC_NORMAL;
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 6d44bd2633bb..d8510913fbeb 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -265,12 +265,12 @@ config PARTITION_KMALLOC_CACHES
- choice
- 	prompt "Partitioned slab cache mode"
- 	depends on PARTITION_KMALLOC_CACHES
--	default TYPED_KMALLOC_CACHES if CC_HAS_ALLOC_TOKEN
--	default RANDOM_KMALLOC_CACHES
-+	default PARTITION_KMALLOC_TYPED if CC_HAS_ALLOC_TOKEN
-+	default PARTITION_KMALLOC_RANDOM
- 	help
- 	  Selects the slab cache partitioning mode.
- 
--config RANDOM_KMALLOC_CACHES
-+config PARTITION_KMALLOC_RANDOM
- 	bool "Randomize slab caches for normal kmalloc"
- 	help
- 	  Randomly pick a slab cache based on code address and a per-boot
-@@ -282,17 +282,17 @@ config RANDOM_KMALLOC_CACHES
- 	  the randomization by retrying attacks across multiple machines until
- 	  the target objects are co-located.
- 
--config TYPED_KMALLOC_CACHES
-+config PARTITION_KMALLOC_TYPED
- 	bool "Type based slab cache selection for normal kmalloc"
- 	depends on CC_HAS_ALLOC_TOKEN
- 	help
- 	  Rely on Clang's allocation tokens to choose a slab cache, where token
- 	  IDs are derived from the allocated type.
- 
--	  Unlike RANDOM_KMALLOC_CACHES, cache assignment is deterministic based
-+	  Unlike PARTITION_KMALLOC_RANDOM, cache assignment is deterministic based
- 	  on type, which guarantees that objects of certain types are not
- 	  placed in the same cache. This effectively mitigates certain classes
--	  of exploits that probabilistic defenses like RANDOM_KMALLOC_CACHES
-+	  of exploits that probabilistic defenses like PARTITION_KMALLOC_RANDOM
- 	  only make harder but not impossible. However, this also means the
- 	  cache assignment is predictable.
- 
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 21ab7dd79b5e..ca5e2a6d4e46 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -742,7 +742,7 @@ kmem_buckets kmalloc_caches[NR_KMALLOC_TYPES] __ro_after_init =
- { /* initialization for https://llvm.org/pr42570 */ };
- EXPORT_SYMBOL(kmalloc_caches);
- 
--#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+#ifdef CONFIG_PARTITION_KMALLOC_RANDOM
- unsigned long random_kmalloc_seed __ro_after_init;
- EXPORT_SYMBOL(random_kmalloc_seed);
- #endif
-@@ -1010,7 +1010,7 @@ void __init create_kmalloc_caches(void)
- 		for (i = KMALLOC_SHIFT_LOW; i <= KMALLOC_SHIFT_HIGH; i++)
- 			new_kmalloc_cache(i, type);
- 	}
--#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+#ifdef CONFIG_PARTITION_KMALLOC_RANDOM
- 	random_kmalloc_seed = get_random_u64();
- #endif
- 
+PS: Each pair of config/configfs patch are independant. I could
+technically create ≈10 different series, but there will be a lot of
+(trivial) conflicts between them. I will be happy to reordoer, split and
+partially apply this series to help the review process.
+
+Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+---
+Changes in v4:
+- Introduced a way to change the PATH property
+- Reordered drm-only patches to the front of the series.
+- Fixed a bug when dynamic connector are allocated/freed (drmm instead of
+  kzalloc)
+- Properly handle errors in vkms_connector_init
+- Only parse formats one by one (no more complex algorithm, you will have
+  to write multiple times for multiple formats)
+- Use sysfs_emit instead of sprintf
+- Fix rotate property default value
+- Link to v3: https://lore.kernel.org/r/20251222-vkms-all-config-v3-0-ba42dc3fb9ff@bootlin.com
+
+Changes in v3:
+- Added Documentation/ABI (Thomas Petazzoni)
+- PATCH 2: Clarify return value
+- PATCH 6,7: Avoid passing null to printf
+- PATCH 7: Restrict plane name to A-Za-z0-9
+- PATCH 12: Fix missing s
+- PATCH 13: Add macro to avoid repetition, fix missing s, make code
+  consistent, remove wrong comment, properly check bit values
+- PATCH 15: Fix missing s
+- PATCH 16: Fix missing s, make code consistent, remove wrong comments,
+  properly check value and fix default_color_range value
+- PATCH 17: Create function to reduce code complexity, fix missing s
+- PATCH 18: Fix parsing, rename data, reject strings > 4 chars
+- PATCH 20: Remove duplicated lines, fix test comments simplify conditions,
+  remove useless documentation, 
+- PATCH 21: {Min,Max}imal -> {Min,Max}imum, simplify commit log
+- PATCH 25: Fix wrong comment
+- PATCH 26: Rename type to colorspaces
+- PATCH 27: Improve comment, avoid useless iterations
+- PATCH 28: Fix typo in commit log
+- PATCH 29: Fix typo in commit log
+- PATCH 30: Remove useless include and move it to proper commit
+- PATCH 32: Clarify documentation
+- PATCH 33: Simplify code and use better variable names
+- PATCH *: Fix EINVAL/EBUSY
+- Link to v2: https://lore.kernel.org/r/20251029-vkms-all-config-v2-0-be20b9bf146e@bootlin.com
+
+Changes in v2:
+- PATCH 1: reorder includes (José)
+- PATCH 2: use name property instead of folder name (José)
+- PATCH 3: Fix default rotations (José)
+- PATCH 3,5,7,12: Add tests and extract validation for planes (José)
+- PATCH 3,5: Do not create color range/encoding properties if not set
+- PATCH 5,6,7,8: Set plural form for vkms_config_plane fields (José)
+- PATCH 4,6,8,13: Remove checking for default in supported (José)
+- PATCH 9: Add break in vkms_config_plane_add_format (José)
+- PATCH 12: fix zpos_enabled typo (José)
+- PATCH 13: fix documentation (José)
+- Add debug display (José)
+- PATCH 20: use drmm_kzalloc instead of kzalloc (José)
+- PATCH 22: simplify the code (José)
+- Link to v1: https://lore.kernel.org/r/20251018-vkms-all-config-v1-0-a7760755d92d@bootlin.com
+
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+To: Maxime Ripard <mripard@kernel.org>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+To: David Airlie <airlied@gmail.com>
+To: Simona Vetter <simona@ffwll.ch>
+To: Louis Chauvet <louis.chauvet@bootlin.com>
+To: Haneen Mohammed <hamohammed.sa@gmail.com>
+To: Melissa Wen <melissa.srw@gmail.com>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+To: Miguel Ojeda <ojeda@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+To: Bill Wendling <morbo@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: thomas.petazzoni@bootlin.com
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: llvm@lists.linux.dev
+
+---
+Louis Chauvet (37):
+      drm/drm_mode_config: Add helper to get plane type name
+      drm/blend: Get a rotation name from it's bitfield
+      drm/drm_color_mgmt: Expose drm_get_color_encoding_name
+      drm/drm_color_mgmt: Expose drm_get_color_range_name
+      drm/connector: Export drm_get_colorspace_name
+      drm/drm_atomic_state_helper: Properly load default value for rotation
+      Documentation: ABI: vkms: Add current VKMS ABI documentation
+      drm/vkms: Add error handling in plane config creation
+      drm/vkms: Simplify plane_release code
+      drm/vkms: Explicitly display plane type
+      drm/vkms: Use enabled/disabled instead of 1/0 for debug
+      drm/vkms: Explicitly display connector status
+      drm/vkms: Introduce config for plane name
+      drm/vkms: Introduce configfs for plane name
+      drm/vkms: Introduce config for plane rotation
+      drm/vkms: Introduce configfs for plane rotation
+      drm/vkms: Introduce config for plane color encoding
+      drm/vkms: Introduce configfs for plane color encoding
+      drm/vkms: Introduce config for plane color range
+      drm/vkms: Introduce configfs for plane color range
+      drm/vkms: Introduce config for plane format
+      drm/vkms: Introduce configfs for plane format
+      drm/vkms: Properly render plane using their zpos
+      drm/vkms: Introduce config for plane zpos property
+      drm/vkms: Introduce configfs for plane zpos property
+      drm/vkms: Introduce config for connector type
+      drm/vkms: Introduce configfs for connector type
+      drm/vkms: Rename vkms_connector_init to vkms_connector_init_static
+      drm/vkms: Introduce config for connector supported colorspace
+      drm/vkms: Introduce configfs for connector supported colorspace
+      drm/vkms: Introduce config for connector EDID
+      drm/vkms: Introduce configfs for connector EDID
+      drm/vkms: Store the enabled/disabled status for connector
+      drm/vkms: Allow to hot-add connectors
+      drm/vkms: Introduce configfs for dynamic connector creation
+      drm/vkms: Add connector parent configuration in vkms_config
+      drm/vkms: Add ConfigFS interface for connector parent and port_id
+
+ .clang-format                                   |    2 +
+ Documentation/ABI/testing/configfs-vkms         |  256 ++++
+ Documentation/gpu/vkms.rst                      |   45 +-
+ drivers/gpu/drm/drm_atomic_state_helper.c       |    6 +
+ drivers/gpu/drm/drm_blend.c                     |   35 +-
+ drivers/gpu/drm/drm_color_mgmt.c                |    4 +-
+ drivers/gpu/drm/drm_connector.c                 |    1 +
+ drivers/gpu/drm/drm_crtc_internal.h             |    6 -
+ drivers/gpu/drm/drm_mode_config.c               |   16 +
+ drivers/gpu/drm/vkms/tests/Makefile             |    3 +-
+ drivers/gpu/drm/vkms/tests/vkms_config_test.c   |  513 +++++++-
+ drivers/gpu/drm/vkms/tests/vkms_configfs_test.c |  102 ++
+ drivers/gpu/drm/vkms/vkms_config.c              |  425 ++++++-
+ drivers/gpu/drm/vkms/vkms_config.h              |  640 +++++++++-
+ drivers/gpu/drm/vkms/vkms_configfs.c            | 1444 +++++++++++++++++++----
+ drivers/gpu/drm/vkms/vkms_configfs.h            |    4 +
+ drivers/gpu/drm/vkms/vkms_connector.c           |  266 ++++-
+ drivers/gpu/drm/vkms/vkms_connector.h           |   48 +-
+ drivers/gpu/drm/vkms/vkms_crtc.c                |   10 +-
+ drivers/gpu/drm/vkms/vkms_output.c              |   15 +-
+ drivers/gpu/drm/vkms/vkms_plane.c               |   73 +-
+ include/drm/drm_blend.h                         |    2 +
+ include/drm/drm_color_mgmt.h                    |    3 +
+ include/drm/drm_mode_config.h                   |    3 +
+ 24 files changed, 3623 insertions(+), 299 deletions(-)
+---
+base-commit: 8711eb2dde2ed44c98714b875dcf7329950c71ba
+change-id: 20251017-vkms-all-config-bd0c2a01846f
+
+Best regards,
+--  
+Louis Chauvet <louis.chauvet@bootlin.com>
+
