@@ -1,284 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A613CD8D5;
-	Wed, 22 Apr 2026 10:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4825F3E9F8A
+	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 13:02:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776854622; cv=none; b=be+JeP5w+a+R12bIVnLU7ipBSnhJPgiP4TWekVJ53apv6JqHB4ZATtHX4VwEoroif3U6YqAiT+1LkZqIQ6vttIu8/fS8mYjX0RPPsS0h9J4OovxBpW8JQ/KQzxDKyrWTB/6zeKesLyeUviJlUM73qiId4WN5mOTHvRyGMFFqqpM=
+	t=1776862960; cv=none; b=ea9JmycmSWypSBaQ+QMhJto4H3RAE/h2AzsneM5ttJ9KuExGuTZHSOV6f6cuVNblaMpeUP3G8QKSdSB9p4R7ZhN+a8DWRrLzo0yN1T+iVmS0gmfiDwOyBwx8M/o8uMVln8Yh7PtoxwqyT/ZVFxtm9VY2UFgKUmrmeN0+/PzvGaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776854622; c=relaxed/simple;
-	bh=kjrMmCT8D/hLD+2OQdL12dB9asOMZqpCDxmMzIm0+Mk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E/nXVagboygwt5vWE0e+in1wbbkFviHoE58BX84e+G5z0ewpg7WFqqZ/Ts97hA+Mn4XUdT5KVdrCwOMOxXgDBSOroOA1Y2DziJ2Wku2V5XkSvBIOD43gejUK0dHU1oxxFvK6S0xSOHwjXERFON33Z2oBPYy5Kx31v0x2Kw6p/wA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TKigwTby; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1776862960; c=relaxed/simple;
+	bh=T1FD6RRcZe1hlxn6auCxKw8qq4oFtx3vYeZRnRheLT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZpjtxVYnibVTFw33M1tMpSybUbwk+P5UBsSJONC6pHFc1WSFuPUNFuH11lYLYcgMW4capzsnk9ZZnQAiDsHP/k2EaZs1P/6XG1N2xEOPq/DTVOIQvE4l+pxLX42Ct84HEpGNQOB/CT3DAneHyRZV5F3Zend/eB2x4sjl5n2T6po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BUJPL0RG; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TKigwTby"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776854620; x=1808390620;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kjrMmCT8D/hLD+2OQdL12dB9asOMZqpCDxmMzIm0+Mk=;
-  b=TKigwTbyv+P6Nl2WHCx01SFIFj6ld8FJilxPHxFZRRpvmCpLJP7HP7oW
-   X7ayy1FxUIiLDebO+RoM3w65uNgxFA1TZ59kCokXVh15EV5X36ZB+or/G
-   qZTV2fovRDi0AM+fFoOiKtpOmP/S/9zM/6X4Houdjnvac0GXgpvFLs8Eo
-   xrDwza+Rgbh1bzh0PxctvaQ4S9Y7c4kD9GOntg5/CLJA8S50fQ1oCN2a5
-   Tvr4OgTaMGiVwjbub3BFDmhcDKUy8hqo3bsSESrqrFsnJ0WnC1RgNU4Q5
-   BiMiFYuNgM1Kfa9VQQ9N03YpmTNZC/+wSpbkjSEW5aPAL532zDAqfaR62
-   A==;
-X-CSE-ConnectionGUID: vRayPepRTLGQVUYHfgHLXQ==
-X-CSE-MsgGUID: SdaAvzaKQBiLG+IXyWqUnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11763"; a="77922780"
-X-IronPort-AV: E=Sophos;i="6.23,192,1770624000"; 
-   d="scan'208";a="77922780"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 03:43:40 -0700
-X-CSE-ConnectionGUID: uUE/1mwZQeu0JAkbNI2YgQ==
-X-CSE-MsgGUID: VaREkrSkSk6ew6lXlcK6kQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,192,1770624000"; 
-   d="scan'208";a="262706360"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 22 Apr 2026 03:43:37 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wFV3O-000000000b7-2sM3;
-	Wed, 22 Apr 2026 10:43:34 +0000
-Date: Wed, 22 Apr 2026 18:43:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wolfram Sang <wsa-dev@sang-engineering.com>,
-	linux-renesas-soc@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Mark Brown <broonie@linaro.org>
-Subject: Re: [PATCH v2] mailbox: don't free the channel if the startup
- callback failed
-Message-ID: <202604221846.9nkpd0oi-lkp@intel.com>
-References: <20260420114346.10586-2-wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BUJPL0RG"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4891f625344so37659465e9.0
+        for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 06:02:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776862958; x=1777467758; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PAvQgbFKezKfMVm807wMCPxeAcqwUdGT7XqFMU3AArc=;
+        b=BUJPL0RGAWzTaBWaHVMKw928Nl1lTgYb2sy+aw7GjR65inlk10fIZ48IouxoASzJoQ
+         +/0YHvl4LTNsUMy9fb9UeUr/HzFtYeD3rX3SrKwI5LB8tMqxrchv3Zac0g1m/qvqEbB3
+         Po+9gAxcUXsojKoVqUfebfgEbKUKcOI3lwiWW4E7imm38SPt5vN12nvmXMeTmecVEzTk
+         R/ZJ2iH0Vhj32Sf3E1Z8lDMmm1s0XhQ6KRBzeDwN7uXb6A1HMwu0nyVKA/S7R4+YUm4/
+         Xny5/jDu2Ng6ZteumB6M4BHcCm+BOHBjtLmFAcC55rZZCk7IeZ4vsb0kRG6FGUpcmCEI
+         enLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776862958; x=1777467758;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PAvQgbFKezKfMVm807wMCPxeAcqwUdGT7XqFMU3AArc=;
+        b=jcVNEVbRPo80HpjJQKndBcQ2WZfAVHdQnbxcwLrMecOpGVZmmA/OMZWGyttO7Ag04d
+         zGPthw899DvdWTWk/pcbgTce/gT6Cr9kD2p84GQFczBx6z/qBVZLyrTNeq2GgVFydohh
+         KZxCcYWaK8aRus28BRXOpfRA9v9mjGyfktm5t+0+fUwfsOnH/CONsJuRzXE+5/3Fb+nR
+         tlYr6xJTvtX/LI71TgcUOd5gqmqAbj8P+AYjAthRX4RPVucBxVJrn+F6hYhRnr9ykOQr
+         +GalKRIWynoVQPq/ODAVYlSzJITGiPeOTbjIafqfsq1J8bG5iv6ccm36c7oOcXM3qsti
+         geyg==
+X-Forwarded-Encrypted: i=1; AFNElJ/CCYsAG3rEkKZbWrjxVKYenelROOAyuOahp80QnTtcvoz3ZO6SCgRJ/cNtiSRfxFmvoUcR@lists.linux.dev
+X-Gm-Message-State: AOJu0YxNgOIieFXpY9aj2bNtxheAJkmI2vCiPZYjhx0cNVvoTOAaErPH
+	NE/N421Npe5lE1bbiYaT+eZ2GFvHPVMF5O7uBYIrudOzWLvABQoDqFQs
+X-Gm-Gg: AeBDiet2PnMI7VON0HXutQcYjRapV8zy27O02PlKJNzD9YpXxkVVIWb6fWcQPHxXsuK
+	fDmAPOEsV6e1b7hgr2h69vUtGFVT+hL5HweNDwMy9rRfYKxkexpxtIY8onbl3NwMdmZM/izzgtC
+	z5JU8nME8EIm9xxtePqlHTjvuB1QmcHLOTesUgbB6MltOt2xxNjy/OmIyAyX3Dq0i2A7hWQ/KbS
+	T26fSOXrKVF2FQTfNJ8PlHNMAF60i/6BaXqY6wiNiZTFj/XYzUKJqc+ShpgEsnwvNGqBjBFqSeV
+	9EwVVdQM5LXWuqGE4eDT82m2aqRWa51gtp1s+MaR7PIsBj90c2+EXnya39d9nZEFnPPDwz6sFqJ
+	a6N/osdJ2P9Q4ltIyRGLG30haYam/TrCNhvpqolBYEG18mnup0jNAPft5bKl9vA35usToSIfRUF
+	aHh55l1QFUSsEJlfPASt/kk3hvTOeZI6yUw/cqpdykeA60tvOfflV5l8oRPCxzpwUK3wHggvUH+
+	9k=
+X-Received: by 2002:a05:600c:a305:b0:48a:53cb:8604 with SMTP id 5b1f17b1804b1-48a53cb8949mr97880775e9.14.1776862957416;
+        Wed, 22 Apr 2026 06:02:37 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a59816b71sm36512125e9.1.2026.04.22.06.02.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Apr 2026 06:02:37 -0700 (PDT)
+Date: Wed, 22 Apr 2026 14:02:29 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Marco Elver <elver@google.com>, kasan-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda
+ <ojeda@kernel.org>, Dmitry Vyukov <dvyukov@google.com>, Nathan Chancellor
+ <nathan@kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] Compiler Attributes: Add __access macro
+Message-ID: <20260422140229.5a6f23f2@pumpkin>
+In-Reply-To: <CANiq72=x5Ye+Cq6FNPTaLNyFJ+OMYQE45hLKibTyrgXfkeBn7g@mail.gmail.com>
+References: <20260421190351.1976329-1-elver@google.com>
+	<20260422110114.0f48d109@pumpkin>
+	<CANiq72=x5Ye+Cq6FNPTaLNyFJ+OMYQE45hLKibTyrgXfkeBn7g@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260420114346.10586-2-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Wolfram,
+On Wed, 22 Apr 2026 12:25:32 +0200
+Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
 
-kernel test robot noticed the following build errors:
+> On Wed, Apr 22, 2026 at 12:01=E2=80=AFPM David Laight
+> <david.laight.linux@gmail.com> wrote:
+> >
+> > Putting the actual syntax in the comment would help, eg as:
+> >         __access__(read_only|read_write|write_only|none, param_number[,=
+ size]) =20
+>=20
+> I guess you mean as a quick reminder for those that already know about
+> the attribute?
+>=20
+> That sounds OK for an attribute like this, though generally speaking I
+> would avoid duplicating the compiler docs. (Hopefully people will
+> still read the actual docs... :)
 
-[auto build test ERROR on jassibrar-mailbox/for-next]
-[also build test ERROR on next-20260421]
-[cannot apply to linus/master v7.0]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+It might save someone who is just 'wondering what it is about' from having
+to read the gcc docs - particularly if reading the file where you don't have
+a browser handy, or in an editor that doesn't support following links.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wolfram-Sang/mailbox-don-t-free-the-channel-if-the-startup-callback-failed/20260420-234226
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jassibrar/mailbox.git for-next
-patch link:    https://lore.kernel.org/r/20260420114346.10586-2-wsa%2Brenesas%40sang-engineering.com
-patch subject: [PATCH v2] mailbox: don't free the channel if the startup callback failed
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260422/202604221846.9nkpd0oi-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260422/202604221846.9nkpd0oi-lkp@intel.com/reproduce)
+I also had to read a lot of the 'actual doc' to get a hint of what it
+all meant.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604221846.9nkpd0oi-lkp@intel.com/
+> By the way, that could be `__access`, i.e. documenting our side, i.e. the=
+ macro.
 
-All errors (new ones prefixed by >>):
+True, and ', size' should be ', count'.
 
->> drivers/mailbox/mailbox.c:355:4: error: call to undeclared function 'mbox_clean_and_put_channel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     355 |                         mbox_clean_and_put_channel(chan);
-         |                         ^
->> drivers/mailbox/mailbox.c:484:6: error: conflicting types for 'mbox_clean_and_put_channel'
-     484 | void mbox_clean_and_put_channel(struct mbox_chan *chan)
-         |      ^
-   drivers/mailbox/mailbox.c:355:4: note: previous implicit declaration is here
-     355 |                         mbox_clean_and_put_channel(chan);
-         |                         ^
-   2 errors generated.
+	David
 
+>=20
+> Cheers,
+> Miguel
 
-vim +/mbox_clean_and_put_channel +355 drivers/mailbox/mailbox.c
-
-   329	
-   330	static int __mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl)
-   331	{
-   332		struct device *dev = cl->dev;
-   333		int ret;
-   334	
-   335		if (chan->cl || !try_module_get(chan->mbox->dev->driver->owner)) {
-   336			dev_err(dev, "%s: mailbox not free\n", __func__);
-   337			return -EBUSY;
-   338		}
-   339	
-   340		scoped_guard(spinlock_irqsave, &chan->lock) {
-   341			chan->msg_free = 0;
-   342			chan->msg_count = 0;
-   343			chan->active_req = MBOX_NO_MSG;
-   344			chan->cl = cl;
-   345			init_completion(&chan->tx_complete);
-   346	
-   347			if (chan->txdone_method	== MBOX_TXDONE_BY_POLL && cl->knows_txdone)
-   348				chan->txdone_method = MBOX_TXDONE_BY_ACK;
-   349		}
-   350	
-   351		if (chan->mbox->ops->startup) {
-   352			ret = chan->mbox->ops->startup(chan);
-   353			if (ret) {
-   354				dev_err(dev, "Unable to startup the chan (%d)\n", ret);
- > 355				mbox_clean_and_put_channel(chan);
-   356				return ret;
-   357			}
-   358		}
-   359	
-   360		return 0;
-   361	}
-   362	
-   363	/**
-   364	 * mbox_bind_client - Bind client to a mailbox channel.
-   365	 * @chan: The mailbox channel to bind the client to.
-   366	 * @cl: Identity of the client requesting the channel.
-   367	 *
-   368	 * The Client specifies its requirements and capabilities while asking for
-   369	 * a mailbox channel. It can't be called from atomic context.
-   370	 * The channel is exclusively allocated and can't be used by another
-   371	 * client before the owner calls mbox_free_channel.
-   372	 * After assignment, any packet received on this channel will be
-   373	 * handed over to the client via the 'rx_callback'.
-   374	 * The framework holds reference to the client, so the mbox_client
-   375	 * structure shouldn't be modified until the mbox_free_channel returns.
-   376	 *
-   377	 * Return: 0 if the channel was assigned to the client successfully.
-   378	 *         <0 for request failure.
-   379	 */
-   380	int mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl)
-   381	{
-   382		guard(mutex)(&con_mutex);
-   383	
-   384		return __mbox_bind_client(chan, cl);
-   385	}
-   386	EXPORT_SYMBOL_GPL(mbox_bind_client);
-   387	
-   388	/**
-   389	 * mbox_request_channel - Request a mailbox channel.
-   390	 * @cl: Identity of the client requesting the channel.
-   391	 * @index: Index of mailbox specifier in 'mboxes' property.
-   392	 *
-   393	 * The Client specifies its requirements and capabilities while asking for
-   394	 * a mailbox channel. It can't be called from atomic context.
-   395	 * The channel is exclusively allocated and can't be used by another
-   396	 * client before the owner calls mbox_free_channel.
-   397	 * After assignment, any packet received on this channel will be
-   398	 * handed over to the client via the 'rx_callback'.
-   399	 * The framework holds reference to the client, so the mbox_client
-   400	 * structure shouldn't be modified until the mbox_free_channel returns.
-   401	 *
-   402	 * Return: Pointer to the channel assigned to the client if successful.
-   403	 *		ERR_PTR for request failure.
-   404	 */
-   405	struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index)
-   406	{
-   407		struct fwnode_reference_args fwspec;
-   408		struct fwnode_handle *fwnode;
-   409		struct mbox_controller *mbox;
-   410		struct of_phandle_args spec;
-   411		struct mbox_chan *chan;
-   412		struct device *dev;
-   413		unsigned int i;
-   414		int ret;
-   415	
-   416		dev = cl->dev;
-   417		if (!dev) {
-   418			pr_debug("No owner device\n");
-   419			return ERR_PTR(-ENODEV);
-   420		}
-   421	
-   422		fwnode = dev_fwnode(dev);
-   423		if (!fwnode) {
-   424			dev_dbg(dev, "No owner fwnode\n");
-   425			return ERR_PTR(-ENODEV);
-   426		}
-   427	
-   428		ret = fwnode_property_get_reference_args(fwnode, "mboxes", "#mbox-cells",
-   429							 0, index, &fwspec);
-   430		if (ret) {
-   431			dev_err(dev, "%s: can't parse \"%s\" property\n", __func__, "mboxes");
-   432			return ERR_PTR(ret);
-   433		}
-   434	
-   435		spec.np = to_of_node(fwspec.fwnode);
-   436		spec.args_count = fwspec.nargs;
-   437		for (i = 0; i < spec.args_count; i++)
-   438			spec.args[i] = fwspec.args[i];
-   439	
-   440		scoped_guard(mutex, &con_mutex) {
-   441			chan = ERR_PTR(-EPROBE_DEFER);
-   442			list_for_each_entry(mbox, &mbox_cons, node) {
-   443				if (device_match_fwnode(mbox->dev, fwspec.fwnode)) {
-   444					if (mbox->fw_xlate) {
-   445						chan = mbox->fw_xlate(mbox, &fwspec);
-   446						if (!IS_ERR(chan))
-   447							break;
-   448					} else if (mbox->of_xlate) {
-   449						chan = mbox->of_xlate(mbox, &spec);
-   450						if (!IS_ERR(chan))
-   451							break;
-   452					}
-   453				}
-   454			}
-   455	
-   456			fwnode_handle_put(fwspec.fwnode);
-   457	
-   458			if (IS_ERR(chan))
-   459				return chan;
-   460	
-   461			ret = __mbox_bind_client(chan, cl);
-   462			if (ret)
-   463				chan = ERR_PTR(ret);
-   464		}
-   465	
-   466		return chan;
-   467	}
-   468	EXPORT_SYMBOL_GPL(mbox_request_channel);
-   469	
-   470	struct mbox_chan *mbox_request_channel_byname(struct mbox_client *cl,
-   471						      const char *name)
-   472	{
-   473		int index = device_property_match_string(cl->dev, "mbox-names", name);
-   474	
-   475		if (index < 0) {
-   476			dev_err(cl->dev, "%s() could not locate channel named \"%s\"\n",
-   477				__func__, name);
-   478			return ERR_PTR(index);
-   479		}
-   480		return mbox_request_channel(cl, index);
-   481	}
-   482	EXPORT_SYMBOL_GPL(mbox_request_channel_byname);
-   483	
- > 484	void mbox_clean_and_put_channel(struct mbox_chan *chan)
-   485	{
-   486		/* The queued TX requests are simply aborted, no callbacks are made */
-   487		scoped_guard(spinlock_irqsave, &chan->lock) {
-   488			chan->cl = NULL;
-   489			chan->active_req = MBOX_NO_MSG;
-   490			if (chan->txdone_method == MBOX_TXDONE_BY_ACK)
-   491				chan->txdone_method = MBOX_TXDONE_BY_POLL;
-   492		}
-   493	
-   494		module_put(chan->mbox->dev->driver->owner);
-   495	}
-   496	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
