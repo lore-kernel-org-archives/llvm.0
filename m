@@ -1,41 +1,41 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D71A396B99
-	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 16:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142D6394497
+	for <llvm@lists.linux.dev>; Wed, 22 Apr 2026 16:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776876593; cv=none; b=C8XjpOk3s3nWSe1b/aNnKGkcKUN8K86uOsDSDZG5vSxDmxfsHgv+xd8wUY69A1HarVrEUY2x8+v1QUugYavZHWmPlTpwno8CA8lmhoe2zyFjOu8Rvlux9sBG51mSou2zSl+ad6Jz58iGOvko9MTzx7LEhp1mUsOJoMnz7BiGvfQ=
+	t=1776876595; cv=none; b=ttqi8CS3yCtiozjM9ML2jc68flOUnp25D7B13k7L+sLs+yS2ymW9qWNNme4iVdGxEsEXH4lw2BYcTSnmU2U3L2PDLfuTYR/0KMlXfYy9T8mt8+WPqYih0PAUB7S4YbG9LfK9vzi35Jc+LmJuByr9AZlpg/9Et+z03SqPjbsJVWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776876593; c=relaxed/simple;
-	bh=GfDDy+irvQT7Sm3UlQJdFLLSd+Who5IlVE9rh6PbBkc=;
+	s=arc-20240116; t=1776876595; c=relaxed/simple;
+	bh=d7zz1HhTwofrHZ5slYD5hGvAgk4U7IgvqkdJD4n7ksg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eOl2Ph5cR4aKecX95mYd3cn7XyqUC601CtaBzkCwNbc92bcGSr7ekFYHUMkoC6dTvlZMTDmLeA8UZ+LGzDCBk3xIUbU2dZGIkRYGQ0pGH2CB7gl/V286FMFd9BSkQH9MuJF/BvkqGXSz/2G0EYbfEabVdzwmGc24AgsXhzK1HNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=w6TwPf/y; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=ZJdXudLgxHpFJQObwjiP6zBQeXhZwXO3xJbEayQ1mmIVpsbT1WGvUKAEMvxc4STX38/z1s1BJUXbYjzB3sxzksymqkt7fGHF1cz5Zj93yvLvkI/72Iv0qGlc4zYyvV5HnpHlcbuyed5sz8/X7pJo79NBlqGhIWFrukxPvto4Vog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=x2kkX277; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="w6TwPf/y"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="x2kkX277"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 0968B4E42AC3;
-	Wed, 22 Apr 2026 16:49:49 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id AFAF0C5EF04;
+	Wed, 22 Apr 2026 16:50:32 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D338B5FA8F;
-	Wed, 22 Apr 2026 16:49:48 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 24AF4104608C5;
-	Wed, 22 Apr 2026 18:49:45 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id CD55E5FA8F;
+	Wed, 22 Apr 2026 16:49:51 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 036FD10460C02;
+	Wed, 22 Apr 2026 18:49:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776876587; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1776876590; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=FSU20SCriqKVmZs7Y/d/m7LHTfNiCTs5qjroGYCzc2A=;
-	b=w6TwPf/y7MiPF/gYgpB5jg07wixTcTlPT+YpSyjIxI9lo/46Hj8tlzwgM9yxIPssPV12ho
-	oEmhrxZLEVnenVSdIMFxxpSkn1r5jJ7VBGasS0ZmybXVS9ZR2j6i5c70sXErpEqRTLZaVC
-	fl7j7sxjPiN+z2gCqeijyxiN8TrGUruihP+wCvQUoYVewmsdV+SwthvHGv0caEGzOrfiTr
-	uEUFN1tg5N6ZEj3MWz29j86ozXdeSPLOwePAwEKIBSUYnkoalU9BIlJdP6Obmj+Q1Qpdyx
-	7YphEeEAv4649luJ+ScsDnecZ6AHq5HAEFJGK2FM0+m6YeB1WH5f03BpvxWNKg==
+	bh=AH9hqEqCVLoQvY7VoCfKColq6Xiw+ZL4aa0k2HpCk4w=;
+	b=x2kkX2776vj38T7Q+6GiSHpLWdutYrW3wr0qlYiL7XUMxZVhbdbIVdrIQSSqJEcQ5zsa93
+	JpLNlyXLuEafcHbcupcDE0Ub4lKZE1WuxA1PDga7dlPZprYIP6SHyOzUqU5WqSmsYwLWdU
+	B6jMk8+/i0WkQKddFTTIrQPmX7tjk+3zpnb2Pq09PA8w2R3/R2TPqtT0lRYdcdz5WlQ3Ne
+	VqepAQitzLVqHvKb/AeHMG9Ntfbe1z/pTAZHRlymNaH4GzMNpKzyid9Cmmr+lIY/MqKG86
+	O0ORTYkhAS898vmh+caWmkYAW/krGxNSvnrqX5AWfg75ak4aMghQwUO4jVNgRg==
 From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Wed, 22 Apr 2026 18:48:18 +0200
-Subject: [PATCH v4 21/37] drm/vkms: Introduce config for plane format
+Date: Wed, 22 Apr 2026 18:48:19 +0200
+Subject: [PATCH v4 22/37] drm/vkms: Introduce configfs for plane format
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,8 +43,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260422-vkms-all-config-v4-21-dbb52e9aadc3@bootlin.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260422-vkms-all-config-v4-22-dbb52e9aadc3@bootlin.com>
 References: <20260422-vkms-all-config-v4-0-dbb52e9aadc3@bootlin.com>
 In-Reply-To: <20260422-vkms-all-config-v4-0-dbb52e9aadc3@bootlin.com>
 To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
@@ -64,324 +64,355 @@ Cc: victoria@system76.com, sebastian.wick@redhat.com, victoria@system76.com,
 X-Mailer: b4 0.16-dev
 X-Last-TLS-Session-Version: TLSv1.3
 
-VKMS driver supports all the pixel formats for planes, but for testing it
-can be useful to only advertise few of them. This new configuration
-interface will allow configuring the pixel format per planes.
+To allow the userspace to test many hardware configuration, introduce a
+new interface to configure the available formats per planes. VKMS supports
+multiple formats, so the userspace can choose any combination.
+
+The supported formats are configured by writing the fourcc code in
+supported_formats:
+ # enable AR24 format
+  echo '+AR24' > /config/vkms/DEVICE_1/planes/PLANE_1/supported_formats
+ # disable AR24 format
+  echo '-AR24' > /config/vkms/DEVICE_1/planes/PLANE_1/supported_formats
+ # enable all format supported by VKMS
+  echo '+*' > /config/vkms/DEVICE_1/planes/PLANE_1/supported_formats
+ # disable all formats
+  echo '-*' > /config/vkms/DEVICE_1/planes/PLANE_1/supported_formats
 
 Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- drivers/gpu/drm/vkms/vkms_config.c | 128 +++++++++++++++++++++++++++++++++++++
- drivers/gpu/drm/vkms/vkms_config.h |  51 +++++++++++++++
- drivers/gpu/drm/vkms/vkms_plane.c  |  39 +----------
- 3 files changed, 181 insertions(+), 37 deletions(-)
+ Documentation/ABI/testing/configfs-vkms         |   9 ++
+ Documentation/gpu/vkms.rst                      |   7 +-
+ drivers/gpu/drm/vkms/tests/Makefile             |   3 +-
+ drivers/gpu/drm/vkms/tests/vkms_configfs_test.c | 102 +++++++++++++++++++++
+ drivers/gpu/drm/vkms/vkms_configfs.c            | 113 ++++++++++++++++++++++++
+ drivers/gpu/drm/vkms/vkms_configfs.h            |   4 +
+ 6 files changed, 236 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
-index ab4e9faee712..1b51545385dd 100644
---- a/drivers/gpu/drm/vkms/vkms_config.c
-+++ b/drivers/gpu/drm/vkms/vkms_config.c
-@@ -12,6 +12,42 @@
+diff --git a/Documentation/ABI/testing/configfs-vkms b/Documentation/ABI/testing/configfs-vkms
+index 97681108af1c..dae8b9e9d6bf 100644
+--- a/Documentation/ABI/testing/configfs-vkms
++++ b/Documentation/ABI/testing/configfs-vkms
+@@ -153,6 +153,15 @@ Description:
+ 	Default color range presented to userspace, same
+ 	values as supported_color_ranges.
  
- #include "vkms_config.h"
++What:		/sys/kernel/config/vkms/<device>/planes/<plane>/supported_formats
++Date:		Nov 2025
++Contact:	dri-devel@lists.freedesktop.org
++Description:
++	List of supported formats for this plane. To add a new
++	item, write its fourcc code prefixed with '+'. To remove,
++	use '-' prefix. Use '+*' to add all formats, '-*' to
++	remove all.
++
+ What:		/sys/kernel/config/vkms/<device>/planes/<plane>/possible_crtcs
+ Date:		Nov 2025
+ Contact:	dri-devel@lists.freedesktop.org
+diff --git a/Documentation/gpu/vkms.rst b/Documentation/gpu/vkms.rst
+index 8ba0b0353376..94f7b0d85ca7 100644
+--- a/Documentation/gpu/vkms.rst
++++ b/Documentation/gpu/vkms.rst
+@@ -87,7 +87,7 @@ Start by creating one or more planes::
  
-+static const u32 vkms_supported_plane_formats[] = {
-+	DRM_FORMAT_ARGB8888,
-+	DRM_FORMAT_ABGR8888,
-+	DRM_FORMAT_BGRA8888,
-+	DRM_FORMAT_RGBA8888,
-+	DRM_FORMAT_XRGB8888,
-+	DRM_FORMAT_XBGR8888,
-+	DRM_FORMAT_RGB888,
-+	DRM_FORMAT_BGR888,
-+	DRM_FORMAT_XRGB16161616,
-+	DRM_FORMAT_XBGR16161616,
-+	DRM_FORMAT_ARGB16161616,
-+	DRM_FORMAT_ABGR16161616,
-+	DRM_FORMAT_RGB565,
-+	DRM_FORMAT_BGR565,
-+	DRM_FORMAT_NV12,
-+	DRM_FORMAT_NV16,
-+	DRM_FORMAT_NV24,
-+	DRM_FORMAT_NV21,
-+	DRM_FORMAT_NV61,
-+	DRM_FORMAT_NV42,
-+	DRM_FORMAT_YUV420,
-+	DRM_FORMAT_YUV422,
-+	DRM_FORMAT_YUV444,
-+	DRM_FORMAT_YVU420,
-+	DRM_FORMAT_YVU422,
-+	DRM_FORMAT_YVU444,
-+	DRM_FORMAT_P010,
-+	DRM_FORMAT_P012,
-+	DRM_FORMAT_P016,
-+	DRM_FORMAT_R1,
-+	DRM_FORMAT_R2,
-+	DRM_FORMAT_R4,
-+	DRM_FORMAT_R8,
+   sudo mkdir /config/vkms/my-vkms/planes/plane0
+ 
+-Planes have 8 configurable attributes:
++Planes have 9 configurable attributes:
+ 
+ - type: Plane type: 0 overlay, 1 primary, 2 cursor (same values as those
+   exposed by the "type" property of a plane)
+@@ -109,6 +109,11 @@ Planes have 8 configurable attributes:
+   must be set too.
+ - default_color_range: Default color range presented to the userspace, same
+   values as supported_color_ranges
++- supported_formats: List of supported formats for this plane. To add a new item in the
++  list, write it using a plus and fourcc code: +XR24
++  To remove a format, use a minus and its fourcc: -XR24
++  To add all formats use +*
++  To remove all formats, use -*
+ 
+ Continue by creating one or more CRTCs::
+ 
+diff --git a/drivers/gpu/drm/vkms/tests/Makefile b/drivers/gpu/drm/vkms/tests/Makefile
+index d4d9ba8d4c54..92cfa7262ba4 100644
+--- a/drivers/gpu/drm/vkms/tests/Makefile
++++ b/drivers/gpu/drm/vkms/tests/Makefile
+@@ -3,6 +3,7 @@
+ vkms-kunit-tests-y := \
+ 	vkms_config_test.o \
+ 	vkms_format_test.o \
+-	vkms_color_test.o
++	vkms_color_test.o \
++	vkms_configfs_test.o \
+ 
+ obj-$(CONFIG_DRM_VKMS_KUNIT_TEST) += vkms-kunit-tests.o
+diff --git a/drivers/gpu/drm/vkms/tests/vkms_configfs_test.c b/drivers/gpu/drm/vkms/tests/vkms_configfs_test.c
+new file mode 100644
+index 000000000000..8d02c2c459d9
+--- /dev/null
++++ b/drivers/gpu/drm/vkms/tests/vkms_configfs_test.c
+@@ -0,0 +1,102 @@
++// SPDX-License-Identifier: GPL-2.0+
++
++#include "linux/printk.h"
++#include <kunit/test.h>
++
++#include "../vkms_configfs.h"
++
++MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
++
++/**
++ * struct vkms_configfs_parse_format_case - Store test case for format parsing
++ * @str: Contains the string to parse
++ * @str_len: str len
++ * @expected_len: expected len of the matched format
++ * @expected_offset: expected offset in the string for the parsed format
++ */
++struct vkms_configfs_parse_format_case {
++	const char *str;
++	int str_len;
++	int expected_len;
++	int expected_offset;
 +};
 +
- struct vkms_config *vkms_config_create(const char *dev_name)
- {
- 	struct vkms_config *config;
-@@ -441,6 +477,15 @@ static void show_bitfield(struct seq_file *m, uint32_t value, const char *callba
- 	}
++struct vkms_configfs_parse_format_case vkms_configfs_parse_format_test_cases[] = {
++	{
++		.str = "+RG24",
++		.str_len = 6,
++		.expected_len = 5,
++		.expected_offset = 0,
++	}, {
++		.str = "-RG24",
++		.str_len = 6,
++		.expected_len = 5,
++		.expected_offset = 0
++	}, {
++		.str = "  -RG24",
++		.str_len = 8,
++		.expected_len = 5,
++		.expected_offset = 2
++	}, {
++		.str = "+*",
++		.str_len = 3,
++		.expected_len = 2,
++		.expected_offset = 0
++	}, {
++		.str = "-RG24+RG24",
++		.str_len = 11,
++		.expected_len = 5,
++		.expected_offset = 0
++	}, {
++		.str = "-R1+RG24",
++		.str_len = 9,
++		.expected_len = 3,
++		.expected_offset = 0
++	}, {
++		.str = "\n-R1",
++		.str_len = 5,
++		.expected_len = 3,
++		.expected_offset = 1
++	}, {
++		.str = "-R1111",
++		.str_len = 3,
++		.expected_len = 3,
++		.expected_offset = 0
++	}
++};
++
++static void vkms_configfs_test_parse_format(struct kunit *test)
++{
++	const struct vkms_configfs_parse_format_case *param = test->param_value;
++	char *out;
++	int len = vkms_configfs_parse_next_format(param->str, param->str + param->str_len, &out);
++
++	KUNIT_EXPECT_EQ(test, len, param->expected_len);
++	KUNIT_EXPECT_PTR_EQ(test, out, param->str + param->expected_offset);
++}
++
++static void vkms_configfs_test_parse_format_get_desc(struct vkms_configfs_parse_format_case *t,
++						     char *desc)
++{
++	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "%s", t->str);
++}
++
++KUNIT_ARRAY_PARAM(vkms_configfs_test_parse_format, vkms_configfs_parse_format_test_cases,
++		  vkms_configfs_test_parse_format_get_desc
++);
++
++static struct kunit_case vkms_configfs_test_cases[] = {
++	KUNIT_CASE_PARAM(vkms_configfs_test_parse_format,
++			 vkms_configfs_test_parse_format_gen_params),
++	{}
++};
++
++static struct kunit_suite vkms_configfs_test_suite = {
++	.name = "vkms-configfs",
++	.test_cases = vkms_configfs_test_cases,
++};
++
++kunit_test_suite(vkms_configfs_test_suite);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Kunit test for vkms configfs utility");
+diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
+index 855b1d5f5d31..b38d724cfb94 100644
+--- a/drivers/gpu/drm/vkms/vkms_configfs.c
++++ b/drivers/gpu/drm/vkms/vkms_configfs.c
+@@ -3,6 +3,8 @@
+ #include <linux/configfs.h>
+ #include <linux/mutex.h>
+ #include <linux/slab.h>
++#include <linux/string.h>
++#include <kunit/visibility.h>
+ 
+ #include "vkms_drv.h"
+ #include "vkms_config.h"
+@@ -636,6 +638,115 @@ static ssize_t plane_default_color_encoding_store(struct config_item *item,
+ 	return count;
  }
  
-+static void show_formats(struct seq_file *m, u32 *formats, size_t formats_count)
++static ssize_t plane_supported_formats_show(struct config_item *item, char *page)
 +{
-+	for (int i = 0; i < formats_count; i++) {
-+		seq_printf(m, "%p4cc", &formats[i]);
-+		if (i != formats_count - 1)
-+			seq_puts(m, ", ");
-+	}
-+}
++	struct vkms_configfs_plane *plane;
 +
- static int vkms_config_show(struct seq_file *m, void *data)
- {
- 	struct drm_debugfs_entry *entry = m->private;
-@@ -482,6 +527,10 @@ static int vkms_config_show(struct seq_file *m, void *data)
- 		seq_puts(m, "\n");
- 		seq_printf(m, "\tdefault color range=%s\n",
- 			   drm_get_color_range_name(vkms_config_plane_get_default_color_range(plane_cfg)));
-+		seq_puts(m, "\tsupported formats=");
-+		show_formats(m, vkms_config_plane_get_supported_formats(plane_cfg),
-+			     vkms_config_plane_get_supported_formats_count(plane_cfg));
-+		seq_puts(m, "\n");
- 	}
- 
- 	vkms_config_for_each_crtc(vkmsdev->config, crtc_cfg) {
-@@ -531,6 +580,10 @@ struct vkms_config_plane __must_check *vkms_config_create_plane(struct vkms_conf
- 	if (ret)
- 		goto cleanup_plane_cfg;
- 
-+	ret = vkms_config_plane_add_all_formats(plane_cfg);
-+	if (ret)
-+		goto cleanup_plane_cfg;
++	plane = plane_item_to_vkms_configfs_plane(item);
 +
- 	vkms_config_plane_set_supported_rotations(plane_cfg,
- 						  DRM_MODE_ROTATE_MASK | DRM_MODE_REFLECT_MASK);
- 	vkms_config_plane_set_default_rotation(plane_cfg, DRM_MODE_ROTATE_0);
-@@ -558,6 +611,7 @@ EXPORT_SYMBOL_IF_KUNIT(vkms_config_create_plane);
- void vkms_config_destroy_plane(struct vkms_config_plane *plane_cfg)
- {
- 	xa_destroy(&plane_cfg->possible_crtcs);
-+	kfree(plane_cfg->supported_formats);
- 	list_del(&plane_cfg->link);
- 	kfree_const(plane_cfg->name);
- 	kfree(plane_cfg);
-@@ -662,6 +716,80 @@ static struct vkms_config_plane *vkms_config_crtc_get_plane(const struct vkms_co
- 	return NULL;
- }
- 
-+int __must_check vkms_config_plane_add_all_formats(struct vkms_config_plane *plane_cfg)
-+{
-+	u32 *ret = krealloc_array(plane_cfg->supported_formats,
-+				  ARRAY_SIZE(vkms_supported_plane_formats),
-+				  sizeof(uint32_t), GFP_KERNEL);
-+	if (!ret)
-+		return -ENOMEM;
-+	plane_cfg->supported_formats = ret;
++	page[0] = '\0';
 +
-+	memcpy(plane_cfg->supported_formats, vkms_supported_plane_formats,
-+	       sizeof(vkms_supported_plane_formats));
-+	plane_cfg->supported_formats_count = ARRAY_SIZE(vkms_supported_plane_formats);
-+	return 0;
-+}
++	scoped_guard(mutex, &plane->dev->lock) {
++		u32 *formats = vkms_config_plane_get_supported_formats(plane->config);
 +
-+static bool is_supported_format(u32 drm_format)
-+{
-+	for (int i = 0; i < ARRAY_SIZE(vkms_supported_plane_formats); i++) {
-+		if (vkms_supported_plane_formats[i] == drm_format)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static bool vkms_config_plane_has_format(struct vkms_config_plane *plane_cfg, u32 drm_format)
-+{
-+	for (unsigned int i = 0; i < plane_cfg->supported_formats_count; i++) {
-+		if (plane_cfg->supported_formats[i] == drm_format)
-+			return true;
-+	}
-+	return false;
-+}
-+
-+int __must_check vkms_config_plane_add_format(struct vkms_config_plane *plane_cfg, u32 drm_format)
-+{
-+	if (!is_supported_format(drm_format))
-+		return -EINVAL;
-+
-+	if (vkms_config_plane_has_format(plane_cfg, drm_format))
-+		return 0;
-+
-+	u32 *new_ptr = krealloc_array(plane_cfg->supported_formats,
-+				      plane_cfg->supported_formats_count + 1,
-+				      sizeof(*plane_cfg->supported_formats), GFP_KERNEL);
-+	if (!new_ptr)
-+		return -ENOMEM;
-+
-+	plane_cfg->supported_formats = new_ptr;
-+	plane_cfg->supported_formats[plane_cfg->supported_formats_count] = drm_format;
-+	plane_cfg->supported_formats_count++;
-+
-+	return 0;
-+}
-+
-+void vkms_config_plane_remove_all_formats(struct vkms_config_plane *plane_cfg)
-+{
-+	plane_cfg->supported_formats_count = 0;
-+	kfree(plane_cfg->supported_formats);
-+	plane_cfg->supported_formats = NULL;
-+}
-+
-+void vkms_config_plane_remove_format(struct vkms_config_plane *plane_cfg, u32 drm_format)
-+{
-+	for (unsigned int i = 0; i < plane_cfg->supported_formats_count; i++) {
-+		if (plane_cfg->supported_formats[i] == drm_format) {
-+			plane_cfg->supported_formats[i] =
-+				plane_cfg->supported_formats[plane_cfg->supported_formats_count -
-+					1];
-+			plane_cfg->supported_formats_count--;
++		for (int i = 0;
++		     i < vkms_config_plane_get_supported_formats_count(plane->config);
++		     i++) {
++			char tmp[6] = { 0 };
++			const ssize_t ret = snprintf(tmp, ARRAY_SIZE(tmp), "%.*s\n",
++					       (int)sizeof(*formats),
++					       (char *)&formats[i]);
++			if (ret < 0)
++				return ret;
++			/*
++			 * Limitation of ConfigFS attributes, an attribute can't be bigger
++			 * than PAGE_SIZE. This will crop the result if this plane support
++			 * more than ≈1000 formats.
++			 */
++			if (ret + strlen(page) > PAGE_SIZE - 1)
++				return -ENOMEM;
++			strncat(page, tmp, ARRAY_SIZE(tmp));
 +		}
 +	}
++
++	return strlen(page);
 +}
 +
- struct vkms_config_plane *vkms_config_crtc_primary_plane(const struct vkms_config *config,
- 							 struct vkms_config_crtc *crtc_cfg)
- {
-diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
-index c3d86aeb1d55..ea09768a678e 100644
---- a/drivers/gpu/drm/vkms/vkms_config.h
-+++ b/drivers/gpu/drm/vkms/vkms_config.h
-@@ -49,6 +49,8 @@ struct vkms_config {
-  * @supported_color_encodings: Color encodings that this plane will support
-  * @default_color_range: Default color range that should be used by this plane
-  * @supported_color_ranges: Color ranges that this plane will support
-+ * @supported_formats: List of supported formats
-+ * @supported_formats_count: Length of @supported_formats
-  */
- struct vkms_config_plane {
- 	struct list_head link;
-@@ -62,6 +64,8 @@ struct vkms_config_plane {
- 	unsigned int supported_color_encodings;
- 	enum drm_color_range default_color_range;
- 	unsigned int supported_color_ranges;
-+	u32 *supported_formats;
-+	unsigned int supported_formats_count;
- 	struct xarray possible_crtcs;
- 	bool default_pipeline;
- 
-@@ -474,6 +478,53 @@ bool vkms_config_valid_plane_color_range(const struct vkms_config *config,
- 					 const struct vkms_config_plane *plane_cfg);
- #endif
- 
-+static inline u32 *
-+vkms_config_plane_get_supported_formats(const struct vkms_config_plane *plane_cfg)
++/**
++ * vkms_configfs_parse_next_format() - Parse the next format in page,
++ *				       skipping all non fourcc-related characters
++ * @page: page to search into
++ * @page_end: last character of the page
++ * @out: Output pointer, will point inside page
++ *
++ * Returns: size of the matched format, @out will point to the + or -
++ */
++VISIBLE_IF_KUNIT
++int vkms_configfs_parse_next_format(const char *page, const char *page_end, char **out)
 +{
-+	return plane_cfg->supported_formats;
-+}
++	int count = page - page_end;
++	char *tmp_plus = strnchr(page, count, '+');
++	char *tmp_minus = strnchr(page, count, '-');
 +
-+static inline unsigned int
-+vkms_config_plane_get_supported_formats_count(struct vkms_config_plane *plane_cfg)
++	if (!tmp_plus && !tmp_minus)
++		return 0;
++	if (!tmp_plus)
++		*out = tmp_minus;
++	else if (!tmp_minus)
++		*out = tmp_plus;
++	else
++		*out = min(tmp_plus, tmp_minus);
++
++	char *end = *out + 1;
++
++	while (end < page_end) {
++		if (!isalnum(*end) && *end != '*')
++			break;
++		end++;
++	}
++
++	return end - *out;
++}
++EXPORT_SYMBOL_IF_KUNIT(vkms_configfs_parse_next_format);
++
++static ssize_t plane_supported_formats_store(struct config_item *item,
++					     const char *page, size_t count)
 +{
-+	return plane_cfg->supported_formats_count;
++	struct vkms_configfs_plane *plane;
++
++	plane = plane_item_to_vkms_configfs_plane(item);
++	int ret = 0;
++
++	if (count < 2 || count > 5)
++		return -EINVAL;
++
++	if (page[0] != '+' && page[0] != '-')
++		return -EINVAL;
++
++	if (page[1] == '*' && count != 2)
++		return -EINVAL;
++
++	scoped_guard(mutex, &plane->dev->lock) {
++		char fmt[4] = {' ', ' ', ' ', ' '};
++
++		memcpy(fmt, &page[1], min(count - 1, 4));
++
++		if (page[0] == '+' && page[1] == '*')
++			ret = vkms_config_plane_add_all_formats(plane->config);
++		else if (page[0] == '-' && page[1] == '*')
++			vkms_config_plane_remove_all_formats(plane->config);
++		else if (page[0] == '+')
++			ret = vkms_config_plane_add_format(plane->config, *(int *)fmt);
++		else if (page[0] == '-')
++			vkms_config_plane_remove_format(plane->config, *(int *)fmt);
++
++		if (ret)
++			return ret;
++	}
++
++	return count;
 +}
 +
-+/** vkms_config_plane_add_format - Add a format to the list of supported format of a plane
-+ *
-+ * The passed drm_format can already be present in the list. This may fail if the allocation of a
-+ * bigger array fails.
-+ *
-+ * @plane_cfg: Plane to add the format to
-+ * @drm_format: Format to add to this plane
-+ *
-+ * Returns: 0 on success, -ENOMEM if array allocation fails, -EINVAL if the format is not supported
-+ * by VKMS
-+ */
-+int __must_check vkms_config_plane_add_format(struct vkms_config_plane *plane_cfg, u32 drm_format);
-+
-+/**
-+ * vkms_config_plane_add_all_formats - Helper to quickly add all the supported formats
-+ * @plane_cfg: Plane to add the formats to
-+ *
-+ * Returns: 0 on success, -ENOMEM if array allocation fails
-+ * by VKMS
-+ */
-+int __must_check vkms_config_plane_add_all_formats(struct vkms_config_plane *plane_cfg);
-+
-+/**
-+ * vkms_config_plane_remove_format - Remove a specific format from a plane
-+ * @plane_cfg: Plane to remove the format from
-+ * @drm_format: Format to remove
-+ */
-+void vkms_config_plane_remove_format(struct vkms_config_plane *plane_cfg, u32 drm_format);
-+
-+/**
-+ * vkms_config_plane_remove_all_formats - Remove all formats from a plane
-+ * @plane_cfg: Plane to remove the formats from
-+ */
-+void vkms_config_plane_remove_all_formats(struct vkms_config_plane *plane_cfg);
-+
- /**
-  * vkms_config_plane_set_name() - Set the plane name
-  * @plane_cfg: Plane to set the name to
-diff --git a/drivers/gpu/drm/vkms/vkms_plane.c b/drivers/gpu/drm/vkms/vkms_plane.c
-index f6b82b3115e0..d8fcf928d8ec 100644
---- a/drivers/gpu/drm/vkms/vkms_plane.c
-+++ b/drivers/gpu/drm/vkms/vkms_plane.c
-@@ -15,42 +15,6 @@
- #include "vkms_drv.h"
- #include "vkms_formats.h"
+ CONFIGFS_ATTR(plane_, type);
+ CONFIGFS_ATTR(plane_, name);
+ CONFIGFS_ATTR(plane_, supported_rotations);
+@@ -644,6 +755,7 @@ CONFIGFS_ATTR(plane_, supported_color_ranges);
+ CONFIGFS_ATTR(plane_, default_color_range);
+ CONFIGFS_ATTR(plane_, supported_color_encodings);
+ CONFIGFS_ATTR(plane_, default_color_encoding);
++CONFIGFS_ATTR(plane_, supported_formats);
  
--static const u32 vkms_formats[] = {
--	DRM_FORMAT_ARGB8888,
--	DRM_FORMAT_ABGR8888,
--	DRM_FORMAT_BGRA8888,
--	DRM_FORMAT_RGBA8888,
--	DRM_FORMAT_XRGB8888,
--	DRM_FORMAT_XBGR8888,
--	DRM_FORMAT_RGB888,
--	DRM_FORMAT_BGR888,
--	DRM_FORMAT_XRGB16161616,
--	DRM_FORMAT_XBGR16161616,
--	DRM_FORMAT_ARGB16161616,
--	DRM_FORMAT_ABGR16161616,
--	DRM_FORMAT_RGB565,
--	DRM_FORMAT_BGR565,
--	DRM_FORMAT_NV12,
--	DRM_FORMAT_NV16,
--	DRM_FORMAT_NV24,
--	DRM_FORMAT_NV21,
--	DRM_FORMAT_NV61,
--	DRM_FORMAT_NV42,
--	DRM_FORMAT_YUV420,
--	DRM_FORMAT_YUV422,
--	DRM_FORMAT_YUV444,
--	DRM_FORMAT_YVU420,
--	DRM_FORMAT_YVU422,
--	DRM_FORMAT_YVU444,
--	DRM_FORMAT_P010,
--	DRM_FORMAT_P012,
--	DRM_FORMAT_P016,
--	DRM_FORMAT_R1,
--	DRM_FORMAT_R2,
--	DRM_FORMAT_R4,
--	DRM_FORMAT_R8,
--};
--
- static struct drm_plane_state *
- vkms_plane_duplicate_state(struct drm_plane *plane)
- {
-@@ -227,7 +191,8 @@ struct vkms_plane *vkms_plane_init(struct vkms_device *vkmsdev,
+ static struct configfs_attribute *plane_item_attrs[] = {
+ 	&plane_attr_type,
+@@ -654,6 +766,7 @@ static struct configfs_attribute *plane_item_attrs[] = {
+ 	&plane_attr_default_color_range,
+ 	&plane_attr_supported_color_encodings,
+ 	&plane_attr_default_color_encoding,
++	&plane_attr_supported_formats,
+ 	NULL,
+ };
  
- 	plane = drmm_universal_plane_alloc(dev, struct vkms_plane, base, 0,
- 					   &vkms_plane_funcs,
--					   vkms_formats, ARRAY_SIZE(vkms_formats),
-+					   vkms_config_plane_get_supported_formats(plane_cfg),
-+					   vkms_config_plane_get_supported_formats_count(plane_cfg),
- 					   NULL, vkms_config_plane_get_type(plane_cfg),
- 					   vkms_config_plane_get_name(plane_cfg));
- 	if (IS_ERR(plane))
+diff --git a/drivers/gpu/drm/vkms/vkms_configfs.h b/drivers/gpu/drm/vkms/vkms_configfs.h
+index e9020b0043db..73be660412ca 100644
+--- a/drivers/gpu/drm/vkms/vkms_configfs.h
++++ b/drivers/gpu/drm/vkms/vkms_configfs.h
+@@ -5,4 +5,8 @@
+ int vkms_configfs_register(void);
+ void vkms_configfs_unregister(void);
+ 
++#if IS_ENABLED(CONFIG_KUNIT)
++int vkms_configfs_parse_next_format(const char *page, const char *end_page, char **out);
++#endif
++
+ #endif /* _VKMS_CONFIGFS_H_ */
 
 -- 
 2.54.0
