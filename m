@@ -1,318 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3820C1A840A;
-	Wed, 22 Apr 2026 04:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BA4314B62;
+	Wed, 22 Apr 2026 05:30:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776831686; cv=none; b=hB4reufLhZT9i88FN6dESP7c3aZah7G6Min9tZUmkxTNBGcujleAdnuzDMMnf87njC7+XR8hBjVo/FlmGitT9f4vLxnnYtjOJK4xmCQPkuljw5QH5JG9G034VVyaB4QH6N4vWE0Z+VoafVpBYG0t4FyhkM4dS8ZxYKG+I0hllRA=
+	t=1776835824; cv=none; b=t7UulYnLBYT93AoWCQkUrlNkSNWTzl9kJQVGc5RJ7iQYMdNkguBspIImloXEosUAss7l+R77uHIxYAHPsYJz+Mb1xlgcg21Jdr1m2nkZ/umlbKXcmxd//KVveVcu+RLajwNXNpWTww2jnSk3n4jSp1vjgn9BpPLUiBROEtF3DPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776831686; c=relaxed/simple;
-	bh=cRfLF2/6ASPxIS0tZfBKYwlD00ZtUQzwe/IqPjwGuj8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=QJw6Z/hE0EIXGGhPCqt+CraJsLLoFbG8ZEJ3U9ci7lQnXjYsHR08bErTgxPYSl1ZQRL0NJYawYUvFF2XhbbRje/+azwG1M/Fl82cHovUD2vahT96i+5e/CiOLhz+ulp+srWwpDqpQ/X6UQfA0ggZaJD/rL4WHx6zhhmG/Nm8MvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cYIx/P8K; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1776835824; c=relaxed/simple;
+	bh=AGWsstsjrREKBSTh+GJePoKEFjOh536dd8QSceSuyZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FfmE7ukw8I/1K5TEtcKbPqfVDfV3QiuYSSm1AGYdqxj6C4V1C01j4v29Hll9+P06ibVL0kIhAWVmzwW4j3Ur8Ph7dWXQfwTJMfe3VYTmvIGEcUaCSWV87HHWlb9uon/eN5zyRYwvRRYPb9YBrCBQu0s7TgqsvLuCgH8yDazbio4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DWPEqU4v; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cYIx/P8K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776831684; x=1808367684;
-  h=date:from:to:cc:subject:message-id;
-  bh=cRfLF2/6ASPxIS0tZfBKYwlD00ZtUQzwe/IqPjwGuj8=;
-  b=cYIx/P8KhHHD5SHT7jBCgxRBbTXiXbtfppDgI8VLsbCfjEm+OqsguS2W
-   +Tg1UrcFjbNtR4gWmVfGGeMc4r99J9bzG9op6rmJDfCnCl+XMAf+pXbEf
-   NgVNGyE5wEk8EazODb4aAEg/dXwiDn0B9U27znzhglRO5ZLYmfzzYOFmn
-   vJbh2upjkyPCB8nJzSKpjEOqwOKMMrSlGzD0b/sKLyryZ+VlcaKbZUf8B
-   uTR4j43sMMwykFFM1CBfiQH/v7wQQPYNX7S3D24xlLX+lqA1pXeXTyR8R
-   l3bNkk44p8pGBgm74ABbw6xeu/QUn3WART9ylWduKPmJ9MGMFomrIizG1
-   w==;
-X-CSE-ConnectionGUID: j33pB/0MRdqL4Ks+QjAang==
-X-CSE-MsgGUID: tX+kWol9TRi+pjpAzA+PlQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11763"; a="77963606"
-X-IronPort-AV: E=Sophos;i="6.23,192,1770624000"; 
-   d="scan'208";a="77963606"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2026 21:21:22 -0700
-X-CSE-ConnectionGUID: dlI5SVu2Toy353LdjSg+8g==
-X-CSE-MsgGUID: IvJsf7UmTtefkRu57VOmnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,192,1770624000"; 
-   d="scan'208";a="232155266"
-Received: from lkp-server01.sh.intel.com (HELO 7e48d0ff8e22) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 21 Apr 2026 21:21:21 -0700
-Received: from kbuild by 7e48d0ff8e22 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wFP5R-000000004Ia-4A0s;
-	Wed, 22 Apr 2026 04:21:17 +0000
-Date: Wed, 22 Apr 2026 12:20:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 3/16]
- fs/bcachefs/vfs/direct.c:141:3: error: expected expression
-Message-ID: <202604221249.dVuAlJLj-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DWPEqU4v"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BEA1C2BCB4;
+	Wed, 22 Apr 2026 05:30:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776835823;
+	bh=AGWsstsjrREKBSTh+GJePoKEFjOh536dd8QSceSuyZw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=DWPEqU4viuqu64WITCvBZvtY3Hat8stM8vBUB5YL5nj477Ady7Qq0FewHARH3EFQd
+	 pB+fRT2oO9yA6fQzzSJibINxayBQuQ0EQGxF3vSVK7ukae7/R0W+1ICy11vkQILnbq
+	 xl+4FJhG7/dZ1Nws/EPGRL4YmDidyydJVrWjhg/TNe7IbHmH+46UfYfjqltl3RLLrr
+	 2yE6dnr5dLk+sHlj9rUp8v5h4Dib6Sr4NfdGevF7vwESlMFogqkU2Jtc3pUs/02d10
+	 DOcWwXpAi4Ynqt2+fWVyt9Jg0ahjKvzp1Rr7HOrxOMHYcCTPPUr2DMeKbnoSzgyLAO
+	 ZM/QCSxARElRg==
+Date: Tue, 21 Apr 2026 22:30:19 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: ojeda@kernel.org
+Subject: Prebuilt LLVM 22.1.4 uploaded
+Message-ID: <20260422053019.GA3090128@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   5752c6bd338f34f0f86ee9c87b7400974578935a
-commit: 92b3d152fe07e1f2a7060adb3f06afcae6135437 [3/16] bcachefs: fix __bch2_direct_IO_read() error path
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260422/202604221249.dVuAlJLj-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260422/202604221249.dVuAlJLj-lkp@intel.com/reproduce)
+Hi all,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604221249.dVuAlJLj-lkp@intel.com/
+I have built and uploaded LLVM 22.1.4 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-All errors (new ones prefixed by >>):
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before the 22.x
+series is no longer supported.
 
->> fs/bcachefs/vfs/direct.c:141:3: error: expected expression
-                   struct bch_read_bio *rbio =
-                   ^
->> fs/bcachefs/vfs/direct.c:149:10: error: use of undeclared identifier 'rbio'
-                   BUG_ON(rbio->_state);
-                          ^
-   fs/bcachefs/vfs/direct.c:150:3: error: use of undeclared identifier 'rbio'; did you mean 'bio'?
-                   rbio->err_report                = err_report;
-                   ^~~~
-                   bio
-   fs/bcachefs/vfs/direct.c:73:14: note: 'bio' declared here
-           struct bio *bio;
-                       ^
->> fs/bcachefs/vfs/direct.c:150:9: error: no member named 'err_report' in 'struct bio'
-                   rbio->err_report                = err_report;
-                   ~~~~  ^
-   fs/bcachefs/vfs/direct.c:151:3: error: use of undeclared identifier 'rbio'; did you mean 'bio'?
-                   rbio->subvol                    = inode_inum(inode).subvol;
-                   ^~~~
-                   bio
-   fs/bcachefs/vfs/direct.c:73:14: note: 'bio' declared here
-           struct bio *bio;
-                       ^
->> fs/bcachefs/vfs/direct.c:151:9: error: no member named 'subvol' in 'struct bio'
-                   rbio->subvol                    = inode_inum(inode).subvol;
-                   ~~~~  ^
-   fs/bcachefs/vfs/direct.c:152:3: error: use of undeclared identifier 'rbio'; did you mean 'bio'?
-                   rbio->bio.bi_opf                = REQ_OP_READ|REQ_SYNC;
-                   ^~~~
-                   bio
-   fs/bcachefs/vfs/direct.c:73:14: note: 'bio' declared here
-           struct bio *bio;
-                       ^
->> fs/bcachefs/vfs/direct.c:152:9: error: no member named 'bio' in 'struct bio'
-                   rbio->bio.bi_opf                = REQ_OP_READ|REQ_SYNC;
-                   ~~~~  ^
-   fs/bcachefs/vfs/direct.c:153:3: error: use of undeclared identifier 'rbio'; did you mean 'bio'?
-                   rbio->bio.bi_iter.bi_sector     = offset >> 9;
-                   ^~~~
-                   bio
-   fs/bcachefs/vfs/direct.c:73:14: note: 'bio' declared here
-           struct bio *bio;
-                       ^
-   fs/bcachefs/vfs/direct.c:153:9: error: no member named 'bio' in 'struct bio'
-                   rbio->bio.bi_iter.bi_sector     = offset >> 9;
-                   ~~~~  ^
-   fs/bcachefs/vfs/direct.c:154:3: error: use of undeclared identifier 'rbio'; did you mean 'bio'?
-                   rbio->bio.bi_private            = dio;
-                   ^~~~
-                   bio
-   fs/bcachefs/vfs/direct.c:73:14: note: 'bio' declared here
-           struct bio *bio;
-                       ^
-   fs/bcachefs/vfs/direct.c:154:9: error: no member named 'bio' in 'struct bio'
-                   rbio->bio.bi_private            = dio;
-                   ~~~~  ^
-   fs/bcachefs/vfs/direct.c:156:38: error: use of undeclared identifier 'rbio'; did you mean 'dio'?
-                   ret = bch2_bio_iov_iter_get_pages(&rbio->bio, iter, 0);
-                                                      ^~~~
-                                                      dio
-   fs/bcachefs/vfs/direct.c:72:19: note: 'dio' declared here
-           struct dio_read *dio;
-                            ^
->> fs/bcachefs/vfs/direct.c:156:44: error: no member named 'bio' in 'struct dio_read'; did you mean 'rbio'?
-                   ret = bch2_bio_iov_iter_get_pages(&rbio->bio, iter, 0);
-                                                            ^~~
-                                                            rbio
-   fs/bcachefs/vfs/direct.h:14:23: note: 'rbio' declared here
-           struct bch_read_bio             rbio;
-                                           ^
-   fs/bcachefs/vfs/direct.c:159:4: error: use of undeclared identifier 'rbio'; did you mean 'bio'?
-                           rbio->ret = ret;
-                           ^~~~
-                           bio
-   fs/bcachefs/vfs/direct.c:73:14: note: 'bio' declared here
-           struct bio *bio;
-                       ^
->> fs/bcachefs/vfs/direct.c:159:10: error: no member named 'ret' in 'struct bio'
-                           rbio->ret = ret;
-                           ~~~~  ^
-   fs/bcachefs/vfs/direct.c:160:15: error: use of undeclared identifier 'rbio'; did you mean 'dio'?
-                           bio_endio(&rbio->bio);
-                                      ^~~~
-                                      dio
-   fs/bcachefs/vfs/direct.c:72:19: note: 'dio' declared here
-           struct dio_read *dio;
-                            ^
-   fs/bcachefs/vfs/direct.c:160:21: error: no member named 'bio' in 'struct dio_read'; did you mean 'rbio'?
-                           bio_endio(&rbio->bio);
-                                            ^~~
-                                            rbio
-   fs/bcachefs/vfs/direct.h:14:23: note: 'rbio' declared here
-           struct bch_read_bio             rbio;
-                                           ^
-   fs/bcachefs/vfs/direct.c:164:13: error: use of undeclared identifier 'rbio'
-                   offset += rbio->bio.bi_iter.bi_size;
-                             ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-
-
-vim +141 fs/bcachefs/vfs/direct.c
-
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   64  
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24   65  static int __bch2_direct_IO_read(struct kiocb *req, struct iov_iter *iter,
-39fe245ff806f1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24   66  				enum bch_read_flags flags,
-39fe245ff806f1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24   67  				struct bch_read_err_report *err_report)
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   68  {
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   69  	struct file *file = req->ki_filp;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   70  	struct bch_inode_info *inode = file_bch_inode(file);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   71  	struct bch_fs *c = inode->v.i_sb->s_fs_info;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   72  	struct dio_read *dio;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   73  	struct bio *bio;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   74  	loff_t offset = req->ki_pos;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   75  	bool sync = is_sync_kiocb(req);
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15   76  	bool split = false;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   77  	size_t shorten;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   78  	ssize_t ret;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   79  
-e6479021dea40b fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-08-23   80  	struct bch_inode_opts opts;
-e6479021dea40b fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-08-23   81  	bch2_inode_opts_get_inode(c, &inode->ei_inode, &opts);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   82  
-00fff4dd586619 fs/bcachefs/fs-io-direct.c Kent Overstreet 2024-01-16   83  	/* bios must be 512 byte aligned: */
-00fff4dd586619 fs/bcachefs/fs-io-direct.c Kent Overstreet 2024-01-16   84  	if ((offset|iter->count) & (SECTOR_SIZE - 1))
-15be180f2638ee fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-03   85  		return bch_err_throw(c, EINVAL_unaligned_io);
-00fff4dd586619 fs/bcachefs/fs-io-direct.c Kent Overstreet 2024-01-16   86  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   87  	ret = min_t(loff_t, iter->count,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   88  		    max_t(loff_t, 0, i_size_read(&inode->v) - offset));
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   89  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   90  	if (!ret)
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   91  		return ret;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   92  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   93  	shorten = iov_iter_count(iter) - round_up(ret, block_bytes(c));
-b58b1b883b9b70 fs/bcachefs/fs-io-direct.c Brian Foster    2024-02-15   94  	if (shorten >= iter->count)
-b58b1b883b9b70 fs/bcachefs/fs-io-direct.c Brian Foster    2024-02-15   95  		shorten = 0;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   96  	iter->count -= shorten;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   97  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   98  	bio = bio_alloc_bioset(NULL,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03   99  			       bio_iov_vecs_to_alloc(iter, BIO_MAX_VECS),
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  100  			       REQ_OP_READ,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  101  			       GFP_KERNEL,
-52d279ad5f3e4c fs/bcachefs/vfs/direct.c   Kent Overstreet 2025-11-30  102  			       &c->vfs.dio_read_bioset);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  103  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  104  	dio = container_of(bio, struct dio_read, rbio.bio);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  105  	closure_init(&dio->cl, NULL);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  106  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  107  	/*
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  108  	 * this is a _really_ horrible hack just to avoid an atomic sub at the
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  109  	 * end:
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  110  	 */
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  111  	if (!sync) {
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  112  		set_closure_fn(&dio->cl, bch2_dio_read_complete, NULL);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  113  		atomic_set(&dio->cl.remaining,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  114  			   CLOSURE_REMAINING_INITIALIZER -
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  115  			   CLOSURE_RUNNING +
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  116  			   CLOSURE_DESTRUCTOR);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  117  	} else {
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  118  		atomic_set(&dio->cl.remaining,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  119  			   CLOSURE_REMAINING_INITIALIZER + 1);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  120  	}
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  121  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  122  	dio->req	= req;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  123  	dio->ret	= ret;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  124  	/*
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  125  	 * This is one of the sketchier things I've encountered: we have to skip
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  126  	 * the dirtying of requests that are internal from the kernel (i.e. from
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  127  	 * loopback), because we'll deadlock on page_lock.
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  128  	 */
-8838999ccf4f6f fs/bcachefs/fs-io-direct.c Alan Huang      2025-07-19  129  	dio->should_dirty = user_backed_iter(iter);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  130  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  131  	goto start;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  132  	while (iter->count) {
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  133  		split = true;
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  134  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  135  		bio = bio_alloc_bioset(NULL,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  136  				       bio_iov_vecs_to_alloc(iter, BIO_MAX_VECS),
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  137  				       REQ_OP_READ,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  138  				       GFP_KERNEL,
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  139  				       &c->bio_read);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  140  start:
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15 @141  		struct bch_read_bio *rbio =
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  142  			rbio_init(bio,
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  143  				  c,
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  144  				  opts,
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  145  				  split
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  146  				  ? bch2_direct_IO_read_split_endio
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  147  				  : bch2_direct_IO_read_endio);
-dfa204b169ed29 fs/bcachefs/fs-io-direct.c Kent Overstreet 2025-01-15  148  
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24 @149  		BUG_ON(rbio->_state);
-39fe245ff806f1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24 @150  		rbio->err_report		= err_report;
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24 @151  		rbio->subvol			= inode_inum(inode).subvol;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21 @152  		rbio->bio.bi_opf		= REQ_OP_READ|REQ_SYNC;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  153  		rbio->bio.bi_iter.bi_sector	= offset >> 9;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  154  		rbio->bio.bi_private		= dio;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  155  
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21 @156  		ret = bch2_bio_iov_iter_get_pages(&rbio->bio, iter, 0);
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  157  		if (ret < 0) {
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  158  			/* XXX: fault inject this path */
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21 @159  			rbio->ret = ret;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  160  			bio_endio(&rbio->bio);
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  161  			break;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  162  		}
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  163  
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  164  		offset += rbio->bio.bi_iter.bi_size;
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  165  
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  166  		if (dio->should_dirty)
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  167  			bio_set_pages_dirty(&rbio->bio);
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  168  
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  169  		if (iter->count)
-92b3d152fe07e1 fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-04-21  170  			closure_get(&dio->cl);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  171  
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  172  		CLASS(btree_trans, trans)(c);
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  173  		bch2_read(trans, rbio, rbio->bio.bi_iter, inode_inum(inode),
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  174  			  NULL, NULL,
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  175  			  BCH_READ_retry_if_stale|
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  176  			  BCH_READ_may_promote|
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  177  			  BCH_READ_user_mapped|
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  178  			  flags);
-1fd72aa451b8bb fs/bcachefs/vfs/direct.c   Kent Overstreet 2026-03-24  179  	}
-27de0ee39f810d fs/bcachefs/fs-io-direct.c Kent Overstreet 2024-10-14  180  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  181  	iter->count += shorten;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  182  
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  183  	if (sync) {
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  184  		closure_sync(&dio->cl);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  185  		closure_debug_destroy(&dio->cl);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  186  		ret = dio->ret;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  187  		bio_check_or_release(&dio->rbio.bio, dio->should_dirty);
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  188  		return ret;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  189  	} else {
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  190  		return -EIOCBQUEUED;
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  191  	}
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  192  }
-dbbfca9f41e869 fs/bcachefs/fs-io-direct.c Kent Overstreet 2023-08-03  193  
-
-:::::: The code at line 141 was first introduced by commit
-:::::: dfa204b169ed29e4cdcb5a20d4cba2f579235543 bcachefs: rbio_init() cleanup
-
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
