@@ -1,134 +1,238 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A1232692B;
-	Wed, 22 Apr 2026 23:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356EA1D9A54;
+	Thu, 23 Apr 2026 00:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776902234; cv=none; b=Tj44MRsjmDqd38oX9PIVyOP2zc5mprkC34o1LEK6sYZr5D694X1GR/znzWsUHrGrJsrE+pISO8kErtMEuEP3n6bX+xXyRgZYJRaD9Y9Xp65t3gY9UCKZVcSy6JRFkMMW6+GXVgMiapS8B7Qii+EWarAhveniz+7dOqhk/UFNK08=
+	t=1776903627; cv=none; b=dH9SEAeaN77MXTw1zvfkOm+Vt7hEtwIBu8gAwIX0pkMV0knTTiz7InwpNfkNTVYkz5KYvISvaBQCtEl4N1hqPpTWjQ9d2KPMwJNdDL2mvGv2hOcLvWbDQx9b442taYfY0jRDU+pvsGZMqCUFd5F0jQLBN131p8+xC2NfLxNFJx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776902234; c=relaxed/simple;
-	bh=h6ggrtCedybWSPNMwswG0DZDcNwcm7cnvs/LOyD/wNQ=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=Y+xNKaq0Fo4jcp1l+xRvyR5jD/mzr8WSdmv7Lf8/NjrQI+9Nu26gdELaEab7NGmoVfLV4Bf65P5nmvw2zyvHgce7f3l29C291eX3ulH8IzjcQatU1g+klQCjbvQDsDjpTj+fF5Zoz3OUtUsdy+DcpDjYWOtKFzpunMCY5YV+t1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mNFB+xdW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776903627; c=relaxed/simple;
+	bh=XTfiEiAYdJ8AVYeaY2oGSul2dp2WY1MsOVPTRQCnik4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=WyNxZBz+qqmlGX6FmyNr4S9B3i9ib7niQQjW3IBe0Xjy3HJgkl2Y0KaRbFPwKKf/30qMFcTkZsewGG5CprCPqhZTMx/Y3+2NsTfS4cH0zz9ZF4dIG3mpUnwRr4S94hesi9AjwzioQeqbAkwh48TMEajgAbHsEzLQmAW6Exm0xE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aeIJqtvE; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mNFB+xdW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CDB8C19425;
-	Wed, 22 Apr 2026 23:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776902233;
-	bh=h6ggrtCedybWSPNMwswG0DZDcNwcm7cnvs/LOyD/wNQ=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=mNFB+xdWLZKpCxXZm4/ECJ7c866xDmRQuYKee2ZmooLdAboj4IF919Yq3Iw0bINsX
-	 RA4s2JA6QITi2C8+PeIS8/KussEZgcuvkC/xnNNHlYcTPzfY/A3b0ztWYGAPRFwI7q
-	 dFrML80TrDtSrx81rSV0kIXhdCtQo7zA0q26ALnYgDR5M/YJ++seIkDSgNLESZuZoO
-	 x0ElHg5+r32UBFskPnb1kuB1/kBSU2lIvB4V/c0IfQCt5g8Tm+EL2o7hCU8m71CPuJ
-	 558uJ+lGCcjFbOFFld46ZXtKgYDBP2LW5O7Tcc5SS8XOXouVemuXDANtK9uPhHYsdE
-	 QBLGa3JPbkmZQ==
-Date: Wed, 22 Apr 2026 16:57:11 -0700
-From: Kees Cook <kees@kernel.org>
-To: Marco Elver <elver@google.com>
-CC: Vlastimil Babka <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
- Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>,
- Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-hardening@vger.kernel.org,
- kasan-dev@googlegroups.com, llvm@lists.linux.dev,
- Andrey Konovalov <andreyknvl@gmail.com>, Florent Revest <revest@google.com>,
- Jann Horn <jannh@google.com>, KP Singh <kpsingh@kernel.org>,
- Matteo Rizzo <matteorizzo@google.com>, GONG Ruiqi <gongruiqi1@huawei.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D_slab=3A_support_for_compiler-?=
- =?US-ASCII?Q?assisted_type-based_slab_cache_partitioning?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <aejopk23CsntyFOB@elver.google.com>
-References: <20260415143735.2974230-1-elver@google.com> <202604210954.84C57E5E0@keescook> <CANpmjNO8CcR56LXAQf4GQhGcbU4MQkRCa7gVvwuAfvVrzEUhQg@mail.gmail.com> <aejopk23CsntyFOB@elver.google.com>
-Message-ID: <D3E316B3-9909-408E-85BF-647383810CFF@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aeIJqtvE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776903625; x=1808439625;
+  h=date:from:to:cc:subject:message-id;
+  bh=XTfiEiAYdJ8AVYeaY2oGSul2dp2WY1MsOVPTRQCnik4=;
+  b=aeIJqtvEalZz0PhZbPWObYrMfjNO0Q7Drv/9+0UpLi8wysk82ZTI+lql
+   GVOBO4pzSevAa5zhSMU6eBblni1t27cRIL+unqdAAocCqcDH2cc6DMR75
+   3oATHhG7F5LD1qFom4OpxOpMbGEmX+lE27f1B60rK/dwsLAue1bCtj+ga
+   TTPbSW5s0PNu3NVd+QnzgIAbBcB3TZQRSTlAkJf24u/8d4OdUbnUwRef/
+   CSizo72feBs1OtdR0b8VvhfJ//FadpNQwL08ygjgAfeI9/1FkFaFGNW8K
+   KY28lD5652lLoBVWZq3AxBMwtg154rtRK4sR+hhJqUOwsyx6bNIR0Sr2I
+   Q==;
+X-CSE-ConnectionGUID: TJC68F26Tmicqt64dMHMtg==
+X-CSE-MsgGUID: r5NQeJKXStukzVuVZ+b0QA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11764"; a="77781178"
+X-IronPort-AV: E=Sophos;i="6.23,193,1770624000"; 
+   d="scan'208";a="77781178"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 17:20:25 -0700
+X-CSE-ConnectionGUID: +nE49jKZRW6Q7HwPgpjlQQ==
+X-CSE-MsgGUID: Xi1/9j+KT+qkcS5IY1015w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,193,1770624000"; 
+   d="scan'208";a="236861804"
+Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 22 Apr 2026 17:20:23 -0700
+Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wFhno-000000001EH-0Pfv;
+	Thu, 23 Apr 2026 00:20:20 +0000
+Date: Thu, 23 Apr 2026 08:20:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: LiangCheng Wang <zaq14760@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>
+Subject: drivers/gpu/drm/tiny/pixpaper.c:579:12: warning: stack frame
+ size (19288) exceeds limit (8192) in 'pixpaper_panel_hw_init'
+Message-ID: <202604230813.tiodR4pT-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+
+Hi LiangCheng,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2e68039281932e6dc37718a1ea7cbb8e2cda42e6
+commit: c9e70639f5915f2d084a0126e62fe53a52c29cea drm: tiny: Add support for Mayqueen Pixpaper e-ink panel
+date:   8 months ago
+config: x86_64-randconfig-075-20260423 (https://download.01.org/0day-ci/archive/20260423/202604230813.tiodR4pT-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260423/202604230813.tiodR4pT-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: c9e70639f591 ("drm: tiny: Add support for Mayqueen Pixpaper e-ink panel")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604230813.tiodR4pT-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/tiny/pixpaper.c:579:12: warning: stack frame size (19288) exceeds limit (8192) in 'pixpaper_panel_hw_init' [-Wframe-larger-than]
+     579 | static int pixpaper_panel_hw_init(struct pixpaper_panel *panel)
+         |            ^
+   1 warning generated.
 
 
+vim +/pixpaper_panel_hw_init +579 drivers/gpu/drm/tiny/pixpaper.c
 
-On April 22, 2026 8:26:30 AM PDT, Marco Elver <elver@google=2Ecom> wrote:
->On Tue, Apr 21, 2026 at 09:13PM +0200, Marco Elver wrote:
->[=2E=2E=2E]
->> > And actually, perhaps a global rename of the options so the selection
->> > naming is at the end of the CONFIG phrase, and bundle the on/off into
->> > the choice:
->> >
->> >
->> > choice
->> >         prompt "Partitioned slab cache mode"
->> >         depends on PARTITION_KMALLOC_CACHES
->> >         default KMALLOC_PARTITION_TYPED if !SLUB_TINY && CC_HAS_ALLOC=
-_TOKEN
->> >         default KMALLOC_PARTITION_RANDOM if !SLUB_TINY
->> >         default KMALLOC_PARTITION_NONE
->> >
->> > config KMALLOC_PARTITION_NONE
->> > =2E=2E=2E
->> > config KMALLOC_PARTITION_RANDOM
->> >         depends on !SLUB_TINY
->> > =2E=2E=2E
->> > config KMALLOC_PARTITION_TYPED
->> >         depends on !SLUB_TINY && CC_HAS_ALLOC_TOKEN
->>=20
->> There was a comment somewhere else that even introducing
->> PARTITION_KMALLOC_CACHES might confuse users of RANDOM_KMALLOC_CACHES=
-=2E
->> I think completely getting rid of and renaming RANDOM_KMALLOC_CACHES
->> has marginal benefit, and will cause friction for existing users (even
->> moreso than already)=2E I see little benefit here, and would prefer not
->> to break user configs more than needed: configs that already set
->> RANDOM_KMALLOC_CACHES, upon rebuild will be prompted to enable
->> PARTITION_KMALLOC_CACHES; if user says Y, then their previous
->> selection (RANDOM) would already be picked and they don't have to
->> rediscover that it exists under a new name=2E
->>=20
->> I can make this change, but only if you're sure the benefit outweighs
->> the downsides here=2E
->
->Upon further reflection, since the transition isn't smooth anyway, I'm
->probably going to rename, but have them all use the PARTITION_KMALLOC_*
->prefix so it's easy to just search for "CONFIG_PARTITION_KMALLOC_"=2E I
->don't see the need for a "NONE" variant - I've seen this pattern
->elsewhere, and then you end up with users reading the =2Econfig and
->concluding "CONFIG_PARTITION_KMALLOC_CACHES is enabled =2E=2E=2E but oh n=
-ever
->mind actually it isn't" which I find confusing=2E This could be useful if
->we had a dynamic on/off toggle and the default is NONE, but that's not
->the case here=2E
+   578	
+ > 579	static int pixpaper_panel_hw_init(struct pixpaper_panel *panel)
+   580	{
+   581		struct pixpaper_error_ctx err = { .errno_code = 0 };
+   582	
+   583		gpiod_set_value_cansleep(panel->reset, 0);
+   584		msleep(50);
+   585		gpiod_set_value_cansleep(panel->reset, 1);
+   586		msleep(50);
+   587	
+   588		pixpaper_wait_for_panel(panel);
+   589	
+   590		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_4D, &err);
+   591		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_4D_CONFIG, &err);
+   592		if (err.errno_code)
+   593			goto init_fail;
+   594		pixpaper_wait_for_panel(panel);
+   595	
+   596		pixpaper_send_cmd(panel, PIXPAPER_CMD_PANEL_SETTING, &err);
+   597		pixpaper_send_data(panel, PIXPAPER_PSR_CONFIG, &err);
+   598		pixpaper_send_data(panel, PIXPAPER_PSR_CONFIG2, &err);
+   599		if (err.errno_code)
+   600			goto init_fail;
+   601		pixpaper_wait_for_panel(panel);
+   602	
+   603		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_SETTING, &err);
+   604		pixpaper_send_data(panel, PIXPAPER_PWR_CONFIG1, &err);
+   605		pixpaper_send_data(panel, PIXPAPER_PWR_CONFIG2, &err);
+   606		pixpaper_send_data(panel, PIXPAPER_PWR_VSP_8_2V, &err);
+   607		pixpaper_send_data(panel, PIXPAPER_PWR_VSPL_15V, &err);
+   608		pixpaper_send_data(panel, PIXPAPER_PWR_VSN_4V, &err);
+   609		pixpaper_send_data(panel, PIXPAPER_PWR_VSP_8_2V, &err);
+   610		if (err.errno_code)
+   611			goto init_fail;
+   612		pixpaper_wait_for_panel(panel);
+   613	
+   614		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_OFF_SEQUENCE, &err);
+   615		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG1, &err);
+   616		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG2, &err);
+   617		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG3, &err);
+   618		if (err.errno_code)
+   619			goto init_fail;
+   620		pixpaper_wait_for_panel(panel);
+   621	
+   622		pixpaper_send_cmd(panel, PIXPAPER_CMD_BOOSTER_SOFT_START, &err);
+   623		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG1, &err);
+   624		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG2, &err);
+   625		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG3, &err);
+   626		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG4, &err);
+   627		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG5, &err);
+   628		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG6, &err);
+   629		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG7, &err);
+   630		if (err.errno_code)
+   631			goto init_fail;
+   632		pixpaper_wait_for_panel(panel);
+   633	
+   634		pixpaper_send_cmd(panel, PIXPAPER_CMD_PLL_CONTROL, &err);
+   635		pixpaper_send_data(panel, PIXPAPER_PLL_CONFIG, &err);
+   636		if (err.errno_code)
+   637			goto init_fail;
+   638		pixpaper_wait_for_panel(panel);
+   639	
+   640		pixpaper_send_cmd(panel, PIXPAPER_CMD_TEMP_SENSOR_CALIB, &err);
+   641		pixpaper_send_data(panel, PIXPAPER_TSE_CONFIG, &err);
+   642		if (err.errno_code)
+   643			goto init_fail;
+   644		pixpaper_wait_for_panel(panel);
+   645	
+   646		pixpaper_send_cmd(panel, PIXPAPER_CMD_VCOM_INTERVAL, &err);
+   647		pixpaper_send_data(panel, PIXPAPER_CDI_CONFIG, &err);
+   648		if (err.errno_code)
+   649			goto init_fail;
+   650		pixpaper_wait_for_panel(panel);
+   651	
+   652		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_60, &err);
+   653		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_60_CONFIG1, &err);
+   654		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_60_CONFIG2, &err);
+   655		if (err.errno_code)
+   656			goto init_fail;
+   657		pixpaper_wait_for_panel(panel);
+   658	
+   659		pixpaper_send_cmd(panel, PIXPAPER_CMD_RESOLUTION_SETTING, &err);
+   660		pixpaper_send_data(panel, PIXPAPER_TRES_HRES_H, &err);
+   661		pixpaper_send_data(panel, PIXPAPER_TRES_HRES_L, &err);
+   662		pixpaper_send_data(panel, PIXPAPER_TRES_VRES_H, &err);
+   663		pixpaper_send_data(panel, PIXPAPER_TRES_VRES_L, &err);
+   664		if (err.errno_code)
+   665			goto init_fail;
+   666		pixpaper_wait_for_panel(panel);
+   667	
+   668		pixpaper_send_cmd(panel, PIXPAPER_CMD_GATE_SOURCE_START, &err);
+   669		pixpaper_send_data(panel, PIXPAPER_GSST_S_START, &err);
+   670		pixpaper_send_data(panel, PIXPAPER_GSST_RESERVED, &err);
+   671		pixpaper_send_data(panel, PIXPAPER_GSST_G_START_H, &err);
+   672		pixpaper_send_data(panel, PIXPAPER_GSST_G_START_L, &err);
+   673		if (err.errno_code)
+   674			goto init_fail;
+   675		pixpaper_wait_for_panel(panel);
+   676	
+   677		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E7, &err);
+   678		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E7_CONFIG, &err);
+   679		if (err.errno_code)
+   680			goto init_fail;
+   681		pixpaper_wait_for_panel(panel);
+   682	
+   683		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_SAVING, &err);
+   684		pixpaper_send_data(panel, PIXPAPER_PWS_CONFIG, &err);
+   685		if (err.errno_code)
+   686			goto init_fail;
+   687		pixpaper_wait_for_panel(panel);
+   688	
+   689		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E0, &err);
+   690		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E0_CONFIG, &err);
+   691		if (err.errno_code)
+   692			goto init_fail;
+   693		pixpaper_wait_for_panel(panel);
+   694	
+   695		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_B4, &err);
+   696		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_B4_CONFIG, &err);
+   697		if (err.errno_code)
+   698			goto init_fail;
+   699		pixpaper_wait_for_panel(panel);
+   700	
+   701		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_B5, &err);
+   702		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_B5_CONFIG, &err);
+   703		if (err.errno_code)
+   704			goto init_fail;
+   705		pixpaper_wait_for_panel(panel);
+   706	
+   707		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E9, &err);
+   708		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E9_CONFIG, &err);
+   709		if (err.errno_code)
+   710			goto init_fail;
+   711		pixpaper_wait_for_panel(panel);
+   712	
+   713		return 0;
+   714	
+   715	init_fail:
+   716		drm_err(&panel->drm, "Hardware initialization failed (err=%d)\n",
+   717			err.errno_code);
+   718		return err.errno_code;
+   719	}
+   720	
 
-There is now the "transitional" Kconfig keyword too, which should make it =
-easy to move to the new name=2E
-
-For the naming, I tend to prefer the noun-verb (e=2Eg=2E timer_start()) an=
-d noun-feature-option ordering (e=2Eg=2E CONFIG_SLAB_FREELIST_RANDOM)=2E Th=
-is feature isn't about partition tables, so I don't think the first word sh=
-ould be "partition"=2E :)
-
-As far as doing the full isolation later, yeah, that's fine, and I think w=
-ith this Kconfig change it's easy to add a new mode=2E
-
--Kees
-
---=20
-Kees Cook
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
