@@ -1,57 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E64A371053;
-	Thu, 23 Apr 2026 04:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4E33D3B3;
+	Thu, 23 Apr 2026 04:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776918551; cv=none; b=ZoadXuaEiXpd5glp2fZ+VNAfGIP57sCs/gnACmEby902PKg/6gZgbVc1vjMlq1aZuFxVHciLjF0nkwb7ncXHmVmMtCeJUq3SqxVLhUx41xwwb+97ZXYKWdShwA55j1oL0ip2Pcz6smw4rjYp4tv6vzpHGaVHVjjj71hD3N1qcG8=
+	t=1776919991; cv=none; b=DwcQ9OoVrC17ZW4rB9gvPB9c6K5Wet1Nx55ipb/F9AV6XSHKby/4P6I6ZuXyczUqcrJ2gOPr/vN58yAm6ySjttlH66OSRfPe2xm38xtwBCRMimCZdcnV6Tg4Hmw+8pX6LFDz6uLuxmzwTw/RyMiw1m3PY+bw5tm3T+l3AoBC59w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776918551; c=relaxed/simple;
-	bh=ZMb5YrwAz5yRFO/s/tEHThMsgPC1cr4Y6u/lA6BREp8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=WNODKT4cs9tdEgnOgHZEhFno26IfrExAOQidmlYxXO9+q7jUeJsE7PLQyBFKk+SeFoo5u5hpmZNbuGg4Cn4wCYPIZLqmac9nq9BjZ5gCNoKg3PNUAoYrfdNWrG4s/P1XdMnBr3XJZZLVT2rkzvSMCdK1cYYgAkPGjgipt4VYrtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HvzcHebk; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1776919991; c=relaxed/simple;
+	bh=wnPMqrjzMxaKRUJBIDcEdbJagLtJjw/bNHmQDO7EXEg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=uO7PoEZzWytSgvURbHHj0OeEzpxTf1YbjdOdy0n4off9totPy75kx23ZSDKbELBF3gIRTgDMYIEnPTgd5aKlPltfnbsS7HBfdWeKRguQwg4L7KkVF3hE/S50nb+SyuNQ8QzN+P+vTuhySjMIUM+wj9MN7XFj2tRWMA0MRn6vQqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hd17JL2x; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HvzcHebk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hd17JL2x"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776918550; x=1808454550;
+  t=1776919988; x=1808455988;
   h=date:from:to:cc:subject:message-id;
-  bh=ZMb5YrwAz5yRFO/s/tEHThMsgPC1cr4Y6u/lA6BREp8=;
-  b=HvzcHebkbqpjkvaMy26bLtzeulyTj6NCxeUk+znzeuh5Tg12mwKVCYHL
-   auW01DAMdCWBRRTXXEbHoZ+kU7vg+rVt+HiYGikth93HEVGSiLe5Q+pwR
-   sGpDJHxBCOG0iFAFzKcianhgO8v9Uv7kKEUVvefR2CZSqJE3TViyglYpm
-   R26H6X0g47UYUvkr7wz8NRk21slbBllGq6H0uoS14IQ8E7XRLwDO9h08l
-   PBgVd5uIHA4I8Th8a7kCJ2SNieY5g8oYKLiTZNuWSokoY5k9va4OImBtj
-   wZWJv8uHZo/Je7jVfc60yq8A4EzpcX7BbXkBhyv+Wj/wyZVNyEzkuGLAO
-   Q==;
-X-CSE-ConnectionGUID: maGaWUuOQL6qM62IZQgehA==
-X-CSE-MsgGUID: XtGBEXr1SdifgA7qORNtOg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11764"; a="77761327"
+  bh=wnPMqrjzMxaKRUJBIDcEdbJagLtJjw/bNHmQDO7EXEg=;
+  b=hd17JL2xRFrlrUdRcQzTq9b0g7rJASBxU07Fn7aVqV6gHBMdJBslaIFT
+   QbAtI3QTZJ0Q+agrfVDZerkJiVgKutSkncxkW+DgtJb+R334/VFqx/KXu
+   mjeBwnkqWYwtsn/vjpan23CtEm34qU97EqZ4na+GppdowvYW+5PW265+s
+   sR7LFAWX8SeOKDcngR4RnRGfdJhH6WHjUKG/82R97jJSE5OJUfCYAN9Av
+   s1v2QFxtHPKvMjHqVuZ8a8ToJo1bZ9KiezQx1aMTN3K9p9+CuGrIkWnHb
+   o9j/bUNLWn/cdsGq+krx3hFXBrKSUuH7zuVM+dtuyiQlX/N3J8voMjrMi
+   A==;
+X-CSE-ConnectionGUID: ioJC2IjnSSqMK3sNqQVMaA==
+X-CSE-MsgGUID: eHKXT8DlRpqqqkzVrqctaQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11764"; a="77045276"
 X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
-   d="scan'208";a="77761327"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 21:29:09 -0700
-X-CSE-ConnectionGUID: 8PnrON1TSCCPFFWJju+z7Q==
-X-CSE-MsgGUID: 9kjNsZsPQz+Hzp8LBeSB3A==
+   d="scan'208";a="77045276"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 21:53:08 -0700
+X-CSE-ConnectionGUID: vNLn79mFTz683a1qdUYuQA==
+X-CSE-MsgGUID: r2msdUE7R3Ww7SdBPri67A==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
+   d="scan'208";a="237537166"
 Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 22 Apr 2026 21:29:07 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 22 Apr 2026 21:53:06 -0700
 Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wFlgQ-000000001St-06Fm;
-	Thu, 23 Apr 2026 04:28:58 +0000
-Date: Thu, 23 Apr 2026 12:28:33 +0800
+	id 1wFm3j-000000001UP-2Mo6;
+	Thu, 23 Apr 2026 04:53:03 +0000
+Date: Thu, 23 Apr 2026 12:52:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: KancyJoe <kancy2333@outlook.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [superna9999:topic/sm8650/ayaneo-pocket-s2/pmos-v3 7/26]
- sound/soc/qcom/qdsp6/audioreach.c:755:29: error: cannot assign to variable
- 'module' with const-qualified type 'const struct audioreach_module *'
-Message-ID: <202604231213.g3VRFPQk-lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-04-21 167/167]
+ sound/soc/generic/simple-card.c:767:7: warning: variable 'card' is used
+ uninitialized whenever 'if' condition is true
+Message-ID: <202604231210.QpPbIUWe-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,114 +60,273 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/superna9999/linux topic/sm8650/ayaneo-pocket-s2/pmos-v3
-head:   8bac0544d1a4e155182b87aca13870ba2a0a3c49
-commit: 29cdaf388e5fb3df4c09814c374e4aec27bddfed [7/26] audioreach: Add dedicated WSA2 support.
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260423/202604231213.g3VRFPQk-lkp@intel.com/config)
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-04-21
+head:   e532cc3ce1a670087bbbf444b59515d5e52d0c39
+commit: 3b1fd93395d526f33814f14d531afe5917e51687 [167/167] ASoC: generic: use snd_soc_card_register()
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260423/202604231210.QpPbIUWe-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260423/202604231213.g3VRFPQk-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260423/202604231210.QpPbIUWe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604231213.g3VRFPQk-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604231210.QpPbIUWe-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> sound/soc/qcom/qdsp6/audioreach.c:755:29: error: cannot assign to variable 'module' with const-qualified type 'const struct audioreach_module *'
-     755 |                 module->hw_interface_type = 2;  // need to set lpaif type back to WSA after set active channel mask
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   sound/soc/qcom/qdsp6/audioreach.c:692:40: note: variable 'module' declared const here
-     692 |                                                  const struct audioreach_module *module,
-         |                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   1 error generated.
+>> sound/soc/generic/simple-card.c:767:7: warning: variable 'card' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     767 |                 if (!cinfo->name ||
+         |                     ^~~~~~~~~~~~~~~
+     768 |                     !cinfo->codec_dai.name ||
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+     769 |                     !cinfo->codec ||
+         |                     ~~~~~~~~~~~~~~~~
+     770 |                     !cinfo->platform ||
+         |                     ~~~~~~~~~~~~~~~~~~~
+     771 |                     !cinfo->cpu_dai.name) {
+         |                     ~~~~~~~~~~~~~~~~~~~~
+   sound/soc/generic/simple-card.c:814:30: note: uninitialized use occurs here
+     814 |         simple_util_clean_reference(card);
+         |                                     ^~~~
+   sound/soc/generic/simple-card.c:767:3: note: remove the 'if' if its condition is always false
+     767 |                 if (!cinfo->name ||
+         |                 ^~~~~~~~~~~~~~~~~~~
+     768 |                     !cinfo->codec_dai.name ||
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+     769 |                     !cinfo->codec ||
+         |                     ~~~~~~~~~~~~~~~~
+     770 |                     !cinfo->platform ||
+         |                     ~~~~~~~~~~~~~~~~~~~
+     771 |                     !cinfo->cpu_dai.name) {
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~
+     772 |                         dev_err(dev, "insufficient simple_util_info settings\n");
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     773 |                         goto err;
+         |                         ~~~~~~~~~
+     774 |                 }
+         |                 ~
+>> sound/soc/generic/simple-card.c:767:7: warning: variable 'card' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+     767 |                 if (!cinfo->name ||
+         |                     ^~~~~~~~~~~~~~~
+     768 |                     !cinfo->codec_dai.name ||
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+     769 |                     !cinfo->codec ||
+         |                     ~~~~~~~~~~~~~~~~
+     770 |                     !cinfo->platform ||
+         |                     ~~~~~~~~~~~~~~~~
+   sound/soc/generic/simple-card.c:814:30: note: uninitialized use occurs here
+     814 |         simple_util_clean_reference(card);
+         |                                     ^~~~
+   sound/soc/generic/simple-card.c:767:7: note: remove the '||' if its condition is always false
+     767 |                 if (!cinfo->name ||
+         |                     ^~~~~~~~~~~~~~~
+     768 |                     !cinfo->codec_dai.name ||
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+     769 |                     !cinfo->codec ||
+         |                     ~~~~~~~~~~~~~~~~
+     770 |                     !cinfo->platform ||
+         |                     ~~~~~~~~~~~~~~~~~~~
+>> sound/soc/generic/simple-card.c:767:7: warning: variable 'card' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+     767 |                 if (!cinfo->name ||
+         |                     ^~~~~~~~~~~~~~~
+     768 |                     !cinfo->codec_dai.name ||
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+     769 |                     !cinfo->codec ||
+         |                     ~~~~~~~~~~~~~
+   sound/soc/generic/simple-card.c:814:30: note: uninitialized use occurs here
+     814 |         simple_util_clean_reference(card);
+         |                                     ^~~~
+   sound/soc/generic/simple-card.c:767:7: note: remove the '||' if its condition is always false
+     767 |                 if (!cinfo->name ||
+         |                     ^~~~~~~~~~~~~~~
+     768 |                     !cinfo->codec_dai.name ||
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+     769 |                     !cinfo->codec ||
+         |                     ~~~~~~~~~~~~~~~~
+>> sound/soc/generic/simple-card.c:767:7: warning: variable 'card' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+     767 |                 if (!cinfo->name ||
+         |                     ^~~~~~~~~~~~~~~
+     768 |                     !cinfo->codec_dai.name ||
+         |                     ~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/generic/simple-card.c:814:30: note: uninitialized use occurs here
+     814 |         simple_util_clean_reference(card);
+         |                                     ^~~~
+   sound/soc/generic/simple-card.c:767:7: note: remove the '||' if its condition is always false
+     767 |                 if (!cinfo->name ||
+         |                     ^~~~~~~~~~~~~~~
+     768 |                     !cinfo->codec_dai.name ||
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/generic/simple-card.c:767:7: warning: variable 'card' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+     767 |                 if (!cinfo->name ||
+         |                     ^~~~~~~~~~~~
+   sound/soc/generic/simple-card.c:814:30: note: uninitialized use occurs here
+     814 |         simple_util_clean_reference(card);
+         |                                     ^~~~
+   sound/soc/generic/simple-card.c:767:7: note: remove the '||' if its condition is always false
+     767 |                 if (!cinfo->name ||
+         |                     ^~~~~~~~~~~~~~~
+   sound/soc/generic/simple-card.c:762:7: warning: variable 'card' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     762 |                 if (!cinfo) {
+         |                     ^~~~~~
+   sound/soc/generic/simple-card.c:814:30: note: uninitialized use occurs here
+     814 |         simple_util_clean_reference(card);
+         |                                     ^~~~
+   sound/soc/generic/simple-card.c:762:3: note: remove the 'if' if its condition is always false
+     762 |                 if (!cinfo) {
+         |                 ^~~~~~~~~~~~~
+     763 |                         dev_err(dev, "no info for asoc-simple-card\n");
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     764 |                         goto err;
+         |                         ~~~~~~~~~
+     765 |                 }
+         |                 ~
+   sound/soc/generic/simple-card.c:746:7: warning: variable 'card' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     746 |                 if (ret < 0) {
+         |                     ^~~~~~~
+   sound/soc/generic/simple-card.c:814:30: note: uninitialized use occurs here
+     814 |         simple_util_clean_reference(card);
+         |                                     ^~~~
+   sound/soc/generic/simple-card.c:746:3: note: remove the 'if' if its condition is always false
+     746 |                 if (ret < 0) {
+         |                 ^~~~~~~~~~~~~~
+     747 |                         dev_err_probe(dev, ret, "parse error\n");
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     748 |                         goto err;
+         |                         ~~~~~~~~~
+     749 |                 }
+         |                 ~
+   sound/soc/generic/simple-card.c:717:27: note: initialize the variable 'card' to silence this warning
+     717 |         struct snd_soc_card *card;
+         |                                  ^
+         |                                   = NULL
+   7 warnings generated.
+--
+>> sound/soc/tegra/tegra_audio_graph_card.c:215:2: warning: variable 'card' is uninitialized when used here [-Wuninitialized]
+     215 |         card->component_chaining = 1;
+         |         ^~~~
+   sound/soc/tegra/tegra_audio_graph_card.c:208:27: note: initialize the variable 'card' to silence this warning
+     208 |         struct snd_soc_card *card;
+         |                                  ^
+         |                                   = NULL
+   1 warning generated.
 
 
-vim +755 sound/soc/qcom/qdsp6/audioreach.c
+vim +767 sound/soc/generic/simple-card.c
 
-   689	
-   690	/* LPASS Codec DMA port Module Media Format Setup */
-   691	static int audioreach_codec_dma_set_media_format(struct q6apm_graph *graph,
-   692							 const struct audioreach_module *module,
-   693							 const struct audioreach_module_config *cfg)
-   694	{
-   695		struct apm_codec_dma_module_intf_cfg *intf_cfg;
-   696		struct apm_module_frame_size_factor_cfg *fs_cfg;
-   697		struct apm_module_hw_ep_power_mode_cfg *pm_cfg;
-   698		struct apm_module_param_data *param_data;
-   699		struct apm_module_hw_ep_mf_cfg *hw_cfg;
-   700		int ic_sz = APM_CDMA_INTF_CFG_PSIZE;
-   701		int ep_sz = APM_HW_EP_CFG_PSIZE;
-   702		int fs_sz = APM_FS_CFG_PSIZE;
-   703		int pm_sz = APM_HW_EP_PMODE_CFG_PSIZE;
-   704		int size = ic_sz + ep_sz + fs_sz + pm_sz;
-   705		void *p;
-   706	
-   707		struct gpr_pkt *pkt __free(kfree) = audioreach_alloc_apm_cmd_pkt(size, APM_CMD_SET_CFG, 0);
-   708		static u8 last_active_channel_mask = 0;
-   709	
-   710		if (IS_ERR(pkt))
-   711			return PTR_ERR(pkt);
-   712	
-   713		p = (void *)pkt + GPR_HDR_SIZE + APM_CMD_HDR_SIZE;
-   714	
-   715		hw_cfg = p;
-   716		param_data = &hw_cfg->param_data;
-   717		param_data->module_instance_id = module->instance_id;
-   718		param_data->error_code = 0;
-   719		param_data->param_id = PARAM_ID_HW_EP_MF_CFG;
-   720		param_data->param_size = ep_sz - APM_MODULE_PARAM_DATA_SIZE;
-   721	
-   722		hw_cfg->mf.sample_rate = cfg->sample_rate;
-   723		hw_cfg->mf.bit_width = cfg->bit_width;
-   724		hw_cfg->mf.num_channels = cfg->num_channels;
-   725		hw_cfg->mf.data_format = module->data_format;
-   726		p += ep_sz;
-   727	
-   728		fs_cfg = p;
-   729		param_data = &fs_cfg->param_data;
-   730		param_data->module_instance_id = module->instance_id;
-   731		param_data->error_code = 0;
-   732		param_data->param_id = PARAM_ID_HW_EP_FRAME_SIZE_FACTOR;
-   733		param_data->param_size = fs_sz - APM_MODULE_PARAM_DATA_SIZE;
-   734		fs_cfg->frame_size_factor = 1;
-   735		p += fs_sz;
-   736	
-   737		intf_cfg = p;
-   738		param_data = &intf_cfg->param_data;
-   739		param_data->module_instance_id = module->instance_id;
-   740		param_data->error_code = 0;
-   741		param_data->param_id = PARAM_ID_CODEC_DMA_INTF_CFG;
-   742		param_data->param_size = ic_sz - APM_MODULE_PARAM_DATA_SIZE;
-   743	
-   744		intf_cfg->cfg.lpaif_type = module->hw_interface_type;
-   745		intf_cfg->cfg.intf_index = module->hw_interface_idx;
-   746		// dev_err(graph->dev, "IDX: 0x%08X, TYPE: 0x%08X", module->hw_interface_idx, module->hw_interface_type);
-   747	
-   748		if((intf_cfg->cfg.lpaif_type == 7 && cfg->num_channels <= 2 && intf_cfg->cfg.intf_index == 1)
-   749			|| ((intf_cfg->cfg.intf_index == 1) && (intf_cfg->cfg.lpaif_type == 2) && (cfg->num_channels <= 2) && (last_active_channel_mask>>2 & 0b11) != 0)) // Dedicated WSA2 RX0
-   750		{
-   751			intf_cfg->cfg.active_channels_mask = ((1 << cfg->num_channels) - 1) << 2; 
-   752			last_active_channel_mask = intf_cfg->cfg.active_channels_mask;
-   753			// dev_err(graph->dev, "Setting mask to 0b1100");
-   754			intf_cfg->cfg.lpaif_type = 2;	// adsp do not support WSA2 DMA
- > 755			module->hw_interface_type = 2;	// need to set lpaif type back to WSA after set active channel mask
-   756		} else
-   757			intf_cfg->cfg.active_channels_mask = (1 << cfg->num_channels) - 1;
-   758	
-   759		p += ic_sz;
-   760	
-   761		pm_cfg = p;
-   762		param_data = &pm_cfg->param_data;
-   763		param_data->module_instance_id = module->instance_id;
-   764		param_data->error_code = 0;
-   765		param_data->param_id = PARAM_ID_HW_EP_POWER_MODE_CFG;
-   766		param_data->param_size = pm_sz - APM_MODULE_PARAM_DATA_SIZE;
-   767		pm_cfg->power_mode.power_mode = 0;
-   768	
-   769		return q6apm_send_cmd_sync(graph->apm, pkt, 0);
-   770	}
-   771	
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  711  
+b4b7de99c6da461 Kuninori Morimoto   2023-09-11  712  static int simple_probe(struct platform_device *pdev)
+f2390880ec0264a Kuninori Morimoto   2012-04-08  713  {
+b4b7de99c6da461 Kuninori Morimoto   2023-09-11  714  	struct simple_util_priv *priv;
+f89983ef61677af Kuninori Morimoto   2012-12-25  715  	struct device *dev = &pdev->dev;
+dcee9bfe8904518 Kuninori Morimoto   2017-03-15  716  	struct device_node *np = dev->of_node;
+5be509576cf634a Kuninori Morimoto   2017-03-15  717  	struct snd_soc_card *card;
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  718  	const char *card_name = NULL;
+65a5056b21202ef Kuninori Morimoto   2019-03-20  719  	int ret;
+f2390880ec0264a Kuninori Morimoto   2012-04-08  720  
+0dd4fc3c2f663b9 Xiubo Li            2014-09-10  721  	/* Allocate the private data and the DAI link array */
+b0133d9c4d7600f Kuninori Morimoto   2016-08-26  722  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+ca65b492c7a265b Jean-Francois Moine 2014-01-15  723  	if (!priv)
+ca919fe4b972b94 Xiubo Li            2014-01-14  724  		return -ENOMEM;
+ca919fe4b972b94 Xiubo Li            2014-01-14  725  
+a0ef5b4b101424b Kuninori Morimoto   2025-02-05  726  	ret = -ENOMEM;
+bf4afc53b77aeaa Linus Torvalds      2026-02-21  727  	struct link_info *li __free(kfree) = kzalloc_obj(*li);
+ec1af6c64db94e4 Thierry Reding      2021-04-19  728  	if (!li)
+a0ef5b4b101424b Kuninori Morimoto   2025-02-05  729  		goto end;
+ec1af6c64db94e4 Thierry Reding      2021-04-19  730  
+ec1af6c64db94e4 Thierry Reding      2021-04-19  731  	ret = simple_get_dais_count(priv, li);
+0f687d826736a5b Thierry Reding      2021-04-16  732  	if (ret < 0)
+a0ef5b4b101424b Kuninori Morimoto   2025-02-05  733  		goto end;
+0f687d826736a5b Thierry Reding      2021-04-16  734  
+a0ef5b4b101424b Kuninori Morimoto   2025-02-05  735  	ret = -EINVAL;
+ec1af6c64db94e4 Thierry Reding      2021-04-19  736  	if (!li->link)
+a0ef5b4b101424b Kuninori Morimoto   2025-02-05  737  		goto end;
+da215354eb55c38 Kuninori Morimoto   2018-12-14  738  
+b4b7de99c6da461 Kuninori Morimoto   2023-09-11  739  	ret = simple_util_init_priv(priv, li);
+65a5056b21202ef Kuninori Morimoto   2019-03-20  740  	if (ret < 0)
+a0ef5b4b101424b Kuninori Morimoto   2025-02-05  741  		goto end;
+201a0eac7fe5e7a Jean-Francois Moine 2014-01-15  742  
+201a0eac7fe5e7a Jean-Francois Moine 2014-01-15  743  	if (np && of_device_is_available(np)) {
+ca919fe4b972b94 Xiubo Li            2014-01-14  744  
+ec1af6c64db94e4 Thierry Reding      2021-04-19  745  		ret = simple_parse_of(priv, li);
+fa558c2801fc173 Kuninori Morimoto   2013-11-20  746  		if (ret < 0) {
+7a0299e13bc740c Kuninori Morimoto   2021-12-14  747  			dev_err_probe(dev, ret, "parse error\n");
+e512e001dafa54e Jean-Francois Moine 2014-03-11  748  			goto err;
+fa558c2801fc173 Kuninori Morimoto   2013-11-20  749  		}
+6a91a17bd7b92b2 Jean-Francois Moine 2014-03-20  750  
+fa558c2801fc173 Kuninori Morimoto   2013-11-20  751  	} else {
+b4b7de99c6da461 Kuninori Morimoto   2023-09-11  752  		struct simple_util_info *cinfo;
+f107294c6422e77 Kuninori Morimoto   2019-06-06  753  		struct snd_soc_dai_link_component *cpus;
+710af9196ce614e Kuninori Morimoto   2018-08-31  754  		struct snd_soc_dai_link_component *codecs;
+e58f41e41185c69 Kuninori Morimoto   2018-08-31  755  		struct snd_soc_dai_link_component *platform;
+65a5056b21202ef Kuninori Morimoto   2019-03-20  756  		struct snd_soc_dai_link *dai_link = priv->dai_link;
+65a5056b21202ef Kuninori Morimoto   2019-03-20  757  		struct simple_dai_props *dai_props = priv->dai_props;
+65a5056b21202ef Kuninori Morimoto   2019-03-20  758  
+41bae58df411f9a Kuninori Morimoto   2023-09-19  759  		ret = -EINVAL;
+41bae58df411f9a Kuninori Morimoto   2023-09-19  760  
+ca65b492c7a265b Jean-Francois Moine 2014-01-15  761  		cinfo = dev->platform_data;
+ca65b492c7a265b Jean-Francois Moine 2014-01-15  762  		if (!cinfo) {
+f89983ef61677af Kuninori Morimoto   2012-12-25  763  			dev_err(dev, "no info for asoc-simple-card\n");
+41bae58df411f9a Kuninori Morimoto   2023-09-19  764  			goto err;
+f2390880ec0264a Kuninori Morimoto   2012-04-08  765  		}
+f2390880ec0264a Kuninori Morimoto   2012-04-08  766  
+f2390880ec0264a Kuninori Morimoto   2012-04-08 @767  		if (!cinfo->name ||
+fa558c2801fc173 Kuninori Morimoto   2013-11-20  768  		    !cinfo->codec_dai.name ||
+7722f830a45f7fb Jean-Francois Moine 2014-01-15  769  		    !cinfo->codec ||
+7722f830a45f7fb Jean-Francois Moine 2014-01-15  770  		    !cinfo->platform ||
+7722f830a45f7fb Jean-Francois Moine 2014-01-15  771  		    !cinfo->cpu_dai.name) {
+b4b7de99c6da461 Kuninori Morimoto   2023-09-11  772  			dev_err(dev, "insufficient simple_util_info settings\n");
+41bae58df411f9a Kuninori Morimoto   2023-09-19  773  			goto err;
+f2390880ec0264a Kuninori Morimoto   2012-04-08  774  		}
+2bee991460a838e Jean-Francois Moine 2014-01-15  775  
+f107294c6422e77 Kuninori Morimoto   2019-06-06  776  		cpus			= dai_link->cpus;
+f107294c6422e77 Kuninori Morimoto   2019-06-06  777  		cpus->dai_name		= cinfo->cpu_dai.name;
+f107294c6422e77 Kuninori Morimoto   2019-06-06  778  
+710af9196ce614e Kuninori Morimoto   2018-08-31  779  		codecs			= dai_link->codecs;
+710af9196ce614e Kuninori Morimoto   2018-08-31  780  		codecs->name		= cinfo->codec;
+710af9196ce614e Kuninori Morimoto   2018-08-31  781  		codecs->dai_name	= cinfo->codec_dai.name;
+710af9196ce614e Kuninori Morimoto   2018-08-31  782  
+910fdcabedd2354 Kuninori Morimoto   2019-01-21  783  		platform		= dai_link->platforms;
+e58f41e41185c69 Kuninori Morimoto   2018-08-31  784  		platform->name		= cinfo->platform;
+e58f41e41185c69 Kuninori Morimoto   2018-08-31  785  
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  786  		card_name		= (cinfo->card) ? cinfo->card : cinfo->name;
+5ca8ba4180a6f62 Jean-Francois Moine 2014-01-15  787  		dai_link->name		= cinfo->name;
+5ca8ba4180a6f62 Jean-Francois Moine 2014-01-15  788  		dai_link->stream_name	= cinfo->name;
+1efb53a220b78fd Lars-Peter Clausen  2015-03-24  789  		dai_link->dai_fmt	= cinfo->daifmt;
+b4b7de99c6da461 Kuninori Morimoto   2023-09-11  790  		dai_link->init		= simple_util_dai_init;
+65a5056b21202ef Kuninori Morimoto   2019-03-20  791  		memcpy(dai_props->cpu_dai, &cinfo->cpu_dai,
+65a5056b21202ef Kuninori Morimoto   2019-03-20  792  					sizeof(*dai_props->cpu_dai));
+65a5056b21202ef Kuninori Morimoto   2019-03-20  793  		memcpy(dai_props->codec_dai, &cinfo->codec_dai,
+65a5056b21202ef Kuninori Morimoto   2019-03-20  794  					sizeof(*dai_props->codec_dai));
+7722f830a45f7fb Jean-Francois Moine 2014-01-15  795  	}
+f2390880ec0264a Kuninori Morimoto   2012-04-08  796  
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  797  	card = devm_snd_soc_card_alloc(dev, THIS_MODULE, &card_driver,
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  798  					     card_name, NULL, NULL);
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  799  	if (!card)
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  800  		goto err;
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  801  
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  802  	priv->snd_card = card;
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  803  
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  804  	snd_soc_card_attach_priv(card, priv);
+f2390880ec0264a Kuninori Morimoto   2012-04-08  805  
+b4b7de99c6da461 Kuninori Morimoto   2023-09-11  806  	simple_util_debug_info(priv);
+0580dde59438686 Kuninori Morimoto   2019-03-20  807  
+3b1fd93395d526f Kuninori Morimoto   2026-04-20  808  	ret = devm_snd_soc_card_register(card);
+c6d112e442fed7b Kuninori Morimoto   2017-05-19  809  	if (ret < 0)
+c6d112e442fed7b Kuninori Morimoto   2017-05-19  810  		goto err;
+c6d112e442fed7b Kuninori Morimoto   2017-05-19  811  
+c6d112e442fed7b Kuninori Morimoto   2017-05-19  812  	return 0;
+e512e001dafa54e Jean-Francois Moine 2014-03-11  813  err:
+b4b7de99c6da461 Kuninori Morimoto   2023-09-11  814  	simple_util_clean_reference(card);
+a0ef5b4b101424b Kuninori Morimoto   2025-02-05  815  end:
+a0ef5b4b101424b Kuninori Morimoto   2025-02-05  816  	return dev_err_probe(dev, ret, "parse error\n");
+f2390880ec0264a Kuninori Morimoto   2012-04-08  817  }
+f2390880ec0264a Kuninori Morimoto   2012-04-08  818  
+
+:::::: The code at line 767 was first introduced by commit
+:::::: f2390880ec0264a0ed26b32c23bc23435b4297da ASoC: add generic simple-card support
+
+:::::: TO: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+:::::: CC: Mark Brown <broonie@opensource.wolfsonmicro.com>
 
 -- 
 0-DAY CI Kernel Test Service
