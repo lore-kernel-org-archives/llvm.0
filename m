@@ -1,58 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356EA1D9A54;
-	Thu, 23 Apr 2026 00:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E64A371053;
+	Thu, 23 Apr 2026 04:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776903627; cv=none; b=dH9SEAeaN77MXTw1zvfkOm+Vt7hEtwIBu8gAwIX0pkMV0knTTiz7InwpNfkNTVYkz5KYvISvaBQCtEl4N1hqPpTWjQ9d2KPMwJNdDL2mvGv2hOcLvWbDQx9b442taYfY0jRDU+pvsGZMqCUFd5F0jQLBN131p8+xC2NfLxNFJx0=
+	t=1776918551; cv=none; b=ZoadXuaEiXpd5glp2fZ+VNAfGIP57sCs/gnACmEby902PKg/6gZgbVc1vjMlq1aZuFxVHciLjF0nkwb7ncXHmVmMtCeJUq3SqxVLhUx41xwwb+97ZXYKWdShwA55j1oL0ip2Pcz6smw4rjYp4tv6vzpHGaVHVjjj71hD3N1qcG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776903627; c=relaxed/simple;
-	bh=XTfiEiAYdJ8AVYeaY2oGSul2dp2WY1MsOVPTRQCnik4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=WyNxZBz+qqmlGX6FmyNr4S9B3i9ib7niQQjW3IBe0Xjy3HJgkl2Y0KaRbFPwKKf/30qMFcTkZsewGG5CprCPqhZTMx/Y3+2NsTfS4cH0zz9ZF4dIG3mpUnwRr4S94hesi9AjwzioQeqbAkwh48TMEajgAbHsEzLQmAW6Exm0xE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aeIJqtvE; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1776918551; c=relaxed/simple;
+	bh=ZMb5YrwAz5yRFO/s/tEHThMsgPC1cr4Y6u/lA6BREp8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=WNODKT4cs9tdEgnOgHZEhFno26IfrExAOQidmlYxXO9+q7jUeJsE7PLQyBFKk+SeFoo5u5hpmZNbuGg4Cn4wCYPIZLqmac9nq9BjZ5gCNoKg3PNUAoYrfdNWrG4s/P1XdMnBr3XJZZLVT2rkzvSMCdK1cYYgAkPGjgipt4VYrtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HvzcHebk; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aeIJqtvE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HvzcHebk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776903625; x=1808439625;
+  t=1776918550; x=1808454550;
   h=date:from:to:cc:subject:message-id;
-  bh=XTfiEiAYdJ8AVYeaY2oGSul2dp2WY1MsOVPTRQCnik4=;
-  b=aeIJqtvEalZz0PhZbPWObYrMfjNO0Q7Drv/9+0UpLi8wysk82ZTI+lql
-   GVOBO4pzSevAa5zhSMU6eBblni1t27cRIL+unqdAAocCqcDH2cc6DMR75
-   3oATHhG7F5LD1qFom4OpxOpMbGEmX+lE27f1B60rK/dwsLAue1bCtj+ga
-   TTPbSW5s0PNu3NVd+QnzgIAbBcB3TZQRSTlAkJf24u/8d4OdUbnUwRef/
-   CSizo72feBs1OtdR0b8VvhfJ//FadpNQwL08ygjgAfeI9/1FkFaFGNW8K
-   KY28lD5652lLoBVWZq3AxBMwtg154rtRK4sR+hhJqUOwsyx6bNIR0Sr2I
+  bh=ZMb5YrwAz5yRFO/s/tEHThMsgPC1cr4Y6u/lA6BREp8=;
+  b=HvzcHebkbqpjkvaMy26bLtzeulyTj6NCxeUk+znzeuh5Tg12mwKVCYHL
+   auW01DAMdCWBRRTXXEbHoZ+kU7vg+rVt+HiYGikth93HEVGSiLe5Q+pwR
+   sGpDJHxBCOG0iFAFzKcianhgO8v9Uv7kKEUVvefR2CZSqJE3TViyglYpm
+   R26H6X0g47UYUvkr7wz8NRk21slbBllGq6H0uoS14IQ8E7XRLwDO9h08l
+   PBgVd5uIHA4I8Th8a7kCJ2SNieY5g8oYKLiTZNuWSokoY5k9va4OImBtj
+   wZWJv8uHZo/Je7jVfc60yq8A4EzpcX7BbXkBhyv+Wj/wyZVNyEzkuGLAO
    Q==;
-X-CSE-ConnectionGUID: TJC68F26Tmicqt64dMHMtg==
-X-CSE-MsgGUID: r5NQeJKXStukzVuVZ+b0QA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11764"; a="77781178"
-X-IronPort-AV: E=Sophos;i="6.23,193,1770624000"; 
-   d="scan'208";a="77781178"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 17:20:25 -0700
-X-CSE-ConnectionGUID: +nE49jKZRW6Q7HwPgpjlQQ==
-X-CSE-MsgGUID: Xi1/9j+KT+qkcS5IY1015w==
+X-CSE-ConnectionGUID: maGaWUuOQL6qM62IZQgehA==
+X-CSE-MsgGUID: XtGBEXr1SdifgA7qORNtOg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11764"; a="77761327"
+X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
+   d="scan'208";a="77761327"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 21:29:09 -0700
+X-CSE-ConnectionGUID: 8PnrON1TSCCPFFWJju+z7Q==
+X-CSE-MsgGUID: 9kjNsZsPQz+Hzp8LBeSB3A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,193,1770624000"; 
-   d="scan'208";a="236861804"
 Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 22 Apr 2026 17:20:23 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 22 Apr 2026 21:29:07 -0700
 Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wFhno-000000001EH-0Pfv;
-	Thu, 23 Apr 2026 00:20:20 +0000
-Date: Thu, 23 Apr 2026 08:20:01 +0800
+	id 1wFlgQ-000000001St-06Fm;
+	Thu, 23 Apr 2026 04:28:58 +0000
+Date: Thu, 23 Apr 2026 12:28:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: LiangCheng Wang <zaq14760@gmail.com>
+To: KancyJoe <kancy2333@outlook.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>
-Subject: drivers/gpu/drm/tiny/pixpaper.c:579:12: warning: stack frame
- size (19288) exceeds limit (8192) in 'pixpaper_panel_hw_init'
-Message-ID: <202604230813.tiodR4pT-lkp@intel.com>
+ Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [superna9999:topic/sm8650/ayaneo-pocket-s2/pmos-v3 7/26]
+ sound/soc/qcom/qdsp6/audioreach.c:755:29: error: cannot assign to variable
+ 'module' with const-qualified type 'const struct audioreach_module *'
+Message-ID: <202604231213.g3VRFPQk-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,178 +59,114 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-Hi LiangCheng,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2e68039281932e6dc37718a1ea7cbb8e2cda42e6
-commit: c9e70639f5915f2d084a0126e62fe53a52c29cea drm: tiny: Add support for Mayqueen Pixpaper e-ink panel
-date:   8 months ago
-config: x86_64-randconfig-075-20260423 (https://download.01.org/0day-ci/archive/20260423/202604230813.tiodR4pT-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260423/202604230813.tiodR4pT-lkp@intel.com/reproduce)
+tree:   https://github.com/superna9999/linux topic/sm8650/ayaneo-pocket-s2/pmos-v3
+head:   8bac0544d1a4e155182b87aca13870ba2a0a3c49
+commit: 29cdaf388e5fb3df4c09814c374e4aec27bddfed [7/26] audioreach: Add dedicated WSA2 support.
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260423/202604231213.g3VRFPQk-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260423/202604231213.g3VRFPQk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
-| Fixes: c9e70639f591 ("drm: tiny: Add support for Mayqueen Pixpaper e-ink panel")
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604230813.tiodR4pT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604231213.g3VRFPQk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/tiny/pixpaper.c:579:12: warning: stack frame size (19288) exceeds limit (8192) in 'pixpaper_panel_hw_init' [-Wframe-larger-than]
-     579 | static int pixpaper_panel_hw_init(struct pixpaper_panel *panel)
-         |            ^
-   1 warning generated.
+>> sound/soc/qcom/qdsp6/audioreach.c:755:29: error: cannot assign to variable 'module' with const-qualified type 'const struct audioreach_module *'
+     755 |                 module->hw_interface_type = 2;  // need to set lpaif type back to WSA after set active channel mask
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   sound/soc/qcom/qdsp6/audioreach.c:692:40: note: variable 'module' declared const here
+     692 |                                                  const struct audioreach_module *module,
+         |                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   1 error generated.
 
 
-vim +/pixpaper_panel_hw_init +579 drivers/gpu/drm/tiny/pixpaper.c
+vim +755 sound/soc/qcom/qdsp6/audioreach.c
 
-   578	
- > 579	static int pixpaper_panel_hw_init(struct pixpaper_panel *panel)
-   580	{
-   581		struct pixpaper_error_ctx err = { .errno_code = 0 };
-   582	
-   583		gpiod_set_value_cansleep(panel->reset, 0);
-   584		msleep(50);
-   585		gpiod_set_value_cansleep(panel->reset, 1);
-   586		msleep(50);
-   587	
-   588		pixpaper_wait_for_panel(panel);
-   589	
-   590		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_4D, &err);
-   591		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_4D_CONFIG, &err);
-   592		if (err.errno_code)
-   593			goto init_fail;
-   594		pixpaper_wait_for_panel(panel);
-   595	
-   596		pixpaper_send_cmd(panel, PIXPAPER_CMD_PANEL_SETTING, &err);
-   597		pixpaper_send_data(panel, PIXPAPER_PSR_CONFIG, &err);
-   598		pixpaper_send_data(panel, PIXPAPER_PSR_CONFIG2, &err);
-   599		if (err.errno_code)
-   600			goto init_fail;
-   601		pixpaper_wait_for_panel(panel);
-   602	
-   603		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_SETTING, &err);
-   604		pixpaper_send_data(panel, PIXPAPER_PWR_CONFIG1, &err);
-   605		pixpaper_send_data(panel, PIXPAPER_PWR_CONFIG2, &err);
-   606		pixpaper_send_data(panel, PIXPAPER_PWR_VSP_8_2V, &err);
-   607		pixpaper_send_data(panel, PIXPAPER_PWR_VSPL_15V, &err);
-   608		pixpaper_send_data(panel, PIXPAPER_PWR_VSN_4V, &err);
-   609		pixpaper_send_data(panel, PIXPAPER_PWR_VSP_8_2V, &err);
-   610		if (err.errno_code)
-   611			goto init_fail;
-   612		pixpaper_wait_for_panel(panel);
-   613	
-   614		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_OFF_SEQUENCE, &err);
-   615		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG1, &err);
-   616		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG2, &err);
-   617		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG3, &err);
-   618		if (err.errno_code)
-   619			goto init_fail;
-   620		pixpaper_wait_for_panel(panel);
-   621	
-   622		pixpaper_send_cmd(panel, PIXPAPER_CMD_BOOSTER_SOFT_START, &err);
-   623		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG1, &err);
-   624		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG2, &err);
-   625		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG3, &err);
-   626		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG4, &err);
-   627		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG5, &err);
-   628		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG6, &err);
-   629		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG7, &err);
-   630		if (err.errno_code)
-   631			goto init_fail;
-   632		pixpaper_wait_for_panel(panel);
-   633	
-   634		pixpaper_send_cmd(panel, PIXPAPER_CMD_PLL_CONTROL, &err);
-   635		pixpaper_send_data(panel, PIXPAPER_PLL_CONFIG, &err);
-   636		if (err.errno_code)
-   637			goto init_fail;
-   638		pixpaper_wait_for_panel(panel);
-   639	
-   640		pixpaper_send_cmd(panel, PIXPAPER_CMD_TEMP_SENSOR_CALIB, &err);
-   641		pixpaper_send_data(panel, PIXPAPER_TSE_CONFIG, &err);
-   642		if (err.errno_code)
-   643			goto init_fail;
-   644		pixpaper_wait_for_panel(panel);
-   645	
-   646		pixpaper_send_cmd(panel, PIXPAPER_CMD_VCOM_INTERVAL, &err);
-   647		pixpaper_send_data(panel, PIXPAPER_CDI_CONFIG, &err);
-   648		if (err.errno_code)
-   649			goto init_fail;
-   650		pixpaper_wait_for_panel(panel);
-   651	
-   652		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_60, &err);
-   653		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_60_CONFIG1, &err);
-   654		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_60_CONFIG2, &err);
-   655		if (err.errno_code)
-   656			goto init_fail;
-   657		pixpaper_wait_for_panel(panel);
-   658	
-   659		pixpaper_send_cmd(panel, PIXPAPER_CMD_RESOLUTION_SETTING, &err);
-   660		pixpaper_send_data(panel, PIXPAPER_TRES_HRES_H, &err);
-   661		pixpaper_send_data(panel, PIXPAPER_TRES_HRES_L, &err);
-   662		pixpaper_send_data(panel, PIXPAPER_TRES_VRES_H, &err);
-   663		pixpaper_send_data(panel, PIXPAPER_TRES_VRES_L, &err);
-   664		if (err.errno_code)
-   665			goto init_fail;
-   666		pixpaper_wait_for_panel(panel);
-   667	
-   668		pixpaper_send_cmd(panel, PIXPAPER_CMD_GATE_SOURCE_START, &err);
-   669		pixpaper_send_data(panel, PIXPAPER_GSST_S_START, &err);
-   670		pixpaper_send_data(panel, PIXPAPER_GSST_RESERVED, &err);
-   671		pixpaper_send_data(panel, PIXPAPER_GSST_G_START_H, &err);
-   672		pixpaper_send_data(panel, PIXPAPER_GSST_G_START_L, &err);
-   673		if (err.errno_code)
-   674			goto init_fail;
-   675		pixpaper_wait_for_panel(panel);
-   676	
-   677		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E7, &err);
-   678		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E7_CONFIG, &err);
-   679		if (err.errno_code)
-   680			goto init_fail;
-   681		pixpaper_wait_for_panel(panel);
-   682	
-   683		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_SAVING, &err);
-   684		pixpaper_send_data(panel, PIXPAPER_PWS_CONFIG, &err);
-   685		if (err.errno_code)
-   686			goto init_fail;
-   687		pixpaper_wait_for_panel(panel);
-   688	
-   689		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E0, &err);
-   690		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E0_CONFIG, &err);
-   691		if (err.errno_code)
-   692			goto init_fail;
-   693		pixpaper_wait_for_panel(panel);
-   694	
-   695		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_B4, &err);
-   696		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_B4_CONFIG, &err);
-   697		if (err.errno_code)
-   698			goto init_fail;
-   699		pixpaper_wait_for_panel(panel);
-   700	
-   701		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_B5, &err);
-   702		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_B5_CONFIG, &err);
-   703		if (err.errno_code)
-   704			goto init_fail;
-   705		pixpaper_wait_for_panel(panel);
+   689	
+   690	/* LPASS Codec DMA port Module Media Format Setup */
+   691	static int audioreach_codec_dma_set_media_format(struct q6apm_graph *graph,
+   692							 const struct audioreach_module *module,
+   693							 const struct audioreach_module_config *cfg)
+   694	{
+   695		struct apm_codec_dma_module_intf_cfg *intf_cfg;
+   696		struct apm_module_frame_size_factor_cfg *fs_cfg;
+   697		struct apm_module_hw_ep_power_mode_cfg *pm_cfg;
+   698		struct apm_module_param_data *param_data;
+   699		struct apm_module_hw_ep_mf_cfg *hw_cfg;
+   700		int ic_sz = APM_CDMA_INTF_CFG_PSIZE;
+   701		int ep_sz = APM_HW_EP_CFG_PSIZE;
+   702		int fs_sz = APM_FS_CFG_PSIZE;
+   703		int pm_sz = APM_HW_EP_PMODE_CFG_PSIZE;
+   704		int size = ic_sz + ep_sz + fs_sz + pm_sz;
+   705		void *p;
    706	
-   707		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E9, &err);
-   708		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E9_CONFIG, &err);
-   709		if (err.errno_code)
-   710			goto init_fail;
-   711		pixpaper_wait_for_panel(panel);
+   707		struct gpr_pkt *pkt __free(kfree) = audioreach_alloc_apm_cmd_pkt(size, APM_CMD_SET_CFG, 0);
+   708		static u8 last_active_channel_mask = 0;
+   709	
+   710		if (IS_ERR(pkt))
+   711			return PTR_ERR(pkt);
    712	
-   713		return 0;
+   713		p = (void *)pkt + GPR_HDR_SIZE + APM_CMD_HDR_SIZE;
    714	
-   715	init_fail:
-   716		drm_err(&panel->drm, "Hardware initialization failed (err=%d)\n",
-   717			err.errno_code);
-   718		return err.errno_code;
-   719	}
-   720	
+   715		hw_cfg = p;
+   716		param_data = &hw_cfg->param_data;
+   717		param_data->module_instance_id = module->instance_id;
+   718		param_data->error_code = 0;
+   719		param_data->param_id = PARAM_ID_HW_EP_MF_CFG;
+   720		param_data->param_size = ep_sz - APM_MODULE_PARAM_DATA_SIZE;
+   721	
+   722		hw_cfg->mf.sample_rate = cfg->sample_rate;
+   723		hw_cfg->mf.bit_width = cfg->bit_width;
+   724		hw_cfg->mf.num_channels = cfg->num_channels;
+   725		hw_cfg->mf.data_format = module->data_format;
+   726		p += ep_sz;
+   727	
+   728		fs_cfg = p;
+   729		param_data = &fs_cfg->param_data;
+   730		param_data->module_instance_id = module->instance_id;
+   731		param_data->error_code = 0;
+   732		param_data->param_id = PARAM_ID_HW_EP_FRAME_SIZE_FACTOR;
+   733		param_data->param_size = fs_sz - APM_MODULE_PARAM_DATA_SIZE;
+   734		fs_cfg->frame_size_factor = 1;
+   735		p += fs_sz;
+   736	
+   737		intf_cfg = p;
+   738		param_data = &intf_cfg->param_data;
+   739		param_data->module_instance_id = module->instance_id;
+   740		param_data->error_code = 0;
+   741		param_data->param_id = PARAM_ID_CODEC_DMA_INTF_CFG;
+   742		param_data->param_size = ic_sz - APM_MODULE_PARAM_DATA_SIZE;
+   743	
+   744		intf_cfg->cfg.lpaif_type = module->hw_interface_type;
+   745		intf_cfg->cfg.intf_index = module->hw_interface_idx;
+   746		// dev_err(graph->dev, "IDX: 0x%08X, TYPE: 0x%08X", module->hw_interface_idx, module->hw_interface_type);
+   747	
+   748		if((intf_cfg->cfg.lpaif_type == 7 && cfg->num_channels <= 2 && intf_cfg->cfg.intf_index == 1)
+   749			|| ((intf_cfg->cfg.intf_index == 1) && (intf_cfg->cfg.lpaif_type == 2) && (cfg->num_channels <= 2) && (last_active_channel_mask>>2 & 0b11) != 0)) // Dedicated WSA2 RX0
+   750		{
+   751			intf_cfg->cfg.active_channels_mask = ((1 << cfg->num_channels) - 1) << 2; 
+   752			last_active_channel_mask = intf_cfg->cfg.active_channels_mask;
+   753			// dev_err(graph->dev, "Setting mask to 0b1100");
+   754			intf_cfg->cfg.lpaif_type = 2;	// adsp do not support WSA2 DMA
+ > 755			module->hw_interface_type = 2;	// need to set lpaif type back to WSA after set active channel mask
+   756		} else
+   757			intf_cfg->cfg.active_channels_mask = (1 << cfg->num_channels) - 1;
+   758	
+   759		p += ic_sz;
+   760	
+   761		pm_cfg = p;
+   762		param_data = &pm_cfg->param_data;
+   763		param_data->module_instance_id = module->instance_id;
+   764		param_data->error_code = 0;
+   765		param_data->param_id = PARAM_ID_HW_EP_POWER_MODE_CFG;
+   766		param_data->param_size = pm_sz - APM_MODULE_PARAM_DATA_SIZE;
+   767		pm_cfg->power_mode.power_mode = 0;
+   768	
+   769		return q6apm_send_cmd_sync(graph->apm, pkt, 0);
+   770	}
+   771	
 
 -- 
 0-DAY CI Kernel Test Service
