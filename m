@@ -1,98 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F0F368977;
-	Thu, 23 Apr 2026 12:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AF33E6DC4;
+	Thu, 23 Apr 2026 12:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776946879; cv=none; b=K3VsXmvB/04ifl4ak5Prfhay5a0kaGg3RInG4/1cFb+hOxY0Iz78XCSRE8MBtQL+V0XfombC4L4pYDTHB8r4wcezEbI+VXGuGIM0PKYwIiO/xtOpvw+kQ//BNuc3X7xdA19NxuGqmNBywZGbF7R2weKqWwIYjUQPczxYQuDYIQU=
+	t=1776947727; cv=none; b=S0f8A2G7iHDtHcHBM92Dfc1noAS/HyQh2r+1VQCSnb5xhKWFQYLKx1JFK1gyWO8Lz1es/S3Pjap9pf3bswncXOYZEmitpAWGkb/C0kk+yRvcy2eKrN0pwc6HwoYcVygVyN3OkaFicTFZVy6/hk9JHw2n0Q5llibzFkj54yQ/TaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776946879; c=relaxed/simple;
-	bh=7yml3KCwQFMRM8CLV/Tk69TcRqzhsWCqpHGHJ5hYBM4=;
-	h=Date:From:Cc:Subject:Message-ID; b=SHVpfuAxMrLAhXOWoGh2Q6JVtRIxv1cOcYASUdWyLsWUFTaf0MCbA2yMDZCh5MG7KGVlVZC8vWIjcD5tcbomv9nf4GE4g3IXzE6sHkWZo/jEqxVOof1IxYI/LtrLq9mS2hv/fW1VorKLuaCdrQwI+UHut9paAy+qYWUU1V6edjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H8ziVMwB; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1776947727; c=relaxed/simple;
+	bh=Y512Lp+aCd1q+GGPtG90KD7iKKkxfsyPd0izY2TQyjo=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type; b=TVWxFh21VNTogOe52xakPxgY+zQdP5NI25TkpnzCm2VaWX9df3j3rcylteReDhvNHIlgF6w1G1cdpNLj406Srv6vTeH+Y+cSxHSzJyVn7g/yApuwfnCALQZGbkjw8vI9LGnHUlHbpJrHA+RV9qb4aTZe/JUIjtzwup5eyf/N50w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=k+5Y0+/r; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H8ziVMwB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776946878; x=1808482878;
-  h=date:from:cc:subject:message-id;
-  bh=7yml3KCwQFMRM8CLV/Tk69TcRqzhsWCqpHGHJ5hYBM4=;
-  b=H8ziVMwBugqwZbdz5K+QY5wqjx0t0oy1g3HXIzmpVybOmrBQSmQG1ie2
-   9IiDcffSF7vt2PFqDCzAWW1THBhxg+MaS02Xp+EYJ+M4ZdCm2khgEf+Oo
-   CALSwVWtaC0HgtJUkyI9/s2W88znfXGi2JJ5A1yeqALVUxmQU2k5tLX65
-   qmil9PmXoejC+dUPWRnCF1Ru50LMzlKepU2fobCYb1D1dPnJn7wfrzg72
-   Mb5/VEGgBf6X/9WdLmMldyjhIqaYU5xpwetDjDss6gW6t/8UAeX0D2Lmt
-   wqym0ceWPl7rdQ+XBDd+6OgM4RvqmcG199a/h1pxtLAg/EZwflWchNlJ8
-   g==;
-X-CSE-ConnectionGUID: Hf0tAgGGQ/+YfGpGZv46Pg==
-X-CSE-MsgGUID: hiB9g3yxRrG7drUlZcpjOw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11764"; a="77975645"
-X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
-   d="scan'208";a="77975645"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2026 05:21:18 -0700
-X-CSE-ConnectionGUID: Rl+7cm2ZRO+aBgh3Fx3/wg==
-X-CSE-MsgGUID: GZt++8peQjuDDy3sDEJuWQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
-   d="scan'208";a="231613985"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 23 Apr 2026 05:21:17 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wFt3S-000000002yP-24IH;
-	Thu, 23 Apr 2026 12:21:14 +0000
-Date: Thu, 23 Apr 2026 20:21:10 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [linux-next:master 14465/14612] clang: error: ignoring
- '-mabi=ilp32s' as it conflicts with that implied by '-msoft-float' (lp64s)
-Message-ID: <202604232041.ESJDwVG4-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="k+5Y0+/r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E18CC2BCAF;
+	Thu, 23 Apr 2026 12:35:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1776947726;
+	bh=Y512Lp+aCd1q+GGPtG90KD7iKKkxfsyPd0izY2TQyjo=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:From;
+	b=k+5Y0+/rK57iiMoRju4bRDvlvXOTem2gmzXY2200u0unvUm5+2RsVvX+mKVumtDQ1
+	 02iWZr6wpo1iuRqP3G0+Nz59gQMtYl0SI93ZKJLGW3pUOSyT9BScAbo2T9To5rqYai
+	 g6JhXo2WlCNfi7pZl1gOfwOAv0MkCWMg/wamB9Ek=
+Subject: Patch "drm/amd/display: Do not add '-mhard-float' to calcs, dsc, and dcn30 FP files for clang" has been added to the 5.10-stable tree
+To: amd-gfx@lists.freedesktop.org,gregkh@linuxfoundation.org,llvm@lists.linux.dev,nathan@kernel.org,ndesaulniers@google.com,sashal@kernel.org
+Cc: <stable-commits@vger.kernel.org>
+From: <gregkh@linuxfoundation.org>
+Date: Thu, 23 Apr 2026 14:35:06 +0200
+In-Reply-To: <20260406-5-10-clang-amdgpu-hard-float-errors-v1-1-09c4c045f848@kernel.org>
+Message-ID: <2026042306-fool-ergonomic-bb0e@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
+X-stable: commit
+X-Patchwork-Hint: ignore 
 
-TO: Huacai Chen <chenhuacai@loongson.cn>
-CC: Arnd Bergmann <arnd@arndb.de>
-CC: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   70c8a7ec6715b5fb14e501731b5b9210a16684f7
-commit: 3d9aba6618d115750729bba2d1f8af180bd7d3bd [14465/14612] LoongArch: Adjust build infrastructure for 32BIT/64BIT
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260423/202604232041.ESJDwVG4-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260423/202604232041.ESJDwVG4-lkp@intel.com/reproduce)
+This is a note to let you know that I've just added the patch titled
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604232041.ESJDwVG4-lkp@intel.com/
+    drm/amd/display: Do not add '-mhard-float' to calcs, dsc, and dcn30 FP files for clang
 
-All errors (new ones prefixed by >>):
+to the 5.10-stable tree which can be found at:
+    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
->> clang: error: ignoring '-mabi=ilp32s' as it conflicts with that implied by '-msoft-float' (lp64s) [-Werror,-Woption-ignored]
-   scripts/dtc/dtc-lexer.lex.c:641:12: warning: variable 'dts_version' set but not used [-Wunused-but-set-global]
-     641 | static int dts_version = 1;
-         |            ^
-   1 warning generated.
->> clang: error: ignoring '-mabi=ilp32s' as it conflicts with that implied by '-msoft-float' (lp64s) [-Werror,-Woption-ignored]
->> clang: error: ignoring '-mabi=ilp32s' as it conflicts with that implied by '-msoft-float' (lp64s) [-Werror,-Woption-ignored]
-   make[3]: *** [scripts/Makefile.build:289: scripts/mod/empty.o] Error 1
-   make[3]: *** [scripts/Makefile.build:184: scripts/mod/devicetable-offsets.s] Error 1
-   make[3]: Target 'scripts/mod/' not remade because of errors.
-   make[2]: *** [Makefile:1336: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+The filename of the patch is:
+     drm-amd-display-do-not-add-mhard-float-to-calcs-dsc-and-dcn30-fp-files-for-clang.patch
+and it can be found in the queue-5.10 subdirectory.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you, or anyone else, feels it should not be added to the stable tree,
+please let <stable@vger.kernel.org> know about it.
+
+
+From stable+bounces-233477-greg=kroah.com@vger.kernel.org Tue Apr  7 02:49:29 2026
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 06 Apr 2026 17:49:08 -0700
+Subject: drm/amd/display: Do not add '-mhard-float' to calcs, dsc, and dcn30 FP files for clang
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,  Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,  amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev,  Nathan Chancellor <nathan@kernel.org>
+Message-ID: <20260406-5-10-clang-amdgpu-hard-float-errors-v1-1-09c4c045f848@kernel.org>
+
+From: Nathan Chancellor <nathan@kernel.org>
+
+This patch is for linux-5.10.y only. It is functionally equivalent to
+upstream commit 7db038d9790e ("drm/amd/display: Do not add
+'-mhard-float' to dml_ccflags for clang"), which was created after all
+files that require '-mhard-float' were moved under the dml folder. In
+linux-5.10.y, which does not contain upstream commits
+
+  b4bab46400a0 ("drm/amd/display: move calcs folder into DML")
+  27e01f10d183 ("drm/amd/display: move FPU associated DSC code to DML folder")
+  40b31e5355ba ("drm/amd/display: Remove FPU flags from DCN30 Makefile")
+
+clang-21 or newer errors with
+
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calc_math.o] Error 1
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calcs.o] Error 1
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calc_auto.o] Error 1
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/dsc/rc_calc.o] Error 1
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.o] Error 1
+  clang: error: unsupported option '-mhard-float' for target 'x86_64-pc-linux-gnu'
+  make[6]: *** [scripts/Makefile.build:286: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_resource.o] Error 1
+
+Apply a functionally equivalent change to prevent adding '-mhard-float'
+with clang for these files.
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2156
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/gpu/drm/amd/display/dc/calcs/Makefile |    3 ++-
+ drivers/gpu/drm/amd/display/dc/dcn30/Makefile |    4 ++--
+ drivers/gpu/drm/amd/display/dc/dsc/Makefile   |    3 ++-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+--- a/drivers/gpu/drm/amd/display/dc/calcs/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/calcs/Makefile
+@@ -26,7 +26,8 @@
+ #
+ 
+ ifdef CONFIG_X86
+-calcs_ccflags := -mhard-float -msse
++calcs_ccflags-$(CONFIG_CC_IS_GCC) := -mhard-float
++calcs_ccflags := $(calcs_ccflags-y) -msse
+ endif
+ 
+ ifdef CONFIG_PPC64
+--- a/drivers/gpu/drm/amd/display/dc/dcn30/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dcn30/Makefile
+@@ -32,8 +32,8 @@ DCN30 = dcn30_init.o dcn30_hubbub.o dcn3
+ 
+ 
+ ifdef CONFIG_X86
+-CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_resource.o := -mhard-float -msse
+-CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_optc.o := -mhard-float -msse
++CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_resource.o := $(if $(CONFIG_CC_IS_GCC),-mhard-float) -msse
++CFLAGS_$(AMDDALPATH)/dc/dcn30/dcn30_optc.o := $(if $(CONFIG_CC_IS_GCC),-mhard-float) -msse
+ endif
+ 
+ ifdef CONFIG_PPC64
+--- a/drivers/gpu/drm/amd/display/dc/dsc/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dsc/Makefile
+@@ -3,7 +3,8 @@
+ # Makefile for the 'dsc' sub-component of DAL.
+ 
+ ifdef CONFIG_X86
+-dsc_ccflags := -mhard-float -msse
++dsc_ccflags-$(CONFIG_CC_IS_GCC) := -mhard-float
++dsc_ccflags := $(dsc_ccflags-y) -msse
+ endif
+ 
+ ifdef CONFIG_PPC64
+
+
+Patches currently in stable-queue which might be from nathan@kernel.org are
+
+queue-5.10/acpi-property-constify-stubs-for-config_acpi-n-case.patch
+queue-5.10/scripts-dtc-remove-unused-dts_version-in-dtc-lexer.l.patch
+queue-5.10/drm-amd-display-do-not-add-mhard-float-to-calcs-dsc-and-dcn30-fp-files-for-clang.patch
