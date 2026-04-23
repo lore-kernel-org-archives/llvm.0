@@ -1,232 +1,267 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA0C1A23A6
-	for <llvm@lists.linux.dev>; Thu, 23 Apr 2026 08:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776931838; cv=fail; b=D6XIP3wY5UvB9IqmG2EoM/iX8QaaKKqgMtutmixoo56fuE/ZV6y5srji6HJmcuVifHQaRgLBUVW/qXUvXjHOw+SOD1Akfh6M9jSrmyMh5rgx7Rec3JnvQdEPH7Z2OCoXZK+lI5pqKP4VtnGvaEan4/6sJL0PXYBSuhU9v/ryiX8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776931838; c=relaxed/simple;
-	bh=K4RtPeAj+sjQVoMP/u/AA5b+vGGClAXzSibyxlUQOTA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=msyawabybd1zCQgsGqU2j1RlbUvVWLW+Rs4KclSvDvoMiCmkF+7tqaK5pz/zH/xY04KwsRAe75wVjL8kXh0LMXHJ7NjP7NooJj22ij/oVdINLvyZvfhKbkjwp2M4ViqSmQEbOZYH/nvPx9yzHisvqHiUsYuNdWoZ+RzDIe/vzHE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YzSyJ1F8; arc=fail smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6058394792
+	for <llvm@lists.linux.dev>; Thu, 23 Apr 2026 08:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776932703; cv=none; b=KtHxY+xyhatfcasXmIjBRC4yO9lImvUxcw5NvjySM9nb0RQHlQCwtIf2cHMFT0qCyKl2KaMY4rSPxL69zOKLANfwZ3S4TTgas9krHkqM2+JC9r18YpGbrQjGQhO9eKoFOQLeP89vr158KQhBNnATymkdU3v9od7HHhtjq+JxMDA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776932703; c=relaxed/simple;
+	bh=pEG5q1K3q4rNqE+dv56RAw5gTDj61FpVhvEFK7I1JaM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XbPaDSJgKXbsR5VY1vR3K+e/5s4tTqCk6ZU3ALZY1oH3qmHgIeqHHIGIVhM4bzfyycMBkN8VobNSVFjURyTl4HQn8+OflntAB40196tztKM9CCfEMv830LMywyc4zFAnHl6hFayPdzZP1sGS1HLBIDjYk5nLnqbD+pq7F5zFeH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r5IDPTWc; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YzSyJ1F8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776931837; x=1808467837;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=K4RtPeAj+sjQVoMP/u/AA5b+vGGClAXzSibyxlUQOTA=;
-  b=YzSyJ1F84ZgpLO7uJ6sZFBtd356GK+FFFtogb+Polqw4BrVNv5Ehm2Nn
-   t0T1WaF62IAbYsjN27tgt71TuyGex1NntJTX4RQ+DEkJjH6FPeSDJmkot
-   dxzAfyMzrRp4zmmIJhhCOuHoHGBW5XADqhDoMYxMmZ87Pi03eI4yKHUgk
-   flmVBfoARkvfMjIAPnndfD/4ihX01jM/cywsg4+8CZr1QQe0J14AsPpFJ
-   MWsu3HI+dJ2kfkAuT3ULsWLLEBZhOixmrK3huDMLP5Yle60uL/DuF2CKO
-   G4wjErxzxOTgwtDN6ih6vWmxcsbfkm1UcjUhYM37r4lkYCqDj28PlQl3y
-   g==;
-X-CSE-ConnectionGUID: LzMRvsKaQ7+wyL6qTY4cSQ==
-X-CSE-MsgGUID: xqf9dVP5QyKfhwyBxiFnQA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11764"; a="77912214"
-X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
-   d="scan'208";a="77912214"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2026 01:10:36 -0700
-X-CSE-ConnectionGUID: qAbuymfaS3W5+JK3bbNW4g==
-X-CSE-MsgGUID: fCboZ7XhTb6VWAVU6InWRg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
-   d="scan'208";a="234380026"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2026 01:09:54 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 23 Apr 2026 01:09:53 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Thu, 23 Apr 2026 01:09:53 -0700
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.26)
- by edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 23 Apr 2026 01:09:51 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IIYwOi+hOAtj2O4LJO44R8etNBr6dZv6atZ3Tfr9KrIkTBCaj+tLyOuOW1Jqkua80Jyx9AU8kH6MPYkf7wA7rNDmQKRtwQt1D63Fo53gza6YLazR+mtcdXLCnAx9nwwL+KT8s/u99eT2T8QaFBXTxl0eP87vUYJWxl5piDiPPUggcW4epmh5HRGoxL0wKPEUYBhqMYDP3qNTalwdh8y0own3J1+cqH7zF6SN33JJG5vALR2yM4bBrz04iIL96jqvnwx7TbGad0RQWiljuynyKrQqOz3rK5mK+NwJkGCwLxqivA38gTKjaD2K4TY9WRNpGHsFDaDs2DPoNo00mGc7lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6Lh/ioE0xVUbcobJdiASPt2buwtZUptK5ePC1ksSaDc=;
- b=KRZPLbuUlKonrhnuFDLAT9UjNdADhCWd2Xkok0+wD+0h9WVtuu4D34O/85WC4odsXO7vO0SzSA67+JGiyy+zCwFujV/H47X0kVLhtvNAMIyyzfjPCHAT313nwosvuDU1G9hZJggAAfyZAG0WliNE8aaddEx04d5eMNG2/+HEBXMWwglzRc2x4heeZFBzqmJ57Ddn2bZE8CyV+CkgGfMwZpOigm8axrDLbJvPAbrpuMk3J6F0eYhCZIpFnY6prNtRpPdWpQHHCLBvl+QhOlXFt0jsY3yKAYBt0pRhx7GeaiuyASO0Kc39bFWXXxwG9WUBoLO52/5wVjhgJJkA+JujWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BL0PR11MB3282.namprd11.prod.outlook.com (2603:10b6:208:6a::32)
- by IA1PR11MB6420.namprd11.prod.outlook.com (2603:10b6:208:3a8::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.21; Thu, 23 Apr
- 2026 08:09:38 +0000
-Received: from BL0PR11MB3282.namprd11.prod.outlook.com
- ([fe80::5050:537c:f8b:6a19]) by BL0PR11MB3282.namprd11.prod.outlook.com
- ([fe80::5050:537c:f8b:6a19%4]) with mapi id 15.20.9846.021; Thu, 23 Apr 2026
- 08:09:38 +0000
-Date: Thu, 23 Apr 2026 10:09:03 +0200
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-CC: "nick.desaulniers+lkml@gmail.com" <nick.desaulniers+lkml@gmail.com>,
-	"shuah@kernel.org" <shuah@kernel.org>, "justinstitt@google.com"
-	<justinstitt@google.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"morbo@google.com" <morbo@google.com>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "mingo@redhat.com" <mingo@redhat.com>,
-	"xin@zytor.com" <xin@zytor.com>, "ilpo.jarvinen@linux.intel.com"
-	<ilpo.jarvinen@linux.intel.com>, "nathan@kernel.org" <nathan@kernel.org>,
-	"oleg@redhat.com" <oleg@redhat.com>, "seanjc@google.com" <seanjc@google.com>,
-	"hou, wenlong" <houwenlong.hwl@antgroup.com>, "ryan.roberts@arm.com"
-	<ryan.roberts@arm.com>, "m.wieczorretman@pm.me" <m.wieczorretman@pm.me>,
-	"peterz@infradead.org" <peterz@infradead.org>, "tglx@kernel.org"
-	<tglx@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "bp@alien8.de"
-	<bp@alien8.de>, "ljs@kernel.org" <ljs@kernel.org>, "perry.yuan@amd.com"
-	<perry.yuan@amd.com>, "jgross@suse.com" <jgross@suse.com>, "Mehta, Sohil"
-	<sohil.mehta@intel.com>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v6 1/3] x86/process: Shorten the LAM tag width
-Message-ID: <aemzYE5td11cWydN@wieczorr-mobl1.localdomain>
-References: <cover.1775813245.git.m.wieczorretman@pm.me>
- <79720f2640839b15f22e3618136b084cb376456b.1775813245.git.m.wieczorretman@pm.me>
- <8bc4ff4b7491c6fea6e17583a6fa249961c08275.camel@intel.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8bc4ff4b7491c6fea6e17583a6fa249961c08275.camel@intel.com>
-X-ClientProxiedBy: DUZPR01CA0023.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:46b::17) To BYAPR11MB3288.namprd11.prod.outlook.com
- (2603:10b6:a03:7e::33)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r5IDPTWc"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso65552335e9.1
+        for <llvm@lists.linux.dev>; Thu, 23 Apr 2026 01:25:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776932700; x=1777537500; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RzTh6TgwvRxOhySU4DIA2mRhAv+jUq93gvppWWxQXFo=;
+        b=r5IDPTWc/n2VJk3vbrZLLXTOBqbP282SMXL4wGLGExq/kmhSi/geygsIsaF2z2Zl5u
+         0zTIefOlM63i63QaLzX6x96CyeTqMuvccYKS5uWcnAEwbKwoql6KMofIOHDul/Pb54AP
+         C9v8KW4mfNAAKAOTd38/nz2GL9wOC3r2DkaaG3X0ccJCIMgUWG8vf73tLHl2TsaCT/OI
+         fwz3rzlEDAIqswd9VkO1+b1x4vROrLTd/fg816TEJBy8bGs+PN9yrq7R9CkQ5BaWJew0
+         PSso0ScQYt9JQVSVoaVozoq6NOJ2CUljIBU2AJ41rKM+DLP5TzhFGjZWqyQF3aXloKYC
+         zHfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776932700; x=1777537500;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RzTh6TgwvRxOhySU4DIA2mRhAv+jUq93gvppWWxQXFo=;
+        b=HJOxSXYb+UKMF5etYNMsOPHifC9ifL69sMP9MtUv977tb7cd1bvfldHlIyGtOrGxl3
+         pdAmACW8mmGdNOEMF15aV4GrXP/awL/08cK1KPNI/o4XOM2bd2to8UPuucQQlUscHcEW
+         teJmzpu18X7CcUkbr89pzq6jL7wrEHXSmlTafpE9eGVvw+wDnw/wg+KylvhpDAOz+tS7
+         iqS0DjbDkr4/Ya9aD08ozhqdrxpCeOdzJbv71ActqeEt7eRMgP+PX1Ues9RpnAvOqwy/
+         xgSssASiCDp82Or6yB1LkOV2cqTt/WIPwQPlp/w+wS6pX7y7uCIY21clhewqH0cK9dE/
+         7KWQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/15ZpQKQSRx3S6R6H/94fNxDi5cWZAu4/VkvFP5SLpza/7t7QU6VWJUzYpwSbeleadKYN4@lists.linux.dev
+X-Gm-Message-State: AOJu0YwNOBywFiBqD9x+8JsQRZzhEHucIi6/3HnR1x/jQbbC2mRrGOOs
+	GZaBkC8mmoXtHg+34f/VY76yI/xVZ9aNiGX86QuN+BG4BWYRqHXrgkCF
+X-Gm-Gg: AeBDiesv6W/3xuE29VPzQv+i56t3l1mCAWWwxeNi2m3f2PSWQT/oT0ZZHb95nSilP02
+	H2omoo4hTPcdaXjEqBukGQXOjkhZghH8+Ae1YSHRLROY5iEei36rvNilSKCioQkJiL81SUKJLyt
+	/6DvDpTJopoCCqcHJ7PHxvikhUM822Q3dF2pj7a3z0SaBNh92BBlYVsEdmCi3DupHy8U+1uVWgo
+	dmqn0CazUTU+aKG3Jal2KKbAeZEn7vUrNclTUYaK7zxZKnk1QkRZRGXJGUpxCABFz7qYOMDX+oE
+	maj4NeEfCq0+8U5T5dCpU12dDh2Q7ajg2gvyyhuQMEUnCxLE2JPCAezrYBOVXgR5bxsPZE5waBz
+	U7aX12Qu9tfpJTuUhcECKYpBqpYhA0iRs09Tnj8TkCOJVxQkCGinFTRkPoqBVmyzWfvE680W74/
+	Jmn1VVyZhPjIRgk2RI6L4jB5guu+ohsanbS7AOi0BW/hXz8YNK/82Pm7WcIw3yHA/o/AaYKO6yS
+	4w=
+X-Received: by 2002:a05:600c:3e1a:b0:489:1ca2:eafd with SMTP id 5b1f17b1804b1-4891ca2ee65mr227559915e9.11.1776932699946;
+        Thu, 23 Apr 2026 01:24:59 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a6124d7e7sm14410915e9.5.2026.04.23.01.24.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2026 01:24:59 -0700 (PDT)
+Date: Thu, 23 Apr 2026 09:24:58 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: LiangCheng Wang <zaq14760@gmail.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, Thomas
+ Zimmermann <tzimmermann@suse.de>
+Subject: Re: drivers/gpu/drm/tiny/pixpaper.c:579:12: warning: stack frame
+ size (19288) exceeds limit (8192) in 'pixpaper_panel_hw_init'
+Message-ID: <20260423092458.15743768@pumpkin>
+In-Reply-To: <202604230813.tiodR4pT-lkp@intel.com>
+References: <202604230813.tiodR4pT-lkp@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR11MB3282:EE_|IA1PR11MB6420:EE_
-X-MS-Office365-Filtering-Correlation-Id: ddd2acc0-5bf9-4846-0db4-08dea10fa8e3
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info: R/Cc4TFUnlxcGnH8iRbVbblrff9nFzuU/GddepeVKxWL22NXxdSEfYvmbkk1YxPHTlYMfzGXw/exaRkjcS5Ou2VEAPthglfKgFbe6z3LUcqHQmlGX5qnKCItPdMQi66ui9hCaMK3fEYw/h86YsLwHkYeH47Z7KCDV3HvZ2AQmcbnqE0fFUZoIAaJi6PRZ18xuDoTuqs54f2fBRdg+Fagd1Y5iHIPC6ukL40YjGGddQaZD/KvUq11IdYkSKIpVMhrE/3a7UCBOSqY0ztks/GPTugRai7qYeaRxTfOWHu0/MxzcKqOtzIXWani+92zu/lUph+zoHRmq7PnimGEEmWWLSXVJZ6DpQIC6tqmR+Ef+82J0ccQK13ZSKAPSfzBofSfcsZYGRDM6Sd+9RaFBdxIpMx0bfeiJBnLYq9JuNxHv3KCATBfQonbQXzcofXa6p/ZAF6KPixzuI5fLYywd3W6oxlJ3BjWPkEHL3nKfIKERp1U9MgHJbiy11R/mh5b6URARg64V9CU0I4pYya+rtzUoZKAB5A8mMUnOzuaZL/0IgMLppOJibMEdN6WM9Kk5NeIEL/W7HdMgqos6tgPMDSUuSPzWaVn++e9Vqb0uaxaja6EXRf8oJSFqSaULOxktcyc7epYtLsb38RmPgZSEZB9U4yWql4WvAOB/xMHrIIJhgxqgD+7SM8BuKv0V5KM4v5DQTkpzsAueekM+ePk1Kw08rWL7mOTqFYQ3j/mCTEZ6A0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB3282.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?o3YlnoFVY0BPSEzrxzdy/kQVOWHPUDxMrbJGCUHl/eSHP8MgAiB6/D+k2Z?=
- =?iso-8859-1?Q?J/qz2ECV/fUG3B12QZjBBKFwdzo0jJM/wtTmD9Q9y4HpDun2NaH18HyOz2?=
- =?iso-8859-1?Q?YMACX4PMm+9axFg2XxwNuTMdc33vV+p4XvSgijA9Ysk0S7cJJpEFetMmzc?=
- =?iso-8859-1?Q?hzniR8X0tCGs1xQt5caYH2BZtcdxG2rnO9/ZKC6ZbvXRrMBNwL2Kw77fT2?=
- =?iso-8859-1?Q?jBni2dhyq+yAZQxrPIk0gVYlXm/erWVmNOrGDne+fLtlq0zXrUEKMeGR6R?=
- =?iso-8859-1?Q?yN1majPX3CKzF+cXOxMp0q4zIodKUY+uFmRLPeR1Wyau0TX+pVMdZKEejD?=
- =?iso-8859-1?Q?8aJRbERD+ZXDHFjrrkjoAcSqCoXQrETVZzdVLbbsFk7lf6J4uR0r1naiZ3?=
- =?iso-8859-1?Q?YgzvngC2KQF5hi6g3kLYWIyLoBN/O1EsHX7Kk7WwgXejM/JnQKTnYwtifp?=
- =?iso-8859-1?Q?F//3fegVBSL2GBJWolxKYWVXfs5g1mTpG0YDRwmsVQLZeMEWkONHukvzAu?=
- =?iso-8859-1?Q?2U1m+XDxeuWPHChqVrx1wlD0+qjagTdKmMtPm2MUUgPEg26e/VkjJeRERh?=
- =?iso-8859-1?Q?M2HjhsYSss25AP3iFeA6b/IaoQVPCjQJzRWHm13W1TbRWbG4WuAO7uPi7K?=
- =?iso-8859-1?Q?3g8KCn/ZYLKUEq1+ujijzhkpe5XIT+r2Evjm4Z/qJefW6RAou8uPnG8FGM?=
- =?iso-8859-1?Q?RdmJvEyvA1PZvQ/d0YUPvmqYhb+DIhY4p2A/ciQOBRsyjqcwCTfuovnt2P?=
- =?iso-8859-1?Q?QvkvksupYkpmV/smubQqrqr+HrsJTPFNPPSI73iLjRbnQUyVYGEeMIo8N4?=
- =?iso-8859-1?Q?ogBBYidy/Vh13Rup2VdxxXAc7mThO1jor37KKqdDS6aisHew77s/nCXYhR?=
- =?iso-8859-1?Q?qhHn0na2RYTEBufeToUh0sTGK2j3UPf1rlH4+6DpE+r86bCTWhxtBnZZzU?=
- =?iso-8859-1?Q?WTp5gaZxy5mRFgg8AuAENVCzrUQEHbpydQs/oM5e/ezIg4U+sOYAT/DNKZ?=
- =?iso-8859-1?Q?L+uklmRrm7AJwQGVF6FNTrY9kVCJZypZZNEQLvtDNpsbu9ltCsaDIEF8h/?=
- =?iso-8859-1?Q?f5dR8Wngf8Yl1Y5KwY1MhpUA3EKmPwlNldiyv4M02aIcOxQI98hxOly7hc?=
- =?iso-8859-1?Q?fEwBE/nY3wUyDO/YADbzqXvzSLwVsIAsJyPxETE8eDmZPSbeYimSoAvvj8?=
- =?iso-8859-1?Q?DT6G1g0Ph6+XQN3yX9BNw8lnFpkSoTqq6N+wwe6hoLfSDw6n0H2Q96WfXt?=
- =?iso-8859-1?Q?pzewUj24q5kKWErZd+6kEEDuXMTym2brLQpAjg8Z60vOB92pUIY1BvRKA8?=
- =?iso-8859-1?Q?72nCN14iHXSJqxtSsGIl0sU0RTdM8PjjzG5VEM2nci47AHNmg091Smfr18?=
- =?iso-8859-1?Q?1WKNJ2snkQ2ELoh1C0WMA/MgCUvpt1UrwuThSpA71yIZIwp2zeYP7OEDyr?=
- =?iso-8859-1?Q?AwcB6Tf9wAs7Nl3ZlEjuRkPUgW4rQNse/GXFkhmRxJfzpESYyRDccuykni?=
- =?iso-8859-1?Q?nn5vN4o12e7/vaBSfni3SYcwMy9PXZVEM0mFMzoql+bTx2qq/Y4EhO8cKj?=
- =?iso-8859-1?Q?0k0PwAqIzyoudKQiU9WpgQbPfdB+fgnfDCnXy2rmHv5mBFAFbeWQcwne+4?=
- =?iso-8859-1?Q?YQz9E/g2kZq7Pc8/F4eqB8p+NOpZpDPI3wVJuRrzlInWA+uSO1Y+c6EylD?=
- =?iso-8859-1?Q?P2RcpQ5OlKDUVfeYLn5nTJzxG4LhuI7DzufmSg3EVK7hh27yYIH17nnIEY?=
- =?iso-8859-1?Q?vstpYnKSp/XrxHmK8z0nDaGyfL1lv1+tIJggW/hlsOw9mbNl3YbAasiGRT?=
- =?iso-8859-1?Q?rAtu9ebvNX7WBQx+M9f3FUKqhrozkdfpvreWRZ5yYputTtKTSDOO?=
-X-Exchange-RoutingPolicyChecked: OgLHwRSvjjGDIBYYggh11hhKfemuzvP0D2EJRzejOWAweq9q9bBNzncIyWyGHDBbHvgAWqIu8qSgqN9CCf66THtkiF3VPZ3dbHNw7glLllI27uvtg7xfu1THMziW+R76ByBaOd4MKnSZxnbOkNpdhqpO+klzSJ/ucp0J1Q26XVNKKC2u/b+BExCHvnmEY+VMbqSynxZg9AC19LX0TGFsy6vEGRKGiWBPvWsSInYYQcM6/4DiXx0oalr4Pambazhv9cj81G6WqoWdLAVlfHi4zJzq/1/G4d2YRFXz40/QW5B2JcHPAH/5Bf0hYpkx/BcqOIIdDoW/3uvGZumPG6pMnA==
-X-MS-Exchange-CrossTenant-Network-Message-Id: ddd2acc0-5bf9-4846-0db4-08dea10fa8e3
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3288.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2026 08:09:38.1837
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /u9ikGaXOtTa681Hcet+uMPPPFSKgSB6i5HO7Q+mHjkhJkGFPUEPe4+75fddU3NdZQ7+iLR5EuoLqwDDYgQ/eF+GQlChiJMR30xCj+Yx98s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6420
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 2026-04-22 at 18:07:29 +0000, Edgecombe, Rick P wrote:
->On Fri, 2026-04-10 at 09:55 +0000, Maciej Wieczor-Retman wrote:
->>  
->>  #ifdef CONFIG_ADDRESS_MASKING
->>  
->> -#define LAM_U57_BITS 6
->> +#define LAM_TAG_BITS	4
->> +#define LAM_LS_BIT	57
->> +#define LAM_MS_BIT	(LAM_LS_BIT + LAM_TAG_BITS - 1) /* 60 */
->> +#define LAM_UNTAG_MASK	~GENMASK(LAM_MS_BIT, LAM_LS_BIT)
->>  
->>  static void enable_lam_func(void *__mm)
->>  {
->> @@ -814,7 +817,7 @@ static void enable_lam_func(void *__mm)
->>  static void mm_enable_lam(struct mm_struct *mm)
->>  {
->>  	mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
->> -	mm->context.untag_mask =  ~GENMASK(62, 57);
->> +	mm->context.untag_mask = LAM_UNTAG_MASK;
->>  
->
->It's been a bit since I looked at LAM. The untag_mask is used to strip the
->addresses passed by userspace, right? So this lies to userspace about the
->tagging behavior of the CPU? Userspace still gets the LAM_U57 behavior, but is
->told the untag mask is the 4 chcktag bits?
+On Thu, 23 Apr 2026 08:20:01 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-Yes, the intention being that hardware might move from using the 6-bit tag width
-at some point in favor of the 4-bit one. So the user can safely expect the 4-bit
-tags to work.
+> Hi LiangCheng,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   2e68039281932e6dc37718a1ea7cbb8e2cda42e6
+> commit: c9e70639f5915f2d084a0126e62fe53a52c29cea drm: tiny: Add support for Mayqueen Pixpaper e-ink panel
+> date:   8 months ago
+> config: x86_64-randconfig-075-20260423 (https://download.01.org/0day-ci/archive/20260423/202604230813.tiodR4pT-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260423/202604230813.tiodR4pT-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Fixes: c9e70639f591 ("drm: tiny: Add support for Mayqueen Pixpaper e-ink panel")
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202604230813.tiodR4pT-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/gpu/drm/tiny/pixpaper.c:579:12: warning: stack frame size (19288) exceeds limit (8192) in 'pixpaper_panel_hw_init' [-Wframe-larger-than]  
+>      579 | static int pixpaper_panel_hw_init(struct pixpaper_panel *panel)
+>          |            ^
+>    1 warning generated.
+> 
+> 
+> vim +/pixpaper_panel_hw_init +579 drivers/gpu/drm/tiny/pixpaper.c
+> 
+>    578	
+>  > 579	static int pixpaper_panel_hw_init(struct pixpaper_panel *panel)  
+>    580	{
+>    581		struct pixpaper_error_ctx err = { .errno_code = 0 };
+>    582	
+>    583		gpiod_set_value_cansleep(panel->reset, 0);
+>    584		msleep(50);
+>    585		gpiod_set_value_cansleep(panel->reset, 1);
+>    586		msleep(50);
+>    587	
+>    588		pixpaper_wait_for_panel(panel);
+>    589	
+>    590		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_4D, &err);
+>    591		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_4D_CONFIG, &err);
 
->If so, then there will be a difference between userspace accesses to a pointer
->and the kernel's handling of a user pointer (mmap(), gup, etc). I don't know
->that it is unsafe, but have you thought through the implications? Besides that
->though it's a weird ABI.
+Both the above functions need marking unconditionally 'noinline'.
+They both contain usleep_range(1, 5) so the performance can't matter.
+So inlining just bloats the object file and clang+kasan tends to allocate
+the per-function on-stack data separately for each inlined call.
 
-Do you think leaving the untag_mask as it was (bits 62:57) while advertising
-that 4 bits are available would be better? The untag_mask would be more inline
-with what the hardware is doing currently while ABI would promise to long term
-only stick by the 4-bit tags.
+	David
 
->What is the chktag behavior for bits 61 and 62? Are they ignored or trigger a
->#GP?
+>    592		if (err.errno_code)
+>    593			goto init_fail;
+>    594		pixpaper_wait_for_panel(panel);
+>    595	
+>    596		pixpaper_send_cmd(panel, PIXPAPER_CMD_PANEL_SETTING, &err);
+>    597		pixpaper_send_data(panel, PIXPAPER_PSR_CONFIG, &err);
+>    598		pixpaper_send_data(panel, PIXPAPER_PSR_CONFIG2, &err);
+>    599		if (err.errno_code)
+>    600			goto init_fail;
+>    601		pixpaper_wait_for_panel(panel);
+>    602	
+>    603		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_SETTING, &err);
+>    604		pixpaper_send_data(panel, PIXPAPER_PWR_CONFIG1, &err);
+>    605		pixpaper_send_data(panel, PIXPAPER_PWR_CONFIG2, &err);
+>    606		pixpaper_send_data(panel, PIXPAPER_PWR_VSP_8_2V, &err);
+>    607		pixpaper_send_data(panel, PIXPAPER_PWR_VSPL_15V, &err);
+>    608		pixpaper_send_data(panel, PIXPAPER_PWR_VSN_4V, &err);
+>    609		pixpaper_send_data(panel, PIXPAPER_PWR_VSP_8_2V, &err);
+>    610		if (err.errno_code)
+>    611			goto init_fail;
+>    612		pixpaper_wait_for_panel(panel);
+>    613	
+>    614		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_OFF_SEQUENCE, &err);
+>    615		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG1, &err);
+>    616		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG2, &err);
+>    617		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG3, &err);
+>    618		if (err.errno_code)
+>    619			goto init_fail;
+>    620		pixpaper_wait_for_panel(panel);
+>    621	
+>    622		pixpaper_send_cmd(panel, PIXPAPER_CMD_BOOSTER_SOFT_START, &err);
+>    623		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG1, &err);
+>    624		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG2, &err);
+>    625		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG3, &err);
+>    626		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG4, &err);
+>    627		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG5, &err);
+>    628		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG6, &err);
+>    629		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG7, &err);
+>    630		if (err.errno_code)
+>    631			goto init_fail;
+>    632		pixpaper_wait_for_panel(panel);
+>    633	
+>    634		pixpaper_send_cmd(panel, PIXPAPER_CMD_PLL_CONTROL, &err);
+>    635		pixpaper_send_data(panel, PIXPAPER_PLL_CONFIG, &err);
+>    636		if (err.errno_code)
+>    637			goto init_fail;
+>    638		pixpaper_wait_for_panel(panel);
+>    639	
+>    640		pixpaper_send_cmd(panel, PIXPAPER_CMD_TEMP_SENSOR_CALIB, &err);
+>    641		pixpaper_send_data(panel, PIXPAPER_TSE_CONFIG, &err);
+>    642		if (err.errno_code)
+>    643			goto init_fail;
+>    644		pixpaper_wait_for_panel(panel);
+>    645	
+>    646		pixpaper_send_cmd(panel, PIXPAPER_CMD_VCOM_INTERVAL, &err);
+>    647		pixpaper_send_data(panel, PIXPAPER_CDI_CONFIG, &err);
+>    648		if (err.errno_code)
+>    649			goto init_fail;
+>    650		pixpaper_wait_for_panel(panel);
+>    651	
+>    652		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_60, &err);
+>    653		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_60_CONFIG1, &err);
+>    654		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_60_CONFIG2, &err);
+>    655		if (err.errno_code)
+>    656			goto init_fail;
+>    657		pixpaper_wait_for_panel(panel);
+>    658	
+>    659		pixpaper_send_cmd(panel, PIXPAPER_CMD_RESOLUTION_SETTING, &err);
+>    660		pixpaper_send_data(panel, PIXPAPER_TRES_HRES_H, &err);
+>    661		pixpaper_send_data(panel, PIXPAPER_TRES_HRES_L, &err);
+>    662		pixpaper_send_data(panel, PIXPAPER_TRES_VRES_H, &err);
+>    663		pixpaper_send_data(panel, PIXPAPER_TRES_VRES_L, &err);
+>    664		if (err.errno_code)
+>    665			goto init_fail;
+>    666		pixpaper_wait_for_panel(panel);
+>    667	
+>    668		pixpaper_send_cmd(panel, PIXPAPER_CMD_GATE_SOURCE_START, &err);
+>    669		pixpaper_send_data(panel, PIXPAPER_GSST_S_START, &err);
+>    670		pixpaper_send_data(panel, PIXPAPER_GSST_RESERVED, &err);
+>    671		pixpaper_send_data(panel, PIXPAPER_GSST_G_START_H, &err);
+>    672		pixpaper_send_data(panel, PIXPAPER_GSST_G_START_L, &err);
+>    673		if (err.errno_code)
+>    674			goto init_fail;
+>    675		pixpaper_wait_for_panel(panel);
+>    676	
+>    677		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E7, &err);
+>    678		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E7_CONFIG, &err);
+>    679		if (err.errno_code)
+>    680			goto init_fail;
+>    681		pixpaper_wait_for_panel(panel);
+>    682	
+>    683		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_SAVING, &err);
+>    684		pixpaper_send_data(panel, PIXPAPER_PWS_CONFIG, &err);
+>    685		if (err.errno_code)
+>    686			goto init_fail;
+>    687		pixpaper_wait_for_panel(panel);
+>    688	
+>    689		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E0, &err);
+>    690		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E0_CONFIG, &err);
+>    691		if (err.errno_code)
+>    692			goto init_fail;
+>    693		pixpaper_wait_for_panel(panel);
+>    694	
+>    695		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_B4, &err);
+>    696		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_B4_CONFIG, &err);
+>    697		if (err.errno_code)
+>    698			goto init_fail;
+>    699		pixpaper_wait_for_panel(panel);
+>    700	
+>    701		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_B5, &err);
+>    702		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_B5_CONFIG, &err);
+>    703		if (err.errno_code)
+>    704			goto init_fail;
+>    705		pixpaper_wait_for_panel(panel);
+>    706	
+>    707		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E9, &err);
+>    708		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E9_CONFIG, &err);
+>    709		if (err.errno_code)
+>    710			goto init_fail;
+>    711		pixpaper_wait_for_panel(panel);
+>    712	
+>    713		return 0;
+>    714	
+>    715	init_fail:
+>    716		drm_err(&panel->drm, "Hardware initialization failed (err=%d)\n",
+>    717			err.errno_code);
+>    718		return err.errno_code;
+>    719	}
+>    720	
+> 
 
-In ChkTag? I don't think the full specification is out yet so I'm not sure. In
-current LAM they are ignored.
-
->>  	/*
->>  	 * Even though the process must still be single-threaded at this
->> @@ -850,7 +853,7 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
->>  		return -EBUSY;
->>  	}
->>  
->> -	if (!nr_bits || nr_bits > LAM_U57_BITS) {
->> +	if (!nr_bits || nr_bits > LAM_TAG_BITS) {
->>  		mmap_write_unlock(mm);
->
-
--- 
-Kind regards
-Maciej Wieczór-Retman
