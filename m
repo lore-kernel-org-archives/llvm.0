@@ -1,81 +1,81 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCEF3630BF
-	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 10:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373B6364EAA
+	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 10:34:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777026404; cv=pass; b=QUvn+Z9EkXKvCMDa1Om1nDcR3wPFxCPXjM6MQJI8J0HtprzIEB6mWjVUizjNKspk1pbtWHkCAvdcJP79GGoo9zN0Vmrq0VqqiG9wS5LO229W5XO6j1Qh1D7/1J6g7nV7bnso5DG1EILQKQJh2febR/Taw6jbVf/D39SPP2Eg21U=
+	t=1777026882; cv=pass; b=UhNZgqHY1IQpLiOcKadGhqqfCgkjvQSBxIpz3wA682/dTWsTkbU1rrIAieh7kHJHZFepVGYbk/M7ts0Ar+fCXtQd9mdSgyzfM8OlpKCFDUWGNj4rci8pKu/Ggs6kSC2kpSGa1Rwi5laIjMMlbr96AmAHdABxXx61+POzX05Tz18=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777026404; c=relaxed/simple;
-	bh=akrD/7yNgCJ2hr9qe1CwVyZoBGQGlAkQEpZNlJzWaec=;
+	s=arc-20240116; t=1777026882; c=relaxed/simple;
+	bh=yTJizOE+aTFx68oE3PlVDChTaWYKzRYowl6JulRmua4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e9qI4YviLSP4/uzXGFxR/BAmdU5asW3ls0F1rpk3MNFt1YRE9n/RdErtWvEPrdnPDQIABq98Q3pHkgbh/75eOpZs60WBiUWRL9GC4GZ7bvjMNOkM7NtMCk3HfoYivuz5ShV9kLXqWpxAE6vX8Gp5UuT96v0t8UuF2K7kjfAVT1s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mNeItjQ8; arc=pass smtp.client-ip=74.125.82.178
+	 To:Cc:Content-Type; b=j6n7vxJRmh4GWFEHRvW77aGASjK8mqp46EEAmzSYB72WHVuyD6Eaas/07joe7uQDDtioud7O5OKFvF5mPAaj71CNL6JMk5ZQVLSPKRE+c9dZwOLPLd+1ts6kyXh39vI4zeqo2E5/kFSd37eS/TOP1ksmjT5coV+5nXmOcU/D8hk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J+0BIALC; arc=pass smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mNeItjQ8"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2d958ce9921so552912eec.0
-        for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 03:26:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777026402; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J+0BIALC"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2bda3b4318dso995233eec.1
+        for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 03:34:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777026880; cv=none;
         d=google.com; s=arc-20240605;
-        b=du64OH/v7bUBc8AAgIn4G5RGJH6RmfxInNqgBRRSLfoyTDuBqhTNSDGv+55gY4fNc9
-         j4pI7lK5bLtYFunh+tAyXtGJkThvY6te7grwu0CbvbsT2D2Rgflg7lwKNjooZW14rO1f
-         eG2gNCs4aDgKs/6k6fx4MaZ9fTXQuadw9wuOHD37fs9hdxiZskioxBDAtCniBR70a5+M
-         Zk+Ut91kXW5zz6UJ39YLzq/n5Ftib5rBAv6uwu+JcTSA97bjfiEH/iD23Ia9szVoF9WT
-         0nGDg65P8tukYJRaQTnjzCx1x+8X2liPmWrJclTwHKQD2oLDDbQhV0wAyomezooGvDsU
-         g5MQ==
+        b=gHvdi6k5oEjlWPGLdxH8hXLrF+eCjWq5dWJVCx19eyvn3FNS3Ux2Y5PYxU3YcgP2vK
+         +a3mWDpWESsd1c7LqqbvQo9WrTqiT2+6wVtfiMnz7zVnVVK1f0BznZtwlt9s3Pqk+bi9
+         aPJIiiafyR8vjKkTFL9mQua5JKGXnQi1PSzevvvSZWrgwWXagg/VqNKXvHRfvcXJrqSH
+         HkTwGkd7EPIEEIoHDB1b8zLNk9WEztB7qQvGduQeHUmhUvesnm4a3wn5MnUsqfFUXKxT
+         oZnEolit9pPd9WgsI1x1pGjXyQag7sXu4aXWepNeqQte4sGP1DIMfrp1unwVUCS/FHfs
+         4Ekg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=j0xKFe1jeJhx1ESLTH8WRadcy9BjbQbmpsMi2ljEDVs=;
-        fh=ZBkGQrxxfSY3EQuurim6LlgWDqvEaBgyH79N25Mh3tQ=;
-        b=PLSV3pc1OT/Qswjf0RI2Qdh1pfRDQ8ww9dOltM2j8HLuO/4S1s4P1/skAywfHgQxB4
-         UjUDntUK8Q6RmBO3FYYJBrySGYK9jvL5kN99enkHtU74OZx9ABbZENSGuADY56U060o2
-         4SW3NqDdv2BUJvFIQgki5bsvwZmdr/W40gY6qy/79iwONzUypkLRzyhnIQVeJvOuhB9E
-         PlkmFmKJI7LDnPGqHPNfInBL/Z4NA5eH7M0bkt9EkC0zPfR3NGNJsHuYy8dOOeVo2qGR
-         RpF/SwQsPP8Vg/qDKGu14MP8xJF7BOsr2K6ID0JQj+o4WybX0+1EibuzuDhoxGDxR4K0
-         3vMw==;
+        bh=yTJizOE+aTFx68oE3PlVDChTaWYKzRYowl6JulRmua4=;
+        fh=RJarqMI1B3/FdwLR6WC/Suw+/g26Ve8DUwv7/H6bElQ=;
+        b=jWqiHg+L/hErprmA1Hrt+1p2wydHdH4pNZsE1cV/wXwHEOGgI6GcvrIglaFmxMiZfx
+         3YnvQWzpChjA8ZVIB8MUABiubQBh5RF7tZ6XIc4c5JrKgioJCQQEEVpaQG3KtqnJbIrK
+         dpg1UiHX72nrkXyCpanE0GITItY0dYFa19iaYEJ/gDJ21Kvq3KynjxNdEtu/D9k3TUjH
+         Cklb5uL0JbElF7jpRvTP1UtEjvlrGai7lNhgJIYqU8PC6qZwsTkA6y81XvQ5Ow44iIfV
+         cUU7QiSmGeMIaDyTFXsNXTYgkc9k5Ep2hoXDjxeO8i63ctiLYdkvHYFSGXspXANaV4xR
+         ka1Q==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777026402; x=1777631202; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1777026880; x=1777631680; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j0xKFe1jeJhx1ESLTH8WRadcy9BjbQbmpsMi2ljEDVs=;
-        b=mNeItjQ8UTeLZ2hirBf8qjalazeRqXrNKFe/CwXkT+ZNT1hsuJjywctM34iOGL1f3j
-         xGImzPUdjZ1VOcCITS9nBV+p3Ora54B4J1bvbG1cqFPSJ5vCITSHUx8I+WV0EeOEfGA+
-         JCCc8SXFHnPcXf9nxr6Ad/jIwz3dycXzqaKKq4kcNSVzcbJXoOxsvF3UQe6lRQLRTnI5
-         LxSYprgHlxMim54I8l2lJ3zBy5qEhoUsXW+uJls6ghBGVmR3ih3cj86ZBqTSpK4MhOHC
-         au0ORgjSZuY/QtylvxatDhKMVYteOLUW1kZMuFlruuakzeJOAu64lua9zRdDTXLBmS/T
-         PV+g==
+        bh=yTJizOE+aTFx68oE3PlVDChTaWYKzRYowl6JulRmua4=;
+        b=J+0BIALCZ4jogRb4kl2SFbDpimWy9Z4Y0HbszINcydxI3R575Zhbf52FOCffGHz96F
+         WdYTrkzHsm+eiMAPkevH7nCAlDr8bP7f/ktWI39+xZvZjuFopvtINLqp7MO0mZ361ik7
+         92c0xh5XWT9x7iQE6prA7oWrwsyDX4P0Y6dIFtMiYOjqkJKsxN1ndgRK2TZfj14wXGi4
+         aFhG+o5AaC7MDs0nByTdLc1KPFZcveQSrSGYEUbzmZ5gqDOGqKiFl++U5O6Y5++gnYsP
+         C+JGHdJyrGRMLIoEtAcErKZgxHLZ57sx2dlGNHgHgIzuKJYR0u+Txli3KjSOFiEwgcPD
+         VHdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777026402; x=1777631202;
+        d=1e100.net; s=20251104; t=1777026880; x=1777631680;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=j0xKFe1jeJhx1ESLTH8WRadcy9BjbQbmpsMi2ljEDVs=;
-        b=VK9Axc0irmzGtoMSOMKzlituJMFtbDkeNdkHEWR51aoYcX4i3l8oYf4P7x1C/EYSYe
-         ZrbrfuGYlyKyUyq81XYSGJTmfMJwVHyKylXDlrSPuEh7P8ScqNPYB0z7knYvHkWrCXZs
-         nZp+DX2O9qolJSAKARV3WrRuetBTvW/IPsxMGtUMcLnK16u7PBj4iusZGsvc5HarWu1Z
-         Qc7SntuK2BLj9n9BW+Ft0pnw/9Nbm/+HM8QEOcKhlo4gWW38oUrNbIOnw/+IasE6GhbW
-         XyK8kTFgqnc1C8tqeWVlThAwOy4/9uAvpcfLajeQ8ksJsqmMtKDy0wWiwLt9I5JprvB9
-         r6wA==
-X-Forwarded-Encrypted: i=1; AFNElJ/IEzkcO1TMN62G0t+g1dqkmXWnt1L37814KC/Scsw8qANzhsR446ZjL9+rprJIPVQ53TMX@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw4VoAsAME/smRmFgyR6vou1uIBJhmqzu24icGnPrJTkHUbyQQI
-	PH5xkuF5FpNY3vzvHuuPm/p4BX5S1zK77Ilsx8Py1fA2FHnX8nhz2X74FgTC0NW6CtikHRqjKb2
-	jwqptVS67qjAQ/PUF/MXeSuuylJnyK3k=
-X-Gm-Gg: AeBDiesXQFpUrgyOFfOfIVBy8tD5+uragNjl1dt7/hZWYCml2pVZrUKsUA/NI27kJcH
-	p1m2MNd6XNOa2B1MRf5Io58OumDkytE6rUPfJ7aDt0SHFIkY+tzITe1EL6q0vAnSgy99OLrIf/Z
-	7MvykPZZtAS5qjESqlhA426OVHzWaBTZpNeMQPAZz5aTtjKSmcipc/IdWTsTW4JlrZBj7kpzuYh
-	OZNolkH3hR7XiBu+1HzLqi4TFJ/B7ULW+yo3jV/VQeOot09NCpIv5kKeyjkCvu29/8ZnkwPtp4A
-	3tw/XyHq2YvRGwPwrj1FLJG4dfG4jXKCi1Q2KUG4zI85DCodGe2MWS6EGhaY+u0NaBPesw6Pt8C
-	uQXjb8NkOk4kJNkUVpHbIIizDWJo5w8TbxQ==
-X-Received: by 2002:a05:7301:9f03:b0:2be:298c:a11 with SMTP id
- 5a478bee46e88-2e478a2e850mr6554300eec.3.1777026402324; Fri, 24 Apr 2026
- 03:26:42 -0700 (PDT)
+        bh=yTJizOE+aTFx68oE3PlVDChTaWYKzRYowl6JulRmua4=;
+        b=gcrxixo7WSDpgdkH/lS/Yb/2TpyjQxZlkV+N8n5ssUsMJMQDjQOaIEUqvXF4IoqdUi
+         Rf+N9RW3zpaRUEjWAn1AROuUoxuT34vea77JMtelA4SRY3G1byoNE5y3doNJH8f/3v7c
+         uA4AdgC2RI3B+nV9+emUxgZofsHZIhEP2f8YKHLsALCp96CmNkjSf7vJZx19i1Ymk1Gz
+         fiuakY8l3o+8qfg33xocWxaK05lWdIFAX5XVYxNQONAJGYamMc6WOMRkjbpIb9D6RswP
+         RpR69q3JihSh3Wdq3mlx2Wd6VNoQp0rYSdHE3xaYrG8kJDB0yZUDAoSBgaipm1w9UbFp
+         U5Fg==
+X-Forwarded-Encrypted: i=1; AFNElJ/xN1fWvt0PCyLl96X24IMDzFDLCHpi9jXrSfqf7vAK62MVaRNThyIvl5aPaz/oRsE4o3mX@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzg9xNAv1LhQEpumbeGbAGCUXthyFwLRM076klyzjNUxKtO2owP
+	pWCbPshRAe/pA4TcAHM8D8DieKRRokXDfSjCUWTroCHKVNT5qWFIowqCBJsTX5ASy1Vi5sbPwkz
+	lZjjTudgX/JZBXp0T2yzoEFEN/2bxWMg=
+X-Gm-Gg: AeBDievN4mrVTbMjRtnlymlL5OrePM/tA2T2A5WgzyHvGa2YdCr+ilEl6a5dskR8EhI
+	E+qfpkY+umFtIQYT9afQNmjg4PbpTEw6CYNIrlbvZvNOnUDoKJfDypEhpgCLPubBJUHJ2Rir6/0
+	bfANHg4xr/sG86h15vCKCsbL9tB+dAhV31REEjwMktW/w/L9loBatXPRPpDQjNE0sikokOgbyT0
+	DEy8kFpLtQFCXemVKGXFw7dcI9NAPaxgAD4QrV69uxvglI4VK80M0zeAP2qoLTftPB31SFkL0cu
+	eeOmwhRmtdxXEAEDu2v+sZXwrEFqBIp9GxyKJ4m7sLGcf6ca0kuHJrKepRgeGhLLxwaj4nhr+qW
+	NB48gvTypemitqQWlOTdf0CY3+YQtL9/dgw==
+X-Received: by 2002:a05:7300:d50e:b0:2bd:d8e6:90a0 with SMTP id
+ 5a478bee46e88-2e478936a32mr6682650eec.3.1777026880251; Fri, 24 Apr 2026
+ 03:34:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,54 +83,60 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20260424054742.45832-1-mkchauras@gmail.com> <20260424054742.45832-6-mkchauras@gmail.com>
- <20260424101425.6bde0e17@pumpkin> <aes7L3M1d_LvvGKa@luna>
-In-Reply-To: <aes7L3M1d_LvvGKa@luna>
+ <20260424101425.6bde0e17@pumpkin> <aes7L3M1d_LvvGKa@luna> <0a81f510-7b49-4879-b0bb-3b24dbfc0788@app.fastmail.com>
+In-Reply-To: <0a81f510-7b49-4879-b0bb-3b24dbfc0788@app.fastmail.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 24 Apr 2026 12:26:28 +0200
-X-Gm-Features: AQROBzDET6d-0hjNl0HV899j9TcLUcNjD1kIJArKfIFhDWI5iKiWhVLnvOkXFjo
-Message-ID: <CANiq72nsYy-EUSMynykb=6QyR62M7hT61RoTO3F0-vw1oBMh+w@mail.gmail.com>
+Date: Fri, 24 Apr 2026 12:34:27 +0200
+X-Gm-Features: AQROBzBsdDZLB2GUpMgvGgFgU1KPjXwk3TMpDFKjffQGyp1lulncbpRBZafhAFU
+Message-ID: <CANiq72mZGb+mTwP-8pTLe81oM0QnK-WtQeVjKPiP5m8zK_tOnw@mail.gmail.com>
 Subject: Re: [PATCH V13 5/7] rust: Make __udivdi3() and __umoddi3() panic
-To: Link Mauve <linkmauve@linkmauve.fr>
-Cc: David Laight <david.laight.linux@gmail.com>, 
-	"Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>, maddy@linux.ibm.com, mpe@ellerman.id.au, 
-	npiggin@gmail.com, chleroy@kernel.org, peterz@infradead.org, 
-	jpoimboe@kernel.org, jbaron@akamai.com, aliceryhl@google.com, 
-	rostedt@goodmis.org, ardb@kernel.org, sumit.semwal@linaro.org, 
-	christian.koenig@amd.com, ojeda@kernel.org, boqun@kernel.org, 
-	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
-	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	tamird@kernel.org, arnd@arndb.de, nsc@kernel.org, simona.vetter@ffwll.ch, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Link Mauve <linkmauve@linkmauve.fr>, David Laight <david.laight.linux@gmail.com>, 
+	"Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <chleroy@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, boqun@kernel.org, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, tamird@kernel.org, 
+	Nicolas Schier <nsc@kernel.org>, simona.vetter@ffwll.ch, linuxppc-dev@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 24, 2026 at 11:43=E2=80=AFAM Link Mauve <linkmauve@linkmauve.fr=
-> wrote:
+On Fri, Apr 24, 2026 at 12:21=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
 >
-> A possible solution would be to change the core crate to not divide
-> u64s, but the last time I tried to do that I couldn=E2=80=99t quite figur=
-e out
-> how to do formatting without it, maybe I will just open an issue against
-> Rust.
+> How hard would it be to have a private copy of the parts of the core
+> crate that the kernel actually needs? Since Linux is neither quite
+> hosted (using a full libc) nor entirely freestanding (still using
+> some library interfaces), the C implementation on most architectures
+> has a small subset of the libgcc that we ship with the kernel.
+>
+> I assume the core crate is larger than libgcc, but I don't know how
+> much of it is actually needed here.
 
-Yeah, I have some context at:
+It is fairly tied to the compiler version, so it would be a
+substantial effort to support across a bunch of versions. Instead of
+that, initially we asked to have some `cfg`s (i.e. conditional
+compilation) to customize it in the few places we need. We already
+pass `--cfg no_fp_fmt_parse` for instance.
 
-  https://github.com/Rust-for-Linux/linux/issues/2 ->
-feature(compiler_builtins) and a way to avoid certain intrinsics (f32,
-f64, i128, u128 and 64-bit divisions/modulos).
+There were concerns about combinatorial explosion of `cfg`s, so we
+suggested `cfg(linux_kernel)` or similar instead, though nothing
+happened so far.
 
-We have discussed it at some points with upstream Rust (including
-related discussions about having more `cfg`s in `core` or a
-`cfg(linux_kernel)` etc.). I don't think we have an open issue
-concretely for it, apart from the Clippy one to flag the use the use
-of the 64-bit division, but if you open a more general one with some
-details, that would be great.
-
-Thanks!
+The other option is to at least lint against certain operations, but I
+think it would be better to have a way to tell the compiler we really
+don't want them generated to begin with.
 
 Cheers,
 Miguel
