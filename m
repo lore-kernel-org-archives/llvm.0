@@ -1,142 +1,132 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373B6364EAA
-	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 10:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777026882; cv=pass; b=UhNZgqHY1IQpLiOcKadGhqqfCgkjvQSBxIpz3wA682/dTWsTkbU1rrIAieh7kHJHZFepVGYbk/M7ts0Ar+fCXtQd9mdSgyzfM8OlpKCFDUWGNj4rci8pKu/Ggs6kSC2kpSGa1Rwi5laIjMMlbr96AmAHdABxXx61+POzX05Tz18=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777026882; c=relaxed/simple;
-	bh=yTJizOE+aTFx68oE3PlVDChTaWYKzRYowl6JulRmua4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j6n7vxJRmh4GWFEHRvW77aGASjK8mqp46EEAmzSYB72WHVuyD6Eaas/07joe7uQDDtioud7O5OKFvF5mPAaj71CNL6JMk5ZQVLSPKRE+c9dZwOLPLd+1ts6kyXh39vI4zeqo2E5/kFSd37eS/TOP1ksmjT5coV+5nXmOcU/D8hk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J+0BIALC; arc=pass smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11963A3804
+	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 11:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777028995; cv=none; b=EaUMgmiI63KZWa4BZfgqYobjwXgaTQAWZjtDNuRV35aEkq6LWjaiSmg6/h4XeikJ1jgVYM8ak3RYZNtYWwltq6JlP3M26T1HmYeyhVDBGCRLL4gohYSc3HWzo8Xq3gm2ZcUJF7GIOxR6T2TeexMBex3iwKheIPNBohCk61cNEWg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777028995; c=relaxed/simple;
+	bh=2m/skchHwc5eR3DekHbks6y2/UhAgeRXG9eMAJvaWJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=S1ws2/ejEJEksoIWZvIB2a0F7xnnwtKNbHvFZhF/AlWjFZ6MpnqhGU5YUt/dPRwRpTgoF0v0ZD62uHua5clt3DHaiHqzWgKzbi3vdom+QMFyeK0leep22NyVD4VlRg39RRU+jsNzPVDEAvy0FSjrVC1lO4hBEwNqLuXBQ879R6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=muejwO7/; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J+0BIALC"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2bda3b4318dso995233eec.1
-        for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 03:34:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777026880; cv=none;
-        d=google.com; s=arc-20240605;
-        b=gHvdi6k5oEjlWPGLdxH8hXLrF+eCjWq5dWJVCx19eyvn3FNS3Ux2Y5PYxU3YcgP2vK
-         +a3mWDpWESsd1c7LqqbvQo9WrTqiT2+6wVtfiMnz7zVnVVK1f0BznZtwlt9s3Pqk+bi9
-         aPJIiiafyR8vjKkTFL9mQua5JKGXnQi1PSzevvvSZWrgwWXagg/VqNKXvHRfvcXJrqSH
-         HkTwGkd7EPIEEIoHDB1b8zLNk9WEztB7qQvGduQeHUmhUvesnm4a3wn5MnUsqfFUXKxT
-         oZnEolit9pPd9WgsI1x1pGjXyQag7sXu4aXWepNeqQte4sGP1DIMfrp1unwVUCS/FHfs
-         4Ekg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=yTJizOE+aTFx68oE3PlVDChTaWYKzRYowl6JulRmua4=;
-        fh=RJarqMI1B3/FdwLR6WC/Suw+/g26Ve8DUwv7/H6bElQ=;
-        b=jWqiHg+L/hErprmA1Hrt+1p2wydHdH4pNZsE1cV/wXwHEOGgI6GcvrIglaFmxMiZfx
-         3YnvQWzpChjA8ZVIB8MUABiubQBh5RF7tZ6XIc4c5JrKgioJCQQEEVpaQG3KtqnJbIrK
-         dpg1UiHX72nrkXyCpanE0GITItY0dYFa19iaYEJ/gDJ21Kvq3KynjxNdEtu/D9k3TUjH
-         Cklb5uL0JbElF7jpRvTP1UtEjvlrGai7lNhgJIYqU8PC6qZwsTkA6y81XvQ5Ow44iIfV
-         cUU7QiSmGeMIaDyTFXsNXTYgkc9k5Ep2hoXDjxeO8i63ctiLYdkvHYFSGXspXANaV4xR
-         ka1Q==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="muejwO7/"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43d0deb7ad5so6354530f8f.2
+        for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 04:09:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777026880; x=1777631680; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1777028992; x=1777633792; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yTJizOE+aTFx68oE3PlVDChTaWYKzRYowl6JulRmua4=;
-        b=J+0BIALCZ4jogRb4kl2SFbDpimWy9Z4Y0HbszINcydxI3R575Zhbf52FOCffGHz96F
-         WdYTrkzHsm+eiMAPkevH7nCAlDr8bP7f/ktWI39+xZvZjuFopvtINLqp7MO0mZ361ik7
-         92c0xh5XWT9x7iQE6prA7oWrwsyDX4P0Y6dIFtMiYOjqkJKsxN1ndgRK2TZfj14wXGi4
-         aFhG+o5AaC7MDs0nByTdLc1KPFZcveQSrSGYEUbzmZ5gqDOGqKiFl++U5O6Y5++gnYsP
-         C+JGHdJyrGRMLIoEtAcErKZgxHLZ57sx2dlGNHgHgIzuKJYR0u+Txli3KjSOFiEwgcPD
-         VHdw==
+        bh=FDKNX6OzlxA7jl/VimGCsLSHmvQn0nEFxj0ZFcUDDEc=;
+        b=muejwO7/C4iXo+lz1uNAcKEqmZ0TbPakpdP11/HSMtUoTlcbTG4JkRy3ZATpQQGU7K
+         FnXO18YxcloXis8lahgyQS795EmoGawjMB7wCipvOHbjYPAamP9tVTDyw7bFcCopKL0a
+         W7uvMmcUBoFbO54GaKPfaQOztrDyu2i0iRsTRZOzvxXE+8gZcdTsA05RSVbpJ4IE+a6k
+         EnQmC8QuOamAbbehriK36AHvGwrHOGeQa8mJXFeN1NYissfKj50NyPfR2lkQ87ynsG8U
+         p5EhVpmw/MUHHHlmudsJMXi9rVuOiq4TsmYZ7gjdVDPJzVEikVOskYJfHU9XHxUhQqDA
+         n7Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777026880; x=1777631680;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1777028992; x=1777633792;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=yTJizOE+aTFx68oE3PlVDChTaWYKzRYowl6JulRmua4=;
-        b=gcrxixo7WSDpgdkH/lS/Yb/2TpyjQxZlkV+N8n5ssUsMJMQDjQOaIEUqvXF4IoqdUi
-         Rf+N9RW3zpaRUEjWAn1AROuUoxuT34vea77JMtelA4SRY3G1byoNE5y3doNJH8f/3v7c
-         uA4AdgC2RI3B+nV9+emUxgZofsHZIhEP2f8YKHLsALCp96CmNkjSf7vJZx19i1Ymk1Gz
-         fiuakY8l3o+8qfg33xocWxaK05lWdIFAX5XVYxNQONAJGYamMc6WOMRkjbpIb9D6RswP
-         RpR69q3JihSh3Wdq3mlx2Wd6VNoQp0rYSdHE3xaYrG8kJDB0yZUDAoSBgaipm1w9UbFp
-         U5Fg==
-X-Forwarded-Encrypted: i=1; AFNElJ/xN1fWvt0PCyLl96X24IMDzFDLCHpi9jXrSfqf7vAK62MVaRNThyIvl5aPaz/oRsE4o3mX@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzg9xNAv1LhQEpumbeGbAGCUXthyFwLRM076klyzjNUxKtO2owP
-	pWCbPshRAe/pA4TcAHM8D8DieKRRokXDfSjCUWTroCHKVNT5qWFIowqCBJsTX5ASy1Vi5sbPwkz
-	lZjjTudgX/JZBXp0T2yzoEFEN/2bxWMg=
-X-Gm-Gg: AeBDievN4mrVTbMjRtnlymlL5OrePM/tA2T2A5WgzyHvGa2YdCr+ilEl6a5dskR8EhI
-	E+qfpkY+umFtIQYT9afQNmjg4PbpTEw6CYNIrlbvZvNOnUDoKJfDypEhpgCLPubBJUHJ2Rir6/0
-	bfANHg4xr/sG86h15vCKCsbL9tB+dAhV31REEjwMktW/w/L9loBatXPRPpDQjNE0sikokOgbyT0
-	DEy8kFpLtQFCXemVKGXFw7dcI9NAPaxgAD4QrV69uxvglI4VK80M0zeAP2qoLTftPB31SFkL0cu
-	eeOmwhRmtdxXEAEDu2v+sZXwrEFqBIp9GxyKJ4m7sLGcf6ca0kuHJrKepRgeGhLLxwaj4nhr+qW
-	NB48gvTypemitqQWlOTdf0CY3+YQtL9/dgw==
-X-Received: by 2002:a05:7300:d50e:b0:2bd:d8e6:90a0 with SMTP id
- 5a478bee46e88-2e478936a32mr6682650eec.3.1777026880251; Fri, 24 Apr 2026
- 03:34:40 -0700 (PDT)
+        bh=FDKNX6OzlxA7jl/VimGCsLSHmvQn0nEFxj0ZFcUDDEc=;
+        b=ZSNipvnxKOJGGNz6o1H+7XvXKLTUbzZTheiayCAu/O2gPZS/uZNFZyhq0Wh0+BokvG
+         thi5Iwk7F8PlYdvTTkcZOKHZueLe8p9pzOymy5cxDXcFhaFyolNhCwhNtYgRHli7149K
+         1Az1J5I89zkWn2P5pCD8EzzxNIB5F92eFGwnvkmPS5CPHCwfXrABBKW3HPoa16gERbhq
+         sBWwywe/WwMkijYY/fy/LPPZPTEugvO6FwydIqeYb3Fa2JpP8/0AjWtaIpgMS8Y7N++P
+         KAXvvZ6JqKk8xYRNbMNg+OS70omZCww9e0L3BYlgIDoHB6Ls0s/ZMhS8k6DklVsq1nfE
+         lRFw==
+X-Forwarded-Encrypted: i=1; AFNElJ8w2SaYOPnjRiFZ0H+il9FabUgCF5ajhi3j0H1Y5JPQZiabPXSHeM7nCxu8dYUSohKULQrG@lists.linux.dev
+X-Gm-Message-State: AOJu0YxIz/8Fj0dTO2HTD88GiHAnZ1vHSa86TNHZhvyiTRpOaLkWqkT3
+	Zm/qWYTWjnKJUuoq0iUWsLW148meIAtkp/oooNcy/P4dvcSpWZVzGhqD
+X-Gm-Gg: AeBDiesOIwkK+EfqCJpOY6vUh/a30qOS1AiL7pHc8oEpPF3R/ac0/KwTKQDWNM2wo9a
+	ji8SZWnhEj68nz/OWI2lHYs9R4OUtb5/LwHNyKgRxiB7HgnI1201wNb7OMdR+R9IUSGg54QZXE7
+	wt96EqXoEgjMv1ltVJexAAsmREiZARVaJFBqXgFEacVlWb5FjF5x5HDRqwvCzJJjeAz61dW31ej
+	AcLVTMvy7vdXVhiHbobUiGku7rrOsvVXS0A1ksc5d3UBb2Bm/A1tJEmyt8gm2YVQAvn7XB0On9P
+	u/CwjUiBudpsWdz/PVHXKP7VGCfqihUmyb49/kNDzcGCAex8iaRRMA4OBXTUdKJHuZeQ0Tem94H
+	BhYV2R5u5rVFJ64yahu2g3RuvI94wCl6PaA+SxaRDB+HfnTflODabnQCIdy4H5wKe2GzgCJzKtM
+	2JsX2rACxwL8/tlGfXaDdi8UCqtnrwdPKhxfosd8ATAddjxPP/Q3KKXxWYM3DZVVvkELrl1KPNC
+	UDl1PCyS1rvZA==
+X-Received: by 2002:a05:6000:1863:b0:43e:a69b:d818 with SMTP id ffacd0b85a97d-43fe3e0ab5dmr49306229f8f.38.1777028991633;
+        Fri, 24 Apr 2026 04:09:51 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cc0f31sm59174867f8f.12.2026.04.24.04.09.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Apr 2026 04:09:51 -0700 (PDT)
+Date: Fri, 24 Apr 2026 12:09:43 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Link Mauve <linkmauve@linkmauve.fr>
+Cc: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>,
+ maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+ chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org,
+ jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org,
+ ardb@kernel.org, sumit.semwal@linaro.org, christian.koenig@amd.com,
+ ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net,
+ bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
+ tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
+ tamird@kernel.org, arnd@arndb.de, nsc@kernel.org, simona.vetter@ffwll.ch,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH V13 5/7] rust: Make __udivdi3() and __umoddi3() panic
+Message-ID: <20260424120943.4a65dd69@pumpkin>
+In-Reply-To: <aes7L3M1d_LvvGKa@luna>
+References: <20260424054742.45832-1-mkchauras@gmail.com>
+	<20260424054742.45832-6-mkchauras@gmail.com>
+	<20260424101425.6bde0e17@pumpkin>
+	<aes7L3M1d_LvvGKa@luna>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260424054742.45832-1-mkchauras@gmail.com> <20260424054742.45832-6-mkchauras@gmail.com>
- <20260424101425.6bde0e17@pumpkin> <aes7L3M1d_LvvGKa@luna> <0a81f510-7b49-4879-b0bb-3b24dbfc0788@app.fastmail.com>
-In-Reply-To: <0a81f510-7b49-4879-b0bb-3b24dbfc0788@app.fastmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 24 Apr 2026 12:34:27 +0200
-X-Gm-Features: AQROBzBsdDZLB2GUpMgvGgFgU1KPjXwk3TMpDFKjffQGyp1lulncbpRBZafhAFU
-Message-ID: <CANiq72mZGb+mTwP-8pTLe81oM0QnK-WtQeVjKPiP5m8zK_tOnw@mail.gmail.com>
-Subject: Re: [PATCH V13 5/7] rust: Make __udivdi3() and __umoddi3() panic
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Link Mauve <linkmauve@linkmauve.fr>, David Laight <david.laight.linux@gmail.com>, 
-	"Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <chleroy@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, boqun@kernel.org, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, tamird@kernel.org, 
-	Nicolas Schier <nsc@kernel.org>, simona.vetter@ffwll.ch, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 24, 2026 at 12:21=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
->
-> How hard would it be to have a private copy of the parts of the core
-> crate that the kernel actually needs? Since Linux is neither quite
-> hosted (using a full libc) nor entirely freestanding (still using
-> some library interfaces), the C implementation on most architectures
-> has a small subset of the libgcc that we ship with the kernel.
->
-> I assume the core crate is larger than libgcc, but I don't know how
-> much of it is actually needed here.
+On Fri, 24 Apr 2026 11:43:11 +0200
+Link Mauve <linkmauve@linkmauve.fr> wrote:
 
-It is fairly tied to the compiler version, so it would be a
-substantial effort to support across a bunch of versions. Instead of
-that, initially we asked to have some `cfg`s (i.e. conditional
-compilation) to customize it in the few places we need. We already
-pass `--cfg no_fp_fmt_parse` for instance.
+> On Fri, Apr 24, 2026 at 10:14:25AM +0100, David Laight wrote:
+> > On Fri, 24 Apr 2026 11:17:40 +0530
+> > "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com> wrote:
+> >  =20
+> > > From: Link Mauve <linkmauve@linkmauve.fr>
+> > >=20
+> > > The core crate currently depends on these two functions for i64/u64/
+> > > i128/u128/core::time::Duration formatting, but we shouldn=E2=80=99t u=
+se that in
+> > > the kernel so let=E2=80=99s panic if they are ever called. =20
+> >=20
+> > Ugg.
+> > Surely you can make it a link-time failure?
+> > Or change the underlying code to avoid the divide. =20
+>=20
+> This is currently a link-time failure, which means if any of the core
+> crate or drm_panic_qr are linked in, the kernel will fail to link.
+>=20
+> And since we rely on core, that means no kernel can be built on PowerPC
+> without this patch.
+>=20
+> A possible solution would be to change the core crate to not divide
+> u64s, but the last time I tried to do that I couldn=E2=80=99t quite figur=
+e out
+> how to do formatting without it, maybe I will just open an issue against
+> Rust.
 
-There were concerns about combinatorial explosion of `cfg`s, so we
-suggested `cfg(linux_kernel)` or similar instead, though nothing
-happened so far.
+If the problematic code is (effectively) printf("%lld", val) there are much
+better ways to generate the digit string than repeated 64bit divides.
+On particular you can use 'multiply by reciprocal' instead.
+For example see the latest (I think it'll be in 7.1-rc) version of
+tools/include/nolibc/stdlib.h
 
-The other option is to at least lint against certain operations, but I
-think it would be better to have a way to tell the compiler we really
-don't want them generated to begin with.
-
-Cheers,
-Miguel
+	David
