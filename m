@@ -1,127 +1,198 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012058.outbound.protection.outlook.com [40.107.209.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C1E17D6
-	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 07:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777017191; cv=none; b=Qwqq05e6qOPI/Kden/wfIYsKZ6/HdiUdbzkQOZTuU4oBP+r+rHWr3XPLwNE5iw8QDWS4v1rOrBcVInOYVgcCoAIl3HKRICnpQ3MMMzjtuxxQji4WqVGuaA0kgx/srunjvKJ5/brFEN6cQKPOjYhl8VwCQa8g2jly4Rf1wWt4EIo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777017191; c=relaxed/simple;
-	bh=JpsvE4TMssmFe79rCK8WynPd6EzODqc8jagXJaWoMsk=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=HqZctamNsPOlLdT/Bx4LJiu/arZs61F96PMLLP995fwqpJGHorfIFOMk8UgEbNklj2xB2NsBZAZ0qroPTfgMqkf3XnDhsqfrpW8byixFPgK7uJ90Uu7Q2Uag5XRGlPNYYcTcYLGTk+QGyGEGYmCRhFeul0mgsvJG6x6WRftdZDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bl34pYj0; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFEF534D398
+	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 07:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777017393; cv=fail; b=kXic+ds86S1n+Jv2f+OQ53plNQi07Ldzl4h22zYz1jsgJdKZXvkDKNZLfmSe3rx9i3+t8q5O4YpYI6Z2i4KMU01zw+zNdILKaqdGiCYJmDWZNwfJkplZ9FdfiO6i9YfZdKnSWqkHUnIp7MkL+e6E5j3pASiPFNHdIS9jvoahh8E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777017393; c=relaxed/simple;
+	bh=Yjky2po/hfqGQkTtkxTmp+sKK0pFaiCeyZAoapeqrzo=;
+	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=HUHwVOqWuhlscRyYsknTyQwkjsbUjuG6OchB1S5E6mKTCMmXRQAYOq5sKDIMEag3zTuSLpiJZ7RHMx9h/ZUL37dZFi4pckorZt9cXLzIlJi+hBTH5eRBFqMqXaymPLwFsuvFQqKoIaJ6jkhJ6AbZgCx2P3cWIZOUAaLQAQUpMP0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=k2Wo/xFD; arc=fail smtp.client-ip=40.107.209.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bl34pYj0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777017189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PxLYRLZNoqycAoKqPF5ROOpfWl3wef18kzjU0wme0W4=;
-	b=bl34pYj0kYI0IlqGSW+a9YaHn1qLWT75zCRvIXuz+ckudl9txPd8h9myM/W7OkUjst2y8A
-	5NNG9c+c0uLKta0SX07aKkOgNlocDJN2MUZ1TJeXr46m5kJU7U7WbRVD3hJUe4+5+6JTqv
-	sOd1IIoWDsiIegn0ZizmKD/5Akmz1D0=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-38-Aq9NOttTMSimElyTHuM5Pg-1; Fri,
- 24 Apr 2026 03:53:07 -0400
-X-MC-Unique: Aq9NOttTMSimElyTHuM5Pg-1
-X-Mimecast-MFC-AGG-ID: Aq9NOttTMSimElyTHuM5Pg_1777017186
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A585519560B3
-	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 07:53:06 +0000 (UTC)
-Received: from [172.20.96.14] (unknown [10.30.44.37])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3E222180047F;
-	Fri, 24 Apr 2026 07:53:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-0,
- upstream-mainline, 507bd4b6)
-Date: Fri, 24 Apr 2026 07:53:06 -0000
-To: llvm@lists.linux.dev, yoyang@redhat.com
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="k2Wo/xFD"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=o9/KAROI8IXfUP1G0TO7wdtlJO7mOum5bLdxe43PzOTHpMyMdOg+cF+CaxYGP+zWq5zgzWVBHqekDPlWaz7vQcd85xIys5SGSCCsLtlR9G97KKHF8bqBCwV4XD0q+MvX7UYqeJMfN1X8TPxj46QTYwT2S7+U06p7qmuLYT4xBMwTzeCQkBO2+ivAnCZDl2LhTuDyic3gJ5QXYWjOprJOSTKIC+Z0XoQ3VP8u5QTM/S+yLgLQEOPZEWOx/hepCSkovjrEHhGibC+i7tfl9CrsIdd0w6k6jBSlKCWYRuMXyRFuREPAjaDly2BpLdwxSgd9FhDpKOciFBoFQ7D7novHoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=scSnd+H3WVxhMjEXoi5rhivsgX1stNt6JPlyZUyc9XI=;
+ b=fEvTqyVHnYZIGdYWmQTEhpmHxKmhchh1PpH/uWlNqlbmATa0j2IVH+JmMOOGfjjo1XFKk0SoRMCUSk6ylkq3COABqRb+pd0Sh92DJmYcuM5VV6OvwD3/SlZUjDwa+YaVkZLqDE6zOoU8mMcsj4zYvKx6wCn48yTxVVPPB8o7LcOs1In2KjY/vGBdf1m6wL5HJNhuWcbG4wRzOm13S6DApkUfHTJR2aDGY+7aDzjE2acMBGbqSfLXXhAMjr4AZrjW7V19D2dG+IMZMfFhrRy/EDVxJjxu3X2rJ2I+dgMUgjnIlGOh+XbR6T4k6gMi3JSkFZmOS1UV+tMOPZSvJ8C5xg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=scSnd+H3WVxhMjEXoi5rhivsgX1stNt6JPlyZUyc9XI=;
+ b=k2Wo/xFDdkNGpLbd7eVOFdCwu+4zIiBfEEN9gToSEyZeCXiaqreSJfwDI2pY7TP36J35TIayBw4t2Fppz00HDKRkj7Zg9uyAFqlLL2hRubF6nHh3GojvQ6JdY11fDg8CGVn3+07RGvLbMxtN1aWl+u1AkgR0YBfXWP4B6QkrTGI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by SN7PR12MB6861.namprd12.prod.outlook.com (2603:10b6:806:266::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.15; Fri, 24 Apr
+ 2026 07:56:27 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.20.9846.021; Fri, 24 Apr 2026
+ 07:56:27 +0000
+Message-ID: <b4dcb464-7784-47e2-a973-6d731ab9ccf8@amd.com>
+Date: Fri, 24 Apr 2026 09:56:16 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V13 2/7] dma-resv: Fix undefined symbol when
+ CONFIG_DMA_SHARED_BUFFER is disabled
+To: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>,
+ maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+ chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org,
+ jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org,
+ ardb@kernel.org, sumit.semwal@linaro.org, ojeda@kernel.org,
+ boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com,
+ lossin@kernel.org, a.hindborg@kernel.org, tmgross@umich.edu,
+ dakr@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+ morbo@google.com, justinstitt@google.com, tamird@kernel.org, arnd@arndb.de,
+ nsc@kernel.org, simona.vetter@ffwll.ch, linuxppc-dev@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+References: <20260424054742.45832-1-mkchauras@gmail.com>
+ <20260424054742.45832-3-mkchauras@gmail.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20260424054742.45832-3-mkchauras@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0180.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b7::13) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <66656.126042403530700347@us-mta-38.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 7dDkBGg2aKghtUy8SDaizxGQHvU6fG0Rvt1t9XfDSNw_1777017186
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SN7PR12MB6861:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1a51f7d-c556-4420-2a76-08dea1d6fcbf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|18002099003|921020|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	hcbDccIkFnEwL3/hvvoGROrys+qLkGqjSziOPe48RryGsAdQ8W0uOEdRMCOEn1YevwM677ZCrknXyClW6rMT4dhIQw9EyBWRWzWLZ1xwjlNmoNnBNmGstDFoDJEBXpqES7Err+Uv/e/XR2IIWY134wY/7Dn78BpfUi6yWnXSy4y3BGw8rCJuLjabcdk9rZvxry8frWuMkexJ1TcNMJV++xmT5hQxP4k3tzxTq9eKh04bwQ2gX3/hSBwXXm9OanbUPOlRV1UtLpbLhvi6G5mDmdfqTsWeIUMFFElWvRBmyGdL4aZw7aOXulr1UZALvSHDy4yykXBJ110rlI3AqoK25GQaBKqGmlCYFTBKnLsr0z7QEEWCiaOrjgSD4ZGmkSxUyVCldO/zkPMKZeC+s7vqpqBU27WvTu1hGC5G94K8GDrYBUnFo57Mmk94Kk2MjClLZkLmFTphVPa0DXYcUrBfY4Q+3dkF+8LbzPcSF3vgBeZdHVzrP4g9KvzhVPpcWg85Nz+IFItfWHkxh4eRihcoUtEA5nWalgAUvukE7QHRPDa9lA6K3Yw+inNqWhLgf0GzoH8ZT7DXKNN3Zmx3SFIS6+V/JoG4iALfvvZ16Ro1RfeEvXGmhOrnmiV4G1UQjUE49+ZKgFpg80JeOQ+XlCzXA2QInij0aAOks5yVJK5PFeIwXDs1zlEr6dzvkwkjlrPtpCJVCX50SJGHS6vxzNySD/7dqavktMCJTiSuHl5SvUOrK9NW7RZ6FKRsNIu5mDB4TLGom+XfVeS277+4nBNFUg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(18002099003)(921020)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eDNjcXJIT2IwelRlN0Y2Nkl0aGFkQVFYNyt4TVg1dE5NQ1RqNklZcVM3Y3ly?=
+ =?utf-8?B?M01wcVUrTTJSQXV1bnYxMnlqZWsrVk5RMmVoYmF5S2VHMFlmRUY3RkU1SWs5?=
+ =?utf-8?B?NTZ2U0F3SzR0cFJTd1VyZmp2TmJrUlkwblZlMGtSVDNIajJhanBkY08xbjJh?=
+ =?utf-8?B?NnhEdXVCcFBwNnJkRlRnenBlbStzM0cwNVBRbEZ0WEJpamliWXNmdmQxYjVX?=
+ =?utf-8?B?OFB1MzIyNjFxSjNqcEpyc05nNXhWc0JFZThQQWcrUkQvd1FnWjdjRUZjb3BI?=
+ =?utf-8?B?UEt4bHl5dnpYWll5TGhzdEs3NGk0Nm41RU1vaXVrM29lQVFIaFE3RlY5SWdw?=
+ =?utf-8?B?UzJIeEViTStnUG90OU4vZzFHbGo0M2tFanhTS0h6OFJjak91MmdHTWxPRlds?=
+ =?utf-8?B?TjBOaGJPZlVqRmt4NnYrT2tHSjRRZGRzVHJSbm9SQmFRcGYxY0dVamQ2VVNS?=
+ =?utf-8?B?SnlyUEd6dldOaHdzR3VjN2syN2VuUk4yOHJuNkNmWFd1YkFGSFQ4WjA5MTg4?=
+ =?utf-8?B?TmUwQkhSLzZ0UFFvZmhLRWNERkd1b21sNGQ0LzAreUVoRjVNWU9KQzNUWkV2?=
+ =?utf-8?B?M0JuSjB1Ry9Fd0FRSDJCbnV3dTl5QlBGemZYNWRpU2VEcjhNbmJ0RWl3YWZF?=
+ =?utf-8?B?QkVXamxiM2x3OTM0VHB5emgyVXVVaTJIODFaNXhHSUdYR1Y3SCt6MUlKODhx?=
+ =?utf-8?B?WTRVaEQ4Rk05MzFlNERZeVB3RlcvYmx0cll1WGpKVjR2N0pqTFMydEdKQWY5?=
+ =?utf-8?B?NUt1Z05URFQrQndGcERnQ3orK0UwdXAvdjlESkVmb0ZPaUgzN2pFeEFEOUFp?=
+ =?utf-8?B?R1V5dWV4cHM5dmFEdHd0RXQzSi84c2V0eGtaZnJMMXlSUWxPYk5qbTRZTkkx?=
+ =?utf-8?B?K1NpL0FyQ3ZzUmY3T1NrMk9YNEtKaGJ6NmRaRTNubmhDd0g5NXptVGRiQ3Bs?=
+ =?utf-8?B?cHJwRi8rQk42Q1RBa204OWpyV2xiRGJpZEpwRmJKV0g1d1VHeGxFaVlTK1NG?=
+ =?utf-8?B?TFFPeHdtWm8zMGs5V2xpejFXYW1HS05XeERnQ3gwR1lqYjFhbHJFWTlneDhZ?=
+ =?utf-8?B?ZWp4MVdSSXFVcTZHVTVUZ2hZYVU1R3VWVWdNaVVBcWV2czcxeGdOVXI3OC9w?=
+ =?utf-8?B?L01ueTBwK1RsSEV1VFVGS0llNkNmbmlWaUtoUWFmVVBWY0czZDFqcXNRNW5K?=
+ =?utf-8?B?c2U1MlJHR1IzQkRMa0lXMEh4VUNyaWpMeCtidFAxL1hJYURkNVJpMlZRcmVY?=
+ =?utf-8?B?S3oweVVaTUE5ZkJ1bEpnRzNVOEZRRFRJYUM4bk4vY3Z5N2oxSksrVUhTU3pD?=
+ =?utf-8?B?U3FScTJwOElzeWlNT2xWd3UxTUdVOWpPU2hhUjJmM3Y0WlpVODh4RG80b0FQ?=
+ =?utf-8?B?b2VZWk1GWjZ5OXlBdU9BZ1BxMFp2RTNtVTBZUHd0SEFScW5PbStiM0J6WmYy?=
+ =?utf-8?B?NklnelNqaThpbUxxMSs3UzM5QlpSOWZxeDYwRmlrOHVxMTVHRU5zTm1YUjQr?=
+ =?utf-8?B?VnBsNFRHUXJxeGtlZThFSVRkZDVZdkplRm4vNlBiSmVlRzAyWmtZdlRxRTdh?=
+ =?utf-8?B?N0pncXhidmZ2bWZTangwV3JrU2psaU9DQytoSlZ2dkI5S29vZTNJcVBvZk5B?=
+ =?utf-8?B?aHlSSERhZitmdXNubmUxalNGcFJITXlxRkNlK3ZvUjdTanI2L2RxWThQc1hF?=
+ =?utf-8?B?T3QzdkdTZEFtRUo2YmlwQ1U2SzIwZDdDV3RzUTVrS1VmTDh5aUtDRmVwa1Z3?=
+ =?utf-8?B?aHByNVAxQ2cwNW0zOGVmcHdKYzZQT2xWYTBVc2IzUHdtNjd0Z29mSzRockxp?=
+ =?utf-8?B?dGVIbVhLZTZneHE1bEY5azVCRTh2Q3NkMG9NNzd0K0hjMVFyOU1KK3F1SWNO?=
+ =?utf-8?B?RHo3Zk9pcXpkUjg4bnVTUGZrUWRCNkNwQTdiRmVBSDBIWG14V0JQUnYzeW1G?=
+ =?utf-8?B?SG84MEhiSm1KSzFUVnZ5bGx1b01tTDFzMUJPc3NsZEYveCsvdjRlazNoeVNQ?=
+ =?utf-8?B?QWIrRVdSQXJjQlp5TUtYZFpyVUx2ZFJTS1lqQzVQTkorM1NjVlV4UmZOMzNh?=
+ =?utf-8?B?c2VyeWNhbmRzLytsSDJFaDZFRzdNTnpLaU1kM01USjYycUF3TkxTTmI5dHdV?=
+ =?utf-8?B?VUU2MEtoMW5ocUNSMHBuUFBDRjh2a09sM0srVEpFR1l6T3dlamZXcjM0VEZy?=
+ =?utf-8?B?dVI3aDZ6aGZSWnN2d3FlUGtGcWhtcGpQTWNWN2JiSFdsWlNGOEQ2TTN2V0M0?=
+ =?utf-8?B?Q1Bod2puUmQ3WnQ3Z0h4MWF5N05naDlpdFF5SW5MWW5jNG4xczBRRUtSblJS?=
+ =?utf-8?Q?gD0nSOcdQyAiCVRh+g?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1a51f7d-c556-4420-2a76-08dea1d6fcbf
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2026 07:56:27.0591
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yHnvy7/gV1lsr8iRkL1ZFfLZEjHYbGw2wOg8trkR4KMWvq3PWoA2oVfCOWzlfemM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6861
 
-Hi, we tested your kernel and here are the results:
+On 4/24/26 07:47, Mukesh Kumar Chaurasiya (IBM) wrote:
+> When building with LLVM=1 for architectures like powerpc where
+> CONFIG_DMA_SHARED_BUFFER is not enabled, the build fails with:
+> 
+>   ld.lld: error: undefined symbol: dma_resv_reset_max_fences
+>   >>> referenced by helpers.c
+>   >>>               rust/helpers/helpers.o:(rust_helper_dma_resv_unlock)
+> 
+> The issue occurs because:
+> 1. CONFIG_DEBUG_MUTEXES=y is enabled
+> 2. CONFIG_DMA_SHARED_BUFFER is not enabled
+> 3. dma_resv_reset_max_fences() is declared in the header when
+>    CONFIG_DEBUG_MUTEXES is set
+> 4. But the function is only compiled in drivers/dma-buf/dma-resv.c,
+>    which is only built when CONFIG_DMA_SHARED_BUFFER is enabled
+> 5. Rust helpers call dma_resv_unlock() which calls
+>    dma_resv_reset_max_fences(), causing an undefined symbol
+> 
+> Fix this by making the function declaration conditional on both
+> CONFIG_DEBUG_MUTEXES and CONFIG_DMA_SHARED_BUFFER. When either is
+> disabled, use a static inline stub instead.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+Well we are clearly missing something here, but of hand that doesn't looks like the right fix.
 
+When CONFIG_DMA_SHARED_BUFFER isn't enabled then the whole dma-resv.h header can't be used at all.
 
-Kernel information:
-    Commit message: Merge tag 'soc-late-7.1' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/soc/soc
+So you also can't call dma_resv_unlock() from the Rust helpers. Which means that we need to make the Rust helpers somehow depend on CONFIG_DMA_SHARED_BUFFER.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2475278902
+Alternative would be to provide dummies for the functions in dma-resv.h when CONFIG_DMA_SHARED_BUFFER isn't set, but that looks a bit like it just hides the issue.
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2475278902_ppc64le_kernel
+Regards,
+Christian.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2475278902_aarch64_kernel_kcidb_tool_21162766_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2475278902_x86_64_kernel_kcidb_tool_21163484_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
- futimens
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+> 
+> Fixes: 0c6b522abc2a ("dma-buf: cleanup dma-resv shared fence debugging a bit v2")
+> Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
+> ---
+>  include/linux/dma-resv.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
+> index c5ab6fd9ebe8..23c8db0b5214 100644
+> --- a/include/linux/dma-resv.h
+> +++ b/include/linux/dma-resv.h
+> @@ -311,7 +311,7 @@ static inline bool dma_resv_iter_is_restarted(struct dma_resv_iter *cursor)
+>  #define dma_resv_held(obj) lockdep_is_held(&(obj)->lock.base)
+>  #define dma_resv_assert_held(obj) lockdep_assert_held(&(obj)->lock.base)
+> 
+> -#ifdef CONFIG_DEBUG_MUTEXES
+> +#if IS_ENABLED(CONFIG_DEBUG_MUTEXES) && IS_ENABLED(CONFIG_DMA_SHARED_BUFFER)
+>  void dma_resv_reset_max_fences(struct dma_resv *obj);
+>  #else
+>  static inline void dma_resv_reset_max_fences(struct dma_resv *obj) {}
+> --
+> 2.53.0
+> 
 
