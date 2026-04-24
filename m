@@ -1,132 +1,138 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11963A3804
-	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 11:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64DC3BE629;
+	Fri, 24 Apr 2026 11:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777028995; cv=none; b=EaUMgmiI63KZWa4BZfgqYobjwXgaTQAWZjtDNuRV35aEkq6LWjaiSmg6/h4XeikJ1jgVYM8ak3RYZNtYWwltq6JlP3M26T1HmYeyhVDBGCRLL4gohYSc3HWzo8Xq3gm2ZcUJF7GIOxR6T2TeexMBex3iwKheIPNBohCk61cNEWg=
+	t=1777031531; cv=none; b=mq9vUOqhQj4cETb51syI8DagyeGtYai9ckLagGFAE+ZGyEiWMuYx49W3xUqRPa5zAAKTiBPTwhjA76IqXjXH3PhdxDAWiaP5Y8vaKKyszJE0cB1Je8ixZ4Q3fGCANRdAEJztt86Mi2HEN/uZtiXJz9iCmuhFlu1cffMd7ivbZUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777028995; c=relaxed/simple;
-	bh=2m/skchHwc5eR3DekHbks6y2/UhAgeRXG9eMAJvaWJ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S1ws2/ejEJEksoIWZvIB2a0F7xnnwtKNbHvFZhF/AlWjFZ6MpnqhGU5YUt/dPRwRpTgoF0v0ZD62uHua5clt3DHaiHqzWgKzbi3vdom+QMFyeK0leep22NyVD4VlRg39RRU+jsNzPVDEAvy0FSjrVC1lO4hBEwNqLuXBQ879R6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=muejwO7/; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777031531; c=relaxed/simple;
+	bh=IzJXx+zx6j4NX28LafTopFwufgCBd4WHTlSHKqEQ2gA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Uqpm+UM3S9Wtvli6ZyHzIOT1da/GJtFDe2h8q7X6ST35BYTmNZy4OkPQEbDBZ9aObDZyIj4omz1nvDPoVCqmn8oEtcYjCDBqF6f7UhqHLMGZyRPmTbaXEKslI65ZM7isyv4NiIWsmT2ATr5mPWK2QVpeWlhCvDnubbRyfR76h7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l17Y1Ygb; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="muejwO7/"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43d0deb7ad5so6354530f8f.2
-        for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 04:09:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777028992; x=1777633792; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FDKNX6OzlxA7jl/VimGCsLSHmvQn0nEFxj0ZFcUDDEc=;
-        b=muejwO7/C4iXo+lz1uNAcKEqmZ0TbPakpdP11/HSMtUoTlcbTG4JkRy3ZATpQQGU7K
-         FnXO18YxcloXis8lahgyQS795EmoGawjMB7wCipvOHbjYPAamP9tVTDyw7bFcCopKL0a
-         W7uvMmcUBoFbO54GaKPfaQOztrDyu2i0iRsTRZOzvxXE+8gZcdTsA05RSVbpJ4IE+a6k
-         EnQmC8QuOamAbbehriK36AHvGwrHOGeQa8mJXFeN1NYissfKj50NyPfR2lkQ87ynsG8U
-         p5EhVpmw/MUHHHlmudsJMXi9rVuOiq4TsmYZ7gjdVDPJzVEikVOskYJfHU9XHxUhQqDA
-         n7Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777028992; x=1777633792;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FDKNX6OzlxA7jl/VimGCsLSHmvQn0nEFxj0ZFcUDDEc=;
-        b=ZSNipvnxKOJGGNz6o1H+7XvXKLTUbzZTheiayCAu/O2gPZS/uZNFZyhq0Wh0+BokvG
-         thi5Iwk7F8PlYdvTTkcZOKHZueLe8p9pzOymy5cxDXcFhaFyolNhCwhNtYgRHli7149K
-         1Az1J5I89zkWn2P5pCD8EzzxNIB5F92eFGwnvkmPS5CPHCwfXrABBKW3HPoa16gERbhq
-         sBWwywe/WwMkijYY/fy/LPPZPTEugvO6FwydIqeYb3Fa2JpP8/0AjWtaIpgMS8Y7N++P
-         KAXvvZ6JqKk8xYRNbMNg+OS70omZCww9e0L3BYlgIDoHB6Ls0s/ZMhS8k6DklVsq1nfE
-         lRFw==
-X-Forwarded-Encrypted: i=1; AFNElJ8w2SaYOPnjRiFZ0H+il9FabUgCF5ajhi3j0H1Y5JPQZiabPXSHeM7nCxu8dYUSohKULQrG@lists.linux.dev
-X-Gm-Message-State: AOJu0YxIz/8Fj0dTO2HTD88GiHAnZ1vHSa86TNHZhvyiTRpOaLkWqkT3
-	Zm/qWYTWjnKJUuoq0iUWsLW148meIAtkp/oooNcy/P4dvcSpWZVzGhqD
-X-Gm-Gg: AeBDiesOIwkK+EfqCJpOY6vUh/a30qOS1AiL7pHc8oEpPF3R/ac0/KwTKQDWNM2wo9a
-	ji8SZWnhEj68nz/OWI2lHYs9R4OUtb5/LwHNyKgRxiB7HgnI1201wNb7OMdR+R9IUSGg54QZXE7
-	wt96EqXoEgjMv1ltVJexAAsmREiZARVaJFBqXgFEacVlWb5FjF5x5HDRqwvCzJJjeAz61dW31ej
-	AcLVTMvy7vdXVhiHbobUiGku7rrOsvVXS0A1ksc5d3UBb2Bm/A1tJEmyt8gm2YVQAvn7XB0On9P
-	u/CwjUiBudpsWdz/PVHXKP7VGCfqihUmyb49/kNDzcGCAex8iaRRMA4OBXTUdKJHuZeQ0Tem94H
-	BhYV2R5u5rVFJ64yahu2g3RuvI94wCl6PaA+SxaRDB+HfnTflODabnQCIdy4H5wKe2GzgCJzKtM
-	2JsX2rACxwL8/tlGfXaDdi8UCqtnrwdPKhxfosd8ATAddjxPP/Q3KKXxWYM3DZVVvkELrl1KPNC
-	UDl1PCyS1rvZA==
-X-Received: by 2002:a05:6000:1863:b0:43e:a69b:d818 with SMTP id ffacd0b85a97d-43fe3e0ab5dmr49306229f8f.38.1777028991633;
-        Fri, 24 Apr 2026 04:09:51 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cc0f31sm59174867f8f.12.2026.04.24.04.09.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Apr 2026 04:09:51 -0700 (PDT)
-Date: Fri, 24 Apr 2026 12:09:43 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Link Mauve <linkmauve@linkmauve.fr>
-Cc: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>,
- maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
- chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org,
- jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org,
- ardb@kernel.org, sumit.semwal@linaro.org, christian.koenig@amd.com,
- ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net,
- bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
- tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
- tamird@kernel.org, arnd@arndb.de, nsc@kernel.org, simona.vetter@ffwll.ch,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH V13 5/7] rust: Make __udivdi3() and __umoddi3() panic
-Message-ID: <20260424120943.4a65dd69@pumpkin>
-In-Reply-To: <aes7L3M1d_LvvGKa@luna>
-References: <20260424054742.45832-1-mkchauras@gmail.com>
-	<20260424054742.45832-6-mkchauras@gmail.com>
-	<20260424101425.6bde0e17@pumpkin>
-	<aes7L3M1d_LvvGKa@luna>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l17Y1Ygb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777031529; x=1808567529;
+  h=date:from:to:cc:subject:message-id;
+  bh=IzJXx+zx6j4NX28LafTopFwufgCBd4WHTlSHKqEQ2gA=;
+  b=l17Y1Ygb92vU+YkLkYNnJC58CYTX5rlHCJg8FPWpd945NPozJhALubc5
+   cu6OXahsMsaBsBBMgcwt2BiudutkGsa4X9HwmzuMAv2Pv96FMrPOdlWTN
+   HOFT20uJxTYH2g9n3Le2Wlp2obEiD2tRiK5plFqM/CWuGy4nEodS3EI8n
+   qFU1zH9CwiBYXwJmvKdVPRhBFwhUrQ2sz0eab83dRxyTxY0BogkHTtizq
+   Mu4oAIE95jBVGz15sadchOEcJYx+HhmcQsdp6fE0RF64k0RnviMkf0dRK
+   RejujyhsDZk7nySx35cXMJA/D8N6mtn3x2H06AscHzJK96wLFz8if7oy1
+   g==;
+X-CSE-ConnectionGUID: WUNd3QcOR/SEJG/F+UWwlg==
+X-CSE-MsgGUID: DWzl5kafQKisctNQ5JN7nA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11765"; a="103471711"
+X-IronPort-AV: E=Sophos;i="6.23,196,1770624000"; 
+   d="scan'208";a="103471711"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2026 04:52:09 -0700
+X-CSE-ConnectionGUID: gqpA8DrEQcCn9jrk0KscCA==
+X-CSE-MsgGUID: Whx59wDnR/G5yuWXGwBxKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,196,1770624000"; 
+   d="scan'208";a="256229690"
+Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 24 Apr 2026 04:52:07 -0700
+Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wGF4n-000000005dh-1sLQ;
+	Fri, 24 Apr 2026 11:52:05 +0000
+Date: Fri, 24 Apr 2026 19:51:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zach Brown <zab@zabbo.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [zab-rpdfs:rpdfs-initial 39/71] fs/rpdfs/dir.c:188:6:
+ warning: variable 'inode' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202604241900.EP5N8dLy-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, 24 Apr 2026 11:43:11 +0200
-Link Mauve <linkmauve@linkmauve.fr> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zab/linux-rpdfs.git rpdfs-initial
+head:   4c70e08d984665a04c3879b17ee74470846a3b47
+commit: babd2186d11672777dfa3e80a446f081227ddf7f [39/71] rpdfs: access dirents with block handles
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260424/202604241900.EP5N8dLy-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260424/202604241900.EP5N8dLy-lkp@intel.com/reproduce)
 
-> On Fri, Apr 24, 2026 at 10:14:25AM +0100, David Laight wrote:
-> > On Fri, 24 Apr 2026 11:17:40 +0530
-> > "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com> wrote:
-> >  =20
-> > > From: Link Mauve <linkmauve@linkmauve.fr>
-> > >=20
-> > > The core crate currently depends on these two functions for i64/u64/
-> > > i128/u128/core::time::Duration formatting, but we shouldn=E2=80=99t u=
-se that in
-> > > the kernel so let=E2=80=99s panic if they are ever called. =20
-> >=20
-> > Ugg.
-> > Surely you can make it a link-time failure?
-> > Or change the underlying code to avoid the divide. =20
->=20
-> This is currently a link-time failure, which means if any of the core
-> crate or drm_panic_qr are linked in, the kernel will fail to link.
->=20
-> And since we rely on core, that means no kernel can be built on PowerPC
-> without this patch.
->=20
-> A possible solution would be to change the core crate to not divide
-> u64s, but the last time I tried to do that I couldn=E2=80=99t quite figur=
-e out
-> how to do formatting without it, maybe I will just open an issue against
-> Rust.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604241900.EP5N8dLy-lkp@intel.com/
 
-If the problematic code is (effectively) printf("%lld", val) there are much
-better ways to generate the digit string than repeated 64bit divides.
-On particular you can use 'multiply by reciprocal' instead.
-For example see the latest (I think it'll be in 7.1-rc) version of
-tools/include/nolibc/stdlib.h
+All warnings (new ones prefixed by >>):
 
-	David
+>> fs/rpdfs/dir.c:188:6: warning: variable 'inode' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     188 |         if (ret < 0)
+         |             ^~~~~~~
+   fs/rpdfs/dir.c:205:24: note: uninitialized use occurs here
+     205 |         return d_splice_alias(inode, dentry);
+         |                               ^~~~~
+   fs/rpdfs/dir.c:188:2: note: remove the 'if' if its condition is always false
+     188 |         if (ret < 0)
+         |         ^~~~~~~~~~~~
+     189 |                 goto out;
+         |                 ~~~~~~~~
+   fs/rpdfs/dir.c:177:21: note: initialize the variable 'inode' to silence this warning
+     177 |         struct inode *inode;
+         |                            ^
+         |                             = NULL
+   1 warning generated.
+
+
+vim +188 fs/rpdfs/dir.c
+
+   170	
+   171	static struct dentry *rpdfs_lookup(struct inode *dir, struct dentry *dentry, unsigned int flags)
+   172	{
+   173		struct super_block *sb = dir->i_sb;
+   174		struct rpdfs_fs_info *rfi = RPDFS_INODE_FS(dir);
+   175		struct rpdfs_block_handle *hnd = NULL;
+   176		struct dent_cb_args da;
+   177		struct inode *inode;
+   178		int ret;
+   179	
+   180		if (dentry->d_name.len > RPDFS_NAME_MAX) {
+   181			inode = ERR_PTR(-ENAMETOOLONG);
+   182			goto out;
+   183		}
+   184	
+   185		init_dent_cb_args(&da, dentry, NULL);
+   186	
+   187		ret = rpdfs_inode_acquire(rfi, dir, &hnd, 0);
+ > 188		if (ret < 0)
+   189			goto out;
+   190	
+   191		ret = lookup_entry(rfi, dir, &da);
+   192		rpdfs_block_release(rfi, &hnd);
+   193		if (ret < 0 && ret != -ENOENT) {
+   194			inode = ERR_PTR(ret);
+   195			goto out;
+   196		}
+   197	
+   198		if (ret == -ENOENT)
+   199			inode = NULL;
+   200		else
+   201			inode = rpdfs_iget(sb, &da.dent.ig);
+   202	
+   203	out:
+   204		/* d_splice_alias passes through ERR_PTR inodes */
+   205		return d_splice_alias(inode, dentry);
+   206	}
+   207	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
