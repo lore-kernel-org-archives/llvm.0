@@ -1,80 +1,200 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5012E625;
-	Fri, 24 Apr 2026 00:04:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB927282F16;
+	Fri, 24 Apr 2026 04:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776989057; cv=none; b=IvmtDKumOaCUNZOtX5CxYzWLJGob2PwWSilLxeMrqHuSNvgHQZCsuIda/fQQJlLNEW3WDzOIj5CJsVD8PnYyGTlg6N3qk1qHQMlYjdOdSwICmOPSGmWwUk9yHbYp5TCd/80KlyGUkKs1L95WAYC411W5FcVGInfiPnZmIlYn808=
+	t=1777004072; cv=none; b=KzOk+KOo4q7t/neyIaJ/v4ueAOUJGrmdhpwWeRXej4PtpuWbdVPx7E3j6BG3z4NmkCdnCgwxKSAa3GZBBVamXASQv0lVv8gMGG226Coztjp4gxCHHYjIkGCDU+0TB9JATZL93PaThOVr+3QPjNzaVKGhQkibweI0o0z1TuyOafo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776989057; c=relaxed/simple;
-	bh=FBP1QMpZvU+K8ZsHJxtOUnrV+D38784dku4cXyjD2YM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bjPnkgGcGCeF/aSFh73rCRp395SAoFvpDsHfocfJ1ltyWFFar/yiGAqwcmdc+4sNe7RDHZXMLIB3gtKc15k/sp7iIatjncHZDX0lOMNzbL9KSXtgwfzGxin0oWF8D5hfpGs0IyaXaYCO4gkQu0t8iZ9hCTS4Blws0GuwEw8hBv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M1bGx3nG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777004072; c=relaxed/simple;
+	bh=aw419j7Omp56/BH+DB9eaVbzQNqNHJydFkp+Dqa+kQc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=jvFbFB1FOMBSfFbEnb5ESpkilU6W3of3RAi1zPHJ/VsYIGJvXhC5dzbIg3K2+xTZS0lzJsHpFJ52ungXbGe3KQFZFOZj439lsnVfD58SUQBsNkTMtGLgF7v8iXVoMaFdj3O+zgjXMGavOPgDtRUEBF2zPf71Tqy9NJx+aqTr8AE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GYzVHs5P; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M1bGx3nG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47BC1C2BCAF;
-	Fri, 24 Apr 2026 00:04:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776989057;
-	bh=FBP1QMpZvU+K8ZsHJxtOUnrV+D38784dku4cXyjD2YM=;
-	h=Date:From:To:Cc:Subject:From;
-	b=M1bGx3nG5cpdC4x5uVL3hCYp2my0Udgor4BQNC9F39QGJLzBGwDqSKlJ1UUrTkZ+r
-	 vsvwKgMP84Gz2cCZibY4/IRwaa4dZmUlFOlslWziOibazBOEJXwC7v7kdrb99p3VHA
-	 prFmuHQ4Ml/+8FkzaVwmZ6zxf8V+jz1fNO+jEDBYsHrKMki5GFyUO8igEIi88P541A
-	 6pHqHhh6AHFjgD9ec7CFOoi0vUQIo/Uwb/6ZKQzq44uBdxrDkHszdkpKkpABTfMjGh
-	 oadmjHJqTyVdJBZI4g16cJHb6SMDXJKAgtBUrPfF7XAPTnMU4snDSQZ6X4Sr7IkvDm
-	 w7UL9/Zt+V/7w==
-Date: Thu, 23 Apr 2026 17:04:13 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [GIT PULL] Clang build fix for 7.1
-Message-ID: <20260424000413.GA1031124@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GYzVHs5P"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777004070; x=1808540070;
+  h=date:from:to:cc:subject:message-id;
+  bh=aw419j7Omp56/BH+DB9eaVbzQNqNHJydFkp+Dqa+kQc=;
+  b=GYzVHs5PGJtCuN7ryI/hICEnOvtYSswHXkdTukLNX5paIzuCwZhdcftP
+   KIi4b6uXvPHIWMPDpsg5yhQJiN3npCfUrDtVwAzA0lj4a8u5yvl1bX5Zn
+   G0dRxEHCxpMvV4ZRMbe54w/KuW7AEPTB5tcOrqRRIubozxIBFl9V2J/Tf
+   ncYYkaqSv3jN+0u+bqaTRWU4ZmWimC12gUIWxcSPPOvWPgV30xZU35855
+   2GxUv3mZONMvjzQWVxxPLtCjHRSLE4GfKxSHJiof9ljp/KtFpDd9wleIa
+   Z0VfBc5YSGmQpCk2l0KSX7MMZcFHrNDH3j05uPyVEK3zhGOdBuPuI/bdz
+   Q==;
+X-CSE-ConnectionGUID: t4pUUNQaSsynXcjZrH68fA==
+X-CSE-MsgGUID: xF8r4oitSuWGswaZGA+ZDg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11765"; a="95397583"
+X-IronPort-AV: E=Sophos;i="6.23,196,1770624000"; 
+   d="scan'208";a="95397583"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2026 21:14:29 -0700
+X-CSE-ConnectionGUID: WpRfM02iS7Kr3zl7Xrejtw==
+X-CSE-MsgGUID: sHJAV3oITHidgQkAnBdSig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,196,1770624000"; 
+   d="scan'208";a="270967475"
+Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 23 Apr 2026 21:14:28 -0700
+Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wG7vt-0000000059R-0nnd;
+	Fri, 24 Apr 2026 04:14:25 +0000
+Date: Fri, 24 Apr 2026 12:14:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bcachefs:bcachefs-testing 35/35]
+ fs/bcachefs/alloc/foreground.c:560:2: warning: label followed by a
+ declaration is a C23 extension
+Message-ID: <202604241231.XHlNZ0fg-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Hi Linus,
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   db7e4548979f797675fe7214f4745be25d16c455
+commit: 3dd173bb8d58e827ecf6cdd31e81dc52f8d75110 [35/35] bcachefs: alloc: filter spurious freelist_wait wakes on the waiter side
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260424/202604241231.XHlNZ0fg-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260424/202604241231.XHlNZ0fg-lkp@intel.com/reproduce)
 
-Please pull this single build fix for an instance of a new clang
-subwarning under -Wunused-but-set-variable, -Wunused-but-set-global,
-that appears in certs/extract-cert.c. If there are any issues, please
-let me know.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604241231.XHlNZ0fg-lkp@intel.com/
 
-Cheers,
-Nathan
+All warnings (new ones prefixed by >>):
 
-The following changes since commit 028ef9c96e96197026887c0f092424679298aae8:
+>> fs/bcachefs/alloc/foreground.c:560:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     560 |         u32 wake_counter_snapshot = atomic_read(&ca->alloc_wake_counter);
+         |         ^
+   1 warning generated.
 
-  Linux 7.0 (2026-04-12 13:48:06 -0700)
 
-are available in the Git repository at:
+vim +560 fs/bcachefs/alloc/foreground.c
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git tags/clang-fixes-7.1-1
+   540	
+   541	/**
+   542	 * bch2_bucket_alloc_trans - allocate a single bucket from a specific device
+   543	 * @trans:	transaction object
+   544	 * @req:	state for the entire allocation
+   545	 *
+   546	 * Returns:	an open_bucket on success, or an ERR_PTR() on failure.
+   547	 */
+   548	static struct open_bucket *bch2_bucket_alloc_trans(struct btree_trans *trans,
+   549							   struct alloc_request *req)
+   550	{
+   551		struct bch_fs *c = trans->c;
+   552		struct bch_dev *ca = req->ca;
+   553		struct open_bucket *ob = NULL;
+   554		bool freespace = READ_ONCE(ca->mi.freespace_initialized);
+   555		bool waiting = false;
+   556	
+   557		req->btree_bitmap = req->data_type == BCH_DATA_btree;
+   558		memset(&req->counters, 0, sizeof(req->counters));
+   559	again:
+ > 560		u32 wake_counter_snapshot = atomic_read(&ca->alloc_wake_counter);
+   561		bch2_dev_usage_read_fast(ca, &req->usage);
+   562		u64 avail = __dev_buckets_free(ca, req->usage, req->watermark);
+   563	
+   564		if (req->usage.buckets[BCH_DATA_need_discard] >
+   565		    min(avail, ca->mi.nbuckets >> 7))
+   566			bch2_do_discards_async(c);
+   567	
+   568		if (req->usage.buckets[BCH_DATA_need_gc_gens] > avail)
+   569			bch2_gc_gens_async(c);
+   570	
+   571		if (should_invalidate_buckets(ca, req->usage))
+   572			bch2_dev_do_invalidates(ca);
+   573	
+   574		if (!avail) {
+   575			if (req->watermark > BCH_WATERMARK_normal &&
+   576			    c->recovery.pass_done < BCH_RECOVERY_PASS_check_allocations)
+   577				goto alloc;
+   578	
+   579			if (bch2_copygc_can_make_progress(ca)) {
+   580				req->copygc_can_make_progress = true;
+   581				bch2_copygc_wakeup(c);
+   582			}
+   583	
+   584			track_event_change(&c->times[BCH_TIME_blocked_allocate], true);
+   585	
+   586			if (req->cl &&
+   587			    !(req->flags & BCH_WRITE_alloc_nowait) &&
+   588			    !req->will_retry_target_devices &&
+   589			    !req->will_retry_all_devices &&
+   590			    !req->will_retry_set_devices) {
+   591				if ((!req->copygc_can_make_progress ||
+   592				     req->watermark == BCH_WATERMARK_copygc) &&
+   593				    (req->nr_effective || (req->devs_have && req->devs_have->nr))) {
+   594					ob = ERR_PTR(bch_err_throw(c, bucket_alloc_no_progress));
+   595				} else if (!waiting) {
+   596					closure_wait(&c->allocator.freelist_wait, req->cl);
+   597					waiting = true;
+   598					goto again;
+   599				} else {
+   600					ob = ERR_PTR(bch_err_throw(c, bucket_alloc_blocked));
+   601				}
+   602			} else {
+   603				ob = ERR_PTR(bch_err_throw(c, freelist_empty));
+   604			}
+   605	
+   606			goto err;
+   607		}
+   608	
+   609		if (waiting)
+   610			bch2_alloc_wake_dev(ca);
+   611	alloc:
+   612		ob = likely(freespace)
+   613			? bch2_bucket_alloc_freelist(trans, req)
+   614			: bch2_bucket_alloc_early(trans, req);
+   615	
+   616		if (!ob && req->btree_bitmap != BTREE_BITMAP_ANY) {
+   617			req->btree_bitmap = BTREE_BITMAP_ANY;
+   618			goto alloc;
+   619		}
+   620	
+   621		if (!ob && freespace && c->recovery.pass_done < BCH_RECOVERY_PASS_check_alloc_info) {
+   622			freespace = false;
+   623			goto alloc;
+   624		}
+   625	err:
+   626		if (!ob)
+   627			ob = ERR_PTR(bch_err_throw(c, no_buckets_found));
+   628	
+   629		int ret = PTR_ERR_OR_ZERO(ob);
+   630	
+   631		if (!ret) {
+   632			ob->data_type = req->data_type;
+   633	
+   634			event_inc_trace(c, bucket_alloc, buf,
+   635				bucket_alloc_to_text(&buf, c, req, ob));
+   636		} else if (bch2_err_matches(ret, BCH_ERR_open_buckets_empty) ||
+   637			   bch2_err_matches(ret, BCH_ERR_open_bucket_alloc_blocked)) {
+   638			event_inc_trace(c, open_bucket_alloc_fail, buf,
+   639				bch2_fs_open_buckets_to_text(&buf, c));
+   640		} else if (!bch2_err_matches(ret, BCH_ERR_transaction_restart) &&
+   641			   !req->will_retry_target_devices &&
+   642			   !req->will_retry_all_devices &&
+   643			   !req->will_retry_set_devices)
+   644			event_inc_trace(c, bucket_alloc_fail, buf,
+   645				bucket_alloc_to_text(&buf, c, req, ob));
+   646	
+   647		alloc_trace_add(req, ca->dev_idx, ret, wake_counter_snapshot);
+   648	
+   649		return ob;
+   650	}
+   651	
 
-for you to fetch changes up to 4f96b7c68a9904e01049ef610d701b382dca9574:
-
-  extract-cert: Wrap key_pass with '#ifdef USE_PKCS11_ENGINE' (2026-04-16 14:21:10 -0700)
-
-----------------------------------------------------------------
-Clang build fixes for 7.1
-
-- Wrap declaration and assignment of key_pass in certs/extract-cert.c
-  with '#ifdef' that matches its only usage to clear up an instance of a
-  new clang subwarning, -Wunused-but-set-global.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-----------------------------------------------------------------
-Nathan Chancellor (1):
-      extract-cert: Wrap key_pass with '#ifdef USE_PKCS11_ENGINE'
-
- certs/extract-cert.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
