@@ -1,89 +1,207 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C2D927FB2E
-	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 11:57:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777031874; cv=none; b=dOwM2NU90KsbgfhQv1llMC5oEbZgYtqzHvWWIjUcNTjWz2kNxq5u4X0VPNz9AggELcWEWNj83cy6uUZRDvDqL30pZ3MbXxHv6+mUOU7iqzox2HflmaSlXOpXaAoN8OQUtSYZuVt0EHRA1IznMj9lqyIRXSAJc52AGDetZ2+LN5Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777031874; c=relaxed/simple;
-	bh=MYK1fWgR91ZYqs435Qv9paY5FhralssDhU5Ykv0Bby0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sf6Z90fQoMkKvRCG0KHkByRoeLPneur07k2EdpRNkMAcKtoiD+lpPUMxdiuYCQKrRmn/2Y5axTuMOZT9RNVOhuaQRAIA4H3tT0wfZKHOpbQCLNdqpPQQZLP4o6Dr+KhXaordKs25W4Qcog2U6JVd14xiFMaxPGWssFmIDCyR02I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
-Received: from gate.crashing.org (localhost [127.0.0.1])
-	by gate.crashing.org (8.18.1/8.18.1/Debian-2) with ESMTP id 63OBvJ0f186057;
-	Fri, 24 Apr 2026 06:57:19 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.18.1/8.18.1/Submit) id 63OBvCZI186048;
-	Fri, 24 Apr 2026 06:57:12 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Fri, 24 Apr 2026 06:57:12 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org,
-        jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org,
-        ardb@kernel.org, sumit.semwal@linaro.org, christian.koenig@amd.com,
-        ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net,
-        bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
-        tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org,
-        nick.desaulniers+lkml@gmail.com, morbo@google.com,
-        justinstitt@google.com, tamird@kernel.org, arnd@arndb.de,
-        nsc@kernel.org, simona.vetter@ffwll.ch, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
-        Link Mauve <linkmauve@linkmauve.fr>
+Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020142.outbound.protection.outlook.com [52.101.196.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75D33CFF4C
+	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 12:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.142
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777034630; cv=fail; b=ZwLOrSCTA6RnKZUQSdx3jHdmVqFzkHpRLvtpe/to6C1QKgea+Dd3lP/YBBuymxtfcfA1cbzpS/Fyp6yhuQYJDr8ChlGwqj7KeF3NpVcf73C0jEj7bGO8Y6T9/1mARHxrwITzGZiCKeJMLrejSWHIJ6VAXE8Pb0BrWicd3EzpgvA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777034630; c=relaxed/simple;
+	bh=yIYC1j6UaAYb6UMV2endYCAe+t/8wtUdTmoF7hhMa8M=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
+	 In-Reply-To:MIME-Version; b=mByv1thTBZiZnE6ASgPfmUA3pkLIf/JNoULM5j3qBy8TC+MvXMUqEpzvQlUN8hnsyeoBVMG+66VdHG/43yh+T1Buqi4eB8wAHVzU3pjCGjlSk6Ae+zjq5zJX8JcZNk00S7TZ9Lq0HPiMz1btKBbqAMX5yow5S8c4ITv2ioYEieQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=NEqO1q6f; arc=fail smtp.client-ip=52.101.196.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="NEqO1q6f"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NigBRx1yEkVD33IbDA4vFt4eHJUN1TvF0X6D2JG+40c5YJ/fXwNLs9Di5O0dlgmjZFuWwvIIcjNv87ptlFqpGAn75z5sa9pOIXEl13SUzrv2onUgkr74mM5xwnIvj54nvWQk72mKwJD3R+MeodsRa1CHAQcCi3YQrDJfuFaCeuWaa04dSdgNyuelzAIVbrIGN96WN62q1rNCyqu3jsgf7C3g5MXjTtwx0Sb1GJ61jppWl8ru0naZU1x5+qy7xjoaxiIiFv8HoJif7UYttqQ9he5DIs4TDc1/BqJYU0Zzt9VuS1RAHRzeru5RJUDKi89kEOfIn+HyzIRJ4RoPUALvaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yM2KVpbeXVKYgSfEiEsPee0AccJ+OUQ3jbc1h7inrC0=;
+ b=hFamBzZUeedjkS7Zf1QtkFDqv6yGgn1yZDWBul02fnEERgNe6suDnXpHyq92ClUa4XCh7idWEqS2SC6JwKW2LmX7APxZ6ZBLD3y3LwxjlxgRl3cIoCjQ9q/0RY3WhcLQoz0gbT1muUjj5r5KcJCsRBy9msGiwxRMBF+04pSlEbQJsPymGe1YmlFniW9zeiiSC33JPFAECgyHwKyWImj9xAgxnUoGgrpKjDhAnQhnvI9V4FkEcdr3BaAbRMzz9C5fHTA48DNGpNf3OzUI7Eh1isM3Bjq5IUVfgbZ4mK2fsbE8disa6A1FKHVw7bleE6eB1G+U7wDZqrg91yoaayPAGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yM2KVpbeXVKYgSfEiEsPee0AccJ+OUQ3jbc1h7inrC0=;
+ b=NEqO1q6fN+YFKLS2FZBm37UU1P1kOOZAG2BVDmexX5j31Sz1eHLhrEJ9K9RXqcXwtqxxi8qdOw5gWSTQrO2Agxx8gcMtDWNNW9y2UXUvDf9LFIirZwyYyLv7uRdiaDH7tmaBO9wWi85sTrN2FmJezSooNALesP9SkpLVLDlOI3U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
+ by LO0P265MB7026.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2eb::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.22; Fri, 24 Apr
+ 2026 12:43:44 +0000
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.20.9846.021; Fri, 24 Apr 2026
+ 12:43:44 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 24 Apr 2026 13:43:43 +0100
+Message-Id: <DI1E781QPU8F.1C28PL0089NP6@garyguo.net>
+Cc: "Link Mauve" <linkmauve@linkmauve.fr>
 Subject: Re: [PATCH V13 5/7] rust: Make __udivdi3() and __umoddi3() panic
-Message-ID: <aetamPA_SsWcwC4M@gate>
+From: "Gary Guo" <gary@garyguo.net>
+To: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>,
+ <maddy@linux.ibm.com>, <mpe@ellerman.id.au>, <npiggin@gmail.com>,
+ <chleroy@kernel.org>, <peterz@infradead.org>, <jpoimboe@kernel.org>,
+ <jbaron@akamai.com>, <aliceryhl@google.com>, <rostedt@goodmis.org>,
+ <ardb@kernel.org>, <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
+ <ojeda@kernel.org>, <boqun@kernel.org>, <gary@garyguo.net>,
+ <bjorn3_gh@protonmail.com>, <lossin@kernel.org>, <a.hindborg@kernel.org>,
+ <tmgross@umich.edu>, <dakr@kernel.org>, <nathan@kernel.org>,
+ <nick.desaulniers+lkml@gmail.com>, <morbo@google.com>,
+ <justinstitt@google.com>, <tamird@kernel.org>, <arnd@arndb.de>,
+ <nsc@kernel.org>, <simona.vetter@ffwll.ch>,
+ <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+ <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+ <linaro-mm-sig@lists.linaro.org>, <rust-for-linux@vger.kernel.org>,
+ <llvm@lists.linux.dev>
+X-Mailer: aerc 0.21.0
 References: <20260424054742.45832-1-mkchauras@gmail.com>
  <20260424054742.45832-6-mkchauras@gmail.com>
- <aetZ3VX_Y9sop-SO@gate>
+In-Reply-To: <20260424054742.45832-6-mkchauras@gmail.com>
+X-ClientProxiedBy: LO4P265CA0028.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2ae::20) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:488::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aetZ3VX_Y9sop-SO@gate>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|LO0P265MB7026:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3cf2ce5d-0c7e-4354-218e-08dea1ff1ee9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|1800799024|366016|7416014|376014|921020|18002099003|56012099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	qZxuI9vt5qSeLsyrg9zmyJOM/CEX42j7kuAUtj8gBfLFAU38bw3Oae3ceSTgI6jh+sfFJKFIl28itXW5SS2Ubcuft6krOLaAqX6wlUr2XRq2u+HJghwErPBSzf0wedOoJHXPGmnbCFqYNr4q12AsQmTrFvjR2rAzLaaFmWmRn/UbbOvrLj2V/+fy1DfEBFGcKeIW8LPS707iJXyarkkhbiWIz3pvoHSPGVu+Q3TzbwTk2oD3KC9HRvtHlFtv5nydOTcG2JVdRayes42fMfaF9O64XmIh0KrkPiLX/G2JWP8FpL+MhQqrzPUynUZdP1mdCDJRuqfHJC04KxExZ0XBPV1C/vzfgW7nrevjdQno9pM9Hr5ZeFIPIIFefTomna5Wp5C4RaJcBkXbPtK4i3KmP76I/nuRZnK7yYqRvG3hsgKW37hrYQfRQxIAfhu+bK3q2mW4wIoQoZnWe+fvAh63ujEVJXDioNO9pvop5s4h/FUzdjxd49dqIp760z84ThMFcCNubJpMBURW27kSP2WdXsy38e5VedJYcjTHXENAnBcoV54kjPTQNz87nVbDqs/h4e+hjNKyCHklwxnsva/fkFFRxQYgGgFwbU6GgwJZB8W4Nz3mScVa1YPBMOldxjtkHYonQhHB1TNkKPjY2Dz9GAZp78Sg7Y/raDgLQKUTz5I26lWn2J7zGMiNh9+/UIM2JuiIJLoF3Uh7QdjeyQk5ge86kOIon6RRJrdpsdIqL4FqeZCHuAeQx3wHz7yEjiwbbcZU2wEyhAwFRgW7EKp9BA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(366016)(7416014)(376014)(921020)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dDdVTTRJYW1VU3pTU2JyWXdmWUNDQVpIbVd6RnlYVnlLa0VYT3kwK3RRditU?=
+ =?utf-8?B?YVBIRFlSUjcvS1VIR3YvM2dOR3g3bFpTT2haWUdRYVB3anM5bnd5ckpuVDNx?=
+ =?utf-8?B?NkgzWW9QZ0NPbjQ1V0xGY2xDd1BRV0hDbFlKSHhMZUR0MU04cGREMDBQb2R1?=
+ =?utf-8?B?NjVENkRDcTVFR1pCZUJ2ZGdVUTF5WjNTdlRub3Z1UjVkTXg5bjU0Zm4rOFpD?=
+ =?utf-8?B?eSttaTJqUE1UaDB2UlE3V1d3ZFRiZHhtWUxXT1dvejNwTFA4VitDWHY2eHAw?=
+ =?utf-8?B?NEhoVXQ0WVE1WjRKU1g0WVVDOUIwTUdmSWZuMFFUR2paRjlERCtmSU1tMGVl?=
+ =?utf-8?B?ZmlhRWxEb0lWSEg2eXRRUEpMb3lRdHJaUVRORnp5UlJUWnpVdGg4UFZieXdh?=
+ =?utf-8?B?NnJwVXdBdHdTa3h2bWZ3WmJydmJoZlNjS1p6NVpBM2cvNGlRbUEvNkdicTMw?=
+ =?utf-8?B?Nk5QVEZVQ0lRR1JrQmY4RUV3aUZ6SDFDN0kzaGFjZnk3YlVjQnoxeE8zQXp4?=
+ =?utf-8?B?cE11b1BtT3MzeG9GSDlpVXJPdG85L2F1aERaMGR1MG0xRkg4RDJxNDdKK3Jl?=
+ =?utf-8?B?ZEQwTVVOSkduK0pnQXEvU01FS1hVRUdEWmpIRnFVdm5ySlNYMlJtelVLM3Fz?=
+ =?utf-8?B?QW12T0N0NkhhTk1wSXJ4SjJaRGUvWDB1MmV6bUZHaDhvRnNzbUdHNmtsUmtN?=
+ =?utf-8?B?TjhhQTFaUlY3ME04TzdIQWZsenFLYzJHVU50RVdWN292M1lVbWcwck1QWkFP?=
+ =?utf-8?B?c2NNaTR1RG9WZFlNUkpJVnRwWDZ5ckl5Wnh5c2hjVlBLc3lIOTNXWGJ4VFJV?=
+ =?utf-8?B?anVTVlkvUHY2czljSHBsSXI5R2ZhVWczRmVuREFlaDhrQVZQcjBsbTU0Sk81?=
+ =?utf-8?B?Y2hRMXBvOVpJdGlGbDJrQjJBMGk0dzJqNzhqMWNrWExzTXRjL0ZxTytBcURW?=
+ =?utf-8?B?YklaZElTMFdkY0VHVS9pRDhRc3AyanpER0FraUJCRlJFS1BRd3FwWjRSOUxw?=
+ =?utf-8?B?bkI5UEgzS3BhKyt4ZjE5bWdmM0Mrc0VXTXZvV3paRWxyUmFRODRSY21QTG9x?=
+ =?utf-8?B?cWRvbkJmdVVEaEw2ZWdGV2t2aHBJUFhzWEIvaGVLMUlCcWVKUERwRUNLMEtL?=
+ =?utf-8?B?K1BqVU9HTnVnL01TWFpGU1UrdEZiaE90ZXk4NjUvSUFtRERVT0FVWFd6aXJZ?=
+ =?utf-8?B?U0NZdjZuVlRIS25xc0FIRzZSSXpobHNhKzg4WnlaUHZCc3BETEJLekNBMjVE?=
+ =?utf-8?B?K1ZFemZEVlN6OGRMUVg3Q09EbHo1azRMd3VkRTkyckdxRDg2aXB6ejFFaDNz?=
+ =?utf-8?B?TXJCYThId1hOU0UyMXdnU0ZPSnFmTjNRclg2NExhSk5vQ2haNjVPcVVpRllv?=
+ =?utf-8?B?Ti90VnkvdmhtNERDMGN2SVhxMkMyYWlPREhrQTdqRys5KytmNlNDWVh3aUp4?=
+ =?utf-8?B?Q1lKa2ZsZG15YUxsZUFnUjZMVy9zRUNkbDRsVHNDUGFDMXdMZ0s5Qk5kZjcr?=
+ =?utf-8?B?WFIrcjN3SnNIK0tGdmxMUUZ4eFNHUFhuL09DdHpJREVqWnI4YlRpM3VnelVE?=
+ =?utf-8?B?M3RIcHlYWWJ0c0ZNbkJsVkRwUlljb1pvNVVUNjVxMjlpQjFuMmhjcU9LMGln?=
+ =?utf-8?B?eS8yeGxINUFqVlh5S0V3a1djYjFQT3grT28zTWJYQ2JFdG5YOUo3VFFvekxB?=
+ =?utf-8?B?RTlxWGFjSC9oVTh2a1d6RHMwZ2NxcGtoOFJzV3JLdkxqNlBpR1Q0SkhXNVVQ?=
+ =?utf-8?B?bzVIZDh4bTVjU2o1bUlxdTJYZTYrYXZwbmFlVGYrdmRQN2JzUXQ5YlI4ZmIx?=
+ =?utf-8?B?LzAvS0tWdmhTbFJremppSzgxNk5QSjFPWjRaZTN1N0xTUERlZUhRKzdrM0kx?=
+ =?utf-8?B?bEZMZEdHdmloMHcwcC92ZFBiV0xJL3dOOFRUQVNWaW00VWNjWHRPdjFCZTdz?=
+ =?utf-8?B?U0lZL211NWFTODJ3K1ZPZWVRVHBHWFpnaVA3VWc0U2N1UmlDWU9MRjdXU1FH?=
+ =?utf-8?B?R3M5VjZ3cS83QjZMSXVOd1puOWFkZmFQdTJlV1ZrOEUva2ZRV21VWGtiRnFu?=
+ =?utf-8?B?c290TTZwNGNpVEVwK3dkOVg4clRvRHpCZDJsWjFvWTFqbzZHY3N0RFlteWNZ?=
+ =?utf-8?B?MXB1SzNjSTRwUUwyMVluc255cGhNOXVlbFBkL0VZeHZYeGpMSnUzZWpqN3k4?=
+ =?utf-8?B?MlNjWTRLU2FKZllVNk5mMS8vY1pLY1lpUDF0amw1QXNDdktKSVdCTmo3allQ?=
+ =?utf-8?B?VHNMQWxSNm1BWXlWTkFxUHRZc1FKQmtONFJjaGhQV1FBaDFCYlg3Zml3eEhQ?=
+ =?utf-8?B?Z0JHUGFZNUlyclFPL3pTOVU4MDdPZzQ3MzhZbnRJTmkxVDVUWTlwZz09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3cf2ce5d-0c7e-4354-218e-08dea1ff1ee9
+X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2026 12:43:44.1297
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wYzL+1TKZSabyrdAizLf0SgY/fCe51GNVaxudBMtsXwZ+zeR8n9ErHV4WLwE0vIkd0wm+6lAV1eTdy1/XTYL7g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB7026
 
-On Fri, Apr 24, 2026 at 06:54:05AM -0500, Segher Boessenkool wrote:
-> Hi!
-> 
-> On Fri, Apr 24, 2026 at 11:17:40AM +0530, Mukesh Kumar Chaurasiya (IBM) wrote:
-> > The core crate currently depends on these two functions for i64/u64/
-> > i128/u128/core::time::Duration formatting, but we shouldn’t use that in
-> > the kernel so let’s panic if they are ever called.
-> > 
-> > This doesn’t yet fix drm_panic_qr.rs, which also uses __udivdi3 when
-> > CONFIG_CC_OPTIMIZE_FOR_SIZE=y, but at least makes the rest of the kernel
-> > build on PPC32.
-> 
-> GCC uses calls to functions like even __addsi3 whenever the (sub-)target
-> does not implement some RTL, doesn't have a define_insn and the like for
-> it.  When you write a new port you only *have* to implement a very few
-> things, the rest is done in libgcc (you might still have to write some
-> of that for your target, no free lunch etc.)
-> 
-> 32-bit PowerPC has no instructions for 64-bit divisions, nor
-> instructions that help implementing it in software.  It still very often
-> helps to hand-write machine code for it, it very easily can usually be
-> more than twice as fast for example (for example if the divisor is less
-> than half a word big, the common case -- it can be made tens of times
-> faster then).
-> 
-> There can be many reasons why a GCC backend decides to call a libgcc
-> routine.  For __udivdi3 on -m32 rs6000 you'll be good AFAICS :-)
-> (but poisoning functions like you do is a terrible idea in general!)
+On Fri Apr 24, 2026 at 6:47 AM BST, Mukesh Kumar Chaurasiya (IBM) wrote:
+> From: Link Mauve <linkmauve@linkmauve.fr>
+>
+> The core crate currently depends on these two functions for i64/u64/
+> i128/u128/core::time::Duration formatting, but we shouldn=E2=80=99t use t=
+hat in
+> the kernel so let=E2=80=99s panic if they are ever called.
+>
+> This doesn=E2=80=99t yet fix drm_panic_qr.rs, which also uses __udivdi3 w=
+hen
+> CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy, but at least makes the rest of the kerne=
+l
+> build on PPC32.
 
-Whoopsie, I forgot to mention:
+Can we always build libcore with `-C opt-level=3D2` even if
+`CONFIG_CC_OPTIMIZE_FOR_SIZE` is specified? It feels like a better fix than
+stubbing things out.
 
-Approved for trunk.
+Best,
+Gary
 
+>
+> Signed-off-by: Link Mauve <linkmauve@linkmauve.fr>
+> Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
+> ---
+>  rust/Makefile             | 4 ++++
+>  rust/compiler_builtins.rs | 6 ++++++
+>  2 files changed, 10 insertions(+)
+>
+> diff --git a/rust/Makefile b/rust/Makefile
+> index 2a5428a5503d..ee11fba7a03d 100644
+> --- a/rust/Makefile
+> +++ b/rust/Makefile
+> @@ -616,6 +616,10 @@ ifneq ($(or $(CONFIG_ARM64),$(and $(CONFIG_RISCV),$(=
+CONFIG_64BIT))),)
+>  		__ashrti3 \
+>  		__ashlti3 __lshrti3
+>  endif
+> +ifdef CONFIG_PPC32
+> +	redirect-intrinsics +=3D \
+> +		__udivdi3 __umoddi3
+> +endif
+> =20
+>  ifdef CONFIG_MODVERSIONS
+>  cmd_gendwarfksyms =3D $(if $(skip_gendwarfksyms),, \
+> diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
+> index dd16c1dc899c..fc6b54636dd5 100644
+> --- a/rust/compiler_builtins.rs
+> +++ b/rust/compiler_builtins.rs
+> @@ -97,5 +97,11 @@ pub extern "C" fn $ident() {
+>      __aeabi_uldivmod,
+>  });
+> =20
+> +#[cfg(target_arch =3D "powerpc")]
+> +define_panicking_intrinsics!("`u64` division/modulo should not be used",=
+ {
+> +    __udivdi3,
+> +    __umoddi3,
+> +});
+> +
+>  // NOTE: if you are adding a new intrinsic here, you should also add it =
+to
+>  // `redirect-intrinsics` in `rust/Makefile`.
 
-Segher
