@@ -1,144 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62DD1DDC2B;
-	Fri, 24 Apr 2026 06:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C1E17D6
+	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 07:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777011645; cv=none; b=mYJvypcaAucH14Cgg6b77R5mo3Zq2Tha28lBWF+FKQ59uijlJ4PNsWUkU1fzm99FOvaFPb1MJ/6sLrqGLhYfuFU8KE8MnYXBomfu7jEdiatFTbTKX104zaqdd45q44kDZU8XER8nyqzfBkGJCO/z4IsN3QlwWsHsaco6w3IVx+U=
+	t=1777017191; cv=none; b=Qwqq05e6qOPI/Kden/wfIYsKZ6/HdiUdbzkQOZTuU4oBP+r+rHWr3XPLwNE5iw8QDWS4v1rOrBcVInOYVgcCoAIl3HKRICnpQ3MMMzjtuxxQji4WqVGuaA0kgx/srunjvKJ5/brFEN6cQKPOjYhl8VwCQa8g2jly4Rf1wWt4EIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777011645; c=relaxed/simple;
-	bh=rEs+bxnue3b5W5zjkHRcygFVRRpJRsmuT0X/Jx/8Py8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=afO9bPAG93n1l8Ro4HEHRZF8FAilrdTQkKFKK6ntA7crVWwTuqQb9cFhSMBlXH1CIYFkR8Gd1t2QNAHohTnVbdT1WZ7hUG6pxknS/HE5K+9U6nJ55IGUGkF9w1SJ6cV4ozvH5Y6XeY0jkHayDb5XIj3a1hQ/k13o6c27MTLrIkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GQAHb6cN; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777017191; c=relaxed/simple;
+	bh=JpsvE4TMssmFe79rCK8WynPd6EzODqc8jagXJaWoMsk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=HqZctamNsPOlLdT/Bx4LJiu/arZs61F96PMLLP995fwqpJGHorfIFOMk8UgEbNklj2xB2NsBZAZ0qroPTfgMqkf3XnDhsqfrpW8byixFPgK7uJ90Uu7Q2Uag5XRGlPNYYcTcYLGTk+QGyGEGYmCRhFeul0mgsvJG6x6WRftdZDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bl34pYj0; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GQAHb6cN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777011644; x=1808547644;
-  h=date:from:to:cc:subject:message-id;
-  bh=rEs+bxnue3b5W5zjkHRcygFVRRpJRsmuT0X/Jx/8Py8=;
-  b=GQAHb6cN8zC1OBJLsEe9qz05UI/EgOX5uvUmLKmGNMAS/wX/bu5gyu2r
-   KKAnvO0hnI2zpJYgHZQc/dKYUxugtgmZKwInhiiXEt1azzHu5Pm3xSoXs
-   vdtB9w5Y8SJzr2++HpYgeCadALxkxtRdM/lJKdafUrk5/xPQA1KVaeZPL
-   2v2abCHLNXaMsO+9ldH6aUUIiUIGoqU8R+Eg+5riYLupWf4KYWwrdQMrq
-   GpV53fiJhPCM/aAbrm9UFH5Fu9omd7aSYmHzzZyNzHvz/YgQRB6FIBSbX
-   OUez0cwKG7iGbg/6xzQCpprScbQuW24AHXKfTOnW1WGMkMkAKk0AT3U8i
-   g==;
-X-CSE-ConnectionGUID: 3NQOD6lyTC+ejhWGGXJGjw==
-X-CSE-MsgGUID: thkhApZFQzaEHq/6ke1Xuw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11765"; a="89072296"
-X-IronPort-AV: E=Sophos;i="6.23,196,1770624000"; 
-   d="scan'208";a="89072296"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2026 23:20:43 -0700
-X-CSE-ConnectionGUID: vnoTiBNHRlSnx5E39LkVkw==
-X-CSE-MsgGUID: Hg6NJzrORJ+yBJCqln0twA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,196,1770624000"; 
-   d="scan'208";a="230203403"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 23 Apr 2026 23:20:41 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wG9u3-000000005JF-1Km0;
-	Fri, 24 Apr 2026 06:20:39 +0000
-Date: Fri, 24 Apr 2026 14:20:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2026-04-20-2 147/147]
- sound/soc/codecs/88pm860x-codec.c:1229:52: error: incomplete definition of
- type 'struct snd_soc_component'
-Message-ID: <202604241453.bSDCnoJH-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bl34pYj0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777017189;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PxLYRLZNoqycAoKqPF5ROOpfWl3wef18kzjU0wme0W4=;
+	b=bl34pYj0kYI0IlqGSW+a9YaHn1qLWT75zCRvIXuz+ckudl9txPd8h9myM/W7OkUjst2y8A
+	5NNG9c+c0uLKta0SX07aKkOgNlocDJN2MUZ1TJeXr46m5kJU7U7WbRVD3hJUe4+5+6JTqv
+	sOd1IIoWDsiIegn0ZizmKD/5Akmz1D0=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-38-Aq9NOttTMSimElyTHuM5Pg-1; Fri,
+ 24 Apr 2026 03:53:07 -0400
+X-MC-Unique: Aq9NOttTMSimElyTHuM5Pg-1
+X-Mimecast-MFC-AGG-ID: Aq9NOttTMSimElyTHuM5Pg_1777017186
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A585519560B3
+	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 07:53:06 +0000 (UTC)
+Received: from [172.20.96.14] (unknown [10.30.44.37])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3E222180047F;
+	Fri, 24 Apr 2026 07:53:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-0,
+ upstream-mainline, 507bd4b6)
+Date: Fri, 24 Apr 2026 07:53:06 -0000
+To: llvm@lists.linux.dev, yoyang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <66656.126042403530700347@us-mta-38.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 7dDkBGg2aKghtUy8SDaizxGQHvU6fG0Rvt1t9XfDSNw_1777017186
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2026-04-20-2
-head:   1604ab9b37c0f7145cc187f24e3aca5b4e318eb1
-commit: 1604ab9b37c0f7145cc187f24e3aca5b4e318eb1 [147/147] move soc-component
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260424/202604241453.bSDCnoJH-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260424/202604241453.bSDCnoJH-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604241453.bSDCnoJH-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> sound/soc/codecs/88pm860x-codec.c:1229:52: error: incomplete definition of type 'struct snd_soc_component'
-    1229 |                 trace_snd_soc_jack_irq(dev_name(pm860x->component->dev));
-         |                                                 ~~~~~~~~~~~~~~~~~^
-   include/sound/soc.h:422:8: note: forward declaration of 'struct snd_soc_component'
-     422 | struct snd_soc_component;
-         |        ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +1229 sound/soc/codecs/88pm860x-codec.c
+Kernel information:
+    Commit message: Merge tag 'soc-late-7.1' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/soc/soc
 
-f213f4b5177740 Haojian Zhuang    2010-08-19  1213  
-5783994b9afa8d Kuninori Morimoto 2018-01-29  1214  static irqreturn_t pm860x_component_handler(int irq, void *data)
-f213f4b5177740 Haojian Zhuang    2010-08-19  1215  {
-f213f4b5177740 Haojian Zhuang    2010-08-19  1216  	struct pm860x_priv *pm860x = data;
-abc495582a3f01 Kuninori Morimoto 2026-04-09  1217  	struct device *dev = snd_soc_component_to_dev(pm860x->component);
-f213f4b5177740 Haojian Zhuang    2010-08-19  1218  	int status, shrt, report = 0, mic_report = 0;
-f213f4b5177740 Haojian Zhuang    2010-08-19  1219  	int mask;
-f213f4b5177740 Haojian Zhuang    2010-08-19  1220  
-f213f4b5177740 Haojian Zhuang    2010-08-19  1221  	status = pm860x_reg_read(pm860x->i2c, REG_STATUS_1);
-f213f4b5177740 Haojian Zhuang    2010-08-19  1222  	shrt = pm860x_reg_read(pm860x->i2c, REG_SHORTS);
-f213f4b5177740 Haojian Zhuang    2010-08-19  1223  	mask = pm860x->det.hs_shrt | pm860x->det.hook_det | pm860x->det.lo_shrt
-f213f4b5177740 Haojian Zhuang    2010-08-19  1224  		| pm860x->det.hp_det;
-f213f4b5177740 Haojian Zhuang    2010-08-19  1225  
-7116f452c8e3e3 Mark Brown        2010-12-29  1226  #ifndef CONFIG_SND_SOC_88PM860X_MODULE
-1c9e9795b5e234 Mark Brown        2010-12-05  1227  	if (status & (HEADSET_STATUS | MIC_STATUS | SHORT_HS1 | SHORT_HS2 |
-1c9e9795b5e234 Mark Brown        2010-12-05  1228  		      SHORT_LO1 | SHORT_LO2))
-5783994b9afa8d Kuninori Morimoto 2018-01-29 @1229  		trace_snd_soc_jack_irq(dev_name(pm860x->component->dev));
-1435b9402fe0fb Mark Brown        2010-12-23  1230  #endif
-1c9e9795b5e234 Mark Brown        2010-12-05  1231  
-f213f4b5177740 Haojian Zhuang    2010-08-19  1232  	if ((pm860x->det.hp_det & SND_JACK_HEADPHONE)
-f213f4b5177740 Haojian Zhuang    2010-08-19  1233  		&& (status & HEADSET_STATUS))
-f213f4b5177740 Haojian Zhuang    2010-08-19  1234  		report |= SND_JACK_HEADPHONE;
-f213f4b5177740 Haojian Zhuang    2010-08-19  1235  
-f213f4b5177740 Haojian Zhuang    2010-08-19  1236  	if ((pm860x->det.mic_det & SND_JACK_MICROPHONE)
-f213f4b5177740 Haojian Zhuang    2010-08-19  1237  		&& (status & MIC_STATUS))
-f213f4b5177740 Haojian Zhuang    2010-08-19  1238  		mic_report |= SND_JACK_MICROPHONE;
-f213f4b5177740 Haojian Zhuang    2010-08-19  1239  
-f213f4b5177740 Haojian Zhuang    2010-08-19  1240  	if (pm860x->det.hs_shrt && (shrt & (SHORT_HS1 | SHORT_HS2)))
-f213f4b5177740 Haojian Zhuang    2010-08-19  1241  		report |= pm860x->det.hs_shrt;
-f213f4b5177740 Haojian Zhuang    2010-08-19  1242  
-f213f4b5177740 Haojian Zhuang    2010-08-19  1243  	if (pm860x->det.hook_det && (status & HOOK_STATUS))
-f213f4b5177740 Haojian Zhuang    2010-08-19  1244  		report |= pm860x->det.hook_det;
-f213f4b5177740 Haojian Zhuang    2010-08-19  1245  
-f213f4b5177740 Haojian Zhuang    2010-08-19  1246  	if (pm860x->det.lo_shrt && (shrt & (SHORT_LO1 | SHORT_LO2)))
-f213f4b5177740 Haojian Zhuang    2010-08-19  1247  		report |= pm860x->det.lo_shrt;
-f213f4b5177740 Haojian Zhuang    2010-08-19  1248  
-f213f4b5177740 Haojian Zhuang    2010-08-19  1249  	if (report)
-f213f4b5177740 Haojian Zhuang    2010-08-19  1250  		snd_soc_jack_report(pm860x->det.hp_jack, report, mask);
-f213f4b5177740 Haojian Zhuang    2010-08-19  1251  	if (mic_report)
-f213f4b5177740 Haojian Zhuang    2010-08-19  1252  		snd_soc_jack_report(pm860x->det.mic_jack, SND_JACK_MICROPHONE,
-f213f4b5177740 Haojian Zhuang    2010-08-19  1253  				    SND_JACK_MICROPHONE);
-f213f4b5177740 Haojian Zhuang    2010-08-19  1254  
-abc495582a3f01 Kuninori Morimoto 2026-04-09  1255  	dev_dbg(dev, "headphone report:0x%x, mask:%x\n", report, mask);
-abc495582a3f01 Kuninori Morimoto 2026-04-09  1256  	dev_dbg(dev, "microphone report:0x%x\n", mic_report);
-f213f4b5177740 Haojian Zhuang    2010-08-19  1257  	return IRQ_HANDLED;
-f213f4b5177740 Haojian Zhuang    2010-08-19  1258  }
-f213f4b5177740 Haojian Zhuang    2010-08-19  1259  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2475278902
 
-:::::: The code at line 1229 was first introduced by commit
-:::::: 5783994b9afa8d37e9766b3cfbb594c1ae26087c ASoC: 88pm860x: replace codec to component
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2475278902_ppc64le_kernel
 
-:::::: TO: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2475278902_aarch64_kernel_kcidb_tool_21162766_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2475278902_x86_64_kernel_kcidb_tool_21163484_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
