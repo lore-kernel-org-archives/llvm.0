@@ -1,200 +1,216 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB927282F16;
-	Fri, 24 Apr 2026 04:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4EAA2C859
+	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 05:47:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777004072; cv=none; b=KzOk+KOo4q7t/neyIaJ/v4ueAOUJGrmdhpwWeRXej4PtpuWbdVPx7E3j6BG3z4NmkCdnCgwxKSAa3GZBBVamXASQv0lVv8gMGG226Coztjp4gxCHHYjIkGCDU+0TB9JATZL93PaThOVr+3QPjNzaVKGhQkibweI0o0z1TuyOafo=
+	t=1777009681; cv=none; b=TxfRluNLen2iBCJZICtqoBkyXTfNnssrXmRXt83RnsABzMnUzv9WAi1OEsIjBlWPpW1FQUBH2sIJkQhpA5jN5aRghoSYbU3UTjmrhpei4Eda9YK7dcU/Ct9yZf+91i00fgLX/+s+AptOYibCR0xMc9gg8uPyLeSOfBMnkCq6WJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777004072; c=relaxed/simple;
-	bh=aw419j7Omp56/BH+DB9eaVbzQNqNHJydFkp+Dqa+kQc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jvFbFB1FOMBSfFbEnb5ESpkilU6W3of3RAi1zPHJ/VsYIGJvXhC5dzbIg3K2+xTZS0lzJsHpFJ52ungXbGe3KQFZFOZj439lsnVfD58SUQBsNkTMtGLgF7v8iXVoMaFdj3O+zgjXMGavOPgDtRUEBF2zPf71Tqy9NJx+aqTr8AE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GYzVHs5P; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777009681; c=relaxed/simple;
+	bh=Wbj58W73Rvn11UjYWl9yYv7iLUdHME6E7yi35WzUH1g=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GC0Hpd1e7hqcXl9VDFUrYAMMwlEq2zTEsnYlzKRJ5KbDVTTQwzYPYaTodO5o8+x6yASd3ZtKjyrbofqLnzpjvxoHUQjqeOKEKscmHyn6Jub+EcQjQD1ph95KttLRirIxgFerC2L/aLRxY1/dTrE9MK1uwcHzKEGswP/R5ZOLxMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m92cpLDy; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GYzVHs5P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777004070; x=1808540070;
-  h=date:from:to:cc:subject:message-id;
-  bh=aw419j7Omp56/BH+DB9eaVbzQNqNHJydFkp+Dqa+kQc=;
-  b=GYzVHs5PGJtCuN7ryI/hICEnOvtYSswHXkdTukLNX5paIzuCwZhdcftP
-   KIi4b6uXvPHIWMPDpsg5yhQJiN3npCfUrDtVwAzA0lj4a8u5yvl1bX5Zn
-   G0dRxEHCxpMvV4ZRMbe54w/KuW7AEPTB5tcOrqRRIubozxIBFl9V2J/Tf
-   ncYYkaqSv3jN+0u+bqaTRWU4ZmWimC12gUIWxcSPPOvWPgV30xZU35855
-   2GxUv3mZONMvjzQWVxxPLtCjHRSLE4GfKxSHJiof9ljp/KtFpDd9wleIa
-   Z0VfBc5YSGmQpCk2l0KSX7MMZcFHrNDH3j05uPyVEK3zhGOdBuPuI/bdz
-   Q==;
-X-CSE-ConnectionGUID: t4pUUNQaSsynXcjZrH68fA==
-X-CSE-MsgGUID: xF8r4oitSuWGswaZGA+ZDg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11765"; a="95397583"
-X-IronPort-AV: E=Sophos;i="6.23,196,1770624000"; 
-   d="scan'208";a="95397583"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2026 21:14:29 -0700
-X-CSE-ConnectionGUID: WpRfM02iS7Kr3zl7Xrejtw==
-X-CSE-MsgGUID: sHJAV3oITHidgQkAnBdSig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,196,1770624000"; 
-   d="scan'208";a="270967475"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 23 Apr 2026 21:14:28 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wG7vt-0000000059R-0nnd;
-	Fri, 24 Apr 2026 04:14:25 +0000
-Date: Fri, 24 Apr 2026 12:14:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bcachefs:bcachefs-testing 35/35]
- fs/bcachefs/alloc/foreground.c:560:2: warning: label followed by a
- declaration is a C23 extension
-Message-ID: <202604241231.XHlNZ0fg-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m92cpLDy"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-35da1af3e10so6995430a91.3
+        for <llvm@lists.linux.dev>; Thu, 23 Apr 2026 22:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777009679; x=1777614479; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q7M2fwY604nxmRG1YIO02Z14fgzwwg1Pa67qHupVFxk=;
+        b=m92cpLDytJzxchvz2n6kORvtoW+OkUkH0pTV3hTNOdSOqtpHw6o7F/Wxc9tZW8b4Jj
+         517789udqbzQKRDOqBqnDXwBP/1+NhRUGBLMtzfRpZN3hKX6osRW47vTsx18fDvA2r9s
+         IfeLd+jGGjEMEyE425e48fowtjdgZMWWYjkIymzVVtcWImxCKxueFRq++c8RCul2Hz9f
+         omvYiGZe1GdkaRZLfEhHTBxVTF8paqWMHl8Kdk1ybHbJfDd7rxbd2vSv5NdFFc/XdF9h
+         zvENIZrruGfW4mWMwnN9Jfd/FuajWFSB1J46x3jJJVn/JEDKgaFRRCuzbORZ3eoE+4zF
+         lyHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777009679; x=1777614479;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q7M2fwY604nxmRG1YIO02Z14fgzwwg1Pa67qHupVFxk=;
+        b=EaDvnOkBzQXhXccCW0OqG8iicxYrBzefc7ZxFX+Xzc9SMh7aE+hda/6OxXjREfvwaH
+         AKCALx487XS8SbTrN8mlzjKbyT6d2vPtMq82tCSmBYmplIi1ukY4yJ6g23oLlDz5Fhnq
+         tqvIwh0kh2RNLlA3d0Y0scPlgZQLWRA/JPJhKE0u77WjOkR3UvayVVJ6VWla5X9mRApe
+         I+gFSvlC7eJwD++3Y68wlHeDP3666EziWfz6nsGKhqos9/WCoD+0iS4IKBqb2COQkk8q
+         xjZmoI5oDNnuWY53FUeBicrg2KeVYakYsypJUvtdsbfATDnjXIL3vOrVq+f9V1m9brzO
+         ZuNg==
+X-Forwarded-Encrypted: i=1; AFNElJ+OiFvw8El2alKyf1CHXgkLIjjtJaY05+VNHig6MIl0Z3mhGQ2Q6smkfcH3chVsbNU4pRyB@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw/AkAFwqSv3sfdxnO3OJnhW8fDZGymqYMi/JAGFdt4AJfAQYT0
+	ct3KXQqDKC9ZlPhD+Bv4Jttq5ADXfQcbuFeMRv3fSyXAviFU40lck554
+X-Gm-Gg: AeBDiev65uYEhWLPiiu3nMDKqA1ct5c6gVvBKhjQFdij2Ot1OaQ0gBiKjIdfKR8ysAZ
+	5gHbAHPCbvE2a9LjLm44FzQRcpChgSc+V767FmY9uk1rQGJshGJVFF8Yko6e+jfW//kcKTc/nKq
+	KQhPC60FwNyG84l5Caf5VKw/wUYGE/8byvF5jMl963w+INoFoptXjzBhNN8nrTaQialTwsaGwDR
+	b/aZ5h53EYEAJ/Zit97k4pv8lbaFXL8Uvp9TMw9k3BP0n5fbBT6Zow75UyDwNCLEN93o03zLr1i
+	0DKAE3CojCvJUM7mU7cfSREk8iow7XG83H0NvAZAWO2rZYcb2ufm7KJhBPh/N7ZoMWYTlU/ZQ5e
+	txBMmGGaeAJaZL1Sw1WJoi5Nm8vnAS19NbXGDwXsA5bemO16Q7G9t3xSAPWwElN71W6Uu9UfMBp
+	9EvSe2el1Wm84AHEVEB4XotcCd1UrzFLCu+0WkWcFWSfbRmeq2qwyMPCoMIBBD+3i5/kBEtTbS8
+	bv1O+0dvA7n3rQ=
+X-Received: by 2002:a17:903:28e:b0:2b0:7531:b61e with SMTP id d9443c01a7336-2b5f9f9f125mr305572665ad.41.1777009679150;
+        Thu, 23 Apr 2026 22:47:59 -0700 (PDT)
+Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.bl1-in.ibm.com ([129.41.58.4])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5faa176e9sm208778245ad.20.2026.04.23.22.47.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2026 22:47:58 -0700 (PDT)
+From: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
+To: maddy@linux.ibm.com,
+	mpe@ellerman.id.au,
+	npiggin@gmail.com,
+	chleroy@kernel.org,
+	peterz@infradead.org,
+	jpoimboe@kernel.org,
+	jbaron@akamai.com,
+	aliceryhl@google.com,
+	rostedt@goodmis.org,
+	ardb@kernel.org,
+	sumit.semwal@linaro.org,
+	christian.koenig@amd.com,
+	ojeda@kernel.org,
+	boqun@kernel.org,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	tmgross@umich.edu,
+	dakr@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	tamird@kernel.org,
+	arnd@arndb.de,
+	nsc@kernel.org,
+	mkchauras@gmail.com,
+	simona.vetter@ffwll.ch,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH V13 0/7] Rust support for powerpc
+Date: Fri, 24 Apr 2026 11:17:35 +0530
+Message-ID: <20260424054742.45832-1-mkchauras@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   db7e4548979f797675fe7214f4745be25d16c455
-commit: 3dd173bb8d58e827ecf6cdd31e81dc52f8d75110 [35/35] bcachefs: alloc: filter spurious freelist_wait wakes on the waiter side
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260424/202604241231.XHlNZ0fg-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260424/202604241231.XHlNZ0fg-lkp@intel.com/reproduce)
+Enable experimental rust support for ppc64le and ppc32be. The patch for
+ppc32 has been provided by Link Mauve[1] and ppc64le support[2] has been
+merged over it. ppc32 needs some toolchain fixes mentioned in the patch
+`rust: Add PowerPC support` and the discussion for that is done here[1].
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604241231.XHlNZ0fg-lkp@intel.com/
+This has been tested on
+- powernv9 hardware
+- pseries P11 hardware
+- pseries(9, 10) qemu
+- powernv(9, 10) qemu
+- rustdoc on x86 and powerpc64le
+- rusttest on x86 and powerpc64le
 
-All warnings (new ones prefixed by >>):
+We are actively working with our LLVM team to get the target for ppc,
+ppc64 and ppc64le in the rust compiler.
 
->> fs/bcachefs/alloc/foreground.c:560:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     560 |         u32 wake_counter_snapshot = atomic_read(&ca->alloc_wake_counter);
-         |         ^
-   1 warning generated.
+[1] https://lore.kernel.org/all/20260204030507.8203-1-linkmauve@linkmauve.fr
+[2] https://lore.kernel.org/all/20260204042417.83903-1-mkchauras@gmail.com
 
+Changelog:
+V12 -> V13:
+- Added a patch for fixing build issue on ppc32 by Link Mauve
+- Added another patch to fix a build issue in dma-buf
+- Added another patch to enforce minimum `rustc` version for powerpc
+V12: https://lore.kernel.org/all/20260421120958.190430-1-mkchauras@gmail.com/
 
-vim +560 fs/bcachefs/alloc/foreground.c
+V11 -> V12:
+- Rebased to mainline (rust/Makefile conflict resolved)
+V11: https://lore.kernel.org/all/20260417152253.2312961-1-mkchauras@gmail.com/
 
-   540	
-   541	/**
-   542	 * bch2_bucket_alloc_trans - allocate a single bucket from a specific device
-   543	 * @trans:	transaction object
-   544	 * @req:	state for the entire allocation
-   545	 *
-   546	 * Returns:	an open_bucket on success, or an ERR_PTR() on failure.
-   547	 */
-   548	static struct open_bucket *bch2_bucket_alloc_trans(struct btree_trans *trans,
-   549							   struct alloc_request *req)
-   550	{
-   551		struct bch_fs *c = trans->c;
-   552		struct bch_dev *ca = req->ca;
-   553		struct open_bucket *ob = NULL;
-   554		bool freespace = READ_ONCE(ca->mi.freespace_initialized);
-   555		bool waiting = false;
-   556	
-   557		req->btree_bitmap = req->data_type == BCH_DATA_btree;
-   558		memset(&req->counters, 0, sizeof(req->counters));
-   559	again:
- > 560		u32 wake_counter_snapshot = atomic_read(&ca->alloc_wake_counter);
-   561		bch2_dev_usage_read_fast(ca, &req->usage);
-   562		u64 avail = __dev_buckets_free(ca, req->usage, req->watermark);
-   563	
-   564		if (req->usage.buckets[BCH_DATA_need_discard] >
-   565		    min(avail, ca->mi.nbuckets >> 7))
-   566			bch2_do_discards_async(c);
-   567	
-   568		if (req->usage.buckets[BCH_DATA_need_gc_gens] > avail)
-   569			bch2_gc_gens_async(c);
-   570	
-   571		if (should_invalidate_buckets(ca, req->usage))
-   572			bch2_dev_do_invalidates(ca);
-   573	
-   574		if (!avail) {
-   575			if (req->watermark > BCH_WATERMARK_normal &&
-   576			    c->recovery.pass_done < BCH_RECOVERY_PASS_check_allocations)
-   577				goto alloc;
-   578	
-   579			if (bch2_copygc_can_make_progress(ca)) {
-   580				req->copygc_can_make_progress = true;
-   581				bch2_copygc_wakeup(c);
-   582			}
-   583	
-   584			track_event_change(&c->times[BCH_TIME_blocked_allocate], true);
-   585	
-   586			if (req->cl &&
-   587			    !(req->flags & BCH_WRITE_alloc_nowait) &&
-   588			    !req->will_retry_target_devices &&
-   589			    !req->will_retry_all_devices &&
-   590			    !req->will_retry_set_devices) {
-   591				if ((!req->copygc_can_make_progress ||
-   592				     req->watermark == BCH_WATERMARK_copygc) &&
-   593				    (req->nr_effective || (req->devs_have && req->devs_have->nr))) {
-   594					ob = ERR_PTR(bch_err_throw(c, bucket_alloc_no_progress));
-   595				} else if (!waiting) {
-   596					closure_wait(&c->allocator.freelist_wait, req->cl);
-   597					waiting = true;
-   598					goto again;
-   599				} else {
-   600					ob = ERR_PTR(bch_err_throw(c, bucket_alloc_blocked));
-   601				}
-   602			} else {
-   603				ob = ERR_PTR(bch_err_throw(c, freelist_empty));
-   604			}
-   605	
-   606			goto err;
-   607		}
-   608	
-   609		if (waiting)
-   610			bch2_alloc_wake_dev(ca);
-   611	alloc:
-   612		ob = likely(freespace)
-   613			? bch2_bucket_alloc_freelist(trans, req)
-   614			: bch2_bucket_alloc_early(trans, req);
-   615	
-   616		if (!ob && req->btree_bitmap != BTREE_BITMAP_ANY) {
-   617			req->btree_bitmap = BTREE_BITMAP_ANY;
-   618			goto alloc;
-   619		}
-   620	
-   621		if (!ob && freespace && c->recovery.pass_done < BCH_RECOVERY_PASS_check_alloc_info) {
-   622			freespace = false;
-   623			goto alloc;
-   624		}
-   625	err:
-   626		if (!ob)
-   627			ob = ERR_PTR(bch_err_throw(c, no_buckets_found));
-   628	
-   629		int ret = PTR_ERR_OR_ZERO(ob);
-   630	
-   631		if (!ret) {
-   632			ob->data_type = req->data_type;
-   633	
-   634			event_inc_trace(c, bucket_alloc, buf,
-   635				bucket_alloc_to_text(&buf, c, req, ob));
-   636		} else if (bch2_err_matches(ret, BCH_ERR_open_buckets_empty) ||
-   637			   bch2_err_matches(ret, BCH_ERR_open_bucket_alloc_blocked)) {
-   638			event_inc_trace(c, open_bucket_alloc_fail, buf,
-   639				bch2_fs_open_buckets_to_text(&buf, c));
-   640		} else if (!bch2_err_matches(ret, BCH_ERR_transaction_restart) &&
-   641			   !req->will_retry_target_devices &&
-   642			   !req->will_retry_all_devices &&
-   643			   !req->will_retry_set_devices)
-   644			event_inc_trace(c, bucket_alloc_fail, buf,
-   645				bucket_alloc_to_text(&buf, c, req, ob));
-   646	
-   647		alloc_trace_add(req, ca->dev_idx, ret, wake_counter_snapshot);
-   648	
-   649		return ob;
-   650	}
-   651	
+V10 -> V11:
+- Updated `rust/Makefile`
+- Not all libraries are move to `rust/host` directory now. Only
+  proc_macro2, quote and syn are moved
+- Special handling for pin init is added. Details in commit
+- Removed mkdir for `rust/host`, this is now handled by toolchain.
+V10: https://lore.kernel.org/all/20260406200149.3727922-1-mkchauras@gmail.com/
+
+V9 -> V10:
+- rust/Makefile updated with review comments from Miguel
+- Patch 1/4 updated with commit message and subject
+V9: https://lore.kernel.org/all/20260404121610.1956528-1-mkchauras@gmail.com/
+
+V8 -> V9:
+- rust/Makefile updated with a directory instead of abspath
+V8: https://lore.kernel.org/all/20260403145308.1042622-1-mkchauras@gmail.com/
+
+V7 -> V8:
+- rust/Makefile updated to separate host libraries from target
+V7: https://lore.kernel.org/all/20260329160254.2592207-1-mkchauras@gmail.com/
+
+Changelog:
+V6 -> V7:
+- Documentation removed as powerpc is still under development
+- Added a fix for race condition in rust/Makefile
+V6: https://lore.kernel.org/all/20260210090023.2587534-1-mkchauras@gmail.com
+
+V5 -> V6:
+- Added a missing Tested by from Venkat which got missed since V3
+- Support is marked as Maintained instead of experimental
+V5: https://lore.kernel.org/all/20260210053756.2088302-1-mkchauras@gmail.com
+
+V4 -> V5:
+- Removed a nested ifdef from PPC64 for Little endian toolchain
+V4: https://lore.kernel.org/all/20260209105456.1551677-1-mkchauras@gmail.com
+
+V3 -> V4:
+- Co-developed-by header added in patch 1
+V3: https://lore.kernel.org/all/20260205180429.3280657-1-mkchauras@gmail.com
+
+V2 -> V3:
+- Splited HAVE_RUST in 2 lines
+- BINDGEN_TARGET_powerpc initialized before assigning the same to
+  BINDGEN_TARGET
+V2: https://lore.kernel.org/all/20260204210125.613350-1-mkchauras@gmail.com
+
+V1 -> V2:
+- jump label fix for rust has been moved to a separate patch
+- PPC32 support has been taken
+- rust support has been marked experimental
+- target.json dependency has been removed
+- HAVE_RUST now depends on CPU_LITTLE_ENDIAN for PPC64
+
+Link Mauve (2):
+  rust: Make __udivdi3() and __umoddi3() panic
+  rust: Add PowerPC support
+
+Mukesh Kumar Chaurasiya (IBM) (5):
+  rust: Fix "multiple candidates for rmeta dependency core" error
+  dma-resv: Fix undefined symbol when CONFIG_DMA_SHARED_BUFFER is
+    disabled
+  powerpc/jump_label: adjust inline asm to be consistent
+  rust/powerpc: Set min rustc version for powerpc
+  powerpc: Enable Rust for ppc64le
+
+ arch/powerpc/Kconfig                  |  2 ++
+ arch/powerpc/Makefile                 |  7 ++++
+ arch/powerpc/include/asm/jump_label.h | 23 ++++++------
+ include/linux/dma-resv.h              |  2 +-
+ rust/Makefile                         | 52 +++++++++++++++++----------
+ rust/compiler_builtins.rs             |  6 ++++
+ scripts/min-tool-version.sh           |  6 +++-
+ 7 files changed, 68 insertions(+), 30 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.53.0
+
