@@ -1,112 +1,134 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD30A2DC798
-	for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 23:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777074884; cv=pass; b=iGa0WDrf6q7oVJJ5p9AM2haAd/yN9XlSWpCKLCF26oo7WC4Uypl+Q/VPoZQ2jmtNGhO1LlnfFVB6O6qH0zpPRM2mWZEgv0Cl5cMM44/sg8cZlSilIzwoNJSFM+LG+TfT95k/LVwarju09nIjcH9eya5n/TgLlAyQUt+gPUJTRcM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777074884; c=relaxed/simple;
-	bh=5WCqxVi5zvwO1R1WPCjofkbxGaKa8lBOi58ektf9Erg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PjB7UjLbHa4jbdRdFJO1M8iFmR2c5MCGKqHEjMDPgHqOkIQx8gbX0VmI+xIqO1k1aO5gVbs8NR9Hd+q8HvzU24YfclbBn5R4O9ZE53CPChEsH2mzhQL4R7N20J0DEvNuzvK2PvkGwlOJFrDNpTSM9IpRDuX48Sw5pJFlTRTCImY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dp76vDbB; arc=pass smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1397B26AC3
+	for <llvm@lists.linux.dev>; Sat, 25 Apr 2026 06:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777098733; cv=none; b=DRb7zMorLxKWnSQrkOLCUrlNqsa8PeWZ6D/32d8q9RSQCE+znMOOMYOPCR3Chn3nDMo/w/R97pOP8HdwQE8QPBEYsN4TbwMaiH50AlTtLLmo9XmFuR4t/m8Dw2LHWBDpYR0Bg4STixi/Cei4t3k3tFy4btsyCT5l/wjMKztXN10=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777098733; c=relaxed/simple;
+	bh=zDFniH/dPcHlsfMl2AidsijxUXkm6pPuDGro+FjYpGU=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kqftVLjdHvMZe0D3qJgqj33x9EEO5fzQsctL1n4D8rxu2j2o4vhTkatMjzlG0xk1Jxo5vqkn531NZY/9qLl2ja+4l+ojpFUnx9rvyLMpprk3HAHtJWl51NW4ZfdXXU6loTtDWXiW5gEUJ445EtNN3we9Cd1Z9zwnhTsdHYFo6G4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Zwx8FM76; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dp76vDbB"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2dd52990758so519997eec.1
-        for <llvm@lists.linux.dev>; Fri, 24 Apr 2026 16:54:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777074883; cv=none;
-        d=google.com; s=arc-20240605;
-        b=iSRG7m15YYGq/X0iDe4m1f77Tb+rdAEZ/HRlsXIu7fqAZ5bqjsI2iZOo8kn2V3Lysd
-         NdGlObLL/t27gPkyy/HdcEH5a82aSTwEFZJchk7gYLUNiNtlYQlBRjbHVNcEQ9OlyNWv
-         asfGAPUf/Cz9kVDWdF6Q9VgCUD1CPdmknQkdkl2AxNSIwIzSPvKURJbh4SkMjzGwi3hn
-         6tT01yaIkFuztphFyeU4gL7ZA3raAWFJQ5yYP0un7YyoB+Ujizh9qcP6BsQnXMNf5IBF
-         UYZ07DCt41HG6OUepBPp9YvEi1ovgXoAQR5EB21Ym2MvZcaVgA3Eu1VAGTWFfJDTl3LB
-         N6Bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5WCqxVi5zvwO1R1WPCjofkbxGaKa8lBOi58ektf9Erg=;
-        fh=+osfa/ezuuSfuuZMXmgz8ac8SZN09C5wygH0v9KJtT4=;
-        b=F4ZP2HetGsQje2R0U43VdjxufT5lEEO8VV7InfdQYEmzsJu1bVA/1Tag5qAKz7KRJW
-         H6YWLqJSvAiFDIUd+LeMoxYmfA5ZqygSL6cKxAP32UkQflTLM+J/lwyfgEwR+f+8kiCF
-         6pRmC9V9jJJ8VIGMheMoNSiwhTq/bbyQlMXseKazC73bNiUY7SDdorUNzIWZlblFQcHd
-         SnzqJ06puZGggoakZEkTCVRmDhLMDBWzlNouJwzro6//znV/hhqYUFFH1IafNj6RPjrx
-         9LuU3rTXekreqE9uw2hwmx2mx4boj2hl5pblzEEXRKRuFc4yRww8+MY7x/av20rYW2Yd
-         Fmtg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777074883; x=1777679683; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5WCqxVi5zvwO1R1WPCjofkbxGaKa8lBOi58ektf9Erg=;
-        b=Dp76vDbBjW3Aj7KrztRVuwtI1Ax/ltLv8Pu/7sn9rYNMHqG4GAjSSVYwjVpylmWJI5
-         ef3SSxcLkXcIQjWVjriMzgdzRc2pOWC8bHwrNwxw8a+o+8v5QWtkq54XOxY78KE1D4oT
-         kmqefYjc7yRZPWINa/KZeqJnfinwNMZDYhm0p+qLo1t0l4RlLZDNewLkApRmRD1zD+84
-         3tKstZJYTacbEuCtMyF8WMGQdxC233AYAQLXow50U7tZ6cbSJnQECR+i7ShrhlsL2tfJ
-         yxKWhPfAS7IeUDJEI3Hwz7q/Rqe6MS9o4GW1SFCcXnwxmj0kk5Z0cZq96S9LgFBLK2gH
-         5EKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777074883; x=1777679683;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5WCqxVi5zvwO1R1WPCjofkbxGaKa8lBOi58ektf9Erg=;
-        b=ixQdpRKwPBIqCjvAcBtdY9Xu3P6B4FWKnl2qdNXM24JIJ+OAYJe0ggrYj8TP/3Z0sc
-         SICDCgybaAn7X57WxFryxC1Wsd2RjdhdhZpbAxJwcEo/msUrU0X2Jnxm752fJTvRsEpz
-         Wc+lOI45si8NPQR0K7T2EDHMIWU3pQnXpJXzS09KOZqv5G7VPykbklyaITn2aDIzQT04
-         EfTrpDeG/Z7V4NZjX689d6nWvzo4qlcNJDV/pOhOah4vQ6wjdBzsZJQ3Q8CskhTADYyv
-         oiRDfKq+ockstScZnNlkK7yabysVAh0Q8OW+StrUGyqWSFibqcc+I2zF2ufC/idf7BuQ
-         xpbw==
-X-Gm-Message-State: AOJu0YzQd+saXjuUzIu9VZgQtXJRQUBb8Jqsmso5X8LJSuuHtHRqJaUp
-	00p2MEhXPkm8XWv945LGOFM8jK6T5yTCwfoGsYTfT74eQ0Wh/XUyAaMhN7086vwcSYYcMan+5nS
-	D2lt4wXGGTK5clTy415m5S6zyRx9p9hY=
-X-Gm-Gg: AeBDievU3VDmVEw09eIJS1ht7chz0xsFhNcpTxFPoffhzitcC0BNE9Fmmgp4IUE8+Yq
-	fMhw1QprMD6gz1mhtWH3hHD6X8M3/Z3yZ9CQA/gh54VdlYYES4zQqx7CanWRyfE12dTUaIOgFBs
-	nWCCa4YsneforZK1kdgwTWoHLEib2hw7biYIQYBTggy3V2IIIkjdkjwt4HS/rY231vZHPLt/SvG
-	sdH99MLWpHhy6HYm6ux8stBlNVMihk3YOr5nitDsILJpQhbLVaV2+Z6QXHY/FWlx3SecJinHlo1
-	o1H0LMgz/oCHg4fxu8abluJY6mfQYif+PS495zgb2KWYYv9SIzsRkGHamb1u8mJKVVdu5MhUPPw
-	ZT/as37II0l9NythEeLB00rA/lWS/tSlXRw==
-X-Received: by 2002:a05:7300:7494:b0:2dc:e799:934f with SMTP id
- 5a478bee46e88-2e479910f1emr7409949eec.3.1777074882821; Fri, 24 Apr 2026
- 16:54:42 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Zwx8FM76"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777098731;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=inDe2+nlOWJ91j/VGeP5bmwyfa5u4n0E3nFTqG7wlr0=;
+	b=Zwx8FM76bB+cLR5kTs/jojSnS73URb+4hrtyUhviKehEOZe/vYGf9bkBFYtjUNLs+13Fes
+	fwQ7KYssU8ufh96YVplybJpx87QxFqqxWXGUcgfCro4reOlHtoTC+biXTxp5AJe70bZqEG
+	7GGCz4UbbPjuMjbGHlghltgNtqmaM+c=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-277-RlpBajCOOLODNUuetczNRA-1; Sat,
+ 25 Apr 2026 02:32:09 -0400
+X-MC-Unique: RlpBajCOOLODNUuetczNRA-1
+X-Mimecast-MFC-AGG-ID: RlpBajCOOLODNUuetczNRA_1777098728
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9BD4718003F6
+	for <llvm@lists.linux.dev>; Sat, 25 Apr 2026 06:32:08 +0000 (UTC)
+Received: from [172.20.96.14] (unknown [10.30.44.37])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E82DB3007572;
+	Sat, 25 Apr 2026 06:32:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.0.0-0,
+ upstream-mainline, 892c894b)
+Date: Sat, 25 Apr 2026 06:32:07 -0000
+To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260422053019.GA3090128@ax162>
-In-Reply-To: <20260422053019.GA3090128@ax162>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 25 Apr 2026 01:54:30 +0200
-X-Gm-Features: AQROBzCxO62WtEF7X_Hog6dNoP0B1oejIM3QN38bfUS94g5-mqc2KXmLqhs1R7c
-Message-ID: <CANiq72kjHY8HXAmwOfJAf333fsToYCsk0RONZ6gFFGR1B035nw@mail.gmail.com>
-Subject: Re: Prebuilt LLVM 22.1.4 uploaded
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <41551.126042502320900275@us-mta-277.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: ReqxHwVLVK2A7qy1vzl1vukHG07NQT7kz0d6eCdgCC0_1777098728
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 22, 2026 at 7:30=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> I have built and uploaded LLVM 22.1.4 to
-> https://mirrors.edge.kernel.org/pub/tools/llvm/.
->
-> If there are any issues found, please let us know via email or
-> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-> opportunity to get them fixed in main and backported before the 22.x
-> series is no longer supported.
+Hi, we tested your kernel and here are the results:
 
-As usual, tested with Rust enabled -- it seems to work, thanks!
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-Cheers,
-Miguel
+Kernel information:
+    Commit message: Merge tag 'locking-urgent-2026-04-24' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/tip/tip
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2478237672
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2478237672_ppc64le_kernel
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2478237672_x86_64_kernel_kcidb_tool_21170111_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: fedora rawhide - nfsv4.2 failed to update ctime when calling=
+ futimens
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2417851
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/309 FAIL on 6.19.0 as "mtime not up=
+dated" and "ctime not updated"
+            URL: https://lore.kernel.org/linux-nfs/20251219175955.4480-1-ok=
+orniev@redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
