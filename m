@@ -1,64 +1,62 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD73D2EFD95
-	for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 08:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5A82DCF55
+	for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 10:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777193952; cv=none; b=tt/ezMJOPA3uSM7cx+1qdR8XS3AA4/EGaCMkjD8FPStWfEZtJP23fvqXsDmpEyBNNDamW0n4CO5mH3F0j7jk2XwzyebPtM//JKQLmlUwZb0JFQDHBhip9TeD8rPSG7+3DJjuczLeFSEnuideo0kxbxBg/pcKXj9evHOhtK5fYyA=
+	t=1777201192; cv=none; b=WviJ15QuN9GjuAj2OmqS/fgnRae2vBSaVGOt6e5k9aftWEL3ve1c6E+2KKnwBpOEicyWrnGRTa9tZ/z9ZvqgvHPyRJyb1tiuU70f22q8Y/wzHFJDRErCygwfr+BNJHz3k42rYGfRGLtJnFO3MFC9hkBBisNCueDi3hzwI4OxZDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777193952; c=relaxed/simple;
-	bh=Tc8sOod0krNItOJV2MA2sQK3bhEDWu/YmKLDcz4nh/c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VMOXYJA0BG2Ryiia21laUMujYG3jKcC/vPbZeK5UAxFGHfi28wxpFiJ0BZU4HPdWA9ginqKBTvujCPILor62RC5GT9Ir1i4B9KivtxAnH4R6XE4bIhbV7UAdwLFAl+nB+ohXcmXMYQ95nqt3bJGNAxek5yvQNzHf4oc/TisheG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TTnrxmTd; arc=none smtp.client-ip=209.85.216.48
+	s=arc-20240116; t=1777201192; c=relaxed/simple;
+	bh=AySotw8seCXdyqr/esoayXpvzRueCl69QpjBBeYpSZc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jssOLJC+3bRvqSuczHj7+satOXOLhV7TygdevMHiABN9NPv/p94IeqE+9qd/EOPUQa0Ko5fFFfISnRXw9VKVnoqLZQFik9Y2l9D4fml9+4FeTMks/RAfYbVJiAw6/29JyzyUwg5HWX22gnqJdHpa0E0Sx4ox0R4XpbdXMcZ8UPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oLZeFWU0; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TTnrxmTd"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3614826eca4so8192417a91.1
-        for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 01:59:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oLZeFWU0"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-36146ae9dd4so7643083a91.3
+        for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 03:59:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777193950; x=1777798750; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=55+b7l5F3zlZQ0yMZrz5rEYbg5vrZhPlJC+KY+nm9CU=;
-        b=TTnrxmTdEYZhDkOL0LXo4SFz2bIpGydSVyiir4ep8iPCTidNQGmA0KzA6jtBTkxUS+
-         VvnLpqv8/Sk+KLRqWgEe99eTme9M+Lru+QITFNlVYfMmQIPIYjaKz/M+R+XDGWynsJqw
-         pjBNOOx/AGVlgSeTkcMSnlLAvYbFiSlXo3dr0R6Bf5pOv47E6iR7DzOlK9WnCWEJrHiO
-         XIMQIdZXIiLZaynlPhytNiHV03Jhs9tZm2eY4bi8cxuEJ7i8aIJIQQfwnNPQOXUorRNp
-         hqasTHdTmO1f+dBukWWgM3PSBLHrE88eiqRYZ5EaEVaRJOTFKAxS1Mphi8W2UogbfDbf
-         tVVw==
+        d=gmail.com; s=20251104; t=1777201189; x=1777805989; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U1VDIUYAAbGhNNmqVpBAywUG0DbqRnlLtXCpqzu1q0E=;
+        b=oLZeFWU0S81QJpjt7ehpKl36tHd/m6bEE8SLMkH9llgbpxlw4SwlhCoTJ6dc0yobk1
+         OCKQdfOJnOb7DSpgF3xVOCCJ/10RgSs8NydwnlfGvnrTWGgpLQy12Ffgkm1l4vG/5akX
+         WXfUV74WG0uVB/NGkDgVerLpHBB3E3CiefInsnTT5YsLDax5dr1toN2XAqWk4TtLK9l9
+         omdpFRt8kOKIlO/0doGwJTn9zeDtvnmZZMQEJ91Z5yTyUVpzDHEZa2KkFzWUv3+HzNAZ
+         kAkn54t8S2j+KK0xS0N1x0CDiW2GuvZ1rme0NAgtmM/22rd1K8xU207UKpv1FRW/6im3
+         YLMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777193950; x=1777798750;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=55+b7l5F3zlZQ0yMZrz5rEYbg5vrZhPlJC+KY+nm9CU=;
-        b=jw/1ZOwHNLLw+ik78tl1VhD9/xDB3YD9OSBRK/pcQ6HWcxTBwklYYcneVG61WcwH0E
-         YltIXHwbjUHVvVRQPghIiSYzlhCiQlXg/ro4t6Z3ji2DUb1XsykH7H+2gqJdQB3uylg9
-         GyCDt5QsAPBX0V7qHWrTBDaMw862g5sX0jrEP6oFLQIuZ++EKiqxurFNOe4QeR4n2D3l
-         se6KxTVP4q1n1ek1plnlu9+WZzBPYX/0VV3WIKNT6x+GR4cwUcxhni9VrUDC5pfNxRX+
-         UJN9ebnmY/ZSNbrqEVmHy2JULukDVxzmzihLq0Tl/bKQFJeLGoPLl7gzxJwIAdHRaZKD
-         /qPg==
-X-Forwarded-Encrypted: i=1; AFNElJ9XLpcaKqPy/pWWI5MCpcrhxPOJxXu7H8LYMwg38oPqEvBF09NItrxb0OZTZGNUQUorIajP@lists.linux.dev
-X-Gm-Message-State: AOJu0YwaZYdvRLO6X/ZiDRGwBv1nu0Gf/jH8Be0EcTht00jRNjjI9K0K
-	H1L6Gbz7uqpv62MdsjbFL798iYVNu1rXG6WeS0YnkQOfIZR+E7gfPzQR
-X-Gm-Gg: AeBDiesfs2hHpUqOGlPCq0MGlBAV7vcxj+R3H2zS3U8P/Pqj1pXrgQJDb3nVDVMiIOE
-	E3O0twUqdtZUoJeu+rDvgTGBrLz5dg2aWTgtyPXLci0Gx0t/0NmOVHca/1Qia2z4NrKdfxuDZ1U
-	nSwENDGr/bR8lP0Bmi96xdijkFNb8jabSn+qedBN7osWwIfhbnT/IiAxgV0PWXy9/Tt/Bb92Zx/
-	OjLronUMfyay0SFMc0fjcAgfuOrdcQFmma47wd5Rwj9OW0xq5+V4uwJcy/fmY1F8YlXDEFbUo4z
-	YYyJUYVwtBhM9nfnsatNf3LjGEn4xU6bcmpZbEgHrujJVC5kUJD7pkhDnuED99e1G4kVPzRbM59
-	/68faSu/9fe1NMOQRYY4wgz1lGD73mjqcq+h97gjQfgIUdfVSBmeW9+tgrMkn1K6yNYQRnQ5a4y
-	hDIpIGxsqPX41+12pnO+QF+L7Orz93FIsgeNQArCTrL+6zBrAEkQGahW5siHhw2yAI/s1v8dfbY
-	4AwluG2M/06cfM=
-X-Received: by 2002:a17:90a:e704:b0:35f:ccf6:69a5 with SMTP id 98e67ed59e1d1-36140478a16mr39086684a91.20.1777193950059;
-        Sun, 26 Apr 2026 01:59:10 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777201189; x=1777805989;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U1VDIUYAAbGhNNmqVpBAywUG0DbqRnlLtXCpqzu1q0E=;
+        b=eVn5sv0c0rk3lISJiLxoV/OFcKEDaXu81/0k8OueIJ0iuT2Bw1eVRCttWZ6ijDUv8x
+         Fq42H408nCSQpmcJrKNQylOpIjbl8IWPV92jNVzkd5Yug5G3NE25chKrIYMWzl/ZnjTf
+         +YD5CVRN9YY2PewCyNUOxjN3Z9pjry7dumQmGiYWCN+Z8oy4+BrlX8miy6WhprWMcyyt
+         Oiy06+UKPMHd+X26KtLDeeih6V+qGH9V4HYl9Az8AXdDItKkVTlIpQ0pvNrr4HzZLvnP
+         pYlmDVLB3+3jXwRon+nJwBI6daHHoYdbN/QE7HMQRYBylqrCc4PeU1q6ZDdvWOqadhOx
+         KWZw==
+X-Forwarded-Encrypted: i=1; AFNElJ/IVi2ip1rxZ5MHk+zQx1PzHTyVu3hMKyI6gcJWSTrqGrB1DmTVbI49ynof9ibCit1mL/lM@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxd8fnbYykbLWMiawHp59YnzaOD90HM/T+uTfHPiLUmH6Ih7blC
+	2KZ7Y1/6XTIGD0HmitrifGorKJ481FOQtwuju3rowSJlco/p3A3hs0D3
+X-Gm-Gg: AeBDieu5nxbL1L9FdeqXk+KRy9tj2ILgk0/J0hCnUgiRUdLqKXexlxHVmy1DbvU5YLe
+	osFviSxM1pOFza2sKZkclJ8zhsm3M8pw7Z/shF24i1IC1YZZTuHeqq0Bt3mv5MVw+XpIcGCL3T5
+	9qsx77aMhzZQ2b5cKZYAyMyrnh8U4dGo4idl4EOJ2Pk3MWwbmLnmqzZJc2E6pWWuKgtxGwPhe9F
+	mg/gC2mEhST3+PHKu/SL5Asf2sFtG+bD+6yQhNyspwSsgGmOEyCJYIuEXgN/0CTf3q3JT5Rtvcf
+	SemurXJEUwS9gRDOJXC0WsMx1Y4zaQr/iOT/EGJ6Iro0VAeBdGW/BR3zQXN2+Y6o9LP6DFEQ7Rp
+	Qjz9nnFaf9HQjt6GofvrnEUDW9DisHHM4tdiYFgPLzvxEUS09r8HLMV8owObWBmjTIkjYrUWcLY
+	zmFW/jpHvV3Tig82yilLb9pMDINX3duRLE7LFOarIW4yZ01hHP/CQaKr8hrTTJr7XB42WyXmFVq
+	NHlks5hLTB68sA=
+X-Received: by 2002:a17:903:3585:b0:2b2:42f8:1a45 with SMTP id d9443c01a7336-2b5fa013092mr465462375ad.39.1777201189497;
+        Sun, 26 Apr 2026 03:59:49 -0700 (PDT)
 Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com.com ([106.51.164.157])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36141868906sm27718937a91.3.2026.04.26.01.58.56
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5faa2f129sm256667235ad.29.2026.04.26.03.59.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Apr 2026 01:59:09 -0700 (PDT)
+        Sun, 26 Apr 2026 03:59:49 -0700 (PDT)
 From: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
 To: maddy@linux.ibm.com,
 	mpe@ellerman.id.au,
@@ -89,22 +87,18 @@ To: maddy@linux.ibm.com,
 	gregkh@linuxfoundation.org,
 	arnd@arndb.de,
 	tamird@kernel.org,
+	mark.rutland@arm.com,
 	mkchauras@gmail.com,
 	lyude@redhat.com,
-	airlied@gmail.com,
-	j@jannau.net,
+	lina+kernel@asahilina.net,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev
-Cc: Link Mauve <linkmauve@linkmauve.fr>,
-	Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: [PATCH V14 7/7] powerpc: Enable Rust for ppc64le
-Date: Sun, 26 Apr 2026 14:27:25 +0530
-Message-ID: <20260426085725.2090827-8-mkchauras@gmail.com>
+Subject: [PATCH V15 0/7] Rust support for powerpc
+Date: Sun, 26 Apr 2026 16:29:25 +0530
+Message-ID: <20260426105932.2270364-1-mkchauras@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260426085725.2090827-1-mkchauras@gmail.com>
-References: <20260426085725.2090827-1-mkchauras@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -114,105 +108,121 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Enabling rust support for ppc64le.
+Enable experimental rust support for ppc64le and ppc32be. The patch for
+ppc32 has been provided by Link Mauve[1] and ppc64le support[2] has been
+merged over it. ppc32 needs some toolchain fixes mentioned in the patch
+`rust: Add PowerPC support` and the discussion for that is done here[1].
 
-Tested on pseries Power11:
-╰─❯ dmesg | grep rust
-[    0.225728] Initialise system trusted keyrings
-[    0.270961] rust_minimal: Rust minimal sample (init)
-[    0.270968] rust_minimal: Am I built-in? true
-[    0.270974] rust_minimal: test_parameter: 1
-[    0.270983] rust_misc_device: Initialising Rust Misc Device Sample
-[    0.271012] rust_print: Rust printing macros sample (init)
-[    0.271019] rust_print: Emergency message (level 0) without args
-[    0.271023] rust_print: Alert message (level 1) without args
-[    0.271026] rust_print: Critical message (level 2) without args
-[    0.271030] rust_print: Error message (level 3) without args
-[    0.271033] rust_print: Warning message (level 4) without args
-[    0.271037] rust_print: Notice message (level 5) without args
-[    0.271040] rust_print: Info message (level 6) without args
-[    0.271043] rust_print: A line that is continued without args
-[    0.271054] rust_print: Emergency message (level 0) with args
-[    0.271064] rust_print: Alert message (level 1) with args
-[    0.271072] rust_print: Critical message (level 2) with args
-[    0.271077] rust_print: Error message (level 3) with args
-[    0.271083] rust_print: Warning message (level 4) with args
-[    0.271091] rust_print: Notice message (level 5) with args
-[    0.271097] rust_print: Info message (level 6) with args
-[    0.271102] rust_print: A line that is continued with args
-[    0.271110] rust_print: 1
-[    0.271113] rust_print: "hello, world"
-[    0.271121] rust_print: [samples/rust/rust_print_main.rs:35:5] c = "hello, world"
-[    0.271129] rust_print: Arc<dyn Display> says 42
-[    0.271130] rust_print: Arc<dyn Display> says hello, world
-[    0.271136] rust_print: "hello, world"
-[    0.271198] usbcore: registered new interface driver rust_driver_usb
-[    0.271207] rust_faux_driver: Initialising Rust Faux Device Sample
-[    0.271227] faux_driver rust-faux-sample-device: Hello from faux device!
-[    0.271297] rust_configfs: Rust configfs sample (init)
+This has been tested on
+- powernv9 hardware
+- pseries P11 hardware
+- pseries(9, 10) qemu
+- powernv(9, 10) qemu
+- rustdoc on x86 and powerpc64le
+- rusttest on x86 and powerpc64le
 
-Reviewed-by: Link Mauve <linkmauve@linkmauve.fr>
-Tested-by: Link Mauve <linkmauve@linkmauve.fr>
-Reviewed-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
-Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Link: https://github.com/Rust-for-Linux/linux/issues/105
-Link: https://github.com/linuxppc/issues/issues/451
-Acked-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
----
- arch/powerpc/Kconfig  | 1 +
- arch/powerpc/Makefile | 7 ++++++-
- rust/Makefile         | 6 ++++++
- 3 files changed, 13 insertions(+), 1 deletion(-)
+We are actively working with our LLVM team to get the target for ppc,
+ppc64 and ppc64le in the rust compiler.
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 4ac897b650d4..2e3065bce9cd 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -286,6 +286,7 @@ config PPC
- 	select HAVE_RELIABLE_STACKTRACE
- 	select HAVE_RSEQ
- 	select HAVE_RUST			if PPC32
-+	select HAVE_RUST			if PPC64 && CPU_LITTLE_ENDIAN
- 	select HAVE_SAMPLE_FTRACE_DIRECT	if HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	select HAVE_SETUP_PER_CPU_AREA		if PPC64
-diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-index 589613eaa5dc..9385db478c59 100644
---- a/arch/powerpc/Makefile
-+++ b/arch/powerpc/Makefile
-@@ -61,7 +61,12 @@ else
- KBUILD_LDFLAGS_MODULE += $(objtree)/arch/powerpc/lib/crtsavres.o
- endif
- 
--KBUILD_RUSTFLAGS 	+= --target=powerpc-unknown-linux-gnu
-+ifdef CONFIG_PPC64
-+KBUILD_RUSTFLAGS	+= --target=powerpc64le-unknown-linux-gnu
-+KBUILD_RUSTFLAGS	+= -Ctarget-feature=-mma,-vsx,-hard-float,-altivec
-+else
-+KBUILD_RUSTFLAGS	+= --target=powerpc-unknown-linux-gnu
-+endif
- 
- ifdef CONFIG_CPU_LITTLE_ENDIAN
- KBUILD_CPPFLAGS	+= -mlittle-endian
-diff --git a/rust/Makefile b/rust/Makefile
-index 03926a451bac..8e5891563777 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -407,7 +407,13 @@ BINDGEN_TARGET_x86	:= x86_64-linux-gnu
- BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
- BINDGEN_TARGET_arm	:= arm-linux-gnueabi
- BINDGEN_TARGET_loongarch	:= loongarch64-linux-gnusf
-+
-+ifdef CONFIG_PPC64
-+BINDGEN_TARGET_powerpc	:= powerpc64le-linux-gnu
-+else
- BINDGEN_TARGET_powerpc	:= powerpc-linux-gnu
-+endif
-+
- BINDGEN_TARGET_um	:= $(BINDGEN_TARGET_$(SUBARCH))
- BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
- 
+[1] https://lore.kernel.org/all/20260204030507.8203-1-linkmauve@linkmauve.fr
+[2] https://lore.kernel.org/all/20260204042417.83903-1-mkchauras@gmail.com
+
+Changelog:
+V14 -> V15:
+- Fix an issue with rustdoc build on ppc64le
+V14: https://lore.kernel.org/all/20260426085725.2090827-1-mkchauras@gmail.com/
+
+V13 -> V14:
+- 2nd patch is rewritten (Christian)
+- Fixed a small typo in rust/Makefile (Sashiko)
+- Fixed commit message in Patch 4 (Sashiko)
+V13: https://lore.kernel.org/all/20260424054742.45832-1-mkchauras@gmail.com/
+
+V12 -> V13:
+- Added a patch for fixing build issue on ppc32 by Link Mauve
+- Added another patch to fix a build issue in dma-buf
+- Added another patch to enforce minimum `rustc` version for powerpc
+V12: https://lore.kernel.org/all/20260421120958.190430-1-mkchauras@gmail.com/
+
+V11 -> V12:
+- Rebased to mainline (rust/Makefile conflict resolved)
+V11: https://lore.kernel.org/all/20260417152253.2312961-1-mkchauras@gmail.com/
+
+V10 -> V11:
+- Updated `rust/Makefile`
+- Not all libraries are move to `rust/host` directory now. Only
+  proc_macro2, quote and syn are moved
+- Special handling for pin init is added. Details in commit
+- Removed mkdir for `rust/host`, this is now handled by toolchain.
+V10: https://lore.kernel.org/all/20260406200149.3727922-1-mkchauras@gmail.com/
+
+V9 -> V10:
+- rust/Makefile updated with review comments from Miguel
+- Patch 1/4 updated with commit message and subject
+V9: https://lore.kernel.org/all/20260404121610.1956528-1-mkchauras@gmail.com/
+
+V8 -> V9:
+- rust/Makefile updated with a directory instead of abspath
+V8: https://lore.kernel.org/all/20260403145308.1042622-1-mkchauras@gmail.com/
+
+V7 -> V8:
+- rust/Makefile updated to separate host libraries from target
+V7: https://lore.kernel.org/all/20260329160254.2592207-1-mkchauras@gmail.com/
+
+Changelog:
+V6 -> V7:
+- Documentation removed as powerpc is still under development
+- Added a fix for race condition in rust/Makefile
+V6: https://lore.kernel.org/all/20260210090023.2587534-1-mkchauras@gmail.com
+
+V5 -> V6:
+- Added a missing Tested by from Venkat which got missed since V3
+- Support is marked as Maintained instead of experimental
+V5: https://lore.kernel.org/all/20260210053756.2088302-1-mkchauras@gmail.com
+
+V4 -> V5:
+- Removed a nested ifdef from PPC64 for Little endian toolchain
+V4: https://lore.kernel.org/all/20260209105456.1551677-1-mkchauras@gmail.com
+
+V3 -> V4:
+- Co-developed-by header added in patch 1
+V3: https://lore.kernel.org/all/20260205180429.3280657-1-mkchauras@gmail.com
+
+V2 -> V3:
+- Splited HAVE_RUST in 2 lines
+- BINDGEN_TARGET_powerpc initialized before assigning the same to
+  BINDGEN_TARGET
+V2: https://lore.kernel.org/all/20260204210125.613350-1-mkchauras@gmail.com
+
+V1 -> V2:
+- jump label fix for rust has been moved to a separate patch
+- PPC32 support has been taken
+- rust support has been marked experimental
+- target.json dependency has been removed
+- HAVE_RUST now depends on CPU_LITTLE_ENDIAN for PPC64
+V1: https://lore.kernel.org/all/20260204042417.83903-1-mkchauras@gmail.com 
+
+Link Mauve (2):
+  rust: Make __udivdi3() and __umoddi3() panic
+  rust: Add PowerPC support
+
+Mukesh Kumar Chaurasiya (IBM) (5):
+  rust: Fix "multiple candidates for rmeta dependency core" error
+  dma-resv: Fix undefined symbol when CONFIG_DMA_SHARED_BUFFER is
+    disabled
+  powerpc/jump_label: adjust inline asm to be consistent
+  rust/powerpc: Set min rustc version for powerpc
+  powerpc: Enable Rust for ppc64le
+
+ arch/powerpc/Kconfig                  |  2 ++
+ arch/powerpc/Makefile                 |  7 ++++
+ arch/powerpc/include/asm/jump_label.h | 23 ++++++------
+ rust/Makefile                         | 52 +++++++++++++++++----------
+ rust/compiler_builtins.rs             |  6 ++++
+ rust/helpers/helpers.c                |  2 ++
+ scripts/min-tool-version.sh           |  6 +++-
+ 7 files changed, 69 insertions(+), 29 deletions(-)
+
 -- 
 2.53.0
 
