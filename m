@@ -1,64 +1,64 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3C535A395
-	for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 11:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185601F16B
+	for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 11:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777201245; cv=none; b=OqY6RQY0ScPww313jHdwujFvgWp0asL0TMIX1MpdqFrn9O+1VCDRQboMSqsH7k7T907gRaPKrd6akp//A1VNw1u2ylrG0fvGMr0sR/VRyLSrZQRAoxCo1CvRnXkpcXdDqtl3LVAZTffwQXQ5rireheKvigl+BI3n2oONEcXhp8s=
+	t=1777201257; cv=none; b=LOVzhb/NIS0jiFS+A7IkR5T5yFH+TILw9Ae40IfJjxPn8itz/nK5JICXEAJMzBl9Mv7N0FPBAbfSWsvS3jBnAffg/W8bS5PCdu6APxPuGOw0fJJv75QhiUk7cT8DCwrNO/cA8BjNWa4Wk6wV+93n330rAOVW0vexKQPzi8OIcZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777201245; c=relaxed/simple;
-	bh=r1aKh5I901VyW1MTDbYbzZkzaliwYbiMtV4wPKGZXxM=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TH1GiIdzlwCbk0B0KOhjJZ1Lx8OYiTYNx5i18XQbajplM0iSTrGGsvrHrlsSDe8eZkBI/GV2MoNl1yElM/f0nefDC9Mc+mmVbUAplwC9zJGwlS3aw88AVZivRQ+Ff8ctM0RmM/4/U2u3MD0neJY2HVH1Q1W2AgcBjbteqWshBdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rUb+6keX; arc=none smtp.client-ip=209.85.214.177
+	s=arc-20240116; t=1777201257; c=relaxed/simple;
+	bh=bZp8zfSf0+0j2MuhSlyeDxaKsIo8xAezFmdEdikJQpA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AKoqZ9skPi0yRQNBKSc6ZZvSzbSMcDwaf0QytBGao083pdLyDZwI2/wwcux5CgKPrEuJLNWoWZsrSIHPOIVFW/V7fHYIZ/GHyeHCSUz4c9l0o9Z9cIocmhTZ8UbPpoPI+vzBBBbnjjinq09A8zmjttlaZRV35sRR/GIzBKpOFIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sv+VgYH1; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rUb+6keX"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2b24fdac394so89998575ad.3
-        for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 04:00:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sv+VgYH1"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ad617d5b80so54130435ad.1
+        for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 04:00:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777201242; x=1777806042; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1777201255; x=1777806055; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xKjAi9HbHD3A8vBvpsVmPpMZEiOAHaxheYu3agjVGmU=;
-        b=rUb+6keXbCLVYYGDOgFThl8io0g2/GfIN9cYn7IOfNS/8KFoROURBmll1QkNORFTXQ
-         85JV3sSYfcda3FumW2Hf8bIZX+IwBoLhB6RC4vhJCPfQ5zcOHxOhBIml64K7IxvvBF7Y
-         SLsfG0//5VKqDMI2jlgZaD/Fqt/VSc6EJBLFjsaPzgXAFLKmYKg0pcfFBRX2h1NgJzep
-         cqB2Lm0V1tsPIArdvwX7hZTyMORhUWz0s8gP9QrWBgT+8uvwCNQQOdkIpfyMfLWoZdzX
-         12cWMeEG/DzirQbGIl06IOGp37ao87YhfyrJr/LffEkKIwjoLxsITr+uHW0z7zhg0mr7
-         LrrQ==
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=edTE4+K3AUC8N+XPcCOjDXD3S338RUHsqJvIH7+h8+A=;
+        b=sv+VgYH1WdJ5fvmnFZT1ROEMvxShYQoV03KwkLs6YvwKOhS6TiK4O25yYuVjoUCUD6
+         yLAUlfS+5UVSjmhOZLd/FGaUNtBpfPCSigJryDz/YTjJQwcnmrDVSeXd2EtmHS8+5uoF
+         wvd96tPAjL5UIXOkQK2fl3u0vahroE7G8UTAiQSqsFYqd/1m8SZfRG4W+WMftBfdFbMX
+         WiujRnx2VJJ+eDO7dIU+tlHcnVcKnJVzln8xjffzoLIDMxZk2ZJovIJzFIepmwWqFRqe
+         whax6Q5EHSWunjPxKaRVrw6mzL1Okf2fZq4fUxD0wi9UzL6q1GiVMxfgvNSvtcAXvoAt
+         RwSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777201242; x=1777806042;
+        d=1e100.net; s=20251104; t=1777201255; x=1777806055;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xKjAi9HbHD3A8vBvpsVmPpMZEiOAHaxheYu3agjVGmU=;
-        b=kqq6EPH9vHrhqAeEYjEmnnd+fDkRfsNPLkmRRHQDWtWrHJF/Z6wiPS+Y32Dp9AssUt
-         HpZpvem2/5c7AqE60ZENEyD//aoK6j+Ld2SD/MGXU7gDTJQdTn1er73eUbRYBQVbsYFu
-         JzyN5SFHTNJ1PApk8nx7+LuRiXX3LV5zlagi2KbKyS+lx68YlXrIr5WNJxLKDELl9ubw
-         xUWVSpgH8BiPJKGeSwUFXvEMCUe7oHpdaxvw2in8k6OV2f+dv9gZxMk3UMM+yTDd8wBN
-         X/wKD9Zx/3G+lx3JEaGiEC74kyqs1sAA6BToe37YSIC9wF0kiKU6AXpYkB8V+hicgtW3
-         4Mow==
-X-Forwarded-Encrypted: i=1; AFNElJ/QDsL4AShghfwQJyFeGR8t3kiThnh4sRUtRcLZ4E6UAekAYOes3v++yAjaDJgxhVtgpxfv@lists.linux.dev
-X-Gm-Message-State: AOJu0YyiVk7bK2c6r+0cJHRCCiP0E2VLAXfzyjoJVPOhKk2WZ8wjfDD8
-	JIz5TDD9I8y8LXw6mEvj/Fc1We7shjij3ykwegXhjJiNDazPGew7I8Bf
-X-Gm-Gg: AeBDiescAi6iQDqmny8JFWqtjuJFMkAPgwXYyL1jsS6+fwbSRH+ducFZZsaOU+hg7Eu
-	VOEG5rAkTrMUYfig6YOXqDJPcqufBokaU+x5KcAMt05LZATblcEa8uURoIanbxgN3P2Q4kfqDj/
-	6RpQh4Nam8H6vB1jhhgX45ffKHxQD6cNgLdg8a6XwNMIBcphlBnwPcn48S0Yaw8WWSrZUQjcFCg
-	6WSv+ShREKGbrcI42USwc+dcRjbjp+BIvG3jz6pDySR6vnGfZNqKUsecP8LF2EsBy3ShkD9gnJq
-	C2WSSJ87jdMeF1dkelD2j6cAalBVg4Oaz6P9SA3s0EHF5mCnI5N01+3PFjgw+DAyAuWXJQkV+Tv
-	QTqBiRYJmAIKwzyYDUgtZaHBgJs6+AuSX1S1IiYewzvd/AKbJ7Dqq8J0d8vyQot42bSttdT36id
-	Q3UGQF2/x6Up6p3DhYg+itbqznWUSNf/qYRnpSp5upv/TWZ8OOZNI8RNRXYgqJ64BPcfZ1jlBMw
-	p+Gm/AOG7WNA0s=
-X-Received: by 2002:a17:903:32c9:b0:2b0:5923:5194 with SMTP id d9443c01a7336-2b5f9fa70e1mr403887325ad.27.1777201241796;
-        Sun, 26 Apr 2026 04:00:41 -0700 (PDT)
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=edTE4+K3AUC8N+XPcCOjDXD3S338RUHsqJvIH7+h8+A=;
+        b=LhEocEv1EKNrEM53OhU6x9LJcy6ORv1+G9JB9IdXeUeJRCt+HgyNbHheVi9SNPsQw3
+         iuo5TcynuKLM+pqXy2C0Sf4z7pcB3UizC/8fS5+qDljFop/wvcna7uQffxmEilW65wgC
+         mf1usFZhRhWta++d+11Y/XDSakhBFaSXK5ji4tH4Aw4hHVRM66Xkr2ZswKkc9rMeJLwg
+         OmIosDyU9d/5l9sZ0jAS6GpYiLrpmTknFzkNlkZL75GaHio26+C5ptt37CTTBsGmkNnc
+         tcsP8OYRSv4NCpsq85LpFhfY4GbBybrjhVb7Dz4dPEUKLPbeH7FYBX4JJapR4doFT+T9
+         iTtw==
+X-Forwarded-Encrypted: i=1; AFNElJ+YgKM3nm9Gkhytd6qr/uie9NfAd/Pmw+7/IWzDldLU0dT7EIcszBwakCNqumn8M2P2Ig1z@lists.linux.dev
+X-Gm-Message-State: AOJu0YxVqAvUu+jx3fpBeujAbUUsgBsQXVb9WR9um/BQhLnPXauXHaa3
+	ZV1FSVq/QaYtf//NG+l6bLZhYQ+VTppS7QEZ2xCvX8wsVwjrr8//3xGK
+X-Gm-Gg: AeBDieuJ2Z1LfgvnrDS4zfJbYBv03pAplbSwU6JYdY14wf46JPndcuALvQNMrNwWUG8
+	UKqkLyzeroiSH36IUJyhJ2X1nV6xaXhnizm5FDPw5C5EFdEaSHuSx7vH7aSRMXfNVVeXRZc7ZG5
+	6IuT21SLTzHH0bodqcWyz/Sm/AUyNh3TEMld9S28/iP6fmeO9n0D7p3in1scb8L7CgbvJo6tYOz
+	lThpDVbz7c8kf5cUyOySYrfH2LtT3gFcjJV+E354VgmMzYpRTa7prRSGrugx61woP04C0BupQeF
+	KOhqNcN6g5ycOvBAC3uRjk94CxDgjwqk1+7AMI7jvy3Lm8bYdrSFUl8jwhIb2VQfq+PiGvQt1ex
+	ACmrVA5FN86LV/KNbuOxXvorw9FdJ6y54L3FYmTiS3XhIxEPf3sSaMqZObA1nJCrmVVDYoSbj0G
+	rUUME5fSBkfDWjt3Y0hsy77pFdOniPTqJxnv4i4N7C5Kp0Zn8bVT3AfHrH2ohMmclPzuXPURnSQ
+	mMUW1CH6/kcf94=
+X-Received: by 2002:a17:903:2284:b0:2b2:5822:7a70 with SMTP id d9443c01a7336-2b5f9fcfc2dmr396373895ad.38.1777201254932;
+        Sun, 26 Apr 2026 04:00:54 -0700 (PDT)
 Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com.com ([106.51.164.157])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5faa2f129sm256667235ad.29.2026.04.26.04.00.29
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5faa2f129sm256667235ad.29.2026.04.26.04.00.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Apr 2026 04:00:41 -0700 (PDT)
+        Sun, 26 Apr 2026 04:00:54 -0700 (PDT)
 From: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
 To: maddy@linux.ibm.com,
 	mpe@ellerman.id.au,
@@ -97,9 +97,10 @@ To: maddy@linux.ibm.com,
 	linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH V15 4/7] rust/powerpc: Set min rustc version for powerpc
-Date: Sun, 26 Apr 2026 16:29:29 +0530
-Message-ID: <20260426105932.2270364-5-mkchauras@gmail.com>
+Cc: Link Mauve <linkmauve@linkmauve.fr>
+Subject: [PATCH V15 5/7] rust: Make __udivdi3() and __umoddi3() panic
+Date: Sun, 26 Apr 2026 16:29:30 +0530
+Message-ID: <20260426105932.2270364-6-mkchauras@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260426105932.2270364-1-mkchauras@gmail.com>
 References: <20260426105932.2270364-1-mkchauras@gmail.com>
@@ -109,36 +110,57 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Minimum `rustc` version required for powerpc is 1.95 as some critical
-features required for compiling rust code for kernel are not there.
+From: Link Mauve <linkmauve@linkmauve.fr>
 
-For example Stable inline asm support which got merged in 1.95.
+The core crate currently depends on these two functions for i64/u64/
+i128/u128/core::time::Duration formatting, but we shouldn’t use that in
+the kernel so let’s panic if they are ever called.
 
-Link: https://github.com/rust-lang/rust/pull/147996
+This doesn’t yet fix drm_panic_qr.rs, which also uses __udivdi3 when
+CONFIG_CC_OPTIMIZE_FOR_SIZE=y, but at least makes the rest of the kernel
+build on PPC32.
+
+Signed-off-by: Link Mauve <linkmauve@linkmauve.fr>
 Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
 ---
- scripts/min-tool-version.sh | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ rust/Makefile             | 4 ++++
+ rust/compiler_builtins.rs | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-index b96ec2d379b6..406895621511 100755
---- a/scripts/min-tool-version.sh
-+++ b/scripts/min-tool-version.sh
-@@ -31,7 +31,11 @@ llvm)
- 	fi
- 	;;
- rustc)
--	echo 1.85.0
-+	if [ "$ARCH" = powerpc ]; then
-+		echo 1.95.0
-+	else
-+		echo 1.85.0
-+	fi
- 	;;
- bindgen)
- 	echo 0.71.1
+diff --git a/rust/Makefile b/rust/Makefile
+index 44ec1634714a..d70fb186cae9 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -616,6 +616,10 @@ ifneq ($(or $(CONFIG_ARM64),$(and $(CONFIG_RISCV),$(CONFIG_64BIT))),)
+ 		__ashrti3 \
+ 		__ashlti3 __lshrti3
+ endif
++ifdef CONFIG_PPC32
++	redirect-intrinsics += \
++		__udivdi3 __umoddi3
++endif
+ 
+ ifdef CONFIG_MODVERSIONS
+ cmd_gendwarfksyms = $(if $(skip_gendwarfksyms),, \
+diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
+index dd16c1dc899c..fc6b54636dd5 100644
+--- a/rust/compiler_builtins.rs
++++ b/rust/compiler_builtins.rs
+@@ -97,5 +97,11 @@ pub extern "C" fn $ident() {
+     __aeabi_uldivmod,
+ });
+ 
++#[cfg(target_arch = "powerpc")]
++define_panicking_intrinsics!("`u64` division/modulo should not be used", {
++    __udivdi3,
++    __umoddi3,
++});
++
+ // NOTE: if you are adding a new intrinsic here, you should also add it to
+ // `redirect-intrinsics` in `rust/Makefile`.
 -- 
 2.53.0
 
