@@ -1,158 +1,170 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6542B346FA0
-	for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 11:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3462E35F603;
+	Sun, 26 Apr 2026 14:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777204499; cv=none; b=QjzvJjZyaKl2ilZVdv/qPJkTVDQSMCKAEz2d/JPqXxCkwvw0aUtk53M74VRF+uP9Iwv1R88FybnCxx9FNAXEOhappquwCjUikcHH01mVuOJo0OUrPCOpCTAkjIgyFAJ9POb8jzQwO4FoDHBt0d/02OW9CFpVZStlbNqZtCn3CgM=
+	t=1777213183; cv=none; b=jPpxslRBVRB7KwrkKQt/Qjbs+yQsS5J/h7U8GrLyzxAzq8Y0+m+IlHW9S5LTaa6T2zmyZ+/NXOpfqP6XKyYeSdSCgVTHsA6VW3b3/Qwm2H2wKNAPLT1clqrWJLAFw0KEVE9+8Bj5Itfpvnn3bbNHbcGrnj6mhLvpLbOJUtvBeG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777204499; c=relaxed/simple;
-	bh=s97TACo/hqmjQpYdb4vDFZoOWfwKihLA3tU+wy+H/4k=;
+	s=arc-20240116; t=1777213183; c=relaxed/simple;
+	bh=URvyEJiznvxr1mg7MT1vmtVH/KoUn/kPWKJIrV3eitw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c4qwsFz5Z5+aS9vIokbFRt0Ns7XOceW9FqY73tOYv3oylf+BaoM+ojr2gVGVWvUPsM//HFpZNqjPRu3Ww4m4ufP80jVr2HQb6uXvZolWbj4OAr4bhZyDmd6IWMaWyAQyiuclAflTTGVLC8y7Q3cTMDAcKL9cPDRGva+kdTBf400=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TMCAaWBr; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=l6zUdH8O+0J0Vt93JtBUloPIDb4v+uCvvGdq196Yq63cUG44WcUeuYpECZGbjq9nJbGAxrMB2XAKJ4XndG0e4Uk6h7/61WpyLA6l8EpPWspMuASgd17lS2hd12JQiMFs/vQ4pog9byiQoDtWEQ72WM1psCxt7NjVIZgvQ9OeDM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Scw3s7WY; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TMCAaWBr"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-82f4a53ae20so6787789b3a.3
-        for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 04:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777204498; x=1777809298; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EOUGdGocvy3Me4myqdA0xbgNTAj2NUsoVcgMrrjsU4E=;
-        b=TMCAaWBrzn+gmOqHWeufyglnHknDkcLYr8iOJ9t0+VTIkwj7zrFsd7p/RESmpmcmAR
-         ne0ugCujvn1sPRKJPuto1sAlhyZzt6rRwbJORAvuJ81J8xQ51wn+prIkZyBjZg4Q4sfR
-         ndsovbk4nul6jIPaatAVPLBjNyVdOLtMcfCG7sNtRrLKTP/NGO3SzJYOSVTH8SHTaSfR
-         RGL3Rh2GLj0xgjGk7ABSfq+UspkEXSIaQSYZ3R3zukGd+i/HjR+hpzl/rMBJPPtNwuB4
-         63QYcm5kzwKzRd7j2ke53exkNQRDp/vjh6eCSx/h2lFloBAyjr0V+pyp7dNTEg8E20yu
-         dpYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777204498; x=1777809298;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EOUGdGocvy3Me4myqdA0xbgNTAj2NUsoVcgMrrjsU4E=;
-        b=Ar7O9vJL1J8NQoFofdELsFwI4dmXbu1CuQECzuWwUwqLzj61MujLY2NW903uvgv9Hh
-         mBqZp+qiZGO1vYOjpoGMFLF8Vs2/zzYFZLTjL09A+oC5AP9dtk/6Qty1PoGzLWb++Ced
-         cA6D+IUlfBTenH0e3lJIlgAhipU1sv9RlkGKKKYfdkmCNTY+lNIjQ5Lizuncx9t87Z3B
-         EUhEqx9WKz1+uLzRotijNpWxcJ2GxaIdTjMfopriIr1wYY4lH4rgomBmTrpOvDDjTXXa
-         47/KkeYWT8wbma4wgXa7xjvC/oRNTE0Y2UNEDnJbRMRD7E7orsL/pAQP4kHrXlfyIZJB
-         i2og==
-X-Forwarded-Encrypted: i=1; AFNElJ+QFCTOcZaBmvbHPlsMyFhrXUgIbTbuhouv4UG8LkGdcSRv5Wmku1RdTqpGR/XskG8XBQFM@lists.linux.dev
-X-Gm-Message-State: AOJu0YyltYvVkdHta2HRNRXKGE4a2ndVGGN6z9puCD1ZVrLOTf7I4eBz
-	Y+hnbAXWsTTZjv+mll5WO4mDGfsIZ6BUpbpdOJS+bUYJTCKycXQEigw2
-X-Gm-Gg: AeBDievaIxVihJzwjJnfEAnAWNtU/Y8kHsT1KCtZoC+ZXxqdVr7uG333w10iSXRXWcI
-	iBAXroxIWC7+XVzAUtFNzQeMvIvvC4EkyFavM3T+WQogEmx0i16228cxZqgF/84WpmDofxm1TCm
-	nV+ChRCddFYLc6k14kYGiV1IVre04UJNfT8kboSTYHsHeO/7bMcDszBAtRWwFPJ5kS77bhRFMu0
-	Fidd+NeeQeLLgs8/VYfoDImR3KrycVoCa7GQkVWAkdw0CUuUb8tLa9iq85khe7qSqhfGdFo2721
-	uGWYDb2OQt7AHXHeWzQvpMTh6FwPlNI7WDDgOhNTP/k8aVZwxDZZEBy6k4i/0j32O0WbxrmsCJO
-	8ASBjkgR1UDhlmCFGykD4zj2mJCH8M6yciyc/F5h+pBtwCTSF/QjeYcFQnAnG8L/VAQve/ivXdI
-	pYuec9lpXtVHjICk+xLefAYDXcZcubXltGwDpYtXTef20HqEV/VNw22l2KE0JZAaQTktznsf4oI
-	f5C5oYyAw==
-X-Received: by 2002:a05:6a20:2591:b0:39f:3ca8:a331 with SMTP id adf61e73a8af0-3a08d7372b4mr44232635637.16.1777204497670;
-        Sun, 26 Apr 2026 04:54:57 -0700 (PDT)
-Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([106.51.164.157])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c797701d9bfsm21241887a12.16.2026.04.26.04.54.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Apr 2026 04:54:57 -0700 (PDT)
-Date: Sun, 26 Apr 2026 17:24:42 +0530
-From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com, 
-	aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org, 
-	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
-	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	daniel.almeida@collabora.com, fujita.tomonori@gmail.com, viresh.kumar@linaro.org, 
-	prafulrai522@gmail.com, gregkh@linuxfoundation.org, arnd@arndb.de, tamird@kernel.org, 
-	lyude@redhat.com, airlied@gmail.com, j@jannau.net, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
-	Link Mauve <linkmauve@linkmauve.fr>
-Subject: Re: [PATCH V14 5/7] rust: Make __udivdi3() and __umoddi3() panic
-Message-ID: <ae38Eh_HgkJR0jTo@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-References: <20260426085725.2090827-1-mkchauras@gmail.com>
- <20260426085725.2090827-6-mkchauras@gmail.com>
- <20260426124921.28eb433f@pumpkin>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Scw3s7WY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777213181; x=1808749181;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=URvyEJiznvxr1mg7MT1vmtVH/KoUn/kPWKJIrV3eitw=;
+  b=Scw3s7WYHF60s/r6KDtc8HLX+Ql0wMg14hdVxZLkAhdPIcOSIsi+NCTf
+   ybet85+ouFKpPrOwBt8ebvBKnSBl0omhC57zRRkJET/4SBzyEbjIY4xFE
+   ua0zSOORYzuf6ChmpyYxvU0AxqzxUACHRewXncXsOePdIXsMFXV90Q5L5
+   7dcvxZ9v8UowZ5AXpGNXtnYTR6RjmEjqG7FlUvgTkJohEITFFqOWpwN9K
+   BcHoVKjrdd9N5d/5vUvbbctOJwKyIlACD2XhX7gHJBiY3MLxAd0gAYqyw
+   b3mwHEcXLOf6vZ3yQyjm7qxMW7om8m61akOzpQN2ByLG5NekycIJQw4SI
+   A==;
+X-CSE-ConnectionGUID: 8M5MbuCETpmD374Q/bVz6w==
+X-CSE-MsgGUID: wNOkC0XSS8m2q2XtNFuOBg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11768"; a="78308281"
+X-IronPort-AV: E=Sophos;i="6.23,200,1770624000"; 
+   d="scan'208";a="78308281"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2026 07:19:41 -0700
+X-CSE-ConnectionGUID: ziOmEDTvSCe9EljfjscO9A==
+X-CSE-MsgGUID: UdPkb92JS5m4WCwW7FbKag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,200,1770624000"; 
+   d="scan'208";a="233683673"
+Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 26 Apr 2026 07:19:37 -0700
+Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wH0Kd-000000007wL-0HYX;
+	Sun, 26 Apr 2026 14:19:35 +0000
+Date: Sun, 26 Apr 2026 22:19:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wentao Liang <vulab@iscas.ac.cn>, Georgi Djakov <djakov@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Wentao Liang <vulab@iscas.ac.cn>, linux-pm@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] interconnect: imx: fix use-after-free in
+ imx_icc_node_init_qos()
+Message-ID: <202604262216.MLuzg6nl-lkp@intel.com>
+References: <20260408153022.401123-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260426124921.28eb433f@pumpkin>
+In-Reply-To: <20260408153022.401123-1-vulab@iscas.ac.cn>
 
-On Sun, Apr 26, 2026 at 12:49:21PM +0100, David Laight wrote:
-> On Sun, 26 Apr 2026 14:27:23 +0530
-> "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com> wrote:
-> 
-> > From: Link Mauve <linkmauve@linkmauve.fr>
-> > 
-> > The core crate currently depends on these two functions for i64/u64/
-> > i128/u128/core::time::Duration formatting, but we shouldn’t use that in
-> > the kernel so let’s panic if they are ever called.
-> > 
-> > This doesn’t yet fix drm_panic_qr.rs, which also uses __udivdi3 when
-> > CONFIG_CC_OPTIMIZE_FOR_SIZE=y, but at least makes the rest of the kernel
-> > build on PPC32.
-> 
-> This needs resolving properly.
-> 
-Hey David,
+Hi Wentao,
 
-Yeah I agree, we need to find a proper fix for this. This is under my
-todo list. Currently we are enabling experimental support for powerpc
-and we are trying to get the basic kernel to work as of now. panicking
-kernel also doesn't seems like a good idea as of now to me, we are
-working towards it, we'll come up with a solution soon. Meanwhile we
-want atleast the build to work.
+kernel test robot noticed the following build errors:
 
-Regards,
-Mukesh
-> > 
-> > Signed-off-by: Link Mauve <linkmauve@linkmauve.fr>
-> > Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
-> > ---
-> >  rust/Makefile             | 4 ++++
-> >  rust/compiler_builtins.rs | 6 ++++++
-> >  2 files changed, 10 insertions(+)
-> > 
-> > diff --git a/rust/Makefile b/rust/Makefile
-> > index f6369d121c50..9aa18cff2fae 100644
-> > --- a/rust/Makefile
-> > +++ b/rust/Makefile
-> > @@ -615,6 +615,10 @@ ifneq ($(or $(CONFIG_ARM64),$(and $(CONFIG_RISCV),$(CONFIG_64BIT))),)
-> >  		__ashrti3 \
-> >  		__ashlti3 __lshrti3
-> >  endif
-> > +ifdef CONFIG_PPC32
-> > +	redirect-intrinsics += \
-> > +		__udivdi3 __umoddi3
-> > +endif
-> >  
-> >  ifdef CONFIG_MODVERSIONS
-> >  cmd_gendwarfksyms = $(if $(skip_gendwarfksyms),, \
-> > diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
-> > index dd16c1dc899c..fc6b54636dd5 100644
-> > --- a/rust/compiler_builtins.rs
-> > +++ b/rust/compiler_builtins.rs
-> > @@ -97,5 +97,11 @@ pub extern "C" fn $ident() {
-> >      __aeabi_uldivmod,
-> >  });
-> >  
-> > +#[cfg(target_arch = "powerpc")]
-> > +define_panicking_intrinsics!("`u64` division/modulo should not be used", {
-> > +    __udivdi3,
-> > +    __umoddi3,
-> > +});
-> > +
-> >  // NOTE: if you are adding a new intrinsic here, you should also add it to
-> >  // `redirect-intrinsics` in `rust/Makefile`.
-> 
+[auto build test ERROR on amd-pstate/linux-next]
+[also build test ERROR on amd-pstate/bleeding-edge linus/master shawnguo/for-next v7.0 next-20260424]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/interconnect-imx-fix-use-after-free-in-imx_icc_node_init_qos/20260424-225513
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
+patch link:    https://lore.kernel.org/r/20260408153022.401123-1-vulab%40iscas.ac.cn
+patch subject: [PATCH v2] interconnect: imx: fix use-after-free in imx_icc_node_init_qos()
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260426/202604262216.MLuzg6nl-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260426/202604262216.MLuzg6nl-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604262216.MLuzg6nl-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/interconnect/imx/imx.c:123:22: error: use of undeclared identifier '__free_device_nod'; did you mean '__free_device_node'?
+     123 |         struct device_node *__free(device_nod) dn = of_parse_phandle(dev->of_node,
+         |                             ^~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:213:33: note: expanded from macro '__free'
+     213 | #define __free(_name)   __cleanup(__free_##_name)
+         |                                   ^~~~~~~~~~~~~~
+   <scratch space>:42:1: note: expanded from here
+      42 | __free_device_nod
+         | ^~~~~~~~~~~~~~~~~
+   include/linux/of.h:138:1: note: '__free_device_node' declared here
+     138 | DEFINE_FREE(device_node, struct device_node *, if (_T) of_node_put(_T))
+         | ^
+   include/linux/cleanup.h:211:30: note: expanded from macro 'DEFINE_FREE'
+     211 |         static __always_inline void __free_##_name(void *p) { _type _T = *(_type *)p; _free; }
+         |                                     ^
+   <scratch space>:227:1: note: expanded from here
+     227 | __free_device_node
+         | ^
+   1 error generated.
+
+
+vim +123 drivers/interconnect/imx/imx.c
+
+   116	
+   117	static int imx_icc_node_init_qos(struct icc_provider *provider,
+   118					 struct icc_node *node)
+   119	{
+   120		struct imx_icc_node *node_data = node->data;
+   121		const struct imx_icc_node_adj_desc *adj = node_data->desc->adj;
+   122		struct device *dev = provider->dev;
+ > 123		struct device_node *__free(device_nod) dn = of_parse_phandle(dev->of_node,
+   124				adj->phandle_name, 0);
+   125		struct platform_device *pdev;
+   126	
+   127		if (adj->main_noc) {
+   128			node_data->qos_dev = dev;
+   129			dev_dbg(dev, "icc node %s[%d] is main noc itself\n",
+   130				node->name, node->id);
+   131		} else {
+   132			if (!dn) {
+   133				dev_warn(dev, "Failed to parse %s\n",
+   134					 adj->phandle_name);
+   135				return -ENODEV;
+   136			}
+   137			/* Allow scaling to be disabled on a per-node basis */
+   138			if (!of_device_is_available(dn)) {
+   139				dev_warn(dev, "Missing property %s, skip scaling %s\n",
+   140					 adj->phandle_name, node->name);
+   141				return 0;
+   142			}
+   143	
+   144			pdev = of_find_device_by_node(dn);
+   145			if (!pdev) {
+   146				dev_warn(dev, "node %s[%d] missing device for %pOF\n",
+   147					 node->name, node->id, dn);
+   148				return -EPROBE_DEFER;
+   149			}
+   150			node_data->qos_dev = &pdev->dev;
+   151			dev_dbg(dev, "node %s[%d] has device node %pOF\n",
+   152				node->name, node->id, dn);
+   153		}
+   154	
+   155		return dev_pm_qos_add_request(node_data->qos_dev,
+   156					      &node_data->qos_req,
+   157					      DEV_PM_QOS_MIN_FREQUENCY, 0);
+   158	}
+   159	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
