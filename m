@@ -1,170 +1,230 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from CWXP265CU008.outbound.protection.outlook.com (mail-ukwestazon11020136.outbound.protection.outlook.com [52.101.195.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3462E35F603;
-	Sun, 26 Apr 2026 14:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777213183; cv=none; b=jPpxslRBVRB7KwrkKQt/Qjbs+yQsS5J/h7U8GrLyzxAzq8Y0+m+IlHW9S5LTaa6T2zmyZ+/NXOpfqP6XKyYeSdSCgVTHsA6VW3b3/Qwm2H2wKNAPLT1clqrWJLAFw0KEVE9+8Bj5Itfpvnn3bbNHbcGrnj6mhLvpLbOJUtvBeG0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777213183; c=relaxed/simple;
-	bh=URvyEJiznvxr1mg7MT1vmtVH/KoUn/kPWKJIrV3eitw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l6zUdH8O+0J0Vt93JtBUloPIDb4v+uCvvGdq196Yq63cUG44WcUeuYpECZGbjq9nJbGAxrMB2XAKJ4XndG0e4Uk6h7/61WpyLA6l8EpPWspMuASgd17lS2hd12JQiMFs/vQ4pog9byiQoDtWEQ72WM1psCxt7NjVIZgvQ9OeDM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Scw3s7WY; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9098B24A06D
+	for <llvm@lists.linux.dev>; Sun, 26 Apr 2026 14:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.195.136
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777213237; cv=fail; b=l0//xUk/KFSFpWvwmN4ujVD4BeR0/Y8LeGhHesaB1CAGtWdLZ8ONpRShNzGQhgaF0iQF/lUs5PS5Tyb/zBQFIlRRTrEY0AfFCbFxhtEONnPnMcDkhaVEgwsfERqbHrYFQwyFYkAxxmsc1FJQDrCmWJRK0qWAysM/LgBfJ0NsOu4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777213237; c=relaxed/simple;
+	bh=Fl2Dlm879ESdDf4SdyYSoC+9hnln6BGlzuxLmOrZEGk=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
+	 In-Reply-To:MIME-Version; b=aRPdAAynEiDALk8dM41rd5cMdEC+mm3J5ggauUDSJFsAxueuOZY12NhGWFvxOOnE3BdipvdEkb0ZjLc1s/Q9LiSX+iTcTnPkrAX82gyEikXGn+RRV8aW4hn+r2nL+rWo1bWdG6OMlTotKNEoqQ0FIpLjYM3puTfcY+ZnfPm22Xg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=crxWSXnf; arc=fail smtp.client-ip=52.101.195.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Scw3s7WY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777213181; x=1808749181;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=URvyEJiznvxr1mg7MT1vmtVH/KoUn/kPWKJIrV3eitw=;
-  b=Scw3s7WYHF60s/r6KDtc8HLX+Ql0wMg14hdVxZLkAhdPIcOSIsi+NCTf
-   ybet85+ouFKpPrOwBt8ebvBKnSBl0omhC57zRRkJET/4SBzyEbjIY4xFE
-   ua0zSOORYzuf6ChmpyYxvU0AxqzxUACHRewXncXsOePdIXsMFXV90Q5L5
-   7dcvxZ9v8UowZ5AXpGNXtnYTR6RjmEjqG7FlUvgTkJohEITFFqOWpwN9K
-   BcHoVKjrdd9N5d/5vUvbbctOJwKyIlACD2XhX7gHJBiY3MLxAd0gAYqyw
-   b3mwHEcXLOf6vZ3yQyjm7qxMW7om8m61akOzpQN2ByLG5NekycIJQw4SI
-   A==;
-X-CSE-ConnectionGUID: 8M5MbuCETpmD374Q/bVz6w==
-X-CSE-MsgGUID: wNOkC0XSS8m2q2XtNFuOBg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11768"; a="78308281"
-X-IronPort-AV: E=Sophos;i="6.23,200,1770624000"; 
-   d="scan'208";a="78308281"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2026 07:19:41 -0700
-X-CSE-ConnectionGUID: ziOmEDTvSCe9EljfjscO9A==
-X-CSE-MsgGUID: UdPkb92JS5m4WCwW7FbKag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,200,1770624000"; 
-   d="scan'208";a="233683673"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 26 Apr 2026 07:19:37 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wH0Kd-000000007wL-0HYX;
-	Sun, 26 Apr 2026 14:19:35 +0000
-Date: Sun, 26 Apr 2026 22:19:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wentao Liang <vulab@iscas.ac.cn>, Georgi Djakov <djakov@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Wentao Liang <vulab@iscas.ac.cn>, linux-pm@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] interconnect: imx: fix use-after-free in
- imx_icc_node_init_qos()
-Message-ID: <202604262216.MLuzg6nl-lkp@intel.com>
-References: <20260408153022.401123-1-vulab@iscas.ac.cn>
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="crxWSXnf"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bSdEFgTcGfhBPMJXgr5w8JhJjMIg4FfmQxwfkvAGGBevI4QGo/wKcfj3YPLlnRHMxqgi2gZnNQikDS5lnqc/+2j7+pMwPt5ZpJj7J9HY8Wm1R5Y/XM8nnwNJzBBJxcU3PyEC+4+3+vzN0zoYgYh1C5HP74s5Bq+MQYxzTxprIcbz3Iwy/Mb7K7jSUNTfXNMcwTnN0dmZaSHseIA+XuFuK4Ap6H6k0T5LeDlkGApaL2rYII1TAlz9eJCjWjTi+BsswmHb4WgyrQ5ScrWCntVymOPmXLHzZ/j9BDG6atW60a/oee+gZElLmZV8jLnWj6WNjX93AHTNP1xD3JtT/WsRnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GFjjlU+u92aIfJdIjkWHPqi1RWeexZS8Gp+GPDyW+zI=;
+ b=nZY89yKOYqimWSiFXLT8xrIeJ5e9nOIbHqIB/PVc7rzYyK/llYf5xolb91Q/6801sLb43XAwUBC8mOO7RsOrse3bawi1ncPNozlz2qeUyxR77kU6UUpL4Obhawc1YxlHdX9y8xZk+IwISoRAfRCLlnc/DwVqBf2LFpkd6KnbY/xxKPtYzoOKCc70quutYvEij6vKwmLikM6ZSXxceZMIbUvuTGN2qehc19Tu7p8VgnjJlE6os/FZMwZqaGlaFg7VKDDtAW2uxRzn3Tjl4afmUpGbhxlGxm189PTW4B5C3ss+8IFqD6g5uf0kQWDaEd6dRGRSD22ECXwiNTGFjAFSfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GFjjlU+u92aIfJdIjkWHPqi1RWeexZS8Gp+GPDyW+zI=;
+ b=crxWSXnfTJqlz9QF0elEylEE/UPTuPMcmfjO+T8yRDRP498N6QeaChMiyLBIzW6NhjgplLDCiiKaCBJrfqhVad9ZBMpo1f6H8biicgvYhYxXGAOUq5DEt9mOqXaaBSvwOXP780tE6cD8QDtRtDeSIMaKWYJUhK893S5FZorwuUw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
+ by LOBP265MB9250.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:47d::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.23; Sun, 26 Apr
+ 2026 14:20:32 +0000
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.20.9846.025; Sun, 26 Apr 2026
+ 14:20:32 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 26 Apr 2026 15:20:31 +0100
+Message-Id: <DI35IFD8M019.2WGRH5ADW6NOG@garyguo.net>
+Cc: <maddy@linux.ibm.com>, <mpe@ellerman.id.au>, <npiggin@gmail.com>,
+ <chleroy@kernel.org>, <peterz@infradead.org>, <jpoimboe@kernel.org>,
+ <jbaron@akamai.com>, <aliceryhl@google.com>, <rostedt@goodmis.org>,
+ <ardb@kernel.org>, <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
+ <ojeda@kernel.org>, <boqun@kernel.org>, <bjorn3_gh@protonmail.com>,
+ <lossin@kernel.org>, <a.hindborg@kernel.org>, <tmgross@umich.edu>,
+ <dakr@kernel.org>, <nathan@kernel.org>, <nick.desaulniers+lkml@gmail.com>,
+ <morbo@google.com>, <justinstitt@google.com>, <tamird@kernel.org>,
+ <arnd@arndb.de>, <nsc@kernel.org>, <simona.vetter@ffwll.ch>,
+ <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+ <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+ <linaro-mm-sig@lists.linaro.org>, <rust-for-linux@vger.kernel.org>,
+ <llvm@lists.linux.dev>, "Link Mauve" <linkmauve@linkmauve.fr>
+Subject: Re: [PATCH V13 5/7] rust: Make __udivdi3() and __umoddi3() panic
+From: "Gary Guo" <gary@garyguo.net>
+To: "Mukesh Kumar Chaurasiya" <mkchauras@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>
+X-Mailer: aerc 0.21.0
+References: <20260424054742.45832-1-mkchauras@gmail.com>
+ <20260424054742.45832-6-mkchauras@gmail.com>
+ <DI1E781QPU8F.1C28PL0089NP6@garyguo.net>
+ <ae3C2gqzoVaovY-h@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+In-Reply-To: <ae3C2gqzoVaovY-h@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+X-ClientProxiedBy: LO4P265CA0059.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2af::15) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:488::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260408153022.401123-1-vulab@iscas.ac.cn>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|LOBP265MB9250:EE_
+X-MS-Office365-Filtering-Correlation-Id: d712c940-9cc6-49d4-69c3-08dea39ef98f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|10070799003|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	Hbopwm2jPZA7jTq3nkGxDoNLGFNYrTTMAw2dKD1zlsjC73idePJsDDElG8jzAqo5APysbIq9lf/fj4auv4aiiMLbGLxyTDcawUA5PRXPHwSsnetOuKlJUSjB43ePZ+RhKCayrT1yUz0uF6REnsbeqgm28pALZ/ny1pYNKtYF2w7MFQSy0h+ptJP5opFm5X3sZsmEks4BaPW3/Jb7OHPZuBLwk5j0aZc4h969iKnukf3VfPfYFWTMqzv9mYtyvoT0l3c8zC3qlzZE35geWAF61Cbyg7apZT5TrX2EHZk3PR9tYEpwd4DbXLzcItB6RFwsLzGDwArChcgTxHx/zZ60wL7uagpjUykA6CR7i8VrU2mDToSue+hKNQhlEFXNhNZ53X+KybLRzQ6zbyt7NTB95aCUKNOFR/stRN8R/o05p5WGdGSAuw7MR7Ue/zZRKsVJniu43FvsTSm27PJ1FtDuU4/RMjdYySy+bfCmd0yIT9CFLIEL2gzHamZyH2A3s17K3ipE2M/cjn4MvyAkbpKarJMES9mF20UFO/JIAypnCgfzGbr6VTO3DIL0dcypjpjuWRGP2KId8rgGY92Aspwjfw6U/P7BuUnk/8m/Vo3brVauyt3roLvtvKD1bt8L1KQoxbuhuuIliu7jbQoCbccA8cusxh1j2i6JDlKoWh5bo/CnFUxDvP7wtjG6ZHnbfhi0RKZGTQRiVrNHgUdnyoi+zC8myfttM7P0fzOvls1J0l4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(10070799003)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Ris1TDZoZEtXU29PZEJlL1lTb3NSU1ptcDRoSmc0b0tiUmZXVERvdzFPaDJt?=
+ =?utf-8?B?eThsL0cxek1TK1BBM0lNYlVRZ24xSEttcC9WcG40RG96cE1od2lVMUVaa1hB?=
+ =?utf-8?B?QXhqM0lIajFEQVNtMG1yVnBPNG9mQVR6SkFlQThaQTJIb2lNQTJwTXhVU0dL?=
+ =?utf-8?B?VTZMOEpyb1VZTmJVbE9Qc3BQZmNYdWh5VnhXdUt1bkJ3elE3VnVkYk10V2J1?=
+ =?utf-8?B?QjN2UXdzWWZ4WjhaTWZ3M3RFazhGVlFOdDFqRGVOUmpmNGhpNFZxNFIrcGQx?=
+ =?utf-8?B?dndacTQrb3ppTVZmS3Nyamp3djg2WXdpb1JiZTlzYmhBNk4zdlJHLythcCtF?=
+ =?utf-8?B?bkVhRUpybWFKcDlyaTgzS3NKNnZIcHlMOHZIOVdjVnNuem81b2JoTkt3V29k?=
+ =?utf-8?B?UjN2VTBnYnAwVVRpcFN3SHowbHNNS1NmZ2lJVnhXcXBUcmFaWDVpeGFsTzFo?=
+ =?utf-8?B?R3JpRHdBQWJZSmR0dkpxZTgwUHY0eHJPM3RvSUUxTXg1bkNJajJWOEN2TnJ2?=
+ =?utf-8?B?dE9qUXkwTTFmOVZiOEd6T0JBc2VzSHJmQXZjeW1OVnZ5K2J1MStKNUlBNDBn?=
+ =?utf-8?B?ZFJDYSthSkpzNGtPNzRsSjVjNy83QkUyL1NQamROR3pxdytjc1JaQlhOVGNL?=
+ =?utf-8?B?My9aaWNiZ05PY3ZETUZBNEVSN255WG1FSlpQb0RQQU1DTGJubUx3NkxOaC9E?=
+ =?utf-8?B?Nkx2Mkgva0p1THFnVktvUmg3T1U4YVBEb3FaRGZZei9vREhlVjhWNTkxaEh4?=
+ =?utf-8?B?WHZYMmQzK1d1TW9MWHgvcTZjVWcrS3pSNTZER2RqSE1GdkJ2cEtXdy9TRjFr?=
+ =?utf-8?B?MHVZNkxkS3VBYlpIV3ZTSmZNMW1yWXkyZFBTVEVsOTd1N0pacTNxL1pqaHZw?=
+ =?utf-8?B?bXZ1Z3NrazJGN1hINmhnelg4UzloazhyRUpUVjdGTEJUem9DK1Y0VmU1ams1?=
+ =?utf-8?B?R1ZuQXl4R09oU2dDSGE0UHZmZHpmWmF0My9EeXZ0L25jVlpVNUZINThmaVM0?=
+ =?utf-8?B?V0V0TndjVDF1Q2I1UjB1bWZrN0tadWY2ZkxpRHorUDdBK29xbGozZDAxb3k5?=
+ =?utf-8?B?dUVIZWFMUVNlZ3pubXBUcmVGRjNBakNxaVVoa0VVWm1tbU9MSDBZcXZwTStp?=
+ =?utf-8?B?c2FtSDNMNTY0aWdOTlU4S1M3b0V5dEVxM3l2NDdJbWl1Q0hRdU9BY2tkMUU4?=
+ =?utf-8?B?a0FjL0dtK25odk5qM2pNTE5UZFhXcGlrWTdSaHlTM3hqVnlEWnlHZW5LU01N?=
+ =?utf-8?B?SlNLZnRIR3dEUy9aWi9HM05LRHgvQi81b1lpL25GQnUyY2VHM0t2a3FESDd4?=
+ =?utf-8?B?cEFHSjJQWDNqNURiTGNwUDNXY2VrdlJHeEVycHV1NGY5MWlZY2h3NHNJMXI1?=
+ =?utf-8?B?TFNsWlVvNlhwWnpRTVozckx2Nk8yMWFobkYvMlVPN1lsRnY1UGtRVFRwQVpj?=
+ =?utf-8?B?Y0txSkpvUSt6bU9SK2xCbzBGT296SVB1R1hERExldHhOQTNVa0syd0twdUZl?=
+ =?utf-8?B?QitwRDJieTBFWW5DZ0U0aHZTZUdwTFo2c21XZldZd1FIZC9rQ1J5QXRHMGZW?=
+ =?utf-8?B?OVZRMUlxT0Q5RVVwL0w2WlNVamU4Ri9RZVNkL3BFV1pSV2k1U1g0WlRrWkxR?=
+ =?utf-8?B?U0FWM2tNWVhHRkVQeU9YVlZWL0JKeTAwd3lEV2MvTUs2ZjFETEpYNUV0K0g4?=
+ =?utf-8?B?SnIyWlA4TU9xbVU4amRIL3U2RFpCVkprVUZtYndSTm5pTzZOMzVvWEwrNDBo?=
+ =?utf-8?B?MGR1ck5BT2RsVXBsWWhDMFZFcHBtVGFQUmxKYVBrSStUMUxZcDc4em52YlRC?=
+ =?utf-8?B?Q2VYRGNQUHk0b0RhWlJEQkV0M3d5MjQvTEhwak5DNUMwTWhscWVrWlh6Qmx6?=
+ =?utf-8?B?L0dZS2w3UkIwN0dSUnBLRHpwNjFuaHB6WThvem5ySk5UdE5DUlhMNHJzSldp?=
+ =?utf-8?B?c3hweis5aEV4VDFqQ25hcytqOWFoNnpiMlVvcGNINWVHcmgvT20vdDFDRTdv?=
+ =?utf-8?B?MXljUVVkL21WbzVRZmFSVWRiQzdBeUw0RWZ4am1BOFpxU0dJemJBSGprV1ph?=
+ =?utf-8?B?S05UckpsMzFRUC9mYVRnOEhGVnFQcHV5M01VMEdxYjJldFllb0s0MFY1UjRw?=
+ =?utf-8?B?U3BZTi9EanpJVFQ1T0xaaUwrdUdMY1c0RDVLQTc1eENseFVpYlZIS2djNGRE?=
+ =?utf-8?B?Uk5wL0lHcWppSG9vQ3ZjZUV3N3ZZZDlBWnoySHUxRzlqL2pOS0JWQ2lTTm91?=
+ =?utf-8?B?L0kwMXdEVlRkTGpnVUdja0lwYldPZmpVTHlyTmtmZnNjNnAvN3BnbmtuSDE5?=
+ =?utf-8?B?UndjbHlOZHhIaGFGd09OR3QvS1VSd3hVTjhITWt4RVU1cnJWa3NkUT09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: d712c940-9cc6-49d4-69c3-08dea39ef98f
+X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2026 14:20:32.1214
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MKDTle5ekvgHm44TV8Od/Bip2XYCPZreg7JAEmkIUugyRoXNRTHPrIEkB4Yt4v9bcs1W7CgW/P+C/lCTjw7zaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LOBP265MB9250
 
-Hi Wentao,
+On Sun Apr 26, 2026 at 8:52 AM BST, Mukesh Kumar Chaurasiya wrote:
+> On Fri, Apr 24, 2026 at 01:43:43PM +0100, Gary Guo wrote:
+>> On Fri Apr 24, 2026 at 6:47 AM BST, Mukesh Kumar Chaurasiya (IBM) wrote:
+>> > From: Link Mauve <linkmauve@linkmauve.fr>
+>> >
+>> > The core crate currently depends on these two functions for i64/u64/
+>> > i128/u128/core::time::Duration formatting, but we shouldn=E2=80=99t us=
+e that in
+>> > the kernel so let=E2=80=99s panic if they are ever called.
+>> >
+>> > This doesn=E2=80=99t yet fix drm_panic_qr.rs, which also uses __udivdi=
+3 when
+>> > CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy, but at least makes the rest of the ke=
+rnel
+>> > build on PPC32.
+>>=20
+>> Can we always build libcore with `-C opt-level=3D2` even if
+>> `CONFIG_CC_OPTIMIZE_FOR_SIZE` is specified? It feels like a better fix t=
+han
+>> stubbing things out.
+>>=20
+>> Best,
+>> Gary
+>>=20
+> The issue is not coming from libcore itself. It's the driver that's
+> causing this.
 
-kernel test robot noticed the following build errors:
+Sorry. I quoted the wrong part. I was asking if compiling libcore with O2 g=
+ets
+rid of its use of the builtins, as that's what the change this commit is fo=
+r.
 
-[auto build test ERROR on amd-pstate/linux-next]
-[also build test ERROR on amd-pstate/bleeding-edge linus/master shawnguo/for-next v7.0 next-20260424]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Formatting of u64 will be needed, so we should make sure that these works a=
+s
+intended.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/interconnect-imx-fix-use-after-free-in-imx_icc_node_init_qos/20260424-225513
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
-patch link:    https://lore.kernel.org/r/20260408153022.401123-1-vulab%40iscas.ac.cn
-patch subject: [PATCH v2] interconnect: imx: fix use-after-free in imx_icc_node_init_qos()
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260426/202604262216.MLuzg6nl-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260426/202604262216.MLuzg6nl-lkp@intel.com/reproduce)
+Best,
+Gary
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604262216.MLuzg6nl-lkp@intel.com/
+>
+> Regards,
+> Mukesh
+>> >
+>> > Signed-off-by: Link Mauve <linkmauve@linkmauve.fr>
+>> > Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
+>> > ---
+>> >  rust/Makefile             | 4 ++++
+>> >  rust/compiler_builtins.rs | 6 ++++++
+>> >  2 files changed, 10 insertions(+)
+>> >
+>> > diff --git a/rust/Makefile b/rust/Makefile
+>> > index 2a5428a5503d..ee11fba7a03d 100644
+>> > --- a/rust/Makefile
+>> > +++ b/rust/Makefile
+>> > @@ -616,6 +616,10 @@ ifneq ($(or $(CONFIG_ARM64),$(and $(CONFIG_RISCV)=
+,$(CONFIG_64BIT))),)
+>> >  		__ashrti3 \
+>> >  		__ashlti3 __lshrti3
+>> >  endif
+>> > +ifdef CONFIG_PPC32
+>> > +	redirect-intrinsics +=3D \
+>> > +		__udivdi3 __umoddi3
+>> > +endif
+>> > =20
+>> >  ifdef CONFIG_MODVERSIONS
+>> >  cmd_gendwarfksyms =3D $(if $(skip_gendwarfksyms),, \
+>> > diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
+>> > index dd16c1dc899c..fc6b54636dd5 100644
+>> > --- a/rust/compiler_builtins.rs
+>> > +++ b/rust/compiler_builtins.rs
+>> > @@ -97,5 +97,11 @@ pub extern "C" fn $ident() {
+>> >      __aeabi_uldivmod,
+>> >  });
+>> > =20
+>> > +#[cfg(target_arch =3D "powerpc")]
+>> > +define_panicking_intrinsics!("`u64` division/modulo should not be use=
+d", {
+>> > +    __udivdi3,
+>> > +    __umoddi3,
+>> > +});
+>> > +
+>> >  // NOTE: if you are adding a new intrinsic here, you should also add =
+it to
+>> >  // `redirect-intrinsics` in `rust/Makefile`.
+>>=20
 
-All errors (new ones prefixed by >>):
-
->> drivers/interconnect/imx/imx.c:123:22: error: use of undeclared identifier '__free_device_nod'; did you mean '__free_device_node'?
-     123 |         struct device_node *__free(device_nod) dn = of_parse_phandle(dev->of_node,
-         |                             ^~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:213:33: note: expanded from macro '__free'
-     213 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^~~~~~~~~~~~~~
-   <scratch space>:42:1: note: expanded from here
-      42 | __free_device_nod
-         | ^~~~~~~~~~~~~~~~~
-   include/linux/of.h:138:1: note: '__free_device_node' declared here
-     138 | DEFINE_FREE(device_node, struct device_node *, if (_T) of_node_put(_T))
-         | ^
-   include/linux/cleanup.h:211:30: note: expanded from macro 'DEFINE_FREE'
-     211 |         static __always_inline void __free_##_name(void *p) { _type _T = *(_type *)p; _free; }
-         |                                     ^
-   <scratch space>:227:1: note: expanded from here
-     227 | __free_device_node
-         | ^
-   1 error generated.
-
-
-vim +123 drivers/interconnect/imx/imx.c
-
-   116	
-   117	static int imx_icc_node_init_qos(struct icc_provider *provider,
-   118					 struct icc_node *node)
-   119	{
-   120		struct imx_icc_node *node_data = node->data;
-   121		const struct imx_icc_node_adj_desc *adj = node_data->desc->adj;
-   122		struct device *dev = provider->dev;
- > 123		struct device_node *__free(device_nod) dn = of_parse_phandle(dev->of_node,
-   124				adj->phandle_name, 0);
-   125		struct platform_device *pdev;
-   126	
-   127		if (adj->main_noc) {
-   128			node_data->qos_dev = dev;
-   129			dev_dbg(dev, "icc node %s[%d] is main noc itself\n",
-   130				node->name, node->id);
-   131		} else {
-   132			if (!dn) {
-   133				dev_warn(dev, "Failed to parse %s\n",
-   134					 adj->phandle_name);
-   135				return -ENODEV;
-   136			}
-   137			/* Allow scaling to be disabled on a per-node basis */
-   138			if (!of_device_is_available(dn)) {
-   139				dev_warn(dev, "Missing property %s, skip scaling %s\n",
-   140					 adj->phandle_name, node->name);
-   141				return 0;
-   142			}
-   143	
-   144			pdev = of_find_device_by_node(dn);
-   145			if (!pdev) {
-   146				dev_warn(dev, "node %s[%d] missing device for %pOF\n",
-   147					 node->name, node->id, dn);
-   148				return -EPROBE_DEFER;
-   149			}
-   150			node_data->qos_dev = &pdev->dev;
-   151			dev_dbg(dev, "node %s[%d] has device node %pOF\n",
-   152				node->name, node->id, dn);
-   153		}
-   154	
-   155		return dev_pm_qos_add_request(node_data->qos_dev,
-   156					      &node_data->qos_req,
-   157					      DEV_PM_QOS_MIN_FREQUENCY, 0);
-   158	}
-   159	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
