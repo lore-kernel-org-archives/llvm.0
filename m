@@ -1,177 +1,169 @@
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021103.outbound.protection.outlook.com [52.101.95.103])
+Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798C83CE4A5
-	for <llvm@lists.linux.dev>; Mon, 27 Apr 2026 13:39:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.103
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777297183; cv=fail; b=oqYghn5CHhVxCIWEuiLKMXevN0GhbWor2f5aZASvIuoUAwqup76ZEiIb7VMKtboDbHw2ykv7J6tuXr6Z7VfdomIttLtZfAjB5FRJO9eI2BH0SePI8IoIIOetqO6qDBAvD750GYbqadRBO5aSmCvls36/HkqW52mM5Jw1k05N7p4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777297183; c=relaxed/simple;
-	bh=3cjYdiR4bNVtYdZvZU0jDG3Zvm0icOvkx6AnUUBorYo=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
-	 In-Reply-To:MIME-Version; b=S3rrYnkupLQpSSm+9NRdJkMEYzVdu9MV1OEljBZHOyImIcqlUfujfgAbZFetxRY66Pi6ZjbrJC8MQXK99z2QqbJ/f5eEuIHoY+vnY4na0f3EDoFfthrE/z/Ym3u59fDEFshFUu8btVvCofNB9yRk/5ZRrl//EeCqpfQEvpbquMw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=KhnmXXyn; arc=fail smtp.client-ip=52.101.95.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86660341660
+	for <llvm@lists.linux.dev>; Mon, 27 Apr 2026 16:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777305926; cv=none; b=hSFOSDkHantZUXnGOvEhVvsyfqxz3+8GbUdk1sJFDFOSlKWDqCwi0mY5ySmpSw9sIl/1jahUZRk88s2BZDVL82k1kKoddjuJ0qWDFjRAdNsm5CCgRMBXQ6s5Usoj/jLz/m+YwnyCTqPpY/eU5I5acNmp2xrIc7qE9EwG+nJkumw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777305926; c=relaxed/simple;
+	bh=vbZdqbw7FzAtu+e+zkTmT9zpbxiygvDKDe8SFC5BI+Q=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=LDlb0Wlgt63BgSF9Avw7B9cinJPqMGAEhdHh0LOCXGsQyuPyDqGHpy8R7gd5SjSgvWADcwcdxmwJeyHFn6ZuP5qlHP/5uzyu23x01o6ZSF5M07vJtg7hijtJd8IOfB1oZ93MKdz798ts5izHwtMDM2Z5bylIVha3ZgU464YHcME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=LM+1WQZb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rcp5e0Yz; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="KhnmXXyn"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Dz4f/767BsEds9W3e4PFyEM3JSE7R/vNsPI8XpbNrj3C8L03+H92zJdJoACdxnCP4LVlFk+ofPcE+a6Yup93K9GzFB/Icoy9rSEEhM4yD9PZqrqndQYhidMCmGgJsFmAZaHrFZQuKBc5YYJUac95TwC37watwNhpneGLh3t4FeDPUh5Kp2ra73yRy0njGtFldyocJIcpfjD7SKYl/p1R/Bb8+BPqp+1nLlIuccZ2gIS7M3nL5NUYgoe0fawOIYcuc5X9gxBOKuzKPcA/HgGC0WzQfGdrmAQkZJIvTpfhmsketeJ72FtLD5SnYUoZM7wsSIRD4Pc53rNAIUwsCFLzfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mz6Q6Vet4WtSSpzzCPiqs4M4vi/DowaAEwPM7iGZ5xE=;
- b=xfOQR8TpPa6fJnUo5+XPG4NYzNbEAxLGPQw0MHoj89JxhP2MSLbzZhKHORbt4DtG3pVWxeKEn7k8dbws3RJ4Wdl1nUx/xyLIUAeBVak1sPC//mLtWOVea/GY/UEWrZHN7wzZadHYIgkhg4xHZeTeVDBuvqC9+kSX/pdgGv0HGkNwIUQo1DfHWx0RgiYM+QVTXyUh5mBZVDxThs6FFmttmYlnI66mEprkhwlNUr3P0877fZOAaHgAU/PBt835IHvyLwFJ5UioGfxNA8BeCQ5iYA6NPgAFYsOOVTwex2KhsEQHf4GCa8qJgIEYFkeGGhPd2ZnfVrK3i0hfbW/nmSv2HQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Mz6Q6Vet4WtSSpzzCPiqs4M4vi/DowaAEwPM7iGZ5xE=;
- b=KhnmXXynQmKt5NTZG6s43RQXOVSt8THbNGnMhin0RRTaCFPebW4aACDKNYzDEWmhJwb+QCAqV7j8/RC8Z35nU0Q/h91y2rF8kZWnm6T24V00xmORHtYqYzkMAd82drbceP0CAdXm5/I0OjkCLfZVmj+2C6yApqUgeY2JniqTypw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
- by CWXP265MB1944.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:82::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Mon, 27 Apr
- 2026 13:39:35 +0000
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.20.9846.025; Mon, 27 Apr 2026
- 13:39:35 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 27 Apr 2026 14:39:34 +0100
-Message-Id: <DI3Z9MKH147K.3C2RZSDKIAGGP@garyguo.net>
-Cc: =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Subject: Re: [PATCH V15 2/7] dma-resv: Fix undefined symbol when
- CONFIG_DMA_SHARED_BUFFER is disabled
-From: "Gary Guo" <gary@garyguo.net>
-To: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>,
- <maddy@linux.ibm.com>, <mpe@ellerman.id.au>, <npiggin@gmail.com>,
- <chleroy@kernel.org>, <peterz@infradead.org>, <jpoimboe@kernel.org>,
- <jbaron@akamai.com>, <aliceryhl@google.com>, <rostedt@goodmis.org>,
- <ardb@kernel.org>, <ojeda@kernel.org>, <boqun@kernel.org>,
- <gary@garyguo.net>, <bjorn3_gh@protonmail.com>, <lossin@kernel.org>,
- <a.hindborg@kernel.org>, <tmgross@umich.edu>, <dakr@kernel.org>,
- <nathan@kernel.org>, <nick.desaulniers+lkml@gmail.com>, <morbo@google.com>,
- <justinstitt@google.com>, <daniel.almeida@collabora.com>,
- <fujita.tomonori@gmail.com>, <viresh.kumar@linaro.org>,
- <prafulrai522@gmail.com>, <gregkh@linuxfoundation.org>, <arnd@arndb.de>,
- <tamird@kernel.org>, <mark.rutland@arm.com>, <lyude@redhat.com>,
- <lina+kernel@asahilina.net>, <linuxppc-dev@lists.ozlabs.org>,
- <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
- <llvm@lists.linux.dev>
-X-Mailer: aerc 0.21.0
-References: <20260426105932.2270364-1-mkchauras@gmail.com>
- <20260426105932.2270364-3-mkchauras@gmail.com>
-In-Reply-To: <20260426105932.2270364-3-mkchauras@gmail.com>
-X-ClientProxiedBy: LO6P123CA0037.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:2fe::9) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:488::16)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="LM+1WQZb";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rcp5e0Yz"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id D7ECAEC0FC1;
+	Mon, 27 Apr 2026 12:05:24 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Mon, 27 Apr 2026 12:05:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1777305924;
+	 x=1777392324; bh=ZCtou/cEXXCW2EAHTSeZgopr0M/VLaS4+NUan7nzjpo=; b=
+	LM+1WQZbjg5FBMii6wK/sxZP2lOaFxRnk3u5Y3RPRDCzwUmZITJVrJYqecL2ip3a
+	4zzSTLCelWjFhL013m4iJHoxS6Qryrlltr0l0KcnCsF0zd8QPA8q6pUln4acYa8M
+	54nuREiojIbbaBaMFMLGNK8a5NR9/kuocofwyDkZm5DW7GuZ/jmqkNE5M3f46zKo
+	5QaTkvQGYhoJdysVmGamXRQKrpuIz7P+dDEeMSCkxebmSIF11REtmkrF47cpziZe
+	zenSKG9DiD44E7jJxT04sOGvo0Hmconj/mNLbJlmwwqDLCfLgJ3JyiScecfLsZYk
+	HjdD77kIDYfokvaUaH6FTQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1777305924; x=
+	1777392324; bh=ZCtou/cEXXCW2EAHTSeZgopr0M/VLaS4+NUan7nzjpo=; b=r
+	cp5e0YzGwabDnLbX/xXlbtzzv9e8OX0XRwm69dlgxbBAO3PGQDnv+gLQ9iNaw41t
+	wiog0CQMhPF+ACfM6DLMRENiyAYiJeJm1+ICJB+8quz+E31tQ6nPNQPc/XBiA0pw
+	n/cJg9b/IcMhSBopBJbLrEhhxyEQYKBBRMOIyStsB49kW1o929ihCOJ9oxPJS4yR
+	mklaN+1vMJ3XdBzCPiiHtUvU0bqlp9z4Q7AZjFEMVRW4SXSTRkvgkYb2ToIN4omR
+	5t/JFUxGzDJDq0qYmldtbIqsLrBi89KCkPrVSmT1gzvgREkXP55VsmGOAjNpoHa2
+	dL7fdzim8Bm97btgfIZ5Q==
+X-ME-Sender: <xms:Q4nvabvgD-Y0-q21rj0xIevp3vYtWZ1cxKFvIuxKRHMaTtQTxjGz5A>
+    <xme:Q4nvaXSFnWpwpLdH3gTHczIdKeqNIYEdHjDNHzryu4ch2F0apyFIXLg61RMHMZ-b3
+    304p_cMmvtBQBKrtHOzNpIgGPl-vyiY4uum6i7My8pPO5wY649nPVo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdejleduvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeefjedpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepjhgsrghrohhnsegrkhgrmhgrihdrtghomhdprhgtphhtthhopegthh
+    hrihhsthhirghnrdhkohgvnhhighesrghmugdrtghomhdprhgtphhtthhopehmphgvsegv
+    lhhlvghrmhgrnhdrihgurdgruhdprhgtphhtthhopehsihhmohhnrgdrvhgvthhtvghrse
+    hffhiflhhlrdgthhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgt
+    phhtthhopegurghvihgurdhlrghighhhthdrlhhinhhugiesghhmrghilhdrtghomhdprh
+    gtphhtthhopehmkhgthhgruhhrrghssehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhhi
+    tghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtth
+    hopehnphhighhgihhnsehgmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:Q4nvacXMD2rgkFYfQT6xRfjCHHzuIur5ewWkYvLB3s1CPfPeONk9Yg>
+    <xmx:Q4nvaY2Is8kGpnqdtzP_bEIxpw2iOsohNjjdyy0uXHi_Xq7T0TrmMg>
+    <xmx:Q4nvaeM0ht2htEmAr3ZLvSR44Fg_2_9W52RbXTZcjuamGIomTUJOMg>
+    <xmx:Q4nvaQS7xdW9MU6arMT9qKha7QhqS-7qn5T0fzYzrfcy_Nars0aFfg>
+    <xmx:RInvaRzrTfYEHKqKGtWlisXUYFSpPribsTZQ5DAa5owond2lsXUold8G>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 3B6AE700065; Mon, 27 Apr 2026 12:05:23 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|CWXP265MB1944:EE_
-X-MS-Office365-Filtering-Correlation-Id: ab02506c-42da-4340-b364-08dea4626bec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|10070799003|56012099003|18002099003|22082099003|921020;
-X-Microsoft-Antispam-Message-Info:
-	rXjwgYjUHQz5rYfHI7pfC1wVIzb9153q/7zxbvxub5cNw44NAGGcsfgqhwTBpv/D763SeKb8/AiFiRcVZ57TxKYNY9ETumlzpDPvr2oAnl4T670zjUzq8QEdHBwfT8GePKl5XPZqey5vCINNIrgT79GN7GS1B3qjHf52HcQZL2JmnmGWVxhpUjyMFGn+jm+/pWP64vqO9gGURVOJSf5Gv1zVe1Hi02/1oeAnmh8Eb3QySHdHlpJwIhZ22Uk8ZOvMGMJiCHHwnQUqFgVn9TYZh3VkgQVsFeXipGjwG4jYElktmSMiTzdxKY5oMZMSOuJQF7/KNxpy28nNe0oCEeGRtUcnX4yuX9A0wMbkf+kgIGtAos0MDi2K320OImhaYsFJgZHvD+TrVG9gkFQyVSDaRl/L6m7rZmuyjA/hgse950uSeA7pyHHGjoq7CJWqn/EAvE/Yn2reQliI4QVP/1aBV+Vo7bD6BLEGh2kZttQkva4Pb01qiPPAUbUG8zs38VHQ0l5Qe4wS5QCleVNSt3rvDwAqn4svEHlHyDFeZsAM85VbqvFmEQXrW2hHCgVNEvaaDtF2reSwfmmFk9DcmlUlY0etqrWQsnRJaCVfyFoCwNKu/rtGNOYoKbhn7Zi2zi8NixOPRqm1JOtzOgXVMdBmAdFI2E+nsUvucmRvnCH8cP683o9xmMDkFL4apR08p8U+RevmrnNyW4Z/z+R2MTKG1OToVpyXwUgG40SQ6TmNR5PJ0AShE7ldky4cjGpg+jgNKuuMR8cF9cPjAzWDigIb1Q==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(10070799003)(56012099003)(18002099003)(22082099003)(921020);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VmkyQWYvV1N4MFVPbExsVE1DS0RxOVIwM0g3dzVFS1NOTXBxNmVScnFrajl4?=
- =?utf-8?B?dVRQVUM5Ni9MK3RlT0VZeHlaOGFYUHhqN3ovdzFpbHB5ZEJXOFpPZmVOYVp2?=
- =?utf-8?B?ejJuMmJ1SkNpTG9zUFZjUlVXU2dNRlZkS3RpQy9lV2ViM2tLZGVvcmdZVjN2?=
- =?utf-8?B?ZzNjMmoxYzBuK0REcCtsOVJFY29qSTl0blB6MmhHcVlNT0pva0JlY2dIVGNr?=
- =?utf-8?B?SVBqTDltcy9lUkI1bnRYYmlMdmVtdzZnVjN6eWxrb3VsbmpTZkplUVZPWWRG?=
- =?utf-8?B?K1NRd3UwOVMrODRBZHgxclpSWHNkMzFITzhGMzYxVWN6VjFINGpqODV6dkF2?=
- =?utf-8?B?UmlWb1ZHOTdMZjF2Q1lncFVyY2RlbC9VYk1vYnhMRTB2Q1BqaFhZZlEzUlhQ?=
- =?utf-8?B?ZGVaZm1zbkk5b0RJYXh4QUttajN0R1JlWXNoSE5ITFV0eklXUGo4WkRoUm1G?=
- =?utf-8?B?VHlld1NaZk05WEhKUWFqdWZrejFTZi9EMVR5aThXVVlDem5IMGw0Wmg0UWU1?=
- =?utf-8?B?NlN1cTV1QTRuWk9Pb3VkSnExRmlYb1BMVGRqeGl5dFRGTkVDUHgrV1ZkMXpo?=
- =?utf-8?B?RWZNODNTVkxnWm40a1htKzltRW1lM3BRdCtnUUVHcDROSGZaaHVONkExQmlM?=
- =?utf-8?B?eDRPNUZNZTZ0VnVMdVJNeHhDQ1E0cWJKdGM0b3BRRUloNUhpMmQyS2piWjVT?=
- =?utf-8?B?Z29VZEpkVG45MjR4VVVWcnVpdUYwb0ZqdUU2dlpHcXZCQ2t6OVJlSnpCZXJ2?=
- =?utf-8?B?em5NTU4yaFc1c0MvMWxMak1UTjNwSnBSRTV0K0FKQUM4S3kwZ3RiVVRENzN5?=
- =?utf-8?B?RUdLZE1XcEpEcmU5WHJhN2lIMVhDYUhScGc0RktJb0M1ZVEwUUdQcHZ1dnY1?=
- =?utf-8?B?a05HZmxHeklWSUNxNjY2QjhhTXBhZXBzOFN2a1VKbkZXclU3cUVnSFJXMUR0?=
- =?utf-8?B?cGZPMWtuTFkreENpdVFUYlY5SGhiT1crU25zQlp3MjZWMXRxQ3Btc241QUlH?=
- =?utf-8?B?d3FEVjRSUnFLaThhUE0xc29ETXFBQ3pQdUlxNEtwSnBGN0RjaXFhblFqcEtr?=
- =?utf-8?B?ckVpKytkN2I1bU90U1V5NmtQbGpWZElzWlBlcnF4VHBaNDRvbWJKUGpwQXRK?=
- =?utf-8?B?MEMvejVKMkhNQk40N2dTM1BNa2UwU3JHRlZaeTdCOER3MW5YUGpXckZsN1BQ?=
- =?utf-8?B?VzRoc0FmZUNPZWlObU1wa05uYW9EaTE5SWNURm8xdDZkVFI0VHpHRTBYTHI1?=
- =?utf-8?B?QUhsWUNROGxmbitZbEpZR1BOb0M0VC9RN2JiQmVrVlJRZWcrZm1lSnBzU0R1?=
- =?utf-8?B?amUzaVdPRjJmUnpQQW5QcGhLdWFOQ1Y1MjlXcHoycjRxVkRHeVRBaDJjVktW?=
- =?utf-8?B?cnNMSXNuQnZ5YWcvMzdpTkpEbmgxMlFqaE45NCswZ1RKVE5lMk9wcXRFQlNr?=
- =?utf-8?B?OTNQZ20zMGgwRGJkNFgyZTBIczZGSWRRc3c5WE5BZkxwQ1F4N2Q5MHJGVFpN?=
- =?utf-8?B?V3NaRDRSZUorVHdQUktXRWFFWWRma0wvbFBwL3BIRXA5eFJwenNLS2ViUk5l?=
- =?utf-8?B?MEdZZXhZQkpuS2hzVDJsbFIzYmgwK2tUMURVcTQ0R2JVSzdwZFVQUUdtaFNR?=
- =?utf-8?B?VXp2QytlQ3FYSVU4eStUbUp4SzJzT2tqNWVsclByMHFuaFJyNll4LzA1bTR0?=
- =?utf-8?B?Q2hQaVVoWFBYY0FrdlR2cDhiTmVLaGJJMnhxOXkwUWdmM2JFdFJFbGUwRGc5?=
- =?utf-8?B?OVZPWGZ0TENodVdhQjBWMGkwTno1bmhMR21VTHlNeVZCUmpsUklNcUxpelg5?=
- =?utf-8?B?YkNqOGN3bnJid2hiUVdXM0NiZ1hLWW5QNXFueGxRNTRGc0NRK0k5UnJKRzVh?=
- =?utf-8?B?M29uS1VJdUxvV3FSYmRJaTEvUHEzODZFRE80bDU3VCszMDFxS0RRbTkxTlNC?=
- =?utf-8?B?QjA1NmVadEV3alJacXZhRy9OMk1rVDNSV29WbnBtcU5mM3p0OHFpNW5FNCtp?=
- =?utf-8?B?UlRKcVFQcVh4TWlQT1k2U0tCcXVOandYSVNXTWVRaWVWVHNEemx6cjJVcFln?=
- =?utf-8?B?QlNvSDFsaHB3aGpFbDVxQzBkU3ZLTytkY3hkSlZaN2t0NG5xRUhwVWlDTnJn?=
- =?utf-8?B?YytucXF5WTFZVXhsUXc0dWswc1VDc1lQQ25DY1QwK1l1TkkrSVRpV2JueitN?=
- =?utf-8?B?MTJ3QnYwM24rUzU0UTF2TXdDejVNaHhZR1JsRysvSnJYZUxqK0lXQ2pMdWNP?=
- =?utf-8?B?VE9PSXozcnRhRk5YYkJvNHVxN3Mrb3dPaWpqRitMdkxmRGtnZ0E0N1dzdXJt?=
- =?utf-8?B?aWMxMzd5Z2kraXA2NzNmRDZ0Q0JXb3F4MzdGY2VDZ2RqeS9pcnY4QT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab02506c-42da-4340-b364-08dea4626bec
-X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2026 13:39:35.8602
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gvbyGbacvqTztL7pVt5s9Rz6BxJtO99luCP6mstY0xgeWi088IzgCSd9kcmvW7Uu7I3T9PvXEedu4oWiuaafBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB1944
+X-ThreadId: ADiin7Vigcc3
+Date: Mon, 27 Apr 2026 18:05:01 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Link Mauve" <linkmauve@linkmauve.fr>,
+ "David Laight" <david.laight.linux@gmail.com>
+Cc: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>,
+ "Madhavan Srinivasan" <maddy@linux.ibm.com>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Christophe Leroy" <chleroy@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Jason Baron" <jbaron@akamai.com>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Ard Biesheuvel" <ardb@kernel.org>,
+ "Sumit Semwal" <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "Miguel Ojeda" <ojeda@kernel.org>, boqun@kernel.org,
+ "Gary Guo" <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ "Benno Lossin" <lossin@kernel.org>,
+ "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, tamird@kernel.org,
+ "Nicolas Schier" <nsc@kernel.org>, simona.vetter@ffwll.ch,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <21348763-ff78-46c6-b0eb-eedce69a839a@app.fastmail.com>
+In-Reply-To: <aes7L3M1d_LvvGKa@luna>
+References: <20260424054742.45832-1-mkchauras@gmail.com>
+ <20260424054742.45832-6-mkchauras@gmail.com>
+ <20260424101425.6bde0e17@pumpkin> <aes7L3M1d_LvvGKa@luna>
+Subject: Re: [Linaro-mm-sig] Re: [PATCH V13 5/7] rust: Make __udivdi3() and __umoddi3()
+ panic
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sun Apr 26, 2026 at 11:59 AM BST, Mukesh Kumar Chaurasiya (IBM) wrote:
-> When building with LLVM=3D1 for architectures like powerpc where
-> CONFIG_DMA_SHARED_BUFFER is not enabled, the build fails with:
->=20
->   ld.lld: error: undefined symbol: dma_resv_reset_max_fences
->   >>> referenced by helpers.c
->   >>>               rust/helpers/helpers.o:(rust_helper_dma_resv_unlock)
->=20
-> The issue occurs because:
-> 1. CONFIG_DEBUG_MUTEXES=3Dy is enabled
-> 2. CONFIG_DMA_SHARED_BUFFER is not enabled
-> 3. dma_resv_reset_max_fences() is declared in the header when
->    CONFIG_DEBUG_MUTEXES is set
-> 4. But the function is only compiled in drivers/dma-buf/dma-resv.c,
->    which is only built when CONFIG_DMA_SHARED_BUFFER is enabled
-> 5. Rust helpers call dma_resv_unlock() which calls
->    dma_resv_reset_max_fences(), causing an undefined symbol
->=20
-> Fix this by compiling `dma-resv.c` file only when CONFIG_DMA_SHARED_BUFFE=
-R
-> is enabled.
->=20
-> Fixes: 9b836641d3bf ("rust: helpers: Add bindings/wrappers for dma_resv_l=
-ock")
-> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-> Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
+On Fri, Apr 24, 2026, at 11:43, Link Mauve wrote:
+> On Fri, Apr 24, 2026 at 10:14:25AM +0100, David Laight wrote:
+>> On Fri, 24 Apr 2026 11:17:40 +0530
+>> "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com> wrote:
+>>=20
+>> > From: Link Mauve <linkmauve@linkmauve.fr>
+>> >=20
+>> > The core crate currently depends on these two functions for i64/u64/
+>> > i128/u128/core::time::Duration formatting, but we shouldn=E2=80=99t=
+ use that in
+>> > the kernel so let=E2=80=99s panic if they are ever called.
+>>=20
+>> Ugg.
+>> Surely you can make it a link-time failure?
+>> Or change the underlying code to avoid the divide.
+>
+> This is currently a link-time failure, which means if any of the core
+> crate or drm_panic_qr are linked in, the kernel will fail to link.
+>
+> And since we rely on core, that means no kernel can be built on PowerPC
+> without this patch.
+>
+> A possible solution would be to change the core crate to not divide
+> u64s, but the last time I tried to do that I couldn=E2=80=99t quite fi=
+gure out
+> how to do formatting without it, maybe I will just open an issue again=
+st
+> Rust.
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
+I think you just need to rewrite the patch description, it appears
+that everyone misunderstands what you are doing in the patch:
 
-> ---
->  rust/helpers/helpers.c | 2 ++
->  1 file changed, 2 insertions(+)
+Like on arm32, normal kernel code will continue to cause
+a link failure the same way in Rust as it does in C, and your
+patch does not change that. When you (or Link Mauve) "let's panic",
+I assume this is was just a mistake in summarizing the logic
+that turns the unreachable code from the Rust core crate
+into a runtime assertion since it would be impossible to link
+the kernel otherwise.
 
+Silently turning a 64-bit division into a panic() for normal
+code would of course be unacceptable, but that's not what
+you are doing here.
+
+    Arnd
