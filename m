@@ -1,407 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12C631D366;
-	Tue, 28 Apr 2026 06:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2D2346FCF
+	for <llvm@lists.linux.dev>; Tue, 28 Apr 2026 06:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777356180; cv=none; b=BsDeVvyh5Cwxg4+29yPlEIcQkw5E+9HvRpH5u2J1+RLOrdIDH8ZYtvQw6myffG84ucmInoTFbS66iJm2siZardOGn8tEF6IrxMqxkAFlCFm1bR2buaA6fbOM+js3IEr0Rt5jLvDcI66ns/Jeq0oDJtRgNgLFahIc6vIK+g2joAU=
+	t=1777359278; cv=none; b=O5TQ251lSCRejxvr9ooya9maANZN6s+zkYcy4rXP7J34eEpmPdx4Z5Q2Qv7cz7l1LFdHubSmC6af0/rbvQ+a6Vf+tRo/qNbRkjB//IjusAGLut4Z5tzzXCezQyZEAy2K/pYYD6R9Kv0vPK6img66l9tSfL5ckY8bVeqLN8ANins=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777356180; c=relaxed/simple;
-	bh=bnBKURh2CCSd96pdSXR1lYVcneWMv6pNHcGvaINt2/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gq5TGHaZTbkLVYjrheMKlvqk3O+eKQeOI3YCe7P3VytNt0IoS33fKJ32hjjsV51D5y5Kf2NIqk9SZpjcsvsKNNiNH8Sh+RlLZbYoT4e4TzAgGAAJc/GUZFdZb1XzJ747jwubOff8b+6P2NEkvGkU+E+ak9Gu4xv/sWCi3HUXkGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HcR7ZQMQ; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777359278; c=relaxed/simple;
+	bh=IM9ESi6nZ2GNqGO23/dFzs6wZwAg2FXQqPWBRXVgMic=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=GN208KqFtnd+eHVinjh9nBSkeb7R8jmkz1uFN95W/bwsQqog4wgM6XfxgW12l78U1qpOa//3P4xRW3dWDyPKj/R9BRkiVHlk6r/L6F6qwk5VaOGPUTtRL+0X+83M9yJ0hXpR24AFwvHpc2kI8H0Oat9P17LphqI6glJtvpcEwuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vogpi84t; arc=none smtp.client-ip=74.125.82.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HcR7ZQMQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777356178; x=1808892178;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bnBKURh2CCSd96pdSXR1lYVcneWMv6pNHcGvaINt2/c=;
-  b=HcR7ZQMQtUDrtpWZOEX5oR+VrH59Z4CEZYwDx/qsmXaRsrx2PChJrVa0
-   orTRK2d6NIhz/NKV/kFV5IAcRH5EHY/jnvxV2HfI9pLZeLofNEsDz+R0N
-   4PPIYpXFGvAdOf/fczy6CMBeJYH4kmpwxANVY6s6iBAGgPzFUpxaAMlxH
-   2e0fLgNyjz21P+sqOSoWABTfIv9ZDoSaSIGoLs4jcOIT6ZsQ9bLJk/3f9
-   dz4tPyv66dh9ZigNq62kSCkLv0UMfNDIjySdmCXpTXe9JVN3LeNxSAvP3
-   0SMuE7Ow9ItuY6KlWtsxt2syIJ+A6ZujjYj18xAfjKtGYUnbmP/41r3tQ
-   w==;
-X-CSE-ConnectionGUID: KFfCpvCjSd6Vb0SCSc1Gzg==
-X-CSE-MsgGUID: ImubkptcTWufTvuuBLrluw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11769"; a="78239620"
-X-IronPort-AV: E=Sophos;i="6.23,203,1770624000"; 
-   d="scan'208";a="78239620"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 23:02:58 -0700
-X-CSE-ConnectionGUID: f6VeYzKjQya4iCxTFN2vPA==
-X-CSE-MsgGUID: yK3emIbdS0yqGhfzZjyQXw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,203,1770624000"; 
-   d="scan'208";a="232852885"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa006.jf.intel.com with ESMTP; 27 Apr 2026 23:02:55 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wHbX1-000000004CL-36bR;
-	Tue, 28 Apr 2026 06:02:51 +0000
-Date: Tue, 28 Apr 2026 08:02:40 +0200
-From: kernel test robot <lkp@intel.com>
-To: Daniel Borkmann <daniel@iogearbox.net>, kuba@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	edumazet@google.com, dsahern@kernel.org, tom@herbertland.com,
-	willemdebruijn.kernel@gmail.com, idosch@nvidia.com,
-	justin.iurman@gmail.com, pabeni@redhat.com, netdev@vger.kernel.org
-Subject: Re: [PATCH net v3] ipv6: Implement limits on extension header parsing
-Message-ID: <202604280700.QqKZKu4g-lkp@intel.com>
-References: <20260427101318.750730-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vogpi84t"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-12c87ba0890so39466983c88.0
+        for <llvm@lists.linux.dev>; Mon, 27 Apr 2026 23:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777359277; x=1777964077; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zio41ZFzhjPT5cI6wrI5OFkLmqAK3oJn4tmFEmpUdG4=;
+        b=vogpi84tg8p0G439Mh3vVuXcz5k7scJIFSoHcnQeliv8pCpZJ2fNWDYzb/hk1/LsPS
+         d2IdlwQMmRNbK9+76aZmTTBvQ10Os0SBoE2hwvzv09lkNkEebkBQ4Dnf+Kx6OWt2ICpS
+         9vpDUMryIlxzzbUyz/9YWS9PwEm7GK/LPL6l8MdsjQ5g9LBWfpzf80e/olFFcw1VG/bT
+         FSHmN4m+82p499zoRksn3XyRtWlXzSXlA1dDNqzNTklIAV9clU+1R4sRVti83zxa0WGx
+         ccRifAFtRUiXvpoAcYO4Y1uqww687nnzKZ1+t1HeSBWRAGLOQLteTGBXlUg/4drIQS3L
+         DnCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777359277; x=1777964077;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zio41ZFzhjPT5cI6wrI5OFkLmqAK3oJn4tmFEmpUdG4=;
+        b=idZ7wGypxZs2pPs8ogO3JsOke6MuDtfuVHayMLkwsmXCkLX5J9x8EnBtgYtuG6W+YH
+         EFZh9V1sRU8pK6FuTn/LtCQc5x0G6cC/6mY6gEjLVHfbMFxEzw1qq63htc53vf/chXrt
+         LWKUCFjzXA9cgT/2GqrMIZGH8JfRNehwExPLc78gW7mAMgHdKgUvy5osx6tylpe3vaLc
+         ee7d1wZ8TrM+MSPBqxcPbSJbv8cAONETaJG07DhYpcAoRUwOZuOrtx4MvvsHuyVZj0rH
+         h/WCQDXyCmpkGYb6JXyEKMBxgdeFaJzoka93NBT2BW/sIF6XyOdvRdvn79hvMKJiYSiu
+         RZKg==
+X-Forwarded-Encrypted: i=1; AFNElJ8gaU9iqPW4bNfqwxCcs2eJXacg63PPXYpycKiNVv6g+FVz+F8XJVfYnF4pPgqxVX1FUOY3@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw2esrO+t26ppBvP03wMHmbXgHb9pFbx3keciIgapKkBTUNFBRn
+	/FGuRQ2KbpxaiwDhN8YQcq7dTvWLJhwnws0P6V/9GUkQSHn9C81x8IQRMedQRf9wtWDyjh28+zz
+	OwYIXL1Mi4w==
+X-Received: from dlbto5.prod.google.com ([2002:a05:7022:3b05:b0:12c:1f83:7b4c])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:e28:b0:128:c9fa:4c32
+ with SMTP id a92af1059eb24-12ddd9dd721mr881046c88.28.1777359276536; Mon, 27
+ Apr 2026 23:54:36 -0700 (PDT)
+Date: Mon, 27 Apr 2026 23:54:32 -0700
+In-Reply-To: <20260407165551.3075684-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260427101318.750730-1-daniel@iogearbox.net>
+Mime-Version: 1.0
+References: <20260407165551.3075684-1-irogers@google.com>
+X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
+Message-ID: <20260428065432.1877423-1-irogers@google.com>
+Subject: [PATCH v2] perf clang-format: Add a perf clang-format that overrides
+ some kernel behaviors
+From: Ian Rogers <irogers@google.com>
+To: irogers@google.com, acme@kernel.org, namhyung@kernel.org
+Cc: akpm@linux-foundation.org, joe@perches.com, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, morbo@google.com, 
+	nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
+	linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Daniel,
+In particular, header file ordering is an issue in the tools/perf
+directory given the larger number of depended upon libraries.
 
-kernel test robot noticed the following build errors:
+The order of header file includes was proposed in:
+https://lore.kernel.org/linux-perf-users/CAP-5=fUitzKwJONTngiW17XkS7kVr2cDS4cDL_HccJKcnR2EgQ@mail.gmail.com/
 
-[auto build test ERROR on net/main]
+Sorting headers is desirable to avoid issues like duplicate includes.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Borkmann/ipv6-Implement-limits-on-extension-header-parsing/20260427-194303
-base:   net/main
-patch link:    https://lore.kernel.org/r/20260427101318.750730-1-daniel%40iogearbox.net
-patch subject: [PATCH net v3] ipv6: Implement limits on extension header parsing
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260428/202604280700.QqKZKu4g-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260428/202604280700.QqKZKu4g-lkp@intel.com/reproduce)
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+v2: Move the .clang-format file under tools/perf rather than tools/.
+---
+ tools/perf/.clang-format | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 tools/perf/.clang-format
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604280700.QqKZKu4g-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/ipv6/exthdrs_core.c:77:38: error: no member named 'ipv6' in 'struct net'
-      77 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:660:10: note: expanded from macro '__native_word'
-     660 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-         |                 ^
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> net/ipv6/exthdrs_core.c:77:38: error: no member named 'ipv6' in 'struct net'
-      77 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:660:39: note: expanded from macro '__native_word'
-     660 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-         |                                              ^
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> net/ipv6/exthdrs_core.c:77:38: error: no member named 'ipv6' in 'struct net'
-      77 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:661:10: note: expanded from macro '__native_word'
-     661 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-         |                 ^
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> net/ipv6/exthdrs_core.c:77:38: error: no member named 'ipv6' in 'struct net'
-      77 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:661:38: note: expanded from macro '__native_word'
-     661 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-         |                                             ^
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> net/ipv6/exthdrs_core.c:77:38: error: no member named 'ipv6' in 'struct net'
-      77 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                                       ^
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> net/ipv6/exthdrs_core.c:77:38: error: no member named 'ipv6' in 'struct net'
-      77 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
-      50 |         __READ_ONCE(x);                                                 \
-         |                     ^
-   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
-      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-         |                                                                  ^
-   include/linux/compiler_types.h:635:53: note: expanded from macro '__unqual_scalar_typeof'
-     635 | #define __unqual_scalar_typeof(x) __typeof_unqual__(x)
-         |                                                     ^
->> net/ipv6/exthdrs_core.c:77:38: error: no member named 'ipv6' in 'struct net'
-      77 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
-      50 |         __READ_ONCE(x);                                                 \
-         |                     ^
-   include/asm-generic/rwonce.h:44:72: note: expanded from macro '__READ_ONCE'
-      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-         |                                                                         ^
-   net/ipv6/exthdrs_core.c:197:38: error: no member named 'ipv6' in 'struct net'
-     197 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:660:10: note: expanded from macro '__native_word'
-     660 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-         |                 ^
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   net/ipv6/exthdrs_core.c:197:38: error: no member named 'ipv6' in 'struct net'
-     197 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:660:39: note: expanded from macro '__native_word'
-     660 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-         |                                              ^
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   net/ipv6/exthdrs_core.c:197:38: error: no member named 'ipv6' in 'struct net'
-     197 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:661:10: note: expanded from macro '__native_word'
-     661 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-         |                 ^
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   net/ipv6/exthdrs_core.c:197:38: error: no member named 'ipv6' in 'struct net'
-     197 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-         |                                          ^
-   include/linux/compiler_types.h:661:38: note: expanded from macro '__native_word'
-     661 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-         |                                             ^
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   net/ipv6/exthdrs_core.c:197:38: error: no member named 'ipv6' in 'struct net'
-     197 |         int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-         |                                    ~~~~~~~~ ^
-   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |                                        ^
-   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
-      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-
-
-vim +77 net/ipv6/exthdrs_core.c
-
-    28	
-    29	/*
-    30	 * Skip any extension headers. This is used by the ICMP module.
-    31	 *
-    32	 * Note that strictly speaking this conflicts with RFC 2460 4.0:
-    33	 * ...The contents and semantics of each extension header determine whether
-    34	 * or not to proceed to the next header.  Therefore, extension headers must
-    35	 * be processed strictly in the order they appear in the packet; a
-    36	 * receiver must not, for example, scan through a packet looking for a
-    37	 * particular kind of extension header and process that header prior to
-    38	 * processing all preceding ones.
-    39	 *
-    40	 * We do exactly this. This is a protocol bug. We can't decide after a
-    41	 * seeing an unknown discard-with-error flavour TLV option if it's a
-    42	 * ICMP error message or not (errors should never be send in reply to
-    43	 * ICMP error messages).
-    44	 *
-    45	 * But I see no other way to do this. This might need to be reexamined
-    46	 * when Linux implements ESP (and maybe AUTH) headers.
-    47	 * --AK
-    48	 *
-    49	 * This function parses (probably truncated) exthdr set "hdr".
-    50	 * "nexthdrp" initially points to some place,
-    51	 * where type of the first header can be found.
-    52	 *
-    53	 * It skips all well-known exthdrs, and returns pointer to the start
-    54	 * of unparsable area i.e. the first header with unknown type.
-    55	 * If it is not NULL *nexthdr is updated by type/protocol of this header.
-    56	 *
-    57	 * NOTES: - if packet terminated with NEXTHDR_NONE it returns NULL.
-    58	 *        - it may return pointer pointing beyond end of packet,
-    59	 *	    if the last recognized header is truncated in the middle.
-    60	 *        - if packet is truncated, so that all parsed headers are skipped,
-    61	 *	    it returns NULL.
-    62	 *	  - First fragment header is skipped, not-first ones
-    63	 *	    are considered as unparsable.
-    64	 *	  - Reports the offset field of the final fragment header so it is
-    65	 *	    possible to tell whether this is a first fragment, later fragment,
-    66	 *	    or not fragmented.
-    67	 *	  - ESP is unparsable for now and considered like
-    68	 *	    normal payload protocol.
-    69	 *	  - Note also special handling of AUTH header. Thanks to IPsec wizards.
-    70	 *
-    71	 * --ANK (980726)
-    72	 */
-    73	
-    74	int ipv6_skip_exthdr(const struct sk_buff *skb, int start, u8 *nexthdrp,
-    75			     __be16 *frag_offp)
-    76	{
-  > 77		int exthdr_max = READ_ONCE(init_net.ipv6.sysctl.max_ext_hdrs_cnt);
-    78		u8 nexthdr = *nexthdrp;
-    79		int exthdr_cnt = 0;
-    80	
-    81		*frag_offp = 0;
-    82	
-    83		while (ipv6_ext_hdr(nexthdr)) {
-    84			struct ipv6_opt_hdr _hdr, *hp;
-    85			int hdrlen;
-    86	
-    87			if (nexthdr == NEXTHDR_NONE)
-    88				return -1;
-    89			if (unlikely(exthdr_cnt++ >= exthdr_max))
-    90				return -1;
-    91			hp = skb_header_pointer(skb, start, sizeof(_hdr), &_hdr);
-    92			if (!hp)
-    93				return -1;
-    94			if (nexthdr == NEXTHDR_FRAGMENT) {
-    95				__be16 _frag_off, *fp;
-    96				fp = skb_header_pointer(skb,
-    97							start+offsetof(struct frag_hdr,
-    98								       frag_off),
-    99							sizeof(_frag_off),
-   100							&_frag_off);
-   101				if (!fp)
-   102					return -1;
-   103	
-   104				*frag_offp = *fp;
-   105				if (ntohs(*frag_offp) & ~0x7)
-   106					break;
-   107				hdrlen = 8;
-   108			} else if (nexthdr == NEXTHDR_AUTH)
-   109				hdrlen = ipv6_authlen(hp);
-   110			else
-   111				hdrlen = ipv6_optlen(hp);
-   112	
-   113			nexthdr = hp->nexthdr;
-   114			start += hdrlen;
-   115		}
-   116	
-   117		*nexthdrp = nexthdr;
-   118		return start;
-   119	}
-   120	EXPORT_SYMBOL(ipv6_skip_exthdr);
-   121	
-
+diff --git a/tools/perf/.clang-format b/tools/perf/.clang-format
+new file mode 100644
+index 000000000000..902b2f7456f6
+--- /dev/null
++++ b/tools/perf/.clang-format
+@@ -0,0 +1,20 @@
++BasedOnStyle: InheritParentConfig
++SortIncludes: true
++IncludeBlocks: Regroup
++IncludeCategories:
++  # Implicitly the corresponding header for the C file has Priority 0
++  # C Standard Library Headers
++  - Regex:           '^<(assert|complex|ctype|errno|fenv|float|inttypes|iso646|limits|locale|math|setjmp|signal|stdalign|stdarg|stdatomic|stdbool|stddef|stdint|stdio|stdlib|stdnoreturn|string|tgmath|threads|time|uchar|wchar|wctype)\.h>'
++    Priority:        1
++  # OS/System-Specific Headers (directories)
++  - Regex:           '^<(sys|linux|asm|arpa|net|netinet|x86_64|machine)/.*>'
++    Priority:        2
++  # OS/System-Specific Headers (POSIX/System flat headers)
++  - Regex:           '^<(unistd|pthread|fcntl|dirent|dlfcn|poll|sched|semaphore|spawn|syslog|termios|pwd|grp|netdb|sysexits|err|paths|pty|utmp|resolv|ifaddrs|elf|libelf|gelf)\.h>'
++    Priority:        2
++  # Third-Party Library Headers
++  - Regex:           '^<.*>'
++    Priority:        3
++  # Your Project's Other Headers
++  - Regex:           '^".*"'
++    Priority:        4
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.54.0.545.g6539524ca2-goog
+
