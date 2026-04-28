@@ -1,155 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFAE346AFD;
-	Tue, 28 Apr 2026 23:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102C3481FC1
+	for <llvm@lists.linux.dev>; Tue, 28 Apr 2026 23:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777417905; cv=none; b=MSgsCB1iShRbCR6wRaOTHb3B+QPvUM3nrtvUIWvO6/MyGs9jPfiVmJ0iks6CDMVRDQxlqWvNUcBw4q2vySTLX5Ga7y7BVsxW+8ITPkcNfYMauqYCarTX9tRK77VBpEoDG/EHNWqZga5nStpUElDURnVatx9RWWG6sBGXpJw72Ts=
+	t=1777418732; cv=none; b=BWs4o0Zd176i/V0WMzpK8MSv1JcvYextY75hkBFBhPOBIDIRHvi0QxMVE3Kf9M1fg9P0Yi9y36X/w8M9Kgu/+cuB/GeA4vAG6l7tNb8LAWNxxgH/cXfweP4c9050ZeSojXzPkFSaXhV1vAfr+t82UvZ7+T+xd+EK2nw0w0r7hBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777417905; c=relaxed/simple;
-	bh=mOd1+/pjP+EGTIv5fUtzevodrBcPg1AohOW3V9tki6k=;
+	s=arc-20240116; t=1777418732; c=relaxed/simple;
+	bh=R6cQfvSjsIKmI/Y08xsoDpxCht3Jq53qKnqck3FE+rk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XR52Aix8xWpfF6YTod2WBxUNgokzcS8lIiVsC+W5papvJfDxwvZBhqZ8ra3ErWzlE9y3cbZL9SJvG4EwCPkLo7tn/IhYSj1yCU1gtLaaUW0KdG9tn8U1MVZgwW6/hh25u8M0claRcF2Ptm2uskACFd90gAiHVqeWTOLCNWPtXNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PJtjKkFQ; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=EqGM6PedUzO+Lps2s2sLtp/hdOwAnyITFdITGy8aGSNIs9jCBWkcXXCiDxObTdsteKhadZx1mjuUdMHKZB9DysliqtMAE7LZr0PTLkoPzDszK0Gy3sF/0o4gAtvsMI/CWxtns7//4m3sSQDUhSk2YRtAvOrdvcYglWtq/wnzxHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZAgA6eY/; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PJtjKkFQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777417903; x=1808953903;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mOd1+/pjP+EGTIv5fUtzevodrBcPg1AohOW3V9tki6k=;
-  b=PJtjKkFQGBvbYpqKqA9pWd6ckFB2BMIesRHc6+4DQvuc9t5F3lcCYNDe
-   zMX/dVCvYyCp/7tvMA610rwql2e0Jy54czAJWgHuwFcPE08kMCW2K9Ar+
-   TCgoufGFFRD4JvT45YOHqeB90CaGt/038cfTfwxsPXwyVt3VwUuElrTmy
-   S9RtscIWZxAdUMCEStOXatO7/6Z3/dVJeCxJv3BFU6WBZ3xuz1kIrGS3F
-   uqAditlqstSkt/0Ntf6chJowmEL1bXurArsaaRvTOHlunKqD9T4wQxeWU
-   o1D2Q7n6eNA/K/ndG2peWluuqGNPMqbFmOAWrpmFD8YTju0kjSqSH1AEc
-   A==;
-X-CSE-ConnectionGUID: Zqa7npFSRrWAnEsLp3zeOg==
-X-CSE-MsgGUID: av2t5UteRyaAqxmXKFRLzw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11770"; a="77506574"
-X-IronPort-AV: E=Sophos;i="6.23,205,1770624000"; 
-   d="scan'208";a="77506574"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2026 16:11:42 -0700
-X-CSE-ConnectionGUID: oJsrIaKiQVyaW2JaRn9r3g==
-X-CSE-MsgGUID: PAPkm0WuQcacjzYfPZAOXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,205,1770624000"; 
-   d="scan'208";a="233068293"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 28 Apr 2026 16:11:39 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wHraa-00000000ALU-2Aes;
-	Tue, 28 Apr 2026 23:11:36 +0000
-Date: Wed, 29 Apr 2026 07:11:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxwell Doose <m32285159@gmail.com>, badhri@google.com,
-	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: replace strcpy with strscpy
-Message-ID: <202604290711.kHqUSJ8v-lkp@intel.com>
-References: <20260419213638.38291-2-m32285159@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZAgA6eY/"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-35dac556bb2so7236902a91.1
+        for <llvm@lists.linux.dev>; Tue, 28 Apr 2026 16:25:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777418729; x=1778023529; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tOJluPxYzNGos+SwkCBaicu5SwImO2KTCLCxq5NtkQk=;
+        b=ZAgA6eY/4LRPVx8QupDaUkM8VpvD4KHmtxBLxPZu8Fpaur/xJXvjhxUAOIYaLvuLtO
+         JasKO1Hn8/zwGfn/WmA2bzYnibwdhrP6TGntlgiKne+fiazPx0VSRIwuESg2u3nZQX09
+         nIHRI+DG/hz6gh41V5DJKVN3P42dZJn9SN8y7CuUIUdCo239RmjEyWY0NwqKQ9tL02Ql
+         vGuTAQgqk0D6qEUb1+CsGUzx8XPDjMkUkmfPy4lmqlnRPPCkVr5RMk8by140+CXTi6Pb
+         q55ST8CQk7m3J17UDPeSb07xydGFdt8LfViWYx8RF1zZthc8p2J2iCF1JT1EqV5smBlh
+         ZUvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777418729; x=1778023529;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tOJluPxYzNGos+SwkCBaicu5SwImO2KTCLCxq5NtkQk=;
+        b=Q24HCNrcvUJaiHn0SWDek/fzk0V4FkNrMzYypTCz7G6aNBgeFbEd2rcjlt4yc/9BRY
+         D09JBVMipzen27vgLKX5DRu+b7bhEY69f6gX0QlJTh2g0sseReNBzG9SvQpqnJFTuxvl
+         RzaMCAdBoOpbIRaRQ0crDzN0qsvFxOX5cMcjq7dyCmjBMR2tYw+x+A9aK3LTp9SWhTOH
+         0kyjMKxwvJ5GZQFcXZUBTpjLZpKyl4PryRbclG1HD7YF1BYbQIhP90ge5bY3OeaHt8lV
+         hvPt/dmx3gOyspGEXp11AS3TwK4BMe1RKb5yEud5PdqqDtQLAzv5rskI1yyvISId8N40
+         TZfQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/vD4B6+tz1R0eOINha2IYIQEuXldO3DzMj7wEd7DVvIQ0GpsIHrDOLm19EoAN8ApiHNN3G@lists.linux.dev
+X-Gm-Message-State: AOJu0YyiyawC7lsBhteDu0QVa10m6Iyow5mGzaV7lF+aHpljXIdQQimI
+	u4CbNubDoTWQRThyDQWfr6fu5OImJ34vqrblFJTpwgy+jtOGhq+71SslkFGukOQe390=
+X-Gm-Gg: AeBDieuiRFPoFZzKsDTLLEocAi5IhWdtxKOrnk1f+pDeH5l9EuBgNCsJ3HenttFI5Co
+	qpBrIUNlgY4wU8SS1v3sX988nY5WGDSuZKnBKD03KLHSC+irCdDT1nUnck/aKLNjRHojC4xal2/
+	oC9gLwhnLTW8MS/fC1WW5ENscYChA6Bd3Uah9oR1jiZZtSsCpli7jJhqot4u69AmCjUf2duR9bJ
+	+UXu7UDMm5NfAj8YVfw8Bs69ree70nCJx68anZECzD6LCRthTucXgfd+qL1xtGJ535jSvtRq9Jj
+	YN77BNral3E7rRjtP5OCxC2LZ3fN+4ZhKxYsLCynZjrm4yJTEZYPef74pWIQzZRV+5tI03THSOj
+	Not6RMZ69qBL4E1OTNvU2e8iCB7Yf2kZxQ9pWkN2qnf8VmbpVQ3Qt5j8zwGBr94/ieLCqcBo1lZ
+	ocQbunalqfH66t0JdPCHIanJpo
+X-Received: by 2002:a17:90b:264c:b0:35b:a418:698c with SMTP id 98e67ed59e1d1-364a0b82c88mr1309297a91.12.1777418729293;
+        Tue, 28 Apr 2026 16:25:29 -0700 (PDT)
+Received: from localhost ([27.122.242.71])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-364a0115274sm803468a91.2.2026.04.28.16.25.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2026 16:25:28 -0700 (PDT)
+Date: Wed, 29 Apr 2026 08:25:26 +0900
+From: Hyunchul Lee <hyc.lee@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Namjae Jeon <linkinjeon@kernel.org>,
+	Zhan Xusheng <zhanxusheng@xiaomi.com>,
+	linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] ntfs: Use return instead of goto in
+ ntfs_mapping_pairs_decompress()
+Message-ID: <afFB5jP8Wer3MYRp@hyunchul-PC02>
+References: <20260428-ntfs-fix-sometimes-uninit-rl-v1-1-31e0c8025430@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260419213638.38291-2-m32285159@gmail.com>
+In-Reply-To: <20260428-ntfs-fix-sometimes-uninit-rl-v1-1-31e0c8025430@kernel.org>
 
-Hi Maxwell,
+On Tue, Apr 28, 2026 at 03:21:38PM -0400, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=y / W=e):
+> 
+>   fs/ntfs/runlist.c:755:6: error: variable 'rl' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>     755 |         if (overflows_type(lowest_vcn, vcn)) {
+>         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   ...
+>   fs/ntfs/runlist.c:971:9: note: uninitialized use occurs here
+>     971 |         kvfree(rl);
+>         |                ^~
+>   ...
+> 
+> rl has not been allocated at this point so the 'goto err_out' should
+> really just be a return of the error pointer -EIO.
+> 
+> Fixes: cad7c6f0a514 ("ntfs: fix VCN overflow in ntfs_mapping_pairs_decompress()")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-kernel test robot noticed the following build errors:
+Thank you for this patch.
 
-[auto build test ERROR on v7.0]
-[cannot apply to usb/usb-testing usb/usb-next usb/usb-linus linus/master next-20260428]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reviewed-by: Hyunchul Lee <hyc.lee@gmail.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Doose/usb-typec-tcpm-replace-strcpy-with-strscpy/20260427-011111
-base:   v7.0
-patch link:    https://lore.kernel.org/r/20260419213638.38291-2-m32285159%40gmail.com
-patch subject: [PATCH] usb: typec: tcpm: replace strcpy with strscpy
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260429/202604290711.kHqUSJ8v-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260429/202604290711.kHqUSJ8v-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604290711.kHqUSJ8v-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/typec/tcpm/tcpm.c:728:52: error: expected ';' after expression
-                   strscpy(tmpbuffer, "overflow", sizeof(tmpbuffer))
-                                                                    ^
-                                                                    ;
-   1 error generated.
-
-
-vim +728 drivers/usb/typec/tcpm/tcpm.c
-
-   706	
-   707	__printf(2, 0)
-   708	static void _tcpm_log(struct tcpm_port *port, const char *fmt, va_list args)
-   709	{
-   710		char tmpbuffer[LOG_BUFFER_ENTRY_SIZE];
-   711		u64 ts_nsec = local_clock();
-   712		unsigned long rem_nsec;
-   713	
-   714		mutex_lock(&port->logbuffer_lock);
-   715		if (!port->logbuffer[port->logbuffer_head]) {
-   716			port->logbuffer[port->logbuffer_head] =
-   717					kzalloc(LOG_BUFFER_ENTRY_SIZE, GFP_KERNEL);
-   718			if (!port->logbuffer[port->logbuffer_head]) {
-   719				mutex_unlock(&port->logbuffer_lock);
-   720				return;
-   721			}
-   722		}
-   723	
-   724		vsnprintf(tmpbuffer, sizeof(tmpbuffer), fmt, args);
-   725	
-   726		if (tcpm_log_full(port)) {
-   727			port->logbuffer_head = max(port->logbuffer_head - 1, 0);
- > 728			strscpy(tmpbuffer, "overflow", sizeof(tmpbuffer))
-   729		}
-   730	
-   731		if (port->logbuffer_head < 0 ||
-   732		    port->logbuffer_head >= LOG_BUFFER_ENTRIES) {
-   733			dev_warn(port->dev,
-   734				 "Bad log buffer index %d\n", port->logbuffer_head);
-   735			goto abort;
-   736		}
-   737	
-   738		if (!port->logbuffer[port->logbuffer_head]) {
-   739			dev_warn(port->dev,
-   740				 "Log buffer index %d is NULL\n", port->logbuffer_head);
-   741			goto abort;
-   742		}
-   743	
-   744		rem_nsec = do_div(ts_nsec, 1000000000);
-   745		scnprintf(port->logbuffer[port->logbuffer_head],
-   746			  LOG_BUFFER_ENTRY_SIZE, "[%5lu.%06lu] %s",
-   747			  (unsigned long)ts_nsec, rem_nsec / 1000,
-   748			  tmpbuffer);
-   749		port->logbuffer_head = (port->logbuffer_head + 1) % LOG_BUFFER_ENTRIES;
-   750	
-   751	abort:
-   752		mutex_unlock(&port->logbuffer_lock);
-   753	}
-   754	
+> ---
+>  fs/ntfs/runlist.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ntfs/runlist.c b/fs/ntfs/runlist.c
+> index be6ca3d374bb..da21dbeaaf66 100644
+> --- a/fs/ntfs/runlist.c
+> +++ b/fs/ntfs/runlist.c
+> @@ -754,7 +754,7 @@ struct runlist_element *ntfs_mapping_pairs_decompress(const struct ntfs_volume *
+>  	/* Validate lowest_vcn from on-disk metadata to ensure it is sane. */
+>  	if (overflows_type(lowest_vcn, vcn)) {
+>  		ntfs_error(vol->sb, "Invalid lowest_vcn in mapping pairs.");
+> -		goto err_out;
+> +		return ERR_PTR(-EIO);
+>  	}
+>  	/* Start at vcn = lowest_vcn and lcn 0. */
+>  	vcn = lowest_vcn;
+> 
+> ---
+> base-commit: d986ba0329dcca102e227995371135c9bbcefb6b
+> change-id: 20260428-ntfs-fix-sometimes-uninit-rl-cfe3c6a9c34e
+> 
+> Best regards,
+> --  
+> Nathan Chancellor <nathan@kernel.org>
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Hyunchul
