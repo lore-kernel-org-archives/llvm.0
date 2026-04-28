@@ -1,67 +1,67 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C9139D6E6
-	for <llvm@lists.linux.dev>; Tue, 28 Apr 2026 23:45:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC75B39EF1A
+	for <llvm@lists.linux.dev>; Tue, 28 Apr 2026 23:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777419949; cv=none; b=f48MsFVZjQOtP3LMkSyuAzn8S2ZVVWMFIzqdtsHSXahQeV+mJy4clR+eu9Ztwl9AFF5CWT+pe4jWBKKfTZd0H0vntxPEc2SGfYe3rupXzYVw/HW0hfyFq7/NOawQaJhak285DBpP6qg4M4+CN9d/J4RofDb5dpVmFz02q0utuUI=
+	t=1777419953; cv=none; b=Rjv7LbJaCnTbmsEcNkXzRAKVN9SikxTdmeZb+1RpUt21LW07TC5JycTeesYDoBQ+9i1S7x7nflw1H0WgdaxgY06JuGA/qG6nf9V6baJ7y4f1zk9jTM+zjhxAeL/qBDeWVfLit5q5CjWWEQK0S/BWVDd6zcaew3j5J5psbv6PQcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777419949; c=relaxed/simple;
-	bh=M6OJfT3qSdP4lnrHz8anqee8kUQRnD0Hidbc1/0+8Oc=;
+	s=arc-20240116; t=1777419953; c=relaxed/simple;
+	bh=bp6nwxzrFREUgn01pCEsReac6kfcDYuXiYr9ESZXpIc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VLBfzIoDQG9ZSMZvuu1HgUrND5b9Q0sPl6TNRU83r4OtsV6PTr1RYyce4OASw28EjZ5jnyiA10/0mcQQPPgWhz0YYq3KkwJObny5ozeaZZCOUkMgYXnjostZhin4HmCa6IiF9NmSIi/jXrqu0B0RsWdJbqNuw/bljIUWJ/EFg+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=C7FTWyeQ; arc=none smtp.client-ip=209.85.128.43
+	 In-Reply-To:To:Cc; b=gkVX5PGDXq3kShjWsEcfkN76GBqC/6JpyF0yColwRmLBdLKWvLd7cvRjfbn5zGXAIk+sOVZmzuYKoWPH20+0h2unhMdwjmFaJ3M0uHDd1GUszrIhnmwZ3LeA9dqD+5O/J1Yrabh7nymp/axLsdm+FVEtFlWc1ZXyyLnC/4cwdrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=T8euT6u0; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="C7FTWyeQ"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-488a8ca4aadso164426035e9.3
-        for <llvm@lists.linux.dev>; Tue, 28 Apr 2026 16:45:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="T8euT6u0"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488ad135063so108536495e9.0
+        for <llvm@lists.linux.dev>; Tue, 28 Apr 2026 16:45:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777419946; x=1778024746; darn=lists.linux.dev;
+        d=suse.com; s=google; t=1777419950; x=1778024750; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gvXdowVtyuI/sQdPSdYXchM5M1PBQ4p+rahyvFeZ5AI=;
-        b=C7FTWyeQ7J85gqUCZ4g1AUy/SIFRwhsD6qctQEtZoPVesgDZ/7cLU0OZTDmEOcXyQA
-         Ws5Du8QUNM0Ndtk9PWaArPUtmdXgOw6Juz51DAJMErGnpNlMKacY2dJL75MwstIHjAZJ
-         7JaI3ai6DSMWiniZXQ+g1WfAD0P42tlXIj1cexUUTRSfwG57N3wqV9lEc6I+/B5cbgZC
-         2Nwaal/ZMSjJPnLnh/Xq5w88hhS6rC/oIMISti1vdv27p608nKdRxD7WUhGJGq/993Tf
-         ogo8Yizv5MaG9qLDPsOgixwljGFaOaMJh9POs2l9sh3EzgFcvotL5pNeyd94t8KLZUxK
-         Q4Mw==
+        bh=6hdu595jYeB1D4K1cw+a/FSX5Nhp2ZnO92G/7aUFiPw=;
+        b=T8euT6u0yAhHAPBXE4bOfcr0FMh98fLlTqKxWVgPuNj/Rkjml/1CMrZmfXc9FbDZai
+         EwuaAnkZaNAPbPciSEigAhxP4J9ZoG5mFESlYJibNkwBRiS41++0Qj6Wa0HStXpM1vEt
+         CvYdfEdAh/I+gPLbLB9srXI/uub5SyMBHP24VUN+LzVdj+TY3M/QU/kTq4KLrmh6yqLv
+         GeefBj3afGtbFhYAmMrLbmWsNXsjOrEnH0U0rcwHhl5IElD1Mk7MjiNeH4+sCGGsKs65
+         /mT0qjSA9mjvY0BDMNlxVPBnZJYI5c7pRCB0ydT0yke+/7uuM1U/H9o/h1UlgoK2aKsb
+         tw8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777419946; x=1778024746;
+        d=1e100.net; s=20251104; t=1777419950; x=1778024750;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=gvXdowVtyuI/sQdPSdYXchM5M1PBQ4p+rahyvFeZ5AI=;
-        b=TXjwNwRDU5tnsB6mHtdfFsr7H6qJW/WjPGITCixtmFTpVdGNAxxj63l0jCnnOyZ4/T
-         fmupAfLCHDxkFbiOmgh7s8Mvo0lpfMsU8EACoi3gN9i8PzDsWH1NBZvjUVeIg1UFE55p
-         vuwzczg/e2pW6gqtAQUIq3ZuC1XXfW3PUz/eM/H4lJ0br2KkhQGSH6ZYCunVSZgmQi38
-         4lQnJFTJZWnrP/8EroK4prKhNqrTrLwR1pD8m1j/NPiyfhVQngQaMqwXqRVc6ahZrxiQ
-         JKQJi81K84JCIySiUsZ8njvSsW/OpHssoKbJV7XJKbDyfRBILS4YyinN7F14lEh2jy89
-         gYuA==
-X-Forwarded-Encrypted: i=1; AFNElJ97by+z4pBY/uub4Wt73xNo/rEZpgEHU8oimEaHMoE83td5HTrpR+AceZ5t3W6f6eDW/qa/@lists.linux.dev
-X-Gm-Message-State: AOJu0YwLkfb5Nycd/60xhMp6YcOvt0GzHxNV0P2UpeUkmlbrzVKp2/rl
-	83isVAH01e6qNmi6ZEE7zEK+9mRGF5V6May0CR+6TYLnClm5WKxBk4cpAcD6UhK/k0k=
-X-Gm-Gg: AeBDiet6/MnEYDplMZdgpIDoMSavV8StALSoF8nDwxNETYpg775bATvELmA0JaeuINo
-	E6V0vBvn51uR58z44A/4mPg4a3U6CUxo2bnAk6eneaDJ0GxK+AUFftKfgHnNOx40rBTH4JjjSwm
-	QFTD9SJu+RZKFcVKtX67R7Bsf7/AxnaAeNI7ZMHu8E40Rf6FjNVzSlJWEIqmMZM3KWtYmkBPde7
-	O+YisAXF8dHGnbQ9/Ktem11f+fqTYt+qq5Yg9s+xeB1GgAWldPr3t9Pv3J/afWYzwR69M9bcKoi
-	/2Uf95JKzXKM+WlAHdB0VR4OK9C2mEub+5hSENdW3E9pWzDDCcX4aN1jCrAOJP2rhGMdEI+0jkK
-	yHxiZC3AogsTG8gmkzkxo5RJSubZdJvFjslecJNFLj5g0eSiGn8brr+L/h3/6A3lEFVsBFqrLPz
-	LlfZ1tHvoowZkC4D3G4izSAM5C
-X-Received: by 2002:a05:600c:138e:b0:488:c014:34da with SMTP id 5b1f17b1804b1-48a7b549000mr27416645e9.26.1777419946495;
-        Tue, 28 Apr 2026 16:45:46 -0700 (PDT)
+        bh=6hdu595jYeB1D4K1cw+a/FSX5Nhp2ZnO92G/7aUFiPw=;
+        b=D25mmaqo4wpQm4T5D6oE40oRu4AO4RG1uVu3CR5Mj2k3se9OjHKBKN8x1XmWtvVMw0
+         Bjb1VLHhKDdgOhUtpYvSoparaxQOVvZf/Uxc+rVitmdqkZf/vAuTCb8dvgVxTz13AbZY
+         5mvYskqaLMf2Se69ATHYAD3QQFWyflVpuDAbecWKY7gv1cscJMywSW/tDJQs320yHZdq
+         LMmEXVOLSEzt2n7eISxE3ZT2KTb3Yar2bOXVtTBotvD2KefoKobe03cVUr/aXDW76y0I
+         T1oo+48WnVIsPX0hT+Zdnm70qEfuQrNssZ6NhJATgpbD86Oq3kHTppPOYzbvrSDhTIrE
+         5kaA==
+X-Forwarded-Encrypted: i=1; AFNElJ/qJZKiQzZG35vMa97L4VvQ0ZoIJOLuw62i3rkJf7t5MOtayRybq9SMc6yKrqI2QE4fSUF+@lists.linux.dev
+X-Gm-Message-State: AOJu0YxBs3NcK74r2hOSTDDi/aBQMYDwfE3afvgj9FfNvoc0JlIc3kQ7
+	eNevyP2EWvZpu88yRAgBus4Rv0F1s/Q2mcWYb/WZPywFaAFiUFGtMGjb0iWECmZxE/U=
+X-Gm-Gg: AeBDiestQPpT/63im/BIZMSmcMyJQNFNT2L+FOPrdKpzw6m0HmWG3o7gslltDUmLgG6
+	50WgSUBzyJmJcPmGuzNdw/KgN21s+EiWrf2opcMKF5oi/JRQHWnqV12RXYl8cfCgtihyLVXK9k7
+	loYFvHpswqaanbog+eK4fv7sU+5xjzM98sLTpRbgERYh9nfwwKTxWzQsasbSS2im6bPj9IiKA11
+	Zuf4Kp2tSg3Bios05Gcat+oariUFOHiOcSexl1cTKhK6KczY0SSatvU537UR2dzfRLkM8Oz2JlH
+	h7vOcvRwvx75stGXWGTRHeTMgIaibYA8nh+qXxKywTT0tbF6Btkz5Im0S7s1iU5f/tyO+JThic0
+	PrrlTn1coezuaoqisazum090qrWB+S6ZDxb7PEn9ZZ12alGqiSfLw1JuHI5uz8yDyV7uuMlVxPP
+	p6AN8UObrzaLDkkuWFmxTkIJlHLVIyI8r6ijA=
+X-Received: by 2002:a05:600c:828c:b0:489:1ca2:eafd with SMTP id 5b1f17b1804b1-48a7b51bcf7mr25090455e9.11.1777419950411;
+        Tue, 28 Apr 2026 16:45:50 -0700 (PDT)
 Received: from localhost ([2804:7f0:b765:105d:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-6297f4e2345sm240138137.0.2026.04.28.16.45.45
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-95cb7831df4sm131316241.12.2026.04.28.16.45.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 16:45:45 -0700 (PDT)
+        Tue, 28 Apr 2026 16:45:48 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Tue, 28 Apr 2026 20:45:08 -0300
-Subject: [PATCH bpf-next v8 07/11] selftests/bpf: Skip tests whose objects
- were not built
+Date: Tue, 28 Apr 2026 20:45:09 -0300
+Subject: [PATCH bpf-next v8 08/11] selftests/bpf: Allow test_progs to link
+ with a partial object set
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260428-selftests-bpf_misconfig-v8-7-bf02cf97dbcb@suse.com>
+Message-Id: <20260428-selftests-bpf_misconfig-v8-8-bf02cf97dbcb@suse.com>
 References: <20260428-selftests-bpf_misconfig-v8-0-bf02cf97dbcb@suse.com>
 In-Reply-To: <20260428-selftests-bpf_misconfig-v8-0-bf02cf97dbcb@suse.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -87,167 +87,71 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Alan Maguire <alan.maguire@oracle.com>, 
  "Ricardo B. Marliere" <rbm@suse.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1777419912; l=5462;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1777419912; l=3164;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=M6OJfT3qSdP4lnrHz8anqee8kUQRnD0Hidbc1/0+8Oc=;
+ bh=bp6nwxzrFREUgn01pCEsReac6kfcDYuXiYr9ESZXpIc=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QI/vJASeufP/GKj/nGjA7NK3YrtbiPXcNZjGrVzqGLi3qIuwk2Ice1ZXUoucXS4Y60laEqLz2DX
- 7NMQAnH274gs=
+ QI0hxMH5mboGWDH9N3nD/FcQJitJcEB3D5vN43cKT82ONg6T2bIh0WA3f2tOXEcc0QmwtCIFLlr
+ kbZw83cM8Bwo=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-When both run_test and run_serial_test are NULL (because the corresponding
-.test.o was not compiled), mark the test as not built instead of fatally
-aborting.
+When individual test files are skipped due to compilation failures, their
+.test.o files are absent. The linker step currently lists all expected
+.test.o files as explicit prerequisites, so make considers any missing one
+an error.
 
-Report these tests as "SKIP (not built)" in per-test output and include
-them in the skip count so they remain visible in CI results and JSON
-output. The summary line shows the not-built count when nonzero:
+In permissive mode, declare the test objects that already exist on disk
+(via parse-time $(wildcard ...)) as normal prerequisites of the binary so
+that modifications to a test source still trigger a relink, and keep the
+full TRUNNER_TEST_OBJS list as order-only prerequisites so that initial
+fresh builds still produce them and missing objects do not abort the link.
+The recipe filter is split per mode: in permissive mode it combines a
+recipe-time $(wildcard ...) (which catches objects freshly produced via the
+order-only path on a fresh build) with $(filter-out
+$(TRUNNER_TEST_OBJS),$^) (which keeps the non-test inputs from $^ but drops
+the parse-time wildcard duplicates). This avoids passing the same .test.o
+twice to the linker while still presenting test objects before libbpf.a so
+that GNU ld, which scans static archives left-to-right, pulls in archive
+members referenced exclusively by test objects (e.g. ring_buffer__new from
+ringbuf.c). In default (strict) mode the recipe remains the simple $(filter
+%.a %.o,$^) since TRUNNER_TEST_OBJS is part of $^ exactly once.
 
-  Summary: 50/55 PASSED, 5 SKIPPED (3 not built), 0 FAILED
-
-Tests filtered out by -t/-n remain invisible as before; only genuinely
-unbuilt tests are surfaced.
+Note: adding a brand-new test_*.c file in permissive mode requires removing
+the binary (or a clean rebuild) before the new test is linked in, because
+the parse-time $(wildcard ...) is evaluated when the Makefile is read and
+will not yet see the new .test.o. This is acceptable since permissive mode
+targets tolerant CI builds rather than incremental development.
 
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
- tools/testing/selftests/bpf/test_progs.c | 53 +++++++++++++++++++++++++++-----
- tools/testing/selftests/bpf/test_progs.h |  1 +
- 2 files changed, 46 insertions(+), 8 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index cc14b13e23fe..7ba82974ee78 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -165,6 +165,8 @@ struct prog_test_def {
- 	void (*run_test)(void);
- 	void (*run_serial_test)(void);
- 	bool should_run;
-+	bool not_built;
-+	bool selected;
- 	bool need_cgroup_cleanup;
- 	bool should_tmon;
- };
-@@ -372,6 +374,8 @@ static void print_test_result(const struct prog_test_def *test, const struct tes
- 	fprintf(env.stdout_saved, "#%-*d %s:", TEST_NUM_WIDTH, test->test_num, test->test_name);
- 	if (test_state->error_cnt)
- 		fprintf(env.stdout_saved, "FAIL");
-+	else if (test->not_built)
-+		fprintf(env.stdout_saved, "SKIP (not built)");
- 	else if (!skipped_cnt)
- 		fprintf(env.stdout_saved, "OK");
- 	else if (skipped_cnt == subtests_cnt || !subtests_cnt)
-@@ -1641,6 +1645,7 @@ static void calculate_summary_and_print_errors(struct test_env *env)
- 	json_writer_t *w = NULL;
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index f0545ee6b32a..9a5177455f0a 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -767,14 +767,15 @@ endif
+ # some X.test.o files have runtime dependencies on Y.bpf.o files
+ $(OUTPUT)/$(TRUNNER_BINARY): | $(TRUNNER_BPF_OBJS)
  
- 	for (i = 0; i < prog_test_cnt; i++) {
-+		struct prog_test_def *test = &prog_test_defs[i];
- 		struct test_state *state = &test_states[i];
+-$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
++$(OUTPUT)/$(TRUNNER_BINARY): $(if $(PERMISSIVE),$$(wildcard $(TRUNNER_TEST_OBJS)),$(TRUNNER_TEST_OBJS))	\
+ 			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
+ 			     $(TRUNNER_LIB_OBJS)			\
+ 			     $(TRUNNER_BPFTOOL)				\
+ 			     $(OUTPUT)/veristat				\
+-			     | $(TRUNNER_BINARY)-extras
++			     | $(TRUNNER_BINARY)-extras			\
++			     $(if $(PERMISSIVE),$(TRUNNER_TEST_OBJS))
+ 	$$(call msg,BINARY,,$$@)
+-	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
++	$(Q)$$(CC) $$(CFLAGS) $(if $(PERMISSIVE),$$(filter %.a %.o,$$(wildcard $(TRUNNER_TEST_OBJS)) $$(filter-out $(TRUNNER_TEST_OBJS),$$^)),$$(filter %.a %.o,$$^)) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+ 	$(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/$(USE_BOOTSTRAP)bpftool \
+ 		   $(OUTPUT)/$(if $2,$2/)bpftool
  
- 		if (!state->tested)
-@@ -1651,7 +1656,7 @@ static void calculate_summary_and_print_errors(struct test_env *env)
- 
- 		if (state->error_cnt)
- 			fail_cnt++;
--		else
-+		else if (!test->not_built)
- 			succ_cnt++;
- 	}
- 
-@@ -1700,8 +1705,13 @@ static void calculate_summary_and_print_errors(struct test_env *env)
- 	if (env->json)
- 		fclose(env->json);
- 
--	printf("Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
--	       succ_cnt, sub_succ_cnt, skip_cnt, fail_cnt);
-+	if (env->not_built_cnt)
-+		printf("Summary: %d/%d PASSED, %d SKIPPED (%d not built), %d FAILED\n",
-+		       succ_cnt, sub_succ_cnt, skip_cnt, env->not_built_cnt,
-+		       fail_cnt);
-+	else
-+		printf("Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
-+		       succ_cnt, sub_succ_cnt, skip_cnt, fail_cnt);
- 
- 	env->succ_cnt = succ_cnt;
- 	env->sub_succ_cnt = sub_succ_cnt;
-@@ -1772,6 +1782,19 @@ static void server_main(void)
- 		run_one_test(i);
- 	}
- 
-+	/* mark not-built tests as skipped */
-+	for (int i = 0; i < prog_test_cnt; i++) {
-+		struct prog_test_def *test = &prog_test_defs[i];
-+		struct test_state *state = &test_states[i];
-+
-+		if (test->not_built && test->selected) {
-+			state->tested = true;
-+			state->skip_cnt = 1;
-+			env.not_built_cnt++;
-+			print_test_result(test, state);
-+		}
-+	}
-+
- 	/* generate summary */
- 	fflush(stderr);
- 	fflush(stdout);
-@@ -2046,15 +2069,20 @@ int main(int argc, char **argv)
- 		struct prog_test_def *test = &prog_test_defs[i];
- 
- 		test->test_num = i + 1;
--		test->should_run = should_run(&env.test_selector,
--					      test->test_num, test->test_name);
-+		test->selected = should_run(&env.test_selector,
-+					    test->test_num, test->test_name);
-+		test->should_run = test->selected;
- 
--		if ((test->run_test == NULL && test->run_serial_test == NULL) ||
--		    (test->run_test != NULL && test->run_serial_test != NULL)) {
-+		if (test->run_test && test->run_serial_test) {
- 			fprintf(stderr, "Test %d:%s must have either test_%s() or serial_test_%sl() defined.\n",
- 				test->test_num, test->test_name, test->test_name, test->test_name);
- 			exit(EXIT_ERR_SETUP_INFRA);
- 		}
-+		if (!test->run_test && !test->run_serial_test) {
-+			test->not_built = true;
-+			test->should_run = false;
-+			continue;
-+		}
- 		if (test->should_run)
- 			test->should_tmon = should_tmon(&env.tmon_selector, test->test_name);
- 	}
-@@ -2106,9 +2134,18 @@ int main(int argc, char **argv)
- 
- 	for (i = 0; i < prog_test_cnt; i++) {
- 		struct prog_test_def *test = &prog_test_defs[i];
-+		struct test_state *state = &test_states[i];
- 
--		if (!test->should_run)
-+		if (!test->should_run) {
-+			if (test->not_built && test->selected &&
-+			    !env.get_test_cnt && !env.list_test_names) {
-+				state->tested = true;
-+				state->skip_cnt = 1;
-+				env.not_built_cnt++;
-+				print_test_result(test, state);
-+			}
- 			continue;
-+		}
- 
- 		if (env.get_test_cnt) {
- 			env.succ_cnt++;
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index 37955a8ad385..2cf950afcd85 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -125,6 +125,7 @@ struct test_env {
- 	int sub_succ_cnt; /* successful sub-tests */
- 	int fail_cnt; /* total failed tests + sub-tests */
- 	int skip_cnt; /* skipped tests */
-+	int not_built_cnt; /* tests not built */
- 
- 	int saved_netns_fd;
- 	int workers; /* number of worker process */
 
 -- 
 2.54.0
