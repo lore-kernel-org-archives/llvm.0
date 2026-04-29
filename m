@@ -1,91 +1,106 @@
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D28A2D0C63
-	for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 06:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B214C39D6E0
+	for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 07:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777442611; cv=none; b=Up7HjFjtqOdMaxtBLJOc0xRHn9G97B82xBZ/Pfdi0yWavmY/MemWQjnXAu77G9dIT0ww+utP1/sEJlKLVVx4xlJ6j1DK9EtXQto6izNug/3+21smH/fKMxWj440rXLnP4RTyaN5RDaxtL5Wg9AccD0MUjB/gF3LsdgVC8x//rV0=
+	t=1777446662; cv=none; b=EjQ4wp6Xl44dOQprUoBNwvmVk32v19i230twy2FlZR3YJUVM4RekqhZdMvwQht87Knt5K1nVD7xm9e4P9nhqxJmyeNQTXHzghprpkhCAbaUBda4QhNwKVos5ovWxOTqoPuEyQV6rxtHt2NbYLZIQaDPbb8pUW57n6bpiMvn4tgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777442611; c=relaxed/simple;
-	bh=WzpztBIFwMx1HqyUajdyUSSNz/O80ntx1j0+tXnJCuw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=TE1UzJyFrnZpGpyxp9E3IadgOBDPqnKcGMN2XKlDD/8R7ySHWupIJwwu7/d++la7sVfviVelydIXqqsi2jjsmxbdP7gnvgr1uUQJSd4peLwcFhtH9DDOTSm6tM0vxqtatXTTMmbg1QR+n7T+Nbji5mlcquR+R97TIUHJmu2P26o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=OJ7/bHzd; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+	s=arc-20240116; t=1777446662; c=relaxed/simple;
+	bh=vgTKPi91ydquf4THtwCY3jKGdkghf/1QRqHyJugk684=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=MXvvhuRb9R6bGExET2EkaNTwOIOE1jRvFWwdDubuIpjSjAj4BynEbJDjNwWfkBkIuwd+FMGRSKUAd1/hikY20qJ3+ETS9LNfqZbrU2oKn2z0/5C/iNDI928P/zFkGNUyhq06hBTQ6yc2NLN6uupVw0TolNKSmOQPCvWCl31k0GE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZLhV/SSY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="OJ7/bHzd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1777442600;
-	bh=/RRTW6GJMQFD74GRMm5qCHethywFoA6NvTHxdjnYDRo=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=OJ7/bHzdqP/D/PBwqvTeqWZi/62SIyIkSFycBqGDuKddM02BTqzdlmY06gX8IFrzj
-	 f7szli7NQY3+uJxDmDPwgXgmKCWCJ4VFW4Vxz7k7JPherp2pox/udntYGtCk9c8HWY
-	 FkKjYE0+9CC64y+0L3n/Q33VkMcYL7LQhS1WXsGQapF/wsagr3uY2refEn9/E6LSrN
-	 PdT8Ht5BDFFsbhZSp2hvhBlebRqLjoijmf4LHV3idy8swZR7I3nC6/T0XYhSqjbs/1
-	 u5Nc+TgLJnbJz9d6iBelpLu79DlNQWnZD7cYUeDakUbEaRzrE/SI5QcMkEP5XpZvv+
-	 WTDcbiZlsg9QQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4g56DQ1KV7z4wj5;
-	Wed, 29 Apr 2026 16:03:18 +1000 (AEST)
-Message-ID: <946b79c2-ae4c-40ed-997b-ac654e148d47@ellerman.id.au>
-Date: Wed, 29 Apr 2026 16:03:17 +1000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZLhV/SSY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55CAC2BCC6;
+	Wed, 29 Apr 2026 07:11:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777446662;
+	bh=vgTKPi91ydquf4THtwCY3jKGdkghf/1QRqHyJugk684=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=ZLhV/SSYrplYwUFSPsbt9P5pz/R1WfgGrHIHZFXFLEGEyHngGcwdRZjxXodSqv5lm
+	 /njOgU7Tzz5IbdpXhJEBIeLxnKAo3KwXX7sCkOtGO5W9viRZ+rIo3I+NbuTBTby4hM
+	 n6lVP2onNeyecWdLqRX2giIkp6R5weSvfSoBvpfqdQXN2LjOQw8cANAXaiDMIWSupo
+	 RGCRbFAilI33/7Nau21uHcldqjzDXxNk9D0edMpyHtcggQvRqMcIWpNQwFiHTiAzrz
+	 quvOXvfaS7s7NVBvqXt4M45CCNOQJyEIVh96VvkxFwrhWJsSt8md5A633gCeWzF4Md
+	 RTxRalwOQkdlA==
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id BD7D4F40073;
+	Wed, 29 Apr 2026 03:11:00 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-01.internal (MEProxy); Wed, 29 Apr 2026 03:11:00 -0400
+X-ME-Sender: <xms:BK_xabEs3CLjyMv3JDN7gzsO0l-HuThd0BpkzctwXA58YBDjhrzRqQ>
+    <xme:BK_xaTLhoDTjO4QTABZD3sDJzLWJgbQqJUcZL3FawS7HCRIL5YC7sxgFpU2Hyy49s
+    Nr-ijPW-uRPXyQbfriAccJv2G6q0zUp9QHjlQGWFtvK15ywur3tBGs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdekfeektdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhguuceu
+    ihgvshhhvghuvhgvlhdfuceorghruggssehkvghrnhgvlhdrohhrgheqnecuggftrfgrth
+    htvghrnhepvdeuheeitdevtdelkeduudetgffftdelteefteevjeevjeeiheefhfejieej
+    fedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrugdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudeijedthedttdejledq
+    feefvdduieegudehqdgrrhgusgeppehkvghrnhgvlhdrohhrghesfihorhhkohhfrghrug
+    drtghomhdpnhgspghrtghpthhtohepudehpdhmohguvgepshhmthhpohhuthdprhgtphht
+    thhopegsphesrghlihgvnhekrdguvgdprhgtphhtthhopehnihgtkhdruggvshgruhhlnh
+    hivghrshdolhhkmhhlsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhushhtihhnshht
+    ihhtthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhglhgvrd
+    gtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghp
+    thhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnshgtsehkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieskhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtohepgiekieeskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:BK_xabTGIESLo2jXcjF0ZdFmaTn6k2nL1OrtsZWsz1j0yu13RBSi7w>
+    <xmx:BK_xaUpdFdUBup2gxR6GRgUadgOHw3onrKYPso9Z9dNADJSWmj5VbA>
+    <xmx:BK_xaQOU1MvdidLF5fiYR5Sh-76LzOtNXV5lOBGcAtW4k3qDrr3omg>
+    <xmx:BK_xaSw_k-fyNCjCIFmI61HDvEyD2SGDdPNGHcCm7CR_Cl4CK4K89g>
+    <xmx:BK_xacyriSh5l4wYA9tOTrZsDnvxjJnb4p7M1KusbgNwPKU89GkjjWKI>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 9B347700065; Wed, 29 Apr 2026 03:11:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND 1/2] powerpc/ps3: Drop redundant result assignment
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Nicholas Piggin <npiggin@gmail.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Geoff Levand <geoff@infradead.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20260317130823.240279-3-krzysztof.kozlowski@oss.qualcomm.com>
- <90c122bc-3067-4e3d-8083-dd94844c31f2@oss.qualcomm.com>
-Content-Language: en-US
-From: Michael Ellerman <mpe@ellerman.id.au>
-In-Reply-To: <90c122bc-3067-4e3d-8083-dd94844c31f2@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date: Wed, 29 Apr 2026 09:10:40 +0200
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nsc@kernel.org>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kbuild@vger.kernel.org, "Thomas Gleixner" <tglx@kernel.org>,
+ "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "Peter Zijlstra" <peterz@infradead.org>, x86@kernel.org,
+ "H . Peter Anvin" <hpa@zytor.com>
+Message-Id: <e4dfd1f7-67fe-4690-8c2c-0f9d5a3ffed0@app.fastmail.com>
+In-Reply-To: 
+ <20260428-bump-minimum-supported-llvm-version-to-17-v1-12-81d9b2e8ee75@kernel.org>
+References: 
+ <20260428-bump-minimum-supported-llvm-version-to-17-v1-0-81d9b2e8ee75@kernel.org>
+ <20260428-bump-minimum-supported-llvm-version-to-17-v1-12-81d9b2e8ee75@kernel.org>
+Subject: Re: [PATCH 12/14] x86/module: Revert "Deal with GOT based stack cookie load on
+ Clang < 17"
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 28/4/2026 23:22, Krzysztof Kozlowski wrote:
-> On 17/03/2026 14:08, Krzysztof Kozlowski wrote:
->> Return value of ps3_start_probe_thread() is not used, so code can be
->> simplified to fix W=1 clang warnings:
->>
->>    arch/powerpc/platforms/ps3/device-init.c:953:6: error: variable 'result' set but not used [-Werror,-Wunused-but-set-variable]
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
->> ---
->>
->> Resend after ~2.5 months
->>
->>   arch/powerpc/platforms/ps3/device-init.c | 4 +---
->>   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> Ping. This also got a review.
-> 
-> I do not plan to resend second time... And I also understand if this is
-> somehow legacy and fixing warnings is not desired, but then it would be
-> great if you just responded "don't send such patches" and I would not
-> waste my time.
 
-Thanks for the patch, sorry it hasn't been picked up.
+On Wed, 29 Apr 2026, at 04:59, Nathan Chancellor wrote:
+> Now that the minimum supported version of LLVM for building the kernel
+> has been raised to 17.0.1, the workaround added by
+>
+>   78c4374ef8b8 ("x86/module: Deal with GOT based stack cookie load on 
+> Clang < 17")
+>
+> will never be included, as the final clause in the preprocessor
+> conditional is always false. Revert the change to clean up the dead
+> code.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-I have been AWOL, and I suspect Maddy is not sure about taking PS3 
-patches directly without hearing from Geoff.
-
-Maddy this is fine to pick up for next.
-
-cheers
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
