@@ -1,58 +1,60 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BC028850C;
-	Wed, 29 Apr 2026 20:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E453939E17A;
+	Wed, 29 Apr 2026 20:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777493066; cv=none; b=bYudOBeI8iu3iW4Sz/e1Tm7/rLT1H5be5X6pTDnpkkg5sSmwwYCVtVVaqkkeMJrRrlHuDTmzEof4MOpJHug5hcf5Qz9Q1JD29PERbTpPKA5BecwBYfqq9DFYMe+b4fR71Bd+Xq+ksYCvG+K9bShgcZgICSPeYGM6ywHSecnL1UM=
+	t=1777495074; cv=none; b=q5OilY4mgS+TqKR0+eDz5KNUen20/OWtnNWzzxjmrMbs+Z7yT7UmeDlILJXGnbu4yuOp1bSNbArgKU5bEQCB7slBU4ST2uSz9QSLa+6ffSqkP9vHjOQ6Lq6jdNl4E7wvh5mu6PFTwsdsakGcqfXmeTkd6s2ZwSX2mqfJ3CkJ2mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777493066; c=relaxed/simple;
-	bh=FfRO7GYgDCNy8O7Cqhu5GNAaI0+Uw2gvgWemDXtgbzE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=l7wOPQCvfbMeH8yK11N3jApM9gP03xqA0pcc9WJ/SrxsOlVCkDH8WoeL7h+UVDGSuI67Nhbop+Yl6EIEbjfPPU9xZxaN+zYn5FEzs4vwJwHHlIvULmMbGErAiWu8VmOV/55SMgi6WWYjEz6zx3pQ+yYDsLJ/4+AgOz9BqXwCmzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m76EO7Aq; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1777495074; c=relaxed/simple;
+	bh=b9bCQw37QhsfaxON4/j724gH3z20vILtdSQxtUQhs7U=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mZ+LJO699mh6xl+8SUqX06M4esNrEXC6Oux9BQSiq7wgJZl5jh+JzemuP2RcTYy+fsAvJQzLSApsMPq0vnapSwk4/nRo9wEeQuNH4uSbK7ivsEvHU2rKnq5MPyChceD3a/kts3wqRf56yqXj58t1FQbuR9OU/+wURloIoVHPyLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BolnUuiw; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m76EO7Aq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BolnUuiw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777493065; x=1809029065;
+  t=1777495073; x=1809031073;
   h=date:from:to:cc:subject:message-id;
-  bh=FfRO7GYgDCNy8O7Cqhu5GNAaI0+Uw2gvgWemDXtgbzE=;
-  b=m76EO7Aq+dHxIs4NkGGl9Uq2khLQ1gBYLBhQiu1QDJYMHMNGZ+AoMa4m
-   +J2ntrSAgO0BZiUDpjlzoxQLOKzvOj1RuCofCeJQOufj6gLvu9K7hyaqc
-   KxOh+ZVpNfr8REXxN5aP1yr8EjJ7Vm86RLIqaqD4iPaJtS9FnBzsp1/9C
-   kPYWPSI30jcZVNVWlhOyGV/VfycNu8r+6u8NZ1lFyBzAH43vKJKgpLN3h
-   TLNQNgi4WFdwJ1B6X8Z0yYj2vDdjhcMBqmehFK8fyPfxAQeM2VcSOCKB6
-   HX6YGUErsv5RTIxBr7wsCHSoaJvaMVKDZP+lula92kMqatQFg2yq4JLKb
-   w==;
-X-CSE-ConnectionGUID: HKbesyUpQYm3KNgn+BryTg==
-X-CSE-MsgGUID: LeKR01HcRdiD/6GZsNyzdA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="78421206"
+  bh=b9bCQw37QhsfaxON4/j724gH3z20vILtdSQxtUQhs7U=;
+  b=BolnUuiw7BnnH5JW1GRmWlb5hZ+GzLOI22RjY6n7tBHQEinTWuuyPDG8
+   gPApgjzyBmqij0t+MnNRTS1m7vu7FApp1Hh4XnRiAj6vrebBpn3WYayCJ
+   nr4r6WsR3P/rQfvsVeyqZeJ2CAuQh5rNKw5ldcze6JGN5+ktAfxafeCUH
+   pvzlODlLiJjlyKeTU87OQN26oM9jvyM25SM9vEwMPOwS2R49Byrhcqgli
+   rG5t/bB2jqFJQwn/sA6YGieBPKozteHN72yH2pFKIXtQlsFKsd3vhRn63
+   HrjmtAq4a8XFkGQcJCGSlbU7FPVN2tzScgeXbvmUIxj4kURs40wiK5bMk
+   A==;
+X-CSE-ConnectionGUID: x3iYjT7HR+eS8yON+FkZCQ==
+X-CSE-MsgGUID: OLIo+lm7RFuTOFR1jeyBMg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="78424036"
 X-IronPort-AV: E=Sophos;i="6.23,206,1770624000"; 
-   d="scan'208";a="78421206"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 13:04:25 -0700
-X-CSE-ConnectionGUID: ehzqrv20SZCKpFb3hXruCQ==
-X-CSE-MsgGUID: g6kIAg1MS3yEz3t+qjON5g==
+   d="scan'208";a="78424036"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 13:37:53 -0700
+X-CSE-ConnectionGUID: XYESIDgFSAmePWuW0bU15w==
+X-CSE-MsgGUID: u3P6z5p+Queivi5kVJuAYQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,206,1770624000"; 
-   d="scan'208";a="230011887"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by fmviesa010.fm.intel.com with ESMTP; 29 Apr 2026 13:04:22 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+   d="scan'208";a="257697628"
+Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 29 Apr 2026 13:37:50 -0700
+Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wIB8u-000000004Z7-12yj;
-	Wed, 29 Apr 2026 20:04:20 +0000
-Date: Wed, 29 Apr 2026 22:03:53 +0200
+	id 1wIBfH-00000000BWE-3Rqy;
+	Wed, 29 Apr 2026 20:37:47 +0000
+Date: Thu, 30 Apr 2026 04:37:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Miklos Szeredi <mszeredi@redhat.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- fuse-devel@lists.sourceforge.net
-Subject: [mszeredi-fuse:fusex 40/40] fs/fuse/fusex.c:1601:16: error:
- use of undeclared identifier 'FUSE_SUPER_MAGIC'
-Message-ID: <202604292109.XXl4iUUX-lkp@intel.com>
+ "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+ LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/wfamnae-next20260407 4/19]
+ drivers/scsi/hisi_sas/hisi_sas.h:617:26: error: field has incomplete type
+ 'struct ssp_command_iu'
+Message-ID: <202604300450.vVGf8nD0-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,94 +62,83 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git fusex
-head:   1934d254361977df9fad43102ec1d72e20434a99
-commit: 1934d254361977df9fad43102ec1d72e20434a99 [40/40] fuse: add fusex filesystem
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260429/202604292109.XXl4iUUX-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260429/202604292109.XXl4iUUX-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20260407
+head:   9505f43094e1efb72854c166160fb7666517f07a
+commit: f6054f7e1b3b8a6fdba096f5d0b2a273d07452d4 [4/19] scsi: libsas/aci94xx: Avoid multiple -Wflex-array-member-not-at-end warnings
+config: s390-randconfig-002-20260430 (https://download.01.org/0day-ci/archive/20260430/202604300450.vVGf8nD0-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604300450.vVGf8nD0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604292109.XXl4iUUX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604300450.vVGf8nD0-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/fuse/fusex.c:1601:16: error: use of undeclared identifier 'FUSE_SUPER_MAGIC'
-    1601 |         sb->s_magic = FUSE_SUPER_MAGIC;
-         |                       ^
+   In file included from drivers/scsi/hisi_sas/hisi_sas_v1_hw.c:7:
+>> drivers/scsi/hisi_sas/hisi_sas.h:617:26: error: field has incomplete type 'struct ssp_command_iu'
+     617 |                         struct ssp_command_iu task;
+         |                                               ^
+   drivers/scsi/hisi_sas/hisi_sas.h:617:11: note: forward declaration of 'struct ssp_command_iu'
+     617 |                         struct ssp_command_iu task;
+         |                                ^
+>> drivers/scsi/hisi_sas/hisi_sas_v1_hw.c:1002:11: error: invalid application of 'sizeof' to an incomplete type 'struct ssp_command_iu'
+    1002 |                 dw2 = ((sizeof(struct ssp_command_iu) +
+         |                         ^     ~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/hisi_sas/hisi_sas.h:617:11: note: forward declaration of 'struct ssp_command_iu'
+     617 |                         struct ssp_command_iu task;
+         |                                ^
+   2 errors generated.
+--
+   In file included from drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:7:
+>> drivers/scsi/hisi_sas/hisi_sas.h:617:26: error: field has incomplete type 'struct ssp_command_iu'
+     617 |                         struct ssp_command_iu task;
+         |                                               ^
+   drivers/scsi/hisi_sas/hisi_sas.h:617:11: note: forward declaration of 'struct ssp_command_iu'
+     617 |                         struct ssp_command_iu task;
+         |                                ^
+>> drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:1779:11: error: invalid application of 'sizeof' to an incomplete type 'struct ssp_command_iu'
+    1779 |         dw2 = (((sizeof(struct ssp_command_iu) + sizeof(struct ssp_frame_hdr)
+         |                  ^     ~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/hisi_sas/hisi_sas.h:617:11: note: forward declaration of 'struct ssp_command_iu'
+     617 |                         struct ssp_command_iu task;
+         |                                ^
+   2 errors generated.
+--
+   In file included from drivers/scsi/hisi_sas/hisi_sas_main.c:7:
+>> drivers/scsi/hisi_sas/hisi_sas.h:617:26: error: field has incomplete type 'struct ssp_command_iu'
+     617 |                         struct ssp_command_iu task;
+         |                                               ^
+   drivers/scsi/hisi_sas/hisi_sas.h:617:11: note: forward declaration of 'struct ssp_command_iu'
+     617 |                         struct ssp_command_iu task;
+         |                                ^
    1 error generated.
 
 
-vim +/FUSE_SUPER_MAGIC +1601 fs/fuse/fusex.c
+vim +617 drivers/scsi/hisi_sas/hisi_sas.h
 
-  1574	
-  1575	static int fusex_fill_super(struct super_block *sb, struct fs_context *fsc)
-  1576	{
-  1577		struct fuse_mount *fm = get_fuse_mount_super(sb);
-  1578		struct fuse_conn *fc = fm->fc;
-  1579		struct inode *inode;
-  1580		struct fusex_id id;
-  1581		struct fuse_statx_out statx;
-  1582		struct fuse_chan_param cp;
-  1583		int err;
-  1584	
-  1585		/* Dropped in fuse_mount_destroy() */
-  1586		fuse_conn_get(fc);
-  1587		fm->sb = sb;
-  1588		fc->dev = sb->s_dev;
-  1589	
-  1590		scoped_guard(mutex, &fuse_mutex) {
-  1591			list_add_tail(&fc->entry, &fuse_conn_list);
-  1592			err = fuse_ctl_add_conn(fc);
-  1593			if (err)
-  1594				return err;
-  1595		}
-  1596	
-  1597		err = super_setup_bdi(sb);
-  1598		if (err)
-  1599			return err;
-  1600	
-> 1601		sb->s_magic = FUSE_SUPER_MAGIC;
-  1602		sb->s_op = &fusex_super_operations;
-  1603		sb->s_xattr = fusex_xattr_handlers;
-  1604		sb->s_maxbytes = MAX_LFS_FILESIZE;
-  1605		sb->s_time_gran = 1;
-  1606		sb->s_iflags |= SB_I_IMA_UNVERIFIABLE_SIGNATURE;
-  1607		if (sb->s_user_ns != &init_user_ns)
-  1608			sb->s_iflags |= SB_I_UNTRUSTED_MOUNTER;
-  1609		sb->s_blocksize = PAGE_SIZE;
-  1610		sb->s_blocksize_bits = PAGE_SHIFT;
-  1611		sb->s_flags &= SB_RDONLY;
-  1612		sb->s_flags |= SB_POSIXACL;
-  1613	
-  1614		err = fusex_send_init(fm, &id, &statx);
-  1615		if (err)
-  1616			return err;
-  1617	
-  1618		inode = fusex_iget(sb, &id);
-  1619		if (inode) {
-  1620			WARN_ON(!(inode_state_read_once(inode) & I_NEW));
-  1621			fusex_set_attr(inode, &statx.stat);
-  1622			fusex_init_inode(inode);
-  1623			unlock_new_inode(inode);
-  1624		}
-  1625		sb->s_root = d_make_root(inode);
-  1626		if (!sb->s_root)
-  1627			return -ENOMEM;
-  1628	
-  1629		fc->parallel_dirops = true;
-  1630		fc->destroy = true;
-  1631	
-  1632		cp.minor = fc->minor;
-  1633		cp.max_write = fc->max_write;
-  1634		cp.max_pages = fc->max_pages;
-  1635		fuse_chan_set_initialized(fc->chan, &cp);
-  1636	
-  1637		return 0;
-  1638	}
-  1639	
+b3cce125cb1e2e Xiang Chen          2019-02-06  610  
+4ca7fe99fc8485 Yihang Li           2025-04-14  611  #define PROT_BUF_SIZE 7
+c799d6bd8fe4a8 John Garry          2015-11-18  612  struct hisi_sas_command_table_ssp {
+c799d6bd8fe4a8 John Garry          2015-11-18  613  	struct ssp_frame_hdr hdr;
+c799d6bd8fe4a8 John Garry          2015-11-18  614  	union {
+c799d6bd8fe4a8 John Garry          2015-11-18  615  		struct {
+4ca7fe99fc8485 Yihang Li           2025-04-14  616  			u32 prot[PROT_BUF_SIZE];
+9b3509411b4f8f Gustavo A. R. Silva 2025-09-19 @617  			struct ssp_command_iu task;
+c799d6bd8fe4a8 John Garry          2015-11-18  618  		};
+c799d6bd8fe4a8 John Garry          2015-11-18  619  		struct ssp_tmf_iu ssp_task;
+c799d6bd8fe4a8 John Garry          2015-11-18  620  		struct xfer_rdy_iu xfer_rdy;
+c799d6bd8fe4a8 John Garry          2015-11-18  621  		struct ssp_response_iu ssp_res;
+c799d6bd8fe4a8 John Garry          2015-11-18  622  	} u;
+c799d6bd8fe4a8 John Garry          2015-11-18  623  };
+c799d6bd8fe4a8 John Garry          2015-11-18  624  
+
+:::::: The code at line 617 was first introduced by commit
+:::::: 9b3509411b4f8f5ba827619ca315c5f95f0bd8ac scsi: hisi_sas: Avoid a couple -Wflex-array-member-not-at-end warnings
+
+:::::: TO: Gustavo A. R. Silva <gustavoars@kernel.org>
+:::::: CC: Gustavo A. R. Silva <gustavoars@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
