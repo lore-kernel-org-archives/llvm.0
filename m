@@ -1,67 +1,35 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7CA39D6C7
-	for <llvm@lists.linux.dev>; Tue, 28 Apr 2026 23:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F15330D43;
+	Wed, 29 Apr 2026 03:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777419967; cv=none; b=m25RiXCCiMCIrHwqcS7jmh3+mMLKsXgk5wI5JkAPimJe3TYFsckGArvZvJ3mmYB4KvE6sfmJ15JyZ/SPzvpVMS5BANjyx7zqnLthMmRa2p0PjV9Cz26nY35IOH9qLJpMhf5Gh5q/oJ+OGJZYg6qlPpH7OgAPhcj5XXSeazR3heU=
+	t=1777431610; cv=none; b=XztK+I4ZrFhv0dtdEgdiFtHorJevpzCibvYAEMPtAsocLJdRfhzFD3PR64zFOO8bZg169o637kAFG7pSmBnBkO38Mb63TeBvOn07esHoJwKis2g8+IBPDAg6igLJAfgbewXFk2OlwWuZ0xcwqHH7+eYLmYwsU7N724lv69oV8GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777419967; c=relaxed/simple;
-	bh=/izrmfoNTErOF0QoJyqRR2oNNCmtADhmsCqLhuVNNYw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OkszPuzi/LIWTGUzP9W1TKZeDh51omrWJ6Xs3DPm9z4g0hpG3fYVyEOS8EZ6IoZEhaAHmm+MAQCWQGO5TxfL1Gdd4FxYdcZLHUav7Y3uqGZKCwpgKwo6NV9SErLsXx83pwf9tIJfiSO4n1gOUCwIMSbubs8Q2j2Cvk5lAQCE434=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bTYjNCC5; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1777431610; c=relaxed/simple;
+	bh=BPWip7f/+n2wb9mPvkHgJCd0lFqOC+ZsA1RInw6FYx8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=u3VpxcYkqIkm2oU9JkySBZYzpDzTStl0BTpQraKqvslYM4f2AVxZiwwl43YC8zS5SCO2WayWrbBImZYG/9ylLvcsdwFJm54oQFcr0hQAqr7jC1zgx+IlDfo98EgnxlcR/aHmOxOfjDf1KX9fxD0P6tCN/Y1Yaa2anifZlNxsoKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lm6oqDaZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bTYjNCC5"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso123493005e9.1
-        for <llvm@lists.linux.dev>; Tue, 28 Apr 2026 16:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777419964; x=1778024764; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hR7c8YMvP9LQvNeuTjxfIeyv3ZVfJWeQnEPeA75OGwc=;
-        b=bTYjNCC5EgnYgQx+xGg1uHYLHPqA2fR3mqz2Wwd7mM1aIKlPZr0ZqhMnwhroboE++c
-         j/bX+0Ji5PHx8q/GZy6I+yLYQSVIljN71FcRjyRaPUzkcl0AjqPEAj13t7343s2IW3ci
-         jLh5v8FuNiH2y7D0jbtBU/4Z2XzhvH7TEX4fr4bNfQJf/8V3uT7rv8XuGhzUY2IK2u/0
-         5Oknfk90Wfd4meSss4XLYkyYd2c7c1ds71K3fn2Q74F+ma/HOg5R8t5FejgDYdAf2VaU
-         wADuplqp83ucseYQ67lv/KVGJur84TXOwonaE7/KN27Ui2QPuuthGTuF/fiAZcSPkjUg
-         61HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777419964; x=1778024764;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hR7c8YMvP9LQvNeuTjxfIeyv3ZVfJWeQnEPeA75OGwc=;
-        b=EwbPIklQVFiL20j/dI/vhzVlStYeyE8Hr5WxSHE+xQvksj0MUi4EiJkh9JqeZ2XtWG
-         ePRXvCEFztbzcrjMKV5LMH8lg2LPWLDmz6mia+rFMKJ1a/0NerICYhm7hAx73qlnHn3F
-         NYut7RKpE3y3WSzMUX/N5qcjI2v+sZDtSAbTVQhoC6WR5SvuvHa51jp5HCrjbnL82Uxu
-         7tVHYkDcSLHWu/reqPJNBh8uVq8a9X79IoV6KgTayq+qoUtvVgQ56V7OyQrKiqlBLikg
-         hYMzEJ/QX2mfW2RZ9k6AlUaTfsI9g1P9QnOGe8cBmp0iCVUvsBiWk/eNdHFzvT6nhu/r
-         ldqw==
-X-Forwarded-Encrypted: i=1; AFNElJ9WsrpHdvcI/LPUOybWl0CQtM6+jMjNbLXnowXWcxO3fOLpqYxuBGn+0FFDN5D0ST0MSITk@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw3GbLWfjdHVDj9V1KDVDf9g9OMWKSfcWN6SjsuSx8sbPSL1JQj
-	3xc+Zh2STOqqdxIsamzhNf/4iir6B58fSlGDn0OArl8HAflO6zCKjgV9rhikwUZ0GFU=
-X-Gm-Gg: AeBDievOIB1xN8ionMH2QaZQ+sMi6xsvpTbWIKZFOWarD6uqIxjWvhbp1PlCBWTeqAM
-	fbN+IZmgc1nLTF42fEGi/WnDgGpNMmCg9lD9t0SKo2p8OW/Z1TV6ddd5wDUOzhiXUE8Xl7ExcZm
-	E8+xzyC5lxdncginjorBJwUU7QfXLGPMmQtN+Z8sj7p/H7zZ+b1nnEG9HdnRo8ovS11o3xuWIXI
-	k1diXXf/u79OhPxHcn/GHvYz5pyJEdkZW2EBKaiL/Vv1Sy+vucZNcvp0eCBDAoWOI674d/nZsKE
-	pUn83+edWDDWFUQqCU8aRpOT/dfT5lz6sL/ahmcUYLR3TmxwSH+yrcaIpP1Adzxe4n550gneGd5
-	C7IvcD9q90B/5Kfup1xlAZzTeOrQaLzoLMQRd9wMzUwMqrqVqKlAik5wyhPYTlak7ytjVyBcCIi
-	QZxyLr2K0RRRRSnMbIv+lPk3My
-X-Received: by 2002:a05:600c:4e91:b0:471:700:f281 with SMTP id 5b1f17b1804b1-48a7b54b1c7mr24789895e9.25.1777419964535;
-        Tue, 28 Apr 2026 16:46:04 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:105d:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-573b6953946sm271414e0c.0.2026.04.28.16.46.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 16:46:02 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Tue, 28 Apr 2026 20:45:12 -0300
-Subject: [PATCH bpf-next v8 11/11] selftests/bpf: Tolerate missing files
- during install
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lm6oqDaZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB3B9C2BCB7;
+	Wed, 29 Apr 2026 03:00:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777431609;
+	bh=BPWip7f/+n2wb9mPvkHgJCd0lFqOC+ZsA1RInw6FYx8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Lm6oqDaZCWZPGshfZZK+k3YJKNsDnG8AlHI64y2CWDqFmLMmaqsMBR+/vE3bA/wP/
+	 qBOoFQ/mqwzel7Gid5GmxZodV4mf1xpeBH0sY7SsY9LGRMSt74iysuHwe2M56ExfD8
+	 goiP9iOwlp8C2br8Add6rW5f9H9OjquXWl9bYh+Fcv2GTS5kMfEwGHeClKFelU19sn
+	 SIMG/hdVguN/Ocxka1uk3ZIdHBi5e04hd81Ss92pRLqtTlQ8s93zp/uOUkCGXm4kF9
+	 f+rpPRHBzzJdlmq8Kt6ysbjX7bxF15iXX8oENUhNFMxcT58CLIzAyP8SBPtcmN42wO
+	 4oXtJ02loyEIw==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 00/14] Bump minimum version of LLVM for building the kernel
+ to 17.0.1
+Date: Tue, 28 Apr 2026 22:59:06 -0400
+Message-Id: <20260428-bump-minimum-supported-llvm-version-to-17-v1-0-81d9b2e8ee75@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,86 +37,151 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260428-selftests-bpf_misconfig-v8-11-bf02cf97dbcb@suse.com>
-References: <20260428-selftests-bpf_misconfig-v8-0-bf02cf97dbcb@suse.com>
-In-Reply-To: <20260428-selftests-bpf_misconfig-v8-0-bf02cf97dbcb@suse.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Alan Maguire <alan.maguire@oracle.com>, 
- "Ricardo B. Marliere" <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1777419912; l=2156;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=/izrmfoNTErOF0QoJyqRR2oNNCmtADhmsCqLhuVNNYw=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QBbgjXwVu2unS8JglD6UCKZJvCJEJAlmSjrzgmiYPCBRyG9YG5E/X2CY352VvtcvIUf+weYBF79
- DIYd08L56eQk=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNyw6CMBCF4Vchs3aSUioSX8W4oDDgGHpJbzEhv
+ LtFl9/inH+HSIEpwr3ZIVDhyM5WtJcGptdoV0Keq0EK2QslJepsPBq2bLLBmL13IdGM21YMFgr
+ nHpPD9oZa9d0wXgctVAf1zwda+PNrPZ5/x6zfNKUzAMfxBS9G0zWNAAAA
+X-Change-ID: 20260422-bump-minimum-supported-llvm-version-to-17-b4638a58b043
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-kbuild@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org, 
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+ linux-hardening@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
+ Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>, 
+ linux-arm-kernel@lists.infradead.org, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org, 
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Ard Biesheuvel <ardb@kernel.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6086; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=BPWip7f/+n2wb9mPvkHgJCd0lFqOC+ZsA1RInw6FYx8=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJkfSwy7+t4r7Kv16klo6al7FnGl0OyWQ1SCjbIF4/MYH
+ 9eSzsiOUhYGMS4GWTFFlurHqscNDeecZbxxahLMHFYmkCEMXJwCMJGV0xn+B1/JuipsITflWW/l
+ m6DA5oOhB7lmcdcvX5Hz8Y+Uefb79wz/7J86+2gJ/PR/d2GTU3jbj9SMJM3fnd0H9j5T980/ZXu
+ PBwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-With partial builds, some TEST_GEN_FILES entries can be absent at install
-time. rsync treats missing source arguments as fatal and aborts kselftest
-installation.
+The current minimum version of LLVM for building the kernel is 15.0.0.
+However, there are two deficiencies compared to GCC that were fixed in
+LLVM 17 that are starting to become more noticeable.
 
-Override INSTALL_SINGLE_RULE in selftests/bpf to use --ignore-missing-args,
-while keeping the existing bpf-specific INSTALL_RULE extension logic. Also
-add --ignore-missing-args to the TEST_INST_SUBDIRS rsync loop so that
-subdirectories with no .bpf.o files (e.g. when a test runner flavor was
-skipped) do not abort installation.
+The first was a bug in LLVM's scope checker [1], where all labels in a
+function were validated as potential targets of an asm goto statement,
+even if they were not listed in the asm goto statement as targets. This
+becomes particularly problematic when the cleanup attribute is used, as
 
-Note that the INSTALL_SINGLE_RULE override applies globally to all file
-categories including static source files (TEST_PROGS, TEST_FILES). These
-are version-controlled and should always be present, so the practical risk
-is negligible.
+  asm goto(... : label_a);
+  ...
+label_a:
+  ...
+  int var __free(foo);
+  asm goto(... : label_b);
+  ...
+label_b:
+  ...
 
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+will trigger an error since the scope checker will complain that the
+cleanup variable would be skipped when jumping from the first asm goto
+to label_b (which obviously cannot happen). This issue was the catalyst
+for commit e2ffa15b9baa ("kbuild: Disable CC_HAS_ASM_GOTO_OUTPUT on
+clang < 17"). Unfortunately, this issue is reproducible with regular asm
+goto in addition to asm goto with outputs, so that change was not
+entirely sufficient to avoid the issue altogether. As asm goto has
+effectively been required since commit a0a12c3ed057 ("asm goto:
+eradicate CC_HAS_ASM_GOTO") and the usage of the cleanup attribute
+continues to grow across the tree, raising the minimum to a version that
+avoids this issue altogether is a better long term solution than
+attempting to workaround it at every spot where it happens.
+
+The second issue is an incompatibility with GCC 8.1+ around variables
+marked with const being valid constant expressions for _Static_assert
+and other macros [2]. With GCC 8.1 being the minimum supported version
+since commit 118c40b7b503 ("kbuild: require gcc-8 and binutils-2.30"),
+this incompatibility becomes more of a maintenance burden since only
+clang-15 and clang-16 are affected by it.
+
+Looking at the clang version of various major distributions through
+Docker images, no one should be left behind as a result of this bump, as
+the old ones cannot clear the current minimum of 15.0.0.
+
+  archlinux:latest              clang version 22.1.3
+  debian:oldoldstable-slim      Debian clang version 11.0.1-2
+  debian:oldstable-slim         Debian clang version 14.0.6
+  debian:stable-slim            Debian clang version 19.1.7 (3+b1)
+  debian:testing-slim           Debian clang version 21.1.8 (3+b1)
+  debian:unstable-slim          Debian clang version 21.1.8 (7+b1)
+  fedora:42                     clang version 20.1.8 (Fedora 20.1.8-4.fc42)
+  fedora:latest                 clang version 21.1.8 (Fedora 21.1.8-4.fc43)
+  fedora:44                     clang version 22.1.1 (Fedora 22.1.1-2.fc44)
+  fedora:rawhide                clang version 22.1.3 (Fedora 22.1.3-1.fc45)
+  opensuse/leap:latest          clang version 17.0.6
+  opensuse/tumbleweed:latest    clang version 21.1.8
+  ubuntu:jammy                  Ubuntu clang version 14.0.0-1ubuntu1.1
+  ubuntu:noble                  Ubuntu clang version 18.1.3 (1ubuntu1)
+  ubuntu:questing               Ubuntu clang version 20.1.8 (0ubuntu4)
+  ubuntu:resolute               Ubuntu clang version 21.1.8 (6ubuntu1)
+
+17.0.1 is chosen as the minimum instead of 17.0.0 to ensure that the
+particular version of LLVM 17 has the two aforementioned bugs fixed, as
+the second was fixed during the 17.0.0 release candidate phase and it
+was not until LLVM 18 that LLVM adopted the scheme of x.0.0 being a
+prerelease version and x.1.0 is a release version [3] to help with
+scenarios such as this.
+
+The first patch in the series does the actual bump. The remaining
+patches are cleanups of workarounds for various issues that are no
+longer needed with the bump.
+
+I plan to take this via the Kbuild tree for 7.2, please provide Acks as
+necessary.
+
+[1]: https://github.com/llvm/llvm-project/commit/f023f5cdb2e6c19026f04a15b5a935c041835d14
+[2]: https://github.com/llvm/llvm-project/commit/0b2d5b967d98375793897295d651f58f6fbd3034
+[3]: https://github.com/llvm/llvm-project/commit/4532617ae420056bf32f6403dde07fb99d276a49
+
 ---
- tools/testing/selftests/bpf/Makefile | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+Nathan Chancellor (14):
+      kbuild: Bump minimum version of LLVM for building the kernel to 17.0.1
+      security/Kconfig.hardening: Remove tautological condition from CC_HAS_ZERO_CALL_USED_REGS
+      security/Kconfig.hardening: Remove tautological condition from FORTIFY_SOURCE
+      security/Kconfig.hardening: Remove tautological condition from CC_HAS_RANDSTRUCT
+      arch/Kconfig: Remove tautological conditions from HAS_LTO_CLANG
+      arch/Kconfig: Remove tautological condition from AUTOFDO_CLANG
+      ARM: Drop tautological ld.lld conditions from ARCH_MULTI_V4{,T}
+      riscv: Remove tautological condition from selection of ARCH_SUPPORTS_CFI
+      riscv: Drop tautological condition from TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+      scripts/Makefile.warn: Drop -Wformat handling for clang < 16
+      x86/build: Drop unused '-ffreestanding' addition to KBUILD_CFLAGS
+      x86/module: Revert "Deal with GOT based stack cookie load on Clang < 17"
+      x86/entry/vdso32: Remove conditional omission of '.cfi_offset eflags'
+      kbuild: Remove check for broken scoping with clang < 17 in CC_HAS_ASM_GOTO_OUTPUT
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 461e2d9416fc..3c3234a2ce15 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -1017,12 +1017,23 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- # Delete partially updated (corrupted) files on error
- .DELETE_ON_ERROR:
- 
-+# When permissive, tell rsync to ignore missing source arguments so that
-+# partial builds do not abort installation.
-+ifneq ($(PERMISSIVE),)
-+override define INSTALL_SINGLE_RULE
-+	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-+	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-+endef
-+endif
-+
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
--	@for DIR in $(TEST_INST_SUBDIRS); do		  \
--		mkdir -p $(INSTALL_PATH)/$$DIR;   \
--		rsync -a $(OUTPUT)/$$DIR/*.bpf.o $(INSTALL_PATH)/$$DIR;\
-+	@for DIR in $(TEST_INST_SUBDIRS); do				  \
-+		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
-+		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
-+			$(OUTPUT)/$$DIR/*.bpf.o				  \
-+			$(INSTALL_PATH)/$$DIR;				  \
- 	done
- endef
- 
+ Documentation/process/changes.rst      |  2 +-
+ arch/Kconfig                           |  5 +----
+ arch/arm/Kconfig.platforms             |  4 ----
+ arch/riscv/Kconfig                     | 16 +++++++---------
+ arch/x86/Makefile                      |  5 -----
+ arch/x86/entry/vdso/vdso32/sigreturn.S | 10 ----------
+ arch/x86/include/asm/elf.h             |  5 ++---
+ arch/x86/kernel/module.c               | 15 ---------------
+ init/Kconfig                           |  3 ---
+ scripts/Makefile.warn                  | 10 ----------
+ scripts/min-tool-version.sh            |  2 +-
+ security/Kconfig.hardening             |  8 --------
+ 12 files changed, 12 insertions(+), 73 deletions(-)
+---
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+change-id: 20260422-bump-minimum-supported-llvm-version-to-17-b4638a58b043
 
--- 
-2.54.0
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
