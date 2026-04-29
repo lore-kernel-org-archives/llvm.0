@@ -1,80 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757303B3881
-	for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 22:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD8A3B4E9C;
+	Wed, 29 Apr 2026 22:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777500448; cv=none; b=TpV2u07ndYVBJKQycTyrSupmxijWIC9q80hFkuAlkStAn0nWNWNb2ftMsQoXN1bqpH3VEYEm/2SJj/KD21KdiRAs0E4pHRA/3mag5mmN6npfpvecqqBDqoz9+LGt96TciHXVlMdpQ2fkW4esdbIGzqni7bQV4jsJqFb4i885+Lk=
+	t=1777502409; cv=none; b=nEJwWxdSGSPDAK72xo34cVM5xKTNR2SbTGVnM9aKxO1nf2G5gdgVbArvMupchlPCUWJGnXceulYW3Rzb7h3nMirQj14pLydg0yPELBc17kBA9IHaxTSb5hl48FMDKlrpG64KLZx83NpuedDdacQUZ96RqM0BphDB6XPiIzw6R3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777500448; c=relaxed/simple;
-	bh=ne42NLa8SlVX5BWsuc8lLnC9VrKI2mUNQfxbKnQhih8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d5ZD/hsRKJ8wVz3R35hm3xOs09bLdZWgxtGRQrUPth5L4+W7Ws0NPc31Xfwabe+6Gw1y24rNV005Q28e1pmECtrZY4jZBzFdb0bfRow67g3mf2b2t+oMysNiqBzGWLOMYxbkE87FKTIg2soQZ2+V+zljSXvy2jPwDYexQE6P1ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MyplKs3w; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777502409; c=relaxed/simple;
+	bh=0he1QITSyDMsAyQOTd+y2mjHFsc1of6tuhtd6nynGcs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=eRAnP6vpfc3a99FrsmHXMpZfxkhgOajfKhgrxa/6vnbfn/avjmXn2/LhkhMbb0sbq2BhDm4E0rC6Lmcs4OUWbNoQF7kjPOwSbeVm3LBWamF/8u3XK5n0u5A6f2ZyTwXpWQgHSxQq4pJmASAN+oNUB2WYv2UPug5r8JJtpCwnCo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fZFFjEak; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MyplKs3w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15216C2BCC7
-	for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 22:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777500448;
-	bh=ne42NLa8SlVX5BWsuc8lLnC9VrKI2mUNQfxbKnQhih8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=MyplKs3wkgjpG8mChDQLZDrwA3bQV+4IGzZ36uZ/h+Jyyh1bOWsPYSTzWk+gF2Zhu
-	 ukVQRiwvE5i69uVhm9jTogHyS0mH3XU4C/xKXEZ5vkNryFkjuzSDE7zCKC0O/Lf7lm
-	 50lbcddY8BaR1EvVwMeerpncBBBFEIREtm9VS9wFbHDP5QPdL+MH0+WeLdeqwpLSM+
-	 XtBHL3QolUJ8mJgCKP5hAWJhzMpS2XmIzyn/Q6nm+xhzehINDetiaa0AXUt6Dz1OL4
-	 WQUu5HtCv4EhshLB2MthEgT8XWLnNo0+x5jHgbPjLMlBA8ogrVYgGdaQIjs9DqgMr/
-	 wg0rCs64MZPVg==
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b9c01854477so34695466b.0
-        for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 15:07:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+qVINw516PIbQoaRO3wVGD7O6l2/bihxa1v6XDlMUrV3PcpF/TuThOn12g+uu/I4IK+DLL@lists.linux.dev
-X-Gm-Message-State: AOJu0YyuuEIk7XtKQgLJHeiJWzDVtUmE154T4qysQfPdGS5fteLRlKdR
-	d8DCCDHlDQvAXHJqN8Wj+PtFx5fyHTp8hv7DdRtGHt2fGhsep/ABbCrDz51gJAYS0b9SNbzy4ck
-	0icKovF2RGx22mQfiMbu4/U5iNrU7tQU=
-X-Received: by 2002:a17:907:d706:b0:ba8:cad1:f6e2 with SMTP id
- a640c23a62f3a-bbb6b1901b4mr750066b.23.1777500446684; Wed, 29 Apr 2026
- 15:07:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fZFFjEak"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777502408; x=1809038408;
+  h=date:from:to:cc:subject:message-id;
+  bh=0he1QITSyDMsAyQOTd+y2mjHFsc1of6tuhtd6nynGcs=;
+  b=fZFFjEak7gxyf0JUTn+TfcCT8BYTsxPMY5qk7hF3HRHaMoegIeKYZhVp
+   xkQLxeFL+JFf5r6cggkCNbrfPt+dsRRIs+XjYpbHj/AquGSR513bak79q
+   fKdtFHDBT7RAc2nC3PThkI4TT7MsTGgf5Z1t+8oPBuip4GoloDGjeSFbf
+   Dzxa5ReknimnBjBiKxotMvRml6lN5v135mtEsY5JxEYLxgxxzdbyAda/o
+   LYkmJmEGqT+NFKS+w56HL1n9yBoguc/BfinYxgF3/Ts92bJ9niZwCGviu
+   HP2juHJRg3lcu2k2hMMvS2ylYxfqN188S071+oPT11b6UpPJaPUMiuDhg
+   Q==;
+X-CSE-ConnectionGUID: lN8rJBZUQAaojkhYepo1Vg==
+X-CSE-MsgGUID: AndZNqTVTfSDCAry0X/4sA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="89135881"
+X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
+   d="scan'208";a="89135881"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 15:40:06 -0700
+X-CSE-ConnectionGUID: EnRuKCwVRBeIQXh63w/rNg==
+X-CSE-MsgGUID: eX+9jctdRDegJvZY+osyCw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
+   d="scan'208";a="234670681"
+Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 29 Apr 2026 15:40:03 -0700
+Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wIDZY-00000000BbQ-3Xu8;
+	Wed, 29 Apr 2026 22:40:00 +0000
+Date: Thu, 30 Apr 2026 06:39:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ David Hildenbrand <david@kernel.org>,
+ Linux Memory Management List <linux-mm@kvack.org>,
+ mm-commits@vger.kernel.org, Davidlohr Bueso <dave@stgolabs.net>
+Subject: [akpm-mm:mm-new 117/130] include/asm-generic/fixmap.h:77:2:
+ error: call to undeclared function '__set_fixmap'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202604300638.A3yVzhM3-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260428-ntfs-fix-sometimes-uninit-rl-v1-1-31e0c8025430@kernel.org>
-In-Reply-To: <20260428-ntfs-fix-sometimes-uninit-rl-v1-1-31e0c8025430@kernel.org>
-From: Namjae Jeon <linkinjeon@kernel.org>
-Date: Thu, 30 Apr 2026 07:07:13 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8jNRyXSLHwwxDtiCyQ3m8XkBEFEAse656C-CUszs8Xwg@mail.gmail.com>
-X-Gm-Features: AVHnY4IrQ3YDw5liGNuP0fVBNKnM61a-p537gPgc12WMdwTyTAR3CWMFEUfdbOU
-Message-ID: <CAKYAXd8jNRyXSLHwwxDtiCyQ3m8XkBEFEAse656C-CUszs8Xwg@mail.gmail.com>
-Subject: Re: [PATCH] ntfs: Use return instead of goto in ntfs_mapping_pairs_decompress()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Hyunchul Lee <hyc.lee@gmail.com>, Zhan Xusheng <zhanxusheng@xiaomi.com>, 
-	linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 29, 2026 at 4:21=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Clang warns (or errors with CONFIG_WERROR=3Dy / W=3De):
->
->   fs/ntfs/runlist.c:755:6: error: variable 'rl' is used uninitialized whe=
-never 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->     755 |         if (overflows_type(lowest_vcn, vcn)) {
->         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   ...
->   fs/ntfs/runlist.c:971:9: note: uninitialized use occurs here
->     971 |         kvfree(rl);
->         |                ^~
->   ...
->
-> rl has not been allocated at this point so the 'goto err_out' should
-> really just be a return of the error pointer -EIO.
->
-> Fixes: cad7c6f0a514 ("ntfs: fix VCN overflow in ntfs_mapping_pairs_decomp=
-ress()")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Applied it to #ntfs-next.
-Thanks!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
+head:   0587fb0c820d86e5b77a975680d79b5176d09abb
+commit: 93580c23bb3da5dd2926d6ae991ef04c2cdacaf2 [117/130] include/asm-generic/fixmap.h: reimplement nasty macros in C
+config: mips-xway_defconfig (https://download.01.org/0day-ci/archive/20260430/202604300638.A3yVzhM3-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604300638.A3yVzhM3-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604300638.A3yVzhM3-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/mips/kernel/asm-offsets.c:17:
+   In file included from include/linux/mm.h:31:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/mips/include/asm/pgtable.h:14:
+   In file included from arch/mips/include/asm/pgtable-32.h:17:
+   In file included from arch/mips/include/asm/fixmap.h:70:
+>> include/asm-generic/fixmap.h:77:2: error: call to undeclared function '__set_fixmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      77 |         __set_fixmap(idx, phys, flags);
+         |         ^
+>> include/asm-generic/fixmap.h:84:40: error: use of undeclared identifier 'PAGE_KERNEL'
+      84 |         return __set_fixmap_offset(idx, phys, FIXMAP_PAGE_NORMAL);
+         |                                               ^~~~~~~~~~~~~~~~~~
+   include/asm-generic/fixmap.h:48:28: note: expanded from macro 'FIXMAP_PAGE_NORMAL'
+      48 | #define FIXMAP_PAGE_NORMAL PAGE_KERNEL
+         |                            ^~~~~~~~~~~
+   include/asm-generic/fixmap.h:93:2: error: call to undeclared function '__set_fixmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      93 |         __set_fixmap(idx, phys, FIXMAP_PAGE_NOCACHE);
+         |         ^
+   include/asm-generic/fixmap.h:93:26: error: use of undeclared identifier 'PAGE_KERNEL_NOCACHE'
+      93 |         __set_fixmap(idx, phys, FIXMAP_PAGE_NOCACHE);
+         |                                 ^~~~~~~~~~~~~~~~~~~
+   include/asm-generic/fixmap.h:54:29: note: expanded from macro 'FIXMAP_PAGE_NOCACHE'
+      54 | #define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE
+         |                             ^~~~~~~~~~~~~~~~~~~
+   include/asm-generic/fixmap.h:99:33: error: use of undeclared identifier 'PAGE_KERNEL_NOCACHE'
+      99 |         __set_fixmap_offset(idx, phys, FIXMAP_PAGE_NOCACHE);
+         |                                        ^~~~~~~~~~~~~~~~~~~
+   include/asm-generic/fixmap.h:54:29: note: expanded from macro 'FIXMAP_PAGE_NOCACHE'
+      54 | #define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE
+         |                             ^~~~~~~~~~~~~~~~~~~
+   In file included from arch/mips/kernel/asm-offsets.c:26:
+   In file included from include/linux/kvm_host.h:5:
+   In file included from include/linux/entry-virt.h:7:
+   In file included from include/linux/syscalls.h:95:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:7:
+   include/linux/poll.h:134:27: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                         ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:134:39: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                                     ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   2 warnings and 5 errors generated.
+   make[3]: *** [scripts/Makefile.build:184: arch/mips/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1371: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/__set_fixmap +77 include/asm-generic/fixmap.h
+
+    72	
+    73	/* Return a pointer with offset calculated */
+    74	static inline unsigned long
+    75	__set_fixmap_offset(enum fixed_addresses idx, phys_addr_t phys, pgprot_t flags)
+    76	{
+  > 77		__set_fixmap(idx, phys, flags);
+    78		return fix_to_virt(idx) + (phys & (PAGE_SIZE - 1));
+    79	}
+    80	
+    81	static inline unsigned long
+    82	set_fixmap_offset(enum fixed_addresses idx, phys_addr_t phys)
+    83	{
+  > 84		return __set_fixmap_offset(idx, phys, FIXMAP_PAGE_NORMAL);
+    85	}
+    86	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
