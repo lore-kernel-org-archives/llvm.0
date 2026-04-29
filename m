@@ -1,122 +1,155 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-106119.protonmail.ch (mail-106119.protonmail.ch [79.135.106.119])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F673FD122
-	for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 12:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777467151; cv=pass; b=uxXXNq+X2hy64WVMcGEuflJKfpGWGGZcpi7kgKJaKlaYffg0sgbreWJtZfEA0WzU/LpPjepImadtpcmgeTZgSSkDUT+Tmy2IRe6MkapTIZBUF/v6IPYbUq7QQyiLlPJwIto0dj89qpyxAOPyRZLZSFSGBGXceB2F6CveziwfWQc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777467151; c=relaxed/simple;
-	bh=EqJjoPB0QzUXNbWp06xPCuzyg8lj2fAXwhNqHbKz/S8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rXyoukEHTa9WCAgyj8AjA/GDD27iWvUx/GTPOJ9TS5wyAdqwGtvjcxAqF15fbOcxwM02FYAYBLQpK/G1/D+v6mNDP/+ZI2zssBB0AWA/TVgJN0EXf2ZQEnRQZInOZZjW3PZO4+zoDH1MEKhIUNOUkhPzRnpWzyRo7YPnpWA1LOE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AdP51JhA; arc=pass smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84AC3921C6
+	for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 14:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.119
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777471570; cv=none; b=UQlABe9trGarveM+IeNsjAEi9BHgZUgy+OFKbdCWu8hs9veU9wrswdBq6kQ0l7LwycLBpFtgdY9Vjg15L87zWii9bwWLKuJB+UXomYaKydItadU7glOL/WLgo8W8tRUUxKcfgPIkgnz8ZuNRJfr2LyHbwUv/Ri2iRNwLnp9CSg0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777471570; c=relaxed/simple;
+	bh=uExTrrXv2ZF9hJiGpeUeEqQ4gYyS1a0Vzka3f+QUJXw=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Ra+dOBY5MAHe97vNjAn63S8JNh9t6ne3k/PMkKhqGmel0bkx04OWkvChuwbxhgnJY5Q3PBbDTrlBGTeK8f9dOaeMr29BfXF6AKbIAjyUBoY8ahmRWabobgguoZqWJH/e9Zm1OLe4oz+S9vnL7PnUwU/3SVAMeH0759OsbEq7khc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=PMsvEJkb; arc=none smtp.client-ip=79.135.106.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AdP51JhA"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2d96243c8a1so557643eec.3
-        for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 05:52:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777467148; cv=none;
-        d=google.com; s=arc-20240605;
-        b=OtrOM1WtqtLXIaNFuZXTzQlWkKVZe8ZCBntZLmI1vzNLK9/i0Q8rIhpjBfLeIM5b7s
-         AI48cKkVwYKUFQ3jKuG9jCYjAJZWPabdCvFEDOLYOig+BrBWjgdsX1oL9igjkE3/rHuK
-         /ajJm6H+ZdX/ECcoARfFNRFBxghhOT12BCuNd73wMeYkq5zE+jkKkjl/T3bttHnnuZOp
-         v8pxZTjdy10KwgTrp5gN4YhUOk8fSorQqFA18Sxq8ZfRH5Kzj/x9iwixm3f/6NPeZk5P
-         VTMuw3c1uXQ5Uzb6V0wDWpIqc1awo/X8dG+TXpIAJ6Myg6red1n/6F9FyrtmmEYiZ/gw
-         /c0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=EqJjoPB0QzUXNbWp06xPCuzyg8lj2fAXwhNqHbKz/S8=;
-        fh=WoOynqBefX5xYZAKHmiDaG86TM9B8Y+zCK708LXpyw4=;
-        b=URDmaQ7HnwZbae4THkJvzywgF4Ze9OiP8gwa+Ups33y9hwI8hPur4lS9sVwImMtEE6
-         NuhxHAGamybb1RTpC8n1vSVSJlywi6KUrscOFxI4X4QoEtAi6vJxlFfM2iBcaQiSJpkU
-         kknH5oOO1qemXORMHrhrQZW0IV5RYjRnU1pt2SwAFcDiTqI7dwvWLJf43QkDYH+yeKEq
-         BSrLHgDvNzOeKWQoW2JmujQZY4yLCjR6jZWmQPqVRzGiMkeGfHF4ibSjITBnYDO+qglK
-         dWeRphrG/TCeZOanqr/w7dWpX/64F5FlBBqYXz6XjKDyDGvNDnRObTQCHKL5GchMAebI
-         HFUw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777467148; x=1778071948; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EqJjoPB0QzUXNbWp06xPCuzyg8lj2fAXwhNqHbKz/S8=;
-        b=AdP51JhAPSq6vRPWNmPIt3cH3PreEE+KWuwd0nkSwgkBHZvTf/vbnUTeHBi8FdGS99
-         jRm4M+EXPp7vpQRrS3c+N4hIJiluqxbbyYIfJ48kcd3bqK+UD26AP/8NRJ3d5MeIitsh
-         TSIAHfOmlZbPAnzh6gYesE/CSIEJ+T5yCHRLiIbJqaDEj9DSKdQ02F/0y1anJVPQVNhl
-         D82FrACXKL7uPfwL1ttxq7EXydaxycMbDShPGd4tXi8RQ8L1Y4BvNW6PIA2NNpsz6heE
-         ekYuferdW1X3CwyRPUads4kviUAcfGMsk5xDnP1QadDRhhXJcKy5efIU/UG2e946Ak0o
-         Fdkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777467148; x=1778071948;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EqJjoPB0QzUXNbWp06xPCuzyg8lj2fAXwhNqHbKz/S8=;
-        b=dmDge2lJueXThF98wMz0jSRO5CDfNCHCEzFvTBNsMEV+DT/9qL/389hzk4BGwE8U/P
-         79vEiiUP077SQFnjGBEAj5uhaKN48XbCR410SvsjbtRzDlHyZseWut35WtGcIHoQlbQS
-         6Ro/o+b6yUgu4iCEWIA2iRl6eCSG6bad3MQDB2LywzvRw+3ONAsgmUykHNvwS75Nfgu1
-         dsvTaxkHBbbxo2YOSpkhk2JC5g8t9el8Hkt1gVG6BrtqHsDnwVx1yWvju6d0jWDBObGi
-         vvwElAR9vyy+H5HPeX5gEAdbe7bfJ4cX09APtyp53CrSKufwAT/+ANEMFiqF4zbhblNB
-         z9kg==
-X-Forwarded-Encrypted: i=1; AFNElJ9899uCERBjVUuXMJscatyn2IopEVv62cbhBpFe2cntU9iG0VZsFHfKc3Hz8O9kL5zMz4gX@lists.linux.dev
-X-Gm-Message-State: AOJu0YxkLkXWtJybB9s1h6uxlBO/gcD5/t5ngAGlWEnAwphRR07+EYEl
-	Z6Cm2SlHvKVBWr7UX514qUSsg+NUCqRHYR25GeMUctnJOAcnx+UAxVOsSFEMoSE1CXKOVP1NEEr
-	KHuEntNPinh6qb2lss7D2FRgA7SWfUtM=
-X-Gm-Gg: AeBDietpu+JDWXYy0+Y05LfF0w+gGMEo+7HX7uSrijxcebmnNZrQdUgbJxnSIebDAd3
-	CRleJ5Wlm4xoBW4QDBd55AGdskicYb+NZx4tIQQVvVeppzqaI/QHG97kOyfgzX585ELDI6FQrtp
-	0EtgsKEO+WXgTJ08ljhkE2zXRCPL+JcjQwT0In1GumCbIzHS8TW2lpMY3C0jOvVMDT04vIlM3ex
-	WPP68e28Pt0AQlGf4BysmhrK7+pHJohxBD1imC0JNFFGdpe5Tm/EaqC50JptfpeU6KsmXPcabzS
-	960vQYSMUS2Bc8dtdv0Gd5RwXwJLHlFA2T1C7jJuI4kYYGmkb5yzAjz+RDSd+y81RBjDo7slupk
-	nWpgwGGRDzqzun8RtYBzKpJnKEZx5A6f17g==
-X-Received: by 2002:a05:7300:a148:b0:2c4:acef:291a with SMTP id
- 5a478bee46e88-2ed09b6b8a5mr1583361eec.4.1777467148218; Wed, 29 Apr 2026
- 05:52:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="PMsvEJkb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1777471557; x=1777730757;
+	bh=HBA+prfYWAXuk4JZntWYfoOHN1pxfrVekP+qEbg6iDY=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=PMsvEJkbQaYqAVIwHRtjSMFXJxBZAQ4RTAisXPFiCkx9YCdWUTEexdcpwx8xGzWh/
+	 brNk05b31Xe7CGpfSC5wrXfxTIIrWxmLJKf6XpK9vRjXzN85GkC0+eurqqvVfmMqMm
+	 eKNjvagdnr/4TdtGjRcqSxXyBz2r8uKHtqg9gL8TbMpmgC7G1QStKh14kmLlOur1M8
+	 X6RHaz7d+CTEf9Q0bfGCW+CfN+EkgvMFH5wdP+Bu2Y0kFXvQnxovZgxCmAgCUGfQxp
+	 mORv1K5HWK/QGxXCRelqzyQqnBOWhxnSBi/ZmjQn5UbzGYMUEFzKBzMZ4+uMf4drqp
+	 /uyDWp3Sgte7Q==
+Date: Wed, 29 Apr 2026 14:05:48 +0000
+To: david.laight.linux@gmail.com, riel@surriel.com, perry.yuan@amd.com, jgross@suse.com, ljs@kernel.org, justinstitt@google.com, hpa@zytor.com, shuah@kernel.org, nathan@kernel.org, sohil.mehta@intel.com, mathieu.desnoyers@efficios.com, brauner@kernel.org, ethantidmore06@gmail.com, dave.hansen@linux.intel.com, maciej.wieczor-retman@intel.com, mingo@redhat.com, bp@alien8.de, akpm@linux-foundation.org, peterz@infradead.org, viro@zeniv.linux.org.uk, superman.xpt@gmail.com, rdunlap@infradead.org, aliceryhl@google.com, ilpo.jarvinen@linux.intel.com, david@kernel.org, xin@zytor.com, seanjc@google.com, tglx@kernel.org, houwenlong.hwl@antgroup.com, yury.norov@gmail.com, rppt@kernel.org, oleg@redhat.com, nick.desaulniers+lkml@gmail.com, vmalik@redhat.com, morbo@google.com, ryan.roberts@arm.com, kees@kernel.org
+From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, m.wieczorretman@pm.me
+Subject: [PATCH v7 0/4] x86: Simplifying LAM
+Message-ID: <cover.1777470980.git.m.wieczorretman@pm.me>
+Feedback-ID: 164464600:user:proton
+X-Pm-Message-ID: 5d54fa1e5d74e57302a3cd6663e845502b4d8fb5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260426105932.2270364-1-mkchauras@gmail.com> <20260426105932.2270364-8-mkchauras@gmail.com>
- <afGT_RB1-PZVKzE3@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-In-Reply-To: <afGT_RB1-PZVKzE3@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 29 Apr 2026 14:52:14 +0200
-X-Gm-Features: AVHnY4KoUZeS1E-bxbPJDpxvSamSjAegTpsH1f0vqRtt_t4Wuwp8ZSXNfFVNGW8
-Message-ID: <CANiq72ncgvqJ_TExZP9ebe6vGroYReGzqn8NuhBCPpNWmnnMVA@mail.gmail.com>
-Subject: Re: [PATCH V15 7/7] powerpc: Enable Rust for ppc64le
-To: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, 
-	jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, 
-	ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
-	tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	daniel.almeida@collabora.com, fujita.tomonori@gmail.com, 
-	viresh.kumar@linaro.org, prafulrai522@gmail.com, gregkh@linuxfoundation.org, 
-	arnd@arndb.de, tamird@kernel.org, mark.rutland@arm.com, lyude@redhat.com, 
-	lina+kernel@asahilina.net, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev, Link Mauve <linkmauve@linkmauve.fr>, 
-	Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 29, 2026 at 7:17=E2=80=AFAM Mukesh Kumar Chaurasiya
-<mkchauras@gmail.com> wrote:
->
-> Upstream issue for powerpc64 and powerpc64le target.
-> Link: https://github.com/rust-lang/compiler-team/issues/987
-> Link: https://github.com/rust-lang/compiler-team/issues/988
+After ChkTag [1] announcement, it's worth preparing a stable x86 linear
+address masking (lam) user interface. One important aspect of lam is the
+tag width, and aligning it with other industry solutions can provide a
+more popular, generalized interface that other technologies could
+utilize.
 
-Great, thanks -- linked from the PowerPC issue:
-https://github.com/Rust-for-Linux/linux/issues/105.
+ChkTag will use 4-bit tags and since that's the direction other memory
+tagging implementations seem to be taking too (for example Arm's MTE)
+it's reasonable to converge lam in linux to the same specification. Even
+though x86's LAM supports 6-bit tags it is beneficial to shorten lam to
+4 bits as ChkTag will likely be the main user of the interface and such
+connection should simplify things in the long run.
 
-Cheers,
-Miguel
+Change in the interface tries to cover the three following aspects:
+=09- Have the kernel use the same tag width as the underlying
+=09  hardware does. This should ensure consistent treatment of user
+=09  pointers across various user/kernel interfaces.
+=09- Present the user with a stable tag width value not dependent
+=09  on the maximum capabilities of the hardware used. This should
+=09  prevent any backward capability issues in case there are any
+=09  hardware changes in the future.
+=09- Export the hardware tag width through procfs for programs that
+=09  need to recreate kernel's treatment of user pointers
+=09  accurately such as gdb.
+
+Changing the tag width at the moment has no effect on userspace
+programs. Due to LAM being disabled until LASS is fully supported in the
+kernel there are yet no userspace projects relying on a specific LAM tag
+width. One known exception is the clang compiler and its hwasan support.
+It is however not a problem since there are both no users of hwasan on
+x86 yet and upon closer inspection (when working on x86 KASAN software
+tag-based mode) I found it's not working correctly and needs to be
+patched.
+
+The patchset also cleans up some comments referencing LAM_U48 which was
+not implemented in the kernel and the comments shouldn't imply it can be
+enabled.
+
+Patches are based on v7.1-rc1
+
+Changelog v7:
+- Redid quite a bit after Rick Edgecombe pointing out the inconsistent
+  treatment of user pointers internally.
+- Cover letter:
+=09- Added the third paragraph to the cover letter summarizing expected
+  =09  results of the interface changes.
+- 1/4:
+=09- Redid the untag mask handling and syscall return. Updated last
+=09  paragraph of the patch message.
+- 2/4:
+=09- Added a procfs patch to help make gdb like programs work with
+=09  LAM.
+- 3/4:
+=09- No changes
+- 4/4:
+=09- Made the selftest constants analogous to the kernel ones.
+
+Changelog v6:
+- 1/3
+=09- Change define names so they match the arch_prctl() cases for
+=09  LAM.
+=09- Add more defines so they build into the GENMASK() more
+=09  properly.
+- 2/3
+=09- Add one reviewed-by.
+- 3/3
+=09- Update the patch subject after removing additional test cases
+=09  during v3.
+=09- Change bit width and untag mask defines so they match the
+=09  kernel ones in name and add GENMASK() to x86 selftests so
+=09  they match the kernel in form. Update the patch description.
+
+Changelog v5:
+- Rebase onto v7.0-rc7.
+
+Changelog v4:
+- Remove the 'default' wording from the cover letter and patch messages.
+- Add a paragraph to the cover letter about userspace impact.
+
+Changelog v3:
+- Remove the debugfs part and update the rest of the code and patch
+  messages accordingly.
+
+Changelog v2:
+- Extend a char buffer in debugfs read callback to fit the format
+  string.
+
+[1] https://community.intel.com/t5/Blogs/Tech-Innovation/open-intel/ChkTag-=
+x86-Memory-Safety/post/1721490
+
+Maciej Wieczor-Retman (4):
+  x86/process: Shorten the LAM tag width
+  x86/process: Add a procfs file with hardware address masking
+  x86/mm: Cleanup comments where LAM_U48 is mentioned
+  selftests/lam: Update LAM tag width and cleanup names
+
+ arch/x86/Kconfig                  |  1 +
+ arch/x86/include/asm/mmu.h        |  2 +-
+ arch/x86/include/asm/tlbflush.h   |  2 +-
+ arch/x86/kernel/process_64.c      | 30 ++++++++--
+ fs/proc/Kconfig                   |  4 ++
+ fs/proc/base.c                    |  6 ++
+ include/linux/uaccess.h           |  5 ++
+ tools/testing/selftests/x86/lam.c | 94 ++++++++++++++++---------------
+ 8 files changed, 92 insertions(+), 52 deletions(-)
+
+--=20
+2.53.0
+
+
