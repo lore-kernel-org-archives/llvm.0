@@ -1,137 +1,108 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB21376473
-	for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 16:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777481021; cv=pass; b=in9gltqD5TPeJA3C2UlsYsEJOkCfpC4cP2XHDdA/1mn/5A1b6K5PCVOvXK2u96+68oBtxaOUNCVojpzPEgVfPaz3lO/6kxPePZDpuaJAWgIQCL+WvbUJTk/G2hGPGJinOYIVh9acnCAKHT0cL+ny4FRmSsDfZuj64Xu6k2/ZQeQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777481021; c=relaxed/simple;
-	bh=MqSqhGjtNDbnEb2QTBR92Es5KtPX+3lXEjPCy9wPhoA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UdYXI77SoXyLuGyJccQyEO8CUyglOxZG/weJzhuRBliaawm+QGN+Dni/vNXkwLZT2mSb/9HHkBRKjCKQLsHZRrxjwKLUpthP44tJcwr05asOoFHAWhNQvGU7ubdzaCMzBAWKERgkVtAdbMalMUM6sOQZp1FRhAoSLgiYS3dor30=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WIXmzyi2; arc=pass smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4F43806D6;
+	Wed, 29 Apr 2026 17:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777483501; cv=none; b=HcR3TUw60z1GxGKttzk8PRgKJ08fnPzK6O9MgMR/UYGdldzQiEIskVhkN6+7xuDiRyhq9kxnYIx3pFoazKCrIyXfV9ie5gZ1U9h6Qki1vFHzlP7FtQ2n0DTYerVIl1sfe4VKI0aG3sAi6XMb873W3qAWdfcoCcxa4QxhM8usHPA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777483501; c=relaxed/simple;
+	bh=mffL2JW6T8+5RordXSJf9JdbCYGneKu1w5+tmtqfz+c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PiQ1NFkHQTK0RgkOHscVGynDQZsO4x9X84s824d97ziiqQzMCrbB87gUpiWXdh65pTSB+n1GxPh0HzROuZn+OjtczS0y0g6JDOCkjY88tWjiPvycKBdoD3qgQQETjbPPC9BV+HXDrROU4WL+GUpv+fj/5+asc4Ntc72gUzyycLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d9a7nIEx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WIXmzyi2"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-50d864c23bdso806821cf.1
-        for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 09:43:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777481019; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jK13UStoRhKlMym95f6xGEHgquY57r3n2h7UIVs9ot7Pfqd/4qdbwHGaKqTvMkmVfp
-         JIktMz+x2Rve0aVIP2GpFbkp6gw4uySc9wJmTu5NmrlbhLpsK+bda/DCaKpv3icrWWEa
-         RJ4Q440Iaqdrvw+95IPTJpX+gCWmKwVuizRue+Ny9DXZCv3Dfg4Bq7vF3JJGLoHXk1Rt
-         DSd/EtD7qHXVt8jERpjVjrgw2C3vlwbWXQ9O3pQr6N1q94dsjQLIYuEl4Z4IvhvnIrL+
-         MoO8jPJLWiIz6xXQSp9gKyvl5vNkVLL7J/fhMY+CHP5j2V2VtE7v7HOz+LZ+JE6/kCqA
-         oUIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=imZEw5SCLY9qEQ69oWbenh4ppLOBEqp0hlK19phWzpc=;
-        fh=kdRwLfhVwWjTqaGP270YZvI23POi1o7H8pBSh8gwyeM=;
-        b=NG4bedBJERytyF83OwCcmDa58MvadnclBvCLpc4IGgB1Te36O+ELi3LVLBpBewz4x4
-         lGydz83p1QK1R/XcdCQpOMP1W9+j9s4YnSUtMffqTzEbX5cLhezJz9Aaj8x5RXtNr41r
-         vTRYjSALSPH1GmwKTx+s46x6Rxg9ku9UkR5QK+giv2KP0CUBz1t7YNlgO6/kIXAiZi84
-         bXMlE0RUMypqZof+FHog9PuqX8risSE1XR12kIPqkwQvTqK/qaWkqBSpl6FjYP6uSNSI
-         vo445o9dCP7pzGWqjSplhInkQnVKMlPqkYw5Mn4Yv054kqTLSU8DNT2YxaHRxPKZWoCe
-         39Gw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777481019; x=1778085819; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=imZEw5SCLY9qEQ69oWbenh4ppLOBEqp0hlK19phWzpc=;
-        b=WIXmzyi2hdQ+kCcm99mggA3sETSVZccp8IKH0Nb2lU2npdyAEROClVmGUzXscpfWpf
-         J0I4g4Bt0Clmt10ytwS/kKQtqYWG7yD9wmOgzxedfAite2wQRNsBWUen6+hrBxCxF7Hx
-         pyu7i+afcqZ/4iHZ4a8N/c7oSJQp2XJOeR+w3wpsCb+1S9X2RJmiNBh3BYAmKLDnpfPF
-         hdPlsJvYTFvzh13AgDboBB61dnYMwA5/pYgYBze7JqNTreTQKIYQxsEOE+/pjeLI5Fna
-         iiHEaA2/IPv1kU7pIr9MMU4CSmASX8nu/sI54PWP/JK4V7go8TeVwiGsLciB1pfeGJYf
-         B50g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777481019; x=1778085819;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=imZEw5SCLY9qEQ69oWbenh4ppLOBEqp0hlK19phWzpc=;
-        b=f42nbq17lHzcwcjU89ay4/+2vVtZ0nW90/u8YCsIeolfKh4YmbDfmDrgyzSXWvbw2n
-         kn+l7HCalaMo4R+VcGNwDKQyFwN58PfzPNLJjikYu8IQsok13MJI4IwvfrZjSxJcJw8Q
-         u7Yx3DBuNFCF/fCaP2am08NamtW1Tb6tUtP/mxM5xn3c4shXZ8JIHzIujnR8XRJav4BP
-         ApUDmB2DPXv+1ZdqPqcvexOEwMdN9NceBGfx8CwAyCx2+czRdUzQBU5wJtkUYDd25c+7
-         tnVzDlT9s8C1++8d6lrlz5+3oXS8WTL06bOfl4PpW4BMm6yyj5POJ+25GmcALqGqpsGZ
-         jusg==
-X-Forwarded-Encrypted: i=1; AFNElJ+fb8FvvreWeiZwv3x8EVmHzPnLTf8ErvaAswXz6qbtzRDpAaggrYF75W7QnGUTqkjte58D@lists.linux.dev
-X-Gm-Message-State: AOJu0YzBvFLTFbdGykVufZzc7aEtiJku2T02SuifPx0oGlHyMJFipqI9
-	sCv77GM58cQx058KSZ/yRDe1kGB/7jd7eG5V9qZpZm2RB1O+IEtk3YhlAtj7CbTwpYzJs9bzkNd
-	CPdfJyr3fGN8HJbxlzV4mke3+5qokVZvkQxamyJv/
-X-Gm-Gg: AeBDievC4261Od3qJOXGwQjB1TT8uvuRJUD3FnITyGflTZuzrAHt4/5JX2eJyyoC55W
-	mkWowG4+6d1j5yXbK/xcln53GHqLZXNYvSuyGiyuZOBQ/ekoVBHDKb1iFt195zpdnw77NXgk3L5
-	OhzMUzj/MWSG9BewzDUJn7IN7dPX5TTJDsNSwtN4HfVAKaPZtPFV2t/g1rVodcsNie8vIxRe/HX
-	XD7z1pxRL1KnH+kQLpOr6kD/ggTtkt3OKe2Z8DTJ5dj/OM6PTl/mb/YPll6hvV/jynQbeo4xaHs
-	LOARNqo1RgVagPYz3y77b6LpYSmpkMKet5DBdz/JY7jpl/+61sbSP5V3G2g=
-X-Received: by 2002:a05:622a:1b12:b0:50b:8d3c:5bd7 with SMTP id
- d75a77b69052e-5101a60b0aamr15133791cf.9.1777481018705; Wed, 29 Apr 2026
- 09:43:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9a7nIEx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A3DFC19425;
+	Wed, 29 Apr 2026 17:24:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777483500;
+	bh=mffL2JW6T8+5RordXSJf9JdbCYGneKu1w5+tmtqfz+c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=d9a7nIEx9f9IH+TQpYvB3d7+jjUMIbFmLu+q3cqPiWyiAQX8bjIVpcFvozhkXmKLX
+	 5CSDK1qHF5qfLyt5WzlhHeHTJZKUQop0g29qlP9xcic4b9KxnB0MaCT3XJpEl1PmDb
+	 GkV8IAzywCzIgqtfb6V5Q2ya3yuEAhmyQTY/UKRm60YNA8F/LEFhEyq53Ue9N8Xebj
+	 zEjvw6kyIKKZ9rWQlpvkv/2R+ZHB5fX/zN7OkILIdaSv5/ZK4fbV3bA44J43cZIFhV
+	 QE5Y3BUKGltUAZa3433J5sAMIsM8USUoxQ4ARODeDBW5YmFdBtS4WFtR3sq1p/eY+N
+	 WPYuIeVfcbE3w==
+Date: Wed, 29 Apr 2026 10:24:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <nsc@kernel.org>, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 11/14] x86/build: Drop unused '-ffreestanding' addition
+ to KBUILD_CFLAGS
+Message-ID: <20260429172455.GA2407772@ax162>
+References: <20260428-bump-minimum-supported-llvm-version-to-17-v1-0-81d9b2e8ee75@kernel.org>
+ <20260428-bump-minimum-supported-llvm-version-to-17-v1-11-81d9b2e8ee75@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260428-bump-minimum-supported-llvm-version-to-17-v1-0-81d9b2e8ee75@kernel.org>
- <20260428-bump-minimum-supported-llvm-version-to-17-v1-6-81d9b2e8ee75@kernel.org>
-In-Reply-To: <20260428-bump-minimum-supported-llvm-version-to-17-v1-6-81d9b2e8ee75@kernel.org>
-From: Rong Xu <xur@google.com>
-Date: Wed, 29 Apr 2026 09:43:25 -0700
-X-Gm-Features: AVHnY4Ik3LqgaCUyRYx0CryX47pN-vmu9vi1p76k09ZWMtV3tzrvTc04VbRHK4M
-Message-ID: <CAF1bQ=Q9bZHBT13K7OzY9-QHHzm7D1ZZ3fM3M+-oVzdU+G4yhA@mail.gmail.com>
-Subject: Re: [PATCH 06/14] arch/Kconfig: Remove tautological condition from AUTOFDO_CLANG
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, Han Shen <shenhan@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260428-bump-minimum-supported-llvm-version-to-17-v1-11-81d9b2e8ee75@kernel.org>
 
-This looks good to me.
-
-Reviewed-by: Rong Xu <xur@google.com>
-
--Rong
-
-On Tue, Apr 28, 2026 at 8:00=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
+On Tue, Apr 28, 2026 at 10:59:17PM -0400, Nathan Chancellor wrote:
 > Now that the minimum supported version of LLVM for building the kernel
-> has been raised to 17.0.1, the clang version check in
-> CONFIG_AUTOFDO_CLANG can be removed because it is always true.
->
+> has been raised to 17.0.1, the condition to add '-ffreestanding' to
+> KBUILD_CFLAGS for 32-bit x86 is always false, so the if block can be
+> removed.
+> 
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
-> Cc: Rong Xu <xur@google.com>
-> Cc: Han Shen <shenhan@google.com>
+> Cc: Thomas Gleixner <tglx@kernel.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: H. Peter Anvin <hpa@zytor.com>
 > ---
->  arch/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 0d34bcafecaa..5d6e9f56210b 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -866,7 +866,7 @@ config ARCH_SUPPORTS_AUTOFDO_CLANG
->  config AUTOFDO_CLANG
->         bool "Enable Clang's AutoFDO build (EXPERIMENTAL)"
->         depends on ARCH_SUPPORTS_AUTOFDO_CLANG
-> -       depends on CC_IS_CLANG && CLANG_VERSION >=3D 170000
-> +       depends on CC_IS_CLANG
->         help
->           This option enables Clang=E2=80=99s AutoFDO build. When
->           an AutoFDO profile is specified in variable
->
-> --
+>  arch/x86/Makefile | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 46fec0b08487..5720f2470cfc 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -124,11 +124,6 @@ ifeq ($(CONFIG_X86_32),y)
+>          include $(srctree)/arch/x86/Makefile_32.cpu
+>          KBUILD_CFLAGS += $(cflags-y)
+>  
+> -    ifneq ($(call clang-min-version, 160000),y)
+
+Sashiko points out [1] that the condition of this block, added by
+
+  d70da12453ac ("hardening: Enable i386 FORTIFY_SOURCE on Clang 16+")
+
+results in GCC builds still having '-ffreestanding' enabled. I don't
+think this should be a problem but if we want to be more conservative, I
+could turn this into an
+
+  ifdef CONFIG_CC_IS_GCC
+
+block to keep the same behavior for GCC while avoiding the flag
+altogether for clang. Regardless, the commit message will need
+rewording.
+
+[1]: https://sashiko.dev/#/patchset/14621?part=11
+
+> -        # https://github.com/llvm/llvm-project/issues/53645
+> -        KBUILD_CFLAGS += -ffreestanding
+> -    endif
+> -
+>          percpu_seg := fs
+>  else
+>          BITS := 64
+> 
+> -- 
 > 2.54.0
->
+> 
