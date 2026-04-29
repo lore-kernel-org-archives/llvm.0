@@ -1,108 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4F43806D6;
-	Wed, 29 Apr 2026 17:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45DC2C029F
+	for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 18:17:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777483501; cv=none; b=HcR3TUw60z1GxGKttzk8PRgKJ08fnPzK6O9MgMR/UYGdldzQiEIskVhkN6+7xuDiRyhq9kxnYIx3pFoazKCrIyXfV9ie5gZ1U9h6Qki1vFHzlP7FtQ2n0DTYerVIl1sfe4VKI0aG3sAi6XMb873W3qAWdfcoCcxa4QxhM8usHPA=
+	t=1777486670; cv=none; b=Vbakd1vBBWaaMLJVf55gZUEslFwmZlzCRIKBoMF2UckE9j8MXZK/Vju5VsCa65jkuu7VsOYYPb8HAn7/vrszUhUGHkvo9zAoKWmi42Bw9eiMuJNqr+tv53WH3cYnPSuD7HwyepbzNuO+Ckd8KS+b7zlZf2xdRv+kdiUeLGLxXuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777483501; c=relaxed/simple;
-	bh=mffL2JW6T8+5RordXSJf9JdbCYGneKu1w5+tmtqfz+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PiQ1NFkHQTK0RgkOHscVGynDQZsO4x9X84s824d97ziiqQzMCrbB87gUpiWXdh65pTSB+n1GxPh0HzROuZn+OjtczS0y0g6JDOCkjY88tWjiPvycKBdoD3qgQQETjbPPC9BV+HXDrROU4WL+GUpv+fj/5+asc4Ntc72gUzyycLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d9a7nIEx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777486670; c=relaxed/simple;
+	bh=f3X2sCykS3XjkcDUPz13DMo3K1nn3Ll6Ytr0HV222vA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VW6AR3U493R+4UqlgVRhdwLRxy0+xR8ManzhgN3ZQnv4YcICcBEQfnym4MglyVegJ8dsvg6V+tGwICkk1DAH3NmYExltAv2fu2Iwy0fZoWLwD3iIqZTJ0WSuWf0TinEjgBZyF/iYQJsl5+JsUvDGLIOtciEHOXaK4UPwcwD3aL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BzqUK7q/; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9a7nIEx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A3DFC19425;
-	Wed, 29 Apr 2026 17:24:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777483500;
-	bh=mffL2JW6T8+5RordXSJf9JdbCYGneKu1w5+tmtqfz+c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d9a7nIEx9f9IH+TQpYvB3d7+jjUMIbFmLu+q3cqPiWyiAQX8bjIVpcFvozhkXmKLX
-	 5CSDK1qHF5qfLyt5WzlhHeHTJZKUQop0g29qlP9xcic4b9KxnB0MaCT3XJpEl1PmDb
-	 GkV8IAzywCzIgqtfb6V5Q2ya3yuEAhmyQTY/UKRm60YNA8F/LEFhEyq53Ue9N8Xebj
-	 zEjvw6kyIKKZ9rWQlpvkv/2R+ZHB5fX/zN7OkILIdaSv5/ZK4fbV3bA44J43cZIFhV
-	 QE5Y3BUKGltUAZa3433J5sAMIsM8USUoxQ4ARODeDBW5YmFdBtS4WFtR3sq1p/eY+N
-	 WPYuIeVfcbE3w==
-Date: Wed, 29 Apr 2026 10:24:55 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nicolas Schier <nsc@kernel.org>, Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH 11/14] x86/build: Drop unused '-ffreestanding' addition
- to KBUILD_CFLAGS
-Message-ID: <20260429172455.GA2407772@ax162>
-References: <20260428-bump-minimum-supported-llvm-version-to-17-v1-0-81d9b2e8ee75@kernel.org>
- <20260428-bump-minimum-supported-llvm-version-to-17-v1-11-81d9b2e8ee75@kernel.org>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BzqUK7q/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1777486662;
+	bh=f3X2sCykS3XjkcDUPz13DMo3K1nn3Ll6Ytr0HV222vA=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=BzqUK7q/gl2Kb0JE88v3rX78GCbNczyUnEhAYIv+P5Z8H9J5IczADQUAMJY7FSaJi
+	 qj8n8X89wkD1w6YnX+ct+flH/M7o9uVofUM+Wr4Izwl+rVsi+vr/ls3gMDDsTdN43a
+	 /u16p4sFIeb1gsC+Pxap0+sf1wCrZyR/wuBD97/S3nRkYwCu14a7InTxZenyeFm6v4
+	 lIzAC3C0CEzywaNkacylIKxsc94aKFyHRGGiyurEg6w5qRiOfayUUpjW45XgKvqAaK
+	 0VjtjRQXcMfD0PUWj0oesqwM00dJIhD/u8GBaJ26MPTZiBR8jul+t9v7ssSoQzijLg
+	 gTR73FqJv8NHA==
+Received: from [100.64.0.214] (unknown [100.64.0.214])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 1F07C17E05FC;
+	Wed, 29 Apr 2026 20:17:41 +0200 (CEST)
+Message-ID: <40b8ba9bd3ca1926d8550b9345a21851cbbb61ba.camel@collabora.com>
+Subject: Re: [PATCH v3 1/4] media: rkvdec: Introduce a global bitwriter
+ helper
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Detlev Casanova <detlev.casanova@collabora.com>, Ezequiel Garcia	
+ <ezequiel@vanguardiasur.com.ar>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>,  Heiko Stuebner	 <heiko@sntech.de>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers	 <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Jonas Karlman <jonas@kwiboo.se>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev, kernel@collabora.com
+Date: Wed, 29 Apr 2026 14:17:40 -0400
+In-Reply-To: <20260402-rkvdec-use-bitwriter-v3-1-2072474ceaf4@collabora.com>
+References: <20260402-rkvdec-use-bitwriter-v3-0-2072474ceaf4@collabora.com>
+	 <20260402-rkvdec-use-bitwriter-v3-1-2072474ceaf4@collabora.com>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-ojEsNyi3XYjWjFdaxKBG"
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260428-bump-minimum-supported-llvm-version-to-17-v1-11-81d9b2e8ee75@kernel.org>
 
-On Tue, Apr 28, 2026 at 10:59:17PM -0400, Nathan Chancellor wrote:
-> Now that the minimum supported version of LLVM for building the kernel
-> has been raised to 17.0.1, the condition to add '-ffreestanding' to
-> KBUILD_CFLAGS for 32-bit x86 is always false, so the if block can be
-> removed.
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+--=-ojEsNyi3XYjWjFdaxKBG
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Le jeudi 02 avril 2026 =C3=A0 10:06 -0400, Detlev Casanova a =C3=A9crit=C2=
+=A0:
+> The use of structures with bitfields is good when the values are
+> somewhat aligned.
+> More mis-alignement means that compilers need to do more gymanstics
+                                                           gymnastics
+> to edit the fields values.
+>=20
+> Some cases have been reported with CLang on specific architectures
+> like armhf and hexagon, where the compiler would allocate a bigger
+> local stack than needed or even completely freeze during compilation.
+>=20
+> Some fixes have been provided to ease the issues, but the real fix
+> here is to use a bitwriter instead of heavily unaligned bitfields.
+>=20
+> This is a preparation commit to provide a global bitwriter interface
+> for the whole driver.
+>=20
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 > ---
-> Cc: Thomas Gleixner <tglx@kernel.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: H. Peter Anvin <hpa@zytor.com>
-> ---
->  arch/x86/Makefile | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index 46fec0b08487..5720f2470cfc 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -124,11 +124,6 @@ ifeq ($(CONFIG_X86_32),y)
->          include $(srctree)/arch/x86/Makefile_32.cpu
->          KBUILD_CFLAGS += $(cflags-y)
->  
-> -    ifneq ($(call clang-min-version, 160000),y)
+> =C2=A0.../platform/rockchip/rkvdec/rkvdec-bitwriter.h=C2=A0=C2=A0=C2=A0 |=
+ 39 ++++++++++++++++++++++
+> =C2=A01 file changed, 39 insertions(+)
+>=20
+> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.h b/=
+drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.h
+> new file mode 100644
+> index 000000000000..2a5c271ade91
+> --- /dev/null
+> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-bitwriter.h
+> @@ -0,0 +1,39 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Rockchip Video Decoder bit writer
+> + *
+> + * Copyright (C) 2026 Collabora, Ltd.
+> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Detlev Casanova <detlev.casanova@collab=
+ora.com>
+> + * Copyright (C) 2019 Collabora, Ltd.
+> + *	Boris Brezillon <boris.brezillon@collabora.com>
 
-Sashiko points out [1] that the condition of this block, added by
+nit: indent it the same for for your name.
 
-  d70da12453ac ("hardening: Enable i386 FORTIFY_SOURCE on Clang 16+")
+I will do the edits if I find now other issues=C2=A0in the series.
 
-results in GCC builds still having '-ffreestanding' enabled. I don't
-think this should be a problem but if we want to be more conservative, I
-could turn this into an
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-  ifdef CONFIG_CC_IS_GCC
+> + */
+> +
+> +#ifndef RKVDEC_BIT_WRITER_H_
+> +#define RKVDEC_BIT_WRITER_H_
+> +
+> +#include <linux/types.h>
+> +#include <linux/bits.h>
+> +
+> +struct rkvdec_bw_field {
+> +	u16 offset;
+> +	u8 len;
+> +};
+> +
+> +#define BW_FIELD(_offset, _len) ((struct rkvdec_bw_field){ _offset, _len=
+ })
+> +
+> +static inline void rkvdec_set_bw_field(u32 *buf, struct rkvdec_bw_field =
+field, u32 value)
+> +{
+> +	u8 bit =3D field.offset % 32;
+> +	u16 word =3D field.offset / 32;
+> +	u64 mask =3D GENMASK_ULL(bit + field.len - 1, bit);
+> +	u64 val =3D ((u64)value << bit) & mask;
+> +
+> +	buf[word] &=3D ~mask;
+> +	buf[word] |=3D val;
+> +	if (bit + field.len > 32) {
+> +		buf[word + 1] &=3D ~(mask >> 32);
+> +		buf[word + 1] |=3D val >> 32;
+> +	}
+> +}
+> +
+> +#endif /* RKVDEC_BIT_WRITER_H_ */
 
-block to keep the same behavior for GCC while avoiding the flag
-altogether for clang. Regardless, the commit message will need
-rewording.
+--=-ojEsNyi3XYjWjFdaxKBG
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-[1]: https://sashiko.dev/#/patchset/14621?part=11
+-----BEGIN PGP SIGNATURE-----
 
-> -        # https://github.com/llvm/llvm-project/issues/53645
-> -        KBUILD_CFLAGS += -ffreestanding
-> -    endif
-> -
->          percpu_seg := fs
->  else
->          BITS := 64
-> 
-> -- 
-> 2.54.0
-> 
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCafJLRAAKCRDZQZRRKWBy
+9CfpAQDqF14g5OufVsa2Fpra0HvendS7U/2GaNB0mAdxpVSheQD/VHfDT4/LbugD
+q9xHQ7ZBhrVCWlO17vwUUH9yJW1KegE=
+=4+T8
+-----END PGP SIGNATURE-----
+
+--=-ojEsNyi3XYjWjFdaxKBG--
