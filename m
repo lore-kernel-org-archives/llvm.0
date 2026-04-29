@@ -1,139 +1,75 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA4A3890E2
-	for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 10:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB3C332637
+	for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 11:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777457468; cv=none; b=mXdPJWn6wBbcWgKEknZ367ZZibz6dRN3fZiW2PphZDzs9fjSNTwcpnLEaWHne5wsYJvwIGr6LrR+iyqkgNvFWU1Un1lBEEOYBQQ+5XwfFD7dwYzRbAJuknpH74WIBHPTSbxx/yxs4c2taXcZM35lldRDV2duivCh58iwihU/Ztk=
+	t=1777461289; cv=none; b=IwQAFUnS+CkaW3UcVGISx3NuN/cbvdmRAFGy1f5fxVGY8KwRxXSgs5vEkTteCRyRmklPQYWo4pSTC01ctWFfGX2epe40oKIVvvKO2XhO8mk/pUYuabcFppjgjCyOoKmUPutxhgxUunClJqmNPd8J7tKl5wE3LGy5MuIaEWtxPVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777457468; c=relaxed/simple;
-	bh=KLwWf95QYlXqjTRiTI/nyMeghq1jIrTTG2Jrgoqqb/s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BbzkCQcjq+W7RTNhJ1j2DxmhUcxRL95gsAco3OXd1uvuKG/brpD+NoqLgMiRpKQfOmb5sa2Q6YbkPjRipemrH1oUAqyPMObtg/+BTE8Oirv8+EaIrRqNQfdkr4sfKjQugZZepgck3eiDS1hPcXwjtapqOmN7Y5NO8oksOvKo28Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ingeniumdigital.com; spf=pass smtp.mailfrom=ingeniumdigital.com; dkim=pass (2048-bit key) header.d=ingeniumdigital.com header.i=@ingeniumdigital.com header.b=YsXPeJ/3; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ingeniumdigital.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ingeniumdigital.com
+	s=arc-20240116; t=1777461289; c=relaxed/simple;
+	bh=ON3ZXNp2mNn0teuGO1Qch5RiWn/snTfcpl/leGkxYho=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bYJJ6++SetY0N1/8qXGGoUKy/Tv2xilQbqs2BR88d3C42LeRQQvYx2OXyJhAHb39hul2yY0jao0biw5JcyGo1QDL53QA0TBXbAj16hTtzQxYIaX+gVjHaM/cacfx84ZRsUxsFi8oLBsOlP7nquWt6ETjrfHql0BJ34n/Ri28rPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=nUIBLiwh; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ingeniumdigital.com header.i=@ingeniumdigital.com header.b="YsXPeJ/3"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2b23fcf90b2so118422825ad.3
-        for <llvm@lists.linux.dev>; Wed, 29 Apr 2026 03:11:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ingeniumdigital.com; s=google; t=1777457466; x=1778062266; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0R26ySyVwseh0XvD0z3+P5speK5gk4CAVoAQ5oLCLJI=;
-        b=YsXPeJ/30Ohh8XgAEL6vqRozYrnKtF9cz/nxfWdFtT12aGOnGfA3E3TCORK50sQsql
-         HRmX+Sf9CMkP3f9YtI5IfdBLv918SpGyUXsdteKhcSLtOgG6s7evYybrnBhct+LATKCJ
-         Ub533LEuF6/piJ9rHPabQPIJhQVuHKi3LSb6hH1jSzf9G77qrl92v43SARy5BP9hDnRd
-         ZN54FBkSXELeiJZFcaO8+r1gOER1L/6HXToR25fscaCAxX3MW0JA8QVbLZhoAIabCH//
-         uQSyiMkvJB2ict7E9PAV7kg6T7y7tldGqikmhSyqnUv+OtfUBAJXB9eGNPNfhiKbvHMd
-         CqJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777457466; x=1778062266;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0R26ySyVwseh0XvD0z3+P5speK5gk4CAVoAQ5oLCLJI=;
-        b=G4L3sxhWkCUibRZGnsL1ziBVBHD7+l6bQV64Bz8675Mv0ZaTZuDPnTu148cEYjQUUq
-         nA3Gb8duAqqhLup1nZmwJLYBb3P0cLWcTHdX8/y7QdHI6oifvHHHPYxCZvshHiIdc8TX
-         FUwKUsgtAreldtwK7Y9einU+ru3aXJ+WhQYZS1j4ZxyIXjN45TviQFjdh5hawRbimD+O
-         KBQU6NUkJhful6H2Y6kU1CfQLLoO2T5nTBE18vvTXb1P5v0/jnJz9U2bnxJQ9yaU51GZ
-         Mkub+2SixRAryKQZCGfeRnb++8L6yH3LL/60Pv2NnrUWwCmJUIFSf1JKolvA01UWX0/E
-         KSZw==
-X-Forwarded-Encrypted: i=1; AFNElJ9Sod/Io15Y02lpmQDO48WiQNE/ZdjWYJPMrHcyHSjUOC8xjsGdTnXOFb2iHwTGsngl5beW@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw3KyEeMT1urBlRTm0tSVCYWuRA8sF55ZXedn97XPZGTUTlTn8r
-	DdOR1uptfoidi3R3iU/tNQ/owxgcqBxLAxHaJY4J7gkHKobYmLC7mEeWL7KukTIjQA==
-X-Gm-Gg: AeBDiesrALsVshDHeOHMQUjlG6HTsv6Xsc+gE5nkg6Rx/VoS03XCb+RqBeWtYwKA/xs
-	5cYeAmXNc/e0o14ZXmGvhW84dsMWWglFa5DsYuEqlCvXFFuox2vUaC/RTcU5E+t5E00yEF1uRsP
-	1PZj47dhd8w59vmCQEoHayrBd1oPB/SU/wf31ZdHnsnEm97AYUc7CwIm4uX2qVNJ4LE+cGglpjZ
-	/xxEVluTVfuy0FfYylA+6ya/wvwa9YuINWvmkVfHNWoXO8WX2d+YdIxipKaFi93Iu2gTxShtlqm
-	zR51s+Ya1033ACyqiBdeVshLseapHOvwt0gmdr/BTPNwolMMPuJoL3dd8vLuNTW5dO+ssxZyEDo
-	YAzvNkPnsCcqyd1B+FWAPVaRdQNsgD0ajh2vwMLXyjgYdkTJ7BzXvdn9tM/H3u6yzeOebJQY3W4
-	CfTE2sQgj8yBQXeRXrvXEq9frJR5qltmE2pJkwdXaW89pLrxWnYKHfijj8pMxdpL/uTimMqur8g
-	wDUTKMJ6pW/+lyVjwCY
-X-Received: by 2002:a17:903:3503:b0:2b2:ec00:7966 with SMTP id d9443c01a7336-2b97c462381mr77953125ad.21.1777457466448;
-        Wed, 29 Apr 2026 03:11:06 -0700 (PDT)
-Received: from ?IPV6:2001:8003:8810:ea00:ed87:ca88:5326:e11d? ([2001:8003:8810:ea00:ed87:ca88:5326:e11d])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b988972dfasm17817855ad.72.2026.04.29.03.11.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Apr 2026 03:11:05 -0700 (PDT)
-Message-ID: <279a16dd-f98f-44ef-9685-44537eac2892@ingeniumdigital.com>
-Date: Wed, 29 Apr 2026 18:10:58 +0800
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="nUIBLiwh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1777461284;
+	bh=ON3ZXNp2mNn0teuGO1Qch5RiWn/snTfcpl/leGkxYho=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nUIBLiwhS6K0U2ji2ZtCW8eb1K2wMFJlY3SD7I5H5EGw4KPX0AQoBXWopwJu8LbGX
+	 tAo8L3j/r5oy7oVLVN7IfKLFC9S6xwdvCU1t1nvLiLuiXdLPhjGX/uqorTIBv94PyH
+	 W3lS2bGH6mEWcFr2Lx3I71qjsh4T2o05mj9lTFAY=
+Date: Wed, 29 Apr 2026 13:14:42 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: David Gow <david@ingeniumdigital.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com
+Subject: Re: [PATCH 2/2] kunit: qemu_configs: Add or1k / openrisc
+ configuration
+Message-ID: <19c00a88-ea92-4f17-afb6-9fa5da247d21@t-8ch.de>
+References: <20260427-kunit-or1k-v1-0-9d3109e991e8@weissschuh.net>
+ <20260427-kunit-or1k-v1-2-9d3109e991e8@weissschuh.net>
+ <279a16dd-f98f-44ef-9685-44537eac2892@ingeniumdigital.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] kunit: qemu_configs: Add or1k / openrisc
- configuration
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>,
- Rae Moar <raemoar63@gmail.com>
-Cc: linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com
-References: <20260427-kunit-or1k-v1-0-9d3109e991e8@weissschuh.net>
- <20260427-kunit-or1k-v1-2-9d3109e991e8@weissschuh.net>
-Content-Language: fr
-From: David Gow <david@ingeniumdigital.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-In-Reply-To: <20260427-kunit-or1k-v1-2-9d3109e991e8@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <279a16dd-f98f-44ef-9685-44537eac2892@ingeniumdigital.com>
 
-Le 28/04/2026 à 12:04 AM, 'Thomas Weißschuh' via KUnit Development a écrit :
-> Add a basic configuration to run kunit tests on or1k / openrisc.
+On 2026-04-29 18:10:58+0800, David Gow wrote:
+> Le 28/04/2026 à 12:04 AM, 'Thomas Weißschuh' via KUnit Development a écrit :
+> > Add a basic configuration to run kunit tests on or1k / openrisc.
+> > 
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
-
-Thanks very much. This works well here (assuming 
-CONFIG_KUNIT_FAULT_TESTS=n, and either a long timeout, or slow tests 
-skipped, as qemu-or1k is not fast on my machine).
-
-Reviewed-by: David Gow <david@davidgow.net>
-
-Do we want to split the series and take this patch via kselftest/kunit, 
-and the generate_compile_commands one separately, or just pick both up 
-in the same tree?
-
-Cheers,
--- David
-
->   tools/testing/kunit/qemu_configs/or1k.py | 18 ++++++++++++++++++
->   1 file changed, 18 insertions(+)
+> Thanks very much. This works well here (assuming CONFIG_KUNIT_FAULT_TESTS=n,
+> and either a long timeout, or slow tests skipped, as qemu-or1k is not fast
+> on my machine).
 > 
-> diff --git a/tools/testing/kunit/qemu_configs/or1k.py b/tools/testing/kunit/qemu_configs/or1k.py
-> new file mode 100644
-> index 000000000000..dfbbad0f9076
-> --- /dev/null
-> +++ b/tools/testing/kunit/qemu_configs/or1k.py
-> @@ -0,0 +1,18 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +from ..qemu_config import QemuArchParams
-> +
-> +QEMU_ARCH = QemuArchParams(linux_arch='openrisc',
-> +			   kconfig='''
-> +CONFIG_SERIAL_8250=y
-> +CONFIG_SERIAL_8250_CONSOLE=y
-> +CONFIG_SERIAL_OF_PLATFORM=y
-> +CONFIG_POWER_RESET=y
-> +CONFIG_POWER_RESET_SYSCON=y
-> +''',
-> +			   qemu_arch='or1k',
-> +			   kernel_path='vmlinux',
-> +			   kernel_command_line='console=ttyS0',
-> +			   extra_qemu_params=[
-> +					    '-machine', 'virt',
-> +                        '-m', '512',
-> +			  ])
-> 
+> Reviewed-by: David Gow <david@davidgow.net>
 
+Thanks!
+
+> Do we want to split the series and take this patch via kselftest/kunit, and
+> the generate_compile_commands one separately, or just pick both up in the
+> same tree?
+
+They should go through the same tree as otherwise kunit.py will fail to
+build the or1k architecture, as it always tries to generate
+compile_commands.json.
+
+(...)
