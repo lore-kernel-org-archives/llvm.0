@@ -1,319 +1,336 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA9E121B9F6;
-	Thu, 30 Apr 2026 02:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D54627CB35;
+	Thu, 30 Apr 2026 02:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777516711; cv=none; b=s5LcE27lLpkD0K//4DCycNvqdmo1mWPX/obF6sbmoVZ9vArLGjiAUO1Hk37RivOUb7syuXlgif8pMxnwTOeAGmbrACQ3zngy4OlYIy2GounAa8lKmX9fyGNp++tjv9bPVvPExA1xjyy4R4UUP7p+krpd9ArTzGLTHCzUGka8uuY=
+	t=1777517494; cv=none; b=PCRvJQTH5z7lBAKyvkg0czQ7jupVzElJsXcjmLCIRPDbzj76ikN7RZuAlJORL6Y5LEgJD1TaNdhyqtIc3SqQYZ4YPXDQ0KJdI9BwJtCg6E4lOPR26QTWoenAh155OjULzDV14tNX3D39URUibdX5zx/hXoI334r+YHlf2goAgWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777516711; c=relaxed/simple;
-	bh=PkKOmBRTGLs12bBKng/adtfCsJNJYQSLMRRQ5O8w284=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HNHiTKs4Iz9NC0oA4ydM8ioHb1iW6LM0hKxUJ2/3b1HHRB8RLHQoq+Nzv6zK0NVPQ3QoL/2SjregqALYtcIl6PTXUgy0Fyr3c3cH1eBKJew+fGs0J1W+95VcZMjjZXFaETxiBUQJOhSb9hcf2ebeV7YXdUr6aNlG7wLFRI5EtRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hqqrxIaC; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1777517494; c=relaxed/simple;
+	bh=FbHh3GB2PMshulXjKx4DAyIytlnn95XTE/CPR5cj9f8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cKPGOwuWy62Zxh+1khXjHNpR+R8UuG+SqUQV6uuIM/WQdKHq/76PQCH0LWP+g5Z+RmDjormidNGy9ELpliDRoBuCvJ/dKf9G5QY/pQeF7aVDQUq32nzC43bXxw0TMGDuOjXeJBvr/F7zxkzwcsOMRbnBAvFsroQdYgGXRWwx/6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=amodr0lS; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hqqrxIaC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="amodr0lS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777516710; x=1809052710;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PkKOmBRTGLs12bBKng/adtfCsJNJYQSLMRRQ5O8w284=;
-  b=hqqrxIaC04mrbTf0hLssikehQ92UXE7N7xgpb3imbIhkaPF95o1PAHP/
-   JbJc+s7dyg6yzF4rAM0uh8dr1UtoqQX9LZ+dfoGEgBGR8DZD5YWJRsXSb
-   tiyJV+6Pb8xrthOHBMqqo8uAnS7iaIFncTcBRa95Oemlt0NmW89xWaXDa
-   nKOcG9dHk/TDSRzvXX8F8cZW4hAGPd7aY3e93x5JWcNGBAc0Ez4vvPGMd
-   k/RLp1cQ05CHDaFpcyStjBImTayVFn8atvdi5OJEs9p4sI2V6dMvBFcyJ
-   vvn+p6AR3s3lBYRwABaT6vuDUdMuuUOfaKpv/6FK87vJfAi9cC+wytzad
-   A==;
-X-CSE-ConnectionGUID: +sNAA+5ESy+u1I/Ol0Wtyw==
-X-CSE-MsgGUID: 4IyPUogbSsqSB6g355ExkA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="78326861"
+  t=1777517493; x=1809053493;
+  h=date:from:to:cc:subject:message-id;
+  bh=FbHh3GB2PMshulXjKx4DAyIytlnn95XTE/CPR5cj9f8=;
+  b=amodr0lSS5YtIuXOUqHgn3GmfCwmeX7cJue0qpSYAfVMvOKIpQJq8VUK
+   +sg0wTAXgKFctKqH38wm+6yQTFOfOJ6Je6RPDwe45Umj4Q2kJ35kRSuGh
+   7u0KM467phsHHRVwD6TETvaUC5dNiJ8gU8DLUFdWWzkDMew8E1iNwLwdl
+   ijmtQZMVIq9pudHO384QVNcwEDnpyrJ+cna+Dq4z7XAhdpFpi4rUGkXhF
+   KNf1O3fKJdqL34e+CbpZhWfZFgNbiiDaGGWDzVnNtQp9hVfeZ9mKuoION
+   4HZMd1fPDMiRtNUBwEpFS+3DQnnqr3FbsowLpmS8Q4BPU6L+ftNeNSQK8
+   g==;
+X-CSE-ConnectionGUID: N/4rtJkZQBWul9/iMLq0QA==
+X-CSE-MsgGUID: M+D7ATSMSheVaeb1+FYHlg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="78482997"
 X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="78326861"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 19:38:29 -0700
-X-CSE-ConnectionGUID: nZLfWukqQiCrK8qlh1SBlA==
-X-CSE-MsgGUID: 2t/5erncQdKs5X5BtbJO1Q==
+   d="scan'208";a="78482997"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 19:51:32 -0700
+X-CSE-ConnectionGUID: mzEy4jJ9R/e7zlimXFLfRw==
+X-CSE-MsgGUID: aDvUy+KQRVGe+vTuJDWlng==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="258031101"
+   d="scan'208";a="236216127"
 Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 29 Apr 2026 19:38:27 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 29 Apr 2026 19:51:29 -0700
 Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wIHIG-00000000Bpk-3oHl;
-	Thu, 30 Apr 2026 02:38:24 +0000
-Date: Thu, 30 Apr 2026 10:37:47 +0800
+	id 1wIHUt-00000000Br6-1DRg;
+	Thu, 30 Apr 2026 02:51:27 +0000
+Date: Thu, 30 Apr 2026 10:50:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yu Kuai <yukuai@fnnas.com>, linux-raid@vger.kernel.org
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Li Nan <linan122@huawei.com>,
-	Yu Kuai <yukuai@fnnas.com>, Cheng Cheng <chencheng@fnnas.com>
-Subject: Re: [PATCH] md/raid10: wire llbitmap reshape lifecycle
-Message-ID: <202604301028.uutGNSgD-lkp@intel.com>
-References: <20260419030942.824195-15-yukuai@fnnas.com>
+ Vinod Koul <vkoul@kernel.org>, Kishon <kishon@ti.com>,
+ Dmitry Baryshkov <lumag@kernel.org>
+Subject: [phy:phy_7.2 26/27] drivers/usb/dwc3/dwc3-imx.c:74:3: error:
+ call to undeclared function 'device_property_read_bool'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202604301015.UEm28qTG-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260419030942.824195-15-yukuai@fnnas.com>
 
-Hi Yu,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on song-md/md-next v7.1-rc1 next-20260429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/md-raid10-wire-llbitmap-reshape-lifecycle/20260423-170302
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260419030942.824195-15-yukuai%40fnnas.com
-patch subject: [PATCH] md/raid10: wire llbitmap reshape lifecycle
-config: um-randconfig-001-20260430 (https://download.01.org/0day-ci/archive/20260430/202604301028.uutGNSgD-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git phy_7.2
+head:   d097a6ebab1ffe9286cca190fe74d51b01d80dc3
+commit: 9ed7a91a68cbba256d1a53c353bf6c62c7e056f0 [26/27] phy: remove temporary provider compatibility from consumer header
+config: arm64-randconfig-003-20260430 (https://download.01.org/0day-ci/archive/20260430/202604301015.UEm28qTG-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604301028.uutGNSgD-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604301015.UEm28qTG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604301028.uutGNSgD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604301015.UEm28qTG-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/md/raid10.c:4370:25: error: no member named 'reshape_can_start' in 'struct bitmap_operations'
-    4370 |             mddev->bitmap_ops->reshape_can_start) {
-         |             ~~~~~~~~~~~~~~~~~  ^
-   drivers/md/raid10.c:4371:28: error: no member named 'reshape_can_start' in 'struct bitmap_operations'
-    4371 |                 ret = mddev->bitmap_ops->reshape_can_start(mddev);
-         |                       ~~~~~~~~~~~~~~~~~  ^
->> drivers/md/raid10.c:4689:26: error: no member named 'reshape_mark' in 'struct bitmap_operations'
-    4689 |                     mddev->bitmap_ops->reshape_mark &&
-         |                     ~~~~~~~~~~~~~~~~~  ^
-   drivers/md/raid10.c:4691:23: error: no member named 'reshape_mark' in 'struct bitmap_operations'
-    4691 |                         mddev->bitmap_ops->reshape_mark(mddev, conf->reshape_safe,
-         |                         ~~~~~~~~~~~~~~~~~  ^
-   drivers/md/raid10.c:4899:25: error: no member named 'reshape_mark' in 'struct bitmap_operations'
-    4899 |             mddev->bitmap_ops->reshape_mark &&
-         |             ~~~~~~~~~~~~~~~~~  ^
-   drivers/md/raid10.c:4901:22: error: no member named 'reshape_mark' in 'struct bitmap_operations'
-    4901 |                 mddev->bitmap_ops->reshape_mark(mddev, conf->reshape_safe,
-         |                 ~~~~~~~~~~~~~~~~~  ^
->> drivers/md/raid10.c:5043:37: error: no member named 'reshape_finish' in 'struct bitmap_operations'
-    5043 |         if (llbitmap && mddev->bitmap_ops->reshape_finish)
-         |                         ~~~~~~~~~~~~~~~~~  ^
-   drivers/md/raid10.c:5044:22: error: no member named 'reshape_finish' in 'struct bitmap_operations'
-    5044 |                 mddev->bitmap_ops->reshape_finish(mddev);
-         |                 ~~~~~~~~~~~~~~~~~  ^
->> drivers/md/raid10.c:5107:3: error: field designator 'bitmap_sync_size' does not refer to any field in type 'struct md_personality'
-    5107 |         .bitmap_sync_size = raid10_bitmap_sync_size,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/md/raid10.c:5108:3: error: field designator 'bitmap_array_sectors' does not refer to any field in type 'struct md_personality'
-    5108 |         .bitmap_array_sectors = raid10_bitmap_sync_size,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   10 errors generated.
+>> drivers/usb/dwc3/dwc3-imx.c:74:3: error: call to undeclared function 'device_property_read_bool'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      74 |                 device_property_read_bool(dev, "fsl,permanently-attached");
+         |                 ^
+>> drivers/usb/dwc3/dwc3-imx.c:184:55: error: array has incomplete element type 'const struct property_entry'
+     184 | static const struct property_entry dwc3_imx_properties[] = {
+         |                                                       ^
+   include/linux/platform_device.h:20:8: note: forward declaration of 'struct property_entry'
+      20 | struct property_entry;
+         |        ^
+>> drivers/usb/dwc3/dwc3-imx.c:185:2: error: call to undeclared function 'PROPERTY_ENTRY_BOOL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     185 |         PROPERTY_ENTRY_BOOL("xhci-missing-cas-quirk"),
+         |         ^
+>> drivers/usb/dwc3/dwc3-imx.c:190:35: error: variable has incomplete type 'const struct software_node'
+     190 | static const struct software_node dwc3_imx_swnode = {
+         |                                   ^
+   include/linux/platform_device.h:166:15: note: forward declaration of 'struct software_node'
+     166 |         const struct software_node *swnode;
+         |                      ^
+>> drivers/usb/dwc3/dwc3-imx.c:255:8: error: call to undeclared function 'device_add_software_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     255 |         ret = device_add_software_node(dev, &dwc3_imx_swnode);
+         |               ^
+   drivers/usb/dwc3/dwc3-imx.c:255:8: note: did you mean 'device_add_of_node'?
+   include/linux/device.h:1217:5: note: 'device_add_of_node' declared here
+    1217 | int device_add_of_node(struct device *dev, struct device_node *of_node);
+         |     ^
+>> drivers/usb/dwc3/dwc3-imx.c:272:3: error: call to undeclared function 'device_remove_software_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     272 |                 device_remove_software_node(dev);
+         |                 ^
+   drivers/usb/dwc3/dwc3-imx.c:286:2: error: call to undeclared function 'device_remove_software_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     286 |         device_remove_software_node(dev);
+         |         ^
+   7 errors generated.
 
 
-vim +4370 drivers/md/raid10.c
+vim +/device_property_read_bool +74 drivers/usb/dwc3/dwc3-imx.c
 
-  4345	
-  4346	static int raid10_start_reshape(struct mddev *mddev)
-  4347	{
-  4348		/* A 'reshape' has been requested. This commits
-  4349		 * the various 'new' fields and sets MD_RECOVER_RESHAPE
-  4350		 * This also checks if there are enough spares and adds them
-  4351		 * to the array.
-  4352		 * We currently require enough spares to make the final
-  4353		 * array non-degraded.  We also require that the difference
-  4354		 * between old and new data_offset - on each device - is
-  4355		 * enough that we never risk over-writing.
-  4356		 */
-  4357	
-  4358		unsigned long before_length, after_length;
-  4359		sector_t min_offset_diff = 0;
-  4360		int first = 1;
-  4361		struct geom new;
-  4362		struct r10conf *conf = mddev->private;
-  4363		struct md_rdev *rdev;
-  4364		int spares = 0;
-  4365		int ret;
-  4366	
-  4367		if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery))
-  4368			return -EBUSY;
-  4369		if (md_bitmap_enabled(mddev, false) &&
-> 4370		    mddev->bitmap_ops->reshape_can_start) {
-  4371			ret = mddev->bitmap_ops->reshape_can_start(mddev);
-  4372			if (ret)
-  4373				return ret;
-  4374		}
-  4375	
-  4376		if (setup_geo(&new, mddev, geo_start) != conf->copies)
-  4377			return -EINVAL;
-  4378	
-  4379		before_length = ((1 << conf->prev.chunk_shift) *
-  4380				 conf->prev.far_copies);
-  4381		after_length = ((1 << conf->geo.chunk_shift) *
-  4382				conf->geo.far_copies);
-  4383	
-  4384		rdev_for_each(rdev, mddev) {
-  4385			if (!test_bit(In_sync, &rdev->flags)
-  4386			    && !test_bit(Faulty, &rdev->flags))
-  4387				spares++;
-  4388			if (rdev->raid_disk >= 0) {
-  4389				long long diff = (rdev->new_data_offset
-  4390						  - rdev->data_offset);
-  4391				if (!mddev->reshape_backwards)
-  4392					diff = -diff;
-  4393				if (diff < 0)
-  4394					diff = 0;
-  4395				if (first || diff < min_offset_diff)
-  4396					min_offset_diff = diff;
-  4397				first = 0;
-  4398			}
-  4399		}
-  4400	
-  4401		if (max(before_length, after_length) > min_offset_diff)
-  4402			return -EINVAL;
-  4403	
-  4404		if (spares < mddev->delta_disks)
-  4405			return -EINVAL;
-  4406	
-  4407		conf->offset_diff = min_offset_diff;
-  4408		spin_lock_irq(&conf->device_lock);
-  4409		if (conf->mirrors_new) {
-  4410			memcpy(conf->mirrors_new, conf->mirrors,
-  4411			       sizeof(struct raid10_info)*conf->prev.raid_disks);
-  4412			smp_mb();
-  4413			kfree(conf->mirrors_old);
-  4414			conf->mirrors_old = conf->mirrors;
-  4415			conf->mirrors = conf->mirrors_new;
-  4416			conf->mirrors_new = NULL;
-  4417		}
-  4418		setup_geo(&conf->geo, mddev, geo_start);
-  4419		smp_mb();
-  4420		if (mddev->reshape_backwards) {
-  4421			sector_t size = raid10_size(mddev, 0, 0);
-  4422			if (size < mddev->array_sectors) {
-  4423				spin_unlock_irq(&conf->device_lock);
-  4424				pr_warn("md/raid10:%s: array size must be reduce before number of disks\n",
-  4425					mdname(mddev));
-  4426				return -EINVAL;
-  4427			}
-  4428			mddev->resync_max_sectors = size;
-  4429			conf->reshape_progress = size;
-  4430		} else
-  4431			conf->reshape_progress = 0;
-  4432		conf->reshape_safe = conf->reshape_progress;
-  4433		spin_unlock_irq(&conf->device_lock);
-  4434	
-  4435		if (mddev->delta_disks && mddev->bitmap) {
-  4436			struct mdp_superblock_1 *sb = NULL;
-  4437			sector_t oldsize, newsize;
-  4438	
-  4439			oldsize = raid10_size(mddev, 0, 0);
-  4440			newsize = raid10_size(mddev, 0, conf->geo.raid_disks);
-  4441	
-  4442			if (!mddev_is_clustered(mddev) &&
-  4443			    md_bitmap_enabled(mddev, false)) {
-  4444				ret = mddev->bitmap_ops->resize(mddev, newsize, 0);
-  4445				if (ret)
-  4446					goto abort;
-  4447				else
-  4448					goto out;
-  4449			}
-  4450	
-  4451			rdev_for_each(rdev, mddev) {
-  4452				if (rdev->raid_disk > -1 &&
-  4453				    !test_bit(Faulty, &rdev->flags))
-  4454					sb = page_address(rdev->sb_page);
-  4455			}
-  4456	
-  4457			/*
-  4458			 * some node is already performing reshape, and no need to
-  4459			 * call bitmap_ops->resize again since it should be called when
-  4460			 * receiving BITMAP_RESIZE msg
-  4461			 */
-  4462			if ((sb && (le32_to_cpu(sb->feature_map) &
-  4463				    MD_FEATURE_RESHAPE_ACTIVE)) || (oldsize == newsize))
-  4464				goto out;
-  4465	
-  4466			/* cluster can't be setup without bitmap */
-  4467			ret = mddev->bitmap_ops->resize(mddev, newsize, 0);
-  4468			if (ret)
-  4469				goto abort;
-  4470	
-  4471			ret = mddev->cluster_ops->resize_bitmaps(mddev, newsize, oldsize);
-  4472			if (ret) {
-  4473				mddev->bitmap_ops->resize(mddev, oldsize, 0);
-  4474				goto abort;
-  4475			}
-  4476		}
-  4477	out:
-  4478		if (mddev->delta_disks > 0) {
-  4479			rdev_for_each(rdev, mddev)
-  4480				if (rdev->raid_disk < 0 &&
-  4481				    !test_bit(Faulty, &rdev->flags)) {
-  4482					if (raid10_add_disk(mddev, rdev) == 0) {
-  4483						if (rdev->raid_disk >=
-  4484						    conf->prev.raid_disks)
-  4485							set_bit(In_sync, &rdev->flags);
-  4486						else
-  4487							rdev->recovery_offset = 0;
-  4488	
-  4489						/* Failure here is OK */
-  4490						sysfs_link_rdev(mddev, rdev);
-  4491					}
-  4492				} else if (rdev->raid_disk >= conf->prev.raid_disks
-  4493					   && !test_bit(Faulty, &rdev->flags)) {
-  4494					/* This is a spare that was manually added */
-  4495					set_bit(In_sync, &rdev->flags);
-  4496				}
-  4497		}
-  4498		/* When a reshape changes the number of devices,
-  4499		 * ->degraded is measured against the larger of the
-  4500		 * pre and  post numbers.
-  4501		 */
-  4502		spin_lock_irq(&conf->device_lock);
-  4503		mddev->degraded = calc_degraded(conf);
-  4504		spin_unlock_irq(&conf->device_lock);
-  4505		mddev->raid_disks = conf->geo.raid_disks;
-  4506		mddev->reshape_position = conf->reshape_progress;
-  4507		set_bit(MD_SB_CHANGE_DEVS, &mddev->sb_flags);
-  4508	
-  4509		clear_bit(MD_RECOVERY_SYNC, &mddev->recovery);
-  4510		clear_bit(MD_RECOVERY_CHECK, &mddev->recovery);
-  4511		clear_bit(MD_RECOVERY_DONE, &mddev->recovery);
-  4512		set_bit(MD_RECOVERY_RESHAPE, &mddev->recovery);
-  4513		set_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
-  4514		conf->reshape_checkpoint = jiffies;
-  4515		md_new_event();
-  4516		return 0;
-  4517	
-  4518	abort:
-  4519		mddev->recovery = 0;
-  4520		spin_lock_irq(&conf->device_lock);
-  4521		conf->geo = conf->prev;
-  4522		mddev->raid_disks = conf->geo.raid_disks;
-  4523		rdev_for_each(rdev, mddev)
-  4524			rdev->new_data_offset = rdev->data_offset;
-  4525		smp_wmb();
-  4526		conf->reshape_progress = MaxSector;
-  4527		conf->reshape_safe = MaxSector;
-  4528		mddev->reshape_position = MaxSector;
-  4529		spin_unlock_irq(&conf->device_lock);
-  4530		return ret;
-  4531	}
-  4532	
+76fc9452a6bfb6 Xu Yang 2026-02-12   68  
+76fc9452a6bfb6 Xu Yang 2026-02-12   69  static void dwc3_imx_get_property(struct dwc3_imx *dwc_imx)
+76fc9452a6bfb6 Xu Yang 2026-02-12   70  {
+76fc9452a6bfb6 Xu Yang 2026-02-12   71  	struct device	*dev = dwc_imx->dev;
+76fc9452a6bfb6 Xu Yang 2026-02-12   72  
+76fc9452a6bfb6 Xu Yang 2026-02-12   73  	dwc_imx->permanent_attached =
+76fc9452a6bfb6 Xu Yang 2026-02-12  @74  		device_property_read_bool(dev, "fsl,permanently-attached");
+76fc9452a6bfb6 Xu Yang 2026-02-12   75  	dwc_imx->disable_pwr_ctrl =
+76fc9452a6bfb6 Xu Yang 2026-02-12   76  		device_property_read_bool(dev, "fsl,disable-port-power-control");
+76fc9452a6bfb6 Xu Yang 2026-02-12   77  	dwc_imx->overcur_active_low =
+76fc9452a6bfb6 Xu Yang 2026-02-12   78  		device_property_read_bool(dev, "fsl,over-current-active-low");
+76fc9452a6bfb6 Xu Yang 2026-02-12   79  	dwc_imx->power_active_low =
+76fc9452a6bfb6 Xu Yang 2026-02-12   80  		device_property_read_bool(dev, "fsl,power-active-low");
+76fc9452a6bfb6 Xu Yang 2026-02-12   81  }
+76fc9452a6bfb6 Xu Yang 2026-02-12   82  
+76fc9452a6bfb6 Xu Yang 2026-02-12   83  static void dwc3_imx_configure_glue(struct dwc3_imx *dwc_imx)
+76fc9452a6bfb6 Xu Yang 2026-02-12   84  {
+76fc9452a6bfb6 Xu Yang 2026-02-12   85  	u32		value;
+76fc9452a6bfb6 Xu Yang 2026-02-12   86  
+76fc9452a6bfb6 Xu Yang 2026-02-12   87  	if (!dwc_imx->glue_base)
+76fc9452a6bfb6 Xu Yang 2026-02-12   88  		return;
+76fc9452a6bfb6 Xu Yang 2026-02-12   89  
+76fc9452a6bfb6 Xu Yang 2026-02-12   90  	value = readl(dwc_imx->glue_base + USB_CTRL0);
+76fc9452a6bfb6 Xu Yang 2026-02-12   91  
+76fc9452a6bfb6 Xu Yang 2026-02-12   92  	if (dwc_imx->permanent_attached)
+76fc9452a6bfb6 Xu Yang 2026-02-12   93  		value |= USB_CTRL0_USB2_FIXED | USB_CTRL0_USB3_FIXED;
+76fc9452a6bfb6 Xu Yang 2026-02-12   94  	else
+76fc9452a6bfb6 Xu Yang 2026-02-12   95  		value &= ~(USB_CTRL0_USB2_FIXED | USB_CTRL0_USB3_FIXED);
+76fc9452a6bfb6 Xu Yang 2026-02-12   96  
+76fc9452a6bfb6 Xu Yang 2026-02-12   97  	if (dwc_imx->disable_pwr_ctrl)
+76fc9452a6bfb6 Xu Yang 2026-02-12   98  		value &= ~USB_CTRL0_PORTPWR_EN;
+76fc9452a6bfb6 Xu Yang 2026-02-12   99  	else
+76fc9452a6bfb6 Xu Yang 2026-02-12  100  		value |= USB_CTRL0_PORTPWR_EN;
+76fc9452a6bfb6 Xu Yang 2026-02-12  101  
+76fc9452a6bfb6 Xu Yang 2026-02-12  102  	writel(value, dwc_imx->glue_base + USB_CTRL0);
+76fc9452a6bfb6 Xu Yang 2026-02-12  103  
+76fc9452a6bfb6 Xu Yang 2026-02-12  104  	value = readl(dwc_imx->glue_base + USB_CTRL1);
+76fc9452a6bfb6 Xu Yang 2026-02-12  105  	if (dwc_imx->overcur_active_low)
+76fc9452a6bfb6 Xu Yang 2026-02-12  106  		value |= USB_CTRL1_OC_POLARITY;
+76fc9452a6bfb6 Xu Yang 2026-02-12  107  	else
+76fc9452a6bfb6 Xu Yang 2026-02-12  108  		value &= ~USB_CTRL1_OC_POLARITY;
+76fc9452a6bfb6 Xu Yang 2026-02-12  109  
+76fc9452a6bfb6 Xu Yang 2026-02-12  110  	if (dwc_imx->power_active_low)
+76fc9452a6bfb6 Xu Yang 2026-02-12  111  		value |= USB_CTRL1_PWR_POLARITY;
+76fc9452a6bfb6 Xu Yang 2026-02-12  112  	else
+76fc9452a6bfb6 Xu Yang 2026-02-12  113  		value &= ~USB_CTRL1_PWR_POLARITY;
+76fc9452a6bfb6 Xu Yang 2026-02-12  114  
+76fc9452a6bfb6 Xu Yang 2026-02-12  115  	writel(value, dwc_imx->glue_base + USB_CTRL1);
+76fc9452a6bfb6 Xu Yang 2026-02-12  116  }
+76fc9452a6bfb6 Xu Yang 2026-02-12  117  
+76fc9452a6bfb6 Xu Yang 2026-02-12  118  static void dwc3_imx_wakeup_enable(struct dwc3_imx *dwc_imx, pm_message_t msg)
+76fc9452a6bfb6 Xu Yang 2026-02-12  119  {
+76fc9452a6bfb6 Xu Yang 2026-02-12  120  	struct dwc3	*dwc = &dwc_imx->dwc;
+76fc9452a6bfb6 Xu Yang 2026-02-12  121  	u32		val;
+76fc9452a6bfb6 Xu Yang 2026-02-12  122  
+76fc9452a6bfb6 Xu Yang 2026-02-12  123  	val = readl(dwc_imx->blkctl_base + USB_WAKEUP_CTRL);
+76fc9452a6bfb6 Xu Yang 2026-02-12  124  
+76fc9452a6bfb6 Xu Yang 2026-02-12  125  	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_HOST && dwc->xhci) {
+76fc9452a6bfb6 Xu Yang 2026-02-12  126  		val |= USB_WAKEUP_EN | USB_WAKEUP_DPDM_EN;
+76fc9452a6bfb6 Xu Yang 2026-02-12  127  		if (PMSG_IS_AUTO(msg))
+76fc9452a6bfb6 Xu Yang 2026-02-12  128  			val |= USB_WAKEUP_SS_CONN | USB_WAKEUP_U3_EN;
+76fc9452a6bfb6 Xu Yang 2026-02-12  129  	} else {
+76fc9452a6bfb6 Xu Yang 2026-02-12  130  		val |= USB_WAKEUP_EN | USB_WAKEUP_VBUS_EN |
+76fc9452a6bfb6 Xu Yang 2026-02-12  131  		       USB_WAKEUP_VBUS_SRC_SESS_VAL;
+76fc9452a6bfb6 Xu Yang 2026-02-12  132  	}
+76fc9452a6bfb6 Xu Yang 2026-02-12  133  
+76fc9452a6bfb6 Xu Yang 2026-02-12  134  	writel(val, dwc_imx->blkctl_base + USB_WAKEUP_CTRL);
+76fc9452a6bfb6 Xu Yang 2026-02-12  135  }
+76fc9452a6bfb6 Xu Yang 2026-02-12  136  
+76fc9452a6bfb6 Xu Yang 2026-02-12  137  static void dwc3_imx_wakeup_disable(struct dwc3_imx *dwc_imx)
+76fc9452a6bfb6 Xu Yang 2026-02-12  138  {
+76fc9452a6bfb6 Xu Yang 2026-02-12  139  	u32	val;
+76fc9452a6bfb6 Xu Yang 2026-02-12  140  
+76fc9452a6bfb6 Xu Yang 2026-02-12  141  	val = readl(dwc_imx->blkctl_base + USB_WAKEUP_CTRL);
+76fc9452a6bfb6 Xu Yang 2026-02-12  142  	val &= ~(USB_WAKEUP_EN | USB_WAKEUP_EN_MASK);
+76fc9452a6bfb6 Xu Yang 2026-02-12  143  	writel(val, dwc_imx->blkctl_base + USB_WAKEUP_CTRL);
+76fc9452a6bfb6 Xu Yang 2026-02-12  144  }
+76fc9452a6bfb6 Xu Yang 2026-02-12  145  
+76fc9452a6bfb6 Xu Yang 2026-02-12  146  static irqreturn_t dwc3_imx_interrupt(int irq, void *data)
+76fc9452a6bfb6 Xu Yang 2026-02-12  147  {
+76fc9452a6bfb6 Xu Yang 2026-02-12  148  	struct dwc3_imx	*dwc_imx = data;
+76fc9452a6bfb6 Xu Yang 2026-02-12  149  	struct dwc3	*dwc = &dwc_imx->dwc;
+76fc9452a6bfb6 Xu Yang 2026-02-12  150  
+76fc9452a6bfb6 Xu Yang 2026-02-12  151  	if (!dwc_imx->pm_suspended)
+76fc9452a6bfb6 Xu Yang 2026-02-12  152  		return IRQ_HANDLED;
+76fc9452a6bfb6 Xu Yang 2026-02-12  153  
+76fc9452a6bfb6 Xu Yang 2026-02-12  154  	disable_irq_nosync(dwc_imx->irq);
+76fc9452a6bfb6 Xu Yang 2026-02-12  155  	dwc_imx->wakeup_pending = true;
+76fc9452a6bfb6 Xu Yang 2026-02-12  156  
+76fc9452a6bfb6 Xu Yang 2026-02-12  157  	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_HOST && dwc->xhci)
+76fc9452a6bfb6 Xu Yang 2026-02-12  158  		pm_runtime_resume(&dwc->xhci->dev);
+76fc9452a6bfb6 Xu Yang 2026-02-12  159  	else if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_DEVICE)
+76fc9452a6bfb6 Xu Yang 2026-02-12  160  		pm_runtime_get(dwc->dev);
+76fc9452a6bfb6 Xu Yang 2026-02-12  161  
+76fc9452a6bfb6 Xu Yang 2026-02-12  162  	return IRQ_HANDLED;
+76fc9452a6bfb6 Xu Yang 2026-02-12  163  }
+76fc9452a6bfb6 Xu Yang 2026-02-12  164  
+76fc9452a6bfb6 Xu Yang 2026-02-12  165  static void dwc3_imx_pre_set_role(struct dwc3 *dwc, enum usb_role role)
+76fc9452a6bfb6 Xu Yang 2026-02-12  166  {
+76fc9452a6bfb6 Xu Yang 2026-02-12  167  	if (role == USB_ROLE_HOST)
+76fc9452a6bfb6 Xu Yang 2026-02-12  168  		/*
+76fc9452a6bfb6 Xu Yang 2026-02-12  169  		 * For xhci host, we need disable dwc core auto
+76fc9452a6bfb6 Xu Yang 2026-02-12  170  		 * suspend, because during this auto suspend delay(5s),
+76fc9452a6bfb6 Xu Yang 2026-02-12  171  		 * xhci host RUN_STOP is cleared and wakeup is not
+76fc9452a6bfb6 Xu Yang 2026-02-12  172  		 * enabled, if device is inserted, xhci host can't
+76fc9452a6bfb6 Xu Yang 2026-02-12  173  		 * response the connection.
+76fc9452a6bfb6 Xu Yang 2026-02-12  174  		 */
+76fc9452a6bfb6 Xu Yang 2026-02-12  175  		pm_runtime_dont_use_autosuspend(dwc->dev);
+76fc9452a6bfb6 Xu Yang 2026-02-12  176  	else
+76fc9452a6bfb6 Xu Yang 2026-02-12  177  		pm_runtime_use_autosuspend(dwc->dev);
+76fc9452a6bfb6 Xu Yang 2026-02-12  178  }
+76fc9452a6bfb6 Xu Yang 2026-02-12  179  
+76fc9452a6bfb6 Xu Yang 2026-02-12  180  static struct dwc3_glue_ops dwc3_imx_glue_ops = {
+76fc9452a6bfb6 Xu Yang 2026-02-12  181  	.pre_set_role = dwc3_imx_pre_set_role,
+76fc9452a6bfb6 Xu Yang 2026-02-12  182  };
+76fc9452a6bfb6 Xu Yang 2026-02-12  183  
+76fc9452a6bfb6 Xu Yang 2026-02-12 @184  static const struct property_entry dwc3_imx_properties[] = {
+76fc9452a6bfb6 Xu Yang 2026-02-12 @185  	PROPERTY_ENTRY_BOOL("xhci-missing-cas-quirk"),
+76fc9452a6bfb6 Xu Yang 2026-02-12  186  	PROPERTY_ENTRY_BOOL("xhci-skip-phy-init-quirk"),
+76fc9452a6bfb6 Xu Yang 2026-02-12  187  	{},
+76fc9452a6bfb6 Xu Yang 2026-02-12  188  };
+76fc9452a6bfb6 Xu Yang 2026-02-12  189  
+76fc9452a6bfb6 Xu Yang 2026-02-12 @190  static const struct software_node dwc3_imx_swnode = {
+76fc9452a6bfb6 Xu Yang 2026-02-12  191  	.properties = dwc3_imx_properties,
+76fc9452a6bfb6 Xu Yang 2026-02-12  192  };
+76fc9452a6bfb6 Xu Yang 2026-02-12  193  
+76fc9452a6bfb6 Xu Yang 2026-02-12  194  static int dwc3_imx_probe(struct platform_device *pdev)
+76fc9452a6bfb6 Xu Yang 2026-02-12  195  {
+76fc9452a6bfb6 Xu Yang 2026-02-12  196  	struct device		*dev = &pdev->dev;
+76fc9452a6bfb6 Xu Yang 2026-02-12  197  	struct dwc3_imx		*dwc_imx;
+76fc9452a6bfb6 Xu Yang 2026-02-12  198  	struct dwc3		*dwc;
+76fc9452a6bfb6 Xu Yang 2026-02-12  199  	struct resource		*res;
+76fc9452a6bfb6 Xu Yang 2026-02-12  200  	const char		*irq_name;
+76fc9452a6bfb6 Xu Yang 2026-02-12  201  	struct dwc3_probe_data	probe_data = {};
+76fc9452a6bfb6 Xu Yang 2026-02-12  202  	int			ret, irq;
+76fc9452a6bfb6 Xu Yang 2026-02-12  203  
+76fc9452a6bfb6 Xu Yang 2026-02-12  204  	dwc_imx = devm_kzalloc(dev, sizeof(*dwc_imx), GFP_KERNEL);
+76fc9452a6bfb6 Xu Yang 2026-02-12  205  	if (!dwc_imx)
+76fc9452a6bfb6 Xu Yang 2026-02-12  206  		return -ENOMEM;
+76fc9452a6bfb6 Xu Yang 2026-02-12  207  
+76fc9452a6bfb6 Xu Yang 2026-02-12  208  	platform_set_drvdata(pdev, dwc_imx);
+76fc9452a6bfb6 Xu Yang 2026-02-12  209  	dwc_imx->dev = dev;
+76fc9452a6bfb6 Xu Yang 2026-02-12  210  
+76fc9452a6bfb6 Xu Yang 2026-02-12  211  	dwc3_imx_get_property(dwc_imx);
+76fc9452a6bfb6 Xu Yang 2026-02-12  212  
+76fc9452a6bfb6 Xu Yang 2026-02-12  213  	dwc_imx->blkctl_base = devm_platform_ioremap_resource_byname(pdev, "blkctl");
+76fc9452a6bfb6 Xu Yang 2026-02-12  214  	if (IS_ERR(dwc_imx->blkctl_base))
+76fc9452a6bfb6 Xu Yang 2026-02-12  215  		return PTR_ERR(dwc_imx->blkctl_base);
+76fc9452a6bfb6 Xu Yang 2026-02-12  216  
+76fc9452a6bfb6 Xu Yang 2026-02-12  217  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "glue");
+76fc9452a6bfb6 Xu Yang 2026-02-12  218  	if (!res) {
+76fc9452a6bfb6 Xu Yang 2026-02-12  219  		dev_warn(dev, "Base address for glue layer missing\n");
+76fc9452a6bfb6 Xu Yang 2026-02-12  220  	} else {
+76fc9452a6bfb6 Xu Yang 2026-02-12  221  		dwc_imx->glue_base = devm_ioremap_resource(dev, res);
+76fc9452a6bfb6 Xu Yang 2026-02-12  222  		if (IS_ERR(dwc_imx->glue_base))
+76fc9452a6bfb6 Xu Yang 2026-02-12  223  			return PTR_ERR(dwc_imx->glue_base);
+76fc9452a6bfb6 Xu Yang 2026-02-12  224  	}
+76fc9452a6bfb6 Xu Yang 2026-02-12  225  
+76fc9452a6bfb6 Xu Yang 2026-02-12  226  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "core");
+76fc9452a6bfb6 Xu Yang 2026-02-12  227  	if (!res)
+76fc9452a6bfb6 Xu Yang 2026-02-12  228  		return dev_err_probe(dev, -ENODEV, "missing core memory resource\n");
+76fc9452a6bfb6 Xu Yang 2026-02-12  229  
+76fc9452a6bfb6 Xu Yang 2026-02-12  230  	dwc_imx->hsio_clk = devm_clk_get_enabled(dev, "hsio");
+76fc9452a6bfb6 Xu Yang 2026-02-12  231  	if (IS_ERR(dwc_imx->hsio_clk))
+76fc9452a6bfb6 Xu Yang 2026-02-12  232  		return dev_err_probe(dev, PTR_ERR(dwc_imx->hsio_clk),
+76fc9452a6bfb6 Xu Yang 2026-02-12  233  				     "Failed to get hsio clk\n");
+76fc9452a6bfb6 Xu Yang 2026-02-12  234  
+76fc9452a6bfb6 Xu Yang 2026-02-12  235  	dwc_imx->suspend_clk = devm_clk_get_enabled(dev, "suspend");
+76fc9452a6bfb6 Xu Yang 2026-02-12  236  	if (IS_ERR(dwc_imx->suspend_clk))
+76fc9452a6bfb6 Xu Yang 2026-02-12  237  		return dev_err_probe(dev, PTR_ERR(dwc_imx->suspend_clk),
+76fc9452a6bfb6 Xu Yang 2026-02-12  238  				     "Failed to get suspend clk\n");
+76fc9452a6bfb6 Xu Yang 2026-02-12  239  
+76fc9452a6bfb6 Xu Yang 2026-02-12  240  	irq = platform_get_irq_byname(pdev, "wakeup");
+76fc9452a6bfb6 Xu Yang 2026-02-12  241  	if (irq < 0)
+76fc9452a6bfb6 Xu Yang 2026-02-12  242  		return irq;
+76fc9452a6bfb6 Xu Yang 2026-02-12  243  	dwc_imx->irq = irq;
+76fc9452a6bfb6 Xu Yang 2026-02-12  244  
+76fc9452a6bfb6 Xu Yang 2026-02-12  245  	irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s:wakeup", dev_name(dev));
+76fc9452a6bfb6 Xu Yang 2026-02-12  246  	if (!irq_name)
+76fc9452a6bfb6 Xu Yang 2026-02-12  247  		return dev_err_probe(dev, -ENOMEM, "failed to create irq_name\n");
+76fc9452a6bfb6 Xu Yang 2026-02-12  248  
+76fc9452a6bfb6 Xu Yang 2026-02-12  249  	ret = devm_request_threaded_irq(dev, irq, NULL, dwc3_imx_interrupt,
+76fc9452a6bfb6 Xu Yang 2026-02-12  250  					IRQF_ONESHOT | IRQF_NO_AUTOEN,
+76fc9452a6bfb6 Xu Yang 2026-02-12  251  					irq_name, dwc_imx);
+76fc9452a6bfb6 Xu Yang 2026-02-12  252  	if (ret)
+76fc9452a6bfb6 Xu Yang 2026-02-12  253  		return dev_err_probe(dev, ret, "failed to request IRQ #%d\n", irq);
+76fc9452a6bfb6 Xu Yang 2026-02-12  254  
+76fc9452a6bfb6 Xu Yang 2026-02-12 @255  	ret = device_add_software_node(dev, &dwc3_imx_swnode);
+76fc9452a6bfb6 Xu Yang 2026-02-12  256  	if (ret)
+76fc9452a6bfb6 Xu Yang 2026-02-12  257  		return dev_err_probe(dev, ret, "failed to add software node\n");
+76fc9452a6bfb6 Xu Yang 2026-02-12  258  
+76fc9452a6bfb6 Xu Yang 2026-02-12  259  	dwc3_imx_configure_glue(dwc_imx);
+76fc9452a6bfb6 Xu Yang 2026-02-12  260  
+76fc9452a6bfb6 Xu Yang 2026-02-12  261  	dwc = &dwc_imx->dwc;
+76fc9452a6bfb6 Xu Yang 2026-02-12  262  	dwc->dev = dev;
+76fc9452a6bfb6 Xu Yang 2026-02-12  263  	dwc->glue_ops = &dwc3_imx_glue_ops;
+76fc9452a6bfb6 Xu Yang 2026-02-12  264  
+76fc9452a6bfb6 Xu Yang 2026-02-12  265  	probe_data.res = res;
+76fc9452a6bfb6 Xu Yang 2026-02-12  266  	probe_data.dwc = dwc;
+76fc9452a6bfb6 Xu Yang 2026-02-12  267  	probe_data.properties = DWC3_DEFAULT_PROPERTIES;
+76fc9452a6bfb6 Xu Yang 2026-02-12  268  	probe_data.properties.needs_full_reinit = true;
+76fc9452a6bfb6 Xu Yang 2026-02-12  269  
+76fc9452a6bfb6 Xu Yang 2026-02-12  270  	ret = dwc3_core_probe(&probe_data);
+76fc9452a6bfb6 Xu Yang 2026-02-12  271  	if (ret) {
+76fc9452a6bfb6 Xu Yang 2026-02-12 @272  		device_remove_software_node(dev);
+76fc9452a6bfb6 Xu Yang 2026-02-12  273  		return ret;
+76fc9452a6bfb6 Xu Yang 2026-02-12  274  	}
+76fc9452a6bfb6 Xu Yang 2026-02-12  275  
+76fc9452a6bfb6 Xu Yang 2026-02-12  276  	device_set_wakeup_capable(dev, true);
+76fc9452a6bfb6 Xu Yang 2026-02-12  277  	return 0;
+76fc9452a6bfb6 Xu Yang 2026-02-12  278  }
+76fc9452a6bfb6 Xu Yang 2026-02-12  279  
+
+:::::: The code at line 74 was first introduced by commit
+:::::: 76fc9452a6bfb63a297fa0410d5368a691ed411b usb: dwc3: introduce flatten model driver of i.MX Soc
+
+:::::: TO: Xu Yang <xu.yang_2@nxp.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
