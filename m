@@ -1,97 +1,185 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625B4334374;
-	Thu, 30 Apr 2026 15:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B508044D020
+	for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 15:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777563492; cv=none; b=U6DUXSmrT589vMWDenHBcMHHFIy89p09SpDCsfZTfbLHcqbKmZpRPKzefK01H4+Fvcgkg/DJWaOeggHMQj7qEansLo/PeNwKrpW9j0QRwjwZywUnKzDr+hXBfxL6vtCnq6vQsLHDLRomV4S2MnTtuZLX2MaaLsZg6/i2QzcwTlE=
+	t=1777564355; cv=none; b=Hy4JG+HhWYK96QqRp4YOXLyIxWCnQgIrBklxrDAY/7tOyQEZWYqwbo2r/sQI7J1Qv3dIs6HQvNgwFPjLg7k36Bkfa9Vl2EI7CRdpoKqT3dZGmW4NAvjGaXXB70M4fYmXUGUfF56XS3XVoVBHQFWjL7fYg2eS9R0i/gJ0gqNY/Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777563492; c=relaxed/simple;
-	bh=cas+fx9QXakeDSvStqAi7Mu9SLnLX6s+1H6MiiTcWN4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R2t0WXTJosw+9U9xWPAXrLEG5jZDRYm3F3i+fLHjr5O9g0uxvao3i8U1K1wjPB0TSaOLXRiqtrb+nvUUA8u5rdp6XeNdT+6MGmaPhgQV0njPpkobvPk/61lcoKtyg3TpYd9ke63ScLDo5VAo9mTljP5lv8kSrfCvn2HD77457OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KAu6CO/j; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777564355; c=relaxed/simple;
+	bh=IVuRovaZgc8SddgoaRNsscreGxylGaJxwXyqkS/+dG8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=VJ003lQr9T88d9gTSZpmwFEXj2P7eGM7qYeO9Gvre4kh20tMbWvGFdRgZo3LEqeE+BibILcgC/UP+jCLcxaXByfZUw7G6p2oOPV0/bYKxQ0nMTgZJEwatmEbl0b5rX013vXc9QkQ72IK23/iAxCuHvmnL2ZMo2mznX5lQUrdU7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VPyUq8/4; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KAu6CO/j"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777563489; x=1809099489;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cas+fx9QXakeDSvStqAi7Mu9SLnLX6s+1H6MiiTcWN4=;
-  b=KAu6CO/jiife/dVS4YSBB3AiGZU1YzY9xiwxRiyS7h1oaQpSWbYnyBSj
-   sOkWJWHd4Vyr7RF27Jvo7NHhok8s76AIF4z+f+de/GZOj6NkGPECdgafS
-   aQtNAQN8kRMD1D7VYB+PNiFVsROCKX6EDvcbmtLDEPCh6s72HHq52cOWu
-   9F97l7NgXAj0fvCApYhcXpMzvmOiwp2fMDfhcHmS9cI19XDD7afwqLQ25
-   DzMIaX7e8a73aV9gl2cGWViT50xTSYm7scCo+KtW169txqQGwUh53wNaD
-   R37nNbgHDEtb8SHr1bSVKCk/fPgO1Lka4hss4OgMqRjJEKJARlxEWioCk
-   Q==;
-X-CSE-ConnectionGUID: 1LKAlbEBTri2fDlTyTARNA==
-X-CSE-MsgGUID: czLjHTnWTnSj8s7ai6OsBg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11772"; a="78711874"
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="78711874"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 08:36:41 -0700
-X-CSE-ConnectionGUID: 0mtNTPv5QliVKNuQbrjNuQ==
-X-CSE-MsgGUID: dPci9gAPRvmQGjxZuj+76g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="230261005"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 30 Apr 2026 08:36:38 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wITRK-00000000CXY-2GqI;
-	Thu, 30 Apr 2026 15:36:34 +0000
-Date: Thu, 30 Apr 2026 23:36:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ren Wei <n05ec@lzu.edu.cn>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, jbenc@redhat.com,
-	yuantan098@gmail.com, yifanwucs@gmail.com, tomapufckgml@gmail.com,
-	bird@lzu.edu.cn, lx24@stu.ynu.edu.cn, caoruide123@gmail.com,
-	n05ec@lzu.edu.cn
-Subject: Re: [PATCH net 1/1] net: nsh: handle nested NSH headers during GSO
-Message-ID: <202604302359.kU59LnTI-lkp@intel.com>
-References: <6112cce99b4e3571444a616d0fb19e91e2fcca72.1776597598.git.caoruide123@gmail.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VPyUq8/4"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48a563e4ef7so11099355e9.0
+        for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 08:52:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1777564351; x=1778169151; darn=lists.linux.dev;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o4xVis6IyBoFIIIn2ZBx1+0WJXecMf9Jb/aMUHHXR+8=;
+        b=VPyUq8/4m4XVC+CqjXbTM7N9TJnZV3dcGDAFNppUcprzdWH+BYKzBlpPfB3Dx9gMva
+         gMjg7L616X/OMt5nAvXuj3k19cf0uAKbiP1keWTK1Xw9+jSuG1cbV55+a6W0cLHaVdwA
+         bl+DVFz3o7L9gXkUwIAJZnk6B4HXB7EEMITWuAWx1Ze5KU2wAHj+dWCHiNpIsSF0bXec
+         NpA1hi1nubZc5BmMjNS3bxUisJVz6joG6mciawzYujcJ9KSfwc/6Dv873ChP5NMG2koi
+         RQK+6UJj4gX5T2o7e20pz9LR39mKxP9uaLXnhlIiLDHBYozw6Xip2NaqvrYOexNZM0TT
+         qZ3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777564351; x=1778169151;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o4xVis6IyBoFIIIn2ZBx1+0WJXecMf9Jb/aMUHHXR+8=;
+        b=aEL/nsuWapSskwpjqRdbs0z9yRLnJJ/D5eBFs7qrEgrzoMwhm3xbBjWwv9lAv7QJDQ
+         i/Ss/r0DPp1vK2UfA7tZ7qx63YcS74GKlMI0xpbPl/apIgGgHmBm9CZayv4ujBpqr1EG
+         jygOBfUtnIj4CDMl1lhuJZ75EczQOMzkZMV5Nh+3NKKUN/EUqM6zCfHxRMDbrgVLACeF
+         3X4DfzeQGsBKeT9vx38wSLRwuMb92buuJ1Qpq0Th86F/PF9MvuRYcgtkIItu4cT2rUgR
+         sEPt7JBZzm4jpZguQgXj1ABLC95tDX7GckVEb8zd+LdsuPlUwz8wynpUkiNiOZ2ngL+c
+         rpPA==
+X-Forwarded-Encrypted: i=1; AFNElJ94F9wHSuvTmTWmeE035EIYZs3BpkvZxWuRQUEMWIoqBosntkXAdWF/1FkNkEyCOFabh1jM@lists.linux.dev
+X-Gm-Message-State: AOJu0YxBBoQiSXX7US47U2RHmhSI0qf638lKAYGlr8E3E8xNJcuryF2P
+	4xiKhjdDjmXxAAaz7pKdXpjQv7a14ejvY4VgyJDF+2XKybyw0ftCzL3w6xM6TeeYRQ4=
+X-Gm-Gg: AeBDietgPiemU3uPZpHemvBcV3kHT3kvaHCmRdaVspIS7fs2qL/XXFdQda/+Xvwf/br
+	jTa9GqZe1jZZXP91GS/rQSWlvTk5ndpw9/3ELT3u/xiuo4Pbj79ZjpQOnYEC4EkWxmMo+z01h8A
+	MrS9J6lblZKbeks8nhcqZNfj1y2BbhUefKCWY4gvbjsSYAm1v0XPiMaXBK/yHUPgnsvsfM4DHZm
+	nqzpS2v3igHEvjjOpWJd8qCbqNuY4ql1wBUo9DRQlo6Zwsg0IroVMfBVWpCdMp/B80D6fDd0/Jd
+	/SvYSRwTx08Nk1pDWF807YxL2UvLFB9lsj7pw+V5axaAgOdJmTru6Jb08lpAiOwlf+JJy+/nDWM
+	HCG2vYI2JcauA200r5oUH92n/eTRn8BZo/ORcdSwvqisnCkiCeA98hOwOEJAqRtj7QpgezGDAjD
+	XCQQMmSarYr8s3zD4FRMLWrkU=
+X-Received: by 2002:a05:600c:a401:b0:488:c80c:c236 with SMTP id 5b1f17b1804b1-48a83f6e3a3mr43007835e9.5.1777564350835;
+        Thu, 30 Apr 2026 08:52:30 -0700 (PDT)
+Received: from localhost ([2804:7f0:b765:105d:2ecf:67ff:fe81:9da0])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12de326a583sm9901061c88.14.2026.04.30.08.52.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2026 08:52:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6112cce99b4e3571444a616d0fb19e91e2fcca72.1776597598.git.caoruide123@gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 30 Apr 2026 12:52:28 -0300
+Message-Id: <DI6LZ06Q21O2.38ZFZEES9W13N@suse.com>
+To: <bot+bpf-ci@kernel.org>, <rbm@suse.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <shuah@kernel.org>,
+ <nathan@kernel.org>, <nick.desaulniers+lkml@gmail.com>, <morbo@google.com>,
+ <justinstitt@google.com>
+From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+Subject: Re: [PATCH bpf-next v10 07/11] selftests/bpf: Skip tests whose
+ objects were not built
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+ <alan.maguire@oracle.com>, <martin.lau@kernel.org>, <clm@meta.com>,
+ <ihor.solodrai@linux.dev>
+X-Mailer: aerc 0.21.0-120-g22b95d38161f
+References: <20260430-selftests-bpf_misconfig-v10-7-cd302a31af16@suse.com>
+ <deceeca5bb5e141c8ad07c5ed3754c6b2613fa0b99383614f1cfcc31bd09d39c@mail.kernel.org>
+In-Reply-To: <deceeca5bb5e141c8ad07c5ed3754c6b2613fa0b99383614f1cfcc31bd09d39c@mail.kernel.org>
 
-Hi Ren,
+On Thu Apr 30, 2026 at 10:30 AM -03, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/se=
+lftests/bpf/test_progs.c
+>> index cc14b13e23fe..7ba82974ee78 100644
+>> --- a/tools/testing/selftests/bpf/test_progs.c
+>> +++ b/tools/testing/selftests/bpf/test_progs.c
+>
+> [ ... ]
+>
+>> @@ -2046,15 +2069,20 @@ int main(int argc, char **argv)
+>>  		struct prog_test_def *test =3D &prog_test_defs[i];
+>>
+>>  		test->test_num =3D i + 1;
+>> -		test->should_run =3D should_run(&env.test_selector,
+>> -					      test->test_num, test->test_name);
+>> +		test->selected =3D should_run(&env.test_selector,
+>> +					    test->test_num, test->test_name);
+>> +		test->should_run =3D test->selected;
+>>
+>> -		if ((test->run_test =3D=3D NULL && test->run_serial_test =3D=3D NULL)=
+ ||
+>> -		    (test->run_test !=3D NULL && test->run_serial_test !=3D NULL)) {
+>> +		if (test->run_test && test->run_serial_test) {
+>>  			fprintf(stderr, "Test %d:%s must have either test_%s() or serial_tes=
+t_%sl() defined.\n",
+>>  				test->test_num, test->test_name, test->test_name, test->test_name);
+>>  			exit(EXIT_ERR_SETUP_INFRA);
+>>  		}
+>> +		if (!test->run_test && !test->run_serial_test) {
+>> +			test->not_built =3D true;
+>> +			test->should_run =3D false;
+>> +			continue;
+>> +		}
+>>  		if (test->should_run)
+>>  			test->should_tmon =3D should_tmon(&env.tmon_selector, test->test_nam=
+e);
+>>  	}
+>> @@ -2106,9 +2134,18 @@ int main(int argc, char **argv)
+>>
+>>  	for (i =3D 0; i < prog_test_cnt; i++) {
+>>  		struct prog_test_def *test =3D &prog_test_defs[i];
+>> +		struct test_state *state =3D &test_states[i];
+>>
+>> -		if (!test->should_run)
+>> +		if (!test->should_run) {
+>> +			if (test->not_built && test->selected &&
+>> +			    !env.get_test_cnt && !env.list_test_names) {
+>> +				state->tested =3D true;
+>> +				state->skip_cnt =3D 1;
+>> +				env.not_built_cnt++;
+>> +				print_test_result(test, state);
+>> +			}
+>>  			continue;
+>> +		}
+>
+> When test->should_run is false (which it is for unbuilt tests due to the
+> code above setting test->should_run =3D false), the continue statement sk=
+ips
+> the env.get_test_cnt and env.list_test_names blocks that follow.
+>
+> Won't this completely omit unbuilt tests from the output of --list (-l) a=
+nd
+> --count modes? The code only prints unbuilt tests when !env.get_test_cnt =
+&&
+> !env.list_test_names is true.
 
-kernel test robot noticed the following build errors:
+It makes no sense to count and list tests that can't be run.
 
-[auto build test ERROR on net/main]
+>
+> If CI systems use test_progs -l to discover and distribute tests across
+> parallel jobs, they won't be aware of unbuilt tests. Could this undermine
+> the stated goal of keeping unbuilt tests visible in CI results?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ren-Wei/net-nsh-handle-nested-NSH-headers-during-GSO/20260423-084001
-base:   net/main
-patch link:    https://lore.kernel.org/r/6112cce99b4e3571444a616d0fb19e91e2fcca72.1776597598.git.caoruide123%40gmail.com
-patch subject: [PATCH net 1/1] net: nsh: handle nested NSH headers during GSO
-config: i386-randconfig-003-20260430 (https://download.01.org/0day-ci/archive/20260430/202604302359.kU59LnTI-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604302359.kU59LnTI-lkp@intel.com/reproduce)
+Only if the CI in question sets BPF_STRICT_BUILD=3D0, which is not usually
+the case and if opted-in then the user will know that some tests might not
+appear and be counted.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604302359.kU59LnTI-lkp@intel.com/
+>
+> Reference: sashiko-bot raised this concern in v10 discussion at
+> https://lore.kernel.org/bpf/20260430131344.B40DDC2BCB3@smtp.kernel.org/
+>
+>>
+>>  		if (env.get_test_cnt) {
+>>  			env.succ_cnt++;
+>
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/251670=
+06036
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "skb_network_protocol" [net/nsh/nsh.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
