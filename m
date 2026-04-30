@@ -1,110 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A70428466;
-	Thu, 30 Apr 2026 13:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C122580D7;
+	Thu, 30 Apr 2026 13:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777555855; cv=none; b=VLFegq0RmETxgf3B3bP3Y5pXYWJhiIJvFYHktOfgFfEUWPOCrN2OCpUi5fqbjjq7dHrV5jQdP/6r8zRS7vpLcHQGCiKYQiARAN3BpzHXc6CxwM098p2TnxXr8u8BGCBXRItURgO/0etN1qOPGlfOJsiLTV/LtAF6EA40/WYE9sM=
+	t=1777556416; cv=none; b=Q0/fwPHdZyxwWrR/mQYPWWCpalePESIsrNX8VK9WBNTI9EuNahtpp4NKXgQZ8zIFIuuYKYVkAdKrNjFsujTHLtqkN9gy/hitkH/QsVNhSDcPJQYqkVf8a1zgaK2dwAhXxI46dS5mdkVT9cisn0avoGdq3/7BlkIBVFJ4MHl0KGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777555855; c=relaxed/simple;
-	bh=ax+ZlzG3JzpEyOXWLGjBwvOJikwf72NuWSrlZfkyUjc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=dqeAgQq7ggUubxy/u3wzqyWFC0RuAsN10wbU7S/E4cA3ojuZu4pxWOAKcIQbVj8NzaeeyehQgThFD3aCAHHSCfvzrLEbKvf9ozrEf625iJhYysAKECUgQmxyBYfyKxT3K99xZPUA8m7VxSEt/gtLB1O28Wvi5gSOLyNV/fzA49s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nn4ZH4IM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777556416; c=relaxed/simple;
+	bh=7U8ayXs8dLaDtAfBoZdyIo0zZFSxc/yxzpat1zXZUMw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L6oVX2HjZoacZKWASXheMlYzz4ckp0SIGZgV/EMTfugNTM9+yD9W41JeJRp1BftgLnRMUcjgaSvVpR5dFCw67mZd0RuNJI+F4KpuGzCZW0f3NZPYdsh1ZAsKzXjaVEvl18U8SXlJe7MkCaWWywWDbS+0uacITWly0bYGqPIy+qY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWLOgp/7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nn4ZH4IM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D509C2BCB3;
-	Thu, 30 Apr 2026 13:30:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWLOgp/7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15BA0C2BCB3;
+	Thu, 30 Apr 2026 13:40:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777555855;
-	bh=ax+ZlzG3JzpEyOXWLGjBwvOJikwf72NuWSrlZfkyUjc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Nn4ZH4IM8mAh7wzJ7Hs0EXFwva7EvObCD/4pI2dNyr3Rd8YvWnQlzsOuPxRpurhzd
-	 pW70HIQvfZfTMMqb1GWcwj6Fuv2Zy5IfF/unB3SHO1heMARKh1Phn9e7hPNSPDxL7C
-	 a+mOQKAwoExvgQOl6oucmjb9mRsbS7SCD9y2daHw+GFE/6+kARMVTrwPWX6MR0Y7oJ
-	 8bw793TBWO5W7zX5k3HdrJ0guU2H+FVT4YXyakStStq8ZN0Ri3LBsf2e1cu0D/HvWn
-	 BHH0QXvkCD0b0R5co8ZszOWdH1LbwJlDPRm0Ez0GMpUhUa2H1rtSwgcZClYopog+vh
-	 icong+Vjzp9ug==
-Content-Type: multipart/mixed; boundary="===============9109038514088101794=="
+	s=k20201202; t=1777556416;
+	bh=7U8ayXs8dLaDtAfBoZdyIo0zZFSxc/yxzpat1zXZUMw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=VWLOgp/7lmtUIlfIBQsumZu9DqNoyrI6AFV/UJZFNKHwi3s2WunGOAVYOtVpexm0H
+	 oo3XENSmWYRSIE31RiCAYVpqkRwPC1RuQuBRkO0UBZpZrwLJBv9InZA0xaL/JlZyFz
+	 eNklDEVLen2i/TmnQzAjSQbPLDsR4hH/R8BYHQncZETlDt2g87pUfun60PtKxa0VYw
+	 6aoAt2KanmXWVK41cR2Sx9eJImTYV5lwIjdNAjColajbxOEgjmfGWfgNLEsl/Hplp9
+	 XfTzLgIdw6QK5Feg2nPX+FgGRJGZ4kaCeL5TuBCAACgag/3t6JDueiFS+a77nEbkaR
+	 DRcbb6fDXV/nA==
+Message-ID: <9c321184-9080-4d5c-bd1a-a16cd0bbaed3@kernel.org>
+Date: Thu, 30 Apr 2026 15:40:08 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <9f76c238686812e3453aa5541d2a6db53ece8414508a8176a6e556d1eb372254@mail.kernel.org>
-In-Reply-To: <20260430-selftests-bpf_misconfig-v10-10-cd302a31af16@suse.com>
-References: <20260430-selftests-bpf_misconfig-v10-10-cd302a31af16@suse.com>
-Subject: Re: [PATCH bpf-next v10 10/11] selftests/bpf: Provide weak definitions for cross-test functions
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 30 Apr 2026 13:30:52 +0000 (UTC)
-
---===============9109038514088101794==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] slab: fix kernel-docs for mm-api
+Content-Language: en-US
+To: Marco Elver <elver@google.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>,
+ Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Alexander Potapenko <glider@google.com>,
+ Dmitry Vyukov <dvyukov@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
+ llvm@lists.linux.dev, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <20260424132427.2703076-1-elver@google.com>
+ <20260424132427.2703076-2-elver@google.com>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+In-Reply-To: <20260424132427.2703076-2-elver@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> index 35adc3f6d443..5a864cd8ad1b 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> @@ -252,10 +252,17 @@ static void kprobe_multi_attach_api_subtest(void)
->  	kprobe_multi__destroy(skel);
->  }
->
-> -/* defined in prog_tests/uprobe_multi_test.c */
-> -void uprobe_multi_func_1(void);
-> -void uprobe_multi_func_2(void);
-> -void uprobe_multi_func_3(void);
-> +/*
-> + * Weak uprobe target stubs. noinline is required because
-> + * uprobe_multi_test_run() takes their addresses to configure the BPF
-> + * program's attachment points; an inlined function has no stable
-> + * address in the binary to probe. The strong definitions in
-> + * uprobe_multi_test.c take precedence when that translation unit is
-> + * linked.
-> + */
-> +noinline __weak void uprobe_multi_func_1(void) {}
-> +noinline __weak void uprobe_multi_func_2(void) {}
-> +noinline __weak void uprobe_multi_func_3(void) {}
+On 4/24/26 15:24, Marco Elver wrote:
+> The mm-api kernel-doc comments have been broken for a while, as many
+> documented symbols shifted from being direct function definitions to
+> macros wrapping _noprof implementations during the introduction of
+> allocation tagging (starting with commit 7bd230a26648 "mm/slab: enable
+> slab allocation tagging for kmalloc and friends").
+> 
+> When the kernel-doc block remains above the internal implementation
+> function but uses the public API name, the documentation generator fails
+> to associate the documented symbol and generates warnings and fails to
+> emit the documentation.
+> 
+> Fix this by:
+> 
+> 1. Moving the kernel-doc comment blocks from slub.c to slab.h, placing
+>    them directly above the user-facing macros.
+> 
+> 2. Converting the variadic macros for the documented APIs to use
+>    explicit arguments.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Marco Elver <elver@google.com>
 
-Can compiler optimization passes like Identical Code Folding (ICF) merge
-these three structurally identical weak stub functions into a single
-memory address?
++Cc Jon
 
-If they are folded into a single address, bpf_program__attach_uprobe_multi()
-would attach three separate uprobes to the exact same offset, each with a
-different cookie. Calling any of the functions would then execute the shared
-address, triggering all three uprobes simultaneously:
+I thought it was supposed to work because the kernel-doc scripts were at the
+time taught by commit 51a7bf0238c2 ("scripts/kernel-doc: drop "_noprof" on
+function prototypes") to handle _noprof. In the current form git grep finds:
 
-  uprobe_multi_test_run() {
-      uprobe_multi_func_1();  // triggers all 3 uprobes
-      uprobe_multi_func_2();  // triggers all 3 uprobes
-      uprobe_multi_func_3();  // triggers all 3 uprobes
-  }
+tools/lib/python/kdoc/kdoc_parser.py:        suffixes = [ '_noprof' ]
+tools/lib/python/kdoc/xforms_lists.py:        (KernRe("_noprof"), ""),
 
-This would increment the BPF program counters multiple times per call,
-causing assertions like:
+Doesn't it work for you then?
 
-  ASSERT_EQ(skel->bss->uprobe_multi_func_1_result, 1, ...);
-
-to fail deterministically, as the result would be 3 instead of 1.
-
-Would it make sense to make these stubs structurally unique, perhaps by
-adding unique inline assembly to each?
-
-This concern was raised by sashiko-bot@kernel.org in v9:
-https://lore.kernel.org/bpf/20260429212931.44DD4C19425@smtp.kernel.org/
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25167006036
---===============9109038514088101794==--
