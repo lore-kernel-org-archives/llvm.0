@@ -1,67 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD27D40242F;
-	Thu, 30 Apr 2026 12:12:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C900407575;
+	Thu, 30 Apr 2026 12:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777551151; cv=none; b=OKuIM07oLpi+LRIHMWf7+wMX7lx+wktXR11lUr1Wmbpk8Q+zNvYfZmjRubo0GZFR7tYDWZBGwIe4wLpJ6tqo6fwWouH/CctwR5RQUwBx1Ys01BMExjTVrG2RbuaBKQOky/dLWmg5Xv/ek8TT0uhASFJXVLm4/jCKJUtmzkpxrLo=
+	t=1777553317; cv=none; b=pUuVWHgNCerlcBtjpPn0oMyAh1umgbTE39sVjP8QyEX3HuI/4++7atdke32etboVLwoaNJe2vEqPBXShQjoiaXWl5Haykl4jApVzJm1+O+Rq3gQbHQDiemnAQc3erPVL6PU1SheCBVtHIQ8Kep6yoz/H9P2w/LVg3az9vI8ee/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777551151; c=relaxed/simple;
-	bh=4YV9b18f8f4b5MeLSUeaxJ5IPV69qM3nQn3s4UPwTy8=;
+	s=arc-20240116; t=1777553317; c=relaxed/simple;
+	bh=/hNyPlR1yP8uL5nQkqngnOmReWAfP6PDqPiI+kJEThc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N1Ztoe7EvvwPf4k8shPjKYkpkuLCJZB3t40bH5VDDcZjkrrBmS5+YJGPVxhatIMDbmU2TghlV3toOZwVz3hWoQyGq3uZbU5oCdDu2fOBYW64NS7WbCvnPdEkKK6XdbeielzexfSQOO83mn2a+gsz1lglAnkIpSMEXYtejfipXsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C37fcfCF; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=EKl217QGDIbjaMGfOt7DFk1ytridZ7byNB4t/x9vcgIIT7jsL1ghHSL2oJYWhXOLANrcj1i+lFgkEGcDFNzBtsED8qO0T7Dpd20wZHWHf3JQDN917ZR/kj/lR1PdsxAxHkulVX7AVw/VGGJ5JwMHE7yESkslBaEK7b7RQB+3lP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ivr62qPx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C37fcfCF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777551149; x=1809087149;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4YV9b18f8f4b5MeLSUeaxJ5IPV69qM3nQn3s4UPwTy8=;
-  b=C37fcfCFczQ0FIMuLjycdVCdwBpgCFaQ2nocKAtY047KgCZIDW15shwg
-   MZS44UBgXgYHUhCaarDgYTDi5njJ1dPZKTFbI3rf9jWgy8o0isjAuHr4U
-   S8it2iJDasJuLE4Ebk0aaFMIb/1CDoFKKyt7orZZGeal2MQ9IL2tzOYLR
-   e/r4SX+unc0FJVOyGVb1V8ux6LYzPvh78LtKpWUjHPzec954eo5WTHpDP
-   Ikf4e/hhZmTud18keft8j7EHbc+7gzpZY/Puo5ckgZrLDMT0I/TVuuL1b
-   87RL0EOFg2+N3ICRd7TJftkMhptZ83t4d2mW0divhyz6lsMkiscZbJGaQ
-   A==;
-X-CSE-ConnectionGUID: yuCSoiLuS+6zY9DIWfaRDw==
-X-CSE-MsgGUID: WdrKVXspTEyJLj//2DW34A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="77664035"
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="77664035"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 05:12:28 -0700
-X-CSE-ConnectionGUID: Dq6Uoh7LT6yvJqZLcghOxg==
-X-CSE-MsgGUID: 1AxaonX6S+WHSxvpsffp5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="258143804"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 30 Apr 2026 05:12:24 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wIQFh-00000000CNa-211v;
-	Thu, 30 Apr 2026 12:12:21 +0000
-Date: Thu, 30 Apr 2026 20:11:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@kernel.org>, Steve French <sfrench@samba.org>,
-	Enzo Matsumiya <ematsumiya@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Arnd Bergmann <arnd@arndb.de>, Paulo Alcantara <pc@manguebit.org>,
-	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
-	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
-	Bharath SM <bharathsm@microsoft.com>,
-	Stefan Metzmacher <metze@samba.org>,
-	Namjae Jeon <linkinjeon@kernel.org>, linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] smb: client: hide unused cifs_debug_dirs_proc_ops
-Message-ID: <202604302014.zKNhMog5-lkp@intel.com>
-References: <20260423065042.1898971-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ivr62qPx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 394F5C2BCB9;
+	Thu, 30 Apr 2026 12:48:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777553317;
+	bh=/hNyPlR1yP8uL5nQkqngnOmReWAfP6PDqPiI+kJEThc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ivr62qPxgF2KlaaJ0RIqSNgydjnPfCTCu6cd0ALBdMEDiGTAv4LNKMt4O3ECUVFgm
+	 ZUEOU4Ycwn6eS2riwp87Dy1qqhtLELoyE+HBtrhMXIBbhLWNrzwxknAIItAr9lRTcr
+	 ZFKrGqx2QrmA+LjK7xnQqk2du14FMhYcBDV20eaYoOnK4lSjijPXhr3zXqUmxQe/gZ
+	 n/lRcpKPjQv+2tSTpEbqrYRzZTV+i22d3vHjJku65YOpzl9/5Xs4kgq/DX5wWyuWIj
+	 DQvUkCX8gpeJcHE8fC3brcFxCcZ4U8kbav2InIuXjMld08kxjOoK1koLjIiiQ628Lb
+	 QyzTb8CNL/zig==
+Date: Thu, 30 Apr 2026 14:48:32 +0200
+From: Niklas Cassel <cassel@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: dayou5941@163.com, dlemoal@kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-ide@vger.kernel.org,
+	linux-kernel@vger.kernel.org, liyouhong@kylinos.cn
+Subject: Re: [PATCH] ata: libahci: fix panic when accessing ports beyond MMIO
+ region
+Message-ID: <afNPoLj-CbigNxRz@ryzen>
+References: <20260422080322.1006592-1-dayou5941@163.com>
+ <202604300815.6kpEidbJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,84 +45,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260423065042.1898971-1-arnd@kernel.org>
+In-Reply-To: <202604300815.6kpEidbJ-lkp@intel.com>
 
-Hi Arnd,
+On Thu, Apr 30, 2026 at 08:59:57AM +0800, kernel test robot wrote:
+> Hi,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v7.1-rc1 next-20260429]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/dayou5941-163-com/ata-libahci-fix-panic-when-accessing-ports-beyond-MMIO-region/20260422-192119
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/20260422080322.1006592-1-dayou5941%40163.com
+> patch subject: [PATCH] ata: libahci: fix panic when accessing ports beyond MMIO region
+> config: arm64-randconfig-003-20260430 (https://download.01.org/0day-ci/archive/20260430/202604300815.6kpEidbJ-lkp@intel.com/config)
+> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+> rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604300815.6kpEidbJ-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202604300815.6kpEidbJ-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    drivers/ata/libahci.c:614:18: warning: missing terminating '"' character [-Winvalid-pp-token]
+>      614 |                         dev_warn(dev, "Port %d (offset 0x%llx) exceeds MMIO region (0x%llx),
+>          |                                       ^
+>    drivers/ata/libahci.c:615:44: warning: missing terminating '"' character [-Winvalid-pp-token]
+>      615 |                                        truncating port map at port %d\n",
+>          |                                                                        ^
+> >> drivers/ata/libahci.c:614:18: error: expected expression
+>      614 |                         dev_warn(dev, "Port %d (offset 0x%llx) exceeds MMIO region (0x%llx),
+>          |                                       ^
+>    2 warnings and 1 error generated.
 
-kernel test robot noticed the following build errors:
+Thank you dear kernel test robot,
 
-[auto build test ERROR on next-20260424]
-[also build test ERROR on linus/master v7.1-rc1]
-[cannot apply to v7.0 v7.0-rc7 v7.0-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+However, this report is for V1, we have applied V5 of this patch:
+https://lore.kernel.org/linux-ide/177735961706.2183577.4033506737290437474.b4-ty@b4/T/#t
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/smb-client-hide-unused-cifs_debug_dirs_proc_ops/20260426-163431
-base:   next-20260424
-patch link:    https://lore.kernel.org/r/20260423065042.1898971-1-arnd%40kernel.org
-patch subject: [PATCH] smb: client: hide unused cifs_debug_dirs_proc_ops
-config: i386-randconfig-017-20260430 (https://download.01.org/0day-ci/archive/20260430/202604302014.zKNhMog5-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604302014.zKNhMog5-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604302014.zKNhMog5-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/smb/client/cifs_debug.c:937:48: error: use of undeclared identifier 'cifs_debug_dirs_proc_ops'; did you mean 'cifs_debug_dirs_proc_show'?
-     937 |         proc_create("open_dirs", 0600, proc_fs_cifs, &cifs_debug_dirs_proc_ops);
-         |                                                       ^~~~~~~~~~~~~~~~~~~~~~~~
-         |                                                       cifs_debug_dirs_proc_show
-   fs/smb/client/cifs_debug.c:298:12: note: 'cifs_debug_dirs_proc_show' declared here
-     298 | static int cifs_debug_dirs_proc_show(struct seq_file *m, void *v)
-         |            ^
-   1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MFD_STMFX
-   Depends on [n]: HAS_IOMEM [=y] && I2C [=y] && OF [=n]
-   Selected by [y]:
-   - PINCTRL_STMFX [=y] && PINCTRL [=y] && I2C [=y] && HAS_IOMEM [=y]
+Which does not have this problem.
 
 
-vim +937 fs/smb/client/cifs_debug.c
-
-^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  922  
-^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  923  void
-^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  924  cifs_proc_init(void)
-^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  925  {
-36a5aeb8787fbf fs/cifs/cifs_debug.c       Alexey Dobriyan   2008-04-29  926  	proc_fs_cifs = proc_mkdir("fs/cifs", NULL);
-^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  927  	if (proc_fs_cifs == NULL)
-^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  928  		return;
-^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  929  
-3f3942aca6da35 fs/cifs/cifs_debug.c       Christoph Hellwig 2018-05-15  930  	proc_create_single("DebugData", 0, proc_fs_cifs,
-3f3942aca6da35 fs/cifs/cifs_debug.c       Christoph Hellwig 2018-05-15  931  			cifs_debug_data_proc_show);
-^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  932  
-dfe33f9abc0899 fs/cifs/cifs_debug.c       Steve French      2018-10-30  933  	proc_create_single("open_files", 0400, proc_fs_cifs,
-dfe33f9abc0899 fs/cifs/cifs_debug.c       Steve French      2018-10-30  934  			cifs_debug_files_proc_show);
-dfe33f9abc0899 fs/cifs/cifs_debug.c       Steve French      2018-10-30  935  
-17d912d54f2305 fs/smb/client/cifs_debug.c Enzo Matsumiya    2026-04-22  936  #ifdef CONFIG_CIFS_DEBUG
-17d912d54f2305 fs/smb/client/cifs_debug.c Enzo Matsumiya    2026-04-22 @937  	proc_create("open_dirs", 0600, proc_fs_cifs, &cifs_debug_dirs_proc_ops);
-17d912d54f2305 fs/smb/client/cifs_debug.c Enzo Matsumiya    2026-04-22  938  #else /* CONFIG_CIFS_DEBUG */
-17d912d54f2305 fs/smb/client/cifs_debug.c Enzo Matsumiya    2026-04-22  939  	proc_create_single("open_dirs", 0400, proc_fs_cifs, cifs_debug_dirs_proc_show);
-17d912d54f2305 fs/smb/client/cifs_debug.c Enzo Matsumiya    2026-04-22  940  #endif /* !CONFIG_CIFS_DEBUG */
-97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  941  	proc_create("Stats", 0644, proc_fs_cifs, &cifs_stats_proc_ops);
-97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  942  	proc_create("cifsFYI", 0644, proc_fs_cifs, &cifsFYI_proc_ops);
-97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  943  	proc_create("traceSMB", 0644, proc_fs_cifs, &traceSMB_proc_ops);
-6539e7f3727ab9 fs/cifs/cifs_debug.c       Ronnie Sahlberg   2018-05-24  944  	proc_create("LinuxExtensionsEnabled", 0644, proc_fs_cifs,
-97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  945  		    &cifs_linux_ext_proc_ops);
-6539e7f3727ab9 fs/cifs/cifs_debug.c       Ronnie Sahlberg   2018-05-24  946  	proc_create("SecurityFlags", 0644, proc_fs_cifs,
-97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  947  		    &cifs_security_flags_proc_ops);
-6539e7f3727ab9 fs/cifs/cifs_debug.c       Ronnie Sahlberg   2018-05-24  948  	proc_create("LookupCacheEnabled", 0644, proc_fs_cifs,
-97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  949  		    &cifs_lookup_cache_proc_ops);
-54be1f6c1c3749 fs/cifs/cifs_debug.c       Paulo Alcantara   2018-11-14  950  
-94b0595a8e018c fs/cifs/cifs_debug.c       Aurelien Aptel    2021-03-18  951  	proc_create("mount_params", 0444, proc_fs_cifs, &cifs_mount_params_proc_ops);
-94b0595a8e018c fs/cifs/cifs_debug.c       Aurelien Aptel    2021-03-18  952  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kind regards,
+Niklas
