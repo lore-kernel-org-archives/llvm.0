@@ -1,155 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2F6344DBD;
-	Thu, 30 Apr 2026 03:25:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB2A246BC0
+	for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 03:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777519546; cv=none; b=ipkCa7dVbTX8kjEc/d1Nhw7m56VODeCR1S4NkFAFDp3htkU65m0E5IqGtPkBs1u95Dlc0GtAcQqHHVi/iMwrLyURnKsBXAhJxd6VhPGRaHkRSeGTbSImiB7uLNiePWTnBY7el8WLXkJg5TFRe7n0NoiPUYspeczSn2u28YQrGVg=
+	t=1777520334; cv=none; b=KbZYtwwY4s/z2m9MVsHESmv3y5cwUu2FIBceNFmpcpqV2i+zFuj9uNRV8a9zORD2hvUv2hlMwxifV3I79clJlSzsgw0eDfcaWkIgBIfD63F/s2AfDVZQO/35M7ym/wLC/1qjX+n+6CoqTSkRitxyh9SPraXPTA9M5szzAYFn/eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777519546; c=relaxed/simple;
-	bh=Ut5G69bc29PiPzWoT/741NVv5Kk/lOmdOdb5wKBmZHY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=oMJPoul8PNqJN8qxyXzoDt53j74wHJg6kb+2ZS0hgqpWdjZGNbOH1It4TJf2ivzRj3tb7vyNx2vyMDZNuY+0yONyH7UOzjDDXVpxGQ9PrY2dHQEyawfmOkUyKSBWQa1B3GsGLAZ5UOKFYciaQK/rWsrPoxF1IimFm8pwH1T2tAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V5dcZx5w; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777520334; c=relaxed/simple;
+	bh=RYhXkJW341w4xegzeJZJ+fFbNaz6G3uEtEa8i8kHlqM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ngoKmFLwbqky2Pc0eacFfF9IGNlXdoB+m1BU47dHxFc5yYmJI69iwaf1Aom6WPZzQFwhXaT58jL7yyaZRZQTlqmi80j7izgABto7JlIQCsMG2ka8NN7Bwim3eQQyQSylJnyjLGnxevFHNwT6pcSNzLiSoiNgjSdgQurHCIB6hC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=h4HscEAR; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V5dcZx5w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FEFFC2BCB9;
-	Thu, 30 Apr 2026 03:25:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777519545;
-	bh=Ut5G69bc29PiPzWoT/741NVv5Kk/lOmdOdb5wKBmZHY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=V5dcZx5w6ZsNbkLQRDMzB2RWL/aoneaFsqWWBCOjQU9YtIWRYDD+T+yLL0c1uuBhY
-	 qEq09wxP51HP2ucG5VcbFYEWu1xwrI3mLVWalChYNFLQKJVV2/uPNO5bNsVTmGtBYW
-	 y+MFexZXsUKBzIR9VcaG11CGAPdXCh5mrQ4ITyVmu2dzJeTpqYPZZKRQaFN8mTUumj
-	 qe1015WQ5bGNHETaFFAMkfQbXS+479tE5rufj5GTm7FfEY/F/wwiBzlApZyMLXQ7Xj
-	 eN4jVc9crSFreUj8YqywmtdyQ9MC4GHMaLaL9pIVAuwmWk3hGgC+ZxtKtJbApg/ERF
-	 YZVQLUUCYw1Pw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id DA1FF3809A07;
-	Thu, 30 Apr 2026 03:25:01 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="h4HscEAR"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63TEP1Px1684395;
+	Thu, 30 Apr 2026 03:38:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=pO8mcx
+	KDRYMKKHttTXUcxSdtULZ3xjIGbHMmmS5djkw=; b=h4HscEARxzgBxCye8ow9vv
+	RHAK/BK8q5CMfK2/2VleYSbDkN/qipwFuSJRDR3pEF+HNKA//naRxxIZPTKNFRmp
+	LQVgG3QDLzbQeL50EM3r28gEWTbRWKBfw1DclgAGHLivJG89EKYsvuXRRURBxsdS
+	xNxJw5C5lFFnx0kgN7qEgXdtIS2zYPqQ8ncXwbUmSwcVTKpgpwFBgOLZxKXjWSJI
+	VOUKxDCikgUa5WqcprSxngJIQC+Mfe/c/wCwinkNdKXAE8ETJ/efVHpQa3gkt3hS
+	Cwb/rDkXnhwS4fq2EjKHOezTMXXrVDGIQZ8B/Vf3UNoqyg8WN8rJrXPDHfff8nYA
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4drnb5dphg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 30 Apr 2026 03:38:36 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63U3NnGN017785;
+	Thu, 30 Apr 2026 03:38:35 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ds7xqhcj6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 30 Apr 2026 03:38:35 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63U3cZuF27001444
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 30 Apr 2026 03:38:35 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 135175804E;
+	Thu, 30 Apr 2026 03:38:35 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D84B05803F;
+	Thu, 30 Apr 2026 03:38:30 +0000 (GMT)
+Received: from [9.123.2.213] (unknown [9.123.2.213])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 30 Apr 2026 03:38:30 +0000 (GMT)
+Message-ID: <fe9e092f-4e38-4f1a-9af3-649fef95ee28@linux.ibm.com>
+Date: Thu, 30 Apr 2026 09:08:29 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND 1/2] powerpc/ps3: Drop redundant result assignment
+To: Michael Ellerman <mpe@ellerman.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Geoff Levand <geoff@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20260317130823.240279-3-krzysztof.kozlowski@oss.qualcomm.com>
+ <90c122bc-3067-4e3d-8083-dd94844c31f2@oss.qualcomm.com>
+ <946b79c2-ae4c-40ed-997b-ac654e148d47@ellerman.id.au>
+Content-Language: en-US
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+In-Reply-To: <946b79c2-ae4c-40ed-997b-ac654e148d47@ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 00/33] rust: bump minimum Rust and `bindgen` versions
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <177751950055.2274119.12088060080551439561.git-patchwork-notify@kernel.org>
-Date: Thu, 30 Apr 2026 03:25:00 +0000
-References: <20260405235309.418950-1-ojeda@kernel.org>
-In-Reply-To: <20260405235309.418950-1-ojeda@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: linux-riscv@lists.infradead.org, nathan@kernel.org, nsc@kernel.org,
- dakr@kernel.org, a.hindborg@kernel.org, catalin.marinas@arm.com,
- will@kernel.org, pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- acourbot@nvidia.com, airlied@gmail.com, simona@ffwll.ch,
- brendan.higgins@linux.dev, david@davidgow.net, gregkh@linuxfoundation.org,
- arve@android.com, tkjos@android.com, christian@brauner.io,
- cmllamas@google.com, aliceryhl@google.com, corbet@lwn.net, boqun@kernel.org,
- gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
- tmgross@umich.edu, rust-for-linux@vger.kernel.org,
- linux-kbuild@vger.kernel.org, lorenzo.stoakes@oracle.com, vbabka@kernel.org,
- Liam.Howlett@oracle.com, urezki@gmail.com, linux-block@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, alex@ghiti.fr,
- nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- raemoar63@gmail.com, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, nick.desaulniers+lkml@gmail.com,
- morbo@google.com, justinstitt@google.com, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
- linux-doc@vger.kernel.org
-
-Hello:
-
-This series was applied to riscv/linux.git (fixes)
-by Miguel Ojeda <ojeda@kernel.org>:
-
-On Mon,  6 Apr 2026 01:52:36 +0200 you wrote:
-> As proposed in the past in e.g. LPC 2025 and the Maintainers Summit [1],
-> we are going to follow Debian Stable's Rust versions as our minimum
-> supported version.
-> 
-> Debian Trixie was released with a Rust 1.85.0 toolchain [2], which it
-> still uses to this day [3] (i.e. no update to Rust 1.85.1).
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2,01/33] rust: kbuild: remove `--remap-path-prefix` workarounds
-    https://git.kernel.org/riscv/c/c8cbe2fc22e4
-  - [v2,02/33] rust: kbuild: remove "`try` keyword" workaround for `bindgen` < 0.59.2
-    https://git.kernel.org/riscv/c/518b9ad2fab3
-  - [v2,03/33] rust: kbuild: remove unneeded old `allow`s for generated layout tests
-    https://git.kernel.org/riscv/c/92cc022f044f
-  - [v2,04/33] gpu: nova-core: bindings: remove unneeded `cfg_attr`
-    https://git.kernel.org/riscv/c/341c51ee3293
-  - [v2,05/33] rust: bump Rust minimum supported version to 1.85.0 (Debian Trixie)
-    https://git.kernel.org/riscv/c/f32fb9c58a5b
-  - [v2,06/33] rust: bump Clippy's MSRV and clean `incompatible_msrv` allows
-    https://git.kernel.org/riscv/c/b6cfba436623
-  - [v2,07/33] rust: allow globally `clippy::incompatible_msrv`
-    https://git.kernel.org/riscv/c/7ed188605e1d
-  - [v2,08/33] rust: simplify `RUSTC_VERSION` Kconfig conditions
-    https://git.kernel.org/riscv/c/b28711ac98e8
-  - [v2,09/33] rust: remove `RUSTC_HAS_SLICE_AS_FLATTENED` and simplify code
-    https://git.kernel.org/riscv/c/9b398d056543
-  - [v2,10/33] rust: remove `RUSTC_HAS_COERCE_POINTEE` and simplify code
-    https://git.kernel.org/riscv/c/4ab22c543f18
-  - [v2,11/33] rust: kbuild: remove skipping of `-Wrustdoc::unescaped_backticks`
-    https://git.kernel.org/riscv/c/0f6e1e0705f0
-  - [v2,12/33] rust: kbuild: remove `feature(...)`s that are now stable
-    https://git.kernel.org/riscv/c/d1aa40daa777
-  - [v2,13/33] rust: transmute: simplify code with Rust 1.80.0 `split_at_*checked()`
-    https://git.kernel.org/riscv/c/f309a6edda53
-  - [v2,14/33] rust: alloc: simplify with `NonNull::add()` now that it is stable
-    https://git.kernel.org/riscv/c/161dd7b51e96
-  - [v2,15/33] rust: macros: simplify code using `feature(extract_if)`
-    https://git.kernel.org/riscv/c/42ec980024f0
-  - [v2,16/33] rust: block: update `const_refs_to_static` MSRV TODO comment
-    https://git.kernel.org/riscv/c/961b72d45ae4
-  - [v2,17/33] rust: bump `bindgen` minimum supported version to 0.71.1 (Debian Trixie)
-    https://git.kernel.org/riscv/c/c3a00a3f31ff
-  - [v2,18/33] rust: rust_is_available: remove warning for `bindgen` 0.66.[01]
-    https://git.kernel.org/riscv/c/41cfbb4295cf
-  - [v2,19/33] rust: rust_is_available: remove warning for `bindgen` < 0.69.5 && libclang >= 19.1
-    https://git.kernel.org/riscv/c/ae64324ad5c1
-  - [v2,20/33] rust: kbuild: update `bindgen --rust-target` version and replace comment
-    https://git.kernel.org/riscv/c/276ed30c558e
-  - [v2,21/33] rust: kbuild: remove "dummy parameter" workaround for `bindgen` < 0.71.1
-    https://git.kernel.org/riscv/c/93553d9922b0
-  - [v2,22/33] docs: rust: quick-start: openSUSE provides `rust-src` package nowadays
-    https://git.kernel.org/riscv/c/53c9647c0a48
-  - [v2,23/33] docs: rust: quick-start: update Ubuntu versioned packages
-    https://git.kernel.org/riscv/c/982e1aa6de73
-  - [v2,24/33] docs: rust: quick-start: update minimum Ubuntu version
-    https://git.kernel.org/riscv/c/6767147cb941
-  - [v2,25/33] docs: rust: quick-start: add Ubuntu 26.04 LTS and remove subsection title
-    https://git.kernel.org/riscv/c/780f847e1419
-  - [v2,26/33] docs: rust: quick-start: remove Gentoo "testing" note
-    https://git.kernel.org/riscv/c/99c672426aed
-  - [v2,27/33] docs: rust: quick-start: remove Nix "unstable channel" note
-    https://git.kernel.org/riscv/c/b69a14650009
-  - [v2,28/33] docs: rust: quick-start: remove GDB/Binutils mention
-    https://git.kernel.org/riscv/c/a4392ed1c8b9
-  - [v2,29/33] docs: rust: general-information: simplify Kconfig example
-    https://git.kernel.org/riscv/c/9375ea727d7e
-  - [v2,30/33] docs: rust: general-information: use real example
-    https://git.kernel.org/riscv/c/86c5d1c6740c
-  - [v2,31/33] rust: declare cfi_encoding for lru_status
-    https://git.kernel.org/riscv/c/9e5946de3a38
-  - [v2,32/33] rust: kbuild: support global per-version flags
-    https://git.kernel.org/riscv/c/b2aa1535ecdd
-  - [v2,33/33] rust: kbuild: allow `clippy::precedence` for Rust < 1.86.0
-    https://git.kernel.org/riscv/c/2e2f8b5a0656
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=AqDeGu9P c=1 sm=1 tr=0 ts=69f2cebd cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=EUspDBNiAAAA:8
+ a=9-q73Pn_6tbH8AxS9DkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDMwMDAzMSBTYWx0ZWRfX/28iLYFVbcvc
+ 8VlBNaDoOwhCIv3sKGPoL7vKUXSObBm9csJE06D/NaSUxTEFpd+5+oF/jPHXBXkGNOzzcWuK9Ul
+ 9yDBGDVQLlEqsMC+5NHEtDqQ1tqRXsXIIIgYADK76UXqxQscv2aF/zK0Q9yn0Mc+PQfQGxerVbw
+ R4uRMU84CPF/a5wBHedm5i6JTzbxyT49Eruuspayt9EZxI/2zjNt0zcDZ6TXNKarv0iI99EgzGd
+ O/QDsIiQ2dkAUv1hrweGoXgAhsWWSA6b0+6ZGoBHxEz0slRF4FfuvGMD1tvn6bi8PMLJWtqFSCc
+ Lx4CR+BpsOA0EUtMRNpe5qC71GAbP3k5ZOg8r4tD29VWSX7R60D47CqXzfLwbiKKSGJDqfNZTK/
+ qqaz+YR1WuZY9XDZBGaLD1SB7L4KCPYy0N7kG36tTEUBDTwx3/QfGrTDBhRZ3cxYiz5OdPr6NoE
+ Xr4fIO/+HtRp53h/R0Q==
+X-Proofpoint-GUID: NZelHy-82CvrztAqBX1pT-aoncFTrmPz
+X-Proofpoint-ORIG-GUID: 3xo6NRUxW_4prS3RUXfXTxxpB9Wsqwi9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-30_01,2026-04-28_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 phishscore=0 suspectscore=0 clxscore=1011
+ lowpriorityscore=0 spamscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604300031
 
 
+On 4/29/26 11:33 AM, Michael Ellerman wrote:
+> On 28/4/2026 23:22, Krzysztof Kozlowski wrote:
+>> On 17/03/2026 14:08, Krzysztof Kozlowski wrote:
+>>> Return value of ps3_start_probe_thread() is not used, so code can be
+>>> simplified to fix W=1 clang warnings:
+>>>
+>>>    arch/powerpc/platforms/ps3/device-init.c:953:6: error: variable 
+>>> 'result' set but not used [-Werror,-Wunused-but-set-variable]
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski 
+>>> <krzysztof.kozlowski@oss.qualcomm.com>
+>>> ---
+>>>
+>>> Resend after ~2.5 months
+>>>
+>>>   arch/powerpc/platforms/ps3/device-init.c | 4 +---
+>>>   1 file changed, 1 insertion(+), 3 deletions(-)
+>>
+>> Ping. This also got a review.
+>>
+>> I do not plan to resend second time... And I also understand if this is
+>> somehow legacy and fixing warnings is not desired, but then it would be
+>> great if you just responded "don't send such patches" and I would not
+>> waste my time.
+>
+> Thanks for the patch, sorry it hasn't been picked up.
+>
+> I have been AWOL, and I suspect Maddy is not sure about taking PS3 
+> patches directly without hearing from Geoff.
+>
+> Maddy this is fine to pick up for next.
+>
+Yep will pick it my in the -rc cycle.
+
+Thanks
+
+
+> cheers
