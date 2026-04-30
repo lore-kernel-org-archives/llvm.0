@@ -1,68 +1,67 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD4724A058;
-	Thu, 30 Apr 2026 12:12:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD27D40242F;
+	Thu, 30 Apr 2026 12:12:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777551149; cv=none; b=A8/asS5t95OUsO3xcBaQUaiNt31cMNwxEptTUvDmOYpz6Gdf9dXQIGZjpKF16uUiJ5DyhopvZsW0QyqafYsWL3kWxa7O9zcHXmNLLkpiB9X7ueA0kactbvxezYP3DX+C4OIW8Bh07R1uaxlzcRJBVL9C1uQrCSkOQfkA+RvnX+8=
+	t=1777551151; cv=none; b=OKuIM07oLpi+LRIHMWf7+wMX7lx+wktXR11lUr1Wmbpk8Q+zNvYfZmjRubo0GZFR7tYDWZBGwIe4wLpJ6tqo6fwWouH/CctwR5RQUwBx1Ys01BMExjTVrG2RbuaBKQOky/dLWmg5Xv/ek8TT0uhASFJXVLm4/jCKJUtmzkpxrLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777551149; c=relaxed/simple;
-	bh=egPFU7xhA88lBAq519bT9HYe8a4c+pVY/6MihkNd9Ls=;
+	s=arc-20240116; t=1777551151; c=relaxed/simple;
+	bh=4YV9b18f8f4b5MeLSUeaxJ5IPV69qM3nQn3s4UPwTy8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fafqs7dEKP5jI33QnldASE4YvVjseaNFcCCTd7ZjsAFpQ6N1vaBOHSmC7OwUbSK5AGmkzLq8nrRu+IY185SBxvTHfhI6VioejL7jceN6tM0PJ8ZmImZS5L+0z2qUxlZGX3GrwRtiDDveORyewaSQDPpSRH3rK+x+1De2zIvtslI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RBwqGcS2; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=N1Ztoe7EvvwPf4k8shPjKYkpkuLCJZB3t40bH5VDDcZjkrrBmS5+YJGPVxhatIMDbmU2TghlV3toOZwVz3hWoQyGq3uZbU5oCdDu2fOBYW64NS7WbCvnPdEkKK6XdbeielzexfSQOO83mn2a+gsz1lglAnkIpSMEXYtejfipXsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C37fcfCF; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RBwqGcS2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C37fcfCF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777551148; x=1809087148;
+  t=1777551149; x=1809087149;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=egPFU7xhA88lBAq519bT9HYe8a4c+pVY/6MihkNd9Ls=;
-  b=RBwqGcS2Np7Z8qrvlrwfBY9vuJWxvpdIfaUQqyzTHNK7nTYO4nbdGyYz
-   ZBwqkQwmgkXwa1NdBIXyVSTi0p1obfTlZbdSOPnd6D4DxiXIeJyPMWpeM
-   FIHlW5pYvRBnYSf1txamIJthlzN5CkWyvla0YTSmDMjkyx60eJF39eX3y
-   cSxerqspYC86WkEIgrJY8+OCAJ5mB8O1/J+7K4XVkgyY0cQDGv6IL4BGt
-   WG/yk1M/k/Dvqmk8l704tVGxfuiXflHJ3TM2XBqb10iEIuZqNapXGcvnc
-   CUX1kCKKzVU0CvolqhbLgda9GAn1cpGa+mwxxwMqa6MbNtZUd4mxQSZvw
-   Q==;
-X-CSE-ConnectionGUID: vMxN012MSfuDkAXxj4Syqg==
-X-CSE-MsgGUID: ZydcbjI9SA2ycBaCrxQFRA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="77664027"
+  bh=4YV9b18f8f4b5MeLSUeaxJ5IPV69qM3nQn3s4UPwTy8=;
+  b=C37fcfCFczQ0FIMuLjycdVCdwBpgCFaQ2nocKAtY047KgCZIDW15shwg
+   MZS44UBgXgYHUhCaarDgYTDi5njJ1dPZKTFbI3rf9jWgy8o0isjAuHr4U
+   S8it2iJDasJuLE4Ebk0aaFMIb/1CDoFKKyt7orZZGeal2MQ9IL2tzOYLR
+   e/r4SX+unc0FJVOyGVb1V8ux6LYzPvh78LtKpWUjHPzec954eo5WTHpDP
+   Ikf4e/hhZmTud18keft8j7EHbc+7gzpZY/Puo5ckgZrLDMT0I/TVuuL1b
+   87RL0EOFg2+N3ICRd7TJftkMhptZ83t4d2mW0divhyz6lsMkiscZbJGaQ
+   A==;
+X-CSE-ConnectionGUID: yuCSoiLuS+6zY9DIWfaRDw==
+X-CSE-MsgGUID: WdrKVXspTEyJLj//2DW34A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="77664035"
 X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="77664027"
+   d="scan'208";a="77664035"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 05:12:27 -0700
-X-CSE-ConnectionGUID: ZxgXd7DlSKCSNgbVzm2Psg==
-X-CSE-MsgGUID: u0hvwTPbSL+4imX9slDRJg==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 05:12:28 -0700
+X-CSE-ConnectionGUID: Dq6Uoh7LT6yvJqZLcghOxg==
+X-CSE-MsgGUID: 1AxaonX6S+WHSxvpsffp5Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="258143800"
+   d="scan'208";a="258143804"
 Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 30 Apr 2026 05:12:23 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 30 Apr 2026 05:12:24 -0700
 Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wIQFg-00000000CNY-3Cyc;
-	Thu, 30 Apr 2026 12:12:20 +0000
-Date: Thu, 30 Apr 2026 20:11:21 +0800
+	id 1wIQFh-00000000CNa-211v;
+	Thu, 30 Apr 2026 12:12:21 +0000
+Date: Thu, 30 Apr 2026 20:11:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@redhat.com>,
-	Lorenzo Stoakes <ljs@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>, Steve French <sfrench@samba.org>,
+	Enzo Matsumiya <ematsumiya@suse.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/page_vma_mapped_walk: add missing pgtable entry
- accessors
-Message-ID: <202604302041.gNPhRRxL-lkp@intel.com>
-References: <20260427052000.196402-1-agordeev@linux.ibm.com>
+	Arnd Bergmann <arnd@arndb.de>, Paulo Alcantara <pc@manguebit.org>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
+	Bharath SM <bharathsm@microsoft.com>,
+	Stefan Metzmacher <metze@samba.org>,
+	Namjae Jeon <linkinjeon@kernel.org>, linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] smb: client: hide unused cifs_debug_dirs_proc_ops
+Message-ID: <202604302014.zKNhMog5-lkp@intel.com>
+References: <20260423065042.1898971-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,292 +70,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260427052000.196402-1-agordeev@linux.ibm.com>
+In-Reply-To: <20260423065042.1898971-1-arnd@kernel.org>
 
-Hi Alexander,
+Hi Arnd,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test ERROR on next-20260424]
+[also build test ERROR on linus/master v7.1-rc1]
+[cannot apply to v7.0 v7.0-rc7 v7.0-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Gordeev/mm-page_vma_mapped_walk-add-missing-pgtable-entry-accessors/20260429-030409
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260427052000.196402-1-agordeev%40linux.ibm.com
-patch subject: [PATCH] mm/page_vma_mapped_walk: add missing pgtable entry accessors
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20260430/202604302041.gNPhRRxL-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604302041.gNPhRRxL-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/smb-client-hide-unused-cifs_debug_dirs_proc_ops/20260426-163431
+base:   next-20260424
+patch link:    https://lore.kernel.org/r/20260423065042.1898971-1-arnd%40kernel.org
+patch subject: [PATCH] smb: client: hide unused cifs_debug_dirs_proc_ops
+config: i386-randconfig-017-20260430 (https://download.01.org/0day-ci/archive/20260430/202604302014.zKNhMog5-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604302014.zKNhMog5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604302041.gNPhRRxL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604302014.zKNhMog5-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/page_vma_mapped.c:222:20: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-     222 |                 if (!pgd_present(pgdp_get(pgd))) {
-         |                                  ^~~~~~~~~~~~~
-   arch/arm/include/asm/pgtable.h:144:36: note: expanded from macro 'pgdp_get'
-     144 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^~~~
-   mm/page_vma_mapped.c:186:9: note: 'pgd' declared here
-     186 |         pgd_t *pgd;
-         |                ^
->> mm/page_vma_mapped.c:222:20: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-     222 |                 if (!pgd_present(pgdp_get(pgd))) {
-         |                                  ^~~~~~~~~~~~~
-   arch/arm/include/asm/pgtable.h:144:36: note: expanded from macro 'pgdp_get'
-     144 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^~~~
-   mm/page_vma_mapped.c:186:9: note: 'pgd' declared here
-     186 |         pgd_t *pgd;
-         |                ^
->> mm/page_vma_mapped.c:222:20: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-     222 |                 if (!pgd_present(pgdp_get(pgd))) {
-         |                                  ^~~~~~~~~~~~~
-   arch/arm/include/asm/pgtable.h:144:36: note: expanded from macro 'pgdp_get'
-     144 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^~~~
-   mm/page_vma_mapped.c:186:9: note: 'pgd' declared here
-     186 |         pgd_t *pgd;
-         |                ^
->> mm/page_vma_mapped.c:222:20: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-     222 |                 if (!pgd_present(pgdp_get(pgd))) {
-         |                                  ^~~~~~~~~~~~~
-   arch/arm/include/asm/pgtable.h:144:36: note: expanded from macro 'pgdp_get'
-     144 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^~~~
-   mm/page_vma_mapped.c:186:9: note: 'pgd' declared here
-     186 |         pgd_t *pgd;
-         |                ^
->> mm/page_vma_mapped.c:222:20: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-     222 |                 if (!pgd_present(pgdp_get(pgd))) {
-         |                                  ^~~~~~~~~~~~~
-   arch/arm/include/asm/pgtable.h:144:36: note: expanded from macro 'pgdp_get'
-     144 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^~~~
-   mm/page_vma_mapped.c:186:9: note: 'pgd' declared here
-     186 |         pgd_t *pgd;
-         |                ^
->> mm/page_vma_mapped.c:222:20: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-     222 |                 if (!pgd_present(pgdp_get(pgd))) {
-         |                                  ^~~~~~~~~~~~~
-   arch/arm/include/asm/pgtable.h:144:36: note: expanded from macro 'pgdp_get'
-     144 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^~~~
-   mm/page_vma_mapped.c:186:9: note: 'pgd' declared here
-     186 |         pgd_t *pgd;
-         |                ^
->> mm/page_vma_mapped.c:222:20: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-     222 |                 if (!pgd_present(pgdp_get(pgd))) {
-         |                                  ^~~~~~~~~~~~~
-   arch/arm/include/asm/pgtable.h:144:36: note: expanded from macro 'pgdp_get'
-     144 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^~~~
-   mm/page_vma_mapped.c:186:9: note: 'pgd' declared here
-     186 |         pgd_t *pgd;
-         |                ^
->> mm/page_vma_mapped.c:222:20: error: passing 'const volatile pmdval_t *' (aka 'const volatile unsigned int *') to parameter of type 'pmdval_t *' (aka 'unsigned int *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     222 |                 if (!pgd_present(pgdp_get(pgd))) {
-         |                                  ^~~~~~~~~~~~~
-   arch/arm/include/asm/pgtable.h:144:25: note: expanded from macro 'pgdp_get'
-     144 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                 ^~~~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:47:28: note: expanded from macro 'READ_ONCE'
-      47 | #define READ_ONCE(x)                                                    \
-         |                                                                         ^
-      48 | ({                                                                      \
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      49 |         compiletime_assert_rwonce_type(x);                              \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |         __READ_ONCE(x);                                                 \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      51 | })
-         | ~~
-   include/asm-generic/pgtable-nop4d.h:23:37: note: passing argument to parameter 'pgd' here
-      23 | static inline int pgd_present(pgd_t pgd)        { return 1; }
-         |                                     ^
-   8 errors generated.
+>> fs/smb/client/cifs_debug.c:937:48: error: use of undeclared identifier 'cifs_debug_dirs_proc_ops'; did you mean 'cifs_debug_dirs_proc_show'?
+     937 |         proc_create("open_dirs", 0600, proc_fs_cifs, &cifs_debug_dirs_proc_ops);
+         |                                                       ^~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                       cifs_debug_dirs_proc_show
+   fs/smb/client/cifs_debug.c:298:12: note: 'cifs_debug_dirs_proc_show' declared here
+     298 | static int cifs_debug_dirs_proc_show(struct seq_file *m, void *v)
+         |            ^
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_STMFX
+   Depends on [n]: HAS_IOMEM [=y] && I2C [=y] && OF [=n]
+   Selected by [y]:
+   - PINCTRL_STMFX [=y] && PINCTRL [=y] && I2C [=y] && HAS_IOMEM [=y]
 
 
-vim +222 mm/page_vma_mapped.c
+vim +937 fs/smb/client/cifs_debug.c
 
-   155	
-   156	/**
-   157	 * page_vma_mapped_walk - check if @pvmw->pfn is mapped in @pvmw->vma at
-   158	 * @pvmw->address
-   159	 * @pvmw: pointer to struct page_vma_mapped_walk. page, vma, address and flags
-   160	 * must be set. pmd, pte and ptl must be NULL.
-   161	 *
-   162	 * Returns true if the page is mapped in the vma. @pvmw->pmd and @pvmw->pte point
-   163	 * to relevant page table entries. @pvmw->ptl is locked. @pvmw->address is
-   164	 * adjusted if needed (for PTE-mapped THPs).
-   165	 *
-   166	 * If @pvmw->pmd is set but @pvmw->pte is not, you have found PMD-mapped page
-   167	 * (usually THP). For PTE-mapped THP, you should run page_vma_mapped_walk() in
-   168	 * a loop to find all PTEs that map the THP.
-   169	 *
-   170	 * For HugeTLB pages, @pvmw->pte is set to the relevant page table entry
-   171	 * regardless of which page table level the page is mapped at. @pvmw->pmd is
-   172	 * NULL.
-   173	 *
-   174	 * Returns false if there are no more page table entries for the page in
-   175	 * the vma. @pvmw->ptl is unlocked and @pvmw->pte is unmapped.
-   176	 *
-   177	 * If you need to stop the walk before page_vma_mapped_walk() returned false,
-   178	 * use page_vma_mapped_walk_done(). It will do the housekeeping.
-   179	 */
-   180	bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
-   181	{
-   182		struct vm_area_struct *vma = pvmw->vma;
-   183		struct mm_struct *mm = vma->vm_mm;
-   184		unsigned long end;
-   185		spinlock_t *ptl;
-   186		pgd_t *pgd;
-   187		p4d_t *p4d;
-   188		pud_t *pud;
-   189		pmd_t pmde;
-   190	
-   191		/* The only possible pmd mapping has been handled on last iteration */
-   192		if (pvmw->pmd && !pvmw->pte)
-   193			return not_found(pvmw);
-   194	
-   195		if (unlikely(is_vm_hugetlb_page(vma))) {
-   196			struct hstate *hstate = hstate_vma(vma);
-   197			unsigned long size = huge_page_size(hstate);
-   198			/* The only possible mapping was handled on last iteration */
-   199			if (pvmw->pte)
-   200				return not_found(pvmw);
-   201			/*
-   202			 * All callers that get here will already hold the
-   203			 * i_mmap_rwsem.  Therefore, no additional locks need to be
-   204			 * taken before calling hugetlb_walk().
-   205			 */
-   206			pvmw->pte = hugetlb_walk(vma, pvmw->address, size);
-   207			if (!pvmw->pte)
-   208				return false;
-   209	
-   210			pvmw->ptl = huge_pte_lock(hstate, mm, pvmw->pte);
-   211			if (!check_pte(pvmw, pages_per_huge_page(hstate)))
-   212				return not_found(pvmw);
-   213			return true;
-   214		}
-   215	
-   216		end = vma_address_end(pvmw);
-   217		if (pvmw->pte)
-   218			goto next_pte;
-   219	restart:
-   220		do {
-   221			pgd = pgd_offset(mm, pvmw->address);
- > 222			if (!pgd_present(pgdp_get(pgd))) {
-   223				step_forward(pvmw, PGDIR_SIZE);
-   224				continue;
-   225			}
-   226			p4d = p4d_offset(pgd, pvmw->address);
-   227			if (!p4d_present(p4dp_get(p4d))) {
-   228				step_forward(pvmw, P4D_SIZE);
-   229				continue;
-   230			}
-   231			pud = pud_offset(p4d, pvmw->address);
-   232			if (!pud_present(pudp_get(pud))) {
-   233				step_forward(pvmw, PUD_SIZE);
-   234				continue;
-   235			}
-   236	
-   237			pvmw->pmd = pmd_offset(pud, pvmw->address);
-   238			/*
-   239			 * Make sure the pmd value isn't cached in a register by the
-   240			 * compiler and used as a stale value after we've observed a
-   241			 * subsequent update.
-   242			 */
-   243			pmde = pmdp_get_lockless(pvmw->pmd);
-   244	
-   245			if (pmd_trans_huge(pmde) || pmd_is_migration_entry(pmde)) {
-   246				pvmw->ptl = pmd_lock(mm, pvmw->pmd);
-   247				pmde = pmdp_get(pvmw->pmd);
-   248				if (!pmd_present(pmde)) {
-   249					softleaf_t entry;
-   250	
-   251					if (!thp_migration_supported() ||
-   252					    !(pvmw->flags & PVMW_MIGRATION))
-   253						return not_found(pvmw);
-   254					entry = softleaf_from_pmd(pmde);
-   255	
-   256					if (!softleaf_is_migration(entry) ||
-   257					    !check_pmd(softleaf_to_pfn(entry), pvmw))
-   258						return not_found(pvmw);
-   259					return true;
-   260				}
-   261				if (likely(pmd_trans_huge(pmde))) {
-   262					if (pvmw->flags & PVMW_MIGRATION)
-   263						return not_found(pvmw);
-   264					if (!check_pmd(pmd_pfn(pmde), pvmw))
-   265						return not_found(pvmw);
-   266					return true;
-   267				}
-   268				/* THP pmd was split under us: handle on pte level */
-   269				spin_unlock(pvmw->ptl);
-   270				pvmw->ptl = NULL;
-   271			} else if (!pmd_present(pmde)) {
-   272				const softleaf_t entry = softleaf_from_pmd(pmde);
-   273	
-   274				if (softleaf_is_device_private(entry)) {
-   275					pvmw->ptl = pmd_lock(mm, pvmw->pmd);
-   276					return true;
-   277				}
-   278	
-   279				if ((pvmw->flags & PVMW_SYNC) &&
-   280				    thp_vma_suitable_order(vma, pvmw->address,
-   281							   PMD_ORDER) &&
-   282				    (pvmw->nr_pages >= HPAGE_PMD_NR))
-   283					sync_with_folio_pmd_zap(mm, pvmw->pmd);
-   284	
-   285				step_forward(pvmw, PMD_SIZE);
-   286				continue;
-   287			}
-   288			if (!map_pte(pvmw, &pmde, &ptl)) {
-   289				if (!pvmw->pte)
-   290					goto restart;
-   291				goto next_pte;
-   292			}
-   293	this_pte:
-   294			if (check_pte(pvmw, 1))
-   295				return true;
-   296	next_pte:
-   297			do {
-   298				pvmw->address += PAGE_SIZE;
-   299				if (pvmw->address >= end)
-   300					return not_found(pvmw);
-   301				/* Did we cross page table boundary? */
-   302				if ((pvmw->address & (PMD_SIZE - PAGE_SIZE)) == 0) {
-   303					if (pvmw->ptl) {
-   304						spin_unlock(pvmw->ptl);
-   305						pvmw->ptl = NULL;
-   306					}
-   307					pte_unmap(pvmw->pte);
-   308					pvmw->pte = NULL;
-   309					pvmw->flags |= PVMW_PGTABLE_CROSSED;
-   310					goto restart;
-   311				}
-   312				pvmw->pte++;
-   313			} while (pte_none(ptep_get_lockless(pvmw->pte)));
-   314	
-   315			if (!pvmw->ptl) {
-   316				spin_lock(ptl);
-   317				if (unlikely(!pmd_same(pmde, pmdp_get_lockless(pvmw->pmd)))) {
-   318					pte_unmap_unlock(pvmw->pte, ptl);
-   319					pvmw->pte = NULL;
-   320					goto restart;
-   321				}
-   322				pvmw->ptl = ptl;
-   323			}
-   324			goto this_pte;
-   325		} while (pvmw->address < end);
-   326	
-   327		return false;
-   328	}
-   329	
+^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  922  
+^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  923  void
+^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  924  cifs_proc_init(void)
+^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  925  {
+36a5aeb8787fbf fs/cifs/cifs_debug.c       Alexey Dobriyan   2008-04-29  926  	proc_fs_cifs = proc_mkdir("fs/cifs", NULL);
+^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  927  	if (proc_fs_cifs == NULL)
+^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  928  		return;
+^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  929  
+3f3942aca6da35 fs/cifs/cifs_debug.c       Christoph Hellwig 2018-05-15  930  	proc_create_single("DebugData", 0, proc_fs_cifs,
+3f3942aca6da35 fs/cifs/cifs_debug.c       Christoph Hellwig 2018-05-15  931  			cifs_debug_data_proc_show);
+^1da177e4c3f41 fs/cifs/cifs_debug.c       Linus Torvalds    2005-04-16  932  
+dfe33f9abc0899 fs/cifs/cifs_debug.c       Steve French      2018-10-30  933  	proc_create_single("open_files", 0400, proc_fs_cifs,
+dfe33f9abc0899 fs/cifs/cifs_debug.c       Steve French      2018-10-30  934  			cifs_debug_files_proc_show);
+dfe33f9abc0899 fs/cifs/cifs_debug.c       Steve French      2018-10-30  935  
+17d912d54f2305 fs/smb/client/cifs_debug.c Enzo Matsumiya    2026-04-22  936  #ifdef CONFIG_CIFS_DEBUG
+17d912d54f2305 fs/smb/client/cifs_debug.c Enzo Matsumiya    2026-04-22 @937  	proc_create("open_dirs", 0600, proc_fs_cifs, &cifs_debug_dirs_proc_ops);
+17d912d54f2305 fs/smb/client/cifs_debug.c Enzo Matsumiya    2026-04-22  938  #else /* CONFIG_CIFS_DEBUG */
+17d912d54f2305 fs/smb/client/cifs_debug.c Enzo Matsumiya    2026-04-22  939  	proc_create_single("open_dirs", 0400, proc_fs_cifs, cifs_debug_dirs_proc_show);
+17d912d54f2305 fs/smb/client/cifs_debug.c Enzo Matsumiya    2026-04-22  940  #endif /* !CONFIG_CIFS_DEBUG */
+97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  941  	proc_create("Stats", 0644, proc_fs_cifs, &cifs_stats_proc_ops);
+97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  942  	proc_create("cifsFYI", 0644, proc_fs_cifs, &cifsFYI_proc_ops);
+97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  943  	proc_create("traceSMB", 0644, proc_fs_cifs, &traceSMB_proc_ops);
+6539e7f3727ab9 fs/cifs/cifs_debug.c       Ronnie Sahlberg   2018-05-24  944  	proc_create("LinuxExtensionsEnabled", 0644, proc_fs_cifs,
+97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  945  		    &cifs_linux_ext_proc_ops);
+6539e7f3727ab9 fs/cifs/cifs_debug.c       Ronnie Sahlberg   2018-05-24  946  	proc_create("SecurityFlags", 0644, proc_fs_cifs,
+97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  947  		    &cifs_security_flags_proc_ops);
+6539e7f3727ab9 fs/cifs/cifs_debug.c       Ronnie Sahlberg   2018-05-24  948  	proc_create("LookupCacheEnabled", 0644, proc_fs_cifs,
+97a32539b9568b fs/cifs/cifs_debug.c       Alexey Dobriyan   2020-02-03  949  		    &cifs_lookup_cache_proc_ops);
+54be1f6c1c3749 fs/cifs/cifs_debug.c       Paulo Alcantara   2018-11-14  950  
+94b0595a8e018c fs/cifs/cifs_debug.c       Aurelien Aptel    2021-03-18  951  	proc_create("mount_params", 0444, proc_fs_cifs, &cifs_mount_params_proc_ops);
+94b0595a8e018c fs/cifs/cifs_debug.c       Aurelien Aptel    2021-03-18  952  
 
 -- 
 0-DAY CI Kernel Test Service
