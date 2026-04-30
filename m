@@ -1,173 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCFE40B6F4;
-	Thu, 30 Apr 2026 13:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C72A4279FA;
+	Thu, 30 Apr 2026 13:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777554227; cv=none; b=ahD1HG9h9FUWCHGsBq/dRbcBYouoBYzeMn8lSZ4Dc/hL7CIl5zwZq6LBlxHzI4En2Eta0kr4z6JoQJsShiVnRLxiEyl15XKAEMQefKTNolmVGXmCQVZ9vmX7CDEgIDVGqO0j07nUJOsBlpMuOi6b1axhV0QMe/xcAayxh6JuSG4=
+	t=1777555833; cv=none; b=EN/+aRBby96J1v9tuwZcODkpTyc19FnCtREwQFM/MPUggddjGn/ef4+ynPF5xZI+eUB3VojzpHJD3VaB6874cJgAWPhjB3y8EMigwWmVg3gPMPPOk743QQC19YEODnlkdNmDUiiYKC3gyuBeD/RL2FktreBAWD/DbelDhVAPGuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777554227; c=relaxed/simple;
-	bh=cBQTATODAw7GU5owkTlr0LLrjvqtSjmzxEuiN88xSno=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jjr8JL0voywVTI9PfrhSmqlXAihKXmsMe024oXhgaBerVveFno3TEfX3vkmwiYtlIcXzSnTAb0JhXWGeSaATjM4SFjnskAHmXces5dLMGSF9b6hZwhd9nvMzKDv0cseOOVk/dmz7T1rxQjEgwPW9obTpaXYZRuU34Rv9F2p27SM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P/GHjLbS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777555833; c=relaxed/simple;
+	bh=skooFsp+/4GbOAuwrVnXAE8MeO/sNiwc6B6Hb4tb1cQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=f7jICPU8ceXqwCxxElm6VoQU4df6DbUpiAZBsfj3LHfx4uUUlfJTyDZmylt+n5U8Fosv1zZLg1s+oJmJhP4zGbjYt4xKZWblhyKo4WKzh//ojMSoU+LvV2/aYslbff/3M/E0E3qLSSyzqRsxpEkv3tTzyip4s9jsV4UPL4QPhm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m9sdh+DH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P/GHjLbS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28CC1C2BCB3;
-	Thu, 30 Apr 2026 13:03:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m9sdh+DH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FD3C2BCB3;
+	Thu, 30 Apr 2026 13:30:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777554226;
-	bh=cBQTATODAw7GU5owkTlr0LLrjvqtSjmzxEuiN88xSno=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=P/GHjLbSzFjFrlVHylyxgW146QEiVuSbq9zns8CvEtQWM6rfKglawHpEP2u9xPcYD
-	 n3OBk3+Ewlgqev591zz+QCAQgiLG/qP61tXvzAfUfEQLwdQHwTwAU25Aj5LWtq0ssC
-	 Py4+RuG35KzGqQGDwDYrQBdOVZdxd0CJdMkCftbMMRJ+Vn4lj8BMpYe90ygfYSWXhL
-	 QBkmykY+5Edz3mfHgsWFepJ+dgw1c9jtCr9bUrTjjQDuGQo/DV+Ac3KfT2VPxfrHbG
-	 MQEorLNtV9QSlJs1xBmN8laC9jqntUFj6tSOuoQZVm/5hfg77vKNKa3lfHUZSpajL8
-	 F0h9gjQtxZnXA==
-Message-ID: <6f2bd63a-dc02-4631-a3a5-7ec8e58a4a4e@kernel.org>
-Date: Thu, 30 Apr 2026 15:03:38 +0200
+	s=k20201202; t=1777555832;
+	bh=skooFsp+/4GbOAuwrVnXAE8MeO/sNiwc6B6Hb4tb1cQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=m9sdh+DHnSNbP/yyTyMTdPwbWbkw3KJ67bx4FvicVup6RoeIVEL9PW8RDZDK+v0kB
+	 a3Q/p3z3ovaVbmtXqgmOFrntlnMvs5cBCawshPu02bQg/xvkKoPz6SWCZNwYnoQEb6
+	 lKcN2sCTeQSHPJxhLbWGv20LujYKCgX0Ifas4pc6SGdamEbB+rrKd7MtN9wKJVf9es
+	 xsN+Ldf1ZuuhtH5kEUmaLouU546vK8HMG+zIfXXb0xOFcjd8JXJNb/ETvgBZg/vqt4
+	 VEWrxtsyEFU93Awz3Ts4Y0zH0mcD8Wvw10OPk55VDnmq0bVKPyom0+ss/jZY8u5PAf
+	 Ml+n57nvbfiQg==
+Content-Type: multipart/mixed; boundary="===============6049219023370403133=="
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] slab: support for compiler-assisted type-based
- slab cache partitioning
-Content-Language: en-US
-To: Marco Elver <elver@google.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
- Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>,
- Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Alexander Potapenko <glider@google.com>,
- Dmitry Vyukov <dvyukov@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
- llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>,
- Florent Revest <revest@google.com>, Jann Horn <jannh@google.com>,
- KP Singh <kpsingh@kernel.org>, Matteo Rizzo <matteorizzo@google.com>,
- GONG Ruiqi <gongruiqi1@huawei.com>
-References: <20260424132427.2703076-1-elver@google.com>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <20260424132427.2703076-1-elver@google.com>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <deceeca5bb5e141c8ad07c5ed3754c6b2613fa0b99383614f1cfcc31bd09d39c@mail.kernel.org>
+In-Reply-To: <20260430-selftests-bpf_misconfig-v10-7-cd302a31af16@suse.com>
+References: <20260430-selftests-bpf_misconfig-v10-7-cd302a31af16@suse.com>
+Subject: Re: [PATCH bpf-next v10 07/11] selftests/bpf: Skip tests whose objects were not built
+From: bot+bpf-ci@kernel.org
+To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 30 Apr 2026 13:30:28 +0000 (UTC)
+
+--===============6049219023370403133==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 4/24/26 15:24, Marco Elver wrote:
+> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> index cc14b13e23fe..7ba82974ee78 100644
+> --- a/tools/testing/selftests/bpf/test_progs.c
+> +++ b/tools/testing/selftests/bpf/test_progs.c
 
-> @@ -938,7 +968,7 @@ void *__kmalloc_large_node_noprof(size_t size, gfp_t flags, int node)
->   *	Try really hard to succeed the allocation but fail
->   *	eventually.
->   */
-> -static __always_inline __alloc_size(1) void *kmalloc_noprof(size_t size, gfp_t flags)
-> +static __always_inline __alloc_size(1) void *_kmalloc_noprof(size_t size, gfp_t flags, kmalloc_token_t token)
->  {
->  	if (__builtin_constant_p(size) && size) {
->  		unsigned int index;
-> @@ -948,14 +978,16 @@ static __always_inline __alloc_size(1) void *kmalloc_noprof(size_t size, gfp_t f
->  
->  		index = kmalloc_index(size);
->  		return __kmalloc_cache_noprof(
-> -				kmalloc_caches[kmalloc_type(flags, _RET_IP_)][index],
-> +				kmalloc_caches[kmalloc_type(flags, token)][index],
+[ ... ]
 
-While reviewing this, it occured to me we might have been using _RET_IP_
-here in a suboptimal way ever since this was introduced. Since this is all
-inlined, shouldn't have we been using _THIS_IP_ to really randomize using
-the kmalloc() callsite, and not its parent?
-
-And after this patch, we get the token passed to _kmalloc_noprof()...
-
->  				flags, size);
+> @@ -2046,15 +2069,20 @@ int main(int argc, char **argv)
+>  		struct prog_test_def *test = &prog_test_defs[i];
+>
+>  		test->test_num = i + 1;
+> -		test->should_run = should_run(&env.test_selector,
+> -					      test->test_num, test->test_name);
+> +		test->selected = should_run(&env.test_selector,
+> +					    test->test_num, test->test_name);
+> +		test->should_run = test->selected;
+>
+> -		if ((test->run_test == NULL && test->run_serial_test == NULL) ||
+> -		    (test->run_test != NULL && test->run_serial_test != NULL)) {
+> +		if (test->run_test && test->run_serial_test) {
+>  			fprintf(stderr, "Test %d:%s must have either test_%s() or serial_test_%sl() defined.\n",
+>  				test->test_num, test->test_name, test->test_name, test->test_name);
+>  			exit(EXIT_ERR_SETUP_INFRA);
+>  		}
+> +		if (!test->run_test && !test->run_serial_test) {
+> +			test->not_built = true;
+> +			test->should_run = false;
+> +			continue;
+> +		}
+>  		if (test->should_run)
+>  			test->should_tmon = should_tmon(&env.tmon_selector, test->test_name);
 >  	}
-> -	return __kmalloc_noprof(size, flags);
-> +	return __kmalloc_noprof(PASS_KMALLOC_PARAMS(size, NULL, token), flags);
+> @@ -2106,9 +2134,18 @@ int main(int argc, char **argv)
+>
+>  	for (i = 0; i < prog_test_cnt; i++) {
+>  		struct prog_test_def *test = &prog_test_defs[i];
+> +		struct test_state *state = &test_states[i];
+>
+> -		if (!test->should_run)
+> +		if (!test->should_run) {
+> +			if (test->not_built && test->selected &&
+> +			    !env.get_test_cnt && !env.list_test_names) {
+> +				state->tested = true;
+> +				state->skip_cnt = 1;
+> +				env.not_built_cnt++;
+> +				print_test_result(test, state);
+> +			}
+>  			continue;
+> +		}
 
-... and used also here for the non-constant-size, where previously
-__kmalloc_noprof() (not inline function) would correctly use _RET_IP_ on its
-own ...
+When test->should_run is false (which it is for unbuilt tests due to the
+code above setting test->should_run = false), the continue statement skips
+the env.get_test_cnt and env.list_test_names blocks that follow.
 
->  }
-> +#define kmalloc_noprof(...)			_kmalloc_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
+Won't this completely omit unbuilt tests from the output of --list (-l) and
+--count modes? The code only prints unbuilt tests when !env.get_test_cnt &&
+!env.list_test_names is true.
 
-... and the token comes from here. With random partitioning that's
-#define __kmalloc_token(...) ((kmalloc_token_t){ .v = _RET_IP_ })
+If CI systems use test_progs -l to discover and distribute tests across
+parallel jobs, they won't be aware of unbuilt tests. Could this undermine
+the stated goal of keeping unbuilt tests visible in CI results?
 
-so that AFAIK makes the situation worse as now the cases without constant
-size also start randomizing by the parent callsite and not the kmalloc callsite.
+Reference: sashiko-bot raised this concern in v10 discussion at
+https://lore.kernel.org/bpf/20260430131344.B40DDC2BCB3@smtp.kernel.org/
 
-But there are many users of __kmalloc_token() and maybe some are corrent in
-using _RET_IP_, I haven't checked, maybe we'll need two variants, or further
-change things around.
+>
+>  		if (env.get_test_cnt) {
+>  			env.succ_cnt++;
 
->  #define kmalloc(...)				alloc_hooks(kmalloc_noprof(__VA_ARGS__))
->  
-> -void *kmalloc_nolock_noprof(size_t size, gfp_t gfp_flags, int node);
-> +void *_kmalloc_nolock_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t gfp_flags, int node);
-> +#define kmalloc_nolock_noprof(_s, _f, _n)	_kmalloc_nolock_noprof(PASS_TOKEN_PARAMS(_s, __kmalloc_token(_s)), _f, _n)
->  #define kmalloc_nolock(...)			alloc_hooks(kmalloc_nolock_noprof(__VA_ARGS__))
->  
->  /**
-
-<snip>
-
->  
-> -#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-> -#define __KMALLOC_RANDOM_CONCAT(a, b) a ## b
-> -#define KMALLOC_RANDOM_NAME(N, sz) __KMALLOC_RANDOM_CONCAT(KMA_RAND_, N)(sz)
-> -#define KMA_RAND_1(sz)                  .name[KMALLOC_RANDOM_START +  1] = "kmalloc-rnd-01-" #sz,
-> -#define KMA_RAND_2(sz)  KMA_RAND_1(sz)  .name[KMALLOC_RANDOM_START +  2] = "kmalloc-rnd-02-" #sz,
-> -#define KMA_RAND_3(sz)  KMA_RAND_2(sz)  .name[KMALLOC_RANDOM_START +  3] = "kmalloc-rnd-03-" #sz,
-> -#define KMA_RAND_4(sz)  KMA_RAND_3(sz)  .name[KMALLOC_RANDOM_START +  4] = "kmalloc-rnd-04-" #sz,
-> -#define KMA_RAND_5(sz)  KMA_RAND_4(sz)  .name[KMALLOC_RANDOM_START +  5] = "kmalloc-rnd-05-" #sz,
-> -#define KMA_RAND_6(sz)  KMA_RAND_5(sz)  .name[KMALLOC_RANDOM_START +  6] = "kmalloc-rnd-06-" #sz,
-> -#define KMA_RAND_7(sz)  KMA_RAND_6(sz)  .name[KMALLOC_RANDOM_START +  7] = "kmalloc-rnd-07-" #sz,
-> -#define KMA_RAND_8(sz)  KMA_RAND_7(sz)  .name[KMALLOC_RANDOM_START +  8] = "kmalloc-rnd-08-" #sz,
-> -#define KMA_RAND_9(sz)  KMA_RAND_8(sz)  .name[KMALLOC_RANDOM_START +  9] = "kmalloc-rnd-09-" #sz,
-> -#define KMA_RAND_10(sz) KMA_RAND_9(sz)  .name[KMALLOC_RANDOM_START + 10] = "kmalloc-rnd-10-" #sz,
-> -#define KMA_RAND_11(sz) KMA_RAND_10(sz) .name[KMALLOC_RANDOM_START + 11] = "kmalloc-rnd-11-" #sz,
-> -#define KMA_RAND_12(sz) KMA_RAND_11(sz) .name[KMALLOC_RANDOM_START + 12] = "kmalloc-rnd-12-" #sz,
-> -#define KMA_RAND_13(sz) KMA_RAND_12(sz) .name[KMALLOC_RANDOM_START + 13] = "kmalloc-rnd-13-" #sz,
-> -#define KMA_RAND_14(sz) KMA_RAND_13(sz) .name[KMALLOC_RANDOM_START + 14] = "kmalloc-rnd-14-" #sz,
-> -#define KMA_RAND_15(sz) KMA_RAND_14(sz) .name[KMALLOC_RANDOM_START + 15] = "kmalloc-rnd-15-" #sz,
-> -#else // CONFIG_RANDOM_KMALLOC_CACHES
-> -#define KMALLOC_RANDOM_NAME(N, sz)
-> +#ifdef CONFIG_KMALLOC_PARTITION_CACHES
-> +#define __KMALLOC_PARTITION_CONCAT(a, b) a ## b
-> +#define KMALLOC_PARTITION_NAME(N, sz) __KMALLOC_PARTITION_CONCAT(KMA_PART_, N)(sz)
-> +#define KMA_PART_1(sz)                  .name[KMALLOC_PARTITION_START +  1] = "kmalloc-part-01-" #sz,
-> +#define KMA_PART_2(sz)  KMA_PART_1(sz)  .name[KMALLOC_PARTITION_START +  2] = "kmalloc-part-02-" #sz,
-> +#define KMA_PART_3(sz)  KMA_PART_2(sz)  .name[KMALLOC_PARTITION_START +  3] = "kmalloc-part-03-" #sz,
-> +#define KMA_PART_4(sz)  KMA_PART_3(sz)  .name[KMALLOC_PARTITION_START +  4] = "kmalloc-part-04-" #sz,
-> +#define KMA_PART_5(sz)  KMA_PART_4(sz)  .name[KMALLOC_PARTITION_START +  5] = "kmalloc-part-05-" #sz,
-> +#define KMA_PART_6(sz)  KMA_PART_5(sz)  .name[KMALLOC_PARTITION_START +  6] = "kmalloc-part-06-" #sz,
-> +#define KMA_PART_7(sz)  KMA_PART_6(sz)  .name[KMALLOC_PARTITION_START +  7] = "kmalloc-part-07-" #sz,
-> +#define KMA_PART_8(sz)  KMA_PART_7(sz)  .name[KMALLOC_PARTITION_START +  8] = "kmalloc-part-08-" #sz,
-> +#define KMA_PART_9(sz)  KMA_PART_8(sz)  .name[KMALLOC_PARTITION_START +  9] = "kmalloc-part-09-" #sz,
-> +#define KMA_PART_10(sz) KMA_PART_9(sz)  .name[KMALLOC_PARTITION_START + 10] = "kmalloc-part-10-" #sz,
-> +#define KMA_PART_11(sz) KMA_PART_10(sz) .name[KMALLOC_PARTITION_START + 11] = "kmalloc-part-11-" #sz,
-> +#define KMA_PART_12(sz) KMA_PART_11(sz) .name[KMALLOC_PARTITION_START + 12] = "kmalloc-part-12-" #sz,
-> +#define KMA_PART_13(sz) KMA_PART_12(sz) .name[KMALLOC_PARTITION_START + 13] = "kmalloc-part-13-" #sz,
-> +#define KMA_PART_14(sz) KMA_PART_13(sz) .name[KMALLOC_PARTITION_START + 14] = "kmalloc-part-14-" #sz,
-> +#define KMA_PART_15(sz) KMA_PART_14(sz) .name[KMALLOC_PARTITION_START + 15] = "kmalloc-part-15-" #sz,
-> +#else // CONFIG_KMALLOC_PARTITION_CACHES
-> +#define KMALLOC_PARTITION_NAME(N, sz)
->  #endif
-
-We're renaming the caches visible in /proc/slabinfo. Maybe it's fine as
-people who care will just adapt their tools without complaining. Not the
-first time we've changes something here.
+[ ... ]
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25167006036
+--===============6049219023370403133==--
