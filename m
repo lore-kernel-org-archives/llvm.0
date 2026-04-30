@@ -1,178 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E1946AF33;
-	Thu, 30 Apr 2026 16:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980EF47798A;
+	Thu, 30 Apr 2026 16:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777566833; cv=none; b=uWR307WFl32pDhGNGofYRKsajRhuW8dALA/iIN9d9ZNoK0PJstezHBzDuh51uxsoG11sQLFbQ8qFsU7DCQPZiTwdx5BGaqa3SLncobKe19vUfvxpn2+Thp0Udf74H+QN0+WydSAy2W+HnzYzI7FmAgCot1dHEkoRK+H6rQg6lcM=
+	t=1777567314; cv=none; b=sSN92lQ4ZC0iifWQRzpl8asQoDhkLy0ioizlg6m9GeL8e3vYVE2Mhp7fLho8NyAS3JY1ATDN/DMJOE5yy2j1VN6dMwX+EBwgF4tf4RPhnAkqaTSRVlCCG+Uu9NNHAxEeHTV2PsLHVfeY6k8DtIAkzMzq6gX4JmStw+KrkCK8L/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777566833; c=relaxed/simple;
-	bh=cfENCjc1fzzR6KbL+6+PAAkvtumH6My77uGSdh60sFg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=llCy3S2bw8V/j2cRI0HN3bfDJSrindsvBps2fAOv8KUARkKWMZ4tV6iSsETZ0slLuV5EowTOIbev1Qqdwd8Oo2hF5cGmYHJ6k+CfzGXvJ3SYlqzHGY1JX1RTPLBq73GetVZOKqHGcV9m76KiwAoEygJkREF/acaABAMGIAdemYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dz5o9OOH; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777567314; c=relaxed/simple;
+	bh=bweV+hs6Kqs0TVaYw7HTY4cXyIr9trJP3ovXUOJKAsw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=e9rayUi4aOsns+1vUSS9DSl2Nqa4EgJ3rzPDEjEEUwdrkRP0FPBwtt5ebFSc9sAdtQ32pjDwBi7d39IGjTtryLNdYHFX++ztlu9BNddPqYPtOiFFAYulwG+PILglLHLgNyiM5U2pyQ6eTTH4YqQOxdwhZ75pcXm7LoBpK7ZTVMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aK+N2cw0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dz5o9OOH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777566832; x=1809102832;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cfENCjc1fzzR6KbL+6+PAAkvtumH6My77uGSdh60sFg=;
-  b=dz5o9OOHBRiOVjwahPWla7r/T4wsp3a7wa/1Y2Mcs+063ooj9/Q2Ol3x
-   hI1TnQ2Uzgc0BZj/FWredUq6WGboSgQG+IsCqYj3DLprE4jOgkfu1yH35
-   YsV604jwIyE2DQT6lKYZFk7GcLaHFX42kUtXfHKGHQh1pows9Q4C96YgZ
-   eetTINU0UHVyEwSiTHHqFV6jBglyh0+tOSJ+z9fEbWuG3F5gZUsZYRaVD
-   Io2pAqEJdQV65y5vZPZE5UcPnpQc4TJ86th/onrYTKwPAkmfIa7mLGqN/
-   eaSXBljGCthN9iqUXGVSCGaMTGJtxUBvC9r/7iww5bh6uFGmNaX1seY1K
-   Q==;
-X-CSE-ConnectionGUID: +CWoF0U0SLmnA77Gd/Qi4Q==
-X-CSE-MsgGUID: AgCT0kDETK2GZXoAfeAW9g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11772"; a="78236278"
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="78236278"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 09:33:52 -0700
-X-CSE-ConnectionGUID: eQNDi5mTSUy9Qg9nksZGIw==
-X-CSE-MsgGUID: gnxf2RtZQkewiLYuAZR9QA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="230278698"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 30 Apr 2026 09:33:48 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wIUKf-00000000CeW-2GTG;
-	Thu, 30 Apr 2026 16:33:45 +0000
-Date: Fri, 1 May 2026 00:33:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dexuan Cui <decui@microsoft.com>, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, longli@microsoft.com,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	mhklinux@outlook.com, matthew.ruffell@canonical.com,
-	johansen@templeofstupid.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] Drivers: hv: vmbus: Improve the logc of reserving
- fb_mmio on Gen2 VMs
-Message-ID: <202605010002.dnnxVZFF-lkp@intel.com>
-References: <20260416183529.838321-1-decui@microsoft.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aK+N2cw0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99674C2BCB3;
+	Thu, 30 Apr 2026 16:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777567313;
+	bh=bweV+hs6Kqs0TVaYw7HTY4cXyIr9trJP3ovXUOJKAsw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=aK+N2cw0vDwEUIaHNoHlnkmnzdPbY2FEQynmGu//r8ssV78myraOmxTzNGONzykuC
+	 e3dBcOhi8C2/rOUQIl/8BsmdGoSnPxSj9xuGmr6LzTy8rWa1fW4i81ViF5l609mx6F
+	 o/dwcMaEMiUe2B2fZXOv4y4SJ1aW01VXAGIKXlz8PpR/a7Q+eRPEdoY0aH3DLRITkx
+	 Ir158PdV7Sqcm37iqzGj0Ag5q75lg35oWtwC9ON/c+J2T3Bqbm7cY/r19Ykw3LdMbk
+	 wV4C95TUgQZ9b5Ov5ySfXY7S7ghAUKOeaRCuZiHJGtDlEuiwtNiV4b/hh9l8Hwj0UG
+	 4hH5RHb87phIw==
+Content-Type: multipart/mixed; boundary="===============6458751896961295269=="
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260416183529.838321-1-decui@microsoft.com>
+Message-Id: <62fa35211e90c3961079550e6b826dd1bee301e86838a03ab15cb0b4a631aa8d@mail.kernel.org>
+In-Reply-To: <20260430-selftests-bpf_misconfig-v11-1-e11f7a8c4fdc@suse.com>
+References: <20260430-selftests-bpf_misconfig-v11-1-e11f7a8c4fdc@suse.com>
+Subject: Re: [PATCH bpf-next v11 01/11] selftests/bpf: Add BPF_STRICT_BUILD toggle
+From: bot+bpf-ci@kernel.org
+To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 30 Apr 2026 16:41:50 +0000 (UTC)
 
-Hi Dexuan,
+--===============6458751896961295269==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build warnings:
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -44,6 +44,12 @@
+>  SKIP_LIBBFD	?=
+>  SKIP_CRYPTO	?=
+>
+> +# When BPF_STRICT_BUILD is 1, any BPF object, skeleton, test object, or
+> +# benchmark compilation failure is fatal. Set to 0 to tolerate failures
+> +# and continue building the remaining tests.
+> +BPF_STRICT_BUILD ?= 1
+> +PERMISSIVE := $(filter 0,$(BPF_STRICT_BUILD))
+                     ^^^^
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v7.1-rc1 next-20260429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The PERMISSIVE variable is defined here but never used anywhere in the
+Makefile. The commit message claims "subsequent Makefile rules use to
+make individual build steps non-fatal," but a search through the file
+shows PERMISSIVE only appears at this definition line.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dexuan-Cui/Drivers-hv-vmbus-Improve-the-logc-of-reserving-fb_mmio-on-Gen2-VMs/20260424-033622
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260416183529.838321-1-decui%40microsoft.com
-patch subject: [PATCH] Drivers: hv: vmbus: Improve the logc of reserving fb_mmio on Gen2 VMs
-config: i386-buildonly-randconfig-002-20260430 (https://download.01.org/0day-ci/archive/20260501/202605010002.dnnxVZFF-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260501/202605010002.dnnxVZFF-lkp@intel.com/reproduce)
+This makes the BPF_STRICT_BUILD=0 option documented in the commit message
+non-functional. Users following the provided example will expect permissive
+mode to work, but it has no actual effect.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605010002.dnnxVZFF-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hv/vmbus_drv.c:2403:40: warning: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-    2403 |                         if (!low_mmio_base || low_mmio_base >= SZ_4G ||
-         |                                               ~~~~~~~~~~~~~ ^  ~~~~~
-   1 warning generated.
+Should this commit include the Makefile rules that actually use PERMISSIVE,
+or is this feature incomplete?
 
 
-vim +2403 drivers/hv/vmbus_drv.c
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-  2385	
-  2386	static void __maybe_unused vmbus_reserve_fb(void)
-  2387	{
-  2388		resource_size_t start = 0, size;
-  2389		resource_size_t low_mmio_base;
-  2390		struct pci_dev *pdev;
-  2391	
-  2392		/* Hyper-V CoCo guests do not have a framebuffer device. */
-  2393		if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
-  2394			return;
-  2395	
-  2396		if (efi_enabled(EFI_BOOT)) {
-  2397			/* Gen2 VM: get FB base from EFI framebuffer */
-  2398			if (IS_ENABLED(CONFIG_SYSFB)) {
-  2399				start = sysfb_primary_display.screen.lfb_base;
-  2400				size = max_t(__u32, sysfb_primary_display.screen.lfb_size, 0x800000);
-  2401	
-  2402				low_mmio_base = hyperv_mmio->start;
-> 2403				if (!low_mmio_base || low_mmio_base >= SZ_4G ||
-  2404				    (start && start < low_mmio_base)) {
-  2405					pr_warn("Unexpected low mmio base 0x%pa\n", &low_mmio_base);
-  2406				} else {
-  2407					/*
-  2408					 * If the kdump kernel's lfb_base is 0,
-  2409					 * fall back to the low mmio base.
-  2410					 */
-  2411					if (!start)
-  2412						start = low_mmio_base;
-  2413					/*
-  2414					 * Reserve half of the space below 4GB for high
-  2415					 * resolutions, but cap the reservation to 128MB.
-  2416					 */
-  2417					size = min((SZ_4G - start) / 2, SZ_128M);
-  2418				}
-  2419			}
-  2420		} else {
-  2421			/* Gen1 VM: get FB base from PCI */
-  2422			pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
-  2423					      PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
-  2424			if (!pdev)
-  2425				return;
-  2426	
-  2427			if (pdev->resource[0].flags & IORESOURCE_MEM) {
-  2428				start = pci_resource_start(pdev, 0);
-  2429				size = pci_resource_len(pdev, 0);
-  2430			}
-  2431	
-  2432			/*
-  2433			 * Release the PCI device so hyperv_drm driver can grab it
-  2434			 * later.
-  2435			 */
-  2436			pci_dev_put(pdev);
-  2437		}
-  2438	
-  2439		if (!start)
-  2440			return;
-  2441	
-  2442		/*
-  2443		 * Make a claim for the frame buffer in the resource tree under the
-  2444		 * first node, which will be the one below 4GB.  The length seems to
-  2445		 * be underreported, particularly in a Generation 1 VM.  So start out
-  2446		 * reserving a larger area and make it smaller until it succeeds.
-  2447		 */
-  2448		for (; !fb_mmio && (size >= 0x100000); size >>= 1)
-  2449			fb_mmio = __request_region(hyperv_mmio, start, size, fb_mmio_name, 0);
-  2450	
-  2451		pr_info("hv_mmio=%pR,%pR fb=%pR\n", hyperv_mmio, hyperv_mmio->sibling, fb_mmio);
-  2452	}
-  2453	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25176431268
+--===============6458751896961295269==--
