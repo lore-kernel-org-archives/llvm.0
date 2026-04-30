@@ -1,105 +1,173 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6887A2DC791;
-	Thu, 30 Apr 2026 19:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BBE39FCA8
+	for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 22:40:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777577111; cv=none; b=rkdHjc441x96vIQkORsQnxXYPYDcx46cHiAhrXAqRhWPpfu5HczQq93AaEBOAds0seWBkMq+L+5pCYMxd6XP6OEbSP02Y+hKuDgFDr0uNExDXngknnGQEdzSW4eh2Kk/Q4G00/31v5tUTyekqOzkyUM532X1Kcop2/cD1jPyntU=
+	t=1777588844; cv=none; b=RWp9p7tJqslhRq7wDxokdx7XfzMp1nvtPTnITcWgqpGJJrieKtB9tVUhF3bXewlJCL7BhK0QohAZot2fFF6QPofI6MPTQmPJloXTF/j23LisBNQyIh0rnqIdbcR+Yby+R6+2RCTadp0vUDrdYdrA3YBpuQLiNd5nesAgioMP6lQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777577111; c=relaxed/simple;
-	bh=c/Y2oacApZo94wOchw3fo4yoz19By5Cpn6cYCyp1n7U=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=bRNnOTE8Q/Ji5E1MCRYUaWjpuUZnzrHMXpObZGo+iME3gI14q0d6DGBMEjZxuQeyGhppNQ3wOpFvxN/a9fDJ7Gk/cesYAwomYJLHaft94ZukHg2+pxn7jxQNB+XT82dCPJ4YkD/wGjDCx+FOFz30YowjO1iTfFgTuVGY6QdHwOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QFPfJykK; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777588844; c=relaxed/simple;
+	bh=V406TqVoKHgAuicekRKpsJmx5/5UDrii8AdfdX/zISw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mfhsmhS+CL3e7oQJyCR3GJhDstq0kR+Gl/nVTvaGKEhBVXT/PfmJsUp6KkYs/bPhJmyaS8yRP7iNkkI7XwFMWEnSK93Z8GXqFZ1JR+ThW7+uQEF24MFaGEuvwnE/PafLS+GHdH6KpV6oZD6b6zXlquqQ3VCHXlEOFC8rDNlARNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cis2bmaL; arc=none smtp.client-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QFPfJykK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777577110; x=1809113110;
-  h=date:from:to:cc:subject:message-id;
-  bh=c/Y2oacApZo94wOchw3fo4yoz19By5Cpn6cYCyp1n7U=;
-  b=QFPfJykKxTqnJoeUtvgX6N0hD7b1dsP2os/bfuNQrs+aqqvmKmJn8p4C
-   CH+ziG/meYR3M/izmoLAbCsui+easv1v0G3Ps+2xse+qJsGDGKSEoAcmz
-   x2vSTnjWv10UZMDubNCt9uEwpSjhHfcgdL7OoxR4iQmdT4rnOpd+k/+6G
-   i94y8S6ly45rfH1nSw9RiWb56pXoKNKd/EwnCcG4lG7njNFdi/hLpf5sA
-   2/JYvV0zKMi1d9j5gnkEoXg2M1/eadIYApOEGm22u43IgO/rsfeF8r1lc
-   naokjarjtpl9ebC0COgLvH19Vnd6XX65uWzNqRiq/C/cpF84z4sFRBUww
-   g==;
-X-CSE-ConnectionGUID: GKgsWlaDTxGfPigh94Bw+w==
-X-CSE-MsgGUID: D0uxqOgXSAWiDuza0P/GCw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11772"; a="78594500"
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="78594500"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 12:25:07 -0700
-X-CSE-ConnectionGUID: FOQZWNwmReqZhuTwuxNrig==
-X-CSE-MsgGUID: sEC1QqGUQCuJY1XAHYsEzA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="232019750"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 30 Apr 2026 12:25:06 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wIX0R-00000000Cqd-0Zm7;
-	Thu, 30 Apr 2026 19:25:03 +0000
-Date: Fri, 01 May 2026 03:24:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Anup Patel <anup@brainfault.org>, Nutty Liu <nutty.liu@hotmail.com>
-Subject: [avpatel:riscv_iommu_irqbypass_v2 3/18]
- drivers/iommu/riscv/iommu.h:24:28: error: field has incomplete type 'struct
- pt_iommu_riscv_64'
-Message-ID: <202605010359.0LXLMhKE-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cis2bmaL"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2b4520f6b32so2279456eec.0
+        for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 15:40:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777588843; x=1778193643; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/rIQVUIY7rOHf6FAYreUm24KryRFVFOuXAkyabTl3TY=;
+        b=Cis2bmaLlibc+6Bc9BhJAXpmXV/uhTinwOqdIdiDPExjh8IgzGbhGTk2hms0X0OnUU
+         MUapD3ApUjvHnY12/shnHlncsB4RVgvDjP9FO/ffbEmDQppjJPQBN8xb2vGp0o5gW5L9
+         r80xPzmyONf1pqrvRRIbytUieoxyeDvCyijgHMaZRO2j1VQmpNWC4mzb5spd9NdTllTB
+         BcNiySoiMV/AN8wf6QvupaZD/R9Vs8XjDjzowclNR7IYteJAxrBTTh6qcJs0LXozFc6O
+         N2zDlH2XNTsfjfKE0cTGlozEip7FXbkbt8KDquGgMbndjRphCepyoz1Re/LiLf4mPE6/
+         AH2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777588843; x=1778193643;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/rIQVUIY7rOHf6FAYreUm24KryRFVFOuXAkyabTl3TY=;
+        b=kNPsaTHohYd5tLLLavKsGRD/h25aC2hisovzICpMW3wI2Xctw+w0QmLFbNsPHDQZDC
+         nbqim7nPd8Ow8H23rUv+2p/tVpC1SakV9+UK4eb3ug0TfJUu8zzDEOMVx8nUhFQEclMl
+         76Vb+ou2IesYyIZvlVBCjdx4B68iQL+4vQbmzLcs3PG72MQcjbeRCHstpdvEK6BQz+QN
+         2vhY8UXFpgBgQVwyjNhnKHUUB/Z30SPvnOsxpQDAsrUdkzniMfMwK9FXT/WfA9S2Y+4o
+         hO3yl5WsA+/+chlk3v3X7CFy6npAQujmcOiKSU11BCp0AnLcbi1AN0M3v+5p+dUCoLaQ
+         ePAA==
+X-Forwarded-Encrypted: i=1; AFNElJ/tpsv5a7renh6WpolvnqvNAvP/BxETqZtWGqSTQsTp0C7onI1AK1MSZucRu0uCsTjwc6kk@lists.linux.dev
+X-Gm-Message-State: AOJu0YyXTqXua+0XevHxjmZRaFNzUpA8/axvFxd5fRuhNajalKu+IQ1a
+	ZXkKNB3dqh/lhCz6Eyd5FCi4Wzf+B8zjHLi9SQDLPokrcxL/XawXqA+A
+X-Gm-Gg: AeBDieteNighqFoF/1AtdTFNZ3bdtyS80mY1APxxbZthY3evrByoFgLKXpllqb+S9EX
+	gbVzKRmDtwOauO87BjxtA/s5CyQX3zBhj4VP2RJNi97rIfFF15nq9fhRxXGviSRu306D8F7QRU8
+	bEkCQb4WFpatk5auWmOZ8Cg3ZfnnIJ6mzADkULHb6MP1vmFCSt16KYuL4fldDs4XcU5ftHYCXc8
+	niMywvoGQ8PKWANYdOlTVxslI+OYw5uVTaNACob4g/U2gf9TbvRvz3VWoPHbRwxvMbCrQuwk+h2
+	preOjjxHLEIsn+N/l4FkqsMhnw7E9cfU9n7ckZWhrFXb4J49Lx5QNr1im2tpg41jsiSBjmogT7Y
+	U1nnRDeuUC94GGBJWGYSXRRGkV/EKwUjvWGZoGvaaGyJiTXsb5w+f+X4WDeYmi4nWSU+H9E2rix
+	QiMhu0t2Yq/BC3wkBcB6FAfjpu2CAzwWO1dp54
+X-Received: by 2002:a05:7300:5341:b0:2d9:77e1:57d4 with SMTP id 5a478bee46e88-2ed3e489086mr2332993eec.29.1777588842546;
+        Thu, 30 Apr 2026 15:40:42 -0700 (PDT)
+Received: from sergio-82n7 ([169.150.198.75])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ee3b29b11fsm1906281eec.19.2026.04.30.15.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2026 15:40:41 -0700 (PDT)
+From: Sergio Melas <sergiomelas@gmail.com>
+To: lkp@intel.com
+Cc: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux@roeck-us.net,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	sergiomelas@gmail.com
+Subject: [PATCH] hwmon: (yogafan) fix non-kernel-doc header warning
+Date: Fri,  1 May 2026 06:40:22 +0800
+Message-ID: <20260430224022.34424-1-sergiomelas@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <202604301429.UUK5MS9i-lkp@intel.com>
+References: <202604301429.UUK5MS9i-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/avpatel/linux.git riscv_iommu_irqbypass_v2
-head:   0ba166d111b762ae8f37075ba1266e345ae5ef59
-commit: 09919384307f2b09ecee7801e4ef772dc0a52a56 [3/18] iommu/riscv: Move struct riscv_iommu_domain and info to iommu.h
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20260501/202605010359.0LXLMhKE-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260501/202605010359.0LXLMhKE-lkp@intel.com/reproduce)
+hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605010359.0LXLMhKE-lkp@intel.com/
+This driver provides fan speed monitoring for Lenovo Yoga, Legion, and
+IdeaPad laptops by interfacing with the Embedded Controller (EC) via ACPI.
 
-All errors (new ones prefixed by >>):
+The current header comment starts with '/**', which is reserved for
+kernel-doc, this triggers a warning so we update it starting to '/*'
+to avoid the compile warning.
 
-   In file included from drivers/iommu/riscv/iommu-platform.c:22:
->> drivers/iommu/riscv/iommu.h:24:28: error: field has incomplete type 'struct pt_iommu_riscv_64'
-      24 |                 struct pt_iommu_riscv_64 riscvpt;
-         |                                          ^
-   drivers/iommu/riscv/iommu.h:24:10: note: forward declaration of 'struct pt_iommu_riscv_64'
-      24 |                 struct pt_iommu_riscv_64 riscvpt;
-         |                        ^
-   1 error generated.
+Fixes: c67c248ca406 ("hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202604301429.UUK5MS9i-lkp@intel.com/
+Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+---
+v11.1:
+  - Fix comment header to resolve 0-day robot warning.
+v11:
+  - Mapped ACPI paths directly via DMI quirks.
+  - Fixed Documentation formatting (0-day robot warnings).
+  - Implemented 100ms MIN_SAMPLING to address rapid polling concerns.
+  - Removed redundant platform_set_drvdata() in probe.
+  - Explicitly defined platform device ID as -1 for cleaner sysfs naming.
+v9/10:
+  - Implement ACPI handle resolution during probe for better performance (O(1) read).
+  - Add MODULE_DEVICE_TABLE(dmi, ...) to enable module autoloading.
+  - Refine RLLag filter documentation and suspend/resume logic.
+  - Include comprehensive EC architecture research database (8-bit vs 16-bit).
+  - Validated efficiency on kernels 6.18, 6.19, and 7.0-rc5: 'perf top' 
+    confirms negligible CPU overhead (<0.01%) during active polling.
+v8:
+  - Replaced heuristic multiplier with deterministic DMI Quirk Table.
+  - Added 'depends on DMI' to Kconfig.
+  - Verified FOPTD model (1000ms TAU / 1500 RPM/s slew) against hardware traces.
+  - Increased filter precision to 12-bit fixed-point.
+v7:
+  - Fixed Kconfig: Removed non-existent 'select MATH64'.
+  - Fixed unused macro: Utilized RPM_FLOOR_LIMIT to implement an
+    immediate 0-RPM bypass in the filter.
+  - Clarification: Previous "unified structure" comment meant that all
+    6 files (driver, docs, metadata) are now in this single atomic patch.
+v6:
+  - Unified patch structure (6 files changed).
+  - Verified FOPTD (First-Order Plus Time Delay) model against hardware
+      traces (Yoga 14c) to ensure physical accuracy of the 1000ms time constant.
+  - Fixed a rounding stall: added a +/- 1 RPM floor to the step calculation
+    to ensure convergence even at high polling frequencies.
+  - Set MAX_SLEW_RPM_S to 1500 to match physical motor inertia.
+  - Documentation: Updated to clarify 100-RPM hardware step resolution.
+  - 32-bit safety: Implemented div64_s64 for coefficient precision.
+v5:
+  - Fixed 32-bit build failures by using div64_s64 for 64-bit division.
+  - Extracted magic numbers into constants (RPM_UNIT_THRESHOLD, etc.).
+  - Fixed filter stall by ensuring a minimum slew limit (limit = 1).
+  - Refined RPM floor logic to trigger only when hardware reports 0 RPM.
+  - Resolved 255/256 unit-jump bug by adjusting heuristic thresholds.
+v4:
+  - Rebased on groeck/hwmon-next branch for clean application.
+  - Corrected alphabetical sorting in Kconfig and Makefile.
+  - Technical Validation & FOPTD Verification:
+    - Implemented RLLag (Rate-Limited Lag) first-order modeling.
+    - Used 10-bit fixed-point math for alpha calculation to avoid
+      floating point overhead in the kernel.
+    - Added 5000ms filter reset for resume/long-polling sanitation.
+v3:
+  - Added MAINTAINERS entry and full Documentation/hwmon/yogafan.rst.
+  - Fixed integer overflow in filter math.
+  - Added support for secondary fan paths (FA2S) for Legion laptops.
+v2:
+  - Migrated from background worker to passive multirate filtering.
+  - Implemented dt-based scaling to maximize CPU sleep states.
+  - Restricted driver to Lenovo hardware via DMI matching.
+v1:
+  - Initial submission with basic ACPI fan path support.
+---
+ drivers/hwmon/yogafan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-vim +24 drivers/iommu/riscv/iommu.h
-
-    19	
-    20	/* This struct contains protection domain specific IOMMU driver data. */
-    21	struct riscv_iommu_domain {
-    22		union {
-    23			struct iommu_domain domain;
-  > 24			struct pt_iommu_riscv_64 riscvpt;
-    25		};
-    26		struct list_head bonds;
-    27		spinlock_t lock;		/* protect bonds list updates. */
-    28		int pscid;
-    29	};
-    30	
-
+diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
+index 605cc928f..314ee6195 100644
+--- a/drivers/hwmon/yogafan.c
++++ b/drivers/hwmon/yogafan.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+-/**
++/*
+  * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
+  *
+  * Provides fan speed monitoring for Lenovo Yoga, Legion, and IdeaPad
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.53.0
+
