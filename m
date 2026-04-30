@@ -1,61 +1,61 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B8C1C28E;
-	Thu, 30 Apr 2026 01:00:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DDD2517AF;
+	Thu, 30 Apr 2026 01:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777510823; cv=none; b=Pe8JhVEmnnOWPgX/28PcpSHNhDHBPiSCXzxffIVvXlMyperfP8Je3c36oCWfq/HjbRktuwu7b/9S63jLVo40loem/wI2lc4IF73POpfQ4anOQ5dyvz7aBAk4XYu6FagbwcQ1NjTm0nZS9N2ylJ2anYp9m/V83675W2yu+ClFTzc=
+	t=1777510826; cv=none; b=CYmcWOs+IrRjA/bu7xuvOV6qTCRjxzZ01gDLODJjsS5ap2PE/hopMmvXnjYaXHMPBk2r088JuwoNYdQl1IBzzr04f4dkm+k91VFOaNiJ7WsO8d3RYGuTZxLYsUybIYz1qknrnp+Ri7sY9iSa5vaXv6iaq0tFeJeIdSFY/i5ng+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777510823; c=relaxed/simple;
-	bh=zfkmByrLFAHEKVJWVl0s1IDqCNxIr7Q7yGaKuyRTUag=;
+	s=arc-20240116; t=1777510826; c=relaxed/simple;
+	bh=ZKHysuAxlJ9FcUWvxBuYMoCwUewrG9ZYNHuUm8WZvP4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pT4Slrw4gcXhQw63hFOgKTGitP/PcNSJANS/XLeD75Ig/kPinWq/VVEOzKPx6W6fvHvJEZnwX/7OxmBRcu53Q3vhSeOVjh0+Inz5PkWIuCTDjmq2dI1cGTUGrnDDbYfwvjWGT/9WHQpFe27pMY/GCeA6FXt4z7X5tE0ESl6afHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IKiMY6hz; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=onrOCeYA63AR87MQ0cTVzGVpQ8gtG5lYClv4bW6Qcd8+O0sE9TDlWGyQHMh6uV6m0kqyC0Sxf1smNQK56i2wZ/oxwyReyjY9Zj1VDASVczPHL9GG3Rp/QMsj5DIr9tEdegCfkU3Sfxo8+hYSTzRGZmMfp09AKaGeILz5kx7Dc7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GMuNmZUu; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IKiMY6hz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GMuNmZUu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777510822; x=1809046822;
+  t=1777510825; x=1809046825;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zfkmByrLFAHEKVJWVl0s1IDqCNxIr7Q7yGaKuyRTUag=;
-  b=IKiMY6hzYvuGjJZ726TmJJMOUmRjX1PlTgeq5e327xWc91/515BycoWK
-   bXQHiWIOWjn/Uf6jc9vZyTGDq6XqqwBa6uKZA93qZs71kPCzRyx4rVuwj
-   ToqcIYZgbKzdv6H8qQzCCIAJ77bRCn+YNwkgCovQv4i910mUrkO/dt1fx
-   uoDgqpy/MjfFtdEdbM7rtXSloK1ZL4E2GaV9/hY2eAy6/2z6AMKxqns/I
-   Bs98kTsNwI1ECPl6PeZLEzpKvS9gSR5Ch5uVoKnB8FHuc+DXGn3i4l5UO
-   SNSl40jj7QgjZmvjBf4QucoyCVVn0rvlMBUAsLts1Lu/psqbTmYHTZs7A
-   Q==;
-X-CSE-ConnectionGUID: 1hsFupDLQy2f3pNc5xfCRg==
-X-CSE-MsgGUID: rCZOEh5cQDyOV1vFMo7Udw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="88765229"
+  bh=ZKHysuAxlJ9FcUWvxBuYMoCwUewrG9ZYNHuUm8WZvP4=;
+  b=GMuNmZUuNApfQS7D4U1Fd+DE9ZsNzYfb0pnMNwAO7OmrMzXqYUHguJ0C
+   /Ioc6lbJlhqRWOYA9CMILgNxy91DS2W/S2cZ7OMMpoNttGl+xQ9RpvjxA
+   9SqGef3IjD+jH2NGc8Wv/OBz077sa54IMmK0+S42nvSa0FLQkZdx/QbUy
+   CVeLTOVEveSIhE/wVhHeH5EHirgTiOODrgjXQ2UJomnG+XyphCEucRr8F
+   1cJPmBN8zjjf04PaLBxwrogkLLlB7CCAIoQoguqKKSjx4h2DbFD9TPwhr
+   FUkOj13jXXgSU5H2k4Fvi6LVCxb1aQWPvlAIFPV++vc+Voa55s518l25V
+   w==;
+X-CSE-ConnectionGUID: tu+G5RoUSFqlbOoNSmF61Q==
+X-CSE-MsgGUID: e0XaRV0ITmO2MS6ppxWk9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="88765232"
 X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="88765229"
+   d="scan'208";a="88765232"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
   by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 18:00:22 -0700
-X-CSE-ConnectionGUID: vGEOVgUIQtiCWTwJKfbZKQ==
-X-CSE-MsgGUID: rWWdLMylRaWrqFLsB6Bs0g==
+X-CSE-ConnectionGUID: 9Ka1Rgt7SimwNrti1gqc7Q==
+X-CSE-MsgGUID: JV6rOf1SQZW+LQIwbPgHJQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="239452397"
+   d="scan'208";a="239452396"
 Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
   by orviesa005.jf.intel.com with ESMTP; 29 Apr 2026 18:00:20 -0700
 Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wIFlI-00000000BkG-3VXr;
+	id 1wIFlI-00000000BkE-3QWg;
 	Thu, 30 Apr 2026 01:00:16 +0000
-Date: Thu, 30 Apr 2026 08:59:54 +0800
+Date: Thu, 30 Apr 2026 08:59:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shawn Lin <shawn.lin@rock-chips.com>, Ulf Hansson <ulfh@kernel.org>
+To: Yu Kuai <yukuai@fnnas.com>, linux-raid@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Shawn Lin <shawn.lin@rock-chips.com>
-Subject: Re: [PATCH] mmc: core: Switch to use pm_ptr() for bus.c
-Message-ID: <202604300815.ATCbIpPU-lkp@intel.com>
-References: <1776739053-120472-1-git-send-email-shawn.lin@rock-chips.com>
+	linux-kernel@vger.kernel.org, Li Nan <linan122@huawei.com>,
+	Yu Kuai <yukuai@fnnas.com>, Cheng Cheng <chencheng@fnnas.com>
+Subject: Re: [PATCH] md/raid5: split reshape bios before bitmap accounting
+Message-ID: <202604300803.nq5tYBQB-lkp@intel.com>
+References: <20260419030942.824195-20-yukuai@fnnas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,65 +64,202 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1776739053-120472-1-git-send-email-shawn.lin@rock-chips.com>
+In-Reply-To: <20260419030942.824195-20-yukuai@fnnas.com>
 
-Hi Shawn,
+Hi Yu,
 
 kernel test robot noticed the following build errors:
 
 [auto build test ERROR on linus/master]
-[also build test ERROR on ulf-hansson-mmc-mirror/next v7.1-rc1 next-20260429]
+[also build test ERROR on song-md/md-next v7.1-rc1 next-20260429]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shawn-Lin/mmc-core-Switch-to-use-pm_ptr-for-bus-c/20260424-085747
+url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/md-raid5-split-reshape-bios-before-bitmap-accounting/20260425-083941
 base:   linus/master
-patch link:    https://lore.kernel.org/r/1776739053-120472-1-git-send-email-shawn.lin%40rock-chips.com
-patch subject: [PATCH] mmc: core: Switch to use pm_ptr() for bus.c
-config: arm64-randconfig-004-20260430 (https://download.01.org/0day-ci/archive/20260430/202604300815.ATCbIpPU-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20260419030942.824195-20-yukuai%40fnnas.com
+patch subject: [PATCH] md/raid5: split reshape bios before bitmap accounting
+config: um-randconfig-001-20260430 (https://download.01.org/0day-ci/archive/20260430/202604300803.nq5tYBQB-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604300815.ATCbIpPU-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604300803.nq5tYBQB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604300815.ATCbIpPU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604300803.nq5tYBQB-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/mmc/core/bus.c:169:26: error: called object type 'void *' is not a function or function pointer
-     169 |         ret = pm_generic_suspend(dev);
-         |               ~~~~~~~~~~~~~~~~~~^
-   drivers/mmc/core/bus.c:175:20: error: called object type 'void *' is not a function or function pointer
-     175 |                 pm_generic_resume(dev);
-         |                 ~~~~~~~~~~~~~~~~~^
-   drivers/mmc/core/bus.c:191:25: error: called object type 'void *' is not a function or function pointer
-     191 |         ret = pm_generic_resume(dev);
-         |               ~~~~~~~~~~~~~~~~~^
-   3 errors generated.
+   drivers/md/raid5.c:4221:7: warning: variable 'qread' set but not used [-Wunused-but-set-variable]
+    4221 |                 int qread =0;
+         |                     ^
+>> drivers/md/raid5.c:6126:7: error: call to undeclared function 'mddev_bio_split_at_reshape_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    6126 |         bi = mddev_bio_split_at_reshape_offset(mddev, bi, NULL,
+         |              ^
+>> drivers/md/raid5.c:6126:5: error: incompatible integer to pointer conversion assigning to 'struct bio *' from 'int' [-Wint-conversion]
+    6126 |         bi = mddev_bio_split_at_reshape_offset(mddev, bi, NULL,
+         |            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    6127 |                                                &conf->bio_split);
+         |                                                ~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-vim +169 drivers/mmc/core/bus.c
+vim +/mddev_bio_split_at_reshape_offset +6126 drivers/md/raid5.c
 
-7628774851751e Ulf Hansson     2013-06-10  162  
-32d317c60e56c2 Chuanxiao Dong  2012-04-11  163  static int mmc_bus_suspend(struct device *dev)
-4101c16a910b15 Pierre Ossman   2007-05-19  164  {
-265cdc900ce93c Andy Shevchenko 2010-09-17  165  	struct mmc_card *card = mmc_dev_to_card(dev);
-986892ca78eedd Ulf Hansson     2013-06-10  166  	struct mmc_host *host = card->host;
-986892ca78eedd Ulf Hansson     2013-06-10  167  	int ret;
-4101c16a910b15 Pierre Ossman   2007-05-19  168  
-0967edc6ef5c3c Ulf Hansson     2014-10-06 @169  	ret = pm_generic_suspend(dev);
-986892ca78eedd Ulf Hansson     2013-06-10  170  	if (ret)
-986892ca78eedd Ulf Hansson     2013-06-10  171  		return ret;
-986892ca78eedd Ulf Hansson     2013-06-10  172  
-986892ca78eedd Ulf Hansson     2013-06-10  173  	ret = host->bus_ops->suspend(host);
-ebe7dd45cf49e3 Adrian Hunter   2017-11-21  174  	if (ret)
-ebe7dd45cf49e3 Adrian Hunter   2017-11-21  175  		pm_generic_resume(dev);
-ebe7dd45cf49e3 Adrian Hunter   2017-11-21  176  
-4101c16a910b15 Pierre Ossman   2007-05-19  177  	return ret;
-4101c16a910b15 Pierre Ossman   2007-05-19  178  }
-4101c16a910b15 Pierre Ossman   2007-05-19  179  
+  6083	
+  6084	static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+  6085	{
+  6086		DEFINE_WAIT_FUNC(wait, woken_wake_function);
+  6087		struct r5conf *conf = mddev->private;
+  6088		const int rw = bio_data_dir(bi);
+  6089		struct stripe_request_ctx *ctx;
+  6090		sector_t logical_sector;
+  6091		enum stripe_result res;
+  6092		int s, stripe_cnt;
+  6093		bool on_wq;
+  6094	
+  6095		if (unlikely(bi->bi_opf & REQ_PREFLUSH)) {
+  6096			int ret = log_handle_flush_request(conf, bi);
+  6097	
+  6098			if (ret == 0)
+  6099				return true;
+  6100			if (ret == -ENODEV) {
+  6101				if (md_flush_request(mddev, bi))
+  6102					return true;
+  6103			}
+  6104			/* ret == -EAGAIN, fallback */
+  6105		}
+  6106	
+  6107		md_write_start(mddev, bi);
+  6108		/*
+  6109		 * If array is degraded, better not do chunk aligned read because
+  6110		 * later we might have to read it again in order to reconstruct
+  6111		 * data on failed drives.
+  6112		 */
+  6113		if (rw == READ && mddev->degraded == 0 &&
+  6114		    mddev->reshape_position == MaxSector) {
+  6115			bi = chunk_aligned_read(mddev, bi);
+  6116			if (!bi)
+  6117				return true;
+  6118		}
+  6119	
+  6120		if (unlikely(bio_op(bi) == REQ_OP_DISCARD)) {
+  6121			make_discard_request(mddev, bi);
+  6122			md_write_end(mddev);
+  6123			return true;
+  6124		}
+  6125	
+> 6126		bi = mddev_bio_split_at_reshape_offset(mddev, bi, NULL,
+  6127						       &conf->bio_split);
+  6128		if (!bi) {
+  6129			if (rw == WRITE)
+  6130				md_write_end(mddev);
+  6131			return true;
+  6132		}
+  6133	
+  6134		logical_sector = bi->bi_iter.bi_sector & ~((sector_t)RAID5_STRIPE_SECTORS(conf)-1);
+  6135		bi->bi_next = NULL;
+  6136	
+  6137		ctx = mempool_alloc(conf->ctx_pool, GFP_NOIO);
+  6138		memset(ctx, 0, conf->ctx_size);
+  6139		ctx->first_sector = logical_sector;
+  6140		ctx->last_sector = bio_end_sector(bi);
+  6141		/*
+  6142		 * if r5l_handle_flush_request() didn't clear REQ_PREFLUSH,
+  6143		 * we need to flush journal device
+  6144		 */
+  6145		if (unlikely(bi->bi_opf & REQ_PREFLUSH))
+  6146			ctx->do_flush = true;
+  6147	
+  6148		stripe_cnt = DIV_ROUND_UP_SECTOR_T(ctx->last_sector - logical_sector,
+  6149						   RAID5_STRIPE_SECTORS(conf));
+  6150		bitmap_set(ctx->sectors_to_do, 0, stripe_cnt);
+  6151	
+  6152		pr_debug("raid456: %s, logical %llu to %llu\n", __func__,
+  6153			 bi->bi_iter.bi_sector, ctx->last_sector);
+  6154	
+  6155		/* Bail out if conflicts with reshape and REQ_NOWAIT is set */
+  6156		if ((bi->bi_opf & REQ_NOWAIT) &&
+  6157		    get_reshape_loc(mddev, conf, logical_sector) == LOC_INSIDE_RESHAPE) {
+  6158			bio_wouldblock_error(bi);
+  6159			if (rw == WRITE)
+  6160				md_write_end(mddev);
+  6161			mempool_free(ctx, conf->ctx_pool);
+  6162			return true;
+  6163		}
+  6164		md_account_bio(mddev, &bi);
+  6165	
+  6166		/*
+  6167		 * Lets start with the stripe with the lowest chunk offset in the first
+  6168		 * chunk. That has the best chances of creating IOs adjacent to
+  6169		 * previous IOs in case of sequential IO and thus creates the most
+  6170		 * sequential IO pattern. We don't bother with the optimization when
+  6171		 * reshaping as the performance benefit is not worth the complexity.
+  6172		 */
+  6173		if (likely(conf->reshape_progress == MaxSector)) {
+  6174			logical_sector = raid5_bio_lowest_chunk_sector(conf, bi);
+  6175			on_wq = false;
+  6176		} else {
+  6177			add_wait_queue(&conf->wait_for_reshape, &wait);
+  6178			on_wq = true;
+  6179		}
+  6180		s = (logical_sector - ctx->first_sector) >> RAID5_STRIPE_SHIFT(conf);
+  6181	
+  6182		while (1) {
+  6183			res = make_stripe_request(mddev, conf, ctx, logical_sector,
+  6184						  bi);
+  6185			if (res == STRIPE_FAIL || res == STRIPE_WAIT_RESHAPE)
+  6186				break;
+  6187	
+  6188			if (res == STRIPE_RETRY)
+  6189				continue;
+  6190	
+  6191			if (res == STRIPE_SCHEDULE_AND_RETRY) {
+  6192				WARN_ON_ONCE(!on_wq);
+  6193				/*
+  6194				 * Must release the reference to batch_last before
+  6195				 * scheduling and waiting for work to be done,
+  6196				 * otherwise the batch_last stripe head could prevent
+  6197				 * raid5_activate_delayed() from making progress
+  6198				 * and thus deadlocking.
+  6199				 */
+  6200				if (ctx->batch_last) {
+  6201					raid5_release_stripe(ctx->batch_last);
+  6202					ctx->batch_last = NULL;
+  6203				}
+  6204	
+  6205				wait_woken(&wait, TASK_UNINTERRUPTIBLE,
+  6206					   MAX_SCHEDULE_TIMEOUT);
+  6207				continue;
+  6208			}
+  6209	
+  6210			s = find_next_bit_wrap(ctx->sectors_to_do, stripe_cnt, s);
+  6211			if (s == stripe_cnt)
+  6212				break;
+  6213	
+  6214			logical_sector = ctx->first_sector +
+  6215				(s << RAID5_STRIPE_SHIFT(conf));
+  6216		}
+  6217		if (unlikely(on_wq))
+  6218			remove_wait_queue(&conf->wait_for_reshape, &wait);
+  6219	
+  6220		if (ctx->batch_last)
+  6221			raid5_release_stripe(ctx->batch_last);
+  6222	
+  6223		if (rw == WRITE)
+  6224			md_write_end(mddev);
+  6225	
+  6226		mempool_free(ctx, conf->ctx_pool);
+  6227		if (res == STRIPE_WAIT_RESHAPE) {
+  6228			md_free_cloned_bio(bi);
+  6229			return false;
+  6230		}
+  6231	
+  6232		bio_endio(bi);
+  6233		return true;
+  6234	}
+  6235	
 
 -- 
 0-DAY CI Kernel Test Service
