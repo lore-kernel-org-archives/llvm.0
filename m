@@ -1,316 +1,214 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B347228CB8;
-	Thu, 30 Apr 2026 10:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99E723EA89;
+	Thu, 30 Apr 2026 11:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777545020; cv=none; b=VYUs9HP7VwDVFNdbVyJRpNbLjaD6xvqLFc3aSLIrpdXpSSqY6o+kXtwXpkwnPHNzVYHi0dEaHsbaECl1d+hhm2Nel41+lyRB0S/h+4Orh6Lq4aHRM3lJP2ziXLZxPrkKfF0OOLlBXIXjfm76EOWZVVrXAVtORIdYo/NAIVal8XU=
+	t=1777547002; cv=none; b=KY8+Icm9pBf3fMlub8no/vQyeIpwJRn6NIsXDGXPacx3v5sdoa+Vrkr1S5EyUOzEGO/ZNReTIUgnw56QUkIjwRZiI6mGQmcgkF4fXe6q94DWMe9OQGudYnwfDzHcikc5eyFtBq4OEp1fVqXJoRAbe7ANvs9cunYEPqJ36XAKZPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777545020; c=relaxed/simple;
-	bh=Lgf2r3J+ySkKuEDNm0dawLdk7AJMr39miziM6Ko5Pik=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=kASIKAYYWT4RmDSkzk2A2/ld+VYgbWHf8WmG73QcAffb7MHfWs/fuctksi801bQEXN1ubhHgmUrRXaDD3vtOOMdz+VGzct1A2ZC+x+pWQIxflwIOscy9yzI3RrCdQgX0Pd2Gz2AaRxr0YXLk/b7En5CGwJFP+63LyzCrChn65CY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ad7Xb+s1; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1777547002; c=relaxed/simple;
+	bh=af2+WqaBOJjzYGkvScqHKYvdj2nIXZyrjYBxCdj8d04=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rs4DebK7WjIQdl+cIDH3U8X5puc3ESUfAx4oMGDzFfwDX5+4NJbx50IHFxSODWHHfBT933nSDNj2edQmaT1OPO8YzvldBtru2gbR7hvMUEPIdK/fLG+h9umnarUHWjbi71J0YqoUnnl0cUTX1JsN/8ufwOxf9uppX9SFSIedB8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nNqf1OPh; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ad7Xb+s1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nNqf1OPh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777545019; x=1809081019;
-  h=date:from:to:cc:subject:message-id;
-  bh=Lgf2r3J+ySkKuEDNm0dawLdk7AJMr39miziM6Ko5Pik=;
-  b=ad7Xb+s11FUILOvukvR04fqXSrycpLq0GjVNqtvHOe1hn7Bev5EFRuUF
-   nztGjIV1PA3eFUI/gZK+esn49e7xN86LWzjj83ZlYcjZUIzhR69Yr7Cpk
-   P64vCRLJz3lI10ZO6QI29v68POeNmNFQNWDJUD6jb/f5uNaSbk8Gv7lJ+
-   uPNrfSyKq7Ff6HqkIm2p97xfgeFqeEFyy+mEvWfl4O5B+vBIKwEUZ15fU
-   +fcSTA2dOSpUWCv57P6A6rhQe7rw0DEo1LzZbo6TG7x9Oylc4kJkZ2MJf
-   g0UChoRC/97cQ3Hgfe3O3Cc0JL8tTIjFgSpiL2hnr011Mz872MQiBPnf/
-   g==;
-X-CSE-ConnectionGUID: LFfy2a/iRXKS/2I4ZJ/75A==
-X-CSE-MsgGUID: +ppIsgaETFO2/BB84vbIwg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="96057599"
+  t=1777547001; x=1809083001;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=af2+WqaBOJjzYGkvScqHKYvdj2nIXZyrjYBxCdj8d04=;
+  b=nNqf1OPhxYruLP/veW/0CXqJ52rHDYMJxNfKXnERW/WOOEPQghnDAt8t
+   GQKoypPf/zeF9g5lLfnrC2FYoCo1QSBkTZMGbeebEKPUqc7wQcQlLS5o7
+   I7/oMmxd+v7rs0yO4lL47d/o4m4KooT/avDNUP1qtEI7sg4/pe42E+EAZ
+   MiZKXG3DjFSSZ+0w6I6RIQrOwCAPf/Ld+YhFjJNJMYiy7Q0A6B96EMgUq
+   fb7k08SwgDwlFD1MzLMETzL6sBITrKF4tQ1NUFsvYrXGQX9Agwz+bBJPF
+   1uusEoXN33c2TcdMKxHwc2YIPLHE/XfF9lzmer4XXG0lfW5xNXEmUPKPZ
+   Q==;
+X-CSE-ConnectionGUID: KrAlIApoTlCRsEvGyHk39g==
+X-CSE-MsgGUID: P4GTg9/vRAKJ9hxHPUkN3g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="101157246"
 X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="96057599"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 03:30:18 -0700
-X-CSE-ConnectionGUID: WI0SvSYxSKi9X0XuJE14rA==
-X-CSE-MsgGUID: 9PSt8TsmQQeutZtyp9yNlA==
+   d="scan'208";a="101157246"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 04:03:20 -0700
+X-CSE-ConnectionGUID: aTS84OxKQq6GwrgGHg6yNA==
+X-CSE-MsgGUID: uLbIXbbnQmyWSstGjibosQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="264917477"
+   d="scan'208";a="234592287"
 Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 30 Apr 2026 03:30:16 -0700
+  by orviesa009.jf.intel.com with ESMTP; 30 Apr 2026 04:03:18 -0700
 Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wIOer-00000000CHs-0j7A;
-	Thu, 30 Apr 2026 10:30:13 +0000
-Date: Thu, 30 Apr 2026 18:29:45 +0800
+	id 1wIPAo-00000000CJ2-3pne;
+	Thu, 30 Apr 2026 11:03:14 +0000
+Date: Thu, 30 Apr 2026 19:02:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
+To: Oliver Neukum <oneukum@suse.com>,
+	syzbot+2afd7e71155c7e241560@syzkaller.appspotmail.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Anup Patel <anup@brainfault.org>
-Subject: [avpatel:riscv_sbi_dbtr_v3 32/33]
- arch/riscv/kernel/hw_breakpoint.c:44:16: error: variable has incomplete type
- 'struct sbiret'
-Message-ID: <202604301857.K5W6rdKg-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-usb@vger.kernel.org, tiwai@suse.com,
+	Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH] sound: usb: caiaq: fix reference leak in probe error
+Message-ID: <202604301817.kEsyTIz2-lkp@intel.com>
+References: <20260429104527.19927-1-oneukum@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260429104527.19927-1-oneukum@suse.com>
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_dbtr_v3
-head:   3f4817f41d4bddd9f389eacf4919824cd8bfdff4
-commit: 619225e881de0229a4211b9b058154bd85619886 [32/33] riscv: Introduce support for hardware break/watchpoints
-config: riscv-randconfig-001-20260430 (https://download.01.org/0day-ci/archive/20260430/202604301857.K5W6rdKg-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604301857.K5W6rdKg-lkp@intel.com/reproduce)
+Hi Oliver,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tiwai-sound/for-next]
+[also build test ERROR on tiwai-sound/for-linus usb/usb-testing usb/usb-next usb/usb-linus westeri-thunderbolt/next peter-chen-usb/for-usb-next linus/master v7.1-rc1 next-20260429]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Neukum/sound-usb-caiaq-fix-reference-leak-in-probe-error/20260429-205539
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+patch link:    https://lore.kernel.org/r/20260429104527.19927-1-oneukum%40suse.com
+patch subject: [PATCH] sound: usb: caiaq: fix reference leak in probe error
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260430/202604301817.kEsyTIz2-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604301817.kEsyTIz2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604301857.K5W6rdKg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604301817.kEsyTIz2-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:846:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     846 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:109:53: note: expanded from macro 'insw'
-     109 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/hw_breakpoint.c:6:
-   In file included from include/linux/hw_breakpoint.h:5:
-   In file included from include/linux/perf_event.h:43:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:854:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     854 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:110:53: note: expanded from macro 'insl'
-     110 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/hw_breakpoint.c:6:
-   In file included from include/linux/hw_breakpoint.h:5:
-   In file included from include/linux/perf_event.h:43:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:863:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     863 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:122:55: note: expanded from macro 'outsb'
-     122 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/hw_breakpoint.c:6:
-   In file included from include/linux/hw_breakpoint.h:5:
-   In file included from include/linux/perf_event.h:43:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:872:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     872 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:123:55: note: expanded from macro 'outsw'
-     123 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/hw_breakpoint.c:6:
-   In file included from include/linux/hw_breakpoint.h:5:
-   In file included from include/linux/perf_event.h:43:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:881:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     881 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:124:55: note: expanded from macro 'outsl'
-     124 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/hw_breakpoint.c:6:
-   In file included from include/linux/hw_breakpoint.h:5:
-   In file included from include/linux/perf_event.h:43:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> arch/riscv/kernel/hw_breakpoint.c:44:16: error: variable has incomplete type 'struct sbiret'
-      44 |         struct sbiret ret;
-         |                       ^
-   arch/riscv/kernel/hw_breakpoint.c:44:9: note: forward declaration of 'struct sbiret'
-      44 |         struct sbiret ret;
-         |                ^
->> arch/riscv/kernel/hw_breakpoint.c:47:15: error: arithmetic on a pointer to an incomplete type 'union sbi_dbtr_shmem_entry'
-      47 |         dbtr_shmem = per_cpu_ptr(sbi_dbtr_shmem, cpu);
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:264:2: note: expanded from macro 'per_cpu_ptr'
-     264 |         __verify_pcpu_ptr(ptr);                                         \
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:221:52: note: expanded from macro '__verify_pcpu_ptr'
-     221 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
-         |                                                     ~~~~~ ^
-   arch/riscv/kernel/hw_breakpoint.c:23:14: note: forward declaration of 'union sbi_dbtr_shmem_entry'
-      23 | static union sbi_dbtr_shmem_entry __percpu *sbi_dbtr_shmem;
-         |              ^
->> arch/riscv/kernel/hw_breakpoint.c:55:8: error: call to undeclared function 'sbi_ecall'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      55 |         ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_SETUP_SHMEM,
-         |               ^
->> arch/riscv/kernel/hw_breakpoint.c:55:18: error: use of undeclared identifier 'SBI_EXT_DBTR'
-      55 |         ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_SETUP_SHMEM,
-         |                         ^~~~~~~~~~~~
->> arch/riscv/kernel/hw_breakpoint.c:55:32: error: use of undeclared identifier 'SBI_EXT_DBTR_SETUP_SHMEM'
-      55 |         ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_SETUP_SHMEM,
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~
->> arch/riscv/kernel/hw_breakpoint.c:60:8: error: use of undeclared identifier 'SBI_ERR_DENIED'
-      60 |                 case SBI_ERR_DENIED:
-         |                      ^~~~~~~~~~~~~~
->> arch/riscv/kernel/hw_breakpoint.c:66:8: error: use of undeclared identifier 'SBI_ERR_INVALID_PARAM'
-      66 |                 case SBI_ERR_INVALID_PARAM:
-         |                      ^~~~~~~~~~~~~~~~~~~~~
->> arch/riscv/kernel/hw_breakpoint.c:67:8: error: use of undeclared identifier 'SBI_ERR_INVALID_ADDRESS'
-      67 |                 case SBI_ERR_INVALID_ADDRESS:
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
->> arch/riscv/kernel/hw_breakpoint.c:73:8: error: use of undeclared identifier 'SBI_ERR_ALREADY_AVAILABLE'
-      73 |                 case SBI_ERR_ALREADY_AVAILABLE:
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/riscv/kernel/hw_breakpoint.c:79:8: error: use of undeclared identifier 'SBI_ERR_FAILURE'
-      79 |                 case SBI_ERR_FAILURE:
-         |                      ^~~~~~~~~~~~~~~
-   arch/riscv/kernel/hw_breakpoint.c:99:16: error: variable has incomplete type 'struct sbiret'
-      99 |         struct sbiret ret;
-         |                       ^
-   arch/riscv/kernel/hw_breakpoint.c:99:9: note: forward declaration of 'struct sbiret'
-      99 |         struct sbiret ret;
-         |                ^
-   arch/riscv/kernel/hw_breakpoint.c:102:8: error: call to undeclared function 'sbi_ecall'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     102 |         ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_SETUP_SHMEM,
-         |               ^
-   arch/riscv/kernel/hw_breakpoint.c:102:18: error: use of undeclared identifier 'SBI_EXT_DBTR'
-     102 |         ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_SETUP_SHMEM,
-         |                         ^~~~~~~~~~~~
-   arch/riscv/kernel/hw_breakpoint.c:102:32: error: use of undeclared identifier 'SBI_EXT_DBTR_SETUP_SHMEM'
-     102 |         ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_SETUP_SHMEM,
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kernel/hw_breakpoint.c:107:8: error: use of undeclared identifier 'SBI_ERR_DENIED'
-     107 |                 case SBI_ERR_DENIED:
-         |                      ^~~~~~~~~~~~~~
-   arch/riscv/kernel/hw_breakpoint.c:112:8: error: use of undeclared identifier 'SBI_ERR_INVALID_PARAM'
-     112 |                 case SBI_ERR_INVALID_PARAM:
-         |                      ^~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kernel/hw_breakpoint.c:113:8: error: use of undeclared identifier 'SBI_ERR_INVALID_ADDRESS'
-     113 |                 case SBI_ERR_INVALID_ADDRESS:
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kernel/hw_breakpoint.c:118:8: error: use of undeclared identifier 'SBI_ERR_ALREADY_AVAILABLE'
-     118 |                 case SBI_ERR_ALREADY_AVAILABLE:
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kernel/hw_breakpoint.c:122:8: error: use of undeclared identifier 'SBI_ERR_FAILURE'
-     122 |                 case SBI_ERR_FAILURE:
-         |                      ^~~~~~~~~~~~~~~
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   7 warnings and 20 errors generated.
+>> sound/usb/caiaq/device.c:446:8: error: use of undeclared label 'dev_err_put'
+     446 |                 goto dev_err_put;
+         |                      ^
+>> sound/usb/caiaq/device.c:534:2: warning: unused label 'err_dev_put' [-Wunused-label]
+     534 |  err_dev_put:
+         |  ^~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +44 arch/riscv/kernel/hw_breakpoint.c
+vim +/dev_err_put +446 sound/usb/caiaq/device.c
 
-    39	
-    40	static int arch_smp_setup_sbi_shmem(unsigned int cpu)
-    41	{
-    42		union sbi_dbtr_shmem_entry *dbtr_shmem;
-    43		unsigned long shmem_pa;
-  > 44		struct sbiret ret;
-    45		int rc = 0;
-    46	
-  > 47		dbtr_shmem = per_cpu_ptr(sbi_dbtr_shmem, cpu);
-    48		if (!dbtr_shmem) {
-    49			pr_err("Invalid per-cpu shared memory for debug triggers\n");
-    50			return -ENODEV;
-    51		}
-    52	
-    53		shmem_pa = __pa(dbtr_shmem);
-    54	
-  > 55		ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_SETUP_SHMEM,
-    56				MEM_LO(shmem_pa), MEM_HI(shmem_pa), 0, 0, 0, 0);
-    57	
-    58		if (ret.error) {
-    59			switch (ret.error) {
-  > 60			case SBI_ERR_DENIED:
-    61				pr_warn("%s: Access denied for shared memory at %lx\n",
-    62					__func__, shmem_pa);
-    63				rc = -EPERM;
-    64				break;
-    65	
-  > 66			case SBI_ERR_INVALID_PARAM:
-  > 67			case SBI_ERR_INVALID_ADDRESS:
-    68				pr_warn("%s: Invalid address parameter (%lu)\n",
-    69					__func__, ret.error);
-    70				rc = -EINVAL;
-    71				break;
-    72	
-  > 73			case SBI_ERR_ALREADY_AVAILABLE:
-    74				pr_warn("%s: Shared memory is already set\n",
-    75					__func__);
-    76				rc = -EADDRINUSE;
-    77				break;
-    78	
-  > 79			case SBI_ERR_FAILURE:
-    80				pr_err("%s: Internal sdtrig state error\n",
-    81				       __func__);
-    82				rc = -ENXIO;
-    83				break;
-    84	
-    85			default:
-    86				pr_warn("%s: Unknown error %lu\n", __func__, ret.error);
-    87				rc = -ENXIO;
-    88				break;
-    89			}
-    90		}
-    91	
-    92		pr_info("CPU %d: HW Breakpoint shared memory registered.\n", cpu);
-    93	
-    94		return rc;
-    95	}
-    96	
+   434	
+   435	static int init_card(struct snd_usb_caiaqdev *cdev)
+   436	{
+   437		char *c, usbpath[32];
+   438		struct usb_device *usb_dev = cdev->chip.dev;
+   439		struct snd_card *card = cdev->chip.card;
+   440		struct device *dev = caiaqdev_to_dev(cdev);
+   441		int err, len;
+   442	
+   443		if (usb_set_interface(usb_dev, 0, 1) != 0) {
+   444			dev_err(dev, "can't set alt interface.\n");
+   445			err = -EIO;
+ > 446			goto dev_err_put;
+   447		}
+   448	
+   449		usb_init_urb(&cdev->ep1_in_urb);
+   450		usb_init_urb(&cdev->midi_out_urb);
+   451	
+   452		usb_fill_bulk_urb(&cdev->ep1_in_urb, usb_dev,
+   453				  usb_rcvbulkpipe(usb_dev, 0x1),
+   454				  cdev->ep1_in_buf, EP1_BUFSIZE,
+   455				  usb_ep1_command_reply_dispatch, cdev);
+   456	
+   457		usb_fill_bulk_urb(&cdev->midi_out_urb, usb_dev,
+   458				  usb_sndbulkpipe(usb_dev, 0x1),
+   459				  cdev->midi_out_buf, EP1_BUFSIZE,
+   460				  snd_usb_caiaq_midi_output_done, cdev);
+   461	
+   462		/* sanity checks of EPs before actually submitting */
+   463		if (usb_urb_ep_type_check(&cdev->ep1_in_urb) ||
+   464		    usb_urb_ep_type_check(&cdev->midi_out_urb)) {
+   465			dev_err(dev, "invalid EPs\n");
+   466			err = -EINVAL;
+   467			goto dev_err_put;
+   468		}
+   469	
+   470		init_waitqueue_head(&cdev->ep1_wait_queue);
+   471		init_waitqueue_head(&cdev->prepare_wait_queue);
+   472	
+   473		if (usb_submit_urb(&cdev->ep1_in_urb, GFP_KERNEL) != 0) {
+   474			err = -EIO;
+   475			goto dev_err_put;
+   476		}
+   477	
+   478	
+   479		err = snd_usb_caiaq_send_command(cdev, EP1_CMD_GET_DEVICE_INFO, NULL, 0);
+   480		if (err)
+   481			goto err_kill_urb;
+   482	
+   483		if (!wait_event_timeout(cdev->ep1_wait_queue, cdev->spec_received, HZ)) {
+   484			err = -ENODEV;
+   485			goto err_kill_urb;
+   486		}
+   487	
+   488		usb_string(usb_dev, usb_dev->descriptor.iManufacturer,
+   489			   cdev->vendor_name, CAIAQ_USB_STR_LEN);
+   490	
+   491		usb_string(usb_dev, usb_dev->descriptor.iProduct,
+   492			   cdev->product_name, CAIAQ_USB_STR_LEN);
+   493	
+   494		strscpy(card->driver, MODNAME, sizeof(card->driver));
+   495		strscpy(card->shortname, cdev->product_name, sizeof(card->shortname));
+   496		strscpy(card->mixername, cdev->product_name, sizeof(card->mixername));
+   497	
+   498		/* if the id was not passed as module option, fill it with a shortened
+   499		 * version of the product string which does not contain any
+   500		 * whitespaces */
+   501	
+   502		if (*card->id == '\0') {
+   503			char id[sizeof(card->id)];
+   504	
+   505			memset(id, 0, sizeof(id));
+   506	
+   507			for (c = card->shortname, len = 0;
+   508				*c && len < sizeof(card->id) - 1; c++)
+   509				if (*c != ' ')
+   510					id[len++] = *c;
+   511	
+   512			snd_card_set_id(card, id);
+   513		}
+   514	
+   515		usb_make_path(usb_dev, usbpath, sizeof(usbpath));
+   516		scnprintf(card->longname, sizeof(card->longname), "%s %s (%s)",
+   517			       cdev->vendor_name, cdev->product_name, usbpath);
+   518	
+   519		card->private_free = card_free;
+   520		err = setup_card(cdev);
+   521		if (err < 0)
+   522			return err;
+   523	
+   524		return 0;
+   525	
+   526	 err_kill_urb:
+   527		usb_kill_urb(&cdev->ep1_in_urb);
+   528	
+   529		/*
+   530	 	 * private_free has not been set.
+   531		 * Undoing the usb_get_dev() from
+   532		 * create_card()
+   533		 */
+ > 534	 err_dev_put:
+   535		usb_put_dev(usb_dev);
+   536		return err;
+   537	}
+   538	
 
 -- 
 0-DAY CI Kernel Test Service
