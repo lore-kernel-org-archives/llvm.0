@@ -1,173 +1,163 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11020087.outbound.protection.outlook.com [52.101.46.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BBE39FCA8
-	for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 22:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777588844; cv=none; b=RWp9p7tJqslhRq7wDxokdx7XfzMp1nvtPTnITcWgqpGJJrieKtB9tVUhF3bXewlJCL7BhK0QohAZot2fFF6QPofI6MPTQmPJloXTF/j23LisBNQyIh0rnqIdbcR+Yby+R6+2RCTadp0vUDrdYdrA3YBpuQLiNd5nesAgioMP6lQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777588844; c=relaxed/simple;
-	bh=V406TqVoKHgAuicekRKpsJmx5/5UDrii8AdfdX/zISw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mfhsmhS+CL3e7oQJyCR3GJhDstq0kR+Gl/nVTvaGKEhBVXT/PfmJsUp6KkYs/bPhJmyaS8yRP7iNkkI7XwFMWEnSK93Z8GXqFZ1JR+ThW7+uQEF24MFaGEuvwnE/PafLS+GHdH6KpV6oZD6b6zXlquqQ3VCHXlEOFC8rDNlARNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cis2bmaL; arc=none smtp.client-ip=74.125.82.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038D33A2550;
+	Thu, 30 Apr 2026 22:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777588949; cv=fail; b=rVDK4kmVlEA58QNmsJchzbuMD0/oQrQZJM01lcXeYLrjKo69yhrDjAVbcSBTOsNumQzLeVuh4Z7ogjPKJD/3vaw0zalkUNVI16k5/fshGqE8ICYpdlpcFwM1zOYMeOKiUJKtf86k9KM2eIvOuFIhO8Uqc8zLnlzDalDUsiKj3Uk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777588949; c=relaxed/simple;
+	bh=dDAIyBM9NqiANnjMrJ9tR42EPu3HZTZOsp/mM3A6AEg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Qb8CzZI+CE2P/IQzgCcH8VY8XBG3B6YTVHLNoNKokyiTEXFgGpbNr2hcELhaPxbIzoVqthkQVCiFZfF3AJMAUqWvGjIGgclbiSAXkKJHc13gOMc6vcBqBFaJKZeCa0hnCVqaQsCxTNN1RI16RyR61Y4SsZv7NAC9YJX9HhNapSE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=FaHR02Ds; arc=fail smtp.client-ip=52.101.46.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cis2bmaL"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2b4520f6b32so2279456eec.0
-        for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 15:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777588843; x=1778193643; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/rIQVUIY7rOHf6FAYreUm24KryRFVFOuXAkyabTl3TY=;
-        b=Cis2bmaLlibc+6Bc9BhJAXpmXV/uhTinwOqdIdiDPExjh8IgzGbhGTk2hms0X0OnUU
-         MUapD3ApUjvHnY12/shnHlncsB4RVgvDjP9FO/ffbEmDQppjJPQBN8xb2vGp0o5gW5L9
-         r80xPzmyONf1pqrvRRIbytUieoxyeDvCyijgHMaZRO2j1VQmpNWC4mzb5spd9NdTllTB
-         BcNiySoiMV/AN8wf6QvupaZD/R9Vs8XjDjzowclNR7IYteJAxrBTTh6qcJs0LXozFc6O
-         N2zDlH2XNTsfjfKE0cTGlozEip7FXbkbt8KDquGgMbndjRphCepyoz1Re/LiLf4mPE6/
-         AH2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777588843; x=1778193643;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/rIQVUIY7rOHf6FAYreUm24KryRFVFOuXAkyabTl3TY=;
-        b=kNPsaTHohYd5tLLLavKsGRD/h25aC2hisovzICpMW3wI2Xctw+w0QmLFbNsPHDQZDC
-         nbqim7nPd8Ow8H23rUv+2p/tVpC1SakV9+UK4eb3ug0TfJUu8zzDEOMVx8nUhFQEclMl
-         76Vb+ou2IesYyIZvlVBCjdx4B68iQL+4vQbmzLcs3PG72MQcjbeRCHstpdvEK6BQz+QN
-         2vhY8UXFpgBgQVwyjNhnKHUUB/Z30SPvnOsxpQDAsrUdkzniMfMwK9FXT/WfA9S2Y+4o
-         hO3yl5WsA+/+chlk3v3X7CFy6npAQujmcOiKSU11BCp0AnLcbi1AN0M3v+5p+dUCoLaQ
-         ePAA==
-X-Forwarded-Encrypted: i=1; AFNElJ/tpsv5a7renh6WpolvnqvNAvP/BxETqZtWGqSTQsTp0C7onI1AK1MSZucRu0uCsTjwc6kk@lists.linux.dev
-X-Gm-Message-State: AOJu0YyXTqXua+0XevHxjmZRaFNzUpA8/axvFxd5fRuhNajalKu+IQ1a
-	ZXkKNB3dqh/lhCz6Eyd5FCi4Wzf+B8zjHLi9SQDLPokrcxL/XawXqA+A
-X-Gm-Gg: AeBDieteNighqFoF/1AtdTFNZ3bdtyS80mY1APxxbZthY3evrByoFgLKXpllqb+S9EX
-	gbVzKRmDtwOauO87BjxtA/s5CyQX3zBhj4VP2RJNi97rIfFF15nq9fhRxXGviSRu306D8F7QRU8
-	bEkCQb4WFpatk5auWmOZ8Cg3ZfnnIJ6mzADkULHb6MP1vmFCSt16KYuL4fldDs4XcU5ftHYCXc8
-	niMywvoGQ8PKWANYdOlTVxslI+OYw5uVTaNACob4g/U2gf9TbvRvz3VWoPHbRwxvMbCrQuwk+h2
-	preOjjxHLEIsn+N/l4FkqsMhnw7E9cfU9n7ckZWhrFXb4J49Lx5QNr1im2tpg41jsiSBjmogT7Y
-	U1nnRDeuUC94GGBJWGYSXRRGkV/EKwUjvWGZoGvaaGyJiTXsb5w+f+X4WDeYmi4nWSU+H9E2rix
-	QiMhu0t2Yq/BC3wkBcB6FAfjpu2CAzwWO1dp54
-X-Received: by 2002:a05:7300:5341:b0:2d9:77e1:57d4 with SMTP id 5a478bee46e88-2ed3e489086mr2332993eec.29.1777588842546;
-        Thu, 30 Apr 2026 15:40:42 -0700 (PDT)
-Received: from sergio-82n7 ([169.150.198.75])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ee3b29b11fsm1906281eec.19.2026.04.30.15.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 15:40:41 -0700 (PDT)
-From: Sergio Melas <sergiomelas@gmail.com>
-To: lkp@intel.com
-Cc: linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	sergiomelas@gmail.com
-Subject: [PATCH] hwmon: (yogafan) fix non-kernel-doc header warning
-Date: Fri,  1 May 2026 06:40:22 +0800
-Message-ID: <20260430224022.34424-1-sergiomelas@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <202604301429.UUK5MS9i-lkp@intel.com>
-References: <202604301429.UUK5MS9i-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="FaHR02Ds"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Oi6LgNvdoXTImwgag7BYA+5hbQsfnW8HlSbxGbfKljfbqLaXac1nehAMOPtH3xhqNOb/tABpMFB04qg9DZyyMRb+PIsuyXKRM8qvJShHgO2KAGM1AMAf58NOYs/YvR0+eGPqWzm7hr3JdV77oQ67IN0DkJVmsN5aTmHiMCh7aQ5VI95xPeog1k5o36jU+1BIrm7GI81sGZKFT3w8W2gc8MGh0LvmSpDIPTaCszwMTHMPmT8AuQEBUSsnSQcDaDd3XiZKDk0fFQ3UHWRVFhENSko6znJibtLJkBYoWghhdCFBcaD/mh8Bvlvp/+W5D3A0yC/XyRyywAql6jOJUB5/gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Leu+2sjT3yNdlOdOQ4YgnR/5C585LREWU7/QhoF6VLA=;
+ b=jd6FQr1AQyJwSAETrchGxfZ0V3aeirCW3czKvAb05laNrpF04Q+vASia5WhgMdjjExdWdSmOCksSateHDHeHGiRwl/gg7Z8rfCAMDXr/BBMZsXC6QFDDu4nf870oYJ721ZSPDEsT2W4uSr5Y/FGhXBJdwSW8y3vLUERe33Lv3Kmhf8C1I9GI2HBHf0/UrvDhUmVNNjYgxG92yRZNUJ1ZV9kwGtIRYaFijfOMFcgP2zfppdlU0+O0HhtOIQLsDIRbchjC4lAm+fmMusiA+k4HwPu8/5bZWAP5N3qWRqXSc93jfGpzmoHN1d/WhDVYkiyhJBeG1x5rE/KPVsL8WNx1zQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Leu+2sjT3yNdlOdOQ4YgnR/5C585LREWU7/QhoF6VLA=;
+ b=FaHR02DsDiS0FaLLa49YMGBqxC6chcRz3p6/DUdk7/8F0nXPSsMWlSzWZk5ovDrS9pwuxzf1fq+sIsFXwh4OpIxpacnBXGvRozx/Jh2jx/cMY6xeJEC2lOMRAjBX5twbjxSqCX0RUE/o7bKUwHp1AT9FCJ9wSgmnPESjG790TbI=
+Received: from SA1PR21MB6921.namprd21.prod.outlook.com (2603:10b6:806:4a7::11)
+ by SA1PR21MB6682.namprd21.prod.outlook.com (2603:10b6:806:4a6::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.3; Thu, 30 Apr
+ 2026 22:42:24 +0000
+Received: from SA1PR21MB6921.namprd21.prod.outlook.com
+ ([fe80::51cf:497c:e5df:f6d]) by SA1PR21MB6921.namprd21.prod.outlook.com
+ ([fe80::51cf:497c:e5df:f6d%2]) with mapi id 15.20.9891.004; Thu, 30 Apr 2026
+ 22:42:24 +0000
+From: Dexuan Cui <DECUI@microsoft.com>
+To: kernel test robot <lkp@intel.com>, KY Srinivasan <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>, "wei.liu@kernel.org"
+	<wei.liu@kernel.org>, Long Li <longli@microsoft.com>,
+	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"mhklinux@outlook.com" <mhklinux@outlook.com>,
+	"matthew.ruffell@canonical.com" <matthew.ruffell@canonical.com>,
+	"johansen@templeofstupid.com" <johansen@templeofstupid.com>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [EXTERNAL] Re: [PATCH] Drivers: hv: vmbus: Improve the logc of
+ reserving fb_mmio on Gen2 VMs
+Thread-Topic: [EXTERNAL] Re: [PATCH] Drivers: hv: vmbus: Improve the logc of
+ reserving fb_mmio on Gen2 VMs
+Thread-Index: AQHc2L8pk0aH/znCKUGCrK9S0RkDCbX4MjcA
+Date: Thu, 30 Apr 2026 22:42:24 +0000
+Message-ID:
+ <SA1PR21MB6921F17261B7EF19FAF6F9A9BF352@SA1PR21MB6921.namprd21.prod.outlook.com>
+References: <20260416183529.838321-1-decui@microsoft.com>
+ <202605010002.dnnxVZFF-lkp@intel.com>
+In-Reply-To: <202605010002.dnnxVZFF-lkp@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=f55ba25e-b4ac-4f7f-ba75-f5d94fa5ef09;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2026-04-30T22:36:58Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Tag=10,
+ 3, 0, 1;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB6921:EE_|SA1PR21MB6682:EE_
+x-ms-office365-filtering-correlation-id: a8529951-be3b-4153-5bec-08dea709bf72
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|7416014|366016|376014|921020|38070700021|18002099003|56012099003|22082099003;
+x-microsoft-antispam-message-info:
+ 9OQ++GLPbXzXQGzMD7tSfhJvHOi8ehBM52ezPW3Mp0Qeg73l0zEgX1e4LThDj84BxiiDMfFWqmG8nUbbEmZvJhf9tofUvXmOa5E1iJzYwF/WX2+3/qitCt4jt9oMy/ROgHs4yaCnQRZ98k5URHnypeiklgfNs4na2gPpXWGmgWc8BA53chI4qYfl6MKaEjtCvXIi5RO6JnIVLnFPj9Ql0o0O+VtpQQChD6yW4NWpst7DsBYvuD9wUl2/wyk0A7Hp6ipx5+fsTIoVHXz2PaWuly6LYEwFEon+akooBRJBhnPWVRfe3CZLwJPb0s9QIHNeR2/OyPESo7cYy2cy2Rx8XYrHMqeN9AaXUOvwLKx9+e5iyC1bDEoTkzDYYCqGXP5wet5X2F4frODJnl/UuqD91QQ3HWwdstD/qjZCD7pLhDDpVmZgaBPiS/5ILX+xxkW8uipY6GADTEod+CLPCRL5oyZJpCkIzUg2GtrHSvaE2IFH3h5hG0SpjmQtBLpyl99vRPNYvF4TcrnCEkA8EkQlkd4oNKfug9rLxcb6m4m5RUr1DGg29o/R6+j0HWvz5PUmKm9yAk4B8NSTh5EZ8LCsrj8DGGX+QQpOQr7j33eja7gorHk0zjel3snXddBwsZ4WHFF8LQWGyTM7YZ3sos3XCYpEAj55kN0/Z02SjqMKExzQc8thCnaUHSngvbb6QmdLagOoBNdxzfOk24BjX46/wVMsWCCxEO+f92Ys6RGJZdRv/F5TM74zhVnw8rZbMSOU8RiT30XB0oGLB1ZwIS794g==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB6921.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(376014)(921020)(38070700021)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?6vDo+73c1c2TC5hwlEyVThD4BiOME3tig0sxHmaIUe474UqUvEKH2PI9EFFr?=
+ =?us-ascii?Q?gFqEOT7NY+F+0eOz3QzeLNIvMYmVpsqAo+QGZLGid4RQmC3va0W/iXYdOJs1?=
+ =?us-ascii?Q?MD3d7DJFpNjlHyPBGceXc38JEGOWmOR7vsjKn8Nra3K5NwN7RHmjCJXXNja6?=
+ =?us-ascii?Q?M4FyLH8JbFoNv8CHbubVG1k+all3xfLhBk891OaIF5SEzGBz8fUmbXgOmr+x?=
+ =?us-ascii?Q?TTbGtKwVKkIuKOBJGlHTEb2ykrvwDVylS4mrOokM63DbL8TIrJBFHnTSuYWk?=
+ =?us-ascii?Q?UtxRAx/RdZshMmGqsmpFXAKn6ZmGirt2KqG0bKXc87hBmSOBbSYrKKrGGpE+?=
+ =?us-ascii?Q?+szZpdhtsSxUjZ4ty7OlF33LzIsEpbn08Vxt2cSct7Dy8MK8r0cgpeSTbztA?=
+ =?us-ascii?Q?r7jtM12sf35JxJqPVQUbWA/FkNSh613gLAb3UXpVAQvVUq1tftdAusw7IUTa?=
+ =?us-ascii?Q?oFCQ4z0QZzatrIV7w+geDTB3l9XmaQkFXzWMCWAJSc8sy2TsuaTmeLp9ZkLa?=
+ =?us-ascii?Q?ZTTUUIut/8sTGlxsREc0bFZlqk7MLxiPJo4j7MDeGKRubPQc6nn4E/bf8Q0J?=
+ =?us-ascii?Q?iBD+kHj7MnWHcE6ER+eKj1un009Z/Ck19ljzpse9RrEPIIkxX+om8nnudVaD?=
+ =?us-ascii?Q?mJockr9YpyAcNJo3G7UGn/taYiIao0BGcIXXmpNw/3bp9oPvWCj6lId6Scy6?=
+ =?us-ascii?Q?pcGAmYdpdjbxkzu/wiqd/LxqpYSVJF10pBVkfGXWVq85u12imIZxH6OeLN+o?=
+ =?us-ascii?Q?hxTm56FDGWGsB9THQ5Eh1BA+gDdhcL4Yn/yNse5wmOwpc6sbYoYI8nnpzdl9?=
+ =?us-ascii?Q?RVP8caUJ8G/6SsBCxd4wxPdSuEnhaC1g2QlYkXJj15CWIu5uUXMCACA66iSp?=
+ =?us-ascii?Q?F4RTsBpWzMD/Qx7PMkx9tuYkXfE2fI2XobQRs71Ouqrq4eakeIUMMrldyd7B?=
+ =?us-ascii?Q?9h+7AZ9iT6tyuIkdBXsKhtWkUKCcfDQ0uZbo+5ua702XsOVmPLv5Vzz3B6Rw?=
+ =?us-ascii?Q?chodzlpl+wLXtL9A2785nSNUOuFf+lsPV+US9T33ByT2DJ0gFUjuZsPO/733?=
+ =?us-ascii?Q?j952GUhG2ulkJy8vvI2CLxde7X2as7PorkBiqUHkjQeZnVbvzQqWOjkxLHky?=
+ =?us-ascii?Q?7WRXkuG2JF3KEAMV7e6jds7BllGpNUJqYF8RzW0tBdFc3u9SH/4PHTbI39SW?=
+ =?us-ascii?Q?slFfb7i8hV9rlndqly+peKACRNsDB377uXk86yKo0wlN7RyZXwLAdloXNcUo?=
+ =?us-ascii?Q?EJ+pCohIMq97HmEe6wYDZjkpt3roNewmht1tN9Nm6lkWZ14CZmUwR6jzCnd/?=
+ =?us-ascii?Q?FYF79OCsfmy5j6DdAdmQe9W5TTaWr86XvZxhy3llQrt1jq0NL8c+BEiu5dNJ?=
+ =?us-ascii?Q?y/tD5TtaTRaMnXeCANumaK+8PZ772+otcAgiAkK4FwoXAZrHsysYxB+22WqF?=
+ =?us-ascii?Q?oPnEzBnqev5K/BeG38ex7cK56r4u+cKrKQnWCCumMLgRv2N37NoLzd9qyltb?=
+ =?us-ascii?Q?XhzpwvG7o+ZzJHOLb85+WHoprdcUSepvHJ/6TIKXuNgAXcstkWfmSmf6oksr?=
+ =?us-ascii?Q?9tQvrkxmDg+CrWvucCOIODF63ALYMTY0sCzkk+nOBqdUyucKx/8IFfyXaYyE?=
+ =?us-ascii?Q?nKhhqd3t4RUNdRCgmgwV0oS2IqpPraPcf7GOJgIUS4zancgCwes71PkYFwuR?=
+ =?us-ascii?Q?oJzmE2oDxkRtv+ypzVGWPnxmWA8S5x3EhjwMcwDmQp0452uo?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB6921.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8529951-be3b-4153-5bec-08dea709bf72
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2026 22:42:24.1450
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wOVCJaBby3aEb2WP6qfVbPXyw9OjvxoSIJDwT/OZR1Bj3R+hiNtHX5j5rgBRmJbV4/i0wMIxGwTzhB38BOcvDw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR21MB6682
 
-hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring.
+> From: kernel test robot <lkp@intel.com>
+> Sent: Thursday, April 30, 2026 9:33 AM
+> ...
+> config: i386-buildonly-randconfig-002-20260430
+>  ...
+> All warnings (new ones prefixed by >>):
+>=20
+> >> drivers/hv/vmbus_drv.c:2403:40: warning: result of comparison of const=
+ant
+> 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int')=
+ is
+> always false [-Wtautological-constant-out-of-range-compare]
+>     2403 |                         if (!low_mmio_base || low_mmio_base >=
+=3D SZ_4G ||
+>          |                                               ~~~~~~~~~~~~~ ^ =
+ ~~~~~
+>    1 warning generated.
 
-This driver provides fan speed monitoring for Lenovo Yoga, Legion, and
-IdeaPad laptops by interfacing with the Embedded Controller (EC) via ACPI.
+Thanks for reporting the warning with the i386 kernel config.
+I don't know if there is any x86-32 users nowadays, but this warning can be
+fixed by:
 
-The current header comment starts with '/**', which is reserved for
-kernel-doc, this triggers a warning so we update it starting to '/*'
-to avoid the compile warning.
-
-Fixes: c67c248ca406 ("hwmon: (yogafan) Add support for Lenovo Yoga/Legion fan monitoring")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202604301429.UUK5MS9i-lkp@intel.com/
-Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
----
-v11.1:
-  - Fix comment header to resolve 0-day robot warning.
-v11:
-  - Mapped ACPI paths directly via DMI quirks.
-  - Fixed Documentation formatting (0-day robot warnings).
-  - Implemented 100ms MIN_SAMPLING to address rapid polling concerns.
-  - Removed redundant platform_set_drvdata() in probe.
-  - Explicitly defined platform device ID as -1 for cleaner sysfs naming.
-v9/10:
-  - Implement ACPI handle resolution during probe for better performance (O(1) read).
-  - Add MODULE_DEVICE_TABLE(dmi, ...) to enable module autoloading.
-  - Refine RLLag filter documentation and suspend/resume logic.
-  - Include comprehensive EC architecture research database (8-bit vs 16-bit).
-  - Validated efficiency on kernels 6.18, 6.19, and 7.0-rc5: 'perf top' 
-    confirms negligible CPU overhead (<0.01%) during active polling.
-v8:
-  - Replaced heuristic multiplier with deterministic DMI Quirk Table.
-  - Added 'depends on DMI' to Kconfig.
-  - Verified FOPTD model (1000ms TAU / 1500 RPM/s slew) against hardware traces.
-  - Increased filter precision to 12-bit fixed-point.
-v7:
-  - Fixed Kconfig: Removed non-existent 'select MATH64'.
-  - Fixed unused macro: Utilized RPM_FLOOR_LIMIT to implement an
-    immediate 0-RPM bypass in the filter.
-  - Clarification: Previous "unified structure" comment meant that all
-    6 files (driver, docs, metadata) are now in this single atomic patch.
-v6:
-  - Unified patch structure (6 files changed).
-  - Verified FOPTD (First-Order Plus Time Delay) model against hardware
-      traces (Yoga 14c) to ensure physical accuracy of the 1000ms time constant.
-  - Fixed a rounding stall: added a +/- 1 RPM floor to the step calculation
-    to ensure convergence even at high polling frequencies.
-  - Set MAX_SLEW_RPM_S to 1500 to match physical motor inertia.
-  - Documentation: Updated to clarify 100-RPM hardware step resolution.
-  - 32-bit safety: Implemented div64_s64 for coefficient precision.
-v5:
-  - Fixed 32-bit build failures by using div64_s64 for 64-bit division.
-  - Extracted magic numbers into constants (RPM_UNIT_THRESHOLD, etc.).
-  - Fixed filter stall by ensuring a minimum slew limit (limit = 1).
-  - Refined RPM floor logic to trigger only when hardware reports 0 RPM.
-  - Resolved 255/256 unit-jump bug by adjusting heuristic thresholds.
-v4:
-  - Rebased on groeck/hwmon-next branch for clean application.
-  - Corrected alphabetical sorting in Kconfig and Makefile.
-  - Technical Validation & FOPTD Verification:
-    - Implemented RLLag (Rate-Limited Lag) first-order modeling.
-    - Used 10-bit fixed-point math for alpha calculation to avoid
-      floating point overhead in the kernel.
-    - Added 5000ms filter reset for resume/long-polling sanitation.
-v3:
-  - Added MAINTAINERS entry and full Documentation/hwmon/yogafan.rst.
-  - Fixed integer overflow in filter math.
-  - Added support for secondary fan paths (FA2S) for Legion laptops.
-v2:
-  - Migrated from background worker to passive multirate filtering.
-  - Implemented dt-based scaling to maximize CPU sleep states.
-  - Restricted driver to Lenovo hardware via DMI matching.
-v1:
-  - Initial submission with basic ACPI fan path support.
----
- drivers/hwmon/yogafan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
-index 605cc928f..314ee6195 100644
---- a/drivers/hwmon/yogafan.c
-+++ b/drivers/hwmon/yogafan.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0-only
--/**
-+/*
-  * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
-  *
-  * Provides fan speed monitoring for Lenovo Yoga, Legion, and IdeaPad
--- 
-2.53.0
-
+-	if (!low_mmio_base || low_mmio_base >=3D SZ_4G ||
++	if (!low_mmio_base || upper_32_bits(low_mmio_base) ||
+ 	    (start && start < low_mmio_base)) {
+ 		pr_warn("Unexpected low mmio base 0x%pa\n", &low_mmio_base);
+ 	}
