@@ -1,62 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61415256C70;
-	Thu, 30 Apr 2026 01:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D540258CE7;
+	Thu, 30 Apr 2026 01:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777510826; cv=none; b=SfgfvJ4AL7csrNH5XMOGlvGt6V0v0vFAd/okExvVXecAUbDNxL3TsBo3PGIP44WQAsQRJh/3QzZBUFHvQSgjmOfdDWcwBxpY//x6koaRlCy9+QItm7Rq/fh/2bav+6GhwtqOO/UawtC6hpLuJ+Gh5/6p3uRg1c0HdJx1Bupon3I=
+	t=1777512037; cv=none; b=QsTY96pkd3B1sJqqZk7ScHWSyj4lAOXLrnvNtktzRSIKh33mwae3+DYtcwzllE5aQNRyGdQT2bO8YTPm/PzyAUkLgQ5V62xt5xhoUk/7qAEOFnLrUKP+g/qSh5gr48bsnoXKxXxzkcpcHajWpBdCvQ+MEPM6TSxBH3sXy7Dzg4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777510826; c=relaxed/simple;
-	bh=EYWCu7pcpjJUbAqcj2oVsDuaMCGyOKj0egVRvkGiCao=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QD6i9CQ+JX7UDJsdZaFYq3CrSZhzIia+ve8Jvkd+oHq+5CNkTT9CrLrTmLIf0hx9w8aDomiyJOKP5Hhs2KOZU8Bj2ai7EPA7dqbNlKiIYWV7gltZnuYF5t80YR5tItMcfixdc0qb4H1lv3cuOyG1Qk2/wDYK9FYsffxdSuAkNNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W+hZsc41; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1777512037; c=relaxed/simple;
+	bh=R3yYnsNb2Puk91RctVi5ia+fe8CuSZ/jd5J3HRXKKCI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uA878BiLuVq71I6q4Rl2qGRHfHXOoq7fl8T7wc8SaAtYsD/5obDzZFDFudfG68Kf4cL5l11p2keDfjLQY5B25IDWNppnDQY4BQzEyY9VD5iGGpUnpwNk2lzkOQc8fpuJ+kwk/JrL5wIZmWFZx9ZVfPok3Eax8yNFAYTHFHB9eJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CD6sV4Ie; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W+hZsc41"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CD6sV4Ie"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777510825; x=1809046825;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EYWCu7pcpjJUbAqcj2oVsDuaMCGyOKj0egVRvkGiCao=;
-  b=W+hZsc41gO+vLWTGD4KBIhoVW/YZVgTUnHbIi2CUnhcxJYkTL0VyB/CL
-   DktzFb1jpB+OG5cUL26sEi1RXW8THScSuRet7/WzslCUj2i4rwcEPTdFY
-   HjN+VrmXSjtvEM3JdoHVfDm602wGI4kE0XnrdtZj9sjPOlz+HHiJ7KxeJ
-   pT06Ua+cZSRW6J+AzYHmDX8dc6wMUHBifw6P93mYaliJ+1L7rx0mfQtFO
-   FxG9r99Zhot04/9F9v1vLvOnTPnv/XAQIFMBLbrlL7Y8udwoV6TgY0lqz
-   EUNKROBZOT9Ib+Ed7Xkvnz5hnQqrkWjSxZvhyFJv7DHnmLNNb1ct5Kf12
-   A==;
-X-CSE-ConnectionGUID: dUTefq3PSLa2KJHo9psS5A==
-X-CSE-MsgGUID: 68zkOpJDT4uht4wT0m9dfw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="88765237"
+  t=1777512035; x=1809048035;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=R3yYnsNb2Puk91RctVi5ia+fe8CuSZ/jd5J3HRXKKCI=;
+  b=CD6sV4IezmsWddQErPV66vYMZ0bVIkdrvUBCI5xaG1ffVlPUXSWQ29iV
+   9pBQaGeKGILYVLx1ZvYRP0uE2r/4YpHowjJW2cJeyjlBJ6q2o4oGBNTep
+   Pf7yyzcK/OhXCQibJcr+6UZZPMx0gLVuJOSVPIvFA6FpqOuJBojrtGs8f
+   AzglBfIncTBFi9gb1PLJWi33Pkr4VZiBmRehgx+FanFw4+PoirFDNWf7R
+   e8kZsK87LsL191Oaxe+7QwB2f6OAJ2xZYpIk79WLY8NE0/91Sc/VrOTzz
+   VbamHRRAJKMNRFYGu6aQpqhm8oswE9the+RJ8RvzsR4/hYdKn42sVUkhN
+   w==;
+X-CSE-ConnectionGUID: a23g+fNhSruo1FO15sD15g==
+X-CSE-MsgGUID: LDypDuDvS+uAQaFR6f5OyA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="89914710"
 X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="88765237"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 18:00:22 -0700
-X-CSE-ConnectionGUID: jVdDLsXNTnyJvKxkcc+Yvg==
-X-CSE-MsgGUID: cFU99KVIRJC2v6TqLQri6Q==
+   d="scan'208";a="89914710"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 18:20:34 -0700
+X-CSE-ConnectionGUID: yx+oneNuSaOFkDr3jFGOAg==
+X-CSE-MsgGUID: rO32wq3nRreIIIphQhJGqA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="239452394"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 29 Apr 2026 18:00:20 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
+   d="scan'208";a="227935449"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa009.fm.intel.com with ESMTP; 29 Apr 2026 18:20:33 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wIFlI-00000000BkC-3Irb;
-	Thu, 30 Apr 2026 01:00:16 +0000
-Date: Thu, 30 Apr 2026 08:59:57 +0800
+	id 1wIG4o-000000004hB-40Wm;
+	Thu, 30 Apr 2026 01:20:26 +0000
+Date: Thu, 30 Apr 2026 03:19:44 +0200
 From: kernel test robot <lkp@intel.com>
-To: dayou5941@163.com, dlemoal@kernel.org, cassel@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-	liyouhong@kylinos.cn
-Subject: Re: [PATCH] ata: libahci: fix panic when accessing ports beyond MMIO
- region
-Message-ID: <202604300815.6kpEidbJ-lkp@intel.com>
-References: <20260422080322.1006592-1-dayou5941@163.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh?= (Schneider Electric)" <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/auxclock-nanosleep 17/44]
+ kernel/time/benchmarks.c:65:8: warning: variable 'b' is used uninitialized
+ whenever 'if' condition is true
+Message-ID: <202604300314.gaiQVLYr-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,265 +61,68 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260422080322.1006592-1-dayou5941@163.com>
 
-Hi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.1-rc1 next-20260429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/dayou5941-163-com/ata-libahci-fix-panic-when-accessing-ports-beyond-MMIO-region/20260422-192119
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260422080322.1006592-1-dayou5941%40163.com
-patch subject: [PATCH] ata: libahci: fix panic when accessing ports beyond MMIO region
-config: arm64-randconfig-003-20260430 (https://download.01.org/0day-ci/archive/20260430/202604300815.6kpEidbJ-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604300815.6kpEidbJ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/auxclock-nanosleep
+head:   3e5442acb7e21f08c3eff2ecdace624b6647d5b1
+commit: 2d4cde60596e5113f58afbb253423ffcabc891ac [17/44] benchmarks
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260430/202604300314.gaiQVLYr-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604300314.gaiQVLYr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604300815.6kpEidbJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604300314.gaiQVLYr-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/ata/libahci.c:614:18: warning: missing terminating '"' character [-Winvalid-pp-token]
-     614 |                         dev_warn(dev, "Port %d (offset 0x%llx) exceeds MMIO region (0x%llx),
-         |                                       ^
-   drivers/ata/libahci.c:615:44: warning: missing terminating '"' character [-Winvalid-pp-token]
-     615 |                                        truncating port map at port %d\n",
-         |                                                                        ^
->> drivers/ata/libahci.c:614:18: error: expected expression
-     614 |                         dev_warn(dev, "Port %d (offset 0x%llx) exceeds MMIO region (0x%llx),
-         |                                       ^
-   2 warnings and 1 error generated.
+>> kernel/time/benchmarks.c:65:8: warning: variable 'b' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+      65 |                         if (!ktime_get_aux(CLOCK_AUX, &a)) {
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/benchmarks.c:76:13: note: uninitialized use occurs here
+      76 |                 *sample = b - a;
+         |                           ^
+   kernel/time/benchmarks.c:65:4: note: remove the 'if' if its condition is always false
+      65 |                         if (!ktime_get_aux(CLOCK_AUX, &a)) {
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      66 |                                 *sample = KTIME_MAX;
+         |                                 ~~~~~~~~~~~~~~~~~~~~
+      67 |                                 continue;
+         |                                 ~~~~~~~~~
+      68 |                         }
+         |                         ~
+   kernel/time/benchmarks.c:62:15: note: initialize the variable 'b' to silence this warning
+      62 |                 ktime_t a, b;
+         |                             ^
+         |                              = 0
+   1 warning generated.
 
 
-vim +614 drivers/ata/libahci.c
+vim +65 kernel/time/benchmarks.c
 
-   428	
-   429	/**
-   430	 *	ahci_save_initial_config - Save and fixup initial config values
-   431	 *	@dev: target AHCI device
-   432	 *	@hpriv: host private area to store config values
-   433	 *
-   434	 *	Some registers containing configuration info might be setup by
-   435	 *	BIOS and might be cleared on reset.  This function saves the
-   436	 *	initial values of those registers into @hpriv such that they
-   437	 *	can be restored after controller reset.
-   438	 *
-   439	 *	If inconsistent, config values are fixed up by this function.
-   440	 *
-   441	 *	If it is not set already this function sets hpriv->start_engine to
-   442	 *	ahci_start_engine.
-   443	 *
-   444	 *	LOCKING:
-   445	 *	None.
-   446	 */
-   447	void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
-   448	{
-   449		void __iomem *mmio = hpriv->mmio;
-   450		void __iomem *port_mmio;
-   451		unsigned long port_map;
-   452		u32 cap, cap2, vers;
-   453		unsigned long long mmio_size = 0;
-   454		bool is_pci_dev = false;
-   455		int i;
-   456	
-   457		/* make sure AHCI mode is enabled before accessing CAP */
-   458		ahci_enable_ahci(mmio);
-   459	
-   460		/*
-   461		 * Values prefixed with saved_ are written back to the HBA and ports
-   462		 * registers after reset. Values without are used for driver operation.
-   463		 */
-   464	
-   465		/*
-   466		 * Override HW-init HBA capability fields with the platform-specific
-   467		 * values. The rest of the HBA capabilities are defined as Read-only
-   468		 * and can't be modified in CSR anyway.
-   469		 */
-   470		cap = readl(mmio + HOST_CAP);
-   471		if (hpriv->saved_cap)
-   472			cap = (cap & ~(HOST_CAP_SSS | HOST_CAP_MPS)) | hpriv->saved_cap;
-   473		hpriv->saved_cap = cap;
-   474	
-   475		/* CAP2 register is only defined for AHCI 1.2 and later */
-   476		vers = readl(mmio + HOST_VERSION);
-   477		if ((vers >> 16) > 1 ||
-   478		   ((vers >> 16) == 1 && (vers & 0xFFFF) >= 0x200))
-   479			hpriv->saved_cap2 = cap2 = readl(mmio + HOST_CAP2);
-   480		else
-   481			hpriv->saved_cap2 = cap2 = 0;
-   482	
-   483		/* some chips have errata preventing 64bit use */
-   484		if ((cap & HOST_CAP_64) && (hpriv->flags & AHCI_HFLAG_32BIT_ONLY)) {
-   485			dev_info(dev, "controller can't do 64bit DMA, forcing 32bit\n");
-   486			cap &= ~HOST_CAP_64;
-   487		}
-   488	
-   489		if ((cap & HOST_CAP_NCQ) && (hpriv->flags & AHCI_HFLAG_NO_NCQ)) {
-   490			dev_info(dev, "controller can't do NCQ, turning off CAP_NCQ\n");
-   491			cap &= ~HOST_CAP_NCQ;
-   492		}
-   493	
-   494		if (!(cap & HOST_CAP_NCQ) && (hpriv->flags & AHCI_HFLAG_YES_NCQ)) {
-   495			dev_info(dev, "controller can do NCQ, turning on CAP_NCQ\n");
-   496			cap |= HOST_CAP_NCQ;
-   497		}
-   498	
-   499		if ((cap & HOST_CAP_PMP) && (hpriv->flags & AHCI_HFLAG_NO_PMP)) {
-   500			dev_info(dev, "controller can't do PMP, turning off CAP_PMP\n");
-   501			cap &= ~HOST_CAP_PMP;
-   502		}
-   503	
-   504		if ((cap & HOST_CAP_SNTF) && (hpriv->flags & AHCI_HFLAG_NO_SNTF)) {
-   505			dev_info(dev,
-   506				 "controller can't do SNTF, turning off CAP_SNTF\n");
-   507			cap &= ~HOST_CAP_SNTF;
-   508		}
-   509	
-   510		if ((cap2 & HOST_CAP2_SDS) && (hpriv->flags & AHCI_HFLAG_NO_DEVSLP)) {
-   511			dev_info(dev,
-   512				 "controller can't do DEVSLP, turning off\n");
-   513			cap2 &= ~HOST_CAP2_SDS;
-   514			cap2 &= ~HOST_CAP2_SADM;
-   515		}
-   516	
-   517		if (!(cap & HOST_CAP_FBS) && (hpriv->flags & AHCI_HFLAG_YES_FBS)) {
-   518			dev_info(dev, "controller can do FBS, turning on CAP_FBS\n");
-   519			cap |= HOST_CAP_FBS;
-   520		}
-   521	
-   522		if ((cap & HOST_CAP_FBS) && (hpriv->flags & AHCI_HFLAG_NO_FBS)) {
-   523			dev_info(dev, "controller can't do FBS, turning off CAP_FBS\n");
-   524			cap &= ~HOST_CAP_FBS;
-   525		}
-   526	
-   527		if (!(cap & HOST_CAP_ALPM) && (hpriv->flags & AHCI_HFLAG_YES_ALPM)) {
-   528			dev_info(dev, "controller can do ALPM, turning on CAP_ALPM\n");
-   529			cap |= HOST_CAP_ALPM;
-   530		}
-   531	
-   532		if ((cap & HOST_CAP_SXS) && (hpriv->flags & AHCI_HFLAG_NO_SXS)) {
-   533			dev_info(dev, "controller does not support SXS, disabling CAP_SXS\n");
-   534			cap &= ~HOST_CAP_SXS;
-   535		}
-   536	
-   537		/* Override the HBA ports mapping if the platform needs it */
-   538		port_map = readl(mmio + HOST_PORTS_IMPL);
-   539		if (hpriv->saved_port_map && port_map != hpriv->saved_port_map) {
-   540			dev_info(dev, "forcing port_map 0x%lx -> 0x%x\n",
-   541				 port_map, hpriv->saved_port_map);
-   542			port_map = hpriv->saved_port_map;
-   543		} else {
-   544			hpriv->saved_port_map = port_map;
-   545		}
-   546	
-   547		/* mask_port_map not set means that all ports are available */
-   548		if (hpriv->mask_port_map) {
-   549			dev_warn(dev, "masking port_map 0x%lx -> 0x%lx\n",
-   550				port_map,
-   551				port_map & hpriv->mask_port_map);
-   552			port_map &= hpriv->mask_port_map;
-   553		}
-   554	
-   555		/* cross check port_map and cap.n_ports */
-   556		if (port_map) {
-   557			int map_ports = 0;
-   558	
-   559			for (i = 0; i < AHCI_MAX_PORTS; i++)
-   560				if (port_map & (1 << i))
-   561					map_ports++;
-   562	
-   563			/* If PI has more ports than n_ports, whine, clear
-   564			 * port_map and let it be generated from n_ports.
-   565			 */
-   566			if (map_ports > ahci_nr_ports(cap)) {
-   567				dev_warn(dev,
-   568					 "implemented port map (0x%lx) contains more ports than nr_ports (%u), using nr_ports\n",
-   569					 port_map, ahci_nr_ports(cap));
-   570				port_map = 0;
-   571			}
-   572		}
-   573	
-   574		/* fabricate port_map from cap.nr_ports for < AHCI 1.3 */
-   575		if (!port_map && vers < 0x10300) {
-   576			port_map = (1 << ahci_nr_ports(cap)) - 1;
-   577			dev_warn(dev, "forcing PORTS_IMPL to 0x%lx\n", port_map);
-   578	
-   579			/* write the fixed up value to the PI register */
-   580			hpriv->saved_port_map = port_map;
-   581		}
-   582	
-   583		is_pci_dev = dev_is_pci(dev);
-   584		if (is_pci_dev) {
-   585			struct pci_dev *pdev = to_pci_dev(dev);
-   586	
-   587			mmio_size = (unsigned long long)pci_resource_len(pdev, 5);
-   588		}
-   589	
-   590		/*
-   591		 * Preserve the ports capabilities defined by the platform. Note there
-   592		 * is no need in storing the rest of the P#.CMD fields since they are
-   593		 * volatile.
-   594		 */
-   595		for_each_set_bit(i, &port_map, AHCI_MAX_PORTS) {
-   596			if (hpriv->saved_port_cap[i])
-   597				continue;
-   598	
-   599			port_mmio = __ahci_port_base(hpriv, i);
-   600	
-   601			/* Calculate offset from MMIO base */
-   602			unsigned long long port_offset = (unsigned long long)port_mmio -
-   603							 (unsigned long long)mmio;
-   604			/* Check if port register block is within MMIO region */
-   605			if (is_pci_dev && port_offset >= mmio_size) {
-   606				/*
-   607				 * Port registers exceed MMIO region boundary.
-   608				 * Since ports are sequentially mapped (0x100 + i*0x80),
-   609				 * all subsequent ports will also exceed the boundary.
-   610				 *
-   611				 * Update port_map to exclude this and all higher ports,
-   612				 * then break out of the loop.
-   613				 */
- > 614				dev_warn(dev, "Port %d (offset 0x%llx) exceeds MMIO region (0x%llx),
-   615					       truncating port map at port %d\n",
-   616					       i, port_offset, mmio_size, i-1);
-   617	
-   618				port_map = (1UL << i) - 1;
-   619				hpriv->saved_port_map = port_map;
-   620				break;
-   621			}
-   622	
-   623			hpriv->saved_port_cap[i] =
-   624				readl(port_mmio + PORT_CMD) & PORT_CMD_CAP;
-   625		}
-   626	
-   627		/* record values to use during operation */
-   628		hpriv->cap = cap;
-   629		hpriv->cap2 = cap2;
-   630		hpriv->version = vers;
-   631		hpriv->port_map = port_map;
-   632	
-   633		if (!hpriv->start_engine)
-   634			hpriv->start_engine = ahci_start_engine;
-   635	
-   636		if (!hpriv->stop_engine)
-   637			hpriv->stop_engine = ahci_stop_engine;
-   638	
-   639		if (!hpriv->irq_handler)
-   640			hpriv->irq_handler = ahci_single_level_irq_intr;
-   641	}
-   642	EXPORT_SYMBOL_GPL(ahci_save_initial_config);
-   643	
+    57	
+    58	static void benchmark_ktime_get_aux(struct benchmark_samples *samples)
+    59	{
+    60		for (size_t l = 0; l < ARRAY_SIZE(samples->d); l++) {
+    61			ktime_t *sample = &samples->d[l];
+    62			ktime_t a, b;
+    63	
+    64			scoped_guard(preempt) {
+  > 65				if (!ktime_get_aux(CLOCK_AUX, &a)) {
+    66					*sample = KTIME_MAX;
+    67					continue;
+    68				}
+    69	
+    70				if (!ktime_get_aux(CLOCK_AUX, &b)) {
+    71					*sample = KTIME_MAX;
+    72					continue;
+    73				}
+    74			}
+    75	
+    76			*sample = b - a;
+    77		}
+    78	}
+    79	
 
 -- 
 0-DAY CI Kernel Test Service
