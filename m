@@ -1,154 +1,121 @@
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3811D477E43
-	for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 16:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC0E46AF17;
+	Thu, 30 Apr 2026 16:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777564976; cv=none; b=SznXkMZF6VeyEV8zEdZIdgNWSAN9q8B+Mhnyj52jSWc0VgQFB6fqZPBu7C1FXH1Rqeld+GrSu0fIBQQZHYM0/2cdc2wwrlh5RHnFFJFi25s+YtxrncE/iJ4ZzYgCTqGnYnmCEwYBoDdYgw+R9rr21sPQMDx5X37JJCvEbbZouoc=
+	t=1777565622; cv=none; b=NREQDbi23onnCC1ckLCusWdqdEUoc9HO9bEyep1GtqTf0gukF2hdBPeH15oXyEhfk+8NoVPgs3x/3LXlDe7Af+u0hkkImmTc8jjwZ2lipb/HHWPiI+LXKu3Xxh/rF2pqvzErdrFO9hJbR3SibE7BIctG1h9nXwA8qwoXv0tZ1i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777564976; c=relaxed/simple;
-	bh=0g4nJPTP+SRNnJ6VP5Kw4a/d4c+9xCSL8ZRFVgYSARs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YXYOiC2xodiJeuA5Q4z/G7ChLyL9BLGixYYtZiAAU5al2G3+1TiP0HMSqpIcNT9Qo8SCkpyRacpflGEz8QpFuZ9xliZ98B61g+LISDQduj8weGLwbQAKeIN+qhnAxqEMOpSvzTvKOTxiMRb2eYXfSWoWF3I1PnhoFNrXkHYmSVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AmUZoT/E; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1777565622; c=relaxed/simple;
+	bh=7FxeS7UrdqX2NlSTElB+df65eG4I664/MsabMaXbTjs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OsDMxSjbj9DrpmDKkWjeEj58S0X/dEPZS0iGy6kmTFVqC85+nFXbLjwJWDP1oZBct/0hfbCSlb+FBLC3KuQhNBy/BXIiS4aHk8AxE6tN6SbPIuE5ZBbD5GTJwg/k4xebQy35cMLuFCCwFJhUrsxpA6+GmD/bS2ymcMFt+8611TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aSfmxmKT; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AmUZoT/E"
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-3922b35e69cso9353031fa.0
-        for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 09:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777564973; x=1778169773; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FrFlzMIY8dqFl9fL6+GZm8ewKnQP1m4Ik6n37xpccCw=;
-        b=AmUZoT/EU1kW2lr9+SnxmtdjPq7BhaKDBX6BY0uKAUfGKcRj6kOoy6ARTQDK0j1s1g
-         MbdwnZujrNBvyJGIQM44691wi3O7gHhWamdnjxED4kUGS3CLnFZ8NK5pZX1cdxKqtrRy
-         9VWfJCNBMx2Q9tQR/5F4Ld+t/zqvde623RcGw4jcy2rhcrwBPxaN8rJR38UHn/PcjvGm
-         LaV27Q/AMcAo/gB8KFVqY5+iYIiQa6t7XiWMPFt/mkB15Wo29YgP4VGMSGz+GxzMfsve
-         hegHxtQDCRfgyTw8+1BAD2GQjux/blUugtoQ0SdFTL7Rdjbrh/IwOrb+RXaCIVufLbWR
-         XpCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777564973; x=1778169773;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FrFlzMIY8dqFl9fL6+GZm8ewKnQP1m4Ik6n37xpccCw=;
-        b=qvcYwW2iA5mD4XTKHnN9tDWsWwyhemWsh/3FfBBOAdGVVc38wWQd9xkdNNOHw5oLgT
-         3AhQuEOknX7ebb4ZD9GI6D81Sw+li4Ql6Xki0YknI3WRuYKZGKonWiNNQXcFrUKQlHNe
-         WaC41zrejaTRYKc5TBIG9cSQDxZhg1EEGToSw18DqeQuCeaR0dd0KqqMK+HM5RfpCLcH
-         8nD8Qau3T5xf8stJbF47BzYGFvcxZ6kdU3EGaCj4DcomJnDsqCkdmE/WJaAxJajDqCQp
-         KGzqK14otALYff7kRlwQrNu00QrK7L9HD1532LswUnrlJOlDhkhe/l/FwZ88fuT14OP4
-         ur9A==
-X-Forwarded-Encrypted: i=1; AFNElJ9p9PvyB9KJuIYD1cgudHV85oJEtDq4gVFuWIsnTmrSS5hUefbtkSj7Cr3qcIZTpqqpBiND@lists.linux.dev
-X-Gm-Message-State: AOJu0YwASTBV97CapGtWp08HanzlduM9puuWpsMmKO2vLYql4MOR3wS0
-	JTe2THVGjweVKoriXfWvRJTKeGsMwcjYYqEy7RALA9wx19NfUnI5QHp64YB4w6ArV/0=
-X-Gm-Gg: AeBDieveRUXStcFaBNeUTEOY9BFqBFA1UYsIcErk4aCGUJijy65z1Rtf7SgwUuPMV6W
-	D3z8HnZPFVBdusSPQ8dz2ZP7gOeoiXyes6s8zJ1+cS/C4xcxraQeohRuplxoKceNebaVlU1plcz
-	Lw9s2kG38Sr7JNbr7yZcf2Y/1ZqDmgXzyJc7AnIv/lb8XiCv1xMf37GkJaeXY5agVoALbgzM/Di
-	xQzg9QtrCM4IhXsx+jJU65H2lPjBhwblkwyBVaW+vMRY6wHBv0/zAOwLqTtHqkQlwbifkTliFDD
-	5UhHuMXhV7J11BThVVKFJPZR4XssQjCvhxUO3n+WJ+7UIitErrD/aTBHD1KibG0p8XPqj3g29Hx
-	QO2WV4C0U2STZEJvfHxzHBDqSwKCj/7mTE9YoFfOhKdxi9jUqsedt/bV6Qfx5ZQRUKABNeUHmrg
-	7PfMaUINx9P3rdqajZwjdI5rvj
-X-Received: by 2002:a2e:9dcf:0:b0:391:11de:dd6c with SMTP id 38308e7fff4ca-3934e27876fmr12461231fa.16.1777564973242;
-        Thu, 30 Apr 2026 09:02:53 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:105d:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ee38d79eb9sm610895eec.8.2026.04.30.09.02.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 09:02:52 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Thu, 30 Apr 2026 13:02:12 -0300
-Subject: [PATCH bpf-next v11 11/11] selftests/bpf: Tolerate missing files
- during install
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aSfmxmKT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777565621; x=1809101621;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7FxeS7UrdqX2NlSTElB+df65eG4I664/MsabMaXbTjs=;
+  b=aSfmxmKTTBoVz1tpV7gSnMVsDglJ+1D/RrBwS2nSOD9AKWoj0hfxuSNW
+   DDOya6FXSLwv9Q1vEeaU2RYgNkIaRRDAmV+yMsGpiBWYEcDoepDNfKrs2
+   Adnooqszhd4qTZC0nxcJYkxqoj5GA85iwc8qTrA0kcVVVvkAs5FibicZC
+   zRAurJBQa+OxOdJ2hujz0Szm8FECJ76E5bFXTqLCvTgRCCQsdjxaGhCo4
+   1UXXPfBj8lS/uGlIwSRLgSkoHhAeiUm8N9DPSVp08Wvo0hs7Q9/jsOtJ0
+   mt/2qJ1kaxQrqp4H/9K8iqC4tzxJB6G+OCm0zhJUSG0Bknwts6Rg60FZ/
+   w==;
+X-CSE-ConnectionGUID: hNng7MhVQp+kD175iazP4g==
+X-CSE-MsgGUID: Mtz6C13dS86z0UX1inFmEA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11772"; a="81100524"
+X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
+   d="scan'208";a="81100524"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 09:13:40 -0700
+X-CSE-ConnectionGUID: AB+03OciRcikVXWgNFwl8Q==
+X-CSE-MsgGUID: 60urOWMfSDGaX5pUkGvxkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
+   d="scan'208";a="238948252"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa004.jf.intel.com with ESMTP; 30 Apr 2026 09:13:38 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wIU1A-000000004r3-08QC;
+	Thu, 30 Apr 2026 16:13:36 +0000
+Date: Thu, 30 Apr 2026 18:13:03 +0200
+From: kernel test robot <lkp@intel.com>
+To: Shawn Lin <shawn.lin@rock-chips.com>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Nirmal Patel <nirmal.patel@linux.intel.com>,
+	Jonathan Derrick <jonathan.derrick@linux.dev>,
+	Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+	Logan Gunthorpe <logang@deltatee.com>,
+	Philipp Stanner <phasta@kernel.org>, linux-pci@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: Re: [PATCH v2 3/3] PCI: vmd: Replace pci_alloc_irq_vectors() with
+ pcim_alloc_irq_vectors()
+Message-ID: <202604301846.yNeYYwuL-lkp@intel.com>
+References: <1776392767-83668-4-git-send-email-shawn.lin@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260430-selftests-bpf_misconfig-v11-11-e11f7a8c4fdc@suse.com>
-References: <20260430-selftests-bpf_misconfig-v11-0-e11f7a8c4fdc@suse.com>
-In-Reply-To: <20260430-selftests-bpf_misconfig-v11-0-e11f7a8c4fdc@suse.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Alan Maguire <alan.maguire@oracle.com>, 
- "Ricardo B. Marliere" <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1777564926; l=2156;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=0g4nJPTP+SRNnJ6VP5Kw4a/d4c+9xCSL8ZRFVgYSARs=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QBSctWHKemMRwsrUhGlHgWOBzzJbhHVoeimaKLPlrUVLkf+65H78hcts5/x+c9oZ8Ecuvc8yUz6
- YyMVNTWCMBgU=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1776392767-83668-4-git-send-email-shawn.lin@rock-chips.com>
 
-With partial builds, some TEST_GEN_FILES entries can be absent at install
-time. rsync treats missing source arguments as fatal and aborts kselftest
-installation.
+Hi Shawn,
 
-Override INSTALL_SINGLE_RULE in selftests/bpf to use --ignore-missing-args,
-while keeping the existing bpf-specific INSTALL_RULE extension logic. Also
-add --ignore-missing-args to the TEST_INST_SUBDIRS rsync loop so that
-subdirectories with no .bpf.o files (e.g. when a test runner flavor was
-skipped) do not abort installation.
+kernel test robot noticed the following build warnings:
 
-Note that the INSTALL_SINGLE_RULE override applies globally to all file
-categories including static source files (TEST_PROGS, TEST_FILES). These
-are version-controlled and should always be present, so the practical risk
-is negligible.
+[auto build test WARNING on pci/next]
+[also build test WARNING on pci/for-linus linus/master v7.1-rc1 next-20260430]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
- tools/testing/selftests/bpf/Makefile | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Shawn-Lin/PCI-MSI-Add-Devres-managed-IRQ-vectors-allocation/20260418-031441
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/1776392767-83668-4-git-send-email-shawn.lin%40rock-chips.com
+patch subject: [PATCH v2 3/3] PCI: vmd: Replace pci_alloc_irq_vectors() with pcim_alloc_irq_vectors()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260430/202604301846.yNeYYwuL-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604301846.yNeYYwuL-lkp@intel.com/reproduce)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index a460f2ad3cff..9948a0a02bb9 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -1023,12 +1023,23 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- # Delete partially updated (corrupted) files on error
- .DELETE_ON_ERROR:
- 
-+# When permissive, tell rsync to ignore missing source arguments so that
-+# partial builds do not abort installation.
-+ifneq ($(PERMISSIVE),)
-+override define INSTALL_SINGLE_RULE
-+	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-+	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-+endef
-+endif
-+
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
--	@for DIR in $(TEST_INST_SUBDIRS); do		  \
--		mkdir -p $(INSTALL_PATH)/$$DIR;   \
--		rsync -a $(OUTPUT)/$$DIR/*.bpf.o $(INSTALL_PATH)/$$DIR;\
-+	@for DIR in $(TEST_INST_SUBDIRS); do				  \
-+		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
-+		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
-+			$(OUTPUT)/$$DIR/*.bpf.o				  \
-+			$(INSTALL_PATH)/$$DIR;				  \
- 	done
- endef
- 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202604301846.yNeYYwuL-lkp@intel.com/
 
--- 
-2.54.0
+All warnings (new ones prefixed by >>):
 
+>> Warning: drivers/pci/msi/api.c:304 function parameter 'dev' not described in 'pcim_alloc_irq_vectors'
+>> Warning: drivers/pci/msi/api.c:304 function parameter 'min_vecs' not described in 'pcim_alloc_irq_vectors'
+>> Warning: drivers/pci/msi/api.c:304 function parameter 'max_vecs' not described in 'pcim_alloc_irq_vectors'
+>> Warning: drivers/pci/msi/api.c:304 function parameter 'flags' not described in 'pcim_alloc_irq_vectors'
+>> Warning: drivers/pci/msi/api.c:317 function parameter 'dev' not described in 'pcim_alloc_irq_vectors_affinity'
+>> Warning: drivers/pci/msi/api.c:317 function parameter 'min_vecs' not described in 'pcim_alloc_irq_vectors_affinity'
+>> Warning: drivers/pci/msi/api.c:317 function parameter 'max_vecs' not described in 'pcim_alloc_irq_vectors_affinity'
+>> Warning: drivers/pci/msi/api.c:317 function parameter 'flags' not described in 'pcim_alloc_irq_vectors_affinity'
+>> Warning: drivers/pci/msi/api.c:317 function parameter 'affd' not described in 'pcim_alloc_irq_vectors_affinity'
+>> Warning: drivers/pci/msi/api.c:304 function parameter 'dev' not described in 'pcim_alloc_irq_vectors'
+>> Warning: drivers/pci/msi/api.c:304 function parameter 'min_vecs' not described in 'pcim_alloc_irq_vectors'
+>> Warning: drivers/pci/msi/api.c:304 function parameter 'max_vecs' not described in 'pcim_alloc_irq_vectors'
+>> Warning: drivers/pci/msi/api.c:304 function parameter 'flags' not described in 'pcim_alloc_irq_vectors'
+>> Warning: drivers/pci/msi/api.c:317 function parameter 'dev' not described in 'pcim_alloc_irq_vectors_affinity'
+>> Warning: drivers/pci/msi/api.c:317 function parameter 'min_vecs' not described in 'pcim_alloc_irq_vectors_affinity'
+>> Warning: drivers/pci/msi/api.c:317 function parameter 'max_vecs' not described in 'pcim_alloc_irq_vectors_affinity'
+>> Warning: drivers/pci/msi/api.c:317 function parameter 'flags' not described in 'pcim_alloc_irq_vectors_affinity'
+>> Warning: drivers/pci/msi/api.c:317 function parameter 'affd' not described in 'pcim_alloc_irq_vectors_affinity'
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
