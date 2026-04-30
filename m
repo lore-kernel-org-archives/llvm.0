@@ -1,185 +1,207 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E7340628F;
-	Thu, 30 Apr 2026 14:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912292D12EC
+	for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 15:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777559256; cv=none; b=m72bMqqGdk6WrbYYenrU4snGCP8FBVg7LJ9elqqVzkADCSHzntCfHa/bgEUkoeMDdDSdAhq9WQQd1xSnnTv7I/eyXYxGmylKYpORP2n5OVndKt7rV3j5JyHXTQk7yVXvdAu72mQGPF1hxZyRC3xX7UDXFihEUVGbIOVMTCV49Gw=
+	t=1777561467; cv=none; b=EKKLV8gE5YliES282l3Xz2m13icooSWJxp2eNLXhnCeoijWAtAP6Fgbfw0zpE91HpXqdzirgs/UlNHh6ldL4ffE+H/fH93mD7/beepLK6BaUkkh01p7VPrynFk2CRX4tBHHH/Ib39F1PUQRIUFIRYeVPKXSvc3OyxN1yruV7zA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777559256; c=relaxed/simple;
-	bh=iWKdoUOA5gr7KBPCbaMjLaH7qyrQE+m0WnuZhPKgbw0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=WaZUgRSE3V217xL+PmMtiyruHO1h0qB3QZs2CxciwGlIJKCohDGJpLFgSjvGzZCCayhctjNwWln6EkiiICdtpgV1NUfIEKNhiLjK20UmgPc7S4CdgMgw945PG8chyNcktc0IowJmtSHl9iW7Yp4HlBLqU8L9La6AQUupVi6DJZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k6loDx72; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777561467; c=relaxed/simple;
+	bh=nPl3S5xTCSMNQ8splI/q0IRS2w0nnDEVyrVlcwnPvvU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=p9VT1X1hJHzkxFOSFg5i2gn5Enp7LDUUSEnn+MqluqB7Rz8WP8qA9AMH27hwj65JvH5/Qy/eIertfSkYyyl89XsnF0b3lPYLJ5Qqb+kkHQEnTu73oxVHbjXlPUo8U1A/eNSkr9znc1lfx6Yp82yWppzz11UXym7IcgxgoFrsVp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XxQkHUZp; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k6loDx72"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777559254; x=1809095254;
-  h=date:from:to:cc:subject:message-id;
-  bh=iWKdoUOA5gr7KBPCbaMjLaH7qyrQE+m0WnuZhPKgbw0=;
-  b=k6loDx72ZhhYbZ5JdBfhfSWbgf2iwjTIfVGkl1/Uh0VU7pVwZYfHB8sx
-   mQsT8okkSFVBbsmqHeRAS8Nr+Xwnb8/ZL5MWzVVdeYj+cX4S8IiGOJxEg
-   w0BCXMYO94TqWCdVVwjalEkFGzL4IebDGju0oDuWJlNRmrkX5/lpqPPzA
-   GyoPwpqHnuVpBgX063U3DYiRvUEzixpS5GyiutOicBkFjzZdJk3lX83Wy
-   hJKh+voQeEH6tFwF9CJIZwaEcVuHiYDskXS6OvYIKLLQB+susIxRHNPpK
-   8W6D4Kig4s3oHEpJNWvn+lUCmIuIYfgsvXl8/CD115oFEt8HEdJIAN7/K
-   w==;
-X-CSE-ConnectionGUID: pN5rxVaMT4qeJLatMyg+HQ==
-X-CSE-MsgGUID: DnBOGvd/T4KdnvPlftJ0IQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11772"; a="103962208"
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="103962208"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 07:27:33 -0700
-X-CSE-ConnectionGUID: 2VLuEdbCT1+HEmmvvZbPUg==
-X-CSE-MsgGUID: IK0yBxuJQVaPjLziv2SReg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="228088919"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 30 Apr 2026 07:27:32 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wISMT-00000000CT4-14Us;
-	Thu, 30 Apr 2026 14:27:29 +0000
-Date: Thu, 30 Apr 2026 22:27:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Anup Patel <anup@brainfault.org>
-Subject: [avpatel:riscv_iommu_irqbypass_v2 16/18]
- arch/riscv/kvm/aia_imsic.c:837:2: warning: variable 'vcpu' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <202604302258.1VWlHeHH-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XxQkHUZp"
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5a2c77c62d7so936899e87.0
+        for <llvm@lists.linux.dev>; Thu, 30 Apr 2026 08:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1777561464; x=1778166264; darn=lists.linux.dev;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ryqSrHFMNl2iyHShwOhMHlwgorJnsltwFPZhZyA51sQ=;
+        b=XxQkHUZpMmu2j0v6cEzPZSDev+YsKo37igKxyDJOXw74VhSGzsDCGs0Aowy/3MDdhC
+         vGdA4ZlNBF3Bdr9AWAzZ30Tu2wsTv2M/toa1DoXTBnnhxsFSWF4NrEtM8Dsw99C5nU0H
+         ZD6IpFbvluRn/VLPFMSBfmiOFF89/Bdp1EvwLGJ60X6lgYWiTnBWjt0SEcEo5Rqa+gpR
+         1oL8mNO384tyXa8q3TUJIB85iNBxnrevcqRzWC2M/ReCoZcoX1DGALia1A0nUWpzyIz3
+         vQf2gaIs8DdgqgcO24NvH2M9J6bbOJUEYbDL+Wcjg8Cvdm0myNVqFDiUhIqW9ryQ+5kK
+         PM6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777561464; x=1778166264;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ryqSrHFMNl2iyHShwOhMHlwgorJnsltwFPZhZyA51sQ=;
+        b=J7J/tuc6VpTCnhuSYCfyWSoQ5o0c2c48ZRKzvbGPq7llUNpOd3T3K+PUp1DKMR2fp+
+         CFF+NmSShK8sgXMuO849bmX889s65sp/UDXCjY9FH/j0SW7cqngic0ZecfLJHb4gqzUR
+         bGydrxy7mWyqXmLDsh5iVDn4U+k/I62G5yTBTbutKLw+V6bzSHqIQ1CmzCEWGesX7nTH
+         SYcg9gOE78RI8dzwUhPYeX48Iywqw8noZ+ATa9dQluDYXZlTvX/oeL92bWngF6yWF0Ll
+         3D4YEgEH+NEMSgjOHMDFK2Ykj1SOiEOjy+X5t+vPpVt6OfK5F2x+wZzWFbk6VbwItnbX
+         O1pA==
+X-Forwarded-Encrypted: i=1; AFNElJ/BtyRIpi1vnC92bfUxiiBlgI+OeBJh7HQJ97gEXWcHEQDfrtwjYryIKqvUP4NQp54JvD8y@lists.linux.dev
+X-Gm-Message-State: AOJu0YyraFlfK2elb2ZLZ//oJEzGNWcppJarMhOWOBqv5I8ByXesgnBm
+	Bf3/5423m8brqO2eUbMGw4em/bSzTLSkgm89UKfLTJp5+G87QHfOksJx3d2PFQYbTbM=
+X-Gm-Gg: AeBDieuj4nC/+JnbiuT6MPNtYFxxweyqNXDM0WCoNANyQTwMMqt2eN2n74pLjqDLMFm
+	WVGsnQacqB8eCB1QmGwFWKFhOKkZrf1/cizozx4nIow/LN5pKosfjWEn3McxSWxcle8JGOu9p5u
+	0aOoJy7+btFPCe5yGb8gLCZoDZ+lejWu6tBsDq89TxNczqNalLglxKdxCobcAFx0ERIsyZ+murl
+	8DscVQkZbXBfWfDqSiLgfMpz0wA7kPEVaXextQI1bGPk46lkaheIo1iRA3YX/bxzK/7RtYJlEtZ
+	z1rXTNdSbQ7c+hzF2s19GEBtQln8bL3qj3ymc8D6rpfEUFumBXfUyBjJ7UtIFBQ9ncAhwRTDLg9
+	mr+RCPmIB8uxODoWe75Kar6yJ5+pqVoly6p3FHSSIacwp0VvNDAqjjDnE/SOW0DzYykiiZh2X21
+	GuVoRsfmbgc2fE2i7tv9NpmHA=
+X-Received: by 2002:a05:6512:1289:b0:5a4:1900:92b1 with SMTP id 2adb3069b0e04-5a8522db66cmr1164817e87.32.1777561462169;
+        Thu, 30 Apr 2026 08:04:22 -0700 (PDT)
+Received: from localhost ([2804:7f0:b765:105d:2ecf:67ff:fe81:9da0])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12de3261533sm8467722c88.9.2026.04.30.08.04.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2026 08:04:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 30 Apr 2026 12:04:18 -0300
+Message-Id: <DI6KY4J2N2UB.39XQW4ZLTT1VV@suse.com>
+Subject: Re: [PATCH bpf-next v10 05/11] selftests/bpf: Make skeleton headers
+ order-only prerequisites of .test.d
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+ <alan.maguire@oracle.com>, <martin.lau@kernel.org>, <clm@meta.com>,
+ <ihor.solodrai@linux.dev>
+To: <bot+bpf-ci@kernel.org>, <rbm@suse.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <shuah@kernel.org>,
+ <nathan@kernel.org>, <nick.desaulniers+lkml@gmail.com>, <morbo@google.com>,
+ <justinstitt@google.com>
+From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+X-Mailer: aerc 0.21.0-120-g22b95d38161f
+References: <20260430-selftests-bpf_misconfig-v10-5-cd302a31af16@suse.com>
+ <4de9eeb57c344c41536f55d67f71254eb43687505ecf15f6c4995d73a8fe49c5@mail.kernel.org>
+In-Reply-To: <4de9eeb57c344c41536f55d67f71254eb43687505ecf15f6c4995d73a8fe49c5@mail.kernel.org>
 
-tree:   https://github.com/avpatel/linux.git riscv_iommu_irqbypass_v2
-head:   0ba166d111b762ae8f37075ba1266e345ae5ef59
-commit: 0ae68ded2664be53f2e34c2be7b639b6b2ef711f [16/18] RISC-V: KVM: Add guest file irqbypass support
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20260430/202604302258.1VWlHeHH-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604302258.1VWlHeHH-lkp@intel.com/reproduce)
+On Thu Apr 30, 2026 at 10:30 AM -03, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selfte=
+sts/bpf/Makefile
+>> index 9a4d8bea0c18..608e6dff0392 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -726,11 +726,11 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:	=
+		\
+>>  $(TRUNNER_TEST_OBJS:.o=3D.d): $(TRUNNER_OUTPUT)/%.test.d:			\
+>>  			    $(TRUNNER_TESTS_DIR)/%.c			\
+>>  			    $(TRUNNER_EXTRA_HDRS)			\
+>> +			    $$(BPFOBJ) | $(TRUNNER_OUTPUT)		\
+>>  			    $(TRUNNER_BPF_SKELS)			\
+>>  			    $(TRUNNER_BPF_LSKELS)			\
+>>  			    $(TRUNNER_BPF_LSKELS_SIGNED)		\
+>> -			    $(TRUNNER_BPF_SKELS_LINKED)			\
+>> -			    $$(BPFOBJ) | $(TRUNNER_OUTPUT)
+>> +			    $(TRUNNER_BPF_SKELS_LINKED)
+>
+> sashiko-bot raised concerns in v9 about the assumption regarding GNU
+> Make's behavior with order-only prerequisites. The commit message claims
+> that "GNU make builds order-only prerequisites that do not exist," but is
+> this correct in the scenario described?
+>
+> If .test.d already exists and its regular prerequisites are not newer, Ma=
+ke
+> ignores order-only prerequisites completely. Since the generated .d files
+> only declare dependencies for .test.o and not for .test.d itself, modifyi=
+ng
+> a local header to include a new skeleton doesn't mark .test.d as out-of-d=
+ate.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604302258.1VWlHeHH-lkp@intel.com/
+Alright so this seems to be false. A small counter example below
+(disclaimer: also LLM output).
 
-All warnings (new ones prefixed by >>):
+/tmp/oo.mk:
+# Reproduces the bot's exact scenario from tools/testing/selftests/bpf:
+#   .test.o : .c | .test.d                (existing rule)
+#   .test.d : .c | <skel headers>         (this patch's change)
+# Setup mimics a previous build: .test.o, .test.d, the .c file, and a
+# local header all exist on disk; the .d already records that .test.o
+# depends on the local header (this is what gcc -MMD captured during the
+# previous compile). The local header is then touched -- as if a
+# developer had just added a new #include to it -- so .test.o becomes
+# timestamp-out-of-date. Crucially, .test.d's own normal prereqs (just
+# .c) have NOT been touched, so .test.d is itself "up-to-date": this is
+# the bot's exact precondition. A new .skel.h is listed in the
+# order-only chain but does not exist on disk yet. The bot claims make
+# will silently skip building it. Below shows make builds it anyway.
 
->> arch/riscv/kvm/aia_imsic.c:837:2: warning: variable 'vcpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     837 |         kvm_for_each_vcpu(tmp, vcpu, kvm) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kvm_host.h:1012:6: note: expanded from macro 'kvm_for_each_vcpu'
-    1012 |         if (atomic_read(&kvm->online_vcpus))                            \
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_imsic.c:841:7: note: uninitialized use occurs here
-     841 |         if (!vcpu)
-         |              ^~~~
-   arch/riscv/kvm/aia_imsic.c:837:2: note: remove the 'if' if its condition is always true
-     837 |         kvm_for_each_vcpu(tmp, vcpu, kvm) {
-         |         ^
-   include/linux/kvm_host.h:1012:2: note: expanded from macro 'kvm_for_each_vcpu'
-    1012 |         if (atomic_read(&kvm->online_vcpus))                            \
-         |         ^
-   arch/riscv/kvm/aia_imsic.c:804:23: note: initialize the variable 'vcpu' to silence this warning
-     804 |         struct kvm_vcpu *vcpu;
-         |                              ^
-         |                               = NULL
-   1 warning generated.
+$(shell rm -rf /tmp/oo; mkdir -p /tmp/oo;                            \
+	touch /tmp/oo/foo.c /tmp/oo/local.h;                         \
+	printf '%s\n' '/tmp/oo/foo.test.o: /tmp/oo/foo.c /tmp/oo/local.h' \
+		> /tmp/oo/foo.test.d;                                \
+	touch /tmp/oo/foo.test.o;                                    \
+	sleep 0.1;                                                   \
+	touch /tmp/oo/local.h)
 
+-include /tmp/oo/foo.test.d
 
-vim +837 arch/riscv/kvm/aia_imsic.c
+/tmp/oo/foo.test.o: /tmp/oo/foo.c | /tmp/oo/foo.test.d
+	@cat /tmp/oo/new.skel.h >/dev/null && touch $@
+	@echo "  TEST-OBJ $@"
 
-   793	
-   794	void kvm_arch_update_irqfd_routing(struct kvm_kernel_irqfd *irqfd,
-   795					   struct kvm_kernel_irq_routing_entry *old,
-   796					   struct kvm_kernel_irq_routing_entry *new)
-   797	{
-   798		struct riscv_iommu_ir_vcpu_info vcpu_info;
-   799		struct kvm *kvm = irqfd->kvm;
-   800		struct kvm_aia *aia = &kvm->arch.aia;
-   801		int host_irq = irqfd->producer->irq;
-   802		struct irq_data *irqdata = irq_get_irq_data(host_irq);
-   803		unsigned long tmp, flags;
-   804		struct kvm_vcpu *vcpu;
-   805		struct imsic *imsic;
-   806		struct msi_msg msg;
-   807		u64 msi_addr_mask;
-   808		gpa_t target;
-   809		int ret;
-   810	
-   811		if (old && old->type == KVM_IRQ_ROUTING_MSI &&
-   812		    new && new->type == KVM_IRQ_ROUTING_MSI &&
-   813		    !memcmp(&old->msi, &new->msi, sizeof(new->msi)))
-   814			return;
-   815	
-   816		if (!new) {
-   817			if (!WARN_ON_ONCE(!old) && old->type == KVM_IRQ_ROUTING_MSI) {
-   818				ret = irq_set_vcpu_affinity(host_irq, NULL);
-   819				WARN_ON_ONCE(ret && ret != -EOPNOTSUPP);
-   820			}
-   821			return;
-   822		}
-   823	
-   824		if (new->type != KVM_IRQ_ROUTING_MSI)
-   825			return;
-   826	
-   827		target = ((gpa_t)new->msi.address_hi << 32) | new->msi.address_lo;
-   828		if (WARN_ON_ONCE(target & (IMSIC_MMIO_PAGE_SZ - 1)))
-   829			return;
-   830	
-   831		msg = (struct msi_msg){
-   832			.address_hi = new->msi.address_hi,
-   833			.address_lo = new->msi.address_lo,
-   834			.data = new->msi.data,
-   835		};
-   836	
- > 837		kvm_for_each_vcpu(tmp, vcpu, kvm) {
-   838			if (target == vcpu->arch.aia_context.imsic_addr)
-   839				break;
-   840		}
-   841		if (!vcpu)
-   842			return;
-   843	
-   844		msi_addr_mask = kvm_riscv_aia_msi_addr_mask(aia);
-   845		vcpu_info = (struct riscv_iommu_ir_vcpu_info){
-   846			.gpa = target,
-   847			.msi_addr_mask = msi_addr_mask,
-   848			.msi_addr_pattern = (target >> IMSIC_MMIO_PAGE_SHIFT) & ~msi_addr_mask,
-   849			.group_index_bits = aia->nr_group_bits,
-   850			.group_index_shift = aia->nr_group_shift,
-   851		};
-   852	
-   853		imsic = vcpu->arch.aia_context.imsic_state;
-   854	
-   855		read_lock_irqsave(&imsic->vsfile_lock, flags);
-   856	
-   857		if (WARN_ON_ONCE(imsic->vsfile_cpu < 0))
-   858			goto out;
-   859	
-   860		vcpu_info.hpa = imsic->vsfile_pa;
-   861	
-   862		ret = irq_set_vcpu_affinity(host_irq, &vcpu_info);
-   863		WARN_ON_ONCE(ret && ret != -EOPNOTSUPP);
-   864		if (ret)
-   865			goto out;
-   866	
-   867		irq_data_get_irq_chip(irqdata)->irq_write_msi_msg(irqdata, &msg);
-   868	
-   869	out:
-   870		read_unlock_irqrestore(&imsic->vsfile_lock, flags);
-   871	}
-   872	
+/tmp/oo/foo.test.d: /tmp/oo/foo.c | /tmp/oo/new.skel.h
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+/tmp/oo/new.skel.h:
+	@echo "/* generated */" > $@
+	@echo "  GEN-SKEL $@"
+
+Then run it:
+
+$ make -f /tmp/oo.mk /tmp/oo/foo.test.o
+  GEN-SKEL /tmp/oo/new.skel.h
+  TEST-OBJ /tmp/oo/foo.test.o
+
+If the order-only chain were skipped at the up-to-date /tmp/oo/foo.test.d,
+then /tmp/oo/new.skel.h would never be created, the recipe's cat would fail
+with "No such file or directory", and make would abort with Error 1 instead
+of relinking /tmp/oo/foo.test.o -- the same failure mode hypothesised for
+the real .test.o case. That does not happen.
+
+>
+> Could this introduce a race condition or build failures for newly added B=
+PF
+> skeletons? The new skeleton might not be generated before compilation, ca=
+using
+> a missing file error when building .test.o.
+>
+> Additionally, if the new skeleton is concurrently being generated for ano=
+ther
+> test that correctly tracks it, Make won't enforce dependency ordering for=
+ the
+> modified test. This could result in gcc reading a partially written .skel=
+.h
+> file.
+
+With this patch every .test.d entry treats skel headers as order-only, so
+there is no "test that does correctly track it" to race against -- the
+premise does not hold.
+
+>
+> This concern from v9 was not addressed in v10.
+>
+> Reference: https://lore.kernel.org/bpf/20260429202343.CB842C2BCFA@smtp.ke=
+rnel.org/
+> Reviewer: sashiko-bot@kernel.org
+> Date: Wed, 29 Apr 2026 20:23:42 +0000
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/251670=
+06036
+
