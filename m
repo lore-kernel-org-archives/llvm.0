@@ -1,228 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4412741B5;
-	Thu, 30 Apr 2026 03:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2F6344DBD;
+	Thu, 30 Apr 2026 03:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777518280; cv=none; b=gYEzqSJMeBvezkFMvluYNv8spAm1f9d5x7bnggMprQ3rNtnMeYO2TqR86TuL1ggyb1Xp5PMw4bjjuZ1PkCp5d6x9lDvjdQKKR6ixCGC1xePGkFGrXw8Yndr1I7LHB1MLXEoOuDTZVv3kn/iHeMnshxxZnMbxUtgD9j258A1m0WY=
+	t=1777519546; cv=none; b=ipkCa7dVbTX8kjEc/d1Nhw7m56VODeCR1S4NkFAFDp3htkU65m0E5IqGtPkBs1u95Dlc0GtAcQqHHVi/iMwrLyURnKsBXAhJxd6VhPGRaHkRSeGTbSImiB7uLNiePWTnBY7el8WLXkJg5TFRe7n0NoiPUYspeczSn2u28YQrGVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777518280; c=relaxed/simple;
-	bh=mxAeFa0zucritB95EEF1sgq4ftLNUflodECe6CLmwnE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VfhM96KhWz1toSraWeO4zMvHsOpnfFuWYb7ZvKj+rahXOu8wIATB7QzDioXTAs2o+NxL1piLIairzijkl0P/SP5V2L6HWBqniKhXYyGAW3ZuxeEOWle1rRlcT/7tuz5RqvFxbrNgdluq04eL8IwQjpfA7NpRyK5RD7Z4cdKF3tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hVw263LQ; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777519546; c=relaxed/simple;
+	bh=Ut5G69bc29PiPzWoT/741NVv5Kk/lOmdOdb5wKBmZHY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=oMJPoul8PNqJN8qxyXzoDt53j74wHJg6kb+2ZS0hgqpWdjZGNbOH1It4TJf2ivzRj3tb7vyNx2vyMDZNuY+0yONyH7UOzjDDXVpxGQ9PrY2dHQEyawfmOkUyKSBWQa1B3GsGLAZ5UOKFYciaQK/rWsrPoxF1IimFm8pwH1T2tAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V5dcZx5w; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hVw263LQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777518277; x=1809054277;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mxAeFa0zucritB95EEF1sgq4ftLNUflodECe6CLmwnE=;
-  b=hVw263LQcp/BCvS4f3r1GPxaBnxFjdNhEmn/QElfbhgRYdGjpBexctob
-   pynKACKiGYBaybbPFJYS1Ms8Tqjy59eTbRUITlCHFpprdW9BYsWlOwEp+
-   hAPLsiMM/0/VOmuHimek9xBzN0hp94yAOjlNhym3cuyO+jBTK9YQz5fyN
-   BGxR74G8GB7VlK/KG7Vf1XkU+8kJdofcsBsihvzCIrT/BxW9FMG3NcC5l
-   RMTCZNBSclIGF797bnK+ELWIPlGk5hLAjiOukjwlFgoVIlU3rNpifgX1j
-   plyR5izCx+fX0+0TDfuaTUZQ/JguMrwus+VKS6KEtS8I8AQ6Qjhbf2zDB
-   g==;
-X-CSE-ConnectionGUID: oYwJlBtPTgWqoYnSBCtI4w==
-X-CSE-MsgGUID: Nz4V/HqgTyWZ0KVpG/88Gw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="65991964"
-X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="65991964"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2026 20:04:36 -0700
-X-CSE-ConnectionGUID: bk16eBbRQOy1LcpnzG9kqg==
-X-CSE-MsgGUID: 0A6sJFtkRC61WCvn12Vhew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,207,1770624000"; 
-   d="scan'208";a="234480184"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 29 Apr 2026 20:04:34 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wIHhX-00000000Brc-0OVn;
-	Thu, 30 Apr 2026 03:04:31 +0000
-Date: Thu, 30 Apr 2026 11:03:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dudu Lu <phx0fer@gmail.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, Dudu Lu <phx0fer@gmail.com>
-Subject: Re: [PATCH] nfc: nci: Add skb length validation in
- nci_core_init_rsp_packet
-Message-ID: <202604301024.q9hVP893-lkp@intel.com>
-References: <20260413090102.77980-1-phx0fer@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V5dcZx5w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FEFFC2BCB9;
+	Thu, 30 Apr 2026 03:25:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777519545;
+	bh=Ut5G69bc29PiPzWoT/741NVv5Kk/lOmdOdb5wKBmZHY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=V5dcZx5w6ZsNbkLQRDMzB2RWL/aoneaFsqWWBCOjQU9YtIWRYDD+T+yLL0c1uuBhY
+	 qEq09wxP51HP2ucG5VcbFYEWu1xwrI3mLVWalChYNFLQKJVV2/uPNO5bNsVTmGtBYW
+	 y+MFexZXsUKBzIR9VcaG11CGAPdXCh5mrQ4ITyVmu2dzJeTpqYPZZKRQaFN8mTUumj
+	 qe1015WQ5bGNHETaFFAMkfQbXS+479tE5rufj5GTm7FfEY/F/wwiBzlApZyMLXQ7Xj
+	 eN4jVc9crSFreUj8YqywmtdyQ9MC4GHMaLaL9pIVAuwmWk3hGgC+ZxtKtJbApg/ERF
+	 YZVQLUUCYw1Pw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id DA1FF3809A07;
+	Thu, 30 Apr 2026 03:25:01 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260413090102.77980-1-phx0fer@gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 00/33] rust: bump minimum Rust and `bindgen` versions
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <177751950055.2274119.12088060080551439561.git-patchwork-notify@kernel.org>
+Date: Thu, 30 Apr 2026 03:25:00 +0000
+References: <20260405235309.418950-1-ojeda@kernel.org>
+In-Reply-To: <20260405235309.418950-1-ojeda@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: linux-riscv@lists.infradead.org, nathan@kernel.org, nsc@kernel.org,
+ dakr@kernel.org, a.hindborg@kernel.org, catalin.marinas@arm.com,
+ will@kernel.org, pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ acourbot@nvidia.com, airlied@gmail.com, simona@ffwll.ch,
+ brendan.higgins@linux.dev, david@davidgow.net, gregkh@linuxfoundation.org,
+ arve@android.com, tkjos@android.com, christian@brauner.io,
+ cmllamas@google.com, aliceryhl@google.com, corbet@lwn.net, boqun@kernel.org,
+ gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
+ tmgross@umich.edu, rust-for-linux@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, lorenzo.stoakes@oracle.com, vbabka@kernel.org,
+ Liam.Howlett@oracle.com, urezki@gmail.com, linux-block@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, alex@ghiti.fr,
+ nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ raemoar63@gmail.com, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, nick.desaulniers+lkml@gmail.com,
+ morbo@google.com, justinstitt@google.com, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+ linux-doc@vger.kernel.org
 
-Hi Dudu,
+Hello:
 
-kernel test robot noticed the following build errors:
+This series was applied to riscv/linux.git (fixes)
+by Miguel Ojeda <ojeda@kernel.org>:
 
-[auto build test ERROR on net/main]
-[also build test ERROR on net-next/main linus/master horms-ipvs/master v7.1-rc1 next-20260429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Mon,  6 Apr 2026 01:52:36 +0200 you wrote:
+> As proposed in the past in e.g. LPC 2025 and the Maintainers Summit [1],
+> we are going to follow Debian Stable's Rust versions as our minimum
+> supported version.
+> 
+> Debian Trixie was released with a Rust 1.85.0 toolchain [2], which it
+> still uses to this day [3] (i.e. no update to Rust 1.85.1).
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dudu-Lu/nfc-nci-Add-skb-length-validation-in-nci_core_init_rsp_packet/20260423-210923
-base:   net/main
-patch link:    https://lore.kernel.org/r/20260413090102.77980-1-phx0fer%40gmail.com
-patch subject: [PATCH] nfc: nci: Add skb length validation in nci_core_init_rsp_packet
-config: arm64-randconfig-004-20260430 (https://download.01.org/0day-ci/archive/20260430/202604301024.q9hVP893-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604301024.q9hVP893-lkp@intel.com/reproduce)
+Here is the summary with links:
+  - [v2,01/33] rust: kbuild: remove `--remap-path-prefix` workarounds
+    https://git.kernel.org/riscv/c/c8cbe2fc22e4
+  - [v2,02/33] rust: kbuild: remove "`try` keyword" workaround for `bindgen` < 0.59.2
+    https://git.kernel.org/riscv/c/518b9ad2fab3
+  - [v2,03/33] rust: kbuild: remove unneeded old `allow`s for generated layout tests
+    https://git.kernel.org/riscv/c/92cc022f044f
+  - [v2,04/33] gpu: nova-core: bindings: remove unneeded `cfg_attr`
+    https://git.kernel.org/riscv/c/341c51ee3293
+  - [v2,05/33] rust: bump Rust minimum supported version to 1.85.0 (Debian Trixie)
+    https://git.kernel.org/riscv/c/f32fb9c58a5b
+  - [v2,06/33] rust: bump Clippy's MSRV and clean `incompatible_msrv` allows
+    https://git.kernel.org/riscv/c/b6cfba436623
+  - [v2,07/33] rust: allow globally `clippy::incompatible_msrv`
+    https://git.kernel.org/riscv/c/7ed188605e1d
+  - [v2,08/33] rust: simplify `RUSTC_VERSION` Kconfig conditions
+    https://git.kernel.org/riscv/c/b28711ac98e8
+  - [v2,09/33] rust: remove `RUSTC_HAS_SLICE_AS_FLATTENED` and simplify code
+    https://git.kernel.org/riscv/c/9b398d056543
+  - [v2,10/33] rust: remove `RUSTC_HAS_COERCE_POINTEE` and simplify code
+    https://git.kernel.org/riscv/c/4ab22c543f18
+  - [v2,11/33] rust: kbuild: remove skipping of `-Wrustdoc::unescaped_backticks`
+    https://git.kernel.org/riscv/c/0f6e1e0705f0
+  - [v2,12/33] rust: kbuild: remove `feature(...)`s that are now stable
+    https://git.kernel.org/riscv/c/d1aa40daa777
+  - [v2,13/33] rust: transmute: simplify code with Rust 1.80.0 `split_at_*checked()`
+    https://git.kernel.org/riscv/c/f309a6edda53
+  - [v2,14/33] rust: alloc: simplify with `NonNull::add()` now that it is stable
+    https://git.kernel.org/riscv/c/161dd7b51e96
+  - [v2,15/33] rust: macros: simplify code using `feature(extract_if)`
+    https://git.kernel.org/riscv/c/42ec980024f0
+  - [v2,16/33] rust: block: update `const_refs_to_static` MSRV TODO comment
+    https://git.kernel.org/riscv/c/961b72d45ae4
+  - [v2,17/33] rust: bump `bindgen` minimum supported version to 0.71.1 (Debian Trixie)
+    https://git.kernel.org/riscv/c/c3a00a3f31ff
+  - [v2,18/33] rust: rust_is_available: remove warning for `bindgen` 0.66.[01]
+    https://git.kernel.org/riscv/c/41cfbb4295cf
+  - [v2,19/33] rust: rust_is_available: remove warning for `bindgen` < 0.69.5 && libclang >= 19.1
+    https://git.kernel.org/riscv/c/ae64324ad5c1
+  - [v2,20/33] rust: kbuild: update `bindgen --rust-target` version and replace comment
+    https://git.kernel.org/riscv/c/276ed30c558e
+  - [v2,21/33] rust: kbuild: remove "dummy parameter" workaround for `bindgen` < 0.71.1
+    https://git.kernel.org/riscv/c/93553d9922b0
+  - [v2,22/33] docs: rust: quick-start: openSUSE provides `rust-src` package nowadays
+    https://git.kernel.org/riscv/c/53c9647c0a48
+  - [v2,23/33] docs: rust: quick-start: update Ubuntu versioned packages
+    https://git.kernel.org/riscv/c/982e1aa6de73
+  - [v2,24/33] docs: rust: quick-start: update minimum Ubuntu version
+    https://git.kernel.org/riscv/c/6767147cb941
+  - [v2,25/33] docs: rust: quick-start: add Ubuntu 26.04 LTS and remove subsection title
+    https://git.kernel.org/riscv/c/780f847e1419
+  - [v2,26/33] docs: rust: quick-start: remove Gentoo "testing" note
+    https://git.kernel.org/riscv/c/99c672426aed
+  - [v2,27/33] docs: rust: quick-start: remove Nix "unstable channel" note
+    https://git.kernel.org/riscv/c/b69a14650009
+  - [v2,28/33] docs: rust: quick-start: remove GDB/Binutils mention
+    https://git.kernel.org/riscv/c/a4392ed1c8b9
+  - [v2,29/33] docs: rust: general-information: simplify Kconfig example
+    https://git.kernel.org/riscv/c/9375ea727d7e
+  - [v2,30/33] docs: rust: general-information: use real example
+    https://git.kernel.org/riscv/c/86c5d1c6740c
+  - [v2,31/33] rust: declare cfi_encoding for lru_status
+    https://git.kernel.org/riscv/c/9e5946de3a38
+  - [v2,32/33] rust: kbuild: support global per-version flags
+    https://git.kernel.org/riscv/c/b2aa1535ecdd
+  - [v2,33/33] rust: kbuild: allow `clippy::precedence` for Rust < 1.86.0
+    https://git.kernel.org/riscv/c/2e2f8b5a0656
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604301024.q9hVP893-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/nfc/nci/rsp.c:1:2: error: expected identifier or '('
-       1 |         if (skb->len < sizeof(*rsp)) {
-         |         ^
-   net/nfc/nci/rsp.c:5:2: error: expected identifier or '('
-       5 |         if (skb->len < 6 + rsp_1->num_supported_rf_interfaces +
-         |         ^
-   net/nfc/nci/rsp.c:10:2: error: expected identifier or '('
-      10 |         if (skb->len < sizeof(*rsp_1))
-         |         ^
-   In file included from net/nfc/nci/rsp.c:29:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/arm64/include/asm/hardirq.h:17:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:588:
-   In file included from include/linux/irqdesc.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from net/nfc/nci/rsp.c:29:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/arm64/include/asm/hardirq.h:17:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:588:
-   In file included from include/linux/irqdesc.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from net/nfc/nci/rsp.c:29:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/arm64/include/asm/hardirq.h:17:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:588:
-   In file included from include/linux/irqdesc.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from net/nfc/nci/rsp.c:29:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/arm64/include/asm/hardirq.h:17:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:588:
-   In file included from include/linux/irqdesc.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from net/nfc/nci/rsp.c:29:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/arm64/include/asm/hardirq.h:17:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:588:
-   In file included from include/linux/irqdesc.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from net/nfc/nci/rsp.c:29:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/arm64/include/asm/hardirq.h:17:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:588:
-   In file included from include/linux/irqdesc.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-
-
-vim +1 net/nfc/nci/rsp.c
-
-   > 1		if (skb->len < sizeof(*rsp)) {
-     2			pr_err("short NCI_CORE_INIT_RSP v2 packet\n");
-     3			return NCI_STATUS_SYNTAX_ERROR;
-     4		}
-     5		if (skb->len < 6 + rsp_1->num_supported_rf_interfaces +
-     6				sizeof(*rsp_2)) {
-     7			pr_err("short NCI_CORE_INIT_RSP v1 packet\n");
-     8			return NCI_STATUS_SYNTAX_ERROR;
-     9		}
-    10		if (skb->len < sizeof(*rsp_1))
-    11			return NCI_STATUS_SYNTAX_ERROR;
-    12	// SPDX-License-Identifier: GPL-2.0-only
-    13	/*
-    14	 *  The NFC Controller Interface is the communication protocol between an
-    15	 *  NFC Controller (NFCC) and a Device Host (DH).
-    16	 *
-    17	 *  Copyright (C) 2011 Texas Instruments, Inc.
-    18	 *
-    19	 *  Written by Ilan Elias <ilane@ti.com>
-    20	 *
-    21	 *  Acknowledgements:
-    22	 *  This file is based on hci_event.c, which was written
-    23	 *  by Maxim Krasnyansky.
-    24	 */
-    25	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
