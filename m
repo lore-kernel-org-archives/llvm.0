@@ -1,67 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC0E46AF17;
-	Thu, 30 Apr 2026 16:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E1946AF33;
+	Thu, 30 Apr 2026 16:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777565622; cv=none; b=NREQDbi23onnCC1ckLCusWdqdEUoc9HO9bEyep1GtqTf0gukF2hdBPeH15oXyEhfk+8NoVPgs3x/3LXlDe7Af+u0hkkImmTc8jjwZ2lipb/HHWPiI+LXKu3Xxh/rF2pqvzErdrFO9hJbR3SibE7BIctG1h9nXwA8qwoXv0tZ1i8=
+	t=1777566833; cv=none; b=uWR307WFl32pDhGNGofYRKsajRhuW8dALA/iIN9d9ZNoK0PJstezHBzDuh51uxsoG11sQLFbQ8qFsU7DCQPZiTwdx5BGaqa3SLncobKe19vUfvxpn2+Thp0Udf74H+QN0+WydSAy2W+HnzYzI7FmAgCot1dHEkoRK+H6rQg6lcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777565622; c=relaxed/simple;
-	bh=7FxeS7UrdqX2NlSTElB+df65eG4I664/MsabMaXbTjs=;
+	s=arc-20240116; t=1777566833; c=relaxed/simple;
+	bh=cfENCjc1fzzR6KbL+6+PAAkvtumH6My77uGSdh60sFg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OsDMxSjbj9DrpmDKkWjeEj58S0X/dEPZS0iGy6kmTFVqC85+nFXbLjwJWDP1oZBct/0hfbCSlb+FBLC3KuQhNBy/BXIiS4aHk8AxE6tN6SbPIuE5ZBbD5GTJwg/k4xebQy35cMLuFCCwFJhUrsxpA6+GmD/bS2ymcMFt+8611TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aSfmxmKT; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=llCy3S2bw8V/j2cRI0HN3bfDJSrindsvBps2fAOv8KUARkKWMZ4tV6iSsETZ0slLuV5EowTOIbev1Qqdwd8Oo2hF5cGmYHJ6k+CfzGXvJ3SYlqzHGY1JX1RTPLBq73GetVZOKqHGcV9m76KiwAoEygJkREF/acaABAMGIAdemYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dz5o9OOH; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aSfmxmKT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dz5o9OOH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777565621; x=1809101621;
+  t=1777566832; x=1809102832;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7FxeS7UrdqX2NlSTElB+df65eG4I664/MsabMaXbTjs=;
-  b=aSfmxmKTTBoVz1tpV7gSnMVsDglJ+1D/RrBwS2nSOD9AKWoj0hfxuSNW
-   DDOya6FXSLwv9Q1vEeaU2RYgNkIaRRDAmV+yMsGpiBWYEcDoepDNfKrs2
-   Adnooqszhd4qTZC0nxcJYkxqoj5GA85iwc8qTrA0kcVVVvkAs5FibicZC
-   zRAurJBQa+OxOdJ2hujz0Szm8FECJ76E5bFXTqLCvTgRCCQsdjxaGhCo4
-   1UXXPfBj8lS/uGlIwSRLgSkoHhAeiUm8N9DPSVp08Wvo0hs7Q9/jsOtJ0
-   mt/2qJ1kaxQrqp4H/9K8iqC4tzxJB6G+OCm0zhJUSG0Bknwts6Rg60FZ/
-   w==;
-X-CSE-ConnectionGUID: hNng7MhVQp+kD175iazP4g==
-X-CSE-MsgGUID: Mtz6C13dS86z0UX1inFmEA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11772"; a="81100524"
+  bh=cfENCjc1fzzR6KbL+6+PAAkvtumH6My77uGSdh60sFg=;
+  b=dz5o9OOHBRiOVjwahPWla7r/T4wsp3a7wa/1Y2Mcs+063ooj9/Q2Ol3x
+   hI1TnQ2Uzgc0BZj/FWredUq6WGboSgQG+IsCqYj3DLprE4jOgkfu1yH35
+   YsV604jwIyE2DQT6lKYZFk7GcLaHFX42kUtXfHKGHQh1pows9Q4C96YgZ
+   eetTINU0UHVyEwSiTHHqFV6jBglyh0+tOSJ+z9fEbWuG3F5gZUsZYRaVD
+   Io2pAqEJdQV65y5vZPZE5UcPnpQc4TJ86th/onrYTKwPAkmfIa7mLGqN/
+   eaSXBljGCthN9iqUXGVSCGaMTGJtxUBvC9r/7iww5bh6uFGmNaX1seY1K
+   Q==;
+X-CSE-ConnectionGUID: +CWoF0U0SLmnA77Gd/Qi4Q==
+X-CSE-MsgGUID: AgCT0kDETK2GZXoAfeAW9g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11772"; a="78236278"
 X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="81100524"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 09:13:40 -0700
-X-CSE-ConnectionGUID: AB+03OciRcikVXWgNFwl8Q==
-X-CSE-MsgGUID: 60urOWMfSDGaX5pUkGvxkg==
+   d="scan'208";a="78236278"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 09:33:52 -0700
+X-CSE-ConnectionGUID: eQNDi5mTSUy9Qg9nksZGIw==
+X-CSE-MsgGUID: gnxf2RtZQkewiLYuAZR9QA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="238948252"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa004.jf.intel.com with ESMTP; 30 Apr 2026 09:13:38 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+   d="scan'208";a="230278698"
+Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 30 Apr 2026 09:33:48 -0700
+Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wIU1A-000000004r3-08QC;
-	Thu, 30 Apr 2026 16:13:36 +0000
-Date: Thu, 30 Apr 2026 18:13:03 +0200
+	id 1wIUKf-00000000CeW-2GTG;
+	Thu, 30 Apr 2026 16:33:45 +0000
+Date: Fri, 1 May 2026 00:33:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shawn Lin <shawn.lin@rock-chips.com>,
-	Bjorn Helgaas <helgaas@kernel.org>
+To: Dexuan Cui <decui@microsoft.com>, kys@microsoft.com,
+	haiyangz@microsoft.com, wei.liu@kernel.org, longli@microsoft.com,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+	mhklinux@outlook.com, matthew.ruffell@canonical.com,
+	johansen@templeofstupid.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nirmal Patel <nirmal.patel@linux.intel.com>,
-	Jonathan Derrick <jonathan.derrick@linux.dev>,
-	Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-	Logan Gunthorpe <logang@deltatee.com>,
-	Philipp Stanner <phasta@kernel.org>, linux-pci@vger.kernel.org,
-	Shawn Lin <shawn.lin@rock-chips.com>
-Subject: Re: [PATCH v2 3/3] PCI: vmd: Replace pci_alloc_irq_vectors() with
- pcim_alloc_irq_vectors()
-Message-ID: <202604301846.yNeYYwuL-lkp@intel.com>
-References: <1776392767-83668-4-git-send-email-shawn.lin@rock-chips.com>
+	stable@vger.kernel.org
+Subject: Re: [PATCH] Drivers: hv: vmbus: Improve the logc of reserving
+ fb_mmio on Gen2 VMs
+Message-ID: <202605010002.dnnxVZFF-lkp@intel.com>
+References: <20260416183529.838321-1-decui@microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,52 +68,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1776392767-83668-4-git-send-email-shawn.lin@rock-chips.com>
+In-Reply-To: <20260416183529.838321-1-decui@microsoft.com>
 
-Hi Shawn,
+Hi Dexuan,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus linus/master v7.1-rc1 next-20260430]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v7.1-rc1 next-20260429]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shawn-Lin/PCI-MSI-Add-Devres-managed-IRQ-vectors-allocation/20260418-031441
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/1776392767-83668-4-git-send-email-shawn.lin%40rock-chips.com
-patch subject: [PATCH v2 3/3] PCI: vmd: Replace pci_alloc_irq_vectors() with pcim_alloc_irq_vectors()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260430/202604301846.yNeYYwuL-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dexuan-Cui/Drivers-hv-vmbus-Improve-the-logc-of-reserving-fb_mmio-on-Gen2-VMs/20260424-033622
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260416183529.838321-1-decui%40microsoft.com
+patch subject: [PATCH] Drivers: hv: vmbus: Improve the logc of reserving fb_mmio on Gen2 VMs
+config: i386-buildonly-randconfig-002-20260430 (https://download.01.org/0day-ci/archive/20260501/202605010002.dnnxVZFF-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260430/202604301846.yNeYYwuL-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260501/202605010002.dnnxVZFF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604301846.yNeYYwuL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605010002.dnnxVZFF-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> Warning: drivers/pci/msi/api.c:304 function parameter 'dev' not described in 'pcim_alloc_irq_vectors'
->> Warning: drivers/pci/msi/api.c:304 function parameter 'min_vecs' not described in 'pcim_alloc_irq_vectors'
->> Warning: drivers/pci/msi/api.c:304 function parameter 'max_vecs' not described in 'pcim_alloc_irq_vectors'
->> Warning: drivers/pci/msi/api.c:304 function parameter 'flags' not described in 'pcim_alloc_irq_vectors'
->> Warning: drivers/pci/msi/api.c:317 function parameter 'dev' not described in 'pcim_alloc_irq_vectors_affinity'
->> Warning: drivers/pci/msi/api.c:317 function parameter 'min_vecs' not described in 'pcim_alloc_irq_vectors_affinity'
->> Warning: drivers/pci/msi/api.c:317 function parameter 'max_vecs' not described in 'pcim_alloc_irq_vectors_affinity'
->> Warning: drivers/pci/msi/api.c:317 function parameter 'flags' not described in 'pcim_alloc_irq_vectors_affinity'
->> Warning: drivers/pci/msi/api.c:317 function parameter 'affd' not described in 'pcim_alloc_irq_vectors_affinity'
->> Warning: drivers/pci/msi/api.c:304 function parameter 'dev' not described in 'pcim_alloc_irq_vectors'
->> Warning: drivers/pci/msi/api.c:304 function parameter 'min_vecs' not described in 'pcim_alloc_irq_vectors'
->> Warning: drivers/pci/msi/api.c:304 function parameter 'max_vecs' not described in 'pcim_alloc_irq_vectors'
->> Warning: drivers/pci/msi/api.c:304 function parameter 'flags' not described in 'pcim_alloc_irq_vectors'
->> Warning: drivers/pci/msi/api.c:317 function parameter 'dev' not described in 'pcim_alloc_irq_vectors_affinity'
->> Warning: drivers/pci/msi/api.c:317 function parameter 'min_vecs' not described in 'pcim_alloc_irq_vectors_affinity'
->> Warning: drivers/pci/msi/api.c:317 function parameter 'max_vecs' not described in 'pcim_alloc_irq_vectors_affinity'
->> Warning: drivers/pci/msi/api.c:317 function parameter 'flags' not described in 'pcim_alloc_irq_vectors_affinity'
->> Warning: drivers/pci/msi/api.c:317 function parameter 'affd' not described in 'pcim_alloc_irq_vectors_affinity'
+>> drivers/hv/vmbus_drv.c:2403:40: warning: result of comparison of constant 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+    2403 |                         if (!low_mmio_base || low_mmio_base >= SZ_4G ||
+         |                                               ~~~~~~~~~~~~~ ^  ~~~~~
+   1 warning generated.
 
---
+
+vim +2403 drivers/hv/vmbus_drv.c
+
+  2385	
+  2386	static void __maybe_unused vmbus_reserve_fb(void)
+  2387	{
+  2388		resource_size_t start = 0, size;
+  2389		resource_size_t low_mmio_base;
+  2390		struct pci_dev *pdev;
+  2391	
+  2392		/* Hyper-V CoCo guests do not have a framebuffer device. */
+  2393		if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
+  2394			return;
+  2395	
+  2396		if (efi_enabled(EFI_BOOT)) {
+  2397			/* Gen2 VM: get FB base from EFI framebuffer */
+  2398			if (IS_ENABLED(CONFIG_SYSFB)) {
+  2399				start = sysfb_primary_display.screen.lfb_base;
+  2400				size = max_t(__u32, sysfb_primary_display.screen.lfb_size, 0x800000);
+  2401	
+  2402				low_mmio_base = hyperv_mmio->start;
+> 2403				if (!low_mmio_base || low_mmio_base >= SZ_4G ||
+  2404				    (start && start < low_mmio_base)) {
+  2405					pr_warn("Unexpected low mmio base 0x%pa\n", &low_mmio_base);
+  2406				} else {
+  2407					/*
+  2408					 * If the kdump kernel's lfb_base is 0,
+  2409					 * fall back to the low mmio base.
+  2410					 */
+  2411					if (!start)
+  2412						start = low_mmio_base;
+  2413					/*
+  2414					 * Reserve half of the space below 4GB for high
+  2415					 * resolutions, but cap the reservation to 128MB.
+  2416					 */
+  2417					size = min((SZ_4G - start) / 2, SZ_128M);
+  2418				}
+  2419			}
+  2420		} else {
+  2421			/* Gen1 VM: get FB base from PCI */
+  2422			pdev = pci_get_device(PCI_VENDOR_ID_MICROSOFT,
+  2423					      PCI_DEVICE_ID_HYPERV_VIDEO, NULL);
+  2424			if (!pdev)
+  2425				return;
+  2426	
+  2427			if (pdev->resource[0].flags & IORESOURCE_MEM) {
+  2428				start = pci_resource_start(pdev, 0);
+  2429				size = pci_resource_len(pdev, 0);
+  2430			}
+  2431	
+  2432			/*
+  2433			 * Release the PCI device so hyperv_drm driver can grab it
+  2434			 * later.
+  2435			 */
+  2436			pci_dev_put(pdev);
+  2437		}
+  2438	
+  2439		if (!start)
+  2440			return;
+  2441	
+  2442		/*
+  2443		 * Make a claim for the frame buffer in the resource tree under the
+  2444		 * first node, which will be the one below 4GB.  The length seems to
+  2445		 * be underreported, particularly in a Generation 1 VM.  So start out
+  2446		 * reserving a larger area and make it smaller until it succeeds.
+  2447		 */
+  2448		for (; !fb_mmio && (size >= 0x100000); size >>= 1)
+  2449			fb_mmio = __request_region(hyperv_mmio, start, size, fb_mmio_name, 0);
+  2450	
+  2451		pr_info("hv_mmio=%pR,%pR fb=%pR\n", hyperv_mmio, hyperv_mmio->sibling, fb_mmio);
+  2452	}
+  2453	
+
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
