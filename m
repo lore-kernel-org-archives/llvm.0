@@ -1,163 +1,137 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11020087.outbound.protection.outlook.com [52.101.46.87])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038D33A2550;
-	Thu, 30 Apr 2026 22:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777588949; cv=fail; b=rVDK4kmVlEA58QNmsJchzbuMD0/oQrQZJM01lcXeYLrjKo69yhrDjAVbcSBTOsNumQzLeVuh4Z7ogjPKJD/3vaw0zalkUNVI16k5/fshGqE8ICYpdlpcFwM1zOYMeOKiUJKtf86k9KM2eIvOuFIhO8Uqc8zLnlzDalDUsiKj3Uk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777588949; c=relaxed/simple;
-	bh=dDAIyBM9NqiANnjMrJ9tR42EPu3HZTZOsp/mM3A6AEg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Qb8CzZI+CE2P/IQzgCcH8VY8XBG3B6YTVHLNoNKokyiTEXFgGpbNr2hcELhaPxbIzoVqthkQVCiFZfF3AJMAUqWvGjIGgclbiSAXkKJHc13gOMc6vcBqBFaJKZeCa0hnCVqaQsCxTNN1RI16RyR61Y4SsZv7NAC9YJX9HhNapSE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=FaHR02Ds; arc=fail smtp.client-ip=52.101.46.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microsoft.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01D91624C5;
+	Fri,  1 May 2026 00:44:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777596243; cv=none; b=mSAHjRW+ZiEAPlV7LLbheOZESEBnM3E3soxk2eduEuuZISS5gbFDxmauGzyAGllYbn5Xq4O047hycV/u03tFIZpC7ZkajeGLkVUFXudtC1U9NwZhEuNaOEYZpuxDj02HcgPJ05ADF4pa5MiVJBZoj5NkB5AipT2sPg8AfeitGYM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777596243; c=relaxed/simple;
+	bh=YQFQLzXtLtoFX6B3iKKOLhplQJGsp/sjJIIbyGKgNs8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cR9mtvdbirTNH7/Q/jV2YA2excdQ4J98oN1iw1ZA+L45AuW/HAeXlhTYM2Yqkei6lotRnzwA8Y8W7RWYrB/PFfCACgELvFYSsM/mk9yUguGorUUJKWlJe0Sh6+Y+cGliRF2jz/yZsNCJBp7KDiRFJvs8/laRU/dtSuyX/b10XCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cUKNwh7T; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="FaHR02Ds"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Oi6LgNvdoXTImwgag7BYA+5hbQsfnW8HlSbxGbfKljfbqLaXac1nehAMOPtH3xhqNOb/tABpMFB04qg9DZyyMRb+PIsuyXKRM8qvJShHgO2KAGM1AMAf58NOYs/YvR0+eGPqWzm7hr3JdV77oQ67IN0DkJVmsN5aTmHiMCh7aQ5VI95xPeog1k5o36jU+1BIrm7GI81sGZKFT3w8W2gc8MGh0LvmSpDIPTaCszwMTHMPmT8AuQEBUSsnSQcDaDd3XiZKDk0fFQ3UHWRVFhENSko6znJibtLJkBYoWghhdCFBcaD/mh8Bvlvp/+W5D3A0yC/XyRyywAql6jOJUB5/gw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Leu+2sjT3yNdlOdOQ4YgnR/5C585LREWU7/QhoF6VLA=;
- b=jd6FQr1AQyJwSAETrchGxfZ0V3aeirCW3czKvAb05laNrpF04Q+vASia5WhgMdjjExdWdSmOCksSateHDHeHGiRwl/gg7Z8rfCAMDXr/BBMZsXC6QFDDu4nf870oYJ721ZSPDEsT2W4uSr5Y/FGhXBJdwSW8y3vLUERe33Lv3Kmhf8C1I9GI2HBHf0/UrvDhUmVNNjYgxG92yRZNUJ1ZV9kwGtIRYaFijfOMFcgP2zfppdlU0+O0HhtOIQLsDIRbchjC4lAm+fmMusiA+k4HwPu8/5bZWAP5N3qWRqXSc93jfGpzmoHN1d/WhDVYkiyhJBeG1x5rE/KPVsL8WNx1zQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Leu+2sjT3yNdlOdOQ4YgnR/5C585LREWU7/QhoF6VLA=;
- b=FaHR02DsDiS0FaLLa49YMGBqxC6chcRz3p6/DUdk7/8F0nXPSsMWlSzWZk5ovDrS9pwuxzf1fq+sIsFXwh4OpIxpacnBXGvRozx/Jh2jx/cMY6xeJEC2lOMRAjBX5twbjxSqCX0RUE/o7bKUwHp1AT9FCJ9wSgmnPESjG790TbI=
-Received: from SA1PR21MB6921.namprd21.prod.outlook.com (2603:10b6:806:4a7::11)
- by SA1PR21MB6682.namprd21.prod.outlook.com (2603:10b6:806:4a6::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.3; Thu, 30 Apr
- 2026 22:42:24 +0000
-Received: from SA1PR21MB6921.namprd21.prod.outlook.com
- ([fe80::51cf:497c:e5df:f6d]) by SA1PR21MB6921.namprd21.prod.outlook.com
- ([fe80::51cf:497c:e5df:f6d%2]) with mapi id 15.20.9891.004; Thu, 30 Apr 2026
- 22:42:24 +0000
-From: Dexuan Cui <DECUI@microsoft.com>
-To: kernel test robot <lkp@intel.com>, KY Srinivasan <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>, "wei.liu@kernel.org"
-	<wei.liu@kernel.org>, Long Li <longli@microsoft.com>,
-	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mhklinux@outlook.com" <mhklinux@outlook.com>,
-	"matthew.ruffell@canonical.com" <matthew.ruffell@canonical.com>,
-	"johansen@templeofstupid.com" <johansen@templeofstupid.com>
-CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [EXTERNAL] Re: [PATCH] Drivers: hv: vmbus: Improve the logc of
- reserving fb_mmio on Gen2 VMs
-Thread-Topic: [EXTERNAL] Re: [PATCH] Drivers: hv: vmbus: Improve the logc of
- reserving fb_mmio on Gen2 VMs
-Thread-Index: AQHc2L8pk0aH/znCKUGCrK9S0RkDCbX4MjcA
-Date: Thu, 30 Apr 2026 22:42:24 +0000
-Message-ID:
- <SA1PR21MB6921F17261B7EF19FAF6F9A9BF352@SA1PR21MB6921.namprd21.prod.outlook.com>
-References: <20260416183529.838321-1-decui@microsoft.com>
- <202605010002.dnnxVZFF-lkp@intel.com>
-In-Reply-To: <202605010002.dnnxVZFF-lkp@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=f55ba25e-b4ac-4f7f-ba75-f5d94fa5ef09;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2026-04-30T22:36:58Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Tag=10,
- 3, 0, 1;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB6921:EE_|SA1PR21MB6682:EE_
-x-ms-office365-filtering-correlation-id: a8529951-be3b-4153-5bec-08dea709bf72
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|7416014|366016|376014|921020|38070700021|18002099003|56012099003|22082099003;
-x-microsoft-antispam-message-info:
- 9OQ++GLPbXzXQGzMD7tSfhJvHOi8ehBM52ezPW3Mp0Qeg73l0zEgX1e4LThDj84BxiiDMfFWqmG8nUbbEmZvJhf9tofUvXmOa5E1iJzYwF/WX2+3/qitCt4jt9oMy/ROgHs4yaCnQRZ98k5URHnypeiklgfNs4na2gPpXWGmgWc8BA53chI4qYfl6MKaEjtCvXIi5RO6JnIVLnFPj9Ql0o0O+VtpQQChD6yW4NWpst7DsBYvuD9wUl2/wyk0A7Hp6ipx5+fsTIoVHXz2PaWuly6LYEwFEon+akooBRJBhnPWVRfe3CZLwJPb0s9QIHNeR2/OyPESo7cYy2cy2Rx8XYrHMqeN9AaXUOvwLKx9+e5iyC1bDEoTkzDYYCqGXP5wet5X2F4frODJnl/UuqD91QQ3HWwdstD/qjZCD7pLhDDpVmZgaBPiS/5ILX+xxkW8uipY6GADTEod+CLPCRL5oyZJpCkIzUg2GtrHSvaE2IFH3h5hG0SpjmQtBLpyl99vRPNYvF4TcrnCEkA8EkQlkd4oNKfug9rLxcb6m4m5RUr1DGg29o/R6+j0HWvz5PUmKm9yAk4B8NSTh5EZ8LCsrj8DGGX+QQpOQr7j33eja7gorHk0zjel3snXddBwsZ4WHFF8LQWGyTM7YZ3sos3XCYpEAj55kN0/Z02SjqMKExzQc8thCnaUHSngvbb6QmdLagOoBNdxzfOk24BjX46/wVMsWCCxEO+f92Ys6RGJZdRv/F5TM74zhVnw8rZbMSOU8RiT30XB0oGLB1ZwIS794g==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB6921.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(376014)(921020)(38070700021)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?6vDo+73c1c2TC5hwlEyVThD4BiOME3tig0sxHmaIUe474UqUvEKH2PI9EFFr?=
- =?us-ascii?Q?gFqEOT7NY+F+0eOz3QzeLNIvMYmVpsqAo+QGZLGid4RQmC3va0W/iXYdOJs1?=
- =?us-ascii?Q?MD3d7DJFpNjlHyPBGceXc38JEGOWmOR7vsjKn8Nra3K5NwN7RHmjCJXXNja6?=
- =?us-ascii?Q?M4FyLH8JbFoNv8CHbubVG1k+all3xfLhBk891OaIF5SEzGBz8fUmbXgOmr+x?=
- =?us-ascii?Q?TTbGtKwVKkIuKOBJGlHTEb2ykrvwDVylS4mrOokM63DbL8TIrJBFHnTSuYWk?=
- =?us-ascii?Q?UtxRAx/RdZshMmGqsmpFXAKn6ZmGirt2KqG0bKXc87hBmSOBbSYrKKrGGpE+?=
- =?us-ascii?Q?+szZpdhtsSxUjZ4ty7OlF33LzIsEpbn08Vxt2cSct7Dy8MK8r0cgpeSTbztA?=
- =?us-ascii?Q?r7jtM12sf35JxJqPVQUbWA/FkNSh613gLAb3UXpVAQvVUq1tftdAusw7IUTa?=
- =?us-ascii?Q?oFCQ4z0QZzatrIV7w+geDTB3l9XmaQkFXzWMCWAJSc8sy2TsuaTmeLp9ZkLa?=
- =?us-ascii?Q?ZTTUUIut/8sTGlxsREc0bFZlqk7MLxiPJo4j7MDeGKRubPQc6nn4E/bf8Q0J?=
- =?us-ascii?Q?iBD+kHj7MnWHcE6ER+eKj1un009Z/Ck19ljzpse9RrEPIIkxX+om8nnudVaD?=
- =?us-ascii?Q?mJockr9YpyAcNJo3G7UGn/taYiIao0BGcIXXmpNw/3bp9oPvWCj6lId6Scy6?=
- =?us-ascii?Q?pcGAmYdpdjbxkzu/wiqd/LxqpYSVJF10pBVkfGXWVq85u12imIZxH6OeLN+o?=
- =?us-ascii?Q?hxTm56FDGWGsB9THQ5Eh1BA+gDdhcL4Yn/yNse5wmOwpc6sbYoYI8nnpzdl9?=
- =?us-ascii?Q?RVP8caUJ8G/6SsBCxd4wxPdSuEnhaC1g2QlYkXJj15CWIu5uUXMCACA66iSp?=
- =?us-ascii?Q?F4RTsBpWzMD/Qx7PMkx9tuYkXfE2fI2XobQRs71Ouqrq4eakeIUMMrldyd7B?=
- =?us-ascii?Q?9h+7AZ9iT6tyuIkdBXsKhtWkUKCcfDQ0uZbo+5ua702XsOVmPLv5Vzz3B6Rw?=
- =?us-ascii?Q?chodzlpl+wLXtL9A2785nSNUOuFf+lsPV+US9T33ByT2DJ0gFUjuZsPO/733?=
- =?us-ascii?Q?j952GUhG2ulkJy8vvI2CLxde7X2as7PorkBiqUHkjQeZnVbvzQqWOjkxLHky?=
- =?us-ascii?Q?7WRXkuG2JF3KEAMV7e6jds7BllGpNUJqYF8RzW0tBdFc3u9SH/4PHTbI39SW?=
- =?us-ascii?Q?slFfb7i8hV9rlndqly+peKACRNsDB377uXk86yKo0wlN7RyZXwLAdloXNcUo?=
- =?us-ascii?Q?EJ+pCohIMq97HmEe6wYDZjkpt3roNewmht1tN9Nm6lkWZ14CZmUwR6jzCnd/?=
- =?us-ascii?Q?FYF79OCsfmy5j6DdAdmQe9W5TTaWr86XvZxhy3llQrt1jq0NL8c+BEiu5dNJ?=
- =?us-ascii?Q?y/tD5TtaTRaMnXeCANumaK+8PZ772+otcAgiAkK4FwoXAZrHsysYxB+22WqF?=
- =?us-ascii?Q?oPnEzBnqev5K/BeG38ex7cK56r4u+cKrKQnWCCumMLgRv2N37NoLzd9qyltb?=
- =?us-ascii?Q?XhzpwvG7o+ZzJHOLb85+WHoprdcUSepvHJ/6TIKXuNgAXcstkWfmSmf6oksr?=
- =?us-ascii?Q?9tQvrkxmDg+CrWvucCOIODF63ALYMTY0sCzkk+nOBqdUyucKx/8IFfyXaYyE?=
- =?us-ascii?Q?nKhhqd3t4RUNdRCgmgwV0oS2IqpPraPcf7GOJgIUS4zancgCwes71PkYFwuR?=
- =?us-ascii?Q?oJzmE2oDxkRtv+ypzVGWPnxmWA8S5x3EhjwMcwDmQp0452uo?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cUKNwh7T"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777596242; x=1809132242;
+  h=date:from:to:cc:subject:message-id;
+  bh=YQFQLzXtLtoFX6B3iKKOLhplQJGsp/sjJIIbyGKgNs8=;
+  b=cUKNwh7TuoffqTwec9vvZPynlB94i5axghwoVOysAbCjfvrlOTLnTxOc
+   WflRkGKQfT4Mh0evwKBBQa93uGbBq4BI74crzuBtDCggQ3hVUiCrA1Yzg
+   wdstwLk36RBLSfTiM0OTtWIf6LPC2M2okX4fLXNyd2NyQXOrM9p035GPW
+   vZDYrCHgPEQfuPT+46K/E/rJAFVu++xHwtLTdk+ZSj3fBoKDT8GAUB60V
+   e9e8kMIFp1czpxoZ2JUqirvJ+xQQmr99CRJk6vEKDv7zNQ3V98SwYfBAb
+   s7a3axgLwhcMGt7jLisLPwE0fJbB/WLweOLKDCnLbRMf3fYgtIJrdpF5j
+   Q==;
+X-CSE-ConnectionGUID: pr/Q5BrtQC+Ra2ZTkMMZvA==
+X-CSE-MsgGUID: hegIasN9TfqhUxx+wgwCSw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11772"; a="78432324"
+X-IronPort-AV: E=Sophos;i="6.23,209,1770624000"; 
+   d="scan'208";a="78432324"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 17:44:01 -0700
+X-CSE-ConnectionGUID: sOZ2/l9IRy+Mixh2aP74Uw==
+X-CSE-MsgGUID: yWGqWavWSTK8s1sxAXn3hA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,209,1770624000"; 
+   d="scan'208";a="239067986"
+Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 30 Apr 2026 17:43:59 -0700
+Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wIbys-00000000DB2-1PKf;
+	Fri, 01 May 2026 00:43:46 +0000
+Date: Fri, 01 May 2026 08:43:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zong Li <zong.li@sifive.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Anup Patel <anup@brainfault.org>,
+ Andrew Jones <ajones@ventanamicro.com>,
+ Nutty Liu <nutty.liu@hotmail.com>
+Subject: [avpatel:riscv_iommu_irqbypass_v2 4/18]
+ drivers/iommu/riscv/iommu.c:1197:55: error: no member named 'pgd_mode' in
+ 'struct riscv_iommu_domain'
+Message-ID: <202605010854.qewZyTHP-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB6921.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8529951-be3b-4153-5bec-08dea709bf72
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2026 22:42:24.1450
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wOVCJaBby3aEb2WP6qfVbPXyw9OjvxoSIJDwT/OZR1Bj3R+hiNtHX5j5rgBRmJbV4/i0wMIxGwTzhB38BOcvDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR21MB6682
 
-> From: kernel test robot <lkp@intel.com>
-> Sent: Thursday, April 30, 2026 9:33 AM
-> ...
-> config: i386-buildonly-randconfig-002-20260430
->  ...
-> All warnings (new ones prefixed by >>):
->=20
-> >> drivers/hv/vmbus_drv.c:2403:40: warning: result of comparison of const=
-ant
-> 4294967296 with expression of type 'resource_size_t' (aka 'unsigned int')=
- is
-> always false [-Wtautological-constant-out-of-range-compare]
->     2403 |                         if (!low_mmio_base || low_mmio_base >=
-=3D SZ_4G ||
->          |                                               ~~~~~~~~~~~~~ ^ =
- ~~~~~
->    1 warning generated.
+tree:   https://github.com/avpatel/linux.git riscv_iommu_irqbypass_v2
+head:   0ba166d111b762ae8f37075ba1266e345ae5ef59
+commit: 495fff405c515405e7c816985699bc45338d297d [4/18] iommu/riscv: Use data structure instead of individual values
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20260501/202605010854.qewZyTHP-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260501/202605010854.qewZyTHP-lkp@intel.com/reproduce)
 
-Thanks for reporting the warning with the i386 kernel config.
-I don't know if there is any x86-32 users nowadays, but this warning can be
-fixed by:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605010854.qewZyTHP-lkp@intel.com/
 
--	if (!low_mmio_base || low_mmio_base >=3D SZ_4G ||
-+	if (!low_mmio_base || upper_32_bits(low_mmio_base) ||
- 	    (start && start < low_mmio_base)) {
- 		pr_warn("Unexpected low mmio base 0x%pa\n", &low_mmio_base);
- 	}
+All errors (new ones prefixed by >>):
+
+>> drivers/iommu/riscv/iommu.c:1197:55: error: no member named 'pgd_mode' in 'struct riscv_iommu_domain'
+    1197 |         dc.fsc = FIELD_PREP(RISCV_IOMMU_PC_FSC_MODE, domain->pgd_mode) |
+         |                                                      ~~~~~~  ^
+>> drivers/iommu/riscv/iommu.c:1197:55: error: no member named 'pgd_mode' in 'struct riscv_iommu_domain'
+    1197 |         dc.fsc = FIELD_PREP(RISCV_IOMMU_PC_FSC_MODE, domain->pgd_mode) |
+         |                                                      ~~~~~~  ^
+>> drivers/iommu/riscv/iommu.c:1197:55: error: no member named 'pgd_mode' in 'struct riscv_iommu_domain'
+    1197 |         dc.fsc = FIELD_PREP(RISCV_IOMMU_PC_FSC_MODE, domain->pgd_mode) |
+         |                                                      ~~~~~~  ^
+>> drivers/iommu/riscv/iommu.c:1198:59: error: no member named 'pgd_root' in 'struct riscv_iommu_domain'
+    1198 |                  FIELD_PREP(RISCV_IOMMU_PC_FSC_PPN, virt_to_pfn(domain->pgd_root));
+         |                                                                 ~~~~~~  ^
+>> drivers/iommu/riscv/iommu.c:1198:59: error: no member named 'pgd_root' in 'struct riscv_iommu_domain'
+    1198 |                  FIELD_PREP(RISCV_IOMMU_PC_FSC_PPN, virt_to_pfn(domain->pgd_root));
+         |                                                                 ~~~~~~  ^
+>> drivers/iommu/riscv/iommu.c:1198:59: error: no member named 'pgd_root' in 'struct riscv_iommu_domain'
+    1198 |                  FIELD_PREP(RISCV_IOMMU_PC_FSC_PPN, virt_to_pfn(domain->pgd_root));
+         |                                                                 ~~~~~~  ^
+   6 errors generated.
+
+
+vim +1197 drivers/iommu/riscv/iommu.c
+
+  1181	
+  1182	static int riscv_iommu_attach_paging_domain(struct iommu_domain *iommu_domain,
+  1183						    struct device *dev,
+  1184						    struct iommu_domain *old)
+  1185	{
+  1186		struct riscv_iommu_domain *domain = iommu_domain_to_riscv(iommu_domain);
+  1187		struct riscv_iommu_device *iommu = dev_to_iommu(dev);
+  1188		struct riscv_iommu_info *info = dev_iommu_priv_get(dev);
+  1189		struct pt_iommu_riscv_64_hw_info pt_info;
+  1190		struct riscv_iommu_dc dc = {0};
+  1191	
+  1192		pt_iommu_riscv_64_hw_info(&domain->riscvpt, &pt_info);
+  1193	
+  1194		if (!riscv_iommu_pt_supported(iommu, pt_info.fsc_iosatp_mode))
+  1195			return -ENODEV;
+  1196	
+> 1197		dc.fsc = FIELD_PREP(RISCV_IOMMU_PC_FSC_MODE, domain->pgd_mode) |
+> 1198			 FIELD_PREP(RISCV_IOMMU_PC_FSC_PPN, virt_to_pfn(domain->pgd_root));
+  1199		dc.ta = FIELD_PREP(RISCV_IOMMU_PC_TA_PSCID, domain->pscid) |
+  1200				   RISCV_IOMMU_PC_TA_V;
+  1201	
+  1202		if (riscv_iommu_bond_link(domain, dev))
+  1203			return -ENOMEM;
+  1204	
+  1205		riscv_iommu_iodir_update(iommu, dev, &dc);
+  1206		riscv_iommu_bond_unlink(info->domain, dev);
+  1207		info->domain = domain;
+  1208	
+  1209		return 0;
+  1210	}
+  1211	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
