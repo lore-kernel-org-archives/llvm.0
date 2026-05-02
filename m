@@ -1,151 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2DA3803E7;
-	Sat,  2 May 2026 19:57:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055FB186A;
+	Sat,  2 May 2026 20:13:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777751833; cv=none; b=QjTXAzwM6c13SgXqDJN0/n1uAAQabyVW8nInGtaKHspW0DEjMhp4xRBllNY2BOk/1PgXIryg1H47P1GMfU8FsmVonl7hlvfqURle4AYHaItX8HLlKWKHyZ19Bf3vweFH4n3OG/f9ghHijqjXETELIUC8FVOdYraII+YjNE1BRug=
+	t=1777752819; cv=none; b=UKirPit0zpHi5ucdSkxHKgUfqu4pbVxaNUEWd8fH8ojQvFGHpVBvt/WgjHEO4AF2iE/Z08q3wQSh8YIEpqAW7M8kpaJsb87nwKcHjseVmaXLx8ZrmI4y+mcu013PyckIb2NRkzCIxTTtEk/g98Ta+ZIF+voQskmpN8o13By25mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777751833; c=relaxed/simple;
-	bh=w6MCEgcGN02EdSWVxt2XdKSiMBc9rPD2ZjWZfV2sKt4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=a/ykfWQ2tT6qjwGIe5AqvgmcuB4dMgyuY/4SdK7hULlJTFkWNK8wgMQZJd1sxiBcTb/mLrzI+H7YsvdJLqipHho+q1ZJCHvvSZdy4rlOO+s1sCjPJ0uYMKc2PMzDUCBH1YH7mWfsuNa1w5fYOt92hK208Iboxfi5ke4Q3kyVH74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ST6ot1gM; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1777752819; c=relaxed/simple;
+	bh=crnjOZylKZIdCsLAiD1K+t/o75AuQmjBAF9uVmJ6/5o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UEfuUEMsQGWQKIJ1XuXEL3QyLrUyB4mW/LXwpqIJehL77rSuqQSmbp/zFgVvdNzG2VngS/nsLzbs1TEvwTLIh3V9RZh/v8MGwpyilHCpvdIJv4g3euua1eJGrKgjv+dp6ExrQ9+wRXNbFwujWmrXXBswlDDb6w1wJSGVWYJ4krs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BlFinHHs; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ST6ot1gM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BlFinHHs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777751831; x=1809287831;
-  h=date:from:to:cc:subject:message-id;
-  bh=w6MCEgcGN02EdSWVxt2XdKSiMBc9rPD2ZjWZfV2sKt4=;
-  b=ST6ot1gMckD77kLimPsuRwcBttTal/rVzQJlnYtDlcMFW9pupQRLwtW1
-   okrwVFbVDc/+ywFWNoMFojaNbjJd4ANiYa1F95Zg8UvAz5LIAOaEYiH4K
-   Y1NRN7zjoRd+92X92W5JscCrkePqlMLUyzBtcZL3et/+zSLMPBaijYlwt
-   ouaozB0i1i3yq9YTLPFNaVKMaklFO8ZDMindICdlQccHlsUEUVuEF+sM+
-   +zhhe1obQcBwDZJetS4S4ojKzEn7VcVVQH3XXdlr5EA6mZeUn8DN9qBGm
-   JHxRSfz21tAaaJUrc2OwWpWVoIp9TL5mZsBl4zWrAXsQRzAT8phq26HJ8
+  t=1777752817; x=1809288817;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=crnjOZylKZIdCsLAiD1K+t/o75AuQmjBAF9uVmJ6/5o=;
+  b=BlFinHHs31+y4IIx2ZXoFv2XkpIGNBvM8yeXBcJ99PzfrPpsHoH52il6
+   mm1qx33NrrCCzItyuoJjnwLp3MivFqlf1hYBPaD2z510fQhBKqreggrRg
+   /DFYg8T/YyWS3wag8UUQCR3Zeuhm/eByRw3fhfEU3S+p0ybXgcaWtcqAg
+   jhmpuowhWsg5iK+6m5yTS9xgngOTbxlT6s2Om1V6oAcz7Q1D6FI5+3GRu
+   FwEc21gogVe9WECBvlLD6zKpXe+DRuBhzU8G8Q35dwB1b4h63rlfIwnmF
+   cYauIluhs2VAQ5YzH4uMWqL/6YeCmeWjR5nDJklF285+7yPIzqlVghpQu
    Q==;
-X-CSE-ConnectionGUID: PrNTCqXLRN2EYn+0dcPDzQ==
-X-CSE-MsgGUID: 37DAAzAWRK+oOFJcB1UjzQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11774"; a="89364208"
+X-CSE-ConnectionGUID: r6w7MSs8SiSq9+7auoD5lg==
+X-CSE-MsgGUID: I5HNCs19QhSDKzzr8DdiBw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11774"; a="96239380"
 X-IronPort-AV: E=Sophos;i="6.23,212,1770624000"; 
-   d="scan'208";a="89364208"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2026 12:57:07 -0700
-X-CSE-ConnectionGUID: 5CkYcYptTFuXRmHRPQQFNQ==
-X-CSE-MsgGUID: MV81kAOJR9uiFiu/P2Huxg==
+   d="scan'208";a="96239380"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2026 13:13:36 -0700
+X-CSE-ConnectionGUID: bDay5cGyQi2jtSyfmUdwgw==
+X-CSE-MsgGUID: nhn0Qm00REmj7f1chsBLpQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,212,1770624000"; 
-   d="scan'208";a="228654899"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by fmviesa009.fm.intel.com with ESMTP; 02 May 2026 12:57:06 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+   d="scan'208";a="232503192"
+Received: from lkp-server01.sh.intel.com (HELO 781826d00641) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 02 May 2026 13:13:35 -0700
+Received: from kbuild by 781826d00641 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wJGSW-000000005LJ-1qNM;
-	Sat, 02 May 2026 19:57:04 +0000
-Date: Sat, 02 May 2026 21:56:22 +0200
+	id 1wJGiS-000000001mX-41Ps;
+	Sat, 02 May 2026 20:13:32 +0000
+Date: Sun, 3 May 2026 04:13:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Dmitry Antipov <dmantipov@yandex.ru>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-crypt 61/68]
- fs/netfs/direct_read.c:86:20: warning: variable 'len' is uninitialized when
- used here
-Message-ID: <202605022132.rygxdHu6-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+Subject: Re: [RFC PATCH] net: skb: on zero-copy formatted output to skb
+Message-ID: <202605030443.Enw1fif1-lkp@intel.com>
+References: <20260423073638.778334-1-dmantipov@yandex.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260423073638.778334-1-dmantipov@yandex.ru>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-crypt
-head:   390dd59a3747b71c4dcff11b2cc5240385cbfedf
-commit: f4bb7e2028c1ca4880ac08cbba94ccac225eb695 [61/68] netfs: Implement bounce-buffering for unbuffered/DIO read
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260502/202605022132.rygxdHu6-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260502/202605022132.rygxdHu6-lkp@intel.com/reproduce)
+Hi Dmitry,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net-next/main]
+[also build test WARNING on net/main linus/master v7.1-rc1 next-20260430]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Antipov/net-skb-on-zero-copy-formatted-output-to-skb/20260425-175341
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260423073638.778334-1-dmantipov%40yandex.ru
+patch subject: [RFC PATCH] net: skb: on zero-copy formatted output to skb
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260503/202605030443.Enw1fif1-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260503/202605030443.Enw1fif1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605022132.rygxdHu6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605030443.Enw1fif1-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/direct_read.c:86:20: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-      86 |                 len = round_down(len, rreq->crypto_bsize);
-         |                                  ^~~
-   include/linux/math.h:35:28: note: expanded from macro 'round_down'
-      35 | #define round_down(x, y) ((x) & ~__round_mask(x, y))
-         |                            ^
-   fs/netfs/direct_read.c:74:12: note: initialize the variable 'len' to silence this warning
-      74 |         size_t len;
-         |                   ^
-         |                    = 0
+>> net/core/skbuff.c:7001:56: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'skb_printf' [-Wmissing-format-attribute]
+    7001 |         len = vsnprintf(skb_tail_pointer(skb), size, fmt, args);
+         |                                                               ^
+   include/linux/skbuff.h:4295:5: note: 'skb_printf' declared here
+    4295 | int skb_printf(struct sk_buff *skb, const char *fmt, ...);
+         |     ^
    1 warning generated.
 
 
-vim +/len +86 fs/netfs/direct_read.c
+vim +7001 net/core/skbuff.c
 
-    64	
-    65	/*
-    66	 * Prepare the buffer for the read RPC.  Limits are applied and the buffer may
-    67	 * be rounded down.  Bounce bufferage will be added if necessary.
-    68	 */
-    69	int netfs_prepare_unbuffered_read_buffer(struct netfs_io_subrequest *subreq,
-    70						 unsigned int max_segs)
-    71	{
-    72		struct netfs_io_request *rreq = subreq->rreq;
-    73		struct netfs_io_stream *stream = &rreq->io_streams[0];
-    74		size_t len;
-    75		int ret;
-    76	
-    77		bvecq_pos_set(&subreq->dispatch_pos, &stream->dispatch_cursor);
-    78		bvecq_pos_set(&subreq->content, &stream->dispatch_cursor);
-    79	
-    80		/* Limit encrypted reads so that we don't split an encryption block
-    81		 * across two subrequests unless the filesystem doesn't support blocks
-    82		 * that big.
-    83		 */
-    84		if (subreq->len > rreq->crypto_bsize &&
-    85		    test_bit(NETFS_RREQ_CONTENT_ENCRYPTION, &rreq->flags)) {
-  > 86			len = round_down(len, rreq->crypto_bsize);
-    87			if (WARN_ON_ONCE(len == 0))
-    88				return -EIO;
-    89		}
-    90	
-    91		/* Expand the bounce buffer so that we've got something to read into. */
-    92		if (test_bit(NETFS_RREQ_USE_BOUNCE_BUFFER, &rreq->flags)) {
-    93			ret = bvecq_buffer_add_space(&rreq->bounce_cursor,
-    94						     &rreq->bounce_alloc_to,
-    95						     subreq->start + subreq->len,
-    96						     round_up(rreq->start + rreq->len,
-    97							      rreq->crypto_bsize),
-    98						     false, GFP_KERNEL);
-    99			if (ret < 0)
-   100				return ret;
-   101		}
-   102	
-   103		len = bvecq_slice(&stream->dispatch_cursor, subreq->len, max_segs,
-   104				  &subreq->nr_segs);
-   105	
-   106		if (len < subreq->len) {
-   107			subreq->len = len;
-   108			trace_netfs_sreq(subreq, netfs_sreq_trace_limited);
-   109		}
-   110	
-   111		stream->buffered   -= subreq->len;
-   112		stream->issue_from += subreq->len;
-   113		rreq->submitted = stream->issue_from;
-   114	
-   115		if (stream->buffered == 0)
-   116			netfs_all_subreqs_queued(rreq);
-   117		return 0;
-   118	}
-   119	
+  6994	
+  6995	int skb_printf(struct sk_buff *skb, const char *fmt, ...)
+  6996	{
+  6997		int len, size = skb_availroom(skb);
+  6998		va_list args;
+  6999	
+  7000		va_start(args, fmt);
+> 7001		len = vsnprintf(skb_tail_pointer(skb), size, fmt, args);
+  7002		va_end(args);
+  7003	
+  7004		if (unlikely(len >= size))
+  7005			return -ENOSPC;
+  7006	
+  7007		skb->tail += len;
+  7008		skb->len += len;
+  7009		return len;
+  7010	}
+  7011	EXPORT_SYMBOL(skb_printf);
+  7012	
 
---
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
