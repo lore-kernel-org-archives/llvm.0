@@ -1,62 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA5F23BCEE;
-	Sun,  3 May 2026 03:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B372B33B6D0;
+	Sun,  3 May 2026 03:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777778762; cv=none; b=pTZM2WKKkUH1Y3mvZWVFSVijj+HFBg/LkOms0qyFqT/o10pRFR+A0rPvz6d3d/OZXznMt0+IR5o/qfe/W07Kk83Balv17b/Tz7rUYZJ00+iKo4kicY5BWdduqUAQ2KndRyr9a8YfdMQFQGx4KeB/1r9OIDBIKLRgOB6Lgw1nhq8=
+	t=1777778826; cv=none; b=gOCCngqdy8J5gRDgOlDWs16gZDEftTJuXx0RPTjbOG+L5VgX1vbNHR92YV9QTg8uPjgPSCninNLFuJCby+fEJHfAoEJhf8HIqtbuFqVrRxrYqgydiOiHJVEIKSeYTOO1SVccnA5o72+IwP34KNU1HhS7d6uWET+Z+JrorbvCp8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777778762; c=relaxed/simple;
-	bh=j1/kIBcHZUMOudByREv8j4jr2E27O77zrId0Of7mnQg=;
+	s=arc-20240116; t=1777778826; c=relaxed/simple;
+	bh=ThXQhMikk8hxgAx07+XgCLWhDs9WRJYcmWLBf6AsvLc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fPysYliXEq6dORcLGjhMJU8blSQFnLUhl7JtPNzzmM3lifAFFGgFXYpdGIveMMytuzuIoNPx0u1wG1uPaoB9O2YoF+zSg/5Rw4jPhSL32GT5xUKDDsm98wTmvGuHOZVIKMWETUWULRQpuiO9jo3n7ifijuM+uoXmloJSk/xI3C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e1ykKIvf; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=BFweVgp7ORH74IWipBtuzF0QWB8UR4sj4v7favKfpFDzLJYf1p5Ua+qzbOX7SIpbJBt01ZmVhWMelpwsoiHy+p4euPohCogTm2VaGMzQpGq1QF2aIyhGErzhcv3tAub7/4RUJw5i4JDaOzIfECBxLFW/ydjd37eFipyri7YjJAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=adlNakCc; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e1ykKIvf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="adlNakCc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777778759; x=1809314759;
+  t=1777778824; x=1809314824;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=j1/kIBcHZUMOudByREv8j4jr2E27O77zrId0Of7mnQg=;
-  b=e1ykKIvfLEIsINyo7STzAGrK/pDeA+OZhebpD83hPLqRb/4T7Apbb9nA
-   YZTwHuIQl7GQrpITKRokuPtsXb9u1s+3PgUPGUvMNsi72pkDm6obBNZ6o
-   rIW+jKDNms7RQ/EzarTXWPM4iyB2J+vOVtRiqs8Sj6a1HUUdXZubKujRk
-   2GhXL7wZaMO23Kzcpvsa7RATYtV+JSumu48sHYSe9mmpd11a7ZrkvkrDd
-   WsauT1SCJbcmqjj3w/ZylWMfBEShhFJzimRhK/gHpb+lWWhfYXec9S4ap
-   DKIH2Dq4PhU1lQ7mGp1LiT6ES5L1jk5kZvaugJ344OTl4QcthHLg5GiU4
-   Q==;
-X-CSE-ConnectionGUID: VTY+EbdxSYK67HSPEgTd3w==
-X-CSE-MsgGUID: l6AqEjL7RDedv03LhhL3HQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11774"; a="82293742"
+  bh=ThXQhMikk8hxgAx07+XgCLWhDs9WRJYcmWLBf6AsvLc=;
+  b=adlNakCc6gAbF4VGPz1TwU/J3HUe34A8h75+l/ZK9yGsMzw+zUoHiOGS
+   HPeFiKPHoSNXPwR+6/Gdn+UbNb91kMghmrUeKYjUp7I0+pT72uENCScDW
+   diNxuT7U7AZ1QG6IJm6POnDVyvWhbX3rVKhtY5e7Z/r3y8DsgEJKINxsn
+   rSFhDXwAgzSBCvl6iDhyuLMpOR3Xd5AbWHbfNtUSQwC0XqEP8FT6NMGeB
+   sqfMMsG40/Qwm/oo+PidEJe24aH+Yx4AKrigsjkpZ847KL6iksBEBMTlw
+   lXkCfcAcK5B5uZJbau2oDNIurQkyUR+DgfrwCPn+FKoKodizyqOgyCQ2C
+   g==;
+X-CSE-ConnectionGUID: dtkVi2O2Ts6e9JpDrYWWxQ==
+X-CSE-MsgGUID: DD7deF9AR9qRBGkUq4RMFA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11774"; a="96111910"
 X-IronPort-AV: E=Sophos;i="6.23,213,1770624000"; 
-   d="scan'208";a="82293742"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2026 20:25:59 -0700
-X-CSE-ConnectionGUID: oyxP96lmT5unJUI6aquoVg==
-X-CSE-MsgGUID: EgBcMGlfSRG4Wrkl1x+AZA==
+   d="scan'208";a="96111910"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2026 20:27:02 -0700
+X-CSE-ConnectionGUID: qHMWufCwSIGpnrzHrQx6fQ==
+X-CSE-MsgGUID: ZO1gsvhvSgCXvuXrkhaoRg==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,213,1770624000"; 
+   d="scan'208";a="240182796"
 Received: from lkp-server01.sh.intel.com (HELO 781826d00641) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 02 May 2026 20:25:57 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 02 May 2026 20:26:57 -0700
 Received: from kbuild by 781826d00641 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wJNSs-0000000025Z-1pHI;
-	Sun, 03 May 2026 03:25:54 +0000
-Date: Sun, 3 May 2026 11:25:46 +0800
+	id 1wJNTq-0000000025d-1ypD;
+	Sun, 03 May 2026 03:26:54 +0000
+Date: Sun, 3 May 2026 11:26:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>
+To: "shaikh.kamal" <shaikhkamal2012@gmail.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	David Rientjes <rientjes@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] fprobe: Add unregister_fprobe_sync() for synchronous
- unregistration
-Message-ID: <202605031133.LJkoT4xo-lkp@intel.com>
-References: <177729179863.401400.6063130067239479972.stgit@mhiramat.tok.corp.google.com>
+	pbonzini@redhat.com, skhan@linuxfoundation.org,
+	me@brighamcampbell.com,
+	syzbot+c3178b6b512446632bac@syzkaller.appspotmail.com,
+	"shaikh.kamal" <shaikhkamal2012@gmail.com>
+Subject: Re: [PATCH v2 1/1] mm/mmu_notifier: Add async OOM cleanup via
+ call_srcu()
+Message-ID: <202605031115.qmkkOLQc-lkp@intel.com>
+References: <20260429222548.25475-1-shaikhkamal2012@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,86 +77,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <177729179863.401400.6063130067239479972.stgit@mhiramat.tok.corp.google.com>
+In-Reply-To: <20260429222548.25475-1-shaikhkamal2012@gmail.com>
 
-Hi Masami,
+Hi shaikh.kamal,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on trace/for-next]
-[cannot apply to linus/master v7.1-rc1 next-20260430]
+[auto build test ERROR on v7.0]
+[cannot apply to akpm-mm/mm-everything kvm/queue kvm/next kvm/linux-next v7.1-rc1 linus/master next-20260430]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/fprobe-Add-unregister_fprobe_sync-for-synchronous-unregistration/20260427-214258
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-patch link:    https://lore.kernel.org/r/177729179863.401400.6063130067239479972.stgit%40mhiramat.tok.corp.google.com
-patch subject: [PATCH] fprobe: Add unregister_fprobe_sync() for synchronous unregistration
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260503/202605031133.LJkoT4xo-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260503/202605031133.LJkoT4xo-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/shaikh-kamal/mm-mmu_notifier-Add-async-OOM-cleanup-via-call_srcu/20260430-202943
+base:   v7.0
+patch link:    https://lore.kernel.org/r/20260429222548.25475-1-shaikhkamal2012%40gmail.com
+patch subject: [PATCH v2 1/1] mm/mmu_notifier: Add async OOM cleanup via call_srcu()
+config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260503/202605031115.qmkkOLQc-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260503/202605031115.qmkkOLQc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605031133.LJkoT4xo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605031115.qmkkOLQc-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/trace/fprobe.c:983:14: error: call to undeclared function 'fprobe_registered'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     983 |         if (!fp || !fprobe_registered(fp))
-         |                     ^
->> kernel/trace/fprobe.c:986:8: error: call to undeclared function 'unregister_fprobe_nolock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     986 |         ret = unregister_fprobe_nolock(fp);
-         |               ^
-   kernel/trace/fprobe.c:986:8: note: did you mean 'unregister_fprobe_sync'?
-   kernel/trace/fprobe.c:978:5: note: 'unregister_fprobe_sync' declared here
-     978 | int unregister_fprobe_sync(struct fprobe *fp)
-         |     ^
-     979 | {
-     980 |         int ret;
-     981 | 
-     982 |         guard(mutex)(&fprobe_mutex);
-     983 |         if (!fp || !fprobe_registered(fp))
-     984 |                 return -EINVAL;
-     985 | 
-     986 |         ret = unregister_fprobe_nolock(fp);
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~
-         |               unregister_fprobe_sync
-   2 errors generated.
+>> mm/oom_kill.c:523:2: error: call to undeclared function 'mmu_notifier_oom_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     523 |         mmu_notifier_oom_enter(mm);
+         |         ^
+   mm/oom_kill.c:523:2: note: did you mean 'mmu_notifier_release'?
+   include/linux/mmu_notifier.h:610:20: note: 'mmu_notifier_release' declared here
+     610 | static inline void mmu_notifier_release(struct mm_struct *mm)
+         |                    ^
+   mm/oom_kill.c:511:28: warning: variable 'oom_reaper_th' set but not used [-Wunused-but-set-global]
+     511 | static struct task_struct *oom_reaper_th;
+         |                            ^
+   1 warning and 1 error generated.
 
 
-vim +/fprobe_registered +983 kernel/trace/fprobe.c
+vim +/mmu_notifier_oom_enter +523 mm/oom_kill.c
 
-   967	
-   968	/**
-   969	 * unregister_fprobe_sync() - Unregister fprobe synchronously with RCU grace period.
-   970	 * @fp: A fprobe data structure to be unregistered.
-   971	 *
-   972	 * Unregister fprobe (and remove ftrace hooks from the function entries) and
-   973	 * wait for the RCU grace period to finish. This is useful for preventing
-   974	 * the fprobe from being used after it is unregistered.
-   975	 *
-   976	 * Return 0 if @fp is unregistered successfully, -errno if not.
-   977	 */
-   978	int unregister_fprobe_sync(struct fprobe *fp)
-   979	{
-   980		int ret;
-   981	
-   982		guard(mutex)(&fprobe_mutex);
- > 983		if (!fp || !fprobe_registered(fp))
-   984			return -EINVAL;
-   985	
- > 986		ret = unregister_fprobe_nolock(fp);
-   987		if (ret)
-   988			return ret;
-   989	
-   990		synchronize_rcu();
-   991		return 0;
-   992	}
-   993	EXPORT_SYMBOL_GPL(unregister_fprobe_sync);
-   994	
+   515	
+   516	static bool __oom_reap_task_mm(struct mm_struct *mm)
+   517	{
+   518		struct vm_area_struct *vma;
+   519		bool ret = true;
+   520		MA_STATE(mas, &mm->mm_mt, ULONG_MAX, ULONG_MAX);
+   521	
+   522		/* Notify MMU notifiers about the OOM event */
+ > 523		mmu_notifier_oom_enter(mm);
+   524	
+   525		/*
+   526		 * Tell all users of get_user/copy_from_user etc... that the content
+   527		 * is no longer stable. No barriers really needed because unmapping
+   528		 * should imply barriers already and the reader would hit a page fault
+   529		 * if it stumbled over a reaped memory.
+   530		 */
+   531		mm_flags_set(MMF_UNSTABLE, mm);
+   532	
+   533		/*
+   534		 * It might start racing with the dying task and compete for shared
+   535		 * resources - e.g. page table lock contention has been observed.
+   536		 * Reduce those races by reaping the oom victim from the other end
+   537		 * of the address space.
+   538		 */
+   539		mas_for_each_rev(&mas, vma, 0) {
+   540			if (vma->vm_flags & (VM_HUGETLB|VM_PFNMAP))
+   541				continue;
+   542	
+   543			/*
+   544			 * Only anonymous pages have a good chance to be dropped
+   545			 * without additional steps which we cannot afford as we
+   546			 * are OOM already.
+   547			 *
+   548			 * We do not even care about fs backed pages because all
+   549			 * which are reclaimable have already been reclaimed and
+   550			 * we do not want to block exit_mmap by keeping mm ref
+   551			 * count elevated without a good reason.
+   552			 */
+   553			if (vma_is_anonymous(vma) || !(vma->vm_flags & VM_SHARED)) {
+   554				struct mmu_notifier_range range;
+   555				struct mmu_gather tlb;
+   556	
+   557				mmu_notifier_range_init(&range, MMU_NOTIFY_UNMAP, 0,
+   558							mm, vma->vm_start,
+   559							vma->vm_end);
+   560				tlb_gather_mmu(&tlb, mm);
+   561				if (mmu_notifier_invalidate_range_start_nonblock(&range)) {
+   562					tlb_finish_mmu(&tlb);
+   563					ret = false;
+   564					continue;
+   565				}
+   566				unmap_page_range(&tlb, vma, range.start, range.end, NULL);
+   567				mmu_notifier_invalidate_range_end(&range);
+   568				tlb_finish_mmu(&tlb);
+   569			}
+   570		}
+   571	
+   572		return ret;
+   573	}
+   574	
 
 -- 
 0-DAY CI Kernel Test Service
