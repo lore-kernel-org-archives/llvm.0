@@ -1,200 +1,191 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA15364046;
-	Mon,  4 May 2026 21:49:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4547B3DE44C;
+	Mon,  4 May 2026 23:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777931391; cv=none; b=Up6j5ypTAgmkdhO9unIpwnaGPiheetTh+zWg4cMbTE0mE40Udpm0H9BQQ/RZRfQnuxtswjHsBMrKW6tTxlQXd85MeKol65rij867lkIq5/OvwH/jrQTmSj4d/u0e7K2TDD3yOIvmWArBtzJ/FL+erX7UmRUkTDuLEJJuSKrePaE=
+	t=1777938697; cv=none; b=FxjDZBuVRKqEsbuky3/nPUVJiqpsEHmj88jwIu0d+UjGpDM3b31YTa4ru1aFYiwgrgMntm/MiqffJ2CBm3lxAo6wfWVoARoZTiMWj+LoH6IPhDrpsOo1ewFMyFAXZU3PQMna0nxfWYqhXYvDoSW45AfI9tQVd5PSK9GqNHiiR6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777931391; c=relaxed/simple;
-	bh=cbnU6gj7O0ry9v8dc64v8x0h01WyetZZ+GqiP32svHw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kVKbp1QreXSf63ABUTYTFgd/v/LcrbPLh7nWNQFmIzs34yJ1FfParOU9wbgtJ0CZZFI9MZuctYCaBYe9tjtqbngaXnhjfdJhQEiDPnYOEQpau8Ldn+AHaruRsNZsew/ft4M4CR8KhDNKAEYKWvj670NwZAmSdIMaUval4R0XtPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aCM2vi2q; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1777938697; c=relaxed/simple;
+	bh=OzNt4t1E1lWvuEosz42yQrrNtCy7qj3PJo/0Iqh5IKY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=fKNvhpa6gsrYIMVmMlNWrUJU7Br+3QJtfNtwEPjDjlcfjakFKzr4NWtgTQlI1mIsFN4/vw7KgcZxoGG1Kq+T4+ksbPHAbD+z3nO8IA1c8jTRdNv/A6qyQVFp45mjYqyR7VnL2MTy1YnNcdW6qywVR5M6gPgs7vwODv7eayJcUOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QX4oIrZJ; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aCM2vi2q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QX4oIrZJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777931388; x=1809467388;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cbnU6gj7O0ry9v8dc64v8x0h01WyetZZ+GqiP32svHw=;
-  b=aCM2vi2qEx5MWlQE4d9f+4k1unqOpsWb26QnNglIrHFOuZ9gl445UtPY
-   hTTgk8kn62yFSj23akBkx/UYVAIWxL1mD7MTMRWqI/CDwf24aROS6Aiaf
-   XeurpeoRymz9BlXbtQvKhbNQ8PwfbB258EocXOXo1Dp/JCW0CTyUP3fJL
-   XFj6aAlgnE0taxj7ZcIEZiKhKtKsBUrf5LfwzMfV1yLj1Y8tPV4yxUa2G
-   Q1rtJIwmyWbWgB3DxwCTUX5ARNcdTlr9CXiDJbMnsoFi6PlP9OAffSzTg
-   f5bgYNrNpCyKMeD0jyi68iFx5/eJLXCEkFDI/zM51eWzLnch0hl8hYqZP
-   g==;
-X-CSE-ConnectionGUID: 4gmrrrwPQRS8xq+KvuYNIA==
-X-CSE-MsgGUID: ofqs9DZWTfWMWUxF/6kV5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11776"; a="78698823"
+  t=1777938696; x=1809474696;
+  h=date:from:to:cc:subject:message-id;
+  bh=OzNt4t1E1lWvuEosz42yQrrNtCy7qj3PJo/0Iqh5IKY=;
+  b=QX4oIrZJwlBA8PHVuOoAUsP+j62ncxwv3XG4u9PjykmFufGgcLby2fUI
+   /69iN97DHHcBBKOIJCLgs78K/LOgujL7RW/9gTkr2yvK0hNQyBDZCzaGK
+   VbEIKD33Cb9TfLvoqrE1Bqj0nFRGAzVtGP1dqU5pM1OzussomKS9wPKDG
+   jzjTlhelAM29I+gPasxQd1hYkRvOrZ66rGG6EVqgkROaIxgz/ueZsH4nW
+   rvLxL+R4FZfrtGHjqQalFTho4lybok2Xjl9a1YZP0ltVEN1i9jYhEoD2B
+   Wic2wlOGlZ8lfP98tDBQpSdHPrNVLNR8kKGa6i/sbbiDz2T928UExvpp1
+   Q==;
+X-CSE-ConnectionGUID: ERTy7cG4SZW6EAv1esOZ0A==
+X-CSE-MsgGUID: WVy1Pd3PSUOTwwlprGYnYQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11776"; a="82654441"
 X-IronPort-AV: E=Sophos;i="6.23,216,1770624000"; 
-   d="scan'208";a="78698823"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 14:49:47 -0700
-X-CSE-ConnectionGUID: dRKqUbYQQWuKkdWo+jsxiA==
-X-CSE-MsgGUID: X6zScUrHRR+LKzFLUZum9g==
+   d="scan'208";a="82654441"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 16:51:35 -0700
+X-CSE-ConnectionGUID: wHqg7XrnQYixtw+TlLyy6w==
+X-CSE-MsgGUID: I/YGVSvTQEWdMV2/M8ubUQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,216,1770624000"; 
-   d="scan'208";a="232492386"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 04 May 2026 14:49:45 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+   d="scan'208";a="231057872"
+Received: from lkp-server01.sh.intel.com (HELO 781826d00641) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 04 May 2026 16:51:33 -0700
+Received: from kbuild by 781826d00641 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wK1Ac-000000005yv-3Mng;
-	Mon, 04 May 2026 21:49:42 +0000
-Date: Mon, 4 May 2026 23:49:38 +0200
+	id 1wK34N-00000000449-31nv;
+	Mon, 04 May 2026 23:51:26 +0000
+Date: Tue, 05 May 2026 07:51:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: James Ye <jye836@gmail.com>, jikos@kernel.org, bentiss@kernel.org,
-	lee@kernel.org, pavel@kernel.org
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-kernel@vger.kernel.org, denis.benato@linux.dev,
-	James Ye <jye836@gmail.com>
-Subject: Re: [PATCH 6/6] leds: led-class: mark classdev as unregistering early
-Message-ID: <202605042355.hVEd8jjX-lkp@intel.com>
-References: <20260503072643.2774762-7-jye836@gmail.com>
+ MD Danish Anwar <danishanwar@ti.com>
+Subject: [mda-next:icssg-dev 1/8] include/linux/if_hsr.h:58:12:
+ error: call to undeclared function 'skb_ext_find'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202605050742.bDIpymJB-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260503072643.2774762-7-jye836@gmail.com>
 
-Hi James,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on hid/for-next]
-[also build test ERROR on lee-leds/for-leds-next linus/master v6.16-rc1 next-20260430]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/James-Ye/HID-input-delete-hid_battery-on-disconnect/20260504-013406
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/20260503072643.2774762-7-jye836%40gmail.com
-patch subject: [PATCH 6/6] leds: led-class: mark classdev as unregistering early
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260504/202605042355.hVEd8jjX-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260504/202605042355.hVEd8jjX-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mda/linux-next.git icssg-dev
+head:   a5d36e904451db02a17787219fd06b6d2ba16f1b
+commit: 756ed4bc4a527cdddc3f9f09240637ceb3408645 [1/8] hsr: Allow to send a specific port and with HSR header
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260505/202605050742.bDIpymJB-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260505/202605050742.bDIpymJB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605042355.hVEd8jjX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605050742.bDIpymJB-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/hid/hid-input.c:2423:48: error: no member named 'batteries' in 'struct hid_device'
-    2423 |         list_for_each_entry_safe(bat, bat_next, &hid->batteries, list) {
-         |                                                  ~~~  ^
-   include/linux/list.h:869:30: note: expanded from macro 'list_for_each_entry_safe'
-     869 |         for (pos = list_first_entry(head, typeof(*pos), member),        \
-         |                                     ^~~~
-   include/linux/list.h:620:14: note: expanded from macro 'list_first_entry'
-     620 |         list_entry((ptr)->next, type, member)
-         |                     ^~~
-   include/linux/list.h:609:15: note: expanded from macro 'list_entry'
-     609 |         container_of(ptr, type, member)
-         |                      ^~~
-   include/linux/container_of.h:20:26: note: expanded from macro 'container_of'
-      20 |         void *__mptr = (void *)(ptr);                                   \
-         |                                 ^~~
->> drivers/hid/hid-input.c:2423:48: error: no member named 'batteries' in 'struct hid_device'
-    2423 |         list_for_each_entry_safe(bat, bat_next, &hid->batteries, list) {
-         |                                                  ~~~  ^
-   include/linux/list.h:869:30: note: expanded from macro 'list_for_each_entry_safe'
-     869 |         for (pos = list_first_entry(head, typeof(*pos), member),        \
-         |                                     ^~~~
-   include/linux/list.h:620:14: note: expanded from macro 'list_first_entry'
-     620 |         list_entry((ptr)->next, type, member)
-         |                     ^~~
-   include/linux/list.h:609:15: note: expanded from macro 'list_entry'
-     609 |         container_of(ptr, type, member)
-         |                      ^~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:610:63: note: expanded from macro '__same_type'
-     610 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   include/linux/build_bug.h:79:50: note: expanded from macro 'static_assert'
-      79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                                  ^~~~
-   include/linux/build_bug.h:80:56: note: expanded from macro '__static_assert'
-      80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
->> drivers/hid/hid-input.c:2423:48: error: no member named 'batteries' in 'struct hid_device'
-    2423 |         list_for_each_entry_safe(bat, bat_next, &hid->batteries, list) {
-         |                                                  ~~~  ^
-   include/linux/list.h:869:30: note: expanded from macro 'list_for_each_entry_safe'
-     869 |         for (pos = list_first_entry(head, typeof(*pos), member),        \
-         |                                     ^~~~
-   include/linux/list.h:620:14: note: expanded from macro 'list_first_entry'
-     620 |         list_entry((ptr)->next, type, member)
-         |                     ^~~
-   include/linux/list.h:609:15: note: expanded from macro 'list_entry'
-     609 |         container_of(ptr, type, member)
-         |                      ^~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:610:63: note: expanded from macro '__same_type'
-     610 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   include/linux/build_bug.h:79:50: note: expanded from macro 'static_assert'
-      79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                                  ^~~~
-   include/linux/build_bug.h:80:56: note: expanded from macro '__static_assert'
-      80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
->> drivers/hid/hid-input.c:2423:48: error: no member named 'batteries' in 'struct hid_device'
-    2423 |         list_for_each_entry_safe(bat, bat_next, &hid->batteries, list) {
-         |                                                  ~~~  ^
-   include/linux/list.h:871:32: note: expanded from macro 'list_for_each_entry_safe'
-     871 |              !list_entry_is_head(pos, head, member);                    \
-         |                                       ^~~~
-   include/linux/list.h:773:30: note: expanded from macro 'list_entry_is_head'
-     773 |         list_is_head(&pos->member, (head))
-         |                                     ^~~~
-   4 errors generated.
+   In file included from net/dsa/dsa.c:12:
+>> include/linux/if_hsr.h:58:12: error: call to undeclared function 'skb_ext_find'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
+                     ^
+>> include/linux/if_hsr.h:58:30: error: use of undeclared identifier 'SKB_EXT_HSR'
+           ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
+                                       ^
+   include/linux/if_hsr.h:71:12: error: call to undeclared function 'skb_ext_find'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
+                     ^
+   include/linux/if_hsr.h:71:30: error: use of undeclared identifier 'SKB_EXT_HSR'
+           ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
+                                       ^
+   include/linux/if_hsr.h:85:12: error: call to undeclared function 'skb_ext_find'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
+                     ^
+   include/linux/if_hsr.h:85:30: error: use of undeclared identifier 'SKB_EXT_HSR'
+           ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
+                                       ^
+>> include/linux/if_hsr.h:99:12: error: call to undeclared function 'skb_ext_add'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ptp_ext = skb_ext_add(skb, SKB_EXT_HSR);
+                     ^
+   include/linux/if_hsr.h:99:29: error: use of undeclared identifier 'SKB_EXT_HSR'
+           ptp_ext = skb_ext_add(skb, SKB_EXT_HSR);
+                                      ^
+   In file included from net/dsa/dsa.c:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:44:
+>> include/linux/skbuff.h:5060:7: error: conflicting types for 'skb_ext_add'
+   void *skb_ext_add(struct sk_buff *skb, enum skb_ext_id id);
+         ^
+   include/linux/if_hsr.h:99:12: note: previous implicit declaration is here
+           ptp_ext = skb_ext_add(skb, SKB_EXT_HSR);
+                     ^
+   In file included from net/dsa/dsa.c:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:44:
+>> include/linux/skbuff.h:5105:21: error: conflicting types for 'skb_ext_find'
+   static inline void *skb_ext_find(const struct sk_buff *skb, enum skb_ext_id id)
+                       ^
+   include/linux/if_hsr.h:58:12: note: previous implicit declaration is here
+           ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
+                     ^
+   10 errors generated.
 
 
-vim +2423 drivers/hid/hid-input.c
+vim +/skb_ext_find +58 include/linux/if_hsr.h
 
-  2407	
-  2408	void hidinput_disconnect(struct hid_device *hid)
-  2409	{
-  2410		struct hid_input *hidinput, *next;
-  2411		struct hid_battery *bat, *bat_next;
-  2412	
-  2413		list_for_each_entry_safe(hidinput, next, &hid->inputs, list) {
-  2414			list_del(&hidinput->list);
-  2415			if (hidinput->registered)
-  2416				input_unregister_device(hidinput->input);
-  2417			else
-  2418				input_free_device(hidinput->input);
-  2419			kfree(hidinput->name);
-  2420			kfree(hidinput);
-  2421		}
-  2422	
-> 2423		list_for_each_entry_safe(bat, bat_next, &hid->batteries, list) {
-  2424			list_del(&bat->list);
-  2425		}
-  2426	
-  2427		/* led_work is spawned by input_dev callbacks, but doesn't access the
-  2428		 * parent input_dev at all. Once all input devices are removed, we
-  2429		 * know that led_work will never get restarted, so we can cancel it
-  2430		 * synchronously and are safe. */
-  2431		cancel_work_sync(&hid->led_work);
-  2432	}
-  2433	EXPORT_SYMBOL_GPL(hidinput_disconnect);
-  2434	
+    45	
+    46	#if IS_ENABLED(CONFIG_HSR)
+    47	extern bool is_hsr_master(struct net_device *dev);
+    48	extern int hsr_get_version(struct net_device *dev, enum hsr_version *ver);
+    49	struct net_device *hsr_get_port_ndev(struct net_device *ndev,
+    50					     enum hsr_port_type pt);
+    51	int hsr_get_port_type(struct net_device *hsr_dev, struct net_device *dev,
+    52			      enum hsr_port_type *type);
+    53	
+    54	static inline bool hsr_skb_has_header(struct sk_buff *skb)
+    55	{
+    56		struct hsr_ptp_ext *ptp_ext;
+    57	
+  > 58		ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
+    59		if (!ptp_ext)
+    60			return false;
+    61		return ptp_ext->header;
+    62	}
+    63	
+    64	static inline unsigned int hsr_skb_has_port(struct sk_buff *skb)
+    65	{
+    66		struct hsr_ptp_ext *ptp_ext;
+    67	
+    68		if (!skb)
+    69			return 0;
+    70	
+    71		ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
+    72		if (!ptp_ext)
+    73			return 0;
+    74		return ptp_ext->port;
+    75	}
+    76	
+    77	static inline bool hsr_skb_get_header_port(struct sk_buff *skb, bool *header,
+    78						   enum hsr_port_type *port_type)
+    79	{
+    80		struct hsr_ptp_ext *ptp_ext;
+    81	
+    82		*port_type = HSR_PT_NONE;
+    83		*header = false;
+    84	
+    85		ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
+    86		if (!ptp_ext)
+    87			return false;
+    88	
+    89		*port_type = ptp_ext->port;
+    90		*header = ptp_ext->header;
+    91		return true;
+    92	}
+    93	
+    94	static inline bool hsr_skb_add_header_port(struct sk_buff *skb, bool header,
+    95						   enum hsr_port_type port)
+    96	{
+    97		struct hsr_ptp_ext *ptp_ext;
+    98	
+  > 99		ptp_ext = skb_ext_add(skb, SKB_EXT_HSR);
+   100		if (!ptp_ext)
+   101			return false;
+   102		ptp_ext->port = port;
+   103		ptp_ext->header = header;
+   104		return true;
+   105	}
+   106	
 
---
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
