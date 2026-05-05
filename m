@@ -1,109 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA1038BF7A;
-	Tue,  5 May 2026 16:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D244A2E0C
+	for <llvm@lists.linux.dev>; Tue,  5 May 2026 18:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777998554; cv=none; b=s3UspnDpIvNwaV98SgSfU8YQqF68AMoFF0khCdUfNsi5o4VjfzdU+2Oah+ceGRkqeUPblPDURMGqmgNHwBltvc8cmBTN25aEN6QVBrr+IEQqZvym2cAmtl1jYx8IjvRzCxR+uYy58cmTcB4I7pr1k5oWmctHVUQ+gmySf286Yek=
+	t=1778005390; cv=none; b=XHhtX3a5+RoNVy4M2RD8foVjxsTaGWRgb20PHrPiDt1LV2qyUfSufopRhU3FVPdsJu793fY4eBEmble6zBRlRmfrqoubQJyr7dxKfTgC/JN+RJ5JBbvtqnWLXEJxxutfQvQCvXvDiOSoDLE0VP2+a/s9fBi0APT57niVO2eWfnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777998554; c=relaxed/simple;
-	bh=1fb0+xKHdJaJ3SPOujBb2WL355TWXX8BqCcDeJIjTCY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=rzJt7D2iz+bHDeJauHvybikWIMgOGc+iHcvmtQScE0L+eG7ngVXimg1zcaU6rEaK+c/ma9KHYlnccR+Xo9CBc6zHjin1IS7L/re9dZ39scfm0QErGJnzPom+qciIlXxsAFZ1h8frnnWfraNIV8Xbvjn9dlny7rz/M4Tkk3DKKno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sr4c3kKj; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778005390; c=relaxed/simple;
+	bh=dwr4phRNczg8CKbKxiMkMhy+8u6drw8ra88OhBmwdB4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MW4ZAcO0RLj0wx8R0rNollxX+b/ViHzIBW3LBRiroSzla1ljINfPfuHSru/B4rvdsjUcxsU/WJMvIV66dWc2kLHSPldBv9jERhYCfx/jTNBWRi3wdz1HXzCVmVI0yTad+1d7kOO+W0Yvn6+W76PfXDuEsfESbo3ZQ+FW4/eotOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bZ/Hi6Vf; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sr4c3kKj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777998552; x=1809534552;
-  h=date:from:to:cc:subject:message-id;
-  bh=1fb0+xKHdJaJ3SPOujBb2WL355TWXX8BqCcDeJIjTCY=;
-  b=Sr4c3kKjWvnAlYS7u+SUQuFIy+7H9m+I+woxfP/ciaYKQM1zNl1Ia+ic
-   lBS6y0XNGeqhapbEh53WUcegwzETFe/GaaxcKPAZC5Xw1CMlfJ3B5c3JB
-   PWOjpiJZlPCh42iH81xpxi+E0KGf9eKPiALqAsEWQ4JHKQQszDVYez8lV
-   0Ean6H7lkgybxcJaGP14J5jTsQm9R3hE8DdxsoAfxyKQHTn5L4O0jNaTt
-   +ew7JVNgghiox6Nggwsu60PRej2b+UOjcok8sRYMKJbPHtFi+Cb4/clTS
-   O5362pwDX3XfqMsSzqW9D6Xlihy/d9u/QR/3Vcf7y3y86EjT1ZRqqnFXO
-   Q==;
-X-CSE-ConnectionGUID: w0q8+WuESiqNZLb6+6udug==
-X-CSE-MsgGUID: maUyfuvbTVemZAsGIrn7yg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11777"; a="81437151"
-X-IronPort-AV: E=Sophos;i="6.23,217,1770624000"; 
-   d="scan'208";a="81437151"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2026 09:29:09 -0700
-X-CSE-ConnectionGUID: DTFzgd8ZQry7By57TWOsww==
-X-CSE-MsgGUID: QB/AysaAQ2iiA/ANFVmmbw==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 9ec114424ce8) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 05 May 2026 09:29:07 -0700
-Received: from kbuild by 9ec114424ce8 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wKIdt-000000000Hl-0eKz;
-	Tue, 05 May 2026 16:29:05 +0000
-Date: Wed, 06 May 2026 00:28:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, x86@kernel.org,
- Peter Zijlstra <peterz@infradead.org>
-Subject: [tip:locking/core 5/5] kernel/locking/rtmutex_api.c:93:1:
- warning: expecting rt_mutex 'lock' to be held at the end of function
-Message-ID: <202605060005.JYWpZXr2-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bZ/Hi6Vf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778005388;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=e2yF4zc1JLbdsENuGtTjyFHt3X2UQdT11aRtbywSEFE=;
+	b=bZ/Hi6Vf5+WOLBJ4eQeprDvhJRXMMyQfROG0EsIHxdQTJzmOHoOXTjL1oh4q8S5ArQenUs
+	Mh62mXn/vr+vUWZ77Wy19UGmC9o/ANoSuDn+DU0ndfvBf5RClmGrYEoOs3zSy9FuvBbJFG
+	+3VG0LUa8wT4JyWnfi9gpuvHxrVIsQs=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-271-6TH6SGiJMByG-NDiLRIpSQ-1; Tue,
+ 05 May 2026 14:23:06 -0400
+X-MC-Unique: 6TH6SGiJMByG-NDiLRIpSQ-1
+X-Mimecast-MFC-AGG-ID: 6TH6SGiJMByG-NDiLRIpSQ_1778005386
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D56C519560A3
+	for <llvm@lists.linux.dev>; Tue,  5 May 2026 18:23:05 +0000 (UTC)
+Received: from [172.20.194.246] (unknown [10.30.44.111])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 45FB71944CED;
+	Tue,  5 May 2026 18:23:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 68 of 97): Test report for master
+ (7.1.0-rc1, upstream-mainline, f377d002)
+Date: Tue, 05 May 2026 18:23:05 -0000
+To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <88292.126050514230600839@us-mta-271.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: vpdwiR4AqJXSFzS3qioP3X53sc_zc0vf_wLtxf8dBU0_1778005386
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-head:   d30a456aa7ce1bab05d9b364eeacad0c9cb10cc2
-commit: d30a456aa7ce1bab05d9b364eeacad0c9cb10cc2 [5/5] locking/rtmutex: Annotate API and implementation
-config: um-defconfig (https://download.01.org/0day-ci/archive/20260506/202605060005.JYWpZXr2-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260506/202605060005.JYWpZXr2-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605060005.JYWpZXr2-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/locking/rtmutex_api.c:93:1: warning: expecting rt_mutex 'lock' to be held at the end of function [-Wthread-safety-analysis]
-      93 | }
-         | ^
-   kernel/locking/rtmutex_api.c:90:14: note: rt_mutex acquired here
-      90 | void __sched rt_mutex_lock(struct rt_mutex *lock)
-         |              ^
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/lock +93 kernel/locking/rtmutex_api.c
+Kernel information:
+    Commit message: Merge tag 'sh-for-v7.1-tag2' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/glaubitz/sh-linux
 
-531ae4b06a737ed Thomas Gleixner           2021-08-15  84  
-531ae4b06a737ed Thomas Gleixner           2021-08-15  85  /**
-531ae4b06a737ed Thomas Gleixner           2021-08-15  86   * rt_mutex_lock - lock a rt_mutex
-531ae4b06a737ed Thomas Gleixner           2021-08-15  87   *
-531ae4b06a737ed Thomas Gleixner           2021-08-15  88   * @lock: the rt_mutex to be locked
-531ae4b06a737ed Thomas Gleixner           2021-08-15  89   */
-531ae4b06a737ed Thomas Gleixner           2021-08-15  90  void __sched rt_mutex_lock(struct rt_mutex *lock)
-531ae4b06a737ed Thomas Gleixner           2021-08-15  91  {
-a3642021923b26d Sebastian Andrzej Siewior 2021-11-29  92  	__rt_mutex_lock_common(lock, TASK_UNINTERRUPTIBLE, NULL, 0);
-531ae4b06a737ed Thomas Gleixner           2021-08-15 @93  }
-531ae4b06a737ed Thomas Gleixner           2021-08-15  94  EXPORT_SYMBOL_GPL(rt_mutex_lock);
-531ae4b06a737ed Thomas Gleixner           2021-08-15  95  #endif
-531ae4b06a737ed Thomas Gleixner           2021-08-15  96  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2496384644
 
-:::::: The code at line 93 was first introduced by commit
-:::::: 531ae4b06a737ed5539cd75dc6f6b9a28f900bba locking/rtmutex: Split API from implementation
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2496384644_x86_64_kernel_kcidb_tool_21215414_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
 
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
+    /distribution/command [aarch64, ppc64le, s390x, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
+    Boot test [aarch64, ppc64le, s390x, x86_64]
+    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
+    Reboot test [aarch64, ppc64le, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
+    Storage - blktests - throtl [aarch64, s390x, x86_64]
+    Storage - blktests - ublk [aarch64, s390x, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+    stress: stress-ng - memory [aarch64, s390x, x86_64]
+    xfstests - btrfs [aarch64]
+    xfstests - ext4 [aarch64]
+    xfstests - xfs [aarch64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
