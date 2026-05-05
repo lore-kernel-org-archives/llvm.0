@@ -1,146 +1,135 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9682E5B2A
-	for <llvm@lists.linux.dev>; Tue,  5 May 2026 08:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777971288; cv=pass; b=gINaau9I78Inh+Ckh6j8dLpEY3rwb+PLJDZ5iDMW0Wg6ZzYgplgmK9w2IsOGjwLSxkX8byv/RzqZKxphDKMnXJS+287POPCVb2GBRdc+u8SAR1sg6JMTev122Blm/Yy8XZjKmYSl1MBYxEOFN/FTIRP/AvvNNK5bPXS8kd0k+Dg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777971288; c=relaxed/simple;
-	bh=6lQCek5WVt/r86ksr/VRfq+SzkKgYJseGbt9VuJSbjc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N1nE6mW/3EiX/2jeXw8x8klxzSO7NP8ZHkJHIP9z53WUdElor4PSgk9gEWGtc2oDQfQzCYe79U7qoOeeCanHZpe9N5oARdWgLpc0pyMzaXdtHcX4uPBOKncIME0O8oGWpT3IDuxKnGmXWUxQF43FVZTVvIlFWvu4H05T9Ft6lb8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bQRsqNIi; arc=pass smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2372030E0D5
+	for <llvm@lists.linux.dev>; Tue,  5 May 2026 09:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777972987; cv=none; b=RgIB5NPVbjhXWnHkQYGMjJJalulbz1oK8UKIYQ7w3FbBLn/h6xft+ibHlVYj+cewuVW4l2hinKEifYVTionMV4CL16XSpAy3VZsFuuWx47F9dsYbI64nJ5XAccNgNH2Mg9BxhDCSFjkP9TJudaGS9GUA15xmxd9Q6hXaYrAxB2U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777972987; c=relaxed/simple;
+	bh=DiXOK6if7zrAf2lmNOpqScegnq2Gljg5iT+JxDXlAxk=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=GHPNc1v5V6aEddmtRL/c+r/CzDi6pBPsRXkdLLpczzGpwozBBSo1KJ0OPTeg0hfDEKf/HQ7lcyN4myFC0NhTicKcb40z+fikgqIgypsSINnsA2Sbj8IbQn45Qrv8JtesbKSqHfzmNKgAyVxCV98VXk1djykVzR4LTgQcWnSPdaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=TGahYX41; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gOE2h9we; arc=none smtp.client-ip=202.12.124.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bQRsqNIi"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-67b6a6bd7b8so2554570a12.0
-        for <llvm@lists.linux.dev>; Tue, 05 May 2026 01:54:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777971285; cv=none;
-        d=google.com; s=arc-20240605;
-        b=N17df/4CKd+hRFfok3yz/Vs3tT7SnmHTJntdkZQ4CptP8B25vv7iqtYUMinx1LsvSY
-         hyGjQcB/YROgBcX/BX0DUh9mWPhDrmeoS7F2yeJcNx79sBnEFwzGrLayxkBVsPl/lbYG
-         0dgFgCaH1K+2JwjZ8IIyh0/PXPQMfnj+1OJFIim27p4NKJ2h1aQ92SuBb+/KExJdSJKU
-         H5j3UHT1yVs/adv7I3RCgzj7gzQDgzdWICnWJViAgro8S0Irrt7IO4wF75gNjd8L8UPA
-         TUv9iogjQ9Ja+Dl9TbSNTd63ZvCOEFRy3m7flRURlm59qq2nXZJ7yfP1TtYTHzJR0CQB
-         OpXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9wdfdluDfOc56C0VjHJT7ZZqNz7mrj9b9II6s2fvnHA=;
-        fh=+FIExnEWKBC15kn+4SMQD9+5iXh/hsLlhq9UrRoVQXw=;
-        b=lTlCVsDdJ3H1QUEXO1RcHgpCuFg0cxE7biunplfJG9AP7lAwC7izxM5KD5s5uMqh6G
-         0vUdJf/ermG0cOKTt9r0JA4J2wc62R41ksuNQw/XU72/Cv6PdtNQPe/5LGNEyYcq+hai
-         UfS45de8N690JMLH1BrUNDtAilfTT1X40gKyeXzs+Q1ZFEDTkufAfHcNF8brHUUnlnwI
-         4PmUolhyC09YJ8WMuHdOwLA96WYctnKfL8+urpPLGREhawn4EE35wOvg21PEOCFHspsG
-         BbLD95yhYtGXiARv5iON2uXZGJyWYia5h+EvjVT0kTXVRnifcFpLMh0nYbA41WPOlTlw
-         BC4A==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777971285; x=1778576085; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9wdfdluDfOc56C0VjHJT7ZZqNz7mrj9b9II6s2fvnHA=;
-        b=bQRsqNIiSCS8c+X+RVGhjFu6FHoLXZ4YjyQM+2ih7puv8teejLT87X6OlkGaE7yfcd
-         HAOZIHdZ7YHjQc3G1PiEHoRIn1NEeTzmMgDIKl8oeaXcqSsIwiqsfDIWYefnwTFffEYO
-         2KVV341XpKeuRbAizCi2/0fLW7JHPP1uA2fgf0Rr8irzGpnKS+Agmj2RrKA5vyrObijO
-         FrN9UTgqXCNuQtr8+pD68SCjv7sVf6Sa0WCjjVWQ5TdoYtGrIl42jonfWcYqg5/1+C08
-         W25KMIO+s+N3tU6qxTE4Eh5/Fr8uswrSJt9G1M2k6saDQv0owsl/AtjgOd4IyqsxZygV
-         Ufxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777971285; x=1778576085;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9wdfdluDfOc56C0VjHJT7ZZqNz7mrj9b9II6s2fvnHA=;
-        b=YPUVnh4wOeYDlyKmYWE1rlFkemOgjbFiMA4FFe5qXbu+JYvgkfBUB/lzaFLKvlCEe9
-         vXfR0izlfTODmZ5EMb0f751f0kGm/5HdbriCwHjYRa2y7nEksqOXXRz5/baoFll5SLW9
-         80777uaaTAQKE+wnz5nKsrDM6lTTP2zIcBk2z1dIEEiY4rK9l4elgpVeTaCtd2EnWK/9
-         e5sJIWMPIn286pXttzz0mjU/xL83V0HIs/F4B7LorphvSAkB3Z+vL6ov+sAvO/5rLewS
-         9Bm+g6XeX4IX1IrmiawSDkxkBm0beOaPdkoqAmuevtKH0QZ3rnsghEhcm0qkufIHVChe
-         URPQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+8n6M3DdzeZsIcqSwQOp7YOIrKYJVdZfOImaddcSE4MW059Q45NoDG2N/xjCFSeYgwUnTJ@lists.linux.dev
-X-Gm-Message-State: AOJu0YyJRN39KlIPp1ntpTbAe7N+qvDcVVlFarpRZY2c8lkcdQLDVhS6
-	vDxP0fgJ1A3ObvYk71Oj9lj479RLx7/05YhuTQZMNQv97tbviWdBgkKCBugTRwQoJr/KzaMmINa
-	sAOn83t7RFM4/9NQU4YZnSsbRac8LDZk=
-X-Gm-Gg: AeBDietorYqYpnFKFjB0VkqkxEkP2YaPRmbh0PxsW4r6TSEHc9PA7ophuRXj5pDHDnz
-	MUmFbq9xEDcdyF3x2OuauEaMoGoMNig/dA6XNTr/UPueAztivphVZqkxK0Yy9Wuy7vyYhr+MdER
-	x/KFwq02PAQjQ2Qk7lgcHoCCHNju5+irR7PSXmYcSJUhKlbgKgDjimhwrmWcxj51ogp/3oLT8Be
-	+iOmGjShOX1gTMvMGJCG58yG9qXuUut1jxaxM5uZsa722Gy7CstbhgM9xXHxECT0sWxGMUclOZD
-	tdO14KfFFYSB3Ips+Lbo6ZObNPpmW7cTG8LOHGzut8a5ACFCqOLywKw5oN2accSwFCQIbjm+CX6
-	T72SyvUn2J59Gtl/w8BAcJnZWPmPTd+nxLwt5PiyROJHzxXX4/I2ZzySN4zb3SJoaOkRe
-X-Received: by 2002:aa7:d549:0:b0:67c:89f2:ae27 with SMTP id
- 4fb4d7f45d1cf-67cc392dd47mr866648a12.9.1777971284861; Tue, 05 May 2026
- 01:54:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="TGahYX41";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gOE2h9we"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id DC8941D0007C;
+	Tue,  5 May 2026 05:23:04 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 05 May 2026 05:23:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1777972984;
+	 x=1778059384; bh=ltI30Dtv2EeBl4uh1GQDYE0C2hnH+4+UiBm7Dg38Mzw=; b=
+	TGahYX415CxL5YI6WvDSnEqxlqLc3XQ7di40bpVvkxee7sbuC8kOgPCJmmmIiLDe
+	SScVJQ4/gYBIm13s6mx1qjkFnBDnA9AKScfIAqQbHbCkxs7iUgO+0KwDzEwAt5c0
+	YH8fF4Qf3ly4S6V1komZC6XDb3uxwEOHR0VRV6AjLMbX6FdKq7kQ5SW6lS+CQaLF
+	PBB+dPNKpJS82slrQxfD6kPzBpOhoGZVBWJlsyokxTyhEzpOhPtvsmD6yyFYHgjS
+	afRTgjXgzT7MKIT5AuQek6mry8OzBk+7uBmIrkBZX6Xf2vj0T5DggSYIODzFb5gA
+	8eXEPVMypJvq1y5C5y9l7A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1777972984; x=
+	1778059384; bh=ltI30Dtv2EeBl4uh1GQDYE0C2hnH+4+UiBm7Dg38Mzw=; b=g
+	OE2h9weXMV3471p2mfh2QA24GdcBg/K1B/LbYMcd0bPDEVyS5RPfHpp9ygF/vUgG
+	w21jOxXkZXDaD/neg3jgtsriIgjniPbPQN6qja8E0ECnwxILBT4h6kp8i4KVQZ7u
+	6OLi7QW4LnfAczCfkQYwlZ6opSOxONvwYJkaRurVZLOFixk63zrUbv4aYJSTegAz
+	W2y65psyiiA2jouedOkqrB7A1Q2fXUexe/2aMw/Q0k79KDBBIugjTzHt18YAzwof
+	D9WPxagAskqn/cONrNU5sDoPIjwXM4CTJlOzwdYTOaMK5CLx5VDfau8BDVYTsSel
+	mEARjFidTvchr393MhS9A==
+X-ME-Sender: <xms:97b5aekrUe5TtO731HpJUO1T6O7V0OkgI1OmxpKqKr667lZMbchEsQ>
+    <xme:97b5aQrcXcrulufEQ28qxA1yGgQQBH36ry-PxMLLiL285jupXL4JBuMjEB76Qd_qz
+    BNYe0jHspEGIl7c3k10B_ofrr9pZdNikX3Djbyi4g4SruRX2A5Q1w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddutddufeegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepkedvuefhiedtueeijeevtdeiieejfeelvefffeelkeeiteejffdvkefgteeuhffg
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
+    phhtthhopedujedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhitghkrdguvg
+    hsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehrohhs
+    vghnphesghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgoh
+    hoghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgt
+    phhtthhopehsuhhrvghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhirghmse
+    hinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepuggrvhhiugeskhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtoheplhhjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrth
+    hhrghnsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:97b5aXut2MOjsdhNR4grrUbo68oGM-N9PLM8XSx9Yi8Yqrwnz0TGfQ>
+    <xmx:97b5aZbduuKJ1ji2iLax7SXnwkeV2R1km36VBZ-kfPNxR37S_Fof-A>
+    <xmx:97b5abEimqUHs66Ze6SQTYoh9lY40aEqWwTROmE7M_4mhRcZFUv7kA>
+    <xmx:97b5aUqVeSSRuFkgV_vG4DhcERLx8kQYOIDuoi8iDuQHsPx29x1F1Q>
+    <xmx:-Lb5aeZ8G-Y5BKS6jU4qO-10PKjjgO6Ib5T2WK65pGWZyqPKHREEol4_>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id C545B700065; Tue,  5 May 2026 05:23:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260505010112.645361-1-rosenp@gmail.com> <0f11390f-e8bd-4f8d-aea8-59ef545b2c32@app.fastmail.com>
- <CAKxU2N92s06-L0+e=KZ7EbtU50tCpaCk2MYJD2xTFEHEsAhXUg@mail.gmail.com> <df3e889d-ac8c-4d11-a5fe-8ed2769953f0@app.fastmail.com>
-In-Reply-To: <df3e889d-ac8c-4d11-a5fe-8ed2769953f0@app.fastmail.com>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Tue, 5 May 2026 01:54:33 -0700
-X-Gm-Features: AVHnY4KjRxcRwGciP2xMVdMfFUTVoMobX-8vJo-rhK4YVGeNq03NoVrlCgH7a04
-Message-ID: <CAKxU2N_moR8bs=NLUcW054a=oHB--4i+M5XKCBNF9LskYcjAhA@mail.gmail.com>
+X-ThreadId: A79HWrF7w_-Z
+Date: Tue, 05 May 2026 11:22:13 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Rosen Penev" <rosenp@gmail.com>
+Cc: linux-mm@kvack.org, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "David Hildenbrand (Red Hat)" <david@kernel.org>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
+ "Michal Hocko" <mhocko@suse.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "open list" <linux-kernel@vger.kernel.org>,
+ "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Message-Id: <add152a5-09bb-4c6b-a17f-da3d817b93e9@app.fastmail.com>
+In-Reply-To: 
+ <CAKxU2N_moR8bs=NLUcW054a=oHB--4i+M5XKCBNF9LskYcjAhA@mail.gmail.com>
+References: <20260505010112.645361-1-rosenp@gmail.com>
+ <0f11390f-e8bd-4f8d-aea8-59ef545b2c32@app.fastmail.com>
+ <CAKxU2N92s06-L0+e=KZ7EbtU50tCpaCk2MYJD2xTFEHEsAhXUg@mail.gmail.com>
+ <df3e889d-ac8c-4d11-a5fe-8ed2769953f0@app.fastmail.com>
+ <CAKxU2N_moR8bs=NLUcW054a=oHB--4i+M5XKCBNF9LskYcjAhA@mail.gmail.com>
 Subject: Re: [PATCH] mm: move phys_mem_access_prot_allowed to header
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-mm@kvack.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	"David Hildenbrand (Red Hat)" <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 5, 2026 at 1:29=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, May 5, 2026, at 09:47, Rosen Penev wrote:
-> > On Mon, May 4, 2026 at 10:54=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> w=
+On Tue, May 5, 2026, at 10:54, Rosen Penev wrote:
+> On Tue, May 5, 2026 at 1:29=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> w=
 rote:
-> >>
-> >> On Tue, May 5, 2026, at 03:01, Rosen Penev wrote:
-> >> > phys_mem_access_prot_allowed is only implemented for X86. For others=
-, it
-> >> > returns 1. Move it to header to avoid using __weak.
-> >> >
-> >> > Fixes compilation with make LLVM=3D1 ARCH=3Dmips
-> >>
-> >> Can you describe what exactly goes wrong here on mips?
-> > Cannot find symbol for section 4: .text.phys_mem_access_prot_allowed.
-> > drivers/char/mem.o: failed
-> >
-> > It's full of similar errors in drivers/pci/ as well. clang on MIPS
-> > doesn't seem to like __weak.
+>>
+>> Does this happen with both ld.bfd and ld.lld? Which version of clang
+>> and lld are you using?
+> clang version 22.1.3
+> Target: x86_64-pc-linux-gnu
+> Thread model: posix
+> InstalledDir: /usr/bin
 >
-> This certainly feels like a toolchain bug. I would not mind having
-> the PCI code converted away from the __weak functions, but it should
-> not just fail with a linker error like this.
-FWIW I just tested
+> lld the same.
 
-make LLVM=3D1 ARCH=3Dpowerpc -j 31
+Ok. I've tried to reproduce this with Nathan's llvm-22.1.3 build
+from https://mirrors.edge.kernel.org/pub/tools/llvm/, but don't
+see this problem on mips defconfig. Are you using a particular
+configuration, or do you see this on every build?
 
-which results in no such errors. So probably.
->
-> Does this happen with both ld.bfd and ld.lld? Which version of clang
-> and lld are you using?
-clang version 22.1.3
-Target: x86_64-pc-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
+> I don't specify lld explicitly. I assume LLVM=3D1 does that.
 
-lld the same.
+Yes, by default it will use ld.lld. For cross-checking, you
+can try passing LD=3Dmips-linux-ld.bfd (or whereever you have
+installed your cross or multiarch binutils), which should
+still work just fine.
 
-I don't specify lld explicitly. I assume LLVM=3D1 does that.
->
->       Arnd
+       Arnd
