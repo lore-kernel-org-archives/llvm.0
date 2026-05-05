@@ -1,271 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FDA3B9D9A;
-	Tue,  5 May 2026 04:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C723C2768
+	for <llvm@lists.linux.dev>; Tue,  5 May 2026 05:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777955930; cv=none; b=RDnUjzvAOnpZeHVODKBki+cFuWtsLZ0eIzFuCKcQ/DPV2qiyJB+dYxoTMSo/tNdD2ZQphjYkf3cHZcPGft3BmW6Ml0MW1Vapady5NH6xMYE4UA63uSfFS9i+QjD2uItv00gDa1CSq1IANf4Zap7myuHh2uWo2oQcDFgoLFtQILk=
+	t=1777960466; cv=none; b=b/8Ebnp37LuUGMdt3YQbkc8Tf+7FT0nlS/8YpUI74/Lv6LrulQDnvuewMbiQ7KE1wI1ZIfRu66pZheVExF22oRNOE2im8WpRO5t8I+/Zc3CxMtwPopxQtgKeOWXVzkKk/HtdToPDs/YZH5HBmh+FpTF2Bgpz7jsKejE4J7QfnSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777955930; c=relaxed/simple;
-	bh=GAIsBwZBBghfY+lcPD2OyM3OFTEm3qTq325FxrjGZro=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IctI//83D0Ea9cq7fo2sn9h56r1Xz8okEWPm8kCQxHPv2ZNnQjdUqN6FSNGROq4/G33oz7f7uJz5llMbuLqmphM30Tx/B6f7fVinMSvLdkoUoxj148ehl3szBVgVJ6j8iAaKQyq5KEQvLJN5e4iSzNgl0TMJK1L7ORC+lIVbyC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UKuLc51H; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777960466; c=relaxed/simple;
+	bh=WELzHou1vd7Ag08z3V2RPQ0A2+vj64fj1uPwKZKE4AI=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=sacoG8JPb7gp0uc7U9qHNj6/YR24ADSzaW+1IVb7sDXEG/JfSOJ7y8b+QG2R/LEbhMr9rFh8iDkJEo1czfpjAMH++Gs/hS+PZgrXcfHtf77lgUVK/Y40uxka4SRXhhYljNJJCwtDBNIMPI7N7AsMJxtGz5M5hGMetE63uWBnn/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=u5y7ZoA9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cvfkQ8LE; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UKuLc51H"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777955929; x=1809491929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GAIsBwZBBghfY+lcPD2OyM3OFTEm3qTq325FxrjGZro=;
-  b=UKuLc51H7DIKq7f96MPexYw+fVbtm2+qIL0yd34wWT9jUVI0yEV7Iohw
-   raHj7Jy4xerck0XLA6fouUsR5chmJ4c/XotQVJCuggXWkjPtpjayniYoV
-   K1AYhgADHs64PEDe97Gp2b6WVDMkpL6YnLKAQe45Zl89gY6Z12oTaRzIa
-   nPw635vbN979r1CngY+kmtjHK8pQvY01WTF0v8g8kQo7ZtybndAC4E05k
-   lNQegfowsavMSNcXs0SwRyogfCk3hFSUB2cd0+CMzHnm+XkONXUwVoXun
-   g3x0YyEvbynwAi2qSIYR3209g93OXVWIULBCe3eP5KvoXtM05qWTpia4U
-   g==;
-X-CSE-ConnectionGUID: MryeE2+oRXeCq994FV3Xmw==
-X-CSE-MsgGUID: 4FAUlFT+RW+qmTMf+W9ZKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11776"; a="89124524"
-X-IronPort-AV: E=Sophos;i="6.23,216,1770624000"; 
-   d="scan'208";a="89124524"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 21:38:48 -0700
-X-CSE-ConnectionGUID: JXBbV3cCTeaBycKjHZF4BA==
-X-CSE-MsgGUID: NQ+T53G+Q6uBQAwRTUq/jA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,216,1770624000"; 
-   d="scan'208";a="259369947"
-Received: from lkp-server01.sh.intel.com (HELO 781826d00641) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 04 May 2026 21:38:45 -0700
-Received: from kbuild by 781826d00641 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wK7Xx-000000004Fp-1nW1;
-	Tue, 05 May 2026 04:38:22 +0000
-Date: Tue, 5 May 2026 12:38:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxwell Doose <m32285159@gmail.com>, jic23@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: imu: kmx61: Use guard(mutex)() family over manual
- locking
-Message-ID: <202605051218.kuLCMDTO-lkp@intel.com>
-References: <20260502032455.76107-1-m32285159@gmail.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="u5y7ZoA9";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cvfkQ8LE"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 5C2CB7A0101;
+	Tue,  5 May 2026 01:54:23 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 05 May 2026 01:54:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1777960463;
+	 x=1778046863; bh=JmfJF9VZOdx6cRELR7IxehWhdMlZxoCBVCSMgdOhjE4=; b=
+	u5y7ZoA9eMuhoBDaFkyut2LXUpEqlffigmhHhnF64AUhHR7cnoryMMaxmEiJ5x6U
+	Bjj9bhf3wxfvrTtTq+JafgfiTZnScp2Gu1QbaLd1QYqadEU38XrlCszrf+f40Jk7
+	MV6zhqVBzbkQkk2MiVMYRiFDRSU/Ga27V388Yos0mNXEvLYPMAhAhohugp8cLiu4
+	uqVNzqKvXCLdtc4ZyvneysGr0B6l+OrwDUTWpOiaKMbtUS9q5W7Te+yFhh34xmsa
+	bF5dtkdpPdExcTwOq6C1CxWRrMvqHchHNQCsOU/VuAbSecTd6Km3ah9WHCpKu3kl
+	g8Up5VgKyxp+83DcMvtLMQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1777960463; x=
+	1778046863; bh=JmfJF9VZOdx6cRELR7IxehWhdMlZxoCBVCSMgdOhjE4=; b=c
+	vfkQ8LErF1rWwYsXdqTOd1lvL7JBRtVY3PbG6sI8WbtF72dYEyGEOoryf/PTyglS
+	3mjevzN4vzc5bP8Di7/ii6qRH4Vo1+icVm8XL7wS+aUnOKsu6QZhk6P8TQP3iWS3
+	J7zSawtaivti0vx7TwA1kUcJYcMHc6f8vLJy/MqVuRXNNwagRAoWeUFFkzYooY36
+	stgZ7Dz9xeSFESrh0G++rHO/b/POPv2Bn4SIV/GImq9rjNq6vViPuN17j12YSxgu
+	wbqw5vPZuXjwwK8ENcQAnWqnZQbh5Vv6AyZPyomYIm4K6E5E6Mn6W+Pp1VMM7JRf
+	VpnXd7Mca2etHTMspOwcg==
+X-ME-Sender: <xms:Dob5admH6Uv6729At1Wuwyl2GIRgJuRRweEAeyrSXSapSZrUWXtbHg>
+    <xme:Dob5aTqhFmhPNScrpV1lE8Rvj5XVBDx5iDZUxWwbonQdgYNdE6YD-m1Rlde8799_r
+    hR5z1jPEjRUQpN3hQPIlPN7GtbpgAS0wx7TUtCus38GPBMIxZEbmQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddutddtleefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfefhheetffduvdfgieeghfejtedvkeetkeejfeekkeelffejteevvdeghffhiefh
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
+    phhtthhopedujedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhitghkrdguvg
+    hsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehrohhs
+    vghnphesghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgoh
+    hoghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgt
+    phhtthhopehsuhhrvghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhirghmse
+    hinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepuggrvhhiugeskhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtoheplhhjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrth
+    hhrghnsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:Dob5aWvudqQklw5FkPvca27pngxBqaXdFjB0UEmBZSsFKI9Vq7cghw>
+    <xmx:Dob5acYjtLE4zyJnH8SKg7oyP4UeJuqxnX-KvRlErKVc2OxkjorIWA>
+    <xmx:Dob5aSElDA-x-F3oI5bm0Z2vz4B9cS_BuW7lUnoyga17KJOr9jHLkg>
+    <xmx:Dob5afo-ddfADE42I5tBWOnDtv8JNK9WojrkzHnDgJPBvNylAZNWwA>
+    <xmx:D4b5aVbKQycBvvy3SX40wM6fWUfzTw41oOlAo7uI4zgMeIj2iY9VIpq2>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 17BDC700065; Tue,  5 May 2026 01:54:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260502032455.76107-1-m32285159@gmail.com>
+X-ThreadId: A79HWrF7w_-Z
+Date: Tue, 05 May 2026 07:54:01 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Rosen Penev" <rosenp@gmail.com>, linux-mm@kvack.org
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "David Hildenbrand (Red Hat)" <david@kernel.org>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
+ "Michal Hocko" <mhocko@suse.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "open list" <linux-kernel@vger.kernel.org>,
+ "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Message-Id: <0f11390f-e8bd-4f8d-aea8-59ef545b2c32@app.fastmail.com>
+In-Reply-To: <20260505010112.645361-1-rosenp@gmail.com>
+References: <20260505010112.645361-1-rosenp@gmail.com>
+Subject: Re: [PATCH] mm: move phys_mem_access_prot_allowed to header
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Maxwell,
+On Tue, May 5, 2026, at 03:01, Rosen Penev wrote:
+> phys_mem_access_prot_allowed is only implemented for X86. For others, it
+> returns 1. Move it to header to avoid using __weak.
+>
+> Fixes compilation with make LLVM=1 ARCH=mips
 
-kernel test robot noticed the following build errors:
+Can you describe what exactly goes wrong here on mips?
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v7.1-rc2 next-20260430]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> @@ -239,12 +239,6 @@ static ssize_t write_mem(struct file *file, const 
+> char __user *buf,
+>  	return written;
+>  }
+> 
+> -int __weak phys_mem_access_prot_allowed(struct file *file,
+> -	unsigned long pfn, unsigned long size, pgprot_t *vma_prot)
+> -{
+> -	return 1;
+> -}
+> -
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Doose/iio-imu-kmx61-Use-guard-mutex-family-over-manual-locking/20260504-212159
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20260502032455.76107-1-m32285159%40gmail.com
-patch subject: [PATCH] iio: imu: kmx61: Use guard(mutex)() family over manual locking
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260505/202605051218.kuLCMDTO-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260505/202605051218.kuLCMDTO-lkp@intel.com/reproduce)
+Removing __weak functions is usually an improvement, but I think
+we can go further here, see the discussion from last year at
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605051218.kuLCMDTO-lkp@intel.com/
+https://lore.kernel.org/all/20250520152030.1499670-1-arnd@kernel.org/#t
 
-All errors (new ones prefixed by >>):
-
->> drivers/iio/imu/kmx61.c:830:2: error: cannot jump from switch statement to this case label
-     830 |         case IIO_CHAN_INFO_SAMP_FREQ:
-         |         ^
-   drivers/iio/imu/kmx61.c:798:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     798 |                 guard(mutex)(&data->lock);
-         |                 ^
-   include/linux/cleanup.h:419:2: note: expanded from macro 'guard'
-     419 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:300:3: note: expanded from macro 'CLASS'
-     300 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:9:1: note: expanded from here
-       9 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:15:1: note: expanded from here
-      15 | __UNIQUE_ID_unlock_468
-         | ^
-   drivers/iio/imu/kmx61.c:798:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:419:15: note: expanded from macro 'guard'
-     419 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
-     168 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:3:1: note: expanded from here
-       3 | __UNIQUE_ID_guard_467
-         | ^
-   drivers/iio/imu/kmx61.c:816:2: error: cannot jump from switch statement to this case label
-     816 |         case IIO_CHAN_INFO_SCALE:
-         |         ^
-   drivers/iio/imu/kmx61.c:798:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     798 |                 guard(mutex)(&data->lock);
-         |                 ^
-   include/linux/cleanup.h:419:2: note: expanded from macro 'guard'
-     419 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:300:3: note: expanded from macro 'CLASS'
-     300 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:9:1: note: expanded from here
-       9 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:15:1: note: expanded from here
-      15 | __UNIQUE_ID_unlock_468
-         | ^
-   drivers/iio/imu/kmx61.c:798:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:419:15: note: expanded from macro 'guard'
-     419 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:168:2: note: expanded from macro '__UNIQUE_ID'
-     168 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:3:1: note: expanded from here
-       3 | __UNIQUE_ID_guard_467
-         | ^
-   drivers/iio/imu/kmx61.c:847:6: warning: unused variable 'ret' [-Wunused-variable]
-     847 |         int ret;
-         |             ^~~
-   drivers/iio/imu/kmx61.c:864:3: error: cannot jump from switch statement to this case label
-     864 |                 default:
-         |                 ^
-   drivers/iio/imu/kmx61.c:862:4: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     862 |                         guard(mutex)(&data->lock);
-         |                         ^
-   include/linux/cleanup.h:419:2: note: expanded from macro 'guard'
-     419 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:300:3: note: expanded from macro 'CLASS'
-     300 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:67:1: note: expanded from here
-      67 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-
-
-vim +830 drivers/iio/imu/kmx61.c
-
-20ffac278ebd64 Daniel Baluta 2014-12-03  777  
-20ffac278ebd64 Daniel Baluta 2014-12-03  778  static int kmx61_read_raw(struct iio_dev *indio_dev,
-20ffac278ebd64 Daniel Baluta 2014-12-03  779  			  struct iio_chan_spec const *chan, int *val,
-20ffac278ebd64 Daniel Baluta 2014-12-03  780  			  int *val2, long mask)
-20ffac278ebd64 Daniel Baluta 2014-12-03  781  {
-20ffac278ebd64 Daniel Baluta 2014-12-03  782  	int ret;
-20ffac278ebd64 Daniel Baluta 2014-12-03  783  	u8 base_reg;
-20ffac278ebd64 Daniel Baluta 2014-12-03  784  	struct kmx61_data *data = kmx61_get_data(indio_dev);
-20ffac278ebd64 Daniel Baluta 2014-12-03  785  
-20ffac278ebd64 Daniel Baluta 2014-12-03  786  	switch (mask) {
-20ffac278ebd64 Daniel Baluta 2014-12-03  787  	case IIO_CHAN_INFO_RAW:
-20ffac278ebd64 Daniel Baluta 2014-12-03  788  		switch (chan->type) {
-20ffac278ebd64 Daniel Baluta 2014-12-03  789  		case IIO_ACCEL:
-20ffac278ebd64 Daniel Baluta 2014-12-03  790  			base_reg = KMX61_ACC_XOUT_L;
-20ffac278ebd64 Daniel Baluta 2014-12-03  791  			break;
-20ffac278ebd64 Daniel Baluta 2014-12-03  792  		case IIO_MAGN:
-20ffac278ebd64 Daniel Baluta 2014-12-03  793  			base_reg = KMX61_MAG_XOUT_L;
-20ffac278ebd64 Daniel Baluta 2014-12-03  794  			break;
-20ffac278ebd64 Daniel Baluta 2014-12-03  795  		default:
-20ffac278ebd64 Daniel Baluta 2014-12-03  796  			return -EINVAL;
-20ffac278ebd64 Daniel Baluta 2014-12-03  797  		}
-84cb5906c7fb44 Maxwell Doose 2026-05-01  798  		guard(mutex)(&data->lock);
-20ffac278ebd64 Daniel Baluta 2014-12-03  799  
-a3da4fa301ae60 Daniel Baluta 2014-12-23  800  		ret = kmx61_set_power_state(data, true, chan->address);
-84cb5906c7fb44 Maxwell Doose 2026-05-01  801  		if (ret)
-a3da4fa301ae60 Daniel Baluta 2014-12-23  802  			return ret;
-a3da4fa301ae60 Daniel Baluta 2014-12-23  803  
-20ffac278ebd64 Daniel Baluta 2014-12-03  804  		ret = kmx61_read_measurement(data, base_reg, chan->scan_index);
-20ffac278ebd64 Daniel Baluta 2014-12-03  805  		if (ret < 0) {
-aff8609addd00e Daniel Baluta 2014-12-03  806  			kmx61_set_power_state(data, false, chan->address);
-20ffac278ebd64 Daniel Baluta 2014-12-03  807  			return ret;
-20ffac278ebd64 Daniel Baluta 2014-12-03  808  		}
-20ffac278ebd64 Daniel Baluta 2014-12-03  809  		*val = sign_extend32(ret >> chan->scan_type.shift,
-20ffac278ebd64 Daniel Baluta 2014-12-03  810  				     chan->scan_type.realbits - 1);
-a3da4fa301ae60 Daniel Baluta 2014-12-23  811  		ret = kmx61_set_power_state(data, false, chan->address);
-20ffac278ebd64 Daniel Baluta 2014-12-03  812  
-a3da4fa301ae60 Daniel Baluta 2014-12-23  813  		if (ret)
-a3da4fa301ae60 Daniel Baluta 2014-12-23  814  			return ret;
-20ffac278ebd64 Daniel Baluta 2014-12-03  815  		return IIO_VAL_INT;
-20ffac278ebd64 Daniel Baluta 2014-12-03  816  	case IIO_CHAN_INFO_SCALE:
-20ffac278ebd64 Daniel Baluta 2014-12-03  817  		switch (chan->type) {
-20ffac278ebd64 Daniel Baluta 2014-12-03  818  		case IIO_ACCEL:
-20ffac278ebd64 Daniel Baluta 2014-12-03  819  			*val = 0;
-20ffac278ebd64 Daniel Baluta 2014-12-03  820  			*val2 = kmx61_uscale_table[data->range];
-20ffac278ebd64 Daniel Baluta 2014-12-03  821  			return IIO_VAL_INT_PLUS_MICRO;
-20ffac278ebd64 Daniel Baluta 2014-12-03  822  		case IIO_MAGN:
-20ffac278ebd64 Daniel Baluta 2014-12-03  823  			/* 14 bits res, 1465 microGauss per magn count */
-20ffac278ebd64 Daniel Baluta 2014-12-03  824  			*val = 0;
-20ffac278ebd64 Daniel Baluta 2014-12-03  825  			*val2 = 1465;
-20ffac278ebd64 Daniel Baluta 2014-12-03  826  			return IIO_VAL_INT_PLUS_MICRO;
-20ffac278ebd64 Daniel Baluta 2014-12-03  827  		default:
-20ffac278ebd64 Daniel Baluta 2014-12-03  828  			return -EINVAL;
-20ffac278ebd64 Daniel Baluta 2014-12-03  829  		}
-20ffac278ebd64 Daniel Baluta 2014-12-03 @830  	case IIO_CHAN_INFO_SAMP_FREQ:
-20ffac278ebd64 Daniel Baluta 2014-12-03  831  		if (chan->type != IIO_ACCEL && chan->type != IIO_MAGN)
-20ffac278ebd64 Daniel Baluta 2014-12-03  832  			return -EINVAL;
-20ffac278ebd64 Daniel Baluta 2014-12-03  833  
-84cb5906c7fb44 Maxwell Doose 2026-05-01  834  		scoped_guard(mutex, &data->lock)
-20ffac278ebd64 Daniel Baluta 2014-12-03  835  			ret = kmx61_get_odr(data, val, val2, chan->address);
-20ffac278ebd64 Daniel Baluta 2014-12-03  836  		if (ret)
-20ffac278ebd64 Daniel Baluta 2014-12-03  837  			return -EINVAL;
-20ffac278ebd64 Daniel Baluta 2014-12-03  838  		return IIO_VAL_INT_PLUS_MICRO;
-20ffac278ebd64 Daniel Baluta 2014-12-03  839  	}
-20ffac278ebd64 Daniel Baluta 2014-12-03  840  	return -EINVAL;
-20ffac278ebd64 Daniel Baluta 2014-12-03  841  }
-20ffac278ebd64 Daniel Baluta 2014-12-03  842  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+     Arnd
