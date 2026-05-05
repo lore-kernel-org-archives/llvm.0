@@ -1,107 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CFC3DCD8D;
-	Tue,  5 May 2026 07:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777965612; cv=none; b=eZmXZ6LghdeZz5iZbvyZdTvsoClwBzpv7UAPTWX42/oU7wB+TsMOZqIAjhLo5Yg89sFqu0X4aI+jwOLZep0YjSTFl+2vZtpteagdPzTH43QCLfaQpK6LFJ2bkVWQOAmYVYFEs1t7j5WT4XGcDXuf0XdGlwtTiZ4Uj0ruZwwXmfo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777965612; c=relaxed/simple;
-	bh=Z0FXQFs0XgCitklm42p+eFCRXoSwhNl8YaZgF5P9pKc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=avacILT6F0XzWRQtG7yjb+gqwIc+WLbZHDC6rTgybEkGTI17LkGyovMpfHtxTrx7e03T3q7O9Tp3G/kXLxFDVHVcTU3vgpJGWxk6bZ4b/LyeXrKYx5tquSQeN+WV/YSIhXEj1wJXfdT5JqzXpWSPj80PgHGK2NvQm+h+f7ZqtJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AZxWbBvY; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9CAC3F164D
+	for <llvm@lists.linux.dev>; Tue,  5 May 2026 07:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777967277; cv=pass; b=YYvAytuwUJLXJT8sH3yhGvIXhGKsdHFz5OBE4FrqhCKJIlAFrq1CJGuBe6DYPCHAfmJXuFcz1haF343Iwzrpd4F7cQym6UZUfpQssdMxHWMDmTIctrKjRxWH+fEB+3TmA05uMbg7C7FY4AUdvLFEqNLgUsrHw/xbg8ZHE6vsnCE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777967277; c=relaxed/simple;
+	bh=umH6HyQOgTxau9kIskod/Xg1ilIJ4AZ0/NF18I0pxRY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=smz3JZUu2Pk245Rjxby0VQDcWHUH584YiS2nNZ9j/jRe/OQfZyu1zaLoEJ4nK48O+QTrvDMame2N05G9lrJzqvPlqXTIkzW47WtZ8A9yvmqGwbwux88wdIzjB25gCzk6larm75HD8i2tQkKxytcKCPWKn8/B0Od2vI+JRGvIXLQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m6HFeJpC; arc=pass smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AZxWbBvY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E591EC2BCF6;
-	Tue,  5 May 2026 07:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777965612;
-	bh=Z0FXQFs0XgCitklm42p+eFCRXoSwhNl8YaZgF5P9pKc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=AZxWbBvYjHzMwBGYAn0U/L+Y4nNRwAOnQ7QKBncZ5DofsMttNhg1rsqFqCAox2z4/
-	 VLC8c51H6eGo4up2Oc9WzaBpVdjqlowLNCCdtrbnljiGBQOVebgMS8cmbhe4lEoUOR
-	 YOUd4azIaiomeZtl+96K3UoRYPsTZCtUEYVtgzTDr47ziJI9XzLSYAno5EeSCiFszF
-	 I0bFBlGGW91/979neAvZamO6efbThBqQq+v1advRIdvH24/vBNcixvmB4Ru5RePWTW
-	 fTQkhHnQa+GFAtYyExdmfSAVa6wcAcfYaOQxhKk7LvgTC5vEJdzwI0EBfhAIJcGSDy
-	 iIAYNNRsm+sqA==
-Content-Type: multipart/mixed; boundary="===============8001377551619871004=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m6HFeJpC"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-67c1e0229acso3806485a12.1
+        for <llvm@lists.linux.dev>; Tue, 05 May 2026 00:47:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777967273; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Rm9v63kha/2a+UfmYx//l9LEMJA/xtKoxE+pY0JqZ1BK9wY//oH7O8ZVVflikSGUsS
+         99ThMsEkP/t9/CR3EWty1E1uLR3d+Gqz/uFgtAEs5GfBg2TUTH2zz+IrCvW1bvfoqPeI
+         iLAhdnRYroSXunqD9rx+YnxJnd5FVoUOUSSTddLRN0Dd8ByLezZ88tEoQWga8Gozgvfo
+         tbFdKAC6piGeWf0yQjR9R8GabWxEemJ5W+tKK+qGKH6UFTXTwAXy+F3flvfab1FutG9d
+         vAA7JX4rhNAn//501D143aJi3JKbxTbkIzdDTtnulUZYGu5brsXsOcx4nJJzML2vK2fw
+         RgXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LrEQHam8DGEcHyD+7jduqW+Fi+mFl53/8fjm+HcTlGY=;
+        fh=8vdGFhinNY7C80G3/i4jtIg5PFQ4iUzW8NenMyPcqx4=;
+        b=BJrAdpKQAXhCZY1BSpedk+5Ij6ZBvefT2aMROxQw+smqt4lEPcuOWp+5L2s39hRItO
+         vS8YD2GFhK1pgx6nn+jePKLKqyT2yqChwu0COYI6VAT1WS0I/4SYsUfR2iawQjduYOHh
+         8NremvXiHjD3igh80BGKn6+dfq+XFMj+zy4it5ZOmWa3FQXIJr+tpFmeXrJmZn96MR2z
+         Ollhk4/8QrbV8J/msSZLwUo6LvptNWpt7sO7+HFuyngO+kPtbopejeoS9q3+pBEm8SCI
+         Y0BYV8NzZQ18j3IjvjRBU6fKbipX+wpcF7kCD/mdr3KdtU7DplUWRHGakuIWdOx69p8J
+         uoYw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777967273; x=1778572073; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LrEQHam8DGEcHyD+7jduqW+Fi+mFl53/8fjm+HcTlGY=;
+        b=m6HFeJpCf18ix+sls+WuOZwMiZFBM8szV/sF28BSYAdP2fV+6Mgv4GYK7OESadFyDQ
+         sm2eLGzZ/qmV7UkbBWO5D2g2VuMTzGX87p6VjJ2MUI8LMlf1uSBRUKeUtsoF0aGAEl/R
+         7Cvdy9Hufm9DzgzTCBzPKmoBKQ9N8XRZjYA6dNl52J153+T3zjI8dOi2X6gd5b1TkuYZ
+         T9EVLoyiCYCaCnXnMLBF5sZVusj9Gsh0DMpXVka2owd8LbQUJ0Z9CKUbXwdTL0SqCoeV
+         6r0rExtfCr1F1pjbYU6wbQmviahLolG/RIy9uencoJTo7Gt6+DJrlb2+gQc90ZPPWbys
+         JF5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777967273; x=1778572073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=LrEQHam8DGEcHyD+7jduqW+Fi+mFl53/8fjm+HcTlGY=;
+        b=N1EEgGzxiBdtX2ogpcVKu2kLK+/Y1b3pxEEKFMZnVPw26ev1xhrWdf8g/MP1Gdz1zj
+         p6Ing4PFVKdd24WN0DJLG7AgvS7Q8zXZ28D8YVKm7zPbwoSiO7UDDbpJQNdHjw6707Gr
+         T5ZSLtl7twCaA93mRtenzNrFZ+sLaJJ7CiW8KCyelFpvrBJwbdMKfC/VhO3SCxRjs9hi
+         c8bdsQvyYNAfU9VDrJCX/8yWphtG3WeWULov7K1XuGSo2AZVY8W2VQhScxtQ2tHauaVP
+         lN4718VRt8gGfyrrKyg968+I91tVn0SMuf1Erk3mbLIVy7UZRY469aYkbkJU6cl/Jt3w
+         0lDQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8pRZRyj+sovGuJd183cwU38o6OCGsIjXWaOEt9EH3ZakXOz/GhVw54UhQvsIIPEqwFrGiC@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx7vQBHkdaAgpQGhEP0ZR5er3/Um22y12Ve9GztwBJN/kMJSlQN
+	mnX1v9mZGqRoSMir0sAb3Qw4spftx8ydfMKwW9MutkTEJ4v5qD1c7zG6SpxdcmaiNZ6/bo2QARt
+	XDhw8ZCcwendslDgotOVozMUF7H4gB/g=
+X-Gm-Gg: AeBDiesQEoEXjQogu7m5ao3ytHnIHJ6qO1JGoBwWlOttKyeyrzr3IgkYNJVtc8zTVTF
+	d9n/Dil0QzRVJ9xBWZ3mCceqfHrgJ3UnMOn+XMNZzDAM+8jDRLeUD6sXMApPvnd8tfCRuJOyyDP
+	/d0+59PkJdibA+EU3GOB715Lap4mZGXy/qzrfK7y79ckFc53uyNLfAz/+GGHPtDhaQNNBTu5Gln
+	a03vv5I+Zdt0i4rZ3gThjoAU07VJ7rYT/O7cwb41ObdQTOOvSnZ0Z2nQbFndmkVIycKYIFGBi8t
+	KEh7W0r6f13b9+2biRVAiwfGmQfKvZTznmKvD2LP8ryMDZES/P7lor5ibXS1n2j7OqsJVNBqOOJ
+	YvM3lq897sXKXApoviztCoIVBirWN1HqIRHH632RTFxywbidOkbWY0AFnR4WNQaI+QtohH09P5+
+	goRTA=
+X-Received: by 2002:a50:fc03:0:b0:66b:f527:c69d with SMTP id
+ 4fb4d7f45d1cf-67ccab1cc90mr656287a12.8.1777967273017; Tue, 05 May 2026
+ 00:47:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <2b13d3da553b3d2b09d94c046e80281f972d997b3e9037a0b215d6663135711a@mail.kernel.org>
-In-Reply-To: <20260505062026.91724-2-cuiyunhui@bytedance.com>
-References: <20260505062026.91724-2-cuiyunhui@bytedance.com>
-Subject: Re: [PATCH v4 1/3] riscv: io: avoid null-pointer arithmetic in PIO helpers
-From: bot+bpf-ci@kernel.org
-To: cuiyunhui@bytedance.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,dennis@kernel.org,tj@kernel.org,cl@gentwo.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,thuth@redhat.com,ajones@ventanamicro.com,ben.dooks@codethink.co.uk,rkrcmar@ventanamicro.com,cuiyunhui@bytedance.com,samuel.holland@sifive.com,zong.li@sifive.com,conor.dooley@microchip.com,tglx@kernel.org,debug@rivosinc.com,seanwascoding@gmail.com,andybnac@gmail.com,menglong8.dong@gmail.com,cyrilbur@tenstorrent.com,wangruikang@iscas.ac.cn,atishp@rivosinc.com,apatel@ventanamicro.com,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-mm@kvack.org,bpf@vger.kernel.org,arnd@arndb.de,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com,qingfang.deng@siflower.com.cn,linux-arch@vger.kernel.org,llvm@lists.linux.dev
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  5 May 2026 07:20:07 +0000 (UTC)
+References: <20260505010112.645361-1-rosenp@gmail.com> <0f11390f-e8bd-4f8d-aea8-59ef545b2c32@app.fastmail.com>
+In-Reply-To: <0f11390f-e8bd-4f8d-aea8-59ef545b2c32@app.fastmail.com>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Tue, 5 May 2026 00:47:41 -0700
+X-Gm-Features: AVHnY4Ktv2gBjkmdWbGk1dG2dc4G9oZ10kiw93sWZlLBrxmklnYBHgXj4r1U3So
+Message-ID: <CAKxU2N92s06-L0+e=KZ7EbtU50tCpaCk2MYJD2xTFEHEsAhXUg@mail.gmail.com>
+Subject: Re: [PATCH] mm: move phys_mem_access_prot_allowed to header
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-mm@kvack.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	"David Hildenbrand (Red Hat)" <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============8001377551619871004==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
-> index 09bb5f57a9d3..6f5d70313c83 100644
-> --- a/arch/riscv/include/asm/io.h
-> +++ b/arch/riscv/include/asm/io.h
-> @@ -56,6 +56,8 @@
->  #define __io_pbw()	RISCV_FENCE(iow, o)
->  #define __io_paw()	RISCV_FENCE(o, io)
+On Mon, May 4, 2026 at 10:54=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
 >
-> +#define PCI_IO_ADDR(addr)	((void __iomem *)((unsigned long)PCI_IOBASE + (addr)))
-> +
->  /*
->   * Accesses from a single hart to a single I/O address must be ordered.  This
->   * allows us to use the raw read macros, but we still need to fence before and
+> On Tue, May 5, 2026, at 03:01, Rosen Penev wrote:
+> > phys_mem_access_prot_allowed is only implemented for X86. For others, i=
+t
+> > returns 1. Move it to header to avoid using __weak.
+> >
+> > Fixes compilation with make LLVM=3D1 ARCH=3Dmips
+>
+> Can you describe what exactly goes wrong here on mips?
+Cannot find symbol for section 4: .text.phys_mem_access_prot_allowed.
+drivers/char/mem.o: failed
 
-Arnd Bergmann raised concerns about this approach in his review of v4
-(https://lore.kernel.org/all/3720c3a4-cc0d-4ba8-97ae-35def0189e2e@app.fastmail.com/).
-
-He points out that the NULL pointer arithmetic warnings are actually
-useful because they indicate real bugs - NULL pointer dereferences that
-will crash the kernel if the driver is ever loaded. The proper fix is to
-ensure drivers have 'depends on HAS_IOPORT' in their Kconfig entries.
-
-He suggests removing the custom RISC-V PIO accessors (ins*/outs*)
-entirely and using the asm-generic versions instead, which already have
-the correct #ifdef checks. This would be a cleaner approach than adding
-guards to suppress warnings.
-
-[ ... ]
-
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index ca5a1ce6f0f8..d799e5ccc943 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -1205,8 +1205,12 @@ static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
->  #define ioport_map ioport_map
->  static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
->  {
-> +#ifdef CONFIG_HAS_IOPORT
->  	port &= IO_SPACE_LIMIT;
->  	return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-> +#else
-> +	return NULL;
-> +#endif
->  }
->  #define ARCH_HAS_GENERIC_IOPORT_MAP
->  #endif
-
-Is this change necessary? The function definition here is already
-guarded by the #ifdef CONFIG_HAS_IOPORT_MAP check, which should prevent
-it from being visible when CONFIG_HAS_IOPORT is disabled.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25361792504
---===============8001377551619871004==--
+It's full of similar errors in drivers/pci/ as well. clang on MIPS
+doesn't seem to like __weak.
+>
+> > @@ -239,12 +239,6 @@ static ssize_t write_mem(struct file *file, const
+> > char __user *buf,
+> >       return written;
+> >  }
+> >
+> > -int __weak phys_mem_access_prot_allowed(struct file *file,
+> > -     unsigned long pfn, unsigned long size, pgprot_t *vma_prot)
+> > -{
+> > -     return 1;
+> > -}
+> > -
+>
+> Removing __weak functions is usually an improvement, but I think
+> we can go further here, see the discussion from last year at
+>
+> https://lore.kernel.org/all/20250520152030.1499670-1-arnd@kernel.org/#t
+I hold no opinion on that.
+>
+>      Arnd
