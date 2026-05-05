@@ -1,110 +1,258 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E392066DE
-	for <llvm@lists.linux.dev>; Tue,  5 May 2026 08:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA7F3B38B6;
+	Tue,  5 May 2026 08:12:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777968217; cv=none; b=lzmZWLtw7UnkHUMo3ejT5waIo7g/PnMtQVq9ITRLHf1c4aGhcO/pkhTfzcKO925w5c/N0scCV1ICsA10e/Z7tqVk/Zy1rP63HIPl4xzEr8KeFNRnsCXJgv/zy1hW6bGHxj1KFjpMdq2iXMEWTH7OkQdsmuncTTgyarEMPe4wsRc=
+	t=1777968772; cv=none; b=qYKKziMBsgtgH3bxeGi/Hm5BLLhBr8XgSVgXA9tC8EucwaJCgw8Th9cH6gYCD+U1ZrMimXDmw1r9njskOv8Vl9GvqxB+WRPu8WJBgZvJqj/hFxwuA+9GNk2+YgZAULWWM+wfPVg35f/w+/eQihkcet4H6C9r5Lyxm4V31WZS7Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777968217; c=relaxed/simple;
-	bh=eFl3ZW1fQsyuvlaAImo28QlmWhvfN4CAVYLlOWDD41E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kruxPVAxle/SPm7+cOVaw3LbB+bJjQIKBay2c+jgMW8qc8gBfHhYAz8l3yxZSVwVkVpUtHMjF/6UDY4b9S0XZf0+1C73gIogtl4Y5henXMRKAK3XEVDMnzjC0EGgwJZQkKjQOcOXSWnrOeB7z31uopO2+xVwxkrRO3Gvf8y7Wg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=xjIkz+FV; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1777968772; c=relaxed/simple;
+	bh=f+LCiamBvDv8dAL5pEQbx4dHj5knkE8cqEdvuYsHteU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i5PLCyS0kwezqdLDE3V4YgGCKzhAXGjiYdUAgPwvg29fI+puPOPqGOzG8wYLjdPx+rxAp6AsovjsEgt7zjbabDeujehSMezJngdKmQQvfyB/mQqANu+q3khGfLNm7o1LRwzS9p0K+KnWdB6rylzsyJvFj7/maxUC+eCiDq4MOhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l31+BBgY; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="xjIkz+FV"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4891c00e7aeso40970045e9.2
-        for <llvm@lists.linux.dev>; Tue, 05 May 2026 01:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1777968213; x=1778573013; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CqR/wy63Urn0t3ThqxSLpf9nxTN7sHcwtEOysFg+/Ls=;
-        b=xjIkz+FVPXQrbSFWbSVCf6YDmDS4LQrRPFe3yWmzwaXyZICL3/CELutK44OGGTNp/B
-         m4j/bYKp7RjQFJrPg0IpjOVCEIkzYVvxzkvSbcF6fY3gBjkjHRXybnOs6alrWnfPV86z
-         ce1iz54qAwmfAzGB5c1xA3zFtCvBWh+BH8g6ATwEECH6oYN/wPwh8UWD62W7IDyNWWWK
-         GWMaJ81UT37d4Ps0NAmEwwdsycqLq+hllLbqHH53n9REWLpR5pcZi4+t0GsdNdXWrlyS
-         aG32/ssLPoVLCPqQi10/edm5X5IJXvI9bGWe6tymb1XPpxudhsmFb1bqlKHZxRYCW7oj
-         A+UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777968213; x=1778573013;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CqR/wy63Urn0t3ThqxSLpf9nxTN7sHcwtEOysFg+/Ls=;
-        b=bCHn3zO9PGL390KbFe/W/s8esub+0GyqCq4VcTtwdXHNTLCmxNd0hzByqS/QkxNEai
-         DJiDG3vhMWrI325Z+ACJaP3cYVs/YkMtw7aUOzHwIRUKqg93w/EUo8t7XcDToNiT2pcG
-         yVN0hd/6jJ3UcVN5vsvWw5I/REYUWaCNDAzsJFbrcOL+ATZxrm7WwACTJxLV7oBDd6m+
-         SORUcxkpJJd7FoOvE6pdM0a0RPBkTBgdk6RG0jnajX8z5EmuK7kCco82SVRH0E28Vrp7
-         f8/IMdxdPBuu7BX9NblnK30bnE4pOXzWotM9woGmvE0RTVLjcaHewMNpzcAnUQDA4hb+
-         ZgfQ==
-X-Gm-Message-State: AOJu0YwjZiefg4rZsSACxzQSW7+t4k+l15ttaE/DXMLoRlvRzzzj3PX3
-	dEhOTBRIngwDK1HaDXbyVnHSYbgP0k/xymkAftkwoGHhJXzMkaq1HzVnn2hTr3HVTb8=
-X-Gm-Gg: AeBDieuo4KZnlPaoCWMmYhN+wivodt2BYGBH/RC0upxqq/tHkDdq378rbPPyb/yoMCv
-	JHoIHFQQaK9aTL0PycZMovBU6ssrj2jYuWZa7EQr855iefiSGBJiv7wzHcQTlYanbQs+wg5PBpq
-	GcT53A20axtMgAMgq2mkb+zC44E+c2DHq9v6w7AwPbBnfHGJ/MDU3YMGZwmYLaxq+DmJxrIvYEc
-	6NEGN4Yk4nLAHzmUuDQn/jU5b1vuu4T5d5r7R4U40kS3Akiq4qUzO5NVBU8O/zAVsjt7O+Wf0r8
-	PSSHlPJka96sYrxnrt+OZhgPWhIGKzbIYvkrhvG4J9ZnSa/CFeKlEru0N1DsDFVt57q26+XxcMu
-	XD6bsQGJ4tUQxCYvrAIR/2g66+n/oplycftUtATJHhgBTwR+QAYzEtZUYRpw3aDbFDRu/Nf7aE7
-	rbK8B3IaDfi77BiKrYIKj+liQm+98e6kgQGO3gV+tPWivgyKIM2NkOrHXWMDrvd8Wlk+uJwC9ge
-	WCbX0A8UHFQsB2s25bQ
-X-Received: by 2002:a05:600c:4e15:b0:485:ae14:8191 with SMTP id 5b1f17b1804b1-48d186dc89emr31013215e9.5.1777968212669;
-        Tue, 05 May 2026 01:03:32 -0700 (PDT)
-Received: from [10.211.9.173] ([213.147.98.98])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48d14a16187sm12914705e9.9.2026.05.05.01.03.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 May 2026 01:03:31 -0700 (PDT)
-Message-ID: <1f1e6ef7-f353-4d4c-8678-77a8728b1d0e@kernel.dk>
-Date: Tue, 5 May 2026 02:03:30 -0600
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l31+BBgY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777968770; x=1809504770;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f+LCiamBvDv8dAL5pEQbx4dHj5knkE8cqEdvuYsHteU=;
+  b=l31+BBgYfMniurSUC82rieam228DkceJOKViBQWHWVQstitmLkCdH009
+   N2Wbv1svqjQzpzz7s8y973VsP9oEbkEju70yGhDMElPFtjNakkxTt7iR4
+   UGsgRN6JEHGx/OT/+qEQCM4xsRrDc8KFQJ6CTKNpB4sTwSJPoW7L9rdgP
+   rS0xKLAVZtURv88cAlQaXZvUpwmoPimwmbUIKpBkBtYtp/laCJLct4jMJ
+   3cYIE4w8HWSPqwdi6sT0/Cpvtuk2Caf8hi5YtmpOaWA53iu5ZMOuQuTyL
+   uFVnbOEyovmWOzwS70cSOXKc+LIi5LiG3i16nxsAh1UL3VWJsBiHMC7s4
+   w==;
+X-CSE-ConnectionGUID: uNkGyfCNT0yKdXZx+zB4fw==
+X-CSE-MsgGUID: JF2IbZ/wRwCyc7nT5ryXGQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11776"; a="78882407"
+X-IronPort-AV: E=Sophos;i="6.23,217,1770624000"; 
+   d="scan'208";a="78882407"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2026 01:12:50 -0700
+X-CSE-ConnectionGUID: E3QWLVgnQ0u11hWb8tV01A==
+X-CSE-MsgGUID: NxUjHUJCT4elHSezVWSDuw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,217,1770624000"; 
+   d="scan'208";a="237522065"
+Received: from lkp-server01.sh.intel.com (HELO 781826d00641) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 05 May 2026 01:12:47 -0700
+Received: from kbuild by 781826d00641 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wKAtZ-000000004NN-0u2k;
+	Tue, 05 May 2026 08:12:45 +0000
+Date: Tue, 5 May 2026 16:11:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Francisco Maestre <francisco@maestretorreblanca.com>,
+	sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+	gregkh@linuxfoundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Francisco Maestre <francisco@maestretorreblanca.com>
+Subject: Re: [PATCH v2] staging: sm750fb: add const qualifier to string
+ pointer arrays
+Message-ID: <202605051602.dWbzp24c-lkp@intel.com>
+References: <20260503005744.68974-1-francisco@maestretorreblanca.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [axboe:io_uring-user-acct.v2 2/2] io_uring/rsrc.c:52:46: warning:
- variable 'count' is uninitialized when used here
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <202605051516.EwH8GTl5-lkp@intel.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <202605051516.EwH8GTl5-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260503005744.68974-1-francisco@maestretorreblanca.com>
 
-On 5/5/26 1:58 AM, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git io_uring-user-acct.v2
-> head:   3db2fc5d524bb4877e39659d0180dfc0112893ac
-> commit: 3db2fc5d524bb4877e39659d0180dfc0112893ac [2/2] io_uring/rsrc: add huge page accounting for registered buffers
-> config: um-allnoconfig (https://download.01.org/0day-ci/archive/20260505/202605051516.EwH8GTl5-lkp@intel.com/config)
-> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260505/202605051516.EwH8GTl5-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202605051516.EwH8GTl5-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> io_uring/rsrc.c:52:46: warning: variable 'count' is uninitialized when used here [-Wuninitialized]
->       52 |         xa_store(&ctx->hpage_acct, key, xa_mk_value(count), GFP_KERNEL_ACCOUNT);
->          |                                                     ^~~~~
->    io_uring/rsrc.c:37:21: note: initialize the variable 'count' to silence this warning
->       37 |         unsigned long count;
->          |                            ^
->          |                             = 0
->    1 warning generated.
+Hi Francisco,
 
-This one is already fixed in the current tree.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on staging/staging-testing]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Francisco-Maestre/staging-sm750fb-add-const-qualifier-to-string-pointer-arrays/20260503-215917
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20260503005744.68974-1-francisco%40maestretorreblanca.com
+patch subject: [PATCH v2] staging: sm750fb: add const qualifier to string pointer arrays
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260505/202605051602.dWbzp24c-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260505/202605051602.dWbzp24c-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605051602.dWbzp24c-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/staging/sm750fb/sm750.c:785:19: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
+     785 |                 g_fbmode[index] = g_def_fbmode;
+         |                 ~~~~~~~~~~~~~~~ ^
+   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
+      36 | static const char * const g_fbmode[] = {NULL, NULL};
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/sm750fb/sm750.c:787:20: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
+     787 |                         g_fbmode[index] = g_fbmode[0];
+         |                         ~~~~~~~~~~~~~~~ ^
+   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
+      36 | static const char * const g_fbmode[] = {NULL, NULL};
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/sm750fb/sm750.c:896:17: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
+     896 |                                 g_fbmode[0] = opt;
+         |                                 ~~~~~~~~~~~ ^
+   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
+      36 | static const char * const g_fbmode[] = {NULL, NULL};
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/sm750fb/sm750.c:900:17: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
+     900 |                                 g_fbmode[1] = opt;
+         |                                 ~~~~~~~~~~~ ^
+   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
+      36 | static const char * const g_fbmode[] = {NULL, NULL};
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   4 errors generated.
+
+
+vim +785 drivers/staging/sm750fb/sm750.c
+
+81dee67e215b23 Sudip Mukherjee      2015-03-03  719  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  720  static int lynxfb_set_fbinfo(struct fb_info *info, int index)
+81dee67e215b23 Sudip Mukherjee      2015-03-03  721  {
+81dee67e215b23 Sudip Mukherjee      2015-03-03  722  	int i;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  723  	struct lynxfb_par *par;
+e359b6a863e19f Mike Rapoport        2015-10-26  724  	struct sm750_dev *sm750_dev;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  725  	struct lynxfb_crtc *crtc;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  726  	struct lynxfb_output *output;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  727  	struct fb_var_screeninfo *var;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  728  	struct fb_fix_screeninfo *fix;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  729  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  730  	const struct fb_videomode *pdb[] = {
+81dee67e215b23 Sudip Mukherjee      2015-03-03  731  		lynx750_ext, NULL, vesa_modes,
+81dee67e215b23 Sudip Mukherjee      2015-03-03  732  	};
+81dee67e215b23 Sudip Mukherjee      2015-03-03  733  	int cdb[] = {ARRAY_SIZE(lynx750_ext), 0, VESA_MODEDB_SIZE};
+d0856045f0e9fc Hungyu Lin           2026-04-01  734  	static const char * const fix_id[2] = {
+81dee67e215b23 Sudip Mukherjee      2015-03-03  735  		"sm750_fb1", "sm750_fb2",
+81dee67e215b23 Sudip Mukherjee      2015-03-03  736  	};
+81dee67e215b23 Sudip Mukherjee      2015-03-03  737  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  738  	int ret, line_length;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  739  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  740  	ret = 0;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  741  	par = (struct lynxfb_par *)info->par;
+e359b6a863e19f Mike Rapoport        2015-10-26  742  	sm750_dev = par->dev;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  743  	crtc = &par->crtc;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  744  	output = &par->output;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  745  	var = &info->var;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  746  	fix = &info->fix;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  747  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  748  	/* set index */
+81dee67e215b23 Sudip Mukherjee      2015-03-03  749  	par->index = index;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  750  	output->channel = &crtc->channel;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  751  	sm750fb_set_drv(par);
+81dee67e215b23 Sudip Mukherjee      2015-03-03  752  
+d11ac7cbcc266c Sudip Mukherjee      2015-08-07  753  	/*
+d11ac7cbcc266c Sudip Mukherjee      2015-08-07  754  	 * set current cursor variable and proc pointer,
+d11ac7cbcc266c Sudip Mukherjee      2015-08-07  755  	 * must be set after crtc member initialized
+d11ac7cbcc266c Sudip Mukherjee      2015-08-07  756  	 */
+fdc234d85210d9 Benjamin Philip      2021-07-28  757  	crtc->cursor.offset = crtc->o_screen + crtc->vidmem_size - 1024;
+e359b6a863e19f Mike Rapoport        2015-10-26  758  	crtc->cursor.mmio = sm750_dev->pvReg +
+e359b6a863e19f Mike Rapoport        2015-10-26  759  		0x800f0 + (int)crtc->channel * 0x140;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  760  
+cd33da26036ea5 Christopher Carbone  2022-08-23  761  	crtc->cursor.max_h = 64;
+cd33da26036ea5 Christopher Carbone  2022-08-23  762  	crtc->cursor.max_w = 64;
+39f9137268ee3d Benjamin Philip      2021-07-26  763  	crtc->cursor.size = crtc->cursor.max_h * crtc->cursor.max_w * 2 / 8;
+e359b6a863e19f Mike Rapoport        2015-10-26  764  	crtc->cursor.vstart = sm750_dev->pvMem + crtc->cursor.offset;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  765  
+3de08a2d14ff8c Lorenzo Stoakes      2015-03-20  766  	memset_io(crtc->cursor.vstart, 0, crtc->cursor.size);
+f7c8a046577e09 Thomas Zimmermann    2023-11-27  767  	if (!g_hwcursor)
+52d0744d751d8f Arnd Bergmann        2016-11-09  768  		sm750_hw_cursor_disable(&crtc->cursor);
+81dee67e215b23 Sudip Mukherjee      2015-03-03  769  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  770  	/* set info->fbops, must be set before fb_find_mode */
+e359b6a863e19f Mike Rapoport        2015-10-26  771  	if (!sm750_dev->accel_off) {
+81dee67e215b23 Sudip Mukherjee      2015-03-03  772  		/* use 2d acceleration */
+f7c8a046577e09 Thomas Zimmermann    2023-11-27  773  		if (!g_hwcursor)
+f7c8a046577e09 Thomas Zimmermann    2023-11-27  774  			info->fbops = &lynxfb_ops_accel;
+f7c8a046577e09 Thomas Zimmermann    2023-11-27  775  		else
+f7c8a046577e09 Thomas Zimmermann    2023-11-27  776  			info->fbops = &lynxfb_ops_accel_with_cursor;
+f7c8a046577e09 Thomas Zimmermann    2023-11-27  777  	} else {
+f7c8a046577e09 Thomas Zimmermann    2023-11-27  778  		if (!g_hwcursor)
+81dee67e215b23 Sudip Mukherjee      2015-03-03  779  			info->fbops = &lynxfb_ops;
+f7c8a046577e09 Thomas Zimmermann    2023-11-27  780  		else
+f7c8a046577e09 Thomas Zimmermann    2023-11-27  781  			info->fbops = &lynxfb_ops_with_cursor;
+f7c8a046577e09 Thomas Zimmermann    2023-11-27  782  	}
+81dee67e215b23 Sudip Mukherjee      2015-03-03  783  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  784  	if (!g_fbmode[index]) {
+81dee67e215b23 Sudip Mukherjee      2015-03-03 @785  		g_fbmode[index] = g_def_fbmode;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  786  		if (index)
+81dee67e215b23 Sudip Mukherjee      2015-03-03  787  			g_fbmode[index] = g_fbmode[0];
+81dee67e215b23 Sudip Mukherjee      2015-03-03  788  	}
+81dee67e215b23 Sudip Mukherjee      2015-03-03  789  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  790  	for (i = 0; i < 3; i++) {
+81dee67e215b23 Sudip Mukherjee      2015-03-03  791  		ret = fb_find_mode(var, info, g_fbmode[index],
+81dee67e215b23 Sudip Mukherjee      2015-03-03  792  				   pdb[i], cdb[i], NULL, 8);
+81dee67e215b23 Sudip Mukherjee      2015-03-03  793  
+db7fb3588ab492 Artem Lytkin         2026-02-23  794  		if (ret == 1 || ret == 2)
+81dee67e215b23 Sudip Mukherjee      2015-03-03  795  			break;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  796  	}
+81dee67e215b23 Sudip Mukherjee      2015-03-03  797  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  798  	/* set par */
+81dee67e215b23 Sudip Mukherjee      2015-03-03  799  	par->info = info;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  800  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  801  	/* set info */
+e3a3f9f5123683 Mike Rapoport        2015-10-26  802  	line_length = ALIGN((var->xres_virtual * var->bits_per_pixel / 8),
+e3a3f9f5123683 Mike Rapoport        2015-10-26  803  			    crtc->line_pad);
+81dee67e215b23 Sudip Mukherjee      2015-03-03  804  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  805  	info->pseudo_palette = &par->pseudo_palette[0];
+cc59bde1c920ab Benjamin Philip      2021-07-28  806  	info->screen_base = crtc->v_screen;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  807  	info->screen_size = line_length * var->yres_virtual;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  808  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  809  	/* set info->fix */
+81dee67e215b23 Sudip Mukherjee      2015-03-03  810  	fix->type = FB_TYPE_PACKED_PIXELS;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  811  	fix->type_aux = 0;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  812  	fix->xpanstep = crtc->xpanstep;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  813  	fix->ypanstep = crtc->ypanstep;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  814  	fix->ywrapstep = crtc->ywrapstep;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  815  	fix->accel = FB_ACCEL_SMI;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  816  
+8c475735085a7d Tim Wassink          2025-12-21  817  	strscpy(fix->id, fix_id[index], sizeof(fix->id));
+81dee67e215b23 Sudip Mukherjee      2015-03-03  818  
+fdc234d85210d9 Benjamin Philip      2021-07-28  819  	fix->smem_start = crtc->o_screen + sm750_dev->vidmem_start;
+d11ac7cbcc266c Sudip Mukherjee      2015-08-07  820  	/*
+d11ac7cbcc266c Sudip Mukherjee      2015-08-07  821  	 * according to mmap experiment from user space application,
+81dee67e215b23 Sudip Mukherjee      2015-03-03  822  	 * fix->mmio_len should not larger than virtual size
+81dee67e215b23 Sudip Mukherjee      2015-03-03  823  	 * (xres_virtual x yres_virtual x ByPP)
+81dee67e215b23 Sudip Mukherjee      2015-03-03  824  	 * Below line maybe buggy when user mmap fb dev node and write
+81dee67e215b23 Sudip Mukherjee      2015-03-03  825  	 * data into the bound over virtual size
+d11ac7cbcc266c Sudip Mukherjee      2015-08-07  826  	 */
+81dee67e215b23 Sudip Mukherjee      2015-03-03  827  	fix->smem_len = crtc->vidmem_size;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  828  	info->screen_size = fix->smem_len;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  829  	fix->line_length = line_length;
+e359b6a863e19f Mike Rapoport        2015-10-26  830  	fix->mmio_start = sm750_dev->vidreg_start;
+e359b6a863e19f Mike Rapoport        2015-10-26  831  	fix->mmio_len = sm750_dev->vidreg_size;
+b610e1193a917f Matej Dujava         2020-04-30  832  
+b610e1193a917f Matej Dujava         2020-04-30  833  	lynxfb_set_visual_mode(info);
+81dee67e215b23 Sudip Mukherjee      2015-03-03  834  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  835  	/* set var */
+81dee67e215b23 Sudip Mukherjee      2015-03-03  836  	var->activate = FB_ACTIVATE_NOW;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  837  	var->accel_flags = 0;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  838  	var->vmode = FB_VMODE_NONINTERLACED;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  839  
+61c507cf652da1 Michel von Czettritz 2015-03-26  840  	ret = fb_alloc_cmap(&info->cmap, 256, 0);
+61c507cf652da1 Michel von Czettritz 2015-03-26  841  	if (ret < 0) {
+fbab250eb51d6d Artem Lytkin         2026-02-07  842  		dev_err(info->device, "Could not allocate memory for cmap.\n");
+81dee67e215b23 Sudip Mukherjee      2015-03-03  843  		goto exit;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  844  	}
+81dee67e215b23 Sudip Mukherjee      2015-03-03  845  
+81dee67e215b23 Sudip Mukherjee      2015-03-03  846  exit:
+81dee67e215b23 Sudip Mukherjee      2015-03-03  847  	lynxfb_ops_check_var(var, info);
+81dee67e215b23 Sudip Mukherjee      2015-03-03  848  	return ret;
+81dee67e215b23 Sudip Mukherjee      2015-03-03  849  }
+81dee67e215b23 Sudip Mukherjee      2015-03-03  850  
 
 -- 
-Jens Axboe
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
