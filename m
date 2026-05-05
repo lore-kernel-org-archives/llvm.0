@@ -1,141 +1,202 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16DFD2D3EF2
-	for <llvm@lists.linux.dev>; Tue,  5 May 2026 01:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111D117BA6;
+	Tue,  5 May 2026 02:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777942892; cv=none; b=TV8AdmWlXj+WEgMF5lunkmeTXMTLLh8occw/BaVZ214cFufi5IYO6RKZfYinxvLZKIuDXv2Y2E5tL+0tDQBfF9pcvI3YdGhcOPb2iv3WVT9eKIThFDfQssw+ho+24uFQhh7mXVgTtVz15FHr5JahvYYfVqmeizGVYri8uISfx5A=
+	t=1777948154; cv=none; b=YIeqLeKWeq8R3X5l8lwbXhXZXWEkM7/EeXTqLUb7x43yDW7kIgtlcnQVvvFfpad3ChNoSGCs1tflHR0ZdnhqLP9ftyMGJN4kHjZtYr1lTXEZdPyDbIDDR3izdbSwat8DoR3pHQsyto3Ff9uPhQtny+rgGbk/llWw4WD/R0wQvIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777942892; c=relaxed/simple;
-	bh=JLDq8fKlyzO6XwZL/iqJWzUDcls7oo47Eus+TVmGyZk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hjgUOxfl8yyP0kgEtnCV6rgSmgdnRHDgvlQdUVuD2ui0A3SYGnhR8Tb6iUMUl9kdyDNtUswSqqSS3TXQotM711ke4llEf0oI8HdvBfFD85ZSf+sUyjxJgYPP0yaahYkE3hD61cEiTAoNaba7ztuUrxeThtlwT7kqHB0SJOT4NSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dWyRcyGB; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777948154; c=relaxed/simple;
+	bh=xMDOpFuV/QpjXQueUurBsSOm/lhLbfdmda63ejEJYAE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=pUNn36NKuLM6Se3RzcIqePDNjEJuzecJOTK6XSxcD/IoIVKazMLsUFltb3BBLMYs/DQOFxTjXfHKy9iWN58VMe8TsdwczDdrxhdBfmFe1jVNSYAKhUKhhxbzwFEBLZK+3yMI8CRc7X9+CcJVtW+Y2QY822kBdDyg1B1XCwP8ZcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MhMPt4Xm; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dWyRcyGB"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-35fb166b0c6so2762319a91.0
-        for <llvm@lists.linux.dev>; Mon, 04 May 2026 18:01:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777942890; x=1778547690; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=noRB/3k3PKvhvGq4d2i3S6nAV184FSHocbhdsDyNxPc=;
-        b=dWyRcyGBzJGsakF3F7kGpRshfioyBtBIXADDaOFKBo7XYQyEfPLeIxXn7reSlUkZ0p
-         pXi6jDMP5xQIbcDtmHXdbNDrdwqeNeCMU0DXrWkv7tZAdrFlVumWOVn+38M2UjF77Smj
-         xinPRVw4+gzikB5ePO5DNtJB1+8H9S5GpVoIkyJkkrOfaxUij3rCWz6FkOzL6MMJ2SrB
-         SC4Q2TYIR/9JEYIGNFMHKfrVLSFt3vKhofrdbRcSN0ZiX37G5mjRO+Iv60GNkaT1RBA/
-         7ajnIpGjAl7WQbDYfi/4TCAKHr1jsmX9d5OfMskToaMw7X3lCsg6aLEQiNOp9aCvFyfO
-         /3Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777942890; x=1778547690;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=noRB/3k3PKvhvGq4d2i3S6nAV184FSHocbhdsDyNxPc=;
-        b=HjphoHEAEagnCLVvLFYX1cdApKV6F67pItGkABZrGX5Pthd4uqO7n9jn55YUkAQjES
-         9OKMvzAgwlhKuRHimZv2pckSthZThz6iH1nDlTG/yGql/dxGB5sKm8e4vA/sts6m47h1
-         T8pFgsfzFbTbCtekk+J7X/W9Uxg8qoGXS3izop/mEyjkZz4MvpCc4cyykuI0gnKtfr9j
-         rYqqbdiHMa+wyw1EsfqIagw4/CCmkLBQk4x6diy9PzHqGvs1DbkDdNTI9QYD8aVnGrbE
-         NsGhVqBHo+zXKIPei3iu966nWwHT9EKTBK0FLNx3wofHaxoblxWqxvjNGfxp6LBm0MQJ
-         gUvQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/QbKV1xK9k2H2bDeCxX3V79BVQxwLYRYIKs3I8i8KWN3peuTZPgWoYU7YKZaJ8O2e9ETcP@lists.linux.dev
-X-Gm-Message-State: AOJu0YyKQwKZQQWJDwXhcLd++E0k4YfkfInLUZx7uTJQzlLOD6Th7VD4
-	OKM67LaVzej2mIQE97Z/27tJNjsfjJcmnnAwNwBCZtx4vlbW40iF3PXU
-X-Gm-Gg: AeBDievmdr1hUJE4ms0gEBDJmvEIgWEOo+pPq9mg8zLJyD8fWBkN4VUFs0CO6NBotwP
-	rU9PMdji3QPxYt2E9g5KrE7ilN1jXkV9u3IR/jHuC+e9HCwaDXg/ZlxzaIGPPthbgXVZgbsQOyD
-	hUZRWmEvv2KoD6ngtGLPRQHHFGiHb/6SfNc9TiIXNFilmnZhknmnQGlkS30Kv/zw3keHK55zqYv
-	LjIqX+7lIzJAybRA3ImaP8jBKrOkmkjhoH7hWL4KDviDgQvYKRewbCo1M2WssrSZLaUSUxwmPuo
-	Ddl8DLF6cOV4cqRqsY3thGvpx5W4/3bV7Khod/tnKmeripF84UrEMXkv5/jTl4blhyWp8LBZCPs
-	wjha9Clwbouvq3GaqkkgKbwdYqsQow19xwW5oTAl/ttaYSFi2I9QchjMhNzPX2N12fuJgCffiqG
-	psEsTVhXLaYuk/7miQ8QfIzfxOSeb/hmP2viMYuVc383q7lqhmkWN3QaF+lGjGfcCgVLoL9Xzlg
-	/VnMYHqssXBO/iaWA9vIEL6pHqkv1gPrhi6NvH8do0fUQ==
-X-Received: by 2002:a17:90a:d443:b0:359:84a3:1942 with SMTP id 98e67ed59e1d1-3657287d45bmr1268764a91.13.1777942890198;
-        Mon, 04 May 2026 18:01:30 -0700 (PDT)
-Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ba1c451d9bsm53830935ad.1.2026.05.04.18.01.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 18:01:29 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-mm@kvack.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] mm: move phys_mem_access_prot_allowed to header
-Date: Mon,  4 May 2026 18:01:12 -0700
-Message-ID: <20260505010112.645361-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MhMPt4Xm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777948152; x=1809484152;
+  h=date:from:to:cc:subject:message-id;
+  bh=xMDOpFuV/QpjXQueUurBsSOm/lhLbfdmda63ejEJYAE=;
+  b=MhMPt4XmIOBnh6BxZV0t0seRzP2BDTy+LPSSjbVEnGkpZKXYP4Tbz3St
+   ryN5ntJOcDthmNdHlnMPNNSD3QSNw8gfwj8Rbf097QZiOy2CbrTXq9a68
+   3L2UfygpGEUl0pIgPNo51V+x3hNfDr/b1IqZbMfIWEaEpCbtlaWCTsht4
+   U1NEJkFa0tU3PgU0slu3jWyTiLzfWLWyO9qgYP4L6wYCQmhUpqIUJ5WZk
+   ceoyowA1SEqEaF8HzsyrCWqMpJjDihgZbnq5ijqbqF+mCGw8FVESpsWrN
+   AL0P7XaGTHXy2izQXI2i8/QYOSWY2qHBxP7H/jXiNk77L7SQBAn2NJUv+
+   A==;
+X-CSE-ConnectionGUID: NBQjQrU/TLaA9CVFrVyPLQ==
+X-CSE-MsgGUID: +7jf3PNrSAm8c6eoRKuUuA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11776"; a="89400893"
+X-IronPort-AV: E=Sophos;i="6.23,216,1770624000"; 
+   d="scan'208";a="89400893"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2026 19:29:11 -0700
+X-CSE-ConnectionGUID: bEVthhVtTe+wf//B6RT/qw==
+X-CSE-MsgGUID: AofikJ2HT9a918LimDaH8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,216,1770624000"; 
+   d="scan'208";a="232546923"
+Received: from lkp-server01.sh.intel.com (HELO 781826d00641) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 04 May 2026 19:29:09 -0700
+Received: from kbuild by 781826d00641 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wK5Ww-000000004AT-11ty;
+	Tue, 05 May 2026 02:29:03 +0000
+Date: Tue, 05 May 2026 10:28:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [koverstreet-bcachefs:bcachefs-testing 35/95]
+ fs/bcachefs/alloc/foreground.c:560:2: error: expected expression
+Message-ID: <202605051042.0qptLM0O-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-phys_mem_access_prot_allowed is only implemented for X86. For others, it
-returns 1. Move it to header to avoid using __weak.
+tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
+head:   8f7020ecb925b9ea9413ac31dd0d2078e99f92cf
+commit: ca284ad06b139fe4dc8f053ada179473c1b71bb1 [35/95] bcachefs: alloc: filter spurious freelist_wait wakes on the waiter side
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260505/202605051042.0qptLM0O-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260505/202605051042.0qptLM0O-lkp@intel.com/reproduce)
 
-Fixes compilation with make LLVM=1 ARCH=mips
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605051042.0qptLM0O-lkp@intel.com/
 
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- drivers/char/mem.c      | 6 ------
- include/linux/pgtable.h | 8 ++++++++
- 2 files changed, 8 insertions(+), 6 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index 5fd421e48c04..ae8449674f46 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -239,12 +239,6 @@ static ssize_t write_mem(struct file *file, const char __user *buf,
- 	return written;
- }
- 
--int __weak phys_mem_access_prot_allowed(struct file *file,
--	unsigned long pfn, unsigned long size, pgprot_t *vma_prot)
--{
--	return 1;
--}
--
- #ifndef __HAVE_PHYS_MEM_ACCESS_PROT
- 
- /*
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index cdd68ed3ae1a..72a7fa388e88 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -2154,8 +2154,16 @@ static inline int pmd_free_pte_page(pmd_t *pmd, unsigned long addr)
- #endif
- 
- struct file;
-+#ifdef CONFIG_X86
- int phys_mem_access_prot_allowed(struct file *file, unsigned long pfn,
- 			unsigned long size, pgprot_t *vma_prot);
-+#else
-+static inline
-+int phys_mem_access_prot_allowed(struct file *file, unsigned long pfn,
-+			unsigned long size, pgprot_t *vma_prot) {
-+	return 1;
-+}
-+#endif
- 
- #ifndef CONFIG_X86_ESPFIX64
- static inline void init_espfix_bsp(void) { }
+>> fs/bcachefs/alloc/foreground.c:560:2: error: expected expression
+           u32 wake_counter_snapshot = atomic_read(&ca->alloc_wake_counter);
+           ^
+>> fs/bcachefs/alloc/foreground.c:647:41: error: use of undeclared identifier 'wake_counter_snapshot'
+           alloc_trace_add(req, ca->dev_idx, ret, wake_counter_snapshot);
+                                                  ^
+   2 errors generated.
+
+
+vim +560 fs/bcachefs/alloc/foreground.c
+
+   540	
+   541	/**
+   542	 * bch2_bucket_alloc_trans - allocate a single bucket from a specific device
+   543	 * @trans:	transaction object
+   544	 * @req:	state for the entire allocation
+   545	 *
+   546	 * Returns:	an open_bucket on success, or an ERR_PTR() on failure.
+   547	 */
+   548	static struct open_bucket *bch2_bucket_alloc_trans(struct btree_trans *trans,
+   549							   struct alloc_request *req)
+   550	{
+   551		struct bch_fs *c = trans->c;
+   552		struct bch_dev *ca = req->ca;
+   553		struct open_bucket *ob = NULL;
+   554		bool freespace = READ_ONCE(ca->mi.freespace_initialized);
+   555		bool waiting = false;
+   556	
+   557		req->btree_bitmap = req->data_type == BCH_DATA_btree;
+   558		memset(&req->counters, 0, sizeof(req->counters));
+   559	again:
+ > 560		u32 wake_counter_snapshot = atomic_read(&ca->alloc_wake_counter);
+   561		bch2_dev_usage_read_fast(ca, &req->usage);
+   562		u64 avail = __dev_buckets_free(ca, req->usage, req->watermark);
+   563	
+   564		if (req->usage.buckets[BCH_DATA_need_discard] >
+   565		    min(avail, ca->mi.nbuckets >> 7))
+   566			bch2_do_discards_async(c);
+   567	
+   568		if (req->usage.buckets[BCH_DATA_need_gc_gens] > avail)
+   569			bch2_gc_gens_async(c);
+   570	
+   571		if (should_invalidate_buckets(ca, req->usage))
+   572			bch2_dev_do_invalidates(ca);
+   573	
+   574		if (!avail) {
+   575			if (req->watermark > BCH_WATERMARK_normal &&
+   576			    c->recovery.pass_done < BCH_RECOVERY_PASS_check_allocations)
+   577				goto alloc;
+   578	
+   579			if (bch2_copygc_can_make_progress(ca)) {
+   580				req->copygc_can_make_progress = true;
+   581				bch2_copygc_wakeup(c);
+   582			}
+   583	
+   584			track_event_change(&c->times[BCH_TIME_blocked_allocate], true);
+   585	
+   586			if (req->cl &&
+   587			    !(req->flags & BCH_WRITE_alloc_nowait) &&
+   588			    !req->will_retry_target_devices &&
+   589			    !req->will_retry_all_devices &&
+   590			    !req->will_retry_set_devices) {
+   591				if ((!req->copygc_can_make_progress ||
+   592				     req->watermark == BCH_WATERMARK_copygc) &&
+   593				    (req->nr_effective || (req->devs_have && req->devs_have->nr))) {
+   594					ob = ERR_PTR(bch_err_throw(c, bucket_alloc_no_progress));
+   595				} else if (!waiting) {
+   596					closure_wait(&c->allocator.freelist_wait, req->cl);
+   597					waiting = true;
+   598					goto again;
+   599				} else {
+   600					ob = ERR_PTR(bch_err_throw(c, bucket_alloc_blocked));
+   601				}
+   602			} else {
+   603				ob = ERR_PTR(bch_err_throw(c, freelist_empty));
+   604			}
+   605	
+   606			goto err;
+   607		}
+   608	
+   609		if (waiting)
+   610			bch2_alloc_wake_dev(ca);
+   611	alloc:
+   612		ob = likely(freespace)
+   613			? bch2_bucket_alloc_freelist(trans, req)
+   614			: bch2_bucket_alloc_early(trans, req);
+   615	
+   616		if (!ob && req->btree_bitmap != BTREE_BITMAP_ANY) {
+   617			req->btree_bitmap = BTREE_BITMAP_ANY;
+   618			goto alloc;
+   619		}
+   620	
+   621		if (!ob && freespace && c->recovery.pass_done < BCH_RECOVERY_PASS_check_alloc_info) {
+   622			freespace = false;
+   623			goto alloc;
+   624		}
+   625	err:
+   626		if (!ob)
+   627			ob = ERR_PTR(bch_err_throw(c, no_buckets_found));
+   628	
+   629		int ret = PTR_ERR_OR_ZERO(ob);
+   630	
+   631		if (!ret) {
+   632			ob->data_type = req->data_type;
+   633	
+   634			event_inc_trace(c, bucket_alloc, buf,
+   635				bucket_alloc_to_text(&buf, c, req, ob));
+   636		} else if (bch2_err_matches(ret, BCH_ERR_open_buckets_empty) ||
+   637			   bch2_err_matches(ret, BCH_ERR_open_bucket_alloc_blocked)) {
+   638			event_inc_trace(c, open_bucket_alloc_fail, buf,
+   639				bch2_fs_open_buckets_to_text(&buf, c));
+   640		} else if (!bch2_err_matches(ret, BCH_ERR_transaction_restart) &&
+   641			   !req->will_retry_target_devices &&
+   642			   !req->will_retry_all_devices &&
+   643			   !req->will_retry_set_devices)
+   644			event_inc_trace(c, bucket_alloc_fail, buf,
+   645				bucket_alloc_to_text(&buf, c, req, ob));
+   646	
+ > 647		alloc_trace_add(req, ca->dev_idx, ret, wake_counter_snapshot);
+   648	
+   649		return ob;
+   650	}
+   651	
+
 -- 
-2.54.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
