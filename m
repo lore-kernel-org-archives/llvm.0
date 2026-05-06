@@ -1,299 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A2A42F12C6;
-	Wed,  6 May 2026 08:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3CD3E3C59
+	for <llvm@lists.linux.dev>; Wed,  6 May 2026 09:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778057249; cv=none; b=EtAX50pj35FkorprkWtQYgPaSCkn6wrbtOEEzPI2j2QHK5pKuOPMtbW6GMzaELeERfUYSnct0G9Ub9GYXp/ie+HPhp9NlS9X2pSuR9GT+mXP9aeAdcIwfd78oBuGyLet3rDE//DMNbrBBqzgaOs9dkXKSn3lClbxyhKz96CxQMo=
+	t=1778060404; cv=none; b=nS97xgZCjeSvdanHEDt5fuIrjNXq8rO6AbDQNVWKdH0AE4wAqAxLV9SUHRYmHXjF+z9zXqtEOH/T3T/dgUwvgQISZCwMC6Xw7EDNgaVw7xMTMV7FQLISvbBXot//g8o3305eHkEm2zw/rDsj2P5HTOlIrg97rZyV5aFwESOx7NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778057249; c=relaxed/simple;
-	bh=MFmaIMbnFEXwGB3PPJF9pDgE/AOZrA/3B9LkdnhKQWU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=XvamhTVP6TwAXJgbd+RuTmGYxbl4TGWQew/cssqpR69SHBwyIo0Lxz3H6rmj6Gm1wyS96scXhpuZUWVucIIQtohpZUNHjs/06xx/QGs2KDZDK7V7MDYN1yi5Zwgv6KoFKIZnG9iUO0mGwxqoNVoiiUxYMeI9e7QGxAZVzL0SIss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JS3HwStA; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+	s=arc-20240116; t=1778060404; c=relaxed/simple;
+	bh=qmjYHGZXtiYUtQtV14Rvb+sQ5RX2t6MVyg4wbNNzAnY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C0b/sU1EtYBZopAXJsfcwoItupD5eKY+3bDOZopm1BTP+G3jlziKStyCMBEhp2BgMErt42nHaR0jcHUXzBkMpoqCOXMdPrd9EctQYAgCGbOye9Xab0TLbcCiuvEcb7DJu4It4MaQI+m+xyhHw4qLo/3+OgJV3mzvX2xFTd36MLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cwaZOiSM; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JS3HwStA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cwaZOiSM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778057247; x=1809593247;
-  h=date:from:to:cc:subject:message-id;
-  bh=MFmaIMbnFEXwGB3PPJF9pDgE/AOZrA/3B9LkdnhKQWU=;
-  b=JS3HwStARf0oeK19lwHUKAoizdWEGC3YcIMM1L7vEu4ETAv89w8wreFn
-   oG0f7E9q/KOY+rUyDWvJ6MgntvW85+d/rZfaJOZmJv+1HHYPdnsO51wwC
-   8sCsO4x0pBma4NhzyRQHSKDtV90Uam8nTTjT/LMNcMITjh/rKAE0v6DnJ
-   aQN5NKHRCAv9kSi54XJXxBYDHhAwjLaBab7qBNzWU95PTQw7WNi1s/25F
-   x/BTICRUqhHzJV1CtBBBb2fLrGvcZt6Yztt3ygUf/a40w9ywtETKHbSM1
-   J6DPaNcEgEgVse4z4OondNGfskUnA0EnRZmtN6KlljENopKyM0dIv4hy/
+  t=1778060403; x=1809596403;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qmjYHGZXtiYUtQtV14Rvb+sQ5RX2t6MVyg4wbNNzAnY=;
+  b=cwaZOiSMxOu9/yXQaji5SHDr14fh6OsRmOTPoaGXKUCh6IHfFlL/OvQ/
+   JQXMqSDl3ztTwASb4LYOTgaTimlwesx5Zby1tjQeJeGJNYhahChUeWj90
+   HVgr7IHsFj7yRoqHuJcvrTr2Jk+X+OANivvvBIDsq2+hZmcrjGsNEaa0H
+   3KsU87w0udlU8gVIJy9u0V3qhq6FOi4PX7YQTJsYpMGDJ9Xvbyi9fA+6e
+   UNto3RZSdHeu/xVqdyo3SV3pxcd9ZFn1cAwkoGpMfyE/sYTTMHMUr/kyQ
+   S5zXTiwMCUF2Vi6/THHyspdq4BGeKroe3npKW74MFxn81Nbx/s3ZC5oiH
    A==;
-X-CSE-ConnectionGUID: GyKhCgEoRFG1JwBnnkwsYA==
-X-CSE-MsgGUID: c9AQufnsQAOpru6t+GRVfg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11777"; a="89681405"
+X-CSE-ConnectionGUID: tgplG0szTiWlRpBOhNqvHw==
+X-CSE-MsgGUID: R9AkDNlyRhm2dPYnqUBu9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11777"; a="78875564"
 X-IronPort-AV: E=Sophos;i="6.23,219,1770624000"; 
-   d="scan'208";a="89681405"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 01:47:26 -0700
-X-CSE-ConnectionGUID: I+bfruxcTjir4jBfjmu4tQ==
-X-CSE-MsgGUID: QLr7vR4aQnifBr2ufYH83Q==
+   d="scan'208";a="78875564"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 02:40:03 -0700
+X-CSE-ConnectionGUID: BZvwe19/RBGv8e+twRE6WQ==
+X-CSE-MsgGUID: wj1vVCwCQq+amL1x7Gp8ZQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,219,1770624000"; 
-   d="scan'208";a="274208919"
-Received: from lkp-server01.sh.intel.com (HELO 9ec114424ce8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 06 May 2026 01:47:24 -0700
-Received: from kbuild by 9ec114424ce8 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wKXuc-000000000pf-0Kft;
-	Wed, 06 May 2026 08:47:22 +0000
-Date: Wed, 06 May 2026 16:47:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:timers/cleanup 33/37] include/linux/smp.h:72:48:
- error: use of undeclared identifier 'cpu_online_mask'
-Message-ID: <202605061620.lTIwySVT-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+   d="scan'208";a="237904989"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa004.fm.intel.com with ESMTP; 06 May 2026 02:40:00 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id 5273595; Wed, 06 May 2026 11:39:59 +0200 (CEST)
+Date: Wed, 6 May 2026 12:39:57 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rosen Penev <rosenp@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	"kernelci.org bot" <bot@kernelci.org>
+Subject: Re: [PATCH] usb: typec: intel_pmc_mux: Zero initialize num_ports in
+ pmc_usb_probe()
+Message-ID: <afsMbeGfk5EHxFHV@kuha>
+References: <20260506-typec-intel_pmc_mux-fix-uninit-num_ports-v1-1-929b128a32e9@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260506-typec-intel_pmc_mux-fix-uninit-num_ports-v1-1-929b128a32e9@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git timers/cleanup
-head:   53bcd35f2ff331adc7277b797333287028c91655
-commit: 3e8fdfa964516dc41fe2573974f779b15dead630 [33/37] riscv: Select ARCH_HAS_RANDOM_ENTROPY
-config: riscv-randconfig-002-20260506 (https://download.01.org/0day-ci/archive/20260506/202605061620.lTIwySVT-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260506/202605061620.lTIwySVT-lkp@intel.com/reproduce)
+On Wed, May 06, 2026 at 02:05:54PM +0800, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=y / W=e):
+> 
+>   drivers/usb/typec/mux/intel_pmc_mux.c:740:3: error: variable 'num_ports' is uninitialized when used here [-Werror,-Wuninitialized]
+>     740 |                 num_ports++;
+>         |                 ^~~~~~~~~
+> 
+> This should have been initialized to zero. Do so now to clean up the
+> warning and ensure num_ports does not use uninitialized memory.
+> 
+> Fixes: 8bdb0b3830ea ("usb: typec: intel_pmc_mux: combine kzalloc + kcalloc")
+> Reported-by: kernelci.org bot <bot@kernelci.org>
+> Closes: https://lore.kernel.org/177793914437.2560.9287713196857718000@997d03828cfd/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605061620.lTIwySVT-lkp@intel.com/
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-All errors (new ones prefixed by >>):
+> ---
+>  drivers/usb/typec/mux/intel_pmc_mux.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+> index e22b070a140f..219a32da1348 100644
+> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> @@ -732,7 +732,7 @@ static int pmc_usb_probe(struct platform_device *pdev)
+>  {
+>  	struct fwnode_handle *fwnode = NULL;
+>  	struct pmc_usb *pmc;
+> -	u8 num_ports;
+> +	u8 num_ports = 0;
+>  	int i = 0;
+>  	int ret;
+>  
 
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:846:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     846 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:109:53: note: expanded from macro 'insw'
-     109 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:11:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:854:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     854 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:110:53: note: expanded from macro 'insl'
-     110 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:11:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:863:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     863 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:122:55: note: expanded from macro 'outsb'
-     122 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:11:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:872:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     872 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:123:55: note: expanded from macro 'outsw'
-     123 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:11:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:881:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     881 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:124:55: note: expanded from macro 'outsl'
-     124 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:11:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:140:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   7 warnings generated.
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:8:
-   In file included from include/linux/prandom.h:13:
-   In file included from include/linux/percpu.h:5:
-   In file included from include/linux/alloc_tag.h:13:
-   In file included from include/linux/cpumask.h:15:
-   In file included from include/linux/numa.h:6:
-   In file included from include/linux/nodemask.h:94:
-   In file included from include/linux/random.h:154:
-   In file included from arch/riscv/include/asm/random.h:5:
-   In file included from arch/riscv/include/asm/timex.h:13:
-   In file included from arch/riscv/include/asm/clint.h:10:
-   In file included from arch/riscv/include/asm/mmio.h:16:
-   In file included from arch/riscv/include/asm/mmiowb.h:12:
->> include/linux/smp.h:72:48: error: use of undeclared identifier 'cpu_online_mask'
-      72 |         on_each_cpu_cond_mask(NULL, func, info, wait, cpu_online_mask);
-         |                                                       ^~~~~~~~~~~~~~~
-   include/linux/smp.h:106:53: error: use of undeclared identifier 'cpu_online_mask'
-     106 |         on_each_cpu_cond_mask(cond_func, func, info, wait, cpu_online_mask);
-         |                                                            ^~~~~~~~~~~~~~~
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                                      ^      ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:139:8: note: expanded from macro '_SIG_SET_BINOP'
-     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
-         |                      ^      ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-
-
-vim +/cpu_online_mask +72 include/linux/smp.h
-
-6f1f942cd5fbbe He Ying     2021-05-06  66  
-bff2dc42bcafdd David Daney 2013-09-11  67  /*
-bff2dc42bcafdd David Daney 2013-09-11  68   * Call a function on all processors
-bff2dc42bcafdd David Daney 2013-09-11  69   */
-a5aa5ce3005972 Nadav Amit  2021-02-20  70  static inline void on_each_cpu(smp_call_func_t func, void *info, int wait)
-a5aa5ce3005972 Nadav Amit  2021-02-20  71  {
-a5aa5ce3005972 Nadav Amit  2021-02-20 @72  	on_each_cpu_cond_mask(NULL, func, info, wait, cpu_online_mask);
-a5aa5ce3005972 Nadav Amit  2021-02-20  73  }
-a5aa5ce3005972 Nadav Amit  2021-02-20  74  
-
-:::::: The code at line 72 was first introduced by commit
-:::::: a5aa5ce300597224ec76dacc8e63ba3ad7a18bbd smp: Inline on_each_cpu_cond() and on_each_cpu()
-
-:::::: TO: Nadav Amit <namit@vmware.com>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+thanks,
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+heikki
