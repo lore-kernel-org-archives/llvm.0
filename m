@@ -1,98 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from www74.your-server.de (www74.your-server.de [213.133.104.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03699428482;
-	Thu,  7 May 2026 15:29:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C04E2701CB;
+	Thu,  7 May 2026 19:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778167756; cv=none; b=jO6utQGjX/98rGAfQJKh3QggCqnacaBsSfFHotGdCMFqV9Up4o+BcYsWNa5JV8RW689FX5kkV+38S6wVznoQjxzlqmWbjPrDn5z3kyVVcxN+kKMZ5UzdOU6NNfB2oG6kz5Omz2XiZT41Toffv235x0Xho2s/r3z6MUxF2RJbkto=
+	t=1778182309; cv=none; b=LOhDIFxzbKr82Vdac4yzV2bcmJVy0P4hkz5UMqAuCuBET6/pFTksGyGvLfKcTfXlwd/DLT8hUr3uxzJthObfMV06Wspfx+ycBqgH+SB9fhVha+twOdm4HIWO6R/4Nq1WoYvdnvAWGSzo5xB5Fb3+fPsw48E0IaGPjEI9Z2B/p2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778167756; c=relaxed/simple;
-	bh=tiM0Ivnmtg97+dsWlj/uSn9Z9wxgcewimRXiAVjKEbk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=hesLIPEwxuI1UHQlPYxMnHMQ1WmcPSifI/4zZT4kDDULSpdvNHlE7H5H3iCww+5SydLV7FL8m+YeSGs7ycOJUtA1DNjBycvRFsOdWrTVtWYMR5XljpUPct6y9IGzORr3dXIBPW71VJFC7K+0G4lJkOy7ZCUrXXRKdgVZNMcQCyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L6MDXQ4O; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778182309; c=relaxed/simple;
+	bh=iedx6vYTOt6EQ+8biHjoci8/Z1oBNpEcQ0mQDe3TfJg=;
+	h=Message-ID:Date:MIME-Version:Subject:References:To:From:
+	 In-Reply-To:Content-Type; b=Vx1S7dHDDBNJwEjQZvuieSM1n9pwrMIcuz0272/2Q0fsWeNf2gvMNPZ3FeerJagNqnZlCjY02TG787ilglJWdqCb/Qc9+NSu3ibBLAQSfNMbEzs4AZDdXoirtBBq31KsRulNnirqf1M9nFu/hmYzrwKqmxiwqqR7kR5h+l4jjMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=computerix.info; spf=pass smtp.mailfrom=computerix.info; dkim=pass (2048-bit key) header.d=computerix.info header.i=@computerix.info header.b=Xw51TXRF; arc=none smtp.client-ip=213.133.104.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=computerix.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=computerix.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L6MDXQ4O"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778167755; x=1809703755;
-  h=date:from:to:cc:subject:message-id;
-  bh=tiM0Ivnmtg97+dsWlj/uSn9Z9wxgcewimRXiAVjKEbk=;
-  b=L6MDXQ4ORefe4/px8SlU87eFVeBsd+ZCoo6+h+mBDM4CpL1OunW4Q15n
-   li1cdjaJdBGjrA5xYp1EGd9LOoWFYEdg+IqLProDfzBMD83owl/7dBoqG
-   V8CGZI26jqSv32dINZt6nY/jNgAYyow68xalhkAI/SID/D5NVnSxTPLCA
-   7o2lJ1jlkNQoQdZwgyJzTM2WSsZVwB88iFacmjOPk7S0nMrd4fpBeDqPd
-   O9mWZy/T/GIcnT3sDVb7Zya1NRo+SZ4UYNF/Um9C0p2rMTsHhyyUAz6P/
-   v+74ObRWqWVt07xuBMXZpjNz8zpIs3E38+RARzKSyuE6LeytEenB4B6HG
-   w==;
-X-CSE-ConnectionGUID: 7D1afWqET+ywY+0JyMCGdQ==
-X-CSE-MsgGUID: ytULVQalQ2COP85r4K/QVw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11779"; a="66649592"
-X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="66649592"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 08:29:14 -0700
-X-CSE-ConnectionGUID: CjdDRL+aQ4mwNwPrdcV//Q==
-X-CSE-MsgGUID: WtWJNzG4R4OLo6jKay4UbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="238292191"
-Received: from lkp-server01.sh.intel.com (HELO d6e19f2f5857) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 07 May 2026 08:29:13 -0700
-Received: from kbuild by d6e19f2f5857 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wL0f0-000000000Dd-4BbQ;
-	Thu, 07 May 2026 15:29:10 +0000
-Date: Thu, 07 May 2026 23:28:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fred Treven <fred.treven@cirrus.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [cirruslogic-drivers:v6.18-cs40l26 36/692]
- include/linux/mfd/cs40l26.h:38:10: fatal error:
- 'linux/firmware/cirrus/cl_dsp.h' file not found
-Message-ID: <202605072301.79xAQtDG-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=computerix.info header.i=@computerix.info header.b="Xw51TXRF"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=computerix.info; s=default2306; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:To:References:Subject:MIME-Version:Date:Message-ID:Sender:
+	Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=94wceeqnt7neE63vyZ5Q6+cgb/PI16Emv45q5Kr8B34=; b=Xw51TXRFxpiiaNa4e3ypVKyvTV
+	1vNul5wUOuE+zZ/J1TaNaL+DVE62an7G8BSqfK9HosK41susXnCkmKEZ7rpsay/ds4KflF/qepnel
+	V03U4lRwthP+RGlCllDQyIjtZzM/s5wy63HfFIJxSvq6pamAf/UNLwzYAFUICrUZubhC2YsQ8cFi0
+	rz3SUX00/2/b1i4ayVIg+D+gasfV03stR/JjyUNOsbUNWT+37iKwTfppU+tQOZWbaJF5ry94VCk/b
+	b2XPfm7/5xpi4T1TNO72g9hW6QRMu4GjXqMN802BJKDTThKs4BBqChgsLnM3JtbMYGTN0H+/mPo0j
+	oJH+O87w==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www74.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <klaus.kusche@computerix.info>)
+	id 1wL4Rd-0000mr-1b;
+	Thu, 07 May 2026 21:31:37 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <klaus.kusche@computerix.info>)
+	id 1wL4Rd-0000gn-0J;
+	Thu, 07 May 2026 21:31:37 +0200
+Message-ID: <98f7c318-c571-4204-a4df-f70221ef8c39@computerix.info>
+Date: Thu, 7 May 2026 21:31:36 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-
-tree:   https://github.com/CirrusLogic/linux-drivers v6.18-cs40l26
-head:   215fc5a27de5a5083e55bfb43ce5e3de6df52c93
-commit: affd439f8b33ecb889c674e08c4ab6a5e1ce37e2 [36/692] ASoC: cs40l26: Add CS40L26 Stub Codec Driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260507/202605072301.79xAQtDG-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260507/202605072301.79xAQtDG-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605072301.79xAQtDG-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from sound/soc/codecs/cs40l26.c:7:
->> include/linux/mfd/cs40l26.h:38:10: fatal error: 'linux/firmware/cirrus/cl_dsp.h' file not found
-      38 | #include <linux/firmware/cirrus/cl_dsp.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: linux 7.0.4 + clang 22.1.5 with thin or full lto still fails with
+ objtool error
+Content-Language: en-US
+References: <3138b173-cdad-4cb6-bb10-98d164513e6b@computerix.info>
+To: llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, peterz@infradead.org,
+ linux-kernel@vger.kernel.org
+From: Klaus Kusche <klaus.kusche@computerix.info>
+In-Reply-To: <3138b173-cdad-4cb6-bb10-98d164513e6b@computerix.info>
+X-Forwarded-Message-Id: <3138b173-cdad-4cb6-bb10-98d164513e6b@computerix.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27994/Thu May  7 08:29:28 2026)
 
 
-vim +38 include/linux/mfd/cs40l26.h
+The error I reported for linux 7.0.3 and clang 22.1.4 (see below)
+still occurs with 7.0.4 and 22.1.5:
+Compiling the kernel fails in the "LD vmlinux.o" step with
+"vmlinux.o: error: objtool: bad .discard.annotate_insn entry: 
+599 of type 8"
 
-351140f7d5d63ea Fred Treven 2020-05-28  37  
-3cae9b2fa130a1e Fred Treven 2021-01-07 @38  #include <linux/firmware/cirrus/cl_dsp.h>
-351140f7d5d63ea Fred Treven 2020-05-28  39  
+This time, I reproduced it with the vanilla kernel,
+not the gentoo kernel, so there is no gentoo involved in the build.
 
-:::::: The code at line 38 was first introduced by commit
-:::::: 3cae9b2fa130a1eb3fc597c2b32e0edaeda6ca00 input: cs40l26: Change include location of CL DSP
+It happens with both full LTO and thin LTO, only no LTO works.
 
-:::::: TO: Fred Treven <fred.treven@cirrus.com>
-:::::: CC: Fred Treven <ftreven@opensource.cirrus.com>
+My kernel config reproducing the error with vanilla 7.0.4 is in 
+https://bugzilla.kernel.org/show_bug.cgi?id=221460
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Klaus Kusche
+
+-------- Forwarded Message --------
+Subject: 7.0.3 with clang 22.1.4 and full lto: objtool error
+Date: Mon, 4 May 2026 20:46:50 +0200
+From: Klaus Kusche <klaus.kusche@computerix.info>
+To: linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>, peterz@infradead.org, Nathan Chancellor <nathan@kernel.org>
+
+Hello,
+
+with clang 22.1.4, I get an error in the "LD vmlinux.o" step
+(full lto):
+"objtool: bad .discard.annotate_insn entry: 609 of type 8"
+
+Same kernel & same config compiles and runs nicely with clang 21.1.8.
+
+I've attached the kernel config to
+https://bugzilla.kernel.org/show_bug.cgi?id=221460
