@@ -1,139 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCCC39EF27;
-	Thu,  7 May 2026 09:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B031239C631;
+	Thu,  7 May 2026 10:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778146733; cv=none; b=M9FxZqxW9g5dsqjhNgeginkdfVGEtUhi1xeULBxl7FADcc1oSvE3UPVsw/cNcTq01vC7LUvaT3p5D5T4oU+hqJE93rKssskEQ9BjUMMfhzl8/+oCNOdL4+JGqzZq8Wd5H6U18+JpGjeLHj/zkn1zhoS2g1Iy892qAgDZlcenl9w=
+	t=1778150592; cv=none; b=oNAUqsRtNC7FOODVCP6qsZBcCTfil/mJDwyUXhyyEekQlIjnCvS+jKbplgNyeE6hNXI2IHcXm7TBYZFoNXoBuOi/PqXVtLnCEGlgLmF1Ku4tWvbEh9k2BxkrlanxWtztxVA00EEppBnBtAef4PwLBNdJHUE5gGuLOnxMyNMzQXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778146733; c=relaxed/simple;
-	bh=DeehgTNF5Iahk7h3I13ggfT+xXDlph1I0HFCnVNDg0U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ew5yOfeHLVZSlEqxhsRFgvnJJ0kUoV7ZptnI3NnUTCOVtBtF5fW+gkhk0ethLnXHaBV/qDr9GdmHPfyGIpN6/avptxaGMl9Fw/PeVIPwlUNAqVuUeQ2b4uJx10CKSWipfW+ERtI154JW2yreeZC9fifxJlkolcFKthZ6DfkIOqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyO8gvHl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778150592; c=relaxed/simple;
+	bh=mKTCEYj8j65FjZvQC8rApCqQNvkpRKdJ/QeLDCo821c=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=qljjU7odpjp7WqX/gfv75rV7XHE/AGbnWoUw7d+DLODbZOT6nZZKW+VRTCTzSurUn6ew08KCW/owSP9Iely8wgHBdCws1EsNwwBp9b4JQ3OXJE5tX9o27ZXCtISevg6vl5aNpTOXk1L0Sp6H0Mu3qvwD+pZr/xh0MiFSIc23dac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IqsQl07f; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyO8gvHl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFC9C2BCB2;
-	Thu,  7 May 2026 09:38:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778146733;
-	bh=DeehgTNF5Iahk7h3I13ggfT+xXDlph1I0HFCnVNDg0U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XyO8gvHlTYz5Ac3kAslP2rYTLBXXjZBXfAg33vMz43SMC73uGVpdjA7lqedr4NbZS
-	 r4++aofHVyBihvJdp4Ii6SozxNddx4pbxHH/H5S66/G06kMHKw3BmnBO12S8t41QNT
-	 zbOCDErsoabOWxotbveYBwdayaw1VLGyYwMYsXwFRh0pmQVV2TRvS1QKRBgYQqlrTC
-	 BK447mA28HbOjWW6piRRG0Q7sfGLGC+m7J+JRqObbZizbiwjc1sH5W3jpNSM/m2o5L
-	 IZyp3aaYELVPdN50gxcjZiUr6jEwr8U6T6k5E5+60ZhibIwXnoDZS5mgWDHiSImqCG
-	 bEYnJFheuItMg==
-Date: Thu, 7 May 2026 17:38:43 +0800
-From: Nathan Chancellor <nathan@kernel.org>
-To: Marco Elver <elver@google.com>
-Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
-	Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Alexander Potapenko <glider@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
-	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>,
-	Florent Revest <revest@google.com>, Jann Horn <jannh@google.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matteo Rizzo <matteorizzo@google.com>,
-	GONG Ruiqi <gongruiqi1@huawei.com>
-Subject: Re: [PATCH v3 1/2] slab: support for compiler-assisted type-based
- slab cache partitioning
-Message-ID: <20260507093843.GA1826581@ax162>
-References: <20260424132427.2703076-1-elver@google.com>
- <6f2bd63a-dc02-4631-a3a5-7ec8e58a4a4e@kernel.org>
- <afkOMIPu1WNFE9MS@elver.google.com>
- <CANpmjNM261J5qefMvmUXWZGBVz-KBs7GkbpdNMfTOvNJ-=LiZQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IqsQl07f"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778150590; x=1809686590;
+  h=date:from:to:cc:subject:message-id;
+  bh=mKTCEYj8j65FjZvQC8rApCqQNvkpRKdJ/QeLDCo821c=;
+  b=IqsQl07fogJrH+QkZDs8hbwOBEaa90y57wkL4WR/8rJlgWRNngevMfCa
+   Qe8rte0jQmIafO8X5acSx9bgFf8PqejYk8HjEDGHTTjeHKHg4Cc2945Se
+   +ycci3irmDWmeqJI4sMwiZiDUOdHn2zd4fAeQ9G/2m8kkVP4Hyh6w0sXr
+   fyagRK7qtvb0DVr4jL83XobXqzvMfNj9Si4WJnDdUADTo7Dflt72TVpR4
+   d7zmnuPoJ7YJ8LiYoYVNAIZEIprwjrPTWEAW1JHHoRX4k45wAr2kPxEFd
+   3ILyaVPLGulPTa3C5L2DCcx2yJ9Sr1h7zCuj+O4ODN7d+CCSEyq7EnLIx
+   g==;
+X-CSE-ConnectionGUID: 1x+xhK/5SYKWcbZOWPCGWw==
+X-CSE-MsgGUID: 1A6Mk1skREuloXSFMzFtMQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="78948277"
+X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
+   d="scan'208";a="78948277"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 03:43:09 -0700
+X-CSE-ConnectionGUID: QZ2ksAdgRaG/BnUYUOvrjA==
+X-CSE-MsgGUID: M/7SF9gJSgeucn37n36/wA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
+   d="scan'208";a="241413805"
+Received: from lkp-server01.sh.intel.com (HELO 8365ac1094ea) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 07 May 2026 03:43:08 -0700
+Received: from kbuild by 8365ac1094ea with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wKwC9-000000000BR-10Mm;
+	Thu, 07 May 2026 10:43:05 +0000
+Date: Thu, 07 May 2026 18:42:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ljs:project/cow-context 1/18] kernel/fork.c:738:2: error:
+ call to undeclared function 'drop_cow_context'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202605071818.oG5849si-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNM261J5qefMvmUXWZGBVz-KBs7GkbpdNMfTOvNJ-=LiZQ@mail.gmail.com>
 
-On Wed, May 06, 2026 at 03:03:27PM +0200, Marco Elver wrote:
-> Bah, this is why it doesn't work:
-> 
-> >> drivers/gpu/drm/msm/msm_gpu.c:272:4: error: cannot jump from this indirect goto statement to one of its possible targets
->      272 |                         drm_exec_retry_on_contention(&exec);
->          |                         ^
->    include/drm/drm_exec.h:123:4: note: expanded from macro
-> 'drm_exec_retry_on_contention'
->      123 |                         goto *__drm_exec_retry_ptr;             \
->          |                         ^
->    drivers/gpu/drm/msm/msm_gpu.c:304:16: note: possible target of
-> indirect goto statement
->      304 |                 state->bos = kcalloc(submit->nr_bos,
->          |                              ^
->    include/linux/slab.h:1173:34: note: expanded from macro 'kcalloc'
->     1173 | #define kcalloc(n, size, flags)         kmalloc_array(n,
-> size, (flags) | __GFP_ZERO)
->          |                                         ^
->    include/linux/slab.h:1133:42: note: expanded from macro 'kmalloc_array'
->     1133 | #define kmalloc_array(...)
-> alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
->          |                                                             ^
->    include/linux/slab.h:1132:71: note: expanded from macro
-> 'kmalloc_array_noprof'
->     1132 | #define kmalloc_array_noprof(...)
-> _kmalloc_array_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
->          |
->                        ^
->    include/linux/slab.h:506:55: note: expanded from macro '__kmalloc_token'
->      506 | #define __kmalloc_token(...) ((kmalloc_token_t){ .v = _THIS_IP_ })
->          |                                                       ^
->    include/linux/instruction_pointer.h:10:41: note: expanded from
-> macro '_THIS_IP_'
->       10 | #define _THIS_IP_  ({ __label__ __here; __here: (unsigned
-> long)&&__here; })
->          |                                         ^
->    drivers/gpu/drm/msm/msm_gpu.c:304:16: note: jump enters a statement
-> expression
-> 
-> 
-> Apparently using _THIS_IP_ creates a possible indirect jump target,
-> but because it's in a statement expression, it's invalid, so the
-> compiler complains. This is obviously nonsense, because the actual
-> indirect jump in this gpu driver code would never jump to the
-> _THIS_IP_ __here label, but that's what it is.
-> 
-> Given this pre-existing issue, we probably need to continue using
-> _RET_IP_, as before. I tried to fix _THIS_IP_, but it's incredibly
-> brittle (e.g. __always_inline function returning address of label
-> doesn't work on Clang, but would on GCC).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ljs/linux.git project/cow-context
+head:   e02aa02fef8128743869032cb20d26f752cd9154
+commit: 1be9d553f4be97b754471cc04735f215e75c4bf2 [1/18] mm/rmap: add cow_context data structure and assign to mm
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260507/202605071818.oG5849si-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260507/202605071818.oG5849si-lkp@intel.com/reproduce)
 
-For what it's worth, both LLVM and GCC consider the generic version of
-_THIS_IP_ to be broken (even if it works currently), as the address of a
-label is only expected to be used with a computed goto (hence the clang
-error above, it just looks for possible computed goto targets):
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605071818.oG5849si-lkp@intel.com/
 
-  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=44298
-  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071
-  https://github.com/llvm/llvm-project/issues/138272
+All errors (new ones prefixed by >>):
+
+>> kernel/fork.c:738:2: error: call to undeclared function 'drop_cow_context'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     738 |         drop_cow_context(mm);
+         |         ^
+>> kernel/fork.c:1097:2: error: call to undeclared function 'mm_init_cow_context'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1097 |         mm_init_cow_context(mm);
+         |         ^
+   kernel/fork.c:1097:2: note: did you mean 'init_new_context'?
+   include/asm-generic/mmu_context.h:34:19: note: 'init_new_context' declared here
+      34 | static inline int init_new_context(struct task_struct *tsk,
+         |                   ^
+   2 errors generated.
+
+
+vim +/drop_cow_context +738 kernel/fork.c
+
+   714	
+   715	/*
+   716	 * Called when the last reference to the mm
+   717	 * is dropped: either by a lazy thread or by
+   718	 * mmput. Free the page directory and the mm.
+   719	 */
+   720	void __mmdrop(struct mm_struct *mm)
+   721	{
+   722		BUG_ON(mm == &init_mm);
+   723		WARN_ON_ONCE(mm == current->mm);
+   724	
+   725		/* Ensure no CPUs are using this as their lazy tlb mm */
+   726		cleanup_lazy_tlbs(mm);
+   727	
+   728		WARN_ON_ONCE(mm == current->active_mm);
+   729		mm_free_pgd(mm);
+   730		mm_free_id(mm);
+   731		destroy_context(mm);
+   732		mmu_notifier_subscriptions_destroy(mm);
+   733		check_mm(mm);
+   734		put_user_ns(mm->user_ns);
+   735		mm_pasid_drop(mm);
+   736		mm_destroy_cid(mm);
+   737		percpu_counter_destroy_many(mm->rss_stat, NR_MM_COUNTERS);
+ > 738		drop_cow_context(mm);
+   739	
+   740		free_mm(mm);
+   741	}
+   742	EXPORT_SYMBOL_GPL(__mmdrop);
+   743	
 
 -- 
-Cheers,
-Nathan
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
