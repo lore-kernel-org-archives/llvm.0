@@ -1,187 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3B0345CAE;
-	Thu,  7 May 2026 21:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E2A2F290E
+	for <llvm@lists.linux.dev>; Thu,  7 May 2026 23:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778190579; cv=none; b=hi3VDuO1rtBz8DwRUO8uegxF1KUZ0Ur+BoMOFHUCEZJzBtaLkB1PqZhyAPLjBvHnknOdw9GJB7WLK/a9aXP2J00mycW57e0H2r0dEBCqt1XMKsLu4cmW9vJNCOQXquvZrIPjSWlXcltjnC75ZPRn8gBHTzAJ0m46E23KKRM03AM=
+	t=1778196116; cv=none; b=SMJee1QTHaM7+1dkAX+Lo+Xabk++Itf4psL8xR/XcpSP0qO4961Ln7kFpRCZ2duoAofK/X9M9Bzref+/eXLkVQto0Qsbr5jX4sxnr2gyIQIPyh7M8o00pCNb+0IfcFVAAtbbMP/HgbneWr9b6RGJvlkXjfBCvN6fQ0Pm/ndTkh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778190579; c=relaxed/simple;
-	bh=vDhx+qTlEIGongxfTbCi7izCbN5cvEC0zYIQ5cbMuOs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UCqxAJUE5/GnUbw5866BYxcOlRtzLgH/H/HjSAJqjS2yKWr3MUbI83wIuj3AeO7keGOZa1Ihxulv9905jR+ask7Sp/hq40SUVPh0aytIDljlsVbBXt1DiwjVVw1yVMKss8mLYLIly++2ocmQMp2GMZ7/ZKlzsAQOZ9D7qd7Vy3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jwqqpn26; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778196116; c=relaxed/simple;
+	bh=/7jMOqiqfS5E2Aa8V7nTqrJGxlbfE7BVeWQEGpFRgbQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kt9zNKnkp6skqMyWhwvxUsMPJyOIckNwLL7RIkeY4lQiW/kcuv8abxdYdr7q2jfUjLHw17AVW/n4iYvfPwsdjDlNEGgcxJwf9J6/Lo8sG5GzEykoIWw5FXhSJrhhzZT8ERvGekSlFVY9c473Ds9hcs+1a2lJ2nCjPNrkqntWU0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cEi0Pd3s; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jwqqpn26"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A16F9C2BCB2;
-	Thu,  7 May 2026 21:49:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778190579;
-	bh=vDhx+qTlEIGongxfTbCi7izCbN5cvEC0zYIQ5cbMuOs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jwqqpn26rDsSqSQ6iSY7WfIk8u1SsmwHBzioFfRMvR4e9N6oP0FBidey1y2T+Lzxi
-	 O6rdnRlS24/l9Q7ZH/qS9m9frAolUlZBJs+LQp2AHV42DQS5hI3PQU/zs5tC44FF4s
-	 MI5GYeR+oxtqLILIScpQQjcmFsykVrvqH6P/4+AMmOssMqiHNk626tOQ1rUgJd5JnJ
-	 ubNV1WnfwHzwmSPIZ+ktI1V+E6asZCmNNF4lKVnYxzX/EIAgbCNNqPdWYgqfwbU/7U
-	 xyaqLgvGNw1n0oR4CiJ1jyRQpVIisSYe+NJBD03tsVHW2DsiqukQdCz2TH4yBbi07k
-	 +G3+tqU2LJypw==
-Date: Thu, 7 May 2026 23:49:20 +0200
-From: "Harry Yoo (Oracle)" <harry@kernel.org>
-To: Marco Elver <elver@google.com>
-Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@gentwo.org>, Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, David Hildenbrand <david@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Alexander Potapenko <glider@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com, 
-	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Florent Revest <revest@google.com>, Jann Horn <jannh@google.com>, KP Singh <kpsingh@kernel.org>, 
-	Matteo Rizzo <matteorizzo@google.com>, GONG Ruiqi <gongruiqi1@huawei.com>
-Subject: Re: [PATCH v3 1/2] slab: support for compiler-assisted type-based
- slab cache partitioning
-Message-ID: <afz7pZADZPD4mKJr@MacBook-Air.tail10959e.ts.net>
-References: <20260424132427.2703076-1-elver@google.com>
- <6f2bd63a-dc02-4631-a3a5-7ec8e58a4a4e@kernel.org>
- <afkOMIPu1WNFE9MS@elver.google.com>
- <CANpmjNM261J5qefMvmUXWZGBVz-KBs7GkbpdNMfTOvNJ-=LiZQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cEi0Pd3s"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2b458ca2296so9130485ad.0
+        for <llvm@lists.linux.dev>; Thu, 07 May 2026 16:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778196115; x=1778800915; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gqk0bhbr2l3f7IDwzLFxsnylMpESKM7ghHU7R8b35rk=;
+        b=cEi0Pd3sM4iXB8SZbXRUsoWSsYdOyv72DDQQKZE0S19AqOu91J67DznBiE6lsADSJE
+         NV+yQIryhdkirfDggvvalR/SKl7cWe9xaHnaki4OzqF9dBMF1ZByGwfuJHJGZUlozhuy
+         s0FvvQq1NATVA2gYsJp8rZVFYF3b6HVuPgWtc1GhNvcinULRE5wMtsF63w9z2JPYM7E0
+         PsCj1QcV4h5O2qwny1fD/PufQf4PXdB3/IfXFA7DqBS7OlJKWVcne0KWGaoeoEI+Ijt2
+         e+36gms3Sl/uwiyHafKsKwgpvsUVuHPQSRPu4NMYEON0WeR2Vx/XadkM6xPeaw9qKVV5
+         H73A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778196115; x=1778800915;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gqk0bhbr2l3f7IDwzLFxsnylMpESKM7ghHU7R8b35rk=;
+        b=LuiU/NKR9fd1Wort6bx7gkl5m0ls3vzWnr4hUhm8TXXLrrh6kpPPzpmQaHfGNQsuzZ
+         QaTX3AulIwBiFWKjDlp5Jh0H7isQfGBtkReJpJQCMnG5QRLNR5nZ4cN77GeINRkDY2h8
+         B+/cPw9ae24DADI6kN++IJUin6hUQgMZSfcBL6dPDKQPfbQmFRjEu2SBZe6auHugJhPh
+         H7+CDLsYGQyCJEBIPKaw0lJBPOte25vsVx2m5YbLrnxLFPyKUQXCkbceJ1MUUC0nBMBN
+         Lut6AoQlD9bVSkB73av60XId9zepzgvWUJlP3GpYGoX7Yhs3phvJKn50fO/pU4dsV+cI
+         mnkg==
+X-Forwarded-Encrypted: i=1; AFNElJ9Npcb20jFXjLRZt8V4ZMzES6Cwkaer9HgaSvQWCdcbhX3KZCS2AJLHY47xKYzAKcUHJSVi@lists.linux.dev
+X-Gm-Message-State: AOJu0YxHPdDfHoGbf6K4y2CrP+OP2M+BYTypUcyrADFRpthhhbUH1nAJ
+	wa5TZ2zLeeaZ5knHuD5ynuw7GdBB9H47oS+Kr573kgOSM0VfTqlTk+IQ
+X-Gm-Gg: Acq92OEIf7ReOAwa6h53ONg8UXs7UdRwHgkZI3hq23YT5Cjg4ES0QLLOOOxMZM3b+U3
+	joWuo1jxTbSKmYu5M7G9m++zCNwtfbgL3CkaiVEIBz5BrGI9sGDHyl4HFmEJmHic3ZB6WKCHPoX
+	Rad/FaFaX6VHbeyiVmphAzPAyiYROtVR3IQ9HMmH73PMvGl6MslNdxQvCRFWl4ucvsTBwkKQnze
+	brxWzpyJL36KOnSJUWduVFAa2EbypSCAle8Zihl7NOR4ONZ5i3vogg8woNQF7BKjHprUm6rd6+n
+	rMETACvxSik3K//EymhhO2p8zIGrneKmG0AbzpmEbmEOULGLTzCpJ4x7KQmYAyjkj8fLAgtKXJJ
+	bR7RwdrxMFxWWIYmtLudESpWUzn9FcaBLqTu0A4S5CDcErUEjkfJd/Og63qVVFrz/dMehSnlMXF
+	0JYsdV+mCFOyZ/fQ1S5x2XAeG9egiD4xTRERnU+Jvmle0P57cR4lIkNMPKtr1WjnopEtDZYlct/
+	evKodNe++dUC/SlB4L1b8rsqm54L9kiRXU=
+X-Received: by 2002:a17:903:28c:b0:2b2:45b7:306e with SMTP id d9443c01a7336-2baf0cf2c98mr2125795ad.3.1778196110299;
+        Thu, 07 May 2026 16:21:50 -0700 (PDT)
+Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bae752f766sm9064475ad.2.2026.05.07.16.21.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2026 16:21:49 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-sound@vger.kernel.org
+Cc: Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT),
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH] ASoC: tegra: tegra210-mixer: Use div_u64() for 64-bit division
+Date: Thu,  7 May 2026 16:21:31 -0700
+Message-ID: <20260507232131.438589-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNM261J5qefMvmUXWZGBVz-KBs7GkbpdNMfTOvNJ-=LiZQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 06, 2026 at 03:03:27PM +0100, Marco Elver wrote:
-> On Mon, 4 May 2026 at 23:23, Marco Elver <elver@google.com> wrote:
-> > On Thu, Apr 30, 2026 at 03:03PM +0200, Vlastimil Babka (SUSE) wrote:
-> > > On 4/24/26 15:24, Marco Elver wrote:
-> > > > @@ -948,14 +978,16 @@ static __always_inline __alloc_size(1) void *kmalloc_noprof(size_t size, gfp_t f
-> > > >
-> > > >             index = kmalloc_index(size);
-> > > >             return __kmalloc_cache_noprof(
-> > > > -                           kmalloc_caches[kmalloc_type(flags, _RET_IP_)][index],
-> > > > +                           kmalloc_caches[kmalloc_type(flags, token)][index],
-> > >
-> > > While reviewing this, it occured to me we might have been using _RET_IP_
-> > > here in a suboptimal way ever since this was introduced. Since this is all
-> > > inlined, shouldn't have we been using _THIS_IP_ to really randomize using
-> > > the kmalloc() callsite, and not its parent?
-> > >
-> > > And after this patch, we get the token passed to _kmalloc_noprof()...
-> > >
-> > > >                             flags, size);
-> > > >     }
-> > > > -   return __kmalloc_noprof(size, flags);
-> > > > +   return __kmalloc_noprof(PASS_KMALLOC_PARAMS(size, NULL, token), flags);
-> > >
-> > > ... and used also here for the non-constant-size, where previously
-> > > __kmalloc_noprof() (not inline function) would correctly use _RET_IP_ on its
-> > > own ...
-> > >
-> > > >  }
-> > > > +#define kmalloc_noprof(...)                        _kmalloc_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
-> > >
-> > > ... and the token comes from here. With random partitioning that's
-> > > #define __kmalloc_token(...) ((kmalloc_token_t){ .v = _RET_IP_ })
-> > >
-> > > so that AFAIK makes the situation worse as now the cases without constant
-> > > size also start randomizing by the parent callsite and not the kmalloc callsite.
-> > >
-> > > But there are many users of __kmalloc_token() and maybe some are corrent in
-> > > using _RET_IP_, I haven't checked, maybe we'll need two variants, or further
-> > > change things around.
-> >
-> > Good catch. I don't think we need multiple variants (otherwise the TYPED
-> > variant would be broken) - we're moving token generation to the callers
-> > (not even inlined anymore) with all this macro magic.
-> >
-> > I think this is all we need:
-> >
-> > --- a/include/linux/slab.h
-> > +++ b/include/linux/slab.h
-> > @@ -503,7 +503,7 @@ int kmem_cache_shrink(struct kmem_cache *s);
-> >  typedef struct { unsigned long v; } kmalloc_token_t;
-> >  #ifdef CONFIG_KMALLOC_PARTITION_RANDOM
-> >  extern unsigned long random_kmalloc_seed;
-> > -#define __kmalloc_token(...) ((kmalloc_token_t){ .v = _RET_IP_ })
-> > +#define __kmalloc_token(...) ((kmalloc_token_t){ .v = _THIS_IP_ })
-> >  #elif defined(CONFIG_KMALLOC_PARTITION_TYPED)
-> >  #define __kmalloc_token(...) ((kmalloc_token_t){ .v = __builtin_infer_alloc_token(__VA_ARGS__) })
-> >  #endif
-> >
-> > Plus a paragraph in the commit message.  Let me add that.
+A MIPS allmodconfig build with LLVM fails during modpost:
 
-Err, I was like "yes, this is the way to go!"
+  ERROR: modpost: "__udivdi3"
+  [sound/soc/tegra/snd-soc-tegra210-mixer.ko] undefined!
 
-and then...
+tegra210_mixer_configure_gain() divides a 64-bit BIT_ULL() value by the
+fade duration. On 32-bit MIPS, clang emits a call to __udivdi3 for that
+plain C division, but that compiler helper is not exported to modules.
 
-> Bah, this is why it doesn't work:
-> 
-> >> drivers/gpu/drm/msm/msm_gpu.c:272:4: error: cannot jump from this indirect goto statement to one of its possible targets
->      272 |                         drm_exec_retry_on_contention(&exec);
->          |                         ^
->    include/drm/drm_exec.h:123:4: note: expanded from macro
-> 'drm_exec_retry_on_contention'
->      123 |                         goto *__drm_exec_retry_ptr;             \
->          |                         ^
->    drivers/gpu/drm/msm/msm_gpu.c:304:16: note: possible target of
-> indirect goto statement
->      304 |                 state->bos = kcalloc(submit->nr_bos,
->          |                              ^
->    include/linux/slab.h:1173:34: note: expanded from macro 'kcalloc'
->     1173 | #define kcalloc(n, size, flags)         kmalloc_array(n,
-> size, (flags) | __GFP_ZERO)
->          |                                         ^
->    include/linux/slab.h:1133:42: note: expanded from macro 'kmalloc_array'
->     1133 | #define kmalloc_array(...)
-> alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
->          |                                                             ^
->    include/linux/slab.h:1132:71: note: expanded from macro
-> 'kmalloc_array_noprof'
->     1132 | #define kmalloc_array_noprof(...)
-> _kmalloc_array_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
->          |
->                        ^
->    include/linux/slab.h:506:55: note: expanded from macro '__kmalloc_token'
->      506 | #define __kmalloc_token(...) ((kmalloc_token_t){ .v = _THIS_IP_ })
->          |                                                       ^
->    include/linux/instruction_pointer.h:10:41: note: expanded from
-> macro '_THIS_IP_'
->       10 | #define _THIS_IP_  ({ __label__ __here; __here: (unsigned
-> long)&&__here; })
->          |                                         ^
->    drivers/gpu/drm/msm/msm_gpu.c:304:16: note: jump enters a statement
-> expression
-> 
-> Apparently using _THIS_IP_ creates a possible indirect jump target,
+Use div_u64() for the inverse duration calculation so the driver uses the
+kernel's 64-bit division helper instead of emitting a compiler runtime
+call.
 
-Didn't even realize people use indirect gotos, heh :)
+Assisted-by: Codex:GPT-5.5
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ sound/soc/tegra/tegra210_mixer.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> but because it's in a statement expression, it's invalid, so the
-> compiler complains. This is obviously nonsense, because the actual
-> indirect jump in this gpu driver code would never jump to the
-> _THIS_IP_ __here label, but that's what it is.
-
-Yeah, I guess it's quite tricky to handle when you don't know where
-it'd jump to as it's an indirect one, and there's an invalid jump
-label...
-
-> Given this pre-existing issue, we probably need to continue using
-> _RET_IP_, as before.
-
-Agreed!
-
+diff --git a/sound/soc/tegra/tegra210_mixer.c b/sound/soc/tegra/tegra210_mixer.c
+index f05617b5f433..bfdd457f740c 100644
+--- a/sound/soc/tegra/tegra210_mixer.c
++++ b/sound/soc/tegra/tegra210_mixer.c
+@@ -7,6 +7,7 @@
+ #include <linux/clk.h>
+ #include <linux/device.h>
+ #include <linux/io.h>
++#include <linux/math64.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+@@ -157,8 +158,8 @@ static int tegra210_mixer_configure_gain(struct snd_soc_component *cmpnt,
+ 			if (i == DURATION_N3_ID)
+ 				val = mixer->duration[id];
+ 			else if (i == DURATION_INV_N3_ID)
+-				val = (u32)(BIT_ULL(31 + TEGRA210_MIXER_PRESCALAR) /
+-					    mixer->duration[id]);
++				val = div_u64(BIT_ULL(31 + TEGRA210_MIXER_PRESCALAR),
++					      mixer->duration[id]);
+ 			else
+ 				val = gain_params.duration[i];
+ 		}
 -- 
-Cheers,
-Harry / Hyeonggon
+2.54.0
+
