@@ -1,123 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9114E37BE8A;
-	Thu,  7 May 2026 09:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCCC39EF27;
+	Thu,  7 May 2026 09:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778146199; cv=none; b=HINRrVhE+uUzBQlBpgyMk6yfTsPknI6ubL2FLAua+NxkZPT2DMGZMeP4yu+Yffxg9mn5grNUCWw+5CEFCmt5eIGFyy6lOnWyz1BSgGrvppOJ52bLaJ3cQFm7NbcV4XPLJtlHKWAXXGYj1y2kmrSjhSDUhaEVTr2FxZNHTzat18o=
+	t=1778146733; cv=none; b=M9FxZqxW9g5dsqjhNgeginkdfVGEtUhi1xeULBxl7FADcc1oSvE3UPVsw/cNcTq01vC7LUvaT3p5D5T4oU+hqJE93rKssskEQ9BjUMMfhzl8/+oCNOdL4+JGqzZq8Wd5H6U18+JpGjeLHj/zkn1zhoS2g1Iy892qAgDZlcenl9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778146199; c=relaxed/simple;
-	bh=E6fNTky40pyAiAoFNGtGajY23Occazt372McMKoxIk4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MvZvHoiRhIpkSPMHPAUXzeWtKoJhxQHnmUNoZuFFjY1MA24faargzskYWfqzzBvuJIGdRgeVQH8rnLnQjiOKBb7g3c6tAMGfDP19UaP2IJmuaXzzqMgMkn7Zzh/hoiv1Le7P0uAzApQGaitZkpamhRp/V7Bcr3mBejs02dHB8yU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LO2HYIhX; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778146733; c=relaxed/simple;
+	bh=DeehgTNF5Iahk7h3I13ggfT+xXDlph1I0HFCnVNDg0U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ew5yOfeHLVZSlEqxhsRFgvnJJ0kUoV7ZptnI3NnUTCOVtBtF5fW+gkhk0ethLnXHaBV/qDr9GdmHPfyGIpN6/avptxaGMl9Fw/PeVIPwlUNAqVuUeQ2b4uJx10CKSWipfW+ERtI154JW2yreeZC9fifxJlkolcFKthZ6DfkIOqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyO8gvHl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LO2HYIhX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778146197; x=1809682197;
-  h=date:from:to:cc:subject:message-id;
-  bh=E6fNTky40pyAiAoFNGtGajY23Occazt372McMKoxIk4=;
-  b=LO2HYIhX1VHGEKowdof30jxy/zyF68tZLuMSxXaclXTPDVnxLjEIV+LH
-   DefVNAJZpKXOy359pJmBJTjk0cf5OX9uQzljS1/LN7Kf5gQ9S1sc+6qM+
-   nKRW2xbsD3Dpn7r5tLFGaP5mv5sMIxqilkuMyQZ6ckueKJi8WN59fyVLy
-   xaKoJY0cmXgiJXibi+O+nd2dWDh1C0mU/TcVmxN2ohYw8+fy7uA+gLw2F
-   nP8bG1cjSKO1DCLRTFsQc/Eerfylq/Rf/E5uquRID1ijy4hl5k2ZlXcVx
-   CP+egHx12NaAkGTlWKmCf2fmsCpvKtyLs9OnkpIL6ipF37xI2T6aI2tfY
-   g==;
-X-CSE-ConnectionGUID: AA+bgFL3SAaMVd4Ecmbhvg==
-X-CSE-MsgGUID: 58f1ZfiUT6uGHgE2VTNWcA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="78241428"
-X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="78241428"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 02:29:57 -0700
-X-CSE-ConnectionGUID: 9nzPgsimThSZq4pDnMbK7A==
-X-CSE-MsgGUID: kWGwmICUQIKZzudwpov1bg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
-   d="scan'208";a="232050929"
-Received: from lkp-server01.sh.intel.com (HELO 8365ac1094ea) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 07 May 2026 02:29:56 -0700
-Received: from kbuild by 8365ac1094ea with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wKv3J-0000000009P-2Cl7;
-	Thu, 07 May 2026 09:29:53 +0000
-Date: Thu, 07 May 2026 17:28:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ljs:project/cow-context 17/18] mm/page_idle.c:105:16:
- error: use of undeclared identifier 'folio_lock_anon_vma_read'
-Message-ID: <202605071744.yAZ3Fsvu-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyO8gvHl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFC9C2BCB2;
+	Thu,  7 May 2026 09:38:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778146733;
+	bh=DeehgTNF5Iahk7h3I13ggfT+xXDlph1I0HFCnVNDg0U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XyO8gvHlTYz5Ac3kAslP2rYTLBXXjZBXfAg33vMz43SMC73uGVpdjA7lqedr4NbZS
+	 r4++aofHVyBihvJdp4Ii6SozxNddx4pbxHH/H5S66/G06kMHKw3BmnBO12S8t41QNT
+	 zbOCDErsoabOWxotbveYBwdayaw1VLGyYwMYsXwFRh0pmQVV2TRvS1QKRBgYQqlrTC
+	 BK447mA28HbOjWW6piRRG0Q7sfGLGC+m7J+JRqObbZizbiwjc1sH5W3jpNSM/m2o5L
+	 IZyp3aaYELVPdN50gxcjZiUr6jEwr8U6T6k5E5+60ZhibIwXnoDZS5mgWDHiSImqCG
+	 bEYnJFheuItMg==
+Date: Thu, 7 May 2026 17:38:43 +0800
+From: Nathan Chancellor <nathan@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+	Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Alexander Potapenko <glider@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
+	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>,
+	Florent Revest <revest@google.com>, Jann Horn <jannh@google.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matteo Rizzo <matteorizzo@google.com>,
+	GONG Ruiqi <gongruiqi1@huawei.com>
+Subject: Re: [PATCH v3 1/2] slab: support for compiler-assisted type-based
+ slab cache partitioning
+Message-ID: <20260507093843.GA1826581@ax162>
+References: <20260424132427.2703076-1-elver@google.com>
+ <6f2bd63a-dc02-4631-a3a5-7ec8e58a4a4e@kernel.org>
+ <afkOMIPu1WNFE9MS@elver.google.com>
+ <CANpmjNM261J5qefMvmUXWZGBVz-KBs7GkbpdNMfTOvNJ-=LiZQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNM261J5qefMvmUXWZGBVz-KBs7GkbpdNMfTOvNJ-=LiZQ@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ljs/linux.git project/cow-context
-head:   e02aa02fef8128743869032cb20d26f752cd9154
-commit: d91a1a12c5871a70ef97dc4725f0ca758f210524 [17/18] HACK, tbh: mm: add pure CoW context mode
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260507/202605071744.yAZ3Fsvu-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260507/202605071744.yAZ3Fsvu-lkp@intel.com/reproduce)
+On Wed, May 06, 2026 at 03:03:27PM +0200, Marco Elver wrote:
+> Bah, this is why it doesn't work:
+> 
+> >> drivers/gpu/drm/msm/msm_gpu.c:272:4: error: cannot jump from this indirect goto statement to one of its possible targets
+>      272 |                         drm_exec_retry_on_contention(&exec);
+>          |                         ^
+>    include/drm/drm_exec.h:123:4: note: expanded from macro
+> 'drm_exec_retry_on_contention'
+>      123 |                         goto *__drm_exec_retry_ptr;             \
+>          |                         ^
+>    drivers/gpu/drm/msm/msm_gpu.c:304:16: note: possible target of
+> indirect goto statement
+>      304 |                 state->bos = kcalloc(submit->nr_bos,
+>          |                              ^
+>    include/linux/slab.h:1173:34: note: expanded from macro 'kcalloc'
+>     1173 | #define kcalloc(n, size, flags)         kmalloc_array(n,
+> size, (flags) | __GFP_ZERO)
+>          |                                         ^
+>    include/linux/slab.h:1133:42: note: expanded from macro 'kmalloc_array'
+>     1133 | #define kmalloc_array(...)
+> alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
+>          |                                                             ^
+>    include/linux/slab.h:1132:71: note: expanded from macro
+> 'kmalloc_array_noprof'
+>     1132 | #define kmalloc_array_noprof(...)
+> _kmalloc_array_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
+>          |
+>                        ^
+>    include/linux/slab.h:506:55: note: expanded from macro '__kmalloc_token'
+>      506 | #define __kmalloc_token(...) ((kmalloc_token_t){ .v = _THIS_IP_ })
+>          |                                                       ^
+>    include/linux/instruction_pointer.h:10:41: note: expanded from
+> macro '_THIS_IP_'
+>       10 | #define _THIS_IP_  ({ __label__ __here; __here: (unsigned
+> long)&&__here; })
+>          |                                         ^
+>    drivers/gpu/drm/msm/msm_gpu.c:304:16: note: jump enters a statement
+> expression
+> 
+> 
+> Apparently using _THIS_IP_ creates a possible indirect jump target,
+> but because it's in a statement expression, it's invalid, so the
+> compiler complains. This is obviously nonsense, because the actual
+> indirect jump in this gpu driver code would never jump to the
+> _THIS_IP_ __here label, but that's what it is.
+> 
+> Given this pre-existing issue, we probably need to continue using
+> _RET_IP_, as before. I tried to fix _THIS_IP_, but it's incredibly
+> brittle (e.g. __always_inline function returning address of label
+> doesn't work on Clang, but would on GCC).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605071744.yAZ3Fsvu-lkp@intel.com/
+For what it's worth, both LLVM and GCC consider the generic version of
+_THIS_IP_ to be broken (even if it works currently), as the address of a
+label is only expected to be used with a computed goto (hence the clang
+error above, it just looks for possible computed goto targets):
 
-All errors (new ones prefixed by >>):
-
->> mm/page_idle.c:105:16: error: use of undeclared identifier 'folio_lock_anon_vma_read'
-     105 |                 .anon_lock = folio_lock_anon_vma_read,
-         |                              ^
-   1 error generated.
---
->> mm/damon/ops-common.c:175:16: error: use of undeclared identifier 'folio_lock_anon_vma_read'
-     175 |                 .anon_lock = folio_lock_anon_vma_read,
-         |                              ^
-   mm/damon/ops-common.c:239:16: error: use of undeclared identifier 'folio_lock_anon_vma_read'
-     239 |                 .anon_lock = folio_lock_anon_vma_read,
-         |                              ^
-   2 errors generated.
-
-
-vim +/folio_lock_anon_vma_read +105 mm/page_idle.c
-
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   96  
-5acc17fd35e627 Kefeng Wang             2022-12-30   97  static void page_idle_clear_pte_refs(struct folio *folio)
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   98  {
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09   99  	/*
-6d4675e6013578 Minchan Kim             2022-05-19  100  	 * Since rwc.try_lock is unused, rwc is effectively immutable, so we
-6d4675e6013578 Minchan Kim             2022-05-19  101  	 * can make it static to save some cycles and stack.
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  102  	 */
-6d4675e6013578 Minchan Kim             2022-05-19  103  	static struct rmap_walk_control rwc = {
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  104  		.rmap_one = page_idle_clear_pte_refs_one,
-2f031c6f042cb8 Matthew Wilcox (Oracle  2022-01-29 @105) 		.anon_lock = folio_lock_anon_vma_read,
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  106  	};
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  107  
-4aed23a2f8aaaa Matthew Wilcox (Oracle  2022-01-29  108) 	if (!folio_mapped(folio) || !folio_raw_mapping(folio))
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  109  		return;
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  110  
-95b34d66480bbc Lokesh Gidra            2025-09-23  111  	if (!folio_trylock(folio))
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  112  		return;
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  113  
-84fbbe21894bb9 Matthew Wilcox (Oracle  2022-01-29  114) 	rmap_walk(folio, &rwc);
-4aed23a2f8aaaa Matthew Wilcox (Oracle  2022-01-29  115) 	folio_unlock(folio);
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  116  }
-33c3fc71c8cfa3 Vladimir Davydov        2015-09-09  117  
-
-:::::: The code at line 105 was first introduced by commit
-:::::: 2f031c6f042cb8a9b221a8b6b80e69de5170f830 mm/rmap: Convert rmap_walk() to take a folio
-
-:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
-:::::: CC: Matthew Wilcox (Oracle) <willy@infradead.org>
+  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=44298
+  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071
+  https://github.com/llvm/llvm-project/issues/138272
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
