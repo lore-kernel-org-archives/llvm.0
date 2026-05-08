@@ -1,62 +1,62 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4997310F1
-	for <llvm@lists.linux.dev>; Fri,  8 May 2026 00:08:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9001F4176
+	for <llvm@lists.linux.dev>; Fri,  8 May 2026 02:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778198937; cv=none; b=VBPkHwSBghhV5oMPpzCwWnKRKN/yYlA29ot0jM4JFpKo/lB13DDDmfJc8icYQJOhR3NW9dSfZOiRGi8RyeO48RyCu1szq450Kyymq29EPawe3SYqyGPB+u57CmHivbEzjwdZcWUkn8b2vGdBywo/pSbQtUxzOd/bgqxJl3MaK7k=
+	t=1778206299; cv=none; b=EFrfca8Et0hCAkjBmFFaBl/fZKZvbCyz40RcliZmWEfikGGTXDenJsBG5BPiL+ZBYX6dcSWP8FbuoudYQTGj556CJ0qdjzvnK2C0lU647ThyLAMUTLLeuYITW259TZ3ktqIIfueA20ONoBVIF6cY6ZdRE3tEmHFD3yZ+lUE2ogA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778198937; c=relaxed/simple;
-	bh=S8BZCxovO9b7N1yNjqQbGm2G8ks95+KJFQvDYlcZ6nI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QuS9lpgHoJMkOCczMotTW+r+tmLJ13ru7U3R3Fogvq7lcd9Q6W2WtNqiAU5QMKrpn/wpd7DhvKaFsLF32rYXJ4R7HXK5pNtQyqpoBAFUBPNJsxC47z3cQcRF6h4C62sO1S/ib2pddeB5jXlhP+6PXVugiWFBLAQ+fLIIhI7DGJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J63h7DDc; arc=none smtp.client-ip=209.85.219.46
+	s=arc-20240116; t=1778206299; c=relaxed/simple;
+	bh=zcuDlvfTQjwKaid2r4G4QhvfGnrUZyPpYyuO+iIQo/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tSDmyYt7Wcbedu3b1z6BIQn9Rm2BluBfSaKTHb1lSJXZJWdD7qLHVWGNihUcKCXXoNO5NsywF1QVtwC1+5ezgBD5MtcMC21ZwFEytfatR2GPQPSZpXKYN+UEYI/zGnRTEFKgb7FTlk8UQrsLtnyCXrW6CxzR0/r1L/tGTIDIUM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eS6iMOFN; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J63h7DDc"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-8acb3daf2aaso18880916d6.0
-        for <llvm@lists.linux.dev>; Thu, 07 May 2026 17:08:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eS6iMOFN"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2b4650d5f5cso5591425ad.0
+        for <llvm@lists.linux.dev>; Thu, 07 May 2026 19:11:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778198934; x=1778803734; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1778206298; x=1778811098; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JiMsd4QNZdhgq2TeK7b6UP9/6dhJg0SmZyNtOPTS9/w=;
-        b=J63h7DDc9hjrbv4UPIMdM41KI/fcYciAcG+wt01BImpvuO/tOJgHz/xm6i4xmSCoAH
-         puS9OQrkLwKhn2o812EpuKyLkcDExsJvHtG3jHYwqRZ1Wbr54JIl1LbT0SALeovVsAAA
-         sHgkNBc09I2TB+Qh3T7HX18/rDfVvMRJ5TFzjDXEvU4mz89FRqxZadO5z6YXrvGuG1qu
-         dz8H/R0sDepL4krvHsjoYa185bH05HQCRQb1fUwffedbaGIhQEquXH7rE9bV91uuh3vd
-         UE/t5PzxQUrldd2rETmMvq51ZXHCdP1bWSJYALaW0kcXqlgStjeZww+KjTfxgEsULaOD
-         YV5A==
+        bh=Kjl5jAW0z3TEk+mYG+Ravixfsv3DlsZiiyMW4sxaDzQ=;
+        b=eS6iMOFNurE26rU1ZgTV7tEfxKK5b/33F/KIkQebhKdO/bV2aDHyS2uIqkVaBVNJLI
+         KoGI41BCJtJg3QJOf1fzdDuHyWs8A50ZIC7SVOTqpWIFlw8e6rYTAH26Fk69IlNQcJ8q
+         GXbTwVVlcqvwEPikAAhJAkvc9cRDGDbZO1GUdq3FecWoWmiceTYqCiLx2ykljVT++4P9
+         SkaJbnqeQSS3/dxvmABK8N5OmNzbnS862QFCI70RuLjJeOd3L3g1PcLl8fIaRH+gf7tj
+         TgKz6SLuuYyrCpqa4SnTaLK5yfc9wyayKHy0QlEUsKyBGjnUqHBgxyGc/A6fm+7MHJQS
+         L8cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778198934; x=1778803734;
+        d=1e100.net; s=20251104; t=1778206298; x=1778811098;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JiMsd4QNZdhgq2TeK7b6UP9/6dhJg0SmZyNtOPTS9/w=;
-        b=qFHkLw7bTnsc8FHXqWKyWF1TUU4yOfNO0tM59JgWujkRWq5HBYq4/iHS3vgxdMR8r3
-         OKJ+JEyG9hYbZ86kGWFkWNClNkSlPzuaHx48NnpJHi5ar9OffIoNIOuzfzkmqjT4/wdh
-         wZtJq/OI0fpo33tkPJsZq26WOvflMdbQqnPXpjbkLdeAt1yFSTcg2gCumpYAYI8hgrJt
-         kIIIeCMfZ0SdWjOBre9EZKHJO9Kjbls69HCcAdsSmTfWAyecxYqtztFuEi/X8Y6PNHQD
-         HJA0isus/D7HWCpJd+NZ++W1Y7HKP7sJoG0A97SfrkWWXK7z7uCioJ3Wn1xypIb9v9se
-         CTUA==
-X-Forwarded-Encrypted: i=1; AFNElJ8KDwHWL2aGjC2UGPKlN3ZbNYGQuEoSx6g5odOioFlXE9FLVW30ChPZp3D6NHwe2hfYfnxa@lists.linux.dev
-X-Gm-Message-State: AOJu0YytLSvBTh9OFrE5lMWfkoSXhOhABoTp+TWHzzwm41CZOI5pWcxg
-	y40q37k2nLVlObDmX2eljYJeTP5OyxSvANIBD3RATurBLGQOA1kOyLY2
-X-Gm-Gg: Acq92OHUskXhYPCArjUwwGk0+dDjGv+707DQX4h1gh/KlnMmAyyugYx7lU0pLLl5Elh
-	nfMsNvKZVJrrXhGwkvdL71PUnw7yMSu+J+3eJs3OrCZlNIDo6/Y5yq4gDrMoONue0xAr59Zxb/t
-	BwuLVZwXuOxSH81yiZDUwFMfo9+Po8g2qO6CDO3B++zTv8KFZpLx6b9ZNWahkOy8twG2IfBt4cW
-	4rrJc+OzYYlDOLlfWXUlVjxsdcpWodwDzIngv7l90BhNOPofNX/g2/rgLsrOMYLg65Frv8rQmUi
-	cVBe9th8ks+Uo5hPRKhJYZ/icFsFzqoBCTtaqw0OFArlwEMNZlbKwYym/+MY8zK4Psq8tcBfCFy
-	S4XbtvpvEP0tiaShRVnnuOQAQFWJryeov/+43WM1HXXBt1xdxu6+fjqxloBiY2fQghxK86/MT1o
-	o5+n2zMxO+kDw4fe0jNOuT2PV6KxDHjUH3xO2h837n9+idwLcLcTjcWK/Msc0Nvde37w1VWTG8a
-	JTb0AudoFqgWOAvBltMjpDYmJviO9/xilqchFleUkTxsQ==
-X-Received: by 2002:a05:6214:2424:b0:89c:e2b4:4ee9 with SMTP id 6a1803df08f44-8bc462f7c01mr163074446d6.46.1778198934362;
-        Thu, 07 May 2026 17:08:54 -0700 (PDT)
+        bh=Kjl5jAW0z3TEk+mYG+Ravixfsv3DlsZiiyMW4sxaDzQ=;
+        b=dkvl9LKNhVrPVWb8uKvVRnJsvVOmp1o6xrmPzFV2Zh7t6iMjhhiEsxjN4xDPzAJ6CC
+         a+/d/8hzaoa1ZpG53OvxtxdkkQWVTDWSaYMlhotEBD6KTyOE1WtET/jWwVK2U0YsFrgA
+         naRsd1rS6Hovg8cUAYfSd1BwOVHrJdMgXJ/uVXd/ljy0y+hqKbz6zm3N5VCTwK27gwNq
+         csZTdXfWhzeiCkJJsmwpTjTH9a5QenFzTzoda9/jOsYDdsKydaZ0zdeyF0mNiQKX0xAw
+         5Ozh0cuc+7CE4/rE10iVL+0bS20F80WenWZTHz123fPvPqrIOuk2ika+Nj9ELem/zre/
+         +VwA==
+X-Forwarded-Encrypted: i=1; AFNElJ+Ihdl4sQ56Q3t+aQLQ/6MJeaNLtQGdVBKY5PjL+Kcoy1p+3s+u7tsQyZvQs/+YqTRCAsxY@lists.linux.dev
+X-Gm-Message-State: AOJu0YyhgqmXErimYmGB7PrilTL+uLQ8/Hj54T5I5zzMLQ7vQPI5mLJw
+	B+nImD8r4CZ3jb0ZuJAICS+irK7V5cnHv2+0tboIEnpBS9Be7Vdq9HMC
+X-Gm-Gg: Acq92OGN2rtRxzYIcxlyV/UYaQB6y+RLHay8AbWWtd+yC/GI6xO11708w3OQnIMhC9E
+	kiwEi8uPPTGsj3seyXJFkFjYXuNXeUNe+eNzZRcHG2Py3NYhHiKpoLF9cqQ8YrkkjgUUPenokA4
+	2HBHWgYAlqGzYya89jhXEApogYrV9A4rRmcmtoYUw7o13S1UCIoVbpNl2qS4bqPjdLXv0dyTn+j
+	YHzN+aApMzQKhKHKB6AtWrwskcDR70iqQXDjzZiFV+8+P82QQsIoUv9HOkNFTdmBE5K7pqIPIeD
+	pgpgd6PxAyeIv23hvxilAj7UCzUsuwJoCI+em2N/UCE/wIO7ZgPO1aBjc4hiZUPbynuatAyfCLB
+	2SMqjmINnijCCN9I8bHkuEuYpQ8FljLVD71GJjHBCKOLlmY0kWquRci66NsOxONhjQMFFzQFouE
+	vFz9yj8L6iKA5Gi17lIm5GoSlWHs0GgLB8jdTdEV/dSYqxkb+b1+213S1FOt2RqZtxZWQvkB19y
+	UDK8/aShdGajnhoLYG2b/wk4TnKq18RaNtFuuyGjFVIOA==
+X-Received: by 2002:a17:903:46c6:b0:2ba:9e1c:7c93 with SMTP id d9443c01a7336-2ba9e1c7ddamr80600225ad.40.1778206297843;
+        Thu, 07 May 2026 19:11:37 -0700 (PDT)
 Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b53d450dcbsm222060286d6.45.2026.05.07.17.08.52
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d4094fsm2124135ad.19.2026.05.07.19.11.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2026 17:08:53 -0700 (PDT)
+        Thu, 07 May 2026 19:11:37 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: sparclinux@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -67,9 +67,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org (open list),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] sparc: Disable compat support with LLD
-Date: Thu,  7 May 2026 17:08:34 -0700
-Message-ID: <20260508000834.834824-1-rosenp@gmail.com>
+Subject: [PATCH] sparc: Export mcount for Clang-built modules
+Date: Thu,  7 May 2026 19:11:19 -0700
+Message-ID: <20260508021119.1635054-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -79,34 +79,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-An LLVM=1 sparc64 allmodconfig enables COMPAT and then tries to
-build the 32-bit vDSO. That path cannot be linked with ld.lld:
+Clang emits calls to mcount for -pg on sparc64, while the
+existing ftrace support only exports the _mcount name. With
+FUNCTION_TRACER enabled, modules can therefore keep relocations
+against mcount and fail during modpost:
 
-  ld.lld: error: unknown emulation: elf32_sparc
+  ERROR: modpost: "mcount" [arch/sparc/kernel/chmc.ko] undefined!
 
-ld.lld does not support the 32-bit SPARC ELF emulation used for
-the compat vDSO, so keep COMPAT disabled when LLD is the linker.
-This avoids selecting an unsupported build path while leaving the
-existing GNU ld configuration unchanged.
+_mcount and mcount are aliases in arch/sparc/lib/mcount.S. Export
+the plain mcount alias as well so Clang-built modules can resolve
+their profiling call target.
 
-Assisted-by: Codex:GPT-5.5
+Assisted-by: Codex:GPT-5
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- arch/sparc/Kconfig | 1 +
+ arch/sparc/lib/mcount.S | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index a6b787efc2c4..681ab2fd3d8a 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -474,6 +474,7 @@ endmenu
- config COMPAT
- 	bool
- 	depends on SPARC64
-+	depends on !LD_IS_LLD
- 	default y
- 	select HAVE_UID16
- 	select ARCH_WANT_OLD_COMPAT_IPC
+diff --git a/arch/sparc/lib/mcount.S b/arch/sparc/lib/mcount.S
+index f7f7910eb41e..0309ba2c4712 100644
+--- a/arch/sparc/lib/mcount.S
++++ b/arch/sparc/lib/mcount.S
+@@ -21,6 +21,7 @@
+ 	EXPORT_SYMBOL(_mcount)
+ 	.globl		mcount
+ 	.type		mcount,#function
++	EXPORT_SYMBOL(mcount)
+ _mcount:
+ mcount:
+ #ifdef CONFIG_FUNCTION_TRACER
 -- 
 2.54.0
 
