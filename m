@@ -1,116 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C826F36682A;
-	Fri,  8 May 2026 12:33:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A7F3E0C67
+	for <llvm@lists.linux.dev>; Fri,  8 May 2026 12:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778243605; cv=none; b=D7A/N/n6IS4BNpBCVwugVDfcSlNfIc130woXqQQtEs3dSbv++oArA8PnZrV6pNoFi6jZQqBBbpmFMoEhTfEmzi6dolXt/ORcGrICyW6V+IFyVuw9PLffzbiTKIPvNInh+162RHaZzv5agpg9PvJ4rk5qiaAamV7bK7mEKoS02+Q=
+	t=1778245165; cv=none; b=arQIjczEWYW8h+/UdeqrIY7haj0fALgWHYbDHHQpWteHaoLVJ94+BhLjs3KLAN9wg2APwMqH9cUE2PUQo0KlJG+j1ZsN0MlPMq5z24Cs3107GpasxQeqoR3TsNr3Bx/wWUZI1eTnVg12ujanAwn61KWFVY7UkzpvDK6KHiJTaPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778243605; c=relaxed/simple;
-	bh=qwcCFUPcqdwl0w6IKq7DT07Q/xkF8iFwc3CiJuMgZSE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Iep7GsrMY5hwOVtpPnTGmv8hQz9IOm84HkoIOZcFYfvCz9KaLwSIsplNKMfYcWOMQtL+q/JN26AnNEqm9LVmw6opRsmytexxawUgMA7fCJ5OKCXdSq+J8gC0zJDmGuUX/2YNRb2GiTeDr5VU9AOrbYzZ5KfZfwT4eOb1nntpyJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zd+7S/5F; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zd+7S/5F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CFEC2BCB0;
-	Fri,  8 May 2026 12:33:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778243605;
-	bh=qwcCFUPcqdwl0w6IKq7DT07Q/xkF8iFwc3CiJuMgZSE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Zd+7S/5FGefATTpuMBem1SuSG/1Cvoh8sxfeOWEG1YaDVma8cc7X/7SK316or2+O1
-	 uOhy9+Jzmg4Ie/R/oLX+keGb4RnArPSGCaCpzK0tYPeNnDuf4+B9YHAIydClSlC+HE
-	 IAjXV85aEAXyHBb/14LPAUUuN3TgBKZ9Bb2tWcvhH9IUnzN/tXSbGrwhHDH9AOXSUF
-	 XFbbQ9A8Jx1Lftuai07gImKz7G0JrSPskJXv7GAAVZnF6aIcZFc6HN8ee0catDOIFy
-	 oLUK9AgbUKquzl4vfQoBDVw6w/ZHhnkz8zyJSliLvt0raqXxFsFfi9tVSw7OBXr++5
-	 xVCXkSdDEFoaQ==
-Date: Fri, 8 May 2026 20:33:20 +0800
-From: Nathan Chancellor <nathan@kernel.org>
+	s=arc-20240116; t=1778245165; c=relaxed/simple;
+	bh=kEO3W2RtBvJpkOj//cj+gG001/vJAUHV8X4GqTFPJZU=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Afs4ndxmf9dz7qMoUENWbEa9S0BG29Rqv1jnmdO+Rek5DVW/IP5ozeaaXlx1vQZewJ58uTMUKsAWIlIXyhuVl2hFKP1RIYbChRdNC/hdgsPjNt7czHfOXOA0eLh5/dIGKB+RKQKIG5JNfObS7hN+aSid/kdGA6Hg+BdYJ/auUgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 4460C92009C; Fri,  8 May 2026 14:59:15 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 3E25992009B;
+	Fri,  8 May 2026 13:59:15 +0100 (BST)
+Date: Fri, 8 May 2026 13:59:15 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
 To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-sound@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Thierry Reding <thierry.reding@kernel.org>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCH] ASoC: tegra: tegra210-mixer: Use div_u64() for 64-bit
- division
-Message-ID: <20260508123320.GD208829@ax162>
-References: <20260507232131.438589-1-rosenp@gmail.com>
+cc: linux-mips@vger.kernel.org, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    open list <linux-kernel@vger.kernel.org>, 
+    "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Subject: Re: [PATCH] mips: cps: Assemble jr.hb with an R2 ISA level
+In-Reply-To: <20260507232323.489383-1-rosenp@gmail.com>
+Message-ID: <alpine.DEB.2.21.2605080101340.46195@angie.orcam.me.uk>
+References: <20260507232323.489383-1-rosenp@gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260507232131.438589-1-rosenp@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
 
-On Thu, May 07, 2026 at 04:21:31PM -0700, Rosen Penev wrote:
-> A MIPS allmodconfig build with LLVM fails during modpost:
-> 
->   ERROR: modpost: "__udivdi3"
->   [sound/soc/tegra/snd-soc-tegra210-mixer.ko] undefined!
-> 
-> tegra210_mixer_configure_gain() divides a 64-bit BIT_ULL() value by the
-> fade duration. On 32-bit MIPS, clang emits a call to __udivdi3 for that
-> plain C division, but that compiler helper is not exported to modules.
-> 
-> Use div_u64() for the inverse duration calculation so the driver uses the
-> kernel's 64-bit division helper instead of emitting a compiler runtime
-> call.
-> 
-> Assisted-by: Codex:GPT-5.5
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+On Thu, 7 May 2026, Rosen Penev wrote:
 
-This is neither a Clang nor MIPS specific issue, it will happen with any
-32-bit target, as Arnd's patch shows:
+> diff --git a/arch/mips/kernel/cps-vec.S b/arch/mips/kernel/cps-vec.S
+> index 2ae7034a3d5c..70413c816eb0 100644
+> --- a/arch/mips/kernel/cps-vec.S
+> +++ b/arch/mips/kernel/cps-vec.S
+> @@ -373,8 +373,11 @@ LEAF(mips_cps_boot_vpes)
+>  	.set	pop
+>  
+>  	PTR_LA	t1, 1f
+> +	.set	push
+> +	.set	MIPS_ISA_LEVEL_RAW
+>  	jr.hb	t1
+>  	 nop
+> +	.set	pop
+>  1:	mfc0	t1, CP0_MVPCONTROL
+>  	ori	t1, t1, MVPCONTROL_VPC
+>  	mtc0	t1, CP0_MVPCONTROL
+> @@ -487,8 +490,11 @@ LEAF(mips_cps_boot_vpes)
+>  	li	t0, TCHALT_H
+>  	mtc0	t0, CP0_TCHALT
+>  	PTR_LA	t0, 1f
+> +	.set	push
+> +	.set	MIPS_ISA_LEVEL_RAW
+>  1:	jr.hb	t0
+>  	 nop
+> +	.set	pop
+>  
+>  2:
+>  
 
-  https://lore.kernel.org/20260508080031.4064272-1-arnd@kernel.org/
+ This seems exceedingly pedantic to me at the cost of cluttering code with 
+these .set push/pop blocks.  Why not simply wrap the whole code block down 
+to the end of the CONFIG_MIPS_MT_SMP conditional instead, analogously to 
+how mips_cps_core_init() has been arranged?  The presence of MT implies R2 
+after all.
 
-Regardless, this is obviously the correct fix.
+ Ah, I can see we have MIPS_ISA_LEVEL_RAW always hardcoded to a 64-bit one 
+and commit 8dbc1864b74f ("MIPS: CPS: Fix MIPS_ISA_LEVEL_RAW fallout") 
+reporting the MOVE macro getting expanded to a 64-bit DADDU instruction on 
+64-bit ISAs, which is obviously not incorrect (you get what you asked 
+for), though also problematic in this use case.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+ This is actually no longer relevant however, as this was changed back in 
+2025 with binutils commit 40fc1451c63d ("[MIPS] Map 'move' to 'or'.") 
+targetting version 2.26, while our requirement nowadays is 2.30, according 
+to Documentation/process/changes.rst.  It is a fairly recent requirement 
+though, from Linux 6.16 only, and the previous one was 2.25, so backports 
+would be affected and it might be too early to rely on for a bug fix.
 
-> ---
->  sound/soc/tegra/tegra210_mixer.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/sound/soc/tegra/tegra210_mixer.c b/sound/soc/tegra/tegra210_mixer.c
-> index f05617b5f433..bfdd457f740c 100644
-> --- a/sound/soc/tegra/tegra210_mixer.c
-> +++ b/sound/soc/tegra/tegra210_mixer.c
-> @@ -7,6 +7,7 @@
->  #include <linux/clk.h>
->  #include <linux/device.h>
->  #include <linux/io.h>
-> +#include <linux/math64.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> @@ -157,8 +158,8 @@ static int tegra210_mixer_configure_gain(struct snd_soc_component *cmpnt,
->  			if (i == DURATION_N3_ID)
->  				val = mixer->duration[id];
->  			else if (i == DURATION_INV_N3_ID)
-> -				val = (u32)(BIT_ULL(31 + TEGRA210_MIXER_PRESCALAR) /
-> -					    mixer->duration[id]);
-> +				val = div_u64(BIT_ULL(31 + TEGRA210_MIXER_PRESCALAR),
-> +					      mixer->duration[id]);
->  			else
->  				val = gain_params.duration[i];
->  		}
-> -- 
-> 2.54.0
-> 
+ Still my guts' feeling is we should define MIPS_ISA_LEVEL_RAW and the 
+other such macros to a 32-bit or 64-bit ISA according to the machine word 
+size of the CPU/ISA chosen for the whole kernel build.  This would enable 
+the cleanup I suggested at the top with no reservation and remove the risk 
+of GAS choosing to produce 64-bit instructions where a 32-bit CPU/ISA has 
+been chosen in the configuration.
 
--- 
-Cheers,
-Nathan
+ You are welcome to do that, however as it stands your patch is not 
+incorrect and fixes a real problem, so:
+
+Reviewed-by: Maciej W. Rozycki <macro@orcam.me.uk>
+
+  Maciej
