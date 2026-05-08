@@ -1,132 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011028.outbound.protection.outlook.com [40.93.194.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61142E7BD3;
-	Fri,  8 May 2026 19:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778267884; cv=none; b=ijeH6Clj22dYM9qtD1xuPuzO+j1HwrB/eH1XUXLnZkVc2ir4qikwRzDa5R9e2D/j78HnNJTgG6SmFx/Rcn5fAmylXdekSD28GvoAAgriQw9n0uEtsQL7xTd0aFc1OigoAgdMGDPJ7VZ7z0VGymTwBOx91AmkAFYLmhYPnjV0UEI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778267884; c=relaxed/simple;
-	bh=G2PvSqaYChmtkHce5V7miyQNE0XDCTiMqQg85ZkV9Co=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=N/CfyXky25jMSYcZT/tMzpsTqZIG6iBJPMG5vWjl46JGw/2C5qYhQfLeETCiZCLFbOLyQL9IIs6Ja4YOavsUK+X2IeGrZFmI+BIWGMhOaJx2nTZwKttjVkuEHiZTHAJeF0puuGkRllyK00KUlrRK5ULC2KT21NSO8Mu2wvWvm1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T9DLabFx; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FAFE3FE64F
+	for <llvm@lists.linux.dev>; Fri,  8 May 2026 19:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.28
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778268613; cv=fail; b=rOlJ08QDSB06M8AYNaqSERd0k9Dz3bt9i7i2e62D0l2ZfkiPDQ8cBnz9ayQJ6MTYJnG+I8S8HRpm1BHyeX1SjpLbm42xyLDjgqcC6WTuhOx5Dkm95tpEO78e+8+Nk95S4qaGllK/HkYhF/oQk7PRatWdTZC/0zIbbNUmfDDMTbw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778268613; c=relaxed/simple;
+	bh=tLhgfVtER6MmH2lcuPjsNpnH7gA9+y7vW3ceB377R4Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=HMQs4/2MY0/AQaBKblCKLy7WwkWsYSzIbg9627ZJYf/OUspowIUFqkRhCk35Pi5Nj/Fkt87ZngV1n7eYRr+BA63Kdqb4nQc1JbnkhW57ycZMpb01hsfULer+PCTpfjGch3s82E5NF7Gv8ZEDCfliuyybarYv2CsL9ll0AT5l79g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=QCVSFlhE; arc=fail smtp.client-ip=40.93.194.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T9DLabFx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778267881; x=1809803881;
-  h=date:from:to:cc:subject:message-id;
-  bh=G2PvSqaYChmtkHce5V7miyQNE0XDCTiMqQg85ZkV9Co=;
-  b=T9DLabFxdKDmRDO+42rI3tdFa+0IsdTQ74o0teUIMp5El12Pi9zES50t
-   xpd/tgkTl6U7DEhe0YyZ/MUatVEemDIOv89/PCCL1g2PSFvMyQFjAK0q1
-   86eMEcVUvvnztudbv8MXyxksBlDxbKWTfSLHTwSFgpYEmO5xl8LV5TApp
-   t/tmNb85wfah2iOykBK2zxGAllnjl5FG36eKNvfv4DB8L+oq6uZJiiVIQ
-   RS51tHNzUvLKmnCs9QozWQu3vwoOalFSpic8T0TAH+xcl6YYyM2IrkCfI
-   H1cTWj3oh3UTg1xnFYYQalH1cfrY6DYc/sUMNbQ68lNuaFFMjhwLht7FU
-   g==;
-X-CSE-ConnectionGUID: x8RwJZmfTUK6P3zjjKB7Xw==
-X-CSE-MsgGUID: YZBopyMeQjST4zlR6ATkeA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11780"; a="66774677"
-X-IronPort-AV: E=Sophos;i="6.23,224,1770624000"; 
-   d="scan'208";a="66774677"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2026 12:18:01 -0700
-X-CSE-ConnectionGUID: dnpg3oaGR/CYYlqofHtTbw==
-X-CSE-MsgGUID: iwNcnnoEQmGX/SqCPnV8mQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,224,1770624000"; 
-   d="scan'208";a="233788788"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 08 May 2026 12:17:59 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wLQhx-000000007G9-2xHM;
-	Fri, 08 May 2026 19:17:57 +0000
-Date: Fri, 08 May 2026 21:17:17 +0200
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [hare-nvme:configfs-ns 1/9]
- drivers/nvme/target/../target/bpf.h:26:9: error: call to undeclared function
- 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202605082159.6BFSLR4U-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="QCVSFlhE"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=c42uy6Iu+GhMoTlqPZawuZndtv0Bncwpd117PCcxtnQtGoltnlHwQ6z0I6NR4QwYxj9avP6ZW0xuWbPNdNo2Jpo7hfViQIdFG6zJcYIIuiEevXCqyCSf67lELAgSBShM6XcNsiOhZhRj/8KJaiSNKwg6qC3Huo+BDkhiiwfpydAcx+z3ysoi/9U3yrYdXjJ2bLJnLuBvyzOHhh2AGZ7ak+n0jv4mOT6Ew4xB3rlDhH1qsGpGlD9noUViVXlWo4WUxuemNcU8CYz7tf3CjqoLYDfGfnRf76L5wYiACuhv1uWrtTe0ra06cw8g2Jwb23Eerq6cdyd3FEYpeFHcOQmyqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TL0Ao6XQVPXJsnoYZXzcDG7cGaOWJMdi9mDgF7Hdq6E=;
+ b=MHxi8GV7o0BF25F3QKm/aRhq45n1phgxRCJJ85GDHnElX5wKEVhPgxRyVWepIogDQeMsE7cSerFGdwdfNMuM27J7CP5gQQ24KkUbyRWJVr3Nnkl+FgHbGFRk7anr67rJ2yrVFrihXoMEBU3ZJ9rYHfhe2AJ9202LasUZQQTgAQCZbZ5JNf8hXUPptBluLKU3Z+YLHiSTcoqWZDtJDVB5vAZ06Ai73Jvl0LvmeslFS281V/dN4RO85s6blXfGD47jrX8POiNaotiTYfopbGp03M9Hx0ISatDk1f0B0geNHX2Jb+ef1TmLd8RLEAmZS4eIh4jNZ8JI2zlGQ/1RJ1OATw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.23.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TL0Ao6XQVPXJsnoYZXzcDG7cGaOWJMdi9mDgF7Hdq6E=;
+ b=QCVSFlhE8v9rXIuZery4JcgJVAe6pS66o8lJ/XwQ7BHD7I/vRSZRC2emMTgrvnf52yoHmT7w4ov5TLaH9zr35yw+Ri1Qbkft96s/YQ1cZTw5Mn3yR9KSKe050xsDZ8R/SDfRDGp2cilAe/NrCMoAJv5/9ul9KfqEuhFDDPHHdnw=
+Received: from PH0PR07CA0103.namprd07.prod.outlook.com (2603:10b6:510:4::18)
+ by PH7PR10MB6988.namprd10.prod.outlook.com (2603:10b6:510:27d::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.19; Fri, 8 May
+ 2026 19:30:07 +0000
+Received: from CY4PEPF0000FCBF.namprd03.prod.outlook.com
+ (2603:10b6:510:4:cafe::e8) by PH0PR07CA0103.outlook.office365.com
+ (2603:10b6:510:4::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.18 via Frontend Transport; Fri,
+ 8 May 2026 19:30:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
+Received: from lewvzet200.ext.ti.com (198.47.23.194) by
+ CY4PEPF0000FCBF.mail.protection.outlook.com (10.167.242.101) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9913.8 via Frontend Transport; Fri, 8 May 2026 19:30:06 +0000
+Received: from DLEE212.ent.ti.com (157.170.170.114) by lewvzet200.ext.ti.com
+ (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Fri, 8 May
+ 2026 14:30:04 -0500
+Received: from DLEE203.ent.ti.com (157.170.170.78) by DLEE212.ent.ti.com
+ (157.170.170.114) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Fri, 8 May
+ 2026 14:30:04 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE203.ent.ti.com
+ (157.170.170.78) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37 via Frontend
+ Transport; Fri, 8 May 2026 14:30:04 -0500
+Received: from [10.249.42.149] ([10.249.42.149])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 648JU3D22104762;
+	Fri, 8 May 2026 14:30:03 -0500
+Message-ID: <87a5bda8-9586-46db-bc3d-6161e517b180@ti.com>
+Date: Fri, 8 May 2026 14:30:03 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/11] soc: ti: knav_qmss: Fix __iomem annotations and
+ __be32 type
+To: Nishanth Menon <nm@ti.com>
+CC: Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nathan Chancellor
+	<nathan@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
+	<llvm@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>
+References: <20260508153211.3688277-1-nm@ti.com>
+ <20260508153211.3688277-7-nm@ti.com>
+ <d22c52dd-7bb0-46e1-8014-b470ec4f0c2f@ti.com>
+ <20260508173643.fwtulzz3fkvplsjl@gusty>
+Content-Language: en-US
+From: Andrew Davis <afd@ti.com>
+In-Reply-To: <20260508173643.fwtulzz3fkvplsjl@gusty>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCBF:EE_|PH7PR10MB6988:EE_
+X-MS-Office365-Filtering-Correlation-Id: f5479554-fea5-4499-b33f-08dead38360a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|82310400026|376014|1800799024|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	66+y0YAmy9A01Qcovyc3LIMeE+SO0ASuOilwUyEvkGpq/9PhXCWmolmTgzthwsc6PjqcclyiDiUbouhrcNjUOpFIH0VVrM+H7y5sj0tMSb4aueG53nRdQaiSLNzJRXxUmxYMrSkC95EIWI/FaWPeIta0jBBaZna5maA+8wZcJPUGeP+hSa/V1Nd7S75gCc7/C0xrlCFtXn9EZu7FW5i8Ys5JLsJYqGp+vvDsvaE2u2CcDexVY0KGpREG1wbOy+yO4MncmV2U3Wvo2WvJ6Vf+Ic69c6KWlUAsuoP94fmm/wSBJNbDYJxSHHkAO1ethmTPH/mLNr0/ZMCq04bIDeaaLb+zPdRik6PuNCqRkL7ZL/NyNz90yTUG6GzlYzQFNkF0wybbU+WRuAG6kGCZxRtVNJ7arNFjE2pdpoun+oBGl5zkopudvvn9Iay+DXAbW3X1X3sKhlBWzgbLIm/sOwO8vZ8mK86CgLc4ujRLyWh45CU2NRKQT+iBrbCEmPpDTAXOscj8RbQtbneIngqrGSgtCp1ooa2KSX7azxQWfOkKK8yqweCu8n2bceAlIpC5DEBG+zqdQQm6pMzTcLqM0a+ppYaHV6qYM82T2B41NLYSgqIqRQfuX+UvI5BSbrhL6mAvKEQ0WHgT0m3YdnwUQ2pjA3xH2By5kwddK3NFUzmqM3svobcFldR2TDilpuug2prBvbyqKEf35sMtOS/lmTM5nzM9UWsSOp1dIV0x8KGuYsA=
+X-Forefront-Antispam-Report:
+	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(82310400026)(376014)(1800799024)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	xhxSzQkHKUkPR9cNf7Qn0Gx2B0/18dEMO31WZWyoidgJ6BLRD/3HZS690ON/jsYBbXqdiHkdT2Wj7glt3rHMj4ofKBgKzrT4d4YFVzAZbL/uccbu0wHBQKNJV2RVVKE5ClpjzjnPpU54ux1gFRb9EWGbtOKLpxwLel3vBuWI4JFmvzDGb0+4cTI3dA3Db8zGkrzWhcpTKEDIrKGJOKG6duen4vCv0XBv7040GIKz3sJu0KRS7iUDqi/C2nwReW0LgzeyzFNrZ6HDFO4bXQngJ8ORxmy+ry7QAB6pYWG8SsjuAcOdPvwrv9dWmjE1sKvraSZxjHwgr52egrEu7t87sD3hBBa/g5dF6dwjb1RP1qgnjRD7IoQnTm29SlP/zNu+rsermIFnkbUQuVnbt4Q7ZscxA2DNVSLjDzKLJKqPYPbpWMSi5ibTr2p9s+W8kvyK
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2026 19:30:06.8795
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5479554-fea5-4499-b33f-08dead38360a
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000FCBF.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6988
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/nvme.git configfs-ns
-head:   509cbb083b05db0f02a3ceea68bb093f8725a6a5
-commit: 94040dcdf8d7b146f62dfb3e0156d93a9713880d [1/9] nvmet-bpf: eBPF struct_ops support for log pages
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260508/202605082159.6BFSLR4U-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260508/202605082159.6BFSLR4U-lkp@intel.com/reproduce)
+On 5/8/26 12:36 PM, Nishanth Menon wrote:
+> On 12:14-20260508, Andrew Davis wrote:
+> [...]
+>>>    	writel_relaxed(val, &pdsp->regs->control);
+>>>    	/* wait for command register to clear */
+>>> -	ret = knav_queue_pdsp_wait(pdsp->command, timeout, 0);
+>>> +	ret = knav_queue_pdsp_wait((u32 __iomem *)pdsp->command, timeout, 0);
+>>
+>> Why not make `command`'s type `u32 __iomem *` instead of casting it when used?
+> 
+> pdsp->command is __iomem *, from what I see, from
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605082159.6BFSLR4U-lkp@intel.com/
+It is a "void", should be "u32", that is why you are having to cast here,
+not the iomem part.
 
-All error/warnings (new ones prefixed by >>):
+Andrew
 
-   In file included from drivers/nvme/target/fcloop.c:11:
-   In file included from drivers/nvme/target/../target/nvmet.h:26:
->> drivers/nvme/target/../target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
-      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
-         |                                            ^
->> drivers/nvme/target/../target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                               ^
->> drivers/nvme/target/../target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                                                            ^
->> drivers/nvme/target/../target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
-      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
-         |                                                        ^
-   drivers/nvme/target/../target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                  ^
-   drivers/nvme/target/../target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                                               ^
->> drivers/nvme/target/../target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-         |                ^
->> drivers/nvme/target/../target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
-      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-         |                                                                    ^
-   6 warnings and 2 errors generated.
+> devm_io_remap_resource(), writel/readl_relaxed and other usage where
+> void __iomem* is used with command, and arithmetic used across the code,
+> __iomem * is intentional, except for this case. i did think of making
+> knav_queue_pdsp_wait take iomem, but that'd weaken what the strict
+> checking of a single u32 reg access it does.. this approach looked the
+> better of the alternatives.
+> 
 
-
-vim +/nvmet_bpf_req_complete +26 drivers/nvme/target/../target/bpf.h
-
-     8	
-     9	void nvmet_bpf_detach(struct nvmet_subsys_link *s);
-    10	bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port);
-    11	bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid);
-    12	void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req);
-    13	int __init nvmet_bpf_struct_ops_init(void);
-    14	#else
-  > 15	static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
-  > 16	static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-    17	{
-    18		return false;
-    19	}
-  > 20	static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
-    21	{
-    22		return false;
-    23	}
-    24	static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-    25	{
-  > 26		return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
