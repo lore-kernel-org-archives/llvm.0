@@ -1,176 +1,235 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013062.outbound.protection.outlook.com [40.93.196.62])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABF83FB7C0
-	for <llvm@lists.linux.dev>; Fri,  8 May 2026 15:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778254369; cv=fail; b=cI9rOOI6ytH783ujOOrF/mona0bhCT6SXMmIlv4J+qw9cToLdPyc6+MZNhcd9rQZr9VOyX/ZBChsbkYxqjNYi/daIjmVUenEgAtoI3jEdJ/mMIm8Jtgao1YsTgHOCNu24TQWVRFUZb0fk9Eo6JyJwHsoeTBfilnFfmmP747GYTA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778254369; c=relaxed/simple;
-	bh=hoc1SCZUNgw7Ksn61qaTGBZClVngAy/n+u7lp3gR6iA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bf9CpIKd86FhWF95uQrN2QSPL2uLLze4aPSqmd+QPOpd6/+pMKi6MVcZk79N3hxaRNt8qsZf+6VZkrZHGKyJ5ROkGPiOvgjqBQq9UnyRR9VRAOHgThoJoH9GAkWpreW7n8muVuKkrhx+7uultMxOtcnvQPh9+KqHH7FuNyXPB2A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=twKtc2r3; arc=fail smtp.client-ip=40.93.196.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B457E374758;
+	Fri,  8 May 2026 16:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778259301; cv=none; b=EbnTXkRl95Op7cAnE6XbBPJWRsLxcf+ZEpS/gQCuETAk2znhv3e7SVkm1S29wsjmsptWExKWvcbVy1M/b3yQRgWlWkTV1L40dg7WEJofYGspmFQy0arS9mA0p6X3aAt5YTGfgnmGWsqACPO9SF+Khvx+QuWOWZVRj1R2Gg/jCA8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778259301; c=relaxed/simple;
+	bh=HQaUSlngELed0sn/NRU0INQRAnmeXsLigygX8nR7T4c=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=KlRBROHS20d7HDlWUT9l+D3/0Ze1NMoW8CxyALuKfSbNfYmBeBuCtWleX1CJwmUJoI4h0XQhVwNil3oKDMc1Dn9fpyuZMHl0ma0RkdGZmOn7lVFdfT4AKPK3ZaSFEQhSEBDj8cWO3Xq4Ejjii5EPpVQQriGrfPnVqkZu5SDva5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WSm+JzB8; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="twKtc2r3"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HBfj75qrDfSLPc/hGeKE1ohb3airz9Y4LU57QuO/XQwLnYFmKNgFCCAYuSLX8rhk2FVH8O2G1Gzsq8UOHXchCcCVXNKUgWSDYDACP9w9sm/iwiZG4zlEsfHSpLm6WCmqMZ699Oy7as95h8TbFuibLhgSPqMRnESK2BZ/TzorqfsYTekiArDoZrEuZeM0Js/+DmbM6EniY6RVRrk5gzLLdieSBSohquYwUkmwwPxXJYVq/KS+kBVg/ZAyI75K1UvaK2EL1bdTDZFyCzCa+U7FSFXW/5Psi3THjObY8UjNtftrt4H/JmczIXD8QPo4QY6+q18BUdxlvReZ1UXQKMVhxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WR7sVFz7wcSJyHRRMEky8mBk9xvmVoc0G8AZswQt50s=;
- b=pUo0FpRTtvpic6r6Ih57YHwbMvRsx3WDZS9bI36Cmal5bVgOujcXqkw8+gqoL5e+4WMJgIHh9/ZVZICD1mUC3orIwnvRlRqfJGeE8T7FcJw/qZ9/z275XxPNGhrNsI4GK9aBbqykS+hHhjUIvcKTUk+i6MXFbNIz/2nJP7oGJjz9Z7cn3hBXSIayuNKsD+4JKm4/HnzGWsM/55DLBWhAmx0L9R6s/vRoymNkQhXmZwLVISNzDotDpioUKq1XQDxHPMqoWMbPQX5FJ1WErVFQ58aW5T37YipWwIeBfkuao1xmUPecYvqZjcgASEruSKSl3d/dl/djBBoIo3tDoT6u+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.195) smtp.rcpttodomain=oss.qualcomm.com smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WR7sVFz7wcSJyHRRMEky8mBk9xvmVoc0G8AZswQt50s=;
- b=twKtc2r3yfRaA1IqKiO5LHtIhUEtbwj5MVxuZthOQ0WOyb3bBq13G4lN2t+90qXPWEbA1+cVbOolB+Sy+wlMQMVPGJ8bWSlptzW1LXznsOcaHafFNi0FIXRW/+eVahADgcZAsOPWIRjPKE4N4Ho61GmIZK3jV3rIH2ny+29oZKA=
-Received: from CY5PR13CA0030.namprd13.prod.outlook.com (2603:10b6:930::18) by
- IA3PR10MB8539.namprd10.prod.outlook.com (2603:10b6:208:580::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.16; Fri, 8 May
- 2026 15:32:44 +0000
-Received: from CH2PEPF00000146.namprd02.prod.outlook.com
- (2603:10b6:930:0:cafe::76) by CY5PR13CA0030.outlook.office365.com
- (2603:10b6:930::18) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.25.12 via Frontend Transport; Fri, 8
- May 2026 15:32:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
-Received: from flwvzet201.ext.ti.com (198.47.21.195) by
- CH2PEPF00000146.mail.protection.outlook.com (10.167.244.103) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9891.9 via Frontend Transport; Fri, 8 May 2026 15:32:42 +0000
-Received: from DFLE215.ent.ti.com (10.64.6.73) by flwvzet201.ext.ti.com
- (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Fri, 8 May
- 2026 10:32:14 -0500
-Received: from DFLE202.ent.ti.com (10.64.6.60) by DFLE215.ent.ti.com
- (10.64.6.73) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Fri, 8 May
- 2026 10:32:14 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE202.ent.ti.com
- (10.64.6.60) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37 via Frontend
- Transport; Fri, 8 May 2026 10:32:14 -0500
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 648FWEwF1647264;
-	Fri, 8 May 2026 10:32:14 -0500
-From: Nishanth Menon <nm@ti.com>
-To: Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nathan Chancellor
-	<nathan@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>, Nishanth Menon
-	<nm@ti.com>
-CC: <llvm@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@oss.qualcomm.com>
-Subject: [PATCH 01/11] soc: ti: knav_qmss: Remove remaining redundant ENOMEM printks
-Date: Fri, 8 May 2026 10:32:01 -0500
-Message-ID: <20260508153211.3688277-2-nm@ti.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20260508153211.3688277-1-nm@ti.com>
-References: <20260508153211.3688277-1-nm@ti.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WSm+JzB8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778259300; x=1809795300;
+  h=date:from:to:cc:subject:message-id;
+  bh=HQaUSlngELed0sn/NRU0INQRAnmeXsLigygX8nR7T4c=;
+  b=WSm+JzB8Z2eezvMM/PKwXHYtzw/nOlF/YC3cIMz6d4dBvzLOyibSuYqB
+   jnCqUwD4rkCTxOC+wsb4rNIDTp46WInetVe1Qjh/trtBJq/152bhG5J/D
+   45Wp0UggwVSLnimCkr+qUZBxwEQOG1nsa9Br4I0/9GEnUGRbfq5LEybyK
+   jLnQYuhZxHiKeZLCe2TzIxHe4NiqSz828OyO+mPPb+nGzAwiLy1Ek5qD1
+   QkPzx3L1r9tH7IXMr3h23llqergdb2jZCsLwvMoBBk0ktrcRotKyqw90Z
+   hPrthnSLzTH9zrRDZb+CI2puAOG4bdMw58BqsYvTHEO3gpv+oA55dFY8C
+   Q==;
+X-CSE-ConnectionGUID: cpWB15baTxySCQkMxEElkA==
+X-CSE-MsgGUID: r02Ndu3/QEuHTJdF32RDzg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11780"; a="89544046"
+X-IronPort-AV: E=Sophos;i="6.23,223,1770624000"; 
+   d="scan'208";a="89544046"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2026 09:55:00 -0700
+X-CSE-ConnectionGUID: IdT6Q/ySSAycJgyIsayiSA==
+X-CSE-MsgGUID: PuXc59S6SyOEALsgiq+RKQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,223,1770624000"; 
+   d="scan'208";a="230422750"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa009.fm.intel.com with ESMTP; 08 May 2026 09:54:57 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wLOTX-000000007Dt-2zDs;
+	Fri, 08 May 2026 16:54:55 +0000
+Date: Fri, 08 May 2026 18:54:41 +0200
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [hare-nvme:configfs-ns 1/9] drivers/nvme/target/bpf.h:15:44:
+ warning: declaration of 'struct nvmet_subsys_link' will not be visible
+ outside of this function
+Message-ID: <202605081839.xgy4NNj4-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000146:EE_|IA3PR10MB8539:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8b24a8ce-fcf6-4ce3-da93-08dead170bd2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700016|376014|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	kpTq1wK+jjxEkxFzgNEwFs/amjODtjj4PAcyTDdrctRLVMdqxxknoHWK8Xmnq8TTVDEa9IfK14ut2f+zbbqH8VHuRFe2QOvhbMkOaLO++Jca2f92NVeG1iSTWKYD51H1mjcmBRPku1inqKkRXLQotxq4XBrs2OF+ZgCTPACM7mWnqme5y1DuP8DbbIzmZd8DqQNf8T1dlFFh+imKn+uK+eqjt4QyxEutz6hRICZ+pzYhtWWnBIXoAhydNJnokXdDmN00RvIKm5K7vst0jKlvcJgHFk/4pM4+yhTpfEHvtb7CGQ8A2yWg2U3EAHwq2RiIIgIX4QGrtaCDrtdZTpL7u/xJL55YoWA0WgsW4wZkjqfTuBYutyIiR8LrpJN7Ddia7Fz71KcoLOwuteXQkGzWWsdqPOLBF/wVi8tebdwBhjhG7Obt8T0zqWs+6n2JPijzwFh3G8EgcTlt76mgWbD22QWAfpgL8B1pWVp41TYWls8e2MbgvLOnjBkF6pY9z62VLzKNjE7XUhiCm5MRLCMbMLUJgtio2Wq6i4yavXv9gCkN/+eOPzg+eixOiukYSB9u+Q8QUoktiAx4kRtsOscukmARYDOZaULsVTmpSnyG8eexquPomAMKcbzORauFb7esM9lEqU/ZsST2/DY1xff/dj7WeyuOzBDN0GfQw6RbLymWQFz4sjmvQkQ+8n7KEGYz5Yq8yeWgQT8R8t/y1Mqjs6R/4cx0TEbsgDQcHcwswU4=
-X-Forefront-Antispam-Report:
-	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700016)(376014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	0TkGafpfY7Zc0yNk5GUtK0Voyi/behLp1kBj2GS7zM8P5oveezGDL1499lzyUQ6Qhtnad7Ap1kyfY56bAqdnVpfEU/p19b6gliGOb+ny3C/jlmkNTcq0HyIS3YVgJtG9KDXJfjX1Q0kVgiQHfmHEQZMaRyKIEL8w0mu30LyWh1yAIxg78fJ+bHzNefv5nMANFEkkexniKG0y06GaH/QoqvbotmX3CcRANjHkEHKCwFn3kB+80+CkC0zL0fNMZVrQ64vzneJUaYpKdtV6iwzsA6uzXkrcxvBYrTO778DPATHknf6k8zhBvBMp0ADprFVmW85jD9FqUKtdSLKPXIamYoIdS7U2FkTRp4MUvY2Xz4nNrWmNM1Gora46eZbReGClsEFvIgzZOs53k+Xb/nCUeY6/INNjlFw1cMzi6QfzlYfNr5TT6Abafb9JzBLNrpRZ
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2026 15:32:42.6434
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b24a8ce-fcf6-4ce3-da93-08dead170bd2
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000146.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA3PR10MB8539
 
-Commit 168d2fb78055 ("soc: ti: knav_qmss: Remove ENOMEM printks")
-removed redundant dev_err() calls after allocation failures in
-knav_queue_setup_regions, knav_queue_init_qmgrs and
-knav_queue_init_pdsps, but missed three further instances in
-knav_pool_create, knav_queue_setup_region and knav_setup_queue_range.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/nvme.git configfs-ns
+head:   509cbb083b05db0f02a3ceea68bb093f8725a6a5
+commit: 94040dcdf8d7b146f62dfb3e0156d93a9713880d [1/9] nvmet-bpf: eBPF struct_ops support for log pages
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260508/202605081839.xgy4NNj4-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260508/202605081839.xgy4NNj4-lkp@intel.com/reproduce)
 
-Remove the missed instances.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605081839.xgy4NNj4-lkp@intel.com/
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
----
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+All warnings (new ones prefixed by >>):
 
- drivers/soc/ti/knav_qmss_queue.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+   In file included from drivers/nvme/target/core.c:17:
+   In file included from drivers/nvme/target/trace.h:19:
+   In file included from drivers/nvme/target/nvmet.h:26:
+>> drivers/nvme/target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
+      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
+         |                                            ^
+>> drivers/nvme/target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                               ^
+>> drivers/nvme/target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                                            ^
+>> drivers/nvme/target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+         |                                                        ^
+   drivers/nvme/target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                  ^
+   drivers/nvme/target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                                               ^
+   drivers/nvme/target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                ^
+   drivers/nvme/target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                                                                    ^
+   6 warnings and 2 errors generated.
+--
+   In file included from drivers/nvme/target/configfs.c:23:
+   In file included from drivers/nvme/target/nvmet.h:26:
+>> drivers/nvme/target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
+      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
+         |                                            ^
+>> drivers/nvme/target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                               ^
+>> drivers/nvme/target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                                            ^
+>> drivers/nvme/target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+         |                                                        ^
+   drivers/nvme/target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                  ^
+   drivers/nvme/target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                                               ^
+   drivers/nvme/target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                ^
+   drivers/nvme/target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                                                                    ^
+   drivers/nvme/target/configfs.c:1114:19: error: incompatible pointer types passing 'struct nvmet_subsys_link *' to parameter of type 'struct nvmet_subsys_link *' [-Werror,-Wincompatible-pointer-types]
+    1114 |         nvmet_bpf_detach(p);
+         |                          ^
+   drivers/nvme/target/bpf.h:15:63: note: passing argument to parameter 's' here
+      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
+         |                                                               ^
+   6 warnings and 3 errors generated.
+--
+   In file included from drivers/nvme/target/admin-cmd.c:13:
+   In file included from drivers/nvme/target/nvmet.h:26:
+>> drivers/nvme/target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
+      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
+         |                                            ^
+>> drivers/nvme/target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                               ^
+>> drivers/nvme/target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                                            ^
+>> drivers/nvme/target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+         |                                                        ^
+   drivers/nvme/target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                  ^
+   drivers/nvme/target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                                               ^
+   drivers/nvme/target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                ^
+   drivers/nvme/target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                                                                    ^
+   drivers/nvme/target/admin-cmd.c:224:26: error: incompatible pointer types passing 'struct nvmet_subsys *' to parameter of type 'struct nvmet_subsys *' [-Werror,-Wincompatible-pointer-types]
+     224 |         if (nvmet_bpf_supported(ctrl->subsys, req->port)) {
+         |                                 ^~~~~~~~~~~~
+   drivers/nvme/target/bpf.h:16:61: note: passing argument to parameter 'subsys' here
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                             ^
+   drivers/nvme/target/admin-cmd.c:224:40: error: incompatible pointer types passing 'struct nvmet_port *' to parameter of type 'struct nvmet_port *' [-Werror,-Wincompatible-pointer-types]
+     224 |         if (nvmet_bpf_supported(ctrl->subsys, req->port)) {
+         |                                               ^~~~~~~~~
+   drivers/nvme/target/bpf.h:16:88: note: passing argument to parameter 'port' here
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                                                        ^
+   drivers/nvme/target/admin-cmd.c:228:37: error: incompatible pointer types passing 'struct nvmet_req *' to parameter of type 'struct nvmet_req *' [-Werror,-Wincompatible-pointer-types]
+     228 |                         if (nvmet_bpf_log_page_supported(req, i))
+         |                                                          ^~~
+   drivers/nvme/target/bpf.h:20:67: note: passing argument to parameter 'req' here
+      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+         |                                                                   ^
+   drivers/nvme/target/admin-cmd.c:626:26: error: incompatible pointer types passing 'struct nvmet_subsys *' to parameter of type 'struct nvmet_subsys *' [-Werror,-Wincompatible-pointer-types]
+     626 |         if (nvmet_bpf_supported(ctrl->subsys, req->port) &&
+         |                                 ^~~~~~~~~~~~
+   drivers/nvme/target/bpf.h:16:61: note: passing argument to parameter 'subsys' here
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                             ^
+   drivers/nvme/target/admin-cmd.c:626:40: error: incompatible pointer types passing 'struct nvmet_port *' to parameter of type 'struct nvmet_port *' [-Werror,-Wincompatible-pointer-types]
+     626 |         if (nvmet_bpf_supported(ctrl->subsys, req->port) &&
+         |                                               ^~~~~~~~~
+   drivers/nvme/target/bpf.h:16:88: note: passing argument to parameter 'port' here
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                                                        ^
+   drivers/nvme/target/admin-cmd.c:627:35: error: incompatible pointer types passing 'struct nvmet_req *' to parameter of type 'struct nvmet_req *' [-Werror,-Wincompatible-pointer-types]
+     627 |             nvmet_bpf_log_page_supported(req, lid))
+         |                                          ^~~
+   drivers/nvme/target/bpf.h:20:67: note: passing argument to parameter 'req' here
+      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+         |                                                                   ^
+   drivers/nvme/target/admin-cmd.c:628:33: error: incompatible pointer types passing 'struct nvmet_subsys *' to parameter of type 'struct nvmet_subsys *' [-Werror,-Wincompatible-pointer-types]
+     628 |                 return nvmet_bpf_get_log_page(ctrl->subsys, req);
+         |                                               ^~~~~~~~~~~~
+   drivers/nvme/target/bpf.h:24:64: note: passing argument to parameter 'subsys' here
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                                ^
+   drivers/nvme/target/admin-cmd.c:628:47: error: incompatible pointer types passing 'struct nvmet_req *' to parameter of type 'struct nvmet_req *' [-Werror,-Wincompatible-pointer-types]
+     628 |                 return nvmet_bpf_get_log_page(ctrl->subsys, req);
+         |                                                             ^~~
+   drivers/nvme/target/bpf.h:24:90: note: passing argument to parameter 'req' here
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                                                          ^
+   6 warnings and 10 errors generated.
 
-diff --git a/drivers/soc/ti/knav_qmss_queue.c b/drivers/soc/ti/knav_qmss_queue.c
-index 86d7a9c9ae01..e87a42734f25 100644
---- a/drivers/soc/ti/knav_qmss_queue.c
-+++ b/drivers/soc/ti/knav_qmss_queue.c
-@@ -769,10 +769,8 @@ void *knav_pool_create(const char *name,
- 		return ERR_PTR(-ENODEV);
- 
- 	pool = devm_kzalloc(kdev->dev, sizeof(*pool), GFP_KERNEL);
--	if (!pool) {
--		dev_err(kdev->dev, "out of memory allocating pool\n");
-+	if (!pool)
- 		return ERR_PTR(-ENOMEM);
--	}
- 
- 	for_each_region(kdev, reg_itr) {
- 		if (reg_itr->id != region_id)
-@@ -1025,10 +1023,8 @@ static void knav_queue_setup_region(struct knav_device *kdev,
- 	region->dma_end = region->dma_start + size;
- 
- 	pool = devm_kzalloc(kdev->dev, sizeof(*pool), GFP_KERNEL);
--	if (!pool) {
--		dev_err(kdev->dev, "out of memory allocating dummy pool\n");
-+	if (!pool)
- 		goto fail;
--	}
- 	pool->num_desc = 0;
- 	pool->region_offset = region->num_desc;
- 	list_add(&pool->region_inst, &region->pools);
-@@ -1211,10 +1207,8 @@ static int knav_setup_queue_range(struct knav_device *kdev,
- 	int ret, i;
- 
- 	range = devm_kzalloc(dev, sizeof(*range), GFP_KERNEL);
--	if (!range) {
--		dev_err(dev, "out of memory allocating range\n");
-+	if (!range)
- 		return -ENOMEM;
--	}
- 
- 	range->kdev = kdev;
- 	range->name = knav_queue_find_name(node);
--- 
-2.47.0
 
+vim +15 drivers/nvme/target/bpf.h
+
+     8	
+     9	void nvmet_bpf_detach(struct nvmet_subsys_link *s);
+    10	bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port);
+    11	bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid);
+    12	void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req);
+    13	int __init nvmet_bpf_struct_ops_init(void);
+    14	#else
+  > 15	static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
+  > 16	static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+    17	{
+    18		return false;
+    19	}
+  > 20	static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
