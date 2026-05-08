@@ -1,85 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7636935CB6F;
-	Fri,  8 May 2026 23:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C2D7261C
+	for <llvm@lists.linux.dev>; Fri,  8 May 2026 23:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778282135; cv=none; b=lz7s+VbOwUuYMM/UHeCXpwD5zRkSfJ9ya3JzYSLyvtApsajXb3dXnOTZfzTYMwjLYajDdR8WT/IfB7Z4jOscVg15JlUOXE+yN3dpDpi05H55DkRr4JC7xZOiqzXtSIBQC17su112vamsPo3v8O1iV51Yd0IoHIeyWmZ3AtvhrWg=
+	t=1778283131; cv=none; b=rMWtwqxBvmCJkf08vH8FTHPTjima0G0GwRXC7LY+ekZf0amvQQPjlraAe47RfXUwS5ksqxQjgDpIwszRaKm7lFk03FTlq3iKXpQ640sdKXr3I25b1Sf8hjK9/HPPIKSJrDNRp9cQ9dmlYTD41N7CzEXA2P0KhZCOWdAE5zxpYdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778282135; c=relaxed/simple;
-	bh=U0+B3uHVrkmoYknwZABwHo3BcmeQsnR2QhzaVTzs9uo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=SWtdIixG+oibEXsGFj2BzBmukmM/ycm7+MAVHwJw1u+3YSPWYy84+jg6aybYXXXcfkfopUNmO+cNN7szGefReXNrV1tngho6s1jn66MZGmCYFoz0WDEuaHCPzqIr2BD2KD1+2DvvTZmyFr2CdoMn0z5aLUxEPwcpoQURee9u6FI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZM4C1nGD; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778283131; c=relaxed/simple;
+	bh=IUcKhMS2hUSiFDiA0yRyGSvDzC3cPyT8Osx0C9U0cZc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=SAzGSDGLKkPQ3DsV8wcpC7GxdYBx14NN2vuPAE8cecuKUgI26AvfRFhVlXfS2EL2+1pqrHQoWqObSLMR2LiDftpSEYraEl4Z9JgMVx1wb/0Eavq9vP3IkLumCZmffFxoMzvdhZ7V8hMObHY/uoCD4qdalDdubld2OiEuZPnPqVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NiyI+Vbm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZM4C1nGD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778282133; x=1809818133;
-  h=date:from:to:cc:subject:message-id;
-  bh=U0+B3uHVrkmoYknwZABwHo3BcmeQsnR2QhzaVTzs9uo=;
-  b=ZM4C1nGDj2eEAlvYfmWo7cotMRhtBUfm1vSeqY51o8uzD6okf97Olti4
-   MXx2WXPRtGRyGSx5mWPg9n5Uxaq8DM0P5DGlEpmZhT9el5Awy8ro2GLUh
-   WxFBvtTliLOVKHcOGphDzhXMsXyiTTqQfBabD4JevcJ+zmQLL/R75t81e
-   ISlI+HNEHHTU3yBbXRP2O4UjALqm2qx3g4iZSfRPL8fkb6a2jn4WadebL
-   5Mc3b3ddlD5BD8Pk07eSxwgPoRkYDtT7wDOFT0xflTC8fl0asddAKql/G
-   yLHiAGcOJJ1wEp+PIxtkln15h7hbMX9+/rF0y48EzI9xJoxj6rNGiOpDT
-   Q==;
-X-CSE-ConnectionGUID: l7BJagfMTsSjSawxP6YRsQ==
-X-CSE-MsgGUID: B/Yp1ZbHQ8SSngAubs8Z9A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11780"; a="101933331"
-X-IronPort-AV: E=Sophos;i="6.23,224,1770624000"; 
-   d="scan'208";a="101933331"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2026 16:15:33 -0700
-X-CSE-ConnectionGUID: r2UtRfBbRDiYjs1cPaWOzQ==
-X-CSE-MsgGUID: pFKrR6CRTUiv8pwoYx5oqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,224,1770624000"; 
-   d="scan'208";a="238690674"
-Received: from lkp-server01.sh.intel.com (HELO 82327192134e) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 08 May 2026 16:15:31 -0700
-Received: from kbuild by 82327192134e with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wLUPp-000000000UL-1FqX;
-	Fri, 08 May 2026 23:15:29 +0000
-Date: Sat, 09 May 2026 07:14:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/kvmclock_vs_tsc 28/39] WARNING: modpost:
- vmlinux: section mismatch in reference: kvm_sched_clock_init+0x3f (section:
- .text.unlikely.) -> __paravirt_set_sched_clock (section: .init.text)
-Message-ID: <202605090742.ffwadDjT-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NiyI+Vbm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778283129;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qxMeFEE5BMXyjKf/e7ksCydittbXDBWkAkfzW6J/ws8=;
+	b=NiyI+VbmqjIgh0j7AkJg+rODrjKVnWFRakOuvvJm+fGGc3mOtU4U/36czURsG4r3M+sY46
+	iWT+NWX+hgjhrcdMg63wxQRsSMFzQImlzTIAuIAsJyvVcyFoAeXmWQPVvLUUoDiodf9P3D
+	TPgG433gBrOTSvPvrkl260o2r/lgvro=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-343-mupIUK2rPZisUC6dy5OcUA-1; Fri,
+ 08 May 2026 19:32:07 -0400
+X-MC-Unique: mupIUK2rPZisUC6dy5OcUA-1
+X-Mimecast-MFC-AGG-ID: mupIUK2rPZisUC6dy5OcUA_1778283126
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CDD9318005B4
+	for <llvm@lists.linux.dev>; Fri,  8 May 2026 23:32:06 +0000 (UTC)
+Received: from [172.20.1.62] (unknown [10.30.45.70])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5070C1801A63;
+	Fri,  8 May 2026 23:32:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 68 of 97): Test report for master
+ (7.1.0-rc2, upstream-mainline, 5862221f)
+Date: Fri, 08 May 2026 23:32:06 -0000
+To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <90102.126050819320700671@us-mta-343.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: ZHKHTQuqQXTPOiQ4DFSWeK7T9-0b2EUe4G31BmhAh-U_1778283126
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sean,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-tree:   https://github.com/sean-jc/linux x86/kvmclock_vs_tsc
-head:   7a6c58b9f7997fb7485959a0aabea787d12e3fc3
-commit: 4607bcbe328bd73372f72f7537da79a34fdfc777 [28/39] x86/paravirt: Mark __paravirt_set_sched_clock() as __init
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20260509/202605090742.ffwadDjT-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260509/202605090742.ffwadDjT-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605090742.ffwadDjT-lkp@intel.com/
+Kernel information:
+    Commit message: Merge tag 'parisc-for-7.1-rc3' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/deller/parisc-linux
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2505733870
 
->> WARNING: modpost: vmlinux: section mismatch in reference: kvm_sched_clock_init+0x3f (section: .text.unlikely.) -> __paravirt_set_sched_clock (section: .init.text)
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2505733870_x86_64_kernel_kcidb_tool_21237509_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
+    /distribution/command [aarch64, ppc64le, s390x, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
+    Boot test [aarch64, ppc64le, s390x, x86_64]
+    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
+    Reboot test [aarch64, ppc64le, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
+    Storage - blktests - throtl [aarch64, s390x, x86_64]
+    Storage - blktests - ublk [aarch64, s390x, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+    stress: stress-ng - memory [aarch64, s390x, x86_64]
+    xfstests - btrfs [aarch64]
+    xfstests - ext4 [aarch64]
+    xfstests - xfs [aarch64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
