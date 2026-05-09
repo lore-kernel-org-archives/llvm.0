@@ -1,62 +1,62 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629C61CAA68
-	for <llvm@lists.linux.dev>; Sat,  9 May 2026 00:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47B41A6807
+	for <llvm@lists.linux.dev>; Sat,  9 May 2026 00:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778286771; cv=none; b=r1QwZI6NwIlRyfWX+kiL3PbN69yjvg9S2VnLdQpxsIDCv3/s1wJrvooPn5uqyqrnAcCD/HHBPtZiuwClqmm/AhJ/sqlTtDt/lNlgrrSGu3THJcXMnH75gFFZhwzXBW6g6ZburvWVUmjuTGfXwZmToC/GYkusU5HMWmp9U4q2mHs=
+	t=1778286826; cv=none; b=QwSPHL5Rx6ILf9mG8SOu+wVeadZAXVrPOiYlRD4e4c3xDDwrAIyHpi8IwWjiObn9KuPqgk46uPTs0EgSJX6GuuEyzlaeEb5mFf7siOij3qZA/FtvJQwgL6zKO0ASxWO2kipClXecDJEpgdUT4GSTyS0tVqxjuzxojNKrfm0Dujs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778286771; c=relaxed/simple;
-	bh=cwAJtaIa3HAbxdD9fPSDi6pvOQg5BHTwme768t43EHI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gm3+hpteuCYvWj8msz2HmWeemzI8TMHBXJdinnkXkW1ahvqTVt5n1vT1KaaIYO7GNK84Ukk/fA+X7lPmk/IIPpoqAb8JHQb0mPK0W2VcMziPFNwG7cSo8dgWczZJXqnIiUEBioKuITsY6rtFlRLmfpVkDxA6lLElC8UrPkKwL6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hTbgYyyH; arc=none smtp.client-ip=209.85.210.178
+	s=arc-20240116; t=1778286826; c=relaxed/simple;
+	bh=w4nfqVFZGrK1NCIJntiRJ5nGBcZBg6USWQRdZN0VlQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H75xhoY8OzXq/+JWCzrjEnWVndJ40mEaN9zudxYDdseXYrXZKJJTpEpJM3evq7smjCwXHKVotAV12fcp+jK8zCiz87Vk18kZ8fH6JqKJi/6FW6XygvB18A6lIdM+NPzpOMER01fJwGNNdZJeIRaOHGXDNk2caDb0mjHJgMzl7SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X1LlBqaL; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hTbgYyyH"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8353ca0f1f1so1322803b3a.1
-        for <llvm@lists.linux.dev>; Fri, 08 May 2026 17:32:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X1LlBqaL"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-835386ff122so2234279b3a.3
+        for <llvm@lists.linux.dev>; Fri, 08 May 2026 17:33:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778286769; x=1778891569; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1778286825; x=1778891625; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jRY9lec9jfKBu3OUprYTLDApFu69WThjVKh+9vZTH68=;
-        b=hTbgYyyH0FWyfu2Q7CwY+3lR8Rn4Br4gR+pm5fwpy7uF+Db9BcHcsckKO/9wMLS0pw
-         ipLjXYkm0ycVRY+xhzysdd3TTMbSYy6j2f8WsmG+bmP+kHuI2A8cFyEzL0txB4HiJUMp
-         XCVOSfo5CxLp3VQGbV/BMWRNYRvgo4ynKUi8QGmGS4Q/tWg8qcY4cz72uwxcCYtNyohA
-         25p2hZVVhvjq5o9g/UcpQLzLAE0WE9V3t6nH+c22c1SSEgi6by+SlM4t0Jl7hqH0/HRn
-         nDy34rV6kkvF2isZR/+XQIxtC2Ap4h7HVAI2yeJIzNypE+3K5iiKzZQCz8n5ZoI4J/wc
-         MlJg==
+        bh=xLJ9gLG7pbZKIRQypRSLrX+188/WO/6+lZX979t4oqk=;
+        b=X1LlBqaLXY/hlgoGZzh6pHZC0e+bTq8CpAIZyXocv2oZHuvctvDgEkVWN4HEidDteN
+         KChtpPOkXlwUIjzNKbD0t3D5ADxZGGiibKAznJsmqWJEDkqwWxMRaA2+rrhNn8byBm0U
+         L7w5m3ZlJHslG/PhZfiec+EmUxFAyThLe68Qe6nRpxY0rnrpyZ7b2wj2zrF5OtvHoKTc
+         Q7AV1mLVu68bR7QDGcsAGibR1t2g3kzgTY4AGqq5LmnEfb2nWA+bh9a4jeOaIr9O1WKJ
+         k00eqQaKd/oC/Zu5os6Dg/ZrOtqKoZw5cvxxTNfiBOc4Z14xpasLj0KyxAw3edApxRrM
+         m2kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778286769; x=1778891569;
+        d=1e100.net; s=20251104; t=1778286825; x=1778891625;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jRY9lec9jfKBu3OUprYTLDApFu69WThjVKh+9vZTH68=;
-        b=rDpeEy04yu4kjMVQjsJqQrsimSc3mheJAGQLWyHO4siryY2R1zYGFp9VGlV8XZrUBy
-         hC4ED9XbM1vMxIxvKrvVreD6MI6hG9PlODKuoG+QO2rKqMXfOsA9BPNhihdqYDdU4nkK
-         f8HM6pWTR1e2ajHY/hnYrC+TWWC7wtGkCwcDgXVx5rnRzWtlUjLXZfI1h0q/VH7EgipQ
-         vbzcLlCuYiMAVNKvIy9s3HAVgmqXX22Va4RWYG0mUEjqarle5IjpNR4L4YIDRnE5KQ0O
-         5DmaND/rIBao6y0A7ecd2i0NTN1plVrP8MKg/Rvo0EMQyhTqsCsxNGqd8Pz/j/vgASyN
-         GKBQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+F3TNybspXT2vWv0f7ePtLBXQ+tMMO3s9xd0x0Mm2hJrOHF/nEGGV3hetE8MhAuIfIOVKt@lists.linux.dev
-X-Gm-Message-State: AOJu0YzSJseQSlSBJUEmCpOnhTVEvWVOfpyP9U/hOVbl/iYyHeo5q3o2
-	xDhR7lgBZVvDLmAuig+k4OdBSPzlicxnhqiE6+tEIJGsiEAYX1WqM8XO
-X-Gm-Gg: Acq92OGpd81J/WGkVH/BNg9eB1l/oW2SiXgIvY4jzknluJxe4n7IJm6WMG/p85OcpcM
-	spmYsVKk/A5FhboLGsEgg8EoQ9kveE8ZlokYiTSI04K+6ANnXuhC3JMoRmVGO9iBSB1tT90YW7y
-	hh6hcqEL6M+PHzMY/UyQnEz1A+6SbJpnvnynGM5YDPrLePwkGnRiGSNGIPt7wvgMIKSH6GqLMzT
-	BdwQY+VFaLKqref4lQFvpHfaAr+VEbmZiNantAjfxJtXNTV6vBfQ46eLfA7ScncBSPX3FH18hb3
-	JHd+do/0ZnEbrNV44TYSh0nDWJT1StEuxxq2YzedGXpSff4Rr+CQcV/+hvjo+PqZAgcN0QeGbT0
-	ASth+m3onnqMPslA3yf4KLAW5mr7jpSZ8bGLO+zs/rpMHjRFD379d73e41rb01IBTpqLY0nwbp2
-	nzNPvmn/q25bEhXZmjgVWzgfgUsI9YBO8oMry4AKKmQdGAxulGYNfsjBxVDjI5VxiHxy3LZ5nRx
-	TdR6aQyw7w8AewCaqwdAHrq1yn/FVCHq2I=
-X-Received: by 2002:a05:6a00:2e96:b0:81f:4e1c:1d3b with SMTP id d2e1a72fcca58-83bb8b74857mr7784664b3a.23.1778286769291;
-        Fri, 08 May 2026 17:32:49 -0700 (PDT)
+        bh=xLJ9gLG7pbZKIRQypRSLrX+188/WO/6+lZX979t4oqk=;
+        b=gvdrborsi+I8D7/QfiymB1N+ANDMKMNA+8x6L7Tbsy3ckGIV/x6aOsF5L1qk1UXgmW
+         U8WWaEL0WkUB9OcwfIYT7FVgBezJFwszlge06o+p3grO0pIXzhbUjZRl8cww7Si96kFA
+         DFCcRm04mRYWEADTbM25VAmfRa7cy7DEd8wpBEmyWpkQQu2tpq3mOUzPGlXuzOd7xgJf
+         wCgKNKQRHpfDj3sKziu5PyCbGE9hT9eEGASo18PUhGgastZQt2w1Ta+epNt79rNc2H7H
+         MQ9RbgqIrWSMXPyvIwdPP30QoucWWD5dGBHkE7K8Ifvtxh6NyFZFKSvxCOEyLssoxu+d
+         MjNw==
+X-Forwarded-Encrypted: i=1; AFNElJ+guuRNTnJxuZ858iVJ0xfdrs940YerMUqXedTNEepuu8DiLVW0hqIbhb7JIMUCMGqj7cWe@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywb+O4068ovH3a1e2Wu6Yf8CCxnITRtDNXifb7XMPbhCSSnJLew
+	6y6mpSOcQChqy72Q/gqm3ffHZF9jtOkaloZO+0jsD353T4KsAVy7jKtM
+X-Gm-Gg: Acq92OGuW2F7R+pJAcMY/ZE5ZDsNqgjGIMvlfMA1lyeRrYJPbWvJ0W+wqimYV0hGHN7
+	I90aqq/RdvtuvuWwh+LFsDuofetmbMy6Fcp2/s+PuOUP79RZzrkWb6F8c8I5I+WQ6VdKztr7DIy
+	3Tc0PRRszwajHQ4CZCZsyKlzvVMJnul81m4KDNWLcLHNBklbXCmZ02QJsc7k9cZYXiCRlxyT8yU
+	29XhvGxJkDdZ1DnMjG0XVGOKF/jBfRJNpJSgkFx5sI1iNNeywJ72kGZJCKpDbvhr9vHO5i9q+mc
+	MFGlxNJHjdTgC4ltyMW4RFVXxgvUcdq8A2cKYk3OgJK48nDVyVN5GIG8PjG5C47k88MdYIk6wCZ
+	zg9mHhBwktyEHSFz+NEBVecS8o+azVc2kxaGVhzYwoAJSebQpZ3BnewYWdVfmAGbDtZbR2w+hs9
+	fCxy1240T4WySWW4oAX6jNHOzKXd6lBYVLbGPcU57UgSOeouLYz+Qgu+yZFs17+/rZBhCumNpGo
+	0AI04dllCPUxChsdvUjM0r3oOUzIX69l60=
+X-Received: by 2002:a05:6a00:6c90:b0:82f:4f63:31e1 with SMTP id d2e1a72fcca58-83a5badbcf7mr13179463b3a.8.1778286825102;
+        Fri, 08 May 2026 17:33:45 -0700 (PDT)
 Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83965d34872sm13648108b3a.22.2026.05.08.17.32.47
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-839679c8c00sm12593925b3a.32.2026.05.08.17.33.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 17:32:48 -0700 (PDT)
+        Fri, 08 May 2026 17:33:44 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: linux-gpio@vger.kernel.org
 Cc: Linus Walleij <linusw@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Linus Walleij <linusw@kernel.org>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org (open list),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] gpio: merrifield: allow COMPILE_TEST builds
-Date: Fri,  8 May 2026 17:32:30 -0700
-Message-ID: <20260509003230.955814-1-rosenp@gmail.com>
+Subject: [PATCH] gpio: sodaville: allow COMPILE_TEST builds
+Date: Fri,  8 May 2026 17:33:27 -0700
+Message-ID: <20260509003327.955942-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -79,34 +79,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Intel Merrifield GPIO driver builds on non-X86 platforms when PCI
-and ACPI are available.  Allow it to build with COMPILE_TEST while keeping
-an explicit ACPI dependency for the ACPI lookup path.
+The Intel Sodaville GPIO driver uses PCI/MMIO and generic GPIO helpers, and
+builds outside X86.  Move its Kconfig entry out of the X86-only port-I/O
+menu and allow it to be selected with COMPILE_TEST.
 
 Tested with:
-make LLVM=1 ARCH=loongarch drivers/gpio/gpio-merrifield.o \
-  drivers/gpio/gpio-tangier.o
+make LLVM=1 ARCH=loongarch drivers/gpio/gpio-sodaville.o
 
 Assisted-by: Codex:GPT-5.5
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/gpio/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpio/Kconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 9e1ed0f451b9..51f510fa8cc7 100644
+index f8e34b16fd99..9e1ed0f451b9 100644
 --- a/drivers/gpio/Kconfig
 +++ b/drivers/gpio/Kconfig
-@@ -1818,7 +1818,8 @@ config GPIO_BT8XX
+@@ -1908,16 +1908,16 @@ config GPIO_RDC321X
+ 	  Support for the RDC R321x SoC GPIOs over southbridge
+ 	  PCI configuration space.
  
- config GPIO_MERRIFIELD
- 	tristate "Intel Merrifield GPIO support"
--	depends on X86_INTEL_MID
-+	depends on X86_INTEL_MID || COMPILE_TEST
-+	depends on ACPI
- 	select GPIO_TANGIER
++endmenu
++
+ config GPIO_SODAVILLE
+ 	bool "Intel Sodaville GPIO support"
+-	depends on X86 && OF
++	depends on (X86 || COMPILE_TEST) && OF
+ 	select GPIO_GENERIC
+ 	select GENERIC_IRQ_CHIP
  	help
- 	  Say Y here to support Intel Merrifield GPIO.
+ 	  Say Y here to support Intel Sodaville GPIO.
+ 
+-endmenu
+-
+ menu "SPI GPIO expanders"
+ 	depends on SPI_MASTER
+ 
 -- 
 2.54.0
 
