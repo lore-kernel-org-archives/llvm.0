@@ -1,135 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 306431F4C8C
-	for <llvm@lists.linux.dev>; Sat,  9 May 2026 19:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 460AE2367D3;
+	Sat,  9 May 2026 20:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778356398; cv=none; b=CjGK1uI4KtJHly6ebPOvglPdipH+lCo/G7xVwEiphGQ7uEUvMLET76d7SoMZI3gEgWwgl5vMXcdrscm1yX3xJhSrdohhGcP9S23f5WXXo7Aw04DkpbBsWfGGOCDVjuKhqaFB007U4EBqOSiFbu23niNGWAG3e4YcobS0epUpnOk=
+	t=1778358995; cv=none; b=aLr5eJDv0xFMnr+bLKZhuOyit0ccWZBpvw/Df0DsfLF4PjmW6UrXmk24qqpvYwQbie9dLMwZvoFCdu/lzF060rJgI6i10UmcpLNOlqoKfeuZqUoVvONG0h0UlllD1KCSIqphv2zk1UWxeyJZJDyRCndT6Mj5diwoK5K1VK9tXUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778356398; c=relaxed/simple;
-	bh=a4Z42Gy0gVJWGlSl0Tx/6ix27GA1pcyX26KfwVlNGMU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Ga/PW+lx+4T5/+cyaynlmpGlCdJ3dHBY1l6lfX2NdB1XKVgeGR6pq1NO/d9PZy1LpTs53GhnWxMb0v+UQZ4sbFCoetkR8N9068e3+KbUm9EXm6pMYuZFKPVbrxETB4YZGl96Ki5t8/r4lRfQIAxo79e4C5Q2jvaefd/b7WpoRc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IViQSBjK; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778358995; c=relaxed/simple;
+	bh=k0keR1Ubk2J+JXLTfOaMUHdGdczEwUUbL+F2gApUoJk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=rnIlHFPBIcz7bfeAs4gpj+KP8VWZ+1lMf5Tkfu7qRssX/i+Ysddt/j+3Im3yNkcufZSPki6q8/uIJ6se5xPU4biSI/pwKJeVQifeKf6JkF0o2kp7xkidsoN13otNg0w4Wn42qODBnA7RWejxTmYnOD3YepQkdwmXdXA9AV9tn0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f+622OuV; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IViQSBjK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778356396;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=jUhe/69VrdVKEwOhqkD35MFGGPxVD4m73cxnie7Wm6w=;
-	b=IViQSBjKgVrTp0yx9u4CaKwSUQ5PEg4XKaBe0quUYBRUm6tYxan46DyynJE7db+LU0sA/Q
-	gYWKifSy3QXb6ik92EycTodUtt8BnDn/c2rnfVtrDHZYTMm6JNzmuXo4IkHHp0loH3/F0Y
-	UX3a1xHBxUyz2YFNZ31uMvBc7AZIX3I=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-154-GpLtAN2bOI2U2cAAuMMffw-1; Sat,
- 09 May 2026 15:53:14 -0400
-X-MC-Unique: GpLtAN2bOI2U2cAAuMMffw-1
-X-Mimecast-MFC-AGG-ID: GpLtAN2bOI2U2cAAuMMffw_1778356394
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C8C021956094
-	for <llvm@lists.linux.dev>; Sat,  9 May 2026 19:53:13 +0000 (UTC)
-Received: from [172.20.1.62] (unknown [10.30.45.70])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3BD901800240;
-	Sat,  9 May 2026 19:53:13 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 68 of 97): Test report for master
- (7.1.0-rc2, upstream-mainline, fcee7d82)
-Date: Sat, 09 May 2026 19:53:13 -0000
-To: yoyang@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f+622OuV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778358993; x=1809894993;
+  h=date:from:to:cc:subject:message-id;
+  bh=k0keR1Ubk2J+JXLTfOaMUHdGdczEwUUbL+F2gApUoJk=;
+  b=f+622OuVed0lOIHKa1gFwwkISNsp7DmbXJPtLpFznfxT9/nZkdIsoiPp
+   4uBwmKgwNrRp1ZE9Fw/73Qrbgc7MaJb4U2qNwKvsgjfVIHr2h9IViIY6/
+   2FhmFrNkiCMMkABYvNuMYHq/HHZ4teEgPuSN+7kDXhmNharyia6bfYRpT
+   iLLn9lQp5lz+wG0/AgdQjx0nF+6A5LL/751ONshNMzStqVjYXQ1vmAz7E
+   1h9cOOkd1VMhSfxthZ0vxMBHcDTVfHF7sh3fWIeVZ7DN3l3xiRu2ckwoR
+   yDX/c+8WuTKl+BVFp7gMw9i6SHkkORfmywHxUx3PrR3MjrYos2GcqOwar
+   g==;
+X-CSE-ConnectionGUID: 06zLJpdOS/mYkIJSM2keEw==
+X-CSE-MsgGUID: QPRKSYwGT/exWEtp72Wp6Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="79486989"
+X-IronPort-AV: E=Sophos;i="6.23,225,1770624000"; 
+   d="scan'208";a="79486989"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2026 13:36:33 -0700
+X-CSE-ConnectionGUID: quNu2yc8RsmQ6c6HIT+Mpg==
+X-CSE-MsgGUID: yAMWgKB1RS+zyM1BWc/WTg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,225,1770624000"; 
+   d="scan'208";a="267443161"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa002.jf.intel.com with ESMTP; 09 May 2026 13:36:32 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wLoPV-000000007Xr-233T;
+	Sat, 09 May 2026 20:36:29 +0000
+Date: Sat, 09 May 2026 22:36:13 +0200
+From: kernel test robot <lkp@intel.com>
+To: Vernon Yang <yanglincheng@kylinos.cn>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: kernel/bpf/helpers.c:2893:60: warning: declaration of 'enum
+ psi_states' will not be visible outside of this function
+Message-ID: <202605092231.VD6i30e4-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <72309.126050915531400295@us-mta-154.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: IqIv_zCqlQxkBZ-3mNzSCOGBCKxtJR9kmFVU2YHSKWs_1778356394
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/intel-lab-lkp/linux/commits/Vernon-Yang/psi-add-psi_group_flush_stats-function/20260509-210713
+head:   4a4580a71f5884e16d331476b601322cc2d41af7
+commit: edf653aa3964af51ae2f2b180bcb0f6cfa26c8f7 bpf: add bpf_cgroup_{flush_stats,stall} function
+date:   7 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260509/202605092231.VD6i30e4-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260509/202605092231.VD6i30e4-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605092231.VD6i30e4-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'net-7.1-rc3' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2508270867
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2508270867_x86_64_kernel_kcidb_tool_21241431_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
-    /distribution/command [aarch64, ppc64le, s390x, x86_64]
-    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
-    Boot test [aarch64, ppc64le, s390x, x86_64]
-    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
-    Reboot test [aarch64, ppc64le, s390x, x86_64]
-    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
-    Storage - blktests - throtl [aarch64, s390x, x86_64]
-    Storage - blktests - ublk [aarch64, s390x, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
-    stress: stress-ng - memory [aarch64, s390x, x86_64]
-    xfstests - btrfs [aarch64]
-    xfstests - ext4 [aarch64]
-    xfstests - xfs [aarch64]
+>> kernel/bpf/helpers.c:2893:60: warning: declaration of 'enum psi_states' will not be visible outside of this function [-Wvisibility]
+    2893 | __bpf_kfunc u64 bpf_cgroup_stall(struct cgroup *cgrp, enum psi_states states)
+         |                                                            ^
+   kernel/bpf/helpers.c:2893:71: error: variable has incomplete type 'enum psi_states'
+    2893 | __bpf_kfunc u64 bpf_cgroup_stall(struct cgroup *cgrp, enum psi_states states)
+         |                                                                       ^
+   kernel/bpf/helpers.c:2893:60: note: forward declaration of 'enum psi_states'
+    2893 | __bpf_kfunc u64 bpf_cgroup_stall(struct cgroup *cgrp, enum psi_states states)
+         |                                                            ^
+   kernel/bpf/helpers.c:2897:40: error: use of undeclared identifier 'NR_PSI_STATES'; did you mean 'NR_NODE_STATES'?
+    2897 |         if (unlikely(!group || (u32)states >= NR_PSI_STATES - 1))
+         |                                               ^~~~~~~~~~~~~
+         |                                               NR_NODE_STATES
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/nodemask.h:396:2: note: 'NR_NODE_STATES' declared here
+     396 |         NR_NODE_STATES
+         |         ^
+   kernel/bpf/helpers.c:2900:24: error: no member named 'total' in 'struct psi_group'
+    2900 |         return div_u64(group->total[PSI_AVGS][states], NSEC_PER_MSEC);
+         |                        ~~~~~  ^
+   kernel/bpf/helpers.c:2900:30: error: use of undeclared identifier 'PSI_AVGS'
+    2900 |         return div_u64(group->total[PSI_AVGS][states], NSEC_PER_MSEC);
+         |                                     ^
+   kernel/bpf/helpers.c:2914:2: error: call to undeclared function 'psi_group_flush_stats'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2914 |         psi_group_flush_stats(group);
+         |         ^
+   1 warning and 5 errors generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +2893 kernel/bpf/helpers.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+  2885	
+  2886	/**
+  2887	 * bpf_cgroup_stall - acquire the total stall time of cgroup
+  2888	 * @cgrp: cgroup struct
+  2889	 * @states: psi states
+  2890	 *
+  2891	 * Return the total stall time.
+  2892	 */
+> 2893	__bpf_kfunc u64 bpf_cgroup_stall(struct cgroup *cgrp, enum psi_states states)
+  2894	{
+  2895		struct psi_group *group = cgroup_psi(cgrp);
+  2896	
+  2897		if (unlikely(!group || (u32)states >= NR_PSI_STATES - 1))
+  2898			return (u64)-1;
+  2899	
+  2900		return div_u64(group->total[PSI_AVGS][states], NSEC_PER_MSEC);
+  2901	}
+  2902	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
