@@ -1,96 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00A83BB48;
-	Sat,  9 May 2026 00:13:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D6A2AEE4;
+	Sat,  9 May 2026 00:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778285624; cv=none; b=uoSjIGvet38wGLR6NefYHdhK+3/AugiuA8KynhU1efar9pLwYNAU/NC/DYxpSVGqWgy+t6+gPCEwH6R8rNHfkChVSpsEeI4iAfmfGPKwE8QH/ufwvHgZq67Y0AgHwWxANWEen/+9t61dzEzh29kUfd/eBCD8JHrUZ3l29lEYP8o=
+	t=1778285980; cv=none; b=hjZ54dZefnWqVS+86gwxYvDiLRYPFZ5wQ+s4JhLK8MqDkDCPUGI3KtpN8buzK97IdZnxyglYOtEwxlQp4BNqGqf4QwRHhBLK0sTEXZ8RgrV2PT1zACuVzwGHxSQGEQdQLZ0zad4xMF7IU3R+N2IfTdmuhgYSDavaAGkDJvPYOao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778285624; c=relaxed/simple;
-	bh=/ecytL0oAx5Ld6PTkFmYbXYxh2xyc5JcmTqjqxsjMik=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Hmu17YfhvHSQbhfMOJGzv/2LvamAThgl8nlvcLOIGGaBCRHRY0+JuOu7TofTKe9s6OrP+hFtAMDqJz2fz278jS9r5opFf7bzXOpXAEYeAIZMCpVQw+qXvcpG3rptWNdCUwp9YoFt79PvrXXb4TgIcihXWBa5qLVMylX/ynstrfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TSFeZg5B; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778285980; c=relaxed/simple;
+	bh=Tmj0FFTkLIPAVG2fa6nYY2zql4qjjtdvgY0TA0+/xBc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=HUztE+2lRh3O82X/se7zMslHnELnL++GTtGEldO2RNMkgtUyq3V2lr2dW8DCeA/U/5zRJDPda66lU78CDMcsCuZxUjlDzwmbeKucEcwnaKRCgBByXOsE+FLXDE3ojKtQxemud1hM+ZaSEuKiHww/OT1UXCPrmovQoswc8NwtM8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XgHqBM1R; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TSFeZg5B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C09C2BCB0;
-	Sat,  9 May 2026 00:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778285624;
-	bh=/ecytL0oAx5Ld6PTkFmYbXYxh2xyc5JcmTqjqxsjMik=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=TSFeZg5BvwFcbzHvLdipCuAa8qoC5gj0XT2Mdz9hxcS0t1ljMUxTHYkpA7j+CL6oE
-	 q79nxhzYdQatXOlp3fgd2mtRGCfiJEL9G2kpGJwx5IuBA5hwE8SF0vvYvYsLhZPV/n
-	 Q0ccVBP+gRPYT2HHJviOtIoRjsxPCItqNV5QLA20X8EhRC0mbllvGhfk5QDOKC7KEW
-	 Y872LI9y3sbdiIep0CI+g++L0qAv/DR1cGgHRrU+GVubxVYTm0QaduMnsrc2oDmJQ8
-	 0p28xf60d6VYB3CyyTBjq2ube7S5vz5VbzsAlA4s9ch5/KIbNPx10PoiGRxxAnzZzK
-	 mh/pVbjQsFoSA==
-From: Mark Brown <broonie@kernel.org>
-To: linux-sound@vger.kernel.org, Rosen Penev <rosenp@gmail.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
- Takashi Iwai <tiwai@suse.com>, Thierry Reding <thierry.reding@kernel.org>, 
- Jonathan Hunter <jonathanh@nvidia.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev
-In-Reply-To: <20260507232131.438589-1-rosenp@gmail.com>
-References: <20260507232131.438589-1-rosenp@gmail.com>
-Subject: Re: [PATCH] ASoC: tegra: tegra210-mixer: Use div_u64() for 64-bit
- division
-Message-Id: <177820154024.916152.3561938548534364041.b4-ty@b4>
-Date: Fri, 08 May 2026 09:52:20 +0900
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XgHqBM1R"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778285979; x=1809821979;
+  h=date:from:to:cc:subject:message-id;
+  bh=Tmj0FFTkLIPAVG2fa6nYY2zql4qjjtdvgY0TA0+/xBc=;
+  b=XgHqBM1RgZPVlLGfKCf/CE/6BKFUSHxgLec70wAT4oPrUNoHTh2q0q4N
+   x7msuH9tcAs26SZODTDouJ1mpSBF5LjynWS1Ds2Pz23P8D9CPrWZr3BYc
+   T9P+2aU50aCa1hU1NnEPmjuR8T53HWU6zfiifpbOubckYgnPZsA4RhMoK
+   fSvKWNx+HAvPlIoEWCtfrMjsM0vxfi9kYf/jihHqqVnWr+Nhi0g0Ga8At
+   rqBJjQoFRkREgQSTXpowQAmo7JT0phWLBdeH/X9TL8HMUs2k9T/9Ul3S7
+   7difBBc0zsYZk4VZeMYw9jN7w1UMkvKANVySpYQ5WYcBSmMNWE4u5i3cH
+   Q==;
+X-CSE-ConnectionGUID: 3P9RiuetSsK6US+mxshlsg==
+X-CSE-MsgGUID: bIuzDZyqTmmr/7cbvljnCQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11780"; a="79369910"
+X-IronPort-AV: E=Sophos;i="6.23,224,1770624000"; 
+   d="scan'208";a="79369910"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2026 17:19:38 -0700
+X-CSE-ConnectionGUID: hOLdUJpxSlS1iuq0YF+wbg==
+X-CSE-MsgGUID: ExahxVKaTheB8ifmGK5xmA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,224,1770624000"; 
+   d="scan'208";a="232397039"
+Received: from lkp-server01.sh.intel.com (HELO 82327192134e) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 08 May 2026 17:19:37 -0700
+Received: from kbuild by 82327192134e with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wLVPq-000000000Xt-3Hik;
+	Sat, 09 May 2026 00:19:34 +0000
+Date: Sat, 09 May 2026 08:19:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe:io_uring-io-slots 8/13] io_uring/slot.h:30:19: error:
+ cannot combine with previous 'int' declaration specifier
+Message-ID: <202605090837.5tCQXf1J-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1141; i=broonie@kernel.org;
- h=from:subject:message-id; bh=/ecytL0oAx5Ld6PTkFmYbXYxh2xyc5JcmTqjqxsjMik=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBp/nwvSLAZh/1jMiuKH1AOYXdSE8Wb+OoBCdOYQ
- LE3nQlXPByJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaf58LwAKCRAk1otyXVSH
- 0JjbB/9lmEoXmnJS2o2tSyfaNxH+R7UCa1oCU5UaOKAVdoqYQsOPQTSuMOUmc5ilqPsXF7T/cx3
- +C/EDwU1c6DE25HmZoJPXel61wUh/G9lGCYoJ8LNur+90w+6rsUyOwH1lRk5pls9nxYyV31TkF+
- s0WCkQh6rM1kxXlPf+jyvQ81XfzNA0wCqsJb/hPqjidYiDo2K0bxfb5tKWyFBkU+LD3aldcvk7Z
- PuqNrFyPZgIjEI1limpojzvrdqWBUaGOmaNn4MVsYxw8gg2DsvRbrwUkppvwfM2pn/7NNDx4HsQ
- levtHctid7d8n62VjOFe/QtgIuK0fmFhTAeSiwUHphk9Q2p1
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Thu, 07 May 2026 16:21:31 -0700, Rosen Penev wrote:
-> ASoC: tegra: tegra210-mixer: Use div_u64() for 64-bit division
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git io_uring-io-slots
+head:   2bbc5f014e3a6c148a49af38c5f288ee510ca57b
+commit: d73e59bdb078d19dd428654188e537c2fca735f3 [8/13] io_uring: add registered IO slot infrastructure
+config: arm64-randconfig-001-20260509 (https://download.01.org/0day-ci/archive/20260509/202605090837.5tCQXf1J-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260509/202605090837.5tCQXf1J-lkp@intel.com/reproduce)
 
-Applied to
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605090837.5tCQXf1J-lkp@intel.com/
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-7.2
+All errors (new ones prefixed by >>):
 
-Thanks!
+   In file included from io_uring/io_uring.c:80:
+>> io_uring/slot.h:30:19: error: cannot combine with previous 'int' declaration specifier
+   static inline int int io_unregister_io_slot(struct io_ring_ctx *ctx, void __user *arg)
+                     ^
+   1 error generated.
+--
+   In file included from io_uring/rw.c:26:
+>> io_uring/slot.h:30:19: error: cannot combine with previous 'int' declaration specifier
+   static inline int int io_unregister_io_slot(struct io_ring_ctx *ctx, void __user *arg)
+                     ^
+   io_uring/rw.c:1265:10: error: call to undeclared function 'io_slot_iopoll'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   return io_slot_iopoll(req, iob, poll_flags);
+                          ^
+   io_uring/rw.c:1265:10: note: did you mean 'io_do_iopoll'?
+   io_uring/io_uring.h:202:5: note: 'io_do_iopoll' declared here
+   int io_do_iopoll(struct io_ring_ctx *ctx, bool force_nonspin);
+       ^
+   2 errors generated.
 
-[1/1] ASoC: tegra: tegra210-mixer: Use div_u64() for 64-bit division
-      https://git.kernel.org/broonie/sound/c/04b8f96b1088
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+vim +/int +30 io_uring/slot.h
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+    29	
+  > 30	static inline int int io_unregister_io_slot(struct io_ring_ctx *ctx, void __user *arg)
+    31	{
+    32		return -EOPNOTSUPP;
+    33	}
+    34	
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
