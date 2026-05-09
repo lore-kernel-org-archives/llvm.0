@@ -1,62 +1,62 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47B41A6807
-	for <llvm@lists.linux.dev>; Sat,  9 May 2026 00:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098D63DBA0
+	for <llvm@lists.linux.dev>; Sat,  9 May 2026 00:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778286826; cv=none; b=QwSPHL5Rx6ILf9mG8SOu+wVeadZAXVrPOiYlRD4e4c3xDDwrAIyHpi8IwWjiObn9KuPqgk46uPTs0EgSJX6GuuEyzlaeEb5mFf7siOij3qZA/FtvJQwgL6zKO0ASxWO2kipClXecDJEpgdUT4GSTyS0tVqxjuzxojNKrfm0Dujs=
+	t=1778286898; cv=none; b=ofKEocvSP2VCMKCjatkOkGzm6992USqALMdVdH8CITsC27M2Bvj6oCEJHq2RIVahZSBAVOWGEPDE5y/TXKUx7qsHbSIG2DnDbXSxSKIIcTWxIrrThRf4gy78Zjtwx55L8vzqAcW+kPkR9ALVlt54k0s0sWsSNYXFMysvZ9OeNsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778286826; c=relaxed/simple;
-	bh=w4nfqVFZGrK1NCIJntiRJ5nGBcZBg6USWQRdZN0VlQY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H75xhoY8OzXq/+JWCzrjEnWVndJ40mEaN9zudxYDdseXYrXZKJJTpEpJM3evq7smjCwXHKVotAV12fcp+jK8zCiz87Vk18kZ8fH6JqKJi/6FW6XygvB18A6lIdM+NPzpOMER01fJwGNNdZJeIRaOHGXDNk2caDb0mjHJgMzl7SA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X1LlBqaL; arc=none smtp.client-ip=209.85.210.169
+	s=arc-20240116; t=1778286898; c=relaxed/simple;
+	bh=ptcjVPEI8PMcugoxtvfq2tBFzpfpZITTxcsgKiNiIUY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BxQC9QjEvgfKdLX3Vufz7N1FcCt1gO2gL5at0ESLf7ZnJSMlVWWUe8+nfUvOPlT9Wzdo4k5VkHGS8t1FQwO0pRHN1ZLxvJXKDplg4p96Vtm/Uy/Cc5628N2hAcTrgow/N2Dd5VtchhbuUjBPKPaRfaP9x+ZONKWJ3XSXEaUzGzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FrquUENk; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X1LlBqaL"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-835386ff122so2234279b3a.3
-        for <llvm@lists.linux.dev>; Fri, 08 May 2026 17:33:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FrquUENk"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2aaed195901so12907255ad.0
+        for <llvm@lists.linux.dev>; Fri, 08 May 2026 17:34:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778286825; x=1778891625; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1778286896; x=1778891696; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xLJ9gLG7pbZKIRQypRSLrX+188/WO/6+lZX979t4oqk=;
-        b=X1LlBqaLXY/hlgoGZzh6pHZC0e+bTq8CpAIZyXocv2oZHuvctvDgEkVWN4HEidDteN
-         KChtpPOkXlwUIjzNKbD0t3D5ADxZGGiibKAznJsmqWJEDkqwWxMRaA2+rrhNn8byBm0U
-         L7w5m3ZlJHslG/PhZfiec+EmUxFAyThLe68Qe6nRpxY0rnrpyZ7b2wj2zrF5OtvHoKTc
-         Q7AV1mLVu68bR7QDGcsAGibR1t2g3kzgTY4AGqq5LmnEfb2nWA+bh9a4jeOaIr9O1WKJ
-         k00eqQaKd/oC/Zu5os6Dg/ZrOtqKoZw5cvxxTNfiBOc4Z14xpasLj0KyxAw3edApxRrM
-         m2kw==
+        bh=BcKVwdgCxNmEiNuNU9ws2Zlv9ka8LThv4VYDHowFaFg=;
+        b=FrquUENk5LPZK7OasOozweMLKOFZksHUeZX/zDZsptOplVtpzR1QFAvQkX14UNNIs5
+         +iUtfsO4DbmfbqKYMb6IWbF+NjtXtZs8zxJY4RewzXt5SLt/sQ/paVaqENBRgmH4pRzL
+         szeGzZ4u60s4ZOBWxqCwFldnw0OY/UbeOOf4nP1z3KbGajv2oXjqpdt+DLkBH4ka0HXu
+         F0t3qIxW1w94/HyhyZlxOAKgjseUeuWV3KfI8zZ4M0YaYakGQ8wpuvTHZoqd/Es0bn5v
+         IIG9LMnhW/WMww/zPK340lsRy56aDiVS/9pbQUvNbqYna14faoFL4ibLtGIlIBfOunvv
+         VJjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778286825; x=1778891625;
+        d=1e100.net; s=20251104; t=1778286896; x=1778891696;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xLJ9gLG7pbZKIRQypRSLrX+188/WO/6+lZX979t4oqk=;
-        b=gvdrborsi+I8D7/QfiymB1N+ANDMKMNA+8x6L7Tbsy3ckGIV/x6aOsF5L1qk1UXgmW
-         U8WWaEL0WkUB9OcwfIYT7FVgBezJFwszlge06o+p3grO0pIXzhbUjZRl8cww7Si96kFA
-         DFCcRm04mRYWEADTbM25VAmfRa7cy7DEd8wpBEmyWpkQQu2tpq3mOUzPGlXuzOd7xgJf
-         wCgKNKQRHpfDj3sKziu5PyCbGE9hT9eEGASo18PUhGgastZQt2w1Ta+epNt79rNc2H7H
-         MQ9RbgqIrWSMXPyvIwdPP30QoucWWD5dGBHkE7K8Ifvtxh6NyFZFKSvxCOEyLssoxu+d
-         MjNw==
-X-Forwarded-Encrypted: i=1; AFNElJ+guuRNTnJxuZ858iVJ0xfdrs940YerMUqXedTNEepuu8DiLVW0hqIbhb7JIMUCMGqj7cWe@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywb+O4068ovH3a1e2Wu6Yf8CCxnITRtDNXifb7XMPbhCSSnJLew
-	6y6mpSOcQChqy72Q/gqm3ffHZF9jtOkaloZO+0jsD353T4KsAVy7jKtM
-X-Gm-Gg: Acq92OGuW2F7R+pJAcMY/ZE5ZDsNqgjGIMvlfMA1lyeRrYJPbWvJ0W+wqimYV0hGHN7
-	I90aqq/RdvtuvuWwh+LFsDuofetmbMy6Fcp2/s+PuOUP79RZzrkWb6F8c8I5I+WQ6VdKztr7DIy
-	3Tc0PRRszwajHQ4CZCZsyKlzvVMJnul81m4KDNWLcLHNBklbXCmZ02QJsc7k9cZYXiCRlxyT8yU
-	29XhvGxJkDdZ1DnMjG0XVGOKF/jBfRJNpJSgkFx5sI1iNNeywJ72kGZJCKpDbvhr9vHO5i9q+mc
-	MFGlxNJHjdTgC4ltyMW4RFVXxgvUcdq8A2cKYk3OgJK48nDVyVN5GIG8PjG5C47k88MdYIk6wCZ
-	zg9mHhBwktyEHSFz+NEBVecS8o+azVc2kxaGVhzYwoAJSebQpZ3BnewYWdVfmAGbDtZbR2w+hs9
-	fCxy1240T4WySWW4oAX6jNHOzKXd6lBYVLbGPcU57UgSOeouLYz+Qgu+yZFs17+/rZBhCumNpGo
-	0AI04dllCPUxChsdvUjM0r3oOUzIX69l60=
-X-Received: by 2002:a05:6a00:6c90:b0:82f:4f63:31e1 with SMTP id d2e1a72fcca58-83a5badbcf7mr13179463b3a.8.1778286825102;
-        Fri, 08 May 2026 17:33:45 -0700 (PDT)
+        bh=BcKVwdgCxNmEiNuNU9ws2Zlv9ka8LThv4VYDHowFaFg=;
+        b=RiJkS9rUH/My6iWx2wvN7+xC9tkZE+9fwxoSH/Q3M8bAcPTtogN70+EtsKBCPETV3s
+         9UZJ88wIim82WbMtPNG4hmQH78Ux1vH73PwX4wc7BJVrPzX015Zp1+bD55Kh0/iZn3MC
+         nIiQfp5gBIjjnVci4mLlKJgmdqWYlyRsVTgQy7VWoYQc8p/hNAu0P0x9egJx+pubz9lq
+         5ZkzjsCQxwwiEe2v5yXpwIh4zUgkwlgMe/G1HTM70snNQtgyZj/CDdkpr5075JnXSrbY
+         kmiofZZUKD0yBV4T7b986pIiSjDeIlafcE8xE8YkFLR3BcOj+xtdYs1Y5q1OQoLE9sBd
+         VKCQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9gdX5F0w8oSzAAfWribzQKXJ6rOnh5tFTN00sea/plVJtNm9LoEeMHtRTVHhNpM20ZIe3u@lists.linux.dev
+X-Gm-Message-State: AOJu0YyWY0JHtVZSX2jEhRvmoePEOzrneDSL183F5/d4YLGOf/WVHD/m
+	TFwCEhdEe01RWLG0Bk8r9X9RSzUrKO/HE8sVgnvnIFqBK1RED4l0Xt1M
+X-Gm-Gg: Acq92OFubdzt4q0EoZ1IrM+L4wlnzIyXlvHEa1wHKhlvkZsuoniRXnmB66vauUHGv7+
+	xkLQJUJKXRFTQVqutdPpFquGzda5I2Qc2Sy6Y0Yst8iG9WNicpfvJ4cJWBeOFREBn77KB/uUKvO
+	bUQhnPeuPPJT/68+WFbkF97WnWFXtzCshAFFYo/RZtK4aKk9HnYvLLC8+uMSoAPpS30HCvfj4BA
+	FhgFEuZ1H+z966DorKlt5ymiY2RQlF0qSke3xcElw3hsC4MScI9z4gjTxtuEsozlWrZChQ3TpU5
+	lcmbIVWq429IDruCZdzP76k9Bhhb7wH1q9mDoxvBNosnhHH51corgDVm/NcXreYFEa1+RYrIuzz
+	4126TdMYuUETrV2qj+4JTl7ZyeQqvXs2T3ofaYDT8Y81fLDoqzG/H0VQVbtsDXo1ifPT7yiOvic
+	dFDvm+UqEo3VRG3tUHR2DCJsRbXIThhG5G5heuWj16NPTRbs3ZvNYN9Q18STS5n0GBL/Dpa3ekN
+	9PFcQchUp/34DcHaSMALlTeWN4QnG1H8DY=
+X-Received: by 2002:a17:903:1b0c:b0:2b4:689a:e411 with SMTP id d9443c01a7336-2bc7aa1f5bcmr4395505ad.22.1778286896345;
+        Fri, 08 May 2026 17:34:56 -0700 (PDT)
 Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-839679c8c00sm12593925b3a.32.2026.05.08.17.33.43
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d405adsm35086295ad.28.2026.05.08.17.34.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 17:33:44 -0700 (PDT)
+        Fri, 08 May 2026 17:34:55 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: linux-gpio@vger.kernel.org
 Cc: Linus Walleij <linusw@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Linus Walleij <linusw@kernel.org>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org (open list),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] gpio: sodaville: allow COMPILE_TEST builds
-Date: Fri,  8 May 2026 17:33:27 -0700
-Message-ID: <20260509003327.955942-1-rosenp@gmail.com>
+Subject: [PATCH] gpio: zevio: allow COMPILE_TEST builds
+Date: Fri,  8 May 2026 17:34:38 -0700
+Message-ID: <20260509003438.956051-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -79,43 +79,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Intel Sodaville GPIO driver uses PCI/MMIO and generic GPIO helpers, and
-builds outside X86.  Move its Kconfig entry out of the X86-only port-I/O
-menu and allow it to be selected with COMPILE_TEST.
+The ZEVIO GPIO driver uses generic platform, MMIO, and gpiolib interfaces.
+Allow it to build with COMPILE_TEST so it gets coverage on non-ARM
+platforms.
+
+Drop the ARM-specific IOMEM() casts around the register pointer.  The
+pointer is already __iomem, so readl() and writel() can use it directly.
 
 Tested with:
-make LLVM=1 ARCH=loongarch drivers/gpio/gpio-sodaville.o
+make LLVM=1 ARCH=loongarch drivers/gpio/gpio-zevio.o
 
 Assisted-by: Codex:GPT-5.5
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/gpio/Kconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpio/Kconfig      | 2 +-
+ drivers/gpio/gpio-zevio.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index f8e34b16fd99..9e1ed0f451b9 100644
+index 16c798446c46..f8e34b16fd99 100644
 --- a/drivers/gpio/Kconfig
 +++ b/drivers/gpio/Kconfig
-@@ -1908,16 +1908,16 @@ config GPIO_RDC321X
- 	  Support for the RDC R321x SoC GPIOs over southbridge
- 	  PCI configuration space.
+@@ -859,7 +859,7 @@ config GPIO_XTENSA
  
-+endmenu
-+
- config GPIO_SODAVILLE
- 	bool "Intel Sodaville GPIO support"
--	depends on X86 && OF
-+	depends on (X86 || COMPILE_TEST) && OF
- 	select GPIO_GENERIC
- 	select GENERIC_IRQ_CHIP
+ config GPIO_ZEVIO
+ 	bool "LSI ZEVIO SoC memory mapped GPIOs"
+-	depends on ARM
++	depends on ARM || COMPILE_TEST
  	help
- 	  Say Y here to support Intel Sodaville GPIO.
+ 	  Say yes here to support the GPIO controller in LSI ZEVIO SoCs.
  
--endmenu
--
- menu "SPI GPIO expanders"
- 	depends on SPI_MASTER
+diff --git a/drivers/gpio/gpio-zevio.c b/drivers/gpio/gpio-zevio.c
+index 29375bea2289..af0158522ac5 100644
+--- a/drivers/gpio/gpio-zevio.c
++++ b/drivers/gpio/gpio-zevio.c
+@@ -64,14 +64,14 @@ static inline u32 zevio_gpio_port_get(struct zevio_gpio *c, unsigned pin,
+ 					unsigned port_offset)
+ {
+ 	unsigned section_offset = ((pin >> 3) & 3)*ZEVIO_GPIO_SECTION_SIZE;
+-	return readl(IOMEM(c->regs + section_offset + port_offset));
++	return readl(c->regs + section_offset + port_offset);
+ }
  
+ static inline void zevio_gpio_port_set(struct zevio_gpio *c, unsigned pin,
+ 					unsigned port_offset, u32 val)
+ {
+ 	unsigned section_offset = ((pin >> 3) & 3)*ZEVIO_GPIO_SECTION_SIZE;
+-	writel(val, IOMEM(c->regs + section_offset + port_offset));
++	writel(val, c->regs + section_offset + port_offset);
+ }
+ 
+ /* Functions for struct gpio_chip */
 -- 
 2.54.0
 
