@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 460AE2367D3;
-	Sat,  9 May 2026 20:36:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1BBF2DB79F;
+	Sat,  9 May 2026 20:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778358995; cv=none; b=aLr5eJDv0xFMnr+bLKZhuOyit0ccWZBpvw/Df0DsfLF4PjmW6UrXmk24qqpvYwQbie9dLMwZvoFCdu/lzF060rJgI6i10UmcpLNOlqoKfeuZqUoVvONG0h0UlllD1KCSIqphv2zk1UWxeyJZJDyRCndT6Mj5diwoK5K1VK9tXUU=
+	t=1778359050; cv=none; b=BUQy+0TP4Jv9pnCkwh0rCNBK6vf8owK2tkkLofNgkrFPV95iOV5xWbTaRrZ8ALq/TInEZqlvh2ePgbBhVoi8SyRt2B6f9nEU4z707dILD/engrumyJ6PFFLlxF90Uu46omFB4kjx4m+OQRZ51x9ZYRsE1cw/EkMbTnUVbNem8gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778358995; c=relaxed/simple;
-	bh=k0keR1Ubk2J+JXLTfOaMUHdGdczEwUUbL+F2gApUoJk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=rnIlHFPBIcz7bfeAs4gpj+KP8VWZ+1lMf5Tkfu7qRssX/i+Ysddt/j+3Im3yNkcufZSPki6q8/uIJ6se5xPU4biSI/pwKJeVQifeKf6JkF0o2kp7xkidsoN13otNg0w4Wn42qODBnA7RWejxTmYnOD3YepQkdwmXdXA9AV9tn0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f+622OuV; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1778359050; c=relaxed/simple;
+	bh=8/haYIuAQgcqbLsOjqloZuxzUC4x11AW1w9LtdUoKJU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=iN0e3BWmakJGmjRaNAA2F3L6LJpV8O7wv7g6HnTu1nYpk9RcjXUF3SD48fyHHPP1H0s6ABLYUIhDFQWLQFOOzrWtJNynJohatG33/GuU5sndVnrQa0AdOCjJRgsOBCPNU4rtHQ7gWnnztIunwmPgDa7cjqlw+W7V2xqkiAgN18s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GBUqgj2U; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f+622OuV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GBUqgj2U"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778358993; x=1809894993;
+  t=1778359049; x=1809895049;
   h=date:from:to:cc:subject:message-id;
-  bh=k0keR1Ubk2J+JXLTfOaMUHdGdczEwUUbL+F2gApUoJk=;
-  b=f+622OuVed0lOIHKa1gFwwkISNsp7DmbXJPtLpFznfxT9/nZkdIsoiPp
-   4uBwmKgwNrRp1ZE9Fw/73Qrbgc7MaJb4U2qNwKvsgjfVIHr2h9IViIY6/
-   2FhmFrNkiCMMkABYvNuMYHq/HHZ4teEgPuSN+7kDXhmNharyia6bfYRpT
-   iLLn9lQp5lz+wG0/AgdQjx0nF+6A5LL/751ONshNMzStqVjYXQ1vmAz7E
-   1h9cOOkd1VMhSfxthZ0vxMBHcDTVfHF7sh3fWIeVZ7DN3l3xiRu2ckwoR
-   yDX/c+8WuTKl+BVFp7gMw9i6SHkkORfmywHxUx3PrR3MjrYos2GcqOwar
-   g==;
-X-CSE-ConnectionGUID: 06zLJpdOS/mYkIJSM2keEw==
-X-CSE-MsgGUID: QPRKSYwGT/exWEtp72Wp6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="79486989"
+  bh=8/haYIuAQgcqbLsOjqloZuxzUC4x11AW1w9LtdUoKJU=;
+  b=GBUqgj2UhA6O6+99uDEiICtSjndjHqXGo/xZQGNnoNTpXAP/3Oz7U17u
+   Srp+j15sg0x6PR1mGuieEYYx5nO36zyzTnfdnLPCOuMQcs3wcOvTgUlKo
+   r0nr0aghINwINGTyBn3woAS9X2IGk/mNyAfSvoEM+sT6M2DW1B8R/EnXY
+   X6qoLr+KH6n3tDN6A6TRSv6veYFLqrwU3TGznkjkMzzcxRgVcm4Y+j6lM
+   45KT0kTo2HX8yhi4wkR6922VLdaW0kJsPuGQ6PRMkg2YWmQ1Q3Tr9cP4p
+   XbLyJO28hWplkaefy8ibvlZ7yUGOC1Ami8FL8GtfdtloNeJeoOR6Pl7f0
+   A==;
+X-CSE-ConnectionGUID: mxOqbCipRhGP3lgWbx6qUA==
+X-CSE-MsgGUID: jepv4V5fQw2p/FrPSg/Jdg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="90682947"
 X-IronPort-AV: E=Sophos;i="6.23,225,1770624000"; 
-   d="scan'208";a="79486989"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2026 13:36:33 -0700
-X-CSE-ConnectionGUID: quNu2yc8RsmQ6c6HIT+Mpg==
-X-CSE-MsgGUID: yAMWgKB1RS+zyM1BWc/WTg==
+   d="scan'208";a="90682947"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2026 13:37:28 -0700
+X-CSE-ConnectionGUID: 4Wj1+eCRRzCFpPgGY3ahwg==
+X-CSE-MsgGUID: E6JwBCKZQnC7gQhvwAJxhQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,225,1770624000"; 
-   d="scan'208";a="267443161"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa002.jf.intel.com with ESMTP; 09 May 2026 13:36:32 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+   d="scan'208";a="275202606"
+Received: from lkp-server01.sh.intel.com (HELO 82327192134e) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 09 May 2026 13:37:27 -0700
+Received: from kbuild by 82327192134e with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wLoPV-000000007Xr-233T;
-	Sat, 09 May 2026 20:36:29 +0000
-Date: Sat, 09 May 2026 22:36:13 +0200
+	id 1wLoQO-000000001Op-0AOO;
+	Sat, 09 May 2026 20:37:24 +0000
+Date: Sun, 10 May 2026 04:36:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vernon Yang <yanglincheng@kylinos.cn>
+To: Hector Martin <marcan@marcan.st>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: kernel/bpf/helpers.c:2893:60: warning: declaration of 'enum
- psi_states' will not be visible outside of this function
-Message-ID: <202605092231.VD6i30e4-lkp@intel.com>
+ Janne Grunau <j@jannau.net>
+Subject: [asahilinux:bits/090-spi-hid 18/19]
+ drivers/hid/dockchannel-hid/dockchannel-hid.c:987:18: warning: format
+ specifies type 'long' but the argument has type '__size_t' (aka 'unsigned
+ int')
+Message-ID: <202605100420.YhXKJxAo-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,73 +62,80 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Vernon-Yang/psi-add-psi_group_flush_stats-function/20260509-210713
-head:   4a4580a71f5884e16d331476b601322cc2d41af7
-commit: edf653aa3964af51ae2f2b180bcb0f6cfa26c8f7 bpf: add bpf_cgroup_{flush_stats,stall} function
-date:   7 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260509/202605092231.VD6i30e4-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260509/202605092231.VD6i30e4-lkp@intel.com/reproduce)
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   7b3c6e8461f3035d025ece758919facbc1c6d854
+commit: e9ca8c87d173cbf7eb2089d7ddec9149e1d608a1 [18/19] HID: Add Apple DockChannel HID transport driver
+config: arm-randconfig-004-20260510 (https://download.01.org/0day-ci/archive/20260510/202605100420.YhXKJxAo-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605100420.YhXKJxAo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605092231.VD6i30e4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605100420.YhXKJxAo-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/bpf/helpers.c:2893:60: warning: declaration of 'enum psi_states' will not be visible outside of this function [-Wvisibility]
-    2893 | __bpf_kfunc u64 bpf_cgroup_stall(struct cgroup *cgrp, enum psi_states states)
-         |                                                            ^
-   kernel/bpf/helpers.c:2893:71: error: variable has incomplete type 'enum psi_states'
-    2893 | __bpf_kfunc u64 bpf_cgroup_stall(struct cgroup *cgrp, enum psi_states states)
-         |                                                                       ^
-   kernel/bpf/helpers.c:2893:60: note: forward declaration of 'enum psi_states'
-    2893 | __bpf_kfunc u64 bpf_cgroup_stall(struct cgroup *cgrp, enum psi_states states)
-         |                                                            ^
-   kernel/bpf/helpers.c:2897:40: error: use of undeclared identifier 'NR_PSI_STATES'; did you mean 'NR_NODE_STATES'?
-    2897 |         if (unlikely(!group || (u32)states >= NR_PSI_STATES - 1))
-         |                                               ^~~~~~~~~~~~~
-         |                                               NR_NODE_STATES
-   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/nodemask.h:396:2: note: 'NR_NODE_STATES' declared here
-     396 |         NR_NODE_STATES
-         |         ^
-   kernel/bpf/helpers.c:2900:24: error: no member named 'total' in 'struct psi_group'
-    2900 |         return div_u64(group->total[PSI_AVGS][states], NSEC_PER_MSEC);
-         |                        ~~~~~  ^
-   kernel/bpf/helpers.c:2900:30: error: use of undeclared identifier 'PSI_AVGS'
-    2900 |         return div_u64(group->total[PSI_AVGS][states], NSEC_PER_MSEC);
-         |                                     ^
-   kernel/bpf/helpers.c:2914:2: error: call to undeclared function 'psi_group_flush_stats'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2914 |         psi_group_flush_stats(group);
-         |         ^
-   1 warning and 5 errors generated.
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:987:18: warning: format specifies type 'long' but the argument has type '__size_t' (aka 'unsigned int') [-Wformat]
+     986 |                 dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
+         |                                                                         ~~~
+         |                                                                         %zu
+     987 |                         shdr->length, hdr->length - sizeof(*shdr));
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +2893 kernel/bpf/helpers.c
+vim +987 drivers/hid/dockchannel-hid/dockchannel-hid.c
 
-  2885	
-  2886	/**
-  2887	 * bpf_cgroup_stall - acquire the total stall time of cgroup
-  2888	 * @cgrp: cgroup struct
-  2889	 * @states: psi states
-  2890	 *
-  2891	 * Return the total stall time.
-  2892	 */
-> 2893	__bpf_kfunc u64 bpf_cgroup_stall(struct cgroup *cgrp, enum psi_states states)
-  2894	{
-  2895		struct psi_group *group = cgroup_psi(cgrp);
-  2896	
-  2897		if (unlikely(!group || (u32)states >= NR_PSI_STATES - 1))
-  2898			return (u64)-1;
-  2899	
-  2900		return div_u64(group->total[PSI_AVGS][states], NSEC_PER_MSEC);
-  2901	}
-  2902	
+   979	
+   980	static void dchid_handle_ack(struct dchid_iface *iface, struct dchid_hdr *hdr, void *data)
+   981	{
+   982		struct dchid_subhdr *shdr = (void *)data;
+   983		u8 *payload = data + sizeof(*shdr);
+   984	
+   985		if (shdr->length + sizeof(*shdr) > hdr->length) {
+   986			dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
+ > 987				shdr->length, hdr->length - sizeof(*shdr));
+   988			return;
+   989		}
+   990		if (shdr->flags != iface->out_flags) {
+   991			dev_err(iface->dchid->dev,
+   992				"Received unexpected flags 0x%x on ACK channel (expFected 0x%x)\n",
+   993				shdr->flags, iface->out_flags);
+   994			return;
+   995		}
+   996	
+   997		if (shdr->length < 1) {
+   998			dev_err(iface->dchid->dev, "Received length 0 output report ack\n");
+   999			return;
+  1000		}
+  1001		if (iface->tx_seq != hdr->seq) {
+  1002			dev_err(iface->dchid->dev, "Received ACK with bad seq (expected %d, got %d)\n",
+  1003				iface->tx_seq, hdr->seq);
+  1004			return;
+  1005		}
+  1006		if (iface->out_report != payload[0]) {
+  1007			dev_err(iface->dchid->dev, "Received ACK with bad report (expected %d, got %d\n",
+  1008				iface->out_report, payload[0]);
+  1009			return;
+  1010		}
+  1011	
+  1012		if (iface->resp_buf && iface->resp_size)
+  1013			memcpy(iface->resp_buf, payload + 1, min((size_t)shdr->length - 1, iface->resp_size));
+  1014	
+  1015		iface->resp_size = shdr->length;
+  1016		iface->out_report = -1;
+  1017		iface->retcode = shdr->retcode;
+  1018		complete(&iface->out_complete);
+  1019	}
+  1020	
 
---
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
