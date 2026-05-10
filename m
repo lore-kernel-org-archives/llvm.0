@@ -1,135 +1,200 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983C733120C
-	for <llvm@lists.linux.dev>; Sun, 10 May 2026 19:53:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79E6196C7C;
+	Sun, 10 May 2026 22:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778442789; cv=none; b=MNHOxlEsIzjV9qBY+ipg2tYYVfKbGIZRR3D+VW3+0/kTmy8o/xODAvzVurNdDvw2Nq11rj2OLeAiTAAndGAxfrYOEqbn9AIEFbJR/i9w9XTMHgRgM3zlHkrRLzjB2oqEoWQvGbJHbdduDnSt15mYthwryLl11HoMsQcIlG02mg0=
+	t=1778452315; cv=none; b=g4/Y53YHNIlA6GZBCsreXShxcJEGAE1fp+hdTSs0w6DbmTs7FEPFZHmWCH8L1uGeYmvPAmUcuny/9LgtUjss3KVhpApQi5bZKCYg8cdDFh0XMFFIE/02n0EiJN2fqaWSB1MNk+Ve8vLP2sLOCHd3d52NAJhZIzW5OMQfeUik5To=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778442789; c=relaxed/simple;
-	bh=P0SHPKf0OXLD1/eRUCuVINEMJRAYVSsoCC04JipipJs=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=rzl1F00RM0hSMrx2XtV+ttUf4rOOvCNtb79BlgGTkf3xZjg4v+Jsc/5b10tI3nc1lZr7EKOKFlF++w9sj2urQIiOBM0PcvBeH7rrRaUQsNGcQTzO2ebm0HRt8LQD4iAP0ugVBdTr+GUdpaLscmoqBuxvjWwQilLRlVZMQZM1IC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S03EgNii; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778452315; c=relaxed/simple;
+	bh=CXHDFQSKgF6v2QpHQAr2XcVV3tOiFDDxpcpC4YUwyGs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cFwNkhQiAVMAjzd3Mxn1KPv8MgjqMoWUZf4oOPygEwx6FnsXELOXs9obsBU1xIbqZ/tiZbZPTf/XPhMR65kRtLoGBfFHTVWd6PeQuiXt0t7o3hZ4PUkgsqUZF4/C0EoHHC2AvvYhMXuiZ32d6gLJtbAUFkWcV9yHGoOajAvInWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X/HbIQWC; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S03EgNii"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778442786;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VZRu6g92SfnQ3XEBdX7Vy0oQKiFxj2MzkcsNNJM+ddo=;
-	b=S03EgNiiiinYJXrA57xZ1MwX2b3uzmxL2MWhPvggPeRJ5VYgJB6iMa2jP6SGH8tr8ng2BX
-	hWgNhHRwP3T2MXJN6vPoQRMDaQpigSfpH+umGZky5RXEu1AIef5xRCaO1D1gpuiLaymJ/n
-	OTrBsgEc2s5HVGB+q04NlzcfMU4FAog=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-505-B4pE9lejMQ67UVgzxepvpw-1; Sun,
- 10 May 2026 15:53:04 -0400
-X-MC-Unique: B4pE9lejMQ67UVgzxepvpw-1
-X-Mimecast-MFC-AGG-ID: B4pE9lejMQ67UVgzxepvpw_1778442784
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0A72F1800344
-	for <llvm@lists.linux.dev>; Sun, 10 May 2026 19:53:04 +0000 (UTC)
-Received: from [172.20.1.62] (unknown [10.30.45.70])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6886719560A2;
-	Sun, 10 May 2026 19:53:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 68 of 97): Test report for master
- (7.1.0-rc2, upstream-mainline, 81d6f780)
-Date: Sun, 10 May 2026 19:53:03 -0000
-To: yoyang@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X/HbIQWC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778452314; x=1809988314;
+  h=date:from:to:cc:subject:message-id;
+  bh=CXHDFQSKgF6v2QpHQAr2XcVV3tOiFDDxpcpC4YUwyGs=;
+  b=X/HbIQWCrkkgvMk7iUBs7lTPbI0lfVLSwt98/e3T2E/YpIzzf3Lz3TDb
+   wOR7KMdyNQ4KGemhiZQzVAkDBvOKzs3QTbhauS8ycVSj7fcDgxA11Ebh5
+   W97vgK0NAoCDiDllVG1ULjKQKMklpcPWWIFa6fQzBWYXeeEiliW0smbzy
+   KbwJy0uyizxZE9BBNJGn3/0ACduJai4pGWW2EPm0zWgDuZzEf9V4ltd/Y
+   jbgfZPl3NCD/rodxbhb3FzaHthmHCIlq4Ba2fTHTLJqrSYw1AMNqVoW7y
+   jtq2gJPEJw1WY5kc2x+vMqwzxPuD2Gd3PrBZq5BDblmTxcBQxjsvLKEKW
+   Q==;
+X-CSE-ConnectionGUID: J+hgznIMTauyrHQl77diww==
+X-CSE-MsgGUID: NxZxzGpiSISgq5cceyXPeA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11782"; a="78486916"
+X-IronPort-AV: E=Sophos;i="6.23,228,1770624000"; 
+   d="scan'208";a="78486916"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2026 15:31:51 -0700
+X-CSE-ConnectionGUID: hH3G8t6/Squ3ozJA2pr/5A==
+X-CSE-MsgGUID: XJeC1sJXQ5aMSowqgT5YFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,228,1770624000"; 
+   d="scan'208";a="260756730"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa002.fm.intel.com with ESMTP; 10 May 2026 15:31:50 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wMCge-000000007oh-0Xyd;
+	Sun, 10 May 2026 22:31:48 +0000
+Date: Mon, 11 May 2026 00:31:47 +0200
+From: kernel test robot <lkp@intel.com>
+To: Eric Dumazet <edumazet@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: net/core/drop_monitor.c:1164:32: error: incompatible
+ function pointer types passing 'void (*const)(void *, struct sk_buff *, void
+ *, enum skb_drop_reason, struct sock *)' to parameter of type 'void (*)(void
+ *, struct sk_buff *, void *, enum skb_drop_reaso...
+Message-ID: <202605110008.TTAJnLEY-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <76205.126051015530500176@us-mta-505.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ripCi5DvKRmNvfgVKM5_k_F56Lg-oriJq5xCcyFpLgc_1778442784
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-constify-sk_skb_reason_drop-sock-parameter/20260510-230935
+head:   daff210bd24b88ed46a00a4f88b96722e9fe4a3d
+commit: c2c014f764c7b7e3341d8ea76f1bcae8c284b06e net: constify sk_skb_reason_drop() sock parameter
+date:   7 hours ago
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260511/202605110008.TTAJnLEY-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260511/202605110008.TTAJnLEY-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605110008.TTAJnLEY-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/core/drop_monitor.c:1164:32: error: incompatible function pointer types passing 'void (*const)(void *, struct sk_buff *, void *, enum skb_drop_reason, struct sock *)' to parameter of type 'void (*)(void *, struct sk_buff *, void *, enum skb_drop_reason, const struct sock *)' [-Wincompatible-function-pointer-types]
+    1164 |         rc = register_trace_kfree_skb(ops->kfree_skb_probe, NULL);
+         |                                       ^~~~~~~~~~~~~~~~~~~~
+   include/trace/events/skb.h:24:1: note: passing argument to parameter 'probe' here
+      24 | TRACE_EVENT(kfree_skb,
+         | ^
+   include/linux/tracepoint.h:664:2: note: expanded from macro 'TRACE_EVENT'
+     664 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
+         |         ^
+   include/linux/tracepoint.h:526:2: note: expanded from macro 'DECLARE_TRACE_EVENT'
+     526 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+         |         ^
+   include/linux/tracepoint.h:300:2: note: expanded from macro '__DECLARE_TRACE'
+     300 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+         |         ^
+   include/linux/tracepoint.h:271:31: note: expanded from macro '__DECLARE_TRACE_COMMON'
+     271 |         register_trace_##name(void (*probe)(data_proto), void *data)    \
+         |                                      ^
+   net/core/drop_monitor.c:1179:29: error: incompatible function pointer types passing 'void (*const)(void *, struct sk_buff *, void *, enum skb_drop_reason, struct sock *)' to parameter of type 'void (*)(void *, struct sk_buff *, void *, enum skb_drop_reason, const struct sock *)' [-Wincompatible-function-pointer-types]
+    1179 |         unregister_trace_kfree_skb(ops->kfree_skb_probe, NULL);
+         |                                    ^~~~~~~~~~~~~~~~~~~~
+   include/trace/events/skb.h:24:1: note: passing argument to parameter 'probe' here
+      24 | TRACE_EVENT(kfree_skb,
+         | ^
+   include/linux/tracepoint.h:664:2: note: expanded from macro 'TRACE_EVENT'
+     664 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
+         |         ^
+   include/linux/tracepoint.h:526:2: note: expanded from macro 'DECLARE_TRACE_EVENT'
+     526 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+         |         ^
+   include/linux/tracepoint.h:300:2: note: expanded from macro '__DECLARE_TRACE'
+     300 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+         |         ^
+   include/linux/tracepoint.h:284:33: note: expanded from macro '__DECLARE_TRACE_COMMON'
+     284 |         unregister_trace_##name(void (*probe)(data_proto), void *data)  \
+         |                                        ^
+   net/core/drop_monitor.c:1202:29: error: incompatible function pointer types passing 'void (*const)(void *, struct sk_buff *, void *, enum skb_drop_reason, struct sock *)' to parameter of type 'void (*)(void *, struct sk_buff *, void *, enum skb_drop_reason, const struct sock *)' [-Wincompatible-function-pointer-types]
+    1202 |         unregister_trace_kfree_skb(ops->kfree_skb_probe, NULL);
+         |                                    ^~~~~~~~~~~~~~~~~~~~
+   include/trace/events/skb.h:24:1: note: passing argument to parameter 'probe' here
+      24 | TRACE_EVENT(kfree_skb,
+         | ^
+   include/linux/tracepoint.h:664:2: note: expanded from macro 'TRACE_EVENT'
+     664 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
+         |         ^
+   include/linux/tracepoint.h:526:2: note: expanded from macro 'DECLARE_TRACE_EVENT'
+     526 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+         |         ^
+   include/linux/tracepoint.h:300:2: note: expanded from macro '__DECLARE_TRACE'
+     300 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+         |         ^
+   include/linux/tracepoint.h:284:33: note: expanded from macro '__DECLARE_TRACE_COMMON'
+     284 |         unregister_trace_##name(void (*probe)(data_proto), void *data)  \
+         |                                        ^
+   3 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'v7.1-rc3-smb3-client-fixes' of git://git.sam=
-ba.org/sfrench/cifs-2.6
+vim +1164 net/core/drop_monitor.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2511121646
+8e94c3bc922e702 Ido Schimmel    2019-08-17  1137  
+7c747838a55818f Ido Schimmel    2019-08-11  1138  static int net_dm_trace_on_set(struct netlink_ext_ack *extack)
+9a8afc8d3962f3e Neil Horman     2009-03-11  1139  {
+28315f7999870bb Ido Schimmel    2019-08-11  1140  	const struct net_dm_alert_ops *ops;
+70c69274f354ecb Ido Schimmel    2019-08-11  1141  	int cpu, rc;
+4b706372f18de53 Neil Horman     2010-07-20  1142  
+28315f7999870bb Ido Schimmel    2019-08-11  1143  	ops = net_dm_alert_ops_arr[net_dm_alert_mode];
+28315f7999870bb Ido Schimmel    2019-08-11  1144  
+cad456d5abbb630 Neil Horman     2012-05-17  1145  	if (!try_module_get(THIS_MODULE)) {
+965100966efe85e Ido Schimmel    2019-08-06  1146  		NL_SET_ERR_MSG_MOD(extack, "Failed to take reference on module");
+7c747838a55818f Ido Schimmel    2019-08-11  1147  		return -ENODEV;
+cad456d5abbb630 Neil Horman     2012-05-17  1148  	}
+cad456d5abbb630 Neil Horman     2012-05-17  1149  
+70c69274f354ecb Ido Schimmel    2019-08-11  1150  	for_each_possible_cpu(cpu) {
+70c69274f354ecb Ido Schimmel    2019-08-11  1151  		struct per_cpu_dm_data *data = &per_cpu(dm_cpu_data, cpu);
+44075f563793880 Ido Schimmel    2019-08-11  1152  		struct sk_buff *skb;
+70c69274f354ecb Ido Schimmel    2019-08-11  1153  
+28315f7999870bb Ido Schimmel    2019-08-11  1154  		INIT_WORK(&data->dm_alert_work, ops->work_item_func);
+70c69274f354ecb Ido Schimmel    2019-08-11  1155  		timer_setup(&data->send_timer, sched_send_work, 0);
+44075f563793880 Ido Schimmel    2019-08-11  1156  		/* Allocate a new per-CPU skb for the summary alert message and
+44075f563793880 Ido Schimmel    2019-08-11  1157  		 * free the old one which might contain stale data from
+44075f563793880 Ido Schimmel    2019-08-11  1158  		 * previous tracing.
+44075f563793880 Ido Schimmel    2019-08-11  1159  		 */
+44075f563793880 Ido Schimmel    2019-08-11  1160  		skb = reset_per_cpu_data(data);
+44075f563793880 Ido Schimmel    2019-08-11  1161  		consume_skb(skb);
+70c69274f354ecb Ido Schimmel    2019-08-11  1162  	}
+70c69274f354ecb Ido Schimmel    2019-08-11  1163  
+28315f7999870bb Ido Schimmel    2019-08-11 @1164  	rc = register_trace_kfree_skb(ops->kfree_skb_probe, NULL);
+7c747838a55818f Ido Schimmel    2019-08-11  1165  	if (rc) {
+7c747838a55818f Ido Schimmel    2019-08-11  1166  		NL_SET_ERR_MSG_MOD(extack, "Failed to connect probe to kfree_skb() tracepoint");
+7c747838a55818f Ido Schimmel    2019-08-11  1167  		goto err_module_put;
+7c747838a55818f Ido Schimmel    2019-08-11  1168  	}
+cad456d5abbb630 Neil Horman     2012-05-17  1169  
+28315f7999870bb Ido Schimmel    2019-08-11  1170  	rc = register_trace_napi_poll(ops->napi_poll_probe, NULL);
+7c747838a55818f Ido Schimmel    2019-08-11  1171  	if (rc) {
+7c747838a55818f Ido Schimmel    2019-08-11  1172  		NL_SET_ERR_MSG_MOD(extack, "Failed to connect probe to napi_poll() tracepoint");
+7c747838a55818f Ido Schimmel    2019-08-11  1173  		goto err_unregister_trace;
+7c747838a55818f Ido Schimmel    2019-08-11  1174  	}
+7c747838a55818f Ido Schimmel    2019-08-11  1175  
+7c747838a55818f Ido Schimmel    2019-08-11  1176  	return 0;
+7c747838a55818f Ido Schimmel    2019-08-11  1177  
+7c747838a55818f Ido Schimmel    2019-08-11  1178  err_unregister_trace:
+28315f7999870bb Ido Schimmel    2019-08-11  1179  	unregister_trace_kfree_skb(ops->kfree_skb_probe, NULL);
+7c747838a55818f Ido Schimmel    2019-08-11  1180  err_module_put:
+9398e9c0b1d44ee Ido Schimmel    2021-03-10  1181  	for_each_possible_cpu(cpu) {
+9398e9c0b1d44ee Ido Schimmel    2021-03-10  1182  		struct per_cpu_dm_data *data = &per_cpu(dm_cpu_data, cpu);
+9398e9c0b1d44ee Ido Schimmel    2021-03-10  1183  		struct sk_buff *skb;
+9398e9c0b1d44ee Ido Schimmel    2021-03-10  1184  
+8fa7292fee5c524 Thomas Gleixner 2025-04-05  1185  		timer_delete_sync(&data->send_timer);
+9398e9c0b1d44ee Ido Schimmel    2021-03-10  1186  		cancel_work_sync(&data->dm_alert_work);
+9398e9c0b1d44ee Ido Schimmel    2021-03-10  1187  		while ((skb = __skb_dequeue(&data->drop_queue)))
+9398e9c0b1d44ee Ido Schimmel    2021-03-10  1188  			consume_skb(skb);
+9398e9c0b1d44ee Ido Schimmel    2021-03-10  1189  	}
+7c747838a55818f Ido Schimmel    2019-08-11  1190  	module_put(THIS_MODULE);
+7c747838a55818f Ido Schimmel    2019-08-11  1191  	return rc;
+7c747838a55818f Ido Schimmel    2019-08-11  1192  }
+7c747838a55818f Ido Schimmel    2019-08-11  1193  
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2511121646_x86_64_kernel_kcidb_tool_21247357_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
-    /distribution/command [aarch64, ppc64le, s390x, x86_64]
-    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
-    Boot test [aarch64, ppc64le, s390x, x86_64]
-    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
-    Reboot test [aarch64, ppc64le, s390x, x86_64]
-    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
-    Storage - blktests - throtl [aarch64, s390x, x86_64]
-    Storage - blktests - ublk [aarch64, s390x, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
-    stress: stress-ng - memory [aarch64, s390x, x86_64]
-    xfstests - btrfs [aarch64]
-    xfstests - ext4 [aarch64]
-    xfstests - xfs [aarch64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
