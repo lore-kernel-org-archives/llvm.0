@@ -1,170 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C303115A2;
-	Sun, 10 May 2026 05:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E24E35504D;
+	Sun, 10 May 2026 05:41:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778390375; cv=none; b=EOd1B6PBvvfhuhtfmQX2cFoT1J/VGEKZVeNV+z5zkSNYo1JibBBBiHawcj7qbsdE9Qk+4id0unEByAgDB6PoDQs3GaDVDkhiWLSR+ZCQyrF0AH4xipg8vtg4R6lnAQht1da4J0gteHVvuqklMGHzTd2WefmtrG1zXdMoWxGDUB0=
+	t=1778391696; cv=none; b=oQP+ca+sz73YlpGQlyJ6i2fkcUnrv4aai+RSNTuaOCiYRR1CXIi01yGpHymgTc6b/Tq9TWJHhKo7tI4zdq3rWlsr4SyxtRn/7kVwUAJzucYmZnCfOK4C72HMHoq5V95a1K1LK4iGUbK8e0O8VAoYLJAftPmmkYiuq1nD2BLU120=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778390375; c=relaxed/simple;
-	bh=Tb2Fcl07lDQV2lJ3devouZ78CtC47C98TLMHnEnOots=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qky2oIE/2UfirclcCFjaz4gd0lxMbjkzTCnrCkNlhIXkTOMaIwkUau3zqzHvoRHhv/VL7CoeMLmVtgir+ue22/OXQAdC50haxQ9gNZMqYueg1CW5soyeFwvryJxhUQTIDuVqTc6KauyqM7tlAEYERllnhVDhXwXdExC+J8oZjFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QfgI33Nm; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1778391696; c=relaxed/simple;
+	bh=FaSFBF1RN1ZsvA/4UwfdV6WVzjUxu01Algt9IxV1aLc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=BIAcYGOVUXbQ1daIZbyHn5qZhn/tPE5xX5Rwm7P0HY+dQ29oCqpmKJfviwzw0Gpr6+VxetFJ5i2Oq3ZvXWgSzvOvIL2Y6bbFSVdBxMaCdoxIJFfJ/XWhyqCLb86c7ejl8EuaTCLpEpbXJDbBY9DtOf3tCBGnkQ2RqFxVRMHZeFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fETNcViA; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QfgI33Nm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fETNcViA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778390372; x=1809926372;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tb2Fcl07lDQV2lJ3devouZ78CtC47C98TLMHnEnOots=;
-  b=QfgI33NmWMWF4sl3wz1EIbU9areyzcxDRp5+Iy+NCJtqepoRzExy9fpM
-   rKF4bATd7xY7eJdzRmrzeRwm8lcCBiUYMg/PdQjnLlJ/mKQ0kObb53y4W
-   6GR3P3ifDDThEvj2+p+a1UHxdw/BAXTpyvZKShwqhoeg1cQiD+/mmpE92
-   A3/a6DT5ay0oTimQzITWNso1HIaRBX1O2mLyiYzHspN+gZJhfQoxFA0BD
-   ecjPOH0/7JeTF+nJdX3QKXRB0KcdZ4vpcsJXoLJINlJKnwDaKfLMlQRjB
-   GzHnh5dU0dyWoDFwrThBwO66kJSSM1l5uw+xwoszfjRHBoYlbaAoF55u4
+  t=1778391694; x=1809927694;
+  h=date:from:to:cc:subject:message-id;
+  bh=FaSFBF1RN1ZsvA/4UwfdV6WVzjUxu01Algt9IxV1aLc=;
+  b=fETNcViAC5s7yauFtZoRaeEL1sdzamzG1X2r37gMNhDb88NwsL9+J2Bd
+   iPWDajQyLCcSOdpx8m46DvA4KKU6tcEmAcdmeb6HwbZBvhqXlqFHfZ0fc
+   Tp5St/3Jmp3AJDZHaMe9qFWXfpmRvb1Ia6ggZqC8ElhuLMmz0PouVbu+8
+   miGKNIjYbO7CHFaFrzHe9nUccArD14JP7beFkB8//nqeeXlNbnmHRnOYC
+   juKpWI3WYp7imWA3svG1VNeQvB9nU+lalTXkPNxWc7qvBP/Z+N085dC4O
+   POujbTjJ9FZ/kJcIydZWXEsCSQ3KFioOuR5T1eMtG/+GHrclaJFf+pAKi
    w==;
-X-CSE-ConnectionGUID: pO2cSURjR8KFP5dNPG7v8A==
-X-CSE-MsgGUID: 3xO/14WPQm2cxJy7aave8A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="89901693"
+X-CSE-ConnectionGUID: ngH/pAOMSPGfZoEH/erR0A==
+X-CSE-MsgGUID: 7SUftu4NS2iQDRquXDW60w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="82930675"
 X-IronPort-AV: E=Sophos;i="6.23,227,1770624000"; 
-   d="scan'208";a="89901693"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2026 22:19:31 -0700
-X-CSE-ConnectionGUID: WbuzXBsTQSGONjZWXM1spQ==
-X-CSE-MsgGUID: MrIXDTyNTtO4bnYNKCVZNA==
+   d="scan'208";a="82930675"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2026 22:41:33 -0700
+X-CSE-ConnectionGUID: tvTUKEaGSlGS6YZgwkRb1w==
+X-CSE-MsgGUID: T7z2icqFSn6UJEPbFT459Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,227,1770624000"; 
-   d="scan'208";a="237083204"
+   d="scan'208";a="237247199"
 Received: from lkp-server01.sh.intel.com (HELO 82327192134e) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 09 May 2026 22:19:30 -0700
+  by orviesa009.jf.intel.com with ESMTP; 09 May 2026 22:41:31 -0700
 Received: from kbuild by 82327192134e with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wLwZa-000000001mL-1pCr;
-	Sun, 10 May 2026 05:19:26 +0000
-Date: Sun, 10 May 2026 13:18:57 +0800
+	id 1wLwuu-000000001nX-3cHU;
+	Sun, 10 May 2026 05:41:28 +0000
+Date: Sun, 10 May 2026 13:41:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiakai Xu <xujiakai24@mails.ucas.ac.cn>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
+To: Lyude Paul <lyude@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiakai Xu <xujiakai24@mails.ucas.ac.cn>
-Subject: Re: [PATCH] netdevsim: Fix task hung by releasing bus lock before
- device ops
-Message-ID: <202605101358.RCmpCsFR-lkp@intel.com>
-References: <20260509092837.3432281-1-xujiakai24@mails.ucas.ac.cn>
+ Janne Grunau <j@jannau.net>
+Subject: [asahilinux:bits/250-aop 31/54] error[E0277]: `T` doesn't
+ implement `Debug`
+Message-ID: <202605101342.P4GWbBZn-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260509092837.3432281-1-xujiakai24@mails.ucas.ac.cn>
 
-Hi Jiakai,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.1-rc2 next-20260508]
-[cannot apply to horms-ipvs/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiakai-Xu/netdevsim-Fix-task-hung-by-releasing-bus-lock-before-device-ops/20260510-070550
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260509092837.3432281-1-xujiakai24%40mails.ucas.ac.cn
-patch subject: [PATCH] netdevsim: Fix task hung by releasing bus lock before device ops
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260510/202605101358.RCmpCsFR-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605101358.RCmpCsFR-lkp@intel.com/reproduce)
+tree:   https://github.com/AsahiLinux/linux bits/250-aop
+head:   571e5d3c9fc1383a0f7a0a52d30fb5ad9f74bef4
+commit: 4af9e85767726a5767b07a6c51479a842b4a896a [31/54] rust: Introduce iosys_map bindings
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260510/202605101342.P4GWbBZn-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605101342.P4GWbBZn-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605101358.RCmpCsFR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605101342.P4GWbBZn-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/netdevsim/bus.c:192:3: error: call to undeclared function 'nsim_bus_dev_del'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     192 |                 nsim_bus_dev_del(nsim_bus_dev);
-         |                 ^
-   drivers/net/netdevsim/bus.c:192:3: note: did you mean 'nsim_bus_dev_new'?
-   drivers/net/netdevsim/bus.c:156:1: note: 'nsim_bus_dev_new' declared here
-     156 | nsim_bus_dev_new(unsigned int id, unsigned int port_count, unsigned int num_queues);
-         | ^
->> drivers/net/netdevsim/bus.c:206:13: error: conflicting types for 'nsim_bus_dev_del'
-     206 | static void nsim_bus_dev_del(struct nsim_bus_dev *nsim_bus_dev);
-         |             ^
-   drivers/net/netdevsim/bus.c:192:3: note: previous implicit declaration is here
-     192 |                 nsim_bus_dev_del(nsim_bus_dev);
-         |                 ^
-   2 errors generated.
-
-
-vim +/nsim_bus_dev_del +192 drivers/net/netdevsim/bus.c
-
-   157	
-   158	static ssize_t
-   159	new_device_store(const struct bus_type *bus, const char *buf, size_t count)
-   160	{
-   161		unsigned int id, port_count, num_queues;
-   162		struct nsim_bus_dev *nsim_bus_dev;
-   163		int err;
-   164	
-   165		err = sscanf(buf, "%u %u %u", &id, &port_count, &num_queues);
-   166		switch (err) {
-   167		case 1:
-   168			port_count = 1;
-   169			fallthrough;
-   170		case 2:
-   171			num_queues = 1;
-   172			fallthrough;
-   173		case 3:
-   174			if (id > INT_MAX) {
-   175				pr_err("Value of \"id\" is too big.\n");
-   176				return -EINVAL;
-   177			}
-   178			break;
-   179		default:
-   180			pr_err("Format for adding new device is \"id port_count num_queues\" (uint uint uint).\n");
-   181			return -EINVAL;
-   182		}
-   183	
-   184		nsim_bus_dev = nsim_bus_dev_new(id, port_count, num_queues);
-   185		if (IS_ERR(nsim_bus_dev))
-   186			return PTR_ERR(nsim_bus_dev);
-   187	
-   188		mutex_lock(&nsim_bus_dev_list_lock);
-   189		/* Prevent to use resource before initialization. */
-   190		if (!smp_load_acquire(&nsim_bus_enable)) {
-   191			mutex_unlock(&nsim_bus_dev_list_lock);
- > 192			nsim_bus_dev_del(nsim_bus_dev);
-   193			return -EBUSY;
-   194		}
-   195	
-   196		/* Allow using nsim_bus_dev */
-   197		smp_store_release(&nsim_bus_dev->init, true);
-   198	
-   199		list_add_tail(&nsim_bus_dev->list, &nsim_bus_dev_list);
-   200		mutex_unlock(&nsim_bus_dev_list_lock);
-   201	
-   202		return count;
-   203	}
-   204	static BUS_ATTR_WO(new_device);
-   205	
- > 206	static void nsim_bus_dev_del(struct nsim_bus_dev *nsim_bus_dev);
-   207	
+>> error[E0277]: `T` doesn't implement `Debug`
+   --> rust/kernel/iosys_map.rs:516:13
+   |
+   516 |             assert_eq!(*self.vec.as_ref(), *src)
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `T` cannot be formatted using `{:?}` because it doesn't implement `Debug`
+   |
+   = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
+   help: consider further restricting type parameter `T` with trait `Debug`
+   |
+   489 |     impl<T: AsBytes + FromBytes + Clone + PartialEq + core::fmt::Debug> VecIoSysMap<T> {
+   |                                                     ++++++++++++++++++
 
 -- 
 0-DAY CI Kernel Test Service
