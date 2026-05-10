@@ -1,135 +1,151 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95926347C6
-	for <llvm@lists.linux.dev>; Sun, 10 May 2026 02:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B5E17B50A;
+	Sun, 10 May 2026 03:53:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778381532; cv=none; b=UQPonBKw4EPd5x8ZfCuSzWzaWZdODW49iYpsVYoh4MV+QwE+0Rp4lF1w52OGA5/qPD4YUFUgPGpEOK1vOZK1ffEqAxOV+7vrwD+oKrycBziCqIAm9fWsy7FQin2ZlYy8lEHDVTYbP9mQ7kZTxaN3pBj38dh2ZmN+9IBXLYVTOb4=
+	t=1778385221; cv=none; b=lw29I7xpZ3GZ3jE28iv4R5Oat5fUTBySTMPsWFriEWgFHrmv8eeFU20X9rremZDo/laEX6vgjAaUXNTaniBRolE6BPP2NApaSyagUFfIW87W2c/sb2hHxxj8JYjCOy9rJpZngbHWIy8RBV2RkkQpR96sCDvyDF2oKpNVoty7ATk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778381532; c=relaxed/simple;
-	bh=1DiQgGrKiYdt11aZJi3t5/Ed7OEei2Gas9yoNwxgh2U=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Ar7XVxwG9n49ALKsTjApPci9jPWLlqcZYOdTIn8jCPjrCXCPz9oJgzlX9E7DqpHVzRLqYgVdqT39YmOYka3DjwUWpkLhZyX+0s1AZ8rrilCr0nAbcTiz4l5nFFeYtJ56DftlYkJoyP8wxjLSEV65TGLfF+czNn3r3xjzjT+/xwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fe2hYa4Q; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778385221; c=relaxed/simple;
+	bh=MtJVwVr+12Fsb/UVgOEcwZP4tcysccsMOyrywVqSz7E=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=MeizzxvzS9XH0iw0jcj2esoOzprfveJA1OMXwXQGfMq6V9/gncL+ul6O1EZR/1TjzHGCxZhh28/vgXUhoXp7R3UrR+MvLjzsXJ4+r25DFHpZy/GinU1RIXblNAUstOmcozcQG5kvM4ZvzME2kimSm91ng9h5ADHyURHW2v36HCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ali1Bh+B; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fe2hYa4Q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778381529;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qdTlVBlxWc8LR6wLotYmM1qjerKi/RBSVWXbC1Jf0Tk=;
-	b=fe2hYa4Q/obHCQJsor3gLRdNgdSgphnUToU9L5dF+CvhVM1ary7ybJwX0p7kWeD/6/5ASE
-	ZtXvPSFTKo8TsgRcywW9cQlgUFuy2lFweL40lNcgVYwdGZkHvDKT0N53MUfxEPRgYNqMNh
-	2kl4AGy5Ai8pVufkOxwx8xycUeW7ekk=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-662-BtrkUSW1M6mHiQM41Zt3Qw-1; Sat,
- 09 May 2026 22:52:07 -0400
-X-MC-Unique: BtrkUSW1M6mHiQM41Zt3Qw-1
-X-Mimecast-MFC-AGG-ID: BtrkUSW1M6mHiQM41Zt3Qw_1778381527
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 006DD19560B4
-	for <llvm@lists.linux.dev>; Sun, 10 May 2026 02:52:07 +0000 (UTC)
-Received: from [172.20.1.62] (unknown [10.30.45.70])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6C32918004A3;
-	Sun, 10 May 2026 02:52:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 68 of 97): Test report for master
- (7.1.0-rc2, upstream-mainline, 917719c4)
-Date: Sun, 10 May 2026 02:52:06 -0000
-To: yoyang@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ali1Bh+B"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778385219; x=1809921219;
+  h=date:from:to:cc:subject:message-id;
+  bh=MtJVwVr+12Fsb/UVgOEcwZP4tcysccsMOyrywVqSz7E=;
+  b=Ali1Bh+BVZ6cPC6GjzTMGylRErLc9P7eA4aBHkDorzzCxjRjfOdR5cTf
+   J0+Q/z9GzlYUaVR2BIr+4Gw5LJVT/BjnfEYUk7aOFuNcJnlMS51UkaHx4
+   Z4GruwtKdSzrnEgfXEwVn9T6FpuzhFKlgYKCM96JttcdSJ+GzcFW0badU
+   9VIyCukdOfXc+zNvDQfnVL5Rp9FFmbDzhVRQefQfWsVxWkbCYUIfqF86A
+   5vrUu+7bsyicKFtv3D2ksZwlEz9PNuOIh5PopN7shjNTdK190UciYTvdz
+   1o+1cf0rimTo45TTXV91g70i11J1foxfF10zKpQMHX684EUCw/vOuqdNz
+   w==;
+X-CSE-ConnectionGUID: wEHK/V6IR0OLxTiBrr7XOQ==
+X-CSE-MsgGUID: hzWnQcRER6OjtLg3YvArUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="82928122"
+X-IronPort-AV: E=Sophos;i="6.23,225,1770624000"; 
+   d="scan'208";a="82928122"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2026 20:53:39 -0700
+X-CSE-ConnectionGUID: ChaEP/0VQWSgeOYK0XsQqw==
+X-CSE-MsgGUID: R1JTC8MZTfaVgqZrQ3LoRg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,225,1770624000"; 
+   d="scan'208";a="237234962"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa009.jf.intel.com with ESMTP; 09 May 2026 20:53:37 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wLvEU-000000007dP-2YXL;
+	Sun, 10 May 2026 03:53:34 +0000
+Date: Sun, 10 May 2026 05:52:44 +0200
+From: kernel test robot <lkp@intel.com>
+To: Jiakai Xu <xujiakai24@mails.ucas.ac.cn>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: drivers/net/netdevsim/bus.c:192:3: error: call to undeclared
+ function 'nsim_bus_dev_del'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202605100547.H0iG9hE4-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <00122.126050922520700749@us-mta-662.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: wSQrSMq7A5dpUStPIW9VL1Y_Ljn0fd04wIJFl_JkKdg_1778381527
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/intel-lab-lkp/linux/commits/Jiakai-Xu/netdevsim-Fix-task-hung-by-releasing-bus-lock-before-device-ops/20260510-070550
+head:   93a12a4523b770bda0f952a4d3a44cbee0775bb4
+commit: 93a12a4523b770bda0f952a4d3a44cbee0775bb4 netdevsim: Fix task hung by releasing bus lock before device ops
+date:   5 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260510/202605100547.H0iG9hE4-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605100547.H0iG9hE4-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605100547.H0iG9hE4-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'selinux-pr-20260507' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/pcmoore/selinux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2509104162
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2509104162_x86_64_kernel_kcidb_tool_21242599_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+>> drivers/net/netdevsim/bus.c:192:3: error: call to undeclared function 'nsim_bus_dev_del'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     192 |                 nsim_bus_dev_del(nsim_bus_dev);
+         |                 ^
+   drivers/net/netdevsim/bus.c:192:3: note: did you mean 'nsim_bus_dev_new'?
+   drivers/net/netdevsim/bus.c:156:1: note: 'nsim_bus_dev_new' declared here
+     156 | nsim_bus_dev_new(unsigned int id, unsigned int port_count, unsigned int num_queues);
+         | ^
+>> drivers/net/netdevsim/bus.c:206:13: error: conflicting types for 'nsim_bus_dev_del'
+     206 | static void nsim_bus_dev_del(struct nsim_bus_dev *nsim_bus_dev);
+         |             ^
+   drivers/net/netdevsim/bus.c:192:3: note: previous implicit declaration is here
+     192 |                 nsim_bus_dev_del(nsim_bus_dev);
+         |                 ^
+   2 errors generated.
 
 
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
-    /distribution/command [aarch64, ppc64le, s390x, x86_64]
-    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
-    Boot test [aarch64, ppc64le, s390x, x86_64]
-    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
-    Reboot test [aarch64, ppc64le, s390x, x86_64]
-    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
-    Storage - blktests - throtl [aarch64, s390x, x86_64]
-    Storage - blktests - ublk [aarch64, s390x, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
-    stress: stress-ng - memory [aarch64, s390x, x86_64]
-    xfstests - btrfs [aarch64]
-    xfstests - ext4 [aarch64]
-    xfstests - xfs [aarch64]
+vim +/nsim_bus_dev_del +192 drivers/net/netdevsim/bus.c
 
+   157	
+   158	static ssize_t
+   159	new_device_store(const struct bus_type *bus, const char *buf, size_t count)
+   160	{
+   161		unsigned int id, port_count, num_queues;
+   162		struct nsim_bus_dev *nsim_bus_dev;
+   163		int err;
+   164	
+   165		err = sscanf(buf, "%u %u %u", &id, &port_count, &num_queues);
+   166		switch (err) {
+   167		case 1:
+   168			port_count = 1;
+   169			fallthrough;
+   170		case 2:
+   171			num_queues = 1;
+   172			fallthrough;
+   173		case 3:
+   174			if (id > INT_MAX) {
+   175				pr_err("Value of \"id\" is too big.\n");
+   176				return -EINVAL;
+   177			}
+   178			break;
+   179		default:
+   180			pr_err("Format for adding new device is \"id port_count num_queues\" (uint uint uint).\n");
+   181			return -EINVAL;
+   182		}
+   183	
+   184		nsim_bus_dev = nsim_bus_dev_new(id, port_count, num_queues);
+   185		if (IS_ERR(nsim_bus_dev))
+   186			return PTR_ERR(nsim_bus_dev);
+   187	
+   188		mutex_lock(&nsim_bus_dev_list_lock);
+   189		/* Prevent to use resource before initialization. */
+   190		if (!smp_load_acquire(&nsim_bus_enable)) {
+   191			mutex_unlock(&nsim_bus_dev_list_lock);
+ > 192			nsim_bus_dev_del(nsim_bus_dev);
+   193			return -EBUSY;
+   194		}
+   195	
+   196		/* Allow using nsim_bus_dev */
+   197		smp_store_release(&nsim_bus_dev->init, true);
+   198	
+   199		list_add_tail(&nsim_bus_dev->list, &nsim_bus_dev_list);
+   200		mutex_unlock(&nsim_bus_dev_list_lock);
+   201	
+   202		return count;
+   203	}
+   204	static BUS_ATTR_WO(new_device);
+   205	
+ > 206	static void nsim_bus_dev_del(struct nsim_bus_dev *nsim_bus_dev);
+   207	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
