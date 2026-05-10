@@ -1,198 +1,135 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228A52D8DB0
-	for <llvm@lists.linux.dev>; Sun, 10 May 2026 19:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983C733120C
+	for <llvm@lists.linux.dev>; Sun, 10 May 2026 19:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778442666; cv=none; b=TQ1kQ+uIvtlYlL5dGeIpwTejEfTHUN5mACDxRcHvMIVFQUBDJ4JUynsGONlpu86YZJ9e5gIHrsLQduQ5MV/A/TJ1gnN9ARXJSYR+VajPnYD90+MJAt943BfdS3rc9MJ8qTVs3idGLOHrxYNADdkUKBCzuQRjEL1SoGnJ2M16OIY=
+	t=1778442789; cv=none; b=MNHOxlEsIzjV9qBY+ipg2tYYVfKbGIZRR3D+VW3+0/kTmy8o/xODAvzVurNdDvw2Nq11rj2OLeAiTAAndGAxfrYOEqbn9AIEFbJR/i9w9XTMHgRgM3zlHkrRLzjB2oqEoWQvGbJHbdduDnSt15mYthwryLl11HoMsQcIlG02mg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778442666; c=relaxed/simple;
-	bh=qy67ampRMVZqwRmzsjjdQbT6QLi6VuaEBZYT1/MTvEs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tCoGi30wdH3nDkbb0pIX6ABtGmRXcXmtg3fbeRt70KGoYTzb59ZIM/U+fh3bZsfD6rWfH5Nl6WFNUc1iXaVIG77fgu403rFy0NcaOQa1Dhtk00xz6TszyzMxJJNLEKhHULbPG5WwDmWZPIFdu+UWmWMv/gkkZfNzifuMsB+b9A0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CcIh3eyg; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778442789; c=relaxed/simple;
+	bh=P0SHPKf0OXLD1/eRUCuVINEMJRAYVSsoCC04JipipJs=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=rzl1F00RM0hSMrx2XtV+ttUf4rOOvCNtb79BlgGTkf3xZjg4v+Jsc/5b10tI3nc1lZr7EKOKFlF++w9sj2urQIiOBM0PcvBeH7rrRaUQsNGcQTzO2ebm0HRt8LQD4iAP0ugVBdTr+GUdpaLscmoqBuxvjWwQilLRlVZMQZM1IC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S03EgNii; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CcIh3eyg"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c80203b9d7bso1359875a12.0
-        for <llvm@lists.linux.dev>; Sun, 10 May 2026 12:51:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778442664; x=1779047464; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8iI1RsUJy3jPss5H1NJck2z9ijXsiYtxqAXvRNgtOYk=;
-        b=CcIh3eygyF0cqaMeFcpRCerVQJVDRNT9Wq52mrH0+indCdD5BHRz5Li94UMmaQ/ven
-         IwY2smkNFbvcIy20d4llbMjlyGyONJBS6V4B9aO0zJ39nb2vANJ2cHOsGTaPHAI4EvG7
-         fp8GIQ5F5Fms3+5KJyxqshmgS6EvMEHFYpzLAV8+XgvubhcWJlAbsWiJT8MQz7Ct84N/
-         j+8YVc41rx3tDaOQA7BwGGouZX7n8MlcrSkRFj6XRdgVmiGv+7qxEqdHsdYMPykSaLPd
-         cqSoD8FwyBy8eEBDsmXDv2dIYraQ/e/2Aj5hp4QX60meUnLOqdLTE+qGsqxiIErGHD5L
-         j/lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778442664; x=1779047464;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8iI1RsUJy3jPss5H1NJck2z9ijXsiYtxqAXvRNgtOYk=;
-        b=Aaj19gQ6JFqjkOnMs3KoKw2ysCyTcgeoAJMtdsorM6BTfZp01uLQZ9fqQxZrNZXxuV
-         dxedNx4G/ZnHUVilb5PUhnfE3xc1VW5Byp6m+7E4n1wE9k3pEHVPOe64kNqztvJTFm/M
-         7K8yTpfrhgqPftufXIsn8kCi06s6n5gTIufuJgYIh05DOCIz5DAhC0yygH1m9/qfkwEC
-         tP21GRblVsWBtFQzQYy/fo2zHi5v9UMV3F+JN2fuUV2Bpb3sYchzoB8Gw6qAGp1VKK4E
-         NUJOAB8m/Fu6EMyOxkISXu5B9SE6oMpVaP6OVB0Rfj94MMVj55rcVtxywq6WzLhcPiVT
-         8fpA==
-X-Forwarded-Encrypted: i=1; AFNElJ9l6r72qaao0I/WDanzOozLhyi0xUfKA8ubBSXF/4FUNRF/WpsWPXe11Z8mCcU4dxODmdz+@lists.linux.dev
-X-Gm-Message-State: AOJu0YzO51cf8PAMnSceJSBk1u+FYfKWNwBF0Y93cW0gSu+TaHCf+h/1
-	D90tTmVhiyOdRnb0UxkYI+PBmzjbHH89rlgX3q8sneSTRAP2nh7VYlqk
-X-Gm-Gg: Acq92OEzvMq2lYNDUayCMVmKpahuBnm6/kqGdevcFjmLOuyukU1syy38OyGs9quYZpM
-	xaUaqU/WXIeGzsyTeSb2eJ6hg8/C0lqK27g7IANs/JFj61SIj/gBWOu7qXdMbKX7KgAIiGKBIF8
-	vanQD6Vw+SjdDneyDEg2JGNx8HA+8hNMtQwfH7UZFkA3Pza1+RqeZdamn4+mKiUctkIATosX6lM
-	cLlhYG7WgcFRmmUCwK2SuFZg616adgFK58cFKRUt/9myu25ueeeSXy8LBsQgRAOAYOm+LIr3jFa
-	j1ZpJWam2i7bHMWGRpCTSgrQSa6iGdXkuV1xw1G6AasAmRDPD2IvFMZ7VMsfmROnNYguHHdr/UJ
-	Kr4n8mOiJPobWJ2JopnkaHDZyHM53ZabmEBd0tHh4dYq6PiIMOWNLKBSoy5fuVhcM7rn65ueHRv
-	uqnPsTx8LOAkH5Ui9UQeWBEnkacNGaAulSFnjV9Tkr+TkkvvOus8GmUZb4DDbkv3QiF5LA1E4IG
-	1FilmLvUJxmr8FAOelYsvdbGq7IQESWoxc=
-X-Received: by 2002:a17:903:1a68:b0:2bc:7486:21cf with SMTP id d9443c01a7336-2bc748623e7mr86956865ad.36.1778442664283;
-        Sun, 10 May 2026 12:51:04 -0700 (PDT)
-Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1eafa62sm84439455ad.74.2026.05.10.12.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 May 2026 12:51:03 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: Thomas Gleixner <tglx@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Marvell Kirkwood and Armada 370, 375, 38x,...),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] irqchip/mvebu: Allow EBU irqchips to be compile-tested
-Date: Sun, 10 May 2026 12:50:47 -0700
-Message-ID: <20260510195047.10143-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S03EgNii"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778442786;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VZRu6g92SfnQ3XEBdX7Vy0oQKiFxj2MzkcsNNJM+ddo=;
+	b=S03EgNiiiinYJXrA57xZ1MwX2b3uzmxL2MWhPvggPeRJ5VYgJB6iMa2jP6SGH8tr8ng2BX
+	hWgNhHRwP3T2MXJN6vPoQRMDaQpigSfpH+umGZky5RXEu1AIef5xRCaO1D1gpuiLaymJ/n
+	OTrBsgEc2s5HVGB+q04NlzcfMU4FAog=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-505-B4pE9lejMQ67UVgzxepvpw-1; Sun,
+ 10 May 2026 15:53:04 -0400
+X-MC-Unique: B4pE9lejMQ67UVgzxepvpw-1
+X-Mimecast-MFC-AGG-ID: B4pE9lejMQ67UVgzxepvpw_1778442784
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0A72F1800344
+	for <llvm@lists.linux.dev>; Sun, 10 May 2026 19:53:04 +0000 (UTC)
+Received: from [172.20.1.62] (unknown [10.30.45.70])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6886719560A2;
+	Sun, 10 May 2026 19:53:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 68 of 97): Test report for master
+ (7.1.0-rc2, upstream-mainline, 81d6f780)
+Date: Sun, 10 May 2026 19:53:03 -0000
+To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <76205.126051015530500176@us-mta-505.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: ripCi5DvKRmNvfgVKM5_k_F56Lg-oriJq5xCcyFpLgc_1778442784
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The Marvell EBU interrupt controller Kconfig symbols are hidden and
-selected only by platform code. This prevents build coverage for the
-drivers on other architectures even though the code only needs OF and
-MMIO support.
+Hi, we tested your kernel and here are the results:
 
-Add COMPILE_TEST prompts and the required dependencies for the GICP,
-ICU, ODMI, PIC and SEI irqchips. While touching PIC for this coverage,
-use GENMASK() and BIT() for its masks so that 32-bit platforms can
-compile this safely without running into issues.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Tested: make LLVM=1 ARCH=s390 drivers/irqchip/
 
-Assisted-by: Codex:GPT-5.5
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- drivers/irqchip/Kconfig         | 31 ++++++++++++++++++++++++++-----
- drivers/irqchip/irq-mvebu-pic.c |  8 ++++----
- 2 files changed, 30 insertions(+), 9 deletions(-)
+Kernel information:
+    Commit message: Merge tag 'v7.1-rc3-smb3-client-fixes' of git://git.sam=
+ba.org/sfrench/cifs-2.6
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index e7d559472790..cf3aea96866b 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -451,22 +451,43 @@ config MSCC_OCELOT_IRQ
- 	select GENERIC_IRQ_CHIP
- 
- config MVEBU_GICP
-+	bool "Marvell EBU GICP interrupt controller" if COMPILE_TEST
-+	depends on OF
-+	depends on HAS_IOMEM
- 	select IRQ_MSI_LIB
--	bool
-+	help
-+	  Support the Marvell EBU GICP interrupt controller.
- 
- config MVEBU_ICU
--	bool
-+	bool "Marvell EBU ICU interrupt controller" if COMPILE_TEST
-+	depends on OF
-+	depends on HAS_IOMEM
-+	select GENERIC_MSI_IRQ
-+	help
-+	  Support the Marvell EBU ICU interrupt controller.
- 
- config MVEBU_ODMI
--	bool
-+	bool "Marvell EBU ODMI interrupt controller" if COMPILE_TEST
-+	depends on OF
-+	depends on HAS_IOMEM
- 	select IRQ_MSI_LIB
- 	select GENERIC_MSI_IRQ
-+	help
-+	  Support the Marvell EBU ODMI interrupt controller.
- 
- config MVEBU_PIC
--	bool
-+	bool "Marvell EBU PIC interrupt controller" if COMPILE_TEST
-+	depends on OF
-+	depends on HAS_IOMEM
-+	help
-+	  Support the Marvell EBU PIC interrupt controller.
- 
- config MVEBU_SEI
--        bool
-+	bool "Marvell EBU SEI interrupt controller" if COMPILE_TEST
-+	depends on OF
-+	depends on HAS_IOMEM
-+	help
-+	  Support the Marvell EBU SEI interrupt controller.
- 
- config LS_EXTIRQ
- 	bool "Freescale Layerscape external IRQ support" if COMPILE_TEST
-diff --git a/drivers/irqchip/irq-mvebu-pic.c b/drivers/irqchip/irq-mvebu-pic.c
-index 10b85128183a..95090d8efc06 100644
---- a/drivers/irqchip/irq-mvebu-pic.c
-+++ b/drivers/irqchip/irq-mvebu-pic.c
-@@ -24,7 +24,7 @@
- #define PIC_MASK	       0x4
- 
- #define PIC_MAX_IRQS		32
--#define PIC_MAX_IRQ_MASK	((1UL << PIC_MAX_IRQS) - 1)
-+#define PIC_MAX_IRQ_MASK	GENMASK(PIC_MAX_IRQS - 1, 0)
- 
- struct mvebu_pic {
- 	void __iomem *base;
-@@ -44,7 +44,7 @@ static void mvebu_pic_eoi_irq(struct irq_data *d)
- {
- 	struct mvebu_pic *pic = irq_data_get_irq_chip_data(d);
- 
--	writel(1 << d->hwirq, pic->base + PIC_CAUSE);
-+	writel(BIT(d->hwirq), pic->base + PIC_CAUSE);
- }
- 
- static void mvebu_pic_mask_irq(struct irq_data *d)
-@@ -53,7 +53,7 @@ static void mvebu_pic_mask_irq(struct irq_data *d)
- 	u32 reg;
- 
- 	reg =  readl(pic->base + PIC_MASK);
--	reg |= (1 << d->hwirq);
-+	reg |= BIT(d->hwirq);
- 	writel(reg, pic->base + PIC_MASK);
- }
- 
-@@ -63,7 +63,7 @@ static void mvebu_pic_unmask_irq(struct irq_data *d)
- 	u32 reg;
- 
- 	reg = readl(pic->base + PIC_MASK);
--	reg &= ~(1 << d->hwirq);
-+	reg &= ~BIT(d->hwirq);
- 	writel(reg, pic->base + PIC_MASK);
- }
- 
--- 
-2.54.0
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2511121646
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2511121646_x86_64_kernel_kcidb_tool_21247357_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
+    /distribution/command [aarch64, ppc64le, s390x, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
+    Boot test [aarch64, ppc64le, s390x, x86_64]
+    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
+    Reboot test [aarch64, ppc64le, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
+    Storage - blktests - throtl [aarch64, s390x, x86_64]
+    Storage - blktests - ublk [aarch64, s390x, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+    stress: stress-ng - memory [aarch64, s390x, x86_64]
+    xfstests - btrfs [aarch64]
+    xfstests - ext4 [aarch64]
+    xfstests - xfs [aarch64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
