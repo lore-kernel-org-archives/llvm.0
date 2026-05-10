@@ -1,192 +1,183 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC6F1A9FBC;
-	Sun, 10 May 2026 09:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B72A1607A4;
+	Sun, 10 May 2026 11:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778403711; cv=none; b=l5JJbgwhwW3zh513j0JD7VS8emYeKk6Hzf9hbrnts4Z07x3rGt5XOX1vZHn2ggM+Bjl/1fjpOtuZpktKYuJw6vO1KC2m7ncCb04luIJQOazrUtJJa1AuAusS8ZAsbe4Ai26OS62CVGj6KxIz9oNzTaRVQ+2UuCzaIVmCMG1OeHo=
+	t=1778412646; cv=none; b=j1Cq6Q9pBlO2bptPPG1IuoEW5ewNe/5jNOPavBoy0ZdlWBhR/AFo0+hHjYA58avGGTCKN0cnBv7tnd7bv5ZllNMp1AKxmQCZ3RspX686/NsM08Yt3pendMioLajsLR9k1NcCE1AJsAyFVyPS68Sgo0ssZ9OOwGo32pF92KBuoJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778403711; c=relaxed/simple;
-	bh=OZFp0rfyazKjRwHnU57/f6YsNV5zbXktLoeHYQduvBs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R89gt6IC2Crr36/wstimvhwyfDgecbONBNkcMVKTx9zqI5oAuGZmiwu9JnYG1EfPCRbqxFy2WFp8YiI+XRsjIVRtjG5/HrW1Sa6wUUPE8sR/300tUIsNIYtp0gTGd0PMUYT1Y4rpbWwIvKCl4IRKorX2jpRLvbZUTk5IXU9z0Ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HGkSLbA0; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1778412646; c=relaxed/simple;
+	bh=K66Nolotuqz6YCr8C8gahsfBITEtXg/36b0zt/1hY+0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=b0mQyHVobmlSG3FDGLmz2lxq4i/rLL5R1XZQcLbwJOD6bYWlC/5W8uo8bo19COJaTA3jN6r4MEKgbyZm6Z0SczrGeL6WsW39CH33+I4GBy/WyxOt/4C8ygNHAAvYywGxIrjBpZdlumXwl+HIAG2dBFF/4FG11zDHvh0iOY5EjL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ThDqRVmA; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HGkSLbA0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ThDqRVmA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778403710; x=1809939710;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OZFp0rfyazKjRwHnU57/f6YsNV5zbXktLoeHYQduvBs=;
-  b=HGkSLbA0IGMeNl1cWEh81b/Jktx7ci0FOWAYgUBO0ixbvPmvUExAyoNi
-   VPHBRnkq9Xy9yQaGjSbQzHlwHZH1wecOqspEyw8EGhqLto6Pd7MEAuvia
-   2LRCGe45M8kt9iyeOcyI/Inyt9BkdC74bouvgA+th0zi4DVz8u5IJIj0c
-   1N3KfVpcgWMBzq5xiD897qQeAGdrk5z/WaGITlnhLT5pEwPA8oemx0+WT
-   jf8VJRripe/IdMfe+GhAFGRJqKp8SGg+6bXNdl2HDhLMhdRIPf4GWe3rh
-   rpp7wC7yaelkKto4KjlHZqqgCDq1eC404MEm+SgO6OwrSdEwx2qCQFP5b
-   Q==;
-X-CSE-ConnectionGUID: x+DJ0XseROWJrZansKR4ew==
-X-CSE-MsgGUID: nBULCM5/R/yjdrJpOqbbgg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="96743290"
+  t=1778412643; x=1809948643;
+  h=date:from:to:cc:subject:message-id;
+  bh=K66Nolotuqz6YCr8C8gahsfBITEtXg/36b0zt/1hY+0=;
+  b=ThDqRVmAFHh5djhOWIkAG0zw/LPIctiE0VMqduNK5pKYNdBkEuIDMf2F
+   InmWWTjIhsEZQYQ7P8cN7tlWI2Rh3KaE8T9J6BCUVSS8Enhnfg39UxMUg
+   jJ0fK3JsEONE/YeWqYN6+Gr+exO6z5P4ulqC4jU5G7XgJNLbHVnZn/vdb
+   4didZ+pt1oi7/9N1S7P7SmsBMY7V7WkoWMwv/95Puzm0YRoEhZ/4jo5Fs
+   cFg7hL433oThvaONIMyuSko6LHGmV/CiMBt8bBRuDOEaeJIN3uBye/YlV
+   SDSl2intzeqg2r8hF6xK5cQof91wYY+rBExvEA+E49dbljyRhkJYotNZC
+   A==;
+X-CSE-ConnectionGUID: mnlZkCtsSM6KvWx3KpOPqQ==
+X-CSE-MsgGUID: voyEosgjQWudedQX68re1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="89629966"
 X-IronPort-AV: E=Sophos;i="6.23,227,1770624000"; 
-   d="scan'208";a="96743290"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2026 02:01:50 -0700
-X-CSE-ConnectionGUID: b7wtxgHxQye/5EiR1bMJKQ==
-X-CSE-MsgGUID: yn7CwMTqQj+BR1Z1YkhJ1w==
+   d="scan'208";a="89629966"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2026 04:30:43 -0700
+X-CSE-ConnectionGUID: StMdg9xPQL6LiCGCymqr+A==
+X-CSE-MsgGUID: 40RE1RZQQJ+mBYoxxHao8g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,227,1770624000"; 
-   d="scan'208";a="241156950"
-Received: from lkp-server01.sh.intel.com (HELO 82327192134e) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 10 May 2026 02:01:46 -0700
-Received: from kbuild by 82327192134e with local (Exim 4.98.2)
+   d="scan'208";a="230811324"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa009.fm.intel.com with ESMTP; 10 May 2026 04:30:41 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wM02h-000000001w5-1zLv;
-	Sun, 10 May 2026 09:01:43 +0000
-Date: Sun, 10 May 2026 17:01:15 +0800
+	id 1wM2Mp-000000007hp-0HSB;
+	Sun, 10 May 2026 11:30:39 +0000
+Date: Sun, 10 May 2026 13:30:04 +0200
 From: kernel test robot <lkp@intel.com>
-To: Lucas Poupeau <lucasp.linux@gmail.com>, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, horms@kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Lucas Poupeau <lucasp.linux@gmail.com>
-Subject: Re: [PATCH] llc: fix coding style and memory barrier documentation
-Message-ID: <202605101615.XGX7gOua-lkp@intel.com>
-References: <20260505192549.74382-1-lucasp.linux@gmail.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: net/ipv4/tcp.c:1606:2: error: call to undeclared function
+ 'tcp_bpf_rcvlowat'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202605101359.dgJxhzI7-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260505192549.74382-1-lucasp.linux@gmail.com>
 
-Hi Lucas,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-[also build test ERROR on net/main linus/master horms-ipvs/master v7.1-rc2 next-20260508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Poupeau/llc-fix-coding-style-and-memory-barrier-documentation/20260510-102311
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260505192549.74382-1-lucasp.linux%40gmail.com
-patch subject: [PATCH] llc: fix coding style and memory barrier documentation
-config: riscv-randconfig-002-20260510 (https://download.01.org/0day-ci/archive/20260510/202605101615.XGX7gOua-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605101615.XGX7gOua-lkp@intel.com/reproduce)
+tree:   https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/selftest-bpf-Use-BPF_SOCK_OPS_ALL_CB_FLAGS-1-for-bad_cb_test_rv/20260510-125645
+head:   8387600c3c2126ca1ff6d5718eb17e7840afd157
+commit: ffaa25dad7353701805e9dae4e5d985b7ecebcc3 bpf: tcp: Add SOCK_OPS rcvlowat hook.
+date:   6 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260510/202605101359.dgJxhzI7-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605101359.dgJxhzI7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605101615.XGX7gOua-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605101359.dgJxhzI7-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> net/llc/llc_input.c:181:3: error: call to undeclared function 'dprintk'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     181 |                 dprintk("%s: PACKET_OTHERHOST\n", __func__);
+>> net/ipv4/tcp.c:1606:2: error: call to undeclared function 'tcp_bpf_rcvlowat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1606 |         tcp_bpf_rcvlowat(sk, NULL);
+         |         ^
+   net/ipv4/tcp.c:1606:2: note: did you mean 'tcp_set_rcvlowat'?
+   include/net/tcp.h:519:5: note: 'tcp_set_rcvlowat' declared here
+     519 | int tcp_set_rcvlowat(struct sock *sk, int val);
+         |     ^
+   1 error generated.
+--
+>> net/ipv4/tcp_input.c:208:6: warning: no previous prototype for function 'bpf_skops_rcvlowat' [-Wmissing-prototypes]
+     208 | void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb)
+         |      ^
+   net/ipv4/tcp_input.c:208:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     208 | void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb)
+         | ^
+         | static 
+>> net/ipv4/tcp_input.c:5309:3: error: call to undeclared function 'tcp_bpf_rcvlowat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    5309 |                 tcp_bpf_rcvlowat(sk, skb);
          |                 ^
-   net/llc/llc_input.c:194:3: error: call to undeclared function 'dprintk'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     194 |                 dprintk("%s: llc_sap_find(%02X) failed!\n", __func__,
-         |                 ^
-   2 errors generated.
+   net/ipv4/tcp_input.c:5309:3: note: did you mean 'tcp_set_rcvlowat'?
+   include/net/tcp.h:519:5: note: 'tcp_set_rcvlowat' declared here
+     519 | int tcp_set_rcvlowat(struct sock *sk, int val);
+         |     ^
+   net/ipv4/tcp_input.c:5514:2: error: call to undeclared function 'tcp_bpf_rcvlowat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    5514 |         tcp_bpf_rcvlowat(sk, skb);
+         |         ^
+   1 warning and 2 errors generated.
+--
+>> net/ipv4/tcp_fastopen.c:284:2: error: call to undeclared function 'tcp_bpf_rcvlowat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     284 |         tcp_bpf_rcvlowat(sk, skb);
+         |         ^
+   net/ipv4/tcp_fastopen.c:284:2: note: did you mean 'tcp_set_rcvlowat'?
+   include/net/tcp.h:519:5: note: 'tcp_set_rcvlowat' declared here
+     519 | int tcp_set_rcvlowat(struct sock *sk, int val);
+         |     ^
+   1 error generated.
 
 
-vim +/dprintk +181 net/llc/llc_input.c
+vim +/tcp_bpf_rcvlowat +1606 net/ipv4/tcp.c
 
-^1da177e4c3f41 Linus Torvalds           2005-04-16  151  
-^1da177e4c3f41 Linus Torvalds           2005-04-16  152  /**
-^1da177e4c3f41 Linus Torvalds           2005-04-16  153   *	llc_rcv - 802.2 entry point from net lower layers
-^1da177e4c3f41 Linus Torvalds           2005-04-16  154   *	@skb: received pdu
-^1da177e4c3f41 Linus Torvalds           2005-04-16  155   *	@dev: device that receive pdu
-^1da177e4c3f41 Linus Torvalds           2005-04-16  156   *	@pt: packet type
-74c950c966c180 Andrew Lunn              2020-07-13  157   *	@orig_dev: the original receive net device
-^1da177e4c3f41 Linus Torvalds           2005-04-16  158   *
-^1da177e4c3f41 Linus Torvalds           2005-04-16  159   *	When the system receives a 802.2 frame this function is called. It
-^1da177e4c3f41 Linus Torvalds           2005-04-16  160   *	checks SAP and connection of received pdu and passes frame to
-^1da177e4c3f41 Linus Torvalds           2005-04-16  161   *	llc_{station,sap,conn}_rcv for sending to proper state machine. If
-^1da177e4c3f41 Linus Torvalds           2005-04-16  162   *	the frame is related to a busy connection (a connection is sending
-^1da177e4c3f41 Linus Torvalds           2005-04-16  163   *	data now), it queues this frame in the connection's backlog.
-^1da177e4c3f41 Linus Torvalds           2005-04-16  164   */
-^1da177e4c3f41 Linus Torvalds           2005-04-16  165  int llc_rcv(struct sk_buff *skb, struct net_device *dev,
-f2ccd8fa06c8e3 David S. Miller          2005-08-09  166  	    struct packet_type *pt, struct net_device *orig_dev)
-^1da177e4c3f41 Linus Torvalds           2005-04-16  167  {
-^1da177e4c3f41 Linus Torvalds           2005-04-16  168  	struct llc_sap *sap;
-^1da177e4c3f41 Linus Torvalds           2005-04-16  169  	struct llc_pdu_sn *pdu;
-^1da177e4c3f41 Linus Torvalds           2005-04-16  170  	int dest;
-846d7f9be89210 Lucas Poupeau            2026-05-05  171  	int (*rcv)(struct sk_buff *skb, struct net_device *dev,
-846d7f9be89210 Lucas Poupeau            2026-05-05  172  		   struct packet_type *pt, struct net_device *orig_dev);
-aadf31de16a7b2 Ben Hutchings            2012-08-13  173  	void (*sta_handler)(struct sk_buff *skb);
-aadf31de16a7b2 Ben Hutchings            2012-08-13  174  	void (*sap_handler)(struct llc_sap *sap, struct sk_buff *skb);
-^1da177e4c3f41 Linus Torvalds           2005-04-16  175  
-^1da177e4c3f41 Linus Torvalds           2005-04-16  176  	/*
-^1da177e4c3f41 Linus Torvalds           2005-04-16  177  	 * When the interface is in promisc. mode, drop all the crap that it
-^1da177e4c3f41 Linus Torvalds           2005-04-16  178  	 * receives, do not try to analyse it.
-^1da177e4c3f41 Linus Torvalds           2005-04-16  179  	 */
-^1da177e4c3f41 Linus Torvalds           2005-04-16  180  	if (unlikely(skb->pkt_type == PACKET_OTHERHOST)) {
-0dc47877a3de00 Harvey Harrison          2008-03-05 @181  		dprintk("%s: PACKET_OTHERHOST\n", __func__);
-^1da177e4c3f41 Linus Torvalds           2005-04-16  182  		goto drop;
-^1da177e4c3f41 Linus Torvalds           2005-04-16  183  	}
-^1da177e4c3f41 Linus Torvalds           2005-04-16  184  	skb = skb_share_check(skb, GFP_ATOMIC);
-^1da177e4c3f41 Linus Torvalds           2005-04-16  185  	if (unlikely(!skb))
-^1da177e4c3f41 Linus Torvalds           2005-04-16  186  		goto out;
-^1da177e4c3f41 Linus Torvalds           2005-04-16  187  	if (unlikely(!llc_fixup_skb(skb)))
-^1da177e4c3f41 Linus Torvalds           2005-04-16  188  		goto drop;
-^1da177e4c3f41 Linus Torvalds           2005-04-16  189  	pdu = llc_pdu_sn_hdr(skb);
-^1da177e4c3f41 Linus Torvalds           2005-04-16  190  	if (unlikely(!pdu->dsap)) /* NULL DSAP, refer to station */
-^1da177e4c3f41 Linus Torvalds           2005-04-16  191  	       goto handle_station;
-^1da177e4c3f41 Linus Torvalds           2005-04-16  192  	sap = llc_sap_find(pdu->dsap);
-^1da177e4c3f41 Linus Torvalds           2005-04-16  193  	if (unlikely(!sap)) {/* unknown SAP */
-0dc47877a3de00 Harvey Harrison          2008-03-05  194  		dprintk("%s: llc_sap_find(%02X) failed!\n", __func__,
-^1da177e4c3f41 Linus Torvalds           2005-04-16  195  			pdu->dsap);
-^1da177e4c3f41 Linus Torvalds           2005-04-16  196  		goto drop;
-^1da177e4c3f41 Linus Torvalds           2005-04-16  197  	}
-^1da177e4c3f41 Linus Torvalds           2005-04-16  198  	/*
-^1da177e4c3f41 Linus Torvalds           2005-04-16  199  	 * First the upper layer protocols that don't need the full
-^1da177e4c3f41 Linus Torvalds           2005-04-16  200  	 * LLC functionality
-^1da177e4c3f41 Linus Torvalds           2005-04-16  201  	 */
-23dbe7912dad6b Stephen Hemminger        2006-05-25  202  	rcv = rcu_dereference(sap->rcv_func);
-696ea472e19c6d Changli Gao              2011-02-22  203  	dest = llc_pdu_type(skb);
-6aa7de059173a9 Mark Rutland             2017-10-23  204  	sap_handler = dest ? READ_ONCE(llc_type_handlers[dest - 1]) : NULL;
-aadf31de16a7b2 Ben Hutchings            2012-08-13  205  	if (unlikely(!sap_handler)) {
-696ea472e19c6d Changli Gao              2011-02-22  206  		if (rcv)
-696ea472e19c6d Changli Gao              2011-02-22  207  			rcv(skb, dev, pt, orig_dev);
-696ea472e19c6d Changli Gao              2011-02-22  208  		else
-696ea472e19c6d Changli Gao              2011-02-22  209  			kfree_skb(skb);
-696ea472e19c6d Changli Gao              2011-02-22  210  	} else {
-23dbe7912dad6b Stephen Hemminger        2006-05-25  211  		if (rcv) {
-8f182b494f8779 Stephen Hemminger        2006-05-25  212  			struct sk_buff *cskb = skb_clone(skb, GFP_ATOMIC);
-846d7f9be89210 Lucas Poupeau            2026-05-05  213  
-8f182b494f8779 Stephen Hemminger        2006-05-25  214  			if (cskb)
-8f182b494f8779 Stephen Hemminger        2006-05-25  215  				rcv(cskb, dev, pt, orig_dev);
-^1da177e4c3f41 Linus Torvalds           2005-04-16  216  		}
-aadf31de16a7b2 Ben Hutchings            2012-08-13  217  		sap_handler(sap, skb);
-696ea472e19c6d Changli Gao              2011-02-22  218  	}
-6e2144b76840be Arnaldo Carvalho de Melo 2005-09-22  219  	llc_sap_put(sap);
-^1da177e4c3f41 Linus Torvalds           2005-04-16  220  out:
-^1da177e4c3f41 Linus Torvalds           2005-04-16  221  	return 0;
-^1da177e4c3f41 Linus Torvalds           2005-04-16  222  drop:
-^1da177e4c3f41 Linus Torvalds           2005-04-16  223  	kfree_skb(skb);
-^1da177e4c3f41 Linus Torvalds           2005-04-16  224  	goto out;
-846d7f9be89210 Lucas Poupeau            2026-05-05  225  
-^1da177e4c3f41 Linus Torvalds           2005-04-16  226  handle_station:
-6aa7de059173a9 Mark Rutland             2017-10-23  227  	sta_handler = READ_ONCE(llc_station_handler);
-aadf31de16a7b2 Ben Hutchings            2012-08-13  228  	if (!sta_handler)
-^1da177e4c3f41 Linus Torvalds           2005-04-16  229  		goto drop;
-aadf31de16a7b2 Ben Hutchings            2012-08-13  230  	sta_handler(skb);
-^1da177e4c3f41 Linus Torvalds           2005-04-16  231  	goto out;
-^1da177e4c3f41 Linus Torvalds           2005-04-16  232  }
-^1da177e4c3f41 Linus Torvalds           2005-04-16  233  
+  1548	
+  1549	/* Clean up the receive buffer for full frames taken by the user,
+  1550	 * then send an ACK if necessary.  COPIED is the number of bytes
+  1551	 * tcp_recvmsg has given to the user so far, it speeds up the
+  1552	 * calculation of whether or not we must ACK for the sake of
+  1553	 * a window update.
+  1554	 */
+  1555	void __tcp_cleanup_rbuf(struct sock *sk, int copied)
+  1556	{
+  1557		struct tcp_sock *tp = tcp_sk(sk);
+  1558		bool time_to_ack = false;
+  1559	
+  1560		if (inet_csk_ack_scheduled(sk)) {
+  1561			const struct inet_connection_sock *icsk = inet_csk(sk);
+  1562	
+  1563			if (/* Once-per-two-segments ACK was not sent by tcp_input.c */
+  1564			    tp->rcv_nxt - tp->rcv_wup > icsk->icsk_ack.rcv_mss ||
+  1565			    /*
+  1566			     * If this read emptied read buffer, we send ACK, if
+  1567			     * connection is not bidirectional, user drained
+  1568			     * receive buffer and there was a small segment
+  1569			     * in queue.
+  1570			     */
+  1571			    (copied > 0 &&
+  1572			     ((icsk->icsk_ack.pending & ICSK_ACK_PUSHED2) ||
+  1573			      ((icsk->icsk_ack.pending & ICSK_ACK_PUSHED) &&
+  1574			       !inet_csk_in_pingpong_mode(sk))) &&
+  1575			      !atomic_read(&sk->sk_rmem_alloc)))
+  1576				time_to_ack = true;
+  1577		}
+  1578	
+  1579		/* We send an ACK if we can now advertise a non-zero window
+  1580		 * which has been raised "significantly".
+  1581		 *
+  1582		 * Even if window raised up to infinity, do not send window open ACK
+  1583		 * in states, where we will not receive more. It is useless.
+  1584		 */
+  1585		if (copied > 0 && !time_to_ack && !(sk->sk_shutdown & RCV_SHUTDOWN)) {
+  1586			__u32 rcv_window_now = tcp_receive_window(tp);
+  1587	
+  1588			/* Optimize, __tcp_select_window() is not cheap. */
+  1589			if (2*rcv_window_now <= tp->window_clamp) {
+  1590				__u32 new_window = __tcp_select_window(sk);
+  1591	
+  1592				/* Send ACK now, if this read freed lots of space
+  1593				 * in our buffer. Certainly, new_window is new window.
+  1594				 * We can advertise it now, if it is not less than current one.
+  1595				 * "Lots" means "at least twice" here.
+  1596				 */
+  1597				if (new_window && new_window >= 2 * rcv_window_now)
+  1598					time_to_ack = true;
+  1599			}
+  1600		}
+  1601		if (time_to_ack) {
+  1602			tcp_mstamp_refresh(tp);
+  1603			tcp_send_ack(sk);
+  1604		}
+  1605	
+> 1606		tcp_bpf_rcvlowat(sk, NULL);
+  1607	}
+  1608	
 
--- 
+--
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
