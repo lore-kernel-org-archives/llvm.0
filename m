@@ -1,69 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9943038239E;
-	Sun, 10 May 2026 12:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9EE383C9F;
+	Sun, 10 May 2026 12:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778416326; cv=none; b=kIfeRChL6Yq3S5xA+P+chSmeSxVixWqERwwKnGaii+1khrdZnx2GiMRmlLueZ8t+NT2Wzf17YbmWAde9V8ZTknLvIWD61Vh2vrK9GHQ8M9BqYfR1wwy+s4FZTtCNKy6Bcv7n3XypKTRDKWgY29rsAUfchTQpuW4iYq0+QMd/5JI=
+	t=1778416967; cv=none; b=CJK9SgSsb8HTIPf4B/gEZkIuzOK/l9GVbnkyGZ/O3kUbDjQbZsK6xY44zvfMpCQwCIs/JFvaHBNso5ylzAldwuFTVv6ImP9I7Ax0xtlD+IXeOmDY/bwyvhDV+wYEUqRzp5hFlHNDMLS2SEvU/TSEWWR6wEdiFgN2rzAJC/Khlqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778416326; c=relaxed/simple;
-	bh=W2lnjd0EEjY95FWLS/VU+8zZVQxhrlAyAYdoXojkgTg=;
+	s=arc-20240116; t=1778416967; c=relaxed/simple;
+	bh=/60CTdOmhFw7w8TxfJ1EtfjlkwUbc3InAg+lUYT5eEg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rn0U6eNRJej9QypwyjkYaz62OVAv0ym1yIc8vq9+ytz90q1EinN4+bIoWffRfTRzrvwh+teRLhvEjGbksg/OGXTL2TDTiyooQiTvRbOmuO8txEhIHKY6ZImK8bZj9d8jt4cIY0E4G0iArmXW9MnsqMebX2h55g6MrVQCw++d244=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FeRwVoxS; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=gDHkp0tnP5H/KIeXzRQHiUxNWNMZypnqsRxRab1vVbulooeqKZ6LHA0l1xrhswNcWQW+Ga6IlEg1yAdca3tisEQepcNOMHa18WqdLJ5ZzTMqbYWKdDQ3floSRQsOzPyo0qNqkJ8EoMXG1YWswIJDV8ASmeVGIxUDYNtAjemOheI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zt8JJ+n+; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FeRwVoxS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zt8JJ+n+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778416325; x=1809952325;
+  t=1778416965; x=1809952965;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=W2lnjd0EEjY95FWLS/VU+8zZVQxhrlAyAYdoXojkgTg=;
-  b=FeRwVoxSxTKT9usFANd/TtH63BiUCreh81mWf3kUZwFfcepQtlamWIKS
-   WIzouUypq8mYTwcaX893ZJAWBwHIFz08qBxhd4+qzPknksdxAUsp0ZIMR
-   Ai9Ts7k/DxFnVdv/1ElDl4kkTDE/ZOdMbKiqs/1CssQq2b7GiblSRL+gT
-   sXkZagnRfCJBKH+026P7SsdZ+NBX8TQgOzTtZSlSVVjED+5veWrPzeltG
-   2PaKwn22GPWl0UKVk4GCU4ZQrOa8Q83+uQOjo1Sdtzw27R/J7M/Wz7ZRp
-   bwvTGZBtpLUcg+Du5Gd+82fpVIBcsc1xi1UZeJBmbD+PIx6REV79JxDrB
-   w==;
-X-CSE-ConnectionGUID: 6EqptFKgRVO1X6B8hGM8OQ==
-X-CSE-MsgGUID: KGO6zjj1QwqmH0yguHg5tw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="83174437"
+  bh=/60CTdOmhFw7w8TxfJ1EtfjlkwUbc3InAg+lUYT5eEg=;
+  b=Zt8JJ+n+k+6t77U6+yddxBVx2CcStY9GbLrKPoy39ewMclLXpdU9aG9Z
+   lO1ZQMaMizZlNklVF69504/VELrdO6vgNcJMA8vA+Nbn5MLogcGkKzvED
+   wKU78JVNJVsuw13msSOxSddHa5ofFgeNy+GMPskVADzHl9w0Vy5HMmvZG
+   DcCdxek1+QYPA18TKHZii66rYe2GOwSPlArvQ4BnGNPQGTXn5S9bLNtcB
+   prTtDzJZKoXXiqSSba/XfD8J1hUJV3kKnF2wHSnzbgtPHf07FAzGtez39
+   BXdViNrqIGkiit2xKw/lZGCRGR5ZhG76J139CO+3DARgx9CYXWtiX/Bbb
+   A==;
+X-CSE-ConnectionGUID: QidSBeXeS2OvAN2NBH8JHg==
+X-CSE-MsgGUID: egOg9bHCRQKyfalc9wvkhw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="90792631"
 X-IronPort-AV: E=Sophos;i="6.23,227,1770624000"; 
-   d="scan'208";a="83174437"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2026 05:32:04 -0700
-X-CSE-ConnectionGUID: O+4Fc+NiTR6GKBhPTah8HQ==
-X-CSE-MsgGUID: cEwYlgaAQFCggNTGzUHM2g==
+   d="scan'208";a="90792631"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2026 05:42:45 -0700
+X-CSE-ConnectionGUID: NN2vNHRmQ1KiXiunPx3uOg==
+X-CSE-MsgGUID: 26UwaYqjTvOfoVcncvQ0cg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,227,1770624000"; 
-   d="scan'208";a="275345921"
-Received: from lkp-server01.sh.intel.com (HELO 82327192134e) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 10 May 2026 05:32:00 -0700
-Received: from kbuild by 82327192134e with local (Exim 4.98.2)
+   d="scan'208";a="239028669"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa004.fm.intel.com with ESMTP; 10 May 2026 05:42:42 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wM3K8-0000000028T-49cF;
-	Sun, 10 May 2026 12:31:56 +0000
-Date: Sun, 10 May 2026 20:30:58 +0800
+	id 1wM3UW-000000007in-0uil;
+	Sun, 10 May 2026 12:42:40 +0000
+Date: Sun, 10 May 2026 14:41:52 +0200
 From: kernel test robot <lkp@intel.com>
-To: Daniel J Blueman <daniel@quora.org>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Antonino Maniscalco <antomani103@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Daniel J Blueman <daniel@quora.org>, linux-arm-msm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] drm/msm: Fix shrinker deadlock
-Message-ID: <202605102047.JRDq9587-lkp@intel.com>
-References: <20260508065722.18785-1-daniel@quora.org>
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH net-next v1 5/5] net: mdiobus: Hide acpi_mdio.h
+Message-ID: <202605101457.OWzRvBTB-lkp@intel.com>
+References: <20260504074610.40799-6-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,68 +68,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260508065722.18785-1-daniel@quora.org>
+In-Reply-To: <20260504074610.40799-6-andriy.shevchenko@linux.intel.com>
 
-Hi Daniel,
+Hi Andy,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v7.1-rc2 next-20260508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-J-Blueman/drm-msm-Fix-shrinker-deadlock/20260510-132942
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20260508065722.18785-1-daniel%40quora.org
-patch subject: [PATCH] drm/msm: Fix shrinker deadlock
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260510/202605102047.JRDq9587-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605102047.JRDq9587-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/net-mdiobus-Provide-fwnode_mdiobus_register/20260510-124038
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260504074610.40799-6-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH net-next v1 5/5] net: mdiobus: Hide acpi_mdio.h
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260510/202605101457.OWzRvBTB-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605101457.OWzRvBTB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605102047.JRDq9587-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605101457.OWzRvBTB-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/msm/msm_gem_shrinker.c:10:
-   In file included from drivers/gpu/drm/msm/msm_drv.h:22:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/gpu/drm/msm/msm_gem_shrinker.c:125:46: error: too many arguments to function call, expected 2, have 3
-     125 |         return with_vm_locks(ticket, msm_gem_evict, obj);
-         |                ~~~~~~~~~~~~~                        ^~~
-   drivers/gpu/drm/msm/msm_gem_shrinker.c:46:1: note: 'with_vm_locks' declared here
-      46 | with_vm_locks(void (*fn)(struct drm_gem_object *obj),
-         | ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      47 |               struct drm_gem_object *obj)
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+>> drivers/net/mdio/fwnode_mdio.c:197:10: error: call to undeclared function '__of_mdiobus_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     197 |                 return __of_mdiobus_register(mdio, to_of_node(fwnode), owner);
+         |                        ^
+   drivers/net/mdio/fwnode_mdio.c:197:10: note: did you mean 'of_mdiobus_register'?
+   include/linux/of_mdio.h:81:19: note: 'of_mdiobus_register' declared here
+      81 | static inline int of_mdiobus_register(struct mii_bus *mdio, struct device_node *np)
+         |                   ^
+   1 error generated.
 
 
-vim +125 drivers/gpu/drm/msm/msm_gem_shrinker.c
+vim +/__of_mdiobus_register +197 drivers/net/mdio/fwnode_mdio.c
 
-6afb0750dba05c Rob Clark 2021-04-05  115  
-63f17ef834284d Rob Clark 2021-04-05  116  static bool
-02070f04987524 Rob Clark 2025-06-29  117  evict(struct drm_gem_object *obj, struct ww_acquire_ctx *ticket)
-63f17ef834284d Rob Clark 2021-04-05  118  {
-b352ba54a82072 Rob Clark 2022-08-02  119  	if (is_unevictable(to_msm_bo(obj)))
-63f17ef834284d Rob Clark 2021-04-05  120  		return false;
-63f17ef834284d Rob Clark 2021-04-05  121  
-b352ba54a82072 Rob Clark 2022-08-02  122  	if (msm_gem_active(obj))
-01780d02634a3a Rob Clark 2022-08-02  123  		return false;
-01780d02634a3a Rob Clark 2022-08-02  124  
-fe4952b5f27cca Rob Clark 2025-06-29 @125  	return with_vm_locks(ticket, msm_gem_evict, obj);
-63f17ef834284d Rob Clark 2021-04-05  126  }
-63f17ef834284d Rob Clark 2021-04-05  127  
+   192	
+   193	int __fwnode_mdiobus_register(struct mii_bus *mdio, struct fwnode_handle *fwnode,
+   194				      struct module *owner)
+   195	{
+   196		if (is_of_node(fwnode))
+ > 197			return __of_mdiobus_register(mdio, to_of_node(fwnode), owner);
 
--- 
+--
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
