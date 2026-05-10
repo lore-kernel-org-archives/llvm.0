@@ -1,183 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B72A1607A4;
-	Sun, 10 May 2026 11:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9943038239E;
+	Sun, 10 May 2026 12:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778412646; cv=none; b=j1Cq6Q9pBlO2bptPPG1IuoEW5ewNe/5jNOPavBoy0ZdlWBhR/AFo0+hHjYA58avGGTCKN0cnBv7tnd7bv5ZllNMp1AKxmQCZ3RspX686/NsM08Yt3pendMioLajsLR9k1NcCE1AJsAyFVyPS68Sgo0ssZ9OOwGo32pF92KBuoJc=
+	t=1778416326; cv=none; b=kIfeRChL6Yq3S5xA+P+chSmeSxVixWqERwwKnGaii+1khrdZnx2GiMRmlLueZ8t+NT2Wzf17YbmWAde9V8ZTknLvIWD61Vh2vrK9GHQ8M9BqYfR1wwy+s4FZTtCNKy6Bcv7n3XypKTRDKWgY29rsAUfchTQpuW4iYq0+QMd/5JI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778412646; c=relaxed/simple;
-	bh=K66Nolotuqz6YCr8C8gahsfBITEtXg/36b0zt/1hY+0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=b0mQyHVobmlSG3FDGLmz2lxq4i/rLL5R1XZQcLbwJOD6bYWlC/5W8uo8bo19COJaTA3jN6r4MEKgbyZm6Z0SczrGeL6WsW39CH33+I4GBy/WyxOt/4C8ygNHAAvYywGxIrjBpZdlumXwl+HIAG2dBFF/4FG11zDHvh0iOY5EjL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ThDqRVmA; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1778416326; c=relaxed/simple;
+	bh=W2lnjd0EEjY95FWLS/VU+8zZVQxhrlAyAYdoXojkgTg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rn0U6eNRJej9QypwyjkYaz62OVAv0ym1yIc8vq9+ytz90q1EinN4+bIoWffRfTRzrvwh+teRLhvEjGbksg/OGXTL2TDTiyooQiTvRbOmuO8txEhIHKY6ZImK8bZj9d8jt4cIY0E4G0iArmXW9MnsqMebX2h55g6MrVQCw++d244=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FeRwVoxS; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ThDqRVmA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FeRwVoxS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778412643; x=1809948643;
-  h=date:from:to:cc:subject:message-id;
-  bh=K66Nolotuqz6YCr8C8gahsfBITEtXg/36b0zt/1hY+0=;
-  b=ThDqRVmAFHh5djhOWIkAG0zw/LPIctiE0VMqduNK5pKYNdBkEuIDMf2F
-   InmWWTjIhsEZQYQ7P8cN7tlWI2Rh3KaE8T9J6BCUVSS8Enhnfg39UxMUg
-   jJ0fK3JsEONE/YeWqYN6+Gr+exO6z5P4ulqC4jU5G7XgJNLbHVnZn/vdb
-   4didZ+pt1oi7/9N1S7P7SmsBMY7V7WkoWMwv/95Puzm0YRoEhZ/4jo5Fs
-   cFg7hL433oThvaONIMyuSko6LHGmV/CiMBt8bBRuDOEaeJIN3uBye/YlV
-   SDSl2intzeqg2r8hF6xK5cQof91wYY+rBExvEA+E49dbljyRhkJYotNZC
-   A==;
-X-CSE-ConnectionGUID: mnlZkCtsSM6KvWx3KpOPqQ==
-X-CSE-MsgGUID: voyEosgjQWudedQX68re1w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="89629966"
+  t=1778416325; x=1809952325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W2lnjd0EEjY95FWLS/VU+8zZVQxhrlAyAYdoXojkgTg=;
+  b=FeRwVoxSxTKT9usFANd/TtH63BiUCreh81mWf3kUZwFfcepQtlamWIKS
+   WIzouUypq8mYTwcaX893ZJAWBwHIFz08qBxhd4+qzPknksdxAUsp0ZIMR
+   Ai9Ts7k/DxFnVdv/1ElDl4kkTDE/ZOdMbKiqs/1CssQq2b7GiblSRL+gT
+   sXkZagnRfCJBKH+026P7SsdZ+NBX8TQgOzTtZSlSVVjED+5veWrPzeltG
+   2PaKwn22GPWl0UKVk4GCU4ZQrOa8Q83+uQOjo1Sdtzw27R/J7M/Wz7ZRp
+   bwvTGZBtpLUcg+Du5Gd+82fpVIBcsc1xi1UZeJBmbD+PIx6REV79JxDrB
+   w==;
+X-CSE-ConnectionGUID: 6EqptFKgRVO1X6B8hGM8OQ==
+X-CSE-MsgGUID: KGO6zjj1QwqmH0yguHg5tw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11781"; a="83174437"
 X-IronPort-AV: E=Sophos;i="6.23,227,1770624000"; 
-   d="scan'208";a="89629966"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2026 04:30:43 -0700
-X-CSE-ConnectionGUID: StMdg9xPQL6LiCGCymqr+A==
-X-CSE-MsgGUID: 40RE1RZQQJ+mBYoxxHao8g==
+   d="scan'208";a="83174437"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2026 05:32:04 -0700
+X-CSE-ConnectionGUID: O+4Fc+NiTR6GKBhPTah8HQ==
+X-CSE-MsgGUID: cEwYlgaAQFCggNTGzUHM2g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,227,1770624000"; 
-   d="scan'208";a="230811324"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by fmviesa009.fm.intel.com with ESMTP; 10 May 2026 04:30:41 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+   d="scan'208";a="275345921"
+Received: from lkp-server01.sh.intel.com (HELO 82327192134e) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 10 May 2026 05:32:00 -0700
+Received: from kbuild by 82327192134e with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wM2Mp-000000007hp-0HSB;
-	Sun, 10 May 2026 11:30:39 +0000
-Date: Sun, 10 May 2026 13:30:04 +0200
+	id 1wM3K8-0000000028T-49cF;
+	Sun, 10 May 2026 12:31:56 +0000
+Date: Sun, 10 May 2026 20:30:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
+To: Daniel J Blueman <daniel@quora.org>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Antonino Maniscalco <antomani103@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: net/ipv4/tcp.c:1606:2: error: call to undeclared function
- 'tcp_bpf_rcvlowat'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202605101359.dgJxhzI7-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	Daniel J Blueman <daniel@quora.org>, linux-arm-msm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] drm/msm: Fix shrinker deadlock
+Message-ID: <202605102047.JRDq9587-lkp@intel.com>
+References: <20260508065722.18785-1-daniel@quora.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260508065722.18785-1-daniel@quora.org>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/selftest-bpf-Use-BPF_SOCK_OPS_ALL_CB_FLAGS-1-for-bad_cb_test_rv/20260510-125645
-head:   8387600c3c2126ca1ff6d5718eb17e7840afd157
-commit: ffaa25dad7353701805e9dae4e5d985b7ecebcc3 bpf: tcp: Add SOCK_OPS rcvlowat hook.
-date:   6 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260510/202605101359.dgJxhzI7-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605101359.dgJxhzI7-lkp@intel.com/reproduce)
+Hi Daniel,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v7.1-rc2 next-20260508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-J-Blueman/drm-msm-Fix-shrinker-deadlock/20260510-132942
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20260508065722.18785-1-daniel%40quora.org
+patch subject: [PATCH] drm/msm: Fix shrinker deadlock
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260510/202605102047.JRDq9587-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260510/202605102047.JRDq9587-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605101359.dgJxhzI7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605102047.JRDq9587-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/ipv4/tcp.c:1606:2: error: call to undeclared function 'tcp_bpf_rcvlowat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1606 |         tcp_bpf_rcvlowat(sk, NULL);
-         |         ^
-   net/ipv4/tcp.c:1606:2: note: did you mean 'tcp_set_rcvlowat'?
-   include/net/tcp.h:519:5: note: 'tcp_set_rcvlowat' declared here
-     519 | int tcp_set_rcvlowat(struct sock *sk, int val);
-         |     ^
-   1 error generated.
---
->> net/ipv4/tcp_input.c:208:6: warning: no previous prototype for function 'bpf_skops_rcvlowat' [-Wmissing-prototypes]
-     208 | void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb)
-         |      ^
-   net/ipv4/tcp_input.c:208:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     208 | void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb)
-         | ^
-         | static 
->> net/ipv4/tcp_input.c:5309:3: error: call to undeclared function 'tcp_bpf_rcvlowat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    5309 |                 tcp_bpf_rcvlowat(sk, skb);
-         |                 ^
-   net/ipv4/tcp_input.c:5309:3: note: did you mean 'tcp_set_rcvlowat'?
-   include/net/tcp.h:519:5: note: 'tcp_set_rcvlowat' declared here
-     519 | int tcp_set_rcvlowat(struct sock *sk, int val);
-         |     ^
-   net/ipv4/tcp_input.c:5514:2: error: call to undeclared function 'tcp_bpf_rcvlowat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    5514 |         tcp_bpf_rcvlowat(sk, skb);
-         |         ^
-   1 warning and 2 errors generated.
---
->> net/ipv4/tcp_fastopen.c:284:2: error: call to undeclared function 'tcp_bpf_rcvlowat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     284 |         tcp_bpf_rcvlowat(sk, skb);
-         |         ^
-   net/ipv4/tcp_fastopen.c:284:2: note: did you mean 'tcp_set_rcvlowat'?
-   include/net/tcp.h:519:5: note: 'tcp_set_rcvlowat' declared here
-     519 | int tcp_set_rcvlowat(struct sock *sk, int val);
-         |     ^
-   1 error generated.
+   In file included from drivers/gpu/drm/msm/msm_gem_shrinker.c:10:
+   In file included from drivers/gpu/drm/msm/msm_drv.h:22:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/gpu/drm/msm/msm_gem_shrinker.c:125:46: error: too many arguments to function call, expected 2, have 3
+     125 |         return with_vm_locks(ticket, msm_gem_evict, obj);
+         |                ~~~~~~~~~~~~~                        ^~~
+   drivers/gpu/drm/msm/msm_gem_shrinker.c:46:1: note: 'with_vm_locks' declared here
+      46 | with_vm_locks(void (*fn)(struct drm_gem_object *obj),
+         | ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      47 |               struct drm_gem_object *obj)
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +/tcp_bpf_rcvlowat +1606 net/ipv4/tcp.c
+vim +125 drivers/gpu/drm/msm/msm_gem_shrinker.c
 
-  1548	
-  1549	/* Clean up the receive buffer for full frames taken by the user,
-  1550	 * then send an ACK if necessary.  COPIED is the number of bytes
-  1551	 * tcp_recvmsg has given to the user so far, it speeds up the
-  1552	 * calculation of whether or not we must ACK for the sake of
-  1553	 * a window update.
-  1554	 */
-  1555	void __tcp_cleanup_rbuf(struct sock *sk, int copied)
-  1556	{
-  1557		struct tcp_sock *tp = tcp_sk(sk);
-  1558		bool time_to_ack = false;
-  1559	
-  1560		if (inet_csk_ack_scheduled(sk)) {
-  1561			const struct inet_connection_sock *icsk = inet_csk(sk);
-  1562	
-  1563			if (/* Once-per-two-segments ACK was not sent by tcp_input.c */
-  1564			    tp->rcv_nxt - tp->rcv_wup > icsk->icsk_ack.rcv_mss ||
-  1565			    /*
-  1566			     * If this read emptied read buffer, we send ACK, if
-  1567			     * connection is not bidirectional, user drained
-  1568			     * receive buffer and there was a small segment
-  1569			     * in queue.
-  1570			     */
-  1571			    (copied > 0 &&
-  1572			     ((icsk->icsk_ack.pending & ICSK_ACK_PUSHED2) ||
-  1573			      ((icsk->icsk_ack.pending & ICSK_ACK_PUSHED) &&
-  1574			       !inet_csk_in_pingpong_mode(sk))) &&
-  1575			      !atomic_read(&sk->sk_rmem_alloc)))
-  1576				time_to_ack = true;
-  1577		}
-  1578	
-  1579		/* We send an ACK if we can now advertise a non-zero window
-  1580		 * which has been raised "significantly".
-  1581		 *
-  1582		 * Even if window raised up to infinity, do not send window open ACK
-  1583		 * in states, where we will not receive more. It is useless.
-  1584		 */
-  1585		if (copied > 0 && !time_to_ack && !(sk->sk_shutdown & RCV_SHUTDOWN)) {
-  1586			__u32 rcv_window_now = tcp_receive_window(tp);
-  1587	
-  1588			/* Optimize, __tcp_select_window() is not cheap. */
-  1589			if (2*rcv_window_now <= tp->window_clamp) {
-  1590				__u32 new_window = __tcp_select_window(sk);
-  1591	
-  1592				/* Send ACK now, if this read freed lots of space
-  1593				 * in our buffer. Certainly, new_window is new window.
-  1594				 * We can advertise it now, if it is not less than current one.
-  1595				 * "Lots" means "at least twice" here.
-  1596				 */
-  1597				if (new_window && new_window >= 2 * rcv_window_now)
-  1598					time_to_ack = true;
-  1599			}
-  1600		}
-  1601		if (time_to_ack) {
-  1602			tcp_mstamp_refresh(tp);
-  1603			tcp_send_ack(sk);
-  1604		}
-  1605	
-> 1606		tcp_bpf_rcvlowat(sk, NULL);
-  1607	}
-  1608	
+6afb0750dba05c Rob Clark 2021-04-05  115  
+63f17ef834284d Rob Clark 2021-04-05  116  static bool
+02070f04987524 Rob Clark 2025-06-29  117  evict(struct drm_gem_object *obj, struct ww_acquire_ctx *ticket)
+63f17ef834284d Rob Clark 2021-04-05  118  {
+b352ba54a82072 Rob Clark 2022-08-02  119  	if (is_unevictable(to_msm_bo(obj)))
+63f17ef834284d Rob Clark 2021-04-05  120  		return false;
+63f17ef834284d Rob Clark 2021-04-05  121  
+b352ba54a82072 Rob Clark 2022-08-02  122  	if (msm_gem_active(obj))
+01780d02634a3a Rob Clark 2022-08-02  123  		return false;
+01780d02634a3a Rob Clark 2022-08-02  124  
+fe4952b5f27cca Rob Clark 2025-06-29 @125  	return with_vm_locks(ticket, msm_gem_evict, obj);
+63f17ef834284d Rob Clark 2021-04-05  126  }
+63f17ef834284d Rob Clark 2021-04-05  127  
 
---
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
