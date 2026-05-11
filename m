@@ -1,89 +1,149 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915F13793A8
-	for <llvm@lists.linux.dev>; Mon, 11 May 2026 12:19:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEC73358D6;
+	Mon, 11 May 2026 12:23:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778501951; cv=none; b=aFieJp4kLWtiLtXSk4HwwbndXFxbxEE34MxhGDkgoksYrF4p9XalFOMJmmDTr5pxX8YShguWePig/Cly+zriPM3EInLUCYTlQBks5lpeOyXGhfzwWJkOM94kUBz/++Yb8Fcl563zEMdUK/lFrF6kzXk3NrRdUac1np9+gzqfEDU=
+	t=1778502182; cv=none; b=m4RxBXnS/o0VL1QkX0SVdLbdJDP8HWqMA6vv8B1nLNQUCXOYIITIMB+LqhrlUbI4YIdXV/uc1oJdxbkWfRnEUGvPwJo59AsfNsxxs2nDF64672AbgDplYEcRItWTUKImef42ArKH22QbaTmfs7u//UNzgq58C6mYe7uGyOL3sK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778501951; c=relaxed/simple;
-	bh=tLmLnG7NtRDvNzoHFnnr7G7EPjQ98zaD83MXtS3QGaY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=D4H1DYQk8FAUBgwz3ni5PdCGGNThRTy6p9EUhZfmjbqo04TslhvAT87PAKRgC5qrWOlMhxWXaISKoQwKO+ULr9Eezw/wXaTQ7ianrIB0/+YhTCM2vQ2rau6kibNcDLx8bUCH/MthI/Ug0kpVP/APJ1NWH1djVOTEYiPpqG7hnlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=NE8Iccbh; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1778502182; c=relaxed/simple;
+	bh=P+ENBJPOk9zcHL20zVJrjU7DVRp3gZ5frQbrs7usO0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TrdoQM8P1fcnGdy/yJl/naSjaqp8TF5J5jx0XJGgFHrWTqkrcLSQNeHhgtw4V3XTqQnucdnD3Ej4W+dKTScD4ghX0UJmATsQ2BSIoM1ygy9dSEFoXC0DRIv3KICzFN4/Nt7d3BcbeBPEsBqRbxDKxCjRa4yvMRaBJwrs1qj4Y1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jwo0gzmx; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="NE8Iccbh"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B1B3C410B5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1778501949; bh=Zd6JYObStql70QlOFbbXZc/nE8PPz1FUhOYeRsnw8R0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=NE8Iccbhlop5kx/SHt52Rf/geOduMGW0s25QzxYTEUHbOkhdbPL75cGB5nCBgnUio
-	 1pSNbwEElvVuv2NeKLxoVtFifIe4xEigRVkh48eplDHFyEsqhWGLAKSd1uQsFnnlWk
-	 hWMnXO1LkRUlwCipZJeOAMpBuWCtuwX/eVO/7We249wxaKgEsrDn+VsCrzq3Zt/BJi
-	 YfslED0S1ywKWCAqGSGB+63OAvyGLWcK4ttKvxUJ1uXeHan8VURu5zqR8s5MtHpuhQ
-	 vkWlLjWBWQ4m/IYIg3bPaOcYEatIgwvk/RaLkbxDF8DLgll1PeFdXk4yjxFYTbZeDE
-	 V8grkQeZtgilw==
-Received: from localhost (unknown [IPv6:2601:280:4600:27b:67c:16ff:fe81:5f9b])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id B1B3C410B5;
-	Mon, 11 May 2026 12:19:09 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Marco Elver <elver@google.com>, "Vlastimil Babka (SUSE)"
- <vbabka@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Dennis Zhou
- <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter
- <cl@gentwo.org>, Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>,
- David Rientjes <rientjes@google.com>, Roman Gushchin
- <roman.gushchin@linux.dev>, Kees Cook <kees@kernel.org>, "Gustavo A. R.
- Silva" <gustavoars@kernel.org>, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>, Suren
- Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Alexander Potapenko <glider@google.com>, Dmitry Vyukov
- <dvyukov@google.com>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
- llvm@lists.linux.dev, "linux-doc@vger.kernel.org"
- <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] slab: fix kernel-docs for mm-api
-In-Reply-To: <afi0nQ84k1oz5RyH@elver.google.com>
-References: <20260424132427.2703076-1-elver@google.com>
- <20260424132427.2703076-2-elver@google.com>
- <9c321184-9080-4d5c-bd1a-a16cd0bbaed3@kernel.org>
- <CANpmjNN_=g31Eoa+w1NrFALfp1dDBi5oHEZdr_bA_48-tS2M=Q@mail.gmail.com>
- <afi0nQ84k1oz5RyH@elver.google.com>
-Date: Mon, 11 May 2026 06:19:08 -0600
-Message-ID: <871pfiw343.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jwo0gzmx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778502180; x=1810038180;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P+ENBJPOk9zcHL20zVJrjU7DVRp3gZ5frQbrs7usO0c=;
+  b=jwo0gzmxhcF1ylIzPsPiooS2V/0HUkRPgA3aJIngxhcY2iQTCKoUOlAm
+   Ipv3kGG6yZqgmAxrvr8o4VhXdsDLYdKkc0Cu4vRLkTBKTJaxgcZPF0ucG
+   IkW/sJ47IW86EQah1Y//3c20h9dKC15OxBMC2Fkdqy81P5n+zaWBA0Ps/
+   IwXpCq8czLDRxFEsTzXI8MnQc0xZO008V+NSd/1UrYP8k85ruEQEenlUM
+   w4aruL79zHL89EAXhYLQzyvoFnty5Rh30TgEVcJKUIJdL+kO5Uo0scMP/
+   U3Ha31JLTMNazmdq0J/PQlSZ4/aY9vrQ91ZudmuBQI8Iqsy6dFmI6o+9S
+   Q==;
+X-CSE-ConnectionGUID: AaWYB1/8SrmQy4MQ42CUhg==
+X-CSE-MsgGUID: 4I5Zknk/QSq3m2hyGvaiDg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11782"; a="79370476"
+X-IronPort-AV: E=Sophos;i="6.23,228,1770624000"; 
+   d="scan'208";a="79370476"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 05:23:00 -0700
+X-CSE-ConnectionGUID: nqQPeyu6QXuD0+Xno0Pz3w==
+X-CSE-MsgGUID: s40PKmb0Rb6zbksyyeuBBA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,228,1770624000"; 
+   d="scan'208";a="236466454"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 11 May 2026 05:22:57 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wMPew-000000000XR-2r3L;
+	Mon, 11 May 2026 12:22:54 +0000
+Date: Mon, 11 May 2026 20:22:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: w15303746062@163.com, giovanni.cabiddu@intel.com,
+	herbert@gondor.apana.org.au, davem@davemloft.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	thorsten.blum@linux.dev, kees@kernel.org, qat-linux@intel.com,
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mingyu Wang <25181214217@stu.xidian.edu.cn>
+Subject: Re: [PATCH] crypto: qat - fix Use-After-Free in
+ adf_ctl_ioctl_dev_start()
+Message-ID: <202605112040.jcfTlYZH-lkp@intel.com>
+References: <20260508023542.256299-1-w15303746062@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260508023542.256299-1-w15303746062@163.com>
 
-Marco Elver <elver@google.com> writes:
+Hi,
 
-> How about the below, i.e. adding type decls that only the kernel-doc
-> parser sees? One complication is also DECL_KMALLOC_PARAMS, and adding
-> kernel-doc parser hacks for that looks pretty awful, so this is a lot
-> cleaner.
+kernel test robot noticed the following build errors:
 
-I'm going to be a while catching up with things, so this is just a first
-take.  I strongly suspect that the people who object so strongly to
-documentation markup in general would be less than fully thrilled by the
-addition of this kind of workaround.  I'd like to ponder a bit and see
-if I can some up with something better...but again, it won't happen
-right away.
+[auto build test ERROR on herbert-cryptodev-2.6/master]
+[also build test ERROR on herbert-crypto-2.6/master linus/master v7.1-rc3 next-20260508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
+url:    https://github.com/intel-lab-lkp/linux/commits/w15303746062-163-com/crypto-qat-fix-Use-After-Free-in-adf_ctl_ioctl_dev_start/20260510-110441
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+patch link:    https://lore.kernel.org/r/20260508023542.256299-1-w15303746062%40163.com
+patch subject: [PATCH] crypto: qat - fix Use-After-Free in adf_ctl_ioctl_dev_start()
+config: loongarch-randconfig-001-20260510 (https://download.01.org/0day-ci/archive/20260511/202605112040.jcfTlYZH-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260511/202605112040.jcfTlYZH-lkp@intel.com/reproduce)
 
-jon
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605112040.jcfTlYZH-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/crypto/intel/qat/qat_common/adf_ctl_drv.c:286:6: error: use of undeclared identifier 'accel_dev'
+     286 |         if (accel_dev)
+         |             ^~~~~~~~~
+   drivers/crypto/intel/qat/qat_common/adf_ctl_drv.c:287:15: error: use of undeclared identifier 'accel_dev'
+     287 |                 adf_dev_put(accel_dev);
+         |                             ^~~~~~~~~
+   2 errors generated.
+
+
+vim +/accel_dev +286 drivers/crypto/intel/qat/qat_common/adf_ctl_drv.c
+
+   255	
+   256	static int adf_ctl_ioctl_dev_stop(struct file *fp, unsigned int cmd,
+   257					  unsigned long arg)
+   258	{
+   259		int ret;
+   260		struct adf_user_cfg_ctl_data *ctl_data;
+   261	
+   262		ctl_data = adf_ctl_alloc_resources(arg);
+   263		if (IS_ERR(ctl_data))
+   264			return PTR_ERR(ctl_data);
+   265	
+   266		if (adf_devmgr_verify_id(ctl_data->device_id)) {
+   267			pr_err("QAT: Device %d not found\n", ctl_data->device_id);
+   268			ret = -ENODEV;
+   269			goto out;
+   270		}
+   271	
+   272		ret = adf_ctl_is_device_in_use(ctl_data->device_id);
+   273		if (ret)
+   274			goto out;
+   275	
+   276		if (ctl_data->device_id == ADF_CFG_ALL_DEVICES)
+   277			pr_info("QAT: Stopping all acceleration devices.\n");
+   278		else
+   279			pr_info("QAT: Stopping acceleration device qat_dev%d.\n",
+   280				ctl_data->device_id);
+   281	
+   282		adf_ctl_stop_devices(ctl_data->device_id);
+   283	
+   284	out:
+   285		/* Release the reference acquired by adf_devmgr_get_dev_by_id() */
+ > 286		if (accel_dev)
+   287			adf_dev_put(accel_dev);
+   288	
+   289		kfree(ctl_data);
+   290		return ret;
+   291	}
+   292	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
