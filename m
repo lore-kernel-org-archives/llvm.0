@@ -1,135 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3996B4657FA
-	for <llvm@lists.linux.dev>; Mon, 11 May 2026 17:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B2A46AECC;
+	Mon, 11 May 2026 18:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778521395; cv=none; b=qbBOAHBu2LelUNf5wmzEkCWZpg7zI4QCm6P9087QvdSAULuxFzSjWpCNkdLiqMcGw+6/tPK88zyg7xsuRR5wprMRjlS24khIwjKeVSHWuq/MyL+PYbjg9j+mwrMo7CWmRy0xDCmIaXo2Lygwz8wFKs2blzCVw7QMr0xMGN3PDN0=
+	t=1778523266; cv=none; b=NU1WieSwg0Sptxy7y8muRoKURbLTxfNANk4FUVJbhbN1Ilh5H1xwwOjU0IGTOPPI1YreKnjyqyzx3Y7pxdswFO0fWD6DOhwhn6c1ekvLzEd5l0FgwnRGOHZ8SsUS9U3G4fejCD3L/5XJASC5PXRSMh6ode0ylowdvqZhOKsYUVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778521395; c=relaxed/simple;
-	bh=b15ExSF7mQEQyvpcHhomqR0PXRIdPfNpmM1BJsGgRd8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Efzi64Hzky3UFrZYFH9CfTauus/NWwIlmi/Xix+q/hDAV9SCCvwK4DMsf6tD1//c3sFOLjVJ2GI4BlGwrP3/IpAYCz1kHxJKQodkPeNnqceah4EmrsFRoQNMQ9+GqjaKWOMoLm4a0d+86Wu2qLz9WswS3tg/ZEG9R/ZFpJE6d2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E+yVj2J0; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778523266; c=relaxed/simple;
+	bh=kYJAjhBLTK5188tkpp895MuAn5ZwQjFTPdmZuwhzdKQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ME4RMi+SUXDetXqRImEaIr5zpeV9iSRgHtSFqOhR9xRJnyT54lvRXV9XH/6eHFfvG/QLsIMot/KpdNJbM+aLWsSuDFWd5/9mgvQvC6oEv0f9x+lJa9ZxJbpZBimwzaLIZB61P2f2mG4BsdPSCZ5EXgHJM7Fr9+lmRsq7V+2XLvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yik00MFs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E+yVj2J0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778521393;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=iT7hr89eH0uER8LgtYoum2WbtDzllkl2a1lpYq4/9KQ=;
-	b=E+yVj2J0xPol6Q4LlkoTBV9OzPVJPF6P9gf6CW6JHZXW0EiV1i4Hv/ufM8XeOJmpHpPjTE
-	U+IeBpAJHqIv1MXTwOroe1bmjE2eZ4nH/TnlcvGyAS7f0nn9la53wb6W0xn6BgF0QI7ek0
-	RMoEw8OefkCQgh0Tb3yvyo7YJHHiY+E=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-20-zWOpFWlbNFqWTlrxcwZ87Q-1; Mon,
- 11 May 2026 13:43:09 -0400
-X-MC-Unique: zWOpFWlbNFqWTlrxcwZ87Q-1
-X-Mimecast-MFC-AGG-ID: zWOpFWlbNFqWTlrxcwZ87Q_1778521388
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7C7E018005B2
-	for <llvm@lists.linux.dev>; Mon, 11 May 2026 17:43:08 +0000 (UTC)
-Received: from [172.20.167.112] (unknown [10.30.44.188])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0928B1955D84;
-	Mon, 11 May 2026 17:43:07 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 68 of 97): Test report for master
- (7.1.0-rc2, upstream-mainline, ec895727)
-Date: Mon, 11 May 2026 17:43:07 -0000
-To: llvm@lists.linux.dev, yoyang@redhat.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yik00MFs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6274CC2BCB0;
+	Mon, 11 May 2026 18:14:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778523266;
+	bh=kYJAjhBLTK5188tkpp895MuAn5ZwQjFTPdmZuwhzdKQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Yik00MFsZZExqbxCaceAPJlMwLQrmJmplumBUszioAlx10aTI4RdUFOzjXo+x+c5u
+	 /VZ6lGT4BZS+HALjze4VbOO1Pro9OETfEq58RSG64GOXUNLfBpoyrkzVnsxu2HjQPW
+	 gmZdwzKpsmcDJCxfMa1NGnelSgreX+FZK15c0Rs05bF11sNGvdbSuIDjH+/77RO3F/
+	 i4eCb0+n3xVp33OV69kdFRqIfPru7ydqw9Q8xz1B73DIYRHGuvEenFrzdyXLnXfzES
+	 QUCSmeTH40A82aP4edYnZ8dDwBoXOb+P4FLxUoEv0Y7xclsqSNwlkWKi6e9qcA8e82
+	 70fz60b4WW4dA==
+Date: Mon, 11 May 2026 11:14:25 -0700
+From: Kees Cook <kees@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: "Harry Yoo (Oracle)" <harry@kernel.org>,
+	"Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+	Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Alexander Potapenko <glider@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
+	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>,
+	Florent Revest <revest@google.com>, Jann Horn <jannh@google.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matteo Rizzo <matteorizzo@google.com>,
+	GONG Ruiqi <gongruiqi1@huawei.com>
+Subject: Re: [PATCH v3 1/2] slab: support for compiler-assisted type-based
+ slab cache partitioning
+Message-ID: <202605111113.5076F0DC@keescook>
+References: <20260424132427.2703076-1-elver@google.com>
+ <6f2bd63a-dc02-4631-a3a5-7ec8e58a4a4e@kernel.org>
+ <afkOMIPu1WNFE9MS@elver.google.com>
+ <CANpmjNM261J5qefMvmUXWZGBVz-KBs7GkbpdNMfTOvNJ-=LiZQ@mail.gmail.com>
+ <afz7pZADZPD4mKJr@MacBook-Air.tail10959e.ts.net>
+ <af3xcFjrZSZFG846@elver.google.com>
+ <rz7dt4wghum6beghfgm6suqje6jeivrensojjalfis5zeuyen7@6bj7kfpqb4q5>
+ <CANpmjNNevjTo0uwo3DJdDc=PpQpyzj301kFT39OBoCNLW0A8VQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <73280.126051113430901451@us-mta-20.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: UyWBvEghiOePj3O7gVvt6PDVXlYo4ORAOoVJjYRnfmc_1778521388
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNNevjTo0uwo3DJdDc=PpQpyzj301kFT39OBoCNLW0A8VQ@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+On Mon, May 11, 2026 at 11:34:53AM +0200, Marco Elver wrote:
+> On Mon, 11 May 2026 at 10:31, 'Harry Yoo (Oracle)' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
+> >
+> > On Fri, May 08, 2026 at 04:21:36PM +0200, Marco Elver wrote:
+> > > I think I have a solution for this mess, see below.
+> > >
+> > > I would not send it as 1 series, but only include the slab changes (+
+> > > instruction_pointer.h change to introduce _CODE_LOCATION_) as one
+> > > series, to go through the slab tree. The rest of the patches would go to
+> > > respective arch maintainers.
+> >
+> > I'm assuming this will be a follow-up and reviewing patch 1
+> > (and waiting for Jon's thuoghts on patch 2)
+> 
+> I'll be sending v4 shortly.
+> 
+> > > diff --git a/include/linux/instruction_pointer.h b/include/linux/instruction_pointer.h
+> > > index aa0b3ffea935..dfe73aafddb8 100644
+> > > --- a/include/linux/instruction_pointer.h
+> > > +++ b/include/linux/instruction_pointer.h
+> > > @@ -8,6 +8,30 @@
+> > >
+> > >  #ifndef _THIS_IP_
+> > >  #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+> > > +/*
+> > > + * The current generic definition of _THIS_IP_ is considered broken by GCC [1]
+> > > + * and Clang [2]. In particular, the address of a label is only expected to be
+> > > + * used with a computed goto.
+> > > + *
+> > > + *   [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071
+> > > + *   [2] https://github.com/llvm/llvm-project/issues/138272
+> > > + *
+> > > + * Mark it as broken, so that appropriate fallback options can be implemented
+> > > + * for architectures that do not define their won _THIS_IP_.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Teeny typo above: "won" -> "own".
 
+> > > + */
+> > > +#define HAS_BROKEN_THIS_IP
+> > > +#endif
+> >
+> > As long as _THIS_IP_ is broken on some arches, it cannot be used anyway
+> > when in a general API that can be used by arbitrary users?
+> 
+> It more or less works today, and for debugging or tracing it's "good
+> enough" in most cases.
+> 
+> The plan would be to phase out the generic _THIS_IP_ once all
+> architectures have a correct _THIS_IP_ implementation.
+> 
+> > Is it something that can be fixed in all arches over time?
+> 
+> Yes, I have patches for that.
+> 
+> > > +/*
+> > > + * _CODE_LOCATION_ provides a unique identifier for the current code location.
+> > > + * When _THIS_IP_ is broken (generic version), we fall back to a static marker
+> > > + * which guarantees uniqueness and resolves to a constant address at link time,
+> > > + * avoiding runtime overhead and compiler optimizations breaking it.
+> > > + */
+> > > +#ifdef HAS_BROKEN_THIS_IP
+> > > +#define _CODE_LOCATION_ ({ static const char __here; (unsigned long)&__here; })
+> >
+> > Nice!
+> >
+> > Yes, we don't really need the exact code location
+> > for partitioning kmalloc caches.
+> >
+> > IIRC lockdep does a similar thing to define lock classes (unique for
+> > each lock init location)
+> >
+> > > +#else
+> > > +#define _CODE_LOCATION_ _THIS_IP_
+> > >  #endif
+> >
+> > Probably we don't need this fallback?
+> 
+> x86-64 is the only arch that has working fast _THIS_IP_, and adding
+> static __here markers to bss is rather wasteful.
+> 
+> More architectures will be supporting _THIS_IP_ properly once I get to
+> send the patches. The mainstream architectures all have a reasonable
+> and fast way to get the current IP, so we don't need to waste bss
+> space there.
 
-Kernel information:
-    Commit message: Merge tag 'hwmon-for-v7.1-rc3' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/groeck/linux-staging
+Thanks for finding a solution for this!
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2512595439
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2512595439_x86_64_kernel_kcidb_tool_21252664_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
-    /distribution/command [aarch64, ppc64le, s390x, x86_64]
-    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
-    Boot test [aarch64, ppc64le, s390x, x86_64]
-    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
-    Reboot test [aarch64, ppc64le, s390x, x86_64]
-    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
-    Storage - blktests - throtl [aarch64, s390x, x86_64]
-    Storage - blktests - ublk [aarch64, s390x, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
-    stress: stress-ng - memory [aarch64, s390x, x86_64]
-    xfstests - btrfs [aarch64]
-    xfstests - ext4 [aarch64]
-    xfstests - xfs [aarch64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+Kees Cook
