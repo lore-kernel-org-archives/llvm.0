@@ -1,327 +1,135 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013017.outbound.protection.outlook.com [52.101.72.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5BCD33F5BA;
-	Mon, 11 May 2026 16:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.17
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778516242; cv=fail; b=eW4FCeg83Qe5FRt3O4oA5q0P1oxDTkShvIxu/R48uO+5svVXrAVWrcoUdRiJYl9AinLz53f+VLag5CBP8Evx7DJ/Xfza2dMbdxvtEFzpMSBrvFjek/bISQSkjCJYY7l4Q61kKi/41BDrvFPB/k349Oh8nBE7v2UHeMiWfL3pdtc=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778516242; c=relaxed/simple;
-	bh=YlNpXA0ZYjirb0kHetYibG5zMXuRpQZMN/Kgldmetf8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=p7cN7cl2+C1DcmgtytV333XO4yAQCjqulmb9zNbEbuU61hkdoe7MCSoI9On/QqOKfS9a1crqDq0Lt673HrXDt0DcbYjn+sD7VebhHVrNSvePk1spspuMDZjn718qx7pmUQKmeu0jp/uKjEsiEm+qFWyT7a/oMxfhGoJP7bkzSwM=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=OSATcqFI; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=OSATcqFI; arc=fail smtp.client-ip=52.101.72.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B576A436350
+	for <llvm@lists.linux.dev>; Mon, 11 May 2026 16:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778517316; cv=pass; b=dfa0b829qitmPced4RfXYE9S5FBADUAbp/ysK+TudZvNavk5+mKGMnwDj54N3yWqDQwxMGjkVh0bx1e3l/CPXxEBO4M9Zhe7p094MB6LNGhEhltCgWXYp5quCVpGA6WeAKJ3458teNDjnMNj7DTU4QelaBnXvnAxrtL/jSFYxJI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778517316; c=relaxed/simple;
+	bh=4S7C02MIUqtzmropOUva8L19yYp6EZ1lPURTmBTWjnA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YuXdItVe9XT7RXFC+wr+bXl0SzScmGTvV5x2RDwFSdt1h1zCZ/6k5N2aZoCZe+vEFWGrJmIp2jpQOPasvmU14JWXvn9eOVCLbd5ghhnAHuhJTf3II1fACWMje/adaTIiW/kFqLgAworYGa/AdmOa+HFEWxWDdC6/VoIQWNdfebs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b/wTv2lh; arc=pass smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="OSATcqFI";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="OSATcqFI"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=yDnzvduw7uwERsoE7hbYxUlsxhhc48NF9Q2gqnzMrZEuXXnPTNACgXF6m6IaIFaoJ7ddIF7Rzta1Wo5gtDRtlZCOHL3NGRYUVZKnO950+T0tflI7gQSC1PObpzuiNyydBOkUd/IuG0QtqqweCkvle/lZjy8FnlYE4fv8d09SKBq5BuAeNlsTANWrzSwbW+3ErUDlqQuE6gKqguyW6eIKYrfvyO+O8Wo4uK3cRDXOnov8Odf+IYRqjCA4CkXyDVSbZlp7oG7L+Vzw5yllv+vybRdilaCbIuz5oaWMUh+x8UZNjISyYYJ9n2o05O/k03hKJFVBRgXgoFwXBwEtu8xf9g==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jVxNQCYjmP6mK0C+OzpHRWSFSLS7wu0wcj4m7EDMZmk=;
- b=EKaizhutv1dHnNfj2dthtbQl0FKRGpYWf6JcjbYkSQo/0wE6YdBeBHjLZ31sLIGgjhbG/8vB5B/eSKLMulvLW7YvWI3tNfCoOynlsKonGrObp7AUN9hjlFaUO1dkIkxhynSyJ4gFE2MWV+Qg7c4fTGMpTr7//JPZeWH2xWXLhlszS8FLi/WJhsVKJymRCh1hX1z2l68qDn3vs5fOfGu9hIqo3UjE921DZHOR8qGCFi6GGu1Hf5Aqu+ngSecvUYq/BKu9sdGr1Xy+YnrZ3adIO1YzC8o3yEMDYoh6jMNnLEhIpItsQfbu+QY52FpjPL9YX+CDRm2J5372oe70tsw+xA==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kylinos.cn smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jVxNQCYjmP6mK0C+OzpHRWSFSLS7wu0wcj4m7EDMZmk=;
- b=OSATcqFIbM2Qc2czeyXLQ6eXHpAtEDG0s8546hN8+G3SBaV96A5OcN1S+hUt3X9OQtdcSdN9PZUK78G857bo3f94/X6VizlvzCPZutyN76YAidMmrZfXH9gZ2RGXExrJel9yfadmFjMECPWKDZMKrkX+zUqMcudtXXZym935ats=
-Received: from DB8PR06CA0046.eurprd06.prod.outlook.com (2603:10a6:10:120::20)
- by DBBPR08MB6138.eurprd08.prod.outlook.com (2603:10a6:10:205::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.22; Mon, 11 May
- 2026 16:17:13 +0000
-Received: from DB5PEPF00014B8D.eurprd02.prod.outlook.com
- (2603:10a6:10:120:cafe::9f) by DB8PR06CA0046.outlook.office365.com
- (2603:10a6:10:120::20) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.23 via Frontend Transport; Mon,
- 11 May 2026 16:17:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DB5PEPF00014B8D.mail.protection.outlook.com (10.167.8.201) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.25.13
- via Frontend Transport; Mon, 11 May 2026 16:17:12 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Kt0RKTZdjCCUyKeXNEAdVpAhLp8QNsGvQX+hjkuJrekqQaVTy/jGru+fOxTPHbFFMYpTljnL89gOG5+sbs8/tskU7bDUqHYiyounHIdjAew83oKLUpUvIAVyR214Y3rpHe1r2Q0ra3ICalsVkdXSNHnrMcOWoPceTiUFWHIf09LEA2Q0/55GfBMVSS/FBE9twXiQUjVuglJjFIVCn53sM+JvxHoQNcwEXBO+eBaIefWVKlYkM56tm8SPdouqwGnzgP4HHAyUqkfm3QuyNGKZWXvL1XjcGLw+13nXEeaPb6/qPKvCHrVzRPSC6siAgVdezHpbVhvQcwgfhOysBb36Mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jVxNQCYjmP6mK0C+OzpHRWSFSLS7wu0wcj4m7EDMZmk=;
- b=oPRFRuTR1NlUq/lK4+BOxfrwNmLlKQ9x3Jhlor6OYPXWEcS8oxnyfI3hVPUXNRysXZIYK5reWu0axX5IdDqmIOLBHUoeq81CsCn6UZVraAiNk1DJDjL8mSRrgVEfe7C9T9hh9zxL6dgpyvcEIZizDsYHB9mPq8yQWaAuZ0eaTgVItrV6HnTaiWtyRhVcqeJyqzKKZB4fwPZEa6PHMRIPrjKhD/YjaUiJQYtwhxIwpKShKWso9reIMHJdOeqYfo3hRC1FT1AOX/fj6aTEOTSn540Z1B5jWYiiFr6qHCDV4EZZPm0FAos/jdjfK2DSBZoQdCLE/muf1mdkvCOC6L2FkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jVxNQCYjmP6mK0C+OzpHRWSFSLS7wu0wcj4m7EDMZmk=;
- b=OSATcqFIbM2Qc2czeyXLQ6eXHpAtEDG0s8546hN8+G3SBaV96A5OcN1S+hUt3X9OQtdcSdN9PZUK78G857bo3f94/X6VizlvzCPZutyN76YAidMmrZfXH9gZ2RGXExrJel9yfadmFjMECPWKDZMKrkX+zUqMcudtXXZym935ats=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from GVXPR08MB10408.eurprd08.prod.outlook.com
- (2603:10a6:150:149::17) by PAVPR08MB9649.eurprd08.prod.outlook.com
- (2603:10a6:102:310::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.23; Mon, 11 May
- 2026 16:16:05 +0000
-Received: from GVXPR08MB10408.eurprd08.prod.outlook.com
- ([fe80::11da:2693:8a4b:1e29]) by GVXPR08MB10408.eurprd08.prod.outlook.com
- ([fe80::11da:2693:8a4b:1e29%4]) with mapi id 15.20.9891.021; Mon, 11 May 2026
- 16:16:05 +0000
-Message-ID: <b63b1409-3c01-418b-be27-f7e273b2e73a@arm.com>
-Date: Mon, 11 May 2026 18:16:03 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] cpufreq: cppc: Add update_limits support for Highest
- Performance changes
-To: Xueqin Luo <luoxueqin@kylinos.cn>, lkp@intel.com
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, rafael@kernel.org,
- sumitg@nvidia.com, viresh.kumar@linaro.org, zhanjie9@hisilicon.com,
- zhenglifeng1@huawei.com
-References: <202605101404.fqz0MXIe-lkp@intel.com>
- <20260511075647.206642-1-luoxueqin@kylinos.cn>
-Content-Language: en-US
-From: Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20260511075647.206642-1-luoxueqin@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P123CA0502.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1ab::21) To GVXPR08MB10408.eurprd08.prod.outlook.com
- (2603:10a6:150:149::17)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b/wTv2lh"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12c8f9846c8so6388906c88.0
+        for <llvm@lists.linux.dev>; Mon, 11 May 2026 09:35:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778517314; cv=none;
+        d=google.com; s=arc-20240605;
+        b=l1UWz91gd3rnT8u71ySVTjTcipM6IkIHEEdbaQ6fjLzcSO7JD62DW1NuN+HB0Rkpmb
+         f2CVd6p9+ri0VOawy7r84y0t/9HTivb29zqe7y5WbsNdH80imy6HyhGPA7tc6IBD2/Zz
+         LeFuOUDCGKAW3eI+6w9D3/5SOR6psDKbih3aHxC0Qf6Oqraz/RbbyIF8mXY/zKkxPGht
+         R1XyEAJIGQkdB0tFXYMMb5+pT1gAw/c9Jbr0lhz4rL4VUYqI5BY224lWXjQJgHdBlDZv
+         qO4TYGlAZ/7uYy2HDDkgF0MaVSDNct0+UMPWNkAwJGee0VGrS0S8sR0x2O8Jbo4Why1V
+         ZjuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=1buMrZnL5eF5p/xBeXqRPyloQLFILIM6omdsc97ttuw=;
+        fh=lDhKPuJa3mo+3MBxuLLyFHPwip2Id61KH+CewghRwQc=;
+        b=BrByiban+4JrR0PcC7dX/9gs6nc6gh5UtUryz09zkxHUijFLuJAtoP2iAJDIZ+5p2b
+         FFdb6eGPNBPw5sMX8lwb7ZDOa73suSbBISjWPWJ6qBKaAfkWi8oQxUpE1SRjGx/7timc
+         GWhHwFvzcZoFKLON2IBC/RiE7pyQKOqcfelBdKH0lrmhXRQIJIKmPS16RmUtNh4W/JM8
+         ILeqkiGckwdMQjQG+PYYlstISOYRwC8N8Ch1cfvVdk8j6DLVR243s9II6T4J7t0RKboT
+         MrsJmeC1r8bia0S2PnqdAlrcW9IG/bW4py0M2LUzpQx9MmptAFPN5f3um2piCCG8QTlJ
+         ADhw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778517314; x=1779122114; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1buMrZnL5eF5p/xBeXqRPyloQLFILIM6omdsc97ttuw=;
+        b=b/wTv2lhQjkGibCQf/sMBIf9LYcJ73KaNqM3WyUMvVHfTno7GAhKb6H5pGkx4jeL37
+         DuNDJu0x0CQOMiVA2+Ssae0ZRFV5wwfJ+7a1nHC7QA4dGEPBgKoAliAABqCYyByJRZJh
+         wy41PdgOTrqgLPq8FALxafR/e8pbE/JU+LZjZNxSsmxtulL+S9UlXyr/tXGEOcWwuATC
+         1Lk97vEqxphkG59jRyattgAUGv8CvagHdUVJCavemXZouox+r8K924MV/fhQUuw7S6K3
+         JgLQoPo3ogCM5T52XFzhfqzjAqImGu6pU7WCLQozLDRgv+GgcpxFO63uDCLDH47rQS30
+         mXag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778517314; x=1779122114;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1buMrZnL5eF5p/xBeXqRPyloQLFILIM6omdsc97ttuw=;
+        b=gAHgUG8BNRGHeoOivmgBunXHhwP/PJBfZQz6UO6gvCb1znGJx5zHmTdW0vy/XlSRJ7
+         4kjIGgcunEpExCVse4J7/mVxZaSfQqbcpgaNwLUNmgPly5uFzNFR7lDkYgRNvgf5QRL/
+         ayNURFPZRwAaNRHV8zTNR2mH+/pbv4cFCn2h83Xa9/RJjaNwi3/qXWRuwYDmYFdhi9l3
+         rtTVOe725gZph3IpRvwzr+jn8nUx4vmkuE/2ZoYcEuGwG38aQgwTLAt99juKEWYB9bAM
+         ThoPNw/4hgay3OmSUR19m8cOrkkC2NehDpJxKX0s3P1CpRhKB8gTpX7EE/3cLD+TnPpQ
+         OdBg==
+X-Forwarded-Encrypted: i=1; AFNElJ+TPPf6CHmHTIJpqntRk6f2vVDdjXCQ/K++FyTRp92MHjEgugDf5hRhhjwJ9meI3VeEoNPs@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz2ljwidJC8Ohdw4e6uoTrwrKvPtg/9DLtqIEmgpoyHYtUEP1ih
+	8v7WT8K7fnx97iATm5clCb9i6UeYWew+CzEC9piTONquZqGQlEVnBOvc2hJI4L/Wr2HxvOc3qgF
+	aa2SaLGIccMPFmLKQHAoU2CUCN7qgeLEBpcXExaic
+X-Gm-Gg: Acq92OELUdD3SEmEm4uGIdshmcqfuUOkVMMoLKCsxFiG4u71fvb5bowQb2CPR+ZUmIn
+	wyuDIZNN6zvRqbkZzPARn/8CcRkQNMIouAUadt+83OXnUOMxdUPcss1ktxGROnqHGDR3cIchhQS
+	trl0ZbRggYiqmsyUJyQTltp2AjLU+4zTJsoy04BwLN1NtWTFXE8S0Kf9AdbQK4LD9lT/7XyAPRz
+	3N2nG5vbVlH8bkDkxIzjtxf5ecqiquzJh3R9PpuRHfPX8rEF/vEd+vB0hg8aMWztR3RNOYwr5cn
+	cOTGC6Xfzmh8VioNV75310Lh9dDIUrZsTQbWP2DL98IZcCQRu9r7msHFoQ4E
+X-Received: by 2002:a05:7022:699d:b0:133:39a6:2b8b with SMTP id
+ a92af1059eb24-13339a62ddamr337498c88.44.1778517313279; Mon, 11 May 2026
+ 09:35:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	GVXPR08MB10408:EE_|PAVPR08MB9649:EE_|DB5PEPF00014B8D:EE_|DBBPR08MB6138:EE_
-X-MS-Office365-Filtering-Correlation-Id: dc6cbb05-6426-4963-5503-08deaf78c266
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|7416014|376014|1800799024|366016|11063799003|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info-Original:
- CDXzePdI2oMZaPzGSVpGnhv1A7Z+e32tUKPRAcPa+eNWTTO7TyEZDRJQCNW71+egsseCPqq1Zjj+5XMSFXllxOeRDqeolW87xigFGZNlMBUtLaCPE7/b4hzVXgh7AtzL6sP+nB2YcgxrjB5KGO6n92vFwVcamrNFvKmqZy+VmhVWTAmR2TnK3TwE7e3osC/kcZreCdrfvB7PnzTznXveOZ6452vO+vWiplMXUs4UyS19w0Lq0R6oEreFjZhisOF1/gMnz0KezvpX6XcDwORYFBxRiPNZbDUbAfZ+86FgWrJ4nwuYqGiOerTjixcRs1WMZ30s/7jnJvOSfxjoeNwlBgRGSsCQFMRcYfHFTIk9CxwJ7TZ9nrntM2VV4CcbSaNuJQ66QL9fe5+tXCUVoNBnaU0HOzotg9rRHBH6i2zEbBH4VZC0BxxEww1WGEfK432E6lJzY1YhdWkZO77AEOhTpV4vhoep3gzhLRiA0I16uewKRnJj3CSTGAL9rSuGGvqOC0sIgLCbWHp7Mhp2Z8iNrsO0S9BdUsM3uHF2Y7qAojgAqLteg7JBoGNZPUPst80jE4dtntVRapfouBCjmxyTSW94eKma8hFMEnQgMRwwvfklSz6tigKMzy6W0hxn8PqlymfKOThTd5CRK7RUa6XGm6lHhvK+n1x699m2WPmcSqJha5AR0egoHDzO2CBrK8RE
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVXPR08MB10408.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(11063799003)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- a29q5Q0XgXTKjUs5XwMidPmZp5UTN4a146KzvmgoWOZb6YKszoBvKVCMijBP2y6DyuLTzuEuY8O/tnmIGNlPTugUEOJNWuMM2NaKW/S41tIkSq3TQvZF1tMW4u2mMQpKx9C+N4l2Kry3YMeFQ5kYCBJ3yTGworW16ydsEvRi/5/vjGdKbAtBH6SgC0UiQMmuLMWm9v7lz0+h3Q+HE88n5/E/iRamI1utbWXVWm/mjdXMYGN8yY0PKXLh/yaY8Sp5yN5g3h1j2a2SVI7N3E80knqAhvKqIRAyxToz5PBFr3bJVVxXOmzKFSz1Eiv2eHwaCRgbjYnlgnD2Zdg5/UdOCg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9649
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DB5PEPF00014B8D.eurprd02.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	7c2ff7ff-6864-4d05-42b1-08deaf789a38
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|14060799003|1800799024|36860700016|82310400026|35042699022|7416014|376014|13003099007|56012099003|11063799003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	Xvz9K/B4yPOEANfsMF5VLcRYPaFmm2U4sOE3nzBLYDe4d0LwdQt78uTs5onFMw7hldHE4BUXbCEryfksAd7W8DLm1cvyGttYKOFvY6Gm+3R0W8H4Xpc0Q/NgXuaoDX7nsfCl/okwJ6jTkO6fexQAJJxLfjsKdruZ/sf9x4XhG7lS2OxQxfgnn7kvsHNlGkTjWojxs+IPz/khcbTS58iSTKh7KtGleUXmaFb04dwrC4DMUEA3ccqv2mAZua8zgDaZsj3LHKGMc7fCgwxGBAdB0GS5oP656y/GTFZjqWPvBH9kg1Y3yPXxrtLgxopdv6lrTe83OO3sE9k4T2F6FEPrzL5O/0kXlbc66slYHPqmhRwHXfoL97DJH4nXUaBUuMWQQKJOd1zd0YwxxEFIIV3OwyX87qBn7KT6N6w6qjkAzYisJNhhQX5s1b8htwxesRd5P+ZdSP1bnAsx6B0v5U28J89hxghvpwE9XpoXV3UEQdxi2LORVyJj4TS153hM81p32iv138rdpo47VgZymr/QYDGW1HAClH5AwYD2686Xu5QU3o6PpGyBKB/OfgV83s6DphE5sqqnqD8/kMOwtgLyYA4DVfaNKO2wumA1WCtJ8U20cGqTxXZuvVQ6CnzkQRji2nlgIaQHU/9Xn5lWkI3brG4zy1IuP/xDssvMvBmpAeHPZodCk8LSZRLdPM5RBFYZ0zA6E/Oi1kxkAmjJzYb8dFyvnROMB3dmdVdCuNRmsRg=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(14060799003)(1800799024)(36860700016)(82310400026)(35042699022)(7416014)(376014)(13003099007)(56012099003)(11063799003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	ks02Z46gCUO7pDwUZGbFQe3hBKdqv4BO/G/6fGGubMgjBIEeCgoE/mpz967vCShemn6yaDqbw03IpBMSkdc3qJZST6jF1LkDIConJr/9SUNViCMJwVjBF/Nern+77fgrZ3J+FfXoFUWCbpxyKv9KyVW9DoW3ICDBK8cYTwmebr6s4+27m4Zhs2kCMVy8oHUA+mBL0WarNrysc+5NpOjl0eXXC1XE/Xn6fKeF951vGWAJW7wvEDX3rlBs7oOoF1weGpAFgIuyuncHSO8O97nmldTSpEMQN/GBYqZytfwSUDr6ZvBqMxBIsQewx3i3A7rLbrSi2OxEJpxNzREvFfRzJl22Hu6lqwBEV6l+l2a0MO7RYa1PS5YlQbbsUb13cjqsO/HG7p3iVvWRLTliK084nArnq1yJDvhGxGI6WNzzCT3dZDYfcca1F6jJPTsV1fRd
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2026 16:17:12.4494
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc6cbb05-6426-4963-5503-08deaf78c266
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB5PEPF00014B8D.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB6138
+References: <20260424132427.2703076-1-elver@google.com> <20260424132427.2703076-2-elver@google.com>
+ <9c321184-9080-4d5c-bd1a-a16cd0bbaed3@kernel.org> <CANpmjNN_=g31Eoa+w1NrFALfp1dDBi5oHEZdr_bA_48-tS2M=Q@mail.gmail.com>
+ <afi0nQ84k1oz5RyH@elver.google.com> <871pfiw343.fsf@trenco.lwn.net>
+In-Reply-To: <871pfiw343.fsf@trenco.lwn.net>
+From: Marco Elver <elver@google.com>
+Date: Mon, 11 May 2026 18:34:36 +0200
+X-Gm-Features: AVHnY4JXza1HWD1Ghv5ACGmGvnp1cOeRA6XD-S98uX5BfJA-pjXWKAfvxk-IzaE
+Message-ID: <CANpmjNML=pbnv7QLf8Qi4wY2nDCk6oOw2T_Vs-MfMwWh=0m5Ag@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] slab: fix kernel-docs for mm-api
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>, 
+	Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com, 
+	llvm@lists.linux.dev, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello Xueqin,
-
-On 5/11/26 09:56, Xueqin Luo wrote:
-> ACPI CPPC specification requires OSPM to re-evaluate the Highest
-> Performance register when Notify(0x85) is received for a processor
-> device.
+On Mon, 11 May 2026 at 14:19, Jonathan Corbet <corbet@lwn.net> wrote:
 >
-> Implement cppc_cpufreq_update_limits() to refresh the cached
-> highest_perf capability through cppc_get_highest_perf() and update
-> policy->cpuinfo.max_freq accordingly.
+> Marco Elver <elver@google.com> writes:
 >
-> When autonomous selection mode is enabled, reprogram the runtime
-> MIN_PERF/MAX_PERF envelope against the updated Highest Performance
-> capability through cppc_cpufreq_set_autonomous_perf().
+> > How about the below, i.e. adding type decls that only the kernel-doc
+> > parser sees? One complication is also DECL_KMALLOC_PARAMS, and adding
+> > kernel-doc parser hacks for that looks pretty awful, so this is a lot
+> > cleaner.
 >
-> --
-> change v2->v3:
-> - Fix build issues reported by kernel test robot
-> - Fold cppc_cpufreq_set_autonomous_perf() refactoring into
->    this patch to keep it self-contained
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202605101404.fqz0MXIe-lkp@intel.com/
-> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
-> ---
->   drivers/cpufreq/cppc_cpufreq.c | 89 +++++++++++++++++++++++++++++-----
->   1 file changed, 76 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 7e7f9dfb7a24..9184d5570de8 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -843,6 +843,80 @@ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
->   	return 0;
->   }
->   
-> +/**
-> + * cppc_cpufreq_set_autonomous_perf - Configure performance bounds for
-> + *                                     autonomous mode
-> + * @policy: cpufreq policy structure
-> + *
-> + * When enabling autonomous selection, program MIN_PERF and MAX_PERF from
-> + * current policy limits so that the platform uses the correct performance
-> + * bounds immediately.
-> + *
-> + * Return: 0 on success, negative error code on failure.
-> + */
-> +static int cppc_cpufreq_set_autonomous_perf(struct cpufreq_policy *policy)
-> +{
-> +	struct cppc_cpudata *cpu_data = policy->driver_data;
-> +	u32 old_min_perf = cpu_data->perf_ctrls.min_perf;
-> +	u32 old_max_perf = cpu_data->perf_ctrls.max_perf;
-> +	int ret;
-> +
-> +	cppc_cpufreq_update_perf_limits(cpu_data, policy);
-> +
-> +	ret = cppc_set_perf(policy->cpu, &cpu_data->perf_ctrls);
-> +	if (ret) {
-> +		cpu_data->perf_ctrls.min_perf = old_min_perf;
-> +		cpu_data->perf_ctrls.max_perf = old_max_perf;
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void cppc_cpufreq_update_limits(struct cpufreq_policy *policy)
-> +{
-> +	struct cppc_cpudata *cpu_data = policy->driver_data;
-> +	u64 prev_highest_perf;
-> +	u64 highest_perf;
-> +	u64 nominal_perf;
-> +	int ret;
-> +
-> +	guard(cpufreq_policy_write)(policy);
-> +
-> +	prev_highest_perf = cpu_data->perf_caps.highest_perf;
-> +
-> +	ret = cppc_get_highest_perf(policy->cpu, &highest_perf);
-> +	if (ret)
-> +		return;
-> +
-> +	if (highest_perf == prev_highest_perf)
-> +		return;
-> +
-> +	cpu_data->perf_caps.highest_perf = highest_perf;
-> +	nominal_perf = min_t(u64, highest_perf,
-> +			     cpu_data->perf_caps.nominal_perf);
-> +
+> I'm going to be a while catching up with things, so this is just a first
+> take.  I strongly suspect that the people who object so strongly to
+> documentation markup in general would be less than fully thrilled by the
+> addition of this kind of workaround.  I'd like to ponder a bit and see
+> if I can some up with something better...but again, it won't happen
+> right away.
 
-I sent a patch to try to remove setting policy->max in drivers
-in cpufreq drivers in general [1]. IMO policy->max should be
-updated through a callback handler, maybe:
+Thanks, Jon.
 
-refresh_frequency_limits()
-\-cpufreq_set_policy()
+The technical debt (hacks) that would accumulate in the kernel-doc
+parser just for accommodating slab.h might be quite high; slab.h is
+rather special, so the "#if 0" solution might be justified. Then
+again, if there's a reasonable kernel-doc parser solution, that also
+helps in other places, I won't object.
 
-[1] https://lore.kernel.org/all/20260511135538.522653-4-pierre.gondois@arm.com/
-
-
-> +	policy->max = cppc_perf_to_khz(&cpu_data->perf_caps,
-> +			policy->boost_enabled ?
-> +			highest_perf : nominal_perf);
-> +
-There might be other things to check:
-
-- Is the new highest_perf higher/equal than nominal_perf ?
-Depending on the answer the boost capabilities/status will have to
-be updated.
-
-- IIUC it will be possible to update the nominal_perf in the next spec,
-so this makes things a bit more complicated aswell.
-https://lore.kernel.org/all/20260430142430.755437-3-sumitg@nvidia.com/
-
-- Do we need to rebuild the whole topology ? Cf. highest_perf
-is used as the CPU capacity in topology_init_cpu_capacity_cppc().
-
-(maybe off topic)
-- What is the relation between highest_perf and the (not yet introduced [1])
-highest_freq value ? Since the highest_perf can evolve over time there
-is no clear correlation between them IIUC.
-https://mantis.uefi.org/mantis/view.php?id=2570
-
-Some of the questions are more spec. related,
-but this patch might be the right place to discuss them.
-
-
-> +	policy->cpuinfo.max_freq = policy->max;
-> +
-> +	/*
-> +	 * Autonomous selection mode uses MIN/MAX performance as runtime
-> +	 * hardware control bounds.
-> +	 *
-> +	 * Re-program them when highest_perf changes.
-> +	 */
-> +	if (cpu_data->perf_ctrls.auto_sel)
-> +		cppc_cpufreq_set_autonomous_perf(policy);
-> +
-> +	pr_debug("CPU%d: highest_perf updated %llu -> %llu\n",
-> +		 policy->cpu,
-> +		 prev_highest_perf,
-> +		 highest_perf);
-> +}
-> +
->   static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
->   {
->   	struct cppc_cpudata *cpu_data = policy->driver_data;
-> @@ -885,20 +959,8 @@ static ssize_t store_auto_select(struct cpufreq_policy *policy,
->   	cpu_data->perf_ctrls.auto_sel = val;
->   
->   	if (val) {
-> -		u32 old_min_perf = cpu_data->perf_ctrls.min_perf;
-> -		u32 old_max_perf = cpu_data->perf_ctrls.max_perf;
-> -
-> -		/*
-> -		 * When enabling autonomous selection, program MIN_PERF and
-> -		 * MAX_PERF from current policy limits so that the platform
-> -		 * uses the correct performance bounds immediately.
-> -		 */
-> -		cppc_cpufreq_update_perf_limits(cpu_data, policy);
-> -
-> -		ret = cppc_set_perf(policy->cpu, &cpu_data->perf_ctrls);
-> +		ret = cppc_cpufreq_set_autonomous_perf(policy);
->   		if (ret) {
-> -			cpu_data->perf_ctrls.min_perf = old_min_perf;
-> -			cpu_data->perf_ctrls.max_perf = old_max_perf;
->   			cppc_set_auto_sel(policy->cpu, false);
->   			cpu_data->perf_ctrls.auto_sel = false;
->   			return ret;
-> @@ -1009,6 +1071,7 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
->   	.init = cppc_cpufreq_cpu_init,
->   	.exit = cppc_cpufreq_cpu_exit,
->   	.set_boost = cppc_cpufreq_set_boost,
-> +	.update_limits = cppc_cpufreq_update_limits,
->   	.attr = cppc_cpufreq_attr,
->   	.name = "cppc_cpufreq",
->   };
+I tested the "#if 0" version and it works as expected. So to move
+forward, we could consider it in the short term, and in the longer
+term, see what new powers the kernel-doc parser can provide.
