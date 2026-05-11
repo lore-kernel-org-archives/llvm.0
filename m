@@ -1,231 +1,257 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA354014B4;
-	Mon, 11 May 2026 15:37:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4D44014B4;
+	Mon, 11 May 2026 15:37:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778513858; cv=none; b=efmRIvCnc/gxW7gyytSeIOE8ts6PzojMNgh387oKrI2LQTyucrmLZS7C9q4oj1PeweyfNasSGwkr4DxeOk7wFbEPTXzz/vteteZbf9Meyw0jfUV0a21+ulZ+5KArBaBeMegklpz/JRMF2OJ+sFvXnCcBwTM8DQBNucBVyrcBxJ0=
+	t=1778513859; cv=none; b=gciifpG422mUgKRcJ/1cUtUmGoNdRD9MHFx9qLWRoO2cGFeVjOg7UVMRnkagZBA9fauD5iYmeJsHR00swsDnmrl6pocnifiV1J71H6eWLwphuwKEM128GOFgymmO/l7IJonlI+RBcO3Ph9w0izb1GHWffFkYKWeViIOxt9tJsEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778513858; c=relaxed/simple;
-	bh=tKom9E45wQh7kZbjvvYuh1sGU+xgrHfoAPXWvinG9ng=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=K0DQT0viCm6L96zkkRM9snEI+dhJSZ5fnb9xK6v1omLTmXvzrqQUsPYG24Qa+n/Wz7RJGImrOuPco44uTaD0voy6DdWck9KX35i12B9B2Xau2CXz4jVsSQrQyNqKDuw5UW7n32r6x7pdKE874r/JJwEYPizRXqFe3j4FRO9jDrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=db2IIuiZ; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1778513859; c=relaxed/simple;
+	bh=1ERw2JJII0ku0hkcgXCz/y4DJh9UBIO4f8+Qt+0NEy8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hlIl43o08PoZgWbi7mrjbAkEPTOFReFh2xMnkagrgkZrGg3o3e7pJkbDEpFoE95jfkKweTr1cb1d+F/1WEHtE06uE4oh3uxC6ySqapI4VUmktFp4kJBlyl6/lT9nEDIsos+rSRls8yne+kRc4F87P0QGsO6UIS/iC153vSfRgc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gsIEQhtm; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="db2IIuiZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gsIEQhtm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778513856; x=1810049856;
-  h=date:from:to:cc:subject:message-id;
-  bh=tKom9E45wQh7kZbjvvYuh1sGU+xgrHfoAPXWvinG9ng=;
-  b=db2IIuiZDPmBgOdttOUd3d1TGgHISz0pD9z54wq9+yNaQKXSGVREEbOG
-   j08Ps5jzdUbS9cBeRhIx/sppmDF9kIgtCEljtELOjueohWOdsz2DgIqKN
-   vjtMb6cB5i+uVd8nH/UawArkZb8z9yhUrO4QZOg0nJgQBddDpqOOymwSJ
-   wcyWzfwD7lf30mlhgFJGeXxJmo/gt6UzFpbpc5Eeu8P0NooXGy+NFOiAH
-   Jb1XagUf5Rh6ZOCGNuW8ekPC6f2wt5VpTgumN5ZhlYi9eNs2i4eTM+h2q
-   NBkH8AI4+fY9vzZEUhaBwx3eYPBla4ppc7iMAhR4v8ILyV9gdOuqzNhLa
+  t=1778513859; x=1810049859;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1ERw2JJII0ku0hkcgXCz/y4DJh9UBIO4f8+Qt+0NEy8=;
+  b=gsIEQhtmN4J9XGiZiAHcF8C6MWEQqZmm18qa3zH1EQv8/iRhENPq81Nw
+   GioCEkzF7Z91YNHrxfmmbDDFPo0KZDfp5OwNu0iPfit2Xb2tM/Z3ZJfBU
+   YMQF4RC7d7X7UnDx8b1W57PZiqLMete465Cl5apzG8NO1BkNnbJu8SkBf
+   6kcaDYHrnRHzLE1+goTQKwyTRRgEEzfqYSHJge06MJzp/JSw4wXyyGEya
+   pGagi6O2swSAGhoB75zyUpLg+7jbDDu4dzgRzbOzndji6jFfrofX6eEkP
+   uVjyx89RwoqjNeZFAZJF+o2nXuS2zC9bHP/btMpHwEByPOWxxkS/ui+yH
    A==;
-X-CSE-ConnectionGUID: EyvGBbydSUW5dThqPpe9Sw==
-X-CSE-MsgGUID: SH8RMu2yQiuoF0l2vi3wjQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="79351090"
+X-CSE-ConnectionGUID: QKA0oR0ETeqhFobxHw3qrw==
+X-CSE-MsgGUID: xT69b6tvSWiQm/4rogbrMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="79351100"
 X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
-   d="scan'208";a="79351090"
+   d="scan'208";a="79351100"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 08:37:36 -0700
-X-CSE-ConnectionGUID: QwQSoH0dTe+XC9/GI1+41A==
-X-CSE-MsgGUID: SprmsbE4SX24lRjC0Rd3QQ==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 08:37:37 -0700
+X-CSE-ConnectionGUID: hjDAa8esRQeyNS1Qi6P0nA==
+X-CSE-MsgGUID: WzG47hM2T4CNA3NMdbSqDg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
-   d="scan'208";a="236632503"
+   d="scan'208";a="236632493"
 Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
   by orviesa010.jf.intel.com with ESMTP; 11 May 2026 08:37:33 -0700
 Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wMShH-000000000lv-0rZw;
+	id 1wMShH-000000000lt-0msj;
 	Mon, 11 May 2026 15:37:31 +0000
-Date: Mon, 11 May 2026 23:37:23 +0800
+Date: Mon, 11 May 2026 23:37:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Woodhouse <dwmw@amazon.co.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dwmw2:kvmclock4 16/34] arch/x86/kvm/x86.c:3388:8: error:
- call to undeclared function 'kvm_get_time_and_clockread'; ISO C99 and later
- do not support implicit function declarations
-Message-ID: <202605112337.VVxrmRHE-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Alone <yogeshdangal66@gmail.com>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Teddy Wang <teddy.wang@siliconmotion.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Chhabilal Dangal <yogeshdangal66@gmail.com>
+Subject: Re: [PATCH] staging: sm750fb: Add const to g_fbmode array
+Message-ID: <202605112333.ORNyLXKe-lkp@intel.com>
+References: <20260509164057.71722-1-yogeshdangal66@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260509164057.71722-1-yogeshdangal66@gmail.com>
 
-tree:   git://git.infradead.org/users/dwmw2/linux kvmclock4
-head:   ffae79fc31e809b2eecbdc70bade1b16f7f9f46d
-commit: d216b965d38e8dc9aeccd8eea855a1187f997199 [16/34] KVM: x86: Restructure kvm_guest_time_update() for TSC upscaling
-config: i386-buildonly-randconfig-002-20260511 (https://download.01.org/0day-ci/archive/20260511/202605112337.VVxrmRHE-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260511/202605112337.VVxrmRHE-lkp@intel.com/reproduce)
+Hi Alone,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on staging/staging-testing]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alone/staging-sm750fb-Add-const-to-g_fbmode-array/20260511-155715
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20260509164057.71722-1-yogeshdangal66%40gmail.com
+patch subject: [PATCH] staging: sm750fb: Add const to g_fbmode array
+config: arm64-randconfig-003-20260511 (https://download.01.org/0day-ci/archive/20260511/202605112333.ORNyLXKe-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260511/202605112333.ORNyLXKe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605112337.VVxrmRHE-lkp@intel.com/
-
-Note: the dwmw2/kvmclock4 HEAD ffae79fc31e809b2eecbdc70bade1b16f7f9f46d builds fine.
-      It only hurts bisectability.
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605112333.ORNyLXKe-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/x86/kvm/x86.c:3388:8: error: call to undeclared function 'kvm_get_time_and_clockread'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3388 |                     !kvm_get_time_and_clockread(&kernel_ns, &host_tsc) &&
-         |                      ^
-   arch/x86/kvm/x86.c:3388:8: note: did you mean 'kvm_get_monotonic_and_clockread'?
-   arch/x86/kvm/x86.h:462:6: note: 'kvm_get_monotonic_and_clockread' declared here
-     462 | bool kvm_get_monotonic_and_clockread(s64 *kernel_ns, u64 *tsc_timestamp);
-         |      ^
-   arch/x86/kvm/x86.c:3359:16: warning: unused variable 'flags' [-Wunused-variable]
-    3359 |         unsigned long flags;
-         |                       ^~~~~
-   1 warning and 1 error generated.
+>> drivers/staging/sm750fb/sm750.c:785:19: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
+     785 |                 g_fbmode[index] = g_def_fbmode;
+         |                 ~~~~~~~~~~~~~~~ ^
+   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
+      36 | static const char * const g_fbmode[] = {NULL, NULL};
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/sm750fb/sm750.c:787:20: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
+     787 |                         g_fbmode[index] = g_fbmode[0];
+         |                         ~~~~~~~~~~~~~~~ ^
+   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
+      36 | static const char * const g_fbmode[] = {NULL, NULL};
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/sm750fb/sm750.c:896:17: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
+     896 |                                 g_fbmode[0] = opt;
+         |                                 ~~~~~~~~~~~ ^
+   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
+      36 | static const char * const g_fbmode[] = {NULL, NULL};
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/sm750fb/sm750.c:900:17: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
+     900 |                                 g_fbmode[1] = opt;
+         |                                 ~~~~~~~~~~~ ^
+   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
+      36 | static const char * const g_fbmode[] = {NULL, NULL};
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   4 errors generated.
 
 
-vim +/kvm_get_time_and_clockread +3388 arch/x86/kvm/x86.c
+vim +785 drivers/staging/sm750fb/sm750.c
 
-  3355	
-  3356	int kvm_guest_time_update(struct kvm_vcpu *v)
-  3357	{
-  3358		struct pvclock_vcpu_time_info hv_clock = {};
-  3359		unsigned long flags;
-  3360		u64 tgt_tsc_hz;
-  3361		unsigned seq;
-  3362		struct kvm_vcpu_arch *vcpu = &v->arch;
-  3363		struct kvm_arch *ka = &v->kvm->arch;
-  3364		s64 kernel_ns;
-  3365		u64 tsc_timestamp, host_tsc;
-  3366		u64 master_host_tsc = 0;
-  3367		s64 master_kernel_ns = 0;
-  3368		bool use_master_clock;
-  3369	
-  3370		/*
-  3371		 * If the host uses TSC clock, then passthrough TSC as stable
-  3372		 * to the guest.
-  3373		 */
-  3374		do {
-  3375			seq = read_seqcount_begin(&ka->pvclock_sc);
-  3376	
-  3377			use_master_clock = ka->use_master_clock;
-  3378	
-  3379			/*
-  3380			 * The TSC read and the call to get_cpu_tsc_khz() must happen
-  3381			 * on the same CPU.
-  3382			 */
-  3383			get_cpu();
-  3384	
-  3385			tgt_tsc_hz = (u64)get_cpu_tsc_khz() * 1000;
-  3386	
-  3387			if (use_master_clock &&
-> 3388			    !kvm_get_time_and_clockread(&kernel_ns, &host_tsc) &&
-  3389			    WARN_ON_ONCE(!read_seqcount_retry(&ka->pvclock_sc, seq)))
-  3390				use_master_clock = false;
-  3391	
-  3392			put_cpu();
-  3393	
-  3394			if (!use_master_clock)
-  3395				break;
-  3396	
-  3397			master_host_tsc = ka->master_cycle_now;
-  3398			master_kernel_ns = ka->master_kernel_ns;
-  3399		} while (read_seqcount_retry(&ka->pvclock_sc, seq));
-  3400	
-  3401		if (unlikely(tgt_tsc_hz == 0)) {
-  3402			kvm_make_request(KVM_REQ_CLOCK_UPDATE, v);
-  3403			return 1;
-  3404		}
-  3405	
-  3406		if (!use_master_clock) {
-  3407			host_tsc = rdtsc();
-  3408			kernel_ns = get_kvmclock_base_ns();
-  3409		}
-  3410	
-  3411		/*
-  3412		 * We may have to catch up the TSC to match elapsed wall clock
-  3413		 * time for two reasons, even if kvmclock is used.
-  3414		 *   1) CPU could have been running below the maximum TSC rate
-  3415		 *   2) Broken TSC compensation resets the base at each VCPU
-  3416		 *      entry to avoid unknown leaps of TSC even when running
-  3417		 *      again on the same CPU.  This may cause apparent elapsed
-  3418		 *      time to disappear, and the guest to stand still or run
-  3419		 *      very slowly.
-  3420		 */
-  3421		if (vcpu->tsc_catchup) {
-  3422			s64 adjustment;
-  3423	
-  3424			/*
-  3425			 * Calculate the delta between what the guest TSC *should* be
-  3426			 * and what it actually is according to kvm_read_l1_tsc().
-  3427			 */
-  3428			adjustment = compute_guest_tsc(v, kernel_ns) -
-  3429				     kvm_read_l1_tsc(v, host_tsc);
-  3430			if (adjustment > 0)
-  3431				adjust_tsc_offset_guest(v, adjustment);
-  3432		}
-  3433	
-  3434		/*
-  3435		 * Now that TSC upscaling is out of the way, the remaining calculations
-  3436		 * are all relative to the reference time that's placed in hv_clock.
-  3437		 * If the master clock is NOT in use, the reference time is "now".  If
-  3438		 * master clock is in use, the reference time comes from there.
-  3439		 */
-  3440		if (use_master_clock) {
-  3441			host_tsc = master_host_tsc;
-  3442			kernel_ns = master_kernel_ns;
-  3443		}
-  3444		tsc_timestamp = kvm_read_l1_tsc(v, host_tsc);
-  3445	
-  3446		/* With all the info we got, fill in the values */
-  3447	
-  3448		if (kvm_caps.has_tsc_control) {
-  3449			tgt_tsc_hz = kvm_scale_tsc(tgt_tsc_hz,
-  3450						    v->arch.l1_tsc_scaling_ratio);
-  3451			tgt_tsc_hz = tgt_tsc_hz ? : 1;
-  3452		}
-  3453	
-  3454		if (unlikely(vcpu->hw_tsc_hz != tgt_tsc_hz)) {
-  3455			kvm_get_time_scale(NSEC_PER_SEC, tgt_tsc_hz,
-  3456					   &vcpu->pvclock_tsc_shift,
-  3457					   &vcpu->pvclock_tsc_mul);
-  3458			vcpu->hw_tsc_hz = tgt_tsc_hz;
-  3459		}
-  3460	
-  3461		hv_clock.tsc_shift = vcpu->pvclock_tsc_shift;
-  3462		hv_clock.tsc_to_system_mul = vcpu->pvclock_tsc_mul;
-  3463		hv_clock.tsc_timestamp = tsc_timestamp;
-  3464		hv_clock.system_time = kernel_ns + v->kvm->arch.kvmclock_offset;
-  3465		vcpu->last_guest_tsc = tsc_timestamp;
-  3466	
-  3467		/* If the host uses TSC clocksource, then it is stable */
-  3468		hv_clock.flags = 0;
-  3469		if (use_master_clock)
-  3470			hv_clock.flags |= PVCLOCK_TSC_STABLE_BIT;
-  3471	
-  3472		if (vcpu->pv_time.active) {
-  3473			/*
-  3474			 * GUEST_STOPPED is only supported by kvmclock, and KVM's
-  3475			 * historic behavior is to only process the request if kvmclock
-  3476			 * is active/enabled.
-  3477			 */
-  3478			if (vcpu->pvclock_set_guest_stopped_request) {
-  3479				hv_clock.flags |= PVCLOCK_GUEST_STOPPED;
-  3480				vcpu->pvclock_set_guest_stopped_request = false;
-  3481			}
-  3482			kvm_setup_guest_pvclock(&hv_clock, v, &vcpu->pv_time, 0);
-  3483	
-  3484			hv_clock.flags &= ~PVCLOCK_GUEST_STOPPED;
-  3485		}
-  3486	
-  3487		kvm_hv_setup_tsc_page(v->kvm, &hv_clock);
-  3488	
+81dee67e215b23f Sudip Mukherjee      2015-03-03  719  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  720  static int lynxfb_set_fbinfo(struct fb_info *info, int index)
+81dee67e215b23f Sudip Mukherjee      2015-03-03  721  {
+81dee67e215b23f Sudip Mukherjee      2015-03-03  722  	int i;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  723  	struct lynxfb_par *par;
+e359b6a863e19f2 Mike Rapoport        2015-10-26  724  	struct sm750_dev *sm750_dev;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  725  	struct lynxfb_crtc *crtc;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  726  	struct lynxfb_output *output;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  727  	struct fb_var_screeninfo *var;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  728  	struct fb_fix_screeninfo *fix;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  729  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  730  	const struct fb_videomode *pdb[] = {
+81dee67e215b23f Sudip Mukherjee      2015-03-03  731  		lynx750_ext, NULL, vesa_modes,
+81dee67e215b23f Sudip Mukherjee      2015-03-03  732  	};
+81dee67e215b23f Sudip Mukherjee      2015-03-03  733  	int cdb[] = {ARRAY_SIZE(lynx750_ext), 0, VESA_MODEDB_SIZE};
+d0856045f0e9fc9 Hungyu Lin           2026-04-01  734  	static const char * const fix_id[2] = {
+81dee67e215b23f Sudip Mukherjee      2015-03-03  735  		"sm750_fb1", "sm750_fb2",
+81dee67e215b23f Sudip Mukherjee      2015-03-03  736  	};
+81dee67e215b23f Sudip Mukherjee      2015-03-03  737  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  738  	int ret, line_length;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  739  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  740  	ret = 0;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  741  	par = (struct lynxfb_par *)info->par;
+e359b6a863e19f2 Mike Rapoport        2015-10-26  742  	sm750_dev = par->dev;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  743  	crtc = &par->crtc;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  744  	output = &par->output;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  745  	var = &info->var;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  746  	fix = &info->fix;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  747  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  748  	/* set index */
+81dee67e215b23f Sudip Mukherjee      2015-03-03  749  	par->index = index;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  750  	output->channel = &crtc->channel;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  751  	sm750fb_set_drv(par);
+81dee67e215b23f Sudip Mukherjee      2015-03-03  752  
+d11ac7cbcc266c6 Sudip Mukherjee      2015-08-07  753  	/*
+d11ac7cbcc266c6 Sudip Mukherjee      2015-08-07  754  	 * set current cursor variable and proc pointer,
+d11ac7cbcc266c6 Sudip Mukherjee      2015-08-07  755  	 * must be set after crtc member initialized
+d11ac7cbcc266c6 Sudip Mukherjee      2015-08-07  756  	 */
+fdc234d85210d91 Benjamin Philip      2021-07-28  757  	crtc->cursor.offset = crtc->o_screen + crtc->vidmem_size - 1024;
+e359b6a863e19f2 Mike Rapoport        2015-10-26  758  	crtc->cursor.mmio = sm750_dev->pvReg +
+e359b6a863e19f2 Mike Rapoport        2015-10-26  759  		0x800f0 + (int)crtc->channel * 0x140;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  760  
+cd33da26036ea54 Christopher Carbone  2022-08-23  761  	crtc->cursor.max_h = 64;
+cd33da26036ea54 Christopher Carbone  2022-08-23  762  	crtc->cursor.max_w = 64;
+39f9137268ee3df Benjamin Philip      2021-07-26  763  	crtc->cursor.size = crtc->cursor.max_h * crtc->cursor.max_w * 2 / 8;
+e359b6a863e19f2 Mike Rapoport        2015-10-26  764  	crtc->cursor.vstart = sm750_dev->pvMem + crtc->cursor.offset;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  765  
+3de08a2d14ff8c7 Lorenzo Stoakes      2015-03-20  766  	memset_io(crtc->cursor.vstart, 0, crtc->cursor.size);
+f7c8a046577e09d Thomas Zimmermann    2023-11-27  767  	if (!g_hwcursor)
+52d0744d751d8f1 Arnd Bergmann        2016-11-09  768  		sm750_hw_cursor_disable(&crtc->cursor);
+81dee67e215b23f Sudip Mukherjee      2015-03-03  769  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  770  	/* set info->fbops, must be set before fb_find_mode */
+e359b6a863e19f2 Mike Rapoport        2015-10-26  771  	if (!sm750_dev->accel_off) {
+81dee67e215b23f Sudip Mukherjee      2015-03-03  772  		/* use 2d acceleration */
+f7c8a046577e09d Thomas Zimmermann    2023-11-27  773  		if (!g_hwcursor)
+f7c8a046577e09d Thomas Zimmermann    2023-11-27  774  			info->fbops = &lynxfb_ops_accel;
+f7c8a046577e09d Thomas Zimmermann    2023-11-27  775  		else
+f7c8a046577e09d Thomas Zimmermann    2023-11-27  776  			info->fbops = &lynxfb_ops_accel_with_cursor;
+f7c8a046577e09d Thomas Zimmermann    2023-11-27  777  	} else {
+f7c8a046577e09d Thomas Zimmermann    2023-11-27  778  		if (!g_hwcursor)
+81dee67e215b23f Sudip Mukherjee      2015-03-03  779  			info->fbops = &lynxfb_ops;
+f7c8a046577e09d Thomas Zimmermann    2023-11-27  780  		else
+f7c8a046577e09d Thomas Zimmermann    2023-11-27  781  			info->fbops = &lynxfb_ops_with_cursor;
+f7c8a046577e09d Thomas Zimmermann    2023-11-27  782  	}
+81dee67e215b23f Sudip Mukherjee      2015-03-03  783  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  784  	if (!g_fbmode[index]) {
+81dee67e215b23f Sudip Mukherjee      2015-03-03 @785  		g_fbmode[index] = g_def_fbmode;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  786  		if (index)
+81dee67e215b23f Sudip Mukherjee      2015-03-03  787  			g_fbmode[index] = g_fbmode[0];
+81dee67e215b23f Sudip Mukherjee      2015-03-03  788  	}
+81dee67e215b23f Sudip Mukherjee      2015-03-03  789  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  790  	for (i = 0; i < 3; i++) {
+81dee67e215b23f Sudip Mukherjee      2015-03-03  791  		ret = fb_find_mode(var, info, g_fbmode[index],
+81dee67e215b23f Sudip Mukherjee      2015-03-03  792  				   pdb[i], cdb[i], NULL, 8);
+81dee67e215b23f Sudip Mukherjee      2015-03-03  793  
+db7fb3588ab4920 Artem Lytkin         2026-02-23  794  		if (ret == 1 || ret == 2)
+81dee67e215b23f Sudip Mukherjee      2015-03-03  795  			break;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  796  	}
+81dee67e215b23f Sudip Mukherjee      2015-03-03  797  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  798  	/* set par */
+81dee67e215b23f Sudip Mukherjee      2015-03-03  799  	par->info = info;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  800  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  801  	/* set info */
+e3a3f9f5123683b Mike Rapoport        2015-10-26  802  	line_length = ALIGN((var->xres_virtual * var->bits_per_pixel / 8),
+e3a3f9f5123683b Mike Rapoport        2015-10-26  803  			    crtc->line_pad);
+81dee67e215b23f Sudip Mukherjee      2015-03-03  804  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  805  	info->pseudo_palette = &par->pseudo_palette[0];
+cc59bde1c920ab6 Benjamin Philip      2021-07-28  806  	info->screen_base = crtc->v_screen;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  807  	info->screen_size = line_length * var->yres_virtual;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  808  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  809  	/* set info->fix */
+81dee67e215b23f Sudip Mukherjee      2015-03-03  810  	fix->type = FB_TYPE_PACKED_PIXELS;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  811  	fix->type_aux = 0;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  812  	fix->xpanstep = crtc->xpanstep;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  813  	fix->ypanstep = crtc->ypanstep;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  814  	fix->ywrapstep = crtc->ywrapstep;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  815  	fix->accel = FB_ACCEL_SMI;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  816  
+8c475735085a7db Tim Wassink          2025-12-21  817  	strscpy(fix->id, fix_id[index], sizeof(fix->id));
+81dee67e215b23f Sudip Mukherjee      2015-03-03  818  
+fdc234d85210d91 Benjamin Philip      2021-07-28  819  	fix->smem_start = crtc->o_screen + sm750_dev->vidmem_start;
+d11ac7cbcc266c6 Sudip Mukherjee      2015-08-07  820  	/*
+d11ac7cbcc266c6 Sudip Mukherjee      2015-08-07  821  	 * according to mmap experiment from user space application,
+81dee67e215b23f Sudip Mukherjee      2015-03-03  822  	 * fix->mmio_len should not larger than virtual size
+81dee67e215b23f Sudip Mukherjee      2015-03-03  823  	 * (xres_virtual x yres_virtual x ByPP)
+81dee67e215b23f Sudip Mukherjee      2015-03-03  824  	 * Below line maybe buggy when user mmap fb dev node and write
+81dee67e215b23f Sudip Mukherjee      2015-03-03  825  	 * data into the bound over virtual size
+d11ac7cbcc266c6 Sudip Mukherjee      2015-08-07  826  	 */
+81dee67e215b23f Sudip Mukherjee      2015-03-03  827  	fix->smem_len = crtc->vidmem_size;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  828  	info->screen_size = fix->smem_len;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  829  	fix->line_length = line_length;
+e359b6a863e19f2 Mike Rapoport        2015-10-26  830  	fix->mmio_start = sm750_dev->vidreg_start;
+e359b6a863e19f2 Mike Rapoport        2015-10-26  831  	fix->mmio_len = sm750_dev->vidreg_size;
+b610e1193a917f4 Matej Dujava         2020-04-30  832  
+b610e1193a917f4 Matej Dujava         2020-04-30  833  	lynxfb_set_visual_mode(info);
+81dee67e215b23f Sudip Mukherjee      2015-03-03  834  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  835  	/* set var */
+81dee67e215b23f Sudip Mukherjee      2015-03-03  836  	var->activate = FB_ACTIVATE_NOW;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  837  	var->accel_flags = 0;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  838  	var->vmode = FB_VMODE_NONINTERLACED;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  839  
+61c507cf652da1b Michel von Czettritz 2015-03-26  840  	ret = fb_alloc_cmap(&info->cmap, 256, 0);
+61c507cf652da1b Michel von Czettritz 2015-03-26  841  	if (ret < 0) {
+fbab250eb51d6d6 Artem Lytkin         2026-02-07  842  		dev_err(info->device, "Could not allocate memory for cmap.\n");
+81dee67e215b23f Sudip Mukherjee      2015-03-03  843  		goto exit;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  844  	}
+81dee67e215b23f Sudip Mukherjee      2015-03-03  845  
+81dee67e215b23f Sudip Mukherjee      2015-03-03  846  exit:
+81dee67e215b23f Sudip Mukherjee      2015-03-03  847  	lynxfb_ops_check_var(var, info);
+81dee67e215b23f Sudip Mukherjee      2015-03-03  848  	return ret;
+81dee67e215b23f Sudip Mukherjee      2015-03-03  849  }
+81dee67e215b23f Sudip Mukherjee      2015-03-03  850  
 
 -- 
 0-DAY CI Kernel Test Service
