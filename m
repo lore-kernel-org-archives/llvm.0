@@ -1,193 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DBB426D24
-	for <llvm@lists.linux.dev>; Mon, 11 May 2026 16:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DF2426EAB;
+	Mon, 11 May 2026 16:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778517824; cv=none; b=TiKfdy1ZNe/bc1XJc3WbO6rsMILU+Oc6mK68dHcI2KCIRD/ELwL+58WJ7If4SsO1smAtE41a5NKfcSg+BdCXCbWGavXsvfvDE6yx0ekbPI9CQUp7AEyZiZR9EujaWyB2a+nJ7tz4GNEXkS1fDvU8glyYnqdsIBUsl2fOenLXwMw=
+	t=1778518304; cv=none; b=UQl369QD9Qjr59tjm6E32ZkOf+sAl15tSGfF6cdxRlen6Cq6xDuNLE1EHs0as8qOW/RWycGNdIezi7Ks+LcSPDukhydh8TMxdQ/qcN/P4HeravnkbExTq6sTV5f2RzZg6WvkFC5wIMOty++PitYgyVWQUbthfzEispjng6FIn7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778517824; c=relaxed/simple;
-	bh=HNw4l5fs4Xn8NKqMIv7U0xRX4INKVPXmLwsXJ0n/rV4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F1Ixg2Sk1RppWfjCLAMxOXx3LgGCOoU2/lbed6lkT+jjY5CKj85dwynPS13h99mW7J8WhUJv2ghhgIMcR77G43O/vbbH8aQeQUTTcmVs8uPFYLd2IsY0Aky4d7mVQ8fbpXMZ6W548j1CLzT1DNcAfGpiQ6UC+QWWmolIlFxnpec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ecI+57Q5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778518304; c=relaxed/simple;
+	bh=zoSWnkqdd8MFJy0pV9VkPobwqV6Frbu3b0beuGHDFiY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=A9uuOEWCwynjbocuuojqezXwLRww4tiuOpBbDu19xIALkGK8/W879LwrLEKeGRe69BjI2qZy8a9jHNEPl15KzdQGxxfjMh4xY3usJJp7dLDPaAm87yv0GplJX9SzD6ny8bAnDna0QhirgC9iIHHh2Q3iwyoq+pqp0bEOgp9EP44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FjL80qn2; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ecI+57Q5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F3AC2BCFB
-	for <llvm@lists.linux.dev>; Mon, 11 May 2026 16:43:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778517823;
-	bh=HNw4l5fs4Xn8NKqMIv7U0xRX4INKVPXmLwsXJ0n/rV4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ecI+57Q5hwnIom58Akc9udK8xzzoufZLamIVy+ZCmqc1TkGfIpoS++BKhhHc/n8bV
-	 DVqqg4dkXREKCALKcvNf+OUELSP9DQYBbIvk3Cd2UZ/HOno8WZALHfEKmtabPGB86y
-	 1yXNM+sVps32zwF9eq5W76H0p9k4xXjMoKVz9EzDhptPCVwN2Gl6AfIAHq0f3Y4wGO
-	 eBYJE9DySghktckziYw/pbbBpT0xoQvZ2Ul85SA/UBqX0cdD+Qlkg8yPnT/3hzqiBK
-	 ezPn7wjPTotnCuM2lQVowAmuPd7YHuIYRGGnZGvcWFwftVLpcX/wvbLxYCqy1zdt8G
-	 NH9lhEns9etAw==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5a40cfab24dso5006599e87.2
-        for <llvm@lists.linux.dev>; Mon, 11 May 2026 09:43:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ9PBUOwLB+Uh0maIIxIq5JfHLp4WY8NlHAiJGw2lFJINGI9sn3WilQUlMnA5tW3UAYwRs4J@lists.linux.dev
-X-Gm-Message-State: AOJu0YzdLvxVGkHwCxwXbu4GPA5rJpIXcRr6hWkbRCoOqpMopY5DbwMj
-	A2MWqIyOWb55qxIcuBNoE2mno3n/B7v527zEJfz7VnvNFsRdRIbnRGC1bck2Swe/ensGxwndPva
-	7E1TddRDFnwq/y0KTL1IpE5Xmrtom3uo=
-X-Received: by 2002:a05:6512:3e21:b0:5a4:ab6:81b8 with SMTP id
- 2adb3069b0e04-5a8a94caf78mr3905042e87.40.1778517822234; Mon, 11 May 2026
- 09:43:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FjL80qn2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778518303; x=1810054303;
+  h=date:from:to:cc:subject:message-id;
+  bh=zoSWnkqdd8MFJy0pV9VkPobwqV6Frbu3b0beuGHDFiY=;
+  b=FjL80qn2E/VuTRIbRtSXE//NCe/fcx1g42be2i//AvtVXwrqkFjCvogx
+   CRkSACSq/PrN833EoboQ/saGx6ohsgcGfXlQLC6YXr97dnPNzu8rnde3m
+   MH8cCx5F1Em0Dznk8LyKh+VGITMz/0w7fxQdSXhCKrhSnmRY8B7A9vmB8
+   xaJiVtyZIsJMXvC+sFyW4PwKWIiwE7LSlF4DA+Dyf4dekSTLh9N0MPJvh
+   2ltNeS1wKrUZCoiDfZwL7dHQJXKnchuIZGYxLlFZ9I6LMdJHV2YgYYM3e
+   ZjQWVsW7+whSW/djSfhN7LcVUiJ8+jr1tiAhI2mScrqQMIvL5p7kh45md
+   g==;
+X-CSE-ConnectionGUID: OW3PciV7QpO2s85wDmXS8A==
+X-CSE-MsgGUID: 5ep/OFaURgGlN/CvfR0bhg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="90878767"
+X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
+   d="scan'208";a="90878767"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 09:51:42 -0700
+X-CSE-ConnectionGUID: Mnd7uEURRWe8wXg67VC/mQ==
+X-CSE-MsgGUID: XOe+Rg3aT+CyFcMtoeaihA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
+   d="scan'208";a="231114404"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 11 May 2026 09:51:40 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wMTr0-000000000sR-1deg;
+	Mon, 11 May 2026 16:51:38 +0000
+Date: Tue, 12 May 2026 00:51:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ mptcp@lists.linux.dev
+Subject: [mptcp:export 1/39] .b4-config: warning: ignored by one of
+ the .gitignore files
+Message-ID: <202605120017.W42dqjAR-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <202605101404.fqz0MXIe-lkp@intel.com> <20260511075647.206642-1-luoxueqin@kylinos.cn>
- <b63b1409-3c01-418b-be27-f7e273b2e73a@arm.com>
-In-Reply-To: <b63b1409-3c01-418b-be27-f7e273b2e73a@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 11 May 2026 18:43:30 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0gaPeZU8a7qY93niVNSNHtFuhBJxyDCv2J60V0zpVV2mg@mail.gmail.com>
-X-Gm-Features: AVHnY4LLnIeaTxnTXX1TBG-KMtjXvHkBRBWANCVZ-qGiD7d1hkQOIowgGauCoWE
-Message-ID: <CAJZ5v0gaPeZU8a7qY93niVNSNHtFuhBJxyDCv2J60V0zpVV2mg@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: cppc: Add update_limits support for Highest
- Performance changes
-To: Pierre Gondois <pierre.gondois@arm.com>
-Cc: Xueqin Luo <luoxueqin@kylinos.cn>, lkp@intel.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	rafael@kernel.org, sumitg@nvidia.com, viresh.kumar@linaro.org, 
-	zhanjie9@hisilicon.com, zhenglifeng1@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 11, 2026 at 6:17=E2=80=AFPM Pierre Gondois <pierre.gondois@arm.=
-com> wrote:
->
-> Hello Xueqin,
->
-> On 5/11/26 09:56, Xueqin Luo wrote:
-> > ACPI CPPC specification requires OSPM to re-evaluate the Highest
-> > Performance register when Notify(0x85) is received for a processor
-> > device.
-> >
-> > Implement cppc_cpufreq_update_limits() to refresh the cached
-> > highest_perf capability through cppc_get_highest_perf() and update
-> > policy->cpuinfo.max_freq accordingly.
-> >
-> > When autonomous selection mode is enabled, reprogram the runtime
-> > MIN_PERF/MAX_PERF envelope against the updated Highest Performance
-> > capability through cppc_cpufreq_set_autonomous_perf().
-> >
-> > --
-> > change v2->v3:
-> > - Fix build issues reported by kernel test robot
-> > - Fold cppc_cpufreq_set_autonomous_perf() refactoring into
-> >    this patch to keep it self-contained
-> >
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202605101404.fqz0MXIe-lkp=
-@intel.com/
-> > Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
-> > ---
-> >   drivers/cpufreq/cppc_cpufreq.c | 89 +++++++++++++++++++++++++++++----=
--
-> >   1 file changed, 76 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpuf=
-req.c
-> > index 7e7f9dfb7a24..9184d5570de8 100644
-> > --- a/drivers/cpufreq/cppc_cpufreq.c
-> > +++ b/drivers/cpufreq/cppc_cpufreq.c
-> > @@ -843,6 +843,80 @@ static int cppc_cpufreq_set_boost(struct cpufreq_p=
-olicy *policy, int state)
-> >       return 0;
-> >   }
-> >
-> > +/**
-> > + * cppc_cpufreq_set_autonomous_perf - Configure performance bounds for
-> > + *                                     autonomous mode
-> > + * @policy: cpufreq policy structure
-> > + *
-> > + * When enabling autonomous selection, program MIN_PERF and MAX_PERF f=
-rom
-> > + * current policy limits so that the platform uses the correct perform=
-ance
-> > + * bounds immediately.
-> > + *
-> > + * Return: 0 on success, negative error code on failure.
-> > + */
-> > +static int cppc_cpufreq_set_autonomous_perf(struct cpufreq_policy *pol=
-icy)
-> > +{
-> > +     struct cppc_cpudata *cpu_data =3D policy->driver_data;
-> > +     u32 old_min_perf =3D cpu_data->perf_ctrls.min_perf;
-> > +     u32 old_max_perf =3D cpu_data->perf_ctrls.max_perf;
-> > +     int ret;
-> > +
-> > +     cppc_cpufreq_update_perf_limits(cpu_data, policy);
-> > +
-> > +     ret =3D cppc_set_perf(policy->cpu, &cpu_data->perf_ctrls);
-> > +     if (ret) {
-> > +             cpu_data->perf_ctrls.min_perf =3D old_min_perf;
-> > +             cpu_data->perf_ctrls.max_perf =3D old_max_perf;
-> > +             return ret;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void cppc_cpufreq_update_limits(struct cpufreq_policy *policy)
-> > +{
-> > +     struct cppc_cpudata *cpu_data =3D policy->driver_data;
-> > +     u64 prev_highest_perf;
-> > +     u64 highest_perf;
-> > +     u64 nominal_perf;
-> > +     int ret;
-> > +
-> > +     guard(cpufreq_policy_write)(policy);
-> > +
-> > +     prev_highest_perf =3D cpu_data->perf_caps.highest_perf;
-> > +
-> > +     ret =3D cppc_get_highest_perf(policy->cpu, &highest_perf);
-> > +     if (ret)
-> > +             return;
-> > +
-> > +     if (highest_perf =3D=3D prev_highest_perf)
-> > +             return;
-> > +
-> > +     cpu_data->perf_caps.highest_perf =3D highest_perf;
-> > +     nominal_perf =3D min_t(u64, highest_perf,
-> > +                          cpu_data->perf_caps.nominal_perf);
-> > +
->
-> I sent a patch to try to remove setting policy->max in drivers
-> in cpufreq drivers in general [1]. IMO policy->max should be
-> updated through a callback handler, maybe:
->
-> refresh_frequency_limits()
-> \-cpufreq_set_policy()
->
-> [1] https://lore.kernel.org/all/20260511135538.522653-4-pierre.gondois@ar=
-m.com/
+tree:   https://github.com/multipath-tcp/mptcp_net-next.git export
+head:   52f68f13d42a1c3752de7a776b6f873988f48401
+commit: bffcdf4fc40a5044eb209e41eb662738fde65fa7 [1/39] DO-NOT-MERGE: git markup: net
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20260512/202605120017.W42dqjAR-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260512/202605120017.W42dqjAR-lkp@intel.com/reproduce)
 
-Yes, that's the right thing to do it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605120017.W42dqjAR-lkp@intel.com/
 
-> > +     policy->max =3D cppc_perf_to_khz(&cpu_data->perf_caps,
-> > +                     policy->boost_enabled ?
-> > +                     highest_perf : nominal_perf);
-> > +
-> There might be other things to check:
->
-> - Is the new highest_perf higher/equal than nominal_perf ?
-> Depending on the answer the boost capabilities/status will have to
-> be updated.
->
-> - IIUC it will be possible to update the nominal_perf in the next spec,
-> so this makes things a bit more complicated aswell.
-> https://lore.kernel.org/all/20260430142430.755437-3-sumitg@nvidia.com/
+All warnings (new ones prefixed by >>):
 
-If you are referring to this one:
+>> .b4-config: warning: ignored by one of the .gitignore files
+   .git_markup: warning: ignored by one of the .gitignore files
+   Documentation/.renames.txt: warning: ignored by one of the .gitignore files
 
-https://uefi.org/specs/ACPI/6.6/08_Processor_Configuration_and_Control.html=
-#ospm-nominal-performance-register
-
-it is about something somewhat different IIUC.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
