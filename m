@@ -1,547 +1,128 @@
-Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F8037F731
-	for <llvm@lists.linux.dev>; Mon, 11 May 2026 20:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1AC0392C5F
+	for <llvm@lists.linux.dev>; Mon, 11 May 2026 20:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778529741; cv=none; b=JwLEEGgPwPY69rmzI5nHxcNN9lO+thTnKBk2pocq++BvYmoEyS8KBcmpW/G99aEXF0O8cCafI3GarpSesFWS+T2fZ1wWd63sPwtrqaSXU7XXAgsiLWV4wIXdMXxZf3bgmylRRtfBKJgSTxoY3j/b5e7DoSunz6IthXcmJZZi4tk=
+	t=1778531532; cv=none; b=NVvsOLca5OTri0hL5Z1mzg5WbU8EyaHnIZbqFbFDfN+voa/JCqlcfCMzuxp3Bm1C9zbVh+hZ7K8+8p3aTWUqNCl+MsCsMKqK9/WrIfFn0VuHM0+VFvSj5OJQtlxxyvv1MB0rw2XdcANiScGuC9PsriB2S3VS/StylB3zooI9rIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778529741; c=relaxed/simple;
-	bh=nuKnNBRfZjWfumh5xz3YpLiN+7yxxuLTEfzHwAHYAEI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fpx15pD6QmQCBiXQLf2+yUFmCOxexeffjspkoWZrrlskDHhrWzNsQewZpcr87AB1T0BHgwIo5FOBF6L3Bv9gAp/efv7qiqIP/sRvbCbmxCD8EtJ77l0TEanYoL2ChwsEMk24O/wfyj4BbzI9GSgYSd+fgTWsN17ayAsiPhPKxpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TS1LL/rT; arc=none smtp.client-ip=209.85.221.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
+	s=arc-20240116; t=1778531532; c=relaxed/simple;
+	bh=gvimHA5kstwSxjA6jmp1+MHGcorqzbFbsrwwOSehOFU=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=tKaLo/Wfy91pnZVtn1D0rrTdBjHaUc+qHEmuVSljyJIkirwZEK7fhYdKJXPTEXL2v6QwSGaZOOE8lZUGXYf1xKfK3Kjes/JTdMZM3QfuA2z/4VlD74FAERrbZ4wSklvsSvXuVI34HqPAkYbPkY6Q5OrwkEl50TZVwQAXI3W314Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O1w49B5V; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TS1LL/rT"
-Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-44d68ed8f95so3679389f8f.1
-        for <llvm@lists.linux.dev>; Mon, 11 May 2026 13:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778529737; x=1779134537; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=COIrc4uMW8PdzVdTIWgCyh1EBSpKptyYSFL7OdZI4gw=;
-        b=TS1LL/rTjQbqXHPpA9KZVJT9Qz+yPBONLdBKwifs95c4tEbFNEDjkhzps8bHFWfaBx
-         U2EB+2p20xvDbqiWIFKu1SzcfxuHU3wXl5Gq8tj0oY2PbiSJhSqX7gwIfA9lCmGFWR72
-         vbDjb8G2Fs8lXD23BWci+zbOpxOeVFRgg2JHu4Wrt3oGrEJJ3gemkojFo1Eid7aCxJOx
-         SZ3wZ0pQxAu79S2YxbyVe+nc4ndJ8CXqIt0Wa/YO0pg9OdrgR5MgVO9nCt4DKNmmtkXi
-         rvOe3pr8SGLb4Mb2EQ5v7gGPMWVYaPcyXT8WB1gHBRs9iJ0qeoF0yF5WaLlx/L7NuY7r
-         aBAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778529737; x=1779134537;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=COIrc4uMW8PdzVdTIWgCyh1EBSpKptyYSFL7OdZI4gw=;
-        b=feGGM0q7ouD51AYWvm580p82U9ZrICe8jDqNS4GYefYk/G8J+lSlBJjcdN6+IDhQmk
-         G+7spjSMTH2yvRmzeLB+ozp3mFg7JYUsExcTXC4cu2McebgEy67VpmbCNDLS0v0PsOgr
-         Zc2y1om7iFjsKZ0mvfGB+5iSEvydB72i+Vn73ktrJQyW56q23hgd2DhpQFYFMJTLrN4a
-         8HCK43GvszEpUKhRQhyv3vEvPhghE5xuHnVmJtqINme8Y4zDCNBhKnw9kNfMFyVqOiMC
-         7cAn6wE75v3Y+6uGCOML/8s9Z8XGQT+SRilAEiAJeLCLVstT8Rwj6qPk9t1vfowyHwhm
-         k3Zg==
-X-Forwarded-Encrypted: i=1; AFNElJ/dCe7SNMHf5PBnPZN1a8nGG1U1XLcBkTJUDHGFj3WGnnbXYYFYaOy6NaREQLEIyESSxXGm@lists.linux.dev
-X-Gm-Message-State: AOJu0YwgPaKViL+CnNRlRn+TW45rqCJGXW4u8fzVJird4bgGGcoRbolX
-	CpGr/hc4sVR1Vox3ihm38Fm6dOq9tFEbBLnN62TH3oR8leCeaAmuXxKopjCII0dciyGWE8WcRw5
-	ieg==
-X-Received: from wroz5.prod.google.com ([2002:adf:f1c5:0:b0:43d:7b52:1f8c])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6000:40c7:b0:449:31ca:5e53
- with SMTP id ffacd0b85a97d-45ac234b93emr1437364f8f.8.1778529736822; Mon, 11
- May 2026 13:02:16 -0700 (PDT)
-Date: Mon, 11 May 2026 22:00:50 +0200
-In-Reply-To: <20260511200136.3201646-1-elver@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O1w49B5V"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778531529;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yTYF8yevhGRAQ7YIfELfa3UOnJSjNElbCEDMAqi6KmY=;
+	b=O1w49B5Vkv06Co4NVQJn2jJczBzKiTPOHhuFqNcGbNTR8Z04tZ5fgKbT/A8w9Z09lxg4Ia
+	n2msM2QbeP0GRw0+xpinEXYbBePUM5n8kEt8Kx2tXkjdF/wwcfnJSu30kU6nflrNO31RZ9
+	MnsgrF81AiyJkmEKGZ3q80gAFZk3nW8=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-586-obDtlbBtMiqACmmsq98nOA-1; Mon,
+ 11 May 2026 16:32:07 -0400
+X-MC-Unique: obDtlbBtMiqACmmsq98nOA-1
+X-Mimecast-MFC-AGG-ID: obDtlbBtMiqACmmsq98nOA_1778531525
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 621FF19560AA
+	for <llvm@lists.linux.dev>; Mon, 11 May 2026 20:32:05 +0000 (UTC)
+Received: from [172.20.167.112] (unknown [10.30.44.188])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 02CE41800465;
+	Mon, 11 May 2026 20:32:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 68 of 97): Test report for master
+ (7.1.0-rc2, upstream-mainline, 1bfaee9d)
+Date: Mon, 11 May 2026 20:32:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260511200136.3201646-1-elver@google.com>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260511200136.3201646-3-elver@google.com>
-Subject: [PATCH v4 3/3] slab: fix kernel-docs for mm-api
-From: Marco Elver <elver@google.com>
-To: elver@google.com, Vlastimil Babka <vbabka@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>, 
-	David Hildenbrand <david@kernel.org>, David Rientjes <rientjes@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>, 
-	Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Matteo Rizzo <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Suren Baghdasaryan <surenb@google.com>, linux-hardening@vger.kernel.org, 
-	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>, 
-	"Liam R. Howlett" <liam@infradead.org>, Alexander Potapenko <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <28567.126051116320701818@us-mta-586.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: g7bbWPoHeNlM8gzFanAl4B0Bs0zI-spQFI5GkgVdxJw_1778531525
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The mm-api kernel-docs have been disconnected from their symbols. While
-the scripts were previously taught to handle the _noprof suffix added by
-allocation tagging (in 51a7bf0238c2 "scripts/kernel-doc: drop "_noprof"
-on function prototypes"), this does not handle cases where the internal
-implementation function has an additional leading underscore. The added
-optional parameters (via DECL_KMALLOC_PARAMS) further complicate parsing
-the internal signatures.
+Hi, we tested your kernel and here are the results:
 
-When the kernel-doc block remains above the internal implementation
-function but uses the public API name, the documentation generator fails
-to associate the documented symbol.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Simply moving the docs to the macros in slab.h fixes the association but
-causes loss of types in the generated documentation (rendering as e.g.
-untyped 'kmalloc(size, flags)' macro).
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Fix this by:
+Kernel information:
+    Commit message: Merge tag 'fsverity-for-linus' of git://git.kernel.org/=
+pub/scm/fs/fsverity/linux
 
-1. Moving the kernel-doc comment blocks from slub.c to slab.h, placing
-   them directly above the user-facing macros.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2512729664
 
-2. Providing explicit, typed C prototypes for the documented APIs inside
-   '#if 0 /* kernel-doc */' blocks.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
-3. Converting the variadic macros for the documented APIs to use
-   explicit arguments to match the documentation.
 
-No functional change intended.
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, ppc64le, s390x, x86_64]
+    /distribution/command [aarch64, ppc64le, s390x, x86_64]
+    /test/misc/machineinfo [aarch64, ppc64le, s390x, x86_64]
+    Boot test [aarch64, ppc64le, s390x, x86_64]
+    CKI/restraint [aarch64, ppc64le, s390x, x86_64]
+    Reboot test [aarch64, ppc64le, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
+    Storage - blktests - throtl [aarch64, s390x, x86_64]
+    Storage - blktests - ublk [aarch64, s390x, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, s390x, x86_64]
+    stress: stress-ng - memory [aarch64, s390x, x86_64]
+    xfstests - btrfs [aarch64]
+    xfstests - ext4 [aarch64]
+    xfstests - xfs [aarch64]
 
-Signed-off-by: Marco Elver <elver@google.com>
----
-v4:
-* Provide typed C prototypes in '#if 0' blocks to properly render API.
----
- include/linux/slab.h | 216 +++++++++++++++++++++++++++++++++----------
- mm/slub.c            |  98 --------------------
- 2 files changed, 168 insertions(+), 146 deletions(-)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index efab6b2ccf21..a4bf1585411f 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -530,7 +530,49 @@ void * __must_check krealloc_node_align_noprof(const void *objp,
- 					       unsigned long align,
- 					       gfp_t flags, int nid) __realloc_size(2);
- #define krealloc_noprof(_o, _s, _f)	krealloc_node_align_noprof(_o, PASS_TOKEN_PARAMS(_s, __kmalloc_token(_s)), 1, _f, NUMA_NO_NODE)
--#define krealloc_node_align(_o, _s, _a, _f, _n)	alloc_hooks(krealloc_node_align_noprof(_o, PASS_TOKEN_PARAMS(_s, __kmalloc_token(_s)), _a, _f, _n))
-+#if 0 /* kernel-doc */
-+/**
-+ * krealloc_node_align - reallocate memory. The contents will remain unchanged.
-+ * @p: object to reallocate memory for.
-+ * @new_size: how many bytes of memory are required.
-+ * @align: desired alignment.
-+ * @flags: the type of memory to allocate.
-+ * @nid: NUMA node or NUMA_NO_NODE
-+ *
-+ * If @p is %NULL, krealloc() behaves exactly like kmalloc().  If @new_size
-+ * is 0 and @p is not a %NULL pointer, the object pointed to is freed.
-+ *
-+ * Only alignments up to those guaranteed by kmalloc() will be honored. Please see
-+ * Documentation/core-api/memory-allocation.rst for more details.
-+ *
-+ * If __GFP_ZERO logic is requested, callers must ensure that, starting with the
-+ * initial memory allocation, every subsequent call to this API for the same
-+ * memory allocation is flagged with __GFP_ZERO. Otherwise, it is possible that
-+ * __GFP_ZERO is not fully honored by this API.
-+ *
-+ * When slub_debug_orig_size() is off, krealloc() only knows about the bucket
-+ * size of an allocation (but not the exact size it was allocated with) and
-+ * hence implements the following semantics for shrinking and growing buffers
-+ * with __GFP_ZERO::
-+ *
-+ *           new             bucket
-+ *   0       size             size
-+ *   |--------|----------------|
-+ *   |  keep  |      zero      |
-+ *
-+ * Otherwise, the original allocation size 'orig_size' could be used to
-+ * precisely clear the requested size, and the new size will also be stored
-+ * as the new 'orig_size'.
-+ *
-+ * In any case, the contents of the object pointed to are preserved up to the
-+ * lesser of the new and old sizes.
-+ *
-+ * Return: pointer to the allocated memory or %NULL in case of error
-+ */
-+void *krealloc_node_align(const void *p, size_t new_size, unsigned long align, gfp_t flags, int nid);
-+#endif
-+#define krealloc_node_align(p, new_size, align, flags, nid) \
-+	alloc_hooks(krealloc_node_align_noprof(p, PASS_TOKEN_PARAMS(new_size, __kmalloc_token(new_size)), align, flags, nid))
- #define krealloc_node(_o, _s, _f, _n)	krealloc_node_align(_o, _s, 1, _f, _n)
- #define krealloc(...)			krealloc_node(__VA_ARGS__, NUMA_NO_NODE)
- 
-@@ -913,6 +955,23 @@ void *__kmalloc_large_noprof(size_t size, gfp_t flags)
- void *__kmalloc_large_node_noprof(size_t size, gfp_t flags, int node)
- 				__assume_page_alignment __alloc_size(1);
- 
-+static __always_inline __alloc_size(1) void *_kmalloc_noprof(size_t size, gfp_t flags, kmalloc_token_t token)
-+{
-+	if (__builtin_constant_p(size) && size) {
-+		unsigned int index;
-+
-+		if (size > KMALLOC_MAX_CACHE_SIZE)
-+			return __kmalloc_large_noprof(size, flags);
-+
-+		index = kmalloc_index(size);
-+		return __kmalloc_cache_noprof(
-+				kmalloc_caches[kmalloc_type(flags, token)][index],
-+				flags, size);
-+	}
-+	return __kmalloc_noprof(PASS_KMALLOC_PARAMS(size, NULL, token), flags);
-+}
-+#define kmalloc_noprof(...)			_kmalloc_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
-+#if 0 /* kernel-doc */
- /**
-  * kmalloc - allocate kernel memory
-  * @size: how many bytes of memory are required.
-@@ -968,27 +1027,27 @@ void *__kmalloc_large_node_noprof(size_t size, gfp_t flags, int node)
-  *	Try really hard to succeed the allocation but fail
-  *	eventually.
-  */
--static __always_inline __alloc_size(1) void *_kmalloc_noprof(size_t size, gfp_t flags, kmalloc_token_t token)
--{
--	if (__builtin_constant_p(size) && size) {
--		unsigned int index;
--
--		if (size > KMALLOC_MAX_CACHE_SIZE)
--			return __kmalloc_large_noprof(size, flags);
--
--		index = kmalloc_index(size);
--		return __kmalloc_cache_noprof(
--				kmalloc_caches[kmalloc_type(flags, token)][index],
--				flags, size);
--	}
--	return __kmalloc_noprof(PASS_KMALLOC_PARAMS(size, NULL, token), flags);
--}
--#define kmalloc_noprof(...)			_kmalloc_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
--#define kmalloc(...)				alloc_hooks(kmalloc_noprof(__VA_ARGS__))
-+void *kmalloc(size_t size, gfp_t flags);
-+#endif
-+#define kmalloc(size, flags)			alloc_hooks(kmalloc_noprof(size, flags))
- 
- void *_kmalloc_nolock_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t gfp_flags, int node);
- #define kmalloc_nolock_noprof(_s, _f, _n)	_kmalloc_nolock_noprof(PASS_TOKEN_PARAMS(_s, __kmalloc_token(_s)), _f, _n)
--#define kmalloc_nolock(...)			alloc_hooks(kmalloc_nolock_noprof(__VA_ARGS__))
-+#if 0 /* kernel-doc */
-+/**
-+ * kmalloc_nolock - Allocate an object of given size from any context.
-+ * @size: size to allocate
-+ * @gfp_flags: GFP flags. Only __GFP_ACCOUNT, __GFP_ZERO, __GFP_NO_OBJ_EXT
-+ * allowed.
-+ * @node: node number of the target node.
-+ *
-+ * Return: pointer to the new object or NULL in case of error.
-+ * NULL does not mean EBUSY or EAGAIN. It means ENOMEM.
-+ * There is no reason to call it again and expect !NULL.
-+ */
-+void *kmalloc_nolock(size_t size, gfp_t gfp_flags, int node);
-+#endif
-+#define kmalloc_nolock(size, gfp_flags, node)	alloc_hooks(kmalloc_nolock_noprof(size, gfp_flags, node))
- 
- /**
-  * __alloc_objs - Allocate objects of a given type using
-@@ -1115,23 +1174,40 @@ static __always_inline __alloc_size(1) void *_kmalloc_node_noprof(size_t size, g
- #define kmalloc_node_noprof(...)		_kmalloc_node_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
- #define kmalloc_node(...)			alloc_hooks(kmalloc_node_noprof(__VA_ARGS__))
- 
-+static inline __alloc_size(1, 2) void *_kmalloc_array_noprof(size_t n, size_t size, gfp_t flags, kmalloc_token_t token)
-+{
-+	size_t bytes;
-+
-+	if (unlikely(check_mul_overflow(n, size, &bytes)))
-+		return NULL;
-+	return _kmalloc_noprof(bytes, flags, token);
-+}
-+#define kmalloc_array_noprof(...)		_kmalloc_array_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
-+#if 0 /* kernel-doc */
- /**
-  * kmalloc_array - allocate memory for an array.
-  * @n: number of elements.
-  * @size: element size.
-  * @flags: the type of memory to allocate (see kmalloc).
-  */
--static inline __alloc_size(1, 2) void *_kmalloc_array_noprof(size_t n, size_t size, gfp_t flags, kmalloc_token_t token)
-+void *kmalloc_array(size_t n, size_t size, gfp_t flags);
-+#endif
-+#define kmalloc_array(n, size, flags)		alloc_hooks(kmalloc_array_noprof(n, size, flags))
-+
-+static inline __realloc_size(2, 3) void * __must_check _krealloc_array_noprof(void *p,
-+								       size_t new_n,
-+								       size_t new_size,
-+								       gfp_t flags, kmalloc_token_t token)
- {
- 	size_t bytes;
- 
--	if (unlikely(check_mul_overflow(n, size, &bytes)))
-+	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
- 		return NULL;
--	return _kmalloc_noprof(bytes, flags, token);
--}
--#define kmalloc_array_noprof(...)		_kmalloc_array_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
--#define kmalloc_array(...)			alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
- 
-+	return krealloc_node_align_noprof(p, PASS_TOKEN_PARAMS(bytes, token), 1, flags, NUMA_NO_NODE);
-+}
-+#define krealloc_array_noprof(...)		_krealloc_array_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
-+#if 0 /* kernel-doc */
- /**
-  * krealloc_array - reallocate memory for an array.
-  * @p: pointer to the memory chunk to reallocate
-@@ -1149,20 +1225,9 @@ static inline __alloc_size(1, 2) void *_kmalloc_array_noprof(size_t n, size_t si
-  * In any case, the contents of the object pointed to are preserved up to the
-  * lesser of the new and old sizes.
-  */
--static inline __realloc_size(2, 3) void * __must_check _krealloc_array_noprof(void *p,
--								       size_t new_n,
--								       size_t new_size,
--								       gfp_t flags, kmalloc_token_t token)
--{
--	size_t bytes;
--
--	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
--		return NULL;
--
--	return krealloc_node_align_noprof(p, PASS_TOKEN_PARAMS(bytes, token), 1, flags, NUMA_NO_NODE);
--}
--#define krealloc_array_noprof(...)		_krealloc_array_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
--#define krealloc_array(...)			alloc_hooks(krealloc_array_noprof(__VA_ARGS__))
-+void *krealloc_array(void *p, size_t new_n, size_t new_size, gfp_t flags);
-+#endif
-+#define krealloc_array(p, new_n, new_size, flags) alloc_hooks(krealloc_array_noprof(p, new_n, new_size, flags))
- 
- /**
-  * kcalloc - allocate memory for an array. The memory is set to zero.
-@@ -1214,17 +1279,20 @@ static inline __alloc_size(1, 2) void *_kmalloc_array_node_noprof(size_t n, size
-  */
- #define kmem_cache_zalloc(_k, _flags)		kmem_cache_alloc(_k, (_flags)|__GFP_ZERO)
- 
--/**
-- * kzalloc - allocate memory. The memory is set to zero.
-- * @size: how many bytes of memory are required.
-- * @flags: the type of memory to allocate (see kmalloc).
-- */
- static inline __alloc_size(1) void *_kzalloc_noprof(size_t size, gfp_t flags, kmalloc_token_t token)
- {
- 	return _kmalloc_noprof(size, flags | __GFP_ZERO, token);
- }
- #define kzalloc_noprof(...)			_kzalloc_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
--#define kzalloc(...)				alloc_hooks(kzalloc_noprof(__VA_ARGS__))
-+#if 0 /* kernel-doc */
-+/**
-+ * kzalloc - allocate memory. The memory is set to zero.
-+ * @size: how many bytes of memory are required.
-+ * @flags: the type of memory to allocate (see kmalloc).
-+ */
-+void *kzalloc(size_t size, gfp_t flags);
-+#endif
-+#define kzalloc(size, flags)			alloc_hooks(kzalloc_noprof(size, flags))
- #define kzalloc_node(_size, _flags, _node)	kmalloc_node(_size, (_flags)|__GFP_ZERO, _node)
- 
- void *__kvmalloc_node_noprof(DECL_KMALLOC_PARAMS(size, b, token), unsigned long align,
-@@ -1233,7 +1301,29 @@ void *__kvmalloc_node_noprof(DECL_KMALLOC_PARAMS(size, b, token), unsigned long
- 	__kvmalloc_node_noprof(PASS_KMALLOC_PARAMS(_size, NULL, __kmalloc_token(_size)), _align, _flags, _node)
- #define kvmalloc_node_align(...)		\
- 	alloc_hooks(kvmalloc_node_align_noprof(__VA_ARGS__))
--#define kvmalloc_node(_s, _f, _n)		kvmalloc_node_align(_s, 1, _f, _n)
-+#if 0 /* kernel-doc */
-+/**
-+ * kvmalloc_node - attempt to allocate physically contiguous memory, but upon
-+ * failure, fall back to non-contiguous (vmalloc) allocation.
-+ * @size: size of the request.
-+ * @flags: gfp mask for the allocation - must be compatible (superset) with GFP_KERNEL.
-+ * @node: numa node to allocate from
-+ *
-+ * Only alignments up to those guaranteed by kmalloc() will be honored. Please see
-+ * Documentation/core-api/memory-allocation.rst for more details.
-+ *
-+ * Uses kmalloc to get the memory but if the allocation fails then falls back
-+ * to the vmalloc allocator. Use kvfree for freeing the memory.
-+ *
-+ * GFP_NOWAIT and GFP_ATOMIC are supported, the __GFP_NORETRY modifier is not.
-+ * __GFP_RETRY_MAYFAIL is supported, and it should be used only if kmalloc is
-+ * preferable to the vmalloc fallback, due to visible performance drawbacks.
-+ *
-+ * Return: pointer to the allocated memory of %NULL in case of failure
-+ */
-+void *kvmalloc_node(size_t size, gfp_t flags, int node);
-+#endif
-+#define kvmalloc_node(size, flags, node)	kvmalloc_node_align(size, 1, flags, node)
- #define kvmalloc_node_noprof(size, flags, node)	\
- 	kvmalloc_node_align_noprof(size, 1, flags, node)
- #define kvmalloc(...)				kvmalloc_node(__VA_ARGS__, NUMA_NO_NODE)
-@@ -1266,8 +1356,38 @@ _kvmalloc_array_node_noprof(size_t n, size_t size, gfp_t flags, int node, kmallo
- 
- void *kvrealloc_node_align_noprof(const void *p, DECL_TOKEN_PARAMS(size, token), unsigned long align,
- 				  gfp_t flags, int nid) __realloc_size(2);
--#define kvrealloc_node_align(_p, _s, _a, _f, _n)	\
--	alloc_hooks(kvrealloc_node_align_noprof(_p, PASS_TOKEN_PARAMS(_s, __kmalloc_token(_s)), _a, _f, _n))
-+#if 0 /* kernel-doc */
-+/**
-+ * kvrealloc_node_align - reallocate memory; contents remain unchanged
-+ * @p: object to reallocate memory for
-+ * @size: the size to reallocate
-+ * @align: desired alignment
-+ * @flags: the flags for the page level allocator
-+ * @nid: NUMA node id
-+ *
-+ * If @p is %NULL, kvrealloc() behaves exactly like kvmalloc(). If @size is 0
-+ * and @p is not a %NULL pointer, the object pointed to is freed.
-+ *
-+ * Only alignments up to those guaranteed by kmalloc() will be honored. Please see
-+ * Documentation/core-api/memory-allocation.rst for more details.
-+ *
-+ * If __GFP_ZERO logic is requested, callers must ensure that, starting with the
-+ * initial memory allocation, every subsequent call to this API for the same
-+ * memory allocation is flagged with __GFP_ZERO. Otherwise, it is possible that
-+ * __GFP_ZERO is not fully honored by this API.
-+ *
-+ * In any case, the contents of the object pointed to are preserved up to the
-+ * lesser of the new and old sizes.
-+ *
-+ * This function must not be called concurrently with itself or kvfree() for the
-+ * same memory allocation.
-+ *
-+ * Return: pointer to the allocated memory or %NULL in case of error
-+ */
-+void *kvrealloc_node_align(const void *p, size_t size, unsigned long align, gfp_t flags, int nid);
-+#endif
-+#define kvrealloc_node_align(p, size, align, flags, nid)	\
-+	alloc_hooks(kvrealloc_node_align_noprof(p, PASS_TOKEN_PARAMS(size, __kmalloc_token(size)), align, flags, nid))
- #define kvrealloc_node(_p, _s, _f, _n)		kvrealloc_node_align(_p, _s, 1, _f, _n)
- #define kvrealloc(...)				kvrealloc_node(__VA_ARGS__, NUMA_NO_NODE)
- 
-diff --git a/mm/slub.c b/mm/slub.c
-index a6e9015601d6..00cb88af79f8 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5310,17 +5310,6 @@ void *__kmalloc_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags)
- }
- EXPORT_SYMBOL(__kmalloc_noprof);
- 
--/**
-- * kmalloc_nolock - Allocate an object of given size from any context.
-- * @size: size to allocate
-- * @gfp_flags: GFP flags. Only __GFP_ACCOUNT, __GFP_ZERO, __GFP_NO_OBJ_EXT
-- * allowed.
-- * @node: node number of the target node.
-- *
-- * Return: pointer to the new object or NULL in case of error.
-- * NULL does not mean EBUSY or EAGAIN. It means ENOMEM.
-- * There is no reason to call it again and expect !NULL.
-- */
- void *_kmalloc_nolock_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t gfp_flags, int node)
- {
- 	gfp_t alloc_gfp = __GFP_NOWARN | __GFP_NOMEMALLOC | gfp_flags;
-@@ -6721,44 +6710,6 @@ __do_krealloc(const void *p, size_t new_size, unsigned long align, gfp_t flags,
- 	return ret;
- }
- 
--/**
-- * krealloc_node_align - reallocate memory. The contents will remain unchanged.
-- * @p: object to reallocate memory for.
-- * @new_size: how many bytes of memory are required.
-- * @align: desired alignment.
-- * @flags: the type of memory to allocate.
-- * @nid: NUMA node or NUMA_NO_NODE
-- *
-- * If @p is %NULL, krealloc() behaves exactly like kmalloc().  If @new_size
-- * is 0 and @p is not a %NULL pointer, the object pointed to is freed.
-- *
-- * Only alignments up to those guaranteed by kmalloc() will be honored. Please see
-- * Documentation/core-api/memory-allocation.rst for more details.
-- *
-- * If __GFP_ZERO logic is requested, callers must ensure that, starting with the
-- * initial memory allocation, every subsequent call to this API for the same
-- * memory allocation is flagged with __GFP_ZERO. Otherwise, it is possible that
-- * __GFP_ZERO is not fully honored by this API.
-- *
-- * When slub_debug_orig_size() is off, krealloc() only knows about the bucket
-- * size of an allocation (but not the exact size it was allocated with) and
-- * hence implements the following semantics for shrinking and growing buffers
-- * with __GFP_ZERO::
-- *
-- *           new             bucket
-- *   0       size             size
-- *   |--------|----------------|
-- *   |  keep  |      zero      |
-- *
-- * Otherwise, the original allocation size 'orig_size' could be used to
-- * precisely clear the requested size, and the new size will also be stored
-- * as the new 'orig_size'.
-- *
-- * In any case, the contents of the object pointed to are preserved up to the
-- * lesser of the new and old sizes.
-- *
-- * Return: pointer to the allocated memory or %NULL in case of error
-- */
- void *krealloc_node_align_noprof(const void *p, DECL_TOKEN_PARAMS(new_size, token), unsigned long align,
- 				 gfp_t flags, int nid)
- {
-@@ -6801,28 +6752,6 @@ static gfp_t kmalloc_gfp_adjust(gfp_t flags, size_t size)
- 	return flags;
- }
- 
--/**
-- * __kvmalloc_node - attempt to allocate physically contiguous memory, but upon
-- * failure, fall back to non-contiguous (vmalloc) allocation.
-- * @size: size of the request.
-- * @b: which set of kmalloc buckets to allocate from.
-- * @token: allocation token.
-- * @align: desired alignment.
-- * @flags: gfp mask for the allocation - must be compatible (superset) with GFP_KERNEL.
-- * @node: numa node to allocate from
-- *
-- * Only alignments up to those guaranteed by kmalloc() will be honored. Please see
-- * Documentation/core-api/memory-allocation.rst for more details.
-- *
-- * Uses kmalloc to get the memory but if the allocation fails then falls back
-- * to the vmalloc allocator. Use kvfree for freeing the memory.
-- *
-- * GFP_NOWAIT and GFP_ATOMIC are supported, the __GFP_NORETRY modifier is not.
-- * __GFP_RETRY_MAYFAIL is supported, and it should be used only if kmalloc is
-- * preferable to the vmalloc fallback, due to visible performance drawbacks.
-- *
-- * Return: pointer to the allocated memory of %NULL in case of failure
-- */
- void *__kvmalloc_node_noprof(DECL_KMALLOC_PARAMS(size, b, token), unsigned long align,
- 			     gfp_t flags, int node)
- {
-@@ -6904,33 +6833,6 @@ void kvfree_sensitive(const void *addr, size_t len)
- }
- EXPORT_SYMBOL(kvfree_sensitive);
- 
--/**
-- * kvrealloc_node_align - reallocate memory; contents remain unchanged
-- * @p: object to reallocate memory for
-- * @size: the size to reallocate
-- * @align: desired alignment
-- * @flags: the flags for the page level allocator
-- * @nid: NUMA node id
-- *
-- * If @p is %NULL, kvrealloc() behaves exactly like kvmalloc(). If @size is 0
-- * and @p is not a %NULL pointer, the object pointed to is freed.
-- *
-- * Only alignments up to those guaranteed by kmalloc() will be honored. Please see
-- * Documentation/core-api/memory-allocation.rst for more details.
-- *
-- * If __GFP_ZERO logic is requested, callers must ensure that, starting with the
-- * initial memory allocation, every subsequent call to this API for the same
-- * memory allocation is flagged with __GFP_ZERO. Otherwise, it is possible that
-- * __GFP_ZERO is not fully honored by this API.
-- *
-- * In any case, the contents of the object pointed to are preserved up to the
-- * lesser of the new and old sizes.
-- *
-- * This function must not be called concurrently with itself or kvfree() for the
-- * same memory allocation.
-- *
-- * Return: pointer to the allocated memory or %NULL in case of error
-- */
- void *kvrealloc_node_align_noprof(const void *p, DECL_TOKEN_PARAMS(size, token), unsigned long align,
- 				  gfp_t flags, int nid)
- {
--- 
-2.54.0.563.g4f69b47b94-goog
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
