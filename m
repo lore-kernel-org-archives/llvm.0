@@ -1,135 +1,193 @@
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B576A436350
-	for <llvm@lists.linux.dev>; Mon, 11 May 2026 16:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778517316; cv=pass; b=dfa0b829qitmPced4RfXYE9S5FBADUAbp/ysK+TudZvNavk5+mKGMnwDj54N3yWqDQwxMGjkVh0bx1e3l/CPXxEBO4M9Zhe7p094MB6LNGhEhltCgWXYp5quCVpGA6WeAKJ3458teNDjnMNj7DTU4QelaBnXvnAxrtL/jSFYxJI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778517316; c=relaxed/simple;
-	bh=4S7C02MIUqtzmropOUva8L19yYp6EZ1lPURTmBTWjnA=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DBB426D24
+	for <llvm@lists.linux.dev>; Mon, 11 May 2026 16:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778517824; cv=none; b=TiKfdy1ZNe/bc1XJc3WbO6rsMILU+Oc6mK68dHcI2KCIRD/ELwL+58WJ7If4SsO1smAtE41a5NKfcSg+BdCXCbWGavXsvfvDE6yx0ekbPI9CQUp7AEyZiZR9EujaWyB2a+nJ7tz4GNEXkS1fDvU8glyYnqdsIBUsl2fOenLXwMw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778517824; c=relaxed/simple;
+	bh=HNw4l5fs4Xn8NKqMIv7U0xRX4INKVPXmLwsXJ0n/rV4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YuXdItVe9XT7RXFC+wr+bXl0SzScmGTvV5x2RDwFSdt1h1zCZ/6k5N2aZoCZe+vEFWGrJmIp2jpQOPasvmU14JWXvn9eOVCLbd5ghhnAHuhJTf3II1fACWMje/adaTIiW/kFqLgAworYGa/AdmOa+HFEWxWDdC6/VoIQWNdfebs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b/wTv2lh; arc=pass smtp.client-ip=74.125.82.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=F1Ixg2Sk1RppWfjCLAMxOXx3LgGCOoU2/lbed6lkT+jjY5CKj85dwynPS13h99mW7J8WhUJv2ghhgIMcR77G43O/vbbH8aQeQUTTcmVs8uPFYLd2IsY0Aky4d7mVQ8fbpXMZ6W548j1CLzT1DNcAfGpiQ6UC+QWWmolIlFxnpec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ecI+57Q5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b/wTv2lh"
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12c8f9846c8so6388906c88.0
-        for <llvm@lists.linux.dev>; Mon, 11 May 2026 09:35:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778517314; cv=none;
-        d=google.com; s=arc-20240605;
-        b=l1UWz91gd3rnT8u71ySVTjTcipM6IkIHEEdbaQ6fjLzcSO7JD62DW1NuN+HB0Rkpmb
-         f2CVd6p9+ri0VOawy7r84y0t/9HTivb29zqe7y5WbsNdH80imy6HyhGPA7tc6IBD2/Zz
-         LeFuOUDCGKAW3eI+6w9D3/5SOR6psDKbih3aHxC0Qf6Oqraz/RbbyIF8mXY/zKkxPGht
-         R1XyEAJIGQkdB0tFXYMMb5+pT1gAw/c9Jbr0lhz4rL4VUYqI5BY224lWXjQJgHdBlDZv
-         qO4TYGlAZ/7uYy2HDDkgF0MaVSDNct0+UMPWNkAwJGee0VGrS0S8sR0x2O8Jbo4Why1V
-         ZjuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=1buMrZnL5eF5p/xBeXqRPyloQLFILIM6omdsc97ttuw=;
-        fh=lDhKPuJa3mo+3MBxuLLyFHPwip2Id61KH+CewghRwQc=;
-        b=BrByiban+4JrR0PcC7dX/9gs6nc6gh5UtUryz09zkxHUijFLuJAtoP2iAJDIZ+5p2b
-         FFdb6eGPNBPw5sMX8lwb7ZDOa73suSbBISjWPWJ6qBKaAfkWi8oQxUpE1SRjGx/7timc
-         GWhHwFvzcZoFKLON2IBC/RiE7pyQKOqcfelBdKH0lrmhXRQIJIKmPS16RmUtNh4W/JM8
-         ILeqkiGckwdMQjQG+PYYlstISOYRwC8N8Ch1cfvVdk8j6DLVR243s9II6T4J7t0RKboT
-         MrsJmeC1r8bia0S2PnqdAlrcW9IG/bW4py0M2LUzpQx9MmptAFPN5f3um2piCCG8QTlJ
-         ADhw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778517314; x=1779122114; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1buMrZnL5eF5p/xBeXqRPyloQLFILIM6omdsc97ttuw=;
-        b=b/wTv2lhQjkGibCQf/sMBIf9LYcJ73KaNqM3WyUMvVHfTno7GAhKb6H5pGkx4jeL37
-         DuNDJu0x0CQOMiVA2+Ssae0ZRFV5wwfJ+7a1nHC7QA4dGEPBgKoAliAABqCYyByJRZJh
-         wy41PdgOTrqgLPq8FALxafR/e8pbE/JU+LZjZNxSsmxtulL+S9UlXyr/tXGEOcWwuATC
-         1Lk97vEqxphkG59jRyattgAUGv8CvagHdUVJCavemXZouox+r8K924MV/fhQUuw7S6K3
-         JgLQoPo3ogCM5T52XFzhfqzjAqImGu6pU7WCLQozLDRgv+GgcpxFO63uDCLDH47rQS30
-         mXag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778517314; x=1779122114;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1buMrZnL5eF5p/xBeXqRPyloQLFILIM6omdsc97ttuw=;
-        b=gAHgUG8BNRGHeoOivmgBunXHhwP/PJBfZQz6UO6gvCb1znGJx5zHmTdW0vy/XlSRJ7
-         4kjIGgcunEpExCVse4J7/mVxZaSfQqbcpgaNwLUNmgPly5uFzNFR7lDkYgRNvgf5QRL/
-         ayNURFPZRwAaNRHV8zTNR2mH+/pbv4cFCn2h83Xa9/RJjaNwi3/qXWRuwYDmYFdhi9l3
-         rtTVOe725gZph3IpRvwzr+jn8nUx4vmkuE/2ZoYcEuGwG38aQgwTLAt99juKEWYB9bAM
-         ThoPNw/4hgay3OmSUR19m8cOrkkC2NehDpJxKX0s3P1CpRhKB8gTpX7EE/3cLD+TnPpQ
-         OdBg==
-X-Forwarded-Encrypted: i=1; AFNElJ+TPPf6CHmHTIJpqntRk6f2vVDdjXCQ/K++FyTRp92MHjEgugDf5hRhhjwJ9meI3VeEoNPs@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz2ljwidJC8Ohdw4e6uoTrwrKvPtg/9DLtqIEmgpoyHYtUEP1ih
-	8v7WT8K7fnx97iATm5clCb9i6UeYWew+CzEC9piTONquZqGQlEVnBOvc2hJI4L/Wr2HxvOc3qgF
-	aa2SaLGIccMPFmLKQHAoU2CUCN7qgeLEBpcXExaic
-X-Gm-Gg: Acq92OELUdD3SEmEm4uGIdshmcqfuUOkVMMoLKCsxFiG4u71fvb5bowQb2CPR+ZUmIn
-	wyuDIZNN6zvRqbkZzPARn/8CcRkQNMIouAUadt+83OXnUOMxdUPcss1ktxGROnqHGDR3cIchhQS
-	trl0ZbRggYiqmsyUJyQTltp2AjLU+4zTJsoy04BwLN1NtWTFXE8S0Kf9AdbQK4LD9lT/7XyAPRz
-	3N2nG5vbVlH8bkDkxIzjtxf5ecqiquzJh3R9PpuRHfPX8rEF/vEd+vB0hg8aMWztR3RNOYwr5cn
-	cOTGC6Xfzmh8VioNV75310Lh9dDIUrZsTQbWP2DL98IZcCQRu9r7msHFoQ4E
-X-Received: by 2002:a05:7022:699d:b0:133:39a6:2b8b with SMTP id
- a92af1059eb24-13339a62ddamr337498c88.44.1778517313279; Mon, 11 May 2026
- 09:35:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ecI+57Q5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F3AC2BCFB
+	for <llvm@lists.linux.dev>; Mon, 11 May 2026 16:43:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778517823;
+	bh=HNw4l5fs4Xn8NKqMIv7U0xRX4INKVPXmLwsXJ0n/rV4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ecI+57Q5hwnIom58Akc9udK8xzzoufZLamIVy+ZCmqc1TkGfIpoS++BKhhHc/n8bV
+	 DVqqg4dkXREKCALKcvNf+OUELSP9DQYBbIvk3Cd2UZ/HOno8WZALHfEKmtabPGB86y
+	 1yXNM+sVps32zwF9eq5W76H0p9k4xXjMoKVz9EzDhptPCVwN2Gl6AfIAHq0f3Y4wGO
+	 eBYJE9DySghktckziYw/pbbBpT0xoQvZ2Ul85SA/UBqX0cdD+Qlkg8yPnT/3hzqiBK
+	 ezPn7wjPTotnCuM2lQVowAmuPd7YHuIYRGGnZGvcWFwftVLpcX/wvbLxYCqy1zdt8G
+	 NH9lhEns9etAw==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5a40cfab24dso5006599e87.2
+        for <llvm@lists.linux.dev>; Mon, 11 May 2026 09:43:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ9PBUOwLB+Uh0maIIxIq5JfHLp4WY8NlHAiJGw2lFJINGI9sn3WilQUlMnA5tW3UAYwRs4J@lists.linux.dev
+X-Gm-Message-State: AOJu0YzdLvxVGkHwCxwXbu4GPA5rJpIXcRr6hWkbRCoOqpMopY5DbwMj
+	A2MWqIyOWb55qxIcuBNoE2mno3n/B7v527zEJfz7VnvNFsRdRIbnRGC1bck2Swe/ensGxwndPva
+	7E1TddRDFnwq/y0KTL1IpE5Xmrtom3uo=
+X-Received: by 2002:a05:6512:3e21:b0:5a4:ab6:81b8 with SMTP id
+ 2adb3069b0e04-5a8a94caf78mr3905042e87.40.1778517822234; Mon, 11 May 2026
+ 09:43:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260424132427.2703076-1-elver@google.com> <20260424132427.2703076-2-elver@google.com>
- <9c321184-9080-4d5c-bd1a-a16cd0bbaed3@kernel.org> <CANpmjNN_=g31Eoa+w1NrFALfp1dDBi5oHEZdr_bA_48-tS2M=Q@mail.gmail.com>
- <afi0nQ84k1oz5RyH@elver.google.com> <871pfiw343.fsf@trenco.lwn.net>
-In-Reply-To: <871pfiw343.fsf@trenco.lwn.net>
-From: Marco Elver <elver@google.com>
-Date: Mon, 11 May 2026 18:34:36 +0200
-X-Gm-Features: AVHnY4JXza1HWD1Ghv5ACGmGvnp1cOeRA6XD-S98uX5BfJA-pjXWKAfvxk-IzaE
-Message-ID: <CANpmjNML=pbnv7QLf8Qi4wY2nDCk6oOw2T_Vs-MfMwWh=0m5Ag@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] slab: fix kernel-docs for mm-api
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, 
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>, 
-	Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, David Hildenbrand <david@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com, 
-	llvm@lists.linux.dev, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <202605101404.fqz0MXIe-lkp@intel.com> <20260511075647.206642-1-luoxueqin@kylinos.cn>
+ <b63b1409-3c01-418b-be27-f7e273b2e73a@arm.com>
+In-Reply-To: <b63b1409-3c01-418b-be27-f7e273b2e73a@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 11 May 2026 18:43:30 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gaPeZU8a7qY93niVNSNHtFuhBJxyDCv2J60V0zpVV2mg@mail.gmail.com>
+X-Gm-Features: AVHnY4LLnIeaTxnTXX1TBG-KMtjXvHkBRBWANCVZ-qGiD7d1hkQOIowgGauCoWE
+Message-ID: <CAJZ5v0gaPeZU8a7qY93niVNSNHtFuhBJxyDCv2J60V0zpVV2mg@mail.gmail.com>
+Subject: Re: [PATCH v3] cpufreq: cppc: Add update_limits support for Highest
+ Performance changes
+To: Pierre Gondois <pierre.gondois@arm.com>
+Cc: Xueqin Luo <luoxueqin@kylinos.cn>, lkp@intel.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	rafael@kernel.org, sumitg@nvidia.com, viresh.kumar@linaro.org, 
+	zhanjie9@hisilicon.com, zhenglifeng1@huawei.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 11 May 2026 at 14:19, Jonathan Corbet <corbet@lwn.net> wrote:
+On Mon, May 11, 2026 at 6:17=E2=80=AFPM Pierre Gondois <pierre.gondois@arm.=
+com> wrote:
 >
-> Marco Elver <elver@google.com> writes:
+> Hello Xueqin,
 >
-> > How about the below, i.e. adding type decls that only the kernel-doc
-> > parser sees? One complication is also DECL_KMALLOC_PARAMS, and adding
-> > kernel-doc parser hacks for that looks pretty awful, so this is a lot
-> > cleaner.
+> On 5/11/26 09:56, Xueqin Luo wrote:
+> > ACPI CPPC specification requires OSPM to re-evaluate the Highest
+> > Performance register when Notify(0x85) is received for a processor
+> > device.
+> >
+> > Implement cppc_cpufreq_update_limits() to refresh the cached
+> > highest_perf capability through cppc_get_highest_perf() and update
+> > policy->cpuinfo.max_freq accordingly.
+> >
+> > When autonomous selection mode is enabled, reprogram the runtime
+> > MIN_PERF/MAX_PERF envelope against the updated Highest Performance
+> > capability through cppc_cpufreq_set_autonomous_perf().
+> >
+> > --
+> > change v2->v3:
+> > - Fix build issues reported by kernel test robot
+> > - Fold cppc_cpufreq_set_autonomous_perf() refactoring into
+> >    this patch to keep it self-contained
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202605101404.fqz0MXIe-lkp=
+@intel.com/
+> > Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+> > ---
+> >   drivers/cpufreq/cppc_cpufreq.c | 89 +++++++++++++++++++++++++++++----=
+-
+> >   1 file changed, 76 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpuf=
+req.c
+> > index 7e7f9dfb7a24..9184d5570de8 100644
+> > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > @@ -843,6 +843,80 @@ static int cppc_cpufreq_set_boost(struct cpufreq_p=
+olicy *policy, int state)
+> >       return 0;
+> >   }
+> >
+> > +/**
+> > + * cppc_cpufreq_set_autonomous_perf - Configure performance bounds for
+> > + *                                     autonomous mode
+> > + * @policy: cpufreq policy structure
+> > + *
+> > + * When enabling autonomous selection, program MIN_PERF and MAX_PERF f=
+rom
+> > + * current policy limits so that the platform uses the correct perform=
+ance
+> > + * bounds immediately.
+> > + *
+> > + * Return: 0 on success, negative error code on failure.
+> > + */
+> > +static int cppc_cpufreq_set_autonomous_perf(struct cpufreq_policy *pol=
+icy)
+> > +{
+> > +     struct cppc_cpudata *cpu_data =3D policy->driver_data;
+> > +     u32 old_min_perf =3D cpu_data->perf_ctrls.min_perf;
+> > +     u32 old_max_perf =3D cpu_data->perf_ctrls.max_perf;
+> > +     int ret;
+> > +
+> > +     cppc_cpufreq_update_perf_limits(cpu_data, policy);
+> > +
+> > +     ret =3D cppc_set_perf(policy->cpu, &cpu_data->perf_ctrls);
+> > +     if (ret) {
+> > +             cpu_data->perf_ctrls.min_perf =3D old_min_perf;
+> > +             cpu_data->perf_ctrls.max_perf =3D old_max_perf;
+> > +             return ret;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static void cppc_cpufreq_update_limits(struct cpufreq_policy *policy)
+> > +{
+> > +     struct cppc_cpudata *cpu_data =3D policy->driver_data;
+> > +     u64 prev_highest_perf;
+> > +     u64 highest_perf;
+> > +     u64 nominal_perf;
+> > +     int ret;
+> > +
+> > +     guard(cpufreq_policy_write)(policy);
+> > +
+> > +     prev_highest_perf =3D cpu_data->perf_caps.highest_perf;
+> > +
+> > +     ret =3D cppc_get_highest_perf(policy->cpu, &highest_perf);
+> > +     if (ret)
+> > +             return;
+> > +
+> > +     if (highest_perf =3D=3D prev_highest_perf)
+> > +             return;
+> > +
+> > +     cpu_data->perf_caps.highest_perf =3D highest_perf;
+> > +     nominal_perf =3D min_t(u64, highest_perf,
+> > +                          cpu_data->perf_caps.nominal_perf);
+> > +
 >
-> I'm going to be a while catching up with things, so this is just a first
-> take.  I strongly suspect that the people who object so strongly to
-> documentation markup in general would be less than fully thrilled by the
-> addition of this kind of workaround.  I'd like to ponder a bit and see
-> if I can some up with something better...but again, it won't happen
-> right away.
+> I sent a patch to try to remove setting policy->max in drivers
+> in cpufreq drivers in general [1]. IMO policy->max should be
+> updated through a callback handler, maybe:
+>
+> refresh_frequency_limits()
+> \-cpufreq_set_policy()
+>
+> [1] https://lore.kernel.org/all/20260511135538.522653-4-pierre.gondois@ar=
+m.com/
 
-Thanks, Jon.
+Yes, that's the right thing to do it.
 
-The technical debt (hacks) that would accumulate in the kernel-doc
-parser just for accommodating slab.h might be quite high; slab.h is
-rather special, so the "#if 0" solution might be justified. Then
-again, if there's a reasonable kernel-doc parser solution, that also
-helps in other places, I won't object.
+> > +     policy->max =3D cppc_perf_to_khz(&cpu_data->perf_caps,
+> > +                     policy->boost_enabled ?
+> > +                     highest_perf : nominal_perf);
+> > +
+> There might be other things to check:
+>
+> - Is the new highest_perf higher/equal than nominal_perf ?
+> Depending on the answer the boost capabilities/status will have to
+> be updated.
+>
+> - IIUC it will be possible to update the nominal_perf in the next spec,
+> so this makes things a bit more complicated aswell.
+> https://lore.kernel.org/all/20260430142430.755437-3-sumitg@nvidia.com/
 
-I tested the "#if 0" version and it works as expected. So to move
-forward, we could consider it in the short term, and in the longer
-term, see what new powers the kernel-doc parser can provide.
+If you are referring to this one:
+
+https://uefi.org/specs/ACPI/6.6/08_Processor_Configuration_and_Control.html=
+#ospm-nominal-performance-register
+
+it is about something somewhat different IIUC.
