@@ -1,193 +1,109 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3DD37881E
-	for <llvm@lists.linux.dev>; Mon, 11 May 2026 09:35:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778492132; cv=pass; b=b+XA7v58XphZxQdJpJtaCF/1+ls/T3AHDMPSTvUXOHMZ966DANJrhQBwkN0/3FaFKUTfKN0RubH4vTAitGKERktj15L7HcRUxpNOH7B3Mfd1BEIZOQhocAhL1T0SAdplL62x5h11O9ohAMEd56dgsbbWrv4pJq0PqLMjmXhMpTw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778492132; c=relaxed/simple;
-	bh=NRMFgXt/+8/VoEquamZsaZxYeYlqHmrVJp607sf0pRg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rCm6G01bHidEv6qmp31xHNCb+rWZ8EQweyVEVFr/l0/PJ5CQ1awpodppPs/KwqxXcwt0HX3qyL/C4s0ivmjiDS+4ol6+ZvglS1Wrj0vScfX7QQVM8CXw/mjZ9edpSmhh6J/eAl0I5QWkGjIgL+y8wxGMu91kOYkRdiwUyHcurRI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hV+udEB3; arc=pass smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C2A3CAE76
+	for <llvm@lists.linux.dev>; Mon, 11 May 2026 10:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778494529; cv=none; b=pcxMPEgzwAvbAqPbiSs1yM16WXztkfzgAvs/jK0kKO9K27xMsfhokNxbfCZWyO27LvuOIyemZIlvfYv5Pqc+q4Y9ZXSDRHrPX+Rp49g2smCqzzW3Ff9SV8vc2kG52RVp1l43GJFxyJIHn0oOFYB+0eQIHGdj7qZekHtpSan7khw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778494529; c=relaxed/simple;
+	bh=ZNCM1f5NkkZEbM1tIxw5+5lLcuLbapbNIuJ4nyqL/5c=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XEk/bAGZW1FVeYGxsvlOLrMCGzskbsEKttHtJNdeidEuUshosPVq7jeYR/VeRZlz3h/uLHDgJFVTKPFa6jNozSU20be07tTIBtUnnf5VUKMZSB8k8REiG1fbhfwPS+Fkl3GfxPCAJlnpjvZwQ29fneeYJ865KO19rseBB902TPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jqITnCNa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hV+udEB3"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1332772f6b3so176960c88.1
-        for <llvm@lists.linux.dev>; Mon, 11 May 2026 02:35:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778492131; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fpv4stuhPbDQwqUaUCKgeA2lGTv0HsNGmOypaIoFay4Re+2aTHOxqmmguraD69wV4O
-         pZ+3nHVfSuGhl0N3xnshxLvWFzWVg+86tGol1QhrNtHwCnLitCSQQLnSUE45oMzoP1TB
-         HpmYToOyTZ9CrlsIXWsQDOIMb9qUUdE2186wvW+P54spKOuc94UyXIpqtlgyxYwyG8Rf
-         wag9E/Pcsv7xu2Q/Up8Fi0Xmsgz2sxSazuqaWwZuGE08OXRXlRuFQBNhB23oHetpWmYB
-         y14WFH9sDKlm9iG7AbVZGNxIMIMNK4T5tdBMKX+7ECMMNd7vgm9pe2c1eSwjcgzgaUqS
-         Fg9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=WufxmpQiwhOpJBofeZI+ZtjHioGWCbMxkve0DPKIOFk=;
-        fh=Gto7xFTDfJZvhFDq8IIcuZPVbrRBulI7MhZHrjwWNRM=;
-        b=bcRYbqFL81IYIA3wUgFh1cIlsdHt4CpqPmC6Yr3rO083Jy678IRZnI7aD4awGOOcYv
-         pXGsEcRH8K4JxtdW82Su738mMNj6m9eQoEeyIYX19g55GoGj4236cRpSO2gHr/UgUFBY
-         jtwXktSWosgS+se3jVVw6Uszeh16Wr/rutGbYODp+aBX3eMEhNLQqbjDewQFvwJlZss1
-         5rB7x7g1LKb/Wjlsb1DQaBoPNpyibMdUHvqKuqGe+y1igF9jivgw4I0yvaZ5G+3d0xaQ
-         0ybC8gUOJqQ/S+bnyER2V2BQbMMJeUjRnzEsQQWYauyyOhHD0eh0uhGH9T27DqPoQS2X
-         xmSg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778492131; x=1779096931; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WufxmpQiwhOpJBofeZI+ZtjHioGWCbMxkve0DPKIOFk=;
-        b=hV+udEB3H8TbSK7j2n7Vn92+MchZpWoXdrlMAl0JHEDIup/DwZB+LZ4cFWs9zoglC0
-         9ZVXtuJoyphA02AWFj1vbjbeCoRbYWlcXrv6bU5+xthf2DEilGXS2l7AVB84KZfUXkaG
-         4MJjGhG1WZzop8/9kHXfqbhL7Lnv0svf7GwSfpZRGb5/4YPunWrM7eqVZphujJkyKkAH
-         xVEUF8ahBvmWEEuI04RiAetEPvuiZuQlmpcEdM+Y6QtXrWvUMKMf59gsc8qXZ5FVI2wx
-         EaRpAh2/YAeLmYdLAxyOT7EuVgjmpALi4jkPOWX5lpIaTack1pk4f9P8GJZn0BJ7UCuG
-         w0Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778492131; x=1779096931;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WufxmpQiwhOpJBofeZI+ZtjHioGWCbMxkve0DPKIOFk=;
-        b=EnJHBzzVj0ijiXiTjkSkJ7ZbleIQwPwmDJHmPGmdbVzMVL956npZaUqptLiZaIn46/
-         xWZtQse5aR8xXneQeRR0AmnQMuiBvtrlLzVyAYpuFm2WKgOT0Ty8Oox2Kf5iM1h4OdFR
-         Gi360/94phS8T+/icF+P5UygX0fsKRbc+l8Rtq3xDd0jHXRbKkDJ4tn/1yCgYV8Cjj5U
-         2Dp3BMtZG6mcI35asfvip+4Nwov/rXPglFaD5++eX8GkzZkV2uYuZvuFAOAxoGAEBG0e
-         YSZOqfPKKgZIjCUkP2ZJ7ZO/KucvwXsqvVWY2v2xzY3YDASEFAas7Ij4iPW5hI9FlVq7
-         SHHA==
-X-Forwarded-Encrypted: i=1; AFNElJ/3iVmZ4GmY1tnUsJjM5d8F9sabW2p8YBEijUVpbtUV69GmsuKdxHuBrfI7GqOnrzUMJeYL@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx5Hne+HPW0vINLCeYwgzUcOvc+AZl51G6lQJKPJd6TvFnG89x3
-	ZMkt3FqT7rmmhboXB4KJfbE/jTjIZ9ga2LwBrUVosvNmUxUvL3KYSNGainKKwO4Ukkdu9HMH5ZP
-	1k7KU6QdeqHvNwYzc7MSSqq+yMUihHyjqNRzap4dx
-X-Gm-Gg: Acq92OFQxNv9Ci3ehgOCKT7mmwlrAHQxESSptde1k0RudjyuzYlyrc9y8gVkNVkPCTm
-	PiHjZXHvZ0e3zgXq+/h67hpcoP7HXcy0o+JEGgQwLDanrTQY7zyWDv4Zvq7+9pqEKrmgqmmzI9N
-	TYiPq6dU3kaOkzu1UnNQHkFp59NnSc2SKIZWug+XzKhw02hjaTN9ZLOS+Svfltzj3x0R/kUu54X
-	zz8oaC9bjqXgth7t7fuNwkG8QpZQzabREqXM3heP+hF80Juf+GJgY5B5nca5lJoZzojU01MDWoF
-	9djb9C3pIkaQrBTxjncIRF/VP8l+wZIDLM8njzqgcCXibmTxCQ==
-X-Received: by 2002:a05:7022:6184:b0:130:ac5d:8f69 with SMTP id
- a92af1059eb24-1318ea1fdd6mr9371056c88.30.1778492129711; Mon, 11 May 2026
- 02:35:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jqITnCNa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A8EC2BCFF
+	for <llvm@lists.linux.dev>; Mon, 11 May 2026 10:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778494529;
+	bh=ZNCM1f5NkkZEbM1tIxw5+5lLcuLbapbNIuJ4nyqL/5c=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
+	b=jqITnCNantnthP+JhD+fN3WOvTuoKHbmwcrD/PHQQQPIwsdhtkBWGOCLOnJDu5KoH
+	 X8Pz73rbMcZIOfFdx4dbgCUbwRMCHfIIDV5Uyn1/KeNdgVCLP/F3c04lGi4cEjiQUS
+	 2ZLxKQAaob3tTZKBOpHqJRJzP+QB4RwYN+M3RiqsuGBsSWO+fcgFj9S3WVU3k96PBk
+	 d+4K9Rj9YIJao+q+yYdMD/9uz1eGBGUrqMzMlW7pY/wup3f8VjxIpD85Nn/DzFFvfk
+	 NbO+/WOIbP1IBkYuUXmNi8KGxToEVWkYMnpPRlVcmFEYyTPQzHKGtqy2yRNZEQ5/MP
+	 vTUIFYi3g14sg==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5a8c6fc5fd3so972357e87.0
+        for <llvm@lists.linux.dev>; Mon, 11 May 2026 03:15:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8b5GL51qe07+xnGo3ljkase3FubdaD4i856Ts8mF2gqVxnxT2cxdrOdgRYQj3fNJqQF4rm@lists.linux.dev
+X-Gm-Message-State: AOJu0YzD9hcwG9Vg2J487p7Xs5OHbjNZZyFYr01R37W/tkJJr+DeBdsW
+	au5NDBqolRgR5Gsu7EJNARyLjRRqVpM06R9qyLJNO0lBOcYXUQBaVPEj1t63mNM+Ff0vuvIfHz8
+	qmMBzhquj+kU/Gwvitx3DQtb2AjGlGoBVl4fYE6h2oQ==
+X-Received: by 2002:a05:6512:3b8f:b0:5a8:7eda:7d8f with SMTP id
+ 2adb3069b0e04-5a899bb5e7cmr5081739e87.12.1778494527644; Mon, 11 May 2026
+ 03:15:27 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 11 May 2026 03:15:24 -0700
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 11 May 2026 03:15:24 -0700
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <20260509003327.955942-1-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260424132427.2703076-1-elver@google.com> <6f2bd63a-dc02-4631-a3a5-7ec8e58a4a4e@kernel.org>
- <afkOMIPu1WNFE9MS@elver.google.com> <CANpmjNM261J5qefMvmUXWZGBVz-KBs7GkbpdNMfTOvNJ-=LiZQ@mail.gmail.com>
- <afz7pZADZPD4mKJr@MacBook-Air.tail10959e.ts.net> <af3xcFjrZSZFG846@elver.google.com>
- <rz7dt4wghum6beghfgm6suqje6jeivrensojjalfis5zeuyen7@6bj7kfpqb4q5>
-In-Reply-To: <rz7dt4wghum6beghfgm6suqje6jeivrensojjalfis5zeuyen7@6bj7kfpqb4q5>
-From: Marco Elver <elver@google.com>
-Date: Mon, 11 May 2026 11:34:53 +0200
-X-Gm-Features: AVHnY4Kqj_o0gwegpds4LdAczqxNps8c5-uDjsqJAwkE704552pC9-_A9oEAMnQ
-Message-ID: <CANpmjNNevjTo0uwo3DJdDc=PpQpyzj301kFT39OBoCNLW0A8VQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] slab: support for compiler-assisted type-based
- slab cache partitioning
-To: "Harry Yoo (Oracle)" <harry@kernel.org>
-Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, 
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, Hao Li <hao.li@linux.dev>, 
-	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com, 
-	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Florent Revest <revest@google.com>, Jann Horn <jannh@google.com>, KP Singh <kpsingh@kernel.org>, 
-	Matteo Rizzo <matteorizzo@google.com>, GONG Ruiqi <gongruiqi1@huawei.com>
+References: <20260509003327.955942-1-rosenp@gmail.com>
+Date: Mon, 11 May 2026 03:15:24 -0700
+X-Gmail-Original-Message-ID: <CAMRc=MfwDx8RTwaJb48ta=gppJGNwfXMOMNiNvQoRa9ibUh60w@mail.gmail.com>
+X-Gm-Features: AVHnY4LaXfT7S_VIc6SNu-VlebOGp4eIttRN573M2qU2mlE-T4_TvvBFzpM9ygY
+Message-ID: <CAMRc=MfwDx8RTwaJb48ta=gppJGNwfXMOMNiNvQoRa9ibUh60w@mail.gmail.com>
+Subject: Re: [PATCH] gpio: sodaville: allow COMPILE_TEST builds
+To: Rosen Penev <rosenp@gmail.com>
+Cc: Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>, linux-gpio@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 11 May 2026 at 10:31, 'Harry Yoo (Oracle)' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
+On Sat, 9 May 2026 02:33:27 +0200, Rosen Penev <rosenp@gmail.com> said:
+> The Intel Sodaville GPIO driver uses PCI/MMIO and generic GPIO helpers, and
+> builds outside X86.  Move its Kconfig entry out of the X86-only port-I/O
+> menu and allow it to be selected with COMPILE_TEST.
 >
-> On Fri, May 08, 2026 at 04:21:36PM +0200, Marco Elver wrote:
-> > I think I have a solution for this mess, see below.
-> >
-> > I would not send it as 1 series, but only include the slab changes (+
-> > instruction_pointer.h change to introduce _CODE_LOCATION_) as one
-> > series, to go through the slab tree. The rest of the patches would go to
-> > respective arch maintainers.
+> Tested with:
+> make LLVM=1 ARCH=loongarch drivers/gpio/gpio-sodaville.o
 >
-> I'm assuming this will be a follow-up and reviewing patch 1
-> (and waiting for Jon's thuoghts on patch 2)
-
-I'll be sending v4 shortly.
-
-> > diff --git a/include/linux/instruction_pointer.h b/include/linux/instruction_pointer.h
-> > index aa0b3ffea935..dfe73aafddb8 100644
-> > --- a/include/linux/instruction_pointer.h
-> > +++ b/include/linux/instruction_pointer.h
-> > @@ -8,6 +8,30 @@
-> >
-> >  #ifndef _THIS_IP_
-> >  #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
-> > +/*
-> > + * The current generic definition of _THIS_IP_ is considered broken by GCC [1]
-> > + * and Clang [2]. In particular, the address of a label is only expected to be
-> > + * used with a computed goto.
-> > + *
-> > + *   [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071
-> > + *   [2] https://github.com/llvm/llvm-project/issues/138272
-> > + *
-> > + * Mark it as broken, so that appropriate fallback options can be implemented
-> > + * for architectures that do not define their won _THIS_IP_.
-> > + */
-> > +#define HAS_BROKEN_THIS_IP
-> > +#endif
+> Assisted-by: Codex:GPT-5.5
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
+>  drivers/gpio/Kconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> As long as _THIS_IP_ is broken on some arches, it cannot be used anyway
-> when in a general API that can be used by arbitrary users?
-
-It more or less works today, and for debugging or tracing it's "good
-enough" in most cases.
-
-The plan would be to phase out the generic _THIS_IP_ once all
-architectures have a correct _THIS_IP_ implementation.
-
-> Is it something that can be fixed in all arches over time?
-
-Yes, I have patches for that.
-
-> > +/*
-> > + * _CODE_LOCATION_ provides a unique identifier for the current code location.
-> > + * When _THIS_IP_ is broken (generic version), we fall back to a static marker
-> > + * which guarantees uniqueness and resolves to a constant address at link time,
-> > + * avoiding runtime overhead and compiler optimizations breaking it.
-> > + */
-> > +#ifdef HAS_BROKEN_THIS_IP
-> > +#define _CODE_LOCATION_ ({ static const char __here; (unsigned long)&__here; })
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index f8e34b16fd99..9e1ed0f451b9 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -1908,16 +1908,16 @@ config GPIO_RDC321X
+>  	  Support for the RDC R321x SoC GPIOs over southbridge
+>  	  PCI configuration space.
 >
-> Nice!
+> +endmenu
+> +
+>  config GPIO_SODAVILLE
+>  	bool "Intel Sodaville GPIO support"
+> -	depends on X86 && OF
+> +	depends on (X86 || COMPILE_TEST) && OF
+>  	select GPIO_GENERIC
+>  	select GENERIC_IRQ_CHIP
+>  	help
+>  	  Say Y here to support Intel Sodaville GPIO.
 >
-> Yes, we don't really need the exact code location
-> for partitioning kmalloc caches.
+> -endmenu
+> -
+>  menu "SPI GPIO expanders"
+>  	depends on SPI_MASTER
 >
-> IIRC lockdep does a similar thing to define lock classes (unique for
-> each lock init location)
+> --
+> 2.54.0
 >
-> > +#else
-> > +#define _CODE_LOCATION_ _THIS_IP_
-> >  #endif
 >
-> Probably we don't need this fallback?
 
-x86-64 is the only arch that has working fast _THIS_IP_, and adding
-static __here markers to bss is rather wasteful.
+I don't mind it but I'll wait for an Ack from Intel GPIO maintainers.
 
-More architectures will be supporting _THIS_IP_ properly once I get to
-send the patches. The mainstream architectures all have a reasonable
-and fast way to get the current IP, so we don't need to waste bss
-space there.
+Bart
