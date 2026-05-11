@@ -1,111 +1,232 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21AA2F8E8A
-	for <llvm@lists.linux.dev>; Mon, 11 May 2026 15:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA354014B4;
+	Mon, 11 May 2026 15:37:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778511613; cv=none; b=SNl+GjArKCuBOVBIsPodRnBCaKdQD7362exMpZ9RYa/LuXryF7LHo71mqhpSoFUNGDVIahAX8uLJ1DiROR3dgyw4e7tQJfJGqRY/ZKBsJMNQcRbZIbxbjkCJbHgRPXLoSRq6T+pxQuOciyIrq6C7oS1BaiV+8Lt3DMWof0gjKwk=
+	t=1778513858; cv=none; b=efmRIvCnc/gxW7gyytSeIOE8ts6PzojMNgh387oKrI2LQTyucrmLZS7C9q4oj1PeweyfNasSGwkr4DxeOk7wFbEPTXzz/vteteZbf9Meyw0jfUV0a21+ulZ+5KArBaBeMegklpz/JRMF2OJ+sFvXnCcBwTM8DQBNucBVyrcBxJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778511613; c=relaxed/simple;
-	bh=0fl1FVlc4728Jngyah/QPyBoBZjAKjC9+pOxoqQncpc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=P/GQqpq7HBYWTwTdHl2YEtkuA5tvYFWtTzHfo9dmPN/LZpjrPMSaE03W+PAnlQfgHtyKW5jRWKnoJGRr/rBeQIfN3hXNVfFb5olp8Ju1zl0VJU7FbI1kA11ghj7U42XXaDAVIiCNdvsgRZxulbNfd1d5noK/aX4lgCRSvArS/pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SaXHgE3R; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778513858; c=relaxed/simple;
+	bh=tKom9E45wQh7kZbjvvYuh1sGU+xgrHfoAPXWvinG9ng=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=K0DQT0viCm6L96zkkRM9snEI+dhJSZ5fnb9xK6v1omLTmXvzrqQUsPYG24Qa+n/Wz7RJGImrOuPco44uTaD0voy6DdWck9KX35i12B9B2Xau2CXz4jVsSQrQyNqKDuw5UW7n32r6x7pdKE874r/JJwEYPizRXqFe3j4FRO9jDrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=db2IIuiZ; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SaXHgE3R"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778511610;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w/eD3OaTHJb0ey72pgYTA9xJ2tegXQL9CnlHMvp4NrM=;
-	b=SaXHgE3RSxAag9QTvuw9MKF5AKexYWkTU3xoBhdYqNwD+3K7nhQrX/xnJFrFSnkFTrA99o
-	YlvbnyuW9ikC59QoI/qoOsK3XE5eqQVZbRyRHxEYywlXBqfQMNNkDPNFcGfkw8iwHiCi23
-	CTFiaK4v0C599nIPRZWFEor4t5HZBI0=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-664-VZAtk3kcNESwawAAccB58g-1; Mon, 11 May 2026 11:00:08 -0400
-X-MC-Unique: VZAtk3kcNESwawAAccB58g-1
-X-Mimecast-MFC-AGG-ID: VZAtk3kcNESwawAAccB58g_1778511608
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-8acaea1ffe7so99386136d6.2
-        for <llvm@lists.linux.dev>; Mon, 11 May 2026 08:00:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778511608; x=1779116408;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=w/eD3OaTHJb0ey72pgYTA9xJ2tegXQL9CnlHMvp4NrM=;
-        b=OpjUSgeRCCgE7jRc2e6Iy0/ja6Dwa119hSAkm+BUtiLLlvLZf3ElPcgw/eqRy+E9LG
-         sCeLfAir+zvi46qrCZx56DZ+UMdouiHhh1cS6D7tmbvsNyCZT71eF4KDqK0Y1SjY/AuW
-         la5dd025H+IiPm1bCdu90OW7U34GtKgjKIOHrldwsmQ7Yym7rQOVoZn4MHL1TpqtwLsW
-         88F1S7yIPIoTqAdS49abmoMWLH3a7e3u2JFY+QprMRXOBi6P/5U4XKiEpK/HEYi0PUhG
-         aF7TtdJEVO1C7eMHryUynmfKNalcgCGvaVGVAdISwEs5cvroiG4pAlHjjp96RTY7Ud1E
-         sxgA==
-X-Forwarded-Encrypted: i=1; AFNElJ/iC5KwDXaG5DW2GteIl3PYpBOw5yMvNv5/3PWU1yl+Kx/kI6Yge3u8n5mt8AaMvbs42J5y@lists.linux.dev
-X-Gm-Message-State: AOJu0YyZylQebK39fMMu7JgcoR9VKeEWOe+J2Bfs/JjXx2LqyCtJ1LbT
-	oY5U6Pp6TPwdyOwDHOumvpa3o2S09mKKtN1wIGfZYjqJcQlG9ROjx5mifUPYCkmW+D/i3Q8Fkkv
-	tDyUH5BuCiETejgzl1nvsj/a/9uPSFpshVwoEf9o85O/LWniBx9GOGfI=
-X-Gm-Gg: Acq92OF7YKM6XLusg+etFamE4KW/0AgJKpntmCiZOjbYAW4/UwekVC5NUCq1/y8huRN
-	OvfS8MOXCTOoSOOFHlK00eBJD/JDs1iZkSW0aT+3EXhCto3EZJhWVTpyns6e29nBkow7oQ61cxt
-	+ftSGQWL1BQE/YFO86KgghvmEeg9MBoA76CjsZQ7RHzUsaO/Pgq5I1GSYpkzSAS7E2FR0w2e4ji
-	t6lyrqD7O4V/w6cmw2GW1OJBYme22kR73+g9KdmQyRCe5JgIqLtQ8OZCGMLNO0GdvPgcxcyxzGx
-	CkJpD9w7cRPIWGZwOOafotVdt9wNnrmAWWbQm8SOijmSZQkQyNnsCHqfB4OWO/ejw3IQyTeByXO
-	LFCY02ApLitIUlaBf5Z9rdvlwwWz83Zf4Hb88r2PFI+gUgY/VlLvwA2GQ
-X-Received: by 2002:ad4:5c64:0:b0:8bb:2e70:7a2a with SMTP id 6a1803df08f44-8bc441e5420mr357791476d6.31.1778511605472;
-        Mon, 11 May 2026 08:00:05 -0700 (PDT)
-X-Received: by 2002:ad4:5c64:0:b0:8bb:2e70:7a2a with SMTP id 6a1803df08f44-8bc441e5420mr357785966d6.31.1778511600814;
-        Mon, 11 May 2026 08:00:00 -0700 (PDT)
-Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8bf3a438e3csm96354776d6.19.2026.05.11.07.59.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 08:00:00 -0700 (PDT)
-Date: Mon, 11 May 2026 10:59:59 -0400
-From: Brian Masney <bmasney@redhat.com>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-clk@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCH] clk: hisilicon: allow COMPILE_TEST builds
-Message-ID: <agHu78VflprAM7Yj@redhat.com>
-References: <20260509051110.1061393-1-rosenp@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="db2IIuiZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778513856; x=1810049856;
+  h=date:from:to:cc:subject:message-id;
+  bh=tKom9E45wQh7kZbjvvYuh1sGU+xgrHfoAPXWvinG9ng=;
+  b=db2IIuiZDPmBgOdttOUd3d1TGgHISz0pD9z54wq9+yNaQKXSGVREEbOG
+   j08Ps5jzdUbS9cBeRhIx/sppmDF9kIgtCEljtELOjueohWOdsz2DgIqKN
+   vjtMb6cB5i+uVd8nH/UawArkZb8z9yhUrO4QZOg0nJgQBddDpqOOymwSJ
+   wcyWzfwD7lf30mlhgFJGeXxJmo/gt6UzFpbpc5Eeu8P0NooXGy+NFOiAH
+   Jb1XagUf5Rh6ZOCGNuW8ekPC6f2wt5VpTgumN5ZhlYi9eNs2i4eTM+h2q
+   NBkH8AI4+fY9vzZEUhaBwx3eYPBla4ppc7iMAhR4v8ILyV9gdOuqzNhLa
+   A==;
+X-CSE-ConnectionGUID: EyvGBbydSUW5dThqPpe9Sw==
+X-CSE-MsgGUID: SH8RMu2yQiuoF0l2vi3wjQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="79351090"
+X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
+   d="scan'208";a="79351090"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 08:37:36 -0700
+X-CSE-ConnectionGUID: QwQSoH0dTe+XC9/GI1+41A==
+X-CSE-MsgGUID: SprmsbE4SX24lRjC0Rd3QQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,229,1770624000"; 
+   d="scan'208";a="236632503"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 11 May 2026 08:37:33 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wMShH-000000000lv-0rZw;
+	Mon, 11 May 2026 15:37:31 +0000
+Date: Mon, 11 May 2026 23:37:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Woodhouse <dwmw@amazon.co.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dwmw2:kvmclock4 16/34] arch/x86/kvm/x86.c:3388:8: error:
+ call to undeclared function 'kvm_get_time_and_clockread'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202605112337.VVxrmRHE-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-In-Reply-To: <20260509051110.1061393-1-rosenp@gmail.com>
-User-Agent: Mutt/2.3.1 (2026-03-20)
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: J52291Z3ftSEB9HiCylTWnhDvcf4UDxxJiOrbIxVPYE_1778511608
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, May 08, 2026 at 10:11:10PM -0700, Rosen Penev wrote:
-> The HiSilicon clock symbols already depend on ARCH_HISI or COMPILE_TEST,
-> but the parent clock Makefile only descends into the hisilicon directory
-> when ARCH_HISI is enabled.
-> 
-> Add a hidden family gate selected by the HiSilicon clock and reset symbols,
-> default it for ARCH_HISI, and use it for the parent Makefile descent.  This
-> keeps existing platform builds unchanged while allowing compile-test
-> coverage.
-> 
-> Tested with:
-> make LLVM=1 ARCH=loongarch drivers/clk/hisilicon/
-> 
-> Assisted-by: Codex:GPT-5.5
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+tree:   git://git.infradead.org/users/dwmw2/linux kvmclock4
+head:   ffae79fc31e809b2eecbdc70bade1b16f7f9f46d
+commit: d216b965d38e8dc9aeccd8eea855a1187f997199 [16/34] KVM: x86: Restructure kvm_guest_time_update() for TSC upscaling
+config: i386-buildonly-randconfig-002-20260511 (https://download.01.org/0day-ci/archive/20260511/202605112337.VVxrmRHE-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260511/202605112337.VVxrmRHE-lkp@intel.com/reproduce)
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605112337.VVxrmRHE-lkp@intel.com/
 
+Note: the dwmw2/kvmclock4 HEAD ffae79fc31e809b2eecbdc70bade1b16f7f9f46d builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kvm/x86.c:3388:8: error: call to undeclared function 'kvm_get_time_and_clockread'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3388 |                     !kvm_get_time_and_clockread(&kernel_ns, &host_tsc) &&
+         |                      ^
+   arch/x86/kvm/x86.c:3388:8: note: did you mean 'kvm_get_monotonic_and_clockread'?
+   arch/x86/kvm/x86.h:462:6: note: 'kvm_get_monotonic_and_clockread' declared here
+     462 | bool kvm_get_monotonic_and_clockread(s64 *kernel_ns, u64 *tsc_timestamp);
+         |      ^
+   arch/x86/kvm/x86.c:3359:16: warning: unused variable 'flags' [-Wunused-variable]
+    3359 |         unsigned long flags;
+         |                       ^~~~~
+   1 warning and 1 error generated.
+
+
+vim +/kvm_get_time_and_clockread +3388 arch/x86/kvm/x86.c
+
+  3355	
+  3356	int kvm_guest_time_update(struct kvm_vcpu *v)
+  3357	{
+  3358		struct pvclock_vcpu_time_info hv_clock = {};
+  3359		unsigned long flags;
+  3360		u64 tgt_tsc_hz;
+  3361		unsigned seq;
+  3362		struct kvm_vcpu_arch *vcpu = &v->arch;
+  3363		struct kvm_arch *ka = &v->kvm->arch;
+  3364		s64 kernel_ns;
+  3365		u64 tsc_timestamp, host_tsc;
+  3366		u64 master_host_tsc = 0;
+  3367		s64 master_kernel_ns = 0;
+  3368		bool use_master_clock;
+  3369	
+  3370		/*
+  3371		 * If the host uses TSC clock, then passthrough TSC as stable
+  3372		 * to the guest.
+  3373		 */
+  3374		do {
+  3375			seq = read_seqcount_begin(&ka->pvclock_sc);
+  3376	
+  3377			use_master_clock = ka->use_master_clock;
+  3378	
+  3379			/*
+  3380			 * The TSC read and the call to get_cpu_tsc_khz() must happen
+  3381			 * on the same CPU.
+  3382			 */
+  3383			get_cpu();
+  3384	
+  3385			tgt_tsc_hz = (u64)get_cpu_tsc_khz() * 1000;
+  3386	
+  3387			if (use_master_clock &&
+> 3388			    !kvm_get_time_and_clockread(&kernel_ns, &host_tsc) &&
+  3389			    WARN_ON_ONCE(!read_seqcount_retry(&ka->pvclock_sc, seq)))
+  3390				use_master_clock = false;
+  3391	
+  3392			put_cpu();
+  3393	
+  3394			if (!use_master_clock)
+  3395				break;
+  3396	
+  3397			master_host_tsc = ka->master_cycle_now;
+  3398			master_kernel_ns = ka->master_kernel_ns;
+  3399		} while (read_seqcount_retry(&ka->pvclock_sc, seq));
+  3400	
+  3401		if (unlikely(tgt_tsc_hz == 0)) {
+  3402			kvm_make_request(KVM_REQ_CLOCK_UPDATE, v);
+  3403			return 1;
+  3404		}
+  3405	
+  3406		if (!use_master_clock) {
+  3407			host_tsc = rdtsc();
+  3408			kernel_ns = get_kvmclock_base_ns();
+  3409		}
+  3410	
+  3411		/*
+  3412		 * We may have to catch up the TSC to match elapsed wall clock
+  3413		 * time for two reasons, even if kvmclock is used.
+  3414		 *   1) CPU could have been running below the maximum TSC rate
+  3415		 *   2) Broken TSC compensation resets the base at each VCPU
+  3416		 *      entry to avoid unknown leaps of TSC even when running
+  3417		 *      again on the same CPU.  This may cause apparent elapsed
+  3418		 *      time to disappear, and the guest to stand still or run
+  3419		 *      very slowly.
+  3420		 */
+  3421		if (vcpu->tsc_catchup) {
+  3422			s64 adjustment;
+  3423	
+  3424			/*
+  3425			 * Calculate the delta between what the guest TSC *should* be
+  3426			 * and what it actually is according to kvm_read_l1_tsc().
+  3427			 */
+  3428			adjustment = compute_guest_tsc(v, kernel_ns) -
+  3429				     kvm_read_l1_tsc(v, host_tsc);
+  3430			if (adjustment > 0)
+  3431				adjust_tsc_offset_guest(v, adjustment);
+  3432		}
+  3433	
+  3434		/*
+  3435		 * Now that TSC upscaling is out of the way, the remaining calculations
+  3436		 * are all relative to the reference time that's placed in hv_clock.
+  3437		 * If the master clock is NOT in use, the reference time is "now".  If
+  3438		 * master clock is in use, the reference time comes from there.
+  3439		 */
+  3440		if (use_master_clock) {
+  3441			host_tsc = master_host_tsc;
+  3442			kernel_ns = master_kernel_ns;
+  3443		}
+  3444		tsc_timestamp = kvm_read_l1_tsc(v, host_tsc);
+  3445	
+  3446		/* With all the info we got, fill in the values */
+  3447	
+  3448		if (kvm_caps.has_tsc_control) {
+  3449			tgt_tsc_hz = kvm_scale_tsc(tgt_tsc_hz,
+  3450						    v->arch.l1_tsc_scaling_ratio);
+  3451			tgt_tsc_hz = tgt_tsc_hz ? : 1;
+  3452		}
+  3453	
+  3454		if (unlikely(vcpu->hw_tsc_hz != tgt_tsc_hz)) {
+  3455			kvm_get_time_scale(NSEC_PER_SEC, tgt_tsc_hz,
+  3456					   &vcpu->pvclock_tsc_shift,
+  3457					   &vcpu->pvclock_tsc_mul);
+  3458			vcpu->hw_tsc_hz = tgt_tsc_hz;
+  3459		}
+  3460	
+  3461		hv_clock.tsc_shift = vcpu->pvclock_tsc_shift;
+  3462		hv_clock.tsc_to_system_mul = vcpu->pvclock_tsc_mul;
+  3463		hv_clock.tsc_timestamp = tsc_timestamp;
+  3464		hv_clock.system_time = kernel_ns + v->kvm->arch.kvmclock_offset;
+  3465		vcpu->last_guest_tsc = tsc_timestamp;
+  3466	
+  3467		/* If the host uses TSC clocksource, then it is stable */
+  3468		hv_clock.flags = 0;
+  3469		if (use_master_clock)
+  3470			hv_clock.flags |= PVCLOCK_TSC_STABLE_BIT;
+  3471	
+  3472		if (vcpu->pv_time.active) {
+  3473			/*
+  3474			 * GUEST_STOPPED is only supported by kvmclock, and KVM's
+  3475			 * historic behavior is to only process the request if kvmclock
+  3476			 * is active/enabled.
+  3477			 */
+  3478			if (vcpu->pvclock_set_guest_stopped_request) {
+  3479				hv_clock.flags |= PVCLOCK_GUEST_STOPPED;
+  3480				vcpu->pvclock_set_guest_stopped_request = false;
+  3481			}
+  3482			kvm_setup_guest_pvclock(&hv_clock, v, &vcpu->pv_time, 0);
+  3483	
+  3484			hv_clock.flags &= ~PVCLOCK_GUEST_STOPPED;
+  3485		}
+  3486	
+  3487		kvm_hv_setup_tsc_page(v->kvm, &hv_clock);
+  3488	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
