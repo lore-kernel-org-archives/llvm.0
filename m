@@ -1,216 +1,145 @@
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F369A3A75A7
-	for <llvm@lists.linux.dev>; Mon, 11 May 2026 07:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9E42DA74C;
+	Mon, 11 May 2026 08:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778486238; cv=none; b=V+KpPkRdTDo1pU/XQCFje9WqFLaKm0d/09zDKu6t0W+9XmLV8Df/k0kOUFECiSEgyO8z86KrGgo+g+sjuoge9nYbxhz6nKIPl4kFmQGqoobqcHdV6nUfNLojddKoObSBakFCy6mIrOJc1yXEr3ublhzKYZqx3REb3jyn+6AVpQw=
+	t=1778488305; cv=none; b=Ha+vjPYB7SCMI4n77BgxgSM52dAGQ+PLlcZXqOy4cV/cr8cxvjxTtwd21GJQQ8fqtsD/zXu5S6gBohWB9yRsnM92Jo83Ch+oc0qvPgyMe12mD+kLbAbaLlQsSLsGC7/nzagRInMS6JGup+WqK1d8WY8h2olon/wLGOG6cCggODQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778486238; c=relaxed/simple;
-	bh=ru3duGHXDkVmv8JGCmgXRMljYeKtJwyvnVrIDnm5YQA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uyoC5QYpF/zJn1PhfRJCutQbbLPZoTkBgegs8zyYDQZYrc9n/o3ENmGkeUdaZTkuEDpEIy2T/nzuSHMv4yMEXzbmSMQlvqD2lRjpVFdrdaWculOhEcC0HAEi22m97aG0/dSDhcAb4xyBvYoZI40/WbFI0Ov6NOnhBKSRw2qbdAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2bab82d75fdso21175615ad.2
-        for <llvm@lists.linux.dev>; Mon, 11 May 2026 00:57:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778486222; x=1779091022;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dtfb9HyJCOsyqLRximz4+i4Nhc4/ec2A3CErNEubLZA=;
-        b=kKWR/Irw9BC0SbkiwNcNeQYPwlU8cthw2YuuLrGTtWR/QUHFWmHt8Ld0ZWGgWdhAyw
-         aU0tSH7ZJaFVmk1xtQpkpaRI+wuQpi5scIJ/jFjcXfSe/nChJC0YxilHdBUeprOW4pss
-         1WB/H73DhVZpxxoEyZ+yx5e22NWZ1jJ+UxdLukgdtVbmY3ouQRZjEmIh8TXnHsLDSPIT
-         /NLFxyqdal0XB6qIDdNDSsmlbXKFwulNYCFepAAsvbhauUfhHxAO/Xc1izmlbJJbQErd
-         sKZRreHDf5G3IU6tLRrzbaHWpuhwrjeFRJRiH2M+WudpYCZP9E3pCp2QEKML8gQ4IfZT
-         SqCg==
-X-Forwarded-Encrypted: i=1; AFNElJ/Vwj/CGe1yO3CWyF9HQUYMluO5nAkGmkzhCCEutKmaN6AmJyPoNRuPVjj1PKxycxgpTMUN@lists.linux.dev
-X-Gm-Message-State: AOJu0YxPjhHyMjFJptlERQwnQus17FA1WZ6Fqsx7/PE/JYLCcBXlEWOu
-	u4vnVLGuWuGwzFYj6OmuzQIWuoc98v3QlXsb7xSltQtgV4m8JQKWCxuC
-X-Gm-Gg: Acq92OHdOUii7kGHcWYaBVZvpIbzp0U4e2ehVpZ6b22D1u+l4JJN4K9Bm95LHPTGTnz
-	QYeGsvtfooPlgBiwRaBtb3iElRWLI4eSMc7j4BTCJT2epRnWA67AT1D3gkLvNGSOaLRVV4TV80H
-	RCdQV8HIC0aBEZCxlKpVM1WqrIyMOkbMSGAntlSc3CVZLk2aDHiHNx3YFK9/Sal9Snc9OwJq+Ih
-	qfvhkTF1vKVI7msokbjKV+vI5wOBEQEGo21RVRMrwQSomSSUt3TObTLvSgsafueXB9HA11Npsdc
-	gyfZt7bqn9YuM+rZ0Ihci3GmEE+4YyackUQr/ZmU5IkQLic4LRcibe601s1Jj7BFRe1BbJvELQf
-	jJONvIADnUWG8ttXVYMvp1QeeBdQa6IluYszsQb5/vyenPpVVWwvGvWoWQSH3T3Lv0yDdeD2NHG
-	CEzTX/l3vhi8mXLGEklrgtdSDIK2E25X+ODbajoL5x2votxq/Xol/OMqc=
-X-Received: by 2002:a17:902:da86:b0:2b4:5b9e:4edd with SMTP id d9443c01a7336-2bc7a9a7838mr94189145ad.9.1778486221628;
-        Mon, 11 May 2026 00:57:01 -0700 (PDT)
-Received: from kylin-XiaoXinPro-16-AHP9.. ([116.128.244.171])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d405adsm96889215ad.28.2026.05.11.00.56.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 00:57:01 -0700 (PDT)
-From: Xueqin Luo <luoxueqin@kylinos.cn>
-To: lkp@intel.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	llvm@lists.linux.dev,
-	luoxueqin@kylinos.cn,
-	oe-kbuild-all@lists.linux.dev,
-	pierre.gondois@arm.com,
-	rafael@kernel.org,
-	sumitg@nvidia.com,
-	viresh.kumar@linaro.org,
-	zhanjie9@hisilicon.com,
-	zhenglifeng1@huawei.com
-Subject: [PATCH v3] cpufreq: cppc: Add update_limits support for Highest Performance changes
-Date: Mon, 11 May 2026 15:56:47 +0800
-Message-ID: <20260511075647.206642-1-luoxueqin@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <202605101404.fqz0MXIe-lkp@intel.com>
-References: <202605101404.fqz0MXIe-lkp@intel.com>
+	s=arc-20240116; t=1778488305; c=relaxed/simple;
+	bh=W2ygD+/z3RlK3HF7zT5mQCUgbAvqMl8VdS2THByT95g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R9IDNhEa76g0TAd4wjTt5iCyE8Ynlj17rqdQkzdF0OmG+evM/MeNCvboJR5OilWHy9kxKqN086GNU0bMGQyQrCfc32TV5Sbasq/JdFLelGaiqFB7/f6sxBpmBsWDD6IrNkfBDfcuUr5VloBkBFYkbV9gU7WXdDIQVpOcP7R4Dvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+NV15du; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+NV15du"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9EEC2BCB0;
+	Mon, 11 May 2026 08:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778488301;
+	bh=W2ygD+/z3RlK3HF7zT5mQCUgbAvqMl8VdS2THByT95g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=A+NV15duwlz6Ndqvdm4yPwCd4z9GzDWQ8L4aeo4shak/0LxcZJUH+ile8v5Wzuigb
+	 LGQWBRY8et9jUhNZSeJergMJ0DiVoojpnzIioMQsBvJJe1LwmjFlzFOzQhU/LCALZD
+	 l9ankpw9UUTZVHn4KiSrYXzI8E2KiZ7FSiw+qAiBZembo50ncEe89P6h5NgZwHP5Dq
+	 Tg1ZG9EYhq9nm1MCIWXWAqKg2CnFb+79oAK7g4xz3eL4PmmNzLGqZsWL7wXhJ8wBZa
+	 EnGM2aUHLHlS14Pt8GlSWf0/4/gjKBA4hntKPt5L378RytYha4qFu87gh1HLm1uthW
+	 Q08x09X2Z7E5g==
+Date: Mon, 11 May 2026 17:31:38 +0900
+From: "Harry Yoo (Oracle)" <harry@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@gentwo.org>, Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Alexander Potapenko <glider@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com, 
+	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Florent Revest <revest@google.com>, Jann Horn <jannh@google.com>, KP Singh <kpsingh@kernel.org>, 
+	Matteo Rizzo <matteorizzo@google.com>, GONG Ruiqi <gongruiqi1@huawei.com>
+Subject: Re: [PATCH v3 1/2] slab: support for compiler-assisted type-based
+ slab cache partitioning
+Message-ID: <rz7dt4wghum6beghfgm6suqje6jeivrensojjalfis5zeuyen7@6bj7kfpqb4q5>
+References: <20260424132427.2703076-1-elver@google.com>
+ <6f2bd63a-dc02-4631-a3a5-7ec8e58a4a4e@kernel.org>
+ <afkOMIPu1WNFE9MS@elver.google.com>
+ <CANpmjNM261J5qefMvmUXWZGBVz-KBs7GkbpdNMfTOvNJ-=LiZQ@mail.gmail.com>
+ <afz7pZADZPD4mKJr@MacBook-Air.tail10959e.ts.net>
+ <af3xcFjrZSZFG846@elver.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <af3xcFjrZSZFG846@elver.google.com>
 
-ACPI CPPC specification requires OSPM to re-evaluate the Highest
-Performance register when Notify(0x85) is received for a processor
-device.
+On Fri, May 08, 2026 at 04:21:36PM +0200, Marco Elver wrote:
+> I think I have a solution for this mess, see below.
+> 
+> I would not send it as 1 series, but only include the slab changes (+
+> instruction_pointer.h change to introduce _CODE_LOCATION_) as one
+> series, to go through the slab tree. The rest of the patches would go to
+> respective arch maintainers.
 
-Implement cppc_cpufreq_update_limits() to refresh the cached
-highest_perf capability through cppc_get_highest_perf() and update
-policy->cpuinfo.max_freq accordingly.
+I'm assuming this will be a follow-up and reviewing patch 1
+(and waiting for Jon's thuoghts on patch 2)
 
-When autonomous selection mode is enabled, reprogram the runtime
-MIN_PERF/MAX_PERF envelope against the updated Highest Performance
-capability through cppc_cpufreq_set_autonomous_perf().
+> diff --git a/include/linux/instruction_pointer.h b/include/linux/instruction_pointer.h
+> index aa0b3ffea935..dfe73aafddb8 100644
+> --- a/include/linux/instruction_pointer.h
+> +++ b/include/linux/instruction_pointer.h
+> @@ -8,6 +8,30 @@
+>  
+>  #ifndef _THIS_IP_
+>  #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+> +/*
+> + * The current generic definition of _THIS_IP_ is considered broken by GCC [1]
+> + * and Clang [2]. In particular, the address of a label is only expected to be
+> + * used with a computed goto.
+> + *
+> + *   [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071
+> + *   [2] https://github.com/llvm/llvm-project/issues/138272
+> + *
+> + * Mark it as broken, so that appropriate fallback options can be implemented
+> + * for architectures that do not define their won _THIS_IP_.
+> + */
+> +#define HAS_BROKEN_THIS_IP
+> +#endif
 
---
-change v2->v3:
-- Fix build issues reported by kernel test robot
-- Fold cppc_cpufreq_set_autonomous_perf() refactoring into
-  this patch to keep it self-contained
+As long as _THIS_IP_ is broken on some arches, it cannot be used anyway
+when in a general API that can be used by arbitrary users?
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202605101404.fqz0MXIe-lkp@intel.com/
-Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
----
- drivers/cpufreq/cppc_cpufreq.c | 89 +++++++++++++++++++++++++++++-----
- 1 file changed, 76 insertions(+), 13 deletions(-)
+Is it something that can be fixed in all arches over time?
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 7e7f9dfb7a24..9184d5570de8 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -843,6 +843,80 @@ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
- 	return 0;
- }
- 
-+/**
-+ * cppc_cpufreq_set_autonomous_perf - Configure performance bounds for
-+ *                                     autonomous mode
-+ * @policy: cpufreq policy structure
-+ *
-+ * When enabling autonomous selection, program MIN_PERF and MAX_PERF from
-+ * current policy limits so that the platform uses the correct performance
-+ * bounds immediately.
-+ *
-+ * Return: 0 on success, negative error code on failure.
-+ */
-+static int cppc_cpufreq_set_autonomous_perf(struct cpufreq_policy *policy)
-+{
-+	struct cppc_cpudata *cpu_data = policy->driver_data;
-+	u32 old_min_perf = cpu_data->perf_ctrls.min_perf;
-+	u32 old_max_perf = cpu_data->perf_ctrls.max_perf;
-+	int ret;
-+
-+	cppc_cpufreq_update_perf_limits(cpu_data, policy);
-+
-+	ret = cppc_set_perf(policy->cpu, &cpu_data->perf_ctrls);
-+	if (ret) {
-+		cpu_data->perf_ctrls.min_perf = old_min_perf;
-+		cpu_data->perf_ctrls.max_perf = old_max_perf;
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void cppc_cpufreq_update_limits(struct cpufreq_policy *policy)
-+{
-+	struct cppc_cpudata *cpu_data = policy->driver_data;
-+	u64 prev_highest_perf;
-+	u64 highest_perf;
-+	u64 nominal_perf;
-+	int ret;
-+
-+	guard(cpufreq_policy_write)(policy);
-+
-+	prev_highest_perf = cpu_data->perf_caps.highest_perf;
-+
-+	ret = cppc_get_highest_perf(policy->cpu, &highest_perf);
-+	if (ret)
-+		return;
-+
-+	if (highest_perf == prev_highest_perf)
-+		return;
-+
-+	cpu_data->perf_caps.highest_perf = highest_perf;
-+	nominal_perf = min_t(u64, highest_perf,
-+			     cpu_data->perf_caps.nominal_perf);
-+
-+	policy->max = cppc_perf_to_khz(&cpu_data->perf_caps,
-+			policy->boost_enabled ?
-+			highest_perf : nominal_perf);
-+
-+	policy->cpuinfo.max_freq = policy->max;
-+
-+	/*
-+	 * Autonomous selection mode uses MIN/MAX performance as runtime
-+	 * hardware control bounds.
-+	 *
-+	 * Re-program them when highest_perf changes.
-+	 */
-+	if (cpu_data->perf_ctrls.auto_sel)
-+		cppc_cpufreq_set_autonomous_perf(policy);
-+
-+	pr_debug("CPU%d: highest_perf updated %llu -> %llu\n",
-+		 policy->cpu,
-+		 prev_highest_perf,
-+		 highest_perf);
-+}
-+
- static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
- {
- 	struct cppc_cpudata *cpu_data = policy->driver_data;
-@@ -885,20 +959,8 @@ static ssize_t store_auto_select(struct cpufreq_policy *policy,
- 	cpu_data->perf_ctrls.auto_sel = val;
- 
- 	if (val) {
--		u32 old_min_perf = cpu_data->perf_ctrls.min_perf;
--		u32 old_max_perf = cpu_data->perf_ctrls.max_perf;
--
--		/*
--		 * When enabling autonomous selection, program MIN_PERF and
--		 * MAX_PERF from current policy limits so that the platform
--		 * uses the correct performance bounds immediately.
--		 */
--		cppc_cpufreq_update_perf_limits(cpu_data, policy);
--
--		ret = cppc_set_perf(policy->cpu, &cpu_data->perf_ctrls);
-+		ret = cppc_cpufreq_set_autonomous_perf(policy);
- 		if (ret) {
--			cpu_data->perf_ctrls.min_perf = old_min_perf;
--			cpu_data->perf_ctrls.max_perf = old_max_perf;
- 			cppc_set_auto_sel(policy->cpu, false);
- 			cpu_data->perf_ctrls.auto_sel = false;
- 			return ret;
-@@ -1009,6 +1071,7 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
- 	.init = cppc_cpufreq_cpu_init,
- 	.exit = cppc_cpufreq_cpu_exit,
- 	.set_boost = cppc_cpufreq_set_boost,
-+	.update_limits = cppc_cpufreq_update_limits,
- 	.attr = cppc_cpufreq_attr,
- 	.name = "cppc_cpufreq",
- };
+> +/*
+> + * _CODE_LOCATION_ provides a unique identifier for the current code location.
+> + * When _THIS_IP_ is broken (generic version), we fall back to a static marker
+> + * which guarantees uniqueness and resolves to a constant address at link time,
+> + * avoiding runtime overhead and compiler optimizations breaking it.
+> + */
+> +#ifdef HAS_BROKEN_THIS_IP
+> +#define _CODE_LOCATION_ ({ static const char __here; (unsigned long)&__here; })
+
+Nice!
+
+Yes, we don't really need the exact code location
+for partitioning kmalloc caches.
+
+IIRC lockdep does a similar thing to define lock classes (unique for
+each lock init location)
+
+> +#else
+> +#define _CODE_LOCATION_ _THIS_IP_
+>  #endif
+
+Probably we don't need this fallback?
+
+>  #endif /* _LINUX_INSTRUCTION_POINTER_H */
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 5e1249e36b0d..a4bf1585411f 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -503,7 +503,7 @@ int kmem_cache_shrink(struct kmem_cache *s);
+>  typedef struct { unsigned long v; } kmalloc_token_t;
+>  #ifdef CONFIG_KMALLOC_PARTITION_RANDOM
+>  extern unsigned long random_kmalloc_seed;
+> -#define __kmalloc_token(...) ((kmalloc_token_t){ .v = _RET_IP_ })
+> +#define __kmalloc_token(...) ((kmalloc_token_t){ .v = _CODE_LOCATION_ })
+>  #elif defined(CONFIG_KMALLOC_PARTITION_TYPED)
+>  #define __kmalloc_token(...) ((kmalloc_token_t){ .v = __builtin_infer_alloc_token(__VA_ARGS__) })
+>  #endif
+
 -- 
-2.43.0
-
+Cheers,
+Harry / Hyeonggon
