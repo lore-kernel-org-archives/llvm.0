@@ -1,158 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37BD395AE6;
-	Tue, 12 May 2026 10:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C5A3B7778;
+	Tue, 12 May 2026 10:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778582218; cv=none; b=GxjZUqFQ8U+nUc7xUJhptxyAvR5gfsRz+Ls8NZSa1IGZMsM0U5RVS5X+Ed+lmx0ivZImfW09EHo10Eqf+VTLJUU8+D3WghO3cAhsuJ6lMhaot4sJ8WexvmwawevigrESM+EOZ8nFQF8oTAt+7mDXOTmmC9gxW3TS4985h3P9D4A=
+	t=1778583581; cv=none; b=DElxMNHMrFtA7pz3DkGaVNQlXqo92ajlW99IG86lE1vxBs2+g/0qgWzrVBUaoF+7zY9cTry1rxNpgQJKRBPJdvbMqjv0H6+7h1Ot8/XWropfxDWWEgE3EYzupXtGpVNShi1Y8MpEgvzfd+8xjskHO+qDp4elWZBV70X9VTxSnWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778582218; c=relaxed/simple;
-	bh=ifiiTIiRXCnHmOD37Bvgeqg4zW7Gr4q05xjPMaDkNRI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QErKpU5jcZxFENVwtdG273+moFQ4wv86uqHLeNG73LAQTwKX7Lcu9S6PD/LwAhPuCE9gMccEsq1nBK+gbVBXYUXuJCKbNEwGCjE+vRGg6gUaCoLrvE82zkUzE/VmDa10/v4elgDKq6da8qciNDjKqH1HXbnXUGDTYfSvcUsZWCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lhlJ53dc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778583581; c=relaxed/simple;
+	bh=KCShsNDFwaVgc0g936GzfxoTB5zHdp5tRc26zVLP33U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WI2/98Py/wo/xqxtDKnZ+zB+v0u/ICJyYnL+1yOKeOPouK73INMdHhkhYpyCMe06WnSDmBBoPwSpD2CXRK/ls9+9YltQjFqQHGjjesogF05dWta/gxkfaaA1ui7SdfCRZhH1a/QDPQvosoJJLaWpMP2fyakKc3bNGE27WkQZgJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fozyZtxJ; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lhlJ53dc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B7AC2BCB0;
-	Tue, 12 May 2026 10:36:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778582218;
-	bh=ifiiTIiRXCnHmOD37Bvgeqg4zW7Gr4q05xjPMaDkNRI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lhlJ53dcGZBBqoHiKDeEwdDXg71WNZ1BtgcUHaAh3matP6wkuRYkenuaV/9ZXg1jn
-	 aB9eHL7GlrhfxM8EskOYqOpN6xLo9j1jCf8rkShFmyTey/zx5kgDSLgevsTqGrcePz
-	 /4p4gjYs6F91D+dLdkR+fsAqOScbkzL4my5mU/PyvD/f1ZnMGkSJF3KHceIxRNMETo
-	 iWsaIrzNet9DI8ZOfoNHHBwuKUGXnuD6586FTF3R50iUoURNz7nUQLH3OBIggAvgiE
-	 x5dLanodJZ7DFC7OeYBrhuj4Bx5xs4YYhp3VnUCkGNyOBAm3rUbcYrFrXIk1fTNnZ3
-	 1CgYM3SFRtTYw==
-Message-ID: <afc2202a-2e0b-43e0-9556-06be2da33c83@kernel.org>
-Date: Tue, 12 May 2026 12:36:47 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fozyZtxJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778583579; x=1810119579;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KCShsNDFwaVgc0g936GzfxoTB5zHdp5tRc26zVLP33U=;
+  b=fozyZtxJMqwlV4EQ3WWCRCwFZ8jTulrllK3CMjuIY/yZo+LAf+xt4pC/
+   7hpwOtdY8rlSu16sh3HmE/AV/3Fmzb2/pjjucWz2QLbPLKxabHW977TEU
+   qD/2/PtvgizXat2uA6EyMFymX83qxYDzYD4oWuX4NMDJIpsKiYGclImbY
+   AaZk5v3HXYJ0wiwOfqnZgfgogjdulEkhz382DuwxZHxfqIB+hTGj28VXB
+   hSYh/18KoYZ+ftVfR9+LfN2Ci65+TNMuYOyBHkdQzhZj90A2V1e+l2Epg
+   dQUzbmtpv/LU241CofGYVXjLxplXNhs2OTGhR9h0h2HVvqaubN68wmjFf
+   g==;
+X-CSE-ConnectionGUID: txfwsE/XTISo1m7yqW1lBA==
+X-CSE-MsgGUID: ZufR3Q3PROe8ILcDI02bGw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="89792066"
+X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
+   d="scan'208";a="89792066"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 03:59:38 -0700
+X-CSE-ConnectionGUID: RetFvmcTQSmOeRYouH+sBw==
+X-CSE-MsgGUID: 46O51GTFSGq9B5iWl/uclQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
+   d="scan'208";a="275853671"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 12 May 2026 03:59:35 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wMkpo-0000000020w-0kb3;
+	Tue, 12 May 2026 10:59:32 +0000
+Date: Tue, 12 May 2026 18:59:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Vadim Fedorenko <vadim.fedorenko@linux.dev>
+Subject: Re: [PATCH net v2] ptp: ocp: fix resource freeing order
+Message-ID: <202605121813.ZVbOZfjr-lkp@intel.com>
+References: <20260511161838.1413499-1-vadim.fedorenko@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] slab: improve KMALLOC_PARTITION_RANDOM randomness
-To: Marco Elver <elver@google.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>,
- David Hildenbrand <david@kernel.org>, David Rientjes <rientjes@google.com>,
- Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>,
- Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>,
- Kees Cook <kees@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Matteo Rizzo <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>,
- Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Suren Baghdasaryan <surenb@google.com>, linux-hardening@vger.kernel.org,
- Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
- Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
- Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>,
- "Liam R. Howlett" <liam@infradead.org>,
- Alexander Potapenko <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev
-References: <20260511200136.3201646-1-elver@google.com>
- <20260511200136.3201646-2-elver@google.com>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20260511200136.3201646-2-elver@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260511161838.1413499-1-vadim.fedorenko@linux.dev>
 
-On 5/11/26 22:00, Marco Elver wrote:
-> When using CONFIG_KMALLOC_PARTITION_RANDOM, _RET_IP_ was previously used
-> to identify the allocation site. _RET_IP_, however, evaluates to the
-> caller's parent's instruction pointer rather than the actual allocation
-> site; this would lead to collisions where a function performs multiple
-> allocations.
-> 
-> With the generalization to kmalloc_token_t, we now generate the token at
-> the outermost macro, and using _THIS_IP_ would fix this for all cases.
+Hi Vadim,
 
-Hm but it means in patch 1 we make things even worse and then fix them
-again, and also improve what was suboptimal prior to the series.
-Would it be instead possible to reorder patches 1 and 2 so we improve the
-current state first, and then introduce typed partitioning without any
-changes to the randomized one? (aside from changing the previously correcly
-used cases _RET_IP_ to _CODE_LOCATION_).
+kernel test robot noticed the following build errors:
 
-> Unfortunately, the generic implementation of _THIS_IP_ relies on taking
-> the address of a local label, which is considered broken by both GCC [1]
-> and Clang [2] because label addresses are only expected to be used with
-> computed gotos. While the generic version more or less works today, it
-> is known to be brittle. For example, Clang -O2 always returns 1 when
-> this function is inlined:
-> 
->         static inline unsigned long get_ip(void)
->         { return ({ __label__ __here; __here: (unsigned long)&&__here; }); }
-> 
-> To provide a reliable unique identifier without breaking architectures
-> relying on the generic _THIS_IP_, introduce _CODE_LOCATION_: it resolves
-> to _THIS_IP_ where architectures provide a safe implementation, and
-> falls back to a zero-cost static marker where _THIS_IP_ is broken.
-> 
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071 [1]
-> Link: https://github.com/llvm/llvm-project/issues/138272 [2]
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
-> v4:
-> * New patch.
-> ---
->  include/linux/instruction_pointer.h | 24 ++++++++++++++++++++++++
->  include/linux/slab.h                |  2 +-
->  2 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/instruction_pointer.h b/include/linux/instruction_pointer.h
-> index aa0b3ffea935..ea5bc756bd99 100644
-> --- a/include/linux/instruction_pointer.h
-> +++ b/include/linux/instruction_pointer.h
-> @@ -8,6 +8,30 @@
->  
->  #ifndef _THIS_IP_
->  #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
-> +/*
-> + * The current generic definition of _THIS_IP_ is considered broken by GCC [1]
-> + * and Clang [2]. In particular, the address of a label is only expected to be
-> + * used with a computed goto.
-> + *
-> + *   [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071
-> + *   [2] https://github.com/llvm/llvm-project/issues/138272
-> + *
-> + * Mark it as broken, so that appropriate fallback options can be implemented
-> + * for architectures that do not define their own _THIS_IP_.
-> + */
-> +#define HAS_BROKEN_THIS_IP
-> +#endif
-> +
-> +/*
-> + * _CODE_LOCATION_ provides a unique identifier for the current code location.
-> + * When _THIS_IP_ is broken (generic version), we fall back to a static marker
-> + * which guarantees uniqueness and resolves to a constant address at link time,
-> + * avoiding runtime overhead and compiler optimizations breaking it.
-> + */
-> +#ifdef HAS_BROKEN_THIS_IP
-> +#define _CODE_LOCATION_ ({ static const char __here; (unsigned long)&__here; })
-> +#else
-> +#define _CODE_LOCATION_ _THIS_IP_
->  #endif
->  
->  #endif /* _LINUX_INSTRUCTION_POINTER_H */
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index c232f8a10af6..efab6b2ccf21 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -503,7 +503,7 @@ int kmem_cache_shrink(struct kmem_cache *s);
->  typedef struct { unsigned long v; } kmalloc_token_t;
->  #ifdef CONFIG_KMALLOC_PARTITION_RANDOM
->  extern unsigned long random_kmalloc_seed;
-> -#define __kmalloc_token(...) ((kmalloc_token_t){ .v = _RET_IP_ })
-> +#define __kmalloc_token(...) ((kmalloc_token_t){ .v = _CODE_LOCATION_ })
->  #elif defined(CONFIG_KMALLOC_PARTITION_TYPED)
->  #define __kmalloc_token(...) ((kmalloc_token_t){ .v = __builtin_infer_alloc_token(__VA_ARGS__) })
->  #endif
+[auto build test ERROR on net/main]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/ptp-ocp-fix-resource-freeing-order/20260512-061754
+base:   net/main
+patch link:    https://lore.kernel.org/r/20260511161838.1413499-1-vadim.fedorenko%40linux.dev
+patch subject: [PATCH net v2] ptp: ocp: fix resource freeing order
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260512/202605121813.ZVbOZfjr-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260512/202605121813.ZVbOZfjr-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605121813.ZVbOZfjr-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/ptp/ptp_ocp.c:4872:39: error: expected ';' after expression
+                   ptp_ocp_ts_enable(bp->ts1, 0, false)
+                                                       ^
+                                                       ;
+   drivers/ptp/ptp_ocp.c:4874:39: error: expected ';' after expression
+                   ptp_ocp_ts_enable(bp->ts2, 0, false)
+                                                       ^
+                                                       ;
+   drivers/ptp/ptp_ocp.c:4876:39: error: expected ';' after expression
+                   ptp_ocp_ts_enable(bp->ts3, 0, false)
+                                                       ^
+                                                       ;
+   drivers/ptp/ptp_ocp.c:4878:39: error: expected ';' after expression
+                   ptp_ocp_ts_enable(bp->ts4, 0, false)
+                                                       ^
+                                                       ;
+   4 errors generated.
+
+
+vim +4872 drivers/ptp/ptp_ocp.c
+
+  4860	
+  4861	static void
+  4862	ptp_ocp_detach(struct ptp_ocp *bp)
+  4863	{
+  4864		int i;
+  4865	
+  4866		ptp_ocp_debugfs_remove_device(bp);
+  4867		ptp_ocp_detach_sysfs(bp);
+  4868		ptp_ocp_attr_group_del(bp);
+  4869		timer_delete_sync(&bp->watchdog);
+  4870		/* Disable interrupts on all timestampers */
+  4871		if (bp->ts1)
+> 4872			ptp_ocp_ts_enable(bp->ts1, 0, false)
+  4873		if (bp->ts2)
+  4874			ptp_ocp_ts_enable(bp->ts2, 0, false)
+  4875		if (bp->ts3)
+  4876			ptp_ocp_ts_enable(bp->ts3, 0, false)
+  4877		if (bp->ts4)
+  4878			ptp_ocp_ts_enable(bp->ts4, 0, false)
+  4879		if (bp->ptp)
+  4880			ptp_clock_unregister(bp->ptp);
+  4881		kfree(bp->ptp_info.pin_config);
+  4882		ptp_ocp_unregister_ext(bp->ts0);
+  4883		ptp_ocp_unregister_ext(bp->ts1);
+  4884		ptp_ocp_unregister_ext(bp->ts2);
+  4885		ptp_ocp_unregister_ext(bp->ts3);
+  4886		ptp_ocp_unregister_ext(bp->ts4);
+  4887		ptp_ocp_unregister_ext(bp->pps);
+  4888		for (i = 0; i < 4; i++)
+  4889			ptp_ocp_unregister_ext(bp->signal_out[i]);
+  4890		for (i = 0; i < __PORT_COUNT; i++)
+  4891			if (bp->port[i].line != -1)
+  4892				serial8250_unregister_port(bp->port[i].line);
+  4893		platform_device_unregister(bp->spi_flash);
+  4894		platform_device_unregister(bp->i2c_ctrl);
+  4895		if (bp->i2c_clk)
+  4896			clk_hw_unregister_fixed_rate(bp->i2c_clk);
+  4897		if (bp->n_irqs)
+  4898			pci_free_irq_vectors(bp->pdev);
+  4899		device_unregister(&bp->dev);
+  4900	}
+  4901	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
