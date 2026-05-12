@@ -1,84 +1,193 @@
-Received: from mail2.andi.de1.cc (vmd64148.contaboserver.net [161.97.139.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D8649550C
-	for <llvm@lists.linux.dev>; Tue, 12 May 2026 08:36:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.97.139.27
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778574967; cv=none; b=jW6kg1+MdOPMQAbRr+eWlHs6dx7fzcir4MrDKjHr9wrAl8oCrdBHO1NgNwWikeCWbo1cVmiy/GpODKTI602UodMMFiRQm7Hxgy1FQ8LgOA2QsC7zpsKYnJasTc4yOAT41scc0SO+gu6zGP8ZDx3Gc+n661BgCt+XpQUtRbj2RLg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778574967; c=relaxed/simple;
-	bh=BN88OXqn/RZm+kW7bamY9IQhbkBmsNVwM82h2oVwq6g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e4rszNWJpVpA8idnNdRabrwL2f9J5W2fDBSEfw0bZEm99yq+Bpcm2surBMUsmFkNZKYeWL984socnGDcBAQywqWjjTY1l0n8jwYLNZ2P6Pif6sBIEYiDDVsln5L4vsTs+E1WLJCSuZYxSmWeehd9Batvx+7DtOibN138vKVPt4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=fqDO1IVa; arc=none smtp.client-ip=161.97.139.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EC249250D
+	for <llvm@lists.linux.dev>; Tue, 12 May 2026 09:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778579517; cv=pass; b=arNgWO3Q89u0Zr4RdB3YXsd1yM8iKqP3uJQcwXodlx1KD95jI7LGJiD10CeOZLSfcnbULyc9O3/w5nXOzkk2/FpFwv7vvjRQY6srM1svc1t/PvnEcU3sc58ZsRDHWbrf+64feZ4l/6BRTvQF6SllmOomFrVut8/FNw3WS7+ZPCI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778579517; c=relaxed/simple;
+	bh=EIsIINGplKZJmp6KyNBZmIyWQAlnRy4EfCcfLd8VLHs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ln+ZYJkSiWibCEs9x0xj0IXCAhb5ujZ78rIv2RfnLt4FJ69KeLrmzxo/mslXeerihgR2q50makmIrWOFYs40ah9er8pSJfgNY/3QvBarI5nTNJCjnfGJatAf6XsMspTveYu234NTaesYvZKmRCFTyrM3R9UoHwhXd/d7XdlKTTE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=juwJB1qu; arc=pass smtp.client-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="fqDO1IVa"
-Received: from mail.andi.de1.cc ([2a02:c205:3004:2154::1])
-	by mail2.andi.de1.cc with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <andreas@kemnade.info>)
-	id 1wMi5P-0000000G8Ve-43dZ
-	for llvm@lists.linux.dev;
-	Tue, 12 May 2026 10:03:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=StyVMsh38RgdBxuIvlVbMdxNYiH9g+lHhpF3I9+o/1M=; b=fqDO1IVaPCtQ3NRyAgL7Vn0eQO
-	MiL1b+tLqQDPObZev8RnMhNjJVBQaSrr95YayUA0q+H7BHfDtCfuuYl7Hxhe9wo5CX3DJf2MchspW
-	OjxoPZzaFIo684B+C/yiOoV8Dq1zS1zm/2JhMLgBGW2ae/QZmf5milNvRMCbmUjEtRAp36ZEXgvmf
-	WlX+p9iLnN6s6b4jbdzUN1zk25RJtHIlbKESZyLVBo/XAB+mAVWbOxs0VMwLE7OoT+cH6M1E9+wPQ
-	zr4izLHmMBKJ+mQUhKGaClRSjEY108sWnsbN4l3gWyxshaQPCBEdwuoSl+NcLVNTIta6gdn35Igtj
-	5o/qZswA==;
-Date: Tue, 12 May 2026 10:02:07 +0200
-From: Andreas Kemnade <andreas@kemnade.info>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Mithil Bavishi <bavishimithil@gmail.com>, Aaro Koskinen
- <aaro.koskinen@iki.fi>, Kevin Hilman <khilman@baylibre.com>, Roger Quadros
- <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>, Russell King
- <linux@armlinux.org.uk>, Sami Tolvanen <samitolvanen@google.com>, Kees Cook
- <kees@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-omap@vger.kernel.org, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: OMAP2+: Make OMAP4 finish_suspend callback
- CFI-safe
-Message-ID: <20260512100207.3d24837e@kemnade.info>
-In-Reply-To: <20260512073442.GA570003@ax162>
-References: <20260512042341.1452-1-bavishimithil@gmail.com>
-	<20260512073442.GA570003@ax162>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="juwJB1qu"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-12ddbe104ccso4848517c88.0
+        for <llvm@lists.linux.dev>; Tue, 12 May 2026 02:51:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778579514; cv=none;
+        d=google.com; s=arc-20240605;
+        b=HOqXs3qrQBByCy308+L1blZOH4iMANHbkAX3sj4HPQvDx8Sak3HLnBVrNk/9BpwyOr
+         35SPZMT07JgbAomEP20swiLOjWO5sCZO6VToSAz0rJst9ZbZGf9YrdQ6YYCC/CYSsBWp
+         sVpK0AyoKHTyFcvFIkpVpr3xWvDqk+/w8fQkVkUAPJsrOEh2KKOER91ImHBCH9JJhpBW
+         e6YmmxcG9a1JvGovO8T23uTcZIX8EnnDVqi0oWQJuuaMzUMIyKVJJP0CpcXvDKs6K1xj
+         093NAKQhmlWTMJLSdzRpcDbFypaCzmDjI4CLLfvVbOb24xQlHQsKbYvsib7Cmfv73iON
+         aSUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=+ec8Gp9KIgloqxfI4Ah9RgcAxU70GC5qHU2EuM04KDM=;
+        fh=IgkO1Ut5wGxuPZJVn6g3GXGxV+X5FJ8iyONlW8JhJeg=;
+        b=FJBJIye1eP+F8yEjVivQbdHe3r7DVrJ2/QAiYp5HsYrjhhmtrmYm3aIn4/COPsbrfV
+         3E9rMrlXNemHuvN+hIZAzhxVqU4Ri8GESgAi4nqubqXniBRJXbZbMwVTzZnLZpRqc/pV
+         ncT+JUTWrYpKZ3ZVKrnXdBz2P/b8k7ZRuAC6Bi7JXQrTnRSUpnxYgjKN5AgZuw+nuacT
+         gJlHq4P5ukKEAALY+GBZW16uEYFrhaK0Rr1o+vM17owWyGsB4tLSfsorQodBMgNS8ELH
+         3ky0CgEhwtLsLXAZLpKaZQSTJEKlzWEEroE6okzwuez3V4t265dhJI6DO0lm4T9szHr2
+         9Lmw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778579514; x=1779184314; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ec8Gp9KIgloqxfI4Ah9RgcAxU70GC5qHU2EuM04KDM=;
+        b=juwJB1qu8aP9eCOpwYG3AZMNrILAYmxcgkznMAsM0MzrbzG16ZjgxmTIb1D73N0yOH
+         e3o7EpaCej7zlVvoOVqPTMynlTsUGHnVFFPfN96CjdbPx38O2kQw7zruQ8AU5//0z4Lv
+         aw1xasJ2AsuJYwdO88cSwEoADHCjaSvijapX9LolIFds+WgqcTMobrYyMZRcTImfvCUD
+         soHmMGB8xJScy3kowquE1Vw4CXAwrKV6QkJzHWB7lh2ZYYLI8FOtiX1uPJ4ZaSPJnOQf
+         /9mMFOt4+afVDQQBL+W+0wT9HzYyIKc5sN0qI68TLg7D200gygoBo90raHhhIW1KruWc
+         nrSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778579514; x=1779184314;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+ec8Gp9KIgloqxfI4Ah9RgcAxU70GC5qHU2EuM04KDM=;
+        b=SmewtQOx4DJy+gl6JyLo9WgTMeyRrti8jgoOumkA78/1lwAW7X9cUaR8WggGS3lUl+
+         /Az+0jqyECuAQVc0buTNSSqH0SAjiAnqa7mFepj78VAU0DUpKKEriA3qyvZ8JkHsLS1l
+         GOtoSlYyzXgjYeMJME1O7apUdlf7vcfUdRhTTm3HkV2mI2fQySzUp24W+EM7He+pez8r
+         50Bm2j6Jnbq18Z6SR8q11G25tuxoxpd4H+hz7/RejmAKg++JUZgDGhQVWQOUmWdTxgpC
+         aEFD2oYjRG9EnadEGeLemWFC0VSWQKzA8+dc5C2qlkJK1Y00vuBGFjgi37JjxlMFOoVj
+         xomg==
+X-Forwarded-Encrypted: i=1; AFNElJ9umPYflW7DYUq1QIrKHTZBpJbYBYIYDiCi5CrZyez9p9PIUylqYTilAqLJvAeGhCGdDqwO@lists.linux.dev
+X-Gm-Message-State: AOJu0YyOzhWv283zeLd9b5t5sT+5iNqxjMHrNzBRdauEmvwkjhEaRgNg
+	qK4trCEDRqdq7VJyFvoaVi2g7k6kI1hVvuH01eciM9dBB2JQbm+SUK4d7pFRLufqAHZrHPdguhE
+	LMJtr+YNM6cjRq0rleV0KPgtYQKixBsmojtuVxiRg
+X-Gm-Gg: Acq92OEpfTE42gPh6iJWbAa5BNEWpmp0MWTln+cB6frAGD3pdWtd8ugL8Y53k5EDQAN
+	A3WR61g8G3PRPigx+pHYbOAamU7TfhmpQRlyTA1dmk2CLKbEzjAQ+YBLr4ef2TJvYNtS2UpnB5T
+	QEzCS0EZ0GPqh1Gd7F2KW1Szu1eovfisCMhrVsbU2YFzRqKc5o6fxQf60+5E42sVD24c9nsi4IV
+	a0VOQf6gUiECC2CG2mGxa9aXCS0ZFRl/fLltAUTfri4d4Y7phUnXJawVR+xgoUY51b7xEhPGROw
+	JNgbmgGvvB4jgVmGEdLk2VG6wolEMB3RPI0ghGc+p93HbgRg
+X-Received: by 2002:a05:7022:38c:b0:128:d20a:2f40 with SMTP id
+ a92af1059eb24-13344c4307bmr1461470c88.8.1778579513098; Tue, 12 May 2026
+ 02:51:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260511200136.3201646-1-elver@google.com> <20260511200136.3201646-2-elver@google.com>
+ <3z5unwqxty4qq2siingxdijbk642te7kf26ba4ff2xsmyptgq5@i6bxrvkfbve4>
+In-Reply-To: <3z5unwqxty4qq2siingxdijbk642te7kf26ba4ff2xsmyptgq5@i6bxrvkfbve4>
+From: Marco Elver <elver@google.com>
+Date: Tue, 12 May 2026 11:51:15 +0200
+X-Gm-Features: AVHnY4J9rWhb6ZrnXllLEE_U0YQh3r6D8w8ra1G0CJOzHs8wrDs9DHipy-uAw-w
+Message-ID: <CANpmjNN-rPHMOGxyfcAGiJKDdDixiB70uYOa0UVCs92QgMNGYQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] slab: improve KMALLOC_PARTITION_RANDOM randomness
+To: "Harry Yoo (Oracle)" <harry@kernel.org>
+Cc: Vlastimil Babka <vbabka@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>, 
+	David Hildenbrand <david@kernel.org>, David Rientjes <rientjes@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>, 
+	Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Matteo Rizzo <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Suren Baghdasaryan <surenb@google.com>, linux-hardening@vger.kernel.org, 
+	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@gentwo.org>, Hao Li <hao.li@linux.dev>, "Liam R. Howlett" <liam@infradead.org>, 
+	Alexander Potapenko <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, kasan-dev@googlegroups.com, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 12 May 2026 16:34:42 +0900
-Nathan Chancellor <nathan@kernel.org> wrote:
+On Tue, 12 May 2026 at 07:13, 'Harry Yoo (Oracle)' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+>
+> On Mon, May 11, 2026 at 10:00:49PM +0200, Marco Elver wrote:
+> > When using CONFIG_KMALLOC_PARTITION_RANDOM, _RET_IP_ was previously used
+> > to identify the allocation site. _RET_IP_, however, evaluates to the
+> > caller's parent's instruction pointer rather than the actual allocation
+> > site; this would lead to collisions where a function performs multiple
+> > allocations.
+> >
+> > With the generalization to kmalloc_token_t, we now generate the token at
+> > the outermost macro, and using _THIS_IP_ would fix this for all cases.
+> >
+> > Unfortunately, the generic implementation of _THIS_IP_ relies on taking
+> > the address of a local label, which is considered broken by both GCC [1]
+> > and Clang [2] because label addresses are only expected to be used with
+> > computed gotos. While the generic version more or less works today, it
+> > is known to be brittle. For example, Clang -O2 always returns 1 when
+> > this function is inlined:
+> >
+> >         static inline unsigned long get_ip(void)
+> >         { return ({ __label__ __here; __here: (unsigned long)&&__here; }); }
+> >
+> > To provide a reliable unique identifier without breaking architectures
+> > relying on the generic _THIS_IP_, introduce _CODE_LOCATION_: it resolves
+> > to _THIS_IP_ where architectures provide a safe implementation, and
+> > falls back to a zero-cost static marker where _THIS_IP_ is broken.
+> >
+> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071 [1]
+> > Link: https://github.com/llvm/llvm-project/issues/138272 [2]
+> > Signed-off-by: Marco Elver <elver@google.com>
+> > ---
+>
+> Looks good to me,
+> Reviewed-by: Harry Yoo (Oracle) <harry@kernel.org>
 
-> On Tue, May 12, 2026 at 12:23:41AM -0400, Mithil Bavishi wrote:
-> > With CONFIG_CFI enabled, OMAP4 can trap in omap4_enter_lowpower()
-> > because omap_pm_ops.finish_suspend points directly to the assembly
-> > routine omap4_finish_suspend, which lacks the expected KCFI type
-> > metadata.  
-> 
-> It sounds like omap4_finish_suspend() should be defined with
-> SYM_TYPED_FUNC_START then? Is that the case for all of the other
-> functions that are added to omap_pm_ops?
-> 
-omap_cpu_resume: the address is written to some cpu register and
-on that way casted to u32. So therefore does not trigger CFI.
-Same for secondary_startup which is also assembler code.
-scu_prepare is C.
+Thanks!
 
-DO you have a pointer to any documentation:
-:~/linux$ grep -R SYM_TYPED_FUNC_START Documentation/
+> with one suggestion below.
+>
+> > ---
+> >  include/linux/instruction_pointer.h | 24 ++++++++++++++++++++++++
+> >  include/linux/slab.h                |  2 +-
+> >  2 files changed, 25 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/instruction_pointer.h b/include/linux/instruction_pointer.h
+> > index aa0b3ffea935..ea5bc756bd99 100644
+> > --- a/include/linux/instruction_pointer.h
+> > +++ b/include/linux/instruction_pointer.h
+> > @@ -8,6 +8,30 @@
+> >
+> >  #ifndef _THIS_IP_
+> >  #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+> > +/*
+> > + * The current generic definition of _THIS_IP_ is considered broken by GCC [1]
+> > + * and Clang [2]. In particular, the address of a label is only expected to be
+> > + * used with a computed goto.
+> > + *
+> > + *   [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071
+> > + *   [2] https://github.com/llvm/llvm-project/issues/138272
+> > + *
+> > + * Mark it as broken, so that appropriate fallback options can be implemented
+> > + * for architectures that do not define their own _THIS_IP_.
+> > + */
+> > +#define HAS_BROKEN_THIS_IP
+> > +#endif
+> > +
+> > +/*
+> > + * _CODE_LOCATION_ provides a unique identifier for the current code location.
+> > + * When _THIS_IP_ is broken (generic version), we fall back to a static marker
+> > + * which guarantees uniqueness and resolves to a constant address at link time,
+> > + * avoiding runtime overhead and compiler optimizations breaking it.
+> > + */
+> > +#ifdef HAS_BROKEN_THIS_IP
+> > +#define _CODE_LOCATION_ ({ static const char __here; (unsigned long)&__here; })
+>
+> nit: perhaps it can be __initdata to free these after boot?
+> ... if we want to save actual memory allocated rather than the
+> vmlinux size.
+>
+> apparently ".init.bss" is a not thing :(
 
-Regards,
-Andreas
+Not sure - it might cause CONFIG_DEBUG_SECTION_MISMATCH warnings.
+Also, if this memory is reclaimed, it may be reused for kernel
+modules, at which point there's a chance for collisions.
