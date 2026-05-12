@@ -1,195 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mail2.andi.de1.cc (vmd64148.contaboserver.net [161.97.139.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58BB37472A;
-	Tue, 12 May 2026 18:49:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992D02D94A0
+	for <llvm@lists.linux.dev>; Tue, 12 May 2026 19:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.97.139.27
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778611744; cv=none; b=oKPvY2tGMIVg8sCi+lD0RZGESQ0WHHFCVXaffsT63G9xgcWyZFZ8lh0/I7/gPLk7ZgL1vF03vZIeqDfnfHd5NIxD89SzNT/pVGwJ+UZvVShACBXuLWmicungE4FkGLCKQOIc0Kw2VAwz1CRKNTTrQZeahZ6J9PeElTJLEmQgQ1E=
+	t=1778612748; cv=none; b=FHV9psID+p/Zqpr43QPvVazIoQkKzMLJh8OWa+4zg49udJ83C87x2Uq/uw4y1E3VPaESnukedUwx4DgYQYKybH0vRZW/PnsReTUQ8ZqenH1JJnWHA4yMhkGO8npf88zlIaN8nafulnQJHz8kDVaEyTb78Ibu5CB/a3lJsZMqRkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778611744; c=relaxed/simple;
-	bh=IFHHh+ypxZXCZn0UJ7amOewF7rDeqiqicm+o7AXxP+k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=peW/f7OGuGdyQ3CFmjeTzKxmVLe3iEDMxn0PedeGZBwLybuRgDq55c3n44/vLw+7ELLlqGbFCC/VhMyzkGpKT/3sYkP1YaFH/MOKlUHU6P73o9oqz8ROuND+qWwJETrk3Md7ajsQR6sV3GdPNiozrcJloNgRoEcsxeVtt5lS4uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cb2ZWX4o; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778612748; c=relaxed/simple;
+	bh=5K428X9dhidwu0Z6JmtnQhRR4g307EBZgpMMxIZxkYo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YS617dwFuJiEyhLxYQRunX5Wl2BNOIKYL2afkgEMUCa4PzzXkSk7G99CHeJ2b0VnDhU7XO+92bs7lHu0VimNNBv3OAFr4YtkYnd7rhlaHeV9VlbPC1sqJT1rnLNm5E7cO5K8R5Irmnlv/H29Xta5lMKzCD6JSTtsDj/lFCG20EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=Eg5eq0of; arc=none smtp.client-ip=161.97.139.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cb2ZWX4o"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778611743; x=1810147743;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IFHHh+ypxZXCZn0UJ7amOewF7rDeqiqicm+o7AXxP+k=;
-  b=Cb2ZWX4oaKcogld6+ov/9VbkdMamtMOwgwVryamlDuFpRJ4Clfa6XEIg
-   UgyZf8RHDIS36+zN7ZlKTw2wsieJ6plRpAbfjSqgT40nAEg/i/jP4O8ct
-   oAY4kzU9wO87ftRRJa+LHc3sSZ9Q1et2ZGwJU813foneW/gHnO8Xceu5N
-   9asPFQxrMZ3e9aik2m89qWn37Q5IwjGikGNaWJaeXNNLiXxtw+LYS9pys
-   kG5KE6p86XGQtxBee+PdkKQY87CCKhd8Kz3VfGY2H6RIj/pZ4bv/a3Hsi
-   bOAwTr4NNs5DKTTf8HLibwVwVQPG12bPWkELXN7EI0gj0iiSZEhPA4eEz
-   w==;
-X-CSE-ConnectionGUID: 102/YRlSRYiQUGbA1EIETA==
-X-CSE-MsgGUID: C6YIwLUYTc+T1rpj6rlSFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="78674347"
-X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
-   d="scan'208";a="78674347"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 11:48:59 -0700
-X-CSE-ConnectionGUID: bv0RfIDiSxuIqtGOxgCzBg==
-X-CSE-MsgGUID: HO37BE3RRI2gdM6tw39b7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
-   d="scan'208";a="268190672"
-Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 12 May 2026 11:48:57 -0700
-Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wMsA2-000000002dX-3nbN;
-	Tue, 12 May 2026 18:48:54 +0000
-Date: Wed, 13 May 2026 02:48:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: muhammad.nazim.amirul.nazle.asmade@altera.com,
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: altera-cvp: Extend wrapped HW credit counter in
- software
-Message-ID: <202605130220.ZrvfCQQU-lkp@intel.com>
-References: <20260511053858.30921-1-muhammad.nazim.amirul.nazle.asmade@altera.com>
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="Eg5eq0of"
+Received: from mail.andi.de1.cc ([2a02:c205:3004:2154::1])
+	by mail2.andi.de1.cc with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <andreas@kemnade.info>)
+	id 1wMsQK-0000000GAZZ-1qD4
+	for llvm@lists.linux.dev;
+	Tue, 12 May 2026 21:05:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=00u0fNz3bWpllwVWiXvs/q7EItAM6xFzqP7BO4pPgFg=; b=Eg5eq0ofQPoWkiwwJGo2qJSBCd
+	+FeS7Xf4fNJv1sNiBgVfW6bunQxTcFYpdQMV1zsFhL49WeTt1MkBQv4KpmW5x1jXioE0f919m2VES
+	9/YYdpJIhtswBJ2HOUfZzKBX0q6sPxstNKihRA3DH6mrK+O802RZE6Yxi6wegiiqDw0471Eododd3
+	lqef7+ZDA84Esn9zfmqN0roJg8Ss6zLuaA20ozki5fpt3AdQLF8PHMH1uZ5fhcwRKfB47/GuI3x9P
+	ZVbj2ihNSiMJEAmeAehCF8LqbNW5adZg1GsKHRS7XhmU5Wlh/A2cQpt6CjCbwqPpzZUNyu74+TNll
+	2lPt4nhA==;
+Date: Tue, 12 May 2026 21:05:27 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Mithil Bavishi <bavishimithil@gmail.com>, Aaro Koskinen
+ <aaro.koskinen@iki.fi>, Kevin Hilman <khilman@baylibre.com>, Roger Quadros
+ <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>, Russell King
+ <linux@armlinux.org.uk>, Sami Tolvanen <samitolvanen@google.com>, Kees Cook
+ <kees@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-omap@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: OMAP2+: Make OMAP4 finish_suspend callback
+ CFI-safe
+Message-ID: <20260512210527.02381e0e@kemnade.info>
+In-Reply-To: <20260512135757.GB570003@ax162>
+References: <20260512042341.1452-1-bavishimithil@gmail.com>
+	<20260512073442.GA570003@ax162>
+	<20260512100207.3d24837e@kemnade.info>
+	<20260512135757.GB570003@ax162>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260511053858.30921-1-muhammad.nazim.amirul.nazle.asmade@altera.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On Tue, 12 May 2026 22:57:57 +0900
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-kernel test robot noticed the following build errors:
+> On Tue, May 12, 2026 at 10:02:07AM +0200, Andreas Kemnade wrote:
+> > On Tue, 12 May 2026 16:34:42 +0900
+> > Nathan Chancellor <nathan@kernel.org> wrote:
+> >   
+> > > On Tue, May 12, 2026 at 12:23:41AM -0400, Mithil Bavishi wrote:  
+> > > > With CONFIG_CFI enabled, OMAP4 can trap in omap4_enter_lowpower()
+> > > > because omap_pm_ops.finish_suspend points directly to the assembly
+> > > > routine omap4_finish_suspend, which lacks the expected KCFI type
+> > > > metadata.    
+> > > 
+> > > It sounds like omap4_finish_suspend() should be defined with
+> > > SYM_TYPED_FUNC_START then? Is that the case for all of the other
+> > > functions that are added to omap_pm_ops?
+> > >   
+> > omap_cpu_resume: the address is written to some cpu register and
+> > on that way casted to u32. So therefore does not trigger CFI.
+> > Same for secondary_startup which is also assembler code.
+> > scu_prepare is C.
+> > 
+> > DO you have a pointer to any documentation:
+> > :~/linux$ grep -R SYM_TYPED_FUNC_START Documentation/  
+> 
+> I don't think we have any formal documentation for SYM_TYPED_FUNC_START
+> (it should probably be documented via kernel-doc?) but you can read the
+> commit message of the change that added it for more information:
+> 
+>   e84e008e7b02 ("cfi: Add type helper macros")
+> 
+Ok, I found what is the missing piece of the puzzle in my head:
+"
+In order to make this easier, the compiler emits a
+    __kcfi_typeid_<function> symbol for each address-taken function
+    declaration in C, which contains the expected type identifier that
+    we can refer to in assembly code.
+"
+So time to look into my backyard if anything more is there.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.1-rc3 next-20260508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/muhammad-nazim-amirul-nazle-asmade-altera-com/fpga-altera-cvp-Extend-wrapped-HW-credit-counter-in-software/20260512-200019
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260511053858.30921-1-muhammad.nazim.amirul.nazle.asmade%40altera.com
-patch subject: [PATCH] fpga: altera-cvp: Extend wrapped HW credit counter in software
-config: i386-buildonly-randconfig-006-20260512 (https://download.01.org/0day-ci/archive/20260513/202605130220.ZrvfCQQU-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260513/202605130220.ZrvfCQQU-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605130220.ZrvfCQQU-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/fpga/altera-cvp.c:242:13: error: no member named 'device_family_type' in 'struct altera_cvp_conf'
-     242 |                 if (conf->device_family_type == SOCFPGA_CVP_V2_AGILEX5) {
-         |                     ~~~~  ^
->> drivers/fpga/altera-cvp.c:242:35: error: use of undeclared identifier 'SOCFPGA_CVP_V2_AGILEX5'
-     242 |                 if (conf->device_family_type == SOCFPGA_CVP_V2_AGILEX5) {
-         |                                                 ^
->> drivers/fpga/altera-cvp.c:243:32: error: use of undeclared identifier 'VSE_CVP_AG5_TX_CREDITS'
-     243 |                         vse_cvp_tx_credits_offset = VSE_CVP_AG5_TX_CREDITS;
-         |                                                     ^
-   3 errors generated.
-
-
-vim +242 drivers/fpga/altera-cvp.c
-
-   227	
-   228	static int altera_cvp_v2_wait_for_credit(struct fpga_manager *mgr,
-   229						 u32 blocks)
-   230	{
-   231		u32 timeout = V2_CREDIT_TIMEOUT_US / V2_CHECK_CREDIT_US;
-   232		struct altera_cvp_conf *conf = mgr->priv;
-   233		int ret;
-   234		u32 val;
-   235		u32 credit_mask;
-   236		u32 vse_cvp_tx_credits_offset = VSE_CVP_TX_CREDITS;
-   237		u32 mod;
-   238		u32 real_credit;
-   239	
-   240		do {
-   241			/* READ DWORD is required for Agilex5 but READ BYTE is required for non-Agilex5 */
- > 242			if (conf->device_family_type == SOCFPGA_CVP_V2_AGILEX5) {
- > 243				vse_cvp_tx_credits_offset = VSE_CVP_AG5_TX_CREDITS;
-   244				credit_mask = 0xFFF;
-   245				ret = altera_read_config_dword(conf, vse_cvp_tx_credits_offset, &val);
-   246			} else {
-   247				/*
-   248				 * For the byte config read path, val is zeroed before pci_read_config_byte
-   249				 * so only the low byte is defined before masking.
-   250				 */
-   251				val = 0;
-   252				credit_mask = 0xFF;
-   253				ret = altera_read_config_byte(conf, vse_cvp_tx_credits_offset,
-   254							      (u8 *)&val);
-   255			}
-   256	
-   257	
-   258			if (ret) {
-   259				dev_err(&conf->pci_dev->dev,
-   260					"Error reading CVP Credit Register\n");
-   261				return ret;
-   262			}
-   263	
-   264			val &= credit_mask;
-   265			mod = credit_mask + 1;
-   266	
-   267			/*
-   268			 * HW credit is n bits and wraps; extend it in software so we can
-   269			 * compare to sent_packets directly. On a forward wrap the masked
-   270			 * value jumps from high to low; require (last - val) > mod/2 so a
-   271			 * small backward glitch is not counted as a wrap. More than one
-   272			 * wrap between polls is not detected if the low bits repeat.
-   273			 */
-   274			if (conf->credit_ext_inited &&
-   275			    val < conf->last_credit_hw &&
-   276			    (conf->last_credit_hw - val) > (mod / 2))
-   277				conf->overflow_counter++;
-   278	
-   279			conf->last_credit_hw = val;
-   280			conf->credit_ext_inited = true;
-   281	
-   282			real_credit = conf->overflow_counter * mod + val;
-   283	
-   284			if (real_credit > conf->sent_packets)
-   285				return 0;
-   286			if (real_credit < conf->sent_packets) {
-   287				dev_err(&conf->pci_dev->dev,
-   288					"CVP credit behind sent count (real %u reg 0x%x sent %u)\n",
-   289					real_credit, val, conf->sent_packets);
-   290				return -EPROTO;
-   291			}
-   292	
-   293			ret = altera_cvp_chk_error(mgr, blocks * ALTERA_CVP_V2_SIZE);
-   294			if (ret) {
-   295				dev_err(&conf->pci_dev->dev,
-   296					"CE Bit error credit reg[0x%x]:sent[0x%x]\n",
-   297					val, conf->sent_packets);
-   298				return -EAGAIN;
-   299			}
-   300	
-   301			/* Limit the check credit byte traffic */
-   302			usleep_range(V2_CHECK_CREDIT_US, V2_CHECK_CREDIT_US + 1);
-   303		} while (timeout--);
-   304	
-   305		dev_err(&conf->pci_dev->dev, "Timeout waiting for credit\n");
-   306		return -ETIMEDOUT;
-   307	}
-   308	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Andreas
