@@ -1,68 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8AF3E3D98;
-	Tue, 12 May 2026 05:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3CD136F8FE;
+	Tue, 12 May 2026 07:34:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778564646; cv=none; b=fsFl0sYFsKjme/fMRzJxenM9rpWB4jpgKVt5qgsIS2Vfq8QNa/QGrHRlusw9fzMEg+QDo/k4XrhB/8SRgSCM03mY/7kbHmqEpJGrrrw+k/zWAfmOYJ1nU2JhAGqRdFcx4el6UBnCDApwE3nfv49T1ZaMuHeAt67xXuUY1kBP4SU=
+	t=1778571288; cv=none; b=SvafrTXLzh3qMKpsnVsMaL12Lb786nzKZz3BLrV0LF18DXWLFxWscv6OS4Gr3hJP2Nzz5uzCyymXmGY6OVoaK5xYKBBfvRVNSBgiQZ6jEXJOn9twd9JhM61dYRSsy4tG7K4RDWXkBAGBgUQuzNuSUoK+iDbQf2gKZnka9f6NbeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778564646; c=relaxed/simple;
-	bh=ZoE7384it269htn0b+KDZdQY37BAyNlYlcmt+DIxG1g=;
+	s=arc-20240116; t=1778571288; c=relaxed/simple;
+	bh=T/Fjk+Ia8FeTP20elfFPSEy0lY7bZ7cUA3AKIwU37ZU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ltwLXJWN3hkzlqxSLEWDbnFbyL9SqS8Ozh+hpPu83VVuqqgBT8q2FEGCQ/O4WIdFop0Lbg5ZzHCIBzBcSzouEQZ2ur+PtuDnyqi3i/2qzfk5AyXakR5H0ayUa1H9tECHBQYEqTs6Vuu/17a7m5c0wZid2H3yIzG5f5gKJLWJWpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kw15HBKE; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=nptquDpvyOhqeNc9+sGr6JQLv70SFlXyrcLRODaetX+1X/oSm+K8Oom1MmaVT3oenqRtoUX3GCqxUqt71JTWmTU2VPekHPfWR+KOE+BAAqB/S098tygOBprmnv2gfV+eyWW7RHhTDkEqiHUJD/xCLpux755+BIDfKeemqiv1qOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b41QgKN8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kw15HBKE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778564637; x=1810100637;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZoE7384it269htn0b+KDZdQY37BAyNlYlcmt+DIxG1g=;
-  b=kw15HBKEuCIosFo9qDAEvmBgClM2fztQSb62x6Ka8vX/xYryhPGW52eX
-   7t35ADmwJxAJHBxRix4ZSy5Gc1cSEz4zUhKrUNNvflSGDAEgn6mi/LUUF
-   HOKuIbT2qPGKB81H9wXx23KTkDhKgSWI+BhdLqocc1A4eA00F94s8xNdK
-   CxW+5bLYWMl+4JkcpP+qHxUY9b8NWsdv33kSq+D/dYjftUDJEeBx2nKfZ
-   XXR+9AGM0aW+NsaELPq+BhJS0goQbL+3sWOrWJoM2vfwRAbwT/G0H7Gh1
-   Mx4uyIx1SWgqQqr+aEiS1jiKKiwRt7kaQLAiBz4xW5JMIRWwOc/7RySZj
-   Q==;
-X-CSE-ConnectionGUID: tjha2SpETMecbLSb28n9Wg==
-X-CSE-MsgGUID: tNF88j2vTZCvIidB2bHEIQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="82030809"
-X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
-   d="scan'208";a="82030809"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 22:43:51 -0700
-X-CSE-ConnectionGUID: lhCniQ8jShSB+CKNYqq58Q==
-X-CSE-MsgGUID: W26M/UnMTr+ZE0KRXyzpfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
-   d="scan'208";a="231262144"
-Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 11 May 2026 22:43:47 -0700
-Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wMfuC-000000001ej-2gVp;
-	Tue, 12 May 2026 05:43:44 +0000
-Date: Tue, 12 May 2026 13:42:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maoyi Xie <maoyixie.tju@gmail.com>, Simon Horman <horms@kernel.org>,
-	Allison Henderson <achender@kernel.org>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com,
-	linux-kernel@vger.kernel.org,
-	Praveen Kakkolangara <praveen.kakkolangara@aumovio.com>,
-	Maoyi Xie <maoyi.xie@ntu.edu.sg>
-Subject: Re: [PATCH net v3] rds: filter RDS_INFO_* getsockopt by caller's
- netns
-Message-ID: <202605121353.896RQym5-lkp@intel.com>
-References: <20260511070211.1033178-1-maoyi.xie@ntu.edu.sg>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b41QgKN8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E27BC2BCB0;
+	Tue, 12 May 2026 07:34:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778571287;
+	bh=T/Fjk+Ia8FeTP20elfFPSEy0lY7bZ7cUA3AKIwU37ZU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b41QgKN8/pvSDbgptQLL7kDNut1BOUGA+W90IztVp/QJIz4DmjpHViUqgm/gWcQBz
+	 /9/D2QNqr9SK4X+RbqudiJWkDEEVS9L3KwnOM4JC44SXAvdIFvUj7OSxK3CGgaRwDJ
+	 nXTiq364Pe3yj5QXmN28eoof2LFc4DHIM8kFeMD02s2BfGrXaGWt1cshwD77t1G/07
+	 MpzPeeblgO2xG2d5a+l0zl/boS90vAeUnnrnrfx4V7Zp1J8MfLyy+lzezR/GiLquHm
+	 3en05WEMaCYfwHxwequ5zjGWKhCJV9dTxl6TKSXAnKpavL/VP33QA7T4GVZiKypF+D
+	 +HPwrkBZaQQeg==
+Date: Tue, 12 May 2026 16:34:42 +0900
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mithil Bavishi <bavishimithil@gmail.com>
+Cc: Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Andreas Kemnade <andreas@kemnade.info>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <kees@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	linux-omap@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: OMAP2+: Make OMAP4 finish_suspend callback CFI-safe
+Message-ID: <20260512073442.GA570003@ax162>
+References: <20260512042341.1452-1-bavishimithil@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,67 +49,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260511070211.1033178-1-maoyi.xie@ntu.edu.sg>
+In-Reply-To: <20260512042341.1452-1-bavishimithil@gmail.com>
 
-Hi Maoyi,
+On Tue, May 12, 2026 at 12:23:41AM -0400, Mithil Bavishi wrote:
+> With CONFIG_CFI enabled, OMAP4 can trap in omap4_enter_lowpower()
+> because omap_pm_ops.finish_suspend points directly to the assembly
+> routine omap4_finish_suspend, which lacks the expected KCFI type
+> metadata.
 
-kernel test robot noticed the following build warnings:
+It sounds like omap4_finish_suspend() should be defined with
+SYM_TYPED_FUNC_START then? Is that the case for all of the other
+functions that are added to omap_pm_ops?
 
-[auto build test WARNING on b266bacba796ff5c4dcd2ae2fc08aacf7ab39153]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Maoyi-Xie/rds-filter-RDS_INFO_-getsockopt-by-caller-s-netns/20260512-045249
-base:   b266bacba796ff5c4dcd2ae2fc08aacf7ab39153
-patch link:    https://lore.kernel.org/r/20260511070211.1033178-1-maoyi.xie%40ntu.edu.sg
-patch subject: [PATCH net v3] rds: filter RDS_INFO_* getsockopt by caller's netns
-config: arm-randconfig-001-20260512 (https://download.01.org/0day-ci/archive/20260512/202605121353.896RQym5-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260512/202605121353.896RQym5-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605121353.896RQym5-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from net/rds/tcp.c:42:
-   In file included from net/rds/rds.h:10:
-   include/uapi/linux/rds.h:233:18: warning: field peer_addr within 'struct rds6_info_tcp_socket' is less aligned than 'struct in6_addr' and is usually due to 'struct rds6_info_tcp_socket' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-     233 |         struct in6_addr peer_addr;
-         |                         ^
->> net/rds/tcp.c:52:21: warning: variable 'rds_tcp_tc_count' set but not used [-Wunused-but-set-global]
-      52 | static unsigned int rds_tcp_tc_count;
-         |                     ^
->> net/rds/tcp.c:54:21: warning: variable 'rds6_tcp_tc_count' set but not used [-Wunused-but-set-global]
-      54 | static unsigned int rds6_tcp_tc_count;
-         |                     ^
-   3 warnings generated.
---
->> net/rds/af_rds.c:46:22: warning: variable 'rds_sock_count' set but not used [-Wunused-but-set-global]
-      46 | static unsigned long rds_sock_count;
-         |                      ^
-   1 warning generated.
-
-
-vim +/rds_tcp_tc_count +52 net/rds/tcp.c
-
-70041088e3b9766 Andy Grover       2009-08-21  41  
-70041088e3b9766 Andy Grover       2009-08-21 @42  #include "rds.h"
-70041088e3b9766 Andy Grover       2009-08-21  43  #include "tcp.h"
-70041088e3b9766 Andy Grover       2009-08-21  44  
-70041088e3b9766 Andy Grover       2009-08-21  45  /* only for info exporting */
-70041088e3b9766 Andy Grover       2009-08-21  46  static DEFINE_SPINLOCK(rds_tcp_tc_list_lock);
-70041088e3b9766 Andy Grover       2009-08-21  47  static LIST_HEAD(rds_tcp_tc_list);
-1e2b44e78eead7b Ka-Cheong Poon    2018-07-23  48  
-1e2b44e78eead7b Ka-Cheong Poon    2018-07-23  49  /* rds_tcp_tc_count counts only IPv4 connections.
-1e2b44e78eead7b Ka-Cheong Poon    2018-07-23  50   * rds6_tcp_tc_count counts both IPv4 and IPv6 connections.
-1e2b44e78eead7b Ka-Cheong Poon    2018-07-23  51   */
-ff51bf841587c75 stephen hemminger 2010-10-19 @52  static unsigned int rds_tcp_tc_count;
-e65d4d96334e3ff Ka-Cheong Poon    2018-07-30  53  #if IS_ENABLED(CONFIG_IPV6)
-1e2b44e78eead7b Ka-Cheong Poon    2018-07-23 @54  static unsigned int rds6_tcp_tc_count;
-e65d4d96334e3ff Ka-Cheong Poon    2018-07-30  55  #endif
-70041088e3b9766 Andy Grover       2009-08-21  56  
+> Add a small C wrapper with the exact callback prototype and use it for
+> finish_suspend.
+> 
+> Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
+> ---
+>  arch/arm/mach-omap2/omap-mpuss-lowpower.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/mach-omap2/omap-mpuss-lowpower.c b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
+> index f18ef45e2..1c51b2f97 100644
+> --- a/arch/arm/mach-omap2/omap-mpuss-lowpower.c
+> +++ b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
+> @@ -111,6 +111,11 @@ static struct cpu_pm_ops omap_pm_ops = {
+>  	.hotplug_restart	= dummy_cpu_resume,
+>  };
+>  
+> +static int omap4_finish_suspend_wrapper(unsigned long cpu_state)
+> +{
+> +	return omap4_finish_suspend(cpu_state);
+> +}
+> +
+>  /*
+>   * Program the wakeup routine address for the CPU0 and CPU1
+>   * used for OFF or DORMANT wakeup.
+> @@ -437,7 +442,7 @@ int __init omap4_mpuss_init(void)
+>  	}
+>  
+>  	if (cpu_is_omap44xx()) {
+> -		omap_pm_ops.finish_suspend = omap4_finish_suspend;
+> +		omap_pm_ops.finish_suspend = omap4_finish_suspend_wrapper;
+>  		omap_pm_ops.resume = omap4_cpu_resume;
+>  		omap_pm_ops.scu_prepare = scu_pwrst_prepare;
+>  		omap_pm_ops.hotplug_restart = omap4_secondary_startup;
+> -- 
+> 2.43.0
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
