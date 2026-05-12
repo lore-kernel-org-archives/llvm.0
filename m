@@ -1,53 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C4933507C;
-	Tue, 12 May 2026 05:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8AF3E3D98;
+	Tue, 12 May 2026 05:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778562804; cv=none; b=VEVwFd/B41umz8fW11bW2mBZCYE7tUtPUeLKfLFOvyr3KvHLVEFX0L2PCmPZntWC9F8B3H+AOijzpg+eV8b9nJgNOmhxhPMbHWDzfv3kkSge8N0kh6WGvnKEC6wptm6QkwzBHUOLyAFMFwahjuwGzUut4EQePv/JGCNOOtqt5sE=
+	t=1778564646; cv=none; b=fsFl0sYFsKjme/fMRzJxenM9rpWB4jpgKVt5qgsIS2Vfq8QNa/QGrHRlusw9fzMEg+QDo/k4XrhB/8SRgSCM03mY/7kbHmqEpJGrrrw+k/zWAfmOYJ1nU2JhAGqRdFcx4el6UBnCDApwE3nfv49T1ZaMuHeAt67xXuUY1kBP4SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778562804; c=relaxed/simple;
-	bh=tOGys+YG4qz5yD/e0NN7zHNw7Mi5/xacrSL440qUgAE=;
+	s=arc-20240116; t=1778564646; c=relaxed/simple;
+	bh=ZoE7384it269htn0b+KDZdQY37BAyNlYlcmt+DIxG1g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TUDzz2X3gMfVyC81Wq5S51OVggcwbBUdei9uPufDhl2rHPKnDDCid/Upz7ClFQ8rxdGwMq0/PSt7Rt4pT6pc11Bxd6ZSXAL7lMzrcyi81njIhGaAGT/+0N6uYALf+3U4uLuDopFKer+cEbavRmI+Dtx7JUM4+oFN37VxrQTfq7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WA9ZG85p; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ltwLXJWN3hkzlqxSLEWDbnFbyL9SqS8Ozh+hpPu83VVuqqgBT8q2FEGCQ/O4WIdFop0Lbg5ZzHCIBzBcSzouEQZ2ur+PtuDnyqi3i/2qzfk5AyXakR5H0ayUa1H9tECHBQYEqTs6Vuu/17a7m5c0wZid2H3yIzG5f5gKJLWJWpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kw15HBKE; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WA9ZG85p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74108C2BD00;
-	Tue, 12 May 2026 05:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778562804;
-	bh=tOGys+YG4qz5yD/e0NN7zHNw7Mi5/xacrSL440qUgAE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WA9ZG85pnCfWjPfH96o1K6ZiJJ208mg1UkHc1vCUk//OBCrfGlcQ8pqSMBaYRarhZ
-	 2XasZCK+ij8fanqe3B9b6vRRNk4z67wShmp3szQSZNkA9mr5+1rny1ElWcoHY077Hk
-	 c3JC0CHxpbTjD0y3tyqUy0M02WctGXzpwXqWHGUqJKaZeH/eO1ddffhIDEgOljoWdF
-	 oBP+Maz4NrrRjsyN12Qm76b4fSY5i5BBjz8mE+f7itKxw3L3jmg7lTdzj5fzbpVdQ+
-	 RaekGoq+qHo0bWAWX/hUJ+3Aqar0fC8d/E7L6XKxx4pa+/m40/bEB/zUVlf4GhGi8w
-	 rPY8L2zwrrg0w==
-Date: Tue, 12 May 2026 14:13:21 +0900
-From: "Harry Yoo (Oracle)" <harry@kernel.org>
-To: Marco Elver <elver@google.com>
-Cc: Vlastimil Babka <vbabka@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Bill Wendling <morbo@google.com>, David Hildenbrand <david@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>, 
-	Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Matteo Rizzo <matteorizzo@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Suren Baghdasaryan <surenb@google.com>, 
-	linux-hardening@vger.kernel.org, Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, 
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, Hao Li <hao.li@linux.dev>, 
-	"Liam R. Howlett" <liam@infradead.org>, Alexander Potapenko <glider@google.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/3] slab: improve KMALLOC_PARTITION_RANDOM randomness
-Message-ID: <3z5unwqxty4qq2siingxdijbk642te7kf26ba4ff2xsmyptgq5@i6bxrvkfbve4>
-References: <20260511200136.3201646-1-elver@google.com>
- <20260511200136.3201646-2-elver@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kw15HBKE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778564637; x=1810100637;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZoE7384it269htn0b+KDZdQY37BAyNlYlcmt+DIxG1g=;
+  b=kw15HBKEuCIosFo9qDAEvmBgClM2fztQSb62x6Ka8vX/xYryhPGW52eX
+   7t35ADmwJxAJHBxRix4ZSy5Gc1cSEz4zUhKrUNNvflSGDAEgn6mi/LUUF
+   HOKuIbT2qPGKB81H9wXx23KTkDhKgSWI+BhdLqocc1A4eA00F94s8xNdK
+   CxW+5bLYWMl+4JkcpP+qHxUY9b8NWsdv33kSq+D/dYjftUDJEeBx2nKfZ
+   XXR+9AGM0aW+NsaELPq+BhJS0goQbL+3sWOrWJoM2vfwRAbwT/G0H7Gh1
+   Mx4uyIx1SWgqQqr+aEiS1jiKKiwRt7kaQLAiBz4xW5JMIRWwOc/7RySZj
+   Q==;
+X-CSE-ConnectionGUID: tjha2SpETMecbLSb28n9Wg==
+X-CSE-MsgGUID: tNF88j2vTZCvIidB2bHEIQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="82030809"
+X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
+   d="scan'208";a="82030809"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 22:43:51 -0700
+X-CSE-ConnectionGUID: lhCniQ8jShSB+CKNYqq58Q==
+X-CSE-MsgGUID: W26M/UnMTr+ZE0KRXyzpfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
+   d="scan'208";a="231262144"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 11 May 2026 22:43:47 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wMfuC-000000001ej-2gVp;
+	Tue, 12 May 2026 05:43:44 +0000
+Date: Tue, 12 May 2026 13:42:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maoyi Xie <maoyixie.tju@gmail.com>, Simon Horman <horms@kernel.org>,
+	Allison Henderson <achender@kernel.org>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com,
+	linux-kernel@vger.kernel.org,
+	Praveen Kakkolangara <praveen.kakkolangara@aumovio.com>,
+	Maoyi Xie <maoyi.xie@ntu.edu.sg>
+Subject: Re: [PATCH net v3] rds: filter RDS_INFO_* getsockopt by caller's
+ netns
+Message-ID: <202605121353.896RQym5-lkp@intel.com>
+References: <20260511070211.1033178-1-maoyi.xie@ntu.edu.sg>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,89 +71,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260511200136.3201646-2-elver@google.com>
+In-Reply-To: <20260511070211.1033178-1-maoyi.xie@ntu.edu.sg>
 
-On Mon, May 11, 2026 at 10:00:49PM +0200, Marco Elver wrote:
-> When using CONFIG_KMALLOC_PARTITION_RANDOM, _RET_IP_ was previously used
-> to identify the allocation site. _RET_IP_, however, evaluates to the
-> caller's parent's instruction pointer rather than the actual allocation
-> site; this would lead to collisions where a function performs multiple
-> allocations.
-> 
-> With the generalization to kmalloc_token_t, we now generate the token at
-> the outermost macro, and using _THIS_IP_ would fix this for all cases.
-> 
-> Unfortunately, the generic implementation of _THIS_IP_ relies on taking
-> the address of a local label, which is considered broken by both GCC [1]
-> and Clang [2] because label addresses are only expected to be used with
-> computed gotos. While the generic version more or less works today, it
-> is known to be brittle. For example, Clang -O2 always returns 1 when
-> this function is inlined:
-> 
->         static inline unsigned long get_ip(void)
->         { return ({ __label__ __here; __here: (unsigned long)&&__here; }); }
-> 
-> To provide a reliable unique identifier without breaking architectures
-> relying on the generic _THIS_IP_, introduce _CODE_LOCATION_: it resolves
-> to _THIS_IP_ where architectures provide a safe implementation, and
-> falls back to a zero-cost static marker where _THIS_IP_ is broken.
-> 
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071 [1]
-> Link: https://github.com/llvm/llvm-project/issues/138272 [2]
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
+Hi Maoyi,
 
-Looks good to me,
-Reviewed-by: Harry Yoo (Oracle) <harry@kernel.org>
+kernel test robot noticed the following build warnings:
 
-with one suggestion below.
+[auto build test WARNING on b266bacba796ff5c4dcd2ae2fc08aacf7ab39153]
 
-> ---
->  include/linux/instruction_pointer.h | 24 ++++++++++++++++++++++++
->  include/linux/slab.h                |  2 +-
->  2 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/instruction_pointer.h b/include/linux/instruction_pointer.h
-> index aa0b3ffea935..ea5bc756bd99 100644
-> --- a/include/linux/instruction_pointer.h
-> +++ b/include/linux/instruction_pointer.h
-> @@ -8,6 +8,30 @@
->  
->  #ifndef _THIS_IP_
->  #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
-> +/*
-> + * The current generic definition of _THIS_IP_ is considered broken by GCC [1]
-> + * and Clang [2]. In particular, the address of a label is only expected to be
-> + * used with a computed goto.
-> + *
-> + *   [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071
-> + *   [2] https://github.com/llvm/llvm-project/issues/138272
-> + *
-> + * Mark it as broken, so that appropriate fallback options can be implemented
-> + * for architectures that do not define their own _THIS_IP_.
-> + */
-> +#define HAS_BROKEN_THIS_IP
-> +#endif
-> +
-> +/*
-> + * _CODE_LOCATION_ provides a unique identifier for the current code location.
-> + * When _THIS_IP_ is broken (generic version), we fall back to a static marker
-> + * which guarantees uniqueness and resolves to a constant address at link time,
-> + * avoiding runtime overhead and compiler optimizations breaking it.
-> + */
-> +#ifdef HAS_BROKEN_THIS_IP
-> +#define _CODE_LOCATION_ ({ static const char __here; (unsigned long)&__here; })
+url:    https://github.com/intel-lab-lkp/linux/commits/Maoyi-Xie/rds-filter-RDS_INFO_-getsockopt-by-caller-s-netns/20260512-045249
+base:   b266bacba796ff5c4dcd2ae2fc08aacf7ab39153
+patch link:    https://lore.kernel.org/r/20260511070211.1033178-1-maoyi.xie%40ntu.edu.sg
+patch subject: [PATCH net v3] rds: filter RDS_INFO_* getsockopt by caller's netns
+config: arm-randconfig-001-20260512 (https://download.01.org/0day-ci/archive/20260512/202605121353.896RQym5-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260512/202605121353.896RQym5-lkp@intel.com/reproduce)
 
-nit: perhaps it can be __initdata to free these after boot?
-... if we want to save actual memory allocated rather than the
-vmlinux size.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605121353.896RQym5-lkp@intel.com/
 
-apparently ".init.bss" is a not thing :(
+All warnings (new ones prefixed by >>):
 
-> +#else
-> +#define _CODE_LOCATION_ _THIS_IP_
->  #endif
+   In file included from net/rds/tcp.c:42:
+   In file included from net/rds/rds.h:10:
+   include/uapi/linux/rds.h:233:18: warning: field peer_addr within 'struct rds6_info_tcp_socket' is less aligned than 'struct in6_addr' and is usually due to 'struct rds6_info_tcp_socket' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+     233 |         struct in6_addr peer_addr;
+         |                         ^
+>> net/rds/tcp.c:52:21: warning: variable 'rds_tcp_tc_count' set but not used [-Wunused-but-set-global]
+      52 | static unsigned int rds_tcp_tc_count;
+         |                     ^
+>> net/rds/tcp.c:54:21: warning: variable 'rds6_tcp_tc_count' set but not used [-Wunused-but-set-global]
+      54 | static unsigned int rds6_tcp_tc_count;
+         |                     ^
+   3 warnings generated.
+--
+>> net/rds/af_rds.c:46:22: warning: variable 'rds_sock_count' set but not used [-Wunused-but-set-global]
+      46 | static unsigned long rds_sock_count;
+         |                      ^
+   1 warning generated.
+
+
+vim +/rds_tcp_tc_count +52 net/rds/tcp.c
+
+70041088e3b9766 Andy Grover       2009-08-21  41  
+70041088e3b9766 Andy Grover       2009-08-21 @42  #include "rds.h"
+70041088e3b9766 Andy Grover       2009-08-21  43  #include "tcp.h"
+70041088e3b9766 Andy Grover       2009-08-21  44  
+70041088e3b9766 Andy Grover       2009-08-21  45  /* only for info exporting */
+70041088e3b9766 Andy Grover       2009-08-21  46  static DEFINE_SPINLOCK(rds_tcp_tc_list_lock);
+70041088e3b9766 Andy Grover       2009-08-21  47  static LIST_HEAD(rds_tcp_tc_list);
+1e2b44e78eead7b Ka-Cheong Poon    2018-07-23  48  
+1e2b44e78eead7b Ka-Cheong Poon    2018-07-23  49  /* rds_tcp_tc_count counts only IPv4 connections.
+1e2b44e78eead7b Ka-Cheong Poon    2018-07-23  50   * rds6_tcp_tc_count counts both IPv4 and IPv6 connections.
+1e2b44e78eead7b Ka-Cheong Poon    2018-07-23  51   */
+ff51bf841587c75 stephen hemminger 2010-10-19 @52  static unsigned int rds_tcp_tc_count;
+e65d4d96334e3ff Ka-Cheong Poon    2018-07-30  53  #if IS_ENABLED(CONFIG_IPV6)
+1e2b44e78eead7b Ka-Cheong Poon    2018-07-23 @54  static unsigned int rds6_tcp_tc_count;
+e65d4d96334e3ff Ka-Cheong Poon    2018-07-30  55  #endif
+70041088e3b9766 Andy Grover       2009-08-21  56  
 
 -- 
-Cheers,
-Harry / Hyeonggon
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
