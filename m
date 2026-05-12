@@ -1,155 +1,117 @@
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010059.outbound.protection.outlook.com [52.101.193.59])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6CA385D6B
-	for <llvm@lists.linux.dev>; Tue, 12 May 2026 17:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778605614; cv=fail; b=PWIbsWSIaLqNk5wVR9fZsrkHwuIpcxSPeCoDVTEBGkkflfDNxiXObS8yuuOMY1I1+3jhfqygCQDB4ApwyneXPArpe3IzV9NpaSFfkGq1mx2WQ43UUr6k+/w8gp8W59Gc7pS4U+8yJ2WjdrqEZMoOMzE8MeMuOebUB714EmCVeHk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778605614; c=relaxed/simple;
-	bh=HnviruEkUItcs+2Zk5Rnp1NSIVSgRwH0RZjOUMrr0Mc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ef3txDBR9DQdZm/hn5i6oCmZyhpacDDuUcNVqmegv5s0KCsX700+V4ab9dlcLigiSTx9fIlpgnYjPlfFAdTQHip4EAfxt7zbsf7+loPYxmBLVIznWEg6YtjdChPAOkDqj4aWIgK/uVnzWpuDivIUOlIo9aqKllLWhZAzfj3uTsU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Kihdy9Pj; arc=fail smtp.client-ip=52.101.193.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6574E2EBB84;
+	Tue, 12 May 2026 17:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778607955; cv=none; b=PdDVO6vjZovGDP9UYIlc+EncKm3G+NLd3KTCSHdjbNESZXQA0dBNx0DBOfSAHG6PC8PKr6JzG+HY9cT7jq/C/tYpzDuy3gk43yM0lxrvbaXQJaXmwl9qt+sYVSVIUBwyRdIklBEE7Hje8WlO8kjmw66kLwRnHKXqbW4hCx/YYVE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778607955; c=relaxed/simple;
+	bh=QMiOXftQsgE92WFbru5pfm4C24Knj1NQvy4huaRXetk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=o/FtTZyyN9qabBmFokHl/l22Nr7hjLvIWSP/LbRp/7aEwp5QwGOGZOqR3kpRS1+26XFRLXQgYa7I7eVEyl92Li4LRU8zcBMueyuqupdGFu75h4LRaZkmGWRY6evrI09niLFTwbtaL5JA1T1hm1dUsVefzdYv1sAyIx699SQ0qgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XQ3ZnKaM; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Kihdy9Pj"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cvYVFLuWBt5wS3x3ez7Z239DFfjzfiA+yOSbJqwFShQwUZ4kmHmkk0mtyLG8tH8RMTgi/gOrJpfeZi2LGp/xxq/mmHwm8f1/bgCDgYvA7ZzT8s5DDZsSVMqkA1R6ojka3X/h09V3Sz3DmDREpwpoLJrGjGZ88TmYcwa8G55ETPx9j/Add8n/VS6t78amHS1JvyeaiG47+iBW3XdSofsEm3+C2vObnLQqCAC3NowZ/Dkj5KB0d/49QoapeXJbrEE1BQ2LfQnTw+xc7/yoaFXyqpe/IBdNzhfuj5nuljesmvkoLALq2NcFYYSWgfCvw0BLXFEKOyQ36tXCyhGjwd637A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VRF6UMbD7gHAfz+mfsh04yBmU5UhdpxMGElasyMA54g=;
- b=jtEUwlj0RjMKkVrr1QVxxwKdcSvNN4GeA5+miBlM0y4DoJlM1kCx3NzjSE0CZKXYuwqN1yaVW85gh+vmRnHJ+960WkhdtHmRxbXueGf0arCYw4Qn07wXVoog5b+HUaet6kl6NUDwUAy/2J4jQyn/WvH8vCSemTa+0Lp8WJf8ccrA9e06fhzBokctU7tRo7oYgSvZZydKMf2YwaCsBBWYP3fIJAqkhv4sIn9VWJ0HBGL/LuLC+4r1gb+Iwqds8Jkpbn/SQ2uNPILtXh072YEYevmLRSHQ7PKiaODmUkMZsr0dn448jvjxpCotq6neA3XbT6pRqTxlij2+tjMM4MxNnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VRF6UMbD7gHAfz+mfsh04yBmU5UhdpxMGElasyMA54g=;
- b=Kihdy9Pj/TdVJtis0X1c8cP6C+8UQf9107ctjHLDAjDZwzguGF+iM18IK9pCYuXlHTZFRwNQE+eI3J7ciVQnCHqjzAw/nTIoBDncVsshxIWAzorHDkP0tIhzZgVC37Fe5Ovfv8KxyogtOGSiiwqlPLUFBFr+B2phBXVg9s6fkVE=
-Received: from SJ0PR05CA0151.namprd05.prod.outlook.com (2603:10b6:a03:339::6)
- by SA1PR10MB7813.namprd10.prod.outlook.com (2603:10b6:806:3a9::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.23; Tue, 12 May
- 2026 17:06:47 +0000
-Received: from SJ1PEPF00001CE6.namprd03.prod.outlook.com
- (2603:10b6:a03:339:cafe::2b) by SJ0PR05CA0151.outlook.office365.com
- (2603:10b6:a03:339::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.25.16 via Frontend Transport; Tue, 12
- May 2026 17:06:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
-Received: from flwvzet200.ext.ti.com (198.47.21.194) by
- SJ1PEPF00001CE6.mail.protection.outlook.com (10.167.242.22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.25.13 via Frontend Transport; Tue, 12 May 2026 17:06:44 +0000
-Received: from DFLE212.ent.ti.com (10.64.6.70) by flwvzet200.ext.ti.com
- (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Tue, 12 May
- 2026 12:06:26 -0500
-Received: from DFLE207.ent.ti.com (10.64.6.65) by DFLE212.ent.ti.com
- (10.64.6.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Tue, 12 May
- 2026 12:06:25 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE207.ent.ti.com
- (10.64.6.65) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37 via Frontend
- Transport; Tue, 12 May 2026 12:06:25 -0500
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 64CH6P092235147;
-	Tue, 12 May 2026 12:06:25 -0500
-From: Nishanth Menon <nm@ti.com>
-To: Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nathan Chancellor
-	<nathan@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>
-CC: <afd@ti.com>, Nishanth Menon <nm@ti.com>, <llvm@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH V2 09/11] soc: ti: knav_dma: Remove dead check on unsigned args.args[0]
-Date: Tue, 12 May 2026 12:06:21 -0500
-Message-ID: <20260512170623.3174416-10-nm@ti.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20260512170623.3174416-1-nm@ti.com>
-References: <20260512170623.3174416-1-nm@ti.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XQ3ZnKaM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778607955; x=1810143955;
+  h=date:from:to:cc:subject:message-id;
+  bh=QMiOXftQsgE92WFbru5pfm4C24Knj1NQvy4huaRXetk=;
+  b=XQ3ZnKaMkbf0EvM08oSQUPcEg+542FOpiVx/pr9yPqSyJkpPsRo0Jilw
+   Tt6bnsfW0KKu1DZiA+ckRSIKMKe8D6t4JBycC+egrTGxbYsvKcM79Hfy9
+   35STvxr/U6E+gRRJGE1wyb3jQg94w0DU2/M3g26dHk4xq1Qc2fBT+LeVX
+   q6gpQKSQ6wrQFUJInCmIr/+aW9/QSL+OQ0Sv3H/OO5Il55WyPnbUtdnNl
+   CPvbUkZR5a4+Or/wU0dwPJ2NlNKlruOonjMgEdD2kNoRPg0E035aDeRw3
+   36r4wETYoL6IKMZ2cBpbtkQCfHT0rXdUWIaINv5qyXZBUyEJZ1pbtnM2+
+   g==;
+X-CSE-ConnectionGUID: byI/0mcqRDOXMbzuHn8Zaw==
+X-CSE-MsgGUID: LUbhKQoMQkudvLh72fDqFw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="79705746"
+X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
+   d="scan'208";a="79705746"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 10:45:54 -0700
+X-CSE-ConnectionGUID: jA2zEmZfQJ2aCrij/ovo4Q==
+X-CSE-MsgGUID: n2PYtZqJQS2KbNa78C+kSg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
+   d="scan'208";a="242181900"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 12 May 2026 10:45:53 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wMrAz-000000002Wx-28Xv;
+	Tue, 12 May 2026 17:45:49 +0000
+Date: Wed, 13 May 2026 01:45:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-s390@vger.kernel.org, Steffen Eiden <seiden@linux.ibm.com>
+Subject: [kvms390:sae 2/54] arch/x86/kvm/svm/sev.c:117:27: error: no
+ member named 'users_count' in 'struct kvm'
+Message-ID: <202605130154.8hoiUlcD-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE6:EE_|SA1PR10MB7813:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9df8f611-87bd-4e89-6b7d-08deb048d89d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|36860700016|1800799024|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	vXS5t0wgYLxIdd3oK2ucTmZ4QqBKhywAmXs5JXpCppGnZBlOP+EU2gUVwSNm05zXcvnoUmYlSi9L7urO9mUKEusJPLZy8YPqnyw5L1HjRNM+RLGbJE7ZQgat/Z6xF+aL/7Lzvlga9H0VF/ewpzKTYwHU/x24O14ylfWIcCvCEvUYeUkORcXqs7kYi0a6fw7Tm/9TR72nI4UVT+1tl2QZTTo4jRCHgOjEqaEryJqrdGBNbUiME/MWD8eKra6aaNKGG6Z81AAp8RIIZkzxuVifGtz9hnm5G4v17fbgDcn+cQJNU4OtgweKfPjTsZlXGRQxnaDbKPUotgVHZDYmjOkTxu0mpany4LZQtT4vgYKOJBh26ZlQ3TxPd9UvG9s6+CGstzIw31clXvDH5NG5mAcyTPzRGO7ldQT0aLkgozYcEx7vvZZWgGDFP6XfV7jbm2yeMhagNn/jQlQ30KazsTfTwh1O14r/7XhlNNTIxLJeqLKP4MaYVU8fttvcpz5vHO21asasVN1345SQ7w7vU4UGFysuQ5hqtlhB9CWWGyHYN+zoB5/Bh+kkGzDkiTf1pdF+8nzm5JFF2YoAE3SMWKCUdIP+j69deSUjKNoZdQ/lmo3BHoIMltXbT7zNtY9NaBZC0NvEHuXaSrT7hE6msw8AHjnaWynGfuqhr73zA4/GlcQI2Xbtog+HBJbqbU3KBXGr8UDRH0ChjOJfpIF6skG5KQuTpcp6R9TD1GUS62wUH0Q=
-X-Forefront-Antispam-Report:
-	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700016)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	wNekB6HiRjdpeZ3g+3Lb97EuCOEKziC06MZttCLQ5SpMgayWl5wSikv7WwUP2vJkxWFAEJRsdM8oY7eI9ZkUoYyM/f6IpQHfUOyvWcDJpi6BunpVClybvHDd23TXdaPUYfThNsbud+BKQerAjaF9BDfRktPojJRXvaqEBiaLSvbkBAZ/WYOFeWImnRfD96RKiB+O1AVS9jkoGrc52l5MOfRfanuzXOi1owcdbL0JzLBZN38GDNI5LKNJXYVkDvE+eqkiar26yLmbtvTbYar1JkcAxUdqGoQ3eGkaedTYbU+Hb2uvFCZumLYBM1HISPRsEyT3/aQCX1Ya1K1DYb3WJFf27Ldd1x98ODccs8H70fAGZTUrBclh1OkwaOWuoaANIXZv9GkowjwheKLHbWwY6TE4cvj2nOsHcWFxXGU+0QkTWObXwlqVHSO59fnJ6Dt5
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2026 17:06:44.9977
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9df8f611-87bd-4e89-6b7d-08deb048d89d
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00001CE6.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB7813
 
-smatch warns:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git sae
+head:   e952fb65773b1e5cd2e5ca409e712db5ef252bb1
+commit: 134336e0cba8dd18185738333bc26c1b0b020b6d [2/54] KVM, vfio: remove symbol_get(kvm_get_kvm_safe) from vfio
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260513/202605130154.8hoiUlcD-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260513/202605130154.8hoiUlcD-lkp@intel.com/reproduce)
 
-  knav_dma.c:390 of_channel_match_helper() warn: unsigned
-  'args.args[0]' is never less than zero.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605130154.8hoiUlcD-lkp@intel.com/
 
-of_phandle_args.args[] is uint32_t, so the 'args.args[0] < 0' check
-is always false. of_parse_phandle_with_fixed_args() already handles
-errors by returning a non-zero code, which is checked immediately
-above. Remove the dead check.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
----
-Changes since V1:
-- None.
+>> arch/x86/kvm/svm/sev.c:117:27: error: no member named 'users_count' in 'struct kvm'
+     117 |         if (!refcount_read(&kvm->users_count))
+         |                             ~~~  ^
+   1 error generated.
 
-V1: https://lore.kernel.org/all/20260508153211.3688277-10-nm@ti.com/
 
- drivers/soc/ti/knav_dma.c | 5 -----
- 1 file changed, 5 deletions(-)
+vim +117 arch/x86/kvm/svm/sev.c
 
-diff --git a/drivers/soc/ti/knav_dma.c b/drivers/soc/ti/knav_dma.c
-index 462d181ca564..7ba6fd58e9ce 100644
---- a/drivers/soc/ti/knav_dma.c
-+++ b/drivers/soc/ti/knav_dma.c
-@@ -387,11 +387,6 @@ static int of_channel_match_helper(struct device_node *np, const char *name,
- 		return -ENODEV;
- 	}
- 
--	if (args.args[0] < 0) {
--		dev_err(kdev->dev, "Missing args for %s\n", name);
--		return -ENODEV;
--	}
--
- 	return args.args[0];
- }
- 
+eaf78265a4ab339 Joerg Roedel        2020-03-24  109  
+ba903f738249077 Sean Christopherson 2026-03-10  110  static __always_inline void kvm_lockdep_assert_sev_lock_held(struct kvm *kvm)
+ba903f738249077 Sean Christopherson 2026-03-10  111  {
+ba903f738249077 Sean Christopherson 2026-03-10  112  #ifdef CONFIG_PROVE_LOCKING
+ba903f738249077 Sean Christopherson 2026-03-10  113  	/*
+ba903f738249077 Sean Christopherson 2026-03-10  114  	 * Querying SEV+ support is safe if there are no other references, i.e.
+ba903f738249077 Sean Christopherson 2026-03-10  115  	 * if concurrent initialization of SEV+ is impossible.
+ba903f738249077 Sean Christopherson 2026-03-10  116  	 */
+ba903f738249077 Sean Christopherson 2026-03-10 @117  	if (!refcount_read(&kvm->users_count))
+ba903f738249077 Sean Christopherson 2026-03-10  118  		return;
+ba903f738249077 Sean Christopherson 2026-03-10  119  
+ba903f738249077 Sean Christopherson 2026-03-10  120  	/*
+ba903f738249077 Sean Christopherson 2026-03-10  121  	 * Querying SEV+ support from vCPU context is always safe, as vCPUs can
+ba903f738249077 Sean Christopherson 2026-03-10  122  	 * only be created after SEV+ is initialized (and KVM disallows all SEV
+ba903f738249077 Sean Christopherson 2026-03-10  123  	 * sub-ioctls while vCPU creation is in-progress).
+ba903f738249077 Sean Christopherson 2026-03-10  124  	 */
+ba903f738249077 Sean Christopherson 2026-03-10  125  	if (kvm_get_running_vcpu())
+ba903f738249077 Sean Christopherson 2026-03-10  126  		return;
+ba903f738249077 Sean Christopherson 2026-03-10  127  
+ba903f738249077 Sean Christopherson 2026-03-10  128  	lockdep_assert_held(&kvm->lock);
+ba903f738249077 Sean Christopherson 2026-03-10  129  #endif
+ba903f738249077 Sean Christopherson 2026-03-10  130  }
+ba903f738249077 Sean Christopherson 2026-03-10  131  
+
+:::::: The code at line 117 was first introduced by commit
+:::::: ba903f7382490776d2df2fca6bf5c8ef2eb4663f KVM: SEV: Assert that kvm->lock is held when querying SEV+ support
+
+:::::: TO: Sean Christopherson <seanjc@google.com>
+:::::: CC: Sean Christopherson <seanjc@google.com>
+
 -- 
-2.47.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
