@@ -1,141 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6005735292A;
-	Tue, 12 May 2026 12:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778587461; cv=none; b=mKNpNbmnaHSkvqEers8ksqiqXkhRQi31MhOWlzpriLPsv+td/dX0r3nq3yGyzS4gLQDaPiaTh/Zsbr4iyZ27+ksl3jflQiSXCADJPpsDFOObyou0lvV4T8lMU61LfRI0yzZ6BDb328YsSLWaqe+D+1xukhA2i6tZmObPFmT+w68=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778587461; c=relaxed/simple;
-	bh=pBhRvdToqyk9YscDRQYma1tJcOj1+LN3nhO4a/iDSo4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=pLCo5iIBS1QOxJu2P6wxyuW0v/f9SDvRLbg3vL/oq9HbO9DiOgOxyLxrtq5DX+YJyJ3Ig5FOYKAkolULcx0NNOGMbxK7w38HMyvhp62v4NdHP38hiwE1n4drX1Z5HgqfwmaGluCKLTiMTMG2Xs/fV+BExnowrqZ+PxKAbg03mcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HIwqWhWl; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECB53E172D
+	for <llvm@lists.linux.dev>; Tue, 12 May 2026 12:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778590518; cv=pass; b=NsUgptY8kVUwO2+HY8Df1w87KOOOb8mhp1kTYxWTxTASTIHi8EgHhIgnSjykzidQ9B2dPDuPSsMQ/TlGjIvl+rL/cOdsJw6nRe/DvFD82Qpr+t7tCS/b54ZxboXsOTFdnbD+oZZnMwh5n1knZ9Z822YUZJ2u/8zSO3ZjWUZfKC0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778590518; c=relaxed/simple;
+	bh=k001GOwiMb4dRczjtWUwITXHZjyE/lTx6um46NJkiUA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OEFGY+IqTGDp4hp36QnNOXB0mfTP0DahfthNUdbwZPOQrSRss5TNlorFGQEh5HaEU+/btXoqj+WkCj5XhgolsPMMXfw4To7SMeQGJdz8PXNVs1zTdxuZOhAL3uv8O+k40wc0wwTPHJ4jQVBiOAV0CMjk+cw6uZsxoWkyYmKWaQk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pNNVQMlp; arc=pass smtp.client-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HIwqWhWl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778587460; x=1810123460;
-  h=date:from:to:cc:subject:message-id;
-  bh=pBhRvdToqyk9YscDRQYma1tJcOj1+LN3nhO4a/iDSo4=;
-  b=HIwqWhWlwSKPLaBSyGMWziM8KPqA1RbjctvIecuayNYWfOUC2HmMqWrP
-   bE14DOX6fpmodZT7kqBIBMRgqLKi+gQp3VC3GUy9j23tKwZe8XRdekB7m
-   d1rJ/CZosO41v1ksE5+CgCJpnR7yllYAOml+aALr5udDZOzHzjrju1ciX
-   tJQBNnn0NddrfwJFbjP9ZYBWbeA5Jf4y5PFVu1E64D5Qwd0oGHB9RxrO/
-   G8tUCS0/SldsmV7xutC4Ba4FLEue7H6X+UDheYvMh954OgWTOkOxiPVYX
-   iI4qvksHPwX2b+RTlLPdRo0+77PRjyXbR1nabKXM8xnUtQfOZBW9t6EaK
-   w==;
-X-CSE-ConnectionGUID: TfUUUUaiQaKIb2YGMjG83Q==
-X-CSE-MsgGUID: oe7Rk9njTve2sieVcrc0OA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="79515048"
-X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
-   d="scan'208";a="79515048"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 05:04:16 -0700
-X-CSE-ConnectionGUID: +B6smK+nRzq2qJ+h58ohFA==
-X-CSE-MsgGUID: Y2z4rlG7THCdWI8kzU5eSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
-   d="scan'208";a="241754032"
-Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 12 May 2026 05:04:14 -0700
-Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wMlqN-0000000025e-3drg;
-	Tue, 12 May 2026 12:04:11 +0000
-Date: Tue, 12 May 2026 20:03:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [chao:bugfix/common 9/12] fs/f2fs/node.c:1547:27: error:
- expected ':' after 'case'
-Message-ID: <202605122029.Sv8LyyIw-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pNNVQMlp"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1334825de43so737625c88.0
+        for <llvm@lists.linux.dev>; Tue, 12 May 2026 05:55:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778590516; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ApwqJDHTcYaLgGEp20JkQqK9+wNDtyhlbFbBA7MAWWEQkdVS1x7VkPLBRRSV5gOt6W
+         JreZJ9Ocj4NYRYkc2Sn3m4iaQbQjyLayEYoKuodIOCz5nawQGtcsLMh2u1x6SQigmYyK
+         6E+KI5UQ8CEZomrMOeGT/ck1hQyew2fmPDGO6P7ZcvuskgpaLHycZDGN7+J33W+nFNgz
+         akLyeN3WW+H0pe09FT3GY4ZRB4b2ZfjMazgtd7dmYsq43B0uN2Oi7DWOLKJQ8k7Qceym
+         U4WLdYZ5f/gx+XBMQwAlKcF7uU5k1EnZDjWv0prYQh/vWoVWcLyixVO9xPtiybL3X/uY
+         su4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=k001GOwiMb4dRczjtWUwITXHZjyE/lTx6um46NJkiUA=;
+        fh=C2BOA/FN6xxLV6ySG86KcjM9KAYQs/ihwOP3WgBkirI=;
+        b=Xqbh8F8rslJ3+AuPtVqpA18F0ZlE5mjl/D1K0NpgEwBkVZQZEF8T4m+eGpRgeqTjSE
+         1EUT2304/mqVmfw8UPV/pMmGua1f/caUoQ7qMk/RB0Gc+lbiL0oemBVoM0/mDzzMYeTH
+         Dk7nKf3H/9ceQ8lBaKOtI819wigGpL2pyUgpWjsvEZxQSpkj7UtyCHCpaWAdodADgAFr
+         DRa4WIoWwjjObMW9wNi/dAI2mhhLE8LMngo/4sCfowAth5DRp3pT0pVEYQDSWU7POxUJ
+         sOyqJGsMF5WelNBPSrLcZCcm6Z3rTfyYC13tgGwBddWaopFCLQ3XB6muKm7A3CgvbS08
+         KdRA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778590516; x=1779195316; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=k001GOwiMb4dRczjtWUwITXHZjyE/lTx6um46NJkiUA=;
+        b=pNNVQMlpqyWrhv6GE/d6Z4hBIXmBQl7XXxw2Jgb1Q72DrugJRtKNoa4Vheg+RwdR5O
+         KGQXFJjd/8Zi0TZHWBYUwDdp3FGOEEED6zC8NnXYFW84ZzNjNr2ddxB0noikCCDZLUZE
+         fLMD52StHOJ7hSV3pNAwYWahAbclx/+w54CbCKfqTLPg0og/dfxn6O43KbrJMH9WvidK
+         jGkP2eNU0Iel0838yIQ6flayYXp7A5vHmeBB4tLS0Aia+7SkdG4jMre3HpH6yocNX34w
+         8Ycuj3DmX28CKT6waBvccnS8IZGMgGMPur2o2TtW7M2HBcUTAfrf8axsqw1leNDkjXBs
+         CF1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778590516; x=1779195316;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k001GOwiMb4dRczjtWUwITXHZjyE/lTx6um46NJkiUA=;
+        b=pb8WZH17VG02jSaWC0XZgoN17j3T9ZdQywhvnUhuji/hDXwrtAiL31cINN4l8eEPBv
+         WLdX50SUmxdgH4rhiauP7wuKDyEmryhVBpCwmJ6ubpUd6bb/9oHJcYaHIRyH2fQe46T9
+         /8lSDufE/WTC1ZprUvzL6fSSTijvwatnrSF8VPa7HGMP7MYL/bBkFzhHW23AiNQFbnRy
+         MHhaLZnoUm/wzbP5L2RTjUdl+U78KnbgnBaVzdprtBbugorYqaZJm1KNvRoBkUHoZbgg
+         saWJSjub7YJCNF0jf6RwdPiS0QKb/C8bb+yjAoiax/RloZxxB+NoxYRhC9+Z7YEfBU9d
+         YwXg==
+X-Forwarded-Encrypted: i=1; AFNElJ/dh2h4jCFT2LeBejL7tDmNeCuod2OYyIg866Gv38EWEbMeMTMoR0JjMITAEOBCADdmHael@lists.linux.dev
+X-Gm-Message-State: AOJu0YwD8cx6cvMYgkXrlZtTkWz6VblAxUwnE8hlZWk740C4x+T7DVX5
+	XcPQZALKQB5ym5ULTNiRuB9yO+3AKZVtBw4Hl/9x+YjF+FmNtmKYxZwXCpEFcmMt06oT+sz0yfZ
+	attxCR1K9NRRp4CtIR/MYjElw9ZwWLm7LvSNXa4bg
+X-Gm-Gg: Acq92OEGp9BEHH12SZSXFPaaseHYoydU+GFxcZWC9owZ5dalOBowdFULZGoxGCygmRE
+	axu4tqDK/Kpnf37jreNpOpgQlVbx+7q3aufbJIiZ3z7YExB1XPmcfmWkce3sxa+PpbCjSJYMLB1
+	dsV5ck0yDT4ERwRsPSZA6MZXo9PpqMAAOz5ggNOM7yEdFYopl1sLFSpxn8te/a2MwzVwD3dnVig
+	1AQqDy/xkbisNgQ6aqBn1DcwqiABrVtGzdGv7GIxwNqvzhEZ02bZ5jOR0H5P7f/3COjn0U0tpMw
+	98xcErM9pg62i2+7EXouQS2WETsrjJgevxRvBKlrJsHX
+X-Received: by 2002:a05:7022:2529:b0:12a:6a64:81ee with SMTP id
+ a92af1059eb24-132a7edc7a5mr7596782c88.3.1778590515386; Tue, 12 May 2026
+ 05:55:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260511200136.3201646-1-elver@google.com> <20260511200136.3201646-2-elver@google.com>
+ <afc2202a-2e0b-43e0-9556-06be2da33c83@kernel.org>
+In-Reply-To: <afc2202a-2e0b-43e0-9556-06be2da33c83@kernel.org>
+From: Marco Elver <elver@google.com>
+Date: Tue, 12 May 2026 14:54:38 +0200
+X-Gm-Features: AVHnY4JQX5cZZPTvWGLXHBJoCN4agKvIY9SusDXvPP6Ojv3wTK7cyl5mLfOsNmM
+Message-ID: <CANpmjNN0-b0TG2=7SsPpRuubwTWYfoAiYgnnM_5-39SoVfv=Pw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] slab: improve KMALLOC_PARTITION_RANDOM randomness
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>, 
+	David Hildenbrand <david@kernel.org>, David Rientjes <rientjes@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>, 
+	Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Matteo Rizzo <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Suren Baghdasaryan <surenb@google.com>, linux-hardening@vger.kernel.org, 
+	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>, 
+	"Liam R. Howlett" <liam@infradead.org>, Alexander Potapenko <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git bugfix/common
-head:   3fc276f79bae89d43863f797bc4ca48965917be8
-commit: 1799e0c0814565aee65a1bc9a58aead705b9bfea [9/12] f2fs: fix to do sanity check on f2fs_get_node_folio_ra()
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260512/202605122029.Sv8LyyIw-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260512/202605122029.Sv8LyyIw-lkp@intel.com/reproduce)
+On Tue, 12 May 2026 at 12:37, 'Vlastimil Babka (SUSE)' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+> On 5/11/26 22:00, Marco Elver wrote:
+> > When using CONFIG_KMALLOC_PARTITION_RANDOM, _RET_IP_ was previously used
+> > to identify the allocation site. _RET_IP_, however, evaluates to the
+> > caller's parent's instruction pointer rather than the actual allocation
+> > site; this would lead to collisions where a function performs multiple
+> > allocations.
+> >
+> > With the generalization to kmalloc_token_t, we now generate the token at
+> > the outermost macro, and using _THIS_IP_ would fix this for all cases.
+>
+> Hm but it means in patch 1 we make things even worse and then fix them
+> again, and also improve what was suboptimal prior to the series.
+> Would it be instead possible to reorder patches 1 and 2 so we improve the
+> current state first, and then introduce typed partitioning without any
+> changes to the randomized one? (aside from changing the previously correcly
+> used cases _RET_IP_ to _CODE_LOCATION_).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605122029.Sv8LyyIw-lkp@intel.com/
+It won't work (it could be made to work if _THIS_IP_ wasn't broken).
+The compiler is supposed to maintain semantics of a static variable in
+a function, even inline functions, and refer to the same static
+variable -- and because kmalloc_type is an inline function, if
+_CODE_LOCATION_ is the non-_THIS_IP_ version, it'd break.
 
-All errors (new ones prefixed by >>):
+Even if _THIS_IP_ wasn't broken, the other complication is introducing
+the slab.c vs. outside use of kmalloc_type differentiation.
 
->> fs/f2fs/node.c:1547:27: error: expected ':' after 'case'
-    1547 |         case NODE_TYPE_NON_IXNODE;
-         |                                  ^
-         |                                  :
-   1 error generated.
+Both these problems go away if we make this patch 2 (using
+_CODE_LOCATION_ on the outer macro, not in an inline function).
 
-
-vim +1547 fs/f2fs/node.c
-
-  1517	
-  1518	int f2fs_sanity_check_node_footer(struct f2fs_sb_info *sbi,
-  1519						struct folio *folio, pgoff_t nid,
-  1520						enum node_type ntype, bool in_irq)
-  1521	{
-  1522		bool is_inode, is_xnode;
-  1523	
-  1524		if (unlikely(nid != nid_of_node(folio)))
-  1525			goto out_err;
-  1526	
-  1527		is_inode = IS_INODE(folio);
-  1528		is_xnode = f2fs_has_xattr_block(ofs_of_node(folio));
-  1529	
-  1530		switch (ntype) {
-  1531		case NODE_TYPE_REGULAR:
-  1532			if (is_inode && is_xnode)
-  1533				goto out_err;
-  1534			break;
-  1535		case NODE_TYPE_INODE:
-  1536			if (!is_inode || is_xnode)
-  1537				goto out_err;
-  1538			break;
-  1539		case NODE_TYPE_XATTR:
-  1540			if (is_inode || !is_xnode)
-  1541				goto out_err;
-  1542			break;
-  1543		case NODE_TYPE_NON_INODE:
-  1544			if (is_inode)
-  1545				goto out_err;
-  1546			break;
-> 1547		case NODE_TYPE_NON_IXNODE;
-  1548			if (is_inode || is_xnode)
-  1549				goto out_err;
-  1550		default:
-  1551			break;
-  1552		}
-  1553		if (time_to_inject(sbi, FAULT_INCONSISTENT_FOOTER))
-  1554			goto out_err;
-  1555		return 0;
-  1556	out_err:
-  1557		set_sbi_flag(sbi, SBI_NEED_FSCK);
-  1558		f2fs_warn_ratelimited(sbi, "inconsistent node block, node_type:%d, nid:%lu, "
-  1559			"node_footer[nid:%u,ino:%u,ofs:%u,cpver:%llu,blkaddr:%u]",
-  1560			ntype, nid, nid_of_node(folio), ino_of_node(folio),
-  1561			ofs_of_node(folio), cpver_of_node(folio),
-  1562			next_blkaddr_of_node(folio));
-  1563	
-  1564		f2fs_handle_error(sbi, ERROR_INCONSISTENT_FOOTER);
-  1565		fserror_report_file_metadata(folio->mapping->host,
-  1566				-EFSCORRUPTED, in_irq ? GFP_NOWAIT : GFP_NOFS);
-  1567		return -EFSCORRUPTED;
-  1568	}
-  1569	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+While I understand that maybe we could have considered this as a
+stable backport, I think it's borderline; the feature isn't broken
+per-se, just slightly lower randomness than perhaps intended if size
+is a constant expression. A minimal fix prior to the macro rework
+currently eludes me.
