@@ -1,144 +1,162 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5443B27FB3A;
-	Tue, 12 May 2026 02:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E37226D18;
+	Tue, 12 May 2026 03:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778552725; cv=none; b=B1mQeNy43szyQobxFgYyb76p7ZaPLFWnoVvepsjAWkx9US8LNDYsrRxf18pl6AFbZ4p6DZeSD/qQYV9uw3VA3O0YBrF0/ogH34Z6mFKRwzpMG+ZnRB9sKKVrxngYPDrNlT5pBxppp6osrJz9UZnGOmTEs7aMu+1snFvlPeJtkaI=
+	t=1778557049; cv=none; b=SHFqa8Sdgp26ZHYS7QHIt9lFTkX2YYkOasr8advX9/29iAAAF/OfjhCiNwZ/zqIVLIycQSfn9Z1zXohknVq4qzpctzshrROubo24us4ojapkx+/D2tspeiNt+hSHx01n45MhZeQFjnvVW7bcy5TUM6nD9/8Xy1g5JtdItjM6LCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778552725; c=relaxed/simple;
-	bh=KtZ3CSfxYzJMO0aFbpNWPQ3J9oGXYmqI1pmCbA0io4E=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=STvQnTa+sz7P/8lCoXQZNjmd5iytUM6prAwn4Z4zo86h24F1OJvyQun9Dr7HxkbAqDBYfm0mwkqHf9j9DPiL45gX0c69fFUiX+TDuqN9S4wcbDDgnC/VkGVGvZW4H9iJJQbm/FauTZopXh5D4v3z1FCT/pJw1cn8hLdCzvyjBUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qj75eu2L; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778557049; c=relaxed/simple;
+	bh=pwneY8tqOMXV/Za/BC8NmNmIjbTm6BzCxeG9cSc4u/Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FV1FffrVAwHrkWS8iLWa9Q7dbpIBJXeQ4GQ9nzWR70fXPHFpa7mFax/bmVqXpuG0UjgFDhYykGfHJQ+x6vYFeKRX/RZ8PNlYla6gTiAwTGWDr4XC5xguKbD5yaYD06GYcrO0t5cTcP/Uz78Pbp2rR/xF16HA+r7NMwbEHC0IYLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CFnyuxLx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qj75eu2L"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778552724; x=1810088724;
-  h=date:from:to:cc:subject:message-id;
-  bh=KtZ3CSfxYzJMO0aFbpNWPQ3J9oGXYmqI1pmCbA0io4E=;
-  b=Qj75eu2Lf6A3p6w4RjbUKBhjsgUvDUYhGTuRyyt1doXOZEoY+0VUnFzK
-   5jBp26NJpFO5CxRu8yzYytU75dnSxsFxQJCiSntqmpef1xKmw27PfvQH2
-   sWm28JdJQ/6ZmSFkDolVX02ZH7FPNhrJKmRmUIQkGedO9X0EjYgddqoP5
-   tMXIO3TQyU/84KikP/PK69aVj/B7VUOqYW65IRHdLH0fF+MCGDEbXp/38
-   tRAUVbST0EwNIJ+JeknvSIlHk9BpsLhAtqA78oqn3zrK5D2CbvMwKmeii
-   IYWMzBURMfpEQM84cNfeqUqYfCDpdStRXyiII75QUW7FAdIj1jEJQezp+
-   w==;
-X-CSE-ConnectionGUID: RJcyGQZeTNq+hPjmqUb1pA==
-X-CSE-MsgGUID: S5VX6omjSXm/YCMR7mniJQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="79561524"
-X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
-   d="scan'208";a="79561524"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2026 19:25:23 -0700
-X-CSE-ConnectionGUID: /7AInmzlQp2rtKS1aoKORw==
-X-CSE-MsgGUID: woutQfx+Rv+tGM7fZE40pg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
-   d="scan'208";a="241982052"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa004.jf.intel.com with ESMTP; 11 May 2026 19:25:22 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wMco8-0000000088L-2rDe;
-	Tue, 12 May 2026 02:25:16 +0000
-Date: Tue, 12 May 2026 04:24:46 +0200
-From: kernel test robot <lkp@intel.com>
-To: Namjae Jeon <linkinjeon@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linkinjeon-exfat:iomap-work 8/9] fs/exfat/file.c:303:6:
- warning: variable 'err' is used uninitialized whenever 'if' condition is true
-Message-ID: <202605120425.jIp6e2MN-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CFnyuxLx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95198C2BCB0;
+	Tue, 12 May 2026 03:37:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778557049;
+	bh=pwneY8tqOMXV/Za/BC8NmNmIjbTm6BzCxeG9cSc4u/Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CFnyuxLxWLewCmqP9tCc5Fky1tBtI6M2DzFY+XCXdM055KYVpjAXEhrZFv12K9rSX
+	 vvebPC5LSDOHGqH9Ou8b7C8Re4H9WoEDHi/9t8KFdGi3S+xG3TObCkdsIhBN93Dagk
+	 pwdDcXB86/Q5KOh7qMV4KCNaU2JbMgP3GPxs1mnKzGFYbR140Fzdqsm9N3KL0eIRNC
+	 +eB5zuc9zgC942F+V+GICImCZ2T6vEWOC4LjMO+ur9mQ6u5ksQioBSm+cK9J4iDlfZ
+	 7goNZYbpZCB18QSHEuII/i3YlMN4MzmlGxI5Fb6qXncgscqXxAqPt+lz3sGbL2NoOY
+	 ojNJE6cC7UQDw==
+Date: Tue, 12 May 2026 12:37:26 +0900
+From: "Harry Yoo (Oracle)" <harry@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@gentwo.org>, Hao Li <hao.li@linux.dev>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Alexander Potapenko <glider@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com, 
+	llvm@lists.linux.dev, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Florent Revest <revest@google.com>, Jann Horn <jannh@google.com>, KP Singh <kpsingh@kernel.org>, 
+	Matteo Rizzo <matteorizzo@google.com>, GONG Ruiqi <gongruiqi1@huawei.com>
+Subject: Re: [PATCH v3 1/2] slab: support for compiler-assisted type-based
+ slab cache partitioning
+Message-ID: <jnfrygcxgl6zbs3fifgsxh6233fr2ou7vyfs7n44xa5cf3dqqt@rhjdx5ifkdur>
+References: <20260424132427.2703076-1-elver@google.com>
+ <6f2bd63a-dc02-4631-a3a5-7ec8e58a4a4e@kernel.org>
+ <afkOMIPu1WNFE9MS@elver.google.com>
+ <CANpmjNM261J5qefMvmUXWZGBVz-KBs7GkbpdNMfTOvNJ-=LiZQ@mail.gmail.com>
+ <afz7pZADZPD4mKJr@MacBook-Air.tail10959e.ts.net>
+ <af3xcFjrZSZFG846@elver.google.com>
+ <rz7dt4wghum6beghfgm6suqje6jeivrensojjalfis5zeuyen7@6bj7kfpqb4q5>
+ <CANpmjNNevjTo0uwo3DJdDc=PpQpyzj301kFT39OBoCNLW0A8VQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNNevjTo0uwo3DJdDc=PpQpyzj301kFT39OBoCNLW0A8VQ@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat.git iomap-work
-head:   6bbe9d8bf6e38726b6d4421a7b144186d8e10a9f
-commit: c5b2f44ae0af3036dffc5f3252cd807e42ac8d2b [8/9] exfat: add iomap direct I/O support
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260512/202605120425.jIp6e2MN-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260512/202605120425.jIp6e2MN-lkp@intel.com/reproduce)
+On Mon, May 11, 2026 at 11:34:53AM +0200, Marco Elver wrote:
+> On Mon, 11 May 2026 at 10:31, 'Harry Yoo (Oracle)' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
+> >
+> > On Fri, May 08, 2026 at 04:21:36PM +0200, Marco Elver wrote:
+> > > I think I have a solution for this mess, see below.
+> > >
+> > > I would not send it as 1 series, but only include the slab changes (+
+> > > instruction_pointer.h change to introduce _CODE_LOCATION_) as one
+> > > series, to go through the slab tree. The rest of the patches would go to
+> > > respective arch maintainers.
+> >
+> > I'm assuming this will be a follow-up and reviewing patch 1
+> > (and waiting for Jon's thuoghts on patch 2)
+> 
+> I'll be sending v4 shortly.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605120425.jIp6e2MN-lkp@intel.com/
+Thanks!
 
-All warnings (new ones prefixed by >>):
+> > > diff --git a/include/linux/instruction_pointer.h b/include/linux/instruction_pointer.h
+> > > index aa0b3ffea935..dfe73aafddb8 100644
+> > > --- a/include/linux/instruction_pointer.h
+> > > +++ b/include/linux/instruction_pointer.h
+> > > @@ -8,6 +8,30 @@
+> > >
+> > >  #ifndef _THIS_IP_
+> > >  #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+> > > +/*
+> > > + * The current generic definition of _THIS_IP_ is considered broken by GCC [1]
+> > > + * and Clang [2]. In particular, the address of a label is only expected to be
+> > > + * used with a computed goto.
+> > > + *
+> > > + *   [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071
+> > > + *   [2] https://github.com/llvm/llvm-project/issues/138272
+> > > + *
+> > > + * Mark it as broken, so that appropriate fallback options can be implemented
+> > > + * for architectures that do not define their won _THIS_IP_.
+> > > + */
+> > > +#define HAS_BROKEN_THIS_IP
+> > > +#endif
+> >
+> > As long as _THIS_IP_ is broken on some arches, it cannot be used anyway
+> > when in a general API that can be used by arbitrary users?
+> 
+> It more or less works today, and for debugging or tracing it's "good
+> enough" in most cases.
+> 
+> The plan would be to phase out the generic _THIS_IP_ once all
+> architectures have a correct _THIS_IP_ implementation.
 
->> fs/exfat/file.c:303:6: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     303 |         if (ei->start_clu == 0) {
-         |             ^~~~~~~~~~~~~~~~~~
-   fs/exfat/file.c:319:9: note: uninitialized use occurs here
-     319 |         return err;
-         |                ^~~
-   fs/exfat/file.c:303:2: note: remove the 'if' if its condition is always false
-     303 |         if (ei->start_clu == 0) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-     304 |                 /*
-         |                 ~~
-     305 |                  * Empty start_clu != ~0 (not allocated)
-         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     306 |                  */
-         |                  ~~
-     307 |                 exfat_fs_error(sb, "tried to truncate zeroed cluster.");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     308 |                 goto write_size;
-         |                 ~~~~~~~~~~~~~~~~
-     309 |         }
-         |         ~
-   fs/exfat/file.c:300:9: note: initialize the variable 'err' to silence this warning
-     300 |         int err;
-         |                ^
-         |                 = 0
-   1 warning generated.
+Ack.
 
+> > Is it something that can be fixed in all arches over time?
+> 
+> Yes, I have patches for that.
+> 
+> > > +/*
+> > > + * _CODE_LOCATION_ provides a unique identifier for the current code location.
+> > > + * When _THIS_IP_ is broken (generic version), we fall back to a static marker
+> > > + * which guarantees uniqueness and resolves to a constant address at link time,
+> > > + * avoiding runtime overhead and compiler optimizations breaking it.
+> > > + */
+> > > +#ifdef HAS_BROKEN_THIS_IP
+> > > +#define _CODE_LOCATION_ ({ static const char __here; (unsigned long)&__here; })
+> >
+> > Nice!
+> >
+> > Yes, we don't really need the exact code location
+> > for partitioning kmalloc caches.
+> >
+> > IIRC lockdep does a similar thing to define lock classes (unique for
+> > each lock init location)
+> >
+> > > +#else
+> > > +#define _CODE_LOCATION_ _THIS_IP_
+> > >  #endif
+> >
+> > Probably we don't need this fallback?
+> 
+> x86-64 is the only arch that has working fast _THIS_IP_, and adding
+> static __here markers to bss is rather wasteful.
 
-vim +303 fs/exfat/file.c
+Ouch, I see.
 
-98d917047e8b7f Namjae Jeon           2020-03-02  294  
-c5b2f44ae0af30 Namjae Jeon           2026-05-07  295  static int exfat_truncate(struct inode *inode)
-98d917047e8b7f Namjae Jeon           2020-03-02  296  {
-98d917047e8b7f Namjae Jeon           2020-03-02  297  	struct super_block *sb = inode->i_sb;
-98d917047e8b7f Namjae Jeon           2020-03-02  298  	struct exfat_sb_info *sbi = EXFAT_SB(sb);
-7dee6f57d7f22a Christophe Vu-Brugier 2021-11-02  299  	struct exfat_inode_info *ei = EXFAT_I(inode);
-98d917047e8b7f Namjae Jeon           2020-03-02  300  	int err;
-98d917047e8b7f Namjae Jeon           2020-03-02  301  
-98d917047e8b7f Namjae Jeon           2020-03-02  302  	mutex_lock(&sbi->s_lock);
-7dee6f57d7f22a Christophe Vu-Brugier 2021-11-02 @303  	if (ei->start_clu == 0) {
-98d917047e8b7f Namjae Jeon           2020-03-02  304  		/*
-98d917047e8b7f Namjae Jeon           2020-03-02  305  		 * Empty start_clu != ~0 (not allocated)
-98d917047e8b7f Namjae Jeon           2020-03-02  306  		 */
-98d917047e8b7f Namjae Jeon           2020-03-02  307  		exfat_fs_error(sb, "tried to truncate zeroed cluster.");
-98d917047e8b7f Namjae Jeon           2020-03-02  308  		goto write_size;
-98d917047e8b7f Namjae Jeon           2020-03-02  309  	}
-98d917047e8b7f Namjae Jeon           2020-03-02  310  
-f7cde96710a436 Yuezhang Mo           2022-03-28  311  	err = __exfat_truncate(inode);
-98d917047e8b7f Namjae Jeon           2020-03-02  312  	if (err)
-98d917047e8b7f Namjae Jeon           2020-03-02  313  		goto write_size;
-98d917047e8b7f Namjae Jeon           2020-03-02  314  
-39c1ce8eafc0ff Yuezhang Mo           2023-01-04  315  	inode->i_blocks = round_up(i_size_read(inode), sbi->cluster_size) >> 9;
-98d917047e8b7f Namjae Jeon           2020-03-02  316  write_size:
-98d917047e8b7f Namjae Jeon           2020-03-02  317  	mutex_unlock(&sbi->s_lock);
-c5b2f44ae0af30 Namjae Jeon           2026-05-07  318  
-c5b2f44ae0af30 Namjae Jeon           2026-05-07  319  	return err;
-98d917047e8b7f Namjae Jeon           2020-03-02  320  }
-98d917047e8b7f Namjae Jeon           2020-03-02  321  
+> More architectures will be supporting _THIS_IP_ properly once I get to
+> send the patches. The mainstream architectures all have a reasonable
+> and fast way to get the current IP, so we don't need to waste bss
+> space there.
 
-:::::: The code at line 303 was first introduced by commit
-:::::: 7dee6f57d7f22a89dd214518c778aec448270d4c exfat: reuse exfat_inode_info variable instead of calling EXFAT_I()
+Ack.
 
-:::::: TO: Christophe Vu-Brugier <christophe.vu-brugier@seagate.com>
-:::::: CC: Namjae Jeon <linkinjeon@kernel.org>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Harry / Hyeonggon
