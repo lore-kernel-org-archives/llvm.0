@@ -1,46 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3CD136F8FE;
-	Tue, 12 May 2026 07:34:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB27F481236;
+	Tue, 12 May 2026 08:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778571288; cv=none; b=SvafrTXLzh3qMKpsnVsMaL12Lb786nzKZz3BLrV0LF18DXWLFxWscv6OS4Gr3hJP2Nzz5uzCyymXmGY6OVoaK5xYKBBfvRVNSBgiQZ6jEXJOn9twd9JhM61dYRSsy4tG7K4RDWXkBAGBgUQuzNuSUoK+iDbQf2gKZnka9f6NbeM=
+	t=1778573524; cv=none; b=qUEGfDI0r0M9rg+sG+2rbSg1JzAibV5FfaKXVUd4lhWo+U75pmDQdoZDBTSh8mxulEyRXnSE1I5Yj8BAxaxH4zH/V3VN6NOr5l9/grdzxhneGVvWMmJl/3xrj1Y7RmOgWWVVlwCrjKe2O52c6mHIjaJ0q1jiDI9L5TfI6z4s8zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778571288; c=relaxed/simple;
-	bh=T/Fjk+Ia8FeTP20elfFPSEy0lY7bZ7cUA3AKIwU37ZU=;
+	s=arc-20240116; t=1778573524; c=relaxed/simple;
+	bh=Lyfw8ZHz86iOPtbqj1/0b4s8DTqbNY5GYz9wZ61yw8o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nptquDpvyOhqeNc9+sGr6JQLv70SFlXyrcLRODaetX+1X/oSm+K8Oom1MmaVT3oenqRtoUX3GCqxUqt71JTWmTU2VPekHPfWR+KOE+BAAqB/S098tygOBprmnv2gfV+eyWW7RHhTDkEqiHUJD/xCLpux755+BIDfKeemqiv1qOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b41QgKN8; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=DYNnfrT+1eGBgsFQoDmdG/P4YZ0coEWJewuaA1QHKZ79qCIQFMqDxZcv1sjEusZiJuRrWyPHtZ/3EaHEYpq4MCHBEbLLvgjg2Iu0ytkxEqPB65vVF0vfBFUOh72dPJAclG7DZ532QtOAARkf0OS8Nv8EH/NhEPakcncFnmSt+sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SMPjOqFx; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b41QgKN8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E27BC2BCB0;
-	Tue, 12 May 2026 07:34:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778571287;
-	bh=T/Fjk+Ia8FeTP20elfFPSEy0lY7bZ7cUA3AKIwU37ZU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b41QgKN8/pvSDbgptQLL7kDNut1BOUGA+W90IztVp/QJIz4DmjpHViUqgm/gWcQBz
-	 /9/D2QNqr9SK4X+RbqudiJWkDEEVS9L3KwnOM4JC44SXAvdIFvUj7OSxK3CGgaRwDJ
-	 nXTiq364Pe3yj5QXmN28eoof2LFc4DHIM8kFeMD02s2BfGrXaGWt1cshwD77t1G/07
-	 MpzPeeblgO2xG2d5a+l0zl/boS90vAeUnnrnrfx4V7Zp1J8MfLyy+lzezR/GiLquHm
-	 3en05WEMaCYfwHxwequ5zjGWKhCJV9dTxl6TKSXAnKpavL/VP33QA7T4GVZiKypF+D
-	 +HPwrkBZaQQeg==
-Date: Tue, 12 May 2026 16:34:42 +0900
-From: Nathan Chancellor <nathan@kernel.org>
-To: Mithil Bavishi <bavishimithil@gmail.com>
-Cc: Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <kees@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: OMAP2+: Make OMAP4 finish_suspend callback CFI-safe
-Message-ID: <20260512073442.GA570003@ax162>
-References: <20260512042341.1452-1-bavishimithil@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SMPjOqFx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778573522; x=1810109522;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lyfw8ZHz86iOPtbqj1/0b4s8DTqbNY5GYz9wZ61yw8o=;
+  b=SMPjOqFxDGqd5DmHMOPgPEHkiq2uhpfkCspU4+B3mEdlhMInG/Yb7bZT
+   7POFoUFs0cYex28WQtGQXtnx8sNgQMUI9rtKjNiyffojXKwfcyRwPLtGv
+   TeB3IvFLKxiKLRp/BHgJsKZtFZObxudkoWBXjow+WHdIqE7AyYh3hgnie
+   pcAl6JLkf43rni398Vm5TctkcxT7j2mTrMHQB8oV2cIiJpdhMbCt8peuD
+   2BIoOUgNyMjyPJ0sVTpvJE99Vcr4Gr4l1ZZGpbvjdvo7oZQyjyOATABJF
+   cNUIr9N3J2OvOh729jWbHuoCtWgLfb/ZkUUEg1oAhLPvoj0xzDhxptGPm
+   Q==;
+X-CSE-ConnectionGUID: PEbdTf6pTMulkGXYWSA3VQ==
+X-CSE-MsgGUID: V2hpuLzsT6axZ4OIgp/f3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11783"; a="90858886"
+X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
+   d="scan'208";a="90858886"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 01:12:01 -0700
+X-CSE-ConnectionGUID: qt2ZnkRLT3OiIy0Dozx+2w==
+X-CSE-MsgGUID: wdyrEXXSS4yuFb5eH6VODw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,230,1770624000"; 
+   d="scan'208";a="235032968"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 12 May 2026 01:12:00 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wMiDe-000000001pW-11Ac;
+	Tue, 12 May 2026 08:11:58 +0000
+Date: Tue, 12 May 2026 16:11:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Badal Nilawar <badal.nilawar@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 1/1] xe/xe_mctp_mailbox: Add support for MCTP
+ transport over mailbox
+Message-ID: <202605121643.X4yOe0ng-lkp@intel.com>
+References: <20260504193420.1232842-4-badal.nilawar@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,55 +63,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260512042341.1452-1-bavishimithil@gmail.com>
+In-Reply-To: <20260504193420.1232842-4-badal.nilawar@intel.com>
 
-On Tue, May 12, 2026 at 12:23:41AM -0400, Mithil Bavishi wrote:
-> With CONFIG_CFI enabled, OMAP4 can trap in omap4_enter_lowpower()
-> because omap_pm_ops.finish_suspend points directly to the assembly
-> routine omap4_finish_suspend, which lacks the expected KCFI type
-> metadata.
+Hi Badal,
 
-It sounds like omap4_finish_suspend() should be defined with
-SYM_TYPED_FUNC_START then? Is that the case for all of the other
-functions that are added to omap_pm_ops?
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-> Add a small C wrapper with the exact callback prototype and use it for
-> finish_suspend.
-> 
-> Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
-> ---
->  arch/arm/mach-omap2/omap-mpuss-lowpower.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/mach-omap2/omap-mpuss-lowpower.c b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
-> index f18ef45e2..1c51b2f97 100644
-> --- a/arch/arm/mach-omap2/omap-mpuss-lowpower.c
-> +++ b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
-> @@ -111,6 +111,11 @@ static struct cpu_pm_ops omap_pm_ops = {
->  	.hotplug_restart	= dummy_cpu_resume,
->  };
->  
-> +static int omap4_finish_suspend_wrapper(unsigned long cpu_state)
-> +{
-> +	return omap4_finish_suspend(cpu_state);
-> +}
-> +
->  /*
->   * Program the wakeup routine address for the CPU0 and CPU1
->   * used for OFF or DORMANT wakeup.
-> @@ -437,7 +442,7 @@ int __init omap4_mpuss_init(void)
->  	}
->  
->  	if (cpu_is_omap44xx()) {
-> -		omap_pm_ops.finish_suspend = omap4_finish_suspend;
-> +		omap_pm_ops.finish_suspend = omap4_finish_suspend_wrapper;
->  		omap_pm_ops.resume = omap4_cpu_resume;
->  		omap_pm_ops.scu_prepare = scu_pwrst_prepare;
->  		omap_pm_ops.hotplug_restart = omap4_secondary_startup;
-> -- 
-> 2.43.0
-> 
+[auto build test ERROR on drm-xe/drm-xe-next]
+[also build test ERROR on drm-misc/drm-misc-next drm-tip/drm-tip linus/master v7.1-rc3 next-20260508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Badal-Nilawar/xe-xe_mctp_mailbox-Add-support-for-MCTP-transport-over-mailbox/20260512-014830
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20260504193420.1232842-4-badal.nilawar%40intel.com
+patch subject: [RFC PATCH 1/1] xe/xe_mctp_mailbox: Add support for MCTP transport over mailbox
+config: powerpc64-randconfig-001-20260512 (https://download.01.org/0day-ci/archive/20260512/202605121643.X4yOe0ng-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260512/202605121643.X4yOe0ng-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605121643.X4yOe0ng-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: mctp_register_netdev
+   >>> referenced by xe_mctp_mailbox.c:166 (drivers/gpu/drm/xe/xe_mctp_mailbox.c:166)
+   >>>               drivers/gpu/drm/xe/xe_mctp_mailbox.o:(xe_mctp_mailbox_init) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: mctp_unregister_netdev
+   >>> referenced by xe_mctp_mailbox.c:147 (drivers/gpu/drm/xe/xe_mctp_mailbox.c:147)
+   >>>               drivers/gpu/drm/xe/xe_mctp_mailbox.o:(xe_mctp_mailbox_init) in archive vmlinux.a
+   >>> referenced by xe_mctp_mailbox.c:175 (drivers/gpu/drm/xe/xe_mctp_mailbox.c:175)
+   >>>               drivers/gpu/drm/xe/xe_mctp_mailbox.o:(xe_mctp_mailbox_init) in archive vmlinux.a
+   >>> referenced by xe_mctp_mailbox.c:147 (drivers/gpu/drm/xe/xe_mctp_mailbox.c:147)
+   >>>               drivers/gpu/drm/xe/xe_mctp_mailbox.o:(xe_mctp_mailbox_fini) in archive vmlinux.a
 
 -- 
-Cheers,
-Nathan
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
