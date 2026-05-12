@@ -1,151 +1,111 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A1F3ABD91
-	for <llvm@lists.linux.dev>; Tue, 12 May 2026 20:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778616844; cv=pass; b=HgghPup1lOU5HFETQjqMBSUFHUHnlCRrF5jgAubtkHGi3zhjprg1wBWJ/1P78ZiX9p2zYTDdknKP/FeaP66IYn0iL86XfTSD3wXVe9SEDAZfvsn9H7yOxXorzrqBLuojV0DWXqkMNgakC3lMJBld5ZjxBTxHyavfmiOF7bwe5gM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778616844; c=relaxed/simple;
-	bh=aw73wrlsT9ay/mNTPbpByGZ+dtyGQl7PfwCRhoX2vyc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I0qQYLuAlHOBSXYVtM+Mqtfehuw5yZXNLLFXP7K9xH9bkG/JcFzcS1tWXNSWF9088aSXWp5NWmUqSkDB+F5mtvDH6Vi8hRLEVT0IPs9NTx5EfuRGZ9crpwOBkcsuFerCweUfWvA2tqs3W0Uw/bBcl55weIkWORpsjVeeoRYPJg8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OPDj2Ab0; arc=pass smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82127274652
+	for <llvm@lists.linux.dev>; Tue, 12 May 2026 20:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778617024; cv=none; b=jdvYJfAG+72K8D8xBN46+ZeaAk4wOMgEgRJUGmAuZyJ5n4yTRklejs/uWthDioaLmQS5IhfzmBFwWSyXNoZHUBSSBtYDrqwFefvS5KAH/dpz2mmRE07iUWu40B3qF9dj3sYqL5+Ex+slydOTe83mYUl8gNEKvZqwog/Nq4G7JQE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778617024; c=relaxed/simple;
+	bh=97qM24lBz73MTGs2Ev7Dn8ABPmphQjfBKXokj6vSwKI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eu50OQDZoEnF5mMwahhTjQFrTEidSHXG/tjl7vghM0leZwdoJa1JWON9uGYHGV8XDiDNs1cMOYicZBLJEHwWIwWEjtpEpMNZ4qeLaZ4Ah8rPhU3sTGHYZwNkOJ815rNXAhy+hqQvHNSgOHtqOC1SmBkYUfXIKyPCZQ9EP6z3irQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kubAm3/o; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OPDj2Ab0"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-67c4aaf76ecso9310762a12.3
-        for <llvm@lists.linux.dev>; Tue, 12 May 2026 13:14:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778616840; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BjBAxuRPQO1g+LVqbKjsoAZF/kuR/ZGKOu7Gn2SWviSyeT1K1B9IgBzwGeaw3b/lE7
-         FZAobbw3XcLehjEhiRQplpQKmNJBMk0LXkuIeFAXXeXWgar69a+0IpvMkUTT9RPa+cMK
-         l81uh8rq/igjRmSJvTt3dwLWkU2yprsLoDzTPfVMx32k+QvjQ3kryq1YBOMdwDg6pZPg
-         K1y9waDNSee7nPU0m1VFLcn4+wo0YYq9O2DFcsaQ+Uo1XaXHx89kG4mLwEfBUdsGIt0l
-         WfPR+Yt8qzFtqeIR7JgSPMGh80KlQrut6+JIKOWYO2HAVIY4/Hav0I9YY5FhSjZmrLXN
-         Q+zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=CdYjIIJuX5fr70Sxdo/ccQur00O9l14SS6MC5vYG7jo=;
-        fh=CAyItwDd3bzmGouVOmNJzWVqdAckvK8MjfGeGu2wmDs=;
-        b=DMacKTMkXAskG2bGL2xqa8rB8oarcylM7pVbDXJQx4ffwRY8JbfMXj8IIiB7hz9N0/
-         Hp9Hpr0aHO4u005LJrTkMQLJFR69t1R7IRrUDekeseqAYw5g2Z1Cv0RBFC5e+iS5yw9r
-         DoZGyRb0jcCGDu5pIr5JKvHL3GGULvrtMgT5fJpg/+zfLIg16HFj9DmLIApsRuQuXdMm
-         h0z/MqBTqnVKQ+jGvFzvGheZpPrSeT1oySEBfX8+RyvvYmMyblVIIY9qc327YKbugmG5
-         mbI/yO53A+f9IVNOiMmT1fDT75Rieeb/sIcETOPPh7kPH+s6Fr9Cw48I+odeRXE6B2wR
-         bbTQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kubAm3/o"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-368763a1bdfso1852009a91.2
+        for <llvm@lists.linux.dev>; Tue, 12 May 2026 13:17:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778616840; x=1779221640; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CdYjIIJuX5fr70Sxdo/ccQur00O9l14SS6MC5vYG7jo=;
-        b=OPDj2Ab06OYythlxO1mIx6Fbh1CRrBwnGBMXx6JPi5ftSm+xr2fMkgs5KtA9V9i/Ba
-         NhAhVpXOOmDC7e8IKXhuEpvARjIdi6mJsl4SGUt1oKlCsrJf2ryLGMjubWTrQbEdPg1Q
-         vRtuzYhco7GbZ8UucWuIrxJ5V/Hwu5hxxJjM6Tgj/BrYJ0SoddlSExpa6jHrI5xsaj5D
-         uVnSgIxtGK49ATFL2JZcoG5DX4Qc8qG+CcKTt9tgU5MBhODY3eliiOVtuIA9dLitDAAP
-         UHYZ1i8+jQ4RJ5lusUpSsRERQJtE30qzzU9rm1L/RQodotp1TZtNubzsMtgHQMnn4iaQ
-         KY6g==
+        d=gmail.com; s=20251104; t=1778617021; x=1779221821; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fioO7dt+DtRipfouwWizM+WF82w1PhyP2cJ94Qb6G0o=;
+        b=kubAm3/o2LM1ABfEP8iPSkrVM7drD1EQxOo032Ce8bFb6yPUcM31eCYL5gEhEGr8Hy
+         zoUo2aDjBpuMdF0MQ/daTGjSkGxlzW799suB17vpZk1OrwoCQpIgMflJYQotuTUPZwgY
+         CQAUxtCAXgJSDb0uxnwl6IZtm+F2hDVfXDuN+LURXxgrQQVoq9pyPQTTFoly7Vl/oouO
+         vrD0Tw7DwIRx7gxyiDbWaW/1phpMwVO1GnUtDPW3sJOI+g9og4Jxy2kBu50ns1eS7E/r
+         9dFSqhv39QR2w1kpgxSbRyPeJtx2QLlA7mhPixUC8BbXTHU4gGfetqZzWNh0uxp2/Dor
+         nTsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778616840; x=1779221640;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CdYjIIJuX5fr70Sxdo/ccQur00O9l14SS6MC5vYG7jo=;
-        b=naUhs0iW26YIy973VueXPeLQv7OeR9GGvnn67+VmboH0IWeH/Ii0aQH8BH4Vdkhfan
-         2PBElhjZNUR8gpSxDRehMH4uX3skPzcGuK7HVEMsbIlm+O/BjYPFP6REVzli6NJUA3Dy
-         x5e0GEgpl5qPXLG8s0gAfKCgh6WF9xCjOfzJHiGK0XDQie1VwYVEEW6JTz9qxX21nGL+
-         fR8ibnCC1GTy8aWpK8zycaeSX+8O6shGv4PtceT58Dn8xMIn6E1mA6sbvK7HAWagAtcp
-         wtadTQfu/5egFB4v0Y5r65vOF35NFO4fghQGKnIy+GbBYqtX/7c9NqSvlUvZI7cUaiX9
-         8iFw==
-X-Forwarded-Encrypted: i=1; AFNElJ8o6ed0q+W7UqPZOPmCNF2GMa5p1YvK2145eHK9jlRA3DKq1Om7acf7arj+MyRgbO+ncj97@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxs0KmYFUIDuT7kPWioVWWvOjUr5iCd1quBXimCWkj6Essf6Pjr
-	pLu5AgL1QPVB/JcokO+LJ9WvPj91rivBrWNxKsowvPYQ+iCFEAjnmg1AqGTAySHx1flvEuB1iqM
-	PW9KdYbrtSgXbIydsJEIIo57zgOWo61Q=
-X-Gm-Gg: Acq92OGfB96t6ll8sD1EGnCmn8XHcV1z7fDE9acHsh2KUJuxhGKUDrndIhroXNAmbIP
-	XpBqRVOOoiI077KeGWwhqUGsVSaDxCMuzuQXIIq7+ZFIJhvM+j8qITvR0/aBypMrZkOYHXj70kY
-	bETqHCjLZ47tQy2ALCdpl4Fs6Y8UvBo7/b0TPTh2WbJMJte4gDx+mVIoL55GJDEex6QYO4usab/
-	q6Z9xT4lexgj8On1MdCNPDYT6VKGBg+lHqV31YHCK/dQ1x+hV7/EAzv2WsutKMQIR4zqaKnvK/L
-	RidwQ9htmSv+l0mJvZT3j3Ty77O/XzugRiqlCxcmanpSGXnHoB57lquVi+gB5+ybIZdkNVuHeVC
-	nN094sEnayAkxyX14TqxdvPmuz28BKmGvdR6Fd7FhsLNmQf6MiwFITfWLSR7VzbDtSulm
-X-Received: by 2002:aa7:c403:0:b0:67b:7d77:14da with SMTP id
- 4fb4d7f45d1cf-682558f09b7mr127673a12.8.1778616839575; Tue, 12 May 2026
- 13:13:59 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778617021; x=1779221821;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fioO7dt+DtRipfouwWizM+WF82w1PhyP2cJ94Qb6G0o=;
+        b=d4HrCBDzE1myzoB61MMe1YevQmHsH1x+G5+c6G1qPqsH1Y3FSQA1ezU0fkRUVafupW
+         P5ZOOya6NfmmiZgQnss5Oi385XoZRu9eTrQ58bsbxppEpeABhIUEtiH/7SvETQwEH4xw
+         g/UrMRZ8qRt3fIhcaCTpd+TYhzG2mTyF51u+YtcexCtFSON+XPySc9pMga2nLCkatrsr
+         y0Shj+zgiYnFByRff5Kh0+jLS5hvlwx7Xee+YtenRmZyd9MOhSvXUNoNERPOT2Izh5Kt
+         TiVHKGRdbcfSlPOSJNYINaiSUVehB6FN0OtwZY531m3UH7ltsq3kCEHXTx5eAUqF61ew
+         mCCg==
+X-Forwarded-Encrypted: i=1; AFNElJ8gj1XPs14yBJwejVK4idYA7+aSanLNTXE6rgP3NHS2lDCm4urcRMyucB8fn5eWvjaRbHD1@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw6jri1Ok0E+59lHDFExAQAWTOeU8jQ+33nUip2Y3Iv+WZ0KIeg
+	lmRGZIeG6BzVVQM1WrlTY3SX726iqDxn1bxha4ecFCmHGitx1thQZNvq
+X-Gm-Gg: Acq92OHVQmkE2p2I0q/ziD01Snyk7JL3E5ovdQGKr8CkHh/x564hoAGfdb2FdxLjNfz
+	qp1Mx1qXAA4EJJXIWrwIIDU1pXZpDvv2mu3b9ab/cB61ZPI66GPvunVCspJs13nfYc9WYJB7CXb
+	wPWB0fMirPUWxSc4/LJ8nNhvrib39Y15N3VLatfwvg+zk2b5g/z2+ueXOo341bOX8VoJDAgEgJs
+	ll7grzSRl46zCIvLbiVTb44P/9ijqUEqRr7KD+CzYrwsV9/KTbHDTlcDjx5qkG9YfShU3gyk7Qg
+	77vyCBTWNvvl/zPCxITlC4UgGV9UxGfACMRkNKHrLxbCM7OgFZ7BBNv7wkQ1ZUfuzu3jNQqX73o
+	wXgNYknGC58z65AIV5puLl36jlEfWzQNHF3inJFC0jgUea9+jdFKqeMaPAwqw41UMt7S7NP9ohZ
+	j29MP4CzOb49ZpSmz+n39Elt4JHfH9PYe2O/yLQOUcrrtKpTjHEOVxA1KnfxKUqFPYrMxNNXJER
+	CwBrTeiHvqGXVsvvosmiByOx/Dj9bS6aaE=
+X-Received: by 2002:a17:90b:3149:b0:366:132:fda6 with SMTP id 98e67ed59e1d1-368f3ab6d1dmr530731a91.11.1778617020651;
+        Tue, 12 May 2026 13:17:00 -0700 (PDT)
+Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8267688e2esm12863093a12.8.2026.05.12.13.16.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 13:16:59 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-gpio@vger.kernel.org
+Cc: Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCHv2] gpio: sodaville: allow COMPILE_TEST builds
+Date: Tue, 12 May 2026 13:16:43 -0700
+Message-ID: <20260512201643.17351-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260509003327.955942-1-rosenp@gmail.com> <CAMRc=MfwDx8RTwaJb48ta=gppJGNwfXMOMNiNvQoRa9ibUh60w@mail.gmail.com>
-In-Reply-To: <CAMRc=MfwDx8RTwaJb48ta=gppJGNwfXMOMNiNvQoRa9ibUh60w@mail.gmail.com>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Tue, 12 May 2026 13:13:47 -0700
-X-Gm-Features: AVHnY4KIcweIsFs1__LMQ5JPb-kIJnCjK_nHRWwFViSB2kG-QHGPVeam3sXQfm4
-Message-ID: <CAKxU2N_XgMqc6tSzEFCrZhoWBwv-Xb+fn7O+Jfg0gVN0sQkKjg@mail.gmail.com>
-Subject: Re: [PATCH] gpio: sodaville: allow COMPILE_TEST builds
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Linus Walleij <linusw@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 11, 2026 at 3:15=E2=80=AFAM Bartosz Golaszewski <brgl@kernel.or=
-g> wrote:
->
-> On Sat, 9 May 2026 02:33:27 +0200, Rosen Penev <rosenp@gmail.com> said:
-> > The Intel Sodaville GPIO driver uses PCI/MMIO and generic GPIO helpers,=
- and
-> > builds outside X86.  Move its Kconfig entry out of the X86-only port-I/=
-O
-> > menu and allow it to be selected with COMPILE_TEST.
-> >
-> > Tested with:
-> > make LLVM=3D1 ARCH=3Dloongarch drivers/gpio/gpio-sodaville.o
-> >
-> > Assisted-by: Codex:GPT-5.5
-> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> > ---
-> >  drivers/gpio/Kconfig | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> > index f8e34b16fd99..9e1ed0f451b9 100644
-> > --- a/drivers/gpio/Kconfig
-> > +++ b/drivers/gpio/Kconfig
-> > @@ -1908,16 +1908,16 @@ config GPIO_RDC321X
-> >         Support for the RDC R321x SoC GPIOs over southbridge
-> >         PCI configuration space.
-> >
-> > +endmenu
-> > +
-> >  config GPIO_SODAVILLE
-> >       bool "Intel Sodaville GPIO support"
-> > -     depends on X86 && OF
-> > +     depends on (X86 || COMPILE_TEST) && OF
-> >       select GPIO_GENERIC
-> >       select GENERIC_IRQ_CHIP
-> >       help
-> >         Say Y here to support Intel Sodaville GPIO.
-> >
-> > -endmenu
-> > -
-> >  menu "SPI GPIO expanders"
-> >       depends on SPI_MASTER
-> >
-> > --
-> > 2.54.0
-> >
-> >
->
-> I don't mind it but I'll wait for an Ack from Intel GPIO maintainers.
-This commit was slop. Will redo.
->
-> Bart
+The Intel Sodaville GPIO driver uses PCI/MMIO and generic GPIO helpers,
+and builds outside X86.
+
+Tested with:
+make LLVM=1 ARCH=loongarch drivers/gpio/gpio-sodaville.o
+
+Assisted-by: Codex:GPT-5.5
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ v2: just add COMPILE_TEST. Moving outside of menuconfig is wrong.
+ drivers/gpio/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index c9a0d53da6d8..92281c14653b 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -1912,7 +1912,8 @@ config GPIO_RDC321X
+
+ config GPIO_SODAVILLE
+ 	bool "Intel Sodaville GPIO support"
+-	depends on X86 && OF
++	depends on X86 || COMPILE_TEST
++	depends on OF
+ 	select GPIO_GENERIC
+ 	select GENERIC_IRQ_CHIP
+ 	help
+--
+2.54.0
+
