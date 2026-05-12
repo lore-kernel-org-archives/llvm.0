@@ -1,228 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42F23B4430;
-	Tue, 12 May 2026 14:35:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E43E3C585A
+	for <llvm@lists.linux.dev>; Tue, 12 May 2026 16:53:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778596533; cv=none; b=XIkIAnQEiFAoF8tobtx1+OL0FvlAgXgM0amQ4v50dqUSZYaxAbqYpldhUEFLdASsuz5XC5BikPz5XlSeMxVy9FApBuYwLX++idi7FnGB69DsMlza7fYIDk7Bf9a/PeCgDExi4egZVekBETmmzNfVjIyowvEPLlmqWYg/cI/rl4o=
+	t=1778604802; cv=none; b=t3uYFuofO9Ej+Lt/sk7scxXtGe1qppZhFT/6wB8+G3wvJnBZ9g60k4mFAF4ha05/XL38f+XWC4uBp0rfyVTQfDb7wLKihg6L4Kd8vbyYUOl7YgpV/16wdkNGGqrZSFckXVGPIb1Gx4LVT3lqXJdMlarlBkRvOUBrMGYYFmAuDig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778596533; c=relaxed/simple;
-	bh=/EgujSwo4+NHKVZ0W2F9XQfFsxhe1kbhwPxQwScMQu8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A8oWA77EJeDo6R+xBltn4XDCjqU8dJKPYB0lsvDyX8Cz96jwDf2LatD1VpSUg20ZRal3/8lTlKYqeVzsIokct19zj7j4D07E5VF5boSOxHs+fz8qFwvKvIkGTcauhk+TeLtSnjPH70OG9Nnqq2Ikzu45hasz4C9hJ0J8hzGfnr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R5PRBz0+; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778604802; c=relaxed/simple;
+	bh=n6YqyFjOV2k/BlMKcyl+qVfbz76XL/KUqt3hMlw5D4I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=h9cvVZki7kkOEC4Nf+Mlq3GyhBUEsy9z8TGlXLkr+G2U/Arr8a+Zc/PMuZYnSlfptQ1PHdpb+ojIdlKLysduxK0n8r9BEcXBTrrbm6SUbon8VM3TqwY8gjUtdlZTn/PuQaFkdCN68q8eCr9QI3+HewFcgj/yRE9bnYqWq2eCyOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C6Qbz9R8; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R5PRBz0+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778596532; x=1810132532;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/EgujSwo4+NHKVZ0W2F9XQfFsxhe1kbhwPxQwScMQu8=;
-  b=R5PRBz0+vx3TyW+xNLHdetPBDRI6xiYGtpwN4WBaPwEA9A9sQhWPPEo3
-   HMrq47zVhPXY/xrPNsqYDbpigKIr7T3QI8GgSefbImJwCt8vQbbHG+veW
-   avsyELsWqmILn76R0k9ZfMqlvQ5DTxpayOH4OJfc0O8Axd6w5p5I8T4iJ
-   feB+ffWKiYqYYKkBJ6rfaHGK4Z5hVTtE6V+PCGnwGawLLwh+WjSR2hnUE
-   A8k9WWwXMhSVeX1HMGVgLRV0NMR9QDq58uJ51+zGEgBng8aEwMGrgJ4Fn
-   9XNBvZk4oqUsOZ7/Hd71GGRXm/sPHWGOBLHSp8s/2sqpI29ihJRKxh+9T
-   Q==;
-X-CSE-ConnectionGUID: /5vl6H2FTWurWOt/ycoLiw==
-X-CSE-MsgGUID: E2MBvAkoTGORJ2ocecJ2mQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="79490224"
-X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
-   d="scan'208";a="79490224"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 07:35:32 -0700
-X-CSE-ConnectionGUID: f9UlSokqTWWwQzHTMw0lmg==
-X-CSE-MsgGUID: ddF2dzviQOSsBX28o/dqcQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
-   d="scan'208";a="242782767"
-Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 12 May 2026 07:35:29 -0700
-Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wMoCj-000000002H5-0KdD;
-	Tue, 12 May 2026 14:35:25 +0000
-Date: Tue, 12 May 2026 22:34:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Lechner <david@lechnology.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] drm/st7735r: simplify with
- spi_get_device_match_data()
-Message-ID: <202605122242.rk2LQyeW-lkp@intel.com>
-References: <20260508080004.1143774-1-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C6Qbz9R8"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8b7f937ef44so33095736d6.0
+        for <llvm@lists.linux.dev>; Tue, 12 May 2026 09:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778604800; x=1779209600; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dq4LCZrUHOBpWDtuS+ZDVNUh4OO0Y+T0F6gJsifopzA=;
+        b=C6Qbz9R8okV4kYPrHLNPsS/iymx8Pn/ONK1ExqGa5bkOsdVqBOGnabB4Bxpvt7ioQg
+         TZ9ky8w4ehulqXB8YbUmBybV3sbI6JW5yLYGRMjlPD3IWhBF13bIqbCsozlqOFdbQKSh
+         JPYEOXVFgrMmUkuzQFHAllU5M64FnSudbtMVdAwuaKNT6jotNu9XEKkvTP9EO4Qz5zdx
+         8x//9JdxGpdtyzJBMzX/djjTNYfpP2HkdViI0uNFUVo0DluTgzWA/pI83I7MekBLwHlJ
+         nBZ2hwjwCt1jueIw3XaroHSctDyRe1z6G0nTTU+2DuQg41RKfz/ZnpBp0hbpzSO9q6pg
+         QBsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778604800; x=1779209600;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Dq4LCZrUHOBpWDtuS+ZDVNUh4OO0Y+T0F6gJsifopzA=;
+        b=rau+b2SKkDCIhmnNvxSAGrAhWcRR9f4B7UwL+FgMWFSWW7BditAKouLSmjiBZ/5DRi
+         LMJWQ9Tf2nXYA1LFsnBiMidc1YRgw1N2+79joNXF/NfL7TUImDwQWv371V5WBpY355f1
+         ZZQxErvUNW5USnOaZhj2yL/G3ATQJrodyKhyNPvjEAq5W9+FtCDlop9OG6SXjJIfB53L
+         75tIkGqAAXz6DJmytCtFNoZbFgZiE1yD9gnGw9WA+Wev1V0o12s5Ya6GWrot34zlhEk+
+         gaNKiO9cCAVG+lcDe9l+htLx0f2yQPYbM0lT3sZm38DUQBQPHkJbtyxcyIs+9TZBAYEX
+         qV2Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/dxmEfwK0fGP8KeujFBR366aE/2lo0mhnEn6tBTa5zLGIYk0Rn1MBpp4Z3Jh1SK1dNsu8h@lists.linux.dev
+X-Gm-Message-State: AOJu0YyKdrSpdPm+vtab45TdRf/+snzI/wv/KjElbglWcDbXbyoGDsLc
+	9YWtOCsLnG8Hx58pvVkcTlhfE0v4ezOHt1ZS4uv/TZCuzpTDeI2GEKk4
+X-Gm-Gg: Acq92OFteiT0Ed+AcgUx1aB3xeXYyhCwYAAaLDVeAIH6yW2VnBfPlqtSZticFvN3HH9
+	TUvdih6I+k66VKHoLFOPVt5U2CRHkpRMJ5oMSzMt9EzQmdDjpTWR6Zk+SWkJ9dTeUC2ncDKzMT6
+	sbvav8Qlj420Awd3LjlhmrtyNAdvNwEcRX49ynt5PxH1NddqOfM9pfsQYrc//DZv8x2Cqjkt732
+	67kp452HzT/40eBPo4sMnGTiULrcDv4YX83N0pWL7oOU92B02CRMqrDjwe2AjO7utNnYWnBZHXg
+	nrfK/FQUz86DPdZnL5Fz9/Rlc2N6kCdAKlwVGYRos56Af+QBnlvDKwcjDblSL4nZWGYXbTRxpaD
+	bNQOyRdukWlryXvVhbxgqtF7Kwd8EHKxnNQuStcxBPmHkLVK0hikH2HNejudXcg26C8sBOzV4pL
+	lga4ktxGuQIi0WY3K2BipKr15IGIaT5++nzB9XbRrQZ74jikXW7dUlmzhj3trMzZTgc++uvG8Hc
+	jElUNdcbAdgnIQaBWgahxpklHreaxblskXW6Wr3V6XfrRA=
+X-Received: by 2002:a05:6214:4c48:b0:8a7:1498:5f67 with SMTP id 6a1803df08f44-8bc42f5313cmr414441406d6.18.1778604800418;
+        Tue, 12 May 2026 09:53:20 -0700 (PDT)
+Received: from mighty.tail79ce1c.ts.net (nat-130-245-192-1.resnet.stonybrook.edu. [130.245.192.1])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8bf39c7e032sm129797216d6.32.2026.05.12.09.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 09:53:20 -0700 (PDT)
+From: Mithil Bavishi <bavishimithil@gmail.com>
+To: nathan@kernel.org
+Cc: aaro.koskinen@iki.fi,
+	andreas@kemnade.info,
+	bavishimithil@gmail.com,
+	kees@kernel.org,
+	khilman@baylibre.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux@armlinux.org.uk,
+	llvm@lists.linux.dev,
+	rogerq@kernel.org,
+	samitolvanen@google.com,
+	tony@atomide.com
+Subject: Re: [PATCH] ARM: OMAP2+: Make OMAP4 finish_suspend callback CFI-safe
+Date: Tue, 12 May 2026 12:53:18 -0400
+Message-ID: <20260512165318.442-1-bavishimithil@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260512135757.GB570003@ax162>
+References: <20260512135757.GB570003@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508080004.1143774-1-andriy.shevchenko@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Andy,
+> I don't think we have any formal documentation for SYM_TYPED_FUNC_START
+> (it should probably be documented via kernel-doc?) but you can read the
+> commit message of the change that added it for more information:
+>
+>  e84e008e7b02 ("cfi: Add type helper macros")
 
-kernel test robot noticed the following build errors:
+Thanks, I had a look at it and other similar commits like
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes drm-tip/drm-tip linus/master v7.1-rc3 next-20260508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+c50d328 ("arm64: Add types to indirect called assembly functions")
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/drm-st7735r-simplify-with-spi_get_device_match_data/20260512-161814
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20260508080004.1143774-1-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/1] drm/st7735r: simplify with spi_get_device_match_data()
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260512/202605122242.rk2LQyeW-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260512/202605122242.rk2LQyeW-lkp@intel.com/reproduce)
+I was not aware of SYM_TYPED_FUNC_START before hence the logical approach
+was just to wrap the function. But now with this I'll send a v2 with the
+ENTRY and ENDPROC changed to SYM_TYPED_FUNC_START and SYM_FUNC_END.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605122242.rk2LQyeW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/sitronix/st7735r.c:255:34: error: incompatible pointer types passing 'struct device *' to parameter of type 'const struct spi_device *' [-Werror,-Wincompatible-pointer-types]
-     255 |         cfg = spi_get_device_match_data(&spi->dev);
-         |                                         ^~~~~~~~~
-   include/linux/spi/spi.h:1757:52: note: passing argument to parameter 'sdev' here
-    1757 | spi_get_device_match_data(const struct spi_device *sdev);
-         |                                                    ^
-   1 error generated.
-
-
-vim +255 drivers/gpu/drm/sitronix/st7735r.c
-
-   234	
-   235	static int st7735r_probe(struct spi_device *spi)
-   236	{
-   237		struct device *dev = &spi->dev;
-   238		const struct st7735r_cfg *cfg;
-   239		struct mipi_dbi_dev *dbidev;
-   240		struct st7735r_device *st7735r;
-   241		struct drm_device *drm;
-   242		struct mipi_dbi *dbi;
-   243		struct gpio_desc *dc;
-   244		struct drm_plane *plane;
-   245		struct drm_crtc *crtc;
-   246		struct drm_encoder *encoder;
-   247		struct drm_connector *connector;
-   248		u32 rotation = 0;
-   249		int ret;
-   250	
-   251		st7735r = devm_drm_dev_alloc(dev, &st7735r_driver, struct st7735r_device, dbidev.drm);
-   252		if (IS_ERR(st7735r))
-   253			return PTR_ERR(st7735r);
-   254	
- > 255		cfg = spi_get_device_match_data(&spi->dev);
-   256		st7735r->cfg = cfg;
-   257	
-   258		dbidev = &st7735r->dbidev;
-   259		dbi = &dbidev->dbi;
-   260		drm = &dbidev->drm;
-   261	
-   262		dbi->reset = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-   263		if (IS_ERR(dbi->reset))
-   264			return dev_err_probe(dev, PTR_ERR(dbi->reset), "Failed to get GPIO 'reset'\n");
-   265	
-   266		dc = devm_gpiod_get(dev, "dc", GPIOD_OUT_LOW);
-   267		if (IS_ERR(dc))
-   268			return dev_err_probe(dev, PTR_ERR(dc), "Failed to get GPIO 'dc'\n");
-   269	
-   270		dbidev->backlight = devm_of_find_backlight(dev);
-   271		if (IS_ERR(dbidev->backlight))
-   272			return PTR_ERR(dbidev->backlight);
-   273	
-   274		device_property_read_u32(dev, "rotation", &rotation);
-   275	
-   276		ret = mipi_dbi_spi_init(spi, dbi, dc);
-   277		if (ret)
-   278			return ret;
-   279	
-   280		if (cfg->write_only)
-   281			dbi->read_commands = NULL;
-   282	
-   283		dbidev->left_offset = cfg->left_offset;
-   284		dbidev->top_offset = cfg->top_offset;
-   285	
-   286		ret = drm_mipi_dbi_dev_init(dbidev, &cfg->mode, st7735r_plane_formats[0], rotation, 0);
-   287		if (ret)
-   288			return ret;
-   289	
-   290		ret = drmm_mode_config_init(drm);
-   291		if (ret)
-   292			return ret;
-   293	
-   294		drm->mode_config.min_width = dbidev->mode.hdisplay;
-   295		drm->mode_config.max_width = dbidev->mode.hdisplay;
-   296		drm->mode_config.min_height = dbidev->mode.vdisplay;
-   297		drm->mode_config.max_height = dbidev->mode.vdisplay;
-   298		drm->mode_config.funcs = &st7735r_mode_config_funcs;
-   299		drm->mode_config.preferred_depth = 16;
-   300		drm->mode_config.helper_private = &st7735r_mode_config_helper_funcs;
-   301	
-   302		plane = &st7735r->plane;
-   303		ret = drm_universal_plane_init(drm, plane, 0, &st7735r_plane_funcs,
-   304					       st7735r_plane_formats, ARRAY_SIZE(st7735r_plane_formats),
-   305					       st7735r_plane_format_modifiers,
-   306					       DRM_PLANE_TYPE_PRIMARY, NULL);
-   307		if (ret)
-   308			return ret;
-   309		drm_plane_helper_add(plane, &st7735r_plane_helper_funcs);
-   310		drm_plane_enable_fb_damage_clips(plane);
-   311	
-   312		crtc = &st7735r->crtc;
-   313		ret = drm_crtc_init_with_planes(drm, crtc, plane, NULL, &st7735r_crtc_funcs, NULL);
-   314		if (ret)
-   315			return ret;
-   316		drm_crtc_helper_add(crtc, &st7735r_crtc_helper_funcs);
-   317	
-   318		encoder = &st7735r->encoder;
-   319		ret = drm_encoder_init(drm, encoder, &st7735r_encoder_funcs, DRM_MODE_ENCODER_NONE, NULL);
-   320		if (ret)
-   321			return ret;
-   322		encoder->possible_crtcs = drm_crtc_mask(crtc);
-   323	
-   324		connector = &st7735r->connector;
-   325		ret = drm_connector_init(drm, connector, &st7735r_connector_funcs,
-   326					 DRM_MODE_CONNECTOR_SPI);
-   327		if (ret)
-   328			return ret;
-   329		drm_connector_helper_add(connector, &st7735r_connector_helper_funcs);
-   330	
-   331		ret = drm_connector_attach_encoder(connector, encoder);
-   332		if (ret)
-   333			return ret;
-   334	
-   335		drm_mode_config_reset(drm);
-   336	
-   337		ret = drm_dev_register(drm, 0);
-   338		if (ret)
-   339			return ret;
-   340	
-   341		spi_set_drvdata(spi, drm);
-   342	
-   343		drm_client_setup(drm, NULL);
-   344	
-   345		return 0;
-   346	}
-   347	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best,
+Mithil
