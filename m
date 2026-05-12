@@ -1,86 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A3E3A05F1;
-	Tue, 12 May 2026 13:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101153B1EF0;
+	Tue, 12 May 2026 14:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778594283; cv=none; b=KIBL7HtY92c1iJ6NtMyXgdGzErGVDU45dH5T62fgLAdsZfUuy+0FfmjDcCI70SpgSG5gvU8marM2Qan73cuYmSyjvejQUhs+fCg57nsLDOPr+LiYmBjA4MWaRfSea70kLRqUsZIaZv63d/MEft7UVRB+gyyAlQ9B9BkVzA7cYyY=
+	t=1778595990; cv=none; b=ECJvcF4C5ftZ41gu6BrPXOtEn85Pn6dBKVkuK2GeRRKDZttpEgtAgGInZbqs8Cdi8yIWzbk9qhyxbNUhmHFHjYIi48XFYFCQMhC1fz5pCJUe02ybtQry2rIyxlTdgC7HkJ0b73b79MiL9T8bCZSQv6Tu8AQ0OAzu2UopPldvBGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778594283; c=relaxed/simple;
-	bh=Rc/JbSkhQh3KrrYjNEJF3TR+KAXO9DvjdINtI40/Tfw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H+ZbsuPNIf8gwlH2PopQht/6WB7JVxAfiTkvfItYniC+axwmPFdIgXcUVnhzegH1sGxVwSgloGAm8ys3es0EI6c7bdHCY1yRjx+sQYIHZueLrxUf6VO+Ib46Px/9SGVhUVxKGeVnkcv4fD9UerkvQ1WqTdLFJ4Ibp6g4aRIdO14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D0RmO0jq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778595990; c=relaxed/simple;
+	bh=JGUSGo/1t1blpM4zuospUqxPhZ6FhthnNivgSxSnCoU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=la4hwpnxSB/859BCoacsntnnNHqote+O5Jf7teuvssOPmNHkcIQP+pV7nFfp/tJH4xg7eB7ienuPbj/xlk1YCfE9MJPdmgHTXkKstaeIZFglmfNGhr7W65VZQDe4V45oDLLCKd/oChdVXOVOkCG7EV3VdMNvz6opbJHY3tNaIpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a6qmpFmy; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D0RmO0jq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF97C2BCB0;
-	Tue, 12 May 2026 13:58:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778594282;
-	bh=Rc/JbSkhQh3KrrYjNEJF3TR+KAXO9DvjdINtI40/Tfw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D0RmO0jqQzwPQcyKil9HUcb1QoWlKI0VQLz3v+wjcMdkUGHv/Whh/XUa47rOSRmOW
-	 8Qgc82+PHXLy0rIczKBOOVDL/C+4/5o9KPYhA6FlZ3pZ6XR/TxQu/dksjUnQzmxGx9
-	 yApeu3sHkH0a+AGWuJLBK44eLJ9GQ3u0pH5oQcGEnOm8ggD6aONLhcU2q/I533f1jO
-	 RYFgQR6rmvPuRNXS+5eNObmXIQny8HqL1vg+ZSZ2Dxxdnmmao5asePeHrfRkipi/Iu
-	 ZaNJLoej2XJNfOCjv5EDrRN8G8ypODoiXtuJR0qNOZnA3C+VEU/MRyjcb1v6cWC8B8
-	 8fW9B3r4vFe5Q==
-Date: Tue, 12 May 2026 22:57:57 +0900
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: Mithil Bavishi <bavishimithil@gmail.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <kees@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: OMAP2+: Make OMAP4 finish_suspend callback CFI-safe
-Message-ID: <20260512135757.GB570003@ax162>
-References: <20260512042341.1452-1-bavishimithil@gmail.com>
- <20260512073442.GA570003@ax162>
- <20260512100207.3d24837e@kemnade.info>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a6qmpFmy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778595988; x=1810131988;
+  h=date:from:to:cc:subject:message-id;
+  bh=JGUSGo/1t1blpM4zuospUqxPhZ6FhthnNivgSxSnCoU=;
+  b=a6qmpFmyaQo/vTDY551JejC54Zf1A6BlwoztPNteJ/vTu/HbbyztcjdC
+   gomXC6EFM3J19gREwjrQ2np3hHTL5+O1o6YA+YUkJTyTM7srgCSm6wfMb
+   XdqyFURvXFf5F9AN+MiTyx1NkQ0OQGzf4ZuA2u6UwH+nTX9UeFVilewdL
+   2KE5KRGzdq+5xUtt5jscGTlO8arU3EZWgHNiCI/CCkHVj7lZlQecozasA
+   VSDrQsuwCQOpvpc7p/KoVh6Ct+7GAQoRDypx508SVW7FnRfRqIOQxU3S7
+   IM+jzERwiHiEEneUiFOXiu91VoiEit3Duaw0SOt8DUxMC1oBcesF6LD0B
+   g==;
+X-CSE-ConnectionGUID: SgEIM67pSOOIPsYCrYZnUQ==
+X-CSE-MsgGUID: TmxEQAhIRm64vldmp+aggA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="83358416"
+X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
+   d="scan'208";a="83358416"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2026 07:26:27 -0700
+X-CSE-ConnectionGUID: 2ovxivtrSmCVnqs+iIrJjA==
+X-CSE-MsgGUID: 3PQqNRWDSXW/hjRfHI+/ow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,231,1770624000"; 
+   d="scan'208";a="233476844"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa010.fm.intel.com with ESMTP; 12 May 2026 07:26:26 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wMo40-000000008HX-0xLi;
+	Tue, 12 May 2026 14:26:24 +0000
+Date: Tue, 12 May 2026 16:25:56 +0200
+From: kernel test robot <lkp@intel.com>
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: kernel/bpf/syscall.c:1655:1: warning: unused label 'free'
+Message-ID: <202605121640.S7Uw0tDN-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260512100207.3d24837e@kemnade.info>
 
-On Tue, May 12, 2026 at 10:02:07AM +0200, Andreas Kemnade wrote:
-> On Tue, 12 May 2026 16:34:42 +0900
-> Nathan Chancellor <nathan@kernel.org> wrote:
-> 
-> > On Tue, May 12, 2026 at 12:23:41AM -0400, Mithil Bavishi wrote:
-> > > With CONFIG_CFI enabled, OMAP4 can trap in omap4_enter_lowpower()
-> > > because omap_pm_ops.finish_suspend points directly to the assembly
-> > > routine omap4_finish_suspend, which lacks the expected KCFI type
-> > > metadata.  
-> > 
-> > It sounds like omap4_finish_suspend() should be defined with
-> > SYM_TYPED_FUNC_START then? Is that the case for all of the other
-> > functions that are added to omap_pm_ops?
-> > 
-> omap_cpu_resume: the address is written to some cpu register and
-> on that way casted to u32. So therefore does not trigger CFI.
-> Same for secondary_startup which is also assembler code.
-> scu_prepare is C.
-> 
-> DO you have a pointer to any documentation:
-> :~/linux$ grep -R SYM_TYPED_FUNC_START Documentation/
+tree:   https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-Extend-BPF-syscall-with-common-attributes-support/20260512-141718
+head:   cf666930ba205510468d7879922c1237df7292c9
+commit: 7cab8e74b4f11d29c3c1bc065fbdfc54b04ac102 bpf: Add syscall common attributes support for map_create
+date:   8 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260512/202605121640.S7Uw0tDN-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260512/202605121640.S7Uw0tDN-lkp@intel.com/reproduce)
 
-I don't think we have any formal documentation for SYM_TYPED_FUNC_START
-(it should probably be documented via kernel-doc?) but you can read the
-commit message of the change that added it for more information:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605121640.S7Uw0tDN-lkp@intel.com/
 
-  e84e008e7b02 ("cfi: Add type helper macros")
+All warnings (new ones prefixed by >>):
 
--- 
-Cheers,
-Nathan
+>> kernel/bpf/syscall.c:1655:1: warning: unused label 'free' [-Wunused-label]
+    1655 | free:
+         | ^~~~~
+   1 warning generated.
+
+
+vim +/free +1655 kernel/bpf/syscall.c
+
+  1634	
+  1635	static int map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_attr *attr_common,
+  1636			      bpfptr_t uattr_common, u32 size_common)
+  1637	{
+  1638		struct bpf_verifier_log *log;
+  1639		struct bpf_log_attr attr_log;
+  1640		int err, ret;
+  1641	
+  1642		log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, size_common);
+  1643		if (IS_ERR(log))
+  1644			return PTR_ERR(log);
+  1645	
+  1646		err = __map_create(attr, uattr, log);
+  1647	
+  1648		ret = bpf_log_attr_finalize(&attr_log, log);
+  1649		if (ret) {
+  1650			if (err >= 0)
+  1651				close_fd(err);
+  1652			err = ret;
+  1653		}
+  1654	
+> 1655	free:
+  1656		kfree(log);
+  1657		return err;
+  1658	}
+  1659	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
