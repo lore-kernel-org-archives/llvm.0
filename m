@@ -1,99 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39E33CAA55;
-	Wed, 13 May 2026 23:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483B1392C3D;
+	Wed, 13 May 2026 23:28:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778713664; cv=none; b=VcIUwfvbgVbsyWr2kkb4uptAQvDAGy8EhJd4JSe9BmuziH5O1RG7D8l5dlUs7hcY5tcRoIg5L5C+fR/fiZ5cnaCAMcQvZ/9S+yCzbp67EwLVrB7YqdSqwLS6DKTuspQWAzECHsefJOXXPCoTdIhnrnqMu2woGmXMhd1DI5DFcC0=
+	t=1778714926; cv=none; b=s1ZoFUtfJznadwvadGnB1JA79PuTVaRSyLxixnCkIFJ3UqgT4ZAZS45uLBZtooca1nG55Td5EmU5q/08cMNrnrhQqoEPeyGvSmNP+mnA89D9LuT2PFJH21Q+x5oCAqdsj4Tw2wcp7DB/iOnUiNL58D4GMP+NyGv5Ca44af01r3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778713664; c=relaxed/simple;
-	bh=ALVwDDjok+OEdPpXRwF61S2YSUI5YuC2BZEzIYLQAj8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GS61Dy5XKSJYdjxNJIJQnhts2z8mtyfTgdbWY7GWrlqWsCYRjEAmp0OzJWzb1pbQQaQbOoDvlBW0CMqO0p2IKu4kALOK9hhvUkjQcNtfInDO2BxMLCjQ+jpNQwS50BrIEsPWfEwsM39Y1RAHSQyMWtkkEbcC0CJOTV8BdYDr/U4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C7GkXQNP; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1778714926; c=relaxed/simple;
+	bh=VGgEMB5EKIsNc5CWmjGUhX9BKS0ky0V5gshwODGwgD8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=XTWqmjO04vRarE0hET82fj5fRv41Q1rEH+xE7xUZpZt3oPJP+ej1slD0zwCXILC6rZLYgjPcswpjccfVZ9CEH3cuw1th08vo1XtAv4YKnc4v1H4o6G0noYYc99XVoIt8ivgxy/DO9WYmwMyhqD1oN8G5eMVmMY2k5WEgf6hxHEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hj7W/CgY; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C7GkXQNP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hj7W/CgY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778713663; x=1810249663;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ALVwDDjok+OEdPpXRwF61S2YSUI5YuC2BZEzIYLQAj8=;
-  b=C7GkXQNPweKd9hqZgEXshXeYq4JLqpZJM3pMe40LgivBPu+KBMkCCX4D
-   JuXBDjTumHJhUQAQedLQfejlARgivrUH0ChzKnzuXIGualz7LV65TdQhO
-   jxZuZHLa5ToYsE4XfRz2+5Lg+CGT+HPImjBbAIIegnnYavpJZ5RP/EfcX
-   0btJtkAg4mRqtm795W7UuKYB3mRThd3XHyYzcPQB0uwQBFA9HZVVEpa1A
-   cB4lpezcSanu+2vvRsG5v/swIOYpl7P9dBuh7QMTYG53cwQMyNC77FQfI
-   cB3KScUQWgdpPkdBNHtPnAtJKUqkvGtBPFCU4wXJ/f41TAjQ7MbP6yqIG
-   A==;
-X-CSE-ConnectionGUID: 3OBTynY+SAOyYgP9r/+5Ow==
-X-CSE-MsgGUID: YDxJqJ2JQFuX0RZPJiwA9w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="91037814"
+  t=1778714925; x=1810250925;
+  h=date:from:to:cc:subject:message-id;
+  bh=VGgEMB5EKIsNc5CWmjGUhX9BKS0ky0V5gshwODGwgD8=;
+  b=Hj7W/CgYmS6hlirBnDaUIKx1uTPw65WpT+UkH4Sd+L6zoyBF5WlEwVTC
+   2yZqqWMhFzHS8rdxfllf3w0HtQtdjCSwPCxqXUnjCOeLNSpSbc91G+QSo
+   FrPFGy3hoHxSocQpPSSy3S4qsGjPYTkbzY8t1M9pMXDCAdXckJsuwdlXa
+   +Ls3zNEBx6YekolgPVzRkemfV6fuVJVthx+ZVLBlIy9WbnV0hCgT0vta6
+   I27+TPb6AonauDdMlt7NehrqxMhtZa9cZJzY1MIxfe5lb+6KUaFhgmcHZ
+   PQNn94+zk2DTNSNZInV6vjPwXOCBYs6OT9T4LnxiEwIXRJKqdQ0VEl/D2
+   w==;
+X-CSE-ConnectionGUID: hM4q1gUIRN+ijSbEZGDmrw==
+X-CSE-MsgGUID: pMEbsT1STv6/kk7ZsOpvNA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="79367561"
 X-IronPort-AV: E=Sophos;i="6.23,233,1770624000"; 
-   d="scan'208";a="91037814"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 16:07:41 -0700
-X-CSE-ConnectionGUID: i0+kLsn+TGODubVr1B9qyw==
-X-CSE-MsgGUID: 7wtMRLYHQ6Ow3/zWIrgT2w==
+   d="scan'208";a="79367561"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 16:28:43 -0700
+X-CSE-ConnectionGUID: LkEVrQh7QjqeN9dDdPHTkQ==
+X-CSE-MsgGUID: zzWylNItRmOFJftSff9gsg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,233,1770624000"; 
-   d="scan'208";a="235557652"
+   d="scan'208";a="276315694"
 Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 13 May 2026 16:07:40 -0700
+  by orviesa001.jf.intel.com with ESMTP; 13 May 2026 16:28:42 -0700
 Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wNIfx-000000005H1-21xG;
-	Wed, 13 May 2026 23:07:37 +0000
-Date: Thu, 14 May 2026 07:07:16 +0800
+	id 1wNJ0J-000000005IH-0QMy;
+	Wed, 13 May 2026 23:28:39 +0000
+Date: Thu, 14 May 2026 07:27:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: hangej <hangej@amazon.com>, bhelgaas@google.com
+To: Andrew Jones <andrew.jones@oss.qualcomm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dwmw2@infradead.org, kexec@lists.infradead.org, hangej@amazon.com
-Subject: Re: [PATCH] pci_crash: capture PCI config space at panic time
-Message-ID: <202605140714.yFl4KATZ-lkp@intel.com>
-References: <20260512162402.1929687-1-hangej@amazon.com>
+ Anup Patel <anup@brainfault.org>
+Subject: [avpatel:riscv_trace_acpi_support_v1 15/60]
+ drivers/iommu/riscv/iommu-ir.c:325:13: error: call to undeclared function
+ 'virt_to_pfn'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202605140751.7BaPMVNq-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260512162402.1929687-1-hangej@amazon.com>
 
-Hi hangej,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus linus/master v7.1-rc3 next-20260508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/hangej/pci_crash-capture-PCI-config-space-at-panic-time/20260514-000653
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20260512162402.1929687-1-hangej%40amazon.com
-patch subject: [PATCH] pci_crash: capture PCI config space at panic time
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260514/202605140714.yFl4KATZ-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605140714.yFl4KATZ-lkp@intel.com/reproduce)
+tree:   https://github.com/avpatel/linux.git riscv_trace_acpi_support_v1
+head:   893faf8dbff9fe0958fb1f32b778914af0fa1b45
+commit: 3a2ee01e59297777c99794a5887e5e1109bbbf27 [15/60] iommu/riscv: Add guest file irqbypass support
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260514/202605140751.7BaPMVNq-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605140751.7BaPMVNq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605140714.yFl4KATZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605140751.7BaPMVNq-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> Warning: kernel/pci_crash.c:74 cannot understand function prototype: 'void *pci_crash_buffer;'
->> Warning: kernel/pci_crash.c:80 cannot understand function prototype: 'size_t pci_crash_buffer_size;'
->> Warning: kernel/pci_crash.c:90 cannot understand function prototype: 'phys_addr_t pci_crash_pagemap_phys;'
+   In file included from drivers/iommu/riscv/iommu-ir.c:10:
+   In file included from include/linux/msi.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/iommu/riscv/iommu-ir.c:325:13: error: call to undeclared function 'virt_to_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     325 |                 .msiptp = virt_to_pfn(domain->msi_root) |
+         |                           ^
+   drivers/iommu/riscv/iommu-ir.c:325:13: note: did you mean 'virt_to_pte'?
+   arch/um/include/asm/pgtable.h:284:15: note: 'virt_to_pte' declared here
+     284 | extern pte_t *virt_to_pte(struct mm_struct *mm, unsigned long addr);
+         |               ^
+   1 warning and 1 error generated.
+
+
+vim +/virt_to_pfn +325 drivers/iommu/riscv/iommu-ir.c
+
+   306	
+   307	static void riscv_iommu_ir_msiptp_update(struct riscv_iommu_domain *domain)
+   308	{
+   309		struct pt_iommu_riscv_64_hw_info pt_info, gstage_info;
+   310		struct riscv_iommu_device *iommu, *prev;
+   311		struct riscv_iommu_bond *bond;
+   312		struct riscv_iommu_dc new_dc;
+   313	
+   314		pt_iommu_riscv_64_hw_info(&domain->riscvpt, &pt_info);
+   315		pt_iommu_riscv_64_hw_info(&domain->gstage_riscvpt, &gstage_info);
+   316	
+   317		new_dc = (struct riscv_iommu_dc){
+   318			.ta = FIELD_PREP(RISCV_IOMMU_PC_TA_PSCID, domain->pscid) |
+   319			      RISCV_IOMMU_PC_TA_V,
+   320			.iohgatp = FIELD_PREP(RISCV_IOMMU_DC_IOHGATP_MODE, gstage_info.fsc_iosatp_mode) |
+   321				   FIELD_PREP(RISCV_IOMMU_DC_IOHGATP_GSCID, domain->gscid) |
+   322				   FIELD_PREP(RISCV_IOMMU_DC_IOHGATP_PPN, gstage_info.ppn),
+   323			.fsc = FIELD_PREP(RISCV_IOMMU_PC_FSC_MODE, pt_info.fsc_iosatp_mode) |
+   324			       FIELD_PREP(RISCV_IOMMU_PC_FSC_PPN, pt_info.ppn),
+ > 325			.msiptp = virt_to_pfn(domain->msi_root) |
+   326				  FIELD_PREP(RISCV_IOMMU_DC_MSIPTP_MODE,
+   327					     RISCV_IOMMU_DC_MSIPTP_MODE_FLAT),
+   328			.msi_addr_mask = domain->msi_addr_mask,
+   329			.msi_addr_pattern = domain->msi_addr_pattern,
+   330		};
+   331	
+   332		/* Like riscv_iommu_ir_msitbl_inval(), synchronize with riscv_iommu_bond_link() */
+   333		smp_mb();
+   334	
+   335		rcu_read_lock();
+   336	
+   337		prev = NULL;
+   338		list_for_each_entry_rcu(bond, &domain->bonds, list) {
+   339			iommu = dev_to_iommu(bond->dev);
+   340			if (iommu == prev)
+   341				continue;
+   342	
+   343			riscv_iommu_iodir_update(iommu, bond->dev, &new_dc);
+   344			prev = iommu;
+   345		}
+   346	
+   347		rcu_read_unlock();
+   348	}
+   349	
 
 --
 0-DAY CI Kernel Test Service
