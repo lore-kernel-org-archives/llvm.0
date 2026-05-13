@@ -1,131 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4B8402435;
-	Wed, 13 May 2026 12:11:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0032047D95C;
+	Wed, 13 May 2026 12:54:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778674288; cv=none; b=E6SlIRVzCRQSWFpK3B2Z884MyErW8npwzjTPrCHqIJSSCbVBaHP84aM0B4R5mbyj1s7p1odWmJ+mEso8FMPiTyaE/s2D7xyfvYX4rRa+MtaavGeLeGty0JZo95b/1CFsSa/hww0RABmti7A0RGyEbVidcLAwZpb03yCbyBnqYmQ=
+	t=1778676874; cv=none; b=RQQy7gNJ8FqnePpsbsQ/lrAP40UOr+NJ5DLo7QvEVRJ0roPauJSY9oM/NeJFPD8sjQmzhMAJClUzi9FQsQBmDouRRxTJPDBo/PnyVDP/wDdwAL/xTocdCzo5nuc03G07l2p10PV11rLyRXITqcPVvgeCjVO34WehRIfkoY7W358=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778674288; c=relaxed/simple;
-	bh=Bq4DEd1wpxmiR3VQXVcP4e0QnueNrknQIdhxe2cBJ/g=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=k+2FB67LtsQPffdSZZAYjMX2186UmTimqk9C1fPp6D3XOAvigSbU9TotdG5Y82lIQvGYwOmdAqYe8cPAuEcjeQEGljZYuI1T4elAuh8+1/Ez5RYRDg5bQxy7vGoC4ujHEnjv3eF//jKnWtBJnpp2F+KVL/sHdXP1kBa6Zr8P6qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RFbIu+JC; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1778676874; c=relaxed/simple;
+	bh=CHoEEWTlL/dVcJyq7sL/SMMTKJ2L2HLLtpbVlyUn0KE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LxumtyPbRQj0HQTVrrHvrZGk6IA/8AfBv/wCrZDjaqQklk+gbRWPUDDAVvbJAcB0hBHC4fwaA+jHOXdUQSJvQsHkAjiG9y2DhDrORZ0UiqnfltS1tiTIVGh7gFuuUKFtNqZZtmJ97B6JIMYgjpGyC7oSjwkhQEO41CuxDCwxqOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RN8hWMV7; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RFbIu+JC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RN8hWMV7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778674285; x=1810210285;
-  h=date:from:to:cc:subject:message-id;
-  bh=Bq4DEd1wpxmiR3VQXVcP4e0QnueNrknQIdhxe2cBJ/g=;
-  b=RFbIu+JCdJiZOuJeJ4kiTPgQHs0J0/jIn3pOTAew4BiFDl3VXKIu7K+g
-   n6pJH+VojibenfKjeW3TFZZOrmfP3R8hGK1iXpQXxvsxq+LLr/OCUutZR
-   4vDEvntEwcFve+Bp19BEcOz5XfDZpbAqvutaou2NxultEakuKsH59qqRk
-   D7jBDZiMvDCq4GjhA4FOVT4zKw1GihsRQmGCsi7moBcmxO5KEAVtqDWrj
-   BuWQEI7Zw7A5iHhia6YTOmXcRmUsEmxnDh9sRoshf8xzHVxrxim4v7FPP
-   dupexFwy5f1FdhhvNz0IhFuftI782ZHDJl+PQG/CDRWr6ZpRmbVBlH7mD
-   g==;
-X-CSE-ConnectionGUID: gJce4b9aTZC4GgOwVlm52g==
-X-CSE-MsgGUID: SYRIoFvbQj2ZsMziTuQkBA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="67128256"
+  t=1778676871; x=1810212871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CHoEEWTlL/dVcJyq7sL/SMMTKJ2L2HLLtpbVlyUn0KE=;
+  b=RN8hWMV7C5SIAxO1ANACXgj/wRTgsVoIbTjFvtUUJNPOpSZcUy7E9Kle
+   2aEbPTPRlupQAauP7DR30LkbI/rqyGDPkkMK5TURydTUZW7cfwGEqffQU
+   V295j3mS2lNK9v509CjbcbZ7/MbTU91W86tW6lgTmYL92zUhid1Ogs5CF
+   W37iqVzdzNQgG2J8JcJlH9ISkBWQ11+DwJhH+Yzwlib+S9LdoNeepuLOI
+   5ovwCO0xnvrrX20KCcdANA0lYJY9YqqGfogg1y37k9/HvbOFkeMpvCULW
+   CtRwm+snAwmRaKVy/azAUeH3SMn7heAZhWnzLpiJM6U/kQeVMKgqckqQ+
+   A==;
+X-CSE-ConnectionGUID: m1kSxeerTzu3leS9E0q7IQ==
+X-CSE-MsgGUID: PbtylbbNSWqdGcomEFNPKA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11784"; a="83217379"
 X-IronPort-AV: E=Sophos;i="6.23,232,1770624000"; 
-   d="scan'208";a="67128256"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 05:11:24 -0700
-X-CSE-ConnectionGUID: yASwr0k6Sq+y5ZFTnWe0+g==
-X-CSE-MsgGUID: EyznT+97SiqZ6ejtgjFiAg==
+   d="scan'208";a="83217379"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 05:54:31 -0700
+X-CSE-ConnectionGUID: 54HrI0MMS660LvNFaK4QVQ==
+X-CSE-MsgGUID: B5P8kFPIRKuOAlJ3avJBuQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,232,1770624000"; 
-   d="scan'208";a="233621461"
+   d="scan'208";a="233807073"
 Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 13 May 2026 05:11:23 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 13 May 2026 05:54:26 -0700
 Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wN8Qq-00000000439-3nKZ;
-	Wed, 13 May 2026 12:11:20 +0000
-Date: Wed, 13 May 2026 20:10:52 +0800
+	id 1wN96V-0000000047L-3yLL;
+	Wed, 13 May 2026 12:54:23 +0000
+Date: Wed, 13 May 2026 20:53:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Harry Yoo <harry@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [harry:slab-allow-runtime-parameter-tuning-rfc-v1r1-wip 6/6]
- mm/slub.c:3173:44: error: no member named 'cache' in 'struct slab_sheaf'
-Message-ID: <202605132022.8fbd7hvH-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Arnav Sharma <arnav4324@gmail.com>, ojeda@kernel.org,
+	paul@paul-moore.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Arnav Sharma <arnav4324@gmail.com>,
+	Serge Hallyn <sergeh@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	linux-security-module@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rust: cred: add safe abstractions for capable() and
+ ns_capable()
+Message-ID: <202605132018.249x1thF-lkp@intel.com>
+References: <20260506204913.26022-1-arnav4324@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260506204913.26022-1-arnav4324@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/harry/linux.git slab-allow-runtime-parameter-tuning-rfc-v1r1-wip
-head:   10c188407341817c6baf9dad9c788928f8387800
-commit: 10c188407341817c6baf9dad9c788928f8387800 [6/6] mm/slab: allow changing sheaf_capacity at runtime
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20260513/202605132022.8fbd7hvH-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260513/202605132022.8fbd7hvH-lkp@intel.com/reproduce)
+Hi Arnav,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rust/rust-next]
+[also build test ERROR on linus/master v7.1-rc3 next-20260508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Arnav-Sharma/rust-cred-add-safe-abstractions-for-capable-and-ns_capable/20260513-154340
+base:   https://github.com/Rust-for-Linux/linux rust-next
+patch link:    https://lore.kernel.org/r/20260506204913.26022-1-arnav4324%40gmail.com
+patch subject: [PATCH] rust: cred: add safe abstractions for capable() and ns_capable()
+config: loongarch-randconfig-001 (https://download.01.org/0day-ci/archive/20260513/202605132018.249x1thF-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260513/202605132018.249x1thF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605132022.8fbd7hvH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605132018.249x1thF-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/slub.c:3173:44: error: no member named 'cache' in 'struct slab_sheaf'
-    3173 |         lockdep_assert_held(this_cpu_ptr(&(sheaf->cache)->cpu_sheaves->lock));
-         |                                            ~~~~~  ^
->> mm/slub.c:3173:44: error: no member named 'cache' in 'struct slab_sheaf'
-    3173 |         lockdep_assert_held(this_cpu_ptr(&(sheaf->cache)->cpu_sheaves->lock));
-         |                                            ~~~~~  ^
->> mm/slub.c:3173:44: error: no member named 'cache' in 'struct slab_sheaf'
-    3173 |         lockdep_assert_held(this_cpu_ptr(&(sheaf->cache)->cpu_sheaves->lock));
-         |                                            ~~~~~  ^
-   mm/slub.c:3187:44: error: no member named 'cache' in 'struct slab_sheaf'
-    3187 |         lockdep_assert_held(this_cpu_ptr(&(sheaf->cache)->cpu_sheaves->lock));
-         |                                            ~~~~~  ^
-   mm/slub.c:3187:44: error: no member named 'cache' in 'struct slab_sheaf'
-    3187 |         lockdep_assert_held(this_cpu_ptr(&(sheaf->cache)->cpu_sheaves->lock));
-         |                                            ~~~~~  ^
-   mm/slub.c:3187:44: error: no member named 'cache' in 'struct slab_sheaf'
-    3187 |         lockdep_assert_held(this_cpu_ptr(&(sheaf->cache)->cpu_sheaves->lock));
-         |                                            ~~~~~  ^
-   mm/slub.c:6042:8: error: use of undeclared label 'flush'
-    6042 |                 goto flush;
-         |                      ^
-   mm/slub.c:7962:39: error: use of undeclared identifier 'USHORT_MAX'
-    7962 |         return max_t(unsigned int, capacity, USHORT_MAX);
-         |                                              ^~~~~~~~~~
-   mm/slub.c:8641:26: error: no member named 'barn' in 'struct kmem_cache_node'
-    8641 |                 if (get_node(s, node)->barn)
-         |                     ~~~~~~~~~~~~~~~~~  ^
-   9 errors generated.
-
-
-vim +3173 mm/slub.c
-
-  3162	
-  3163	/*
-  3164	 * The following two functions are used mainly in cases where we have to undo an
-  3165	 * intended action due to a race or cpu migration. Thus they do not check the
-  3166	 * empty or full sheaf limits for simplicity.
-  3167	 */
-  3168	
-  3169	static void barn_put_empty_sheaf(struct node_barn *barn, struct slab_sheaf *sheaf)
-  3170	{
-  3171		unsigned long flags;
-  3172	
-> 3173		lockdep_assert_held(this_cpu_ptr(&(sheaf->cache)->cpu_sheaves->lock));
-  3174	
-  3175		spin_lock_irqsave(&barn->lock, flags);
-  3176	
-  3177		list_add(&sheaf->barn_list, &barn->sheaves_empty);
-  3178		barn->nr_empty++;
-  3179	
-  3180		spin_unlock_irqrestore(&barn->lock, flags);
-  3181	}
-  3182	
+>> error[E0425]: cannot find function `capable` in crate `bindings`
+   --> rust/kernel/cred.rs:133:24
+   |
+   133 |     unsafe { bindings::capable(cap as i32) }
+   |                        ^^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find function `ns_capable` in crate `bindings`
+   --> rust/kernel/cred.rs:169:24
+   |
+   169    |       unsafe { bindings::ns_capable(ns, cap as i32) }
+   |                          ^^^^^^^^^^ help: a function with a similar name exists: `cap_capable`
+   |
+   ::: rust/bindings/bindings_generated.rs:107518:5
+   |
+   107518 | /     pub fn cap_capable(
+   107519 | |         cred: *const cred,
+   107520 | |         ns: *mut user_namespace,
+   107521 | |         cap: ffi::c_int,
+   107522 | |         opts: ffi::c_uint,
+   107523 | |     ) -> ffi::c_int;
+   | |____________________- similarly named function `cap_capable` defined here
 
 --
 0-DAY CI Kernel Test Service
