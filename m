@@ -1,90 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4562848BA;
-	Thu, 14 May 2026 10:02:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C35357D1F;
+	Thu, 14 May 2026 10:13:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778752953; cv=none; b=eXE1RDY5LD0A8vq0lohez2oYLzrttRnJpU0+VfVIKeWb1L4Fkvf5U8bOu6ZO8HyOVLTbVAwJzRqiKhznPCna8plC8d8Bg1Kna5FTeTuQpB39wdt3OZ7FX1Fy28OASFUZQRYQWNCgWdMBE7EIA6K7TwadT2Att45KIwkJ60jFNdw=
+	t=1778753615; cv=none; b=B6Ak4NmpJWH6PvTiZiNE9rX+NRPiyMfYTMtj7ePjxcxzWFxkDRCVSxgznxkT7DFJ6ZDxwlzYVHhS0NXloYHxS/eba7A97jCFIv9ETybwzva34iqedKlUbbaDh1PtEEM03MDDef4VFqp+QaK9A69ZR3qS1BdCPNpabUSke+qRiXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778752953; c=relaxed/simple;
-	bh=I5LGjB3LPZRTrFXwGMMedAZ0l8A/HmoWWktGrbcMPQQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WswJb8dWi8SWS8/CL/Yz3/MhsNsSO82pb0+vQeaXNfsXVSx1Guzy6XsPbbhIzXoGNNmqFnp2YuDizyXwJ2zYUUky75cA9R4HeTrgZoz2Bw9pZDUnN4oudUpe2MKHRnQPnJqEIiyKcYxMy/s8p+5vegg9NuhDMINWu8mObX5kXtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvtV8Hg3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778753615; c=relaxed/simple;
+	bh=pyFB4ur/KVLGcKl/yLNGIfGo7BXMPQnbBHd8aTS1kt0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kcyBow3IBiEXO/NwysvtGv7Gd4RJVM77paNXMvT3L6uIGDDiwCdtbDq8g6yR7RHXiInLEE+RK1jht0ONCth5LXYSVyOHy6Ucp+qH5ClTurpXqqXaVC2ETHMSvUNIWnhj3br8xFsOjUgoeAooo5e3XKPwUW57eICe/ZVO9DWd/N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VNOUZxJy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvtV8Hg3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4775C2BCB3;
-	Thu, 14 May 2026 10:02:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VNOUZxJy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C0C1C2BCB8;
+	Thu, 14 May 2026 10:13:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778752953;
-	bh=I5LGjB3LPZRTrFXwGMMedAZ0l8A/HmoWWktGrbcMPQQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=lvtV8Hg3FF3mFtVkv62s3NarExlrZoVzcRXoehYpgOkGqsDCqUEXqxx7S1nGlBBBP
-	 SN8kooxAyn6POwG1UC358iK7tGKo8vftXupi17b3eYiBQdMdxQt/IB/H6zQj3yAhQp
-	 /CNh2Jd/I61/ro72qJ8s2wiR6EKRDZzbMS0ApKyzF8skrtt2PJHYt4GPUMsfl3XeaY
-	 KU1cFvXTwPcujQGH7ZokG1KMhmObjxL1sBNdFvc5NFll7WCMWaEjdMV3iLvu/WNInR
-	 YrO/l95WiXD62goABfNC5Ca7kmTkYCVMfmGHBvHSG6LHQ/fjCebOCQudSlA10eGhOT
-	 EcF9dMlyuxxjQ==
-Content-Type: multipart/mixed; boundary="===============3028240220261879341=="
+	s=k20201202; t=1778753614;
+	bh=pyFB4ur/KVLGcKl/yLNGIfGo7BXMPQnbBHd8aTS1kt0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VNOUZxJyCkN4NYFp1NdTxIviv6fdawFQatfOjrTjzUFG5RC8e2NCC0DV935mjzNBQ
+	 TZei+awNzZKo3nMD8AykyxLwChCts8nwLKZedeUXLi9EWZLSYbqrVDRGEQL//xDNUg
+	 M7PAyBJcV26zRYDU2OnWw+KdiSR14zuT1u7e1qLuWWZIRwSqo/1lUYf1xSVMs08VAI
+	 qyP+RI/VF8ZJCPwSf/SO5cYTH+LIA1jHr90zhyMz+RG+khuUUCf3nmJ5B2JNQa89jd
+	 b3LmwFwsbOnim/OouN+nFUdEVHG5o71G9ay1tAkaE1Kk6pEkGuU3m4oZ1d3YG5fx7F
+	 bsazcJySO0Uyg==
+Date: Thu, 14 May 2026 19:13:30 +0900
+From: "Harry Yoo (Oracle)" <harry@kernel.org>
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Cc: Marco Elver <elver@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Bill Wendling <morbo@google.com>, David Hildenbrand <david@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>, 
+	Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Matteo Rizzo <matteorizzo@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Suren Baghdasaryan <surenb@google.com>, 
+	linux-hardening@vger.kernel.org, Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, Hao Li <hao.li@linux.dev>, 
+	"Liam R. Howlett" <liam@infradead.org>, Alexander Potapenko <glider@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
+	GONG Ruiqi <gongruiqi1@huawei.com>, Jonathan Corbet <corbet@lwn.net>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v4 1/3] slab: support for compiler-assisted type-based
+ slab cache partitioning
+Message-ID: <gmzc5ul56yvsdgha4ly53zckhmhnbylak2rcxwxlerhkt2d5lm@gellfjmlzmr3>
+References: <20260511200136.3201646-1-elver@google.com>
+ <560a84ed-7daf-4a78-a314-b867c73bce22@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <998802d0c3bb407e9bcc61e4fe6db2e3eed7ac06c7c6eca0ed0dd5409a8c2801@mail.kernel.org>
-In-Reply-To: <20260514-james-perf-llvm-version-v1-1-6cac1a9a4c8d@linaro.org>
-References: <20260514-james-perf-llvm-version-v1-1-6cac1a9a4c8d@linaro.org>
-Subject: Re: [PATCH 1/6] tools/build: Allow versioning of all LLVM tools defined in Makefile.include
-From: bot+bpf-ci@kernel.org
-To: james.clark@linaro.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com,jikos@kernel.org,bentiss@kernel.org,shuah@kernel.org,peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,mark.rutland@arm.com,alexander.shishkin@linux.intel.com,jolsa@kernel.org,irogers@google.com,adrian.hunter@intel.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev
-Cc: linux-kernel@vger.kernel.org,llvm@lists.linux.dev,linux-input@vger.kernel.org,linux-kselftest@vger.kernel.org,bpf@vger.kernel.org,linux-perf-users@vger.kernel.org,james.clark@linaro.org,leo.yan@arm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 14 May 2026 10:02:32 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <560a84ed-7daf-4a78-a314-b867c73bce22@kernel.org>
 
---===============3028240220261879341==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, May 14, 2026 at 11:01:26AM +0200, Vlastimil Babka (SUSE) wrote:
+> Applied [1] to slab/for-next, thanks. That means including the kernel-doc
+> workarounds in patch 3. I know Jon said someone might hate it, but maybe it
+> will motivate them for creating a proper fix :) It seems better than leaving
+> doc generation broken or not applying this series at all.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=slab/for-7.2/alloc_token
+> 
+> I did the following fixup to remove passing an unnecessary NULL argument for
+> __kmalloc_nolock() with buckets enabled. Made bloat-o-meter happier a bit.
 
-> tools/build: Allow versioning of all LLVM tools defined in Makefile.include
->
-> The version of LLVM tools can be given on the build command with
-> LLVM=-15, but this isn't applied to all tools. For example $(CC) gets
-> versioned, but $(CLANG) doesn't. This causes a Perf build with LTO=1 to
-> fail with an error about mixed clang versions:
->
->  ld.lld: error: libperf/core.o: Unknown attribute kind (86)
->    (Producer: 'LLVM18.1.8' Reader: 'LLVM 15.0.7')
->
-> This file has two "ifneq ($(LLVM),)" blocks adjacent to each other, so
-> merge these blocks making it obvious that all tools should be versioned
-> consistently and there is nothing special about each block.
->
-> This also reveals that ?= and "allow-override" are used inconsistently
-> between the blocks. "allow-override" is technically only required for
-> builtin variables, but isn't only used on them, and doesn't do any harm
-> if used on a non-builtin. Make them all "allow-override" for
-> consistency. The only functional difference this will cause is if there
-> is a file level definition of one of the variables followed by an
-> "#include of Makefile.include" which will now overwrite. But this isn't
-> done and in a later commit some of the duplicate definitions will be
-> removed for good measure.
->
-> There are also some other LLVM tools that are not defined here and will
-> be moved in a later commit.
->
-> Signed-off-by: James Clark <james.clark@linaro.org>
+[...]
 
-This looks like a bug fix that corrects inconsistent LLVM tool versioning
-introduced in an earlier commit. Should this include:
+Looks reasonable to me, thanks!
 
-  Fixes: e9c281928c24 ("kbuild: Make $(LLVM) more flexible")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25853166705
---===============3028240220261879341==--
+-- 
+Cheers,
+Harry / Hyeonggon
