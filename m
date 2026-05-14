@@ -1,174 +1,149 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9863A783B
-	for <llvm@lists.linux.dev>; Thu, 14 May 2026 09:32:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6EC39A070;
+	Thu, 14 May 2026 09:34:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778751165; cv=none; b=XBbicWsKplh9nqkfpDa6Wfg/4Kaj80l0NrdtHZuge+LEF2+xVYAq192f9+o7xPG2icaAZ1ojU7Eu28ymdynNDUPpV6/2+kzHZyrNaI32lwktK2bdFcjHaghNJrq+kLB6MF5pn7ET2Gt5/OaVleBDOXFzAAUO9By4L5cnul6prTo=
+	t=1778751294; cv=none; b=Tkw68qwBVpgA0AqPKr2PQ3r60w9TOEBQCcIuO7/1xwMJt2E4uqGi1O9LkCrZFVvnFqw2pYHj0sI9dYVvDSYh7tfk8o2Zr29LhCT+FsikQmbQwfBlOGaWyo6+5SqtfSY+LwsYD8INxVwZmucvEBvVqdmjBzOtoTedOxJMpLI1p1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778751165; c=relaxed/simple;
-	bh=rZB6cVP+OB68GQ9mGdUKO+TcRKpuZdabKai7x8UMJI4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P4iHFieQucV4QjKn1cnLL6KRylxYLIgENQrGotIbrjIhLGHQJDY1uc2IAKRuOB/+ZS+wxddchNUgrZN+vS0Tp4lByoYrjlFojqRWUOz2XqE2gSzS7FZkC4i83hNWZztwryP5Wswe8RoL4Z+h0tZkdK+QkU6mFN7L0S8h2VIyAaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VVNvHY7s; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1778751294; c=relaxed/simple;
+	bh=Vfnc6YuxQlJxA6PY7X5ZFvM4hXTzk0D7LNw7UTsZT84=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T1Y4TEqZeS1YWLBHKmNj53gVO3FY/KAgHgWWWZQ9fr3CMKiPZzWAv0dzfx6gHcKekYmiILsOXyQRim5H4M7qTzD0mLg8pb1eI39DKWa6ZrPF2U2CaBN6/CR+4LF7j0ga0BdpuoMt/v2lLdlZwVBzNvZCwLunl+hwMlw/YIYQK/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FLrzU2sl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VVNvHY7s"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-45562c41ec7so3859759f8f.1
-        for <llvm@lists.linux.dev>; Thu, 14 May 2026 02:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1778751158; x=1779355958; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0xKmC3f9l+RG3PTmyEhaHWpzz2ePbx7CweTWHocme8c=;
-        b=VVNvHY7ss66NjmW2TxItsAcfe+UbOdbP9S9Y19+QyXWC8Ja/zz85PgnjaeqAQ4BoLC
-         WFXE+hKxAQ0+fperQEkUl2QdNWk220PuT+sBhRpA1G83yKkgEHbLJijmhxti7dfm8ec/
-         iV7cXW8QN+womqXy8OqOa1FGGr5EDJR7dz8nlVkfz/hXT4Ri3bkllSpOYCDPUq6lP/E7
-         JcI3kl932aXhHTyiJ9CJnMw1bWxTCmStinRWgzeGHW9EkgQNTGwO3/cb8OOA+rjhYMfu
-         ZKMdZ/hJFcMeN2wrhnPLIYlJzn73DVwityH1CEth83Lim8sTShlyRRb4XTPC0O3VLjTC
-         pkTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778751158; x=1779355958;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0xKmC3f9l+RG3PTmyEhaHWpzz2ePbx7CweTWHocme8c=;
-        b=XY5ARAhgErx89fO6ZdXWauw9vvEZXRyOIqelDhU/GwBELGCLeAexuVQNugVugD2sDE
-         qwbT4HMnuLBPcuSdbA2HZZHovwTxwmbZH4rx7Bm4q41BcuEhErULYMgR3Lh+zAr7IEEM
-         5X5Ab2wzWuoko/sGAsGSsn39pP+/hO/3s+GJKf5I84y/wEULyIGfkKDsxNxt7eYHGzaz
-         CfbYaVnLzFrlO0OCgGe3WqwbOXvwOsRs31HlblyXrlyH/7MwYZE1a35qB8xEmTug93N7
-         TqIlgcbGFAbx7NfO/KxhxHBUxXlf5SLY3jenawKsqlJNZmvNO/pyxsmfx1eyzVf9bVpi
-         YSbg==
-X-Forwarded-Encrypted: i=1; AFNElJ/9Q/MR4igGNx8Zt2F/Z9afhzTe5/7OLRbIvsLWqNgQgW15+4A+rCkJTNSB7VdXf1sCSTTd@lists.linux.dev
-X-Gm-Message-State: AOJu0YxfnaFIJQktQ/PojHcTanWuuzKig3EmBY7ZiMf90i1Jn3WarPcP
-	g5E8PP9Kl3F0wPmAGmwmzhYbDqh+kT9XUoEDjIEBwDGZL49G/pRMYwB9Xnfl1320RIg=
-X-Gm-Gg: Acq92OFBl9qIfqMzq/N19bN93E/JWrdku88stOD+0LeU0uDtGkre9VYZqbFfcx+3Mw0
-	eEIRv3bX958mbjjrdf1kw5PCSsIY8BwA3NGFChRjZVtIfppXYU0/fEPzjV8zA6SR68EMwnp0SEJ
-	2NItif/W+oIYau8B0NFyfKgQtBt3Df89DNq9wcaV25jsHksJKa3Xa5/2S+jar9U76D6y8F+08lC
-	3mwtOVcvM/tANKfjdrIClnoWP8my0HooSNX75OeGF9DaHN0nu+mEUcEAmEohu3RljXyl4sWfyht
-	9E3bAoewQ/ueQ6uRyPMeFplU/cCsxxYTMhOHQkY7A3/GGi0T/EvDtltxEkhvGsC/vO+JK3Jape+
-	mMjHRbntpXixusBsC0aNAkLhoL5Oz+RkYaVcb8uPtj1dlXJeMLp6ToVQH3v4bwxBuuadkGolHKg
-	unlOfehuylRjdEYv3cXqNwUR/+w68Ctbuc
-X-Received: by 2002:a05:6000:40da:b0:450:e33b:23de with SMTP id ffacd0b85a97d-45c57dea159mr11278250f8f.2.1778751158215;
-        Thu, 14 May 2026 02:32:38 -0700 (PDT)
-Received: from ho-tower-lan.lan ([185.48.77.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe0fecsm5097164f8f.26.2026.05.14.02.32.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 02:32:37 -0700 (PDT)
-From: James Clark <james.clark@linaro.org>
-Date: Thu, 14 May 2026 10:32:12 +0100
-Subject: [PATCH 5/6] tools/build: selftests: Allow versioning LLVM lld
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FLrzU2sl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82D4DC2BCB3;
+	Thu, 14 May 2026 09:34:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778751294;
+	bh=Vfnc6YuxQlJxA6PY7X5ZFvM4hXTzk0D7LNw7UTsZT84=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FLrzU2sls1DQa8YN5s+ZKV70CwHVPGPLTjHOSFGUDOT/wO0P+LwknuxAgoOrg2DlO
+	 vL+4z6KmIKpr3UsLUkRbIMYvYSRBSpjbnmIkppNe4ug68np2qYpAUej/mxebagdsMx
+	 Araz5iwT+CiCFWnMEMrC5tkVSn85Zt9kypfjbLaT+iBnOd5j6O8rSeJsnPMBviFxms
+	 /eyDJ2wvZgl2REilyQ0PVT2MLXvdZv/bq4xJtSBLNP4VLTKTKZue/rJGDWS3h/sKLS
+	 3HIv2O/ywKPp0QTX1wuxe9hY3ZEEzqgxcwNJ9d9X/c1cWg2Ww3bw1z6vg24jeOK14X
+	 PQlDgYorYjceQ==
+Date: Thu, 14 May 2026 10:34:49 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	David Hildenbrand <david@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Memory Management List <linux-mm@kvack.org>, mm-commits@vger.kernel.org
+Subject: Re: [akpm-mm:mm-unstable 25/274] mm/hugetlb.c:7281:3: error: call to
+ undeclared function '__huge_pmd_unshare'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <agWXJeWRb6olB6fi@lucifer>
+References: <202605141638.b5ZBd6IF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
-References: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
-In-Reply-To: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
-To: Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
- Adrian Hunter <adrian.hunter@intel.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- James Clark <james.clark@linaro.org>, leo.yan@arm.com
-X-Mailer: b4 0.14.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202605141638.b5ZBd6IF-lkp@intel.com>
 
-Building with LLVM=... could result in a different version of lld being
-used than the main toolchain for liburandom_read.so because it's
-hardcoded to "lld" in this makefile.
+On Thu, May 14, 2026 at 04:37:45PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> head:   444fc9435e57157fcf30fc99aee44997f3458641
+> commit: 2bb8fe16f7bf4487248c9ff847fcf189c45b9508 [25/274] mm/hugetlb: avoid false positive lockdep assertion
+> config: powerpc64-randconfig-001-20260514 (https://download.01.org/0day-ci/archive/20260514/202605141638.b5ZBd6IF-lkp@intel.com/config)
+> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141638.b5ZBd6IF-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202605141638.b5ZBd6IF-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> mm/hugetlb.c:7281:3: error: call to undeclared function '__huge_pmd_unshare'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>     7281 |                 __huge_pmd_unshare(&tlb, vma, address, ptep, take_locks);
+>          |                 ^
+>    mm/hugetlb.c:7281:3: note: did you mean 'huge_pmd_unshare'?
+>    mm/hugetlb.c:6973:5: note: 'huge_pmd_unshare' declared here
+>     6973 | int huge_pmd_unshare(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>          |     ^
+>    1 error generated.
 
-Make it consistent with the rest of the LLVM toolchain by adding an LLD
-variable to Makefile.include. Keep the fallback for other architectures
-in tools/testing/selftests/bpf/Makefile as it seems like it's something
-specific to this make rule and shouldn't be global.
+Yup, I missed the !CONFIG_HUGETLB_PMD_PAGE_TABLE_SHARING case, sending a fix.
 
-Clang accepts either a full path or "ld.lld-15" style inputs to
--fuse-ld= so this will work with LLD defined the same way as the other
-LLVM tools. However, for full paths, we need to use ".../ld.lld" instead
-of the generic driver "lld", but I don't think the original use of "lld"
-was significant as this is always a linux build.
+Cheers, Lorenzo
 
-Signed-off-by: James Clark <james.clark@linaro.org>
----
- tools/scripts/Makefile.include       | 2 ++
- tools/testing/selftests/bpf/Makefile | 8 ++++----
- 2 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-index 380ad84ac51e..5c2d505cba62 100644
---- a/tools/scripts/Makefile.include
-+++ b/tools/scripts/Makefile.include
-@@ -67,6 +67,7 @@ ifneq ($(LLVM),)
-   $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
-   $(call allow-override,LD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
-   $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
-+  $(call allow-override,LLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
-   $(call allow-override,CXX,$(LLVM_PREFIX)clang++$(LLVM_SUFFIX))
-   $(call allow-override,STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
-   $(call allow-override,LLVM_STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
-@@ -91,6 +92,7 @@ else
-   # Some tools still require Clang, LLC and/or LLVM utils
-   $(call allow-override,CLANG,clang)
-   $(call allow-override,LLC,llc)
-+  $(call allow-override,LLD,ld.lld)
-   $(call allow-override,LLVM_CONFIG,llvm-config)
-   $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
-   $(call allow-override,LLVM_STRIP,llvm-strip)
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6ef6872adbc3..44ba829e5d4d 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
- 
- # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
- ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
--LLD := lld
-+USE_LD := $(LLD)
- else
--LLD := $(shell command -v $(LD))
-+USE_LD := $(shell command -v $(LD))
- endif
- 
- # Filter out -static for liburandom_read.so and its dependent targets so that static builds
-@@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
- 		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
- 		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
- 		     -Wno-unused-command-line-argument \
--		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-+		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
- 		     -Wl,--version-script=liburandom_read.map \
- 		     -fPIC -shared -o $@
- 
-@@ -268,7 +268,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
- 		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
- 		     -Wno-unused-command-line-argument \
- 		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
--		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-+		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
- 		     -Wl,-rpath=. -o $@
- 
- $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
-
--- 
-2.34.1
-
+>
+>
+> vim +/__huge_pmd_unshare +7281 mm/hugetlb.c
+>
+>   7233
+>   7234	/*
+>   7235	 * If @take_locks is false, the caller must ensure that no concurrent page table
+>   7236	 * access can happen (except for gup_fast() and hardware page walks).
+>   7237	 * If @take_locks is true, we take the hugetlb VMA lock (to lock out things like
+>   7238	 * concurrent page fault handling) and the file rmap lock.
+>   7239	 */
+>   7240	static void hugetlb_unshare_pmds(struct vm_area_struct *vma,
+>   7241					   unsigned long start,
+>   7242					   unsigned long end,
+>   7243					   bool take_locks)
+>   7244	{
+>   7245		struct hstate *h = hstate_vma(vma);
+>   7246		unsigned long sz = huge_page_size(h);
+>   7247		struct mm_struct *mm = vma->vm_mm;
+>   7248		struct mmu_notifier_range range;
+>   7249		struct mmu_gather tlb;
+>   7250		unsigned long address;
+>   7251		spinlock_t *ptl;
+>   7252		pte_t *ptep;
+>   7253
+>   7254		if (!(vma->vm_flags & VM_MAYSHARE))
+>   7255			return;
+>   7256
+>   7257		if (start >= end)
+>   7258			return;
+>   7259
+>   7260		flush_cache_range(vma, start, end);
+>   7261		tlb_gather_mmu_vma(&tlb, vma);
+>   7262
+>   7263		/*
+>   7264		 * No need to call adjust_range_if_pmd_sharing_possible(), because
+>   7265		 * we have already done the PUD_SIZE alignment.
+>   7266		 */
+>   7267		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm,
+>   7268					start, end);
+>   7269		mmu_notifier_invalidate_range_start(&range);
+>   7270		if (take_locks) {
+>   7271			hugetlb_vma_lock_write(vma);
+>   7272			i_mmap_lock_write(vma->vm_file->f_mapping);
+>   7273		} else {
+>   7274			i_mmap_assert_write_locked(vma->vm_file->f_mapping);
+>   7275		}
+>   7276		for (address = start; address < end; address += PUD_SIZE) {
+>   7277			ptep = hugetlb_walk(vma, address, sz);
+>   7278			if (!ptep)
+>   7279				continue;
+>   7280			ptl = huge_pte_lock(h, mm, ptep);
+> > 7281			__huge_pmd_unshare(&tlb, vma, address, ptep, take_locks);
+>   7282			spin_unlock(ptl);
+>   7283		}
+>   7284		huge_pmd_unshare_flush(&tlb, vma);
+>   7285		if (take_locks) {
+>   7286			i_mmap_unlock_write(vma->vm_file->f_mapping);
+>   7287			hugetlb_vma_unlock_write(vma);
+>   7288		}
+>   7289		/*
+>   7290		 * No need to call mmu_notifier_arch_invalidate_secondary_tlbs(), see
+>   7291		 * Documentation/mm/mmu_notifier.rst.
+>   7292		 */
+>   7293		mmu_notifier_invalidate_range_end(&range);
+>   7294		tlb_finish_mmu(&tlb);
+>   7295	}
+>   7296
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
