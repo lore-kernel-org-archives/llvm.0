@@ -1,144 +1,121 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E86233A2E3F
-	for <llvm@lists.linux.dev>; Thu, 14 May 2026 10:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBCD3C98B8
+	for <llvm@lists.linux.dev>; Thu, 14 May 2026 12:14:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778753630; cv=none; b=cmQCnikmhi+/cULPrGg71OmtzYOXPOVjH/JsCKeNFB43fH2+ZjtpORYUIgiQyA220psX/hzTTWrI4ajaYT2dNQOTAofi8B/lWvG0i3TpsrMheMtOc4he1NNVmsWflNLNgL6ssCn4RSlxQrgiE1JhUfjaArvcwxnc7MyFA0Dexto=
+	t=1778760860; cv=none; b=R8+BbsPML0DlmVlikH4B0eJlqfUXy4XPMlY0MhFjBXnzAEfkLB2TQa9A/MtnBrR/j9KVgsO76yI6qENCf/YGmEpCBtGdnVccg1WZ0B7otDeVb6/W5MYKEzmgO2c3JjhZr/rkSoB2Sbjvw6a376QmGbX94LRSP6ikuAqaeZO4Mhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778753630; c=relaxed/simple;
-	bh=S63hhfRsG+j7Ng7WAsaWPKCUXZm8OcvpotlPU06841E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AeuypRnQspAYI1gchvhIXgDL94JkRZmo2EugAUwzAhAlsQh4aXbDDjSPUAUyeKjM5+bsBoKrXjHy9WEq+Ct+Bjt9NcFdINkidjAbrj1kmRe/J5OXRufAHZ+9fMWrInEQNEtZfEoqR30APF93Aw7ROxtKt/f1aiQ/40E9YAV1v5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jW24c+Zv; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1778760860; c=relaxed/simple;
+	bh=IAO71bX6/0l+Uffip8mV9c2OUmrqf/4IKgA70H+dCIU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CHAn5PRdWeUcoS3P3HdghAdQtWu7Q2BhtsqcfloFy/fXfXDt86uXP1LfXadViHWXPAEo5KgU/acoKKDzNkh221Cnc0Ggpok3DanUetOL1NdpdNER1O8UkvU/HOg7cUTp9U20M8aoMbXRvIVPljWZgxT+OKThkgaK3Ohlw8wrWI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o6NULJmk; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jW24c+Zv"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48a3e9862f0so52354435e9.1
-        for <llvm@lists.linux.dev>; Thu, 14 May 2026 03:13:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o6NULJmk"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-44a14580111so5792059f8f.0
+        for <llvm@lists.linux.dev>; Thu, 14 May 2026 05:14:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1778753626; x=1779358426; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fTuf5ZCIu9Za2DpjjkJh2zWkoI+wGsi6ZskT4v9wl4s=;
-        b=jW24c+ZvAXwZoVrpv2NiNV44glNOJrdZg5ZsuQX8vAeROBktmyyP7+74AU+1Ka8buX
-         CiaHgzCqdAsTrLAFuaZnrce/NVdtvjEVki0kmuRkp3etqqc9QptmecTuD7Ut2atBbc5O
-         ydybBxRYQna3EM4jVFe9kPlvWoGzNOsVilboqD1BkQ3J4v/XLhhsUNPBWjHceSQI8QA0
-         ESt6mvk3HTY5FpVj6/Rzu3nTcyXuyu7WtIJRD+HjxrAATWZasv6h/1ivhGkT/TnWftAK
-         QGPBVKiUke7RGlGKk9THvQBw3k8IN+pownt5c7WvIHzQsqrhwacxM1Fyc8nq4aOI4V8c
-         GIvg==
+        d=gmail.com; s=20251104; t=1778760858; x=1779365658; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bGqf3rD2el4Fophu1OMYrfA7Yv/0FbhBVG7jdE96agc=;
+        b=o6NULJmkcTnMEF82xPR7rgGYCHKSfjOE0eRtv/jQrzqQsd/OGCid3QjvPjAtrgUusu
+         unrgjCk3GenVuLURluBsHEbq8lMCxHkNjGlY3HNcolrPrPwF/44bvKi/6GcLSaPRezuR
+         CPdz99dVkXceL3HiO1VuqYBJpCmN9Zk7xB36hqUfriIpc1e8/KE/tEEeLaIIUwphRGqz
+         AVfF6wY7YtAOPr1WdBd4HDY+Ks14b13Fi47lr84mu7MPPQk3hpo7UjEFjG/t/Zxpy6eO
+         KoqmbndOEEox5EFDcPQkESAiHu4q5NfRydVIzxGUWMUtd2FTn+rlOa66wFAc+jxaIso8
+         CfTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778753626; x=1779358426;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fTuf5ZCIu9Za2DpjjkJh2zWkoI+wGsi6ZskT4v9wl4s=;
-        b=gboC39m6mMDUxRMHK0vBYZHDTBSesFKTjjT0unQSpuTrBeI2UsH4PtK+cKICG1xwKw
-         PbRPCGCLHzNjrismSae8UuFKSipvBJRMjV6eOXUWK56ZX/KVx/6ZXeUXGIbH7QaGeS6f
-         72WdgyMj1TQmxKKXwIKZd3N58OZ6CADyasUZPvTAGcvH2iO09vuAwX+u1fs52jK42N4F
-         ou0u2k85et4ia5VWX9Z+skX2N6/NZMFeo9kUXqZIvH0XmvgcPIs2cmUDjmPTDJCCBMJj
-         QnOopNYUp1vD57zHgbqbn4mz7gyVEDfcyMmoFqqhNWwxbykolCoDzFEnt1u54/BiX0Nt
-         YKZg==
-X-Forwarded-Encrypted: i=1; AFNElJ+KO4rnD6LRteZ2U2091PeKeiE4eI4LsvVxIrb7pCMR22E9msAfYtn0DXcmueptWB+qRtHU@lists.linux.dev
-X-Gm-Message-State: AOJu0YyJrdbbZDRpiaHT+xQFFLoy/DeGwdRuxGGKY41TFCNiIMP1s1/X
-	aoOLNXZebDoT5LQFZJDW58wRi/lp6HrBJpkX0vMMBtnsJXuMdy3IZW9wAbjLnTpZXTU=
-X-Gm-Gg: Acq92OEGMMVc+SolNFZoGxJkJoCCKvifxYNSRim9/zIhm2cc922ejxMwAML6QIEQXXs
-	K9le1JFwWxic73SJSSl3rnISvbyrFmJHXXNBEal5LKs03ymYxwIVX366SMWaZfUBXL+lHrGs+4Q
-	LesJx9x0DwBgP5twagiZiz5JGikTFTWLm5DWyhNXYVpgMSnAUJ6X3jVVD3vdzld3KsoSKlDOtvH
-	RGc+NB8ZTzC/4YektkrsUmmlZV7MNeT6cGglVZKCyeZogOCBIP5ZdvkIPlsUbHRI+7K+okh+Zmj
-	+ZUpcVI/Ok45XBj7CAS1FgLuaCjWfqnoHL16Vde4g2hJLwRh9Bu//BVVUNCd2GcarmsntI3MwXo
-	Tyt5fl5+SZ1cbG3YCXsbN7qL5cQQp3E6Bjm5PFJ5MByeeVyTuEnO32hzqYn+/NmRFDDxT05uDHM
-	wdd40DI7AKQ74wsrZDwYa4s8NXDsgv
-X-Received: by 2002:a05:600c:19c7:b0:48f:e044:927d with SMTP id 5b1f17b1804b1-48fe24879f6mr3970735e9.10.1778753626408;
-        Thu, 14 May 2026 03:13:46 -0700 (PDT)
-Received: from [192.168.1.3] ([185.48.77.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fd648a7e5sm55592095e9.3.2026.05.14.03.13.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 May 2026 03:13:45 -0700 (PDT)
-Message-ID: <628c0904-08b2-4b93-a90e-456a073ecf73@linaro.org>
-Date: Thu, 14 May 2026 11:13:43 +0100
+        d=1e100.net; s=20251104; t=1778760858; x=1779365658;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bGqf3rD2el4Fophu1OMYrfA7Yv/0FbhBVG7jdE96agc=;
+        b=o0XF9L1sFTuXRQLGIuQHhhHZqO7NzKOLeZOBe9j3/SqgH+kEAer3ZcV421hUVPrS4U
+         ZFVP2xQljojRVgIthT6D8V7KdbtNz6oNiDxI9q/fR+6+TQQYmLu6fLFXO6H4KTRCr/Yt
+         R7UrvWRZfRByqo5ZrPW4AONB3Y2VuQVFQU2gyD5boIGCOiOnRIx08CTXMXTU9XN6wmYf
+         MWwtRSb1xk6FqAYZ0WItGDnSvoimXa6CiaOq5WCe5jDs1FChGFOBE9eq3tgyDZHbf750
+         bcEwhkJUQ42U1uuyDBhXVoLhZwtrZoFaMtmZKXVGdMaN1btIpVoaBbu5yV+Qz8hftB7K
+         6A2Q==
+X-Forwarded-Encrypted: i=1; AFNElJ8y3N1xyY03o3lJK7JN4MPfQODPs2rtwcVJ/87HczIB6pvB6g+nHTRgwxhC4CWhQeE9syrf@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzt4/1DlWwgxhFyxpZSEx2f7WXyU8JP+3DlWjZFi0n1oWppbPdb
+	Lw2M8/8uSY4QzsTsnvS6L7DehCAadU3lFH0Md/V/n+eBu4pGjMUgAzny
+X-Gm-Gg: Acq92OGbFEW8MaHsjbY4EnjCWSeBoCi+BGo7WBTzRFGWwe+54DjYuV8O6QtHXeKDKmA
+	qnsoScB6zE5DJu0ojmevC5LyvnkwPrCoBqY0sPIFxqFtRJVs3NFW3r9d2/+FsmTZaC9t1K4etAe
+	eh4Fc4ytPAj53lsNVzSAXxVDzLT7MVlTIeL4NEJ/xNvBz34yJghB+dGt1HR5kMrsMGHuRfvMiei
+	L/OCQmCp5Ni0AOlZf9kfCF8tqDQserzSqiB1ugVIb8XKl0ZD5wIb8cEfiQtSEDHT/vLOqqXmGSj
+	XSzpIsXR09RZ0AKC5zX+vPWojmwigSvtD4KqLQzC1HWOKv0DwkJEcVgU0iR4Dv3tGFYSZcf9CR9
+	CIB8XdK9zYPTZiadKlizB0QvGkMIRPabibgFntUwLo6Wc6cid+PfDTRgG3jfyZ1qSCRMQf482Qb
+	KhY4dZKI1Kn26Oawl8fvy0rKi1DAFExY26IkNTGTr98/JTkbgmjrMc
+X-Received: by 2002:a05:6000:1acc:b0:43d:7af0:3a7c with SMTP id ffacd0b85a97d-45c7a4ef3e4mr11408615f8f.29.1778760857731;
+        Thu, 14 May 2026 05:14:17 -0700 (PDT)
+Received: from RTRKW671-LIN.domain.local ([77.243.27.125])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9e767cb9sm6285630f8f.2.2026.05.14.05.14.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 05:14:17 -0700 (PDT)
+From: Milan Tripkovic <milant2002@gmail.com>
+To: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexandre Ghiti <alex@ghiti.fr>,
+	Kees Cook <kees@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Dusan Stojkovic <Dusan.Stojkovic@rt-rk.com>,
+	Milan Tripkovic <milant2002@gmail.com>,
+	Milan Tripkovic <Milan.Tripkovic@rt-rk.com>
+Subject: [PATCH v2 0/2] riscv: lib: add optimized memcmp() and extend KUnit tests
+Date: Thu, 14 May 2026 14:13:56 +0200
+Message-ID: <20260514121359.931999-1-milant2002@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] tools/build: Allow versioning of all LLVM tools
- defined in Makefile.include
-To: bot+bpf-ci@kernel.org
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, leo.yan@arm.com,
- martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev,
- nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
- justinstitt@google.com, jikos@kernel.org, bentiss@kernel.org,
- shuah@kernel.org, peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
- namhyung@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, andrii@kernel.org, eddyz87@gmail.com,
- ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev
-References: <20260514-james-perf-llvm-version-v1-1-6cac1a9a4c8d@linaro.org>
- <998802d0c3bb407e9bcc61e4fe6db2e3eed7ac06c7c6eca0ed0dd5409a8c2801@mail.kernel.org>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <998802d0c3bb407e9bcc61e4fe6db2e3eed7ac06c7c6eca0ed0dd5409a8c2801@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Add an assembly implementation of memcmp() for RISC-V. This version
+incorporates feedback from v1 regarding alignment safety, loop 
+efficiency, and ZBB usage.
 
+The second patch extends the KUnit string tests to include functional
+verification and benchmarking for memcmp().
+        
+Signed-off-by: Milan Tripkovic <Milan.Tripkovic@rt-rk.com>
 
-On 14/05/2026 11:02 am, bot+bpf-ci@kernel.org wrote:
->> tools/build: Allow versioning of all LLVM tools defined in Makefile.include
->>
->> The version of LLVM tools can be given on the build command with
->> LLVM=-15, but this isn't applied to all tools. For example $(CC) gets
->> versioned, but $(CLANG) doesn't. This causes a Perf build with LTO=1 to
->> fail with an error about mixed clang versions:
->>
->>   ld.lld: error: libperf/core.o: Unknown attribute kind (86)
->>     (Producer: 'LLVM18.1.8' Reader: 'LLVM 15.0.7')
->>
->> This file has two "ifneq ($(LLVM),)" blocks adjacent to each other, so
->> merge these blocks making it obvious that all tools should be versioned
->> consistently and there is nothing special about each block.
->>
->> This also reveals that ?= and "allow-override" are used inconsistently
->> between the blocks. "allow-override" is technically only required for
->> builtin variables, but isn't only used on them, and doesn't do any harm
->> if used on a non-builtin. Make them all "allow-override" for
->> consistency. The only functional difference this will cause is if there
->> is a file level definition of one of the variables followed by an
->> "#include of Makefile.include" which will now overwrite. But this isn't
->> done and in a later commit some of the duplicate definitions will be
->> removed for good measure.
->>
->> There are also some other LLVM tools that are not defined here and will
->> be moved in a later commit.
->>
->> Signed-off-by: James Clark <james.clark@linaro.org>
-> 
-> This looks like a bug fix that corrects inconsistent LLVM tool versioning
-> introduced in an earlier commit. Should this include:
-> 
->    Fixes: e9c281928c24 ("kbuild: Make $(LLVM) more flexible")
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25853166705
+---
+v2 changes:
+    - Added alignment checks for buffers to avoid expensive misaligned loads.
+    - Optimized the loop using end-pointers to reduce per-iteration overhead.
+    - Implemented word-aligned tail handling using ZBB shifts.
+    - Removed redundant pointer equality (a0 == a1) check.
+    - Retained BE support via #ifndef; ZBB rev8 is used for the LE fast-path.
+    - Fixed KUnit build failures for Clang and non-benchmark configs.
 
-I did consider a fixes tag, but the only real bug is with Perf and 
-LTO=1, and building it in this way has obviously never worked, so you 
-could also argue this is new behavior.
+Milan Tripkovic (2):
+  riscv: lib: add memcmp() implementation
+  lib/string_kunit: extend benchmarks and unit test to memcmp()
 
-I think it's quite and edge case and has some risk to break other tools 
-if backported so I left the tag off.
+ arch/riscv/include/asm/string.h |   2 +
+ arch/riscv/lib/Makefile         |   1 +
+ arch/riscv/lib/memcmp.S         | 124 ++++++++++++++++++++++++++++++++
+ arch/riscv/purgatory/Makefile   |   5 +-
+ lib/tests/string_kunit.c        | 106 +++++++++++++++++++++++++++
+ 5 files changed, 237 insertions(+), 1 deletion(-)
+ create mode 100644 arch/riscv/lib/memcmp.S
+
+-- 
+2.43.0
 
