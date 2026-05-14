@@ -1,152 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from s106b.cyber-folks.pl (s106b.cyber-folks.pl [195.78.66.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78A42BEC4E;
-	Thu, 14 May 2026 02:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B802236E3;
+	Thu, 14 May 2026 03:20:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.78.66.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778726969; cv=none; b=N1kLVw6tcVSEVUQq/CNKbJZgY/3f+HH8WmCK9gD9PhqlUTiRHQyKgqLliKemraXDHLSxfWeOsY75nTNv6p8kmPwzCN5BBkdkFLbwTS+Z9byr+/dKUQZy/z6Wx2EyAhaKTVpbRzkQmmev3+0X2Ee0YTvi6ZxAZFwtAQeLdM+5Ldk=
+	t=1778728809; cv=none; b=VOwuWo4pBs4lUFhKiFAJ+l28JBWK5tqFXdEINFnp+Vg8N+f/+LaxLmwbWfKbSjTkCVJIsaHnY0Qn8SUo+Fh4CzB4IHh76xXENtirn/h+oQ8KXz6TpT+Ir/7AkSGY+4bFbHP6V4SbmwuewUWVlpvpYnha+EVOPHGUXkUGW1+YZI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778726969; c=relaxed/simple;
-	bh=k0CIKpkiwdLSwTL1nBN8SsHdbHwx+9+NbeMDdU3KkdI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CYHTq6yft74PC5cPKU0n49AqW//9NEu4zd48hFmFVQZOdaWa2Wnvw8W1M6//7zeSYyJ5ZEI9Wd7xr4GMFcWh7fkgPWdrlRS1ZTI6d39OodvCRheJr9oju9f/r/z/QYCzkBn/B6Rt/wHQyFuOJDu3cCzGvc3rmmmgPJMZTHFkjCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jXpOG4mV; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778728809; c=relaxed/simple;
+	bh=mAW9smyP3Y9zNh0IDxgH/7BBIen5KUX/2eJMMof12rc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VcomS5/ueECyNovbu5QAkZJWIppg9HylF8Jx9cAkywY7YzP+/ns239Zyj8osreNE561kr3fo+5NJEx9qF531BsUx8l0w7Kuio5+g9Gc2fg/BIOkwPYp5fV6FvzRBp/Hm9cgToiLl+nMo7sWTUZ6uEIdBu3n+krWjI7J5rBUmWvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mmpsystems.pl; spf=pass smtp.mailfrom=mmpsystems.pl; dkim=pass (2048-bit key) header.d=mmpsystems.pl header.i=@mmpsystems.pl header.b=QYij6wex; arc=none smtp.client-ip=195.78.66.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mmpsystems.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mmpsystems.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jXpOG4mV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778726967; x=1810262967;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=k0CIKpkiwdLSwTL1nBN8SsHdbHwx+9+NbeMDdU3KkdI=;
-  b=jXpOG4mVBQvshgma6RJQ1QwnB6n7xWzkdp98trI/azifRGenYFoar9vt
-   JMHxcP9B5Z/sM/7G4yEX5Tx9wxuy0RMwYytVGdR7hv736065vK72qeeC+
-   V6eF/4+EmHGYpz1ryGZqhSMbDE/qXXlRaELjAVHA0Oosz+/Kh34AXUXWx
-   5Ev0sAnZ9QJnAeS8WKqbT+BZ6FMJy1Ens8eMDSzF9ydjI8fKY70Yn+m+H
-   /pQehE1auw/bb24UXbSsQS4jGkLNDI9HdV+cQdJuR0IN+6z4/oxKwnZ5Q
-   U4PQTezEZZjVfMrBapRCnO0qB6Ef1UovJvOiYxewlP7NCyu2ulmPBxCL5
-   A==;
-X-CSE-ConnectionGUID: 6JSFmBIqQwqIz71scq28OA==
-X-CSE-MsgGUID: w7jw5LQoT5ybAO/lHeDqag==
-X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="79618300"
-X-IronPort-AV: E=Sophos;i="6.23,233,1770624000"; 
-   d="scan'208";a="79618300"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 19:49:26 -0700
-X-CSE-ConnectionGUID: ZIrULUKFR32/EfWmCtls1g==
-X-CSE-MsgGUID: g4dK7gGxTcuz6mDdjIL7Mw==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 13 May 2026 19:49:23 -0700
-Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wNM8X-000000005hP-08s4;
-	Thu, 14 May 2026 02:49:21 +0000
-Date: Thu, 14 May 2026 10:48:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pawel Laszczak via B4 Relay <devnull+pawell.cadence.com@kernel.org>,
-	Peter Chen <peter.chen@kernel.org>,
-	Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, Pawel Laszczak <pawell@cadence.com>
-Subject: Re: [PATCH v3] usb: cdnsp: Add support for device-only configuration
-Message-ID: <202605141023.18vWXyw3-lkp@intel.com>
-References: <20260508-no_drd_config-v3-1-0614f5044721@cadence.com>
+	dkim=pass (2048-bit key) header.d=mmpsystems.pl header.i=@mmpsystems.pl header.b="QYij6wex"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=mmpsystems.pl; s=x; h=Cc:To:Message-Id:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=V8Zv1XxU0NXRkczbbte8VINxmUP6BumFNP4JQShgmbg=; b=QYij6wexY6658C8GQB+Ud1GMHS
+	UexeAtIdV4B5jonQ3oMluQfemg78ENfSZp7IWxTW2ohf83AwadBuA6hoI/Gjz7W6jgvVo5U39RtrT
+	U6vHE0YbnzgzQtUoK3h4OZLc2YA74CM0L0Gly5RhPk2x9l1BR67iZhRUg4w6+HzrI2ekkoRC123Y1
+	ICxbqKyo1qJriSlFf9dvFHW73Uz0ZYiezUn/FeWy0bc5y5HiFcpbdUhCZlRP2cfa7Ef23FPK15v9X
+	Cn1xO56b2RgSt3vG2hhCbgYlCBwN8TAJ1zkIYU+gLB7eSCKb+U5ubZahS8TzVeqSdqMbTRIpMuX41
+	YIheyFzg==;
+Received: from [91.102.182.218] (helo=localhost)
+	by s106.cyber-folks.pl with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <michal.piekos@mmpsystems.pl>)
+	id 1wNMc8-0000000H9MG-1Eyv;
+	Thu, 14 May 2026 05:19:56 +0200
+From: Michal Piekos <michal.piekos@mmpsystems.pl>
+Date: Thu, 14 May 2026 05:19:34 +0200
+Subject: [PATCH v2] iio: adc: sun20i-gpadc: support non-contiguous channel
+ lookups
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508-no_drd_config-v3-1-0614f5044721@cadence.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260514-fix-sunxi-gpadc-sparse-channels-v2-1-d4a66b70c7a7@mmpsystems.pl>
+X-B4-Tracking: v=1; b=H4sIAEU/BWoC/42OTQ6DIBBGr2JYdxrAlsSueo/GheBUaRQJg0Zjv
+ HvBXqDLl7zvZ2eEwSKxR7GzgIslO7kE8lIw0zeuQ7BtYia5VPwuSnjbFWh2q4XON60B8k0ghCw
+ 7HAikVlpyVer2VrHU4gOmyLnwqn9Ms/6gibk2G72lOIXtvLCI7P2/tggQoIwUKCuuDeJzHD1tF
+ HGkqx9YfRzHF6qVKH3kAAAA
+X-Change-ID: 20260513-fix-sunxi-gpadc-sparse-channels-2b6b2063bd49
+To: Jonathan Cameron <jic23@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai <wens@kernel.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>
+Cc: linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ Michal Piekos <michal.piekos@mmpsystems.pl>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ llvm@lists.linux.dev
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778728785; l=2567;
+ i=michal.piekos@mmpsystems.pl; s=20260301; h=from:subject:message-id;
+ bh=mAW9smyP3Y9zNh0IDxgH/7BBIen5KUX/2eJMMof12rc=;
+ b=IzE2aCtNGPDvgiHxMVpRWxq6l4Hz7kBMcZiHPIsDF1KFpqFB8KN5/bGtIJbN82SZJaMKOPjtR
+ AyNgm7Y1d/EClBYHORnzkw4FSpaGRdXUTikaUr9cxnFtfZu18gfBWjD
+X-Developer-Key: i=michal.piekos@mmpsystems.pl; a=ed25519;
+ pk=Aixyx03If7ZDamiKKN0lsa+0mtA+WjIuIf2ZQVYNBqg=
+X-Authenticated-Id: michal.piekos@mmpsystems.pl
 
-Hi Pawel,
+Using consumer driver like iio-hwmon which resolve channels thorugh
+io-channels phandles will fail for sparse channels because IIO core by
+default threats phandle argument as index into channel array.
+        eg. <&gpadc 1> will fail if there is only channel@1 specified
 
-kernel test robot noticed the following build warnings:
+Add .fwnode_xlate() which maps DT phandle to the registered channel
+whose chan->channel matches the hardware channel number. It allows
+sparse channel maps to be consumed by drivers like iio-hwmon.
 
-[auto build test WARNING on 17c7841d09ee7d33557fd075562d9289b6018c90]
+Tested on Radxa Cubie A5E.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pawel-Laszczak-via-B4-Relay/usb-cdnsp-Add-support-for-device-only-configuration/20260513-191545
-base:   17c7841d09ee7d33557fd075562d9289b6018c90
-patch link:    https://lore.kernel.org/r/20260508-no_drd_config-v3-1-0614f5044721%40cadence.com
-patch subject: [PATCH v3] usb: cdnsp: Add support for device-only configuration
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260514/202605141023.18vWXyw3-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141023.18vWXyw3-lkp@intel.com/reproduce)
+Signed-off-by: Michal Piekos <michal.piekos@mmpsystems.pl>
+---
+Changes in v2:
+- Move loop variable declaration into the for statement
+- Fix indentation using clang-format
+- Correct commit wording
+- Link to v1: https://patch.msgid.link/20260513-fix-sunxi-gpadc-sparse-channels-v1-1-6c21e290bcee@mmpsystems.pl
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605141023.18vWXyw3-lkp@intel.com/
+To: Jonathan Cameron <jic23@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+To: Nuno Sá <nuno.sa@analog.com>
+To: Andy Shevchenko <andy@kernel.org>
+To: Chen-Yu Tsai <wens@kernel.org>
+To: Jernej Skrabec <jernej.skrabec@gmail.com>
+To: Samuel Holland <samuel@sholland.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+To: Bill Wendling <morbo@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: linux-iio@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-sunxi@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev
+---
+ drivers/iio/adc/sun20i-gpadc-iio.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-All warnings (new ones prefixed by >>):
+diff --git a/drivers/iio/adc/sun20i-gpadc-iio.c b/drivers/iio/adc/sun20i-gpadc-iio.c
+index 861c14da75ad..78c9a52f38df 100644
+--- a/drivers/iio/adc/sun20i-gpadc-iio.c
++++ b/drivers/iio/adc/sun20i-gpadc-iio.c
+@@ -139,8 +139,20 @@ static irqreturn_t sun20i_gpadc_irq_handler(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
+ 
++static int
++sun20i_gpadc_fwnode_xlate(struct iio_dev *indio_dev,
++			  const struct fwnode_reference_args *iiospec)
++{
++	for (unsigned int i = 0; i < indio_dev->num_channels; i++)
++		if (indio_dev->channels[i].channel == iiospec->args[0])
++			return i;
++
++	return -EINVAL;
++}
++
+ static const struct iio_info sun20i_gpadc_iio_info = {
+ 	.read_raw = sun20i_gpadc_read_raw,
++	.fwnode_xlate = sun20i_gpadc_fwnode_xlate,
+ };
+ 
+ static void sun20i_gpadc_reset_assert(void *data)
 
->> drivers/usb/cdns3/drd.c:187:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     187 |         if (cdns->no_drd)
-         |             ^~~~~~~~~~~~
-   drivers/usb/cdns3/drd.c:209:9: note: uninitialized use occurs here
-     209 |         return ret;
-         |                ^~~
-   drivers/usb/cdns3/drd.c:187:2: note: remove the 'if' if its condition is always false
-     187 |         if (cdns->no_drd)
-         |         ^~~~~~~~~~~~~~~~~
-     188 |                 goto phy_set;
-         |                 ~~~~~~~~~~~~
-   drivers/usb/cdns3/drd.c:185:9: note: initialize the variable 'ret' to silence this warning
-     185 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+---
+base-commit: 1d5dcaa3bd65f2e8c9baa14a393d3a2dc5db7524
+change-id: 20260513-fix-sunxi-gpadc-sparse-channels-2b6b2063bd49
 
+Best regards,
+--  
+Michal Piekos <michal.piekos@mmpsystems.pl>
 
-vim +187 drivers/usb/cdns3/drd.c
-
-   175	
-   176	/**
-   177	 * cdns_drd_host_on - start host.
-   178	 * @cdns: Pointer to controller context structure.
-   179	 *
-   180	 * Returns 0 on success otherwise negative errno.
-   181	 */
-   182	int cdns_drd_host_on(struct cdns *cdns)
-   183	{
-   184		u32 val, ready_bit;
-   185		int ret;
-   186	
- > 187		if (cdns->no_drd)
-   188			goto phy_set;
-   189	
-   190		/* Enable host mode. */
-   191		writel(OTGCMD_HOST_BUS_REQ | OTGCMD_OTG_DIS,
-   192		       &cdns->otg_regs->cmd);
-   193	
-   194		if (cdns->version == CDNSP_CONTROLLER_V2)
-   195			ready_bit = OTGSTS_CDNSP_XHCI_READY;
-   196		else
-   197			ready_bit = OTGSTS_CDNS3_XHCI_READY;
-   198	
-   199		dev_dbg(cdns->dev, "Waiting till Host mode is turned on\n");
-   200		ret = readl_poll_timeout_atomic(&cdns->otg_regs->sts, val,
-   201						val & ready_bit, 1, 100000);
-   202	
-   203		if (ret)
-   204			dev_err(cdns->dev, "timeout waiting for xhci_ready\n");
-   205	
-   206	phy_set:
-   207		phy_set_mode(cdns->usb2_phy, PHY_MODE_USB_HOST);
-   208		phy_set_mode(cdns->usb3_phy, PHY_MODE_USB_HOST);
-   209		return ret;
-   210	}
-   211	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
