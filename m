@@ -1,123 +1,112 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69F11F5842
-	for <llvm@lists.linux.dev>; Thu, 14 May 2026 07:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64161ACEDF;
+	Thu, 14 May 2026 07:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778742192; cv=none; b=SZ2ozOY54JGjgemNoHKXtHKmHHL9RyN74nHLQngkiX6eRlgvpeqHFCJ0RAMuvSDPiVwYHz0mUG1zIgySCiRR300yJRfZZNH/uf2X0awlLZ4S14D5a8qmiO9nPjlk4+t0k+MG7vHHY362Gx9FHBVAiBTMKO14ZqfR8pF/bwOUoO0=
+	t=1778742648; cv=none; b=iw4Fye6Wm8z3yFAZRxW3M2R0PLO4A+xXVi2eCzJ3aaI+XB7h0ArfpsKpWeAvNlLQZ6E57KBg7NnD4W0GjsyGLp58GCZ3ri+de82Ao1qip/xD1t0GtHUp3XD5JQzd6CeTcYCYR62Pl1qqyT8yNkXrC96NMCv1juJ0FYp16w4iem8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778742192; c=relaxed/simple;
-	bh=F+5Y3ic1hlNQFAFyDZtaqjvHvJBteYghaS7EP1iplwk=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=IEbO+oeoaJSbxqMBV7yjK5AYuE3s8iXzgMMNbra1ypJ4FWv6sZT5kbxSuM7u+z4OeCYRY4OqalpuwcQ/QJn2Su6Um7mLPG3tPdUJkPnN1rRcLBtf+zrw54Ek3LZt157pT4xb0y/aoZ2aYkBv+jP1CioJRK01FtjJMnYdshIvkvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DtmS7gKk; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778742648; c=relaxed/simple;
+	bh=Dovb0ZSp5Q9c9EM9Cxe4xd9/THMwZyNDud2+qF48IrM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NHaNO73WR9aetFd26V91KnFMeglwjR8aSsWKxJm7f1hyB1DpAQpbnl4d/jg5aqT6psM06qxTb9BeE3iJoDyhOGO19j/PmE6cLxHeFzqeLfo7tXIixBLkEuGxNFLC02XZjquetPRP67Wi1QNC8kBPJAy+lcR0369O3vOHfkY1oXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQVK+8Na; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DtmS7gKk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778742189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Cob4X3NIVxMMDquGTmot/+K+L6AyAUixCCjzWRZI2kA=;
-	b=DtmS7gKkVqEQV8xGOm33Sl5z/06C4AqE4gQ1BYlFy20nz7Zfg3Uxt3AZ8CdPnwQkQ1E9eu
-	SeuyUCWo933QApkXmI7r7X9TE5pH9HJfaTLhNqbIEavK1PMh3XWZAmbdAAaxFVMINLhyAz
-	s80v6jOqRhHfaxxK1gjHaa/6i1T4XtA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-245-o_aoArY6Px-a-G6h0mmDRg-1; Thu,
- 14 May 2026 03:03:08 -0400
-X-MC-Unique: o_aoArY6Px-a-G6h0mmDRg-1
-X-Mimecast-MFC-AGG-ID: o_aoArY6Px-a-G6h0mmDRg_1778742187
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 20E5E18005B2
-	for <llvm@lists.linux.dev>; Thu, 14 May 2026 07:03:07 +0000 (UTC)
-Received: from [172.20.187.136] (unknown [10.30.45.25])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A60B01800240;
-	Thu, 14 May 2026 07:03:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-rc3,
- upstream-mainline, e1914add)
-Date: Thu, 14 May 2026 07:03:06 -0000
-To: llvm@lists.linux.dev, yoyang@redhat.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQVK+8Na"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4842C2BCB7;
+	Thu, 14 May 2026 07:10:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778742648;
+	bh=Dovb0ZSp5Q9c9EM9Cxe4xd9/THMwZyNDud2+qF48IrM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=VQVK+8NamiDvmyWVPlvIE8KFbcc/zLvTxDHq8r4VS/uKjoZWsZArHZLG9uOnRCM8M
+	 +tbbV30upsQiO+lvzN1Wa3dfumk1WBVMNhOe4t0C8j7+v+u7D0SgLwFggRMnY+Ppv4
+	 j78PP3E0Wi8fN8eDISSNXzxB5NC8dwHs50RV6kThwJQ5FOUjKXNnx8wNGWBgdpuXpF
+	 CphgWuxoVP3uLKepFyEloksmre1TXKynCpqd33tVXorTfKlNqLzLpmT8g/E1obRlT3
+	 YGWVC5cHC+NQXI9ZzE4HWAGtYSevT6+hZ8DH3+yYVkzICVM7Fpkgn2/9bHiXtyXmLc
+	 QG0GlOd2L4C3A==
+Message-ID: <1f68fc67-66d8-4db0-8ddb-44737d7ea37e@kernel.org>
+Date: Thu, 14 May 2026 09:10:39 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <40318.126051403030800243@us-mta-245.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: JhfU7pfDduNMs59R7W4yNp2IcCSgvoFv2PYfmKUIvEU_1778742187
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/3] slab: improve KMALLOC_PARTITION_RANDOM randomness
+To: Marco Elver <elver@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>,
+ David Hildenbrand <david@kernel.org>, David Rientjes <rientjes@google.com>,
+ Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>,
+ Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>,
+ Kees Cook <kees@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Matteo Rizzo <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Suren Baghdasaryan <surenb@google.com>, linux-hardening@vger.kernel.org,
+ Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+ Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>,
+ "Liam R. Howlett" <liam@infradead.org>,
+ Alexander Potapenko <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev
+References: <20260511200136.3201646-1-elver@google.com>
+ <20260511200136.3201646-2-elver@google.com>
+ <afc2202a-2e0b-43e0-9556-06be2da33c83@kernel.org>
+ <CANpmjNN0-b0TG2=7SsPpRuubwTWYfoAiYgnnM_5-39SoVfv=Pw@mail.gmail.com>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Content-Language: en-US
+In-Reply-To: <CANpmjNN0-b0TG2=7SsPpRuubwTWYfoAiYgnnM_5-39SoVfv=Pw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On 5/12/26 14:54, Marco Elver wrote:
+> On Tue, 12 May 2026 at 12:37, 'Vlastimil Babka (SUSE)' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
+>> On 5/11/26 22:00, Marco Elver wrote:
+>> > When using CONFIG_KMALLOC_PARTITION_RANDOM, _RET_IP_ was previously used
+>> > to identify the allocation site. _RET_IP_, however, evaluates to the
+>> > caller's parent's instruction pointer rather than the actual allocation
+>> > site; this would lead to collisions where a function performs multiple
+>> > allocations.
+>> >
+>> > With the generalization to kmalloc_token_t, we now generate the token at
+>> > the outermost macro, and using _THIS_IP_ would fix this for all cases.
+>>
+>> Hm but it means in patch 1 we make things even worse and then fix them
+>> again, and also improve what was suboptimal prior to the series.
+>> Would it be instead possible to reorder patches 1 and 2 so we improve the
+>> current state first, and then introduce typed partitioning without any
+>> changes to the randomized one? (aside from changing the previously correcly
+>> used cases _RET_IP_ to _CODE_LOCATION_).
+> 
+> It won't work (it could be made to work if _THIS_IP_ wasn't broken).
+> The compiler is supposed to maintain semantics of a static variable in
+> a function, even inline functions, and refer to the same static
+> variable -- and because kmalloc_type is an inline function, if
+> _CODE_LOCATION_ is the non-_THIS_IP_ version, it'd break.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+Oh, I see.
 
+> Even if _THIS_IP_ wasn't broken, the other complication is introducing
+> the slab.c vs. outside use of kmalloc_type differentiation.
+> 
+> Both these problems go away if we make this patch 2 (using
+> _CODE_LOCATION_ on the outer macro, not in an inline function).
+> 
+> While I understand that maybe we could have considered this as a
+> stable backport, I think it's borderline; the feature isn't broken
+> per-se, just slightly lower randomness than perhaps intended if size
+> is a constant expression. A minimal fix prior to the macro rework
+> currently eludes me.
 
-Kernel information:
-    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
-irt/kvm/kvm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2523499434
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2523499434_ppc64le_kernel
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2523499434_aarch64_kernel_kcidb_tool_21280444_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Fair enough. I wanted to avoid a bisection hazard, but since it's not
+feasible and it shouldn't actually break anything (compilation, run), it's
+acceptable. Thanks.
