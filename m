@@ -1,133 +1,160 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F273AEF34
-	for <llvm@lists.linux.dev>; Thu, 14 May 2026 08:22:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADFF03ABD8D;
+	Thu, 14 May 2026 08:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778746973; cv=none; b=WLDLEymGkLGjs3YK7YcW10Wsu337DRvwT+DO2JVwumzTSLgiW2G7BHSRaPutmQ2Hzwokfbu9qGjDAO1fp+13zb/iN7fBfaG5zjzKBP5pxwtfqxnoB2UAgoIRp0EYmzxVJPgOZxuazlngsFwO/bk0oXpMpUS8HzGKodCV3CMTXsk=
+	t=1778747886; cv=none; b=gqGVT+Cc1v/GAMwH/yDDa+SBAU9z7Wdia9Gg8JUW3BSZJ5nhlMpCk/U3MsEJXkCxz59kX8ggyxOnnxY2sVVvXHoNr3NYKqYjRudjIVk5QVSLWybDBS69iNwtEuz4PndMiMl88FFPmlPy4AIN34RQBq68xkL8idYAjVT7kZLgXnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778746973; c=relaxed/simple;
-	bh=3WjDEzCHsM60UDSdPtY66/xViUYjVkKVnCvLEkxbKG8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MeRGsL3GA17Q0W+9K8uR2LUTfZ+Vm09PROmBZMOm5V9HlVZ0VcS7dWe/MRuat2KKH+JqJI46Ja1Kr8iTN7zOLjM9Pdx0Q0eEQgKDHNt/UjMP8ZMwSR9+CNKjp3c1XS7d26M3v7ddiZns6WZB2FEaC6qBoDVWEKq5W5X7AhOmWjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tDvF4Y89; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778747886; c=relaxed/simple;
+	bh=j0ThepAaKJ3WjfvHf/k3t/FE1agot5fafmNfA332LhU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=svlJtImSPU+IVg83CfiVIQsPGEr1h3vZ0o63yT4Dy7w1U1qIyuhPbDsdePnYKAgkripD9tuXf/EC2gO4tJnWOzp58vNeN8zQNPQciIxCQT2MjIM5StTTmY3s+zDDJtpFetDkjDoZeVTGiGNlrkECqdqOtCPvCZXVA0bHsN5VdGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cx89NjeD; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tDvF4Y89"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-44509921fbcso3894284f8f.3
-        for <llvm@lists.linux.dev>; Thu, 14 May 2026 01:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778746970; x=1779351770; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jnnqbs2N6v6CmeDw57e03ve8ioJE3EIg9PporZt60VY=;
-        b=tDvF4Y89kiO2fvzOywLRSVsEVfTYXSlgEUHfq5ZIDIyS9fkxfmiHJ+7R27xXx2M+mc
-         IROpP5buhj9Y7DJx+XfjZJa8peiVGjpL7jgNqC2g0i1hvj5KydkEN1rZSv7knsaChall
-         ZMOdoo70QDovco9tJ8APDlH2bBVkggsKP8GnJyLW3WmIHDO6lLCrwFRFRFlv0yhvan3V
-         n6Rfzm1SKxD4fjsUx//crGEKAPnOv56o8AMxHv+Adnof9s4L4NOZ360PGYs1uu3xLqYu
-         ZPZwnoTjKY78kQ5mLnA5Tl5FjzjPwzGuQn6LHUV0a/OuFEN7ECHB4dHeMeRea2O1qMmm
-         rdkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778746970; x=1779351770;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jnnqbs2N6v6CmeDw57e03ve8ioJE3EIg9PporZt60VY=;
-        b=i+/jjOqjU/OZx50oURe5S4/l8RlYJHCE0F6j1YSNO1ReaiKhTLZ6q0ZXYwm+yULpw8
-         Yue0EQgosU8BuLEk1fxTODeBtOiJBQ7d9216wO/0Tz+aXO8iOGslxJuA+1pCDGJ7D5rH
-         IlqWE5DjDSyMFVEhFslULfuEJ1x9f7/9/Axn2VdZ4/npc8v1kKtImnQ9rTyTS8q6MzsH
-         Q9Nt/z6kMJhaF1kzBaNIHPxiNaHUN1fL1/b2zrFcRCv3+BZ6Oa9idXWkjCpAGj8EbsXo
-         PG9keWD9dKDRRGjFAk9TZQ6PqKEOSHTlSf+5ERnk08FFukkV/fIEcUAylzRCY6eOyvYj
-         ZbTA==
-X-Forwarded-Encrypted: i=1; AFNElJ/iCwzd0PVg/HteRb4Z/B0zrSIQUhKTRec+IeSLzzairyiU4II2wBhgZYPyGszz2tF8FW/g@lists.linux.dev
-X-Gm-Message-State: AOJu0YxNE4/a2x4HXg8v1aa74UccqEDcs7vhFFhRf/nJq+r3SWDpWYd0
-	SIR4CSz+Podck0tuv8bKy9iYCJAChmPj1RmkMcCmXFg5yuQ6GteO6Eyx
-X-Gm-Gg: Acq92OHjsAxyi2NwQzvuPFM7TG44baGdaHcPoo8KUIZ6Cng8qb2WIvFMEalEi23Gppn
-	1IiEp/e3HHIkINGFtbVALSAIX/k4hJYG9gRKyad6mrrBZlClrH5qq2iQSAB2rvVrTsCQDAPqISU
-	8JmI/MPN2poCWPDedaXIe6F40doFQClx0syaV7iPuKWOh+vvbgSi+A6esBPGdOrY1zk+l8N9FCC
-	T/ufkD5Q8q48qquhhMfSKmjL4qacIukidmxN47qMixB+b6O4WQRw8bkEVRHoX5F1ZQFTXEbJzi6
-	Y31OOPOYB7iIuj2VSsIcw15Oz7XbH3To8Oqnvi4dmRu69XbvMeYt4vblW9kBMNpmOTbOTuWr6Kv
-	ZotjXYP2O2gdT1DJTyNAVH8YK5G9sSrl/zR/bRknakMH/SX2I/xosOnICDqHEGFXXfx7R9lpki5
-	NTduON3Wa7q0224VfyM7BMAWIeuN/UyszauKF6c9+dcHdDXOegWKT6swib0Bac
-X-Received: by 2002:a05:600c:45c8:b0:48d:35e:84a0 with SMTP id 5b1f17b1804b1-48fcea151fbmr93519065e9.28.1778746970041;
-        Thu, 14 May 2026 01:22:50 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fd64a22a9sm49882335e9.8.2026.05.14.01.22.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 01:22:49 -0700 (PDT)
-Date: Thu, 14 May 2026 09:22:46 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Marco Elver <elver@google.com>
-Cc: Vlastimil Babka <vbabka@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Andrey Konovalov
- <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>, David Hildenbrand
- <david@kernel.org>, David Rientjes <rientjes@google.com>, Dmitry Vyukov
- <dvyukov@google.com>, Jann Horn <jannh@google.com>, Justin Stitt
- <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>, Kees Cook
- <kees@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, Matteo Rizzo
- <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>, Mike Rapoport
- <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Roman Gushchin
- <roman.gushchin@linux.dev>, Suren Baghdasaryan <surenb@google.com>,
- linux-hardening@vger.kernel.org, Nicolas Schier <nsc@kernel.org>, Dennis
- Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter
- <cl@gentwo.org>, Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>,
- "Liam R. Howlett" <liam@infradead.org>, Alexander Potapenko
- <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/3] slab: improve KMALLOC_PARTITION_RANDOM
- randomness
-Message-ID: <20260514092246.12b7d1ee@pumpkin>
-In-Reply-To: <20260511200136.3201646-2-elver@google.com>
-References: <20260511200136.3201646-1-elver@google.com>
-	<20260511200136.3201646-2-elver@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cx89NjeD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778747885; x=1810283885;
+  h=date:from:to:cc:subject:message-id;
+  bh=j0ThepAaKJ3WjfvHf/k3t/FE1agot5fafmNfA332LhU=;
+  b=cx89NjeDCvQ92QBgrN9tnkOzvRKq/ltz1p5qxLvwT1RJKZPPG2IlWvsc
+   fGioC4BGEp6rHRtggzzz8yeFsgM5ABnQT717wWypdvr+msUAO66dFNCln
+   2pCe6q0mW0YmhUv62QCifv+C8c0Fty1h85jeoyO/Y94SxFE8eLS9PGhU8
+   cUxA0/cfs2yXeP7USCgvade5rfWXhoXrwr8M903rSMgP9YbGZOktK5LEg
+   7pong9HPVtH/3dBBmiZF1nZxRk8KbvJmw9oxk3OjoYxP9THjlXeuSPu+r
+   0yM3uLQPehMNHL0r+G0iSGomQr1oFn7SmI6OuSW/sGeh/D+E/eXiIXoMj
+   g==;
+X-CSE-ConnectionGUID: EeX1ShtASo+l4UsvRRVcXg==
+X-CSE-MsgGUID: 0tfaDrqPQzCofafnBNvKoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="79400264"
+X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
+   d="scan'208";a="79400264"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2026 01:38:05 -0700
+X-CSE-ConnectionGUID: Vp5QtY92QSeMGVT0OGly0A==
+X-CSE-MsgGUID: IGAwUXu7QDS+Udf9/WSFEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
+   d="scan'208";a="276411331"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 14 May 2026 01:38:02 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wNRZv-000000006Db-0EA2;
+	Thu, 14 May 2026 08:37:59 +0000
+Date: Thu, 14 May 2026 16:37:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ David Hildenbrand <david@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Linux Memory Management List <linux-mm@kvack.org>,
+ mm-commits@vger.kernel.org
+Subject: [akpm-mm:mm-unstable 25/274] mm/hugetlb.c:7281:3: error:
+ call to undeclared function '__huge_pmd_unshare'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202605141638.b5ZBd6IF-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Mon, 11 May 2026 22:00:49 +0200
-Marco Elver <elver@google.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   444fc9435e57157fcf30fc99aee44997f3458641
+commit: 2bb8fe16f7bf4487248c9ff847fcf189c45b9508 [25/274] mm/hugetlb: avoid false positive lockdep assertion
+config: powerpc64-randconfig-001-20260514 (https://download.01.org/0day-ci/archive/20260514/202605141638.b5ZBd6IF-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141638.b5ZBd6IF-lkp@intel.com/reproduce)
 
-> When using CONFIG_KMALLOC_PARTITION_RANDOM, _RET_IP_ was previously used
-> to identify the allocation site. _RET_IP_, however, evaluates to the
-> caller's parent's instruction pointer rather than the actual allocation
-> site; this would lead to collisions where a function performs multiple
-> allocations.
-> 
-> With the generalization to kmalloc_token_t, we now generate the token at
-> the outermost macro, and using _THIS_IP_ would fix this for all cases.
-> 
-> Unfortunately, the generic implementation of _THIS_IP_ relies on taking
-> the address of a local label, which is considered broken by both GCC [1]
-> and Clang [2] because label addresses are only expected to be used with
-> computed gotos. While the generic version more or less works today, it
-> is known to be brittle. For example, Clang -O2 always returns 1 when
-> this function is inlined:
-> 
->         static inline unsigned long get_ip(void)
->         { return ({ __label__ __here; __here: (unsigned long)&&__here; }); }
-> 
-> To provide a reliable unique identifier without breaking architectures
-> relying on the generic _THIS_IP_, introduce _CODE_LOCATION_: it resolves
-> to _THIS_IP_ where architectures provide a safe implementation, and
-> falls back to a zero-cost static marker where _THIS_IP_ is broken.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605141638.b5ZBd6IF-lkp@intel.com/
 
-Doesn't that mean that all the other uses of _THIS_IP_ (which seem to mostly
-be tracking lock requests) are basically broken on everything except x86-64.
+All errors (new ones prefixed by >>):
 
-Would it be better to actually fit that?
-It isn't as though it is hard asm, you just need to look at how gcc generates
-PIC references to static data.
+>> mm/hugetlb.c:7281:3: error: call to undeclared function '__huge_pmd_unshare'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    7281 |                 __huge_pmd_unshare(&tlb, vma, address, ptep, take_locks);
+         |                 ^
+   mm/hugetlb.c:7281:3: note: did you mean 'huge_pmd_unshare'?
+   mm/hugetlb.c:6973:5: note: 'huge_pmd_unshare' declared here
+    6973 | int huge_pmd_unshare(struct mmu_gather *tlb, struct vm_area_struct *vma,
+         |     ^
+   1 error generated.
 
--- David
+
+vim +/__huge_pmd_unshare +7281 mm/hugetlb.c
+
+  7233	
+  7234	/*
+  7235	 * If @take_locks is false, the caller must ensure that no concurrent page table
+  7236	 * access can happen (except for gup_fast() and hardware page walks).
+  7237	 * If @take_locks is true, we take the hugetlb VMA lock (to lock out things like
+  7238	 * concurrent page fault handling) and the file rmap lock.
+  7239	 */
+  7240	static void hugetlb_unshare_pmds(struct vm_area_struct *vma,
+  7241					   unsigned long start,
+  7242					   unsigned long end,
+  7243					   bool take_locks)
+  7244	{
+  7245		struct hstate *h = hstate_vma(vma);
+  7246		unsigned long sz = huge_page_size(h);
+  7247		struct mm_struct *mm = vma->vm_mm;
+  7248		struct mmu_notifier_range range;
+  7249		struct mmu_gather tlb;
+  7250		unsigned long address;
+  7251		spinlock_t *ptl;
+  7252		pte_t *ptep;
+  7253	
+  7254		if (!(vma->vm_flags & VM_MAYSHARE))
+  7255			return;
+  7256	
+  7257		if (start >= end)
+  7258			return;
+  7259	
+  7260		flush_cache_range(vma, start, end);
+  7261		tlb_gather_mmu_vma(&tlb, vma);
+  7262	
+  7263		/*
+  7264		 * No need to call adjust_range_if_pmd_sharing_possible(), because
+  7265		 * we have already done the PUD_SIZE alignment.
+  7266		 */
+  7267		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm,
+  7268					start, end);
+  7269		mmu_notifier_invalidate_range_start(&range);
+  7270		if (take_locks) {
+  7271			hugetlb_vma_lock_write(vma);
+  7272			i_mmap_lock_write(vma->vm_file->f_mapping);
+  7273		} else {
+  7274			i_mmap_assert_write_locked(vma->vm_file->f_mapping);
+  7275		}
+  7276		for (address = start; address < end; address += PUD_SIZE) {
+  7277			ptep = hugetlb_walk(vma, address, sz);
+  7278			if (!ptep)
+  7279				continue;
+  7280			ptl = huge_pte_lock(h, mm, ptep);
+> 7281			__huge_pmd_unshare(&tlb, vma, address, ptep, take_locks);
+  7282			spin_unlock(ptl);
+  7283		}
+  7284		huge_pmd_unshare_flush(&tlb, vma);
+  7285		if (take_locks) {
+  7286			i_mmap_unlock_write(vma->vm_file->f_mapping);
+  7287			hugetlb_vma_unlock_write(vma);
+  7288		}
+  7289		/*
+  7290		 * No need to call mmu_notifier_arch_invalidate_secondary_tlbs(), see
+  7291		 * Documentation/mm/mmu_notifier.rst.
+  7292		 */
+  7293		mmu_notifier_invalidate_range_end(&range);
+  7294		tlb_finish_mmu(&tlb);
+  7295	}
+  7296	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
