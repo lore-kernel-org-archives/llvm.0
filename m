@@ -1,210 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F689379C32;
-	Thu, 14 May 2026 09:01:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8E834B183;
+	Thu, 14 May 2026 09:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778749296; cv=none; b=NtOq++rmNtj/SqQ3D/nhoVPBm+B/Sn5bH4QWzBKBfyHgkITvXBGGdUFy6KqlOxJbWC9Azbryq7f59fvFRLFgoBd4uWkiT1KX85Qd5qXOcofD4A/9c0GS/8IsEaFZm77Xxz6wpGTshKzS/NA9dynj1wqGqVg0srIORTHNGliPgZI=
+	t=1778749987; cv=none; b=gUWjP+1S7LVV3TPbMBTsvq9bZWz3gj4pbEGKM/KDeWqwMFjkLy5LA0AUk6/QiH9PcX+SQQqF4iaFnVloaDdx1SWukjbZBn4acXaujvClbkXKyN+N3I3V1AWKN1CqNWn4YI6Q931MVLHcqBVE26xjaPMnXX/auZU181XejomnZ74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778749296; c=relaxed/simple;
-	bh=9qrd7DZRswnShjHayhkqvrhofgKn4ZIB2zVBnchimsI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BE0IZb4I/eVeR2YrpGvZvLsRhcA4OVz1/3s635hbvGVocxNfa6jZezXRXhNq/KAwOHgy+HFTCIBhwMqlwGXCXv0p4UcC6eqBffz7nWQTYtrVi9CdPjpbuzWLXGc/HhPE8inFYF6QJ3qL0GRPjIPnerNze6Afzx3YWm9yujJDvJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2BkCcFN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778749987; c=relaxed/simple;
+	bh=J9Te1i/wLFrUhF6kdfpAxdw05WjKxBQMUGiIXj86oGs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Wli1t5bQ4Z/RSEn1VC2hOegYphdz04sQU2hdQi6dGmWQbDeor2NVBNMDwf6c0hCN6S35yowRirBVDQLv4VRYGWIUArIaUHUfOq3OYEkSu7B7KXeGQR+ob2+o+3lCGLh5CHRxGyR6pOFIYZ0CWJPXW5+3b7XF7VLSnXIEu5LvSII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KQn6pWyw; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2BkCcFN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B715C2BCC6;
-	Thu, 14 May 2026 09:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778749295;
-	bh=9qrd7DZRswnShjHayhkqvrhofgKn4ZIB2zVBnchimsI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G2BkCcFNIRRps5PTJarrPld2ITBu3MEnYEXg11mhnE12D+VJRwwayBQfS5aUku6Jb
-	 GXY+k0+bMYEQte2Ba2sZBCfpZ2pE29oY3Sw4HJsnFUxwH7lke/wvijUh3uCpXurIuK
-	 DlnckljG5ZQxBM+omlZP1Vjg7PIs641+rCM4lh8uuv0PKiiJ3ktkbxJZPoKcTdoKFy
-	 2XJfB1OFdJl9GaXOCKD6hBOWKZlrz490Wtmw9lnKJmbQ2Nn+4aDO2Uh8XBNd/n6D40
-	 l+2nIpCyOVcnw6ERQlbyTVQxJWZ7gtGqzcNekaxoeepcMWR2F6R0Wc++MSOvjaq3xU
-	 MiY/qECmkhCFA==
-Message-ID: <560a84ed-7daf-4a78-a314-b867c73bce22@kernel.org>
-Date: Thu, 14 May 2026 11:01:26 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KQn6pWyw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778749985; x=1810285985;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J9Te1i/wLFrUhF6kdfpAxdw05WjKxBQMUGiIXj86oGs=;
+  b=KQn6pWywyzmS/YwrQAW/wOrgLDg6bROMoshkRzE27zC6efbJct27PyXZ
+   XleNPwODUICsDfv85VfvDE9BvamtYR3JyA0lUBrN2u0LjVpB5SYcs/r+G
+   hO4BqPXvWzTtZ/KEFz6x8MqdN5bDz/7lRkrvBnmCgGkZ2hxfAYMSsRLdW
+   EjiLjttbEcxgttzGXgqMj8DlifMNeJL6b2KetBlR7Sinzo3A79SEFQ0rx
+   nYOGydMKVlH8fMi6+pQUFH3bh+Bs94Jym1ZMjL4olNC1Y386ZcL8vH2lc
+   cKnr1rfvNiEO/lzTZG/xU9xHUTWOnYshG2kWSDfAkm2oyUu5vX4Qk7T9v
+   g==;
+X-CSE-ConnectionGUID: qnbaZGlbT56ywDReBkK1wA==
+X-CSE-MsgGUID: JnAk81T9RlyCjNUGi6ggng==
+X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="91150359"
+X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
+   d="scan'208";a="91150359"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2026 02:13:05 -0700
+X-CSE-ConnectionGUID: 3ZJO0L0hQB+mDvW4reWsIw==
+X-CSE-MsgGUID: twGHYTAORhinqErrvTPaYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
+   d="scan'208";a="243317563"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 14 May 2026 02:13:03 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wNS7o-000000006GR-2wJr;
+	Thu, 14 May 2026 09:13:00 +0000
+Date: Thu, 14 May 2026 17:12:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Dumazet <edumazet@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Jakub Kicinski <kuba@kernel.org>,
+ "Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen"?= <toke@toke.dk>
+Subject: [netdev-net-next:main 114/116] include/net/sock.h:1861:56:
+ error: use of undeclared identifier '__sock_wfree'; did you mean
+ 'sock_wfree'?
+Message-ID: <202605141714.4ghTxgEO-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/3] slab: support for compiler-assisted type-based
- slab cache partitioning
-Content-Language: en-US
-To: Marco Elver <elver@google.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>,
- David Hildenbrand <david@kernel.org>, David Rientjes <rientjes@google.com>,
- Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>,
- Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>,
- Kees Cook <kees@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Matteo Rizzo <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>,
- Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Suren Baghdasaryan <surenb@google.com>, linux-hardening@vger.kernel.org,
- Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
- Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
- Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>,
- "Liam R. Howlett" <liam@infradead.org>,
- Alexander Potapenko <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev,
- GONG Ruiqi <gongruiqi1@huawei.com>, Jonathan Corbet <corbet@lwn.net>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20260511200136.3201646-1-elver@google.com>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <20260511200136.3201646-1-elver@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 
-On 5/11/26 22:00, Marco Elver wrote:
-> Rework the general infrastructure around RANDOM_KMALLOC_CACHES into more
-> flexible KMALLOC_PARTITION_CACHES, with the former being a partitioning
-> mode of the latter.
-> 
-> Introduce a new mode, KMALLOC_PARTITION_TYPED, which leverages a feature
-> available in Clang 22 and later, called "allocation tokens" via
-> __builtin_infer_alloc_token() [1]. Unlike KMALLOC_PARTITION_RANDOM
-> (formerly RANDOM_KMALLOC_CACHES), this mode deterministically assigns a
-> slab cache to an allocation of type T, regardless of allocation site.
-> 
-> The builtin __builtin_infer_alloc_token(<malloc-args>, ...) instructs
-> the compiler to infer an allocation type from arguments commonly passed
-> to memory-allocating functions and returns a type-derived token ID. The
-> implementation passes kmalloc-args to the builtin: the compiler performs
-> best-effort type inference, and then recognizes common patterns such as
-> `kmalloc(sizeof(T), ...)`, `kmalloc(sizeof(T) * n, ...)`, but also
-> `(T *)kmalloc(...)`. Where the compiler fails to infer a type the
-> fallback token (default: 0) is chosen.
-> 
-> Note: kmalloc_obj(..) APIs fix the pattern how size and result type are
-> expressed, and therefore ensures there's not much drift in which
-> patterns the compiler needs to recognize. Specifically, kmalloc_obj()
-> and friends expand to `(TYPE *)KMALLOC(__obj_size, GFP)`, which the
-> compiler recognizes via the cast to TYPE*.
-> 
-> Clang's default token ID calculation is described as [1]:
-> 
->    typehashpointersplit: This mode assigns a token ID based on the hash
->    of the allocated type's name, where the top half ID-space is reserved
->    for types that contain pointers and the bottom half for types that do
->    not contain pointers.
-> 
-> Separating pointer-containing objects from pointerless objects and data
-> allocations can help mitigate certain classes of memory corruption
-> exploits [2]: attackers who gains a buffer overflow on a primitive
-> buffer cannot use it to directly corrupt pointers or other critical
-> metadata in an object residing in a different, isolated heap region.
-> 
-> It is important to note that heap isolation strategies offer a
-> best-effort approach, and do not provide a 100% security guarantee,
-> albeit achievable at relatively low performance cost. Note that this
-> also does not prevent cross-cache attacks: while waiting for future
-> features like SLAB_VIRTUAL [3] to provide physical page isolation, this
-> feature should be deployed alongside SHUFFLE_PAGE_ALLOCATOR and
-> init_on_free=1 to mitigate cross-cache attacks and page-reuse attacks as
-> much as possible today.
-> 
-> With all that, my kernel (x86 defconfig) shows me a histogram of slab
-> cache object distribution per /proc/slabinfo (after boot):
-> 
->   <slab cache>      <objs> <hist>
->   kmalloc-part-15    1465  ++++++++++++++
->   kmalloc-part-14    2988  +++++++++++++++++++++++++++++
->   kmalloc-part-13    1656  ++++++++++++++++
->   kmalloc-part-12    1045  ++++++++++
->   kmalloc-part-11    1697  ++++++++++++++++
->   kmalloc-part-10    1489  ++++++++++++++
->   kmalloc-part-09     965  +++++++++
->   kmalloc-part-08     710  +++++++
->   kmalloc-part-07     100  +
->   kmalloc-part-06     217  ++
->   kmalloc-part-05     105  +
->   kmalloc-part-04    4047  ++++++++++++++++++++++++++++++++++++++++
->   kmalloc-part-03     183  +
->   kmalloc-part-02     283  ++
->   kmalloc-part-01     316  +++
->   kmalloc            1422  ++++++++++++++
-> 
-> The above /proc/slabinfo snapshot shows me there are 6673 allocated
-> objects (slabs 00 - 07) that the compiler claims contain no pointers or
-> it was unable to infer the type of, and 12015 objects that contain
-> pointers (slabs 08 - 15). On a whole, this looks relatively sane.
-> 
-> Additionally, when I compile my kernel with -Rpass=alloc-token, which
-> provides diagnostics where (after dead-code elimination) type inference
-> failed, I see 186 allocation sites where the compiler failed to identify
-> a type (down from 966 when I sent the RFC [4]). Some initial review
-> confirms these are mostly variable sized buffers, but also include
-> structs with trailing flexible length arrays.
-> 
-> Link: https://clang.llvm.org/docs/AllocToken.html [1]
-> Link: https://blog.dfsec.com/ios/2025/05/30/blasting-past-ios-18/ [2]
-> Link: https://lwn.net/Articles/944647/ [3]
-> Link: https://lore.kernel.org/all/20250825154505.1558444-1-elver@google.com/ [4]
-> Link: https://discourse.llvm.org/t/rfc-a-framework-for-allocator-partitioning-hints/87434
-> Acked-by: GONG Ruiqi <gongruiqi1@huawei.com>
-> Co-developed-by: Harry Yoo (Oracle) <harry@kernel.org>
-> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
-> Signed-off-by: Marco Elver <elver@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git main
+head:   18dc8e6d15d7a30888beec46a1e01ca0f98508fa
+commit: f0de88303d5e7e04a1224bc7a00512b5a1c4fe7a [114/116] net: make is_skb_wmem() available to modules
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260514/202605141714.4ghTxgEO-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141714.4ghTxgEO-lkp@intel.com/reproduce)
 
-Applied [1] to slab/for-next, thanks. That means including the kernel-doc
-workarounds in patch 3. I know Jon said someone might hate it, but maybe it
-will motivate them for creating a proper fix :) It seems better than leaving
-doc generation broken or not applying this series at all.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605141714.4ghTxgEO-lkp@intel.com/
 
-https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=slab/for-7.2/alloc_token
+All errors (new ones prefixed by >>):
 
-I did the following fixup to remove passing an unnecessary NULL argument for
-__kmalloc_nolock() with buckets enabled. Made bloat-o-meter happier a bit.
+   In file included from init/do_mounts.c:23:
+   In file included from include/linux/nfs_fs.h:32:
+   In file included from include/linux/sunrpc/clnt.h:29:
+   In file included from include/net/ipv6.h:12:
+   In file included from include/linux/ipv6.h:103:
+   In file included from include/linux/tcp.h:19:
+>> include/net/sock.h:1861:56: error: use of undeclared identifier '__sock_wfree'; did you mean 'sock_wfree'?
+    1861 |                (IS_ENABLED(CONFIG_INET) && skb->destructor == __sock_wfree) ||
+         |                                                               ^~~~~~~~~~~~
+         |                                                               sock_wfree
+   include/net/sock.h:1853:6: note: 'sock_wfree' declared here
+    1853 | void sock_wfree(struct sk_buff *skb);
+         |      ^
+>> include/net/sock.h:1862:56: error: use of undeclared identifier 'tcp_wfree'; did you mean 'sock_wfree'?
+    1862 |                (IS_ENABLED(CONFIG_INET) && skb->destructor == tcp_wfree);
+         |                                                               ^~~~~~~~~
+         |                                                               sock_wfree
+   include/net/sock.h:1853:6: note: 'sock_wfree' declared here
+    1853 | void sock_wfree(struct sk_buff *skb);
+         |      ^
+   2 errors generated.
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index c232f8a10af6..795455256329 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -894,7 +894,7 @@ unsigned int kmem_cache_sheaf_size(struct slab_sheaf *sheaf);
-  * with the exception of kunit tests
-  */
- 
--void *__kmalloc_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags)
-+void *__kmalloc_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t flags)
- 				__assume_kmalloc_alignment __alloc_size(1);
- 
- void *__kmalloc_node_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags, int node)
-@@ -981,7 +981,7 @@ static __always_inline __alloc_size(1) void *_kmalloc_noprof(size_t size, gfp_t
- 				kmalloc_caches[kmalloc_type(flags, token)][index],
- 				flags, size);
- 	}
--	return __kmalloc_noprof(PASS_KMALLOC_PARAMS(size, NULL, token), flags);
-+	return __kmalloc_noprof(PASS_TOKEN_PARAMS(size, token), flags);
- }
- #define kmalloc_noprof(...)			_kmalloc_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
- #define kmalloc(...)				alloc_hooks(kmalloc_noprof(__VA_ARGS__))
-diff --git a/mm/slub.c b/mm/slub.c
-index a6e9015601d6..74652bbdd591 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5303,10 +5303,10 @@ void *__kmalloc_node_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags, in
- }
- EXPORT_SYMBOL(__kmalloc_node_noprof);
- 
--void *__kmalloc_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags)
-+void *__kmalloc_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t flags)
- {
--	return __do_kmalloc_node(size, PASS_BUCKET_PARAM(b), flags,
--				 NUMA_NO_NODE, _RET_IP_, PASS_TOKEN_PARAM(token));
-+	return __do_kmalloc_node(size, NULL, flags,  NUMA_NO_NODE, _RET_IP_,
-+				 PASS_TOKEN_PARAM(token));
- }
- EXPORT_SYMBOL(__kmalloc_noprof);
- 
 
+vim +1861 include/net/sock.h
+
+  1850	
+  1851	struct sk_buff *sock_wmalloc(struct sock *sk, unsigned long size, int force,
+  1852				     gfp_t priority);
+  1853	void sock_wfree(struct sk_buff *skb);
+  1854	#ifdef CONFIG_INET
+  1855	void __sock_wfree(struct sk_buff *skb);
+  1856	void tcp_wfree(struct sk_buff *skb);
+  1857	#endif
+  1858	static inline bool is_skb_wmem(const struct sk_buff *skb)
+  1859	{
+  1860		return skb->destructor == sock_wfree ||
+> 1861		       (IS_ENABLED(CONFIG_INET) && skb->destructor == __sock_wfree) ||
+> 1862		       (IS_ENABLED(CONFIG_INET) && skb->destructor == tcp_wfree);
+  1863	}
+  1864	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
