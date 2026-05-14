@@ -1,129 +1,174 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03933389DF0;
-	Thu, 14 May 2026 19:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A6F3C3BE0;
+	Thu, 14 May 2026 21:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778786187; cv=none; b=IUtPoMpgPeEV7AkVgxJTdLE3GhxyDDE/abxsDO/jMTuLBeZtcDXtd6LcYMVEBPI6H79I+N1cWST5MRxj7vTwBbGzdzf8DHAognDdscBVF/24vTpxDR2PRApwTEkDw3Ie3HoFhkWzrv84+YpwCiTnjXf1F6zlC8bwYEqlQOJVj88=
+	t=1778793838; cv=none; b=g6tho6rI6JXAgxtdf+9V4fnBfS2+wbL0iZetDGsuaVt1yNUwAVP+6DIsWKarLaqCC9rtZPlVWE8wmhVrZzf+wmS58xpXqRyPqU03OXMN+VKC73jutSRacz5QmTFzS6pyOwUQ5vXgN6rl9/NZPDjYt9Ib04j2faosNDyrITURAjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778786187; c=relaxed/simple;
-	bh=t9cwAHn8rJJH/1O/Acar7KnHiWsja45qkG8SRmmtfgo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EgNcOOsgwXFsQRHi8e1q6M8Z56094SSU/f+MT0lg7hPAub0HcvIUyKjcIbOnG3FBgJY9XvpaGPrTl0C1Vy4Gi+9mHxjNJOOs9hdbTl6IzCbG/XtirH0vv4iC73Yaw/CHV/XaRyHXqhaa5oXaEj07XtzhvLs7ARI2NP8ct7cAfss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lbH0Q5BE; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1778793838; c=relaxed/simple;
+	bh=9v/jjSvKvTC1ZSFJuDatA4FGl5Taf3HzAnre+yRuwEw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=hqT9Npx0SYQezTKGNjifEiVHFOnL3/M6hZYyzKH3ECjaVn/ePtcK/Ei6ULf7BLSLzknTgDKpWAnEx8bhIK317VC7a30BrHxU7GOojv5cpjtX7qkgh4OgZoZVOLK0xyTQM8uvnGyQyGtYh82d1+b1JZwHyRL7Eoy4iXL03SUYWyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZkxGTPaM; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lbH0Q5BE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZkxGTPaM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778786186; x=1810322186;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t9cwAHn8rJJH/1O/Acar7KnHiWsja45qkG8SRmmtfgo=;
-  b=lbH0Q5BEyWo53Oy6RiYezKCrC6ftYvIt3b9DvsFJRYP/wI2MU/x7a/yx
-   2baBfKLpoKE70j7hKF7ImUCWViDk5y0ARTQ/V2RckWwm1k/KqV4eRtGz3
-   GNWgoH0ckxlvXad5d/wD0qRR9PRGUjdGEPP6U61mGSfxEyM7HYeqC7xSY
-   K9EiAy+777ulRrzfzVBRTNx0mF12o2v5V4KCBwZr8yMWH3tYF614MyjPP
-   NvWpz25EAeolKrhLAWgm7O4VPq+KQBbvyO+ETHzvbikklG9443eK9reaL
-   gK/VDdg2vKjUaI/BFG6HiUvXxpqCbufi2wfOd5SgLxBdYUzEm09h2Tva4
-   g==;
-X-CSE-ConnectionGUID: X6CjoXEXQZenNoqa0mgEUA==
-X-CSE-MsgGUID: Eoc+ZQJ6Rmi2qtZ5DcqioA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11786"; a="79776988"
+  t=1778793837; x=1810329837;
+  h=date:from:to:cc:subject:message-id;
+  bh=9v/jjSvKvTC1ZSFJuDatA4FGl5Taf3HzAnre+yRuwEw=;
+  b=ZkxGTPaMvmopd8+TSqLr53TZagXQoJJoL4yoykkndSQcmsgV2m/r8PrM
+   MPm5xnBS8TAtwRI+vV3j1//4xlQqBKCMNsPs0QEiaJIevAgwrL2zpq5TE
+   jx+lLT9i9VqnVPwHQTwW7ON43EGRLIv6QwucdvbGMK0ra0x/S6761Ggbr
+   xR73Phkopip7f7syhSLwi0COr76czsfab867oqIyzFkA1Ihk5QTGYwXQt
+   I3s33dcwOZViYqHGVR1V/X2bzLllFnTyT7DF8Ru+gOySIk66bRwyyuON5
+   DEvUTql6OIfpwGFG7kY/flPXlPH5RTw0Kd7MRu6nYXKjxIMs7dclt/b5Q
+   A==;
+X-CSE-ConnectionGUID: HedQIY78SQmyOozpXbcyNQ==
+X-CSE-MsgGUID: HD5PrqJJQKa6087oekWFCw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11786"; a="79603411"
 X-IronPort-AV: E=Sophos;i="6.23,235,1770624000"; 
-   d="scan'208";a="79776988"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2026 12:16:25 -0700
-X-CSE-ConnectionGUID: OzW6UiskS++VygQqDYGr3w==
-X-CSE-MsgGUID: LMcBnMz3Ro6JIS8urW/OHQ==
+   d="scan'208";a="79603411"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2026 14:23:53 -0700
+X-CSE-ConnectionGUID: /XCZxliNRbW26a59+6rkYA==
+X-CSE-MsgGUID: 7Ex2W37VQH6vXHwJB+GC+g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,235,1770624000"; 
-   d="scan'208";a="242471872"
-Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 14 May 2026 12:16:23 -0700
-Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+   d="scan'208";a="235458967"
+Received: from lkp-server02.sh.intel.com (HELO 7a33ad3e7d27) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 14 May 2026 14:23:51 -0700
+Received: from kbuild by 7a33ad3e7d27 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wNbXg-000000006zH-0Dlo;
-	Thu, 14 May 2026 19:16:20 +0000
-Date: Fri, 15 May 2026 03:15:56 +0800
+	id 1wNdX2-0000000001S-3MjC;
+	Thu, 14 May 2026 21:23:48 +0000
+Date: Fri, 15 May 2026 04:31:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Priyansh Jain <priyansh.jain@oss.qualcomm.com>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, manaf.pallikunhi@oss.qualcomm.com,
-	Priyansh Jain <priyansh.jain@oss.qualcomm.com>
-Subject: Re: [PATCH v2 2/2] thermal: qcom: tsens: widen temperature limits to
- match hardware range
-Message-ID: <202605150330.xjoMIJFw-lkp@intel.com>
-References: <20260508100700.772985-3-priyansh.jain@oss.qualcomm.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-next 33/50] fs/netfs/bvecq.c:153:15:
+ warning: implicit truncation from 'int' to bit-field changes value from 3 to
+ -1
+Message-ID: <202605150457.18ZdCIcX-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508100700.772985-3-priyansh.jain@oss.qualcomm.com>
 
-Hi Priyansh,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on linus/master v7.1-rc3 next-20260508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Priyansh-Jain/thermal-qcom-tsens-atomic-temperature-read-with-hardware-guided-retries/20260514-191243
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20260508100700.772985-3-priyansh.jain%40oss.qualcomm.com
-patch subject: [PATCH v2 2/2] thermal: qcom: tsens: widen temperature limits to match hardware range
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260515/202605150330.xjoMIJFw-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260515/202605150330.xjoMIJFw-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
+head:   da61c0cc3991fe9aab4894d85ab80021d1f24929
+commit: c61bbe667e764ee7f7bc98b9003b225e91eabc69 [33/50] netfs: Add some tools for managing bvecq chains
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260515/202605150457.18ZdCIcX-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260515/202605150457.18ZdCIcX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605150330.xjoMIJFw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605150457.18ZdCIcX-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/thermal/qcom/tsens.c:818:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-     818 |                 return ret;
-         |                 ^
-   drivers/thermal/qcom/tsens.c:815:2: note: previous statement is here
-     815 |         if (!ret)
-         |         ^
-   1 warning generated.
+>> fs/netfs/bvecq.c:153:15: warning: implicit truncation from 'int' to bit-field changes value from 3 to -1 [-Wbitfield-constant-conversion]
+     153 |                 p->mem_type = BVECQ_MEM_ALLOCED;
+         |                             ^ ~~~~~~~~~~~~~~~~~
+   fs/netfs/bvecq.c:288:16: warning: implicit truncation from 'int' to bit-field changes value from 3 to -1 [-Wbitfield-constant-conversion]
+     288 |                         p->mem_type = BVECQ_MEM_ALLOCED;
+         |                                     ^ ~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/if +818 drivers/thermal/qcom/tsens.c
+vim +/int +153 fs/netfs/bvecq.c
 
-   806	
-   807	int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
-   808	{
-   809		int ret;
-   810		int hw_id = s->hw_id;
-   811		u32 temp_idx = LAST_TEMP_0 + hw_id;
-   812	
-   813		ret = tsens_read_temp(s, temp_idx, temp);
-   814	
-   815		if (!ret)
-   816			*temp = tsens_hw_to_mC(s, *temp);
-   817	
- > 818			return ret;
-   819	}
-   820	
+   116	
+   117	/**
+   118	 * bvecq_alloc_buffer - Allocate a bvecq chain and populate with buffers
+   119	 * @size: Target size of the buffer (can be 0 for an empty buffer)
+   120	 * @pre_slots: Number of preamble slots to set aside
+   121	 * @gfp: The allocation constraints.
+   122	 *
+   123	 * Allocate a chain of bvecq nodes and populate the slots with sufficient pages
+   124	 * to provide at least the requested amount of space, leaving the first
+   125	 * @pre_slots slots unset.  The pre-slots must all fit into the the first
+   126	 * bvecq.
+   127	 *
+   128	 * The pages allocated may be compound pages larger than PAGE_SIZE and thus
+   129	 * occupy fewer slots.  The pages have their refcounts set to 1 and can be
+   130	 * passed to MSG_SPLICE_PAGES.
+   131	 *
+   132	 * Return: The first node pointer or NULL on allocation failure.
+   133	 */
+   134	struct bvecq *bvecq_alloc_buffer(size_t size, unsigned int pre_slots, gfp_t gfp)
+   135	{
+   136		struct bvecq *head = NULL, *tail = NULL, *p = NULL;
+   137		size_t nr_per_bq = 32 - 3;
+   138		size_t count = DIV_ROUND_UP(size, PAGE_SIZE);
+   139	
+   140		_enter("%zx,%zx,%u", size, count, pre_slots);
+   141	
+   142		if (WARN_ON_ONCE(pre_slots > nr_per_bq))
+   143			return NULL;
+   144	
+   145		do {
+   146			struct page **pages;
+   147			int want, got;
+   148	
+   149			p = bvecq_alloc_one(umin(pre_slots + count, nr_per_bq), gfp);
+   150			if (!p)
+   151				goto oom;
+   152	
+ > 153			p->mem_type = BVECQ_MEM_ALLOCED;
+   154	
+   155			if (tail) {
+   156				tail->next = p;
+   157				p->prev = tail;
+   158			} else {
+   159				head = p;
+   160			}
+   161			tail = p;
+   162			if (!count)
+   163				break;
+   164	
+   165			/* Need to clear pre slots and pages[], so just clear all. */
+   166			memset(p->bv, 0, p->max_slots * sizeof(p->bv[0]));
+   167	
+   168			pages = (struct page **)&p->bv[p->max_slots];
+   169			pages -= p->max_slots - pre_slots;
+   170	
+   171			want = umin(count, p->max_slots - pre_slots);
+   172			got = alloc_pages_bulk(gfp, want, pages);
+   173			if (got < want) {
+   174				for (int i = 0; i < got; i++) {
+   175					__free_page(pages[i]);
+   176					pages[i] = NULL;
+   177				}
+   178				goto oom;
+   179			}
+   180	
+   181			tail->nr_slots = pre_slots + got;
+   182			for (int i = 0; i < got; i++) {
+   183				int j = pre_slots + i;
+   184	
+   185				set_page_count(pages[i], 1);
+   186				bvec_set_page(&tail->bv[j], pages[i], PAGE_SIZE, 0);
+   187			}
+   188	
+   189			count -= got;
+   190			pre_slots = 0;
+   191		} while (count > 0);
+   192	
+   193		return head;
+   194	oom:
+   195		bvecq_put(head);
+   196		return NULL;
+   197	}
+   198	EXPORT_SYMBOL(bvecq_alloc_buffer);
+   199	
 
 --
 0-DAY CI Kernel Test Service
