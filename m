@@ -1,90 +1,132 @@
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9D43BFAF0;
-	Thu, 14 May 2026 05:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B243ACA5C;
+	Thu, 14 May 2026 06:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778737230; cv=none; b=MaX3L4jgpPqlQQjP+xCbJwreBwdgDuFp8y8o0sBMecetU08b3Gvbv9jFow/1C0cb/MxUTuNNGAX5X9LmIV+nYVzcyXeaF0fDIJOdZVU2pdMZTI2aojgpjfUiZfvonuBeOHHoXC0LbR4Bl0R6W4z8goYk9ugq+YTGn/a8+S6xxM0=
+	t=1778741641; cv=none; b=FZTHd/nX0CBlZtX8or5ASXJwBSVvlHlIoiDrSwpdOL8EJsYl8TzlgCg476r9F5rOfu6VecBycPaOJxTjTrnOC8BN641Zu+HDqTuAhOL7b7N/Ae3JH51x9hjA0jJirW+Ek34i2s8jHzG0x7pVHf5eoyPem4Z04wyl+isyp+Cuixk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778737230; c=relaxed/simple;
-	bh=WJuP3qJyxmVcO8w90nrF0CDjVvnbl4X+a+wmcNPHdvU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hU4EFuMlhdNzLTgQV6Mq0/N/D+CRvKQ0zmo0onrF9l2jJsqYSGTsnRd5Z7FkZ5tSMkdLIeNyrtrVSE81lLJ5BdIe4DvV380klEPfYSzW7jZOR3o3kBJYb0cefJuQ9XgeoCwqKRhYXzNhCby59HElf5MLnbEhscZi1mVGl8jzDkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=GJwcm/Uw; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+	s=arc-20240116; t=1778741641; c=relaxed/simple;
+	bh=aneMv8x/M5JDgosuzn92CXBq3rNhjxDt6eIJGYsFpA4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=VFRfjqfVZ9luvLeCrP/901BHTzvSazHV6g/unedgIotLV/jO9/zkv/L6Kv/QZPFSCk/SiFbhYmS0c/T66Yb6WqHs6LRgcXJRaezS+VibhmgWtFyks5ketXpZal8HPkJ4fi7+uSOwsJglduBYC5zSpheqgl96v4lBLnPTiH7SnNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e+Bk9M98; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="GJwcm/Uw"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
-	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=nJkGjiluwSwpYa1uXAhIlqqCzJhQzELz7NbH86Xblf0=; t=1778737226;
-	x=1779342026; b=GJwcm/UwLn4yoMDZkzcFxdlR8usENPEDQn8YOb9gUfhYm8HfyVJFxSEBzB4zo
-	VnBQkZNcjVbnweQMAGN7ahzTAjxVq7rXDZWt6LnfbDMGIU8XAoyfdWPpdysiKyOykmBPmMJNxpbly
-	RnguH7reWi7nlmMEBK+WINk6GCIeXOTPPvfH2BM+52/Lisi4pVXzKfojlEAMxsQBWJw6SjfdSdsc3
-	K9FwizPCjkissP/Pv31e2MM0W5E4A3xC4pBUyTl51G+l13NcXoJAhp0OPqhmKbTOAMfoULnaTiGHm
-	5QO/TjrD6j68sNPBn36w115k981MVmqG6FRSIkt6c3I3TGl2ug==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.99)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1wNOo4-00000000c1v-1cZw; Thu, 14 May 2026 07:40:24 +0200
-Received: from p5b13ad18.dip0.t-ipconnect.de ([91.19.173.24] helo=[192.168.178.61])
-          by inpost2.zedat.fu-berlin.de (Exim 4.99)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1wNOo4-000000031lZ-0AQS; Thu, 14 May 2026 07:40:24 +0200
-Message-ID: <07519d6f071f9e7fc5a1a58e95a7348d5db4f6cf.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH] sparc: Avoid unsupported LLD branch relocations
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: sparclinux@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, Christian Brauner
- <brauner@kernel.org>, Nathan Chancellor <nathan@kernel.org>,  Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt	 <justinstitt@google.com>, open list
- <linux-kernel@vger.kernel.org>, "open list:CLANG/LLVM BUILD
- SUPPORT:Keyword:\\b(?i:clang|llvm)\\b"	 <llvm@lists.linux.dev>
-Date: Thu, 14 May 2026 07:40:23 +0200
-In-Reply-To: <CAKxU2N_p7unDCif826jpTUtzs8=-ZoKw4u-Eg1UEM+4o+5Fbzg@mail.gmail.com>
-References: <20260514041908.874355-1-rosenp@gmail.com>
-	 <f8a58a8d567149f514f2f5f47af25905f254f72f.camel@physik.fu-berlin.de>
-	 <CAKxU2N_p7unDCif826jpTUtzs8=-ZoKw4u-Eg1UEM+4o+5Fbzg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e+Bk9M98"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778741641; x=1810277641;
+  h=date:from:to:cc:subject:message-id;
+  bh=aneMv8x/M5JDgosuzn92CXBq3rNhjxDt6eIJGYsFpA4=;
+  b=e+Bk9M98l8VDhF0iptsD1ptJK/z7rcWkHppcLgbBU21nxxFogypXCQJ7
+   iTlgxRhojH8PFHL3fE+7PFY1Ffs7gq9nHb7aCIOwTTMzAxSsfcrF/QvEf
+   Iy1Gt7kSMsFjjV732CP4e0dGkNcQzY68n4ND7ivI/N2foXNUIHiSUz/X2
+   2mRUscUyU5N3CgfwfgiYmSbrUMK4lWzwZ2X3WaVQOVhxqH/7sfbYWJxsp
+   MZuRlfqjSefxulVIQojds0T72K8UgSYEeVmVweRct+iVSP5P26l25OK8N
+   hTkuXPMPLBrN0FFjLic4PQNsPp9FWIZMBvHyTKCYoEVq23H8jgMMn8Er0
+   w==;
+X-CSE-ConnectionGUID: jCWMtkjJREKLPJal53QXHQ==
+X-CSE-MsgGUID: VTeC8nyfTUyu1qDNjeN24g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="91140366"
+X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
+   d="scan'208";a="91140366"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 23:53:58 -0700
+X-CSE-ConnectionGUID: cHJeqxSpSOGKXk2+Qr4ExA==
+X-CSE-MsgGUID: +54L/nchQMC+Wo2oEWKrAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
+   d="scan'208";a="237441310"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa010.jf.intel.com with ESMTP; 13 May 2026 23:53:56 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wNPxA-000000008lf-28f0;
+	Thu, 14 May 2026 06:53:52 +0000
+Date: Thu, 14 May 2026 08:53:39 +0200
+From: kernel test robot <lkp@intel.com>
+To: Milan Tripkovic <Milan.Tripkovic@rt-rk.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: lib/tests/string_kunit.c:1014:18: error: use of undeclared
+ identifier 'string_bench_memcmp'; did you mean 'string_test_memcmp'?
+Message-ID: <202605140827.Qg1DZpcB-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
 
-On Wed, 2026-05-13 at 22:34 -0700, Rosen Penev wrote:
-> > I would rather fix LLD than making such intrusive changes to the SPARC
-> > code in the kernel. In particular, since this touches the CPU-optimized
-> > memory routines which had been haunted by subtle bugs for years and wer=
-e
-> > only fixed recently.
-> >=20
-> > Is improving LLD in this case not possible?
-> Above my paygrade. I use this so that allmodconfig succeeds.
->=20
+tree:   https://github.com/intel-lab-lkp/linux/commits/Milan-Tripkovic/lib-string_kunit-extend-benchmarks-and-unit-test-to-memcmp/20260514-061117
+head:   63994c99c1cec63db18bebab3030f0c0e9d43ea5
+commit: 63994c99c1cec63db18bebab3030f0c0e9d43ea5 lib/string_kunit: extend benchmarks and unit test to memcmp()
+date:   9 hours ago
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260514/202605140827.Qg1DZpcB-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605140827.Qg1DZpcB-lkp@intel.com/reproduce)
 
-The kernel must also work in the end. Being able to build it isn't really e=
-nough.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605140827.Qg1DZpcB-lkp@intel.com/
 
-Adrian
+All errors (new ones prefixed by >>):
 
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+>> lib/tests/string_kunit.c:1014:18: error: use of undeclared identifier 'string_bench_memcmp'; did you mean 'string_test_memcmp'?
+    1014 |         KUNIT_CASE_SLOW(string_bench_memcmp),
+         |                         ^~~~~~~~~~~~~~~~~~~
+         |                         string_test_memcmp
+   include/kunit/test.h:188:17: note: expanded from macro 'KUNIT_CASE_SLOW'
+     188 |                 { .run_case = test_name, .name = #test_name,    \
+         |                               ^
+   lib/tests/string_kunit.c:883:13: note: 'string_test_memcmp' declared here
+     883 | static void string_test_memcmp(struct kunit *test)
+         |             ^
+   1 error generated.
+
+
+vim +1014 lib/tests/string_kunit.c
+
+   983	
+   984	static struct kunit_case string_test_cases[] = {
+   985		KUNIT_CASE(string_test_memset16),
+   986		KUNIT_CASE(string_test_memset32),
+   987		KUNIT_CASE(string_test_memset64),
+   988		KUNIT_CASE(string_test_strlen),
+   989		KUNIT_CASE(string_test_strnlen),
+   990		KUNIT_CASE(string_test_strchr),
+   991		KUNIT_CASE(string_test_strnchr),
+   992		KUNIT_CASE(string_test_strrchr),
+   993		KUNIT_CASE(string_test_strspn),
+   994		KUNIT_CASE(string_test_strcmp),
+   995		KUNIT_CASE(string_test_strcmp_long_strings),
+   996		KUNIT_CASE(string_test_strncmp),
+   997		KUNIT_CASE(string_test_strncmp_long_strings),
+   998		KUNIT_CASE(string_test_strcasecmp),
+   999		KUNIT_CASE(string_test_strcasecmp_long_strings),
+  1000		KUNIT_CASE(string_test_strncasecmp),
+  1001		KUNIT_CASE(string_test_strncasecmp_long_strings),
+  1002		KUNIT_CASE(string_test_strscpy),
+  1003		KUNIT_CASE(string_test_strcat),
+  1004		KUNIT_CASE(string_test_strncat),
+  1005		KUNIT_CASE(string_test_strlcat),
+  1006		KUNIT_CASE(string_test_strtomem),
+  1007		KUNIT_CASE(string_test_memtostr),
+  1008		KUNIT_CASE(string_test_strends),
+  1009		KUNIT_CASE(string_bench_strlen),
+  1010		KUNIT_CASE(string_bench_strnlen),
+  1011		KUNIT_CASE(string_bench_strchr),
+  1012		KUNIT_CASE(string_bench_strrchr),
+  1013		KUNIT_CASE(string_test_memcmp),
+> 1014		KUNIT_CASE_SLOW(string_bench_memcmp),
+  1015		{}
+  1016	};
+  1017	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
