@@ -1,149 +1,172 @@
-Received: from s106b.cyber-folks.pl (s106b.cyber-folks.pl [195.78.66.88])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B802236E3;
-	Thu, 14 May 2026 03:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.78.66.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD433A4F4B;
+	Thu, 14 May 2026 03:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778728809; cv=none; b=VOwuWo4pBs4lUFhKiFAJ+l28JBWK5tqFXdEINFnp+Vg8N+f/+LaxLmwbWfKbSjTkCVJIsaHnY0Qn8SUo+Fh4CzB4IHh76xXENtirn/h+oQ8KXz6TpT+Ir/7AkSGY+4bFbHP6V4SbmwuewUWVlpvpYnha+EVOPHGUXkUGW1+YZI4=
+	t=1778729677; cv=none; b=eKOyCvaGetKxLpooo1UYE37MJt6vNNVKI+eGs7yC6dpbnJr6C2KqhNXFKiNVvfq2omUsg9su96RlzZi5jr/jSkkJ/2cc0DKsALlpX9kYlt6z/hgdQ9D+KeDlp5ympYqazeDvdk7RvHBZ07Z9du9Pz3/ZI6VSHIpR+NNYLueRLog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778728809; c=relaxed/simple;
-	bh=mAW9smyP3Y9zNh0IDxgH/7BBIen5KUX/2eJMMof12rc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VcomS5/ueECyNovbu5QAkZJWIppg9HylF8Jx9cAkywY7YzP+/ns239Zyj8osreNE561kr3fo+5NJEx9qF531BsUx8l0w7Kuio5+g9Gc2fg/BIOkwPYp5fV6FvzRBp/Hm9cgToiLl+nMo7sWTUZ6uEIdBu3n+krWjI7J5rBUmWvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mmpsystems.pl; spf=pass smtp.mailfrom=mmpsystems.pl; dkim=pass (2048-bit key) header.d=mmpsystems.pl header.i=@mmpsystems.pl header.b=QYij6wex; arc=none smtp.client-ip=195.78.66.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mmpsystems.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mmpsystems.pl
+	s=arc-20240116; t=1778729677; c=relaxed/simple;
+	bh=3mxmo4gdeOSblWnNntG1/+LV+UhMCa+2jlTlT/fV9I0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ACJW/VmFARhOvKFaYxLVcbU08Y1gYuSnS+9NWvxBJESGTQmCLL5T0ubXNpOL8QmZBqmjW5xGrR+r2+/C0z6KHfsRZ/E9sf4CmPBKlqm1KrnhR5pxpglzI5bImA1Dsxq3sSZEXIpkl0BLt8EswOrhN6LU8/6uVUh/XHVHj8iRA6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ikRnDrPV; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mmpsystems.pl header.i=@mmpsystems.pl header.b="QYij6wex"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=mmpsystems.pl; s=x; h=Cc:To:Message-Id:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=V8Zv1XxU0NXRkczbbte8VINxmUP6BumFNP4JQShgmbg=; b=QYij6wexY6658C8GQB+Ud1GMHS
-	UexeAtIdV4B5jonQ3oMluQfemg78ENfSZp7IWxTW2ohf83AwadBuA6hoI/Gjz7W6jgvVo5U39RtrT
-	U6vHE0YbnzgzQtUoK3h4OZLc2YA74CM0L0Gly5RhPk2x9l1BR67iZhRUg4w6+HzrI2ekkoRC123Y1
-	ICxbqKyo1qJriSlFf9dvFHW73Uz0ZYiezUn/FeWy0bc5y5HiFcpbdUhCZlRP2cfa7Ef23FPK15v9X
-	Cn1xO56b2RgSt3vG2hhCbgYlCBwN8TAJ1zkIYU+gLB7eSCKb+U5ubZahS8TzVeqSdqMbTRIpMuX41
-	YIheyFzg==;
-Received: from [91.102.182.218] (helo=localhost)
-	by s106.cyber-folks.pl with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <michal.piekos@mmpsystems.pl>)
-	id 1wNMc8-0000000H9MG-1Eyv;
-	Thu, 14 May 2026 05:19:56 +0200
-From: Michal Piekos <michal.piekos@mmpsystems.pl>
-Date: Thu, 14 May 2026 05:19:34 +0200
-Subject: [PATCH v2] iio: adc: sun20i-gpadc: support non-contiguous channel
- lookups
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ikRnDrPV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778729676; x=1810265676;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3mxmo4gdeOSblWnNntG1/+LV+UhMCa+2jlTlT/fV9I0=;
+  b=ikRnDrPVwbC4zVZfFJ6t3TElBZWB9l1p44Ms1/sXi7RdT8H+ssJcEzUq
+   6z15pzWWA2YRcdwxXkui/EQYIlHZ6UbBWZlWtRIDwZ1QsPGnw1T+Q9o14
+   cDQicq4oruiFyVwoQv2sgtQzPdHdEwLFUvsHslCVGOHNXUKbFb8TOnSEI
+   W9fZPtVsBClNEkhlTKdYSCaSJYz0s4YFr7lvYjEqcGLkluN4KnR04doNv
+   jLbVt129uE0sAfYvi8Zoc3/IbA2zGYIjb/5qufDpq1GLrHtj1RZ/wjvrj
+   0RKiwNgTnwhYWSjgD0gRq+f4sVwtePYKjuvbPhrFnxHjqE1AjcaBKa4C3
+   A==;
+X-CSE-ConnectionGUID: Au4G5Ad1QqGaqgNThdfSmw==
+X-CSE-MsgGUID: 4zln+thFRv6z8o7JnJObRQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="79648528"
+X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
+   d="scan'208";a="79648528"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 20:34:33 -0700
+X-CSE-ConnectionGUID: 07xLSzhxQJC6BsmkAFWnyQ==
+X-CSE-MsgGUID: 51apW2JcRuGuWaW0JwT1qg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
+   d="scan'208";a="242598641"
+Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 13 May 2026 20:34:32 -0700
+Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wNMqC-000000005kh-1kZW;
+	Thu, 14 May 2026 03:34:28 +0000
+Date: Thu, 14 May 2026 11:33:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ashwin Gundarapu <linuxuser509@zohomail.in>,
+	gregkh <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel <linux-kernel@vger.kernel.org>,
+	linux-staging <linux-staging@lists.linux.dev>
+Subject: Re: [PATCH v7] staging: rtl8723bs: remove unnecessary braces in
+ rtw_mlme.c
+Message-ID: <202605141108.KAKaXH7X-lkp@intel.com>
+References: <19e1c077ee4.2272059b46402.3689085453526247548@zohomail.in>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260514-fix-sunxi-gpadc-sparse-channels-v2-1-d4a66b70c7a7@mmpsystems.pl>
-X-B4-Tracking: v=1; b=H4sIAEU/BWoC/42OTQ6DIBBGr2JYdxrAlsSueo/GheBUaRQJg0Zjv
- HvBXqDLl7zvZ2eEwSKxR7GzgIslO7kE8lIw0zeuQ7BtYia5VPwuSnjbFWh2q4XON60B8k0ghCw
- 7HAikVlpyVer2VrHU4gOmyLnwqn9Ms/6gibk2G72lOIXtvLCI7P2/tggQoIwUKCuuDeJzHD1tF
- HGkqx9YfRzHF6qVKH3kAAAA
-X-Change-ID: 20260513-fix-sunxi-gpadc-sparse-channels-2b6b2063bd49
-To: Jonathan Cameron <jic23@kernel.org>, 
- David Lechner <dlechner@baylibre.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
- Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai <wens@kernel.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>
-Cc: linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
- Michal Piekos <michal.piekos@mmpsystems.pl>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- llvm@lists.linux.dev
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778728785; l=2567;
- i=michal.piekos@mmpsystems.pl; s=20260301; h=from:subject:message-id;
- bh=mAW9smyP3Y9zNh0IDxgH/7BBIen5KUX/2eJMMof12rc=;
- b=IzE2aCtNGPDvgiHxMVpRWxq6l4Hz7kBMcZiHPIsDF1KFpqFB8KN5/bGtIJbN82SZJaMKOPjtR
- AyNgm7Y1d/EClBYHORnzkw4FSpaGRdXUTikaUr9cxnFtfZu18gfBWjD
-X-Developer-Key: i=michal.piekos@mmpsystems.pl; a=ed25519;
- pk=Aixyx03If7ZDamiKKN0lsa+0mtA+WjIuIf2ZQVYNBqg=
-X-Authenticated-Id: michal.piekos@mmpsystems.pl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19e1c077ee4.2272059b46402.3689085453526247548@zohomail.in>
 
-Using consumer driver like iio-hwmon which resolve channels thorugh
-io-channels phandles will fail for sparse channels because IIO core by
-default threats phandle argument as index into channel array.
-        eg. <&gpadc 1> will fail if there is only channel@1 specified
+Hi Ashwin,
 
-Add .fwnode_xlate() which maps DT phandle to the registered channel
-whose chan->channel matches the hardware channel number. It allows
-sparse channel maps to be consumed by drivers like iio-hwmon.
+kernel test robot noticed the following build errors:
 
-Tested on Radxa Cubie A5E.
+[auto build test ERROR on staging/staging-testing]
 
-Signed-off-by: Michal Piekos <michal.piekos@mmpsystems.pl>
----
-Changes in v2:
-- Move loop variable declaration into the for statement
-- Fix indentation using clang-format
-- Correct commit wording
-- Link to v1: https://patch.msgid.link/20260513-fix-sunxi-gpadc-sparse-channels-v1-1-6c21e290bcee@mmpsystems.pl
+url:    https://github.com/intel-lab-lkp/linux/commits/Ashwin-Gundarapu/staging-rtl8723bs-remove-unnecessary-braces-in-rtw_mlme-c/20260514-040753
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/19e1c077ee4.2272059b46402.3689085453526247548%40zohomail.in
+patch subject: [PATCH v7] staging: rtl8723bs: remove unnecessary braces in rtw_mlme.c
+config: i386-buildonly-randconfig-006-20260514 (https://download.01.org/0day-ci/archive/20260514/202605141108.KAKaXH7X-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141108.KAKaXH7X-lkp@intel.com/reproduce)
 
-To: Jonathan Cameron <jic23@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-To: Nuno Sá <nuno.sa@analog.com>
-To: Andy Shevchenko <andy@kernel.org>
-To: Chen-Yu Tsai <wens@kernel.org>
-To: Jernej Skrabec <jernej.skrabec@gmail.com>
-To: Samuel Holland <samuel@sholland.org>
-To: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-To: Bill Wendling <morbo@google.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: linux-iio@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-sunxi@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev
----
- drivers/iio/adc/sun20i-gpadc-iio.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605141108.KAKaXH7X-lkp@intel.com/
 
-diff --git a/drivers/iio/adc/sun20i-gpadc-iio.c b/drivers/iio/adc/sun20i-gpadc-iio.c
-index 861c14da75ad..78c9a52f38df 100644
---- a/drivers/iio/adc/sun20i-gpadc-iio.c
-+++ b/drivers/iio/adc/sun20i-gpadc-iio.c
-@@ -139,8 +139,20 @@ static irqreturn_t sun20i_gpadc_irq_handler(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
-+static int
-+sun20i_gpadc_fwnode_xlate(struct iio_dev *indio_dev,
-+			  const struct fwnode_reference_args *iiospec)
-+{
-+	for (unsigned int i = 0; i < indio_dev->num_channels; i++)
-+		if (indio_dev->channels[i].channel == iiospec->args[0])
-+			return i;
-+
-+	return -EINVAL;
-+}
-+
- static const struct iio_info sun20i_gpadc_iio_info = {
- 	.read_raw = sun20i_gpadc_read_raw,
-+	.fwnode_xlate = sun20i_gpadc_fwnode_xlate,
- };
- 
- static void sun20i_gpadc_reset_assert(void *data)
+All errors (new ones prefixed by >>):
 
----
-base-commit: 1d5dcaa3bd65f2e8c9baa14a393d3a2dc5db7524
-change-id: 20260513-fix-sunxi-gpadc-sparse-channels-2b6b2063bd49
+>> drivers/staging/rtl8723bs/core/rtw_mlme.c:568:1: error: function definition is not allowed here
+     568 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:582:1: error: function definition is not allowed here
+     582 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:628:1: error: function definition is not allowed here
+     628 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:632:1: error: function definition is not allowed here
+     632 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:675:1: error: function definition is not allowed here
+     675 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:774:1: error: function definition is not allowed here
+     774 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:778:1: error: function definition is not allowed here
+     778 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:782:1: error: function definition is not allowed here
+     782 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:805:1: error: function definition is not allowed here
+     805 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:823:1: error: function definition is not allowed here
+     823 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:853:1: error: function definition is not allowed here
+     853 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:879:1: error: function definition is not allowed here
+     879 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:908:1: error: function definition is not allowed here
+     908 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:920:1: error: function definition is not allowed here
+     920 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:942:1: error: function definition is not allowed here
+     942 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:1026:1: error: function definition is not allowed here
+    1026 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:1073:1: error: function definition is not allowed here
+    1073 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:1139:1: error: function definition is not allowed here
+    1139 | {
+         | ^
+   drivers/staging/rtl8723bs/core/rtw_mlme.c:1247:1: error: function definition is not allowed here
+    1247 | {
+         | ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
-Best regards,
---  
-Michal Piekos <michal.piekos@mmpsystems.pl>
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_STMFX
+   Depends on [n]: HAS_IOMEM [=y] && I2C [=m] && OF [=n]
+   Selected by [m]:
+   - PINCTRL_STMFX [=m] && PINCTRL [=y] && I2C [=m] && HAS_IOMEM [=y]
 
+
+vim +568 drivers/staging/rtl8723bs/core/rtw_mlme.c
+
+554c0a3abf216c Hans de Goede 2017-03-29  565  
+554c0a3abf216c Hans de Goede 2017-03-29  566  void rtw_add_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork);
+554c0a3abf216c Hans de Goede 2017-03-29  567  void rtw_add_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork)
+554c0a3abf216c Hans de Goede 2017-03-29 @568  {
+554c0a3abf216c Hans de Goede 2017-03-29  569  	update_current_network(adapter, pnetwork);
+554c0a3abf216c Hans de Goede 2017-03-29  570  	rtw_update_scanned_network(adapter, pnetwork);
+554c0a3abf216c Hans de Goede 2017-03-29  571  }
+554c0a3abf216c Hans de Goede 2017-03-29  572  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
