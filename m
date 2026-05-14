@@ -1,98 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E763B2FC2;
-	Thu, 14 May 2026 13:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4775314D34;
+	Thu, 14 May 2026 13:32:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778763630; cv=none; b=MCwvExJZBG6F2J7TbZ4jYp5TPqU/g8tcSKMjUZqlvTmaeE8hfFE/VQvT8cEoQIeI45UUFnqx69KiqZwXrb9KQ5MTMcDCABPS8YkGbcxaCGYkqm0Kzk2R6hbhplAZvnVbe1Qquvr1SdLXofEilaEXhDLiiRaQ6MPo0/3v48C7okM=
+	t=1778765525; cv=none; b=isti7uMWHC9ijTpqibVaUfedZ2RUAXPBWWopw6wwqeQV0/zpO0+QGqMYAKhhYeKgafOJr0ei1euHM4GX0LrUld5as2be9/BznBKh1/UjQD2LsOAfEYpiz7gApgj6Lawbjldnb1K9laV4xNms0tz17OSzp4mYTclliSQj+J78Bpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778763630; c=relaxed/simple;
-	bh=KMwg1ZJonpP22evmkhxL0puLNLtsmWrf60LlcCdhmlM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d5zhqID+Olsg/v6vOWtBRJFxTg4sIQ0cEg4EAKYJIMWoFo3EE+x2Oc2rk2ewP/E8c/JRjdYjWoefcF/7nQBUSJpdhnFQD9EnJtynCQn2AFZHIKVL4iwCXW241hWHeD0Z4ACpd5+LRLpM3trjY1DlBQrPxpFNpz1PdYQN4sXJFy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hSdIO3QM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778765525; c=relaxed/simple;
+	bh=9vjkP3SHT2epwkx1bZ9EbbspQhfuOSGQak3c0rXInfE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=VGVbfPJKtbjl2X3N/noCPAdEnV57lynKDmNHcYmBQriTM9ustfX0InlHYlTyniwt9NPBYP60nbEfCRUPKMMaL3k4MNgkPZSiOtjPrg9F3dkViYojXm4FXnnKTBYSJLnFBiXT7HQzvvtWM0ontSyaFO9AHTO348RoMWMVrHAGm+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HgoXsg49; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hSdIO3QM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B843C2BCB3;
-	Thu, 14 May 2026 13:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778763630;
-	bh=KMwg1ZJonpP22evmkhxL0puLNLtsmWrf60LlcCdhmlM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hSdIO3QMmfOhZyln7utFkcY67H5q4R6aiuGsrPvHzUhcMVep2v31kY7l4vokdQ7LR
-	 4L2aZHtKaKyFM7H6zoqzAzlTYwQVvaIZYRxoDOpj1xk6HZZtMlUkHn8sHCi/Jq+ga2
-	 LMzbKrjduxvDbr6gp6+nk29N/CBoqwg/xyJMN/q5lUZFryGySCnqKFQDfGheORmnKz
-	 P6Sgi8DKF55DuThuLcEpbLPek0d5ATuOa8r2bllhkVShSW1EEuZq4WXLFEY0InTdJE
-	 4S3D1yVlARnBaKlWjO5xUOKJsSd2/Ey9fHhRtW5U66LNZ+UIuVYcw+8kAMKWsHi8yh
-	 dwg/Swzu66TIA==
-Date: Thu, 14 May 2026 22:00:26 +0900
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: sparclinux@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCH] sparc: Disable compat support with LLD
-Message-ID: <20260514130026.GC1781775@ax162>
-References: <20260508000834.834824-1-rosenp@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HgoXsg49"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778765522; x=1810301522;
+  h=date:from:to:cc:subject:message-id;
+  bh=9vjkP3SHT2epwkx1bZ9EbbspQhfuOSGQak3c0rXInfE=;
+  b=HgoXsg499nLuBSQyAF0Vd4Tc2tgCmBKvheiUoeldNqjwx36ejY0N5ukj
+   BICaCrLSwpIglTc/hCoRm4CYgcgFBwAJ2C578a84TFUOJfvuxZqTHzQ5d
+   GtN3xa0gUGxqqv+HNGs7pEZEVL03nz9lYJp8CQQKARr6Jz4FdbW+HIgYh
+   ds985oSTLALS9BKmNUZtBLAcS89N+zBQvKSP5bg8xo9nUkgEQBipj50Sl
+   xhDnSj0vqoJzbvigEvBvicNJt9Ml2dtkwnVExOxkrdUB5w/oxgO3Fqv67
+   derA2pynvB8Zzfp1TkKdNIUaMbAGkH4HG/pNayPU4GIlPge+TkMWTwPn1
+   A==;
+X-CSE-ConnectionGUID: U6WM1dq8RFiymL3EXzqzSA==
+X-CSE-MsgGUID: 5uaq2jeETKi82pNqfxKgGA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11786"; a="79824447"
+X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
+   d="scan'208";a="79824447"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2026 06:32:00 -0700
+X-CSE-ConnectionGUID: cL+G1xtqS/i/Zjz3NEv5Wg==
+X-CSE-MsgGUID: 8UB8TJyPT7yzx5gMrbcCig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
+   d="scan'208";a="237402229"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa006.jf.intel.com with ESMTP; 14 May 2026 06:31:58 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wNWAO-000000008oj-12RS;
+	Thu, 14 May 2026 13:31:56 +0000
+Date: Thu, 14 May 2026 15:31:02 +0200
+From: kernel test robot <lkp@intel.com>
+To: Andrew Murray <amurray@thegoodpenguin.co.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: kernel/printk/sysctl.c:11:18: warning: unused variable
+ 'ten_thousand'
+Message-ID: <202605141518.BQGr9VpG-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508000834.834824-1-rosenp@gmail.com>
 
-On Thu, May 07, 2026 at 05:08:34PM -0700, Rosen Penev wrote:
-> An LLVM=1 sparc64 allmodconfig enables COMPAT and then tries to
-> build the 32-bit vDSO. That path cannot be linked with ld.lld:
-> 
->   ld.lld: error: unknown emulation: elf32_sparc
-> 
-> ld.lld does not support the 32-bit SPARC ELF emulation used for
-> the compat vDSO, so keep COMPAT disabled when LLD is the linker.
-> This avoids selecting an unsupported build path while leaving the
-> existing GNU ld configuration unchanged.
-> 
-> Assisted-by: Codex:GPT-5.5
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+tree:   https://github.com/intel-lab-lkp/linux/commits/Andrew-Murray/printk-remove-BOOT_PRINTK_DELAY/20260514-132813
+head:   fa13da135c46ed95604a44c0723b4abeddd5eb7f
+commit: fa13da135c46ed95604a44c0723b4abeddd5eb7f printk: remove BOOT_PRINTK_DELAY
+date:   8 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260514/202605141518.BQGr9VpG-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141518.BQGr9VpG-lkp@intel.com/reproduce)
 
-It does not sound like sparc32 will be supported in ld.lld without
-someone contributing the work:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605141518.BQGr9VpG-lkp@intel.com/
 
-  https://github.com/llvm/llvm-project/issues/100320#issuecomment-2254229711
+All warnings (new ones prefixed by >>):
 
-So this seems reasonable, even if we don't support ld.lld for sparc64
-in the kernel right now.
+>> kernel/printk/sysctl.c:11:18: warning: unused variable 'ten_thousand' [-Wunused-const-variable]
+      11 | static const int ten_thousand = 10000;
+         |                  ^~~~~~~~~~~~
+   1 warning generated.
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
 
-> ---
->  arch/sparc/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-> index a6b787efc2c4..681ab2fd3d8a 100644
-> --- a/arch/sparc/Kconfig
-> +++ b/arch/sparc/Kconfig
-> @@ -474,6 +474,7 @@ endmenu
->  config COMPAT
->  	bool
->  	depends on SPARC64
-> +	depends on !LD_IS_LLD
->  	default y
->  	select HAVE_UID16
->  	select ARCH_WANT_OLD_COMPAT_IPC
-> -- 
-> 2.54.0
-> 
+vim +/ten_thousand +11 kernel/printk/sysctl.c
 
--- 
-Cheers,
-Nathan
+faaa357a55e034 Xiaoming Ni 2022-01-21  10  
+faaa357a55e034 Xiaoming Ni 2022-01-21 @11  static const int ten_thousand = 10000;
+faaa357a55e034 Xiaoming Ni 2022-01-21  12  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
