@@ -1,151 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933DA39A7F2;
-	Thu, 14 May 2026 09:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B387339A077
+	for <llvm@lists.linux.dev>; Thu, 14 May 2026 09:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778750821; cv=none; b=S1xEP4os6KSYRH4FNI0hUxqAsRizKoY4HcJTdw8UOtCBCSZeTJ4A44VDQMAGVfAznjxoRIQ0JaYJpuCoL4Szh36FdaPJMsJ71jqvtPguppbFDGouJ8lR1Gq/45eA82qnExOdmIvVDfUIYDfCV6RMk5Nw/6tqCq3s6GCStqxR/3k=
+	t=1778751153; cv=none; b=pi6FpFDf5/PNMLCZNv9ZzKWU80rB9wWgUcsZo57q1h0wAnSc3NVrLCqRl9Lf3P/CRp5r/oQVusda0xqQXZerTkiowDDE2oegMbVGSBUZzI03Q+TMYriQOAs8m3A4SmLjzi8/RpixJ5F5IfOY3vMiLaNc+BZImHTuIKzaTZZrhdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778750821; c=relaxed/simple;
-	bh=Xk2L1Max7/mQ2EO4417jItnDDAVaXdTmX1+X+xT9hF8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=n0uY6FUkE88YPu0jTQMByv1ucIUj88hNfrWN1xc1LA3HJ+vA+mUdNuhs7eq7JOvkWyMC+KmDfm4+FtRgvsoip+H+Lpx/IKgnqJy687G9gG3hPYVqKhJIY+C+JjcGM5C+90xLVnxQEg1gzerR+rF3TjzdNgdq3dIEo3yGaPv1Vvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y0JgIuZz; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778751153; c=relaxed/simple;
+	bh=g4qN1qiOL6eoyFGTvuGJsgsnQ0jH3lElMo1cnFmnA00=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Bs18LKxQ5SIqvrfNagxSJE/YCWSdtKo46oku2niXToGMkGiuH8ovycT9ysErdOZjMm+V4XJczEWrDsy5Rj1erTKxe5SRVpCe7XV77AlRrT5rzD7/PO8dbLybQQTMAHPnnEIlaX1Z26zWN8zAlyvB5LPwfcWzLLy7UBykxmy7liA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oeNPJn+U; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y0JgIuZz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778750819; x=1810286819;
-  h=date:from:to:cc:subject:message-id;
-  bh=Xk2L1Max7/mQ2EO4417jItnDDAVaXdTmX1+X+xT9hF8=;
-  b=Y0JgIuZzu0T3w4xLxOlQRbyPHPNRHXeyTcQ5oBnjafypjx7aKxEjGYUq
-   2DDa4iFT5IGaqrw1xtSeMt4p+eM3K8pfTLeomNuORFjs1TkPbjZDaoI3q
-   GzyXDzo7yh2KgSKGn/K2xmVIZXSLWIY14bUnd/xdJte5uQz4MfsR3di02
-   cTvFQMfVne49Nys8Ha8uFAWm7IDE7nS21mdnuODA8LOajZUgF9pgeTXZS
-   6viPmZCPnTu5o2uQOWWCUwcaXlMrCsoCifoKNhjAhbrQlLq/OEsPVEmI8
-   TwOynKvceBmC838BQjQ9ZQDZ41f9nmo+20TwfCxupOYaa5dE+nrLNnCc+
-   Q==;
-X-CSE-ConnectionGUID: 2Iw+8FXtS/2UnjhwKfYy7Q==
-X-CSE-MsgGUID: VakWKtloRkyFXX1b8C0nJg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="91075298"
-X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
-   d="scan'208";a="91075298"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2026 02:26:58 -0700
-X-CSE-ConnectionGUID: 6MyWtS5bR6emm+8qRcTfdQ==
-X-CSE-MsgGUID: k7jfaF8DRUiQb9z3yRWp8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
-   d="scan'208";a="276419604"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa001.jf.intel.com with ESMTP; 14 May 2026 02:26:56 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wNSLF-000000008nB-3FEh;
-	Thu, 14 May 2026 09:26:53 +0000
-Date: Thu, 14 May 2026 11:26:43 +0200
-From: kernel test robot <lkp@intel.com>
-To: David Matlack <dmatlack@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: drivers/pci/liveupdate.h:31:1: error: expected identifier or
- '('
-Message-ID: <202605141129.QEeW4TcK-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oeNPJn+U"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-44a14580111so5671879f8f.0
+        for <llvm@lists.linux.dev>; Thu, 14 May 2026 02:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1778751150; x=1779355950; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jIhsStlSAZdSG6VxaddFdlwdDOVd+4VLWmlrEpic5HY=;
+        b=oeNPJn+UudbRhw1RzZBWJ9VOktt4qunwgVN3oxZ0bjaGxH8J3CtEZEu5VQF3pTSLL5
+         YT8hnmFLifd7H9cTc0RaHstRXPSZXztDxqMABujqEDPH6tah50nT5A5ftKb4uHKgImx0
+         sa9dTwfUj9MP2Wy4Vmw73fSVY39cI1OI/bgQCNk6eBpROJOpV9NRnsmr6kPgBJr6AHLE
+         sTq3/zWnu2P3CJckXakdcLnMU1KtZ4FZiXB/W6AirNCzRoyQGskYwGvj0a4diWvtrLQh
+         /SCZbZ5b/XlZQETRNTHYmKDu3fkcsOaZelk/TKDiWSx6vUcZd3rmHxtOhCdf5JkeLs+o
+         EHOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778751150; x=1779355950;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jIhsStlSAZdSG6VxaddFdlwdDOVd+4VLWmlrEpic5HY=;
+        b=Z5SrpXjptBVgwiCTyGTpZwkiWm1gj1QI2V4Qmf/V9+lUIX83+IGbjyPhh9NkKOdU8j
+         gDWMGYMfeSEUVPuoQoJNpWScKMLxejQy+17NsHoOE5G6os7ms8Q1jeDLEVIIl84wMZkV
+         AAu48v4it6AuELHRYMiJneDfq9PKLPFFCOJVFY6OsV0BR5iIPviCo+0rEymxkSYWwiDV
+         /n/p2LAgvUibfv4rfkQRE3MFhjyLl4287G5GdQltAEGyFr8MvFtMBMN82jSppaZzOcR2
+         3xgglO9XGpyM7pjlGlUjuqrK2gH90DDIdO4Nyyj3QgfHmCk7Qgq1W/5yeA2ELcR2I8bF
+         0I5A==
+X-Forwarded-Encrypted: i=1; AFNElJ+T5vvMWKQKyQm3va+uUiRpZQd25nTFIeBcI2fodBkyTEw82riemiI27aS3fgaP1ZjoWhQp@lists.linux.dev
+X-Gm-Message-State: AOJu0Yync0oc4mV/D8MBDMAjb7kdShdWhpJa4M6VptjfxNnP24y4av4i
+	IrX/Muvy1/AoyCtDAJYvw01PiSTkOXjdOOnEh78i/iF4SC2eTxP2L99GcHg+HnIJ1iw=
+X-Gm-Gg: Acq92OHpaxhqRhUfyJKXp3Jsndw3bP8SaIEbq91STlImNQRNWJCZSP52dHohkixgb6H
+	+BlWAehHMEyl5qnOzTaCFa1aSsCTRU3O6CFfVbERKpuuAVrWD2YCrdXNS2SMKdIhE9E8HaRgoIS
+	oIEk7BLNa9AAWm2wwpFlvoOiqvYJ3pBN0Gm1PbjpKvAPfBXeg3EMnmQ+w7a6r7TX49rVh1BbiYz
+	+FbBCb6z55HnlhwOdxJTVlqXm4RV3lFM1BXKI/LKOIQ38cjym67WnbVcIAfcnTq4jQaKNGOVifz
+	jNOBLNXSKCi7oGPQolqytLg7vk7IDT68H679AvANpJjtMYjZ56I4GT9Gh6PKjC/hWHbSXDjKb38
+	QochYmFZsEbh0HYsuDUfJf9XArKUiQZk6HOaihAU8JQCumBR2TdI0uO4FYNBu4JJIAmU9Bk7xac
+	tK8ZhZP/JiafGjgOdZXV7QJueyxvJcWkmZ
+X-Received: by 2002:a05:6000:2401:b0:43f:e721:76b8 with SMTP id ffacd0b85a97d-45c7a7dc644mr10324893f8f.37.1778751150103;
+        Thu, 14 May 2026 02:32:30 -0700 (PDT)
+Received: from ho-tower-lan.lan ([185.48.77.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe0fecsm5097164f8f.26.2026.05.14.02.32.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 02:32:29 -0700 (PDT)
+From: James Clark <james.clark@linaro.org>
+Subject: [PATCH 0/6] tools/build: Allow versioning of all LLVM tools
+Date: Thu, 14 May 2026 10:32:07 +0100
+Message-Id: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJeWBWoC/x3MSwqAMAwA0atI1gasWgWvIi7ammrEHykUQby71
+ eUs3twQSJgCdNkNQpEDH3sKlWfgZrNPhDymhrIom0IrhYvZKOBJ4nFd44aR5DNYV8YqZ7V17Qh
+ Jn0Ker//cD8/zAm21c3VpAAAA
+To: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ James Clark <james.clark@linaro.org>, leo.yan@arm.com
+X-Mailer: b4 0.14.0
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/David-Matlack/PCI-liveupdate-Set-up-FLB-handler-for-the-PCI-core/20260514-111126
-head:   b4570b026ee40593fe4f6931f522a15adc6ea247
-commit: f88bd26914e11847b921b4d09d4b91be5dec94ba PCI: liveupdate: Freeze preservation status during shutdown
-date:   6 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260514/202605141129.QEeW4TcK-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141129.QEeW4TcK-lkp@intel.com/reproduce)
+I ran into the build issue mentioned in the first commit, because using
+an option like LLVM=-15 is a documented way to build [1], but only
+some of the LLVM tools defined in tools/ support this.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605141129.QEeW4TcK-lkp@intel.com/
+After fixing that, a lot of other tidyups fell out. I didn't go too far,
+for example some selftests include tools/testing/selftests/lib.mk which
+reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+tools/scripts/Makefile.include and I stopped before touching the former.
+Some other non build scripts hard code toolchains and I didn't touch
+those either, this change is only focused on things that already
+include Makefile.include.
 
-All errors (new ones prefixed by >>):
+[1]: Documentation/kbuild/llvm.rst
 
-   In file included from drivers/pci/probe.c:27:
->> drivers/pci/liveupdate.h:31:1: error: expected identifier or '('
-      31 | {
-         | ^
-   1 error generated.
---
-   In file included from drivers/pci/pci.c:36:
->> drivers/pci/liveupdate.h:31:1: error: expected identifier or '('
-      31 | {
-         | ^
-   drivers/pci/pci.c:427:9: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
-     427 |         return PCI_FIND_NEXT_CAP(pci_bus_read_config, pos, cap, NULL, bus, devfn);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/pci.h:161:5: note: expanded from macro 'PCI_FIND_NEXT_CAP'
-     161 |                                 *(u8 *)prev_ptr = __prev_pos;           \
-         |                                 ^~~~~~~~~~~~~~~
-   drivers/pci/pci.c:427:9: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
-   drivers/pci/pci.h:161:5: note: expanded from macro 'PCI_FIND_NEXT_CAP'
-     161 |                                 *(u8 *)prev_ptr = __prev_pos;           \
-         |                                 ^
-   drivers/pci/pci.c:531:9: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
-     531 |         return PCI_FIND_NEXT_EXT_CAP(pci_bus_read_config, start, cap,
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     532 |                                      NULL, dev->bus, dev->devfn);
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/pci.h:209:5: note: expanded from macro 'PCI_FIND_NEXT_EXT_CAP'
-     209 |                                 *(u16 *)prev_ptr = __prev_pos;          \
-         |                                 ^~~~~~~~~~~~~~~~
-   drivers/pci/pci.c:531:9: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
-   drivers/pci/pci.h:209:5: note: expanded from macro 'PCI_FIND_NEXT_EXT_CAP'
-     209 |                                 *(u16 *)prev_ptr = __prev_pos;          \
-         |                                 ^
-   drivers/pci/pci.c:600:8: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
-     600 |         pos = PCI_FIND_NEXT_CAP(pci_bus_read_config, pos,
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     601 |                                 PCI_CAP_ID_HT, NULL, dev->bus, dev->devfn);
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/pci.h:161:5: note: expanded from macro 'PCI_FIND_NEXT_CAP'
-     161 |                                 *(u8 *)prev_ptr = __prev_pos;           \
-         |                                 ^~~~~~~~~~~~~~~
-   drivers/pci/pci.c:600:8: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
-   drivers/pci/pci.h:161:5: note: expanded from macro 'PCI_FIND_NEXT_CAP'
-     161 |                                 *(u8 *)prev_ptr = __prev_pos;           \
-         |                                 ^
-   drivers/pci/pci.c:610:9: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
-     610 |                 pos = PCI_FIND_NEXT_CAP(pci_bus_read_config,
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     611 |                                         pos + PCI_CAP_LIST_NEXT,
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~
-     612 |                                         PCI_CAP_ID_HT, NULL, dev->bus,
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     613 |                                         dev->devfn);
-         |                                         ~~~~~~~~~~~
-   drivers/pci/pci.h:161:5: note: expanded from macro 'PCI_FIND_NEXT_CAP'
-     161 |                                 *(u8 *)prev_ptr = __prev_pos;           \
-         |                                 ^~~~~~~~~~~~~~~
-   drivers/pci/pci.c:610:9: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
-   drivers/pci/pci.h:161:5: note: expanded from macro 'PCI_FIND_NEXT_CAP'
-     161 |                                 *(u8 *)prev_ptr = __prev_pos;           \
-         |                                 ^
-   4 warnings and 1 error generated.
+Signed-off-by: James Clark <james.clark@linaro.org>
+---
+James Clark (6):
+      tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+      tools/build: Indent if else blocks
+      selftests: Remove unused LLD variable
+      tools/build: Allow versioning LLVM readelf
+      tools/build: selftests: Allow versioning LLVM lld
+      tools/build: selftests: Remove some duplicate toolchain definitions
 
+ tools/bpf/resolve_btfids/Makefile    |  3 --
+ tools/lib/api/Makefile               |  4 --
+ tools/lib/bpf/Makefile               |  8 ++--
+ tools/lib/subcmd/Makefile            |  4 --
+ tools/lib/symbol/Makefile            |  4 --
+ tools/perf/Makefile.perf             |  7 ----
+ tools/scripts/Makefile.include       | 77 ++++++++++++++++++++----------------
+ tools/testing/selftests/bpf/Makefile |  9 ++---
+ tools/testing/selftests/hid/Makefile |  7 ----
+ 9 files changed, 50 insertions(+), 73 deletions(-)
+---
+base-commit: 09d355618f7ccc27ffc7fc668b2e232872962079
+change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
 
-vim +31 drivers/pci/liveupdate.h
+Best regards,
+-- 
+James Clark <james.clark@linaro.org>
 
-    29	
-    30	static inline void pci_liveupdate_freeze(struct pci_dev *dev);
-  > 31	{
-    32	}
-    33	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
