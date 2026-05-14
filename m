@@ -1,165 +1,184 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24B5201004;
-	Thu, 14 May 2026 00:45:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E132722083;
+	Thu, 14 May 2026 00:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778719556; cv=none; b=dY5CvDrFNkgi9vk/jVh825QEbxEHdjyGVrTzAjSpUBATG71C1vZ22Kbqko5GjKU3NxyMM22ubKI+zzyiiWB5hiMRslqiPeHrl3erhaSXSCpvOXIrO/IwmOM8QNAyQgL7WhO4+wVxxYMFo3sYD6N7JBU7uXrq6Sbnvre1frGwUg4=
+	t=1778719675; cv=none; b=lrrsYmxJKnBSN/UdJuZ7D65ffySt+o2R32cd7ZZFDp/qTBx1mo8JEnU+nGOkexGECYY8VclC5ucvsOx8rclG0tkf6ARz9Iz0whaMwfIKhQ8/Jnuk7nWd5WqNcitCLpUGs5teQdrwekImBtpotH7A+pJfjaieochuRckN/8bVnR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778719556; c=relaxed/simple;
-	bh=155Am94qWe/f3pp9RvZy6Owf9p1+ieYSxje12j4/trI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CtF6ip8ZlD8IEbWkJZgEHZkRLW7FgQ7CcfeTQv9VC6G/sniR+JRXUhZxdw2VXz/musZo/xapdWb1EPWtWmHo7rT6AOwq8ZV9Ze5+VhSTKtxnz8T7ak550UTcoETrnV2Ha3SZdDejI89yxm5kkP5pfW0A5+3h1tfaFD3URZXg6JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z9x5LtE/; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1778719675; c=relaxed/simple;
+	bh=x9RVhSdcBorh/KZqhHpKXyM9kyoZNRtrbRCtVcQSthw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=X+vd0BERqlvLmc8tGkueIYjRvVue4WKFXKMjB+YG6B2HpUkj2/8aLIQnIHit3XmqG+zAqiQe/lo+DqgNgUKrfIwVSv90oP3/UIJt9FSaSj5uze/hPMlD1xE6RfY+NtRz8StaBL+Qy3vfu6uMrDajThxDpUw/7eI3DSIJREMYkyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kl8t/VtG; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z9x5LtE/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kl8t/VtG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778719555; x=1810255555;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=155Am94qWe/f3pp9RvZy6Owf9p1+ieYSxje12j4/trI=;
-  b=Z9x5LtE/f5G+mJGIrR7L6KoRTkAuDRvvTMQ/PE9HPyB1DvAE/4OXBNiC
-   c2f63bHqcZBND0PxG47MRkpj05z5yFaVVvLTo1a58Pkjwkh1kCTiKRqj7
-   Lc1BgYPNA6UvjLODatVhjz9XZkoZKupBLl6UteN8S5p4ulstxjCGxQysn
-   wIc9w5IgJmjiGd3njh/uLIeb22Gnrsojhs7jVkZBv/hnKarSManKQeiOR
-   6j0aJ38d2Mmv2FDoXVQ0onAJnLdsWOj07uNODj1Pwx6WPlMXs90/BXpQK
-   NsY2HGEwt8PIc8xI9yRChvqobVIaSgPUTtGBZcOBOnNx1h4MAibvE073h
-   g==;
-X-CSE-ConnectionGUID: KfQpjMqbSc6FxcEqMnCF8Q==
-X-CSE-MsgGUID: f+jdMg3sRiiC0WxaadAQwA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="82222880"
+  t=1778719674; x=1810255674;
+  h=date:from:to:cc:subject:message-id;
+  bh=x9RVhSdcBorh/KZqhHpKXyM9kyoZNRtrbRCtVcQSthw=;
+  b=Kl8t/VtGYEABwRB1AcV6eEjNlSBD3HZVuCSq1eOxarW5CXweposM80dW
+   RkOezrrUVa1ZIDptolgy8z0T5wgDF9TyICvLJ88WLwhsWZ9wEb3VJrk2u
+   CKrw6qNNtc8JCOzSllFnj7myGMpXDosh7jQv2NVPTF/MXW+hlJ3C/bRgW
+   cualtpGUw5vRD//9RYJBVnWotKaxmsgASCl3c54QQVAK8AZzzG7jlobUc
+   FSNoWo1PH3l37p7WHAyCHMGyD55viHUq/0CUsG7hVHtlIPxjqb5R4Trww
+   ch4h4+ZfWh8i/+/nFIpcF0tpz1tKeSpm8TXcuJSDmE9/WU92QQZxUMIdG
+   Q==;
+X-CSE-ConnectionGUID: DX7JtM5aQpWVgjuGBTYGzA==
+X-CSE-MsgGUID: tM/JadNQTBKK9Q4fR53nuw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="97228089"
 X-IronPort-AV: E=Sophos;i="6.23,233,1770624000"; 
-   d="scan'208";a="82222880"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 17:45:54 -0700
-X-CSE-ConnectionGUID: G/z3JY/6QK69mHz1Z2vkxQ==
-X-CSE-MsgGUID: Ja+PiS1rSnicC0N+EQfSmw==
+   d="scan'208";a="97228089"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 17:47:53 -0700
+X-CSE-ConnectionGUID: zi5lD1StTSu/AskuC0Ub4g==
+X-CSE-MsgGUID: HywraJWvRqSz3nCwzd6KoQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,233,1770624000"; 
-   d="scan'208";a="235578919"
-Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 13 May 2026 17:45:50 -0700
-Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
+   d="scan'208";a="242571708"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa004.jf.intel.com with ESMTP; 13 May 2026 17:47:52 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wNKCy-000000005RD-27ZJ;
-	Thu, 14 May 2026 00:45:48 +0000
-Date: Thu, 14 May 2026 08:45:18 +0800
+	id 1wNKEu-000000008hp-3jo6;
+	Thu, 14 May 2026 00:47:48 +0000
+Date: Thu, 14 May 2026 02:46:49 +0200
 From: kernel test robot <lkp@intel.com>
-To: Alex Hung <alex.hung@amd.com>, alexander.deucher@amd.com,
-	christian.koenig@amd.com, airlied@gmail.com, simona@ffwll.ch,
-	timur.kristof@gmail.com, pratap.nirujogi@amd.com,
-	vitaly.prosyak@amd.com, harry.wentland@amd.com,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] drm/amdgpu: Remove UML build exclusion from Kconfig
-Message-ID: <202605140801.Fqury68H-lkp@intel.com>
-References: <20260505162018.1755740-1-alex.hung@amd.com>
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: kernel/cgroup/cpuset.c:3032:9: error: use of undeclared
+ label 'out_unlock_reset'
+Message-ID: <202605140212.cspkpyDl-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260505162018.1755740-1-alex.hung@amd.com>
 
-Hi Alex,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v7.1-rc3 next-20260508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Hung/drm-amdgpu-Remove-UML-build-exclusion-from-Kconfig/20260513-150500
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20260505162018.1755740-1-alex.hung%40amd.com
-patch subject: [PATCH] drm/amdgpu: Remove UML build exclusion from Kconfig
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260514/202605140801.Fqury68H-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605140801.Fqury68H-lkp@intel.com/reproduce)
+tree:   https://github.com/intel-lab-lkp/linux/commits/Aaron-Tomlin/cgroup-cpuset-Fix-deadline-bandwidth-leak-in-cpuset_can_attach/20260513-233840
+head:   6b7a0366d38d3efa80d721b02d588f3f519aa8b3
+commit: 6c37dfa9b4198303c230c525e0796e883dde1624 cgroup/cpuset: Fix deadline bandwidth leak in cpuset_can_attach()
+date:   9 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260514/202605140212.cspkpyDl-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605140212.cspkpyDl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605140801.Fqury68H-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605140212.cspkpyDl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:26:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:2353:9: error: call to undeclared function 'cpu_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2353 |         return cpu_data(first_cpu_of_numa_node).topo.apicid;
-         |                ^
->> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:2353:41: error: member reference base type 'int' is not a structure or union
-    2353 |         return cpu_data(first_cpu_of_numa_node).topo.apicid;
-         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   1 warning and 2 errors generated.
---
-   In file included from drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:24:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1830:27: error: call to undeclared function 'cpu_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1830 |         struct cpuinfo_x86 *c = &cpu_data(0);
-         |                                  ^
->> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1830:26: error: cannot take the address of an rvalue of type 'int'
-    1830 |         struct cpuinfo_x86 *c = &cpu_data(0);
-         |                                 ^~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1833:7: error: incomplete definition of type 'struct cpuinfo_x86'
-    1833 |         if (c->x86_vendor == X86_VENDOR_AMD)
-         |             ~^
-   drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1830:9: note: forward declaration of 'struct cpuinfo_x86'
-    1830 |         struct cpuinfo_x86 *c = &cpu_data(0);
-         |                ^
-   drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1833:23: error: use of undeclared identifier 'X86_VENDOR_AMD'
-    1833 |         if (c->x86_vendor == X86_VENDOR_AMD)
+>> kernel/cgroup/cpuset.c:3032:9: error: use of undeclared label 'out_unlock_reset'
+    3032 |                         goto out_unlock_reset;
          |                              ^
-   1 warning and 4 errors generated.
+   kernel/cgroup/cpuset.c:3604:1: warning: unused label 'out_unlock_reset' [-Wunused-label]
+    3604 | out_unlock_reset:
+         | ^~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +/cpu_data +2353 drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c
+vim +/out_unlock_reset +3032 kernel/cgroup/cpuset.c
 
-851a645efd0fee Felix Kuehling  2017-11-27  2342  
-520b8fb755ccfb Felix Kuehling  2017-12-08  2343  static int kfd_cpumask_to_apic_id(const struct cpumask *cpumask)
-520b8fb755ccfb Felix Kuehling  2017-12-08  2344  {
-520b8fb755ccfb Felix Kuehling  2017-12-08  2345  	int first_cpu_of_numa_node;
-520b8fb755ccfb Felix Kuehling  2017-12-08  2346  
-520b8fb755ccfb Felix Kuehling  2017-12-08  2347  	if (!cpumask || cpumask == cpu_none_mask)
-520b8fb755ccfb Felix Kuehling  2017-12-08  2348  		return -1;
-520b8fb755ccfb Felix Kuehling  2017-12-08  2349  	first_cpu_of_numa_node = cpumask_first(cpumask);
-520b8fb755ccfb Felix Kuehling  2017-12-08  2350  	if (first_cpu_of_numa_node >= nr_cpu_ids)
-520b8fb755ccfb Felix Kuehling  2017-12-08  2351  		return -1;
-df1dd4f4a7271e Felix Kuehling  2019-01-02  2352  #ifdef CONFIG_X86_64
-b9655e702dc5d8 Thomas Gleixner 2023-08-14 @2353  	return cpu_data(first_cpu_of_numa_node).topo.apicid;
-df1dd4f4a7271e Felix Kuehling  2019-01-02  2354  #else
-df1dd4f4a7271e Felix Kuehling  2019-01-02  2355  	return first_cpu_of_numa_node;
-df1dd4f4a7271e Felix Kuehling  2019-01-02  2356  #endif
-520b8fb755ccfb Felix Kuehling  2017-12-08  2357  }
-520b8fb755ccfb Felix Kuehling  2017-12-08  2358  
+  2988	
+  2989	/* Called by cgroups to determine if a cpuset is usable; cpuset_mutex held */
+  2990	static int cpuset_can_attach(struct cgroup_taskset *tset)
+  2991	{
+  2992		struct cgroup_subsys_state *css;
+  2993		struct cpuset *cs, *oldcs;
+  2994		struct task_struct *task;
+  2995		bool setsched_check;
+  2996		int cpu, ret;
+  2997	
+  2998		/* used later by cpuset_attach() */
+  2999		cpuset_attach_old_cs = task_cs(cgroup_taskset_first(tset, &css));
+  3000		oldcs = cpuset_attach_old_cs;
+  3001		cs = css_cs(css);
+  3002	
+  3003		mutex_lock(&cpuset_mutex);
+  3004	
+  3005		/* Check to see if task is allowed in the cpuset */
+  3006		ret = cpuset_can_attach_check(cs);
+  3007		if (ret)
+  3008			goto out_unlock;
+  3009	
+  3010		/*
+  3011		 * Skip rights over task setsched check in v2 when nothing changes,
+  3012		 * migration permission derives from hierarchy ownership in
+  3013		 * cgroup_procs_write_permission()).
+  3014		 */
+  3015		setsched_check = !cpuset_v2() ||
+  3016			!cpumask_equal(cs->effective_cpus, oldcs->effective_cpus) ||
+  3017			!nodes_equal(cs->effective_mems, oldcs->effective_mems);
+  3018	
+  3019		/*
+  3020		 * A v1 cpuset with tasks will have no CPU left only when CPU hotplug
+  3021		 * brings the last online CPU offline as users are not allowed to empty
+  3022		 * cpuset.cpus when there are active tasks inside. When that happens,
+  3023		 * we should allow tasks to migrate out without security check to make
+  3024		 * sure they will be able to run after migration.
+  3025		 */
+  3026		if (!is_in_v2_mode() && cpumask_empty(oldcs->effective_cpus))
+  3027			setsched_check = false;
+  3028	
+  3029		cgroup_taskset_for_each(task, css, tset) {
+  3030			ret = task_can_attach(task);
+  3031			if (ret)
+> 3032				goto out_unlock_reset;
+  3033	
+  3034			if (setsched_check) {
+  3035				ret = security_task_setscheduler(task);
+  3036				if (ret)
+  3037					goto out_unlock_reset;
+  3038			}
+  3039	
+  3040			if (dl_task(task)) {
+  3041				/*
+  3042				 * Count all migrating DL tasks for cpuset task accounting.
+  3043				 * Only tasks that need a root-domain bandwidth move
+  3044				 * contribute to sum_migrate_dl_bw.
+  3045				 */
+  3046				cs->nr_migrate_dl_tasks++;
+  3047				if (dl_task_needs_bw_move(task, cs->effective_cpus))
+  3048					cs->sum_migrate_dl_bw += task->dl.dl_bw;
+  3049			}
+  3050		}
+  3051	
+  3052		if (!cs->sum_migrate_dl_bw)
+  3053			goto out_success;
+  3054	
+  3055		cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
+  3056		if (unlikely(cpu >= nr_cpu_ids)) {
+  3057			ret = -EINVAL;
+  3058			goto out_unlock;
+  3059		}
+  3060	
+  3061		ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
+  3062		if (ret)
+  3063			goto out_unlock;
+  3064	
+  3065		cs->dl_bw_cpu = cpu;
+  3066	
+  3067	out_success:
+  3068		/*
+  3069		 * Mark attach is in progress.  This makes validate_change() fail
+  3070		 * changes which zero cpus/mems_allowed.
+  3071		 */
+  3072		cs->attach_in_progress++;
+  3073	
+  3074	out_unlock:
+  3075		if (ret)
+  3076			reset_migrate_dl_data(cs);
+  3077		mutex_unlock(&cpuset_mutex);
+  3078		return ret;
+  3079	}
+  3080	
 
 --
 0-DAY CI Kernel Test Service
