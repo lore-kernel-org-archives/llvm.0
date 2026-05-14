@@ -1,160 +1,210 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADFF03ABD8D;
-	Thu, 14 May 2026 08:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F689379C32;
+	Thu, 14 May 2026 09:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778747886; cv=none; b=gqGVT+Cc1v/GAMwH/yDDa+SBAU9z7Wdia9Gg8JUW3BSZJ5nhlMpCk/U3MsEJXkCxz59kX8ggyxOnnxY2sVVvXHoNr3NYKqYjRudjIVk5QVSLWybDBS69iNwtEuz4PndMiMl88FFPmlPy4AIN34RQBq68xkL8idYAjVT7kZLgXnM=
+	t=1778749296; cv=none; b=NtOq++rmNtj/SqQ3D/nhoVPBm+B/Sn5bH4QWzBKBfyHgkITvXBGGdUFy6KqlOxJbWC9Azbryq7f59fvFRLFgoBd4uWkiT1KX85Qd5qXOcofD4A/9c0GS/8IsEaFZm77Xxz6wpGTshKzS/NA9dynj1wqGqVg0srIORTHNGliPgZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778747886; c=relaxed/simple;
-	bh=j0ThepAaKJ3WjfvHf/k3t/FE1agot5fafmNfA332LhU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=svlJtImSPU+IVg83CfiVIQsPGEr1h3vZ0o63yT4Dy7w1U1qIyuhPbDsdePnYKAgkripD9tuXf/EC2gO4tJnWOzp58vNeN8zQNPQciIxCQT2MjIM5StTTmY3s+zDDJtpFetDkjDoZeVTGiGNlrkECqdqOtCPvCZXVA0bHsN5VdGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cx89NjeD; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778749296; c=relaxed/simple;
+	bh=9qrd7DZRswnShjHayhkqvrhofgKn4ZIB2zVBnchimsI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BE0IZb4I/eVeR2YrpGvZvLsRhcA4OVz1/3s635hbvGVocxNfa6jZezXRXhNq/KAwOHgy+HFTCIBhwMqlwGXCXv0p4UcC6eqBffz7nWQTYtrVi9CdPjpbuzWLXGc/HhPE8inFYF6QJ3qL0GRPjIPnerNze6Afzx3YWm9yujJDvJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2BkCcFN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cx89NjeD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778747885; x=1810283885;
-  h=date:from:to:cc:subject:message-id;
-  bh=j0ThepAaKJ3WjfvHf/k3t/FE1agot5fafmNfA332LhU=;
-  b=cx89NjeDCvQ92QBgrN9tnkOzvRKq/ltz1p5qxLvwT1RJKZPPG2IlWvsc
-   fGioC4BGEp6rHRtggzzz8yeFsgM5ABnQT717wWypdvr+msUAO66dFNCln
-   2pCe6q0mW0YmhUv62QCifv+C8c0Fty1h85jeoyO/Y94SxFE8eLS9PGhU8
-   cUxA0/cfs2yXeP7USCgvade5rfWXhoXrwr8M903rSMgP9YbGZOktK5LEg
-   7pong9HPVtH/3dBBmiZF1nZxRk8KbvJmw9oxk3OjoYxP9THjlXeuSPu+r
-   0yM3uLQPehMNHL0r+G0iSGomQr1oFn7SmI6OuSW/sGeh/D+E/eXiIXoMj
-   g==;
-X-CSE-ConnectionGUID: EeX1ShtASo+l4UsvRRVcXg==
-X-CSE-MsgGUID: 0tfaDrqPQzCofafnBNvKoQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="79400264"
-X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
-   d="scan'208";a="79400264"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2026 01:38:05 -0700
-X-CSE-ConnectionGUID: Vp5QtY92QSeMGVT0OGly0A==
-X-CSE-MsgGUID: IGAwUXu7QDS+Udf9/WSFEw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
-   d="scan'208";a="276411331"
-Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 14 May 2026 01:38:02 -0700
-Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wNRZv-000000006Db-0EA2;
-	Thu, 14 May 2026 08:37:59 +0000
-Date: Thu, 14 May 2026 16:37:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- David Hildenbrand <david@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Linux Memory Management List <linux-mm@kvack.org>,
- mm-commits@vger.kernel.org
-Subject: [akpm-mm:mm-unstable 25/274] mm/hugetlb.c:7281:3: error:
- call to undeclared function '__huge_pmd_unshare'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202605141638.b5ZBd6IF-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2BkCcFN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B715C2BCC6;
+	Thu, 14 May 2026 09:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778749295;
+	bh=9qrd7DZRswnShjHayhkqvrhofgKn4ZIB2zVBnchimsI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=G2BkCcFNIRRps5PTJarrPld2ITBu3MEnYEXg11mhnE12D+VJRwwayBQfS5aUku6Jb
+	 GXY+k0+bMYEQte2Ba2sZBCfpZ2pE29oY3Sw4HJsnFUxwH7lke/wvijUh3uCpXurIuK
+	 DlnckljG5ZQxBM+omlZP1Vjg7PIs641+rCM4lh8uuv0PKiiJ3ktkbxJZPoKcTdoKFy
+	 2XJfB1OFdJl9GaXOCKD6hBOWKZlrz490Wtmw9lnKJmbQ2Nn+4aDO2Uh8XBNd/n6D40
+	 l+2nIpCyOVcnw6ERQlbyTVQxJWZ7gtGqzcNekaxoeepcMWR2F6R0Wc++MSOvjaq3xU
+	 MiY/qECmkhCFA==
+Message-ID: <560a84ed-7daf-4a78-a314-b867c73bce22@kernel.org>
+Date: Thu, 14 May 2026 11:01:26 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/3] slab: support for compiler-assisted type-based
+ slab cache partitioning
+Content-Language: en-US
+To: Marco Elver <elver@google.com>, Andrew Morton <akpm@linux-foundation.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>,
+ David Hildenbrand <david@kernel.org>, David Rientjes <rientjes@google.com>,
+ Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>,
+ Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>,
+ Kees Cook <kees@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Matteo Rizzo <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Suren Baghdasaryan <surenb@google.com>, linux-hardening@vger.kernel.org,
+ Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+ Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>,
+ "Liam R. Howlett" <liam@infradead.org>,
+ Alexander Potapenko <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev,
+ GONG Ruiqi <gongruiqi1@huawei.com>, Jonathan Corbet <corbet@lwn.net>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <20260511200136.3201646-1-elver@google.com>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+In-Reply-To: <20260511200136.3201646-1-elver@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   444fc9435e57157fcf30fc99aee44997f3458641
-commit: 2bb8fe16f7bf4487248c9ff847fcf189c45b9508 [25/274] mm/hugetlb: avoid false positive lockdep assertion
-config: powerpc64-randconfig-001-20260514 (https://download.01.org/0day-ci/archive/20260514/202605141638.b5ZBd6IF-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141638.b5ZBd6IF-lkp@intel.com/reproduce)
+On 5/11/26 22:00, Marco Elver wrote:
+> Rework the general infrastructure around RANDOM_KMALLOC_CACHES into more
+> flexible KMALLOC_PARTITION_CACHES, with the former being a partitioning
+> mode of the latter.
+> 
+> Introduce a new mode, KMALLOC_PARTITION_TYPED, which leverages a feature
+> available in Clang 22 and later, called "allocation tokens" via
+> __builtin_infer_alloc_token() [1]. Unlike KMALLOC_PARTITION_RANDOM
+> (formerly RANDOM_KMALLOC_CACHES), this mode deterministically assigns a
+> slab cache to an allocation of type T, regardless of allocation site.
+> 
+> The builtin __builtin_infer_alloc_token(<malloc-args>, ...) instructs
+> the compiler to infer an allocation type from arguments commonly passed
+> to memory-allocating functions and returns a type-derived token ID. The
+> implementation passes kmalloc-args to the builtin: the compiler performs
+> best-effort type inference, and then recognizes common patterns such as
+> `kmalloc(sizeof(T), ...)`, `kmalloc(sizeof(T) * n, ...)`, but also
+> `(T *)kmalloc(...)`. Where the compiler fails to infer a type the
+> fallback token (default: 0) is chosen.
+> 
+> Note: kmalloc_obj(..) APIs fix the pattern how size and result type are
+> expressed, and therefore ensures there's not much drift in which
+> patterns the compiler needs to recognize. Specifically, kmalloc_obj()
+> and friends expand to `(TYPE *)KMALLOC(__obj_size, GFP)`, which the
+> compiler recognizes via the cast to TYPE*.
+> 
+> Clang's default token ID calculation is described as [1]:
+> 
+>    typehashpointersplit: This mode assigns a token ID based on the hash
+>    of the allocated type's name, where the top half ID-space is reserved
+>    for types that contain pointers and the bottom half for types that do
+>    not contain pointers.
+> 
+> Separating pointer-containing objects from pointerless objects and data
+> allocations can help mitigate certain classes of memory corruption
+> exploits [2]: attackers who gains a buffer overflow on a primitive
+> buffer cannot use it to directly corrupt pointers or other critical
+> metadata in an object residing in a different, isolated heap region.
+> 
+> It is important to note that heap isolation strategies offer a
+> best-effort approach, and do not provide a 100% security guarantee,
+> albeit achievable at relatively low performance cost. Note that this
+> also does not prevent cross-cache attacks: while waiting for future
+> features like SLAB_VIRTUAL [3] to provide physical page isolation, this
+> feature should be deployed alongside SHUFFLE_PAGE_ALLOCATOR and
+> init_on_free=1 to mitigate cross-cache attacks and page-reuse attacks as
+> much as possible today.
+> 
+> With all that, my kernel (x86 defconfig) shows me a histogram of slab
+> cache object distribution per /proc/slabinfo (after boot):
+> 
+>   <slab cache>      <objs> <hist>
+>   kmalloc-part-15    1465  ++++++++++++++
+>   kmalloc-part-14    2988  +++++++++++++++++++++++++++++
+>   kmalloc-part-13    1656  ++++++++++++++++
+>   kmalloc-part-12    1045  ++++++++++
+>   kmalloc-part-11    1697  ++++++++++++++++
+>   kmalloc-part-10    1489  ++++++++++++++
+>   kmalloc-part-09     965  +++++++++
+>   kmalloc-part-08     710  +++++++
+>   kmalloc-part-07     100  +
+>   kmalloc-part-06     217  ++
+>   kmalloc-part-05     105  +
+>   kmalloc-part-04    4047  ++++++++++++++++++++++++++++++++++++++++
+>   kmalloc-part-03     183  +
+>   kmalloc-part-02     283  ++
+>   kmalloc-part-01     316  +++
+>   kmalloc            1422  ++++++++++++++
+> 
+> The above /proc/slabinfo snapshot shows me there are 6673 allocated
+> objects (slabs 00 - 07) that the compiler claims contain no pointers or
+> it was unable to infer the type of, and 12015 objects that contain
+> pointers (slabs 08 - 15). On a whole, this looks relatively sane.
+> 
+> Additionally, when I compile my kernel with -Rpass=alloc-token, which
+> provides diagnostics where (after dead-code elimination) type inference
+> failed, I see 186 allocation sites where the compiler failed to identify
+> a type (down from 966 when I sent the RFC [4]). Some initial review
+> confirms these are mostly variable sized buffers, but also include
+> structs with trailing flexible length arrays.
+> 
+> Link: https://clang.llvm.org/docs/AllocToken.html [1]
+> Link: https://blog.dfsec.com/ios/2025/05/30/blasting-past-ios-18/ [2]
+> Link: https://lwn.net/Articles/944647/ [3]
+> Link: https://lore.kernel.org/all/20250825154505.1558444-1-elver@google.com/ [4]
+> Link: https://discourse.llvm.org/t/rfc-a-framework-for-allocator-partitioning-hints/87434
+> Acked-by: GONG Ruiqi <gongruiqi1@huawei.com>
+> Co-developed-by: Harry Yoo (Oracle) <harry@kernel.org>
+> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605141638.b5ZBd6IF-lkp@intel.com/
+Applied [1] to slab/for-next, thanks. That means including the kernel-doc
+workarounds in patch 3. I know Jon said someone might hate it, but maybe it
+will motivate them for creating a proper fix :) It seems better than leaving
+doc generation broken or not applying this series at all.
 
-All errors (new ones prefixed by >>):
+https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=slab/for-7.2/alloc_token
 
->> mm/hugetlb.c:7281:3: error: call to undeclared function '__huge_pmd_unshare'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    7281 |                 __huge_pmd_unshare(&tlb, vma, address, ptep, take_locks);
-         |                 ^
-   mm/hugetlb.c:7281:3: note: did you mean 'huge_pmd_unshare'?
-   mm/hugetlb.c:6973:5: note: 'huge_pmd_unshare' declared here
-    6973 | int huge_pmd_unshare(struct mmu_gather *tlb, struct vm_area_struct *vma,
-         |     ^
-   1 error generated.
+I did the following fixup to remove passing an unnecessary NULL argument for
+__kmalloc_nolock() with buckets enabled. Made bloat-o-meter happier a bit.
 
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index c232f8a10af6..795455256329 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -894,7 +894,7 @@ unsigned int kmem_cache_sheaf_size(struct slab_sheaf *sheaf);
+  * with the exception of kunit tests
+  */
+ 
+-void *__kmalloc_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags)
++void *__kmalloc_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t flags)
+ 				__assume_kmalloc_alignment __alloc_size(1);
+ 
+ void *__kmalloc_node_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags, int node)
+@@ -981,7 +981,7 @@ static __always_inline __alloc_size(1) void *_kmalloc_noprof(size_t size, gfp_t
+ 				kmalloc_caches[kmalloc_type(flags, token)][index],
+ 				flags, size);
+ 	}
+-	return __kmalloc_noprof(PASS_KMALLOC_PARAMS(size, NULL, token), flags);
++	return __kmalloc_noprof(PASS_TOKEN_PARAMS(size, token), flags);
+ }
+ #define kmalloc_noprof(...)			_kmalloc_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
+ #define kmalloc(...)				alloc_hooks(kmalloc_noprof(__VA_ARGS__))
+diff --git a/mm/slub.c b/mm/slub.c
+index a6e9015601d6..74652bbdd591 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -5303,10 +5303,10 @@ void *__kmalloc_node_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags, in
+ }
+ EXPORT_SYMBOL(__kmalloc_node_noprof);
+ 
+-void *__kmalloc_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags)
++void *__kmalloc_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t flags)
+ {
+-	return __do_kmalloc_node(size, PASS_BUCKET_PARAM(b), flags,
+-				 NUMA_NO_NODE, _RET_IP_, PASS_TOKEN_PARAM(token));
++	return __do_kmalloc_node(size, NULL, flags,  NUMA_NO_NODE, _RET_IP_,
++				 PASS_TOKEN_PARAM(token));
+ }
+ EXPORT_SYMBOL(__kmalloc_noprof);
+ 
 
-vim +/__huge_pmd_unshare +7281 mm/hugetlb.c
-
-  7233	
-  7234	/*
-  7235	 * If @take_locks is false, the caller must ensure that no concurrent page table
-  7236	 * access can happen (except for gup_fast() and hardware page walks).
-  7237	 * If @take_locks is true, we take the hugetlb VMA lock (to lock out things like
-  7238	 * concurrent page fault handling) and the file rmap lock.
-  7239	 */
-  7240	static void hugetlb_unshare_pmds(struct vm_area_struct *vma,
-  7241					   unsigned long start,
-  7242					   unsigned long end,
-  7243					   bool take_locks)
-  7244	{
-  7245		struct hstate *h = hstate_vma(vma);
-  7246		unsigned long sz = huge_page_size(h);
-  7247		struct mm_struct *mm = vma->vm_mm;
-  7248		struct mmu_notifier_range range;
-  7249		struct mmu_gather tlb;
-  7250		unsigned long address;
-  7251		spinlock_t *ptl;
-  7252		pte_t *ptep;
-  7253	
-  7254		if (!(vma->vm_flags & VM_MAYSHARE))
-  7255			return;
-  7256	
-  7257		if (start >= end)
-  7258			return;
-  7259	
-  7260		flush_cache_range(vma, start, end);
-  7261		tlb_gather_mmu_vma(&tlb, vma);
-  7262	
-  7263		/*
-  7264		 * No need to call adjust_range_if_pmd_sharing_possible(), because
-  7265		 * we have already done the PUD_SIZE alignment.
-  7266		 */
-  7267		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm,
-  7268					start, end);
-  7269		mmu_notifier_invalidate_range_start(&range);
-  7270		if (take_locks) {
-  7271			hugetlb_vma_lock_write(vma);
-  7272			i_mmap_lock_write(vma->vm_file->f_mapping);
-  7273		} else {
-  7274			i_mmap_assert_write_locked(vma->vm_file->f_mapping);
-  7275		}
-  7276		for (address = start; address < end; address += PUD_SIZE) {
-  7277			ptep = hugetlb_walk(vma, address, sz);
-  7278			if (!ptep)
-  7279				continue;
-  7280			ptl = huge_pte_lock(h, mm, ptep);
-> 7281			__huge_pmd_unshare(&tlb, vma, address, ptep, take_locks);
-  7282			spin_unlock(ptl);
-  7283		}
-  7284		huge_pmd_unshare_flush(&tlb, vma);
-  7285		if (take_locks) {
-  7286			i_mmap_unlock_write(vma->vm_file->f_mapping);
-  7287			hugetlb_vma_unlock_write(vma);
-  7288		}
-  7289		/*
-  7290		 * No need to call mmu_notifier_arch_invalidate_secondary_tlbs(), see
-  7291		 * Documentation/mm/mmu_notifier.rst.
-  7292		 */
-  7293		mmu_notifier_invalidate_range_end(&range);
-  7294		tlb_finish_mmu(&tlb);
-  7295	}
-  7296	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
