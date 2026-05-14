@@ -1,63 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD433A4F4B;
-	Thu, 14 May 2026 03:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C2C2EC54C;
+	Thu, 14 May 2026 03:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778729677; cv=none; b=eKOyCvaGetKxLpooo1UYE37MJt6vNNVKI+eGs7yC6dpbnJr6C2KqhNXFKiNVvfq2omUsg9su96RlzZi5jr/jSkkJ/2cc0DKsALlpX9kYlt6z/hgdQ9D+KeDlp5ympYqazeDvdk7RvHBZ07Z9du9Pz3/ZI6VSHIpR+NNYLueRLog=
+	t=1778731001; cv=none; b=gEghFgiqB92NfrHcPq8x3BAPDG6HzZIcAkdk5q77zEqGCYlYFDRAxwRoicK7pn6fQYDIUd2d38FHYf4dpEEgFhiU+eQIoGNDzpOkGc8k3s5ercU3d6fvSzT5pUuS9h6tclQwz/I4WHoshReQYTf/Kd5BTfTRhXDiBlIC4iJV5Tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778729677; c=relaxed/simple;
-	bh=3mxmo4gdeOSblWnNntG1/+LV+UhMCa+2jlTlT/fV9I0=;
+	s=arc-20240116; t=1778731001; c=relaxed/simple;
+	bh=nNXzELtutpEq+OmJxmrD51XitSjV4T7MrHzTWpLXGqs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ACJW/VmFARhOvKFaYxLVcbU08Y1gYuSnS+9NWvxBJESGTQmCLL5T0ubXNpOL8QmZBqmjW5xGrR+r2+/C0z6KHfsRZ/E9sf4CmPBKlqm1KrnhR5pxpglzI5bImA1Dsxq3sSZEXIpkl0BLt8EswOrhN6LU8/6uVUh/XHVHj8iRA6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ikRnDrPV; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=q7coakjMEtgpeXqTHD1QKYfc9kxMCL/3kDbXQKmnvOApX+MGAqGkcTI4nwgvulr6RqvZCFyRKnNNS6FrdAogsEBCAIjZIo78CDIyG6MiPI//CRVWyaBkHC5AwtJ0x/Ljr7trfdBKWGhgUQR9hbK9+PV6a/XWTrjAkb0DfpmriDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HYZ+A3Ew; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ikRnDrPV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HYZ+A3Ew"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778729676; x=1810265676;
+  t=1778731000; x=1810267000;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3mxmo4gdeOSblWnNntG1/+LV+UhMCa+2jlTlT/fV9I0=;
-  b=ikRnDrPVwbC4zVZfFJ6t3TElBZWB9l1p44Ms1/sXi7RdT8H+ssJcEzUq
-   6z15pzWWA2YRcdwxXkui/EQYIlHZ6UbBWZlWtRIDwZ1QsPGnw1T+Q9o14
-   cDQicq4oruiFyVwoQv2sgtQzPdHdEwLFUvsHslCVGOHNXUKbFb8TOnSEI
-   W9fZPtVsBClNEkhlTKdYSCaSJYz0s4YFr7lvYjEqcGLkluN4KnR04doNv
-   jLbVt129uE0sAfYvi8Zoc3/IbA2zGYIjb/5qufDpq1GLrHtj1RZ/wjvrj
-   0RKiwNgTnwhYWSjgD0gRq+f4sVwtePYKjuvbPhrFnxHjqE1AjcaBKa4C3
-   A==;
-X-CSE-ConnectionGUID: Au4G5Ad1QqGaqgNThdfSmw==
-X-CSE-MsgGUID: 4zln+thFRv6z8o7JnJObRQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="79648528"
+  bh=nNXzELtutpEq+OmJxmrD51XitSjV4T7MrHzTWpLXGqs=;
+  b=HYZ+A3EwF52lVNkBtMJjiUPbi4kwcKUltDHunEyzMIQHF11CiqXyQWv2
+   lpy0J/JenKlAxjZKTVSt34aPuhD+bwn3KvhiKBXms45FE3N8/i4EI8A2C
+   hyEKLOUXMTls/fXQt+jN/rcWgQ3WofG8yJ9C0RQ7BafD1+JyoidhQcggQ
+   OPSFpWxTsjBEyx6XV8MHdt0Ao2GHCdHDTB1/UmfwNsEZCAzini6+7iX+L
+   A5TfBnqUe1eQYZwc1pTwGAlaYZ+CmBDfjO6BnTwUwcrd+hsiGlcajRPe6
+   wRsEoSi0VhRZOsPwq3o0tpBsZvRFcfZIyUA/n6GFtLRny28tSOogINkqs
+   g==;
+X-CSE-ConnectionGUID: h/2nN0lGR9ueSXfIUGTQng==
+X-CSE-MsgGUID: 3sRlO6G2SimGm7kTaQPHtQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11785"; a="79564433"
 X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
-   d="scan'208";a="79648528"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 20:34:33 -0700
-X-CSE-ConnectionGUID: 07xLSzhxQJC6BsmkAFWnyQ==
-X-CSE-MsgGUID: 51apW2JcRuGuWaW0JwT1qg==
+   d="scan'208";a="79564433"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2026 20:56:39 -0700
+X-CSE-ConnectionGUID: ZFJEVrqUR0CG+RnG12WEVg==
+X-CSE-MsgGUID: DhVLug9hRyiwfjGsvKVn5w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,234,1770624000"; 
-   d="scan'208";a="242598641"
+   d="scan'208";a="243251014"
 Received: from lkp-server01.sh.intel.com (HELO dca79079c3eb) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 13 May 2026 20:34:32 -0700
+  by orviesa005.jf.intel.com with ESMTP; 13 May 2026 20:56:35 -0700
 Received: from kbuild by dca79079c3eb with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wNMqC-000000005kh-1kZW;
-	Thu, 14 May 2026 03:34:28 +0000
-Date: Thu, 14 May 2026 11:33:36 +0800
+	id 1wNNBX-000000005mN-0hyq;
+	Thu, 14 May 2026 03:56:31 +0000
+Date: Thu, 14 May 2026 11:56:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ashwin Gundarapu <linuxuser509@zohomail.in>,
-	gregkh <gregkh@linuxfoundation.org>
+To: Boris Brezillon <bbrezillon@kernel.org>,
+	Steven Price <steven.price@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	linux-staging <linux-staging@lists.linux.dev>
-Subject: Re: [PATCH v7] staging: rtl8723bs: remove unnecessary braces in
- rtw_mlme.c
-Message-ID: <202605141108.KAKaXH7X-lkp@intel.com>
-References: <19e1c077ee4.2272059b46402.3689085453526247548@zohomail.in>
+	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Akash Goel <akash.goel@arm.com>, Chia-I Wu <olvaffe@gmail.com>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] drm/gem: Make the GEM LRU lock part of drm_device
+Message-ID: <202605141138.kI3vechU-lkp@intel.com>
+References: <20260512-panthor-shrinker-fixes-v3-1-3bf066259471@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,106 +77,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <19e1c077ee4.2272059b46402.3689085453526247548@zohomail.in>
+In-Reply-To: <20260512-panthor-shrinker-fixes-v3-1-3bf066259471@collabora.com>
 
-Hi Ashwin,
+Hi Boris,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on staging/staging-testing]
+[auto build test WARNING on b2ed01e7ad3de80333e9b962a44024b094bc0b2b]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ashwin-Gundarapu/staging-rtl8723bs-remove-unnecessary-braces-in-rtw_mlme-c/20260514-040753
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/19e1c077ee4.2272059b46402.3689085453526247548%40zohomail.in
-patch subject: [PATCH v7] staging: rtl8723bs: remove unnecessary braces in rtw_mlme.c
-config: i386-buildonly-randconfig-006-20260514 (https://download.01.org/0day-ci/archive/20260514/202605141108.KAKaXH7X-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141108.KAKaXH7X-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Boris-Brezillon/drm-gem-Make-the-GEM-LRU-lock-part-of-drm_device/20260514-051749
+base:   b2ed01e7ad3de80333e9b962a44024b094bc0b2b
+patch link:    https://lore.kernel.org/r/20260512-panthor-shrinker-fixes-v3-1-3bf066259471%40collabora.com
+patch subject: [PATCH v3] drm/gem: Make the GEM LRU lock part of drm_device
+config: arm-randconfig-002-20260514 (https://download.01.org/0day-ci/archive/20260514/202605141138.kI3vechU-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605141138.kI3vechU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605141108.KAKaXH7X-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605141138.kI3vechU-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/staging/rtl8723bs/core/rtw_mlme.c:568:1: error: function definition is not allowed here
-     568 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:582:1: error: function definition is not allowed here
-     582 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:628:1: error: function definition is not allowed here
-     628 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:632:1: error: function definition is not allowed here
-     632 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:675:1: error: function definition is not allowed here
-     675 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:774:1: error: function definition is not allowed here
-     774 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:778:1: error: function definition is not allowed here
-     778 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:782:1: error: function definition is not allowed here
-     782 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:805:1: error: function definition is not allowed here
-     805 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:823:1: error: function definition is not allowed here
-     823 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:853:1: error: function definition is not allowed here
-     853 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:879:1: error: function definition is not allowed here
-     879 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:908:1: error: function definition is not allowed here
-     908 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:920:1: error: function definition is not allowed here
-     920 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:942:1: error: function definition is not allowed here
-     942 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:1026:1: error: function definition is not allowed here
-    1026 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:1073:1: error: function definition is not allowed here
-    1073 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:1139:1: error: function definition is not allowed here
-    1139 | {
-         | ^
-   drivers/staging/rtl8723bs/core/rtw_mlme.c:1247:1: error: function definition is not allowed here
-    1247 | {
-         | ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MFD_STMFX
-   Depends on [n]: HAS_IOMEM [=y] && I2C [=m] && OF [=n]
-   Selected by [m]:
-   - PINCTRL_STMFX [=m] && PINCTRL [=y] && I2C [=m] && HAS_IOMEM [=y]
+>> drivers/gpu/drm/msm/msm_gem.c:827:26: warning: unused variable 'priv' [-Wunused-variable]
+     827 |         struct msm_drm_private *priv = obj->dev->dev_private;
+         |                                 ^~~~
+   1 warning generated.
 
 
-vim +568 drivers/staging/rtl8723bs/core/rtw_mlme.c
+vim +/priv +827 drivers/gpu/drm/msm/msm_gem.c
 
-554c0a3abf216c Hans de Goede 2017-03-29  565  
-554c0a3abf216c Hans de Goede 2017-03-29  566  void rtw_add_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork);
-554c0a3abf216c Hans de Goede 2017-03-29  567  void rtw_add_network(struct adapter *adapter, struct wlan_bssid_ex *pnetwork)
-554c0a3abf216c Hans de Goede 2017-03-29 @568  {
-554c0a3abf216c Hans de Goede 2017-03-29  569  	update_current_network(adapter, pnetwork);
-554c0a3abf216c Hans de Goede 2017-03-29  570  	rtw_update_scanned_network(adapter, pnetwork);
-554c0a3abf216c Hans de Goede 2017-03-29  571  }
-554c0a3abf216c Hans de Goede 2017-03-29  572  
+4cd33c48ea25ba1 Rob Clark             2016-05-17  823  
+599089c6af68300 Rob Clark             2020-10-23  824  void msm_gem_purge(struct drm_gem_object *obj)
+68209390f116034 Rob Clark             2016-05-17  825  {
+68209390f116034 Rob Clark             2016-05-17  826  	struct drm_device *dev = obj->dev;
+6c7c8fb863f7c31 Rob Clark             2023-03-20 @827  	struct msm_drm_private *priv = obj->dev->dev_private;
+68209390f116034 Rob Clark             2016-05-17  828  	struct msm_gem_object *msm_obj = to_msm_bo(obj);
+68209390f116034 Rob Clark             2016-05-17  829  
+d4d7d3630d703ff Rob Clark             2022-08-02  830  	msm_gem_assert_locked(obj);
+90643a24a7bfbe9 Rob Clark             2021-04-05  831  	GEM_WARN_ON(!is_purgeable(msm_obj));
+68209390f116034 Rob Clark             2016-05-17  832  
+20d0ae2f8c72e36 Rob Clark             2021-04-05  833  	/* Get rid of any iommu mapping(s): */
+0b4339c55ef59ff Rob Clark             2025-06-29  834  	put_iova_spaces(obj, NULL, false, "purge");
+0e08270a1f01bce Sushmita Susheelendra 2017-06-13  835  
+599089c6af68300 Rob Clark             2020-10-23  836  	msm_gem_vunmap(obj);
+68209390f116034 Rob Clark             2016-05-17  837  
+81d4d597d4faadb Rob Clark             2021-04-05  838  	drm_vma_node_unmap(&obj->vma_node, dev->anon_inode->i_mapping);
+81d4d597d4faadb Rob Clark             2021-04-05  839  
+68209390f116034 Rob Clark             2016-05-17  840  	put_pages(obj);
+68209390f116034 Rob Clark             2016-05-17  841  
+c20ad1ee88c074c Boris Brezillon       2026-05-12  842  	mutex_lock(&dev->gem_lru_mutex);
+6c7c8fb863f7c31 Rob Clark             2023-03-20  843  	/* A one-way transition: */
+68209390f116034 Rob Clark             2016-05-17  844  	msm_obj->madv = __MSM_MADV_PURGED;
+c20ad1ee88c074c Boris Brezillon       2026-05-12  845  	mutex_unlock(&dev->gem_lru_mutex);
+68209390f116034 Rob Clark             2016-05-17  846  
+68209390f116034 Rob Clark             2016-05-17  847  	drm_gem_free_mmap_offset(obj);
+68209390f116034 Rob Clark             2016-05-17  848  
+68209390f116034 Rob Clark             2016-05-17  849  	/* Our goal here is to return as much of the memory as
+68209390f116034 Rob Clark             2016-05-17  850  	 * is possible back to the system as we are called from OOM.
+68209390f116034 Rob Clark             2016-05-17  851  	 * To do this we must instruct the shmfs to drop all of its
+68209390f116034 Rob Clark             2016-05-17  852  	 * backing pages, *now*.
+68209390f116034 Rob Clark             2016-05-17  853  	 */
+68209390f116034 Rob Clark             2016-05-17  854  	shmem_truncate_range(file_inode(obj->filp), 0, (loff_t)-1);
+68209390f116034 Rob Clark             2016-05-17  855  
+68209390f116034 Rob Clark             2016-05-17  856  	invalidate_mapping_pages(file_inode(obj->filp)->i_mapping,
+68209390f116034 Rob Clark             2016-05-17  857  			0, (loff_t)-1);
+68209390f116034 Rob Clark             2016-05-17  858  }
+68209390f116034 Rob Clark             2016-05-17  859  
 
 --
 0-DAY CI Kernel Test Service
