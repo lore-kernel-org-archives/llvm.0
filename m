@@ -1,319 +1,185 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B41370D72;
-	Fri, 15 May 2026 22:35:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A041EEA3C
+	for <llvm@lists.linux.dev>; Fri, 15 May 2026 22:58:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778884556; cv=none; b=pAa7McLSvSkhKS/ylhuIhEpecCyXeSNyFjEkKygcjleVDK3On1VesCzOcoU+59ghWcQOg6/9jbQp1xn/LZzJn6sLuaf65HXKOnzi9d7g0y95PSrEbFXpGaPKjTN8MBfoLrtslMTO/wfcOZZ8fU3WAc6WXOsKo4sXPZE3r8tHSwc=
+	t=1778885916; cv=none; b=kth1hcSio7jdEMYDuJPA0vR4h6FgyjbZtga1ilXAXynraItFCOcNfQY7Qw+KNCwxwkFFqdCb6HWQXZzqGBxE620M1Q1+BIu7tYX5xDSs5M/RCTvqYulsAUD0kptafL6N1mvtIeH4gZZfs2NP7mkjWR28NyNde0BAzTiOfG8mFrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778884556; c=relaxed/simple;
-	bh=ZLma/H6ELmnkcoiyQ0o01HFGuCYj6H1K9UncyvKSe50=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b+IO58gpL9qR6QYLrng5vd/Xm34iPCCChH8NUgi5XRzQou/YAXL8G+Szz+hfIwXL4+jJL1vjsEs/U/dluRiy+jq48+1fqhGOFfKdJTL3JmhXIwPF94RuCVPbWk1gEGB9tYO7BxzHK85XHqN4Ky9oDkt141uUwM7yNCNC6GDDV88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kcjKnZg4; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778885916; c=relaxed/simple;
+	bh=YCcPJH/vYgPQzSl/jsRGZR7a3T07mS4IJqsbO6CFGbA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UDI9fA4+ytBh86QNjsc59l5iF2cm8DCoJeBZVu2zPrQN1fKsEl9CFmeWxHf2PTgF92Z1Q1jSv7NS263UpE+Lms4WvueuCEwuF7SC2tg7s0lW9gNGnRvrtrKb2Zw9p6QmYBN2iiDVPkpBWbtRXs1pi4sTyKocxBVaJfHz7NsYVQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FN46Z9kg; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kcjKnZg4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778884555; x=1810420555;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZLma/H6ELmnkcoiyQ0o01HFGuCYj6H1K9UncyvKSe50=;
-  b=kcjKnZg4dL25Nt4vMRsRgPqe41ZY3cSVYs9L34BPppJcd2P4jhDThaXm
-   ddwStflOnVoL2XFXGBxjmJcyae6DFOfx0pugbtI/ZuelJH3Brma13wtb9
-   w7pRDLHz76QjP7yxE+zmJtaV0QXb/Z+nM/cZsghDYu9tu/SUaP6zMgyRb
-   3e8dwily6YIob0L4Q6hhHLN8kDtZmAKeflAgHiHd6rM9/uR1vbcUTVXAL
-   iHhc4+zOGgBx5IYVRTEOoZQ9h+5xuQtK04n1u0mzprrx6gku/yFChJeaY
-   VgeWIbXJelrdjZT8zqvqDjV9VY0tltYX3oiSEFi23Sa05hIFNXEIHU2KZ
-   A==;
-X-CSE-ConnectionGUID: 199ckgAwQy6B2uCDKsuTtQ==
-X-CSE-MsgGUID: VVaqs62wQK+n+2PYr/a2BA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11787"; a="90542478"
-X-IronPort-AV: E=Sophos;i="6.23,237,1770624000"; 
-   d="scan'208";a="90542478"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 15:35:54 -0700
-X-CSE-ConnectionGUID: xxC8lg0KTzuiZ9OQU4WCHg==
-X-CSE-MsgGUID: 7mRHL75DTaK2Ki/HxjXdSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,237,1770624000"; 
-   d="scan'208";a="269178747"
-Received: from lkp-server01.sh.intel.com (HELO d94e5e629b2d) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 15 May 2026 15:35:52 -0700
-Received: from kbuild by d94e5e629b2d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wO18H-000000000BF-17wQ;
-	Fri, 15 May 2026 22:35:49 +0000
-Date: Sat, 16 May 2026 06:35:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rupesh Majhi <zoone.rupert@gmail.com>, gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-	linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Rupesh Majhi <zoone.rupert@gmail.com>
-Subject: Re: [PATCH] staging: sm750: rename CamelCase variable in sm750.c
-Message-ID: <202605160624.pd29nXG5-lkp@intel.com>
-References: <20260515103811.2808620-1-zoone.rupert@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FN46Z9kg"
+Message-ID: <bda702a1-18f5-47ed-8a4e-a01b94829e07@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778885911;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ycnjTqUOfjzmeEfBwBIsxrCHrlibJg0T0GtKO5eKf28=;
+	b=FN46Z9kgrU4Kbrry6rzC1hKw5c/BjJWT9JzboldGA6XMR/SAGsv528OaUcjWjUgSQeYBmd
+	5K+exPVhr0rkGPOt/yb/c/n4qF/6CBQfTOFh6/xG+dXkoSNGmmEZt0uvPz9elT4wnWFAFD
+	bzNYWItnaGOho3LJep+0i0TX7jE83Ck=
+Date: Fri, 15 May 2026 15:58:14 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260515103811.2808620-1-zoone.rupert@gmail.com>
+Subject: Re: [PATCH 5/6] tools/build: selftests: Allow versioning LLVM lld
+To: James Clark <james.clark@linaro.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, leo.yan@arm.com
+References: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
+ <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Rupesh,
+On 5/14/26 2:32 AM, James Clark wrote:
+> Building with LLVM=... could result in a different version of lld being
+> used than the main toolchain for liburandom_read.so because it's
+> hardcoded to "lld" in this makefile.
+> 
+> Make it consistent with the rest of the LLVM toolchain by adding an LLD
+> variable to Makefile.include. Keep the fallback for other architectures
+> in tools/testing/selftests/bpf/Makefile as it seems like it's something
+> specific to this make rule and shouldn't be global.
+> 
+> Clang accepts either a full path or "ld.lld-15" style inputs to
+> -fuse-ld= so this will work with LLD defined the same way as the other
+> LLVM tools. However, for full paths, we need to use ".../ld.lld" instead
+> of the generic driver "lld", but I don't think the original use of "lld"
+> was significant as this is always a linux build.
+> 
+> Signed-off-by: James Clark <james.clark@linaro.org>
+> ---
+>  tools/scripts/Makefile.include       | 2 ++
+>  tools/testing/selftests/bpf/Makefile | 8 ++++----
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+> index 380ad84ac51e..5c2d505cba62 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -67,6 +67,7 @@ ifneq ($(LLVM),)
+>    $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
+>    $(call allow-override,LD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
+>    $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
+> +  $(call allow-override,LLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
+>    $(call allow-override,CXX,$(LLVM_PREFIX)clang++$(LLVM_SUFFIX))
+>    $(call allow-override,STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
+>    $(call allow-override,LLVM_STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
+> @@ -91,6 +92,7 @@ else
+>    # Some tools still require Clang, LLC and/or LLVM utils
+>    $(call allow-override,CLANG,clang)
+>    $(call allow-override,LLC,llc)
+> +  $(call allow-override,LLD,ld.lld)
+>    $(call allow-override,LLVM_CONFIG,llvm-config)
+>    $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
+>    $(call allow-override,LLVM_STRIP,llvm-strip)
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 6ef6872adbc3..44ba829e5d4d 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
+>  
+>  # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
+>  ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
+> -LLD := lld
+> +USE_LD := $(LLD)
+>  else
+> -LLD := $(shell command -v $(LD))
+> +USE_LD := $(shell command -v $(LD))
+>  endif
+>  
+>  # Filter out -static for liburandom_read.so and its dependent targets so that static builds
+> @@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
+>  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
+>  		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
+>  		     -Wno-unused-command-line-argument \
+> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
 
-kernel test robot noticed the following build errors:
+Hi James,
 
-[auto build test ERROR on staging/staging-testing]
+This patch breaks the selftests/bpf build:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rupesh-Majhi/staging-sm750-rename-CamelCase-variable-in-sm750-c/20260515-213450
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20260515103811.2808620-1-zoone.rupert%40gmail.com
-patch subject: [PATCH] staging: sm750: rename CamelCase variable in sm750.c
-config: powerpc64-randconfig-002-20260516 (https://download.01.org/0day-ci/archive/20260516/202605160624.pd29nXG5-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260516/202605160624.pd29nXG5-lkp@intel.com/reproduce)
+$ clang --version
+clang version 22.1.3 (CentOS 22.1.3-1.el9)
+Target: x86_64-redhat-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605160624.pd29nXG5-lkp@intel.com/
+$ make LLVM=1 -j$(nproc)
+  [...] # ok
 
-All errors (new ones prefixed by >>):
+$ make LLVM=1 -C tools/testing/selftests/bpf -j$(nproc)
 
->> drivers/staging/sm750fb/sm750.c:758:33: error: no member named 'pv_reg' in 'struct sm750_dev'
-     758 |         crtc->cursor.mmio = sm750_dev->pv_reg +
-         |                             ~~~~~~~~~  ^
->> drivers/staging/sm750fb/sm750.c:863:23: error: no member named 'set_all_eng_off' in 'struct init_status'
-     863 |         sm750_dev->init_parm.set_all_eng_off = 0;
-         |         ~~~~~~~~~~~~~~~~~~~~ ^
-   drivers/staging/sm750fb/sm750.c:1062:21: error: no member named 'pv_reg' in 'struct sm750_dev'
-    1062 |         iounmap(sm750_dev->pv_reg);
-         |                 ~~~~~~~~~  ^
-   3 errors generated.
+[...] # somewhere in the middle
 
+  LIB      liburandom_read.so
+clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
+make: *** [Makefile:256: /home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf/liburandom_read.so] Error 1
+make: Leaving directory '/home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf'
 
-vim +758 drivers/staging/sm750fb/sm750.c
+[...]
 
-   719	
-   720	static int lynxfb_set_fbinfo(struct fb_info *info, int index)
-   721	{
-   722		int i;
-   723		struct lynxfb_par *par;
-   724		struct sm750_dev *sm750_dev;
-   725		struct lynxfb_crtc *crtc;
-   726		struct lynxfb_output *output;
-   727		struct fb_var_screeninfo *var;
-   728		struct fb_fix_screeninfo *fix;
-   729	
-   730		const struct fb_videomode *pdb[] = {
-   731			lynx750_ext, NULL, vesa_modes,
-   732		};
-   733		int cdb[] = {ARRAY_SIZE(lynx750_ext), 0, VESA_MODEDB_SIZE};
-   734		static const char * const fix_id[2] = {
-   735			"sm750_fb1", "sm750_fb2",
-   736		};
-   737	
-   738		int ret, line_length;
-   739	
-   740		ret = 0;
-   741		par = (struct lynxfb_par *)info->par;
-   742		sm750_dev = par->dev;
-   743		crtc = &par->crtc;
-   744		output = &par->output;
-   745		var = &info->var;
-   746		fix = &info->fix;
-   747	
-   748		/* set index */
-   749		par->index = index;
-   750		output->channel = &crtc->channel;
-   751		sm750fb_set_drv(par);
-   752	
-   753		/*
-   754		 * set current cursor variable and proc pointer,
-   755		 * must be set after crtc member initialized
-   756		 */
-   757		crtc->cursor.offset = crtc->o_screen + crtc->vidmem_size - 1024;
- > 758		crtc->cursor.mmio = sm750_dev->pv_reg +
-   759			0x800f0 + (int)crtc->channel * 0x140;
-   760	
-   761		crtc->cursor.max_h = 64;
-   762		crtc->cursor.max_w = 64;
-   763		crtc->cursor.size = crtc->cursor.max_h * crtc->cursor.max_w * 2 / 8;
-   764		crtc->cursor.vstart = sm750_dev->vmem + crtc->cursor.offset;
-   765	
-   766		memset_io(crtc->cursor.vstart, 0, crtc->cursor.size);
-   767		if (!g_hwcursor)
-   768			sm750_hw_cursor_disable(&crtc->cursor);
-   769	
-   770		/* set info->fbops, must be set before fb_find_mode */
-   771		if (!sm750_dev->accel_off) {
-   772			/* use 2d acceleration */
-   773			if (!g_hwcursor)
-   774				info->fbops = &lynxfb_ops_accel;
-   775			else
-   776				info->fbops = &lynxfb_ops_accel_with_cursor;
-   777		} else {
-   778			if (!g_hwcursor)
-   779				info->fbops = &lynxfb_ops;
-   780			else
-   781				info->fbops = &lynxfb_ops_with_cursor;
-   782		}
-   783	
-   784		if (!g_fbmode[index]) {
-   785			g_fbmode[index] = g_def_fbmode;
-   786			if (index)
-   787				g_fbmode[index] = g_fbmode[0];
-   788		}
-   789	
-   790		for (i = 0; i < 3; i++) {
-   791			ret = fb_find_mode(var, info, g_fbmode[index],
-   792					   pdb[i], cdb[i], NULL, 8);
-   793	
-   794			if (ret == 1 || ret == 2)
-   795				break;
-   796		}
-   797	
-   798		/* set par */
-   799		par->info = info;
-   800	
-   801		/* set info */
-   802		line_length = ALIGN((var->xres_virtual * var->bits_per_pixel / 8),
-   803				    crtc->line_pad);
-   804	
-   805		info->pseudo_palette = &par->pseudo_palette[0];
-   806		info->screen_base = crtc->v_screen;
-   807		info->screen_size = line_length * var->yres_virtual;
-   808	
-   809		/* set info->fix */
-   810		fix->type = FB_TYPE_PACKED_PIXELS;
-   811		fix->type_aux = 0;
-   812		fix->xpanstep = crtc->xpanstep;
-   813		fix->ypanstep = crtc->ypanstep;
-   814		fix->ywrapstep = crtc->ywrapstep;
-   815		fix->accel = FB_ACCEL_SMI;
-   816	
-   817		strscpy(fix->id, fix_id[index], sizeof(fix->id));
-   818	
-   819		fix->smem_start = crtc->o_screen + sm750_dev->vidmem_start;
-   820		/*
-   821		 * according to mmap experiment from user space application,
-   822		 * fix->mmio_len should not larger than virtual size
-   823		 * (xres_virtual x yres_virtual x ByPP)
-   824		 * Below line maybe buggy when user mmap fb dev node and write
-   825		 * data into the bound over virtual size
-   826		 */
-   827		fix->smem_len = crtc->vidmem_size;
-   828		info->screen_size = fix->smem_len;
-   829		fix->line_length = line_length;
-   830		fix->mmio_start = sm750_dev->vidreg_start;
-   831		fix->mmio_len = sm750_dev->vidreg_size;
-   832	
-   833		lynxfb_set_visual_mode(info);
-   834	
-   835		/* set var */
-   836		var->activate = FB_ACTIVATE_NOW;
-   837		var->accel_flags = 0;
-   838		var->vmode = FB_VMODE_NONINTERLACED;
-   839	
-   840		ret = fb_alloc_cmap(&info->cmap, 256, 0);
-   841		if (ret < 0) {
-   842			dev_err(info->device, "Could not allocate memory for cmap.\n");
-   843			goto exit;
-   844		}
-   845	
-   846	exit:
-   847		lynxfb_ops_check_var(var, info);
-   848		return ret;
-   849	}
-   850	
-   851	/*	chip specific g_option configuration routine */
-   852	static void sm750fb_setup(struct sm750_dev *sm750_dev, char *src)
-   853	{
-   854		char *opt;
-   855		int swap;
-   856	
-   857		swap = 0;
-   858	
-   859		sm750_dev->init_parm.chip_clk = 0;
-   860		sm750_dev->init_parm.mem_clk = 0;
-   861		sm750_dev->init_parm.master_clk = 0;
-   862		sm750_dev->init_parm.power_mode = 0;
- > 863		sm750_dev->init_parm.set_all_eng_off = 0;
-   864		sm750_dev->init_parm.reset_memory = 1;
-   865	
-   866		/* defaultly turn g_hwcursor on for both view */
-   867		g_hwcursor = 3;
-   868	
-   869		if (!src || !*src) {
-   870			dev_warn(&sm750_dev->pdev->dev, "no specific g_option.\n");
-   871			goto NO_PARAM;
-   872		}
-   873	
-   874		while ((opt = strsep(&src, ":")) != NULL && *opt != 0) {
-   875			dev_info(&sm750_dev->pdev->dev, "opt=%s\n", opt);
-   876			dev_info(&sm750_dev->pdev->dev, "src=%s\n", src);
-   877	
-   878			if (!strncmp(opt, "swap", strlen("swap"))) {
-   879				swap = 1;
-   880			} else if (!strncmp(opt, "nocrt", strlen("nocrt"))) {
-   881				sm750_dev->nocrt = 1;
-   882			} else if (!strncmp(opt, "36bit", strlen("36bit"))) {
-   883				sm750_dev->pnltype = SM750_DOUBLE_TFT;
-   884			} else if (!strncmp(opt, "18bit", strlen("18bit"))) {
-   885				sm750_dev->pnltype = SM750_DUAL_TFT;
-   886			} else if (!strncmp(opt, "24bit", strlen("24bit"))) {
-   887				sm750_dev->pnltype = SM750_24TFT;
-   888			} else if (!strncmp(opt, "nohwc0", strlen("nohwc0"))) {
-   889				g_hwcursor &= ~0x1;
-   890			} else if (!strncmp(opt, "nohwc1", strlen("nohwc1"))) {
-   891				g_hwcursor &= ~0x2;
-   892			} else if (!strncmp(opt, "nohwc", strlen("nohwc"))) {
-   893				g_hwcursor = 0;
-   894			} else {
-   895				if (!g_fbmode[0]) {
-   896					g_fbmode[0] = opt;
-   897					dev_info(&sm750_dev->pdev->dev,
-   898						 "find fbmode0 : %s\n", g_fbmode[0]);
-   899				} else if (!g_fbmode[1]) {
-   900					g_fbmode[1] = opt;
-   901					dev_info(&sm750_dev->pdev->dev,
-   902						 "find fbmode1 : %s\n", g_fbmode[1]);
-   903				} else {
-   904					dev_warn(&sm750_dev->pdev->dev, "How many view you wann set?\n");
-   905				}
-   906			}
-   907		}
-   908	
-   909	NO_PARAM:
-   910		if (sm750_dev->revid != SM750LE_REVISION_ID) {
-   911			if (sm750_dev->fb_count > 1) {
-   912				if (swap)
-   913					sm750_dev->dataflow = sm750_dual_swap;
-   914				else
-   915					sm750_dev->dataflow = sm750_dual_normal;
-   916			} else {
-   917				if (swap)
-   918					sm750_dev->dataflow = sm750_simul_sec;
-   919				else
-   920					sm750_dev->dataflow = sm750_simul_pri;
-   921			}
-   922		} else {
-   923			/* SM750LE only have one crt channel */
-   924			sm750_dev->dataflow = sm750_simul_sec;
-   925			/* sm750le do not have complex attributes */
-   926			sm750_dev->nocrt = 0;
-   927		}
-   928	}
-   929	
+Or a simpler reproducer:
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+$ make LLVM=1 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
+  LIB      liburandom_read.so
+clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
+make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
+
+$ make LLVM=-22 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
+  LIB      liburandom_read.so
+clang-22: error: invalid linker name in argument '-fuse-ld=ld.lld-22'
+make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
+
+I tried your patches, and only then noticed BPF CI caught this too:
+https://github.com/kernel-patches/bpf/actions/runs/25943477658/job/76267174885?pr=12082
+
+>  		     -Wl,--version-script=liburandom_read.map \
+>  		     -fPIC -shared -o $@
+>  
+> @@ -268,7 +268,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
+>  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
+>  		     -Wno-unused-command-line-argument \
+>  		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
+> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+>  		     -Wl,-rpath=. -o $@
+>  
+>  $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
+> 
+
