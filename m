@@ -1,89 +1,112 @@
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C6648BD51
-	for <llvm@lists.linux.dev>; Fri, 15 May 2026 15:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C809D30568E;
+	Fri, 15 May 2026 15:38:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778859129; cv=none; b=SQhCh3CLTUtnbBuiOZBroZi1uDCTl1c0Kyc83lq2So3Nq52SHCRKDiKxCjnCnNavd6A4bFlc+m5rbzZ1hMgXiPxdz8IDPDygGORqQ90/hTfBzyggd70sdDJvrL2dCUBHAFrWB/ME4tDhrE6kSAOMR/nqi3A0SGvdeA9X4NXGl7s=
+	t=1778859514; cv=none; b=ldx5wWnXraMEtVhc3p1Fua7cTt6zhzWSj46jHJ250CzMkbw9SyBD7hdJIrDaVw9T7G3M2OMf5vx+KzftppsWHzrZLIMaG2ebYbmCNTQpoO0q0ivv3JpTztzaPxkD0x0844bVUD/xdv4Gclf/d18XjVYVm4cNLcY7Yfezg4cMgL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778859129; c=relaxed/simple;
-	bh=hi3lp0E2aSUN+zJyHwhZ8vbO5xY8PwjZrHRwNIbvsY8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OkRn01QTnC4132x8gja5W1PKjLl6KJKmWz5vhGgSQ0PCWBmn4AS4VhtXmjIhWHM0+CSp9B08nEeEFpNZwrTqIcC2oqbh2bYUcU8W62ELsXSm+aUejWrGgsaEW1/lGzVdtaGQqTR/7/XsndsrTOj5wWozY6fomyR9s4iTldxBQVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=zDH5+Xh8; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1778859514; c=relaxed/simple;
+	bh=cz/ON/e5sP/FtRGD1p8Be83qpDbYR20MrWF7kTeMTcs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bOT5+PnyiSYa+72vUHjUl5O6F9JGP1ykh1u5Qi7ro5Pay/YU5r1cnlabbV9QgcfPvKO/DDlmAnq1GJTZYpXw2sUvWJtlNcVf8xKlHJjTI9pO+nrgjEdZRwVWFB58QkAE65ZbPOhCN6vZh7IaUyTbRikeoddJ0YlUTrYuPrk+Mx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Llc9ziWA; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="zDH5+Xh8"
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4gHB5M48yTz1XM6Jl;
-	Fri, 15 May 2026 15:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1778859122; x=1781451123; bh=B72l22WnGcl/1t0rqH+UDWbg
-	QgRqSMV2ncCh79OadAw=; b=zDH5+Xh8Upgn1HldX/zmZ4rjxXuNIkmJJDQhc/QY
-	ddnerBPlOrTcuCQPttio1RSw2ff9nSO0QUllPrnEP5vKgZAk1g0OGO1qbzyM8tB3
-	YPom0nLS1S6FqbZb8B81h84/5ylp1mEAtCC2pSy0h4gGjQHubbeU9vBPoe5b1OFh
-	OfSaxQKJLwWE7HcA3n+zLMDCDzD/pCQWKeAfFsHBAGtqJSFD6HyGR6B5PuqC2Yqh
-	o8K7raKOE52wvrXp8F1PsWtxwoP578voyJiG96wq1AjMrkDSbiQHTcRV9AB/xMPx
-	zJIG+gNvUdYwj6c1yuaUNFPPJlLb8j3fkp98GxR8RXRQdQ==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id xgjhlCQ6PjK9; Fri, 15 May 2026 15:32:02 +0000 (UTC)
-Received: from [192.168.50.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4gHB5C1pDsz1XM5kt;
-	Fri, 15 May 2026 15:31:58 +0000 (UTC)
-Message-ID: <1ed5f5ca-7176-4003-be14-40d2608ffeb5@acm.org>
-Date: Fri, 15 May 2026 08:31:58 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Llc9ziWA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778859513; x=1810395513;
+  h=date:from:to:cc:subject:message-id;
+  bh=cz/ON/e5sP/FtRGD1p8Be83qpDbYR20MrWF7kTeMTcs=;
+  b=Llc9ziWA7hGNt/UFPbnutemOjncVCAPrlE6NdVa6SQNpKsCg4WrD2Z6O
+   w+s8tIm28bAIsL9M9NsJMLh4xjWNjxEdG4YEUaXnwtQxLoo5pVKyFoca6
+   SB8r9pefvv+d/3S5TQv0UFnbA8Ip1dYLzLXjWaIX7GFaKHHiymWOUxD1c
+   k3QNoUeEsKfnYUhmynyco9kv6+hsj4xnyCeF7wfTQJEBMPgmtYngjcbRU
+   vxHQuJht/JLPVVQZNJCrm2XVUh6ju32SuaYSLymwaiX9tbb3ctHc0WNIm
+   mfD+Bj/00UYADUGFNh4WpCc9D6kAYruh0or0o0yOkvFN6y3wQ9nYIAX8H
+   g==;
+X-CSE-ConnectionGUID: jmwVKNiLQ6e8k/AP/NWYSA==
+X-CSE-MsgGUID: OcXolILnRuScfhGJa7ZFjQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11787"; a="78953769"
+X-IronPort-AV: E=Sophos;i="6.23,236,1770624000"; 
+   d="scan'208";a="78953769"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 08:38:32 -0700
+X-CSE-ConnectionGUID: KxkxvuxAQbuZmFy+R3+ioQ==
+X-CSE-MsgGUID: o7pVe0wBQC6d6NRIYm072g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,236,1770624000"; 
+   d="scan'208";a="238604649"
+Received: from lkp-server02.sh.intel.com (HELO 7a33ad3e7d27) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 15 May 2026 08:38:29 -0700
+Received: from kbuild by 7a33ad3e7d27 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wNucM-0000000026s-05eO;
+	Fri, 15 May 2026 15:38:26 +0000
+Date: Fri, 15 May 2026 23:32:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
+ Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:xlnx_rebase_v6.18 741/871]
+ drivers/phy/xilinx/phy-amd-versal2-usbdp.c:47:9: error: call to undeclared
+ function 'readl'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202605152313.HpRl0O6K-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH tip/locking/core v3] compiler-context-analysis: Bump
- required Clang version to 23
-To: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20260515124426.2227783-1-elver@google.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260515124426.2227783-1-elver@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 5/15/26 5:43 AM, Marco Elver wrote:
-> Clang 23 introduces several major improvements:
-> 
-> 1. Support for multiple arguments in the `guarded_by` and
->     `pt_guarded_by` attributes [1]. This allows defining variables
->     protected by multiple context locks, where read access requires
->     holding at least one lock (shared or exclusive), and write access
->     requires holding all of them exclusively.
-> 
-> 2. Function pointer support [2]. We can now add attributes to function
->     pointers just like we do on normal functions.
-> 
-> 3. A fix to use arrays of locks [3]. Each index is now correctly treated
->     as a separate lock instance.
-> 
-> 4. A fix for implicit member access in attributes [4]. This allows to
->     use __guarded_by(&foo->lock) correctly.
-> 
-> Overall that makes it worthwhile bumping the compiler version instead of
-> trying to make both Clang 22 and later work while supporting these new
-> features.
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.18
+head:   8ad23fcb26beeb807a7f0f3341137ec98e93f390
+commit: 2a8218bbeaa31c54ebe59ee89e4187c48f1cde9c [741/871] phy: xilinx: add AMD Versal Gen 2 USB3.1 SSP+/DP Alt Combo PHY driver
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260515/202605152313.HpRl0O6K-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260515/202605152313.HpRl0O6K-lkp@intel.com/reproduce)
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605152313.HpRl0O6K-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/phy/xilinx/phy-amd-versal2-usbdp.c:47:9: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      47 |         return readl(udphy->base_crpara + reg);
+         |                ^
+   drivers/phy/xilinx/phy-amd-versal2-usbdp.c:52:9: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      52 |         return readl(udphy->base_tca + reg);
+         |                ^
+>> drivers/phy/xilinx/phy-amd-versal2-usbdp.c:57:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      57 |         writel(val, udphy->base_tca + reg);
+         |         ^
+   3 errors generated.
+
+
+vim +/readl +47 drivers/phy/xilinx/phy-amd-versal2-usbdp.c
+
+    44	
+    45	static inline u32 amd_versal2_udphy_crpara_read(struct amd_versal2_udphy *udphy, u32 reg)
+    46	{
+  > 47		return readl(udphy->base_crpara + reg);
+    48	}
+    49	
+    50	static inline u32 amd_versal2_udphy_tca_read(struct amd_versal2_udphy *udphy, u32 reg)
+    51	{
+    52		return readl(udphy->base_tca + reg);
+    53	}
+    54	
+    55	static inline void amd_versal2_udphy_tca_write(struct amd_versal2_udphy *udphy, u32 reg, u32 val)
+    56	{
+  > 57		writel(val, udphy->base_tca + reg);
+    58	}
+    59	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
