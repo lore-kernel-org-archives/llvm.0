@@ -1,171 +1,704 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A1637472D;
-	Fri, 15 May 2026 10:35:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC7447A0B8;
+	Fri, 15 May 2026 11:20:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778841332; cv=none; b=djTBa/9asXtHNXfE+MC43sohXAigDsNtWMkOUqPPx4CWVyUXic5hSjI5TIfS3XsURQkpZcNVtT2Y1UOZQdFd1f6VQJoBEQt2XwKV4/iZ9Pn4H9YozWzid9O/SGO5F38s16Dr0X4iKfyj7bdNQqiqe0wFKaPsJwZHA8WTfbL4B9M=
+	t=1778844055; cv=none; b=Sgwk8vllwcvOKXRhhvYP/l98a0pNtFxNVCQYU6Pt+kDY0JQLqLaRVwddusB5N1x4xbeXkdwCqK+aG/eAvUH0Gsb8SY9JmwGWausuXxyTxYAfo81GnUVew2ehvL/oR+wyGx0Dwrk1fEFC137gTvE2XxgAb+l2XDLRUvUtOpMJ7pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778841332; c=relaxed/simple;
-	bh=xHT782td4/pqewKHklx9mvORJH5xH6wMrIYOffPUzP0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hHaWTmfj0TAo4Gdr/76aKZW8mNWiw6g2GyzCtNnC2yGBnuz4Iswa5naXSTWH0B4HyUjroi+zrts/+XBRp5DbLrH54wmxuZkyXsWZl6Vu3DNe3K3RzGeOZkqoPOXnSNZZJW2+GwkMNmvW/ESlK3r9iYDxdueflJrkyAwFbsU0dNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B89axjR2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778844055; c=relaxed/simple;
+	bh=PdBfLex/p6GR85RdIX0Kk1v4Aps5pHKRkxVT0I00xsc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=t+OdVFAaTBmbgmOHGPdVEJsuDO07gT06QT9xRMUk96vq6SjnTooGbOaJ1yNOhxed/nEyKPlqlhS2PvrWZvCACmCpnmIufsiUj5A4y8UUPi1qnVpdFbkkSaHtLuuWNR+eKHI+3UXEXIZYxeyEzDqgAPxGLgKG22S6RgiW6GA7Qu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hdmb6zRW; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B89axjR2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2948AC2BCB0;
-	Fri, 15 May 2026 10:35:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778841331;
-	bh=xHT782td4/pqewKHklx9mvORJH5xH6wMrIYOffPUzP0=;
-	h=From:Date:Subject:To:Cc:From;
-	b=B89axjR2weA87MJnC1wmVawwfwIuJ4aLnuDMf8Ks0YLp3LAnAOcmXuE2NImN0ogDx
-	 6CokhxxD31U7vOHOp30HkLILoefD5ge7528YpHnd8R3Qroey67aggOWvVWi0Crsk0L
-	 GfcOicAYIGMUoaSLEe+hcAVC0NlG6ybV+d/lBl12OlfuzIBrRqPODEFuZVFgqiCQtu
-	 dfNSvaPPYTuq4qMosYquIwpJrKw+uzd2AIjaf/uFyTFeY0pX3gIzLRw7+GiBh1v4Rr
-	 +fFictysr4XQDfLCLmtFmkkiObLPD7H8F+h0RiC6bM8ntoTHrWKulAdEZke/icHivU
-	 jy83f9o3RD8kA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 15 May 2026 19:35:18 +0900
-Subject: [PATCH] Disable -Wattribute-alias for clang-23 and newer
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hdmb6zRW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778844052; x=1810380052;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PdBfLex/p6GR85RdIX0Kk1v4Aps5pHKRkxVT0I00xsc=;
+  b=Hdmb6zRWNv73NsNBwlOYjzs53ADWyziaZtDkqCBzCqXeSo7kmGOz2bOA
+   SX0SyPSbvU5b5zTrcBEd+xYcZQR6hvhD/4ij83RhvkPvXvJcJ81dvlRtJ
+   9s8qfftw3ZQrkvn4uABB6wTYVWm23Z7GJL4J0iSVCt0WEFEMtDnra87pM
+   eUsyLBZ+cnRFaNNSukqNgAz1p/xuR44W5S/+jJfOU9UDTf3WfTRnK5sRe
+   ImUqu4KxaMSRRWa3RwXwkVi8+FfDkoS+o7rWe6ZaJkxWlQZkaUJ+g2RTG
+   Tha31C9EuCMwWsaQUfrPfQNjEsrRWzwaWHYmhRVAyoTnufIEHm4KRwY1y
+   w==;
+X-CSE-ConnectionGUID: nJ3m0n/BSsyUt9TLHGfEow==
+X-CSE-MsgGUID: hBY0s4DUQ6CjqznwK5WSyw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11786"; a="97372169"
+X-IronPort-AV: E=Sophos;i="6.23,236,1770624000"; 
+   d="scan'208";a="97372169"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 04:20:51 -0700
+X-CSE-ConnectionGUID: ey/6TkJGS3iAzW1T7RhAsw==
+X-CSE-MsgGUID: jEatSIenR8ekw3FrScC/2w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,236,1770624000"; 
+   d="scan'208";a="237808057"
+Received: from lkp-server02.sh.intel.com (HELO 7a33ad3e7d27) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 15 May 2026 04:20:49 -0700
+Received: from kbuild by 7a33ad3e7d27 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wNqaz-000000001Rg-2Tf6;
+	Fri, 15 May 2026 11:20:45 +0000
+Date: Fri, 15 May 2026 19:20:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Dumazet <edumazet@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+ "Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen"?= <toke@toke.dk>
+Subject: [net-next:main 114/116]
+ drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is
+ negative
+Message-ID: <202605151942.zKz99b9W-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260515-syscall-disable-attribute-alias-for-clang-v1-1-9a9d95d41df6@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNQQ7CMAwEv1L5jKWkairgK4iDk7pgZLUoTitQ1
- b8T4LZz2JkNjLOwwbnZIPMqJvNUwR8aSHeabowyVIbWtb0LvkN7WyJVHMQoKiOVkiUupS4VMhz
- njEnrE4P3XYjx5Nyxh+p7Zh7l9Wtdrn+2JT44lW8A9v0DVn7HnY0AAAA=
-X-Change-ID: 20260514-syscall-disable-attribute-alias-for-clang-51145bb90086
-To: Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
- Justin Stitt <justinstitt@google.com>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5348; i=nathan@kernel.org;
- h=from:subject:message-id; bh=xHT782td4/pqewKHklx9mvORJH5xH6wMrIYOffPUzP0=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFls3z4se8c2s25jzbRshcI5P/atWNhSYBF9ZNcpHh4mu
- fCnXvnyHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiqaGMDKeUKxR2MbpsDGKP
- YErz31G0WM/kZNJqUbfdIpzN6QEfTzP8L5uZIW1THuDGI3hdY8nU5NbXDbsCdlVIWXKUZpYfXav
- LCAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
 
-Clang recently added support for -Wattribute-alias [1], which results in
-the same warnings that necessitated commit bee20031772a ("disable
--Wattribute-alias warning for SYSCALL_DEFINEx()") for GCC.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git main
+head:   822d4a8e390a08ccfaf2abb347ae670b230b196f
+commit: f0de88303d5e7e04a1224bc7a00512b5a1c4fe7a [114/116] net: make is_skb_wmem() available to modules
+config: sparc64-randconfig-001-20260515 (https://download.01.org/0day-ci/archive/20260515/202605151942.zKz99b9W-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260515/202605151942.zKz99b9W-lkp@intel.com/reproduce)
 
-  kernel/time/itimer.c:325:1: error: alias and aliasee have different types 'long (unsigned int)' and 'long (typeof (__builtin_choose_expr((__builtin_types_compatible_p(typeof ((unsigned int)0), typeof (0LL)) || __builtin_types_compatible_p(typeof ((unsigned int)0), typeof (0ULL))), 0LL, 0L)))' (aka 'long (long)') [-Werror,-Wattribute-alias]
-    325 | SYSCALL_DEFINE1(alarm, unsigned int, seconds)
-        | ^
-  include/linux/syscalls.h:225:36: note: expanded from macro 'SYSCALL_DEFINE1'
-    225 | #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, __VA_ARGS__)
-        |                                    ^
-  include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
-    236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-        |         ^
-  include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DEFINEx'
-    251 |                 __attribute__((alias(__stringify(__se_sys##name))));    \
-        |                                ^
-  kernel/time/itimer.c:325:1: note: aliasee is declared here
-  include/linux/syscalls.h:225:36: note: expanded from macro 'SYSCALL_DEFINE1'
-    225 | #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, __VA_ARGS__)
-        |                                    ^
-  include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
-    236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-        |         ^
-  include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCALL_DEFINEx'
-    255 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))  \
-        |                         ^
-  <scratch space>:16:1: note: expanded from here
-     16 | __se_sys_alarm
-        | ^
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605151942.zKz99b9W-lkp@intel.com/
 
-Disable the warnings in the same way for clang-23 and newer.
+All warnings (new ones prefixed by >>):
 
-Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2163
-Link: https://github.com/llvm/llvm-project/commit/40da6920a0d71d49dfa2392b09153600b0759f5e [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-I plan to take this via my clang-fixes tree for 7.1.
----
- arch/riscv/include/asm/syscall_wrapper.h | 2 ++
- include/linux/compat.h                   | 2 ++
- include/linux/compiler-clang.h           | 6 ++++++
- include/linux/syscalls.h                 | 2 ++
- 4 files changed, 12 insertions(+)
+   In file included from drivers/net/ethernet/sfc/falcon/falcon.c:18:
+   In file included from drivers/net/ethernet/sfc/falcon/net_driver.h:29:
+   In file included from include/net/busy_poll.h:18:
+   In file included from include/net/ip.h:29:
+   In file included from include/net/inet_sock.h:23:
+   include/net/sock.h:1861:56: error: use of undeclared identifier '__sock_wfree'; did you mean 'sock_wfree'?
+    1861 |                (IS_ENABLED(CONFIG_INET) && skb->destructor == __sock_wfree) ||
+         |                                                               ^~~~~~~~~~~~
+         |                                                               sock_wfree
+   include/net/sock.h:1853:6: note: 'sock_wfree' declared here
+    1853 | void sock_wfree(struct sk_buff *skb);
+         |      ^
+   include/net/sock.h:1862:56: error: use of undeclared identifier 'tcp_wfree'; did you mean 'sock_wfree'?
+    1862 |                (IS_ENABLED(CONFIG_INET) && skb->destructor == tcp_wfree);
+         |                                                               ^~~~~~~~~
+         |                                                               sock_wfree
+   include/net/sock.h:1853:6: note: 'sock_wfree' declared here
+    1853 | void sock_wfree(struct sk_buff *skb);
+         |      ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/falcon/bitfield.h:246:21: note: expanded from macro 'EF4_INSERT_NATIVE64'
+     246 |           (((u64) (value)) >> (min - low))))
+         |                            ^
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:131:31: note: expanded from macro '__swab64'
+     131 |         (__u64)(__builtin_constant_p(x) ?       \
+         |                                      ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/falcon/bitfield.h:252:21: note: expanded from macro 'EF4_INSERT_NATIVE32'
+     252 |           (((u32) (value)) >> (min - low))))
+         |                            ^
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:131:31: note: expanded from macro '__swab64'
+     131 |         (__u64)(__builtin_constant_p(x) ?       \
+         |                                      ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:25:12: note: expanded from macro '___constant_swab64'
+      25 |         (((__u64)(x) & (__u64)0x00000000000000ffULL) << 56) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:25:12: note: expanded from macro '___constant_swab64'
+      25 |         (((__u64)(x) & (__u64)0x00000000000000ffULL) << 56) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:26:12: note: expanded from macro '___constant_swab64'
+      26 |         (((__u64)(x) & (__u64)0x000000000000ff00ULL) << 40) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:26:12: note: expanded from macro '___constant_swab64'
+      26 |         (((__u64)(x) & (__u64)0x000000000000ff00ULL) << 40) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:27:12: note: expanded from macro '___constant_swab64'
+      27 |         (((__u64)(x) & (__u64)0x0000000000ff0000ULL) << 24) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:27:12: note: expanded from macro '___constant_swab64'
+      27 |         (((__u64)(x) & (__u64)0x0000000000ff0000ULL) << 24) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:28:12: note: expanded from macro '___constant_swab64'
+      28 |         (((__u64)(x) & (__u64)0x00000000ff000000ULL) <<  8) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:28:12: note: expanded from macro '___constant_swab64'
+      28 |         (((__u64)(x) & (__u64)0x00000000ff000000ULL) <<  8) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:29:12: note: expanded from macro '___constant_swab64'
+      29 |         (((__u64)(x) & (__u64)0x000000ff00000000ULL) >>  8) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:29:12: note: expanded from macro '___constant_swab64'
+      29 |         (((__u64)(x) & (__u64)0x000000ff00000000ULL) >>  8) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:30:12: note: expanded from macro '___constant_swab64'
+      30 |         (((__u64)(x) & (__u64)0x0000ff0000000000ULL) >> 24) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:30:12: note: expanded from macro '___constant_swab64'
+      30 |         (((__u64)(x) & (__u64)0x0000ff0000000000ULL) >> 24) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:31:12: note: expanded from macro '___constant_swab64'
+      31 |         (((__u64)(x) & (__u64)0x00ff000000000000ULL) >> 40) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:31:12: note: expanded from macro '___constant_swab64'
+      31 |         (((__u64)(x) & (__u64)0x00ff000000000000ULL) >> 40) |   \
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:32:12: note: expanded from macro '___constant_swab64'
+      32 |         (((__u64)(x) & (__u64)0xff00000000000000ULL) >> 56)))
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:32:12: note: expanded from macro '___constant_swab64'
+      32 |         (((__u64)(x) & (__u64)0xff00000000000000ULL) >> 56)))
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/falcon/bitfield.h:246:21: note: expanded from macro 'EF4_INSERT_NATIVE64'
+     246 |           (((u64) (value)) >> (min - low))))
+         |                            ^
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:133:12: note: expanded from macro '__swab64'
+     133 |         __fswab64(x))
+         |                   ^
+>> drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:453:10: note: expanded from macro 'EF4_SET_OWORD64'
+     453 |                            & ~EF4_INPLACE_MASK64(0,  63, low, high))    \
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/falcon/bitfield.h:252:21: note: expanded from macro 'EF4_INSERT_NATIVE32'
+     252 |           (((u32) (value)) >> (min - low))))
+         |                            ^
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:133:12: note: expanded from macro '__swab64'
+     133 |         __fswab64(x))
+         |                   ^
+   drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:454:8: note: expanded from macro 'EF4_SET_OWORD64'
+     454 |                           | EF4_INSERT64(0,  63, low, high, value));    \
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/falcon/bitfield.h:246:21: note: expanded from macro 'EF4_INSERT_NATIVE64'
+     246 |           (((u64) (value)) >> (min - low))))
+         |                            ^
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:131:31: note: expanded from macro '__swab64'
+     131 |         (__u64)(__builtin_constant_p(x) ?       \
+         |                                      ^
+   drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:454:8: note: expanded from macro 'EF4_SET_OWORD64'
+     454 |                           | EF4_INSERT64(0,  63, low, high, value));    \
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/falcon/bitfield.h:252:21: note: expanded from macro 'EF4_INSERT_NATIVE32'
+     252 |           (((u32) (value)) >> (min - low))))
+         |                            ^
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:131:31: note: expanded from macro '__swab64'
+     131 |         (__u64)(__builtin_constant_p(x) ?       \
+         |                                      ^
+   drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+         |                             ^
+   drivers/net/ethernet/sfc/falcon/bitfield.h:497:2: note: expanded from macro 'EF4_SET_OWORD_FIELD64'
+     497 |         EF4_SET_OWORD64(oword, EF4_LOW_BIT(field),                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     498 |                          EF4_HIGH_BIT(field), value)
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:454:8: note: expanded from macro 'EF4_SET_OWORD64'
+     454 |                           | EF4_INSERT64(0,  63, low, high, value));    \
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/uapi/linux/byteorder/big_endian.h:32:53: note: expanded from macro '__cpu_to_le64'
+      32 | #define __cpu_to_le64(x) ((__force __le64)__swab64((x)))
+         |                                           ~~~~~~~~~~^~~
+   include/uapi/linux/swab.h:132:21: note: expanded from macro '__swab64'
+     132 |         ___constant_swab64(x) :                 \
+         |         ~~~~~~~~~~~~~~~~~~~^~
+   include/uapi/linux/swab.h:25:12: note: expanded from macro '___constant_swab64'
+      25 |         (((__u64)(x) & (__u64)0x00000000000000ffULL) << 56) |   \
+         |                   ^
+   drivers/net/ethernet/sfc/falcon/falcon.c:332:2: warning: shift count is negative [-Wshift-count-negative]
+     332 |         EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/falcon/bitfield.h:519:29: note: expanded from macro 'EF4_SET_OWORD_FIELD'
+     519 | #define EF4_SET_OWORD_FIELD EF4_SET_OWORD_FIELD64
+..
 
-diff --git a/arch/riscv/include/asm/syscall_wrapper.h b/arch/riscv/include/asm/syscall_wrapper.h
-index ac80216549ff..366a5354caa5 100644
---- a/arch/riscv/include/asm/syscall_wrapper.h
-+++ b/arch/riscv/include/asm/syscall_wrapper.h
-@@ -32,6 +32,8 @@ asmlinkage long __riscv_sys_ni_syscall(const struct pt_regs *);
- 	__diag_push();									\
- 	__diag_ignore(GCC, 8, "-Wattribute-alias",					\
- 			"Type aliasing is used to sanitize syscall arguments");		\
-+	__diag_ignore(clang, 23, "-Wattribute-alias",					\
-+			"Type aliasing is used to sanitize syscall arguments");		\
- 	static long __se_##prefix##name(ulong, ulong, ulong, ulong, ulong, ulong, 	\
- 					ulong)						\
- 			__attribute__((alias(__stringify(___se_##prefix##name))));	\
-diff --git a/include/linux/compat.h b/include/linux/compat.h
-index 56cebaff0c91..a1ce6d559db9 100644
---- a/include/linux/compat.h
-+++ b/include/linux/compat.h
-@@ -72,6 +72,8 @@
- 	__diag_push();								\
- 	__diag_ignore(GCC, 8, "-Wattribute-alias",				\
- 		      "Type aliasing is used to sanitize syscall arguments");\
-+	__diag_ignore(clang, 23, "-Wattribute-alias",				\
-+		      "Type aliasing is used to sanitize syscall arguments");\
- 	asmlinkage long compat_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))	\
- 		__attribute__((alias(__stringify(__se_compat_sys##name))));	\
- 	ALLOW_ERROR_INJECTION(compat_sys##name, ERRNO);				\
-diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-index e1123dd28486..527e4e136020 100644
---- a/include/linux/compiler-clang.h
-+++ b/include/linux/compiler-clang.h
-@@ -131,6 +131,12 @@
- #define __diag_str(s)		__diag_str1(s)
- #define __diag(s)		_Pragma(__diag_str(clang diagnostic s))
- 
-+#if CONFIG_CLANG_VERSION >= 230000
-+#define __diag_clang_23(s)	__diag(s)
-+#else
-+#define __diag_clang_23(s)
-+#endif
-+
- #define __diag_clang_13(s)	__diag(s)
- 
- #define __diag_ignore_all(option, comment) \
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index f5639d5ac331..97e3411b49d2 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -247,6 +247,8 @@ static inline int is_syscall_trace_event(struct trace_event_call *tp_event)
- 	__diag_push();							\
- 	__diag_ignore(GCC, 8, "-Wattribute-alias",			\
- 		      "Type aliasing is used to sanitize syscall arguments");\
-+	__diag_ignore(clang, 23, "-Wattribute-alias",			\
-+		      "Type aliasing is used to sanitize syscall arguments");\
- 	asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))	\
- 		__attribute__((alias(__stringify(__se_sys##name))));	\
- 	ALLOW_ERROR_INJECTION(sys##name, ERRNO);			\
 
----
-base-commit: 5d6919055dec134de3c40167a490f33c74c12581
-change-id: 20260514-syscall-disable-attribute-alias-for-clang-51145bb90086
+vim +332 drivers/net/ethernet/sfc/falcon/falcon.c
 
-Best regards,
---  
-Cheers,
-Nathan
+d4f2cecce138c3 drivers/net/ethernet/sfc/falcon.c        Ben Hutchings 2012-07-04  303  
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  304  static const unsigned int
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  305  /* "Large" EEPROM device: Atmel AT25640 or similar
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  306   * 8 KB, 16-bit address, 32 B write block */
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  307  large_eeprom_type = ((13 << SPI_DEV_TYPE_SIZE_LBN)
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  308  		     | (2 << SPI_DEV_TYPE_ADDR_LEN_LBN)
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  309  		     | (5 << SPI_DEV_TYPE_BLOCK_SIZE_LBN)),
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  310  /* Default flash device: Atmel AT25F1024
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  311   * 128 KB, 24-bit address, 32 KB erase block, 256 B write block */
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  312  default_flash_type = ((17 << SPI_DEV_TYPE_SIZE_LBN)
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  313  		      | (3 << SPI_DEV_TYPE_ADDR_LEN_LBN)
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  314  		      | (0x52 << SPI_DEV_TYPE_ERASE_CMD_LBN)
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  315  		      | (15 << SPI_DEV_TYPE_ERASE_SIZE_LBN)
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  316  		      | (8 << SPI_DEV_TYPE_BLOCK_SIZE_LBN));
+2f7f5730951322 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-12-12  317  
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  318  /**************************************************************************
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  319   *
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  320   * I2C bus - this is a bit-bashing interface using GPIO pins
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  321   * Note that it uses the output enables to tristate the outputs
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  322   * SDA is the data pin and SCL is the clock
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  323   *
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  324   **************************************************************************
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  325   */
+37b5a60335305e drivers/net/sfc/falcon.c                 Ben Hutchings 2008-05-30  326  static void falcon_setsda(void *data, int state)
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  327  {
+5a6681e22c1409 drivers/net/ethernet/sfc/falcon/falcon.c Edward Cree   2016-11-28  328  	struct ef4_nic *efx = (struct ef4_nic *)data;
+5a6681e22c1409 drivers/net/ethernet/sfc/falcon/falcon.c Edward Cree   2016-11-28  329  	ef4_oword_t reg;
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  330  
+5a6681e22c1409 drivers/net/ethernet/sfc/falcon/falcon.c Edward Cree   2016-11-28  331  	ef4_reado(efx, &reg, FR_AB_GPIO_CTL);
+5a6681e22c1409 drivers/net/ethernet/sfc/falcon/falcon.c Edward Cree   2016-11-28 @332  	EF4_SET_OWORD_FIELD(reg, FRF_AB_GPIO3_OEN, !state);
+5a6681e22c1409 drivers/net/ethernet/sfc/falcon/falcon.c Edward Cree   2016-11-28  333  	ef4_writeo(efx, &reg, FR_AB_GPIO_CTL);
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  334  }
+8ceee660aacb29 drivers/net/sfc/falcon.c                 Ben Hutchings 2008-04-27  335  
 
+:::::: The code at line 332 was first introduced by commit
+:::::: 5a6681e22c1409089132085811857d6da828761b sfc: separate out SFC4000 ("Falcon") support into new sfc-falcon driver
+
+:::::: TO: Edward Cree <ecree@solarflare.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
