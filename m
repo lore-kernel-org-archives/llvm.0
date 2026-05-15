@@ -1,62 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29590401A23;
-	Fri, 15 May 2026 08:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59B73ABDBE;
+	Fri, 15 May 2026 09:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778834403; cv=none; b=RjNPLUcXwMksaRTTaNTfyDcVhzdWxymSG+xGO9MYCKihavTys5CE0Ebvf4Zp8grPCbMz+cCKFT+gVxsfUhgoOF+iVXisoNmhlNNslUgZxMDPDZxfvYeqJk2BhLeru+NVTTykyR/hdoVNANfmGm2dPfL+RfGlYWQwRgw3HFSE7cg=
+	t=1778837224; cv=none; b=S3l6+hdw9e92ufRdh7UNUS/tFUczhQvexAdQ+f8XoqpW5SweW0QjfdKtNG8etqLqkMM8qGBo8qi6dVMLUznPVn3+T42Abh4D/v01e5XJgqV3iyEYLS63q8mB10u1CqHub2LWqCHRoSx12jnxTpsHYUDasRgC5uBXuSa9stpCntg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778834403; c=relaxed/simple;
-	bh=sGKXbIZKgyuInS3d5J3QOxp1VpByw84H18wr0ATeCXk=;
+	s=arc-20240116; t=1778837224; c=relaxed/simple;
+	bh=3CPAkx9yIEtqzPlXREwAuQyeXg/nb9inT4H1AV0ImEM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MfWWQRM4KSoiigOGiwlGLzCdBVVNjQasfL/FUr0MGgrqQXqhz2uE9lXydr5KhXsof9ah4J6fMvQVdc4LtdJdqb7h7AKOB4sjev3kHByQJdt2XPQuZ/ZrA6mWm9ZyXMIs+OLlzoli2ZZgthBbo3c2ZQnPPfACdUJ0O8txzpOqx+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mrILbTk+; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sh2fmdNbi5hkXktut83BIgyuoc6D/NCc/9fo8djRCMcIlax5WRTppiV2dOhdsktjoBj3hsgmcILI7s5JTLHmb/7cLbmvlMvfMxaHfFePLfD5L1RETvaJVZ8z5W+Mj5mzsR0Hcu+I8Q80iE9dWn1zTSACbwQL4OVmW2Ql0ntRkG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k4a0s5Gl; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mrILbTk+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k4a0s5Gl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778834401; x=1810370401;
+  t=1778837222; x=1810373222;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=sGKXbIZKgyuInS3d5J3QOxp1VpByw84H18wr0ATeCXk=;
-  b=mrILbTk+8Y81KeWhb4b+rT9qlSp9hp1cguxciNpyhVebMjAxGoun8IaU
-   m/WhrIJwaX3pnGMVgVp4cOJTteNX5YWzV8TnU/43FMtMyMxAUkM35mahY
-   oqMMfRRxlL+BOuc4l+0C7L5+lJmMRb42I3FLldyHpxZYofQ0azJtNP0dg
-   Fa8FJWRqB3Ej0k6aFKY1q6pwm3YyWRzoOVK7Q8pbTph7uR8zmraqalW9c
-   kh+pB8O1IO140ZYhIdY73bA8pTdrDq9ZU6gf5Ri74vWCpeyYGAGhTd+5B
-   OaO6gH8KJlF06atXR4XR++NABSalR58iyBYEIG8icydAMSnp2vJ4N1fWc
+  bh=3CPAkx9yIEtqzPlXREwAuQyeXg/nb9inT4H1AV0ImEM=;
+  b=k4a0s5GlEOtXAPxO1+NNUIRgEwVG49eHNM/pFzcwddJIj393E6vU5nxT
+   K89SN/07QsTF5QSxqL2eMDYowczcRVztj2yfWOrXHW75XiNs4WHWebLXx
+   cL5RtwvIVmQBJifAHj9o+39wOXqH0zhNa/OIWitrDQiq4zu0Hkj2eWJzb
+   hraKQZjQz9o2A8vVYgSmNm/BAH2Q6wlWYTydJ8+BLBgJ87z9y9qHVOmXD
+   SQ61WPPyA6t2gwrverb4v4/uwzfRbME4w7l4oW+pOEgKcvupzQmeZXJWs
+   tWPV6AaxnY3qqYZS55DBa01rk31C7WTraQpUMFZiBGXfqPD/9wppF5a4B
    A==;
-X-CSE-ConnectionGUID: /jHRjQawRhCkFpDPwDreAw==
-X-CSE-MsgGUID: 7ECWAAwXSXWlabFycrsDHA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11786"; a="83401752"
+X-CSE-ConnectionGUID: GBczyDsPTBujA8TRTeTL3Q==
+X-CSE-MsgGUID: fUj1+MKoSpGmS+VlyyiymA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11786"; a="105248643"
 X-IronPort-AV: E=Sophos;i="6.23,236,1770624000"; 
-   d="scan'208";a="83401752"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 01:40:01 -0700
-X-CSE-ConnectionGUID: ftFTCVoxQJ+g6bBWZv2KAQ==
-X-CSE-MsgGUID: mGuxFZz/RsSrGOTFyA+qLg==
+   d="scan'208";a="105248643"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 02:27:01 -0700
+X-CSE-ConnectionGUID: ehTBC+14Rc6nlGWd7Enpcg==
+X-CSE-MsgGUID: rdDzyRzqT9eg9E+FgzAdIw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,236,1770624000"; 
-   d="scan'208";a="276725515"
-Received: from lkp-server02.sh.intel.com (HELO 7a33ad3e7d27) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 15 May 2026 01:39:17 -0700
-Received: from kbuild by 7a33ad3e7d27 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wNo4f-000000001C9-3NpQ;
-	Fri, 15 May 2026 08:39:13 +0000
-Date: Fri, 15 May 2026 16:32:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sicong Huang <congei42@163.com>, fei1.li@intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	acrn-dev@lists.projectacrn.org, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, Sicong Huang <congei42@163.com>
-Subject: Re: [PATCH v1] virt: acrn: Fix irqfd use-after-free during async
- shutdown
-Message-ID: <202605151636.lR13SqEN-lkp@intel.com>
-References: <20260511135737.2285411-1-congei42@163.com>
+   d="scan'208";a="232249466"
+Received: from vpanait-mobl.ger.corp.intel.com (HELO localhost) ([10.245.245.33])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 02:26:58 -0700
+Date: Fri, 15 May 2026 12:26:55 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Michal Piekos <michal.piekos@mmpsystems.pl>
+Cc: Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai <wens@kernel.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>, linux-iio@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] iio: adc: sun20i-gpadc: support non-contiguous
+ channel lookups
+Message-ID: <agbm3-GUqgzecUlQ@ashevche-desk.local>
+References: <20260514-fix-sunxi-gpadc-sparse-channels-v2-1-d4a66b70c7a7@mmpsystems.pl>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,46 +69,26 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260511135737.2285411-1-congei42@163.com>
+In-Reply-To: <20260514-fix-sunxi-gpadc-sparse-channels-v2-1-d4a66b70c7a7@mmpsystems.pl>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Sicong,
+On Thu, May 14, 2026 at 05:19:34AM +0200, Michal Piekos wrote:
+> Using consumer driver like iio-hwmon which resolve channels thorugh
+> io-channels phandles will fail for sparse channels because IIO core by
+> default threats phandle argument as index into channel array.
+>         eg. <&gpadc 1> will fail if there is only channel@1 specified
+> 
+> Add .fwnode_xlate() which maps DT phandle to the registered channel
+> whose chan->channel matches the hardware channel number. It allows
+> sparse channel maps to be consumed by drivers like iio-hwmon.
+> 
+> Tested on Radxa Cubie A5E.
 
-kernel test robot noticed the following build warnings:
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v7.1-rc3 next-20260508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sicong-Huang/virt-acrn-Fix-irqfd-use-after-free-during-async-shutdown/20260515-063914
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260511135737.2285411-1-congei42%40163.com
-patch subject: [PATCH v1] virt: acrn: Fix irqfd use-after-free during async shutdown
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260515/202605151636.lR13SqEN-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260515/202605151636.lR13SqEN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605151636.lR13SqEN-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/virt/acrn/irqfd.c:232:28: warning: unused variable 'next' [-Wunused-variable]
-     232 |         struct hsm_irqfd *irqfd, *next;
-         |                                   ^~~~
-   1 warning generated.
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-vim +/next +232 drivers/virt/acrn/irqfd.c
-
-aa3b483ff1d71c5 Shuo Liu 2021-02-07  229  
-aa3b483ff1d71c5 Shuo Liu 2021-02-07  230  void acrn_irqfd_deinit(struct acrn_vm *vm)
-aa3b483ff1d71c5 Shuo Liu 2021-02-07  231  {
-aa3b483ff1d71c5 Shuo Liu 2021-02-07 @232  	struct hsm_irqfd *irqfd, *next;
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
