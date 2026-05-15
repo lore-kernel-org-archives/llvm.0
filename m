@@ -1,260 +1,116 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA5C3859FA
-	for <llvm@lists.linux.dev>; Fri, 15 May 2026 13:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778851499; cv=pass; b=OVytwgbQGinHfSL0uULNiRkkKP2694D4yUqS3r5pYC8awyzxNot2KCKSwhvxqEce8+H7GHiMMK1hoQ+EDtUMs52p6WUmOrQAGzSxMqQI5JECHXgOne4LhQQm+fLFcalrnaAYJ0v/Ad5hpKaXgZbBqyNme0cPFmJ4p4rvdw1jl6o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778851499; c=relaxed/simple;
-	bh=9S/wyijREW7prxTs0cpddfr7+xTXmq79rJi7zvdyiio=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BmqA7OcqdGBEO1NMbK6k2n9N4kFD7qJNgH3AH1eefrtFDSUQ6KZV/iGZ+Ar6Ty19talOnbB2DBo1m95QwMQlqaN6qwH4a/gxaLN/H75BlPnlbKaOE1pKCFJY/BtjQI/LcfTnF0kMHxVR+cpSf5/kPxevXINXrKS49ghAgB9fkQo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MNUJl7OI; arc=pass smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8CA302756;
+	Fri, 15 May 2026 14:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778854866; cv=none; b=smWc6w0WZayQYC0BB2nNO9xyllmehzT+5Fn4me0s6vs4Pg9JNZiWdbgFV3lcRAZ+BcrhHOnxliH5YeM1gtN+fb08UTnJGGTVlTRNCaMjvrMizTwyyT7ta1bhwJc6ttgXTJnW52FTt/AtXib5sv/UPZKLGpzGaheLgdP0OiL1QYY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778854866; c=relaxed/simple;
+	bh=RtFQMBf9gooyLPXk1b0UEBsiW3PvJm+kyuMUho6YtSU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=RTLsABjFUTj542EGi2DxTscsgLO6ndOah28ck7TG1gxxYVJYj/606Vq5qHbU2R0MwQXeOJA3V1htnZorfr4gJoiL59s6AdNOy5HURM+1c+ZSPHF2RiWmVxf7jD+W9pYTsjODEoUcJ0CVRjWSDcH088YDp9Z852QHPd2ZhHK9JDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e3Q/3zAv; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MNUJl7OI"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-12c19d23b19so15209766c88.0
-        for <llvm@lists.linux.dev>; Fri, 15 May 2026 06:24:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778851494; cv=none;
-        d=google.com; s=arc-20240605;
-        b=OQj+OJ4FhhiWn+5L01tlgdvP7x2rVbiqOua91MHvgNI9tXuW+RpSHUKOIRmG3tcNZb
-         MVgxWeKa7NJKeybdHmkDqlttDcJ3mquJWQqTGIKOdn5TwBYHW6YeJ33KAi+0EOORUE1m
-         6ANt0vqaSLECpWS2cL8AubiiGLR3OpoG1I1L6m+Sn1JKH3zlnZnRZ4EvsM7HCVdhwYoo
-         kTfnrqq7o4Ax4jxNdSVDGhEdl/rQZJpFIJ0imZVe0U5PnQZXSHUxwAEryyEBEZByn4xF
-         NRy9zFPktiTjs7wkVfcYtjQ0xF+mliMicKq4TVe8KByUQzA21uJpuI22IDNZeWtQR775
-         AVqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=kJkIJ9MSSyAx7AMR5IamH1iN68B4UTFJP9CxVTr4bw8=;
-        fh=5b5s6AZrllokM3tvS7HGwVQPUi+RmXV9QTeYiTeJeag=;
-        b=QLgKe31fvSPhKhA2zOJUz4pAUPSPxUfR+liATjqQbmHgoqBkSRJiP1uVHaqiD4w6wB
-         Ug/j7hrQL9rYCEVMfiJFhA2Z2ayWj5Y0BNGjhF2tATqPKmTCq1Cngg/CuJ0RKwXQU/qz
-         +dvw8eoJAPr3a+1pjbMvupWITRHFXavkyywDaDMtF6q1LR1J/msLq1hHkeAJvKhboG4X
-         SsZf/YH1ywUNcgogMKc4TtC9lI/vrV/a7T76vT3mVlqbNBwtSenuGjGZ1HGNgJYJ9WH5
-         jbRo8RrM1L+FEISt2PbuXA/jZ2okgULQ0qKvO5udoVm143/T44fv/rrCB2GEoW4LI0H3
-         9gIQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778851494; x=1779456294; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kJkIJ9MSSyAx7AMR5IamH1iN68B4UTFJP9CxVTr4bw8=;
-        b=MNUJl7OIvNkmPUHoKPowTdN1gHfkxvqb0z10kO5iE0dbMRFD4Gn6ngj/hfJt6/aTjk
-         9hKVUK49zdtWOwOu9ZlWS8T1rXGZX7OipfRLd4t5kxEa6WUXFhidImPP4+pbWNGDxtaX
-         42aHw/tH7I8i/oBd2ELDyW8g5Fy3tcj01OYfggnmXWf56w2m1VcHYsfjvcmJi1XBDqLz
-         ieNW5/mJKweSuwgLUOAnpFUeiwBEjgDL2FpYgG72Rw/jw9W+xUVFSlFcIsqyB3ycGDdk
-         nrkB4f1rpTl9MhTvMkl8uykTWAHWgIPpNfUNqiCujKgTbXjxNYTh/Lg6IZ8L+DWWBFsC
-         Am0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778851494; x=1779456294;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kJkIJ9MSSyAx7AMR5IamH1iN68B4UTFJP9CxVTr4bw8=;
-        b=XHJ0iMSZmD+t7pO8JCEWE73QqucWi0lhCuMmVq3ceScFnFuVB4VGR658KdLNxsOo6I
-         aNaIu+26iwVuNFGerNUGoM1Tx0AAijbYEi/4jS1quHnZnpSRq7IchCtVGmz2Hf80dr/F
-         jAnHoj7WQ1Z5I61CyW4erTH/sfM5ceAfy5asrsKp4s1NLZJWL9Qj/MO8vCaOJgX+QuZy
-         zMo4SnLe1xHkrFAhizGn6DtjrRXpmFqLDEbb7uToIJnLDFZ/xiwwHrw0Dk5WtrcxG8y6
-         gC0dPRcNMBq3jDhHYag2fgUl1t47xHhpuc7fwIuYtgk3hsNKMoEApi6lpP2ZtQMT26bR
-         2mag==
-X-Forwarded-Encrypted: i=1; AFNElJ+LQG72eKD9EgeS/2UXOZxXiawqMInK2+47UjIqYMm4VbG/jYNC3TDqAOlnXaorjG7VQdT6@lists.linux.dev
-X-Gm-Message-State: AOJu0YwO69JmUljYs+baietSn9/w594SvaSqnUxdqz2nCUYADxnt6rZ4
-	XK2DXKeL9GEw//v7/5ifPD2vzvywTSOxkjDThShNkO8TyM5g3lv0dryrmtX6JfWxff8d5ODCnFU
-	gMzZUmlGLfID398LjvMzFrIEIkZUFLy0l1jONKftk
-X-Gm-Gg: Acq92OFimbhdywg26IgMcrmpTH593Jul7rLijzucKHcJMHh4LteJc5Asp1NXOPxrf9R
-	L20eaIXSd6GOOMm7j4kLvLJ2hLHV3RmLWK2T83rCWpH5Kuaxo+Zq8wvwvbVpRfK7/eVbyKdmhaP
-	uMflchgyw3KNPL0gYdnsfjDcDTvZDiiaZ8pWbqCuX+6xO39jjObmMJhaesrHiKW/kauo91FpFu8
-	vGzJHrZDG02cv8NiX26vsVNOdvJnu91S/e7KrSE1hoMUNxiAXFvmz/sIyaqSpJXy1Ni7YxG0rlK
-	cKA9mMsw70c08lvgOHRkbMv4ppvLwD0OGaBYdADidCwQwjB2
-X-Received: by 2002:a05:7022:62aa:b0:12a:72af:83d2 with SMTP id
- a92af1059eb24-1350441d7ccmr1656610c88.14.1778851492906; Fri, 15 May 2026
- 06:24:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e3Q/3zAv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778854864; x=1810390864;
+  h=date:from:to:cc:subject:message-id;
+  bh=RtFQMBf9gooyLPXk1b0UEBsiW3PvJm+kyuMUho6YtSU=;
+  b=e3Q/3zAv1H6NMn93aN1Werku9n7C2ZAJSDxtKr5typhX41+NsZiByKSM
+   2DTxi8W/GknK7dKCu4rRuKIWNVyIYbeJdnKvKHmpF6mKkuOvGR4P9G5fV
+   8bACu/67V3cIMCLVJ3W39cV9eJ+jhLy63gcQ18RfjZu/GBZO3FFZV7EJU
+   82z58TjD2z0TMwmmk37MEMdipsJZuQw85OQCFB8BgryPSONzd29xbOLz5
+   pVlt3zbGVaMAjZFac98GHmW96CbYXTOdZ+oNy+j82z6y+VNPUKx0ybbEx
+   plWEyD8Zrb1Ts45P7Quu4ti8uBuyCD/RzZFnA+poiS/edU5OLv+aBKVOb
+   w==;
+X-CSE-ConnectionGUID: 6uezqcQhTlmM9QSXvwVftw==
+X-CSE-MsgGUID: clEDghGuSkWSYuPbiF86uQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11787"; a="78948417"
+X-IronPort-AV: E=Sophos;i="6.23,236,1770624000"; 
+   d="scan'208";a="78948417"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 07:21:04 -0700
+X-CSE-ConnectionGUID: NwpZZOZXSDCfaiQ5pLVM3w==
+X-CSE-MsgGUID: pv20zHwlTDuXN8hMl8ACTA==
+X-ExtLoop1: 1
+Received: from lkp-server02.sh.intel.com (HELO 7a33ad3e7d27) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 15 May 2026 07:21:02 -0700
+Received: from kbuild by 7a33ad3e7d27 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wNtPP-000000001pN-2ymh;
+	Fri, 15 May 2026 14:20:59 +0000
+Date: Fri, 15 May 2026 22:12:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rohit Visavalia <rohit.visavalia@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
+ Michal Simek <monstr@monstr.eu>, Vishal Sagar <vishal.sagar@amd.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v6.18_LTS 458/944]
+ drivers/staging/xlnx-mmi-dptx/mmi_dp.h:329:9: error: call to undeclared
+ function 'readl'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202605152253.1FV85nNW-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260511200136.3201646-1-elver@google.com> <560a84ed-7daf-4a78-a314-b867c73bce22@kernel.org>
-In-Reply-To: <560a84ed-7daf-4a78-a314-b867c73bce22@kernel.org>
-From: Marco Elver <elver@google.com>
-Date: Fri, 15 May 2026 15:24:16 +0200
-X-Gm-Features: AVHnY4IK86MdHMyPl5dB4zdZDdnYGN0oaLGQAymJ1xrwo4kBW5Idcq4vVdQ8Oeg
-Message-ID: <CANpmjNNHXvv8ruFGHzvom5V0mwmaoBoBenvt=ZLnEDmEy8dYeA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] slab: support for compiler-assisted type-based
- slab cache partitioning
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>, 
-	David Hildenbrand <david@kernel.org>, David Rientjes <rientjes@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>, 
-	Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Matteo Rizzo <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Suren Baghdasaryan <surenb@google.com>, linux-hardening@vger.kernel.org, 
-	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>, 
-	"Liam R. Howlett" <liam@infradead.org>, Alexander Potapenko <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
-	GONG Ruiqi <gongruiqi1@huawei.com>, Jonathan Corbet <corbet@lwn.net>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 14 May 2026 at 11:01, Vlastimil Babka (SUSE) <vbabka@kernel.org> wrote:
->
-> On 5/11/26 22:00, Marco Elver wrote:
-> > Rework the general infrastructure around RANDOM_KMALLOC_CACHES into more
-> > flexible KMALLOC_PARTITION_CACHES, with the former being a partitioning
-> > mode of the latter.
-> >
-> > Introduce a new mode, KMALLOC_PARTITION_TYPED, which leverages a feature
-> > available in Clang 22 and later, called "allocation tokens" via
-> > __builtin_infer_alloc_token() [1]. Unlike KMALLOC_PARTITION_RANDOM
-> > (formerly RANDOM_KMALLOC_CACHES), this mode deterministically assigns a
-> > slab cache to an allocation of type T, regardless of allocation site.
-> >
-> > The builtin __builtin_infer_alloc_token(<malloc-args>, ...) instructs
-> > the compiler to infer an allocation type from arguments commonly passed
-> > to memory-allocating functions and returns a type-derived token ID. The
-> > implementation passes kmalloc-args to the builtin: the compiler performs
-> > best-effort type inference, and then recognizes common patterns such as
-> > `kmalloc(sizeof(T), ...)`, `kmalloc(sizeof(T) * n, ...)`, but also
-> > `(T *)kmalloc(...)`. Where the compiler fails to infer a type the
-> > fallback token (default: 0) is chosen.
-> >
-> > Note: kmalloc_obj(..) APIs fix the pattern how size and result type are
-> > expressed, and therefore ensures there's not much drift in which
-> > patterns the compiler needs to recognize. Specifically, kmalloc_obj()
-> > and friends expand to `(TYPE *)KMALLOC(__obj_size, GFP)`, which the
-> > compiler recognizes via the cast to TYPE*.
-> >
-> > Clang's default token ID calculation is described as [1]:
-> >
-> >    typehashpointersplit: This mode assigns a token ID based on the hash
-> >    of the allocated type's name, where the top half ID-space is reserved
-> >    for types that contain pointers and the bottom half for types that do
-> >    not contain pointers.
-> >
-> > Separating pointer-containing objects from pointerless objects and data
-> > allocations can help mitigate certain classes of memory corruption
-> > exploits [2]: attackers who gains a buffer overflow on a primitive
-> > buffer cannot use it to directly corrupt pointers or other critical
-> > metadata in an object residing in a different, isolated heap region.
-> >
-> > It is important to note that heap isolation strategies offer a
-> > best-effort approach, and do not provide a 100% security guarantee,
-> > albeit achievable at relatively low performance cost. Note that this
-> > also does not prevent cross-cache attacks: while waiting for future
-> > features like SLAB_VIRTUAL [3] to provide physical page isolation, this
-> > feature should be deployed alongside SHUFFLE_PAGE_ALLOCATOR and
-> > init_on_free=1 to mitigate cross-cache attacks and page-reuse attacks as
-> > much as possible today.
-> >
-> > With all that, my kernel (x86 defconfig) shows me a histogram of slab
-> > cache object distribution per /proc/slabinfo (after boot):
-> >
-> >   <slab cache>      <objs> <hist>
-> >   kmalloc-part-15    1465  ++++++++++++++
-> >   kmalloc-part-14    2988  +++++++++++++++++++++++++++++
-> >   kmalloc-part-13    1656  ++++++++++++++++
-> >   kmalloc-part-12    1045  ++++++++++
-> >   kmalloc-part-11    1697  ++++++++++++++++
-> >   kmalloc-part-10    1489  ++++++++++++++
-> >   kmalloc-part-09     965  +++++++++
-> >   kmalloc-part-08     710  +++++++
-> >   kmalloc-part-07     100  +
-> >   kmalloc-part-06     217  ++
-> >   kmalloc-part-05     105  +
-> >   kmalloc-part-04    4047  ++++++++++++++++++++++++++++++++++++++++
-> >   kmalloc-part-03     183  +
-> >   kmalloc-part-02     283  ++
-> >   kmalloc-part-01     316  +++
-> >   kmalloc            1422  ++++++++++++++
-> >
-> > The above /proc/slabinfo snapshot shows me there are 6673 allocated
-> > objects (slabs 00 - 07) that the compiler claims contain no pointers or
-> > it was unable to infer the type of, and 12015 objects that contain
-> > pointers (slabs 08 - 15). On a whole, this looks relatively sane.
-> >
-> > Additionally, when I compile my kernel with -Rpass=alloc-token, which
-> > provides diagnostics where (after dead-code elimination) type inference
-> > failed, I see 186 allocation sites where the compiler failed to identify
-> > a type (down from 966 when I sent the RFC [4]). Some initial review
-> > confirms these are mostly variable sized buffers, but also include
-> > structs with trailing flexible length arrays.
-> >
-> > Link: https://clang.llvm.org/docs/AllocToken.html [1]
-> > Link: https://blog.dfsec.com/ios/2025/05/30/blasting-past-ios-18/ [2]
-> > Link: https://lwn.net/Articles/944647/ [3]
-> > Link: https://lore.kernel.org/all/20250825154505.1558444-1-elver@google.com/ [4]
-> > Link: https://discourse.llvm.org/t/rfc-a-framework-for-allocator-partitioning-hints/87434
-> > Acked-by: GONG Ruiqi <gongruiqi1@huawei.com>
-> > Co-developed-by: Harry Yoo (Oracle) <harry@kernel.org>
-> > Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
-> > Signed-off-by: Marco Elver <elver@google.com>
->
-> Applied [1] to slab/for-next, thanks. That means including the kernel-doc
-> workarounds in patch 3. I know Jon said someone might hate it, but maybe it
-> will motivate them for creating a proper fix :) It seems better than leaving
-> doc generation broken or not applying this series at all.
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.18_LTS
+head:   85dd9d925c66aa5f21f2d51c7d1db3df23c456ad
+commit: f2009da08ef7c8990f5b89780b3d21335f00ed1a [458/944] staging: mmi-dptx: DRM/KMS driver for AMD MMI DisplayPort
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260515/202605152253.1FV85nNW-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260515/202605152253.1FV85nNW-lkp@intel.com/reproduce)
 
-Thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605152253.1FV85nNW-lkp@intel.com/
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=slab/for-7.2/alloc_token
->
-> I did the following fixup to remove passing an unnecessary NULL argument for
-> __kmalloc_nolock() with buckets enabled. Made bloat-o-meter happier a bit.
+All errors (new ones prefixed by >>):
 
-Good.
+   In file included from drivers/staging/xlnx-mmi-dptx/mmi_dp_config.c:11:
+>> drivers/staging/xlnx-mmi-dptx/mmi_dp.h:329:9: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     329 |         return readl(base + offset);
+         |                ^
+>> drivers/staging/xlnx-mmi-dptx/mmi_dp.h:340:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     340 |         writel(val, base + offset);
+         |         ^
+   2 errors generated.
 
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index c232f8a10af6..795455256329 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -894,7 +894,7 @@ unsigned int kmem_cache_sheaf_size(struct slab_sheaf *sheaf);
->   * with the exception of kunit tests
->   */
->
-> -void *__kmalloc_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags)
-> +void *__kmalloc_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t flags)
->                                 __assume_kmalloc_alignment __alloc_size(1);
->
->  void *__kmalloc_node_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags, int node)
-> @@ -981,7 +981,7 @@ static __always_inline __alloc_size(1) void *_kmalloc_noprof(size_t size, gfp_t
->                                 kmalloc_caches[kmalloc_type(flags, token)][index],
->                                 flags, size);
->         }
-> -       return __kmalloc_noprof(PASS_KMALLOC_PARAMS(size, NULL, token), flags);
-> +       return __kmalloc_noprof(PASS_TOKEN_PARAMS(size, token), flags);
->  }
->  #define kmalloc_noprof(...)                    _kmalloc_noprof(__VA_ARGS__, __kmalloc_token(__VA_ARGS__))
->  #define kmalloc(...)                           alloc_hooks(kmalloc_noprof(__VA_ARGS__))
-> diff --git a/mm/slub.c b/mm/slub.c
-> index a6e9015601d6..74652bbdd591 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -5303,10 +5303,10 @@ void *__kmalloc_node_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags, in
->  }
->  EXPORT_SYMBOL(__kmalloc_node_noprof);
->
-> -void *__kmalloc_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags)
-> +void *__kmalloc_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t flags)
->  {
-> -       return __do_kmalloc_node(size, PASS_BUCKET_PARAM(b), flags,
-> -                                NUMA_NO_NODE, _RET_IP_, PASS_TOKEN_PARAM(token));
-> +       return __do_kmalloc_node(size, NULL, flags,  NUMA_NO_NODE, _RET_IP_,
-> +                                PASS_TOKEN_PARAM(token));
->  }
->  EXPORT_SYMBOL(__kmalloc_noprof);
 
-Reviewed-by: Marco Elver <elver@google.com>
+vim +/readl +329 drivers/staging/xlnx-mmi-dptx/mmi_dp.h
 
-Thanks!
+   319	
+   320	/**
+   321	 * mmi_dp_read - Read mmi_dp register
+   322	 * @base: base register address
+   323	 * @offset: register offset
+   324	 *
+   325	 * Return: value stored in the hardware register
+   326	 */
+   327	static inline u32 mmi_dp_read(void __iomem *base, u32 offset)
+   328	{
+ > 329		return readl(base + offset);
+   330	}
+   331	
+   332	/**
+   333	 * mmi_dp_write - Write the value into mmi_dp register
+   334	 * @base: base register address
+   335	 * @offset: register offset
+   336	 * @val: value to write
+   337	 */
+   338	static inline void mmi_dp_write(void __iomem *base, u32 offset, u32 val)
+   339	{
+ > 340		writel(val, base + offset);
+   341	}
+   342	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
