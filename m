@@ -1,88 +1,68 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01B13B585C
-	for <llvm@lists.linux.dev>; Fri, 15 May 2026 15:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62FE48C3EC;
+	Fri, 15 May 2026 15:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778857291; cv=none; b=JJNG9IjGpX5S5bnTOERLsUScehOFt1FG5u9Lr6pobS3qoHgqyrRpd9Z7VkGjm/hnwkKCB38qjh70zcS6nilFBnxZkeQkIxf29Py/iBIa8vQutOBYJuf52a8OOrPYoTH4GGTWB1f0EGnLCgOoEKbvNa4ezaoPIeEZesdIy7wiIvo=
+	t=1778858280; cv=none; b=nzxJ9l3zfCWCTeS+PPf6IIIiK9DKLobePUGziaT5IcrRRv43+hazmmV8quoF7USMQ+hOCHyM4MaWfuqxxnUUrI8hOUvBAsdThPoytPuPTsMJQRVZ4rGa+l1P6Eya8/71eYNRi8TAnyV/oSxj2rLBwTZ9G36cunNY9m9VenG+7gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778857291; c=relaxed/simple;
-	bh=uiaKR9sLWFTYJwAowj+0O5FDXArQGlMC/p5UVdWMM3Q=;
+	s=arc-20240116; t=1778858280; c=relaxed/simple;
+	bh=Ur+eO9+Wh3Qp0iw8CBPO7MW1A/4n2k3fABoZ47ld0hM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=klPe0TvMGzfqCCOnSN9WuIlorzQPDeXy83RcqNrFc+zGuij0l2YQ07Sa5XOWeOa8aW/6BmdqSX0bfUwVuRDhVq0qRRMqO/TmJML5A+CRXJYVIS99lCHEzg6zAuFQPUkFnlSj0TWgzHvCaFZywA3mTVSiL4QKGiVy8O0vv0Nl+sI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=VoeTC1AL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=pKZGwYmN; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uhcawfJZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=waKOJMGo; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 Content-Type:Content-Disposition:In-Reply-To; b=sjCZL/XZi4sRu2Lbc3MnbU7iRWDNhl857MrO49uSkbqHMfiAmou31WE3c/Ulctb3PzgDpTc8h00uBoOjvQ9hviPDKEoZXFZtM6YVIs2LQoBpx/HBzd3JfZZjTfMyui5HjHQK3CC09CyKZViq8IFRxlxed5LKwmoxR2vsiFFsdL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OndVjwjv; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="VoeTC1AL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="pKZGwYmN";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uhcawfJZ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="waKOJMGo"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0AE606AF02;
-	Fri, 15 May 2026 15:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1778857283;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W1xXYp7X5h3xx2goTvxVSRBGl/WUwI8ZZW7aqHTMb+Y=;
-	b=VoeTC1AL6NH4NJ7J/5sO9f47rA8jHtR7DYI+V4m5dbPAPrPtdO+sIsfZgx5cJHFouOleZu
-	YGsHHSegfUuPOjt7vlD/pO/TpbZwtW5OhXEnuHin+t+X9mfGuIuP7n4a3jWb+DSU/60mw+
-	f7WP9FX3Gp31dPv0GqnczVf9j/G5pJE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1778857283;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W1xXYp7X5h3xx2goTvxVSRBGl/WUwI8ZZW7aqHTMb+Y=;
-	b=pKZGwYmNnRMu4lN1AdWgudEF3wiV+cTIuHgk3U3u7CJDyjWhaMXhSuNiWtGSmJ7tE5UvR7
-	ttJznnlgxqigATAg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1778857278;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W1xXYp7X5h3xx2goTvxVSRBGl/WUwI8ZZW7aqHTMb+Y=;
-	b=uhcawfJZkmZRn7JXHrMANDpK82PEj1Jw963iCkiHUsUiF/jCgQPYXZFduMouLrojCPhunD
-	iBjaHY3mtr/wNf477OZHsnVaiwBNeQclSdx0pHdkMs84vZs13iD6hQ6yBLpWOPVon/ysaj
-	8/o1EsH8tl86uQbZbyNGUWf4dBkRM54=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1778857278;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W1xXYp7X5h3xx2goTvxVSRBGl/WUwI8ZZW7aqHTMb+Y=;
-	b=waKOJMGoJrSczavuIwFM0xMTTQEmOZ0nDHBtHA8TayIlKY+CQzXRkIGHlQpuZ2RyjawQcw
-	po/okFlyOpV3f7Bg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E4790593A9;
-	Fri, 15 May 2026 15:01:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id VlyPNz01B2oARwAAD6G6ig
-	(envelope-from <dsterba@suse.cz>); Fri, 15 May 2026 15:01:17 +0000
-Date: Fri, 15 May 2026 17:01:16 +0200
-From: David Sterba <dsterba@suse.cz>
-To: Daniel Vacek <neelx@suse.com>
-Cc: kernel test robot <lkp@intel.com>, David Sterba <dsterba@suse.com>,
-	Josef Bacik <josef@toxicpanda.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [kdave-btrfs-devel:ext/dv/fscrypt 34/43] fs/btrfs/super.c:659:3:
- warning: label followed by a declaration is a C23 extension
-Message-ID: <20260515150116.GQ2558453@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <202605140749.ueq3q2k7-lkp@intel.com>
- <CAPjX3FchC22U0n8Z97p2BNxeYnf7AQXp41VQUot5ZXsSSWy1Vg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OndVjwjv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778858277; x=1810394277;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ur+eO9+Wh3Qp0iw8CBPO7MW1A/4n2k3fABoZ47ld0hM=;
+  b=OndVjwjvZ+sDW7aojVRRLVbajXKYisbbQXMiSNA+aYYRLT8o6ZfPMDjw
+   mGnZ+64dG5r2YwN1gil51xHjJkRR49EFjCeoDyKjMI8Ksce80v9GDsEgb
+   fAwvz9dp7lEyZ+c3XBHR+jbSLy2k3Bauw+25KtsY35trV2xCJi9LzdHbN
+   VbUzFd2a4veUUQMIbgUN0IndTH+ExgxuC8F7zSnBebX9R+VY4UFNdDYiM
+   uGgSUexulcuNG5iG3JX6OjYOJ4h37nT2b3ESLNuXO5clJVBtS+W0R7LUm
+   co0V7ruT1kAG/AcCPKq4gOl0SX2D5C0nsDaJCYOmEcwfI6qLlgVBBY6qZ
+   Q==;
+X-CSE-ConnectionGUID: 6If7xFAvSumZyLW7BpdNWQ==
+X-CSE-MsgGUID: FEslQEzWSH6qKMlV8kwZQw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11787"; a="79856823"
+X-IronPort-AV: E=Sophos;i="6.23,236,1770624000"; 
+   d="scan'208";a="79856823"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 08:17:56 -0700
+X-CSE-ConnectionGUID: 7b4FpsvdSDSdwQA6KE/3MQ==
+X-CSE-MsgGUID: aSM7EcxmT42GYrvploautQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,236,1770624000"; 
+   d="scan'208";a="276808619"
+Received: from lkp-server02.sh.intel.com (HELO 7a33ad3e7d27) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 15 May 2026 08:17:53 -0700
+Received: from kbuild by 7a33ad3e7d27 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wNuHf-0000000023H-2PVk;
+	Fri, 15 May 2026 15:17:32 +0000
+Date: Fri, 15 May 2026 23:09:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Horst Birthelmer <horst@birthelmer.com>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	Horst Birthelmer <hbirthelmer@ddn.com>
+Subject: Re: [PATCH] dcache: add fs.dentry-limit sysctl with negative-first
+ reaper
+Message-ID: <202605152329.WHnEvZt7-lkp@intel.com>
+References: <20260514-limit-dentries-cache-v1-1-431b9eb0c530@ddn.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -91,74 +71,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPjX3FchC22U0n8Z97p2BNxeYnf7AQXp41VQUot5ZXsSSWy1Vg@mail.gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Flag: NO
-X-Spam-Score: -4.00
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	HAS_REPLYTO(0.30)[dsterba@suse.cz];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RSPAMD_URIBL_FAIL(0.00)[01.org:query timed out];
-	RCVD_TLS_ALL(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,imap1.dmz-prg2.suse.org:helo,suse.cz:mid,suse.cz:replyto,01.org:url];
-	RCVD_COUNT_TWO(0.00)[2];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[]
-X-Spam-Level: 
+In-Reply-To: <20260514-limit-dentries-cache-v1-1-431b9eb0c530@ddn.com>
 
-On Thu, May 14, 2026 at 05:27:36PM +0200, Daniel Vacek wrote:
-> On Thu, 14 May 2026 at 02:02, kernel test robot <lkp@intel.com> wrote:
-> >
-> > tree:   https://github.com/kdave/btrfs-devel.git ext/dv/fscrypt
-> > head:   4c05f02641d57f578a685f7e8d27b9cb18d17cc7
-> > commit: 69bb73593025c83c008129a68acd562e97870998 [34/43] btrfs: add test_dummy_encryption support
-> > config: hexagon-randconfig-002-20260514 (https://download.01.org/0day-ci/archive/20260514/202605140749.ueq3q2k7-lkp@intel.com/config)
-> > compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260514/202605140749.ueq3q2k7-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202605140749.ueq3q2k7-lkp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> fs/btrfs/super.c:659:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-> >      659 |                 int ret;
-> >          |                 ^
-> >    1 warning generated.
-> 
-> This only happens with CONFIG_BTRFS_DEBUG and a clang compiler. I'm
-> getting no error with gcc.
-> 
-> The variable is only used in that single switch case. If we declare it
-> at the beginning of the function then without CONFIG_BTRFS_DEBUG it
-> would complain about an unused variable.
-> 
-> What are your thoughts? Do we want to introduce an extra block or just
-> keep it this way?
+Hi Horst,
 
-Yes add the block to case branch please, we've done it elsewhere too:
+kernel test robot noticed the following build errors:
 
-	switch (...) {
-	case: {
-		int ret;
+[auto build test ERROR on 5d6919055dec134de3c40167a490f33c74c12581]
 
-		ret = ...
-		break;
-	}
-	case:
+url:    https://github.com/intel-lab-lkp/linux/commits/Horst-Birthelmer/dcache-add-fs-dentry-limit-sysctl-with-negative-first-reaper/20260515-154600
+base:   5d6919055dec134de3c40167a490f33c74c12581
+patch link:    https://lore.kernel.org/r/20260514-limit-dentries-cache-v1-1-431b9eb0c530%40ddn.com
+patch subject: [PATCH] dcache: add fs.dentry-limit sysctl with negative-first reaper
+config: s390-randconfig-002-20260515 (https://download.01.org/0day-ci/archive/20260515/202605152329.WHnEvZt7-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260515/202605152329.WHnEvZt7-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605152329.WHnEvZt7-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/dcache.c:1474:7: error: call to undeclared function 'get_nr_dentry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1474 |         nr = get_nr_dentry();
+         |              ^
+   fs/dcache.c:1474:7: note: did you mean 'retain_dentry'?
+   fs/dcache.c:835:20: note: 'retain_dentry' declared here
+     835 | static inline bool retain_dentry(struct dentry *dentry, bool locked)
+         |                    ^
+   fs/dcache.c:1519:6: error: call to undeclared function 'get_nr_dentry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1519 |         if (get_nr_dentry() <= (long)limit)
+         |             ^
+   2 errors generated.
+
+
+vim +/get_nr_dentry +1474 fs/dcache.c
+
+  1463	
+  1464	static void dentry_limit_worker_fn(struct work_struct *work)
+  1465	{
+  1466		struct dentry_limit_ctx ctx;
+  1467		unsigned long limit = READ_ONCE(sysctl_dentry_limit);
+  1468		unsigned int ms;
+  1469		long nr;
+  1470	
+  1471		if (!limit)
+  1472			return;
+  1473	
+> 1474		nr = get_nr_dentry();
+  1475		if (nr <= (long)limit)
+  1476			return;
+  1477	
+  1478		ctx.over = nr - (long)limit;
+  1479	
+  1480		/* Phase 1: drain negative dentries across every superblock. */
+  1481		ctx.isolate = dentry_lru_isolate_negative;
+  1482		iterate_supers(dentry_limit_prune_sb, &ctx);
+  1483	
+  1484		/* Phase 2: still over? Apply the ordinary LRU policy. */
+  1485		if (ctx.over > 0) {
+  1486			ctx.isolate = dentry_lru_isolate;
+  1487			iterate_supers(dentry_limit_prune_sb, &ctx);
+  1488		}
+  1489	
+  1490		/*
+  1491		 * Re-arm while still above the limit. Re-read the sysctls in
+  1492		 * case the admin raised the cap or disabled the feature during
+  1493		 * the walk.
+  1494		 */
+  1495		limit = READ_ONCE(sysctl_dentry_limit);
+  1496		if (!limit || get_nr_dentry() <= (long)limit)
+  1497			return;
+  1498	
+  1499		ms = READ_ONCE(sysctl_dentry_limit_interval_ms);
+  1500		queue_delayed_work(system_unbound_wq, &dentry_limit_work,
+  1501				   msecs_to_jiffies(ms));
+  1502	}
+  1503	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
