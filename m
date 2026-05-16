@@ -1,83 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B91135E1AA;
-	Sat, 16 May 2026 07:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC0A405C59
+	for <llvm@lists.linux.dev>; Sat, 16 May 2026 09:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778914951; cv=none; b=Lejs3UrYG8qxOzIkLZdbhHQ6XE5Y5qcZdPTKlwHk2XpKx6lgxlVX3j5JxtmcjKIMeRyhVF4B12cSQ+4E29zGBTfWfXVTaB+ALNCMFQ9+PzCT00fVdpweR5xSSenXDb0oHBGbq7JH0Zb7T4+1dVo1DLbNjn3GFoqroEJnXO0oCpg=
+	t=1778922192; cv=none; b=RiEYKuS8ZuSf0dgoQ1sG64duvC9i9t74a2gh+JM/HATOrQDhDMR0SF9I0UFjnpH6RxipQKCHjs8jBaM0woJSk3bkH45GElJiV1afKloGj3yE8p8/5jD8q5PRSQR5OoxhlPx1Wboo6+nVQ1bSYMNveLj15/sZ3Nd01b2KEoSB5+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778914951; c=relaxed/simple;
-	bh=3DA4D0pS9QFdOg1p5dk+89aw//uF7Q4VFXvLQxIB9EA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=uK6xWmNbmvReAYy3Nc0ookwuLcpFHoFGUsYeQhsz7b1iHwk+O/MMSntl/S0R7fvtOrfEBmU8Bx52ufTX25MgyL83SHHLhynT3uUtKqmXKqQbG0wGnb4qk6qtUUA+lnnhFL4O30pDgdoXRfrw3eGd03TVGKBByIs6EVz4TxhCY4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aXUvzhP3; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778922192; c=relaxed/simple;
+	bh=z092ZoDzIzB1Y/O27qPAieNoM9ZzQdlmwivpmJa5qUA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=WKXSxedjfnINOWbWxwKmspd/Ww4+485GUTiDuhLm0mR6hrnE6dGzcMtSDWcVZsYUPJ77zDW0snyO7FapscqJC0XAL4pNS1C87po4BmNVHbnTilmv3rpKhBfXJeJPmRH4SnwIbifV4ZKY0/dEQwdvNwlwns63SNHWuN8u7J6l76U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UjIdCBiw; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aXUvzhP3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778914950; x=1810450950;
-  h=date:from:to:cc:subject:message-id;
-  bh=3DA4D0pS9QFdOg1p5dk+89aw//uF7Q4VFXvLQxIB9EA=;
-  b=aXUvzhP31VsInnoigzHjiLqBg9njjQWfYz9/SdCPm5x4jWBgiTtDc0k1
-   cJIqj8nQCHUSuRybb/37HLeXfelGxU1pBCOtKNLyhpTowUe+Davu7EFNN
-   VQxliuBRc2MfsAV1OTfxlNsG8Hci3147kyQDfzFq9SYuSjrZ2fcilHmRk
-   JeH9UdL29hR5xCOrti9bHyf6uq+HYLx9wX84qE4Z3K4/NR+AnkgtqlOwU
-   f9SnI2/KURCYy4WW42VDBsTNxhSZmANkV4fXUlUUtpEg6QtqKwyRWCobW
-   bcayB0TMe6rO6F+iMCkU3MFkE0r95rzswu5SdIy5ujBFZeXwoTH0fBNae
-   Q==;
-X-CSE-ConnectionGUID: wEoB9ajvSkmmpT19jxwNNQ==
-X-CSE-MsgGUID: aHn3ukokRqa5KvxqjpSbZA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11787"; a="90963723"
-X-IronPort-AV: E=Sophos;i="6.23,237,1770624000"; 
-   d="scan'208";a="90963723"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2026 00:02:27 -0700
-X-CSE-ConnectionGUID: qxlCqR1fSWOTmUN/C+kZtA==
-X-CSE-MsgGUID: VFUf9G0vQr6LvqZQXQun/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,237,1770624000"; 
-   d="scan'208";a="238792339"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa008.jf.intel.com with ESMTP; 16 May 2026 00:02:25 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wO92U-000000009Fd-2jAg;
-	Sat, 16 May 2026 07:02:22 +0000
-Date: Sat, 16 May 2026 09:01:43 +0200
-From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: Warning: mm/shmem.c:1594 function parameter 'ctx' not
- described in 'shmem_writeout'
-Message-ID: <202605160836.jJKMcml6-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UjIdCBiw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778922189;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lwT7t9BtrzTdLQz06H56yH042JntCPxF7SzdbW4KUyw=;
+	b=UjIdCBiwD85ZhAmEtsLkgRcrCu+kcGj8QmWs37W/BIJ5XXoSmTrddgl2XRVdPuJh1tc0wu
+	BK5o9KZiOEfcJBMSId5zLS7g6SYdk0hlcgCJ5wYdyJSIk6eBeVLD548pVfEWq2YDp2vhX+
+	ZxTtmprxnXCdsxSaYZfevewcgoZBEpw=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-583-qg4jb-djOWyKmad1VICf6g-1; Sat,
+ 16 May 2026 05:03:08 -0400
+X-MC-Unique: qg4jb-djOWyKmad1VICf6g-1
+X-Mimecast-MFC-AGG-ID: qg4jb-djOWyKmad1VICf6g_1778922187
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8B601195608B
+	for <llvm@lists.linux.dev>; Sat, 16 May 2026 09:03:07 +0000 (UTC)
+Received: from [172.20.187.136] (unknown [10.30.45.25])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9F79219560A2;
+	Sat, 16 May 2026 09:03:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-rc3,
+ upstream-mainline, d458a240)
+Date: Sat, 16 May 2026 09:03:06 -0000
+To: llvm@lists.linux.dev, yoyang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <46055.126051605030800412@us-mta-583.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: EWXqfPe9q0dCPCE2SbH-z-chkBoxAWR0EQocWvWPFYE_1778922187
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/mm-merge-writeout-into-pageout/20260516-003650
-head:   dfa0de1c1f86f5c4e96d214b3549d4c5d3be0068
-commit: b44db93170f358db8179510ea15bb73b2194941c mm/swap: intoduce struct swap_io_ctx
-date:   14 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260516/202605160836.jJKMcml6-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260516/202605160836.jJKMcml6-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605160836.jJKMcml6-lkp@intel.com/
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-All warnings (new ones prefixed by >>):
 
->> Warning: mm/shmem.c:1594 function parameter 'ctx' not described in 'shmem_writeout'
->> Warning: mm/shmem.c:1594 function parameter 'ctx' not described in 'shmem_writeout'
+Kernel information:
+    Commit message: Merge tag 'block-7.1-20260515' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/axboe/linux
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2529156151
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2529156151_ppc64le_kernel
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2529156151_aarch64_kernel_kcidb_tool_21294922_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
