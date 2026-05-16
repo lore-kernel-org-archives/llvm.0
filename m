@@ -1,160 +1,158 @@
-Received: from s106b.cyber-folks.pl (s106b.cyber-folks.pl [195.78.66.88])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3CFA1F1534;
-	Sat, 16 May 2026 05:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.78.66.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD553537ED;
+	Sat, 16 May 2026 05:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778910546; cv=none; b=IYiMY1c/EoFjiT9lv1VLvx1LLBL3k1G3Y78bmoVARboPaNzcG46mz/Lz++1YBl9So5wDwGQWLJgcd2cP5vHBTeVtm0mZtpEeG6YoelkofCJ42o5q7PUnbJue6dekrWZBRRnxb8sdk2FHytKLCkBWmy0MN/U6M3CjCTaPOZ0cavg=
+	t=1778910690; cv=none; b=FZJ1jqmdpQp+vbP4v7iEaVwAT2zFtMahzJFMBWqUuP5R6vMLBBWeDW3goOcNxxmoyv3D/uTv2XrtkYiDuB7owO+nV3MQpTpWGyJya3SovV2ifBMpYxeHgWBgHQHrjQuL0BhJsBik3FKzZBEyg1ED3DIiBTJeeGPDATnantwHLPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778910546; c=relaxed/simple;
-	bh=kNt/Z4oKF9AixaAwpIu2Ml8Cbcb+f121JoIe7G1ZaY8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=D+O6ubJZ1htwBgBwd2BP3e6NTLiJU8mlAWHaz9RKD1/lgkeBVak8pY7icFTMkTmPdxWmnzHW+w0nfIq/60FWMLTAFY13jMJ/CIZU7qyZEySqg+0IWj8IGZqH4EzFLT3jeqvt1g+zjEcgq8W7Ft8F1aTjt+grYZaDlckBvzUx9b0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mmpsystems.pl; spf=pass smtp.mailfrom=mmpsystems.pl; dkim=pass (2048-bit key) header.d=mmpsystems.pl header.i=@mmpsystems.pl header.b=ignd8rVG; arc=none smtp.client-ip=195.78.66.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mmpsystems.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mmpsystems.pl
+	s=arc-20240116; t=1778910690; c=relaxed/simple;
+	bh=YruztoJ4JnKbmHHdTXEO4c0lqX0b/HiPPKmTeVe1w9A=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=k6DYDY710c38WL9xxpoE0ycTUUL9wsZXThdBwty/k++hVjjdr8vfd9yje8bcSvazcNdI4D/5er9pj/ER/2SyykhxRm6Ko4aPRnyVWk3pVBILObuZdLjffiEY3Aux7+qD14Wmiqy/DUFANO+9NUe2qPh6JtISCUeKzDGjaPsvc1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fc+nw/S5; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mmpsystems.pl header.i=@mmpsystems.pl header.b="ignd8rVG"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=mmpsystems.pl; s=x; h=Cc:To:Message-Id:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=GeDSC6iDZRgDYmHR6t4TAJwQ3WTA5QzwDb/jb6aEs2I=; b=ignd8rVGRQS2G1AixRPUaMK0MV
-	/9QYtdHFRsbZ/YDr6TcTGkkroevffBEbYx5z8ABvqXo6XI6VfW3j4CtsRzUZi/wxwBXpMjHUdIu0P
-	W8Bj1f6caxG5eqt9Z/cPH0fgttPfEwm2NDfD/prcD39XBJs88NxIuLh21HhGQvWVcKKCL1Dh57tgQ
-	wfB1SW/+pc/FgrzET3TOlxwOPCtoJ166mKIW9x5dCz8mQ+xtyvnVGNpi4UEeogmnaugGKg8jUf2XX
-	tqKkw2d62BPgC+IuIX28e92ZFhLI12DB/Px9iS+GCnVKToSJSGqSHoR+RpMbDtGA+8z9/57wooGpO
-	Lzszt+Vw==;
-Received: from [91.102.182.218] (helo=localhost)
-	by s106.cyber-folks.pl with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.99.3)
-	(envelope-from <michal.piekos@mmpsystems.pl>)
-	id 1wO7tS-0000000H5s0-3zR1;
-	Sat, 16 May 2026 07:48:59 +0200
-From: Michal Piekos <michal.piekos@mmpsystems.pl>
-Date: Sat, 16 May 2026 07:48:37 +0200
-Subject: [PATCH v3] iio: adc: sun20i-gpadc: support non-contiguous channel
- lookups
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fc+nw/S5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778910687; x=1810446687;
+  h=date:from:to:cc:subject:message-id;
+  bh=YruztoJ4JnKbmHHdTXEO4c0lqX0b/HiPPKmTeVe1w9A=;
+  b=Fc+nw/S5FKlxmeWFtsPRb5Syrmv5k13OQEbjF7VYoGZ0896NFMAMBB1+
+   8H/N3SDDIUoYZziBBH3A2nRaYeMfzgn8hMbQ1Wo2HKdNmTNy2e/dsKSYg
+   D4ePyTLX35DSRyHDnZyDyuamx6AfHqNgaBFB+WPbzu6hpJVdCtYSF/OLI
+   vOhKc7t9tmKDWh1nE5YBUZjsrqlZkb+1Bw+wpSZwWiFJc5FGMRhj+c0JP
+   gIQH2vO0KXMtvByd7MHrRe0ROetK8RgYgzZdmaOeCRVDXBYlrvuy0sZ+w
+   6EOVtCieh5jbmGLSzV2ulBbsb5gzL38RRu/CNOjbtg7WBSDMQoDKv0xKi
+   A==;
+X-CSE-ConnectionGUID: KPUyrmlAQrCYd/jtLZ5oJA==
+X-CSE-MsgGUID: HLPkpTBQRuGNLOb521PPhg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11787"; a="78884151"
+X-IronPort-AV: E=Sophos;i="6.23,237,1770624000"; 
+   d="scan'208";a="78884151"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 22:51:26 -0700
+X-CSE-ConnectionGUID: flvrIg8lQc2C5onF5DTaWg==
+X-CSE-MsgGUID: dBXtJQF+SYO1oNifPryUPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,237,1770624000"; 
+   d="scan'208";a="239009320"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa009.jf.intel.com with ESMTP; 15 May 2026 22:51:24 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wO7vm-000000009F3-0be1;
+	Sat, 16 May 2026 05:51:22 +0000
+Date: Sat, 16 May 2026 07:50:32 +0200
+From: kernel test robot <lkp@intel.com>
+To: Milan Tripkovic <Milan.Tripkovic@rt-rk.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: lib/tests/string_kunit.c:971:14: error: call to undeclared
+ function 'STRING_BENCH'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202605160742.mVHeO3tK-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260516-fix-sunxi-gpadc-sparse-channels-v3-1-4d229d18ff3b@mmpsystems.pl>
-X-B4-Tracking: v=1; b=H4sIADQFCGoC/42OzQ7CIBAGX8Vwdg3QSlNPvofxwM+qmBYJW4nG9
- N0FvRgvepxkdr59MMLkkdhm8WAJsyd/CQWa5YLZkw5HBO8KM8ml4mvRwMHfgK7h5uEYtbNAUSd
- CqHLAgUAaZSRXjXFtz0olJiwnr4Xd/s10NWe0U81W4+RpuqT764Usqvf/WhYgQFkpUPbcWMTtO
- Ea604QjreLA6mKWn832d1OWpmu1UqbjttPdd3Oe5yfLtIJ9OAEAAA==
-X-Change-ID: 20260513-fix-sunxi-gpadc-sparse-channels-2b6b2063bd49
-To: Jonathan Cameron <jic23@kernel.org>, 
- David Lechner <dlechner@baylibre.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
- Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai <wens@kernel.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>
-Cc: linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@intel.com>, 
- Michal Piekos <michal.piekos@mmpsystems.pl>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- llvm@lists.linux.dev
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778910526; l=2985;
- i=michal.piekos@mmpsystems.pl; s=20260301; h=from:subject:message-id;
- bh=kNt/Z4oKF9AixaAwpIu2Ml8Cbcb+f121JoIe7G1ZaY8=;
- b=bCBkkZO3AFDZx2E2f2OZ41t7+qc3Brbk3rwbgGezgw6GKjLXWyj7loNmA4mPZZw4yzhFl6g2h
- gHmxqt/MmOSAqtZbVd6vCN3MA0aENuDRZ6lsyv0hoYWoIPXwyXovAih
-X-Developer-Key: i=michal.piekos@mmpsystems.pl; a=ed25519;
- pk=Aixyx03If7ZDamiKKN0lsa+0mtA+WjIuIf2ZQVYNBqg=
-X-Authenticated-Id: michal.piekos@mmpsystems.pl
 
-Using consumer driver like iio-hwmon which resolve channels through
-io-channels phandles will fail for sparse channels because IIO core by
-default treats phandle argument as index into channel array.
-        eg. <&gpadc 1> will fail if there is only channel@1 specified
+tree:   https://github.com/intel-lab-lkp/linux/commits/Milan-Tripkovic/riscv-lib-add-memcmp-implementation/20260515-232425
+head:   cc47ab1edeaa33a740769c02047c4c601941ae9c
+commit: cc47ab1edeaa33a740769c02047c4c601941ae9c lib/string_kunit: extend benchmarks and unit test to memcmp()
+date:   14 hours ago
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260516/202605160742.mVHeO3tK-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260516/202605160742.mVHeO3tK-lkp@intel.com/reproduce)
 
-Add .fwnode_xlate() which maps DT phandle to the registered channel
-whose chan->channel matches the hardware channel number. It allows
-sparse channel maps to be consumed by drivers like iio-hwmon.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605160742.mVHeO3tK-lkp@intel.com/
 
-Tested on Radxa Cubie A5E.
+All errors (new ones prefixed by >>):
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-Signed-off-by: Michal Piekos <michal.piekos@mmpsystems.pl>
----
-Changes in v3:
-- Add iiospec->nargs validation in sun20i_gpadc_fwnode_xlate()
-- Keep Andy's Reviewed-by tag since change is narrow validation fix
-- Fix spelling issues in commit message
-- Link to v2: https://patch.msgid.link/20260514-fix-sunxi-gpadc-sparse-channels-v2-1-d4a66b70c7a7@mmpsystems.pl
+>> lib/tests/string_kunit.c:971:14: error: call to undeclared function 'STRING_BENCH'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     971 |                         elapsed = STRING_BENCH(iterations, memcmp, p1, p2, len);
+         |                                   ^
+   1 error generated.
 
-Changes in v2:
-- Move loop variable declaration into the for statement
-- Fix indentation using clang-format
-- Correct commit wording
-- Link to v1: https://patch.msgid.link/20260513-fix-sunxi-gpadc-sparse-channels-v1-1-6c21e290bcee@mmpsystems.pl
 
-To: Jonathan Cameron <jic23@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-To: Nuno Sá <nuno.sa@analog.com>
-To: Andy Shevchenko <andy@kernel.org>
-To: Chen-Yu Tsai <wens@kernel.org>
-To: Jernej Skrabec <jernej.skrabec@gmail.com>
-To: Samuel Holland <samuel@sholland.org>
-To: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-To: Bill Wendling <morbo@google.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: linux-iio@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-sunxi@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev
----
- drivers/iio/adc/sun20i-gpadc-iio.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+vim +/STRING_BENCH +971 lib/tests/string_kunit.c
 
-diff --git a/drivers/iio/adc/sun20i-gpadc-iio.c b/drivers/iio/adc/sun20i-gpadc-iio.c
-index 861c14da75ad..8a75498557ff 100644
---- a/drivers/iio/adc/sun20i-gpadc-iio.c
-+++ b/drivers/iio/adc/sun20i-gpadc-iio.c
-@@ -139,8 +139,23 @@ static irqreturn_t sun20i_gpadc_irq_handler(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
-+static int
-+sun20i_gpadc_fwnode_xlate(struct iio_dev *indio_dev,
-+			  const struct fwnode_reference_args *iiospec)
-+{
-+	if (iiospec->nargs != 1)
-+		return -EINVAL;
-+
-+	for (unsigned int i = 0; i < indio_dev->num_channels; i++)
-+		if (indio_dev->channels[i].channel == iiospec->args[0])
-+			return i;
-+
-+	return -EINVAL;
-+}
-+
- static const struct iio_info sun20i_gpadc_iio_info = {
- 	.read_raw = sun20i_gpadc_read_raw,
-+	.fwnode_xlate = sun20i_gpadc_fwnode_xlate,
- };
- 
- static void sun20i_gpadc_reset_assert(void *data)
+   922	
+   923	static void do_string_bench_memcmp(struct kunit *test)
+   924	{
+   925		char *buf1 = NULL;
+   926		char *buf2 = NULL;
+   927		const u64 lengths[] = { 1, 7, 8, 16, 32, 64, 128, 512, 1024, 4096 };
+   928		const int offsets[] = { 0, 1, 3, 7 };
+   929		const u64 max_len = 4096 + 64;
+   930		unsigned int w, o, i;
+   931		unsigned int off;
+   932		u64 len;
+   933		char *p1;
+   934		char *p2;
+   935		u64 iterations;
+   936		u64 elapsed;
+   937		u64 ns_per_call;
+   938		u64 mbps;
+   939		u64 j;
+   940	
+   941		buf1 = vmalloc(max_len);
+   942		buf2 = vmalloc(max_len);
+   943	
+   944		if (!buf1 || !buf2) {
+   945			vfree(buf1);
+   946			vfree(buf2);
+   947			kunit_err(test, "vmalloc failed\n");
+   948			return;
+   949		}
+   950	
+   951		memset(buf1, 'A', max_len);
+   952		memset(buf2, 'A', max_len);
+   953	
+   954		for (w = 0; w < 100000U; w++)
+   955			(void)memcmp(buf1, buf2, 4096);
+   956	
+   957		for (o = 0; o < ARRAY_SIZE(offsets); o++) {
+   958			off = offsets[o];
+   959	
+   960			for (i = 0; i < ARRAY_SIZE(lengths); i++) {
+   961				len = lengths[i];
+   962				p1 = buf1;
+   963				p2 = buf2 + off;
+   964				iterations = (len < 512) ? 100000ULL : 10000ULL;
+   965	
+   966				for (j = 0; j < iterations; j++) {
+   967					(void)memcmp(p1, p2, len);
+   968					barrier();
+   969				}
+   970	
+ > 971				elapsed = STRING_BENCH(iterations, memcmp, p1, p2, len);
+   972				ns_per_call = div_u64(elapsed, iterations);
+   973				mbps = len ? div_u64(iterations * len * (NSEC_PER_SEC / MEGA), elapsed) : 0;
+   974	
+   975				if (off == 0) {
+   976					kunit_info(test, "bench_memcmp_aligned: len=%-4llu: %llu MB/s (%llu ns/call)\n",
+   977						   len, mbps, ns_per_call);
+   978				} else {
+   979					kunit_info(test, "bench_memcmp_unaligned(off=%u): len=%-4llu: %llu MB/s (%llu ns/call)\n",
+   980						   off, len, mbps, ns_per_call);
+   981				}
+   982			}
+   983		}
+   984	
+   985		vfree(buf1);
+   986		vfree(buf2);
+   987	}
+   988	
 
----
-base-commit: 6916d5703ddf9a38f1f6c2cc793381a24ee914c6
-change-id: 20260513-fix-sunxi-gpadc-sparse-channels-2b6b2063bd49
-
-Best regards,
---  
-Michal Piekos <michal.piekos@mmpsystems.pl>
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
