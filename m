@@ -1,185 +1,115 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A041EEA3C
-	for <llvm@lists.linux.dev>; Fri, 15 May 2026 22:58:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF83233149;
+	Sat, 16 May 2026 02:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778885916; cv=none; b=kth1hcSio7jdEMYDuJPA0vR4h6FgyjbZtga1ilXAXynraItFCOcNfQY7Qw+KNCwxwkFFqdCb6HWQXZzqGBxE620M1Q1+BIu7tYX5xDSs5M/RCTvqYulsAUD0kptafL6N1mvtIeH4gZZfs2NP7mkjWR28NyNde0BAzTiOfG8mFrE=
+	t=1778897353; cv=none; b=EP0TOMf3itIXwADmM4j2vdon+f62Tv+IYG28gF8G1qSiHyTL+jGcocmrlB0RSaGZV5FwLIP/zDyMnM8jDKjWp2WW1KQYpYRWO5mDx0sFryOEViGwUn9LrGfotDVD9q7SrVhI6R5dv+YzN3XnsE+B4yoVgaLebUNHgEvpyeV20nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778885916; c=relaxed/simple;
-	bh=YCcPJH/vYgPQzSl/jsRGZR7a3T07mS4IJqsbO6CFGbA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UDI9fA4+ytBh86QNjsc59l5iF2cm8DCoJeBZVu2zPrQN1fKsEl9CFmeWxHf2PTgF92Z1Q1jSv7NS263UpE+Lms4WvueuCEwuF7SC2tg7s0lW9gNGnRvrtrKb2Zw9p6QmYBN2iiDVPkpBWbtRXs1pi4sTyKocxBVaJfHz7NsYVQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FN46Z9kg; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778897353; c=relaxed/simple;
+	bh=jl+SguRpRkZiv7BtD/6Bht46jeBdDOzG1VImV4/H8SU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=XaOYrFSUsLgszS4p5lZADlWzkrTQeu8ax0jfrcnQa2EvJPsYtV87rvUz+fosBGRRlbszG2l8KU4yry1bl761Wp1G0QjqUjxcUgDBlQJkGz3GJYSuFBx6KzyDB3/u9Hh9Hyb5enpFrO4s7EEoWKUOc3zGhLG7/n2ys6iPtdBZAu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nGNHKV+b; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FN46Z9kg"
-Message-ID: <bda702a1-18f5-47ed-8a4e-a01b94829e07@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778885911;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ycnjTqUOfjzmeEfBwBIsxrCHrlibJg0T0GtKO5eKf28=;
-	b=FN46Z9kgrU4Kbrry6rzC1hKw5c/BjJWT9JzboldGA6XMR/SAGsv528OaUcjWjUgSQeYBmd
-	5K+exPVhr0rkGPOt/yb/c/n4qF/6CBQfTOFh6/xG+dXkoSNGmmEZt0uvPz9elT4wnWFAFD
-	bzNYWItnaGOho3LJep+0i0TX7jE83Ck=
-Date: Fri, 15 May 2026 15:58:14 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nGNHKV+b"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778897352; x=1810433352;
+  h=date:from:to:cc:subject:message-id;
+  bh=jl+SguRpRkZiv7BtD/6Bht46jeBdDOzG1VImV4/H8SU=;
+  b=nGNHKV+bUHaE3Tppi7gdCeAYbydGASCScsGsYakbfEGE2UH/tpb12lTG
+   ocg16DcTvrBAZsW+1lNXXlrgRWdzvlAuVI0Cm6anmVDd7B2WPbdJunI5U
+   LrxnJpKs8Lp4/xgxRbmVBswVjY9cLy134HT3UL/m2XmRmadMpW78NTXT7
+   vVF0M7JCtiqgMIKew8fOw6egnar/Vi0AIwNOVdGS9OXdzJGxTk/XZlgRG
+   LXUh6Fgh+0+wrEJ8hGU3nG3Ofk5RdmKpO4hfMGrL107DPqU3EFfaoXhli
+   T/91doJxBfgVUnUKaYUnBzw9Y7VaI/qhFds1aMQ0AQKbtQ2URfMJ1QZSB
+   A==;
+X-CSE-ConnectionGUID: tXpH+TrLTTS32p3JTMp9FQ==
+X-CSE-MsgGUID: crw202wmS7akl9P39WXLpA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11787"; a="97283242"
+X-IronPort-AV: E=Sophos;i="6.23,237,1770624000"; 
+   d="scan'208";a="97283242"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 19:09:10 -0700
+X-CSE-ConnectionGUID: 30omUrBeShu5RusRbXgaXQ==
+X-CSE-MsgGUID: mtGHH+LDS/u0o2tQJ3GI+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,237,1770624000"; 
+   d="scan'208";a="240687788"
+Received: from lkp-server01.sh.intel.com (HELO d94e5e629b2d) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 15 May 2026 19:09:08 -0700
+Received: from kbuild by d94e5e629b2d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wO4Sg-000000000Mf-1dnK;
+	Sat, 16 May 2026 02:09:06 +0000
+Date: Sat, 16 May 2026 10:08:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Chen-Yu Tsai" <wens@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [wens:sunxi-wip 29/29]
+ sound/soc/sunxi/sun4i-codec.c:2130:35: warning: unused variable
+ 'sun55i_codec_ch_vol_scale'
+Message-ID: <202605160958.YTXwh8hZ-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Subject: Re: [PATCH 5/6] tools/build: selftests: Allow versioning LLVM lld
-To: James Clark <james.clark@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, leo.yan@arm.com
-References: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
- <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 5/14/26 2:32 AM, James Clark wrote:
-> Building with LLVM=... could result in a different version of lld being
-> used than the main toolchain for liburandom_read.so because it's
-> hardcoded to "lld" in this makefile.
-> 
-> Make it consistent with the rest of the LLVM toolchain by adding an LLD
-> variable to Makefile.include. Keep the fallback for other architectures
-> in tools/testing/selftests/bpf/Makefile as it seems like it's something
-> specific to this make rule and shouldn't be global.
-> 
-> Clang accepts either a full path or "ld.lld-15" style inputs to
-> -fuse-ld= so this will work with LLD defined the same way as the other
-> LLVM tools. However, for full paths, we need to use ".../ld.lld" instead
-> of the generic driver "lld", but I don't think the original use of "lld"
-> was significant as this is always a linux build.
-> 
-> Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->  tools/scripts/Makefile.include       | 2 ++
->  tools/testing/selftests/bpf/Makefile | 8 ++++----
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> index 380ad84ac51e..5c2d505cba62 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -67,6 +67,7 @@ ifneq ($(LLVM),)
->    $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
->    $(call allow-override,LD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->    $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
-> +  $(call allow-override,LLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->    $(call allow-override,CXX,$(LLVM_PREFIX)clang++$(LLVM_SUFFIX))
->    $(call allow-override,STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
->    $(call allow-override,LLVM_STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
-> @@ -91,6 +92,7 @@ else
->    # Some tools still require Clang, LLC and/or LLVM utils
->    $(call allow-override,CLANG,clang)
->    $(call allow-override,LLC,llc)
-> +  $(call allow-override,LLD,ld.lld)
->    $(call allow-override,LLVM_CONFIG,llvm-config)
->    $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
->    $(call allow-override,LLVM_STRIP,llvm-strip)
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6ef6872adbc3..44ba829e5d4d 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
->  
->  # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
->  ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
-> -LLD := lld
-> +USE_LD := $(LLD)
->  else
-> -LLD := $(shell command -v $(LD))
-> +USE_LD := $(shell command -v $(LD))
->  endif
->  
->  # Filter out -static for liburandom_read.so and its dependent targets so that static builds
-> @@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
->  		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
->  		     -Wno-unused-command-line-argument \
-> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git sunxi-wip
+head:   1cdb4d4846ffaddce6d648dbbfcdcca78f8a0bcc
+commit: 1cdb4d4846ffaddce6d648dbbfcdcca78f8a0bcc [29/29] [WIP] ASoC: sun4i: Support capture on A523
+config: arm-randconfig-003-20260516 (https://download.01.org/0day-ci/archive/20260516/202605160958.YTXwh8hZ-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260516/202605160958.YTXwh8hZ-lkp@intel.com/reproduce)
 
-Hi James,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605160958.YTXwh8hZ-lkp@intel.com/
 
-This patch breaks the selftests/bpf build:
+All warnings (new ones prefixed by >>):
 
-$ clang --version
-clang version 22.1.3 (CentOS 22.1.3-1.el9)
-Target: x86_64-redhat-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
+>> sound/soc/sunxi/sun4i-codec.c:2130:35: warning: unused variable 'sun55i_codec_ch_vol_scale' [-Wunused-const-variable]
+    2130 | static const DECLARE_TLV_DB_SCALE(sun55i_codec_ch_vol_scale, -11925, 75, 1);
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/sound/tlv.h:22:31: note: expanded from macro 'DECLARE_TLV_DB_SCALE'
+      22 | #define DECLARE_TLV_DB_SCALE            SNDRV_CTL_TLVD_DECLARE_DB_SCALE
+         |                                         ^
+   include/uapi/sound/tlv.h:55:15: note: expanded from macro 'SNDRV_CTL_TLVD_DECLARE_DB_SCALE'
+      55 |         unsigned int name[] = { \
+         |                      ^~~~
+   1 warning generated.
 
-$ make LLVM=1 -j$(nproc)
-  [...] # ok
 
-$ make LLVM=1 -C tools/testing/selftests/bpf -j$(nproc)
+vim +/sun55i_codec_ch_vol_scale +2130 sound/soc/sunxi/sun4i-codec.c
 
-[...] # somewhere in the middle
+2198deb823a6ebe Mesih Kilinc 2024-11-23  2127  
+ef6aea06096134a Chen-Yu Tsai 2026-02-18  2128  /* volume / mute controls */
+ef6aea06096134a Chen-Yu Tsai 2026-02-18  2129  static const DECLARE_TLV_DB_SCALE(sun55i_codec_dvol_scale, -7308, 116, 0);
+ef6aea06096134a Chen-Yu Tsai 2026-02-18 @2130  static const DECLARE_TLV_DB_SCALE(sun55i_codec_ch_vol_scale, -11925, 75, 1);
+ef6aea06096134a Chen-Yu Tsai 2026-02-18  2131  static const DECLARE_TLV_DB_SCALE(sun55i_codec_hp_vol_scale, -4200, 600, 0);
+ef6aea06096134a Chen-Yu Tsai 2026-02-18  2132  static const DECLARE_TLV_DB_RANGE(sun55i_codec_lineout_vol_scale,
+ef6aea06096134a Chen-Yu Tsai 2026-02-18  2133  	0, 1, TLV_DB_SCALE_ITEM(TLV_DB_GAIN_MUTE, 0, 1),
+ef6aea06096134a Chen-Yu Tsai 2026-02-18  2134  	2, 31, TLV_DB_SCALE_ITEM(-4350, 150, 0),
+ef6aea06096134a Chen-Yu Tsai 2026-02-18  2135  );
+1cdb4d4846ffadd Chen-Yu Tsai 2026-02-23  2136  static const DECLARE_TLV_DB_RANGE(sun55i_codec_adc_gain_scale,
+1cdb4d4846ffadd Chen-Yu Tsai 2026-02-23  2137  	0, 0, TLV_DB_SCALE_ITEM(0, 0, 0),
+1cdb4d4846ffadd Chen-Yu Tsai 2026-02-23  2138  	1, 3, TLV_DB_SCALE_ITEM(6, 0, 0),
+1cdb4d4846ffadd Chen-Yu Tsai 2026-02-23  2139  	4, 31, TLV_DB_SCALE_ITEM(9, 1, 0),
+1cdb4d4846ffadd Chen-Yu Tsai 2026-02-23  2140  );
+ef6aea06096134a Chen-Yu Tsai 2026-02-18  2141  
 
-  LIB      liburandom_read.so
-clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
-make: *** [Makefile:256: /home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf/liburandom_read.so] Error 1
-make: Leaving directory '/home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf'
+:::::: The code at line 2130 was first introduced by commit
+:::::: ef6aea06096134a7e805db2283ed108274414319 ASoC: sun4i-codec: Support playback for A523 SoC family's audio codec
 
-[...]
+:::::: TO: Chen-Yu Tsai <wens@kernel.org>
+:::::: CC: Chen-Yu Tsai <wens@kernel.org>
 
-Or a simpler reproducer:
-
-$ make LLVM=1 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
-  LIB      liburandom_read.so
-clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
-make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
-
-$ make LLVM=-22 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
-  LIB      liburandom_read.so
-clang-22: error: invalid linker name in argument '-fuse-ld=ld.lld-22'
-make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
-
-I tried your patches, and only then noticed BPF CI caught this too:
-https://github.com/kernel-patches/bpf/actions/runs/25943477658/job/76267174885?pr=12082
-
->  		     -Wl,--version-script=liburandom_read.map \
->  		     -fPIC -shared -o $@
->  
-> @@ -268,7 +268,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
->  		     -Wno-unused-command-line-argument \
->  		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
-> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->  		     -Wl,-rpath=. -o $@
->  
->  $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
-> 
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
