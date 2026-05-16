@@ -1,152 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398E33D5227;
-	Sat, 16 May 2026 11:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98173D410B;
+	Sat, 16 May 2026 12:48:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778932719; cv=none; b=Dhf0FsuX02gE1wS+TsAeITV5Eq+9cy3AZqD9xEw26H6/pzcvrBuanrerj73NjaH4LSAVw9YO8Jsen3g8qF1nK8U3BPKTT+hzpJ9Uha/AstJg6qGiBLBCwCcQoZGZm3J/mi2ayx19/UZcH3/3p13KH8QiXAn1NIx4v940P6fXzOE=
+	t=1778935713; cv=none; b=uYtBCUaXsJ+yEXu6/LSQi0Rmds0Mt6r6WAPVrp3vXi6U0tQWiO1eRoU4eGFWOVyp9NqWjH2h41KhpF19Oy9MuaIz7rSc4uq0IK6R29ZzeJ5CMLmwyHIdt5FFs+HA0DT98GswjpIu6WCwzwZmcg19f3bvestt/4TkSvNKozkkcgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778932719; c=relaxed/simple;
-	bh=2ERxoGHUEDIbm4cUjWfDJXF6FslLg8f6JAKyxzGXA2A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VvVBYP7qKQIpWQonWOD+48zABDgraqyfSijOuuPDDm8GSKNWdSNTtJNRK8AocO9KdTVRpfAEAhtr1zbAYr8XI3YMOHM+z+2DGYr9r4gwPvN9JMBBWhUGWcCoSBRQG7VrNB+UXwHBJkbE92LlTzAeGE1fTBpakclubB8HufmIk6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cZzsCx/V; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1778935713; c=relaxed/simple;
+	bh=2BTUo8szt4DjZleM7Hj+ucVqOrxD+W1MnmrDumkDoXk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=hmPaILDxlsPCP/lLbtuweroqSgP3GMbRGWI9b3QnTbj2k+m39SELHEsNF2blmRAUNXUOWdmW4lilWKieSASaUESSmZY3qrj7e47lKJiEmdhScSSE6JZ6EENsUz8PYQnthzCAEvJZXvH2VAVYuBcl4v0CiiMGQkGiYLG+T4AgMXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fuq6wevW; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cZzsCx/V"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fuq6wevW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778932718; x=1810468718;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2ERxoGHUEDIbm4cUjWfDJXF6FslLg8f6JAKyxzGXA2A=;
-  b=cZzsCx/V5iQmXTtHQFTNJDDRfGNySWMFg4Ela+s9WDXD+YljgDb0Nwjw
-   Ju8Vh1RELZduvdc8KIf4l9cosr6J49D6v4R++qqr7mgID1DTX4IrjG4To
-   rpcYe+ZGngyW/Uatz8l+LpHhwwEjbIfeTZ575ZYFREzKTHMIOjun2hXVK
-   xNXKtNMT6PczgBAxUO0xjv7iwzRiZLyXQcQX6Xalo9sSntOx/jYw6O9PL
-   Qp+EAjZ9eBL4ASV9YeiPy+cLXOVhuACdMypcAzlx/cT3m+NPJNDKTy7Ba
-   VRAn+tNlzZUtka/vN/RtFNQ7YHD+h1DTrK74LVAPrfZ321A4Wi90xttxR
-   Q==;
-X-CSE-ConnectionGUID: +CslRfruQh6bZj8csLMYCQ==
-X-CSE-MsgGUID: FogQY/GCTt63Fzz5godeYA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11787"; a="90969891"
+  t=1778935712; x=1810471712;
+  h=date:from:to:cc:subject:message-id;
+  bh=2BTUo8szt4DjZleM7Hj+ucVqOrxD+W1MnmrDumkDoXk=;
+  b=fuq6wevWsAcdNRA9xlwWNCCaoHjO6udNtvk4HaMhJv1TuUw27iaOBpuC
+   fZfmY+vDI3GIGVPXm9TL3gMSGDEl6S5knOMD+q7k1JJIhD8K75Cx6JzsH
+   5CW5xQC4m8LM2s6L01yPqh+M9EIK18xMUfX+nqB4npbrTlBUdsqt53qVj
+   mSQekg8HtQNlfWM30bSInyKIxR7yQOFEyL+eo3SMLSE2e0ffhxkWCUPfo
+   goGqouVnnG7kfYLfbsPTn0ZShTPSq2RLCes37QpX//60T2LeeuWqaakDx
+   2BDYmN9JEuuzxRvRiNotE4K6rK8UbO9oFddcA6Of/Kqs2bheaW/mPdNwS
+   A==;
+X-CSE-ConnectionGUID: PYRPbNI/TVyMIyaGxXOYLw==
+X-CSE-MsgGUID: lDzknDwaQzCyfBiRFIaXyQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11788"; a="90445803"
 X-IronPort-AV: E=Sophos;i="6.23,238,1770624000"; 
-   d="scan'208";a="90969891"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2026 04:58:37 -0700
-X-CSE-ConnectionGUID: R/nW/oNiQS+8gVQcrrVVDw==
-X-CSE-MsgGUID: +GvjioT3RDWXKyFrDqTMcA==
+   d="scan'208";a="90445803"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2026 05:48:31 -0700
+X-CSE-ConnectionGUID: pcSf5gqgTquzr8T7Mqkc8w==
+X-CSE-MsgGUID: A8V2sJszTby/nslOotfgMQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,238,1770624000"; 
-   d="scan'208";a="238829935"
-Received: from lkp-server01.sh.intel.com (HELO d94e5e629b2d) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 16 May 2026 04:58:36 -0700
-Received: from kbuild by d94e5e629b2d with local (Exim 4.98.2)
+   d="scan'208";a="239069026"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa009.jf.intel.com with ESMTP; 16 May 2026 05:48:29 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wODf7-000000000n4-0N9M;
-	Sat, 16 May 2026 11:58:33 +0000
-Date: Sat, 16 May 2026 19:58:03 +0800
+	id 1wOERP-000000009Kj-0E1o;
+	Sat, 16 May 2026 12:48:27 +0000
+Date: Sat, 16 May 2026 14:48:24 +0200
 From: kernel test robot <lkp@intel.com>
-To: Markus Stockhausen <markus.stockhausen@gmx.de>
+To: David Woodhouse <dwmw@amazon.co.uk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] i2c: i2c-gpio Enhance driver for buses with shared
- SCL
-Message-ID: <202605161950.P3hdEfkq-lkp@intel.com>
-References: <20260514092042.3265986-1-markus.stockhausen@gmx.de>
+Subject: [dwmw2:ffclock 39/39] drivers/ptp/ptp_vmclock.c:347:6:
+ warning: variable 'diff' set but not used
+Message-ID: <202605161448.8UKNxgIE-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260514092042.3265986-1-markus.stockhausen@gmx.de>
 
-Hi Markus,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on andi-shyti/i2c/i2c-host]
-[also build test ERROR on linus/master v7.1-rc3 next-20260508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Stockhausen/i2c-i2c-gpio-Enhance-driver-for-buses-with-shared-SCL/20260514-233812
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20260514092042.3265986-1-markus.stockhausen%40gmx.de
-patch subject: [RFC PATCH] i2c: i2c-gpio Enhance driver for buses with shared SCL
-config: arm64-randconfig-004-20260516 (https://download.01.org/0day-ci/archive/20260516/202605161950.P3hdEfkq-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260516/202605161950.P3hdEfkq-lkp@intel.com/reproduce)
+tree:   git://git.infradead.org/users/dwmw2/linux ffclock
+head:   4d04890e42f4f8a0651ffae982f1da9bc2fe2948
+commit: 4d04890e42f4f8a0651ffae982f1da9bc2fe2948 [39/39] timekeeping: Unify ntp_error and time_offset into phase_error
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260516/202605161448.8UKNxgIE-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260516/202605161448.8UKNxgIE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605161950.P3hdEfkq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605161448.8UKNxgIE-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-gpio.c:197:30: error: incompatible pointer types passing 'struct i2c_gpio_scl_data *' to parameter of type 'const struct gpio_desc *' [-Wincompatible-pointer-types]
-     197 |         int ret, irq = gpiod_to_irq(priv->scl);
-         |                                     ^~~~~~~~~
-   include/linux/gpio/consumer.h:169:42: note: passing argument to parameter 'desc' here
-     169 | int gpiod_to_irq(const struct gpio_desc *desc);
-         |                                          ^
->> drivers/i2c/busses/i2c-gpio.c:204:30: error: incompatible pointer types passing 'struct i2c_gpio_scl_data *' to parameter of type 'struct gpio_desc *' [-Wincompatible-pointer-types]
-     204 |         ret = gpiod_direction_input(priv->scl);
-         |                                     ^~~~~~~~~
-   include/linux/gpio/consumer.h:114:45: note: passing argument to parameter 'desc' here
-     114 | int gpiod_direction_input(struct gpio_desc *desc);
-         |                                             ^
-   drivers/i2c/busses/i2c-gpio.c:219:31: error: incompatible pointer types passing 'struct i2c_gpio_scl_data *' to parameter of type 'struct gpio_desc *' [-Wincompatible-pointer-types]
-     219 |         ret = gpiod_direction_output(priv->scl, 1) ?: ret;
-         |                                      ^~~~~~~~~
-   include/linux/gpio/consumer.h:115:46: note: passing argument to parameter 'desc' here
-     115 | int gpiod_direction_output(struct gpio_desc *desc, int value);
-         |                                              ^
-   3 errors generated.
+>> drivers/ptp/ptp_vmclock.c:347:6: warning: variable 'diff' set but not used [-Wunused-but-set-variable]
+     347 |         s64 diff;
+         |             ^
+   1 warning generated.
+--
+>> Warning: kernel/time/ntp.c:89 struct member 'ntp_err_mult_hi' not described in 'ntp_data'
+>> Warning: kernel/time/ntp.c:89 struct member 'phase_error_pending' not described in 'ntp_data'
+>> Warning: kernel/time/ntp.c:89 struct member 'ntp_err_mult_hi' not described in 'ntp_data'
+>> Warning: kernel/time/ntp.c:89 struct member 'phase_error_pending' not described in 'ntp_data'
 
 
-vim +197 drivers/i2c/busses/i2c-gpio.c
+vim +/diff +347 drivers/ptp/ptp_vmclock.c
 
-bbe899700a44af Wolfram Sang 2018-06-29  193  
-63e57b6f191db9 Wolfram Sang 2019-02-19  194  static int i2c_gpio_fi_act_on_scl_irq(struct i2c_gpio_private_data *priv,
-63e57b6f191db9 Wolfram Sang 2019-02-19  195  				       irqreturn_t handler(int, void*))
-63e57b6f191db9 Wolfram Sang 2019-02-19  196  {
-63e57b6f191db9 Wolfram Sang 2019-02-19 @197  	int ret, irq = gpiod_to_irq(priv->scl);
-63e57b6f191db9 Wolfram Sang 2019-02-19  198  
-63e57b6f191db9 Wolfram Sang 2019-02-19  199  	if (irq < 0)
-63e57b6f191db9 Wolfram Sang 2019-02-19  200  		return irq;
-63e57b6f191db9 Wolfram Sang 2019-02-19  201  
-63e57b6f191db9 Wolfram Sang 2019-02-19  202  	i2c_lock_bus(&priv->adap, I2C_LOCK_ROOT_ADAPTER);
-63e57b6f191db9 Wolfram Sang 2019-02-19  203  
-63e57b6f191db9 Wolfram Sang 2019-02-19 @204  	ret = gpiod_direction_input(priv->scl);
-63e57b6f191db9 Wolfram Sang 2019-02-19  205  	if (ret)
-63e57b6f191db9 Wolfram Sang 2019-02-19  206  		goto unlock;
-63e57b6f191db9 Wolfram Sang 2019-02-19  207  
-63e57b6f191db9 Wolfram Sang 2019-02-19  208  	reinit_completion(&priv->scl_irq_completion);
-63e57b6f191db9 Wolfram Sang 2019-02-19  209  
-63e57b6f191db9 Wolfram Sang 2019-02-19  210  	ret = request_irq(irq, handler, IRQF_TRIGGER_FALLING,
-63e57b6f191db9 Wolfram Sang 2019-02-19  211  			  "i2c_gpio_fault_injector_scl_irq", priv);
-63e57b6f191db9 Wolfram Sang 2019-02-19  212  	if (ret)
-63e57b6f191db9 Wolfram Sang 2019-02-19  213  		goto output;
-63e57b6f191db9 Wolfram Sang 2019-02-19  214  
-63e57b6f191db9 Wolfram Sang 2019-02-19  215  	wait_for_completion_interruptible(&priv->scl_irq_completion);
-63e57b6f191db9 Wolfram Sang 2019-02-19  216  
-63e57b6f191db9 Wolfram Sang 2019-02-19  217  	free_irq(irq, priv);
-63e57b6f191db9 Wolfram Sang 2019-02-19  218   output:
-63e57b6f191db9 Wolfram Sang 2019-02-19  219  	ret = gpiod_direction_output(priv->scl, 1) ?: ret;
-63e57b6f191db9 Wolfram Sang 2019-02-19  220   unlock:
-63e57b6f191db9 Wolfram Sang 2019-02-19  221  	i2c_unlock_bus(&priv->adap, I2C_LOCK_ROOT_ADAPTER);
-63e57b6f191db9 Wolfram Sang 2019-02-19  222  
-63e57b6f191db9 Wolfram Sang 2019-02-19  223  	return ret;
-63e57b6f191db9 Wolfram Sang 2019-02-19  224  }
-63e57b6f191db9 Wolfram Sang 2019-02-19  225  
+20503272422693 David Woodhouse 2024-10-06  338  
+4d04890e42f4f8 David Woodhouse 2026-05-15  339  static void vmclock_set_tk_reference(struct vmclock_state *st);
+df750b53c373b3 David Woodhouse 2026-05-13  340  static void vmclock_cmp_timer_fn(struct timer_list *t)
+df750b53c373b3 David Woodhouse 2026-05-13  341  {
+df750b53c373b3 David Woodhouse 2026-05-13  342  	struct vmclock_state *st = container_of(t, struct vmclock_state, cmp_timer);
+df750b53c373b3 David Woodhouse 2026-05-13  343  	volatile struct vmclock_abi *clk = st->clk;
+df750b53c373b3 David Woodhouse 2026-05-13  344  	struct system_time_snapshot snap;
+df750b53c373b3 David Woodhouse 2026-05-13  345  	unsigned __int128 product;
+df750b53c373b3 David Woodhouse 2026-05-13  346  	u64 delta, ref_frac, ref_ns, sys_ns;
+df750b53c373b3 David Woodhouse 2026-05-13 @347  	s64 diff;
+df750b53c373b3 David Woodhouse 2026-05-13  348  
+df750b53c373b3 David Woodhouse 2026-05-13  349  	ktime_get_snapshot(&snap);
+df750b53c373b3 David Woodhouse 2026-05-13  350  	if (snap.cs_id != st->cs_id)
+df750b53c373b3 David Woodhouse 2026-05-13  351  		goto rearm;
+df750b53c373b3 David Woodhouse 2026-05-13  352  
+df750b53c373b3 David Woodhouse 2026-05-13  353  	delta = snap.cycles - le64_to_cpu(clk->counter_value);
+df750b53c373b3 David Woodhouse 2026-05-13  354  	product = (unsigned __int128)delta * le64_to_cpu(clk->counter_period_frac_sec);
+df750b53c373b3 David Woodhouse 2026-05-13  355  	product >>= clk->counter_period_shift;
+df750b53c373b3 David Woodhouse 2026-05-13  356  	product += le64_to_cpu(clk->time_frac_sec);
+df750b53c373b3 David Woodhouse 2026-05-13  357  	ref_frac = (u64)product;
+df750b53c373b3 David Woodhouse 2026-05-13  358  	ref_ns = mul_u64_u64_shr(ref_frac, NSEC_PER_SEC, 64);
+df750b53c373b3 David Woodhouse 2026-05-13  359  	ref_ns += (le64_to_cpu(clk->time_sec) + (u64)(product >> 64)) * NSEC_PER_SEC;
+df750b53c373b3 David Woodhouse 2026-05-13  360  
+df750b53c373b3 David Woodhouse 2026-05-13  361  	sys_ns = ktime_to_ns(snap.real) - (s64)(int16_t)le16_to_cpu(clk->tai_offset_sec) * NSEC_PER_SEC;
+df750b53c373b3 David Woodhouse 2026-05-13  362  	diff = (s64)(ref_ns - sys_ns);
+df750b53c373b3 David Woodhouse 2026-05-13  363  
+df750b53c373b3 David Woodhouse 2026-05-13  364  rearm:
+df750b53c373b3 David Woodhouse 2026-05-13  365  	mod_timer(&st->cmp_timer, jiffies + msecs_to_jiffies(500));
+df750b53c373b3 David Woodhouse 2026-05-13  366  }
+df750b53c373b3 David Woodhouse 2026-05-13  367  
+
+:::::: The code at line 347 was first introduced by commit
+:::::: df750b53c373b3ddedbf4746625776cf5d3187a5 ptp_vmclock: Feed reference to timekeeping for feed-forward discipline
+
+:::::: TO: David Woodhouse <dwmw@amazon.co.uk>
+:::::: CC: David Woodhouse <dwmw@amazon.co.uk>
 
 --
 0-DAY CI Kernel Test Service
