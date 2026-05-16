@@ -1,128 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98173D410B;
-	Sat, 16 May 2026 12:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C398405C57
+	for <llvm@lists.linux.dev>; Sat, 16 May 2026 13:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778935713; cv=none; b=uYtBCUaXsJ+yEXu6/LSQi0Rmds0Mt6r6WAPVrp3vXi6U0tQWiO1eRoU4eGFWOVyp9NqWjH2h41KhpF19Oy9MuaIz7rSc4uq0IK6R29ZzeJ5CMLmwyHIdt5FFs+HA0DT98GswjpIu6WCwzwZmcg19f3bvestt/4TkSvNKozkkcgo=
+	t=1778936594; cv=none; b=L17DNbtmlr/x62MrCqvyDlClJxp3dE0f+c1ducI7K13qslpswqKF3nHk/QEuqWZmAP6knuY1j/no/owbeo1SHlNLgKL9/dmG6dhCIZnDzTbM2uwTpoYwxPcgWEXYnUNB34WlXaqzEyLLIvXrGq2yyFDnwNtv+V/ssI/dByrBNgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778935713; c=relaxed/simple;
-	bh=2BTUo8szt4DjZleM7Hj+ucVqOrxD+W1MnmrDumkDoXk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=hmPaILDxlsPCP/lLbtuweroqSgP3GMbRGWI9b3QnTbj2k+m39SELHEsNF2blmRAUNXUOWdmW4lilWKieSASaUESSmZY3qrj7e47lKJiEmdhScSSE6JZ6EENsUz8PYQnthzCAEvJZXvH2VAVYuBcl4v0CiiMGQkGiYLG+T4AgMXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fuq6wevW; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778936594; c=relaxed/simple;
+	bh=rFr1YZG0Zf/pzBxZ7a7xVCrA/j5H2HlgEYxLv5Xgjws=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ZKaRuZMD/LTgR6OsGmOrR+6r4nIzerZJc1jULzOiR8wf+xpMjs1TI+Gf+ytK8bs8Ur36dh42bqilwzgZivhhYvTFUUtew+7GnbF+sPWrlwgbQO7A05l3YPhrgVntYpmC7xQKtHWmzZSjV/MRHQQ3qSRCvYvD1v6cjAKD2jBHLQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XMIKmUDO; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fuq6wevW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778935712; x=1810471712;
-  h=date:from:to:cc:subject:message-id;
-  bh=2BTUo8szt4DjZleM7Hj+ucVqOrxD+W1MnmrDumkDoXk=;
-  b=fuq6wevWsAcdNRA9xlwWNCCaoHjO6udNtvk4HaMhJv1TuUw27iaOBpuC
-   fZfmY+vDI3GIGVPXm9TL3gMSGDEl6S5knOMD+q7k1JJIhD8K75Cx6JzsH
-   5CW5xQC4m8LM2s6L01yPqh+M9EIK18xMUfX+nqB4npbrTlBUdsqt53qVj
-   mSQekg8HtQNlfWM30bSInyKIxR7yQOFEyL+eo3SMLSE2e0ffhxkWCUPfo
-   goGqouVnnG7kfYLfbsPTn0ZShTPSq2RLCes37QpX//60T2LeeuWqaakDx
-   2BDYmN9JEuuzxRvRiNotE4K6rK8UbO9oFddcA6Of/Kqs2bheaW/mPdNwS
-   A==;
-X-CSE-ConnectionGUID: PYRPbNI/TVyMIyaGxXOYLw==
-X-CSE-MsgGUID: lDzknDwaQzCyfBiRFIaXyQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11788"; a="90445803"
-X-IronPort-AV: E=Sophos;i="6.23,238,1770624000"; 
-   d="scan'208";a="90445803"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2026 05:48:31 -0700
-X-CSE-ConnectionGUID: pcSf5gqgTquzr8T7Mqkc8w==
-X-CSE-MsgGUID: A8V2sJszTby/nslOotfgMQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,238,1770624000"; 
-   d="scan'208";a="239069026"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa009.jf.intel.com with ESMTP; 16 May 2026 05:48:29 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wOERP-000000009Kj-0E1o;
-	Sat, 16 May 2026 12:48:27 +0000
-Date: Sat, 16 May 2026 14:48:24 +0200
-From: kernel test robot <lkp@intel.com>
-To: David Woodhouse <dwmw@amazon.co.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dwmw2:ffclock 39/39] drivers/ptp/ptp_vmclock.c:347:6:
- warning: variable 'diff' set but not used
-Message-ID: <202605161448.8UKNxgIE-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XMIKmUDO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778936591;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LFHF4Rcr3PmF0n87iOKEK/aF1k4evaPYHer47VXnWJY=;
+	b=XMIKmUDOku7Egn2WiGGf/BcfJ1ZKB+qQMhP5E3u/7Am2o+d0iyayW0Ae+Y884iwaem8jPx
+	N3XVjO/2oXvL7SE5J8DoL7eHPuWkxwBMOwpz9Mwr+wsAwj+RzYYf3OIjEdaql3sxo2GYLw
+	bU6zslf1a8dYY3BHcbkZdWJ3a3beXy8=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-253-bok3Xfa2NIyqEay3GruuzQ-1; Sat,
+ 16 May 2026 09:03:10 -0400
+X-MC-Unique: bok3Xfa2NIyqEay3GruuzQ-1
+X-Mimecast-MFC-AGG-ID: bok3Xfa2NIyqEay3GruuzQ_1778936589
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1EFFA1956052
+	for <llvm@lists.linux.dev>; Sat, 16 May 2026 13:03:09 +0000 (UTC)
+Received: from [172.20.187.136] (unknown [10.30.45.25])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A485E180058A;
+	Sat, 16 May 2026 13:03:08 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-rc3,
+ upstream-mainline, 6916d570)
+Date: Sat, 16 May 2026 13:03:08 -0000
+To: llvm@lists.linux.dev, yoyang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <51131.126051609031000645@us-mta-253.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: udJaE8oNcITuL-fN7ZwEtMXaaUcmH87X1s6FdCtVKkg_1778936589
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.infradead.org/users/dwmw2/linux ffclock
-head:   4d04890e42f4f8a0651ffae982f1da9bc2fe2948
-commit: 4d04890e42f4f8a0651ffae982f1da9bc2fe2948 [39/39] timekeeping: Unify ntp_error and time_offset into phase_error
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260516/202605161448.8UKNxgIE-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260516/202605161448.8UKNxgIE-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605161448.8UKNxgIE-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/ptp/ptp_vmclock.c:347:6: warning: variable 'diff' set but not used [-Wunused-but-set-variable]
-     347 |         s64 diff;
-         |             ^
-   1 warning generated.
---
->> Warning: kernel/time/ntp.c:89 struct member 'ntp_err_mult_hi' not described in 'ntp_data'
->> Warning: kernel/time/ntp.c:89 struct member 'phase_error_pending' not described in 'ntp_data'
->> Warning: kernel/time/ntp.c:89 struct member 'ntp_err_mult_hi' not described in 'ntp_data'
->> Warning: kernel/time/ntp.c:89 struct member 'phase_error_pending' not described in 'ntp_data'
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +/diff +347 drivers/ptp/ptp_vmclock.c
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2026-05-16' of https://gitlab.free=
+desktop.org/drm/kernel
 
-20503272422693 David Woodhouse 2024-10-06  338  
-4d04890e42f4f8 David Woodhouse 2026-05-15  339  static void vmclock_set_tk_reference(struct vmclock_state *st);
-df750b53c373b3 David Woodhouse 2026-05-13  340  static void vmclock_cmp_timer_fn(struct timer_list *t)
-df750b53c373b3 David Woodhouse 2026-05-13  341  {
-df750b53c373b3 David Woodhouse 2026-05-13  342  	struct vmclock_state *st = container_of(t, struct vmclock_state, cmp_timer);
-df750b53c373b3 David Woodhouse 2026-05-13  343  	volatile struct vmclock_abi *clk = st->clk;
-df750b53c373b3 David Woodhouse 2026-05-13  344  	struct system_time_snapshot snap;
-df750b53c373b3 David Woodhouse 2026-05-13  345  	unsigned __int128 product;
-df750b53c373b3 David Woodhouse 2026-05-13  346  	u64 delta, ref_frac, ref_ns, sys_ns;
-df750b53c373b3 David Woodhouse 2026-05-13 @347  	s64 diff;
-df750b53c373b3 David Woodhouse 2026-05-13  348  
-df750b53c373b3 David Woodhouse 2026-05-13  349  	ktime_get_snapshot(&snap);
-df750b53c373b3 David Woodhouse 2026-05-13  350  	if (snap.cs_id != st->cs_id)
-df750b53c373b3 David Woodhouse 2026-05-13  351  		goto rearm;
-df750b53c373b3 David Woodhouse 2026-05-13  352  
-df750b53c373b3 David Woodhouse 2026-05-13  353  	delta = snap.cycles - le64_to_cpu(clk->counter_value);
-df750b53c373b3 David Woodhouse 2026-05-13  354  	product = (unsigned __int128)delta * le64_to_cpu(clk->counter_period_frac_sec);
-df750b53c373b3 David Woodhouse 2026-05-13  355  	product >>= clk->counter_period_shift;
-df750b53c373b3 David Woodhouse 2026-05-13  356  	product += le64_to_cpu(clk->time_frac_sec);
-df750b53c373b3 David Woodhouse 2026-05-13  357  	ref_frac = (u64)product;
-df750b53c373b3 David Woodhouse 2026-05-13  358  	ref_ns = mul_u64_u64_shr(ref_frac, NSEC_PER_SEC, 64);
-df750b53c373b3 David Woodhouse 2026-05-13  359  	ref_ns += (le64_to_cpu(clk->time_sec) + (u64)(product >> 64)) * NSEC_PER_SEC;
-df750b53c373b3 David Woodhouse 2026-05-13  360  
-df750b53c373b3 David Woodhouse 2026-05-13  361  	sys_ns = ktime_to_ns(snap.real) - (s64)(int16_t)le16_to_cpu(clk->tai_offset_sec) * NSEC_PER_SEC;
-df750b53c373b3 David Woodhouse 2026-05-13  362  	diff = (s64)(ref_ns - sys_ns);
-df750b53c373b3 David Woodhouse 2026-05-13  363  
-df750b53c373b3 David Woodhouse 2026-05-13  364  rearm:
-df750b53c373b3 David Woodhouse 2026-05-13  365  	mod_timer(&st->cmp_timer, jiffies + msecs_to_jiffies(500));
-df750b53c373b3 David Woodhouse 2026-05-13  366  }
-df750b53c373b3 David Woodhouse 2026-05-13  367  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2529409396
 
-:::::: The code at line 347 was first introduced by commit
-:::::: df750b53c373b3ddedbf4746625776cf5d3187a5 ptp_vmclock: Feed reference to timekeeping for feed-forward discipline
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2529409396_ppc64le_kernel
 
-:::::: TO: David Woodhouse <dwmw@amazon.co.uk>
-:::::: CC: David Woodhouse <dwmw@amazon.co.uk>
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2529409396_aarch64_kernel_kcidb_tool_21296375_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
