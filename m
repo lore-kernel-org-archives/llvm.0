@@ -1,154 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535C13E3162;
-	Sat, 16 May 2026 15:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B487356764;
+	Sat, 16 May 2026 15:51:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778944305; cv=none; b=E6yd05chd0wI0mUkFBH0Lt30luOBOzsEEaFTeY0JRRNGDk74d4T4ceQtA5Y83hJH7ro7Yze34msJNY3XBdioE+4O1B8+im2sF0CU2lUi0Dk2HkT8szEyk4NlGjfikx6+1Vg2bl5K07wfIf319+wXXGlpWm9tN8O6l0+O41aHiHg=
+	t=1778946694; cv=none; b=VpYtZkcP4ixRKWtHOMdXJHdwiRtRIDtncGOLhQCwW7XGIZH0bQm21yQHNvxKDd1+Oed4Ter5pkquPYm60nuZpoBMvAghhdzBNbKfoGnZ/jqDo/6YpyRXh+rOVoui9e3f+t/XaltyaYixcjw+guJCChHgw2xkRA+a0EJQjLMJilc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778944305; c=relaxed/simple;
-	bh=lg0rxOCQCLqVZWSQOLYhY0Pgw1UG8QKlLFT66nXg4pw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AJr6801XY28WvxotF68VI7H3yUA89DqMb7ib9H5XPBwyDJqzNn+5NqVCTSvaMrKi+rteEHXBIbQuJxpf/HGVASUcKXGSysLCEAikynq9zhqveoxAcwyjzpT21EGfleGejpPnqANzFzWXvVRxmXGjOdbGSTtR8agp678M08scgzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gU1UZoDV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778946694; c=relaxed/simple;
+	bh=kC0HBT9SarchGoqwLfiVYhk8mE+purbVYzNJ74o83Fk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=N1hwsT5W3Ekn0k3tBBKt4KNPmuQ4ESXPo1Qw6KBBB56vjG43OIqu/il7vvBDZowrCOvUhZh+SoQ88LWo5hi3+s6QrQFOEa4USZXAucUFbWFu8hPqeW6x+N//lSZWXJUY8Gdzjgaw17OOpypJnOvib8fXrI95W3u2nTjK04hT4EQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TNpgYvGQ; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gU1UZoDV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596EEC19425;
-	Sat, 16 May 2026 15:11:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778944304;
-	bh=lg0rxOCQCLqVZWSQOLYhY0Pgw1UG8QKlLFT66nXg4pw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=gU1UZoDVy19Pq3Edyqd3E3hghl0X0D51BZtWufEL/1oSmP1iF+9FwKYIpIn9mJQJ7
-	 Bk2n8NFI3SYgZM+9NsQyjR+K0koZs9vobLisKzAheWcy/RBzWT51YuiFsYPl+feVnM
-	 /Qgp12WQdwMR3mv0YeHGWQcZLC4eO8c4O7AiqQTWy0kSOWdhL7M3E3oVqbL5EfSgDs
-	 QUw4P1apzogbuG3hNhHsDfAYRvBk/IIhdqw/OZLOOPDY7j+yvt5dMSUH9Miuz/Wsqz
-	 riRhtTZiAVJeV3jLPpw5tHTFexJMuKqqt8CHO4JUdTXjdJgrZqUpvE1GkElDBAEqd1
-	 xx40wphMHeTVA==
-Date: Sat, 16 May 2026 16:11:34 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Michal Piekos <michal.piekos@mmpsystems.pl>
-Cc: David Lechner <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai
- <wens@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel
- Holland <samuel@sholland.org>, linux-iio@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, Andy Shevchenko
- <andriy.shevchenko@intel.com>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- llvm@lists.linux.dev
-Subject: Re: [PATCH v3] iio: adc: sun20i-gpadc: support non-contiguous
- channel lookups
-Message-ID: <20260516161134.0fc1ad10@jic23-huawei>
-In-Reply-To: <20260516-fix-sunxi-gpadc-sparse-channels-v3-1-4d229d18ff3b@mmpsystems.pl>
-References: <20260516-fix-sunxi-gpadc-sparse-channels-v3-1-4d229d18ff3b@mmpsystems.pl>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TNpgYvGQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778946692; x=1810482692;
+  h=date:from:to:cc:subject:message-id;
+  bh=kC0HBT9SarchGoqwLfiVYhk8mE+purbVYzNJ74o83Fk=;
+  b=TNpgYvGQYm5E3JPZPuy4P8VOpCkHDHbETZc6RI26qnt1tRk7jCFDqj92
+   ivW9l/cusG7DXpUbaVyg56X0aECMCv1jsFX++4hyqrQPlctj9OeBaukMB
+   bSVjD/WmG1Fokl8V69p36a4OehDOfchHEq8XYXZSIuLHfZ9Rx1Ml+sJDr
+   sTOZBKHpXpYv26psDAcoXh0m8yxYBXMSZ3Q/GsIBmBqTD36+BGvQgG1Fl
+   5BhE2sneG1qTQ8VvSGpYtalD2fT8GlTllwrdtZsgCID2kadFCYC3Pdcbg
+   8LqyQK4O1Lasa5roGx4uRetVp4QT0L8CiTmFq/2ruWP8JIPxDQZSkr1/x
+   g==;
+X-CSE-ConnectionGUID: SSbwLFvkSoiUW8HW/NE+gQ==
+X-CSE-MsgGUID: CSoKzJ67Su+G8Ns7uyvg0g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11788"; a="83488964"
+X-IronPort-AV: E=Sophos;i="6.23,238,1770624000"; 
+   d="scan'208";a="83488964"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2026 08:51:32 -0700
+X-CSE-ConnectionGUID: ooCSnYcyR3yZrAJJcpRZCg==
+X-CSE-MsgGUID: JAmnlCUMR0WASAvd7s6IOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,238,1770624000"; 
+   d="scan'208";a="238116238"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa010.jf.intel.com with ESMTP; 16 May 2026 08:51:30 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wOHIW-000000009Lx-0qAH;
+	Sat, 16 May 2026 15:51:28 +0000
+Date: Sat, 16 May 2026 17:51:08 +0200
+From: kernel test robot <lkp@intel.com>
+To: Manos Pitsidianakis <manos@pitsidianak.is>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: warning: variable does not need to be mutable
+Message-ID: <202605161734.3uEaaFFK-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, 16 May 2026 07:48:37 +0200
-Michal Piekos <michal.piekos@mmpsystems.pl> wrote:
+tree:   https://github.com/intel-lab-lkp/linux/commits/Manos-Pitsidianakis/rust-bindings-generate-virtio-bindings/20260513-065912
+head:   dcbb217532e1f25cb932bf8b1019d1085373a6df
+commit: dcbb217532e1f25cb932bf8b1019d1085373a6df samples/rust: Add sample virtio-rtc driver [WIP]
+date:   4 days ago
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260516/202605161734.3uEaaFFK-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260516/202605161734.3uEaaFFK-lkp@intel.com/reproduce)
 
-> Using consumer driver like iio-hwmon which resolve channels through
-> io-channels phandles will fail for sparse channels because IIO core by
-> default treats phandle argument as index into channel array.
->         eg. <&gpadc 1> will fail if there is only channel@1 specified
->=20
-> Add .fwnode_xlate() which maps DT phandle to the registered channel
-> whose chan->channel matches the hardware channel number. It allows
-> sparse channel maps to be consumed by drivers like iio-hwmon.
->=20
-> Tested on Radxa Cubie A5E.
->=20
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> Signed-off-by: Michal Piekos <michal.piekos@mmpsystems.pl>
-Applied to the testing branch of iio.git.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605161734.3uEaaFFK-lkp@intel.com/
 
-Thanks,
+All warnings (new ones prefixed by >>):
 
-Jonathan
+>> warning: variable does not need to be mutable
+   --> samples/rust/rust_virtio_rtc.rs:338:17
+   |
+   338 |             let mut is_exposed = false;
+   |                 ----^^^^^^^^^^
+   |                 |
+   |                 help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` on by default
+--
+>> warning: variants `Tai` and `Monotonic` are never constructed
+   --> samples/rust/rust_virtio_rtc.rs:113:5
+   |
+   109 | enum ClockType {
+   |      --------- variants in this enum
+   ...
+   113 |     Tai = 1,
+   |     ^^^
+   114 |     #[doc(alias = "VIRTIO_RTC_CLOCK_MONOTONIC")]
+   115 |     Monotonic = 2,
+   |     ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
 
-> ---
-> Changes in v3:
-> - Add iiospec->nargs validation in sun20i_gpadc_fwnode_xlate()
-> - Keep Andy's Reviewed-by tag since change is narrow validation fix
-> - Fix spelling issues in commit message
-> - Link to v2: https://patch.msgid.link/20260514-fix-sunxi-gpadc-sparse-ch=
-annels-v2-1-d4a66b70c7a7@mmpsystems.pl
->=20
-> Changes in v2:
-> - Move loop variable declaration into the for statement
-> - Fix indentation using clang-format
-> - Correct commit wording
-> - Link to v1: https://patch.msgid.link/20260513-fix-sunxi-gpadc-sparse-ch=
-annels-v1-1-6c21e290bcee@mmpsystems.pl
->=20
-> To: Jonathan Cameron <jic23@kernel.org>
-> To: David Lechner <dlechner@baylibre.com>
-> To: Nuno S=C3=A1 <nuno.sa@analog.com>
-> To: Andy Shevchenko <andy@kernel.org>
-> To: Chen-Yu Tsai <wens@kernel.org>
-> To: Jernej Skrabec <jernej.skrabec@gmail.com>
-> To: Samuel Holland <samuel@sholland.org>
-> To: Nathan Chancellor <nathan@kernel.org>
-> To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> To: Bill Wendling <morbo@google.com>
-> To: Justin Stitt <justinstitt@google.com>
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-sunxi@lists.linux.dev
-> Cc: linux-kernel@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> ---
->  drivers/iio/adc/sun20i-gpadc-iio.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->=20
-> diff --git a/drivers/iio/adc/sun20i-gpadc-iio.c b/drivers/iio/adc/sun20i-=
-gpadc-iio.c
-> index 861c14da75ad..8a75498557ff 100644
-> --- a/drivers/iio/adc/sun20i-gpadc-iio.c
-> +++ b/drivers/iio/adc/sun20i-gpadc-iio.c
-> @@ -139,8 +139,23 @@ static irqreturn_t sun20i_gpadc_irq_handler(int irq,=
- void *data)
->  	return IRQ_HANDLED;
->  }
-> =20
-> +static int
-> +sun20i_gpadc_fwnode_xlate(struct iio_dev *indio_dev,
-> +			  const struct fwnode_reference_args *iiospec)
-> +{
-> +	if (iiospec->nargs !=3D 1)
-> +		return -EINVAL;
-> +
-> +	for (unsigned int i =3D 0; i < indio_dev->num_channels; i++)
-> +		if (indio_dev->channels[i].channel =3D=3D iiospec->args[0])
-> +			return i;
-> +
-> +	return -EINVAL;
-> +}
-> +
->  static const struct iio_info sun20i_gpadc_iio_info =3D {
->  	.read_raw =3D sun20i_gpadc_read_raw,
-> +	.fwnode_xlate =3D sun20i_gpadc_fwnode_xlate,
->  };
-> =20
->  static void sun20i_gpadc_reset_assert(void *data)
->=20
-> ---
-> base-commit: 6916d5703ddf9a38f1f6c2cc793381a24ee914c6
-> change-id: 20260513-fix-sunxi-gpadc-sparse-channels-2b6b2063bd49
->=20
-> Best regards,
-> -- =20
-> Michal Piekos <michal.piekos@mmpsystems.pl>
->=20
->=20
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
