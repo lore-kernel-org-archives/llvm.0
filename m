@@ -1,104 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D416A30EF94;
-	Sun, 17 May 2026 21:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8040F1F4176;
+	Sun, 17 May 2026 21:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779053157; cv=none; b=MfE+Z9flyDFhOfpvVeYJZQnWyL3mkKPY1NwLCjTNkhr8bg2gPwRypEoKjo8X5JmhNKK8Nn2LTU/waS0ILSjH4289GQeCCmIto3AhKiRztEw1dtKaJZm03i80TKQrAvr0Botc0ji9LYiKc/pXBPLGrx77af9dzChLEltfsonkYfM=
+	t=1779054357; cv=none; b=rxmSfooVtfCxlAH56KR4Al4G0V5RU0YrhyxBfJOg5y58rktR/Nqklr/9GlvaqOU5bysOm/rPvYuBb32YrMjmUgukjqkUXdNzfcVxgqhCZ59/ieU2r+XVS6c/8OkKMKfgdcLc4SKozcZN1Qs3GwDlRRZIHKsf3h/P6odoC8E5ENs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779053157; c=relaxed/simple;
-	bh=HFRITgFGYQVYblgoG8PXv63O6UhzlQojd5cPPmn7EVc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NXmZtVBhXDFeSI7KtTBSC7yVUFmW6Kj1YCzKRgu3mSDIiBe/cxevux213oq21eiuvcX2eyKUJlUHtSK8Q9AH0FNfShMmPwxf2pzwYSBpofw6BQ+YC/FouhaPXT7rHhh/t/OxAHmy7Zpv1NA8nWj1HbA6hXzRAJyqiM1hV/ombLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bDFwRE2y; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1779054357; c=relaxed/simple;
+	bh=HcHkVQED+BUDIbbFFoaWvhuqZicKw1PktcSgrTy4mSs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JJLO/78xX5VdljNd6+UPHHTdt4lUD1gOYeJw2vlaXyA42gWBeqI5H84hAoNT8tKvFpFDlepFSRq5nvuDQOsafg7W/VrEid+5yDUYPpHrNHIsLdM83Tj0mpZ6s8Exs1drhf3b4xVR//Dy6tUvyTdgfsrw+w1wQKC3PqHH2Z0iMcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hJkBqqkC; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bDFwRE2y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hJkBqqkC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779053155; x=1810589155;
-  h=date:from:to:cc:subject:message-id;
-  bh=HFRITgFGYQVYblgoG8PXv63O6UhzlQojd5cPPmn7EVc=;
-  b=bDFwRE2ypLzyOn41i9VhguIGDDhoHSHPxd8pA7jEF/9Z7vBnUgPNFWd7
-   6zk9R7l6OQn5FTV9sqAkZCXrG5fACmmey2AmKWpSxl36SJ7LnciaYXo+6
-   Xn90qIrf190gUgCEL+YMYJDgWrk39+59qs4tKjK9DxS9kn9mtO7RJP9se
-   oXuiZa0dUjtBmDsLl6SKAOO9QkDiE6AjMJ8crgNj1p8sAzpfljg+x8kPn
-   xSHgjQYGclHchONvHBHbo7b2+rCs/QaTKpNRj2B01hVGo7OCuDIcwUE8m
-   Zkm665cE47fwEKXIkbLUWjBc1CTpkFd0qKkN071ubl+P3eyLIjZgEmmuY
-   g==;
-X-CSE-ConnectionGUID: n1Tw1r3yQ3aNPxP5kcn1qw==
-X-CSE-MsgGUID: NhHjIJFhRNudMI2biz8K7g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11789"; a="83782329"
+  t=1779054356; x=1810590356;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HcHkVQED+BUDIbbFFoaWvhuqZicKw1PktcSgrTy4mSs=;
+  b=hJkBqqkCNvLaL+/dBNqyC5Tk5l94U5XLfiOjdyT7oGyo2aQd72XCc+Sj
+   C8n+S/E9KK+Q8OUWEXnoQz7VRANRJJXwjWXM/Oy3ygfj/Um6WUqgGOG/d
+   F+q1/s5odLs8t7520Daq/2NRTVVJMoCHJcP09UVESRvty/NHdpY/Vc34D
+   lzKsSa0x2M4u5aPHj1CvpW8ypQ98tQuStEDNPfZrf3C+7WMpPBFZRCbpS
+   CX1bRR4BHUESXTExngqvIdGTEzU6trw3NqkCpx/f8fTQxrFPkYDI4iKjH
+   EZeY0HJM8dtK1Ylh97Zgo4sVvvIAvPuzyNKrKcarg9IbgB94PM6Q5s3C9
+   w==;
+X-CSE-ConnectionGUID: pjOGuJ0dSeOwgMpkiqeSVg==
+X-CSE-MsgGUID: iYi4pUeUQpOrp/4gQDQNWw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11789"; a="90493036"
 X-IronPort-AV: E=Sophos;i="6.23,240,1770624000"; 
-   d="scan'208";a="83782329"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2026 14:25:54 -0700
-X-CSE-ConnectionGUID: uXjE01aJSnGiV5TlnZy2hg==
-X-CSE-MsgGUID: 4mgDq6gTQgClqSpjBZJXZQ==
+   d="scan'208";a="90493036"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2026 14:45:55 -0700
+X-CSE-ConnectionGUID: 81Lj7rBnS2qvPMLM4gtjwA==
+X-CSE-MsgGUID: QrWDyaHwRx+3Y9FWD6pstw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,240,1770624000"; 
-   d="scan'208";a="234787114"
+   d="scan'208";a="243549847"
 Received: from lkp-server01.sh.intel.com (HELO d94e5e629b2d) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 17 May 2026 14:25:52 -0700
+  by orviesa004.jf.intel.com with ESMTP; 17 May 2026 14:45:54 -0700
 Received: from kbuild by d94e5e629b2d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wOize-000000001xO-0ZSZ;
-	Sun, 17 May 2026 21:25:50 +0000
-Date: Mon, 18 May 2026 05:24:54 +0800
+	id 1wOjJ0-000000001xi-3CWM;
+	Sun, 17 May 2026 21:45:50 +0000
+Date: Mon, 18 May 2026 05:45:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel J Blueman <daniel@quora.org>
+To: shayderrr <darknessshayder@gmail.com>, gregkh@linuxfoundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Rob Clark <robin.clark@oss.qualcomm.com>
-Subject: [drm-msm:msm-next 9/11]
- drivers/gpu/drm/msm/msm_gem_shrinker.c:105:58: warning: omitting the
- parameter name in a function definition is a C23 extension
-Message-ID: <202605180535.PJsAYeaG-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Pranav Bajjuri <darknessshayder@gmail.com>
+Subject: Re: [PATCH] net: octeon: fix carrier state, null guard, and
+ modernize phy ioctl
+Message-ID: <202605180508.53ptUezJ-lkp@intel.com>
+References: <20260517141955.79666-1-darknessshayder@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260517141955.79666-1-darknessshayder@gmail.com>
 
-tree:   https://gitlab.freedesktop.org/drm/msm.git msm-next
-head:   db339b6bc9f234b4883eb02946ea01d8d9faa11c
-commit: 3392291fc509d8ad6e4ad90f15b0a193f721cbc9 [9/11] drm/msm: Fix shrinker deadlock
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20260518/202605180535.PJsAYeaG-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260518/202605180535.PJsAYeaG-lkp@intel.com/reproduce)
+Hi shayderrr,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on staging/staging-testing]
+[also build test ERROR on staging/staging-next staging/staging-linus linus/master v7.1-rc3 next-20260508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/shayderrr/net-octeon-fix-carrier-state-null-guard-and-modernize-phy-ioctl/20260517-222121
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20260517141955.79666-1-darknessshayder%40gmail.com
+patch subject: [PATCH] net: octeon: fix carrier state, null guard, and modernize phy ioctl
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260518/202605180508.53ptUezJ-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260518/202605180508.53ptUezJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605180535.PJsAYeaG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605180508.53ptUezJ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/msm_gem_shrinker.c:105:58: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     105 | purge(struct drm_gem_object *obj, struct ww_acquire_ctx *)
-         |                                                          ^
-   drivers/gpu/drm/msm/msm_gem_shrinker.c:117:58: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     117 | evict(struct drm_gem_object *obj, struct ww_acquire_ctx *)
-         |                                                          ^
-   2 warnings generated.
+>> drivers/staging/octeon/ethernet-mdio.c:91:6: error: conflicting types for 'cvm_oct_common_stop'
+      91 | void cvm_oct_common_stop(struct net_device *dev)
+         |      ^
+   drivers/staging/octeon/octeon-ethernet.h:90:5: note: previous declaration is here
+      90 | int cvm_oct_common_stop(struct net_device *dev);
+         |     ^
+   1 error generated.
 
 
-vim +105 drivers/gpu/drm/msm/msm_gem_shrinker.c
+vim +/cvm_oct_common_stop +91 drivers/staging/octeon/ethernet-mdio.c
 
-   103	
-   104	static bool
- > 105	purge(struct drm_gem_object *obj, struct ww_acquire_ctx *)
-   106	{
-   107		if (!is_purgeable(to_msm_bo(obj)))
-   108			return false;
+    90	
+  > 91	void cvm_oct_common_stop(struct net_device *dev)
+    92	{
+    93		struct octeon_ethernet *priv = netdev_priv(dev);
+    94		int interface = INTERFACE(priv->port);
+    95		int index = INDEX(priv->port);
+    96		union cvmx_helper_link_info link_info;
+    97		union cvmx_gmxx_prtx_cfg gmx_cfg;
+    98	
+    99		gmx_cfg.u64 = cvmx_read_csr(CVMX_GMXX_PRTX_CFG(index, interface));
+   100		gmx_cfg.s.en = 0;
+   101		cvmx_write_csr(CVMX_GMXX_PRTX_CFG(index, interface), gmx_cfg.u64);
+   102	
+   103		priv->poll = NULL;
+   104	
+   105		netif_carrier_off(dev);
+   106	
+   107		if (dev->phydev)
+   108			phy_disconnect(dev->phydev);
    109	
-   110		if (msm_gem_active(obj))
-   111			return false;
-   112	
-   113		return with_vm_locks(msm_gem_purge, obj);
-   114	}
-   115	
+   110		if (priv->last_link) {
+   111			link_info.u64	= 0;
+   112			priv->link_info	= 0;
+   113			priv->last_link	= 0;
+   114	
+   115			cvmx_helper_link_set(priv->port, link_info);
+   116			cvm_oct_note_carrier(priv, link_info);
+   117		}
+   118	}
+   119	
 
 --
 0-DAY CI Kernel Test Service
