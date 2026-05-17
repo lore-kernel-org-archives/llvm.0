@@ -1,94 +1,157 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDD71990C7
-	for <llvm@lists.linux.dev>; Sun, 17 May 2026 01:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F3F3161A2;
+	Sun, 17 May 2026 03:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778981575; cv=none; b=oUyj+Ny1hzbeyxmYVsGpnSMf+OUnp6EKbmdK3OnsEcHlqwHfJLFWqwqBSkv2ZlBy4/uxGCdG/q3p3Qj39HaDJ8RpXJCP0bS/Bbqkd9oNO5wYOIjkNcSYl2eunZyrj7QMrMF9Ld5iCRO4eqOmFpczHS/PZSwrBOSfY2uAiunjmik=
+	t=1778988559; cv=none; b=m7S6n1ZsiH5FK9LW6iqibtLwFbuLgfTYOLvpM9j+SPioY3VEb9plSTsZDqdGtUDjtoYj0wxflvMJMeicJb4NVnzQJJbN86lRCgmozmKtMiFM3Lpy0cK6yEq5eqxHfYFr0pf0shb2ob85tBzVYNHyqSrHj8SL65Uh+O+FhtAFwFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778981575; c=relaxed/simple;
-	bh=vM7dpFsn5ov8F0liu1dS7ratbNckjDrhOhCUfYNjLzI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=VLmNzhzP9SWUgZzWXjquBLQtTgN8hx9ioCFquWAkabEJ0YOV7RhT7avPKwYx0cME1CKvrbMXH0j+yYSD03CNxr6Yg58zVRofZ8OAwYyOMsXy+ByMyRyybnCabZ0j84nZBXH0gvIDy/fWSP2/cLPM2IhzsLZqhG5uwrfbQsy9DKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=REDmtFvh; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778988559; c=relaxed/simple;
+	bh=W3hxyvPQIHp6N/EcjsueATTuNczPa4vrB3d34Qz9f4g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D07jEnGPDAWLAhjUSyiqbEwfNvCEbu+k8GWZQfKm4qZ+H6WbB10X+NH3jvlz5BY5RXohppG1GLBo8dh65GVVZr+EL07HwnpJjPNv/vBP2k1sJbcURsmatmRVr6Jpnd3UL7kY2OQgmePcYPMDvWyQYce18r294C5o9+1oauhQBqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CQQV2+PA; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="REDmtFvh"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7c58e6eb3edso5165117b3.2
-        for <llvm@lists.linux.dev>; Sat, 16 May 2026 18:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778981573; x=1779586373; darn=lists.linux.dev;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vM7dpFsn5ov8F0liu1dS7ratbNckjDrhOhCUfYNjLzI=;
-        b=REDmtFvh8VjUnzGet2gFqNwP9VADPx2zvJZMWsIpcqD1ABbhRlzc1RzsMkK3HL9WX9
-         +wpzbhfnLs/PSjRBHKsJCHV37Qv3H4lJImRK1LKMXY56TPqBPnaSeSa56mZNkGH7+vpk
-         DtWn3rM5xQBZzKq3+JyfULtWlYiaVnucgoUmUH83QjMPdE98FpVeE7DMhQRcr+tniYkr
-         AgicPdQw08XybUSfYxrVocfnvThT0H5WCBdNcXqtXzjj1Akq67tv7raUYFxwATeHI61E
-         v3arst0/CVoZ5bsuWJGzEqAAGrTpfAQTuwwLNP2Hl/msWj8k9WiAz1qCiFRWwM30Me3p
-         StPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778981573; x=1779586373;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vM7dpFsn5ov8F0liu1dS7ratbNckjDrhOhCUfYNjLzI=;
-        b=HaESPyFESODRJ9fJWdk92XJm17ZuutKZykwR32PT+carOt3ryheOE382g1p5/vUEP4
-         OrOBFExncEwiBbjNqolKzbHpWPa7gfUnuYAC+rRaaOBTQqDT6YjOkWLloeDb/wJPn9d7
-         v1NqafGSH6a/EAGx3owd0Yky6j8CC4NOZQm5eJrPT693keOANQS0hhQOkhvGlH8+eTEF
-         eMf8Um0UmtzOnx49/AJFaeQ7Dwdg+u1oHSmtnQfcCcvXhPqyBHiEo8JpGiJ+tz3ZnIiE
-         38iwym9VSRx5NXhXEYSeGWKs2ynk/Vjd5QiMUG5Z6/GmCC19rhrtmW03D+LbvM58btmJ
-         JJUA==
-X-Forwarded-Encrypted: i=1; AFNElJ9NBnVvP66IoaVoUN4LJXr6EplSqDk7qBO50JazG+vRpbvzfRctw5h+c75iWHVkYBHdhQqr@lists.linux.dev
-X-Gm-Message-State: AOJu0YzVACp1jpp8bNPP+k0zgecRRJ7iRlHQZP/sDS2xEgIB1aUN7hJf
-	GqQHg2Qisx4YbxH4YtmfSN4j8sw0yAbH+9p1ma5cmvPq35Lo+IBSSdf1
-X-Gm-Gg: Acq92OGjKDCf7xtHBt1YUmjjUb/zDVIHU34eLcitNSslaIptHExoqgerFutQeeCH69T
-	8Zp44zWAAlDIfbUMpML+V0g5RapPnLgeUn8HsEiEPQPJId0FlJV96y74iP+SlNm2A+I4i4hhEWL
-	aNRlep32B4MQb4k1/9T7s/oj5XAVlqgZuippxsqxeFb3Ubl98wQoa7YfxCW7wxBqNHLwe8Q7x/n
-	BACFqXB8CjF5Vmt/r1aNKmOWTXrNTHDXx4iPexrQCH/RWnTBaSFHZHpzOYikOBCF6nG+e0lZtoz
-	37j3ebq4ijoqK/kdilF9p3VVVkbwH0+vA143TEz/b/ZKgQUVgvfNknT94Ux3LkwfmRoijBXU4Y/
-	5Iqw8W4NQ5bU8cPhJnIaE+4Ty0nyoJbAvsNmU7SpPImq79xfWuXcObMJLIxbjrsSfP/ZvhKCM/m
-	f/GwCjchEuaUbV5wu8F/rKuPstKIb6fcc5zq7AAbKBGTK5iNuZp5QRYPRCTlaBfugRZ6imEBFvY
-	1+MeO4VlvrB2qdrVA==
-X-Received: by 2002:a05:690c:f09:b0:79a:b9cc:2100 with SMTP id 00721157ae682-7c95c00dc67mr115014067b3.35.1778981572872;
-        Sat, 16 May 2026 18:32:52 -0700 (PDT)
-Received: from localhost ([2a03:2880:f806:4f::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7cc9bc0dab3sm2342547b3.24.2026.05.16.18.32.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 May 2026 18:32:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CQQV2+PA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778988557; x=1810524557;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W3hxyvPQIHp6N/EcjsueATTuNczPa4vrB3d34Qz9f4g=;
+  b=CQQV2+PA2Ldx8AV/38ats4JV/kAxm6KcBP6OG4iqZr4oNGl+/wn0CHei
+   xIPWoOaAUJvSssRLDLcCBVRYSCdkdifQU+zUvGLI2e8U5FBVe6rjscR20
+   yiBRvKdfC31NBt4xwTrFR8sLFT78rxzWPNj7+JPulLUaXLzYXQnNY75d9
+   7HJLAqH6EFBslI4Ei4qxaDPzZCXDj+PyzRj0OeiU8nQcWO1soghUKcfKM
+   vGELglZntIjx1dnwjL1lBkxP1RoOtVp9V9TZkwwLMxQP5OuVYQvG9jAyI
+   xsYGcQhaTrKInxttYppLxtv3Bjb3r0s0maST54yg/GJOwN3fz1R49uoVW
+   Q==;
+X-CSE-ConnectionGUID: XASoxHkqRiGFJQ28kG8QdA==
+X-CSE-MsgGUID: yWmpyCBLRruk3YXmxCjx5A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11788"; a="90583156"
+X-IronPort-AV: E=Sophos;i="6.23,239,1770624000"; 
+   d="scan'208";a="90583156"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2026 20:29:14 -0700
+X-CSE-ConnectionGUID: hI1MqPDSRMqXqMwfZi0H0A==
+X-CSE-MsgGUID: 4UbGB/DXS5WdSw+SZJgpWg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,239,1770624000"; 
+   d="scan'208";a="243075114"
+Received: from lkp-server01.sh.intel.com (HELO d94e5e629b2d) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 16 May 2026 20:29:13 -0700
+Received: from kbuild by d94e5e629b2d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wOSBh-000000001KU-4664;
+	Sun, 17 May 2026 03:29:09 +0000
+Date: Sun, 17 May 2026 11:28:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gilles Risch <gilles.risch@gmail.com>, alexander.deucher@amd.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	Gilles Risch <gilles.risch@gmail.com>
+Subject: Re: [PATCH] drm/radeon: fix eDP resume from suspend on iMac11, 1 /
+ DCE3.1 systems
+Message-ID: <202605171126.1g7CRkTZ-lkp@intel.com>
+References: <20260516185226.3005-1-gilles.risch@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 16 May 2026 18:32:51 -0700
-Message-Id: <DIKKC3RENM6O.24MCCPOVFAVZ6@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: Re: [PATCH bpf-next v11 00/11] selftests/bpf: Tolerate partial
- builds across kernel configs
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>, "Alexei
- Starovoitov" <ast@kernel.org>
-X-Mailer: aerc
-References: <20260430-selftests-bpf_misconfig-v11-0-e11f7a8c4fdc@suse.com>
- <DIJ8QPTPH61Q.6NT4DT90K5F9@suse.com>
-In-Reply-To: <DIJ8QPTPH61Q.6NT4DT90K5F9@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260516185226.3005-1-gilles.risch@gmail.com>
 
-On Fri May 15, 2026 at 5:15 AM PDT, Ricardo B. Marli=C3=A8re wrote:
-> Hi Alexei,
->
-> Just a gentle ping, please let me know if there's anything else that coul=
-d
-> be done in order to move this one forward. I believe everything has been
-> addressed.
+Hi Gilles,
 
-Conceptually the series make sense, but I'm not a makefile expert, so
-waiting for human to review them.
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v7.1-rc3 next-20260508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Gilles-Risch/drm-radeon-fix-eDP-resume-from-suspend-on-iMac11-1-DCE3-1-systems/20260517-025343
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20260516185226.3005-1-gilles.risch%40gmail.com
+patch subject: [PATCH] drm/radeon: fix eDP resume from suspend on iMac11, 1 / DCE3.1 systems
+config: riscv-randconfig-001-20260517 (https://download.01.org/0day-ci/archive/20260517/202605171126.1g7CRkTZ-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260517/202605171126.1g7CRkTZ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605171126.1g7CRkTZ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/radeon/atombios_encoders.c:1386:7: error: call to undeclared function 'ASIC_IS_DCE31'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1386 |         if (!ASIC_IS_DCE31(rdev))
+         |              ^
+   drivers/gpu/drm/radeon/atombios_encoders.c:1710:30: error: call to undeclared function 'ASIC_IS_DCE31'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1710 |                         if (ASIC_IS_DCE4(rdev) || ASIC_IS_DCE31(rdev))
+         |                                                   ^
+   drivers/gpu/drm/radeon/atombios_encoders.c:1727:29: error: call to undeclared function 'ASIC_IS_DCE31'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1727 |                 if (ASIC_IS_DCE4(rdev) || ASIC_IS_DCE31(rdev)) {
+         |                                           ^
+   3 errors generated.
+
+
+vim +/ASIC_IS_DCE31 +1386 drivers/gpu/drm/radeon/atombios_encoders.c
+
+  1372	
+  1373	bool
+  1374	atombios_set_edp_panel_power(struct drm_connector *connector, int action)
+  1375	{
+  1376		struct radeon_connector *radeon_connector = to_radeon_connector(connector);
+  1377		struct drm_device *dev = radeon_connector->base.dev;
+  1378		struct radeon_device *rdev = dev->dev_private;
+  1379		union dig_transmitter_control args;
+  1380		int index = GetIndexIntoMasterTable(COMMAND, UNIPHYTransmitterControl);
+  1381		uint8_t frev, crev;
+  1382	
+  1383		if (connector->connector_type != DRM_MODE_CONNECTOR_eDP)
+  1384			goto done;
+  1385	
+> 1386		if (!ASIC_IS_DCE31(rdev))
+  1387			goto done;
+  1388	
+  1389		if ((action != ATOM_TRANSMITTER_ACTION_POWER_ON) &&
+  1390		    (action != ATOM_TRANSMITTER_ACTION_POWER_OFF))
+  1391			goto done;
+  1392	
+  1393		if (!atom_parse_cmd_header(rdev->mode_info.atom_context, index, &frev, &crev))
+  1394			goto done;
+  1395	
+  1396		memset(&args, 0, sizeof(args));
+  1397	
+  1398		args.v1.ucAction = action;
+  1399	
+  1400		atom_execute_table(rdev->mode_info.atom_context, index, (uint32_t *)&args, sizeof(args));
+  1401	
+  1402		/* wait for the panel to power up */
+  1403		if (action == ATOM_TRANSMITTER_ACTION_POWER_ON) {
+  1404			int i;
+  1405	
+  1406			for (i = 0; i < 300; i++) {
+  1407				if (radeon_hpd_sense(rdev, radeon_connector->hpd.hpd))
+  1408					return true;
+  1409				mdelay(1);
+  1410			}
+  1411			return false;
+  1412		}
+  1413	done:
+  1414		return true;
+  1415	}
+  1416	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
