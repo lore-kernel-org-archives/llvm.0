@@ -1,139 +1,202 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8040F1F4176;
-	Sun, 17 May 2026 21:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7DA342173;
+	Sun, 17 May 2026 23:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779054357; cv=none; b=rxmSfooVtfCxlAH56KR4Al4G0V5RU0YrhyxBfJOg5y58rktR/Nqklr/9GlvaqOU5bysOm/rPvYuBb32YrMjmUgukjqkUXdNzfcVxgqhCZ59/ieU2r+XVS6c/8OkKMKfgdcLc4SKozcZN1Qs3GwDlRRZIHKsf3h/P6odoC8E5ENs=
+	t=1779059130; cv=none; b=ZV4EuK/AuoO+pLYQoToiF8YsrkQAOB+b9tvuFesK3NC+Y5ygaV8KsZqu5ixoSkrzVFEG3bcp1GA/TE0AmKi5U3694L/9Wxpt4FTblcbwyQBw8tN680oB+bdjtcrJSIOhCLvSSieF7nHMEy5drbvrQl3BwxBEfCeog8cd5AdcEXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779054357; c=relaxed/simple;
-	bh=HcHkVQED+BUDIbbFFoaWvhuqZicKw1PktcSgrTy4mSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JJLO/78xX5VdljNd6+UPHHTdt4lUD1gOYeJw2vlaXyA42gWBeqI5H84hAoNT8tKvFpFDlepFSRq5nvuDQOsafg7W/VrEid+5yDUYPpHrNHIsLdM83Tj0mpZ6s8Exs1drhf3b4xVR//Dy6tUvyTdgfsrw+w1wQKC3PqHH2Z0iMcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hJkBqqkC; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779059130; c=relaxed/simple;
+	bh=sKGyBmnsQGG9j/rVeObTG2RlcjQt9ogqSMl6CyE8SUg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=q7+69Hnjr1VByzBIthw1FOng8yC3kn7MMzUv3OLFS3OmSVuKgr25w1CDAuZ/23SKMJpS7+a5EyKF/c2xD0UyEQngnwNkPasnvruIoRAkZ686+6uNP3gTJhSlw5MGUJ1B3kk3o6E8DouJBcwbr4aUr7TEjM/3kcxb1c1cKTVzb2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KZwZunnn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hJkBqqkC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779054356; x=1810590356;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HcHkVQED+BUDIbbFFoaWvhuqZicKw1PktcSgrTy4mSs=;
-  b=hJkBqqkCNvLaL+/dBNqyC5Tk5l94U5XLfiOjdyT7oGyo2aQd72XCc+Sj
-   C8n+S/E9KK+Q8OUWEXnoQz7VRANRJJXwjWXM/Oy3ygfj/Um6WUqgGOG/d
-   F+q1/s5odLs8t7520Daq/2NRTVVJMoCHJcP09UVESRvty/NHdpY/Vc34D
-   lzKsSa0x2M4u5aPHj1CvpW8ypQ98tQuStEDNPfZrf3C+7WMpPBFZRCbpS
-   CX1bRR4BHUESXTExngqvIdGTEzU6trw3NqkCpx/f8fTQxrFPkYDI4iKjH
-   EZeY0HJM8dtK1Ylh97Zgo4sVvvIAvPuzyNKrKcarg9IbgB94PM6Q5s3C9
-   w==;
-X-CSE-ConnectionGUID: pjOGuJ0dSeOwgMpkiqeSVg==
-X-CSE-MsgGUID: iYi4pUeUQpOrp/4gQDQNWw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11789"; a="90493036"
-X-IronPort-AV: E=Sophos;i="6.23,240,1770624000"; 
-   d="scan'208";a="90493036"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2026 14:45:55 -0700
-X-CSE-ConnectionGUID: 81Lj7rBnS2qvPMLM4gtjwA==
-X-CSE-MsgGUID: QrWDyaHwRx+3Y9FWD6pstw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,240,1770624000"; 
-   d="scan'208";a="243549847"
-Received: from lkp-server01.sh.intel.com (HELO d94e5e629b2d) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 17 May 2026 14:45:54 -0700
-Received: from kbuild by d94e5e629b2d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wOjJ0-000000001xi-3CWM;
-	Sun, 17 May 2026 21:45:50 +0000
-Date: Mon, 18 May 2026 05:45:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: shayderrr <darknessshayder@gmail.com>, gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Pranav Bajjuri <darknessshayder@gmail.com>
-Subject: Re: [PATCH] net: octeon: fix carrier state, null guard, and
- modernize phy ioctl
-Message-ID: <202605180508.53ptUezJ-lkp@intel.com>
-References: <20260517141955.79666-1-darknessshayder@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KZwZunnn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63B0C2BCB0;
+	Sun, 17 May 2026 23:05:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779059129;
+	bh=sKGyBmnsQGG9j/rVeObTG2RlcjQt9ogqSMl6CyE8SUg=;
+	h=From:Subject:Date:To:Cc:From;
+	b=KZwZunnneLfGOgNmmMgkbwkMmz/eop0EoFPf6Bj7HAIhfo4y4EPlrhXXKKsJy2cTu
+	 dj5E9yHpjiiMV9g7Lak7U0DEW4BOZobhXz430Fc8nutZ78AORq20zAt9SizLEHUppr
+	 CDk0PqKPo0tWnLsFYjF45wyPt7UTT843kcHUchXlNFlksCJEkkmNom5ngRVMTFWjX/
+	 u+ChBcsToLQ8C5V1QBH0kxtAkkJZGxPcmYRktnIlSlCckRzwujz8fuvh1GArCx1Tck
+	 gOZCfFxKzAhGvDFWtcGwhfef4h4u6dwbRtw/TZNbOZ5pXM3Fopvdsfdu7eVl8R4UcS
+	 pUtoOE7qN6TxQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2 00/16] Bump minimum version of LLVM for building the
+ kernel to 17.0.1
+Date: Sun, 17 May 2026 13:05:03 -1000
+Message-Id: <20260517-bump-minimum-supported-llvm-version-to-17-v2-0-b3b8cda46bdd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260517141955.79666-1-darknessshayder@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/5WOSw6CMBRFt2I69hkov+rIfRgGFJ7wlH7SlkZD2
+ LuAcQEOT3LvPXdmHh2hZ5fDzBxG8mT0Cvx4YO3Q6B6BupUZT3iZ5JyDnJQFRZrUpMBP1hoXsIN
+ xjAoiuq0PwUBagczLTDSFkEmesXXPOrzTa3fd6i/7ST6wDZtgSwzkg3Hv/UxMt9zPK/7wxhQSE
+ Gl3lhwFYlVcn+g0jifjelYvy/IBVVHJSPUAAAA=
+X-Change-ID: 20260422-bump-minimum-supported-llvm-version-to-17-b4638a58b043
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-kbuild@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org, 
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+ linux-hardening@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
+ Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>, 
+ linux-arm-kernel@lists.infradead.org, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org, 
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Ard Biesheuvel <ardb@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6925; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=sKGyBmnsQGG9j/rVeObTG2RlcjQt9ogqSMl6CyE8SUg=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFlcnhuUlFizjHsnZfOubBbtifmavaft/KMLr/WqgvPtL
+ syVkfHvKGVhEONikBVTZKl+rHrc0HDOWcYbpybBzGFlAhnCwMUpABPZJc3wz2SGZ+Wx2uZ7ug/c
+ 0qI55uxh1P/T4m87RXvG0Ql6awpKXzAyrD3mJcquZ1VVVHpY6tvlR04vsrP/L469VWB/0WHymWo
+ RNgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi shayderrr,
+The current minimum version of LLVM for building the kernel is 15.0.0.
+However, there are two deficiencies compared to GCC that were fixed in
+LLVM 17 that are starting to become more noticeable.
 
-kernel test robot noticed the following build errors:
+The first was a bug in LLVM's scope checker [1], where all labels in a
+function were validated as potential targets of an asm goto statement,
+even if they were not listed in the asm goto statement as targets. This
+becomes particularly problematic when the cleanup attribute is used, as
 
-[auto build test ERROR on staging/staging-testing]
-[also build test ERROR on staging/staging-next staging/staging-linus linus/master v7.1-rc3 next-20260508]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  asm goto(... : label_a);
+  ...
+label_a:
+  ...
+  int var __free(foo);
+  asm goto(... : label_b);
+  ...
+label_b:
+  ...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/shayderrr/net-octeon-fix-carrier-state-null-guard-and-modernize-phy-ioctl/20260517-222121
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20260517141955.79666-1-darknessshayder%40gmail.com
-patch subject: [PATCH] net: octeon: fix carrier state, null guard, and modernize phy ioctl
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260518/202605180508.53ptUezJ-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260518/202605180508.53ptUezJ-lkp@intel.com/reproduce)
+will trigger an error since the scope checker will complain that the
+cleanup variable would be skipped when jumping from the first asm goto
+to label_b (which obviously cannot happen). This issue was the catalyst
+for commit e2ffa15b9baa ("kbuild: Disable CC_HAS_ASM_GOTO_OUTPUT on
+clang < 17"). Unfortunately, this issue is reproducible with regular asm
+goto in addition to asm goto with outputs, so that change was not
+entirely sufficient to avoid the issue altogether. As asm goto has
+effectively been required since commit a0a12c3ed057 ("asm goto:
+eradicate CC_HAS_ASM_GOTO") and the usage of the cleanup attribute
+continues to grow across the tree, raising the minimum to a version that
+avoids this issue altogether is a better long term solution than
+attempting to workaround it at every spot where it happens.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605180508.53ptUezJ-lkp@intel.com/
+The second issue is an incompatibility with GCC 8.1+ around variables
+marked with const being valid constant expressions for _Static_assert
+and other macros [2]. With GCC 8.1 being the minimum supported version
+since commit 118c40b7b503 ("kbuild: require gcc-8 and binutils-2.30"),
+this incompatibility becomes more of a maintenance burden since only
+clang-15 and clang-16 are affected by it.
 
-All errors (new ones prefixed by >>):
+Looking at the clang version of various major distributions through
+Docker images, no one should be left behind as a result of this bump, as
+the old ones cannot clear the current minimum of 15.0.0.
 
->> drivers/staging/octeon/ethernet-mdio.c:91:6: error: conflicting types for 'cvm_oct_common_stop'
-      91 | void cvm_oct_common_stop(struct net_device *dev)
-         |      ^
-   drivers/staging/octeon/octeon-ethernet.h:90:5: note: previous declaration is here
-      90 | int cvm_oct_common_stop(struct net_device *dev);
-         |     ^
-   1 error generated.
+  archlinux:latest              clang version 22.1.3
+  debian:oldoldstable-slim      Debian clang version 11.0.1-2
+  debian:oldstable-slim         Debian clang version 14.0.6
+  debian:stable-slim            Debian clang version 19.1.7 (3+b1)
+  debian:testing-slim           Debian clang version 21.1.8 (3+b1)
+  debian:unstable-slim          Debian clang version 21.1.8 (7+b1)
+  fedora:42                     clang version 20.1.8 (Fedora 20.1.8-4.fc42)
+  fedora:latest                 clang version 21.1.8 (Fedora 21.1.8-4.fc43)
+  fedora:44                     clang version 22.1.1 (Fedora 22.1.1-2.fc44)
+  fedora:rawhide                clang version 22.1.3 (Fedora 22.1.3-1.fc45)
+  opensuse/leap:latest          clang version 17.0.6
+  opensuse/tumbleweed:latest    clang version 21.1.8
+  ubuntu:jammy                  Ubuntu clang version 14.0.0-1ubuntu1.1
+  ubuntu:noble                  Ubuntu clang version 18.1.3 (1ubuntu1)
+  ubuntu:questing               Ubuntu clang version 20.1.8 (0ubuntu4)
+  ubuntu:resolute               Ubuntu clang version 21.1.8 (6ubuntu1)
 
+17.0.1 is chosen as the minimum instead of 17.0.0 to ensure that the
+particular version of LLVM 17 has the two aforementioned bugs fixed, as
+the second was fixed during the 17.0.0 release candidate phase and it
+was not until LLVM 18 that LLVM adopted the scheme of x.0.0 being a
+prerelease version and x.1.0 is a release version [3] to help with
+scenarios such as this.
 
-vim +/cvm_oct_common_stop +91 drivers/staging/octeon/ethernet-mdio.c
+The first patch in the series does the actual bump. The remaining
+patches are cleanups of workarounds for various issues that are no
+longer needed with the bump.
 
-    90	
-  > 91	void cvm_oct_common_stop(struct net_device *dev)
-    92	{
-    93		struct octeon_ethernet *priv = netdev_priv(dev);
-    94		int interface = INTERFACE(priv->port);
-    95		int index = INDEX(priv->port);
-    96		union cvmx_helper_link_info link_info;
-    97		union cvmx_gmxx_prtx_cfg gmx_cfg;
-    98	
-    99		gmx_cfg.u64 = cvmx_read_csr(CVMX_GMXX_PRTX_CFG(index, interface));
-   100		gmx_cfg.s.en = 0;
-   101		cvmx_write_csr(CVMX_GMXX_PRTX_CFG(index, interface), gmx_cfg.u64);
-   102	
-   103		priv->poll = NULL;
-   104	
-   105		netif_carrier_off(dev);
-   106	
-   107		if (dev->phydev)
-   108			phy_disconnect(dev->phydev);
-   109	
-   110		if (priv->last_link) {
-   111			link_info.u64	= 0;
-   112			priv->link_info	= 0;
-   113			priv->last_link	= 0;
-   114	
-   115			cvmx_helper_link_set(priv->port, link_info);
-   116			cvm_oct_note_carrier(priv, link_info);
-   117		}
-   118	}
-   119	
+I plan to take this via the Kbuild tree for 7.2, please provide Acks as
+necessary.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1]: https://github.com/llvm/llvm-project/commit/f023f5cdb2e6c19026f04a15b5a935c041835d14
+[2]: https://github.com/llvm/llvm-project/commit/0b2d5b967d98375793897295d651f58f6fbd3034
+[3]: https://github.com/llvm/llvm-project/commit/4532617ae420056bf32f6403dde07fb99d276a49
+
+---
+Changes in v2:
+- Pick up provided tags (thanks everyone!)
+- Patch 1: Adjust changes.rst in Documentation/translations
+- Patch 11: Adjust commit message based on Sashiko review
+- Patch 15-16: New changes
+- Link to v1: https://patch.msgid.link/20260428-bump-minimum-supported-llvm-version-to-17-v1-0-81d9b2e8ee75@kernel.org
+
+---
+Nathan Chancellor (16):
+      kbuild: Bump minimum version of LLVM for building the kernel to 17.0.1
+      security/Kconfig.hardening: Remove tautological condition from CC_HAS_ZERO_CALL_USED_REGS
+      security/Kconfig.hardening: Remove tautological condition from FORTIFY_SOURCE
+      security/Kconfig.hardening: Remove tautological condition from CC_HAS_RANDSTRUCT
+      arch/Kconfig: Remove tautological conditions from HAS_LTO_CLANG
+      arch/Kconfig: Remove tautological condition from AUTOFDO_CLANG
+      ARM: Drop tautological ld.lld conditions from ARCH_MULTI_V4{,T}
+      riscv: Remove tautological condition from selection of ARCH_SUPPORTS_CFI
+      riscv: Drop tautological condition from TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+      scripts/Makefile.warn: Drop -Wformat handling for clang < 16
+      x86/build: Drop unnecessary '-ffreestanding' addition to KBUILD_CFLAGS
+      x86/module: Revert "Deal with GOT based stack cookie load on Clang < 17"
+      x86/entry/vdso32: Remove conditional omission of '.cfi_offset eflags'
+      kbuild: Remove check for broken scoping with clang < 17 in CC_HAS_ASM_GOTO_OUTPUT
+      compiler-clang.h: Remove __cleanup -Wunused-variable workaround
+      compiler-clang.h: Drop explicit version number from "all" diagnostic macro
+
+ Documentation/process/changes.rst                    |  2 +-
+ Documentation/translations/it_IT/process/changes.rst |  2 +-
+ Documentation/translations/pt_BR/process/changes.rst |  2 +-
+ arch/Kconfig                                         |  5 +----
+ arch/arm/Kconfig.platforms                           |  4 ----
+ arch/riscv/Kconfig                                   | 16 +++++++---------
+ arch/x86/Makefile                                    |  5 -----
+ arch/x86/entry/vdso/vdso32/sigreturn.S               | 10 ----------
+ arch/x86/include/asm/elf.h                           |  5 ++---
+ arch/x86/kernel/module.c                             | 15 ---------------
+ include/linux/compiler-clang.h                       | 13 ++-----------
+ init/Kconfig                                         |  3 ---
+ scripts/Makefile.warn                                | 10 ----------
+ scripts/min-tool-version.sh                          |  2 +-
+ security/Kconfig.hardening                           |  8 --------
+ 15 files changed, 16 insertions(+), 86 deletions(-)
+---
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+change-id: 20260422-bump-minimum-supported-llvm-version-to-17-b4638a58b043
+
+Best regards,
+--  
+Cheers,
+Nathan
+
