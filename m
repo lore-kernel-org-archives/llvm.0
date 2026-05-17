@@ -1,91 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D0F405C31;
-	Sat, 16 May 2026 19:10:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDD71990C7
+	for <llvm@lists.linux.dev>; Sun, 17 May 2026 01:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778958660; cv=none; b=f0dXNVV1C+K1kUXedAk4Cgckj8gE9IfUcfdWzOgyFL8eAFDYtZPk1Kkjve+fgmpH5QoQmqQ+RuSmxH+bJpaiVTUBdGRsq57Ig55lIMIbuapXAM+wrzkre6c1vSlLazy+79b9lO5srnlVGilpLFj25daFDuqhVLDf4hX53yyaui4=
+	t=1778981575; cv=none; b=oUyj+Ny1hzbeyxmYVsGpnSMf+OUnp6EKbmdK3OnsEcHlqwHfJLFWqwqBSkv2ZlBy4/uxGCdG/q3p3Qj39HaDJ8RpXJCP0bS/Bbqkd9oNO5wYOIjkNcSYl2eunZyrj7QMrMF9Ld5iCRO4eqOmFpczHS/PZSwrBOSfY2uAiunjmik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778958660; c=relaxed/simple;
-	bh=kWcxCCvGz9WmxFUjNmbLt9d+zggHWWgdhLuazVG86w8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=JatAVUeLrP6A7IFAAN2j4OiwcmLftLzYcgJRNLC4KWSvMRYcfrIqRbEB3PA2MomTq15hig1+ejhvhTWXX7zKpIUqR3lx7qB2iey1JUDNvbU546M+N9qoUMgsIf/a6l9MZqvtj04keGaZ/kcp76pWicxdHP03AmJ03lEZbOCcnuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=knbWP63K; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778981575; c=relaxed/simple;
+	bh=vM7dpFsn5ov8F0liu1dS7ratbNckjDrhOhCUfYNjLzI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=VLmNzhzP9SWUgZzWXjquBLQtTgN8hx9ioCFquWAkabEJ0YOV7RhT7avPKwYx0cME1CKvrbMXH0j+yYSD03CNxr6Yg58zVRofZ8OAwYyOMsXy+ByMyRyybnCabZ0j84nZBXH0gvIDy/fWSP2/cLPM2IhzsLZqhG5uwrfbQsy9DKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=REDmtFvh; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="knbWP63K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778958657; x=1810494657;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kWcxCCvGz9WmxFUjNmbLt9d+zggHWWgdhLuazVG86w8=;
-  b=knbWP63KPM3gLYjC3+muuMII4cVTWOuw1gmogADSy9Ny1xnxbhJ1ZoYV
-   uUJVcRCANhd5UiTQiMJbdo5tWcCqjzhKQPT7/dhFSqR6zFvY+KJzDJfPl
-   OuQyk10MnNNqV+ZdhVJj5DM9uxkfdRg5WmBuXDrgdC02OagH9JlwSBmuY
-   ArULr/5V0B8/3G2JgjR8HA+QWdPAIPIAWa4W8AnXWcrg5adjUVChw8LcN
-   tdd3Af9SZuxbpkPwCZ9oeQ4fz8ztZt0QS84CSTkABgoX56Ny+oKxne5pt
-   Lig5X6VUBeXFkxdJF+7/u1yugyErhBws1gBSi9Uehl6J15Gpdq52u3Mgz
-   g==;
-X-CSE-ConnectionGUID: kKgF1jWvTsqXDZoaZ/4uDA==
-X-CSE-MsgGUID: d4Le+uOwSk+yJhQ35TZH+Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11788"; a="79773927"
-X-IronPort-AV: E=Sophos;i="6.23,238,1770624000"; 
-   d="scan'208";a="79773927"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2026 12:10:56 -0700
-X-CSE-ConnectionGUID: Rw/74fL7Q+GAAeqq/aCG9g==
-X-CSE-MsgGUID: Ws3VKb0KTGmzJst1x/eAww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,238,1770624000"; 
-   d="scan'208";a="262777441"
-Received: from lkp-server01.sh.intel.com (HELO d94e5e629b2d) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 16 May 2026 12:10:55 -0700
-Received: from kbuild by d94e5e629b2d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wOKPU-0000000014U-1JiA;
-	Sat, 16 May 2026 19:10:52 +0000
-Date: Sun, 17 May 2026 03:10:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benno Lossin <lossin@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Gary Guo <gary@garyguo.net>
-Subject: [linux-next:master 6256/13385] vmlinux.o: error: objtool:
- =?us-ascii?Q?=5FRINvMs0=5FNvNtNtCshc5sK6KjdJJ=5F6kernel4sync4lock1?=
- =?us-ascii?Q?=5F=5FINtB6=5F12=5F=5F=5FThePinDataINtNtNtBc=5F5alloc4kvec?=
- =?us-ascii?Q?3VecINtNtCsbsbRiabPlh9=5F4core3pin3PinINtNtB1a=5F4kbox3BoxIN?=
- =?us-ascii?Q?tNtBc=5F7debugfs5ScopeNtCscKcGI1asYQG=5F19rust=5Fdebugfs=5Fs?=
- =?us-ascii?Q?coped10DeviceDataENtNtB1a=5F9al...?=
-Message-ID: <202605170339.69SX0hFt-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="REDmtFvh"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7c58e6eb3edso5165117b3.2
+        for <llvm@lists.linux.dev>; Sat, 16 May 2026 18:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778981573; x=1779586373; darn=lists.linux.dev;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vM7dpFsn5ov8F0liu1dS7ratbNckjDrhOhCUfYNjLzI=;
+        b=REDmtFvh8VjUnzGet2gFqNwP9VADPx2zvJZMWsIpcqD1ABbhRlzc1RzsMkK3HL9WX9
+         +wpzbhfnLs/PSjRBHKsJCHV37Qv3H4lJImRK1LKMXY56TPqBPnaSeSa56mZNkGH7+vpk
+         DtWn3rM5xQBZzKq3+JyfULtWlYiaVnucgoUmUH83QjMPdE98FpVeE7DMhQRcr+tniYkr
+         AgicPdQw08XybUSfYxrVocfnvThT0H5WCBdNcXqtXzjj1Akq67tv7raUYFxwATeHI61E
+         v3arst0/CVoZ5bsuWJGzEqAAGrTpfAQTuwwLNP2Hl/msWj8k9WiAz1qCiFRWwM30Me3p
+         StPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778981573; x=1779586373;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vM7dpFsn5ov8F0liu1dS7ratbNckjDrhOhCUfYNjLzI=;
+        b=HaESPyFESODRJ9fJWdk92XJm17ZuutKZykwR32PT+carOt3ryheOE382g1p5/vUEP4
+         OrOBFExncEwiBbjNqolKzbHpWPa7gfUnuYAC+rRaaOBTQqDT6YjOkWLloeDb/wJPn9d7
+         v1NqafGSH6a/EAGx3owd0Yky6j8CC4NOZQm5eJrPT693keOANQS0hhQOkhvGlH8+eTEF
+         eMf8Um0UmtzOnx49/AJFaeQ7Dwdg+u1oHSmtnQfcCcvXhPqyBHiEo8JpGiJ+tz3ZnIiE
+         38iwym9VSRx5NXhXEYSeGWKs2ynk/Vjd5QiMUG5Z6/GmCC19rhrtmW03D+LbvM58btmJ
+         JJUA==
+X-Forwarded-Encrypted: i=1; AFNElJ9NBnVvP66IoaVoUN4LJXr6EplSqDk7qBO50JazG+vRpbvzfRctw5h+c75iWHVkYBHdhQqr@lists.linux.dev
+X-Gm-Message-State: AOJu0YzVACp1jpp8bNPP+k0zgecRRJ7iRlHQZP/sDS2xEgIB1aUN7hJf
+	GqQHg2Qisx4YbxH4YtmfSN4j8sw0yAbH+9p1ma5cmvPq35Lo+IBSSdf1
+X-Gm-Gg: Acq92OGjKDCf7xtHBt1YUmjjUb/zDVIHU34eLcitNSslaIptHExoqgerFutQeeCH69T
+	8Zp44zWAAlDIfbUMpML+V0g5RapPnLgeUn8HsEiEPQPJId0FlJV96y74iP+SlNm2A+I4i4hhEWL
+	aNRlep32B4MQb4k1/9T7s/oj5XAVlqgZuippxsqxeFb3Ubl98wQoa7YfxCW7wxBqNHLwe8Q7x/n
+	BACFqXB8CjF5Vmt/r1aNKmOWTXrNTHDXx4iPexrQCH/RWnTBaSFHZHpzOYikOBCF6nG+e0lZtoz
+	37j3ebq4ijoqK/kdilF9p3VVVkbwH0+vA143TEz/b/ZKgQUVgvfNknT94Ux3LkwfmRoijBXU4Y/
+	5Iqw8W4NQ5bU8cPhJnIaE+4Ty0nyoJbAvsNmU7SpPImq79xfWuXcObMJLIxbjrsSfP/ZvhKCM/m
+	f/GwCjchEuaUbV5wu8F/rKuPstKIb6fcc5zq7AAbKBGTK5iNuZp5QRYPRCTlaBfugRZ6imEBFvY
+	1+MeO4VlvrB2qdrVA==
+X-Received: by 2002:a05:690c:f09:b0:79a:b9cc:2100 with SMTP id 00721157ae682-7c95c00dc67mr115014067b3.35.1778981572872;
+        Sat, 16 May 2026 18:32:52 -0700 (PDT)
+Received: from localhost ([2a03:2880:f806:4f::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7cc9bc0dab3sm2342547b3.24.2026.05.16.18.32.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 May 2026 18:32:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 16 May 2026 18:32:51 -0700
+Message-Id: <DIKKC3RENM6O.24MCCPOVFAVZ6@gmail.com>
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: Re: [PATCH bpf-next v11 00/11] selftests/bpf: Tolerate partial
+ builds across kernel configs
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>, "Alexei
+ Starovoitov" <ast@kernel.org>
+X-Mailer: aerc
+References: <20260430-selftests-bpf_misconfig-v11-0-e11f7a8c4fdc@suse.com>
+ <DIJ8QPTPH61Q.6NT4DT90K5F9@suse.com>
+In-Reply-To: <DIJ8QPTPH61Q.6NT4DT90K5F9@suse.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   e98d21c170b01ddef366f023bbfcf6b31509fa83
-commit: 560f6d13c33f9f06ca34c14dc7c0a045d949c4a0 [6256/13385] rust: pin-init: rewrite `#[pin_data]` using `syn`
-config: x86_64-randconfig-001-20260512 (https://download.01.org/0day-ci/archive/20260517/202605170339.69SX0hFt-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260517/202605170339.69SX0hFt-lkp@intel.com/reproduce)
+On Fri May 15, 2026 at 5:15 AM PDT, Ricardo B. Marli=C3=A8re wrote:
+> Hi Alexei,
+>
+> Just a gentle ping, please let me know if there's anything else that coul=
+d
+> be done in order to move this one forward. I believe everything has been
+> addressed.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605170339.69SX0hFt-lkp@intel.com/
+Conceptually the series make sense, but I'm not a makefile expert, so
+waiting for human to review them.
 
-All errors (new ones prefixed by >>):
-
-   vmlinux.o: error: objtool: .altinstr_replacement+0x18e4: redundant UACCESS disable
->> vmlinux.o: error: objtool: _RINvMs0_NvNtNtCshc5sK6KjdJJ_6kernel4sync4lock1__INtB6_12___ThePinDataINtNtNtBc_5alloc4kvec3VecINtNtCsbsbRiabPlh9_4core3pin3PinINtNtB1a_4kbox3BoxINtNtBc_7debugfs5ScopeNtCscKcGI1asYQG_19rust_debugfs_scoped10DeviceDataENtNtB1a_9allocator7KmallocEEB3s_ENtNtB8_5mutex12MutexBackendE5stateNtNtB1z_7convert10InfallibleINtNtCs57PXBekmiam_8pin_init10___internal11InitClosureNCINvMs5_NtBc_5typesINtB60_6OpaqueNtNtCsfd3uB5I4hpp_8bindings12bindings_raw5mutexE8ffi_initNCNCINvMs0_B8_INtB8_4LockB15_B3Z_E3newB15_E0s_0E0B6b_B4x_EEB2G_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: error: objtool: _RINvXs5_NtNtCshc5sK6KjdJJ_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsbsbRiabPlh9_4core3mem12maybe_uninit11MaybeUninitINtNtBa_7debugfs5ScopeNtCscKcGI1asYQG_19rust_debugfs_scoped10DeviceDataEENtNtB8_9allocator7KmallocEINtCs57PXBekmiam_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB3p_10___internal11InitClosureNCINvYIBH_B1L_B2W_EINtNtBa_4init11InPlaceInitB1L_E8pin_initNtNtBX_7convert10InfallibleINtB3p_12ChainPinInitIB4F_NCINvMs_B1O_B1L_3newB6a_NCINvMB1O_NtB1O_3Dir5scopeB27_B6a_NCNvB29_17create_file_writes0_0B27_E0B27_Es0_0B1L_B6a_ENCB73_0B1L_B6a_EE0B1L_B4l_EEB29_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: error: objtool: _RINvXs5_NtNtCshc5sK6KjdJJ_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsbsbRiabPlh9_4core3mem12maybe_uninit11MaybeUninitINtNtBa_7debugfs5ScopeNtCscKcGI1asYQG_19rust_debugfs_scoped10ModuleDataEENtNtB8_9allocator7KmallocEINtCs57PXBekmiam_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB3p_10___internal11InitClosureNCINvYIBH_B1L_B2W_EINtNtBa_4init11InPlaceInitB1L_E8pin_initNtNtBX_7convert10InfallibleINtB3p_12ChainPinInitIB4F_NCINvMs_B1O_B1L_3newB6a_NCINvMB1O_NtB1O_3Dir5scopeB27_B6a_NCNvB29_12init_control0IB4F_NCNvMB29_B27_4inits_0B27_B6a_EE0B8k_Es0_0B1L_B6a_ENCB73_0B1L_B6a_EE0B1L_B4l_EEB29_: symbol name too long, can't create __pfx_ symbol
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
