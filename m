@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5CF221540;
-	Sun, 17 May 2026 23:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC963161A1;
+	Sun, 17 May 2026 23:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779059144; cv=none; b=kA2a0J5c4NdlwF3AkxaZUqvJv8erQSWz9679fkkO+JLdr8bUqxZk5knSvVh0wz2XezRjIDcDr3a6hwyc3J321jmVPutPxlLPqK96tKROL4fFTE3Xm+V+H1zkk+XVwXqrceyfR5W+mNLM1LajWYEnWN0N9t3KH4u/mZkbzgihoTE=
+	t=1779059147; cv=none; b=GaW/jTr3G97wzX6borVlR0Y+FpcD+1LuWc+bbrsGUUQGp+s7zFSsPlnRmrpRUfbv/XrzD84mTx+H2jqLH+mDllXA4qqkpe58Pnghq9Bjb6+17yDFpH2mgQQMfF5kBw4kDRsQx57Kkrh9v1Z6woCrAMPTJjn6+T/U4sCkV49Zs8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779059144; c=relaxed/simple;
-	bh=8gUcJ6jc14raMb2k8QcHLAcHl1/4TrTWMAhTkoid1Lo=;
+	s=arc-20240116; t=1779059147; c=relaxed/simple;
+	bh=1JdIJ9vb9jL455rjHOOqE3nIS6G4mkOnP3omecCdeRw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=a5vtlFt84QZGOdp5wzRWzVHiX6hISUP6IsKu2ufXhABRR3BJUaPgWqRlKsXcD14kngYeDN0OYAflqaogBPm7Ruty+AZ5Wd5l2biXT6anP9RoqGFJ1nc4BUjoxXc74XTMPshvPb1mtrrRF14+fP3ywRVlNil/HdodEdMiYcAONgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xcuwhxy8; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=G1XrbhVWXkHl3SkOf3WRF92wHn2XLlZ4KKCYHy3kJyQH9dsFHXG82GvtYhYN3kSKdx5lqxjxF7I1lXU819Sts8oNnnJMFnn6z57SDxoErPw96luoLOrCKVFHkGj2OhRpxaOfXeCtiN/akT6nWYHJhK/gPZARjoOvstmcevpPkC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=II85SHSV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xcuwhxy8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB08DC2BCF5;
-	Sun, 17 May 2026 23:05:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="II85SHSV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22416C2BCB3;
+	Sun, 17 May 2026 23:05:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779059142;
-	bh=8gUcJ6jc14raMb2k8QcHLAcHl1/4TrTWMAhTkoid1Lo=;
+	s=k20201202; t=1779059147;
+	bh=1JdIJ9vb9jL455rjHOOqE3nIS6G4mkOnP3omecCdeRw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Xcuwhxy8XSWyGm7/cs0UUm5fhRXoxz8D4H4zZe47NyvQu/d92ebQoJWX65dzpedYQ
-	 74P6HMGek5lhNbznj5t5J7KEoDDGTKdHO7GpZO3hs5TzJ7T1nKrlQrrIvkeKvSgdZV
-	 4PjWvVQywUJvNqrtrpE+dVFTZBZc8kqnwtz518MyKnecgdPuCwjm881vXljhIdD3gq
-	 I1uJR7JUjfKR07xWL3ZYGYp2v6diuiBm9PCIAy9vBMGJ0WdrRzAIVRCQvKHMaIA7gg
-	 urvdwgDTEI0YDBFJgOeWyKCihTU6FyKekxDJA9pvfnADnSd0dbVR9aRd4Wd4/YjQ1G
-	 ybtsfGbCtsAKw==
+	b=II85SHSVBGKfnV5vgFXTbKf9rEgp1YYAyEOs6BtGoj5be2aR6tvWwOd1Pumz4smzu
+	 vm8Si0vaTQJF50m+fJcJx/93YPZyfFzKs52iRisLrIQ799oQ2SEv0Tgy30U8QfPWt5
+	 +R6xbnPeajgcsHy811hZPd4erJu617fF/IpdqKOl0Qxr2o4qIJSHCXeTz8BjMW1Ff8
+	 Vy6+5iAHanyi3H2e5ubFZ9OpOXXSrZDk8XDZyhNg3aFxMFFrGO7pCKTtch+mFrbxMQ
+	 1mBIoJmZQ4mn22kPILRhxae5GJXhsbN5atq7zK/mYvW7leYFfN51KkKMJsUp5Hpycl
+	 Z22ksK5WMxEFQ==
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Sun, 17 May 2026 13:05:08 -1000
-Subject: [PATCH v2 05/16] arch/Kconfig: Remove tautological conditions from
- HAS_LTO_CLANG
+Date: Sun, 17 May 2026 13:05:10 -1000
+Subject: [PATCH v2 07/16] ARM: Drop tautological ld.lld conditions from
+ ARCH_MULTI_V4{,T}
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,49 +38,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260517-bump-minimum-supported-llvm-version-to-17-v2-5-b3b8cda46bdd@kernel.org>
+Message-Id: <20260517-bump-minimum-supported-llvm-version-to-17-v2-7-b3b8cda46bdd@kernel.org>
 References: <20260517-bump-minimum-supported-llvm-version-to-17-v2-0-b3b8cda46bdd@kernel.org>
 In-Reply-To: <20260517-bump-minimum-supported-llvm-version-to-17-v2-0-b3b8cda46bdd@kernel.org>
 To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
 Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- linux-kbuild@vger.kernel.org
+ linux-kbuild@vger.kernel.org, Russell King <linux@armlinux.org.uk>, 
+ Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1037; i=nathan@kernel.org;
- h=from:subject:message-id; bh=8gUcJ6jc14raMb2k8QcHLAcHl1/4TrTWMAhTkoid1Lo=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlcnhuXfq2e4a08wabkbdGKNqPfJ0Rb687e9vvwIaVZg
- 1WgqYKzo5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAExkVxIjw8n+wzEPrThcgzc5
- HeSd9u5mrOKqdfdeHNQ+8SMqO+TpRlZGhj13nxzw5Pr/+Fh28inPaeGr65es37czjv2wUPxDBua
- tNXwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1383; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=1JdIJ9vb9jL455rjHOOqE3nIS6G4mkOnP3omecCdeRw=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFlcnhs/L49o7y4JNXJJv+iu5Lrqz3orziqeE1/m+s003
+ Zt41zmjo5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEykfibDbxaj5IMfN5QeN9ZJ
+ OFoWzvEotrShQEDsw/fJ3Pv/y7hKSzIyfEpZkj6n3ipjmnLGSXHnSMWKS8v23VH0Ewu/Yb5T6sd
+ cXgA=
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
 Now that the minimum supported version of LLVM for building the kernel
-has been raised to 17.0.1, two dependency lines in CONFIG_HAS_LTO_CLANG
-are always true because Clang will always be newer than 17.0.0, so they
-can be removed.
+has been raised to 17.0.1, the '!ld.lld || ld.lld >= 16' dependency of
+CONFIG_ARCH_MULTI_V4{,T} is always true, so tit can be removed from both
+symbols.
 
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- arch/Kconfig | 3 ---
- 1 file changed, 3 deletions(-)
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/Kconfig.platforms | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index e86880045158..0d34bcafecaa 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -806,9 +806,6 @@ config HAS_LTO_CLANG
- 	depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
- 	depends on ARCH_SUPPORTS_LTO_CLANG
- 	depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT
--	# https://github.com/ClangBuiltLinux/linux/issues/1721
--	depends on (!KASAN || KASAN_HW_TAGS || CLANG_VERSION >= 170000) || !DEBUG_INFO
--	depends on (!KCOV || CLANG_VERSION >= 170000) || !DEBUG_INFO
- 	depends on !GCOV_KERNEL
- 	help
- 	  The compiler and Kconfig options support building with Clang's
+diff --git a/arch/arm/Kconfig.platforms b/arch/arm/Kconfig.platforms
+index 5c19c1f2cff6..386eccc81868 100644
+--- a/arch/arm/Kconfig.platforms
++++ b/arch/arm/Kconfig.platforms
+@@ -8,16 +8,12 @@ comment "CPU Core family selection"
+ config ARCH_MULTI_V4
+ 	bool "ARMv4 based platforms (FA526, StrongARM)"
+ 	depends on !ARCH_MULTI_V6_V7
+-	# https://github.com/llvm/llvm-project/issues/50764
+-	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+ 	select ARCH_MULTI_V4_V5
+ 	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
+ 
+ config ARCH_MULTI_V4T
+ 	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
+ 	depends on !ARCH_MULTI_V6_V7
+-	# https://github.com/llvm/llvm-project/issues/50764
+-	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+ 	select ARCH_MULTI_V4_V5
+ 	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
+ 		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
 
 -- 
 2.54.0
