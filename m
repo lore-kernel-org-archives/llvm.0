@@ -1,58 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5EC21D3E4;
-	Sun, 17 May 2026 06:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B6835838B;
+	Sun, 17 May 2026 10:03:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779000989; cv=none; b=Qqd6sQhs1rM9+nvS4AeF9T0WeQ6GS+onjRdT3F3BpYyOmTMI2PJmUuPJI+MpWsGonsb5OmOfwk2Pf0TMXkqpzDg1vGTrsED9hz3oFqYeyxPIRiyiafrw4U1aR+xmuL7+j94lOvgKh9nvfsXFPWgdmST0WghyteQ08n8tnKKTAJ8=
+	t=1779012225; cv=none; b=n3tzgwo/ebO/Z+D0c6eUaGdC8RVXIQz4buxxRSBr5s9QYRqSTV3iC+mWVmR9fyjYacGCNAwdFKMp3gYNtqTRalJsNvdZG8zlO3224vGdXpLQsVdzxDsk3rp3NfYF7+nsb5bekNbUslm9NCkBdZ765yjPUvGLPOXfohg35Po3Y3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779000989; c=relaxed/simple;
-	bh=Mvi4RKTP15B/Ix7mGNa3Z2Jt5QqDaF0TPTSNRpY9qfY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=r0Nc3Yjd8Bbeh1cxGNgziVlQrfcHf5DQ90aL6WvR2wtulYh1nxDVqwM76u+fZT2NdYIDPPkQfussFkLtMb+OhuREjBB6De39BvgP1XRH1f4BcdPUIJConEURW0nuZxgoq/bhSzwrvCUHukv+bR50DM6s7nNEaOsbHEIr2uEgco4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ap6M8GqC; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1779012225; c=relaxed/simple;
+	bh=cOlF77r6doQzYS1S9ajGmwgicqBkIv3GzekHFbjsmF8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=NNj57sWI1lwEqwMfwr5SJs9J+71K7rCtyvyzPaUScNAJ9l3qSE7XmoqK2omOqM6d69A/6l63Nvv/WUggEEPOoeJ4EPC22jBu3kpoPpLigYa8jkJ/U/yXNrg0/uKrmebRiUB/WMqqoglUAzkuCpProjXjmmVF4JuSIah6owSg0m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VmcfBbDW; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ap6M8GqC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VmcfBbDW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779000985; x=1810536985;
+  t=1779012223; x=1810548223;
   h=date:from:to:cc:subject:message-id;
-  bh=Mvi4RKTP15B/Ix7mGNa3Z2Jt5QqDaF0TPTSNRpY9qfY=;
-  b=ap6M8GqCffPcBqEfqRdPg8nBQ4e7LRmiMJI4DpUm0Y+ibRpbgvk9kyHQ
-   9AZHnfDojDHro48mXgIEozQ1cFBaYVlOmkA0AGfpLKZgI577iPe0/4kqJ
-   Jbq4YyKMFkC/Cgs/Qu4NwEK4kTzBDfkBx0nRzsn+vaFkZlQXVuuhHBCJl
-   Zv0krQnj9bek2OLstJ7XuOECSbwU4uQjf9OMo2VJV5VwTpve6qvHQJ4/1
-   rN5zUBAXeI72lGI9pnsOgTJUFw2C7YkPjM+P1Fb/hnwQd5pPD3xCQitsI
-   i7Lua6Do96Av6dC2E2DalgN1HV+2QcBXm2NZ28aLbtnKLxHivjMsHvPTd
-   g==;
-X-CSE-ConnectionGUID: n4bkO2x1RY+e+9miURRq5w==
-X-CSE-MsgGUID: /ttm4bzlS2Kzaer+xcDNGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11788"; a="79605443"
+  bh=cOlF77r6doQzYS1S9ajGmwgicqBkIv3GzekHFbjsmF8=;
+  b=VmcfBbDWMJGR6/Te8sgv9DapNW4/lUFMwAmeg/xJ1aj9ICNnhuxdWTbn
+   hjHOwfZx3YGdtAQb33vU+uWzdgrYCGtTelJ8c2VJ3iT2GryTZfhiBoAg9
+   TWgJSfCONmcnXLIwPvd/I2In9wZGuBvHkY6OPsOfcxTZxsxVNebnY6mPA
+   ffBQois4ZjaWlWfd9xnJ4p02OTQYaKk4102NOaCD4qcR30NUA/LddT0i6
+   nshGxpthm7RGo41VmMUX3btC51S+7W5E6nrdz6xEUJfmwr2Tn2QnD/ziN
+   3/DFJvkxn6MWQDiDGfpFEkRIQMKK9KzG3dI30ezgBn+85N5K27QyBBdu4
+   w==;
+X-CSE-ConnectionGUID: y1013xffTCeY8Uto05xX7A==
+X-CSE-MsgGUID: Vv2DmASrQ6ilir+aVNpFMw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11788"; a="105352764"
 X-IronPort-AV: E=Sophos;i="6.23,239,1770624000"; 
-   d="scan'208";a="79605443"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2026 23:56:23 -0700
-X-CSE-ConnectionGUID: Gg8kyCPwRnis/VfzPOQzeA==
-X-CSE-MsgGUID: HmnQXJOqR5S3Owt05SQ0QA==
+   d="scan'208";a="105352764"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2026 03:03:41 -0700
+X-CSE-ConnectionGUID: iXgWFuk5Qq2kjWNQ9ogfOA==
+X-CSE-MsgGUID: tdv/tAceTGyYWCSaV1sNLg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,239,1770624000"; 
-   d="scan'208";a="236069666"
-Received: from lkp-server01.sh.intel.com (HELO d94e5e629b2d) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 16 May 2026 23:56:20 -0700
-Received: from kbuild by d94e5e629b2d with local (Exim 4.98.2)
+   d="scan'208";a="244106739"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa005.fm.intel.com with ESMTP; 17 May 2026 03:03:39 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wOVQ9-000000001QS-3jNi;
-	Sun, 17 May 2026 06:56:17 +0000
-Date: Sun, 17 May 2026 14:56:14 +0800
+	id 1wOYLR-000000009VT-21Oe;
+	Sun, 17 May 2026 10:03:37 +0000
+Date: Sun, 17 May 2026 12:03:02 +0200
 From: kernel test robot <lkp@intel.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- MD Danish Anwar <danishanwar@ti.com>
-Subject: [mda-next:icssg-dev 1/8] include/linux/skbuff.h:5103:21:
- error: static declaration of 'skb_ext_find' follows non-static declaration
-Message-ID: <202605171434.q7Sc5Ih7-lkp@intel.com>
+To: Chao Yu <chao@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [chao:bugfix/syzbot 1/2] fs/f2fs/node.c:1554:2: warning:
+ unannotated fall-through between switch labels
+Message-ID: <202605171101.RSk82fQf-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,149 +59,91 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mda/linux-next.git icssg-dev
-head:   7aa6108bf5c5328d646e91a0451eeae42a672801
-commit: e17c003c093dccaf3baf0a53b4a3111642960b32 [1/8] hsr: Allow to send a specific port and with HSR header
-config: powerpc64-randconfig-002-20260517 (https://download.01.org/0day-ci/archive/20260517/202605171434.q7Sc5Ih7-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260517/202605171434.q7Sc5Ih7-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git bugfix/syzbot
+head:   8ea0fd81d16fb7f605195f3c609ece5101673fa2
+commit: c855d0659f2c0f6ad59d0d211a09e02a4462b8d5 [1/2] f2fs: fix to do sanity check on f2fs_get_node_folio_ra()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260517/202605171101.RSk82fQf-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260517/202605171101.RSk82fQf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605171434.q7Sc5Ih7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605171101.RSk82fQf-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:177:10: note: expanded from macro '_SIG_SET_OP'
-     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
-         |                 ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
+>> fs/f2fs/node.c:1554:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    1554 |         default:
          |         ^
-   In file included from net/dsa/dsa.c:15:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:44:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:198:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     198 |         case 2: set->sig[1] = 0;
-         |                 ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
+   fs/f2fs/node.c:1554:2: note: insert 'break;' to avoid fall-through
+    1554 |         default:
          |         ^
-   In file included from net/dsa/dsa.c:15:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:44:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:211:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     211 |         case 2: set->sig[1] = -1;
-         |                 ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from net/dsa/dsa.c:15:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:44:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:242:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     242 |         case 2: set->sig[1] = 0;
-         |                 ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from net/dsa/dsa.c:15:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:44:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:5:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:255:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     255 |         case 2: set->sig[1] = -1;
-         |                 ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from net/dsa/dsa.c:15:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:44:
-   include/linux/skbuff.h:5058:7: error: conflicting types for 'skb_ext_add'
-    5058 | void *skb_ext_add(struct sk_buff *skb, enum skb_ext_id id);
-         |       ^
-   include/linux/if_hsr.h:99:12: note: previous implicit declaration is here
-      99 |         ptp_ext = skb_ext_add(skb, SKB_EXT_HSR);
-         |                   ^
-   In file included from net/dsa/dsa.c:15:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:44:
->> include/linux/skbuff.h:5103:21: error: static declaration of 'skb_ext_find' follows non-static declaration
-    5103 | static inline void *skb_ext_find(const struct sk_buff *skb, enum skb_ext_id id)
-         |                     ^
-   include/linux/if_hsr.h:58:12: note: previous implicit declaration is here
-      58 |         ptp_ext = skb_ext_find(skb, SKB_EXT_HSR);
-         |                   ^
-   53 warnings and 10 errors generated.
+         |         break; 
+   1 warning generated.
 
 
-vim +/skb_ext_find +5103 include/linux/skbuff.h
+vim +1554 fs/f2fs/node.c
 
-df5042f4c5b9326 Florian Westphal 2018-12-18  5102  
-df5042f4c5b9326 Florian Westphal 2018-12-18 @5103  static inline void *skb_ext_find(const struct sk_buff *skb, enum skb_ext_id id)
-df5042f4c5b9326 Florian Westphal 2018-12-18  5104  {
-df5042f4c5b9326 Florian Westphal 2018-12-18  5105  	if (skb_ext_exist(skb, id)) {
-df5042f4c5b9326 Florian Westphal 2018-12-18  5106  		struct skb_ext *ext = skb->extensions;
-df5042f4c5b9326 Florian Westphal 2018-12-18  5107  
-df5042f4c5b9326 Florian Westphal 2018-12-18  5108  		return (void *)ext + (ext->offset[id] << 3);
-df5042f4c5b9326 Florian Westphal 2018-12-18  5109  	}
-df5042f4c5b9326 Florian Westphal 2018-12-18  5110  
-df5042f4c5b9326 Florian Westphal 2018-12-18  5111  	return NULL;
-df5042f4c5b9326 Florian Westphal 2018-12-18  5112  }
-174e23810cd3183 Florian Westphal 2019-09-26  5113  
+e05df3b115e730 Jaegeuk Kim             2012-11-02  1521  
+50ac3ecd8e05b6 Chao Yu                 2026-01-12  1522  int f2fs_sanity_check_node_footer(struct f2fs_sb_info *sbi,
+f24f7f8cd6e8ff Matthew Wilcox (Oracle  2025-03-31  1523) 					struct folio *folio, pgoff_t nid,
+50ac3ecd8e05b6 Chao Yu                 2026-01-12  1524  					enum node_type ntype, bool in_irq)
+1cf6b5670af1f4 Chao Yu                 2025-03-05  1525  {
+93ffb6c28ff180 Chao Yu                 2026-01-12  1526  	bool is_inode, is_xnode;
+93ffb6c28ff180 Chao Yu                 2026-01-12  1527  
+c18ecd99e0c707 Chao Yu                 2025-08-23  1528  	if (unlikely(nid != nid_of_node(folio)))
+c18ecd99e0c707 Chao Yu                 2025-08-23  1529  		goto out_err;
+c18ecd99e0c707 Chao Yu                 2025-08-23  1530  
+93ffb6c28ff180 Chao Yu                 2026-01-12  1531  	is_inode = IS_INODE(folio);
+93ffb6c28ff180 Chao Yu                 2026-01-12  1532  	is_xnode = f2fs_has_xattr_block(ofs_of_node(folio));
+93ffb6c28ff180 Chao Yu                 2026-01-12  1533  
+c18ecd99e0c707 Chao Yu                 2025-08-23  1534  	switch (ntype) {
+93ffb6c28ff180 Chao Yu                 2026-01-12  1535  	case NODE_TYPE_REGULAR:
+93ffb6c28ff180 Chao Yu                 2026-01-12  1536  		if (is_inode && is_xnode)
+93ffb6c28ff180 Chao Yu                 2026-01-12  1537  			goto out_err;
+93ffb6c28ff180 Chao Yu                 2026-01-12  1538  		break;
+c18ecd99e0c707 Chao Yu                 2025-08-23  1539  	case NODE_TYPE_INODE:
+93ffb6c28ff180 Chao Yu                 2026-01-12  1540  		if (!is_inode || is_xnode)
+c18ecd99e0c707 Chao Yu                 2025-08-23  1541  			goto out_err;
+c18ecd99e0c707 Chao Yu                 2025-08-23  1542  		break;
+c18ecd99e0c707 Chao Yu                 2025-08-23  1543  	case NODE_TYPE_XATTR:
+93ffb6c28ff180 Chao Yu                 2026-01-12  1544  		if (is_inode || !is_xnode)
+c18ecd99e0c707 Chao Yu                 2025-08-23  1545  			goto out_err;
+c18ecd99e0c707 Chao Yu                 2025-08-23  1546  		break;
+c18ecd99e0c707 Chao Yu                 2025-08-23  1547  	case NODE_TYPE_NON_INODE:
+93ffb6c28ff180 Chao Yu                 2026-01-12  1548  		if (is_inode)
+c18ecd99e0c707 Chao Yu                 2025-08-23  1549  			goto out_err;
+c18ecd99e0c707 Chao Yu                 2025-08-23  1550  		break;
+c855d0659f2c0f Chao Yu                 2026-05-10  1551  	case NODE_TYPE_NON_IXNODE:
+c855d0659f2c0f Chao Yu                 2026-05-10  1552  		if (is_inode || is_xnode)
+c855d0659f2c0f Chao Yu                 2026-05-10  1553  			goto out_err;
+c18ecd99e0c707 Chao Yu                 2025-08-23 @1554  	default:
+c18ecd99e0c707 Chao Yu                 2025-08-23  1555  		break;
+c18ecd99e0c707 Chao Yu                 2025-08-23  1556  	}
+c18ecd99e0c707 Chao Yu                 2025-08-23  1557  	if (time_to_inject(sbi, FAULT_INCONSISTENT_FOOTER))
+c18ecd99e0c707 Chao Yu                 2025-08-23  1558  		goto out_err;
+c18ecd99e0c707 Chao Yu                 2025-08-23  1559  	return 0;
+c18ecd99e0c707 Chao Yu                 2025-08-23  1560  out_err:
+50ac3ecd8e05b6 Chao Yu                 2026-01-12  1561  	set_sbi_flag(sbi, SBI_NEED_FSCK);
+50ac3ecd8e05b6 Chao Yu                 2026-01-12  1562  	f2fs_warn_ratelimited(sbi, "inconsistent node block, node_type:%d, nid:%lu, "
+1cf6b5670af1f4 Chao Yu                 2025-03-05  1563  		"node_footer[nid:%u,ino:%u,ofs:%u,cpver:%llu,blkaddr:%u]",
+a63f2de2dd950a Matthew Wilcox (Oracle  2025-07-08  1564) 		ntype, nid, nid_of_node(folio), ino_of_node(folio),
+6d3a7f6589fec2 Matthew Wilcox (Oracle  2025-07-08  1565) 		ofs_of_node(folio), cpver_of_node(folio),
+f24f7f8cd6e8ff Matthew Wilcox (Oracle  2025-03-31  1566) 		next_blkaddr_of_node(folio));
+50ac3ecd8e05b6 Chao Yu                 2026-01-12  1567  
+1cf6b5670af1f4 Chao Yu                 2025-03-05  1568  	f2fs_handle_error(sbi, ERROR_INCONSISTENT_FOOTER);
+50faed607d3250 Chao Yu                 2026-03-28  1569  	fserror_report_file_metadata(folio->mapping->host,
+50faed607d3250 Chao Yu                 2026-03-28  1570  			-EFSCORRUPTED, in_irq ? GFP_NOWAIT : GFP_NOFS);
+1cf6b5670af1f4 Chao Yu                 2025-03-05  1571  	return -EFSCORRUPTED;
+1cf6b5670af1f4 Chao Yu                 2025-03-05  1572  }
+1cf6b5670af1f4 Chao Yu                 2025-03-05  1573  
 
-:::::: The code at line 5103 was first introduced by commit
-:::::: df5042f4c5b9326c593bf2e31ed859ebc3b4130a sk_buff: add skb extension infrastructure
+:::::: The code at line 1554 was first introduced by commit
+:::::: c18ecd99e0c707ef8f83cace861cbc3162f4fdf1 f2fs: fix to do sanity check on node footer for non inode dnode
 
-:::::: TO: Florian Westphal <fw@strlen.de>
-:::::: CC: David S. Miller <davem@davemloft.net>
+:::::: TO: Chao Yu <chao@kernel.org>
+:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
 
 --
 0-DAY CI Kernel Test Service
