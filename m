@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDAC5274670;
-	Sun, 17 May 2026 23:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46E51BBBFC;
+	Mon, 18 May 2026 00:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779060845; cv=none; b=rtB04rICg/RdZ3HDndJzFdASa1zxa7NBiHku4FHivbpLJiNFeFzWoJ8FOKcHSeixeesA7KgwTNrU3eRZlomx2hAaW05+BEAZUXbgaFL1Y0h1y+MOf3NEqXEBPp2yiF+c1VA/YdRF52VVCqN6Nu2E8L4dm5EeCaP9bAZX/SnRVPw=
+	t=1779065292; cv=none; b=OegvZoCihDuiJN4ick+AkUxyhnnIKtMINEVIBQyGbkY2uyosLFr2z+1cfmm2VSKH35zhfo4AeUHj8rxALTb+igglThSyj0fypiXfB7GLvG2D0Y81hBczFMWqd1OLrVeiZc6rWzUzAnW/kglZbO0G/6sLK9Gxpph6Et5LZjCdNc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779060845; c=relaxed/simple;
-	bh=1PcqiwUilHYtX7qin6U5knoA2Fs5wCdes+k1MpRgpqY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=m5sWZTyhQT/dA59NNmvWOazOz8BmNbWnh0DSxBR2Ah2YDQJKfIHlxAimXCZmZuqiPPqq6qR8iM7trZyuUfTxa3EaW2FsBXY6IOHu9CoXGcie8wySGfACv2aw61f1BZrIH3nlWg6A8+o7pTHMZIOLuxm+StC7Ke0Y1936iIpa1mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iqvK8Uo7; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1779065292; c=relaxed/simple;
+	bh=Y1nf7j3Y9FI2KmGuI0gScfB29izwAUSoBpPX0IKY77U=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ns0JMYJcYrbp23oQEyfWArg6TTzk+r332ZQppNq5LHNtU/g03jPPQiskWVMfQ7jRR9SSvwfS6kVGEtaf7hJLziHKF0WibDlv4rq03+7JiIMeaYvoo/y2oOXz84zt2zFQcZ38NDZPwIG6q1CFNJCsoieJ5fdqCwW0SvyhUOPu+jY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HoKRDkoW; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iqvK8Uo7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HoKRDkoW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779060844; x=1810596844;
+  t=1779065291; x=1810601291;
   h=date:from:to:cc:subject:message-id;
-  bh=1PcqiwUilHYtX7qin6U5knoA2Fs5wCdes+k1MpRgpqY=;
-  b=iqvK8Uo7ymO2D8/LR+6ReJQj0EVC/JaWeR63iklGL1R5qGboEktQmesH
-   zEE7B0ewWYjIf5mS3rrlDiBatiX4NkNP451c3rBDINRxbknbv15TcbaXn
-   PjomyH/jm/fmTzAbenQyQ9Y9NSGvdTIL1Hl2jB0N92OlbUe9j/b5N8b7x
-   rhuO8pcyzJi56hzFFtu/ZrnKqoIFpsS7Cxcplbnv5j5ufssNuW9H1HDLE
-   DvJV8PQkGoAplW8Fzb0DyfzgL15WK+IXVLxgLfEmNH55uoth0LM6zfC5V
-   xYk255XqL17YRj/9mVW6pmNmjxyXsLVNVAcd5EfTX8aYcbSKs1FFl/t6Y
-   g==;
-X-CSE-ConnectionGUID: dUbPL2EfQ2Cw3jhN9jJFSg==
-X-CSE-MsgGUID: KBzxlN/+SVCqbtZl2ef7Ng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11789"; a="83531049"
-X-IronPort-AV: E=Sophos;i="6.23,240,1770624000"; 
-   d="scan'208";a="83531049"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2026 16:34:03 -0700
-X-CSE-ConnectionGUID: U3BjRilITdSvBPOT3OjX1Q==
-X-CSE-MsgGUID: iPBtQ2DoTAyqCUvJGTg5mg==
+  bh=Y1nf7j3Y9FI2KmGuI0gScfB29izwAUSoBpPX0IKY77U=;
+  b=HoKRDkoWQsE5CZY5wq2x7EnoOQJBkqzUGcAUTkbgSKj8jAz2YgqxmaW4
+   6UKaFZp6uteDP5ttzfcUrQpdJ+ZEWN5P5bRJFm6r0+/VJtTO9jD7mPJ4F
+   QPU9JZZEJ/qRuyxSiZfRUFdX11r9036lj7DIkyCmLC//oXQDZkef/b2Tb
+   PBJogspBrJmPsaPKfRssbRpFc4dbXqK2We/y1bkhOEYhmrl+T4bBYB3xM
+   LKB+aoLhr9yVMnZO00GXSnjzRL6cM34X0NFgxcPmhhpNUH1TsOrx3gmAX
+   fvvhVoioPxJ2u0geSiYxPjiSUUofYX12rA0+kfbRFfZfXXyVQSuwWDegu
+   w==;
+X-CSE-ConnectionGUID: B0yh/ibgRE+1fqcPmQpwdQ==
+X-CSE-MsgGUID: lmDdps3MSM6KwmbuwLlHaw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11789"; a="97347175"
+X-IronPort-AV: E=Sophos;i="6.23,241,1770624000"; 
+   d="scan'208";a="97347175"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2026 17:48:08 -0700
+X-CSE-ConnectionGUID: 1vRWk5yxSjuuPG1CfkwWkQ==
+X-CSE-MsgGUID: ck/gcUxfTIO2CWLDW9uoTw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,240,1770624000"; 
-   d="scan'208";a="232863269"
+X-IronPort-AV: E=Sophos;i="6.23,241,1770624000"; 
+   d="scan'208";a="238392306"
 Received: from lkp-server01.sh.intel.com (HELO d94e5e629b2d) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 17 May 2026 16:34:01 -0700
+  by orviesa010.jf.intel.com with ESMTP; 17 May 2026 17:48:05 -0700
 Received: from kbuild by d94e5e629b2d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wOkzf-0000000023o-1kzg;
-	Sun, 17 May 2026 23:33:59 +0000
-Date: Mon, 18 May 2026 07:33:21 +0800
+	id 1wOm9L-00000000292-1Kbk;
+	Mon, 18 May 2026 00:48:03 +0000
+Date: Mon, 18 May 2026 08:47:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel J Blueman <daniel@quora.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Rob Clark <robin.clark@oss.qualcomm.com>
-Subject: [drm-msm:msm-next 9/11]
- drivers/gpu/drm/msm/msm_gem_shrinker.c:105:58: warning: omitting the
- parameter name in a function definition is a C2x extension
-Message-ID: <202605180736.rtcSO0ls-lkp@intel.com>
+ Tejun Heo <tj@kernel.org>
+Subject: [tj-sched-ext:arena-direct-v2 57/63] ld.lld: error:
+ undefined symbol: bpf_arena_handle_page_fault
+Message-ID: <202605180813.fd9yQ9I5-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,44 +60,23 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://gitlab.freedesktop.org/drm/msm.git msm-next
-head:   db339b6bc9f234b4883eb02946ea01d8d9faa11c
-commit: 3392291fc509d8ad6e4ad90f15b0a193f721cbc9 [9/11] drm/msm: Fix shrinker deadlock
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260518/202605180736.rtcSO0ls-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260518/202605180736.rtcSO0ls-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext.git arena-direct-v2
+head:   9a6ad465caf4abb564d5fefa575436b68e0d7d4c
+commit: cc0ed57bf54a18ce6607f9a60f86bf7e264c3a4b [57/63] bpf: Recover arena kernel faults with scratch page
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260518/202605180813.fd9yQ9I5-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260518/202605180813.fd9yQ9I5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605180736.rtcSO0ls-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605180813.fd9yQ9I5-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/msm_gem_shrinker.c:105:58: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   purge(struct drm_gem_object *obj, struct ww_acquire_ctx *)
-                                                            ^
-   drivers/gpu/drm/msm/msm_gem_shrinker.c:117:58: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   evict(struct drm_gem_object *obj, struct ww_acquire_ctx *)
-                                                            ^
-   2 warnings generated.
-
-
-vim +105 drivers/gpu/drm/msm/msm_gem_shrinker.c
-
-   103	
-   104	static bool
- > 105	purge(struct drm_gem_object *obj, struct ww_acquire_ctx *)
-   106	{
-   107		if (!is_purgeable(to_msm_bo(obj)))
-   108			return false;
-   109	
-   110		if (msm_gem_active(obj))
-   111			return false;
-   112	
-   113		return with_vm_locks(msm_gem_purge, obj);
-   114	}
-   115	
+>> ld.lld: error: undefined symbol: bpf_arena_handle_page_fault
+   >>> referenced by fault.c
+   >>>               arch/x86/mm/fault.o:(page_fault_oops) in archive vmlinux.a
 
 --
 0-DAY CI Kernel Test Service
