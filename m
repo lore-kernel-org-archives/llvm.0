@@ -1,107 +1,88 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A9436F413;
-	Mon, 18 May 2026 20:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3178A396573;
+	Mon, 18 May 2026 21:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779136910; cv=none; b=bu89d8GvZC4ei/NSfgnSwk2+CkX8IwEPmbtcQIsjipTsGW1eUg+3GLvRtKI+JpA4BCqUwl4nnAhO4L2M8XMUPUOd6n0NZ0pNeolWUa2Qsj3f94cqUtW90Iwl4b0Ui5p1dU8jB17jK3TUTsCu5cM8YrTHEuQuCsWKqgPuC541G24=
+	t=1779138358; cv=none; b=d3ApOZBGb2GsGX0EIKLaL9ZE5ZguhHT3BRf62n4fzT48/QAsL3C1RMQylWrKhPzi42qSTAc+DNt/EUIGtSqSRAgFUsLBxs4poJqN8+TEXc4KAnbQYav4HK0jk6Rd6gxh4B4CfwnsJTYC1npJA6DSAOeDEXp+ynznB9yrIMP1w5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779136910; c=relaxed/simple;
-	bh=tLQbYlyvOqeVnlHn+hZxm40X9+dVt+Br5fhtEzaCzVM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=iEBH8K72uSfFFjLZ8HrUk4RzWvqpZaVVWnlzIqZ9zJcoIJPbdizzHqxnD2doniNh8M1+Gf+G20j41zY3Co+Dy0zw2sWzpVXG/bIQHbz7F7RA4HC8wpJ38Spn2OaU8EuMMln5x5VHBIJSwl0tKTi8wWiXBjMonqpg97DyyXpFjaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hby2wyWR; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779138358; c=relaxed/simple;
+	bh=KJU4Pz1uSq6DIJ3eWFe2ij4+hMv7Y2WX88sIUB6HKZI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MNSPgk0aLzjsMYpDLvKgcIAAdbeN3cDiY/4wHAxfWVTLD+z7NPKvdCD+0L4+YWjWDFLWjGRT1//nSSTwQJ4UkDCjILGphlCH9kED/es7R/dXG7qeRBpjm3XlXs8s8kbyeuOZZ9eSTbLYTjI6THNvWJKUvr+oMcz0iwo8OIuw+p4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ndd8fkzm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hby2wyWR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779136909; x=1810672909;
-  h=date:from:to:cc:subject:message-id;
-  bh=tLQbYlyvOqeVnlHn+hZxm40X9+dVt+Br5fhtEzaCzVM=;
-  b=hby2wyWR1peO9l0felj6tqxQCfBx6Xfh9mw3zYdv3Nh29MBdyxgdeHbM
-   UPE8KiN3Xu5mSXi2ZzQ04jFkT+kLkwoEq4A/Rg0and+Yjq7GWScQ52Enn
-   xB+/1cXQw/nwhbDXMHhFsidqCzFyeq3h+ZPd3BnC6jOM9wqVbsuDwdWOe
-   2PxR//MqRuHbz9+KIA6ruZp6FEPSpE6gd1dhJ3tpABEOKuEsXswGrBP1f
-   NkvdHGWU9XUVIlNOTpkQNcH4XJk2A4jxXngsQeQCdN6B0+OmXMoIk0+ll
-   797IDRKHw8OlJKhryz8sFbUDkYnmtk3Ao/Zm+u2KeaBBXgdOnvM8a4HsX
-   Q==;
-X-CSE-ConnectionGUID: 48MdW7KpS+i6wCRSy8CCuQ==
-X-CSE-MsgGUID: 16AjRxKqTxCdMJyZMS5zaw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11790"; a="79981822"
-X-IronPort-AV: E=Sophos;i="6.23,242,1770624000"; 
-   d="scan'208";a="79981822"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2026 13:41:49 -0700
-X-CSE-ConnectionGUID: tW8h/u0YSyiua/cwRAbv5Q==
-X-CSE-MsgGUID: 2snzUz44R1OMAQbGFSOtGA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,242,1770624000"; 
-   d="scan'208";a="235092701"
-Received: from lkp-server01.sh.intel.com (HELO d94e5e629b2d) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 18 May 2026 13:41:47 -0700
-Received: from kbuild by d94e5e629b2d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wP4mW-000000003Ne-2zVI;
-	Mon, 18 May 2026 20:41:44 +0000
-Date: Tue, 19 May 2026 04:41:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [rppt:gfp-to-kmalloc/v0.1 205/238]
- arch/sparc/kernel/pci_fire.c:266:23: warning: variable 'order' set but not
- used
-Message-ID: <202605190414.PeXvfubE-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ndd8fkzm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D8BDC2BCB7;
+	Mon, 18 May 2026 21:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779138357;
+	bh=KJU4Pz1uSq6DIJ3eWFe2ij4+hMv7Y2WX88sIUB6HKZI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ndd8fkzmyskIs2Qdl3J7CkSceCEQ2VqBLBMLvxj5nl8ByZ0x3kwuVHnI4SMC9Euwp
+	 TwbZVOof4lbBs9lxo9cFGheU5C/eLT0Y0GhsuyXz5JCXZO6eDMa7g9cw0Xl7Aqp9gN
+	 d4XSn+UXio6Aq8TL/URGlRuHd2WICZg5SqrCpv+a1aEUNn58ISdt9OnvTQ+ZrwZU3K
+	 r6qEQDN9RoEYUT1+bvWCgMXx+4RHR/aawtBAeSkvXVKpOhrTrAnBY+QQyys+ukGLP9
+	 9cD3N1Ue9XeCrZlBbwRr74SWZwD/FYF9Usj9vTdIv9jNBnihlp5Y+duL79oD3/eiJf
+	 9tq1HB7zI1ggw==
+Date: Mon, 18 May 2026 14:05:52 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Nicolas Schier <nsc@kernel.org>, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-hardening@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 02/16] security/Kconfig.hardening: Remove tautological
+ condition from CC_HAS_ZERO_CALL_USED_REGS
+Message-ID: <20260518210552.GA3979157@ax162>
+References: <20260517-bump-minimum-supported-llvm-version-to-17-v2-0-b3b8cda46bdd@kernel.org>
+ <20260517-bump-minimum-supported-llvm-version-to-17-v2-2-b3b8cda46bdd@kernel.org>
+ <55186588-0cff-4908-923a-d5611707a3b0@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <55186588-0cff-4908-923a-d5611707a3b0@app.fastmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git gfp-to-kmalloc/v0.1
-head:   cf8f69ff9142effba4d8d9a70a1a4f275044376c
-commit: e38ac4a3d318d95890c7ec5a86491b7502679fcb [205/238] sparc: replace __get_free_pages() with kmalloc()
-config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20260519/202605190414.PeXvfubE-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260519/202605190414.PeXvfubE-lkp@intel.com/reproduce)
+On Mon, May 18, 2026 at 09:48:47AM +0200, Arnd Bergmann wrote:
+> On Mon, May 18, 2026, at 01:05, Nathan Chancellor wrote:
+> > Now that the minimum supported version of LLVM for building the kernel
+> > has been raised to 17.0.1, the '!Clang || Clang > 15.0.6' dependency for
+> > CONFIG_CC_HAS_ZERO_CALL_USED_REGS is always true, so it can be removed.
+> >
+> > Reviewed-by: Nicolas Schier <nsc@kernel.org>
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605190414.PeXvfubE-lkp@intel.com/
+Thanks for taking a look!
 
-All warnings (new ones prefixed by >>):
+> >  config CC_HAS_ZERO_CALL_USED_REGS
+> >  	def_bool $(cc-option,-fzero-call-used-regs=used-gpr)
+> > -	# https://github.com/ClangBuiltLinux/linux/issues/1766
+> > -	# https://github.com/llvm/llvm-project/issues/59242
+> > -	depends on !CC_IS_CLANG || CLANG_VERSION > 150006
+> > 
+> 
+> Maybe add a comment to mention that this now requires gcc-11,
+> that way we have it easier to remove the check when that becomes
+> the minimum version.
 
->> arch/sparc/kernel/pci_fire.c:266:23: warning: variable 'order' set but not used [-Wunused-but-set-variable]
-     266 |         unsigned long pages, order;
-         |                              ^
-   1 warning generated.
+Sure, I can add
 
+  # supported by gcc-11 or newer and all supported versions of clang
 
-vim +/order +266 arch/sparc/kernel/pci_fire.c
+when I apply it.
 
-9bb3c227c47b23 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-08-30  263  
-759f89e03c9e56 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-10-11  264  static void pci_fire_msiq_free(struct pci_pbm_info *pbm)
-9bb3c227c47b23 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-08-30  265  {
-759f89e03c9e56 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-10-11 @266  	unsigned long pages, order;
-9bb3c227c47b23 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-08-30  267  
-759f89e03c9e56 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-10-11  268  	order = get_order(512 * 1024);
-759f89e03c9e56 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-10-11  269  	pages = (unsigned long) pbm->msi_queues;
-9bb3c227c47b23 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-08-30  270  
-e38ac4a3d318d9 arch/sparc/kernel/pci_fire.c   Mike Rapoport (Microsoft  2026-02-10  271) 	kfree((void *)pages);
-9bb3c227c47b23 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-08-30  272  
-759f89e03c9e56 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-10-11  273  	pbm->msi_queues = NULL;
-9bb3c227c47b23 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-08-30  274  }
-9bb3c227c47b23 arch/sparc64/kernel/pci_fire.c David S. Miller           2007-08-30  275  
-
-:::::: The code at line 266 was first introduced by commit
-:::::: 759f89e03c9e5656ff18c02e21b439506f7c0cdc [SPARC64]: Consolidate MSI support code.
-
-:::::: TO: David S. Miller <davem@sunset.davemloft.net>
-:::::: CC: David S. Miller <davem@sunset.davemloft.net>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Nathan
