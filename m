@@ -1,228 +1,234 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5015371063
-	for <llvm@lists.linux.dev>; Mon, 18 May 2026 14:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA76C47279B
+	for <llvm@lists.linux.dev>; Mon, 18 May 2026 16:06:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.182
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779113378; cv=pass; b=WWiShugpPgDI8PuyVrP0nfJxzVVHRrv7158BWk2Q0gr6KwBLq0JHkgMoElllKhPRLpuDjwH3YDGCRRZd6mwtKL3hBiJfxZTwKZccOEXbpXS3Rb6Z4B4EsqKB8POXZdk5PNwNT+ljJA+JY3rUA3dH/Bsi+7juSMfc4Ln9gWw1qtI=
+	t=1779120385; cv=pass; b=NTBeniLmo5iqBQmUsBUCZPxNuwsOs/kyln4OAtSZJQrFOlKL/MZ7Li9HmTPyC+3YQnB2o3zVRbBn+BrLPA/Nm1QxDuPToXSMkjZdBqGl99YjMegbSfZ8IEWWfqIk0kY4XTGk0WaI6C0fRMX+IFR9kZPbh7sd4JqlD6GRG3qu1rM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779113378; c=relaxed/simple;
-	bh=HhOB63VsXgJe0fuiBA7xxTI2UH22ig0EY/B2rVrPImo=;
+	s=arc-20240116; t=1779120385; c=relaxed/simple;
+	bh=0JN4eWAeyH1DFvPDOFr1bp0SNGRTw2jc5rqIj+ZsVUM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CUoEKVw5rv67ak2uLVDYyGrDNNoCrvh3A4MfpyO3blRu3uWFCX567bTroT8fNwQxo7XEZCHTY82p9HJsNNHoRWTAB7Ji55siOj6Cwc7UuUWUSzA3Z+SQ1N+CcpQD8JenNOC5bwHfOquogkUb4Py+Qpk2n3WyOqzeLStDEe0Rr3k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=btvYflSS; arc=pass smtp.client-ip=74.125.82.42
+	 To:Cc:Content-Type; b=qXSUhQLeBG69XvdTxmPaU6V6nr0UKZCNbIY180Y89amllF8VJhL3m9mHMkon0/JPpdr0njwt2K2DXpkY3cw6LAEp3nZbgMHgx1hGSVV+WCPbcRYMdlP68HXuF2ijJ5vOtENEHMh896RH9tRdMAaT64PShJHRCGOnK1NWGVUEXTY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZwbTqgSn; arc=pass smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="btvYflSS"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-1357c851a48so1641505c88.1
-        for <llvm@lists.linux.dev>; Mon, 18 May 2026 07:09:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779113376; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZwbTqgSn"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ba180a022dso2085ad.1
+        for <llvm@lists.linux.dev>; Mon, 18 May 2026 09:06:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779120368; cv=none;
         d=google.com; s=arc-20240605;
-        b=bF7yKMOq028TyUs6pImfIUqa0i4prZbCZePERkkiaw677qDafEcbqqd9vyxQmVMChY
-         6g4I00ZRgNYGDA1bINewruZqmecQHneMTHuhyTuiHYsat/6YhbMzWJ/rQh90kREQo8nF
-         u3FRSAC1dp6Ari2i2LHEokHdH3oI7mMb81LGuEqtyiErYpCHejSSnaJ3JWcb7gcin4vT
-         GauB6bpFAuZY+3aNUe51UIcZicsAluoFpGd0G5Zy9v7isK3FG5ss30ZcAcpFffyE06tk
-         cn3nxrWjPC4/pMDzGicJsJlP94PotihE0VhaZV4DVE1Eu3BlVvRDGlVo+SVXVxEnvIjl
-         PpWw==
+        b=LzFIXOiYxkqh/FCe+FVKC5Mtl6jpE2nr9tXfQdVMo34D3SSzZDg2FH09/pebjDHBoW
+         pxs0LbeWEHXBM96TSr8o3IXLWuXxPkYhsXGjue7YVwi56i35Nn4+U+dMiHmTcRh6V1+r
+         n/t8EvU+bzsodSDS+lh5+A/qcenn8QWhU9+Jfp/eMamgjn5i77bTVIb/NuRnZMfy/TSO
+         Vg+m9zgK0ncSVkyHh7rCBust6Eo9ihWVGr3Dwu9ge46sK64OblQZ7iuq+lOAtMcjqbFY
+         ftfZqDhDwfbeuXx/9W8tS42pG5IR1kfRJIcJXhUhLrF+0XL8A4kMJJFQOllrzTokS0ym
+         TKzA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=nVNeIyEFEYH1knjNU1H5DLQ8NJ8o0Em1AHL69lK30IY=;
-        fh=xcR1eTSB2YbpSAHxgFWNBuxmhj8wfV1bGs20NoCmVvI=;
-        b=CXJTFns857mE3x4BfGMKe/lfBN3GMZVZcvdVqPYKmzJrYkr2ZREVeB29UZEHf/Z8zH
-         dx7o0BDMJ6vmOqabuSKOZQnD/9dx4/kwEcFdwC2gpRkWx7U9XFip2WJMWqNDamZ8lI0x
-         CunfUse4soYCOsiFbY/c/77ZJ4eyrlrh/3Lq91Xj4HamBqWLVV9d3WAHydWWu0HkpOIG
-         oA73PO/SBMiV9FoZSxo36Et79zGAyw129vaalA4IRQkqjbkrXT4VdO5iMW4Xly5s67D7
-         wzUWIJL4myPyIWo4tlIfvh5wz4xe21GMQf37mBJXpMFMCkCJiCLZK9YSq75GjdYXNf9l
-         NzRg==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
+        fh=ecWuCLf7CoHYyb7UBfTf01NG6eY/WndzG0pBOt9zBTw=;
+        b=JuUFSfHT0L+eqDFkM28g7Jyg7YWBOYWk7h7w3h+RFy3URaxJyrmoD37uq1SZiXbhPB
+         unpNPM+XTv2UoeoSDFEnreGlyIKZ5Pdv/BZMwIR3tO2hcXUzcPG5ykbbsoQvUqbTL72Y
+         P4avBqp04hz/mAlo1pH6aojh6dE1eZA5IFiC1hwSvBDqzjCX14tn9i12KKauO2AzFKQV
+         /tU8hqS3SUd+3XKVheoF+rpaJGkqSXEH2BvuAkz5UEH7Gf+whPrTcNSBM18E8QseVfAZ
+         87/8DpSN4bifcWKMCanUSpz/j+LpuSFsHxD/nHwIomwN2BeUOSyDapprtvu4SxLKM5zr
+         yvEQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779113376; x=1779718176; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nVNeIyEFEYH1knjNU1H5DLQ8NJ8o0Em1AHL69lK30IY=;
-        b=btvYflSS2JNuHZxh4uyeO7M8RB1TRKlrj8jDkOBlY+J0DxnXCIlWxNneYUFv1TACPX
-         l7aotFcHC10i9ygIhg1zdYSdoQ150pHBiE09iGN3tRBKpbKm8GMiQNYfOS90gFqDOVwK
-         f7sFH1ZUZGGGqWOu2FF3BUfQ46aku89UHzlPRTebeXUO2eiCICHyF6i1nv7DY+BqdJnr
-         xguEUMS7vOF7+RLSBOUCzpemUZN5k+5nqN7ekOpwuhgMBDlwhVcFyMcyuQJFhieQnLlK
-         J/2zCiNHqcrb2sB7lRzGAmPSeMCsirCXFxWrNmns3U3poHvFBtTuPieeiXmnS8yraA59
-         BNgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779113376; x=1779718176;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1779120368; x=1779725168; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nVNeIyEFEYH1knjNU1H5DLQ8NJ8o0Em1AHL69lK30IY=;
-        b=AAcXI4AqK8GvGNtIbuhLU+KRNN/jRfgpy95ssYvYv1VWnAgrTnisYoOHby+yV7FVvW
-         tKGG6XCxSqqdh4qzlo1v4TKwol4L1qYzNxHyi6q5+xcmDQfvBxRtSP8Y6S634yfXj39p
-         Qkyb1ERXJEH90e6kXozzvMLVQfiLKqSZzL9LbjkfcPFkxQ8s5eur2MFIAWBtqeqLiuyS
-         xN6+2K3ETze8ypGXzfriW9J4oRGiS7TaPr8lebrht+ELSXDAT6GwXkE1kgsACtj1ehXe
-         wYN5z6Cs+wsj3NhJO2IZesWBIL+uF46mTMNrT6cAxFN6/ij80BC2YcUcZz0kU06ye+TC
-         ++3w==
-X-Forwarded-Encrypted: i=1; AFNElJ8SkHLpZ/oA8VEE9euY3CEDHu/qRnS9ZkF97+0IiSHvcasraAXRtV4CP0lNtF7oJzZj6pG5@lists.linux.dev
-X-Gm-Message-State: AOJu0YynhKaxNpTaSowDwem4l2FPobgFW2ys8rIBtR7OjogV51Px+DHl
-	xSJelThrLVn+ffSpCq6o6OSf/2w/eRZQEIblmSeEPef6RzOhjIpHTAGybiyOY5t+qIm+u5zmk2D
-	Uj3bunUX0asHJGLgnTxbrRQFKO/KWARG/cHpXFGlh
-X-Gm-Gg: Acq92OGmiF2k08chaEGDqet6NXLnKZBtNaqa33vfmUlBAX+z1XmX0bzc1oNRxFq3eXD
-	cwgso1ZrZfUOgg+maG6j8KxaegUsa4vD04bV1afKKv6hCZ01utEC/syyzjQ8XTrLAh3b2doVzf9
-	q8QGCqBN6ntXTj8k47rwsp/ysqxNO+935bbNuerL8UZLuonVRviq3o3aFhKtRZ65iqgc9nk4RD+
-	N0ot0K8X+JpA6LIeSs6yF2H/ve8cI4bjmvShyN2d3SfB1KZV1UIKLOQ4bq2JhLBN9pjcJ0HDWo0
-	b0pqKI1x4T3MjJTnp4kaYPASeid4j8+uHemjrSbfJ/xAk0Mi
-X-Received: by 2002:a05:7022:660e:b0:130:6c8f:5aa3 with SMTP id
- a92af1059eb24-13504418706mr7462281c88.12.1779113375348; Mon, 18 May 2026
- 07:09:35 -0700 (PDT)
+        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
+        b=ZwbTqgSnRcebpB/LX9zbbOiDNyPWwA/AexKdBCiZdZHviEqRzHE4n4xv72Rfwh3/Gg
+         /qBbPxVOvJ55+gKo2DSnDAiN6SXrcAASUAEYfRzm6RyQzWZwyiCCjRij3iCll51xszIY
+         G24ZTGFqsdJ5fX+iROflQFfreb43xwCIcuVSSgiZz0den1fmOd+qBkms/1bYpdq3plCC
+         x6V/0i6I4t86BPnnIRwmsJVbIxzFqy+l469PFN/2jwrW3ezKSqdf93GBL6MHXOQ2qTqF
+         g6nPsnZavaX6CpqzStlNsAKgQATQZl2S3mfGm5XVziGYGbqdoOE1LlmHQS460oFZ80w7
+         VpeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779120368; x=1779725168;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
+        b=WY2hjs2iTqOEC/EZcUT0BaiapRbr5ZLDOrAIkCG7yPaQ2vhn1xJZ3Agn4KQjrn+3xN
+         VisDkvt71i/f49HCS4y0/bkQAg9Ax3Tl6IGTQSz4X9OKdNrhQ/nHVIbxBqh/t2PPVa8T
+         uAn9M5GbKcp/O1szGhTcrl8lS6nxB/EVTj1QkkFuEk58pm/KkUaZc5S37Reo2vFQsNVm
+         OruWnSgmJeawOB2X1FIyziEyGr10y7WHnVcSibn9wLMkSTP3Dvrdhw0HcMMhadm/4lse
+         V/gYQynCQLKA2ZaLPjs9IBwyaSpdsJqFNbxWxZrIeIshYaL7F9Uff1UepEWK9OMxK29d
+         olLA==
+X-Forwarded-Encrypted: i=1; AFNElJ/pS+L6VwF3/5vd6SckaijJQTjTfAyK0zvqw0ObnoR1kP12mX+6ExM8EY0ZP5un8UuNXk8Q@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyu8sO1RozdZzQ5hSi9npXAQrALfLYsJDXC43zr885R2oMiv9P2
+	NJFreAAwfso78sdsRZq4Jzkq3ETVXJHUoihfMQsvglpF8hlAXcK4jPOfJM9Br0XiI8UCk4KqiIO
+	sSoNOYf8ypK5NLaks84NZ9th4Ez1CDuOZF7uunmob
+X-Gm-Gg: Acq92OGLeI7e4+sjvpgFZ0+9cC+TMSi0T+4UAswMCJbIDMY+/HPRbICRD3Q713ABf7p
+	CXz/9OzdvMVHYqPWciGxG3eE0FcSv+RBW+Cj7KBLYfSUlcn5bUX9NHHjiNaM7lkRsYEEcSUBpBg
+	qZ2I5CuUA/CB9hiqCMmQdsncCPizYDZwGzvd8pP7vQd5p+JUejofZua55SLUh8jJk8/qBVmYar/
+	sciIfP9pJXAktyorqjK4EKWSX8yHBvzsdoGYi/2nhW7OKVO85T/x90xmGtbtc7sJPR5uNr/JEJ3
+	w7+pLho6vwE2SWl3mIjS2esuivUbqZ1xIoQbD+0cdCLRLhlK
+X-Received: by 2002:a17:902:d2cf:b0:2bd:3c1b:3073 with SMTP id
+ d9443c01a7336-2bdb041654emr3259205ad.16.1779120367385; Mon, 18 May 2026
+ 09:06:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260511200136.3201646-1-elver@google.com> <agcsMgfKjGTasJ5n@pedro-suse>
-In-Reply-To: <agcsMgfKjGTasJ5n@pedro-suse>
-From: Marco Elver <elver@google.com>
-Date: Mon, 18 May 2026 16:08:58 +0200
-X-Gm-Features: AVHnY4KwxhkHo10jEIBm11GIDEKZZU-LpYTl6pFHzoIdWDT8Gwo4IdHMoFpgtk4
-Message-ID: <CANpmjNOYd9RnJARZ7qUDifsftwWOhhakaWSu926PKA6-SepTwQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] slab: support for compiler-assisted type-based
- slab cache partitioning
-To: Pedro Falcato <pfalcato@suse.de>
-Cc: Vlastimil Babka <vbabka@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>, 
-	David Hildenbrand <david@kernel.org>, David Rientjes <rientjes@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>, 
-	Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Matteo Rizzo <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Suren Baghdasaryan <surenb@google.com>, linux-hardening@vger.kernel.org, 
-	Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>, 
-	"Liam R. Howlett" <liam@infradead.org>, Alexander Potapenko <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
-	GONG Ruiqi <gongruiqi1@huawei.com>
+References: <20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org> <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
+In-Reply-To: <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 18 May 2026 09:05:55 -0700
+X-Gm-Features: AVHnY4J8ZynnI8bourXp6ojaD0bCqutv1EZpQT8aGfrcInLJ1HrazyPhkbTF28U
+Message-ID: <CAP-5=fWmXQEbLg=xGJwQ4s5q5xUZUTdxx2N1K71N0gztZunQrQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] tools/build: Allow versioning LLVM readelf
+To: James Clark <james.clark@linaro.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, ihor.solodrai@linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 15 May 2026 at 16:28, Pedro Falcato <pfalcato@suse.de> wrote:
+On Mon, May 18, 2026 at 2:04=E2=80=AFAM James Clark <james.clark@linaro.org=
+> wrote:
 >
-> On Mon, May 11, 2026 at 10:00:48PM +0200, Marco Elver wrote:
-> > Rework the general infrastructure around RANDOM_KMALLOC_CACHES into more
-> > flexible KMALLOC_PARTITION_CACHES, with the former being a partitioning
-> > mode of the latter.
-> >
-> > Introduce a new mode, KMALLOC_PARTITION_TYPED, which leverages a feature
-> > available in Clang 22 and later, called "allocation tokens" via
-> > __builtin_infer_alloc_token() [1]. Unlike KMALLOC_PARTITION_RANDOM
-> > (formerly RANDOM_KMALLOC_CACHES), this mode deterministically assigns a
-> > slab cache to an allocation of type T, regardless of allocation site.
-> >
-> > The builtin __builtin_infer_alloc_token(<malloc-args>, ...) instructs
-> > the compiler to infer an allocation type from arguments commonly passed
-> > to memory-allocating functions and returns a type-derived token ID. The
-> > implementation passes kmalloc-args to the builtin: the compiler performs
-> > best-effort type inference, and then recognizes common patterns such as
-> > `kmalloc(sizeof(T), ...)`, `kmalloc(sizeof(T) * n, ...)`, but also
-> > `(T *)kmalloc(...)`. Where the compiler fails to infer a type the
-> > fallback token (default: 0) is chosen.
-> >
-> > Note: kmalloc_obj(..) APIs fix the pattern how size and result type are
-> > expressed, and therefore ensures there's not much drift in which
-> > patterns the compiler needs to recognize. Specifically, kmalloc_obj()
-> > and friends expand to `(TYPE *)KMALLOC(__obj_size, GFP)`, which the
-> > compiler recognizes via the cast to TYPE*.
-> >
-> > Clang's default token ID calculation is described as [1]:
-> >
-> >    typehashpointersplit: This mode assigns a token ID based on the hash
-> >    of the allocated type's name, where the top half ID-space is reserved
-> >    for types that contain pointers and the bottom half for types that do
-> >    not contain pointers.
-> >
-> > Separating pointer-containing objects from pointerless objects and data
-> > allocations can help mitigate certain classes of memory corruption
-> > exploits [2]: attackers who gains a buffer overflow on a primitive
-> > buffer cannot use it to directly corrupt pointers or other critical
-> > metadata in an object residing in a different, isolated heap region.
-> >
-> > It is important to note that heap isolation strategies offer a
-> > best-effort approach, and do not provide a 100% security guarantee,
-> > albeit achievable at relatively low performance cost. Note that this
-> > also does not prevent cross-cache attacks: while waiting for future
-> > features like SLAB_VIRTUAL [3] to provide physical page isolation, this
-> > feature should be deployed alongside SHUFFLE_PAGE_ALLOCATOR and
-> > init_on_free=1 to mitigate cross-cache attacks and page-reuse attacks as
-> > much as possible today.
-> >
-> > With all that, my kernel (x86 defconfig) shows me a histogram of slab
-> > cache object distribution per /proc/slabinfo (after boot):
-> >
-> >   <slab cache>      <objs> <hist>
-> >   kmalloc-part-15    1465  ++++++++++++++
-> >   kmalloc-part-14    2988  +++++++++++++++++++++++++++++
-> >   kmalloc-part-13    1656  ++++++++++++++++
-> >   kmalloc-part-12    1045  ++++++++++
-> >   kmalloc-part-11    1697  ++++++++++++++++
-> >   kmalloc-part-10    1489  ++++++++++++++
-> >   kmalloc-part-09     965  +++++++++
-> >   kmalloc-part-08     710  +++++++
-> >   kmalloc-part-07     100  +
-> >   kmalloc-part-06     217  ++
-> >   kmalloc-part-05     105  +
-> >   kmalloc-part-04    4047  ++++++++++++++++++++++++++++++++++++++++
-> >   kmalloc-part-03     183  +
-> >   kmalloc-part-02     283  ++
-> >   kmalloc-part-01     316  +++
-> >   kmalloc            1422  ++++++++++++++
+> Documentation/kbuild/llvm.rst mentions that readelf is included in the
+> LLVM toolchain, but it's not currently included in this block.
 >
-> Hi,
+> Add it so that LLVM=3D... options also apply to readelf. Users in tools/
+> were Perf which was hardcoding it, and another was the BPF makefile.
+> Both already include Makefile.include so convert them to use the new
+> variable.
 >
-> A couple of questions (I apologise if this was asked before, I wasn't involved
-> in this thread):
+> It also didn't have the cross compile prefix, so either readelf didn't
+> mind opening cross binaries, or it wasn't working for cross builds.
 >
-> 1) What's the object behind kmalloc-part-04? I imagine it's a single type
-> getting allocated a lot?
+> Signed-off-by: James Clark <james.clark@linaro.org>
 
-That's from __kmemdup_nul().
+For the tools/perf/Makefile.perf part of this change.
 
-> 2) The bucketing looks quite skewed. Do you have plans to implement something
-> more similar to what's in the original Apple blog post (with the smaller
-> granularity and all)? I'm asking because most of our types have pointers in
-> some way.
+Reviewed-by: Ian Rogers <irogers@google.com>
 
-Having a scheme more tailored towards kernel data structures would be nice.
+Thanks for the cleanup!
+Ian
 
-But we first need to build experience with this, and get more data. I
-think I agree with you that a smaller granularty scheme that tries to
-bucket similarly-shaped objects (e.g. with a pointer bitmap) will work
-better for the kernel, but I have no evidence of that yet. We need an
-analysis of "this scheme would have stopped X out of Y exploit
-chains". There are plans to look into that. But if an improvement
-comes out of it, it's just a compiler-flag flip away for the kernel,
-once the compiler supports it.
-
-There's also what Kees had proposed:
-https://lore.kernel.org/lkml/20240809072532.work.266-kees@kernel.org/
-.. but that trades memory and performance for stronger partitioning.
-Probably should become another KMALLOC_PARTITION variant.
-
-But if performance and memory usage are a concern (which is the case
-for environments where I'd like to enable this), we need a smarter
-token calculation scheme (if the current one is not good enough after
-some analysis).
-
-> 3) Obligatory "how about GCC?" :) I quite like the idea behind this feature,
-> and it would be awesome if it could be more broadly deployed!
-
-+cc linux-toolchains
-
-We'd need __builtin_infer_alloc_token + -falloc-token-max= for kernel
-support (-fsanitize=alloc-token is not needed if kernel support is all
-you'd care about):
-https://clang.llvm.org/docs/AllocToken.html#querying-token-ids-with-builtin-infer-alloc-token
-
-Thanks,
--- Marco
+> ---
+>  tools/lib/bpf/Makefile         | 8 ++++----
+>  tools/perf/Makefile.perf       | 1 -
+>  tools/scripts/Makefile.include | 2 ++
+>  3 files changed, 6 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index 168140f8e646..180dca9c57c8 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -114,12 +114,12 @@ PC_FILE           :=3D $(addprefix $(OUTPUT),$(PC_F=
+ILE))
+>
+>  TAGS_PROG :=3D $(if $(shell which etags 2>/dev/null),etags,ctags)
+>
+> -GLOBAL_SYM_COUNT =3D $(shell readelf -s --wide $(BPF_IN_SHARED) | \
+> +GLOBAL_SYM_COUNT =3D $(shell $(READELF) -s --wide $(BPF_IN_SHARED) | \
+>                            cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*/=
+/' | \
+>                            sed 's/\[.*\]//' | \
+>                            awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {prin=
+t $$NF}' | \
+>                            sort -u | wc -l)
+> -VERSIONED_SYM_COUNT =3D $(shell readelf --dyn-syms --wide $(OUTPUT)libbp=
+f.so | \
+> +VERSIONED_SYM_COUNT =3D $(shell $(READELF) --dyn-syms --wide $(OUTPUT)li=
+bbpf.so | \
+>                               sed 's/\[.*\]//' | \
+>                               awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {p=
+rint $$NF}' | \
+>                               grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | so=
+rt -u | wc -l)
+> @@ -182,12 +182,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
+>                      "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." =
+\
+>                      "Please make sure all LIBBPF_API symbols are"       =
+\
+>                      "versioned in $(VERSION_SCRIPT)." >&2;              =
+\
+> -               readelf -s --wide $(BPF_IN_SHARED) |                     =
+\
+> +               $(READELF) -s --wide $(BPF_IN_SHARED) |                  =
+\
+>                     cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |   =
+\
+>                     sed 's/\[.*\]//' |                                   =
+\
+>                     awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  =
+\
+>                     sort -u > $(OUTPUT)libbpf_global_syms.tmp;           =
+\
+> -               readelf --dyn-syms --wide $(OUTPUT)libbpf.so |           =
+\
+> +               $(READELF) --dyn-syms --wide $(OUTPUT)libbpf.so |        =
+        \
+>                     sed 's/\[.*\]//' |                                   =
+\
+>                     awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}=
+'|  \
+>                     grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |             =
+\
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index 0aba14f22a06..63276bf55856 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -215,7 +215,6 @@ FLEX    ?=3D flex
+>  BISON   ?=3D bison
+>  STRIP   =3D strip
+>  AWK     =3D awk
+> -READELF ?=3D readelf
+>
+>  # include Makefile.config by default and rule out
+>  # non-config cases
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
+ude
+> index e81e5b479c56..380ad84ac51e 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -73,6 +73,7 @@ ifneq ($(LLVM),)
+>    $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
+>    $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFF=
+IX))
+>    $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SU=
+FFIX))
+> +  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)=
+)
+>  else
+>    # Allow setting various cross-compile vars or setting CROSS_COMPILE as=
+ a prefix.
+>    $(call allow-override,CC,$(CROSS_COMPILE)gcc)
+> @@ -80,6 +81,7 @@ else
+>    $(call allow-override,LD,$(CROSS_COMPILE)ld)
+>    $(call allow-override,CXX,$(CROSS_COMPILE)g++)
+>    $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
+> +  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
+>
+>    # Host versions aren't prefixed
+>    $(call allow-override,HOSTAR,ar)
+>
+> --
+> 2.34.1
+>
