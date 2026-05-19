@@ -1,106 +1,96 @@
-Received: from relay.smtp-ext.broadcom.com (lpdvsmtp10.broadcom.com [192.19.144.205])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B17383C6C
-	for <llvm@lists.linux.dev>; Tue, 19 May 2026 19:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830683EA959;
+	Tue, 19 May 2026 19:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779217236; cv=none; b=cgerhH37Lylt7+K1gvwH9tUp1KIrB5IvSqWyPRJSfEP4lNt4JBDoud4cXq15Kv3LjBxsz26pnO4YaARFY5E+p81etX+iDgsHQewanxyMUjie3QzLglsD7zbh2bpx8GGx6/Z8JRp+E0wK1WEp5Q9AEpbq72hsPQwb0qztpaEle7g=
+	t=1779218049; cv=none; b=RPFsew6uzsfALISqBv09jNW6JbcTUFcRDcV/xIVMq/xslFTwOMpJRWvdG5Es1yJ7UCT0xg7DGDANFkAtstA4uiUjmG1h7Ln5Avho9SeElysiE53MbEV5DyA7ywxXQ12c7fPm2RhIGrAy0pKtKR4JL+3UFr6MtDt0FafDHlndywQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779217236; c=relaxed/simple;
-	bh=44BIJcFcaBVpyaPZoO1Hf42KZ9fVcWyJ8e9soWxSrYs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=N8tliZF7W9Hth+65iZcGU4IsT+imgYSouBp4g6YcqxhUbk15eP4e5ryNEuy8kaQfNAl9reCwEyhuovbRJ+69aIc4Qwuv6RRcBKpCQwzGzvCVyiXzocaGYSi+iqy+E7deDP6cD6Q8yERobRJpfdBHzfApz1tZD5UYEbLetLmWQZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=peXehMHK; arc=none smtp.client-ip=192.19.144.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1779218049; c=relaxed/simple;
+	bh=rVJbqjRlaN0oMDG9aoCqy5AoF7FNYxLI1iTDxuWdhZI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=svXcCxYSgy9WRK7LhXHhbvdCD8eKa8bQIbgMx48GcDELcenoirqkgu7sXiDfMq7EX9MZIpKL8mOeUugqkKlPRoBThMOlNxTwDVZZCu0ZljsPTYPtvLzDzuxwLDO9qmO2ENgvLtGrEsgpn09poNAh1XAvc8j0U+OBI+wX3NmIK30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NoXNwa8q; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="peXehMHK"
-Received: from mail-acc-it-01.broadcom.com (mail-acc-it-01.acc.broadcom.net [10.35.36.83])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id E2259C002598;
-	Tue, 19 May 2026 11:51:56 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com E2259C002598
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1779216716;
-	bh=44BIJcFcaBVpyaPZoO1Hf42KZ9fVcWyJ8e9soWxSrYs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=peXehMHKI4cD8wmknt45hVmB8MvfmCMWG0ISHKroGN1vkchVM/B4q0c2VjKJAKB3J
-	 Dp5wj2LiwDzLzqrIbxqKXlmBbyHQabAe1xqsx9YyFXDN5lOqndbn4ubIweyB/6s9Su
-	 Z+oCWIySIMlN4WTebGRx2kUPHuVK4JEPTK7RM9fQ=
-Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id AACE4AEA2;
-	Tue, 19 May 2026 14:51:55 -0400 (EDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: stable@vger.kernel.org
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Ian Rogers <irogers@google.com>,
-	linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
-	linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
-	bpf@vger.kernel.org (open list:BPF [MISC]),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT),
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [PATCH stable 6.1 0/3] perf build fixes
-Date: Tue, 19 May 2026 11:51:51 -0700
-Message-Id: <20260519185154.2987285-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NoXNwa8q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779218047; x=1810754047;
+  h=date:from:to:cc:subject:message-id;
+  bh=rVJbqjRlaN0oMDG9aoCqy5AoF7FNYxLI1iTDxuWdhZI=;
+  b=NoXNwa8qFxV3a71tupIP8S/xtN3NGsOjjhwutDSJWTeIUKtWbcLejRU+
+   R9OhX4+17O9Fd0bC83e0zLJGVWqLEVdduHJb3b3oyRuLi8tS+/lRuK4w9
+   lnSp98GNIYr/Zsq0teuzQ/yeE6QUQS11F1/G8CQ1T26VuWEmp32uqN4Vf
+   MC0hZYcSG3UqCz/A/t2Sttvf7K/QL0TLz0ObfdkPaJgq1FnW0kH/Tgc/i
+   +Px9YmIxg87mL/z6g6TlR/I6uFJJrcS5JXUQwr9HcR2OdSqhy/+dA/et/
+   5YGkILuG/mNdWRKDQHGG4xQ6/4NvhC7IyyQ8nbvpz5dJgMl/sNqXeh8pc
+   g==;
+X-CSE-ConnectionGUID: Tmd48RkLRBS6pvUPZVFLyg==
+X-CSE-MsgGUID: o0dPg0zLQgOGMN8ouLg43A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="97676836"
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="97676836"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 12:14:07 -0700
+X-CSE-ConnectionGUID: rud+tQDvTlaa8qjqk6NvrA==
+X-CSE-MsgGUID: MdK2z6S+QZ2ZG0Bz8l3uZg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="243882438"
+Received: from lkp-server02.sh.intel.com (HELO 30e86e9c1927) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 19 May 2026 12:14:05 -0700
+Received: from kbuild by 30e86e9c1927 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wPPsn-000000001kH-0rYU;
+	Tue, 19 May 2026 19:13:45 +0000
+Date: Wed, 20 May 2026 03:13:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Feng Tang <feng.tang@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [linux-next:master 5548/6445]
+ kernel/dma/contiguous.c:139:13: warning: variable 'numa_cma_configured' set
+ but not used
+Message-ID: <202605200341.a1HLq7XC-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-This patch series contains "perf" build fixes specific to 6.1. We have
-seen occasional build failures in our CI looking like these:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6a50ba100ace43f43c87384367eb2d2605fcc16c
+commit: 38ce91195a7c6f76fa88ef5c03bad0bbabbf5556 [5548/6445] dma-contiguous: add kconfig option to setup numa cma area if not configured explicitly
+config: s390-randconfig-002-20260520 (https://download.01.org/0day-ci/archive/20260520/202605200341.a1HLq7XC-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260520/202605200341.a1HLq7XC-lkp@intel.com/reproduce)
 
-util/parse-events-bison.c: In function 'yy_symbol_print':
-util/parse-events-bison.c:901: error: unterminated #if
-  901 | #if YYDEBUG
-      |
-util/parse-events-bison.c:1020:62: error: '_p' undeclared (first use in this function)
- 1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
-      |                                                              ^~
-util/parse-events-bison.c:1020:62: note: each undeclared identifier is reported only once for each function it appears in
-util/parse-events-bison.c:1020:64: error: expected ')' at end of input
- 1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
-      |                         ~                                      ^
-      |                                                                )
- 1021 |   YYFPRINTF (yyo, ")");
-      |
-util/parse-events-bison.c:1020:3: error: too few arguments to function 'yy_symbol_value_print'
- 1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
-      |   ^~~~~~~~~~~~~~~~~~~~~
-util/parse-events-bison.c:991:1: note: declared here
-  991 | yy_symbol_value_print (FILE *yyo,
-      | ^~~~~~~~~~~~~~~~~~~~~
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605200341.a1HLq7XC-lkp@intel.com/
 
-which are resolved by these patches.
+All warnings (new ones prefixed by >>):
 
-Ian Rogers (3):
-  perf build: Conditionally define NDEBUG
-  perf parse-events: Make YYDEBUG dependent on doing a debug build
-  perf build: Disable fewer bison warnings
+>> kernel/dma/contiguous.c:139:13: warning: variable 'numa_cma_configured' set but not used [-Wunused-but-set-global]
+     139 | static bool numa_cma_configured;
+         |             ^
+   1 warning generated.
 
- tools/perf/Makefile.config     |  1 +
- tools/perf/util/Build          | 12 ++++++++----
- tools/perf/util/expr.y         |  4 +++-
- tools/perf/util/parse-events.y |  3 +++
- tools/perf/util/pmu.y          |  3 +++
- 5 files changed, 18 insertions(+), 5 deletions(-)
 
--- 
-2.34.1
+vim +/numa_cma_configured +139 kernel/dma/contiguous.c
 
+   134	
+   135	static struct cma *dma_contiguous_numa_area[MAX_NUMNODES];
+   136	static phys_addr_t numa_cma_size[MAX_NUMNODES] __initdata;
+   137	static struct cma *dma_contiguous_pernuma_area[MAX_NUMNODES];
+   138	static phys_addr_t pernuma_size_bytes __initdata;
+ > 139	static bool numa_cma_configured;
+   140	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
