@@ -1,164 +1,133 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010056.outbound.protection.outlook.com [52.101.46.56])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C1B322768
-	for <llvm@lists.linux.dev>; Tue, 19 May 2026 16:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779209265; cv=fail; b=bi3rfRlTEl7H9Gr0Xa+62DUQHWo5Hqd3hUqOm2v7wnXiGIA1xO6nCP2G1524JFyBcZU0Vyy9ZlyIZDZuaZkPYMNGQ6AAPXoaUCX8XRdukPGJ010j0RPQn6luhTmI6zoUVrSf9YXEguziKVdsrQirvnsbbInwZqfsqFxp/CN81J8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779209265; c=relaxed/simple;
-	bh=H5gdcmSTM+e+ZrKrkAQTpw0WcuzXBUqvUSkRTjQONzA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=RswG53mI1s3AKSqcpoNUsSDjpLThEKDIcACdapmOR7EVf2qQBGqaDgEc/4vx2PMs4QGVmeG3gIQz/ceUUZDKRswcxpiqUV8pf512ZafAH3gp3Bd0tWGeP+lYUWeVlfVLk4tTmheh/D20NpepN14dqjvT9I9xqJ9slNXum+f5mqg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=BAbL8aF5; arc=fail smtp.client-ip=52.101.46.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AEE92848A0;
+	Tue, 19 May 2026 18:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779213624; cv=none; b=eQmE6Vd4mFJljy/21MjnOwwnwXUkl7I3OPMrNrPGtNkqrWQvBqta/3BL1v8/g4mj3AtgFf7wc5PCsJRHu+gzlkEzXy1uzDcKOZlho3FNq3wLyruP1tHMd+r+oqliF9gULP3vh5raogSWubTL/d9YbEHSvSMD7RQS4WEUvJdHPZU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779213624; c=relaxed/simple;
+	bh=v7y0+eHkzE2qC7DMvU4PVVo0LA6BHbBhb0CgGMEo7F8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=MDigdwiiTceTOe6fRVFUVGtq9cTuFUiZGXxKUscBQ+GoR7WmbgGCkVBCzLYGFJFls6SFrIoJFATIMCxSRXgNer7KxwWNKV31riIcB0I3DPwkHiQ4j4maGOSnbnzeVQsq7LB/xW/KUUaegnJXoolUHfD3uUuE+FacyP1ys1X1XBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mOYmr8Vb; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="BAbL8aF5"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uvv3diR8aosi2+GZdhucZ3gIm567RnG6x8IGlXC4UsumUFJwGp0DSn8dqBWtOnb8l8wzpNu/TYiaQw5jHebE4a00B09OqYZTSBEGugflDxdinlsx8yiWA7FHTExZ3E9Yt7sowR2W4H+AEniNZ3hBtK9xL4xNUqiUoU+FNZzFFOhCOVap9wlLeiI0RKiYhGDZkKL2sj9WvJya1nqaWUI+NXhA7HwX7QA4QJgUvxz3Y+GXXsXwpJBJA0OKCjrvAASR3NYNHRcIFm/4cSC3LGuXDaIFRd4/1TgohyU83hkDXKl7msm1e+6idb9+bLya3UQa/66tOQwDMpL+NlPAkOD2fg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GX73irdgJ/6RBvzWu+MKKv43mhQRTQLFvYZvlaR/7jE=;
- b=v58fM4bh9Za5Ty9QZpEWyG+w4RzvF0MZY0m49/CN996PQwhvH3e4vDUeZT1dNLS93bw9zXEnrqQ/LmFNF7DymMOJxQs3PznDjIczL5J+q6Mp69rabTge4Z6QtdY0dob9UNPpPU/1ow0XclR0T6w2QF4xXKtyjTkjs1TbxnuPZaq1OrCV7mTMSrYfDpfl56NSx/f/ojZLrzt9CjWk30aZxwSSQYtmUqJKyAGYpihWZJ9UurXiKQo91oyRzfweSxNeNWPycQ6bl7J+gGWvcc0EkxA8HGnY+gZbo17t11Gumt5zUIwl47FT8ga2eL36e1ieyQxrCVPCWt8wOpajy3Y9DA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GX73irdgJ/6RBvzWu+MKKv43mhQRTQLFvYZvlaR/7jE=;
- b=BAbL8aF5LXSSsBiPmFzQgwl7//359obmEOb1hoH8NbeaLO7zI2E0QMnFfsTgnPJ/50ysfqFsRLOkJspw8O1mQB9NOBtmvx7GfzuCzM5lmprp3x+F5YDoZhiqmeCzLFYCL8kI4/ZHDyl8wY2vcvu60kdQkyFVEAq4gmnyzqwblwY=
-Received: from SJ0PR05CA0043.namprd05.prod.outlook.com (2603:10b6:a03:33f::18)
- by SJ0PR10MB4415.namprd10.prod.outlook.com (2603:10b6:a03:2dc::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.24; Tue, 19 May
- 2026 16:47:42 +0000
-Received: from SJ5PEPF000001D0.namprd05.prod.outlook.com
- (2603:10b6:a03:33f:cafe::1d) by SJ0PR05CA0043.outlook.office365.com
- (2603:10b6:a03:33f::18) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.48.15 via Frontend Transport; Tue, 19
- May 2026 16:47:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
-Received: from flwvzet201.ext.ti.com (198.47.21.195) by
- SJ5PEPF000001D0.mail.protection.outlook.com (10.167.242.52) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.48.11 via Frontend Transport; Tue, 19 May 2026 16:47:40 +0000
-Received: from DFLE214.ent.ti.com (10.64.6.72) by flwvzet201.ext.ti.com
- (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Tue, 19 May
- 2026 11:47:07 -0500
-Received: from DFLE213.ent.ti.com (10.64.6.71) by DFLE214.ent.ti.com
- (10.64.6.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Tue, 19 May
- 2026 11:47:07 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE213.ent.ti.com
- (10.64.6.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37 via Frontend
- Transport; Tue, 19 May 2026 11:47:07 -0500
-Received: from [10.249.138.105] ([10.249.138.105])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 64JGl31k220693;
-	Tue, 19 May 2026 11:47:04 -0500
-Message-ID: <6ea9a707-cb0e-4fad-b2e8-2fb9928b124a@ti.com>
-Date: Tue, 19 May 2026 22:17:02 +0530
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mOYmr8Vb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779213623; x=1810749623;
+  h=date:from:to:cc:subject:message-id;
+  bh=v7y0+eHkzE2qC7DMvU4PVVo0LA6BHbBhb0CgGMEo7F8=;
+  b=mOYmr8VbtQwg5/luIR0Izwn6eWMSU5K+JoGET7H8DvGqPDzpvFIcaoWg
+   EhdV+imdow3ibphowUpd6rcpY1lURO8hx3M3+7JRF4PqOm3j+sHBJtJoJ
+   lMvKFXD11WeBu7h1AAtyH26OozIPgci3ktZf2l6iOZaB5p+xjkxdglr+S
+   CxtY1n0VRHYrsXcXJpe0xaCO4m7Tef2nCQYgU+B1A33u+Pm+cFiuxq+sb
+   M5yEvtJrAGshBnR382+WohHcA5A/56CWBbPZAztBcQb/qvkaHuKdI9WZv
+   M+r/AWcqhYO/VejmsOnK5QC3sHD2hZkn7WJe/hLPOm8CfZU/KKGGamK+q
+   g==;
+X-CSE-ConnectionGUID: 2RSmUmbASP2rM+7RsTnmLg==
+X-CSE-MsgGUID: akKjaUNMSRWUOafcL5zMcg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="102780189"
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="102780189"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 11:00:22 -0700
+X-CSE-ConnectionGUID: gE9AFmTOTPa07ciHA7yKuA==
+X-CSE-MsgGUID: +pt/iUF1QQSpten0vrPwhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="263623893"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa001.fm.intel.com with ESMTP; 19 May 2026 11:00:19 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wPOjp-00000000AGH-3Iew;
+	Tue, 19 May 2026 18:00:17 +0000
+Date: Tue, 19 May 2026 19:59:36 +0200
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Christian Brauner <christianvanbrauner@gmail.com>
+Subject: [brauner-github:work.exit_mm 3/4] mm/init-mm.c:46:3: error:
+ field designator 'user_ns' does not refer to any field in type 'struct
+ mm_struct'
+Message-ID: <202605191950.sdjDw98a-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 00/11] soc: ti: keystone/k3 navigator queue/dma/ringacc
- cleanups
-To: Nishanth Menon <nm@ti.com>, Justin Stitt <justinstitt@google.com>, "Bill
- Wendling" <morbo@google.com>, Nick Desaulniers
-	<nick.desaulniers+lkml@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
-	Santosh Shilimkar <ssantosh@kernel.org>
-CC: <afd@ti.com>, <llvm@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20260512170623.3174416-1-nm@ti.com>
-Content-Language: en-US
-From: Hari Prasath G E <gehariprasath@ti.com>
-In-Reply-To: <20260512170623.3174416-1-nm@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D0:EE_|SJ0PR10MB4415:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4616aca7-50ba-42de-35bc-08deb5c65747
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|36860700016|1800799024|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	yEUilXSs4TrgQ87OPyu2Ofpz7WLmugR24I520dz6YIMPIlW+KLp23QzMr3p8DhyWF9vuXRHnd6G7apt8LG9aRXSqiTqoLYfgLkwpGRjFu/MiQ/sQtarRNLYL3VjR+p4uHmrY4JSbE5f8e1Es8YcRn3WpNYP4cKoi3c+ty8knGRHYcu7gBGhS7NPoRxwTMnrttS3UkV4BvDv+oZDDzm/75H1dnUqHTs2+H1L2QB8BwDMWF9KA0OfjNMmzyONdasurktoVTmAX7/WfN3K2TsSzw6fuosfe8rCoXbjwsDJtHMDh5PXH7pAVOYhNSzAnukWsRxaPGCHBJ5zLnipBSINO5FeGHyYfio8tpVZ6enOeUB5ivb20zEtQfmIyqni34cxakftDp1sjRM2UVhfdSx4Ybcvj5PPOuIDOQVcfwEzqDUqXzU8ZDIIJBmYtsqu5fXQ1nElQevEKkaXzsfwY0kKhql5zY/2/rnIgV1ZrtL+fI2lLled9KJu5amNGPuYD7YZzxZGyrilVpmH9zf4SCZHU4KkKgVvpImH+vZxcltqRhwalqYNHn5pZwQHVWOxIfLgxqUZ2Zr5hN2Q/+CLtPGVLoafUe9IuusGRBYVrGMqIAG8zgTv02mEWje075VOkICr9Ls8s/6B+FVot+mzeE/Jnomopb/xIKKtlxB/vqCGulXy5QpCNXpqyBTlldqRNA8o7
-X-Forefront-Antispam-Report:
-	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700016)(1800799024)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	zaZCfIQXschJu/RFcHkkQstOQZJf4R0YhgFKWgXIber1hGzHVkz7FlKnKXlCTandtLtqwowxRo14s+K+oS8eyFwcGAj85YrAJvai7WO9XmHniiwA0g0+42GEwGSaF9a6pqSzv7TjXKeaDvtphi3B677C2t8PFBaXgVc/cECy0GpnUax1qdNW3qFfKLupcXWqggRS43QjiAVfpBt1MHvN08xdegfaH/w3QmcsAIf98EMPJDG20SaZTtoerIsGfVssxOTxPva0YrX2l9Z33sFKEvS/LvOpH/8tWNWg8xl8wNgyaBAHA0TI/Zv33/8GehipySJDSZXOFDNfrNq51yw8X3UyJ8+ro8+Pgar5ianWFIla7s9lr+FefcOmRL4uSMHadl7S9g5BwlSkJZ+RuvwQWaVzA8CH16hC/0LGI3w7/erBCSPFFMH78l3SozT7RfMS
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2026 16:47:40.4309
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4616aca7-50ba-42de-35bc-08deb5c65747
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001D0.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4415
 
-On 5/12/2026 10:36 PM, Nishanth Menon wrote:
-> Fix W=2 (clang/gcc), sparse, smatch and coccinelle warnings.
-> No functional changes.
-> 
-> Tested: NFS boot (via nav subsystem) on k2l-evm, k2hk-evm and k2g-evm
-> based on next-20260507:
-> https://gist.github.com/nmenon/cff02a5f2a72fde5fcb49664fcc834d2
-> 
-> Changes since V1:
-> - update for review comments.
-> - Picked up Randy's and Andrew's tags in appropriate patches.
-> 
-> V1: https://lore.kernel.org/all/20260508153211.3688277-1-nm@ti.com/
+tree:   https://github.com/brauner/linux.git work.exit_mm
+head:   822aa51be2cae2813d42b998a12558fa76afbc4f
+commit: a8f2b6f303fb0cdc7fef1b4e8966828a1dc7e10a [3/4] sched: move mm->user_ns to task->exec_state
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260519/202605191950.sdjDw98a-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260519/202605191950.sdjDw98a-lkp@intel.com/reproduce)
 
-For the whole series,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605191950.sdjDw98a-lkp@intel.com/
 
-Reviewed-by: Hari Prasath Gujulan Elango <gehariprasath@ti.com>
+All errors (new ones prefixed by >>):
 
-(I did see a few patches already have picked Reviewed-by tags)
+>> mm/init-mm.c:46:3: error: field designator 'user_ns' does not refer to any field in type 'struct mm_struct'
+      46 |         .user_ns        = &init_user_ns,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/firmware/efi/efi.c:76:3: error: field designator 'user_ns' does not refer to any field in type 'struct mm_struct'
+      76 |         .user_ns                = &init_user_ns,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-Regards,
-Hari
 
-> 
-> Nishanth Menon (11):
->    soc: ti: knav_qmss: Remove remaining redundant ENOMEM printks
->    soc: ti: knav_qmss: Rename global kdev to knav_qdev to fix -Wshadow
->    soc: ti: knav_qmss: Inline lockdep condition in for_each_handle_rcu
->    soc: ti: knav_qmss: Fix kernel-doc Return: tags
->    soc: ti: knav_qmss: Use %pe to print PTR_ERR()
->    soc: ti: knav_qmss: Fix __iomem annotations and __be32 type
->    soc: ti: knav_qmss_acc: Fix kernel-doc Return: tag
->    soc: ti: knav_dma: Remove unused DMA_PRIO_MASK macro
->    soc: ti: knav_dma: Remove dead check on unsigned args.args[0]
->    soc: ti: knav_dma: Use IOMEM_ERR_PTR() in pktdma_get_regs()
->    soc: ti: k3-ringacc: Use str_enabled_disabled() helper
-> 
->   drivers/soc/ti/k3-ringacc.c      |   3 +-
->   drivers/soc/ti/knav_dma.c        |   8 +-
->   drivers/soc/ti/knav_qmss.h       |   2 +-
->   drivers/soc/ti/knav_qmss_acc.c   |   2 +-
->   drivers/soc/ti/knav_qmss_queue.c | 148 +++++++++++++++----------------
->   5 files changed, 75 insertions(+), 88 deletions(-)
-> 
+vim +46 mm/init-mm.c
 
+9a9d0b82990112 Mateusz Guzik      2023-08-07  21  
+c1a2f7f0c06454 Rik van Riel       2018-07-16  22  /*
+c1a2f7f0c06454 Rik van Riel       2018-07-16  23   * For dynamically allocated mm_structs, there is a dynamically sized cpumask
+c1a2f7f0c06454 Rik van Riel       2018-07-16  24   * at the end of the structure, the size of which depends on the maximum CPU
+c1a2f7f0c06454 Rik van Riel       2018-07-16  25   * number the system can see. That way we allocate only as much memory for
+c1a2f7f0c06454 Rik van Riel       2018-07-16  26   * mm_cpumask() as needed for the hundreds, or thousands of processes that
+c1a2f7f0c06454 Rik van Riel       2018-07-16  27   * a system typically runs.
+c1a2f7f0c06454 Rik van Riel       2018-07-16  28   *
+c1a2f7f0c06454 Rik van Riel       2018-07-16  29   * Since there is only one init_mm in the entire system, keep it simple
+c1a2f7f0c06454 Rik van Riel       2018-07-16  30   * and size this cpu_bitmask to NR_CPUS.
+c1a2f7f0c06454 Rik van Riel       2018-07-16  31   */
+bb1f17b0372de9 Alexey Dobriyan    2009-06-16  32  struct mm_struct init_mm = {
+d4af56c5c7c678 Liam R. Howlett    2022-09-06  33  	.mm_mt		= MTREE_INIT_EXT(mm_mt, MM_MT_FLAGS, init_mm.mmap_lock),
+bb1f17b0372de9 Alexey Dobriyan    2009-06-16  34  	.pgd		= swapper_pg_dir,
+bb1f17b0372de9 Alexey Dobriyan    2009-06-16  35  	.mm_users	= ATOMIC_INIT(2),
+bb1f17b0372de9 Alexey Dobriyan    2009-06-16  36  	.mm_count	= ATOMIC_INIT(1),
+57efa1fe595769 Jason Gunthorpe    2020-12-14  37  	.write_protect_seq = SEQCNT_ZERO(init_mm.write_protect_seq),
+14c3656b7284a8 Michel Lespinasse  2020-06-08  38  	MMAP_LOCK_INITIALIZER(init_mm)
+bb1f17b0372de9 Alexey Dobriyan    2009-06-16  39  	.page_table_lock =  __SPIN_LOCK_UNLOCKED(init_mm.page_table_lock),
+88aa7cc688d48d Yang Shi           2018-06-07  40  	.arg_lock	=  __SPIN_LOCK_UNLOCKED(init_mm.arg_lock),
+bb1f17b0372de9 Alexey Dobriyan    2009-06-16  41  	.mmlist		= LIST_HEAD_INIT(init_mm.mmlist),
+5e31275cc997f8 Suren Baghdasaryan 2023-02-27  42  #ifdef CONFIG_PER_VMA_LOCK
+f35ab95ca0af7a Suren Baghdasaryan 2025-02-13  43  	.vma_writer_wait = __RCUWAIT_INITIALIZER(init_mm.vma_writer_wait),
+eb449bd96954b1 Suren Baghdasaryan 2024-11-22  44  	.mm_lock_seq	= SEQCNT_ZERO(init_mm.mm_lock_seq),
+5e31275cc997f8 Suren Baghdasaryan 2023-02-27  45  #endif
+bfedb589252c01 Eric W. Biederman  2016-10-13 @46  	.user_ns	= &init_user_ns,
+12a6ddfc76bb8a Mathieu Desnoyers  2025-12-24  47  #ifdef CONFIG_SCHED_MM_CID
+12a6ddfc76bb8a Mathieu Desnoyers  2025-12-24  48  	.mm_cid.lock = __RAW_SPIN_LOCK_UNLOCKED(init_mm.mm_cid.lock),
+12a6ddfc76bb8a Mathieu Desnoyers  2025-12-24  49  #endif
+6ac433f8b2590b Mathieu Desnoyers  2025-12-24  50  	.flexible_array	= MM_STRUCT_FLEXIBLE_ARRAY_INIT,
+a1b200e27c0426 Heiko Carstens     2010-08-09  51  	INIT_MM_CONTEXT(init_mm)
+bb1f17b0372de9 Alexey Dobriyan    2009-06-16  52  };
+5748fbc533a324 Kefeng Wang        2021-07-07  53  
+
+:::::: The code at line 46 was first introduced by commit
+:::::: bfedb589252c01fa505ac9f6f2a3d5d68d707ef4 mm: Add a user_ns owner to mm_struct and fix ptrace permission checks
+
+:::::: TO: Eric W. Biederman <ebiederm@xmission.com>
+:::::: CC: Eric W. Biederman <ebiederm@xmission.com>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
