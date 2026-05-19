@@ -1,168 +1,160 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AEE2C0303;
-	Tue, 19 May 2026 23:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E527369D4D;
+	Tue, 19 May 2026 23:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779234028; cv=none; b=rEL+gJyQKLP+goKZOr8WTosI85m9zu6QFyMjh/RElCu+EyUwV6EOrrbi6PqccqquKpKQVAspPUlXtrxcIZEmL4dd0YuWTZbxFOv8GQVTDbmolS6LPwzojEgu6b48W99d9Kg0QwVJ3dN9fnJABUWW1MFGPtZiyevrQYzP8kvcW9w=
+	t=1779235072; cv=none; b=o4zrK0C7sZizZkL5W/cb21P/4YQ1laVNTSPUddmA+AiMMpGCYlnPCwBpV9f0iISOv6kz+R5pnwRZjJKMYnhN5CRUdpc3QAEcH6EV8AwoE29eiv5lMT9V2+ON/0CdMgX/1lgN0owLnMSJhHiGKH21HyzG3KcYu9N9ipqVCCHb7RQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779234028; c=relaxed/simple;
-	bh=pXRHIAnYsFDl4U45YklvY0YFOrGnm3Zek1PMbbZhsiA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=KgnStY5/+xgXDzHiZ7o+xYb6FEKUBK//QHtG6xqhKGQAhKP2IWIYld4AFkq0t/UyotVPqzOCXlUhVe3IfVB1w5eYw/oTnHE2Iuv3SiikfcqtIF3b27bqa2BtaBthoKffOWwKuUztNnXJswLqeh9ggg5itlb3digkSFyaoevXiZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XW9secaw; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779235072; c=relaxed/simple;
+	bh=7UTzWNyq8e8HIpKZw64gKTF6fVCOvbLqoh4DSh8fbSI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bYKIrV7rrxYGf59Ax3jPAjqLmLFZSIVQ+m8Zfo+ahunX4Cet/zR+npogF2b4cUNeeFSa4BIdVaH7C8egIBQ6Hl69mqvJuSFVOyAjn9/+Zva0OEsuDHUYvaD4Z2CWhqTbP6yk6dc8UiyNxP0rFSFzfVIk7zN4S8HIotnrTfuTaiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j+IawRDC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XW9secaw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779234027; x=1810770027;
-  h=date:from:to:cc:subject:message-id;
-  bh=pXRHIAnYsFDl4U45YklvY0YFOrGnm3Zek1PMbbZhsiA=;
-  b=XW9secawVLoijxrZOK/z129Aa4puyp5E6Mzr8j4ldsX5QNkmKe3ZbioJ
-   JVTO2wFX7tvvSkczd1jOcTo1Pyr0d58p35RgWGuwKxECwKRG0x0cRBuW+
-   APN6KE/6EE3U8sofkY9apzENbzXBTBtQanyEb5PFXS+TQ5NgxWL/DrjkR
-   AK1OmuF4Xi2f6/BRhB/NEZCdhFFqDb+QM/nicc8FZs/6nma2xyKg0MRbZ
-   /eXGspebwKNyaaJV7Kw+znn4j7mn7qdQPupKDGDJOgRrYHdUhuf11t4F2
-   jcyjg1O1KttU8JWWhmWvrQqIRsuUPbJyMQTHCDywM2ON1oMu/Ym1TuPJH
-   A==;
-X-CSE-ConnectionGUID: GviKxMKyScW+EQEzUYlz0Q==
-X-CSE-MsgGUID: f8gYpXepTDm1eGUC23oU7w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="79851677"
-X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
-   d="scan'208";a="79851677"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 16:40:26 -0700
-X-CSE-ConnectionGUID: tVglYbqjTf6t+Zcen4kAUA==
-X-CSE-MsgGUID: Xe0NP7NhRimvSZ51KjYf0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
-   d="scan'208";a="239092348"
-Received: from lkp-server02.sh.intel.com (HELO 30e86e9c1927) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 19 May 2026 16:40:24 -0700
-Received: from kbuild by 30e86e9c1927 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wPU2I-0000000028v-0QSa;
-	Tue, 19 May 2026 23:39:52 +0000
-Date: Wed, 20 May 2026 07:39:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Harry Wentland <harry.wentland@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Alex Deucher <alexander.deucher@amd.com>, Alex Hung <alex.hung@amd.com>
-Subject: [agd5f:drm-next 4/72]
- drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1833:7: error: incomplete
- definition of type 'struct cpuinfo_x86'
-Message-ID: <202605200730.CZLQcLxo-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j+IawRDC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 328051F00893;
+	Tue, 19 May 2026 23:57:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779235071;
+	bh=dbsOAfuN8ml++VqHBD2xHu4Tk0pEHTjebmx81mRjNjQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=j+IawRDC4po5J/sySD3Vspo/j2V6R7CsxVFwZtizeYW8pdH/UsliZI/qQZreqa8ll
+	 +9cK0dwngXE+55CkwGhFbim4x6YdUttO7nM04lyrmgGpKcD3RtBQwuzb1y64Trj6fZ
+	 VVWfqd7g3nHCG/zZRm/8qqKykiislzCZKL89CzHEyWbFGc0fUOcjHiohFpRNELU0AR
+	 ejYF/V59JUUqr7nmzQMRIJBisCdJ9anllfnXNzmrBu2lUTqvJMepXGcCu9AdyWCc36
+	 5Bjrs4QZ8Ac5swPr9Ow3Z/mDI5sHraIw+5YwUah4DOCvHh2DIw53nFgb5ThnZo5I5q
+	 2RyBf6pHU8qAA==
+Message-ID: <d0cea3c8-f1ce-4dfe-a116-8f36d5b4308e@kernel.org>
+Date: Wed, 20 May 2026 08:57:42 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-
-Hi Harry,
-
-First bad commit (maybe != root cause):
-
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   4cdbba5a16aaf16513b69cc332b1d6f971a44b52
-commit: af3f2f5db2659a13c256d2fb096c473eb50412ef [4/72] drm/amdgpu: Remove UML build exclusion from Kconfig
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260520/202605200730.CZLQcLxo-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260520/202605200730.CZLQcLxo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605200730.CZLQcLxo-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:24:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1830:27: error: call to undeclared function 'cpu_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1830 |         struct cpuinfo_x86 *c = &cpu_data(0);
-         |                                  ^
-   drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1830:26: error: cannot take the address of an rvalue of type 'int'
-    1830 |         struct cpuinfo_x86 *c = &cpu_data(0);
-         |                                 ^~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1833:7: error: incomplete definition of type 'struct cpuinfo_x86'
-    1833 |         if (c->x86_vendor == X86_VENDOR_AMD)
-         |             ~^
-   drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1830:9: note: forward declaration of 'struct cpuinfo_x86'
-    1830 |         struct cpuinfo_x86 *c = &cpu_data(0);
-         |                ^
->> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1833:23: error: use of undeclared identifier 'X86_VENDOR_AMD'
-    1833 |         if (c->x86_vendor == X86_VENDOR_AMD)
-         |                              ^
-   1 warning and 4 errors generated.
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/3] slab: support for compiler-assisted type-based
+ slab cache partitioning
+To: Marco Elver <elver@google.com>, Pedro Falcato <pfalcato@suse.de>
+Cc: Vlastimil Babka <vbabka@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>,
+ David Hildenbrand <david@kernel.org>, David Rientjes <rientjes@google.com>,
+ Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>,
+ Justin Stitt <justinstitt@google.com>, KP Singh <kpsingh@kernel.org>,
+ Kees Cook <kees@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Matteo Rizzo <matteorizzo@google.com>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Suren Baghdasaryan <surenb@google.com>, linux-hardening@vger.kernel.org,
+ Nicolas Schier <nsc@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+ Hao Li <hao.li@linux.dev>, "Liam R. Howlett" <liam@infradead.org>,
+ Alexander Potapenko <glider@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, kasan-dev@googlegroups.com, llvm@lists.linux.dev,
+ GONG Ruiqi <gongruiqi1@huawei.com>
+References: <20260511200136.3201646-1-elver@google.com>
+ <agcsMgfKjGTasJ5n@pedro-suse>
+ <CANpmjNOYd9RnJARZ7qUDifsftwWOhhakaWSu926PKA6-SepTwQ@mail.gmail.com>
+Content-Language: en-US
+From: Harry Yoo <harry@kernel.org>
+In-Reply-To: <CANpmjNOYd9RnJARZ7qUDifsftwWOhhakaWSu926PKA6-SepTwQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-vim +1833 drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c
 
-520b8fb755ccfb Felix Kuehling    2017-12-08  1823  
-6d3d8065bb14dc Nathan Chancellor 2019-01-21  1824  #ifdef CONFIG_X86_64
-520b8fb755ccfb Felix Kuehling    2017-12-08  1825  static int kfd_fill_iolink_info_for_cpu(int numa_node_id, int *avail_size,
-520b8fb755ccfb Felix Kuehling    2017-12-08  1826  				uint32_t *num_entries,
-520b8fb755ccfb Felix Kuehling    2017-12-08  1827  				struct crat_subtype_iolink *sub_type_hdr)
-520b8fb755ccfb Felix Kuehling    2017-12-08  1828  {
-520b8fb755ccfb Felix Kuehling    2017-12-08  1829  	int nid;
-520b8fb755ccfb Felix Kuehling    2017-12-08 @1830  	struct cpuinfo_x86 *c = &cpu_data(0);
-520b8fb755ccfb Felix Kuehling    2017-12-08  1831  	uint8_t link_type;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1832  
-520b8fb755ccfb Felix Kuehling    2017-12-08 @1833  	if (c->x86_vendor == X86_VENDOR_AMD)
-520b8fb755ccfb Felix Kuehling    2017-12-08  1834  		link_type = CRAT_IOLINK_TYPE_HYPERTRANSPORT;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1835  	else
-520b8fb755ccfb Felix Kuehling    2017-12-08  1836  		link_type = CRAT_IOLINK_TYPE_QPI_1_1;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1837  
-520b8fb755ccfb Felix Kuehling    2017-12-08  1838  	*num_entries = 0;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1839  
-520b8fb755ccfb Felix Kuehling    2017-12-08  1840  	/* Create IO links from this node to other CPU nodes */
-520b8fb755ccfb Felix Kuehling    2017-12-08  1841  	for_each_online_node(nid) {
-520b8fb755ccfb Felix Kuehling    2017-12-08  1842  		if (nid == numa_node_id) /* node itself */
-520b8fb755ccfb Felix Kuehling    2017-12-08  1843  			continue;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1844  
-520b8fb755ccfb Felix Kuehling    2017-12-08  1845  		*avail_size -= sizeof(struct crat_subtype_iolink);
-520b8fb755ccfb Felix Kuehling    2017-12-08  1846  		if (*avail_size < 0)
-520b8fb755ccfb Felix Kuehling    2017-12-08  1847  			return -ENOMEM;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1848  
-520b8fb755ccfb Felix Kuehling    2017-12-08  1849  		memset(sub_type_hdr, 0, sizeof(struct crat_subtype_iolink));
-520b8fb755ccfb Felix Kuehling    2017-12-08  1850  
-520b8fb755ccfb Felix Kuehling    2017-12-08  1851  		/* Fill in subtype header data */
-520b8fb755ccfb Felix Kuehling    2017-12-08  1852  		sub_type_hdr->type = CRAT_SUBTYPE_IOLINK_AFFINITY;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1853  		sub_type_hdr->length = sizeof(struct crat_subtype_iolink);
-520b8fb755ccfb Felix Kuehling    2017-12-08  1854  		sub_type_hdr->flags = CRAT_SUBTYPE_FLAGS_ENABLED;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1855  
-520b8fb755ccfb Felix Kuehling    2017-12-08  1856  		/* Fill in IO link data */
-520b8fb755ccfb Felix Kuehling    2017-12-08  1857  		sub_type_hdr->proximity_domain_from = numa_node_id;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1858  		sub_type_hdr->proximity_domain_to = nid;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1859  		sub_type_hdr->io_interface_type = link_type;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1860  
-520b8fb755ccfb Felix Kuehling    2017-12-08  1861  		(*num_entries)++;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1862  		sub_type_hdr++;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1863  	}
-520b8fb755ccfb Felix Kuehling    2017-12-08  1864  
-520b8fb755ccfb Felix Kuehling    2017-12-08  1865  	return 0;
-520b8fb755ccfb Felix Kuehling    2017-12-08  1866  }
-d1c234e2cd1091 Felix Kuehling    2019-01-02  1867  #endif
-520b8fb755ccfb Felix Kuehling    2017-12-08  1868  
+On 5/18/26 11:08 PM, Marco Elver wrote:
+> On Fri, 15 May 2026 at 16:28, Pedro Falcato <pfalcato@suse.de> wrote:
+>>
+>> On Mon, May 11, 2026 at 10:00:48PM +0200, Marco Elver wrote:
+>>> Rework the general infrastructure around RANDOM_KMALLOC_CACHES into more
+>>> flexible KMALLOC_PARTITION_CACHES, with the former being a partitioning
+>>> mode of the latter.
+>>>
+>>> Introduce a new mode, KMALLOC_PARTITION_TYPED, which leverages a feature
+>>> available in Clang 22 and later, called "allocation tokens" via
+>>> __builtin_infer_alloc_token() [1]. Unlike KMALLOC_PARTITION_RANDOM
+>>> (formerly RANDOM_KMALLOC_CACHES), this mode deterministically assigns a
+>>> slab cache to an allocation of type T, regardless of allocation site.
+>>>
+>>> The builtin __builtin_infer_alloc_token(<malloc-args>, ...) instructs
+>>> the compiler to infer an allocation type from arguments commonly passed
+>>> to memory-allocating functions and returns a type-derived token ID. The
+>>> implementation passes kmalloc-args to the builtin: the compiler performs
+>>> best-effort type inference, and then recognizes common patterns such as
+>>> `kmalloc(sizeof(T), ...)`, `kmalloc(sizeof(T) * n, ...)`, but also
+>>> `(T *)kmalloc(...)`. Where the compiler fails to infer a type the
+>>> fallback token (default: 0) is chosen.
+>>>
+>>> Note: kmalloc_obj(..) APIs fix the pattern how size and result type are
+>>> expressed, and therefore ensures there's not much drift in which
+>>> patterns the compiler needs to recognize. Specifically, kmalloc_obj()
+>>> and friends expand to `(TYPE *)KMALLOC(__obj_size, GFP)`, which the
+>>> compiler recognizes via the cast to TYPE*.
+>>>
+>>> Clang's default token ID calculation is described as [1]:
+>>>
+>>>     typehashpointersplit: This mode assigns a token ID based on the hash
+>>>     of the allocated type's name, where the top half ID-space is reserved
+>>>     for types that contain pointers and the bottom half for types that do
+>>>     not contain pointers.
+>>>
+>>> Separating pointer-containing objects from pointerless objects and data
+>>> allocations can help mitigate certain classes of memory corruption
+>>> exploits [2]: attackers who gains a buffer overflow on a primitive
+>>> buffer cannot use it to directly corrupt pointers or other critical
+>>> metadata in an object residing in a different, isolated heap region.
+>>>
+>>> It is important to note that heap isolation strategies offer a
+>>> best-effort approach, and do not provide a 100% security guarantee,
+>>> albeit achievable at relatively low performance cost. Note that this
+>>> also does not prevent cross-cache attacks: while waiting for future
+>>> features like SLAB_VIRTUAL [3] to provide physical page isolation, this
+>>> feature should be deployed alongside SHUFFLE_PAGE_ALLOCATOR and
+>>> init_on_free=1 to mitigate cross-cache attacks and page-reuse attacks as
+>>> much as possible today.
+>>>
+>>> With all that, my kernel (x86 defconfig) shows me a histogram of slab
+>>> cache object distribution per /proc/slabinfo (after boot):
+>>>
+>>>    <slab cache>      <objs> <hist>
+>>>    kmalloc-part-15    1465  ++++++++++++++
+>>>    kmalloc-part-14    2988  +++++++++++++++++++++++++++++
+>>>    kmalloc-part-13    1656  ++++++++++++++++
+>>>    kmalloc-part-12    1045  ++++++++++
+>>>    kmalloc-part-11    1697  ++++++++++++++++
+>>>    kmalloc-part-10    1489  ++++++++++++++
+>>>    kmalloc-part-09     965  +++++++++
+>>>    kmalloc-part-08     710  +++++++
+>>>    kmalloc-part-07     100  +
+>>>    kmalloc-part-06     217  ++
+>>>    kmalloc-part-05     105  +
+>>>    kmalloc-part-04    4047  ++++++++++++++++++++++++++++++++++++++++
+>>>    kmalloc-part-03     183  +
+>>>    kmalloc-part-02     283  ++
+>>>    kmalloc-part-01     316  +++
+>>>    kmalloc            1422  ++++++++++++++
+>>
+>> Hi,
+>>
+>> A couple of questions (I apologise if this was asked before, I wasn't involved
+>> in this thread):
+>>
+>> 1) What's the object behind kmalloc-part-04? I imagine it's a single type
+>> getting allocated a lot?
+> 
+> That's from __kmemdup_nul().
 
-:::::: The code at line 1833 was first introduced by commit
-:::::: 520b8fb755ccfb07d8d743da5753cff1fcb74b9f drm/amdkfd: Add topology support for CPUs
+__kmemdup_nul() is probably a good fit for SLAB_BUCKETS?
 
-:::::: TO: Felix Kuehling <Felix.Kuehling@amd.com>
-:::::: CC: Oded Gabbay <oded.gabbay@gmail.com>
+-- 
+Cheers,
+Harry / Hyeonggon
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
