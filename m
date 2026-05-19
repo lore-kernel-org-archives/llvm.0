@@ -1,177 +1,111 @@
-Received: from mail-yx1-f100.google.com (mail-yx1-f100.google.com [74.125.224.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 595FB3EA942
-	for <llvm@lists.linux.dev>; Tue, 19 May 2026 19:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82C42E2286;
+	Tue, 19 May 2026 19:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779218999; cv=none; b=EU7/yNC2aTAI3/qeEss14ikz1na3JGFkoWeNTcX61omYQsHi15pPNskNcv6xuDiANq1UvlXX6xSMar45jSJoVUGflX1mf7Bwip74I4AiqL1xf8zs7EfYoOoSRYYu5hHc39lG96fNk2CnKgPlQxfDqmm8apIlTmp8qyZzzthJGtc=
+	t=1779219284; cv=none; b=orkz/kGzNRA9gvrgBax14Syotppgh8Tq+tjaXwd3MYWXkfH+IdAVqSr614Nh/6Ls2p64A5ALdOwd169gn602bNcBvnzuAtEnHStKPo8LwnHcv9ktXK9Z4q2bmn/14FR/q3mrKpRyJ2hiX9+u0Jv886FKMygh5W1SK49ixxgHOOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779218999; c=relaxed/simple;
-	bh=YPcRiw4Tsr2KvMmATm06qRml6/4p3sbblnDe0qTV42Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FzZnzEHy6GiwEy81a6KvnAHpxREmbGtwRUkMUSRc15At8Czws5zGZJ3DmtUxe6EJdFzW0bAML+Z6mhi8iFVi/UpObxdsMTVe/yYAVMC1Lc8w/R26f9J3ZSvpLGyjKJLKhpS394I5swUCbHtYFxNwBIBU05dX6gitSnrfZKHwfVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Q9E03S5H; arc=none smtp.client-ip=74.125.224.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1779219284; c=relaxed/simple;
+	bh=hAWMlkh2r9FZkBVlkBIQrTmce6VfqMBrMoFkO+bbfpc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=TnadLLOysNXz32rsk0toTKnockvCS38L+0kzJ54y7vQyntviX8fWUDTIAqvocv1GigGOzlo70zbO+06Z5cDi8WJEAHeA7tKtoadPnSeuWLBA2N1iffJRQgBiPj8D/0OIyeIQ1/s/cNMtVy24IBagniD9ibN8VdIsnENARGYk40c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qcuu0xMT; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Q9E03S5H"
-Received: by mail-yx1-f100.google.com with SMTP id 956f58d0204a3-65dbe04fc1bso4239281d50.1
-        for <llvm@lists.linux.dev>; Tue, 19 May 2026 12:29:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779218995; x=1779823795;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HOwWa+Njguq/yZzIYzDdMRRevQFxklUNPfoFyUumtAI=;
-        b=azkpOAqbf2QWpc2NwnQjOHgcFol9TW62mP2B08lCjKu7+5TerFhp3AaK9ppNLruba3
-         bO+2PhXXWEMPVt4//Pit4+0sj+vTBXBE3WQh0dNhCZQks867nKWEw1I1ifbC5OnNYntC
-         m471Xsvjv1Dp6Wxi5PlVDcYIs7ClA3HXdxAnafx0woxeBDqGbx4PGOFXJOHMSQK1AH0B
-         WkS8leK+YlAWVRp/zEg98UWaP9wXNhiZelaBLjAA228n985tlHF/NTGzsTXnEGJaAZuA
-         Qep2UFIv0xuxVdSJbpKSb6bmibcfn0QBCy5ZKLG7i0fPldM9dD458ivjfqtaE/pnRn6K
-         OVyQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8WZrXAr1FnCJqfPX0MwWis2v4Cq/OcEwtCcoc2tO+SNR12AqlB+q0PfcpNcfcas+BdGI9F@lists.linux.dev
-X-Gm-Message-State: AOJu0YyYPpTS76Z1zbIm4rKYj0oknRA/NBAJS/PEyEz9t7+HuaWCxJRF
-	Cp+tCUnhJBlFCPgt5vqS4d3HvdujShTQtVh2mTWrFswdABwD/z8o5ZAnqSJUOum33RfGtq39dIG
-	9BlsgiG5V3DM3tVoDn7AjRu2CIwuGWAPekhjj4nBWtMzNkcq+yAaK+y1UvO+YhfusEnwEAigK4x
-	Z+ID2d2CV0nbkAh2Pd14pFAiOcrPsNnhTpdfKGm4kwwFAWS9VTGgFADTbqwNKbn9l6jTUUgTjxy
-	Qb3zzjKpf4maQ==
-X-Gm-Gg: Acq92OG+B2oFQXoo/QD9kOGdYzgIQdYfwirYu2gTyM2QMekUu4sMFdO5PvxClB7Rky/
-	L8FbTo0n5HIZMKg9U4DHURdKULBhiWhv5I4C5v0J1637iiyStJfOoSjkhkbhqFNzyIy0pwxPdIo
-	GU+688srI3QqxTvtgPtKWlg/88map9mVWqOMsqdrPGN4xSePobGYv9iS28Qz63oV0TX709ZY2SF
-	AL8kL46LrR4TCUsfM3w+wD3JTZrnxn6+Z0zubRXiE7UWZATYGA8A4orV/hpmbcCPkvjTN1xhCfc
-	MwysIbMRB8iFXhvq6iEQpx3dSFyMvx0sFB9BXH0zi21a24tMNADVzch3J537MKTklyWIq5ldiV8
-	H6w8kCum9zGo2fIYrB4OoHpSThoSqviix6z29qisaOz5Gd2EAlW3G3dOmD/PlmGq8Eb1VXIx3P2
-	2CxeT5d/ebaw==
-X-Received: by 2002:a53:d015:0:b0:65c:391:4553 with SMTP id 956f58d0204a3-65e2264f62amr19215715d50.2.1779218995028;
-        Tue, 19 May 2026 12:29:55 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com ([144.49.247.127])
-        by smtp-relay.gmail.com with ESMTPS id 956f58d0204a3-65e85e73587sm104984d50.0.2026.05.19.12.29.54
-        for <llvm@lists.linux.dev>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 May 2026 12:29:55 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-45e73a4f1dfso2528761f8f.0
-        for <llvm@lists.linux.dev>; Tue, 19 May 2026 12:29:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1779218993; x=1779823793; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=HOwWa+Njguq/yZzIYzDdMRRevQFxklUNPfoFyUumtAI=;
-        b=Q9E03S5HHTzKx0hZ0NsbLxgCDYaSkFO/guaGBo1PvVZlGOQutjPMurnQMUgdKohnPu
-         xb7o1AqFkU6VKm5Rz/l20M4c+cERNIJYBzhCPVrM/VHNpE3dv8Ff3XAnWutedGvKmfe2
-         QWbzLBb3H86YGVgEJ5PXN3R7nhKKnm0K3Tz4g=
-X-Forwarded-Encrypted: i=1; AFNElJ9/vsl/gThJaz7+kFKEW2t+1uOLex7cvI1ICCQO7OkrF7osqbbO99bzDdJeAFc5R989OSdr@lists.linux.dev
-X-Received: by 2002:a05:6000:2c0f:b0:45e:9323:63ad with SMTP id ffacd0b85a97d-45e93236594mr661949f8f.36.1779218993469;
-        Tue, 19 May 2026 12:29:53 -0700 (PDT)
-X-Received: by 2002:a05:6000:2c0f:b0:45e:9323:63ad with SMTP id ffacd0b85a97d-45e93236594mr661909f8f.36.1779218993060;
-        Tue, 19 May 2026 12:29:53 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe2464sm49304372f8f.32.2026.05.19.12.29.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 May 2026 12:29:52 -0700 (PDT)
-Message-ID: <5b6063d2-a57f-4a8a-9b1f-9cc8ab4cf175@broadcom.com>
-Date: Tue, 19 May 2026 12:29:42 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qcuu0xMT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779219283; x=1810755283;
+  h=date:from:to:cc:subject:message-id;
+  bh=hAWMlkh2r9FZkBVlkBIQrTmce6VfqMBrMoFkO+bbfpc=;
+  b=Qcuu0xMTV7SRiUw56viu83qAIyWDO/BjNFkcJRD3a4LEVmGlQ0W55NrY
+   n/zFhDaPGFygsIrnV/2qbuyYExGH1fP2xHmce8w8Fentp90bVMb/wPHpl
+   XvuCoDqRgGm1W8UIn6RMWnaPJrApGkRfQkg9yYTnlQ0pjE1GIU41xHCoc
+   wmoIekkB+xPq6HO8FT54r+vuy4q6zHN8PjtxbdOiSy7GUDwwX/Bw0KcO9
+   XLSHfJ7RcQdcWgGFlvn5BO/wgXVU7McaSMOUvTC4q0IpcLOfHbvBcABCs
+   oA96pGkzaf2DJ0pha9Ct6GjT6HCsnmJgGq2VgdUU1kavGSdQiS9ALC6op
+   Q==;
+X-CSE-ConnectionGUID: WMUzxYc0R7yzBaAdoZCusw==
+X-CSE-MsgGUID: XOYNTTNDTdGYgOWwITKzuw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="91504622"
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="91504622"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 12:34:42 -0700
+X-CSE-ConnectionGUID: aB96Fj2uQkqubX2bjDpNBQ==
+X-CSE-MsgGUID: d2PbgROGQrG/7YND+MBXqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="244860072"
+Received: from lkp-server02.sh.intel.com (HELO 30e86e9c1927) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 19 May 2026 12:34:40 -0700
+Received: from kbuild by 30e86e9c1927 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wPQD7-000000001mz-49nj;
+	Tue, 19 May 2026 19:34:37 +0000
+Date: Wed, 20 May 2026 03:34:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Christian Brauner <christianvanbrauner@gmail.com>
+Subject: [brauner-github:work.exit_mm 3/4]
+ drivers/firmware/efi/efi.c:76:3: error: field designator 'user_ns' does not
+ refer to any field in type 'struct mm_struct'
+Message-ID: <202605200302.rSItKx0k-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH stable 6.1 0/3] perf build fixes
-To: Ian Rogers <irogers@google.com>
-Cc: stable@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
- "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-kernel@vger.kernel.org>,
- "open list:BPF [MISC]" <bpf@vger.kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
- bcm-kernel-feedback-list@broadcom.com
-References: <20260519185154.2987285-1-florian.fainelli@broadcom.com>
- <CAP-5=fUuhNRj2Dwz9FmMnWKwXjM3RCFV1oQKO4e3X20EOHstEg@mail.gmail.com>
-Content-Language: en-US, fr-FR
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <CAP-5=fUuhNRj2Dwz9FmMnWKwXjM3RCFV1oQKO4e3X20EOHstEg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-On 5/19/26 11:55, Ian Rogers wrote:
-> On Tue, May 19, 2026 at 11:51 AM Florian Fainelli
-> <florian.fainelli@broadcom.com> wrote:
->>
->> This patch series contains "perf" build fixes specific to 6.1. We have
->> seen occasional build failures in our CI looking like these:
->>
->> util/parse-events-bison.c: In function 'yy_symbol_print':
->> util/parse-events-bison.c:901: error: unterminated #if
->>    901 | #if YYDEBUG
->>        |
->> util/parse-events-bison.c:1020:62: error: '_p' undeclared (first use in this function)
->>   1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
->>        |                                                              ^~
->> util/parse-events-bison.c:1020:62: note: each undeclared identifier is reported only once for each function it appears in
->> util/parse-events-bison.c:1020:64: error: expected ')' at end of input
->>   1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
->>        |                         ~                                      ^
->>        |                                                                )
->>   1021 |   YYFPRINTF (yyo, ")");
->>        |
->> util/parse-events-bison.c:1020:3: error: too few arguments to function 'yy_symbol_value_print'
->>   1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
->>        |   ^~~~~~~~~~~~~~~~~~~~~
->> util/parse-events-bison.c:991:1: note: declared here
->>    991 | yy_symbol_value_print (FILE *yyo,
->>        | ^~~~~~~~~~~~~~~~~~~~~
->>
->> which are resolved by these patches.
-> 
-> Lgtm, but the changes should be unnecessary as perf from Linux 7.1
-> should run on Linux 6.1 and with more and better features.
+tree:   https://github.com/brauner/linux.git work.exit_mm
+head:   822aa51be2cae2813d42b998a12558fa76afbc4f
+commit: a8f2b6f303fb0cdc7fef1b4e8966828a1dc7e10a [3/4] sched: move mm->user_ns to task->exec_state
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260520/202605200302.rSItKx0k-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260520/202605200302.rSItKx0k-lkp@intel.com/reproduce)
 
-That's a bit harder to ship logistically for us and likely for others as 
-well where we expect a single source to build the kernel and its 
-companion tools.
--- 
-Florian
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605200302.rSItKx0k-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/firmware/efi/efi.c:76:3: error: field designator 'user_ns' does not refer to any field in type 'struct mm_struct'
+      76 |         .user_ns                = &init_user_ns,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +76 drivers/firmware/efi/efi.c
+
+732ea9db9d8a6a04 Ard Biesheuvel    2022-10-11  67  
+7e904a91bf604907 Sai Praneeth      2018-03-12  68  struct mm_struct efi_mm = {
+d4af56c5c7c6781c Liam R. Howlett   2022-09-06  69  	.mm_mt			= MTREE_INIT_EXT(mm_mt, MM_MT_FLAGS, efi_mm.mmap_lock),
+7e904a91bf604907 Sai Praneeth      2018-03-12  70  	.mm_users		= ATOMIC_INIT(2),
+7e904a91bf604907 Sai Praneeth      2018-03-12  71  	.mm_count		= ATOMIC_INIT(1),
+57efa1fe5957694f Jason Gunthorpe   2020-12-14  72  	.write_protect_seq      = SEQCNT_ZERO(efi_mm.write_protect_seq),
+14c3656b7284a864 Michel Lespinasse 2020-06-08  73  	MMAP_LOCK_INITIALIZER(efi_mm)
+7e904a91bf604907 Sai Praneeth      2018-03-12  74  	.page_table_lock	= __SPIN_LOCK_UNLOCKED(efi_mm.page_table_lock),
+7e904a91bf604907 Sai Praneeth      2018-03-12  75  	.mmlist			= LIST_HEAD_INIT(efi_mm.mmlist),
+61ed08c2fd1db0eb Breno Leitao      2025-12-23 @76  	.user_ns		= &init_user_ns,
+40374d308e4e4560 Ard Biesheuvel    2025-10-15  77  #ifdef CONFIG_SCHED_MM_CID
+44fc84337b6eae58 Linus Torvalds    2025-12-02  78  	.mm_cid.lock		= __RAW_SPIN_LOCK_UNLOCKED(efi_mm.mm_cid.lock),
+40374d308e4e4560 Ard Biesheuvel    2025-10-15  79  #endif
+6ac433f8b2590b09 Mathieu Desnoyers 2025-12-24  80  	.flexible_array		= MM_STRUCT_FLEXIBLE_ARRAY_INIT,
+7e904a91bf604907 Sai Praneeth      2018-03-12  81  };
+7e904a91bf604907 Sai Praneeth      2018-03-12  82  
+
+:::::: The code at line 76 was first introduced by commit
+:::::: 61ed08c2fd1db0eb43c8b62ade249a3061e39444 arm64: efi: Fix NULL pointer dereference by initializing user_ns
+
+:::::: TO: Breno Leitao <leitao@debian.org>
+:::::: CC: Ard Biesheuvel <ardb@kernel.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
