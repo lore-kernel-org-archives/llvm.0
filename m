@@ -1,201 +1,170 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 929FE3A9D93;
-	Tue, 19 May 2026 10:27:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE4B409623
+	for <llvm@lists.linux.dev>; Tue, 19 May 2026 13:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779186430; cv=none; b=R0oE77glSWuZ8ODXNsGavxrWXHtEQw0f1kQnJDZfrQpz3ckkEcEm4tXdACAoeo2Ero30KGLrU5C3LDVP96AjFFqGFapzw9G4gUk9OpL5e8Icgrs44Kx9KzClxQx4feVhIaU0oPLdV/3ZSkBt+u/PS22QI/AKUTzIjOmZEcdG+lE=
+	t=1779197157; cv=none; b=MbgBWy/4KEW+vkdsA8PGG9/AQ7LU4CykES74x7LUp7f08MUP0p1kjsKkdXInejPPLYODL50hQOVLey5uhOaXHrdfa5NquaXMS26Mt5z1gvVuThTOw/GpCZhX3avPHixwRxNWciuuFN5u3J3uYbqYkUe6V7R91KE/3qNxF8FCOeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779186430; c=relaxed/simple;
-	bh=Sp1Dzgyt0uiMhWyXQnjLId1ElC81WYmDX8fhEWBUkjE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WGtkM25/rGrCyPMk/iQkL/wpAXCtsVXPTVoppaqTEvy8VMfYB0/eipP55YUh02RW1/lZo2pAX51MJF4hP15L0GieSeWFQpjT561CmaiajIc4PiuVApltjnErfuQHfJT1w7oqyq7pG4TN9Rz5S2I/zyzKtHpj5TpH0Hxd3quSyk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=apeFeBBL; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779197157; c=relaxed/simple;
+	bh=GDglPgcWhpHbpv3ea0myGcC0pw07Pvch0HH3aFDSKds=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u8GLGV/6ulQHuq3KJ6l9D0TmhE0aeNCLpb72GJd2du6exA+DWkgw6idvc6IY36f5wD7wmakBZED8c3Ie3UTvJMdAzUvDmI1ZxGvSYxNV9+sf8pA7ynrL9EubP+5BThQFUZrtZ6w4UdnLrpw1AVUKewgiPqYFlv3kLoVZ0t2vTjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=LuXhCkby; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=JK4sN8k8; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="apeFeBBL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779186429; x=1810722429;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sp1Dzgyt0uiMhWyXQnjLId1ElC81WYmDX8fhEWBUkjE=;
-  b=apeFeBBLckEQlcCxGr0mznQek1CIy4hdQpF1d243PDzpMmQLXA7aNlHg
-   scJB3h5hEjLmGFBGBJBB6Gw7h+6QMVaiRQ/Wrvxn7yy2EIlaEm7ddiedg
-   hlbeRYZqXuLzuRiLmIYx8tjCLbXxbBuKGAeWDWbZaIxQ4wpoYF206/Bvp
-   ZP4YrqxfzmqYkFq0Zysxu77Ln2Fy5R2fYL+qs68jTJOFEF/6y+8X13jsG
-   d0Mh5jCy2swog0ELp2lLs5aCYN77yhnobaWWfwl7wlJ5sGq/05jQV3mgZ
-   7dRIcdbL1F4xj50To8eeLYe8+V2o+13rVGL47fUFq0cbuNCNC9NhDX7h1
-   Q==;
-X-CSE-ConnectionGUID: FsDx5J0ZRAyvYcXipXMwrQ==
-X-CSE-MsgGUID: 1tsV06iWR2GhgcLlxKQIfw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11790"; a="79961397"
-X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
-   d="scan'208";a="79961397"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 03:27:08 -0700
-X-CSE-ConnectionGUID: LUne9bpQRXiqva0CzZ/MoA==
-X-CSE-MsgGUID: IJEFdpuGTTSxogZC6UtqwQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
-   d="scan'208";a="270071857"
-Received: from lkp-server02.sh.intel.com (HELO 30e86e9c1927) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 19 May 2026 03:27:05 -0700
-Received: from kbuild by 30e86e9c1927 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wPHeh-000000000sb-1mqc;
-	Tue, 19 May 2026 10:26:39 +0000
-Date: Tue, 19 May 2026 18:25:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Justin Suess <utilityemal77@gmail.com>, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-	memxor@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-	jolsa@kernel.org, bpf@vger.kernel.org, mic@digikod.net,
-	Justin Suess <utilityemal77@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: Re: [PATCH bpf-next 1/1] bpf: fix deadlock in special field
- destruction in NMI
-Message-ID: <202605191848.XKKrABbz-lkp@intel.com>
-References: <20260519011450.1144935-2-utilityemal77@gmail.com>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="LuXhCkby";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="JK4sN8k8"
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64JA10I2254218
+	for <llvm@lists.linux.dev>; Tue, 19 May 2026 13:25:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=KZvWNF+yRKh/FFzbql4gl8+mQgXlWhOfjdw
+	e9W7GeiA=; b=LuXhCkbycpwvQgcYHZcFhZ91XCzDzSdtMN/Qhkmq9TmdE3sgiBO
+	Hbe0aBrQsFPkW31Y1sbs/ioaV9h9vUJIJ83gVvjDrrhxb7oqC17yCMGekvGSVii3
+	TvFeVqH2FO1Eejo2k8H1IXzt7q5Hxajw3Wa6CvOqN4i01gXgWWeL4Ev0DO/Jn0ur
+	AnESmic5fewrv9p8iOLPIkmhgsMlXACzMRuyudK80hb+kOycrNnH/7gN0TJEK2JJ
+	HtheWiQReNAH0M9FA7/VnN4rvNt7Frc+JjDqEnE3CNlquGIh9vZGfvJct6IzAagG
+	7k8cSmMp2DFJVrJyQOQVJhnQtlsTAHBl95Q==
+Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com [209.85.221.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e8h87t2pp-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Tue, 19 May 2026 13:25:54 +0000 (GMT)
+Received: by mail-vk1-f199.google.com with SMTP id 71dfb90a1353d-575456ad2b2so2470887e0c.0
+        for <llvm@lists.linux.dev>; Tue, 19 May 2026 06:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1779197154; x=1779801954; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KZvWNF+yRKh/FFzbql4gl8+mQgXlWhOfjdwe9W7GeiA=;
+        b=JK4sN8k81sBwCkB06VJweOdMhHo3aR4jXzxV14F60T7I/Ax6kVWmSpk2DjPS9K/qPZ
+         x5C5l+jaMEyWGtA9EjU3J9ZDP/YBdjlaaUSEnTYf+mH4CxI/aoFyAq26/1WLJZ+TU33T
+         QmO4W1vb/mdG+0gJC6bsjUbUL78VHNphmw0cDI624o0oM7rBAQVoh2DNWu7Jknk/AHK4
+         1MadssCdjWxCIX/yTMtkBqGhP4CxSaeHleqVdi51ea0RLhIQ4JyYNwVWFbmkWgRGWjdV
+         b67/WVi9xhZkGYYFq4kJVH6wlbLE3E49CYrL29Uez8XR9OKbWmQY0guh0Non+9HJ3/ew
+         6zYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779197154; x=1779801954;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KZvWNF+yRKh/FFzbql4gl8+mQgXlWhOfjdwe9W7GeiA=;
+        b=erKrLM+uo2l5TGbBnH2lTHcygj73MfA2B8P0D50HPLcgYp1iWXObirdiWbIz7G/WW5
+         JidXqkQOloFdKo5aG1LnraDLwphKQVqHTRUPvf+DJVMb5Fp0yC/dFtHMHc7924zRSCVN
+         TC3Cn/UGcauiWu/kIFvm+nJkdxAXkQKG1hICKd0ZdmxV9zWhW3lgIBFP/Z7qY7FYBI3H
+         oNwbayuHtE5OV5q68XFdjYnvI9GcNgYQYRR29fTIViajDGlpXXkmi91KkL0dQx24EFM/
+         uV38GqCuj96d6BDXMFYL6tJIxFDvttye93dSmaJordlgKY8xohVyLFD4K1RbaD1ZmDmN
+         l26A==
+X-Forwarded-Encrypted: i=1; AFNElJ9LFwEXwMGP2c0nlB09HfgF6AqD3/I5EUZmmU16M4AEAAzW19IAiu9WLf1QGdvxAzg+L2a9@lists.linux.dev
+X-Gm-Message-State: AOJu0YyWfVIG+aUJrJ5RaZSgp73OvQiy27J90yFmtD9vFiuRomdSX3aN
+	4OoDGe4RKWzlHxveEqWitXyEX/KAUP3WQPaHmRQ0YgScdLvEl2rJ+MPDZmmDJupV3chnhS5bqz9
+	7bfiSQBgYD/cw4v0L9OFrT1C6Z2NDHP0Dlkwlue3V7/GKVxOUp2sn24P3
+X-Gm-Gg: Acq92OG0XOh99w7lotKz2upNNwwuDz/UgyijI7w8HwsWKPjjjOYSkh1JJWLdDbzCd4t
+	H41EWhHRneLZLtRNWi862O4iPHeKPubXJ1BvNZHPfV01SmwrWT2jKJE0el7pxNt91RJnBD9Gru0
+	Qi+3yBGC1SC0NJ5jWtgYdmoryDzXDWagdi2kB9AFeT3KPcdjcEPy6vroLOSAX/32dfJAdmke58x
+	apXqCAjnA5fOtnGyO2aGrf3R7w37DHuI4eJEm0nttkI5h5yhbuo4N2PpDmmUDI6qHPX5yxJ5+5x
+	7N1u6Ht3sS+/3Cfu9uxzavzEjNtBj580Im2CFVgPlWrHJJ5x1UA7lFKpqafqbrcTI66fAs0QGPA
+	pC7Wty3HWJ/besq+R2PNyVmTDaipaPeKKXm6gCYwf85fGtwQ=
+X-Received: by 2002:a05:6122:8f8c:b0:56d:b639:5c0d with SMTP id 71dfb90a1353d-5760c1f3533mr9339785e0c.13.1779197153641;
+        Tue, 19 May 2026 06:25:53 -0700 (PDT)
+X-Received: by 2002:a05:6122:8f8c:b0:56d:b639:5c0d with SMTP id 71dfb90a1353d-5760c1f3533mr9339756e0c.13.1779197153140;
+        Tue, 19 May 2026 06:25:53 -0700 (PDT)
+Received: from quoll ([178.197.219.94])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe5cab818sm339086305e9.14.2026.05.19.06.25.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2026 06:25:52 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+To: Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Subject: [PATCH] memory: omap-gpmc: Silence clang kerneldoc warnings
+Date: Tue, 19 May 2026 15:25:49 +0200
+Message-ID: <20260519132548.315229-2-krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260519011450.1144935-2-utilityemal77@gmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1088; i=krzysztof.kozlowski@oss.qualcomm.com;
+ h=from:subject; bh=GDglPgcWhpHbpv3ea0myGcC0pw07Pvch0HH3aFDSKds=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBqDGTcYCuJb0KMwnQbq7evgSD6wbOxhhWIztt/G
+ A06SKFVh4iJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCagxk3AAKCRDBN2bmhouD
+ 17n6D/9vMOJP7A+ga93Y+kUWhCm9i7ZKVURsyw4ItuM6aQoSSmEuJlbidOhXDDkpC3vQzK5NFKG
+ 4tjK49JgM9pxKSWPs9zp9PiFlWKCTnAcBqYXaz7gfPvwz8jn9E6WNaMTKZPjaCVvY9J4fv66Crq
+ HHPdw9xmr5NP5J/7+0YwUEPWNqaDGMA6jt7k/qN/NpcbRFwrJGDet1b2MDOdmqi1RLFqtxvPUGI
+ 7CDw9E6prjqOsdBGfI2vB9D8QW2+lxFrC+D6JyJG/coBkMTyKuDXAKwksuiBwdZculGBWy+wGf/
+ fNGUwxC+ZE6OZrySQ0FxP49BcdgssG8Evq4F9He02wYVLvOPgCNAzjC1gywoaeY4BdWqiPhYP5i
+ zuO/XnjBv99qv6nt3lxR4W8EjECXhFP4R128ZUWUpHiZFNMoRqeyg4qmBQugbAdq8Gq4ByrfAO0
+ ADfFRnDyU6XPfsaATx/7Da0KQRp7rksFT5HqGt1t64/hZpq+A+xgvncFcPRGP+Ll2LDFgXEvGCY
+ zQSBMG2lR4H1LcVIg93Hdbfb1dB1GI+e/pk4tWocxtQ9D8D4OomjGT7m1NH66XUBj07JC1wO0Dd
+ 3OHhyu8WbMAfLRrfg6GrGSQTgc77tfFGlTk+xCkALKK7kggWZ7/iKv1fUaNf4R1s2TKMwbVXoCB BCmdsh3eayoEx/w==
+X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: eApx6-OTBL3ESrvSW-uHzJ132pXzk_fz
+X-Proofpoint-ORIG-GUID: eApx6-OTBL3ESrvSW-uHzJ132pXzk_fz
+X-Authority-Analysis: v=2.4 cv=a9sAM0SF c=1 sm=1 tr=0 ts=6a0c64e2 cx=c_pps
+ a=+D9SDfe9YZWTjADjLiQY5g==:117 a=gOEeR9iKwsj33Yj5oN/cWg==:17
+ a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22 a=EUspDBNiAAAA:8
+ a=2Dvqj_LvCoWKn3WZKIgA:9 a=vmgOmaN-Xu0dpDh8OwbV:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE5MDEzMiBTYWx0ZWRfXzkkov8h+ugEn
+ qWOaw6k1d5inR+Rszh1F7XYSyXmoE3o8lgJ2T2s129xUkhJcp+/LXmBraQmuMW7XMQR7q+XuuJT
+ cmvzXR2lJPmz4cVPfXKEDSXi3dRFMHWWUnuIe8FcSZ6jKlLHXI8ww1Yf/VTr07z76/wLfXvPyfi
+ pa19sZEPBfzyXS4zc2POBUZ8gxaVQPXgq4Bl3SVPWrvCQ32x7q1WGJpCFTkwvjeGWS6tG41y5y+
+ QUT0E+lRF5GCMbYZ3W67KLHWqU7nRqASrn6/01Qi6caYzVtC7qL/+/Yf/qMboU0VMK7WB9X1ua0
+ kSbx/UflJlODU3HH3GE2/hwNzBBEduaC7137fAoM0GEjsw97UXUN9TPiKxwn5TcWdmRSXqsC/sY
+ ceVVS4XjG7ILHWnj6PAifT9rPtjfHrlSNYzFMUOnttFIfWp8xuk671Boszah4elvzEymHB5GZTn
+ rvfOEOrPTBq0FsVjdeA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-19_03,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 priorityscore=1501 impostorscore=0 adultscore=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 spamscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605190132
 
-Hi Justin,
+Recent LLVM prints kerneldoc W=1 warnings, even though a correct
+kerneldoc is there:
 
-kernel test robot noticed the following build warnings:
+  Warning: drivers/memory/omap-gpmc.c:441 Excess function parameter 'cs' description in 'get_gpmc_timing_reg'
 
-[auto build test WARNING on 576482b55c19e7ec00e162a0fde4c4f1a95128c7]
+Drop additional inline comments for arguments to fix that.  They are
+anyway not that useful.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Justin-Suess/bpf-fix-deadlock-in-special-field-destruction-in-NMI/20260519-123808
-base:   576482b55c19e7ec00e162a0fde4c4f1a95128c7
-patch link:    https://lore.kernel.org/r/20260519011450.1144935-2-utilityemal77%40gmail.com
-patch subject: [PATCH bpf-next 1/1] bpf: fix deadlock in special field destruction in NMI
-config: s390-randconfig-001-20260519 (https://download.01.org/0day-ci/archive/20260519/202605191848.XKKrABbz-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260519/202605191848.XKKrABbz-lkp@intel.com/reproduce)
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+---
+ drivers/memory/omap-gpmc.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605191848.XKKrABbz-lkp@intel.com/
+diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
+index d9e13c1f9b13..958d2b0ea54a 100644
+--- a/drivers/memory/omap-gpmc.c
++++ b/drivers/memory/omap-gpmc.c
+@@ -432,13 +432,9 @@ static unsigned int gpmc_clk_ticks_to_ns(unsigned int ticks, int cs,
+  *
+  */
+ static int get_gpmc_timing_reg(
+-	/* timing specifiers */
+ 	int cs, int reg, int st_bit, int end_bit, int max,
+ 	const char *name, const enum gpmc_clk_domain cd,
+-	/* value transform */
+-	int shift,
+-	/* format specifiers */
+-	bool raw, bool noval)
++	int shift, bool raw, bool noval)
+ {
+ 	u32 l;
+ 	int nr_bits;
+-- 
+2.51.0
 
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/hashtab.c:1514:6: warning: variable 'l_old' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1514 |         if (ret)
-         |             ^~~
-   kernel/bpf/hashtab.c:1553:6: note: uninitialized use occurs here
-    1553 |         if (l_old && !ret && htab_has_nmi_special_fields(htab))
-         |             ^~~~~
-   kernel/bpf/hashtab.c:1514:2: note: remove the 'if' if its condition is always false
-    1514 |         if (ret)
-         |         ^~~~~~~~
-    1515 |                 goto err_lock_bucket;
-         |                 ~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/hashtab.c:1482:40: note: initialize the variable 'l_old' to silence this warning
-    1482 |         struct htab_elem *l_new = NULL, *l_old;
-         |                                               ^
-         |                                                = NULL
-   1 warning generated.
-
-
-vim +1514 kernel/bpf/hashtab.c
-
-824bd0ce6c7c43a Alexei Starovoitov      2016-02-01  1476  
-d7ba4cc900bf1ee JP Kobryn               2023-03-22  1477  static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1478  					      void *value, u64 map_flags,
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1479  					      bool onallcpus)
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1480  {
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1481  	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1482  	struct htab_elem *l_new = NULL, *l_old;
-4fe8435909fddc9 Alexei Starovoitov      2017-03-07  1483  	struct hlist_nulls_head *head;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1484  	unsigned long flags;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1485  	struct bucket *b;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1486  	u32 key_size, hash;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1487  	int ret;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1488  
-c6936161fd55d0c Leon Hwang              2026-01-07  1489  	ret = htab_map_check_update_flags(onallcpus, map_flags);
-c6936161fd55d0c Leon Hwang              2026-01-07  1490  	if (unlikely(ret))
-c6936161fd55d0c Leon Hwang              2026-01-07  1491  		return ret;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1492  
-48a97ffc6c82664 Andrii Nakryiko         2025-10-14  1493  	WARN_ON_ONCE(!bpf_rcu_lock_held());
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1494  
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1495  	key_size = map->key_size;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1496  
-c0203475765f827 Daniel Borkmann         2018-08-22  1497  	hash = htab_map_hash(key, key_size, htab->hashrnd);
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1498  
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1499  	b = __select_bucket(htab, hash);
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1500  	head = &b->head;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1501  
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1502  	/* For LRU, we need to alloc before taking bucket's
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1503  	 * spinlock because LRU's elem alloc may need
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1504  	 * to remove older elem from htab and this removal
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1505  	 * operation will need a bucket lock.
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1506  	 */
-d05cda57f3acd92 Justin Suess            2026-05-18  1507  	if (map_flags != BPF_EXIST || htab_has_nmi_special_fields(htab)) {
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1508  		l_new = prealloc_lru_pop(htab, key, hash);
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1509  		if (!l_new)
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1510  			return -ENOMEM;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1511  	}
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1512  
-4fa8d68aa53e6d7 Kumar Kartikeya Dwivedi 2025-03-15  1513  	ret = htab_lock_bucket(b, &flags);
-20b6cc34ea74b6a Song Liu                2020-10-29 @1514  	if (ret)
-b34ffb0c6d23583 Anton Protopopov        2023-05-22  1515  		goto err_lock_bucket;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1516  
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1517  	l_old = lookup_elem_raw(head, hash, key, key_size);
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1518  
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1519  	ret = check_flags(htab, l_old, map_flags);
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1520  	if (ret)
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1521  		goto err;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1522  
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1523  	if (l_old) {
-d05cda57f3acd92 Justin Suess            2026-05-18  1524  		if (htab_has_nmi_special_fields(htab)) {
-d05cda57f3acd92 Justin Suess            2026-05-18  1525  			pcpu_init_value(htab,
-d05cda57f3acd92 Justin Suess            2026-05-18  1526  					htab_elem_get_ptr(l_new, key_size),
-d05cda57f3acd92 Justin Suess            2026-05-18  1527  					value, onallcpus, map_flags);
-d05cda57f3acd92 Justin Suess            2026-05-18  1528  			hlist_nulls_add_head_rcu(&l_new->hash_node, head);
-d05cda57f3acd92 Justin Suess            2026-05-18  1529  			hlist_nulls_del_rcu(&l_old->hash_node);
-d05cda57f3acd92 Justin Suess            2026-05-18  1530  			bpf_lru_node_set_ref(&l_new->lru_node);
-d05cda57f3acd92 Justin Suess            2026-05-18  1531  			l_new = NULL;
-d05cda57f3acd92 Justin Suess            2026-05-18  1532  		} else {
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1533  			bpf_lru_node_set_ref(&l_old->lru_node);
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1534  
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1535  			/* per-cpu hash map can update value in-place */
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1536  			pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
-c6936161fd55d0c Leon Hwang              2026-01-07  1537  					value, onallcpus, map_flags);
-d05cda57f3acd92 Justin Suess            2026-05-18  1538  		}
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1539  	} else {
-d3bec0138bfbe58 David Verbeiren         2020-11-04  1540  		pcpu_init_value(htab, htab_elem_get_ptr(l_new, key_size),
-c6936161fd55d0c Leon Hwang              2026-01-07  1541  				value, onallcpus, map_flags);
-4fe8435909fddc9 Alexei Starovoitov      2017-03-07  1542  		hlist_nulls_add_head_rcu(&l_new->hash_node, head);
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1543  		l_new = NULL;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1544  	}
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1545  	ret = 0;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1546  err:
-4fa8d68aa53e6d7 Kumar Kartikeya Dwivedi 2025-03-15  1547  	htab_unlock_bucket(b, flags);
-b34ffb0c6d23583 Anton Protopopov        2023-05-22  1548  err_lock_bucket:
-9bc421b6be955c0 Anton Protopopov        2023-07-06  1549  	if (l_new) {
-9bc421b6be955c0 Anton Protopopov        2023-07-06  1550  		bpf_map_dec_elem_count(&htab->map);
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1551  		bpf_lru_push_free(&htab->lru, &l_new->lru_node);
-9bc421b6be955c0 Anton Protopopov        2023-07-06  1552  	}
-d05cda57f3acd92 Justin Suess            2026-05-18  1553  	if (l_old && !ret && htab_has_nmi_special_fields(htab))
-d05cda57f3acd92 Justin Suess            2026-05-18  1554  		htab_lru_push_free(htab, l_old);
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1555  	return ret;
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1556  }
-8f8449384ec364b Martin KaFai Lau        2016-11-11  1557  
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
