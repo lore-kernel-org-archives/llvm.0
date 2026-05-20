@@ -1,63 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D59D3FC5C3;
-	Wed, 20 May 2026 18:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A99374192;
+	Wed, 20 May 2026 22:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779303538; cv=none; b=XRUAvRA7r8baIvOIiH/I09tw2S6LPD6vrpA4Ag/CGaJwn8dovxlr5Idjaz/jWvvRKVjcWO8eyURc0Vq5C/3Df8qHYHYruk+HJV2zaoD/+1Tstjr3mssbvix/qpaFvlCzWiG3b2ysxwuE6BvFr1dXVUWHD5NHmK1+4iOHCZw+WGM=
+	t=1779316067; cv=none; b=Md/9zih0QFmV8PCk6egBKdYBFm54J1ZeQGtFgx1uWciHNIljikBpkz8vqvqNE9T3besxPu5skRKsoJT1Bk+do9TYmnDTL3t29A94wgaEcXf0YX++a6sODJUdrO0g38TrefWvyhtXQd8/6ADUj+4o4JOwp5jb6WlLFAKiQUaQNYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779303538; c=relaxed/simple;
-	bh=tQ2CvlZD5E4G/EoOu8BkHnDUHVLY01kjEqytn+FSuns=;
+	s=arc-20240116; t=1779316067; c=relaxed/simple;
+	bh=45e2iIXXwL+4GZlXJtvvyWj1J9e1ROrHdHdi57Hb3eg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RmreU9yv4a2jTlvmyry3CQRjY/N5pR05puGfbT5E6AnySJnxu5LOkqMSgVX0lLFhXYAMQ7VRoZ52iC4XvKKM9mKLvfCvxvKKvBTcuO9fblRsHBo+NB9yOez+VYe3tYa3SEAF7zEm82OoPkQ1ckojd0qi5JQskjyUfDusTBKzfGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C3HYJyk5; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=tpUkDqQfcj+2ox61qdx6LX6PRYK666IaKx5KIvEP019bYxjHT9JwBahXOeCpjpmR2SBkhlg/n9nP5M71FzPThM/PumtoaTd8dHcxk71/L7qo7Vo5O/XBEtgEXqyLe3n2lPlQ9bMgsuGjMRS/PW9ycJfuivZO7VJ01kQVedytyYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qz9fQrjk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C3HYJyk5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779303536; x=1810839536;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tQ2CvlZD5E4G/EoOu8BkHnDUHVLY01kjEqytn+FSuns=;
-  b=C3HYJyk5dFAc9JhyKoKizc2jNJtGx7EbUguzC1w8k12vNu0TIuz7WiSN
-   uO5BYrCRn5QFsxa77yB/cYVFebtzHR/V92qz+1T//1HcMp1kb8df64ZZP
-   16JQbeJHwrjXmlQyRrkjDVPkYVi7x/J6yIOIbBbCZvnmIO2+IDW9h8gfk
-   1NdORTciKRxIMtoR5y7qKZwRVVIWhvWYc9wHHU6tjuDODmkZLPGehiZO8
-   710EuOJ1ggprxZFg/J6Cjsjb7woR1HHAplC4GcpJ7Wl8ang+eoyzulhgP
-   cHHfOADuC8DklEzSJsc06K0rvRVR/scCcedHOAMgbDrZiqXOAv62JDOpk
-   g==;
-X-CSE-ConnectionGUID: biPmEXF9R56v76Rnzo05eQ==
-X-CSE-MsgGUID: oIb3Uo//RJ6WimDnF8t+HQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="80332751"
-X-IronPort-AV: E=Sophos;i="6.23,244,1770624000"; 
-   d="scan'208";a="80332751"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2026 11:58:55 -0700
-X-CSE-ConnectionGUID: 96T3v6E8Td+OA/16PJLZpg==
-X-CSE-MsgGUID: fJPfPjFAScC0AyDkCDgYUg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,244,1770624000"; 
-   d="scan'208";a="245266532"
-Received: from lkp-server02.sh.intel.com (HELO 30e86e9c1927) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 20 May 2026 11:58:54 -0700
-Received: from kbuild by 30e86e9c1927 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wPm7l-000000003jh-4AQk;
-	Wed, 20 May 2026 18:58:38 +0000
-Date: Thu, 21 May 2026 02:57:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: keyspan: fix missing indat transfer sanity
- check
-Message-ID: <202605210249.xpCIgp3t-lkp@intel.com>
-References: <20260520101230.657426-1-johan@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qz9fQrjk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E229B1F000E9;
+	Wed, 20 May 2026 22:27:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779316066;
+	bh=j5GCAZK/Nq8zx5Np3k4/p1YoRM8+HwgPIuGzPsoBJ6I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Qz9fQrjklL4LH0FnY6wzBNhP74JgqNr4+DAfWOC4gUnEyp0oMK7sNVaoqtLYokajl
+	 nHGXWkDBJUwozrV3QLFMF/xPEh644pyuIC9x6fI9QtiseTgCTCAqWXJnN8LCDx8xcz
+	 5loghrKqhydTOAoVx2DFC6E1QHFXty406NKU12btl5VKzzBU6Lh4fkP3O4214+PXaS
+	 9FBrNyy+T3I5gFR0SKgzqiVIYx6waDsSu4xp9P/v5ojrfMqGGt1oIDt4K5KjSgqKGn
+	 QkJyj+E+lkPL3DR5C00WrkD043jy3ZsbEDVWh0pMr1TofTjKHSJ4iChFRMpicb7zq2
+	 4dgK5xwjy0WiQ==
+Date: Wed, 20 May 2026 15:27:42 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Feng Tang <feng.tang@linux.alibaba.com>
+Cc: kernel test robot <lkp@intel.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [linux-next:master 5548/6445] kernel/dma/contiguous.c:139:13:
+ warning: variable 'numa_cma_configured' set but not used
+Message-ID: <20260520222742.GA1607511@ax162>
+References: <202605200341.a1HLq7XC-lkp@intel.com>
+ <ag0_qU5BS9KBBiWK@U-2FWC9VHC-2323.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,134 +45,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260520101230.657426-1-johan@kernel.org>
+In-Reply-To: <ag0_qU5BS9KBBiWK@U-2FWC9VHC-2323.local>
 
-Hi Johan,
+On Wed, May 20, 2026 at 12:59:21PM +0800, Feng Tang wrote:
+> On Wed, May 20, 2026 at 03:13:09AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > head:   6a50ba100ace43f43c87384367eb2d2605fcc16c
+> > commit: 38ce91195a7c6f76fa88ef5c03bad0bbabbf5556 [5548/6445] dma-contiguous: add kconfig option to setup numa cma area if not configured explicitly
+> > config: s390-randconfig-002-20260520 (https://download.01.org/0day-ci/archive/20260520/202605200341.a1HLq7XC-lkp@intel.com/config)
+> > compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260520/202605200341.a1HLq7XC-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202605200341.a1HLq7XC-lkp@intel.com/
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > >> kernel/dma/contiguous.c:139:13: warning: variable 'numa_cma_configured' set but not used [-Wunused-but-set-global]
+> >      139 | static bool numa_cma_configured;
+> >          |             ^
+> >    1 warning generated.
+> 
+> Thanks for the catch!
+> 
+> In this config, CONFIG_CMA_SIZE_PERNUMA is not set, which triggers the
+> warning.
+> 
+> The patch below should fix it.
+> 
+> Hi Marek,
+> 
+> Could you help to squash this follow-on fix patch, or I can send
+> you a modified new version of the original patch? Thanks!
+> 
+> - Feng
+> 
+> ---
+> diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
+> index 42227c823893..f286d49bf068 100644
+> --- a/kernel/dma/contiguous.c
+> +++ b/kernel/dma/contiguous.c
+> @@ -136,7 +136,7 @@ static struct cma *dma_contiguous_numa_area[MAX_NUMNODES];
+>  static phys_addr_t numa_cma_size[MAX_NUMNODES] __initdata;
+>  static struct cma *dma_contiguous_pernuma_area[MAX_NUMNODES];
+>  static phys_addr_t pernuma_size_bytes __initdata;
+> -static bool numa_cma_configured;
+> +static bool __maybe_unused numa_cma_configured;
+>  
+>  static int __init early_numa_cma(char *p)
+>  {
+> 
 
-kernel test robot noticed the following build errors:
+I know Marek already updated this but I think a better solution would
+have been turning the '#ifdef' into IS_ENABLED(), as I don't see a
+reason for this code to be ifdef'd, none of these variables are
+undeclared or unusable when CONFIG_CMA_SIZE_PERNUMA is unset. This would
+allow the compiler to always see the variable as used, regardless of the
+value of CONFIG_CMA_SIZE_PERNUMA.
 
-[auto build test ERROR on johan-usb-serial/usb-next]
-[also build test ERROR on usb/usb-testing usb/usb-next usb/usb-linus tty/tty-testing tty/tty-next tty/tty-linus linus/master v7.1-rc4 next-20260520]
-[cannot apply to johan-usb-serial/usb-linus]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/USB-serial-keyspan-fix-missing-indat-transfer-sanity-check/20260520-181924
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
-patch link:    https://lore.kernel.org/r/20260520101230.657426-1-johan%40kernel.org
-patch subject: [PATCH] USB: serial: keyspan: fix missing indat transfer sanity check
-config: arm-randconfig-002-20260520 (https://download.01.org/0day-ci/archive/20260521/202605210249.xpCIgp3t-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260521/202605210249.xpCIgp3t-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605210249.xpCIgp3t-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/serial/keyspan.c:1189:25: error: incompatible pointer types passing 'struct usb_device **' to parameter of type 'const struct device *' [-Wincompatible-pointer-types]
-    1189 |                         dev_warn_ratelimited(&serial->dev, "malformed indat packet\n");
-         |                                              ^~~~~~~~~~~~
-   include/linux/dev_printk.h:227:34: note: expanded from macro 'dev_warn_ratelimited'
-     227 |         dev_level_ratelimited(dev_warn, dev, fmt, ##__VA_ARGS__)
-         |                                         ^~~
-   include/linux/dev_printk.h:215:13: note: expanded from macro 'dev_level_ratelimited'
-     215 |                 dev_level(dev, fmt, ##__VA_ARGS__);                     \
-         |                           ^~~
-   include/linux/dev_printk.h:156:49: note: expanded from macro 'dev_warn'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~
-   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                         ^~~
-   include/linux/dev_printk.h:52:37: note: passing argument to parameter 'dev' here
-      52 | void _dev_warn(const struct device *dev, const char *fmt, ...);
-         |                                     ^
-   1 error generated.
-
-
-vim +1189 drivers/usb/serial/keyspan.c
-
-  1166	
-  1167	static void usa49wg_indat_callback(struct urb *urb)
-  1168	{
-  1169		int			i, len, x, err;
-  1170		struct usb_serial	*serial;
-  1171		struct usb_serial_port	*port;
-  1172		unsigned char 		*data = urb->transfer_buffer;
-  1173		int status = urb->status;
-  1174	
-  1175		serial = urb->context;
-  1176	
-  1177		if (status) {
-  1178			dev_dbg(&urb->dev->dev, "%s - nonzero status: %d\n",
-  1179					__func__, status);
-  1180			return;
-  1181		}
-  1182	
-  1183		/* inbound data is in the form P#, len, status, data */
-  1184		i = 0;
-  1185		len = 0;
-  1186	
-  1187		while (i < urb->actual_length) {
-  1188			if (urb->actual_length - i < 3) {
-> 1189				dev_warn_ratelimited(&serial->dev, "malformed indat packet\n");
-  1190				break;
-  1191			}
-  1192	
-  1193			/* Check port number from message */
-  1194			if (data[i] >= serial->num_ports) {
-  1195				dev_dbg(&urb->dev->dev, "%s - Unexpected port number %d\n",
-  1196					__func__, data[i]);
-  1197				return;
-  1198			}
-  1199			port = serial->port[data[i++]];
-  1200			len = data[i++];
-  1201	
-  1202			/* 0x80 bit is error flag */
-  1203			if ((data[i] & 0x80) == 0) {
-  1204				/* no error on any byte */
-  1205				i++;
-  1206				for (x = 1; x < len && i < urb->actual_length; ++x)
-  1207					tty_insert_flip_char(&port->port,
-  1208							data[i++], 0);
-  1209			} else {
-  1210				/*
-  1211				 * some bytes had errors, every byte has status
-  1212				 */
-  1213				for (x = 0; x + 1 < len &&
-  1214					    i + 1 < urb->actual_length; x += 2) {
-  1215					int stat = data[i];
-  1216					int flag = TTY_NORMAL;
-  1217	
-  1218					if (stat & RXERROR_OVERRUN) {
-  1219						tty_insert_flip_char(&port->port, 0,
-  1220									TTY_OVERRUN);
-  1221					}
-  1222					/* XXX should handle break (0x10) */
-  1223					if (stat & RXERROR_PARITY)
-  1224						flag = TTY_PARITY;
-  1225					else if (stat & RXERROR_FRAMING)
-  1226						flag = TTY_FRAME;
-  1227	
-  1228					tty_insert_flip_char(&port->port, data[i+1],
-  1229							     flag);
-  1230					i += 2;
-  1231				}
-  1232			}
-  1233			tty_flip_buffer_push(&port->port);
-  1234		}
-  1235	
-  1236		/* Resubmit urb so we continue receiving */
-  1237		err = usb_submit_urb(urb, GFP_ATOMIC);
-  1238		if (err != 0)
-  1239			dev_dbg(&urb->dev->dev, "%s - resubmit read urb failed. (%d)\n", __func__, err);
-  1240	}
-  1241	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
+index 42227c823893..d6435c1eabe3 100644
+--- a/kernel/dma/contiguous.c
++++ b/kernel/dma/contiguous.c
+@@ -202,11 +202,10 @@ static void __init dma_numa_cma_reserve(void)
+ {
+ 	int nid;
+ 
+-#ifdef CONFIG_CMA_SIZE_PERNUMA
+-	if (!numa_cma_configured && dma_contiguous_default_area
++	if (IS_ENABLED(CONFIG_CMA_SIZE_PERNUMA) &&
++	    !numa_cma_configured && dma_contiguous_default_area
+ 	    && nr_online_nodes > 1)
+ 		pernuma_size_bytes = cma_get_size(dma_contiguous_default_area);
+-#endif
+ 
+ 	for_each_node(nid) {
+ 		int ret;
+-- 
+Cheers,
+Nathan
