@@ -1,167 +1,199 @@
-Received: from mail-yx1-f100.google.com (mail-yx1-f100.google.com [74.125.224.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6794363C74
-	for <llvm@lists.linux.dev>; Wed, 20 May 2026 16:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4303EDACC;
+	Wed, 20 May 2026 17:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779294909; cv=none; b=hyiKmhOJ0ZdVMZc+J9pLj/ezcWnCUT6/b/KysWnmKsK9P3zgDYLcb8jGRX4YyvMOzMoaY5Xa0s7TLyoQ6VxKtisIn+74oDsCjn/XsGb2zv80OQRkpTfSFs8Pm9Kmad/dllFmKIsRaBBPv7K0eBEoKbAiL2JCdWJ1V2lqeIB7qxI=
+	t=1779299038; cv=none; b=uFi3NvD6RYuv6sn+jTp80HLJkLuKfM6xHd6o+Mln4gNqpmorDs+1FlzQRn/aqxFCEkNv2yCw6m/hjk7tugKdS0IU0eBUOMfA8Q7z++McMaeiceT950OziEAX7tdMRBu0Tj49I7ZQszegmiViTNx0QOFiBXlJswdmnzu6qGiRz5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779294909; c=relaxed/simple;
-	bh=3lGRAEnQMtX4zERAKSIZdMRkPZ+RvRXWmkS38F/ap7E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KyhDv0ws1aYdL2OSP1t6K5KBZDCkhLlJkQeOesutreRJ/S9SYIKqfHqpCyckUUt9EfHg7Ci1Gc00EF2cPxwborGRl7Se7opkl6xEFhE3bMGzR8JHK/gPpQ61L0kE9HuYPFlfEvAG7K9qGO3XGsUIwPlGJ56s1fOOhetSDDRvnEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=aSONhXct; arc=none smtp.client-ip=74.125.224.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1779299038; c=relaxed/simple;
+	bh=HmbzItfoBNw9pRHaQ4Z+zDtSvsx6AuIEaW7Ov5R+vFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dLN4hHYVo0JLOrSgMnw9Btqj2GLzivCs+xE+4wJ+Qwb2sseoAKBjkpTZs2+hOO5SWAo6vaL2mcplFndN7+QQwBVv6fGC+m9BJDuCedhyuuPGK2z4C++Z6RVRYki5vg4H7xFHxTTZU3BJOBmqyAFFKa/KvLhtpbcKmHggDWK5HY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DA99Mr0a; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="aSONhXct"
-Received: by mail-yx1-f100.google.com with SMTP id 956f58d0204a3-654672a6d68so5140023d50.0
-        for <llvm@lists.linux.dev>; Wed, 20 May 2026 09:35:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779294906; x=1779899706;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=k1YJJ1YFmprPS6ntzC8PQrKknM/3MWPFYqmao9X/xvo=;
-        b=oNLhSaLUCQIhurF0qhOwxWeX3nemd0EvifKrD629b7nmXL/95srWm0YAMXnphI3dtE
-         ndj+ocCyWKpWKh2tl4Qyoho2HY30IeXq3uEjzPYyOsu0xPTTZNmdXZ/eo00NqKvr7LSI
-         kvtfgAjA3u2mkQmJMmLnxPGwZOkkNRrX7No2OE++/Cbc9xRqAL26EZwhaFbFVGOuddv5
-         HzzaCKtNO0ySzRw3dSbZ7fCGI5uLgbIi0yeKFfvak7AtWDsGwN/K6i2lp4dl0iotrItW
-         URR53V5NBs2fadYO38lZAXFh3j4+58fWpghb1whm9plRwvXCaWq6BWbB3ss8hBgy9Xfv
-         Q0+w==
-X-Forwarded-Encrypted: i=1; AFNElJ/IOp041dSPlsmaz7fwwvLU61k1QYASFtSqBz1NiI7EamPpz9PwNW8GR0eZde1HAqw2sLQI@lists.linux.dev
-X-Gm-Message-State: AOJu0YzJDTZzxPgzg0tpXbvCj7khnX70xPeEohkWyJOaZXgx+IlbLe4W
-	X+juo6TuP9hA7vAabMC3pSMaA3V8LatCeSHns4vVLcbOrnw2iP/RKU/xQdxcTXxuGGNH9m0nwKQ
-	X7ZxxT7O+HZkKHjyjxQ6MYKeDn1eSJaHOiTvWJ8w51lSuiBWoAlxIK1c1cNIsDZjOQmz77zR+3P
-	NzfzFF8VMH6d3ajGxJn1HutA0P0sXovj2wUgt/mm2BonVwjMWFhQ+WyYIBTG1f141/OYOPrxkM6
-	qHV2xfomeqFyw==
-X-Gm-Gg: Acq92OE20LWsbh0Hhro3L/ba8CpLV+AoWEBLdwCCrJPv/oVIUpxTtF+acIjnJBWgMA0
-	CqBxljAY0CtveGxpgo1lfUycau0scE726+1npMS2YVG4VKU65qHy1AjPxX9bHzqX44458Yt54wO
-	gaBoWUOOiAxO7lHVxXrMZfV3vU4bnqkJH9lWBg0y/NYCzcZzilS5gtvP7MiOD7sLpmAunVrmYCo
-	oqKqfg0USLqpmHhCyP5aEO69Nzh/l/sjnpwIDUIrc/nr0u9yf1Ygaf3DTLucYCU7bxqCpv+sGV/
-	jyFJQnP6mbgFl9JxIMgMt3zRShcRu1ZeheeeZC4RBAYLs+sPGdqWepHm7DSBF5nDoH4CTM0fccj
-	Gs/aWtmioQ74bVY/ufmGwPajyWiW3XLE2e4ZJ7b9gU+jH6z3TZJxOxDm+mHhn1XHdpE7mp49F1u
-	KsHEtefJey0pkYLFukijDsV1Y1byVJL4lrk85kT1W4bigfDLS7hzGmeKIwUjGbvw==
-X-Received: by 2002:a05:690e:1699:b0:650:88fa:f5e5 with SMTP id 956f58d0204a3-65e2289490bmr25399303d50.59.1779294906517;
-        Wed, 20 May 2026 09:35:06 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-16.dlp.protect.broadcom.com. [144.49.247.16])
-        by smtp-relay.gmail.com with ESMTPS id 956f58d0204a3-65e0d867f76sm1576911d50.2.2026.05.20.09.35.06
-        for <llvm@lists.linux.dev>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 May 2026 09:35:06 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-1353bfdbf99so8167175c88.0
-        for <llvm@lists.linux.dev>; Wed, 20 May 2026 09:35:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1779294905; x=1779899705; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1YJJ1YFmprPS6ntzC8PQrKknM/3MWPFYqmao9X/xvo=;
-        b=aSONhXctSCQ88l8Hi/bqB5I9bZSawLfPQc8A2iDpw8hxTohM9TSN75ZHzrPjnNQVwJ
-         xKo1I9A7SGdxLWMSOIFrzGLtqgAbNYpEjuJnJllWioKtNqfGls+gjvX/4+j2GwVVCgVO
-         l7PaPd+s0EjFoG/OVEmPPPbyZTgduBxsdue38=
-X-Forwarded-Encrypted: i=1; AFNElJ8Gd2175qk7ARlKSrOhfb/AMTaE61ZZnOv77dixtT7xz1bd32JVMw25XxBYBzXaZatTyikJ@lists.linux.dev
-X-Received: by 2002:a05:7022:607:b0:133:3c47:932e with SMTP id a92af1059eb24-1350494e402mr11987637c88.28.1779294905258;
-        Wed, 20 May 2026 09:35:05 -0700 (PDT)
-X-Received: by 2002:a05:7022:607:b0:133:3c47:932e with SMTP id a92af1059eb24-1350494e402mr11987597c88.28.1779294904668;
-        Wed, 20 May 2026 09:35:04 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbcb9ed3sm27311954c88.1.2026.05.20.09.35.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 May 2026 09:35:04 -0700 (PDT)
-Message-ID: <6541a5f4-a150-44b9-af27-8712cdafc1ae@broadcom.com>
-Date: Wed, 20 May 2026 09:35:02 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DA99Mr0a"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779299037; x=1810835037;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HmbzItfoBNw9pRHaQ4Z+zDtSvsx6AuIEaW7Ov5R+vFs=;
+  b=DA99Mr0av5ZAisYcOEaFv5QrJBKpMzJbVNoNLEN77+4Rydylwg2wGV4o
+   LP17rZ+tdzRhUQ/82meqfG0Fb50EZEtlaEY0HGCFPZeiavtdTRyvPDOiF
+   /kj70j40egz/1On0Z3q2K9RtUiZ3EG59Yk37pKsTOlJdH0RlryCUEz11w
+   KCYdbNvhc+5tCET4bTMSWanvw21tlNdgNB5ytNp28GXomcKnxTawxnHrv
+   m91CXYbz/LCav80CUrVKpYOmX+P8LkMWPsM1NiK+/wxKjhSZLEafyriIK
+   /G0mmdProDpbSAWVoQkXYaQDlQf6Gauuokoij+BeWOrOetSqf8jqafXJ5
+   A==;
+X-CSE-ConnectionGUID: 2CUagkL2Q5enXVNKBAyx4A==
+X-CSE-MsgGUID: F7dIYNCgQN64QcEaY4NwPw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="90784893"
+X-IronPort-AV: E=Sophos;i="6.23,244,1770624000"; 
+   d="scan'208";a="90784893"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2026 10:43:57 -0700
+X-CSE-ConnectionGUID: 0RuTxDY6T6C4TrX8UPnXYw==
+X-CSE-MsgGUID: vAvB2vGvQe+79Z8PTXhRJw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,244,1770624000"; 
+   d="scan'208";a="264063058"
+Received: from lkp-server02.sh.intel.com (HELO 30e86e9c1927) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 20 May 2026 10:43:54 -0700
+Received: from kbuild by 30e86e9c1927 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wPkx3-000000003d7-2eTq;
+	Wed, 20 May 2026 17:43:33 +0000
+Date: Thu, 21 May 2026 01:42:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: keyspan: fix missing indat transfer sanity
+ check
+Message-ID: <202605210121.M2IibKiB-lkp@intel.com>
+References: <20260520101230.657426-1-johan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH stable 6.1 v2 5/5] perf build: Remove
- -Wno-unused-but-set-variable from the flex flags when building with clang <
- 13.0.0
-To: stable@vger.kernel.org
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Ian Rogers <irogers@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
- "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-kernel@vger.kernel.org>,
- "open list:BPF [MISC]" <bpf@vger.kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
- bcm-kernel-feedback-list@broadcom.com
-References: <20260520163320.3073037-1-florian.fainelli@broadcom.com>
- <20260520163320.3073037-6-florian.fainelli@broadcom.com>
-Content-Language: en-US, fr-FR
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20260520163320.3073037-6-florian.fainelli@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260520101230.657426-1-johan@kernel.org>
 
-On 5/20/26 09:33, Florian Fainelli wrote:
-> From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> 
-> clang < 13.0.0 doesn't grok -Wno-unused-but-set-variable, so just remove
-> it to avoid:
-> 
->    error: unknown warning option '-Wno-unused-but-set-variable'; did you mean '-Wno-unused-const-variable'? [-Werror,-Wunknown-warning-option]
->    make[4]: *** [/git/perf-6.5.0-rc4/tools/build/Makefile.build:128: /tmp/build/perf/util/pmu-flex.o] Error 1
->    make[4]: *** Waiting for unfinished jobs....
-> 
-> Fixes: ddc8e4c966923ad1 ("perf build: Disable fewer bison warnings")
-> Cc: Adrian Hunter <adrian.hunter@intel.com>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Link: https://lore.kernel.org/lkml/ZNUSWr52jUnVaaa%2F@kernel.org/
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> Change-Id: I8db8a372d1e83d26fbe8beda2bcf4d1a871a2b80
+Hi Johan,
 
-Argh, sorry the Change-Id snuck in there, let me know if you need me to 
-resubmit.
--- 
-Florian
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on johan-usb-serial/usb-next]
+[also build test ERROR on usb/usb-testing usb/usb-next usb/usb-linus tty/tty-testing tty/tty-next tty/tty-linus linus/master v7.1-rc4 next-20260520]
+[cannot apply to johan-usb-serial/usb-linus]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Johan-Hovold/USB-serial-keyspan-fix-missing-indat-transfer-sanity-check/20260520-181924
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
+patch link:    https://lore.kernel.org/r/20260520101230.657426-1-johan%40kernel.org
+patch subject: [PATCH] USB: serial: keyspan: fix missing indat transfer sanity check
+config: i386-buildonly-randconfig-006-20260520 (https://download.01.org/0day-ci/archive/20260521/202605210121.M2IibKiB-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260521/202605210121.M2IibKiB-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605210121.M2IibKiB-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/serial/keyspan.c:1189:25: error: incompatible pointer types passing 'struct usb_device **' to parameter of type 'const struct device *' [-Werror,-Wincompatible-pointer-types]
+    1189 |                         dev_warn_ratelimited(&serial->dev, "malformed indat packet\n");
+         |                                              ^~~~~~~~~~~~
+   include/linux/dev_printk.h:227:34: note: expanded from macro 'dev_warn_ratelimited'
+     227 |         dev_level_ratelimited(dev_warn, dev, fmt, ##__VA_ARGS__)
+         |                                         ^~~
+   include/linux/dev_printk.h:215:13: note: expanded from macro 'dev_level_ratelimited'
+     215 |                 dev_level(dev, fmt, ##__VA_ARGS__);                     \
+         |                           ^~~
+   include/linux/dev_printk.h:156:49: note: expanded from macro 'dev_warn'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                         ^~~
+   include/linux/dev_printk.h:89:37: note: passing argument to parameter 'dev' here
+      89 | void _dev_warn(const struct device *dev, const char *fmt, ...)
+         |                                     ^
+   1 error generated.
+
+
+vim +1189 drivers/usb/serial/keyspan.c
+
+  1166	
+  1167	static void usa49wg_indat_callback(struct urb *urb)
+  1168	{
+  1169		int			i, len, x, err;
+  1170		struct usb_serial	*serial;
+  1171		struct usb_serial_port	*port;
+  1172		unsigned char 		*data = urb->transfer_buffer;
+  1173		int status = urb->status;
+  1174	
+  1175		serial = urb->context;
+  1176	
+  1177		if (status) {
+  1178			dev_dbg(&urb->dev->dev, "%s - nonzero status: %d\n",
+  1179					__func__, status);
+  1180			return;
+  1181		}
+  1182	
+  1183		/* inbound data is in the form P#, len, status, data */
+  1184		i = 0;
+  1185		len = 0;
+  1186	
+  1187		while (i < urb->actual_length) {
+  1188			if (urb->actual_length - i < 3) {
+> 1189				dev_warn_ratelimited(&serial->dev, "malformed indat packet\n");
+  1190				break;
+  1191			}
+  1192	
+  1193			/* Check port number from message */
+  1194			if (data[i] >= serial->num_ports) {
+  1195				dev_dbg(&urb->dev->dev, "%s - Unexpected port number %d\n",
+  1196					__func__, data[i]);
+  1197				return;
+  1198			}
+  1199			port = serial->port[data[i++]];
+  1200			len = data[i++];
+  1201	
+  1202			/* 0x80 bit is error flag */
+  1203			if ((data[i] & 0x80) == 0) {
+  1204				/* no error on any byte */
+  1205				i++;
+  1206				for (x = 1; x < len && i < urb->actual_length; ++x)
+  1207					tty_insert_flip_char(&port->port,
+  1208							data[i++], 0);
+  1209			} else {
+  1210				/*
+  1211				 * some bytes had errors, every byte has status
+  1212				 */
+  1213				for (x = 0; x + 1 < len &&
+  1214					    i + 1 < urb->actual_length; x += 2) {
+  1215					int stat = data[i];
+  1216					int flag = TTY_NORMAL;
+  1217	
+  1218					if (stat & RXERROR_OVERRUN) {
+  1219						tty_insert_flip_char(&port->port, 0,
+  1220									TTY_OVERRUN);
+  1221					}
+  1222					/* XXX should handle break (0x10) */
+  1223					if (stat & RXERROR_PARITY)
+  1224						flag = TTY_PARITY;
+  1225					else if (stat & RXERROR_FRAMING)
+  1226						flag = TTY_FRAME;
+  1227	
+  1228					tty_insert_flip_char(&port->port, data[i+1],
+  1229							     flag);
+  1230					i += 2;
+  1231				}
+  1232			}
+  1233			tty_flip_buffer_push(&port->port);
+  1234		}
+  1235	
+  1236		/* Resubmit urb so we continue receiving */
+  1237		err = usb_submit_urb(urb, GFP_ATOMIC);
+  1238		if (err != 0)
+  1239			dev_dbg(&urb->dev->dev, "%s - resubmit read urb failed. (%d)\n", __func__, err);
+  1240	}
+  1241	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
