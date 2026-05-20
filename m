@@ -1,223 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C20293DE439;
-	Wed, 20 May 2026 11:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8AD348477
+	for <llvm@lists.linux.dev>; Wed, 20 May 2026 13:25:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779276714; cv=none; b=RczZ2EEdqEr/YUXfEdTMUsVUu1U6S1LZ9buP6vcTQaomid/zn+S/lyn5UpXw8gkVSYUtUEwlnLCH9wenlGY3a+a0MeS+D5yHqTVr173CNrqKua3qHifcE7Rv75xuDXKVqzbVYlCHkkTrZB9fECIioPCHv414sG4eK9U8OowPxU0=
+	t=1779283533; cv=none; b=oGd4heTw04xtwYhoSseQLK7dGE17UKlg1ZTnmIiGLYehG12nG9GkJIbzBE3nW9tF244Zymc3wq9KxQpWxQzqU8Fxe2lRlovRvOzr/n1ALkc6mhhM9iIgE0T7jW3rjCHrG3OR+3A/miUph0oLmPInmLsOYT9/ynDFuPeqMUoxD3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779276714; c=relaxed/simple;
-	bh=4uNLZ+rNICLYE+44oXzDvs0FCYgTFqX9gU7BLeUSsnk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=YYjobWzwT6Z1XzogbZ++B2GW/HMW/20hFP1nYsXR63Ouwnzog+50Hyr9TJ5cfHt/+03teGyxABWLR3/+a6hN8qc+Ff9/4MvWEPq07lEEEenrcp77dbIbXqPrKYf6f/i1ztCPIoPzMS3OMOrOSk1lyYGKygDY86yLNqhvN2Ysc2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d9iwppiB; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779283533; c=relaxed/simple;
+	bh=dpBzg9zlTDjazIxohgR7RWnyk6NZm9rP0R7pOhYKmYo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=py7VGjMmVBnZp5oSCKCyFpy0Mo2qRotQXj1Bv/1akw41p0e/8nDAt5VOsaKu1gCdLROLzEyMOHoYUrbbmP4hoaY1yje0YhRdgQbHzjcXhwV5+jsKUsZGD9BG1HuVVfRgUyA8kGCGoD5cDS5hdU0d9wToZfKM6kTz4/KAlFAgnMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lGIXG3wK; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Kcl4x9Tb; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d9iwppiB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779276713; x=1810812713;
-  h=date:from:to:cc:subject:message-id;
-  bh=4uNLZ+rNICLYE+44oXzDvs0FCYgTFqX9gU7BLeUSsnk=;
-  b=d9iwppiBhEKeaVS11cgWRnjFkeufD9V22HUbpqYp5nZpIsDwTOSMCdBe
-   TBCkATGjmTldiUErBIHRxEg8kCHFeoI83e1gnmAg2LwwTwn2Xa5aZ2itJ
-   XrKWkHl3etBGlbv+ImLJhUNs8fHZJf9eYcjzeTmg5iGUQo9lA9qfXL+bH
-   iPtFCg1bwx+7vWNflPuiwv0gexvYtp0TpZHG0d7EQbqd3y/dme8PHfs6z
-   En9Xv5g1TWJ+AC9m+8wkeLJILnNPP2l4zpCzVvkdkFgEalyAys1wcZhUK
-   QjY8er26KC2bdG1xAILaMcj5YcZvAbI4XBqGveUnapW96lDaWBYs0LN57
-   g==;
-X-CSE-ConnectionGUID: PilOtXXJRHmMy3BHxKwRtg==
-X-CSE-MsgGUID: wtW/D8rmTt6VHhVGCOQl+Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="105630550"
-X-IronPort-AV: E=Sophos;i="6.23,244,1770624000"; 
-   d="scan'208";a="105630550"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2026 04:31:52 -0700
-X-CSE-ConnectionGUID: 9NbmjxjdSoSqWqS3WgIf7Q==
-X-CSE-MsgGUID: 9e22dssPTqens1P291Tbmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,244,1770624000"; 
-   d="scan'208";a="263652749"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by fmviesa002.fm.intel.com with ESMTP; 20 May 2026 04:31:35 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wPf9B-00000000AXV-1lrm;
-	Wed, 20 May 2026 11:31:33 +0000
-Date: Wed, 20 May 2026 13:30:53 +0200
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/gpr_helpers_cleanup 40/40]
- arch/x86/kvm/ioapic.c:210:14: error: call to undeclared function
- 'kvm_apicv_activated'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202605201338.YzMiIdXC-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lGIXG3wK";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Kcl4x9Tb"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64KCUB2B1725558
+	for <llvm@lists.linux.dev>; Wed, 20 May 2026 13:25:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	GH1S6x8/f0fwRU6JS2rGdz1EF99sFIqi+K1xw1yVSeE=; b=lGIXG3wKhLv4+KbX
+	sfFu0jOizzrssOI+O6DIpaskgCaWcbzM6TnRGvmBha16Ku8l9A856Pa+fbvCrEVN
+	fH/77OYCewMxqVzgDof1YTxt21TcAdYiqwqLvqxosl3mEGl9kRRrHxFe3gpDwPiL
+	b58f51hj3mWqglfq8L//4rDDAcelIugB8YLPKHO5W6GoSXARrbP1MP2EoMUQPMEe
+	VN5mzVFnVS4mwN82zmHe7nR/HAyiilY7fcanY0E9CgV5M6gHh0R3guXMi3xCvnqV
+	5IiFZSuYOF3XLPMmHl6jP46QWpxUAFQaSNEGj9zYu7GKk8Pp6yTh75IkRRtDVnBO
+	o0JoPA==
+Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com [209.85.217.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e8t3qmwk2-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Wed, 20 May 2026 13:25:31 +0000 (GMT)
+Received: by mail-vs1-f72.google.com with SMTP id ada2fe7eead31-63271d633b5so3281222137.3
+        for <llvm@lists.linux.dev>; Wed, 20 May 2026 06:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1779283531; x=1779888331; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GH1S6x8/f0fwRU6JS2rGdz1EF99sFIqi+K1xw1yVSeE=;
+        b=Kcl4x9Tbt/RdcBI4ZYkXvpCXSHtPzHsPhqYuO9A7yMlyWSoh0KmvNG3vb7gQMdc/Xp
+         85wx1h6Awpns/Nr5ukVlLrTU+6Rz0nPlJ+mBccixWk7HWvAtJpaldl+6UYJ6gpstEfn8
+         b59r4ClqB0UBK+jpmw9h+vtQyP3NIcMGXxMQ4hNsUi/dnDoaUNkph97Yf8uIi2SwaTyK
+         qF1Kw+DMst/B1kWTdPGsDQohdndYqA/1AHGMEv6supGNlUSUGRSiUF7zflXqmL7HxT68
+         JC5xrNeGbmQgQPQLbyxiK2n08LwWGyzvb8RuAdNR/JpCTSJZfOKgQ6uG5h1DwPzg8KRx
+         w1dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779283531; x=1779888331;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GH1S6x8/f0fwRU6JS2rGdz1EF99sFIqi+K1xw1yVSeE=;
+        b=StWV9jqLMGtWUEljVS6vub4K613V4XX3qi3EYbOAO/bauImC3TTKDvo+MjcpIenPDB
+         3wcpPMzDS7MK/MuAPBO7OX6WPjj+x8IGYIgqG+OYQVka4HvOpEGYfkHNzwpigP6/suXq
+         htSDdC7kHegU5vZRC8wnEwfA9kY7gF/NBjQs6L2tVozvOU9nOvq26oqTjKeKO7Nl5+cJ
+         0X0Fpb33RKCGwhH8wwdQE7Autc/FP9G517CSwalm6lxK/exlSJv7cLe+woaWtuCBCZOX
+         cVqhqLL4fOJmWqnwSocjMeQUcBnZhCQnnJhysDwuhVC2kCxVs/PBmfNo1tMTxupVbCxG
+         ql9w==
+X-Forwarded-Encrypted: i=1; AFNElJ9n5LQ0qmJhK6vJ7aEb0LnT9FY8qV1FvwqBNgjM/qJ39DRQy8Iev4Ie3i0hsiRH+e8ACF2G@lists.linux.dev
+X-Gm-Message-State: AOJu0YxCgxfAvypdPnztFU/A/sdOqUp7s7mLd73rlL0554tRvC/pqlMq
+	YyrFxnuU36YVUSpHDwSHXLFEgeIazfdq6VrbVm4yUQ3bTzAMRPKovxi8gpIVBNkPIywIJkiaeT2
+	0Py5moGpgxBM9LpaU2zItEkv/5IUqyjS4WlJo3vlv4wOxYDSS/88bFPXq
+X-Gm-Gg: Acq92OGwuGq95+Lzl9u6wVGIiDZN/lBbPjr43OsiaFaRRbTb+lzss7uTdRs2oKfJSZC
+	c+cs3ADKwmit2fDaIwUHge+//6PUU10LWBF/X/9QpUhGGQtHOVYyOm9vl51wO4pEbGjTnKX6ost
+	5LNbuJOVhGQlOUh1tbDRzEbjFsVT5fWWb7dgVrte8pczeSY5QVdC6KnUC/k+TaOJxC8E5mLqiDb
+	JfxktWrcSmjcJ5sNinS5JRgog+++EBKdycloQqql1SKFb7ON+U0ZkcRSj+bPsoTe7K9L67Ms8Cr
+	JBUt9is3tOV+Q4KkLOkVKTQ+Pp92sS7jYIclbZsa+YhlyuiHvRMhjRvEbY3AzHu4q/RypQ9EDD8
+	CLBOqaod0dAMD0/2paz1SNmpAsgZPhLt9XorP/frFQceVHEoSzw==
+X-Received: by 2002:a05:6102:374b:b0:631:23fa:38d7 with SMTP id ada2fe7eead31-63a3f18505cmr10776415137.14.1779283530823;
+        Wed, 20 May 2026 06:25:30 -0700 (PDT)
+X-Received: by 2002:a05:6102:374b:b0:631:23fa:38d7 with SMTP id ada2fe7eead31-63a3f18505cmr10776195137.14.1779283528471;
+        Wed, 20 May 2026 06:25:28 -0700 (PDT)
+Received: from brgl-qcom.home ([2a01:cb1d:dc:7e00:9ec3:885a:6d78:48d0])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48febe58638sm127925495e9.17.2026.05.20.06.25.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2026 06:25:27 -0700 (PDT)
+From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+To: linux-gpio@vger.kernel.org, Rosen Penev <rosenp@gmail.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+        Linus Walleij <linusw@kernel.org>,
+        Bartosz Golaszewski <brgl@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] gpio: en7523: allow COMPILE_TEST builds
+Date: Wed, 20 May 2026 15:25:23 +0200
+Message-ID: <177928351979.51371.15501091389617115126.b4-ty@oss.qualcomm.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260519005912.628667-1-rosenp@gmail.com>
+References: <20260519005912.628667-1-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-
-tree:   https://github.com/sean-jc/linux x86/gpr_helpers_cleanup
-head:   ba354c376be921363bd75a65fb21710bd6dc284f
-commit: ba354c376be921363bd75a65fb21710bd6dc284f [40/40] KVM: x86: Move a pile of stuff from kvm_host.h => x86.h
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260520/202605201338.YzMiIdXC-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260520/202605201338.YzMiIdXC-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605201338.YzMiIdXC-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/kvm/ioapic.c:210:14: error: call to undeclared function 'kvm_apicv_activated'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     210 |         if (edge && kvm_apicv_activated(ioapic->kvm))
-         |                     ^
-   arch/x86/kvm/ioapic.c:210:14: note: did you mean 'kvm_gpc_activate'?
-   include/linux/kvm_host.h:1457:5: note: 'kvm_gpc_activate' declared here
-    1457 | int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len);
-         |     ^
->> arch/x86/kvm/ioapic.c:291:2: error: call to undeclared function 'kvm_make_scan_ioapic_request'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     291 |         kvm_make_scan_ioapic_request(kvm);
-         |         ^
->> arch/x86/kvm/ioapic.c:448:4: error: call to undeclared function 'kvm_make_scan_ioapic_request_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     448 |                         kvm_make_scan_ioapic_request_mask(ioapic->kvm,
-         |                         ^
-   arch/x86/kvm/ioapic.c:448:4: note: did you mean 'kvm_make_vcpus_request_mask'?
-   include/linux/kvm_host.h:188:6: note: 'kvm_make_vcpus_request_mask' declared here
-     188 | bool kvm_make_vcpus_request_mask(struct kvm *kvm, unsigned int req,
-         |      ^
-   arch/x86/kvm/ioapic.c:451:4: error: call to undeclared function 'kvm_make_scan_ioapic_request'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     451 |                         kvm_make_scan_ioapic_request(ioapic->kvm);
-         |                         ^
-   arch/x86/kvm/ioapic.c:776:2: error: call to undeclared function 'kvm_make_scan_ioapic_request'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     776 |         kvm_make_scan_ioapic_request(kvm);
-         |         ^
-   5 errors generated.
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIwMDEzMCBTYWx0ZWRfX1/FbbRTVucTN
+ frrqufM7JGlyMxwAmHm38pOv72qs+Po3lpMUeYq8BDuB7C+lWHASihFTB1MCecxD4M1vuL4dbet
+ 6vBfDzHvJ3gfkSY33F8Y/bEvVFQAwmClU/jmj2gn7JbWHmgVenp+yTj6tKDYOmL22VopTalCSnR
+ zpTTdKpN/BFmd/qgakjvk1WNWgHWgjmnwQBePfHNA2ffEuK88X09+2UkCIDOOlvtnBNLHrmnF6d
+ fE5irG5KMIFy1w2tH8mNyw9pbSKZKWkcG8/I1j7lpyoLO/8zEirB1+9gFS/eff/tSKH5cB1V0zs
+ O7rhCYYtTnx6alfAJc2wEOvoYNGOB29NreD5H77OecK5WXJByckMQJn7AWCBL/eCpTYaEvUT6fa
+ 17XJD+3Za1D+7YVi2BxUXtixo7PF9ZDNkS7M+NY+daYILXurCWtsLmjQhgTs0Ch5LLCPFpKYYru
+ FyW2zKnwD9howQ4/oBg==
+X-Authority-Analysis: v=2.4 cv=N9cZ0W9B c=1 sm=1 tr=0 ts=6a0db64b cx=c_pps
+ a=DUEm7b3gzWu7BqY5nP7+9g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=dBzKjp2fhYOy3RD5rRUA:9 a=QEXdDO2ut3YA:10
+ a=-aSRE8QhW-JAV6biHavz:22
+X-Proofpoint-GUID: 4BHU1jTzOXpq572z4VVTrExLZ7BO0UZc
+X-Proofpoint-ORIG-GUID: 4BHU1jTzOXpq572z4VVTrExLZ7BO0UZc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-20_02,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 impostorscore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 clxscore=1015
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
+ definitions=main-2605200130
 
 
-vim +/kvm_apicv_activated +210 arch/x86/kvm/ioapic.c
+On Mon, 18 May 2026 17:59:12 -0700, Rosen Penev wrote:
+> The Airoha EN7523 GPIO driver uses generic platform, MMIO, and gpiolib
+> interfaces.  Allow it to build with COMPILE_TEST so it gets coverage on
+> non-Airoha platforms.
+> 
+> Tested with:
+> make LLVM=1 ARCH=loongarch drivers/gpio/gpio-en7523.o
+> 
+> [...]
 
-f458d039db7e85 arch/x86/kvm/ioapic.c Suravee Suthikulpanit 2019-11-14  186  
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  187  static int ioapic_set_irq(struct kvm_ioapic *ioapic, unsigned int irq,
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  188  		int irq_level, bool line_status)
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  189  {
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  190  	union kvm_ioapic_redirect_entry entry;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  191  	u32 mask = 1 << irq;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  192  	u32 old_irr;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  193  	int edge, ret;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  194  
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  195  	entry = ioapic->redirtbl[irq];
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  196  	edge = (entry.fields.trig_mode == IOAPIC_EDGE_TRIG);
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  197  
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  198  	if (!irq_level) {
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  199  		ioapic->irr &= ~mask;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  200  		ret = 1;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  201  		goto out;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  202  	}
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  203  
-f458d039db7e85 arch/x86/kvm/ioapic.c Suravee Suthikulpanit 2019-11-14  204  	/*
-8be8f932e3db5f arch/x86/kvm/ioapic.c Paolo Bonzini         2020-05-04  205  	 * AMD SVM AVIC accelerate EOI write iff the interrupt is edge
-8be8f932e3db5f arch/x86/kvm/ioapic.c Paolo Bonzini         2020-05-04  206  	 * triggered, in which case the in-kernel IOAPIC will not be able
-8be8f932e3db5f arch/x86/kvm/ioapic.c Paolo Bonzini         2020-05-04  207  	 * to receive the EOI.  In this case, we do a lazy update of the
-8be8f932e3db5f arch/x86/kvm/ioapic.c Paolo Bonzini         2020-05-04  208  	 * pending EOI when trying to set IOAPIC irq.
-f458d039db7e85 arch/x86/kvm/ioapic.c Suravee Suthikulpanit 2019-11-14  209  	 */
-8be8f932e3db5f arch/x86/kvm/ioapic.c Paolo Bonzini         2020-05-04 @210  	if (edge && kvm_apicv_activated(ioapic->kvm))
-f458d039db7e85 arch/x86/kvm/ioapic.c Suravee Suthikulpanit 2019-11-14  211  		ioapic_lazy_update_eoi(ioapic, irq);
-f458d039db7e85 arch/x86/kvm/ioapic.c Suravee Suthikulpanit 2019-11-14  212  
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  213  	/*
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  214  	 * Return 0 for coalesced interrupts; for edge-triggered interrupts,
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  215  	 * this only happens if a previous edge has not been delivered due
-00116795aa87ca arch/x86/kvm/ioapic.c Miaohe Lin            2019-12-11  216  	 * to masking.  For level interrupts, the remote_irr field tells
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  217  	 * us if the interrupt is waiting for an EOI.
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  218  	 *
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  219  	 * RTC is special: it is edge-triggered, but userspace likes to know
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  220  	 * if it has been already ack-ed via EOI because coalesced RTC
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  221  	 * interrupts lead to time drift in Windows guests.  So we track
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  222  	 * EOI manually for the RTC interrupt.
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  223  	 */
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  224  	if (irq == RTC_GSI && line_status &&
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  225  		rtc_irq_check_coalesced(ioapic)) {
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  226  		ret = 0;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  227  		goto out;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  228  	}
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  229  
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  230  	old_irr = ioapic->irr;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  231  	ioapic->irr |= mask;
-7d2253684dd10e arch/x86/kvm/ioapic.c Nikita Leshenko       2017-11-05  232  	if (edge) {
-5bda6eed2e3626 arch/x86/kvm/ioapic.c Wincy Van             2014-12-24  233  		ioapic->irr_delivered &= ~mask;
-7d2253684dd10e arch/x86/kvm/ioapic.c Nikita Leshenko       2017-11-05  234  		if (old_irr == ioapic->irr) {
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  235  			ret = 0;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  236  			goto out;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  237  		}
-7d2253684dd10e arch/x86/kvm/ioapic.c Nikita Leshenko       2017-11-05  238  	}
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  239  
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  240  	ret = ioapic_service(ioapic, irq, line_status);
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  241  
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  242  out:
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  243  	trace_kvm_ioapic_set_irq(entry.bits, irq, ret == 0);
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  244  	return ret;
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  245  }
-44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  246  
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  247  static void kvm_ioapic_inject_all(struct kvm_ioapic *ioapic, unsigned long irr)
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  248  {
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  249  	u32 idx;
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  250  
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  251  	rtc_irq_eoi_tracking_reset(ioapic);
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  252  	for_each_set_bit(idx, &irr, IOAPIC_NUM_PINS)
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  253  		ioapic_set_irq(ioapic, idx, 1, true);
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  254  
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  255  	kvm_rtc_eoi_tracking_restore_all(ioapic);
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  256  }
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  257  
-673f7b4257a1fe virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  258  
-6308630bd3dbb6 arch/x86/kvm/ioapic.c Andrey Smetanin       2015-11-10  259  void kvm_ioapic_scan_entry(struct kvm_vcpu *vcpu, ulong *ioapic_handled_vectors)
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  260  {
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  261  	struct kvm_ioapic *ioapic = vcpu->kvm->arch.vioapic;
-5cd6b1a6eebd56 arch/x86/kvm/ioapic.c Sean Christopherson   2025-12-05  262  	struct rtc_status *status = &ioapic->rtc_status;
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  263  	union kvm_ioapic_redirect_entry *e;
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  264  	int index;
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  265  
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  266  	spin_lock(&ioapic->lock);
-4d99ba898dd0c5 arch/x86/kvm/ioapic.c Joerg Roedel          2016-02-29  267  
-4d99ba898dd0c5 arch/x86/kvm/ioapic.c Joerg Roedel          2016-02-29  268  	/* Make sure we see any missing RTC EOI */
-5cd6b1a6eebd56 arch/x86/kvm/ioapic.c Sean Christopherson   2025-12-05  269  	if (test_bit(vcpu->vcpu_id, status->map))
-5cd6b1a6eebd56 arch/x86/kvm/ioapic.c Sean Christopherson   2025-12-05  270  		__set_bit(status->vectors[vcpu->vcpu_id],
-4d99ba898dd0c5 arch/x86/kvm/ioapic.c Joerg Roedel          2016-02-29  271  			  ioapic_handled_vectors);
-4d99ba898dd0c5 arch/x86/kvm/ioapic.c Joerg Roedel          2016-02-29  272  
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  273  	for (index = 0; index < IOAPIC_NUM_PINS; index++) {
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  274  		e = &ioapic->redirtbl[index];
-0f6c0a740b7d3e virt/kvm/ioapic.c     Paolo Bonzini         2014-07-30  275  		if (e->fields.trig_mode == IOAPIC_LEVEL_TRIG ||
-0f6c0a740b7d3e virt/kvm/ioapic.c     Paolo Bonzini         2014-07-30  276  		    kvm_irq_has_notifier(ioapic->kvm, KVM_IRQCHIP_IOAPIC, index) ||
-0f6c0a740b7d3e virt/kvm/ioapic.c     Paolo Bonzini         2014-07-30  277  		    index == RTC_GSI) {
-5c69d5c113f15a arch/x86/kvm/ioapic.c Peter Xu              2019-12-04  278  			u16 dm = kvm_lapic_irq_dest_mode(!!e->fields.dest_mode);
-5c69d5c113f15a arch/x86/kvm/ioapic.c Peter Xu              2019-12-04  279  
-c2207bbc0c0f4b arch/x86/kvm/ioapic.c Sean Christopherson   2025-03-03  280  			kvm_scan_ioapic_irq(vcpu, e->fields.dest_id, dm,
-c2207bbc0c0f4b arch/x86/kvm/ioapic.c Sean Christopherson   2025-03-03  281  					    e->fields.vector, ioapic_handled_vectors);
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  282  		}
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  283  	}
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  284  	spin_unlock(&ioapic->lock);
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  285  }
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  286  
-993225adf4af20 arch/x86/kvm/ioapic.c David Hildenbrand     2017-04-07  287  void kvm_arch_post_irq_ack_notifier_list_update(struct kvm *kvm)
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  288  {
-0bceb15ad15e93 arch/x86/kvm/ioapic.c David Hildenbrand     2017-04-07  289  	if (!ioapic_in_kernel(kvm))
-3d81bc7e96d6bc virt/kvm/ioapic.c     Yang Zhang            2013-04-11  290  		return;
-3d81bc7e96d6bc virt/kvm/ioapic.c     Yang Zhang            2013-04-11 @291  	kvm_make_scan_ioapic_request(kvm);
-3d81bc7e96d6bc virt/kvm/ioapic.c     Yang Zhang            2013-04-11  292  }
-c7c9c56ca26f7b virt/kvm/ioapic.c     Yang Zhang            2013-01-25  293  
+Applied, thanks!
 
-:::::: The code at line 210 was first introduced by commit
-:::::: 8be8f932e3db5fe4ed178b8892eeffeab530273a kvm: ioapic: Restrict lazy EOI update to edge-triggered interrupts
+[1/1] gpio: en7523: allow COMPILE_TEST builds
+      https://git.kernel.org/brgl/c/292e7cab58e2ce1f9213a6a326eb314e18756459
 
-:::::: TO: Paolo Bonzini <pbonzini@redhat.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
