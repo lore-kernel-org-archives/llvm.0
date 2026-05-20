@@ -1,86 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217273B4E8F;
-	Wed, 20 May 2026 09:08:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 219F03C8728;
+	Wed, 20 May 2026 09:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779268115; cv=none; b=Tl6JsThRxBuaJSiQjGL1H1uHq5gaqYJIJrtGwZBJRdEVvLHsqInJePbNi6jhz1CvmOIqlfag+I462lT9c7uz/8bGixo56U93NQVkXvNIJnQE4oxLuasIvDHGWW5zw115dV1lMQLhpcE3VVSv7cLTvo6DHWx3o7RDFi+TS/k0Dio=
+	t=1779269819; cv=none; b=h5DzyZrtlm8HtCdkrXrKdqyWypjeXO8Wr5gXaPnEUq8YZNPPItilEk52QbUgakjXGi5qxMSXBtCmKMljanb2MwYdQ9pAwyJa0QaJ80543/7Z8Lm2bQpQXSE1PqEUPk+rU+T1zNi7/OCek9olyREKs/5V9z7SAvjoDYHWNGNoT08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779268115; c=relaxed/simple;
-	bh=g9Y1rskBOICxiUtP1FdF88jHeZC0uNxznyzGCNiRgew=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=OSCeSANLYtTYJmrTSVM81wP7k9jHqR2ykK9Nu8TkZ2lmYQyllYpUwS7qvLz5XT8NbzAFTdLFSohSmqdfqJH+1TVPb2yNR9X3ulbead6a3tZ+4Aei2hZ0ttY1P5PIh01vOIbi1O4bvduYde59TTe8Y44h7PuX4LdCrJu4k1nfWH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IOqIGrq8; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1779269819; c=relaxed/simple;
+	bh=MKx+Ty10TaoeZJ5q8WkDOwfGzFRcJF9CsGFBUgLYLdg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hkkan9M9ObTWJoLfW3xhY8FSYfgXAhnBuR4iatV7D8C15jNHCpfTpcMqwpPswyqFCyI3emikW0o4OrDjH8LVJQqQ4P7PlSBjV64Tf75VQSKIEhEEtUXGIH0amqQCvV0QVOq7jqGBoZoTeQk/5NmRlVUbn9KSvPkV9kkbFxfqJBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TX/RVl0s; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IOqIGrq8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TX/RVl0s"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779268114; x=1810804114;
-  h=date:from:to:cc:subject:message-id;
-  bh=g9Y1rskBOICxiUtP1FdF88jHeZC0uNxznyzGCNiRgew=;
-  b=IOqIGrq8ZrGFMs1HIzMr6+nmzLFKBuLRsjrcGacE2vVWAEjMh4OcwmsK
-   JAJOvXGDrSHLMIOkce+PUa6Vra8f5Yksgw290vMScwSRA+tSdb3Ujh7UB
-   lTZGPCkoFFxOhWz9rS4gQf/aPfEL0bl3w69/SXTmL1ZOepNAP5w7NKFU/
-   FJjvzq6APuFlBo5/nymsg9tcs3nX7OWPDpuSpCg+TzJVvi8zpk5hwgX8F
-   uGpM/MzyuCYXN1He32/cWt80Dz0Ro3HwG7TZRWTXxlGDS+Z4O+4JUCSuI
-   RSgwQ/2zkTPTiSntbIWBGwZKhhEquuyyw1W04KNDK/Cl0Qa5oYx0Hoscp
-   A==;
-X-CSE-ConnectionGUID: cr/O7J0nTmWLHhH9b6EWGA==
-X-CSE-MsgGUID: ibvIHFvETo23w+fEhQEC4A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="91266034"
+  t=1779269814; x=1810805814;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MKx+Ty10TaoeZJ5q8WkDOwfGzFRcJF9CsGFBUgLYLdg=;
+  b=TX/RVl0stWQkNEymj3Za5b/AERonXgxSKIc4fMUTMttIuOPy+GmtVJ9H
+   ui32rP2xS9t0dqgKiBoLIx1gIvSncgKAr4gjGA15yQQh1PLKmVmZqtyHf
+   IcT1UvcdsAvrvZu7dB63ykv5ISHlCXWqEwFzyB4s3Zj6mW31x01qdrtcG
+   ghJcuaMow2S1knCXMbfW/ne9TgaCoGN+F5BcQ0aJ551jIE8pOn0nREhvu
+   YNxZnTMxa40F98vf9RGec+yH81mniYjJ8wrPMZgqlCBKjeNNnwmyArlt8
+   JU4nEwXkgHCTqa4zhkQw7YfHp7MRcK04uYYKYDaJTsQZSCF/yCPd14ugj
+   g==;
+X-CSE-ConnectionGUID: 9Mv5ANmVRFKYiAlhSKdkgw==
+X-CSE-MsgGUID: E/WqcoAiTh61ix47bKTxiQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="79310767"
 X-IronPort-AV: E=Sophos;i="6.23,244,1770624000"; 
-   d="scan'208";a="91266034"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2026 02:08:33 -0700
-X-CSE-ConnectionGUID: X37rMs8UT4qOESZfnsDH5g==
-X-CSE-MsgGUID: UbpsvTwDRpi/qhoumMb/uQ==
+   d="scan'208";a="79310767"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2026 02:36:53 -0700
+X-CSE-ConnectionGUID: ZmIhuF4bRAyagXLFbJ3g+Q==
+X-CSE-MsgGUID: j2qBrrkfT1Ou413/Rh0Dww==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,244,1770624000"; 
-   d="scan'208";a="233744142"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by fmviesa009.fm.intel.com with ESMTP; 20 May 2026 02:08:32 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+   d="scan'208";a="239113754"
+Received: from lkp-server02.sh.intel.com (HELO 30e86e9c1927) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 20 May 2026 02:36:51 -0700
+Received: from kbuild by 30e86e9c1927 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wPcuk-00000000AUT-10pi;
-	Wed, 20 May 2026 09:08:30 +0000
-Date: Wed, 20 May 2026 11:08:04 +0200
+	id 1wPdLf-000000002v7-3LdC;
+	Wed, 20 May 2026 09:36:24 +0000
+Date: Wed, 20 May 2026 17:35:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: error[E0063]: missing field `failed_bio` in initializer of
- `block_device_operations`
-Message-ID: <202605201146.akzjCrUm-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	Arnd Bergmann <arnd@arndb.de>,
+	Sriharsha Basavapatna <sriharsha.basavapatna@broadcom.com>,
+	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RDMA/core: remove extraneous dummy helper functions
+Message-ID: <202605201724.StvoCZ6d-lkp@intel.com>
+References: <20260519203629.1341667-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260519203629.1341667-1-arnd@kernel.org>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/blk-mq-fix-status-for-unaligned-bio/20260520-012950
-head:   89ba31ad7984d07e6f2dc223b2b47ee84cf8fe5c
-commit: 89ba31ad7984d07e6f2dc223b2b47ee84cf8fe5c block, nvme: add failed_bio callback for multipath bio failover
-date:   16 hours ago
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260520/202605201146.akzjCrUm-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260520/202605201146.akzjCrUm-lkp@intel.com/reproduce)
+Hi Arnd,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on v7.1-rc4]
+[also build test ERROR on linus/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/RDMA-core-remove-extraneous-dummy-helper-functions/20260520-044317
+base:   v7.1-rc4
+patch link:    https://lore.kernel.org/r/20260519203629.1341667-1-arnd%40kernel.org
+patch subject: [PATCH] RDMA/core: remove extraneous dummy helper functions
+config: hexagon-randconfig-002-20260520 (https://download.01.org/0day-ci/archive/20260520/202605201724.StvoCZ6d-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260520/202605201724.StvoCZ6d-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605201146.akzjCrUm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605201724.StvoCZ6d-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> error[E0063]: missing field `failed_bio` in initializer of `block_device_operations`
-   --> rust/kernel/block/mq/gen_disk.rs:128:58
-   |
-   128 |         const TABLE: bindings::block_device_operations = bindings::block_device_operations {
-   |                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ missing `failed_bio`
+>> ld.lld: error: undefined symbol: _ib_copy_validate_udata_in
+   >>> referenced by siw_verbs.c:1373 (drivers/infiniband/sw/siw/siw_verbs.c:1373)
+   >>>               drivers/infiniband/sw/siw/siw_verbs.o:(siw_reg_user_mr) in archive vmlinux.a
+   >>> referenced by siw_verbs.c:1373 (drivers/infiniband/sw/siw/siw_verbs.c:1373)
+   >>>               drivers/infiniband/sw/siw/siw_verbs.o:(siw_reg_user_mr) in archive vmlinux.a
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_STMFX
+   Depends on [n]: HAS_IOMEM [=y] && I2C [=y] && OF [=n]
+   Selected by [y]:
+   - PINCTRL_STMFX [=y] && PINCTRL [=y] && I2C [=y] && HAS_IOMEM [=y]
 
 --
 0-DAY CI Kernel Test Service
