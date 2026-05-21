@@ -1,57 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 967B53F54DA;
-	Thu, 21 May 2026 13:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9438E231A23;
+	Thu, 21 May 2026 14:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779370833; cv=none; b=MEkBr0QECu/NODOs/iZPBSgDOjaFJRpPPc8wQiYiKPH6CbUTXpdjHyRh2a15puyySJ0mizC53SGDJbYl+xj4oPhWf9seYP5swjcj8HBbw4WYVYjKsposkGh47i7mR6pF/ZwzQjWOC4fPz60+3c0tBw6qbKkKywLcHlhCCuVyRok=
+	t=1779372035; cv=none; b=bcPywHhtZE3dKGjJc+IBxTFDKmCEuB24K9HIeg3iBXv6G86tEKaUgLxo4n+kEFQDmhIIE6kWNpGvSuQFhP/zJMDd3SyTWI1AyhKmL65dyR+3c7UyhbQW2NXSgTDm3o05osjAmMTtViLQ/pcPQ2vUkEK6wxIXqkdB0JCB3sqKT6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779370833; c=relaxed/simple;
-	bh=sgLyNFRARVWSEHSacqBFelUbiQxjUGeL003xQ75ue/8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=fZxoERAuyAjQ50f53nAe2Uu7Ke0HJEqEUDT2Ixout0hsjbNTxsw4GVOVrfddB1HdROkNj1DG5rZk0Mlbm5HuDWFjElrXgn5zvHZIteZwswgir4WW/XW/41+pE+RyDC/MIksYCOLxmBlV9E77FJKIZNZ7XHNoO3OCgSuYKEii7ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kc3MUtKq; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1779372035; c=relaxed/simple;
+	bh=UGxgQW7Vh4Ms3MUzW38FN/IAB06c5faKaXaJOj6wuoM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=s8lwijrtOY1WizaaJBX0Me2winn2NVmmV5T35j2r11l7pBWT6BADr1/WhjBNkQVXnNALw4c0LSsZZWNe53efXzV+Pxvulic4VdFTDGlbHYKFrVjCdAXaFRE79ve1xuQ15B9gpbZxjIVt1JUVRfRG2EEpq8DCmJJz6ByEhUpuEIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c+Zc3Zsc; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kc3MUtKq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c+Zc3Zsc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779370831; x=1810906831;
+  t=1779372034; x=1810908034;
   h=date:from:to:cc:subject:message-id;
-  bh=sgLyNFRARVWSEHSacqBFelUbiQxjUGeL003xQ75ue/8=;
-  b=Kc3MUtKqffJI/6DBfx1CA7VN/NbOBA2N7UAk41TDYTAZ9AZy3egevl8g
-   pBZF6vS+S5q1zc8ucbzRD63tPDDC2GYbSdB/gCG5+xzRkFIUiOIrkM/eR
-   s0JrFB2B1CvO7TM3BIxkXyywJTD4ry8Smj+zqOIjzsTZqlWO/OAhHFRsJ
-   BDM6Q3u0Z+0CmS927+a0TEsm0Paat6GVy/e2+uW4cmoMNg7vPV7Ln3BPj
-   Cc+UNudv8oK32J0Yn/TY6SPO1mYyGrJenywCyOU/nukudzu2IFSY2OLLC
-   d4Y3b/rxHIBM9k4nZuCFphCMkA558TmRjKtpuoZWJ0FykHiVsYRqMn/p1
+  bh=UGxgQW7Vh4Ms3MUzW38FN/IAB06c5faKaXaJOj6wuoM=;
+  b=c+Zc3ZscyqK0YYkmTmQfTcDNSa+miQwE9cNs3Fi0+9cCdkd1OakQmAFr
+   YORqigOJaKSJvXRbOePXitTb7bJnbNgbvfkXno2J3/ref8Hf8xlmdFdhj
+   3QClmjz/xUIojKBQMoWguJ7nLtzssXcTf5FFT41BoDcNgqM0gozjo//qs
+   Q4sWcT1dr2RbCId9hdNYjMagMXrBV0aftClPx5NhjzcnBxmaS3SLof23L
+   IJ9muQBv2Q7hJPs4aK7AFPPfgaqy8L39w122Mqk/vxInpNbsXYfrsJ9QD
+   3sseKpd0d6manK+TcyL4EaqIdOm3KGu7haztrjojokZZrlLRjvSMymBy3
    Q==;
-X-CSE-ConnectionGUID: 505tdFPeREK8XmBj7RNvZw==
-X-CSE-MsgGUID: 3++XsonOQwSrsbNZnXXrDw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="80321682"
+X-CSE-ConnectionGUID: a3xpwDZrR8e1cZtTHenypQ==
+X-CSE-MsgGUID: TSBrig8JTmiKv3y3lK6Vvw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="91760846"
 X-IronPort-AV: E=Sophos;i="6.23,246,1770624000"; 
-   d="scan'208";a="80321682"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 06:40:30 -0700
-X-CSE-ConnectionGUID: aJCc9cWgRJyI85uCWDR4+w==
-X-CSE-MsgGUID: Ai9LKH08QMeq4HNNSHll9A==
+   d="scan'208";a="91760846"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 07:00:34 -0700
+X-CSE-ConnectionGUID: jtJKT7NCRlSKwAadDOiJSw==
+X-CSE-MsgGUID: 9C+3SPWhQmGWI3w2DBwosA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,246,1770624000"; 
-   d="scan'208";a="239517097"
+   d="scan'208";a="240555182"
 Received: from lkp-server01.sh.intel.com (HELO fdb68b0ce653) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 21 May 2026 06:40:28 -0700
+  by orviesa009.jf.intel.com with ESMTP; 21 May 2026 07:00:31 -0700
 Received: from kbuild by fdb68b0ce653 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wQ3dS-000000000MZ-0FLh;
-	Thu, 21 May 2026 13:40:26 +0000
-Date: Thu, 21 May 2026 21:39:32 +0800
+	id 1wQ3wr-000000000OP-00tL;
+	Thu, 21 May 2026 14:00:29 +0000
+Date: Thu, 21 May 2026 22:00:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Ehrhardt <christian.ehrhardt@codasip.com>
+To: "Markus Schneider-Pargmann (The Capable Hub)" <msp@baylibre.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [scosu-sched:topic/mmap-cap-prot-wip/v6.18 521/1130]
- mm/mmap.c:730:12: error: use of undeclared identifier 'ERESERVATION'
-Message-ID: <202605212157.rTbHHJit-lkp@intel.com>
+Subject: [scosu-sched:topic/mmap-cap-prot-wip/v6.18 2/3]
+ arch/x86/kernel/signal_32.c:433:15: error: static assertion failed due to
+ requirement '15 == 14': NSIGSEGV == 14
+Message-ID: <202605212157.nCb1dWY2-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,106 +62,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
 tree:   https://github.com/scosu/linux-sched topic/mmap-cap-prot-wip/v6.18
 head:   f69a5a9d9fee15edde28429e23a4c749a59937bd
-commit: af9bff1748c242e5113c456afe8e54fe3e9bebe8 [521/1130] [CHERRY-PICK] mm/mmap: Handle reservations in get_unmapped_area
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260521/202605212157.rTbHHJit-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260521/202605212157.rTbHHJit-lkp@intel.com/reproduce)
+commit: 8b9ecbe3b33ed26fa45de2f3b928df3f6fd1713c [2/3] riscv/mm: Handle CHERI PTE faults
+config: x86_64-randconfig-075-20260521 (https://download.01.org/0day-ci/archive/20260521/202605212157.nCb1dWY2-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260521/202605212157.nCb1dWY2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605212157.rTbHHJit-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605212157.nCb1dWY2-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from mm/mmap.c:21:
-   In file included from include/linux/syscalls.h:95:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:53:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:28:
-   In file included from include/linux/bpfptr.h:6:
-   include/linux/compat.h:1106:9: warning: 'is_compat32_task' macro redefined [-Wmacro-redefined]
-    1106 | #define is_compat32_task() is_compat_task()
-         |         ^
-   arch/sparc/include/asm/compat.h:151:9: note: previous definition is here
-     151 | #define is_compat32_task is_compat_task
-         |         ^
->> mm/mmap.c:730:12: error: use of undeclared identifier 'ERESERVATION'
-     730 |                         return -ERESERVATION;
-         |                                 ^~~~~~~~~~~~
-   mm/mmap.c:799:12: error: use of undeclared identifier 'ERESERVATION'
-     799 |                         return -ERESERVATION;
-         |                                 ^~~~~~~~~~~~
-   1 warning and 2 errors generated.
+>> arch/x86/kernel/signal_32.c:433:15: error: static assertion failed due to requirement '15 == 14': NSIGSEGV == 14
+     433 | static_assert(NSIGSEGV == 14);
+         | ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+   include/uapi/asm-generic/siginfo.h:248:18: note: expanded from macro 'NSIGSEGV'
+     248 | #define NSIGSEGV        15
+         |                         ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   1 error generated.
 
 
-vim +/ERESERVATION +730 mm/mmap.c
+vim +433 arch/x86/kernel/signal_32.c
 
-   681	
-   682	/* Get an address range which is currently unmapped.
-   683	 * For shmat() with addr=0.
-   684	 *
-   685	 * Ugly calling convention alert:
-   686	 * Return value with the low bits set means error value,
-   687	 * ie
-   688	 *	if (ret & ~PAGE_MASK)
-   689	 *		error = ret;
-   690	 *
-   691	 * This function "knows" that -ENOMEM has the bits set.
-   692	 */
-   693	unsigned long
-   694	generic_get_unmapped_area(struct file *filp, unsigned long addr,
-   695				  unsigned long len, unsigned long pgoff,
-   696				  unsigned long flags, vm_flags_t vm_flags)
-   697	{
-   698		struct mm_struct *mm = current->mm;
-   699		struct vm_area_struct *vma, *prev;
-   700		struct vm_unmapped_area_info info = {};
-   701		const unsigned long mmap_end = arch_get_mmap_end(addr, len, flags);
-   702		unsigned long aligned_len = reserv_representable_length(len);
-   703	
-   704		if (aligned_len > mmap_end - mmap_min_addr)
-   705			return -ENOMEM;
-   706	
-   707		/*
-   708		 * If MAP_FIXED is passed in the reservation case, the aligned range
-   709		 * should be either completely contained inside an existing
-   710		 * reservation, or completely outside (new reservation).
-   711		 * Let this scenario fallthrough for the corresponding checks below.
-   712		 */
-   713		if ((flags & MAP_FIXED) && !reserv_is_supported(mm))
-   714			return addr;
-   715	
-   716		if (addr || (flags & MAP_FIXED)) {
-   717			unsigned long aligned_addr;
-   718	
-   719			addr = PAGE_ALIGN(addr);
-   720			aligned_addr = reserv_representable_base(addr, len);
-   721			vma = find_vma_prev(mm, aligned_addr, &prev);
-   722			if (mmap_end - aligned_len >= aligned_addr && aligned_addr >= mmap_min_addr &&
-   723			    (!vma || aligned_addr + aligned_len <= vm_start_gap(vma)) &&
-   724			    (!prev || aligned_addr >= vm_end_gap(prev)))
-   725				return addr;
-   726			else if (flags & MAP_FIXED) {
-   727				if ((vma && reserv_vma_range_within_reserv(vma, aligned_addr, aligned_len)) ||
-   728				    (prev && reserv_vma_range_within_reserv(prev, aligned_addr, aligned_len)))
-   729					return addr;
- > 730				return -ERESERVATION;
-   731			}
-   732		}
-   733	
-   734		info.length = len;
-   735		info.low_limit = mm->mmap_base;
-   736		info.high_limit = mmap_end;
-   737		info.start_gap = stack_guard_placement(vm_flags);
-   738		info.align_mask |= reserv_representable_alignment(len);
-   739		if (filp && is_file_hugepages(filp))
-   740			info.align_mask |= huge_page_mask_align(filp);
-   741		return vm_unmapped_area(&info);
-   742	}
-   743	
+f6e2a56c2bad10 Brian Gerst        2022-12-19  411  
+f6e2a56c2bad10 Brian Gerst        2022-12-19  412  /*
+f6e2a56c2bad10 Brian Gerst        2022-12-19  413   * The siginfo_t structure and handing code is very easy
+f6e2a56c2bad10 Brian Gerst        2022-12-19  414   * to break in several ways.  It must always be updated when new
+f6e2a56c2bad10 Brian Gerst        2022-12-19  415   * updates are made to the main siginfo_t, and
+f6e2a56c2bad10 Brian Gerst        2022-12-19  416   * copy_siginfo_to_user32() must be updated when the
+f6e2a56c2bad10 Brian Gerst        2022-12-19  417   * (arch-independent) copy_siginfo_to_user() is updated.
+f6e2a56c2bad10 Brian Gerst        2022-12-19  418   *
+f6e2a56c2bad10 Brian Gerst        2022-12-19  419   * It is also easy to put a new member in the siginfo_t
+f6e2a56c2bad10 Brian Gerst        2022-12-19  420   * which has implicit alignment which can move internal structure
+f6e2a56c2bad10 Brian Gerst        2022-12-19  421   * alignment around breaking the ABI.  This can happen if you,
+f6e2a56c2bad10 Brian Gerst        2022-12-19  422   * for instance, put a plain 64-bit value in there.
+f6e2a56c2bad10 Brian Gerst        2022-12-19  423   */
+f6e2a56c2bad10 Brian Gerst        2022-12-19  424  
+f6e2a56c2bad10 Brian Gerst        2022-12-19  425  /*
+f6e2a56c2bad10 Brian Gerst        2022-12-19  426  * If adding a new si_code, there is probably new data in
+f6e2a56c2bad10 Brian Gerst        2022-12-19  427  * the siginfo.  Make sure folks bumping the si_code
+f6e2a56c2bad10 Brian Gerst        2022-12-19  428  * limits also have to look at this code.  Make sure any
+f6e2a56c2bad10 Brian Gerst        2022-12-19  429  * new fields are handled in copy_siginfo_to_user32()!
+f6e2a56c2bad10 Brian Gerst        2022-12-19  430  */
+f6e2a56c2bad10 Brian Gerst        2022-12-19  431  static_assert(NSIGILL  == 11);
+f6e2a56c2bad10 Brian Gerst        2022-12-19  432  static_assert(NSIGFPE  == 15);
+cdce7a4bdf68ce Christian Ehrhardt 2025-06-11 @433  static_assert(NSIGSEGV == 14);
+f6e2a56c2bad10 Brian Gerst        2022-12-19  434  static_assert(NSIGBUS  == 5);
+f6e2a56c2bad10 Brian Gerst        2022-12-19  435  static_assert(NSIGTRAP == 6);
+f6e2a56c2bad10 Brian Gerst        2022-12-19  436  static_assert(NSIGCHLD == 6);
+f6e2a56c2bad10 Brian Gerst        2022-12-19  437  static_assert(NSIGSYS  == 2);
+f6e2a56c2bad10 Brian Gerst        2022-12-19  438  
+
+:::::: The code at line 433 was first introduced by commit
+:::::: cdce7a4bdf68ce84ffd97a9b30b7cfc73951a674 [CHERRY-PICK] arm64: morello: Handle capability faults
+
+:::::: TO: Christian Ehrhardt <christian.ehrhardt@codasip.com>
+:::::: CC: Christian A. Ehrhardt <christian.ehrhardt@codasip.com>
 
 --
 0-DAY CI Kernel Test Service
