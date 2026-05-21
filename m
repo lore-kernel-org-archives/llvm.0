@@ -1,261 +1,205 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5973BCD36;
-	Thu, 21 May 2026 11:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E8B3C415C;
+	Thu, 21 May 2026 12:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779362467; cv=none; b=XYMqfKG+jLzj10tluKnrT0MGZIOOpZUeQnBENaxfkY1VW1EVvnKHIBHsm86cthUqdXheC/wGmWwUVf2hIncWivEcp5Esjp7L0+mZokSn2XMCxVwk9+ZjFuDrDSbVkbEYqbPDTyGhiapYZ1RH9YG8sa4FtS4pRKdoUcG1mmMTm8c=
+	t=1779365290; cv=none; b=fSn7Hlak/xAfn/htpo1SsA3pzr9/mDs6JlKw+tfC9RyV1GQpQFjcJz7DJYtOo+GyflnAlBA79CkRzq1xc40mVVjZVdm9SytZg+QHn+7IT+G1pZf59mt3CmvNVp2UjyNl5wEbZZcfWXdCBz4mDQpS4aZRZ1mmywDQu3cUOOrHwk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779362467; c=relaxed/simple;
-	bh=WUm6zmdFqh0mEvVJdV6krXjVoydqlOpvjl9nqwtbNfU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=qVkSNGoEPBtzW8E2Ru0Gy+wuTBP+YwUkWSaGCQnpaiNXQYaVtl732RpgNNkahSpD/TY5qRdbZcUUjJfXAL4FeyaDf1qjMGHpWTs4relgTFAt1zAVtAuCg21PoJPPpGLiXs7vYdmRatnkCriJTBQ8fBQl/o3QzXzleudA5HFrhc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RI+XI/Or; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1779365290; c=relaxed/simple;
+	bh=RcFveqQ7a8lV96kPtiSp9MUVrmozzT5OhtAzJqAOeLI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UYc9sbbFoewpOzaDwbECv4fhiFmMdfeBvWArFh3A4lkf25DQAM9XhjJ+X/EameeEOWnrA2VJ6ezHT2PfueNyclFP48m+dgwduvOqb+OQgQ1u9gPPo4TUO7//d3j3vt0tbQQEAs1LPzpcsGtPIEJXKj5s9DPftsqYaffjD91u8Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kO51RvxD; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RI+XI/Or"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kO51RvxD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779362465; x=1810898465;
-  h=date:from:to:cc:subject:message-id;
-  bh=WUm6zmdFqh0mEvVJdV6krXjVoydqlOpvjl9nqwtbNfU=;
-  b=RI+XI/Or74HoGSFI2x7umKrOKhYkeTG0yzHlicEjdULzdP/2h+MQolVo
-   Wk0MVahVani+cJrAhXzvbufqYjih8SszbHHqkJhMk5Byv9F2U9BOJfHKx
-   g5Cgqp6q16+j5G+HGQS2avYta9oce9uM/ag8PgMKLmDWrT1eRJrkya4I7
-   Mpxui7MEb/cUf5a0g3thCPma3uMX9oTEpEKf4vijc1wVshbYf7QDAD4v1
-   2Wm8QjdsxAytgdpOudpafyiXC5hnLVbmsBuqnUjkTrV0IEQmQumWCovzA
-   smoZaSY6qXs7sKkn0ceoSmxNJdWDbA/XTALU5cV2r7TgUSXhWG3Rn7cef
-   Q==;
-X-CSE-ConnectionGUID: wSeRVh6zTZyunbQaeKt69A==
-X-CSE-MsgGUID: 5XY1rRAnTwe35NdWMVPKAg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="90575443"
+  t=1779365287; x=1810901287;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RcFveqQ7a8lV96kPtiSp9MUVrmozzT5OhtAzJqAOeLI=;
+  b=kO51RvxD+qDbnWWDUcjcMcmGveKaSMYL9Lm8ERexPYZhwToBDf1OTX7Q
+   JPCvwhPOVh2L9SE2nOOgHsBcjiWCAK54M8NM8ptaGSHsyGaUCgMt19yHU
+   zgWcg/3PFBxMSJCewrCwvLHbkrg53803phtDWzRh8ibVCzYtZ0uPeDU/F
+   9EMNMc5cgdRXLy1cqIyfd7sXuInvZBILrBWg8bAK71eTiwEvIAxRtsZUa
+   XNgL3RiK+ssZTazvQwB5XakOBzvCyePPGeqlpdQS9WlIpN7MrtJgOh5WJ
+   tJNh2ByHhGDtZ7FAxhSYxGlMADTFzpnhyD9amURoc7dc/tweS3s/3LhHi
+   w==;
+X-CSE-ConnectionGUID: ZRy6p5DMR6GBXUwFAvm88Q==
+X-CSE-MsgGUID: nwSQoswaS4iaGnpIbJ5+Kg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="90856117"
 X-IronPort-AV: E=Sophos;i="6.23,246,1770624000"; 
-   d="scan'208";a="90575443"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 04:21:05 -0700
-X-CSE-ConnectionGUID: ouI0VVN7TmSuoQRUaUE5iQ==
-X-CSE-MsgGUID: NsG5znNHQ9qNZD1kHrKBtQ==
+   d="scan'208";a="90856117"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 05:07:59 -0700
+X-CSE-ConnectionGUID: 5bE8l1g1SbSnYtctE9jjYA==
+X-CSE-MsgGUID: 4yDO+L6oRZyrcbq73yBFKA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,246,1770624000"; 
-   d="scan'208";a="236248554"
-Received: from lkp-server01.sh.intel.com (HELO fdb68b0ce653) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 21 May 2026 04:21:03 -0700
-Received: from kbuild by fdb68b0ce653 with local (Exim 4.98.2)
+   d="scan'208";a="244502626"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 21 May 2026 05:07:56 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wQ1SW-000000000C1-2enX;
-	Thu, 21 May 2026 11:21:00 +0000
-Date: Thu, 21 May 2026 19:20:02 +0800
+	id 1wQ2Bt-00000000Aqn-3Lj2;
+	Thu, 21 May 2026 12:07:53 +0000
+Date: Thu, 21 May 2026 14:07:19 +0200
 From: kernel test robot <lkp@intel.com>
-To: Christian Ehrhardt <christian.ehrhardt@codasip.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [scosu-sched:topic/mmap-cap-prot-wip/v6.18 454/1130]
- include/linux/compat.h:1106:9: warning: 'is_compat32_task' macro redefined
-Message-ID: <202605211921.5geSahUF-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Ashwin Gundarapu <linuxuser509@zohomail.in>,
+	"anthony.l.nguyen@intel.com" <przemyslaw.kitszel@intel.com>,
+	andrewnetdev <andrew+netdev@lunn.ch>, davem <davem@davemloft.net>,
+	edumazet <edumazet@google.com>, kuba <kuba@kernel.org>,
+	pabeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] net: e100: replace silent 'hope for the best'
+ with debug message
+Message-ID: <202605211409.vFzkDRoq-lkp@intel.com>
+References: <19e49280392.4757403170773.5767589851918809405@zohomail.in>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19e49280392.4757403170773.5767589851918809405@zohomail.in>
 
-tree:   https://github.com/scosu/linux-sched topic/mmap-cap-prot-wip/v6.18
-head:   f69a5a9d9fee15edde28429e23a4c749a59937bd
-commit: 9aa5dc60f6d4d5572283cb169018137aa3ae11cf [454/1130] [CHERRY-PICK] arch: add compat helpers specific to 64-bit
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260521/202605211921.5geSahUF-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260521/202605211921.5geSahUF-lkp@intel.com/reproduce)
+Hi Ashwin,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ashwin-Gundarapu/net-e100-replace-silent-hope-for-the-best-with-debug-message/20260521-141158
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/19e49280392.4757403170773.5767589851918809405%40zohomail.in
+patch subject: [PATCH net-next] net: e100: replace silent 'hope for the best' with debug message
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260521/202605211409.vFzkDRoq-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260521/202605211409.vFzkDRoq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605211921.5geSahUF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605211409.vFzkDRoq-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from ipc/compat.c:24:
->> include/linux/compat.h:1106:9: warning: 'is_compat32_task' macro redefined [-Wmacro-redefined]
-    1106 | #define is_compat32_task() is_compat_task()
-         |         ^
-   arch/sparc/include/asm/compat.h:151:9: note: previous definition is here
-     151 | #define is_compat32_task is_compat_task
-         |         ^
-   1 warning generated.
---
-   In file included from ipc/sem.c:73:
->> include/linux/compat.h:1106:9: warning: 'is_compat32_task' macro redefined [-Wmacro-redefined]
-    1106 | #define is_compat32_task() is_compat_task()
-         |         ^
-   arch/sparc/include/asm/compat.h:151:9: note: previous definition is here
-     151 | #define is_compat32_task is_compat_task
-         |         ^
-   ipc/sem.c:1824:1: error: conflicting types for 'compat_sys_semctl'
-    1824 | COMPAT_SYSCALL_DEFINE4(semctl, int, semid, int, semnum, int, cmd, compat_ulong_t, arg)
-         | ^
-   include/linux/compat.h:66:2: note: expanded from macro 'COMPAT_SYSCALL_DEFINE4'
-      66 |         COMPAT_SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |         ^
-   include/linux/compat.h:82:18: note: expanded from macro 'COMPAT_SYSCALL_DEFINEx'
-      82 |         asmlinkage long compat_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))        \
-         |                         ^
-   <scratch space>:79:1: note: expanded from here
-      79 | compat_sys_semctl
-         | ^
-   include/linux/compat.h:912:17: note: previous declaration is here
-     912 | asmlinkage long compat_sys_semctl(int semid, int semnum, int cmd, int arg);
+>> drivers/net/ethernet/intel/e100.c:1459:3: error: expected expression
+    1459 |                 else {
          |                 ^
-   1 warning and 1 error generated.
---
-   In file included from mm/process_vm_access.c:8:
->> include/linux/compat.h:1106:9: warning: 'is_compat32_task' macro redefined [-Wmacro-redefined]
-    1106 | #define is_compat32_task() is_compat_task()
-         |         ^
-   arch/sparc/include/asm/compat.h:151:9: note: previous definition is here
-     151 | #define is_compat32_task is_compat_task
-         |         ^
-   mm/process_vm_access.c:217:4: error: call to undeclared function '__c_pa_u'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     217 |                         __c_pa_u(rvec[i].iov_base), rvec[i].iov_len,
-         |                         ^
-   1 warning and 1 error generated.
---
-   In file included from kernel/trace/ftrace.c:45:
-   In file included from kernel/trace/trace_output.h:6:
-   In file included from kernel/trace/trace.h:30:
-   In file included from arch/sparc/include/asm/syscall.h:7:
->> include/linux/compat.h:1106:9: warning: 'is_compat32_task' macro redefined [-Wmacro-redefined]
-    1106 | #define is_compat32_task() is_compat_task()
-         |         ^
-   arch/sparc/include/asm/compat.h:151:9: note: previous definition is here
-     151 | #define is_compat32_task is_compat_task
-         |         ^
-   kernel/trace/ftrace.c:1043:13: warning: variable 'update_all_ops' set but not used [-Wunused-but-set-global]
-    1043 | static bool update_all_ops;
-         |             ^
-   2 warnings generated.
---
-   In file included from kernel/trace/trace_nop.c:12:
-   In file included from kernel/trace/trace.h:30:
-   In file included from arch/sparc/include/asm/syscall.h:7:
->> include/linux/compat.h:1106:9: warning: 'is_compat32_task' macro redefined [-Wmacro-redefined]
-    1106 | #define is_compat32_task() is_compat_task()
-         |         ^
-   arch/sparc/include/asm/compat.h:151:9: note: previous definition is here
-     151 | #define is_compat32_task is_compat_task
-         |         ^
-   kernel/trace/trace_nop.c:35:28: warning: variable 'ctx_trace' set but not used [-Wunused-but-set-global]
-      35 | static struct trace_array       *ctx_trace;
-         |                                  ^
-   2 warnings generated.
---
-   In file included from kernel/trace/fgraph.c:20:
-   In file included from kernel/trace/trace.h:30:
-   In file included from arch/sparc/include/asm/syscall.h:7:
->> include/linux/compat.h:1106:9: warning: 'is_compat32_task' macro redefined [-Wmacro-redefined]
-    1106 | #define is_compat32_task() is_compat_task()
-         |         ^
-   arch/sparc/include/asm/compat.h:151:9: note: previous definition is here
-     151 | #define is_compat32_task is_compat_task
-         |         ^
-   kernel/trace/fgraph.c:542:27: warning: variable 'fgraph_direct_gops' set but not used [-Wunused-but-set-global]
-     542 | static struct fgraph_ops *fgraph_direct_gops = &fgraph_stub;
-         |                           ^
-   2 warnings generated.
---
-   In file included from kernel/trace/bpf_trace.c:9:
-   In file included from include/linux/bpf_verifier.h:9:
-   In file included from include/linux/filter.h:11:
->> include/linux/compat.h:1106:9: warning: 'is_compat32_task' macro redefined [-Wmacro-redefined]
-    1106 | #define is_compat32_task() is_compat_task()
-         |         ^
-   arch/sparc/include/asm/compat.h:151:9: note: previous definition is here
-     151 | #define is_compat32_task is_compat_task
-         |         ^
-   kernel/trace/bpf_trace.c:377:65: warning: diagnostic behavior may be improved by adding the 'format(printf, 1, 0)' attribute to the declaration of '____bpf_trace_printk' [-Wmissing-format-attribute]
-     362 | BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_size, u64, arg1,
-         | __attribute__((format(printf, 1, 0))) 
-     363 |            u64, arg2, u64, arg3)
-     364 | {
-     365 |         u64 args[MAX_TRACE_PRINTK_VARARGS] = { arg1, arg2, arg3 };
-     366 |         struct bpf_bprintf_data data = {
-     367 |                 .get_bin_args   = true,
-     368 |                 .get_buf        = true,
-     369 |         };
-     370 |         int ret;
-     371 | 
-     372 |         ret = bpf_bprintf_prepare(fmt, fmt_size, args,
-     373 |                                   MAX_TRACE_PRINTK_VARARGS, &data);
-     374 |         if (ret < 0)
-     375 |                 return ret;
-     376 | 
-     377 |         ret = bstr_printf(data.buf, MAX_BPRINTF_BUF, fmt, data.bin_args);
-         |                                                                        ^
-   kernel/trace/bpf_trace.c:362:1: note: '____bpf_trace_printk' declared here
-     362 | BPF_CALL_5(bpf_trace_printk, char *, fmt, u32, fmt_size, u64, arg1,
-         | ^
-   include/linux/filter.h:628:31: note: expanded from macro 'BPF_CALL_5'
-     628 | #define BPF_CALL_5(name, ...)   BPF_CALL_x(5, __NOATTR, name, __VA_ARGS__)
-         |                                 ^
-   include/linux/filter.h:612:6: note: expanded from macro 'BPF_CALL_x'
-     612 |         u64 ____##name(__BPF_MAP(x, __BPF_DECL_ARGS, __BPF_V, __VA_ARGS__));   \
-         |             ^
-   <scratch space>:110:1: note: expanded from here
-     110 | ____bpf_trace_printk
-         | ^
-   kernel/trace/bpf_trace.c:433:65: warning: diagnostic behavior may be improved by adding the 'format(printf, 1, 0)' attribute to the declaration of '____bpf_trace_vprintk' [-Wmissing-format-attribute]
-     415 |         ret = bstr_printf(data.buf, MAX_BPRINTF_BUF, fmt, data.bin_args);
-         |                                                                        ^
-   kernel/trace/bpf_trace.c:415:1: note: '____bpf_trace_vprintk' declared here
-     415 | BPF_CALL_4(bpf_trace_vprintk, char *, fmt, u32, fmt_size, const void *, args,
-         | ^
-   include/linux/filter.h:627:31: note: expanded from macro 'BPF_CALL_4'
-     627 | #define BPF_CALL_4(name, ...)   BPF_CALL_x(4, __NOATTR, name, __VA_ARGS__)
-         |                                 ^
-   include/linux/filter.h:612:6: note: expanded from macro 'BPF_CALL_x'
-     612 |         u64 ____##name(__BPF_MAP(x, __BPF_DECL_ARGS, __BPF_V, __VA_ARGS__));   \
-         |             ^
-   <scratch space>:127:1: note: expanded from here
-     127 | ____bpf_trace_vprintk
-         | ^
-   kernel/trace/bpf_trace.c:475:35: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 0)' attribute to the declaration of '____bpf_seq_printf' [-Wmissing-format-attribute]
-     458 |         seq_bprintf(m, fmt, data.bin_args);
-         |                                          ^
-   kernel/trace/bpf_trace.c:458:1: note: '____bpf_seq_printf' declared here
-     458 | BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_size,
-         | ^
-   include/linux/filter.h:628:31: note: expanded from macro 'BPF_CALL_5'
-     628 | #define BPF_CALL_5(name, ...)   BPF_CALL_x(5, __NOATTR, name, __VA_ARGS__)
-         |                                 ^
-   include/linux/filter.h:612:6: note: expanded from macro 'BPF_CALL_x'
-     612 |         u64 ____##name(__BPF_MAP(x, __BPF_DECL_ARGS, __BPF_V, __VA_ARGS__));   \
-         |             ^
-   <scratch space>:142:1: note: expanded from here
-     142 | ____bpf_seq_printf
-         | ^
-   4 warnings generated.
+   1 error generated.
 
 
-vim +/is_compat32_task +1106 include/linux/compat.h
+vim +1459 drivers/net/ethernet/intel/e100.c
 
-  1096	
-  1097	/*
-  1098	 * For most but not all architectures, "am I in a compat syscall?" and
-  1099	 * "am I a compat task?" are the same question.  For architectures on which
-  1100	 * they aren't the same question, arch code can override in_compat_syscall.
-  1101	 */
-  1102	#ifndef in_compat_syscall
-  1103	static inline bool in_compat_syscall(void) { return is_compat_task(); }
-  1104	#endif
-  1105	#ifndef CONFIG_COMPAT64
-> 1106	#define is_compat32_task() is_compat_task()
-  1107	#define is_compat64_task() (0)
-  1108	#endif
-  1109	#ifndef in_compat32_syscall
-  1110	static inline bool in_compat32_syscall(void) { return is_compat32_task(); }
-  1111	#endif
-  1112	#ifndef in_compat64_syscall
-  1113	static inline bool in_compat64_syscall(void) { return is_compat64_task(); }
-  1114	#endif
-  1115	
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1430  
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1431  #define NCONFIG_AUTO_SWITCH	0x0080
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1432  #define MII_NSC_CONG		MII_RESV1
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1433  #define NSC_CONG_ENABLE		0x0100
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1434  #define NSC_CONG_TXREADY	0x0400
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1435  static int e100_phy_init(struct nic *nic)
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1436  {
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1437  	struct net_device *netdev = nic->netdev;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1438  	u32 addr;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1439  	u16 bmcr, stat, id_lo, id_hi, cong;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1440  
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1441  	/* Discover phy addr by searching addrs in order {1,0,2,..., 31} */
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1442  	for (addr = 0; addr < 32; addr++) {
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1443  		nic->mii.phy_id = (addr == 0) ? 1 : (addr == 1) ? 0 : addr;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1444  		bmcr = mdio_read(netdev, nic->mii.phy_id, MII_BMCR);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1445  		stat = mdio_read(netdev, nic->mii.phy_id, MII_BMSR);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1446  		stat = mdio_read(netdev, nic->mii.phy_id, MII_BMSR);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1447  		if (!((bmcr == 0xFFFF) || ((stat == 0) && (bmcr == 0))))
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1448  			break;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1449  	}
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1450  	if (addr == 32) {
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1451  		/* uhoh, no PHY detected: check whether we seem to be some
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1452  		 * weird, rare variant which is *known* to not have any MII.
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1453  		 * But do this AFTER MII checking only, since this does
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1454  		 * lookup of EEPROM values which may easily be unreliable. */
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1455  		if (e100_phy_check_without_mii(nic))
+e95e8b2860fba4 drivers/net/ethernet/intel/e100.c Ashwin Gundarapu 2026-05-10  1456                          netif_dbg(nic, probe, nic->netdev,
+e95e8b2860fba4 drivers/net/ethernet/intel/e100.c Ashwin Gundarapu 2026-05-10  1457                                    "No MII PHY detected, continuing anyway\n");
+e95e8b2860fba4 drivers/net/ethernet/intel/e100.c Ashwin Gundarapu 2026-05-10  1458                          return 0;
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10 @1459  		else {
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1460  			/* for unknown cases log a fatal error */
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1461  			netif_err(nic, hw, nic->netdev,
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1462  				  "Failed to locate any known PHY, aborting\n");
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1463  			return -EAGAIN;
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1464  		}
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1465  	} else
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1466  		netif_printk(nic, hw, KERN_DEBUG, nic->netdev,
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1467  			     "phy_addr = %d\n", nic->mii.phy_id);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1468  
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1469  	/* Get phy ID */
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1470  	id_lo = mdio_read(netdev, nic->mii.phy_id, MII_PHYSID1);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1471  	id_hi = mdio_read(netdev, nic->mii.phy_id, MII_PHYSID2);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1472  	nic->phy = (u32)id_hi << 16 | (u32)id_lo;
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1473  	netif_printk(nic, hw, KERN_DEBUG, nic->netdev,
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1474  		     "phy ID = 0x%08X\n", nic->phy);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1475  
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1476  	/* Select the phy and isolate the rest */
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1477  	for (addr = 0; addr < 32; addr++) {
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1478  		if (addr != nic->mii.phy_id) {
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1479  			mdio_write(netdev, addr, MII_BMCR, BMCR_ISOLATE);
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1480  		} else if (nic->phy != phy_82552_v) {
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1481  			bmcr = mdio_read(netdev, addr, MII_BMCR);
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1482  			mdio_write(netdev, addr, MII_BMCR,
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1483  				bmcr & ~BMCR_ISOLATE);
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1484  		}
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1485  	}
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1486  	/*
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1487  	 * Workaround for 82552:
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1488  	 * Clear the ISOLATE bit on selected phy_id last (mirrored on all
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1489  	 * other phy_id's) using bmcr value from addr discovery loop above.
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1490  	 */
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1491  	if (nic->phy == phy_82552_v)
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1492  		mdio_write(netdev, nic->mii.phy_id, MII_BMCR,
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1493  			bmcr & ~BMCR_ISOLATE);
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1494  
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1495  	/* Handle National tx phys */
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1496  #define NCS_PHY_MODEL_MASK	0xFFF0FFFF
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1497  	if ((nic->phy & NCS_PHY_MODEL_MASK) == phy_nsc_tx) {
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1498  		/* Disable congestion control */
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1499  		cong = mdio_read(netdev, nic->mii.phy_id, MII_NSC_CONG);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1500  		cong |= NSC_CONG_TXREADY;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1501  		cong &= ~NSC_CONG_ENABLE;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1502  		mdio_write(netdev, nic->mii.phy_id, MII_NSC_CONG, cong);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1503  	}
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1504  
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1505  	if (nic->phy == phy_82552_v) {
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1506  		u16 advert = mdio_read(netdev, nic->mii.phy_id, MII_ADVERTISE);
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1507  
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1508  		/* assign special tweaked mdio_ctrl() function */
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1509  		nic->mdio_ctrl = mdio_ctrl_phy_82552_v;
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1510  
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1511  		/* Workaround Si not advertising flow-control during autoneg */
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1512  		advert |= ADVERTISE_PAUSE_CAP | ADVERTISE_PAUSE_ASYM;
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1513  		mdio_write(netdev, nic->mii.phy_id, MII_ADVERTISE, advert);
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1514  
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1515  		/* Reset for the above changes to take effect */
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1516  		bmcr = mdio_read(netdev, nic->mii.phy_id, MII_BMCR);
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1517  		bmcr |= BMCR_RESET;
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1518  		mdio_write(netdev, nic->mii.phy_id, MII_BMCR, bmcr);
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1519  	} else if ((nic->mac >= mac_82550_D102) || ((nic->flags & ich) &&
+60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1520  	   (mdio_read(netdev, nic->mii.phy_id, MII_TPISTATUS) & 0x8000) &&
+d4ef55288aa2e1 drivers/net/ethernet/intel/e100.c Jesse Brandeburg 2021-03-25  1521  	   (le16_to_cpu(nic->eeprom[eeprom_cnfg_mdix]) & eeprom_mdix_enabled))) {
+60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1522  		/* enable/disable MDI/MDI-X auto-switching. */
+60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1523  		mdio_write(netdev, nic->mii.phy_id, MII_NCONFIG,
+60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1524  				nic->mii.force_media ? 0 : NCONFIG_AUTO_SWITCH);
+648951451e6d2d drivers/net/e100.c                Malli Chilakala  2005-06-17  1525  	}
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1526  
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1527  	return 0;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1528  }
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1529  
 
 --
 0-DAY CI Kernel Test Service
