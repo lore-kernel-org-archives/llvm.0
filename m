@@ -1,134 +1,401 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2CAC2BDC32
-	for <llvm@lists.linux.dev>; Thu, 21 May 2026 17:57:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B76E384235;
+	Thu, 21 May 2026 18:19:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779386257; cv=none; b=ltZqc+42wYcH2L1v3CB+NeNmwC1VOEKky/MpOyOG+QRBnNE6ShqBjjsdgqhM2Kzda3k1m/8e5sA/wgKsIEhl4zfjAC5mIybI6DPdDuK6DYnWjGWY6HDoyQdVYcxn1qGwhC77ORxID0sCtHY7eua9ruDaJScSygzTG7dqdYnFuL0=
+	t=1779387559; cv=none; b=NdguWi2Vp5aBsMMODpq6r4ALnpymOwrnRayX1oBHCNNq978S5zVai01cDJuF2tBq9UlW6I7OgoBF2HLkvEiGnQZipy4tPimstCTfS+jpHOQ5RiWLRBRvJtNz/1FkUDO4G9PvmOGw7lbiEmp6YDKUextd8kKYuKUtxrZ7N5NWEK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779386257; c=relaxed/simple;
-	bh=fhMJeEtf48wfhs6WEzw9JIhUEyLqIW3ueZckmjfjmb8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PLigWRlMcex7C8Bs+0ruNnSnjL0W2/aAuvxg0tPdwwWd+2cadX3NkVEkAF1KNYZqnvP7X3RCjNf5oX0dx49y/cxaIKZEkpbLtiI2/a3C90OBYbDLrJIbl/zUuyPYoNLPUKG4IuNyh9pt+vj7VuNmu2hlprFTk6xt59nZyF+vTAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZfqDSgWU; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779387559; c=relaxed/simple;
+	bh=v4tDeBnkfAJ1lOfGR6SPqL5lXOGOD9HkoZChjFoNKic=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Y7i0I3qZH63waypzVA2K1v7oxImL8qM30HwV4sAPk8iidiLLcd1/IYgbPEX0pDYEPgKJjxy2EFfRuT6q3cku8hqQQrsug8whCGwkrfSBPWH37DBPoLscD2dsVR4L2d2ZhuO7CZCeWIh5SRJApAyBy6hhuK5YAzL0UpCEFP0DDio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KjxTygp+; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZfqDSgWU"
-Message-ID: <2672f790-f57b-4739-b78f-906c0a5d202e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779386252;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vB7y4Z6fBlVyLn2Op9km7+Z416nX/TCNl4lHmjXL0HI=;
-	b=ZfqDSgWUHUkyNQ0BJiz7SmT0HDBMN7Wc82BEL5n49pZOEQAgBtTuY7eGowJvMP0Udqt0ah
-	RTAbnb3cUp6A4VXSrTBeK4QVHWh4FhLHHrGArYtvetPiXkncvQB2Y9m9hroRVLjouxcI+d
-	giNQS86U1wRotv1fMClcgNjAzFhtlsA=
-Date: Thu, 21 May 2026 10:57:19 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KjxTygp+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779387555; x=1810923555;
+  h=date:from:to:cc:subject:message-id;
+  bh=v4tDeBnkfAJ1lOfGR6SPqL5lXOGOD9HkoZChjFoNKic=;
+  b=KjxTygp+FIMhT9/23CvazJzuQt8MknMjyayUvqiJFK1K0VYhySKaJ1oN
+   khI2HqOI9c7zkydRo3BLsEYZfq8AnMSFQALLNjmepgjchQF6TwGH+sp9d
+   GpPtWvGcTD/dmxXstH5SLUk7MMVa/Ij0kds7UqRfP6pjI2Naqbr8aucrt
+   H7Wj6lg8yyqMbkTzgtEg+Qr0z00cBFSUvhXLPoA8mHQuVBnXlipyrBvCx
+   c+2afYiH22rYd/512+DfLCmH77y0WQbIWAectxY/YJJPD0qUulFU1KgT2
+   JlcmECI7OLhLJahs6DgBALVqYGb1QI3W8x+/ZyWjDPeyzU7jRr5o6EIFC
+   w==;
+X-CSE-ConnectionGUID: GW7srOEoTxOp+PzmAaCr8A==
+X-CSE-MsgGUID: 4PvcMwAGQY2SBPNF1ppveQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11793"; a="90609220"
+X-IronPort-AV: E=Sophos;i="6.24,160,1774335600"; 
+   d="scan'208";a="90609220"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 11:19:14 -0700
+X-CSE-ConnectionGUID: o6ioXj9vTG2s/cqhuJoM6g==
+X-CSE-MsgGUID: XF9YGVBeRDqYHUMu0BZmtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,160,1774335600"; 
+   d="scan'208";a="244871713"
+Received: from lkp-server01.sh.intel.com (HELO fdb68b0ce653) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 21 May 2026 11:19:13 -0700
+Received: from kbuild by fdb68b0ce653 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wQ7zC-000000000xx-2phE;
+	Thu, 21 May 2026 18:19:10 +0000
+Date: Fri, 22 May 2026 02:18:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linux-next:master 5302/7547] fs/open.c:152:1: error:
+ unknown warning group '-Wattribute-alias', ignored
+Message-ID: <202605220247.dQAHslyv-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Subject: Re: [PATCH v9 3/3] kbuild: distributed build support for Clang
- ThinLTO
-Content-Language: en-GB
-To: Nathan Chancellor <nathan@kernel.org>, xur@google.com
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Miguel Ojeda <ojeda@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Alice Ryhl <aliceryhl@google.com>, Sami Tolvanen <samitolvanen@google.com>,
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
- Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Stafford Horne <shorne@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Piotr Gorski <piotrgorski@cachyos.org>,
- Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
- Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-References: <20260331154827.2793269-1-xur@google.com>
- <20260331154827.2793269-4-xur@google.com> <20260331162729.GA2006419@ax162>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260331162729.GA2006419@ax162>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   550604d6c9b9efc8d068aff94dc301694a7afdee
+commit: bc5ffe737f56ee2734597069ed71f48830549483 [5302/7547] Disable -Wattribute-alias for clang-23 and newer
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20260522/202605220247.dQAHslyv-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260522/202605220247.dQAHslyv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605220247.dQAHslyv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/open.c:152:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     152 | SYSCALL_DEFINE2(truncate, const char __user *, path, long, length)
+         | ^
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:223:27: note: expanded from here
+     223 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/open.c:209:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     209 | SYSCALL_DEFINE2(ftruncate, unsigned int, fd, off_t, length)
+         | ^
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:35:27: note: expanded from here
+      35 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/open.c:223:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     223 | SYSCALL_DEFINE2(truncate64, const char __user *, path, loff_t, length)
+         | ^
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:68:27: note: expanded from here
+      68 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/open.c:228:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     228 | SYSCALL_DEFINE2(ftruncate64, unsigned int, fd, loff_t, length)
+         | ^
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:101:27: note: expanded from here
+     101 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/open.c:365:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     365 | SYSCALL_DEFINE4(fallocate, int, fd, int, mode, loff_t, offset, loff_t, len)
+         | ^
+   include/linux/syscalls.h:228:36: note: expanded from macro 'SYSCALL_DEFINE4'
+     228 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+--
+>> fs/read_write.c:412:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     412 | SYSCALL_DEFINE3(lseek, unsigned int, fd, off_t, offset, unsigned int, whence)
+         | ^
+   include/linux/syscalls.h:227:36: note: expanded from macro 'SYSCALL_DEFINE3'
+     227 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:46:27: note: expanded from here
+      46 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/read_write.c:426:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     426 | SYSCALL_DEFINE5(llseek, unsigned int, fd, unsigned long, offset_high,
+         | ^
+   include/linux/syscalls.h:229:36: note: expanded from macro 'SYSCALL_DEFINE5'
+     229 | #define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:80:27: note: expanded from here
+      80 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/read_write.c:724:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     724 | SYSCALL_DEFINE3(read, unsigned int, fd, char __user *, buf, size_t, count)
+         | ^
+   include/linux/syscalls.h:227:36: note: expanded from macro 'SYSCALL_DEFINE3'
+     227 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:32:27: note: expanded from here
+      32 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/read_write.c:748:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     748 | SYSCALL_DEFINE3(write, unsigned int, fd, const char __user *, buf,
+         | ^
+   include/linux/syscalls.h:227:36: note: expanded from macro 'SYSCALL_DEFINE3'
+     227 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:72:27: note: expanded from here
+      72 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/read_write.c:770:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     770 | SYSCALL_DEFINE4(pread64, unsigned int, fd, char __user *, buf,
+         | ^
+   include/linux/syscalls.h:228:36: note: expanded from macro 'SYSCALL_DEFINE4'
+     228 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+--
+>> fs/stat.c:505:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     505 | SYSCALL_DEFINE2(newstat, const char __user *, filename,
+         | ^
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:119:27: note: expanded from here
+     119 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/stat.c:518:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     518 | SYSCALL_DEFINE2(newlstat, const char __user *, filename,
+         | ^
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:18:27: note: expanded from here
+      18 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/stat.c:546:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     546 | SYSCALL_DEFINE2(newfstat, unsigned int, fd, struct stat __user *, statbuf)
+         | ^
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:51:27: note: expanded from here
+      51 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/stat.c:596:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     596 | SYSCALL_DEFINE4(readlinkat, int, dfd, const char __user *, pathname,
+         | ^
+   include/linux/syscalls.h:228:36: note: expanded from macro 'SYSCALL_DEFINE4'
+     228 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+     135 | #define __diag_clang_23(s)      __diag(s)
+         |                                 ^
+   include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+     132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+         |                                 ^
+   <scratch space>:92:27: note: expanded from here
+      92 |  clang diagnostic ignored "-Wattribute-alias"
+         |                           ^
+   fs/stat.c:602:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+     602 | SYSCALL_DEFINE3(readlink, const char __user *, path, char __user *, buf,
+         | ^
+   include/linux/syscalls.h:227:36: note: expanded from macro 'SYSCALL_DEFINE3'
+     227 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+     250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+         |         ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+..
 
 
+vim +152 fs/open.c
 
-On 3/31/26 9:27 AM, Nathan Chancellor wrote:
-> Hi Rong,
->
-> On Tue, Mar 31, 2026 at 03:48:27PM +0000, xur@google.com wrote:
->> diff --git a/Makefile b/Makefile
->> index 69ccf9b8507d..26005c64016d 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -1047,11 +1047,13 @@ export CC_FLAGS_SCS
->>   endif
->>   
->>   ifdef CONFIG_LTO_CLANG
->> -ifdef CONFIG_LTO_CLANG_THIN
->> +ifdef CONFIG_LTO_CLANG_FULL
->> +CC_FLAGS_LTO	:= -flto
->> +else
->>   CC_FLAGS_LTO	:= -flto=thin -fsplit-lto-unit
->> +if CONFIG_LTO_CLANG_THIN
-> This should be an 'ifdef', not an 'if'. You copied Yonghong's mistake:
->
->    https://lore.kernel.org/abgRRX3PH9IaExi8@sirena.org.uk/
->    https://lore.kernel.org/6db3a2f6-d61c-42f1-9b9d-0aca021cc2d7@linux.dev/
->
-> Please slow down and test build your changes before sending them. Each
-> revision adds four new emails to everyone's inbox, which is just noise
-> when there are obvious, basic problems. 'b4 diff' shows no actual
-> difference from v8 and v9, which should have been caught by a simple
-> build test right before 'git send-email'.
->
->>   KBUILD_LDFLAGS += $(call ld-option,--lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false)
->> -else
->> -CC_FLAGS_LTO	:= -flto
->> +endif
+^1da177e4c3f415 Linus Torvalds    2005-04-16  151  
+4fd8da8d62416d0 Heiko Carstens    2009-09-23 @152  SYSCALL_DEFINE2(truncate, const char __user *, path, long, length)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  153  {
+e8767a3134ca69a Christoph Hellwig 2026-03-23  154  	return ksys_truncate(path, length);
+^1da177e4c3f415 Linus Torvalds    2005-04-16  155  }
+^1da177e4c3f415 Linus Torvalds    2005-04-16  156  
 
-The above patch has a guard CONFIG_LTO_CLANG_THIN, which can be removed.
-See llvm patch
-    https://github.com/llvm/llvm-project/pull/188074
-which supports distributed thin-lto mode too for reducing the number
-of renaming. In other words, for llvm23, both in-process and
-distributed-process are supported for thin-lto.
+:::::: The code at line 152 was first introduced by commit
+:::::: 4fd8da8d62416d0dae05603ab5990a498d9aeb12 fs: change sys_truncate length parameter type
 
->>   endif
->>   CC_FLAGS_LTO	+= -fvisibility=hidden
->>   
->> @@ -1657,6 +1659,7 @@ endif # CONFIG_MODULES
->>   CLEAN_FILES += vmlinux.symvers modules-only.symvers \
->>   	       modules.builtin modules.builtin.modinfo modules.nsdeps \
->>   	       modules.builtin.ranges vmlinux.o.map vmlinux.unstripped \
->> +	       vmlinux.thinlto-index builtin.order \
->>   	       compile_commands.json rust/test \
->>   	       rust-project.json .vmlinux.objs .vmlinux.export.c \
->>                  .builtin-dtbs-list .builtin-dtb.S
->> @@ -2118,7 +2121,7 @@ clean: $(clean-dirs)
->>   	$(call cmd,rmfiles)
->>   	@find . $(RCS_FIND_IGNORE) \
->>   		\( -name '*.[aios]' -o -name '*.rsi' -o -name '*.ko' -o -name '.*.cmd' \
->> -		-o -name '*.ko.*' \
->> +		-o -name '*.ko.*' -o -name '*.o.thinlto.bc' \
->>   		-o -name '*.dtb' -o -name '*.dtbo' \
->>   		-o -name '*.dtb.S' -o -name '*.dtbo.S' \
->>   		-o -name '*.dt.yaml' -o -name 'dtbs-list' \
-> With that addressed above, the series survives my basic LLVM 22.1.2
-> build test with my distribution configuration. I'll provide formal tags
-> on a properly tested and fixed revision.
->
-> Cheers,
-> Nathan
+:::::: TO: Heiko Carstens <heiko.carstens@de.ibm.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
