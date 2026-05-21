@@ -1,179 +1,159 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542EB36895D
-	for <llvm@lists.linux.dev>; Thu, 21 May 2026 21:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01311356756;
+	Thu, 21 May 2026 22:14:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779400642; cv=none; b=lbOLMuENtiVZd6WpghrYObk/oDvSUlZ1mR7pGetIv58JoEXdunSq/+U80MTwZn63p04cM2N47N78b1Gcp7Q5lKKK8B6NncFrNX9bogW2i92Fi//lK0GL+DV0fysQJ0hJPq0vdTEXTnN3D9wl6W0yu/UEbdkaEh5nmmmFrMBkNkA=
+	t=1779401685; cv=none; b=bxx91nAsLSsmDGXbX29nQKjpI5iMvheMdbsjHZfRu6fMaBEzLGRhEYZJeb+yggV6zXVHwBVfohrziN8YoSCnHF6LBhVUU8WrUn3HYZI+QsOO89BC1PuKxObP2/ns1MiJGIE7+qyRbwcMigEI3nPZ8/HOwf+HBVQHSIi7kdiLmN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779400642; c=relaxed/simple;
-	bh=dN/Ouz6Gx8zRex/mSWQGh1HUKwndLo3j/QXe5RFa3tY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sGvYyhJdbRlFtICYMJiYD824Gx2NQtQP0gtt0cik+DAM3ng/Hc+KfwjQ+GLFg5By3kDzI6uQ/0OcGBxizs1XXlkWlIqCW0bNzQ5ZIU0pFiKC/2EBaVqv9UOpryiQRXNUF1wBJVjge5uh+tjzEI7H4xDI+woXa+siAY8YPwZNMM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pD9gP2P0; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779401685; c=relaxed/simple;
+	bh=jjjeLch0HCMRatmlxcDE2irwQannTRXB+eS0znvfkZQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=novJY3fP5PQtENSslXOcvflpGf37x/QFUW2yk1eiJEQbMZjoDC8Jm2HLzR4ug/T2m3oBk61Du/8pUxhuc57RROx027PGyi/yud202OExYCq1AAzYtcaZN/f6F9tUmIOzuiDP2+pASchGMdNUsysqwNLJa1nLz09p0tfpYINXWaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OBnNnMSK; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pD9gP2P0"
-Message-ID: <69e60bc9-cfe6-4b8d-b61b-5840f7d2518a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779400636;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xQNkuJH7kA7sCyQjsW5bf2RbZYI8pGmnGfg1gJiQndM=;
-	b=pD9gP2P0WdkGMFY/FVC1Tg6P2SVsQQLvdvUghngqUPSVAO1najrfQNsFUOSZYbdV6mC2Fw
-	Jpt7XlQAiOfg0MLGeVhN4dlVAQcWsZMyPBPsUvGAjdph9CJZvzyFaFt/mD3tu5FjOMncdn
-	xiJlRHczpMgEMSXVTdQilHvrHC2oeT4=
-Date: Thu, 21 May 2026 14:56:53 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OBnNnMSK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779401684; x=1810937684;
+  h=date:from:to:cc:subject:message-id;
+  bh=jjjeLch0HCMRatmlxcDE2irwQannTRXB+eS0znvfkZQ=;
+  b=OBnNnMSK/peNaOZVOMyJM18XSl2JtR4jGEKUzwMpRZbvfryEPw23tPhC
+   C/0NiU/FSRPoIBqsEMEPYtxxFciduFM5HB7A2Y1j84Zbxfir7WkNslkez
+   jkt/6QrAYDM7qiQjJgYlMPTP7N9y10FOsTWJwU5iVxSAh4qyIIz4BduDa
+   tnOQuu32QOZVwafFutIqu7icAA/164sJAaH82fuE4viNj0HHJGprX1inI
+   xvqIExq+m5xrmzx3KDPn0b81rF2DIwCmWhIQl443EZWFNqglQ1iaHdQ8C
+   D6iRCqSPh6q7nzfcx+5+8UUofWFvbu8v8IhFp+RU18jTrfniTDWZIE2Lp
+   g==;
+X-CSE-ConnectionGUID: SDIjxRZzS3eNafz1jSnMdw==
+X-CSE-MsgGUID: MZL+Kj3xRPSmJV7HOmXRVg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11793"; a="90906687"
+X-IronPort-AV: E=Sophos;i="6.24,161,1774335600"; 
+   d="scan'208";a="90906687"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 15:14:43 -0700
+X-CSE-ConnectionGUID: E/rHvAICSKeI/QLChFDLnw==
+X-CSE-MsgGUID: AX4CEXiwSDqZXPwMbfgOIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,161,1774335600"; 
+   d="scan'208";a="264476422"
+Received: from lkp-server01.sh.intel.com (HELO fdb68b0ce653) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 21 May 2026 15:14:42 -0700
+Received: from kbuild by fdb68b0ce653 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wQBf5-000000001FX-0GYh;
+	Thu, 21 May 2026 22:14:39 +0000
+Date: Fri, 22 May 2026 06:14:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Harry Wentland <harry.wentland@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Alex Deucher <alexander.deucher@amd.com>, Alex Hung <alex.hung@amd.com>
+Subject: [linux-next:master 5774/7547]
+ drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:2353:9: error: call to
+ undeclared function 'cpu_data'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202605220631.ugDr2VPb-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Subject: Re: [PATCH v9 3/3] kbuild: distributed build support for Clang
- ThinLTO
-Content-Language: en-GB
-To: Rong Xu <xur@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Miguel Ojeda <ojeda@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Alice Ryhl <aliceryhl@google.com>, Sami Tolvanen <samitolvanen@google.com>,
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
- Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Stafford Horne <shorne@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Piotr Gorski <piotrgorski@cachyos.org>,
- Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
- Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-References: <20260331154827.2793269-1-xur@google.com>
- <20260331154827.2793269-4-xur@google.com> <20260331162729.GA2006419@ax162>
- <2672f790-f57b-4739-b78f-906c0a5d202e@linux.dev>
- <CAF1bQ=R6=0G9O-eNFsHiCLMpkph7=hSu4Rn_HjFD4PvTFnAnDQ@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAF1bQ=R6=0G9O-eNFsHiCLMpkph7=hSu4Rn_HjFD4PvTFnAnDQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+
+Hi Harry,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   550604d6c9b9efc8d068aff94dc301694a7afdee
+commit: af3f2f5db2659a13c256d2fb096c473eb50412ef [5774/7547] drm/amdgpu: Remove UML build exclusion from Kconfig
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260522/202605220631.ugDr2VPb-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260522/202605220631.ugDr2VPb-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605220631.ugDr2VPb-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:26:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:2353:9: error: call to undeclared function 'cpu_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2353 |         return cpu_data(first_cpu_of_numa_node).topo.apicid;
+         |                ^
+>> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:2353:41: error: member reference base type 'int' is not a structure or union
+    2353 |         return cpu_data(first_cpu_of_numa_node).topo.apicid;
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:24:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1830:27: error: call to undeclared function 'cpu_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1830 |         struct cpuinfo_x86 *c = &cpu_data(0);
+         |                                  ^
+>> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1830:26: error: cannot take the address of an rvalue of type 'int'
+    1830 |         struct cpuinfo_x86 *c = &cpu_data(0);
+         |                                 ^~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1833:7: error: incomplete definition of type 'struct cpuinfo_x86'
+    1833 |         if (c->x86_vendor == X86_VENDOR_AMD)
+         |             ~^
+   drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1830:9: note: forward declaration of 'struct cpuinfo_x86'
+    1830 |         struct cpuinfo_x86 *c = &cpu_data(0);
+         |                ^
+>> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1833:23: error: use of undeclared identifier 'X86_VENDOR_AMD'
+    1833 |         if (c->x86_vendor == X86_VENDOR_AMD)
+         |                              ^
+   1 warning and 4 errors generated.
 
 
+vim +/cpu_data +2353 drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c
 
-On 5/21/26 11:31 AM, Rong Xu wrote:
-> Yonghong, thanks for the update.
->
-> Regarding this guard: ther is a period of Clang (before this patch and
-> after your first patch), even though ld.lld having these options
-> (specifically --lto-whole-program-visibility -mllvm
-> -always-rename-promoted-locals=false), distributed ThinLTO mode
-> remains unsupported, correct? What the behvior of using this options
-> in distributed mode with these compilers? nop or it will lead to
-> error?
+851a645efd0fee Felix Kuehling  2017-11-27  2342  
+520b8fb755ccfb Felix Kuehling  2017-12-08  2343  static int kfd_cpumask_to_apic_id(const struct cpumask *cpumask)
+520b8fb755ccfb Felix Kuehling  2017-12-08  2344  {
+520b8fb755ccfb Felix Kuehling  2017-12-08  2345  	int first_cpu_of_numa_node;
+520b8fb755ccfb Felix Kuehling  2017-12-08  2346  
+520b8fb755ccfb Felix Kuehling  2017-12-08  2347  	if (!cpumask || cpumask == cpu_none_mask)
+520b8fb755ccfb Felix Kuehling  2017-12-08  2348  		return -1;
+520b8fb755ccfb Felix Kuehling  2017-12-08  2349  	first_cpu_of_numa_node = cpumask_first(cpumask);
+520b8fb755ccfb Felix Kuehling  2017-12-08  2350  	if (first_cpu_of_numa_node >= nr_cpu_ids)
+520b8fb755ccfb Felix Kuehling  2017-12-08  2351  		return -1;
+df1dd4f4a7271e Felix Kuehling  2019-01-02  2352  #ifdef CONFIG_X86_64
+b9655e702dc5d8 Thomas Gleixner 2023-08-14 @2353  	return cpu_data(first_cpu_of_numa_node).topo.apicid;
+df1dd4f4a7271e Felix Kuehling  2019-01-02  2354  #else
+df1dd4f4a7271e Felix Kuehling  2019-01-02  2355  	return first_cpu_of_numa_node;
+df1dd4f4a7271e Felix Kuehling  2019-01-02  2356  #endif
+520b8fb755ccfb Felix Kuehling  2017-12-08  2357  }
+520b8fb755ccfb Felix Kuehling  2017-12-08  2358  
 
-The in-process thin-lto support is landed on Feb 27.
-The distributed thin-lto support is landed on Apr 24.
+:::::: The code at line 2353 was first introduced by commit
+:::::: b9655e702dc5d856e5e05ae414b71708ca98b30c x86/cpu: Encapsulate topology information in cpuinfo_x86
 
-If people are using distributed thin-lto in kernel between Feb 27 and
-Apr 24, there will be some issues. But people typically use released
-compiler, so we should be fine.
+:::::: TO: Thomas Gleixner <tglx@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
->
-> I would assume there will be errors; otherwise, you would not ask me
-> to change my patch last time. In this case, I would keep this guard
-> and remove it when the minimum llvm version passes llvm23. What do you
-> think?
-
-There is no need to keep compiler version guard.
-
-Before llvm23, the below will be a noop:
-    $(call ld-option,--lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false)
-since '-mllvm -always-rename-promoted-locals=false' is a new flag and the compiler won't
-recognize it so the kernel will resolve above 'call ...' option as noop.
-
-With llvm23 and later, the kernel will be able to recognize above options and
-things should be okay.
-
->
-> Best,
->
-> -Rong
->
->
-> On Thu, May 21, 2026 at 1:57 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->>
->>
->> On 3/31/26 9:27 AM, Nathan Chancellor wrote:
->>> Hi Rong,
->>>
->>> On Tue, Mar 31, 2026 at 03:48:27PM +0000, xur@google.com wrote:
->>>> diff --git a/Makefile b/Makefile
->>>> index 69ccf9b8507d..26005c64016d 100644
->>>> --- a/Makefile
->>>> +++ b/Makefile
->>>> @@ -1047,11 +1047,13 @@ export CC_FLAGS_SCS
->>>>    endif
->>>>
->>>>    ifdef CONFIG_LTO_CLANG
->>>> -ifdef CONFIG_LTO_CLANG_THIN
->>>> +ifdef CONFIG_LTO_CLANG_FULL
->>>> +CC_FLAGS_LTO        := -flto
->>>> +else
->>>>    CC_FLAGS_LTO       := -flto=thin -fsplit-lto-unit
->>>> +if CONFIG_LTO_CLANG_THIN
->>> This should be an 'ifdef', not an 'if'. You copied Yonghong's mistake:
->>>
->>>     https://lore.kernel.org/abgRRX3PH9IaExi8@sirena.org.uk/
->>>     https://lore.kernel.org/6db3a2f6-d61c-42f1-9b9d-0aca021cc2d7@linux.dev/
->>>
->>> Please slow down and test build your changes before sending them. Each
->>> revision adds four new emails to everyone's inbox, which is just noise
->>> when there are obvious, basic problems. 'b4 diff' shows no actual
->>> difference from v8 and v9, which should have been caught by a simple
->>> build test right before 'git send-email'.
->>>
->>>>    KBUILD_LDFLAGS += $(call ld-option,--lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false)
->>>> -else
->>>> -CC_FLAGS_LTO        := -flto
->>>> +endif
->> The above patch has a guard CONFIG_LTO_CLANG_THIN, which can be removed.
->> See llvm patch
->>      https://github.com/llvm/llvm-project/pull/188074
->> which supports distributed thin-lto mode too for reducing the number
->> of renaming. In other words, for llvm23, both in-process and
->> distributed-process are supported for thin-lto.
->>
->>>>    endif
->>>>    CC_FLAGS_LTO       += -fvisibility=hidden
->>>>
->>>> @@ -1657,6 +1659,7 @@ endif # CONFIG_MODULES
->>>>    CLEAN_FILES += vmlinux.symvers modules-only.symvers \
->>>>              modules.builtin modules.builtin.modinfo modules.nsdeps \
->>>>              modules.builtin.ranges vmlinux.o.map vmlinux.unstripped \
->>>> +           vmlinux.thinlto-index builtin.order \
->>>>              compile_commands.json rust/test \
->>>>              rust-project.json .vmlinux.objs .vmlinux.export.c \
->>>>                   .builtin-dtbs-list .builtin-dtb.S
->>>> @@ -2118,7 +2121,7 @@ clean: $(clean-dirs)
->>>>       $(call cmd,rmfiles)
->>>>       @find . $(RCS_FIND_IGNORE) \
->>>>               \( -name '*.[aios]' -o -name '*.rsi' -o -name '*.ko' -o -name '.*.cmd' \
->>>> -            -o -name '*.ko.*' \
->>>> +            -o -name '*.ko.*' -o -name '*.o.thinlto.bc' \
->>>>               -o -name '*.dtb' -o -name '*.dtbo' \
->>>>               -o -name '*.dtb.S' -o -name '*.dtbo.S' \
->>>>               -o -name '*.dt.yaml' -o -name 'dtbs-list' \
->>> With that addressed above, the series survives my basic LLVM 22.1.2
->>> build test with my distribution configuration. I'll provide formal tags
->>> on a properly tested and fixed revision.
->>>
->>> Cheers,
->>> Nathan
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
