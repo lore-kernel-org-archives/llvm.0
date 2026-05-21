@@ -1,57 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD7D344044;
-	Thu, 21 May 2026 15:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FC330EF95;
+	Thu, 21 May 2026 16:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779379077; cv=none; b=NQF2mJ39OQ71PzDdaBNcG/MF4osRBk9b8ND/SR9DZpYHaEjqR2i2Ap4dMKjVyNBwIxfRHcctgDGP+L5SJ6w2+t+yjE19ezkYQMQ6d5p7/I3FVVSxAWHku1IdScpA0DjON+YZYpkhk7xBSs2dxvejDv1XdojpVSdLY4CEnXMqv5g=
+	t=1779379928; cv=none; b=lZeb55pvXoYCYxzLsEXfO8EJJLAr9IO3a9uNZOmopGdutX/455tSjcaquzg5A1kWcvCCcLRDwusmwPItPb8kehxdBhUbvqHvgcVMwICtJr05OLSI9mVFFif27+GWSVnm1p+U8jZXIkFg8Bvj/Nedf8xfJB2HPBY2GANd2ali38U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779379077; c=relaxed/simple;
-	bh=muNcK3GoaRe3SzgbidU2qQPIT1qEYK3lvjp7SyXTFnI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=JZTCeXNG8JmZ5ORTcrpwN/Wj5Ifnzlcx6bJrq24wxv/BvyVCWSTOKvvxMBMcr//8D6kmBycwMY2eEEqw39bC8VCqIbWXoPWHzaOy3lZOqzPN3OOZfFmg9DwGFUuuDnx/lefvXnA5WCv8uATzDlww0HpFjGBNJBA+Cytodr7hro8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I+IDUptC; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1779379928; c=relaxed/simple;
+	bh=11NXiQbScHt7Qe+mC8n1AMv90obBf1oZDyqyIriqbSY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ZFl3g1KTkAQIeouU1nDhs0ZtYUPsBJ8O9rLRR9uDULWm1UZRtDy/GZpGK+CsgP0o87G1rkoOnGT72/PHLzLImFbz+gy2MCyWmxDtlW7OT3gBMtcsClKK2wW8ttU60qd82fKBOScjgJmhu9k4z7vVl6RedUBx1zBFctri9UUnGBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FloEmZZj; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I+IDUptC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FloEmZZj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779379075; x=1810915075;
+  t=1779379928; x=1810915928;
   h=date:from:to:cc:subject:message-id;
-  bh=muNcK3GoaRe3SzgbidU2qQPIT1qEYK3lvjp7SyXTFnI=;
-  b=I+IDUptCrgFZ1tHBQcIHwNQ44Tya2NK35/FbQysLuKVxfzbEdJkkEEb4
-   gCOfelbTDgOsPViAWQtT2MbqyU5D6F0rrMdw5K2dvS82YX8lsPDeOAU63
-   BxIX2P80Hbyqi/eLTbVZEvCGAW0hGZP+4BhtOgbGw7r2BlawvyMLwGjAn
-   EUctu+v/sD2OJFQTNXM172213sHB96eWbPnySq55ZxPxr8Reaky5Uq2i5
-   uYm5x5eJ3jr5MYzd+Valxqw8rGUVnkMsljaEMslytKIMIdGMuYVh9JnIz
-   B0a8ZBrjZj3XclXoaAqH8j+dEUOsvR/4htij01STLTs1sO/S0YRiaic1s
+  bh=11NXiQbScHt7Qe+mC8n1AMv90obBf1oZDyqyIriqbSY=;
+  b=FloEmZZjUFfJZ/sDsF0r9ZaZN0L6UMy5QSLOULJXJBgnyXHVh9psZU+L
+   Y7zW4rSgEah2IFtV1RXhT8upN1r1Nyv9sdRW3kywDbHA1g0/qGeCN6Ke2
+   w351GAwWu+6Ajq4MzWa0r8/1jffbw79/QY+E7s2DovBRC7TZUCxAxF1qi
+   liH0tFdl9mzGJuhhIF8lzY5iUuVCz17AGWcSvTJ9yUnDedNsqtxNh6RRs
+   t08rLnaZDAUWIPjEZmKzJiVPk0Vk5NaSS/sibyMn6N+xoTB056BGDWAsR
+   686lNpBqHWwFZEUp2uNcNpT1gVW4Pj7lsT7oISj7RZgHMpe2EgoLWzmkk
    g==;
-X-CSE-ConnectionGUID: ezx20ltPSr6Hs0k+tXenBw==
-X-CSE-MsgGUID: zYmFFpfzTOGYJVAE0AFLWQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11793"; a="105762064"
+X-CSE-ConnectionGUID: lq7pihUITf6HzEYVXrV1YA==
+X-CSE-MsgGUID: 8pDDlBsqTn6JwA2I6O0EvQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11793"; a="80269600"
 X-IronPort-AV: E=Sophos;i="6.24,160,1774335600"; 
-   d="scan'208";a="105762064"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 08:57:55 -0700
-X-CSE-ConnectionGUID: bORzRU83RratY6Ezy8jZkw==
-X-CSE-MsgGUID: kOBbVmfaSXqDtvnPF7Fbdg==
+   d="scan'208";a="80269600"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 09:12:07 -0700
+X-CSE-ConnectionGUID: V2PhT261S/y4XS/wKjfa/A==
+X-CSE-MsgGUID: P0f9JHB2Twy6KQs93GUy5w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,160,1774335600"; 
-   d="scan'208";a="236315740"
-Received: from lkp-server01.sh.intel.com (HELO fdb68b0ce653) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 21 May 2026 08:57:53 -0700
-Received: from kbuild by fdb68b0ce653 with local (Exim 4.98.2)
+   d="scan'208";a="278678144"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa001.jf.intel.com with ESMTP; 21 May 2026 09:12:05 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wQ5mR-000000000jb-1F5M;
-	Thu, 21 May 2026 15:57:51 +0000
-Date: Thu, 21 May 2026 23:57:06 +0800
+	id 1wQ609-00000000AyL-3wZ3;
+	Thu, 21 May 2026 16:12:01 +0000
+Date: Thu, 21 May 2026 18:11:38 +0200
 From: kernel test robot <lkp@intel.com>
-To: Christian Ehrhardt <christian.ehrhardt@codasip.com>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [scosu-sched:topic/mmap-cap-prot-wip/v6.18 524/1130]
- mm/vma.c:2982:11: error: use of undeclared identifier 'ERESERVATION'
-Message-ID: <202605212349.VjWqdKUF-lkp@intel.com>
+Subject: [mhiramat:topic/ring-buffer-bootid 4/4]
+ kernel/trace/trace.c:5842:1: error: function definition is not allowed here
+Message-ID: <202605211823.ejyoDwBk-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,83 +59,111 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/scosu/linux-sched topic/mmap-cap-prot-wip/v6.18
-head:   f69a5a9d9fee15edde28429e23a4c749a59937bd
-commit: 134d750606527b5b0550a144e1d8012dc7ea0020 [524/1130] [CHERRY-PICK] fs/exec: Create a stack reservation in PCuABI
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260521/202605212349.VjWqdKUF-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260521/202605212349.VjWqdKUF-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/ring-buffer-bootid
+head:   11c7f327c260ca2dd626cb8e242b1aed41959caf
+commit: 11c7f327c260ca2dd626cb8e242b1aed41959caf [4/4] tracing: Record and show boot ID in last_boot_info
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260521/202605211823.ejyoDwBk-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260521/202605211823.ejyoDwBk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605212349.VjWqdKUF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605211823.ejyoDwBk-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from mm/vma.c:7:
-   In file included from mm/vma_internal.h:37:
-   In file included from include/linux/perf_event.h:53:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:28:
-   In file included from include/linux/bpfptr.h:6:
-   include/linux/compat.h:1106:9: warning: 'is_compat32_task' macro redefined [-Wmacro-redefined]
-    1106 | #define is_compat32_task() is_compat_task()
-         |         ^
-   arch/sparc/include/asm/compat.h:151:9: note: previous definition is here
-     151 | #define is_compat32_task is_compat_task
-         |         ^
->> mm/vma.c:2982:11: error: use of undeclared identifier 'ERESERVATION'
-    2982 |                 return -ERESERVATION;
-         |                         ^~~~~~~~~~~~
-   1 warning and 1 error generated.
+>> kernel/trace/trace.c:5842:1: error: function definition is not allowed here
+    5842 | {
+         | ^
+>> kernel/trace/trace.c:5859:11: error: use of undeclared identifier 'l_show'
+    5859 |         .show           = l_show,
+         |                           ^
+   kernel/trace/trace.c:5863:1: error: function definition is not allowed here
+    5863 | {
+         | ^
+   kernel/trace/trace.c:5885:1: error: function definition is not allowed here
+    5885 | {
+         | ^
+   kernel/trace/trace.c:5903:1: error: function definition is not allowed here
+    5903 | {
+         | ^
+   kernel/trace/trace.c:5916:1: error: function definition is not allowed here
+    5916 | {
+         | ^
+   kernel/trace/trace.c:5934:1: error: function definition is not allowed here
+    5934 | {
+         | ^
+   kernel/trace/trace.c:6008:1: error: function definition is not allowed here
+    6008 | {
+         | ^
+   kernel/trace/trace.c:6023:1: error: function definition is not allowed here
+    6023 | {
+         | ^
+   kernel/trace/trace.c:6054:1: error: function definition is not allowed here
+    6054 | {
+         | ^
+   kernel/trace/trace.c:6064:1: error: function definition is not allowed here
+    6064 | {
+         | ^
+   kernel/trace/trace.c:6086:1: error: function definition is not allowed here
+    6086 | {
+         | ^
+   kernel/trace/trace.c:6113:1: error: function definition is not allowed here
+    6113 | {
+         | ^
+   kernel/trace/trace.c:6137:1: error: function definition is not allowed here
+    6137 | {
+         | ^
+   kernel/trace/trace.c:6156:1: error: function definition is not allowed here
+    6156 | {
+         | ^
+   kernel/trace/trace.c:6201:1: error: function definition is not allowed here
+    6201 | {
+         | ^
+   kernel/trace/trace.c:6302:1: error: function definition is not allowed here
+    6302 | {
+         | ^
+   kernel/trace/trace.c:6347:1: error: function definition is not allowed here
+    6347 | {
+         | ^
+   kernel/trace/trace.c:6383:1: error: function definition is not allowed here
+    6383 | {
+         | ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-vim +/ERESERVATION +2982 mm/vma.c
+vim +5842 kernel/trace/trace.c
 
-  2961	
-  2962	/*
-  2963	 * Verify that the stack growth is acceptable and
-  2964	 * update accounting. This is shared with both the
-  2965	 * grow-up and grow-down cases.
-  2966	 */
-  2967	static int acct_stack_growth(struct vm_area_struct *vma,
-  2968				     unsigned long size, unsigned long grow)
-  2969	{
-  2970		struct mm_struct *mm = vma->vm_mm;
-  2971		unsigned long new_start;
-  2972	
-  2973		/* address space limit tests */
-  2974		if (!may_expand_vm(mm, vma->vm_flags, grow))
-  2975			return -ENOMEM;
-  2976	
-  2977		/* Stack limit test */
-  2978		if (size > rlimit(RLIMIT_STACK))
-  2979			return -ENOMEM;
-  2980	
-  2981		if (reserv_is_supported(mm) && size > reserv_vma_reserv_len(vma))
-> 2982			return -ERESERVATION;
-  2983	
-  2984		/* mlock limit tests */
-  2985		if (!mlock_future_ok(mm, vma->vm_flags, grow << PAGE_SHIFT))
-  2986			return -ENOMEM;
-  2987	
-  2988		/* Check to ensure the stack will not grow into a hugetlb-only region */
-  2989		new_start = (vma->vm_flags & VM_GROWSUP) ? vma->vm_start :
-  2990				vma->vm_end - size;
-  2991		if (is_hugepage_only_range(vma->vm_mm, new_start, size))
-  2992			return -EFAULT;
-  2993	
-  2994		/*
-  2995		 * Overcommit..  This must be the final test, as it will
-  2996		 * update security statistics.
-  2997		 */
-  2998		if (security_vm_enough_memory_mm(mm, grow))
-  2999			return -ENOMEM;
-  3000	
-  3001		return 0;
-  3002	}
-  3003	
+7a1d1e4b9639ff Steven Rostedt (Google  2024-06-12  5840) 
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5841  static int l_show(struct seq_file *m, void *v)
+1bd25a6f7173c0 Steven Rostedt          2025-03-05 @5842  {
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5843  	struct trace_array *tr = m->private;
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5844  	struct trace_mod_entry *entry = v;
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5845  
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5846  	if (v == LAST_BOOT_HEADER) {
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5847  		show_last_boot_header(m, tr);
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5848  		return 0;
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5849  	}
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5850  
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5851  	seq_printf(m, "%lx\t%s\n", entry->mod_addr, entry->mod_name);
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5852  	return 0;
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5853  }
+7a1d1e4b9639ff Steven Rostedt (Google  2024-06-12  5854) 
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5855  static const struct seq_operations last_boot_seq_ops = {
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5856  	.start		= l_start,
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5857  	.next		= l_next,
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5858  	.stop		= l_stop,
+1bd25a6f7173c0 Steven Rostedt          2025-03-05 @5859  	.show		= l_show,
+1bd25a6f7173c0 Steven Rostedt          2025-03-05  5860  };
+7a1d1e4b9639ff Steven Rostedt (Google  2024-06-12  5861) 
+
+:::::: The code at line 5842 was first introduced by commit
+:::::: 1bd25a6f7173c005844cd0076718b3c87bccd891 tracing: Show module names and addresses of last boot
+
+:::::: TO: Steven Rostedt <rostedt@goodmis.org>
+:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
 
 --
 0-DAY CI Kernel Test Service
