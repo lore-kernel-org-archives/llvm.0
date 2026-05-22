@@ -1,194 +1,106 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C005A356746
-	for <llvm@lists.linux.dev>; Fri, 22 May 2026 17:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A609336605A;
+	Fri, 22 May 2026 18:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779472343; cv=none; b=SqPsUOiyz6NTxE/FHtazU0IH8+a5TZ7Op3/T5sn5CN/MTZmaa+wKDFahzar8e0R8E3rV769eBlKnV0KmqCmilS/tRVOKzwDGTIL0Et1Hul1Mp3p28TmKsOvplASHkFqCDMy4ZTmkF52xIkA/tjweSqLeUewiPicaqh2DE+m/XnI=
+	t=1779472951; cv=none; b=u2F9VmyJpm55RnejKi3B8onLz3c2y/Lx3AjYnuP3gjmSYCIrJ5rSnTIdJubrFitb5N4mWh8lxOXQWtssJUBdJ+4PM6GRLNNoKfTsrvmomv1Sh61fxHZY1+Kho/akNo6XWA03RTOry0K+oJ2dT5noMxSZhb+XexhBNxYmxtW0eeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779472343; c=relaxed/simple;
-	bh=tLOqfE6O2z69zUK3q+Z2f+uzzRKePw2JvmcW67NMtgc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZRvh2+E47IWvQ+MXFXK9wrlB84qPqHTElQmUDWF8McuijI3QFZzBUzeuUpGGB/saaVY5ICyyVlrnvOdozU+KwsvXKJ0D25MDcxVq1YI0o+cQ6Mrn6MdHayzwmo9HIEfTPz/Xa69M+a8dnfYb/Zwsvu9Fi6oDu6xlWJbD0ql2hYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h6mmwzk4; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779472951; c=relaxed/simple;
+	bh=l8ODfZgffWhTHTNDJn/mQ2hY1Ih7Z3HZW4fAEarFVBg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=AB1B3wqjLX07SwOPbpdAe7cHBYzY5UGlDqfU3efXzFhB7vtspHsej8td9oDZmAaDY8Rm/vFB5a+djRP6HDTRUo6wuOjzc4veXlTsGDUNi/ii7wo+zJVUXdtfKtQMjWuit8Y987HPsaxAipUPYDQ9XiW9BBJdmCaIZcRzjbIXXp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gg0Ws3W6; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h6mmwzk4"
-Message-ID: <4914f246-611c-4f8a-94d5-b1d868266fd0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779472336;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2gi5CCoB99/3ARHQRSOW5GbnEfG5AJ1BVvMwoiu/LaU=;
-	b=h6mmwzk4c8sHimwy8gkSzfDvwTtn8kyhyTzqmxSqV2W/8iW/Utvsp+wHBUZDL43z37wddy
-	tUn2C9LpSdb+bNwlwmAcPBdzUef/dMRrSmJX1N6zXHi3tOTDvP8v1jJ0DQicak79HvJII+
-	d5TVustwwg6LNR7K5gwHKmStxKP83iI=
-Date: Fri, 22 May 2026 10:51:46 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gg0Ws3W6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779472949; x=1811008949;
+  h=date:from:to:cc:subject:message-id;
+  bh=l8ODfZgffWhTHTNDJn/mQ2hY1Ih7Z3HZW4fAEarFVBg=;
+  b=gg0Ws3W6mfPR1b2/LDnKNzZvGQQAvbfeBSeHRf+Jbu8bsBCw+Zdvcnmf
+   DB9gGIQTEGP87Mfz79ssHdeDv/CykWnrywHLYsWI+W7kGGDrd0NiaWhou
+   7XSS8I1gjd0JE3GvMAy6rUIBgE7/B1N6Nq/YGJwK/1Z/F96tNatyhc/sb
+   Ec0BfHb9m5dYmWu4dX+/c0NSw0OW7abEfA4D/+AGXL7RJ8AzyLN44JN+b
+   HZTHsoWIn7vfGGF7VYTVXNHmoqK6hbLL80YOJIs3P0IisXqjUb8anEb+Z
+   2aVU1RqxGtudcsa9AR/v/Z0kC7Z6yhypB/1Aj9LpfR+0GAGkiKHWkWr/u
+   Q==;
+X-CSE-ConnectionGUID: /4m6WDR3Th6ft6+PW4nd3Q==
+X-CSE-MsgGUID: uGVO8U9DQtGOBJFUUn4ofg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11794"; a="97832237"
+X-IronPort-AV: E=Sophos;i="6.24,162,1774335600"; 
+   d="scan'208";a="97832237"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2026 11:02:29 -0700
+X-CSE-ConnectionGUID: 2dH2sRdzQq64RinRheDw8A==
+X-CSE-MsgGUID: pYAYzQNXTQSwz9NnVERgcg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,162,1774335600"; 
+   d="scan'208";a="241043530"
+Received: from lkp-server01.sh.intel.com (HELO fdb68b0ce653) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 22 May 2026 11:02:27 -0700
+Received: from kbuild by fdb68b0ce653 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wQUCX-000000002pZ-1T0h;
+	Fri, 22 May 2026 18:02:25 +0000
+Date: Sat, 23 May 2026 02:02:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Christian A. Ehrhardt" <christian.ehrhardt@codasip.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [scosu-sched:topic/mmap-cap-prot-wip/v6.18 1057/1130]
+ drivers/usb/misc/sisusbvga/sisusbvga.c:2748:47: error: call to undeclared
+ function 'compat_ptr'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202605230126.Pb5CR8Zy-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Subject: Re: [PATCH v9 3/3] kbuild: distributed build support for Clang
- ThinLTO
-Content-Language: en-GB
-To: Rong Xu <xur@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Miguel Ojeda <ojeda@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Alice Ryhl <aliceryhl@google.com>, Sami Tolvanen <samitolvanen@google.com>,
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
- Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Stafford Horne <shorne@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Piotr Gorski <piotrgorski@cachyos.org>,
- Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
- Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-References: <20260331154827.2793269-1-xur@google.com>
- <20260331154827.2793269-4-xur@google.com> <20260331162729.GA2006419@ax162>
- <2672f790-f57b-4739-b78f-906c0a5d202e@linux.dev>
- <CAF1bQ=R6=0G9O-eNFsHiCLMpkph7=hSu4Rn_HjFD4PvTFnAnDQ@mail.gmail.com>
- <69e60bc9-cfe6-4b8d-b61b-5840f7d2518a@linux.dev>
- <CAF1bQ=TFMSkLE6bqPEOqGxcLbC7tYfPqEmg7xrjbc2m_B=72GA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAF1bQ=TFMSkLE6bqPEOqGxcLbC7tYfPqEmg7xrjbc2m_B=72GA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+
+tree:   https://github.com/scosu/linux-sched topic/mmap-cap-prot-wip/v6.18
+head:   f69a5a9d9fee15edde28429e23a4c749a59937bd
+commit: cbf08e7e214ff0b91ce6944b628a22044f0b893c [1057/1130] cheri: compat64: usb: Enable compat64 handling in usb/
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260523/202605230126.Pb5CR8Zy-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260523/202605230126.Pb5CR8Zy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605230126.Pb5CR8Zy-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/misc/sisusbvga/sisusbvga.c:2748:47: error: call to undeclared function 'compat_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2748 |                 return sisusb_ioctl(f, cmd, (user_uintptr_t)compat_ptr(arg));
+         |                                                             ^
+   1 error generated.
 
 
+vim +/compat_ptr +2748 drivers/usb/misc/sisusbvga/sisusbvga.c
 
-On 5/22/26 8:32 AM, Rong Xu wrote:
-> On Thu, May 21, 2026 at 2:57 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->>
->>
->> On 5/21/26 11:31 AM, Rong Xu wrote:
->>> Yonghong, thanks for the update.
->>>
->>> Regarding this guard: ther is a period of Clang (before this patch and
->>> after your first patch), even though ld.lld having these options
->>> (specifically --lto-whole-program-visibility -mllvm
->>> -always-rename-promoted-locals=false), distributed ThinLTO mode
->>> remains unsupported, correct? What the behvior of using this options
->>> in distributed mode with these compilers? nop or it will lead to
->>> error?
->> The in-process thin-lto support is landed on Feb 27.
->> The distributed thin-lto support is landed on Apr 24.
->>
->> If people are using distributed thin-lto in kernel between Feb 27 and
->> Apr 24, there will be some issues. But people typically use released
->> compiler, so we should be fine.
-> This is not the case for us (google). We do use compiler b/w releases,
-> and we build our own.
->
-> What is the issue if we use the compiler in b/w Feb27 and Apr24?
+  2739	
+  2740	#ifdef CONFIG_COMPAT
+  2741	static long sisusb_compat_ioctl(struct file *f, unsigned int cmd,
+  2742			unsigned long arg)
+  2743	{
+  2744		switch (cmd) {
+  2745		case SISUSB_GET_CONFIG_SIZE:
+  2746		case SISUSB_GET_CONFIG:
+  2747		case SISUSB_COMMAND:
+> 2748			return sisusb_ioctl(f, cmd, (user_uintptr_t)compat_ptr(arg));
+  2749	
+  2750		default:
+  2751			return -ENOIOCTLCMD;
+  2752		}
+  2753	}
+  2754	#endif
+  2755	
 
-If you use the custom compiler between Feb27 and Apr24 and your kernel
-will do distributed thin-lto, you can remove
-    $(call ld-option,--lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false)
-from your kernel. Since you have custom compiler, you can
-do some customization for your kernel as well.
-
-
->
-> -Rong
->
->>> I would assume there will be errors; otherwise, you would not ask me
->>> to change my patch last time. In this case, I would keep this guard
->>> and remove it when the minimum llvm version passes llvm23. What do you
->>> think?
->> There is no need to keep compiler version guard.
->>
->> Before llvm23, the below will be a noop:
->>      $(call ld-option,--lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false)
->> since '-mllvm -always-rename-promoted-locals=false' is a new flag and the compiler won't
->> recognize it so the kernel will resolve above 'call ...' option as noop.
->>
->> With llvm23 and later, the kernel will be able to recognize above options and
->> things should be okay.
->>
->>> Best,
->>>
->>> -Rong
->>>
->>>
->>> On Thu, May 21, 2026 at 1:57 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->>>>
->>>> On 3/31/26 9:27 AM, Nathan Chancellor wrote:
->>>>> Hi Rong,
->>>>>
->>>>> On Tue, Mar 31, 2026 at 03:48:27PM +0000, xur@google.com wrote:
->>>>>> diff --git a/Makefile b/Makefile
->>>>>> index 69ccf9b8507d..26005c64016d 100644
->>>>>> --- a/Makefile
->>>>>> +++ b/Makefile
->>>>>> @@ -1047,11 +1047,13 @@ export CC_FLAGS_SCS
->>>>>>     endif
->>>>>>
->>>>>>     ifdef CONFIG_LTO_CLANG
->>>>>> -ifdef CONFIG_LTO_CLANG_THIN
->>>>>> +ifdef CONFIG_LTO_CLANG_FULL
->>>>>> +CC_FLAGS_LTO        := -flto
->>>>>> +else
->>>>>>     CC_FLAGS_LTO       := -flto=thin -fsplit-lto-unit
->>>>>> +if CONFIG_LTO_CLANG_THIN
->>>>> This should be an 'ifdef', not an 'if'. You copied Yonghong's mistake:
->>>>>
->>>>>      https://lore.kernel.org/abgRRX3PH9IaExi8@sirena.org.uk/
->>>>>      https://lore.kernel.org/6db3a2f6-d61c-42f1-9b9d-0aca021cc2d7@linux.dev/
->>>>>
->>>>> Please slow down and test build your changes before sending them. Each
->>>>> revision adds four new emails to everyone's inbox, which is just noise
->>>>> when there are obvious, basic problems. 'b4 diff' shows no actual
->>>>> difference from v8 and v9, which should have been caught by a simple
->>>>> build test right before 'git send-email'.
->>>>>
->>>>>>     KBUILD_LDFLAGS += $(call ld-option,--lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false)
->>>>>> -else
->>>>>> -CC_FLAGS_LTO        := -flto
->>>>>> +endif
->>>> The above patch has a guard CONFIG_LTO_CLANG_THIN, which can be removed.
->>>> See llvm patch
->>>>       https://github.com/llvm/llvm-project/pull/188074
->>>> which supports distributed thin-lto mode too for reducing the number
->>>> of renaming. In other words, for llvm23, both in-process and
->>>> distributed-process are supported for thin-lto.
->>>>
->>>>>>     endif
->>>>>>     CC_FLAGS_LTO       += -fvisibility=hidden
->>>>>>
->>>>>> @@ -1657,6 +1659,7 @@ endif # CONFIG_MODULES
->>>>>>     CLEAN_FILES += vmlinux.symvers modules-only.symvers \
->>>>>>               modules.builtin modules.builtin.modinfo modules.nsdeps \
->>>>>>               modules.builtin.ranges vmlinux.o.map vmlinux.unstripped \
->>>>>> +           vmlinux.thinlto-index builtin.order \
->>>>>>               compile_commands.json rust/test \
->>>>>>               rust-project.json .vmlinux.objs .vmlinux.export.c \
->>>>>>                    .builtin-dtbs-list .builtin-dtb.S
->>>>>> @@ -2118,7 +2121,7 @@ clean: $(clean-dirs)
->>>>>>        $(call cmd,rmfiles)
->>>>>>        @find . $(RCS_FIND_IGNORE) \
->>>>>>                \( -name '*.[aios]' -o -name '*.rsi' -o -name '*.ko' -o -name '.*.cmd' \
->>>>>> -            -o -name '*.ko.*' \
->>>>>> +            -o -name '*.ko.*' -o -name '*.o.thinlto.bc' \
->>>>>>                -o -name '*.dtb' -o -name '*.dtbo' \
->>>>>>                -o -name '*.dtb.S' -o -name '*.dtbo.S' \
->>>>>>                -o -name '*.dt.yaml' -o -name 'dtbs-list' \
->>>>> With that addressed above, the series survives my basic LLVM 22.1.2
->>>>> build test with my distribution configuration. I'll provide formal tags
->>>>> on a properly tested and fixed revision.
->>>>>
->>>>> Cheers,
->>>>> Nathan
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
