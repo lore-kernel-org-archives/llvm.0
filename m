@@ -1,205 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5545534CFAE;
-	Fri, 22 May 2026 07:10:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234A53B52E1;
+	Fri, 22 May 2026 09:48:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779433838; cv=none; b=Hcz9+H7yiXgQ/fNmbGnzGkvSiiKHj8wAeFpWQgGIwSkb09LB1wts70uluzegRBbMsgyU7MeXX+o/GaxGUzv/J4zgc4lrlbL+V/XVyhDCYPpccJdeCCHcd7ami6NRNvgoJLh4B3SOgCy5YrPoMEC0+GudEvfexg3WnshFJK2sWew=
+	t=1779443332; cv=none; b=P3mPmk4Ri8p2IURXiAJ2qY5iGJ8RWn4ZLCPPOSzHddHfNNqKieFptw6PjU9D9xDHu9w4kcWXaZkSO8SQHPDPtUe8/VXmwlt2cg7Gg+GrBygXO0Bo87iDum9HYSutvB8h6rJ8ioga/FpDGImTrfQNI9fiE6mgm9Y9i8jtS/XUq/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779433838; c=relaxed/simple;
-	bh=swEbMHwwBqlkC8hhDvdqYagb+ZOCeTkY69rhc69F2cI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pK5yC+g8yugk88lNTyTaOQfXbTylHTeL93BeGhISqEzpG7zDyartrltH/JNw/eX5SeVzxsvUWqBAtqSL5nbgIyXbahsm/JWOfCGy8Prf8AClFkzPE1ox6mVgFMFN6uaZ0EeYw0HnYvwr1YRxOmnqiRXOQn4FLe9xABAyJ04kZlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jCxc0IE4; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1779443332; c=relaxed/simple;
+	bh=pXuKngj1VF6nqhCAC95aGkRrbtnFauBmbxWFiqcafqs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=j/qzyrQ6CujM0xRIFT8l67SBLe6m8svCCG1Q7bXDYhd5MJH8RCoH0GOp1S9vRENRNbz0XI1aVxdBtrFShbDib1e7C0k20ixiWFWz5oHxXJzCKquAkPmKQ/mIxLBvTM7czDmNvdQjjYpe8+569ay3uN+JuAoccSLVRvCk5y/cbR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dIOCXVod; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jCxc0IE4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dIOCXVod"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779433835; x=1810969835;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=swEbMHwwBqlkC8hhDvdqYagb+ZOCeTkY69rhc69F2cI=;
-  b=jCxc0IE4VUucPktS1xSbmFw8KIzGBos/sU5GNLNvVMBpYzb8aVQEITde
-   SF5aF9M2oNDoVrt2GvNuDv1ZS9gu9U+7KFBvooWhZJkEMq5YbEh3FeH3M
-   ivVgSx83kDcd5PJItV27HDWb0GtSM1x1tdEg6z3jgbxz2GimMfB4RQoL0
-   JlZ8Gv1XxiMaYeeYy1jtqSr3lQtMH0ZSD65lgPjd/G7s0dhzWLbl+Qm/t
-   VYXZsxFAxPd9wrU0w6zz+/l7GN1uvQ6ujVl4DGM1fIZZddmBFXrIZZaCr
-   NQvvx2jzH+jhlB8jwBcd1smM/9mI6//EzdmfG9AonsNIqz7PXc8GOSdB0
-   Q==;
-X-CSE-ConnectionGUID: rMK2yO7NQaabGZvt3sbiPQ==
-X-CSE-MsgGUID: sdxTVVsWRAOx6+N0MHAFjA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11793"; a="91050949"
-X-IronPort-AV: E=Sophos;i="6.24,161,1774335600"; 
-   d="scan'208";a="91050949"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2026 00:10:35 -0700
-X-CSE-ConnectionGUID: QgTrfsW9TJeEWuFXk3YVjg==
-X-CSE-MsgGUID: eMY5qiooQM2aiSnIlKmB4Q==
+  t=1779443330; x=1810979330;
+  h=date:from:to:cc:subject:message-id;
+  bh=pXuKngj1VF6nqhCAC95aGkRrbtnFauBmbxWFiqcafqs=;
+  b=dIOCXVod5qn6LS9GIGRmlkUu7QkmqiVuzfQCNjGcamzD4oUf/shOj84H
+   MWCZkTWDA88AUbfjcSFkHDgYhSR0M2akPcXxot7/b2F4NZFEwq9RrG6H+
+   rkpVN3FYdMID9EJNL0HEA4zM1dFiDpLUiITXSHHDXgPCBwioL04/C1xI3
+   6qqh956esCu+h4ppU+/X3MObL+fEmR8tKs/nBNXJcvdPdNYTPbgn3NUOM
+   Jb3dxwgRjUDfa6SHlFYqYg8ESckHi+VpWwzO4d8AgKHjw3vBb7RcwOKkB
+   IHzBnkXpfnzToYFGO3WlanjmE/9q03bpJ+rABHwsanU48KSo5kZ8ByGOw
+   w==;
+X-CSE-ConnectionGUID: zY/pKOgwQ5SRL+GDnLJ9zA==
+X-CSE-MsgGUID: 3hdjexx0RJuG1TqGTj4cfg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11793"; a="91840187"
+X-IronPort-AV: E=Sophos;i="6.24,162,1774335600"; 
+   d="scan'208";a="91840187"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2026 02:48:49 -0700
+X-CSE-ConnectionGUID: Rv0OMenCT+irf3NH/nzXMw==
+X-CSE-MsgGUID: VWMzEejeTSGv+9RUsKhUkg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,161,1774335600"; 
-   d="scan'208";a="238236669"
+X-IronPort-AV: E=Sophos;i="6.24,162,1774335600"; 
+   d="scan'208";a="234517929"
 Received: from lkp-server01.sh.intel.com (HELO fdb68b0ce653) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 22 May 2026 00:10:32 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 22 May 2026 02:48:47 -0700
 Received: from kbuild by fdb68b0ce653 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wQK1d-000000001wf-1Boq;
-	Fri, 22 May 2026 07:10:29 +0000
-Date: Fri, 22 May 2026 15:09:48 +0800
+	id 1wQMUm-000000002An-1uiy;
+	Fri, 22 May 2026 09:48:44 +0000
+Date: Fri, 22 May 2026 17:48:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ashwin Gundarapu <linuxuser509@zohomail.in>,
-	"anthony.l.nguyen@intel.com" <przemyslaw.kitszel@intel.com>,
-	andrewnetdev <andrew+netdev@lunn.ch>, davem <davem@davemloft.net>,
-	edumazet <edumazet@google.com>, kuba <kuba@kernel.org>,
-	pabeni <pabeni@redhat.com>
+To: Andrew Jones <andrew.jones@oss.qualcomm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] net: e100: replace silent 'hope for the best'
- with debug message
-Message-ID: <202605221404.6yAWlKOQ-lkp@intel.com>
-References: <19e49280392.4757403170773.5767589851918809405@zohomail.in>
+ Anup Patel <anup@brainfault.org>
+Subject: [avpatel:riscv_trace_acpi_support_v1 20/65]
+ drivers/iommu/riscv/iommu-ir.c:325:13: error: call to undeclared function
+ 'virt_to_pfn'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202605221735.0RNzdr8y-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <19e49280392.4757403170773.5767589851918809405@zohomail.in>
 
-Hi Ashwin,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ashwin-Gundarapu/net-e100-replace-silent-hope-for-the-best-with-debug-message/20260521-141158
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/19e49280392.4757403170773.5767589851918809405%40zohomail.in
-patch subject: [PATCH net-next] net: e100: replace silent 'hope for the best' with debug message
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260522/202605221404.6yAWlKOQ-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260522/202605221404.6yAWlKOQ-lkp@intel.com/reproduce)
+tree:   https://github.com/avpatel/linux.git riscv_trace_acpi_support_v1
+head:   7087f62c7333ca95c6a5c57f5ba52bd1594f22cf
+commit: b94a25c2259625ebc67070995888f7baec7e3203 [20/65] iommu/riscv: Add guest file irqbypass support
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260522/202605221735.0RNzdr8y-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260522/202605221735.0RNzdr8y-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605221404.6yAWlKOQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605221735.0RNzdr8y-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/intel/e100.c:1459:3: error: expected expression
-                   else {
-                   ^
-   1 error generated.
+   In file included from drivers/iommu/riscv/iommu-ir.c:10:
+   In file included from include/linux/msi.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/iommu/riscv/iommu-ir.c:325:13: error: call to undeclared function 'virt_to_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     325 |                 .msiptp = virt_to_pfn(domain->msi_root) |
+         |                           ^
+   drivers/iommu/riscv/iommu-ir.c:325:13: note: did you mean 'virt_to_pte'?
+   arch/um/include/asm/pgtable.h:284:15: note: 'virt_to_pte' declared here
+     284 | extern pte_t *virt_to_pte(struct mm_struct *mm, unsigned long addr);
+         |               ^
+   1 warning and 1 error generated.
 
 
-vim +1459 drivers/net/ethernet/intel/e100.c
+vim +/virt_to_pfn +325 drivers/iommu/riscv/iommu-ir.c
 
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1430  
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1431  #define NCONFIG_AUTO_SWITCH	0x0080
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1432  #define MII_NSC_CONG		MII_RESV1
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1433  #define NSC_CONG_ENABLE		0x0100
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1434  #define NSC_CONG_TXREADY	0x0400
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1435  static int e100_phy_init(struct nic *nic)
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1436  {
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1437  	struct net_device *netdev = nic->netdev;
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1438  	u32 addr;
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1439  	u16 bmcr, stat, id_lo, id_hi, cong;
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1440  
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1441  	/* Discover phy addr by searching addrs in order {1,0,2,..., 31} */
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1442  	for (addr = 0; addr < 32; addr++) {
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1443  		nic->mii.phy_id = (addr == 0) ? 1 : (addr == 1) ? 0 : addr;
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1444  		bmcr = mdio_read(netdev, nic->mii.phy_id, MII_BMCR);
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1445  		stat = mdio_read(netdev, nic->mii.phy_id, MII_BMSR);
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1446  		stat = mdio_read(netdev, nic->mii.phy_id, MII_BMSR);
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1447  		if (!((bmcr == 0xFFFF) || ((stat == 0) && (bmcr == 0))))
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1448  			break;
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1449  	}
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1450  	if (addr == 32) {
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1451  		/* uhoh, no PHY detected: check whether we seem to be some
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1452  		 * weird, rare variant which is *known* to not have any MII.
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1453  		 * But do this AFTER MII checking only, since this does
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1454  		 * lookup of EEPROM values which may easily be unreliable. */
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1455  		if (e100_phy_check_without_mii(nic))
-e95e8b2860fba4 drivers/net/ethernet/intel/e100.c Ashwin Gundarapu 2026-05-10  1456                          netif_dbg(nic, probe, nic->netdev,
-e95e8b2860fba4 drivers/net/ethernet/intel/e100.c Ashwin Gundarapu 2026-05-10  1457                                    "No MII PHY detected, continuing anyway\n");
-e95e8b2860fba4 drivers/net/ethernet/intel/e100.c Ashwin Gundarapu 2026-05-10  1458                          return 0;
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10 @1459  		else {
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1460  			/* for unknown cases log a fatal error */
-fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1461  			netif_err(nic, hw, nic->netdev,
-fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1462  				  "Failed to locate any known PHY, aborting\n");
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1463  			return -EAGAIN;
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1464  		}
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1465  	} else
-fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1466  		netif_printk(nic, hw, KERN_DEBUG, nic->netdev,
-fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1467  			     "phy_addr = %d\n", nic->mii.phy_id);
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1468  
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1469  	/* Get phy ID */
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1470  	id_lo = mdio_read(netdev, nic->mii.phy_id, MII_PHYSID1);
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1471  	id_hi = mdio_read(netdev, nic->mii.phy_id, MII_PHYSID2);
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1472  	nic->phy = (u32)id_hi << 16 | (u32)id_lo;
-fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1473  	netif_printk(nic, hw, KERN_DEBUG, nic->netdev,
-fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1474  		     "phy ID = 0x%08X\n", nic->phy);
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1475  
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1476  	/* Select the phy and isolate the rest */
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1477  	for (addr = 0; addr < 32; addr++) {
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1478  		if (addr != nic->mii.phy_id) {
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1479  			mdio_write(netdev, addr, MII_BMCR, BMCR_ISOLATE);
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1480  		} else if (nic->phy != phy_82552_v) {
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1481  			bmcr = mdio_read(netdev, addr, MII_BMCR);
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1482  			mdio_write(netdev, addr, MII_BMCR,
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1483  				bmcr & ~BMCR_ISOLATE);
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1484  		}
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1485  	}
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1486  	/*
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1487  	 * Workaround for 82552:
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1488  	 * Clear the ISOLATE bit on selected phy_id last (mirrored on all
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1489  	 * other phy_id's) using bmcr value from addr discovery loop above.
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1490  	 */
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1491  	if (nic->phy == phy_82552_v)
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1492  		mdio_write(netdev, nic->mii.phy_id, MII_BMCR,
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1493  			bmcr & ~BMCR_ISOLATE);
-8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1494  
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1495  	/* Handle National tx phys */
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1496  #define NCS_PHY_MODEL_MASK	0xFFF0FFFF
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1497  	if ((nic->phy & NCS_PHY_MODEL_MASK) == phy_nsc_tx) {
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1498  		/* Disable congestion control */
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1499  		cong = mdio_read(netdev, nic->mii.phy_id, MII_NSC_CONG);
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1500  		cong |= NSC_CONG_TXREADY;
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1501  		cong &= ~NSC_CONG_ENABLE;
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1502  		mdio_write(netdev, nic->mii.phy_id, MII_NSC_CONG, cong);
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1503  	}
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1504  
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1505  	if (nic->phy == phy_82552_v) {
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1506  		u16 advert = mdio_read(netdev, nic->mii.phy_id, MII_ADVERTISE);
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1507  
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1508  		/* assign special tweaked mdio_ctrl() function */
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1509  		nic->mdio_ctrl = mdio_ctrl_phy_82552_v;
-720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1510  
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1511  		/* Workaround Si not advertising flow-control during autoneg */
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1512  		advert |= ADVERTISE_PAUSE_CAP | ADVERTISE_PAUSE_ASYM;
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1513  		mdio_write(netdev, nic->mii.phy_id, MII_ADVERTISE, advert);
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1514  
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1515  		/* Reset for the above changes to take effect */
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1516  		bmcr = mdio_read(netdev, nic->mii.phy_id, MII_BMCR);
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1517  		bmcr |= BMCR_RESET;
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1518  		mdio_write(netdev, nic->mii.phy_id, MII_BMCR, bmcr);
-b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1519  	} else if ((nic->mac >= mac_82550_D102) || ((nic->flags & ich) &&
-60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1520  	   (mdio_read(netdev, nic->mii.phy_id, MII_TPISTATUS) & 0x8000) &&
-d4ef55288aa2e1 drivers/net/ethernet/intel/e100.c Jesse Brandeburg 2021-03-25  1521  	   (le16_to_cpu(nic->eeprom[eeprom_cnfg_mdix]) & eeprom_mdix_enabled))) {
-60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1522  		/* enable/disable MDI/MDI-X auto-switching. */
-60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1523  		mdio_write(netdev, nic->mii.phy_id, MII_NCONFIG,
-60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1524  				nic->mii.force_media ? 0 : NCONFIG_AUTO_SWITCH);
-648951451e6d2d drivers/net/e100.c                Malli Chilakala  2005-06-17  1525  	}
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1526  
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1527  	return 0;
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1528  }
-^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1529  
+   306	
+   307	static void riscv_iommu_ir_msiptp_update(struct riscv_iommu_domain *domain)
+   308	{
+   309		struct pt_iommu_riscv_64_hw_info pt_info, gstage_info;
+   310		struct riscv_iommu_device *iommu, *prev;
+   311		struct riscv_iommu_bond *bond;
+   312		struct riscv_iommu_dc new_dc;
+   313	
+   314		pt_iommu_riscv_64_hw_info(&domain->riscvpt, &pt_info);
+   315		pt_iommu_riscv_64_hw_info(&domain->gstage_riscvpt, &gstage_info);
+   316	
+   317		new_dc = (struct riscv_iommu_dc){
+   318			.ta = FIELD_PREP(RISCV_IOMMU_PC_TA_PSCID, domain->pscid) |
+   319			      RISCV_IOMMU_PC_TA_V,
+   320			.iohgatp = FIELD_PREP(RISCV_IOMMU_DC_IOHGATP_MODE, gstage_info.fsc_iosatp_mode) |
+   321				   FIELD_PREP(RISCV_IOMMU_DC_IOHGATP_GSCID, domain->gscid) |
+   322				   FIELD_PREP(RISCV_IOMMU_DC_IOHGATP_PPN, gstage_info.ppn),
+   323			.fsc = FIELD_PREP(RISCV_IOMMU_PC_FSC_MODE, pt_info.fsc_iosatp_mode) |
+   324			       FIELD_PREP(RISCV_IOMMU_PC_FSC_PPN, pt_info.ppn),
+ > 325			.msiptp = virt_to_pfn(domain->msi_root) |
+   326				  FIELD_PREP(RISCV_IOMMU_DC_MSIPTP_MODE,
+   327					     RISCV_IOMMU_DC_MSIPTP_MODE_FLAT),
+   328			.msi_addr_mask = domain->msi_addr_mask,
+   329			.msi_addr_pattern = domain->msi_addr_pattern,
+   330		};
+   331	
+   332		/* Like riscv_iommu_ir_msitbl_inval(), synchronize with riscv_iommu_bond_link() */
+   333		smp_mb();
+   334	
+   335		rcu_read_lock();
+   336	
+   337		prev = NULL;
+   338		list_for_each_entry_rcu(bond, &domain->bonds, list) {
+   339			iommu = dev_to_iommu(bond->dev);
+   340			if (iommu == prev)
+   341				continue;
+   342	
+   343			riscv_iommu_iodir_update(iommu, bond->dev, &new_dc);
+   344			prev = iommu;
+   345		}
+   346	
+   347		rcu_read_unlock();
+   348	}
+   349	
 
 --
 0-DAY CI Kernel Test Service
