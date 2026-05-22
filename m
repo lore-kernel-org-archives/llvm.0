@@ -1,173 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6063BAD95;
-	Fri, 22 May 2026 09:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFC83C585E
+	for <llvm@lists.linux.dev>; Fri, 22 May 2026 10:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779443992; cv=none; b=EUtEGhRA0442jvGzi2pFP8GjJkiozreC86aP3pRnKZBmXKCmnEVIwTWg5SDZelCkvkw35U0CTvAJneSGcOzbmn9WhWWtp+LJHiyARjMtYTCTOKOa6Jb4TzZlXidLlGjnCLH5RKFzgAQPGMeQv8pX3ap4x9fZq1nYLFy7YSBeMfw=
+	t=1779444732; cv=none; b=S3ZghjzNc9rlXhx5xgpzDPMa/YRt6/FCMidoVr2MU6xZiJ19eFcJx6vNTRUGLT30GsVb0aK6Nxd30D/XvduQfmXdQ6V6tha1yWFG3fcXE5A1aSU2+C10WMyjzyRS7ORTDd0mPkISNCAjHaWehhMxYq1dT7ldiZCJDRCQNJ3i0C0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779443992; c=relaxed/simple;
-	bh=T3WEIuYunpiFtNrcsozkWvbkSofS8UtMFzcXms+GnLE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=EXej1OnI5+nvIy6TLFIhiZwGrFzTl6UYYFphkrxotsbRA0L9q+RsXwDWQ8nMvBDjGsOxxoxkqEAm6/jB68794vB4IDo633uMekdHR88cDYDbE+1p5tGyBd6+F9PWxS8X36YGqNWzJ5zYx7oYw5BZ1Hb3Pq/xhAFFwf0z1gDQ0SU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n937xdlX; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779444732; c=relaxed/simple;
+	bh=z6JOl1rRlmXhCdTKqNxlv0HWwnJK1XqbWQwVv0CHlZE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=c3Xr4QQ8ssFS+iD13h+8ojQJkIxA2NCqRnxyJhXuruTiQ2OqbjEQYU9rs1Wtk7OZrhQUJNHTCtdLwOb5/a8iQQ16+y5O0olvT7SYz+mLuYWSnC8EkO56Oo9VYI00TrpbyzeW1mh/q4qQXQXfcgTGNYxPAc29Ia0+TNZ6exjwkNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IZEoWquI; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n937xdlX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779443991; x=1810979991;
-  h=date:from:to:cc:subject:message-id;
-  bh=T3WEIuYunpiFtNrcsozkWvbkSofS8UtMFzcXms+GnLE=;
-  b=n937xdlXaGQ4DwTi52FVeWawtMN1k924D8I3QwnOhrLfBZEWWoXXWZXJ
-   TbH252MzcP95xRDDEbRAy2NWtsDLSarq8Rp+FOihEd2+mQqsT3C7ipQyw
-   ZmKX86HVAwuG5vR1d5Eg1J0NKLeljSTqJA3heHVYRPApxAaWGjZMHZ4nJ
-   xLpWJbM09N+KJxUjPshXPhI9yKA1bu7dCuI59+NfPund/1n8vOS4miHPt
-   COrrFDup0tGaqCHKbNMUOWunPf72AFZ8VI21AYr8yCccQKw5tmbn8CBbc
-   1OMl68o9P1bklpnMuLjYC8xZChqFT/BX0/AP2K5JKktKD1ZmYgWO/rHtZ
-   A==;
-X-CSE-ConnectionGUID: ghvQgrHuQY+NK9Jd+5lPGQ==
-X-CSE-MsgGUID: E+Q+rQTpThC8EZ0D6S5hhg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11793"; a="80552446"
-X-IronPort-AV: E=Sophos;i="6.24,162,1774335600"; 
-   d="scan'208";a="80552446"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2026 02:59:50 -0700
-X-CSE-ConnectionGUID: gyzgNfbgT36BXsNdb6fydQ==
-X-CSE-MsgGUID: icqPE/4oQSiFShSPKnQRnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,162,1774335600"; 
-   d="scan'208";a="245146889"
-Received: from lkp-server01.sh.intel.com (HELO fdb68b0ce653) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 22 May 2026 02:59:49 -0700
-Received: from kbuild by fdb68b0ce653 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wQMfS-000000002Bt-07NN;
-	Fri, 22 May 2026 09:59:46 +0000
-Date: Fri, 22 May 2026 17:59:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Christian A. Ehrhardt" <christian.ehrhardt@codasip.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [scosu-sched:topic/mmap-cap-prot-wip/v6.18 26/1130]
- usr/include/linux/socket.h:25:3: error: // comments are not allowed in this
- language
-Message-ID: <202605221710.fzCUhb6F-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IZEoWquI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1779444729;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EmcYsNphY9SGxYns1eprfSXbKWg/vbAvAbObNiz3Qqo=;
+	b=IZEoWquIasj8gwmxbNpvjYyd4Qx0DdL20PTDi3OxkDpfyapJE6obm5QvKo2jghWNAlbLAl
+	ZlHn4vbF0LqF8CSAg4FNNJkejzTmdtiPUx4Wr2q8En1Ok9Y4FUhOrg4Ih3zE7+Ao6OVObx
+	K/rbqVEpF3Q65mbercBtvLNuyjQg2ls=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-88-oJH5lzs_PTygqO5zs4m9Pw-1; Fri,
+ 22 May 2026 06:12:08 -0400
+X-MC-Unique: oJH5lzs_PTygqO5zs4m9Pw-1
+X-Mimecast-MFC-AGG-ID: oJH5lzs_PTygqO5zs4m9Pw_1779444727
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6E3E718005B4
+	for <llvm@lists.linux.dev>; Fri, 22 May 2026 10:12:07 +0000 (UTC)
+Received: from [172.20.212.222] (unknown [10.30.45.124])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D4FCA1956053;
+	Fri, 22 May 2026 10:12:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-rc4,
+ upstream-mainline, 6779b50f)
+Date: Fri, 22 May 2026 10:12:06 -0000
+To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <69926.126052206120801323@us-mta-88.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: pTq5aiFCI77chux0XnO3FXFrbVFwBBPr-pBseV6sXD0_1779444727
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/scosu/linux-sched topic/mmap-cap-prot-wip/v6.18
-head:   f69a5a9d9fee15edde28429e23a4c749a59937bd
-commit: 0f1728c5a7989963baae90445399623f7fcae35a [26/1130] cheri: UAPI: Add annotations to some fields
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260522/202605221710.fzCUhb6F-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260522/202605221710.fzCUhb6F-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605221710.fzCUhb6F-lkp@intel.com/
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-All errors (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
-   In file included from ./usr/include/scsi/scsi_netlink.h:11:
-   In file included from usr/include/linux/netlink.h:6:
->> usr/include/linux/socket.h:25:3: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      25 |                 /// UAPI: NoConvert: Only for alignment
-         |                 ^
-   1 error generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/io_uring.h:953:3: error: // comments are not allowed in this language [-Werror,-Wcomment]
-     953 |                 /// UAPI: NoConvert: Padding only
-         |                 ^
-   1 error generated.
---
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/route.h:27:
-   In file included from usr/include/linux/if.h:25:
->> usr/include/linux/socket.h:25:3: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      25 |                 /// UAPI: NoConvert: Only for alignment
-         |                 ^
-   In file included from <built-in>:1:
-   ./usr/include/linux/route.h:39:25: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      39 |         unsigned long   rt_pad4;        // it is actually 8 bytes
-         |                                         ^
-   2 errors generated.
---
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/netfilter_arp/arp_tables.h:15:
-   In file included from usr/include/linux/if.h:25:
->> usr/include/linux/socket.h:25:3: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      25 |                 /// UAPI: NoConvert: Only for alignment
-         |                 ^
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/netfilter_arp/arp_tables.h:18:
->> usr/include/linux/netfilter/x_tables.h:25:5: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      25 |                                 /// UAPI: NoConvert: Kernel only
-         |                                 ^
-   2 errors generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/dvb/frontend.h:906:4: error: // comments are not allowed in this language [-Werror,-Wcomment]
-     906 |                         /// UAPI: NoConvert: Unused in kernel
-         |                         ^
-   1 error generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/socket.h:25:3: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      25 |                 /// UAPI: NoConvert: Only for alignment
-         |                 ^
-   1 error generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/sysinfo.h:22:2: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      22 |         /// UAPI: NoConvert: Padding
-         |         ^
-   1 error generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/cdrom.h:295:3: error: // comments are not allowed in this language [-Werror,-Wcomment]
-     295 |                 /// UAPI: NoConvert: Unused in the kernel
-         |                 ^
-   1 error generated.
---
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/netfilter_bridge/ebtables.h:17:
-   In file included from usr/include/linux/if.h:25:
->> usr/include/linux/socket.h:25:3: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      25 |                 /// UAPI: NoConvert: Only for alignment
-         |                 ^
-   In file included from <built-in>:1:
->> ./usr/include/linux/netfilter_bridge/ebtables.h:129:4: error: // comments are not allowed in this language [-Werror,-Wcomment]
-     129 |                         /// UAPI: NoConvert: Kernel only
-         |                         ^
-   2 errors generated.
---
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/mptcp.h:10:
-   In file included from usr/include/linux/in.h:25:
->> usr/include/linux/socket.h:25:3: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      25 |                 /// UAPI: NoConvert: Only for alignment
-         |                 ^
-   In file included from <built-in>:1:
->> ./usr/include/linux/mptcp.h:95:3: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      95 |                 /// UAPI: NoConvert: Convert ss_local instead
-         |                 ^
-   2 errors generated.
---
-   In file included from <built-in>:1:
->> ./usr/include/linux/aio_abi.h:68:3: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      68 |                 /// UAPI: NoConvert: Padding
-         |                 ^
-   1 error generated.
-..
+Kernel information:
+    Commit message: Merge tag 'pci-v7.1-fixes-2' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/pci/pci
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2544880881
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2544880881_ppc64le_kernel
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2544880881_aarch64_kernel_kcidb_tool_21332815_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
