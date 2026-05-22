@@ -1,100 +1,206 @@
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C422217A305
-	for <llvm@lists.linux.dev>; Fri, 22 May 2026 06:02:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5545534CFAE;
+	Fri, 22 May 2026 07:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779429747; cv=none; b=bFbI79XrUVlZZtakQVFG5HbvU9WtG9yFarbZOUQu7icU9BJ/Ld3eOzGkNlFXeArQir0catwMUAgOAZTg8D7kukPmWSvoSb/Qy423AEB5iXoQ/oE6Xi/Xn8xXvKhEW3a5YFWYodzBO3NHGOR4w1s2dzauLlVuv1YsykOZBpv+wjY=
+	t=1779433838; cv=none; b=Hcz9+H7yiXgQ/fNmbGnzGkvSiiKHj8wAeFpWQgGIwSkb09LB1wts70uluzegRBbMsgyU7MeXX+o/GaxGUzv/J4zgc4lrlbL+V/XVyhDCYPpccJdeCCHcd7ami6NRNvgoJLh4B3SOgCy5YrPoMEC0+GudEvfexg3WnshFJK2sWew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779429747; c=relaxed/simple;
-	bh=x2y53w7c1e8+Q48egGy68Np7IsuVA68IgU0qf8wkud4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=OZMPcsvqmi2kXocMmPuM/dUP9Es8X9UIUv1heXSDAGaJMaMtkYOyFqOKl83FfaeRFL48Q1dk/ZtZ26dfIQgkGXgMeNVKnuFlEfuUaCX89gLSkBXMYNk+s6Qvlx7dmmj2FEsLl3wGdb4roonK7ZKEGJ598unGr0m0qQclycX68N4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=qe+1BIcd; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1779433838; c=relaxed/simple;
+	bh=swEbMHwwBqlkC8hhDvdqYagb+ZOCeTkY69rhc69F2cI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pK5yC+g8yugk88lNTyTaOQfXbTylHTeL93BeGhISqEzpG7zDyartrltH/JNw/eX5SeVzxsvUWqBAtqSL5nbgIyXbahsm/JWOfCGy8Prf8AClFkzPE1ox6mVgFMFN6uaZ0EeYw0HnYvwr1YRxOmnqiRXOQn4FLe9xABAyJ04kZlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jCxc0IE4; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="qe+1BIcd"
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20260522060222euoutp0247e8b80aff0396af064b841af45ccb6b~xzexWijxy2486124861euoutp02l
-	for <llvm@lists.linux.dev>; Fri, 22 May 2026 06:02:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20260522060222euoutp0247e8b80aff0396af064b841af45ccb6b~xzexWijxy2486124861euoutp02l
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1779429742;
-	bh=4J5pzzJH1WRf8mEoRQtTRMNCxIld6gZMOlem1a3l+Nc=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=qe+1BIcdIVTCseRLsA7U0VTRys9TvvhWVPInQqkxNGpAN8f6IQr/SlyWVIkbwuXs0
-	 CYfS+4P50jFa108fGPIYcS/TFATIiO8uKzk5di/7hDI0O4ejMS+gGU5+y983qVyzB3
-	 Q2AeNxTVw+1R+Yvhnaq5DWHJlfkyNy3BMSQRnROE=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20260522060222eucas1p21143fc4c09872a48275e37f34f2a4325~xzexMMGQQ1128511285eucas1p2B;
-	Fri, 22 May 2026 06:02:22 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20260522060221eusmtip176ff2017700ba234285cfc6154dc1d6b~xzewnzGS22675326753eusmtip17;
-	Fri, 22 May 2026 06:02:21 +0000 (GMT)
-Message-ID: <3d7f3f61-f305-4b31-beb9-c21a6d460255@samsung.com>
-Date: Fri, 22 May 2026 08:02:21 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jCxc0IE4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779433835; x=1810969835;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=swEbMHwwBqlkC8hhDvdqYagb+ZOCeTkY69rhc69F2cI=;
+  b=jCxc0IE4VUucPktS1xSbmFw8KIzGBos/sU5GNLNvVMBpYzb8aVQEITde
+   SF5aF9M2oNDoVrt2GvNuDv1ZS9gu9U+7KFBvooWhZJkEMq5YbEh3FeH3M
+   ivVgSx83kDcd5PJItV27HDWb0GtSM1x1tdEg6z3jgbxz2GimMfB4RQoL0
+   JlZ8Gv1XxiMaYeeYy1jtqSr3lQtMH0ZSD65lgPjd/G7s0dhzWLbl+Qm/t
+   VYXZsxFAxPd9wrU0w6zz+/l7GN1uvQ6ujVl4DGM1fIZZddmBFXrIZZaCr
+   NQvvx2jzH+jhlB8jwBcd1smM/9mI6//EzdmfG9AonsNIqz7PXc8GOSdB0
+   Q==;
+X-CSE-ConnectionGUID: rMK2yO7NQaabGZvt3sbiPQ==
+X-CSE-MsgGUID: sdxTVVsWRAOx6+N0MHAFjA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11793"; a="91050949"
+X-IronPort-AV: E=Sophos;i="6.24,161,1774335600"; 
+   d="scan'208";a="91050949"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2026 00:10:35 -0700
+X-CSE-ConnectionGUID: QgTrfsW9TJeEWuFXk3YVjg==
+X-CSE-MsgGUID: eMY5qiooQM2aiSnIlKmB4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,161,1774335600"; 
+   d="scan'208";a="238236669"
+Received: from lkp-server01.sh.intel.com (HELO fdb68b0ce653) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 22 May 2026 00:10:32 -0700
+Received: from kbuild by fdb68b0ce653 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wQK1d-000000001wf-1Boq;
+	Fri, 22 May 2026 07:10:29 +0000
+Date: Fri, 22 May 2026 15:09:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ashwin Gundarapu <linuxuser509@zohomail.in>,
+	"anthony.l.nguyen@intel.com" <przemyslaw.kitszel@intel.com>,
+	andrewnetdev <andrew+netdev@lunn.ch>, davem <davem@davemloft.net>,
+	edumazet <edumazet@google.com>, kuba <kuba@kernel.org>,
+	pabeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] net: e100: replace silent 'hope for the best'
+ with debug message
+Message-ID: <202605221404.6yAWlKOQ-lkp@intel.com>
+References: <19e49280392.4757403170773.5767589851918809405@zohomail.in>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [linux-next:master 5548/6445] kernel/dma/contiguous.c:139:13:
- warning: variable 'numa_cma_configured' set but not used
-To: Feng Tang <feng.tang@linux.alibaba.com>, Nathan Chancellor
-	<nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <ag5g30Jm-3gRS9QQ@U-2FWC9VHC-2323.local>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20260522060222eucas1p21143fc4c09872a48275e37f34f2a4325
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20260521013323eucas1p118cd8406a412e2fadcea2e0276529610
-X-EPHeader: CA
-X-CMS-RootMailID: 20260521013323eucas1p118cd8406a412e2fadcea2e0276529610
-References: <202605200341.a1HLq7XC-lkp@intel.com>
-	<ag0_qU5BS9KBBiWK@U-2FWC9VHC-2323.local> <20260520222742.GA1607511@ax162>
-	<CGME20260521013323eucas1p118cd8406a412e2fadcea2e0276529610@eucas1p1.samsung.com>
-	<ag5g30Jm-3gRS9QQ@U-2FWC9VHC-2323.local>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19e49280392.4757403170773.5767589851918809405@zohomail.in>
 
-On 21.05.2026 03:33, Feng Tang wrote:
-> On Wed, May 20, 2026 at 03:27:42PM -0700, Nathan Chancellor wrote:
-> [...]
->>> ---
->>> diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
->>> index 42227c823893..f286d49bf068 100644
->>> --- a/kernel/dma/contiguous.c
->>> +++ b/kernel/dma/contiguous.c
->>> @@ -136,7 +136,7 @@ static struct cma *dma_contiguous_numa_area[MAX_NUMNODES];
->>>  static phys_addr_t numa_cma_size[MAX_NUMNODES] __initdata;
->>>  static struct cma *dma_contiguous_pernuma_area[MAX_NUMNODES];
->>>  static phys_addr_t pernuma_size_bytes __initdata;
->>> -static bool numa_cma_configured;
->>> +static bool __maybe_unused numa_cma_configured;
->>>  
->>>  static int __init early_numa_cma(char *p)
->>>  {
->>>
->> I know Marek already updated this but I think a better solution would
->> have been turning the '#ifdef' into IS_ENABLED(), as I don't see a
->> reason for this code to be ifdef'd, none of these variables are
->> undeclared or unusable when CONFIG_CMA_SIZE_PERNUMA is unset. This would
->> allow the compiler to always see the variable as used, regardless of the
->> value of CONFIG_CMA_SIZE_PERNUMA.
-> Looks good to me, thanks. I'm fine either way.
-Okay, I've updated that patch again. While touching it, I've also added 
-__initdata attribute to the numa_cma_configured variable.
+Hi Ashwin,
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ashwin-Gundarapu/net-e100-replace-silent-hope-for-the-best-with-debug-message/20260521-141158
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/19e49280392.4757403170773.5767589851918809405%40zohomail.in
+patch subject: [PATCH net-next] net: e100: replace silent 'hope for the best' with debug message
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260522/202605221404.6yAWlKOQ-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260522/202605221404.6yAWlKOQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605221404.6yAWlKOQ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/intel/e100.c:1459:3: error: expected expression
+                   else {
+                   ^
+   1 error generated.
+
+
+vim +1459 drivers/net/ethernet/intel/e100.c
+
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1430  
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1431  #define NCONFIG_AUTO_SWITCH	0x0080
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1432  #define MII_NSC_CONG		MII_RESV1
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1433  #define NSC_CONG_ENABLE		0x0100
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1434  #define NSC_CONG_TXREADY	0x0400
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1435  static int e100_phy_init(struct nic *nic)
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1436  {
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1437  	struct net_device *netdev = nic->netdev;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1438  	u32 addr;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1439  	u16 bmcr, stat, id_lo, id_hi, cong;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1440  
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1441  	/* Discover phy addr by searching addrs in order {1,0,2,..., 31} */
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1442  	for (addr = 0; addr < 32; addr++) {
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1443  		nic->mii.phy_id = (addr == 0) ? 1 : (addr == 1) ? 0 : addr;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1444  		bmcr = mdio_read(netdev, nic->mii.phy_id, MII_BMCR);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1445  		stat = mdio_read(netdev, nic->mii.phy_id, MII_BMSR);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1446  		stat = mdio_read(netdev, nic->mii.phy_id, MII_BMSR);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1447  		if (!((bmcr == 0xFFFF) || ((stat == 0) && (bmcr == 0))))
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1448  			break;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1449  	}
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1450  	if (addr == 32) {
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1451  		/* uhoh, no PHY detected: check whether we seem to be some
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1452  		 * weird, rare variant which is *known* to not have any MII.
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1453  		 * But do this AFTER MII checking only, since this does
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1454  		 * lookup of EEPROM values which may easily be unreliable. */
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1455  		if (e100_phy_check_without_mii(nic))
+e95e8b2860fba4 drivers/net/ethernet/intel/e100.c Ashwin Gundarapu 2026-05-10  1456                          netif_dbg(nic, probe, nic->netdev,
+e95e8b2860fba4 drivers/net/ethernet/intel/e100.c Ashwin Gundarapu 2026-05-10  1457                                    "No MII PHY detected, continuing anyway\n");
+e95e8b2860fba4 drivers/net/ethernet/intel/e100.c Ashwin Gundarapu 2026-05-10  1458                          return 0;
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10 @1459  		else {
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1460  			/* for unknown cases log a fatal error */
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1461  			netif_err(nic, hw, nic->netdev,
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1462  				  "Failed to locate any known PHY, aborting\n");
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1463  			return -EAGAIN;
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1464  		}
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1465  	} else
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1466  		netif_printk(nic, hw, KERN_DEBUG, nic->netdev,
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1467  			     "phy_addr = %d\n", nic->mii.phy_id);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1468  
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1469  	/* Get phy ID */
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1470  	id_lo = mdio_read(netdev, nic->mii.phy_id, MII_PHYSID1);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1471  	id_hi = mdio_read(netdev, nic->mii.phy_id, MII_PHYSID2);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1472  	nic->phy = (u32)id_hi << 16 | (u32)id_lo;
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1473  	netif_printk(nic, hw, KERN_DEBUG, nic->netdev,
+fa05e1ad1b61b3 drivers/net/e100.c                Joe Perches      2010-03-16  1474  		     "phy ID = 0x%08X\n", nic->phy);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1475  
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1476  	/* Select the phy and isolate the rest */
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1477  	for (addr = 0; addr < 32; addr++) {
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1478  		if (addr != nic->mii.phy_id) {
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1479  			mdio_write(netdev, addr, MII_BMCR, BMCR_ISOLATE);
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1480  		} else if (nic->phy != phy_82552_v) {
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1481  			bmcr = mdio_read(netdev, addr, MII_BMCR);
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1482  			mdio_write(netdev, addr, MII_BMCR,
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1483  				bmcr & ~BMCR_ISOLATE);
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1484  		}
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1485  	}
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1486  	/*
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1487  	 * Workaround for 82552:
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1488  	 * Clear the ISOLATE bit on selected phy_id last (mirrored on all
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1489  	 * other phy_id's) using bmcr value from addr discovery loop above.
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1490  	 */
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1491  	if (nic->phy == phy_82552_v)
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1492  		mdio_write(netdev, nic->mii.phy_id, MII_BMCR,
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1493  			bmcr & ~BMCR_ISOLATE);
+8fbd962e39517d drivers/net/e100.c                Bruce Allan      2009-10-29  1494  
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1495  	/* Handle National tx phys */
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1496  #define NCS_PHY_MODEL_MASK	0xFFF0FFFF
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1497  	if ((nic->phy & NCS_PHY_MODEL_MASK) == phy_nsc_tx) {
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1498  		/* Disable congestion control */
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1499  		cong = mdio_read(netdev, nic->mii.phy_id, MII_NSC_CONG);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1500  		cong |= NSC_CONG_TXREADY;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1501  		cong &= ~NSC_CONG_ENABLE;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1502  		mdio_write(netdev, nic->mii.phy_id, MII_NSC_CONG, cong);
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1503  	}
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1504  
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1505  	if (nic->phy == phy_82552_v) {
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1506  		u16 advert = mdio_read(netdev, nic->mii.phy_id, MII_ADVERTISE);
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1507  
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1508  		/* assign special tweaked mdio_ctrl() function */
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1509  		nic->mdio_ctrl = mdio_ctrl_phy_82552_v;
+720017623ab294 drivers/net/e100.c                Andreas Mohr     2009-06-10  1510  
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1511  		/* Workaround Si not advertising flow-control during autoneg */
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1512  		advert |= ADVERTISE_PAUSE_CAP | ADVERTISE_PAUSE_ASYM;
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1513  		mdio_write(netdev, nic->mii.phy_id, MII_ADVERTISE, advert);
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1514  
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1515  		/* Reset for the above changes to take effect */
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1516  		bmcr = mdio_read(netdev, nic->mii.phy_id, MII_BMCR);
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1517  		bmcr |= BMCR_RESET;
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1518  		mdio_write(netdev, nic->mii.phy_id, MII_BMCR, bmcr);
+b55de80e498920 drivers/net/e100.c                Bruce Allan      2009-03-21  1519  	} else if ((nic->mac >= mac_82550_D102) || ((nic->flags & ich) &&
+60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1520  	   (mdio_read(netdev, nic->mii.phy_id, MII_TPISTATUS) & 0x8000) &&
+d4ef55288aa2e1 drivers/net/ethernet/intel/e100.c Jesse Brandeburg 2021-03-25  1521  	   (le16_to_cpu(nic->eeprom[eeprom_cnfg_mdix]) & eeprom_mdix_enabled))) {
+60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1522  		/* enable/disable MDI/MDI-X auto-switching. */
+60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1523  		mdio_write(netdev, nic->mii.phy_id, MII_NCONFIG,
+60ffa478759f39 drivers/net/e100.c                Jeff Kirsher     2006-08-16  1524  				nic->mii.force_media ? 0 : NCONFIG_AUTO_SWITCH);
+648951451e6d2d drivers/net/e100.c                Malli Chilakala  2005-06-17  1525  	}
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1526  
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1527  	return 0;
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1528  }
+^1da177e4c3f41 drivers/net/e100.c                Linus Torvalds   2005-04-16  1529  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
