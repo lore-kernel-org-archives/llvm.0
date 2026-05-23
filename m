@@ -1,89 +1,166 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24D31A5B8A;
-	Sat, 23 May 2026 00:52:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2056B145355;
+	Sat, 23 May 2026 01:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779497528; cv=none; b=mWdo+PBWdfrGuFhqlrv2oe5ViAPLP7lomifk+2GiFVcLYeBrxABlO4Rqgq0n6SZR0gdEy7Homgl7Hw8elxOXqjPAFz0QMLiyyRC3wAC3psxU6A0OJ4xRLpV628oNq48myHJwPoJlub4jZz7eQPSFlrGq/2WzkIN1/JNfXRswNuo=
+	t=1779499050; cv=none; b=H++31g+fQFXVp54Xuprpzi/349xWXVihimob+5ZmV9opy5l9b066HFA2zzus1NrZbBKREy/XV1imVhKPSebl2ScdibE8BZlYLjjHOkc80+PaVbV4WqtY8AeDBrrp6YuYL4yzhrMXa4ZUSghYLqVrBgLrf80137+D/LEctReAiAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779497528; c=relaxed/simple;
-	bh=mMKbUXhotAiM3JrCASgbl0bizLNw3atB0q/nyPLZlDY=;
+	s=arc-20240116; t=1779499050; c=relaxed/simple;
+	bh=i/3lZb8lZXlY0K/M/zqOdtxGHQVNEkC5Acp162PQKhY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OsM2bXcsHfl/VKpp2mT+UYPhStHlg9aQRtN2XCXen9gPXZUD1GpW7CkOJa5M8wAFjy6/6DGXZIgLgiWnOLJ5Xbf/bhBcUq8DqU7B4UO7HMGxbC4QTvXf3O9v7R0cFjVUiV8eddsGtVb5s4VkqzVxQ8bQ49kHbriSqB+bfDthsBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lxwrsbcZ; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=jbtyWDeWCFQ1lW3HLMmDNfCucxrxX6ZvNZRg8SiV4n6ltlKbObPQOpTP8miFf4oW9TzXQOJd33TvtXNKbFLboNbUC9SEMXVNQhDlkOEeiGmOPVaNlQmnco6ipWbkcf3HkFsijeQrhyD8Hw7ldBkWWtHVSJ2sIUq3CtrnVLrqzTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nk0nNDLK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lxwrsbcZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C60841F000E9;
-	Sat, 23 May 2026 00:52:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nk0nNDLK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A2141F000E9;
+	Sat, 23 May 2026 01:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779497527;
-	bh=xQt/ftYZ853rYkzRLauQOTMPaYs6t+GxooPkj8b75dU=;
+	s=k20260515; t=1779499048;
+	bh=JJk/5P73IG0Jf6gdZ+X/6wOiaPgi2bb7vgUfpVrZAm8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lxwrsbcZ520irmjUu+CI20HzPNzHRuVpVP+Pb5K1jBd6UqKmHTbIlzYm2fQPYivHt
-	 akkgpi82bWIj8Ol0lRXpA3L/Ru6PcYNwz6L0AWbutyRJoFHnX1iRbkVporWBRzzAU+
-	 9rIJTwhxBoiZrsrYlw2fYOwnADF5en8CRtUd+waTRhcvOlAkBikzFiALsfPa2yXZpS
-	 5lgCLdDCPl4rr+8CISNyGR3yix6K915h8oqOinp43hF2mEiBo750lwLWfa08OetVWE
-	 hvd9FkuDpgryNs23iORvwBT7CEoZJ3+mk7a/24jVbMhR2nwVb5RCJTEWp0Rqj1exw0
-	 pI9buf6B486Ew==
-Date: Fri, 22 May 2026 17:52:04 -0700
+	b=nk0nNDLK64aOetewdYpyH1zDQ38YIHaooaai12+JjzbjSIW93bAxot1n8QFYBBo0k
+	 io6P7TUS0b8otOG860DuIpiUaa/6CeOa1tJqIZBFPZAb0qi1cxH9N80EtC+AsS5r4S
+	 DoYmP3U3Uk+zKWlLtq+yDS1md60RSCmRtx5RlZ1EtYyI4A1O9VYdyDXZpG0m/tPOX/
+	 EVrb5a0xpji//quHcsaIvWEbGjpQ0gzFZ5stC6JX+KdbGH9JFlAAO0AlZ+m9MXPZuT
+	 sG/A5uAoA3jJk0Zn86/g8tdbcySuNiTCzYqkjR+2WcZcwWH4htSzRKLzvJ/XDOOaWp
+	 v/AEtaIzl7gHg==
+Date: Fri, 22 May 2026 18:17:21 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [linux-next:master 5302/7547] fs/open.c:152:1: error: unknown
- warning group '-Wattribute-alias', ignored
-Message-ID: <20260523005204.GA520407@ax162>
-References: <202605220247.dQAHslyv-lkp@intel.com>
+To: Rong Xu <xur@google.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Stafford Horne <shorne@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Piotr Gorski <piotrgorski@cachyos.org>,
+	Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v9 3/3] kbuild: distributed build support for Clang
+ ThinLTO
+Message-ID: <20260523011721.GB520407@ax162>
+References: <20260331154827.2793269-4-xur@google.com>
+ <20260331162729.GA2006419@ax162>
+ <2672f790-f57b-4739-b78f-906c0a5d202e@linux.dev>
+ <CAF1bQ=R6=0G9O-eNFsHiCLMpkph7=hSu4Rn_HjFD4PvTFnAnDQ@mail.gmail.com>
+ <69e60bc9-cfe6-4b8d-b61b-5840f7d2518a@linux.dev>
+ <CAF1bQ=TFMSkLE6bqPEOqGxcLbC7tYfPqEmg7xrjbc2m_B=72GA@mail.gmail.com>
+ <4914f246-611c-4f8a-94d5-b1d868266fd0@linux.dev>
+ <CAF1bQ=Ta0LJVSiEWnhyq=mXA81m3=-gW1H+iyQyQwZ+w02g1VA@mail.gmail.com>
+ <21591f06-fedd-4a51-b06c-947c72b1457f@linux.dev>
+ <CAF1bQ=Q3szLgxREV2R=v9eEqDrme8r+Ky2ZtQiuXZ2A1ZrHPYw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202605220247.dQAHslyv-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF1bQ=Q3szLgxREV2R=v9eEqDrme8r+Ky2ZtQiuXZ2A1ZrHPYw@mail.gmail.com>
 
-On Fri, May 22, 2026 at 02:18:49AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   550604d6c9b9efc8d068aff94dc301694a7afdee
-> commit: bc5ffe737f56ee2734597069ed71f48830549483 [5302/7547] Disable -Wattribute-alias for clang-23 and newer
-> config: arm-defconfig (https://download.01.org/0day-ci/archive/20260522/202605220247.dQAHslyv-lkp@intel.com/config)
-> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260522/202605220247.dQAHslyv-lkp@intel.com/reproduce)
+On Fri, May 22, 2026 at 11:58:35AM -0700, Rong Xu wrote:
+> On Fri, May 22, 2026 at 11:44 AM Yonghong Song <yonghong.song@linux.dev> wrote:
+> > On 5/22/26 11:14 AM, Rong Xu wrote:
+> > > On Fri, May 22, 2026 at 10:52 AM Yonghong Song <yonghong.song@linux.dev> wrote:
+> > >> On 5/22/26 8:32 AM, Rong Xu wrote:
+> > >>> On Thu, May 21, 2026 at 2:57 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+> > >>>>
+> > >>>> On 5/21/26 11:31 AM, Rong Xu wrote:
+> > >>>>> Yonghong, thanks for the update.
+> > >>>>>
+> > >>>>> Regarding this guard: ther is a period of Clang (before this patch and
+> > >>>>> after your first patch), even though ld.lld having these options
+> > >>>>> (specifically --lto-whole-program-visibility -mllvm
+> > >>>>> -always-rename-promoted-locals=false), distributed ThinLTO mode
+> > >>>>> remains unsupported, correct? What the behvior of using this options
+> > >>>>> in distributed mode with these compilers? nop or it will lead to
+> > >>>>> error?
+> > >>>> The in-process thin-lto support is landed on Feb 27.
+> > >>>> The distributed thin-lto support is landed on Apr 24.
+> > >>>>
+> > >>>> If people are using distributed thin-lto in kernel between Feb 27 and
+> > >>>> Apr 24, there will be some issues. But people typically use released
+> > >>>> compiler, so we should be fine.
+> > >>> This is not the case for us (google). We do use compiler b/w releases,
+> > >>> and we build our own.
+> > >>>
+> > >>> What is the issue if we use the compiler in b/w Feb27 and Apr24?
+> > >> If you use the custom compiler between Feb27 and Apr24 and your kernel
+> > >> will do distributed thin-lto, you can remove
+> > >>      $(call ld-option,--lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false)
+> > >> from your kernel. Since you have custom compiler, you can
+> > >> do some customization for your kernel as well.
+> > > I am referring to this specific patch -- there are cases that use
+> > > custom compilers built between the February 27 and April 24 LLVM
+> > > releases.
+> > > I don't want to see any breakage for distributed ThinLTO in these cases.
+> > >
+> > > I would prefer to keep this guard for distributed ThinLTO for the time
+> > > being and remove it later. What do you think?
+> >
+> > For 'remove it later', when this will happen? When llvm23 cuts the rc
+> > in July or cut the release in September or the end of bug fix say in December?
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202605220247.dQAHslyv-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> fs/open.c:152:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
->      152 | SYSCALL_DEFINE2(truncate, const char __user *, path, long, length)
->          | ^
->    include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE2'
->      226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
->          |                                    ^
->    include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
->      236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
->          |         ^
->    include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
->      250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
->          |         ^
->    note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
->      135 | #define __diag_clang_23(s)      __diag(s)
->          |                                 ^
->    include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
->      132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
->          |                                 ^
->    <scratch space>:223:27: note: expanded from here
->      223 |  clang diagnostic ignored "-Wattribute-alias"
->          |                           ^
+> I can remove the guard when the minimal clang containis the 4/24 patch.
 
-Please update your clang-23, this will be avoided with a newer version
-from main that has the change that adds -Wattribute-alias.
+I think we could just change
+
+  ifdef CONFIG_LTO_CLANG_THIN
+  KBUILD_LDFLAGS += $(call ld-option,--lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false)
+  endif
+
+to
+
+  ifneq ($(CONFIG_LTO_CLANG_THIN)$(CONFIG_LTO_CLANG_THIN_DIST),)
+  KBUILD_LDFLAGS += $(if $(call clang-min-version,230100),--lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false)
+  endif
+
+when LLVM 23.1.0-rc1 is out to avoid that Feb 27 to Apr 24 breakage?
+
+> > If we carry the guard (for distributed thinlto) in this kernel release,
+> > that means at some point, we will need to do kernel backport, extra work.
+> 
+> I don't understand here: this is part of the distributed thinlto patch
+> that you would need merge anyay.
+> where is the extra work for backporting?
+> 
+> > Also, since you are building custom in-development compiler, you can
+> > disable this flag -always-rename-promoted-locals, problem solved, right?
+> 
+> I'm not only talking about me. There are other users also use this way.
+> BTW, even in google, I don't control the compiler that being used.
+
+So in general, we assume that folks who are using prerelease compilers
+(i.e., 23.0.0 in this case) are upgrading them regularly, as we may need
+to workaround or fix issues that happen in main that cannot be
+dynamically detected (at least not easily or conveniently). For example,
+recent main versions of clang have support for -Wattribute-alias, so we
+need to turn it off via #pragmas like done for GCC, which will break
+things for clang-23 versions that do not have -Wattribute-alias:
+
+  https://git.kernel.org/nathan/c/bc5ffe737f56ee2734597069ed71f48830549483
+
+So the argument about breaking compilers in between Feb 27 and Apr 24 is
+not really relevant in my opinion since they should be short lived in
+terms of deployment. However, given that things work the way the check
+is currently written and the LLVM 23 branch is only a couple of months
+away, I am fine with just sticking with how it is currently written and
+updating it when things are more guaranteed to work.
 
 -- 
 Cheers,
