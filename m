@@ -1,99 +1,55 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDADF63B9
-	for <llvm@lists.linux.dev>; Sat, 23 May 2026 01:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25303043D5;
+	Sat, 23 May 2026 03:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779499929; cv=none; b=jx+Nu4hjXm9xg74ds+7ZnsxRpANw4VazoDXlrh+hpNhf1R5LnJS+pXf9IHB2/9HBuRw6K89+RyCH/3fq5Uv3MsBcLJMaQHYSTNhs4QswM0vQfZMgjeywv9tRdElmm43NvMT3j8Xc6I2EjU4JBfz7zIo/CFgHJ/e+rdAcEDIf+OY=
+	t=1779506485; cv=none; b=PcRTfyd0yyX/S49exLOp9+z+PaG63wEoeM91RBXMaQk0irefbKBiCIMeI8sOoCd/e1FWmchdVnoXt6i9lhAZUP42Q0XtNa9nD4RhgQuhrucNJW/twmgNSPsFSzTjUO1tvZZuA8XwfAKDgwxrOrEVPJog/sPnkMUEnfalxIlOEZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779499929; c=relaxed/simple;
-	bh=3FRznZxFkMVbwSufSIAn+qxZCMivThUvXfxTF0aPmNg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=rX6Z11SUawjSKV36B+e3vheeTQvdjx5a7w1zSSOGSqW34Fp//z7ljjblt0cAbBJ+Kp8XY85GEy9Vf3EIuHyyQMS3jUXkkBqXrFt/+H7KCpp/oadwFet+1QcTbLFtlOLWib+s4wf9Z9+3MqCjfRLVDDfaM/JHKfUr7grpbU0xmk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N3RzUm8x; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1779506485; c=relaxed/simple;
+	bh=flX45g+d8KosDoVuivgJStXttAmPFYItb5f9ROdX5lQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=k34YXlTz4uJ/P5pz5wPK3d5pKGnxm4+ldsLgYLKpQb6B1vfv49eZ5RLvJaJ5l3t9pxnIEEkYrlR5+JEH/dxRL0Jd2BKbiczTUheoahuiSjt4vZF1Sm6R2MnasgDAh8Y7q1R5HvE4YADqKJiLexTKNH9OIioQFa2QYdd5Tm2xmoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aG+1VmWl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N3RzUm8x"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779499926;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=OlNLtvSKKq7Uuns0i6MgqfybFNVOnVwZoFd8Yc4Wxw0=;
-	b=N3RzUm8xYqaRxzlBt6oFPt/Q4CWzC3UCHxEntNfL50eYQcCwG8jB7oxEK4WoM0dsgVx0Qg
-	UR1CXey/r9kNqmbRhCD3hMiLysTHNEQLzIKtzRh9OLUMwOt5cVW3y0IlBjEJYd8Zvr3Yeq
-	/TLx0J+Y6c8pZkv8C2Le6fM2X0MS9d8=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-78-VtNoiVhgO16NnLtiY9-u8w-1; Fri,
- 22 May 2026 21:32:05 -0400
-X-MC-Unique: VtNoiVhgO16NnLtiY9-u8w-1
-X-Mimecast-MFC-AGG-ID: VtNoiVhgO16NnLtiY9-u8w_1779499924
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 374871800344
-	for <llvm@lists.linux.dev>; Sat, 23 May 2026 01:32:04 +0000 (UTC)
-Received: from [172.20.212.222] (unknown [10.30.45.124])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C4C4619560B4;
-	Sat, 23 May 2026 01:32:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-rc4,
- upstream-mainline, 79bd2dde)
-Date: Sat, 23 May 2026 01:32:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aG+1VmWl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6296F1F000E9;
+	Sat, 23 May 2026 03:21:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779506483;
+	bh=flX45g+d8KosDoVuivgJStXttAmPFYItb5f9ROdX5lQ=;
+	h=Date:From:To:Cc:Subject;
+	b=aG+1VmWlMbvsp7jDp9RX5qzsBz3BxkybokqRFgG/0Sjyyr6OfKmcVI5cFjZgMLf9k
+	 7ywUKwKhGSTrmB1ozRKjggQDdHLSlpakDlxWftDB16q+zM4GHbPH3AllZsW7l5G/V1
+	 jvv7aBauykU9G4keLHH+Vw6s/7Zyab6C+ky03BNK8j81AGVTrCa1npw3DXML340GaR
+	 ekLzxiSVLySWEWFlTT3B2XwSLeNw/aLNdmo7EhUKHFREG8LRlCx3vaDrKbTSihgDWV
+	 zoHkLGv3czk6POE27C+EAjCdoxfWToa0dGpX8bzVb4BYJMlEssiy8TxEEYag2IEh3g
+	 sarwuuL5BOa0w==
+Date: Fri, 22 May 2026 20:21:19 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: ojeda@kernel.org
+Subject: Prebuilt LLVM 22.1.6 uploaded
+Message-ID: <20260523032119.GA317916@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <40204.126052221320500163@us-mta-78.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: e-ShARWhkIiHYLoaFLR1B_6jLP8v16hB3p8gEGKIiu0_1779499924
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi all,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+I have built and uploaded LLVM 22.1.6 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before the 22.x
+series is no longer supported.
 
-Kernel information:
-    Commit message: Merge tag 'sched_ext-for-7.1-rc4-fixes' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/tj/sched_ext
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2547520148
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2547520148_aarch64_kernel
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Nathan
