@@ -1,124 +1,90 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8AD33F5A9
-	for <llvm@lists.linux.dev>; Fri, 22 May 2026 23:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24D31A5B8A;
+	Sat, 23 May 2026 00:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779492654; cv=none; b=iDYaa3aPsK6y4vf/+jXwDKT8HappXxnnefXk7Hl2qyhOdDuSS2moUDrMt7mHjePdXeqagFsss1mOtz5dP7Ki+M3VxNIP4JqG7rrbigP9z+tuQIuOs7JKYmDIBZHPazOJAjjFbj0hWOObSEtgPalbp7b4R6ClrTHhdPVUWzJCFl8=
+	t=1779497528; cv=none; b=mWdo+PBWdfrGuFhqlrv2oe5ViAPLP7lomifk+2GiFVcLYeBrxABlO4Rqgq0n6SZR0gdEy7Homgl7Hw8elxOXqjPAFz0QMLiyyRC3wAC3psxU6A0OJ4xRLpV628oNq48myHJwPoJlub4jZz7eQPSFlrGq/2WzkIN1/JNfXRswNuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779492654; c=relaxed/simple;
-	bh=vvmjUek1QzkG1Hk5FgNGb9tW9zywdDL3NFyvPD5zYmA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YTN0hpi++pOl4ENOG4lpV+IMkGdJeTCeBgflLsSbMSyrI5O+lLH9d3e25Vnp7o1LnqB5aOyWQoCTkME4ACaES0hsb6Y20J2IPNcc2f5lUiNZPgT1/qdMcpQfgfES2j5stNB3pag8jefjp0ofe7tY+CTnDEjBGBMi7YVz0LywezM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XJS3MQmB; arc=none smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779497528; c=relaxed/simple;
+	bh=mMKbUXhotAiM3JrCASgbl0bizLNw3atB0q/nyPLZlDY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OsM2bXcsHfl/VKpp2mT+UYPhStHlg9aQRtN2XCXen9gPXZUD1GpW7CkOJa5M8wAFjy6/6DGXZIgLgiWnOLJ5Xbf/bhBcUq8DqU7B4UO7HMGxbC4QTvXf3O9v7R0cFjVUiV8eddsGtVb5s4VkqzVxQ8bQ49kHbriSqB+bfDthsBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lxwrsbcZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XJS3MQmB"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-651c366f7efso8202953d50.1
-        for <llvm@lists.linux.dev>; Fri, 22 May 2026 16:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779492652; x=1780097452; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OVgXaIjnKTC975MfdRgmXFyZkQKLmkaHxhR1b9izJDM=;
-        b=XJS3MQmBjk9ui9YCKvTUG3A5xnbNx5vnVT4hn3qBZWnM0FklTqfl4/djLIP0P9asP2
-         67NZ9OrVZs+gG7DAhSZT9VSrZtnz+G4Xn1mtlu0fohCFlinFHhhsFDsaEOz68XYa05Av
-         plysStmZ68zSyicB4COdMKD4x8CH1YmdWUydN9jBHL9DhpzmNlOwMlh79a6IflNwk7Sr
-         +nsMtVbzVO6Px+9F/HqTo8SqPtdJ1AAEPeDi6FRzwKPGZgtIWJ8PyQVbVKdBToh1RaAK
-         ja5RhvTroz6IsYtiD4uPVoowqYPBMkkwh74/QhllnpyNAZAvBJsxYbijntaA6X9Y8yPO
-         3UDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779492652; x=1780097452;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OVgXaIjnKTC975MfdRgmXFyZkQKLmkaHxhR1b9izJDM=;
-        b=KTOonVmKsYjxSH4wt5n+Zm20K/XEO+KHOvv1o1Nj2dbQoHVqluVpQ8auZpNMSNvLoo
-         NLbl1Z+d+hj9nhh4rk76y1+bb+uZU63UB7auQbjA0gz0bkca/y3bVf0FkdyVtXx4rxXy
-         88B3iZEiOneVU/hBEaQuh9KKARDzEAvkJNSjwJs/2TqRfS48yu8spmYdgZdMiB+EpW8I
-         dS0TI9vMOZbsdz9ejvUj9sc0Wz1bzFa4dIaJNQRKoiaWA4z6GSzK+95LcvlDBNCbEc/c
-         xRSbJw06eXQiavzklvalZe0Vr68j+DDTajZU26GHW4P0fBKXDiTIrEyCCoEAScw+3EbD
-         dtNQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+t3t33v1qqZt8h+WBK0wbG/+6h5mBGUbsomxXX0lq5meAqXye/feBpXa4f9TWVjbF20JWY@lists.linux.dev
-X-Gm-Message-State: AOJu0YwvkJhh6SbhlwIec59C98T25uws7hsYU2lx4B3AnTJ52lLvtetF
-	NNwmuWfjx1tFz9pG/gwkaeJ4PiS0LtGvmbMOD1mBHF4/R10WIeMfioew
-X-Gm-Gg: Acq92OHfzmsROgYPf1VsBMdSSGrEVfkszoK0w4S28o+/6QsKdx6r6s/a9Mkf2CFOoFa
-	iA/fTL2gUpxApS2IzoWTRNnIrR5Q0/XjbXqNPcRljG7eh+L9QRVVzKhF/VHFtl+BrJXdubN8pAI
-	l7zIPxzsYjx1mSZODAhYpNZt9tF7hAF+17sjfS12LPU72Ir2Df6Tk2EDItKGDECAehVyR6XawUI
-	3IB/UgHgLLU2wJh8tEG0nKSDH5c6Lw16+loYeQaer+uy5CfOywnUsBYXhJKoB0UB/AVejzZVL+9
-	OJWOpMH2iInznYGX53niKxSQ/se3weO9vv4gmUH4NI00CTkhgiVrXEGyIBy3i5+tlg39tvVGYXj
-	Vh1GroGrFeqNgzyzQhZ2BBuMYCb3umSUlrAY2moXVDtOeNpPMLIZxDpRyv4weYi/1fB16Uwc3KZ
-	Hs5ynj2Kixz/kh9xflZDCjDFUskBrTmXTyOkdw6ea3LrSgLkR7rJK3y/0tnKsAZkvaDo466xw31
-	nyKP42mzrh62omZq2gIfzdw4TaXUH+Jwh5qJ+rn2K0SAU0+i16OilTDKNIPCbLUwK+tvg==
-X-Received: by 2002:a05:690e:418e:b0:65c:5b88:849f with SMTP id 956f58d0204a3-65ec9931107mr5745827d50.45.1779492651865;
-        Fri, 22 May 2026 16:30:51 -0700 (PDT)
-Received: from localhost.localdomain (99-61-165-33.lightspeed.sntcca.sbcglobal.net. [99.61.165.33])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65ecfdfc74csm1341853d50.21.2026.05.22.16.30.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2026 16:30:51 -0700 (PDT)
-From: Mithil Bavishi <bavishimithil@gmail.com>
-To: Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Tony Lindgren <tony@atomide.com>,
-	Russell King <linux@armlinux.org.uk>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <kees@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Mithil Bavishi <bavishimithil@gmail.com>
-Subject: [PATCH v2] ARM: OMAP2+: Add CFI type for omap4_finish_suspend
-Date: Fri, 22 May 2026 16:30:36 -0700
-Message-ID: <20260522233036.12277-1-bavishimithil@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lxwrsbcZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C60841F000E9;
+	Sat, 23 May 2026 00:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779497527;
+	bh=xQt/ftYZ853rYkzRLauQOTMPaYs6t+GxooPkj8b75dU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=lxwrsbcZ520irmjUu+CI20HzPNzHRuVpVP+Pb5K1jBd6UqKmHTbIlzYm2fQPYivHt
+	 akkgpi82bWIj8Ol0lRXpA3L/Ru6PcYNwz6L0AWbutyRJoFHnX1iRbkVporWBRzzAU+
+	 9rIJTwhxBoiZrsrYlw2fYOwnADF5en8CRtUd+waTRhcvOlAkBikzFiALsfPa2yXZpS
+	 5lgCLdDCPl4rr+8CISNyGR3yix6K915h8oqOinp43hF2mEiBo750lwLWfa08OetVWE
+	 hvd9FkuDpgryNs23iORvwBT7CEoZJ3+mk7a/24jVbMhR2nwVb5RCJTEWp0Rqj1exw0
+	 pI9buf6B486Ew==
+Date: Fri, 22 May 2026 17:52:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [linux-next:master 5302/7547] fs/open.c:152:1: error: unknown
+ warning group '-Wattribute-alias', ignored
+Message-ID: <20260523005204.GA520407@ax162>
+References: <202605220247.dQAHslyv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202605220247.dQAHslyv-lkp@intel.com>
 
-With CONFIG_CFI enabled, OMAP4 can trap in omap4_enter_lowpower()
-because omap_pm_ops.finish_suspend points directly to the assembly
-routine omap4_finish_suspend, which lacks the expected KCFI type
-metadata.
+On Fri, May 22, 2026 at 02:18:49AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   550604d6c9b9efc8d068aff94dc301694a7afdee
+> commit: bc5ffe737f56ee2734597069ed71f48830549483 [5302/7547] Disable -Wattribute-alias for clang-23 and newer
+> config: arm-defconfig (https://download.01.org/0day-ci/archive/20260522/202605220247.dQAHslyv-lkp@intel.com/config)
+> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260522/202605220247.dQAHslyv-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202605220247.dQAHslyv-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> fs/open.c:152:1: error: unknown warning group '-Wattribute-alias', ignored [-Werror,-Wunknown-warning-option]
+>      152 | SYSCALL_DEFINE2(truncate, const char __user *, path, long, length)
+>          | ^
+>    include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE2'
+>      226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, __VA_ARGS__)
+>          |                                    ^
+>    include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFINEx'
+>      236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+>          |         ^
+>    include/linux/syscalls.h:250:2: note: expanded from macro '__SYSCALL_DEFINEx'
+>      250 |         __diag_ignore(clang, 23, "-Wattribute-alias",                   \
+>          |         ^
+>    note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+>    include/linux/compiler-clang.h:135:28: note: expanded from macro '__diag_clang_23'
+>      135 | #define __diag_clang_23(s)      __diag(s)
+>          |                                 ^
+>    include/linux/compiler-clang.h:132:20: note: expanded from macro '__diag'
+>      132 | #define __diag(s)               _Pragma(__diag_str(clang diagnostic s))
+>          |                                 ^
+>    <scratch space>:223:27: note: expanded from here
+>      223 |  clang diagnostic ignored "-Wattribute-alias"
+>          |                           ^
 
-Annotate omap4_finish_suspend with SYM_TYPED_FUNC_START so the assembly
-routine carries the KCFI type metadata.
+Please update your clang-23, this will be avoided with a newer version
+from main that has the change that adds -Wattribute-alias.
 
-Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
----
- arch/arm/mach-omap2/sleep44xx.S | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/mach-omap2/sleep44xx.S b/arch/arm/mach-omap2/sleep44xx.S
-index f09c91978..0b48df6fc 100644
---- a/arch/arm/mach-omap2/sleep44xx.S
-+++ b/arch/arm/mach-omap2/sleep44xx.S
-@@ -58,7 +58,7 @@
-  * stack frame and it expects the caller to take care of it. Hence the entire
-  * stack frame is saved to avoid possible stack corruption.
-  */
--ENTRY(omap4_finish_suspend)
-+SYM_TYPED_FUNC_START(omap4_finish_suspend)
- 	stmfd	sp!, {r4-r12, lr}
- 	cmp	r0, #0x0
- 	beq	do_WFI				@ No lowpower state, jump to WFI
-@@ -223,7 +223,7 @@ skip_scu_gp_clear:
- 	isb
- 	dsb
- 	ldmfd	sp!, {r4-r12, pc}
--ENDPROC(omap4_finish_suspend)
-+SYM_FUNC_END(omap4_finish_suspend)
- 
- /*
-  * ============================
 -- 
-2.43.0
-
+Cheers,
+Nathan
