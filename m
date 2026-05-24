@@ -1,100 +1,157 @@
-Received: from mail2.andi.de1.cc (vmd64148.contaboserver.net [161.97.139.27])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FF250276
-	for <llvm@lists.linux.dev>; Sat, 23 May 2026 22:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.97.139.27
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14902CCB9;
+	Sun, 24 May 2026 00:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779576422; cv=none; b=MyMQ5foONvGaXfOOx/yDUERs3yG5lCjNSofvXUuEYshp/jz4VDquVZ+Gnn/0vIE0FBkeOt6p0PR9Qxup3VQEPng1Sk1nPhdmiKADZlPQ9rGsk3AyS0X/yy5yIoVNgTpcNK71ATPiDK7XMheR8z1JmzQu7eQEFk9bQVVefBWT5pY=
+	t=1779583388; cv=none; b=CTAEcqvUdVglYWxzGv6mw0ySUEVFLR/aeVRt0d+zVdBx9m6ufFvmS3VrCD3zfMvG45o9ysQH39D+sla8thK1LowRdPsPrCITaEql3hP01c0bSwsXYCSP49uTv3MGD4OVCChR5c9IrlK6eREQ13QtPFe39Czs5FDbbDCfsMKqjpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779576422; c=relaxed/simple;
-	bh=hI2WxIL/SFibqPgCNfqmsJi15LBfE7vwSV9XDng5yMc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=inAMhFvkmnot0wQdUA3s9dl2fi4lNSk7dHi7wYhViXGFfYSB4Zagw67qbJhGWxQpvO14iNV/OjcFUBYokSZZ6r+WB9Pkzp4Xrj3XDhmFoHIOjpxCJ3e8wamqLYGU9cCtxYlUFogqAXEfprkoEmEk9KOLQ67pWvlME+u4EJKx2lM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=29eVPFxr; arc=none smtp.client-ip=161.97.139.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+	s=arc-20240116; t=1779583388; c=relaxed/simple;
+	bh=sjjHbte3eiz4moBHWiBbxv1YP40LKcIdx3yYpzZN3g4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Km8HoOEygYcPEk5mh+GW4Bcqm/HIkL+47aFa3yoGBKkRemxP8f2IeKQThrgAHkBMrch304n84hZH34e/d7rSPoWVk0cVeArKSkSZ/YqhX4C2lfSYGNnNGXK/JHWnIurFKsB6xNaBBwOpw2FezaIu59344/PInteAh/5KQfqhFsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KW3uFkhn; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="29eVPFxr"
-Received: from mail.andi.de1.cc ([2a02:c205:3004:2154::1])
-	by mail2.andi.de1.cc with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <andreas@kemnade.info>)
-	id 1wQuT1-0000000H3qM-0Cpg
-	for llvm@lists.linux.dev;
-	Sun, 24 May 2026 00:05:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=5y5C7U0eJNMWpozPRhpxeJdIqeK0zzLaadU8ylQbPm8=; b=29eVPFxrSct7jQWCF+6gO7VEHs
-	zKAP0Qda313Jh20BQWWgKsnRy1pBtFicxbgKdgC+UZNl9mNE2ESJ65O+vwTbr4DBVdTrjeqg6wR8L
-	saOEkvzVEY1VE2xp9ZYWdUfITY1x72Yt4GTaVgaP9gTF3KQqNscluekNakGKl4cro6dHMxjj9xeek
-	30PT+yCxhZmCUr5AdO9vAW3XdmXNUzWSjQ6w6P3CJSTz/Fx2x+EqkL6U9jymtBr/xAEc8ygNjbuIa
-	H3uj5A9XYEFwlb/lpVf6QpJ7qTtxOjYvw3w11jiicIcuT5SgSwyb57cH/eRRXhlp3NIXzn32Ttvf/
-	wAifhk3Q==;
-Date: Sun, 24 May 2026 00:04:52 +0200
-From: Andreas Kemnade <andreas@kemnade.info>
-To: Mithil Bavishi <bavishimithil@gmail.com>
-Cc: Aaro Koskinen <aaro.koskinen@iki.fi>, Kevin Hilman
- <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, Tony Lindgren
- <tony@atomide.com>, Russell King <linux@armlinux.org.uk>, Sami Tolvanen
- <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-omap@vger.kernel.org, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ARM: OMAP2+: Add CFI type for omap4_finish_suspend
-Message-ID: <20260524000452.0d67f884@kemnade.info>
-In-Reply-To: <20260522233036.12277-1-bavishimithil@gmail.com>
-References: <20260522233036.12277-1-bavishimithil@gmail.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KW3uFkhn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779583386; x=1811119386;
+  h=date:from:to:cc:subject:message-id;
+  bh=sjjHbte3eiz4moBHWiBbxv1YP40LKcIdx3yYpzZN3g4=;
+  b=KW3uFkhnKc2jadn6L4LbpqjxhvpvtkiraaGIxBU+lcUkEMKh2Nna3aoT
+   R82u0XPcM4F718WDc04IckXe2M96YnA5Jm17M1E367TgHx4bBT45EPTL0
+   X4VZ1Q9yzgPajUXpH1kqMu2CaDF0/JNc1NVR6W+oONok8nIlwjQgcQ0M2
+   rLnUXak5uWJnmIq4ui/g7gjA0tdvt6O/aSQZIpusRzWyxT6XLogXC17Br
+   tFvTch4NfmM+GiR2myIiqSjb0/lRUCAAQcHeFRm3oAch3xrhYRenj8txH
+   H+k0zdYaLEfR2mBAdzv17rNb8jNVmtEsFkHcubDj/iAfE12wsLVRfW0+G
+   A==;
+X-CSE-ConnectionGUID: BIad1p0PTtu9ffDpQ6eWRg==
+X-CSE-MsgGUID: DCwM3Q/PTDiQj/GJOoSoTA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11795"; a="98034350"
+X-IronPort-AV: E=Sophos;i="6.24,165,1774335600"; 
+   d="scan'208";a="98034350"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2026 17:43:05 -0700
+X-CSE-ConnectionGUID: MwzvTACHQZS4nxYkgZvKyA==
+X-CSE-MsgGUID: ZqQGWk/yRZqmKI70tscwkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,165,1774335600"; 
+   d="scan'208";a="245533735"
+Received: from lkp-server01.sh.intel.com (HELO 6ba8523b1a8f) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 23 May 2026 17:43:04 -0700
+Received: from kbuild by 6ba8523b1a8f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wQwvl-000000000V5-0idu;
+	Sun, 24 May 2026 00:43:01 +0000
+Date: Sun, 24 May 2026 08:42:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Brian Cain <brian.cain@oss.qualcomm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bcain:bcain/boot_qemu 17/40]
+ arch/hexagon/kernel/setup.c:50:15: error: use of undeclared identifier
+ '__dtb_start'; did you mean '__bss_start'?
+Message-ID: <202605240825.mlcuRxza-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Fri, 22 May 2026 16:30:36 -0700
-Mithil Bavishi <bavishimithil@gmail.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
+head:   35eb04372bf7b3ef31afcde7c3336a0ff690d16c
+commit: 069f8d84bd3fe3a24e07fbf9de23de4537d60c29 [17/40] hexagon: add platform infrastructure
+config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260524/202605240825.mlcuRxza-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260524/202605240825.mlcuRxza-lkp@intel.com/reproduce)
 
-> With CONFIG_CFI enabled, OMAP4 can trap in omap4_enter_lowpower()
-> because omap_pm_ops.finish_suspend points directly to the assembly
-> routine omap4_finish_suspend, which lacks the expected KCFI type
-> metadata.
-> 
-> Annotate omap4_finish_suspend with SYM_TYPED_FUNC_START so the assembly
-> routine carries the KCFI type metadata.
-> 
-> Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605240825.mlcuRxza-lkp@intel.com/
 
-Reviewed-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
->  arch/arm/mach-omap2/sleep44xx.S | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/mach-omap2/sleep44xx.S b/arch/arm/mach-omap2/sleep44xx.S
-> index f09c91978..0b48df6fc 100644
-> --- a/arch/arm/mach-omap2/sleep44xx.S
-> +++ b/arch/arm/mach-omap2/sleep44xx.S
-> @@ -58,7 +58,7 @@
->   * stack frame and it expects the caller to take care of it. Hence the entire
->   * stack frame is saved to avoid possible stack corruption.
->   */
-> -ENTRY(omap4_finish_suspend)
-> +SYM_TYPED_FUNC_START(omap4_finish_suspend)
->  	stmfd	sp!, {r4-r12, lr}
->  	cmp	r0, #0x0
->  	beq	do_WFI				@ No lowpower state, jump to WFI
-> @@ -223,7 +223,7 @@ skip_scu_gp_clear:
->  	isb
->  	dsb
->  	ldmfd	sp!, {r4-r12, pc}
-> -ENDPROC(omap4_finish_suspend)
-> +SYM_FUNC_END(omap4_finish_suspend)
->  
->  /*
->   * ============================
+All errors (new ones prefixed by >>):
 
+   In file included from arch/hexagon/kernel/setup.c:22:
+   arch/hexagon/include/asm/platform.h:29:13: error: conflicting types for 'early_memtest'
+      29 | extern void early_memtest(unsigned long start, unsigned long end);
+         |             ^
+   include/linux/memblock.h:609:20: note: previous definition is here
+     609 | static inline void early_memtest(phys_addr_t start, phys_addr_t end) { }
+         |                    ^
+   arch/hexagon/kernel/setup.c:49:13: error: use of undeclared identifier 'external_buffer'
+      49 |         char *p = &external_buffer;
+         |                    ^~~~~~~~~~~~~~~
+>> arch/hexagon/kernel/setup.c:50:15: error: use of undeclared identifier '__dtb_start'; did you mean '__bss_start'?
+      50 |         void *dtb = &__dtb_start;
+         |                      ^~~~~~~~~~~
+         |                      __bss_start
+   include/asm-generic/sections.h:37:13: note: '__bss_start' declared here
+      37 | extern char __bss_start[], __bss_stop[];
+         |             ^
+   3 errors generated.
+
+
+vim +50 arch/hexagon/kernel/setup.c
+
+e03167b26b7fcf Richard Kuo  2011-10-31  41  
+e03167b26b7fcf Richard Kuo  2011-10-31  42  /*
+e03167b26b7fcf Richard Kuo  2011-10-31  43   * setup_arch -  high level architectural setup routine
+e03167b26b7fcf Richard Kuo  2011-10-31  44   * @cmdline_p: pointer to pointer to command-line arguments
+e03167b26b7fcf Richard Kuo  2011-10-31  45   */
+e03167b26b7fcf Richard Kuo  2011-10-31  46  
+e03167b26b7fcf Richard Kuo  2011-10-31  47  void __init setup_arch(char **cmdline_p)
+e03167b26b7fcf Richard Kuo  2011-10-31  48  {
+af437bfe6b48c6 Brian Cain   2026-01-24 @49  	char *p = &external_buffer;
+af437bfe6b48c6 Brian Cain   2026-01-24 @50  	void *dtb = &__dtb_start;
+e03167b26b7fcf Richard Kuo  2011-10-31  51  
+e03167b26b7fcf Richard Kuo  2011-10-31  52  	/*
+e03167b26b7fcf Richard Kuo  2011-10-31  53  	 * Set up event bindings to handle exceptions and interrupts.
+e03167b26b7fcf Richard Kuo  2011-10-31  54  	 */
+e03167b26b7fcf Richard Kuo  2011-10-31  55  	__vmsetvec(_K_VM_event_vector);
+e03167b26b7fcf Richard Kuo  2011-10-31  56  
+2738f359b1dcae Randy Dunlap 2018-06-14  57  	printk(KERN_INFO "PHYS_OFFSET=0x%08lx\n", PHYS_OFFSET);
+af437bfe6b48c6 Brian Cain   2026-01-24  58  	/*  initial machine setup from flattened device tree  */
+af437bfe6b48c6 Brian Cain   2026-01-24  59  	mdesc = setup_machine_fdt(dtb);
+af437bfe6b48c6 Brian Cain   2026-01-24  60  
+af437bfe6b48c6 Brian Cain   2026-01-24  61  	if (!mdesc)
+af437bfe6b48c6 Brian Cain   2026-01-24  62  		panic("setup_machine_fdt returned NULL\n");
+8f5a0b9dffeb3c Richard Kuo  2013-03-22  63  
+af437bfe6b48c6 Brian Cain   2026-01-24  64  	if (mdesc->setup_arch_platform) {
+af437bfe6b48c6 Brian Cain   2026-01-24  65  		mdesc->setup_arch_platform();
+af437bfe6b48c6 Brian Cain   2026-01-24  66  	}
+af437bfe6b48c6 Brian Cain   2026-01-24  67  
+af437bfe6b48c6 Brian Cain   2026-01-24  68  	printk("vmversion=0x%08lx\n", vmversion);
+af437bfe6b48c6 Brian Cain   2026-01-24  69  	printk("vm build id=0x%08lx\n", __vmgetinfo(vm_info_build_id));
+af437bfe6b48c6 Brian Cain   2026-01-24  70  	printk("boot_info=%p\n", boot_info);
+e03167b26b7fcf Richard Kuo  2011-10-31  71  	/*
+af437bfe6b48c6 Brian Cain   2026-01-24  72  	 * Will need to work on boot specification.
+e03167b26b7fcf Richard Kuo  2011-10-31  73  	 */
+af437bfe6b48c6 Brian Cain   2026-01-24  74  	//  Todo:  seriously need to fix this for all platforms
+af437bfe6b48c6 Brian Cain   2026-01-24  75  #ifdef CONFIG_HEXAGON_MSM8960_FLUID
+af437bfe6b48c6 Brian Cain   2026-01-24  76  	{
+af437bfe6b48c6 Brian Cain   2026-01-24  77  		unsigned int *magic;
+af437bfe6b48c6 Brian Cain   2026-01-24  78  
+af437bfe6b48c6 Brian Cain   2026-01-24  79  		p = NULL;
+af437bfe6b48c6 Brian Cain   2026-01-24  80  		for (magic = (unsigned int *)&external_buffer;
+af437bfe6b48c6 Brian Cain   2026-01-24  81  		     magic < ((unsigned int *)&external_buffer) + 32; magic++) {
+af437bfe6b48c6 Brian Cain   2026-01-24  82  			if (*magic == 0x54410009) {
+af437bfe6b48c6 Brian Cain   2026-01-24  83  				p = (char *)++magic;
+af437bfe6b48c6 Brian Cain   2026-01-24  84  				break;
+af437bfe6b48c6 Brian Cain   2026-01-24  85  			}
+af437bfe6b48c6 Brian Cain   2026-01-24  86  		}
+af437bfe6b48c6 Brian Cain   2026-01-24  87  	}
+af437bfe6b48c6 Brian Cain   2026-01-24  88  #endif
+e03167b26b7fcf Richard Kuo  2011-10-31  89  
+
+:::::: The code at line 50 was first introduced by commit
+:::::: af437bfe6b48c6b7436b42f989f7eeb4afc5cfbc hexagon: update boot and setup code
+
+:::::: TO: Brian Cain <brian.cain@oss.qualcomm.com>
+:::::: CC: Brian Cain <brian.cain@oss.qualcomm.com>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
