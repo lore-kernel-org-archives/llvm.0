@@ -1,156 +1,265 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14902CCB9;
-	Sun, 24 May 2026 00:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346941DF261;
+	Sun, 24 May 2026 01:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779583388; cv=none; b=CTAEcqvUdVglYWxzGv6mw0ySUEVFLR/aeVRt0d+zVdBx9m6ufFvmS3VrCD3zfMvG45o9ysQH39D+sla8thK1LowRdPsPrCITaEql3hP01c0bSwsXYCSP49uTv3MGD4OVCChR5c9IrlK6eREQ13QtPFe39Czs5FDbbDCfsMKqjpk=
+	t=1779586030; cv=none; b=tleufCN10h2Ji7SgiJfNl00W3ZGkGffJinmlczlJEP+9pevhlO+sACpamxwHd4GJm78+KBQMyKDxhwpIjMydxIOdbinC37S/0oxG5SQIu8ci2fls7/678vfkUYkd1dYt05Tydj/cZhkm3eyunoAdRPhs6nCYfReC8Of4LGExlHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779583388; c=relaxed/simple;
-	bh=sjjHbte3eiz4moBHWiBbxv1YP40LKcIdx3yYpzZN3g4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Km8HoOEygYcPEk5mh+GW4Bcqm/HIkL+47aFa3yoGBKkRemxP8f2IeKQThrgAHkBMrch304n84hZH34e/d7rSPoWVk0cVeArKSkSZ/YqhX4C2lfSYGNnNGXK/JHWnIurFKsB6xNaBBwOpw2FezaIu59344/PInteAh/5KQfqhFsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KW3uFkhn; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1779586030; c=relaxed/simple;
+	bh=w4/DKiC93rbZ/2BN1B0jXfV4Pdn5Ww9+WLlZv3ykrMQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G2vFF2sV3ouWdE3oBH9Kw3pfx/3oL3ssmkno0z089m/CmWHDOY3N7qnJLdCLYiWLtZVLgzF9L4LUohFxkuPux5HJ7PpvRZktFTp8hj/of+dfMKlyOaujlOd9Ifi/TsZKGH/tHG6FpoRODQnjwTH9B82boe6ZyUnZyuUeoIRCTUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QTu8fa0O; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KW3uFkhn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QTu8fa0O"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779583386; x=1811119386;
-  h=date:from:to:cc:subject:message-id;
-  bh=sjjHbte3eiz4moBHWiBbxv1YP40LKcIdx3yYpzZN3g4=;
-  b=KW3uFkhnKc2jadn6L4LbpqjxhvpvtkiraaGIxBU+lcUkEMKh2Nna3aoT
-   R82u0XPcM4F718WDc04IckXe2M96YnA5Jm17M1E367TgHx4bBT45EPTL0
-   X4VZ1Q9yzgPajUXpH1kqMu2CaDF0/JNc1NVR6W+oONok8nIlwjQgcQ0M2
-   rLnUXak5uWJnmIq4ui/g7gjA0tdvt6O/aSQZIpusRzWyxT6XLogXC17Br
-   tFvTch4NfmM+GiR2myIiqSjb0/lRUCAAQcHeFRm3oAch3xrhYRenj8txH
-   H+k0zdYaLEfR2mBAdzv17rNb8jNVmtEsFkHcubDj/iAfE12wsLVRfW0+G
-   A==;
-X-CSE-ConnectionGUID: BIad1p0PTtu9ffDpQ6eWRg==
-X-CSE-MsgGUID: DCwM3Q/PTDiQj/GJOoSoTA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11795"; a="98034350"
+  t=1779586028; x=1811122028;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w4/DKiC93rbZ/2BN1B0jXfV4Pdn5Ww9+WLlZv3ykrMQ=;
+  b=QTu8fa0OsXntycYE+PKdeU29M/v17pJH1Lk5SMNBABoE97cwNtShVZ5I
+   vbRdVb60WabcZW+b/CyTazxZ3OvLNroYlFfq9RxDeGg38HvpP54FoHdu3
+   jjz12EiIwouptR/4YhcUDZjbHxmZ96NTgb0BjCDtNEW+Y8p00pNl1n2pp
+   3LZDtW6gpGcmSu3EPTgtdNd2nlTz1Y21aRregclWc1p8lm5ylVksEaUjc
+   U8vEtaMYHgbd2WtD1cAXbjpa/p9sdm6Lf6Oxk+hhLYliQH2iawPS5HMJN
+   CKkjMKJAL8KCrVSZLZaqw2yIdQUckbLQGdkVAAqxP2KG+cAaJAAZp6xFY
+   Q==;
+X-CSE-ConnectionGUID: m04yqT/LSji9KwKhm1gpuA==
+X-CSE-MsgGUID: MLl4mHuVSUKZbaTBsKJi2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11795"; a="79607435"
 X-IronPort-AV: E=Sophos;i="6.24,165,1774335600"; 
-   d="scan'208";a="98034350"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2026 17:43:05 -0700
-X-CSE-ConnectionGUID: MwzvTACHQZS4nxYkgZvKyA==
-X-CSE-MsgGUID: ZqQGWk/yRZqmKI70tscwkA==
+   d="scan'208";a="79607435"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2026 18:27:07 -0700
+X-CSE-ConnectionGUID: BIv9M++JTp2Sj2gJ52js1Q==
+X-CSE-MsgGUID: UTZajSRZQre4aYWDyU6PXQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,165,1774335600"; 
-   d="scan'208";a="245533735"
+   d="scan'208";a="265105510"
 Received: from lkp-server01.sh.intel.com (HELO 6ba8523b1a8f) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 23 May 2026 17:43:04 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 23 May 2026 18:27:05 -0700
 Received: from kbuild by 6ba8523b1a8f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wQwvl-000000000V5-0idu;
-	Sun, 24 May 2026 00:43:01 +0000
-Date: Sun, 24 May 2026 08:42:54 +0800
+	id 1wQxcN-000000000XR-2tDN;
+	Sun, 24 May 2026 01:27:03 +0000
+Date: Sun, 24 May 2026 09:26:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Brian Cain <brian.cain@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bcain:bcain/boot_qemu 17/40]
- arch/hexagon/kernel/setup.c:50:15: error: use of undeclared identifier
- '__dtb_start'; did you mean '__bss_start'?
-Message-ID: <202605240825.mlcuRxza-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Ashwin Gundarapu <linuxuser509@zohomail.in>, jack <jack@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-ext4 <linux-ext4@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ext2: Remove deprecated DAX support
+Message-ID: <202605240952.dIQvDsdW-lkp@intel.com>
+References: <19e54c7cba1.5355cb8650862.622752146451851140@zohomail.in>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19e54c7cba1.5355cb8650862.622752146451851140@zohomail.in>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
-head:   35eb04372bf7b3ef31afcde7c3336a0ff690d16c
-commit: 069f8d84bd3fe3a24e07fbf9de23de4537d60c29 [17/40] hexagon: add platform infrastructure
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260524/202605240825.mlcuRxza-lkp@intel.com/config)
+Hi Ashwin,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on jack-fs/for_next]
+[also build test WARNING on linus/master v7.1-rc4 next-20260522]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ashwin-Gundarapu/ext2-Remove-deprecated-DAX-support/20260523-202224
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git for_next
+patch link:    https://lore.kernel.org/r/19e54c7cba1.5355cb8650862.622752146451851140%40zohomail.in
+patch subject: [PATCH] ext2: Remove deprecated DAX support
+config: riscv-nommu_virt_defconfig (https://download.01.org/0day-ci/archive/20260524/202605240952.dIQvDsdW-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260524/202605240825.mlcuRxza-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260524/202605240952.dIQvDsdW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605240825.mlcuRxza-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605240952.dIQvDsdW-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/hexagon/kernel/setup.c:22:
-   arch/hexagon/include/asm/platform.h:29:13: error: conflicting types for 'early_memtest'
-      29 | extern void early_memtest(unsigned long start, unsigned long end);
-         |             ^
-   include/linux/memblock.h:609:20: note: previous definition is here
-     609 | static inline void early_memtest(phys_addr_t start, phys_addr_t end) { }
-         |                    ^
-   arch/hexagon/kernel/setup.c:49:13: error: use of undeclared identifier 'external_buffer'
-      49 |         char *p = &external_buffer;
-         |                    ^~~~~~~~~~~~~~~
->> arch/hexagon/kernel/setup.c:50:15: error: use of undeclared identifier '__dtb_start'; did you mean '__bss_start'?
-      50 |         void *dtb = &__dtb_start;
-         |                      ^~~~~~~~~~~
-         |                      __bss_start
-   include/asm-generic/sections.h:37:13: note: '__bss_start' declared here
-      37 | extern char __bss_start[], __bss_stop[];
-         |             ^
-   3 errors generated.
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     838 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:108:53: note: expanded from macro 'insb'
+     108 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from fs/ext2/inode.c:28:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:846:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     846 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:109:53: note: expanded from macro 'insw'
+     109 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from fs/ext2/inode.c:28:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:854:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     854 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:110:53: note: expanded from macro 'insl'
+     110 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from fs/ext2/inode.c:28:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:863:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     863 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:122:55: note: expanded from macro 'outsb'
+     122 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from fs/ext2/inode.c:28:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:872:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     872 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:123:55: note: expanded from macro 'outsw'
+     123 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from fs/ext2/inode.c:28:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:881:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     881 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:124:55: note: expanded from macro 'outsl'
+     124 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from fs/ext2/inode.c:28:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:140:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> fs/ext2/inode.c:792:23: warning: unused variable 'sbi' [-Wunused-variable]
+     792 |         struct ext2_sb_info *sbi = EXT2_SB(inode->i_sb);
+         |                              ^~~
+   8 warnings generated.
 
 
-vim +50 arch/hexagon/kernel/setup.c
+vim +/sbi +792 fs/ext2/inode.c
 
-e03167b26b7fcf Richard Kuo  2011-10-31  41  
-e03167b26b7fcf Richard Kuo  2011-10-31  42  /*
-e03167b26b7fcf Richard Kuo  2011-10-31  43   * setup_arch -  high level architectural setup routine
-e03167b26b7fcf Richard Kuo  2011-10-31  44   * @cmdline_p: pointer to pointer to command-line arguments
-e03167b26b7fcf Richard Kuo  2011-10-31  45   */
-e03167b26b7fcf Richard Kuo  2011-10-31  46  
-e03167b26b7fcf Richard Kuo  2011-10-31  47  void __init setup_arch(char **cmdline_p)
-e03167b26b7fcf Richard Kuo  2011-10-31  48  {
-af437bfe6b48c6 Brian Cain   2026-01-24 @49  	char *p = &external_buffer;
-af437bfe6b48c6 Brian Cain   2026-01-24 @50  	void *dtb = &__dtb_start;
-e03167b26b7fcf Richard Kuo  2011-10-31  51  
-e03167b26b7fcf Richard Kuo  2011-10-31  52  	/*
-e03167b26b7fcf Richard Kuo  2011-10-31  53  	 * Set up event bindings to handle exceptions and interrupts.
-e03167b26b7fcf Richard Kuo  2011-10-31  54  	 */
-e03167b26b7fcf Richard Kuo  2011-10-31  55  	__vmsetvec(_K_VM_event_vector);
-e03167b26b7fcf Richard Kuo  2011-10-31  56  
-2738f359b1dcae Randy Dunlap 2018-06-14  57  	printk(KERN_INFO "PHYS_OFFSET=0x%08lx\n", PHYS_OFFSET);
-af437bfe6b48c6 Brian Cain   2026-01-24  58  	/*  initial machine setup from flattened device tree  */
-af437bfe6b48c6 Brian Cain   2026-01-24  59  	mdesc = setup_machine_fdt(dtb);
-af437bfe6b48c6 Brian Cain   2026-01-24  60  
-af437bfe6b48c6 Brian Cain   2026-01-24  61  	if (!mdesc)
-af437bfe6b48c6 Brian Cain   2026-01-24  62  		panic("setup_machine_fdt returned NULL\n");
-8f5a0b9dffeb3c Richard Kuo  2013-03-22  63  
-af437bfe6b48c6 Brian Cain   2026-01-24  64  	if (mdesc->setup_arch_platform) {
-af437bfe6b48c6 Brian Cain   2026-01-24  65  		mdesc->setup_arch_platform();
-af437bfe6b48c6 Brian Cain   2026-01-24  66  	}
-af437bfe6b48c6 Brian Cain   2026-01-24  67  
-af437bfe6b48c6 Brian Cain   2026-01-24  68  	printk("vmversion=0x%08lx\n", vmversion);
-af437bfe6b48c6 Brian Cain   2026-01-24  69  	printk("vm build id=0x%08lx\n", __vmgetinfo(vm_info_build_id));
-af437bfe6b48c6 Brian Cain   2026-01-24  70  	printk("boot_info=%p\n", boot_info);
-e03167b26b7fcf Richard Kuo  2011-10-31  71  	/*
-af437bfe6b48c6 Brian Cain   2026-01-24  72  	 * Will need to work on boot specification.
-e03167b26b7fcf Richard Kuo  2011-10-31  73  	 */
-af437bfe6b48c6 Brian Cain   2026-01-24  74  	//  Todo:  seriously need to fix this for all platforms
-af437bfe6b48c6 Brian Cain   2026-01-24  75  #ifdef CONFIG_HEXAGON_MSM8960_FLUID
-af437bfe6b48c6 Brian Cain   2026-01-24  76  	{
-af437bfe6b48c6 Brian Cain   2026-01-24  77  		unsigned int *magic;
-af437bfe6b48c6 Brian Cain   2026-01-24  78  
-af437bfe6b48c6 Brian Cain   2026-01-24  79  		p = NULL;
-af437bfe6b48c6 Brian Cain   2026-01-24  80  		for (magic = (unsigned int *)&external_buffer;
-af437bfe6b48c6 Brian Cain   2026-01-24  81  		     magic < ((unsigned int *)&external_buffer) + 32; magic++) {
-af437bfe6b48c6 Brian Cain   2026-01-24  82  			if (*magic == 0x54410009) {
-af437bfe6b48c6 Brian Cain   2026-01-24  83  				p = (char *)++magic;
-af437bfe6b48c6 Brian Cain   2026-01-24  84  				break;
-af437bfe6b48c6 Brian Cain   2026-01-24  85  			}
-af437bfe6b48c6 Brian Cain   2026-01-24  86  		}
-af437bfe6b48c6 Brian Cain   2026-01-24  87  	}
-af437bfe6b48c6 Brian Cain   2026-01-24  88  #endif
-e03167b26b7fcf Richard Kuo  2011-10-31  89  
-
-:::::: The code at line 50 was first introduced by commit
-:::::: af437bfe6b48c6b7436b42f989f7eeb4afc5cfbc hexagon: update boot and setup code
-
-:::::: TO: Brian Cain <brian.cain@oss.qualcomm.com>
-:::::: CC: Brian Cain <brian.cain@oss.qualcomm.com>
+a686cd898bd999f Martin J. Bligh      2007-10-16  785  
+25f4e70291a3097 Christoph Hellwig    2016-09-19  786  static int ext2_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+c039b9979272634 Goldwyn Rodrigues    2019-10-18  787  		unsigned flags, struct iomap *iomap, struct iomap *srcmap)
+25f4e70291a3097 Christoph Hellwig    2016-09-19  788  {
+25f4e70291a3097 Christoph Hellwig    2016-09-19  789  	unsigned int blkbits = inode->i_blkbits;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  790  	unsigned long first_block = offset >> blkbits;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  791  	unsigned long max_blocks = (length + (1 << blkbits) - 1) >> blkbits;
+8cf037a8b22f71c Dan Williams         2017-08-30 @792  	struct ext2_sb_info *sbi = EXT2_SB(inode->i_sb);
+25f4e70291a3097 Christoph Hellwig    2016-09-19  793  	bool new = false, boundary = false;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  794  	u32 bno;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  795  	int ret;
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  796) 	bool create = flags & IOMAP_WRITE;
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  797) 
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  798) 	/*
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  799) 	 * For writes that could fill holes inside i_size on a
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  800) 	 * DIO_SKIP_HOLES filesystem we forbid block creations: only
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  801) 	 * overwrites are permitted.
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  802) 	 */
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  803) 	if ((flags & IOMAP_DIRECT) &&
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  804) 	    (first_block << blkbits) < i_size_read(inode))
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  805) 		create = 0;
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  806) 
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  807) 	/*
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  808) 	 * Writes that span EOF might trigger an IO size update on completion,
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  809) 	 * so consider them to be dirty for the purposes of O_DSYNC even if
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  810) 	 * there is no other metadata changes pending or have been made here.
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  811) 	 */
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  812) 	if ((flags & IOMAP_WRITE) && offset + length > i_size_read(inode))
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  813) 		iomap->flags |= IOMAP_F_DIRTY;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  814  
+25f4e70291a3097 Christoph Hellwig    2016-09-19  815  	ret = ext2_get_blocks(inode, first_block, max_blocks,
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  816) 			&bno, &new, &boundary, create);
+25f4e70291a3097 Christoph Hellwig    2016-09-19  817  	if (ret < 0)
+a686cd898bd999f Martin J. Bligh      2007-10-16  818  		return ret;
+a686cd898bd999f Martin J. Bligh      2007-10-16  819  
+25f4e70291a3097 Christoph Hellwig    2016-09-19  820  	iomap->flags = 0;
+d5bfccdf38d094f Christoph Hellwig    2016-10-03  821  	iomap->offset = (u64)first_block << blkbits;
+de2051147771017 Christoph Hellwig    2021-11-29  822          iomap->bdev = inode->i_sb->s_bdev;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  823  
+25f4e70291a3097 Christoph Hellwig    2016-09-19  824  	if (ret == 0) {
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  825) 		/*
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  826) 		 * Switch to buffered-io for writing to holes in a non-extent
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  827) 		 * based filesystem to avoid stale data exposure problem.
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  828) 		 */
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  829) 		if (!create && (flags & IOMAP_WRITE) && (flags & IOMAP_DIRECT))
+fb5de4358e1aa47 Ritesh Harjani (IBM  2023-04-21  830) 			return -ENOTBLK;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  831  		iomap->type = IOMAP_HOLE;
+19fe5f643f89f29 Andreas Gruenbacher  2017-10-01  832  		iomap->addr = IOMAP_NULL_ADDR;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  833  		iomap->length = 1 << blkbits;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  834  	} else {
+25f4e70291a3097 Christoph Hellwig    2016-09-19  835  		iomap->type = IOMAP_MAPPED;
+19fe5f643f89f29 Andreas Gruenbacher  2017-10-01  836  		iomap->addr = (u64)bno << blkbits;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  837  		iomap->length = (u64)ret << blkbits;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  838  		iomap->flags |= IOMAP_F_MERGED;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  839  	}
+25f4e70291a3097 Christoph Hellwig    2016-09-19  840  
+25f4e70291a3097 Christoph Hellwig    2016-09-19  841  	if (new)
+25f4e70291a3097 Christoph Hellwig    2016-09-19  842  		iomap->flags |= IOMAP_F_NEW;
+25f4e70291a3097 Christoph Hellwig    2016-09-19  843  	return 0;
+a686cd898bd999f Martin J. Bligh      2007-10-16  844  }
+a686cd898bd999f Martin J. Bligh      2007-10-16  845  
 
 --
 0-DAY CI Kernel Test Service
