@@ -1,88 +1,122 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78FE18DB2A;
-	Sun, 24 May 2026 01:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BC624A06D;
+	Sun, 24 May 2026 01:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779587292; cv=none; b=WOSoZ07Rt1yrHKPOFf4pMBCU36Rk61u5XCAnDCvif/mssvbnWuW5mSLBTz4asherH+oWAfbJxTQhL+7AYLU2hK6+lHtUXs/tY0is978DdCRDAjAb43EwPnV0IGgEMjUFQZGzeaVeB/zsBNirKcGFGjWoYiHXtdYhiVzNwaMBXYc=
+	t=1779587293; cv=none; b=QjkJwo95swtdBP/k9r0zvko+C21Aub8cOlKuVKzWVMogVIqqJuguvpt40CKhQCOEyzn52H8hKkop6tqRekJnPB6IgSeKtZEcy1Y2izWroYpI+qTNC6EHodky8ved1tHtY2X+PlAEkcMp8S0ilyoy2W8NGo1O2Ab5/zYBQ3dGRZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779587292; c=relaxed/simple;
-	bh=Rq/Ilv9Lz1YZKif4EvELNLDsLbbm5KUhXZOwC6SzAjE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=fSDuouYvEmm3aRhKmc6ZSlZ16AHIupcPVSj+QQB7MCa00ZVS8+JMDiDKU8nVI8KfFCq6mEkOnPiMZknINOrgRxY4V6vNvUZ0bXCnAjCRRgKAMmbnonGY7Ly8+Hmuh0Iv1pufnbLf4+sPHvcCQhtz3p+h77WneApkyhMxpY6P7vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ArEdCCWq; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1779587293; c=relaxed/simple;
+	bh=vg/c7TJDu10FRRVuGSAd+E5BQF3Qfcy4XMIuLXw/Hzo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DwjJMRwI0/4gxIvF1GM9sxSaxYShurBDtfPhyw0vU8v6DqsIsB76hzrfxJdHdP5mEjj5b0upgcepXrgwckzipUyaiQVhE6vmD9YDRWV8endWsZ+tKnUgkPCehVkkpYOAhre4nRSFLtDQcZtS7MZo8oiJ5vM1xiHXp+Zv0AvFNaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AyXoaa/F; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ArEdCCWq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AyXoaa/F"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779587291; x=1811123291;
-  h=date:from:to:cc:subject:message-id;
-  bh=Rq/Ilv9Lz1YZKif4EvELNLDsLbbm5KUhXZOwC6SzAjE=;
-  b=ArEdCCWqXIcVIa2z8zA+i72EPhQwq85J88NOlV0pv3PrLYQu4f7gLVgb
-   VHqtuLrKAIxNjEqOpp4Hl9+NL4tYFm46Aq7o0NE2oMIiMefF0+CMY7/ky
-   3ioYZiA7isd/NrgxpLl3KuL2eRHnJ8oIk+7vKoE/9zikef7sH4kIQ+IC4
-   y0dmPzcUtralEDP9709qkhozAuizCi5miD7k/OAytQShgtYWM0qUMmOdA
-   g0yIWpDeDafp9j4nZkus0YrU8IBAPj2RpwKqU9yRR/qOvJqD3duZK6/jK
-   NxUM4/P9xj/zMQWKxi7ZDf3lrb7L1yKg+F7JbsQ1xGHcpS4DvFpBffyn+
+  t=1779587292; x=1811123292;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vg/c7TJDu10FRRVuGSAd+E5BQF3Qfcy4XMIuLXw/Hzo=;
+  b=AyXoaa/F99CANpf2ytVyCEkkMUnd24XRhVljY3fIxcWexucLr0qkfcGS
+   OtXuJ5u05/RPxS2t2BVoTft8GzxHsC8SQYXn/NXKfjCF8ebv1u/9jTUCx
+   NkLv/RaTPYL743Fj5UEa2OUkuY2ngw8nf90eNf7LIZzzY779IUi0lFlxb
+   lYonQCk4p++tuuwEnCXrlXQjhVQ/yw1YDflp8DAeZ7SZ4lKVPuNgEz8eV
+   S7QObwlPpkD/nDr3QZzelGa9v7FLoEIykNJkVwcCFaNmp+i3FzmB02j1O
+   sIlsM9V54iTjTjwsYp477pLv93+oWePUiETyjtMKNmGN5LCl6lZt4p8SK
    w==;
-X-CSE-ConnectionGUID: bTqvnhSTTNibw+0T7tN3Jw==
-X-CSE-MsgGUID: eRSMuob6Q8a3w5UvhLOiRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11795"; a="79492348"
+X-CSE-ConnectionGUID: /R9p7QGfQUO3Yi73mQuNXw==
+X-CSE-MsgGUID: ud8jRwx1Tv6Z4OKw1pgWPA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11795"; a="79492352"
 X-IronPort-AV: E=Sophos;i="6.24,165,1774335600"; 
-   d="scan'208";a="79492348"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2026 18:48:09 -0700
-X-CSE-ConnectionGUID: Qq8Z5pWKTGC1YPvkxXPisA==
-X-CSE-MsgGUID: fj39BLsfQDSZ0LxEhmMKAQ==
+   d="scan'208";a="79492352"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2026 18:48:10 -0700
+X-CSE-ConnectionGUID: xHQW8v4kQC+22kGGQWAvCg==
+X-CSE-MsgGUID: TY0B7MF7Qh+81Zcg9Va5Kg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,165,1774335600"; 
-   d="scan'208";a="234904244"
+   d="scan'208";a="246337968"
 Received: from lkp-server01.sh.intel.com (HELO 6ba8523b1a8f) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 23 May 2026 18:48:07 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 23 May 2026 18:48:08 -0700
 Received: from kbuild by 6ba8523b1a8f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wQxwi-000000000Z1-4C31;
-	Sun, 24 May 2026 01:48:05 +0000
-Date: Sun, 24 May 2026 09:47:25 +0800
+	id 1wQxwi-000000000Yz-3y4E;
+	Sun, 24 May 2026 01:48:04 +0000
+Date: Sun, 24 May 2026 09:47:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Michal Wajdeczko <michal.wajdeczko@intel.com>
+To: Hardik Prakash <hardikprakash.official@gmail.com>,
+	linux-i2c@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: ld.lld: error: undefined symbol: xe_configfs_get_max_vfs
-Message-ID: <202605240945.1ED8m0A4-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-gpio@vger.kernel.org, wsa@kernel.org,
+	andriy.shevchenko@intel.com, mario.limonciello@amd.com,
+	brgl@bgdev.pl, basavaraj.natikar@amd.com, linus.walleij@linaro.org,
+	Hardik Prakash <hardikprakash.official@gmail.com>
+Subject: Re: [PATCH v6 1/1] i2c: designware: defer probe if child GpioInt
+ controllers are not bound
+Message-ID: <202605240959.Kcf1lIg4-lkp@intel.com>
+References: <20260523174440.9629-2-hardikprakash.official@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260523174440.9629-2-hardikprakash.official@gmail.com>
 
-Hi Michal,
+Hi Hardik,
 
-FYI, the error/warning still remains.
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4cbfe4502e3d4bda48eb4b83dfad8d7da3b22e90
-commit: c09a9933af08cdcb295ccc65a6d9862bf8474706 drm/xe/pf: Add max_vfs configfs attribute to control PF mode
-date:   8 months ago
-config: x86_64-randconfig-016-20260519 (https://download.01.org/0day-ci/archive/20260524/202605240945.1ED8m0A4-lkp@intel.com/config)
+[auto build test WARNING on 3812a9e84265a5cdd90d29fe8d97a023e91fb945]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Hardik-Prakash/i2c-designware-defer-probe-if-child-GpioInt-controllers-are-not-bound/20260524-014648
+base:   3812a9e84265a5cdd90d29fe8d97a023e91fb945
+patch link:    https://lore.kernel.org/r/20260523174440.9629-2-hardikprakash.official%40gmail.com
+patch subject: [PATCH v6 1/1] i2c: designware: defer probe if child GpioInt controllers are not bound
+config: x86_64-randconfig-001-20260524 (https://download.01.org/0day-ci/archive/20260524/202605240959.Kcf1lIg4-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260524/202605240945.1ED8m0A4-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260524/202605240959.Kcf1lIg4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
-| Fixes: c09a9933af08 ("drm/xe/pf: Add max_vfs configfs attribute to control PF mode")
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605240945.1ED8m0A4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605240959.Kcf1lIg4-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: xe_configfs_get_max_vfs
-   >>> referenced by xe_sriov_pf.c:24 (drivers/gpu/drm/xe/xe_sriov_pf.c:24)
-   >>>               vmlinux.o:(xe_sriov_pf_readiness)
+>> drivers/i2c/busses/i2c-designware-platdrv.c:192:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     192 |         int ret;
+         |             ^
+   1 warning generated.
+
+
+vim +/ret +192 drivers/i2c/busses/i2c-designware-platdrv.c
+
+   187	
+   188	static int check_child_gpioint(struct acpi_device *adev, void *data)
+   189	{
+   190		struct gpio_dep_ctx *ctx = data;
+   191		struct list_head res_list;
+ > 192		int ret;
+   193	
+   194		INIT_LIST_HEAD(&res_list);
+   195	
+   196		ret = acpi_dev_get_resources(adev, &res_list, check_gpioint_resource, ctx);
+   197		acpi_dev_free_resource_list(&res_list);
+   198	
+   199		if (ctx->ret < 0)
+   200			return ctx->ret;
+   201	
+   202		return 0;
+   203	}
+   204	
 
 --
 0-DAY CI Kernel Test Service
