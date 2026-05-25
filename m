@@ -1,99 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6AFE3F412C;
-	Mon, 25 May 2026 16:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EAD30149F;
+	Mon, 25 May 2026 17:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779728134; cv=none; b=goNhRyD8t3SGUJBX6Dsp1rxJVYGTvIpfRbgrM3zm1tpKewFmXT/jkicHvJ8I7phzbJpwS9DwTnx28xVl43vr2fgXkACqz+pgbp1fPqqdJhgbD/WizVrizshNMhgH0mgkwVhdUIMjHp+dCCHBSFuiAk6NWJBdWykRIkGL0D5NfLA=
+	t=1779729921; cv=none; b=BdV7cAx+F9J2aYlWHwceZ0NnSzBzWwheh1Wzz6q0zAadTr7P5BXH22sfx0zmy8T14JX/wnWK55SSyDWBfT2tvfEqIZkFjCWUjtMLBbdPpuSDNGUi9YSKNLVvsoZzvluMiG/Mkkg3sLMZpJwaMBKgizeYxHrEEpUOCGfFbHCruAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779728134; c=relaxed/simple;
-	bh=r9F+Z/G2R9EmJkJqYGdSK5x1qhDsOMO4RIwwPT3nm08=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sGaZtK6fo6RX2QYbaxKeXGHwDZYJxm/QNCmfhATUQ1j7arPK0+4TVsORJ91va+3m1L6pl+GTHodbL0QaFyDE5oKeLK0Cqk+9v9gH+CJa+1+Uc24fnONo9euRCZSfTNeYQtfmpJWx2RFzsZlTNUfSsLAyT/OEWxG4blalyZRsKtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fmjI4rKS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779729921; c=relaxed/simple;
+	bh=DjzYQkJI9q+buCggGLXcTVtkSSzAbctB14Bq3ZurYKI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=jUZhSOWCZqzLgp+b1EY85mpAZwkaeq0ODAYbY5kG0QLKBg7BkPWySVlvxqIvE0qqmNdExnosYnjFGXEAgWgACeAvrIoa0hl6MSYLDxssDQdESlX8OMaMu9VwUhRksdtig4pZM7CmIZoxF63EDSgPq3KvYuN6Mjd1jdj5Wpla7YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kyxL+WTs; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fmjI4rKS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74DF41F000E9;
-	Mon, 25 May 2026 16:55:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779728133;
-	bh=ev9yLt5NTZ9nEb03Xjyz/o28bx64uGp1JLdEhh9Coe0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fmjI4rKS4bBepoqAbV18Ip+mP1JiKaJ3SoWM3uQKqXia1IKu2zRHu2mI1vT2l5Fqs
-	 3+EOG9c04IkzAjonoKnZm7GnFDrQO2v6NPjAZT3ut9lI48JcOZ2G9P3IT6YksrvV99
-	 y1e7z+eYHMmBDGXGsxi2q2imq/lnYzFVqV9rOuqaYdo3I8lMmskVD04kbXLnNMYQ25
-	 kq967Zy2cOc7fghz+uBGLRScMX/WVp30btRe98rSP5Hzx65U9+z4lBn/0KOhjB71un
-	 l52BZzGMNEsXMzRCvHQ21t4rHFRPC21lyXe8cKiDIOKJGMB+BdE8FFmuHw3AWsjfUk
-	 dPifMRmJhwO+g==
-Date: Mon, 25 May 2026 09:55:27 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Mithil Bavishi <bavishimithil@gmail.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Russell King <linux@armlinux.org.uk>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <kees@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ARM: OMAP2+: Add CFI type for omap4_finish_suspend
-Message-ID: <20260525165527.GA18457@ax162>
-References: <20260522233036.12277-1-bavishimithil@gmail.com>
- <202605241332.fXvCYBR2-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kyxL+WTs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779729919; x=1811265919;
+  h=date:from:to:cc:subject:message-id;
+  bh=DjzYQkJI9q+buCggGLXcTVtkSSzAbctB14Bq3ZurYKI=;
+  b=kyxL+WTskaKSa2Id9HlQHcSXv+d/lg1Q7Nos+hixQXORXJQGFI0UhCCM
+   wOBuMcgX2z5iVp/tiFSbVQL0FgDjygOacL3aDWP+3QiytSAmZUc0h03Dx
+   4aDZAutzN6Xmmco7JtCGVgrKWi4Fk9ufhMwBwUueRXy7xYylOnSoaX6ON
+   8uQLOjxCmjF99oCe+poTEBzOa3e9DDj2vXeUwbs3YaAK/ZI8zZ76NGvpU
+   5nsSG2v3hUp8hRobsQvyQlX6afoUyCOYfinDaB6EGn7jicmVrcBAmgkfI
+   fnpUpSUNeB46A4ePioa0hw/0qzhjLicWww1RFkXdzbnv0qZxyp4BNUl+C
+   A==;
+X-CSE-ConnectionGUID: IsyOO3CpSXC+ZEdV/wzH1w==
+X-CSE-MsgGUID: BIL6GEAtT9OED+eE9SLPbQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11797"; a="80608034"
+X-IronPort-AV: E=Sophos;i="6.24,168,1774335600"; 
+   d="scan'208";a="80608034"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2026 10:25:17 -0700
+X-CSE-ConnectionGUID: kIT4GOS4QFSIiHVUUMfzGw==
+X-CSE-MsgGUID: Mzty2ISvTGqMojlPCQIWbA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,168,1774335600"; 
+   d="scan'208";a="241507860"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 25 May 2026 10:25:16 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wRZ3B-000000001hY-2tWE;
+	Mon, 25 May 2026 17:25:13 +0000
+Date: Tue, 26 May 2026 01:24:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+Subject: vmlinux.o: warning: objtool: csio_ln_fdmi_rhba_cbfn():
+ unexpected end of section .text.csio_ln_fdmi_rhba_cbfn
+Message-ID: <202605260130.anS2FFur-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202605241332.fXvCYBR2-lkp@intel.com>
 
-On Sun, May 24, 2026 at 02:01:31PM +0800, kernel test robot wrote:
-> Hi Mithil,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on tmlind-omap/for-next]
-> [also build test ERROR on linus/master v7.1-rc4 next-20260522]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Mithil-Bavishi/ARM-OMAP2-Add-CFI-type-for-omap4_finish_suspend/20260523-073206
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git for-next
-> patch link:    https://lore.kernel.org/r/20260522233036.12277-1-bavishimithil%40gmail.com
-> patch subject: [PATCH v2] ARM: OMAP2+: Add CFI type for omap4_finish_suspend
-> config: arm-defconfig (https://download.01.org/0day-ci/archive/20260524/202605241332.fXvCYBR2-lkp@intel.com/config)
-> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5bac06718f502014fade905512f1d26d578a18f3)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260524/202605241332.fXvCYBR2-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202605241332.fXvCYBR2-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> arch/arm/mach-omap2/sleep44xx.S:61:1: error: invalid instruction
->    SYM_TYPED_FUNC_START(omap4_finish_suspend)
->    ^
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e7ae89a0c97ce2b68b0983cd01eda67cf373517d
+commit: 11bb4944f014d756f35261f5afcb346901ef1efa x86/bug: Implement WARN_ONCE()
+date:   6 months ago
+config: x86_64-buildonly-randconfig-005-20260525 (https://download.01.org/0day-ci/archive/20260526/202605260130.anS2FFur-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260526/202605260130.anS2FFur-lkp@intel.com/reproduce)
 
-This report and the GCC one
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: 11bb4944f014 ("x86/bug: Implement WARN_ONCE()")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605260130.anS2FFur-lkp@intel.com/
 
-  https://lore.kernel.org/202605252315.UhjCBtGA-lkp@intel.com/
+All warnings (new ones prefixed by >>):
 
-are both pointing out that cfi_types.h needs to be included in
-arch/arm/mach-omap2/sleep44xx.S for SYM_TYPED_FUNC_START to always be
-expanded properly. I tested adding
+>> vmlinux.o: warning: objtool: csio_ln_fdmi_rhba_cbfn(): unexpected end of section .text.csio_ln_fdmi_rhba_cbfn
+   vmlinux.o: warning: objtool: jme_check_link(): unexpected end of section .text.jme_check_link
 
-  #include <linux/cfi_types.h>
-
-as the first include line and both issues were resolved.
-
-Cheers,
-Nathan
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
