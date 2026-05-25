@@ -1,136 +1,126 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3912C24DD15
-	for <llvm@lists.linux.dev>; Mon, 25 May 2026 18:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779733027; cv=pass; b=AtvMXfg0zwjK/CIYka4was5tRBHOQg6qVQ4dY7bJO2SIcPytZZannafaB9ID31VExm71VTKlPbvk6ogA56FELO+2FqbEsxVhfML504mwyhBSygM2gHCBbM6QVWaglKwWFMyrKQg7eT3v5AOK46V1UUWn9Vb2inO03BkxMacclU4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779733027; c=relaxed/simple;
-	bh=N/2UctasxdczuvHkDvPIxcGMO1uUr3Chr5Ej1C66Qh8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ppq2n1RccEVkzE+DG4xLyJmJNlB0CqBhxQY4UswLkHwfcWZowJZ1PUkNE27+SLllk/1cXDOpFzaaYZi6smqDyM6ZcyRrW33wu//gAaHPmXGWqHbu+k2rAz6fxYw/CSLaSmZxrget1ZgROFkvQbVuOVWlrwrbtPBWG/POI85p45M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RV1dUd4Y; arc=pass smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BCA2DE6FF;
+	Mon, 25 May 2026 19:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779739166; cv=none; b=R9kgnVe7lomTZR/DK3ptq+CzSPMLErvi0xroGiKPWC4xlqp9/z+qOCjjX1VMkH1dcK8c4SZ5J2UI/SAeBv2lK8pKmZjMlqTIXPAOck7CicNqqFIGuZon1TPcM/sBps3mZ+fXJiTLH9dnf6EpCYzNpza3lZnNUx0T6OqiGng6p1c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779739166; c=relaxed/simple;
+	bh=YN78vf8+41suap17viVNSe54cvyCYZejAjYdkDMzsE8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SRqDnU5FUxuQiIBI3sMFfED5qXV4iJ8rsweHyEYD30JyvamEWYLwoZQtIWd0mRlWxMdLi+HzXsSIRuIdWizhWtcBObxW1jmDeDMjdzclIqhuPvw9dQzm/oEKSVsYoALh2PdBtvWM4jfEsxda8Cfh4jXZ+8yMJMZg6FnBmlJWM0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i/kp6wh/; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RV1dUd4Y"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2f53c6af46eso696644eec.1
-        for <llvm@lists.linux.dev>; Mon, 25 May 2026 11:17:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779733025; cv=none;
-        d=google.com; s=arc-20240605;
-        b=DUmbZ4sHxn6eOs+tkcbxSKJQauTpgwXVpLs0tRVfQhfxXjMzXT24fOyepK4HfsvS2L
-         UrPDdm6q3UUhFx/bOyu5Npc57+GA5wuTbSHi+yihA+zLfrfzJtTVSOni3bvmUqPU++Rv
-         AVAG9+2QfmW4RNVuC0iynvoaqPPyWxNKG4gKMIzJ9lkmfYIhzN73JYjBxUn5rbdFee+N
-         tnEBx6Fx6k4v3CChECaTKFnXIiHqWG5j1IKA3gJO73evODv4+UPEBwbmwcT/KpBkpPsq
-         GvMVQQWUG15EOzSkHzLvO8eyd83Vcqj6zIcuwwIC9zBaPivUbBFf4gVh3NW9pqpS9piv
-         Em9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=N/2UctasxdczuvHkDvPIxcGMO1uUr3Chr5Ej1C66Qh8=;
-        fh=pxoDDqjU4lkC5K5VRtwXSFr0feKvKeUPN8nn2W4yGTI=;
-        b=EzYpZo2mv36JDSJ4nRBtweVqqaPJzrt37itbjbpRLQDioTo+s6sC3lMX04Jv8HHvi/
-         ZlwIkl1/GxPzuNtOLHsA128Gy4/Iw9EObgNyG8Sm8E0GD9nuX4udCNrkhR9JNDM18cT2
-         9OROJC85E0YejmqYeG7najO/Hv+3YixlP+GfltMz3R+sR9yUvxCD/12AwLQX3IORfIUe
-         3J8e/hRTfLYnGEWOOjffjbeVv5Ll90h/S1pwy3Ih8r7uy2zJunlq5e68oWip8I+ocwPq
-         QsFG9f+YBmgJVscLhBq8kl4aeRBWx+9VwV8i84UIqzdeYj1JB/SbQYEBSxP2scr9LU3m
-         Eogw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779733025; x=1780337825; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N/2UctasxdczuvHkDvPIxcGMO1uUr3Chr5Ej1C66Qh8=;
-        b=RV1dUd4YSkp8uS1QF01NcFyxGghPZEP1N497hyZxdQVSaFYLNkHw2tdY4wbXF38Elg
-         4hc1ApwrEgKitXRFfAh2oT01lUONRRlpFVrBQtERDztziWNzXQIuI1or28iIJbYVHuYF
-         xuc2Ainf+2sevngU//XOANEkqcVzxw0ymtWLt1gIr5tsqRgtpxZ7n9i2ZEt8iavLTliT
-         JX/6L6P7hTcCc5z43h4j98Kjc8FJAjn6Wm2Nj4oVTZIlDR+gbZFmAalGINvH3t0mygq1
-         ByoEBINAWQrRwtKr9P4Mit9D72hvxamTMAd2h/L0i99mnYhMSVJA57EHu55WDwLZXu1K
-         rXNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779733025; x=1780337825;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=N/2UctasxdczuvHkDvPIxcGMO1uUr3Chr5Ej1C66Qh8=;
-        b=iMRWIGJQJucQm1R6lbHadjEUsZSB3r03NuQI1gVAQGR8UGcT6Y6cAJChQBJPYoIVdN
-         aZ/CPRP7XasWnnEOSZlBQ8Lyl6zTaglTievVjnb11QBkwMsNAQUD/CsiZSqk+VMl0mzB
-         HsVAIRhr0yBh10tvShmZbEXQofFzUvD4y1rHH56WfLkOQ7xmhWC/QCsUKcaUgFIekY/C
-         FcdVHv32yGJq5KZgfwRVLqlSTzWa5blcBrjgDcpWEOR+e8cNK7QAm+ryD/kyYQ3PcFYy
-         BSbpjAhBkzv9dTQb1RlQomrciTjZZS1kHnfwsRClTHkiaXNei9lzzHy1oaa0yrub7niv
-         hgCA==
-X-Forwarded-Encrypted: i=1; AFNElJ/pY2zQjuT0iDfW8lZ/OQK4ObBqwsc1o8IGSwFq16dq6LYqZGjk75lH27HceKfe9wn/Uuxk@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy1NE43o7RdZrcvfMuG3oSEC5r1R/DA/zX7shdOdsZ4iXfF/OuI
-	5Turu9xCrPtD4WZYnnoI6aa4N2yAVkfYnDowXwhpMp+i8vT9CXXtPW3A0KRIv8UZLKCffbaejl5
-	6wRUOD+7clLbq7pvLaq7/vuevt5+cszw=
-X-Gm-Gg: Acq92OGmNS51TAx8SfohZrNOcebajYUfHLh/UdcZEoX62KNcgEHB1pNjol5moP3qEVY
-	scvmN2tF0/aM7yskpaVF4gNTwQd22Y5Lf18Z2GPKBIz6Jaag4830weLwCzfNwlU7T/pXYzvuQQH
-	3TfyFsNmpcvuvgYomDT4u0wBuYUsn09kjW8E2otvhirjqcZMBrdRwu+v2IqEobQUTzGgIqQSq3B
-	l+dkUqHhy6UF28KdUYady66SArxrjblNK7cYtQWwbHHlBma5XpRHexoZgmMy+yOHgBE3Zk9aoHv
-	Xka+g+x14Vii5lrxsPlyBk5lY/E8U2zXFSJjIzKFIOu/7btnKAJhEh+0X+aGUCTVM8TxeuAMlG0
-	Pm1eVNXRU/jVP4wGS+RYwdDI=
-X-Received: by 2002:a05:7301:2c89:b0:2ce:db5e:354b with SMTP id
- 5a478bee46e88-3044912c779mr3218270eec.6.1779733025318; Mon, 25 May 2026
- 11:17:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i/kp6wh/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779739165; x=1811275165;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YN78vf8+41suap17viVNSe54cvyCYZejAjYdkDMzsE8=;
+  b=i/kp6wh/Jzi2a3WPaPHyov3QjOjC0UPEy4EFCrHAbiutpBcevtvG1G0V
+   Gc9aYcXXx/+9IKfxX5OTcDqvhjXqfoCJoXAKkn3T9nf9Or9Pni9X4PUP8
+   y19pVxY3509dS+YrpOLKBNzbTfIoNe8tnR7wCWHfRlSNXn8NKEFC9vYk3
+   +qxR1cRZUdC6M4ExfT5JwLeMAQyS8g5L+VNULr+Z85gbDoDNtI9ynl7To
+   zgIt3daZt3gskTBP1k5nA+UGDhsl3Mxito5CmXnO3JC3MUOh37kBESqu3
+   lDSbCxBCqckOYohsLlh+DpeLwMT/X8irtZ7WmIH0JDfWtHek8Q4IX+IaN
+   Q==;
+X-CSE-ConnectionGUID: jUE/P/02SOyVGpaintwJLw==
+X-CSE-MsgGUID: K49T1Pd4TWK+uIL7dJQybg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11797"; a="80744703"
+X-IronPort-AV: E=Sophos;i="6.24,168,1774335600"; 
+   d="scan'208";a="80744703"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2026 12:59:25 -0700
+X-CSE-ConnectionGUID: BeO12+0TRIC4UOErPJW5vg==
+X-CSE-MsgGUID: CQ5CodBjRsyC0Zym5/AbZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,168,1774335600"; 
+   d="scan'208";a="245977964"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 25 May 2026 12:59:23 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wRbSK-000000001mM-2rX7;
+	Mon, 25 May 2026 19:59:20 +0000
+Date: Tue, 26 May 2026 03:58:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chuck Lever <cel@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] SUNRPC: Reject short RFC 4121 MIC tokens in
+ gss_krb5_verify_mic_v2
+Message-ID: <202605260319.m5jggKFF-lkp@intel.com>
+References: <20260523165237.510204-1-cel@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260520064630.1785283-1-mkchauras@gmail.com> <20260520064630.1785283-5-mkchauras@gmail.com>
-In-Reply-To: <20260520064630.1785283-5-mkchauras@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 25 May 2026 20:16:53 +0200
-X-Gm-Features: AVHnY4KNP2Nl2JQ1LBLJOr_gMKPZJcSjALxmqaPRFB0APLpX2lXytJLQunJepAg
-Message-ID: <CANiq72nPOMkZXpMpwTLFg4xjFfmyf_O_x2FN_nrNBsxeNu178Q@mail.gmail.com>
-Subject: Re: [PATCH V16 4/7] rust/powerpc: Set min rustc version for powerpc
-To: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, 
-	jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, 
-	ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
-	tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	daniel.almeida@collabora.com, acourbot@nvidia.com, fujita.tomonori@gmail.com, 
-	gregkh@linuxfoundation.org, prafulrai522@gmail.com, tamird@kernel.org, 
-	kees@kernel.org, lyude@redhat.com, airlied@gmail.com, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260523165237.510204-1-cel@kernel.org>
 
-On Wed, May 20, 2026 at 8:48=E2=80=AFAM Mukesh Kumar Chaurasiya (IBM)
-<mkchauras@gmail.com> wrote:
->
-> Minimum `rustc` version required for powerpc is 1.95 as some critical
-> features required for compiling rust code for kernel are not there.
+Hi Chuck,
 
-Which critical features?
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-> For example Stable inline asm support which got merged in 1.95.
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on linus/master v7.1-rc5 next-20260525]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-It is not needed that the support is stable, but rather that
-everything you may need works.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chuck-Lever/SUNRPC-Reject-short-RFC-4121-MIC-tokens-in-gss_krb5_verify_mic_v2/20260524-005345
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/20260523165237.510204-1-cel%40kernel.org
+patch subject: [PATCH] SUNRPC: Reject short RFC 4121 MIC tokens in gss_krb5_verify_mic_v2
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260526/202605260319.m5jggKFF-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260526/202605260319.m5jggKFF-lkp@intel.com/reproduce)
 
-From a quick test (with a dummy example that may not be
-representative), ppc64 inline assembly seems to work for a long time,
-way before Rust 1.95.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605260319.m5jggKFF-lkp@intel.com/
 
-So, which is the actual version that it is needed? i.e. 1.95.0 doesn't
-seem to be required at least due to that.
+All errors (new ones prefixed by >>):
 
-That is why I am asking about the critical features above, because it
-may be that this works since earlier versions.
+>> net/sunrpc/auth_gss/gss_krb5_unseal.c:89:47: error: use of undeclared identifier 'cksum_len'
+      89 |         if (read_token->len < GSS_KRB5_TOK_HDR_LEN + cksum_len)
+         |                                                      ^
+   1 error generated.
 
-(I wonder if this patch and s390's similar one influenced each other?)
 
-Thanks!
+vim +/cksum_len +89 net/sunrpc/auth_gss/gss_krb5_unseal.c
 
-Cheers,
-Miguel
+    69	
+    70	u32
+    71	gss_krb5_verify_mic_v2(struct krb5_ctx *ctx, struct xdr_buf *message_buffer,
+    72			       struct xdr_netobj *read_token)
+    73	{
+    74		struct crypto_ahash *tfm = ctx->initiate ?
+    75					   ctx->acceptor_sign : ctx->initiator_sign;
+    76		char cksumdata[GSS_KRB5_MAX_CKSUM_LEN];
+    77		struct xdr_netobj cksumobj = {
+    78			.len	= ctx->gk5e->cksumlength,
+    79			.data	= cksumdata,
+    80		};
+    81		u8 *ptr = read_token->data;
+    82		__be16 be16_ptr;
+    83		time64_t now;
+    84		u8 flags;
+    85		int i;
+    86	
+    87		dprintk("RPC:       %s\n", __func__);
+    88	
+  > 89		if (read_token->len < GSS_KRB5_TOK_HDR_LEN + cksum_len)
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
