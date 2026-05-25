@@ -1,179 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C717E2F7F0C;
-	Mon, 25 May 2026 06:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED4637FF64;
+	Mon, 25 May 2026 11:44:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779692086; cv=none; b=gDY3TtiuNtx4cb2A9wzn+tAjJQrFjzYCgkbVpK+FHNJ1eFeoSU4HQnIPlGbl17cIp0mSW16azrMzgG0lY4Xs2Ntcq5oMPXCs2sib7z0rP8edFHZx9xas8AVnZexMgwWDSarXv8WDkvsfpsy3e/HxGk8ruXi9MC9XYKy+lgw0Hv8=
+	t=1779709443; cv=none; b=dt8J6IeK/RU0u7tlh2HWTzie6N/5Ktxdc9q6hO+v1zof3bFtHbiJRtzHc91GBhBhyvHP1us78zlf1aTHunrCIlRUwD8teUBf/M4yBYaIHNDbRwMrR+h0f3SwVyIN88TSDb6EYtaH7+HAGz8G/Kq8fRxV80EvbGkIbRwLqN7vJZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779692086; c=relaxed/simple;
-	bh=KnWQo3kWcvCik0bv07YOk79yqQhdtr/EkBUeLqloD3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ts/2jP9lLY5wpyn2oLJj6e0JHcp6Vk/6hYl31kSmgoTn23ZzMRPYj1RbP8EDHVCyejMWa8lddDHS29Fkc5TOpiYirtQ3TZN9Ls2Om/2CQxwznsZAhH0pYY3t8W52LBYLqUlrLS92oaaU4MkVNRdPJ/JYeidyhz9qck4tVn5M2JE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RWcfMqIq; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1779709443; c=relaxed/simple;
+	bh=WecPQJfCrErCiVESIdsqsyUdYnPBMpehDox7J972gPE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a+xQ77G3qaYTVU+gDfEe/vJRBxuC8zBiimQ0pv8DUTULHicaVj5OXKASo2mjGzLFnm951nKN/ete7qmJhs9c3HI4+2C3pu09/mEGXvxknwZbzWLAtYUe9sL8ZjBFd9oRAYP47+WmShoIXf+zbMgcanVxWXXMM3UlTaKryWBj0SQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NWJaSFdA; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RWcfMqIq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NWJaSFdA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779692083; x=1811228083;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KnWQo3kWcvCik0bv07YOk79yqQhdtr/EkBUeLqloD3s=;
-  b=RWcfMqIqYW0ndZHEeLZGxfGIjSD9UdYxhCLeSUV/zahDQyd1B/777kGk
-   x5+/9osr/Sp+yv79BJiXHBqfwXdaDTrwDREFr5qSF8EqEgtQ0Kq2LYPRX
-   npLRNZcr4NQiDj5TkI8QwTwlNx8sPBJQWp5TP6eWqjrrb+VSxgvLfndm1
-   wdvOhqIJBl/9xcLQRYIdJDRrmW8O75uy5dxUirnZiIjjWBNVFtqP3RnmU
-   IbMWFpT0zioJmAORL7+UfUas1g080nT8rLBEj93QdsFG+xd3zKkfMVHOI
-   juacNK0FYS5MJ06TTdhecFjjHyVhGCcfbpTUCIcc7X737VDIpQuO1q9AN
-   w==;
-X-CSE-ConnectionGUID: q9ZTNh62TQKOZ+g0brcgsA==
-X-CSE-MsgGUID: WgFMDEXxSry0yw4KRB5wjg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11796"; a="80628031"
+  t=1779709441; x=1811245441;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WecPQJfCrErCiVESIdsqsyUdYnPBMpehDox7J972gPE=;
+  b=NWJaSFdAnfztwyxmO8qr8t8ll28H/aqB0dgJhrQprlHaYXYyjTN9UrN8
+   3l2z9ZOAgqAw8PeOy8OFzMEKsQQ9dAJDt3jT4LFMzHJjjHlW87epnSlQd
+   ZyGRo5psLCsV7MD0QWLMp0ZRUep3omQzaQZroPFX471ruvKB794/hFen6
+   mq+civkBes4cXKzFn6UshwAvToh9LvGHTp3sccuRpZTIdUEp88s9HKQKI
+   WhTBB2ngEqXVHnzZjGhzxTbA1UUxeBCa/6ctzXY7eVu/MJDgCJnzrSIsj
+   aZjiZyRAcORD8V/uJJpMCbokBELsXHwXbasdvsqtB/vEsaKOrMs8R4Raq
+   g==;
+X-CSE-ConnectionGUID: cxvZhRGfTqGAod8gm8tDhQ==
+X-CSE-MsgGUID: CTk7HV1JR2mcAuhIXanhNw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11796"; a="84381701"
 X-IronPort-AV: E=Sophos;i="6.24,167,1774335600"; 
-   d="scan'208";a="80628031"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2026 23:54:42 -0700
-X-CSE-ConnectionGUID: 07DeJTjUSR2v5bClPMMstA==
-X-CSE-MsgGUID: 7pI3GzhwSPqTUM3IvQ/OPA==
+   d="scan'208";a="84381701"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2026 04:43:59 -0700
+X-CSE-ConnectionGUID: UcMbxQW7Sw2/vc+29vukHQ==
+X-CSE-MsgGUID: cfo44RCpSy+bKieFXbF9JQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,167,1774335600"; 
-   d="scan'208";a="235163703"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 24 May 2026 23:54:40 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 25 May 2026 04:43:55 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wRPCw-000000001BK-0OCb;
-	Mon, 25 May 2026 06:54:38 +0000
-Date: Mon, 25 May 2026 14:54:14 +0800
+	id 1wRTiq-000000001QI-1Msq;
+	Mon, 25 May 2026 11:43:52 +0000
+Date: Mon, 25 May 2026 19:42:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To: Michael Kelley <mhklkml@zohomail.com>, kys@microsoft.com,
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+	longli@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+	hpa@zytor.com, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2026-05-22 254/254]
- sound/soc/intel/avs/boards/pcm3168a.c:115:35: warning: variable 'card' is
- uninitialized when used here
-Message-ID: <202605251422.lO4uuYRc-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+Subject: Re: [PATCH 1/1] x86/hyperv: Refactor hv_smp_prepare_cpus()
+Message-ID: <202605251945.TesslTvF-lkp@intel.com>
+References: <20260521192336.99623-1-mhklkml@zohomail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260521192336.99623-1-mhklkml@zohomail.com>
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2026-05-22
-head:   65ed982efb72231d8feca201fdeb06adb64515a0
-commit: 6aeffb844883a34370f83da1c9c96a0a66003076 [254/254] ASoC: intel: avs=
-: pcm3168a: use snd_soc_card_register()
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/202605=
-25/202605251422.lO4uuYRc-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f022=
-7cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
-/20260525/202605251422.lO4uuYRc-lkp@intel.com/reproduce)
+Hi Michael,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new versio=
-n of
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/master]
+[also build test ERROR on linus/master v7.1-rc5 next-20260522]
+[cannot apply to tip/x86/core arnd-asm-generic/master tip/auto-latest]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Kelley/x86-hyperv-Refactor-hv_smp_prepare_cpus/20260522-032610
+base:   tip/master
+patch link:    https://lore.kernel.org/r/20260521192336.99623-1-mhklkml%40zohomail.com
+patch subject: [PATCH 1/1] x86/hyperv: Refactor hv_smp_prepare_cpus()
+config: x86_64-randconfig-076-20260524 (https://download.01.org/0day-ci/archive/20260525/202605251945.TesslTvF-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260525/202605251945.TesslTvF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605251422.lO4uuYRc-lkp@i=
-ntel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605251945.TesslTvF-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/soc/intel/avs/boards/pcm3168a.c:115:35: warning: variable 'card' i=
-s uninitialized when used here [-Wuninitialized]
-     115 |         ret =3D avs_create_dai_links(dev, &card->dai_link, &card=
-->num_links);
-         |                                          ^~~~
-   sound/soc/intel/avs/boards/pcm3168a.c:103:27: note: initialize the varia=
-ble 'card' to silence this warning
-     103 |         struct snd_soc_card *card;
-         |                                  ^
-         |                                   =3D NULL
-   1 warning generated.
+>> drivers/hv/hv_proc.c:303:55: error: call to undeclared function 'cpu_physical_id'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     303 |                 ret = hv_call_add_logical_proc(numa_cpu_node(i), i, cpu_physical_id(i));
+         |                                                                     ^
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_STMFX
+   Depends on [n]: HAS_IOMEM [=y] && I2C [=y] && OF [=n]
+   Selected by [y]:
+   - PINCTRL_STMFX [=y] && PINCTRL [=y] && I2C [=y] && HAS_IOMEM [=y]
 
 
-vim +/card +115 sound/soc/intel/avs/boards/pcm3168a.c
+vim +/cpu_physical_id +303 drivers/hv/hv_proc.c
 
-79ebb596201c86 Cezary Rojewski    2025-02-03   97 =20
-79ebb596201c86 Cezary Rojewski    2025-02-03   98  static int avs_pcm3168a_=
-probe(struct platform_device *pdev)
-79ebb596201c86 Cezary Rojewski    2025-02-03   99  {
-091614d1c57193 Amadeusz S=C5=82awi=C5=84ski 2025-04-07  100  	struct snd_so=
-c_acpi_mach *mach;
-091614d1c57193 Amadeusz S=C5=82awi=C5=84ski 2025-04-07  101  	struct avs_ma=
-ch_pdata *pdata;
-79ebb596201c86 Cezary Rojewski    2025-02-03  102  	struct device *dev =3D =
-&pdev->dev;
-79ebb596201c86 Cezary Rojewski    2025-02-03  103  	struct snd_soc_card *ca=
-rd;
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  104  	struct snd_soc_card_dri=
-ver *card_driver;
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  105  	char *card_name =3D NUL=
-L, *long_name =3D NULL, *driver_name =3D NULL;
-79ebb596201c86 Cezary Rojewski    2025-02-03  106  	int ret;
-79ebb596201c86 Cezary Rojewski    2025-02-03  107 =20
-091614d1c57193 Amadeusz S=C5=82awi=C5=84ski 2025-04-07  108  	mach =3D dev_=
-get_platdata(dev);
-091614d1c57193 Amadeusz S=C5=82awi=C5=84ski 2025-04-07  109  	pdata =3D mac=
-h->pdata;
-091614d1c57193 Amadeusz S=C5=82awi=C5=84ski 2025-04-07  110 =20
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  111  	card_driver =3D devm_kz=
-alloc(dev, sizeof(*card_driver), GFP_KERNEL);
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  112  	if (!card_driver)
-79ebb596201c86 Cezary Rojewski    2025-02-03  113  		return -ENOMEM;
-79ebb596201c86 Cezary Rojewski    2025-02-03  114 =20
-79ebb596201c86 Cezary Rojewski    2025-02-03 @115  	ret =3D avs_create_dai_=
-links(dev, &card->dai_link, &card->num_links);
-79ebb596201c86 Cezary Rojewski    2025-02-03  116  	if (ret)
-79ebb596201c86 Cezary Rojewski    2025-02-03  117  		return ret;
-79ebb596201c86 Cezary Rojewski    2025-02-03  118 =20
-091614d1c57193 Amadeusz S=C5=82awi=C5=84ski 2025-04-07  119  	if (pdata->ob=
-solete_card_names) {
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  120  		card_name =3D "avs_pcm=
-3168a";
-091614d1c57193 Amadeusz S=C5=82awi=C5=84ski 2025-04-07  121  	} else {
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  122  		driver_name =3D "avs_p=
-cm3168a";
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  123  		long_name =3D card_nam=
-e =3D "AVS I2S PCM3168A";
-091614d1c57193 Amadeusz S=C5=82awi=C5=84ski 2025-04-07  124  	}
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  125 =20
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  126  	card_driver->name =3D d=
-river_name;
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  127  	card_driver->dapm_widge=
-ts =3D card_widgets;
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  128  	card_driver->num_dapm_w=
-idgets =3D ARRAY_SIZE(card_widgets);
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  129  	card_driver->dapm_route=
-s =3D card_routes;
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  130  	card_driver->num_dapm_r=
-outes =3D ARRAY_SIZE(card_routes);
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  131  	card_driver->fully_rout=
-ed =3D true;
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  132 =20
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  133  	card =3D devm_snd_soc_c=
-ard_alloc(dev, THIS_MODULE, card_driver,
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  134  				       card_name, lo=
-ng_name, NULL);
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  135  	if (!card)
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  136  		return -ENOMEM;
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  137 =20
-6aeffb844883a3 Kuninori Morimoto  2026-05-21  138  	return devm_snd_soc_car=
-d_register(card);
-79ebb596201c86 Cezary Rojewski    2025-02-03  139  }
-79ebb596201c86 Cezary Rojewski    2025-02-03  140 =20
-
-:::::: The code at line 115 was first introduced by commit
-:::::: 79ebb596201c86712fe38b0ef73d25d07b932664 ASoC: Intel: avs: Add pcm31=
-68a machine board
-
-:::::: TO: Cezary Rojewski <cezary.rojewski@intel.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
+   290	
+   291	void hv_smp_prep_cpus(void)
+   292	{
+   293	#ifdef CONFIG_X86_64
+   294		int i, ret;
+   295	
+   296		/* If AP LPs exist, we are in a kexec'd kernel and VPs already exist */
+   297		if (num_present_cpus() == 1 || hv_lp_exists(1))
+   298			return;
+   299	
+   300		for_each_present_cpu(i) {
+   301			if (i == 0)
+   302				continue;
+ > 303			ret = hv_call_add_logical_proc(numa_cpu_node(i), i, cpu_physical_id(i));
 
 --
 0-DAY CI Kernel Test Service
