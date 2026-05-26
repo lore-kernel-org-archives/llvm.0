@@ -1,148 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141EC22D7A9;
-	Tue, 26 May 2026 13:29:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779802176; cv=none; b=i851OcxGC7EioTyVfhs9KS3Jb0nFxAUiWBd2lFtaiOEJCMvAd2wyveXztXpsEzSxh/C0wLT2U+QvIMSsy6LZ4rehgClgn/EAoJFmaCKfCeLKzDSuRndZAdpjfpj5eWg0EYlDIoz3QSmgDI6U0D4PBc158tDrMNnTK4euLfrv3Uk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779802176; c=relaxed/simple;
-	bh=YFBXj9kJAK2GUBcqj2oJN6vkUDXLvNaK/aM1Qe9i5Gs=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Oo9v6vlz9ydi1Ree1z/qiN+LpPRTqhBu3/Y3quirVqM33ZFipfGC5IKMC0mergJOJ1N8x9oIti31rKAZKrZ5nwi9R9lzJO/XARhS0S7FzZtF1+NZptOjJUP7t1fCSC+0hPjSkkOsRvPO+ilex4DhVBlj6kLsMny4sHiEHVLFMOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gin2EEmw; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327A73FD946
+	for <llvm@lists.linux.dev>; Tue, 26 May 2026 13:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779803863; cv=pass; b=GPZenAMywzCpvdCIe0/ziYW2+sNhb7s5MpTe1Olj8R5+fMeMDgjIVSpKije9r8gWqfHIrm9r1JbQevoWhn0G1ZGj128FWXs8sWYtyFkVVuN75isRtEc6UoG0BkDxvKT06l+z+mTQxHNhFo1H4CdNI6bxaX1W9epW5zWHm2k9KAA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779803863; c=relaxed/simple;
+	bh=pUx2Efe0iKz290DUjvk5U36pR+gdlU4WnThSTIl69DA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kkQNhmlEqBaSWe+r0x0B4l+C8opeBEKnmvGtC3abjzpjcPrN9sOksgYW8DeZF8RI3yVGkUhpWuEqaKuZcIofD/A5uhohf+5QxlR2gXONDA9CYm7aEkKvVOfvUvYweHYGjKmlJmZzpoB454g3KRsCnzJBQhLkpfsTtQXuGYD9CGM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f4BHpH3V; arc=pass smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gin2EEmw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779802175; x=1811338175;
-  h=date:from:to:cc:subject:message-id;
-  bh=YFBXj9kJAK2GUBcqj2oJN6vkUDXLvNaK/aM1Qe9i5Gs=;
-  b=gin2EEmwgUU9Z+4k3POG+VKtTNgusEd47g/Jh4SEIfGUDvyvJubjiY1S
-   u4T4G2XwU5WpaSzX+X/GAmJPeTir5WyrCLe7c5LkNskbviXJdlLRTpH7n
-   UPfXwOak81hjmrdab36WVBYht4stQUtGWUyl7Lypoz33OT5nnG4w0O7Dy
-   dpb4yrvaDBOrlZXQnn5TMPTrHb+c3Av9MqxETF/1THgGV7zp0FdUH0htK
-   J8zQIDZJ3lOXKhHP50v06oqI3NV552mXHghrJ/yc1Cn7UZOlIt3rmzDA/
-   cODa4Apxr9coRoVqfBpvz2L65lhqKjQI/JtmCx8zlW3KFHyRyY2B4/VYZ
-   Q==;
-X-CSE-ConnectionGUID: Xz0OpZuUTre2LDA84vp2oA==
-X-CSE-MsgGUID: PJ0E5TWwSSGtruVUZ0tatw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11797"; a="80597417"
-X-IronPort-AV: E=Sophos;i="6.24,169,1774335600"; 
-   d="scan'208";a="80597417"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 06:29:35 -0700
-X-CSE-ConnectionGUID: 4ir42ViOQSyzCOm/3IfOfg==
-X-CSE-MsgGUID: tEM3y2IaT3KgsDsAiCyqqw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,169,1774335600"; 
-   d="scan'208";a="280042297"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa001.jf.intel.com with ESMTP; 26 May 2026 06:29:33 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wRrqc-00000000CPl-1ZSN;
-	Tue, 26 May 2026 13:29:30 +0000
-Date: Tue, 26 May 2026 15:29:17 +0200
-From: kernel test robot <lkp@intel.com>
-To: Li kunyu <likunyu10@163.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: kernel/sched/fair.c:7632:6: warning: variable 'delta' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <202605261559.6RBLgJz5-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f4BHpH3V"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-3047a628b34so189800eec.3
+        for <llvm@lists.linux.dev>; Tue, 26 May 2026 06:57:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779803854; cv=none;
+        d=google.com; s=arc-20240605;
+        b=W5Pcc92/mIGyln/jwHh4rMgzhmBrN4wVkREY8n7FZpY3RYA0jGH5tpHGfdDA86QZqE
+         +Pf5KJJ9+SpRn044brMx5UbeATNNsySLE5JFwqW5zAOfMmUmidXk5S4FVTBM+E8rSZvF
+         NSG9JVlPJWz4NkNxgyr2/Kwa0MWQ9kvfsdqg4POFEDknLh+ez+layEtc0zZNqMjn/b+J
+         Q3Ak4ONxL1EqXF/5rt6CHS8bhIdAD1RqfkuYJvwz09qGNMBvcZRZp+RePL34DF7f9AnJ
+         XbHbtLCK5Tme6ZRdTkAeYGCzTd7V2m+7WPQZB80Aosmv0tzQ6OsUwYkrigy/N6HdhUP7
+         xF5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pUx2Efe0iKz290DUjvk5U36pR+gdlU4WnThSTIl69DA=;
+        fh=+osfa/ezuuSfuuZMXmgz8ac8SZN09C5wygH0v9KJtT4=;
+        b=Yv9GlGCtr7ov0W/XKkDLAFQvfOnHXWk9mnbp3Zx3FH0fbroN2jLemHR1x4BbbdtfUh
+         vxlcHvXqRlsykUkkH1t9dWY7KMd1S52dt0hnAfFw9UIVNGHrQ9v6b/X3ZklqnKK7he5Y
+         C99BySzFJHjkDyqr2M3Oi/SE7uApsuEmh7jJoxoGHVmJuF1HDLukf+wMk2ut09Wj1/T1
+         L0nHMl07rUTRBExtar3SED8uNSgmL4meRSa8c2UgWLSa4etWzNgECswk96TzbIRIC/GU
+         YjT2oua6JpdulQjOgGGHY1+4Avj6L6sl/TJKw3RQK/7WjpQodqWt8P/Vr9grWI87BaPl
+         JiJw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779803854; x=1780408654; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pUx2Efe0iKz290DUjvk5U36pR+gdlU4WnThSTIl69DA=;
+        b=f4BHpH3VLO/SEdp5pWZuFsj1VVnFioUtdefsRmqETTx8hpb+I3IJMkNwBHs+vs0ptc
+         YQ9HvzHtNdictM5yF9miz5J3sL/u10ZQIp7SroTvbKksfBljhlis8OdB6YTtn3tgcAFg
+         8FYffFa28lJPZGbNOS0KMmltrtvX/TsAzxJnxcKRoOogmdzyGwTa/r9xCqKwk3b/ChZm
+         1XWLjWTVgZ6vo6P6qgckKjwNzbYUpZjwKEfMqAFaqc0a2yroSzJ7wzNgTfdFnt3KKQRA
+         Sm5MiQny6wc0YpYAwJnukDN72UswTMPGFsAm7vwj9Ms0ib35BawIAGwHDwBIN82xiEXt
+         r5TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779803854; x=1780408654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pUx2Efe0iKz290DUjvk5U36pR+gdlU4WnThSTIl69DA=;
+        b=B91WIoPPAnvDIx5YOI2XJFXdBrsN4J4C8SIcN2iohQaCiEm4nqUXTsEu61/h2yewqD
+         +AasLaqiGNfxyjUjGwrLJiIKYnpK7GBWLtZeruRnGDzNrgMCBldF1IYGz3C1of68nCEY
+         L+7l9mWNMeClcHUWHusZLXTZj7jHV0GeJ8Xyr6S5JQ5TpPWa8V3owPOafMs51/YIJS5h
+         qjKiWxvYyZXOmoLB1PiVBTdmmAFthm3XJSDy7BlAnumqHTHrWiAmLTaNM9fQfgNwe3PQ
+         xLQ6f7MwRB8WCzBXH4juBalM+QyP0+b0O2uyIMJ1ziXA4+t+0iAE2soZ833/nJ0D11Pq
+         CRBQ==
+X-Gm-Message-State: AOJu0Yy0dTusx2XnJ0OX0cuwv6cLmPbN305dprRGgzLVN4ke81wJZY4l
+	RF9axzfyeQLYw8Zz4bYpTNQdqvIqW1JNlphT2B0rmAIKXfG6quTttk+JyjvklElDrd3MVNf9r5S
+	/yF3Fd6qSy9mzQ1g/81dwFltAUt0uVmQ=
+X-Gm-Gg: Acq92OFD0u6Pmnzz8IZDhc6Sfvh9EvEEWj/s3/QSxXLOUE/J7wQy9C7eM4R8ZVfaql4
+	HSg3h5QJ66V1oILx6vNVoyE5a/N9BGzkmN2RVlhT5NqN/kkKs5RyW+tR35LNeFQhOfQmXgML/W4
+	JkJwK5lfD7aowt23AjbwMOAXizTxitdKfhDTghbwfzoS0MkK5ZCV5ZQdKBQ0wB7lSCp+QUJXdhE
+	2jVjN0hC/ZYSifCTn+ez6JvCjbXDfZ9EqFTeBx75aEj9LzhyZkPp34bRIl9nJucy8uBiH5/haiB
+	K6jKjN6BrubLzLpANXhb497Bv4ZgaM5pWwoUDgPTNu8Ey3HZO6lvc50x2aRGUjEBDq3MNz8SCgs
+	+w11ikzrTfc1OrZpmC4gBvso=
+X-Received: by 2002:a05:7301:3d06:b0:304:1d92:42ab with SMTP id
+ 5a478bee46e88-30449040654mr3652848eec.2.1779803854015; Tue, 26 May 2026
+ 06:57:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260523032119.GA317916@ax162>
+In-Reply-To: <20260523032119.GA317916@ax162>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 26 May 2026 15:57:20 +0200
+X-Gm-Features: AVHnY4J2agT1Ukbat9KqrWMJUX1nzxToByj9FGi5-n5nA-T3bQK46Z5ByVpCGTI
+Message-ID: <CANiq72kUipx_gohsxJmjrDawmkSz+6B0ncroNuxhZrpxth=-Ww@mail.gmail.com>
+Subject: Re: Prebuilt LLVM 22.1.6 uploaded
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Li-kunyu/kernel-sched-fair-Fix-the-issue-of-virtual-runtime-conversion-error/20260526-151853
-head:   bd4bbad39597b8716ec86aff4dff435d94b116b8
-commit: bd4bbad39597b8716ec86aff4dff435d94b116b8 kernel/sched/fair: Fix the issue of virtual runtime conversion error
-date:   6 hours ago
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260526/202605261559.6RBLgJz5-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260526/202605261559.6RBLgJz5-lkp@intel.com/reproduce)
+On Sat, May 23, 2026 at 5:21=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> I have built and uploaded LLVM 22.1.6 to
+> https://mirrors.edge.kernel.org/pub/tools/llvm/.
+>
+> If there are any issues found, please let us know via email or
+> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+> opportunity to get them fixed in main and backported before the 22.x
+> series is no longer supported.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605261559.6RBLgJz5-lkp@intel.com/
+As usual, I did a run in CI (with Rust from `rustup`) and it seems to work =
+fine:
 
-All warnings (new ones prefixed by >>):
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
->> kernel/sched/fair.c:7632:6: warning: variable 'delta' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    7632 |         if (unlikely(se->load.weight != NICE_0_LOAD))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:77:22: note: expanded from macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:7644:28: note: uninitialized use occurs here
-    7644 |         hrtick_start(rq, (scale * delta) / 1024);
-         |                                   ^~~~~
-   kernel/sched/fair.c:7632:2: note: remove the 'if' if its condition is always true
-    7632 |         if (unlikely(se->load.weight != NICE_0_LOAD))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    7633 |                 delta = (NICE_0_LOAD * vdelta) / se->load.weight;
-   kernel/sched/fair.c:7615:11: note: initialize the variable 'delta' to silence this warning
-    7615 |         u64 delta;
-         |                  ^
-         |                   = 0
-   1 warning generated.
+Thanks! :)
 
-
-vim +7632 kernel/sched/fair.c
-
-  7603	
-  7604	/**************************************************
-  7605	 * CFS operations on tasks:
-  7606	 */
-  7607	
-  7608	#ifdef CONFIG_SCHED_HRTICK
-  7609	static void hrtick_start_fair(struct rq *rq, struct task_struct *p)
-  7610	{
-  7611		struct sched_entity *se = &p->se;
-  7612		unsigned long scale = 1024;
-  7613		unsigned long util = 0;
-  7614		u64 vdelta;
-  7615		u64 delta;
-  7616	
-  7617		WARN_ON_ONCE(task_rq(p) != rq);
-  7618	
-  7619		if (rq->cfs.h_nr_queued <= 1)
-  7620			return;
-  7621	
-  7622		/*
-  7623		 * Compute time until virtual deadline
-  7624		 */
-  7625		vdelta = se->deadline - se->vruntime;
-  7626		if ((s64)vdelta < 0) {
-  7627			if (task_current_donor(rq, p))
-  7628				resched_curr(rq);
-  7629			return;
-  7630		}
-  7631	
-> 7632		if (unlikely(se->load.weight != NICE_0_LOAD))
-  7633			delta = (NICE_0_LOAD * vdelta) / se->load.weight;
-  7634	
-  7635		/*
-  7636		 * Correct for instantaneous load of other classes.
-  7637		 */
-  7638		util += cpu_util_irq(rq);
-  7639		if (util && util < 1024) {
-  7640			scale *= 1024;
-  7641			scale /= (1024 - util);
-  7642		}
-  7643	
-  7644		hrtick_start(rq, (scale * delta) / 1024);
-  7645	}
-  7646	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
