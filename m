@@ -1,62 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE3D40F8C4;
-	Tue, 26 May 2026 15:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D1F2868A7;
+	Tue, 26 May 2026 15:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779807819; cv=none; b=K7fbjhwfwYhFk/kxrAV3aanzcO5jcUJCbwFqwIjXvxCIc26PlRe/GN2gHi981boaPcdKxTXgfz9CpGXzKjFfQS9Kv39wdQnFAfaqT3gNkSx+ZA7XSZ9yJ9ab0thL8cLqiVxfh/Gw3CS6+tlPP04tcbf/ogEtKh6PyDZu+5IoUeU=
+	t=1779808438; cv=none; b=XYVaGAcdhNwKjobS2vzV60BLxcwocjhiDrK5+pGjqU3s8hVqoP4j7wx05dFOlZsr9LRtXoyikBI+SuW7EZejvyglrcy+2dZ1sxGc/COJr3upzf2iGXiXwUIqwmhjWeLisGyNORJ9aN+DfPKDzFeN7cM9EIU7olJd89Z/9cphZro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779807819; c=relaxed/simple;
-	bh=0a6HnbTZ2RV59J72sSa2ET/4+5I6oh6zRZ7Rz7fcaeo=;
+	s=arc-20240116; t=1779808438; c=relaxed/simple;
+	bh=f+fVeGwH2AGX0iHgTYcaIbHb7350IWFdEYH/N4AH1+g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C0G0WhrfZVMInmuKnzgh/4cgNBuqQC//gV/sA/Y9ncsapvJKRfwCEsDvYPnn+f9vZi9RfhXjCrCLGENiJapPN5x7YUK7WlbnoYLrKUldKYEmwvUX5xeso99zp8HxfPZZcRsdjuBPVnpcI/zreAp22SkqWv/T90ViZJ7RwjZwFW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DlqIvsUv; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=ud7KpZWih3b+ojU4Q/SqUf6XAzZ5ukpyOlC042nit5qDso6r8Nqh/K4lZ9A6fz88LPChN+zcDeJ46p53DE8vVDnZCIWmSws2Xf+BkHasKVcz6W4lqBQ2vPPClDTe+SZGlT5iG6As1X/xRfl6wa+D0rvby66HLaXV3eWRn4iI4Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZZJBisl7; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DlqIvsUv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZZJBisl7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779807819; x=1811343819;
+  t=1779808437; x=1811344437;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=0a6HnbTZ2RV59J72sSa2ET/4+5I6oh6zRZ7Rz7fcaeo=;
-  b=DlqIvsUvaEw2PxtFwAIOhakS2qlD3hSEaYZ51p1Gt5qwyTFzH2y9X/Vw
-   N8LY4E7s+fm7n+CnmaRiQVcLZiTJsz+M5Ir3/Yv1ZXBe91mm7T94vb85Y
-   s7jF5lpdFw0zGbgPG42q7Cp9sQKDzM3mYnHvsdByudC1MV6XOWYxdNQvr
-   kSWGM+ckPBdc8Z/ppUXiw8yzpPNiHvr8tcCHyCeq+vbHHy75NxjIHgXoI
-   3TVMfAwBbd4uu7Ge3Tb93ZHiGgJutMNglbekt5ggPmS9k7tHs82lwUyTT
-   YznUCz7XqGVDG8tz7UVzbXk7722u5aC5P1OcvZfYNvWU1d55jgGKnhKL9
-   Q==;
-X-CSE-ConnectionGUID: pSHo6Bi0QYagBZmSFjYZDw==
-X-CSE-MsgGUID: vz+nYX5MST+msLQoVTdlbw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11797"; a="98047349"
+  bh=f+fVeGwH2AGX0iHgTYcaIbHb7350IWFdEYH/N4AH1+g=;
+  b=ZZJBisl7RHGnLa3zzJrFA9v8iA+T1T2eV4pT1P1hOHmcCVNNyqS4y5IE
+   oGFxaECZjlWiA/0tew53K1UyKCLwRZ0eRr4aCnMPtYbDnQUaVQuRzIiXZ
+   wIouFjLDO+VWSTZFbsG8Bw8G4Qf8k1D39HB38m7beOklci92S/Jo3acTK
+   5ZUJmbEUEFgXe3YXnHOLo2aOU2AjiPSxhMPhMqiLdLLeWkuwNaITsOBMK
+   PX3My+cqlpft8mxv96cMalWd1znWTFcPkQjPZPuPpv83e37Qqxlp86YLY
+   bvywCkNPkE2gr+o7jGobblB3Nx4kWFGVSV3kO3uXF2ZRXIAC31EB8MKEl
+   A==;
+X-CSE-ConnectionGUID: mN/Ib9vbRxisW4Ftz4yggA==
+X-CSE-MsgGUID: qlE2nFCIRyaz2+6/yvznDQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11797"; a="91194419"
 X-IronPort-AV: E=Sophos;i="6.24,169,1774335600"; 
-   d="scan'208";a="98047349"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 08:03:36 -0700
-X-CSE-ConnectionGUID: hEQK080AQNOkzkp93f49Kg==
-X-CSE-MsgGUID: FVU9B0qvTRa1hf3dNzIjNQ==
+   d="scan'208";a="91194419"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 08:13:35 -0700
+X-CSE-ConnectionGUID: eR//+E9BSAyKkRggeAy5GQ==
+X-CSE-MsgGUID: 1zvR1ORqStekGfCZ3gQ+Mg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,169,1774335600"; 
-   d="scan'208";a="240895113"
+   d="scan'208";a="237782045"
 Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa006.jf.intel.com with ESMTP; 26 May 2026 08:03:34 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 26 May 2026 08:13:33 -0700
 Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wRtJb-00000000CQV-06iV;
-	Tue, 26 May 2026 15:03:31 +0000
-Date: Tue, 26 May 2026 17:02:51 +0200
+	id 1wRtTH-00000000CQb-0JbS;
+	Tue, 26 May 2026 15:13:31 +0000
+Date: Tue, 26 May 2026 17:13:23 +0200
 From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@meta.com>, linux-block@vger.kernel.org,
-	axboe@kernel.dk
+To: Geliang Tang <geliang@kernel.org>, mptcp@lists.linux.dev
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Keith Busch <kbusch@kernel.org>, Ming Lei <tom.leiming@gmail.com>,
-	Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH] blk-mq: reinsert cached request to the list
-Message-ID: <202605261716.TITwjvlB-lkp@intel.com>
-References: <20260525160744.896047-1-kbusch@meta.com>
+	Geliang Tang <tanggeliang@kylinos.cn>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Matthieu Baerts <matttbe@kernel.org>
+Subject: Re: [PATCH mptcp-next] mptcp: remove unused data_ack from struct
+ mptcp_ext
+Message-ID: <202605261737.8n5ShBlg-lkp@intel.com>
+References: <59640df9a7c0528688419655e53cb4efc50aff41.1779786007.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,185 +66,116 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260525160744.896047-1-kbusch@meta.com>
+In-Reply-To: <59640df9a7c0528688419655e53cb4efc50aff41.1779786007.git.tanggeliang@kylinos.cn>
 
-Hi Keith,
+Hi Geliang,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on axboe/for-next]
-[also build test ERROR on next-20260525]
-[cannot apply to linus/master v6.16-rc1]
+[auto build test ERROR on mptcp/export]
+[also build test ERROR on mptcp/export-net linus/master v7.1-rc5 next-20260525]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/blk-mq-reinsert-cached-request-to-the-list/20260526-000916
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
-patch link:    https://lore.kernel.org/r/20260525160744.896047-1-kbusch%40meta.com
-patch subject: [PATCH] blk-mq: reinsert cached request to the list
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260526/202605261716.TITwjvlB-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Geliang-Tang/mptcp-remove-unused-data_ack-from-struct-mptcp_ext/20260526-174441
+base:   https://github.com/multipath-tcp/mptcp_net-next.git export
+patch link:    https://lore.kernel.org/r/59640df9a7c0528688419655e53cb4efc50aff41.1779786007.git.tanggeliang%40kylinos.cn
+patch subject: [PATCH mptcp-next] mptcp: remove unused data_ack from struct mptcp_ext
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260526/202605261737.8n5ShBlg-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260526/202605261716.TITwjvlB-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260526/202605261737.8n5ShBlg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605261716.TITwjvlB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605261737.8n5ShBlg-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> block/blk-mq.c:3249:3: error: call to undeclared function 'rq_list_push'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3249 |                 rq_list_push(&plug->cached_rqs, rq);
-         |                 ^
-   1 error generated.
+>> net/mptcp/options.c:607:18: error: no member named 'data_ack' in 'struct mptcp_ext'
+     607 |                 opts->ext_copy.data_ack = ack_seq;
+         |                 ~~~~~~~~~~~~~~ ^
+>> net/mptcp/options.c:611:18: error: no member named 'data_ack32' in 'struct mptcp_ext'
+     611 |                 opts->ext_copy.data_ack32 = (uint32_t)ack_seq;
+         |                 ~~~~~~~~~~~~~~ ^
+   net/mptcp/options.c:1479:31: error: no member named 'data_ack' in 'struct mptcp_ext'
+    1479 |                                 put_unaligned_be64(mpext->data_ack, ptr);
+         |                                                    ~~~~~  ^
+   net/mptcp/options.c:1482:31: error: no member named 'data_ack32' in 'struct mptcp_ext'
+    1482 |                                 put_unaligned_be32(mpext->data_ack32, ptr);
+         |                                                    ~~~~~  ^
+   4 errors generated.
 
 
-vim +/rq_list_push +3249 block/blk-mq.c
+vim +607 net/mptcp/options.c
 
-  3110	
-  3111	/**
-  3112	 * blk_mq_submit_bio - Create and send a request to block device.
-  3113	 * @bio: Bio pointer.
-  3114	 *
-  3115	 * Builds up a request structure from @q and @bio and send to the device. The
-  3116	 * request may not be queued directly to hardware if:
-  3117	 * * This request can be merged with another one
-  3118	 * * We want to place request at plug queue for possible future merging
-  3119	 * * There is an IO scheduler active at this queue
-  3120	 *
-  3121	 * It will not queue the request if there is an error with the bio, or at the
-  3122	 * request creation.
-  3123	 */
-  3124	void blk_mq_submit_bio(struct bio *bio)
-  3125	{
-  3126		struct request_queue *q = bdev_get_queue(bio->bi_bdev);
-  3127		struct blk_plug *plug = current->plug;
-  3128		const int is_sync = op_is_sync(bio->bi_opf);
-  3129		unsigned int integrity_action;
-  3130		struct blk_mq_hw_ctx *hctx;
-  3131		unsigned int nr_segs;
-  3132		struct request *rq;
-  3133		blk_status_t ret;
-  3134	
-  3135		/*
-  3136		 * If the plug has a cached request for this queue, try to use it.
-  3137		 */
-  3138		rq = blk_mq_get_cached_request(plug, q, bio->bi_opf);
-  3139	
-  3140		/*
-  3141		 * A BIO that was released from a zone write plug has already been
-  3142		 * through the preparation in this function, already holds a reference
-  3143		 * on the queue usage counter, and is the only write BIO in-flight for
-  3144		 * the target zone. Go straight to preparing a request for it.
-  3145		 */
-  3146		if (bio_zone_write_plugging(bio)) {
-  3147			nr_segs = bio->__bi_nr_segments;
-  3148			if (rq)
-  3149				blk_queue_exit(q);
-  3150			goto new_request;
-  3151		}
-  3152	
-  3153		/*
-  3154		 * The cached request already holds a q_usage_counter reference and we
-  3155		 * don't have to acquire a new one if we use it.
-  3156		 */
-  3157		if (!rq) {
-  3158			if (unlikely(bio_queue_enter(bio)))
-  3159				return;
-  3160		}
-  3161	
-  3162		/*
-  3163		 * Device reconfiguration may change logical block size or reduce the
-  3164		 * number of poll queues, so the checks for alignment and poll support
-  3165		 * have to be done with queue usage counter held.
-  3166		 */
-  3167		if (unlikely(bio_unaligned(bio, q))) {
-  3168			bio_io_error(bio);
-  3169			goto queue_exit;
-  3170		}
-  3171	
-  3172		if ((bio->bi_opf & REQ_POLLED) && !blk_mq_can_poll(q)) {
-  3173			bio->bi_status = BLK_STS_NOTSUPP;
-  3174			bio_endio(bio);
-  3175			goto queue_exit;
-  3176		}
-  3177	
-  3178		bio = __bio_split_to_limits(bio, &q->limits, &nr_segs);
-  3179		if (!bio)
-  3180			goto queue_exit;
-  3181	
-  3182		integrity_action = bio_integrity_action(bio);
-  3183		if (integrity_action)
-  3184			bio_integrity_prep(bio, integrity_action);
-  3185	
-  3186		blk_mq_bio_issue_init(q, bio);
-  3187		if (blk_mq_attempt_bio_merge(q, bio, nr_segs))
-  3188			goto queue_exit;
-  3189	
-  3190		if (bio_needs_zone_write_plugging(bio)) {
-  3191			if (blk_zone_plug_bio(bio, nr_segs))
-  3192				goto queue_exit;
-  3193		}
-  3194	
-  3195	new_request:
-  3196		if (rq) {
-  3197			rq_qos_throttle(rq->q, bio);
-  3198			blk_mq_rq_time_init(rq, blk_time_get_ns());
-  3199			rq->cmd_flags = bio->bi_opf;
-  3200			INIT_LIST_HEAD(&rq->queuelist);
-  3201		} else {
-  3202			rq = blk_mq_get_new_requests(q, plug, bio);
-  3203			if (unlikely(!rq)) {
-  3204				if (bio->bi_opf & REQ_NOWAIT)
-  3205					bio_wouldblock_error(bio);
-  3206				goto queue_exit;
-  3207			}
-  3208		}
-  3209	
-  3210		trace_block_getrq(bio);
-  3211	
-  3212		rq_qos_track(q, rq, bio);
-  3213	
-  3214		blk_mq_bio_to_request(rq, bio, nr_segs);
-  3215	
-  3216		ret = blk_crypto_rq_get_keyslot(rq);
-  3217		if (ret != BLK_STS_OK) {
-  3218			bio->bi_status = ret;
-  3219			bio_endio(bio);
-  3220			blk_mq_free_request(rq);
-  3221			return;
-  3222		}
-  3223	
-  3224		if (bio_zone_write_plugging(bio))
-  3225			blk_zone_write_plug_init_request(rq);
-  3226	
-  3227		if (op_is_flush(bio->bi_opf) && blk_insert_flush(rq))
-  3228			return;
-  3229	
-  3230		if (plug) {
-  3231			blk_add_rq_to_plug(plug, rq);
-  3232			return;
-  3233		}
-  3234	
-  3235		hctx = rq->mq_hctx;
-  3236		if ((rq->rq_flags & RQF_USE_SCHED) ||
-  3237		    (hctx->dispatch_busy && (q->nr_hw_queues == 1 || !is_sync))) {
-  3238			blk_mq_insert_request(rq, 0);
-  3239			blk_mq_run_hw_queue(hctx, true);
-  3240		} else {
-  3241			blk_mq_run_dispatch_ops(q, blk_mq_try_issue_directly(hctx, rq));
-  3242		}
-  3243		return;
-  3244	
-  3245	queue_exit:
-  3246		if (!rq)
-  3247			blk_queue_exit(q);
-  3248		else
-> 3249			rq_list_push(&plug->cached_rqs, rq);
-  3250	}
-  3251	
+6d0060f600adfd Mat Martineau    2020-01-21  561  
+6d0060f600adfd Mat Martineau    2020-01-21  562  static bool mptcp_established_options_dss(struct sock *sk, struct sk_buff *skb,
+d87903b63e3ce1 Paolo Abeni      2021-02-19  563  					  bool snd_data_fin_enable,
+6d0060f600adfd Mat Martineau    2020-01-21  564  					  unsigned int *size,
+6d0060f600adfd Mat Martineau    2020-01-21  565  					  struct mptcp_out_options *opts)
+6d0060f600adfd Mat Martineau    2020-01-21  566  {
+6d0060f600adfd Mat Martineau    2020-01-21  567  	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(sk);
+7279da6145bbb2 Mat Martineau    2020-07-28  568  	struct mptcp_sock *msk = mptcp_sk(subflow->conn);
+6d0060f600adfd Mat Martineau    2020-01-21  569  	unsigned int dss_size = 0;
+6d0060f600adfd Mat Martineau    2020-01-21  570  	struct mptcp_ext *mpext;
+6d0060f600adfd Mat Martineau    2020-01-21  571  	unsigned int ack_size;
+d22f4988ffecbe Christoph Paasch 2020-01-21  572  	bool ret = false;
+d87903b63e3ce1 Paolo Abeni      2021-02-19  573  	u64 ack_seq;
+6d0060f600adfd Mat Martineau    2020-01-21  574  
+c5b39e26d00364 Geliang Tang     2021-06-17  575  	opts->csum_reqd = READ_ONCE(msk->csum_enabled);
+0bac966a1f2ae0 Mat Martineau    2020-07-28  576  	mpext = skb ? mptcp_get_ext(skb) : NULL;
+6d0060f600adfd Mat Martineau    2020-01-21  577  
+7279da6145bbb2 Mat Martineau    2020-07-28  578  	if (!skb || (mpext && mpext->use_map) || snd_data_fin_enable) {
+c5b39e26d00364 Geliang Tang     2021-06-17  579  		unsigned int map_size = TCPOLEN_MPTCP_DSS_BASE + TCPOLEN_MPTCP_DSS_MAP64;
+6d0060f600adfd Mat Martineau    2020-01-21  580  
+c5b39e26d00364 Geliang Tang     2021-06-17  581  		if (mpext) {
+c5b39e26d00364 Geliang Tang     2021-06-17  582  			if (opts->csum_reqd)
+c5b39e26d00364 Geliang Tang     2021-06-17  583  				map_size += TCPOLEN_MPTCP_DSS_CHECKSUM;
+6d0060f600adfd Mat Martineau    2020-01-21  584  
+6d0060f600adfd Mat Martineau    2020-01-21  585  			opts->ext_copy = *mpext;
+c5b39e26d00364 Geliang Tang     2021-06-17  586  		}
+6d0060f600adfd Mat Martineau    2020-01-21  587  
+c5b39e26d00364 Geliang Tang     2021-06-17  588  		dss_size = map_size;
+7279da6145bbb2 Mat Martineau    2020-07-28  589  		if (skb && snd_data_fin_enable)
+9c29e36152748f Paolo Abeni      2020-07-03  590  			mptcp_write_data_fin(subflow, skb, &opts->ext_copy);
+1bff1e43a30e2f Paolo Abeni      2021-08-24  591  		opts->suboptions = OPTION_MPTCP_DSS;
+d22f4988ffecbe Christoph Paasch 2020-01-21  592  		ret = true;
+d22f4988ffecbe Christoph Paasch 2020-01-21  593  	}
+d22f4988ffecbe Christoph Paasch 2020-01-21  594  
+2398e3991bda7c Paolo Abeni      2020-03-04  595  	/* passive sockets msk will set the 'can_ack' after accept(), even
+2398e3991bda7c Paolo Abeni      2020-03-04  596  	 * if the first subflow may have the already the remote key handy
+2398e3991bda7c Paolo Abeni      2020-03-04  597  	 */
+d22f4988ffecbe Christoph Paasch 2020-01-21  598  	opts->ext_copy.use_ack = 0;
+dc093db5cc052b Paolo Abeni      2020-03-13  599  	if (!READ_ONCE(msk->can_ack)) {
+d22f4988ffecbe Christoph Paasch 2020-01-21  600  		*size = ALIGN(dss_size, 4);
+d22f4988ffecbe Christoph Paasch 2020-01-21  601  		return ret;
+6d0060f600adfd Mat Martineau    2020-01-21  602  	}
+6d0060f600adfd Mat Martineau    2020-01-21  603  
+e3859603ba13e7 Paolo Abeni      2021-02-11  604  	ack_seq = READ_ONCE(msk->ack_seq);
+37198e93ced707 Davide Caratti   2020-10-06  605  	if (READ_ONCE(msk->use_64bit_ack)) {
+6d0060f600adfd Mat Martineau    2020-01-21  606  		ack_size = TCPOLEN_MPTCP_DSS_ACK64;
+e3859603ba13e7 Paolo Abeni      2021-02-11 @607  		opts->ext_copy.data_ack = ack_seq;
+a0c1d0eafd1ef1 Christoph Paasch 2020-05-14  608  		opts->ext_copy.ack64 = 1;
+a0c1d0eafd1ef1 Christoph Paasch 2020-05-14  609  	} else {
+a0c1d0eafd1ef1 Christoph Paasch 2020-05-14  610  		ack_size = TCPOLEN_MPTCP_DSS_ACK32;
+e3859603ba13e7 Paolo Abeni      2021-02-11 @611  		opts->ext_copy.data_ack32 = (uint32_t)ack_seq;
+a0c1d0eafd1ef1 Christoph Paasch 2020-05-14  612  		opts->ext_copy.ack64 = 0;
+a0c1d0eafd1ef1 Christoph Paasch 2020-05-14  613  	}
+a0c1d0eafd1ef1 Christoph Paasch 2020-05-14  614  	opts->ext_copy.use_ack = 1;
+1bff1e43a30e2f Paolo Abeni      2021-08-24  615  	opts->suboptions = OPTION_MPTCP_DSS;
+6d0060f600adfd Mat Martineau    2020-01-21  616  
+6d0060f600adfd Mat Martineau    2020-01-21  617  	/* Add kind/length/subtype/flag overhead if mapping is not populated */
+6d0060f600adfd Mat Martineau    2020-01-21  618  	if (dss_size == 0)
+6d0060f600adfd Mat Martineau    2020-01-21  619  		ack_size += TCPOLEN_MPTCP_DSS_BASE;
+6d0060f600adfd Mat Martineau    2020-01-21  620  
+6d0060f600adfd Mat Martineau    2020-01-21  621  	dss_size += ack_size;
+6d0060f600adfd Mat Martineau    2020-01-21  622  
+6d0060f600adfd Mat Martineau    2020-01-21  623  	*size = ALIGN(dss_size, 4);
+6d0060f600adfd Mat Martineau    2020-01-21  624  	return true;
+6d0060f600adfd Mat Martineau    2020-01-21  625  }
+6d0060f600adfd Mat Martineau    2020-01-21  626  
 
 --
 0-DAY CI Kernel Test Service
