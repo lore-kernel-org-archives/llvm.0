@@ -1,178 +1,172 @@
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010021.outbound.protection.outlook.com [52.101.193.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC973F413A
-	for <llvm@lists.linux.dev>; Tue, 26 May 2026 11:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779796318; cv=fail; b=VSU0ao04i7iYLKipx8G5KxOc8g022VcR8kNVmffg8cCXsQ4vODOAcoSlTaGNW3+3IywcavEDWIwBT3k6fgHkOORt0B2y0zYqcImHWxX79ge7fau3xuF5PplutQlxZj+CYMmM2sNO4oUKeGeYP1vkuZ/1EALgJCB07g9D4WKnrs0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779796318; c=relaxed/simple;
-	bh=4+reLZDrvWBLNu+3yXq9955bDCtDOvLGJjp2aKoTBxQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BipYk3OoSJ5GfAS0VNRI6fxbitx7kaSbfxwSWFqcQXfrcvSBkcPrAzvKnQoCcvmD7/+xQlHyG9TklxiWIBZv4vvR+dj/Y1p00GbA/JjAvd9QlWGGgVMEF8pcOXAcvJszqfmzASs4bfYbd9S4ISfsL2LT4GZyA0oya4e1UeuD/pY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=KRH2zKvs; arc=fail smtp.client-ip=52.101.193.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298363B5851;
+	Tue, 26 May 2026 12:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779797916; cv=none; b=Ch31mjgSphObR4g6FB1ksEy6Sv0Ln0kd69PF1mxi/a8VbapNTlxHTALFw1fh+recLA5TtJ7acAuXHgz3/b4j0WDfX5DRzQUvEQCCgNGrPNB9L+I5zeBggv9WpKp+lVCtUtoY5+p3Ie2eGNA0Fu9a2ze9JQiQLyTG4updwiimLIM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779797916; c=relaxed/simple;
+	bh=WOqZe4QVfO/JR6rizSDRmpDUpJEdblaFAOMUZpSaItg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=sThjjHNHgTtmC4/MDfX8pGEkAojePEWhXQJiHNnMS/j89wUtqlt67L+O1Y539kZM/mtKb12B0ziNdBkslUkdD3gS1K1qXvzPp95c9Gu4jAKxIBDGbAlYeAog4mtcX73jflw7tGo9I7InE4laok7x28AQXAv9iR8jtovAzXonp4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BHJoo3Hd; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="KRH2zKvs"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Vrxi7HWn1lKJpbJJJkuwS1xogZmSKeSn4sDQoLa8+L+Tp45MgHu0DOMK0IK2PFLstegksor7ennV2JN2N+ECvQo9XOw3JypBxUhLlSjAClVCGDU38RMxygH+4vFja2r8w0Pf6AmNJl9c/xz4a2rEusj5nOYG1UuskHOd0t+kWBqdGOWvyd+2jBWWvJVhmlujMYcLLJp0kgaQNb/b779lyktnC9t2IyjnJSiHNJ1tMWzsflgU37g8Oc+P9eLZ+9T3B0mJpBbUAxlJqA6cc51ACVZB9q+b+UGe1Oqcz87M6Q+PVZlQampMhIvhd8+FbcaAthjz1zN53uFwmg3XPTbfAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fnHL3Krm7ZMb//CUB+ItyHVXlpV0yqOvGMlYdW+94qs=;
- b=RosEhxRMljyNXRK6aw35eVRA9dCruzmmxMS1LAtuKkqmhYA8+kBrP4W/nBSr8siDaKYkCdm49jjks7+nt2E3JpDkKx+OgDarDrykggGmKa0iHfhuuuKs76g2eyos7Q+eceFJk00qXWL6rIw36R9HR1TFjWtZFrrlhHsVazBBIkGuzwbipKGjsak/O7eSG8XlaiPviWCT7Nzc0bEvdiXM0dZhqCT6w77/YJ0Ne1jZOVBrE0R9Pnu9xJB6E0WUgn8YJYEzQLEh3oEdbG/HQe+DzFcFy+6IuMfRDIcyAsL1BPqoy7fohuuXcXoj2gqedEmaFYfyKKWUORORiLgFEd03wA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fnHL3Krm7ZMb//CUB+ItyHVXlpV0yqOvGMlYdW+94qs=;
- b=KRH2zKvsEgbHFTgu3gSmJX5zLDCJ4OIu33BxpYgPnS9YvDjfBuTaXkid0pDb+xwiYOzyoUN7Od/amv2WiuMv39ljZk95jQlrqvD/ua2eTMmiJRbx0ZfZ0MXlF/ko65zGA/lm9QuuMjc0d1kz+aVtMx1tEwYILtpTArBTKdnc7OE=
-Received: from BL1PR13CA0243.namprd13.prod.outlook.com (2603:10b6:208:2ba::8)
- by IA0PR10MB7644.namprd10.prod.outlook.com (2603:10b6:208:492::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.17; Tue, 26 May
- 2026 11:51:43 +0000
-Received: from MN1PEPF0000ECD4.namprd02.prod.outlook.com
- (2603:10b6:208:2ba:cafe::4) by BL1PR13CA0243.outlook.office365.com
- (2603:10b6:208:2ba::8) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.71.12 via Frontend Transport; Tue, 26
- May 2026 11:51:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
-Received: from lewvzet200.ext.ti.com (198.47.23.194) by
- MN1PEPF0000ECD4.mail.protection.outlook.com (10.167.242.132) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.71.7 via Frontend Transport; Tue, 26 May 2026 11:51:43 +0000
-Received: from DLEE210.ent.ti.com (157.170.170.112) by lewvzet200.ext.ti.com
- (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Tue, 26 May
- 2026 06:51:42 -0500
-Received: from DLEE201.ent.ti.com (157.170.170.76) by DLEE210.ent.ti.com
- (157.170.170.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Tue, 26 May
- 2026 06:51:42 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE201.ent.ti.com
- (157.170.170.76) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37 via Frontend
- Transport; Tue, 26 May 2026 06:51:42 -0500
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 64QBpgVG1352007;
-	Tue, 26 May 2026 06:51:42 -0500
-From: Nishanth Menon <nm@ti.com>
-To: Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nathan Chancellor
-	<nathan@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>, Nishanth Menon
-	<nm@ti.com>
-CC: <afd@ti.com>, <llvm@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 00/11] soc: ti: keystone/k3 navigator queue/dma/ringacc cleanups
-Date: Tue, 26 May 2026 06:51:40 -0500
-Message-ID: <177979627538.2037951.11495500937235905269.b4-ty@b4>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20260512170623.3174416-1-nm@ti.com>
-References: <20260512170623.3174416-1-nm@ti.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BHJoo3Hd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779797914; x=1811333914;
+  h=date:from:to:cc:subject:message-id;
+  bh=WOqZe4QVfO/JR6rizSDRmpDUpJEdblaFAOMUZpSaItg=;
+  b=BHJoo3Hd96lY9Lj6GUnUgRnkhS9lcIRNVf55LEBvRdi82EkOSUbtZiNV
+   NUawbdQ6SPLNBuNnBPGPyuN0g17vWVdDRlu/afNyRMHywm6h3iyFAJwFQ
+   fal3ZqCWM24ZWqLAV3BlSAxIlC/z06MgD9m+6ncKVJhZk7GsANXwE6e+8
+   XjmurmOfe21oMXPSeoY5rKBkIXLIfmygN58p9jy0zQLI4yPx0c0KhOekR
+   GlIvf80gllC/9fFMS4CkfpPMs/fd6Ud6WNz7RK/9Mm3uesWR+W7W5t6ed
+   iNJuQmKSeCWlZddvSEShb5ezhSf5/Zhs0WzEg8hK+dJTqpmZlrn6lD4os
+   Q==;
+X-CSE-ConnectionGUID: /Ba7ZNuBThyTxneXB1P9pA==
+X-CSE-MsgGUID: HP3+ypeJQjieqxfWikiHyA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11797"; a="79642116"
+X-IronPort-AV: E=Sophos;i="6.24,169,1774335600"; 
+   d="scan'208";a="79642116"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 05:18:33 -0700
+X-CSE-ConnectionGUID: BTi3HVRcQNOWFpYP5gr1zw==
+X-CSE-MsgGUID: Ao/8eW+eSVmidoLjFcj9wA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,169,1774335600"; 
+   d="scan'208";a="246991495"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa005.fm.intel.com with ESMTP; 26 May 2026 05:18:31 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wRqjt-00000000COz-2kvC;
+	Tue, 26 May 2026 12:18:29 +0000
+Date: Tue, 26 May 2026 14:17:50 +0200
+From: kernel test robot <lkp@intel.com>
+To: Florian Westphal <fw@strlen.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: net/netfilter/nf_conntrack_ovs.c:31:14: error: no member
+ named 'tuple' in 'struct nf_conntrack_helper'
+Message-ID: <202605261426.RWlvhMj8-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD4:EE_|IA0PR10MB7644:EE_
-X-MS-Office365-Filtering-Correlation-Id: 88e4fd8c-0073-485f-7646-08debb1d27fa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|36860700016|82310400026|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	GeFcj5/u+k4OlsFLDtIR2m1olokZChikHWZkq1uItFJt69+jDEMoBQfh2w/kV8B05iSl2ShxYPjCcQQomIqHuv2uAScm7Gp95tVGK/RL3m5qDEBdr1/0+8E57jX5cpn0p3Ocn0jx0CJjVm/Mxnt0F9GrAkNN63UH3NbK9rfrqEzuLRBHh/1ICyYXkhojWEdep0xjD1iQeS34ZVm2F0bJtizI9jtw9wLebaJqWuMx2HEMrpyX357QSCXYVsyr2Wl+YtWfLBU/r2Bt7a1jDdzlEyRyxs7ATjMNBx+CkqOiA4Ru3Ns4meRYUsK9CkeOQfuBE/4ZZNaCXsk2nWEz7nBXxDhDr5lIqjBWBmiy5kqTL/q0+X3v4KjmO8RAHRSVq4DEJ2/yHZcx5WezN5K8Ca02Nvo2feqN1yzDKjdtMWGxubYiMg0uT3sZ0sHRb518+Ntuvsn98O1Ef3yShtRDkx0XSK0KCF1tc3XC79v8sMqXT+RDNcpMQpJNEvr6mRsjFBN6R4vWOpSxQ2EgbyqzLwUvSVmcE8F1rzEYvES5iSTQVVOu8azfKB25e7w5RTLFH+11ozbp24NGfP58G7H9W4vK36sianrz0ljKqtfxipgwGXmckf771Wlryi0BjlG5OVeoO4mPwwegFm8EHpxp4pEt7Tzhkx7SHUqqxBPXnCvdDcT2iZhvlJ1TsENxfAJ1DKoR
-X-Forefront-Antispam-Report:
-	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700016)(82310400026)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	qWnQbT2SSgbITLZV7QMliQyxRzoH08Dbzdv7sG7PsRS/BEug6N//z1XLz4NiO7B9yOz5RUaHc6CA2dVE9+VA8JrqJwvUCbLcbZlqDKhaDK/qjcA0FV88obMtvhVzhCw2TaZWLCFyaTSLiwrwYLrV+G1km09xRbSHGRBFZL6bsYyEe8Cp8As8XiYrAkgC3yOwqIuqUYaGtdJmQu1L9m7L7ezzK9wchBsRcvqQJWEMFgQyoUOgRulRvWowDtf8hzOTuEfIxbH2dsh9+8Ev6zVd97nwK+cOdNbFViegIGjlap/ZzRSgvZepNWWKrmsMvJfC4XIPXuF2UwpDd+X2ngW9pT5jXEoVq1ARPolz1kB0RwBDQhhmdG5Am2ZMCIjgV/QPRoCeyogy6CU3hsu7B4g4bxvfL79W4ghjUKWlry65DPn2VEs0Uggz53MMB+X9V72H
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2026 11:51:43.1135
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88e4fd8c-0073-485f-7646-08debb1d27fa
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000ECD4.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB7644
 
-Hi Nishanth Menon,
+tree:   https://github.com/intel-lab-lkp/linux/commits/Florian-Westphal/netfilter-nf_conntrack_helper-do-not-hash-by-tuple/20260522-130418
+head:   883ccf421e36cd870e2b18fa94755528a668d3b9
+commit: 4dc863a09204f9be74df2cfcc7568f4997ac6ec4 netfilter: conntrack: get rid of tuple in helper definitions
+date:   4 days ago
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260526/202605261426.RWlvhMj8-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260526/202605261426.RWlvhMj8-lkp@intel.com/reproduce)
 
-On Tue, 12 May 2026 12:06:12 -0500, Nishanth Menon wrote:
-> Fix W=2 (clang/gcc), sparse, smatch and coccinelle warnings.
-> No functional changes.
-> 
-> Tested: NFS boot (via nav subsystem) on k2l-evm, k2hk-evm and k2g-evm
-> based on next-20260507:
-> https://gist.github.com/nmenon/cff02a5f2a72fde5fcb49664fcc834d2
-> 
-> [...]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605261426.RWlvhMj8-lkp@intel.com/
 
-I have applied the following to branch ti-drivers-soc-next on [1].
-Thank you!
+All errors (new ones prefixed by >>):
 
-[01/11] soc: ti: knav_qmss: Remove remaining redundant ENOMEM printks
-        commit: a76c24eb1f10366f128c621f876c20a13ae53489
-[02/11] soc: ti: knav_qmss: Rename global kdev to knav_qdev to fix -Wshadow
-        commit: 7db27a04fb8a33a7f9904961ee6f3c75f65d1118
-[03/11] soc: ti: knav_qmss: Inline lockdep condition in for_each_handle_rcu
-        commit: b6542cf0f4d062133f6e05de03382080ad941c67
-[04/11] soc: ti: knav_qmss: Fix kernel-doc Return: tags
-        commit: 7650590dbf12a3d4a3d302cd33ac31270e39c43c
-[05/11] soc: ti: knav_qmss: Use %pe to print PTR_ERR()
-        commit: a5f624c4fee6d7b51f7bc4bd6e213c220b610ec3
-[06/11] soc: ti: knav_qmss: Fix __iomem annotations and __be32 type
-        commit: cb1a271a4f20faae9a10891bfae2b543778d2b4a
-[07/11] soc: ti: knav_qmss_acc: Fix kernel-doc Return: tag
-        commit: ebc1a345bf1166b22035f0cfbf877b9d0e80ba4e
-[08/11] soc: ti: knav_dma: Remove unused DMA_PRIO_MASK macro
-        commit: 2b47cc255a952d3bd7ec3c0f38fdd81ccde3cb58
-[09/11] soc: ti: knav_dma: Remove dead check on unsigned args.args[0]
-        commit: fe5272e13e34025a9bb10cc452805e5085492a92
-[10/11] soc: ti: knav_dma: Use IOMEM_ERR_PTR() in pktdma_get_regs()
-        commit: 81f2c17bc0596f619616a2e85fab142c8316de85
-[11/11] soc: ti: k3-ringacc: Use str_enabled_disabled() helper
-        commit: 33050d81b828c7d699ad0ad0c7489a198c527019
+>> net/netfilter/nf_conntrack_ovs.c:31:14: error: no member named 'tuple' in 'struct nf_conntrack_helper'
+      31 |         if (helper->tuple.src.l3num != NFPROTO_UNSPEC &&
+         |             ~~~~~~  ^
+   net/netfilter/nf_conntrack_ovs.c:32:14: error: no member named 'tuple' in 'struct nf_conntrack_helper'
+      32 |             helper->tuple.src.l3num != proto)
+         |             ~~~~~~  ^
+   net/netfilter/nf_conntrack_ovs.c:60:14: error: no member named 'tuple' in 'struct nf_conntrack_helper'
+      60 |         if (helper->tuple.dst.protonum != proto)
+         |             ~~~~~~  ^
+   3 errors generated.
+--
+>> net/sched/act_ct.c:1527:52: error: no member named 'tuple' in 'struct nf_conntrack_helper'
+    1527 |             nla_put_u8(skb, TCA_CT_HELPER_FAMILY, helper->tuple.src.l3num) ||
+         |                                                   ~~~~~~  ^
+   net/sched/act_ct.c:1528:51: error: no member named 'tuple' in 'struct nf_conntrack_helper'
+    1528 |             nla_put_u8(skb, TCA_CT_HELPER_PROTO, helper->tuple.dst.protonum))
+         |                                                  ~~~~~~  ^
+   2 errors generated.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+vim +31 net/netfilter/nf_conntrack_ovs.c
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+c0c3ab63de603b Xin Long 2023-02-07  10  
+c0c3ab63de603b Xin Long 2023-02-07  11  /* 'skb' should already be pulled to nh_ofs. */
+c0c3ab63de603b Xin Long 2023-02-07  12  int nf_ct_helper(struct sk_buff *skb, struct nf_conn *ct,
+c0c3ab63de603b Xin Long 2023-02-07  13  		 enum ip_conntrack_info ctinfo, u16 proto)
+c0c3ab63de603b Xin Long 2023-02-07  14  {
+c0c3ab63de603b Xin Long 2023-02-07  15  	const struct nf_conntrack_helper *helper;
+c0c3ab63de603b Xin Long 2023-02-07  16  	const struct nf_conn_help *help;
+c0c3ab63de603b Xin Long 2023-02-07  17  	unsigned int protoff;
+c0c3ab63de603b Xin Long 2023-02-07  18  	int err;
+c0c3ab63de603b Xin Long 2023-02-07  19  
+c0c3ab63de603b Xin Long 2023-02-07  20  	if (ctinfo == IP_CT_RELATED_REPLY)
+c0c3ab63de603b Xin Long 2023-02-07  21  		return NF_ACCEPT;
+c0c3ab63de603b Xin Long 2023-02-07  22  
+c0c3ab63de603b Xin Long 2023-02-07  23  	help = nfct_help(ct);
+c0c3ab63de603b Xin Long 2023-02-07  24  	if (!help)
+c0c3ab63de603b Xin Long 2023-02-07  25  		return NF_ACCEPT;
+c0c3ab63de603b Xin Long 2023-02-07  26  
+c0c3ab63de603b Xin Long 2023-02-07  27  	helper = rcu_dereference(help->helper);
+c0c3ab63de603b Xin Long 2023-02-07  28  	if (!helper)
+c0c3ab63de603b Xin Long 2023-02-07  29  		return NF_ACCEPT;
+c0c3ab63de603b Xin Long 2023-02-07  30  
+c0c3ab63de603b Xin Long 2023-02-07 @31  	if (helper->tuple.src.l3num != NFPROTO_UNSPEC &&
+c0c3ab63de603b Xin Long 2023-02-07  32  	    helper->tuple.src.l3num != proto)
+c0c3ab63de603b Xin Long 2023-02-07  33  		return NF_ACCEPT;
+c0c3ab63de603b Xin Long 2023-02-07  34  
+c0c3ab63de603b Xin Long 2023-02-07  35  	switch (proto) {
+c0c3ab63de603b Xin Long 2023-02-07  36  	case NFPROTO_IPV4:
+c0c3ab63de603b Xin Long 2023-02-07  37  		protoff = ip_hdrlen(skb);
+c0c3ab63de603b Xin Long 2023-02-07  38  		proto = ip_hdr(skb)->protocol;
+c0c3ab63de603b Xin Long 2023-02-07  39  		break;
+c0c3ab63de603b Xin Long 2023-02-07  40  	case NFPROTO_IPV6: {
+c0c3ab63de603b Xin Long 2023-02-07  41  		u8 nexthdr = ipv6_hdr(skb)->nexthdr;
+c0c3ab63de603b Xin Long 2023-02-07  42  		__be16 frag_off;
+c0c3ab63de603b Xin Long 2023-02-07  43  		int ofs;
+c0c3ab63de603b Xin Long 2023-02-07  44  
+c0c3ab63de603b Xin Long 2023-02-07  45  		ofs = ipv6_skip_exthdr(skb, sizeof(struct ipv6hdr), &nexthdr,
+c0c3ab63de603b Xin Long 2023-02-07  46  				       &frag_off);
+c0c3ab63de603b Xin Long 2023-02-07  47  		if (ofs < 0 || (frag_off & htons(~0x7)) != 0) {
+c0c3ab63de603b Xin Long 2023-02-07  48  			pr_debug("proto header not found\n");
+c0c3ab63de603b Xin Long 2023-02-07  49  			return NF_ACCEPT;
+c0c3ab63de603b Xin Long 2023-02-07  50  		}
+c0c3ab63de603b Xin Long 2023-02-07  51  		protoff = ofs;
+c0c3ab63de603b Xin Long 2023-02-07  52  		proto = nexthdr;
+c0c3ab63de603b Xin Long 2023-02-07  53  		break;
+c0c3ab63de603b Xin Long 2023-02-07  54  	}
+c0c3ab63de603b Xin Long 2023-02-07  55  	default:
+c0c3ab63de603b Xin Long 2023-02-07  56  		WARN_ONCE(1, "helper invoked on non-IP family!");
+c0c3ab63de603b Xin Long 2023-02-07  57  		return NF_DROP;
+c0c3ab63de603b Xin Long 2023-02-07  58  	}
+c0c3ab63de603b Xin Long 2023-02-07  59  
+c0c3ab63de603b Xin Long 2023-02-07  60  	if (helper->tuple.dst.protonum != proto)
+c0c3ab63de603b Xin Long 2023-02-07  61  		return NF_ACCEPT;
+c0c3ab63de603b Xin Long 2023-02-07  62  
+c0c3ab63de603b Xin Long 2023-02-07  63  	err = helper->help(skb, protoff, ct, ctinfo);
+c0c3ab63de603b Xin Long 2023-02-07  64  	if (err != NF_ACCEPT)
+c0c3ab63de603b Xin Long 2023-02-07  65  		return err;
+c0c3ab63de603b Xin Long 2023-02-07  66  
+c0c3ab63de603b Xin Long 2023-02-07  67  	/* Adjust seqs after helper.  This is needed due to some helpers (e.g.,
+c0c3ab63de603b Xin Long 2023-02-07  68  	 * FTP with NAT) adusting the TCP payload size when mangling IP
+c0c3ab63de603b Xin Long 2023-02-07  69  	 * addresses and/or port numbers in the text-based control connection.
+c0c3ab63de603b Xin Long 2023-02-07  70  	 */
+c0c3ab63de603b Xin Long 2023-02-07  71  	if (test_bit(IPS_SEQ_ADJUST_BIT, &ct->status) &&
+c0c3ab63de603b Xin Long 2023-02-07  72  	    !nf_ct_seq_adjust(skb, ct, ctinfo, protoff))
+c0c3ab63de603b Xin Long 2023-02-07  73  		return NF_DROP;
+c0c3ab63de603b Xin Long 2023-02-07  74  	return NF_ACCEPT;
+c0c3ab63de603b Xin Long 2023-02-07  75  }
+c0c3ab63de603b Xin Long 2023-02-07  76  EXPORT_SYMBOL_GPL(nf_ct_helper);
+c0c3ab63de603b Xin Long 2023-02-07  77  
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
-https://ti.com/opensource
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
