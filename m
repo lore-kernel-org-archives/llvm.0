@@ -1,58 +1,69 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996672D8364
-	for <llvm@lists.linux.dev>; Tue, 26 May 2026 18:29:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F733C65FA;
+	Tue, 26 May 2026 22:23:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779820178; cv=none; b=kkwVrT+WSkB8idVOZ4xQoC3601ESoS9ot8o8u5+DpYjWBbDn/WLgzvpvRL53sjWV3Q6Uolgcy0Z1w1JCV66O+hJFwZX+ajweGNfgXVGNcY3/GwLpibxFw9bYRljC53J26MzeW5jn6oYdrzkRo+xTostTw1hreYxXD2qyeM8+ZZE=
+	t=1779834222; cv=none; b=CU5kmyDHTte+KJwgWmIELanM0Wj0qysWObEzP5gV8+aHvi1u9ysm3sZlaIGiK0RcUYv4OUbhkvQIrNPmxE7zyodpKnmBQUo7AdAUyGK8FKPkW1Cw4rO9mgbxo3wzL+BHptvWFXILPae5CiiC8bsAKSljj898ETOzkbldL8wgX94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779820178; c=relaxed/simple;
-	bh=KpUppVZ8QZSoZsraIQoIJK5QdakJlsWa/Qre1zpsV2A=;
+	s=arc-20240116; t=1779834222; c=relaxed/simple;
+	bh=PeWkXtVByZaI1HB4gRMRQ14IUpZcVF886iBQEGNYfvg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nKIw8gU3kLEZ/ewnv9PSJXF1Dk8oLTbXJ9axBMMouZnA6PqXRDiOB3n9MjzDzEd5xHFDKRjapK/NZZa3iDlgUrc6VpDvEGazm2v5MJ1yXPcBmFJKNnfWk9jVeQhtBrqY+ooU0EsZbqU84FqsMd1/r1bnwB9bCdJ0ZZahN7cngNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=N4EdRD/0; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=CLSj/cxd0j13NP3p55BTLn1xJExwW5GjYWh90yulUKY+wnAw4uXhYetYYW7EWH4AhKcYwxDEYxt81h0O3UQgTNkbQI8KCEonKyEAzI60obwsoFpOFPziB95OpU15FhmIsqH37eZZIi5hrz70ZRkkGG5Hs5+KjScv2XTNCefrwiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e4JALKv9; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="N4EdRD/0"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4EE702936;
-	Tue, 26 May 2026 11:29:30 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB51C3F7B4;
-	Tue, 26 May 2026 11:29:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1779820175; bh=KpUppVZ8QZSoZsraIQoIJK5QdakJlsWa/Qre1zpsV2A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N4EdRD/0ShkZ57IyNX70SdcB/Q5k0LEXw52dLQVujI+Vwslvq6V1hDq1tpeG1/aaX
-	 BAZ3BhKUpKgUUaSLG9f2Swj9DLuk3/9X8+1V4sGBWT+MZ8xj7+w4G+uyn9TryisCLu
-	 ucEf7pUjmBDQD08PtnyFBfYqcdTlbaDowEHWfCLU=
-Date: Tue, 26 May 2026 19:29:24 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Kieran Bingham <kbingham@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	workflows@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v12 01/15] kasan: sw_tags: Use arithmetic shift for
- shadow computation
-Message-ID: <ahXmhNvFbIq-mvfP@arm.com>
-References: <cover.1774872838.git.m.wieczorretman@pm.me>
- <c36fe46e1dde1a759e8ffdd0fe9439bdf2c66dd8.1774872838.git.m.wieczorretman@pm.me>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e4JALKv9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779834221; x=1811370221;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PeWkXtVByZaI1HB4gRMRQ14IUpZcVF886iBQEGNYfvg=;
+  b=e4JALKv9l4zOu49Kf11bhIIUyeM91FsAF7HTbErMwiy8pw0Oq35s5XbS
+   We3VmzXGTM73zSMoj9p4oFf6tSIAD5MoFSRdPTTTqUzt98AWHSArSXtE4
+   fB4df1yRMDftZwZHIWMV1LuaDz2fwo/EsP8aYzmOH+scHiZxGgvNjiQFM
+   GuS7gnKq0aXQq0h2LJY/+RedlvH7X+r9jbdjHvfcTQwzM/ybSbPJYuc2z
+   KWka53Vwf5gvsbR9BeZAn3CKups7Uvf8RrILTEX/73+5lAoS+i7Ph1MhM
+   v1Pcmzl1pqK1eXc4iYbVSmciksT1RCDS6CaFf6Qo/Y6i6XH9GoiiWv1p7
+   w==;
+X-CSE-ConnectionGUID: qtcyJz5HROCzSExvm85+cg==
+X-CSE-MsgGUID: JNSpeOoWTt+S/8osziXAXA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11798"; a="80848046"
+X-IronPort-AV: E=Sophos;i="6.24,170,1774335600"; 
+   d="scan'208";a="80848046"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 15:23:41 -0700
+X-CSE-ConnectionGUID: jXp1pGdtQVWRxKGMFXbOoQ==
+X-CSE-MsgGUID: XwU4YZPvT6+rsx2PIp014g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,170,1774335600"; 
+   d="scan'208";a="241890275"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa008.jf.intel.com with ESMTP; 26 May 2026 15:23:37 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wS0BS-00000000CUr-2yTH;
+	Tue, 26 May 2026 22:23:34 +0000
+Date: Wed, 27 May 2026 00:22:41 +0200
+From: kernel test robot <lkp@intel.com>
+To: Frank.Li@oss.nxp.com, Vinod Koul <vkoul@kernel.org>,
+	Dong Aisheng <aisheng.dong@nxp.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, carlos.song@nxp.com,
+	Frank Li <Frank.Li@nxp.com>
+Subject: Re: [PATCH v2 2/2] i2c: imx-lpi2c: use dmaengine_prep_submit() to
+ simple code
+Message-ID: <202605270007.xFkhAWbC-lkp@intel.com>
+References: <20260522-dma_prep_submit-v2-2-7a87a5a29525@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,77 +72,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c36fe46e1dde1a759e8ffdd0fe9439bdf2c66dd8.1774872838.git.m.wieczorretman@pm.me>
+In-Reply-To: <20260522-dma_prep_submit-v2-2-7a87a5a29525@nxp.com>
 
-On Mon, Mar 30, 2026 at 02:33:05PM +0000, Maciej Wieczor-Retman wrote:
-> diff --git a/Documentation/arch/arm64/kasan-offsets.sh b/Documentation/arch/arm64/kasan-offsets.sh
-> index 2dc5f9e18039..ce777c7c7804 100644
-> --- a/Documentation/arch/arm64/kasan-offsets.sh
-> +++ b/Documentation/arch/arm64/kasan-offsets.sh
-> @@ -5,8 +5,12 @@
->  
->  print_kasan_offset () {
->  	printf "%02d\t" $1
-> -	printf "0x%08x00000000\n" $(( (0xffffffff & (-1 << ($1 - 1 - 32))) \
-> -			- (1 << (64 - 32 - $2)) ))
-> +	if [[ $2 -ne 4 ]] then
+Hi Frank,
 
-Nitpick: does this need a semicolon before 'then'?
+kernel test robot noticed the following build errors:
 
-I can see Sashiko raised it here:
+[auto build test ERROR on 8f0b4cce4481fb22653697cced8d0d04027cb1e8]
 
-https://sashiko.dev/#/patchset/cover.1774872838.git.m.wieczorretman@pm.me
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li-oss-nxp-com/dmaengine-Add-helper-dmaengine_prep_submit_slave_single/20260523-041812
+base:   8f0b4cce4481fb22653697cced8d0d04027cb1e8
+patch link:    https://lore.kernel.org/r/20260522-dma_prep_submit-v2-2-7a87a5a29525%40nxp.com
+patch subject: [PATCH v2 2/2] i2c: imx-lpi2c: use dmaengine_prep_submit() to simple code
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260527/202605270007.xFkhAWbC-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260527/202605270007.xFkhAWbC-lkp@intel.com/reproduce)
 
-> +		printf "0x%08x00000000\n" $(( (0xffffffff & (-1 << ($1 - 1 - 32))) \
-> +				- (1 << (64 - 32 - $2)) ))
-> +	else
-> +		printf "0x%08x00000000\n" $(( (0xffffffff & (-1 << ($1 - 1 - 32))) ))
-> +	fi
->  }
->  
->  echo KASAN_SHADOW_SCALE_SHIFT = 3
-[...]
-> diff --git a/scripts/gdb/linux/kasan.py b/scripts/gdb/linux/kasan.py
-> index 56730b3fde0b..4b86202b155f 100644
-> --- a/scripts/gdb/linux/kasan.py
-> +++ b/scripts/gdb/linux/kasan.py
-> @@ -7,7 +7,8 @@
->  #
->  
->  import gdb
-> -from linux import constants, mm
-> +from linux import constants, utils, mm
-> +from ctypes import c_int64 as s64
->  
->  def help():
->      t = """Usage: lx-kasan_mem_to_shadow [Hex memory addr]
-> @@ -39,6 +40,8 @@ class KasanMemToShadow(gdb.Command):
->          else:
->              help()
->      def kasan_mem_to_shadow(self, addr):
-> +        if constants.CONFIG_KASAN_SW_TAGS and not utils.is_target_arch('x86'):
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605270007.xFkhAWbC-lkp@intel.com/
 
-Does this need to be constants.LX_CONFIG_KASAN_SW_TAGS? I don't claim I
-fully understand this script but the other constants.* use LX_*.
+All errors (new ones prefixed by >>):
 
-> +            addr = s64(addr)
->          return (addr >> self.p_ops.KASAN_SHADOW_SCALE_SHIFT) + self.p_ops.KASAN_SHADOW_OFFSET
+   In file included from net/core/dev.c:124:
+>> include/linux/dmaengine.h:1588:48: error: expected ')'
+    1588 |                                    dma_async_tx_callback cb, void *cb_param;
+         |                                                                            ^
+   include/linux/dmaengine.h:1587:35: note: to match this '('
+    1587 | dmaengine_prep_submit_slave_single(struct dma_chan *chan,
+         |                                   ^
+>> include/linux/dmaengine.h:1587:1: error: conflicting types for 'dmaengine_prep_submit_slave_single'
+    1587 | dmaengine_prep_submit_slave_single(struct dma_chan *chan,
+         | ^
+   include/linux/dmaengine.h:994:1: note: previous declaration is here
+     994 | dmaengine_prep_submit_slave_single(struct dma_chan *chan,
+         | ^
+>> include/linux/dmaengine.h:1589:24: error: redefinition of 'size_t' as different kind of symbol
+    1589 |                                    dma_addr_t buf, size_t len,
+         |                                                    ^
+   include/linux/types.h:62:26: note: previous definition is here
+      62 | typedef __kernel_size_t         size_t;
+         |                                 ^
+   In file included from net/core/dev.c:124:
+>> include/linux/dmaengine.h:1589:30: error: expected ';' after top level declarator
+    1589 |                                    dma_addr_t buf, size_t len,
+         |                                                          ^
+         |                                                          ;
+>> include/linux/dmaengine.h:1592:1: error: expected identifier or '('
+    1592 | {
+         | ^
+   5 errors generated.
 
-And, again, Sashiko mentions that the bitwise right shift here will fail
-after the cast to c_int64. I just tried this in python:
 
->>> from ctypes import c_int64 as s64
->>> s64(0xffff000008eca008) >> 4
-Traceback (most recent call last):
-  File "<python-input-1>", line 1, in <module>
-    s64(0xffff000008eca008) >> 4
-    ~~~~~~~~~~~~~~~~~~~~~~~~^^~~
-TypeError: unsupported operand type(s) for >>: 'c_long' and 'int'
+vim +1588 include/linux/dmaengine.h
 
-I guess it's hidden by the wrong check on
-constants.CONFIG_KASAN_SW_TAGS.
+  1585	
+  1586	static inline dma_cookie_t
+> 1587	dmaengine_prep_submit_slave_single(struct dma_chan *chan,
+> 1588					   dma_async_tx_callback cb, void *cb_param;
+> 1589					   dma_addr_t buf, size_t len,
+  1590					   enum dma_transfer_direction dir,
+  1591					   unsigned long flags);
+> 1592	{
+  1593		return -ENODEV;
+  1594	}
+  1595	#endif
+  1596	
 
-Otherwise I think the changes are fine. If you fix the above, feel free
-to add:
-
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
