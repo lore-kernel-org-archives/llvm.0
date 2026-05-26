@@ -1,82 +1,137 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0921935B653;
-	Tue, 26 May 2026 18:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996672D8364
+	for <llvm@lists.linux.dev>; Tue, 26 May 2026 18:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779818657; cv=none; b=Gq1HVdleaWxIuxduw+t0F7vXsjJSd0E0TR27zyxs2VMH7xTGLQj+9N5t+UFQ38HQIofXP5xTBixwc4gUK4p1p9tDOEavmNju0sFpimrFJaz4l5QqhCib7WLI/GdHbJl7IIKwLuWefi7f8ewlnPFZWU7yn4Z6GMqyBKHNb9h005A=
+	t=1779820178; cv=none; b=kkwVrT+WSkB8idVOZ4xQoC3601ESoS9ot8o8u5+DpYjWBbDn/WLgzvpvRL53sjWV3Q6Uolgcy0Z1w1JCV66O+hJFwZX+ajweGNfgXVGNcY3/GwLpibxFw9bYRljC53J26MzeW5jn6oYdrzkRo+xTostTw1hreYxXD2qyeM8+ZZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779818657; c=relaxed/simple;
-	bh=hY1fCSDsAVyidhLB+OchBan6ZrQEGXwmSvtYRL859uo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=UhUjRstNlB95dvkVevFloNrfKc7LgKv6ESrmNCq4atwYj8EQE2wgJS3a/88EK5QqYI1bIurmcuW8xfpiKxBMZyDlNjZ0XpQRPYR0F4gdPX0LfoJkboZh+88OId8mxUOTfDNtzUy9lUoqmDitt8p509dz4zX0BOtZ6UKDD2zTkMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WsRooTZ0; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779820178; c=relaxed/simple;
+	bh=KpUppVZ8QZSoZsraIQoIJK5QdakJlsWa/Qre1zpsV2A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nKIw8gU3kLEZ/ewnv9PSJXF1Dk8oLTbXJ9axBMMouZnA6PqXRDiOB3n9MjzDzEd5xHFDKRjapK/NZZa3iDlgUrc6VpDvEGazm2v5MJ1yXPcBmFJKNnfWk9jVeQhtBrqY+ooU0EsZbqU84FqsMd1/r1bnwB9bCdJ0ZZahN7cngNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=N4EdRD/0; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WsRooTZ0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779818656; x=1811354656;
-  h=date:from:to:cc:subject:message-id;
-  bh=hY1fCSDsAVyidhLB+OchBan6ZrQEGXwmSvtYRL859uo=;
-  b=WsRooTZ06Z+B1Y866pTJUEvO/v3sn3uJ3egmzt0bEnFSWznq0ilDot5u
-   TGZ5N9Zdwk7oseKhAGNs5NK4/f4kPqckai33qB/mAnr/oTYvxYR1q9/Hx
-   72OKbLo/GdVRgYByB3HOdawMMNQY0Gfx1K76RllQX+PejGPXUP1f8x8jy
-   iBJbcBLroC7+A8MXHJKpIGGHairZ0C1DJTyzDCanVAuvsp14h2O0eb2M7
-   v5eJSJNqiTlQs/lvq+Omj6ThoLHa2g3Mwi6JPekFoiAC5SyyCMswJ0AVx
-   djBHjd5ecMKsxpoz23MPxPGIQYcUJkMoZ+PL60EnUB4lnQZaNj1XKMX50
-   g==;
-X-CSE-ConnectionGUID: R+jF0jtORMWBET/2H7J3YQ==
-X-CSE-MsgGUID: 3uLCxZQqQwaErF6cGLIs8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11798"; a="80490428"
-X-IronPort-AV: E=Sophos;i="6.24,170,1774335600"; 
-   d="scan'208";a="80490428"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 11:04:15 -0700
-X-CSE-ConnectionGUID: e3caSa1iQ6Klq1aflrSCxQ==
-X-CSE-MsgGUID: ZpqmSzlkRL+1gPLDS994nQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,170,1774335600"; 
-   d="scan'208";a="243825098"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 26 May 2026 11:04:13 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wRw8Q-000000002ty-40a7;
-	Tue, 26 May 2026 18:04:10 +0000
-Date: Wed, 27 May 2026 02:03:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Richard Kuo <rkuo@quicinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Brian Cain <bcain@kernel.org>
-Subject: [bcain:bcain/boot_qemu 16/40] make[3]: *** No rule to make
- target 'arch/hexagon/boot/dts/comet.dtb', needed by 'arch/hexagon/boot/dts/'.
-Message-ID: <202605270141.G8y1kM20-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="N4EdRD/0"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4EE702936;
+	Tue, 26 May 2026 11:29:30 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB51C3F7B4;
+	Tue, 26 May 2026 11:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1779820175; bh=KpUppVZ8QZSoZsraIQoIJK5QdakJlsWa/Qre1zpsV2A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=N4EdRD/0ShkZ57IyNX70SdcB/Q5k0LEXw52dLQVujI+Vwslvq6V1hDq1tpeG1/aaX
+	 BAZ3BhKUpKgUUaSLG9f2Swj9DLuk3/9X8+1V4sGBWT+MZ8xj7+w4G+uyn9TryisCLu
+	 ucEf7pUjmBDQD08PtnyFBfYqcdTlbaDowEHWfCLU=
+Date: Tue, 26 May 2026 19:29:24 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Kieran Bingham <kbingham@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+	workflows@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v12 01/15] kasan: sw_tags: Use arithmetic shift for
+ shadow computation
+Message-ID: <ahXmhNvFbIq-mvfP@arm.com>
+References: <cover.1774872838.git.m.wieczorretman@pm.me>
+ <c36fe46e1dde1a759e8ffdd0fe9439bdf2c66dd8.1774872838.git.m.wieczorretman@pm.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c36fe46e1dde1a759e8ffdd0fe9439bdf2c66dd8.1774872838.git.m.wieczorretman@pm.me>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
-head:   35eb04372bf7b3ef31afcde7c3336a0ff690d16c
-commit: 92ffe54f0f99ec61fbcf52c66862fb29d279ac9a [16/40] hexagon: add device tree support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260527/202605270141.G8y1kM20-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260527/202605270141.G8y1kM20-lkp@intel.com/reproduce)
+On Mon, Mar 30, 2026 at 02:33:05PM +0000, Maciej Wieczor-Retman wrote:
+> diff --git a/Documentation/arch/arm64/kasan-offsets.sh b/Documentation/arch/arm64/kasan-offsets.sh
+> index 2dc5f9e18039..ce777c7c7804 100644
+> --- a/Documentation/arch/arm64/kasan-offsets.sh
+> +++ b/Documentation/arch/arm64/kasan-offsets.sh
+> @@ -5,8 +5,12 @@
+>  
+>  print_kasan_offset () {
+>  	printf "%02d\t" $1
+> -	printf "0x%08x00000000\n" $(( (0xffffffff & (-1 << ($1 - 1 - 32))) \
+> -			- (1 << (64 - 32 - $2)) ))
+> +	if [[ $2 -ne 4 ]] then
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605270141.G8y1kM20-lkp@intel.com/
+Nitpick: does this need a semicolon before 'then'?
 
-All errors (new ones prefixed by >>):
+I can see Sashiko raised it here:
 
->> make[3]: *** No rule to make target 'arch/hexagon/boot/dts/comet.dtb', needed by 'arch/hexagon/boot/dts/'.
-   make[3]: Target 'arch/hexagon/boot/dts/' not remade because of errors.
+https://sashiko.dev/#/patchset/cover.1774872838.git.m.wieczorretman@pm.me
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +		printf "0x%08x00000000\n" $(( (0xffffffff & (-1 << ($1 - 1 - 32))) \
+> +				- (1 << (64 - 32 - $2)) ))
+> +	else
+> +		printf "0x%08x00000000\n" $(( (0xffffffff & (-1 << ($1 - 1 - 32))) ))
+> +	fi
+>  }
+>  
+>  echo KASAN_SHADOW_SCALE_SHIFT = 3
+[...]
+> diff --git a/scripts/gdb/linux/kasan.py b/scripts/gdb/linux/kasan.py
+> index 56730b3fde0b..4b86202b155f 100644
+> --- a/scripts/gdb/linux/kasan.py
+> +++ b/scripts/gdb/linux/kasan.py
+> @@ -7,7 +7,8 @@
+>  #
+>  
+>  import gdb
+> -from linux import constants, mm
+> +from linux import constants, utils, mm
+> +from ctypes import c_int64 as s64
+>  
+>  def help():
+>      t = """Usage: lx-kasan_mem_to_shadow [Hex memory addr]
+> @@ -39,6 +40,8 @@ class KasanMemToShadow(gdb.Command):
+>          else:
+>              help()
+>      def kasan_mem_to_shadow(self, addr):
+> +        if constants.CONFIG_KASAN_SW_TAGS and not utils.is_target_arch('x86'):
+
+Does this need to be constants.LX_CONFIG_KASAN_SW_TAGS? I don't claim I
+fully understand this script but the other constants.* use LX_*.
+
+> +            addr = s64(addr)
+>          return (addr >> self.p_ops.KASAN_SHADOW_SCALE_SHIFT) + self.p_ops.KASAN_SHADOW_OFFSET
+
+And, again, Sashiko mentions that the bitwise right shift here will fail
+after the cast to c_int64. I just tried this in python:
+
+>>> from ctypes import c_int64 as s64
+>>> s64(0xffff000008eca008) >> 4
+Traceback (most recent call last):
+  File "<python-input-1>", line 1, in <module>
+    s64(0xffff000008eca008) >> 4
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^~~
+TypeError: unsupported operand type(s) for >>: 'c_long' and 'int'
+
+I guess it's hidden by the wrong check on
+constants.CONFIG_KASAN_SW_TAGS.
+
+Otherwise I think the changes are fine. If you fix the above, feel free
+to add:
+
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
