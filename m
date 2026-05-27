@@ -1,324 +1,209 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7971FE44A;
-	Wed, 27 May 2026 02:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39C93612F5;
+	Wed, 27 May 2026 03:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779848289; cv=none; b=kyVOcZ1FECC1uK4VIlNm4tKe56whym7xQulPTgLNsfwTc6/Q3QAZ4x/VBpKtVMgQAGeJORP4yS7jUFQdWB0+oHWcULagROZ+jz3Jxp9b4kwjI13AF57y6vxUwmCjpccHaZyG7jOuDeSBLrxT+AfM3dKF0TM8ccacqbxWTRO6YWU=
+	t=1779850932; cv=none; b=Pl3LjovP0XVzc/fTgbRDENS64laohQJgeCb5mfoBEf4WiKfjSM8YNowlkKDcwTVQC3KREfX+furBPC7OG68sY7WciZMaZY5c8ebPREAJelGBf1rZzjO6qLoZ78WH9y5NWFos996n7Mlvl9pDUWNdlkj2YHUUewfZbmFLOP22poI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779848289; c=relaxed/simple;
-	bh=TMbvDbgUTPtTslZr8H7vu38wbe3gX1dFPoU4U/gtd6g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cLZrRpZ8Vj+Ov15CZ23DCMdIRkQrrjFRsbSO998y6H0QiwSLSZr+HR87zLF7GuvHbDZr8HY+X/UhBwZE8QjaALiLmGsg8ryeF83abFOPpzJA4romuTJFt76RygWVNObYgHdIYD9MnrVcMqz/eOrf7n3GFCw5nMiG+3SKwRqiIx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Knfu5Z3G; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1779850932; c=relaxed/simple;
+	bh=02VxKTgHkiYArs8mO2aTIPsWW69QIsuN11HYkVba/10=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cypH5BnR0AXWhmEPdgVSqsBJkLNr439C78OWZu1itRb0HvI34kC1wjLCBp5T8YM8fYPI5hPI3DNpBXE5XdRq8BpYOyG8b9PiFM6ZvTABMJLzJKZ7/3r1xUrIEFHd65MX8g4f8LoYv1IbQQq5n3myY+W+0gU9stMZgsLh2CNRmN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c88hmZA7; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Knfu5Z3G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c88hmZA7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779848287; x=1811384287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=TMbvDbgUTPtTslZr8H7vu38wbe3gX1dFPoU4U/gtd6g=;
-  b=Knfu5Z3GyTKNOOOYcPKgbSqeAfM1Lf7SH/xX4oiVrIIOrMRz7u1pNJbD
-   MDuS0lUKwsof31L0mnNsHOc4iJ3qjZKHE9gmzq+p/Wysndpf18ErKwHN8
-   GM5HYFfLlJI/Ai7bLRI+9TM9A+v36JdfSoizO4eDntY/p5oLRkcol8YfG
-   wCxvOS2tIsiWztuARREsXkmy6WOdS9UZ9Nk53GFB5RzxZrS5onja+jAoz
-   TYcZxYmazyf39STc24r7uEM4176qHR7ab0wUEGAtTRjr6t8wnJRDdkR+m
-   AjUaUQYp+W0TrKpTD4KrJ6iLcVWRi1vA4UpI4jLGiXTKLmQGB0sWWwO8L
-   Q==;
-X-CSE-ConnectionGUID: Bpjo38VDSFuI/swOAI5NBA==
-X-CSE-MsgGUID: Sc8SIdobT5awb3xbn0FjOQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11798"; a="80521594"
+  t=1779850930; x=1811386930;
+  h=date:from:to:cc:subject:message-id;
+  bh=02VxKTgHkiYArs8mO2aTIPsWW69QIsuN11HYkVba/10=;
+  b=c88hmZA7nWFhg1erJ4lecW9mmz6YS6sOml860xMYhaWUcgzcrLLzvZDO
+   9jmTXIwNEUlrw9gkj3F3zDcC+52k3GNC1ekG7EvmF5Ir4kl3OidRcS+nF
+   W+zcSog9SEGu7ZlnXbS6qVqXHyRBzqSxUn26/jmkEQzbpdHVLwNU3eZb5
+   rSiHnyO1YMD4RmXjDWOf1SPmAwWZXbKls/PKmpyCadEiacN5KyKiNTCce
+   Nu8NIoQCwHozjLwqCABlGDhMgtv7786BdIawgt3N7k2/dozl+xeGvfin6
+   4d8y1mWOEsTezIq85mYrdWdd44g9UflVIhxYklye1Ue5pN8BeNOIW8EYB
+   w==;
+X-CSE-ConnectionGUID: daK2s2v3QhexcvqjOxVi6g==
+X-CSE-MsgGUID: KoSqBTYqRDu+2KT72waYTw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11798"; a="80733771"
 X-IronPort-AV: E=Sophos;i="6.24,170,1774335600"; 
-   d="scan'208";a="80521594"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 19:18:06 -0700
-X-CSE-ConnectionGUID: jA4+a52cRA6gVLIwhVEiIg==
-X-CSE-MsgGUID: e4yCOGUFRruRmSukACaMpg==
+   d="scan'208";a="80733771"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 20:02:10 -0700
+X-CSE-ConnectionGUID: Xoaoqgt7RhK6VOX+zKgtew==
+X-CSE-MsgGUID: FA+tpijzRYqEZgp7PvY03Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,170,1774335600"; 
-   d="scan'208";a="242262078"
+   d="scan'208";a="247188785"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 26 May 2026 19:18:02 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 26 May 2026 20:02:07 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wS3qI-000000003G2-01vc;
-	Wed, 27 May 2026 02:17:58 +0000
-Date: Wed, 27 May 2026 10:17:16 +0800
+	id 1wS4Wz-000000003IC-2EW5;
+	Wed, 27 May 2026 03:02:05 +0000
+Date: Wed, 27 May 2026 11:01:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Myeonghun Pak <mhun512@gmail.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Myeonghun Pak <mhun512@gmail.com>, stable@vger.kernel.org,
-	Ijae Kim <ae878000@gmail.com>
-Subject: Re: [PATCH] drm/meson: clean up KMS polling on register failure
-Message-ID: <202605271010.KFK2tlLa-lkp@intel.com>
-References: <20260524160657.17802-1-mhun512@gmail.com>
+To: Brian Cain <brian.cain@oss.qualcomm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bcain:bcain/boot_qemu 33/40]
+ drivers/comedi/comedi_fops.c:2577:8: error: use of undeclared identifier
+ 'PAGE_SHARED'
+Message-ID: <202605271018.Hdv96pQp-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260524160657.17802-1-mhun512@gmail.com>
 
-Hi Myeonghun,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v7.1-rc5 next-20260526]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Myeonghun-Pak/drm-meson-clean-up-KMS-polling-on-register-failure/20260525-000807
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20260524160657.17802-1-mhun512%40gmail.com
-patch subject: [PATCH] drm/meson: clean up KMS polling on register failure
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260527/202605271010.KFK2tlLa-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260527/202605271010.KFK2tlLa-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
+head:   a81283ca24aeced3d15724ecb99d91190babce5a
+commit: ff8d5c27567e8e17099e37861739ee70bd309ae8 [33/40] hexagon: fix page table model for hexagon VM
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260527/202605271018.Hdv96pQp-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260527/202605271018.Hdv96pQp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605271010.KFK2tlLa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605271018.Hdv96pQp-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/meson/meson_drv.c:363:1: warning: unused label 'uninstall_irq' [-Wunused-label]
-     363 | uninstall_irq:
-         | ^~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/comedi/comedi_fops.c:2577:8: error: use of undeclared identifier 'PAGE_SHARED'
+    2577 |                                                  PAGE_SHARED);
+         |                                                  ^
+   1 error generated.
+--
+>> drivers/video/fbdev/udlfb.c:370:52: error: use of undeclared identifier 'PAGE_SHARED'
+     370 |                 if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED))
+         |                                                                  ^
+   1 error generated.
+--
+>> drivers/video/fbdev/smscufx.c:802:52: error: use of undeclared identifier 'PAGE_SHARED'
+     802 |                 if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED))
+         |                                                                  ^
+   1 error generated.
 
 
-vim +/uninstall_irq +363 drivers/gpu/drm/meson/meson_drv.c
+vim +/PAGE_SHARED +2577 drivers/comedi/comedi_fops.c
 
-8976eeee8de05f1 Neil Armstrong        2020-04-28  180  
-8604889f83381ca Neil Armstrong        2017-05-29  181  static int meson_drv_bind_master(struct device *dev, bool has_components)
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  182  {
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  183  	struct platform_device *pdev = to_platform_device(dev);
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  184  	const struct meson_drm_match_data *match;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  185  	struct meson_drm *priv;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  186  	struct drm_device *drm;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  187  	struct resource *res;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  188  	void __iomem *regs;
-8976eeee8de05f1 Neil Armstrong        2020-04-28  189  	int ret, i;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  190  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  191  	/* Checks if an output connector is available */
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  192  	if (!meson_vpu_has_available_connectors(dev)) {
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  193  		dev_err(dev, "No output connector available\n");
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  194  		return -ENODEV;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  195  	}
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  196  
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  197  	match = of_device_get_match_data(dev);
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  198  	if (!match)
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  199  		return -ENODEV;
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  200  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  201  	drm = drm_dev_alloc(&meson_driver, dev);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  202  	if (IS_ERR(drm))
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  203  		return PTR_ERR(drm);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  204  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  205  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  206  	if (!priv) {
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  207  		ret = -ENOMEM;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  208  		goto free_drm;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  209  	}
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  210  	drm->dev_private = priv;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  211  	priv->drm = drm;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  212  	priv->dev = dev;
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  213  	priv->compat = match->compat;
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  214  	priv->afbcd.ops = match->afbcd_ops;
-528a25d040bc212 Julien Masson         2019-08-22  215  
-d4cb82aa2e4bc0e Cai Huoqing           2021-08-31  216  	regs = devm_platform_ioremap_resource_byname(pdev, "vpu");
-2c18107b9d58972 Christophe JAILLET    2018-03-12  217  	if (IS_ERR(regs)) {
-2c18107b9d58972 Christophe JAILLET    2018-03-12  218  		ret = PTR_ERR(regs);
-2c18107b9d58972 Christophe JAILLET    2018-03-12  219  		goto free_drm;
-2c18107b9d58972 Christophe JAILLET    2018-03-12  220  	}
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  221  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  222  	priv->io_base = regs;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  223  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  224  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hhi");
-01a9e9493fb3f65 Christophe JAILLET    2018-06-11  225  	if (!res) {
-01a9e9493fb3f65 Christophe JAILLET    2018-06-11  226  		ret = -EINVAL;
-01a9e9493fb3f65 Christophe JAILLET    2018-06-11  227  		goto free_drm;
-01a9e9493fb3f65 Christophe JAILLET    2018-06-11  228  	}
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  229  	/* Simply ioremap since it may be a shared register zone */
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  230  	regs = devm_ioremap(dev, res->start, resource_size(res));
-2c18107b9d58972 Christophe JAILLET    2018-03-12  231  	if (!regs) {
-2c18107b9d58972 Christophe JAILLET    2018-03-12  232  		ret = -EADDRNOTAVAIL;
-2c18107b9d58972 Christophe JAILLET    2018-03-12  233  		goto free_drm;
-2c18107b9d58972 Christophe JAILLET    2018-03-12  234  	}
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  235  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  236  	priv->hhi = devm_regmap_init_mmio(dev, regs,
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  237  					  &meson_regmap_config);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  238  	if (IS_ERR(priv->hhi)) {
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  239  		dev_err(&pdev->dev, "Couldn't create the HHI regmap\n");
-2c18107b9d58972 Christophe JAILLET    2018-03-12  240  		ret = PTR_ERR(priv->hhi);
-2c18107b9d58972 Christophe JAILLET    2018-03-12  241  		goto free_drm;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  242  	}
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  243  
-66cae477c380d1a Maxime Jourdan        2018-11-05  244  	priv->canvas = meson_canvas_get(dev);
-2bf6b5b0e374fcc Maxime Jourdan        2019-03-11  245  	if (IS_ERR(priv->canvas)) {
-2bf6b5b0e374fcc Maxime Jourdan        2019-03-11  246  		ret = PTR_ERR(priv->canvas);
-2bf6b5b0e374fcc Maxime Jourdan        2019-03-11  247  		goto free_drm;
-2bf6b5b0e374fcc Maxime Jourdan        2019-03-11  248  	}
-2bf6b5b0e374fcc Maxime Jourdan        2019-03-11  249  
-66cae477c380d1a Maxime Jourdan        2018-11-05  250  	ret = meson_canvas_alloc(priv->canvas, &priv->canvas_id_osd1);
-66cae477c380d1a Maxime Jourdan        2018-11-05  251  	if (ret)
-66cae477c380d1a Maxime Jourdan        2018-11-05  252  		goto free_drm;
-f9a2348196d1ab9 Neil Armstrong        2018-11-06  253  	ret = meson_canvas_alloc(priv->canvas, &priv->canvas_id_vd1_0);
-a695949b2e9bb6b Yao Zi                2024-07-03  254  	if (ret)
-a695949b2e9bb6b Yao Zi                2024-07-03  255  		goto free_canvas_osd1;
-f9a2348196d1ab9 Neil Armstrong        2018-11-06  256  	ret = meson_canvas_alloc(priv->canvas, &priv->canvas_id_vd1_1);
-a695949b2e9bb6b Yao Zi                2024-07-03  257  	if (ret)
-a695949b2e9bb6b Yao Zi                2024-07-03  258  		goto free_canvas_vd1_0;
-f9a2348196d1ab9 Neil Armstrong        2018-11-06  259  	ret = meson_canvas_alloc(priv->canvas, &priv->canvas_id_vd1_2);
-a695949b2e9bb6b Yao Zi                2024-07-03  260  	if (ret)
-a695949b2e9bb6b Yao Zi                2024-07-03  261  		goto free_canvas_vd1_1;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  262  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  263  	priv->vsync_irq = platform_get_irq(pdev, 0);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  264  
-e770f6bf18182bc Christophe JAILLET    2018-03-12  265  	ret = drm_vblank_init(drm, 1);
-e770f6bf18182bc Christophe JAILLET    2018-03-12  266  	if (ret)
-a695949b2e9bb6b Yao Zi                2024-07-03  267  		goto free_canvas_vd1_2;
-e770f6bf18182bc Christophe JAILLET    2018-03-12  268  
-8976eeee8de05f1 Neil Armstrong        2020-04-28  269  	/* Assign limits per soc revision/package */
-8976eeee8de05f1 Neil Armstrong        2020-04-28  270  	for (i = 0 ; i < ARRAY_SIZE(meson_drm_soc_attrs) ; ++i) {
-8976eeee8de05f1 Neil Armstrong        2020-04-28  271  		if (soc_device_match(meson_drm_soc_attrs[i].attrs)) {
-8976eeee8de05f1 Neil Armstrong        2020-04-28  272  			priv->limits = &meson_drm_soc_attrs[i].limits;
-8976eeee8de05f1 Neil Armstrong        2020-04-28  273  			break;
-8976eeee8de05f1 Neil Armstrong        2020-04-28  274  		}
-8976eeee8de05f1 Neil Armstrong        2020-04-28  275  	}
-8976eeee8de05f1 Neil Armstrong        2020-04-28  276  
-6848c291a54f8cd Thomas Zimmermann     2021-04-12  277  	/*
-6848c291a54f8cd Thomas Zimmermann     2021-04-12  278  	 * Remove early framebuffers (ie. simplefb). The framebuffer can be
-6848c291a54f8cd Thomas Zimmermann     2021-04-12  279  	 * located anywhere in RAM
-6848c291a54f8cd Thomas Zimmermann     2021-04-12  280  	 */
-736db96696b6232 Thomas Zimmermann     2024-09-30  281  	ret = aperture_remove_all_conflicting_devices(meson_driver.name);
-6848c291a54f8cd Thomas Zimmermann     2021-04-12  282  	if (ret)
-a695949b2e9bb6b Yao Zi                2024-07-03  283  		goto free_canvas_vd1_2;
-e3de0aa6c9afdca Maxime Jourdan        2018-12-10  284  
-bd9ff7b521a647a Simona Vetter         2020-03-23  285  	ret = drmm_mode_config_init(drm);
-bd9ff7b521a647a Simona Vetter         2020-03-23  286  	if (ret)
-a695949b2e9bb6b Yao Zi                2024-07-03  287  		goto free_canvas_vd1_2;
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  288  	drm->mode_config.max_width = 3840;
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  289  	drm->mode_config.max_height = 2160;
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  290  	drm->mode_config.funcs = &meson_mode_config_funcs;
-ce0210c12433031 Neil Armstrong        2019-01-14  291  	drm->mode_config.helper_private	= &meson_mode_config_helpers;
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  292  
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  293  	/* Hardware Initialization */
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  294  
-09762525d6eafb3 Neil Armstrong        2017-12-06  295  	meson_vpu_init(priv);
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  296  	meson_venc_init(priv);
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  297  	meson_vpp_init(priv);
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  298  	meson_viu_init(priv);
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  299  	if (priv->afbcd.ops) {
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  300  		ret = priv->afbcd.ops->init(priv);
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  301  		if (ret)
-a695949b2e9bb6b Yao Zi                2024-07-03  302  			goto free_canvas_vd1_2;
-d1b5e41e13a7e9b Neil Armstrong        2019-10-21  303  	}
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  304  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  305  	/* Encoder Initialization */
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  306  
-1a9e51bef89af0f Martin Blumenstingl   2024-02-18  307  	ret = meson_encoder_cvbs_probe(priv);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  308  	if (ret)
-fa747d75f65d1b1 Martin Blumenstingl   2021-12-31  309  		goto exit_afbcd;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  310  
-8604889f83381ca Neil Armstrong        2017-05-29  311  	if (has_components) {
-6a044642988b5f8 Neil Armstrong        2023-05-30  312  		ret = component_bind_all(dev, drm);
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  313  		if (ret) {
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  314  			dev_err(drm->dev, "Couldn't bind all components\n");
-6a044642988b5f8 Neil Armstrong        2023-05-30  315  			/* Do not try to unbind */
-6a044642988b5f8 Neil Armstrong        2023-05-30  316  			has_components = false;
-fa747d75f65d1b1 Martin Blumenstingl   2021-12-31  317  			goto exit_afbcd;
-a41e82e6c4575b6 Neil Armstrong        2017-04-04  318  		}
-8604889f83381ca Neil Armstrong        2017-05-29  319  	}
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  320  
-1a9e51bef89af0f Martin Blumenstingl   2024-02-18  321  	ret = meson_encoder_hdmi_probe(priv);
-e67f6037ae1be34 Neil Armstrong        2021-10-20  322  	if (ret)
-6a044642988b5f8 Neil Armstrong        2023-05-30  323  		goto exit_afbcd;
-e67f6037ae1be34 Neil Armstrong        2021-10-20  324  
-42dcf15f901c822 Neil Armstrong        2023-05-30  325  	if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A)) {
-1a9e51bef89af0f Martin Blumenstingl   2024-02-18  326  		ret = meson_encoder_dsi_probe(priv);
-42dcf15f901c822 Neil Armstrong        2023-05-30  327  		if (ret)
-42dcf15f901c822 Neil Armstrong        2023-05-30  328  			goto exit_afbcd;
-42dcf15f901c822 Neil Armstrong        2023-05-30  329  	}
-42dcf15f901c822 Neil Armstrong        2023-05-30  330  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  331  	ret = meson_plane_create(priv);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  332  	if (ret)
-6a044642988b5f8 Neil Armstrong        2023-05-30  333  		goto exit_afbcd;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  334  
-f9a2348196d1ab9 Neil Armstrong        2018-11-06  335  	ret = meson_overlay_create(priv);
-f9a2348196d1ab9 Neil Armstrong        2018-11-06  336  	if (ret)
-6a044642988b5f8 Neil Armstrong        2023-05-30  337  		goto exit_afbcd;
-f9a2348196d1ab9 Neil Armstrong        2018-11-06  338  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  339  	ret = meson_crtc_create(priv);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  340  	if (ret)
-6a044642988b5f8 Neil Armstrong        2023-05-30  341  		goto exit_afbcd;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  342  
-65a969655cb91fa Thomas Zimmermann     2021-07-06  343  	ret = request_irq(priv->vsync_irq, meson_irq, 0, drm->driver->name, drm);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  344  	if (ret)
-6a044642988b5f8 Neil Armstrong        2023-05-30  345  		goto exit_afbcd;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  346  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  347  	drm_mode_config_reset(drm);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  348  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  349  	drm_kms_helper_poll_init(drm);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  350  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  351  	platform_set_drvdata(pdev, priv);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  352  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  353  	ret = drm_dev_register(drm, 0);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  354  	if (ret)
-e31803f51415af4 Myeonghun Pak         2026-05-25  355  		goto uninstall_poll;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  356  
-57a03512c49a2e3 Thomas Zimmermann     2024-09-24  357  	drm_client_setup(drm, NULL);
-efbb9df91e03b31 Noralf Trønnes        2018-09-08  358  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  359  	return 0;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  360  
-e31803f51415af4 Myeonghun Pak         2026-05-25  361  uninstall_poll:
-e31803f51415af4 Myeonghun Pak         2026-05-25  362  	drm_kms_helper_poll_fini(drm);
-2d8f92897ad816f Jean-Philippe Brucker 2019-03-22 @363  uninstall_irq:
-65a969655cb91fa Thomas Zimmermann     2021-07-06  364  	free_irq(priv->vsync_irq, drm);
-fa747d75f65d1b1 Martin Blumenstingl   2021-12-31  365  exit_afbcd:
-fa747d75f65d1b1 Martin Blumenstingl   2021-12-31  366  	if (priv->afbcd.ops)
-fa747d75f65d1b1 Martin Blumenstingl   2021-12-31  367  		priv->afbcd.ops->exit(priv);
-a695949b2e9bb6b Yao Zi                2024-07-03  368  free_canvas_vd1_2:
-a695949b2e9bb6b Yao Zi                2024-07-03  369  	meson_canvas_free(priv->canvas, priv->canvas_id_vd1_2);
-a695949b2e9bb6b Yao Zi                2024-07-03  370  free_canvas_vd1_1:
-a695949b2e9bb6b Yao Zi                2024-07-03  371  	meson_canvas_free(priv->canvas, priv->canvas_id_vd1_1);
-a695949b2e9bb6b Yao Zi                2024-07-03  372  free_canvas_vd1_0:
-a695949b2e9bb6b Yao Zi                2024-07-03  373  	meson_canvas_free(priv->canvas, priv->canvas_id_vd1_0);
-a695949b2e9bb6b Yao Zi                2024-07-03  374  free_canvas_osd1:
-a695949b2e9bb6b Yao Zi                2024-07-03  375  	meson_canvas_free(priv->canvas, priv->canvas_id_osd1);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  376  free_drm:
-dcacf65139e3def Christophe JAILLET    2018-03-12  377  	drm_dev_put(drm);
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  378  
-42dcf15f901c822 Neil Armstrong        2023-05-30  379  	meson_encoder_dsi_remove(priv);
-6a044642988b5f8 Neil Armstrong        2023-05-30  380  	meson_encoder_hdmi_remove(priv);
-6a044642988b5f8 Neil Armstrong        2023-05-30  381  	meson_encoder_cvbs_remove(priv);
-6a044642988b5f8 Neil Armstrong        2023-05-30  382  
-6a044642988b5f8 Neil Armstrong        2023-05-30  383  	if (has_components)
-6a044642988b5f8 Neil Armstrong        2023-05-30  384  		component_unbind_all(dev, drm);
-6a044642988b5f8 Neil Armstrong        2023-05-30  385  
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  386  	return ret;
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  387  }
-bbbe775ec5b5dac Neil Armstrong        2016-11-10  388  
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2479  
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2480  static int comedi_mmap(struct file *file, struct vm_area_struct *vma)
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2481  {
+20f083c07565cb drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-11-04  2482  	struct comedi_file *cfp = file->private_data;
+20f083c07565cb drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-11-04  2483  	struct comedi_device *dev = cfp->dev;
+a52840a98bbb50 drivers/staging/comedi/comedi_fops.c H Hartley Sweeten  2012-12-19  2484  	struct comedi_subdevice *s;
+a52840a98bbb50 drivers/staging/comedi/comedi_fops.c H Hartley Sweeten  2012-12-19  2485  	struct comedi_async *async;
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2486  	struct comedi_buf_map *bm = NULL;
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2487  	struct comedi_buf_page *buf;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2488  	unsigned long start = vma->vm_start;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2489  	unsigned long size;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2490  	int n_pages;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2491  	int i;
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2492  	int retval = 0;
+3ffab428f40849 drivers/staging/comedi/comedi_fops.c Bernd Porr         2011-11-08  2493  
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2494  	/*
+c1e8d7c6a7a682 drivers/staging/comedi/comedi_fops.c Michel Lespinasse  2020-06-08  2495  	 * 'trylock' avoids circular dependency with current->mm->mmap_lock
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2496  	 * and down-reading &dev->attach_lock should normally succeed without
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2497  	 * contention unless the device is in the process of being attached
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2498  	 * or detached.
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2499  	 */
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2500  	if (!down_read_trylock(&dev->attach_lock))
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2501  		return -EAGAIN;
+a52840a98bbb50 drivers/staging/comedi/comedi_fops.c H Hartley Sweeten  2012-12-19  2502  
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2503  	if (!dev->attached) {
+272850f07c47ab drivers/staging/comedi/comedi_fops.c H Hartley Sweeten  2013-11-26  2504  		dev_dbg(dev->class_dev, "no driver attached\n");
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2505  		retval = -ENODEV;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2506  		goto done;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2507  	}
+a52840a98bbb50 drivers/staging/comedi/comedi_fops.c H Hartley Sweeten  2012-12-19  2508  
+476b847733636c drivers/staging/comedi/comedi_fops.c Greg Kroah-Hartman 2008-11-13  2509  	if (vma->vm_flags & VM_WRITE)
+20f083c07565cb drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-11-04  2510  		s = comedi_file_write_subdevice(file);
+476b847733636c drivers/staging/comedi/comedi_fops.c Greg Kroah-Hartman 2008-11-13  2511  	else
+20f083c07565cb drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-11-04  2512  		s = comedi_file_read_subdevice(file);
+a52840a98bbb50 drivers/staging/comedi/comedi_fops.c H Hartley Sweeten  2012-12-19  2513  	if (!s) {
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2514  		retval = -EINVAL;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2515  		goto done;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2516  	}
+a52840a98bbb50 drivers/staging/comedi/comedi_fops.c H Hartley Sweeten  2012-12-19  2517  
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2518  	async = s->async;
+a52840a98bbb50 drivers/staging/comedi/comedi_fops.c H Hartley Sweeten  2012-12-19  2519  	if (!async) {
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2520  		retval = -EINVAL;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2521  		goto done;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2522  	}
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2523  
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2524  	if (vma->vm_pgoff != 0) {
+272850f07c47ab drivers/staging/comedi/comedi_fops.c H Hartley Sweeten  2013-11-26  2525  		dev_dbg(dev->class_dev, "mmap() offset must be 0.\n");
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2526  		retval = -EINVAL;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2527  		goto done;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2528  	}
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2529  
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2530  	size = vma->vm_end - vma->vm_start;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2531  	if (size > async->prealloc_bufsz) {
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2532  		retval = -EFAULT;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2533  		goto done;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2534  	}
+44b8c793fc0d63 drivers/staging/comedi/comedi_fops.c Sandhya Bankar     2016-03-06  2535  	if (offset_in_page(size)) {
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2536  		retval = -EFAULT;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2537  		goto done;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2538  	}
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2539  
+ec9d0754e0c640 drivers/staging/comedi/comedi_fops.c sayli karnik       2016-09-20  2540  	n_pages = vma_pages(vma);
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2541  
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2542  	/* get reference to current buf map (if any) */
+b34aa86f12e884 drivers/staging/comedi/comedi_fops.c Ian Abbott         2014-04-10  2543  	bm = comedi_buf_map_from_subdev_get(s);
+af93da31634d6d drivers/staging/comedi/comedi_fops.c Ian Abbott         2013-11-08  2544  	if (!bm || n_pages > bm->n_pages) {
+af93da31634d6d drivers/staging/comedi/comedi_fops.c Ian Abbott         2013-11-08  2545  		retval = -EINVAL;
+af93da31634d6d drivers/staging/comedi/comedi_fops.c Ian Abbott         2013-11-08  2546  		goto done;
+af93da31634d6d drivers/staging/comedi/comedi_fops.c Ian Abbott         2013-11-08  2547  	}
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2548  	if (bm->dma_dir != DMA_NONE) {
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2549  		unsigned long vm_start = vma->vm_start;
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2550  		unsigned long vm_end = vma->vm_end;
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2551  
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2552  		/*
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2553  		 * Buffer pages are not contiguous, so temporarily modify VMA
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2554  		 * start and end addresses for each buffer page.
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2555  		 */
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2556  		for (i = 0; i < n_pages; ++i) {
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2557  			buf = &bm->page_list[i];
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2558  			vma->vm_start = start;
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2559  			vma->vm_end = start + PAGE_SIZE;
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2560  			retval = dma_mmap_coherent(bm->dma_hw_dev, vma,
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2561  						   buf->virt_addr,
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2562  						   buf->dma_addr, PAGE_SIZE);
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2563  			if (retval)
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2564  				break;
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2565  
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2566  			start += PAGE_SIZE;
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2567  		}
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2568  		vma->vm_start = vm_start;
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2569  		vma->vm_end = vm_end;
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2570  	} else {
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2571  		for (i = 0; i < n_pages; ++i) {
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2572  			unsigned long pfn;
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2573  
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2574  			buf = &bm->page_list[i];
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2575  			pfn = page_to_pfn(virt_to_page(buf->virt_addr));
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2576  			retval = remap_pfn_range(vma, start, pfn, PAGE_SIZE,
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25 @2577  						 PAGE_SHARED);
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2578  			if (retval)
+e36472145aa706 drivers/staging/comedi/comedi_fops.c Ian Abbott         2019-06-25  2579  				break;
+a52840a98bbb50 drivers/staging/comedi/comedi_fops.c H Hartley Sweeten  2012-12-19  2580  
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2581  			start += PAGE_SIZE;
+ed9eccbe8970f6 drivers/staging/comedi/comedi_fops.c David Schleef      2008-11-04  2582  		}
+fd1575e28a325b drivers/comedi/comedi_fops.c         Ian Abbott         2025-04-15  2583  	}
+ce8f9fb651fac9 drivers/comedi/comedi_fops.c         Jann Horn          2024-10-17  2584  
+
+:::::: The code at line 2577 was first introduced by commit
+:::::: e36472145aa706c186a6bb4f6419c613b0b1305c staging: comedi: use dma_mmap_coherent for DMA-able buffer mmap
+
+:::::: TO: Ian Abbott <abbotti@mev.co.uk>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --
 0-DAY CI Kernel Test Service
