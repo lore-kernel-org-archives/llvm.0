@@ -1,172 +1,325 @@
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2BD21771B
-	for <llvm@lists.linux.dev>; Tue, 26 May 2026 23:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779837712; cv=pass; b=Z2tPpdT7HRrVEJfP83DUCUS11KRl4PowSblCiWu8jxo00K7p+sPjEO7v7SBWTXNrIuduAp/wX/yVcqGJgZzDvLi7QXWthqykmPG4DqeQQ7vqc3MBJDn6php85/Xj06ckHg0PchKvSDCq6cBYX6LdpGePVFwjD1cqUT7K8BuSbuw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779837712; c=relaxed/simple;
-	bh=u5AZ6lDvJHN6hkOMWJlEHdIYy+BPs1w8b0bOdZZRyJY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J8P1loUVUomiiqG9jxUxwmMUebwmX8mlQo+8Wpdy0jft0r43JcylwcnNbckyPyjoJFck8OCFktOuizbYdXtThk41HbgyFc4aVq2TynN5Q1N8nv3tM9JIwgnVvn2FjUsLWDOX4WWGLoZnoITs+NEORCwa+iygIRfRq/nriaBScMg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IjbisMCy; arc=pass smtp.client-ip=209.85.161.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7971FE44A;
+	Wed, 27 May 2026 02:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779848289; cv=none; b=kyVOcZ1FECC1uK4VIlNm4tKe56whym7xQulPTgLNsfwTc6/Q3QAZ4x/VBpKtVMgQAGeJORP4yS7jUFQdWB0+oHWcULagROZ+jz3Jxp9b4kwjI13AF57y6vxUwmCjpccHaZyG7jOuDeSBLrxT+AfM3dKF0TM8ccacqbxWTRO6YWU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779848289; c=relaxed/simple;
+	bh=TMbvDbgUTPtTslZr8H7vu38wbe3gX1dFPoU4U/gtd6g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cLZrRpZ8Vj+Ov15CZ23DCMdIRkQrrjFRsbSO998y6H0QiwSLSZr+HR87zLF7GuvHbDZr8HY+X/UhBwZE8QjaALiLmGsg8ryeF83abFOPpzJA4romuTJFt76RygWVNObYgHdIYD9MnrVcMqz/eOrf7n3GFCw5nMiG+3SKwRqiIx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Knfu5Z3G; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IjbisMCy"
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-69d78547957so2738451eaf.0
-        for <llvm@lists.linux.dev>; Tue, 26 May 2026 16:21:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779837710; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BiSDU8tPqjBu1aS9V0Z7rvk/whZpDyv76OWTXqg2Z1ipQVICva6ft/kRVBF/gZdisj
-         qvW7CAy38VaJ32zHVel+InDBKnklSENgZXQ7A6vheqOSLJEGU0SxCcsz3rNtaUnuaC1t
-         W9W2J0syPDXYWK+rS+O1tThRsTyNZjD1YOC3dVVAB2yEf4Uc7dW5m1qfTZkVDjl5Rhza
-         k9iZGxZwr/yHF6uRjpK2ZE7zgQnXHLU0042bNmnT2Dk95uxCRZ2T6Q/+usluW1j+K9H7
-         GIsPlzwZquTSmEfzgp7zHtBsGE5b1t9o0m7HE8hpA0NQOOhgJKwwMJhhcZqmPGUFPyq9
-         p8zA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=HujuVBuKdWWEfICM8n6u8a8X3rF3iweG2fpAlmRVj68=;
-        fh=6bwU7OMcYG5rVzxvpqmXrMwEZCnvkOMEGUubDg/3ymI=;
-        b=PKb93NL8COLv5oYIH9P2HpECXVWiE1cf9nLpBwLYpj0uw8pXj/YNvk/sPvivYdRJE0
-         Y/m1MqFzcUdBpkWyzQuksDmOshxct2wn8LbqlIvDPztReuGaWMZCri/Q6E+dB05fwEVC
-         WJs1cjQJc31EZ6JT+i5VCE3iIF4ISh+F019KnfFyZ8T2xLN1yqex/csIGasl43HAS/+C
-         WufgxGVZK/DG0iFXHRookUfUd7gHmgSxdmZDqZEhbd5ns15Fm+he3v3PX1r+vc3UP9Lu
-         4+zM0FxG7U7EBJvZJGuo9qgPH7swidw/HjLTE8PV+DTqNImAa7lrNS9EbgqjmJocaMqe
-         bJzQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779837710; x=1780442510; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HujuVBuKdWWEfICM8n6u8a8X3rF3iweG2fpAlmRVj68=;
-        b=IjbisMCyHHaOTMObJ8rRqf7o37IhBvSJhF0xHjmOwSaQIZ+0L1MncSDfs8h+M8G6dh
-         u469rSLTjDWFcnk/dV2DnLdQgC6kMIolUMNCXmyKgwcALGN4giFBVmjhLmMRr8UY+FDl
-         VwEER6NG3T6/Nc4h56PclcUx7xTfNhqhh7gkcjDde2r7Kg7/AvOmbwriXf2EXmud4Aqc
-         SMEjim8D8T2G2LApAlcWwUTGcqvwjnm+9in3V3XH0E12qUD1/mf5WkIDxDweQevnhjhu
-         dv8lymkh5Iii/F9OK3im/jQuUa+FMFrJsPXAOgvGaMvN9ngYHlXJfh+ZGIrFcswSbT2Q
-         APHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779837710; x=1780442510;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HujuVBuKdWWEfICM8n6u8a8X3rF3iweG2fpAlmRVj68=;
-        b=ae8UEfFFep/bxr7F1U/SooIvG38/W8iRJ+INpnU3zWx8KhkLntj3HSJFlqxkpA4lwY
-         prvw5Oz8zrs1hAJ1Ta/hGkG75ntRAXtETYkWJ4Gg+0gcaq+dfS67GBxvPF3JqGGNDJtZ
-         4FYlIaGkQaCRPP4R4xhdTx2EtPsNa2je5k5DFREIPw0XmbQ7F3IL+u5StvZUY8gYX5zB
-         mNtdks7qRUvemgJJ5m8jy8sR0JHAcGvl+ScGGqHVnNQlct4T2PDP/P4fmr4wzYCSq170
-         vyA6VjrK6R4SzcnSnP/zXPUZMyRwzJwN4EfMtVTUR4cM3laDkZp3ksLiVstPT6X7g76f
-         uWXg==
-X-Forwarded-Encrypted: i=1; AFNElJ/OVbkF2Nd18rjlvB/bk/lIHsLDVtx3m+YAqf6clZ+J1ybqFIe70y4FFEGNFT/xIZE9cTvz@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw7YvlzUHPOoM2NYDxUiLJqRWQmAJEpL8KcZPTCSOeVfaoUF+rA
-	QsInkbQ16W+9l9TPoU1vyyk8ShR/pYX7LSiQwJ8+h017SBLRV1DyH8kpIcWKQFZnDX7ygNKN1HA
-	uRJLg2lnsirVLthdCQse8+UAa4yZGk4w=
-X-Gm-Gg: Acq92OEF9jpY09QBLTHmvRwLvnOmyc0JYLM46mWTfwbmPMQPUIrF6rX9ty/J9fs3Umx
-	Eck8YI0mU/nYbcnyvRz8pqr3tMxuQ7o4QoliHf3wIXWhl2RK27i2bhvkSqVmFCdKbqZMKXygr65
-	Nwl5ADgtC/qi1WweL0u+Mr7Uuk/KbvkzpXcj9L/CVT0LCNax3gve/XbFugTT15C5291phg0BYMj
-	jojc5t8TnyuwdNEkrakUVy6rIpzIrYKvMXgnF0pL4QjcvX99PYt7KZ+Ad3lMeXzE/zxlXOkoyAo
-	6rYVnTfaRn5BRLIKkrsoLav87R0=
-X-Received: by 2002:a4a:e903:0:b0:694:9e2f:cfac with SMTP id
- 006d021491bc7-69d7fcb51b6mr8951696eaf.9.1779837709977; Tue, 26 May 2026
- 16:21:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Knfu5Z3G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779848287; x=1811384287;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=TMbvDbgUTPtTslZr8H7vu38wbe3gX1dFPoU4U/gtd6g=;
+  b=Knfu5Z3GyTKNOOOYcPKgbSqeAfM1Lf7SH/xX4oiVrIIOrMRz7u1pNJbD
+   MDuS0lUKwsof31L0mnNsHOc4iJ3qjZKHE9gmzq+p/Wysndpf18ErKwHN8
+   GM5HYFfLlJI/Ai7bLRI+9TM9A+v36JdfSoizO4eDntY/p5oLRkcol8YfG
+   wCxvOS2tIsiWztuARREsXkmy6WOdS9UZ9Nk53GFB5RzxZrS5onja+jAoz
+   TYcZxYmazyf39STc24r7uEM4176qHR7ab0wUEGAtTRjr6t8wnJRDdkR+m
+   AjUaUQYp+W0TrKpTD4KrJ6iLcVWRi1vA4UpI4jLGiXTKLmQGB0sWWwO8L
+   Q==;
+X-CSE-ConnectionGUID: Bpjo38VDSFuI/swOAI5NBA==
+X-CSE-MsgGUID: Sc8SIdobT5awb3xbn0FjOQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11798"; a="80521594"
+X-IronPort-AV: E=Sophos;i="6.24,170,1774335600"; 
+   d="scan'208";a="80521594"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2026 19:18:06 -0700
+X-CSE-ConnectionGUID: jA4+a52cRA6gVLIwhVEiIg==
+X-CSE-MsgGUID: e4yCOGUFRruRmSukACaMpg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,170,1774335600"; 
+   d="scan'208";a="242262078"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 26 May 2026 19:18:02 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wS3qI-000000003G2-01vc;
+	Wed, 27 May 2026 02:17:58 +0000
+Date: Wed, 27 May 2026 10:17:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Myeonghun Pak <mhun512@gmail.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Myeonghun Pak <mhun512@gmail.com>, stable@vger.kernel.org,
+	Ijae Kim <ae878000@gmail.com>
+Subject: Re: [PATCH] drm/meson: clean up KMS polling on register failure
+Message-ID: <202605271010.KFK2tlLa-lkp@intel.com>
+References: <20260524160657.17802-1-mhun512@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260525201116.407338-2-kacper.kokot.44@gmail.com> <202605261807.YY0PWuhX-lkp@intel.com>
-In-Reply-To: <202605261807.YY0PWuhX-lkp@intel.com>
-From: Kacper Kokot <kacper.kokot.44@gmail.com>
-Date: Wed, 27 May 2026 00:21:38 +0100
-X-Gm-Features: AVHnY4IeURuAw-7kug8a-6xqNpmP-8aoIQEcxEzrITr5eMpT52Lzw3oZg7lhaRo
-Message-ID: <CAG-Fur7edB8_4iLnP4QWh+K96bGFBgYyfdoy8H7zvqa8NYdyow@mail.gmail.com>
-Subject: Re: [PATCH] netfilter: TCPMSS: fix dropped packets when MSS option is unaligned
-To: kernel test robot <lkp@intel.com>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260524160657.17802-1-mhun512@gmail.com>
 
-> AFAICS, these issues are not present in real environments as MSS option
-> is placed at the beginning of the options block making it aligned by
-> default usually.
+Hi Myeonghun,
 
-I agree, I haven't observed it in any real environment and wouldn't expect to.
-I found it by reading the code and had to craft a SYN to reproduce. That said
-the spec permits unaligned options and the kernel shouldn't silently drop legal
-packets just because nobody sends them today. I can note in the v2 commit
-message that this is a theoretical fix.
+kernel test robot noticed the following build warnings:
 
-> > I wonder, if we are touching this code, we could use the opportunity
-> > to make it use get_unaligned_be16() instead.
->
-> gcc and clang convert x[0] << 8 | x[1] (etc) to the appropriate single
-> instruction (and maybe byteswap) on cpu that support misaligned accesses.
-> So there is little to gain from doing it any other way.
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on linus/master v7.1-rc5 next-20260526]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Happy to go with whichever you prefer for v2.
+url:    https://github.com/intel-lab-lkp/linux/commits/Myeonghun-Pak/drm-meson-clean-up-KMS-polling-on-register-failure/20260525-000807
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20260524160657.17802-1-mhun512%40gmail.com
+patch subject: [PATCH] drm/meson: clean up KMS polling on register failure
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260527/202605271010.KFK2tlLa-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260527/202605271010.KFK2tlLa-lkp@intel.com/reproduce)
 
-> and, of course, the code works fine because 0x1 != 0 is 1.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605271010.KFK2tlLa-lkp@intel.com/
 
-Ha - accidentally correct. I'll add the parens in v2 tomorrow.
+All warnings (new ones prefixed by >>):
 
-Also the reproducer I sent with v1 was clunky. Here's a better
-one with some results below:
+>> drivers/gpu/drm/meson/meson_drv.c:363:1: warning: unused label 'uninstall_irq' [-Wunused-label]
+     363 | uninstall_irq:
+         | ^~~~~~~~~~~~~~
+   1 warning generated.
 
-  #!/usr/bin/env python3
-  import argparse
-  from scapy.all import *
 
-  parser = argparse.ArgumentParser()
-  parser.add_argument("target_ip")
-  parser.add_argument("target_port", type=int)
-  args = parser.parse_args()
+vim +/uninstall_irq +363 drivers/gpu/drm/meson/meson_drv.c
 
-  def gen_mss_syn_options(nops=0):
-      return nops * [("NOP", None)] + [("MSS", 1460)]
+8976eeee8de05f1 Neil Armstrong        2020-04-28  180  
+8604889f83381ca Neil Armstrong        2017-05-29  181  static int meson_drv_bind_master(struct device *dev, bool has_components)
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  182  {
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  183  	struct platform_device *pdev = to_platform_device(dev);
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  184  	const struct meson_drm_match_data *match;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  185  	struct meson_drm *priv;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  186  	struct drm_device *drm;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  187  	struct resource *res;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  188  	void __iomem *regs;
+8976eeee8de05f1 Neil Armstrong        2020-04-28  189  	int ret, i;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  190  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  191  	/* Checks if an output connector is available */
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  192  	if (!meson_vpu_has_available_connectors(dev)) {
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  193  		dev_err(dev, "No output connector available\n");
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  194  		return -ENODEV;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  195  	}
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  196  
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  197  	match = of_device_get_match_data(dev);
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  198  	if (!match)
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  199  		return -ENODEV;
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  200  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  201  	drm = drm_dev_alloc(&meson_driver, dev);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  202  	if (IS_ERR(drm))
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  203  		return PTR_ERR(drm);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  204  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  205  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  206  	if (!priv) {
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  207  		ret = -ENOMEM;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  208  		goto free_drm;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  209  	}
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  210  	drm->dev_private = priv;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  211  	priv->drm = drm;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  212  	priv->dev = dev;
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  213  	priv->compat = match->compat;
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  214  	priv->afbcd.ops = match->afbcd_ops;
+528a25d040bc212 Julien Masson         2019-08-22  215  
+d4cb82aa2e4bc0e Cai Huoqing           2021-08-31  216  	regs = devm_platform_ioremap_resource_byname(pdev, "vpu");
+2c18107b9d58972 Christophe JAILLET    2018-03-12  217  	if (IS_ERR(regs)) {
+2c18107b9d58972 Christophe JAILLET    2018-03-12  218  		ret = PTR_ERR(regs);
+2c18107b9d58972 Christophe JAILLET    2018-03-12  219  		goto free_drm;
+2c18107b9d58972 Christophe JAILLET    2018-03-12  220  	}
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  221  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  222  	priv->io_base = regs;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  223  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  224  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hhi");
+01a9e9493fb3f65 Christophe JAILLET    2018-06-11  225  	if (!res) {
+01a9e9493fb3f65 Christophe JAILLET    2018-06-11  226  		ret = -EINVAL;
+01a9e9493fb3f65 Christophe JAILLET    2018-06-11  227  		goto free_drm;
+01a9e9493fb3f65 Christophe JAILLET    2018-06-11  228  	}
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  229  	/* Simply ioremap since it may be a shared register zone */
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  230  	regs = devm_ioremap(dev, res->start, resource_size(res));
+2c18107b9d58972 Christophe JAILLET    2018-03-12  231  	if (!regs) {
+2c18107b9d58972 Christophe JAILLET    2018-03-12  232  		ret = -EADDRNOTAVAIL;
+2c18107b9d58972 Christophe JAILLET    2018-03-12  233  		goto free_drm;
+2c18107b9d58972 Christophe JAILLET    2018-03-12  234  	}
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  235  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  236  	priv->hhi = devm_regmap_init_mmio(dev, regs,
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  237  					  &meson_regmap_config);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  238  	if (IS_ERR(priv->hhi)) {
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  239  		dev_err(&pdev->dev, "Couldn't create the HHI regmap\n");
+2c18107b9d58972 Christophe JAILLET    2018-03-12  240  		ret = PTR_ERR(priv->hhi);
+2c18107b9d58972 Christophe JAILLET    2018-03-12  241  		goto free_drm;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  242  	}
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  243  
+66cae477c380d1a Maxime Jourdan        2018-11-05  244  	priv->canvas = meson_canvas_get(dev);
+2bf6b5b0e374fcc Maxime Jourdan        2019-03-11  245  	if (IS_ERR(priv->canvas)) {
+2bf6b5b0e374fcc Maxime Jourdan        2019-03-11  246  		ret = PTR_ERR(priv->canvas);
+2bf6b5b0e374fcc Maxime Jourdan        2019-03-11  247  		goto free_drm;
+2bf6b5b0e374fcc Maxime Jourdan        2019-03-11  248  	}
+2bf6b5b0e374fcc Maxime Jourdan        2019-03-11  249  
+66cae477c380d1a Maxime Jourdan        2018-11-05  250  	ret = meson_canvas_alloc(priv->canvas, &priv->canvas_id_osd1);
+66cae477c380d1a Maxime Jourdan        2018-11-05  251  	if (ret)
+66cae477c380d1a Maxime Jourdan        2018-11-05  252  		goto free_drm;
+f9a2348196d1ab9 Neil Armstrong        2018-11-06  253  	ret = meson_canvas_alloc(priv->canvas, &priv->canvas_id_vd1_0);
+a695949b2e9bb6b Yao Zi                2024-07-03  254  	if (ret)
+a695949b2e9bb6b Yao Zi                2024-07-03  255  		goto free_canvas_osd1;
+f9a2348196d1ab9 Neil Armstrong        2018-11-06  256  	ret = meson_canvas_alloc(priv->canvas, &priv->canvas_id_vd1_1);
+a695949b2e9bb6b Yao Zi                2024-07-03  257  	if (ret)
+a695949b2e9bb6b Yao Zi                2024-07-03  258  		goto free_canvas_vd1_0;
+f9a2348196d1ab9 Neil Armstrong        2018-11-06  259  	ret = meson_canvas_alloc(priv->canvas, &priv->canvas_id_vd1_2);
+a695949b2e9bb6b Yao Zi                2024-07-03  260  	if (ret)
+a695949b2e9bb6b Yao Zi                2024-07-03  261  		goto free_canvas_vd1_1;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  262  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  263  	priv->vsync_irq = platform_get_irq(pdev, 0);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  264  
+e770f6bf18182bc Christophe JAILLET    2018-03-12  265  	ret = drm_vblank_init(drm, 1);
+e770f6bf18182bc Christophe JAILLET    2018-03-12  266  	if (ret)
+a695949b2e9bb6b Yao Zi                2024-07-03  267  		goto free_canvas_vd1_2;
+e770f6bf18182bc Christophe JAILLET    2018-03-12  268  
+8976eeee8de05f1 Neil Armstrong        2020-04-28  269  	/* Assign limits per soc revision/package */
+8976eeee8de05f1 Neil Armstrong        2020-04-28  270  	for (i = 0 ; i < ARRAY_SIZE(meson_drm_soc_attrs) ; ++i) {
+8976eeee8de05f1 Neil Armstrong        2020-04-28  271  		if (soc_device_match(meson_drm_soc_attrs[i].attrs)) {
+8976eeee8de05f1 Neil Armstrong        2020-04-28  272  			priv->limits = &meson_drm_soc_attrs[i].limits;
+8976eeee8de05f1 Neil Armstrong        2020-04-28  273  			break;
+8976eeee8de05f1 Neil Armstrong        2020-04-28  274  		}
+8976eeee8de05f1 Neil Armstrong        2020-04-28  275  	}
+8976eeee8de05f1 Neil Armstrong        2020-04-28  276  
+6848c291a54f8cd Thomas Zimmermann     2021-04-12  277  	/*
+6848c291a54f8cd Thomas Zimmermann     2021-04-12  278  	 * Remove early framebuffers (ie. simplefb). The framebuffer can be
+6848c291a54f8cd Thomas Zimmermann     2021-04-12  279  	 * located anywhere in RAM
+6848c291a54f8cd Thomas Zimmermann     2021-04-12  280  	 */
+736db96696b6232 Thomas Zimmermann     2024-09-30  281  	ret = aperture_remove_all_conflicting_devices(meson_driver.name);
+6848c291a54f8cd Thomas Zimmermann     2021-04-12  282  	if (ret)
+a695949b2e9bb6b Yao Zi                2024-07-03  283  		goto free_canvas_vd1_2;
+e3de0aa6c9afdca Maxime Jourdan        2018-12-10  284  
+bd9ff7b521a647a Simona Vetter         2020-03-23  285  	ret = drmm_mode_config_init(drm);
+bd9ff7b521a647a Simona Vetter         2020-03-23  286  	if (ret)
+a695949b2e9bb6b Yao Zi                2024-07-03  287  		goto free_canvas_vd1_2;
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  288  	drm->mode_config.max_width = 3840;
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  289  	drm->mode_config.max_height = 2160;
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  290  	drm->mode_config.funcs = &meson_mode_config_funcs;
+ce0210c12433031 Neil Armstrong        2019-01-14  291  	drm->mode_config.helper_private	= &meson_mode_config_helpers;
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  292  
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  293  	/* Hardware Initialization */
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  294  
+09762525d6eafb3 Neil Armstrong        2017-12-06  295  	meson_vpu_init(priv);
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  296  	meson_venc_init(priv);
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  297  	meson_vpp_init(priv);
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  298  	meson_viu_init(priv);
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  299  	if (priv->afbcd.ops) {
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  300  		ret = priv->afbcd.ops->init(priv);
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  301  		if (ret)
+a695949b2e9bb6b Yao Zi                2024-07-03  302  			goto free_canvas_vd1_2;
+d1b5e41e13a7e9b Neil Armstrong        2019-10-21  303  	}
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  304  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  305  	/* Encoder Initialization */
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  306  
+1a9e51bef89af0f Martin Blumenstingl   2024-02-18  307  	ret = meson_encoder_cvbs_probe(priv);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  308  	if (ret)
+fa747d75f65d1b1 Martin Blumenstingl   2021-12-31  309  		goto exit_afbcd;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  310  
+8604889f83381ca Neil Armstrong        2017-05-29  311  	if (has_components) {
+6a044642988b5f8 Neil Armstrong        2023-05-30  312  		ret = component_bind_all(dev, drm);
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  313  		if (ret) {
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  314  			dev_err(drm->dev, "Couldn't bind all components\n");
+6a044642988b5f8 Neil Armstrong        2023-05-30  315  			/* Do not try to unbind */
+6a044642988b5f8 Neil Armstrong        2023-05-30  316  			has_components = false;
+fa747d75f65d1b1 Martin Blumenstingl   2021-12-31  317  			goto exit_afbcd;
+a41e82e6c4575b6 Neil Armstrong        2017-04-04  318  		}
+8604889f83381ca Neil Armstrong        2017-05-29  319  	}
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  320  
+1a9e51bef89af0f Martin Blumenstingl   2024-02-18  321  	ret = meson_encoder_hdmi_probe(priv);
+e67f6037ae1be34 Neil Armstrong        2021-10-20  322  	if (ret)
+6a044642988b5f8 Neil Armstrong        2023-05-30  323  		goto exit_afbcd;
+e67f6037ae1be34 Neil Armstrong        2021-10-20  324  
+42dcf15f901c822 Neil Armstrong        2023-05-30  325  	if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A)) {
+1a9e51bef89af0f Martin Blumenstingl   2024-02-18  326  		ret = meson_encoder_dsi_probe(priv);
+42dcf15f901c822 Neil Armstrong        2023-05-30  327  		if (ret)
+42dcf15f901c822 Neil Armstrong        2023-05-30  328  			goto exit_afbcd;
+42dcf15f901c822 Neil Armstrong        2023-05-30  329  	}
+42dcf15f901c822 Neil Armstrong        2023-05-30  330  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  331  	ret = meson_plane_create(priv);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  332  	if (ret)
+6a044642988b5f8 Neil Armstrong        2023-05-30  333  		goto exit_afbcd;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  334  
+f9a2348196d1ab9 Neil Armstrong        2018-11-06  335  	ret = meson_overlay_create(priv);
+f9a2348196d1ab9 Neil Armstrong        2018-11-06  336  	if (ret)
+6a044642988b5f8 Neil Armstrong        2023-05-30  337  		goto exit_afbcd;
+f9a2348196d1ab9 Neil Armstrong        2018-11-06  338  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  339  	ret = meson_crtc_create(priv);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  340  	if (ret)
+6a044642988b5f8 Neil Armstrong        2023-05-30  341  		goto exit_afbcd;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  342  
+65a969655cb91fa Thomas Zimmermann     2021-07-06  343  	ret = request_irq(priv->vsync_irq, meson_irq, 0, drm->driver->name, drm);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  344  	if (ret)
+6a044642988b5f8 Neil Armstrong        2023-05-30  345  		goto exit_afbcd;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  346  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  347  	drm_mode_config_reset(drm);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  348  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  349  	drm_kms_helper_poll_init(drm);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  350  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  351  	platform_set_drvdata(pdev, priv);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  352  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  353  	ret = drm_dev_register(drm, 0);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  354  	if (ret)
+e31803f51415af4 Myeonghun Pak         2026-05-25  355  		goto uninstall_poll;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  356  
+57a03512c49a2e3 Thomas Zimmermann     2024-09-24  357  	drm_client_setup(drm, NULL);
+efbb9df91e03b31 Noralf Trønnes        2018-09-08  358  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  359  	return 0;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  360  
+e31803f51415af4 Myeonghun Pak         2026-05-25  361  uninstall_poll:
+e31803f51415af4 Myeonghun Pak         2026-05-25  362  	drm_kms_helper_poll_fini(drm);
+2d8f92897ad816f Jean-Philippe Brucker 2019-03-22 @363  uninstall_irq:
+65a969655cb91fa Thomas Zimmermann     2021-07-06  364  	free_irq(priv->vsync_irq, drm);
+fa747d75f65d1b1 Martin Blumenstingl   2021-12-31  365  exit_afbcd:
+fa747d75f65d1b1 Martin Blumenstingl   2021-12-31  366  	if (priv->afbcd.ops)
+fa747d75f65d1b1 Martin Blumenstingl   2021-12-31  367  		priv->afbcd.ops->exit(priv);
+a695949b2e9bb6b Yao Zi                2024-07-03  368  free_canvas_vd1_2:
+a695949b2e9bb6b Yao Zi                2024-07-03  369  	meson_canvas_free(priv->canvas, priv->canvas_id_vd1_2);
+a695949b2e9bb6b Yao Zi                2024-07-03  370  free_canvas_vd1_1:
+a695949b2e9bb6b Yao Zi                2024-07-03  371  	meson_canvas_free(priv->canvas, priv->canvas_id_vd1_1);
+a695949b2e9bb6b Yao Zi                2024-07-03  372  free_canvas_vd1_0:
+a695949b2e9bb6b Yao Zi                2024-07-03  373  	meson_canvas_free(priv->canvas, priv->canvas_id_vd1_0);
+a695949b2e9bb6b Yao Zi                2024-07-03  374  free_canvas_osd1:
+a695949b2e9bb6b Yao Zi                2024-07-03  375  	meson_canvas_free(priv->canvas, priv->canvas_id_osd1);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  376  free_drm:
+dcacf65139e3def Christophe JAILLET    2018-03-12  377  	drm_dev_put(drm);
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  378  
+42dcf15f901c822 Neil Armstrong        2023-05-30  379  	meson_encoder_dsi_remove(priv);
+6a044642988b5f8 Neil Armstrong        2023-05-30  380  	meson_encoder_hdmi_remove(priv);
+6a044642988b5f8 Neil Armstrong        2023-05-30  381  	meson_encoder_cvbs_remove(priv);
+6a044642988b5f8 Neil Armstrong        2023-05-30  382  
+6a044642988b5f8 Neil Armstrong        2023-05-30  383  	if (has_components)
+6a044642988b5f8 Neil Armstrong        2023-05-30  384  		component_unbind_all(dev, drm);
+6a044642988b5f8 Neil Armstrong        2023-05-30  385  
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  386  	return ret;
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  387  }
+bbbe775ec5b5dac Neil Armstrong        2016-11-10  388  
 
-  def syn_check(opts):
-      sport = RandShort()
-      ip = IP(dst=args.target_ip)
-      syn = TCP(sport=sport, dport=args.target_port, flags="S",
-seq=1000, options=opts)
-      synack = sr1(ip/syn, timeout=1, verbose=False)
-      send(ip/TCP(sport=sport, dport=args.target_port, flags="R",
-seq=syn.seq+1),
-           verbose=False)
-      return not not (synack and synack.haslayer(TCP) and
-synack[TCP].flags == 0x12)
-
-  for i in range(7):
-      n = 5
-      ok = sum(syn_check(gen_mss_syn_options(i)) for _ in range(n))
-      print(f"{i} nops + mss, {ok}/{n} probes responded")
-
-Before:
-
-  0 nops + mss, 5/5 probes responded
-  1 nops + mss, 0/5 probes responded
-  2 nops + mss, 5/5 probes responded
-  3 nops + mss, 0/5 probes responded
-  4 nops + mss, 5/5 probes responded
-  5 nops + mss, 0/5 probes responded
-  6 nops + mss, 5/5 probes responded
-
-After:
-
-  0 nops + mss, 5/5 probes responded
-  1 nops + mss, 5/5 probes responded
-  2 nops + mss, 5/5 probes responded
-  3 nops + mss, 5/5 probes responded
-  4 nops + mss, 5/5 probes responded
-  5 nops + mss, 5/5 probes responded
-  6 nops + mss, 5/5 probes responded
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
