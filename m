@@ -1,82 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07FA3DC4CB;
-	Wed, 27 May 2026 13:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A916423A67;
+	Wed, 27 May 2026 13:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779890105; cv=none; b=Dp+iyP8HhYZCCsBs8Fnyka4NusP5V9I4LnSKuFkweYXZR/7KqMPEvknzXVg7SiaZHbmsYJm7Oq27bJ8EljSgL1ovYNcAVqPQADaBV1N6TA13/W5hY2pn9pPA1bKdnlPsSh1lg6EmbORgEYelVK2BtaE9+kDjs2/q0UJ0NJmXmDA=
+	t=1779890312; cv=none; b=CeKDdCChgkNWv9z8ppmR/Nq8451WrKIjIwAOO9antATrb3V7ExmFDzfFeM/vfqjWvI5MjB3htgdf1W0q7RmHFVR2YKBVd0ieogtqYuND+MBUHwmbvbSIgtoddm8xHjAixlucv44nA/pZ1HDSX/ggAc06f8c1bvlybjFPfCRmLsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779890105; c=relaxed/simple;
-	bh=PAQny02UQuphsRSJ0GCA5rxjLiP0Wa2G119yYk9uVFU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=oN+sw1wsTIsxf1RWeIStPQSVorF2bywaMCuO/8Z575txsqvdct4LnATT8UJJ4sDGzYm7sBCicaiYrnKqPz76sD6MVqStBpa0bGhI5UNXji7C4wcdF94iyNhDegpE6OjkC1exUa0QpzPN8FVxyil7OtRwl2JiO3v9fkOe32/sdWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e1Lsuo6G; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779890312; c=relaxed/simple;
+	bh=HtSfq1VPs9AMP26cxMF9avyydNGqum+AU/zKQ5ztens=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WVe9n38HHMghGbjyb3PAXPzhl2JNsoV+MuaWqzuo3L3u83ZWqaOAsEQDNvjseyIAmVR13k9EQEvvxd6HRUdAx4Pt5+vEcq9oRCFgpALOTSDWd/MLjqM9hbbOMalVzmceeo69kZYmVNHBB1RgPbYFJkGXzR+E/JrIYdlhYKur7xU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FgyQ8yrY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e1Lsuo6G"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779890103; x=1811426103;
-  h=date:from:to:cc:subject:message-id;
-  bh=PAQny02UQuphsRSJ0GCA5rxjLiP0Wa2G119yYk9uVFU=;
-  b=e1Lsuo6GwbDGvhiXPigfzB0azwup67SuwzHGk8zqzd1EZVqEMAgY18cE
-   VjURC5Cix0yQhQXQG5AZu03NCVf1Ev7xWD08h6cpAsQBHL4Zk1ULsgzG6
-   Lt/lr5GlIWRXB0RVoslk3+gIWRl7Jv4neu/aKgDuwVzQPm9mB+DcZ05Bh
-   EVKTZW50DCtxFQA66Vl2J0UpxqI4r7NYOiCAInx8zUKZDiqQFigEfZLI2
-   bRiUYPdPEBzogB1u+vdcNmzIYAioIRXfQSS04AW+m5g6L/FirI/8BwZJb
-   2ZwGKCfLwbLUU5QuzaHWTJGrmN0ILegPtOPzzqagly4tu7Hnr3hBgttCI
-   Q==;
-X-CSE-ConnectionGUID: yzjvBUxLSVWSgcuBFaVrfw==
-X-CSE-MsgGUID: CB+h8oMCTxymeMPAfHLiVg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="91408575"
-X-IronPort-AV: E=Sophos;i="6.24,171,1774335600"; 
-   d="scan'208";a="91408575"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 06:55:03 -0700
-X-CSE-ConnectionGUID: eoUlQ4TBTAuIu37UKT3uQw==
-X-CSE-MsgGUID: WZQzm/4MRDidDjvQKKfVuA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,171,1774335600"; 
-   d="scan'208";a="238077146"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 27 May 2026 06:55:01 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wSEio-0000000040Y-2VIJ;
-	Wed, 27 May 2026 13:54:58 +0000
-Date: Wed, 27 May 2026 21:54:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Mark Brown <broonie@kernel.org>
-Subject: [linux-next:master 7957/8013] WARNING: modpost: vmlinux:
- section mismatch in reference: tdx_module_run_update+0x240 (section: .text)
- -> get_tdx_sys_info_version (section: .init.text)
-Message-ID: <202605272110.QiNGdptX-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FgyQ8yrY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB21B1F00A3D;
+	Wed, 27 May 2026 13:58:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779890310;
+	bh=KuqFQwlEXxVURmtb9qRVFE2EZ//e5lQiwjh7+2MN4DA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=FgyQ8yrYj5laqK22iHPL6Y/09F8TueBz9OgYoqSskBgvrZ4EKcJ/K875PW7DMTxY0
+	 oxSn/jI347HLS/TRJ+M/CjZmChwC/zVUVD+R9Cj1CmIpLfwzfRhgF5M10dnoZe4G/p
+	 1i01X8UUxtMXVU+a/dlrSZDZiSMMlg3rMN+ifvXrrlenUG6bGXSZ4MW1d9k8o/xgMb
+	 h0OEOZ8SAW3iTgnzmsL2nR7tGTI0BkBuKc3DNf/PZ0SPBttO7a/S+0TpRvy3IgkV/+
+	 Po7h0URqoXA0gqrEt92n+OZrEJKES18kChs1CnNiAZYDGtLwLF41coMcfnRf1dClsY
+	 IYYhyM8FkEFPg==
+Date: Wed, 27 May 2026 14:58:24 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 1/2] rust: kasan: KASAN+RUST requires clang
+Message-ID: <736d3bc7-9285-4c94-8a68-afb37ef27167@sirena.org.uk>
+References: <20260408-kasan-rust-sw-tags-v3-0-e07964d14363@google.com>
+ <20260408-kasan-rust-sw-tags-v3-1-e07964d14363@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="VR46wcgkWwqEKGEO"
+Content-Disposition: inline
+In-Reply-To: <20260408-kasan-rust-sw-tags-v3-1-e07964d14363@google.com>
+X-Cookie: Mene, mene, tekel, upharsen.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   e7e28506af98ce4e1059e5ec59334b335c00a246
-commit: f2deea5559644fe8296d034da97bb5d07e1d7299 [7957/8013] Merge branch 'next' of https://github.com/kvm-x86/linux.git
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20260527/202605272110.QiNGdptX-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260527/202605272110.QiNGdptX-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605272110.QiNGdptX-lkp@intel.com/
+--VR46wcgkWwqEKGEO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+On Wed, Apr 08, 2026 at 08:32:16AM +0000, Alice Ryhl wrote:
+> Kernel KASAN involves passing various llvm/gcc specific arguments to
+> the C and Rust compiler. Since these arguments differ between llvm and
+> gcc, it's not safe to mix an llvm-based rustc with a gcc build when
+> kasan is enabled.
 
->> WARNING: modpost: vmlinux: section mismatch in reference: tdx_module_run_update+0x240 (section: .text) -> get_tdx_sys_info_version (section: .init.text)
+FWIW this has the effect of turning off rust for an allmodconfig unless
+you're using LLVM=1.  That's probably the right thing to do but it means
+you might've lost a bunch of coverage.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--VR46wcgkWwqEKGEO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoW+H8ACgkQJNaLcl1U
+h9B2fQf+JuuwWKT7HJ/sduPGlYRYDoFCctj8jzyDwu7nLSrOJEaU6wwu+wWKSYsc
+rfZ2f4UVYiJDXnVy3YwoYfUggqxatpkhD4G/8pUx+Qc02bcduclFw3iqQ2TuaG+0
+oXInpcgNL9JGEWS3fQwFZLfyuGl6Amy/Oaqt0IvAdCtFjHAgqTgk7WIXG4pozqx/
+TjM3WLmNnzSe5GR+DXYq0jZYvUeVpQkLVaYiwTLTmrFCm1PsUdnChpqih9ayIILz
+D0jyuQBq5+yGY+BhvBKqECb4uu7r1lhVuzsH7hYXIrs29Yukvi4se2WZZNF1GI++
+b4o5YwWBy8+j2uEgY+V1OiNZsC6P+w==
+=R/4T
+-----END PGP SIGNATURE-----
+
+--VR46wcgkWwqEKGEO--
