@@ -1,99 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB94734389F;
-	Thu, 28 May 2026 00:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B062F9985;
+	Thu, 28 May 2026 02:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779929641; cv=none; b=s81fUn9lQtAhoaUAymeWrXEsjlVrBrueX8x9HW9fMGJOONc8rAMLkD55AOeabbzNnQ71jjcmqZU+UI63uS2k0Jc1YpplfxEbl+QGOKGEDvBQwaJ69wlHST6VfT3zmbzztDuSXOqAm4ICCnwVb1L0ncIV1uJaMzO3wYgPm+ayQC4=
+	t=1779935833; cv=none; b=c8nhwbghZCYYM/0825ZEVRFzI1a1hdhX6AzyaL2+v47rClpxYYkSyC0OV7BXCOOHV8R7iOZh5+L0HYiH3Egb9OJ96/NMf07LPjUsx3BlXVO1mvUB2NvFqLyXRRNXP6Md/yBLtFmsU+lbBHTIY4FcdXdGx3tAlc+vNlQodPk2HT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779929641; c=relaxed/simple;
-	bh=7OieC3j4bhoQbAcyiuNCBDiS2VUTkSjW62BflYGByCc=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=KjWwaivOfLBqoK7qCHMFXbLvxLCNUEIUSegtlPm8mib7wLzhm4OxZ/3YUdcAQ8lNBkO40FNJAuyAALrNcmDZj6Smzr7UX4fcW9vWz4nkfNNpUP7N/9DQ0vsPO5epV1BRspCfdhdn3YM1zMVTu2BY9IUHodI5+BoPefGc56GsBO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cyMy4vBn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779935833; c=relaxed/simple;
+	bh=khOy1YHkLh2at/czqg+ErAUw3NkZTduS66BBN1JphJs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ebVy0gq2LYeCPvGY1bMjOuSABEOZBvBRlAU0uQq5dUDT5iRF9ziKmlCTgsdj1IvFECRt47f2LKM/A2yoQMq5KRrVjZ35GLbIRVSKYPoQdB6wsE5xP9CUZ9utqI2h7LzO2y81WWiHmbfsMjJ+ENwypQ+3AkUv7savBCyrGl9lh20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nS1N1ITZ; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cyMy4vBn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 701321F000E9;
-	Thu, 28 May 2026 00:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779929639;
-	bh=pdDjIkNijKLPqQZZjvl89rVWZJDBbIPWDE3n8/9bQ/U=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=cyMy4vBn+6CqelyL/RfAXqBmOY+xqIsWgJ5euNlyQbxOWpyZE7sFT6RkYNdPtHaYr
-	 rFVWSessbHo/uJIV2IvLs2xMDPbS0andOm4ed7iwzoVYECyh0WqTiJeu7Exwo2iio9
-	 kjerszR3XwJ14ozmGVvWhG4pNUGuZTXwFB719S9qCmwlFct5VzOc5GqDHipCxDuQSG
-	 PrgRUycJTsJxermakUvRH4H3otYT+JClQx+mPOsmndezmFfNqoeG9h8M851ra2a/5i
-	 7Hn3jwJgeV91PEJnUt3kRlJM/6oM1f7tAdqjhDmPs3jRKKMFWZN5pUgaOHiJoIir8T
-	 /L4a0ug0BSpUQ==
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nS1N1ITZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779935832; x=1811471832;
+  h=date:from:to:cc:subject:message-id;
+  bh=khOy1YHkLh2at/czqg+ErAUw3NkZTduS66BBN1JphJs=;
+  b=nS1N1ITZZ71BVfg+bq7iMEu9fLmskQwx7qf3eevbq12nRTAEWAk02uaE
+   O55lvyH/V5iSZ5n84br5zE5JN4f4gje9k9kN6PWfdbtmGw5yhk+ybSZM2
+   H6CK1TC0cStGnTbZNUgcus2ApVBaFmmahLB4Q7T2xpOwryl68Qy+TPCEp
+   2P3FXE8rV+uWvIH1qbFgNE5ntOufzqMsEI7gOPVq5aI+Ui5BRUSGNZI+6
+   VlxRb2j0I5oAzQySMbnmjnPPR/PvB4+iPHr92rCGEQsN8eAQu841nOIH+
+   pIzdYWDyOSyzagd7ilZhMAi+0t1+FxV2r9C14dhKzZpxjiDO/71QwwYtG
+   w==;
+X-CSE-ConnectionGUID: yi/BUraCRUallZl5XzIrfg==
+X-CSE-MsgGUID: rSChS56kSvuUwZep2wuB/w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="98352224"
+X-IronPort-AV: E=Sophos;i="6.24,172,1774335600"; 
+   d="scan'208";a="98352224"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 19:37:08 -0700
+X-CSE-ConnectionGUID: Auj00iVvRbCjAEG+YrsS4g==
+X-CSE-MsgGUID: f1mOuKQHR7OYfqX/8jPueQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,172,1774335600"; 
+   d="scan'208";a="239840185"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 27 May 2026 19:37:05 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wSQcJ-000000000FN-1Noq;
+	Thu, 28 May 2026 02:37:03 +0000
+Date: Thu, 28 May 2026 04:36:32 +0200
+From: kernel test robot <lkp@intel.com>
+To: Karan Tilak Kumar <kartilak@cisco.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>, Sesidhar Baddela <sebaddel@cisco.com>,
+ Arulprabhu Ponnusamy <arulponn@cisco.com>,
+ Gian Carlo Boffa <gcboffa@cisco.com>, Arun Easi <aeasi@cisco.com>,
+ Hannes Reinecke <hare@kernel.org>, Lee Duncan <lduncan@suse.com>
+Subject: ERROR: modpost: "nvme_fc_set_remoteport_devloss"
+ [drivers/scsi/fnic/fnic.ko] undefined!
+Message-ID: <202605280430.wTYAqI3A-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v10 3/3] kbuild: distributed build support for Clang
- ThinLTO
-From: Nathan Chancellor <nathan@kernel.org>
-To: xur@google.com
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nicolas.schier@linux.dev>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Yonghong Song <yonghong.song@linux.dev>, Bill Wendling <morbo@google.com>, 
- Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
- Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
- Sami Tolvanen <samitolvanen@google.com>, 
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
- Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
- Stafford Horne <shorne@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Piotr Gorski <piotrgorski@cachyos.org>, 
- Venkat Rao Bagalkote <venkat88@linux.ibm.com>, 
- Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
- Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-In-Reply-To: <20260526172926.2717929-4-xur@google.com>
-References: <20260526172926.2717929-1-xur@google.com>
- <20260526172926.2717929-4-xur@google.com>
-Date: Wed, 27 May 2026 17:53:48 -0700
-Message-Id: <177992962862.1361033.11249653355160017674.b4-review@b4>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1013; i=nathan@kernel.org;
- h=from:subject:message-id; bh=7OieC3j4bhoQbAcyiuNCBDiS2VUTkSjW62BflYGByCc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFnik5T15riviJu1iXvf3eyNNgYaT89zO9wWOPXX/8D9b
- ubU/b7MHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAi9QIMfzjurRH43/6pVj5z
- /enrN/k9tvX0ubIxGC0JPHjhb/yUq5cZGaa0C+xd2dadtNmMbeqNGdOmu1/meui/UL88y2jN8f9
- /ZjADAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue, 26 May 2026 10:29:26 -0700, xur@google.com <xur@google.com> wrote:
-> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> index 0718e39cedda..b36c7c6817bd 100644
-> --- a/scripts/Makefile.lib
-> +++ b/scripts/Makefile.lib
-> @@ -249,6 +249,12 @@ ifdef CONFIG_LTO_CLANG
->  cmd_ld_single = $(if $(objtool-enabled)$(is-single-obj-m), ; $(LD) $(ld_flags) -r -o $(tmp-target) $@; mv $(tmp-target) $@)
->  endif
->  
-> +ifdef CONFIG_LTO_CLANG_THIN_DIST
-> +# Save the _c_flags, sliently.
-> +quiet_cmd_save_c_flags =
-> +      cmd_save_c_flags = printf '\n%s\n' 'saved_c_flags_$@ := $(call escsq,$(_c_flags))' >> $(dot-target).cmd
+tree:   https://github.com/intel-lab-lkp/linux/commits/Karan-Tilak-Kumar/scsi-fnic-Make-debug-logging-protocol-independent/20260528-040540
+head:   36a4121c6d75bc8b76d0f8211fb04fb4957393e1
+commit: 0b04eb634acdf0b014cff5642fe8ea44a186a67c scsi: fnic: Add the NVMe/FC transport path
+date:   6 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260528/202605280430.wTYAqI3A-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605280430.wTYAqI3A-lkp@intel.com/reproduce)
 
-Sashiko notes that we might want modkern_cflags here as well, which
-seems like it could really matter for LoongArch?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605280430.wTYAqI3A-lkp@intel.com/
 
-  https://sashiko.dev/#/patchset/25040?part=3
+All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-The other comments might be relevant too but I did not look too closely
-as I am wrapping up my day but I wanted to bring this to your attention
-sooner rather than later.
+   drivers/scsi/fnic/fnic_nvme.c:227:6: warning: variable 'idx' set but not used [-Wunused-but-set-variable]
+     227 |         int idx;
+         |             ^
+>> drivers/scsi/fnic/fnic_nvme.c:373:23: warning: variable 'tport' set but not used [-Wunused-but-set-variable]
+     373 |         struct fnic_tport_s *tport;
+         |                              ^
+   drivers/scsi/fnic/fnic_nvme.c:509:23: warning: variable 'tport' set but not used [-Wunused-but-set-variable]
+     509 |         struct fnic_tport_s *tport;
+         |                              ^
+>> drivers/scsi/fnic/fnic_nvme.c:664:16: warning: variable 'start_time' set but not used [-Wunused-but-set-variable]
+     664 |         unsigned long start_time;
+         |                       ^
+   drivers/scsi/fnic/fnic_nvme.c:666:23: warning: variable 'tport' set but not used [-Wunused-but-set-variable]
+     666 |         struct fnic_tport_s *tport;
+         |                              ^
+   5 warnings generated.
+--
+>> ERROR: modpost: "nvme_fc_set_remoteport_devloss" [drivers/scsi/fnic/fnic.ko] undefined!
+>> ERROR: modpost: "nvme_fc_unregister_localport" [drivers/scsi/fnic/fnic.ko] undefined!
+>> ERROR: modpost: "nvme_fc_unregister_remoteport" [drivers/scsi/fnic/fnic.ko] undefined!
+>> ERROR: modpost: "nvme_fc_register_remoteport" [drivers/scsi/fnic/fnic.ko] undefined!
+>> ERROR: modpost: "nvme_fc_register_localport" [drivers/scsi/fnic/fnic.ko] undefined!
 
--- 
-Cheers,
-Nathan
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
