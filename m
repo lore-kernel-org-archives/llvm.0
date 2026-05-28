@@ -1,170 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA7A3B388B;
-	Thu, 28 May 2026 09:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85CA38A72C;
+	Thu, 28 May 2026 09:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779962355; cv=none; b=kgr5aCXQr1RO60N+qdvJVuO5KVRJPnMWYQIuE88uDPkL/vwFlegLSf8NbslVVNdWNnLVxM8Isy1UMj6YUzNDwk3No/0NzjVX/cRM7aufHn2012Oy/7ChH9wOYJtl2Gho8hT/HGOEsyC1NOrXZlyiwdG7IT8lJLJx7t8t9RPfmQ4=
+	t=1779962355; cv=none; b=u01rC8q9K6fHKmS6r2QPappe2jNFeE6DYeGIgLhOPv11Nmacq+XfO2OvzJB9AGuLhIqIiOxg4SVNMRVkP2wwKzXiDqT7moKs4KoIbpc/OlK615bALnysSP3Wbl6Sk/sZ9CNQklb6uxB87KLcIgsP6jECI9ndBZToJjl7sba0KRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779962355; c=relaxed/simple;
-	bh=YcSqz8rIvXiHdos4uH83Vi6/oh8HcyJ26DO/bOa0v+Y=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=oZ0agh/NKSLoMnr1hvGhVX3Wa3D48AyQ6LA10I3SnaGd97r/r1B8xMQ3z6wKe/VGfE1pjOtI/ec+HDAbrndAZ3rIWsGBJz80P68Vcbj1Drb5zgA7h7QMH/040/Tu7SeXvujF45CTZbGj/bbBCLAnN3z0ADvF6XWriqnzIjreMHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cx/KDjUw; arc=none smtp.client-ip=198.175.65.9
+	bh=u4KQyevO0lsjfzitdwGKGzyIBtc5q/zb1uFGBX9/SAU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KvQX5xC7pieknRC0K/BWMx1wW84jbSXvUvRwZCL0bgv/cNzexe1rD3bllSXTC6qzobC2ap0JnaRD0mfhVQYOFuyB0EO0C5ZFHtLDMQoJVejQkTiFWBNMuO29xNUqy8rZwltTuKZjQdicgwMqAl4iB9Xgt8G2BP8Je65P/2KiD9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yrdx6iLv; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cx/KDjUw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yrdx6iLv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1779962354; x=1811498354;
-  h=date:from:to:cc:subject:message-id;
-  bh=YcSqz8rIvXiHdos4uH83Vi6/oh8HcyJ26DO/bOa0v+Y=;
-  b=Cx/KDjUwngJWmG9b+5D3k7sPvvDyhkwqX10zV2FIhCZgR4LhuxMRror5
-   dVv6pw2KEF0p3e10Ib/8MPaVDjSzREGf6zFE38bhPtAiWvNB/675a7DmC
-   E/LmetajrDgLuA08CAraptstIrJftEfOUxvE2yrnnI8CrGdpxMQHnes5v
-   waqNuQFEaxQnHM3Yr4zd4KWZRXXlVeiLqbqDznPNhr5weHnXM5XPTeKDT
-   Wfy1DZz+YjpN6P9EriCDv4DqPGxxJhrCdBzTYt2YESHfRvC83yRiwq2d7
-   w3zgmZ07VN+JCXqvc18qIorBR5J8QYVq5YOVuH3MFsYZ9Arn96va3Uc5x
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u4KQyevO0lsjfzitdwGKGzyIBtc5q/zb1uFGBX9/SAU=;
+  b=Yrdx6iLv5lUNmvMJ5jpbiVGcehmPWGZXjVZIYixKhOsVe6JK29NyiYAn
+   KKnvK9OIYvZGJqTgWJIfzWIa1jc70KzGviYSrSSdUY8XWr+0/AcnfCt07
+   2+G0S9uLL8+PguMRUyn+E8EzHcoJztoPAPym7K5caDsCWt0JEdg+qMB6P
+   XBjeRz5fQpJaWGfnU5vrWiXJxNKK3P8TkUjsDsVHnFkR+jX2LRfpb8oHu
+   6oz1VBZYHHPsQ29R+clfK3wH7BL4mrllo2E97dCZ0nW604YSza9iw0q7e
+   qYKjCOiArTAdZ1KNnyFO1yV0nIU62kclW5LBeqVia8M2UDe2aQ1qrtx9b
    Q==;
-X-CSE-ConnectionGUID: St+PzvJ+Qp2KaEvCX+aLuA==
-X-CSE-MsgGUID: /nH1Uex7Tsigz2T1/++jhA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="103475573"
+X-CSE-ConnectionGUID: RrTE6yKTRiWM+IpSH44+cw==
+X-CSE-MsgGUID: Ss2vD4YDSU+SyhoB21PuGg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="84690777"
 X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
-   d="scan'208";a="103475573"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 02:59:13 -0700
-X-CSE-ConnectionGUID: 1FjPrJFQQ1+Oxhf9yFQ8GQ==
-X-CSE-MsgGUID: THrLNQ56Ta2juBfqiuYhwg==
+   d="scan'208";a="84690777"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 02:59:14 -0700
+X-CSE-ConnectionGUID: bx3Fkm9MQyOeZz9pp4l+wQ==
+X-CSE-MsgGUID: wNR4CYXHQn6vbs38vm32ow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
-   d="scan'208";a="239933896"
+   d="scan'208";a="238322484"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 28 May 2026 02:59:10 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 28 May 2026 02:59:10 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wSXW7-000000005oM-1KFU;
+	id 1wSXW7-000000005oK-1CaQ;
 	Thu, 28 May 2026 09:59:07 +0000
-Date: Thu, 28 May 2026 17:58:34 +0800
+Date: Thu, 28 May 2026 17:58:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kairui Song <kasong@tencent.com>
+To: Li kunyu <likunyu10@163.com>, mingo@redhat.com, peterz@infradead.org,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- David Hildenbrand <david@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Linux Memory Management List <linux-mm@kvack.org>,
- mm-commits@vger.kernel.org
-Subject: [akpm-mm:mm-unstable 199/420] mm/memcontrol-v1.c:651:24:
- error: call to undeclared function 'swp_cluster_offset'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202605281711.bSeZlErK-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-kernel@vger.kernel.org, Li kunyu <likunyu10@163.com>
+Subject: Re: [PATCH v2] kernel/sched/fair: Fix the issue of virtual runtime
+ conversion error
+Message-ID: <202605281756.0qWgdGW5-lkp@intel.com>
+References: <20260527072113.359604-1-likunyu10@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260527072113.359604-1-likunyu10@163.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   8a74e22643189e0ae339afc91110ddb4cab1941b
-commit: 93680c2b51fa1f84fe50800b71140dbd283372b8 [199/420] mm/memcg, swap: store cgroup id in cluster table directly
-config: arm-randconfig-004-20260528 (https://download.01.org/0day-ci/archive/20260528/202605281711.bSeZlErK-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9409c07de6378507397ecdb6f05f628f58110112)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605281711.bSeZlErK-lkp@intel.com/reproduce)
+Hi Li,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on peterz-queue/sched/core linus/master v7.1-rc5 next-20260527]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-kunyu/kernel-sched-fair-Fix-the-issue-of-virtual-runtime-conversion-error/20260527-152554
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20260527072113.359604-1-likunyu10%40163.com
+patch subject: [PATCH v2] kernel/sched/fair: Fix the issue of virtual runtime conversion error
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260528/202605281756.0qWgdGW5-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605281756.0qWgdGW5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605281711.bSeZlErK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605281756.0qWgdGW5-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/memcontrol-v1.c:651:24: error: call to undeclared function 'swp_cluster_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     651 |         __swap_cgroup_set(ci, swp_cluster_offset(folio->swap), nr_entries,
-         |                               ^
-   mm/memcontrol-v1.c:721:31: error: call to undeclared function 'swp_cluster_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     721 |         id = __swap_cgroup_clear(ci, swp_cluster_offset(folio->swap),
-         |                                      ^
-   2 errors generated.
+>> kernel/sched/fair.c:7632:6: warning: variable 'delta' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    7632 |         if (unlikely(se->load.weight != NICE_0_LOAD))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:77:22: note: expanded from macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:7644:28: note: uninitialized use occurs here
+    7644 |         hrtick_start(rq, (scale * delta) / 1024);
+         |                                   ^~~~~
+   kernel/sched/fair.c:7632:2: note: remove the 'if' if its condition is always true
+    7632 |         if (unlikely(se->load.weight != NICE_0_LOAD))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    7633 |                 delta = div64_ul(NICE_0_LOAD * vdelta, se->load.weight);
+   kernel/sched/fair.c:7615:11: note: initialize the variable 'delta' to silence this warning
+    7615 |         u64 delta;
+         |                  ^
+         |                   = 0
+   1 warning generated.
 
 
-vim +/swp_cluster_offset +651 mm/memcontrol-v1.c
+vim +7632 kernel/sched/fair.c
 
-   606	
-   607	/**
-   608	 * __memcg1_swapout - transfer a memsw charge to swap
-   609	 * @folio: folio whose memsw charge to transfer
-   610	 * @ci: the locked swap cluster holding the swap entries
-   611	 *
-   612	 * Transfer the memsw charge of @folio to the swap entry stored in
-   613	 * folio->swap.
-   614	 *
-   615	 * Context: folio must be isolated, unmapped, locked and is just about to
-   616	 * be freed, and caller must disable IRQs and hold the swap cluster lock.
-   617	 */
-   618	void __memcg1_swapout(struct folio *folio, struct swap_cluster_info *ci)
-   619	{
-   620		struct mem_cgroup *memcg, *swap_memcg;
-   621		struct obj_cgroup *objcg;
-   622		unsigned int nr_entries;
-   623	
-   624		VM_WARN_ON_ONCE_FOLIO(!folio_test_swapcache(folio), folio);
-   625		VM_WARN_ON_ONCE_FOLIO(!folio_test_locked(folio), folio);
-   626		VM_BUG_ON_FOLIO(folio_test_lru(folio), folio);
-   627		VM_BUG_ON_FOLIO(folio_ref_count(folio), folio);
-   628	
-   629		if (mem_cgroup_disabled())
-   630			return;
-   631	
-   632		if (!do_memsw_account())
-   633			return;
-   634	
-   635		objcg = folio_objcg(folio);
-   636		VM_WARN_ON_ONCE_FOLIO(!objcg, folio);
-   637		if (!objcg)
-   638			return;
-   639	
-   640		rcu_read_lock();
-   641		memcg = obj_cgroup_memcg(objcg);
-   642		/*
-   643		 * In case the memcg owning these pages has been offlined and doesn't
-   644		 * have an ID allocated to it anymore, charge the closest online
-   645		 * ancestor for the swap instead and transfer the memory+swap charge.
-   646		 */
-   647		nr_entries = folio_nr_pages(folio);
-   648		swap_memcg = mem_cgroup_private_id_get_online(memcg, nr_entries);
-   649		mod_memcg_state(swap_memcg, MEMCG_SWAP, nr_entries);
-   650	
- > 651		__swap_cgroup_set(ci, swp_cluster_offset(folio->swap), nr_entries,
-   652				  mem_cgroup_private_id(swap_memcg));
-   653	
-   654		folio_unqueue_deferred_split(folio);
-   655		folio->memcg_data = 0;
-   656	
-   657		if (!obj_cgroup_is_root(objcg))
-   658			page_counter_uncharge(&memcg->memory, nr_entries);
-   659	
-   660		if (memcg != swap_memcg) {
-   661			if (!mem_cgroup_is_root(swap_memcg))
-   662				page_counter_charge(&swap_memcg->memsw, nr_entries);
-   663			page_counter_uncharge(&memcg->memsw, nr_entries);
-   664		}
-   665	
-   666		/*
-   667		 * The caller must hold the swap cluster lock with IRQ off. It is
-   668		 * important here to have the interrupts disabled because it is the
-   669		 * only synchronisation we have for updating the per-CPU variables.
-   670		 */
-   671		preempt_disable_nested();
-   672		VM_WARN_ON_IRQS_ENABLED();
-   673		memcg1_charge_statistics(memcg, -folio_nr_pages(folio));
-   674		preempt_enable_nested();
-   675		memcg1_check_events(memcg, folio_nid(folio));
-   676	
-   677		rcu_read_unlock();
-   678		obj_cgroup_put(objcg);
-   679	}
-   680	
+  7603	
+  7604	/**************************************************
+  7605	 * CFS operations on tasks:
+  7606	 */
+  7607	
+  7608	#ifdef CONFIG_SCHED_HRTICK
+  7609	static void hrtick_start_fair(struct rq *rq, struct task_struct *p)
+  7610	{
+  7611		struct sched_entity *se = &p->se;
+  7612		unsigned long scale = 1024;
+  7613		unsigned long util = 0;
+  7614		u64 vdelta;
+  7615		u64 delta;
+  7616	
+  7617		WARN_ON_ONCE(task_rq(p) != rq);
+  7618	
+  7619		if (rq->cfs.h_nr_queued <= 1)
+  7620			return;
+  7621	
+  7622		/*
+  7623		 * Compute time until virtual deadline
+  7624		 */
+  7625		vdelta = se->deadline - se->vruntime;
+  7626		if ((s64)vdelta < 0) {
+  7627			if (task_current_donor(rq, p))
+  7628				resched_curr(rq);
+  7629			return;
+  7630		}
+  7631	
+> 7632		if (unlikely(se->load.weight != NICE_0_LOAD))
+  7633			delta = div64_ul(NICE_0_LOAD * vdelta, se->load.weight);
+  7634	
+  7635		/*
+  7636		 * Correct for instantaneous load of other classes.
+  7637		 */
+  7638		util += cpu_util_irq(rq);
+  7639		if (util && util < 1024) {
+  7640			scale *= 1024;
+  7641			scale /= (1024 - util);
+  7642		}
+  7643	
+  7644		hrtick_start(rq, (scale * delta) / 1024);
+  7645	}
+  7646	
 
 --
 0-DAY CI Kernel Test Service
