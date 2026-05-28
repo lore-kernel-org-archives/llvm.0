@@ -1,140 +1,129 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9874E35AC10;
-	Thu, 28 May 2026 22:07:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 230EC367B93;
+	Thu, 28 May 2026 22:16:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780006035; cv=none; b=FEMLBdRkg1A1ujDp+ZkKd4fM69BgQbWy09FC8OzUwvbh0MF3LGWaicIOefBpfN8/+vGvT2n0D1SmqEu4xlXL2cPEWAa1G698a7Lj6X3OAmqFOQH0VXFONGuN2ffoey5vdfy15Nqsld65U6Keg/IJb9RPhyc/sIVURxvZSqAtWH8=
+	t=1780006581; cv=none; b=X0UEGlpfmoIcO7en/fIWbc7L6Hw1ahp2mjJsSrs0BtR728PaPWPbpCnsOOFCcQzuv8kQXR4rS9foCjk8mwjbzJzoT8xlpITep6E8dkc++LvDk+FpaHjpA8EUDuwXEPoZDxlVL7TyjYc34mi4HguQDWbEAeVG38cEpiZ+AI1IgZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780006035; c=relaxed/simple;
-	bh=r/TESHHd+9Ajc3Dle1HBSrY5sagpHkmz4msWbaHdOHU=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=uPFG4+p9/KZv71bkixA0or44jzp5ZHBGSni81X7InHu7o2gK/v4nAbkxIsQOBt28QGOkr3eDYF4rYCS0jHKoyDSaIjRBz6lVVu0qZgQkkQ2TqVlW/wKYsYK4c9tS0uikzAjgvNg59o48jyvol6Pq5Avcw2iVOLGwTL7mX5mxXII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z4mILtj3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780006581; c=relaxed/simple;
+	bh=EtfFqm6J96FrTAXa40Zo94HO6Jm4SlbaWU14omsN8CE=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=WRze22Wi1e+See7TCX0QHE/ll6hUqfJ9ETMfoqnvVCqqKcHgOJdXYfGo3dR/ePzIlK9VdggBAj+wmE1aIyQdusMZCSxkDTP23/TavgTLLFvv5+7H/mVIh3IueEWjGaIkjJiTnNZc09RaNOBxWDA5YNqJFcH7t4Y1LxAxKdkvxs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=DN6I2KP8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z4mILtj3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C88A1F00A3A;
-	Thu, 28 May 2026 22:07:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780006034;
-	bh=cotglDt+0ZWigWJpRRu9N7ejYCW3NC13PopI8oClGus=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=Z4mILtj3kd9q3B0+eMhQaJikZC4W7xSaIt6n5IKkjBT2Ci4y1QgmKRfSvIuVI/dh5
-	 Zg16LFe8UGOn5jfyr/VaiJddTZhNKsSCX7mX6stfhpzLIKZRsxiWU3itySJ9pAacl3
-	 vZO6fZMFViofZ3zD6W/3xxrdGnX1yfesbIHBYNchpHDqyMj/Tg6KsJH8kcKJNgct9C
-	 sK0IhIUrDr3znUYe+tSt+NxnGdyNVxg5a8jTL7Zl4S1y4j9KpuYVy/ISjEyF3hhYl4
-	 1/r52RRGSCZZKKFjYfuCpbJNGzw+nHVlYmFkVMQPoKuTdl3jkonCfo8V5/xIdmiiB8
-	 /irZDQrIWb0Pg==
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="DN6I2KP8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB7B1F000E9;
+	Thu, 28 May 2026 22:16:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1780006579;
+	bh=TLt+xHl/igW7/uoHhFaIthjEDGE139MNPnu6HA06LIU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=DN6I2KP87TaWhV4j9oHEQulEmdSIIbTijdb/JUVsfocZfVpmH44cjfqgGx0PedIqz
+	 lrahMH/RZxsTViyuI9balSrw9AB59WLtNgbIdz+AveEn4St2UJKk0KnMC7we0VEEgb
+	 +16AvK+/Ql2ILs0DX40GGLfV2k+hdAP52r412G6U=
+Date: Thu, 28 May 2026 15:16:18 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, David Hildenbrand <david@kernel.org>, Linux
+ Memory Management List <linux-mm@kvack.org>, mm-commits@vger.kernel.org,
+ "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
+Subject: Re: [akpm-mm:mm-new 429/433] mm/swap_state.c:468:19: error: call to
+ undeclared function 'folio_memcg_alloc_deferred'; ISO C99 and later do not
+ support implicit function declarations
+Message-Id: <20260528151618.7aa255415825c8d1de6ca437@linux-foundation.org>
+In-Reply-To: <202605281620.lc3rtkBm-lkp@intel.com>
+References: <202605281620.lc3rtkBm-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v11 3/3] kbuild: distributed build support for Clang
- ThinLTO
-From: Nathan Chancellor <nathan@kernel.org>
-To: xur@google.com
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nicolas.schier@linux.dev>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Yonghong Song <yonghong.song@linux.dev>, Bill Wendling <morbo@google.com>, 
- Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
- Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
- Sami Tolvanen <samitolvanen@google.com>, 
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
- Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
- Stafford Horne <shorne@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Piotr Gorski <piotrgorski@cachyos.org>, 
- Venkat Rao Bagalkote <venkat88@linux.ibm.com>, 
- Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
- Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-In-Reply-To: <20260528203905.687687-4-xur@google.com>
-References: <20260528203905.687687-1-xur@google.com>
- <20260528203905.687687-4-xur@google.com>
-Date: Thu, 28 May 2026 15:07:03 -0700
-Message-Id: <178000602351.678078.3534988919326810792.b4-review@b4>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2847; i=nathan@kernel.org;
- h=from:subject:message-id; bh=r/TESHHd+9Ajc3Dle1HBSrY5sagpHkmz4msWbaHdOHU=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFkSe3pvde1Y++nZunMVOiLTt/lNDrv8riiilueK97T5D
- 38qLH4v01HKwiDGxSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmct+N4b/zCpcl3E+11reW
- OLsoXcvRT/c48H/PYa2YZ6IyjButtNoZGaacXmwb03yBRXnxn9mvr1/mZpQW5Au+mxw9q1ra++N
- WURYA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Thu, 28 May 2026 13:39:05 -0700, xur@google.com <xur@google.com> wrote:
-> diff --git a/scripts/Makefile.thinlto b/scripts/Makefile.thinlto
-> new file mode 100644
-> index 000000000000..408b63786a08
-> --- /dev/null
-> +++ b/scripts/Makefile.thinlto
-> @@ -0,0 +1,41 @@
-> +PHONY := __default
-> +__default:
-> +
-> +include include/config/auto.conf
-> +include $(srctree)/scripts/Kbuild.include
-> +include $(srctree)/scripts/Makefile.lib
-> +
-> +native-objs := $(patsubst %.o,%.thinlto-native.o,$(call read-file, vmlinux.thinlto-index))
-> +
-> +__default: $(native-objs)
-> +
-> +# Generate .thinlto-native.o (obj) from .o (bitcode) and .thinlto.bc (summary) files
-> +# ---------------------------------------------------------------------------
-> +quiet_cmd_cc_o_bc = CC $(quiet_modtag)  $@
-> +      be_flags = $(saved_c_flags_$(<))
+On Thu, 28 May 2026 16:15:31 +0800 kernel test robot <lkp@intel.com> wrote:
 
-This change...
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
+> head:   d7d405cc33d6e3eeba2d6ec8f0b595da2a5c600a
+> commit: a5e62d9e00dac6f96174c397a82da30e7ae53064 [429/433] mm: switch deferred split shrinker to list_lru
+> config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20260528/202605281620.lc3rtkBm-lkp@intel.com/config)
+> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9409c07de6378507397ecdb6f05f628f58110112)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605281620.lc3rtkBm-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202605281620.lc3rtkBm-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> mm/swap_state.c:468:19: error: call to undeclared function 'folio_memcg_alloc_deferred'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      468 |         if (order > 1 && folio_memcg_alloc_deferred(folio)) {
+>          |                          ^
+>    1 error generated.
 
-> [ ... skip 20 lines ... ]
-> +prereq-ir-objs := $(targets:%.thinlto-native.o=%.o)
-> +existing-ir-objs := $(wildcard $(sort $(prereq-ir-objs)))
-> +
-> +-include $(foreach f, $(existing-targets) $(existing-ir-objs), $(dir $(f)).$(notdir $(f)).cmd)
-> +
-> +.PHONY: $(PHONY)
+Thanks.  How does this look?
 
-... and this change appear to break the build in certain circumstances.
 
-  | $ printf 'CONFIG_%s\n' LTO_NONE=n LTO_CLANG_THIN_DIST=y >kernel/configs/repro.config
-  |
-  | $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 mrproper defconfig repro.config vmlinux
-  | ...
-  | warning: linking module 'virt/kvm/coalesced_mmio.o': Linking two modules of different target triples: 'mm/slab_common.o' is 'aarch64-unknown-linux-gnu' whereas 'virt/kvm/coalesced_mmio.o' is 'x86_64-unknown-linux-gnu' [-Wlinker-warnings]
-  | '+v8a' is not a recognized feature for this target (ignoring feature)
-  | '-fmv' is not a recognized feature for this target (ignoring feature)
-  | '-fp-armv8' is not a recognized feature for this target (ignoring feature)
-  | '-neon' is not a recognized feature for this target (ignoring feature)
-  | '+v8a' is not a recognized feature for this target (ignoring feature)
-  | '-fmv' is not a recognized feature for this target (ignoring feature)
-  | '-fp-armv8' is not a recognized feature for this target (ignoring feature)
-  | '-neon' is not a recognized feature for this target (ignoring feature)
-  | <inline asm>:1:2: error: invalid instruction mnemonic 'dmb'
-  |         dmb ishst
-  |         ^~~
-  | 2 warnings and 3 errors generated.
-  | make[5]: *** [scripts/Makefile.thinlto:22: virt/kvm/dirty_ring.thinlto-native.o] Error 1
-  | ...
+From: Andrew Morton <akpm@linux-foundation.org>
+Subject: mm-switch-deferred-split-shrinker-to-list_lru-fix
+Date: Thu May 28 03:12:45 PM PDT 2026
 
-Looking at V=1 output, the backend flags are missing from this object
-and the other ones that errored. If I revert back to how you had it in
-v10, the build is successful and the flags appear to be included
-properly.
+fix build with CONFIG_TRANSPARENT_HUGEPAGE=n
 
-Sashiko has another comment as well.
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605281620.lc3rtkBm-lkp@intel.com/
+Link: https://lore.kernel.org/202605281620.lc3rtkBm-lkp@intel.com
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Barry Song <baohua@kernel.org>
+Cc: Dave Chinner <david@fromorbit.com>
+Cc: David Hildenbrand (Arm) <david@kernel.org>
+Cc: Dev Jain <dev.jain@arm.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Kairui Song <ryncsn@gmail.com>
+Cc: Lance Yang <lance.yang@linux.dev>
+Cc: Liam R. Howlett <liam@infradead.org>
+Cc: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Mikhail Zaslonko <zaslonko@linux.ibm.com>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Nico Pache <npache@redhat.com>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Usama Arif <usama.arif@linux.dev>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Vlastimil Babka <vbabka@kernel.org>
+Cc: Zi Yan <ziy@nvidia.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
 
-  https://sashiko.dev/#/patchset/26003?part=3
+ include/linux/huge_mm.h |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
--- 
-Cheers,
-Nathan
+--- a/include/linux/huge_mm.h~mm-switch-deferred-split-shrinker-to-list_lru-fix
++++ a/include/linux/huge_mm.h
+@@ -663,7 +663,15 @@ static inline int folio_split(struct fol
+ 	return -EINVAL;
+ }
+ 
+-static inline void deferred_split_folio(struct folio *folio, bool partially_mapped) {}
++static inline int folio_memcg_alloc_deferred(struct folio *folio)
++{
++	return 0;
++}
++
++static inline void deferred_split_folio(struct folio *folio, bool partially_mapped)
++{
++}
++
+ #define split_huge_pmd(__vma, __pmd, __address)	\
+ 	do { } while (0)
+ 
+_
 
