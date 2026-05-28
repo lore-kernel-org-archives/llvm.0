@@ -1,259 +1,167 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05692E736D;
-	Thu, 28 May 2026 18:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779991976; cv=none; b=qgeQ1GwEPIHgMRiPsJbo2wElcnx4csJDkjeFCIwKh++g2aT/lVDHYV0hW6E+J3NPfitw5bpiIlPedTFFj3detGyqiUvvFU49hYSYK/19YwWVIVfiMjGDUz5X4a8CtFpui0dXTVjdx9GK7Jb0smM2AJJ3P4t42TZYGKIv/351MEs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779991976; c=relaxed/simple;
-	bh=Ctdv0OYabhQxjDPpRvM20MVC5CcJdOQYGsbFnJQvI5U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hOIax+fg3km/4RrUYR+9qymqj5ll5udwSmCU1udoww9a7FGiW8Ev0j9eUA4q1sQpUMhwGWdSZtgAm5FNMBzZqMrWNtw6GqL+OazbdAz0hLSlMaudu/0e+XgZXaR4VJ3FJv9EnpnsjQzbWz3GjvuIeC48LZEEqiJoIGWWaehNyHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J7vXQVR8; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5D1314A8E
+	for <llvm@lists.linux.dev>; Thu, 28 May 2026 19:05:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779995114; cv=pass; b=nDU9NsuGGX8358TwGkPUL2+9RFv6QXK55B9PP7xl89B9+9+FwQoe00zEtC1d72/74UYQyDBQhc433PiXExD93ViMdtLE42LpsaDeNL5keEvikI0SDItlV3EHDK/clYKahY4RmrfK9QkAyJz82tsna5MGGltSNGoNQl3MSAusqcQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779995114; c=relaxed/simple;
+	bh=y4Bbb4J8lASYOK52zh5o+m5RzeLvKudKDuTc0Qn4b38=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uhuHogHIHu2BPVA0Hw4qARGuKnCBzImNiE9Fj6q/XWIKPmk13c7VgFBDF+XcWnJc4rx1Ft1cVbbXDT1Flbed/QONdCovoohm5MmkAxqxysUNXRKi6pidelwqGQ/e3AFKZfJCNb9cVVf9eEw2sh2GDR6ipulkO+xa82Pf8UeNQGA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FskkeXJo; arc=pass smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J7vXQVR8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779991975; x=1811527975;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ctdv0OYabhQxjDPpRvM20MVC5CcJdOQYGsbFnJQvI5U=;
-  b=J7vXQVR8A7jQOFwqXBRWZWsdoSxSZGMyoFtr1of1bM1UxKcJ85VdDRG6
-   acvFjTUnuQYHGtr0vtFeE/oOA7Cqtgq0c7WAIuPWuY2HlHuupZEp1hMRR
-   4AUCiDxbgxo8KkX/IShhhYvzMWvC+eI2kiPlhRVOB4T0grFRWb/SY6TNh
-   yQmhHjDNhbD72fAn/9DcMDdhpAaFOe9f0II8DpzOLvRB0JVvd1y1XzSYt
-   kWjj+0SfCmfD7pMVhqq4WoRue7t4wE0cqxqWeWQSR+ytrRhViUYA/I202
-   VfN4dnalwSpam/RejujzumhfYs7EQKFGaECFzWL8VYgdykEjNORIzforU
-   g==;
-X-CSE-ConnectionGUID: se2A4yf0RICPfWNyN57wTg==
-X-CSE-MsgGUID: /HRuJZP6QY2hXh9HYg1UUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11800"; a="80567132"
-X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
-   d="scan'208";a="80567132"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 11:12:54 -0700
-X-CSE-ConnectionGUID: b6TCqGmhSmmsToisHUMiNA==
-X-CSE-MsgGUID: jNKatLEgS0yer2qHq6c8sg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
-   d="scan'208";a="244442960"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 28 May 2026 11:12:51 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wSfDs-000000006HS-0bwD;
-	Thu, 28 May 2026 18:12:48 +0000
-Date: Fri, 29 May 2026 02:11:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kacper Kokot <kacper.kokot.44@gmail.com>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, stable@vger.kernel.org,
-	Kacper Kokot <kacper.kokot.44@gmail.com>
-Subject: Re: [PATCH] netfilter: TCPMSS: fix dropped packets when MSS option
- is unaligned
-Message-ID: <202605290221.PE1wkPWQ-lkp@intel.com>
-References: <20260525201116.407338-2-kacper.kokot.44@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FskkeXJo"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-516d1ddcdf4so12941cf.0
+        for <llvm@lists.linux.dev>; Thu, 28 May 2026 12:05:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779995112; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QrrZinEPSIfaUMe03AVOh84ICNQGYQ+IIoXfsWECzFjmeEPcNxZIk6tkkBOEcMsoZ8
+         S6KqZ4MoNPTAvWEn6cBVK/+tsIf2Lhe14O0vM5EavTb3lAdw5s2r1WP6J+h3e7ELsJ+N
+         yE4m6hrNtVOUfB2JsPDQbe7ky7BqXx2xuiXqYKvXAAcDbgPcWMfLXGmTiddQIeH5mi6+
+         /u9iRIdAE2y6GP9Mtc4zIvl3EIFzzIPp9GQnqEOnGLAj54ppdESCFcUgPN4YMGdg6n5P
+         X7H6IHiyjf+xQ4I4JD021EP9XmhDqOnL7BtzUG/sFZ9hDXwsMYUsk7/LDRopTjRyDgz/
+         hkPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8Fbsmv+6O7TS0nAIvm3pb4iiGQVOKjsqXhBEGEcBbPQ=;
+        fh=Vxw7CLn+yLwr8Fw7/+o7sxEOQ/4lYpQttlqnwHuT/OM=;
+        b=lnIyiHYemJhsE+gmKgK+0Pl+qDQmgMyFp43FNdtS2zVRltzMbafLhqN8ao0DH/YOX2
+         pDd5527IXniwBq9ohuRPBadfVqjJhoJdiibYRMH99zG2YhdXFadvnOTUfHhFlTuMj6YP
+         G1zYT7LrWDbAgURffkyg2EsS+T92yvJ7crd1WrnNK7DHGdYLqb1HEaiu/JgdSh6rEtf7
+         pJSx9ZzuHidyZ1j7kXyTjYySoaYuDtj9EgdJgjuKJfUcbK0W/opUSbjWAkQ0zF1Xd5Rx
+         NS3JaBi6+xgqvGwL55WM/LpZ+fO9xQLUCOdVQesBR9rdjseM+wxbrTb6hcmqH0FvHs+l
+         TWoA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779995112; x=1780599912; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Fbsmv+6O7TS0nAIvm3pb4iiGQVOKjsqXhBEGEcBbPQ=;
+        b=FskkeXJoY7cUVABlVCDA3bAieWCVI/FDocU+uhbFqfozrwsw96eNoSag3jpQW90jA1
+         SkgT6LNSr8D3pPTwAFaTh+FtbxOysoqEJ2obzdqplDyHS0KpCaP2Wxzy6pS/FCmCNr4E
+         YZrcBgVH0A+qW28SYrHy++yHLjqDTFpvyoP8TOv4WDDOxB4v4ruJY8JLQUGPfPj0jGYv
+         JYOvpVVpjmhSN/yhTk6vTCv1EwNMhhwS2wfMmMD78ZkKZuwNVjLw0S1SQUM3evv65LSJ
+         RdZSdm+ShXr2vwqNVyApB1+76jIuZTzzMXf8dsxd09AzCjJytQyCg8g2NF1Se9x9staX
+         IluA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779995112; x=1780599912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8Fbsmv+6O7TS0nAIvm3pb4iiGQVOKjsqXhBEGEcBbPQ=;
+        b=HM7YEMDcsFxjg9Ewrbbswu31tuICmEBkmsST6Z6j6JPUANikVE23amL5r/5YLB7YHB
+         dsr/r9j9z8k8u2t7xO6gMp5srDVWKM0kEkZaWj3yIckGiIwCYnGL+zUdEiWtafffpPmb
+         auSvGjAU9bob6lKxZfcV1Hh6gaeQ7f2gIbhFumam/mOQUnx502J7AdMHOmCEf8r2X5Lp
+         RpEGUCKR15AZ+LWXtNJxmjOcl8hYoo0IZJBl9M0vyGjzOPLq3xioU8WbljFqjpfq5aoh
+         SJrlYPivC3id0bQwMl3a7U2f9dbR6kH26i4IfYL0Bqb04z5FsH8vgSGgJ1jMVxr8P9Lv
+         UT1g==
+X-Forwarded-Encrypted: i=1; AFNElJ+A2w5P8OMOlFf19OdFrntJBMGtwL8pIP0EPsvCoCJE4apnlEYnXg1IYXQGUmXRDtUDci+g@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy/sYAniU5KWMjqfE+7YWYQ9LNS/5VEu2FEAq0Bn1ytiRWPZk1e
+	IEp163fkz0Syf2CBqyZaDXazOZrYrOAs/1LpQKJbPYvmWyw2l2ATsfQDaEupoanU+1td1lXrEXd
+	wZPRTQwkZ8VW1d3MUtr53BBrS79pQ3GJtbPihx0tl
+X-Gm-Gg: Acq92OElGCmQ8qVL9tP1jJFdZNhxxyyGfmU7huNwlqCTTC3jR5wsGPFtCN5RFMovxsl
+	q6Cpx6CcERc52pf8aPHrzZxFDRjCBIZMnqrVPpjyFGEEeX47xQMtMHp9SSIjR5/3ubGVY7HbvE2
+	lu9GnAFl2ppAGs7ZrqXJwMtkYFnDZQdbPBfRX3vqJJoZhDBZwmq2xq0TgM9CXLNyK5TXvW3wEF8
+	xBS+G3K8PdttjtIMo4F45Ju9Qo8B+l+Kwtmi/tYzdgXTvifN+oWoP+mXnqk4NcyGU691zS7bj4C
+	ebdb7YMW2dm+cDEo6GAeB58e1dJPjgKeOK2jqRtNV5x7jXPz
+X-Received: by 2002:a05:622a:8c14:b0:50f:bea3:9485 with SMTP id
+ d75a77b69052e-5172cc5dbedmr441831cf.2.1779995111825; Thu, 28 May 2026
+ 12:05:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260525201116.407338-2-kacper.kokot.44@gmail.com>
+References: <20260526172926.2717929-1-xur@google.com> <20260526172926.2717929-4-xur@google.com>
+ <177992962862.1361033.11249653355160017674.b4-review@b4>
+In-Reply-To: <177992962862.1361033.11249653355160017674.b4-review@b4>
+From: Rong Xu <xur@google.com>
+Date: Thu, 28 May 2026 12:04:59 -0700
+X-Gm-Features: AVHnY4Kpzs0qh2r1fVo7N5kE04LZemrV5UvvFNp2x8zXNTtJzeAxmD36VHtf_ME
+Message-ID: <CAF1bQ=Syrnb-wEfXmHpcDg3u7JVXQnDExhjWFzDAzA3paZD7mQ@mail.gmail.com>
+Subject: Re: [PATCH v10 3/3] kbuild: distributed build support for Clang ThinLTO
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
+	Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Stafford Horne <shorne@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Piotr Gorski <piotrgorski@cachyos.org>, Venkat Rao Bagalkote <venkat88@linux.ibm.com>, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Teresa Johnson <tejohnson@google.com>, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kacper,
+Hi Nathan,
 
-kernel test robot noticed the following build warnings:
+Thanks for sharing the AI review findings. Please see my responses to
+the comments below:
 
-[auto build test WARNING on nf-next/main]
-[also build test WARNING on netfilter-nf/main linus/master v7.1-rc5 next-20260527]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Wed, May 27, 2026 at 5:54=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> On Tue, 26 May 2026 10:29:26 -0700, xur@google.com <xur@google.com> wrote=
+:
+> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> > index 0718e39cedda..b36c7c6817bd 100644
+> > --- a/scripts/Makefile.lib
+> > +++ b/scripts/Makefile.lib
+> > @@ -249,6 +249,12 @@ ifdef CONFIG_LTO_CLANG
+> >  cmd_ld_single =3D $(if $(objtool-enabled)$(is-single-obj-m), ; $(LD) $=
+(ld_flags) -r -o $(tmp-target) $@; mv $(tmp-target) $@)
+> >  endif
+> >
+> > +ifdef CONFIG_LTO_CLANG_THIN_DIST
+> > +# Save the _c_flags, sliently.
+> > +quiet_cmd_save_c_flags =3D
+> > +      cmd_save_c_flags =3D printf '\n%s\n' 'saved_c_flags_$@ :=3D $(ca=
+ll escsq,$(_c_flags))' >> $(dot-target).cmd
+>
+> Sashiko notes that we might want modkern_cflags here as well, which
+> seems like it could really matter for LoongArch?
+>
+>   https://sashiko.dev/#/patchset/25040?part=3D3
+>
+This is a valid point, as users have the ability to add new flags via
+KBUILD_KERNL_FLAGS and they are likely needed to pass the backend. I
+will update saved_c_flags to include modkern_cflags.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kacper-Kokot/netfilter-TCPMSS-fix-dropped-packets-when-MSS-option-is-unaligned/20260526-041308
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git main
-patch link:    https://lore.kernel.org/r/20260525201116.407338-2-kacper.kokot.44%40gmail.com
-patch subject: [PATCH] netfilter: TCPMSS: fix dropped packets when MSS option is unaligned
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260529/202605290221.PE1wkPWQ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260529/202605290221.PE1wkPWQ-lkp@intel.com/reproduce)
+> The other comments might be relevant too but I did not look too closely
+> as I am wrapping up my day but I wanted to bring this to your attention
+> sooner rather than later.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605290221.PE1wkPWQ-lkp@intel.com/
+The second comment concerns using a shell script to get _c_flags: I
+opted for this method instead of $(saved_c_flags_$(<) to avoid loading
+$(<).cmd in the Makefile. Note that I only load $(@).cmd at the end of
+the file. However, if we would rather use the latter approach, I can
+make that change, though it will require loading $(<).cmd file.
 
-All warnings (new ones prefixed by >>):
+The third comment concerns file name matching: That is a fair point; I
+should have implemented a more precise matching criteria. I will
+address and fix this.
 
->> net/netfilter/xt_TCPMSS.c:140:45: warning: & has lower precedence than !=; != will be evaluated first [-Wparentheses]
-     140 |                         if (((char *)&opt[i + 2] - (char *)tcph) & 0x1 != 0) {
-         |                                                                  ^~~~~~~~~~
-   net/netfilter/xt_TCPMSS.c:140:45: note: place parentheses around the '!=' expression to silence this warning
-     140 |                         if (((char *)&opt[i + 2] - (char *)tcph) & 0x1 != 0) {
-         |                                                                  ^         
-         |                                                                    (       )
-   net/netfilter/xt_TCPMSS.c:140:45: note: place parentheses around the & expression to evaluate it first
-     140 |                         if (((char *)&opt[i + 2] - (char *)tcph) & 0x1 != 0) {
-         |                                                                  ^
-         |                             (                                         )
-   1 warning generated.
+I disagree with some of the comments regarding compile times. We have
+tested this build mode extensively and observed no compile-time
+regressions compared to the existing in-process ThinLTO build.
 
+I will send the updated patch shortly, after I tested the changes.
 
-vim +140 net/netfilter/xt_TCPMSS.c
+-Rong
 
-    69	
-    70	static int
-    71	tcpmss_mangle_packet(struct sk_buff *skb,
-    72			     const struct xt_action_param *par,
-    73			     unsigned int family,
-    74			     unsigned int tcphoff,
-    75			     unsigned int minlen)
-    76	{
-    77		const struct xt_tcpmss_info *info = par->targinfo;
-    78		struct tcphdr *tcph;
-    79		int len, tcp_hdrlen;
-    80		unsigned int i;
-    81		__be16 oldval;
-    82		u16 newmss;
-    83		u8 *opt;
-    84	
-    85		/* This is a fragment, no TCP header is available */
-    86		if (par->fragoff != 0)
-    87			return 0;
-    88	
-    89		if (skb_ensure_writable(skb, skb->len))
-    90			return -1;
-    91	
-    92		len = skb->len - tcphoff;
-    93		if (len < (int)sizeof(struct tcphdr))
-    94			return -1;
-    95	
-    96		tcph = (struct tcphdr *)(skb_network_header(skb) + tcphoff);
-    97		tcp_hdrlen = tcph->doff * 4;
-    98	
-    99		if (len < tcp_hdrlen || tcp_hdrlen < sizeof(struct tcphdr))
-   100			return -1;
-   101	
-   102		if (info->mss == XT_TCPMSS_CLAMP_PMTU) {
-   103			struct net *net = xt_net(par);
-   104			unsigned int in_mtu = tcpmss_reverse_mtu(net, skb, family);
-   105			unsigned int min_mtu = min(dst_mtu(skb_dst(skb)), in_mtu);
-   106	
-   107			if (min_mtu <= minlen) {
-   108				net_err_ratelimited("unknown or invalid path-MTU (%u)\n",
-   109						    min_mtu);
-   110				return -1;
-   111			}
-   112			newmss = min_mtu - minlen;
-   113		} else
-   114			newmss = info->mss;
-   115	
-   116		opt = (u_int8_t *)tcph;
-   117		for (i = sizeof(struct tcphdr); i <= tcp_hdrlen - TCPOLEN_MSS; i += optlen(opt, i)) {
-   118			if (opt[i] == TCPOPT_MSS && opt[i+1] == TCPOLEN_MSS) {
-   119				u_int16_t oldmss;
-   120				u16 csum_oldmss, csum_newmss;
-   121	
-   122				oldmss = (opt[i+2] << 8) | opt[i+3];
-   123	
-   124				/* Never increase MSS, even when setting it, as
-   125				 * doing so results in problems for hosts that rely
-   126				 * on MSS being set correctly.
-   127				 */
-   128				if (oldmss <= newmss)
-   129					return 0;
-   130	
-   131				opt[i+2] = (newmss & 0xff00) >> 8;
-   132				opt[i+3] = newmss & 0x00ff;
-   133	
-   134				csum_oldmss = htons(oldmss);
-   135				csum_newmss = htons(newmss);
-   136	
-   137				/* MSS may be unaligned; fix up the incremental checksum
-   138				 * to avoid an invalid checksum and a dropped packet.
-   139				 */
- > 140				if (((char *)&opt[i + 2] - (char *)tcph) & 0x1 != 0) {
-   141					csum_oldmss = swab16(csum_oldmss);
-   142					csum_newmss = swab16(csum_newmss);
-   143				}
-   144	
-   145				inet_proto_csum_replace2(&tcph->check, skb,
-   146							 csum_oldmss, csum_newmss,
-   147							 false);
-   148				return 0;
-   149			}
-   150		}
-   151	
-   152		/* There is data after the header so the option can't be added
-   153		 * without moving it, and doing so may make the SYN packet
-   154		 * itself too large. Accept the packet unmodified instead.
-   155		 */
-   156		if (len > tcp_hdrlen)
-   157			return 0;
-   158	
-   159		/* tcph->doff has 4 bits, do not wrap it to 0 */
-   160		if (tcp_hdrlen >= 15 * 4)
-   161			return 0;
-   162	
-   163		/*
-   164		 * MSS Option not found ?! add it..
-   165		 */
-   166		if (skb_tailroom(skb) < TCPOLEN_MSS) {
-   167			if (pskb_expand_head(skb, 0,
-   168					     TCPOLEN_MSS - skb_tailroom(skb),
-   169					     GFP_ATOMIC))
-   170				return -1;
-   171			tcph = (struct tcphdr *)(skb_network_header(skb) + tcphoff);
-   172		}
-   173	
-   174		skb_put(skb, TCPOLEN_MSS);
-   175	
-   176		/*
-   177		 * IPv4: RFC 1122 states "If an MSS option is not received at
-   178		 * connection setup, TCP MUST assume a default send MSS of 536".
-   179		 * IPv6: RFC 2460 states IPv6 has a minimum MTU of 1280 and a minimum
-   180		 * length IPv6 header of 60, ergo the default MSS value is 1220
-   181		 * Since no MSS was provided, we must use the default values
-   182		 */
-   183		if (xt_family(par) == NFPROTO_IPV4)
-   184			newmss = min(newmss, (u16)536);
-   185		else
-   186			newmss = min(newmss, (u16)1220);
-   187	
-   188		opt = (u_int8_t *)tcph + sizeof(struct tcphdr);
-   189		memmove(opt + TCPOLEN_MSS, opt, len - sizeof(struct tcphdr));
-   190	
-   191		inet_proto_csum_replace2(&tcph->check, skb,
-   192					 htons(len), htons(len + TCPOLEN_MSS), true);
-   193		opt[0] = TCPOPT_MSS;
-   194		opt[1] = TCPOLEN_MSS;
-   195		opt[2] = (newmss & 0xff00) >> 8;
-   196		opt[3] = newmss & 0x00ff;
-   197	
-   198		inet_proto_csum_replace4(&tcph->check, skb, 0, *((__be32 *)opt), false);
-   199	
-   200		oldval = ((__be16 *)tcph)[6];
-   201		tcph->doff += TCPOLEN_MSS/4;
-   202		inet_proto_csum_replace2(&tcph->check, skb,
-   203					 oldval, ((__be16 *)tcph)[6], false);
-   204		return TCPOLEN_MSS;
-   205	}
-   206	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> --
+> Cheers,
+> Nathan
+>
