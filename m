@@ -1,169 +1,166 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC7A34040F
-	for <llvm@lists.linux.dev>; Thu, 28 May 2026 21:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3827D35DA65;
+	Thu, 28 May 2026 21:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780004327; cv=none; b=F09pvV6QC4HFigA80hnO9mCmzIoxpYEHSbEL6v2P/0c04c6Hr3HelWPXWfyiJT5wEg1hypcEf6nyhLwEm4x+SOU37u+03a4TZpU6aI+01hoAeBdByFaHug+uBR66DAR8B3LpF2K3NjbP1iL9iqNPoPn9fzPSNpDTRHVTYGVKRb0=
+	t=1780004705; cv=none; b=rjAVr9Mb/oQAHEeya6RPUQQwWugy8LwG5U8ccT94M6JWpni/l4Qc7bUPeT73t3ADUezqrPODSAZ+h/bL/xZhxexYdxTCZCpNDfntUJkgMgWOn8E/6N8prBKW/mFY5wMJxq+ncmNjSGfI+OFKX6w7pEHmxbBlA1Cz6KxhUFASupg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780004327; c=relaxed/simple;
-	bh=Qm0ClVgDR801I+ouZbmXtpJMj50lr1fOBsz4IDlnCjc=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=pWsmiqWixwm6OBwSeN+LqvajrLexRvgEPDgBQ8uBSvAZaTHX0s+AyL710uTSTjwl/xSebkaS4xyA/9bSR/RlWmQgE67i1AVSHDnCN7kIKDdF15h+mejNv4u2CfBM7Q5URsZOoSdMb8HcoaSGAVUlQbXHapC1Sxct8LCeYQgZFFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ndesaulniers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i0ApNpr9; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ndesaulniers.bounces.google.com
+	s=arc-20240116; t=1780004705; c=relaxed/simple;
+	bh=sjnecVX5nIOcMHRYythtH58Mqtr54+a+OfryVaoyfhg=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Mu27URXyDsdtuG9jFkxgicEb1vghTotMHnONGgrytGvpJw4OPc9fDHJ645yKjSARGQm78Ao0Q8EpW/RNEyP1x7mp5sXpKnPR4YNVuIh6ON1bJoJeKee+QOn94oQC+i25YnCO+HW1HM42P7IybHSsFkK9dW0ffPZTAtfqbf5/YGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=t1D3p3fU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i0ApNpr9"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-304d8613efbso1329763eec.1
-        for <llvm@lists.linux.dev>; Thu, 28 May 2026 14:38:45 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="t1D3p3fU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637F41F000E9;
+	Thu, 28 May 2026 21:45:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780004325; x=1780609125; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RJqAJojaJ8zfnf1d2GA7xSP8FvOiPajlnN1Xf8Iccu8=;
-        b=i0ApNpr9RgZZgpDOBAJsFytQfYeIe6LckTNJcraCZARuaFso1d0e5Svcke1S0Xx/Zs
-         fY8xzLOxTo//UTm6s5qMioEqHz36722X8oRmUHH3mn1t5eP2hF2ewQ38CAChoXFNU7O9
-         qvR/R32kVtgFBkksPtuEXPA8ehW+WZVPKcxcChV5zi3L+eXWYc8e2kK8pP8BwTKL/vOb
-         1LvBd+qts4JMx1mvwZbQg154wcUni+eZddNbergYRnOlsoK8aGQMCAX4vzZP4SI/XlyR
-         04YYzxKXb3ee3Yg44Xse5tR/jx4nfWhaqo6qH6v9I01DhAuXAJaQb7amGfXuNfxQ/460
-         0Oow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780004325; x=1780609125;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RJqAJojaJ8zfnf1d2GA7xSP8FvOiPajlnN1Xf8Iccu8=;
-        b=Hy4oAPOGelk0IZY6p8ZCSMpaDVQcNUIuhqhew99T4iCRl3PTvNm5TDzw8BZjm/nx08
-         dCRBYZpbzF7iSAxpxZ2h1zn7f+2pVRZSdvlMEzb2To/JJijPoF9PnVbwJ7OgyQuhNcCQ
-         GFlMfGChXYLiZdnB30fXgsYJC7xY4pzFgXnr8SMyJfi4qsnapmYLyMge5Ako+5DX60kS
-         ydmoIivagVTgYzHECh2mo0/UY75S5rDUmz9eiZ/IciNBPuEYQC37J4SbiO9YpJX2/Npm
-         +jkjLb32un7WViXcHPMkhm9FJho4ktNjY/8k7tzE9X5po4eRPJ9wV01ZD2LeBZH4J4nP
-         gYxA==
-X-Forwarded-Encrypted: i=1; AFNElJ8Xw7sFDU7lBKD3pPiUTG1ZfdjQYPBTejCGYa0SX4GqZYvphuBIOOcWeYQ93+7VuxQbOaGe@lists.linux.dev
-X-Gm-Message-State: AOJu0YxiuXeW9Y31QRQojcN5oBkzJoGxTgO5yE9sp0YWc/kyH0G945IJ
-	dSiQSX6XQoB1vrSXIMuaZlRk56sCDwuce/dys2hQmI7rSIln2ysvrRH3mm/pnQhPXNyigPMWSGw
-	MVdi0+iDBg0dgByJEhxgSvAiPeuQ7+w==
-X-Received: from dyjk24.prod.google.com ([2002:a05:7300:2718:b0:303:93ec:5fc5])
- (user=ndesaulniers job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7301:1008:b0:304:6782:d57c with SMTP id 5a478bee46e88-304eb13916bmr131522eec.15.1780004324464;
- Thu, 28 May 2026 14:38:44 -0700 (PDT)
-Date: Thu, 28 May 2026 14:38:41 -0700
+	d=linux-foundation.org; s=korg; t=1780004703;
+	bh=T/hmRzBBegpzhry5lne7It+TrGap2MWq6h+hhKaTIuQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=t1D3p3fUYTz13Y/1X2Ddt/Owx9g7PCHJ4UibSTPCgBR0VYK4aY0aurH9R8E/7Gm99
+	 uihO9PJS+JxjM6JU6p5zWhT3gQV1IXXryri9yqX2hll0U5ycz70bv91yHejTzNNtWH
+	 4tDnwBx/KFPDMuI0DX4ny6N9IJ8tW6yQ3lmvaxi4=
+Date: Thu, 28 May 2026 14:45:02 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Kairui Song <kasong@tencent.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, David Hildenbrand <david@kernel.org>, Linux
+ Memory Management List <linux-mm@kvack.org>, mm-commits@vger.kernel.org,
+ Michal Hocko <mhocko@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>,
+ Johannes Weiner <hannes@cmpxchg.org>, Shakeel Butt
+ <shakeel.butt@linux.dev>, Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [akpm-mm:mm-unstable 199/420] mm/memcontrol-v1.c:651:24: error:
+ call to undeclared function 'swp_cluster_offset'; ISO C99 and later do not
+ support implicit function declarations
+Message-Id: <20260528144502.dd586e865b677051ac7c776b@linux-foundation.org>
+In-Reply-To: <202605281711.bSeZlErK-lkp@intel.com>
+References: <202605281711.bSeZlErK-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAOG1GGoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDUyML3czc+KTE5GwgkVSpa5iYkmpslJJsYGKZqgTUUlCUmpZZATYuOhb CLy5NykpNLgGZoVRbCwD3xNl3cAAAAA==
-X-Change-Id: 20260528-im_back_baby-1ade32dc049e
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=G37kqG19J0fT90FIX6gZgD3l/cpQxiU38uBYq55AfXs=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780004322; l=3204;
- i=ndesaulniers@google.com; s=20260528; h=from:subject:message-id;
- bh=e4E1W/ubyy6eoS6wLc7Upd/F0ktRDYTG2gsNUpKQwfA=; b=cgLdoDrxBSrFtk9KK92hKq8JwEIJ+hIp5Vbklh1HyqiQ9lAL6XP9u0Z8FfdNdlgyn0sHyk6R0
- sCfSeCYxqhqAWQEng533s+jL//Lk87YkR9S41SC4EfByycDV3IF80IP
-X-Mailer: b4 0.15.2
-Message-ID: <20260528-im_back_baby-v1-1-25d355efdbae@google.com>
-Subject: [PATCH] MAINTAINERS: update ndesaulniers
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Carlos Bilbao <carlos.bilbao@kernel.org>, 
-	Avadhut Naik <avadhut.naik@amd.com>, linux-kernel@vger.kernel.org, 
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org, llvm@lists.linux.dev, 
-	gosst-kernel <gosst-kernel@google.com>, 
-	android-kernel-team <android-kernel-team@google.com>, 
-	kernel-dynamic-tools <kernel-dynamic-tools@google.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-I'm coming back.  I will return.  I will possess your body, and I'll
-make LKML burn.
+On Thu, 28 May 2026 17:58:34 +0800 kernel test robot <lkp@intel.com> wrote:
 
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> head:   8a74e22643189e0ae339afc91110ddb4cab1941b
+> commit: 93680c2b51fa1f84fe50800b71140dbd283372b8 [199/420] mm/memcg, swap: store cgroup id in cluster table directly
+> config: arm-randconfig-004-20260528 (https://download.01.org/0day-ci/archive/20260528/202605281711.bSeZlErK-lkp@intel.com/config)
+> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9409c07de6378507397ecdb6f05f628f58110112)
+> rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605281711.bSeZlErK-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202605281711.bSeZlErK-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> mm/memcontrol-v1.c:651:24: error: call to undeclared function 'swp_cluster_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      651 |         __swap_cgroup_set(ci, swp_cluster_offset(folio->swap), nr_entries,
+>          |                               ^
+>    mm/memcontrol-v1.c:721:31: error: call to undeclared function 'swp_cluster_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      721 |         id = __swap_cgroup_clear(ci, swp_cluster_offset(folio->swap),
+>          |                                      ^
+>    2 errors generated.
+
+OK, CONFIG_SWAP=n.
+
+We could hack in a stub for swp_cluster_offset(), but why are we
+compiling __memcg1_swapout() at all when CONFIG_SWAP=n?  Ditto
+memcg1_swapin().
+
+How does the below look?
+
+Really this should be done as a preparatory thing, but we'll survive.
+
+
+
+From: Andrew Morton <akpm@linux-foundation.org>
+Subject: memcgv1: don't compile swap functions when CONFIG_SWAP=n
+Date: Thu May 28 02:35:22 PM PDT 2026
+
+Stub these out to save some dead code and to fix a build error with the
+upcoming "mm/memcg, swap: store cgroup id in cluster table directly".
+
+Link: https://lore.kernel.org/202605281711.bSeZlErK-lkp@intel.com
+Cc: David Hildenbrand <david@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Kairui Song <kasong@tencent.com>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- .mailmap                                                               | 1=
- -
- Documentation/process/embargoed-hardware-issues.rst                    | 2=
- +-
- Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst | 2=
- +-
- MAINTAINERS                                                            | 2=
- +-
- 4 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/.mailmap b/.mailmap
-index a009f73d7ea5..f863781b0102 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -634,7 +634,6 @@ Nicholas Piggin <npiggin@gmail.com> <npiggin@kernel.dk>
- Nicholas Piggin <npiggin@gmail.com> <npiggin@suse.de>
- Nicholas Piggin <npiggin@gmail.com> <nickpiggin@yahoo.com.au>
- Nicholas Piggin <npiggin@gmail.com> <piggin@cyberone.com.au>
--Nick Desaulniers <nick.desaulniers+lkml@gmail.com> <ndesaulniers@google.co=
-m>
- Nicolas Ferre <nicolas.ferre@microchip.com> <nicolas.ferre@atmel.com>
- Nicolas Pitre <nico@fluxnic.net> <nicolas.pitre@linaro.org>
- Nicolas Pitre <nico@fluxnic.net> <nico@linaro.org>
-diff --git a/Documentation/process/embargoed-hardware-issues.rst b/Document=
-ation/process/embargoed-hardware-issues.rst
-index 34e00848e0da..d07f16c3c7b8 100644
---- a/Documentation/process/embargoed-hardware-issues.rst
-+++ b/Documentation/process/embargoed-hardware-issues.rst
-@@ -308,7 +308,7 @@ an involved disclosed party. The current ambassadors li=
-st:
-=20
-   Google	Kees Cook <keescook@chromium.org>
-=20
--  LLVM		Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-+  LLVM		Nick Desaulniers <ndesaulniers@google.com>
-   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
- If you want your organization to be added to the ambassadors list, please
-diff --git a/Documentation/translations/sp_SP/process/embargoed-hardware-is=
-sues.rst b/Documentation/translations/sp_SP/process/embargoed-hardware-issu=
-es.rst
-index 9d444b9c46d3..7d4d694967c7 100644
---- a/Documentation/translations/sp_SP/process/embargoed-hardware-issues.rs=
-t
-+++ b/Documentation/translations/sp_SP/process/embargoed-hardware-issues.rs=
-t
-@@ -287,7 +287,7 @@ revelada involucrada. La lista de embajadores actuales:
-=20
-   Google	Kees Cook <keescook@chromium.org>
-=20
--  LLVM		Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-+  LLVM		Nick Desaulniers <ndesaulniers@google.com>
-   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
- Si quiere que su organizaci=C3=B3n se a=C3=B1ada a la lista de embajadores=
-, por
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 461a3eed6129..2f06cc2e463c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6259,7 +6259,7 @@ F:	.clang-format
-=20
- CLANG/LLVM BUILD SUPPORT
- M:	Nathan Chancellor <nathan@kernel.org>
--R:	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-+R:	Nick Desaulniers <ndesaulniers@google.com>
- R:	Bill Wendling <morbo@google.com>
- R:	Justin Stitt <justinstitt@google.com>
- L:	llvm@lists.linux.dev
+ include/linux/memcontrol.h |   15 ++++++++++-----
+ mm/memcontrol-v1.c         |    2 ++
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
----
-base-commit: 8fde5d1d47f69db6082dfa34500c27f8485389a5
-change-id: 20260528-im_back_baby-1ade32dc049e
-
-Best regards,
--- =20
-Nick Desaulniers <ndesaulniers@google.com>
+--- a/include/linux/memcontrol.h~mm-memcg-swap-store-cgroup-id-in-cluster-table-directly-fix
++++ a/include/linux/memcontrol.h
+@@ -1900,9 +1900,6 @@ static inline void mem_cgroup_exit_user_
+ 	current->in_user_fault = 0;
+ }
+ 
+-void __memcg1_swapout(struct folio *folio, struct swap_cluster_info *ci);
+-void memcg1_swapin(struct folio *folio);
+-
+ #else /* CONFIG_MEMCG_V1 */
+ static inline
+ unsigned long memcg1_soft_limit_reclaim(pg_data_t *pgdat, int order,
+@@ -1930,6 +1927,15 @@ static inline void mem_cgroup_exit_user_
+ {
+ }
+ 
++#endif /* CONFIG_MEMCG_V1 */
++
++#if defined(CONFIG_MEMCG_V1) && defined(CONFIG_SWAP)
++
++void __memcg1_swapout(struct folio *folio, struct swap_cluster_info *ci);
++void memcg1_swapin(struct folio *folio);
++
++#else
++
+ static inline void __memcg1_swapout(struct folio *folio,
+ 		struct swap_cluster_info *ci)
+ {
+@@ -1938,7 +1944,6 @@ static inline void __memcg1_swapout(stru
+ static inline void memcg1_swapin(struct folio *folio)
+ {
+ }
+-
+-#endif /* CONFIG_MEMCG_V1 */
++#endif
+ 
+ #endif /* _LINUX_MEMCONTROL_H */
+--- a/mm/memcontrol-v1.c~mm-memcg-swap-store-cgroup-id-in-cluster-table-directly-fix
++++ a/mm/memcontrol-v1.c
+@@ -604,6 +604,7 @@ void memcg1_commit_charge(struct folio *
+ 	local_irq_restore(flags);
+ }
+ 
++#ifdef CONFIG_SWAP
+ /**
+  * __memcg1_swapout - transfer a memsw charge to swap
+  * @folio: folio whose memsw charge to transfer
+@@ -723,6 +724,7 @@ void memcg1_swapin(struct folio *folio)
+ 	swap_cluster_unlock(ci);
+ 	mem_cgroup_uncharge_swap(id, nr_pages);
+ }
++#endif
+ 
+ void memcg1_uncharge_batch(struct mem_cgroup *memcg, unsigned long pgpgout,
+ 			   unsigned long nr_memory, int nid)
+_
 
