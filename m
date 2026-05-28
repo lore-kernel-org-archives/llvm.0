@@ -1,137 +1,185 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACBEB25F7B9;
-	Thu, 28 May 2026 20:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFC62139C9
+	for <llvm@lists.linux.dev>; Thu, 28 May 2026 20:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780000410; cv=none; b=reKXtD1uCbLWAeWZh6wQiFP3x08ql0gP1h+8Yq3S1rdI66loC/whFjxkxvVpgT/e4FSbhd14aPkqCp8SI+708EPJ3iNOkgSYFN1C7c2RNiMs9eUAHwJNyUc2P881fmdqgF1yKoZi3fkxrnYExyOmIteNBnr81wvYcsLW8kMtLg4=
+	t=1780000750; cv=none; b=ZqWbd7xn5az3If/h0zxhWzvDU9mx/urLX9qHCRbPBr5PUDxdUTjXLUoMb3dCGpx1OUeCRzmLCVSVKkTG4Pbp0eGECk0RG9jwLC+iySFhZJypom5n0zn0FhPLYZvjcL0Q59YaiGy+zuKXwfItDHM89+eqbKAkpndaHzH2F/ZXKx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780000410; c=relaxed/simple;
-	bh=Zj9FhbnM1hJ+o73taQpfbaKpvMFUH2QEHLmDk1RIlC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iF0C0ywekfkklEAki7xrbUV0OWFs6NBUhfV32E8uKS5YV2K9IXouRR8pvsLr3KSQRtcIqKjnp8WGdHAmIe2L/rN8wqEv63EVqfRStKt+tg+eNmUhYXPaS52kHQ/LEYX5ykxJgzMseDuG+ZfoXVyvvVdGu8NuVJysgc4i5iZXl+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pi+dhZSn; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780000750; c=relaxed/simple;
+	bh=nM3I23N6J3rf1+A39I1UKYCnI6r93ke/uZ68ANA8cws=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=QjiQsC+z45msRUKhM14OnItJkf2Yap0lY6/j2i/WsPij7KfD7PLkd5HImMgg+KfoU8eCFuR+pepZmZ3I4tF1/8UL9p7RMxzlTTPKPF+y+d8f4s6txWJWpVlOi5dABf112/YhLF5rqUEuM8Of8mypcjBfSauU2sGaYtOq7CKKF1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=buOHZCQT; arc=none smtp.client-ip=74.125.82.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pi+dhZSn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780000409; x=1811536409;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zj9FhbnM1hJ+o73taQpfbaKpvMFUH2QEHLmDk1RIlC0=;
-  b=Pi+dhZSn8qz6PImG3QjM6+8rhjd1SeiK+woe8OaMNkHUsMP+s3/n6IM4
-   cwlbo0v/knmQqKU01IUjRW78kJVN44Z9slw/CdXvkeqCQkJHALEtpnEom
-   azoLGYWaatsSXuhgJmqGiSmNshWgF6kUuLKQXao28rJDqOjqbDorqCrAV
-   kb0F6YN3xmrb/f3Jvk7hI+eMhari6AovPWW9FidOdU3cQwnTeJCmQzozz
-   iBi95VW1UCsy6MOXAmskk5Ky9Uq3KyEu6GiDQtiTnWdoeLQbvHKDTXUcf
-   0+ifq5WrQBZN2lT3aEbUk9VDEyaXNwDZpHeLvSUkart915Jfooa47e9Ni
-   Q==;
-X-CSE-ConnectionGUID: B71S/YcMQPuVFvgGsudW+Q==
-X-CSE-MsgGUID: EF2Xm0jgT8uZzUOiLscXxQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11800"; a="92327110"
-X-IronPort-AV: E=Sophos;i="6.24,174,1774335600"; 
-   d="scan'208";a="92327110"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 13:33:27 -0700
-X-CSE-ConnectionGUID: 2wnFMkTtS7qQXnam381Esg==
-X-CSE-MsgGUID: n1YgZry0RA+DqbsA2ND2DA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,174,1774335600"; 
-   d="scan'208";a="244472099"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa004.fm.intel.com with ESMTP; 28 May 2026 13:33:21 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wShPq-000000000Zp-40GA;
-	Thu, 28 May 2026 20:33:18 +0000
-Date: Thu, 28 May 2026 22:32:41 +0200
-From: kernel test robot <lkp@intel.com>
-To: Mateusz Nowicki <mateusz.nowicki@posteo.net>,
-	Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Caleb Sander Mateos <csander@purestorage.com>,
-	Sung-woo Kim <iam@sung-woo.kim>, Josef Bacik <josef@toxicpanda.com>,
-	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Ulf Hansson <ulfh@kernel.org>, Richard Weinberger <richard@nod.at>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>, Sven Peter <sven@kernel.org>,
-	Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>,
-	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Justin Tee <justin.tee@broadcom.com>,
-	Naresh Gottumukkala <nareshgottumukkala83@gmail.com>,
-	Paul Ely <paul.ely@broadcom.com>,
-	Chaitanya Kulkarni <kch@nvidia.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Thomas Fourier <fourier.thomas@gmail.com>,
-	Al Viro <viro@zeniv.linux.org.uk>, Luke Wang <ziniu.wang_1@nxp.com>,
-	Kees Cook <kees@kernel.org>, linux-block@vger.kernel.org
-Subject: Re: [PATCH v1] block: switch numa_node to int in blk_mq_hw_ctx and
- init_request
-Message-ID: <202605282203.xhTf7sMS-lkp@intel.com>
-References: <20260523125210.272274-1-mateusz.nowicki@posteo.net>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="buOHZCQT"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-13312be8a31so546189c88.1
+        for <llvm@lists.linux.dev>; Thu, 28 May 2026 13:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780000748; x=1780605548; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rYiHWgzyN9qEbPXmYY6E8njhDvnt+Sz3conx1MK3jyc=;
+        b=buOHZCQTBD4YBSG8bsoHMgm9VYEqalNa7OzZCDAimmmQkUBNEHDW04JwUQFejg/MQT
+         xExIDQiOkXPrmU0C8gkBBiguo7MOVrfq4KnP/RbZogWQ9ou3+0MBJ+hi4ZyHKIEhUkGh
+         2M0Ag3AcAYMJH85jAwngmz+I1WvZBnHqj9uUOPuKf0pwB4xCQshz2RVnTNRMu5eUeioG
+         6VkjOxWRVh4CZ1PHpzgvtvILIXF1kk10i/09LN6Hbv6R6KY/7y9v8H5faBXV2gd8jgT6
+         s/0TPhZafXGaM3mTrqRya63eVKGxdveSpwJ7m2ZOfVi+oFYeZ9oX9Hj/66l4B4J4klkj
+         3LVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780000748; x=1780605548;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rYiHWgzyN9qEbPXmYY6E8njhDvnt+Sz3conx1MK3jyc=;
+        b=j25FsUNMzmMTd893xmv5ZQBReMz5xbd4mCcFo+Bbj8gYsS+RzdhYKpvCTaFywSRjoz
+         PgJoI8lcGIPBVaR2Tr/fH4EPXo1qcInfzQ1r1bBfwVHqeyDQD+aITl9KlodJQmIY7TPU
+         T4xEl0kzMZWc2tZ4pfpEYRWgEJgq/SGa7YVm+P/G8bAAaHzcmVRyMOEvURNBCJGMU8hY
+         I8zst5zzTDM94P8rI8N2m0suNzDO0+7sJlrX4rIcKuNeTpU2CT5+s6mZGOABx3jxUx6s
+         Kt3/ceBY4D9Y+yw7MQNKmQHtp3jEk0TRlVNZlUvGR7x/8R2AlG73K+LnSh4BGAPksvos
+         tf+Q==
+X-Forwarded-Encrypted: i=1; AFNElJ8csSkw2DSABcYQzMXbV17lQ8ei3YcUglfCImmviug/NuhnYVYZbimD67IyVMDrYZzpWK9b@lists.linux.dev
+X-Gm-Message-State: AOJu0YwUrI0pEO4GMurVzNCyF7wW4OVrnFxGwL1QeFNckSBMMEBKhU1V
+	6TqXWlFEhctLpZONHI32AUJ14zUhfZSCM/OW0q3G0PMMGQ2Luan8xSsYfloTcomNls17Bg==
+X-Received: from dlbvc11.prod.google.com ([2002:a05:7022:fe0b:b0:132:8d92:4d65])
+ (user=xur job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:241c:b0:136:72f0:6c54
+ with SMTP id a92af1059eb24-137a903c8f5mr115927c88.29.1780000748077; Thu, 28
+ May 2026 13:39:08 -0700 (PDT)
+Date: Thu, 28 May 2026 13:39:03 -0700
+In-Reply-To: <20260528203905.687687-1-xur@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260523125210.272274-1-mateusz.nowicki@posteo.net>
+Mime-Version: 1.0
+References: <20260528203905.687687-1-xur@google.com>
+X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
+Message-ID: <20260528203905.687687-2-xur@google.com>
+Subject: [PATCH v11 1/3] kbuild: move vmlinux.a build rule to scripts/Makefile.vmlinux_a
+From: xur@google.com
+To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
+	Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Stafford Horne <shorne@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Piotr Gorski <piotrgorski@cachyos.org>, Rong Xu <xur@google.com>, 
+	Venkat Rao Bagalkote <venkat88@linux.ibm.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Teresa Johnson <tejohnson@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Mateusz,
+From: Rong Xu <xur@google.com>
 
-kernel test robot noticed the following build errors:
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-[auto build test ERROR on 45255ea1ca096b11b1303c9b54502a28f3a31dd1]
+Move the build rule for vmlinux.a to a separate file in preparation
+for supporting distributed builds with Clang ThinLTO.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mateusz-Nowicki/block-switch-numa_node-to-int-in-blk_mq_hw_ctx-and-init_request/20260523-205439
-base:   45255ea1ca096b11b1303c9b54502a28f3a31dd1
-patch link:    https://lore.kernel.org/r/20260523125210.272274-1-mateusz.nowicki%40posteo.net
-patch subject: [PATCH v1] block: switch numa_node to int in blk_mq_hw_ctx and init_request
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260528/202605282203.xhTf7sMS-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605282203.xhTf7sMS-lkp@intel.com/reproduce)
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Tested-by: Rong Xu <xur@google.com>
+Tested-by: Piotr Gorski <piotrgorski@cachyos.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Rong Xu <xur@google.com>
+---
+ Makefile                   | 16 +++++--------
+ scripts/Makefile.vmlinux_a | 46 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 52 insertions(+), 10 deletions(-)
+ create mode 100644 scripts/Makefile.vmlinux_a
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605282203.xhTf7sMS-lkp@intel.com/
+diff --git a/Makefile b/Makefile
+index e27c91ea56fc..0fce9557a115 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1291,7 +1291,7 @@ export ARCH_DRIVERS	:= $(drivers-y) $(drivers-m)
+ KBUILD_VMLINUX_OBJS := built-in.a $(patsubst %/, %/lib.a, $(filter %/, $(libs-y)))
+ KBUILD_VMLINUX_LIBS := $(filter-out %/, $(libs-y))
+ 
+-export KBUILD_VMLINUX_LIBS
++export KBUILD_VMLINUX_OBJS KBUILD_VMLINUX_LIBS
+ export KBUILD_LDS          := arch/$(SRCARCH)/kernel/vmlinux.lds
+ 
+ ifdef CONFIG_TRIM_UNUSED_KSYMS
+@@ -1300,16 +1300,12 @@ ifdef CONFIG_TRIM_UNUSED_KSYMS
+ KBUILD_MODULES := y
+ endif
+ 
+-# '$(AR) mPi' needs 'T' to workaround the bug of llvm-ar <= 14
+-quiet_cmd_ar_vmlinux.a = AR      $@
+-      cmd_ar_vmlinux.a = \
+-	rm -f $@; \
+-	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
+-	$(AR) mPiT $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
++PHONY += vmlinux_a
++vmlinux_a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt FORCE
++	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_a
+ 
+-targets += vmlinux.a
+-vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt FORCE
+-	$(call if_changed,ar_vmlinux.a)
++vmlinux.a: vmlinux_a
++	@:
+ 
+ PHONY += vmlinux_o
+ vmlinux_o: vmlinux.a $(KBUILD_VMLINUX_LIBS)
+diff --git a/scripts/Makefile.vmlinux_a b/scripts/Makefile.vmlinux_a
+new file mode 100644
+index 000000000000..9774f02b43b2
+--- /dev/null
++++ b/scripts/Makefile.vmlinux_a
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++PHONY := __default
++__default: vmlinux.a
++
++include include/config/auto.conf
++include $(srctree)/scripts/Kbuild.include
++include $(srctree)/scripts/Makefile.lib
++
++# Link of built-in-fixup.a
++# ---------------------------------------------------------------------------
++
++# '$(AR) mPi' needs --thin to workaround the bug of llvm-ar <= 14
++quiet_cmd_ar_builtin_fixup = AR      $@
++      cmd_ar_builtin_fixup = \
++	rm -f $@; \
++	$(AR) cDPrS --thin $@ $(KBUILD_VMLINUX_OBJS); \
++	$(AR) mPi --thin $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
++
++targets += built-in-fixup.a
++built-in-fixup.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt FORCE
++	$(call if_changed,ar_builtin_fixup)
++
++# vmlinux.a
++# ---------------------------------------------------------------------------
++
++targets += vmlinux.a
++vmlinux.a: built-in-fixup.a FORCE
++	$(call if_changed,copy)
++
++# Add FORCE to the prerequisites of a target to force it to be always rebuilt.
++# ---------------------------------------------------------------------------
++
++PHONY += FORCE
++FORCE:
++
++# Read all saved command lines and dependencies for the $(targets) we
++# may be building above, using $(if_changed{,_dep}). As an
++# optimization, we don't need to read them if the target does not
++# exist, we will rebuild anyway in that case.
++
++existing-targets := $(wildcard $(sort $(targets)))
++
++-include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
++
++.PHONY: $(PHONY)
+-- 
+2.54.0.823.g6e5bcc1fc9-goog
 
-All errors (new ones prefixed by >>):
-
->> error[E0308]: mismatched types
-   --> rust/kernel/block/mq/operations.rs:274:28
-   |
-   274 |         init_request: Some(Self::init_request_callback),
-   |                       ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected fn pointer, found fn item
-   |                       |
-   |                       arguments to this enum variant are incorrect
-   |
-   = note: expected fn pointer `unsafe extern "C" fn(_, _, _, i32) -> _`
-   found fn item `unsafe extern "C" fn(_, _, _, u32) -> _ {OperationsVTable::<T>::init_request_callback}`
-   help: the type constructed contains `unsafe extern "C" fn(*mut blk_mq_tag_set, *mut bindings::request, u32, u32) -> i32 {OperationsVTable::<T>::init_request_callback}` due to the type of the argument passed
-   --> rust/kernel/block/mq/operations.rs:274:23
-   |
-   274 |         init_request: Some(Self::init_request_callback),
-   |                       ^^^^^---------------------------^
-   |                            |
-   |                            this argument influences the type of `Some`
-   note: tuple variant defined here
-   --> /opt/cross/rustc-1.88.0-bindgen-0.72.1/rustup/toolchains/1.88.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:597:5
-   |
-   597 |     Some(#[stable(feature = "rust1", since = "1.0.0")] T),
-   |     ^^^^
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
