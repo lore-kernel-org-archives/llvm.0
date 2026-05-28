@@ -1,120 +1,211 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE9D1BC2A;
-	Thu, 28 May 2026 16:40:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9301C2F7F13;
+	Thu, 28 May 2026 16:44:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779986423; cv=none; b=U0WKWLNr2ns9Ed+1whGchU7Aib2cKE8w/jG019owZmpPMBS5TKMfMi3tM+xe3W368jq/kwlmTVUNdOB6Wdry2Ed0k8uHJ004/88D2zJGtjF2JBneV5OUWTlUJmWO+0ASbdzLK3htajbDyGV7o1iSnm/IPL+/2zCjb6OpUFKbiyE=
+	t=1779986646; cv=none; b=SODqKlGHXC26AFJMG1byPWBNCxe+qKOSkp/MidliPm8L/mpbMvhsgefJ+20zJxi7B0KdRs1iZ3/ffsxbIFOzGEI7DL9QJc9BJ3PLOriaCm42hITCrqK6PtyZHI8csJbrEFmOhubPVCc/gXtQiO8fRNxov/TiCF2x/8Gnxt9bFFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779986423; c=relaxed/simple;
-	bh=eI7l9gd/axgulgBOtSweIRBCnebGZj+NpWPPoBHHjtU=;
+	s=arc-20240116; t=1779986646; c=relaxed/simple;
+	bh=eHyM/ZOktpZtpi4ZGcSERtKFio43kQZhDQiIcKDT7as=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZR4k/h6YNQyR+bAKsZWOS2kSl8G0GEF/aHKeFRudcLFN4vdzK62CVpZFNPGnWehanEoynq775K4Vk/52YArp8ZiD1DgrJOixZonR2oKDmscibmnsu7eqKzE8bwQRvzzgkRS1yhjundTn5bE55lovrPnGBxDf6lJJnJqYksQ8v8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZS/bmhgs; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=d4ogRbEq9jRtVSB4Rp/pEQnH8vM8TWDmyRe01YHxNzSl8R6qKjzaoruzyIs2uzHkp/FYdNSueODCqaW1Wvjo9jvW4rU6St3kAQ+OX0kcr5hObtKmHLC1d1Sk06h6J2UQNKyFbhu40zRNt4vAu/JpjBH7OxLxXJ6vjqBRI2KS6+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jSg6Aw9g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZS/bmhgs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779986421; x=1811522421;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eI7l9gd/axgulgBOtSweIRBCnebGZj+NpWPPoBHHjtU=;
-  b=ZS/bmhgshSPkMP9yl/f/Bjppt+A1DuDEc85sihsGM9JF5GPvoRq1+rS/
-   ngL+IYd78EVRBajI+r+WViH1ShD8tglDNtU8fC0ZTJ2Qm+myTtLlBcKXg
-   yvX9SmZ4YkIOO58t5IuEPxUQ98A4nOxsMwVK1zhExIOpLAHbHf0/35vcc
-   wK42KKMyN++UYOfw795fTnHXn2FCxYy1YTF5MLymjjl268zxbdWHaTPGs
-   wJ0F3DcdDAQka0HApHTSlWjxH08cxKlf9ty+kY251VO7ehUimcJBPO91a
-   sdvpH4GkAOGU7HfruvlbWYrZnTGeEemSUW5w9M5GNEGqOHIVbOayPdH5s
-   w==;
-X-CSE-ConnectionGUID: B5ZnyxuAQ5WSw8lZvwqqNg==
-X-CSE-MsgGUID: NbCON4IcTs2irsJRySbpbQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11800"; a="80557684"
-X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
-   d="scan'208";a="80557684"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 09:40:21 -0700
-X-CSE-ConnectionGUID: cfFxAHexThyRanndquCDSA==
-X-CSE-MsgGUID: b2TfR2xvQJa4pArFJpn9sw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
-   d="scan'208";a="272929837"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa002.jf.intel.com with ESMTP; 28 May 2026 09:40:19 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wSdmL-000000000Xt-11nv;
-	Thu, 28 May 2026 16:40:17 +0000
-Date: Thu, 28 May 2026 18:39:52 +0200
-From: kernel test robot <lkp@intel.com>
-To: Aichun Shi <shiaichun@open-hieco.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v2 11/11] EDAC/amd64: Harden Hygon Family 0x18 UMC
- SMN base against bad DFID
-Message-ID: <202605281827.tz1LJoDS-lkp@intel.com>
-References: <20260528035246.526012-12-shiaichun@open-hieco.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jSg6Aw9g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F0E71F000E9;
+	Thu, 28 May 2026 16:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779986645;
+	bh=oSQQQK0xIp517yq4BVvco281GyViuiXg6k3M8TceXrA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=jSg6Aw9gejUw63G2BHFUh4DGzStLx3MdoDzdVdNZdNyg5iIWoe0QYM5ncPQoTYEfX
+	 3PY5AdUd8e6GUYG8NyORjnqVc2AfrtGy5/mFJwy5SvHTN4wqbiJymdWvc1keO7WR3K
+	 KYXLcmGYev5gSKB/uTrxL5ISpX8fp09gZu57ts9cwR/G4Ph2nrQQmUu7h3h8WzJZjj
+	 +8cuN03bGLRT97x07pViZ3Mu+rP/5IWthGDR8Y8k5Wscp+E/SkfqVmKlTegKoOzmoT
+	 nsjQbaKFWprVRSvMgHDRM9CjJ1NbIdrKyu4ZxIXfbWJOQOTPrVuM5fC22YOEpxxkXq
+	 zyqzyCOEBAuMw==
+Date: Thu, 28 May 2026 09:44:00 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org, Thomas Gleixner <tglx@kernel.org>
+Subject: Re: [tip:timers/vdso 10/18] kernel/sys.c:2878:1: warning: alias and
+ aliasee have different types 'long (unsigned int *, unsigned int *, void *)'
+ and 'long (typeof
+ (__builtin_choose_expr((__builtin_types_compatible_p(typeof ((unsigned int
+ *)0), typeof (0LL)) || __builtin_types_compat...
+Message-ID: <20260528164400.GA1342076@ax162>
+References: <202605281540.qUDQmxib-lkp@intel.com>
+ <20260528094452-62bd9d27-bacf-4bc4-a6c2-3ff60a6eb073@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260528035246.526012-12-shiaichun@open-hieco.net>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260528094452-62bd9d27-bacf-4bc4-a6c2-3ff60a6eb073@linutronix.de>
 
-Hi Aichun,
+Hi Thomas,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+On Thu, May 28, 2026 at 09:50:43AM +0200, Thomas Wei=DFschuh wrote:
+> On Thu, May 28, 2026 at 03:22:06PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tim=
+ers/vdso
+> > head:   034779fb06aba5bc45faf366922bd77e4d36543a
+> > commit: 7158fc54b2c6f124eec0d7cd13bff69da0172e59 [10/18] vdso: Remove s=
+truct getcpu_cache
+> > config: um-allnoconfig (https://download.01.org/0day-ci/archive/2026052=
+8/202605281540.qUDQmxib-lkp@intel.com/config)
+> > compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project=
+ 5bac06718f502014fade905512f1d26d578a18f3)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20260528/202605281540.qUDQmxib-lkp@intel.com/reproduce)
+> >=20
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202605281540.qUDQmxib-l=
+kp@intel.com/
+> >=20
+> > All warnings (new ones prefixed by >>):
+> >=20
+> >    kernel/sys.c:1793:1: warning: alias and aliasee have different types=
+ 'long (unsigned int, struct rlimit *)' and 'long (typeof (__builtin_choose=
+_expr((__builtin_types_compatible_p(typeof ((unsigned int)0), typeof (0LL))=
+ || __builtin_types_compatible_p(typeof ((unsigned int)0), typeof (0ULL))),=
+ 0LL, 0L)), typeof (__builtin_choose_expr((__builtin_types_compatible_p(typ=
+eof ((struct rlimit *)0), typeof (0LL)) || __builtin_types_compatible_p(typ=
+eof ((struct rlimit *)0), typeof (0ULL))), 0LL, 0L)))' (aka 'long (long, lo=
+ng)') [-Wattribute-alias]
+>=20
+> (...)
+>=20
+> >    kernel/sys.c:1933:1: warning: alias and aliasee have different types=
+ 'long (int, struct rusage *)' and 'long (typeof (__builtin_choose_expr((__=
+builtin_types_compatible_p(typeof ((int)0), typeof (0LL)) || __builtin_type=
+s_compatible_p(typeof ((int)0), typeof (0ULL))), 0LL, 0L)), typeof (__built=
+in_choose_expr((__builtin_types_compatible_p(typeof ((struct rusage *)0), t=
+ypeof (0LL)) || __builtin_types_compatible_p(typeof ((struct rusage *)0), t=
+ypeof (0ULL))), 0LL, 0L)))' (aka 'long (long, long)') [-Wattribute-alias]
+> >    kernel/sys.c:1959:1: warning: alias and aliasee have different types=
+ 'long (int)' and 'long (typeof (__builtin_choose_expr((__builtin_types_com=
+patible_p(typeof ((int)0), typeof (0LL)) || __builtin_types_compatible_p(ty=
+peof ((int)0), typeof (0ULL))), 0LL, 0L)))' (aka 'long (long)') [-Wattribut=
+e-alias]
+>=20
+> (...)
+>=20
+> >    kernel/sys.c:2517:1: warning: alias and aliasee have different types=
+ 'long (int, unsigned long, unsigned long, unsigned long, unsigned long)' a=
+nd 'long (typeof (__builtin_choose_expr((__builtin_types_compatible_p(typeo=
+f ((int)0), typeof (0LL)) || __builtin_types_compatible_p(typeof ((int)0), =
+typeof (0ULL))), 0LL, 0L)), typeof (__builtin_choose_expr((__builtin_types_=
+compatible_p(typeof ((unsigned long)0), typeof (0LL)) || __builtin_types_co=
+mpatible_p(typeof ((unsigned long)0), typeof (0ULL))), 0LL, 0L)), typeof (_=
+_builtin_choose_expr((__builtin_types_compatible_p(typeof ((unsigned long)0=
+), typeof (0LL)) || __builtin_types_compatible_p(typeof ((unsigned long)0),=
+ typeof (0ULL))), 0LL, 0L)), typeof (__builtin_choose_expr((__builtin_types=
+_compatible_p(typeof ((unsigned long)0), typeof (0LL)) || __builtin_types_c=
+ompatible_p(typeof ((unsigned long)0), typeof (0ULL))), 0LL, 0L)), typeof (=
+__builtin_choose_expr((__builtin_types_compatible_p(typeof ((unsigned long)=
+0), typeof (0LL)) || __builtin_types_compatible_p(typeof ((unsigned long)0)=
+, typeof (0ULL))), 0LL, 0L)))' (aka 'long (long, long, long, long, long)') =
+[-Wattribute-alias]
+>=20
+> (...)
+>=20
+> > >> kernel/sys.c:2878:1: warning: alias and aliasee have different types=
+ 'long (unsigned int *, unsigned int *, void *)' and 'long (typeof (__built=
+in_choose_expr((__builtin_types_compatible_p(typeof ((unsigned int *)0), ty=
+peof (0LL)) || __builtin_types_compatible_p(typeof ((unsigned int *)0), typ=
+eof (0ULL))), 0LL, 0L)), typeof (__builtin_choose_expr((__builtin_types_com=
+patible_p(typeof ((unsigned int *)0), typeof (0LL)) || __builtin_types_comp=
+atible_p(typeof ((unsigned int *)0), typeof (0ULL))), 0LL, 0L)), typeof (__=
+builtin_choose_expr((__builtin_types_compatible_p(typeof ((void *)0), typeo=
+f (0LL)) || __builtin_types_compatible_p(typeof ((void *)0), typeof (0ULL))=
+), 0LL, 0L)))' (aka 'long (long, long, long)') [-Wattribute-alias]
+> >     2878 | SYSCALL_DEFINE3(getcpu, unsigned __user *, cpup, unsigned __=
+user *, nodep, void __user *, unused)
+> >          | ^
+> >    include/linux/syscalls.h:227:36: note: expanded from macro 'SYSCALL_=
+DEFINE3'
+> >      227 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##nam=
+e, __VA_ARGS__)
+> >          |                                    ^
+> >    include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_D=
+EFINEx'
+> >      236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+> >          |         ^
+> >    include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCAL=
+L_DEFINEx'
+> >      251 |                 __attribute__((alias(__stringify(__se_sys##n=
+ame))));    \
+> >          |                                ^
+> >    kernel/sys.c:2878:1: note: aliasee is declared here
+> >    include/linux/syscalls.h:227:36: note: expanded from macro 'SYSCALL_=
+DEFINE3'
+> >      227 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##nam=
+e, __VA_ARGS__)
+> >          |                                    ^
+> >    include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_D=
+EFINEx'
+> >      236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+> >          |         ^
+> >    include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCAL=
+L_DEFINEx'
+> >      255 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__V=
+A_ARGS__))  \
+> >          |                         ^
+> >    <scratch space>:132:1: note: expanded from here
+> >      132 | __se_sys_getcpu
+> >          | ^
+>=20
+> (...)
+>=20
+> > vim +2878 kernel/sys.c
+> >=20
+> >   2877=09
+> > > 2878	SYSCALL_DEFINE3(getcpu, unsigned __user *, cpup, unsigned __user=
+ *, nodep, void __user *, unused)
+> >   2879	{
+> >   2880		int err =3D 0;
+> >   2881		int cpu =3D raw_smp_processor_id();
+> >   2882=09
+> >   2883		if (cpup)
+> >   2884			err |=3D put_user(cpu, cpup);
+> >   2885		if (nodep)
+> >   2886			err |=3D put_user(cpu_to_node(cpu), nodep);
+> >   2887		return err ? -EFAULT : 0;
+> >   2888	}
+> >   2889=09
+>=20
+> This warning is reported for  many/all system call definitions in this fi=
+le.
+> The *new* warning is reported as the prototype of the system call has
+> changed and the warning is now slightly different from before.
+> So this report can be disregarded in my opinion.
+>=20
+> It might be good to figure out why this warning happens in general,
+> but that shouldn't be urgent.
+>=20
+> Also this patch is not in the current tip tree, but already released.
+> Is there an issue with the bot testing the wrong code?
 
-[auto build test ERROR on ras/edac-for-next]
-[also build test ERROR on next-20260527]
-[cannot apply to linus/master v6.16-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Sorry for the noise. This is from a compiler upgrade, as tip of tree
+clang has implemented -Wattribute-alias like GCC, which means it needs
+to be turned off in the same way:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aichun-Shi/ras-amd-atl-Add-Hygon-DF1-Data-Fabric-system-information-helper/20260528-121009
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git edac-for-next
-patch link:    https://lore.kernel.org/r/20260528035246.526012-12-shiaichun%40open-hieco.net
-patch subject: [RFC PATCH v2 11/11] EDAC/amd64: Harden Hygon Family 0x18 UMC SMN base against bad DFID
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260528/202605281827.tz1LJoDS-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605281827.tz1LJoDS-lkp@intel.com/reproduce)
+  https://git.kernel.org/nathan/c/175db11786bde9061db526bf1ac5107d915f5163
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605281827.tz1LJoDS-lkp@intel.com/
+I plan to send that to Linus soon.
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/ras/amd/fmpm.c:59:
->> drivers/ras/amd/atl/internal.h:22:10: fatal error: 'asm/hygon/node.h' file not found
-      22 | #include <asm/hygon/node.h>
-         |          ^~~~~~~~~~~~~~~~~~
-   1 error generated.
---
-   In file included from drivers/ras/amd/atl/hygon/system.c:10:
->> drivers/ras/amd/atl/hygon/../internal.h:22:10: fatal error: 'asm/hygon/node.h' file not found
-      22 | #include <asm/hygon/node.h>
-         |          ^~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +22 drivers/ras/amd/atl/internal.h
-
-    19	
-    20	#include <asm/amd/nb.h>
-    21	#include <asm/amd/node.h>
-  > 22	#include <asm/hygon/node.h>
-    23	#include <linux/processor.h>
-    24	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Cheers,
+Nathan
