@@ -1,179 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA28343888;
-	Thu, 28 May 2026 05:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779945012; cv=none; b=ScgLBQ9F/KWrTT9HOd1/9v2IWMUdhQqD6LLvCXE7DCyUtifAQ54zYYxKXuqypl5K8yxXNWhCqIIf5Wu5GGmVPYR70u7UnBLn48kXErS5S4P8ikoPavosdCq8JLshmi8tdkfSWgCJ14mWIFQ74wj1xaetoWIgiKNDaQV2TVa4aKw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779945012; c=relaxed/simple;
-	bh=5DUAh/8uR09Ok1Op5lMUw9+RWLG7FHcapCEvmRbjoig=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=cswfFKnxitPaAWICjye9cTtEPMU1YwyKoZiBshKhYNohhhSdVtH3ENOalRvsGHbaxwRt+NQhio1o01YXDijK1GIQs4aI3QlpwcjUz/hx0F6XtTTpOK5Ne2qRHqE7El+wF88gdelXlGVv4PQcqRrX25f9759G374mtWdL3QtYOdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hb80UQOx; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F37318EF4
+	for <llvm@lists.linux.dev>; Thu, 28 May 2026 05:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779945982; cv=pass; b=iSLBUtQy1R6kjk2rTDK+arfPwn35L5v4eXnUnZa61oo22fFKfl8MkIzpVu1hb2qBYzIZ1e4XIMUNd46Ubus2Wd2a59n3qoX8sq/EmhXOCCGmjaFcJPyEDMNUNtauYOh8Tg0uuyfYS5+LEplXkIVAQSL7Jp6LJYUHQTVCxJhl0VQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779945982; c=relaxed/simple;
+	bh=wf88XchxCYIRzw5GxK/rHjVoB2l6TgPg7ppMUr6qr7Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S2lcXGqpIi/+IzZpRXLAeqEmLOVf14Qf2xnmw1odY+aP7DIDmvaI1+lHplRFbpognRA+XoXy9xKlKZAaQIW28lar1hqAMxs0/+zp8NDfrVsd84XESFOpLhsZ6KgoCFzwrCvdUYodwV7d9h4Hsf+x8hiT64m5IhiYYAe+MRV9MMI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k3FiLWv9; arc=pass smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hb80UQOx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779945010; x=1811481010;
-  h=date:from:to:cc:subject:message-id;
-  bh=5DUAh/8uR09Ok1Op5lMUw9+RWLG7FHcapCEvmRbjoig=;
-  b=Hb80UQOxDvJHuRGRX9T1Pqg0kg1QiZXxacz2b0BO/e31qTx8MsUre9Jt
-   eYr9u6EYVWdR3kDg9hvB+f1QHwNjitBj6JWVycSbxJR2Fxf3PRM9T2nWi
-   RRGIefmUATQ0TrAnyM4jhG7CFTSTR0Sm/wK71E6OLQpyJZHLo1d78MnhT
-   6K9d8i4yxXuVJBsf+uZ4VM+n0Kt3ZrnrYQEfZb/Aoby8WSqqkRdLabM6q
-   SPP5rk0QQdxBorwEKdBWkhBNMSEonuRtFeFcZqbrt3k5+q0ts0bhpc97X
-   RKgRAsSKMi+C1aEP96IiTD/YWEpMOv0Fez5uV70QXOdDL40STr6mdX4fN
-   w==;
-X-CSE-ConnectionGUID: RD3ZiE9qRBilXleOK8FY2A==
-X-CSE-MsgGUID: Zep6BOtiQKiQGrubB8Ks8w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="106234737"
-X-IronPort-AV: E=Sophos;i="6.24,172,1774335600"; 
-   d="scan'208";a="106234737"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 22:10:10 -0700
-X-CSE-ConnectionGUID: 4K6nKA5CT3SQAiul0mNV5w==
-X-CSE-MsgGUID: 0ZwynyZjTzuVdwWVk55k5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,172,1774335600"; 
-   d="scan'208";a="247395720"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa005.jf.intel.com with ESMTP; 27 May 2026 22:10:07 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wST0P-000000000I9-2PMS;
-	Thu, 28 May 2026 05:10:05 +0000
-Date: Thu, 28 May 2026 07:09:58 +0200
-From: kernel test robot <lkp@intel.com>
-To: tao <tao.wangtao@honor.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: mm/debug.c:260:14: warning: format specifies type 'void *'
- but the argument has type 'anon_vma_tree_t' (aka 'unsigned long')
-Message-ID: <202605280750.e5zhc9OW-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k3FiLWv9"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-304559733faso509115eec.0
+        for <llvm@lists.linux.dev>; Wed, 27 May 2026 22:26:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779945980; cv=none;
+        d=google.com; s=arc-20240605;
+        b=BkGW7B38uATYpP5vRqocT45Zr9bACGj0iohqIF47LV50fzcYP7qY+wGmieGo0keT7a
+         8I4zEI8Cm8q7Ul/Du9e3K3NcWXR/Q8rZno91Ar6r1HNwlPfaLi0VDjGN+xJT7vYGCEFt
+         L326wSQROKtCPVbrAGJvU9dq5DiilY2vwbkiMH+XuQz80e6iV6fQq0D+6BiqvI0JBTVo
+         ivqLum88w9t9Qy5uG96dmoQoT5WFkYQjyHxR1os5mMzq5pDcsBBvmhszRyUt+iIFeOol
+         VGOWPzvYGrmHVEDgU8Gv+tH/pygw0BzW3d9VV8f6uCa/oNv0G7ljPODf6Xg9XEC2/x9g
+         99Cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7ZPB+UbJ3xOm/x1ryseHShdbECkKLBZAc98p8FpEfJY=;
+        fh=8iMUic8F4CajC282LGE+6tzAM1C/3OdQm4obUnOjO/0=;
+        b=f1NwZptz1yNDqgwl8ox4tWLbSf26o1ESAw+gcG5sHouialdr1lp4MY2BZL/29u4ujL
+         Sxxb+XXB3lKLWPH1VDbHGWPht2LfAkCSp9z8owcGv/EuxvYx63SILOZdwpF4PIM3bFVU
+         XytVey170v9ZgNovM6KQ8Igf0XNBCwgMLXHjGI3htISXbFjjJAyof75DF6+SPKfbMTFA
+         nvaZPg243hZfY6Q0K90NXtDNrQWJQDttsDJNRrTakdJyWs0qyei02ht94F+x1d80MOOY
+         86IImoyKhOOWWfrphwq99dxtDuqlKhfmVe3qhlSvA0ECJk8oAkzcwRkoXoUj2SN8qOKz
+         HXfA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779945980; x=1780550780; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7ZPB+UbJ3xOm/x1ryseHShdbECkKLBZAc98p8FpEfJY=;
+        b=k3FiLWv9uMWBYda2Is4fHrcn+NuZg3A414Q17fUBtavBirj0bJq069sEALoAL5SIZr
+         Pc+ro0H9mwUdfI3zNa5YUA3YrHClc/CnL32wwv2heMc3XhbgMeo2Zsvhg2KWJXQ9xIxO
+         ubWfRcWOv7vQkZeRDvDnUTQa41RDBvuuKUdC/2jXZVJ1AWenZIe3tlwqXinqioErxmIC
+         fSDcat2n7Uz5osKw7CgiwzrXmckOxA5fgtx7TfkAvNwpHTX6pjGzv41ElC68PWzUUqhG
+         YiGiV1Iu6cuUL+fzccTwNqhi7exUUVAN6Rs5dwCH3wENoe8KQPsWeg9VskhQX7chsruD
+         YK1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779945980; x=1780550780;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7ZPB+UbJ3xOm/x1ryseHShdbECkKLBZAc98p8FpEfJY=;
+        b=eDLTcn3V+/wab3h4wrrNt3dyO/GRN0YGxdAJ0nqGy5IO4HczNMkIsvx7/gUUuWfyWF
+         v1s7dNU6InGC5pEmqcv/olEKzGnhbz8ecV8/Ch0TAgEJYIs5rmSTcmUq1xdrwU3BqNdB
+         Qc6Adon/RCVpJ7sZgaRfB2daUEER+5eDgyfec4JACtqN5tvMoJh2cmXhJWqG8GYnWstm
+         KyMMG8cz+Oid8unmN/FNdKVfgPKZOCh3QT8bC2U153rT5qYsq1ATW4OydjsCrHnptWDC
+         5yKWTRr0nnbJvVx7Uy5IQmEykwtiV3m9YT0eNtN1BoErUDWFxlt2rC20t6ISbWoUuCzP
+         R83g==
+X-Forwarded-Encrypted: i=1; AFNElJ8YLx987Pay7A+z99A2SJwN9GKEMXz0qIs//x/ECqecNZNlPBBIjyfR2Y7CslyiDPOHXB5l@lists.linux.dev
+X-Gm-Message-State: AOJu0YzrXnUXzoveQYocEvt8iqRETn9T5vdtjfQeAjqHWkLaEzom8Qul
+	99itofHEypmgb9SxMIc74L3qQ2vWOSulMpbm5pqA/v76/w75gmf0UvEe0ZiZoSun5fnzTFGEBmp
+	2LA160r3AqWT/L8iHSNggNiGjZ99va+8=
+X-Gm-Gg: Acq92OGnBul2Nq/WjNTdlPe5j7VSNWMVxb1p13YocYeaXvFxLCQ3CDkiinw8jgqQgOH
+	yiIdOuI3F8PdHBE6gSUiIy9TKlT69rXcGCkvs3BYWm1unOsLwb196M4bZvbZSUhlHPrdhvzzNam
+	B3kgRhwdWTPhhLkeXwArDG0otyKrlgAvYucUlDBaTjdTIytUVnErSBA3qIQEfpfwR3jpc51qW82
+	ZSZ9pTMMQPT94ETdmCSF2SL+kyH9ALo5aWKs2t3bjuWV79WbIPXTt/lP3edka7Z3R9r8Mjk9S4b
+	sToRPY2auhwBLiR7o4q/jBq2uROq03V0CzCWppk60x31EEtQ7gxXxxyJabYoJfrXTxsbo11X6jH
+	Edg+GwnRbwXP6EOxnn06xoimLsJNR0RGVQ/ZJWaSkn7eV
+X-Received: by 2002:a05:7300:df44:b0:2e6:b55a:76c9 with SMTP id
+ 5a478bee46e88-30448cf0ceamr5032661eec.0.1779945979977; Wed, 27 May 2026
+ 22:26:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260527-uwtable-module-flag-v1-1-caa41342be4b@google.com>
+In-Reply-To: <20260527-uwtable-module-flag-v1-1-caa41342be4b@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 28 May 2026 07:26:07 +0200
+X-Gm-Features: AVHnY4LpfTWCciL-kun38xNZkmFlALMcz5bmeoJdgZ6qhFC5eHM3rUClaReGlc0
+Message-ID: <CANiq72mCYOXrWM7_3jby_ZvYmspXsYVzRqhTgQiBF0bdDLAaEg@mail.gmail.com>
+Subject: Re: [PATCH] rust: arm64: set uwtable llvm module flag for CONFIG_UNWIND_TABLES
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, stable@kernel.org, 
+	Bo Ye <bo.ye@mediatek.com>, Isaac Manjarres <isaacmanjarres@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/tao/mm-rmap-introduce-anon_rmap-APIs-for-anonymous-folios/20260527-191029
-head:   d6b84c27ac44f1ad64e0c96150f128acfc1be38e
-commit: 21dbb148d564b75be29efcaaae4152e27a0a5f91 mm: switch to anon_vma_tree_t APIs in preparation for ANON_VMA_LAZY
-date:   18 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260528/202605280750.e5zhc9OW-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605280750.e5zhc9OW-lkp@intel.com/reproduce)
+On Wed, May 27, 2026 at 8:18=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
+rote:
+>
+> Once the fix lands in rustc, this flag can be made conditional on the
+> rustc version. Note that passing the flag on a rustc with the fix
+> present has no effect.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605280750.e5zhc9OW-lkp@intel.com/
+Already landed now, so if the uwtable one is enough, we could already
+do that since it will be 1.98. But since it has no effect, we can keep
+the fix as-is and do that on top too.
 
-All warnings (new ones prefixed by >>):
+Added and linked both issues (i.e. `uwtable` and the `frame-pointer` one) t=
+o:
 
->> mm/debug.c:260:14: warning: format specifies type 'void *' but the argument has type 'anon_vma_tree_t' (aka 'unsigned long') [-Wformat]
-     248 |                 "file %px anon_vma %px policy %px\n"
-         |                                    ~~
-         |                                    %lu
-     249 |                 "uffd_ctx %px\n"
-     250 |                 "anon_name %px\n"
-     251 |                 "state %x\n"
-     252 |                 "just_expand %d\n"
-     253 |                 "__adjust_middle_start %d __adjust_next_start %d\n"
-     254 |                 "__remove_middle %d __remove_next %d\n",
-     255 |                 vmg, vmg->mm, vmg->pgoff,
-     256 |                 vmg->vmi, vmg->vmi ? vma_iter_addr(vmg->vmi) : 0,
-     257 |                 vmg->vmi ? vma_iter_end(vmg->vmi) : 0,
-     258 |                 vmg->prev, vmg->middle, vmg->next, vmg->target,
-     259 |                 vmg->start, vmg->end, vmg->vm_flags,
-     260 |                 vmg->file, vmg->anon_vma, vmg->policy,
-         |                            ^~~~~~~~~~~~~
-   include/linux/printk.h:564:37: note: expanded from macro 'pr_warn'
-     564 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                    ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:511:60: note: expanded from macro 'printk'
-     511 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:483:19: note: expanded from macro 'printk_index_wrap'
-     483 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+  https://github.com/Rust-for-Linux/linux/issues/355
 
+I have to send a fixes PR in the coming days, so I can pick this one
+up, but if arm64 will do so then:
 
-vim +260 mm/debug.c
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
-31c9afa6db122a5 Sasha Levin     2014-10-09  233  
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  234  void dump_vmg(const struct vma_merge_struct *vmg, const char *reason)
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  235  {
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  236  	if (reason)
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  237  		pr_warn("vmg %px dumped because: %s\n", vmg, reason);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  238  
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  239  	if (!vmg) {
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  240  		pr_warn("vmg %px state: (NULL)\n", vmg);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  241  		return;
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  242  	}
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  243  
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  244  	pr_warn("vmg %px state: mm %px pgoff %lx\n"
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  245  		"vmi %px [%lx,%lx)\n"
-3a75ccba047b11a Lorenzo Stoakes 2025-01-31  246  		"prev %px middle %px next %px target %px\n"
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  247  		"start %lx end %lx flags %lx\n"
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  248  		"file %px anon_vma %px policy %px\n"
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  249  		"uffd_ctx %px\n"
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  250  		"anon_name %px\n"
-6ab2d9c7c680c0a Lorenzo Stoakes 2025-01-31  251  		"state %x\n"
-fe3e9cf0d7a28d3 Lorenzo Stoakes 2025-01-31  252  		"just_expand %d\n"
-fe3e9cf0d7a28d3 Lorenzo Stoakes 2025-01-31  253  		"__adjust_middle_start %d __adjust_next_start %d\n"
-fe3e9cf0d7a28d3 Lorenzo Stoakes 2025-01-31  254  		"__remove_middle %d __remove_next %d\n",
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  255  		vmg, vmg->mm, vmg->pgoff,
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  256  		vmg->vmi, vmg->vmi ? vma_iter_addr(vmg->vmi) : 0,
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  257  		vmg->vmi ? vma_iter_end(vmg->vmi) : 0,
-3a75ccba047b11a Lorenzo Stoakes 2025-01-31  258  		vmg->prev, vmg->middle, vmg->next, vmg->target,
-bfbe71109fa40e8 Lorenzo Stoakes 2025-06-18  259  		vmg->start, vmg->end, vmg->vm_flags,
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03 @260  		vmg->file, vmg->anon_vma, vmg->policy,
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  261  #ifdef CONFIG_USERFAULTFD
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  262  		vmg->uffd_ctx.ctx,
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  263  #else
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  264  		(void *)0,
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  265  #endif
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  266  		vmg->anon_name,
-6ab2d9c7c680c0a Lorenzo Stoakes 2025-01-31  267  		(int)vmg->state,
-fe3e9cf0d7a28d3 Lorenzo Stoakes 2025-01-31  268  		vmg->just_expand,
-fe3e9cf0d7a28d3 Lorenzo Stoakes 2025-01-31  269  		vmg->__adjust_middle_start, vmg->__adjust_next_start,
-fe3e9cf0d7a28d3 Lorenzo Stoakes 2025-01-31  270  		vmg->__remove_middle, vmg->__remove_next);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  271  
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  272  	if (vmg->mm) {
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  273  		pr_warn("vmg %px mm:\n", vmg);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  274  		dump_mm(vmg->mm);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  275  	} else {
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  276  		pr_warn("vmg %px mm: (NULL)\n", vmg);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  277  	}
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  278  
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  279  	if (vmg->prev) {
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  280  		pr_warn("vmg %px prev:\n", vmg);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  281  		dump_vma(vmg->prev);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  282  	} else {
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  283  		pr_warn("vmg %px prev: (NULL)\n", vmg);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  284  	}
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  285  
-3a75ccba047b11a Lorenzo Stoakes 2025-01-31  286  	if (vmg->middle) {
-3a75ccba047b11a Lorenzo Stoakes 2025-01-31  287  		pr_warn("vmg %px middle:\n", vmg);
-3a75ccba047b11a Lorenzo Stoakes 2025-01-31  288  		dump_vma(vmg->middle);
-3a75ccba047b11a Lorenzo Stoakes 2025-01-31  289  	} else {
-3a75ccba047b11a Lorenzo Stoakes 2025-01-31  290  		pr_warn("vmg %px middle: (NULL)\n", vmg);
-3a75ccba047b11a Lorenzo Stoakes 2025-01-31  291  	}
-3a75ccba047b11a Lorenzo Stoakes 2025-01-31  292  
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  293  	if (vmg->next) {
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  294  		pr_warn("vmg %px next:\n", vmg);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  295  		dump_vma(vmg->next);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  296  	} else {
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  297  		pr_warn("vmg %px next: (NULL)\n", vmg);
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  298  	}
-b0d66d82fce6016 Lorenzo Stoakes 2025-01-03  299  
+Thanks!
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
