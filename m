@@ -1,70 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4ED3B585F;
-	Thu, 28 May 2026 09:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403F63B9942;
+	Thu, 28 May 2026 10:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779962357; cv=none; b=YMNe1We0pCloRnI/3OnkbFsNxk/kux/gEQBROwnbLyy+zE3fVVy+ukDH5Ld4I2skKm5v1fGk0R9wjdrTqqRTPraxYJIJCC4/qK7V+M6PtSLawB5wMZwzk4gl4S+zrbGBoybuB5T58FRbq0d1LUDR8UTOB1uVKGzSvXGX8SbZUOM=
+	t=1779964400; cv=none; b=A4+t1xQzMR2fjqbyrWT9FIETQf0F7l3vyhMHWGFZaYDKoSKovM5aAFrBChI42GMqLObCFOFMX/26EYRQ6YvIan12ajOTs+p2Bdoo18s6rTlMivNaksHY5/aZcWrHgUqJjwR/40+Lm4LoDU4ou9fjDxcudnJ9sUjxM0feTvkmWck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779962357; c=relaxed/simple;
-	bh=RVbc3koXQ4err9PbYblRDyJEYwnImRo0oDvglNC9DXQ=;
+	s=arc-20240116; t=1779964400; c=relaxed/simple;
+	bh=+h8BiDyEGUTaX5dkltOlb6CAZB4QJkd09eu9rd4ZL7I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jkuag/cJc5heAwBg4vzsGQn5OjgRPugMTltv9tnXWATc2BHoUaCb3UShChtGKoiv6oYJ5je5zY9ePFlXUqsqLSPdw8WmiH9uoBAzWEdo3DTvtFv3K1uv5n9ND0ehoRsuQ8phO/J5C5Qu6g1BG0b9Qg4+cxzlK/bN7iyDrkZGQD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZU2XzmeT; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=DdUurbeBghT5GtQujAl3hFTFBPrm5cIeDE6JP8IY3xt5eNV8p6UiYqhZzRngXNtlB2pwwbAGcc9xefPaP3rPxWdcTH5u5rl/lB4yZwUHY+9rucGNaWiQt4vO+inCS9ZLk1085qvRkfA+OT05YZpEeg58bCmyGYEYcnKkxCDa6Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WEABsABb; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZU2XzmeT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WEABsABb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779962356; x=1811498356;
+  t=1779964398; x=1811500398;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=RVbc3koXQ4err9PbYblRDyJEYwnImRo0oDvglNC9DXQ=;
-  b=ZU2XzmeTZKSCX1+i7fxS0rPWlQui3LIrGdKJdPJNe0yl7Uah2jPLn1eW
-   Fc1b1fsP9aU3MZc9pdghOJD2RMe1+AqhKu0b2NSxRNRiKnAh3/WItIeXw
-   xgE9WmW+czrKRzdm7OE+bf8GQlNSUpkCJx5n9FPBJZVvrqdUXJITNnOoI
-   5wmgBZ3auvPyv2i7kC0u+3UEfMid4LdBDYy8MnnEdTJmIBjnqjqYw3x2B
-   BorFQO5heI5ipbwDgqixVcwb+iUt4CYCH9UJrmfCjnt6bwQmMWPCUjp2o
-   XP63q/sSR1D0yeDqBKxbv+6la/ryVW517Zc/B/PamtwOE/rUK0n8dcuCM
+  bh=+h8BiDyEGUTaX5dkltOlb6CAZB4QJkd09eu9rd4ZL7I=;
+  b=WEABsABbI4qCyWR/suuTCBZ0CowISKo1OnmLfmdb6Ltv6Bbyzu3ez2EB
+   u71FRdIhXHIMAynnP3bjeGvH1/jXxHQtiFnKh6UHZqsAepsKOLeTFLiiy
+   wFoITHeTgLrz0HcK+S5OKPNpVpJy2rF7HJWHZkNje2K4C4u9Q/8N0mXIL
+   jA/FioRBYbdRb3yzf9VPeJirw7+a0OyoteWTwUMmSKt/ZhcS9F4jF26z5
+   MzS3z3Yh+rQd8DBekaVy4qAIeNhnjxwUIz8BP69gP1fWMYlbovY79t2qc
+   VIFOZc7LJ4jpRtJOjnw2EZK6BEDgWq2j+CSlBdKv8XxEx3MQ5pCLD12yj
    w==;
-X-CSE-ConnectionGUID: NcAOvSpeQQGZ4C/K61vWsA==
-X-CSE-MsgGUID: /jMunWhqSvKBIXiXmzsDIA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="84690782"
+X-CSE-ConnectionGUID: +64hfVbhQ8urGOHIHDER0A==
+X-CSE-MsgGUID: OMNapIcIT0G7/fX/R75l4w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="106256609"
 X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
-   d="scan'208";a="84690782"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 02:59:16 -0700
-X-CSE-ConnectionGUID: mkTEZP3cRj+k5DYuQ58yeA==
-X-CSE-MsgGUID: A+RjZFUHRLql4VDS9C8C+Q==
+   d="scan'208";a="106256609"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 03:33:16 -0700
+X-CSE-ConnectionGUID: iNrAHOncSZy9ngJMnGgBWg==
+X-CSE-MsgGUID: ypfIc8BbS7eMVXf3AkLkJg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
-   d="scan'208";a="238322491"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 28 May 2026 02:59:10 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 28 May 2026 03:33:14 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wSXW7-000000005oI-107J;
-	Thu, 28 May 2026 09:59:07 +0000
-Date: Thu, 28 May 2026 17:58:32 +0800
+	id 1wSY35-000000005qk-30Rp;
+	Thu, 28 May 2026 10:33:11 +0000
+Date: Thu, 28 May 2026 18:33:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	syzbot <syzbot+5d32c8bd82427f9c77cc@syzkaller.appspotmail.com>
+To: Wentao Guan <guanwentao@uniontech.com>, masahiroy@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	apopple@nvidia.com, byungchul@sk.com, david@kernel.org,
-	gourry@gourry.net, joshua.hahnjy@gmail.com,
-	linux-kernel@vger.kernel.org, matthew.brost@intel.com,
-	rakie.kim@sk.com, syzkaller-bugs@googlegroups.com,
-	ying.huang@linux.alibaba.com, ziy@nvidia.com,
-	dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Subject: Re: [PATCH] drm/lease: Limit amount of maximum objects per lease.
-Message-ID: <202605281701.Blefmpwd-lkp@intel.com>
-References: <b3390013-f0de-4e23-a915-23340594fb49@linux.intel.com>
+	petr.pavlu@suse.com, linux-kernel@vger.kernel.org,
+	Wentao Guan <guanwentao@uniontech.com>
+Subject: Re: [PATCH v2] genksyms: Support arm64 CRC32 hardware acceleration
+Message-ID: <202605281815.1Z1xCVpw-lkp@intel.com>
+References: <20260525070344.1564886-1-guanwentao@uniontech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,177 +62,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b3390013-f0de-4e23-a915-23340594fb49@linux.intel.com>
+In-Reply-To: <20260525070344.1564886-1-guanwentao@uniontech.com>
 
-Hi Maarten,
+Hi Wentao,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on akpm-mm/mm-everything daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes drm-tip/drm-tip linus/master v7.1-rc5 next-20260527]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v7.1-rc5 next-20260527]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maarten-Lankhorst/drm-lease-Limit-amount-of-maximum-objects-per-lease/20260527-180216
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/b3390013-f0de-4e23-a915-23340594fb49%40linux.intel.com
-patch subject: [PATCH] drm/lease: Limit amount of maximum objects per lease.
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260528/202605281701.Blefmpwd-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605281701.Blefmpwd-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Guan/genksyms-Support-arm64-CRC32-hardware-acceleration/20260525-151229
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260525070344.1564886-1-guanwentao%40uniontech.com
+patch subject: [PATCH v2] genksyms: Support arm64 CRC32 hardware acceleration
+config: um-randconfig-002 (https://download.01.org/0day-ci/archive/20260528/202605281815.1Z1xCVpw-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9409c07de6378507397ecdb6f05f628f58110112)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605281815.1Z1xCVpw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605281701.Blefmpwd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605281815.1Z1xCVpw-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/drm_lease.c:513:50: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     513 |                 drm_dbg_lease(dev, "too many objects (%ld)\n", object_count);
-         |                                                       ~~~      ^~~~~~~~~~~~
-         |                                                       %zu
-   include/drm/drm_print.h:663:54: note: expanded from macro 'drm_dbg_lease'
-     663 |         drm_dev_dbg(__drm_to_dev(drm), DRM_UT_LEASE, fmt, ##__VA_ARGS__)
-         |                                                      ~~~    ^~~~~~~~~~~
-   include/drm/drm_print.h:563:39: note: expanded from macro 'drm_dev_dbg'
-     563 |         __drm_dev_dbg(NULL, dev, cat, fmt, ##__VA_ARGS__)
-         |                                       ~~~    ^~~~~~~~~~~
+>> scripts/genksyms/genksyms.c:122:12: warning: variable 'crc32_hw_available' set but not used [-Wunused-but-set-global]
+     122 | static int crc32_hw_available;
+         |            ^
+   1 warning generated.
+--
+>> scripts/genksyms/genksyms.c:122:12: warning: variable 'crc32_hw_available' set but not used [-Wunused-but-set-global]
+     122 | static int crc32_hw_available;
+         |            ^
    1 warning generated.
 
 
-vim +513 drivers/gpu/drm/drm_lease.c
+vim +/crc32_hw_available +122 scripts/genksyms/genksyms.c
 
-   468	
-   469	/*
-   470	 * The master associated with the specified file will have a lease
-   471	 * created containing the objects specified in the ioctl structure.
-   472	 * A file descriptor will be allocated for that and returned to the
-   473	 * application.
-   474	 */
-   475	int drm_mode_create_lease_ioctl(struct drm_device *dev,
-   476					void *data, struct drm_file *lessor_priv)
-   477	{
-   478		struct drm_mode_create_lease *cl = data;
-   479		size_t object_count;
-   480		int ret = 0;
-   481		struct idr leases;
-   482		struct drm_master *lessor;
-   483		struct drm_master *lessee = NULL;
-   484		struct file *lessee_file = NULL;
-   485		struct file *lessor_file = lessor_priv->filp;
-   486		struct drm_file *lessee_priv;
-   487		int fd = -1;
-   488		uint32_t *object_ids;
-   489		static const size_t max_objects =
-   490			8 * sizeof(drm_crtc_mask(NULL)) +
-   491			8 * sizeof(drm_plane_mask(NULL)) +
-   492			8 * sizeof(drm_connector_mask(NULL));
-   493	
-   494		/* Can't lease without MODESET */
-   495		if (!drm_core_check_feature(dev, DRIVER_MODESET))
-   496			return -EOPNOTSUPP;
-   497	
-   498		if (cl->flags && (cl->flags & ~(O_CLOEXEC | O_NONBLOCK))) {
-   499			drm_dbg_lease(dev, "invalid flags\n");
-   500			return -EINVAL;
-   501		}
-   502	
-   503		lessor = drm_file_get_master(lessor_priv);
-   504		/* Do not allow sub-leases */
-   505		if (lessor->lessor) {
-   506			drm_dbg_lease(dev, "recursive leasing not allowed\n");
-   507			ret = -EINVAL;
-   508			goto out_lessor;
-   509		}
-   510	
-   511		object_count = cl->object_count;
-   512		if (object_count > max_objects) {
- > 513			drm_dbg_lease(dev, "too many objects (%ld)\n", object_count);
-   514			ret = -EINVAL;
-   515			goto out_lessor;
-   516		}
-   517	
-   518		/* Handle leased objects, if any */
-   519		idr_init(&leases);
-   520		if (object_count != 0) {
-   521			object_ids = memdup_array_user(u64_to_user_ptr(cl->object_ids),
-   522						       object_count, sizeof(__u32));
-   523			if (IS_ERR(object_ids)) {
-   524				ret = PTR_ERR(object_ids);
-   525				idr_destroy(&leases);
-   526				goto out_lessor;
-   527			}
-   528	
-   529			/* fill and validate the object idr */
-   530			ret = fill_object_idr(dev, lessor_priv, &leases,
-   531					      object_count, object_ids);
-   532			kfree(object_ids);
-   533			if (ret) {
-   534				drm_dbg_lease(dev, "lease object lookup failed: %i\n", ret);
-   535				idr_destroy(&leases);
-   536				goto out_lessor;
-   537			}
-   538		}
-   539	
-   540		/* Allocate a file descriptor for the lease */
-   541		fd = get_unused_fd_flags(cl->flags & (O_CLOEXEC | O_NONBLOCK));
-   542		if (fd < 0) {
-   543			idr_destroy(&leases);
-   544			ret = fd;
-   545			goto out_lessor;
-   546		}
-   547	
-   548		drm_dbg_lease(dev, "Creating lease\n");
-   549		/* lessee will take the ownership of leases */
-   550		lessee = drm_lease_create(lessor, &leases);
-   551	
-   552		if (IS_ERR(lessee)) {
-   553			ret = PTR_ERR(lessee);
-   554			idr_destroy(&leases);
-   555			goto out_leases;
-   556		}
-   557	
-   558		/* Clone the lessor file to create a new file for us */
-   559		drm_dbg_lease(dev, "Allocating lease file\n");
-   560		lessee_file = file_clone_open(lessor_file);
-   561		if (IS_ERR(lessee_file)) {
-   562			ret = PTR_ERR(lessee_file);
-   563			goto out_lessee;
-   564		}
-   565	
-   566		lessee_priv = lessee_file->private_data;
-   567		/* Change the file to a master one */
-   568		drm_master_put(&lessee_priv->master);
-   569		lessee_priv->master = lessee;
-   570		lessee_priv->is_master = 1;
-   571		lessee_priv->authenticated = 1;
-   572	
-   573		/* Pass fd back to userspace */
-   574		drm_dbg_lease(dev, "Returning fd %d id %d\n", fd, lessee->lessee_id);
-   575		cl->fd = fd;
-   576		cl->lessee_id = lessee->lessee_id;
-   577	
-   578		/* Hook up the fd */
-   579		fd_install(fd, lessee_file);
-   580	
-   581		drm_master_put(&lessor);
-   582		drm_dbg_lease(dev, "drm_mode_create_lease_ioctl succeeded\n");
-   583		return 0;
-   584	
-   585	out_lessee:
-   586		drm_master_put(&lessee);
-   587	
-   588	out_leases:
-   589		put_unused_fd(fd);
-   590	
-   591	out_lessor:
-   592		drm_master_put(&lessor);
-   593		drm_dbg_lease(dev, "drm_mode_create_lease_ioctl failed: %d\n", ret);
-   594		return ret;
-   595	}
-   596	
+   118	
+   119	/*
+   120	 * Architecture-specific CRC32 hardware acceleration.
+   121	 */
+ > 122	static int crc32_hw_available;
+   123	
 
 --
 0-DAY CI Kernel Test Service
