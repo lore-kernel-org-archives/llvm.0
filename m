@@ -1,75 +1,77 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E026C40963D
-	for <llvm@lists.linux.dev>; Thu, 28 May 2026 20:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0492E7377
+	for <llvm@lists.linux.dev>; Thu, 28 May 2026 20:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779999190; cv=none; b=hN1EVmV8wq+pHI8bgR1DiNZsKzuCh5KxfaibR3jZuNKBoR37Kjha+kiB6gsz0AKDg+5hlYS9pHCuXcTK70MPLZokAsx420ArYYWyVxT4eniF/xw76NhbztOKoObJyYpMOkDUtSDZh7asr+u7LPYCFpTKpucm9cvOONjA1bG3wJQ=
+	t=1779999730; cv=none; b=izsdC1OHBqLTkXLJXb+3rGLZBXyauk7qlPpbqvSPf9Rb7Uf7S9FA6E/p+K7/R5EGzi8f+F/P1WkBOacqYngok7hgV6tPikjP8aAbuqP/xz6xMjDrQ8NpsN6rNi9dgfBScIftA3QXyYoz4Apoj25IiydzkDpLuKzkj7mwAymdMFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779999190; c=relaxed/simple;
-	bh=MW+T++PF99/Vjl4jrlZc3WclQejwtQesBgvBPrpVZV4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MeAWRT6WuADGeojnFqmDc4Si39QM4YKHHkJUL/FBfNupQLd0a4pQokEJTgwvgYyKjZ9kUGEp3K1ZZHuvs0VmnHnfqxdilN5cy9UNsu6Ihvrg7NOfC0eWwcPnMrebGwnMxCNBykunq2FpeamAxOfKVQarHcRylxB3QVxfnK+/vLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kB8FAn+5; arc=none smtp.client-ip=209.85.215.172
+	s=arc-20240116; t=1779999730; c=relaxed/simple;
+	bh=8r3Njt8panVzaDyqKXn/pvgpQoA+kH4AbvtZB3YhhYU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SQqZEPuGodHeq8POdsCAq+eEFqk+YCwHFnl35gGJ5VN4gRho7ONqmuU4yh/1xY2T1iLWki/GUMTuIUty9QC2wlfKaijsRcJPs2tOEU30oMO1aL4XRnpSFj0GM9mFhhLr6b9IABjHafXWTAXQhCC11ei9KcEId+Q2zdFEoilWYfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FibbRqCE; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kB8FAn+5"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c856db4fcacso496204a12.1
-        for <llvm@lists.linux.dev>; Thu, 28 May 2026 13:13:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FibbRqCE"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-36bba9a1089so67174a91.3
+        for <llvm@lists.linux.dev>; Thu, 28 May 2026 13:22:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779999188; x=1780603988; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1779999729; x=1780604529; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j9qJ8rpcsYRHuSOceWQ8qSKZ87Tyx2plk/734O2C4JM=;
-        b=kB8FAn+5YBvVJlfyfT+NM3bjhZA0Dt8iO8LwVRtkL2vySUHIF2X8MQJxFjd2FAVrnP
-         AsAV6tXR7tD6Kt01IZIsmZZZ/iHsQz3bhmXlEx8E9nVp4ZmIRCwpuoHZjRhccIZSV4ua
-         37lOahUFOrlC1ndYLaaRHeD4qZR/G03AXexD0AELywp8b/iOKUQ2sgbU0rdfrYudMzk2
-         3FCyCKzaHnLcItt+PeDxX7Y5xOv6i4wJLbaO/rvgXQLUVBFRizhkbJgqwFc0Sg+bZz9k
-         l17qj+183Bg2/v1Cui0zw5zy5cA1PhOIayD7W/Tp0WolxfxyLCQ1coBcN3QKBaNnfVmf
-         A2sQ==
+        bh=BvVT0II3dEilSbYrBZE5Ytb4041NB7ZsFn14SAB4u14=;
+        b=FibbRqCExntnWTqwuOAUyv2Mt20zYSo1IkPpGX9bH6XlhFBZ/5IDkFwljM4LrQqPRF
+         EBBrtcTyB5QM5uXrUY7RwK7qlkS/Dzwv4WC4d2DVU9/IJOXogLx9X5INp4TtgFgI1xcD
+         5quAAr0vI89IdgQSkiOWqkGtn84s/G8Iu2lGXY0rpUzqxUbHqZO0V+tc7BQQT7AY9eBz
+         pTMkPP4a2SR9Hx3hzO80LDzP1/FB76F6k4LHSmI3HNNn5ajD5AqoMI7dbmISzv5lO2gQ
+         H4Wofz3d7BvQ0WUgmHm2IlMoh2gmZ2Zy+BukWfTTiA9GIVjzXFHSMXxzgZiSVGrub66S
+         K60A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779999188; x=1780603988;
+        d=1e100.net; s=20251104; t=1779999729; x=1780604529;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j9qJ8rpcsYRHuSOceWQ8qSKZ87Tyx2plk/734O2C4JM=;
-        b=He6tU4WjRtCyryE4VLCfpGMSKGXTykI2OeE4yVZ41wa72YibuGhUsQbBkrc3M8PT/L
-         j5IQDOn63kFs/EzMy8Gtw8qfxs1ujpDU2f/M0RgFr8WGhbt7nZVXc2wvjrAm17lFGJt0
-         V1hdJwvTs2lgwiPWeTfeJgMbsBT6nH56s0hEHffijOc+kkFriPzjfuONHEgXp6akOIES
-         GOk0o1poPagA1qJHjE1k2Nnu82jSa0vzD2XFkLYVqitfP+CaGY1LBRWsXw8Vyw2IBLA5
-         169+xt4qgNMhIgSiEXptgxU+aFqnMM/A7twXIp9/qYGktd59YZoqiFyBSYoJI5FmQSS4
-         +PdA==
-X-Forwarded-Encrypted: i=1; AFNElJ+1zrdhoYCguaYgRjw18YFNDPWmhlEf6qk45u38bJDkP8YV/fxyNmB9tlF69jIVXnTXZbX5@lists.linux.dev
-X-Gm-Message-State: AOJu0YxrsofhfE4pOmHHr6RsFUyisnsvYoN4FUxs3YzllwXd3XQGQJZR
-	NNibsOD82nKLsUEta4mMAhdTBWrPRu6Jn2nim7KaDBUwnYbcxzOGP3Ee
-X-Gm-Gg: Acq92OFrq5/a6Hhz7fEZtD5KLrMEoW7nL0Iqgtx0DJjmVKNbt3EHlDdv71NmiSNHIMT
-	6OGkor4Am3JZK+TYSqHNxTxb07Ca6adS9qDTMPY8OjCeXSHO3t9Iq0iRv/5DyLZU2LGPQvmR0Nl
-	S254zOaV1nqHe66adS26Bi/o346cIkCywcdXw0hnswQnFyswKjDEtts2xuohmyVEMETXmE0PICE
-	ZZNwLDVddq0/ElI2JNoceoGCHJQmN+vN1ZDfOQQa0IPkb86wnF6uoor5/xomcWjfUL3a+6uJkpk
-	SEy422Dx+U4LDAbd/0YEkXgbq10mNn+AYj/Y3yXUsjOoHF2HsHTGopoyIHfRJFP8bGsiFAIX94G
-	MTHCEbNEzG8y3ReYU1K4YjfENGyQqi0E+chlrgd1KwvJ3JgyOYHn2WVkOmAMx5S3nloMYDW8uZZ
-	62XNGCr9AzY33EM8Qweti/n+hNrJoIDJtEXXeRMabRXngfBwPGR3A0rnqmo5Ar3XNXd9FfUCEoT
-	5WZgM1dyntNpUp6ygGIEzB5uGjt3FN1ERj1Bni4fCLi1Q==
-X-Received: by 2002:a05:6a00:6c99:b0:82d:603f:f3a with SMTP id d2e1a72fcca58-8420cb5b92bmr434239b3a.24.1779999188201;
-        Thu, 28 May 2026 13:13:08 -0700 (PDT)
+        bh=BvVT0II3dEilSbYrBZE5Ytb4041NB7ZsFn14SAB4u14=;
+        b=IK71q7M6wQ8KBLbd2x5kB1HHhxRpQ7zavKH9GXLPWM7OhvYGCbMcyVH6bMORTM2iFW
+         43+HqiddAQBJbJ2WyjVkq7a1ogChTLCdn1i/GIcfuvaDmKa6x695SSyY1YtLHRN0krg2
+         JVUFXs7EWlxd1fGTweD4VIaifDrs/n8BjabI1Hwr/9cMxJRqikUuxDZBRqpga7EbeQkV
+         AFRbZtHiNJaE+bMhX9aI+R5rIjiYTkt6Kbtwn44f+eyMa8NvWgdPuc93GG8LvDSnvu3j
+         hKBNkh2UvZnY7NXP+ob0SupntYJxxMV1KjNan1js8URkW3077TVnQkGMRR6rq2hKexxT
+         6QrQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8MIe+D9q9Nx7pCzbn3XZeTJP0OM2zPwg8tWCyi4WNbah3Z2uXWGVEb1dGo4c71kqbNa9ta@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxki7R5eH8q3UXsBNL8s2ngHp8zmobXnazRRBqv9A5g2iMrh/9A
+	CMORsMaCfyS4W3jPWzTUW1U8Ipqq7LivzKY6zT5O/gC3XcO2i6TLKcrs
+X-Gm-Gg: Acq92OGfuCteRmwPZL83RK5Ot8vJm5TB5CoOI2iwu+RYhJCooW3vo1/Z3B1sKRkNxw5
+	vme6unnqD0uhu5GVMEK9r6R6WvQvtvsq2lxc1fVbDfajhOZFh6GC1XkA/jLYsyOKpxANLRSTDWn
+	eo1DiR+NS9ux6mVKTij2WoEKo2yKcx5RzzZJXBA6cSpq7Sv4JjUFZiMVGJ8qHGiMVSqHtL6ivf6
+	IwMPG1s3V2lfeTRbGS+VUTLlmqshElw0AGxPpoMysOfjErAtKZZeI1lIBbdb8Z1XAmCeN5OLcgY
+	5QxHKzkaeHr1H7O4Xps2c0nmdDdWXoore53XxIYK7SpoPOfx7qP13wJ0C17mST1CpFfirIIn5TQ
+	f5njOtIAvI6H4y0/TCJVHeh8xVVi7jPaELjGcjM3iNkfs+B+WSFn6Yjjwi+Mz1x40ZrpuJm/8xV
+	6DSnXSBBQ9sS3lDIVYWG03tcmMrIhsIqw9NnJASJDl5Gz3PCmfJOANzfg7CBOXB5heOfh5j8MgQ
+	hEciJQMjNCVa8OQlYZuZ6ohQqyituU30+trqwuWUN22/Q==
+X-Received: by 2002:a17:90a:dfcf:b0:35d:a3b4:2f0d with SMTP id 98e67ed59e1d1-36bbcc146f3mr122373a91.6.1779999729076;
+        Thu, 28 May 2026 13:22:09 -0700 (PDT)
 Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-841d6e80c2asm6628425b3a.6.2026.05.28.13.13.06
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36b908da770sm2334406a91.2.2026.05.28.13.22.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 13:13:07 -0700 (PDT)
+        Thu, 28 May 2026 13:22:08 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
-To: linux-serial@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
+To: linux-block@vger.kernel.org
+Cc: Ilya Dryomov <idryomov@gmail.com>,
+	Dongsheng Yang <dongsheng.yang@linux.dev>,
+	Jens Axboe <axboe@kernel.dk>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list:TTY LAYER AND SERIAL DRIVERS),
+	ceph-devel@vger.kernel.org (open list:RADOS BLOCK DEVICE (RBD)),
+	linux-kernel@vger.kernel.org (open list),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] serial: 8250_pci: fix -Winitializer-overrides for Brainboxes UC-260/271/701/756 entries
-Date: Thu, 28 May 2026 13:12:50 -0700
-Message-ID: <20260528201250.135691-1-rosenp@gmail.com>
+Subject: [PATCH] rbd: cast snap_count to size_t to avoid tautological comparison warning
+Date: Thu, 28 May 2026 13:21:51 -0700
+Message-ID: <20260528202151.136274-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -79,42 +81,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-PCI_VDEVICE() expands to set .class=0 and .class_mask=0, but the Brainboxes
- UC-260/271/701/756 entries immediately override those fields. This causes
- a build error with clang -Werror,-Winitializer-overrides.
-
-Fix by expanding PCI_VDEVICE() manually, omitting the trailing
- .class/.class_mask zeroes so each field is set exactly once.
-
-Found with W=1
+snap_count is u32 but the comparison is against a SIZE_MAX-derived value
+(~2^61 on 64-bit), which clang flags as always false with
+-Wtautological-constant-out-of-range-compare. Cast to size_t so the
+comparison is done in the correct width.
 
 Assisted-by: Opencode:Big-pickle
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/tty/serial/8250/8250_pci.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/block/rbd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-index 3e5bc9e8d269..0513f4b3c093 100644
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -5394,12 +5394,14 @@ static const struct pci_device_id serial_pci_tbl[] = {
- 	 * Brainboxes UC-260/271/701/756
+diff --git a/drivers/block/rbd.c b/drivers/block/rbd.c
+index 94709466ad19..b4ba51db9a28 100644
+--- a/drivers/block/rbd.c
++++ b/drivers/block/rbd.c
+@@ -6079,7 +6079,7 @@ static int rbd_dev_v2_snap_context(struct rbd_device *rbd_dev,
+ 	 * make sure the computed size of the snapshot context we
+ 	 * allocate is representable in a size_t.
  	 */
- 	{
--		PCI_VDEVICE(INTASHIELD, 0x0D21),
-+		.vendor = PCI_VENDOR_ID_INTASHIELD, .device = 0x0D21,
-+		.subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID,
- 		.class = PCI_CLASS_COMMUNICATION_MULTISERIAL << 8,
- 		.class_mask = 0xffff00,
- 		.driver_data = pbn_b2_4_115200,
- 	}, {
--		PCI_VDEVICE(INTASHIELD, 0x0E34),
-+		.vendor = PCI_VENDOR_ID_INTASHIELD, .device = 0x0E34,
-+		.subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID,
- 		.class = PCI_CLASS_COMMUNICATION_MULTISERIAL << 8,
- 		.class_mask = 0xffff00,
- 		.driver_data = pbn_b2_4_115200,
+-	if (snap_count > (SIZE_MAX - sizeof (struct ceph_snap_context))
++	if ((size_t)snap_count > (SIZE_MAX - sizeof (struct ceph_snap_context))
+ 				 / sizeof (u64)) {
+ 		ret = -EINVAL;
+ 		goto out;
 -- 
 2.54.0
 
