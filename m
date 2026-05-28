@@ -1,140 +1,372 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619CF1A680F
-	for <llvm@lists.linux.dev>; Thu, 28 May 2026 05:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779947791; cv=pass; b=UdTiA7M+N/jEcSRP0k95W6aJ2cKTUm4Cpin4U42cyMEiyhy/9Qs9FZNJWweKv6hP2t3aTO7wtg++fs8Hpm7xrkmln8Nu3YvZAwSTjux8yBtc4crgYbJTa3MQoC0FKprKJccyYisrFhFs1v/LNFXNAvBCXhCIBUIOlV1rcg7nOkA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779947791; c=relaxed/simple;
-	bh=SHQe48/OG7Vdmb6Q7Hpmrn028N5c0kstT6AWGJ7acBs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CjtLcfzVgm1bak+l4ikCfg8xs3pTs5VZpTXcsmNKpjbUU/g00ItK0nM366fKmy09F4NnsYM+Tzzd7fRRARWN+kQoFIToBkvicYlBUwM8zsIZkHgtJfWUzZ1MzYRukOdn+f6Xp8saDjsapHNW7GsnVcQKu42UEpaP6cHDOx6FGaM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CYC3wjSC; arc=pass smtp.client-ip=74.125.82.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BBE32720C;
+	Thu, 28 May 2026 07:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779952987; cv=none; b=l2joeshWNHxspPOVX4nTH/JxY5eYMLvpsQzoIE1l+LDkq5OXbjDzCNb8MVUSsvN/bHhhjvkwBcl0tMs/0lBhWqnEwUTTtuqnlmwTC55MWOUlrTyRtj45YC/Xvva8IN/avKrqMhXzeRWA0Bn6TFRi253Sw4mVP4syl8IO+LBb94c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779952987; c=relaxed/simple;
+	bh=8gO9OFosoNPSAgZQatlSa4o21QvJ/pd6Qrsi3dKieqI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=S97nnhGqLcrwXtwQ8myUp+u6c7nC8XMlo5icv5JvISN7x7vMvXj9lTFdod0ZCMj2FeutS8wx6CUNK3HNbT8IVdcbkZYcx8cBQGlzMmC2LFEKafndX4J3RG+ts9RK/AbZT4hk6sQx1jtH8pAbUrWPZdGKu6McGUYa6dWdWvGgmk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Oqemg4O3; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CYC3wjSC"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2f0ad52830cso15879487eec.1
-        for <llvm@lists.linux.dev>; Wed, 27 May 2026 22:56:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779947789; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jUqnrby2yOcy7u3lQVh4wZln8SA1H8OOY44/63U2AS6JvEae/G8EOm1NZaQORNbBrK
-         d09LsucOzbL45YNcZpVZetgSK6RV8xlz749hyZ/psmZTfP1Eq1ZYTVjEkTyEHZFODlPN
-         gnMaAYOA+EDtbgR5FAflWJkI62s7nSkWtgjx4brjH0hRUafjiUbNk1HW0FLyQH1q+Z/l
-         1S5ZwU0Yb8QYF0phrfN37/Dj34j1/vocFrHn7t3ZCNAx/umzsnzOwWr9R3mK0PEapfdS
-         G9PEVFOaqFBs4YHUtH5X/UUD8Vdt31dadYJ2r3cOHVY+kJQtyrN4aATyY8MmGyX1nHl1
-         sYDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9/tAvDfBZY4caNpdNLD3RtS2Pph9k/Hgin/a4k+F0Cw=;
-        fh=9SHzoW14Pu1D51D6iPoBoQ11nFmoba/pkFbAv/BMyko=;
-        b=ihPjeUP1izhNSmjf/asoe6S4+t3smwpEEDvOjh73+rzkbRmA9QdkuXCcbbF2Ak2oby
-         +dBpbd12aKrWbMLsU/FY3hu0/i+RUNTEar2t3ic5M6BsN2bl+yEznWBCkP7vif1xF9nD
-         zk8P16NhMzPgw4P0jgFWswUO1c+5oa6sUg7IiLUq9ROZXScm/JjbCHn24Gq+l9nBT0DB
-         z01TWfddWJmihnvstt54/T8CKsMnWb8TlJuWY5Go23byAfJGoOdx6DTH42nLTXVuEW4Y
-         fjAn/TxqLdTZzDr4z+XDLioJeDfuXN3LIBZ4Gxbsj3m/oYoiKL62Pje7rIWpLd5vsNYL
-         PYhQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779947789; x=1780552589; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9/tAvDfBZY4caNpdNLD3RtS2Pph9k/Hgin/a4k+F0Cw=;
-        b=CYC3wjSCIFSqmpAGjNtCKf3dvbcpo78m/5PePCwrzOMp7f8EDlahZydNzt2cjlnQRe
-         rbK8aN767MWxk8YoEoKRFCFSMiyJaJEqPOmev6BlpmlZfp8slmDFrrk+cLvRxmYmf6ME
-         QCI2MydwlNzENchtdlWCSvmX0dM34HjKTu/+kRs40/+RnRG0Br485Z3ANtm+155/navX
-         lNT2GK1FiVDf52HoyjSpuPMfT05y4dldssYaAagCB2kwCR5erbpNxhN9H6oiwH+4a9oH
-         HP7Y8ArYObOZ83hKmon/lewMFUhVX8EYCDqUrYq33ZZfMJKkHNMZoRXJWxsKpLKLj8PR
-         UCVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779947789; x=1780552589;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9/tAvDfBZY4caNpdNLD3RtS2Pph9k/Hgin/a4k+F0Cw=;
-        b=V4V1MQcaNPbF1sp1mGqf3UYrOmYiqtKSDJ090vVmgjf2ZynqFmksp2ddYYDNX3c8d7
-         aZ/+uUAQXi4IjAmRySpqVLNuP2iHbMOtXNuIf2TNL0QLD9qGYgRsuzstla+3K2f4AJ1/
-         htnP28HZ9uFTBH7Wt4x/4FH9xRDBu2+vCNnevMMkozIOjB0I3970aa9ZTS0krwI4GQDz
-         w0DmISiYLWq7507YUthxetl9OCGbvSwWf5sRdS2WaGvEtQ7uH6qI8U2WNAvPYwV0Ijey
-         DXY1cEHw9SQRhP7h0tBr3IvhF05h4ZE0uYfXWX+b0sxxmCPEoK1UfhVS3qYSTD8WIlbw
-         LgRQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9lCnzQh1uJM+aIdXTZfT0dLFc7mpwmENhygllKjg52NQa10FAuVOC7LaKb2LMIwjt+qGxe@lists.linux.dev
-X-Gm-Message-State: AOJu0YxM6dKMVC9W2F3b/6r+1F2LOS0FOAowOEPG9/0tB6E2uWJD/QsT
-	hcys7Zx1lbcJ9JSjKBo6ls8tbhty8zp+uxtL1fScgBz7+tmWbvfDGkP2Xf6yWTBIuj02fJuFM/0
-	ndTnAx13dC35BEevwqxy5gWGeNDznN5mdhCvOzoMr
-X-Gm-Gg: Acq92OHT6tPKx3f4Sun+OGlwhHrTgC8Vs3UKjqa1xeajKjfhjy8QsdK7QtGs1lIUVts
-	2d7daGyLqTYVwUiQi7G633WT5UebEBAm/VUlXCds8fj72JJZjEu+xg25cmXzNYWvxTZLeSmBpBA
-	MdT2FIVpz9wjuu7w2csc1L1mEpE67WwYMRFVzxPMvfKH5jrtJbmmZRJ4VEzUTQFSVqoTOGp8UU3
-	XEHKwyCLZoRhemN07iiqDV5G0ywnLg9uXmojr7/pRApcdl09iy5FSv0/r5RIIrQ3Kha8ZlHxdP1
-	diyPFRcQ95Rhy6yp9hedHN+kDkuMhKqgb5FRRveX2FTI87gA
-X-Received: by 2002:a05:7300:2389:b0:2ea:b975:3db1 with SMTP id
- 5a478bee46e88-304491d7957mr12069640eec.23.1779947789049; Wed, 27 May 2026
- 22:56:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Oqemg4O3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779952984; x=1811488984;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8gO9OFosoNPSAgZQatlSa4o21QvJ/pd6Qrsi3dKieqI=;
+  b=Oqemg4O36iQ5/2ge+Z/DNICioiVlwrLtmthHUE3FHYuSFKipyHeXzN7e
+   8B7M0WEpgAOveLB/XJverBaaxT2ISPCD7K0HKemC/F2wE/C5ZkEPoqNyr
+   b1YVKKGD6VOma/pkicw5WxCQBYJqSFw3aBkhNgb6+62nfTLu7XJp3xJch
+   3pxB3AGB8/QDBB8rX/9zF+9JjDsz8gPpC/wiZAfNI9Fm/ykafXZAL9WSD
+   yo4sFxRG2JDPo5AhvKF6PwkpLCLFbvFr4zRnu0b+8YtfMlQqXOianPBUO
+   HM+7Djp0PqZx9K4JzjCHuQOKNnqxZ/kHhg7VWSz0m8rAj9ApvCRnLSB8k
+   w==;
+X-CSE-ConnectionGUID: tQG34OrmSiCicAU7yxTPVA==
+X-CSE-MsgGUID: c9JZal1TSE+hH1fSbLgW8Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="84417281"
+X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
+   d="scan'208";a="84417281"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 00:23:03 -0700
+X-CSE-ConnectionGUID: 24XA7NGiQRCNsGR5Fi0rgw==
+X-CSE-MsgGUID: vw55Oy1LQc2tNoPxWwEF3w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
+   d="scan'208";a="241438967"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 28 May 2026 00:23:01 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wSV50-000000005gC-1rGq;
+	Thu, 28 May 2026 07:22:58 +0000
+Date: Thu, 28 May 2026 15:22:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, x86@kernel.org,
+ Thomas Gleixner <tglx@kernel.org>
+Subject: [tip:timers/vdso 10/18] kernel/sys.c:2878:1: warning: alias
+ and aliasee have different types 'long (unsigned int *, unsigned int *, void
+ *)' and 'long (typeof
+ (__builtin_choose_expr((__builtin_types_compatible_p(typeof ((unsigned int
+ *)0), typeof (0LL)) || __builtin_types_compat...
+Message-ID: <202605281540.qUDQmxib-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260527-uwtable-module-flag-v1-1-caa41342be4b@google.com> <CANiq72mCYOXrWM7_3jby_ZvYmspXsYVzRqhTgQiBF0bdDLAaEg@mail.gmail.com>
-In-Reply-To: <CANiq72mCYOXrWM7_3jby_ZvYmspXsYVzRqhTgQiBF0bdDLAaEg@mail.gmail.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Thu, 28 May 2026 07:56:11 +0200
-X-Gm-Features: AVHnY4Ie_gpq2EI8eezCf2IRezAi1N80vE8gyBvflGswgtsI7hjNkqwxua2zqnE
-Message-ID: <CAH5fLghSe9tV+CJkqp5CkUPfugZ7hvMN0XHsh5kY3vs=3uQ2FQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: arm64: set uwtable llvm module flag for CONFIG_UNWIND_TABLES
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, stable@kernel.org, 
-	Bo Ye <bo.ye@mediatek.com>, Isaac Manjarres <isaacmanjarres@google.com>, 
-	Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 28, 2026 at 7:26=E2=80=AFAM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Wed, May 27, 2026 at 8:18=E2=80=AFPM Alice Ryhl <aliceryhl@google.com>=
- wrote:
-> >
-> > Once the fix lands in rustc, this flag can be made conditional on the
-> > rustc version. Note that passing the flag on a rustc with the fix
-> > present has no effect.
->
-> Already landed now, so if the uwtable one is enough, we could already
-> do that since it will be 1.98. But since it has no effect, we can keep
-> the fix as-is and do that on top too.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/=
+vdso
+head:   034779fb06aba5bc45faf366922bd77e4d36543a
+commit: 7158fc54b2c6f124eec0d7cd13bff69da0172e59 [10/18] vdso: Remove struc=
+t getcpu_cache
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20260528/20=
+2605281540.qUDQmxib-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 5ba=
+c06718f502014fade905512f1d26d578a18f3)
+reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
+/20260528/202605281540.qUDQmxib-lkp@intel.com/reproduce)
 
-Ah, yes, let's just add the version check.
+If you fix the issue in a separate patch/commit (i.e. not just a new versio=
+n of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605281540.qUDQmxib-lkp@i=
+ntel.com/
 
-With regards to the frame-pointer one, it's probably a good idea to do
-the same for that one. It's not necessary to fix the boot crash I
-encountered, but may help with other issues such as backtraces of
-ftrace.
+All warnings (new ones prefixed by >>):
 
-> Added and linked both issues (i.e. `uwtable` and the `frame-pointer` one)=
- to:
->
->   https://github.com/Rust-for-Linux/linux/issues/355
->
-> I have to send a fixes PR in the coming days, so I can pick this one
-> up, but if arm64 will do so then:
->
-> Acked-by: Miguel Ojeda <ojeda@kernel.org>
->
-> Thanks!
->
-> Cheers,
-> Miguel
+   kernel/sys.c:1793:1: warning: alias and aliasee have different types 'lo=
+ng (unsigned int, struct rlimit *)' and 'long (typeof (__builtin_choose_exp=
+r((__builtin_types_compatible_p(typeof ((unsigned int)0), typeof (0LL)) || =
+__builtin_types_compatible_p(typeof ((unsigned int)0), typeof (0ULL))), 0LL=
+, 0L)), typeof (__builtin_choose_expr((__builtin_types_compatible_p(typeof =
+((struct rlimit *)0), typeof (0LL)) || __builtin_types_compatible_p(typeof =
+((struct rlimit *)0), typeof (0ULL))), 0LL, 0L)))' (aka 'long (long, long)'=
+) [-Wattribute-alias]
+    1793 | SYSCALL_DEFINE2(setrlimit, unsigned int, resource, struct rlimit=
+ __user *, rlim)
+         | ^
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFI=
+NE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     251 |                 __attribute__((alias(__stringify(__se_sys##name)=
+)));    \
+         |                                ^
+   kernel/sys.c:1793:1: note: aliasee is declared here
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFI=
+NE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     255 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_AR=
+GS__))  \
+         |                         ^
+   <scratch space>:109:1: note: expanded from here
+     109 | __se_sys_setrlimit
+         | ^
+   kernel/sys.c:1933:1: warning: alias and aliasee have different types 'lo=
+ng (int, struct rusage *)' and 'long (typeof (__builtin_choose_expr((__buil=
+tin_types_compatible_p(typeof ((int)0), typeof (0LL)) || __builtin_types_co=
+mpatible_p(typeof ((int)0), typeof (0ULL))), 0LL, 0L)), typeof (__builtin_c=
+hoose_expr((__builtin_types_compatible_p(typeof ((struct rusage *)0), typeo=
+f (0LL)) || __builtin_types_compatible_p(typeof ((struct rusage *)0), typeo=
+f (0ULL))), 0LL, 0L)))' (aka 'long (long, long)') [-Wattribute-alias]
+    1933 | SYSCALL_DEFINE2(getrusage, int, who, struct rusage __user *, ru)
+         | ^
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFI=
+NE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     251 |                 __attribute__((alias(__stringify(__se_sys##name)=
+)));    \
+         |                                ^
+   kernel/sys.c:1933:1: note: aliasee is declared here
+   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFI=
+NE2'
+     226 | #define SYSCALL_DEFINE2(name, ...) SYSCALL_DEFINEx(2, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     255 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_AR=
+GS__))  \
+         |                         ^
+   <scratch space>:15:1: note: expanded from here
+      15 | __se_sys_getrusage
+         | ^
+   kernel/sys.c:1959:1: warning: alias and aliasee have different types 'lo=
+ng (int)' and 'long (typeof (__builtin_choose_expr((__builtin_types_compati=
+ble_p(typeof ((int)0), typeof (0LL)) || __builtin_types_compatible_p(typeof=
+ ((int)0), typeof (0ULL))), 0LL, 0L)))' (aka 'long (long)') [-Wattribute-al=
+ias]
+    1959 | SYSCALL_DEFINE1(umask, int, mask)
+         | ^
+   include/linux/syscalls.h:225:36: note: expanded from macro 'SYSCALL_DEFI=
+NE1'
+     225 | #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     251 |                 __attribute__((alias(__stringify(__se_sys##name)=
+)));    \
+         |                                ^
+   kernel/sys.c:1959:1: note: aliasee is declared here
+   include/linux/syscalls.h:225:36: note: expanded from macro 'SYSCALL_DEFI=
+NE1'
+     225 | #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     255 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_AR=
+GS__))  \
+         |                         ^
+   <scratch space>:42:1: note: expanded from here
+      42 | __se_sys_umask
+         | ^
+   kernel/sys.c:2517:1: warning: alias and aliasee have different types 'lo=
+ng (int, unsigned long, unsigned long, unsigned long, unsigned long)' and '=
+long (typeof (__builtin_choose_expr((__builtin_types_compatible_p(typeof ((=
+int)0), typeof (0LL)) || __builtin_types_compatible_p(typeof ((int)0), type=
+of (0ULL))), 0LL, 0L)), typeof (__builtin_choose_expr((__builtin_types_comp=
+atible_p(typeof ((unsigned long)0), typeof (0LL)) || __builtin_types_compat=
+ible_p(typeof ((unsigned long)0), typeof (0ULL))), 0LL, 0L)), typeof (__bui=
+ltin_choose_expr((__builtin_types_compatible_p(typeof ((unsigned long)0), t=
+ypeof (0LL)) || __builtin_types_compatible_p(typeof ((unsigned long)0), typ=
+eof (0ULL))), 0LL, 0L)), typeof (__builtin_choose_expr((__builtin_types_com=
+patible_p(typeof ((unsigned long)0), typeof (0LL)) || __builtin_types_compa=
+tible_p(typeof ((unsigned long)0), typeof (0ULL))), 0LL, 0L)), typeof (__bu=
+iltin_choose_expr((__builtin_types_compatible_p(typeof ((unsigned long)0), =
+typeof (0LL)) || __builtin_types_compatible_p(typeof ((unsigned long)0), ty=
+peof (0ULL))), 0LL, 0L)))' (aka 'long (long, long, long, long, long)') [-Wa=
+ttribute-alias]
+    2517 | SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigne=
+d long, arg3,
+         | ^
+   include/linux/syscalls.h:229:36: note: expanded from macro 'SYSCALL_DEFI=
+NE5'
+     229 | #define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     251 |                 __attribute__((alias(__stringify(__se_sys##name)=
+)));    \
+         |                                ^
+   kernel/sys.c:2517:1: note: aliasee is declared here
+   include/linux/syscalls.h:229:36: note: expanded from macro 'SYSCALL_DEFI=
+NE5'
+     229 | #define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     255 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_AR=
+GS__))  \
+         |                         ^
+   <scratch space>:93:1: note: expanded from here
+      93 | __se_sys_prctl
+         | ^
+>> kernel/sys.c:2878:1: warning: alias and aliasee have different types 'lo=
+ng (unsigned int *, unsigned int *, void *)' and 'long (typeof (__builtin_c=
+hoose_expr((__builtin_types_compatible_p(typeof ((unsigned int *)0), typeof=
+ (0LL)) || __builtin_types_compatible_p(typeof ((unsigned int *)0), typeof =
+(0ULL))), 0LL, 0L)), typeof (__builtin_choose_expr((__builtin_types_compati=
+ble_p(typeof ((unsigned int *)0), typeof (0LL)) || __builtin_types_compatib=
+le_p(typeof ((unsigned int *)0), typeof (0ULL))), 0LL, 0L)), typeof (__buil=
+tin_choose_expr((__builtin_types_compatible_p(typeof ((void *)0), typeof (0=
+LL)) || __builtin_types_compatible_p(typeof ((void *)0), typeof (0ULL))), 0=
+LL, 0L)))' (aka 'long (long, long, long)') [-Wattribute-alias]
+    2878 | SYSCALL_DEFINE3(getcpu, unsigned __user *, cpup, unsigned __user=
+ *, nodep, void __user *, unused)
+         | ^
+   include/linux/syscalls.h:227:36: note: expanded from macro 'SYSCALL_DEFI=
+NE3'
+     227 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     251 |                 __attribute__((alias(__stringify(__se_sys##name)=
+)));    \
+         |                                ^
+   kernel/sys.c:2878:1: note: aliasee is declared here
+   include/linux/syscalls.h:227:36: note: expanded from macro 'SYSCALL_DEFI=
+NE3'
+     227 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     255 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_AR=
+GS__))  \
+         |                         ^
+   <scratch space>:132:1: note: expanded from here
+     132 | __se_sys_getcpu
+         | ^
+   kernel/sys.c:2957:1: warning: alias and aliasee have different types 'lo=
+ng (struct sysinfo *)' and 'long (typeof (__builtin_choose_expr((__builtin_=
+types_compatible_p(typeof ((struct sysinfo *)0), typeof (0LL)) || __builtin=
+_types_compatible_p(typeof ((struct sysinfo *)0), typeof (0ULL))), 0LL, 0L)=
+))' (aka 'long (long)') [-Wattribute-alias]
+    2957 | SYSCALL_DEFINE1(sysinfo, struct sysinfo __user *, info)
+         | ^
+   include/linux/syscalls.h:225:36: note: expanded from macro 'SYSCALL_DEFI=
+NE1'
+     225 | #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     251 |                 __attribute__((alias(__stringify(__se_sys##name)=
+)));    \
+         |                                ^
+   kernel/sys.c:2957:1: note: aliasee is declared here
+   include/linux/syscalls.h:225:36: note: expanded from macro 'SYSCALL_DEFI=
+NE1'
+     225 | #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, _=
+_VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:236:2: note: expanded from macro 'SYSCALL_DEFIN=
+Ex'
+     236 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCALL_DE=
+FINEx'
+     255 |         asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_AR=
+GS__))  \
+         |                         ^
+   <scratch space>:160:1: note: expanded from here
+     160 | __se_sys_sysinfo
+         | ^
+   31 warnings generated.
+
+
+vim +2878 kernel/sys.c
+
+  2877=09
+> 2878	SYSCALL_DEFINE3(getcpu, unsigned __user *, cpup, unsigned __user *, =
+nodep, void __user *, unused)
+  2879	{
+  2880		int err =3D 0;
+  2881		int cpu =3D raw_smp_processor_id();
+  2882=09
+  2883		if (cpup)
+  2884			err |=3D put_user(cpu, cpup);
+  2885		if (nodep)
+  2886			err |=3D put_user(cpu_to_node(cpu), nodep);
+  2887		return err ? -EFAULT : 0;
+  2888	}
+  2889=09
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
