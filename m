@@ -1,192 +1,183 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A86372067;
-	Thu, 28 May 2026 08:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5A93B47EB;
+	Thu, 28 May 2026 09:45:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779956169; cv=none; b=cbjO9Scfar9R6KTDUFJshC8xpPZpPo61um1GxQ2dV7KSHnNeObNxGFSUzUL1Wluu02hnt8rd5Bnx3Y+l9PfFCqbxNnaeoea4CGS29WLskixlowFzMi2uZ6r2KVS63q3dMWobTrjkju2BJLnPIuJwqlUipVpsh8fxnWCeNww7xCA=
+	t=1779961519; cv=none; b=iYtUqttc8CUaS5AY8IP29s4jeAOGlI0XKusTncMblfrpNYbZO/XOHFAuvuH+CXsZIIBP3iQVsAmguKN16bgOV2/Fxb1FJ4/2GSZVYj6oheF2+MGdM89DVRoNGj/8ByuGSO9E3aOO+3kfPsdj7ymhwgGBbrIjKNXYxZGW0kWMK1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779956169; c=relaxed/simple;
-	bh=XRG8W9NAHc+HbEyj0+UtCgt+HhS+ZeeZXcAuoLpSGFE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ZdMEclZ/rVCq3l2Mm1K2rW+0m5S8FcfCWRb5ykHXINv+2UtmYwP5Dc9MTRf5l18mWs3JYakg8q4BMu+5PxezMnn3iXXAo5xhJHPvt9jjGaGtyXl2dwEar80ZAk5NftFef92rxoUfsQ2hAHCIt8m8TajTazTbQ/eJlSL/n53PHzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IHGDkimU; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1779961519; c=relaxed/simple;
+	bh=aci1jsED6wdJdkNYfeQgZYAydVZuHi2F0wWGj7na3uY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CWHO7vgyTY+JX81IZRnssRCGty/PDEFjo2jQfWvIXKz0aC7hnHg04eGGyVjkWA3wvXCJtjqPqsiALYEQIAiW1vaijsorHHP90CU2cHrTNtlVkuneJ/oGEUlQE8rg+5FFa2Z9Lzsc7rx6WSHGq6Buje07gLnx8u0iW4+p39FHnZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cqUSMmLQ; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IHGDkimU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cqUSMmLQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779956167; x=1811492167;
-  h=date:from:to:cc:subject:message-id;
-  bh=XRG8W9NAHc+HbEyj0+UtCgt+HhS+ZeeZXcAuoLpSGFE=;
-  b=IHGDkimUC1MfgVBtimXvqjELLUBoBJGBQd3UPiTmQBzPJy3BHjXCdyG2
-   m8hByVb3A2XfOL38mxuwI8WH/pi3NuRHgFu+jeg8sGBzNc0zW8lojsZIN
-   Y4fuuUS9HKmjLQiEr7ol2DBxNY9Cppp0Szpn0p/mlFfrEfkxthNA2+DeQ
-   nIBUKu4hfjxAB4D5lr4KgHuWsCuaNLNIcvq9VtXlQTNAgfmkhr90AYVHJ
-   OA2lmiXWp5cz/DII+NElLnsTWLWsCzlCkBet15dAmw6zdGXT6IXB1rjI8
-   pAEPzZ3pD/AEtqF9WCmc0fG8tkhR3WRlbCnUHy6bl7So9XzJWf10djulB
-   A==;
-X-CSE-ConnectionGUID: G7VqswVcT1KBr39VCi5fvw==
-X-CSE-MsgGUID: 7HgbP3rBTWGIOhs4sG6h4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="80520119"
+  t=1779961516; x=1811497516;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aci1jsED6wdJdkNYfeQgZYAydVZuHi2F0wWGj7na3uY=;
+  b=cqUSMmLQU+Bsx9wDKMpLx7V+pX9fAl3Xr4sj+lKwx0dMJF2GQyZSkEu/
+   MCMhg93h3JJUTuxiv3cFFzVIu3OoQ8+f1qetOvETXTGi5SBw6hIkVtN58
+   /6e1lgrOKebowRX71MUJpSW+Ggnk50D52ELIpFFKWg3UryfVPgtUVwUTS
+   QGcGOjYlF/RMw0qkKumFSuUEnSGOBsNvh8YUQykebdxmb8Eev4BUUO2t0
+   VZsHjkIjvy4Qel5VEX0r333+iRbGm5TitBZJHe5lYtjNC8eUpcjK/v9NC
+   XTLYXAio6fQZipB3hkW3K1bTudG1wYKertIlKSYMXjORfkuEVCie1rewI
+   Q==;
+X-CSE-ConnectionGUID: dYYHYkMpTiWil67XQ0DRfw==
+X-CSE-MsgGUID: fA8homi3Qeq9e4zibpfARw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="91109286"
 X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
-   d="scan'208";a="80520119"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 01:16:07 -0700
-X-CSE-ConnectionGUID: 91NmiBW4RE2ttYlQlBmu7g==
-X-CSE-MsgGUID: 7247Q2d1SaOkJYI760tmCg==
+   d="scan'208";a="91109286"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 02:45:12 -0700
+X-CSE-ConnectionGUID: 17Hz6Rr9RRCy19GfJbAVqA==
+X-CSE-MsgGUID: zGThimueS5GwjWeZhZHQ2A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
-   d="scan'208";a="266088107"
+   d="scan'208";a="247452835"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 28 May 2026 01:16:04 -0700
+  by orviesa005.jf.intel.com with ESMTP; 28 May 2026 02:45:09 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wSVuL-000000005j0-3mpc;
-	Thu, 28 May 2026 08:16:01 +0000
-Date: Thu, 28 May 2026 16:15:31 +0800
+	id 1wSXIY-000000005nA-10us;
+	Thu, 28 May 2026 09:45:06 +0000
+Date: Thu, 28 May 2026 17:44:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Johannes Weiner <hannes@cmpxchg.org>
+To: Ashwin Gundarapu <linuxuser509@zohomail.in>, tglx <tglx@kernel.org>,
+	mingo <mingo@redhat.com>, bp <bp@alien8.de>, hpa <hpa@zytor.com>,
+	x86 <x86@kernel.org>, "dave.hansen" <dave.hansen@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- David Hildenbrand <david@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Linux Memory Management List <linux-mm@kvack.org>,
- mm-commits@vger.kernel.org, "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>
-Subject: [akpm-mm:mm-new 429/433] mm/swap_state.c:468:19: error: call
- to undeclared function 'folio_memcg_alloc_deferred'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202605281620.lc3rtkBm-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] x86/vm86: Remove deprecated VM86 support
+Message-ID: <202605281705.9gRlhp1Y-lkp@intel.com>
+References: <19e6858d9db.3a90532342003.5043853571553507480@zohomail.in>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19e6858d9db.3a90532342003.5043853571553507480@zohomail.in>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
-head:   d7d405cc33d6e3eeba2d6ec8f0b595da2a5c600a
-commit: a5e62d9e00dac6f96174c397a82da30e7ae53064 [429/433] mm: switch deferred split shrinker to list_lru
-config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20260528/202605281620.lc3rtkBm-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9409c07de6378507397ecdb6f05f628f58110112)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605281620.lc3rtkBm-lkp@intel.com/reproduce)
+Hi Ashwin,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on v7.1-rc5]
+[also build test ERROR on linus/master next-20260527]
+[cannot apply to tip/x86/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ashwin-Gundarapu/x86-vm86-Remove-deprecated-VM86-support/20260527-153401
+base:   v7.1-rc5
+patch link:    https://lore.kernel.org/r/19e6858d9db.3a90532342003.5043853571553507480%40zohomail.in
+patch subject: [PATCH v2] x86/vm86: Remove deprecated VM86 support
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260528/202605281705.9gRlhp1Y-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260528/202605281705.9gRlhp1Y-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605281620.lc3rtkBm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605281705.9gRlhp1Y-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/swap_state.c:468:19: error: call to undeclared function 'folio_memcg_alloc_deferred'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     468 |         if (order > 1 && folio_memcg_alloc_deferred(folio)) {
-         |                          ^
+>> arch/x86/kernel/signal.c:261:3: error: call to undeclared function 'save_v86_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     261 |                 save_v86_state((struct kernel_vm86_regs *) regs, VM86_SIGNAL);
+         |                 ^
    1 error generated.
+--
+>> arch/x86/kernel/traps.c:289:9: error: call to undeclared function 'handle_vm86_trap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     289 |                         if (!handle_vm86_trap((struct kernel_vm86_regs *) regs,
+         |                              ^
+>> arch/x86/kernel/traps.c:927:3: error: call to undeclared function 'handle_vm86_fault'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     927 |                 handle_vm86_fault((struct kernel_vm86_regs *) regs, error_code);
+         |                 ^
+   arch/x86/kernel/traps.c:927:3: note: did you mean 'handle_mm_fault'?
+   include/linux/mm.h:3144:19: note: 'handle_mm_fault' declared here
+    3144 | extern vm_fault_t handle_mm_fault(struct vm_area_struct *vma,
+         |                   ^
+   arch/x86/kernel/traps.c:1347:3: error: call to undeclared function 'handle_vm86_trap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1347 |                 handle_vm86_trap((struct kernel_vm86_regs *)regs, 0, X86_TRAP_DB);
+         |                 ^
+   3 errors generated.
 
 
-vim +/folio_memcg_alloc_deferred +468 mm/swap_state.c
+vim +/save_v86_state +261 arch/x86/kernel/signal.c
 
-   390	
-   391	/*
-   392	 * Try to allocate a folio of given order in the swap cache.
-   393	 *
-   394	 * This helper resolves the potential races of swap allocation
-   395	 * and prepares a folio to be used for swap IO. May return following
-   396	 * value:
-   397	 *
-   398	 * -ENOMEM / -EBUSY: Order is too large or in conflict with sub slot,
-   399	 *                   caller should shrink the order and retry
-   400	 * -ENOENT / -EEXIST: Target swap entry is unavailable or cached, the caller
-   401	 *                    should abort or try to use the cached folio instead
-   402	 */
-   403	static struct folio *__swap_cache_alloc(struct swap_cluster_info *ci,
-   404						swp_entry_t targ_entry, gfp_t gfp,
-   405						unsigned int order, struct vm_fault *vmf,
-   406						struct mempolicy *mpol, pgoff_t ilx)
-   407	{
-   408		int err;
-   409		swp_entry_t entry;
-   410		struct folio *folio;
-   411		void *shadow = NULL;
-   412		unsigned short memcg_id;
-   413		unsigned long address, nr_pages = 1UL << order;
-   414		struct vm_area_struct *vma = vmf ? vmf->vma : NULL;
-   415	
-   416		VM_WARN_ON_ONCE(nr_pages > SWAPFILE_CLUSTER);
-   417		entry.val = round_down(targ_entry.val, nr_pages);
-   418	
-   419		/* Check if the slot and range are available, skip allocation if not */
-   420		spin_lock(&ci->lock);
-   421		err = __swap_cache_add_check(ci, targ_entry, nr_pages, NULL, NULL);
-   422		spin_unlock(&ci->lock);
-   423		if (unlikely(err))
-   424			return ERR_PTR(err);
-   425	
-   426		/*
-   427		 * Limit THP gfp. The limitation is a no-op for typical
-   428		 * GFP_HIGHUSER_MOVABLE but matters for shmem.
-   429		 */
-   430		if (order)
-   431			gfp = thp_shmem_limit_gfp_mask(vma_thp_gfp_mask(vma), gfp);
-   432	
-   433		if (mpol || !vmf) {
-   434			folio = folio_alloc_mpol(gfp, order, mpol, ilx, numa_node_id());
-   435		} else {
-   436			address = round_down(vmf->address, PAGE_SIZE << order);
-   437			folio = vma_alloc_folio(gfp, order, vmf->vma, address);
-   438		}
-   439		if (unlikely(!folio))
-   440			return ERR_PTR(-ENOMEM);
-   441	
-   442		/* Double check the range is still not in conflict */
-   443		spin_lock(&ci->lock);
-   444		err = __swap_cache_add_check(ci, targ_entry, nr_pages, &shadow, &memcg_id);
-   445		if (unlikely(err)) {
-   446			spin_unlock(&ci->lock);
-   447			folio_put(folio);
-   448			return ERR_PTR(err);
-   449		}
-   450	
-   451		__folio_set_locked(folio);
-   452		__folio_set_swapbacked(folio);
-   453		__swap_cache_do_add_folio(ci, folio, entry);
-   454		spin_unlock(&ci->lock);
-   455	
-   456		if (mem_cgroup_swapin_charge_folio(folio, memcg_id,
-   457						   vmf ? vmf->vma->vm_mm : NULL, gfp)) {
-   458			spin_lock(&ci->lock);
-   459			__swap_cache_do_del_folio(ci, folio, entry, shadow);
-   460			spin_unlock(&ci->lock);
-   461			folio_unlock(folio);
-   462			/* nr_pages refs from swap cache, 1 from allocation */
-   463			folio_put_refs(folio, nr_pages + 1);
-   464			count_mthp_stat(order, MTHP_STAT_SWPIN_FALLBACK_CHARGE);
-   465			return ERR_PTR(-ENOMEM);
-   466		}
-   467	
- > 468		if (order > 1 && folio_memcg_alloc_deferred(folio)) {
-   469			spin_lock(&ci->lock);
-   470			__swap_cache_do_del_folio(ci, folio, entry, shadow);
-   471			spin_unlock(&ci->lock);
-   472			folio_unlock(folio);
-   473			/* nr_pages refs from swap cache, 1 from allocation */
-   474			folio_put_refs(folio, nr_pages + 1);
-   475			return ERR_PTR(-ENOMEM);
-   476		}
-   477	
-   478		/* memsw uncharges swap when folio is added to swap cache */
-   479		memcg1_swapin(folio);
-   480		if (shadow)
-   481			workingset_refault(folio, shadow);
-   482	
-   483		node_stat_mod_folio(folio, NR_FILE_PAGES, nr_pages);
-   484		lruvec_stat_mod_folio(folio, NR_SWAPCACHE, nr_pages);
-   485	
-   486		/* Caller will initiate read into locked new_folio */
-   487		folio_add_lru(folio);
-   488		return folio;
-   489	}
-   490	
+1d13024e624d0e2 arch/x86/kernel/signal_32.c Hiroshi Shimamoto   2008-09-05  253  
+a610d6e672d6d37 arch/x86/kernel/signal.c    Al Viro             2012-05-21  254  static void
+235b80226b986da arch/x86/kernel/signal.c    Al Viro             2012-11-09  255  handle_signal(struct ksignal *ksig, struct pt_regs *regs)
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  256  {
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  257  	bool stepping, failed;
+e3bfa3859936da3 arch/x86/kernel/signal.c    Ingo Molnar         2025-04-09  258  	struct fpu *fpu = x86_task_fpu(current);
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  259  
+5ed92a8ab71f886 arch/x86/kernel/signal.c    Brian Gerst         2015-07-29  260  	if (v8086_mode(regs))
+5ed92a8ab71f886 arch/x86/kernel/signal.c    Brian Gerst         2015-07-29 @261  		save_v86_state((struct kernel_vm86_regs *) regs, VM86_SIGNAL);
+5ed92a8ab71f886 arch/x86/kernel/signal.c    Brian Gerst         2015-07-29  262  
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  263  	/* Are we from a system call? */
+9ddcb87b9218dec arch/x86/kernel/signal.c    H. Peter Anvin      2021-05-10  264  	if (syscall_get_nr(current, regs) != -1) {
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  265  		/* If so, check system call restarting.. */
+bb57925f5057837 arch/x86/kernel/signal_32.c Hiroshi Shimamoto   2008-09-05  266  		switch (syscall_get_error(current, regs)) {
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  267  		case -ERESTART_RESTARTBLOCK:
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  268  		case -ERESTARTNOHAND:
+65ea5b034990358 arch/x86/kernel/signal_32.c H. Peter Anvin      2008-01-30  269  			regs->ax = -EINTR;
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  270  			break;
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  271  
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  272  		case -ERESTARTSYS:
+235b80226b986da arch/x86/kernel/signal.c    Al Viro             2012-11-09  273  			if (!(ksig->ka.sa.sa_flags & SA_RESTART)) {
+65ea5b034990358 arch/x86/kernel/signal_32.c H. Peter Anvin      2008-01-30  274  				regs->ax = -EINTR;
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  275  				break;
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  276  			}
+df561f6688fef77 arch/x86/kernel/signal.c    Gustavo A. R. Silva 2020-08-23  277  			fallthrough;
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  278  		case -ERESTARTNOINTR:
+65ea5b034990358 arch/x86/kernel/signal_32.c H. Peter Anvin      2008-01-30  279  			regs->ax = regs->orig_ax;
+65ea5b034990358 arch/x86/kernel/signal_32.c H. Peter Anvin      2008-01-30  280  			regs->ip -= 2;
+ac66f3fd89ee20b arch/x86/kernel/signal_32.c Harvey Harrison     2008-02-08  281  			break;
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  282  		}
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  283  	}
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  284  
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  285  	/*
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  286  	 * If TF is set due to a debugger (TIF_FORCED_TF), clear TF now
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  287  	 * so that register information in the sigcontext is correct and
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  288  	 * then notify the tracer before entering the signal handler.
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  289  	 */
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  290  	stepping = test_thread_flag(TIF_SINGLESTEP);
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  291  	if (stepping)
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  292  		user_disable_single_step(current);
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  293  
+235b80226b986da arch/x86/kernel/signal.c    Al Viro             2012-11-09  294  	failed = (setup_rt_frame(ksig, regs) < 0);
+235b80226b986da arch/x86/kernel/signal.c    Al Viro             2012-11-09  295  	if (!failed) {
+8b9c5ff380aa4f1 arch/x86/kernel/signal_32.c Roland McGrath      2008-04-19  296  		/*
+8b9c5ff380aa4f1 arch/x86/kernel/signal_32.c Roland McGrath      2008-04-19  297  		 * Clear the direction flag as per the ABI for function entry.
+ddd40da4ccbabdd arch/x86/kernel/signal.c    Jiri Olsa           2013-05-01  298  		 *
+24cda10996f5420 arch/x86/kernel/signal.c    Jiri Olsa           2013-05-01  299  		 * Clear RF when entering the signal handler, because
+24cda10996f5420 arch/x86/kernel/signal.c    Jiri Olsa           2013-05-01  300  		 * it might disable possible debug exception from the
+24cda10996f5420 arch/x86/kernel/signal.c    Jiri Olsa           2013-05-01  301  		 * signal handler.
+ddd40da4ccbabdd arch/x86/kernel/signal.c    Jiri Olsa           2013-05-01  302  		 *
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  303  		 * Clear TF for the case when it wasn't set by debugger to
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  304  		 * avoid the recursive send_sigtrap() in SIGTRAP handler.
+8b9c5ff380aa4f1 arch/x86/kernel/signal_32.c Roland McGrath      2008-04-19  305  		 */
+ddd40da4ccbabdd arch/x86/kernel/signal.c    Jiri Olsa           2013-05-01  306  		regs->flags &= ~(X86_EFLAGS_DF|X86_EFLAGS_RF|X86_EFLAGS_TF);
+66463db4fc5605d arch/x86/kernel/signal.c    Oleg Nesterov       2014-09-02  307  		/*
+66463db4fc5605d arch/x86/kernel/signal.c    Oleg Nesterov       2014-09-02  308  		 * Ensure the signal handler starts with the new fpu state.
+66463db4fc5605d arch/x86/kernel/signal.c    Oleg Nesterov       2014-09-02  309  		 */
+b860eb8dce5906b arch/x86/kernel/signal.c    Fenghua Yu          2020-05-12  310  		fpu__clear_user_states(fpu);
+235b80226b986da arch/x86/kernel/signal.c    Al Viro             2012-11-09  311  	}
+fd0f86b66425bd8 arch/x86/kernel/signal.c    Oleg Nesterov       2015-04-16  312  	signal_setup_done(failed, ksig, stepping);
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  313  }
+^1da177e4c3f415 arch/i386/kernel/signal.c   Linus Torvalds      2005-04-16  314  
 
 --
 0-DAY CI Kernel Test Service
