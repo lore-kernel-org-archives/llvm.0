@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58135387363;
-	Fri, 29 May 2026 17:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4033612F8;
+	Fri, 29 May 2026 18:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780076205; cv=none; b=gHbIX6mt31aiGrj/f3JYdUqP8Ao71GRLuXz6R5b003JhhP4FmSK8IjPXyCUeCA7t7j5tzP2I/fFrt1ejAUPlNZE+5ApQn48d915GEycGYVM44//p2E9nFvbdfSx3xkPsV1MtR+A3o4K4OQz2kxT1Re3g5sQ4g1np6+JTeWB3Qh8=
+	t=1780077641; cv=none; b=SyYQOR188oJPK1YALyN0cflDia617yQXqZ0oU45gg+k2/yxgMpJH4k0eayhVvupwb5hMWy1GB4CF/lOzoEitQIn0zNg5hrZ+NQsesBAgq1iLmvwpLmYwxWTHH5w8vz8CmOwnNZEYuQYpvmBvXmRcbmz4DUReSGv+KhxoK3m7L9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780076205; c=relaxed/simple;
-	bh=7Uuo5e8hVDwUSS8WSodvniwPfg7SrlP4W5S07wwq/gA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=sxQMWFXBe484xEixjbNTmJd/Hxl68VnypLUG4lXsj2Qv7nriGf8GXQRIBiDaIirzbAdMAId1MlOUy9ORCxtm8GHdF8s3qOuUt0k/R441ouDmoMxvRkKVmYUw82Ft0V/uqCqWnE8MASX4KPyHO4XhASW5AAvEbtVBHos0/yYzEEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YmSrRPrZ; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1780077641; c=relaxed/simple;
+	bh=U18HE6s1nIUNcZLoOifyH+0a+S519C7SIn5dTwYT64o=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=NuJbg4QDbl4CKywFq7ou8MZCb81oWhuXV6UAr1dqCyWJoQ3Na5wJ9Y6kYGGpu+pJKJoayW30ery9hYzz04imJ2l2qNrBifp0BRjoRf9mBY24+NDEQQgtIjgh5w6geaj7+A9Jt2YSUfB0GeSU3TdFwK353NjVE0OumAU/wXE+kL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9pkjnaZ; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YmSrRPrZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9pkjnaZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780076205; x=1811612205;
+  t=1780077640; x=1811613640;
   h=date:from:to:cc:subject:message-id;
-  bh=7Uuo5e8hVDwUSS8WSodvniwPfg7SrlP4W5S07wwq/gA=;
-  b=YmSrRPrZxubelrVR6C/ieW+ToomnLSKTpAqW8+S4Ucc/egr6wI1yE8bd
-   q2vvyob25BNqo02ORyM4qdVHK/T/J+FWY71BiF1wpq8907/kkTSrv1qpW
-   jdsbVYdcqpMPRq0m1720QIujuISIkJ5hELU/6u+q4+owmw5NGN5TZHezt
-   q917CzJ8HVhUm+hoJg0vcYGritAiMf/P7GLu93HZlEe1sByMBVxmthDSy
-   pL34dJL9ddMA9SgKZsa79Q8zVDfOvGzKJYbhManCoxGMBbICDzkAkgZyT
-   I1wiSn0451m1Np9PTXwWH5yMbnSsM8Jdzpm/uEwQm06zTmAKxYJI2ZWjk
-   Q==;
-X-CSE-ConnectionGUID: Wikp9C4JTEymAOEEKJOsKQ==
-X-CSE-MsgGUID: PMvP3opjSgKHZGg3Z7/0nQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="106383592"
+  bh=U18HE6s1nIUNcZLoOifyH+0a+S519C7SIn5dTwYT64o=;
+  b=M9pkjnaZacuQXlHGCAm/xkBu/il2goU6bNK85glDOLPsGR9AWnl4k+og
+   L2OblEfYxECNWlXk0uo613XWvhGm20YjDRaEDXWAJXjHt350v3N0Pczx0
+   ChOzS8+fcYogEWXeLS3R9bVQi4a5B8PVmqc/Mfdm6ZIWHt45QR7e3xwCo
+   bDOd1IbbXyjesI+1cJpOzr6+lm1NJCE/g6NRD/dkqjcnG55lK22flM9L/
+   WgOCJXeDJPlQmkD/gpLBrY9O5rqWea5WzbgoaE1oqolV4u0IFJNpkXc44
+   nEv1jWjmk2ftedcgkfKi+JTQ08O8Y12ZGio321mecDc79UBNPHRwyD1g4
+   w==;
+X-CSE-ConnectionGUID: dp5Q2TLmTOy6hVv1kD5x3A==
+X-CSE-MsgGUID: DQoB5EDZQxamRhpqSz2uFA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="92317763"
 X-IronPort-AV: E=Sophos;i="6.24,175,1774335600"; 
-   d="scan'208";a="106383592"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2026 10:36:44 -0700
-X-CSE-ConnectionGUID: wIHHYo8NRBGuYJd4X/WH7g==
-X-CSE-MsgGUID: pdCWgOXVTeafER6u51fimg==
+   d="scan'208";a="92317763"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2026 11:00:39 -0700
+X-CSE-ConnectionGUID: 7vvR/ShDS2WPZIxzKSisig==
+X-CSE-MsgGUID: SGuAmygKRIOg5CbYKU8GRQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,175,1774335600"; 
-   d="scan'208";a="241863341"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 29 May 2026 10:36:42 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+   d="scan'208";a="236555635"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa009.fm.intel.com with ESMTP; 29 May 2026 11:00:38 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wT18R-000000007YA-2u2v;
-	Fri, 29 May 2026 17:36:39 +0000
-Date: Sat, 30 May 2026 01:36:32 +0800
+	id 1wT1Vc-000000000vN-0WeV;
+	Fri, 29 May 2026 18:00:36 +0000
+Date: Fri, 29 May 2026 20:00:25 +0200
 From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
+To: Tomas Glozar <tglozar@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [hare-scsi-devel:configfs-ns.v5 27/29]
- fs/configfs/mount.c:256:6: warning: variable 'dentry' is used uninitialized
- whenever 'if' condition is false
-Message-ID: <202605300137.nbNI6Vs7-lkp@intel.com>
+Subject: [tglozar:rtla-for-next 17/26]
+ tools/tracing/rtla/tests/scripts/lib/get_workload_pids.sh: warning: ignored
+ by one of the .gitignore files
+Message-ID: <202605291919.eszupseg-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,73 +60,22 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git configfs-ns.v5
-head:   964d695bfb8ffb92899c77a55c4920fdb3d79e7b
-commit: 2d39db5facb268ddbb34f11f3a28f5518ab5cf84 [27/29] fs/configfs: rework configfs_pin_fs()
-config: arm-lpc32xx_defconfig (https://download.01.org/0day-ci/archive/20260530/202605300137.nbNI6Vs7-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605300137.nbNI6Vs7-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglozar/linux.git rtla-for-next
+head:   db956bcf8d681b5a01ebe04c79f6a7b29b9934f9
+commit: 48209d763c22354c78f6138f4a83814c2f2a3578 [17/26] rtla: Add libsubcmd dependency
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260529/202605291919.eszupseg-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260529/202605291919.eszupseg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605300137.nbNI6Vs7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605291919.eszupseg-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/configfs/mount.c:256:6: warning: variable 'dentry' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     256 |         if (!info->mnt) {
-         |             ^~~~~~~~~~
-   fs/configfs/mount.c:267:9: note: uninitialized use occurs here
-     267 |         return dentry;
-         |                ^~~~~~
-   fs/configfs/mount.c:256:2: note: remove the 'if' if its condition is always true
-     256 |         if (!info->mnt) {
-         |         ^~~~~~~~~~~~~~~
-   fs/configfs/mount.c:240:23: note: initialize the variable 'dentry' to silence this warning
-     240 |         struct dentry *dentry;
-         |                              ^
-         |                               = NULL
-   1 warning generated.
-
-
-vim +256 fs/configfs/mount.c
-
-   235	
-   236	struct dentry *configfs_pin_fs(struct super_block *sb)
-   237	{
-   238		struct configfs_super_info *info;
-   239		struct vfsmount *mnt;
-   240		struct dentry *dentry;
-   241	
-   242		if (sb) {
-   243			struct configfs_super_info *root = configfs_get_root(NULL);
-   244	
-   245			info = sb->s_fs_info;
-   246			dentry = sb->s_root;
-   247			dget(dentry);
-   248			info->mnt = root->mnt;
-   249			configfs_put_root(root);
-   250			goto get_mount;
-   251		}
-   252		info = configfs_get_root(NULL);
-   253		if (WARN_ON(!info))
-   254			return ERR_PTR(-EAGAIN);
-   255	
- > 256		if (!info->mnt) {
-   257			mnt = vfs_kern_mount(&configfs_fs_type, SB_KERNMOUNT,
-   258					     configfs_fs_type.name, NULL);
-   259			if (IS_ERR(mnt))
-   260				return ERR_CAST(mnt);
-   261			info->mnt = mnt;
-   262			dentry = info->mnt->mnt_root;
-   263		}
-   264	get_mount:
-   265		refcount_inc(&info->mnt_ref);
-   266		mntget(info->mnt);
-   267		return dentry;
-   268	}
-   269	
+   Documentation/.renames.txt: warning: ignored by one of the .gitignore files
+>> tools/tracing/rtla/tests/scripts/lib/get_workload_pids.sh: warning: ignored by one of the .gitignore files
 
 --
 0-DAY CI Kernel Test Service
