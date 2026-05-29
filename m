@@ -1,135 +1,133 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7568E262FC1
-	for <llvm@lists.linux.dev>; Fri, 29 May 2026 15:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F462E7378;
+	Fri, 29 May 2026 16:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780067868; cv=none; b=PCccw3I1kYuOIuA652QdmrZepPp7Zoc/CjAr5yH2qzRNtxgZFHUCFpaD2VLXaX9RWqnoVGkB/8FkA9qXfdIa0PbnjFUfLJgU/TepSfp91z59wuVZPFWtWU8AcykddI6P0eWvsmBgc6I/boC4pP6TGRRMy0gAeuCXzmrxSy3XydA=
+	t=1780070921; cv=none; b=pLl8jI1yJnGgQJbWOmUNbUOATzKyI3xQqz8BxxlxqsGy/ITAnV794p34G0ZHvfG5kXYH3nVGXl5iZDY9/f+tgHekrx2kmOCIY4ceHj6IR67DIG01GmRTE3tCe0U2iUdFvkf3B+jn7s/8emnhlXXpd+Wy7jDAcVVLOxhZGDLqArE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780067868; c=relaxed/simple;
-	bh=i14utAyWVag4qxanxiMOSsLoacp5PlK9awjdPrY0Lt0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u8nOCENav82Cy6Gmd0S0vcOdNLDHZ+lDhTBpdfcos0X8tumfYD8uBWxoTgrHzxx07xQVRdvRLdEzeBS0mkwfWIb3BS1bZIRepjofjHZndOfyklXChn9WOBCWzlVvGFR5MR9oDo7FsJVuMRNtjTmwI7nNzEVJ/cyvgOI7BRZgxLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=E/Y8OmFz; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1780070921; c=relaxed/simple;
+	bh=FPIDO8Th/9W+Bs1Y2HZTcoisymwgATSC3kpjj0NlJDU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=KwM1fYf04eqXSbNfwJkeNLn5lRwqDOsnIdPSkn0Z44comcQE3dE+IQV9B07er+K9HdwKriRe8y11JhiJDP0oJidRC+0Kov7KkOQ8RZAqou+W77GhS/23XGrwnqi7sq/lpsv5UBgnsORan2Uw2E3mcGlhYXXCgk+SPk0msdpyN60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hd2H+TzH; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="E/Y8OmFz"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D29DD1C00;
-	Fri, 29 May 2026 08:17:41 -0700 (PDT)
-Received: from [10.57.26.238] (unknown [10.57.26.238])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8093B3F632;
-	Fri, 29 May 2026 08:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780067866; bh=i14utAyWVag4qxanxiMOSsLoacp5PlK9awjdPrY0Lt0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=E/Y8OmFzjPPiFlVn4wlpigbZpVnBOLe/nvmQB9aWj85QNMT7/qwPvsbPCBXgoTSUY
-	 ILoZRm/Zx+YVmLnnnjl6SbY9FgvOkUu3spSzSN72QzgqEzBR85lxu8q43Fz/aKK1vx
-	 t17fO/GqqvBY0+f/5OA/Bl8CQBWaofzEEz9yntmI=
-Message-ID: <c99085e5-cf1f-479d-bef0-b6a4161482e5@arm.com>
-Date: Fri, 29 May 2026 16:17:33 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hd2H+TzH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780070920; x=1811606920;
+  h=date:from:to:cc:subject:message-id;
+  bh=FPIDO8Th/9W+Bs1Y2HZTcoisymwgATSC3kpjj0NlJDU=;
+  b=Hd2H+TzHmJu2qRvwUWzHse/AwVfZsVJGy0HD5XtTfFQPwFzzfnWP5Syr
+   kdR/P7TOQ2iYN6q3VwsDD5MG4uEghJPjsPVUqgCqVWQjLHHqrufcrWe0g
+   gyaOv897UKjNeNlaDVnU/q6y/tDm5F5/QYUI5XtUpUrrkhaBjTXoOnrpH
+   QKHSnaWzOW5HkFLP0x2lSnxUfsVNLR0A2+a5bLkpArdso9O9bWVQQdV54
+   qrR5x9rT4oaI4OOKfmVycS4lH/hMu6s4DNg3dVnb627YtLR65VpjI+qyr
+   A4ud2RMNSyZAjcdmpNJN1iBVnPqtoc1fy9RokkOCf0xyztIEJFJfj2YzT
+   g==;
+X-CSE-ConnectionGUID: S4ABi1aTSQ++4Q9YxheYLQ==
+X-CSE-MsgGUID: 3fWrursxSLaRXUCumZ+X6Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="81109588"
+X-IronPort-AV: E=Sophos;i="6.24,175,1774335600"; 
+   d="scan'208";a="81109588"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2026 09:08:40 -0700
+X-CSE-ConnectionGUID: 2HFK82PeQtu7lhJt8ez2AA==
+X-CSE-MsgGUID: zjtlVkrbQJ2QSsnl/Y/yUg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,175,1774335600"; 
+   d="scan'208";a="246897299"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 29 May 2026 09:08:37 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wSzlD-000000000ub-1wWL;
+	Fri, 29 May 2026 16:08:35 +0000
+Date: Fri, 29 May 2026 18:08:20 +0200
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [hare-scsi-devel:configfs-ns.v5 27/29]
+ fs/configfs/mount.c:256:6: warning: variable 'dentry' is used uninitialized
+ whenever 'if' condition is false
+Message-ID: <202605291802.UGY3xPFG-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 06/10] thermal/of: Rename the
- devm_thermal_of_cooling_device_register() function
-To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>, rafael@kernel.org,
- daniel.lezcano@kernel.org
-Cc: Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
- Russell King <linux+etnaviv@armlinux.org.uk>,
- Christian Gmeiner <christian.gmeiner@gmail.com>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Benson Leung <bleung@chromium.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
- <pali@kernel.org>, Avi Fishman <avifishman70@gmail.com>,
- Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
- Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
- Benjamin Fair <benjaminfair@google.com>, Heiko Stuebner <heiko@sntech.de>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Amit Daniel Kachhap <amit.kachhap@gmail.com>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Neil Armstrong <neil.armstrong@linaro.org>, Amit Kucheria
- <amitk@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
- Thierry Reding <thierry.reding@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
- Mikko Perttunen <mperttunen@nvidia.com>,
- Svyatoslav Ryhel <clamor95@gmail.com>,
- "moderated list:ARM/ASPEED MACHINE SUPPORT"
- <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/ASPEED MACHINE SUPPORT" <linux-aspeed@lists.ozlabs.org>,
- "moderated list:ARM/NUVOTON NPCM ARCHITECTURE" <openbmc@lists.ozlabs.org>,
- "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
- "open list:ARM/QUALCOMM MAILING LIST" <linux-arm-msm@vger.kernel.org>,
- "open list:KHADAS MCU MFD DRIVER" <linux-amlogic@lists.infradead.org>,
- "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>
-References: <20260526140802.1059293-12-daniel.lezcano@oss.qualcomm.com>
- <20260526140802.1059293-18-daniel.lezcano@oss.qualcomm.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20260526140802.1059293-18-daniel.lezcano@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git configfs-ns.v5
+head:   964d695bfb8ffb92899c77a55c4920fdb3d79e7b
+commit: 2d39db5facb268ddbb34f11f3a28f5518ab5cf84 [27/29] fs/configfs: rework configfs_pin_fs()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260529/202605291802.UGY3xPFG-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260529/202605291802.UGY3xPFG-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605291802.UGY3xPFG-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/configfs/mount.c:256:6: warning: variable 'dentry' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     256 |         if (!info->mnt) {
+         |             ^~~~~~~~~~
+   fs/configfs/mount.c:267:9: note: uninitialized use occurs here
+     267 |         return dentry;
+         |                ^~~~~~
+   fs/configfs/mount.c:256:2: note: remove the 'if' if its condition is always true
+     256 |         if (!info->mnt) {
+         |         ^~~~~~~~~~~~~~~
+   fs/configfs/mount.c:240:23: note: initialize the variable 'dentry' to silence this warning
+     240 |         struct dentry *dentry;
+         |                              ^
+         |                               = NULL
+   1 warning generated.
 
 
+vim +256 fs/configfs/mount.c
 
-On 5/26/26 15:08, Daniel Lezcano wrote:
-> To clarify that the function operates on child nodes, rename:
-> 
->            devm_thermal_of_cooling_device_register()
-> 	                     |
-> 			     v
->         devm_thermal_of_child_cooling_device_register()
-> 
-> Used the command:
-> 
->       	 find . -type f -name '*.[ch]' -exec \
-> 	 sed -i 's/devm_thermal_of_cooling_device_register/\
-> 	 devm_thermal_of_child_cooling_device_register/g' {} \;
-> 
-> Did not used clang-format-diff because it does not indent correctly
-> and checkpatch complained. Manually reindented to make checkpatch
-> happy
-> 
-> This prepares for upcoming support of cooling devices identified by
-> an ID rather than device tree child nodes.
-> 
-> No functional change.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-> ---
->   drivers/hwmon/amc6821.c                  |  2 +-
->   drivers/hwmon/aspeed-pwm-tacho.c         |  5 +++--
->   drivers/hwmon/emc2305.c                  |  6 +++---
->   drivers/hwmon/gpio-fan.c                 |  6 ++++--
->   drivers/hwmon/max6650.c                  |  6 +++---
->   drivers/hwmon/npcm750-pwm-fan.c          |  6 ++++--
->   drivers/hwmon/pwm-fan.c                  |  5 +++--
->   drivers/hwmon/qnap-mcu-hwmon.c           |  6 +++---
->   drivers/hwmon/tc654.c                    |  5 +++--
->   drivers/memory/tegra/tegra210-emc-core.c |  4 ++--
->   drivers/soc/qcom/qcom_aoss.c             |  2 +-
->   drivers/thermal/khadas_mcu_fan.c         |  7 ++++---
->   drivers/thermal/tegra/soctherm.c         |  6 +++---
->   drivers/thermal/thermal_of.c             | 15 +++++++++------
->   include/linux/thermal.h                  | 16 ++++++++--------
->   15 files changed, 54 insertions(+), 43 deletions(-)
-> 
+   235	
+   236	struct dentry *configfs_pin_fs(struct super_block *sb)
+   237	{
+   238		struct configfs_super_info *info;
+   239		struct vfsmount *mnt;
+   240		struct dentry *dentry;
+   241	
+   242		if (sb) {
+   243			struct configfs_super_info *root = configfs_get_root(NULL);
+   244	
+   245			info = sb->s_fs_info;
+   246			dentry = sb->s_root;
+   247			dget(dentry);
+   248			info->mnt = root->mnt;
+   249			configfs_put_root(root);
+   250			goto get_mount;
+   251		}
+   252		info = configfs_get_root(NULL);
+   253		if (WARN_ON(!info))
+   254			return ERR_PTR(-EAGAIN);
+   255	
+ > 256		if (!info->mnt) {
+   257			mnt = vfs_kern_mount(&configfs_fs_type, SB_KERNMOUNT,
+   258					     configfs_fs_type.name, NULL);
+   259			if (IS_ERR(mnt))
+   260				return ERR_CAST(mnt);
+   261			info->mnt = mnt;
+   262			dentry = info->mnt->mnt_root;
+   263		}
+   264	get_mount:
+   265		refcount_inc(&info->mnt_ref);
+   266		mntget(info->mnt);
+   267		return dentry;
+   268	}
+   269	
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
