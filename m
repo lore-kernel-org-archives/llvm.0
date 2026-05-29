@@ -1,82 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4033612F8;
-	Fri, 29 May 2026 18:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24BF9425CE1;
+	Fri, 29 May 2026 18:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780077641; cv=none; b=SyYQOR188oJPK1YALyN0cflDia617yQXqZ0oU45gg+k2/yxgMpJH4k0eayhVvupwb5hMWy1GB4CF/lOzoEitQIn0zNg5hrZ+NQsesBAgq1iLmvwpLmYwxWTHH5w8vz8CmOwnNZEYuQYpvmBvXmRcbmz4DUReSGv+KhxoK3m7L9Q=
+	t=1780080444; cv=none; b=VpolKhmJS2Fo+W04nMe2Fof/emRQQl0qETz3L1ZKjZWaE7TJTqhDIJkeuquAt307H1YsmS80ogZkPg/v7+lpQTxcp/792IahvTulmLlwuOG0I4Gacp9u04txt9RgBZHlcj8ByV+7G8tHKwmq9Cm9rcCwrc6XFC5IPYNVmvLjOqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780077641; c=relaxed/simple;
-	bh=U18HE6s1nIUNcZLoOifyH+0a+S519C7SIn5dTwYT64o=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NuJbg4QDbl4CKywFq7ou8MZCb81oWhuXV6UAr1dqCyWJoQ3Na5wJ9Y6kYGGpu+pJKJoayW30ery9hYzz04imJ2l2qNrBifp0BRjoRf9mBY24+NDEQQgtIjgh5w6geaj7+A9Jt2YSUfB0GeSU3TdFwK353NjVE0OumAU/wXE+kL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9pkjnaZ; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780080444; c=relaxed/simple;
+	bh=Y2BfjIOohy7qzAHN359pShO4LMVZ0g/7OgqTF8A8sRk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iCi2I3/QUBW7XgmgbO6yHJTwoZOpIOf8MsvWE/LS7nEp48BfsONSTDwTynHl9mkfeUDCwht8Iq/EZZ14VsxUqEfK7nU9Ww3PQGJdzoYYMlfY4XH+Z4ehqxHYCtc7lun5wxb45Q/rXUJ6JVzJy7X7aXhVi70fV6EFwaMHL3rePZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HmRPQV+c; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9pkjnaZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780077640; x=1811613640;
-  h=date:from:to:cc:subject:message-id;
-  bh=U18HE6s1nIUNcZLoOifyH+0a+S519C7SIn5dTwYT64o=;
-  b=M9pkjnaZacuQXlHGCAm/xkBu/il2goU6bNK85glDOLPsGR9AWnl4k+og
-   L2OblEfYxECNWlXk0uo613XWvhGm20YjDRaEDXWAJXjHt350v3N0Pczx0
-   ChOzS8+fcYogEWXeLS3R9bVQi4a5B8PVmqc/Mfdm6ZIWHt45QR7e3xwCo
-   bDOd1IbbXyjesI+1cJpOzr6+lm1NJCE/g6NRD/dkqjcnG55lK22flM9L/
-   WgOCJXeDJPlQmkD/gpLBrY9O5rqWea5WzbgoaE1oqolV4u0IFJNpkXc44
-   nEv1jWjmk2ftedcgkfKi+JTQ08O8Y12ZGio321mecDc79UBNPHRwyD1g4
-   w==;
-X-CSE-ConnectionGUID: dp5Q2TLmTOy6hVv1kD5x3A==
-X-CSE-MsgGUID: DQoB5EDZQxamRhpqSz2uFA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="92317763"
-X-IronPort-AV: E=Sophos;i="6.24,175,1774335600"; 
-   d="scan'208";a="92317763"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2026 11:00:39 -0700
-X-CSE-ConnectionGUID: 7vvR/ShDS2WPZIxzKSisig==
-X-CSE-MsgGUID: SGuAmygKRIOg5CbYKU8GRQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,175,1774335600"; 
-   d="scan'208";a="236555635"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa009.fm.intel.com with ESMTP; 29 May 2026 11:00:38 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wT1Vc-000000000vN-0WeV;
-	Fri, 29 May 2026 18:00:36 +0000
-Date: Fri, 29 May 2026 20:00:25 +0200
-From: kernel test robot <lkp@intel.com>
-To: Tomas Glozar <tglozar@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglozar:rtla-for-next 17/26]
- tools/tracing/rtla/tests/scripts/lib/get_workload_pids.sh: warning: ignored
- by one of the .gitignore files
-Message-ID: <202605291919.eszupseg-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HmRPQV+c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFAD1F00893;
+	Fri, 29 May 2026 18:47:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780080442;
+	bh=r2c2Odd8JPefWuQj2wE16E72FC1VtLLMGPUbupxPPIg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=HmRPQV+cqmN/y4kJjAffLC/vkDxIEMLsAcp4Rw4NQ3J8TdUpnwGSjAnEEaVGLz08M
+	 9fJqOV7t4QX6WzfClGDu/wL2+1oxs8vuOKsh4yCEfUioFHVafOf1+FE1JL1q4DtHMd
+	 K8WwpqH7d7ZhsfY2Et2AtSa94sY0d6YOt8QkL3CZblb8AOIPCcs4PVnf8o2nU3NOoW
+	 EAG5OmujNWXCGchqvjOek7W9i/hBXywLIF3m/bVEWN8EF6vcPYCpKmm7yUlXm85p67
+	 aso5S5XJEiLjbjeyYZdodDAyA+XFbjomLpadt+fTbU63SZopevSUd6w3r6EsIMa/9H
+	 ELeL0RzX4fnNw==
+Date: Fri, 29 May 2026 11:47:14 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Rong Xu <xur@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Stafford Horne <shorne@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Piotr Gorski <piotrgorski@cachyos.org>,
+	Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Teresa Johnson <tejohnson@google.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v11 3/3] kbuild: distributed build support for Clang
+ ThinLTO
+Message-ID: <20260529184714.GA2059596@ax162>
+References: <20260528203905.687687-1-xur@google.com>
+ <20260528203905.687687-4-xur@google.com>
+ <178000602351.678078.3534988919326810792.b4-review@b4>
+ <CAF1bQ=SOG3qr4K3h=SBgM=e42RmV6WjOfyMOmi_qBOpYMoVaEQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF1bQ=SOG3qr4K3h=SBgM=e42RmV6WjOfyMOmi_qBOpYMoVaEQ@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglozar/linux.git rtla-for-next
-head:   db956bcf8d681b5a01ebe04c79f6a7b29b9934f9
-commit: 48209d763c22354c78f6138f4a83814c2f2a3578 [17/26] rtla: Add libsubcmd dependency
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260529/202605291919.eszupseg-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260529/202605291919.eszupseg-lkp@intel.com/reproduce)
+On Thu, May 28, 2026 at 04:09:10PM -0700, Rong Xu wrote:
+> On Thu, May 28, 2026 at 3:07 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > Sashiko has another comment as well.
+> >
+> >   https://sashiko.dev/#/patchset/26003?part=3
+> 
+> Are you referring to KBUILD_VMLINUX_OBJS and KBUILD_VMLINUX_LIBS part?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605291919.eszupseg-lkp@intel.com/
+Yes.
 
-All warnings (new ones prefixed by >>):
+> I'm not sure if that's true: in my build, KBUILD_VMLINUX_OBJS includes
+> lib/lib.a etc.
+> In line 1296 of Makefile:
+> KBUILD_VMLINUX_OBJS := built-in.a $(patsubst %/, %/lib.a, $(filter %/,
+> $(libs-y)))
+> 
+> We can see native objects in lib/*.
+> % find lib -name '*.thinlto-native.o' |wc
+>     204     204    7104
 
-   Documentation/.renames.txt: warning: ignored by one of the .gitignore files
->> tools/tracing/rtla/tests/scripts/lib/get_workload_pids.sh: warning: ignored by one of the .gitignore files
+Ah yes, I should have double checked that before brining it up.
+KBUILD_VMLINUX_LIBS would contain archives such as
+drivers/firmware/efi/libstub/lib.a, which we obviously do not want to
+process into vmlinux.a, so I think that comment is obviously invalid.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Nathan
