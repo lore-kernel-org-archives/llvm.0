@@ -1,202 +1,133 @@
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B84F3DA7F5
-	for <llvm@lists.linux.dev>; Fri, 29 May 2026 16:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780072145; cv=pass; b=nnusKgC79POtL0SXFQCk8Vh8pwqWzaMk4lQse3vyhNUPX7M62uU/9ODTFHDxK75jEwjYzVa3rg1t9R3e4VUICp+jEg0/iIWiYOGGYpVcWiWsMGmKaxAv273U6GxVnKgEMRMWG0L4gODBLvvdVD9OdZy6iyajxyWzqEMd8iWF9UI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780072145; c=relaxed/simple;
-	bh=PH/Z12wHsMq8SpuU56tCXSsJXXE208ciSwkYTY3S1Lw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L0utSvPRld4AjE15UBpfH1piyIacmCGauOR0IFgHxp/HT1YikB3T/d0tpWOQxk7u/Rl/87DJkeZGSIm0D069ydKfLdTCSd2BUh8liY2DFSR2TBdTouGQhWYbNchf+EHnOUpq1Kb/GmPHbiUkbRB2hag7GzeGPjVwbgBuqjAEAf4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eqnfSqdt; arc=pass smtp.client-ip=209.85.217.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58135387363;
+	Fri, 29 May 2026 17:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780076205; cv=none; b=gHbIX6mt31aiGrj/f3JYdUqP8Ao71GRLuXz6R5b003JhhP4FmSK8IjPXyCUeCA7t7j5tzP2I/fFrt1ejAUPlNZE+5ApQn48d915GEycGYVM44//p2E9nFvbdfSx3xkPsV1MtR+A3o4K4OQz2kxT1Re3g5sQ4g1np6+JTeWB3Qh8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780076205; c=relaxed/simple;
+	bh=7Uuo5e8hVDwUSS8WSodvniwPfg7SrlP4W5S07wwq/gA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=sxQMWFXBe484xEixjbNTmJd/Hxl68VnypLUG4lXsj2Qv7nriGf8GXQRIBiDaIirzbAdMAId1MlOUy9ORCxtm8GHdF8s3qOuUt0k/R441ouDmoMxvRkKVmYUw82Ft0V/uqCqWnE8MASX4KPyHO4XhASW5AAvEbtVBHos0/yYzEEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YmSrRPrZ; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eqnfSqdt"
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-6c36543e834so166006137.1
-        for <llvm@lists.linux.dev>; Fri, 29 May 2026 09:29:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780072143; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aEyH7A3OBtWH29YHpt3QRy83cNNeSe+SNkcMWpXjJvQ32xOlWE1yMqJy3Vag/xA2Ew
-         IO+i5A/VHSQM7UxsI2EjhWtwrqrJSVIH2kMOorFyB8jOivL7xhxH3ZWHa70SmnezyNEo
-         TNnhr1rLnKILh9R1cxn4ju+jvLu1RGeRWgBYA8qq7wl8Vf8eH6xzF1wsj4qXYOvjUoty
-         mvk8iGHk0V7RFYUOshbv3nmmiyBOU0PqkGEHouSkDBB4KhW6YDpRBtIwoPCcdF3yrwCL
-         OkVFoOgPAeFs7H8kUkhsWWxoVtuJNTWmf0JWVguFMJW70TkzSRJmkQN6MlsqG68mXYQG
-         evGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Q7KOWJPsMTJrakS60eVOqCDfj+qeD6Xam4DgPMjjGsI=;
-        fh=dTgH+GgDYPPrmR7trjLVD/FeEIOqbGk95zP8uVDUcrQ=;
-        b=PcesGRfAgtDxUaLcgg5u7gvGItLte+J+dIJvZf4f+vcyKyWKi1nwk7dZSxySayMLeC
-         axfCyrcrXF99n9ehMwXPRltki/zTuyjcdmRoDQGjqc2DamE9598KZ0MJVCZpVcpz9BBI
-         JwdZcS8zAAS8Y3/LcMZiD21WVddkojQxZJKO/DgwZVJNw76yHWWzD3jXs6fIjFUGFMKr
-         dQKSA2at+pR1IEPvxC/7KCfjwSsguFiKTnCtrsT5WkPnxdbbBd+dfY7ZisvaoM22ctaM
-         TK4CVWZqL8Kc6KHdnSZl9bMF//TBPg/wNuL1p7ISX6Zlz8RWb4Jwe/0FJFQBq48y5FLU
-         g7Og==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780072143; x=1780676943; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q7KOWJPsMTJrakS60eVOqCDfj+qeD6Xam4DgPMjjGsI=;
-        b=eqnfSqdtpR+m/ZHe7dqrgmwE0NCDux+bRO8hCAQDpqZqDUEvyGaQbw/X33woHfUlta
-         dAeo59XgA8bquyMcV5z0EPmtF4AhcRUNGXIXg3FejYrgZruFVYVZ3YOkxtXV5NbZmdZN
-         Xv5kllKnUoaoJnV2UjTktSeI8iRoBF1VwNBVeMyiMpKw9ouR2CbfQzIzFqP56SbAltlW
-         Zq3H+9Qoh9T8kQ7aQ67pnbJuPnxlk8tIStcblH1zs1rntI+/l3M6z2oeibU6+w62emd/
-         kRFljvRRb6IzTz63E6wzZvgp80dG2+Skcy+AcDtrpRHtkWWnxIciCQkVEHTHUyhACeP5
-         1JjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780072143; x=1780676943;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Q7KOWJPsMTJrakS60eVOqCDfj+qeD6Xam4DgPMjjGsI=;
-        b=mvSTn32HkSJ61lCKKzffFXGvWzPw1YFm8s4LZ2p0XIKgTTzAwtBc3YLrDFFC2IT7IU
-         6cOD/srLBmZz9lgiPuKsrhQ0fiIcwCKTGsdiWvaSN5R9k0nzT+DyfBzWLfwTC+zu07sF
-         fPVJiB/DycAlmpizQ+fY2pnfBpvPuquXv+rG0J01lAbguYjIvWNDlI1uYejrTyMNa0jG
-         2MIXu5jFsJHji9Tcb+n3gbAAl+Lv60xN8OSoDVC3+4VLE+cfWUXyduck/u99VHFsaL+2
-         tt1V5rEBtBtJo9py0WgIsZ3/9zz+s6PGk+rtY4gqWPG0IV0u72RVCQfpZsEsrLJg62IK
-         zFhQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+UTZ4Cyx0jlZjZi2OIb7p0lNkw37tAUbghIB+uMiQgYMwZ09ZB01rY3HTqVHAbSLazvqGj@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxy7hV8sSmopfoPuEGRCLE6kCAOCahsoJXF4CRhBjzhsqAoNQnW
-	AVcTNmWmQaX6hczgLsMtl4TCDzpQIM3kBC0F0OHFIMy7Rjya31oMoQhtXgeQppZ1aZgvoHxKwfJ
-	Gy0zKQMnZPw6ANCQJKQfR9uLzdjUUBVesIWz1Socz
-X-Gm-Gg: Acq92OHwatFHbc5KyOgLxP+raFQNLTN4/OKy3Xd7DuY9Jil/Xx3extFGAvcbhxFcLAa
-	5jSVIVAomeB9DGuBWQIPB7Fput/gBaEqRviO3r/+kSwD+0QFkOpawHU4cFSMnbpLY3Qj2Xo1Dh+
-	0ceDuJzr221NnS/dg1xXb8EKIjg5pXi34ZNB4qr7ROwqPbhn7DJjBRcJuUkq+AHwXmEyHiD6Ila
-	dCXBzET66/MaWQlQIcIrGQ5T2TPYTYtW2ubBlNO9mrqouYnT26yHIcKOTF3Ftre6YknuRQVSmYo
-	logP0OFbLaXVLuqyWQ==
-X-Received: by 2002:a05:6102:3ece:b0:631:8665:3511 with SMTP id
- ada2fe7eead31-6bf422b40eemr1931039137.30.1780072142599; Fri, 29 May 2026
- 09:29:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YmSrRPrZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780076205; x=1811612205;
+  h=date:from:to:cc:subject:message-id;
+  bh=7Uuo5e8hVDwUSS8WSodvniwPfg7SrlP4W5S07wwq/gA=;
+  b=YmSrRPrZxubelrVR6C/ieW+ToomnLSKTpAqW8+S4Ucc/egr6wI1yE8bd
+   q2vvyob25BNqo02ORyM4qdVHK/T/J+FWY71BiF1wpq8907/kkTSrv1qpW
+   jdsbVYdcqpMPRq0m1720QIujuISIkJ5hELU/6u+q4+owmw5NGN5TZHezt
+   q917CzJ8HVhUm+hoJg0vcYGritAiMf/P7GLu93HZlEe1sByMBVxmthDSy
+   pL34dJL9ddMA9SgKZsa79Q8zVDfOvGzKJYbhManCoxGMBbICDzkAkgZyT
+   I1wiSn0451m1Np9PTXwWH5yMbnSsM8Jdzpm/uEwQm06zTmAKxYJI2ZWjk
+   Q==;
+X-CSE-ConnectionGUID: Wikp9C4JTEymAOEEKJOsKQ==
+X-CSE-MsgGUID: PMvP3opjSgKHZGg3Z7/0nQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="106383592"
+X-IronPort-AV: E=Sophos;i="6.24,175,1774335600"; 
+   d="scan'208";a="106383592"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2026 10:36:44 -0700
+X-CSE-ConnectionGUID: wIHHYo8NRBGuYJd4X/WH7g==
+X-CSE-MsgGUID: pdCWgOXVTeafER6u51fimg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,175,1774335600"; 
+   d="scan'208";a="241863341"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 29 May 2026 10:36:42 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wT18R-000000007YA-2u2v;
+	Fri, 29 May 2026 17:36:39 +0000
+Date: Sat, 30 May 2026 01:36:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [hare-scsi-devel:configfs-ns.v5 27/29]
+ fs/configfs/mount.c:256:6: warning: variable 'dentry' is used uninitialized
+ whenever 'if' condition is false
+Message-ID: <202605300137.nbNI6Vs7-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260528-im_back_baby-v1-1-25d355efdbae@google.com>
-In-Reply-To: <20260528-im_back_baby-v1-1-25d355efdbae@google.com>
-From: Justin Stitt <justinstitt@google.com>
-Date: Fri, 29 May 2026 09:28:51 -0700
-X-Gm-Features: AVHnY4Jr6H03OfHaWFJtqrsbD1DMvlU60lxKSdJGu2BseUWECJcMyHSM0OqmjvQ
-Message-ID: <CAFhGd8pOWHnZHH7R5KBspj+o1Bfrbk9sXeNj2X48VB+nYPBAnw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: update ndesaulniers
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, Will Deacon <will@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Carlos Bilbao <carlos.bilbao@kernel.org>, Avadhut Naik <avadhut.naik@amd.com>, 
-	linux-kernel@vger.kernel.org, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, llvm@lists.linux.dev, 
-	gosst-kernel <gosst-kernel@google.com>, 
-	android-kernel-team <android-kernel-team@google.com>, 
-	kernel-dynamic-tools <kernel-dynamic-tools@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git configfs-ns.v5
+head:   964d695bfb8ffb92899c77a55c4920fdb3d79e7b
+commit: 2d39db5facb268ddbb34f11f3a28f5518ab5cf84 [27/29] fs/configfs: rework configfs_pin_fs()
+config: arm-lpc32xx_defconfig (https://download.01.org/0day-ci/archive/20260530/202605300137.nbNI6Vs7-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605300137.nbNI6Vs7-lkp@intel.com/reproduce)
 
-On Thu, May 28, 2026 at 2:38=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> I'm coming back.  I will return.  I will possess your body, and I'll
-> make LKML burn.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605300137.nbNI6Vs7-lkp@intel.com/
 
-:0
+All warnings (new ones prefixed by >>):
 
->
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  .mailmap                                                               |=
- 1 -
->  Documentation/process/embargoed-hardware-issues.rst                    |=
- 2 +-
->  Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst |=
- 2 +-
->  MAINTAINERS                                                            |=
- 2 +-
->  4 files changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/.mailmap b/.mailmap
-> index a009f73d7ea5..f863781b0102 100644
-> --- a/.mailmap
-> +++ b/.mailmap
-> @@ -634,7 +634,6 @@ Nicholas Piggin <npiggin@gmail.com> <npiggin@kernel.d=
-k>
->  Nicholas Piggin <npiggin@gmail.com> <npiggin@suse.de>
->  Nicholas Piggin <npiggin@gmail.com> <nickpiggin@yahoo.com.au>
->  Nicholas Piggin <npiggin@gmail.com> <piggin@cyberone.com.au>
-> -Nick Desaulniers <nick.desaulniers+lkml@gmail.com> <ndesaulniers@google.=
-com>
->  Nicolas Ferre <nicolas.ferre@microchip.com> <nicolas.ferre@atmel.com>
->  Nicolas Pitre <nico@fluxnic.net> <nicolas.pitre@linaro.org>
->  Nicolas Pitre <nico@fluxnic.net> <nico@linaro.org>
-> diff --git a/Documentation/process/embargoed-hardware-issues.rst b/Docume=
-ntation/process/embargoed-hardware-issues.rst
-> index 34e00848e0da..d07f16c3c7b8 100644
-> --- a/Documentation/process/embargoed-hardware-issues.rst
-> +++ b/Documentation/process/embargoed-hardware-issues.rst
-> @@ -308,7 +308,7 @@ an involved disclosed party. The current ambassadors =
-list:
->
->    Google       Kees Cook <keescook@chromium.org>
->
-> -  LLVM         Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> +  LLVM         Nick Desaulniers <ndesaulniers@google.com>
->    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->  If you want your organization to be added to the ambassadors list, pleas=
-e
-> diff --git a/Documentation/translations/sp_SP/process/embargoed-hardware-=
-issues.rst b/Documentation/translations/sp_SP/process/embargoed-hardware-is=
-sues.rst
-> index 9d444b9c46d3..7d4d694967c7 100644
-> --- a/Documentation/translations/sp_SP/process/embargoed-hardware-issues.=
-rst
-> +++ b/Documentation/translations/sp_SP/process/embargoed-hardware-issues.=
-rst
-> @@ -287,7 +287,7 @@ revelada involucrada. La lista de embajadores actuale=
-s:
->
->    Google       Kees Cook <keescook@chromium.org>
->
-> -  LLVM         Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> +  LLVM         Nick Desaulniers <ndesaulniers@google.com>
->    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->  Si quiere que su organizaci=C3=B3n se a=C3=B1ada a la lista de embajador=
-es, por
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 461a3eed6129..2f06cc2e463c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6259,7 +6259,7 @@ F:        .clang-format
->
->  CLANG/LLVM BUILD SUPPORT
->  M:     Nathan Chancellor <nathan@kernel.org>
-> -R:     Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> +R:     Nick Desaulniers <ndesaulniers@google.com>
->  R:     Bill Wendling <morbo@google.com>
->  R:     Justin Stitt <justinstitt@google.com>
->  L:     llvm@lists.linux.dev
->
-> ---
-> base-commit: 8fde5d1d47f69db6082dfa34500c27f8485389a5
-> change-id: 20260528-im_back_baby-1ade32dc049e
->
-> Best regards,
-> --
-> Nick Desaulniers <ndesaulniers@google.com>
->
+>> fs/configfs/mount.c:256:6: warning: variable 'dentry' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     256 |         if (!info->mnt) {
+         |             ^~~~~~~~~~
+   fs/configfs/mount.c:267:9: note: uninitialized use occurs here
+     267 |         return dentry;
+         |                ^~~~~~
+   fs/configfs/mount.c:256:2: note: remove the 'if' if its condition is always true
+     256 |         if (!info->mnt) {
+         |         ^~~~~~~~~~~~~~~
+   fs/configfs/mount.c:240:23: note: initialize the variable 'dentry' to silence this warning
+     240 |         struct dentry *dentry;
+         |                              ^
+         |                               = NULL
+   1 warning generated.
 
-Justin
+
+vim +256 fs/configfs/mount.c
+
+   235	
+   236	struct dentry *configfs_pin_fs(struct super_block *sb)
+   237	{
+   238		struct configfs_super_info *info;
+   239		struct vfsmount *mnt;
+   240		struct dentry *dentry;
+   241	
+   242		if (sb) {
+   243			struct configfs_super_info *root = configfs_get_root(NULL);
+   244	
+   245			info = sb->s_fs_info;
+   246			dentry = sb->s_root;
+   247			dget(dentry);
+   248			info->mnt = root->mnt;
+   249			configfs_put_root(root);
+   250			goto get_mount;
+   251		}
+   252		info = configfs_get_root(NULL);
+   253		if (WARN_ON(!info))
+   254			return ERR_PTR(-EAGAIN);
+   255	
+ > 256		if (!info->mnt) {
+   257			mnt = vfs_kern_mount(&configfs_fs_type, SB_KERNMOUNT,
+   258					     configfs_fs_type.name, NULL);
+   259			if (IS_ERR(mnt))
+   260				return ERR_CAST(mnt);
+   261			info->mnt = mnt;
+   262			dentry = info->mnt->mnt_root;
+   263		}
+   264	get_mount:
+   265		refcount_inc(&info->mnt_ref);
+   266		mntget(info->mnt);
+   267		return dentry;
+   268	}
+   269	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
