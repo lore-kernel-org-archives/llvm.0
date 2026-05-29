@@ -1,169 +1,207 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022138.outbound.protection.outlook.com [52.101.101.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375DD3B7751
-	for <llvm@lists.linux.dev>; Fri, 29 May 2026 12:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780056439; cv=none; b=V6XgKtdRyP/016L/wtwmFDTrxBO27FGiyhEjcWzx3C6sgILjXQXPtUe9Q5l8Ilscvzkk6go6jBSuLliTN8xXIDMBYjNue3ZkkX4UQiPh6DSPm2XGxbqAOlf891ziKPAJAKtBbGywBunuj1TcboQF2VZ3ZTvsC/vgceTdkIJHrXg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780056439; c=relaxed/simple;
-	bh=huXbw8E6rXipPcgfI/oulq5BpMxyZJTGhVrRVLWkCV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a0lQHH6h3HWbuf8MYQrYW7cSbfi8pmxW5ch1ooU4ojOJzTd1ke8Gr9LNmRDKtBoznvVvHbOQOL51KVsKNwSZ/OfP/9/retpPtrHr9jn6qrrOfLVPCRTRsNr8b94cKsT3PNvywTUUThxOgHx6bWCVe+xFGa0JhYoEXka1e2+71Bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=IzxTSQNN; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ibxNMEJJ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE143E0087;
+	Fri, 29 May 2026 12:13:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.101.138
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780056830; cv=fail; b=khWciM/nfJLTJGVHtItZaqagEwdrOtm4lBbKViVuBOMPu5VKjs9egBf3no+PtAx2d254GaOPOtJtOigt6fqz5qHQx+9gOfRLWtBbxUnk+raKFxWnHvlnfw8W+V72ad4e3JbIy0JnTsl0wWZmw+80wHTtCQCnWFVki4nubg8/8X0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780056830; c=relaxed/simple;
+	bh=gLWu6EXehftzTZTZMx82gpAraw4auWfUeZHBA1265dc=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
+	 In-Reply-To:MIME-Version; b=LYrMQZ/gMDPdv6FJCKcczkKu6i4zsEwUy+SAxbiivY7FygQEam3n2r3w7W6JBpQ0Jou6pvK3/L6lZ5GsFoc9cqOsFTUfzZBw5mfqyhkHPVJpmArbPq1QpyyowFaWqT3O/Ls1bsiwIt0vSu/OReCDBN6/RSs9TU5Z9sP2SdBFX20=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=bXC0AfFZ; arc=fail smtp.client-ip=52.101.101.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="IzxTSQNN";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ibxNMEJJ"
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64TAKrvh4194208
-	for <llvm@lists.linux.dev>; Fri, 29 May 2026 12:07:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=w5W401i4KtUyBJU1xtt1ZS7P
-	g3gpytfeIc6F79YZRj0=; b=IzxTSQNNRau6wTm6QjwiEcWEYWcwDUJIIOcyZDH4
-	+75yNC/IEgXGrtKHTWA3JeifFlGq0izbvlwr15ZZ4YEWqSV4wqB86zL4mGAzwu+X
-	JowRHucgpM493ZTCE1wWEhzdlls8AmcqjTzIrpsSo1LqotH+C+eE61ogK3fam6uF
-	tmqlQsyoYH/PC5xTZE94VD8HOoAVK8qVv+1lGvgWpi74+7kxvaJs6GaTb3qzsfbT
-	mOeJDpivXjKjjln/FR6FycAKLC0qh5OppYeur/bbFIoPsephGJb8soTtTvSDP/r0
-	AHlYlg+ULj7289fykoKOJP7I1OAsY4p5wAfo9YMWH/pN3A==
-Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com [209.85.221.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ef3te1t9s-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Fri, 29 May 2026 12:07:17 +0000 (GMT)
-Received: by mail-vk1-f199.google.com with SMTP id 71dfb90a1353d-58700e12faeso10820866e0c.2
-        for <llvm@lists.linux.dev>; Fri, 29 May 2026 05:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1780056436; x=1780661236; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w5W401i4KtUyBJU1xtt1ZS7Pg3gpytfeIc6F79YZRj0=;
-        b=ibxNMEJJ0VdjpaTTwBY+6Ixv5/cyonvfyFwkui3Kk9+q0G3tstdLu22qvBmItbKRWn
-         E6gPUT0Z9GZapl/mXyjhoRQ8UgHEFmqfPVwgSbPsyNTPe2oa/AoZ7kYtpRaL/LwRueur
-         uieJC55MbD+aJqF3wLKJrAOixqVz5CleHbjWCIude0gySVsse2psVSNYo6jPf/jaxZ8i
-         ljpKTe8eeh0c1RhfbAqDWPW1UWdfTIaJGvyf5add7cZRxf+nbd6oUjU2w1v7T44bObBw
-         73CBHp6I0tULqk0/8WPTkvzK1e9BEWFjefzEOdQ6BxlP8yUjOjvxH2KqozlkFspn1WVc
-         kS+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780056436; x=1780661236;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w5W401i4KtUyBJU1xtt1ZS7Pg3gpytfeIc6F79YZRj0=;
-        b=aE53D5CPj+OPw+9syffrxUSh38Wzy+NgHOYDoCQK3Ni92WA1LYPyf8CujXqev7e9KX
-         cN3ztScf1x8OyqZG7yjttg16biZI12d4n9/Pj2kpSQVWUi0Iw/F48Up06J9UYQZlVn4i
-         SVTE3N5kGrMFtDX6qW/ivw6JkhWgosuPoATHVhDMePJ9uZIWtQcfEMBVdKendiUYuBLz
-         96CWX9lm4BvNJCDJw2Y/CiyngtRClIHM05rMU2k7kq4ax9RQ3pR19Ux3J25zfRXo9twy
-         DpZph71QkSgKpHTRMf4lqgX5GffpWZWicnnar5x7hrCUbYy8aMxrUqsUM6fxxILB5uY5
-         WO4Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+4VZsOzcpKEfwEr1tBKemuBopd6pUUtRSv/5oaIxmkzUrpFC3wxXwVMGmiVmouhViBehX/@lists.linux.dev
-X-Gm-Message-State: AOJu0YxDOWI8qJvIhuBs8fNJS2c8t6FH9NvI1rjkJ3SHwLFRiPKAkHt3
-	DAbmHZLlTSmr9epXeJsdRnKWuJZ+FyMaSyneEDOgOf6LwznYtw8dNdFfBQf85L0PMG7vPuREtgd
-	t4Z9z6xoeaQ8bv6MTv7fZ/6z1hN0G89MP3tFOh6sipOHCJ56YoooiX7f7
-X-Gm-Gg: Acq92OEU8iM2xkUYCSUGAlsz2nzpXs7JAwlDM2+UsRJyCOwxxUXD3C90h+Y0IY1M3ng
-	OR5OU9ZiUin1JG3y+HVJ17RN9ybtM+hlY6qi2lMoCWfjqVu8ue6qveADh8/uLw0oWIZWsTwIEIH
-	2BUZ2JZk1LYpgRl95HqSBCzYQUgEWtMnx9sZ7atlOPd/vg3nGnBOvnulQp2WtzqR6g/n73R+9zd
-	eN1THw81fci7t3jGbF11rJ+CJFW+s3PqnJKp0zV5zmmFzbGf8gu1GGCrHMJlOSmGE9TiYehjFtw
-	YRcLOk7aNxkVSeM6BTUPDwP/FGAeMO62PKgxqI2Zk34QMtq9yYCD+OSDp5bYo80i4PMBxETHMuf
-	btm/d+jxfLhEQEDUCWR2mtB0jlLxUEPmWdg14nGDtF4640Drm8GvDTQzEHPdgZ1vFbRJQGiWCkI
-	n5Z641tNH/VD9BEC33l8VTJzRKgljXz+7uUPv8mwRzy0WBjA==
-X-Received: by 2002:a05:6122:378d:b0:56b:9b7b:83e7 with SMTP id 71dfb90a1353d-599f6cb1402mr838129e0c.7.1780056436461;
-        Fri, 29 May 2026 05:07:16 -0700 (PDT)
-X-Received: by 2002:a05:6122:378d:b0:56b:9b7b:83e7 with SMTP id 71dfb90a1353d-599f6cb1402mr838086e0c.7.1780056436015;
-        Fri, 29 May 2026 05:07:16 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5aa5b596664sm235308e87.39.2026.05.29.05.07.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2026 05:07:14 -0700 (PDT)
-Date: Fri, 29 May 2026 15:07:13 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Rob Clark <robin.clark@oss.qualcomm.com>,
-        Dmitry Baryshkov <lumag@kernel.org>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Daniel J Blueman <daniel@quora.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] drm/msm: Restore second parameter name in purge() and
- evict()
-Message-ID: <6l4aqnqhmhjg35ofoofu4zkcfn5ua54wxy7vjnxnmhew5lspof@vmjkxlzb6vj5>
-References: <20260518-drm-msm-fix-c23-extensions-v1-1-0833559418c7@kernel.org>
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="bXC0AfFZ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=K6WGrpGey8FsAxhJ3EH8FOO5mv5CjOhNrdhFBto8k3ta26Vl21mZcZ0Xuo/oIPblxbFuF51L7Z0Ns3QhW6ZdtqCYUmlQuccSsV1ZaLGC2OJuN116JB2YlWpi2VUJ3Osj6YjIm/9gQO4yeVXnKdvN9ky1QsF/68cGl6G526kYrIUuNobVz80qs0FzamI3n4QhpWplMvFQm6panp8W2Euss2BeKB1CicA8atVYPOeolAkxhWEP96X5usD1vy9SlAnRGmFfPKoCfgzf57xJEwqOzTbyL8RMkRYxc6LXa6EyISzfmhylxwqEgp1x7oQizyPdtFNwlLroWN8L2kU+V2LkjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y+AONA20MBALR9vf0gr/rU9gKPNX7QyxMne4JXn8ZFI=;
+ b=xRUbmm0XOEq6uOjElwnnvXfAihyPosFj72P/B22700TVXFpd39h1jzz9h9K26l9dIOhr5rv1T+VKcaw9D5k9VgzrTczAy+m3t6DUui09wuoZQWdnN4CnoyDlxtOkhydUI5ZCXQNSRk4FzliBrNFRUBncAKmsE1sW3t6FeuorX8gpizlE20iVPdrX9YF7Pr8JgG7QCVem0I9rktDtjrR6H8FIZbA1wtpFzAIAl//cjRAbRFk44MobwCHYtSeQPKliTyEfmvsD6gKP5OiZ6DvV8PqUUS/MVmS8p5wXYoCR0pHoIMur0sG6/gWTs+yiDQbNN14HuRpqOl4SAjLsm67gFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y+AONA20MBALR9vf0gr/rU9gKPNX7QyxMne4JXn8ZFI=;
+ b=bXC0AfFZdal8hYQuEta3fZrQu1OSANjnpN5odfGWdbfTBJlENqtOXJScnmKFBtXi61nRFzcfN/IZov1dwjz+98SpQ/kMYNq0QwO5k2JqXyFTGv1/UoNwG6w7TA0yED4TvfhMNfI1QbjgW9f3qS8H0Z+4pQofYwMfvYWGV1tfJjI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
+ by CWLP265MB2755.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:a9::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.71.15; Fri, 29 May
+ 2026 12:13:40 +0000
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.21.0071.014; Fri, 29 May 2026
+ 12:13:40 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 29 May 2026 13:13:39 +0100
+Message-Id: <DIV5H9S8ZN2L.234ZKX4RBF6BO@garyguo.net>
+Cc: "kernel test robot" <lkp@intel.com>, "Danilo Krummrich"
+ <dakr@kernel.org>, <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+ <rust-for-linux@vger.kernel.org>
+Subject: Re: [linux-next:master 3728/9137]
+ samples/rust/rust_driver_auxiliary.o: warning: objtool:
+ _RINvXs5_NtNtCshc5sK6KjdJJ_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsbsbRiabPlh9_4core3mem12maybe_uninit11MaybeUninitINtNtBa_9auxiliary16RegistrationDataNtCseULRbgTYaTO_21rust_driver_auxiliary4DataEENtNtB...
+From: "Gary Guo" <gary@garyguo.net>
+To: "Alexandre Courbot" <acourbot@nvidia.com>, "Alice Ryhl"
+ <aliceryhl@google.com>
+X-Mailer: aerc 0.21.0
+References: <202605291041.seNEWvLQ-lkp@intel.com>
+ <ahkzosbjO4NdSyD8@google.com> <DIUZYLZW1KTM.VRI2RJ8DXEGQ@nvidia.com>
+ <CAH5fLgiFo1rep3N5qGWGsTXT177hfSwW0=e1KsVCrrz2uRMoBw@mail.gmail.com>
+ <DIV0HOKW3R1L.2ZK80B9TV36H7@nvidia.com>
+In-Reply-To: <DIV0HOKW3R1L.2ZK80B9TV36H7@nvidia.com>
+X-ClientProxiedBy: LO4P123CA0479.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a8::16) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:488::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260518-drm-msm-fix-c23-extensions-v1-1-0833559418c7@kernel.org>
-X-Proofpoint-ORIG-GUID: iiNanzk46P59Vgk2bgAFH-zvkYcXvWHe
-X-Proofpoint-GUID: iiNanzk46P59Vgk2bgAFH-zvkYcXvWHe
-X-Authority-Analysis: v=2.4 cv=daSwG3Xe c=1 sm=1 tr=0 ts=6a198175 cx=c_pps
- a=+D9SDfe9YZWTjADjLiQY5g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22 a=VwQbUJbxAAAA:8
- a=EUspDBNiAAAA:8 a=ooG1LIPqdb8N2y3itNcA:9 a=CjuIK1q_8ugA:10
- a=vmgOmaN-Xu0dpDh8OwbV:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI5MDEyMSBTYWx0ZWRfX3VdIxvaFPIZi
- OffPkGTzkr1SwLxjeEvNt4jzZi8XcilwmzYiop1Iw01MTaLUMWmZqjTP1nSI0DzaiXRle5JYPIl
- LRIhySVMobXNS8zzAwbgruqCdg1DdSNpfaAZKVCGwFunmin0/E7q2GRcllHVuXQKy5+chGENzJP
- 6sTwqYu7hFxWdAdU8rbiT44nzquxGGYLATooxXTr88cM4Y7tyf6nMLoB7e2w2VUNESAHd3qket2
- C7Y/CyEr1JDJ3Os1/5S+72j7ENMuoYV0nJre9gRVRu2DaDV/6RpSUckO3fnhYpPJQE1RYNw2yd/
- nhm+6QkF8ruVEONtR9n5gIOHWPMW5bm5X/GQ2tWL5dXsqvDDmj72O0pOxazNRusUH0W48n8OGFa
- udwx/H7wtZwc4FxFN8UWW9rOcRd0NDFHU7zTKnJQL3LIFZtRQZfYTqo/LXN3wFgjOtMBeERgpFc
- H2Gi8XtWfBO8ih9BMyA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-05-29_03,2026-05-28_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 bulkscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- clxscore=1015 spamscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2605290121
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|CWLP265MB2755:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff864cd4-ce2a-4d64-ebcd-08debd7bb7fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|10070799003|1800799024|22082099003|18002099003|56012099006|4143699003;
+X-Microsoft-Antispam-Message-Info:
+	m/7sG31qWbTcFHvItZo+vHQQm04P4ZLKuobGWDXUylwlAyj3re1/YfS9N/QYqwSWFL6Mw0Y2Ka0Qzx8AWyGYluV9t4ClYjHWyQrrUdvpc0CNbEEe7UOoVzzlS0MDfJ/KMzad/e4k013ZAI4wJ2rUjwzWsj3lM8TuhMhggqHTlrCqRhdF354R79So8YsXI+I/hS6Zglj23ywu+FVnnrz2mn7wz1arUcX5atJYb+hw6AIEw6bCAgZlZwHBXqemYmdnwY2DEZc43bLlkg7DVZLFu5xbe5duw+zNvjP1jDKefFzxjvI8HvYxcl7l+N+6ZGv30dGsrVDW/pRGNqnh7vSalhyXXAYHBmcwTWVPQSMSaYxx/aBcx15Ff5Y8X/7QpPHLn+x9mIjSGK+0oHKwNVcOxcO2Xwpo64EI4CzcIhFGC2vGjDrAmikicSNK9gVabJMAKetpCs/Zyd2e9wnSIBywcDubNhpNX6Ol9dCPDwh0940p5yZfXlfOfVIn0Be67yFYpmpXPXKBCg3/v3PgC+eOlvz9ayVlf03lOn54+sw6dmeSlQUX4e6fHNvlpUrsZ7KzogETj/Wf0VKe3M1BE9Xw/Cbf3oiznBxVEhRnCtp39uTKCfyJ8f5/dSgIOBLJ8zA2VNAk78OQo2ch/66o+Doq0w==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(10070799003)(1800799024)(22082099003)(18002099003)(56012099006)(4143699003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VngyOU9OZTVsV2NOR0lhRUthNmVDdDJhaWNoc1ltWGhadWpXc2o1aEZ5RFJW?=
+ =?utf-8?B?S0l6bDlNcHRia29Qak55SU9LMTRTOFJNMDdNMFc5enY0NUhGQVMzL1BtR0NQ?=
+ =?utf-8?B?R0lsYzdKcm5RWnlpek5kaWpoTEdwbTZ0eWMyazREMGdSR0hTb0hFMnYxQkp6?=
+ =?utf-8?B?S2ZtVjRuUDJHTUFXSjJjS3NTR0d2Ukt5SU85Q1k0SEVqQkM0ZGxQS050NHpR?=
+ =?utf-8?B?YWRmSlZackw0N1ZlVG4zU2VUT3RVODIwenRVVzA2N3Z2NERSbmd5Q2haTXdV?=
+ =?utf-8?B?MUJsQ294VUhXRnVIRVRzMHdlc2p2S0dGK1BXUS9vWkp6UXJTY0xEclhQWkYr?=
+ =?utf-8?B?UkJYNU01M2VCdlQyclc2cmhwdm01aytyUUpKc1R5NFhZWXR6c2h6clB0dWgz?=
+ =?utf-8?B?eFdydzFxQlBvL0pGL2hXOVdaQUtjNkMxWEdNdmg5eVVOQVh2cXptd0x3d0xY?=
+ =?utf-8?B?cUJkUnJtWTQ2SEk3bFdsaVBmRUVFcUZUNUlQZmd0UEFZcmZuem5VdU11djZC?=
+ =?utf-8?B?dVk2UE1oWTRoTVRZQjZ3M0JkYmgxV3g3S1lpd05ieW1hU1JJZzQveWhiREpj?=
+ =?utf-8?B?OGNkS3FoRzVMNmovaGRQWkhCdWFkTkhmZkVWVHVZVUxwZzRlUm0xSjVFSGl4?=
+ =?utf-8?B?b1RmY3pDUHBJV1hxMXZQYy9jQjRRVkxGR3BhY3FjNnVjV01VVkZoUFg3V3lH?=
+ =?utf-8?B?dGVFNWVRU0ZlUXJ0OVpnU2h4cC9qUkptRGZLYXdPaGR4SXNhR0daOTFEZWF2?=
+ =?utf-8?B?eWM2a2JkcHJibC9FbHNkaUk0UG5YTWZnMnpjUGdjZ2RPZ3JoNzdtOWVHZ1Vq?=
+ =?utf-8?B?M2NuN281MnJhLzR0THZmLzg0UGhEQ1hHWmtJdDRPamNUU0wxS3U3Mkl4ZlJm?=
+ =?utf-8?B?RXFRdTI0MmFHYnVPNHk2UUQ1UjZldWUrSFpFUUhsOC9JN0YvajBycVJjRGda?=
+ =?utf-8?B?RmNVeGNZWW5LZ3JkcS9vdXNNQjJ4Q29RUCtNbUwrNm1sVFJvVlU4b1FCaTkz?=
+ =?utf-8?B?K3dwN1NKOXBVUFVyb0grTGNHK0YzSDJ2amVmSmEzb3hPZGlpaDJFNUcxaHhX?=
+ =?utf-8?B?cGNGTnFUUUpBeGw2SlVPNkVEM3c2d0VVWkovYnYxWEkyVVplaFVNcEJScXEw?=
+ =?utf-8?B?NGFaeGwrVTFJemQyL1FkL2Y1WXBIQnZ2RmdhMDgybVUrK3dOSnp0YnVaeUhN?=
+ =?utf-8?B?K1BQcldqR2lpN0kwWHNTVVI5Lys0VGtkNkx0c3RvcDZVNFRlbk5XK0d3cSti?=
+ =?utf-8?B?VFVlOStiMTUvLzVXdHI4ZTZ0N0xQRGVuNlE5L2pvUTU0Rmg4czdUMGloOWMv?=
+ =?utf-8?B?N0xucFpsVGx5bnhlM1JjZ0t5STRZUndDS2IxSjJtaEhZUE0ycDh4L1hPSFpw?=
+ =?utf-8?B?ZmQ0MkRTSHljeHN4UGU1cWNadzRPQ1pWQTUrbm94c1FwekdIdHVoT3NBR1Zq?=
+ =?utf-8?B?bWxMcDFpWGZENkFEajBwY1RGcVk4bXAyaG4wcEUrRE1YVVVoR3NCWWxxM05G?=
+ =?utf-8?B?emJlK2RFcnN2UG5lR1FnTStrYmhpWmpSbEM0Vmg4dThVay9iNDJrMTRFbklV?=
+ =?utf-8?B?MExqM0dnL21IRVMxMVFHblBrSXBvS1E0akJuWVd0MThUNTdzL3FkeThMbkxP?=
+ =?utf-8?B?YjFzL0xSVTU3WHNMWnNjL2E1YzVXWml3ZU0xZHh4ZnVjRDNNSlgvWkYyQy9S?=
+ =?utf-8?B?VVJ3Y1Bta2YxQW5hRVNrSGxLdFRrYjZ0RWpOcktaTTFxNWRTZjZIUFQrUElj?=
+ =?utf-8?B?ZnJ4WTdtSmNZblQyWkV5K013OUdOa0c4b01qSHVpZVF4SkdtUWZmNG0zY2Rt?=
+ =?utf-8?B?OHlaK0xuMGMxMXVEeVoyYmhGeHpWNExiNHg5Ky9Qcm90ZVNNbHJ2NTh5Nm1B?=
+ =?utf-8?B?Y3h5K1haUmFSK3ppZjhiNnBNY1l5Tnl6WFMrNERDWU9zUDhyZXluZlFNOGhK?=
+ =?utf-8?B?N0JKVS95NmVOSGk0RHNac2ZDNzE2RlMyYnpYODNqaXM0TWVrV0JSNm9kcWhy?=
+ =?utf-8?B?YWNKYUUwRVl0aDZOMXFyOFNBcWFrYU85ZHk0eTZZcEJqb1I5aXBHekdpQkFx?=
+ =?utf-8?B?cFFuUmNucGt2ZVVsWERqV0c2VG16djUxUUdnUDZRZU5mdW5OODJOK1RPSDhx?=
+ =?utf-8?B?RDFqZm5mWTM4MG9RSmdwemJYeHhWTm83Yk9hYmVoQ0tEbi9CY3ZzYVBYeGln?=
+ =?utf-8?B?NkJNdm5ReW1FUzRIbFNpQ0dCMXZKaGdnYVRBVnFJQ0VnTlFCYlluVFRGY1RY?=
+ =?utf-8?B?UjhRNGFOMnZHdkRDQjF4cHpyMDhEKzc2SmtoWFkwWjFXV3NXRTVwRzkwaUpT?=
+ =?utf-8?B?c2JiS2F3czBSVTJ5T1NOVU1qcWU1Q2hZOWZDczh0UUpqTlBOSWxOZz09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff864cd4-ce2a-4d64-ebcd-08debd7bb7fc
+X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2026 12:13:39.9685
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DOsdfGCaPCaeb+ceXK/bXbkv/TifGqFvVjQbNxKLvYz5D928Np0utIzHYC09wyp216LWwcZjUOb90yIwPfQdzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB2755
 
-On Mon, May 18, 2026 at 03:17:14PM -0700, Nathan Chancellor wrote:
-> After commit 3392291fc509 ("drm/msm: Fix shrinker deadlock"), all
-> supported versions of clang warn (or error with CONFIG_WERROR=y):
-> 
->   drivers/gpu/drm/msm/msm_gem_shrinker.c:105:58: error: omitting the parameter name in a function definition is a C23 extension [-Werror,-Wc23-extensions]
->     105 | purge(struct drm_gem_object *obj, struct ww_acquire_ctx *)
->         |                                                          ^
->   drivers/gpu/drm/msm/msm_gem_shrinker.c:117:58: error: omitting the parameter name in a function definition is a C23 extension [-Werror,-Wc23-extensions]
->     117 | evict(struct drm_gem_object *obj, struct ww_acquire_ctx *)
->         |                                                          ^
->   2 errors generated.
-> 
-> With older but supported versions of GCC, this is an unconditional hard error:
-> 
->   drivers/gpu/drm/msm/msm_gem_shrinker.c: In function 'purge':
->   drivers/gpu/drm/msm/msm_gem_shrinker.c:105:35: error: parameter name omitted
->    purge(struct drm_gem_object *obj, struct ww_acquire_ctx *)
->                                      ^~~~~~~~~~~~~~~~~~~~~~~
->   drivers/gpu/drm/msm/msm_gem_shrinker.c: In function 'evict':
->   drivers/gpu/drm/msm/msm_gem_shrinker.c:117:35: error: parameter name omitted
->    evict(struct drm_gem_object *obj, struct ww_acquire_ctx *)
->                                      ^~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Restore the parameter name to clear up the warnings, renaming it
-> "unused" to make it clear it is only needed to satisfy the prototype of
-> drm_gem_lru_scan().
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 3392291fc509 ("drm/msm: Fix shrinker deadlock")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/gpu/drm/msm/msm_gem_shrinker.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Fri May 29, 2026 at 9:19 AM BST, Alexandre Courbot wrote:
+> On Fri May 29, 2026 at 5:00 PM JST, Alice Ryhl wrote:
+>> On Fri, May 29, 2026 at 9:54=E2=80=AFAM Alexandre Courbot <acourbot@nvid=
+ia.com> wrote:
+>>>
+>>> On Fri May 29, 2026 at 3:35 PM JST, Alice Ryhl wrote:
+>>> > On Fri, May 29, 2026 at 10:52:52AM +0800, kernel test robot wrote:
+>>> >> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-n=
+ext.git master
+>>> >> head:   f7af91adc230aa99e23330ecf85bc9badd9780ad
+>>> >> commit: fd3b87ff0232f46e1ad53a48609a3853c8757c6c [3728/9137] rust: a=
+uxiliary: add registration data to auxiliary devices
+>>> >> config: x86_64-randconfig-004-20260529 (https://download.01.org/0day=
+-ci/archive/20260529/202605291041.seNEWvLQ-lkp@intel.com/config)
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Ah, OPTIMIZE_FOR_SIZE build, it's always this...
 
+>>> >> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project=
+ 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+>>> >> rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+>>> >> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/=
+archive/20260529/202605291041.seNEWvLQ-lkp@intel.com/reproduce)
+>>> >>
+>>> >> If you fix the issue in a separate patch/commit (i.e. not just a new=
+ version of
+>>> >> the same patch/commit), kindly add following tags
+>>> >> | Reported-by: kernel test robot <lkp@intel.com>
+>>> >> | Closes: https://lore.kernel.org/oe-kbuild-all/202605291041.seNEWvL=
+Q-lkp@intel.com/
+>>> >>
+>>> >> All warnings (new ones prefixed by >>):
+>>> >>
+>>> >>    samples/rust/rust_driver_auxiliary.o: warning: objtool: asan.modu=
+le_ctor+0xd: call without frame pointer save/setup
+>>> >>    samples/rust/rust_driver_auxiliary.o: warning: objtool: asan.modu=
+le_dtor+0x1: call without frame pointer save/setup
+>>> >
+>>> > This one looks like this bug:
+>>> > https://github.com/rust-lang/rust/pull/156980
+>>>
+>>> Does [1] work around the problem by any chance?
+>>>
+>>> [1] https://lore.kernel.org/all/20260527-nova-exports-v2-3-06de4c556d55=
+@nvidia.com/
+>>
+>> The asan.module_ctor error? I don't see how it would work around that.
+>
+> I was referring to this error on the report:
+>
+> _RINvXs5_NtNtCshc5sK6KjdJJ_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsbsbRiabPl=
+h9_4core3mem12maybe_uninit11MaybeUninitINtNtBa_9auxiliary16RegistrationData=
+NtCseULRbgTYaTO_21rust_driver_auxiliary4DataEENtNtB8_9allocator7KmallocEINt=
+Cs57PXBekmiam_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5Err=
+orINtNtB3y_10___internal11InitClosureNCINvYIBH_B1L_B35_EINtNtBa_4init11InPl=
+aceInitB1L_E8pin_initB4u_IB4O_NCINvMsc_B1O_INtB1O_12RegistrationB2l_E3newNt=
+NtBX_7convert10InfallibleB2l_Es_0B1L_B4u_EE0B1L_B4u_EEB2n_: symbol name too=
+ long, can't create __pfx_ symbol
+>
+> As this patch might help shorten the symbol.
 
--- 
-With best wishes
-Dmitry
+https://lore.kernel.org/rust-for-linux/20260527-pin-init-sync-v1-5-e20335ed=
+2501@garyguo.net/
+would also help a bit with this, although I'm not sure if is sufficient.
+
+Also, regarding your patch; do you need `#[inline(always)]` or is `#[inline=
+]`
+sufficient? Inlining shouldn't be forced unless there's a good justificatio=
+n.
+
+Best,
+Gary
