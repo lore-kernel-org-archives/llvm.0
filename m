@@ -1,62 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BE534CFCA;
-	Fri, 29 May 2026 02:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2DF35F162;
+	Fri, 29 May 2026 02:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780020028; cv=none; b=bWksn3Zz8w1K/ATLZ6/SnlaySzHKW5ZjnX4CiWjUGIh+idwjhFx0dHH/wZlK7srsxh0AhiS8J1/5g+Gh9l03xFOPGMDBb25DyQqPn4eNygH3//SW3HcSuTFaCmebiKA53fW1HyJKHUu9QpqgLhTxCc6lP8no/XR9PwzglzFDShU=
+	t=1780020690; cv=none; b=Sb56u3/IQo9gFZ9NwJWaC1y3aV1zT6xUmzElQV2Xsz5rV1zChfUNH4E/r8LmzQDrvhwOgY9SpxpxQeHVv6NGQpsuBSfs4CrKaaoBCHzqg9I60s9Tyaj/SlTLICzYuEZXRbezbbB/hQ9WvT6pv0EJLxNq9FchWO8YVPeGfiGUCu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780020028; c=relaxed/simple;
-	bh=v7SUI5JPIDJF7swbx4MsnsnbEBHDeSvQQx/6or3YF0s=;
+	s=arc-20240116; t=1780020690; c=relaxed/simple;
+	bh=sxXAfmgBMqXaMKEaLOhGLpAx+qO1rkPgYcbAN0oKIUI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jVA5AjK69Dd84mPDwS063nOwAklpxOgHnKWUxMNqKVMu9HTXT8VNJSWdDsjKQmLKnpViKWol5dkm15h0gq1QE4v/sQzJaNaZXZ46/o+iA+7Op1O9h2NabaxSWwBO2/7oNYBCJy7F6ZtF2O17r14y7DSFSUYtRydY+7bq5Zd79tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hnY/y2FJ; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=o+S7yY5n4I6wlBFVQAfZ6WvXgW2FOKWtcpKneMDo0MHzdAKWX0l24UY+SDiqy6RhHrMX/Ocvug3zbwJzmXO9zLbpnYhvi6Q0/BLjjhtc9L/ZoNSCujOpV5eEsi5q06/ucnGom3tQBgjuvDXC+85bRqPbivIExG93TNlO2Fznryc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U7iaHtSl; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hnY/y2FJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U7iaHtSl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780020027; x=1811556027;
+  t=1780020688; x=1811556688;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=v7SUI5JPIDJF7swbx4MsnsnbEBHDeSvQQx/6or3YF0s=;
-  b=hnY/y2FJ1D0BXYK+8sl0UA7LSsmHRv8GoRg5oA/NYSbsSeSJoX6pyaSx
-   3RyDjcej+luRxEkPasX8N+1Lf+NaAMRZ8sTawjxsGDcwcQ7ddXfOr0Lyb
-   1A38L7JeeJILbu11z3KFbrJSDjbGMhQ1BnaxqDyNihWA9icv8LsL8EMVO
-   Zv1imdKMDTd8ztkqvim60HGUqXq/Uc2DbYDfU9j/VmSRAb4csJkMz9vc8
-   C95AmieFMKV4YsF7NiY9cTSt7wZWLMyhcOce9JXnY3peCSD+n+sPdX6IM
-   qc0Zr09orX4xf/gXXNYPbyvW2DqtroH4lmkT2dL4J0OsNrDiLxg4/4ymw
-   g==;
-X-CSE-ConnectionGUID: KPOFn5NzTVuHSDwFxe+3+w==
-X-CSE-MsgGUID: 15/M77+uQzWU0pFg323ZLQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11800"; a="81054080"
+  bh=sxXAfmgBMqXaMKEaLOhGLpAx+qO1rkPgYcbAN0oKIUI=;
+  b=U7iaHtSl48aWWJVJ+wM6gpxEqDDuD3eHZlOfLwZJqGi/hh0mADR5sVeB
+   uNeZ60NlD+woQAuW7/Es+lF/QVqLlI7RWHpycCCSd+Lz+5JYqoV1BxXmW
+   DHMbH2LlLMqg53oJFPmZDZz9bZXT5g1oiA+jftyjQqpZcwtyS9lSzxOXh
+   +S/3rXPw6o+brjCuiHchsqtS9V+47U62SNfiGZo9bm2Cs1yLrjySGB9Eq
+   qq5kXicX4tfi8egsxlNoeUvCuIyXrhxNA/DI0U/3zxsBnV7P3A9YIZZ3a
+   WxyUzwsQ5dqZ+9+pBKvFOZ/Au27PpCELcya9aLvRLZQfsLMx05JL/o61T
+   Q==;
+X-CSE-ConnectionGUID: PuQBRHQqRkG6WSPOHMPRKA==
+X-CSE-MsgGUID: /FRJQ3HTQTuHXY3mJPc+yA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11800"; a="83446242"
 X-IronPort-AV: E=Sophos;i="6.24,174,1774335600"; 
-   d="scan'208";a="81054080"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 19:00:26 -0700
-X-CSE-ConnectionGUID: KAmQrINJTRiB8jymJW2/UA==
-X-CSE-MsgGUID: gegDXNHeQG26tWvke58ANw==
+   d="scan'208";a="83446242"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 19:11:27 -0700
+X-CSE-ConnectionGUID: ekacbo/uRuGAePuJ3vQxEA==
+X-CSE-MsgGUID: QDI2aWepSJCmQqeFLRL9Ig==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,174,1774335600"; 
-   d="scan'208";a="236364381"
+   d="scan'208";a="273038134"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 28 May 2026 19:00:23 -0700
+  by orviesa002.jf.intel.com with ESMTP; 28 May 2026 19:11:25 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wSmWK-000000006fW-3PRA;
-	Fri, 29 May 2026 02:00:20 +0000
-Date: Fri, 29 May 2026 10:00:00 +0800
+	id 1wSmh0-000000006gI-3jCt;
+	Fri, 29 May 2026 02:11:22 +0000
+Date: Fri, 29 May 2026 10:10:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>
+To: Pankaj Gupta <pankaj.gupta@nxp.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] can: flexcan: Drop unused platform driver data
-Message-ID: <202605290912.Y77fySxN-lkp@intel.com>
-References: <20260528094540.1867783-2-u.kleine-koenig@baylibre.com>
+	imx@lists.linux.dev, frank.li@nxp.com,
+	Pankaj Gupta <pankaj.gupta@nxp.com>,
+	sashiko-bot <sashiko-bot@kernel.org>
+Subject: Re: [PATCH -next] firmware: imx: se_ctrl: serialize command receiver
+ registration
+Message-ID: <202605291047.TLJLq3sB-lkp@intel.com>
+References: <20260528091634.3331090-1-pankaj.gupta@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,45 +66,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260528094540.1867783-2-u.kleine-koenig@baylibre.com>
+In-Reply-To: <20260528091634.3331090-1-pankaj.gupta@nxp.com>
 
-Hi Uwe,
+Hi Pankaj,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on e7d700e14934e68f86338c5610cf2ae76798b663]
+[auto build test WARNING on next-20260527]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Uwe-Kleine-K-nig-The-Capable-Hub/can-flexcan-Drop-unused-platform-driver-data/20260528-181620
-base:   e7d700e14934e68f86338c5610cf2ae76798b663
-patch link:    https://lore.kernel.org/r/20260528094540.1867783-2-u.kleine-koenig%40baylibre.com
-patch subject: [PATCH v1] can: flexcan: Drop unused platform driver data
-config: i386-buildonly-randconfig-002-20260529 (https://download.01.org/0day-ci/archive/20260529/202605290912.Y77fySxN-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260529/202605290912.Y77fySxN-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Gupta/firmware-imx-se_ctrl-serialize-command-receiver-registration/20260528-172942
+base:   next-20260527
+patch link:    https://lore.kernel.org/r/20260528091634.3331090-1-pankaj.gupta%40nxp.com
+patch subject: [PATCH -next] firmware: imx: se_ctrl: serialize command receiver registration
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260529/202605291047.TLJLq3sB-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260529/202605291047.TLJLq3sB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605290912.Y77fySxN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605291047.TLJLq3sB-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/can/flexcan/flexcan-core.c:296:42: warning: unused variable 'fsl_mcf5441x_devtype_data' [-Wunused-const-variable]
-     296 | static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/firmware/imx/se_ctrl.c:934:4: warning: label at end of compound statement is a C2x extension [-Wc2x-extensions]
+     934 |                         }
+         |                         ^
    1 warning generated.
 
 
-vim +/fsl_mcf5441x_devtype_data +296 drivers/net/can/flexcan/flexcan-core.c
+vim +934 drivers/firmware/imx/se_ctrl.c
 
-4b702878afc375 drivers/net/can/flexcan.c              Marc Kleine-Budde 2020-09-22  295  
-d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02 @296  static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
-d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02  297  	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
-c5c88591040ee7 drivers/net/can/flexcan/flexcan-core.c Marc Kleine-Budde 2022-01-07  298  		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
-d945346db1ef41 drivers/net/can/flexcan/flexcan-core.c Marc Kleine-Budde 2022-08-11  299  		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
-d945346db1ef41 drivers/net/can/flexcan/flexcan-core.c Marc Kleine-Budde 2022-08-11  300  		FLEXCAN_QUIRK_SUPPORT_RX_FIFO,
-d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02  301  };
-d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02  302  
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  905  
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  906  /* IOCTL entry point of a character device */
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  907  static long se_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  908  {
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  909  	struct se_if_device_ctx *dev_ctx = fp->private_data;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  910  	struct se_if_priv *priv = dev_ctx->priv;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  911  	void __user *uarg = (void __user *)arg;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  912  	long err;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  913  
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  914  	/* Prevent race during change of device context */
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  915  	scoped_cond_guard(mutex_intr, return -EBUSY, &dev_ctx->fops_lock) {
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  916  		switch (cmd) {
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  917  		case SE_IOCTL_ENABLE_CMD_RCV:
+8aff20bcff52903 Pankaj Gupta 2026-05-28  918  			scoped_guard(mutex, &priv->priv_dev_ctx->fops_lock) {
+8aff20bcff52903 Pankaj Gupta 2026-05-28  919  				if (priv->cmd_receiver_clbk_hdl.dev_ctx) {
+8aff20bcff52903 Pankaj Gupta 2026-05-28  920  					err = -EBUSY;
+8aff20bcff52903 Pankaj Gupta 2026-05-28  921  					goto out_enable_cmd_rcv;
+8aff20bcff52903 Pankaj Gupta 2026-05-28  922  				}
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  923  				priv->cmd_receiver_clbk_hdl.rx_msg =
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  924  								kzalloc(MAX_NVM_MSG_LEN,
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  925  									GFP_KERNEL);
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  926  				if (!priv->cmd_receiver_clbk_hdl.rx_msg) {
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  927  					err = -ENOMEM;
+8aff20bcff52903 Pankaj Gupta 2026-05-28  928  					goto out_enable_cmd_rcv;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  929  				}
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  930  				priv->cmd_receiver_clbk_hdl.rx_msg_sz = MAX_NVM_MSG_LEN;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  931  				priv->cmd_receiver_clbk_hdl.dev_ctx = dev_ctx;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  932  				err = 0;
+8aff20bcff52903 Pankaj Gupta 2026-05-28  933  out_enable_cmd_rcv:
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22 @934  			}
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  935  			break;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  936  		case SE_IOCTL_GET_MU_INFO:
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  937  			err = se_ioctl_get_mu_info(dev_ctx, uarg);
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  938  			break;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  939  		case SE_IOCTL_SETUP_IOBUF:
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  940  			err = se_ioctl_setup_iobuf_handler(dev_ctx, uarg);
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  941  			break;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  942  		case SE_IOCTL_GET_SOC_INFO:
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  943  			err = se_ioctl_get_se_soc_info_handler(dev_ctx, uarg);
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  944  			break;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  945  		case SE_IOCTL_CMD_SEND_RCV_RSP:
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  946  			err = se_ioctl_cmd_snd_rcv_rsp_handler(dev_ctx, uarg);
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  947  			break;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  948  		default:
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  949  			err = -EINVAL;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  950  			dev_dbg(priv->dev, "%s: IOCTL %.8x not supported.",
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  951  				dev_ctx->devname, cmd);
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  952  		}
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  953  	}
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  954  
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  955  	return err;
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  956  }
+3ae9dcce8400f0a Pankaj Gupta 2026-01-22  957  
 
 --
 0-DAY CI Kernel Test Service
