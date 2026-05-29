@@ -1,63 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAD4367B95;
-	Fri, 29 May 2026 02:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DC4367B93;
+	Fri, 29 May 2026 04:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780023211; cv=none; b=V2sgJL2ehqFjMq2RKjDNn4auujfXHPln6BQsZPlBGJCepvLNhRJuEUEBtlb8knrivZ7zjUUxOChtu8pvDeR3WVcWShSZ2zWCg5vYaF0Vt3Kgioi8olJKChnvCsW1ES1fA8vsCdF8AJokpldrmNww+XMqGybWpn1NoDqhwmak8fk=
+	t=1780029643; cv=none; b=pTMTAn6K37XDgGL4cqOlFd3aTWXSvV2njl8eCzwpKXcy6EKf44N+MBaHQPjkqRcckir8TQW3mhqjI0d33/gK6fBzsFN7k7SlOFCxioTYok8kwCsNX3MIFkIy8Wp+zevE03GeRTPk7RQd40IRT7ZnK9bx4TOAwaJRPOy9oa6us/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780023211; c=relaxed/simple;
-	bh=MMv/5NSwkzggm38CTPziMZDIPfS+SFR/ssIwAbMQIok=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RGVNDfkZrYBUsLJfvpZAQM67fZbCBxANsHjl5f9hY4eFj+trKy/Kg23d0snFQLo7vE1tmWhAIxcT0TvQyJPXW8qTKAP9GL8xy1tukIHdCYTukv4SX+Znr5LRgs1RgeKZDIE6rZ76xxKYEjSay9wGfap6seFn+4GdO+n0uj+HjAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ri/PcGuI; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1780029643; c=relaxed/simple;
+	bh=Foeg4dSi3z9TYbKdiFS1ryI9uUYSgtrI0i/55qmstXo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qw7DU+T+P7kQD7v0RVN6H6BV/3vmhxYeoEH5rHnFTqWVDM76vxdQDsHyjN81o/Gt4Z5XuyqFA/0btsJ+LtPbl5TFoJly1m2yByVmmrJ/FFafrt+d1gsuclCamEFmgU3N3Kwe0/ZheG8/0OJ16yl49NGYP+qyUySPrwxoCGMDT3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XPvpLjBr; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ri/PcGuI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XPvpLjBr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780023210; x=1811559210;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MMv/5NSwkzggm38CTPziMZDIPfS+SFR/ssIwAbMQIok=;
-  b=Ri/PcGuIe6JDjfKSaIzYQrys4DgM0QNgFugG3EHwzj3N1094TE+9bPgQ
-   +1pHuOTYa6tiaaypFo4A0IRgC5tl+fDan6bs8/JrnErfY88bbZrqQcQIe
-   z3gSihul6U2VSOsUg0qNWjdpYtIEzwW5KfGYhdmzuPhh3GMHIj55aRpin
-   ZNVATv5ppptfXsACTU7gcnXJQ0ord1HvlpFUQeOHuOzRf8m2e78q4vzZX
-   UQsu+QnWi/4auJzTVopnlvU+lx+TtNcuIkLZQvKnzX5Lf41HZHP0lyG3I
-   QLl/78jVthFC73z6qpjR/hsgwm4QAbG/iDgpUBue9AKmly6w/HfBp+2mN
-   g==;
-X-CSE-ConnectionGUID: QQnPFaX/QYSeJ1YFk0+P7w==
-X-CSE-MsgGUID: l4/MzLGxSBG4d/5RfrsQQA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11800"; a="68410256"
+  t=1780029642; x=1811565642;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Foeg4dSi3z9TYbKdiFS1ryI9uUYSgtrI0i/55qmstXo=;
+  b=XPvpLjBrJLEcNbeN4xi00C1ptzhMmJor+C+hEXETRUvRHZbafnuSRV//
+   7gO5BQcRBUWPCBRTzndpXrRR4LeO99F2PZEhGkDKHMVihCePts/j7kYJK
+   FvQmyIePnuu9KA1ift8qyJ8HQESZlmgAKlPMCr/9UiFExxyvb9yPbwKH8
+   R/1Zq4dJcgfHLIjCestkH03R55wR2J+I5hOh5w+8YrIfU6obeFTmErKX4
+   wVWJAUeAfGyVPVagDT44ZXiQkKyiUs49TSRHY2FxRdiYiqguD9J6L2XMc
+   H0jeLusI90pLnNbgpizrUcF0RHMaAoge607GFZuxux4aNMcnVtHBOKsEV
+   w==;
+X-CSE-ConnectionGUID: /wYYr2zzR7ScPm3DL+2x+g==
+X-CSE-MsgGUID: 8vfkgp+YS5yMxODB9tK+rA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11800"; a="91188302"
 X-IronPort-AV: E=Sophos;i="6.24,174,1774335600"; 
-   d="scan'208";a="68410256"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 19:53:29 -0700
-X-CSE-ConnectionGUID: AgeBxSw7TzarERMK2arMWg==
-X-CSE-MsgGUID: TB2LUYupRcCFmj0x7eobpQ==
+   d="scan'208";a="91188302"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 21:40:42 -0700
+X-CSE-ConnectionGUID: NTkOfrkFRdmEGNZjed71zA==
+X-CSE-MsgGUID: fxBDTmiGRw6IibNZeF5UTg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,174,1774335600"; 
-   d="scan'208";a="266603015"
+   d="scan'208";a="241922473"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 28 May 2026 19:53:27 -0700
+  by orviesa010.jf.intel.com with ESMTP; 28 May 2026 21:40:39 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wSnLg-000000006hu-3OzL;
-	Fri, 29 May 2026 02:53:24 +0000
-Date: Fri, 29 May 2026 10:52:52 +0800
+	id 1wSp1R-000000006ls-1ELz;
+	Fri, 29 May 2026 04:40:37 +0000
+Date: Fri, 29 May 2026 12:40:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Danilo Krummrich <dakr@kernel.org>
+To: Pankaj Gupta <pankaj.gupta@nxp.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Alice Ryhl <aliceryhl@google.com>
-Subject: [linux-next:master 3728/9137]
- samples/rust/rust_driver_auxiliary.o: warning: objtool:
- =?us-ascii?Q?=5FRINvXs5=5FNtNtCshc5sK6KjdJJ=5F6kernel5alloc4kboxINtB6?=
- =?us-ascii?Q?=5F3BoxINtNtNtCsbsbRiabPlh9=5F4core3mem12maybe=5Funinit11M?=
- =?us-ascii?Q?aybeUninitINtNtBa=5F9auxiliary16RegistrationDataNtCseULRbg?=
- =?us-ascii?Q?TYaTO=5F21rust=5Fdriver=5Fauxiliary4DataEENtNtB...?=
-Message-ID: <202605291041.seNEWvLQ-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	imx@lists.linux.dev, frank.li@nxp.com,
+	Pankaj Gupta <pankaj.gupta@nxp.com>,
+	sashiko-bot <sashiko-bot@kernel.org>
+Subject: Re: [PATCH -next] firmware: imx: se_ctrl: serialize command receiver
+ registration
+Message-ID: <202605291206.NC4J51NQ-lkp@intel.com>
+References: <20260528091634.3331090-1-pankaj.gupta@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,25 +65,94 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260528091634.3331090-1-pankaj.gupta@nxp.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f7af91adc230aa99e23330ecf85bc9badd9780ad
-commit: fd3b87ff0232f46e1ad53a48609a3853c8757c6c [3728/9137] rust: auxiliary: add registration data to auxiliary devices
-config: x86_64-randconfig-004-20260529 (https://download.01.org/0day-ci/archive/20260529/202605291041.seNEWvLQ-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260529/202605291041.seNEWvLQ-lkp@intel.com/reproduce)
+Hi Pankaj,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20260527]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Gupta/firmware-imx-se_ctrl-serialize-command-receiver-registration/20260528-172942
+base:   next-20260527
+patch link:    https://lore.kernel.org/r/20260528091634.3331090-1-pankaj.gupta%40nxp.com
+patch subject: [PATCH -next] firmware: imx: se_ctrl: serialize command receiver registration
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260529/202605291206.NC4J51NQ-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260529/202605291206.NC4J51NQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605291041.seNEWvLQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605291206.NC4J51NQ-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   samples/rust/rust_driver_auxiliary.o: warning: objtool: asan.module_ctor+0xd: call without frame pointer save/setup
-   samples/rust/rust_driver_auxiliary.o: warning: objtool: asan.module_dtor+0x1: call without frame pointer save/setup
->> samples/rust/rust_driver_auxiliary.o: warning: objtool: _RINvXs5_NtNtCshc5sK6KjdJJ_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsbsbRiabPlh9_4core3mem12maybe_uninit11MaybeUninitINtNtBa_9auxiliary16RegistrationDataNtCseULRbgTYaTO_21rust_driver_auxiliary4DataEENtNtB8_9allocator7KmallocEINtCs57PXBekmiam_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB3y_10___internal11InitClosureNCINvYIBH_B1L_B35_EINtNtBa_4init11InPlaceInitB1L_E8pin_initB4u_IB4O_NCINvMsc_B1O_INtB1O_12RegistrationB2l_E3newNtNtBX_7convert10InfallibleB2l_Es_0B1L_B4u_EE0B1L_B4u_EEB2n_: symbol name too long, can't create __pfx_ symbol
+   drivers/firmware/imx/se_ctrl.c:673:16: warning: result of comparison of constant 18446744073709551608 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     673 |         if (io.length > SIZE_MAX - 7) {
+         |             ~~~~~~~~~ ^ ~~~~~~~~~~~~
+>> drivers/firmware/imx/se_ctrl.c:934:4: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+     934 |                         }
+         |                         ^
+   2 warnings generated.
+
+
+vim +934 drivers/firmware/imx/se_ctrl.c
+
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  905  
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  906  /* IOCTL entry point of a character device */
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  907  static long se_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  908  {
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  909  	struct se_if_device_ctx *dev_ctx = fp->private_data;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  910  	struct se_if_priv *priv = dev_ctx->priv;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  911  	void __user *uarg = (void __user *)arg;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  912  	long err;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  913  
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  914  	/* Prevent race during change of device context */
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  915  	scoped_cond_guard(mutex_intr, return -EBUSY, &dev_ctx->fops_lock) {
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  916  		switch (cmd) {
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  917  		case SE_IOCTL_ENABLE_CMD_RCV:
+8aff20bcff5290 Pankaj Gupta 2026-05-28  918  			scoped_guard(mutex, &priv->priv_dev_ctx->fops_lock) {
+8aff20bcff5290 Pankaj Gupta 2026-05-28  919  				if (priv->cmd_receiver_clbk_hdl.dev_ctx) {
+8aff20bcff5290 Pankaj Gupta 2026-05-28  920  					err = -EBUSY;
+8aff20bcff5290 Pankaj Gupta 2026-05-28  921  					goto out_enable_cmd_rcv;
+8aff20bcff5290 Pankaj Gupta 2026-05-28  922  				}
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  923  				priv->cmd_receiver_clbk_hdl.rx_msg =
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  924  								kzalloc(MAX_NVM_MSG_LEN,
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  925  									GFP_KERNEL);
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  926  				if (!priv->cmd_receiver_clbk_hdl.rx_msg) {
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  927  					err = -ENOMEM;
+8aff20bcff5290 Pankaj Gupta 2026-05-28  928  					goto out_enable_cmd_rcv;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  929  				}
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  930  				priv->cmd_receiver_clbk_hdl.rx_msg_sz = MAX_NVM_MSG_LEN;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  931  				priv->cmd_receiver_clbk_hdl.dev_ctx = dev_ctx;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  932  				err = 0;
+8aff20bcff5290 Pankaj Gupta 2026-05-28  933  out_enable_cmd_rcv:
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22 @934  			}
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  935  			break;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  936  		case SE_IOCTL_GET_MU_INFO:
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  937  			err = se_ioctl_get_mu_info(dev_ctx, uarg);
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  938  			break;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  939  		case SE_IOCTL_SETUP_IOBUF:
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  940  			err = se_ioctl_setup_iobuf_handler(dev_ctx, uarg);
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  941  			break;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  942  		case SE_IOCTL_GET_SOC_INFO:
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  943  			err = se_ioctl_get_se_soc_info_handler(dev_ctx, uarg);
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  944  			break;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  945  		case SE_IOCTL_CMD_SEND_RCV_RSP:
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  946  			err = se_ioctl_cmd_snd_rcv_rsp_handler(dev_ctx, uarg);
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  947  			break;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  948  		default:
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  949  			err = -EINVAL;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  950  			dev_dbg(priv->dev, "%s: IOCTL %.8x not supported.",
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  951  				dev_ctx->devname, cmd);
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  952  		}
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  953  	}
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  954  
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  955  	return err;
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  956  }
+3ae9dcce8400f0 Pankaj Gupta 2026-01-22  957  
 
 --
 0-DAY CI Kernel Test Service
