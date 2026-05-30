@@ -1,136 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE6F387369;
-	Sat, 30 May 2026 07:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780125710; cv=none; b=pCEeS756Qfkt8y9Ykl1Fm4psPi0Sh2HpxBhb+9azAhcdnsT/7AgQeySqdScUuJCGZ6hmUdyVT4w+eu4UYuTQkxN5KYxG1HuFIinJtz+OqcKPVbhWi5tVT3DmaskLX0Nw1DcuRG/V3VsXQRpMshDfOMKYVNyVFSZOmfjqiw1oHp4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780125710; c=relaxed/simple;
-	bh=SKtIHjcxbsa8b88YmfrKc376yFEcKAQ3wnPjdzv7THE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=dsX1l9dPo16it4d82N6TAx6tTvOBx2aAwQ2dJM1iZ8ozMRZSK4ssHSfr/YYOwov1gKqFm0oGkpiL6swlHFYlK+j21xgwCHRfz605iMsCMcsWpGwFgb/OBSP19e+KAvOMRxL1F8NJqax6XKMi32xoJ806j3ZYoyLZGczYZax6FEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QN/Xj6II; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BCF393DDB
+	for <llvm@lists.linux.dev>; Sat, 30 May 2026 07:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780126867; cv=pass; b=dR6ddXeplZWUnPgyTtkoe8QpOrywuMt3yNJJxKZ/m4tiTe6IhF9mbohS4rmwkw9MKvItJ5LB/VUTerrEzGHTHyzCHGEscldL96DfWBa8O0VWqSH9M5lplZFACPCz0gAtFKGChouo9HOrKugsc0U8RveBrtrO2PqWyNjnmRPuD1I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780126867; c=relaxed/simple;
+	bh=L3UEWLmXReuYoCrmgUMxQKkIqL6gBhu9SHlnPE1kURQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bxJxVhraau4phEOEPBAvQUBMYvg6BUG3GB50iK16pmOsoJpBeNAsKk1vAQq8gWDKcPiJXFrs+aGILE13mAmWp56XjNvZ8lSzzFweHLlk7lP2nV4TVJqQohW3Jsi3MjMllGhg5cN6G0X0ysyDKW9pjDP06NHwy958xPZV8xZ/cfk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jQhidlql; arc=pass smtp.client-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QN/Xj6II"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780125709; x=1811661709;
-  h=date:from:to:cc:subject:message-id;
-  bh=SKtIHjcxbsa8b88YmfrKc376yFEcKAQ3wnPjdzv7THE=;
-  b=QN/Xj6IIlq1PvFtmJbWoR/jdwaAcGQJbcFCupUDsSZGz/gs4mvmvYimg
-   tV0cv0AITwvimCj5vO9Sw2wws2n0spCXeA/7sNcwGy78SqIFQPS+e32FD
-   CHMlFrlwL/Re9eEvygAbcaY5giZso8v/te3jsL9zu5Pm37nfEmpKfODIZ
-   WZEsNz9Fs1NKYbb8lxbwkA++SnmoVSbVHN2fNjU2Wk+IbvSj/5BBg1I9B
-   yrS6/qr0+vHUBAtoShhGG23mavsrh9EDMl0rOpEdpL+z/YpiRVZX0XuN0
-   VftYlg6d58SR997MbgH4F3myhks45RzupTwI3XWxKQk5E2eDWCRucwMNc
-   w==;
-X-CSE-ConnectionGUID: DLucv1lTSh2gctNN709DxA==
-X-CSE-MsgGUID: txdPI0nnQlemdodj7S6E8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="80820963"
-X-IronPort-AV: E=Sophos;i="6.24,176,1774335600"; 
-   d="scan'208";a="80820963"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 00:21:48 -0700
-X-CSE-ConnectionGUID: h31a8cYER0KBsgSg3IIYOg==
-X-CSE-MsgGUID: Hd+ExlLPQJ2ppiYTGVRGGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,176,1774335600"; 
-   d="scan'208";a="243147384"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa009.jf.intel.com with ESMTP; 30 May 2026 00:21:47 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wTE0u-00000000153-1BRB;
-	Sat, 30 May 2026 07:21:44 +0000
-Date: Sat, 30 May 2026 09:21:26 +0200
-From: kernel test robot <lkp@intel.com>
-To: Brian Cain <brian.cain@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bcain:bcain/boot_qemu 42/43] mm/mm_init.c:920:18: error: no
- member named 'pageblock_flags' in 'struct zone'
-Message-ID: <202605300909.7HlejklT-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQhidlql"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-304d3d3d8f8so208329eec.2
+        for <llvm@lists.linux.dev>; Sat, 30 May 2026 00:41:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780126866; cv=none;
+        d=google.com; s=arc-20240605;
+        b=djFZSR+Anz834mRum696f0eYSaWBv185c1XJgH+Q26QxL/Chv3m2Di2KyNbyYJCkiV
+         4qhK+8Jb6PccyRuXArR2M3dj3sPGIAZ7Zzr0M1+7fI+X2IPLIgQjFyww4NR/HL8IbmCR
+         RDlFEtj71tMb6nJcb3LVFmFK5el+J6M/7bg49Q/MEONnmiKYw3wxHMMjEDf7rR0Eq6Ka
+         O9VH9T1Yh1Dd3o+BbOFqsaHzb7pHe3zmwPEZJDTcYhzomYq5Zwv3ViDYVvIDTH9swD/u
+         KEHeEG3LbNO/Kdrw2BstUmln9CivkQRRAGmLjSy13Rejziq3eis0vsMFlx2jVe6+mPBi
+         hqew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Qpr9VE3elbZ+vLOG6raofIn6zipcaovFd851fDkQwe4=;
+        fh=AfbmMews1k48N1AYScpjnGAaFzJD7zT5Yo4ZjV6rShw=;
+        b=hW5vqCpMifzz3ff0JJ2k5a4RkQIK2N5CR6kNnQGOC8PWr9XSfhqBfRAKIO+Zo0W3eg
+         NoaynQlt5ND496iDnk9rAU/kUJ0VK8xHJ/7uArfSwt8+gTRrfdQAKdujCs2gPRwGnUe0
+         yzWW8ZOBhRZ0+htonypsHZ67903JZBSkm1SAXKmDwBv+BWnGg0X0KMeG88CLZJFeXohe
+         1gcDzsljGEjxuiB2Tv45uiG8zMkE6+upKO0qH37f+i2OTjpXD1iv2UuDPqDi6KXZVn8S
+         V4/a+6veTz2mF4w8xRFRTwuc61uCSUwvOK7mYlshSiXu+Wbxi4qD88wmdBFg7e7Y548b
+         CkHQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780126866; x=1780731666; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qpr9VE3elbZ+vLOG6raofIn6zipcaovFd851fDkQwe4=;
+        b=jQhidlqlMHTr2xbbuxhoaF37l5SfCA3V5fynSf1dgis+/Fa2CjothCrY6vt673kWBB
+         RURAg3wtx6laKpXVNgHptpLjgiuJb3aCiK6UleXCuTiaK/sSCmsWEzwj/uq7IhohRIKV
+         f1cVEvY04VCshEOCRRK5Gudp1szhHl/9waPjNhpTD6PNeIZi+5wT4woKP7bpqC/k/7EE
+         3Lq+t/WhToLC2eeII0G6bijywraW+ePpUjNKqjF47Z72B7NgLlTF1vOXpmQptoikpa0Q
+         aMf2P7pYzo/lWD1fbhTUr8lqv5OYuOE9nZFH0NTNmVJPOsnuQNGrOOa2N3Al4ugAiKNB
+         ravg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780126866; x=1780731666;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Qpr9VE3elbZ+vLOG6raofIn6zipcaovFd851fDkQwe4=;
+        b=ka1txU9WchBqMSy9g24p5dqh84OvoXPlUq+PK6qwCmorzNqdS7L3Y0PkhODY5LzcIf
+         k4WA/ZTnu4YpMkEpE+IbpmfEHoiJoXwgWfO170CRzPrIDgy5hUHAT8K21voK1X9J0ZJ+
+         hGvbnLKnw3V6UHCepMliZADDUs6b43QXHIM9CEFmM4Jx8JQvOztbQPy3F/FIacL7YyDh
+         /yUA2iE7UWB+HZJN7RDpKa2eE2w50j6vomHx+GKpettKsjgO5iSYQ7qhiesMmPByUkRJ
+         2RPckXBP6e+P2s7T204hQJwgb0AKGLUX+IOx9fS4p3OtU5U35WVgKpouLXOr+kbKTIP2
+         DLvQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+gBiUbyd7sybRBWn2lOdsB/9FlmTK3ddn9nWs24HUrLleNmqLvWGA9HjvNXBfTd0VWGfYC@lists.linux.dev
+X-Gm-Message-State: AOJu0YyS4LGNkTXbuxGRaMLB0UpnDhwy3d/XY3T0A00oLHCiSR/QY/js
+	liO571/LbkK6LU+W/5lKA7Wj4HMAWw6L0WEAO2LkBDC/O/SHVM+Zatkn0Q6dTT3YM/ekQis1Z/S
+	X/dk+4ejVS7DtqghEUNb4LI2PkM/JZ+k=
+X-Gm-Gg: Acq92OGc1rloSnK9ZQKfYo76NBR18VeiqTyZzXaL18ZgU7ra0ehKj68NJZ7ZeNLid6m
+	QY1lNFCcV8fWlhZs3n7TsxmI+7Q9bIKdeSQC5IBbHeit2rjovADDgncoWaGB+S90J/bucmvKMiF
+	/+zss1hFUPkbIxKq+7zf7nXqxHRrytfrrNXCfVf4U7rbcriqqCQxIUN4XXitZ/z2jargEt9FsE6
+	EF1/Wg8dY0zMycdftFsGkQSghjiGPDTqwOdABNz/i/3tmzxHyLvA/MkknWHIrlAnwLnf4L7RAbo
+	iDomyJXO5TYzdZbTSASMelrQSnCV7ZT+b2O9hjXbhbBr6ImwUEp0DDsSu+Mek1Jtphsx1gnoPDE
+	HPBvAPq7CKsPnEiGwIhY3XUh9pU1gEfV43w==
+X-Received: by 2002:a05:693c:2c86:b0:304:3c33:7afd with SMTP id
+ 5a478bee46e88-304fa4a75dbmr712153eec.1.1780126865429; Sat, 30 May 2026
+ 00:41:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260527-uwtable-module-flag-v1-1-caa41342be4b@google.com>
+In-Reply-To: <20260527-uwtable-module-flag-v1-1-caa41342be4b@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sat, 30 May 2026 09:40:51 +0200
+X-Gm-Features: AVHnY4LYzc72_leHtuASvRnfI_XBQ5P_tmJIekDaxm-OGvsoitOo6icCZq7qopI
+Message-ID: <CANiq72ny89rMb9y1ysfbBjm=LVhO=51sRd6Ocpy-UOwFj=61vQ@mail.gmail.com>
+Subject: Re: [PATCH] rust: arm64: set uwtable llvm module flag for CONFIG_UNWIND_TABLES
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, stable@kernel.org, 
+	Bo Ye <bo.ye@mediatek.com>, Isaac Manjarres <isaacmanjarres@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
-head:   dea73df6b6f456832390a9acd2c44cf235110d30
-commit: a2a98cd08700b29ee25458e078d1c20cc3cb4131 [42/43] mm: guard pageblock init against missing pageblock_flags
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260530/202605300909.7HlejklT-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605300909.7HlejklT-lkp@intel.com/reproduce)
+On Wed, May 27, 2026 at 8:18=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
+rote:
+>
+> Due to a rustc bug [1] the -Cforce-unwind-tables=3Dy flag only emits the
+> uwtable annotation for functions, but not for the module. This means
+> that compiler-generated functions such as 'asan.module_ctor' do not
+> receive the uwtable annotation.
+>
+> When CONFIG_UNWIND_PATCH_PAC_INTO_SCS is enabled, this leads to boot
+> failures because the dwarf information emitted for the kasan
+> constructors is wrong, which causes the SCS boot patching code to
+> patch the constructor in an illegal manner. Specifically, the paciasp
+> instruction is patched, but the autiasp instruction is not. This
+> mismatch leads to a crash when the constructor is called during boot.
+>
+>         =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>         BUG: KASAN: global-out-of-bounds in do_basic_setup+0x4c/0x90
+>         Read of size 8 at addr ffffffe3cc7eb488 by task swapper/0/1
+>
+> Specifically the faulting instruction is the (*fn)() to invoke the
+> constructor in do_ctors() of the init/main.c file.
+>
+> Once the fix lands in rustc, this flag can be made conditional on the
+> rustc version. Note that passing the flag on a rustc with the fix
+> present has no effect.
+>
+> Fixes: d077242d68a3 ("rust: support for shadow call stack sanitizer")
+> Cc: stable@kernel.org
+> Link: https://github.com/rust-lang/rust/pull/156980 [1]
+> Reported-by: Bo Ye <bo.ye@mediatek.com>
+> Debugged-by: Isaac Manjarres <isaacmanjarres@google.com>
+> Debugged-by: Sami Tolvanen <samitolvanen@google.com>
+> Tested-by: Isaac Manjarres <isaacmanjarres@google.com>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605300909.7HlejklT-lkp@intel.com/
+Applied to `rust-fixes` -- thanks everyone!
 
-All errors (new ones prefixed by >>):
+    [ The fix [1] has landed for Rust 1.98.0 (expected release on
+      2026-08-20).
 
->> mm/mm_init.c:920:18: error: no member named 'pageblock_flags' in 'struct zone'
-     920 |                         if (likely(z->pageblock_flags)) {
-         |                                    ~  ^
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   1 error generated.
+      Thus add a version check as discussed.
 
+        - Miguel ]
 
-vim +920 mm/mm_init.c
+    [ Adjusted link and comment. - Miguel ]
 
-   887	
-   888		for (pfn = start_pfn; pfn < end_pfn; ) {
-   889			/*
-   890			 * There can be holes in boot-time mem_map[]s handed to this
-   891			 * function.  They do not exist on hotplugged memory.
-   892			 */
-   893			if (context == MEMINIT_EARLY) {
-   894				if (overlap_memmap_init(zone, &pfn))
-   895					continue;
-   896				if (defer_init(nid, pfn, zone_end_pfn)) {
-   897					deferred_struct_pages = true;
-   898					break;
-   899				}
-   900			}
-   901	
-   902			page = pfn_to_page(pfn);
-   903			__init_single_page(page, pfn, zone, nid);
-   904			if (context == MEMINIT_HOTPLUG) {
-   905	#ifdef CONFIG_ZONE_DEVICE
-   906				if (zone == ZONE_DEVICE)
-   907					__SetPageReserved(page);
-   908				else
-   909	#endif
-   910					__SetPageOffline(page);
-   911			}
-   912	
-   913			/*
-   914			 * Usually, we want to mark the pageblock MIGRATE_MOVABLE,
-   915			 * such that unmovable allocations won't be scattered all
-   916			 * over the place during system boot.
-   917			 */
-   918			if (pageblock_aligned(pfn)) {
-   919				struct zone *z = page_zone(page);
- > 920				if (likely(z->pageblock_flags)) {
-   921					init_pageblock_migratetype(page, migratetype,
-   922							isolate_pageblock);
-   923				} else {
-   924					pr_warn_once("memmap_init_range: skipping pageblock init for pfn 0x%lx (zone %s has no pageblock_flags)\n",
-   925						     pfn, z->name);
-   926				}
-   927				cond_resched();
-   928			}
-   929			pfn++;
-   930		}
-   931	}
-   932	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
