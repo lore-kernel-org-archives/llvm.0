@@ -1,73 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6155348C5E;
-	Sat, 30 May 2026 18:05:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD9022D7B9;
+	Sat, 30 May 2026 19:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780164321; cv=none; b=YNzz+CrJPfcJL1oub32VoiiOkgL1cD7sIgiWM4EOM4rNGrgbpQYDMxueT9pnGC5CLTlImm7dwsUYgydAgKueSvmiieT4D1E43lnnsTZUeMKoPZfFB1UwS+UBuGGWuS9zs4K/cYbTKfayqxUnMsf+l9BdJ3/2h6zh0VXwc9kZOtg=
+	t=1780170569; cv=none; b=S97U5CRtRPrPdkjzBYL6/lnrVoAA6Plpg49ZoCTA5WqcRI6zLcCqYH4sDo91Cq2zCdYIe0z7vNBJJweAx4Jy+2QloKrHu01H+k4Hvd9WIxOBnbRCU+hBhq8XOjS9IHaIRUlZVThBXBPaHoE7knYOK4q1pUYkigJ9rt5EO0bM0QE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780164321; c=relaxed/simple;
-	bh=CmIOsDhzmaoHfGl24Cswm9/46h1EqKgKFEAM5HlR5l8=;
+	s=arc-20240116; t=1780170569; c=relaxed/simple;
+	bh=r2HYZ1309/OZlVyvOT2l/OJyonDxhgfEY4CEmE5YdKQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XvNChr5CW1vtwIDCMNrPos3EQrrdZHF2RFGr/0MQEzIPpm1hAAmUcTYmBxRRzPBzBUptdGXVsVf8/148qSIUAb9PdmGXiqEOQgIXRGpGd+OVubgVOMgosTn0DX4vHfdOYFJdErW40j599DSBgwe2Ls5jhjxTyX7ChXc1c/YrhB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ET/MXsJl; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=p1ull9EieXsYubdzGfkrcx9Gd+hjtTVTfsosXMxiI3Ao6qup51Lz63AzOkVVpHiWY1mBkCrcDEX26HRb7HZxOv9aZTbPSxbMBTrxW9JxlUzDqID40H7wcGfwudPUE4Ork8ZQAhcrS0syj8OGmp5EqFiL2XoLf6PjHOQfC7+VIz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bj83evpA; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ET/MXsJl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bj83evpA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780164319; x=1811700319;
+  t=1780170567; x=1811706567;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CmIOsDhzmaoHfGl24Cswm9/46h1EqKgKFEAM5HlR5l8=;
-  b=ET/MXsJlRMnRwt4OGGww3YQ/REgWg5XSZ3y4bntO+z5erZnlgYgN1LpQ
-   ZXAI6M+JTbMPEgUf0b/3PUo61VtJ4LDFg3ZXKxV2EujVaDsb9DG8OTY4A
-   c1MOodLzpHd0pUMW1o97VSsMBqdHbvrJey/FYezUSot+iZ3jOzKFfYlgO
-   B/vk2k1/4EEn4tcdosluP6tRZWM8svdxe4SdX2QgTUUjP7eWQZ/gjjZ+d
-   z2SvFUaqDIHpzCMWN736u5i7mAleS2B5ESZEqDf9naH54H48TqByKtK8b
-   pnwiuagpyQE1O9a5+8YWDEUMbHwbyAxmiI/W8z35i4wQ8c/dwd097dHOM
+  bh=r2HYZ1309/OZlVyvOT2l/OJyonDxhgfEY4CEmE5YdKQ=;
+  b=Bj83evpAQbHIiFwQMJzLgSJSzWgmfTQOGsl6rOS3Bx6BqK3NniDMw9wD
+   Ln+OGxI9TdgFsvzIp8R9K+5GaO5OKKPiTLUU67q16+EyEnEctNG2yzvh/
+   7735MJF//0lNhaVkQBsUVtQLzEkEEPDYWy16v8m+01UT2FN7QKLXz5uOn
+   nf/8Mu96MyEXvEfrJtOGs/XIu9nezHK9QQegKoEqGmiicjw5ldwblKPCH
+   k4eT7xE0YD7Xgi28z6UpPmHIiRd/M03Tnz2khQ/qtApHK1QpV+PiRqdxE
+   bs4iudqCYlhp8JdXuUdBSPn4vZdOlxaKI6CO1Bzqnrcda3k1LxPGvF5Cr
    g==;
-X-CSE-ConnectionGUID: WfA+t28OQIGWP+gtiFfx+g==
-X-CSE-MsgGUID: hrouslKvQhW1SHZSApAv+w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11802"; a="103655846"
-X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
-   d="scan'208";a="103655846"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 11:05:19 -0700
-X-CSE-ConnectionGUID: VCmEDFrQTAinCjDCAOl9rw==
-X-CSE-MsgGUID: 1EOOZkKNQ1u+i7ncO+8olQ==
+X-CSE-ConnectionGUID: 0QZzSLypQ56YXsFRhkCz7A==
+X-CSE-MsgGUID: s+Ca/YO6SGGGJtbpsFL7Yg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11802"; a="92367065"
+X-IronPort-AV: E=Sophos;i="6.24,178,1774335600"; 
+   d="scan'208";a="92367065"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 12:49:26 -0700
+X-CSE-ConnectionGUID: WrVI3wmXSVSZaKetzgcb6g==
+X-CSE-MsgGUID: neI8wEgjR/qzIuBfSXLVLw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
-   d="scan'208";a="281261019"
+X-IronPort-AV: E=Sophos;i="6.24,178,1774335600"; 
+   d="scan'208";a="244979562"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 30 May 2026 11:05:14 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 30 May 2026 12:49:23 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wTO3b-000000008m2-1KnD;
-	Sat, 30 May 2026 18:05:11 +0000
-Date: Sun, 31 May 2026 02:04:16 +0800
+	id 1wTPgN-000000008p8-3PBB;
+	Sat, 30 May 2026 19:49:19 +0000
+Date: Sun, 31 May 2026 03:48:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ronald Claveau via B4 Relay <devnull+linux-kernel-dev.aliel.fr@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Lukasz Luba <lukasz.luba@arm.com>
+To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Jens Axboe <axboe@kernel.dk>,
+	linux-block <linux-block@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Guillaume La Roque <glaroque@baylibre.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	Ronald Claveau <linux-kernel-dev@aliel.fr>
-Subject: Re: [PATCH] firmware: meson: sm: add stub functions when
- CONFIG_MESON_SM is disabled
-Message-ID: <202605310154.bmdMBZHJ-lkp@intel.com>
-References: <20260530-fix-missing-meson_sm-symbol-v1-1-3fb672b989d4@aliel.fr>
+	Bart Van Assche <bvanassche@acm.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Ming Lei <tom.leiming@gmail.com>,
+	Damien Le Moal <dlemoal@kernel.org>, Christoph Hellwig <hch@lst.de>,
+	Qu Wenruo <wqu@suse.com>, Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH] loop: reject binding to procfs and sysfs files
+Message-ID: <202605310318.dbidMe6W-lkp@intel.com>
+References: <148efba2-a0b6-47d7-ac76-b19d2f4b696c@I-love.SAKURA.ne.jp>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,87 +71,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260530-fix-missing-meson_sm-symbol-v1-1-3fb672b989d4@aliel.fr>
+In-Reply-To: <148efba2-a0b6-47d7-ac76-b19d2f4b696c@I-love.SAKURA.ne.jp>
 
-Hi Ronald,
+Hi Tetsuo,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 3929405c64376a8a54c794e8a4485023b108a97e]
+[auto build test ERROR on axboe/for-next]
+[also build test ERROR on linus/master v7.1-rc5 next-20260529]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ronald-Claveau-via-B4-Relay/firmware-meson-sm-add-stub-functions-when-CONFIG_MESON_SM-is-disabled/20260530-150837
-base:   3929405c64376a8a54c794e8a4485023b108a97e
-patch link:    https://lore.kernel.org/r/20260530-fix-missing-meson_sm-symbol-v1-1-3fb672b989d4%40aliel.fr
-patch subject: [PATCH] firmware: meson: sm: add stub functions when CONFIG_MESON_SM is disabled
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260531/202605310154.bmdMBZHJ-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260531/202605310154.bmdMBZHJ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Tetsuo-Handa/loop-reject-binding-to-procfs-and-sysfs-files/20260530-214900
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
+patch link:    https://lore.kernel.org/r/148efba2-a0b6-47d7-ac76-b19d2f4b696c%40I-love.SAKURA.ne.jp
+patch subject: [PATCH] loop: reject binding to procfs and sysfs files
+config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20260531/202605310318.dbidMe6W-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9409c07de6378507397ecdb6f05f628f58110112)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260531/202605310318.dbidMe6W-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605310154.bmdMBZHJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605310318.dbidMe6W-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/firmware/meson/meson_sm.c:233:27: error: redefinition of 'meson_sm_get'
-     233 | struct meson_sm_firmware *meson_sm_get(struct device_node *sm_node)
-         |                           ^
-   include/linux/firmware/meson/meson_sm.h:39:41: note: previous definition is here
-      39 | static inline struct meson_sm_firmware *meson_sm_get(struct device_node *firmware_node)
-         |                                         ^
->> drivers/firmware/meson/meson_sm.c:258:5: error: redefinition of 'meson_sm_get_thermal_calib'
-     258 | int meson_sm_get_thermal_calib(struct meson_sm_firmware *fw, u32 *trim_info,
-         |     ^
-   include/linux/firmware/meson/meson_sm.h:43:19: note: previous definition is here
-      43 | static inline int meson_sm_get_thermal_calib(struct meson_sm_firmware *fw,
-         |                   ^
+>> drivers/block/loop.c:504:7: error: use of undeclared identifier 'PROC_SUPER_MAGIC'
+     504 |         case PROC_SUPER_MAGIC: /* e.g. "losetup -f /proc/sys/kernel/version" */
+         |              ^~~~~~~~~~~~~~~~
+>> drivers/block/loop.c:505:7: error: use of undeclared identifier 'SYSFS_MAGIC'
+     505 |         case SYSFS_MAGIC: /* e.g. "losetup -f /sys/power/state" */
+         |              ^~~~~~~~~~~
    2 errors generated.
 
 
-vim +/meson_sm_get +233 drivers/firmware/meson/meson_sm.c
+vim +/PROC_SUPER_MAGIC +504 drivers/block/loop.c
 
-2c4ddb215521d5 Carlo Caione   2016-08-27  225  
-8cde3c2153e8f5 Carlo Caione   2019-07-31  226  /**
-8cde3c2153e8f5 Carlo Caione   2019-07-31  227   * meson_sm_get - get pointer to meson_sm_firmware structure.
-8cde3c2153e8f5 Carlo Caione   2019-07-31  228   *
-8cde3c2153e8f5 Carlo Caione   2019-07-31  229   * @sm_node:		Pointer to the secure-monitor Device Tree node.
-8cde3c2153e8f5 Carlo Caione   2019-07-31  230   *
-8cde3c2153e8f5 Carlo Caione   2019-07-31  231   * Return:		NULL is the secure-monitor device is not ready.
-8cde3c2153e8f5 Carlo Caione   2019-07-31  232   */
-8cde3c2153e8f5 Carlo Caione   2019-07-31 @233  struct meson_sm_firmware *meson_sm_get(struct device_node *sm_node)
-8cde3c2153e8f5 Carlo Caione   2019-07-31  234  {
-8cde3c2153e8f5 Carlo Caione   2019-07-31  235  	struct platform_device *pdev = of_find_device_by_node(sm_node);
-8ece3173f87df0 Johan Hovold   2025-07-25  236  	struct meson_sm_firmware *fw;
-8cde3c2153e8f5 Carlo Caione   2019-07-31  237  
-8cde3c2153e8f5 Carlo Caione   2019-07-31  238  	if (!pdev)
-8cde3c2153e8f5 Carlo Caione   2019-07-31  239  		return NULL;
-8cde3c2153e8f5 Carlo Caione   2019-07-31  240  
-8ece3173f87df0 Johan Hovold   2025-07-25  241  	fw = platform_get_drvdata(pdev);
-8ece3173f87df0 Johan Hovold   2025-07-25  242  
-8ece3173f87df0 Johan Hovold   2025-07-25  243  	put_device(&pdev->dev);
-8ece3173f87df0 Johan Hovold   2025-07-25  244  
-8ece3173f87df0 Johan Hovold   2025-07-25  245  	return fw;
-8cde3c2153e8f5 Carlo Caione   2019-07-31  246  }
-8cde3c2153e8f5 Carlo Caione   2019-07-31  247  EXPORT_SYMBOL_GPL(meson_sm_get);
-8cde3c2153e8f5 Carlo Caione   2019-07-31  248  
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  249  /**
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  250   * meson_sm_get_thermal_calib - Read thermal sensor calibration data.
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  251   * @fw:		Pointer to secure-monitor firmware.
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  252   * @trim_info:	Pointer to store the returned calibration data.
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  253   * @tsensor_id:	Sensor index to identify which sensor's calibration data
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  254   *		to retrieve
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  255   *
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  256   * Return: 0 on success, negative error code on failure.
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  257   */
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24 @258  int meson_sm_get_thermal_calib(struct meson_sm_firmware *fw, u32 *trim_info,
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  259  			       u32 tsensor_id)
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  260  {
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  261  	return meson_sm_call(fw, SM_THERMAL_CALIB_READ, trim_info, tsensor_id,
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  262  			     0, 0, 0, 0);
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  263  }
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  264  EXPORT_SYMBOL_GPL(meson_sm_get_thermal_calib);
-1c5cb7391ef5f8 Ronald Claveau 2026-04-24  265  
+   478	
+   479	static int loop_validate_file(struct file *file, struct block_device *bdev)
+   480	{
+   481		struct inode	*inode = file->f_mapping->host;
+   482		struct file	*f = file;
+   483	
+   484		/* Avoid recursion */
+   485		while (is_loop_device(f)) {
+   486			struct loop_device *l;
+   487	
+   488			lockdep_assert_held(&loop_validate_mutex);
+   489			if (f->f_mapping->host->i_rdev == bdev->bd_dev)
+   490				return -EBADF;
+   491	
+   492			l = I_BDEV(f->f_mapping->host)->bd_disk->private_data;
+   493			if (l->lo_state != Lo_bound)
+   494				return -EINVAL;
+   495			/* Order wrt setting lo->lo_backing_file in loop_configure(). */
+   496			rmb();
+   497			f = l->lo_backing_file;
+   498		}
+   499		if (S_ISBLK(inode->i_mode))
+   500			return 0;
+   501		if (!S_ISREG(inode->i_mode))
+   502			return -EINVAL;
+   503		switch (inode->i_sb->s_magic) {
+ > 504		case PROC_SUPER_MAGIC: /* e.g. "losetup -f /proc/sys/kernel/version" */
+ > 505		case SYSFS_MAGIC: /* e.g. "losetup -f /sys/power/state" */
+   506			return -EINVAL;
+   507		}
+   508		return 0;
+   509	}
+   510	
 
 --
 0-DAY CI Kernel Test Service
