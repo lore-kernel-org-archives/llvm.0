@@ -1,124 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77BC13955D0;
-	Sat, 30 May 2026 09:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D63F39C621;
+	Sat, 30 May 2026 09:55:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780132432; cv=none; b=hfNc8Cnww3G+zFNLOFTSEDnnN65MmeFvDH5d3lgqtph+cyIZyElRLq8IXx9TG+o6PlOV2SnSp1I6ATA1js7BmO+rS22vPd41KubB8p74VNTcPlD1uDJBqjUWT7SIGyNVlFI8x5hu1MfMkk6lqfRbsYaPTlpcAtaPvsRh2Aorh0E=
+	t=1780134936; cv=none; b=UPQqBUUisdnq6R+1T9KL98f3g7/SZCQNkTX5UbWyPSgFsFTilOFF2fxjdGkK+Mbagbb0snPbH+9SElBVlDDQnuz/VY2UdX4hOQwdBVKWsXYOUqo9WJ951eQz8w6Su9pmvjc1ZH5CclAk0MPnfA/3CxsMKqgs7DgcsZBL1jsZBO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780132432; c=relaxed/simple;
-	bh=22tmpD69P1URiswlRoWhBg/BX2jx5Dn1SpOE5c+SaRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E5SXsXXMSgap2JAQorn4TIjNqcM7rMZyVCsd6LgdbDiWvm0ZAx5GAkDyf//xV3ePMiQH30TEh+kZg2u7Low5eQN4h3Z+8HyRHcDIuykGpwHTxYyF/HIWQ7wZWAhY/WW7DnJZmVt7I3mw1x2NWTLv3PIgo1WNGlcSIX6MYkPpTAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fCs4gOiE; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1780134936; c=relaxed/simple;
+	bh=J4/3TPVg/kQcwwK3ITFCqJkm26z4OuxNxkgaARFrcC0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=IKdeyegF4BJbbgyl4WaYJkhf9W15uSEOSROkTc/eh0xHh8Uow1Vfi4BI6+PLxQYemQ9evqqEKEXUVqkyrP7seMwmj3KYM1LVUKk4TbAlNHVhk5K6jL8pRWqqpeqgdDtw9Ds+sMARO0r2W1o7/kZO/zEA5bNwm7MVw6XJO3H5CeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UtlTY7mP; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fCs4gOiE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UtlTY7mP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780132431; x=1811668431;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=22tmpD69P1URiswlRoWhBg/BX2jx5Dn1SpOE5c+SaRw=;
-  b=fCs4gOiEebh1evuXFgL9v/wuh8s1Uc5Ih2dCKAvvgb4PQSBuemwOtt2x
-   lCJUNc/wgQ6CmLtaoVttRYGa/auyVgHvzD3oBOeFnEADkklKFsbeZFCVh
-   1syyu0QlMAYZ8OpLSoS/UcTKHcP3NteogfbOa1itF1fJKJqo13ePxYH8D
-   wnIX5ZVwSHNCW8KN4wpg0aSjPnCCa9a+WsCCGSvbGzuQKfccaU/7l6r1f
-   p+3ZmMCDpgWmfXv4husiM8iciS6bQFen51q26vnzZWbPQaMBBEOXMYWoZ
-   /cxjmmDpknLkdJWnRk3nwpMSgmL2M6qPG2RRHeGyfFFrqOqCvdgdFVfn7
+  t=1780134935; x=1811670935;
+  h=date:from:to:cc:subject:message-id;
+  bh=J4/3TPVg/kQcwwK3ITFCqJkm26z4OuxNxkgaARFrcC0=;
+  b=UtlTY7mPXT/PuMsEW/sTrFNFiGDWPZERq9c0i+ejn4DkbWSRdw8B4+Rk
+   leURak1ydoO3qH9tuJNyu/Vx0s/EVK4RGp2faD04JWtdBtwMp+exE1Ufd
+   ZOFecf1Ta27q4X+oMOsKiO3GKJozPiVySsakSZnvVpSYdBaOVU6rrK2kk
+   62/XNHbv9fqkUeHbz7+9awpfDpfYui0ABHlkmEyfAgVZeqf33QTNYGWPm
+   Vp1md3z06s4+wkg9hcpvdRGTGbbtTWwvU1TN+C2vrQgqQFmKUqRbDr85M
+   LYx3uiN557vc+AUpp6JtWXonUOT1gM2HrEPxUKtfvPVXoXUwWphAFfcU+
    g==;
-X-CSE-ConnectionGUID: Si8DyG/eTzqG62jX9R04rw==
-X-CSE-MsgGUID: KI/y50X7Rte8L/J2a6MMdQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="80112664"
+X-CSE-ConnectionGUID: UkjS6CbuRcKyh0w9jHOl9g==
+X-CSE-MsgGUID: J3I6yMGxRKaLxWfpOmdSWA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="68506026"
 X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
-   d="scan'208";a="80112664"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 02:13:51 -0700
-X-CSE-ConnectionGUID: mDD6+TLDRNeHEF6Qv2iPgw==
-X-CSE-MsgGUID: UrfCGkIIQG23p/OWwKiWPQ==
+   d="scan'208";a="68506026"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 02:55:32 -0700
+X-CSE-ConnectionGUID: dKbBT4ZdSfSiLVy9OMhDtQ==
+X-CSE-MsgGUID: +emGpQyjSJWjPRPm59rDMw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
-   d="scan'208";a="240528979"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa008.fm.intel.com with ESMTP; 30 May 2026 02:13:47 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+   d="scan'208";a="248171977"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 30 May 2026 02:55:30 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wTFlJ-00000000169-0kTS;
-	Sat, 30 May 2026 09:13:45 +0000
-Date: Sat, 30 May 2026 11:13:18 +0200
+	id 1wTGPg-000000008Im-1j3J;
+	Sat, 30 May 2026 09:55:28 +0000
+Date: Sat, 30 May 2026 17:55:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Neil Spring <ntspring@meta.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
-	davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, ntspring@meta.com,
-	bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net
-Subject: Re: [PATCH net-next v10 2/2] selftests: net: add local ECMP rehash
- test
-Message-ID: <202605301121.q28WSYib-lkp@intel.com>
-References: <20260529160136.1010064-3-ntspring@meta.com>
+To: Joerg Roedel <joerg.roedel@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [joro:kvm-planes-v7.0 38/62] arch/riscv/kvm/vm.c:108:46:
+ error: too few arguments to function call, expected 5, have 4
+Message-ID: <202605301745.3cIog3zy-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260529160136.1010064-3-ntspring@meta.com>
 
-Hi Neil,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Neil-Spring/tcp-rehash-onto-different-local-ECMP-path-on-retransmit-timeout/20260530-005334
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260529160136.1010064-3-ntspring%40meta.com
-patch subject: [PATCH net-next v10 2/2] selftests: net: add local ECMP rehash test
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260530/202605301121.q28WSYib-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605301121.q28WSYib-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/linux.git kvm-planes-v7.0
+head:   dbb5c2770eccdd9477ce812561c61d49ef7891ab
+commit: 02ee2b16b2c3d162c0bfe4315ef1fd6a1a2836fa [38/62] kvm: Make KVM_SET_GSI_ROUTING per plane
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20260530/202605301745.3cIog3zy-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9409c07de6378507397ecdb6f05f628f58110112)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605301745.3cIog3zy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605301121.q28WSYib-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605301745.3cIog3zy-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/slip/slhc.c:74:
->> include/net/tcp.h:2557:2: error: call to undeclared function 'tcp_synq_overflow'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2557 |         tcp_synq_overflow(sk);
-         |         ^
-   1 error generated.
---
-   In file included from drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:48:
->> include/net/tcp.h:2557:2: error: call to undeclared function 'tcp_synq_overflow'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2557 |         tcp_synq_overflow(sk);
-         |         ^
-   drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:15197:26: warning: shift count >= width of type [-Wshift-count-overflow]
-    15197 |         bp->cyclecounter.mask = CYCLECOUNTER_MASK(64);
-          |                                 ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/timecounter.h:14:59: note: expanded from macro 'CYCLECOUNTER_MASK'
-      14 | #define CYCLECOUNTER_MASK(bits) (u64)((bits) < 64 ? ((1ULL<<(bits))-1) : -1)
-         |                                                           ^ ~~~~~~
-   1 warning and 1 error generated.
+   In file included from arch/riscv/kvm/vm.c:13:
+   include/linux/kvm_host.h:1084:56: error: no member named 'srcu_depth' in 'struct kvm_vcpu'
+    1084 |                   "KVM: Illegal vCPU srcu_idx LOCK, depth=%d", vcpu->srcu_depth - 1);
+         |                                                                ~~~~  ^
+   include/linux/kvm_host.h:1095:58: error: no member named 'srcu_depth' in 'struct kvm_vcpu'
+    1095 |                   "KVM: Illegal vCPU srcu_idx UNLOCK, depth=%d", vcpu->srcu_depth);
+         |                                                                  ~~~~  ^
+>> arch/riscv/kvm/vm.c:108:46: error: too few arguments to function call, expected 5, have 4
+     108 |         rc = kvm_set_irq_routing(kvm, ents, lines, 0);
+         |              ~~~~~~~~~~~~~~~~~~~                    ^
+   include/linux/kvm_host.h:2331:5: note: 'kvm_set_irq_routing' declared here
+    2331 | int kvm_set_irq_routing(struct kvm *kvm,
+         |     ^                   ~~~~~~~~~~~~~~~~
+    2332 |                         const struct kvm_irq_routing_entry *entries,
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2333 |                         unsigned nr,
+         |                         ~~~~~~~~~~~~
+    2334 |                         unsigned flags,
+         |                         ~~~~~~~~~~~~~~~
+    2335 |                         unsigned plane_level);
+         |                         ~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kvm/vm.c:119:5: error: conflicting types for 'kvm_set_routing_entry'
+     119 | int kvm_set_routing_entry(struct kvm *kvm,
+         |     ^
+   include/linux/kvm_host.h:2337:5: note: previous declaration is here
+    2337 | int kvm_set_routing_entry(struct kvm *kvm,
+         |     ^
+   4 errors generated.
 
 
-vim +/tcp_synq_overflow +2557 include/net/tcp.h
+vim +108 arch/riscv/kvm/vm.c
 
-  2554	
-  2555	static inline void cookie_record_sent(const struct sock *sk)
-  2556	{
-> 2557		tcp_synq_overflow(sk);
-  2558		__NET_INC_STATS(sock_net(sk), LINUX_MIB_SYNCOOKIESSENT);
-  2559	}
-  2560	
+00f918f61c56a4 Anup Patel     2023-06-15   92  
+00f918f61c56a4 Anup Patel     2023-06-15   93  int kvm_riscv_setup_default_irq_routing(struct kvm *kvm, u32 lines)
+00f918f61c56a4 Anup Patel     2023-06-15   94  {
+00f918f61c56a4 Anup Patel     2023-06-15   95  	struct kvm_irq_routing_entry *ents;
+00f918f61c56a4 Anup Patel     2023-06-15   96  	int i, rc;
+00f918f61c56a4 Anup Patel     2023-06-15   97  
+bf4afc53b77aea Linus Torvalds 2026-02-21   98  	ents = kzalloc_objs(*ents, lines);
+00f918f61c56a4 Anup Patel     2023-06-15   99  	if (!ents)
+00f918f61c56a4 Anup Patel     2023-06-15  100  		return -ENOMEM;
+00f918f61c56a4 Anup Patel     2023-06-15  101  
+00f918f61c56a4 Anup Patel     2023-06-15  102  	for (i = 0; i < lines; i++) {
+00f918f61c56a4 Anup Patel     2023-06-15  103  		ents[i].gsi = i;
+00f918f61c56a4 Anup Patel     2023-06-15  104  		ents[i].type = KVM_IRQ_ROUTING_IRQCHIP;
+00f918f61c56a4 Anup Patel     2023-06-15  105  		ents[i].u.irqchip.irqchip = 0;
+00f918f61c56a4 Anup Patel     2023-06-15  106  		ents[i].u.irqchip.pin = i;
+00f918f61c56a4 Anup Patel     2023-06-15  107  	}
+00f918f61c56a4 Anup Patel     2023-06-15 @108  	rc = kvm_set_irq_routing(kvm, ents, lines, 0);
+00f918f61c56a4 Anup Patel     2023-06-15  109  	kfree(ents);
+00f918f61c56a4 Anup Patel     2023-06-15  110  
+00f918f61c56a4 Anup Patel     2023-06-15  111  	return rc;
+00f918f61c56a4 Anup Patel     2023-06-15  112  }
+00f918f61c56a4 Anup Patel     2023-06-15  113  
+
+:::::: The code at line 108 was first introduced by commit
+:::::: 00f918f61c56a46d9e09ce21b54b8c21f496c753 RISC-V: KVM: Skeletal in-kernel AIA irqchip support
+
+:::::: TO: Anup Patel <apatel@ventanamicro.com>
+:::::: CC: Anup Patel <anup@brainfault.org>
 
 --
 0-DAY CI Kernel Test Service
