@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6551427A;
-	Sat, 30 May 2026 05:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2211DDC28;
+	Sat, 30 May 2026 06:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780119499; cv=none; b=k4VNJA4jn/2mAYEO7VCR51RLCLmrOGGNDtPg/lgRVHFY8OysUuf2SAZEQy0K/pn/4ropBIlTHFjLV70A7jCt7OssqByjlBDMji+6HL1/m6ldyD5mAUOHuMfEdhTN8yHl9FrtRgMCfxf/+2uB3KpLlbiE+CB60dk0gNSrZ1bADIw=
+	t=1780120881; cv=none; b=IL4ThiYWGTn1RVCoACAjaYYxmD1pPgQE9XDhWa6yVq/lUTtZvldhqvgnE4sbf7VKge2D0rlxEeEUKj5LfkqZ/bTzS71Qw0Q96lg59I9lFJZwtWFZF+kLL4cRO1IoooC2kJGY0tSI4Ow5aFw4rHlL+9TzPx9BEfNu7TKsxW9h7qU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780119499; c=relaxed/simple;
-	bh=FV4QAJh1viK1hv7mV/Iroc6FIIZi8P4GDerVmKL1sgA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=GAlqEWtdbYQYkLIufzQBwr69fnbMioCoXVdCACON/fHbaeuV4ax+68JyM5+3y/L71Q76UNTzywudeVDQCojezkR3qXwHtP0JtJKejNg/qCgZ23LUghtS5TbAEpV6oXA55MgXG3Gr/DnDQNBqRGr4HGY9STX48+zLSs95c5+6GGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DYpy9vV+; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1780120881; c=relaxed/simple;
+	bh=QGjRSDz+VFUdOxAOa4vtpq4cWxvbAvdlKG6PCASx/sA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ANQhO5Gs+QTcBRhmUVNKtWeHt7fByR7BBQMGUraYNIm5n8oQTIlLPtcfBPteiW0XneCagaecUiMD2D8Co8xp/Bm4sRWjui6mYgmK0n6uPuu+sJVCuoCMMe4qQbdAqMjireKdNU4r7+dLSPxHyhproN8LXWfWeraBe8BNVvKnLxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jAe5lJWs; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DYpy9vV+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jAe5lJWs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780119498; x=1811655498;
+  t=1780120880; x=1811656880;
   h=date:from:to:cc:subject:message-id;
-  bh=FV4QAJh1viK1hv7mV/Iroc6FIIZi8P4GDerVmKL1sgA=;
-  b=DYpy9vV+5OznVjATmnsEoGNSHGLKOfHJUZzQqZ7NYQxi5swpR9qb/avr
-   H2EsxGn7mv6GbKJzx4/XlbJnxrfaj0PQxPby2asgkVH0xL6CaK3gfvBeM
-   0rmwVALLUG6iZU2P7jbOKr2Z9mfvRIubC5oBM+L9fTCUuRyrWvOL7SvV8
-   m7+EXUjX5wTsu8WPvvqBtaK2iLqTLH3919Fnw81aygClBIIzYS7j9vhts
-   1PqNpXBvVdy7w9jIeyYHSs5t0iyaq3jBWC1LP16/4B/SCEGmthDldnVdO
-   Ns58YcLM2/XRfHBm5PLDc7nIJFZ8NV0gP+pc74ZAZDReBrYISZMPETYGD
-   A==;
-X-CSE-ConnectionGUID: wP7fNT8CTnaLgi8plxKWJQ==
-X-CSE-MsgGUID: wvwHyopiQYyEWbMgF5z5dw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="103636459"
+  bh=QGjRSDz+VFUdOxAOa4vtpq4cWxvbAvdlKG6PCASx/sA=;
+  b=jAe5lJWsS0hgK4oMD1+Bbg7tosInPKMFi8khdg/If0O6KnQG30GZglMq
+   3jbaFm478HBS1Y52UGdFFQRiyqR6aJYIx2XonI8KejldU0kMlcGze0/t2
+   yE1BD6vG5cuYi5VZHrxNKv6Mqy7A+L2DGVEbf6GDOBhOMjjgBNiTIotJd
+   mse9cXaDbAQOteBuYpx2//XUCrdY0ka+2mJUIseE9B/mkZxUN1HW0MBrJ
+   H5DBEksjL5R8Fz2qdqx6HISNsxIcwV3XTTWDfUPBIW/vK+pfi5RHBeJdJ
+   HOn9GNx39Fu9zeWVBD+HUKTBLEvHwLezBZ8/92HjsdzBzKjIGvnn8TiCh
+   w==;
+X-CSE-ConnectionGUID: fWXADPDAR6ajJUaYLIqOmg==
+X-CSE-MsgGUID: Fj8VtcUwRo63ozIh6+H4ZA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="81152139"
 X-IronPort-AV: E=Sophos;i="6.24,176,1774335600"; 
-   d="scan'208";a="103636459"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2026 22:38:18 -0700
-X-CSE-ConnectionGUID: UlXAJ22TQlyceyACWSANSA==
-X-CSE-MsgGUID: RCPB6/ozRP2dGxkFgXQtHQ==
+   d="scan'208";a="81152139"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2026 23:01:19 -0700
+X-CSE-ConnectionGUID: sRkghpkzSyqSQ33vZeQd5Q==
+X-CSE-MsgGUID: 2YBAoaVxQsuufdCQbQ4lPQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,176,1774335600"; 
-   d="scan'208";a="238651943"
+   d="scan'208";a="281162498"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 29 May 2026 22:38:16 -0700
+  by orviesa001.jf.intel.com with ESMTP; 29 May 2026 23:01:17 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wTCOj-0000000088s-3tlt;
-	Sat, 30 May 2026 05:38:13 +0000
-Date: Sat, 30 May 2026 13:38:05 +0800
+	id 1wTCl0-0000000089W-264L;
+	Sat, 30 May 2026 06:01:14 +0000
+Date: Sat, 30 May 2026 14:01:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Lukasz Luba <lukasz.luba@arm.com>
-Subject: [thermal:thermal/bleeding-edge 24/30]
- include/linux/thermal.h:332:1: error: expected identifier or '('
-Message-ID: <202605301304.r2MYs4Rz-lkp@intel.com>
+To: Joerg Roedel <joerg.roedel@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [joro:kvm-planes-v7.0 32/62]
+ arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: error: invalid
+ application of 'sizeof' to an incomplete type 'struct kvm_debugregs'
+Message-ID: <202605301330.4Tex4quV-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,57 +60,412 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-Hi Daniel,
-
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git thermal/bleeding-edge
-head:   100e27ef9a645f07881160256b7131fb40885215
-commit: 06f53fafe3cccbb83d6d6f0812e4d5c8d46bbb63 [24/30] thermal/of: Move cooling device OF helpers out of thermal core
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260530/202605301304.r2MYs4Rz-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/linux.git kvm-planes-v7.0
+head:   dbb5c2770eccdd9477ce812561c61d49ef7891ab
+commit: cdb548334cc63d4a4149d890056482719042314c [32/62] KVM: Implement KVM_CREATE_VCPU ioctl for planes
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20260530/202605301330.4Tex4quV-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9409c07de6378507397ecdb6f05f628f58110112)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605301304.r2MYs4Rz-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605301330.4Tex4quV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605301304.r2MYs4Rz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605301330.4Tex4quV-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/loongarch/kernel/topology.c:11:
-   In file included from include/acpi/processor.h:11:
->> include/linux/thermal.h:332:1: error: expected identifier or '('
-     332 | static inline void thermal_cooling_device_unregister(
-         | ^
-   1 error generated.
+   In file included from arch/riscv/kvm/../../../virt/kvm/kvm_main.c:15:
+   include/linux/kvm_host.h:1065:56: error: no member named 'srcu_depth' in 'struct kvm_vcpu'
+    1065 |                   "KVM: Illegal vCPU srcu_idx LOCK, depth=%d", vcpu->srcu_depth - 1);
+         |                                                                ~~~~  ^
+   include/linux/kvm_host.h:1076:58: error: no member named 'srcu_depth' in 'struct kvm_vcpu'
+    1076 |                   "KVM: Illegal vCPU srcu_idx UNLOCK, depth=%d", vcpu->srcu_depth);
+         |                                                                  ~~~~  ^
+   In file included from arch/riscv/kvm/../../../virt/kvm/kvm_main.c:38:
+   include/linux/mman.h:157:9: warning: division by zero is undefined [-Wdivision-by-zero]
+     157 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:135:21: note: expanded from macro '_calc_vm_trans'
+     135 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+         |                     ^ ~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
+     159 |                _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:135:21: note: expanded from macro '_calc_vm_trans'
+     135 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+         |                     ^ ~~~~~~~~~~~~~~~~~
+>> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_debugregs'
+    4596 |         case KVM_GET_DEBUGREGS:
+         |              ^~~~~~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1408:35: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:86:60: note: expanded from macro '_IOR'
+      86 | #define _IOR(type,nr,argtype)           _IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:13:4: note: expanded from macro '_IOC_TYPECHECK'
+      13 |         ((sizeof(t) == sizeof(t[1]) && \
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: note: forward declaration of 'struct kvm_debugregs'
+   include/uapi/linux/kvm.h:1408:61: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                                             ^
+>> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: error: array has incomplete element type 'struct kvm_debugregs'
+    4596 |         case KVM_GET_DEBUGREGS:
+         |              ^
+   include/uapi/linux/kvm.h:1408:35: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                   ^
+   include/uapi/asm-generic/ioctl.h:86:60: note: expanded from macro '_IOR'
+      86 | #define _IOR(type,nr,argtype)           _IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                                                     ^
+   include/asm-generic/ioctl.h:13:25: note: expanded from macro '_IOC_TYPECHECK'
+      13 |         ((sizeof(t) == sizeof(t[1]) && \
+         |                                ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: note: forward declaration of 'struct kvm_debugregs'
+   include/uapi/linux/kvm.h:1408:61: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                                             ^
+>> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_debugregs'
+    4596 |         case KVM_GET_DEBUGREGS:
+         |              ^~~~~~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1408:35: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:86:60: note: expanded from macro '_IOR'
+      86 | #define _IOR(type,nr,argtype)           _IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:14:4: note: expanded from macro '_IOC_TYPECHECK'
+      14 |           sizeof(t) < (1 << _IOC_SIZEBITS)) ? \
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: note: forward declaration of 'struct kvm_debugregs'
+   include/uapi/linux/kvm.h:1408:61: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                                             ^
+>> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_debugregs'
+    4596 |         case KVM_GET_DEBUGREGS:
+         |              ^~~~~~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1408:35: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:86:60: note: expanded from macro '_IOR'
+      86 | #define _IOR(type,nr,argtype)           _IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:15:4: note: expanded from macro '_IOC_TYPECHECK'
+      15 |           sizeof(t) : __invalid_size_argument_for_IOC)
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: note: forward declaration of 'struct kvm_debugregs'
+   include/uapi/linux/kvm.h:1408:61: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                                             ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4597:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_debugregs'
+    4597 |         case KVM_SET_DEBUGREGS:
+         |              ^~~~~~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1409:35: note: expanded from macro 'KVM_SET_DEBUGREGS'
+    1409 | #define KVM_SET_DEBUGREGS         _IOW(KVMIO,  0xa2, struct kvm_debugregs)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
+      87 | #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:13:4: note: expanded from macro '_IOC_TYPECHECK'
+      13 |         ((sizeof(t) == sizeof(t[1]) && \
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: note: forward declaration of 'struct kvm_debugregs'
+    4596 |         case KVM_GET_DEBUGREGS:
+         |              ^
+   include/uapi/linux/kvm.h:1408:61: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                                             ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4597:7: error: array has incomplete element type 'struct kvm_debugregs'
+    4597 |         case KVM_SET_DEBUGREGS:
+         |              ^
+   include/uapi/linux/kvm.h:1409:35: note: expanded from macro 'KVM_SET_DEBUGREGS'
+    1409 | #define KVM_SET_DEBUGREGS         _IOW(KVMIO,  0xa2, struct kvm_debugregs)
+         |                                   ^
+   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
+      87 | #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                                                      ^
+   include/asm-generic/ioctl.h:13:25: note: expanded from macro '_IOC_TYPECHECK'
+      13 |         ((sizeof(t) == sizeof(t[1]) && \
+         |                                ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: note: forward declaration of 'struct kvm_debugregs'
+    4596 |         case KVM_GET_DEBUGREGS:
+         |              ^
+   include/uapi/linux/kvm.h:1408:61: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                                             ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4597:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_debugregs'
+    4597 |         case KVM_SET_DEBUGREGS:
+         |              ^~~~~~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1409:35: note: expanded from macro 'KVM_SET_DEBUGREGS'
+    1409 | #define KVM_SET_DEBUGREGS         _IOW(KVMIO,  0xa2, struct kvm_debugregs)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
+      87 | #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:14:4: note: expanded from macro '_IOC_TYPECHECK'
+      14 |           sizeof(t) < (1 << _IOC_SIZEBITS)) ? \
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: note: forward declaration of 'struct kvm_debugregs'
+    4596 |         case KVM_GET_DEBUGREGS:
+         |              ^
+   include/uapi/linux/kvm.h:1408:61: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                                             ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4597:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_debugregs'
+    4597 |         case KVM_SET_DEBUGREGS:
+         |              ^~~~~~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1409:35: note: expanded from macro 'KVM_SET_DEBUGREGS'
+    1409 | #define KVM_SET_DEBUGREGS         _IOW(KVMIO,  0xa2, struct kvm_debugregs)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
+      87 | #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:15:4: note: expanded from macro '_IOC_TYPECHECK'
+      15 |           sizeof(t) : __invalid_size_argument_for_IOC)
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4596:7: note: forward declaration of 'struct kvm_debugregs'
+    4596 |         case KVM_GET_DEBUGREGS:
+         |              ^
+   include/uapi/linux/kvm.h:1408:61: note: expanded from macro 'KVM_GET_DEBUGREGS'
+    1408 | #define KVM_GET_DEBUGREGS         _IOR(KVMIO,  0xa1, struct kvm_debugregs)
+         |                                                             ^
+>> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_lapic_state'
+    4600 |         case KVM_GET_LAPIC:
+         |              ^~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1376:35: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:86:60: note: expanded from macro '_IOR'
+      86 | #define _IOR(type,nr,argtype)           _IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:13:4: note: expanded from macro '_IOC_TYPECHECK'
+      13 |         ((sizeof(t) == sizeof(t[1]) && \
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: note: forward declaration of 'struct kvm_lapic_state'
+   include/uapi/linux/kvm.h:1376:61: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                                             ^
+>> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: error: array has incomplete element type 'struct kvm_lapic_state'
+    4600 |         case KVM_GET_LAPIC:
+         |              ^
+   include/uapi/linux/kvm.h:1376:35: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                   ^
+   include/uapi/asm-generic/ioctl.h:86:60: note: expanded from macro '_IOR'
+      86 | #define _IOR(type,nr,argtype)           _IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                                                     ^
+   include/asm-generic/ioctl.h:13:25: note: expanded from macro '_IOC_TYPECHECK'
+      13 |         ((sizeof(t) == sizeof(t[1]) && \
+         |                                ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: note: forward declaration of 'struct kvm_lapic_state'
+   include/uapi/linux/kvm.h:1376:61: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                                             ^
+>> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_lapic_state'
+    4600 |         case KVM_GET_LAPIC:
+         |              ^~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1376:35: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:86:60: note: expanded from macro '_IOR'
+      86 | #define _IOR(type,nr,argtype)           _IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:14:4: note: expanded from macro '_IOC_TYPECHECK'
+      14 |           sizeof(t) < (1 << _IOC_SIZEBITS)) ? \
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: note: forward declaration of 'struct kvm_lapic_state'
+   include/uapi/linux/kvm.h:1376:61: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                                             ^
+>> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_lapic_state'
+    4600 |         case KVM_GET_LAPIC:
+         |              ^~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1376:35: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:86:60: note: expanded from macro '_IOR'
+      86 | #define _IOR(type,nr,argtype)           _IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:15:4: note: expanded from macro '_IOC_TYPECHECK'
+      15 |           sizeof(t) : __invalid_size_argument_for_IOC)
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: note: forward declaration of 'struct kvm_lapic_state'
+   include/uapi/linux/kvm.h:1376:61: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                                             ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4601:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_lapic_state'
+    4601 |         case KVM_SET_LAPIC:
+         |              ^~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1377:35: note: expanded from macro 'KVM_SET_LAPIC'
+    1377 | #define KVM_SET_LAPIC             _IOW(KVMIO,  0x8f, struct kvm_lapic_state)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
+      87 | #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:13:4: note: expanded from macro '_IOC_TYPECHECK'
+      13 |         ((sizeof(t) == sizeof(t[1]) && \
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: note: forward declaration of 'struct kvm_lapic_state'
+    4600 |         case KVM_GET_LAPIC:
+         |              ^
+   include/uapi/linux/kvm.h:1376:61: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                                             ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4601:7: error: array has incomplete element type 'struct kvm_lapic_state'
+    4601 |         case KVM_SET_LAPIC:
+         |              ^
+   include/uapi/linux/kvm.h:1377:35: note: expanded from macro 'KVM_SET_LAPIC'
+    1377 | #define KVM_SET_LAPIC             _IOW(KVMIO,  0x8f, struct kvm_lapic_state)
+         |                                   ^
+   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
+      87 | #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                                                      ^
+   include/asm-generic/ioctl.h:13:25: note: expanded from macro '_IOC_TYPECHECK'
+      13 |         ((sizeof(t) == sizeof(t[1]) && \
+         |                                ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: note: forward declaration of 'struct kvm_lapic_state'
+    4600 |         case KVM_GET_LAPIC:
+         |              ^
+   include/uapi/linux/kvm.h:1376:61: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                                             ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4601:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_lapic_state'
+    4601 |         case KVM_SET_LAPIC:
+         |              ^~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1377:35: note: expanded from macro 'KVM_SET_LAPIC'
+    1377 | #define KVM_SET_LAPIC             _IOW(KVMIO,  0x8f, struct kvm_lapic_state)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
+      87 | #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:14:4: note: expanded from macro '_IOC_TYPECHECK'
+      14 |           sizeof(t) < (1 << _IOC_SIZEBITS)) ? \
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: note: forward declaration of 'struct kvm_lapic_state'
+    4600 |         case KVM_GET_LAPIC:
+         |              ^
+   include/uapi/linux/kvm.h:1376:61: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                                             ^
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4601:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_lapic_state'
+    4601 |         case KVM_SET_LAPIC:
+         |              ^~~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1377:35: note: expanded from macro 'KVM_SET_LAPIC'
+    1377 | #define KVM_SET_LAPIC             _IOW(KVMIO,  0x8f, struct kvm_lapic_state)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
+      87 | #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:15:4: note: expanded from macro '_IOC_TYPECHECK'
+      15 |           sizeof(t) : __invalid_size_argument_for_IOC)
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4600:7: note: forward declaration of 'struct kvm_lapic_state'
+    4600 |         case KVM_GET_LAPIC:
+         |              ^
+   include/uapi/linux/kvm.h:1376:61: note: expanded from macro 'KVM_GET_LAPIC'
+    1376 | #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
+         |                                                             ^
+>> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4602:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_msrs'
+    4602 |         case KVM_GET_MSRS:
+         |              ^~~~~~~~~~~~
+   include/uapi/linux/kvm.h:1370:35: note: expanded from macro 'KVM_GET_MSRS'
+    1370 | #define KVM_GET_MSRS              _IOWR(KVMIO, 0x88, struct kvm_msrs)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/asm-generic/ioctl.h:88:72: note: expanded from macro '_IOWR'
+      88 | #define _IOWR(type,nr,argtype)          _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/ioctl.h:13:4: note: expanded from macro '_IOC_TYPECHECK'
+      13 |         ((sizeof(t) == sizeof(t[1]) && \
+         |           ^
+   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
+      73 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   arch/riscv/kvm/../../../virt/kvm/kvm_main.c:4602:7: note: forward declaration of 'struct kvm_msrs'
+   include/uapi/linux/kvm.h:1370:61: note: expanded from macro 'KVM_GET_MSRS'
+    1370 | #define KVM_GET_MSRS              _IOWR(KVMIO, 0x88, struct kvm_msrs)
+         |                                                             ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   2 warnings and 20 errors generated.
 
 
-vim +332 include/linux/thermal.h
+vim +4596 arch/riscv/kvm/../../../virt/kvm/kvm_main.c
 
-06f53fafe3cccbb Daniel Lezcano 2026-05-26  331  
-12ca7188468ee29 Nishanth Menon 2015-02-13 @332  static inline void thermal_cooling_device_unregister(
-12ca7188468ee29 Nishanth Menon 2015-02-13  333  	struct thermal_cooling_device *cdev)
-12ca7188468ee29 Nishanth Menon 2015-02-13  334  { }
-12ca7188468ee29 Nishanth Menon 2015-02-13  335  static inline struct thermal_zone_device *thermal_zone_get_zone_by_name(
-12ca7188468ee29 Nishanth Menon 2015-02-13  336  		const char *name)
-12ca7188468ee29 Nishanth Menon 2015-02-13  337  { return ERR_PTR(-ENODEV); }
-12ca7188468ee29 Nishanth Menon 2015-02-13  338  static inline int thermal_zone_get_temp(
-17e8351a77397e8 Sascha Hauer   2015-07-24  339  		struct thermal_zone_device *tz, int *temp)
-12ca7188468ee29 Nishanth Menon 2015-02-13  340  { return -ENODEV; }
-4a7069a32c99a81 Rajendra Nayak 2016-05-05  341  static inline int thermal_zone_get_slope(
-4a7069a32c99a81 Rajendra Nayak 2016-05-05  342  		struct thermal_zone_device *tz)
-4a7069a32c99a81 Rajendra Nayak 2016-05-05  343  { return -ENODEV; }
-4a7069a32c99a81 Rajendra Nayak 2016-05-05  344  static inline int thermal_zone_get_offset(
-4a7069a32c99a81 Rajendra Nayak 2016-05-05  345  		struct thermal_zone_device *tz)
-4a7069a32c99a81 Rajendra Nayak 2016-05-05  346  { return -ENODEV; }
-f0129c231772a85 Daniel Lezcano 2020-04-02  347  
-
-:::::: The code at line 332 was first introduced by commit
-:::::: 12ca7188468ee29c4e717f73db4bf43c90954fc7 thermal: Introduce dummy functions when thermal is not defined
-
-:::::: TO: Nishanth Menon <nm@ti.com>
-:::::: CC: Eduardo Valentin <edubezval@gmail.com>
+  4592	
+  4593	static inline bool kvm_is_vcpu_plane_ioctl(unsigned ioctl)
+  4594	{
+  4595		switch (ioctl) {
+> 4596		case KVM_GET_DEBUGREGS:
+  4597		case KVM_SET_DEBUGREGS:
+  4598		case KVM_GET_FPU:
+  4599		case KVM_SET_FPU:
+> 4600		case KVM_GET_LAPIC:
+  4601		case KVM_SET_LAPIC:
+> 4602		case KVM_GET_MSRS:
+  4603		case KVM_SET_MSRS:
+  4604		case KVM_GET_NESTED_STATE:
+  4605		case KVM_SET_NESTED_STATE:
+  4606		case KVM_GET_ONE_REG:
+  4607		case KVM_SET_ONE_REG:
+  4608		case KVM_GET_REGS:
+  4609		case KVM_SET_REGS:
+  4610		case KVM_GET_SREGS:
+  4611		case KVM_SET_SREGS:
+  4612		case KVM_GET_SREGS2:
+  4613		case KVM_SET_SREGS2:
+  4614		case KVM_GET_VCPU_EVENTS:
+  4615		case KVM_SET_VCPU_EVENTS:
+  4616		case KVM_GET_XCRS:
+  4617		case KVM_SET_XCRS:
+  4618		case KVM_GET_XSAVE:
+  4619		case KVM_GET_XSAVE2:
+  4620		case KVM_SET_XSAVE:
+  4621	
+  4622		case KVM_GET_REG_LIST:
+  4623		case KVM_TRANSLATE:
+  4624			return true;
+  4625	
+  4626		default:
+  4627			return false;
+  4628		}
+  4629	}
+  4630	
 
 --
 0-DAY CI Kernel Test Service
