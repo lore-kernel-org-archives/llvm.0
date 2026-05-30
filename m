@@ -1,133 +1,466 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFAF3A1E92;
-	Sat, 30 May 2026 10:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628DC3A962E
+	for <llvm@lists.linux.dev>; Sat, 30 May 2026 11:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780137640; cv=none; b=GJSck1Illg5G3hbUiyF5ZoutOo1gj8s6QUXAeSa6RkgRbLSp+d7kjvhU5u4IoiiPS1t8kAtToUf66nOLT/W7oACs5ZH1yRTu56fcbfcOlM5FNy4ElPVnyKrp2VYU6T/DfBjAO2J9gBfTBbaoM33f2OpjjQ2SEigXlUmM+AdrM30=
+	t=1780138938; cv=none; b=V1hlP3pPYU9NYJphA6jf3njivQ5Isy/DNSlvF0scLEsML4gtluKzDB0F36uOU95fwjrUkZnGYcRjJF3A+pb70H89upHPtWs1NmYPD6I2IOi8NAIT0VcNXb59hFdYyEreWJrZdrdjkSJTc2bevDJ0UIxEt+9lXNfrY78nxw6H2ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780137640; c=relaxed/simple;
-	bh=lJTtyxnXQA6faDJhJHS7O/yVW1sr0/ChXUgTte27mMg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=q/lRcQhaLm8S7Gnkwz03xwgUCm26tpzk5gQjD9x2O05lEH3RvJepg7gU9DJuqPKkt445h2z0cGI26LibXKAReo9CF4jvcQKakrc37387gOw7wKFYsArqs8pHW/j83DsXBwNWUWE9s0RFIW8LWh4vByZwsZJGd8RMbSkH040UBDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L0coYrev; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780138938; c=relaxed/simple;
+	bh=Mk2WFRLTyLbhOpCMUhZjWEzSaXwEO5KiT0iYBtPJn+Y=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Lq947mEiylT5JH0kxll8+MLlLkzs+68Au4huD9R9uXdUu2SlFKZqB6qhQCXyf+1/0WtDwhgaKnUhp7esDNrjwjgJiQmUnMI73yPk7qg7qZyZ0khmE3O6y9dk9y+TXVcUOWhZmNeTN/TyfPmC0VVB7GTywpgO/ogdQmjf3ugSv1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WF4v4DP+; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L0coYrev"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780137638; x=1811673638;
-  h=date:from:to:cc:subject:message-id;
-  bh=lJTtyxnXQA6faDJhJHS7O/yVW1sr0/ChXUgTte27mMg=;
-  b=L0coYrevjWk2zE2YtjDnoatB49hYG1smb495S5aGENcjRmxqxe239H+Q
-   nc1zQi8JLoSY2imS5HEZGTEVvYEc7/tZ+rLM10V5mLRC2+CubArtkN57y
-   UCsbvdVObbFFMcnwmNDJWU123h5msn+2uw7nxxEIkgMhG6XHc6uEaJb0k
-   adfNjBg0j+mgF1DMY7cPca5hO4X2oY5GtA9GZhBmFna6lE04yw11jXLdx
-   q9oLm0l7MM9bAY3rk2TAGH/kzdghf0iMfz1mNG+BkdpNqyeyXxIwcY3TJ
-   nBwr2seclSJtIaTdIJH+VR3/2pOV6CYy7k7PRxX0YEua4DFOIFninMHxE
-   Q==;
-X-CSE-ConnectionGUID: YrhhAFpqQNeJi13XGuBJaA==
-X-CSE-MsgGUID: orQeM1cSQ/Scz/xcSLkiZg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11801"; a="92087235"
-X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
-   d="scan'208";a="92087235"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 03:40:35 -0700
-X-CSE-ConnectionGUID: XX6AkW5cQkeZil3urwTHnw==
-X-CSE-MsgGUID: NZE9/u1RSC+f9RwsIuAVgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,177,1774335600"; 
-   d="scan'208";a="266715814"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 30 May 2026 03:40:33 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wTH7H-000000008Kk-29as;
-	Sat, 30 May 2026 10:40:31 +0000
-Date: Sat, 30 May 2026 18:40:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Brian Cain <brian.cain@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bcain:bcain/boot_qemu 42/43] mm/mm_init.c:920:18: error: no
- member named 'pageblock_flags' in 'struct zone'
-Message-ID: <202605301801.LxwJTUEe-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WF4v4DP+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1780138935;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wWxmlR0lPCbvf5hiZbqyQf1aXwTwcnHDw1F8Dsi/on0=;
+	b=WF4v4DP+ND0FobOhG1GVLv0z/uY/LEa6zuIR0AszzScbW6oCDOnizx6YPbdQH5hpfzUckr
+	mhrrDtQLeBgL31nMW6BKiLqEjHzJDYDNpivJFSal1P77Pofpc9Qzl1ia7cF3BOa/PmiY5I
+	yuArLyE6iD4e7keMlEOP37Oa/NMBW7U=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-29-TR5nx--JOWKNbaz_aedWCw-1; Sat,
+ 30 May 2026 07:02:13 -0400
+X-MC-Unique: TR5nx--JOWKNbaz_aedWCw-1
+X-Mimecast-MFC-AGG-ID: TR5nx--JOWKNbaz_aedWCw_1780138932
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3DFF5180056E
+	for <llvm@lists.linux.dev>; Sat, 30 May 2026 11:02:12 +0000 (UTC)
+Received: from [172.20.152.59] (unknown [10.30.45.46])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C5A7E30001BB;
+	Sat, 30 May 2026 11:02:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-rc5,
+ upstream-mainline, 9215e74f)
+Date: Sat, 30 May 2026 11:02:11 -0000
+To: llvm@lists.linux.dev, yoyang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <51794.126053007021300139@us-mta-29.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: xRqOq5F-Iq0Cdc8ukfYTwASU_n8Hb_ucqYkPtnqzuKE_1780138932
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
-head:   dea73df6b6f456832390a9acd2c44cf235110d30
-commit: a2a98cd08700b29ee25458e078d1c20cc3cb4131 [42/43] mm: guard pageblock init against missing pageblock_flags
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260530/202605301801.LxwJTUEe-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9409c07de6378507397ecdb6f05f628f58110112)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260530/202605301801.LxwJTUEe-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605301801.LxwJTUEe-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/mm_init.c:920:18: error: no member named 'pageblock_flags' in 'struct zone'
-     920 |                         if (likely(z->pageblock_flags)) {
-         |                                    ~  ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +920 mm/mm_init.c
+Kernel information:
+    Commit message: Merge tag 'block-7.1-20260529' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/axboe/linux
 
-   887	
-   888		for (pfn = start_pfn; pfn < end_pfn; ) {
-   889			/*
-   890			 * There can be holes in boot-time mem_map[]s handed to this
-   891			 * function.  They do not exist on hotplugged memory.
-   892			 */
-   893			if (context == MEMINIT_EARLY) {
-   894				if (overlap_memmap_init(zone, &pfn))
-   895					continue;
-   896				if (defer_init(nid, pfn, zone_end_pfn)) {
-   897					deferred_struct_pages = true;
-   898					break;
-   899				}
-   900			}
-   901	
-   902			page = pfn_to_page(pfn);
-   903			__init_single_page(page, pfn, zone, nid);
-   904			if (context == MEMINIT_HOTPLUG) {
-   905	#ifdef CONFIG_ZONE_DEVICE
-   906				if (zone == ZONE_DEVICE)
-   907					__SetPageReserved(page);
-   908				else
-   909	#endif
-   910					__SetPageOffline(page);
-   911			}
-   912	
-   913			/*
-   914			 * Usually, we want to mark the pageblock MIGRATE_MOVABLE,
-   915			 * such that unmovable allocations won't be scattered all
-   916			 * over the place during system boot.
-   917			 */
-   918			if (pageblock_aligned(pfn)) {
-   919				struct zone *z = page_zone(page);
- > 920				if (likely(z->pageblock_flags)) {
-   921					init_pageblock_migratetype(page, migratetype,
-   922							isolate_pageblock);
-   923				} else {
-   924					pr_warn_once("memmap_init_range: skipping pageblock init for pfn 0x%lx (zone %s has no pageblock_flags)\n",
-   925						     pfn, z->name);
-   926				}
-   927				cond_resched();
-   928			}
-   929			pfn++;
-   930		}
-   931	}
-   932	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2562813796
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2562813796_ppc64le_kernel
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2562813796_aarch64_kernel_kcidb_tool_21376589_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/001
+                       =E2=9D=8C FAIL generic/004
+                       =E2=9D=8C FAIL generic/005
+                       =E2=9D=8C FAIL generic/006
+                       =E2=9D=8C FAIL generic/007
+                       =E2=9D=8C FAIL generic/008
+                       =E2=9D=8C FAIL generic/012
+                       =E2=9D=8C FAIL generic/014
+                       =E2=9D=8C FAIL generic/016
+                       =E2=9D=8C FAIL generic/021
+                       =E2=9D=8C FAIL generic/022
+                       =E2=9D=8C FAIL generic/023
+                       =E2=9D=8C FAIL generic/024
+                       =E2=9D=8C FAIL generic/025
+                       =E2=9D=8C FAIL generic/026
+                       =E2=9D=8C FAIL generic/028
+                       =E2=9D=8C FAIL generic/030
+                       =E2=9D=8C FAIL generic/031
+                       =E2=9D=8C FAIL generic/037
+                       =E2=9D=8C FAIL generic/052
+                       =E2=9D=8C FAIL generic/058
+                       =E2=9D=8C FAIL generic/060
+                       =E2=9D=8C FAIL generic/061
+                       =E2=9D=8C FAIL generic/063
+                       =E2=9D=8C FAIL generic/064
+                       =E2=9D=8C FAIL generic/069
+                       =E2=9D=8C FAIL generic/078
+                       =E2=9D=8C FAIL generic/086
+                       =E2=9D=8C FAIL generic/096
+                       =E2=9D=8C FAIL generic/097
+                       =E2=9D=8C FAIL generic/098
+                       =E2=9D=8C FAIL generic/103
+                       =E2=9D=8C FAIL generic/105
+                       =E2=9D=8C FAIL generic/110
+                       =E2=9D=8C FAIL generic/111
+                       =E2=9D=8C FAIL generic/114
+                       =E2=9D=8C FAIL generic/115
+                       =E2=9D=8C FAIL generic/116
+                       =E2=9D=8C FAIL generic/123
+                       =E2=9D=8C FAIL generic/134
+                       =E2=9D=8C FAIL generic/138
+                       =E2=9D=8C FAIL generic/140
+                       =E2=9D=8C FAIL generic/141
+                       =E2=9D=8C FAIL generic/142
+                       =E2=9D=8C FAIL generic/143
+                       =E2=9D=8C FAIL generic/144
+                       =E2=9D=8C FAIL generic/145
+                       =E2=9D=8C FAIL generic/146
+                       =E2=9D=8C FAIL generic/147
+                       =E2=9D=8C FAIL generic/148
+                       =E2=9D=8C FAIL generic/149
+                       =E2=9D=8C FAIL generic/150
+                       =E2=9D=8C FAIL generic/151
+                       =E2=9D=8C FAIL generic/152
+                       =E2=9D=8C FAIL generic/153
+                       =E2=9D=8C FAIL generic/154
+                       =E2=9D=8C FAIL generic/155
+                       =E2=9D=8C FAIL generic/156
+                       =E2=9D=8C FAIL generic/157
+                       =E2=9D=8C FAIL generic/159
+                       =E2=9D=8C FAIL generic/160
+                       =E2=9D=8C FAIL generic/161
+                       =E2=9D=8C FAIL generic/171
+                       =E2=9D=8C FAIL generic/172
+                       =E2=9D=8C FAIL generic/173
+                       =E2=9D=8C FAIL generic/174
+                       =E2=9D=8C FAIL generic/178
+                       =E2=9D=8C FAIL generic/179
+                       =E2=9D=8C FAIL generic/180
+                       =E2=9D=8C FAIL generic/181
+                       =E2=9D=8C FAIL generic/183
+                       =E2=9D=8C FAIL generic/185
+                       =E2=9D=8C FAIL generic/188
+                       =E2=9D=8C FAIL generic/189
+                       =E2=9D=8C FAIL generic/190
+                       =E2=9D=8C FAIL generic/191
+                       =E2=9D=8C FAIL generic/194
+                       =E2=9D=8C FAIL generic/195
+                       =E2=9D=8C FAIL generic/196
+                       =E2=9D=8C FAIL generic/197
+                       =E2=9D=8C FAIL generic/198
+                       =E2=9D=8C FAIL generic/199
+                       =E2=9D=8C FAIL generic/200
+                       =E2=9D=8C FAIL generic/201
+                       =E2=9D=8C FAIL generic/202
+                       =E2=9D=8C FAIL generic/203
+                       =E2=9D=8C FAIL generic/205
+                       =E2=9D=8C FAIL generic/206
+                       =E2=9D=8C FAIL generic/207
+                       =E2=9D=8C FAIL generic/211
+                       =E2=9D=8C FAIL generic/212
+                       =E2=9D=8C FAIL generic/214
+                       =E2=9D=8C FAIL generic/216
+                       =E2=9D=8C FAIL generic/217
+                       =E2=9D=8C FAIL generic/220
+                       =E2=9D=8C FAIL generic/221
+                       =E2=9D=8C FAIL generic/222
+                       =E2=9D=8C FAIL generic/227
+                       =E2=9D=8C FAIL generic/238
+                       =E2=9D=8C FAIL generic/246
+                       =E2=9D=8C FAIL generic/248
+                       =E2=9D=8C FAIL generic/253
+                       =E2=9D=8C FAIL generic/259
+                       =E2=9D=8C FAIL generic/261
+                       =E2=9D=8C FAIL generic/262
+                       =E2=9D=8C FAIL generic/264
+                       =E2=9D=8C FAIL generic/277
+                       =E2=9D=8C FAIL generic/287
+                       =E2=9D=8C FAIL generic/289
+                       =E2=9D=8C FAIL generic/290
+                       =E2=9D=8C FAIL generic/291
+                       =E2=9D=8C FAIL generic/292
+                       =E2=9D=8C FAIL generic/293
+                       =E2=9D=8C FAIL generic/295
+                       =E2=9D=8C FAIL generic/296
+                       =E2=9D=8C FAIL generic/301
+                       =E2=9D=8C FAIL generic/302
+                       =E2=9D=8C FAIL generic/303
+                       =E2=9D=8C FAIL generic/304
+                       =E2=9D=8C FAIL generic/305
+                       =E2=9D=8C FAIL generic/309
+                       =E2=9D=8C FAIL generic/312
+                       =E2=9D=8C FAIL generic/326
+                       =E2=9D=8C FAIL generic/327
+                       =E2=9D=8C FAIL generic/328
+                       =E2=9D=8C FAIL generic/330
+                       =E2=9D=8C FAIL generic/332
+                       =E2=9D=8C FAIL generic/337
+                       =E2=9D=8C FAIL generic/353
+                       =E2=9D=8C FAIL generic/358
+                       =E2=9D=8C FAIL generic/359
+                       =E2=9D=8C FAIL generic/362
+                       =E2=9D=8C FAIL generic/372
+                       =E2=9D=8C FAIL generic/379
+                       =E2=9D=8C FAIL generic/380
+                       =E2=9D=8C FAIL generic/389
+                       =E2=9D=8C FAIL generic/391
+                       =E2=9D=8C FAIL generic/393
+                       =E2=9D=8C FAIL generic/395
+                       =E2=9D=8C FAIL generic/396
+                       =E2=9D=8C FAIL generic/397
+                       =E2=9D=8C FAIL generic/398
+                       =E2=9D=8C FAIL generic/406
+                       =E2=9D=8C FAIL generic/408
+                       =E2=9D=8C FAIL generic/412
+                       =E2=9D=8C FAIL generic/414
+                       =E2=9D=8C FAIL generic/419
+                       =E2=9D=8C FAIL generic/421
+                       =E2=9D=8C FAIL generic/424
+                       =E2=9D=8C FAIL generic/432
+                       =E2=9D=8C FAIL generic/433
+                       =E2=9D=8C FAIL generic/439
+                       =E2=9D=8C FAIL generic/440
+                       =E2=9D=8C FAIL generic/443
+                       =E2=9D=8C FAIL generic/462
+                       =E2=9D=8C FAIL generic/463
+                       =E2=9D=8C FAIL generic/470
+                       =E2=9D=8C FAIL generic/474
+                       =E2=9D=8C FAIL generic/488
+                       =E2=9D=8C FAIL generic/492
+                       =E2=9D=8C FAIL generic/493
+                       =E2=9D=8C FAIL generic/496
+                       =E2=9D=8C FAIL generic/497
+                       =E2=9D=8C FAIL generic/499
+                       =E2=9D=8C FAIL generic/503
+                       =E2=9D=8C FAIL generic/505
+                       =E2=9D=8C FAIL generic/506
+                       =E2=9D=8C FAIL generic/507
+                       =E2=9D=8C FAIL generic/508
+                       =E2=9D=8C FAIL generic/511
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2562813796_x86_64_kernel_kcidb_tool_21376586_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/001
+                       =E2=9D=8C FAIL generic/004
+                       =E2=9D=8C FAIL generic/005
+                       =E2=9D=8C FAIL generic/006
+                       =E2=9D=8C FAIL generic/007
+                       =E2=9D=8C FAIL generic/008
+                       =E2=9D=8C FAIL generic/012
+                       =E2=9D=8C FAIL generic/014
+                       =E2=9D=8C FAIL generic/016
+                       =E2=9D=8C FAIL generic/021
+                       =E2=9D=8C FAIL generic/022
+                       =E2=9D=8C FAIL generic/023
+                       =E2=9D=8C FAIL generic/024
+                       =E2=9D=8C FAIL generic/025
+                       =E2=9D=8C FAIL generic/026
+                       =E2=9D=8C FAIL generic/028
+                       =E2=9D=8C FAIL generic/030
+                       =E2=9D=8C FAIL generic/031
+                       =E2=9D=8C FAIL generic/037
+                       =E2=9D=8C FAIL generic/052
+                       =E2=9D=8C FAIL generic/058
+                       =E2=9D=8C FAIL generic/060
+                       =E2=9D=8C FAIL generic/061
+                       =E2=9D=8C FAIL generic/063
+                       =E2=9D=8C FAIL generic/064
+                       =E2=9D=8C FAIL generic/069
+                       =E2=9D=8C FAIL generic/078
+                       =E2=9D=8C FAIL generic/086
+                       =E2=9D=8C FAIL generic/096
+                       =E2=9D=8C FAIL generic/097
+                       =E2=9D=8C FAIL generic/098
+                       =E2=9D=8C FAIL generic/103
+                       =E2=9D=8C FAIL generic/105
+                       =E2=9D=8C FAIL generic/110
+                       =E2=9D=8C FAIL generic/111
+                       =E2=9D=8C FAIL generic/114
+                       =E2=9D=8C FAIL generic/115
+                       =E2=9D=8C FAIL generic/116
+                       =E2=9D=8C FAIL generic/123
+                       =E2=9D=8C FAIL generic/134
+                       =E2=9D=8C FAIL generic/138
+                       =E2=9D=8C FAIL generic/140
+                       =E2=9D=8C FAIL generic/141
+                       =E2=9D=8C FAIL generic/142
+                       =E2=9D=8C FAIL generic/143
+                       =E2=9D=8C FAIL generic/144
+                       =E2=9D=8C FAIL generic/145
+                       =E2=9D=8C FAIL generic/146
+                       =E2=9D=8C FAIL generic/147
+                       =E2=9D=8C FAIL generic/148
+                       =E2=9D=8C FAIL generic/149
+                       =E2=9D=8C FAIL generic/150
+                       =E2=9D=8C FAIL generic/151
+                       =E2=9D=8C FAIL generic/152
+                       =E2=9D=8C FAIL generic/153
+                       =E2=9D=8C FAIL generic/154
+                       =E2=9D=8C FAIL generic/155
+                       =E2=9D=8C FAIL generic/156
+                       =E2=9D=8C FAIL generic/157
+                       =E2=9D=8C FAIL generic/159
+                       =E2=9D=8C FAIL generic/160
+                       =E2=9D=8C FAIL generic/161
+                       =E2=9D=8C FAIL generic/171
+                       =E2=9D=8C FAIL generic/172
+                       =E2=9D=8C FAIL generic/173
+                       =E2=9D=8C FAIL generic/174
+                       =E2=9D=8C FAIL generic/178
+                       =E2=9D=8C FAIL generic/179
+                       =E2=9D=8C FAIL generic/180
+                       =E2=9D=8C FAIL generic/181
+                       =E2=9D=8C FAIL generic/183
+                       =E2=9D=8C FAIL generic/185
+                       =E2=9D=8C FAIL generic/188
+                       =E2=9D=8C FAIL generic/189
+                       =E2=9D=8C FAIL generic/190
+                       =E2=9D=8C FAIL generic/191
+                       =E2=9D=8C FAIL generic/194
+                       =E2=9D=8C FAIL generic/195
+                       =E2=9D=8C FAIL generic/196
+                       =E2=9D=8C FAIL generic/197
+                       =E2=9D=8C FAIL generic/198
+                       =E2=9D=8C FAIL generic/199
+                       =E2=9D=8C FAIL generic/200
+                       =E2=9D=8C FAIL generic/201
+                       =E2=9D=8C FAIL generic/202
+                       =E2=9D=8C FAIL generic/203
+                       =E2=9D=8C FAIL generic/205
+                       =E2=9D=8C FAIL generic/206
+                       =E2=9D=8C FAIL generic/207
+                       =E2=9D=8C FAIL generic/211
+                       =E2=9D=8C FAIL generic/212
+                       =E2=9D=8C FAIL generic/214
+                       =E2=9D=8C FAIL generic/216
+                       =E2=9D=8C FAIL generic/217
+                       =E2=9D=8C FAIL generic/220
+                       =E2=9D=8C FAIL generic/221
+                       =E2=9D=8C FAIL generic/222
+                       =E2=9D=8C FAIL generic/227
+                       =E2=9D=8C FAIL generic/238
+                       =E2=9D=8C FAIL generic/246
+                       =E2=9D=8C FAIL generic/248
+                       =E2=9D=8C FAIL generic/253
+                       =E2=9D=8C FAIL generic/259
+                       =E2=9D=8C FAIL generic/261
+                       =E2=9D=8C FAIL generic/262
+                       =E2=9D=8C FAIL generic/264
+                       =E2=9D=8C FAIL generic/277
+                       =E2=9D=8C FAIL generic/287
+                       =E2=9D=8C FAIL generic/289
+                       =E2=9D=8C FAIL generic/290
+                       =E2=9D=8C FAIL generic/291
+                       =E2=9D=8C FAIL generic/292
+                       =E2=9D=8C FAIL generic/293
+                       =E2=9D=8C FAIL generic/295
+                       =E2=9D=8C FAIL generic/296
+                       =E2=9D=8C FAIL generic/301
+                       =E2=9D=8C FAIL generic/302
+                       =E2=9D=8C FAIL generic/303
+                       =E2=9D=8C FAIL generic/304
+                       =E2=9D=8C FAIL generic/305
+                       =E2=9D=8C FAIL generic/309
+                       =E2=9D=8C FAIL generic/312
+                       =E2=9D=8C FAIL generic/326
+                       =E2=9D=8C FAIL generic/327
+                       =E2=9D=8C FAIL generic/328
+                       =E2=9D=8C FAIL generic/330
+                       =E2=9D=8C FAIL generic/332
+                       =E2=9D=8C FAIL generic/337
+                       =E2=9D=8C FAIL generic/353
+                       =E2=9D=8C FAIL generic/358
+                       =E2=9D=8C FAIL generic/359
+                       =E2=9D=8C FAIL generic/362
+                       =E2=9D=8C FAIL generic/372
+                       =E2=9D=8C FAIL generic/379
+                       =E2=9D=8C FAIL generic/380
+                       =E2=9D=8C FAIL generic/389
+                       =E2=9D=8C FAIL generic/391
+                       =E2=9D=8C FAIL generic/393
+                       =E2=9D=8C FAIL generic/395
+                       =E2=9D=8C FAIL generic/396
+                       =E2=9D=8C FAIL generic/397
+                       =E2=9D=8C FAIL generic/398
+                       =E2=9D=8C FAIL generic/406
+                       =E2=9D=8C FAIL generic/408
+                       =E2=9D=8C FAIL generic/412
+                       =E2=9D=8C FAIL generic/414
+                       =E2=9D=8C FAIL generic/419
+                       =E2=9D=8C FAIL generic/421
+                       =E2=9D=8C FAIL generic/424
+                       =E2=9D=8C FAIL generic/432
+                       =E2=9D=8C FAIL generic/433
+                       =E2=9D=8C FAIL generic/439
+                       =E2=9D=8C FAIL generic/440
+                       =E2=9D=8C FAIL generic/443
+                       =E2=9D=8C FAIL generic/462
+                       =E2=9D=8C FAIL generic/463
+                       =E2=9D=8C FAIL generic/470
+                       =E2=9D=8C FAIL generic/474
+                       =E2=9D=8C FAIL generic/488
+                       =E2=9D=8C FAIL generic/492
+                       =E2=9D=8C FAIL generic/493
+                       =E2=9D=8C FAIL generic/496
+                       =E2=9D=8C FAIL generic/497
+                       =E2=9D=8C FAIL generic/499
+                       =E2=9D=8C FAIL generic/503
+                       =E2=9D=8C FAIL generic/505
+                       =E2=9D=8C FAIL generic/506
+                       =E2=9D=8C FAIL generic/507
+                       =E2=9D=8C FAIL generic/508
+                       =E2=9D=8C FAIL generic/511
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
