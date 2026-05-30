@@ -1,167 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA34242D67;
-	Sat, 30 May 2026 19:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AC42D9EDB;
+	Sat, 30 May 2026 23:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780171167; cv=none; b=WwVYFHCazLGY95qEm2lJwpiPt55XEovZomEbykVJtqZebzjIZ3zLljo67oJmAzCtlBti/AojVb1KWWhRllqSWDd216PH7oz8ye2eWkYh+taeCNZoN+xKDrCrs4+xHVG64+/N+CDctnoQjuocr6iJ1JSZn2MKUI7OPzjL+80Ypbs=
+	t=1780184589; cv=none; b=sTev+l5K6gK6pX86RCMru9uzsZGp1QWT22vdL1fTU23NVs98ohMqvkd5WMMePdO/VL3l2UrBk9oXEQP+o8S5sVJk/dTLdtlghmumOWpNndapRjrTvz0/Xepo7+T8YAi6eD+kZaCglGCzmsuyjOcDHu0EyGI/BJqsk6+SiaJeAUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780171167; c=relaxed/simple;
-	bh=V3gXuKL3ohKlaGUo6W9V9HMZNrmRcdDJ5vz2T55yHpk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Ga6vWEFHbDIZ+Yt7jmkGr7v6+ZDIfNs4HICuOZHWJK2Sb8lLFeJE4kREEJ22RwO1tuTM4W/Ql9i81Mw9Tu1j0orG9r31sBz5qlglhEIPw/+OUffeVTERvD8D4v75m9TDuzeK2KkR6sr/X5j3UXFYp4LiGTxkmkrYTP2x4qqDgus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HZJxEpvj; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1780184589; c=relaxed/simple;
+	bh=6UEtp5cJrG0/ctHrMRtxUfaitpU3/366G0FBrSuy0Lo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QkEZms6wsTkIB1YGQyPJOQWWlk+qIlO4CDWsPuewnkwVDLSklyTMG8atOS4TE48383glWKtZ0SjERRuWfny1LREAhfhsSwfLQ66TxpYwmICca86lCcUi/w5OmgWjtwMEaf59KnesMOPscH/m+jdsavcpAFRUzXmkEncDNLq+yKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H6ZPRpQ4; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HZJxEpvj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H6ZPRpQ4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780171165; x=1811707165;
-  h=date:from:to:cc:subject:message-id;
-  bh=V3gXuKL3ohKlaGUo6W9V9HMZNrmRcdDJ5vz2T55yHpk=;
-  b=HZJxEpvjteo67tMbMj+4nDBicHYoAcWLpXF/YPAhpd1sfMmQhBKoJbRx
-   X7A7fb35D3PPhwU5M6FObjQ0qJhslxzPtNCi/PtOLc2duYfKUalQOLlFt
-   /EkJQFd/VQXWzkxyu8rgSqlQuq6yp8jkzbuhnLIPMPVDJ8/Gmd2vNfCZ3
-   JxLhPCm/+tlstYp+HjlxXnQBNU65ej56rRq836Jai/uBellcTHV4SQbzh
-   MTLIYCsI61M11YVAgwIEBiJJJYKmnM93f+AFVgGCBkAr5Mkjri58AO0HB
-   5gJUx7HThR2jedhu8Wy3U3B7rARLmDzXctxrD92owR58nFZdhvxNdxNEu
-   Q==;
-X-CSE-ConnectionGUID: lqCiWD9zTCy+9cM0tvxByg==
-X-CSE-MsgGUID: ctyZ3X0LSl6s3Y4dszQwcQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11802"; a="81172123"
+  t=1780184588; x=1811720588;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6UEtp5cJrG0/ctHrMRtxUfaitpU3/366G0FBrSuy0Lo=;
+  b=H6ZPRpQ4jOJj/AM3TUMsRL7lln/RT8iu4e+HUoUx67vYGCjcymUsLIFr
+   UGiJZjl7nhgs0g3qqr18bvF+KmhTlJl+9BdM8iDKTSK3hES5xaPZtmQvF
+   HO+u3WsN7p2PgdiBb91JU/WpDrAP0QnzZmJtIHrg1J9zsjARDRqzxw01v
+   Roc+fsi8dmXVp/k+z72Vgw3r4yZDLG/Q2CdxgLN2hsf4xvj2rdprp56/H
+   ze0HLI3dQHGygcM/VIGBAY20e23yAodpX2cASfi9JfU2WF8vGkCfrMDvZ
+   GbITkg9YNpfaHrpFVzubXv25zEjTqvUDBeJ2NhNsW7YkSVCfBnOsguIHx
+   A==;
+X-CSE-ConnectionGUID: d7pfpt7PQk69MbmwhGjaGQ==
+X-CSE-MsgGUID: 4U8fPfEnQNqRdwWotnAiYQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11802"; a="84849478"
 X-IronPort-AV: E=Sophos;i="6.24,178,1774335600"; 
-   d="scan'208";a="81172123"
+   d="scan'208";a="84849478"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 12:59:25 -0700
-X-CSE-ConnectionGUID: 6idJrEaxRuG/+eG2rVKgiA==
-X-CSE-MsgGUID: aXtt8mwWRVi9D42qdYfQyg==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 16:43:07 -0700
+X-CSE-ConnectionGUID: GJleeBbPSLu4SZVIMXP6eA==
+X-CSE-MsgGUID: wkqRRNVaQsel5UF928mo3A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,178,1774335600"; 
-   d="scan'208";a="238977790"
+   d="scan'208";a="239009345"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 30 May 2026 12:59:22 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 30 May 2026 16:43:06 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wTPq4-000000008pa-0gx5;
-	Sat, 30 May 2026 19:59:20 +0000
-Date: Sun, 31 May 2026 03:59:13 +0800
+	id 1wTTKZ-000000008xy-2Yo3;
+	Sat, 30 May 2026 23:43:03 +0000
+Date: Sun, 31 May 2026 07:42:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-pm@vger.kernel.org
-Subject: [amd-pstate:superm1/backlight-property-v4 3/9]
- drivers/gpu/drm/drm_backlight.c:101:62: error: passing 'const char *const[2]'
- to parameter of type 'char **' discards qualifiers in nested pointer types
-Message-ID: <202605310304.chQ0W1xz-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-media@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH] [TEST] add a broken patch
+Message-ID: <202605310729.zrGRsEVN-lkp@intel.com>
+References: <9050789262f583cef777eb3a9c3e07948faf18c3.1780141190.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9050789262f583cef777eb3a9c3e07948faf18c3.1780141190.git.mchehab+huawei@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git superm1/backlight-property-v4
-head:   d6dda4e35a589d00e7be9db8c45aef13547401f2
-commit: 838d0906592749f46424cbf58eb20a85a95efd27 [3/9] drm: link connectors to backlight devices
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260531/202605310304.chQ0W1xz-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260531/202605310304.chQ0W1xz-lkp@intel.com/reproduce)
+Hi Mauro,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on staging/staging-testing]
+[also build test ERROR on staging/staging-next staging/staging-linus sailus-media-tree/master sailus-media-tree/streams linus/master v7.1-rc5 next-20260529]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mauro-Carvalho-Chehab/add-a-broken-patch/20260530-194048
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/9050789262f583cef777eb3a9c3e07948faf18c3.1780141190.git.mchehab%2Bhuawei%40kernel.org
+patch subject: [PATCH] [TEST] add a broken patch
+config: x86_64-buildonly-randconfig-002-20260531 (https://download.01.org/0day-ci/archive/20260531/202605310729.zrGRsEVN-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260531/202605310729.zrGRsEVN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605310304.chQ0W1xz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605310729.zrGRsEVN-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/drm_backlight.c:101:62: error: passing 'const char *const[2]' to parameter of type 'char **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     101 |                 kobject_uevent_env(&b->connector->kdev->kobj, KOBJ_CHANGE, ep);
-         |                                                                            ^~
-   include/linux/kobject.h:216:10: note: passing argument to parameter 'envp' here
-     216 |                         char *envp[]);
-         |                               ^
-   drivers/gpu/drm/drm_backlight.c:321:5: error: no member named 'luminance_clients' in 'struct drm_backlight'
-     321 |         b->luminance_clients++;
-         |         ~  ^
-   drivers/gpu/drm/drm_backlight.c:323:24: error: no member named 'drm_takeover' in 'struct backlight_device'
-     323 |                 atomic_inc(&b->link->drm_takeover);
-         |                             ~~~~~~~  ^
-   drivers/gpu/drm/drm_backlight.c:315:6: warning: no previous prototype for function 'drm_backlight_inhibit_legacy' [-Wmissing-prototypes]
-     315 | void drm_backlight_inhibit_legacy(struct drm_backlight *b)
-         |      ^
-   drivers/gpu/drm/drm_backlight.c:315:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     315 | void drm_backlight_inhibit_legacy(struct drm_backlight *b)
+>> drivers/staging/media/atomisp/pci/sh_css.c:91:1: error: unknown type name 'FOOBAR_SYNTAX_BREAK_BY_PURPOSE'
+      91 | FOOBAR_SYNTAX_BREAK_BY_PURPOSE
          | ^
-         | static 
-   drivers/gpu/drm/drm_backlight.c:340:17: error: no member named 'luminance_clients' in 'struct drm_backlight'
-     340 |         if (WARN_ON(b->luminance_clients == 0))
-         |                     ~  ^
-   include/asm-generic/bug.h:155:25: note: expanded from macro 'WARN_ON'
-     155 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   drivers/gpu/drm/drm_backlight.c:342:5: error: no member named 'luminance_clients' in 'struct drm_backlight'
-     342 |         b->luminance_clients--;
-         |         ~  ^
-   drivers/gpu/drm/drm_backlight.c:344:24: error: no member named 'drm_takeover' in 'struct backlight_device'
-     344 |                 atomic_dec(&b->link->drm_takeover);
-         |                             ~~~~~~~  ^
-   drivers/gpu/drm/drm_backlight.c:334:6: warning: no previous prototype for function 'drm_backlight_uninhibit_legacy' [-Wmissing-prototypes]
-     334 | void drm_backlight_uninhibit_legacy(struct drm_backlight *b)
-         |      ^
-   drivers/gpu/drm/drm_backlight.c:334:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     334 | void drm_backlight_uninhibit_legacy(struct drm_backlight *b)
-         | ^
-         | static 
-   drivers/gpu/drm/drm_backlight.c:356:6: warning: no previous prototype for function 'drm_backlight_inhibit_legacy_all' [-Wmissing-prototypes]
-     356 | void drm_backlight_inhibit_legacy_all(struct drm_device *dev)
-         |      ^
-   drivers/gpu/drm/drm_backlight.c:356:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     356 | void drm_backlight_inhibit_legacy_all(struct drm_device *dev)
-         | ^
-         | static 
-   drivers/gpu/drm/drm_backlight.c:372:6: warning: no previous prototype for function 'drm_backlight_uninhibit_legacy_all' [-Wmissing-prototypes]
-     372 | void drm_backlight_uninhibit_legacy_all(struct drm_device *dev)
-         |      ^
-   drivers/gpu/drm/drm_backlight.c:372:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     372 | void drm_backlight_uninhibit_legacy_all(struct drm_device *dev)
-         | ^
-         | static 
-   4 warnings and 6 errors generated.
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_STMFX
+   Depends on [n]: HAS_IOMEM [=y] && I2C [=m] && OF [=n]
+   Selected by [m]:
+   - PINCTRL_STMFX [=m] && PINCTRL [=y] && I2C [=m] && HAS_IOMEM [=y]
 
 
-vim +101 drivers/gpu/drm/drm_backlight.c
+vim +/FOOBAR_SYNTAX_BREAK_BY_PURPOSE +91 drivers/staging/media/atomisp/pci/sh_css.c
 
-    74	
-    75	static void __drm_backlight_worker(struct work_struct *w)
-    76	{
-    77		struct drm_backlight *b = container_of(w, struct drm_backlight, work);
-    78		static const char * const ep[] = { "BACKLIGHT=1", NULL };
-    79		struct backlight_device *bd;
-    80		bool send_uevent;
-    81		unsigned int v;
-    82	
-    83		scoped_guard(spinlock, &drm_backlight_lock) {
-    84			send_uevent = b->changed;
-    85			b->changed = false;
-    86			v = b->set_value;
-    87			bd = b->link;
-    88			backlight_device_ref(bd);
-    89		}
     90	
-    91		if (bd) {
-    92			int rc = backlight_set_brightness(bd, v, BACKLIGHT_UPDATE_DRM);
+  > 91	FOOBAR_SYNTAX_BREAK_BY_PURPOSE
+    92	
     93	
-    94			WARN_ON(rc);
-    95			if (rc)
-    96				backlight_set_brightness(bd, U16_MAX, BACKLIGHT_UPDATE_DRM);
-    97			backlight_device_unref(bd);
-    98		}
-    99	
-   100		if (send_uevent)
- > 101			kobject_uevent_env(&b->connector->kdev->kobj, KOBJ_CHANGE, ep);
-   102	}
-   103	
 
 --
 0-DAY CI Kernel Test Service
