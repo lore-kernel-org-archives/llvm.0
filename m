@@ -1,154 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39DA11EFF93;
-	Sun, 31 May 2026 00:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C1E1891A9
+	for <llvm@lists.linux.dev>; Sun, 31 May 2026 01:07:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780188377; cv=none; b=Cn7a+Aat9er1MhByqAeRFVfBLVNji/yQymMzchUEbOCTFuZuwhNdT6fyW41Q0xBsKIBrasR+W/mLGvwyqrMLwMTy3FyT1266jPELmmDnf4kfjb+OqNEFFI+fr1CzbrsccIgeqMaPUtxBmJdmVuAVm/gQ/YlNvsFVUPl8Ecb9Llw=
+	t=1780189679; cv=none; b=fusoYPaGQ5U1G510Qt5TRHKcWMfI6wzFVKiPLIb6iHY3IONHKdIoWHQ0W0FwYQ5XhcRXmNidiIeSFCnqBZTfGdqTvkG+Ot0MW9glEYU6+c7l1bX2ZRunx4TsE2XnJOvTxCzX0QRIg9nbyAAT0wGSwfIMKIsaCc3brPF0FOKOskQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780188377; c=relaxed/simple;
-	bh=jpTfjX9mNM8h3K7oR8BVKXhyNjueunIRRNInpWrKVgc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Arf8Jz+ArpryuCBdVvP58PsIKJWHsaxThjqqViIb4nGExAiTe5dYGJ2YoIUDNyTcQwXG5G60zsEEQSJ4wwLbdMwGENUjelRdKbvyDA7V68KwHmndQycJxy8rxE35bnqRGOlBzTGjgAmykToGCLPyhfcTWFODuQSYljRWPWQiAvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SG5xz+QT; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780189679; c=relaxed/simple;
+	bh=l/IOAmzqAWxn3px4qTqpAPWLw3OXzvVmnFcKE59vi9U=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Wrn8OO5vxgnVW3WFUmKyEGXxlyqfqtTBDxHdRMHYjpAEsXaL4RtFMo0Qnok12xUvrKtzZp85vJJpeSttfmyu4e/iL86Nebzk3pacfme+XGQyOTc7B3V2hwQHuOw/d+JZWcVkDnoxQVfXdZqTqgMEaagipGZqNabJvMFUnZUMd4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NBzxz68T; arc=none smtp.client-ip=74.125.82.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SG5xz+QT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780188375; x=1811724375;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jpTfjX9mNM8h3K7oR8BVKXhyNjueunIRRNInpWrKVgc=;
-  b=SG5xz+QTBQKTKwKZj5nxENNSY9CYRbTjZ9DGBeBnXHP8cA2iYIlScfgh
-   fSrmKWeuqmm/MKHD52VV9zEQQuUlD5fguTa5Xk1tQNv0nBejALjLSlp+s
-   cKdoXLD1/jyiLe9gOEjpm8S/Z1MyVzVadvtzZ49FAbzsY1z8I4dNZuIsg
-   qZFpDP+/v451wL+GfIZ0rJ5QTQ0sQnZ8UyjU7+EMLJUPd6XouGXSHLwmS
-   rpz5NcnBwMfVxEFpUMfQoIdaLQVAgpxT1KHXwZWHgVAmf8CcvZfSjIiKe
-   F1sTYCffMSPsTqjpBFtwWnsWSD1VHpUUw0VHNnEF4kgA75OoLebw/bJbA
-   A==;
-X-CSE-ConnectionGUID: nIHRyWE3R1O24uURva8A6Q==
-X-CSE-MsgGUID: Xv3uFrDBQZGx/UXo60tuKg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11802"; a="103663890"
-X-IronPort-AV: E=Sophos;i="6.24,178,1774335600"; 
-   d="scan'208";a="103663890"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2026 17:46:15 -0700
-X-CSE-ConnectionGUID: a0Gzb8LGSMGqaNkQ+/F6Eg==
-X-CSE-MsgGUID: q9/Br8YXSLKQR/ImCPK0QQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,178,1774335600"; 
-   d="scan'208";a="240193517"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 30 May 2026 17:46:13 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wTUJe-0000000093K-3kW3;
-	Sun, 31 May 2026 00:46:10 +0000
-Date: Sun, 31 May 2026 08:45:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jisheng Zhang <jszhang@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] spi: cadence-xspi: Support 32bit and 64bit slave dma
- interface
-Message-ID: <202605310818.A7laSi0h-lkp@intel.com>
-References: <20260530123715.25899-1-jszhang@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NBzxz68T"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-304ee7d1368so1686391eec.0
+        for <llvm@lists.linux.dev>; Sat, 30 May 2026 18:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780189675; x=1780794475; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=7kr1agsQxN7R+ckqIUhhb0WeLzMOoxPB09KTg0cF36Y=;
+        b=NBzxz68TICKIDxWPQEPw4FozlPD5PskEI+1R2YtwtXoEJ4QM/Gyy7RObbURZQvTFoP
+         qSkpU/qAORj8CebvwvYC7vbO/M7w82GMw4O2UfNI8UlBn+xDZmV+VR4qyAtoAF5umJTh
+         670ESwo2pEKruo2/Z8ZpfZ60E2nVjN6/KiD+HmOEi+Dw/rzNxLG5nko97BhxPTIorGC2
+         utDWCGlO3G1lzkjQdR5jZCSUEo2ztH0N4UgwB46uPzzMsoHUeVXl/s1Ktay/347ofs+K
+         HrfbdpwmjLFcrJkkVk67AKlEKAP7EdZf5/zA/ZSLycVn3CvOLz6wumF3Sgu4ltlFB99x
+         lsCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780189675; x=1780794475;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7kr1agsQxN7R+ckqIUhhb0WeLzMOoxPB09KTg0cF36Y=;
+        b=AwSrjeRP43/pW6CZxgYFROnsQqUGqSJJyZtU30viG8sqdXaP8V4u3CBVD1LFBM9pWC
+         osb0hKnR524g2PTfzt/HKW5oH733LL8AtN/3XtgsSTS/OwwMS2qH9tW/1NUjsWAKxFqj
+         j6e2d7FkeMTZ8J/rGWgo4+XBcbREmdWWhmze/TFeb0LIVcBNopYrsLNkoRqit6XMj5Is
+         qfSL73v0HAPJXzpjTAzEXOIgWaFgRBusIOldadTOXxWggGg391PwHRbJVReuhc3w2ZzN
+         0FogMvQrfNPod2Ukp/VIiJNg5mT+yzffo7L8Xt9z0Jvs3so3Oc8ZrbFE3g6fcXsvh0m/
+         t2Rw==
+X-Forwarded-Encrypted: i=1; AFNElJ/GEljsUMGjLjPIbomo6k+bBp0eEJkTTsOjfuxLusS4KQH59AANTnOhzTyVLxJf1hcTm6Rr@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywbkt4BRjB/HA7ZecSb3Q+LcwaVNax+M9xmxF2Y6kEF3Ys1g7jz
+	qZzzNU/ySvaFy0MN6ChsgNYqCFOwR4Tav1+7KzmDIV6Q01CuPstYCFUsoMuA30EJ9UwVohAtVWA
+	OwQkHD1oKYg==
+X-Received: from dybmi48.prod.google.com ([2002:a05:7301:fb0:b0:304:d272:2198])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:578e:b0:2e2:4979:eb5
+ with SMTP id 5a478bee46e88-304fa4d7a78mr2732026eec.10.1780189674615; Sat, 30
+ May 2026 18:07:54 -0700 (PDT)
+Date: Sat, 30 May 2026 18:07:50 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260530123715.25899-1-jszhang@kernel.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
+Message-ID: <20260531010750.525160-1-irogers@google.com>
+Subject: [PATCH v1] bpftool build: Restrict feature tests during bootstrap compilation
+From: Ian Rogers <irogers@google.com>
+To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: linux-perf-users@vger.kernel.org, Ian Rogers <irogers@google.com>, 
+	James Clark <james.clark@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jisheng,
+When the perf build executes 'make -C ../bpf/bpftool bootstrap', bpftool's
+Makefile unconditionally evaluated feature checks for llvm, libcap, libbfd,
+and disassembler libraries because the bootstrap target was not exempted.
 
-kernel test robot noticed the following build errors:
+Since the bootstrap bpftool strictly compiles minimal AST parsing and C
+code generation logic without linking LLVM or disassembler libraries, these
+feature check sub-makes are completely redundant.
 
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on linus/master v7.1-rc5 next-20260529]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Exempt the bootstrap target from non-essential feature tests to eliminate
+unneeded sub-make fork overhead during Kbuild startup.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jisheng-Zhang/spi-cadence-xspi-Support-32bit-and-64bit-slave-dma-interface/20260530-205805
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20260530123715.25899-1-jszhang%40kernel.org
-patch subject: [PATCH v2] spi: cadence-xspi: Support 32bit and 64bit slave dma interface
-config: x86_64-randconfig-005-20260531 (https://download.01.org/0day-ci/archive/20260531/202605310818.A7laSi0h-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260531/202605310818.A7laSi0h-lkp@intel.com/reproduce)
+Tested-by: James Clark <james.clark@linaro.org>
+Assisted-by: Gemini:gemini-3.1-pro-preview
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+This patch originally appeared in the now merged perf patch series:
+https://lore.kernel.org/linux-perf-users/20260514163409.927816-1-irogers@google.com/
+---
+ tools/bpf/bpftool/Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605310818.A7laSi0h-lkp@intel.com/
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 0febf60e1b64..8f50bc163bb2 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -106,6 +106,10 @@ ifneq ($(SKIP_CRYPTO),1)
+   CRYPTO_LIBS := -lcrypto
+ endif
+ 
++ifeq ($(MAKECMDGOALS),bootstrap)
++FEATURE_TESTS := libelf-zstd
++FEATURE_DISPLAY :=
++else
+ FEATURE_TESTS := clang-bpf-co-re
+ FEATURE_TESTS += llvm
+ FEATURE_TESTS += libcap
+@@ -122,6 +126,7 @@ FEATURE_DISPLAY += libcap
+ FEATURE_DISPLAY += libbfd
+ FEATURE_DISPLAY += libbfd-liberty
+ FEATURE_DISPLAY += libbfd-liberty-z
++endif
+ 
+ check_feat := 1
+ NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
+-- 
+2.54.0.823.g6e5bcc1fc9-goog
 
-All errors (new ones prefixed by >>):
-
->> drivers/spi/spi-cadence-xspi.c:601:4: error: call to undeclared function 'ioread64_rep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     601 |                         ioread64_rep(src, buf, len >> 3);
-         |                         ^
->> drivers/spi/spi-cadence-xspi.c:623:4: error: call to undeclared function 'iowrite64_rep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     623 |                         iowrite64_rep(dst, buf, len >> 3);
-         |                         ^
-   2 errors generated.
-
-
-vim +/ioread64_rep +601 drivers/spi/spi-cadence-xspi.c
-
-   586	
-   587	static inline void cdns_xspi_sdma_read(struct cdns_xspi_dev *cdns_xspi, size_t len)
-   588	{
-   589		void __iomem *src = cdns_xspi->sdmabase;
-   590		void *buf = cdns_xspi->in_buffer;
-   591		size_t offset = 0;
-   592	
-   593		if (cdns_xspi->dma_data_width == 4) {
-   594			if (IS_ALIGNED((uintptr_t)src, 4) && IS_ALIGNED((uintptr_t)buf, 4)) {
-   595				ioread32_rep(src, buf, len >> 2);
-   596				offset = len & ~0x3;
-   597				len -= offset;
-   598			}
-   599		} else {
-   600			if (IS_ALIGNED((uintptr_t)src, 8) && IS_ALIGNED((uintptr_t)buf, 8)) {
- > 601				ioread64_rep(src, buf, len >> 3);
-   602				offset = len & ~0x7;
-   603				len -= offset;
-   604			}
-   605		}
-   606		ioread8_rep(src, (u8 *)buf + offset, len);
-   607	}
-   608	
-   609	static inline void cdns_xspi_sdma_write(struct cdns_xspi_dev *cdns_xspi, size_t len)
-   610	{
-   611		void __iomem *dst = cdns_xspi->sdmabase;
-   612		const void *buf = cdns_xspi->out_buffer;
-   613		size_t offset = 0;
-   614	
-   615		if (cdns_xspi->dma_data_width == 4) {
-   616			if (IS_ALIGNED((uintptr_t)dst, 4) && IS_ALIGNED((uintptr_t)buf, 4)) {
-   617				iowrite32_rep(dst, buf, len >> 2);
-   618				offset = len & ~0x3;
-   619				len -= offset;
-   620			}
-   621		} else {
-   622			if (IS_ALIGNED((uintptr_t)dst, 8) && IS_ALIGNED((uintptr_t)buf, 8)) {
- > 623				iowrite64_rep(dst, buf, len >> 3);
-   624				offset = len & ~0x7;
-   625				len -= offset;
-   626			}
-   627		}
-   628		iowrite8_rep(dst, (const u8 *)buf + offset, len);
-   629	}
-   630	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
