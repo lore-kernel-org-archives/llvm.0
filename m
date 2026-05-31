@@ -1,57 +1,57 @@
 Received: from mta.al2klimov.de (mta.al2klimov.de [162.55.223.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3E632B12B
-	for <llvm@lists.linux.dev>; Sun, 31 May 2026 19:53:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EADDB231A23
+	for <llvm@lists.linux.dev>; Sun, 31 May 2026 19:55:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.55.223.79
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780257241; cv=none; b=H8WBWjM2w3Q305KZHLN8YrjBE40olhT4Vmo7c/gyC75LrpKw/Ye8vA4oN+EMBfgy+aXC5QZ2WaUyKWd/ygDws1DbR55j7BBsyYx+wrjMQAYlJt9m82ASU/LIcKVzhTPEEYkIkucvQVXqzOCDwjQFdBGrysUpaKraMF2r01qPmyE=
+	t=1780257343; cv=none; b=uw7eIcWa0yaCyZhAHoj9k1jku+/Fc/PcETlI8zgI0LoAsKgGO2CFTxQ8K8hNTqaoOUJcb3zDaNa6ZQa6rpZW+naia53go1LRFhP3yhWiIgL+Y57fHLGWG+1d8202Nizst3upP1pyuxO1S8csBafgmxf2SyMXhZX3JLrDaIiOqlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780257241; c=relaxed/simple;
-	bh=Ok/76h30j/DmvaFJRXEZMciSEbTzOAQ8fJQk/r2uSxI=;
+	s=arc-20240116; t=1780257343; c=relaxed/simple;
+	bh=ZoukwfSF8bc4T0zOTYJl0C8sMTVJuamWQpd1iB8O5oY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DaCuG3nSgCFckdisQT/65lh93olHM3l2Y0Yxa1rNJm3JRfwN3i8l8vBjeQve0mpC5MzGiL7zUuP9H3eiPhSf4KBYjtVewXgwfO69vBrlpz4DOqHF3Q/MnkfZ2w1z30ZfwoihaNhYHcCTzxippiHr45ooVCe69FC8EBFZUZXvbqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=al2klimov.de; spf=pass smtp.mailfrom=al2klimov.de; dkim=pass (2048-bit key) header.d=al2klimov.de header.i=@al2klimov.de header.b=nhzGi4aF; arc=none smtp.client-ip=162.55.223.79
+	 MIME-Version:Content-Type; b=QawtyDjMjNbxUgObDy/sXH4kNmqKJMcsAHyEDx1RDRJn8G6C/1ey9241Ir4J4DlIvUgU6zMS1IXCVQLh+KaDEd8llgpbuh9c7xC3kjGCVMPsCWUsBDhcNJ87pfPzsKsLUM/AdTUk8Mug2sDsP0hh8ACCVxWqutjRcJRPvCHDwFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=al2klimov.de; spf=pass smtp.mailfrom=al2klimov.de; dkim=pass (2048-bit key) header.d=al2klimov.de header.i=@al2klimov.de header.b=KlI1Nk1I; arc=none smtp.client-ip=162.55.223.79
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=al2klimov.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=al2klimov.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=al2klimov.de header.i=@al2klimov.de header.b="nhzGi4aF"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=default; bh=Ok/76h30j/Dm
-	vaFJRXEZMciSEbTzOAQ8fJQk/r2uSxI=; h=references:in-reply-to:date:
-	subject:cc:to:from; d=al2klimov.de; b=nhzGi4aFbFe8AzSSxgqwxtnVbDaEQKhY
-	UuW0dLmKB+Ed2AvOPyxX8V0I29TV5gEhj6RNEzams4iu4gkPVNtrbRDzNlRDaQYd0qWHez
-	J1OCflCE71eDi5xGfALWmhlnhQW8CwcfQd6GBHZxaTfozcLIJw3cBrG8PpteGHgTG3dvEv
-	qRDo3gOsnFlPNUEy1R8CPHM+0DSw0XqgppjfziiVeht9FEFIrasJJTifoV5VZZ17hrWpvK
-	GvO7AiOypPt9HwlT/WmqHVyrrqGJ35Y0aMdq84SGm0HF8tG3jJuYaitYGZN++6XJ1ROvfz
-	V7pCOvXbM5PrTM318LJTUqyfI0NCrA==
+	dkim=pass (2048-bit key) header.d=al2klimov.de header.i=@al2klimov.de header.b="KlI1Nk1I"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=default; bh=ZoukwfSF8bc4
+	T0zOTYJl0C8sMTVJuamWQpd1iB8O5oY=; h=references:in-reply-to:date:
+	subject:cc:to:from; d=al2klimov.de; b=KlI1Nk1IOl7Xplg+KLj9PasHUyKo26zW
+	v28XKYaCn9XtSp0HAIfaO8UMXsl8cxjmvHwqi0u8PcTsJcxgNE71K0HH9jp2oL6YY/k7QP
+	FUb70eJWpnX1Q0tCl+UsGKhhGtcBrmX42C4Xto3lpk4Y1d9HGGocI197vR9Rlekqxy745Y
+	NNq2qmcLXwccal2GtxXAcjIFrtopqKgBYZL3V7QstMMtTKzeD6MjwbRlUyBGqdOFva5EL+
+	zZAviDp1BtEppsXVYgs+V2Bv6FUkjz4ze7G4hx/xzLeYKo3lj1nTcByka5O630M2hyO18C
+	HD5SodwmJhkiySidSSxQgoeT59YxVg==
 Received: from cachy-ak (88.215.123.80.dyn.pyur.net [88.215.123.80])
-	by mta.al2klimov.de (OpenSMTPD) with ESMTPSA id af376ef6 (TLSv1.3:TLS_CHACHA20_POLY1305_SHA256:256:NO);
-	Sun, 31 May 2026 19:53:52 +0000 (UTC)
+	by mta.al2klimov.de (OpenSMTPD) with ESMTPSA id e9e32a2c (TLSv1.3:TLS_CHACHA20_POLY1305_SHA256:256:NO);
+	Sun, 31 May 2026 19:55:34 +0000 (UTC)
 From: "Alexander A. Klimov" <grandmaster@al2klimov.de>
 To: 
 Cc: "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-	Peter De Schrijver <pdeschrijver@nvidia.com>,
-	Prashant Gaikwad <pgaikwad@nvidia.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Brian Masney <bmasney@redhat.com>,
-	Thierry Reding <thierry.reding@kernel.org>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
+	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
-	linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT),
+	Eric Anholt <eric@anholt.net>,
+	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
 	linux-kernel@vger.kernel.org (open list),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH v2] clk: tegra: tegra124-emc: fix krealloc() memory leak
-Date: Sun, 31 May 2026 21:52:52 +0200
-Message-ID: <20260531195313.99447-1-grandmaster@al2klimov.de>
+Subject: [PATCH v2] drm/vc4: fix krealloc() memory leak
+Date: Sun, 31 May 2026 21:55:10 +0200
+Message-ID: <20260531195515.99623-1-grandmaster@al2klimov.de>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <ahilgKKwkttOd9H6@orome>
-References: <ahilgKKwkttOd9H6@orome>
+In-Reply-To: <2b602ec6-d563-4fa0-a0c5-89b97a46abf9@igalia.com>
+References: <2b602ec6-d563-4fa0-a0c5-89b97a46abf9@igalia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,46 +75,48 @@ and only then assign it to the original pointer:
     if (!TMP) return;
     MEM = TMP;
 
-Fixes: 888ca40e2843 ("clk: tegra: emc: Support multiple RAM codes")
+Fixes: 6d45c81d229d ("drm/vc4: Add support for branching in shader validation.")
 Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 ---
- v2: Separate variable declaration/init
+ v2: Declare the variable explicitly
+ v2: Instead of void *, use u32 *
  v2: While on it, enhance variable name
- v2: While on it, explicit variable type
- v2: While on it, re-order variables (reverse Xmas tree)
 
  [✓] scripts/checkpatch.pl --strict
  [✓] allmodconfig compiled (i686, LLVM)
  [✓] localyesconfig booted (IBM T43)
 
- Note to myself: use --in-reply-to=ahilgKKwkttOd9H6@orome
+ Note to myself: use --in-reply-to=2b602ec6-d563-4fa0-a0c5-89b97a46abf9@igalia.com
 
- drivers/clk/tegra/clk-tegra124-emc.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/vc4/vc4_validate_shaders.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-tegra124-emc.c b/drivers/clk/tegra/clk-tegra124-emc.c
-index f3b2c96fdcfc..81e4c02a807c 100644
---- a/drivers/clk/tegra/clk-tegra124-emc.c
-+++ b/drivers/clk/tegra/clk-tegra124-emc.c
-@@ -445,15 +445,17 @@ static int load_timings_from_dt(struct tegra_clk_emc *tegra,
+diff --git a/drivers/gpu/drm/vc4/vc4_validate_shaders.c b/drivers/gpu/drm/vc4/vc4_validate_shaders.c
+index d48cf76983c0..6f52b4db9cc9 100644
+--- a/drivers/gpu/drm/vc4/vc4_validate_shaders.c
++++ b/drivers/gpu/drm/vc4/vc4_validate_shaders.c
+@@ -290,15 +290,16 @@ static bool require_uniform_address_uniform(struct vc4_validated_shader_info *va
  {
- 	struct emc_timing *timings_ptr;
- 	int child_count = of_get_child_count(node);
-+	struct emc_timing *timings;
- 	int i = 0, err;
- 	size_t size;
+ 	uint32_t o = validated_shader->num_uniform_addr_offsets;
+ 	uint32_t num_uniforms = validated_shader->uniforms_size / 4;
++	u32 *offsets;
  
- 	size = (tegra->num_timings + child_count) * sizeof(struct emc_timing);
+-	validated_shader->uniform_addr_offsets =
+-		krealloc(validated_shader->uniform_addr_offsets,
+-			 (o + 1) *
+-			 sizeof(*validated_shader->uniform_addr_offsets),
+-			 GFP_KERNEL);
+-	if (!validated_shader->uniform_addr_offsets)
++	offsets = krealloc(validated_shader->uniform_addr_offsets,
++			   (o + 1) *
++			   sizeof(*validated_shader->uniform_addr_offsets),
++			   GFP_KERNEL);
++	if (!offsets)
+ 		return false;
  
--	tegra->timings = krealloc(tegra->timings, size, GFP_KERNEL);
--	if (!tegra->timings)
-+	timings = krealloc(tegra->timings, size, GFP_KERNEL);
-+	if (!timings)
- 		return -ENOMEM;
- 
-+	tegra->timings = timings;
- 	timings_ptr = tegra->timings + tegra->num_timings;
- 	tegra->num_timings += child_count;
++	validated_shader->uniform_addr_offsets = offsets;
+ 	validated_shader->uniform_addr_offsets[o] = num_uniforms;
+ 	validated_shader->num_uniform_addr_offsets++;
  
 -- 
 2.54.0
