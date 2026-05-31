@@ -1,53 +1,53 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C1E1891A9
-	for <llvm@lists.linux.dev>; Sun, 31 May 2026 01:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A469299959
+	for <llvm@lists.linux.dev>; Sun, 31 May 2026 01:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780189679; cv=none; b=fusoYPaGQ5U1G510Qt5TRHKcWMfI6wzFVKiPLIb6iHY3IONHKdIoWHQ0W0FwYQ5XhcRXmNidiIeSFCnqBZTfGdqTvkG+Ot0MW9glEYU6+c7l1bX2ZRunx4TsE2XnJOvTxCzX0QRIg9nbyAAT0wGSwfIMKIsaCc3brPF0FOKOskQ=
+	t=1780189778; cv=none; b=BhKlJ6mXq55v/DLHAMSyTRKyPD4+Qdv5MQXk5WRwDf7A0HeMsoY059CCIdb4RQVSWdZgNcefxq5cSHjMSed1vHG69WNbGaUC7Ob2IRUJAQKzUbllju+Vsp89E5rVDdITYyeaHTYLtb86g7/gMUJKrPo+qrZp6ihGd34fU1+XcYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780189679; c=relaxed/simple;
-	bh=l/IOAmzqAWxn3px4qTqpAPWLw3OXzvVmnFcKE59vi9U=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Wrn8OO5vxgnVW3WFUmKyEGXxlyqfqtTBDxHdRMHYjpAEsXaL4RtFMo0Qnok12xUvrKtzZp85vJJpeSttfmyu4e/iL86Nebzk3pacfme+XGQyOTc7B3V2hwQHuOw/d+JZWcVkDnoxQVfXdZqTqgMEaagipGZqNabJvMFUnZUMd4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NBzxz68T; arc=none smtp.client-ip=74.125.82.202
+	s=arc-20240116; t=1780189778; c=relaxed/simple;
+	bh=GsGocHcq/Q0vfetgMY4nWIE8g9RqWN7YqLOVtvPKOXE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=kUgFvYfbeVLwiacCDw7bNqRTM3fNzu7+5daGP2GOGk1iUkEl3xsVOHAVBxKfwpck9bSPvi32SkiQtuNtOoYph6HPrUkPJJDLvKNpLGqj7v4DLNQvrV1onjtgJhTjgSOxrNend9fW4SdH2LZotxH0/rbL9FIVOvD20nENQe9E+sQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QJQD6Gga; arc=none smtp.client-ip=74.125.82.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NBzxz68T"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-304ee7d1368so1686391eec.0
-        for <llvm@lists.linux.dev>; Sat, 30 May 2026 18:07:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QJQD6Gga"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-135916eefa0so8972470c88.1
+        for <llvm@lists.linux.dev>; Sat, 30 May 2026 18:09:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780189675; x=1780794475; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1780189776; x=1780794576; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=7kr1agsQxN7R+ckqIUhhb0WeLzMOoxPB09KTg0cF36Y=;
-        b=NBzxz68TICKIDxWPQEPw4FozlPD5PskEI+1R2YtwtXoEJ4QM/Gyy7RObbURZQvTFoP
-         qSkpU/qAORj8CebvwvYC7vbO/M7w82GMw4O2UfNI8UlBn+xDZmV+VR4qyAtoAF5umJTh
-         670ESwo2pEKruo2/Z8ZpfZ60E2nVjN6/KiD+HmOEi+Dw/rzNxLG5nko97BhxPTIorGC2
-         utDWCGlO3G1lzkjQdR5jZCSUEo2ztH0N4UgwB46uPzzMsoHUeVXl/s1Ktay/347ofs+K
-         HrfbdpwmjLFcrJkkVk67AKlEKAP7EdZf5/zA/ZSLycVn3CvOLz6wumF3Sgu4ltlFB99x
-         lsCQ==
+        bh=6OZnvWRalzD/CmOsCs1H78dHBBpbTxm9Yjlm+cCugng=;
+        b=QJQD6GgaVlHGa1WbVLZ+BbJHiwNIILaXUFAQELVofO0rZbU4KKfk1E9tBrmDOFfWy5
+         Qt5uPxf1Jfh+6gyCjUsNcrAdaaOn1TstIMhF8sqA3Xt4P16n1mtnI2W8PT9LBeYrYZCj
+         TS/GmAJQRTqAEj2oawiwjrFIK/PI6P/xaQc3eFGfR00ux5MUhtx16u3ziiuoxJxJ30nE
+         1KkkrWI/CXBPrKJ7CeWNJVuP0fJhKYQq3d4LTBpjZ/+HsH+Jso2gp39hfNelpHzd1eb7
+         d2pVINTXI9RtknkMl4bFszkzig9cJWv6kVs4P9aujGW8Sid1w5pwciWoNs9w7e3qy0WF
+         jPUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780189675; x=1780794475;
+        d=1e100.net; s=20251104; t=1780189776; x=1780794576;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7kr1agsQxN7R+ckqIUhhb0WeLzMOoxPB09KTg0cF36Y=;
-        b=AwSrjeRP43/pW6CZxgYFROnsQqUGqSJJyZtU30viG8sqdXaP8V4u3CBVD1LFBM9pWC
-         osb0hKnR524g2PTfzt/HKW5oH733LL8AtN/3XtgsSTS/OwwMS2qH9tW/1NUjsWAKxFqj
-         j6e2d7FkeMTZ8J/rGWgo4+XBcbREmdWWhmze/TFeb0LIVcBNopYrsLNkoRqit6XMj5Is
-         qfSL73v0HAPJXzpjTAzEXOIgWaFgRBusIOldadTOXxWggGg391PwHRbJVReuhc3w2ZzN
-         0FogMvQrfNPod2Ukp/VIiJNg5mT+yzffo7L8Xt9z0Jvs3so3Oc8ZrbFE3g6fcXsvh0m/
-         t2Rw==
-X-Forwarded-Encrypted: i=1; AFNElJ/GEljsUMGjLjPIbomo6k+bBp0eEJkTTsOjfuxLusS4KQH59AANTnOhzTyVLxJf1hcTm6Rr@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywbkt4BRjB/HA7ZecSb3Q+LcwaVNax+M9xmxF2Y6kEF3Ys1g7jz
-	qZzzNU/ySvaFy0MN6ChsgNYqCFOwR4Tav1+7KzmDIV6Q01CuPstYCFUsoMuA30EJ9UwVohAtVWA
-	OwQkHD1oKYg==
-X-Received: from dybmi48.prod.google.com ([2002:a05:7301:fb0:b0:304:d272:2198])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:578e:b0:2e2:4979:eb5
- with SMTP id 5a478bee46e88-304fa4d7a78mr2732026eec.10.1780189674615; Sat, 30
- May 2026 18:07:54 -0700 (PDT)
-Date: Sat, 30 May 2026 18:07:50 -0700
+        bh=6OZnvWRalzD/CmOsCs1H78dHBBpbTxm9Yjlm+cCugng=;
+        b=M+9S8BQe2MpOnauonnT1c6M8EHSaJmRpbCLzYOFT6HtmAZTVA5tK17ECkLMfUtwUWa
+         ewXgQWdHKlvEZ7Xdc0N23kMAVpvLR8WKnVlB970Sxj4CjX/8N3SNUbNmvQVPcGkJR3vb
+         hpIH+NUosC971BhCSMfPWJUVSmlQFPAXWea7Jp0yuA1747nS+1SsE5k4SkmeYJxVJWzk
+         gjkGcw2xrzVvpG+FUfNVX+xX+1oqk68R6QQZKtfBgeEX+gZtCavqIr1pTnxki4kivTqm
+         12svKhG2IajHe2QKzvz/QPsqWOYQswKfHonETnoE5R0rlvjFtnQZqRLx7yJBjTWB0Oqp
+         u3qQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9TSJu7isSud/sBI4hzVNAFYePy98uKhBNtfGB9NKEYaHzHQKZ7gc1lmVmKuK5SN7ijou/L@lists.linux.dev
+X-Gm-Message-State: AOJu0YwL7d2XStttCmy0ywmdlvVVU6juDwWvDcojmcYj+1EoVFw8y/YV
+	jAY8+n+xeJREl2qfm84i2x+7EUAp55nMBWDRjITQzBd1UM4ApzZT6vkCVZbSO771gcTg5rwv4mN
+	s+t529yfjfg==
+X-Received: from dlbrl27.prod.google.com ([2002:a05:7022:f51b:b0:136:9842:a8cb])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:421:b0:12d:de3f:d843
+ with SMTP id a92af1059eb24-137d425071fmr2460172c88.38.1780189775362; Sat, 30
+ May 2026 18:09:35 -0700 (PDT)
+Date: Sat, 30 May 2026 18:09:24 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,66 +55,84 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.54.0.823.g6e5bcc1fc9-goog
-Message-ID: <20260531010750.525160-1-irogers@google.com>
-Subject: [PATCH v1] bpftool build: Restrict feature tests during bootstrap compilation
+Message-ID: <20260531010924.525824-1-irogers@google.com>
+Subject: [PATCH v1] tools build: Fix feature checks to touch target files on success
 From: Ian Rogers <irogers@google.com>
-To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: linux-perf-users@vger.kernel.org, Ian Rogers <irogers@google.com>, 
-	James Clark <james.clark@linaro.org>
+To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Dmitrii Dolgov <9erthalion6@gmail.com>, James Clark <james.clark@linaro.org>, 
+	Leo Yan <leo.yan@arm.com>, Costa Shulyupin <costa.shul@redhat.com>, Yuzhuo Jing <yuzhuo@google.com>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Cc: linux-perf-users@vger.kernel.org, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-When the perf build executes 'make -C ../bpf/bpftool bootstrap', bpftool's
-Makefile unconditionally evaluated feature checks for llvm, libcap, libbfd,
-and disassembler libraries because the bootstrap target was not exempted.
+In tools/build/feature/Makefile, test-clang-bpf-co-re.bin and
+test-bpftool-skeletons.bin redirected grep output but never touched or
+created the $@ target file upon success.
 
-Since the bootstrap bpftool strictly compiles minimal AST parsing and C
-code generation logic without linking LLVM or disassembler libraries, these
-feature check sub-makes are completely redundant.
+Because the target file was never created on disk, Kbuild could never cache
+the result of the check. Consequently, Make treated the prerequisite as
+missing and continuously re-executed the Clang BPF backend and bpftool
+feature checks on every single sub-make evaluation during build startup, or
+on every incremental build.
 
-Exempt the bootstrap target from non-essential feature tests to eliminate
-unneeded sub-make fork overhead during Kbuild startup.
+Refactor both feature check recipes to touch $@ on success. For
+test-clang-bpf-co-re.bin, group the shell pipeline within curly braces
+and redirect both stdout and stderr to .make.output to allow errors to
+be inspected and not appear in build output. List
+test-clang-bpf-co-re.bin's input C file as a dependency so
+modification triggers a rebuild. For test-bpftool-skeletons.bin, add
+it to the FILES list so that it will be cleaned.
 
 Tested-by: James Clark <james.clark@linaro.org>
 Assisted-by: Gemini:gemini-3.1-pro-preview
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
 This patch originally appeared in the now merged perf patch series:
-https://lore.kernel.org/linux-perf-users/20260514163409.927816-1-irogers@google.com/
+https://lore.kernel.org/linux-perf-users/20260518154638.2798789-1-irogers@google.com/
 ---
- tools/bpf/bpftool/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/build/feature/Makefile | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 0febf60e1b64..8f50bc163bb2 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -106,6 +106,10 @@ ifneq ($(SKIP_CRYPTO),1)
-   CRYPTO_LIBS := -lcrypto
- endif
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 704c687ed3ad..5b4a984973c4 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -75,7 +75,8 @@ FILES=                                          \
+          test-file-handle.bin			\
+          test-libpfm4.bin			\
+          test-rust.bin				\
+-         test-libopenssl.bin
++         test-libopenssl.bin			\
++         test-bpftool-skeletons.bin
  
-+ifeq ($(MAKECMDGOALS),bootstrap)
-+FEATURE_TESTS := libelf-zstd
-+FEATURE_DISPLAY :=
-+else
- FEATURE_TESTS := clang-bpf-co-re
- FEATURE_TESTS += llvm
- FEATURE_TESTS += libcap
-@@ -122,6 +126,7 @@ FEATURE_DISPLAY += libcap
- FEATURE_DISPLAY += libbfd
- FEATURE_DISPLAY += libbfd-liberty
- FEATURE_DISPLAY += libbfd-liberty-z
-+endif
+ FILES := $(addprefix $(OUTPUT),$(FILES))
  
- check_feat := 1
- NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
+@@ -383,9 +384,9 @@ $(OUTPUT)test-libaio.bin:
+ $(OUTPUT)test-libzstd.bin:
+ 	$(BUILD) -lzstd
+ 
+-$(OUTPUT)test-clang-bpf-co-re.bin:
+-	$(CLANG) -S -g --target=bpf -o - $(patsubst %.bin,%.c,$(@F)) |	\
+-		grep BTF_KIND_VAR
++$(OUTPUT)test-clang-bpf-co-re.bin: test-clang-bpf-co-re.c
++	{ $(CLANG) -S -g --target=bpf -o - $< |	\
++		grep BTF_KIND_VAR; } > $(@:.bin=.make.output) 2>&1 && touch $@
+ 
+ $(OUTPUT)test-file-handle.bin:
+ 	$(BUILD)
+@@ -397,8 +398,8 @@ $(OUTPUT)test-libopenssl.bin:
+ 	$(BUILD) $(shell $(PKG_CONFIG) --libs --cflags openssl 2>/dev/null)
+ 
+ $(OUTPUT)test-bpftool-skeletons.bin:
+-	$(SYSTEM_BPFTOOL) version | grep '^features:.*skeletons' \
+-		> $(@:.bin=.make.output) 2>&1
++	{ $(SYSTEM_BPFTOOL) version | grep '^features:.*skeletons'; } \
++		> $(@:.bin=.make.output) 2>&1 && touch $@
+ 
+ # Testing Rust is special: we don't compile anything, it's enough to check the
+ # compiler presence. Compiling a test code for this purposes is problematic,
 -- 
 2.54.0.823.g6e5bcc1fc9-goog
 
