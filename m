@@ -1,123 +1,121 @@
-Received: from mta.al2klimov.de (mta.al2klimov.de [162.55.223.79])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EADDB231A23
-	for <llvm@lists.linux.dev>; Sun, 31 May 2026 19:55:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.55.223.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF42340286;
+	Sun, 31 May 2026 22:07:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780257343; cv=none; b=uw7eIcWa0yaCyZhAHoj9k1jku+/Fc/PcETlI8zgI0LoAsKgGO2CFTxQ8K8hNTqaoOUJcb3zDaNa6ZQa6rpZW+naia53go1LRFhP3yhWiIgL+Y57fHLGWG+1d8202Nizst3upP1pyuxO1S8csBafgmxf2SyMXhZX3JLrDaIiOqlI=
+	t=1780265241; cv=none; b=uQx5oRY9cc2izLpNTp1yX0hPBzjvf33CGmOjGOg123wrLRSKgCt6fNLQmo0C9u3FD3wW63yJeilXcnDGj4Shr/lF1EZRqVqMYGi5Ivg6Iec29WVt29FoQrP5ArEAcj+RhoZ1nv/VQIdnhZ7pGRQxY7XHxohArjHnWrQi3EDHWJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780257343; c=relaxed/simple;
-	bh=ZoukwfSF8bc4T0zOTYJl0C8sMTVJuamWQpd1iB8O5oY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QawtyDjMjNbxUgObDy/sXH4kNmqKJMcsAHyEDx1RDRJn8G6C/1ey9241Ir4J4DlIvUgU6zMS1IXCVQLh+KaDEd8llgpbuh9c7xC3kjGCVMPsCWUsBDhcNJ87pfPzsKsLUM/AdTUk8Mug2sDsP0hh8ACCVxWqutjRcJRPvCHDwFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=al2klimov.de; spf=pass smtp.mailfrom=al2klimov.de; dkim=pass (2048-bit key) header.d=al2klimov.de header.i=@al2klimov.de header.b=KlI1Nk1I; arc=none smtp.client-ip=162.55.223.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=al2klimov.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=al2klimov.de
+	s=arc-20240116; t=1780265241; c=relaxed/simple;
+	bh=OC1tIHIWUROzbHD1lUZmdBMrG+oesiCUnmWJURbLs1U=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=fraSskGpNp6AopvjYX/2qDkLxNIu1zQsAbInN0V3t55QEDUd9pXpMYL8xIy3zs1BhpdHp8Bl3WaQfKj7rvXl5rtb+FAzEN1ThjvS0U3/GVKktHxNR/RFDO/P6uq7W2tKnooTYgNUdd/EIhcIiDtZ/NJjfmpnlsycAboagNgvUD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YNhmKpQZ; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=al2klimov.de header.i=@al2klimov.de header.b="KlI1Nk1I"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=default; bh=ZoukwfSF8bc4
-	T0zOTYJl0C8sMTVJuamWQpd1iB8O5oY=; h=references:in-reply-to:date:
-	subject:cc:to:from; d=al2klimov.de; b=KlI1Nk1IOl7Xplg+KLj9PasHUyKo26zW
-	v28XKYaCn9XtSp0HAIfaO8UMXsl8cxjmvHwqi0u8PcTsJcxgNE71K0HH9jp2oL6YY/k7QP
-	FUb70eJWpnX1Q0tCl+UsGKhhGtcBrmX42C4Xto3lpk4Y1d9HGGocI197vR9Rlekqxy745Y
-	NNq2qmcLXwccal2GtxXAcjIFrtopqKgBYZL3V7QstMMtTKzeD6MjwbRlUyBGqdOFva5EL+
-	zZAviDp1BtEppsXVYgs+V2Bv6FUkjz4ze7G4hx/xzLeYKo3lj1nTcByka5O630M2hyO18C
-	HD5SodwmJhkiySidSSxQgoeT59YxVg==
-Received: from cachy-ak (88.215.123.80.dyn.pyur.net [88.215.123.80])
-	by mta.al2klimov.de (OpenSMTPD) with ESMTPSA id e9e32a2c (TLSv1.3:TLS_CHACHA20_POLY1305_SHA256:256:NO);
-	Sun, 31 May 2026 19:55:34 +0000 (UTC)
-From: "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To: 
-Cc: "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-	Maxime Ripard <mripard@kernel.org>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
-	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Eric Anholt <eric@anholt.net>,
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH v2] drm/vc4: fix krealloc() memory leak
-Date: Sun, 31 May 2026 21:55:10 +0200
-Message-ID: <20260531195515.99623-1-grandmaster@al2klimov.de>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <2b602ec6-d563-4fa0-a0c5-89b97a46abf9@igalia.com>
-References: <2b602ec6-d563-4fa0-a0c5-89b97a46abf9@igalia.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YNhmKpQZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780265239; x=1811801239;
+  h=date:from:to:cc:subject:message-id;
+  bh=OC1tIHIWUROzbHD1lUZmdBMrG+oesiCUnmWJURbLs1U=;
+  b=YNhmKpQZAIeLy+5UG1WCATMGwPn7yexF4ssjTaqoymoBjPdRLtwHwWG4
+   m4WbSXWSlpd4fGzjhW8HGwg6R/z1wtYTpLZ+7cVhh6r7bvbzD7G/QhzHW
+   hO5T3jSyoSi4DePtxY5VMu/ckKzpvWeInayenGGxSyNnUbb93UlegxUMd
+   TQAoq+uvUFC5e4/r5qOUMxjGkaDlh1IHlDasscZI3OLSzbezei6mDVBZq
+   VgKhSlgpdKncWnkmqyq9RldwpghTMj6JlrQm+v6t+d9M4pE090UYysN5t
+   f016AUwbqX7/yxbyY2uMJoTz5U6JLfhXDv2/4HdWwjQA/wStReY7THlU7
+   w==;
+X-CSE-ConnectionGUID: tuzvfp5oT16AXgMqLNAZFw==
+X-CSE-MsgGUID: ntoL6BcRRIe3SZYP/CcIwg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11803"; a="80755050"
+X-IronPort-AV: E=Sophos;i="6.24,180,1774335600"; 
+   d="scan'208";a="80755050"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2026 15:07:19 -0700
+X-CSE-ConnectionGUID: RxyWV6MCSP6WnVHXv+og5w==
+X-CSE-MsgGUID: CSkhTnxdS6uNrJH7fnaJjA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,180,1774335600"; 
+   d="scan'208";a="243491624"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 31 May 2026 15:07:17 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wToJO-000000009n2-3Msc;
+	Sun, 31 May 2026 22:07:14 +0000
+Date: Mon, 01 Jun 2026 06:06:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Crystal Wood <crwood@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Steven Rostedt <rostedt@goodmis.org>
+Subject: [trace:latency/for-next 2/2]
+ kernel/trace/trace_osnoise.c:96:44: warning: diagnostic behavior may be
+ improved by adding the 'format(printf, 1, 2)' attribute to the declaration of
+ 'osnoise_print'
+Message-ID: <202606010552.jzJfWIjv-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Don't just overwrite the original pointer passed to krealloc()
-with its return value without checking latter:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace latency/for-next
+head:   9cb99c598643ba78638dfd668cf020544159cf70
+commit: 9cb99c598643ba78638dfd668cf020544159cf70 [2/2] tracing/osnoise: Array printk init and cleanup
+config: powerpc64-randconfig-001-20260531 (https://download.01.org/0day-ci/archive/20260601/202606010552.jzJfWIjv-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9409c07de6378507397ecdb6f05f628f58110112)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260601/202606010552.jzJfWIjv-lkp@intel.com/reproduce)
 
-    MEM = krealloc(MEM, SZ, GFP);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606010552.jzJfWIjv-lkp@intel.com/
 
-If krealloc() returns NULL, that erases the pointer
-to the still allocated memory, hence leaks this memory.
-Instead, use a temporary variable, check it's not NULL
-and only then assign it to the original pointer:
+All warnings (new ones prefixed by >>):
 
-    TMP = krealloc(MEM, SZ, GFP);
-    if (!TMP) return;
-    MEM = TMP;
+>> kernel/trace/trace_osnoise.c:96:44: warning: diagnostic behavior may be improved by adding the 'format(printf, 1, 2)' attribute to the declaration of 'osnoise_print' [-Wmissing-format-attribute]
+      86 | static void osnoise_print(const char *fmt, ...)
+         | __attribute__((format(printf, 1, 2))) 
+      87 | {
+      88 |         struct osnoise_instance *inst;
+      89 |         struct trace_array *tr;
+      90 |         va_list ap;
+      91 | 
+      92 |         rcu_read_lock();
+      93 |         list_for_each_entry_rcu(inst, &osnoise_instances, list) {
+      94 |                 tr = inst->tr;
+      95 |                 va_start(ap, fmt);
+      96 |                 trace_array_vprintk(tr, _RET_IP_, fmt, ap);
+         |                                                          ^
+   kernel/trace/trace_osnoise.c:86:13: note: 'osnoise_print' declared here
+      86 | static void osnoise_print(const char *fmt, ...)
+         |             ^
+   1 warning generated.
 
-Fixes: 6d45c81d229d ("drm/vc4: Add support for branching in shader validation.")
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
----
- v2: Declare the variable explicitly
- v2: Instead of void *, use u32 *
- v2: While on it, enhance variable name
 
- [✓] scripts/checkpatch.pl --strict
- [✓] allmodconfig compiled (i686, LLVM)
- [✓] localyesconfig booted (IBM T43)
+vim +96 kernel/trace/trace_osnoise.c
 
- Note to myself: use --in-reply-to=2b602ec6-d563-4fa0-a0c5-89b97a46abf9@igalia.com
+    85	
+    86	static void osnoise_print(const char *fmt, ...)
+    87	{
+    88		struct osnoise_instance *inst;
+    89		struct trace_array *tr;
+    90		va_list ap;
+    91	
+    92		rcu_read_lock();
+    93		list_for_each_entry_rcu(inst, &osnoise_instances, list) {
+    94			tr = inst->tr;
+    95			va_start(ap, fmt);
+  > 96			trace_array_vprintk(tr, _RET_IP_, fmt, ap);
+    97			va_end(ap);
+    98		}
+    99		rcu_read_unlock();
+   100	}
+   101	
 
- drivers/gpu/drm/vc4/vc4_validate_shaders.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/gpu/drm/vc4/vc4_validate_shaders.c b/drivers/gpu/drm/vc4/vc4_validate_shaders.c
-index d48cf76983c0..6f52b4db9cc9 100644
---- a/drivers/gpu/drm/vc4/vc4_validate_shaders.c
-+++ b/drivers/gpu/drm/vc4/vc4_validate_shaders.c
-@@ -290,15 +290,16 @@ static bool require_uniform_address_uniform(struct vc4_validated_shader_info *va
- {
- 	uint32_t o = validated_shader->num_uniform_addr_offsets;
- 	uint32_t num_uniforms = validated_shader->uniforms_size / 4;
-+	u32 *offsets;
- 
--	validated_shader->uniform_addr_offsets =
--		krealloc(validated_shader->uniform_addr_offsets,
--			 (o + 1) *
--			 sizeof(*validated_shader->uniform_addr_offsets),
--			 GFP_KERNEL);
--	if (!validated_shader->uniform_addr_offsets)
-+	offsets = krealloc(validated_shader->uniform_addr_offsets,
-+			   (o + 1) *
-+			   sizeof(*validated_shader->uniform_addr_offsets),
-+			   GFP_KERNEL);
-+	if (!offsets)
- 		return false;
- 
-+	validated_shader->uniform_addr_offsets = offsets;
- 	validated_shader->uniform_addr_offsets[o] = num_uniforms;
- 	validated_shader->num_uniform_addr_offsets++;
- 
--- 
-2.54.0
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
