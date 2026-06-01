@@ -1,215 +1,329 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5CF23E1221;
-	Mon,  1 Jun 2026 17:53:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9164303A35;
+	Mon,  1 Jun 2026 19:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780336403; cv=none; b=X9tj3W3+bbwEUBopKyvj3Z2YyyAHyL0wuSItYEO1fYutJ258tQChGpP9N/ExWUe13mwE9c/l1KdwY+zYZ37MNnU0QfNseMVltrY5QJrPHhKohAA7AsQDXvRcYUetmpJfDLuozUUbZDj7cCnwIZSweo5jpzVLvIcasi206K35vW0=
+	t=1780341302; cv=none; b=HO+zUHwvVEziJKAxrTuLLyd4a+SwHZ6YndiwGTZT5ezN0+Ak2mr80XYWdwBdP4Tqj/GQn1OGv5T9bmPNYxPgD2mh17Xw0GplPcS8dp7QZ7Y4QUyH6HvJSUZ5WBb1mpPfXByN6NPeNSq5E4nSzFlYuue1ksB5S0UCGN6ZddYj6EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780336403; c=relaxed/simple;
-	bh=WRfOe0RWs25AtPRCRm97YZQP2oRBirOhTTiBl3XaWC8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bd1aACXYu0kGPYcGg+FYUyFnlTO873CWkTEgmGrOyTD6rcWzEI6KXL1hV11hCeLDwQmcNXkcpY+zr8a5xm5LPCpmgKz3K76kCJjeM8MTCMHLWSicdetopp7l4b5dkAhEALZnbCmExUYR0lA4Xzs6vRBh6O/CTY36xscQZQ6/a/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a1XqAMxD; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1780341302; c=relaxed/simple;
+	bh=7lmabJPasWrY6uualkK8nL5U1EO14ylNex6xC70nGaw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=HWx2eMIcow25RfUdxsHVOnPQkep2bBkOAbtOn2q5IWKyEgnCym1MvxF1s5iVyZn5wTPhND1RU+29s7arkDRSIU1HXlcBQwdWT5YvqNO6woB1OAeX8NVkhNBLqDMIyZ9FQtwOYVjhOW3Y8F0jtzPG1uTdGQqRmsR+P6HStKMuVBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T1u2jYYO; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a1XqAMxD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T1u2jYYO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780336401; x=1811872401;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WRfOe0RWs25AtPRCRm97YZQP2oRBirOhTTiBl3XaWC8=;
-  b=a1XqAMxDZYkWZIeB2nkdmcl34nE0jMw3+LgJSsQp3fBOiuoK4Y4c4zNs
-   HisetbwsbYQelD8sJYck/VzGl3vFwFduPEtXrrpp3SzzDrgg8wnzSGDx8
-   t0TggmwZeiLEC8/pYj9jFxUnxhECxeYnWG7cQAymgkfxH9L46RBOxfIUT
-   b2cV9wIXRtoXrAwMdILRkqR1UaIcotfpblo/aLjYwvVgRc9tmNFSNWbOY
-   KrP4Gl6dOEUwR+ivpWyjRlhx0WNnO7ohz4qXdaZVOksrvgSoN4tz5GD7v
-   1nsMxFYa0qeP+A5eReIX6CKp451+j5ohLFZ3z7gek+XaJ7QrDY5fa+zgy
-   g==;
-X-CSE-ConnectionGUID: dnnoDrxFTnOBfeZYZk40Qg==
-X-CSE-MsgGUID: pbSTnPtITSeo5el8gEVpbQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11804"; a="81163603"
+  t=1780341299; x=1811877299;
+  h=date:from:to:cc:subject:message-id;
+  bh=7lmabJPasWrY6uualkK8nL5U1EO14ylNex6xC70nGaw=;
+  b=T1u2jYYOV4wFO+Eo0MTpUTUyfMJG8iMC5OhPEy4/3LVJuT7h9bo+ivUp
+   dmHfKGlXVkSURqOQYjKomuGSb9s8IZU29QJw37VNoYdXmItCsFT4Ttiin
+   IuBZHDjgh935nA/75SZ4nGLhytwzArUkPGdfKltInoQXKuwfrsrmiXx/k
+   hPSl0YasuBVCns7bpFIYrqcYmzJ9B4b2bU5iNl1HnciKbxy1Vxp2Vzba5
+   h0JotSP4JcnfR+aHQj7XD2maN+1TsEtVgrKEHp3oSlBPZm/xPgjyW2+tX
+   npOyqKclRYL+0p3trS80sbuyn3K8Om9V28HK7Ru08Gt2xlX5nrXapey9J
+   Q==;
+X-CSE-ConnectionGUID: fHSOgkHyQXGU2QKoAuSBlw==
+X-CSE-MsgGUID: 6DL0OcIKQfC/G8a+wx95vA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11804"; a="81082924"
 X-IronPort-AV: E=Sophos;i="6.24,181,1774335600"; 
-   d="scan'208";a="81163603"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2026 10:53:20 -0700
-X-CSE-ConnectionGUID: eu1U6JSdTVKqz656e67pYg==
-X-CSE-MsgGUID: HPjciOlzT461v4RZYqQE+g==
+   d="scan'208";a="81082924"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2026 12:14:59 -0700
+X-CSE-ConnectionGUID: 0oEo0LnaRPCkACIeYqCR2Q==
+X-CSE-MsgGUID: x9dMIns9QL2QQcX/uPDuhQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,181,1774335600"; 
-   d="scan'208";a="241136374"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa008.fm.intel.com with ESMTP; 01 Jun 2026 10:53:16 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+   d="scan'208";a="273942580"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 01 Jun 2026 12:14:57 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wU6p8-000000001cP-34OC;
-	Mon, 01 Jun 2026 17:53:14 +0000
-Date: Mon, 1 Jun 2026 19:52:58 +0200
+	id 1wU86A-00000000AzK-1V1I;
+	Mon, 01 Jun 2026 19:14:54 +0000
+Date: Tue, 02 Jun 2026 03:14:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Simon Horman <horms@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org,
-	eric.dumazet@gmail.com, Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next] mptcp: change mptcp_established_options() to
- return opt_size
-Message-ID: <202606011921.XxnF0IB7-lkp@intel.com>
-References: <20260601091816.444738-1-edumazet@google.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-06-01-3 290/290]
+ sound/soc/mediatek/mt8186/mt8186-mt6366.c:1303:3: error: initializer element
+ is not a compile-time constant
+Message-ID: <202606020221.IAtsG18f-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260601091816.444738-1-edumazet@google.com>
 
-Hi Eric,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/mptcp-change-mptcp_established_options-to-return-opt_size/20260601-174435
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260601091816.444738-1-edumazet%40google.com
-patch subject: [PATCH net-next] mptcp: change mptcp_established_options() to return opt_size
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260601/202606011921.XxnF0IB7-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260601/202606011921.XxnF0IB7-lkp@intel.com/reproduce)
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-01-3
+head:   1ef39bbdce9099b285b9702e22c4defc277e42dd
+commit: cc97e5ee4f734c20e86677cf9ed8ac4c87277f2a [290/290] ASoC: mediatek: common: use snd_soc_card_register()
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20260602/202606020221.IAtsG18f-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e5ab4f8a1f766febdc65ce89c00dec85393cfd68)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260602/202606020221.IAtsG18f-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606011921.XxnF0IB7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606020221.IAtsG18f-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/ipv4/tcp_output.c:1187:24: error: too few arguments to function call, expected 5, have 4
-    1186 |                 opt_size = mptcp_established_options(sk, skb, remaining,
-         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~
-    1187 |                                                      &opts->mptcp);
-         |                                                                  ^
-   include/net/mptcp.h:269:19: note: 'mptcp_established_options' declared here
-     269 | static inline int mptcp_established_options(struct sock *sk,
-         |                   ^                         ~~~~~~~~~~~~~~~~
-     270 |                                             struct sk_buff *skb,
-         |                                             ~~~~~~~~~~~~~~~~~~~~
-     271 |                                             unsigned int *size,
-         |                                             ~~~~~~~~~~~~~~~~~~~
-     272 |                                             unsigned int remaining,
-         |                                             ~~~~~~~~~~~~~~~~~~~~~~~
-     273 |                                             struct mptcp_out_options *opts)
-         |                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+   sound/soc/mediatek/mt8186/mt8186-mt6366.c:1099:37: error: variable has incomplete type 'struct snd_soc_card_platform'
+    1099 | static struct snd_soc_card_platform mt8186_mt6366_da7219_max98357_soc_card = {
+         |                                     ^
+   sound/soc/mediatek/mt8186/../common/mtk-soundcard-driver.h:30:9: note: forward declaration of 'struct snd_soc_card_platform'
+      30 |         struct snd_soc_card_platform *card_platform;
+         |                ^
+   sound/soc/mediatek/mt8186/mt8186-mt6366.c:1116:37: error: variable has incomplete type 'struct snd_soc_card_platform'
+    1116 | static struct snd_soc_card_platform mt8186_mt6366_rt1019_rt5682s_soc_card = {
+         |                                     ^
+   sound/soc/mediatek/mt8186/../common/mtk-soundcard-driver.h:30:9: note: forward declaration of 'struct snd_soc_card_platform'
+      30 |         struct snd_soc_card_platform *card_platform;
+         |                ^
+   sound/soc/mediatek/mt8186/mt8186-mt6366.c:1133:37: error: variable has incomplete type 'struct snd_soc_card_platform'
+    1133 | static struct snd_soc_card_platform mt8186_mt6366_rt5682s_max98360_soc_card = {
+         |                                     ^
+   sound/soc/mediatek/mt8186/../common/mtk-soundcard-driver.h:30:9: note: forward declaration of 'struct snd_soc_card_platform'
+      30 |         struct snd_soc_card_platform *card_platform;
+         |                ^
+   sound/soc/mediatek/mt8186/mt8186-mt6366.c:1150:37: error: variable has incomplete type 'struct snd_soc_card_platform'
+    1150 | static struct snd_soc_card_platform mt8186_mt6366_rt5650_soc_card = {
+         |                                     ^
+   sound/soc/mediatek/mt8186/../common/mtk-soundcard-driver.h:30:9: note: forward declaration of 'struct snd_soc_card_platform'
+      30 |         struct snd_soc_card_platform *card_platform;
+         |                ^
+>> sound/soc/mediatek/mt8186/mt8186-mt6366.c:1303:3: error: initializer element is not a compile-time constant
+    1303 |                 .num_jacks = MT8186_JACK_MAX,
+         |                 ^
+   sound/soc/mediatek/mt8186/mt8186-mt6366.c:1315:3: error: initializer element is not a compile-time constant
+    1315 |                 .num_jacks = MT8186_JACK_MAX,
+         |                 ^
+   sound/soc/mediatek/mt8186/mt8186-mt6366.c:1326:3: error: initializer element is not a compile-time constant
+    1326 |                 .num_jacks = MT8186_JACK_MAX,
+         |                 ^
+   sound/soc/mediatek/mt8186/mt8186-mt6366.c:1337:3: error: initializer element is not a compile-time constant
+    1337 |                 .num_jacks = MT8186_JACK_MAX,
+         |                 ^
+   8 errors generated.
+--
+   sound/soc/mediatek/mt8188/mt8188-mt6359.c:1307:37: error: variable has incomplete type 'struct snd_soc_card_platform'
+    1307 | static struct snd_soc_card_platform mt8188_mt6359_soc_card = {
+         |                                     ^
+   sound/soc/mediatek/mt8188/../common/mtk-soundcard-driver.h:30:9: note: forward declaration of 'struct snd_soc_card_platform'
+      30 |         struct snd_soc_card_platform *card_platform;
+         |                ^
+>> sound/soc/mediatek/mt8188/mt8188-mt6359.c:1417:3: error: initializer element is not a compile-time constant
+    1417 |                 .num_jacks = MT8188_JACK_MAX,
+         |                 ^
+   sound/soc/mediatek/mt8188/mt8188-mt6359.c:1427:3: error: initializer element is not a compile-time constant
+    1427 |                 .num_jacks = MT8188_JACK_MAX,
+         |                 ^
+   sound/soc/mediatek/mt8188/mt8188-mt6359.c:1438:3: error: initializer element is not a compile-time constant
+    1438 |                 .num_jacks = MT8188_JACK_MAX,
+         |                 ^
+   sound/soc/mediatek/mt8188/mt8188-mt6359.c:1449:3: error: initializer element is not a compile-time constant
+    1449 |                 .num_jacks = MT8188_JACK_MAX,
+         |                 ^
+   5 errors generated.
+--
+   sound/soc/mediatek/mt8195/mt8195-mt6359.c:1246:37: error: variable has incomplete type 'struct snd_soc_card_platform'
+    1246 | static struct snd_soc_card_platform mt8195_mt6359_soc_card = {
+         |                                     ^
+   sound/soc/mediatek/mt8195/../common/mtk-soundcard-driver.h:30:9: note: forward declaration of 'struct snd_soc_card_platform'
+      30 |         struct snd_soc_card_platform *card_platform;
+         |                ^
+>> sound/soc/mediatek/mt8195/mt8195-mt6359.c:1499:3: error: initializer element is not a compile-time constant
+    1499 |                 .num_jacks = MT8195_JACK_MAX,
+         |                 ^
+   sound/soc/mediatek/mt8195/mt8195-mt6359.c:1512:3: error: initializer element is not a compile-time constant
+    1512 |                 .num_jacks = MT8195_JACK_MAX,
+         |                 ^
+   sound/soc/mediatek/mt8195/mt8195-mt6359.c:1525:3: error: initializer element is not a compile-time constant
+    1525 |                 .num_jacks = MT8195_JACK_MAX,
+         |                 ^
+   sound/soc/mediatek/mt8195/mt8195-mt6359.c:1538:3: error: initializer element is not a compile-time constant
+    1538 |                 .num_jacks = MT8195_JACK_MAX,
+         |                 ^
+   5 errors generated.
 
 
-vim +1187 net/ipv4/tcp_output.c
+vim +1303 sound/soc/mediatek/mt8186/mt8186-mt6366.c
 
-  1145	
-  1146	/* Compute TCP options for ESTABLISHED sockets. This is not the
-  1147	 * final wire format yet.
-  1148	 */
-  1149	static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb,
-  1150						struct tcp_out_options *opts,
-  1151						struct tcp_key *key)
-  1152	{
-  1153		struct tcp_sock *tp = tcp_sk(sk);
-  1154		unsigned int size = 0;
-  1155		unsigned int eff_sacks;
-  1156	
-  1157		opts->options = 0;
-  1158	
-  1159		/* Better than switch (key.type) as it has static branches */
-  1160		if (tcp_key_is_md5(key)) {
-  1161			opts->options |= OPTION_MD5;
-  1162			size += TCPOLEN_MD5SIG_ALIGNED;
-  1163		} else if (tcp_key_is_ao(key)) {
-  1164			opts->options |= OPTION_AO;
-  1165			size += tcp_ao_len_aligned(key->ao_key);
-  1166		}
-  1167	
-  1168		if (likely(tp->rx_opt.tstamp_ok)) {
-  1169			opts->options |= OPTION_TS;
-  1170			opts->tsval = skb ? tcp_skb_timestamp_ts(tp->tcp_usec_ts, skb) +
-  1171					tp->tsoffset : 0;
-  1172			opts->tsecr = tp->rx_opt.ts_recent;
-  1173			size += TCPOLEN_TSTAMP_ALIGNED;
-  1174		}
-  1175	
-  1176		/* MPTCP options have precedence over SACK for the limited TCP
-  1177		 * option space because a MPTCP connection would be forced to
-  1178		 * fall back to regular TCP if a required multipath option is
-  1179		 * missing. SACK still gets a chance to use whatever space is
-  1180		 * left.
-  1181		 */
-  1182		if (sk_is_mptcp(sk)) {
-  1183			unsigned int remaining = MAX_TCP_OPTION_SPACE - size;
-  1184			int opt_size;
-  1185	
-  1186			opt_size = mptcp_established_options(sk, skb, remaining,
-> 1187							     &opts->mptcp);
-  1188			if (opt_size >= 0) {
-  1189				opts->options |= OPTION_MPTCP;
-  1190				size += opt_size;
-  1191			}
-  1192		}
-  1193	
-  1194		eff_sacks = tp->rx_opt.num_sacks + tp->rx_opt.dsack;
-  1195		if (unlikely(eff_sacks)) {
-  1196			const unsigned int remaining = MAX_TCP_OPTION_SPACE - size;
-  1197			if (likely(remaining >= TCPOLEN_SACK_BASE_ALIGNED +
-  1198						TCPOLEN_SACK_PERBLOCK)) {
-  1199				opts->num_sack_blocks =
-  1200					min_t(unsigned int, eff_sacks,
-  1201					      (remaining - TCPOLEN_SACK_BASE_ALIGNED) /
-  1202					      TCPOLEN_SACK_PERBLOCK);
-  1203	
-  1204				size += TCPOLEN_SACK_BASE_ALIGNED +
-  1205					opts->num_sack_blocks * TCPOLEN_SACK_PERBLOCK;
-  1206			} else {
-  1207				opts->num_sack_blocks = 0;
-  1208			}
-  1209		} else {
-  1210			opts->num_sack_blocks = 0;
-  1211		}
-  1212	
-  1213		if (tcp_ecn_mode_accecn(tp)) {
-  1214			int ecn_opt = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option);
-  1215	
-  1216			if (ecn_opt && tp->saw_accecn_opt &&
-  1217			    (ecn_opt >= TCP_ACCECN_OPTION_PERSIST ||
-  1218			     !tcp_accecn_opt_fail_send(tp)) &&
-  1219			    (ecn_opt >= TCP_ACCECN_OPTION_FULL || tp->accecn_opt_demand ||
-  1220			     tcp_accecn_option_beacon_check(sk))) {
-  1221				opts->use_synack_ecn_bytes = 0;
-  1222				size += tcp_options_fit_accecn(opts, tp->accecn_minlen,
-  1223							       MAX_TCP_OPTION_SPACE - size);
-  1224			}
-  1225		}
-  1226	
-  1227		if (unlikely(BPF_SOCK_OPS_TEST_FLAG(tp,
-  1228						    BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG))) {
-  1229			unsigned int remaining = MAX_TCP_OPTION_SPACE - size;
-  1230	
-  1231			bpf_skops_hdr_opt_len(sk, skb, NULL, NULL, 0, opts, &remaining);
-  1232	
-  1233			size = MAX_TCP_OPTION_SPACE - remaining;
-  1234		}
-  1235	
-  1236		return size;
-  1237	}
-  1238	
+6e1dbf694d7cd1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c tongjian                   2022-12-28  1149  
+cc97e5ee4f734c sound/soc/mediatek/mt8186/mt8186-mt6366.c                Kuninori Morimoto          2026-05-18 @1150  static struct snd_soc_card_platform mt8186_mt6366_rt5650_soc_card = {
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1151  	.name = "mt8186_rt5650",
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1152  	.owner = THIS_MODULE,
+cc97e5ee4f734c sound/soc/mediatek/mt8186/mt8186-mt6366.c                Kuninori Morimoto          2026-05-18  1153  	.driver = {
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1154  		.dai_link = mt8186_mt6366_rt1019_rt5682s_dai_links,
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1155  		.num_links = ARRAY_SIZE(mt8186_mt6366_rt1019_rt5682s_dai_links),
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1156  		.controls = mt8186_mt6366_rt1019_rt5682s_controls,
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1157  		.num_controls = ARRAY_SIZE(mt8186_mt6366_rt1019_rt5682s_controls),
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1158  		.dapm_widgets = mt8186_mt6366_rt1019_rt5682s_widgets,
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1159  		.num_dapm_widgets = ARRAY_SIZE(mt8186_mt6366_rt1019_rt5682s_widgets),
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1160  		.dapm_routes = mt8186_mt6366_rt5650_routes,
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1161  		.num_dapm_routes = ARRAY_SIZE(mt8186_mt6366_rt5650_routes),
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1162  		.codec_conf = mt8186_mt6366_rt1019_rt5682s_codec_conf,
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1163  		.num_configs = ARRAY_SIZE(mt8186_mt6366_rt1019_rt5682s_codec_conf),
+cc97e5ee4f734c sound/soc/mediatek/mt8186/mt8186-mt6366.c                Kuninori Morimoto          2026-05-18  1164  	},
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1165  };
+d88c433831015a sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c xiazhengqiao               2023-10-19  1166  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1167  static int mt8186_mt6366_legacy_probe(struct mtk_soc_card_data *soc_card_data)
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1168  {
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1169  	struct mtk_platform_card_data *card_data = soc_card_data->card_data;
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1170  	struct snd_soc_card *card = card_data->card;
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1171  	struct device *dev = card->dev;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1172  	struct snd_soc_dai_link *dai_link;
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1173  	struct device_node *headset_codec, *playback_codec;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1174  	int ret, i;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1175  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1176  	playback_codec = of_get_child_by_name(dev->of_node, "playback-codecs");
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1177  	if (!playback_codec)
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1178  		return dev_err_probe(dev, -EINVAL,
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1179  				     "Property 'playback-codecs' missing or invalid\n");
+e14657c0f0022e sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Ajye Huang                 2022-11-02  1180  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1181  	headset_codec = of_get_child_by_name(dev->of_node, "headset-codec");
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1182  	if (!headset_codec) {
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1183  		of_node_put(playback_codec);
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1184  		return dev_err_probe(dev, -EINVAL,
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1185  				     "Property 'headset-codec' missing or invalid\n");
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1186  	}
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1187  
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1188  	for_each_card_prelinks(card, i, dai_link) {
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1189  		ret = mt8186_mt6366_card_set_be_link(card, dai_link, playback_codec, "I2S3");
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1190  		if (ret) {
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1191  			dev_err_probe(dev, ret, "%s set playback_codec fail\n",
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1192  				      dai_link->name);
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1193  			break;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1194  		}
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1195  
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1196  		ret = mt8186_mt6366_card_set_be_link(card, dai_link, headset_codec, "I2S0");
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1197  		if (ret) {
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1198  			dev_err_probe(dev, ret, "%s set headset_codec fail\n",
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1199  				      dai_link->name);
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1200  			break;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1201  		}
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1202  
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1203  		ret = mt8186_mt6366_card_set_be_link(card, dai_link, headset_codec, "I2S1");
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1204  		if (ret) {
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1205  			dev_err_probe(dev, ret, "%s set headset_codec fail\n",
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1206  				      dai_link->name);
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1207  			break;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1208  		}
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1209  	}
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1210  	of_node_put(headset_codec);
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1211  	of_node_put(playback_codec);
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1212  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1213  	return ret;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1214  }
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1215  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1216  static int mt8186_mt6366_soc_card_probe(struct mtk_soc_card_data *soc_card_data, bool legacy)
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1217  {
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1218  	struct mtk_platform_card_data *card_data = soc_card_data->card_data;
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1219  	struct snd_soc_card *card = card_data->card;
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1220  	struct snd_soc_dai_link *dai_link;
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1221  	struct mt8186_mt6366_rt1019_rt5682s_priv *mach_priv;
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1222  	int i, ret;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1223  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1224  	mach_priv = devm_kzalloc(card->dev, sizeof(*mach_priv), GFP_KERNEL);
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1225  	if (!mach_priv)
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1226  		return -ENOMEM;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1227  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1228  	soc_card_data->mach_priv = mach_priv;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1229  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1230  	mach_priv->dmic_sel = devm_gpiod_get_optional(card->dev,
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1231  						      "dmic", GPIOD_OUT_LOW);
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1232  	if (IS_ERR(mach_priv->dmic_sel))
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1233  		return dev_err_probe(card->dev, PTR_ERR(mach_priv->dmic_sel),
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1234  				     "DMIC gpio failed\n");
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1235  
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1236  	for_each_card_prelinks(card, i, dai_link) {
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1237  		if (strcmp(dai_link->name, "I2S0") == 0 ||
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1238  		    strcmp(dai_link->name, "I2S1") == 0 ||
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1239  		    strcmp(dai_link->name, "I2S2") == 0) {
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1240  			if (card_data->flags & DA7219_CODEC_PRESENT) {
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1241  				dai_link->be_hw_params_fixup = mt8186_i2s_hw_params_32le_fixup;
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1242  				dai_link->ops = &mt8186_da7219_i2s_ops;
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1243  			} else {
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1244  				dai_link->be_hw_params_fixup = mt8186_i2s_hw_params_24le_fixup;
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1245  				dai_link->ops = &mt8186_rt5682s_i2s_ops;
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1246  			}
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1247  		} else if (strcmp(dai_link->name, "I2S3") == 0) {
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1248  			if (card_data->flags & DA7219_CODEC_PRESENT)
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1249  				dai_link->be_hw_params_fixup = mt8186_i2s_hw_params_24le_fixup;
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1250  			else
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1251  				dai_link->be_hw_params_fixup = mt8186_i2s_hw_params_32le_fixup;
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1252  		}
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1253  	}
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1254  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1255  	if (legacy) {
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1256  		ret = mt8186_mt6366_legacy_probe(soc_card_data);
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1257  		if (ret)
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1258  			return ret;
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1259  	}
+0da16e370dd7a1 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c Jiaxin Yu                  2022-07-19  1260  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1261  	ret = mt8186_afe_gpio_init(card->dev);
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1262  	if (ret)
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1263  		return dev_err_probe(card->dev, ret, "init AFE gpio error\n");
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1264  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1265  	return 0;
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1266  }
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1267  
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1268  static const unsigned int mt8186_pcm_playback_channels[] = { 2 };
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1269  static const unsigned int mt8186_pcm_capture_channels[] = { 1, 2 };
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1270  static const unsigned int mt8186_pcm_rates[] = { 48000 };
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1271  
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1272  static const struct snd_pcm_hw_constraint_list mt8186_rate_constraint = {
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1273  	.list = mt8186_pcm_rates,
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1274  	.count = ARRAY_SIZE(mt8186_pcm_rates)
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1275  };
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1276  
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1277  static const struct mtk_pcm_constraints_data mt8186_pcm_constraints[MTK_CONSTRAINT_CAPTURE + 1] = {
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1278  	[MTK_CONSTRAINT_PLAYBACK] = {
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1279  		.channels = &(const struct snd_pcm_hw_constraint_list) {
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1280  			.list = mt8186_pcm_playback_channels,
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1281  			.count = ARRAY_SIZE(mt8186_pcm_playback_channels)
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1282  		},
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1283  		.rates = &mt8186_rate_constraint,
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1284  	},
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1285  	[MTK_CONSTRAINT_CAPTURE] = {
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1286  		.channels = &(const struct snd_pcm_hw_constraint_list) {
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1287  			.list = mt8186_pcm_capture_channels,
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1288  			.count = ARRAY_SIZE(mt8186_pcm_capture_channels)
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1289  		},
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1290  		.rates = &mt8186_rate_constraint,
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1291  	}
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1292  };
+f103ce4ff6932b sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1293  
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1294  static const struct mtk_sof_priv mt8186_sof_priv = {
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1295  	.conn_streams = g_sof_conn_streams,
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1296  	.num_streams = ARRAY_SIZE(g_sof_conn_streams),
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1297  	.sof_dai_link_fixup = mt8186_sof_dai_link_fixup
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1298  };
+44a53c8ec9cad0 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c AngeloGioacchino Del Regno 2024-04-16  1299  
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1300  static const struct mtk_soundcard_pdata mt8186_mt6366_da7219_max98357_pdata = {
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1301  	.card_data = &(struct mtk_platform_card_data) {
+cc97e5ee4f734c sound/soc/mediatek/mt8186/mt8186-mt6366.c                Kuninori Morimoto          2026-05-18  1302  		.card_platform = &mt8186_mt6366_da7219_max98357_soc_card,
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16 @1303  		.num_jacks = MT8186_JACK_MAX,
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1304  		.pcm_constraints = mt8186_pcm_constraints,
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1305  		.num_pcm_constraints = ARRAY_SIZE(mt8186_pcm_constraints),
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1306  		.flags = DA7219_CODEC_PRESENT,
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1307  	},
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1308  	.sof_priv = &mt8186_sof_priv,
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1309  	.soc_probe = mt8186_mt6366_soc_card_probe
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1310  };
+6ed619b348bf0a sound/soc/mediatek/mt8186/mt8186-mt6366.c                AngeloGioacchino Del Regno 2024-04-16  1311  
+
+:::::: The code at line 1303 was first introduced by commit
+:::::: 6ed619b348bf0a490e70dea7a330cf44dc81c16d ASoC: mediatek: mt8186: Unify mt8186-mt6366 machine drivers
+
+:::::: TO: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
 --
 0-DAY CI Kernel Test Service
