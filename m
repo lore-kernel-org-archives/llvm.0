@@ -1,110 +1,122 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F50C3EC2F8;
-	Tue,  2 Jun 2026 14:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C93AF34388F
+	for <llvm@lists.linux.dev>; Tue,  2 Jun 2026 14:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780411186; cv=none; b=aslyffyOAzUPgyRxv7J8pO8C5FSCPMW+WgXkSOyM2BNfzQwHW+Y9lggYLZSmapvH1pSpKNheS3dspDUv3C2Eei8Pda2tnOdpyyjti1KtKrGuFv8HAvKU9VtPYCNzC8CbG1pc+cv3dkqYGSiDBveo5qm+JhxKNdWvD12rnpVVo/A=
+	t=1780411644; cv=none; b=OJzXhRCXMzqyHtI6MXYTZQDEuhRdxVNVFtIrmepTplz2k/DHrMQ1Kigf3M/yJkHq8HRepKXaZ9tb3sEp9/A95iTv7VEp3iklO3Vitep3SS0/mkhnKZUyhqnoj78UEg3+xIjrvJDmB9Z/6kfFSuGHRqiOExSrp+nkw0gSfhIIQBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780411186; c=relaxed/simple;
-	bh=LAMBj6aYpplXAlYLN4ZUEnGZPujKLvNggGo2VH8mzXw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kSiw1VUxT1RwQ1f0uu2SBT2QCRCH+gt4X5Fbi9Ktbs/9I7x8Cpe0whCYJkCUQGTJwry/oAeMElXsK+yq1DsYjA7owE1ufQLN9rBvWUlD8+Jmamxpu36jFz0iQF6HZ2g5cadYsWGSEclgbnRjtCWDMQ533AhIMIl1pclwnQF9TjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=WULXRrZl; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1780411644; c=relaxed/simple;
+	bh=qEH/cix4wnk9Qp9XXRIOZqqkN1RAuGqUImujvq3mcRQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Ao4kpTeWwLBL819AIopIY90jr5ncYW33B2UVCxYlQLZ7Nzxtrjbm7OThzGQBuoZf22qhitR14V1GCCFV6Y7iHV+QiqCsIHzDmL5+t6n7lrDiR/kfJ8bLUuHF8ktleyoBcn6rMQGiKhNDW6ihwM37bU/TyjVf48+durcgc7R1abE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ob04tNXZ; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="WULXRrZl"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=2yTFg8zXujpXN4UZD70cI8WNKyrOKFmDDdxuAIlK6M4=; b=WULXRrZl/m6pxN5DUaHQlSF4jL
-	4YjRfLR7mN64uq3KofcwYOhCkBt4Hxrlp563PwImPTAcFiA4yMeLTUiAXH5Pb/ZgMRKBFFlyw0UBo
-	EjZEufnwHJTXBPBj7pUJk/zThgzML0DE+sbYfGA78HLZopWHwmeN7yKCsg2QXSX79ZSNZBcRogEuT
-	ahBE4rOF8Z84zaM3Rk05ByKPdRpdwMk80jlstERsCfQQ+xd6qBplXZV5pM9vRZ/VPMGyC/OX/dvSt
-	OMrzqis44gIjnfUHSgTbvk42krzadxuBNoPGCttRNEJvSyVKN7JY8JYs6zOKJ/p4y/TIQBLgj3c0P
-	jl68NzlA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wUQHE-0031kP-1a;
-	Tue, 02 Jun 2026 14:39:32 +0000
-Date: Tue, 2 Jun 2026 07:39:26 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Edward Cree <ecree.xilinx@gmail.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Ben Hutchings <ben@decadent.org.uk>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Brett Creeley <brett.creeley@amd.com>, 
-	Kees Cook <kees@kernel.org>, netdev@vger.kernel.org, linux-net-drivers@amd.com, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [net-next] [v3] net: sfc: avoid format string warning
-Message-ID: <ah7qyOv2aCAOIKO8@gmail.com>
-References: <20260602135347.3179200-1-arnd@kernel.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ob04tNXZ"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29FED176C;
+	Tue,  2 Jun 2026 07:47:17 -0700 (PDT)
+Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8338A3F632;
+	Tue,  2 Jun 2026 07:47:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1780411642; bh=qEH/cix4wnk9Qp9XXRIOZqqkN1RAuGqUImujvq3mcRQ=;
+	h=From:Subject:Date:To:Cc:From;
+	b=ob04tNXZ9js21k7b4Sv5y9Hzg/f9+gXdqM40Rcgslk2yLTpKXNR8kXZ2o/qbSB6rW
+	 mT+B9Dy+aDzm/8lKhO2nJKlMQX3q02WriJqRQ4DsC6oRc0mxrbUVo1VLH0T9frAbbq
+	 eIsNILTrXrN2ickVQLrQnG6w2SvNooADELFaizO4=
+From: Leo Yan <leo.yan@arm.com>
+Subject: [PATCH bpf-next v2 0/8] tools build: bpf: Append EXTRA_CFLAGS and
+ HOST_EXTRACFLAGS
+Date: Tue, 02 Jun 2026 15:47:09 +0100
+Message-Id: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260602135347.3179200-1-arnd@kernel.org>
-X-Debian-User: leitao
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO3sHmoC/5WNQQqDMBBFryKzbooZWwtd9R4iQZNMHdBEklS04
+ t0bvEGXj/f5b4doA9sIz2KHYBeO7F0GvBSgh869rWCTGbDEuqywEsn7Mar+w6NRxKv62uAVO06
+ qn0l5N27ijlgh1Uj9gyAfzcHm5RlpIK+Es2uCNpuBY/JhO+uLPP0/oUWKUhipqTNIN23kqwvTV
+ fsJ2uM4fvG/g4vcAAAA
+X-Change-ID: 20260323-tools_build_fix_zero_init_bpf_only-52232f62fb7f
+To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+ James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+ Leo Yan <leo.yan@arm.com>, Ihor Solodrai <ihor.solodrai@linux.dev>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780411637; l=2117;
+ i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
+ bh=qEH/cix4wnk9Qp9XXRIOZqqkN1RAuGqUImujvq3mcRQ=;
+ b=7udvvT+S0LaoJXsdjHr1h8LmLWmu4ifqSq5q9LcRnGzCvLCkbHk0iJPp5SlIlQipvdTMaBCR0
+ Tqkpx5uTr1/ACUFqmqFzG2t5hLghK7/4xGRv6Myav+kodRw+3XjN2TH
+X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
+ pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-On Tue, Jun 02, 2026 at 03:53:04PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Three sfc drivers contain the same *_fill_test() function that takes
-> a format string argument that gets passed down to snprintf(), producing
-> a warning with clang-22:
-> 
-> drivers/net/ethernet/sfc/falcon/ethtool.c:227:60: error: diagnostic behavior may be improved by adding
->       the 'format(printf, 7, 8)' attribute to the declaration of 'ef4_fill_test' [-Werror,-Wmissing-format-attribute]
->   210 |                 snprintf(test_str, sizeof(test_str), test_format, test_id);
->       |                                                                          ^
-> drivers/net/ethernet/sfc/falcon/ethtool.c:210:13: note: 'ef4_fill_test' declared here
-> 
-> Rework these to take a varargs based test_format that allows better
-> type checking and a non-varargs unit name that gets pre-filled by
-> the caller, so that the compiler can validate all format strings.
-> 
-> Fixes: 3273c2e8c66a ("[netdrvr] sfc: sfc: Add self-test support")
-> Link: https://lore.kernel.org/all/20260325134557.3406655-1-arnd@kernel.org/
-> Reviewed-by: Edward Cree <ecree.xilinx@gmail.com>
-> Cc: Breno Leitao <leitao@debian.org>
-> Cc: Ben Hutchings <ben@decadent.org.uk>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Append EXTRA_CFLAGS and HOST_EXTRACFLAGS to the BPF build.
 
-Reviewed-by: Breno Leitao <leitao@debian.org>
+This mitigates an issue introduced in GCC 15, where a {0} initializer
+does not guarantee zeroing the entire union [1].
 
-> diff --git a/drivers/net/ethernet/sfc/siena/ethtool_common.c b/drivers/net/ethernet/sfc/siena/ethtool_common.c
-> index 76cbce2b9592..9df08f1e2347 100644
-> --- a/drivers/net/ethernet/sfc/siena/ethtool_common.c
-> +++ b/drivers/net/ethernet/sfc/siena/ethtool_common.c
-> @@ -199,18 +199,17 @@ int efx_siena_ethtool_set_pauseparam(struct net_device *net_dev,
->   * @strings:		Ethtool strings, or %NULL
->   * @data:		Ethtool test results, or %NULL
->   * @test:		Pointer to test result (used only if data != %NULL)
-> - * @unit_format:	Unit name format (e.g. "chan\%d")
-> - * @unit_id:		Unit id (e.g. 0 for "chan0")
-> + * @unit_name:		Unit name
->   * @test_format:	Test name format (e.g. "loopback.\%s.tx.sent")
-> - * @test_id:		Test id (e.g. "PHYXS" for "loopback.PHYXS.tx_sent")
->   *
->   * Fill in an individual self-test entry.
->   */
-> -static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
-> -			  int *test, const char *unit_format, int unit_id,
-> -			  const char *test_format, const char *test_id)
-> +static void __printf(6, 7) efx_fill_test(unsigned int test_index, u8 *strings,
-> +					 u64 *data, int *test,
-> +					 const char *unit_name,
-> +					 char *test_format, ...)
+The common changes under tools to support EXTRA_CFLAGS and
+HOST_EXTRACFLAGS are sent separately [2].  As suggested, BPF patches
+would be picked up via the bpf tree, so this series only includes BPF
+related changes.
 
-Should you keep the 'const' in test_format?
+Verification on bpf-ci (with tools changes [2]:
+
+  https://github.com/kernel-patches/bpf/actions/runs/26815163486
+
+[1] https://gcc.gnu.org/gcc-15/changes.html
+[2] https://lore.kernel.org/all/20260602-tools_build_fix_zero_init-v7-0-631baf679fe7@arm.com/
+
+Signed-off-by: Leo Yan <leo.yan@arm.com>
+---
+Changes in v2:
+- Used strscpy() instead in patch 06 (Ihor).
+- Added prefix "bpf-next" in subject (Alexei).
+- Added patch 01 to pass host cflags to bootstrap libbpf.
+- Added patch 08 to avoid static LLVM linking for cross build.
+- Link to v1: https://lore.kernel.org/r/20260323-tools_build_fix_zero_init_bpf_only-v1-0-d1cfad2f4cd1@arm.com
+
+---
+Leo Yan (8):
+      bpftool: Pass host flags to bootstrap libbpf
+      bpftool: Avoid adding EXTRA_CFLAGS to HOST_CFLAGS
+      bpftool: Append extra host flags
+      libbpf: Initialize CFLAGS before including Makefile.include
+      tools/bpf: build: Append extra cflags
+      selftests/bpf: Initialize operation name before use
+      selftests/bpf: Use common CFLAGS for urandom_read
+      selftests/bpf: Avoid static LLVM linking for cross builds
+
+ tools/bpf/Makefile                                    |  1 +
+ tools/bpf/bpftool/Makefile                            | 15 ++++++++++++---
+ tools/lib/bpf/Makefile                                | 17 +++++++++--------
+ tools/testing/selftests/bpf/Makefile                  | 19 +++++++++++++------
+ tools/testing/selftests/bpf/prog_tests/verifier_log.c |  1 +
+ 5 files changed, 36 insertions(+), 17 deletions(-)
+---
+base-commit: b93c55b4932dd7e32dca8cf34a3443cc87a02906
+change-id: 20260323-tools_build_fix_zero_init_bpf_only-52232f62fb7f
+
+Best regards,
+-- 
+Leo Yan <leo.yan@arm.com>
+
