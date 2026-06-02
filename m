@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A548272803;
-	Tue,  2 Jun 2026 00:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C1E3EA66;
+	Tue,  2 Jun 2026 00:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780358964; cv=none; b=S/vAYUZPY85xa9JiZecc/XtOtP2P7fq+uNS0B96i2BMQrMvsYEO07HXNORshSIUyu3wlSko4LCpvBqF32m/BZgsUtrq2lJZ9EOyoMYDlps11yC2FsJ56JZOSB56KP5lG4DC2BLEJU4NNUkbjzdwoWrTb3I6D0r535KU6wAcvB2Q=
+	t=1780359795; cv=none; b=RVmKfSlmm8EtqVmPFpXxJu9l8i6iYytyzMmkD5va1DbBa0oNHQzN909BdbuxuDtcJGZD6brv3PT2UpqZcGoR9jmdZ2EzbLpkjHG7GHIufQPabfyomYaAbCxhe7X3xxOUrydDw22R5Lq2tTKHAazlbWYAT9fcCCJVI2dg4r8xcQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780358964; c=relaxed/simple;
-	bh=Bz6Fy7Qpw4BBfVIEeQiqcZBmvtQtm30OfSuuLglM7oE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=GUy8gdBiHwf5M/THwTuB4re1+kQzHaj7LCSjmju2wNzcVKdbYN25lU/9Y1+laWerGiVkiM5dmY0V3lGVLvP9ExAv8fNw5BF6vF6szg+BuUhqcvcGMuCusLKJhs7Dy2HuN7lNsL8xmet3QNGxhfDN9twR5rXseL/qNUPQ0z7DaQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T5TPd24R; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1780359795; c=relaxed/simple;
+	bh=u2xx1Shy0HQ/a3hcG/QT41eGAoDfQrEhO0JI3Swj37g=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=RZMEl6bBEDXo4vEfJTXOAYHUIQxYHHhd2oS5qdJMXPqrKjq0TvKal4IePPYXzDBuChWv6D0Vje8jLz1Ivx2PI6aAylqz/k0+49YxVIAbe4FhwO1vRctcG5wE0D6C1bbfBUaMpq+qRUWNz+utoGqViXIEEt6L907Hw5UGzbwdsdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cLdjEAIu; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T5TPd24R"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cLdjEAIu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780358964; x=1811894964;
+  t=1780359794; x=1811895794;
   h=date:from:to:cc:subject:message-id;
-  bh=Bz6Fy7Qpw4BBfVIEeQiqcZBmvtQtm30OfSuuLglM7oE=;
-  b=T5TPd24RF5P8UmZbWh3CYZAHn5OGN/+A97UTNQ9hWEBRupIC3v2GCTpD
-   MBDDIFDIp7WVAdpD7ZOo678wn3g26qiWQEbpJcVSP8Ga+X/up6WMll3xT
-   FcZm0IIx4AIwvT2wh0v7fjXckZolCvv+x8bb/C3c7Xp63UcAUVc00iAOn
-   YIS+w33EfSsNStevmxS29HafCshs07YbDrRnDdd0BmpYhAp2l/RYYcyJ5
-   Qox9mgGDhExvCKpXlY/R+YRuWaZk1KLqfgF6W+3FQjP+Jx4NyAD9z5or+
-   D8ZkeihI96+fY6+wfie48prSw7SUawbpD+crVOE4Z8wRQwH2D7fz2va/p
-   w==;
-X-CSE-ConnectionGUID: 9XpiBQGhRDC/yWMnUkH3mQ==
-X-CSE-MsgGUID: DchjZMRgR/2xN9L+paSlfQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11804"; a="81029251"
+  bh=u2xx1Shy0HQ/a3hcG/QT41eGAoDfQrEhO0JI3Swj37g=;
+  b=cLdjEAIuAcp3zhVuo1prQhfn3028nSu2al36sDOiobxyg5SOb1C2GP0I
+   ebLRrtNs6L2mHan48wxrUQrCRTWGmFYM6zZMKepuncSfCfjmZgzVOHRoR
+   ByJEGdxiM9fE03PCwbYhYHO+LeDdCI97NRObkphfCJcbi62oeSsfmWGrS
+   hGTwWdswnYs/le/nhMjxcqaifBhCz4JvX5WUfn/n56ZzMVY/ukfCkfIVo
+   tXPwfqcdM16SqPL1SKE2Y4gBXB7EDw5E2loPzyT0VJtuUSduQENWtAUpj
+   N/Uhxa9B76rJ38mreHIwDlm+rKcUjOIbJiZLHRZrZjLIA1s7zXWT1gKkQ
+   g==;
+X-CSE-ConnectionGUID: IvHOYCDNQLywS8S6BVmxYA==
+X-CSE-MsgGUID: 8mS4DmkIRg+Oi6Xy6T/l1g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11804"; a="81122130"
 X-IronPort-AV: E=Sophos;i="6.24,182,1774335600"; 
-   d="scan'208";a="81029251"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2026 17:09:23 -0700
-X-CSE-ConnectionGUID: 0tZPo9EUQf6+52EwkHfo4A==
-X-CSE-MsgGUID: x/YF//9eSGm6b70PWkB88A==
+   d="scan'208";a="81122130"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2026 17:23:14 -0700
+X-CSE-ConnectionGUID: kk51ihs5REycSn9Y7rIPFw==
+X-CSE-MsgGUID: p6Zu6elQQ/qD45Z3yBbbZg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,182,1774335600"; 
-   d="scan'208";a="242690349"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa006.jf.intel.com with ESMTP; 01 Jun 2026 17:09:21 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+   d="scan'208";a="274000544"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 01 Jun 2026 17:23:13 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wUCh4-000000001gv-2wny;
-	Tue, 02 Jun 2026 00:09:18 +0000
-Date: Tue, 02 Jun 2026 02:08:35 +0200
+	id 1wUCuT-00000000BFS-2o8J;
+	Tue, 02 Jun 2026 00:23:09 +0000
+Date: Tue, 02 Jun 2026 08:22:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pranjal Shrivastava <praan@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: drivers/iommu/amd/iommu.c:2483:6: warning: variable
- 'dev_data' is used uninitialized whenever 'if' condition is true
-Message-ID: <202606020253.RoYlNZBh-lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-06-01-3 290/290]
+ sound/soc/fsl/imx-es8328.c:168:51: error: too many arguments to function
+ call, expected 2, have 6
+Message-ID: <202606020826.sp0yY8ma-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,121 +60,193 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Pranjal-Shrivastava/iommu-amd-Clear-aliases-before-setting-the-rlookup_table-to-NULL/20260601-215359
-head:   93f2b68d12c1ba701844fead3e671ac1a9edf4ee
-commit: d0ab5cc828d000ab8fa0387a75d426d77b315b9c iommu/amd: Fix Use-After-Free in non-fatal probe error path
-date:   10 hours ago
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260602/202606020253.RoYlNZBh-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260602/202606020253.RoYlNZBh-lkp@intel.com/reproduce)
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-01-3
+head:   1ef39bbdce9099b285b9702e22c4defc277e42dd
+commit: 96152fea95db604513be69582e07cab8587750e8 [290/290] ASoC: fsl: imx-es8328: use snd_soc_card_register()
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260602/202606020826.sp0yY8ma-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260602/202606020826.sp0yY8ma-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606020253.RoYlNZBh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606020826.sp0yY8ma-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iommu/amd/iommu.c:2483:6: warning: variable 'dev_data' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    2483 |         if (ret) {
-         |             ^~~
-   drivers/iommu/amd/iommu.c:2525:6: note: uninitialized use occurs here
-    2525 |         if (dev_data) {
-         |             ^~~~~~~~
-   drivers/iommu/amd/iommu.c:2483:2: note: remove the 'if' if its condition is always false
-    2483 |         if (ret) {
-         |         ^~~~~~~~~~
-    2484 |                 dev_err(dev, "Failed to initialize - trying to proceed anyway\n");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2485 |                 iommu_dev = ERR_PTR(ret);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~
-    2486 |                 goto err_deinit;
-         |                 ~~~~~~~~~~~~~~~~
-    2487 |         }
-         |         ~
-   drivers/iommu/amd/iommu.c:2465:33: note: initialize the variable 'dev_data' to silence this warning
-    2465 |         struct iommu_dev_data *dev_data;
-         |                                        ^
-         |                                         = NULL
-   1 warning generated.
+>> sound/soc/fsl/imx-es8328.c:168:51: error: too many arguments to function call, expected 2, have 6
+     168 |         card = devm_snd_soc_card_alloc(dev, THIS_MODULE, &data->card_driver,
+         |                ~~~~~~~~~~~~~~~~~~~~~~~                   ^~~~~~~~~~~~~~~~~~~
+     169 |                                        NULL, NULL, NULL);
+         |                                        ~~~~~~~~~~~~~~~~
+   include/sound/soc-card.h:90:22: note: 'devm_snd_soc_card_alloc' declared here
+      90 | struct snd_soc_card *devm_snd_soc_card_alloc(struct device *dev,
+         |                      ^                       ~~~~~~~~~~~~~~~~~~~
+      91 |                                              struct snd_soc_card_driver *driver);
+         |                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +2483 drivers/iommu/amd/iommu.c
+vim +168 sound/soc/fsl/imx-es8328.c
 
-e275a2a0fc9e21 arch/x86/kernel/amd_iommu.c Joerg Roedel           2008-12-10  2460  
-dce8d6964ebdb3 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2461  static struct iommu_device *amd_iommu_probe_device(struct device *dev)
-15898bbcb48fc8 arch/x86/kernel/amd_iommu.c Joerg Roedel           2009-11-24  2462  {
-dce8d6964ebdb3 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2463  	struct iommu_device *iommu_dev;
-e275a2a0fc9e21 arch/x86/kernel/amd_iommu.c Joerg Roedel           2008-12-10  2464  	struct amd_iommu *iommu;
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2465  	struct iommu_dev_data *dev_data;
-8b71c9bf4df829 drivers/iommu/amd/iommu.c   Suravee Suthikulpanit  2022-07-06  2466  	int ret;
-e275a2a0fc9e21 arch/x86/kernel/amd_iommu.c Joerg Roedel           2008-12-10  2467  
-57bd2c24ba1673 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2468  	if (!check_device(dev))
-dce8d6964ebdb3 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2469  		return ERR_PTR(-ENODEV);
-e275a2a0fc9e21 arch/x86/kernel/amd_iommu.c Joerg Roedel           2008-12-10  2470  
-8b71c9bf4df829 drivers/iommu/amd/iommu.c   Suravee Suthikulpanit  2022-07-06  2471  	iommu = rlookup_amd_iommu(dev);
-8b71c9bf4df829 drivers/iommu/amd/iommu.c   Suravee Suthikulpanit  2022-07-06  2472  	if (!iommu)
-8b71c9bf4df829 drivers/iommu/amd/iommu.c   Suravee Suthikulpanit  2022-07-06  2473  		return ERR_PTR(-ENODEV);
-e275a2a0fc9e21 arch/x86/kernel/amd_iommu.c Joerg Roedel           2008-12-10  2474  
-cbc040081fdf7d drivers/iommu/amd/iommu.c   Robin Murphy           2022-08-15  2475  	/* Not registered yet? */
-cbc040081fdf7d drivers/iommu/amd/iommu.c   Robin Murphy           2022-08-15  2476  	if (!iommu->iommu.ops)
-cbc040081fdf7d drivers/iommu/amd/iommu.c   Robin Murphy           2022-08-15  2477  		return ERR_PTR(-ENODEV);
-cbc040081fdf7d drivers/iommu/amd/iommu.c   Robin Murphy           2022-08-15  2478  
-05a0542b456e13 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-05-27  2479  	if (dev_iommu_priv_get(dev))
-dce8d6964ebdb3 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2480  		return &iommu->iommu;
-dce8d6964ebdb3 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2481  
-99fc4ac3d2978c drivers/iommu/amd/iommu.c   Suravee Suthikulpanit  2022-07-06  2482  	ret = iommu_init_device(iommu, dev);
-4d58b8a6de6b8c drivers/iommu/amd_iommu.c   Joerg Roedel           2015-06-11 @2483  	if (ret) {
-5f226da1b1d706 drivers/iommu/amd_iommu.c   Bjorn Helgaas          2019-02-08  2484  		dev_err(dev, "Failed to initialize - trying to proceed anyway\n");
-dce8d6964ebdb3 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2485  		iommu_dev = ERR_PTR(ret);
-244221e10f5f3b drivers/iommu/amd/iommu.c   Pranjal Shrivastava    2026-06-01  2486  		goto err_deinit;
-293aa9ec694e63 drivers/iommu/amd/iommu.c   Vasant Hegde           2024-08-28  2487  	}
-293aa9ec694e63 drivers/iommu/amd/iommu.c   Vasant Hegde           2024-08-28  2488  
-2b2c6aa63824c6 drivers/iommu/amd/iommu.c   Thomas Gleixner        2020-08-26  2489  	amd_iommu_set_pci_msi_domain(dev, iommu);
-dce8d6964ebdb3 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2490  	iommu_dev = &iommu->iommu;
-657cbb6b6cba0f arch/x86/kernel/amd_iommu.c Joerg Roedel           2009-11-23  2491  
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2492  	/*
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2493  	 * If IOMMU and device supports PASID then it will contain max
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2494  	 * supported PASIDs, else it will be zero.
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2495  	 */
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2496  	dev_data = dev_iommu_priv_get(dev);
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2497  	if (amd_iommu_pasid_supported() && dev_is_pci(dev) &&
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2498  	    pdev_pasid_supported(dev_data)) {
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2499  		dev_data->max_pasids = min_t(u32, iommu->iommu.max_pasids,
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2500  					     pci_max_pasids(to_pci_dev(dev)));
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2501  	}
-a0c47f233e683e drivers/iommu/amd/iommu.c   Vasant Hegde           2024-04-18  2502  
-7e5516e6096124 drivers/iommu/amd/iommu.c   Ankit Soni             2025-06-04  2503  	if (amd_iommu_pgtable == PD_MODE_NONE) {
-7e5516e6096124 drivers/iommu/amd/iommu.c   Ankit Soni             2025-06-04  2504  		pr_warn_once("%s: DMA translation not supported by iommu.\n",
-7e5516e6096124 drivers/iommu/amd/iommu.c   Ankit Soni             2025-06-04  2505  			     __func__);
-7e5516e6096124 drivers/iommu/amd/iommu.c   Ankit Soni             2025-06-04  2506  		iommu_dev = ERR_PTR(-ENODEV);
-7e5516e6096124 drivers/iommu/amd/iommu.c   Ankit Soni             2025-06-04  2507  		goto out_err;
-7e5516e6096124 drivers/iommu/amd/iommu.c   Ankit Soni             2025-06-04  2508  	}
-7e5516e6096124 drivers/iommu/amd/iommu.c   Ankit Soni             2025-06-04  2509  
-dce8d6964ebdb3 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2510  	iommu_completion_wait(iommu);
-2c9195e9902970 drivers/iommu/amd_iommu.c   Joerg Roedel           2012-07-19  2511  
-19e5cc156cbc32 drivers/iommu/amd/iommu.c   Kishon Vijay Abraham I 2025-03-07  2512  	if (FEATURE_NUM_INT_REMAP_SUP_2K(amd_iommu_efr2))
-19e5cc156cbc32 drivers/iommu/amd/iommu.c   Kishon Vijay Abraham I 2025-03-07  2513  		dev_data->max_irqs = MAX_IRQS_PER_TABLE_2K;
-19e5cc156cbc32 drivers/iommu/amd/iommu.c   Kishon Vijay Abraham I 2025-03-07  2514  	else
-19e5cc156cbc32 drivers/iommu/amd/iommu.c   Kishon Vijay Abraham I 2025-03-07  2515  		dev_data->max_irqs = MAX_IRQS_PER_TABLE_512;
-19e5cc156cbc32 drivers/iommu/amd/iommu.c   Kishon Vijay Abraham I 2025-03-07  2516  
-6c17c7d5936e6a drivers/iommu/amd/iommu.c   Jason Gunthorpe        2024-08-07  2517  	if (dev_is_pci(dev))
-6c17c7d5936e6a drivers/iommu/amd/iommu.c   Jason Gunthorpe        2024-08-07  2518  		pci_prepare_ats(to_pci_dev(dev), PAGE_SHIFT);
-6c17c7d5936e6a drivers/iommu/amd/iommu.c   Jason Gunthorpe        2024-08-07  2519  
-244221e10f5f3b drivers/iommu/amd/iommu.c   Pranjal Shrivastava    2026-06-01  2520  	return iommu_dev;
-244221e10f5f3b drivers/iommu/amd/iommu.c   Pranjal Shrivastava    2026-06-01  2521  
-244221e10f5f3b drivers/iommu/amd/iommu.c   Pranjal Shrivastava    2026-06-01  2522  err_deinit:
-244221e10f5f3b drivers/iommu/amd/iommu.c   Pranjal Shrivastava    2026-06-01  2523  	iommu_ignore_device(iommu, dev);
-3222b6de514527 drivers/iommu/amd/iommu.c   Vasant Hegde           2026-01-16  2524  out_err:
-d0ab5cc828d000 drivers/iommu/amd/iommu.c   Pranjal Shrivastava    2026-06-01  2525  	if (dev_data) {
-d0ab5cc828d000 drivers/iommu/amd/iommu.c   Pranjal Shrivastava    2026-06-01  2526  		amd_iommu_clear_device_dte(iommu, dev_data);
-d0ab5cc828d000 drivers/iommu/amd/iommu.c   Pranjal Shrivastava    2026-06-01  2527  		dev_data->dev = NULL;
-d0ab5cc828d000 drivers/iommu/amd/iommu.c   Pranjal Shrivastava    2026-06-01  2528  	}
-d0ab5cc828d000 drivers/iommu/amd/iommu.c   Pranjal Shrivastava    2026-06-01  2529  
-dce8d6964ebdb3 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2530  	return iommu_dev;
-dce8d6964ebdb3 drivers/iommu/amd_iommu.c   Joerg Roedel           2020-04-29  2531  }
-1ac4cbbc5eb56d arch/x86/kernel/amd_iommu.c Joerg Roedel           2008-12-10  2532  
+    85	
+    86	static int imx_es8328_probe(struct platform_device *pdev)
+    87	{
+    88		struct device_node *np = pdev->dev.of_node;
+    89		struct device_node *ssi_np = NULL, *codec_np = NULL;
+    90		struct platform_device *ssi_pdev;
+    91		struct imx_es8328_data *data;
+    92		struct snd_soc_dai_link_component *comp;
+    93		struct snd_soc_card *card;
+    94		u32 int_port, ext_port;
+    95		int ret;
+    96		struct device *dev = &pdev->dev;
+    97	
+    98		ret = of_property_read_u32(np, "mux-int-port", &int_port);
+    99		if (ret) {
+   100			dev_err(dev, "mux-int-port missing or invalid\n");
+   101			goto fail;
+   102		}
+   103		if (int_port > MUX_PORT_MAX || int_port == 0) {
+   104			dev_err(dev, "mux-int-port: hardware only has %d mux ports\n",
+   105				MUX_PORT_MAX);
+   106			ret = -EINVAL;
+   107			goto fail;
+   108		}
+   109	
+   110		ret = of_property_read_u32(np, "mux-ext-port", &ext_port);
+   111		if (ret) {
+   112			dev_err(dev, "mux-ext-port missing or invalid\n");
+   113			goto fail;
+   114		}
+   115		if (ext_port > MUX_PORT_MAX || ext_port == 0) {
+   116			dev_err(dev, "mux-ext-port: hardware only has %d mux ports\n",
+   117				MUX_PORT_MAX);
+   118			ret = -EINVAL;
+   119			goto fail;
+   120		}
+   121	
+   122		/*
+   123		 * The port numbering in the hardware manual starts at 1, while
+   124		 * the audmux API expects it starts at 0.
+   125		 */
+   126		int_port--;
+   127		ext_port--;
+   128		ret = imx_audmux_v2_configure_port(int_port,
+   129				IMX_AUDMUX_V2_PTCR_SYN |
+   130				IMX_AUDMUX_V2_PTCR_TFSEL(ext_port) |
+   131				IMX_AUDMUX_V2_PTCR_TCSEL(ext_port) |
+   132				IMX_AUDMUX_V2_PTCR_TFSDIR |
+   133				IMX_AUDMUX_V2_PTCR_TCLKDIR,
+   134				IMX_AUDMUX_V2_PDCR_RXDSEL(ext_port));
+   135		if (ret) {
+   136			dev_err(dev, "audmux internal port setup failed\n");
+   137			return ret;
+   138		}
+   139		ret = imx_audmux_v2_configure_port(ext_port,
+   140				IMX_AUDMUX_V2_PTCR_SYN,
+   141				IMX_AUDMUX_V2_PDCR_RXDSEL(int_port));
+   142		if (ret) {
+   143			dev_err(dev, "audmux external port setup failed\n");
+   144			return ret;
+   145		}
+   146	
+   147		ssi_np = of_parse_phandle(pdev->dev.of_node, "ssi-controller", 0);
+   148		codec_np = of_parse_phandle(pdev->dev.of_node, "audio-codec", 0);
+   149		if (!ssi_np || !codec_np) {
+   150			dev_err(dev, "phandle missing or invalid\n");
+   151			ret = -EINVAL;
+   152			goto fail;
+   153		}
+   154	
+   155		ssi_pdev = of_find_device_by_node(ssi_np);
+   156		if (!ssi_pdev) {
+   157			dev_err(dev, "failed to find SSI platform device\n");
+   158			ret = -EINVAL;
+   159			goto fail;
+   160		}
+   161	
+   162		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+   163		if (!data) {
+   164			ret = -ENOMEM;
+   165			goto put_device;
+   166		}
+   167	
+ > 168		card = devm_snd_soc_card_alloc(dev, THIS_MODULE, &data->card_driver,
+   169					       NULL, NULL, NULL);
+   170		if (!card) {
+   171			ret = -ENOMEM;
+   172			goto put_device;
+   173		}
+   174	
+   175		comp = devm_kzalloc(dev, 2 * sizeof(*comp), GFP_KERNEL);
+   176		if (!comp) {
+   177			ret = -ENOMEM;
+   178			goto put_device;
+   179		}
+   180	
+   181		data->dev = dev;
+   182	
+   183		data->jack_gpiod = devm_gpiod_get_optional(dev, "jack", GPIOD_IN);
+   184		if (IS_ERR(data->jack_gpiod)) {
+   185			ret = PTR_ERR(data->jack_gpiod);
+   186			goto put_device;
+   187		}
+   188	
+   189		/*
+   190		 * CPU == Platform
+   191		 * platform is using soc-generic-dmaengine-pcm
+   192		 */
+   193		data->dai.cpus		=
+   194		data->dai.platforms	= &comp[0];
+   195		data->dai.codecs	= &comp[1];
+   196	
+   197		data->dai.num_cpus	= 1;
+   198		data->dai.num_codecs	= 1;
+   199		data->dai.num_platforms	= 1;
+   200	
+   201		data->dai.name = "hifi";
+   202		data->dai.stream_name = "hifi";
+   203		data->dai.codecs->dai_name = "es8328-hifi-analog";
+   204		data->dai.codecs->of_node = codec_np;
+   205		data->dai.cpus->of_node = ssi_np;
+   206		data->dai.init = &imx_es8328_dai_init;
+   207		data->dai.dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
+   208				    SND_SOC_DAIFMT_CBP_CFP;
+   209	
+   210		data->card_driver.dapm_widgets = imx_es8328_dapm_widgets;
+   211		data->card_driver.num_dapm_widgets = ARRAY_SIZE(imx_es8328_dapm_widgets);
+   212		data->card_driver.controls = imx_es8328_controls;
+   213		data->card_driver.num_controls = ARRAY_SIZE(imx_es8328_controls);
+   214		ret = snd_soc_card_of_parse_name(card, "model");
+   215		if (ret) {
+   216			dev_err(dev, "Unable to parse card name\n");
+   217			goto put_device;
+   218		}
+   219		ret = snd_soc_card_of_parse_audio_routing(card, "audio-routing");
+   220		if (ret) {
+   221			dev_err(dev, "Unable to parse routing: %d\n", ret);
+   222			goto put_device;
+   223		}
+   224		data->card_driver.num_links = 1;
+   225		data->card_driver.dai_link = &data->dai;
+   226	
+   227		ret = devm_snd_soc_card_register(card);
+   228		if (ret) {
+   229			dev_err(dev, "Unable to register: %d\n", ret);
+   230			goto put_device;
+   231		}
+   232	
+   233		platform_set_drvdata(pdev, data);
+   234	put_device:
+   235		put_device(&ssi_pdev->dev);
+   236	fail:
+   237		of_node_put(ssi_np);
+   238		of_node_put(codec_np);
+   239	
+   240		return ret;
+   241	}
+   242	
 
 --
 0-DAY CI Kernel Test Service
