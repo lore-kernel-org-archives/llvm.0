@@ -1,67 +1,67 @@
 Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580E13E1D1D
-	for <llvm@lists.linux.dev>; Tue,  2 Jun 2026 13:03:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB203E1D0B
+	for <llvm@lists.linux.dev>; Tue,  2 Jun 2026 13:03:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780405406; cv=none; b=fic7XQqvMnIbgB6sp8mkI3/rNKzEAtLwtt3q9ft9IQ+KcGRAFLybMdA7/pqTFx8Ku9nWVLAyodxGgUa6mg3PZdDKMMSSMGbmvklafgiVx6JazFSJMjVFpcOsgJpG0eKs9OexSlLcgPnzeVJvq0qYlJhFPEgZ6T9CS+tBX78NkRY=
+	t=1780405409; cv=none; b=utrsywPtklY/Irer/x/GDUl10BAdCBdLWvta50PN+M7mIQyT85Jv3JF07CF7D/+ZABqFZl3aCoPree15FbtNDfPeWZBiu/GMB2022IKUK34V53PCuH9Bg6n0/ZvaCjfwGF4tNJXui2Op8Ry5+1MW7Y9/yJvoGxw59WDkhxmNLZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780405406; c=relaxed/simple;
-	bh=GDZbYvQUamOFYqe+wDRuXBL1KE4AYy5pkKArBFAUAWs=;
+	s=arc-20240116; t=1780405409; c=relaxed/simple;
+	bh=fbF8nQJXxB1SkRTOtp4VOVdXaJiaAS90dkQH2m8/uwE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LvwZwoQIjJmtl8vYx1uPR6DOhJjh3m89NOS2ROpJS4skIdqdjzDvyinWEacgSQ3O3XFMutC+J6UG5vrcXvrSYL3lze21Ivh5/ZzKs42WHA7WrXlUE6vinv7GBN37iQxMVTakYqB6j7TUgV7AbeYgqkiAiuKskL6wogGi0OpcK+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EOIekoTT; arc=none smtp.client-ip=209.85.208.46
+	 In-Reply-To:To:Cc; b=myK7NS3J/UFN22jmmLgKqp9Se6vw+2cXyyzQmBAsDIDnxj229LsI3q05EdjRxiVpiDpF6l/PomFrTcfB3mn/h6z/5ObW1CtbNpWVZU0TNysGFqtZGE9aps/OWRiX7/QU1B8L+zIK0i4eUk0I3SMqQ4ModRAwodTgYtIqGgBtkTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HvBh1Xdz; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EOIekoTT"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-68c3421b009so5819654a12.1
-        for <llvm@lists.linux.dev>; Tue, 02 Jun 2026 06:03:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HvBh1Xdz"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-68852a4fc68so2589547a12.3
+        for <llvm@lists.linux.dev>; Tue, 02 Jun 2026 06:03:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780405404; x=1781010204; darn=lists.linux.dev;
+        d=suse.com; s=google; t=1780405406; x=1781010206; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MZypcCVdQoLHHXNUwPT3EyFR3TdxTd7mb2pLyq2WFR0=;
-        b=EOIekoTT2CBWWzKNqHUnc7Gp5ovCWR73Iulrl7oysUq9Ix5IyLRslsD7r/h6B5RVX0
-         CSlQAC9XSwRUbSTg8muVnRcKOLbm9Z/+sSm2XBJDj6F9J2o+pNKqgpUMVqO3bq+L6mn9
-         54mYtlbu8TKY/EGvTk4mpD8MHZB906RasbenNrczg5kNSUn6ov+pQS9T8DpHS1KVp1WZ
-         owBCe1DmBFiTfcKE6q/OLJbrBT3BWiRjZ7ctsvAf5APfitnS8o68PpT9YiK5sEHnthvV
-         9PEqsTuDvAAEA2TcZcgOmYD7wNSmreVxh9pbYoeiaehJGAanp0dfona5YdJ7TStcQvYf
-         62Bw==
+        bh=M7sRCyAaG4JtB8cGdq/xLoJjiqdDEq8Sk+qOaCu1wfw=;
+        b=HvBh1XdzVZG60JgBeItSoGG//x/zBOeDOAHbh2Gt9w63rLtYpwd5sWN6Xu9LqGZWix
+         mzRQIsVahfLE2swGQacU/3g4n9EV+XFHtkqCKJN3QhRRhVVvfeEuwmKX1WRKkoWJotDH
+         mLwWdKtlkjb1/6ilqbM5/8HYCPyYnYJvSRAvX3gvOiC1arjo+SuC/5y3mdo8k9bcO4Vo
+         oqDJkHxJyCu4Fj5joy2wQryy6dcpTqfqGv0TZuZ7lWd5pmIVCpkS7ORIetb1u4jgLUzv
+         9noFULVEZEK/bGrqd2voLCvkoa3vOLi+6GLw8+9uQKdo9PDcDqCn0wC0RzdI4G/KOILe
+         xsSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780405404; x=1781010204;
+        d=1e100.net; s=20251104; t=1780405406; x=1781010206;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=MZypcCVdQoLHHXNUwPT3EyFR3TdxTd7mb2pLyq2WFR0=;
-        b=lkdZRY1FbIgKbT24UC8ct/5XRr+/KGw5teEZdM4sct45Fx4BEeyRvndKkBzsLjXyfJ
-         RWDOm+xlnlil9tsP5aiSRU6XF3H5Lv+4TKTU2UDbYgBxuHTvCHeDuZZoopmK42T6ZNVP
-         Eyj/zGGKg84xTrBR+9CUU6AZ5zrVe7/EluFudvVNzXjxzilfojm4v6MWP6p6YFPMhV0K
-         aROGIpt4MKkyfd/LhFqOM2QF7vdSpBZdotdjTsJ95Zpa7jS/HB26QPWW9I5NCaUCAfPF
-         bpO9CGVAoqhqsC+KHYJpUPmLDsrCu4Ys/wXXcm+OXdO5N027srvIGkTvMAbNIeWqavfS
-         rBTg==
-X-Forwarded-Encrypted: i=1; AFNElJ/oS91hqVdPp+T3CWxUScWUnN0cDBRQFRCL8+1sISDtfiV2dCpvQJyngLxLl5MumvlmvwGo@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywd+DX71TXdcoLiEeJHJcWxe6pRrhLgswYVfxZ02nSdokuKFZxQ
-	0JVyc5c+DbS8+oqjp1u6UwEfiwQP5WUGNtUY3pJ0fpHwjejSMOh3pcoLTT5v0LFP4xc=
-X-Gm-Gg: Acq92OH5P3zBoFVTIiX1TEwsGy8soqMbsbHD7Q1OI98DXtk2CDYhPw5Ixpye1sOPOM8
-	RPebKW6gqV+nj6oYT0c7eO5TiWyw02fqC9H5KvwUaN/qBHrAQNd0XP8/kWO+2HFtUXLyeaateWH
-	CE2Cl9/rwVjBhqBJjMQKvS9N3wY5lHo3dWfLIoRfDp0YlxlNyJvM/O8Y7wbDAo2kxsiLXdKfGzl
-	Ek+8QAOe3QAwEj13Hx/VzcuuLoVHFMYmeH0ACz4fdag5gQYhKdwLShmENi654O/6WhUj+Dcsfa+
-	fGpxs5MhZ+jhq1/bg1vt2iZHKVi7z9hIN3/XjBoS4ONDCnY+aIcyzmHGM5OJ65G4RcrMMLI0cTg
-	BAgo9GGuR0toJ68KasTjwPIkClBhnWvmR+t0MB2o5mIHqoCgmnGXph1L8YXUrkJ0lp1bAlLXum3
-	sXrzYqujzcSuDroZvdzmDjS4DKNogmODf/
-X-Received: by 2002:a17:906:c14d:b0:bee:d554:f33c with SMTP id a640c23a62f3a-beef57fbdebmr208259266b.0.1780405401970;
-        Tue, 02 Jun 2026 06:03:21 -0700 (PDT)
+        bh=M7sRCyAaG4JtB8cGdq/xLoJjiqdDEq8Sk+qOaCu1wfw=;
+        b=XGUK/Q/8raoXpvrI0yrjggjG5egyALKOcQ68GL5BgXt5asZeF4T/nBcXt1YM2BxEuq
+         nptD3dZw+6aMe9fMpm3xWtVb7PCBqYNXnCu1JATwaxcmGfI59bFwp3MNfPR/EagM4am6
+         B3wavNcPkaqlB1yEyn6c1euAeWTu5OJBWnGKULFRtD8MweXk49kiqydxJYwztAzcoyhN
+         +vRKLU/nos3i/6zMb2fBOQcZjZl1cemt1DRjfYEqx4/27zWeGGPBFjYcpbce2UMY0PTy
+         r5AQFx2kGcnXkHm51OPviGmoQXDvKNSjsGP4WyaHNSQ8I3hgV9Nt3BvwpQB6Q4b/jroq
+         5KzQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/FrtDEdMbVCh34PeRNtO0vrMiDY2WR2vIAerCobqM05MV5mar00g491dOkiOjE6LdoKYiy@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywqe/1BVraQC0yG0qq2W4jXc+NmSTAY+rMqMorDgvGKAVBIz+4k
+	twwruMMy0xcdLpmg2968lScb35oxSYqMrCIZfxWcVbygWquNwwQCoqbJxisuX1vup64=
+X-Gm-Gg: Acq92OE2KST9ct6szX7bBg7GU9TY07r5bF9Rz0I3Gsh1IXoqEsSI3AiMuuCAHVWrCIp
+	e55flbreELdeH2ghsihskl8GTyc8Zd3Y9GFSdR9YxZeXWIfmKlQ7iz1ce/cXtjIbQ1NjyFb2V62
+	9DIBrNxVOG40GwP510NbnsEnsQYoYqa5/+Xg0/I5I6BnO2dEY3VbGVnTeKevHCtmtsE89KVXlx0
+	5kAlz4h8u7IR1IssJKGjWFF1dnEZRKYOs0qb+DBWFgH1Pi6C3KhCJ6SiB5k8M9EUlRw6QCEQew9
+	hJoxbItaM2CRvJ5Et4aAJvxwQ2TH4XXphmQfo7IrymXuHP1zkypsNTcBc8xToK8E6OFvUFfieue
+	IUKQCl9MpX8c5QZtBC9KH5ryLFWCpYIbFT9H7PhVtySAsVQ7M5GzWydugU7rmMlsFsiyNNx5qf1
+	oN4MjlCLMHkjsF8MUVuCQ25Q==
+X-Received: by 2002:a17:907:9729:b0:bda:8e57:5639 with SMTP id a640c23a62f3a-beab13c2204mr914425266b.20.1780405406008;
+        Tue, 02 Jun 2026 06:03:26 -0700 (PDT)
 Received: from localhost ([2804:7f0:b765:e15:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bee8899dd5bsm176361766b.23.2026.06.02.06.03.20
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-be9d62cbee6sm484486866b.44.2026.06.02.06.03.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 06:03:21 -0700 (PDT)
+        Tue, 02 Jun 2026 06:03:25 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Tue, 02 Jun 2026 10:02:50 -0300
-Subject: [PATCH bpf-next RESEND v12 01/11] selftests/bpf: Add
- BPF_STRICT_BUILD toggle
+Date: Tue, 02 Jun 2026 10:02:51 -0300
+Subject: [PATCH bpf-next RESEND v12 02/11] selftests/bpf: Fix test_kmods
+ KDIR to honor O= and distro kernels
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260602-selftests-bpf_misconfig-v12-1-27f898b3ba26@suse.com>
+Message-Id: <20260602-selftests-bpf_misconfig-v12-2-27f898b3ba26@suse.com>
 References: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
 In-Reply-To: <20260602-selftests-bpf_misconfig-v12-0-27f898b3ba26@suse.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -87,54 +87,135 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Alan Maguire <alan.maguire@oracle.com>, 
  "Ricardo B. Marliere" <rbm@suse.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1780405395; l=1573;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1780405395; l=5932;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=GDZbYvQUamOFYqe+wDRuXBL1KE4AYy5pkKArBFAUAWs=;
+ bh=fbF8nQJXxB1SkRTOtp4VOVdXaJiaAS90dkQH2m8/uwE=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QPZE5O73neptr/nVHQlz6qoj/gAhVpUqQ41Slol1ZYyw3dxCoSxmAPVUrEPlcTP7dTwRAKVf8wo
- JaX29rXsJVQk=
+ QI5yf7yf2KUrgMKzMpv9PNsaaemkv5a2Vsp6OYxwNHZ/EeuLg672ou+N8NZ/UkldtQNlkR1OTTJ
+ LUmbr3gtU8Q0=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-Distro kernels often lack BTF types or kernel features required by some BPF
-selftests, causing the build to abort on the first failure and preventing
-the remaining tests from running.
+test_kmods/Makefile always pointed KDIR at the kernel source tree root,
+ignoring O= and KBUILD_OUTPUT. On distro kernels where the source tree has
+not been built, the Makefile had no fallback and would fail
+unconditionally.
 
-Add BPF_STRICT_BUILD (default 1) to control build failure tolerance. When
-set to 0, the PERMISSIVE make variable is assigned a non-empty value that
-subsequent Makefile rules use to make individual build steps non-fatal.
-When set to 1 (the default), the build fails on any error, preserving the
-existing behavior for CI and direct builds.
+When O= or KBUILD_OUTPUT is set and points at a prepared kernel build
+directory (one containing Module.symvers), pass it through so kbuild can
+locate the correct build infrastructure (scripts, Kconfig, etc.). Note
+that the module artifacts themselves still land in the M= directory,
+which is test_kmods/; O= only controls where kbuild finds its build
+infrastructure. Fall back to /lib/modules/$(uname -r)/build when neither
+an explicit valid build directory nor an in-tree Module.symvers is
+present.
 
-Users can opt in to permissive mode on the command line:
+A selftests-only O= value (one that does not contain Module.symvers, e.g.
+a private output directory) is intentionally not treated as a kernel
+build directory. Without this guard, a user invoking
+"make -C tools/testing/selftests/bpf O=/tmp/out" would have test_kmods
+try to use /tmp/out as the kernel build dir and fail.
 
-  make -C tools/testing/selftests \
-       TARGETS=bpf SKIP_TARGETS= BPF_STRICT_BUILD=0
+The parent bpf/Makefile resolves O= and KBUILD_OUTPUT to absolute paths
+before invoking the test_kmods sub-make. Without this, $(abspath ...)
+inside test_kmods/Makefile would resolve relative paths against the
+sub-make's CWD (test_kmods/) rather than the user's invocation directory.
 
-Suggested-by: Alan Maguire <alan.maguire@oracle.com>
+When O= is passed to kbuild, also pass KBUILD_OUTPUT=$(KMOD_O_VALID)
+explicitly. The parent invocation lifts KBUILD_OUTPUT into MAKEFLAGS as
+a command-line variable, which would otherwise suppress kbuild's own
+"KBUILD_OUTPUT := $(O)" assignment and cause it to use the inherited
+KBUILD_OUTPUT instead of the validated O=.
+
+Guard both all and clean against a missing KDIR so the step is silently
+skipped rather than fatal. Make the parent Makefile's cp conditional so it
+does not abort when modules were not built.
+
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
- tools/testing/selftests/bpf/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/bpf/Makefile            | 10 +++++----
+ tools/testing/selftests/bpf/test_kmods/Makefile | 30 ++++++++++++++++++++++---
+ 2 files changed, 33 insertions(+), 7 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index bc049620c774..75036c1b5c4f 100644
+index 75036c1b5c4f..e912526a65dd 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -44,6 +44,12 @@ SKIP_LLVM	?=
- SKIP_LIBBFD	?=
- SKIP_CRYPTO	?=
+@@ -296,13 +296,15 @@ $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
+ # subst() turns the rule into a pattern matching rule
+ $(addprefix test_kmods/,$(subst .ko,%ko,$(TEST_KMODS))): $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard test_kmods/Makefile test_kmods/*.[ch])
+ 	$(Q)$(RM) test_kmods/*.ko test_kmods/*.mod.o # force re-compilation
+-	$(Q)$(MAKE) $(submake_extras) -C test_kmods	\
+-		RESOLVE_BTFIDS=$(RESOLVE_BTFIDS)	\
++	$(Q)$(MAKE) $(submake_extras) -C test_kmods				\
++		$(if $(O),O=$(abspath $(O)))					\
++		$(if $(KBUILD_OUTPUT),KBUILD_OUTPUT=$(abspath $(KBUILD_OUTPUT)))\
++		RESOLVE_BTFIDS=$(RESOLVE_BTFIDS)				\
+ 		EXTRA_CFLAGS='' EXTRA_LDFLAGS=''
  
-+# When BPF_STRICT_BUILD is 1, any BPF object, skeleton, test object, or
-+# benchmark compilation failure is fatal. Set to 0 to tolerate failures
-+# and continue building the remaining tests.
-+BPF_STRICT_BUILD ?= 1
+ $(TEST_KMOD_TARGETS): $(addprefix test_kmods/,$(TEST_KMODS))
+ 	$(call msg,MOD,,$@)
+-	$(Q)cp test_kmods/$(@F) $@
++	$(Q)$(if $(PERMISSIVE),if [ -f test_kmods/$(@F) ]; then )cp test_kmods/$(@F) $@$(if $(PERMISSIVE),; fi)
+ 
+ 
+ DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
+@@ -718,7 +720,7 @@ $(TRUNNER_LIB_OBJS): $(TRUNNER_OUTPUT)/%.o:$(TOOLSDIR)/lib/%.c
+ $(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_FILES) | $(TRUNNER_OUTPUT)
+ ifneq ($2:$(OUTPUT),:$(shell pwd))
+ 	$$(call msg,EXT-COPY,$(TRUNNER_BINARY),$(TRUNNER_EXTRA_FILES))
+-	$(Q)rsync -aq $$^ $(TRUNNER_OUTPUT)/
++	$(Q)rsync -aq $(if $(PERMISSIVE),--ignore-missing-args) $$^ $(TRUNNER_OUTPUT)/
+ endif
+ 
+ # some X.test.o files have runtime dependencies on Y.bpf.o files
+diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
+index 63c4d3f6a12f..031c7454ce65 100644
+--- a/tools/testing/selftests/bpf/test_kmods/Makefile
++++ b/tools/testing/selftests/bpf/test_kmods/Makefile
+@@ -1,5 +1,16 @@
+ TEST_KMOD_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
+-KDIR ?= $(abspath $(TEST_KMOD_DIR)/../../../../..)
++SRCTREE_KDIR := $(abspath $(TEST_KMOD_DIR)/../../../../..)
++# Honor O=/KBUILD_OUTPUT only if they point at a prepared kernel build
++# directory (one containing Module.symvers); otherwise treat the value as a
++# selftests-only output directory and fall back to in-tree or distro headers.
++# The parent bpf/Makefile resolves O=/KBUILD_OUTPUT to absolute paths before
++# invoking this sub-make so relative paths still anchor to the user's
++# invocation directory.
++KMOD_O := $(or $(O),$(KBUILD_OUTPUT))
++KMOD_O_VALID := $(if $(KMOD_O),$(if $(wildcard $(KMOD_O)/Module.symvers),$(KMOD_O)))
++KDIR ?= $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
++	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
++		/lib/modules/$(shell uname -r)/build))
+ 
+ ifeq ($(V),1)
+ Q =
+@@ -14,8 +25,21 @@ $(foreach m,$(MODULES),$(eval obj-m += $(m:.ko=.o)))
+ 
+ CFLAGS_bpf_testmod.o = -I$(src)
+ 
++# When BPF_STRICT_BUILD != 0, a missing KDIR is fatal (the default).
++# When permissive, skip silently.
 +PERMISSIVE := $(filter 0,$(BPF_STRICT_BUILD))
 +
- ifeq ($(srctree),)
- srctree := $(patsubst %/,%,$(dir $(CURDIR)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
+ all:
+-	$(Q)$(MAKE) -C $(KDIR) M=$(TEST_KMOD_DIR) modules
++ifeq ($(PERMISSIVE),)
++	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
++		M=$(TEST_KMOD_DIR) modules
++else ifneq ("$(wildcard $(KDIR))", "")
++	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
++		M=$(TEST_KMOD_DIR) modules
++endif
+ 
+ clean:
+-	$(Q)$(MAKE) -C $(KDIR) M=$(TEST_KMOD_DIR) clean
++ifneq ("$(wildcard $(KDIR))", "")
++	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
++		M=$(TEST_KMOD_DIR) clean
++endif
 
 -- 
 2.54.0
