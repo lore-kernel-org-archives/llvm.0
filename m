@@ -1,162 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB5E33E37A;
-	Tue,  2 Jun 2026 02:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC111368263
+	for <llvm@lists.linux.dev>; Tue,  2 Jun 2026 03:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780366885; cv=none; b=MGLx7hwyY1ONWPydfqVC9dGl5Bg1HWwSh+cHYETaobykLHpJbcml+5WxzNVSynaXdm23bBx3Tk2nwIv1LerNPzRI7xXZJ6EEmbJ23QKOEwh4yb4lFBIRsl6OTTUDu4I8bShu4LieYftFutsjz17VGIVe7H2Xb5oVW8/VhdgZvH0=
+	t=1780369747; cv=none; b=rwqLYVCZbEu0KecrJdUQ78kmcKXfv6abOzXHYaydnPbHREVTou7Q9r8cg2LaTm9eVxcgmVh5kXUVMDDoL307OLmNBU5n7d6LzHh69hvIDCKXwZPYiNMqnpn3boesCt8GVZ8/dTLmmDklqlAcCadoxmLLnXyt5/tBdgm8K9RmMJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780366885; c=relaxed/simple;
-	bh=c2+SViuNjksxMtE1VcAPh1IEUFSJvUeNCCC+NtP5vQ0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=baFG1Q3EaDntBr8ja/IJeZjJUdDosuaaDDdzD6xs3JxJl4QVdMT1v/rru339RNluuntqtyWs93FPBU2wS/gZlKd+84g+nb35DROrpYRva75eR5JjtxGcedov9MMNHjZVgbOdpdG8fCMnLJIHdQAD1MwQrEDf76x/UlzLdh1Dhf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=chLgXfDE; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780369747; c=relaxed/simple;
+	bh=S+5yjiqdurSwWGV3vZL82sGJRrRg3cT3Gkw6FXUX4Zw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=NVzdWo7pqV876dJY0ChiCynpNT+5dso01lWzFwNQz17fUFYJ19JPuPjMUOmodMamBlHkzq4xI0rCls9HqwOEcavOR0qgzq5AhAZw6m/SzsLI6gmQ8Fr8YJu0XHZ0zbbWWYaZNqBHtzbH5ck5HCK2uGB5oxmaklQmRtu6CDYYkJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A8WEmBM9; arc=none smtp.client-ip=209.85.215.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="chLgXfDE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780366884; x=1811902884;
-  h=date:from:to:cc:subject:message-id;
-  bh=c2+SViuNjksxMtE1VcAPh1IEUFSJvUeNCCC+NtP5vQ0=;
-  b=chLgXfDEcLrHO++uDB9eA32rOpQlb5uXL4G+aeJ9Opr+KHJeebZRpTDm
-   54KBAl7hTeyfJmsHQyYXdIO4xV5xHC/+wH42/kpTExBFhSBWGs4E1RQ60
-   oo5gKwd4TGfWlv0myXqd672K07Pv6CM02At7VfF2w7phflQ2E0op3cetp
-   vFkys80vXaUAq7Zcok7ll3KMNsOmyoReRWWIqbvWUG+zsstNzFL9OqPQD
-   i0bli1VwVVe1ewQA4l21Dn1Gd7ILWURinJKUOQzkSVFQisi4gpN7uuL71
-   opQzKEEGOgf1/qMevSRcoRpd2xORFleqWSVn9oyyKKWeQsn//jJ/AQMPY
-   A==;
-X-CSE-ConnectionGUID: qLeIiL7lTxOhlWrWrR8qkA==
-X-CSE-MsgGUID: PoC+JFa9QUmmoVbSY5K7ug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11804"; a="91446572"
-X-IronPort-AV: E=Sophos;i="6.24,182,1774335600"; 
-   d="scan'208";a="91446572"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2026 19:21:24 -0700
-X-CSE-ConnectionGUID: SlxvEZ+hTrmO038VyK4e/A==
-X-CSE-MsgGUID: ceeDOTK7SsKSaWFkzlf2hA==
-X-ExtLoop1: 1
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa003.fm.intel.com with ESMTP; 01 Jun 2026 19:21:22 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wUEkq-000000001if-2ILW;
-	Tue, 02 Jun 2026 02:21:20 +0000
-Date: Tue, 02 Jun 2026 04:20:51 +0200
-From: kernel test robot <lkp@intel.com>
-To: K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:sched/core 53/55] kernel/sched/core.c:9862:19:
- error: too few arguments to function call, single argument 'rq' was not
- specified
-Message-ID: <202606020432.6P6cOrOj-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A8WEmBM9"
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c85a2c012e5so707938a12.1
+        for <llvm@lists.linux.dev>; Mon, 01 Jun 2026 20:09:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780369745; x=1780974545; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A6//D+s1eomSFlvy221abQe65GjmCnQrDuYTvNngqlI=;
+        b=A8WEmBM96g984FwvVULLH0pslHyYZV913QaMFxg84IhNQ2GYVHQ7YjhK8A7OBYs7Ai
+         g1kUnH1ysvaBY8lhda6GUK5F4TjnLJftjy58gwV+ziVTpOAuwwrmREXg3HQyf+SqPnY5
+         1FYsvYfl5HVzMwomese9YVOUVGG2B5Vk2P3btl/I3b6nA1EnLAGUrs85IYqEV9HqRf4e
+         mPnJ+IpKogP3dGg+pt2QOcVJ1BwbFDqbtCenM0+IYxbqIXa/3WTXYg6AeGhWRzUjPGYO
+         PrR95U2nk8/nnzHz5JPU6g37YmgGGzIW1JYrEsUBm08yfhM8ebCZZmlBjyzCoGhPxddE
+         8M/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780369745; x=1780974545;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=A6//D+s1eomSFlvy221abQe65GjmCnQrDuYTvNngqlI=;
+        b=VQ2nU6TFzsAtFaSA39d1GP4R2mHZ4kM7As2zdVFEZKBJl/yC/XjrXkqZDMMt4F6p3P
+         CLQ5F0Iq/v5RvGdkjOnRu5uobB5dVZ6yfeCFLhege9uQ30uJb6tOBqMZRiOfHqQpqD7k
+         GboowbcgVD9/A8QKspcKjMrz5/xfRrywGOIjG/6AIefqaR7LMzre0F4bCqocWWpfDMO5
+         6uzZazNc5enVYKjcFL8e5cZYdrTAZQuEjckTyddieOShi0Yj9Uk6rzX/C/9leo/C6JdD
+         8jnzjwSdy8Nwyv+Zi1IqUreIZcHvuio8xOudqJ9B0fk44yvn+P8UZAU+4GB3esC8ICFO
+         uckQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9yaeMt1RU1eb+6EOpDaLrlV8apfsnr55Q9gEh+cRKhRD71byOLefd/ciqe13XXCvs4czoh@lists.linux.dev
+X-Gm-Message-State: AOJu0YwWvc/po0k9PHd3kNelcvhKFfZjjRyZPRR0q+xUbn8LYojCpOyC
+	yweE6pBqgfB2WQKNWN5AMvCKszmYJ0kcpM3UfkjFE4bTE3VD1WkL9eck
+X-Gm-Gg: Acq92OGzX9dlztiedtIETneS7j0iBZfqh7fJ29mltcZEpUTzDnPG4F6C6U46b9FO1Ux
+	8ptORzfmCzO/hp1F3vpQYHtUmvehWS91mS2+2uOcy3d8xnjS0SAx56rlqZsz6UntwMupE1ftWsr
+	930FaBuSxO1PMpaRZqtIwo9Cjk3mARb5WnPWsh2XIywGQmKtAtXfICWjX1rHblvrX7igmTJlf4E
+	ARFUbZBi17GBLJ/VUGQcomW4VX6vqc3vXfNjDnK16H1JFOyJxyVymlrRgpKU28TP48o0mfpV45p
+	rehn3b0KGL9YTVFrnQg4U3lQpUPexZF8+U9hLwD1eosLDbblHuq2asN6zEpNQso4grtVHJJz/9a
+	ybuCyniY8EsR1DNN55MCcAzPOEukfzJlKooQN7w1Q/l9LJGCOKDxeQAhf81CL+/halkX4XsnE5Q
+	uD5J6QRWYI4xw8b0eW9XqsdNMt2T9atv5Kw6KUjeWSuJo7fA8rM9ZRV3TnxZre
+X-Received: by 2002:a05:6a20:4389:b0:398:7ffe:472f with SMTP id adf61e73a8af0-3b427bc7337mr14542220637.2.1780369745002;
+        Mon, 01 Jun 2026 20:09:05 -0700 (PDT)
+Received: from lima-ubuntu.hz.ali.com ([47.246.98.221])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85861d5fe2sm8836799a12.8.2026.06.01.20.08.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2026 20:09:04 -0700 (PDT)
+From: Qing Wang <wangqing7171@gmail.com>
+To: peterz@infradead.org,
+	mathieu.desnoyers@efficios.com
+Cc: dvyukov@google.com,
+	justinstitt@google.com,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	mark.rutland@arm.com,
+	mingo@kernel.org,
+	morbo@google.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	syzbot+185a631927096f9da2fc@syzkaller.appspotmail.com,
+	tglx@kernel.org,
+	wangqing7171@gmail.com
+Subject: [PATCH v2] rseq: fix using an uninitialized stack variable in rseq_exit_user_update
+Date: Tue,  2 Jun 2026 11:08:54 +0800
+Message-Id: <20260602030854.574038-1-wangqing7171@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260601143934.GT3493090@noisy.programming.kicks-ass.net>
+References: <20260601143934.GT3493090@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
-head:   3a9f55cc6febc28a79812ccea577e49e6292c272
-commit: f01680da9d51010caa60b7f534bbae7eeed904d3 [53/55] sched/fair: Call update_curr() before unthrottling the hierarchy
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260602/202606020432.6P6cOrOj-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260602/202606020432.6P6cOrOj-lkp@intel.com/reproduce)
+There is an bug which is an uninitialized stack variable use in
+`rseq_exit_user_update()` reported by syzbot:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606020432.6P6cOrOj-lkp@intel.com/
+BUG: KMSAN: kernel-infoleak in rseq_set_ids_get_csaddr include/linux/rseq_entry.h:502 [inline]
 
-All errors (new ones prefixed by >>):
+The local variable:
+```c
+	struct rseq_ids ids = {
+		.cpu_id	 = task_cpu(t),
+		.mm_cid	 = task_mm_cid(t),
+		.node_id = cpu_to_node(ids.cpu_id),
+	};
+```
+According to the C standard, the evaluation order of expressions in an
+initializer list is indeterminately sequenced. The compiler (Clang, in this
+KMSAN build) evaluates `cpu_to_node(ids.cpu_id)` *before* `ids.cpu_id` is
+initialized with `task_cpu(t)`.
 
->> kernel/sched/core.c:9862:19: error: too few arguments to function call, single argument 'rq' was not specified
-    9862 |                 update_rq_clock();
-         |                 ~~~~~~~~~~~~~~~ ^
-   kernel/sched/core.c:860:6: note: 'update_rq_clock' declared here
-     860 | void update_rq_clock(struct rq *rq)
-         |      ^               ~~~~~~~~~~~~~
-   1 error generated.
+This is fixed by moving the assignment of ids.node_id outside the structure
+initialization.
 
+Reported-by: syzbot+185a631927096f9da2fc@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=185a631927096f9da2fc
+Fixes: 82f572449cfe ("rseq: Implement read only ABI enforcement for optimized RSEQ V2 mode")
+Signed-off-by: Qing Wang <wangqing7171@gmail.com>
+---
+ include/linux/rseq_entry.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-vim +/rq +9862 kernel/sched/core.c
+diff --git a/include/linux/rseq_entry.h b/include/linux/rseq_entry.h
+index 63bc72086e75..ed9da6e41a2a 100644
+--- a/include/linux/rseq_entry.h
++++ b/include/linux/rseq_entry.h
+@@ -635,10 +635,11 @@ static __always_inline bool rseq_exit_user_update(struct pt_regs *regs, struct t
+ 		return true;
+ 	}
+ 
++	int cpu = task_cpu(t);
+ 	struct rseq_ids ids = {
+-		.cpu_id	 = task_cpu(t),
++		.cpu_id	 = cpu,
+ 		.mm_cid	 = task_mm_cid(t),
+-		.node_id = cpu_to_node(ids.cpu_id),
++		.node_id = cpu_to_node(cpu),
+ 	};
+ 
+ 	return rseq_update_usr(t, regs, &ids);
+-- 
+2.34.1
 
-  9805	
-  9806	static int tg_set_cfs_bandwidth(struct task_group *tg,
-  9807					u64 period_us, u64 quota_us, u64 burst_us)
-  9808	{
-  9809		int i, ret = 0, runtime_enabled, runtime_was_enabled;
-  9810		struct cfs_bandwidth *cfs_b = &tg->cfs_bandwidth;
-  9811		u64 period, quota, burst;
-  9812	
-  9813		period = (u64)period_us * NSEC_PER_USEC;
-  9814	
-  9815		if (quota_us == RUNTIME_INF)
-  9816			quota = RUNTIME_INF;
-  9817		else
-  9818			quota = (u64)quota_us * NSEC_PER_USEC;
-  9819	
-  9820		burst = (u64)burst_us * NSEC_PER_USEC;
-  9821	
-  9822		/*
-  9823		 * Prevent race between setting of cfs_rq->runtime_enabled and
-  9824		 * unthrottle_offline_cfs_rqs().
-  9825		 */
-  9826		guard(cpus_read_lock)();
-  9827		guard(mutex)(&cfs_constraints_mutex);
-  9828	
-  9829		ret = __cfs_schedulable(tg, period, quota);
-  9830		if (ret)
-  9831			return ret;
-  9832	
-  9833		runtime_enabled = quota != RUNTIME_INF;
-  9834		runtime_was_enabled = cfs_b->quota != RUNTIME_INF;
-  9835		/*
-  9836		 * If we need to toggle cfs_bandwidth_used, off->on must occur
-  9837		 * before making related changes, and on->off must occur afterwards
-  9838		 */
-  9839		if (runtime_enabled && !runtime_was_enabled)
-  9840			cfs_bandwidth_usage_inc();
-  9841	
-  9842		scoped_guard (raw_spinlock_irq, &cfs_b->lock) {
-  9843			cfs_b->period = ns_to_ktime(period);
-  9844			cfs_b->quota = quota;
-  9845			cfs_b->burst = burst;
-  9846	
-  9847			__refill_cfs_bandwidth_runtime(cfs_b);
-  9848	
-  9849			/*
-  9850			 * Restart the period timer (if active) to handle new
-  9851			 * period expiry:
-  9852			 */
-  9853			if (runtime_enabled)
-  9854				start_cfs_bandwidth(cfs_b);
-  9855		}
-  9856	
-  9857		for_each_online_cpu(i) {
-  9858			struct cfs_rq *cfs_rq = tg_cfs_rq(tg, i);
-  9859			struct rq *rq = cfs_rq->rq;
-  9860	
-  9861			guard(rq_lock_irq)(rq);
-> 9862			update_rq_clock();
-  9863			cfs_rq->runtime_enabled = runtime_enabled;
-  9864			cfs_rq->runtime_remaining = 1;
-  9865	
-  9866			if (cfs_rq->throttled)
-  9867				unthrottle_cfs_rq(cfs_rq);
-  9868		}
-  9869	
-  9870		if (runtime_was_enabled && !runtime_enabled)
-  9871			cfs_bandwidth_usage_dec();
-  9872	
-  9873		return 0;
-  9874	}
-  9875	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
