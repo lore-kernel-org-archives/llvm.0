@@ -1,135 +1,219 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CB43537CD
-	for <llvm@lists.linux.dev>; Tue,  2 Jun 2026 07:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99789371043;
+	Tue,  2 Jun 2026 08:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780384567; cv=none; b=kZjhoJ4vThpYTsw3DRlBLELRTq3y2MRMgAnBKnvdLEEGCurvyIas6CChlstVzfxAgxfUatsq4LdHQscMHQFhOgNdxYfQUzxl96eTeRh7kYZ8+/SqQh1oGeOA9p59FokBIDkHznTmaWDIIPqu4DIajCTqZqGcS88j3VaMsfkScgc=
+	t=1780388789; cv=none; b=bojhQ6/qZFtn8dZEZNIFpazq+caxCwx9SVaTCNQcUic41ZKNy6Ih7skQigNZEyi/vi8f8hnpf5+/t+WHVkiqZUuzQPuXn8AvhpkS9KHZyWyQcM3Dvu5Dlnd7IW6weFtIsQ12RfzfpojGcYBQIkWDl/lYLTDZaPzOZUR9SXPhFY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780384567; c=relaxed/simple;
-	bh=NcxbZhoJuwI2oRvDEpq2snWYy2SZI6F9jCQ5SNiw2rI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XD8hO2vcFr2+LRHi5PDbeVdktvgUvb19vYSOtpv1k9OrC+BT6bIaIQr1/WLWbrmLbBm7dcoHMByPWx36bhhupRFIqU2iv4n+jY25HulLsr2fzIvf+HlpTk55ggSoIkTgbpUQf98Hn2r5lhdisN+Ki+EzmhdMlsyhNXIJoQqhNl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KhwOp+oe; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780388789; c=relaxed/simple;
+	bh=KoJirJOySXdeAkdwPga5VwtZvFTR+sdoOFjPZigz9FU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=YGBjLkiAPP9X3wuGfPXPeEHK4ZXFmJzzDRPRnmhAn17VClQNXYqvNPvl118CUbU4Wwp4e3Cf1kEySzHrXeZGSGQfAaPUMoDPesUqSuAJCvA+uLbbii2bYJWZ/T3lBU7CG4O553HIrlIWhFumzPcg+KoDgI1n9J65c2ZcoEHepew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PdN5gnHR; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KhwOp+oe"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-36d98c9b596so1452161a91.3
-        for <llvm@lists.linux.dev>; Tue, 02 Jun 2026 00:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780384566; x=1780989366; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+tr7lju0eN0VwcHqpO/c52DT9rHJ2kZQnj1NlP5AASY=;
-        b=KhwOp+oerFZZGUmOpH/wUzCaDJA0GJYqp6o5JKUMO2oBELMsbPxnPA/QHE8/xLEDO5
-         dh9hFGPR3kqc8u+68j/r2CVFMPfJiGcJkvN1B1ifUAbQvCAMy/NQbvme6wxyRxoyuAL9
-         MBMwMrEUUCzoz5Lgo4iHJiPBg8uTt6jsdqtPRnFU0bYKyqpnj2Xn4PnXM2nh+a26caSu
-         0KOpF7RCjF65lvWzdbSMkqITTG9gonW6NvSv9hh1ogqZxsccU45MyZZ3PEXLg8a3V4Vf
-         ItXOS+MXqgQr2CisX498MUcJrdkS3zwEawPsL83NVbv7SQ0+NQIIHFmjpnd7ueWsNCz9
-         SKEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780384566; x=1780989366;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+tr7lju0eN0VwcHqpO/c52DT9rHJ2kZQnj1NlP5AASY=;
-        b=cUhM2+KkXwD91U480AktFcEbPAXI5sZJIMocvwiRMOaX32EEit4gpCyosj16EGnc0w
-         FIhpOUoBj6RGTPVPYkx535ZlCXVsus4kZLqjkNdqJR89vuP+7C7uNcUSjtTW5sk/BeX5
-         0o5/ko55y+zQYdlnpbayI8UyL2gf+zfDF5pq3Y+gB2wE50lT7k7nMUfQmIz+KAxc8nrE
-         g6JmyxEFgRL1+Ia3mODIWZUcfl3s/pbvi2E27VPdzix9Ds5St7QVPK5JMRfBUdVwkxcb
-         QV5WYlL6BcYQBsbUmLlGmdhmNEIxmwgDbQ47lOUx3d0gdFVjEtrSrHlf8qGpZothsAHq
-         3ZnQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/oQx7yUfmJZ2WApuDBvQvIndJeNeh1fIZUtrpzypR38AsRKwldbiFFlV5rQODilOWixvnh@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy8HrlXXnHbMFCssIHUbIuGQIpQ5PkzU4zSpKJlrNtTv4fX1QI9
-	C1Tq9U+DxlzQxU1e/RgpkW5xVR0dgdlWrk5BAYtdlsaOEdLVSKmCeKlT
-X-Gm-Gg: Acq92OHb0CywpEWmXKH+uYT6jrya5V0Hg4lIfcG+Wu3VHBI0XFJNRakbU+Q4LmDAeeU
-	9VnCjgKIY48WFNNAMEY84JC/LJtZdQVRUdAMijRV7qa0yOaxiAAKylFbZnlWowdb2lmAsEApTnG
-	RMe8wxfX23OQqQF4lH+QkA5KtxF6qZkAM4CmtfJoIpufWh/t4e88wzO5KzunXR+DOKRB6qDAF5P
-	09nyrfUbGwzWw5QW/pyHBlrTWRDhDY1FAd8e1IpXnW8WY4Z1rf30Hicdr+unQr7+o64UZA1q6ia
-	WOsgnGQhdaUzpLzLjFLgzlHzsEq/ovHjh7M/VBndF53RVQy3ukXAG1Afsm0k4NAOkuMUE+vWveg
-	zycMD3ut/JJEyWbLFLLz0k3vFYVWaKxshfwouFjiCCzkYeWuMWGieWs+3t6LMhMWHbXaUwegZ4C
-	rhhXRD4Ep336yX1Nwa/nw8oGaqE+SHY4N7HzgCoe4wJjz8aHGGmHqiWET0irC1nXuL8sZETDvns
-	Glcgw==
-X-Received: by 2002:a17:90a:c2cc:b0:368:147f:bd2b with SMTP id 98e67ed59e1d1-36c5020a69fmr13824981a91.23.1780384565532;
-        Tue, 02 Jun 2026 00:16:05 -0700 (PDT)
-Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([129.41.58.4])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36dd98797fesm1680774a91.13.2026.06.02.00.15.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 00:16:05 -0700 (PDT)
-Date: Tue, 2 Jun 2026 12:45:33 +0530
-From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-To: Gary Guo <gary@garyguo.net>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, maddy@linux.ibm.com, 
-	mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org, peterz@infradead.org, 
-	jpoimboe@kernel.org, jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org, 
-	ardb@kernel.org, ojeda@kernel.org, boqun@kernel.org, bjorn3_gh@protonmail.com, 
-	lossin@kernel.org, a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, 
-	nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com, 
-	justinstitt@google.com, daniel.almeida@collabora.com, acourbot@nvidia.com, 
-	fujita.tomonori@gmail.com, gregkh@linuxfoundation.org, prafulrai522@gmail.com, 
-	tamird@kernel.org, kees@kernel.org, lyude@redhat.com, airlied@gmail.com, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH V16 4/7] rust/powerpc: Set min rustc version for powerpc
-Message-ID: <ah6CsIo3N09q0Kj9@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-References: <20260520064630.1785283-1-mkchauras@gmail.com>
- <20260520064630.1785283-5-mkchauras@gmail.com>
- <CANiq72nPOMkZXpMpwTLFg4xjFfmyf_O_x2FN_nrNBsxeNu178Q@mail.gmail.com>
- <ahVb4k-2rC4EYZF9@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <DITEZRMNTOX2.1DKO9U58508S8@garyguo.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PdN5gnHR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780388787; x=1811924787;
+  h=date:from:to:cc:subject:message-id;
+  bh=KoJirJOySXdeAkdwPga5VwtZvFTR+sdoOFjPZigz9FU=;
+  b=PdN5gnHR/1amgNAiTwJKl6j7ILy/VHO6K6tzUwWZASOP7pRtu1hKeLLv
+   pxTAl5OZ/YIA5L5SUgMJD2soK1vsiLGFQQzbQB/1dxcsObNswowE05+Ot
+   oKsqJSR8V5IwKLlIcuwfabZu3+YJCIabpQ6McXvNONU5KArmwjsxbAV28
+   g2fx9TuoHNb9VmxmdJ4FbIN+WIfG9DRAgRBvZWcMEdTnHm1QXjTIiex86
+   DWXKxKlbU5HDaudlGGlLbdlHMAAeZ0kSyRoLD+qOuXCE3cYXFdUWAKQFB
+   XioHKStSYQQJlmABXr2JD38zLvz3cM9BOKLAqWCCppM42OMOPvrAAuaO/
+   w==;
+X-CSE-ConnectionGUID: d542KYKpRXe2VyEC+g5HWQ==
+X-CSE-MsgGUID: tp/053bhTUKwUhDBo7GjLw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11804"; a="84791197"
+X-IronPort-AV: E=Sophos;i="6.24,182,1774335600"; 
+   d="scan'208";a="84791197"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 01:26:27 -0700
+X-CSE-ConnectionGUID: lfRyu5MMT06JdhhB3yS3nw==
+X-CSE-MsgGUID: q/mK1pgMSIWDlA7/b6N0dg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,182,1774335600"; 
+   d="scan'208";a="274106307"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 02 Jun 2026 01:26:26 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wUKS6-00000000BiY-2tfo;
+	Tue, 02 Jun 2026 08:26:22 +0000
+Date: Tue, 02 Jun 2026 16:25:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-06-01-3 290/290]
+ sound/soc/meson/meson-card-utils.c:302:9: error: incompatible function
+ pointer types passing 'int (struct device *, struct snd_soc_card_driver *,
+ const char *)' to parameter of type 'int (*)(struct snd_soc_card *, const
+ char *)'
+Message-ID: <202606021536.MmpL1VNX-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DITEZRMNTOX2.1DKO9U58508S8@garyguo.net>
 
-On Wed, May 27, 2026 at 12:15:39PM +0100, Gary Guo wrote:
-> On Tue May 26, 2026 at 9:52 AM BST, Mukesh Kumar Chaurasiya wrote:
-> > On Mon, May 25, 2026 at 08:16:53PM +0200, Miguel Ojeda wrote:
-> >> On Wed, May 20, 2026 at 8:48 AM Mukesh Kumar Chaurasiya (IBM)
-> >> <mkchauras@gmail.com> wrote:
-> >> >
-> >> > Minimum `rustc` version required for powerpc is 1.95 as some critical
-> >> > features required for compiling rust code for kernel are not there.
-> >> 
-> >> Which critical features?
-> > Hey Miguel,
-> >
-> > Right now i can only think of inline asm. I can rerun the whole thing
-> > with 1.85 and figure out the issues with 1.85. I'll get back on this.
-> >
-> >>
-> >> > For example Stable inline asm support which got merged in 1.95.
-> >> 
-> >> It is not needed that the support is stable, but rather that
-> >> everything you may need works.
-> >> 
-> > I wanted inline asm be stable, I was skeptical about inline asm to be
-> > unstable and potentially messing up the whole system. That's the reason
-> > I waited for the stable support to get merged before sending out this
-> > patch series.
-> 
-> AFAIK inline asm is only unstable for archs for their surface syntax (i.e. name
-> of register and classes). The rest is just LLVM inline asm. If there're codegen
-> issues, you should gate on LLVM version instead (Rust supports multiple LLVM
-> versions in a single release and distro may use different LLVM than rustup's).
-> 
-> Best,
-> Gary
-Hey Gary,
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-01-3
+head:   1ef39bbdce9099b285b9702e22c4defc277e42dd
+commit: 9b07c6aa4c11e450c2f7f409b4a47925b85697c0 [290/290] ASoC: soc.h: remove compatible definition
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20260602/202606021536.MmpL1VNX-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e5ab4f8a1f766febdc65ce89c00dec85393cfd68)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260602/202606021536.MmpL1VNX-lkp@intel.com/reproduce)
 
-Sry about delayed response.
-I'll check if the codegen has any issues. If yes we'll put a guard on
-that. Meanwhile i'll also test out the 1.85 for any other issues. Thanks
-for the help.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606021536.MmpL1VNX-lkp@intel.com/
 
-Regards,
-Mukesh
+All errors (new ones prefixed by >>):
+
+   sound/soc/meson/meson-card-utils.c:253:3: error: call to undeclared function 'for_each_card_prelinks'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     253 |                 for_each_card_prelinks(card, i, link) {
+         |                 ^
+   sound/soc/meson/meson-card-utils.c:253:40: error: expected ';' after expression
+     253 |                 for_each_card_prelinks(card, i, link) {
+         |                                                      ^
+         |                                                      ;
+   sound/soc/meson/meson-card-utils.c:262:3: error: call to undeclared function 'for_each_card_pre_auxs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     262 |                 for_each_card_pre_auxs(card, i, aux)
+         |                 ^
+   sound/soc/meson/meson-card-utils.c:262:39: error: expected ';' after expression
+     262 |                 for_each_card_pre_auxs(card, i, aux)
+         |                                                     ^
+         |                                                     ;
+   sound/soc/meson/meson-card-utils.c:287:57: error: too many arguments to function call, expected 2, have 6
+     287 |         priv->card = devm_snd_soc_card_alloc(dev, THIS_MODULE, &priv->card_driver,
+         |                      ~~~~~~~~~~~~~~~~~~~~~~~                   ^~~~~~~~~~~~~~~~~~~
+     288 |                                              NULL, NULL, NULL);
+         |                                              ~~~~~~~~~~~~~~~~
+   include/sound/soc-card.h:90:22: note: 'devm_snd_soc_card_alloc' declared here
+      90 | struct snd_soc_card *devm_snd_soc_card_alloc(struct device *dev,
+         |                      ^                       ~~~~~~~~~~~~~~~~~~~
+      91 |                                              struct snd_soc_card_driver *driver);
+         |                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/meson/meson-card-utils.c:297:8: error: call to undeclared function 'snd_soc_card_of_parse_name'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     297 |         ret = snd_soc_card_of_parse_name(priv->card, "model");
+         |               ^
+   sound/soc/meson/meson-card-utils.c:297:8: note: did you mean 'snd_soc_card_driver_of_parse_name'?
+   include/sound/soc-card.h:135:5: note: 'snd_soc_card_driver_of_parse_name' declared here
+     135 | int snd_soc_card_driver_of_parse_name(struct device *dev,
+         |     ^
+   sound/soc/meson/meson-card-utils.c:302:9: error: use of undeclared identifier 'snd_soc_card_of_parse_audio_routing'; did you mean 'snd_soc_card_driver_of_parse_audio_routing'?
+     302 |                                            snd_soc_card_of_parse_audio_routing);
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                            snd_soc_card_driver_of_parse_audio_routing
+   include/sound/soc-card.h:141:5: note: 'snd_soc_card_driver_of_parse_audio_routing' declared here
+     141 | int snd_soc_card_driver_of_parse_audio_routing(struct device *dev,
+         |     ^
+>> sound/soc/meson/meson-card-utils.c:302:9: error: incompatible function pointer types passing 'int (struct device *, struct snd_soc_card_driver *, const char *)' to parameter of type 'int (*)(struct snd_soc_card *, const char *)' [-Wincompatible-function-pointer-types]
+     302 |                                            snd_soc_card_of_parse_audio_routing);
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/meson/meson-card-utils.c:230:12: note: passing argument to parameter 'func' here
+     230 |                                         int (*func)(struct snd_soc_card *c,
+         |                                               ^
+   sound/soc/meson/meson-card-utils.c:309:9: error: use of undeclared identifier 'snd_soc_card_of_parse_simple_widgets'; did you mean 'snd_soc_card_driver_of_parse_simple_widgets'?
+     309 |                                            snd_soc_card_of_parse_simple_widgets);
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                            snd_soc_card_driver_of_parse_simple_widgets
+   include/sound/soc-card.h:132:5: note: 'snd_soc_card_driver_of_parse_simple_widgets' declared here
+     132 | int snd_soc_card_driver_of_parse_simple_widgets(struct device *dev,
+         |     ^
+   sound/soc/meson/meson-card-utils.c:309:9: error: incompatible function pointer types passing 'int (struct device *, struct snd_soc_card_driver *, const char *)' to parameter of type 'int (*)(struct snd_soc_card *, const char *)' [-Wincompatible-function-pointer-types]
+     309 |                                            snd_soc_card_of_parse_simple_widgets);
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/meson/meson-card-utils.c:230:12: note: passing argument to parameter 'func' here
+     230 |                                         int (*func)(struct snd_soc_card *c,
+         |                                               ^
+   sound/soc/meson/meson-card-utils.c:319:8: error: call to undeclared function 'snd_soc_card_of_parse_aux_devs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     319 |         ret = snd_soc_card_of_parse_aux_devs(priv->card, "audio-aux-devs");
+         |               ^
+   11 errors generated.
+
+
+vim +302 sound/soc/meson/meson-card-utils.c
+
+aa9c3b7273a58b Jerome Brunet     2020-02-13  269  
+aa9c3b7273a58b Jerome Brunet     2020-02-13  270  int meson_card_probe(struct platform_device *pdev)
+aa9c3b7273a58b Jerome Brunet     2020-02-13  271  {
+aa9c3b7273a58b Jerome Brunet     2020-02-13  272  	const struct meson_card_match_data *data;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  273  	struct device *dev = &pdev->dev;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  274  	struct meson_card *priv;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  275  	int ret;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  276  
+aa9c3b7273a58b Jerome Brunet     2020-02-13  277  	data = of_device_get_match_data(dev);
+aa9c3b7273a58b Jerome Brunet     2020-02-13  278  	if (!data) {
+aa9c3b7273a58b Jerome Brunet     2020-02-13  279  		dev_err(dev, "failed to match device\n");
+aa9c3b7273a58b Jerome Brunet     2020-02-13  280  		return -ENODEV;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  281  	}
+aa9c3b7273a58b Jerome Brunet     2020-02-13  282  
+aa9c3b7273a58b Jerome Brunet     2020-02-13  283  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+aa9c3b7273a58b Jerome Brunet     2020-02-13  284  	if (!priv)
+aa9c3b7273a58b Jerome Brunet     2020-02-13  285  		return -ENOMEM;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  286  
+ba5577652c6a70 Kuninori Morimoto 2026-05-20  287  	priv->card = devm_snd_soc_card_alloc(dev, THIS_MODULE, &priv->card_driver,
+ba5577652c6a70 Kuninori Morimoto 2026-05-20  288  					     NULL, NULL, NULL);
+ba5577652c6a70 Kuninori Morimoto 2026-05-20  289  	if (!priv->card)
+ba5577652c6a70 Kuninori Morimoto 2026-05-20  290  		return -ENOMEM;
+ba5577652c6a70 Kuninori Morimoto 2026-05-20  291  
+f66a1b718fbcb7 Kuninori Morimoto 2026-06-01  292  	snd_soc_card_attach_priv(priv->card, priv);
+aa9c3b7273a58b Jerome Brunet     2020-02-13  293  
+ba5577652c6a70 Kuninori Morimoto 2026-05-20  294  	priv->card_driver.name = dev->driver->name;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  295  	priv->match_data = data;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  296  
+f66a1b718fbcb7 Kuninori Morimoto 2026-06-01  297  	ret = snd_soc_card_of_parse_name(priv->card, "model");
+aa9c3b7273a58b Jerome Brunet     2020-02-13  298  	if (ret < 0)
+aa9c3b7273a58b Jerome Brunet     2020-02-13  299  		return ret;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  300  
+ba5577652c6a70 Kuninori Morimoto 2026-05-20  301  	ret = meson_card_parse_of_optional(priv->card, "audio-routing",
+f66a1b718fbcb7 Kuninori Morimoto 2026-06-01 @302  					   snd_soc_card_of_parse_audio_routing);
+aa9c3b7273a58b Jerome Brunet     2020-02-13  303  	if (ret) {
+aa9c3b7273a58b Jerome Brunet     2020-02-13  304  		dev_err(dev, "error while parsing routing\n");
+aa9c3b7273a58b Jerome Brunet     2020-02-13  305  		return ret;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  306  	}
+aa9c3b7273a58b Jerome Brunet     2020-02-13  307  
+ba5577652c6a70 Kuninori Morimoto 2026-05-20  308  	ret = meson_card_parse_of_optional(priv->card, "audio-widgets",
+f66a1b718fbcb7 Kuninori Morimoto 2026-06-01  309  					   snd_soc_card_of_parse_simple_widgets);
+aa9c3b7273a58b Jerome Brunet     2020-02-13  310  	if (ret) {
+aa9c3b7273a58b Jerome Brunet     2020-02-13  311  		dev_err(dev, "error while parsing widgets\n");
+aa9c3b7273a58b Jerome Brunet     2020-02-13  312  		return ret;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  313  	}
+aa9c3b7273a58b Jerome Brunet     2020-02-13  314  
+ba5577652c6a70 Kuninori Morimoto 2026-05-20  315  	ret = meson_card_add_links(priv->card);
+aa9c3b7273a58b Jerome Brunet     2020-02-13  316  	if (ret)
+aa9c3b7273a58b Jerome Brunet     2020-02-13  317  		goto out_err;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  318  
+f66a1b718fbcb7 Kuninori Morimoto 2026-06-01  319  	ret = snd_soc_card_of_parse_aux_devs(priv->card, "audio-aux-devs");
+aa9c3b7273a58b Jerome Brunet     2020-02-13  320  	if (ret)
+aa9c3b7273a58b Jerome Brunet     2020-02-13  321  		goto out_err;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  322  
+ba5577652c6a70 Kuninori Morimoto 2026-05-20  323  	ret = devm_snd_soc_card_register(priv->card);
+aa9c3b7273a58b Jerome Brunet     2020-02-13  324  	if (ret)
+aa9c3b7273a58b Jerome Brunet     2020-02-13  325  		goto out_err;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  326  
+aa9c3b7273a58b Jerome Brunet     2020-02-13  327  	return 0;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  328  
+aa9c3b7273a58b Jerome Brunet     2020-02-13  329  out_err:
+aa9c3b7273a58b Jerome Brunet     2020-02-13  330  	meson_card_clean_references(priv);
+aa9c3b7273a58b Jerome Brunet     2020-02-13  331  	return ret;
+aa9c3b7273a58b Jerome Brunet     2020-02-13  332  }
+aa9c3b7273a58b Jerome Brunet     2020-02-13  333  EXPORT_SYMBOL_GPL(meson_card_probe);
+aa9c3b7273a58b Jerome Brunet     2020-02-13  334  
+
+:::::: The code at line 302 was first introduced by commit
+:::::: f66a1b718fbcb7553fef8ad2e807c9e84ca546e5 dai
+
+:::::: TO: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+:::::: CC: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
