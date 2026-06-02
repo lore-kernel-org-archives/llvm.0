@@ -1,248 +1,314 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1398D3BED75;
-	Tue,  2 Jun 2026 15:00:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABADC3E5ED8;
+	Tue,  2 Jun 2026 15:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780412419; cv=none; b=kH09qOXjhIt8p+BGsl6aIOBUUlQBvxHgmSLgiNKqWypvgDpdlSQQTq9/qvnVHY5fP5TuMEf5xKmsy6AlD8+Fm0KspBanHloL+SJcIZzz6ZKop9y3ZHEp0sRdlUMSIH/0vPmUb2XJn6RwTO0TIF9nOyZMwAxpaSsS2uM4RFKnABs=
+	t=1780412962; cv=none; b=fAnrCDb8amFAQ1LKGFIQnSWXlyBwARadxE9vU8Ddj73Ma+hFTDaoaq9ehnxRxfG0zKCYyybHB14cRxHHANwVRxhW5Cbkzg8Tx0qqUAYvtz3j/xiV2BRNbf0BZD3rJEIX7oSTaYi9gM2dmRmHquMiFuoDq+RUKWXMxsvIHAUGGF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780412419; c=relaxed/simple;
-	bh=oXfr3zgzt0uAj3tYxULk7UusHbiY022C+aZxE1qmhSA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=dueGuUgiKfRt/si4fauL2lLgGB3WQvAcj1fkJ6Jc9CR0NuuEwhV6zOSNjoYdCx0Ku5UBgORh3JVYERVovqMf1VHf5/xOBakihkDnitGSfoRFDoKkgzQGOnJK/0f+Yva18HQxdghWHcYLRzWdgpXqbOxNPYIokCHzO0XQdUft8GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WvMVwe4U; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780412962; c=relaxed/simple;
+	bh=YIlUUETkVH8UUy8ze1s+f9+Gh3RwlJ+rmwgeOqySVoI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NePclvEhw+imxrkonxSasUg7rftht5nqjGPLLIWm+GxwCm+UAQjj3euU+soKCffiH8f0epbzW/ux5pAb9m3lvA2l39sEnLn9t48QiWaii2RRpo7pxK2qlcdRCaT6Lk77P9haCVvI78qtLHY7qs22F5flHN3HIvaBWwtWysx6qWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lpKHtcHq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WvMVwe4U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780412418; x=1811948418;
-  h=date:from:to:cc:subject:message-id;
-  bh=oXfr3zgzt0uAj3tYxULk7UusHbiY022C+aZxE1qmhSA=;
-  b=WvMVwe4UlSVP/5R8WMLG3W9KOMvp386ZAwUEKm3ZencYAKdvW+iS9KlZ
-   oJt/7bs0R6QqRO1UEzOWbnKq1aeOn0JYkXa6PdVLD87k4wSmp5jA9LJLI
-   zK9pD1A1YQPVCK0yynDnAKxShhPdcaQTirbUbWMHRCAxerofSpAi7XUgP
-   Ya0td4UscbHn7Aqned855VzNIqYLd5CrObRI/gq5zWeuJX19cXFS2Dv6m
-   fcY9TDavEKLYzUctk16Wk20aaXeSQCVPZhowCiW2AYrNfl7JavtyJMzty
-   4Ez9mLDjxUtVR7548/H1PWEpMNPpjXRDY/2PAdBzYnaT17QcQLGzngBFY
-   w==;
-X-CSE-ConnectionGUID: EXkYfaFOQ8CM68gHLdL6Lg==
-X-CSE-MsgGUID: m61fvwDXTIio7IEQ5muFJA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="81195171"
-X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
-   d="scan'208";a="81195171"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 08:00:15 -0700
-X-CSE-ConnectionGUID: NdS+k7MBRguvIaZ1QeDnyg==
-X-CSE-MsgGUID: jYGoq0EuRYGHeBULegPVJw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
-   d="scan'208";a="239756897"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 02 Jun 2026 08:00:12 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wUQbC-00000000C9M-2LQh;
-	Tue, 02 Jun 2026 15:00:10 +0000
-Date: Tue, 02 Jun 2026 22:59:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2026-06-01-3 290/290]
- sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:593:29: error: call to undeclared
- function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202606022247.t8JRtx1U-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lpKHtcHq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F9E1F00893;
+	Tue,  2 Jun 2026 15:09:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780412961;
+	bh=8T6KiMQPfhmF9wCBshWFSoHQT/tPdPFdSJ7O7GH+wSY=;
+	h=From:To:Cc:Subject:Date;
+	b=lpKHtcHqH9r/PmNgUgVacJ83f7c/6/ITxcP9dd71/VNhiPXfAXC5oNtZiZiaGe2UR
+	 CLZSzAHZIQJzm0A1Bym3tkt2+mjbch0FeT1MD81rBE6GVKtXV5Or7hAkFGverXzYqc
+	 pDnpppHboNt5DJaZmE1S+PaFyxhFVASkvZ7ddKbRndtARP5NXyb0VJx0aWluhumKwP
+	 sNjIQM+5t8XgSsoNAmL1Qke3CMhJcGyxX0EfhZ+tbdNklhUudjJQSoaXqhlHhn2Gxq
+	 N6iuY2Z1FqnyyLofGTnMrbDBXGbNrrqrEiYDex0npmavhnRBFW6udDdHrrRNgjS8WS
+	 DQ2Gnh3jm2FQA==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Arend van Spriel <arend.vanspriel@broadcom.com>,
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	brcm80211@lists.linux.dev,
+	brcm80211-dev-list.pdl@broadcom.com,
+	linux-trace-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 1/2] tracing: work around -Wmissing-format-attribute warning
+Date: Tue,  2 Jun 2026 17:07:05 +0200
+Message-Id: <20260602150904.2258624-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-01-3
-head:   1ef39bbdce9099b285b9702e22c4defc277e42dd
-commit: 8be84f679bd497ac2dabc87df9f9a4737f841c0d [290/290] ASoC: soc-dai: remove snd_soc_dai_{set/get}_drvdata()
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260602/202606022247.t8JRtx1U-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260602/202606022247.t8JRtx1U-lkp@intel.com/reproduce)
+From: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606022247.t8JRtx1U-lkp@intel.com/
+A number of tracing headers turn off -Wsuggest-attribute=format for
+gcc, but they don't turn it off for clang, so the same warning still
+happens on new versions of clang that support the format attribute.
 
-All errors (new ones prefixed by >>):
+To avoid duplicating the same thing in each tracing header, as well
+as changing all of them to also turn it off for clang, add a new
+__vsnprintf() helper that is not annotated this way in linux/sprintf.h
+but is defined to work the same way as the regular vsprintf.
 
->> sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:593:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     593 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
->> sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:593:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     593 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:644:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     644 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:644:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     644 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:660:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     660 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:660:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     660 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:748:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     748 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:748:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     748 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:773:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     773 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt2701/mt2701-afe-pcm.c:773:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     773 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   10 errors generated.
---
->> sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:141:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     141 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
->> sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:141:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     141 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:186:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     186 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:186:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     186 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:208:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     208 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:208:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     208 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:253:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     253 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:253:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     253 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   8 errors generated.
---
->> sound/soc/mediatek/mt8196/mt8196-dai-adda.c:412:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     412 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
->> sound/soc/mediatek/mt8196/mt8196-dai-adda.c:412:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     412 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:470:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     470 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:470:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     470 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:660:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     660 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:660:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     660 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 errors generated.
---
->> sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2325:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2325 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
->> sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2325:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-    2325 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2373:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2373 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2373:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-    2373 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 errors generated.
---
->> sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:397:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     397 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
->> sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:397:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     397 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:506:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     506 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                                    ^
-   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:506:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
-     506 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 errors generated.
+Aside from tracing, the same thing can be used in va_format(),
+which is part of lib/vsprintf.c itself.
 
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+This version is a fairly simplistic way to work around the warning
+reliably. I have resent two more patches to address actually
+missing annotations in device drivers, but with all of these
+out of the way, we can move the warning from the 'make W=1'
+into the default set.
 
-vim +/snd_soc_dai_get_drvdata +593 sound/soc/mediatek/mt2701/mt2701-afe-pcm.c
+I have also prototyped a variant of this patch that passes down
+a 'struct va_format' throughout the tracing code. That patch is
+a little more invasive and I have no idea if that actually works,
+but the result looks simpler.
+---
+ drivers/infiniband/hw/hfi1/trace_dbg.h               |  7 -------
+ .../broadcom/brcm80211/brcmfmac/tracepoint.h         |  7 -------
+ .../brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h    |  7 -------
+ drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c    |  3 ---
+ include/linux/sprintf.h                              |  1 +
+ include/linux/trace_events.h                         |  2 +-
+ include/trace/events/qla.h                           |  7 -------
+ include/trace/stages/stage6_event_callback.h         |  2 +-
+ lib/vsprintf.c                                       | 12 +++++++-----
+ samples/trace_events/trace-events-sample.c           |  2 --
+ 10 files changed, 10 insertions(+), 40 deletions(-)
 
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  589  
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  590  static int mt2701_afe_hdmi_startup(struct snd_pcm_substream *substream,
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  591  				   struct snd_soc_dai *dai)
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  592  {
-0e2f1d39c2bf68 Daniel Golle 2026-04-24 @593  	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  594  	struct mt2701_afe_private *afe_priv = afe->platform_priv;
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  595  	int ret;
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  596  
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  597  	if (!afe_priv->hadds2pll_ck || !afe_priv->audio_hdmi_ck) {
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  598  		dev_err(afe->dev, "HDMI audio clocks not available\n");
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  599  		return -ENODEV;
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  600  	}
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  601  
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  602  	ret = clk_prepare_enable(afe_priv->hadds2pll_ck);
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  603  	if (ret)
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  604  		return ret;
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  605  
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  606  	ret = clk_prepare_enable(afe_priv->audio_hdmi_ck);
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  607  	if (ret)
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  608  		goto err_hdmi;
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  609  
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  610  	if (afe_priv->audio_spdf_ck) {
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  611  		ret = clk_prepare_enable(afe_priv->audio_spdf_ck);
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  612  		if (ret)
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  613  			goto err_spdf;
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  614  	}
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  615  
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  616  	if (afe_priv->audio_apll_ck) {
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  617  		ret = clk_prepare_enable(afe_priv->audio_apll_ck);
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  618  		if (ret)
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  619  			goto err_apll;
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  620  	}
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  621  
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  622  	ret = mt2701_afe_enable_mclk(afe, MT2701_HDMI_I2S_PATH);
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  623  	if (ret)
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  624  		goto err_mclk;
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  625  
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  626  	return 0;
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  627  
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  628  err_mclk:
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  629  	if (afe_priv->audio_apll_ck)
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  630  		clk_disable_unprepare(afe_priv->audio_apll_ck);
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  631  err_apll:
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  632  	if (afe_priv->audio_spdf_ck)
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  633  		clk_disable_unprepare(afe_priv->audio_spdf_ck);
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  634  err_spdf:
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  635  	clk_disable_unprepare(afe_priv->audio_hdmi_ck);
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  636  err_hdmi:
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  637  	clk_disable_unprepare(afe_priv->hadds2pll_ck);
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  638  	return ret;
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  639  }
-0e2f1d39c2bf68 Daniel Golle 2026-04-24  640  
+diff --git a/drivers/infiniband/hw/hfi1/trace_dbg.h b/drivers/infiniband/hw/hfi1/trace_dbg.h
+index 58304b91380f..05c4f1354269 100644
+--- a/drivers/infiniband/hw/hfi1/trace_dbg.h
++++ b/drivers/infiniband/hw/hfi1/trace_dbg.h
+@@ -22,11 +22,6 @@
+ 
+ #define MAX_MSG_LEN 512
+ 
+-#pragma GCC diagnostic push
+-#ifndef __clang__
+-#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+-#endif
+-
+ DECLARE_EVENT_CLASS(hfi1_trace_template,
+ 		    TP_PROTO(const char *function, struct va_format *vaf),
+ 		    TP_ARGS(function, vaf),
+@@ -41,8 +36,6 @@ DECLARE_EVENT_CLASS(hfi1_trace_template,
+ 			      __get_str(msg))
+ );
+ 
+-#pragma GCC diagnostic pop
+-
+ /*
+  * It may be nice to macroize the __hfi1_trace but the va_* stuff requires an
+  * actual function to work and can not be in a macro.
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.h b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.h
+index 96032322b165..6c4e00e9ccd1 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.h
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/tracepoint.h
+@@ -28,11 +28,6 @@ static inline void trace_ ## name(proto) {}
+ 
+ #define MAX_MSG_LEN		100
+ 
+-#pragma GCC diagnostic push
+-#ifndef __clang__
+-#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+-#endif
+-
+ TRACE_EVENT(brcmf_err,
+ 	TP_PROTO(const char *func, struct va_format *vaf),
+ 	TP_ARGS(func, vaf),
+@@ -128,8 +123,6 @@ TRACE_EVENT(brcmf_sdpcm_hdr,
+ 		  __entry->len, ((u8 *)__get_dynamic_array(hdr))[4])
+ );
+ 
+-#pragma GCC diagnostic pop
+-
+ #ifdef CONFIG_BRCM_TRACING
+ 
+ #undef TRACE_INCLUDE_PATH
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h
+index 908ce3c864fe..dc296d8bf775 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h
+@@ -24,11 +24,6 @@
+ 
+ #define MAX_MSG_LEN	100
+ 
+-#pragma GCC diagnostic push
+-#ifndef __clang__
+-#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+-#endif
+-
+ DECLARE_EVENT_CLASS(brcms_msg_event,
+ 	TP_PROTO(struct va_format *vaf),
+ 	TP_ARGS(vaf),
+@@ -77,8 +72,6 @@ TRACE_EVENT(brcms_dbg,
+ 	TP_printk("%s: %s", __get_str(func), __get_str(msg))
+ );
+ 
+-#pragma GCC diagnostic pop
+-
+ #endif /* __TRACE_BRCMSMAC_MSG_H */
+ 
+ #ifdef CONFIG_BRCM_TRACING
+diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c b/drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c
+index 7e686297963d..49a8196430a7 100644
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c
+@@ -12,9 +12,6 @@
+ #include "iwl-trans.h"
+ 
+ #define CREATE_TRACE_POINTS
+-#ifdef CONFIG_CC_IS_GCC
+-#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+-#endif
+ #include "iwl-devtrace.h"
+ 
+ EXPORT_TRACEPOINT_SYMBOL(iwlwifi_dev_ucode_event);
+diff --git a/include/linux/sprintf.h b/include/linux/sprintf.h
+index f06f7b785091..036a247b7c1e 100644
+--- a/include/linux/sprintf.h
++++ b/include/linux/sprintf.h
+@@ -12,6 +12,7 @@ __printf(2, 3) int sprintf(char *buf, const char * fmt, ...);
+ __printf(2, 0) int vsprintf(char *buf, const char *, va_list);
+ __printf(3, 4) int snprintf(char *buf, size_t size, const char *fmt, ...);
+ __printf(3, 0) int vsnprintf(char *buf, size_t size, const char *fmt, va_list args);
++int __vsnprintf(char *buf, size_t size, const char *fmt, va_list args);
+ __printf(3, 4) int scnprintf(char *buf, size_t size, const char *fmt, ...);
+ __printf(3, 0) int vscnprintf(char *buf, size_t size, const char *fmt, va_list args);
+ __printf(2, 3) __malloc char *kasprintf(gfp_t gfp, const char *fmt, ...);
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index d49338c44014..4715330c7b6b 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -962,7 +962,7 @@ perf_trace_buf_submit(void *raw_data, int size, int rctx, u16 type,
+ 	int __ret;					\
+ 							\
+ 	va_copy(__ap, *(va));				\
+-	__ret = vsnprintf(NULL, 0, fmt, __ap) + 1;	\
++	__ret = __vsnprintf(NULL, 0, fmt, __ap) + 1;	\
+ 	va_end(__ap);					\
+ 							\
+ 	min(__ret, TRACE_EVENT_STR_MAX);		\
+diff --git a/include/trace/events/qla.h b/include/trace/events/qla.h
+index 8800c35525a1..74a7534b99b6 100644
+--- a/include/trace/events/qla.h
++++ b/include/trace/events/qla.h
+@@ -9,11 +9,6 @@
+ 
+ #define QLA_MSG_MAX 256
+ 
+-#pragma GCC diagnostic push
+-#ifndef __clang__
+-#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+-#endif
+-
+ DECLARE_EVENT_CLASS(qla_log_event,
+ 	TP_PROTO(const char *buf,
+ 		struct va_format *vaf),
+@@ -32,8 +27,6 @@ DECLARE_EVENT_CLASS(qla_log_event,
+ 	TP_printk("%s %s", __get_str(buf), __get_str(msg))
+ );
+ 
+-#pragma GCC diagnostic pop
+-
+ DEFINE_EVENT(qla_log_event, ql_dbg_log,
+ 	TP_PROTO(const char *buf, struct va_format *vaf),
+ 	TP_ARGS(buf, vaf)
+diff --git a/include/trace/stages/stage6_event_callback.h b/include/trace/stages/stage6_event_callback.h
+index 1691676fd858..7d6a6ca6e779 100644
+--- a/include/trace/stages/stage6_event_callback.h
++++ b/include/trace/stages/stage6_event_callback.h
+@@ -45,7 +45,7 @@
+ 	do {								\
+ 		va_list __cp_va;					\
+ 		va_copy(__cp_va, *(va));				\
+-		vsnprintf(__get_str(dst), TRACE_EVENT_STR_MAX, fmt, __cp_va); \
++		__vsnprintf(__get_str(dst), TRACE_EVENT_STR_MAX, fmt, __cp_va); \
+ 		va_end(__cp_va);					\
+ 	} while (0)
+ 
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index a3017bc58986..3caf0796f54d 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -1702,9 +1702,6 @@ char *escaped_string(char *buf, char *end, u8 *addr, struct printf_spec spec,
+ 	return buf;
+ }
+ 
+-__diag_push();
+-__diag_ignore(GCC, all, "-Wsuggest-attribute=format",
+-	      "Not a valid __printf() conversion candidate.");
+ static char *va_format(char *buf, char *end, struct va_format *va_fmt,
+ 		       struct printf_spec spec)
+ {
+@@ -1714,12 +1711,11 @@ static char *va_format(char *buf, char *end, struct va_format *va_fmt,
+ 		return buf;
+ 
+ 	va_copy(va, *va_fmt->va);
+-	buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
++	buf += __vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
+ 	va_end(va);
+ 
+ 	return buf;
+ }
+-__diag_pop();
+ 
+ static noinline_for_stack
+ char *uuid_string(char *buf, char *end, const u8 *addr,
+@@ -2979,6 +2975,12 @@ int vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
+ }
+ EXPORT_SYMBOL(vsnprintf);
+ 
++int __printf(3, 0) __vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
++{
++	return vsnprintf(buf, size, fmt_str, args);
++}
++EXPORT_SYMBOL(__vsnprintf);
++
+ /**
+  * vscnprintf - Format a string and place it in a buffer
+  * @buf: The buffer to place the result into
+diff --git a/samples/trace_events/trace-events-sample.c b/samples/trace_events/trace-events-sample.c
+index 9993fb5d5f98..ecc7db237f2e 100644
+--- a/samples/trace_events/trace-events-sample.c
++++ b/samples/trace_events/trace-events-sample.c
+@@ -9,8 +9,6 @@
+  * creates the handles for the trace points.
+  */
+ #define CREATE_TRACE_POINTS
+-__diag_ignore(GCC, all, "-Wsuggest-attribute=format",
+-             "trace_event_get_offsets_foo_bar can't easily be annotated as __printf");
+ #include "trace-events-sample.h"
+ 
+ static const char *random_strings[] = {
+-- 
+2.39.5
 
-:::::: The code at line 593 was first introduced by commit
-:::::: 0e2f1d39c2bf68d181b72ea51ef1e778c04140e4 ASoC: mediatek: mt2701: add HDMI audio memif, FE and BE DAIs
-
-:::::: TO: Daniel Golle <daniel@makrotopia.org>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
