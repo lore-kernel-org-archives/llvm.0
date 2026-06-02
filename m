@@ -1,139 +1,136 @@
-Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC111368263
-	for <llvm@lists.linux.dev>; Tue,  2 Jun 2026 03:09:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14EF0348C66;
+	Tue,  2 Jun 2026 06:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780369747; cv=none; b=rwqLYVCZbEu0KecrJdUQ78kmcKXfv6abOzXHYaydnPbHREVTou7Q9r8cg2LaTm9eVxcgmVh5kXUVMDDoL307OLmNBU5n7d6LzHh69hvIDCKXwZPYiNMqnpn3boesCt8GVZ8/dTLmmDklqlAcCadoxmLLnXyt5/tBdgm8K9RmMJA=
+	t=1780381911; cv=none; b=MO6CU+wR7BZnNiTzoSbYGeF53aDpRykoEaerHWRqW7uIHZx+DbVFGHtjAVNNFgxRth7lcmke7SUnDPqiAgZAO8Ob/sbGQb0sWsarpKpkN2HoAXPXfcfTJ7giuvPVXS0DYmgVpM+EjNiZX2+rnNqQ1iVpCaneoh8US4fHhg9ql0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780369747; c=relaxed/simple;
-	bh=S+5yjiqdurSwWGV3vZL82sGJRrRg3cT3Gkw6FXUX4Zw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NVzdWo7pqV876dJY0ChiCynpNT+5dso01lWzFwNQz17fUFYJ19JPuPjMUOmodMamBlHkzq4xI0rCls9HqwOEcavOR0qgzq5AhAZw6m/SzsLI6gmQ8Fr8YJu0XHZ0zbbWWYaZNqBHtzbH5ck5HCK2uGB5oxmaklQmRtu6CDYYkJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A8WEmBM9; arc=none smtp.client-ip=209.85.215.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780381911; c=relaxed/simple;
+	bh=DNNKIAuBD00M0sTiFrn6qsVxqCcToQTnD8ZfbO+A/I4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=rNQL02o7rE4rTHLxO4FqiP4rwDwxREhyHAoC1MXhQxhGuLcssvNdilGj39bS7e5i1ZhPmUwtU8wGG2xtyXlbO26oNjzfyJoEtCpoQ+4ecRTTaM0KlqSelTlY3JsvTiE7GgjzXjhykN9fzzYmDi7t20ay0LBMj7BKnU9xDspJP7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aYa4NO26; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A8WEmBM9"
-Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c85a2c012e5so707938a12.1
-        for <llvm@lists.linux.dev>; Mon, 01 Jun 2026 20:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780369745; x=1780974545; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A6//D+s1eomSFlvy221abQe65GjmCnQrDuYTvNngqlI=;
-        b=A8WEmBM96g984FwvVULLH0pslHyYZV913QaMFxg84IhNQ2GYVHQ7YjhK8A7OBYs7Ai
-         g1kUnH1ysvaBY8lhda6GUK5F4TjnLJftjy58gwV+ziVTpOAuwwrmREXg3HQyf+SqPnY5
-         1FYsvYfl5HVzMwomese9YVOUVGG2B5Vk2P3btl/I3b6nA1EnLAGUrs85IYqEV9HqRf4e
-         mPnJ+IpKogP3dGg+pt2QOcVJ1BwbFDqbtCenM0+IYxbqIXa/3WTXYg6AeGhWRzUjPGYO
-         PrR95U2nk8/nnzHz5JPU6g37YmgGGzIW1JYrEsUBm08yfhM8ebCZZmlBjyzCoGhPxddE
-         8M/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780369745; x=1780974545;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=A6//D+s1eomSFlvy221abQe65GjmCnQrDuYTvNngqlI=;
-        b=VQ2nU6TFzsAtFaSA39d1GP4R2mHZ4kM7As2zdVFEZKBJl/yC/XjrXkqZDMMt4F6p3P
-         CLQ5F0Iq/v5RvGdkjOnRu5uobB5dVZ6yfeCFLhege9uQ30uJb6tOBqMZRiOfHqQpqD7k
-         GboowbcgVD9/A8QKspcKjMrz5/xfRrywGOIjG/6AIefqaR7LMzre0F4bCqocWWpfDMO5
-         6uzZazNc5enVYKjcFL8e5cZYdrTAZQuEjckTyddieOShi0Yj9Uk6rzX/C/9leo/C6JdD
-         8jnzjwSdy8Nwyv+Zi1IqUreIZcHvuio8xOudqJ9B0fk44yvn+P8UZAU+4GB3esC8ICFO
-         uckQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9yaeMt1RU1eb+6EOpDaLrlV8apfsnr55Q9gEh+cRKhRD71byOLefd/ciqe13XXCvs4czoh@lists.linux.dev
-X-Gm-Message-State: AOJu0YwWvc/po0k9PHd3kNelcvhKFfZjjRyZPRR0q+xUbn8LYojCpOyC
-	yweE6pBqgfB2WQKNWN5AMvCKszmYJ0kcpM3UfkjFE4bTE3VD1WkL9eck
-X-Gm-Gg: Acq92OGzX9dlztiedtIETneS7j0iBZfqh7fJ29mltcZEpUTzDnPG4F6C6U46b9FO1Ux
-	8ptORzfmCzO/hp1F3vpQYHtUmvehWS91mS2+2uOcy3d8xnjS0SAx56rlqZsz6UntwMupE1ftWsr
-	930FaBuSxO1PMpaRZqtIwo9Cjk3mARb5WnPWsh2XIywGQmKtAtXfICWjX1rHblvrX7igmTJlf4E
-	ARFUbZBi17GBLJ/VUGQcomW4VX6vqc3vXfNjDnK16H1JFOyJxyVymlrRgpKU28TP48o0mfpV45p
-	rehn3b0KGL9YTVFrnQg4U3lQpUPexZF8+U9hLwD1eosLDbblHuq2asN6zEpNQso4grtVHJJz/9a
-	ybuCyniY8EsR1DNN55MCcAzPOEukfzJlKooQN7w1Q/l9LJGCOKDxeQAhf81CL+/halkX4XsnE5Q
-	uD5J6QRWYI4xw8b0eW9XqsdNMt2T9atv5Kw6KUjeWSuJo7fA8rM9ZRV3TnxZre
-X-Received: by 2002:a05:6a20:4389:b0:398:7ffe:472f with SMTP id adf61e73a8af0-3b427bc7337mr14542220637.2.1780369745002;
-        Mon, 01 Jun 2026 20:09:05 -0700 (PDT)
-Received: from lima-ubuntu.hz.ali.com ([47.246.98.221])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85861d5fe2sm8836799a12.8.2026.06.01.20.08.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2026 20:09:04 -0700 (PDT)
-From: Qing Wang <wangqing7171@gmail.com>
-To: peterz@infradead.org,
-	mathieu.desnoyers@efficios.com
-Cc: dvyukov@google.com,
-	justinstitt@google.com,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	mark.rutland@arm.com,
-	mingo@kernel.org,
-	morbo@google.com,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	syzbot+185a631927096f9da2fc@syzkaller.appspotmail.com,
-	tglx@kernel.org,
-	wangqing7171@gmail.com
-Subject: [PATCH v2] rseq: fix using an uninitialized stack variable in rseq_exit_user_update
-Date: Tue,  2 Jun 2026 11:08:54 +0800
-Message-Id: <20260602030854.574038-1-wangqing7171@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260601143934.GT3493090@noisy.programming.kicks-ass.net>
-References: <20260601143934.GT3493090@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aYa4NO26"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780381909; x=1811917909;
+  h=date:from:to:cc:subject:message-id;
+  bh=DNNKIAuBD00M0sTiFrn6qsVxqCcToQTnD8ZfbO+A/I4=;
+  b=aYa4NO26cxWUcIJuFhGPxswe01PgoKElf/i2iMoGH+OTxSnma5eSCZRI
+   MvEP/FX5D3gaui+yYl7Nuw2s1ES15jK+9D6xQJ4fspZ/MBUeZM1TtE/ll
+   Rujfw0bFQqN2VffdnxbuPGehSLwuLpE1tGJTWCn7GWLojeQB9cZOgdGRd
+   +5lDoVUejVbtfVPBtsrl/Cs7R8CwjxrtNUJtDBFN5IzS5K855W1OZbHCn
+   s5gX7Bwo1Tcq7VpTN7SyMBwjrZQDCeFwx62tWDthvan75wLIi2yfO2g4q
+   /WZJb0ogh+sdnz/Qi4QFQz3PtyWb9PGrf+V3VJ61YJYfJGbz84zmIQSZJ
+   w==;
+X-CSE-ConnectionGUID: o7PXVgs0TF63lcfxVnzzZA==
+X-CSE-MsgGUID: qHvzs+ncQqesRvxoxBZxlw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11804"; a="68703336"
+X-IronPort-AV: E=Sophos;i="6.24,182,1774335600"; 
+   d="scan'208";a="68703336"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2026 23:31:48 -0700
+X-CSE-ConnectionGUID: m69XUQPORU6H7zFlp00CrQ==
+X-CSE-MsgGUID: U5/DbXK+SQqOb1u+5aki9Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,182,1774335600"; 
+   d="scan'208";a="243924215"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 01 Jun 2026 23:31:46 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wUIf9-00000000BbW-2qKf;
+	Tue, 02 Jun 2026 06:31:43 +0000
+Date: Tue, 02 Jun 2026 14:31:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-06-01-3 290/290]
+ sound/soc/sdca/sdca_asoc.c:449:42: error: incompatible pointer types passing
+ 'struct snd_soc_component *' to parameter of type 'struct regmap *'
+Message-ID: <202606021426.jj3i0meq-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-There is an bug which is an uninitialized stack variable use in
-`rseq_exit_user_update()` reported by syzbot:
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-01-3
+head:   1ef39bbdce9099b285b9702e22c4defc277e42dd
+commit: f66a1b718fbcb7553fef8ad2e807c9e84ca546e5 [290/290] dai
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20260602/202606021426.jj3i0meq-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e5ab4f8a1f766febdc65ce89c00dec85393cfd68)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260602/202606021426.jj3i0meq-lkp@intel.com/reproduce)
 
-BUG: KMSAN: kernel-infoleak in rseq_set_ids_get_csaddr include/linux/rseq_entry.h:502 [inline]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606021426.jj3i0meq-lkp@intel.com/
 
-The local variable:
-```c
-	struct rseq_ids ids = {
-		.cpu_id	 = task_cpu(t),
-		.mm_cid	 = task_mm_cid(t),
-		.node_id = cpu_to_node(ids.cpu_id),
-	};
-```
-According to the C standard, the evaluation order of expressions in an
-initializer list is indeterminately sequenced. The compiler (Clang, in this
-KMSAN build) evaluates `cpu_to_node(ids.cpu_id)` *before* `ids.cpu_id` is
-initialized with `task_cpu(t)`.
+All errors (new ones prefixed by >>):
 
-This is fixed by moving the assignment of ids.node_id outside the structure
-initialization.
+   sound/soc/sdca/sdca_asoc.c:389:5: error: conflicting types for 'sdca_asoc_pde_poll_actual_ps'
+     389 | int sdca_asoc_pde_poll_actual_ps(struct device *dev, struct snd_soc_component *component,
+         |     ^
+   include/sound/sdca_asoc.h:103:5: note: previous declaration is here
+     103 | int sdca_asoc_pde_poll_actual_ps(struct device *dev, struct regmap *regmap,
+         |     ^
+>> sound/soc/sdca/sdca_asoc.c:449:42: error: incompatible pointer types passing 'struct snd_soc_component *' to parameter of type 'struct regmap *' [-Wincompatible-pointer-types]
+     449 |         ret = sdca_asoc_pde_poll_actual_ps(dev, component,
+         |                                                 ^~~~~~~~~
+   sound/soc/sdca/sdca_asoc.c:422:18: note: passing argument to parameter here
+     422 | EXPORT_SYMBOL_NS(sdca_asoc_pde_poll_actual_ps, "SND_SOC_SDCA");
+         |                  ^
+   2 errors generated.
 
-Reported-by: syzbot+185a631927096f9da2fc@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=185a631927096f9da2fc
-Fixes: 82f572449cfe ("rseq: Implement read only ABI enforcement for optimized RSEQ V2 mode")
-Signed-off-by: Qing Wang <wangqing7171@gmail.com>
----
- include/linux/rseq_entry.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/rseq_entry.h b/include/linux/rseq_entry.h
-index 63bc72086e75..ed9da6e41a2a 100644
---- a/include/linux/rseq_entry.h
-+++ b/include/linux/rseq_entry.h
-@@ -635,10 +635,11 @@ static __always_inline bool rseq_exit_user_update(struct pt_regs *regs, struct t
- 		return true;
- 	}
- 
-+	int cpu = task_cpu(t);
- 	struct rseq_ids ids = {
--		.cpu_id	 = task_cpu(t),
-+		.cpu_id	 = cpu,
- 		.mm_cid	 = task_mm_cid(t),
--		.node_id = cpu_to_node(ids.cpu_id),
-+		.node_id = cpu_to_node(cpu),
- 	};
- 
- 	return rseq_update_usr(t, regs, &ids);
--- 
-2.34.1
+vim +449 sound/soc/sdca/sdca_asoc.c
 
+   423	
+   424	static int entity_pde_event(struct snd_soc_dapm_widget *widget,
+   425				    struct snd_kcontrol *kctl, int event)
+   426	{
+   427		struct snd_soc_component *component = snd_soc_dapm_to_component(widget->dapm);
+   428		struct device *dev = snd_soc_component_to_dev(component);
+   429		struct sdca_entity *entity = widget->priv;
+   430		int from, to;
+   431		int ret;
+   432	
+   433		if (!component)
+   434			return -EIO;
+   435	
+   436		switch (event) {
+   437		case SND_SOC_DAPM_POST_PMD:
+   438			from = widget->on_val;
+   439			to = widget->off_val;
+   440			break;
+   441		case SND_SOC_DAPM_POST_PMU:
+   442			from = widget->off_val;
+   443			to = widget->on_val;
+   444			break;
+   445		default:
+   446			return 0;
+   447		}
+   448	
+ > 449		ret = sdca_asoc_pde_poll_actual_ps(dev, component,
+   450						   SDW_SDCA_CTL_FUNC(widget->reg),
+   451						   SDW_SDCA_CTL_ENT(widget->reg),
+   452						   from, to,
+   453						   entity->pde.max_delay,
+   454						   entity->pde.num_max_delay);
+   455		if (ret)
+   456			dev_err(dev, "%s: PDE transition %x -> %x failed, err=%d\n",
+   457				entity->label, from, to, ret);
+   458	
+   459		return ret;
+   460	}
+   461	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
