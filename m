@@ -1,51 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1CE3D8916;
-	Tue,  2 Jun 2026 13:53:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C046E3E867A;
+	Tue,  2 Jun 2026 14:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780408437; cv=none; b=mBb11p3gOXqB4zziwacshS9S0cjup/4NH0aHpf9TcLr4v/ezBZtm6IewXM+m7WaOpSbeVXNvb22gvYs6+J1m+fLSehuo+TXEBqftB0lMcSVsVvcf4WporyFkaGKlxe/mdQMovTGOSygcwn4PlYfm7oakJB0KMPcsqhHOOA6aGlI=
+	t=1780409115; cv=none; b=e5LnN1VNE07q2utxSemABrnz6rwX5RAyoF8QcFmT6P5jHr6TfT8rz6Za++zREaxTYbE0NukEo0nug9zWdhji/iwpu72wOLRq1VWf0DvTo2XSPAelGb4V2bqDVArxhc3vBVntwnM8wne1O3IWFujuFqtDKx19jvZQcI+7PhXxqbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780408437; c=relaxed/simple;
-	bh=eIDw/JBcQnYk7C5O3k8r432mw4hSiwj/UytHDUyQa/Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q43UwnkrU8/Br+sLUT0H4cQUcNrebxV80EKlXWD+hBsrWivccvnnV6oDOQQv1+eF8oGEkYWRYvOXY0/cCUtratGtI7gDkwEoXYTxzC8bs6uxEw+ecy/u+9Xv4XpvXKRYqjQAy1J7+xflfn0iE69kCbwi06hCO7Rq74rHIRACHm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WWxDnBML; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780409115; c=relaxed/simple;
+	bh=MPJmrHyzu6Q4n7GstA06o8d60TkJhPuXCvlMGIU8yKM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hy0fipb3cUNP/TbC67RCo+pHDzNytQ8JcN9mdfTsGhOspqUXTKlOJNJAIXLXqzU6R3uW/hKc/iudwsOYA9UXQPdICQn5+Cnrdoxqy4p1Grjmp/E++lI3usDJDMEws2ZLUZhHBpQdiDMpdlREcuTSK7nHbkAApfDcin9RfpvR8VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B9dqDQoM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WWxDnBML"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B736B1F00893;
-	Tue,  2 Jun 2026 13:53:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B9dqDQoM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 679661F00893;
+	Tue,  2 Jun 2026 14:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780408435;
-	bh=4X6r9E6LW4i9WleW22UqPu79iPdnDBJvarCs7peeu/I=;
+	s=k20260515; t=1780409114;
+	bh=2/krVRc7nfC9A6ChR8uWLfYagg/geIPKiZr1Lzo9cUQ=;
 	h=From:To:Cc:Subject:Date;
-	b=WWxDnBMLRFeKkSqslKHr9KdqhgzmKzR/JHS//eAJE9wxOuG3lakA9nM1mSkdfk9nC
-	 AKa29AkV3WYqs/pb7OnLD0iCg5i6bwwRkj6RbOYJSl/GhsjO9wxnrXGOKiW+PODRdp
-	 SQ8TbwrtqaTzaW/olFvvuJl6XcFkjUYRItOpNtBBL+EaFb34A0s/grpWyOSdHS7VvG
-	 m6MOhkxLsZi51hZ7dg47CRWWzufM4H1Rm3HG9CUuhWYKrGxj6en/RsyApdx55X1Ipj
-	 HplXlm4W/EXRGglEUzJMM1DGhMCDLSPE5lLKqLdkVLteO1BskwoYEOnafjNa0klEzJ
-	 ljkkkEqWwsLjQ==
+	b=B9dqDQoMxwB67FmFnBSdYa7bcZ9qIe4k6ZHnCsHhGztpX9zQim+J3K7vYlCTxCLM1
+	 FY4U5Mwa6JLqmYcAFc7xFtmyrwB25RItgtvRgkYHjHe6J9agymaA0vDgHPX+lFOmSv
+	 DrQ7opyYK1VrDmF2Ekp7koeroAi+6D+tw9mC3ZI1IxtPOceIvfw9AUI7aKg3Mqfasa
+	 +Lp4cd9rV+WwsGKFcY+ADl6qPnnqVRi2KMnixcNA1g6q4tp9KD4Iz5UkMT1PodcWHF
+	 vHqJkVzIvhBBi1KJTeCp4+eOyi+jR+xU5ouLyHc30X5w3DubDp+x1WOYlpZPmIc4YM
+	 rrcDrADWND5JQ==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Edward Cree <ecree.xilinx@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
+To: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Doug Ledford <dledford@redhat.com>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	Mike Marciniszyn <mike.marciniszyn@intel.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Breno Leitao <leitao@debian.org>,
-	Ben Hutchings <ben@decadent.org.uk>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Brett Creeley <brett.creeley@amd.com>,
+	Marco Crivellari <marco.crivellari@suse.com>,
 	Kees Cook <kees@kernel.org>,
-	netdev@vger.kernel.org,
-	linux-net-drivers@amd.com,
+	Dean Luick <dean.luick@cornelisnetworks.com>,
+	linux-rdma@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [net-next] [v3] net: sfc: avoid format string warning
-Date: Tue,  2 Jun 2026 15:53:04 +0200
-Message-Id: <20260602135347.3179200-1-arnd@kernel.org>
+Subject: [PATCH] [v2] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
+Date: Tue,  2 Jun 2026 16:04:34 +0200
+Message-Id: <20260602140453.3542427-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,452 +55,94 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Three sfc drivers contain the same *_fill_test() function that takes
-a format string argument that gets passed down to snprintf(), producing
-a warning with clang-22:
+clang warns about a function missing a printf attribute:
 
-drivers/net/ethernet/sfc/falcon/ethtool.c:227:60: error: diagnostic behavior may be improved by adding
-      the 'format(printf, 7, 8)' attribute to the declaration of 'ef4_fill_test' [-Werror,-Wmissing-format-attribute]
-  210 |                 snprintf(test_str, sizeof(test_str), test_format, test_id);
-      |                                                                          ^
-drivers/net/ethernet/sfc/falcon/ethtool.c:210:13: note: 'ef4_fill_test' declared here
+include/rdma/rdma_vt.h:457:47: error: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'rvt_set_ibdev_name' [-Werror,-Wmissing-format-attribute]
+  447 | static inline void rvt_set_ibdev_name(struct rvt_dev_info *rdi,
+      | __attribute__((format(printf, 2, 3)))
+  448 |                                       const char *fmt, const char *name,
+  449 |                                       const int unit)
 
-Rework these to take a varargs based test_format that allows better
-type checking and a non-varargs unit name that gets pre-filled by
-the caller, so that the compiler can validate all format strings.
+The helper was originally added as an abstraction for the hfi1 and
+qib drivers needing the same thing, but now qib is gone, and hfi1
+is the only remaining user of rdma_vt.
 
-Fixes: 3273c2e8c66a ("[netdrvr] sfc: sfc: Add self-test support")
-Link: https://lore.kernel.org/all/20260325134557.3406655-1-arnd@kernel.org/
-Reviewed-by: Edward Cree <ecree.xilinx@gmail.com>
-Cc: Breno Leitao <leitao@debian.org>
-Cc: Ben Hutchings <ben@decadent.org.uk>
+Avoid the warning and allow the compiler to check the format string by
+open-coding the helper and directly assigning the device name.
+
+Fixes: 5084c8ff21f2 ("IB/{rdmavt, hfi1, qib}: Self determine driver name")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-v3: fix chan%d format string on efx
-    whitespace fixes
-v2: open-code the unit name format as well
-    reformat the function prototype
+v2: fix typo
+    drop two other patches from the series that are no longer
+    relevant, leaving only one patch
 ---
- drivers/net/ethernet/sfc/ethtool_common.c     | 67 +++++++++---------
- drivers/net/ethernet/sfc/falcon/ethtool.c     | 68 +++++++++---------
- .../net/ethernet/sfc/siena/ethtool_common.c   | 69 +++++++++----------
- 3 files changed, 99 insertions(+), 105 deletions(-)
+ drivers/infiniband/hw/hfi1/init.c | 13 ++++++++++++-
+ include/rdma/rdma_vt.h            | 20 --------------------
+ 2 files changed, 12 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/ethtool_common.c b/drivers/net/ethernet/sfc/ethtool_common.c
-index 54f8e4626568..a0b77407fe9c 100644
---- a/drivers/net/ethernet/sfc/ethtool_common.c
-+++ b/drivers/net/ethernet/sfc/ethtool_common.c
-@@ -247,18 +247,17 @@ int efx_ethtool_set_pauseparam(struct net_device *net_dev,
-  * @strings:		Ethtool strings, or %NULL
-  * @data:		Ethtool test results, or %NULL
-  * @test:		Pointer to test result (used only if data != %NULL)
-- * @unit_format:	Unit name format (e.g. "chan\%d")
-- * @unit_id:		Unit id (e.g. 0 for "chan0")
-+ * @unit_name:		Unit name
-  * @test_format:	Test name format (e.g. "loopback.\%s.tx.sent")
-- * @test_id:		Test id (e.g. "PHYXS" for "loopback.PHYXS.tx_sent")
-  *
-  * Fill in an individual self-test entry.
-  */
--static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
--			  int *test, const char *unit_format, int unit_id,
--			  const char *test_format, const char *test_id)
-+static void __printf(6, 7) efx_fill_test(unsigned int test_index, u8 *strings,
-+					 u64 *data, int *test,
-+					 const char *unit_name,
-+					 const char *test_format, ...)
+diff --git a/drivers/infiniband/hw/hfi1/init.c b/drivers/infiniband/hw/hfi1/init.c
+index 8b5a5b32b0fa..b7fd8b1fbbbd 100644
+--- a/drivers/infiniband/hw/hfi1/init.c
++++ b/drivers/infiniband/hw/hfi1/init.c
+@@ -1206,6 +1206,7 @@ static struct hfi1_devdata *hfi1_alloc_devdata(struct pci_dev *pdev,
+ 					       size_t extra)
  {
--	char unit_str[ETH_GSTRING_LEN], test_str[ETH_GSTRING_LEN];
-+	char test_str[ETH_GSTRING_LEN];
+ 	struct hfi1_devdata *dd;
++	struct ib_device *ibdev;
+ 	int ret, nports;
  
- 	/* Fill data value, if applicable */
- 	if (data)
-@@ -266,20 +265,16 @@ static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
- 
- 	/* Fill string, if applicable */
- 	if (strings) {
--		if (strchr(unit_format, '%'))
--			snprintf(unit_str, sizeof(unit_str),
--				 unit_format, unit_id);
--		else
--			strcpy(unit_str, unit_format);
--		snprintf(test_str, sizeof(test_str), test_format, test_id);
-+		va_list args;
-+
-+		va_start(args, test_format);
-+		vsnprintf(test_str, sizeof(test_str), test_format, args);
-+		va_end(args);
- 		snprintf(strings + test_index * ETH_GSTRING_LEN,
--			 ETH_GSTRING_LEN,
--			 "%-6s %-24s", unit_str, test_str);
-+			 ETH_GSTRING_LEN, "%-6s %-24s", unit_name, test_str);
+ 	/* extra is * number of ports */
+@@ -1227,7 +1228,17 @@ static struct hfi1_devdata *hfi1_alloc_devdata(struct pci_dev *pdev,
+ 			"Could not allocate unit ID: error %d\n", -ret);
+ 		goto bail;
  	}
- }
- 
--#define EFX_CHANNEL_NAME(_channel) "chan%d", _channel->channel
--#define EFX_TX_QUEUE_NAME(_tx_queue) "txq%d", _tx_queue->label
- #define EFX_LOOPBACK_NAME(_mode, _counter)			\
- 	"loopback.%s." _counter, STRING_TABLE_LOOKUP(_mode, efx_loopback_mode)
- 
-@@ -306,23 +301,23 @@ static int efx_fill_loopback_test(struct efx_nic *efx,
- 	struct efx_tx_queue *tx_queue;
- 
- 	efx_for_each_channel_tx_queue(tx_queue, channel) {
-+		char unit_str[ETH_GSTRING_LEN];
+-	rvt_set_ibdev_name(&dd->verbs_dev.rdi, "%s_%d", class_name(), dd->unit);
 +
-+		snprintf(unit_str, sizeof(unit_str), "txq%d", tx_queue->label);
++	/*
++	 * FIXME: rvt and its users want to touch the ibdev before
++	 * registration and have things like the name work. We don't have the
++	 * infrastructure in the core to support this directly today, hack it
++	 * to work by setting the name manually here.
++	 */
++	ibdev = &dd->verbs_dev.rdi.ibdev;
++	dev_set_name(&ibdev->dev, "%s_%d", class_name(), dd->unit);
++	strscpy(ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
 +
- 		efx_fill_test(test_index++, strings, data,
- 			      &lb_tests->tx_sent[tx_queue->label],
--			      EFX_TX_QUEUE_NAME(tx_queue),
--			      EFX_LOOPBACK_NAME(mode, "tx_sent"));
-+			      unit_str, EFX_LOOPBACK_NAME(mode, "tx_sent"));
- 		efx_fill_test(test_index++, strings, data,
- 			      &lb_tests->tx_done[tx_queue->label],
--			      EFX_TX_QUEUE_NAME(tx_queue),
--			      EFX_LOOPBACK_NAME(mode, "tx_done"));
-+			      unit_str, EFX_LOOPBACK_NAME(mode, "tx_done"));
- 	}
- 	efx_fill_test(test_index++, strings, data,
- 		      &lb_tests->rx_good,
--		      "rx", 0,
--		      EFX_LOOPBACK_NAME(mode, "rx_good"));
-+		      "rx", EFX_LOOPBACK_NAME(mode, "rx_good"));
- 	efx_fill_test(test_index++, strings, data,
- 		      &lb_tests->rx_bad,
--		      "rx", 0,
--		      EFX_LOOPBACK_NAME(mode, "rx_bad"));
-+		      "rx", EFX_LOOPBACK_NAME(mode, "rx_bad"));
+ 	/*
+ 	 * If the BIOS does not have the NUMA node information set, select
+ 	 * NUMA 0 so we get consistent performance.
+diff --git a/include/rdma/rdma_vt.h b/include/rdma/rdma_vt.h
+index 7d8de561f71b..7ffc83262a01 100644
+--- a/include/rdma/rdma_vt.h
++++ b/include/rdma/rdma_vt.h
+@@ -438,26 +438,6 @@ struct rvt_dev_info {
+ 	struct rvt_wss *wss;
+ };
  
- 	return test_index;
- }
-@@ -349,28 +344,30 @@ int efx_ethtool_fill_self_tests(struct efx_nic *efx,
- 	enum efx_loopback_mode mode;
- 
- 	efx_fill_test(n++, strings, data, &tests->phy_alive,
--		      "phy", 0, "alive", NULL);
-+		      "phy", "alive");
- 	efx_fill_test(n++, strings, data, &tests->nvram,
--		      "core", 0, "nvram", NULL);
-+		      "core", "nvram");
- 	efx_fill_test(n++, strings, data, &tests->interrupt,
--		      "core", 0, "interrupt", NULL);
-+		      "core", "interrupt");
- 
- 	/* Event queues */
- 	efx_for_each_channel(channel, efx) {
-+		char unit_str[ETH_GSTRING_LEN];
-+
-+		snprintf(unit_str, sizeof(unit_str), "chan%d", channel->channel);
-+
- 		efx_fill_test(n++, strings, data,
- 			      &tests->eventq_dma[channel->channel],
--			      EFX_CHANNEL_NAME(channel),
--			      "eventq.dma", NULL);
-+			      unit_str, "eventq.dma");
- 		efx_fill_test(n++, strings, data,
- 			      &tests->eventq_int[channel->channel],
--			      EFX_CHANNEL_NAME(channel),
--			      "eventq.int", NULL);
-+			      unit_str, "eventq.int");
- 	}
- 
- 	efx_fill_test(n++, strings, data, &tests->memory,
--		      "core", 0, "memory", NULL);
-+		      "core", "memory");
- 	efx_fill_test(n++, strings, data, &tests->registers,
--		      "core", 0, "registers", NULL);
-+		      "core", "registers");
- 
- 	for (i = 0; true; ++i) {
- 		const char *name;
-@@ -380,7 +377,7 @@ int efx_ethtool_fill_self_tests(struct efx_nic *efx,
- 		if (name == NULL)
- 			break;
- 
--		efx_fill_test(n++, strings, data, &tests->phy_ext[i], "phy", 0, name, NULL);
-+		efx_fill_test(n++, strings, data, &tests->phy_ext[i], "phy", "%s", name);
- 	}
- 
- 	/* Loopback tests */
-diff --git a/drivers/net/ethernet/sfc/falcon/ethtool.c b/drivers/net/ethernet/sfc/falcon/ethtool.c
-index 807c587eba3b..260340b291d3 100644
---- a/drivers/net/ethernet/sfc/falcon/ethtool.c
-+++ b/drivers/net/ethernet/sfc/falcon/ethtool.c
-@@ -200,18 +200,17 @@ static void ef4_ethtool_set_msglevel(struct net_device *net_dev, u32 msg_enable)
-  * @strings:		Ethtool strings, or %NULL
-  * @data:		Ethtool test results, or %NULL
-  * @test:		Pointer to test result (used only if data != %NULL)
-- * @unit_format:	Unit name format (e.g. "chan\%d")
-- * @unit_id:		Unit id (e.g. 0 for "chan0")
-+ * @unit_name:		Unit name
-  * @test_format:	Test name format (e.g. "loopback.\%s.tx.sent")
-- * @test_id:		Test id (e.g. "PHYXS" for "loopback.PHYXS.tx_sent")
-  *
-  * Fill in an individual self-test entry.
-  */
--static void ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
--			  int *test, const char *unit_format, int unit_id,
--			  const char *test_format, const char *test_id)
-+static void __printf(6, 7) ef4_fill_test(unsigned int test_index, u8 *strings,
-+					 u64 *data, int *test,
-+					 const char *unit_name,
-+					 const char *test_format, ...)
- {
--	char unit_str[ETH_GSTRING_LEN], test_str[ETH_GSTRING_LEN];
-+	char test_str[ETH_GSTRING_LEN];
- 
- 	/* Fill data value, if applicable */
- 	if (data)
-@@ -219,21 +218,17 @@ static void ef4_fill_test(unsigned int test_index, u8 *strings, u64 *data,
- 
- 	/* Fill string, if applicable */
- 	if (strings) {
--		if (strchr(unit_format, '%'))
--			snprintf(unit_str, sizeof(unit_str),
--				 unit_format, unit_id);
--		else
--			strcpy(unit_str, unit_format);
--		snprintf(test_str, sizeof(test_str), test_format, test_id);
-+		va_list arg;
-+
-+		va_start(arg, test_format);
-+		vsnprintf(test_str, sizeof(test_str), test_format, arg);
-+		va_end(arg);
- 		snprintf(strings + test_index * ETH_GSTRING_LEN,
- 			 ETH_GSTRING_LEN,
--			 "%-6s %-24s", unit_str, test_str);
-+			 "%-6s %-24s", unit_name, test_str);
- 	}
- }
- 
--#define EF4_CHANNEL_NAME(_channel) "chan%d", _channel->channel
--#define EF4_TX_QUEUE_NAME(_tx_queue) "txq%d", _tx_queue->queue
--#define EF4_RX_QUEUE_NAME(_rx_queue) "rxq%d", _rx_queue->queue
- #define EF4_LOOPBACK_NAME(_mode, _counter)			\
- 	"loopback.%s." _counter, STRING_TABLE_LOOKUP(_mode, ef4_loopback_mode)
- 
-@@ -260,23 +255,23 @@ static int ef4_fill_loopback_test(struct ef4_nic *efx,
- 	struct ef4_tx_queue *tx_queue;
- 
- 	ef4_for_each_channel_tx_queue(tx_queue, channel) {
-+		char unit_str[ETH_GSTRING_LEN];
-+
-+		snprintf(unit_str, sizeof(unit_str), "txq%d", tx_queue->queue);
-+
- 		ef4_fill_test(test_index++, strings, data,
- 			      &lb_tests->tx_sent[tx_queue->queue],
--			      EF4_TX_QUEUE_NAME(tx_queue),
--			      EF4_LOOPBACK_NAME(mode, "tx_sent"));
-+			      unit_str, EF4_LOOPBACK_NAME(mode, "tx_sent"));
- 		ef4_fill_test(test_index++, strings, data,
- 			      &lb_tests->tx_done[tx_queue->queue],
--			      EF4_TX_QUEUE_NAME(tx_queue),
--			      EF4_LOOPBACK_NAME(mode, "tx_done"));
-+			      unit_str, EF4_LOOPBACK_NAME(mode, "tx_done"));
- 	}
- 	ef4_fill_test(test_index++, strings, data,
- 		      &lb_tests->rx_good,
--		      "rx", 0,
--		      EF4_LOOPBACK_NAME(mode, "rx_good"));
-+		      "rx", EF4_LOOPBACK_NAME(mode, "rx_good"));
- 	ef4_fill_test(test_index++, strings, data,
- 		      &lb_tests->rx_bad,
--		      "rx", 0,
--		      EF4_LOOPBACK_NAME(mode, "rx_bad"));
-+		      "rx", EF4_LOOPBACK_NAME(mode, "rx_bad"));
- 
- 	return test_index;
- }
-@@ -303,28 +298,31 @@ static int ef4_ethtool_fill_self_tests(struct ef4_nic *efx,
- 	enum ef4_loopback_mode mode;
- 
- 	ef4_fill_test(n++, strings, data, &tests->phy_alive,
--		      "phy", 0, "alive", NULL);
-+		      "phy", "alive");
- 	ef4_fill_test(n++, strings, data, &tests->nvram,
--		      "core", 0, "nvram", NULL);
-+		      "core", "nvram");
- 	ef4_fill_test(n++, strings, data, &tests->interrupt,
--		      "core", 0, "interrupt", NULL);
-+		      "core", "interrupt");
- 
- 	/* Event queues */
- 	ef4_for_each_channel(channel, efx) {
-+		char unit_str[ETH_GSTRING_LEN];
-+
-+		snprintf(unit_str, sizeof(unit_str), "chan%d",
-+			 channel->channel);
-+
- 		ef4_fill_test(n++, strings, data,
- 			      &tests->eventq_dma[channel->channel],
--			      EF4_CHANNEL_NAME(channel),
--			      "eventq.dma", NULL);
-+			      unit_str, "eventq.dma");
- 		ef4_fill_test(n++, strings, data,
- 			      &tests->eventq_int[channel->channel],
--			      EF4_CHANNEL_NAME(channel),
--			      "eventq.int", NULL);
-+			      unit_str, "eventq.int");
- 	}
- 
- 	ef4_fill_test(n++, strings, data, &tests->memory,
--		      "core", 0, "memory", NULL);
-+		      "core", "memory");
- 	ef4_fill_test(n++, strings, data, &tests->registers,
--		      "core", 0, "registers", NULL);
-+		      "core", "registers");
- 
- 	if (efx->phy_op->run_tests != NULL) {
- 		EF4_BUG_ON_PARANOID(efx->phy_op->test_name == NULL);
-@@ -338,7 +336,7 @@ static int ef4_ethtool_fill_self_tests(struct ef4_nic *efx,
- 				break;
- 
- 			ef4_fill_test(n++, strings, data, &tests->phy_ext[i],
--				      "phy", 0, name, NULL);
-+				      "phy", "%s", name);
- 		}
- 	}
- 
-diff --git a/drivers/net/ethernet/sfc/siena/ethtool_common.c b/drivers/net/ethernet/sfc/siena/ethtool_common.c
-index 76cbce2b9592..9df08f1e2347 100644
---- a/drivers/net/ethernet/sfc/siena/ethtool_common.c
-+++ b/drivers/net/ethernet/sfc/siena/ethtool_common.c
-@@ -199,18 +199,17 @@ int efx_siena_ethtool_set_pauseparam(struct net_device *net_dev,
-  * @strings:		Ethtool strings, or %NULL
-  * @data:		Ethtool test results, or %NULL
-  * @test:		Pointer to test result (used only if data != %NULL)
-- * @unit_format:	Unit name format (e.g. "chan\%d")
-- * @unit_id:		Unit id (e.g. 0 for "chan0")
-+ * @unit_name:		Unit name
-  * @test_format:	Test name format (e.g. "loopback.\%s.tx.sent")
-- * @test_id:		Test id (e.g. "PHYXS" for "loopback.PHYXS.tx_sent")
-  *
-  * Fill in an individual self-test entry.
-  */
--static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
--			  int *test, const char *unit_format, int unit_id,
--			  const char *test_format, const char *test_id)
-+static void __printf(6, 7) efx_fill_test(unsigned int test_index, u8 *strings,
-+					 u64 *data, int *test,
-+					 const char *unit_name,
-+					 char *test_format, ...)
- {
--	char unit_str[ETH_GSTRING_LEN], test_str[ETH_GSTRING_LEN];
-+	char test_str[ETH_GSTRING_LEN];
- 
- 	/* Fill data value, if applicable */
- 	if (data)
-@@ -218,20 +217,16 @@ static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
- 
- 	/* Fill string, if applicable */
- 	if (strings) {
--		if (strchr(unit_format, '%'))
--			snprintf(unit_str, sizeof(unit_str),
--				 unit_format, unit_id);
--		else
--			strcpy(unit_str, unit_format);
--		snprintf(test_str, sizeof(test_str), test_format, test_id);
-+		va_list args;
-+
-+		va_start(args, test_format);
-+		vsnprintf(test_str, sizeof(test_str), test_format, args);
-+		va_end(args);
- 		snprintf(strings + test_index * ETH_GSTRING_LEN,
--			 ETH_GSTRING_LEN,
--			 "%-6s %-24s", unit_str, test_str);
-+			 ETH_GSTRING_LEN, "%-6s %-24s", unit_name, test_str);
- 	}
- }
- 
--#define EFX_CHANNEL_NAME(_channel) "chan%d", _channel->channel
--#define EFX_TX_QUEUE_NAME(_tx_queue) "txq%d", _tx_queue->label
- #define EFX_LOOPBACK_NAME(_mode, _counter)			\
- 	"loopback.%s." _counter, STRING_TABLE_LOOKUP(_mode, efx_siena_loopback_mode)
- 
-@@ -258,23 +253,23 @@ static int efx_fill_loopback_test(struct efx_nic *efx,
- 	struct efx_tx_queue *tx_queue;
- 
- 	efx_for_each_channel_tx_queue(tx_queue, channel) {
-+		char unit_str[ETH_GSTRING_LEN];
-+
-+		snprintf(unit_str, sizeof(unit_str), "txq%d", tx_queue->label);
-+
- 		efx_fill_test(test_index++, strings, data,
- 			      &lb_tests->tx_sent[tx_queue->label],
--			      EFX_TX_QUEUE_NAME(tx_queue),
--			      EFX_LOOPBACK_NAME(mode, "tx_sent"));
-+			      unit_str, EFX_LOOPBACK_NAME(mode, "tx_sent"));
- 		efx_fill_test(test_index++, strings, data,
- 			      &lb_tests->tx_done[tx_queue->label],
--			      EFX_TX_QUEUE_NAME(tx_queue),
--			      EFX_LOOPBACK_NAME(mode, "tx_done"));
-+			      unit_str, EFX_LOOPBACK_NAME(mode, "tx_done"));
- 	}
- 	efx_fill_test(test_index++, strings, data,
- 		      &lb_tests->rx_good,
--		      "rx", 0,
--		      EFX_LOOPBACK_NAME(mode, "rx_good"));
-+		      "rx", EFX_LOOPBACK_NAME(mode, "rx_good"));
- 	efx_fill_test(test_index++, strings, data,
- 		      &lb_tests->rx_bad,
--		      "rx", 0,
--		      EFX_LOOPBACK_NAME(mode, "rx_bad"));
-+		      "rx", EFX_LOOPBACK_NAME(mode, "rx_bad"));
- 
- 	return test_index;
- }
-@@ -301,28 +296,31 @@ static int efx_ethtool_fill_self_tests(struct efx_nic *efx,
- 	enum efx_loopback_mode mode;
- 
- 	efx_fill_test(n++, strings, data, &tests->phy_alive,
--		      "phy", 0, "alive", NULL);
-+		      "phy", "alive");
- 	efx_fill_test(n++, strings, data, &tests->nvram,
--		      "core", 0, "nvram", NULL);
-+		      "core", "nvram");
- 	efx_fill_test(n++, strings, data, &tests->interrupt,
--		      "core", 0, "interrupt", NULL);
-+		      "core", "interrupt");
- 
- 	/* Event queues */
- 	efx_for_each_channel(channel, efx) {
-+		char unit_str[ETH_GSTRING_LEN];
-+
-+		snprintf(unit_str, sizeof(unit_str), "chan%d",
-+			 channel->channel);
-+
- 		efx_fill_test(n++, strings, data,
- 			      &tests->eventq_dma[channel->channel],
--			      EFX_CHANNEL_NAME(channel),
--			      "eventq.dma", NULL);
-+			      unit_str, "eventq.dma");
- 		efx_fill_test(n++, strings, data,
- 			      &tests->eventq_int[channel->channel],
--			      EFX_CHANNEL_NAME(channel),
--			      "eventq.int", NULL);
-+			      unit_str, "eventq.int");
- 	}
- 
- 	efx_fill_test(n++, strings, data, &tests->memory,
--		      "core", 0, "memory", NULL);
-+		      "core", "memory");
- 	efx_fill_test(n++, strings, data, &tests->registers,
--		      "core", 0, "registers", NULL);
-+		      "core", "registers");
- 
- 	for (i = 0; true; ++i) {
- 		const char *name;
-@@ -332,7 +330,8 @@ static int efx_ethtool_fill_self_tests(struct efx_nic *efx,
- 		if (name == NULL)
- 			break;
- 
--		efx_fill_test(n++, strings, data, &tests->phy_ext[i], "phy", 0, name, NULL);
-+		efx_fill_test(n++, strings, data, &tests->phy_ext[i], "phy",
-+			      "%s", name);
- 	}
- 
- 	/* Loopback tests */
+-/**
+- * rvt_set_ibdev_name - Craft an IB device name from client info
+- * @rdi: pointer to the client rvt_dev_info structure
+- * @name: client specific name
+- * @unit: client specific unit number.
+- */
+-static inline void rvt_set_ibdev_name(struct rvt_dev_info *rdi,
+-				      const char *fmt, const char *name,
+-				      const int unit)
+-{
+-	/*
+-	 * FIXME: rvt and its users want to touch the ibdev before
+-	 * registration and have things like the name work. We don't have the
+-	 * infrastructure in the core to support this directly today, hack it
+-	 * to work by setting the name manually here.
+-	 */
+-	dev_set_name(&rdi->ibdev.dev, fmt, name, unit);
+-	strscpy(rdi->ibdev.name, dev_name(&rdi->ibdev.dev), IB_DEVICE_NAME_MAX);
+-}
+-
+ /**
+  * rvt_get_ibdev_name - return the IB name
+  * @rdi: rdmavt device
 -- 
 2.39.5
 
