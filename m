@@ -1,670 +1,405 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025873FC5C6;
-	Tue,  2 Jun 2026 17:36:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E2D31D381;
+	Tue,  2 Jun 2026 18:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780421797; cv=none; b=IGTvitOpOSKaRWTKodG7fZ/uwbH0napbO0bUg1qz4kyQq91i55c2mA2iTYc8R1zDXlLmwLaczTsGuoZyAVdDrsFY2SpV+A12+Y8cLYePwPnlk98rZbJzHaFRs+ScIueL2TOgf1t6UhReBveHkq0ojTZaQfp7uD17qP9KFZpKZJk=
+	t=1780423577; cv=none; b=hV+c7hODfzpd9W6xmUeZCiSa8uti6HWpPRvUt0R9p11fgSo8v8ZizT+Z1CZBmn8CUwwcD9YDFxKBlODYxD5GzNtYofjL2nX/PR33pLRfFoEAkKmNc5pQmBTmvmBv8luaa7e6L0QeuzrVtFzJWbCJD4/bKrY9O19FXvF+HzDUVm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780421797; c=relaxed/simple;
-	bh=otZNjnKU8KxeJXPJRtYwHqJshU02vqeJZVB3TATb45Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mu94q9ce3wCO9aRKXy06IvSlpx2Z9uaLNH9QHvI8RWpiRmSHwwENN8uS38WZt2cer7/if+ZDSFH4HPqc0eoiE927RUQ+P0IV3e69GObQBmAZxfq1vpyt8Rhtp6+etTx3BNOh71SLg4VKFXVoElUXQl79osVDGuP6sa+WwTmEkOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PAvqtj4o; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1780423577; c=relaxed/simple;
+	bh=ry2vRUXxNxCx4/f0tDSsP43+LhXP3dk7CaaSf+mtXxE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=SxNYq1eSX4NUa69au23xjUJI4Ms0uUeIf6bB93qGh8KFbFOMyEesv/wb9w3srs11E5T7DZnp06QWoxe4jY2/AJ4wpMYUpl8y41Y0VKSwwZP2GOmWYtTDTD+CEJvmiCttRGrQhwNYu9kVpljsZ0zHNbLnNhj2+z6ceIEZtRJG6sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JN84TNIO; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PAvqtj4o"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JN84TNIO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780421795; x=1811957795;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=otZNjnKU8KxeJXPJRtYwHqJshU02vqeJZVB3TATb45Q=;
-  b=PAvqtj4oKfOFaj21hcrHMfR7TE3aBC3YKWUL15TfQnVrtc+qGVK3XPW1
-   44YcSpaZAY1WwamA3YazOB/gnKssJyGumUA5Q6j8Qr/zOgUs1vaZHy1IF
-   o2vj3OoKdgEox8KGW3ofEKFDBN2SeHDcTbd+aoK3m6kijn+u0GXGOENHW
-   R3pmvb6QwAB8ydUcZYNAy6Qe3FzFxrz0ZRl7dkTW1ggFNaIGm50ENzoNM
-   qM1zJi78UbEPM9/dkbbqi/nMatxrjvykNqDVygMVQYbba4DDZ2+U1xGs7
-   aWDvPQyOHiXsxWl6AetJDrRKD+2kRYC+Ets8xVCOc1lrNNBaGpEe9jfop
-   Q==;
-X-CSE-ConnectionGUID: W0Kcr1wQRO2XgsqWTDypKw==
-X-CSE-MsgGUID: YTY+ZGMSQcSLOmJpoeWtow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="103876325"
+  t=1780423575; x=1811959575;
+  h=date:from:to:cc:subject:message-id;
+  bh=ry2vRUXxNxCx4/f0tDSsP43+LhXP3dk7CaaSf+mtXxE=;
+  b=JN84TNIOnoabwQyPgENRmZiW1+jjino1VBzysPr82R4HTFjIRLfbg1T0
+   QVc0Ur33DHxbrmfQjC1vKJxtNqZhTpjSVR/SuS5NODn7a0IbbtS8C79w5
+   JkApkbGZJtDWlRZyBonpKE9jlt9BXmiFbnJegNor5TUXG3bT11kvssNyV
+   mXBjZ05N2j4u3ijRMzbg6pdQ3NWbtpAyaWqAdQj1ytnJwtN0s52X4/mBM
+   Rqpjp7jP3ku/mKAZMehNS836q5J6v+/LRWnkqTEaWu6gS+FiqNYDeCIz6
+   joaD6xM53t2g+n+zwu1jx0L3Il8wVuKAZwu604Rn1dicNiCyKzscM7v4N
+   g==;
+X-CSE-ConnectionGUID: oeLyAx+xQV+sRBxkFA7zpg==
+X-CSE-MsgGUID: Dtx5YyxESo6a870Jm/gKPA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="106666556"
 X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
-   d="scan'208";a="103876325"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 10:36:34 -0700
-X-CSE-ConnectionGUID: ki6jN5u7SOGZ5z+gykXXwQ==
-X-CSE-MsgGUID: oct1Ibf+Trqn++sAKMP9sg==
+   d="scan'208";a="106666556"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 11:06:15 -0700
+X-CSE-ConnectionGUID: JERTbLDfTf+yQzCk+4QSaQ==
+X-CSE-MsgGUID: 6J7MHQv6Qom56cuKQRjgOA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,183,1774335600"; 
-   d="scan'208";a="239802400"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa010.fm.intel.com with ESMTP; 02 Jun 2026 10:36:30 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+   d="scan'208";a="237629654"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 02 Jun 2026 11:06:13 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wUT2R-000000001pt-1HNF;
-	Tue, 02 Jun 2026 17:36:27 +0000
-Date: Tue, 2 Jun 2026 19:36:25 +0200
+	id 1wUTVC-00000000CNu-2N3P;
+	Tue, 02 Jun 2026 18:06:10 +0000
+Date: Wed, 03 Jun 2026 02:05:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: chenyuan_fl@163.com, eddyz87@gmail.com, yonghong.song@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
-	ast@kernel.org, bot+bpf-ci@kernel.org, bpf@vger.kernel.org,
-	chenyuan@kylinos.cn, chenyuan_fl@163.com, clm@meta.com,
-	daniel@iogearbox.net, ihor.solodrai@linux.dev, jolsa@kernel.org,
-	linux-kernel@vger.kernel.org, martin.lau@kernel.org,
-	martin.lau@linux.dev, memxor@gmail.com, song@kernel.org
-Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: Add regression test for kfunc
- implicit arg injection
-Message-ID: <202606021934.SXop4khA-lkp@intel.com>
-References: <20260602093836.2632714-3-chenyuan_fl@163.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-06-01-3 290/290]
+ sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:144:25: error: incomplete
+ definition of type 'struct snd_soc_dai'
+Message-ID: <202606030136.R4on6tJO-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260602093836.2632714-3-chenyuan_fl@163.com>
 
-Hi Yuan,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bpf/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/chenyuan_fl-163-com/bpf-Fix-kfunc-implicit-arg-inject-type-detection-to-prevent-invalid-pointer-deref/20260602-175420
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-patch link:    https://lore.kernel.org/r/20260602093836.2632714-3-chenyuan_fl%40163.com
-patch subject: [PATCH bpf v4 2/2] selftests/bpf: Add regression test for kfunc implicit arg injection
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260602/202606021934.SXop4khA-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260602/202606021934.SXop4khA-lkp@intel.com/reproduce)
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-01-3
+head:   1ef39bbdce9099b285b9702e22c4defc277e42dd
+commit: 61940afff67a6c8e813921b69dbef7e26112dccf [290/290] ASoC: soc-dai: move struct snd_soc_dai to soc-dai.c
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260603/202606030136.R4on6tJO-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606030136.R4on6tJO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606021934.SXop4khA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606030136.R4on6tJO-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/bpf/verifier.c:12097:5: error: call to undeclared function 'reg_arg_name'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    12097 |                                 reg_arg_name(env, argno));
-          |                                 ^
->> kernel/bpf/verifier.c:12097:23: error: use of undeclared identifier 'argno'
-    12097 |                                 reg_arg_name(env, argno));
-          |                                                   ^
-   2 errors generated.
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:141:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     141 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:141:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     141 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:144:25: error: incomplete definition of type 'struct snd_soc_dai'
+     144 |         int memif_num = cpu_dai->id;
+         |                         ~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:186:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     186 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:186:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     186 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:188:25: error: incomplete definition of type 'struct snd_soc_dai'
+     188 |         int memif_num = cpu_dai->id;
+         |                         ~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:208:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     208 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:208:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     208 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:211:37: error: incomplete definition of type 'struct snd_soc_dai'
+     211 |         int id = snd_soc_rtd_to_cpu(rtd, 0)->id;
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:253:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     253 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:253:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     253 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8196/mt8196-afe-pcm.c:254:37: error: incomplete definition of type 'struct snd_soc_dai'
+     254 |         int id = snd_soc_rtd_to_cpu(rtd, 0)->id;
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   12 errors generated.
+--
+   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:412:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     412 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:412:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     412 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/mediatek/mt8196/mt8196-dai-adda.c:417:14: error: incomplete definition of type 'struct snd_soc_dai'
+     417 |         int id = dai->id;
+         |                  ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:470:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     470 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:470:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     470 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:477:14: error: incomplete definition of type 'struct snd_soc_dai'
+     477 |         int id = dai->id;
+         |                  ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:660:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     660 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:660:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     660 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8196/mt8196-dai-adda.c:661:14: error: incomplete definition of type 'struct snd_soc_dai'
+     661 |         int id = dai->id;
+         |                  ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   9 errors generated.
+--
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2325:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2325 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2325:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+    2325 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2327:44: error: incomplete definition of type 'struct snd_soc_dai'
+    2327 |         return mtk_dai_i2s_config(afe, params, dai->id);
+         |                                                ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2333:48: error: incomplete definition of type 'struct snd_soc_dai'
+    2333 |         struct mtk_base_afe *afe = dev_get_drvdata(dai->dev);
+         |                                                    ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2339:9: error: incomplete definition of type 'struct snd_soc_dai'
+    2339 |         if (dai->id >= MT8196_DAI_NUM || dai->id < 0 || dir != SND_SOC_CLOCK_OUT)
+         |             ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2339:38: error: incomplete definition of type 'struct snd_soc_dai'
+    2339 |         if (dai->id >= MT8196_DAI_NUM || dai->id < 0 || dir != SND_SOC_CLOCK_OUT)
+         |                                          ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2342:35: error: incomplete definition of type 'struct snd_soc_dai'
+    2342 |         i2s_priv = afe_priv->dai_priv[dai->id];
+         |                                       ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2373:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2373 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2373:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+    2373 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2377:9: error: incomplete definition of type 'struct snd_soc_dai'
+    2377 |         if (dai->id >= MT8196_DAI_NUM || dai->id < 0)
+         |             ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2377:38: error: incomplete definition of type 'struct snd_soc_dai'
+    2377 |         if (dai->id >= MT8196_DAI_NUM || dai->id < 0)
+         |                                          ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2380:35: error: incomplete definition of type 'struct snd_soc_dai'
+    2380 |         i2s_priv = afe_priv->dai_priv[dai->id];
+         |                                       ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-i2s.c:2384:51: error: incomplete definition of type 'struct snd_soc_dai'
+    2384 |         dev_dbg(afe->dev, "dai->id: %d, fmt: 0x%x\n", dai->id, fmt);
+         |                                                       ~~~^
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                              ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:285:19: note: expanded from macro 'dynamic_dev_dbg'
+     285 |                            dev, fmt, ##__VA_ARGS__)
+         |                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
+     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
+     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
+     231 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   13 errors generated.
+--
+   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:397:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     397 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:397:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     397 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:399:18: error: incomplete definition of type 'struct snd_soc_dai'
+     399 |         int tdm_id = dai->id;
+         |                      ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:506:29: error: call to undeclared function 'snd_soc_dai_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     506 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                                    ^
+   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:506:23: error: incompatible integer to pointer conversion initializing 'struct mtk_base_afe *' with an expression of type 'int' [-Wint-conversion]
+     506 |         struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+         |                              ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:507:18: error: incomplete definition of type 'struct snd_soc_dai'
+     507 |         int tdm_id = dai->id;
+         |                      ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:556:48: error: incomplete definition of type 'struct snd_soc_dai'
+     556 |         struct mtk_base_afe *afe = dev_get_drvdata(dai->dev);
+         |                                                    ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:560:9: error: incomplete definition of type 'struct snd_soc_dai'
+     560 |         if (dai->id >= MT8196_DAI_NUM || dai->id < 0)
+         |             ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:560:38: error: incomplete definition of type 'struct snd_soc_dai'
+     560 |         if (dai->id >= MT8196_DAI_NUM || dai->id < 0)
+         |                                          ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-dai-tdm.c:563:35: error: incomplete definition of type 'struct snd_soc_dai'
+     563 |         tdm_priv = afe_priv->dai_priv[dai->id];
+         |                                       ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   10 errors generated.
+--
+>> sound/soc/mediatek/mt8196/mt8196-nau8825.c:553:68: error: incomplete definition of type 'struct snd_soc_dai'
+     553 |         struct snd_soc_component *component = snd_soc_rtd_to_codec(rtd, 0)->component;
+         |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-nau8825.c:578:68: error: incomplete definition of type 'struct snd_soc_dai'
+     578 |         struct snd_soc_component *component = snd_soc_rtd_to_codec(rtd, 0)->component;
+         |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-nau8825.c:605:68: error: incomplete definition of type 'struct snd_soc_dai'
+     605 |         struct snd_soc_component *component = snd_soc_rtd_to_codec(rtd, 0)->component;
+         |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-nau8825.c:653:68: error: incomplete definition of type 'struct snd_soc_dai'
+     653 |         struct snd_soc_component *component = snd_soc_rtd_to_codec(rtd, 0)->component;
+         |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-nau8825.c:673:20: error: incomplete definition of type 'struct snd_soc_dai'
+     673 |                 dev_err(codec_dai->dev, "can't set BCLK clock %d\n", ret);
+         |                         ~~~~~~~~~^
+   include/linux/dev_printk.h:154:44: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                   ^~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                         ^~~
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/mediatek/mt8196/mt8196-nau8825.c:681:20: error: incomplete definition of type 'struct snd_soc_dai'
+     681 |                 dev_err(codec_dai->dev, "can't set BCLK: %d\n", ret);
+         |                         ~~~~~~~~~^
+   include/linux/dev_printk.h:154:44: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                   ^~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                         ^~~
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   6 errors generated.
 
 
-vim +/reg_arg_name +12097 kernel/bpf/verifier.c
+vim +144 sound/soc/mediatek/mt8196/mt8196-afe-pcm.c
 
- 12044	
- 12045	static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_arg_meta *meta,
- 12046				    int insn_idx)
- 12047	{
- 12048		const char *func_name = meta->func_name, *ref_tname;
- 12049		const struct btf *btf = meta->btf;
- 12050		const struct btf_param *args;
- 12051		struct btf_record *rec;
- 12052		u32 i, nargs;
- 12053		int ret;
- 12054	
- 12055		args = (const struct btf_param *)(meta->func_proto + 1);
- 12056		nargs = btf_type_vlen(meta->func_proto);
- 12057		if (nargs > MAX_BPF_FUNC_REG_ARGS) {
- 12058			verbose(env, "Function %s has %d > %d args\n", func_name, nargs,
- 12059				MAX_BPF_FUNC_REG_ARGS);
- 12060			return -EINVAL;
- 12061		}
- 12062	
- 12063		/* Check that BTF function arguments match actual types that the
- 12064		 * verifier sees.
- 12065		 */
- 12066		for (i = 0; i < nargs; i++) {
- 12067			struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[i + 1];
- 12068			const struct btf_type *t, *ref_t, *resolve_ret;
- 12069			enum bpf_arg_type arg_type = ARG_DONTCARE;
- 12070			u32 regno = i + 1, ref_id, type_size;
- 12071			bool is_ret_buf_sz = false;
- 12072			int kf_arg_type;
- 12073	
- 12074			if (is_kfunc_arg_prog_aux(btf, &args[i])) {
- 12075				/* Reject repeated use bpf_prog_aux */
- 12076				if (meta->arg_prog) {
- 12077					verifier_bug(env, "Only 1 prog->aux argument supported per-kfunc");
- 12078					return -EFAULT;
- 12079				}
- 12080				meta->arg_prog = true;
- 12081				cur_aux(env)->arg_prog = regno;
- 12082				continue;
- 12083			}
- 12084	
- 12085			if (is_kfunc_arg_ignore(btf, &args[i]))
- 12086				continue;
- 12087	
- 12088			if (is_kfunc_arg_implicit(meta, i)) {
- 12089				/* list_push / rbtree_add kfuncs have implicit args
- 12090				 * (e.g. 'off' parameter) handled during verification
- 12091				 * in bpf_fixup_kfunc_call().  Don't flag them.
- 12092				 */
- 12093				if (is_bpf_list_push_kfunc(meta->func_id) ||
- 12094				    is_bpf_rbtree_add_kfunc(meta->func_id))
- 12095					continue;
- 12096				verbose(env, "%s unrecognized implicit argument, possible BTF mismatch\n",
- 12097					reg_arg_name(env, argno));
- 12098				return -EFAULT;
- 12099			}
- 12100	
- 12101			t = btf_type_skip_modifiers(btf, args[i].type, NULL);
- 12102	
- 12103			if (btf_type_is_scalar(t)) {
- 12104				if (reg->type != SCALAR_VALUE) {
- 12105					verbose(env, "R%d is not a scalar\n", regno);
- 12106					return -EINVAL;
- 12107				}
- 12108	
- 12109				if (is_kfunc_arg_constant(meta->btf, &args[i])) {
- 12110					if (meta->arg_constant.found) {
- 12111						verifier_bug(env, "only one constant argument permitted");
- 12112						return -EFAULT;
- 12113					}
- 12114					if (!tnum_is_const(reg->var_off)) {
- 12115						verbose(env, "R%d must be a known constant\n", regno);
- 12116						return -EINVAL;
- 12117					}
- 12118					ret = mark_chain_precision(env, regno);
- 12119					if (ret < 0)
- 12120						return ret;
- 12121					meta->arg_constant.found = true;
- 12122					meta->arg_constant.value = reg->var_off.value;
- 12123				} else if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdonly_buf_size")) {
- 12124					meta->r0_rdonly = true;
- 12125					is_ret_buf_sz = true;
- 12126				} else if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdwr_buf_size")) {
- 12127					is_ret_buf_sz = true;
- 12128				}
- 12129	
- 12130				if (is_ret_buf_sz) {
- 12131					if (meta->r0_size) {
- 12132						verbose(env, "2 or more rdonly/rdwr_buf_size parameters for kfunc");
- 12133						return -EINVAL;
- 12134					}
- 12135	
- 12136					if (!tnum_is_const(reg->var_off)) {
- 12137						verbose(env, "R%d is not a const\n", regno);
- 12138						return -EINVAL;
- 12139					}
- 12140	
- 12141					meta->r0_size = reg->var_off.value;
- 12142					ret = mark_chain_precision(env, regno);
- 12143					if (ret)
- 12144						return ret;
- 12145				}
- 12146				continue;
- 12147			}
- 12148	
- 12149			if (!btf_type_is_ptr(t)) {
- 12150				verbose(env, "Unrecognized arg#%d type %s\n", i, btf_type_str(t));
- 12151				return -EINVAL;
- 12152			}
- 12153	
- 12154			if ((bpf_register_is_null(reg) || type_may_be_null(reg->type)) &&
- 12155			    !is_kfunc_arg_nullable(meta->btf, &args[i])) {
- 12156				verbose(env, "Possibly NULL pointer passed to trusted arg%d\n", i);
- 12157				return -EACCES;
- 12158			}
- 12159	
- 12160			if (reg->ref_obj_id) {
- 12161				if (is_kfunc_release(meta) && meta->ref_obj_id) {
- 12162					verifier_bug(env, "more than one arg with ref_obj_id R%d %u %u",
- 12163						     regno, reg->ref_obj_id,
- 12164						     meta->ref_obj_id);
- 12165					return -EFAULT;
- 12166				}
- 12167				meta->ref_obj_id = reg->ref_obj_id;
- 12168				if (is_kfunc_release(meta))
- 12169					meta->release_regno = regno;
- 12170			}
- 12171	
- 12172			ref_t = btf_type_skip_modifiers(btf, t->type, &ref_id);
- 12173			ref_tname = btf_name_by_offset(btf, ref_t->name_off);
- 12174	
- 12175			kf_arg_type = get_kfunc_ptr_arg_type(env, meta, t, ref_t, ref_tname, args, i, nargs);
- 12176			if (kf_arg_type < 0)
- 12177				return kf_arg_type;
- 12178	
- 12179			switch (kf_arg_type) {
- 12180			case KF_ARG_PTR_TO_NULL:
- 12181				continue;
- 12182			case KF_ARG_PTR_TO_MAP:
- 12183				if (!reg->map_ptr) {
- 12184					verbose(env, "pointer in R%d isn't map pointer\n", regno);
- 12185					return -EINVAL;
- 12186				}
- 12187				if (meta->map.ptr && (reg->map_ptr->record->wq_off >= 0 ||
- 12188						      reg->map_ptr->record->task_work_off >= 0)) {
- 12189					/* Use map_uid (which is unique id of inner map) to reject:
- 12190					 * inner_map1 = bpf_map_lookup_elem(outer_map, key1)
- 12191					 * inner_map2 = bpf_map_lookup_elem(outer_map, key2)
- 12192					 * if (inner_map1 && inner_map2) {
- 12193					 *     wq = bpf_map_lookup_elem(inner_map1);
- 12194					 *     if (wq)
- 12195					 *         // mismatch would have been allowed
- 12196					 *         bpf_wq_init(wq, inner_map2);
- 12197					 * }
- 12198					 *
- 12199					 * Comparing map_ptr is enough to distinguish normal and outer maps.
- 12200					 */
- 12201					if (meta->map.ptr != reg->map_ptr ||
- 12202					    meta->map.uid != reg->map_uid) {
- 12203						if (reg->map_ptr->record->task_work_off >= 0) {
- 12204							verbose(env,
- 12205								"bpf_task_work pointer in R2 map_uid=%d doesn't match map pointer in R3 map_uid=%d\n",
- 12206								meta->map.uid, reg->map_uid);
- 12207							return -EINVAL;
- 12208						}
- 12209						verbose(env,
- 12210							"workqueue pointer in R1 map_uid=%d doesn't match map pointer in R2 map_uid=%d\n",
- 12211							meta->map.uid, reg->map_uid);
- 12212						return -EINVAL;
- 12213					}
- 12214				}
- 12215				meta->map.ptr = reg->map_ptr;
- 12216				meta->map.uid = reg->map_uid;
- 12217				fallthrough;
- 12218			case KF_ARG_PTR_TO_ALLOC_BTF_ID:
- 12219			case KF_ARG_PTR_TO_BTF_ID:
- 12220				if (!is_trusted_reg(reg)) {
- 12221					if (!is_kfunc_rcu(meta)) {
- 12222						verbose(env, "R%d must be referenced or trusted\n", regno);
- 12223						return -EINVAL;
- 12224					}
- 12225					if (!is_rcu_reg(reg)) {
- 12226						verbose(env, "R%d must be a rcu pointer\n", regno);
- 12227						return -EINVAL;
- 12228					}
- 12229				}
- 12230				fallthrough;
- 12231			case KF_ARG_PTR_TO_DYNPTR:
- 12232			case KF_ARG_PTR_TO_ITER:
- 12233			case KF_ARG_PTR_TO_LIST_HEAD:
- 12234			case KF_ARG_PTR_TO_LIST_NODE:
- 12235			case KF_ARG_PTR_TO_RB_ROOT:
- 12236			case KF_ARG_PTR_TO_RB_NODE:
- 12237			case KF_ARG_PTR_TO_MEM:
- 12238			case KF_ARG_PTR_TO_MEM_SIZE:
- 12239			case KF_ARG_PTR_TO_CALLBACK:
- 12240			case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
- 12241			case KF_ARG_PTR_TO_CONST_STR:
- 12242			case KF_ARG_PTR_TO_WORKQUEUE:
- 12243			case KF_ARG_PTR_TO_TIMER:
- 12244			case KF_ARG_PTR_TO_TASK_WORK:
- 12245			case KF_ARG_PTR_TO_IRQ_FLAG:
- 12246			case KF_ARG_PTR_TO_RES_SPIN_LOCK:
- 12247				break;
- 12248			case KF_ARG_PTR_TO_CTX:
- 12249				arg_type = ARG_PTR_TO_CTX;
- 12250				break;
- 12251			default:
- 12252				verifier_bug(env, "unknown kfunc arg type %d", kf_arg_type);
- 12253				return -EFAULT;
- 12254			}
- 12255	
- 12256			if (is_kfunc_release(meta) && reg->ref_obj_id)
- 12257				arg_type |= OBJ_RELEASE;
- 12258			ret = check_func_arg_reg_off(env, reg, regno, arg_type);
- 12259			if (ret < 0)
- 12260				return ret;
- 12261	
- 12262			switch (kf_arg_type) {
- 12263			case KF_ARG_PTR_TO_CTX:
- 12264				if (reg->type != PTR_TO_CTX) {
- 12265					verbose(env, "arg#%d expected pointer to ctx, but got %s\n",
- 12266						i, reg_type_str(env, reg->type));
- 12267					return -EINVAL;
- 12268				}
- 12269	
- 12270				if (meta->func_id == special_kfunc_list[KF_bpf_cast_to_kern_ctx]) {
- 12271					ret = get_kern_ctx_btf_id(&env->log, resolve_prog_type(env->prog));
- 12272					if (ret < 0)
- 12273						return -EINVAL;
- 12274					meta->ret_btf_id  = ret;
- 12275				}
- 12276				break;
- 12277			case KF_ARG_PTR_TO_ALLOC_BTF_ID:
- 12278				if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC)) {
- 12279					if (!is_bpf_obj_drop_kfunc(meta->func_id)) {
- 12280						verbose(env, "arg#%d expected for bpf_obj_drop()\n", i);
- 12281						return -EINVAL;
- 12282					}
- 12283				} else if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC | MEM_PERCPU)) {
- 12284					if (!is_bpf_percpu_obj_drop_kfunc(meta->func_id)) {
- 12285						verbose(env, "arg#%d expected for bpf_percpu_obj_drop()\n", i);
- 12286						return -EINVAL;
- 12287					}
- 12288				} else {
- 12289					verbose(env, "arg#%d expected pointer to allocated object\n", i);
- 12290					return -EINVAL;
- 12291				}
- 12292				if (!reg->ref_obj_id) {
- 12293					verbose(env, "allocated object must be referenced\n");
- 12294					return -EINVAL;
- 12295				}
- 12296				if (meta->btf == btf_vmlinux) {
- 12297					meta->arg_btf = reg->btf;
- 12298					meta->arg_btf_id = reg->btf_id;
- 12299				}
- 12300				break;
- 12301			case KF_ARG_PTR_TO_DYNPTR:
- 12302			{
- 12303				enum bpf_arg_type dynptr_arg_type = ARG_PTR_TO_DYNPTR;
- 12304				int clone_ref_obj_id = 0;
- 12305	
- 12306				if (reg->type == CONST_PTR_TO_DYNPTR)
- 12307					dynptr_arg_type |= MEM_RDONLY;
- 12308	
- 12309				if (is_kfunc_arg_uninit(btf, &args[i]))
- 12310					dynptr_arg_type |= MEM_UNINIT;
- 12311	
- 12312				if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb]) {
- 12313					dynptr_arg_type |= DYNPTR_TYPE_SKB;
- 12314				} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_xdp]) {
- 12315					dynptr_arg_type |= DYNPTR_TYPE_XDP;
- 12316				} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb_meta]) {
- 12317					dynptr_arg_type |= DYNPTR_TYPE_SKB_META;
- 12318				} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_file]) {
- 12319					dynptr_arg_type |= DYNPTR_TYPE_FILE;
- 12320				} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_file_discard]) {
- 12321					dynptr_arg_type |= DYNPTR_TYPE_FILE;
- 12322					meta->release_regno = regno;
- 12323				} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_clone] &&
- 12324					   (dynptr_arg_type & MEM_UNINIT)) {
- 12325					enum bpf_dynptr_type parent_type = meta->initialized_dynptr.type;
- 12326	
- 12327					if (parent_type == BPF_DYNPTR_TYPE_INVALID) {
- 12328						verifier_bug(env, "no dynptr type for parent of clone");
- 12329						return -EFAULT;
- 12330					}
- 12331	
- 12332					dynptr_arg_type |= (unsigned int)get_dynptr_type_flag(parent_type);
- 12333					clone_ref_obj_id = meta->initialized_dynptr.ref_obj_id;
- 12334					if (dynptr_type_refcounted(parent_type) && !clone_ref_obj_id) {
- 12335						verifier_bug(env, "missing ref obj id for parent of clone");
- 12336						return -EFAULT;
- 12337					}
- 12338				}
- 12339	
- 12340				ret = process_dynptr_func(env, regno, insn_idx, dynptr_arg_type, clone_ref_obj_id);
- 12341				if (ret < 0)
- 12342					return ret;
- 12343	
- 12344				if (!(dynptr_arg_type & MEM_UNINIT)) {
- 12345					int id = dynptr_id(env, reg);
- 12346	
- 12347					if (id < 0) {
- 12348						verifier_bug(env, "failed to obtain dynptr id");
- 12349						return id;
- 12350					}
- 12351					meta->initialized_dynptr.id = id;
- 12352					meta->initialized_dynptr.type = dynptr_get_type(env, reg);
- 12353					meta->initialized_dynptr.ref_obj_id = dynptr_ref_obj_id(env, reg);
- 12354				}
- 12355	
- 12356				break;
- 12357			}
- 12358			case KF_ARG_PTR_TO_ITER:
- 12359				if (meta->func_id == special_kfunc_list[KF_bpf_iter_css_task_new]) {
- 12360					if (!check_css_task_iter_allowlist(env)) {
- 12361						verbose(env, "css_task_iter is only allowed in bpf_lsm, bpf_iter and sleepable progs\n");
- 12362						return -EINVAL;
- 12363					}
- 12364				}
- 12365				ret = process_iter_arg(env, regno, insn_idx, meta);
- 12366				if (ret < 0)
- 12367					return ret;
- 12368				break;
- 12369			case KF_ARG_PTR_TO_LIST_HEAD:
- 12370				if (reg->type != PTR_TO_MAP_VALUE &&
- 12371				    reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
- 12372					verbose(env, "arg#%d expected pointer to map value or allocated object\n", i);
- 12373					return -EINVAL;
- 12374				}
- 12375				if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC) && !reg->ref_obj_id) {
- 12376					verbose(env, "allocated object must be referenced\n");
- 12377					return -EINVAL;
- 12378				}
- 12379				ret = process_kf_arg_ptr_to_list_head(env, reg, regno, meta);
- 12380				if (ret < 0)
- 12381					return ret;
- 12382				break;
- 12383			case KF_ARG_PTR_TO_RB_ROOT:
- 12384				if (reg->type != PTR_TO_MAP_VALUE &&
- 12385				    reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
- 12386					verbose(env, "arg#%d expected pointer to map value or allocated object\n", i);
- 12387					return -EINVAL;
- 12388				}
- 12389				if (reg->type == (PTR_TO_BTF_ID | MEM_ALLOC) && !reg->ref_obj_id) {
- 12390					verbose(env, "allocated object must be referenced\n");
- 12391					return -EINVAL;
- 12392				}
- 12393				ret = process_kf_arg_ptr_to_rbtree_root(env, reg, regno, meta);
- 12394				if (ret < 0)
- 12395					return ret;
- 12396				break;
- 12397			case KF_ARG_PTR_TO_LIST_NODE:
- 12398				if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
- 12399					verbose(env, "arg#%d expected pointer to allocated object\n", i);
- 12400					return -EINVAL;
- 12401				}
- 12402				if (!reg->ref_obj_id) {
- 12403					verbose(env, "allocated object must be referenced\n");
- 12404					return -EINVAL;
- 12405				}
- 12406				ret = process_kf_arg_ptr_to_list_node(env, reg, regno, meta);
- 12407				if (ret < 0)
- 12408					return ret;
- 12409				break;
- 12410			case KF_ARG_PTR_TO_RB_NODE:
- 12411				if (is_bpf_rbtree_add_kfunc(meta->func_id)) {
- 12412					if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
- 12413						verbose(env, "arg#%d expected pointer to allocated object\n", i);
- 12414						return -EINVAL;
- 12415					}
- 12416					if (!reg->ref_obj_id) {
- 12417						verbose(env, "allocated object must be referenced\n");
- 12418						return -EINVAL;
- 12419					}
- 12420				} else {
- 12421					if (!type_is_non_owning_ref(reg->type) && !reg->ref_obj_id) {
- 12422						verbose(env, "%s can only take non-owning or refcounted bpf_rb_node pointer\n", func_name);
- 12423						return -EINVAL;
- 12424					}
- 12425					if (in_rbtree_lock_required_cb(env)) {
- 12426						verbose(env, "%s not allowed in rbtree cb\n", func_name);
- 12427						return -EINVAL;
- 12428					}
- 12429				}
- 12430	
- 12431				ret = process_kf_arg_ptr_to_rbtree_node(env, reg, regno, meta);
- 12432				if (ret < 0)
- 12433					return ret;
- 12434				break;
- 12435			case KF_ARG_PTR_TO_MAP:
- 12436				/* If argument has '__map' suffix expect 'struct bpf_map *' */
- 12437				ref_id = *reg2btf_ids[CONST_PTR_TO_MAP];
- 12438				ref_t = btf_type_by_id(btf_vmlinux, ref_id);
- 12439				ref_tname = btf_name_by_offset(btf, ref_t->name_off);
- 12440				fallthrough;
- 12441			case KF_ARG_PTR_TO_BTF_ID:
- 12442				/* Only base_type is checked, further checks are done here */
- 12443				if ((base_type(reg->type) != PTR_TO_BTF_ID ||
- 12444				     (bpf_type_has_unsafe_modifiers(reg->type) && !is_rcu_reg(reg))) &&
- 12445				    !reg2btf_ids[base_type(reg->type)]) {
- 12446					verbose(env, "arg#%d is %s ", i, reg_type_str(env, reg->type));
- 12447					verbose(env, "expected %s or socket\n",
- 12448						reg_type_str(env, base_type(reg->type) |
- 12449								  (type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS)));
- 12450					return -EINVAL;
- 12451				}
- 12452				ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref_id, meta, i);
- 12453				if (ret < 0)
- 12454					return ret;
- 12455				break;
- 12456			case KF_ARG_PTR_TO_MEM:
- 12457				resolve_ret = btf_resolve_size(btf, ref_t, &type_size);
- 12458				if (IS_ERR(resolve_ret)) {
- 12459					verbose(env, "arg#%d reference type('%s %s') size cannot be determined: %ld\n",
- 12460						i, btf_type_str(ref_t), ref_tname, PTR_ERR(resolve_ret));
- 12461					return -EINVAL;
- 12462				}
- 12463				ret = check_mem_reg(env, reg, regno, type_size);
- 12464				if (ret < 0)
- 12465					return ret;
- 12466				break;
- 12467			case KF_ARG_PTR_TO_MEM_SIZE:
- 12468			{
- 12469				struct bpf_reg_state *buff_reg = &regs[regno];
- 12470				const struct btf_param *buff_arg = &args[i];
- 12471				struct bpf_reg_state *size_reg = &regs[regno + 1];
- 12472				const struct btf_param *size_arg = &args[i + 1];
- 12473	
- 12474				if (!bpf_register_is_null(buff_reg) || !is_kfunc_arg_nullable(meta->btf, buff_arg)) {
- 12475					ret = check_kfunc_mem_size_reg(env, size_reg, regno + 1);
- 12476					if (ret < 0) {
- 12477						verbose(env, "arg#%d arg#%d memory, len pair leads to invalid memory access\n", i, i + 1);
- 12478						return ret;
- 12479					}
- 12480				}
- 12481	
- 12482				if (is_kfunc_arg_const_mem_size(meta->btf, size_arg, size_reg)) {
- 12483					if (meta->arg_constant.found) {
- 12484						verifier_bug(env, "only one constant argument permitted");
- 12485						return -EFAULT;
- 12486					}
- 12487					if (!tnum_is_const(size_reg->var_off)) {
- 12488						verbose(env, "R%d must be a known constant\n", regno + 1);
- 12489						return -EINVAL;
- 12490					}
- 12491					meta->arg_constant.found = true;
- 12492					meta->arg_constant.value = size_reg->var_off.value;
- 12493				}
- 12494	
- 12495				/* Skip next '__sz' or '__szk' argument */
- 12496				i++;
- 12497				break;
- 12498			}
- 12499			case KF_ARG_PTR_TO_CALLBACK:
- 12500				if (reg->type != PTR_TO_FUNC) {
- 12501					verbose(env, "arg%d expected pointer to func\n", i);
- 12502					return -EINVAL;
- 12503				}
- 12504				meta->subprogno = reg->subprogno;
- 12505				break;
- 12506			case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
- 12507				if (!type_is_ptr_alloc_obj(reg->type)) {
- 12508					verbose(env, "arg#%d is neither owning or non-owning ref\n", i);
- 12509					return -EINVAL;
- 12510				}
- 12511				if (!type_is_non_owning_ref(reg->type))
- 12512					meta->arg_owning_ref = true;
- 12513	
- 12514				rec = reg_btf_record(reg);
- 12515				if (!rec) {
- 12516					verifier_bug(env, "Couldn't find btf_record");
- 12517					return -EFAULT;
- 12518				}
- 12519	
- 12520				if (rec->refcount_off < 0) {
- 12521					verbose(env, "arg#%d doesn't point to a type with bpf_refcount field\n", i);
- 12522					return -EINVAL;
- 12523				}
- 12524	
- 12525				meta->arg_btf = reg->btf;
- 12526				meta->arg_btf_id = reg->btf_id;
- 12527				break;
- 12528			case KF_ARG_PTR_TO_CONST_STR:
- 12529				if (reg->type != PTR_TO_MAP_VALUE) {
- 12530					verbose(env, "arg#%d doesn't point to a const string\n", i);
- 12531					return -EINVAL;
- 12532				}
- 12533				ret = check_reg_const_str(env, reg, regno);
- 12534				if (ret)
- 12535					return ret;
- 12536				break;
- 12537			case KF_ARG_PTR_TO_WORKQUEUE:
- 12538				if (reg->type != PTR_TO_MAP_VALUE) {
- 12539					verbose(env, "arg#%d doesn't point to a map value\n", i);
- 12540					return -EINVAL;
- 12541				}
- 12542				ret = check_map_field_pointer(env, regno, BPF_WORKQUEUE, &meta->map);
- 12543				if (ret < 0)
- 12544					return ret;
- 12545				break;
- 12546			case KF_ARG_PTR_TO_TIMER:
- 12547				if (reg->type != PTR_TO_MAP_VALUE) {
- 12548					verbose(env, "arg#%d doesn't point to a map value\n", i);
- 12549					return -EINVAL;
- 12550				}
- 12551				ret = process_timer_kfunc(env, regno, meta);
- 12552				if (ret < 0)
- 12553					return ret;
- 12554				break;
- 12555			case KF_ARG_PTR_TO_TASK_WORK:
- 12556				if (reg->type != PTR_TO_MAP_VALUE) {
- 12557					verbose(env, "arg#%d doesn't point to a map value\n", i);
- 12558					return -EINVAL;
- 12559				}
- 12560				ret = check_map_field_pointer(env, regno, BPF_TASK_WORK, &meta->map);
- 12561				if (ret < 0)
- 12562					return ret;
- 12563				break;
- 12564			case KF_ARG_PTR_TO_IRQ_FLAG:
- 12565				if (reg->type != PTR_TO_STACK) {
- 12566					verbose(env, "arg#%d doesn't point to an irq flag on stack\n", i);
- 12567					return -EINVAL;
- 12568				}
- 12569				ret = process_irq_flag(env, regno, meta);
- 12570				if (ret < 0)
- 12571					return ret;
- 12572				break;
- 12573			case KF_ARG_PTR_TO_RES_SPIN_LOCK:
- 12574			{
- 12575				int flags = PROCESS_RES_LOCK;
- 12576	
- 12577				if (reg->type != PTR_TO_MAP_VALUE && reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
- 12578					verbose(env, "arg#%d doesn't point to map value or allocated object\n", i);
- 12579					return -EINVAL;
- 12580				}
- 12581	
- 12582				if (!is_bpf_res_spin_lock_kfunc(meta->func_id))
- 12583					return -EFAULT;
- 12584				if (meta->func_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
- 12585				    meta->func_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave])
- 12586					flags |= PROCESS_SPIN_LOCK;
- 12587				if (meta->func_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave] ||
- 12588				    meta->func_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore])
- 12589					flags |= PROCESS_LOCK_IRQ;
- 12590				ret = process_spin_lock(env, regno, flags);
- 12591				if (ret < 0)
- 12592					return ret;
- 12593				break;
- 12594			}
- 12595			}
- 12596		}
- 12597	
- 12598		if (is_kfunc_release(meta) && !meta->release_regno) {
- 12599			verbose(env, "release kernel function %s expects refcounted PTR_TO_BTF_ID\n",
- 12600				func_name);
- 12601			return -EINVAL;
- 12602		}
- 12603	
- 12604		return 0;
- 12605	}
- 12606	
+57513aabfe5bff Darren Ye 2026-04-30  136  
+57513aabfe5bff Darren Ye 2026-04-30  137  static int mt8196_fe_startup(struct snd_pcm_substream *substream,
+57513aabfe5bff Darren Ye 2026-04-30  138  			     struct snd_soc_dai *dai)
+57513aabfe5bff Darren Ye 2026-04-30  139  {
+57513aabfe5bff Darren Ye 2026-04-30  140  	struct snd_soc_pcm_runtime *rtd = snd_soc_substream_to_rtd(substream);
+57513aabfe5bff Darren Ye 2026-04-30  141  	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+57513aabfe5bff Darren Ye 2026-04-30  142  	struct snd_pcm_runtime *runtime = substream->runtime;
+57513aabfe5bff Darren Ye 2026-04-30  143  	struct snd_soc_dai *cpu_dai = snd_soc_rtd_to_cpu(rtd, 0);
+57513aabfe5bff Darren Ye 2026-04-30 @144  	int memif_num = cpu_dai->id;
+57513aabfe5bff Darren Ye 2026-04-30  145  	struct mtk_base_afe_memif *memif = &afe->memif[memif_num];
+57513aabfe5bff Darren Ye 2026-04-30  146  	const struct snd_pcm_hardware *mtk_afe_hardware = afe->mtk_afe_hardware;
+57513aabfe5bff Darren Ye 2026-04-30  147  	int ret;
+57513aabfe5bff Darren Ye 2026-04-30  148  
+57513aabfe5bff Darren Ye 2026-04-30  149  	dev_dbg(afe->dev, "memif_num: %d.\n", memif_num);
+57513aabfe5bff Darren Ye 2026-04-30  150  
+57513aabfe5bff Darren Ye 2026-04-30  151  	memif->substream = substream;
+57513aabfe5bff Darren Ye 2026-04-30  152  
+57513aabfe5bff Darren Ye 2026-04-30  153  	snd_pcm_hw_constraint_step(substream->runtime, 0,
+57513aabfe5bff Darren Ye 2026-04-30  154  				   SNDRV_PCM_HW_PARAM_BUFFER_BYTES, 16);
+57513aabfe5bff Darren Ye 2026-04-30  155  
+57513aabfe5bff Darren Ye 2026-04-30  156  	if (memif_num == MT8196_MEMIF_VUL_CM0)
+57513aabfe5bff Darren Ye 2026-04-30  157  		snd_pcm_hw_constraint_step(substream->runtime, 0,
+57513aabfe5bff Darren Ye 2026-04-30  158  					   SNDRV_PCM_HW_PARAM_PERIOD_BYTES, 16);
+57513aabfe5bff Darren Ye 2026-04-30  159  
+57513aabfe5bff Darren Ye 2026-04-30  160  	snd_soc_set_runtime_hwparams(substream, mtk_afe_hardware);
+57513aabfe5bff Darren Ye 2026-04-30  161  
+57513aabfe5bff Darren Ye 2026-04-30  162  	ret = snd_pcm_hw_constraint_integer(runtime,
+57513aabfe5bff Darren Ye 2026-04-30  163  					    SNDRV_PCM_HW_PARAM_PERIODS);
+57513aabfe5bff Darren Ye 2026-04-30  164  	if (ret < 0)
+57513aabfe5bff Darren Ye 2026-04-30  165  		dev_warn(afe->dev, "snd_pcm_hw_constraint_integer failed\n");
+57513aabfe5bff Darren Ye 2026-04-30  166  
+57513aabfe5bff Darren Ye 2026-04-30  167  	/* dynamic allocate irq to memif */
+57513aabfe5bff Darren Ye 2026-04-30  168  	if (memif->irq_usage < 0) {
+57513aabfe5bff Darren Ye 2026-04-30  169  		int irq_id = mtk_dynamic_irq_acquire(afe);
+57513aabfe5bff Darren Ye 2026-04-30  170  
+57513aabfe5bff Darren Ye 2026-04-30  171  		if (irq_id != afe->irqs_size) {
+57513aabfe5bff Darren Ye 2026-04-30  172  			/* link */
+57513aabfe5bff Darren Ye 2026-04-30  173  			memif->irq_usage = irq_id;
+57513aabfe5bff Darren Ye 2026-04-30  174  		} else {
+57513aabfe5bff Darren Ye 2026-04-30  175  			dev_err(afe->dev, "no more asys irq\n");
+57513aabfe5bff Darren Ye 2026-04-30  176  			ret = -EBUSY;
+57513aabfe5bff Darren Ye 2026-04-30  177  		}
+57513aabfe5bff Darren Ye 2026-04-30  178  	}
+57513aabfe5bff Darren Ye 2026-04-30  179  	return ret;
+57513aabfe5bff Darren Ye 2026-04-30  180  }
+57513aabfe5bff Darren Ye 2026-04-30  181  
+
+:::::: The code at line 144 was first introduced by commit
+:::::: 57513aabfe5bff89163cff811d9ac1b97651d0d6 ASoC: mediatek: mt8196: add platform driver
+
+:::::: TO: Darren Ye <darren.ye@mediatek.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
 --
 0-DAY CI Kernel Test Service
