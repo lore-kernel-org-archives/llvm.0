@@ -1,148 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C046E3E867A;
-	Tue,  2 Jun 2026 14:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F50C3EC2F8;
+	Tue,  2 Jun 2026 14:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780409115; cv=none; b=e5LnN1VNE07q2utxSemABrnz6rwX5RAyoF8QcFmT6P5jHr6TfT8rz6Za++zREaxTYbE0NukEo0nug9zWdhji/iwpu72wOLRq1VWf0DvTo2XSPAelGb4V2bqDVArxhc3vBVntwnM8wne1O3IWFujuFqtDKx19jvZQcI+7PhXxqbI=
+	t=1780411186; cv=none; b=aslyffyOAzUPgyRxv7J8pO8C5FSCPMW+WgXkSOyM2BNfzQwHW+Y9lggYLZSmapvH1pSpKNheS3dspDUv3C2Eei8Pda2tnOdpyyjti1KtKrGuFv8HAvKU9VtPYCNzC8CbG1pc+cv3dkqYGSiDBveo5qm+JhxKNdWvD12rnpVVo/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780409115; c=relaxed/simple;
-	bh=MPJmrHyzu6Q4n7GstA06o8d60TkJhPuXCvlMGIU8yKM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hy0fipb3cUNP/TbC67RCo+pHDzNytQ8JcN9mdfTsGhOspqUXTKlOJNJAIXLXqzU6R3uW/hKc/iudwsOYA9UXQPdICQn5+Cnrdoxqy4p1Grjmp/E++lI3usDJDMEws2ZLUZhHBpQdiDMpdlREcuTSK7nHbkAApfDcin9RfpvR8VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B9dqDQoM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780411186; c=relaxed/simple;
+	bh=LAMBj6aYpplXAlYLN4ZUEnGZPujKLvNggGo2VH8mzXw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kSiw1VUxT1RwQ1f0uu2SBT2QCRCH+gt4X5Fbi9Ktbs/9I7x8Cpe0whCYJkCUQGTJwry/oAeMElXsK+yq1DsYjA7owE1ufQLN9rBvWUlD8+Jmamxpu36jFz0iQF6HZ2g5cadYsWGSEclgbnRjtCWDMQ533AhIMIl1pclwnQF9TjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=WULXRrZl; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B9dqDQoM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 679661F00893;
-	Tue,  2 Jun 2026 14:05:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780409114;
-	bh=2/krVRc7nfC9A6ChR8uWLfYagg/geIPKiZr1Lzo9cUQ=;
-	h=From:To:Cc:Subject:Date;
-	b=B9dqDQoMxwB67FmFnBSdYa7bcZ9qIe4k6ZHnCsHhGztpX9zQim+J3K7vYlCTxCLM1
-	 FY4U5Mwa6JLqmYcAFc7xFtmyrwB25RItgtvRgkYHjHe6J9agymaA0vDgHPX+lFOmSv
-	 DrQ7opyYK1VrDmF2Ekp7koeroAi+6D+tw9mC3ZI1IxtPOceIvfw9AUI7aKg3Mqfasa
-	 +Lp4cd9rV+WwsGKFcY+ADl6qPnnqVRi2KMnixcNA1g6q4tp9KD4Iz5UkMT1PodcWHF
-	 vHqJkVzIvhBBi1KJTeCp4+eOyi+jR+xU5ouLyHc30X5w3DubDp+x1WOYlpZPmIc4YM
-	 rrcDrADWND5JQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Leon Romanovsky <leon@kernel.org>,
-	Doug Ledford <dledford@redhat.com>,
-	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
-	Mike Marciniszyn <mike.marciniszyn@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Kees Cook <kees@kernel.org>,
-	Dean Luick <dean.luick@cornelisnetworks.com>,
-	linux-rdma@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] [v2] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
-Date: Tue,  2 Jun 2026 16:04:34 +0200
-Message-Id: <20260602140453.3542427-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="WULXRrZl"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=2yTFg8zXujpXN4UZD70cI8WNKyrOKFmDDdxuAIlK6M4=; b=WULXRrZl/m6pxN5DUaHQlSF4jL
+	4YjRfLR7mN64uq3KofcwYOhCkBt4Hxrlp563PwImPTAcFiA4yMeLTUiAXH5Pb/ZgMRKBFFlyw0UBo
+	EjZEufnwHJTXBPBj7pUJk/zThgzML0DE+sbYfGA78HLZopWHwmeN7yKCsg2QXSX79ZSNZBcRogEuT
+	ahBE4rOF8Z84zaM3Rk05ByKPdRpdwMk80jlstERsCfQQ+xd6qBplXZV5pM9vRZ/VPMGyC/OX/dvSt
+	OMrzqis44gIjnfUHSgTbvk42krzadxuBNoPGCttRNEJvSyVKN7JY8JYs6zOKJ/p4y/TIQBLgj3c0P
+	jl68NzlA==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wUQHE-0031kP-1a;
+	Tue, 02 Jun 2026 14:39:32 +0000
+Date: Tue, 2 Jun 2026 07:39:26 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Edward Cree <ecree.xilinx@gmail.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Ben Hutchings <ben@decadent.org.uk>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Brett Creeley <brett.creeley@amd.com>, 
+	Kees Cook <kees@kernel.org>, netdev@vger.kernel.org, linux-net-drivers@amd.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [net-next] [v3] net: sfc: avoid format string warning
+Message-ID: <ah7qyOv2aCAOIKO8@gmail.com>
+References: <20260602135347.3179200-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260602135347.3179200-1-arnd@kernel.org>
+X-Debian-User: leitao
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Jun 02, 2026 at 03:53:04PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Three sfc drivers contain the same *_fill_test() function that takes
+> a format string argument that gets passed down to snprintf(), producing
+> a warning with clang-22:
+> 
+> drivers/net/ethernet/sfc/falcon/ethtool.c:227:60: error: diagnostic behavior may be improved by adding
+>       the 'format(printf, 7, 8)' attribute to the declaration of 'ef4_fill_test' [-Werror,-Wmissing-format-attribute]
+>   210 |                 snprintf(test_str, sizeof(test_str), test_format, test_id);
+>       |                                                                          ^
+> drivers/net/ethernet/sfc/falcon/ethtool.c:210:13: note: 'ef4_fill_test' declared here
+> 
+> Rework these to take a varargs based test_format that allows better
+> type checking and a non-varargs unit name that gets pre-filled by
+> the caller, so that the compiler can validate all format strings.
+> 
+> Fixes: 3273c2e8c66a ("[netdrvr] sfc: sfc: Add self-test support")
+> Link: https://lore.kernel.org/all/20260325134557.3406655-1-arnd@kernel.org/
+> Reviewed-by: Edward Cree <ecree.xilinx@gmail.com>
+> Cc: Breno Leitao <leitao@debian.org>
+> Cc: Ben Hutchings <ben@decadent.org.uk>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-clang warns about a function missing a printf attribute:
+Reviewed-by: Breno Leitao <leitao@debian.org>
 
-include/rdma/rdma_vt.h:457:47: error: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'rvt_set_ibdev_name' [-Werror,-Wmissing-format-attribute]
-  447 | static inline void rvt_set_ibdev_name(struct rvt_dev_info *rdi,
-      | __attribute__((format(printf, 2, 3)))
-  448 |                                       const char *fmt, const char *name,
-  449 |                                       const int unit)
+> diff --git a/drivers/net/ethernet/sfc/siena/ethtool_common.c b/drivers/net/ethernet/sfc/siena/ethtool_common.c
+> index 76cbce2b9592..9df08f1e2347 100644
+> --- a/drivers/net/ethernet/sfc/siena/ethtool_common.c
+> +++ b/drivers/net/ethernet/sfc/siena/ethtool_common.c
+> @@ -199,18 +199,17 @@ int efx_siena_ethtool_set_pauseparam(struct net_device *net_dev,
+>   * @strings:		Ethtool strings, or %NULL
+>   * @data:		Ethtool test results, or %NULL
+>   * @test:		Pointer to test result (used only if data != %NULL)
+> - * @unit_format:	Unit name format (e.g. "chan\%d")
+> - * @unit_id:		Unit id (e.g. 0 for "chan0")
+> + * @unit_name:		Unit name
+>   * @test_format:	Test name format (e.g. "loopback.\%s.tx.sent")
+> - * @test_id:		Test id (e.g. "PHYXS" for "loopback.PHYXS.tx_sent")
+>   *
+>   * Fill in an individual self-test entry.
+>   */
+> -static void efx_fill_test(unsigned int test_index, u8 *strings, u64 *data,
+> -			  int *test, const char *unit_format, int unit_id,
+> -			  const char *test_format, const char *test_id)
+> +static void __printf(6, 7) efx_fill_test(unsigned int test_index, u8 *strings,
+> +					 u64 *data, int *test,
+> +					 const char *unit_name,
+> +					 char *test_format, ...)
 
-The helper was originally added as an abstraction for the hfi1 and
-qib drivers needing the same thing, but now qib is gone, and hfi1
-is the only remaining user of rdma_vt.
-
-Avoid the warning and allow the compiler to check the format string by
-open-coding the helper and directly assigning the device name.
-
-Fixes: 5084c8ff21f2 ("IB/{rdmavt, hfi1, qib}: Self determine driver name")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: fix typo
-    drop two other patches from the series that are no longer
-    relevant, leaving only one patch
----
- drivers/infiniband/hw/hfi1/init.c | 13 ++++++++++++-
- include/rdma/rdma_vt.h            | 20 --------------------
- 2 files changed, 12 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/infiniband/hw/hfi1/init.c b/drivers/infiniband/hw/hfi1/init.c
-index 8b5a5b32b0fa..b7fd8b1fbbbd 100644
---- a/drivers/infiniband/hw/hfi1/init.c
-+++ b/drivers/infiniband/hw/hfi1/init.c
-@@ -1206,6 +1206,7 @@ static struct hfi1_devdata *hfi1_alloc_devdata(struct pci_dev *pdev,
- 					       size_t extra)
- {
- 	struct hfi1_devdata *dd;
-+	struct ib_device *ibdev;
- 	int ret, nports;
- 
- 	/* extra is * number of ports */
-@@ -1227,7 +1228,17 @@ static struct hfi1_devdata *hfi1_alloc_devdata(struct pci_dev *pdev,
- 			"Could not allocate unit ID: error %d\n", -ret);
- 		goto bail;
- 	}
--	rvt_set_ibdev_name(&dd->verbs_dev.rdi, "%s_%d", class_name(), dd->unit);
-+
-+	/*
-+	 * FIXME: rvt and its users want to touch the ibdev before
-+	 * registration and have things like the name work. We don't have the
-+	 * infrastructure in the core to support this directly today, hack it
-+	 * to work by setting the name manually here.
-+	 */
-+	ibdev = &dd->verbs_dev.rdi.ibdev;
-+	dev_set_name(&ibdev->dev, "%s_%d", class_name(), dd->unit);
-+	strscpy(ibdev->name, dev_name(&ibdev->dev), IB_DEVICE_NAME_MAX);
-+
- 	/*
- 	 * If the BIOS does not have the NUMA node information set, select
- 	 * NUMA 0 so we get consistent performance.
-diff --git a/include/rdma/rdma_vt.h b/include/rdma/rdma_vt.h
-index 7d8de561f71b..7ffc83262a01 100644
---- a/include/rdma/rdma_vt.h
-+++ b/include/rdma/rdma_vt.h
-@@ -438,26 +438,6 @@ struct rvt_dev_info {
- 	struct rvt_wss *wss;
- };
- 
--/**
-- * rvt_set_ibdev_name - Craft an IB device name from client info
-- * @rdi: pointer to the client rvt_dev_info structure
-- * @name: client specific name
-- * @unit: client specific unit number.
-- */
--static inline void rvt_set_ibdev_name(struct rvt_dev_info *rdi,
--				      const char *fmt, const char *name,
--				      const int unit)
--{
--	/*
--	 * FIXME: rvt and its users want to touch the ibdev before
--	 * registration and have things like the name work. We don't have the
--	 * infrastructure in the core to support this directly today, hack it
--	 * to work by setting the name manually here.
--	 */
--	dev_set_name(&rdi->ibdev.dev, fmt, name, unit);
--	strscpy(rdi->ibdev.name, dev_name(&rdi->ibdev.dev), IB_DEVICE_NAME_MAX);
--}
--
- /**
-  * rvt_get_ibdev_name - return the IB name
-  * @rdi: rdmavt device
--- 
-2.39.5
-
+Should you keep the 'const' in test_format?
