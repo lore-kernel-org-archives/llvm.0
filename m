@@ -1,85 +1,215 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011010.outbound.protection.outlook.com [40.107.130.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4091025B0A3;
-	Wed,  3 Jun 2026 11:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780487386; cv=none; b=CtAOsFCRhE4HK/sdBbKTw53a1jTayosc0YX8tr47hzNy5MjCSaqZ+q4yqmx7WKx6/Dd/T+EdlRJlROGvjCxdBHkkSBfdZopDBATsDZRI2kEta9RKgEasRPDdK9Ljy7RqRuYVA94Sed6xwLNRH8yDt5lbmyoEmACPbegCDJ00Ezw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780487386; c=relaxed/simple;
-	bh=drZBsPwx6+GpDkzr4elJUMEzRDtWFJ72EWCZeqTMNeA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=sDWXHvqDlltOsDbGzIPkdYjSAPnBNphUfpFN+tZbjV3L2fZbQ8A8CWzvz7K9swdI2c1exb8Ar7b47e+AcAVzpY04v9ZerH7HwLbMPb3kzLInvU7AsnyWh7baqt11DpG7ua+Y2sM1FYK2/h4b1BTUanHnS00z6EUXQD8BZZzstJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NCYwqClJ; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15D1232395;
+	Wed,  3 Jun 2026 12:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780490968; cv=fail; b=r9mksPnRb0/dlsg+evS3Uf2GTsRXwZC00GP+5udHvGdorM4PNPh/oDoRi0TAPdlCHfOAiu1RJgtnUwFt3SJJ6iCGj2aLZV+2KUt/eR6W2mAi9tZrClYhQ/EaAZdtiLBlqKp5Xb/jVORrWKBjLFXumF3Duz5lLnzNGzPWNU6Sb8w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780490968; c=relaxed/simple;
+	bh=lJAhqtEnAGYI/M0inpQ/yNbH3yxhkaMNkXTq1i1fzh8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=sa4yE/OrlGX0u8yTObZlQq0kDq0uHZqXjGy4hbKvGRcS8/ufo1wo5P68L3FngBqSSUo7mq5oHSojIi1nwmji6jTFfeFOK4TMLrwFZQTDLkRFVGMmhCYAnvNtT88avNMboFNjn9lC6SOnWFo6VCTUGVxi2pp4OMU3bd23Hx19wH8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=prevas.dk; spf=pass smtp.mailfrom=prevas.dk; dkim=pass (1024-bit key) header.d=prevas.dk header.i=@prevas.dk header.b=Ymlz/BTy; arc=fail smtp.client-ip=40.107.130.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=prevas.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prevas.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NCYwqClJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780487386; x=1812023386;
-  h=date:from:to:cc:subject:message-id;
-  bh=drZBsPwx6+GpDkzr4elJUMEzRDtWFJ72EWCZeqTMNeA=;
-  b=NCYwqClJ4yrtKwMFnxUfMW4JyPvaLyTSt5gMvb4xr+AWynpSEcRpzo8S
-   GNfkJrmXcJGKlw/ZucCadIejBQQhE4wR8fUa4JEUMBRQ3qEYXwhyiCQGp
-   SEyPIrbbNKW2f3cB6vLdxVIGKEn90iKpeIHQpr9BwFOCLxNTlzxFqLaV2
-   y8XkAePrwtIDxuq58DNcc4fW0v/7lTonvVpA+NxYYYdPrwfM90c3BqJc6
-   MRME9mBtK8kcPqNaFypP/DcMraR1yODKLR9ulNTWjP8adeQT2e1akBjkv
-   dkh6GaTk2mGFieDcNY1ogjJc6yC2tGvqw24NNUT2/HW4RggFtHTUDwOYM
-   Q==;
-X-CSE-ConnectionGUID: AnHe9lRSTZSv4I/izFGAEg==
-X-CSE-MsgGUID: m/QdxDERSWWkrHMpkhhfgQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="81287321"
-X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="81287321"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 04:49:45 -0700
-X-CSE-ConnectionGUID: zkfDu55rQy6d2dkk60xQNA==
-X-CSE-MsgGUID: wl+d5X+wQ8+7rt0zVYmrng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="267854380"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Jun 2026 04:49:43 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wUk6O-0000000023F-0xcG;
-	Wed, 03 Jun 2026 11:49:40 +0000
-Date: Wed, 03 Jun 2026 13:49:17 +0200
-From: kernel test robot <lkp@intel.com>
-To: Pranjal Shrivastava <praan@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: Warning: fs/nfs/pagelist.c:478 function parameter 'pinned'
- not described in 'nfs_page_create_from_folio'
-Message-ID: <202606031311.0vTqyPGz-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=prevas.dk header.i=@prevas.dk header.b="Ymlz/BTy"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IeuRyLKCIy8ZVY2u6CZoBcnaFg5Fs+K7MASsIzQH2JgnS+9FyFSjHwfy5e/2xrKCEpYYI3+dgmFc62TEwZlAzPiqBbVMz/EmvkoEXvSQVP5p6xrbH5o6lU0W6V58KyLGAwF+h602fVKRKFVR1rI8q5wRPqj+8ABf80wZoBNTPwS1f5AwRbuwvkk/3FBjJcGBvSZcR4/8/mTFgsfEFaoIvoZhDWDza1f6GSqBu1ajWFExF5/WNwaO/VhtBtr73t8K/ln7H2Al5mBK+aCdFoRWZkpKt2urviwFY3EgIl+hO3SOfQs130GgPRfolHTyoFVPzt5ueLZbkvbjmsdMEKTpyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VAZbrhAsQ3EzdG55w24NXdb7XkL1n92bID843FSTc/s=;
+ b=ZlfWTEUTlmDBkgJ+McYdKU3SfYjOsmX3hDuesN/oVc/MlhAzeKswAKX25Yw0YCCwksPR8l0SKAIGMQBxxV5tWGhkZ+lf5wYSm183P+cgW1tyIWqnACV8zWrUBTWfEzc7cWyoCsVRZ2E4F3TcOwQjlxjecIE1W4Wtnnnzo0Kd8aCU7lu6qmlg8KCKSo8jnPdkv9/BFNIoEshWFdJN9EPADPpCmMTHNCEjZwz+j/KeptrLa2guY9Hozz9wbfTlnMisLUVpj2qO/gainwz83X8zmG6SX4wWeNkaOTpIE0q9/u2LePPDtuqdPEUernK4K2G+B75MMY5ThFYqzZOGpwVuKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
+ dkim=pass header.d=prevas.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VAZbrhAsQ3EzdG55w24NXdb7XkL1n92bID843FSTc/s=;
+ b=Ymlz/BTya/JOkXY5MI3ZxEFoRaDqUhus6JnN2OCJmGL/xqb3FFSErwIkwpTmrAhjDkuYYLANKdBTzcIBB4tfFvcQ+wtj4pvd2am6W2xCv5DXQa/D6XBuFi9UXUiYyYDu0yuMCXntMxlWA+AAy0+4qT7NgvdUWFlDTLlYFcNvS4w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=prevas.dk;
+Received: from AS5PR10MB8243.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:681::18)
+ by DB8PR10MB3323.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:11c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.7; Wed, 3 Jun 2026
+ 12:49:20 +0000
+Received: from AS5PR10MB8243.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::ebc6:4e0d:5d6b:95d8]) by AS5PR10MB8243.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::ebc6:4e0d:5d6b:95d8%6]) with mapi id 15.21.0092.006; Wed, 3 Jun 2026
+ 12:49:20 +0000
+From: Rasmus Villemoes <ravi@prevas.dk>
+To: "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,  "Arnd Bergmann"
+ <arnd@kernel.org>,  "Steven Rostedt" <rostedt@goodmis.org>,  "Masami
+ Hiramatsu" <mhiramat@kernel.org>,  "Andrew Morton"
+ <akpm@linux-foundation.org>,  "Petr Mladek" <pmladek@suse.com>,  "Nathan
+ Chancellor" <nathan@kernel.org>,  "Dennis Dalessandro"
+ <dennis.dalessandro@cornelisnetworks.com>,  "Jason Gunthorpe"
+ <jgg@ziepe.ca>,  "Leon Romanovsky" <leon@kernel.org>,  "Arend van Spriel"
+ <arend.vanspriel@broadcom.com>,  "Miri Korenblit"
+ <miriam.rachel.korenblit@intel.com>,  "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>,  "Sergey Senozhatsky"
+ <senozhatsky@chromium.org>,  "Nick Desaulniers"
+ <nick.desaulniers+lkml@gmail.com>,  "Bill Wendling" <morbo@google.com>,
+  "Justin Stitt" <justinstitt@google.com>,  "Vlastimil Babka (SUSE)"
+ <vbabka@kernel.org>,  <linux-rdma@vger.kernel.org>,
+  <linux-kernel@vger.kernel.org>,  <linux-wireless@vger.kernel.org>,
+  <brcm80211@lists.linux.dev>,  <brcm80211-dev-list.pdl@broadcom.com>,
+  <linux-trace-kernel@vger.kernel.org>,  <llvm@lists.linux.dev>
+Subject: Re: [PATCH 1/2] tracing: work around -Wmissing-format-attribute
+ warning
+In-Reply-To: <aafe201a-64a6-438f-89a3-d1cd10a357a7@app.fastmail.com> (Arnd
+	Bergmann's message of "Wed, 03 Jun 2026 10:41:18 +0200")
+References: <20260602150904.2258624-1-arnd@kernel.org>
+	<ah8n-Nk305S5hRwN@ashevche-desk.local>
+	<WPQQfPHOiGJbSxrXRdFDy9jURhS7JMpNu9sD54Vfe5wB-JOjyGY6xPQyACz3MSGg0xGp79eOYCyZ2Hi2CsPeUg==@protonmail.internalid>
+	<35c1ba62-e74d-4abc-aa73-ccd35968ff89@app.fastmail.com>
+	<875x40hz7k.fsf@prevas.dk>
+	<cODLVx6ZlerCiOgdpsG7OSsC2YRA6pXmq2jBdTjRB2UQoTIY4hI-yhV1lrumRNBH1hTT2aJRS-MgtlbhNWUTEw==@protonmail.internalid>
+	<aafe201a-64a6-438f-89a3-d1cd10a357a7@app.fastmail.com>
+Date: Wed, 03 Jun 2026 14:49:18 +0200
+Message-ID: <87zf1bhjqp.fsf@prevas.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+Content-Type: text/plain
+X-ClientProxiedBy: GV2PEPF00023989.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:158:400::366) To AS5PR10MB8243.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:681::18)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS5PR10MB8243:EE_|DB8PR10MB3323:EE_
+X-MS-Office365-Filtering-Correlation-Id: d40e37ea-4692-4789-33ba-08dec16e87f1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|3023799007|22082099003|18002099003|4143699003|11063799006|6133799003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	2hwtOGHiqQ9Taob/DXxXNKGwwENxmTsM6wwqwbqEZG7LeSX25e6MhSAsLsFqnUVQ9K30Uc1s59/d6rWvnkQUVqnbMi9EYnDeqDZy5Lj5hYOzJpD5pamsxxtDvuVk66aNRefsSTsTv6mH2NhB8cW6M6VW5YJ3r6VSlEx/+g/FZQdXxvIM+2YF338klUJE3ir0Nm9mVUmkeSfilv2NSzpz/gwXbUpRy1TCEQ4ouBafQscDHLYStOntcbpTyuBmcieK8ED10MDXXzDUSfkbCiSpOFz2FDUZlb18zzWdDruhkqhtWOTcDQvFVA3oV4euKzSk/lQbRU63tArdd8NIJQA+YhhyODmN5KFOqgyvYR9jSF2Ebkhc5zMNhIaJOgrmv9USDJWvyAxVcgpeAT7G8ZG7g6yy9ojY2tGRZ7byBhX/fFujeEWTjF+cUD0EOCZ5IgoaZr7I5Tq7aQhpTSMPHa+P4Gh0JkVyUok0x3YlbmdZyTuprJQM2IpdncTaVcmrV6B6od1NzFeBp8D0SzqhL2ayfF4f27Z56Uno4QHQsKQ6Toof8jgJiUXAiOB7etTVFw3KYZVC0vrXj3Qc2frEFRRVV7j2nUhxJ44Zyrg+NwXJOu/rFDduMqLxdW/3X2Bw7r+eI7DmR/CjIl+5BoGe+wIy4AXeaIdP+8zXKrKbarYj9vmeO5KWZKKsubHLMj8wSDJh
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS5PR10MB8243.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(3023799007)(22082099003)(18002099003)(4143699003)(11063799006)(6133799003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?RA6C5FdOO+tjjw1+zzXfb44vBIBqVDEJAxSb/395wY6BnhDsyD6ksskatHfg?=
+ =?us-ascii?Q?GId+y5SZPxFhwc7MZfvT+NK74rnyQy1veq622AzTQfQNDHLqdbVAF/zVGPEg?=
+ =?us-ascii?Q?WrGt9c6r3uqPWe78fiqJAfdigAifInGGN6c1q0dqjgb4vb/HySknfBIBfUqj?=
+ =?us-ascii?Q?+qaTxjHXmfftFkWA/Q3mLMTzNJuDz+O3Lep3GtfYJk8pk9POzcWjaXJF/Kec?=
+ =?us-ascii?Q?FD9o07r0pMMGxfTEILR2lFgjvvp6mz7Cj2gCfdQ8MoTOTkdoG3/tX07QB/LL?=
+ =?us-ascii?Q?M93rcPOg5D5VKMCwAKFlAyrjCxMrTAq/QXKkkoUBVlQUmYYwhekZqyMcf2OO?=
+ =?us-ascii?Q?/FQE9lCv+dA/3S6sygYo6jjoSUAPe6ccm3UDrdNt5TUOXSTvenVsL40MYYMn?=
+ =?us-ascii?Q?3Gn+N1acjMq9GhNiG7gk6jTdLE1XfKko6HZHo5f92SPexURlxQl/e6vw32RJ?=
+ =?us-ascii?Q?jA+X5RzYDs+R6ch/eeDAcAPXf/V2Coe7lDgbgU1LpH+r47POMpfKXuDdSQ8E?=
+ =?us-ascii?Q?yCnYAykqHzZdwOezTrnf/pTsjX8lxL8LTsCn19NRh9keqlF4D4jWGBZy/ueW?=
+ =?us-ascii?Q?cXlM0PhqaBIGwdKyxDdNijCd6Xgkg7DrQuiRDxeRIrvLcDeJ09C6YcbAXvHp?=
+ =?us-ascii?Q?W+AejfSBgWF/LANluxwzjynVWa0REc+hYENB3kIoolpQQb9UvmOyEQ1pOjCM?=
+ =?us-ascii?Q?bczUB65qHrBbpgGWX3cp5ctx67eCi0bPhI4keemmMkwMeo9LOAwiVMvumi/x?=
+ =?us-ascii?Q?UMhYBXruUziWsqg4AQya2evpc/tSRUq52fsSb+dIOCePU3z5VUloMnFCQOD8?=
+ =?us-ascii?Q?pYjoLYqv7EfvY/AsOeQo6UkV4FoA/YjRY/kKQP+h27rjmhAd1oghwJAsCC6j?=
+ =?us-ascii?Q?2CutafZ423eSezaPVfeFn6glZzKzaJDSwMfm2DBY2xylirAWsYrpy9qqqOCc?=
+ =?us-ascii?Q?ekwxRsXHqYFnhWzdGDB4XoRahJV6LOz25aqgu5rPQP6NqWU5cbc+nt5trMCv?=
+ =?us-ascii?Q?FGUXAZczAoof6mHqM1YPKJ3mr2upc+224pUxN13wws6mpRwynYGtrzOzZRgJ?=
+ =?us-ascii?Q?MNZrV+V18V43zRM48DuunXZGJnbjDOh/KeNlNGSoRSBvQPIAazydGJeVQXP3?=
+ =?us-ascii?Q?1cmGv2Jhm+owaLCGJPCZ69APcLX06F1H/7pNh2qcH+qNPIELiqnO+UH7du2s?=
+ =?us-ascii?Q?HVNVMICkCDaIAQS761TG+M0eQvn/dIaSPxP7myTiw1VkRKvBez0h6Wrh+jpl?=
+ =?us-ascii?Q?VyGffdFNVUHID7FQybOUbLGExvSCMfDTcpoL7i/7xPhUnNAzY629uamtS3Ce?=
+ =?us-ascii?Q?H3O28hS/xE46GvNJEoQVNN2OabbFi1+CUkWWWqY3GHh51V2B8JJchVEhPK4+?=
+ =?us-ascii?Q?IFXqE9pSsZHT85n2KjN5YYa7Tkz6TfF8M7uq+QWWTgMEpWbErNSkNzU5q76E?=
+ =?us-ascii?Q?nm2fQyoAEDnnf0Z2IvGkNTZC4N1YtL6kKVDNhoQ1lz9lQPzz5zQARzeNUqGb?=
+ =?us-ascii?Q?9phIBIOGQ0ZAbWx/0jn8WgFR4F9p0+1l69JQBN6uv0BqvNi6VucJUadpHazZ?=
+ =?us-ascii?Q?bSoND7C7Xd9R8hIV3O3yAZ2xoVi9HmcxBpTHeHIxLnbihRfSxtWckJAbW/7E?=
+ =?us-ascii?Q?MOaKtw7dNZvlgG881nYYxljJb+K+v8nZ4NPf433JKatbIrUFEACZSaI1+rDA?=
+ =?us-ascii?Q?cLCUwV12b35Rs1lQhlwpOmnz00Slx8DdZCNQrLxuQN9OAIyr7+WgBcE7Zlnq?=
+ =?us-ascii?Q?lVkUJy9+grTqK+LCdtIXb65p7YIty2c=3D?=
+X-OriginatorOrg: prevas.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: d40e37ea-4692-4789-33ba-08dec16e87f1
+X-MS-Exchange-CrossTenant-AuthSource: AS5PR10MB8243.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2026 12:49:20.7290
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: S9039GmgpCOjqjI8gtuFf2XcyEjf8STTB+ETy37Dipne9vsw8xuFEYKdBIVrgmjaO5FtykKy3c/f8S74/jNVIL5Xt1up9ypticMkI3qmgNE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3323
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Pranjal-Shrivastava/nfs-make-nfs_page-pin-aware/20260603-133419
-head:   51c6eda8fc66ee56e3e2f4079ad6ab86d457213a
-commit: 15061ec64dc3144340b3ba2857700c9622c38dd6 nfs: make nfs_page pin-aware
-date:   6 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260603/202606031311.0vTqyPGz-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606031311.0vTqyPGz-lkp@intel.com/reproduce)
+On Wed, Jun 03 2026, "Arnd Bergmann" <arnd@arndb.de> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606031311.0vTqyPGz-lkp@intel.com/
+> On Wed, Jun 3, 2026, at 09:15, Rasmus Villemoes wrote:
+>> On Tue, Jun 02 2026, "Arnd Bergmann" <arnd@arndb.de> wrote:
+>>> On Tue, Jun 2, 2026, at 20:59, Andy Shevchenko wrote:
+>>>> On Tue, Jun 02, 2026 at 05:07:05PM +0200, Arnd Bergmann wrote:
+>>
+>> May I suggest a different approach, that avoids having that extra
+>> function emitted (which presumably compiles to a single jump
+>> instruction, but still, with retpoline and CFI and all that it all adds
+>> up): Keep the declaration of __vsnprintf() in the header without the
+>> __print() attribute, but then do
+>>
+>> int __vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
+>>    __alias(vsnprintf);
+>>
+>> in vsprintf.c. Aside from reusing the same entry point, I could well
+>> imagine a compiler some day complaining about seeing the printf
+>> attribute applied in a local extra declaration but not having it in the
+>> header file.
+>>
+>> Presumably it will need its own EXPORT_SYMBOL if any of the intended
+>> users are modular, and it certainly still needs a comment.
+>
+> I had tried that earlier but given up because the attributes have to
+> match exactly.
+>
+> This definition works with all currently supported versions of gcc,
+> but may have to change when the there is a new version that adds
+> even more attributes:
+>
+> int
+> __printf(3, 0)
+> __attribute__((nothrow))
+> __attribute__((nonnull(1)))
+> __vsnprintf(char *__restrict buf, size_t size,
+>             const char * __restrict fmt_str, va_list args)
+>                __alias(vsnprintf);
+>
 
-All warnings (new ones prefixed by >>):
+Ah, I see. The documentation for the alias attribute does say that the
+types have to match, but I didn't know that the nothrow and nonnull
+attributes were considered part of the type identity. Oddly enough, if
+one does
 
-   Warning: fs/nfs/pagelist.c:446 function parameter 'pinned' not described in 'nfs_page_create_from_page'
->> Warning: fs/nfs/pagelist.c:478 function parameter 'pinned' not described in 'nfs_page_create_from_folio'
-   Warning: fs/nfs/pagelist.c:446 function parameter 'pinned' not described in 'nfs_page_create_from_page'
->> Warning: fs/nfs/pagelist.c:478 function parameter 'pinned' not described in 'nfs_page_create_from_folio'
+  typeof(vsnprintf) __vsnprintf __alias(vsnprintf);
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+that still fails, but only complains about nothrow, not nonnull.
+
+I don't remember what minimum gcc we currently require, but gcc 9
+introduced another attribute that is apperently meant for cases like
+this: 'copy'. This seems to build:
+
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 9f359b31c8d1..c1402d375429 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -2988,6 +2988,9 @@ int vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
+ }
+ EXPORT_SYMBOL(vsnprintf);
+ 
++int __vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
++       __alias(vsnprintf) __attribute__((__copy__(vsnprintf)));
++
+ /**
+  * vscnprintf - Format a string and place it in a buffer
+  * @buf: The buffer to place the result into
+
+That at least should handle any future "gcc knows this-or-that about the
+vsnprintf function". But I don't know if clang supports that copy
+mechanism or if the minimum supported gcc is too old.
+
+Rasmus
