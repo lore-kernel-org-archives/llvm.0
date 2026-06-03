@@ -1,157 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB8537BE89;
-	Wed,  3 Jun 2026 17:45:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993D0480346;
+	Wed,  3 Jun 2026 18:56:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780508753; cv=none; b=eRF0tRdkkpSsfjc+McfQIJSIB8Pb+7jMKsCzvdWPWPfW4gCFGhLRyZ153OjxnilMv44f6prjpgF92QW7PCgXY2ujfjO12DRYOv9HUSD7zMg9hKkOOGzCjdqPqbhhjMIpMvR+pCM4xvELjp8Cg+daH5Wu7lRfYog7QuYMPcdyeCs=
+	t=1780513010; cv=none; b=FJIG+zAD4mgv0lEeDO4rFEETL6rCZMwJw7feXLN10A9PwyaS9pRUbjwFOnCW7vLzoR1fzeElxdZygmHVpDrybQ2v9Foh20z1pNiyuSHSzB6lgEBc1lgHXEaId+OJsdLsz6Q7no/2+ClY5ylHS+uP8mXjOliT2sCt9DDz0J5h8sA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780508753; c=relaxed/simple;
-	bh=qJt147BrsreeHbJrYMOblgXpYN9KI0pqzDvbZ9LhVyE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZAmKYJOg5BuWVGRx1nckBeMf0/jXgpZ6hwiyaAFPsM470Cndf3QFJ7nvhg+ryfKV7GtAfE4sUhQTgrtrkwIgEigN5GxYMFZteSSBBDcrJxFb1lOEKwq0H4hdGk128LNqcK14SasRlnR6ioTuWvm9V51tyoINO9BaXe5lo2bpoYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q1ezJi32; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1780513010; c=relaxed/simple;
+	bh=K1m9iz3Mf/Z/2HkW2/lw6CLgBeM4sVWKVrxUJtsSUkg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bwzKqvCRrkj3XgCKQv4GC1lMf0t9AIt5gyX3g8vFf53O9bLUwqGfmLSppKIrL7iaei8LlwRRwcJKzYgPuwzBJz79ARAWOX5K5E8RRociBYkJQGZ1QImON2/mSDA18mG5hIiHDUL/lROktHnPu6HaqiK/OKu4WZx86Oiyd3r5ca4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LUwwSjtC; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q1ezJi32"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LUwwSjtC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780508749; x=1812044749;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qJt147BrsreeHbJrYMOblgXpYN9KI0pqzDvbZ9LhVyE=;
-  b=Q1ezJi3246/8gBL7niCxJ2rMYXiLTXOEYXJ4jwL6xlytlPaBBOmlwotN
-   Z98EF5mM+Pjhi0ljUBW2chUrbpTzAcUSM+kY/Z1ZDBoBaFnikcygqL1BR
-   Q0n0n7kIGdR7FVsOXKMIY6B27PX3913mBkAGuNdraJ+sJkmUMHAwz6ROL
-   XXVkXcWLhVOua/01EoqvgY1YhriUcrR0CpbXrjw6LP+rwjm51fj9Cvxp7
-   AVCTIQlC/mD6OKeJeIo2b/rGFN+oFtmsKTqI3k0bc9HZ9kdt5qngT6cVW
-   iDrgABf00I4ZvtWQXmili9uN09v5wQKfINvTClroUhIkY4QiDJYuGoRX0
-   Q==;
-X-CSE-ConnectionGUID: Tcnq7wPDQ1ypb2XSiiLpYg==
-X-CSE-MsgGUID: Xb9Sr2mvSGyqtzhYqFxH8Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="92703222"
+  t=1780513010; x=1812049010;
+  h=date:from:to:cc:subject:message-id;
+  bh=K1m9iz3Mf/Z/2HkW2/lw6CLgBeM4sVWKVrxUJtsSUkg=;
+  b=LUwwSjtCQpuQT47VpZfffHddvW6suPEN9vyiVWWEGDdq2zRPadeFe44D
+   WQJfr78QQ85syKi5Yn3SUVeyXU+0aIrLVMyAokKwxOKYlm0CKurgNwr5m
+   aizqRrVag/+9bjFQL8ediccBoQ9Ct6itVRcyueqYof03JY0tmrPYD1ZV2
+   oCfIfzvNuQSFl/u296ugtvKXCnNYmf6X1sI/z5X093wh1B5dJkmdbotnh
+   gMHYg22xIjB4lejP5y1Hm5GbaNwj7RqDa2nJqVaad/1dlf9XZN3Y6A+nw
+   U/xnZesOwtucwKAm5mFlZ7/R1qjwU6Wj+N9+Gma6tF45zk5oNLaXNEnDj
+   w==;
+X-CSE-ConnectionGUID: mb7VknvhRIe4KRTnoLmY5A==
+X-CSE-MsgGUID: uswGaafSRXKIoQSvWdgCGA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="81073583"
 X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="92703222"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 10:45:48 -0700
-X-CSE-ConnectionGUID: EqADPJ1TRHWXoExjlzSOEw==
-X-CSE-MsgGUID: gdqv3b/dTi2DOsv2lsHPrw==
+   d="scan'208";a="81073583"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 11:56:50 -0700
+X-CSE-ConnectionGUID: 2VsjqbCfS0q60h7q3shhGw==
+X-CSE-MsgGUID: v/I7X/MCQU62sOU/ZythQw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="267969880"
+   d="scan'208";a="248647347"
 Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Jun 2026 10:45:46 -0700
+  by orviesa004.jf.intel.com with ESMTP; 03 Jun 2026 11:56:47 -0700
 Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wUpey-0000000027d-2O3q;
-	Wed, 03 Jun 2026 17:45:44 +0000
-Date: Wed, 3 Jun 2026 19:44:45 +0200
+	id 1wUqlh-0000000028L-0Xuq;
+	Wed, 03 Jun 2026 18:56:45 +0000
+Date: Wed, 03 Jun 2026 20:56:10 +0200
 From: kernel test robot <lkp@intel.com>
-To: Maxwell Doose <m32285159@gmail.com>, linux@dominikbrodowski.net
+To: Nikolay Aleksandrov <nikolay@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Maxwell Doose <m32285159@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pcmcia: cs: Replace manual mutex locking with
- guard(mutex)
-Message-ID: <202606031924.nEoqNaNq-lkp@intel.com>
-References: <20260603062714.45848-1-m32285159@gmail.com>
+ 0day robot <lkp@intel.com>, David Ahern <dsahern@kernel.org>,
+ Tariq Toukan <tariqt@nvidia.com>
+Subject: 
+ drivers/net/ethernet/mellanox/mlx5/core/lib/nv_param.c:877:10: error:
+ incompatible function pointer types initializing 'int (*)(struct devlink *,
+ u32, union devlink_param_value *, struct netlink_ext_ack *)' (aka 'int
+ (*)(struct devlink *, unsigned int, un...
+Message-ID: <202606032050.tgc4z881-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260603062714.45848-1-m32285159@gmail.com>
 
-Hi Maxwell,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v7.1-rc6 next-20260602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxwell-Doose/pcmcia-cs-Replace-manual-mutex-locking-with-guard-mutex/20260603-144020
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260603062714.45848-1-m32285159%40gmail.com
-patch subject: [PATCH] pcmcia: cs: Replace manual mutex locking with guard(mutex)
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260603/202606031924.nEoqNaNq-lkp@intel.com/config)
+tree:   https://github.com/intel-lab-lkp/linux/commits/Tariq-Toukan/devlink-add-generic-device-max_sfs-parameter/20260603-183351
+head:   3f9c478ff2a7ceca60d14dab453bbd80ba5347fd
+commit: 3f9c478ff2a7ceca60d14dab453bbd80ba5347fd net/mlx5: implement max_sfs parameter
+date:   8 hours ago
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260603/202606032050.tgc4z881-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606031924.nEoqNaNq-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606032050.tgc4z881-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606031924.nEoqNaNq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606032050.tgc4z881-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pcmcia/cs.c:592:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     592 |         if (sysfs_events) {
-         |             ^~~~~~~~~~~~
-   drivers/pcmcia/cs.c:621:9: note: uninitialized use occurs here
-     621 |         return ret;
-         |                ^~~
-   drivers/pcmcia/cs.c:592:2: note: remove the 'if' if its condition is always true
-     592 |         if (sysfs_events) {
-         |         ^~~~~~~~~~~~~~~~~
-   drivers/pcmcia/cs.c:585:9: note: initialize the variable 'ret' to silence this warning
-     585 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+>> drivers/net/ethernet/mellanox/mlx5/core/lib/nv_param.c:877:10: error: incompatible function pointer types initializing 'int (*)(struct devlink *, u32, union devlink_param_value *, struct netlink_ext_ack *)' (aka 'int (*)(struct devlink *, unsigned int, union devlink_param_value *, struct netlink_ext_ack *)') with an expression of type 'int (struct devlink *, u32, union devlink_param_value, struct netlink_ext_ack *)' (aka 'int (struct devlink *, unsigned int, union devlink_param_value, struct netlink_ext_ack *)') [-Wincompatible-function-pointer-types]
+     877 |                               mlx5_devlink_max_sfs_validate),
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +592 drivers/pcmcia/cs.c
+vim +877 drivers/net/ethernet/mellanox/mlx5/core/lib/nv_param.c
 
-   581	
-   582	static int pccardd_helper(struct pcmcia_socket *skt, unsigned int events,
-   583				  unsigned int sysfs_events)
-   584	{
-   585		int ret;
-   586	
-   587		guard(mutex)(&skt->skt_mutex);
-   588	
-   589		if (events & SS_DETECT)
-   590			socket_detect_change(skt);
-   591	
- > 592		if (sysfs_events) {
-   593			if (sysfs_events & PCMCIA_UEVENT_EJECT)
-   594				socket_remove(skt);
-   595			if (sysfs_events & PCMCIA_UEVENT_INSERT)
-   596				socket_insert(skt);
-   597			if ((sysfs_events & PCMCIA_UEVENT_SUSPEND) &&
-   598			    !(skt->state & SOCKET_CARDBUS)) {
-   599				if (skt->callback)
-   600					ret = skt->callback->suspend(skt);
-   601				else
-   602					ret = 0;
-   603				if (!ret) {
-   604					socket_suspend(skt);
-   605					msleep(100);
-   606				}
-   607			}
-   608			if ((sysfs_events & PCMCIA_UEVENT_RESUME) &&
-   609			    !(skt->state & SOCKET_CARDBUS)) {
-   610				ret = socket_resume(skt);
-   611				if (!ret && skt->callback)
-   612					skt->callback->resume(skt);
-   613			}
-   614			if ((sysfs_events & PCMCIA_UEVENT_REQUERY) &&
-   615			    !(skt->state & SOCKET_CARDBUS)) {
-   616				if (!ret && skt->callback)
-   617					skt->callback->requery(skt);
-   618			}
-   619		}
-   620	
-   621		return ret;
-   622	}
-   623	
+   865	
+   866	static const struct devlink_param mlx5_nv_param_devlink_params[] = {
+   867		DEVLINK_PARAM_GENERIC(ENABLE_SRIOV, BIT(DEVLINK_PARAM_CMODE_PERMANENT),
+   868				      mlx5_devlink_enable_sriov_get,
+   869				      mlx5_devlink_enable_sriov_set, NULL),
+   870		DEVLINK_PARAM_GENERIC(TOTAL_VFS, BIT(DEVLINK_PARAM_CMODE_PERMANENT),
+   871				      mlx5_devlink_total_vfs_get,
+   872				      mlx5_devlink_total_vfs_set,
+   873				      mlx5_devlink_total_vfs_validate),
+   874		DEVLINK_PARAM_GENERIC(MAX_SFS, BIT(DEVLINK_PARAM_CMODE_PERMANENT),
+   875				      mlx5_devlink_max_sfs_get,
+   876				      mlx5_devlink_max_sfs_set,
+ > 877				      mlx5_devlink_max_sfs_validate),
+   878		DEVLINK_PARAM_DRIVER(MLX5_DEVLINK_PARAM_ID_CQE_COMPRESSION_TYPE,
+   879				     "cqe_compress_type", DEVLINK_PARAM_TYPE_STRING,
+   880				     BIT(DEVLINK_PARAM_CMODE_PERMANENT),
+   881				     mlx5_nv_param_devlink_cqe_compress_get,
+   882				     mlx5_nv_param_devlink_cqe_compress_set,
+   883				     mlx5_nv_param_devlink_cqe_compress_validate),
+   884		DEVLINK_PARAM_DRIVER_WITH_DEFAULTS(MLX5_DEVLINK_PARAM_ID_SWP_L4_CSUM_MODE,
+   885						   "swp_l4_csum_mode", DEVLINK_PARAM_TYPE_STRING,
+   886						   BIT(DEVLINK_PARAM_CMODE_PERMANENT),
+   887						   mlx5_devlink_swp_l4_csum_mode_get,
+   888						   mlx5_devlink_swp_l4_csum_mode_set,
+   889						   mlx5_devlink_swp_l4_csum_mode_validate,
+   890						   mlx5_devlink_swp_l4_csum_mode_get_default,
+   891						   mlx5_devlink_swp_l4_csum_mode_set_default),
+   892	};
+   893	
 
 --
 0-DAY CI Kernel Test Service
