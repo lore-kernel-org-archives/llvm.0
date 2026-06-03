@@ -1,155 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6871934A76A;
-	Wed,  3 Jun 2026 19:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D95320A00;
+	Wed,  3 Jun 2026 20:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780514211; cv=none; b=Hcv3JImcaCidPT4DEpjjPw8cvA5TSD4qYXdDPcuxygWWTyqwMPEX29/B1ryWH9XwEY63LVgaP2KXkdfnQIt9r80F47XOFtw4itqnpW0Ylm/Sq+aSRFmak/WaarXsyExQWPNBvp/3HNOjtXRFs1nmd0frySHNV81wvkN57Rq9lEk=
+	t=1780518473; cv=none; b=gfGfNgBjSxKOsu0bCKj4VVkLHL1aYW4cRHRU+EU8wONEL/1ggBnmwc1EjMipd5577FlNgour9tP8uh7oAmVXV14kXfAgy83NMsJvPU+WaHN/MrqE/8vKO7uAsheab1xshfOW8na6INb9FMnZePpbgK//OkJu0Sn2fSqMKUT8+js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780514211; c=relaxed/simple;
-	bh=KhEsWPNQ6bD5/d7Tz1Dc8Szc7hsbmUVroXqhB8qW6RI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Uf8HdrkgZCMYs4Pfcy/vjWuNLPGBCN7BqWaifDTWQmWR5h8rX92MZGVFx+LRxPzmPTbl0j0MbHAqrOtXLWPKkKXNTwNK4i3eaUcWwx8F4DhajweEeLR9ZqhNx74P0htmGSqM47M9WojC4OhOIJKdXd645sjDnTLNV7eZeoKJg+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H92VVAyk; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1780518473; c=relaxed/simple;
+	bh=YwTGPsjBah6GvaY4EYLSGeDs8Fkv/GZQKN8WfKQMncQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dptNIogoYwdlJl/coX1IA7Bn8MIb1gsXsVKeP4aRuMe7928iv4WR0o4ce3tQEM6FjNMNfoB5saeFb0pWdL01S0nB0vniWPFpfLV2JO9hvmCWOdRMDBfSVHZrwvU1TN0ZSeGmTsSKU0SNqzLOfqLVQn2rvfN845jpbj3VTwNCFHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DlOeSIyI; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H92VVAyk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DlOeSIyI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780514209; x=1812050209;
-  h=date:from:to:cc:subject:message-id;
-  bh=KhEsWPNQ6bD5/d7Tz1Dc8Szc7hsbmUVroXqhB8qW6RI=;
-  b=H92VVAykvh+7cUGSc3aQi0Qs0PTppRxRViU9G3G7CK12Cz7VWGojjRKa
-   d3GPYDSsfph27S4/pyAXZtDQu6r9ofG6/CDlxbovKLalyf0d9VkG9P/Ho
-   EpWsLsnB2sSvQiyBVcGcg/5zD+B3K0VPNL2S4PooHzagqBlVg6tITEOZT
-   +fW1dWyaZqES/fkC1R8arH0FgnxZG5/IeJNaHmbAtkvMXaT5AknV+/Su7
-   Z8qMwc8K/MUhltIVRVvMl6VVEjAKeuvB9E5of1YZ/1jjRD9PSbDW3TGst
-   k04F3agP98F+CvoH7gclNnLASmwDAstxo9LtKv7q1S6HnXBF5r5YOQSg/
-   w==;
-X-CSE-ConnectionGUID: AQBa/EmTTBSdeahl49dinQ==
-X-CSE-MsgGUID: 3nKqP7TDSSyjyQHreiKGHA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="85189788"
+  t=1780518473; x=1812054473;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YwTGPsjBah6GvaY4EYLSGeDs8Fkv/GZQKN8WfKQMncQ=;
+  b=DlOeSIyI37/Jfk17BtzO2WHU1lQD+EdK/h3kZMtAESd5eBth/Kmi10iL
+   +kZix/4gCCFa0hkUI4K+A1rKIeSN4e6tEI9Lpa4v2mM25NbtUMAeHrCMB
+   58dJnymvv1xL26uFPM+ImC4toEFozozqf4+faeVa8Cjh6QDJE/mS0b2ew
+   KC5QWhn5FP4TSAFtxfMLubT9SIF5ChY2Uf9S+Ox8E/uq/SNaOTRscCWuK
+   P2B9ndI7eTFtUmi6/GYe3mE1KND5RmgyIH8ZCWBhd/7bFdFObMv7CrTS5
+   UOnWV2eL67K85i46z+npEa5CC6IujMVDGfRiMTdcdwVxH1FI3lzplm78F
+   A==;
+X-CSE-ConnectionGUID: 8MvzqupOSQqexaOczHJLvQ==
+X-CSE-MsgGUID: QAQUlT2hSFS3YaEO8+wQ2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="106789445"
 X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="85189788"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 12:16:49 -0700
-X-CSE-ConnectionGUID: Gu0moSAtQu2wkIvCjW0jow==
-X-CSE-MsgGUID: oPVw22fNSz+IDuj6CC5HDg==
+   d="scan'208";a="106789445"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 13:27:52 -0700
+X-CSE-ConnectionGUID: 6vV8yUgjQ4iGVwtO1bkXVg==
+X-CSE-MsgGUID: xi91RExKRIWPluvF9+SKDg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="237992407"
+   d="scan'208";a="249263061"
 Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa009.fm.intel.com with ESMTP; 03 Jun 2026 12:16:47 -0700
+  by orviesa005.jf.intel.com with ESMTP; 03 Jun 2026 13:27:48 -0700
 Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wUr53-0000000028X-1Bre;
-	Wed, 03 Jun 2026 19:16:45 +0000
-Date: Wed, 03 Jun 2026 21:16:42 +0200
+	id 1wUsBl-0000000029B-3dO4;
+	Wed, 03 Jun 2026 20:27:45 +0000
+Date: Wed, 3 Jun 2026 22:27:39 +0200
 From: kernel test robot <lkp@intel.com>
-To: Michal Camacho Romero <michal.camacho.romero@intel.com>
+To: JB Tsai <jb.tsai@mediatek.com>, nbd@nbd.name, lorenzo@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: drivers/iommu/intel/dmar.c:681:11: warning: variable
- 'txt_heap' is uninitialized when used here
-Message-ID: <202606032136.5vhG7xrS-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
+	Deren.Wu@mediatek.com, Sean.Wang@mediatek.com,
+	Quan.Zhou@mediatek.com, Ryder.Lee@mediatek.com,
+	Leon.Yen@mediatek.com, litien.chang@mediatek.com,
+	Charlie-cy.Wu@mediatek.com, jb.tsai@mediatek.com
+Subject: Re: [PATCH] wifi: mt76: mt7925: add regulatory wiphy self manager
+ support
+Message-ID: <202606032205.iaSDVq2Z-lkp@intel.com>
+References: <20260603075331.1234691-1-jb.tsai@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260603075331.1234691-1-jb.tsai@mediatek.com>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Michal-Camacho-Romero/x86-tboot-Add-support-for-parsing-DTPR-table-and-disabling-TPRs/20260603-194638
-head:   7185450ff8f30f609336848d64612c34f44c9b04
-commit: 7185450ff8f30f609336848d64612c34f44c9b04 iommu/vt-d: Disable PMRs and skip force-IOMMU when TXT TPRs are active
-date:   7 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260603/202606032136.5vhG7xrS-lkp@intel.com/config)
+Hi JB,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v7.1-rc6 next-20260602]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/JB-Tsai/wifi-mt76-mt7925-add-regulatory-wiphy-self-manager-support/20260603-155908
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20260603075331.1234691-1-jb.tsai%40mediatek.com
+patch subject: [PATCH] wifi: mt76: mt7925: add regulatory wiphy self manager support
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260603/202606032205.iaSDVq2Z-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606032136.5vhG7xrS-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606032205.iaSDVq2Z-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606032136.5vhG7xrS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606032205.iaSDVq2Z-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iommu/intel/dmar.c:681:11: warning: variable 'txt_heap' is uninitialized when used here [-Wuninitialized]
-     681 |                 iounmap(txt_heap);
-         |                         ^~~~~~~~
-   drivers/iommu/intel/dmar.c:639:34: note: initialize the variable 'txt_heap' to silence this warning
-     639 |         void                   *txt_heap;
-         |                                         ^
-         |                                          = NULL
-   1 warning generated.
+>> drivers/net/wireless/mediatek/mt76/mt7925/regd.c:361:43: error: passing 'const struct ieee80211_regdomain *' to parameter of type 'struct ieee80211_regdomain *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     361 |                 return regulatory_set_wiphy_regd(wiphy, &mt7925_regd_ww);
+         |                                                         ^~~~~~~~~~~~~~~
+   include/net/cfg80211.h:8082:38: note: passing argument to parameter 'rd' here
+    8082 |                               struct ieee80211_regdomain *rd);
+         |                                                           ^
+   1 error generated.
 
 
-vim +/txt_heap +681 drivers/iommu/intel/dmar.c
+vim +361 drivers/net/wireless/mediatek/mt76/mt7925/regd.c
 
-   630	
-   631	/**
-   632	 * parse_dmar_table - parses the DMA reporting table
-   633	 */
-   634	static int __init
-   635	parse_dmar_table(void)
-   636	{
-   637		struct acpi_table_dmar *dmar;
-   638		struct acpi_table_dtpr *dtpr;
-   639		void                   *txt_heap;
-   640		int drhd_count = 0;
-   641		int ret;
-   642		struct dmar_res_callback cb = {
-   643			.print_entry = true,
-   644			.ignore_unhandled = true,
-   645			.arg[ACPI_DMAR_TYPE_HARDWARE_UNIT] = &drhd_count,
-   646			.cb[ACPI_DMAR_TYPE_HARDWARE_UNIT] = &dmar_parse_one_drhd,
-   647			.cb[ACPI_DMAR_TYPE_RESERVED_MEMORY] = &dmar_parse_one_rmrr,
-   648			.cb[ACPI_DMAR_TYPE_ROOT_ATS] = &dmar_parse_one_atsr,
-   649			.cb[ACPI_DMAR_TYPE_HARDWARE_AFFINITY] = &dmar_parse_one_rhsa,
-   650			.cb[ACPI_DMAR_TYPE_NAMESPACE] = &dmar_parse_one_andd,
-   651			.cb[ACPI_DMAR_TYPE_SATC] = &dmar_parse_one_satc,
-   652		};
-   653	
-   654		/*
-   655		 * Do it again, earlier dmar_tbl mapping could be mapped with
-   656		 * fixed map.
-   657		 */
-   658		dmar_table_detect();
-   659	
-   660		/*
-   661		 * ACPI tables may not be DMA protected by tboot, so use DMAR copy
-   662		 * SINIT saved in SinitMleData in TXT heap (which is DMA protected)
-   663		 */
-   664		dmar_tbl = tboot_get_dmar_table(dmar_tbl);
-   665	
-   666		dmar = (struct acpi_table_dmar *)dmar_tbl;
-   667		if (!dmar)
-   668			return -ENODEV;
-   669	
-   670		if (dmar->width < PAGE_SHIFT - 1) {
-   671			pr_warn("Invalid DMAR haw\n");
-   672			return -EINVAL;
-   673		}
-   674	
-   675		dtpr = tboot_get_dtpr_table(&txt_heap);
-   676		if (dtpr) {
-   677			/* TPR is enabled
-   678			 * This will also tell not to establish IOMMU PMRs
-   679			 */
-   680			tboot_parse_dtpr_table(dtpr);
- > 681			iounmap(txt_heap);
-   682		}
-   683	
-   684		txt_heap = NULL;
-   685		pr_info("Host address width %d\n", dmar->width + 1);
-   686		ret = dmar_walk_dmar_table(dmar, &cb);
-   687		if (ret == 0 && drhd_count == 0)
-   688			pr_warn(FW_BUG "No DRHD structure found in DMAR table\n");
-   689	
-   690		return ret;
-   691	}
-   692	
+   286	
+   287	int mt7925_regd_update(struct mt792x_phy *phy, char *alpha2)
+   288	{
+   289		struct wiphy *wiphy = phy->mt76->hw->wiphy;
+   290		struct ieee80211_hw *hw = wiphy_to_ieee80211_hw(wiphy);
+   291		struct mt792x_dev *dev = mt792x_hw_dev(hw);
+   292		struct mt7925_regd_rule *mt7925_rule;
+   293		struct mt76_dev *mdev = &dev->mt76;
+   294		struct ieee80211_regdomain *regd;
+   295		struct ieee80211_reg_rule *rule;
+   296		struct mt7925_regd_rule_ev *ev;
+   297		int i, num_of_rules = 0;
+   298		struct sk_buff *skb;
+   299		int ret = 0;
+   300	
+   301		if (dev->hw_full_reset)
+   302			return 0;
+   303	
+   304		if (!MT7925_REGD_SUPPORTED(phy))
+   305			return -EOPNOTSUPP;
+   306	
+   307		mt792x_mutex_acquire(dev);
+   308		skb = mt7925_regd_query_regdb(phy, alpha2);
+   309		mt792x_mutex_release(dev);
+   310	
+   311		if (!skb)
+   312			return -EINVAL;
+   313	
+   314		ev = (struct mt7925_regd_rule_ev *)(skb->data + 4);
+   315		num_of_rules = le32_to_cpu(ev->n_reg_rules);
+   316	
+   317		if (!num_of_rules ||
+   318			WARN_ON_ONCE(num_of_rules > NL80211_MAX_SUPP_REG_RULES)) {
+   319			ret = -EINVAL;
+   320			goto err;
+   321		}
+   322	
+   323		regd = kzalloc(struct_size(regd, reg_rules, num_of_rules), GFP_KERNEL);
+   324		if (!regd) {
+   325			ret = -ENOMEM;
+   326			goto err;
+   327		}
+   328	
+   329		for (i = 0; i < num_of_rules; i++) {
+   330			mt7925_rule = &ev->reg_rule[i];
+   331			rule = &regd->reg_rules[i];
+   332	
+   333			rule->freq_range.start_freq_khz =
+   334						MHZ_TO_KHZ(mt7925_rule->start_freq);
+   335			rule->freq_range.end_freq_khz =
+   336						MHZ_TO_KHZ(mt7925_rule->end_freq);
+   337			rule->freq_range.max_bandwidth_khz =
+   338						MHZ_TO_KHZ(mt7925_rule->max_bw);
+   339			/* not used by fw */
+   340			rule->power_rule.max_antenna_gain = DBI_TO_MBI(6);
+   341			rule->power_rule.max_eirp = DBM_TO_MBM(22);
+   342			rule->flags = mt7925_rule->flags;
+   343		}
+   344	
+   345		regd->n_reg_rules = num_of_rules;
+   346		regd->dfs_region = ev->dfs_region;
+   347	
+   348		memcpy(regd->alpha2, alpha2, 2);
+   349		memcpy(mdev->alpha2, alpha2, 2);
+   350	
+   351		dev->regd_change = true;
+   352		mt7925_mcu_regd_update(dev, alpha2, ENVIRON_ANY);
+   353	
+   354		ret = regulatory_set_wiphy_regd(wiphy, regd);
+   355	
+   356		kfree(regd);
+   357	err:
+   358		dev_kfree_skb(skb);
+   359	
+   360		if (ret < 0)
+ > 361			return regulatory_set_wiphy_regd(wiphy, &mt7925_regd_ww);
+   362	
+   363		return ret;
+   364	}
+   365	EXPORT_SYMBOL_GPL(mt7925_regd_update);
+   366	
 
 --
 0-DAY CI Kernel Test Service
