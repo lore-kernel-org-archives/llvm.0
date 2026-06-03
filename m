@@ -1,155 +1,83 @@
-Received: from mail-43172.protonmail.ch (mail-43172.protonmail.ch [185.70.43.172])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40E648123B
-	for <llvm@lists.linux.dev>; Wed,  3 Jun 2026 13:14:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F600481653;
+	Wed,  3 Jun 2026 13:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780492500; cv=none; b=aUqyBJPFdmGEv8wIJRU9CgSf5wut6MZSlZ7+xpJdUPVTI5KjMseLDuA7hrlLbD7EOgbxuCHA7QuTXkKKPB4Dcw9PzHwpz51aeHxNPjHyknAr8quCiL1+JoHmfjauNPrTpL3B26vB/aA0im2cxVg6LAPU4NY6dr2x/hYBnVreso4=
+	t=1780492847; cv=none; b=lCr4+GHQxFqH/diysu5m7wg1/oS3i/Oi3U2BPA9bLjDLsYRJerPlx1C2hdwD3ayUMjLF+wR2BYh2eqisvzKWhsNfA+rFsLXqm8iNQtvc/3aWK+hs15z2ZpMxwsdUX0+Hee6jEpcp/TsdRdmM1Y70DHD6wF8+xzYSYUFn9D3phm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780492500; c=relaxed/simple;
-	bh=C2GewxLkkgkEYbqR2iNRlLWHQtBSWfBZDO6yBn946kQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=RKzklnF/wUBLw4EwrJsPDzLp0S2H1iRS7moVr1qTVm6hp91PYv6JRxtaoK1cobMnZGAwRekwckYru4m28Hbp07F8QHc2gPpzBARrXUV8gDUmUYyyc5Q4UolUUuTAW22DAsYRyn3ZAAnBtLV+BqGy/cRdcF8Y//pMj/+FNFkdSEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rasmusvillemoes.dk; spf=pass smtp.mailfrom=rasmusvillemoes.dk; dkim=pass (2048-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b=j9p4Bnka; arc=none smtp.client-ip=185.70.43.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rasmusvillemoes.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rasmusvillemoes.dk
+	s=arc-20240116; t=1780492847; c=relaxed/simple;
+	bh=LS+4rNfxK7i9K5lzOlbHkJotT8jcURP1SRsKf+Hoakg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=eXcjulMUDGr9QyGAeYOzzsz7yes0KJsCx3bf7qTUDrAoENf/y8uhY0hSllX7x7O2EpFV1YHkWeSy8JsjgCRHwuujpubT00CFeuqFDxZzYS06Z6t0TSQs9j3ZNP5xZVN/A4edICku4tojh+D9ZTN08f7nCZ18kFvz4dRnFbABtEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NM1ebNH4; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="j9p4Bnka"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rasmusvillemoes.dk;
-	s=protonmail; t=1780492488; x=1780751688;
-	bh=V2Q66gdvmCtjrbhnA8iFDT8uoIIyOyjUBipERHmuu4c=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:From:To:
-	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=j9p4Bnka6PQzW3q8mK/aVo01BjZleEwlhVKxZDjRCXNgW/dEvOKiKLq2eSjhrCSCf
-	 QsLmaxdpywC53akTtyxCM3OaE2kVJ9UjvkC329bTW+i45VQht398uA+WkYVcjxGiQG
-	 w+KDxUxGKlpLKhznpDa3LTmN41o1v2EJ5K4M+jAD81duudtI3XaBK0EASDtMOP/3DG
-	 SJs8KG2B1gJX7R2p2JNWI2pDk+Elhg6Tj0sedgkR3WuQBpBpWOhg3qD4vLkRNE1UTu
-	 hVQpzS+MLwZeGUDu8xSAkVpgXpfc3Sm9WLixRtD4BGnb1KiWY4BEp4XZIir2U9RAcj
-	 NNwpLVUUCm1/g==
-X-Pm-Submission-Id: 4gVp850wFCz2ScNN
-From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To: "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,  "Arnd Bergmann"
- <arnd@kernel.org>,  "Steven Rostedt" <rostedt@goodmis.org>,  "Masami
- Hiramatsu" <mhiramat@kernel.org>,  "Andrew Morton"
- <akpm@linux-foundation.org>,  "Petr Mladek" <pmladek@suse.com>,  "Nathan
- Chancellor" <nathan@kernel.org>,  "Dennis Dalessandro"
- <dennis.dalessandro@cornelisnetworks.com>,  "Jason Gunthorpe"
- <jgg@ziepe.ca>,  "Leon Romanovsky" <leon@kernel.org>,  "Arend van Spriel"
- <arend.vanspriel@broadcom.com>,  "Miri Korenblit"
- <miriam.rachel.korenblit@intel.com>,  "Mathieu Desnoyers"
- <mathieu.desnoyers@efficios.com>,  "Sergey Senozhatsky"
- <senozhatsky@chromium.org>,  "Nick Desaulniers"
- <nick.desaulniers+lkml@gmail.com>,  "Bill Wendling" <morbo@google.com>,
-  "Justin Stitt" <justinstitt@google.com>,  "Vlastimil Babka (SUSE)"
- <vbabka@kernel.org>,  <linux-rdma@vger.kernel.org>,
-  <linux-kernel@vger.kernel.org>,  <linux-wireless@vger.kernel.org>,
-  <brcm80211@lists.linux.dev>,  <brcm80211-dev-list.pdl@broadcom.com>,
-  <linux-trace-kernel@vger.kernel.org>,  <llvm@lists.linux.dev>
-Subject: Re: [PATCH 1/2] tracing: work around -Wmissing-format-attribute
- warning
-In-Reply-To: <87zf1bhjqp.fsf@prevas.dk> (Rasmus Villemoes's message of "Wed,
-	03 Jun 2026 14:49:18 +0200")
-References: <20260602150904.2258624-1-arnd@kernel.org>
-	<ah8n-Nk305S5hRwN@ashevche-desk.local>
-	<WPQQfPHOiGJbSxrXRdFDy9jURhS7JMpNu9sD54Vfe5wB-JOjyGY6xPQyACz3MSGg0xGp79eOYCyZ2Hi2CsPeUg==@protonmail.internalid>
-	<35c1ba62-e74d-4abc-aa73-ccd35968ff89@app.fastmail.com>
-	<875x40hz7k.fsf@prevas.dk>
-	<cODLVx6ZlerCiOgdpsG7OSsC2YRA6pXmq2jBdTjRB2UQoTIY4hI-yhV1lrumRNBH1hTT2aJRS-MgtlbhNWUTEw==@protonmail.internalid>
-	<aafe201a-64a6-438f-89a3-d1cd10a357a7@app.fastmail.com>
-	<87zf1bhjqp.fsf@prevas.dk>
-Date: Wed, 03 Jun 2026 15:14:44 +0200
-Message-ID: <87se73hikb.fsf@prevas.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NM1ebNH4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780492845; x=1812028845;
+  h=date:from:to:cc:subject:message-id;
+  bh=LS+4rNfxK7i9K5lzOlbHkJotT8jcURP1SRsKf+Hoakg=;
+  b=NM1ebNH4ausPTDrMAvl8XIWoVN2WVI5xP8PXrFHGIrmbmhqZeIpiUsxP
+   73WNhBT39E4flB5SlZaMJYF/OJBMewiFBX1+qdFUElroDkFrvuyj0XUrg
+   tbA2xz+59JxDMFB8/H9xj7IOWB03nezKttHBJVh+Y861qrplzpPWycubw
+   JNjga2N1s+rH4KKBYcZDRaOcwlCnP2auESwjR1c1BwCmJxVwwCGb0sJnf
+   Pd4IsTuJZ57UH3WesoI2XXz2jNTKBc4Osc36JWYneTaKWxXDYsJraQO0C
+   3oo1HbrI66DV/gtlu837xiju0TTTxwHThkHqn7+jCNOc811/4k4DQTjuM
+   w==;
+X-CSE-ConnectionGUID: 3Zct8392TtKqquulgVPswA==
+X-CSE-MsgGUID: zS3tLWCkSeecHEcN0SJTIA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="81428421"
+X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
+   d="scan'208";a="81428421"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 06:20:44 -0700
+X-CSE-ConnectionGUID: zaP3vnPDTCO4rXoTblD7Ug==
+X-CSE-MsgGUID: kY2rFTsIRNeIW8YYrp8TwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
+   d="scan'208";a="241741619"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 03 Jun 2026 06:20:43 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wUlWT-00000000243-1JPf;
+	Wed, 03 Jun 2026 13:20:41 +0000
+Date: Wed, 03 Jun 2026 15:20:40 +0200
+From: kernel test robot <lkp@intel.com>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org
+Subject: [viro-vfs:more.configfs 30/33] Warning:
+ fs/configfs/dir.c:260 function parameter 'parent_sd' not described in
+ 'configfs_create_dir'
+Message-ID: <202606031516.cGG744n7-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain
 
-On Wed, Jun 03 2026, Rasmus Villemoes <ravi@prevas.dk> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git more.configfs
+head:   53a9faf145785b0b12ec71f2204f3b3011dbda5e
+commit: 2bbdcd7eabfcd3a5bd2614ab75ece19323d5f4c2 [30/33] configfs: attach the subtree only when it's completely built
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260603/202606031516.cGG744n7-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606031516.cGG744n7-lkp@intel.com/reproduce)
 
-> On Wed, Jun 03 2026, "Arnd Bergmann" <arnd@arndb.de> wrote:
->
->> On Wed, Jun 3, 2026, at 09:15, Rasmus Villemoes wrote:
->>> On Tue, Jun 02 2026, "Arnd Bergmann" <arnd@arndb.de> wrote:
->>>> On Tue, Jun 2, 2026, at 20:59, Andy Shevchenko wrote:
->>>>> On Tue, Jun 02, 2026 at 05:07:05PM +0200, Arnd Bergmann wrote:
->>>
->>> May I suggest a different approach, that avoids having that extra
->>> function emitted (which presumably compiles to a single jump
->>> instruction, but still, with retpoline and CFI and all that it all adds
->>> up): Keep the declaration of __vsnprintf() in the header without the
->>> __print() attribute, but then do
->>>
->>> int __vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
->>>    __alias(vsnprintf);
->>>
->>> in vsprintf.c. Aside from reusing the same entry point, I could well
->>> imagine a compiler some day complaining about seeing the printf
->>> attribute applied in a local extra declaration but not having it in the
->>> header file.
->>>
->>> Presumably it will need its own EXPORT_SYMBOL if any of the intended
->>> users are modular, and it certainly still needs a comment.
->>
->> I had tried that earlier but given up because the attributes have to
->> match exactly.
->>
->> This definition works with all currently supported versions of gcc,
->> but may have to change when the there is a new version that adds
->> even more attributes:
->>
->> int
->> __printf(3, 0)
->> __attribute__((nothrow))
->> __attribute__((nonnull(1)))
->> __vsnprintf(char *__restrict buf, size_t size,
->>             const char * __restrict fmt_str, va_list args)
->>                __alias(vsnprintf);
->>
->
-> Ah, I see. The documentation for the alias attribute does say that the
-> types have to match, but I didn't know that the nothrow and nonnull
-> attributes were considered part of the type identity. Oddly enough, if
-> one does
->
->   typeof(vsnprintf) __vsnprintf __alias(vsnprintf);
->
-> that still fails, but only complains about nothrow, not nonnull.
->
-> I don't remember what minimum gcc we currently require, but gcc 9
-> introduced another attribute that is apperently meant for cases like
-> this: 'copy'. This seems to build:
->
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index 9f359b31c8d1..c1402d375429 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -2988,6 +2988,9 @@ int vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
->  }
->  EXPORT_SYMBOL(vsnprintf);
->  
-> +int __vsnprintf(char *buf, size_t size, const char *fmt_str, va_list args)
-> +       __alias(vsnprintf) __attribute__((__copy__(vsnprintf)));
-> +
->  /**
->   * vscnprintf - Format a string and place it in a buffer
->   * @buf: The buffer to place the result into
->
-> That at least should handle any future "gcc knows this-or-that about the
-> vsnprintf function". But I don't know if clang supports that copy
-> mechanism or if the minimum supported gcc is too old.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606031516.cGG744n7-lkp@intel.com/
 
-Ah, so we already have __copy in compiler-attributes.h, stating that
-it's not supported by clang. Our current minimum gcc version is 8. But
-judging from the commit message for c0d9782f5, perhaps it's not actually
-a problem that it just expands to nothing for gcc 8, as the "less
-restrictive attribute" warning was also introduced with gcc 9, and the
-__copy macro is already used for module init/exit functions. Which also
-suggests that it might not be a problem that clang doesn't support it.
+All warnings (new ones prefixed by >>):
 
-Rasmus
+>> Warning: fs/configfs/dir.c:260 function parameter 'parent_sd' not described in 'configfs_create_dir'
+>> Warning: fs/configfs/dir.c:260 function parameter 'parent_sd' not described in 'configfs_create_dir'
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
