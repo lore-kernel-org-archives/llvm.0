@@ -1,260 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A42A383981;
-	Wed,  3 Jun 2026 09:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276A8385535;
+	Wed,  3 Jun 2026 09:22:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780478433; cv=none; b=jeuMdSHG/yEyUkafu2E6zfFmPK8zsT0UPlpEeluhm3ZCsHxBA4+eVx2MljnL1CyIXrX3LYcX3jxwXhTkV6W3GDdCIsCYUr3DIjdefMOyh6ZValezqptDjUSj6b2onUZXjxu44tjcHftUAq6B0bHPHXC1FHSaEHcoqB7nUOXK7A4=
+	t=1780478526; cv=none; b=tyhP4/6T+KRMKp00GAV++i4P6t0VUb5IihizpDUxDLqB1RgrTgittgEyj8Cl0L6WonKkQA5ZXBFHyLQS3sPxymebNOf836Y2DhnPuvp+y67kXfi8LdPQUuKE4Sx/FA2wec4ILuHhHqAfVZzPACn1wUEQBVME0s5vv3tnxKIPX0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780478433; c=relaxed/simple;
-	bh=v5cwawTLYNoco3AW28ytlskrlyDijLWmELlFAYbSezU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Op4CxvPbrCAAl+w3M8KSvWCk+t+lsansaPJwW0FzQzCM4tyTiOyHbZIsQ5KERCzaAKa+Aq5xpHmK5ybEZa4kKr/gFnEQk8O9I1shknmZqJG/y5T1MJAJ24Vgn3HZotucwQYDIiTPLzXe1sp0IVQjMM/vb8i6DRw5WjZjvymJVeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RMO/1DzK; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780478526; c=relaxed/simple;
+	bh=LdQejOz1IAnEcJAOumKNKrxcqY2PK3y43OQ3sjX7IAo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HiOhKLvKTwlCkhLPT6Pp9twzNAUEMW+KS/FwtxGgiEhXXaCG9ne+ucM9EzuP6edk4HReta2fbXyLZIle0UekA2JcaKcM0VrgVGPYbzXVjtXMyJXd4wUtHazp2TW/5udk6PIlpFqrDWyOzFkWDgSR4n+Itc/XVmm6aphHn4cXSC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MS7eDG/G; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RMO/1DzK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780478430; x=1812014430;
-  h=date:from:to:cc:subject:message-id;
-  bh=v5cwawTLYNoco3AW28ytlskrlyDijLWmELlFAYbSezU=;
-  b=RMO/1DzKbYLxLTCAPosld4mFnn3EFVCR0t0EYTVsMIx5APxSNqI79gcW
-   +DQLhDKEcKGre2fR1T0hcQRyhxWto7oJMBD2iE9p1I4VSevI/D++FSrkB
-   uCFsfJSqoNwu4zYQHzmL7kyA8XVT/ifnT9MGTRzl5ZkMGTTsNBU6rUYlV
-   3cFYO8ezjPh5BpIhXtDV2wBugKxF9DgkZ4UMDVlv0EcIpRy3WaFErLl8V
-   3NQC8zmqS5NMIajOLhz7/JU5/cEgA2K3hE5BT5dI1tzm9jtnBPnNOuhIR
-   ArdxG32YKAOqxnk6dwLdMRg3H3KQkIRweQP0snNCuxX+a7wzBRWWs8MpG
-   A==;
-X-CSE-ConnectionGUID: +YEsPSfFSQymnBBuJzkuNA==
-X-CSE-MsgGUID: xkKPsZHYRhq/THJ4VZjzkw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="81311216"
-X-IronPort-AV: E=Sophos;i="6.24,184,1774335600"; 
-   d="scan'208";a="81311216"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 02:20:29 -0700
-X-CSE-ConnectionGUID: ZReinKeiTE6OI97Nxj3HTA==
-X-CSE-MsgGUID: XnpqHjSGSmyCR/d1/u9C+w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,184,1774335600"; 
-   d="scan'208";a="244283181"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 03 Jun 2026 02:20:29 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wUhlx-00000000DDe-2FXg;
-	Wed, 03 Jun 2026 09:20:25 +0000
-Date: Wed, 03 Jun 2026 17:19:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joerg Roedel <joerg.roedel@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [joro:kvm-planes-v7.1 33/60]
- arch/s390/kvm/../../../virt/kvm/kvm_main.c:4595:7: error: array has
- incomplete element type 'struct kvm_msrs'
-Message-ID: <202606031728.JL1mVANJ-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MS7eDG/G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6260E1F00893;
+	Wed,  3 Jun 2026 09:21:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780478523;
+	bh=9KPpHmif7uT13SYzZOScP8ZXHj+daUOWD5CJb4ZWcmg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=MS7eDG/GouIHIPQmW7/3M1HBKF/aNNJDtbfrd9i4qhasluoLq2Dp+W9bfux3IkQIl
+	 y+myZ+HGUtT391bfB0nWl/7ZzmDY6sd05KY7T6v3jZ3Me1W3/fTkUstxiIXqSNRI7j
+	 lxYUkNQJ1hWHKqbVPkBbHel3ogjxnu0zzq1XITJItbCI5RpCrtKrc2FL/Zg7LCWRaa
+	 JLDfxNFtfslLUD+WRb9eYrgTCmQJxYXtTPM8G7AE2/YIQOmFWygczVhjALYqggjusn
+	 v80J9YaCM7zAajSejmfLDRyqj8JCg1ZLOYBybe0mmvPYnCXA6VkfvtPiBM0V9DVkhR
+	 B0lCZivckwzQg==
+Message-ID: <2b72da46-bf83-406f-bf5b-022f8e0ac04f@kernel.org>
+Date: Wed, 3 Jun 2026 10:21:58 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/8] bpftool: Pass host flags to bootstrap
+ libbpf
+To: Leo Yan <leo.yan@arm.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Lorenz Bauer <lmb@isovalent.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+ James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
+ <20260602-tools_build_fix_zero_init_bpf_only-v2-1-c76e5250ea1c@arm.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260602-tools_build_fix_zero_init_bpf_only-v2-1-c76e5250ea1c@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/linux.git kvm-planes-v7.1
-head:   02b786614480597a489766ec45b0ec286a3301a0
-commit: ff0aae76b3b7cd22365bbcb936c38a7c605d3948 [33/60] KVM: Implement KVM_CREATE_VCPU ioctl for planes
-config: s390-randconfig-001-20260603 (https://download.01.org/0day-ci/archive/20260603/202606031728.JL1mVANJ-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606031728.JL1mVANJ-lkp@intel.com/reproduce)
+2026-06-02 15:47 UTC+0100 ~ Leo Yan <leo.yan@arm.com>
+> bpftool builds a bootstrap libbpf with HOSTCC, but the libbpf submake can
+> still inherit target build flags through CFLAGS. This can break cross
+> builds when host objects are compiled with target-only options.
+> 
+> Since HOST_CFLAGS contains warning options that are not suitable for
+> building libbpf, use LIBBPF_BOOTSTRAP_CFLAGS with the warning options
+> removed to build the bootstrap libbpf. Clear EXTRA_CFLAGS so target
+> extra flags are not mixed into the host bootstrap libbpf build.
+> 
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/bpf/bpftool/Makefile | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index 0febf60e1b64656035dfe93cd15cba090015587a..1f033e578f90a2d6b93168ab41399de758bdf659 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -47,7 +47,8 @@ $(LIBBPF_INTERNAL_HDRS): $(LIBBPF_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_HDRS_
+>  $(LIBBPF_BOOTSTRAP): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_BOOTSTRAP_OUTPUT)
+>  	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) \
+>  		DESTDIR=$(LIBBPF_BOOTSTRAP_DESTDIR:/=) prefix= \
+> -		ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" $@ install_headers
+> +		ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
+> +		CFLAGS="$(LIBBPF_BOOTSTRAP_CFLAGS)" EXTRA_CFLAGS= $@ install_headers
+>  
+>  $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS): $(LIBBPF_BOOTSTRAP_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_BOOTSTRAP_HDRS_DIR)
+>  	$(call QUIET_INSTALL, $@)
+> @@ -92,6 +93,9 @@ HOST_CFLAGS := $(subst -I$(LIBBPF_INCLUDE),-I$(LIBBPF_BOOTSTRAP_INCLUDE),\
+>  		$(subst $(CLANG_CROSS_FLAGS),,$(CFLAGS)))
+>  HOST_LDFLAGS := $(LDFLAGS)
+>  
+> +# Remove warnings for libbpf bootstrap build
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606031728.JL1mVANJ-lkp@intel.com/
+Nitpick: We could expand this comment to briefly explain why. Not sure
+it's worth a respin, though.
 
-All errors (new ones prefixed by >>):
+> +LIBBPF_BOOTSTRAP_CFLAGS := $(filter-out -W -Wall -Wextra -Wformat -Wformat-signedness,$(HOST_CFLAGS))
 
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4594:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_lapic_state'
-           case KVM_SET_LAPIC:
-                ^~~~~~~~~~~~~
-   include/uapi/linux/kvm.h:1387:35: note: expanded from macro 'KVM_SET_LAPIC'
-   #define KVM_SET_LAPIC             _IOW(KVMIO,  0x8f, struct kvm_lapic_state)
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
-   #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/ioctl.h:13:4: note: expanded from macro '_IOC_TYPECHECK'
-           ((sizeof(t) == sizeof(t[1]) && \
-             ^
-   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
-            ((size) << _IOC_SIZESHIFT))
-              ^~~~
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4593:7: note: forward declaration of 'struct kvm_lapic_state'
-           case KVM_GET_LAPIC:
-                ^
-   include/uapi/linux/kvm.h:1386:61: note: expanded from macro 'KVM_GET_LAPIC'
-   #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
-                                                               ^
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4594:7: error: array has incomplete element type 'struct kvm_lapic_state'
-           case KVM_SET_LAPIC:
-                ^
-   include/uapi/linux/kvm.h:1387:35: note: expanded from macro 'KVM_SET_LAPIC'
-   #define KVM_SET_LAPIC             _IOW(KVMIO,  0x8f, struct kvm_lapic_state)
-                                     ^
-   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
-   #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
-                                                                        ^
-   include/asm-generic/ioctl.h:13:25: note: expanded from macro '_IOC_TYPECHECK'
-           ((sizeof(t) == sizeof(t[1]) && \
-                                  ^
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4593:7: note: forward declaration of 'struct kvm_lapic_state'
-           case KVM_GET_LAPIC:
-                ^
-   include/uapi/linux/kvm.h:1386:61: note: expanded from macro 'KVM_GET_LAPIC'
-   #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
-                                                               ^
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4594:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_lapic_state'
-           case KVM_SET_LAPIC:
-                ^~~~~~~~~~~~~
-   include/uapi/linux/kvm.h:1387:35: note: expanded from macro 'KVM_SET_LAPIC'
-   #define KVM_SET_LAPIC             _IOW(KVMIO,  0x8f, struct kvm_lapic_state)
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
-   #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/ioctl.h:14:4: note: expanded from macro '_IOC_TYPECHECK'
-             sizeof(t) < (1 << _IOC_SIZEBITS)) ? \
-             ^
-   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
-            ((size) << _IOC_SIZESHIFT))
-              ^~~~
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4593:7: note: forward declaration of 'struct kvm_lapic_state'
-           case KVM_GET_LAPIC:
-                ^
-   include/uapi/linux/kvm.h:1386:61: note: expanded from macro 'KVM_GET_LAPIC'
-   #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
-                                                               ^
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4594:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_lapic_state'
-           case KVM_SET_LAPIC:
-                ^~~~~~~~~~~~~
-   include/uapi/linux/kvm.h:1387:35: note: expanded from macro 'KVM_SET_LAPIC'
-   #define KVM_SET_LAPIC             _IOW(KVMIO,  0x8f, struct kvm_lapic_state)
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/asm-generic/ioctl.h:87:61: note: expanded from macro '_IOW'
-   #define _IOW(type,nr,argtype)           _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/ioctl.h:15:4: note: expanded from macro '_IOC_TYPECHECK'
-             sizeof(t) : __invalid_size_argument_for_IOC)
-             ^
-   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
-            ((size) << _IOC_SIZESHIFT))
-              ^~~~
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4593:7: note: forward declaration of 'struct kvm_lapic_state'
-           case KVM_GET_LAPIC:
-                ^
-   include/uapi/linux/kvm.h:1386:61: note: expanded from macro 'KVM_GET_LAPIC'
-   #define KVM_GET_LAPIC             _IOR(KVMIO,  0x8e, struct kvm_lapic_state)
-                                                               ^
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4595:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_msrs'
-           case KVM_GET_MSRS:
-                ^~~~~~~~~~~~
-   include/uapi/linux/kvm.h:1380:35: note: expanded from macro 'KVM_GET_MSRS'
-   #define KVM_GET_MSRS              _IOWR(KVMIO, 0x88, struct kvm_msrs)
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/asm-generic/ioctl.h:88:72: note: expanded from macro '_IOWR'
-   #define _IOWR(type,nr,argtype)          _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/ioctl.h:13:4: note: expanded from macro '_IOC_TYPECHECK'
-           ((sizeof(t) == sizeof(t[1]) && \
-             ^
-   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
-            ((size) << _IOC_SIZESHIFT))
-              ^~~~
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4595:7: note: forward declaration of 'struct kvm_msrs'
-   include/uapi/linux/kvm.h:1380:61: note: expanded from macro 'KVM_GET_MSRS'
-   #define KVM_GET_MSRS              _IOWR(KVMIO, 0x88, struct kvm_msrs)
-                                                               ^
->> arch/s390/kvm/../../../virt/kvm/kvm_main.c:4595:7: error: array has incomplete element type 'struct kvm_msrs'
-           case KVM_GET_MSRS:
-                ^
-   include/uapi/linux/kvm.h:1380:35: note: expanded from macro 'KVM_GET_MSRS'
-   #define KVM_GET_MSRS              _IOWR(KVMIO, 0x88, struct kvm_msrs)
-                                     ^
-   include/uapi/asm-generic/ioctl.h:88:72: note: expanded from macro '_IOWR'
-   #define _IOWR(type,nr,argtype)          _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
-                                                                                  ^
-   include/asm-generic/ioctl.h:13:25: note: expanded from macro '_IOC_TYPECHECK'
-           ((sizeof(t) == sizeof(t[1]) && \
-                                  ^
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4595:7: note: forward declaration of 'struct kvm_msrs'
-   include/uapi/linux/kvm.h:1380:61: note: expanded from macro 'KVM_GET_MSRS'
-   #define KVM_GET_MSRS              _IOWR(KVMIO, 0x88, struct kvm_msrs)
-                                                               ^
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4595:7: error: invalid application of 'sizeof' to an incomplete type 'struct kvm_msrs'
-           case KVM_GET_MSRS:
-                ^~~~~~~~~~~~
-   include/uapi/linux/kvm.h:1380:35: note: expanded from macro 'KVM_GET_MSRS'
-   #define KVM_GET_MSRS              _IOWR(KVMIO, 0x88, struct kvm_msrs)
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/asm-generic/ioctl.h:88:72: note: expanded from macro '_IOWR'
-   #define _IOWR(type,nr,argtype)          _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/ioctl.h:14:4: note: expanded from macro '_IOC_TYPECHECK'
-             sizeof(t) < (1 << _IOC_SIZEBITS)) ? \
-             ^
-   include/uapi/asm-generic/ioctl.h:73:5: note: expanded from macro '_IOC'
-            ((size) << _IOC_SIZESHIFT))
-              ^~~~
-   arch/s390/kvm/../../../virt/kvm/kvm_main.c:4595:7: note: forward declaration of 'struct kvm_msrs'
-   include/uapi/linux/kvm.h:1380:61: note: expanded from macro 'KVM_GET_MSRS'
-   #define KVM_GET_MSRS              _IOWR(KVMIO, 0x88, struct kvm_msrs)
-                                                               ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+Do we need to remove all warnings, or would it be sufficient to take out
+-Wformat and -Wformat-signedness? I don't mind removing them all if
+necessary, just asking.
 
+Acked-by: Quentin Monnet <qmo@kernel.org>
 
-vim +4595 arch/s390/kvm/../../../virt/kvm/kvm_main.c
-
-  4585	
-  4586	static inline bool kvm_is_vcpu_plane_ioctl(unsigned ioctl)
-  4587	{
-  4588		switch (ioctl) {
-  4589		case KVM_GET_DEBUGREGS:
-  4590		case KVM_SET_DEBUGREGS:
-  4591		case KVM_GET_FPU:
-  4592		case KVM_SET_FPU:
-  4593		case KVM_GET_LAPIC:
-  4594		case KVM_SET_LAPIC:
-> 4595		case KVM_GET_MSRS:
-  4596		case KVM_SET_MSRS:
-  4597		case KVM_GET_NESTED_STATE:
-  4598		case KVM_SET_NESTED_STATE:
-  4599		case KVM_GET_ONE_REG:
-  4600		case KVM_SET_ONE_REG:
-  4601		case KVM_GET_REGS:
-  4602		case KVM_SET_REGS:
-  4603		case KVM_GET_SREGS:
-  4604		case KVM_SET_SREGS:
-  4605		case KVM_GET_SREGS2:
-  4606		case KVM_SET_SREGS2:
-  4607		case KVM_GET_VCPU_EVENTS:
-  4608		case KVM_SET_VCPU_EVENTS:
-  4609		case KVM_GET_XCRS:
-  4610		case KVM_SET_XCRS:
-  4611		case KVM_GET_XSAVE:
-  4612		case KVM_GET_XSAVE2:
-  4613		case KVM_SET_XSAVE:
-  4614	
-  4615		case KVM_GET_REG_LIST:
-  4616		case KVM_TRANSLATE:
-  4617			return true;
-  4618	
-  4619		default:
-  4620			return false;
-  4621		}
-  4622	}
-  4623	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
