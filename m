@@ -1,193 +1,612 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D95320A00;
-	Wed,  3 Jun 2026 20:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6954F492533;
+	Wed,  3 Jun 2026 21:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780518473; cv=none; b=gfGfNgBjSxKOsu0bCKj4VVkLHL1aYW4cRHRU+EU8wONEL/1ggBnmwc1EjMipd5577FlNgour9tP8uh7oAmVXV14kXfAgy83NMsJvPU+WaHN/MrqE/8vKO7uAsheab1xshfOW8na6INb9FMnZePpbgK//OkJu0Sn2fSqMKUT8+js=
+	t=1780522236; cv=none; b=aDIIktJm3fbiZYLDk/5WydLtu0Q4VCoVYRHdCuNAdxqaerDH0N+gagMO7aX6xUoHSTGGOJuvZDSSTD7EvGc5r5AxxUTrg+8613/gyhDYjj5hV2PwTn32S2qvFo7WuolnE5y0C0SupM9Rb0H7egiPqNyEU9Qa/rKs2vDNJPXogJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780518473; c=relaxed/simple;
-	bh=YwTGPsjBah6GvaY4EYLSGeDs8Fkv/GZQKN8WfKQMncQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dptNIogoYwdlJl/coX1IA7Bn8MIb1gsXsVKeP4aRuMe7928iv4WR0o4ce3tQEM6FjNMNfoB5saeFb0pWdL01S0nB0vniWPFpfLV2JO9hvmCWOdRMDBfSVHZrwvU1TN0ZSeGmTsSKU0SNqzLOfqLVQn2rvfN845jpbj3VTwNCFHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DlOeSIyI; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780522236; c=relaxed/simple;
+	bh=n5boqW3HvANONssfWkpvHsdym12bRJsYkFGekS8vni4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=thE6ThU80hoGYj16YzHb64XouT+yiXxycQrbxINfOHYMjFCLk/OgMS95ppYMOxCBoxU9a1DJu0uflMKS6uyTQN3kxWORGI8pfU+mJ3mZt4OwRixuf+e3nL4LsqnW/QpS2aHKOeUt0J19FpvnhemnhCwblQjgoC80QUVqckvICVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a0mZIyOO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DlOeSIyI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780518473; x=1812054473;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YwTGPsjBah6GvaY4EYLSGeDs8Fkv/GZQKN8WfKQMncQ=;
-  b=DlOeSIyI37/Jfk17BtzO2WHU1lQD+EdK/h3kZMtAESd5eBth/Kmi10iL
-   +kZix/4gCCFa0hkUI4K+A1rKIeSN4e6tEI9Lpa4v2mM25NbtUMAeHrCMB
-   58dJnymvv1xL26uFPM+ImC4toEFozozqf4+faeVa8Cjh6QDJE/mS0b2ew
-   KC5QWhn5FP4TSAFtxfMLubT9SIF5ChY2Uf9S+Ox8E/uq/SNaOTRscCWuK
-   P2B9ndI7eTFtUmi6/GYe3mE1KND5RmgyIH8ZCWBhd/7bFdFObMv7CrTS5
-   UOnWV2eL67K85i46z+npEa5CC6IujMVDGfRiMTdcdwVxH1FI3lzplm78F
-   A==;
-X-CSE-ConnectionGUID: 8MvzqupOSQqexaOczHJLvQ==
-X-CSE-MsgGUID: QAQUlT2hSFS3YaEO8+wQ2w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="106789445"
-X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="106789445"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 13:27:52 -0700
-X-CSE-ConnectionGUID: 6vV8yUgjQ4iGVwtO1bkXVg==
-X-CSE-MsgGUID: xi91RExKRIWPluvF9+SKDg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="249263061"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa005.jf.intel.com with ESMTP; 03 Jun 2026 13:27:48 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wUsBl-0000000029B-3dO4;
-	Wed, 03 Jun 2026 20:27:45 +0000
-Date: Wed, 3 Jun 2026 22:27:39 +0200
-From: kernel test robot <lkp@intel.com>
-To: JB Tsai <jb.tsai@mediatek.com>, nbd@nbd.name, lorenzo@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	Deren.Wu@mediatek.com, Sean.Wang@mediatek.com,
-	Quan.Zhou@mediatek.com, Ryder.Lee@mediatek.com,
-	Leon.Yen@mediatek.com, litien.chang@mediatek.com,
-	Charlie-cy.Wu@mediatek.com, jb.tsai@mediatek.com
-Subject: Re: [PATCH] wifi: mt76: mt7925: add regulatory wiphy self manager
- support
-Message-ID: <202606032205.iaSDVq2Z-lkp@intel.com>
-References: <20260603075331.1234691-1-jb.tsai@mediatek.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a0mZIyOO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 742431F00893;
+	Wed,  3 Jun 2026 21:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780522234;
+	bh=w5TvDZ3wJT/WYNVIei0fljDYlvUV9vlvQ7+MiO4iQPI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=a0mZIyOOYd5PEC6qxOJl6ikVpH2bOwuz10N7CCKDcmCqvoq2WHg0wSz+ILx8OSB+j
+	 ZLea2YIUlecUl810dLE5EypVUb8rICZkySEloVbf+JvM/ZK13X7y5bQiGNbIa+AFIA
+	 +EA51fW+9woE5qQH+VfiMrgyxwYHHf30ekdYguVXxc8sykfAtni/q/CGbXy6OkbAPs
+	 sEKZA264+jQnZyf0CdEngSntb2h9UEhnvMa6wJlKMHsYBJYKsmfjCYaqfmpy5qtrl4
+	 26cQHd9oMyAODm+9sfHhJnlxTt8LdAwMX7RZshLfWa5sM1aH/a+TTYDSuoOun68o+5
+	 71gN4iwRuHnGw==
+Message-ID: <f2b8227f-528e-4fbd-aa2a-d86986565f87@kernel.org>
+Date: Wed, 3 Jun 2026 22:30:28 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260603075331.1234691-1-jb.tsai@mediatek.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] bpftool: Make the LLVM disassembler an optional runtime
+ dependency
+To: socketpair@gmail.com, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi JB,
+2026-06-03 22:39 UTC+0500 ~ Korenberg Mark via B4 Relay
+<devnull+socketpair.gmail.com@kernel.org>
+> From: Korenberg Mark <socketpair@gmail.com>
+> 
+> Fixes https://github.com/libbpf/bpftool/issues/262
+> 
+> Signed-off-by: Korenberg Mark <socketpair@gmail.com>
 
-kernel test robot noticed the following build errors:
+Please move the sign-off and the link to the end of the commit
+description (where you specify the bpftool version you've been using).
+Please use "Link: " for the GitHub issue.
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v7.1-rc6 next-20260602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> ---
 
-url:    https://github.com/intel-lab-lkp/linux/commits/JB-Tsai/wifi-mt76-mt7925-add-regulatory-wiphy-self-manager-support/20260603-155908
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20260603075331.1234691-1-jb.tsai%40mediatek.com
-patch subject: [PATCH] wifi: mt76: mt7925: add regulatory wiphy self manager support
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260603/202606032205.iaSDVq2Z-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606032205.iaSDVq2Z-lkp@intel.com/reproduce)
+And remove this separator, or the rest of your description won't make it
+to the commit log.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606032205.iaSDVq2Z-lkp@intel.com/
+> On Fedora 43, installing `bpftool` pulls in `llvm20-libs` (~140 MiB) as a hard
+> dependency, even though the bpftool binary itself is ~730 KiB:
+> 
+>     # dnf install bpftool
+>     Installing:
+>      bpftool            x86_64   7.6.0-1.fc43    fedora   731.4 KiB
+>     Installing dependencies:
+>      llvm20-filesystem  x86_64   20.1.8-2.fc43   fedora   0.0   B
+>      llvm20-libs        x86_64   20.1.8-2.fc43   fedora   139.7 MiB
+> 
+> The LLVM library is only used to disassemble JIT-compiled (native) programs,
+> i.e. `bpftool prog dump jited`. Every other use case  works
+> without LLVM. For scripting, automation, and CI, dragging in ~140 MB of LLVM
+> just to have a single optional command available is a heavy cost.
+> 
+> Load the LLVM disassembler lazily at runtime via `dlopen`/`dlsym` instead of
+> linking against it at build time. When `prog dump jited` is invoked and the
+> library is unavailable, fall back gracefully (libbfd, or an informative message).
+> This would remove the automatic ELF dependency on `libLLVM.so`, allowing distributions to make
+> LLVM a weak/optional dependency (e.g. RPM `Recommends`) rather than a hard one.
+> 
+> The `perf` tool is solving the exact same problem (libLLVM/libcapstone
+> bloating dependencies for users who never disassemble) by dlopen-ing these
+> libraries at runtime, so distributions can ship them as a separate, optional
+> package:
+> 
+> - Overview: https://lwn.net/Articles/1040879/
+> - https://lore.kernel.org/lkml/?q=Capstone%2Fllvm+dlopen
+> 
+> - Build with the libbfd disassembler instead of LLVM (smaller, but a build/
+>   packaging choice and subject to libbfd's unstable ABI).
+> - Build with no disassembler at all (loses `prog dump jited` entirely).
+> - Ship the disassembler in a separate binary (works, but less idiomatic for a
+>   single-binary tool; dlopen keeps the existing UX intact).
+> 
+> - bpftool 7.6.0-1.fc43 (Fedora 43), x86_64
 
-All errors (new ones prefixed by >>):
+Thanks a lot for this work! I think it makes sense to separate the
+LLVM-based disassembler, other people have complained about the
+increased size in the past. My comment on your initial GitHub issue was
+that I wanted the libbfd-based disassembler untouched, and you left it
+built-in (when we pick the libbfd-disassembler), thank you.
 
->> drivers/net/wireless/mediatek/mt76/mt7925/regd.c:361:43: error: passing 'const struct ieee80211_regdomain *' to parameter of type 'struct ieee80211_regdomain *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     361 |                 return regulatory_set_wiphy_regd(wiphy, &mt7925_regd_ww);
-         |                                                         ^~~~~~~~~~~~~~~
-   include/net/cfg80211.h:8082:38: note: passing argument to parameter 'rd' here
-    8082 |                               struct ieee80211_regdomain *rd);
-         |                                                           ^
-   1 error generated.
+The plug-in seems to work correctly, although we need to install it at
+the path built in the binary before using the disassembler. It would be
+good to fall back on the current directory otherwise. I haven't tested
+the static build thoroughly yet (I tried the GitHub PR and it seems that
+the combination "LLVM_LINK_STATIC=1 EXTRA_LDFLAGS=-static" is broken
+there, I think because the feature detection in the GitHub repo needs to
+be adjusted).
 
+I do have some comments, please see inline below.
 
-vim +361 drivers/net/wireless/mediatek/mt76/mt7925/regd.c
+> ---
+>  tools/bpf/bpftool/Makefile      |  63 ++++++++++++++++++----
+>  tools/bpf/bpftool/jit_disasm.c  | 112 +++++++++++++++++++++++-----------------
+>  tools/bpf/bpftool/llvm_disasm.c |  85 ++++++++++++++++++++++++++++++
+>  tools/bpf/bpftool/llvm_disasm.h |  38 ++++++++++++++
+>  4 files changed, 240 insertions(+), 58 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index 0febf60e1..9887ac6fb 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -62,6 +62,7 @@ $(LIBBPF_BOOTSTRAP)-clean: FORCE | $(LIBBPF_BOOTSTRAP_OUTPUT)
+>  	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) clean >/dev/null
+>  
+>  prefix ?= /usr/local
+> +libdir ?= $(prefix)/lib
+>  bash_compdir ?= /usr/share/bash-completion/completions
+>  
+>  CFLAGS += -O2
+> @@ -157,6 +158,8 @@ include $(wildcard $(OUTPUT)*.d)
+>  all: $(OUTPUT)bpftool
+>  
+>  SRCS := $(wildcard *.c)
+> +# llvm_disasm.c is compiled separately into the bpftool-llvm.so plugin.
+> +SRCS := $(filter-out llvm_disasm.c,$(SRCS))
+>  
+>  ifeq ($(feature-llvm),1)
+>  ifneq ($(SKIP_LLVM),1)
+> @@ -165,19 +168,36 @@ endif
+>  endif
+>  
+>  ifeq ($(HAS_LLVM),1)
+> +  # The libLLVM-based JIT disassembler is built as a separate plugin,
+> +  # bpftool-llvm.so, which is the only object that links against libLLVM.
+> +  # bpftool loads it lazily with dlopen() (see jit_disasm.c), so the bpftool
 
-   286	
-   287	int mt7925_regd_update(struct mt792x_phy *phy, char *alpha2)
-   288	{
-   289		struct wiphy *wiphy = phy->mt76->hw->wiphy;
-   290		struct ieee80211_hw *hw = wiphy_to_ieee80211_hw(wiphy);
-   291		struct mt792x_dev *dev = mt792x_hw_dev(hw);
-   292		struct mt7925_regd_rule *mt7925_rule;
-   293		struct mt76_dev *mdev = &dev->mt76;
-   294		struct ieee80211_regdomain *regd;
-   295		struct ieee80211_reg_rule *rule;
-   296		struct mt7925_regd_rule_ev *ev;
-   297		int i, num_of_rules = 0;
-   298		struct sk_buff *skb;
-   299		int ret = 0;
-   300	
-   301		if (dev->hw_full_reset)
-   302			return 0;
-   303	
-   304		if (!MT7925_REGD_SUPPORTED(phy))
-   305			return -EOPNOTSUPP;
-   306	
-   307		mt792x_mutex_acquire(dev);
-   308		skb = mt7925_regd_query_regdb(phy, alpha2);
-   309		mt792x_mutex_release(dev);
-   310	
-   311		if (!skb)
-   312			return -EINVAL;
-   313	
-   314		ev = (struct mt7925_regd_rule_ev *)(skb->data + 4);
-   315		num_of_rules = le32_to_cpu(ev->n_reg_rules);
-   316	
-   317		if (!num_of_rules ||
-   318			WARN_ON_ONCE(num_of_rules > NL80211_MAX_SUPP_REG_RULES)) {
-   319			ret = -EINVAL;
-   320			goto err;
-   321		}
-   322	
-   323		regd = kzalloc(struct_size(regd, reg_rules, num_of_rules), GFP_KERNEL);
-   324		if (!regd) {
-   325			ret = -ENOMEM;
-   326			goto err;
-   327		}
-   328	
-   329		for (i = 0; i < num_of_rules; i++) {
-   330			mt7925_rule = &ev->reg_rule[i];
-   331			rule = &regd->reg_rules[i];
-   332	
-   333			rule->freq_range.start_freq_khz =
-   334						MHZ_TO_KHZ(mt7925_rule->start_freq);
-   335			rule->freq_range.end_freq_khz =
-   336						MHZ_TO_KHZ(mt7925_rule->end_freq);
-   337			rule->freq_range.max_bandwidth_khz =
-   338						MHZ_TO_KHZ(mt7925_rule->max_bw);
-   339			/* not used by fw */
-   340			rule->power_rule.max_antenna_gain = DBI_TO_MBI(6);
-   341			rule->power_rule.max_eirp = DBM_TO_MBM(22);
-   342			rule->flags = mt7925_rule->flags;
-   343		}
-   344	
-   345		regd->n_reg_rules = num_of_rules;
-   346		regd->dfs_region = ev->dfs_region;
-   347	
-   348		memcpy(regd->alpha2, alpha2, 2);
-   349		memcpy(mdev->alpha2, alpha2, 2);
-   350	
-   351		dev->regd_change = true;
-   352		mt7925_mcu_regd_update(dev, alpha2, ENVIRON_ANY);
-   353	
-   354		ret = regulatory_set_wiphy_regd(wiphy, regd);
-   355	
-   356		kfree(regd);
-   357	err:
-   358		dev_kfree_skb(skb);
-   359	
-   360		if (ret < 0)
- > 361			return regulatory_set_wiphy_regd(wiphy, &mt7925_regd_ww);
-   362	
-   363		return ret;
-   364	}
-   365	EXPORT_SYMBOL_GPL(mt7925_regd_update);
-   366	
+I'd replace "lazily" with "only when calling the disassembler", to avoid
+confusion with the RTLD_LAZY flag for dlopen(), which you don't use.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +  # binary itself keeps no dependency on the large libLLVM shared object.
+>    CFLAGS  += -DHAVE_LLVM_SUPPORT
+> +  CFLAGS  += -DLLVM_PLUGIN_DIR='"$(libdir)/bpftool"'
+> +  # dlopen() lives in libc on modern glibc, but keep -ldl for portability.
+> +  LIBS    += -ldl
+> +
+> +  # Flags used to build the plugin itself (the only part that needs libLLVM).
+>    LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+> -  # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
+> -  # (e.g. when bpftool build is called from selftests build as selftests
+> -  # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
+> -  # compilation error due to redefinition. Let's filter it out here.
+> -  CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+> -  LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> +  # llvm-config always adds -D_GNU_SOURCE, which llvm_disasm.c already defines;
+> +  # filter it out to avoid a redefinition warning.
+> +  LLVM_PLUGIN_CFLAGS := $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+> +
+> +  # Embed libLLVM into the plugin statically when requested with
+> +  # LLVM_LINK_STATIC=1, or when this LLVM install only ships static libraries
+> +  # ("llvm-config --shared-mode" reports "static"). Otherwise link the shared
+> +  # libLLVM, which is the only runtime dependency of the plugin.
+>    ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
+> -    LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> -    LIBS += -lstdc++
+> +    LLVM_LINK_STATIC := 1
+> +  endif
+> +  ifeq ($(LLVM_LINK_STATIC),1)
+> +    LLVM_PLUGIN_LIBS := $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> +    LLVM_PLUGIN_LIBS += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> +    LLVM_PLUGIN_LIBS += -lstdc++
+> +  else
+> +    LLVM_PLUGIN_LIBS := $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>    endif
+> -  LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+> +  LLVM_PLUGIN_LDFLAGS := $(shell $(LLVM_CONFIG) --ldflags)
+>  else
+>    ifneq ($(SKIP_LIBBFD),1)
+>    # Fall back on libbfd
+> @@ -276,6 +296,20 @@ $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOOTSTRAP)
+>  $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
+>  	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
+>  
+> +ifeq ($(HAS_LLVM),1)
+> +all: $(OUTPUT)bpftool-llvm.so
+> +
+> +$(OUTPUT)llvm_disasm.o: llvm_disasm.c
+> +	$(QUIET_CC)$(CC) $(CFLAGS) $(LLVM_PLUGIN_CFLAGS) -fPIC -c -MMD $< -o $@
+> +
+> +# The plugin is a shared object by definition, so drop a global -static (e.g.
+> +# from EXTRA_LDFLAGS for a static bpftool) which would conflict with -shared.
+> +# Embedding libLLVM statically is controlled separately (see LLVM_LINK_STATIC).
+> +$(OUTPUT)bpftool-llvm.so: $(OUTPUT)llvm_disasm.o
+> +	$(QUIET_LINK)$(CC) $(CFLAGS) $(filter-out -static,$(LDFLAGS)) \
+> +		$(LLVM_PLUGIN_LDFLAGS) -shared -o $@ $< $(LLVM_PLUGIN_LIBS)
+> +endif
+> +
+>  $(BOOTSTRAP_OUTPUT)%.o: %.c $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS) | $(BOOTSTRAP_OUTPUT)
+>  	$(QUIET_CC)$(HOSTCC) $(HOST_CFLAGS) -c -MMD $< -o $@
+>  
+> @@ -288,17 +322,25 @@ feature-detect-clean:
+>  
+>  clean: $(LIBBPF)-clean $(LIBBPF_BOOTSTRAP)-clean feature-detect-clean
+>  	$(call QUIET_CLEAN, bpftool)
+> -	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)*.o $(OUTPUT)*.d
+> +	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)bpftool-llvm.so $(OUTPUT)*.o $(OUTPUT)*.d
+>  	$(Q)$(RM) -- $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
+>  	$(Q)$(RM) -r -- $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT)
+>  	$(call QUIET_CLEAN, core-gen)
+>  	$(Q)$(RM) -- $(OUTPUT)FEATURE-DUMP.bpftool
+>  	$(Q)$(RM) -r -- $(OUTPUT)feature/
+>  
+> +ifeq ($(HAS_LLVM),1)
+> +install-bin: $(OUTPUT)bpftool-llvm.so
+> +endif
+>  install-bin: $(OUTPUT)bpftool
+>  	$(call QUIET_INSTALL, bpftool)
+>  	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(prefix)/sbin
+>  	$(Q)$(INSTALL) $(OUTPUT)bpftool $(DESTDIR)$(prefix)/sbin/bpftool
+> +ifeq ($(HAS_LLVM),1)
+> +	$(call QUIET_INSTALL, bpftool-llvm.so)
+> +	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(libdir)/bpftool
+
+If the user runs "make && make install libdir=/usr/lib64", we'll get a
+mismatch between the libdir path set at build time and the install path.
+Maybe we could try to catch this? In a separate commit we could print
+the plugin path as part of the "bpftool version" output and check
+whether it matches when we install (and warn if it doesn't)? I don't know.
+
+> +	$(Q)$(INSTALL) -m 0755 $(OUTPUT)bpftool-llvm.so $(DESTDIR)$(libdir)/bpftool/bpftool-llvm.so
+> +endif
+>  
+>  install: install-bin
+>  	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(bash_compdir)
+> @@ -307,6 +349,7 @@ install: install-bin
+>  uninstall:
+>  	$(call QUIET_UNINST, bpftool)
+>  	$(Q)$(RM) -- $(DESTDIR)$(prefix)/sbin/bpftool
+
+Please make it consistent with the install:
+
+    $(call QUIET_UNINST, bpftool-llvm.so)
+
+Also, we should probably remove $(DESTDIR)$(libdir)/bpftool entirely.
+
+> +	$(Q)$(RM) -- $(DESTDIR)$(libdir)/bpftool/bpftool-llvm.so
+>  	$(Q)$(RM) -- $(DESTDIR)$(bash_compdir)/bpftool
+>  
+>  doc:
+> diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
+> index 04541155e..e8cef2da2 100644
+> --- a/tools/bpf/bpftool/jit_disasm.c
+> +++ b/tools/bpf/bpftool/jit_disasm.c
+> @@ -25,10 +25,9 @@
+>  #include <bpf/libbpf.h>
+>  
+>  #ifdef HAVE_LLVM_SUPPORT
+> -#include <llvm-c/Core.h>
+> -#include <llvm-c/Disassembler.h>
+> -#include <llvm-c/Target.h>
+> -#include <llvm-c/TargetMachine.h>
+> +#include <dlfcn.h>
+> +
+> +#include "llvm_disasm.h"
+>  #endif
+>  
+>  #ifdef HAVE_LIBBFD_SUPPORT
+> @@ -45,7 +44,32 @@ static int oper_count;
+>  #ifdef HAVE_LLVM_SUPPORT
+>  #define DISASM_SPACER
+>  
+> -typedef LLVMDisasmContextRef disasm_ctx_t;
+> +/*
+> + * The libLLVM-based disassembler used for "bpftool prog dump jited" lives in a
+> + * separate plugin, bpftool-llvm.so, which is the only object linked against
+> + * libLLVM. This keeps the bpftool binary itself free of a hard dependency on
+> + * the (large) libLLVM shared object: the plugin is loaded lazily with dlopen()
+> + * the first time a JITed image actually needs to be disassembled, with its
+> + * entry points resolved by dlsym(). See llvm_disasm.c for the plugin.
+> + *
+> + * LLVM_PLUGIN_DIR is the install directory baked in at build time
+> + * ($(libdir)/bpftool). When set, the plugin is loaded from that absolute
+> + * location; otherwise only the bare file name is used, i.e. the plugin is
+> + * looked up via the dynamic linker search path (or the current directory).
+
+It doesn't appear to search the binary from the current directory, at
+least not in my case? But it probably should though, otherwise Sashiko
+is right, the feature is no longer available from a newly-built bpftool
+binary that has not been installed on the system.
+
+> + */
+> +#ifdef LLVM_PLUGIN_DIR
+> +#define LLVM_PLUGIN_PATH LLVM_PLUGIN_DIR "/bpftool-llvm.so"
+> +#else
+> +#define LLVM_PLUGIN_PATH "bpftool-llvm.so"
+> +#endif
+> +
+> +typedef void *disasm_ctx_t;
+> +
+> +static void *llvm_plugin_handle;
+> +static __typeof__(&bpftool_llvm_init) p_bpftool_llvm_init;
+> +static __typeof__(&bpftool_llvm_create_context) p_bpftool_llvm_create_context;
+> +static __typeof__(&bpftool_llvm_destroy_context) p_bpftool_llvm_destroy_context;
+> +static __typeof__(&bpftool_llvm_disassemble) p_bpftool_llvm_disassemble;
+>  
+>  static int printf_json(char *s)
+>  {
+> @@ -63,48 +87,13 @@ static int printf_json(char *s)
+>  	return 0;
+>  }
+>  
+> -/* This callback to set the ref_type is necessary to have the LLVM disassembler
+> - * print PC-relative addresses instead of byte offsets for branch instruction
+> - * targets.
+> - */
+> -static const char *
+> -symbol_lookup_callback(__maybe_unused void *disasm_info,
+> -		       __maybe_unused uint64_t ref_value,
+> -		       uint64_t *ref_type, __maybe_unused uint64_t ref_PC,
+> -		       __maybe_unused const char **ref_name)
+> -{
+> -	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
+> -	return NULL;
+> -}
+> -
+>  static int
+>  init_context(disasm_ctx_t *ctx, const char *arch,
+>  	     __maybe_unused const char *disassembler_options,
+>  	     __maybe_unused unsigned char *image, __maybe_unused ssize_t len,
+>  	     __maybe_unused __u64 func_ksym)
+>  {
+> -	char *triple;
+> -
+> -	if (arch)
+> -		triple = LLVMNormalizeTargetTriple(arch);
+> -	else
+> -		triple = LLVMGetDefaultTargetTriple();
+> -	if (!triple) {
+> -		p_err("Failed to retrieve triple");
+> -		return -1;
+> -	}
+> -
+> -	/*
+> -	 * Enable all aarch64 ISA extensions so the disassembler can handle any
+> -	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
+> -	 */
+> -	if (!strncmp(triple, "aarch64", 7))
+> -		*ctx = LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0, NULL,
+> -						   symbol_lookup_callback);
+> -	else
+> -		*ctx = LLVMCreateDisasm(triple, NULL, 0, NULL, symbol_lookup_callback);
+> -	LLVMDisposeMessage(triple);
+> -
+> +	*ctx = p_bpftool_llvm_create_context(arch);
+>  	if (!*ctx) {
+>  		p_err("Failed to create disassembler");
+>  		return -1;
+> @@ -115,7 +104,7 @@ init_context(disasm_ctx_t *ctx, const char *arch,
+>  
+>  static void destroy_context(disasm_ctx_t *ctx)
+>  {
+> -	LLVMDisposeMessage(*ctx);
+> +	p_bpftool_llvm_destroy_context(*ctx);
+>  }
+>  
+>  static int
+> @@ -125,8 +114,8 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
+>  	char buf[256];
+>  	int count;
+>  
+> -	count = LLVMDisasmInstruction(*ctx, image + pc, len - pc, func_ksym + pc,
+> -				      buf, sizeof(buf));
+> +	count = p_bpftool_llvm_disassemble(*ctx, image, len, pc, func_ksym,
+> +					   buf, sizeof(buf));
+>  	if (json_output)
+>  		printf_json(buf);
+>  	else
+> @@ -137,10 +126,37 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
+>  
+>  int disasm_init(void)
+>  {
+> -	LLVMInitializeAllTargetInfos();
+> -	LLVMInitializeAllTargetMCs();
+> -	LLVMInitializeAllDisassemblers();
+> -	return 0;
+> +	if (llvm_plugin_handle)
+> +		return p_bpftool_llvm_init();
+> +
+> +	/* Load the plugin by its absolute install path. */
+> +	llvm_plugin_handle = dlopen(LLVM_PLUGIN_PATH, RTLD_NOW | RTLD_LOCAL);
+> +	if (!llvm_plugin_handle) {
+> +		p_err("failed to load %s, install it to disassemble JITed programs: %s",
+> +		      LLVM_PLUGIN_PATH, dlerror());
+
+You may exceptionally have dlerror() returning NULL here, so we should
+make sure it's not the case before printing it (and print something like
+"unknown error" otherwise). (I've observed this on a machine with
+LD_PRELOAD set to something that might call dlopen() and wipe the error
+string.)
+
+> +		return -1;
+> +	}
+
+We'd need to check plugin availability when running "bpftool version"
+too, otherwise we may advertise that we support the "llvm" disassembler
+feature even when we don't.
+
+> +
+> +#define RESOLVE(name)							       \
+> +	do {								       \
+> +		p_##name = (__typeof__(p_##name))dlsym(llvm_plugin_handle,     \
+> +						       #name);		       \
+> +		if (!p_##name) {					       \
+> +			p_err("%s is missing symbol %s: %s",		       \
+> +			      LLVM_PLUGIN_PATH, #name, dlerror());	       \
+> +			dlclose(llvm_plugin_handle);			       \
+> +			llvm_plugin_handle = NULL;			       \
+> +			return -1;					       \
+> +		}							       \
+> +	} while (0)
+> +
+> +	RESOLVE(bpftool_llvm_init);
+> +	RESOLVE(bpftool_llvm_create_context);
+> +	RESOLVE(bpftool_llvm_destroy_context);
+> +	RESOLVE(bpftool_llvm_disassemble);
+
+If we ever change the ABI of the plug-in, and don't have the right
+plug-in installed, we'll get issues when using the loaded symbols. Not
+sure how this is usually addressed, maybe load some sort of version
+symbol from the plug-in to check that it's the one we expect?
+
+> +#undef RESOLVE
+> +
+> +	return p_bpftool_llvm_init();
+>  }
+>  #endif /* HAVE_LLVM_SUPPORT */
+>  
+> diff --git a/tools/bpf/bpftool/llvm_disasm.c b/tools/bpf/bpftool/llvm_disasm.c
+> new file mode 100644
+> index 000000000..b83216191
+> --- /dev/null
+> +++ b/tools/bpf/bpftool/llvm_disasm.c
+> @@ -0,0 +1,85 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+
+Ack. The copyright header in jit_disasm.c only applies to the
+libbfd-based disassembler and does not need to be reported here, so
+we're good.
+
+> +/*
+> + * libLLVM-based BPF JIT disassembler plugin for bpftool.
+> + *
+> + * This translation unit is built into a standalone shared object
+> + * (bpftool-llvm.so) which is the only bpftool component that links against
+> + * libLLVM. bpftool loads it lazily with dlopen() (see jit_disasm.c) so that
+> + * the bpftool binary itself does not depend on the large libLLVM shared
+> + * object. Only the small, stable C ABI declared in llvm_disasm.h is exposed.
+> + */
+> +#ifndef _GNU_SOURCE
+> +#define _GNU_SOURCE
+> +#endif
+> +#include <stdint.h>
+> +#include <string.h>
+> +#include <sys/types.h>
+> +
+> +#include <llvm-c/Core.h>
+> +#include <llvm-c/Disassembler.h>
+> +#include <llvm-c/Target.h>
+> +#include <llvm-c/TargetMachine.h>
+> +
+> +#include "llvm_disasm.h"
+> +
+> +/* This callback to set the ref_type is necessary to have the LLVM disassembler
+> + * print PC-relative addresses instead of byte offsets for branch instruction
+> + * targets.
+> + */
+> +static const char *
+> +symbol_lookup_callback(void *disasm_info, uint64_t ref_value,
+> +		       uint64_t *ref_type, uint64_t ref_PC,
+> +		       const char **ref_name)
+> +{
+> +	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
+> +	return NULL;
+> +}
+> +
+> +int bpftool_llvm_init(void)
+> +{
+> +	LLVMInitializeAllTargetInfos();
+> +	LLVMInitializeAllTargetMCs();
+> +	LLVMInitializeAllDisassemblers();
+> +
+> +	return 0;
+> +}
+> +
+> +void *bpftool_llvm_create_context(const char *arch)
+> +{
+> +	LLVMDisasmContextRef ctx;
+> +	char *triple;
+> +
+> +	if (arch)
+> +		triple = LLVMNormalizeTargetTriple(arch);
+> +	else
+> +		triple = LLVMGetDefaultTargetTriple();
+> +	if (!triple)
+> +		return NULL;
+> +
+> +	/*
+> +	 * Enable all aarch64 ISA extensions so the disassembler can handle any
+> +	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
+> +	 */
+> +	if (!strncmp(triple, "aarch64", 7))
+> +		ctx = LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0,
+> +						  NULL, symbol_lookup_callback);
+> +	else
+> +		ctx = LLVMCreateDisasm(triple, NULL, 0, NULL,
+> +				       symbol_lookup_callback);
+> +	LLVMDisposeMessage(triple);
+> +
+> +	return ctx;
+> +}
+> +
+> +void bpftool_llvm_destroy_context(void *ctx)
+> +{
+> +	LLVMDisasmDispose(ctx);
+
+Please move the fix for the context destruction to a separate commit,
+and document it in the commit description.
+
+> +}
+> +
+> +int bpftool_llvm_disassemble(void *ctx, unsigned char *image, ssize_t len,
+> +			     int pc, uint64_t func_ksym, char *buf,
+> +			     size_t buf_sz)
+> +{
+> +	return LLVMDisasmInstruction(ctx, image + pc, len - pc, func_ksym + pc,
+> +				     buf, buf_sz);
+> +}
+> diff --git a/tools/bpf/bpftool/llvm_disasm.h b/tools/bpf/bpftool/llvm_disasm.h
+> new file mode 100644
+> index 000000000..cd9491ea3
+> --- /dev/null
+> +++ b/tools/bpf/bpftool/llvm_disasm.h
+> @@ -0,0 +1,38 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +#ifndef __BPFTOOL_LLVM_DISASM_H
+> +#define __BPFTOOL_LLVM_DISASM_H
+> +
+> +#include <stddef.h>
+> +#include <stdint.h>
+> +#include <sys/types.h>
+> +
+> +/*
+> + * Stable C ABI between bpftool and its optional libLLVM-based JIT disassembler
+> + * plugin (bpftool-llvm.so). bpftool resolves these symbols with dlsym()
+> + * after dlopen()ing the plugin; the plugin is the only object that links
+> + * against libLLVM. See jit_disasm.c (loader) and llvm_disasm.c (plugin).
+> + */
+> +
+> +/* Initialize the libLLVM targets and disassemblers. Returns 0 on success. */
+> +int bpftool_llvm_init(void);
+> +
+> +/*
+> + * Create a disassembler context for @arch (NULL selects the host
+> + * architecture). Returns an opaque context pointer, or NULL on failure.
+> + */
+> +void *bpftool_llvm_create_context(const char *arch);
+> +
+> +/* Release a context previously returned by bpftool_llvm_create_context(). */
+> +void bpftool_llvm_destroy_context(void *ctx);
+> +
+> +/*
+> + * Disassemble the single instruction at @image[@pc] into @buf as a NUL
+> + * terminated string. @func_ksym is the kernel address of @image and is used to
+> + * render absolute branch targets. Returns the instruction length in bytes, or
+> + * 0 if the instruction could not be decoded.
+> + */
+> +int bpftool_llvm_disassemble(void *ctx, unsigned char *image, ssize_t len,
+> +			     int pc, uint64_t func_ksym, char *buf,
+> +			     size_t buf_sz);
+> +
+> +#endif /* __BPFTOOL_LLVM_DISASM_H */
+> 
+> ---
+> base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
+> change-id: 20260603-bpftool-plugin-c994bc3e0643
+> 
+> Best regards,
+
