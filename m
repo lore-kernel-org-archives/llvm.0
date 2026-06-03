@@ -1,115 +1,102 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287E338734D
-	for <llvm@lists.linux.dev>; Wed,  3 Jun 2026 23:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D789A3B27E2;
+	Wed,  3 Jun 2026 23:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780529231; cv=none; b=Z6VWfL9yKNO4UkrbXot2poynBq4JwAp+wjSgT6HTgoS7wZsCYPKgvJy+fiPtPbUyUu9TeUmgLDflklYxCnfsS2z+UoV2hvDBDlT1d26/xQIaZ85/wDTtpi2sRtdmAj7m/DYq3ERCpUX4a+5FaLbmU7PRQjKYqJ1kdM/XgXgr0V8=
+	t=1780529373; cv=none; b=kwra1+OwoqsL+oweLlwRhSfvNZgC6RzZ4syS8T0GtcRGZXb9mKSaEyuabxy6pxhuZnB9nee0vGU5KOaUTIIadejfVhXAf73ZfSUAE5EAK5wYZk9Eki0U27rNwuIxTrhzmVfGLoU7T/eYZfl2jACAu4h0Ddi+ltAWnD4pIarkogw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780529231; c=relaxed/simple;
-	bh=41RLXGxxCkF6evkmiuQBXUvrmZEV/tP+nyRrVDCrsLs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K5XkL6AsewLhWczsEuFmsDEGl+1TpkvcxwSl/N4150wS/guwGXQGTjQdY6py8ZX/zB36fG6ImI++kRGktz+DDnu/Bpd5gxsEOdrrQdgab7cdw4MLkdkf+WyGurer4/k2dRzsYuZb+Ne9+1pKPGgqP1iTUelvyIBFIZEvdzIMu5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d81rjm9S; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780529373; c=relaxed/simple;
+	bh=Ha4oADRXq1PYWtCJBMnXq0kpE6mHWtuzSC7B8v/poo4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=nhGNwC8wXliEBaD0+pygVXmuY6pCvC3pG0Y+BMvEP34BwDByYth7ubDotYjdDKOMIlU0utipdxgxnOOBW/Ni56Hc6ue52eOUBoxuQExUqe5e8Y98pinGqK6mOpb2/Q65jF5+Fr5oA5vC2eHppuh5HJCiLHKqnu2aG9OZmL/uwTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bRHhIEFL; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d81rjm9S"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2bea7176c72so627615ad.0
-        for <llvm@lists.linux.dev>; Wed, 03 Jun 2026 16:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780529229; x=1781134029; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dZ7Whjf9rGOihI7ocMNjiwJGEh3geoh5OMV09wppzAY=;
-        b=d81rjm9SXb1MCz6TVWHtGveI4vssE9BzXbKzPWOBAfXhXCHQtZeIsxvxwaxEpgOhz6
-         8aFLsHX8yofD071v9Io3mocxpUNSgfVTm5WdGikXolclV3E/uY/qsYyM3eGkXC5yU5+/
-         Si2vSEqGNaq3kllMVvBTFHStGxSknZ85ixS2GUkodZ3Lx5M7cvtIMQ7zFH5soabYyPUH
-         rmzsT2MbtB6fc7mYdH/HJVByp/C5KH3rPyfpSGK481ANOAxiGReJFWMFsIJSZydramGC
-         KKrZlNe5hiI3kgmi9ZVdIPUlQ0x3AjdyuLkavTEVhhLUiToKUtcgOfx6PzO5wJQHHi96
-         Tf9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780529229; x=1781134029;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dZ7Whjf9rGOihI7ocMNjiwJGEh3geoh5OMV09wppzAY=;
-        b=Fo9hwhES0Nc8oH5nriZpYwQHq8ZkRp5RwOgFLdg1K5bUfV3WHjw6scBQoeOYka0Fqz
-         BkK0V9gOVfm/cKIynPgjPa5D0TbZu3n6/FbJ5lmoXCDPYB8hkDaKDOolluq6dHxMwE16
-         XdNMYTVYRg0tjz/m+guF6eCIrKyTV85AW38u7RTnX1Pbl1bfWaoIxe35EfBwYZLbaih3
-         omvYpn6JUYVKwkEw28a3lZfa+wMV4pPD3Us6IfLMol+gUspBNORWVWwYsCYY5SrsOTyW
-         iMWqHMG9k4Wo2OQNrWAA7oJMFFYrHmUZcI1/v3Kzl529JQmBY6BqE/wMB2sqdPXcWXl9
-         yYDA==
-X-Forwarded-Encrypted: i=1; AFNElJ/hl74rdLyzGeMmczFlpkgFW+VZsQ5PE0pVX1hRM542ELpkh7GxE0e3SYf16HnwJHAzWNtl@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw+Qeu2a+IXoSFSosX+CFEHg3DAYxpNQC5A5Wv/1BDMHzHdKWBw
-	oQpArncQV1uo+BN8GL1bD/vTW79jTW3CNWURjbRHPKkr3kbnLVacCQD3pb6ZGbfJ
-X-Gm-Gg: Acq92OEF0IJGo4ktNyGamLqPdt1InMOY31IIIX/5lUAjSIyfWSjbejKQUQxN/9WYCuu
-	94uN54Wm2rSlIkrdLWchxVzk2k31fSFC3o71JPR/fCMGZo5WPw+JiRTJSsPUnC1O975W0UyThAf
-	pKyRxblp0M8RnlfYUbH5leOF/XcnQ//qzkCtdFSkBsGh6rCmbMDVuLg23/3+Nlw1UBAeyQdW71O
-	wcwe/IVEbcoiGixW0Z27yYGV7WF6RhoLrVKfW8IkCxrbaq279vCzWm+XPDPjn8V5kuoBi1OYZiH
-	JYSXNuya7Ldm1c3mricK/ONAISJqWwq1sKD+bmMVXoZdEJh4B4vB6TOD7hC0/pi7zwJElj+kS4w
-	BIlUikG+G4zyJOX7sFglvzX8oPx61iaxvTSTBsuiWwNchT8fa5JQVhqnx7nbgk3xEltmv/ZdmyF
-	oRdh9oahocZPNekb/HGL6s66dvR2Im1pVXH0jnH4njPE5QrYYdeQrh/rnieLe11m4qwV/ot8vMC
-	24mpYsS/nlus4QjwKKkYRZZrOaoSkJMOpSVMQpnvjZfxw==
-X-Received: by 2002:a17:902:f60b:b0:2bd:9803:9308 with SMTP id d9443c01a7336-2c1644b827amr62195945ad.36.1780529229363;
-        Wed, 03 Jun 2026 16:27:09 -0700 (PDT)
-Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16649bde7sm37462955ad.72.2026.06.03.16.27.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 16:27:08 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-serial@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list:TTY LAYER AND SERIAL DRIVERS),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] serial: 8250_pci: fix -Winitializer-overrides for Brainboxes UC-260/271/701/756 entries
-Date: Wed,  3 Jun 2026 16:26:51 -0700
-Message-ID: <20260603232651.8580-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bRHhIEFL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780529372; x=1812065372;
+  h=date:from:to:cc:subject:message-id;
+  bh=Ha4oADRXq1PYWtCJBMnXq0kpE6mHWtuzSC7B8v/poo4=;
+  b=bRHhIEFL4bNiEelZw2C+oitv2AqcK6SBQk8mneNtWccRFmJwqU0Apcxj
+   TOU7F4GWiyk2YFLuZ7Da9EXuyQQSfDLjedEwck4go/dEEm6wW0Wnd1zBk
+   ydL+jA/G9czjLJtVkFQ5dRlXVzGRiHgF2vtMEPZ0JwGa6nBqSoLzRpjlT
+   9sihQT12smIgnUUshwijeyxy30gbzVt8If+F7SVCEWYyUZHhd9sl9Aro2
+   ukAh/tHUgzesVbRqTVDzNDAPSqbZr5Mvv856wjnfiqo3qXyCCLqNOeIt1
+   GwfQgpCTve6rdpE1WyKS/jRsIcUWQ62Y3LpnxyqbYe+/jgju7UsIjYZCE
+   Q==;
+X-CSE-ConnectionGUID: +aYOM08YT26uKaZSMBwSOg==
+X-CSE-MsgGUID: xw34qsZvQ6G8mpcEEW/DaQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="84974564"
+X-IronPort-AV: E=Sophos;i="6.24,186,1774335600"; 
+   d="scan'208";a="84974564"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 16:29:31 -0700
+X-CSE-ConnectionGUID: bp+4zMZzSXuPfJ7utyxZlw==
+X-CSE-MsgGUID: 7hgxRcjqQSCaGGNwFXt6Tg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,186,1774335600"; 
+   d="scan'208";a="274613151"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 03 Jun 2026 16:29:30 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wUv1b-00000000E00-2bQu;
+	Wed, 03 Jun 2026 23:29:27 +0000
+Date: Thu, 04 Jun 2026 07:28:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Joerg Roedel <joerg.roedel@amd.com>
+Subject: [joro:kvm-planes-v7.1 59/60] arch/x86/kvm/svm/svm.c:5326:6:
+ error: call to undeclared function '____sev_snp_guest'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202606040736.ebDQao8C-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-PCI_VDEVICE() expands to set .class=0 and .class_mask=0, but the Brainboxes UC-260/271/701/756 entries immediately override those fields. This causes a build error with clang -Werror,-Winitializer-overrides.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/linux.git kvm-planes-v7.1
+head:   02b786614480597a489766ec45b0ec286a3301a0
+commit: a476e7f4b75733365b448899e65f4326eaebf9e3 [59/60] kvm: svm: Implement max_planes x86 operation
+config: x86_64-randconfig-016-20260603 (https://download.01.org/0day-ci/archive/20260604/202606040736.ebDQao8C-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260604/202606040736.ebDQao8C-lkp@intel.com/reproduce)
 
-Fix by expanding PCI_VDEVICE() manually, omitting the trailing .class/.class_mask zeroes so each field is set exactly once.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606040736.ebDQao8C-lkp@intel.com/
 
-Assisted-by: opencode:big-pickle
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- drivers/tty/serial/8250/8250_pci.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-index 3e5bc9e8d269..0513f4b3c093 100644
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -5394,12 +5394,14 @@ static const struct pci_device_id serial_pci_tbl[] = {
- 	 * Brainboxes UC-260/271/701/756
- 	 */
- 	{
--		PCI_VDEVICE(INTASHIELD, 0x0D21),
-+		.vendor = PCI_VENDOR_ID_INTASHIELD, .device = 0x0D21,
-+		.subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID,
- 		.class = PCI_CLASS_COMMUNICATION_MULTISERIAL << 8,
- 		.class_mask = 0xffff00,
- 		.driver_data = pbn_b2_4_115200,
- 	}, {
--		PCI_VDEVICE(INTASHIELD, 0x0E34),
-+		.vendor = PCI_VENDOR_ID_INTASHIELD, .device = 0x0E34,
-+		.subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID,
- 		.class = PCI_CLASS_COMMUNICATION_MULTISERIAL << 8,
- 		.class_mask = 0xffff00,
- 		.driver_data = pbn_b2_4_115200,
--- 
-2.54.0
+>> arch/x86/kvm/svm/svm.c:5326:6: error: call to undeclared function '____sev_snp_guest'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    5326 |         if (____sev_snp_guest(kvm))
+         |             ^
+   arch/x86/kvm/svm/svm.c:5326:6: note: did you mean 'is_sev_snp_guest'?
+   arch/x86/kvm/svm/svm.h:461:29: note: 'is_sev_snp_guest' declared here
+     461 | static __always_inline bool is_sev_snp_guest(struct kvm_vcpu *vcpu)
+         |                             ^
+   1 error generated.
 
+
+vim +/____sev_snp_guest +5326 arch/x86/kvm/svm/svm.c
+
+  5323	
+  5324	static unsigned svm_max_planes(struct kvm *kvm)
+  5325	{
+> 5326		if (____sev_snp_guest(kvm))
+  5327			return sev_snp_max_planes(kvm);
+  5328	
+  5329		return kvm_x86_default_max_planes(kvm);
+  5330	}
+  5331	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
