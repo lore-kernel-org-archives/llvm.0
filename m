@@ -1,460 +1,168 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58752D839C
-	for <llvm@lists.linux.dev>; Wed,  3 Jun 2026 14:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D049352F87;
+	Wed,  3 Jun 2026 14:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780495932; cv=none; b=fxdeyMTsUVNjk7G8QTbDINcUiQILs4daxBPkfE0+z1llgm5ijA+6/jbkVc22iDBHeZtzBy+Ny9njZ4bkjZWu1ZONg92C2FBUi5HsHubg84lpejyjb7zs6b/m9B/iIBLalUP0ctjlX9cQJc0kXb9aiOh/vc8Vct/INAAsHcbKYNU=
+	t=1780497768; cv=none; b=EvLGmgadFGPzS7GYL8+pOu24HXyuJS4JVO9dmnYv/kX4wr6jRhmCNJvf1c67FWi18zeveiXfXtLsLc6t8gl6t0qzdMXhX+3efcn38jzQQeq10PmVeUTOsAUnNKGYR721Ywa5FjednzcsIZXa0TXzuD1esgn9+TxwNVKLiclEssE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780495932; c=relaxed/simple;
-	bh=nNAT47tGcdaCPEC2oM3gdcrAUQu7fto32u0jTjnqdfU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=OMiTINX+kkL7wwMiZNnwlJyDWdq7LN3IijRWu0tF7J+gWx0By4wkNw7U4cUI6yES33jJAcTjHNZ5J+yKs2zEgV2oRoan8siJUbq+CZQ0jcMV+x6Db4PDdBaXDPBIfnclhIIfGA0S1SR02H9EWyChUihVRpiaemDoQjspF3zdHw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fkzBJmZk; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1780497768; c=relaxed/simple;
+	bh=IAXIe9i199iVavRnrmTXTxm2Y+IVirjDD3K3rG4IhqA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=FKhN8myILveOWBIwKkpkqud7ai4dy4ML6XevnXWAzZ3XxIIWVSmTepmFRt/I5q6HVaaOBGvhdrXmQd4LIRZcE6CM1FFalef4B+q+4qHGq4kTF3vNR31bQGBpKp2yV/Ef9GnmE61fhFzwToEf0w3Q1oB8mASzkLewxQRZKovxnFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h5KXLT8i; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fkzBJmZk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1780495929;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=jusEJKKexyQnTizXm8cXULcEdad6cEnFqq2ynpahabA=;
-	b=fkzBJmZknjklVf/V/5LWS/1tGqJoOK4Af/LLXrkm7jw/HVgQSCXXP5ZtNlDvp1xz5n+S4g
-	mLOnxo7xFCvUMBkoLWHxi4qK997ILWvJsARhmLO48MFgbgww1zMqlrUzjideoGu3ZWKxgd
-	eIW7FbLh5NouYKGu9+dpUjTGMXHCpXQ=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-206-YyqQGpxmMJyxE0fUDiJdiw-1; Wed,
- 03 Jun 2026 10:12:08 -0400
-X-MC-Unique: YyqQGpxmMJyxE0fUDiJdiw-1
-X-Mimecast-MFC-AGG-ID: YyqQGpxmMJyxE0fUDiJdiw_1780495927
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 61EE6180057C
-	for <llvm@lists.linux.dev>; Wed,  3 Jun 2026 14:12:07 +0000 (UTC)
-Received: from [172.20.191.214] (unknown [10.30.44.124])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C814C30001A1;
-	Wed,  3 Jun 2026 14:12:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-rc6,
- upstream-mainline, ba3e43a9)
-Date: Wed, 03 Jun 2026 14:12:06 -0000
-To: yoyang@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h5KXLT8i"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780497767; x=1812033767;
+  h=date:from:to:cc:subject:message-id;
+  bh=IAXIe9i199iVavRnrmTXTxm2Y+IVirjDD3K3rG4IhqA=;
+  b=h5KXLT8iby4ZsPazPcDuYqB0/PlKmFrpUt5esnYe+xIrpWLQ2rUDqcv3
+   xSQ2VbwwaQtVDyt8beOvKp3ZfrOQRjpGWeq5kk/Im37BiACv2ezKaRhSe
+   HkfsDv1uW3hk6SyucZB0YowT0lbOqEhbOdx1KcdWemc0gxzeSSniHq7MV
+   kfbXdK9YFMiVta/yokTeYVPnFD5kdn8kNvECDNVEzh5CliVk5Trneb8pz
+   7rQR8Oz/LEefdD3J1easEElqipe6JK5wGfQhJOf16AMEbPbAG/9xqXFqz
+   DSjtw5NgEz1Ld2TFKJInzSd09xCSgr7EJcU0O7SAA/8gxEGt0VwMckXoX
+   A==;
+X-CSE-ConnectionGUID: 4TeaJ8DQS9SilKrtzUKJmQ==
+X-CSE-MsgGUID: m8pZqX1jRk2LGIZGTRd95Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="91624810"
+X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
+   d="scan'208";a="91624810"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 07:42:47 -0700
+X-CSE-ConnectionGUID: H0bRajFSR9aum4ahq1yLng==
+X-CSE-MsgGUID: GWqVLa2URreIybuiLRFYPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
+   d="scan'208";a="246082250"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa004.fm.intel.com with ESMTP; 03 Jun 2026 07:42:45 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wUmnp-0000000024l-3y1h;
+	Wed, 03 Jun 2026 14:42:41 +0000
+Date: Wed, 03 Jun 2026 16:41:54 +0200
+From: kernel test robot <lkp@intel.com>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org
+Subject: [viro-vfs:more.configfs 33/33] fs/configfs/symlink.c:136:26:
+ warning: variable 'sd' set but not used
+Message-ID: <202606031627.uHB6eQoo-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <02379.126060310120800567@us-mta-206.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ya3lumNSGnVlTFS7lzCirnllJ47CziB_qwLWQ2DdKcw_1780495927
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git more.configfs
+head:   53a9faf145785b0b12ec71f2204f3b3011dbda5e
+commit: 53a9faf145785b0b12ec71f2204f3b3011dbda5e [33/33] kill configfs_dirent_is_ready()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260603/202606031627.uHB6eQoo-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606031627.uHB6eQoo-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606031627.uHB6eQoo-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'soc-fixes-7.1-2' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/soc/soc
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2571349035
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2571349035_ppc64le_kernel
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2571349035_aarch64_kernel_kcidb_tool_21398362_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/001
-                       =E2=9D=8C FAIL generic/004
-                       =E2=9D=8C FAIL generic/005
-                       =E2=9D=8C FAIL generic/006
-                       =E2=9D=8C FAIL generic/007
-                       =E2=9D=8C FAIL generic/008
-                       =E2=9D=8C FAIL generic/012
-                       =E2=9D=8C FAIL generic/014
-                       =E2=9D=8C FAIL generic/016
-                       =E2=9D=8C FAIL generic/021
-                       =E2=9D=8C FAIL generic/022
-                       =E2=9D=8C FAIL generic/023
-                       =E2=9D=8C FAIL generic/024
-                       =E2=9D=8C FAIL generic/025
-                       =E2=9D=8C FAIL generic/026
-                       =E2=9D=8C FAIL generic/028
-                       =E2=9D=8C FAIL generic/030
-                       =E2=9D=8C FAIL generic/031
-                       =E2=9D=8C FAIL generic/037
-                       =E2=9D=8C FAIL generic/052
-                       =E2=9D=8C FAIL generic/058
-                       =E2=9D=8C FAIL generic/060
-                       =E2=9D=8C FAIL generic/061
-                       =E2=9D=8C FAIL generic/063
-                       =E2=9D=8C FAIL generic/064
-                       =E2=9D=8C FAIL generic/069
-                       =E2=9D=8C FAIL generic/078
-                       =E2=9D=8C FAIL generic/086
-                       =E2=9D=8C FAIL generic/096
-                       =E2=9D=8C FAIL generic/097
-                       =E2=9D=8C FAIL generic/098
-                       =E2=9D=8C FAIL generic/103
-                       =E2=9D=8C FAIL generic/105
-                       =E2=9D=8C FAIL generic/110
-                       =E2=9D=8C FAIL generic/111
-                       =E2=9D=8C FAIL generic/114
-                       =E2=9D=8C FAIL generic/115
-                       =E2=9D=8C FAIL generic/116
-                       =E2=9D=8C FAIL generic/123
-                       =E2=9D=8C FAIL generic/134
-                       =E2=9D=8C FAIL generic/138
-                       =E2=9D=8C FAIL generic/140
-                       =E2=9D=8C FAIL generic/141
-                       =E2=9D=8C FAIL generic/142
-                       =E2=9D=8C FAIL generic/143
-                       =E2=9D=8C FAIL generic/144
-                       =E2=9D=8C FAIL generic/145
-                       =E2=9D=8C FAIL generic/146
-                       =E2=9D=8C FAIL generic/147
-                       =E2=9D=8C FAIL generic/148
-                       =E2=9D=8C FAIL generic/149
-                       =E2=9D=8C FAIL generic/150
-                       =E2=9D=8C FAIL generic/151
-                       =E2=9D=8C FAIL generic/152
-                       =E2=9D=8C FAIL generic/153
-                       =E2=9D=8C FAIL generic/154
-                       =E2=9D=8C FAIL generic/155
-                       =E2=9D=8C FAIL generic/156
-                       =E2=9D=8C FAIL generic/157
-                       =E2=9D=8C FAIL generic/159
-                       =E2=9D=8C FAIL generic/160
-                       =E2=9D=8C FAIL generic/161
-                       =E2=9D=8C FAIL generic/171
-                       =E2=9D=8C FAIL generic/172
-                       =E2=9D=8C FAIL generic/173
-                       =E2=9D=8C FAIL generic/174
-                       =E2=9D=8C FAIL generic/178
-                       =E2=9D=8C FAIL generic/179
-                       =E2=9D=8C FAIL generic/180
-                       =E2=9D=8C FAIL generic/181
-                       =E2=9D=8C FAIL generic/183
-                       =E2=9D=8C FAIL generic/185
-                       =E2=9D=8C FAIL generic/188
-                       =E2=9D=8C FAIL generic/189
-                       =E2=9D=8C FAIL generic/190
-                       =E2=9D=8C FAIL generic/191
-                       =E2=9D=8C FAIL generic/194
-                       =E2=9D=8C FAIL generic/195
-                       =E2=9D=8C FAIL generic/196
-                       =E2=9D=8C FAIL generic/197
-                       =E2=9D=8C FAIL generic/198
-                       =E2=9D=8C FAIL generic/199
-                       =E2=9D=8C FAIL generic/200
-                       =E2=9D=8C FAIL generic/201
-                       =E2=9D=8C FAIL generic/202
-                       =E2=9D=8C FAIL generic/203
-                       =E2=9D=8C FAIL generic/205
-                       =E2=9D=8C FAIL generic/206
-                       =E2=9D=8C FAIL generic/207
-                       =E2=9D=8C FAIL generic/211
-                       =E2=9D=8C FAIL generic/212
-                       =E2=9D=8C FAIL generic/214
-                       =E2=9D=8C FAIL generic/216
-                       =E2=9D=8C FAIL generic/217
-                       =E2=9D=8C FAIL generic/220
-                       =E2=9D=8C FAIL generic/221
-                       =E2=9D=8C FAIL generic/222
-                       =E2=9D=8C FAIL generic/227
-                       =E2=9D=8C FAIL generic/238
-                       =E2=9D=8C FAIL generic/246
-                       =E2=9D=8C FAIL generic/248
-                       =E2=9D=8C FAIL generic/253
-                       =E2=9D=8C FAIL generic/259
-                       =E2=9D=8C FAIL generic/261
-                       =E2=9D=8C FAIL generic/262
-                       =E2=9D=8C FAIL generic/264
-                       =E2=9D=8C FAIL generic/277
-                       =E2=9D=8C FAIL generic/287
-                       =E2=9D=8C FAIL generic/289
-                       =E2=9D=8C FAIL generic/290
-                       =E2=9D=8C FAIL generic/291
-                       =E2=9D=8C FAIL generic/292
-                       =E2=9D=8C FAIL generic/293
-                       =E2=9D=8C FAIL generic/295
-                       =E2=9D=8C FAIL generic/296
-                       =E2=9D=8C FAIL generic/301
-                       =E2=9D=8C FAIL generic/302
-                       =E2=9D=8C FAIL generic/303
-                       =E2=9D=8C FAIL generic/304
-                       =E2=9D=8C FAIL generic/305
-                       =E2=9D=8C FAIL generic/309
-                       =E2=9D=8C FAIL generic/312
-                       =E2=9D=8C FAIL generic/326
-                       =E2=9D=8C FAIL generic/327
-                       =E2=9D=8C FAIL generic/328
-                       =E2=9D=8C FAIL generic/330
-                       =E2=9D=8C FAIL generic/332
-                       =E2=9D=8C FAIL generic/337
-                       =E2=9D=8C FAIL generic/353
-                       =E2=9D=8C FAIL generic/358
-                       =E2=9D=8C FAIL generic/359
-                       =E2=9D=8C FAIL generic/362
-                       =E2=9D=8C FAIL generic/372
-                       =E2=9D=8C FAIL generic/379
-                       =E2=9D=8C FAIL generic/380
-                       =E2=9D=8C FAIL generic/389
-                       =E2=9D=8C FAIL generic/391
-                       =E2=9D=8C FAIL generic/393
-                       =E2=9D=8C FAIL generic/395
-                       =E2=9D=8C FAIL generic/396
-                       =E2=9D=8C FAIL generic/397
-                       =E2=9D=8C FAIL generic/398
-                       =E2=9D=8C FAIL generic/406
-                       =E2=9D=8C FAIL generic/408
-                       =E2=9D=8C FAIL generic/412
-                       =E2=9D=8C FAIL generic/414
-                       =E2=9D=8C FAIL generic/419
-                       =E2=9D=8C FAIL generic/421
-                       =E2=9D=8C FAIL generic/424
-                       =E2=9D=8C FAIL generic/432
-                       =E2=9D=8C FAIL generic/433
-                       =E2=9D=8C FAIL generic/439
-                       =E2=9D=8C FAIL generic/440
-                       =E2=9D=8C FAIL generic/443
-                       =E2=9D=8C FAIL generic/462
-                       =E2=9D=8C FAIL generic/463
-                       =E2=9D=8C FAIL generic/470
-                       =E2=9D=8C FAIL generic/474
-                       =E2=9D=8C FAIL generic/488
-                       =E2=9D=8C FAIL generic/492
-                       =E2=9D=8C FAIL generic/493
-                       =E2=9D=8C FAIL generic/496
-                       =E2=9D=8C FAIL generic/497
-                       =E2=9D=8C FAIL generic/499
-                       =E2=9D=8C FAIL generic/503
-                       =E2=9D=8C FAIL generic/505
-                       =E2=9D=8C FAIL generic/506
-                       =E2=9D=8C FAIL generic/507
-                       =E2=9D=8C FAIL generic/508
-                       =E2=9D=8C FAIL generic/511
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2571349035_x86_64_kernel_kcidb_tool_21398356_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/001
-                       =E2=9D=8C FAIL generic/004
-                       =E2=9D=8C FAIL generic/005
-                       =E2=9D=8C FAIL generic/006
-                       =E2=9D=8C FAIL generic/007
-                       =E2=9D=8C FAIL generic/008
-                       =E2=9D=8C FAIL generic/012
-                       =E2=9D=8C FAIL generic/014
-                       =E2=9D=8C FAIL generic/016
-                       =E2=9D=8C FAIL generic/021
-                       =E2=9D=8C FAIL generic/022
-                       =E2=9D=8C FAIL generic/023
-                       =E2=9D=8C FAIL generic/024
-                       =E2=9D=8C FAIL generic/025
-                       =E2=9D=8C FAIL generic/026
-                       =E2=9D=8C FAIL generic/028
-                       =E2=9D=8C FAIL generic/030
-                       =E2=9D=8C FAIL generic/031
-                       =E2=9D=8C FAIL generic/037
-                       =E2=9D=8C FAIL generic/052
-                       =E2=9D=8C FAIL generic/058
-                       =E2=9D=8C FAIL generic/060
-                       =E2=9D=8C FAIL generic/061
-                       =E2=9D=8C FAIL generic/063
-                       =E2=9D=8C FAIL generic/064
-                       =E2=9D=8C FAIL generic/069
-                       =E2=9D=8C FAIL generic/078
-                       =E2=9D=8C FAIL generic/086
-                       =E2=9D=8C FAIL generic/096
-                       =E2=9D=8C FAIL generic/097
-                       =E2=9D=8C FAIL generic/098
-                       =E2=9D=8C FAIL generic/103
-                       =E2=9D=8C FAIL generic/105
-                       =E2=9D=8C FAIL generic/110
-                       =E2=9D=8C FAIL generic/111
-                       =E2=9D=8C FAIL generic/114
-                       =E2=9D=8C FAIL generic/115
-                       =E2=9D=8C FAIL generic/116
-                       =E2=9D=8C FAIL generic/123
-                       =E2=9D=8C FAIL generic/134
-                       =E2=9D=8C FAIL generic/138
-                       =E2=9D=8C FAIL generic/140
-                       =E2=9D=8C FAIL generic/141
-                       =E2=9D=8C FAIL generic/142
-                       =E2=9D=8C FAIL generic/143
-                       =E2=9D=8C FAIL generic/144
-                       =E2=9D=8C FAIL generic/145
-                       =E2=9D=8C FAIL generic/146
-                       =E2=9D=8C FAIL generic/147
-                       =E2=9D=8C FAIL generic/148
-                       =E2=9D=8C FAIL generic/149
-                       =E2=9D=8C FAIL generic/150
-                       =E2=9D=8C FAIL generic/151
-                       =E2=9D=8C FAIL generic/152
-                       =E2=9D=8C FAIL generic/153
-                       =E2=9D=8C FAIL generic/154
-                       =E2=9D=8C FAIL generic/155
-                       =E2=9D=8C FAIL generic/156
-                       =E2=9D=8C FAIL generic/157
-                       =E2=9D=8C FAIL generic/159
-                       =E2=9D=8C FAIL generic/160
-                       =E2=9D=8C FAIL generic/161
-                       =E2=9D=8C FAIL generic/171
-                       =E2=9D=8C FAIL generic/172
-                       =E2=9D=8C FAIL generic/173
-                       =E2=9D=8C FAIL generic/174
-                       =E2=9D=8C FAIL generic/178
-                       =E2=9D=8C FAIL generic/179
-                       =E2=9D=8C FAIL generic/180
-                       =E2=9D=8C FAIL generic/181
-                       =E2=9D=8C FAIL generic/183
-                       =E2=9D=8C FAIL generic/185
-                       =E2=9D=8C FAIL generic/188
-                       =E2=9D=8C FAIL generic/189
-                       =E2=9D=8C FAIL generic/190
-                       =E2=9D=8C FAIL generic/191
-                       =E2=9D=8C FAIL generic/194
-                       =E2=9D=8C FAIL generic/195
-                       =E2=9D=8C FAIL generic/196
-                       =E2=9D=8C FAIL generic/197
-                       =E2=9D=8C FAIL generic/198
-                       =E2=9D=8C FAIL generic/199
-                       =E2=9D=8C FAIL generic/200
-                       =E2=9D=8C FAIL generic/201
-                       =E2=9D=8C FAIL generic/202
-                       =E2=9D=8C FAIL generic/203
-                       =E2=9D=8C FAIL generic/205
-                       =E2=9D=8C FAIL generic/206
-                       =E2=9D=8C FAIL generic/207
-                       =E2=9D=8C FAIL generic/211
-                       =E2=9D=8C FAIL generic/212
-                       =E2=9D=8C FAIL generic/214
-                       =E2=9D=8C FAIL generic/216
-                       =E2=9D=8C FAIL generic/217
-                       =E2=9D=8C FAIL generic/220
-                       =E2=9D=8C FAIL generic/221
-                       =E2=9D=8C FAIL generic/222
-                       =E2=9D=8C FAIL generic/227
-                       =E2=9D=8C FAIL generic/238
-                       =E2=9D=8C FAIL generic/246
-                       =E2=9D=8C FAIL generic/248
-                       =E2=9D=8C FAIL generic/253
-                       =E2=9D=8C FAIL generic/259
-                       =E2=9D=8C FAIL generic/261
-                       =E2=9D=8C FAIL generic/262
-                       =E2=9D=8C FAIL generic/264
-                       =E2=9D=8C FAIL generic/277
-                       =E2=9D=8C FAIL generic/287
-                       =E2=9D=8C FAIL generic/289
-                       =E2=9D=8C FAIL generic/290
-                       =E2=9D=8C FAIL generic/291
-                       =E2=9D=8C FAIL generic/292
-                       =E2=9D=8C FAIL generic/293
-                       =E2=9D=8C FAIL generic/295
-                       =E2=9D=8C FAIL generic/296
-                       =E2=9D=8C FAIL generic/301
-                       =E2=9D=8C FAIL generic/302
-                       =E2=9D=8C FAIL generic/303
-                       =E2=9D=8C FAIL generic/304
-                       =E2=9D=8C FAIL generic/305
-                       =E2=9D=8C FAIL generic/309
-                       =E2=9D=8C FAIL generic/312
-                       =E2=9D=8C FAIL generic/326
-                       =E2=9D=8C FAIL generic/327
-                       =E2=9D=8C FAIL generic/328
-                       =E2=9D=8C FAIL generic/330
-                       =E2=9D=8C FAIL generic/332
-                       =E2=9D=8C FAIL generic/337
-                       =E2=9D=8C FAIL generic/353
-                       =E2=9D=8C FAIL generic/358
-                       =E2=9D=8C FAIL generic/359
-                       =E2=9D=8C FAIL generic/362
-                       =E2=9D=8C FAIL generic/372
-                       =E2=9D=8C FAIL generic/379
-                       =E2=9D=8C FAIL generic/380
-                       =E2=9D=8C FAIL generic/389
-                       =E2=9D=8C FAIL generic/391
-                       =E2=9D=8C FAIL generic/393
-                       =E2=9D=8C FAIL generic/395
-                       =E2=9D=8C FAIL generic/396
-                       =E2=9D=8C FAIL generic/397
-                       =E2=9D=8C FAIL generic/398
-                       =E2=9D=8C FAIL generic/406
-                       =E2=9D=8C FAIL generic/408
-                       =E2=9D=8C FAIL generic/412
-                       =E2=9D=8C FAIL generic/414
-                       =E2=9D=8C FAIL generic/419
-                       =E2=9D=8C FAIL generic/421
-                       =E2=9D=8C FAIL generic/424
-                       =E2=9D=8C FAIL generic/432
-                       =E2=9D=8C FAIL generic/433
-                       =E2=9D=8C FAIL generic/439
-                       =E2=9D=8C FAIL generic/440
-                       =E2=9D=8C FAIL generic/443
-                       =E2=9D=8C FAIL generic/462
-                       =E2=9D=8C FAIL generic/463
-                       =E2=9D=8C FAIL generic/470
-                       =E2=9D=8C FAIL generic/474
-                       =E2=9D=8C FAIL generic/488
-                       =E2=9D=8C FAIL generic/492
-                       =E2=9D=8C FAIL generic/493
-                       =E2=9D=8C FAIL generic/496
-                       =E2=9D=8C FAIL generic/497
-                       =E2=9D=8C FAIL generic/499
-                       =E2=9D=8C FAIL generic/503
-                       =E2=9D=8C FAIL generic/505
-                       =E2=9D=8C FAIL generic/506
-                       =E2=9D=8C FAIL generic/507
-                       =E2=9D=8C FAIL generic/508
-                       =E2=9D=8C FAIL generic/511
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+>> fs/configfs/symlink.c:136:26: warning: variable 'sd' set but not used [-Wunused-but-set-variable]
+     136 |         struct configfs_dirent *sd;
+         |                                 ^
+   1 warning generated.
 
 
+vim +/sd +136 fs/configfs/symlink.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+7063fbf2261194f Joel Becker       2005-12-15  130  
+7063fbf2261194f Joel Becker       2005-12-15  131  
+7a77db95511c39b Christian Brauner 2023-01-13  132  int configfs_symlink(struct mnt_idmap *idmap, struct inode *dir,
+549c7297717c32e Christian Brauner 2021-01-21  133  		     struct dentry *dentry, const char *symname)
+7063fbf2261194f Joel Becker       2005-12-15  134  {
+7063fbf2261194f Joel Becker       2005-12-15  135  	int ret;
+2a109f2a4155f16 Louis Rilling     2008-07-04 @136  	struct configfs_dirent *sd;
+7063fbf2261194f Joel Becker       2005-12-15  137  	struct config_item *parent_item;
+3c48f23adada870 Subrata Modak     2009-04-19  138  	struct config_item *target_item = NULL;
+aa293583f0fe8b1 Bhumika Goyal     2017-10-16  139  	const struct config_item_type *type;
+7063fbf2261194f Joel Becker       2005-12-15  140  
+2a109f2a4155f16 Louis Rilling     2008-07-04  141  	sd = dentry->d_parent->d_fsdata;
+2a109f2a4155f16 Louis Rilling     2008-07-04  142  
+7063fbf2261194f Joel Becker       2005-12-15  143  	parent_item = configfs_get_config_item(dentry->d_parent);
+7063fbf2261194f Joel Becker       2005-12-15  144  	type = parent_item->ci_type;
+7063fbf2261194f Joel Becker       2005-12-15  145  
+2a109f2a4155f16 Louis Rilling     2008-07-04  146  	ret = -EPERM;
+7063fbf2261194f Joel Becker       2005-12-15  147  	if (!type || !type->ct_item_ops ||
+7063fbf2261194f Joel Becker       2005-12-15  148  	    !type->ct_item_ops->allow_link)
+7063fbf2261194f Joel Becker       2005-12-15  149  		goto out_put;
+7063fbf2261194f Joel Becker       2005-12-15  150  
+351e5d869e5ac10 Al Viro           2019-08-03  151  	/*
+351e5d869e5ac10 Al Viro           2019-08-03  152  	 * This is really sick.  What they wanted was a hybrid of
+351e5d869e5ac10 Al Viro           2019-08-03  153  	 * link(2) and symlink(2) - they wanted the target resolved
+351e5d869e5ac10 Al Viro           2019-08-03  154  	 * at syscall time (as link(2) would've done), be a directory
+351e5d869e5ac10 Al Viro           2019-08-03  155  	 * (which link(2) would've refused to do) *AND* be a deep
+351e5d869e5ac10 Al Viro           2019-08-03  156  	 * fucking magic, making the target busy from rmdir POV.
+351e5d869e5ac10 Al Viro           2019-08-03  157  	 * symlink(2) is nothing of that sort, and the locking it
+351e5d869e5ac10 Al Viro           2019-08-03  158  	 * gets matches the normal symlink(2) semantics.  Without
+351e5d869e5ac10 Al Viro           2019-08-03  159  	 * attempts to resolve the target (which might very well
+351e5d869e5ac10 Al Viro           2019-08-03  160  	 * not even exist yet) done prior to locking the parent
+351e5d869e5ac10 Al Viro           2019-08-03  161  	 * directory.  This perversion, OTOH, needs to resolve
+351e5d869e5ac10 Al Viro           2019-08-03  162  	 * the target, which would lead to obvious deadlocks if
+351e5d869e5ac10 Al Viro           2019-08-03  163  	 * attempted with any directories locked.
+351e5d869e5ac10 Al Viro           2019-08-03  164  	 *
+351e5d869e5ac10 Al Viro           2019-08-03  165  	 * Unfortunately, that garbage is userland ABI and we should've
+351e5d869e5ac10 Al Viro           2019-08-03  166  	 * said "no" back in 2005.  Too late now, so we get to
+351e5d869e5ac10 Al Viro           2019-08-03  167  	 * play very ugly games with locking.
+351e5d869e5ac10 Al Viro           2019-08-03  168  	 *
+351e5d869e5ac10 Al Viro           2019-08-03  169  	 * Try *ANYTHING* of that sort in new code, and you will
+351e5d869e5ac10 Al Viro           2019-08-03  170  	 * really regret it.  Just ask yourself - what could a BOFH
+351e5d869e5ac10 Al Viro           2019-08-03  171  	 * do to me and do I want to find it out first-hand?
+351e5d869e5ac10 Al Viro           2019-08-03  172  	 *
+351e5d869e5ac10 Al Viro           2019-08-03  173  	 *  AV, a thoroughly annoyed bastard.
+351e5d869e5ac10 Al Viro           2019-08-03  174  	 */
+351e5d869e5ac10 Al Viro           2019-08-03  175  	inode_unlock(dir);
+1b25dea3867abc9 Al Viro           2025-09-04  176  	ret = get_target(symname, &target_item, dentry->d_sb);
+351e5d869e5ac10 Al Viro           2019-08-03  177  	inode_lock(dir);
+7063fbf2261194f Joel Becker       2005-12-15  178  	if (ret)
+7063fbf2261194f Joel Becker       2005-12-15  179  		goto out_put;
+7063fbf2261194f Joel Becker       2005-12-15  180  
+351e5d869e5ac10 Al Viro           2019-08-03  181  	if (dentry->d_inode || d_unhashed(dentry))
+351e5d869e5ac10 Al Viro           2019-08-03  182  		ret = -EEXIST;
+351e5d869e5ac10 Al Viro           2019-08-03  183  	else
+4609e1f18e19c3b Christian Brauner 2023-01-13  184  		ret = inode_permission(&nop_mnt_idmap, dir,
+47291baa8ddfdae Christian Brauner 2021-01-21  185  				       MAY_WRITE | MAY_EXEC);
+351e5d869e5ac10 Al Viro           2019-08-03  186  	if (!ret)
+7063fbf2261194f Joel Becker       2005-12-15  187  		ret = type->ct_item_ops->allow_link(parent_item, target_item);
+e75206517504461 Louis Rilling     2008-06-12  188  	if (!ret) {
+9a73d78cda750f1 Louis Rilling     2008-06-20  189  		mutex_lock(&configfs_symlink_mutex);
+7063fbf2261194f Joel Becker       2005-12-15  190  		ret = create_link(parent_item, target_item, dentry);
+9a73d78cda750f1 Louis Rilling     2008-06-20  191  		mutex_unlock(&configfs_symlink_mutex);
+e75206517504461 Louis Rilling     2008-06-12  192  		if (ret && type->ct_item_ops->drop_link)
+e75206517504461 Louis Rilling     2008-06-12  193  			type->ct_item_ops->drop_link(parent_item,
+e75206517504461 Louis Rilling     2008-06-12  194  						     target_item);
+e75206517504461 Louis Rilling     2008-06-12  195  	}
+7063fbf2261194f Joel Becker       2005-12-15  196  
+7063fbf2261194f Joel Becker       2005-12-15  197  	config_item_put(target_item);
+7063fbf2261194f Joel Becker       2005-12-15  198  
+7063fbf2261194f Joel Becker       2005-12-15  199  out_put:
+7063fbf2261194f Joel Becker       2005-12-15  200  	config_item_put(parent_item);
+7063fbf2261194f Joel Becker       2005-12-15  201  	return ret;
+7063fbf2261194f Joel Becker       2005-12-15  202  }
+7063fbf2261194f Joel Becker       2005-12-15  203  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 136 was first introduced by commit
+:::::: 2a109f2a4155f168047aa2f5b3a170e279bef89a [PATCH] configfs: Prevent userspace from creating new entries under attaching directories
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Louis Rilling <louis.rilling@kerlabs.com>
+:::::: CC: Mark Fasheh <mfasheh@suse.com>
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
