@@ -1,97 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF42391E5B;
-	Wed,  3 Jun 2026 01:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBC437756F;
+	Wed,  3 Jun 2026 05:47:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780451935; cv=none; b=eXTY1y/kVurb77qaCVrztjZtdVsz1BHsZ6qJ+78lO71I3nwENNt3Y0u8OuZV5wQu5TIgrXLk3bjJPnlDVcrhYOcyykygVstKYlvD0meHxG+4VozrHB6vxkXgozaqo3s4U1lN0hLgGUQNvI50tSVrb3zoXUb8xYyxBzgswQdAAtc=
+	t=1780465627; cv=none; b=t1kDmuK0o6EpJUhOL+B3CqXTZhziZAz5UiCRIJNPSDdffqyXSzsGZuHmt9DRjmJ3TFbd+HIDk7wakvltkSJZnnsQH/cGhIhijU85GaUa4N2wiT7m8rlHrx12sUO2mfy6b6CV5xHjwW8AhgqrhobKwJ/CmVQsXQONWqAIJYgO9R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780451935; c=relaxed/simple;
-	bh=4UAkSHyts2wKV6GLVSbcpPizHATKVgcPbqwRbKwlcws=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Rs+La6GiZX1/XTkesT57wQ/lu1AxmnruV/Z0EYCji9efvyyOv6+BXjUdNWW+KCbqvFtST9t4TRdRhijABI1yPi9pablvW/R9IruQF7i95VM9nywL6AvUH4NlLbWQPpXnLaK8zNPRpdHmw50suD5jd9elgvy9xblKS2EfilRy1PU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+5sfnW9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780465627; c=relaxed/simple;
+	bh=/FLTeWNgbJxy3Ry7en1bPUx4V4oTJRJksctul9uRdys=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I2kuMDdc6Px0YOc7f15hwIjbTqZHagNiWGPdsPAykCe0/8wXdQ65YgCIB6Dq++6Mnc5h7CkTtqj/99eL1cYeAUZVdVb1EdcMh8rAZQ3cETo2YhdKZJVYjT9P3wSUo501VV1s4MOL3x1XjXAzxCGZ3f0z3d2t0oT39a39gLz+iYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UdSzM+U+; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+5sfnW9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B351D1F00893;
-	Wed,  3 Jun 2026 01:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780451930;
-	bh=4B3KvEc1dwO0ujpKZjsPorwmzZfs0UtyayL3dg0Jit0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=l+5sfnW9I+psIYVAHnfBUxg6AzMOz+5FBRafH/qS+Lm0TfTM3dsjbmAo3imnzJlYQ
-	 nGvZz5lzqIWg41OHihB6R8SxevOXlYuoiwHavowZ+huQQaYQLBZ7cDNIINsTHiCTgt
-	 kKafzuz5rY/triV+BUJBm1RwmA1zctPsIuhKn0M1NE/FDtl8GiSvGiFfAnEBvNRjEO
-	 XKJ+iXSnfqnd/VCD4aUa3rTxarj8t65Bh3ZuWqn0hYJ5vcUk10HCSUqDZ8PcIO0pN0
-	 NALjlnTyDZGdcvFcqg0Ptj4vlIBCPfhb7jkdVb5KK42fbd6r+LKn7qlGeHhCgaISbg
-	 YvekgMjDUq2sA==
-Date: Wed, 3 Jun 2026 10:58:42 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Andrew Morton
- <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, Nathan
- Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Dennis
- Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe
- <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, Arend van Spriel
- <arend.vanspriel@broadcom.com>, Miri Korenblit
- <miriam.rachel.korenblit@intel.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Rasmus Villemoes
- <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Vlastimil Babka
- <vbabka@kernel.org>, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
- brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
- linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UdSzM+U+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780465626; x=1812001626;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/FLTeWNgbJxy3Ry7en1bPUx4V4oTJRJksctul9uRdys=;
+  b=UdSzM+U+EplFsOf4XNA2qaf1T+vx6hptvRRxtl/KhEWlhBZ/kK8dx3bR
+   UrqnTYgYJXYMDxGJiO/dYI1lCu5ffh8v/0NpwSt3rD9nt3fcOXu/i5OTo
+   LIuTRUgM941gZ99qNV7T+yn7tIQk3t9it15PWFw+f9uM2UsB73qGVIXH1
+   2k15QiSZGbal2ODtdhaf22a1yruuv0GirdhD7DFk9Ps658MWSMDzWRTuV
+   D8Swyx0a++xHMz6ELqXgZwN9p/TrujUI2a1Y27W65P4eJdQs9NAiMtiTX
+   8/8bkV42Kypb+ExwUmbLiB5f3A0imYBTi8MiTeLRjY+bLLloEE9zSeQ87
+   w==;
+X-CSE-ConnectionGUID: OZVDjEHlTnSriuQI4LY+UQ==
+X-CSE-MsgGUID: xGoe0QnLTnO33ZgRQ2rVQA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11805"; a="83842272"
+X-IronPort-AV: E=Sophos;i="6.24,184,1774335600"; 
+   d="scan'208";a="83842272"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 22:47:05 -0700
+X-CSE-ConnectionGUID: FNlwVWqVTf2houfD4TQfCw==
+X-CSE-MsgGUID: WZFOE495REOFrIL2m/+VhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,184,1774335600"; 
+   d="scan'208";a="243966295"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.116])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2026 22:46:59 -0700
+Date: Wed, 3 Jun 2026 08:46:57 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+	Arend van Spriel <arend.vanspriel@broadcom.com>,
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>, linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+	brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
+	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev
 Subject: Re: [PATCH 1/2] tracing: work around -Wmissing-format-attribute
  warning
-Message-Id: <20260603105842.1e0ef8cb4a55cb776d6a4971@kernel.org>
-In-Reply-To: <20260602150904.2258624-1-arnd@kernel.org>
+Message-ID: <ah-_0aAnev7pHU57@ashevche-desk.local>
 References: <20260602150904.2258624-1-arnd@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <20260603105842.1e0ef8cb4a55cb776d6a4971@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260603105842.1e0ef8cb4a55cb776d6a4971@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Tue,  2 Jun 2026 17:07:05 +0200
-Arnd Bergmann <arnd@kernel.org> wrote:
+On Wed, Jun 03, 2026 at 10:58:42AM +0900, Masami Hiramatsu wrote:
+> On Tue,  2 Jun 2026 17:07:05 +0200
+> Arnd Bergmann <arnd@kernel.org> wrote:
 
-> diff --git a/include/linux/sprintf.h b/include/linux/sprintf.h
-> index f06f7b785091..036a247b7c1e 100644
-> --- a/include/linux/sprintf.h
-> +++ b/include/linux/sprintf.h
-> @@ -12,6 +12,7 @@ __printf(2, 3) int sprintf(char *buf, const char * fmt, ...);
->  __printf(2, 0) int vsprintf(char *buf, const char *, va_list);
->  __printf(3, 4) int snprintf(char *buf, size_t size, const char *fmt, ...);
->  __printf(3, 0) int vsnprintf(char *buf, size_t size, const char *fmt, va_list args);
-> +int __vsnprintf(char *buf, size_t size, const char *fmt, va_list args);
->  __printf(3, 4) int scnprintf(char *buf, size_t size, const char *fmt, ...);
->  __printf(3, 0) int vscnprintf(char *buf, size_t size, const char *fmt, va_list args);
->  __printf(2, 3) __malloc char *kasprintf(gfp_t gfp, const char *fmt, ...);
-> diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-> index d49338c44014..4715330c7b6b 100644
-> --- a/include/linux/trace_events.h
-> +++ b/include/linux/trace_events.h
-> @@ -962,7 +962,7 @@ perf_trace_buf_submit(void *raw_data, int size, int rctx, u16 type,
->  	int __ret;					\
->  							\
->  	va_copy(__ap, *(va));				\
-> -	__ret = vsnprintf(NULL, 0, fmt, __ap) + 1;	\
-> +	__ret = __vsnprintf(NULL, 0, fmt, __ap) + 1;	\
->  	va_end(__ap);					\
->  							\
->  	min(__ret, TRACE_EVENT_STR_MAX);		\
+...
 
-I think this is a slightly confusing name. What about vsnprintf_nocheck()?
+> I think this is a slightly confusing name. What about vsnprintf_nocheck()?
 
-Thanks,
+What check? If you want to be more precise: vsnprintf_no_printf_attr() or
+vsnprintf_no_format_check(). But they also seem to me not the good choices.
+(Just slight preference to the latter one no_format_check.)
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+With Best Regards,
+Andy Shevchenko
+
+
