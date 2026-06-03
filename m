@@ -1,167 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D049352F87;
-	Wed,  3 Jun 2026 14:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3913E5564;
+	Wed,  3 Jun 2026 16:13:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780497768; cv=none; b=EvLGmgadFGPzS7GYL8+pOu24HXyuJS4JVO9dmnYv/kX4wr6jRhmCNJvf1c67FWi18zeveiXfXtLsLc6t8gl6t0qzdMXhX+3efcn38jzQQeq10PmVeUTOsAUnNKGYR721Ywa5FjednzcsIZXa0TXzuD1esgn9+TxwNVKLiclEssE=
+	t=1780503231; cv=none; b=swfmmcEbBocA69CcLCNzrXgdKVin72FOR7ZG2gELVweM+fdvjE5tDj6G8XPklTe/2u5d2IqhLOQgUbnmnr4rDEYRIBCDsuvJ/PxSwotwBMPrYV+iFcQozXg3Ui1bF4wSsOzragZ1XxUQLWkzfWiiJzQQ69w0StqFd9UeLhWrZL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780497768; c=relaxed/simple;
-	bh=IAXIe9i199iVavRnrmTXTxm2Y+IVirjDD3K3rG4IhqA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=FKhN8myILveOWBIwKkpkqud7ai4dy4ML6XevnXWAzZ3XxIIWVSmTepmFRt/I5q6HVaaOBGvhdrXmQd4LIRZcE6CM1FFalef4B+q+4qHGq4kTF3vNR31bQGBpKp2yV/Ef9GnmE61fhFzwToEf0w3Q1oB8mASzkLewxQRZKovxnFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h5KXLT8i; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1780503231; c=relaxed/simple;
+	bh=NQGda+ldp72jCROfqHpVqZFXJq6f6BXsKUN8lXV3OIk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=trL7El/ZLuvQ12t3/LR+EoirPTlW1hRzuCw+QdHExO5+BKMQ8vZI9st6+jjP0dbpKil7RNXjwIoignpKJevA92mVsiDL/Ff+MRT+AoiY13nj6RnrAiea8aJIuLLdONViIpHwxoQSeS/RgY7B5NWv3tsrPCFqK2H6l52cm71gaaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bjrjSJc7; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h5KXLT8i"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bjrjSJc7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780497767; x=1812033767;
-  h=date:from:to:cc:subject:message-id;
-  bh=IAXIe9i199iVavRnrmTXTxm2Y+IVirjDD3K3rG4IhqA=;
-  b=h5KXLT8iby4ZsPazPcDuYqB0/PlKmFrpUt5esnYe+xIrpWLQ2rUDqcv3
-   xSQ2VbwwaQtVDyt8beOvKp3ZfrOQRjpGWeq5kk/Im37BiACv2ezKaRhSe
-   HkfsDv1uW3hk6SyucZB0YowT0lbOqEhbOdx1KcdWemc0gxzeSSniHq7MV
-   kfbXdK9YFMiVta/yokTeYVPnFD5kdn8kNvECDNVEzh5CliVk5Trneb8pz
-   7rQR8Oz/LEefdD3J1easEElqipe6JK5wGfQhJOf16AMEbPbAG/9xqXFqz
-   DSjtw5NgEz1Ld2TFKJInzSd09xCSgr7EJcU0O7SAA/8gxEGt0VwMckXoX
-   A==;
-X-CSE-ConnectionGUID: 4TeaJ8DQS9SilKrtzUKJmQ==
-X-CSE-MsgGUID: m8pZqX1jRk2LGIZGTRd95Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="91624810"
+  t=1780503228; x=1812039228;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NQGda+ldp72jCROfqHpVqZFXJq6f6BXsKUN8lXV3OIk=;
+  b=bjrjSJc7eP0HYzxdTMuM+aGB49gSaKX1cNTqyqQEemF9KVGpC7a1qTfW
+   r0hArhmn4oJArYkWEZpd2PAZSTjTekMWLOOBbQ1RgOEAGnMDdF0Yj2Zt/
+   y0GJpnFMv3AjOIrqPu37+CcDTbKX6uUP/OHh7OAG/9v1yZMQpakMrgdoH
+   L1SzsmD1H3ZswH4qtwK1ulnwHwKjmRZ3SF9xkZwD8Ac6GvXZO7NiE7TE3
+   k9vWTm2FdW4o+XK4WEnxGjjL/8NhXtiOyatrDARicFtnQL+9U82TY8zfG
+   a3p4s2P1W2Sw2Oorf4USHY+GEM4POa3Bv83zQSHwkjhGCcEe0mvzGEgZZ
+   Q==;
+X-CSE-ConnectionGUID: vq5L98maQwmHkpxc/OOdUg==
+X-CSE-MsgGUID: brUhrWEOTiKZ+qn4y4fKQA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="81225137"
 X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="91624810"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 07:42:47 -0700
-X-CSE-ConnectionGUID: H0bRajFSR9aum4ahq1yLng==
-X-CSE-MsgGUID: GWqVLa2URreIybuiLRFYPw==
+   d="scan'208";a="81225137"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 09:13:47 -0700
+X-CSE-ConnectionGUID: k6LN7mBHR++zHn/j+ieAWQ==
+X-CSE-MsgGUID: Ux6O5Lk7RXigtCnUbBF23Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,185,1774335600"; 
-   d="scan'208";a="246082250"
+   d="scan'208";a="241293620"
 Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa004.fm.intel.com with ESMTP; 03 Jun 2026 07:42:45 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 03 Jun 2026 09:13:45 -0700
 Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wUmnp-0000000024l-3y1h;
-	Wed, 03 Jun 2026 14:42:41 +0000
-Date: Wed, 03 Jun 2026 16:41:54 +0200
+	id 1wUoDv-0000000026z-2aBv;
+	Wed, 03 Jun 2026 16:13:43 +0000
+Date: Wed, 3 Jun 2026 18:13:06 +0200
 From: kernel test robot <lkp@intel.com>
-To: Al Viro <viro@zeniv.linux.org.uk>
+To: Johannes Berg <johannes@sipsolutions.net>,
+	linux-wireless@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-fsdevel@vger.kernel.org
-Subject: [viro-vfs:more.configfs 33/33] fs/configfs/symlink.c:136:26:
- warning: variable 'sd' set but not used
-Message-ID: <202606031627.uHB6eQoo-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	Johannes Berg <johannes.berg@intel.com>, Xiang Mei <xmei5@asu.edu>
+Subject: Re: [PATCH] wifi: cfg80211: enforce HE/EHT cap/oper consistency
+Message-ID: <202606031815.lqRk4eKB-lkp@intel.com>
+References: <20260603091812.101894-2-johannes@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260603091812.101894-2-johannes@sipsolutions.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git more.configfs
-head:   53a9faf145785b0b12ec71f2204f3b3011dbda5e
-commit: 53a9faf145785b0b12ec71f2204f3b3011dbda5e [33/33] kill configfs_dirent_is_ready()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260603/202606031627.uHB6eQoo-lkp@intel.com/config)
+Hi Johannes,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v7.1-rc6 next-20260602]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Berg/wifi-cfg80211-enforce-HE-EHT-cap-oper-consistency/20260603-173706
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20260603091812.101894-2-johannes%40sipsolutions.net
+patch subject: [PATCH] wifi: cfg80211: enforce HE/EHT cap/oper consistency
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260603/202606031815.lqRk4eKB-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606031627.uHB6eQoo-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260603/202606031815.lqRk4eKB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606031627.uHB6eQoo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606031815.lqRk4eKB-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/configfs/symlink.c:136:26: warning: variable 'sd' set but not used [-Wunused-but-set-variable]
-     136 |         struct configfs_dirent *sd;
-         |                                 ^
-   1 warning generated.
+>> net/wireless/nl80211.c:12054:8: error: use of undeclared identifier 'params'
+    12054 |         if (!!params->he_cap != !!params->he_oper)
+          |               ^~~~~~
+   net/wireless/nl80211.c:12054:28: error: use of undeclared identifier 'params'
+    12054 |         if (!!params->he_cap != !!params->he_oper)
+          |                                   ^~~~~~
+   net/wireless/nl80211.c:12057:8: error: use of undeclared identifier 'params'
+    12057 |         if (!!params->eht_cap != !!params->eht_oper)
+          |               ^~~~~~
+   net/wireless/nl80211.c:12057:29: error: use of undeclared identifier 'params'
+    12057 |         if (!!params->eht_cap != !!params->eht_oper)
+          |                                    ^~~~~~
+   4 errors generated.
 
 
-vim +/sd +136 fs/configfs/symlink.c
+vim +/params +12054 net/wireless/nl80211.c
 
-7063fbf2261194f Joel Becker       2005-12-15  130  
-7063fbf2261194f Joel Becker       2005-12-15  131  
-7a77db95511c39b Christian Brauner 2023-01-13  132  int configfs_symlink(struct mnt_idmap *idmap, struct inode *dir,
-549c7297717c32e Christian Brauner 2021-01-21  133  		     struct dentry *dentry, const char *symname)
-7063fbf2261194f Joel Becker       2005-12-15  134  {
-7063fbf2261194f Joel Becker       2005-12-15  135  	int ret;
-2a109f2a4155f16 Louis Rilling     2008-07-04 @136  	struct configfs_dirent *sd;
-7063fbf2261194f Joel Becker       2005-12-15  137  	struct config_item *parent_item;
-3c48f23adada870 Subrata Modak     2009-04-19  138  	struct config_item *target_item = NULL;
-aa293583f0fe8b1 Bhumika Goyal     2017-10-16  139  	const struct config_item_type *type;
-7063fbf2261194f Joel Becker       2005-12-15  140  
-2a109f2a4155f16 Louis Rilling     2008-07-04  141  	sd = dentry->d_parent->d_fsdata;
-2a109f2a4155f16 Louis Rilling     2008-07-04  142  
-7063fbf2261194f Joel Becker       2005-12-15  143  	parent_item = configfs_get_config_item(dentry->d_parent);
-7063fbf2261194f Joel Becker       2005-12-15  144  	type = parent_item->ci_type;
-7063fbf2261194f Joel Becker       2005-12-15  145  
-2a109f2a4155f16 Louis Rilling     2008-07-04  146  	ret = -EPERM;
-7063fbf2261194f Joel Becker       2005-12-15  147  	if (!type || !type->ct_item_ops ||
-7063fbf2261194f Joel Becker       2005-12-15  148  	    !type->ct_item_ops->allow_link)
-7063fbf2261194f Joel Becker       2005-12-15  149  		goto out_put;
-7063fbf2261194f Joel Becker       2005-12-15  150  
-351e5d869e5ac10 Al Viro           2019-08-03  151  	/*
-351e5d869e5ac10 Al Viro           2019-08-03  152  	 * This is really sick.  What they wanted was a hybrid of
-351e5d869e5ac10 Al Viro           2019-08-03  153  	 * link(2) and symlink(2) - they wanted the target resolved
-351e5d869e5ac10 Al Viro           2019-08-03  154  	 * at syscall time (as link(2) would've done), be a directory
-351e5d869e5ac10 Al Viro           2019-08-03  155  	 * (which link(2) would've refused to do) *AND* be a deep
-351e5d869e5ac10 Al Viro           2019-08-03  156  	 * fucking magic, making the target busy from rmdir POV.
-351e5d869e5ac10 Al Viro           2019-08-03  157  	 * symlink(2) is nothing of that sort, and the locking it
-351e5d869e5ac10 Al Viro           2019-08-03  158  	 * gets matches the normal symlink(2) semantics.  Without
-351e5d869e5ac10 Al Viro           2019-08-03  159  	 * attempts to resolve the target (which might very well
-351e5d869e5ac10 Al Viro           2019-08-03  160  	 * not even exist yet) done prior to locking the parent
-351e5d869e5ac10 Al Viro           2019-08-03  161  	 * directory.  This perversion, OTOH, needs to resolve
-351e5d869e5ac10 Al Viro           2019-08-03  162  	 * the target, which would lead to obvious deadlocks if
-351e5d869e5ac10 Al Viro           2019-08-03  163  	 * attempted with any directories locked.
-351e5d869e5ac10 Al Viro           2019-08-03  164  	 *
-351e5d869e5ac10 Al Viro           2019-08-03  165  	 * Unfortunately, that garbage is userland ABI and we should've
-351e5d869e5ac10 Al Viro           2019-08-03  166  	 * said "no" back in 2005.  Too late now, so we get to
-351e5d869e5ac10 Al Viro           2019-08-03  167  	 * play very ugly games with locking.
-351e5d869e5ac10 Al Viro           2019-08-03  168  	 *
-351e5d869e5ac10 Al Viro           2019-08-03  169  	 * Try *ANYTHING* of that sort in new code, and you will
-351e5d869e5ac10 Al Viro           2019-08-03  170  	 * really regret it.  Just ask yourself - what could a BOFH
-351e5d869e5ac10 Al Viro           2019-08-03  171  	 * do to me and do I want to find it out first-hand?
-351e5d869e5ac10 Al Viro           2019-08-03  172  	 *
-351e5d869e5ac10 Al Viro           2019-08-03  173  	 *  AV, a thoroughly annoyed bastard.
-351e5d869e5ac10 Al Viro           2019-08-03  174  	 */
-351e5d869e5ac10 Al Viro           2019-08-03  175  	inode_unlock(dir);
-1b25dea3867abc9 Al Viro           2025-09-04  176  	ret = get_target(symname, &target_item, dentry->d_sb);
-351e5d869e5ac10 Al Viro           2019-08-03  177  	inode_lock(dir);
-7063fbf2261194f Joel Becker       2005-12-15  178  	if (ret)
-7063fbf2261194f Joel Becker       2005-12-15  179  		goto out_put;
-7063fbf2261194f Joel Becker       2005-12-15  180  
-351e5d869e5ac10 Al Viro           2019-08-03  181  	if (dentry->d_inode || d_unhashed(dentry))
-351e5d869e5ac10 Al Viro           2019-08-03  182  		ret = -EEXIST;
-351e5d869e5ac10 Al Viro           2019-08-03  183  	else
-4609e1f18e19c3b Christian Brauner 2023-01-13  184  		ret = inode_permission(&nop_mnt_idmap, dir,
-47291baa8ddfdae Christian Brauner 2021-01-21  185  				       MAY_WRITE | MAY_EXEC);
-351e5d869e5ac10 Al Viro           2019-08-03  186  	if (!ret)
-7063fbf2261194f Joel Becker       2005-12-15  187  		ret = type->ct_item_ops->allow_link(parent_item, target_item);
-e75206517504461 Louis Rilling     2008-06-12  188  	if (!ret) {
-9a73d78cda750f1 Louis Rilling     2008-06-20  189  		mutex_lock(&configfs_symlink_mutex);
-7063fbf2261194f Joel Becker       2005-12-15  190  		ret = create_link(parent_item, target_item, dentry);
-9a73d78cda750f1 Louis Rilling     2008-06-20  191  		mutex_unlock(&configfs_symlink_mutex);
-e75206517504461 Louis Rilling     2008-06-12  192  		if (ret && type->ct_item_ops->drop_link)
-e75206517504461 Louis Rilling     2008-06-12  193  			type->ct_item_ops->drop_link(parent_item,
-e75206517504461 Louis Rilling     2008-06-12  194  						     target_item);
-e75206517504461 Louis Rilling     2008-06-12  195  	}
-7063fbf2261194f Joel Becker       2005-12-15  196  
-7063fbf2261194f Joel Becker       2005-12-15  197  	config_item_put(target_item);
-7063fbf2261194f Joel Becker       2005-12-15  198  
-7063fbf2261194f Joel Becker       2005-12-15  199  out_put:
-7063fbf2261194f Joel Becker       2005-12-15  200  	config_item_put(parent_item);
-7063fbf2261194f Joel Becker       2005-12-15  201  	return ret;
-7063fbf2261194f Joel Becker       2005-12-15  202  }
-7063fbf2261194f Joel Becker       2005-12-15  203  
-
-:::::: The code at line 136 was first introduced by commit
-:::::: 2a109f2a4155f168047aa2f5b3a170e279bef89a [PATCH] configfs: Prevent userspace from creating new entries under attaching directories
-
-:::::: TO: Louis Rilling <louis.rilling@kerlabs.com>
-:::::: CC: Mark Fasheh <mfasheh@suse.com>
+ 12020	
+ 12021	static int nl80211_parse_counter_offsets(struct cfg80211_registered_device *rdev,
+ 12022						 const u8 *data, size_t datalen,
+ 12023						 int first_count, struct nlattr *attr,
+ 12024						 const u16 **offsets, unsigned int *n_offsets)
+ 12025	{
+ 12026		int i;
+ 12027	
+ 12028		*n_offsets = 0;
+ 12029	
+ 12030		if (!attr)
+ 12031			return 0;
+ 12032	
+ 12033		if (!nla_len(attr) || (nla_len(attr) % sizeof(u16)))
+ 12034			return -EINVAL;
+ 12035	
+ 12036		*n_offsets = nla_len(attr) / sizeof(u16);
+ 12037		if (rdev->wiphy.max_num_csa_counters &&
+ 12038		    (*n_offsets > rdev->wiphy.max_num_csa_counters))
+ 12039			return -EINVAL;
+ 12040	
+ 12041		*offsets = nla_data(attr);
+ 12042	
+ 12043		/* sanity checks - counters should fit and be the same */
+ 12044		for (i = 0; i < *n_offsets; i++) {
+ 12045			u16 offset = (*offsets)[i];
+ 12046	
+ 12047			if (offset >= datalen)
+ 12048				return -EINVAL;
+ 12049	
+ 12050			if (first_count != -1 && data[offset] != first_count)
+ 12051				return -EINVAL;
+ 12052		}
+ 12053	
+ 12054		if (!!params->he_cap != !!params->he_oper)
+ 12055			return -EINVAL;
+ 12056	
+ 12057		if (!!params->eht_cap != !!params->eht_oper)
+ 12058			return -EINVAL;
+ 12059	
+ 12060		return 0;
+ 12061	}
+ 12062	
 
 --
 0-DAY CI Kernel Test Service
