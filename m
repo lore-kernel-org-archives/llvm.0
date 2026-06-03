@@ -1,552 +1,425 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011008.outbound.protection.outlook.com [52.101.70.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583002DA762;
-	Wed,  3 Jun 2026 17:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780508398; cv=none; b=pAOWyAkHi5eVRpAEO+vlBp0Yn6oMm1xe8Hw5DNREbN1u6F+U3tt2LfarFlFU6BYFtjKpdy0+8w4zPw3cN9ZZZ6aVVGtMu8qXTOJ1dUbgFHNQkRyKxgcOhf3Pr0NzGZhB0BHIdfMxU9tt3gjmA64PGPdVf3PPg48xHutPOTrJ3KA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780508398; c=relaxed/simple;
-	bh=oXUjRNRrzYzoJ/rcCx75NpPn0hq276MBq+cTP9tTxMU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kpJaEiwfQCHA2VvUL23HRVmX7duw7MqvXKRuEjPYvka/MvN+3ku4eERrgU8mbBDAIveYZEYX+1Du+aUdwHaK9BkbZ8BwWs8gPZiyutTcbatwHGkqTq5LD5LdUlBFYLvcm1oT0T1/5oJ7o45y0m1ih3Mjq1qHs1w6STTef+BctxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZetseQqK; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E45E3E2756
+	for <llvm@lists.linux.dev>; Wed,  3 Jun 2026 17:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780508628; cv=fail; b=XkEAHWwBDJz/0hH+gENIZdT44Mva2OJvWofijYUHXzut1La3BbK6eZwlrL8nDLuY3B/4pSW8mhbtChbNppgVEb1hIXMoTNp/VyjtydyWpyc7F5SPW/H1mQW+oy4vZjbMs8fKdODixL8Lduyw5J32O9rV/2H+Br399a5xpZ15Jjo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780508628; c=relaxed/simple;
+	bh=N5WfnUZswbSSztr1Zm85NDygAEa2ZSIUEYtjxhZ7ucA=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=q/a/k2a6CyixN9eyX5MOWmLxYZ7eexT/1tvqEYOIK/vH4gR35dxC1xmiNGLc/XrLhGnx15th9e3T29BUu4GCCIujwHLE3qHfkUSD0DhE3vzSaZimWHjadtpaZr6GOT9I1jwc4/+8ou15gOe0EhJ1gAYWLbLHx2vQ2oupXWBnD/k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=U5h/2kTs; arc=fail smtp.client-ip=52.101.70.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZetseQqK"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DBC31C2BCB0;
-	Wed,  3 Jun 2026 17:39:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1780508397;
-	bh=oXUjRNRrzYzoJ/rcCx75NpPn0hq276MBq+cTP9tTxMU=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=ZetseQqKRxwPSS/wL/Cw2zMDwZUA2Kpclu/MHzoqpwn7ZFMOqiDkfDmkYNjzZoQ/J
-	 Hg/kyYvcTdDqCYK7+1IJM7J2zH6SXpUxN7SJcWGMVVcDT0QzkxLLiZn+ahZc2Xxoqb
-	 sUpaaWUCr+Ip8m4aWvmccFr7vll8f1k5OhXzCg+EW9z/econvPw+Xq/Xgp9L5ieAWb
-	 eAWDdGJ44rhTrYcxQGRJA2PGzqUUBhsYrd8rZ2mO9FI4D1Ns/hi/gThuvYBVGB8o/q
-	 1Wroc+l9XTXsFFgRztubgXDSGIpzASCBh0cXt5a7lh1ATXIdaOV/Uw9cnBeSWz2/mf
-	 5sZ3Lh5KhqQ+Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFB53CD6E69;
-	Wed,  3 Jun 2026 17:39:57 +0000 (UTC)
-From: Korenberg Mark via B4 Relay <devnull+socketpair.gmail.com@kernel.org>
-Date: Wed, 03 Jun 2026 22:39:53 +0500
-Subject: [PATCH] bpftool: Make the LLVM disassembler an optional runtime
- dependency
+	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="U5h/2kTs"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IYfGkOGQOySurEbfxT9ngcuojA2WAbo2m5uZMfYQX27Fbx0TUrIFphA2atMVjd1LjLFehBllzxsPOaHO3UmUHNwqXjz5QwFRJjRtZzpk5OZ+XWfNGwKSEt1kkqBoxrc61FAYkbeG+fR1PZFLDnZGIA5XBlTqbEJx28fXCdjOPPvVOIMocJwgfyDOkBbw+Lwy6QNT+jLsCxJs9akGh6DaedscgADXSPME5g6Z4y7OZCGnQlJCIAHXySVPQGjNDzOIAl6EwGcDGveZh0hTnAnG0a3hGYJljl6zdtpRJXTekx3twTu7p1mc4NnTgarsicRS2Hy7timS7DyO0Ofx5U/yzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WCwm7by1dJ4irR0/+NbbyjtFEaGptT8NIPO9ziTrg0U=;
+ b=J2kb80IaECkiTg6R0nSIhiasc+HLTFViRI8Apsz2l5x8shVywHlQt8gserkx7i94Nq5fRCLslP8ycsG7cuXUuA6u9Q1fVeHbWfXpyENnd+uN2e2iX5A+vcAtgalNgpignH8NlwbiwuL2n/hteh74enLAqq5T3xXqkwefSFHtIXdBcxHC/frem/lx6sUa/APM02Io39ZMaH7qqjXz6oZzZUwp+JpLBUSlBjw8SkTNQIe21NGWDk/ruSjcxC+2ihahAKv7ub0DXtoiG/blY1yhsAVckaftXLdOpfgy/Iwijh4NE1KQojiYuY5OofuVh6aGo5gBb8OEKmqdD0+7LrgNhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
+ dkim=pass header.d=est.tech; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WCwm7by1dJ4irR0/+NbbyjtFEaGptT8NIPO9ziTrg0U=;
+ b=U5h/2kTsf7xn/kdJmgoPI8N3yPa2DRTe1wszeK8E8NdLS6T1kp1q7iHMxLmy/LVb0BxdjUl43xv97VgvPFZ/z9K79NF+hVBcQgcGXganaqXiJHGUKGw5/mL+Gr/ZSKyvssAUzQCv3dIlW4AzwZss+9SdDEQbgEjGKc/Ny1bhiQZWc1jyH9Cd6Qc5R148gHhOe1QENRib5SduoVeellTWwM35K+hud213hfwI0bx98w1IVMmnJP9w7mrHE8LorOUQCF+5DJ6u/Hi1E5h5EBj1+12WBHH2rfMiNlJ3T45BMCLwclAnV7PxQbA93eo8D3zVpSB2x0rfi8mV/VQVtbv3ow==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=est.tech;
+Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:39b::19)
+ by AM7P189MB0929.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:17d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.7; Wed, 3 Jun 2026
+ 17:43:43 +0000
+Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+ ([fe80::69fc:c4d4:200b:e4b4]) by AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+ ([fe80::69fc:c4d4:200b:e4b4%7]) with mapi id 15.21.0092.006; Wed, 3 Jun 2026
+ 17:43:43 +0000
+From: Yunseong Kim <yunseong.kim@est.tech>
+Subject: [RFC PATCH v2 0/6] kcov: per-task dataflow extraction at kernel
+ function boundaries
+Date: Wed, 03 Jun 2026 19:43:27 +0200
+Message-Id: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAL9nIGoC/42NQQ7CIBBFr9LM2jFTahBdeQ/TRUsHIRowQLCm6
+ d3FLly7fO8n7y+QODpOcG4WiFxccsFXELsGtB38jdFNlUGQkCSpw7sOBachD+YRXuh5zvjb1Gi
+ kUOakSEmohWdk4+atfu0rW5dyiO/trLRf+1+3tEjI8tARjaY9anPhlPeZtYV+XdcPUPuD5sUAA
+ AA=
+X-Change-ID: 20260603-kcov-dataflow-next-20260603-8bf628f98086
+To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ K Prateek Nayak <kprateek.nayak@amd.com>, 
+ Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: Yunseong Kim <yunseong.kim@est.tech>, linux-kernel@vger.kernel.org, 
+ kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
+ linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+ workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Yunseong Kim <ysk@kzalloc.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780508619; l=11478;
+ i=yunseong.kim@est.tech; s=20260426; h=from:subject:message-id;
+ bh=N5WfnUZswbSSztr1Zm85NDygAEa2ZSIUEYtjxhZ7ucA=;
+ b=wfrfS6aT59ZcNcbBFvS6Kc1vfgHp4EEPb6O7KQlmtILOKvopGsrQMC4H+TeaD8fi5+ji2bh/S
+ oWopH5ACIYOCwu1btoY933urhLvxY9rpEdD9scIjIujlBwuofhJYJBx
+X-Developer-Key: i=yunseong.kim@est.tech; a=ed25519;
+ pk=1nBUX92cvTaavYG1+MR073D+XMKhdOciBZcnf6h6qEo=
+X-ClientProxiedBy: LO2P123CA0104.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:139::19) To AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:39b::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBA0avErBMsQ7CrRIu00QZERSuC8O5Jy
- 7f4/4WCmbDA3L2Q8aZCMTQMfQfm2IJDRnszjHyUXHLBdLJnjJ4lfzkKzCg1aSOQy0lAi1JGS88
- /XNZaP9YWoPxgAAAA
-X-Change-ID: 20260603-bpftool-plugin-c994bc3e0643
-To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
- Korenberg Mark <socketpair@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780508396; l=17763;
- i=socketpair@gmail.com; s=20260603; h=from:subject:message-id;
- bh=aP25w5DlRMlpRD13hPXrY+sdA/kazAuiqSIzsN6jCjo=;
- b=KO2gDX0W+nZYLgZElcrJXmy1YebBcl8lyEaNBrgdrldgnNmGQcB8fotxNzTDKTGXHmgwBtBgy
- wOYA2Fu/PB+AqbHme1fxuiUuJcm/Eb/FtP0IK03y7L+VJnJybh7yVAR
-X-Developer-Key: i=socketpair@gmail.com; a=ed25519;
- pk=2iAMjWhs7kA9X8ccetT2YVX8dvniXua2okQogw3Don8=
-X-Endpoint-Received: by B4 Relay for socketpair@gmail.com/20260603 with
- auth_id=806
-X-Original-From: Korenberg Mark <socketpair@gmail.com>
-Reply-To: socketpair@gmail.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8P189MB1752:EE_|AM7P189MB0929:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5553b108-353a-4ae8-9367-08dec197a744
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|921020|6133799003|18002099003|56012099006|11063799006|3023799007|5023799004;
+X-Microsoft-Antispam-Message-Info:
+	IAP4NDKpAM0mBzgA7dJ2G3RtphyQHMIVBBd2xw/TKIlF9DHG0TBjCxtlCubcPX8MQkbde2H7+pQGsCIfiLJJ4oQiKDJFR8eFtqWL/n1dr9ZyJ3QYgCGvVQX3Y9ZMzsoF35IKM+jlawPljiUDmlYyYeOhT3rosDtInYaPxN8e4L5v0K0S4Dwt8ZjxV9BqIhPaCFowR1gfg+8YdIu/p+13se9VFgARjIx4TXJeFR0srPNfPTtq1yK3sOfk1uFbNsh4/gL4WCf/BnCteQtEWMP1FV7eAm+nfz9fCgoh+kbLsVcfe/OwMKtyp/v6ZXAX0grrxZq/sE0EW2NholOYL7TrW+m+e5ByMeDR6D76NVaFI6ZpWsH0eAz3clRSABArzbg9uHhPZfzD6BgT4002u/q5kscjdt8/5q7J8IDuxQzUoTqc1vk5MZslLLe2t9etgMQv2J9Da9lAP5ukBLTioEVWUolvq6uQFgKGdWwzXz9K5mkQqak47M/RlEoPuiB4pEmzd7MFYvLJZayP8EKgulIRHh6O5S7+2uq5RD18p4GQ37OvATPsrOF3QNgH70CnmEdU4+aet2lsAWNeOyy4krzIFhXFUgR4G5PdyqZ+Un67k+reX0HQxYYQV/g9c+fzCch4JjBa/UT3mqeIqAJOjei/A6uMa4OCOs6IQVtEuPfChuCV48Nuv4U4AK97zkuMWjKy
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P189MB1752.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(921020)(6133799003)(18002099003)(56012099006)(11063799006)(3023799007)(5023799004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NlhZTFZVZXBJRDlaQXJyNmo4czYrdFkva1Vua05EbW5lbzB5RzVsQ2hrTXo0?=
+ =?utf-8?B?RDg1R2lEWWZLYkhJMVh3T2Vwb05iU1BFOWJOUUtkUmpqaHRmcjJaUlh5T2pW?=
+ =?utf-8?B?WjIrQlkzVmVqUi9WLzAxQWZlcjdSSEdRK1BmTU5TQVEraXAzNjYrLzlpV2Vm?=
+ =?utf-8?B?Q004VldRYXVjd3FxV2Q4NVkrSlFreTNMT2d3b1ZuWitKSTNxRG9CQnI5dlFn?=
+ =?utf-8?B?R0ExdVFNSDJWSXFCeWtRRnpiZjM1Yzg1TEx6dnpOK2w3ZUVyQ3lwMHpiVzlB?=
+ =?utf-8?B?ZUhFc3MxTWF3UnZsd0pCTWxCc1R5VDBaT1MwS2cvQ1F2MWludUJpNVVHRUM2?=
+ =?utf-8?B?Qzl4YVg0T2owYTRDd1o4bnBqZ3E1OE95Y1RxUG5MTmJZRnJzR0FkTldlbFRs?=
+ =?utf-8?B?c214alFSVjRnc20vREttNTdrVjNoVlZiMzBQZDR1cHBQWmEzVHVudmF4K2Nn?=
+ =?utf-8?B?UHJyUHJydFZ0MDJPUnJ6RGI3ZU9ORFVkRW9OTTdTMy9XSnNnOE9wRDZsTDJV?=
+ =?utf-8?B?S3p5SlFWNnlvYlF4S1FlTWxOdWpDNEY3TGdZQmo5Z2NLQmdxQVVwTE9uZ1JH?=
+ =?utf-8?B?UGgwcWNLdld4YlFrZ05iWnZNWXQ0OWc3aWcrRUw4UzlVL3JDbXc4YzZDSEor?=
+ =?utf-8?B?b1htT0Y4MnU5MUN5MThNQXMvbU5RVVNqeHJXOFZ6WndpcWptZkdWRnVCVUdx?=
+ =?utf-8?B?UDBVSitNWXVncjZqQUdiTm1zNmgwNlVNVlVJQW5SandqSXhBdzhFaHJvWWFk?=
+ =?utf-8?B?YXMvSUZSU0hwdldXVC9mR0liM0Jyc1d1SGRBNGtGLzFnVURPTDFkN2poK0lT?=
+ =?utf-8?B?YXpKTWpFQ3lUd1VJY1pGTUl1dzVIbER3RERUbWZoeDBEMHZYS05oQ24wTXM2?=
+ =?utf-8?B?WUZNS1RqMSszeEUwd2wvK29BRGFGKy9PZUNTR3RQQUptbXJBb0JlUi9DS3Fn?=
+ =?utf-8?B?S1hMSDRuMklzZSt2S3JEYm1sL3pITm1ad0Z1Q3RKTDl1amM2QVdyQ1RNR0Jk?=
+ =?utf-8?B?R1JIRmVGSTNxUUpPQnArOUNsQ3EwcG1rUXhZUU82a0t6RkFBc2hvYm5MYjhk?=
+ =?utf-8?B?a05sSWRlUDZualVQbjZTb1dXeGNubG92eldVYVZ3cTRvWDR3N0RFQlNoc2Fa?=
+ =?utf-8?B?RStydFQ5MlgyS2NmVU9ibzg0QnhGSFR6Z3FzczlRdGV1UXZCY1RoRkJYSEZB?=
+ =?utf-8?B?SzVFMm9LTHkzWGl2NkFJQ0JkUXlXQUtrMTJGd0tWb2dnRHRLUmJ6R0ZFaXR4?=
+ =?utf-8?B?bm9sV3ZjRXZFYlJIM3orV05KcDFxTk9DVEs4YXhvVStVc3JNVW9TSzMxank0?=
+ =?utf-8?B?Y0NFbHVsTGc3YitvQUhZT2VoZURtbmhsZkxwdWZrKzl1MWsxaVdmVVMwdlBs?=
+ =?utf-8?B?UG9OUFNNQnl0a0JCUjFPU21zdi9DeE1oWDZYWjRvNUQxSFBIT0RjT0x1c3dY?=
+ =?utf-8?B?YW9vS0dGWUx4ejRiWE16cWdDVDVNZThBYzQwcEJleUNVd1FiaVBuVVVyRG90?=
+ =?utf-8?B?N3JOQnIxaGhXaFJZZjJSRmEvVldodHZOWE9TMkJCd01jWXJGeUI3U0Vwa29h?=
+ =?utf-8?B?UFJOQzRSZVhMWXExMmEybS81NEUwYkk0bWpPSmlaWDEzRnl5d3lzdzhjSzRm?=
+ =?utf-8?B?SUFDTC8zMWpYKys3MnN1TzdNNUo0NU9VTTlLVWNBeU96ajVGSFZzMVptNGp2?=
+ =?utf-8?B?bnN3WGtXRnNvZU5CMVdGM1JNc2ttMHZWMXpPQllqNmlwZUNGZ29zMmlNWisv?=
+ =?utf-8?B?ODVBSEVudXNJakVRUzV4cjZBNlQrVmdvTFNlWi9yTTl1VVJ5aE1PNWxUcFhV?=
+ =?utf-8?B?dXVnUmNlR3k5WkV0MVg4U0pKSDhmTDdsZlk2T0ZHMVJSMkR3c2lVcEh6aWVk?=
+ =?utf-8?B?SlFjNjRsWEtRTUF4dEJQV2YvbHl4NDhjSlZVOUo1T0tmSFB0U2dMbnFCRTYw?=
+ =?utf-8?B?QXV3MndrVG1KYWJIdFkyVUJwb25oWkU4LzNoVkVsc2c4aXJ5cGRGdWhoWElq?=
+ =?utf-8?B?b3NBaDl3cGNyV0ROQ1FTKzF3VDRTSnQ0bmRWNGVpQ3d4eDhJSGUxVDgzNzI1?=
+ =?utf-8?B?Rzl6OG9YNGFiank2VDlVc3M0blpjQjFBdkpwUlpqQ2lGTUdiN0VKbjJnbVBq?=
+ =?utf-8?B?UFNXdWc1LzV3VGd5ZmZ1elJhYy9TWEFXMVA3UVBPQ0s4YnpzSVpvNGN2dG5K?=
+ =?utf-8?B?YnNuOHhPQnVMaW0zV1E3SGNWOGNTM0RZTTdNTXBxSXlwTTRBd0FHd3ZCRnFO?=
+ =?utf-8?B?eWdWd0VIWW0wdjN6enp0dUtPc1RwSllxU1J1RFQvY2FpTkR2S1MzWVhqdXFR?=
+ =?utf-8?B?N1JNZmp5QnRNbG91RlhLdUpUeE5mTy9oTHpjTGpRdUNsSGZpdFR6UT09?=
+X-OriginatorOrg: est.tech
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5553b108-353a-4ae8-9367-08dec197a744
+X-MS-Exchange-CrossTenant-AuthSource: AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2026 17:43:43.3449
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zgb2QLTjnE8T9iiL8ssMPr8/kuf5ZhKKgzRkU+5Ze8Ng0yEPS7aU4NqIj7h37VATh7N3FuzBfPMuEfWe91Ujqg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7P189MB0929
 
-From: Korenberg Mark <socketpair@gmail.com>
+Introduces a new KCOV exetened feature that captures function arguments and
+return values at kernel function boundaries, enabling per-process visibility
+into runtime dataflow.
 
-Fixes https://github.com/libbpf/bpftool/issues/262
+Motivation
+==========
 
-Signed-off-by: Korenberg Mark <socketpair@gmail.com>
+Even for highly experienced developers, it is not straightforward to
+determine, at any given moment, which specific kernel paths a user
+process is executing or how function arguments and return values evolve
+during execution. This lack of visibility makes debugging and security
+auditing significantly more challenging.
+
+Limitations of existing tools in per-task dataflow extraction:
+
+  - ftrace/kprobes provide dynamic tracing at specific probe points
+  - eBPF enables programmable in-kernel analysis but requires manual
+    specification of struct layouts rather than automatic extraction
+    from compiler debug metadata
+  - perf provides statistical sampling of hardware/software events,
+    inherently lossy and designed for performance profiling rather
+    than deterministic data-flow capture
+
+This is NOT a performance tool. The purpose is auditing and contract
+verification — confirming that kernel functions receive and return
+expected values at runtime.
+
+Real-World Result: Android Binder Vulnerabilities
+=================================================
+
+Using kcov-dataflow with CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL, I
+audited the Android binder driver (both C and Rust implementations)
+and discovered two exploitable logic bugs:
+
+Bug 1: BINDER_SET_MAX_THREADS accepts 0xFFFFFFFF without validation.
+  kcov-dataflow showed: set_max_threads(max=0xffffffff) → return 0
+  Impact: bypasses RLIMIT_NPROC, OOM from unprivileged userspace.
+
+Bug 2: BC_ENTER_LOOPER accepted twice without error.
+  kcov-dataflow showed: looper_enter() called with ENTERED already set,
+  no rejection, return=0 on both calls.
+  Impact: thread pool state corruption.
+
+These bugs are invisible to:
+  - KASAN: no memory corruption occurs
+  - Edge coverage: same code paths for valid/invalid values
+  - ftrace: shows "function called" but not argument values
+
+Only by capturing the actual runtime values at function boundaries
+could I detect that 0xFFFFFFFF passes through without rejection, or
+that the same state-mutating command succeeds twice.
+
+The fixes are submitted separately:
+  [PATCH 1/4] binder: cap BINDER_SET_MAX_THREADS at RLIMIT_NPROC
+  [PATCH 2/4] binder: reject duplicate BC_ENTER_LOOPER commands
+  [PATCH 3/4] rust_binder: cap set_max_threads at RLIMIT_NPROC
+  [PATCH 4/4] rust_binder: reject duplicate BC_ENTER_LOOPER in looper_enter
+
+Approach
+========
+
+Rather than tracing individual probe points, this patch set enables
+continuous per-task extraction of data flow across all instrumented
+function boundaries — capturing how argument values enter and return
+values exit each function as execution progresses through a subsystem.
+
+The key insight is that function boundaries are natural observation
+points: arguments at entry reveal what data enters a subsystem, and
+return values reveal what comes out.
+
+The compiler (clang with a SanitizerCoverage extension) inserts
+callbacks at function entry/exit that record argument values into a
+per-task mmap'd buffer. The kernel backend reads struct fields safely
+via copy_from_kernel_nofault(). When not enabled for a task, the
+overhead is a single boolean check per instrumented function.
+
+Design
+======
+
+- Completely independent from legacy /sys/kernel/debug/kcov
+- Separate device: /sys/kernel/debug/kcov_dataflow
+- Separate ioctl namespace ('d'), separate per-task buffer
+- Per-module opt-in: KCOV_DATAFLOW_file.o := y
+- Optional global enablement: CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL
+- Supports both C and Rust kernel modules
+- Safe in process context; rejects interrupt/NMI via in_task() guard
+- Recursion guard via sequence counter bit 31
+- Requires clang with -fsanitize-coverage=dataflow-args,dataflow-ret
+  (Kconfig uses cc-option to verify compiler support)
+
+Performance Note
+================
+
+This feature is designed for auditing and security analysis, NOT for
+production use or performance measurement. It should not be compared
+to runtime tracing tools optimized for low overhead.
+
+Per-module instrumentation (recording active):
+  ~27ns per callback (dominated by LOCK XADD + copy_from_kernel_nofault)
+
+Global instrumentation (INSTRUMENT_ALL, recording disabled):
+  .text: +9.5%, .data: +44%, boot: +71%, syscall latency: +133%
+
+CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL instruments every function in the
+kernel. This incurs significant overhead comparable to KMSAN and is
+intended exclusively for:
+  - Fuzzer-driven whole-kernel auditing (syzkaller integration)
+  - Full-subsystem contract verification (as demonstrated with binder)
+  - Capturing complete call-flow data for post-mortem analysis
+
+For targeted auditing, use per-module opt-in (KCOV_DATAFLOW_file.o := y)
+which limits overhead to the specific subsystem under investigation.
+
+Patches
+=======
+
+1/6: Core kernel implementation (kernel/kcov.c, sched.h, Kconfig)
+2/6: Build system support (Makefile.kcov, Makefile.lib)
+3/6: CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL and NO_INLINE
+4/6: Userspace tools and test modules
+5/6: Harden kcov_df_write() against interrupt reentry
+6/6: Recursion guard and documentation
+
+Prerequisites / Toolchain
+=========================
+
+This kernel patch relies on a custom LLVM SanitizerCoverage pass that
+emits __sanitizer_cov_trace_args() and __sanitizer_cov_trace_ret()
+callbacks at function boundaries, extracting struct field layouts from
+DWARF debug metadata at compile time.
+
+To build and test this patchset, compile the kernel using the modified
+toolchain:
+
+1. LLVM/Clang (adds -fsanitize-coverage=dataflow-args,dataflow-ret):
+   https://github.com/llvm/llvm-project/pull/201410
+
+2. Rust (rustc 1.98 built against the above LLVM 23, for Rust module support):
+   https://github.com/yskzalloc/rust
+
+Build instructions:
+
+  # Build the modified clang
+  cd llvm-project && cmake -G Ninja -S llvm -B build \
+    -DLLVM_ENABLE_PROJECTS="clang;lld" -DCMAKE_BUILD_TYPE=Release
+  ninja -C build clang
+
+  # Build the kernel with dataflow support
+  export PATH=$HOME/llvm-project/build/bin:$PATH
+  export RUSTC=$HOME/rust/build/x86_64-unknown-linux-gnu/stage1/bin/rustc
+  export RUST_LIB_SRC=$HOME/rust/library
+
+  make LLVM=1 defconfig
+  scripts/config --enable KCOV \
+                 --enable KCOV_DATAFLOW_ARGS \
+                 --enable KCOV_DATAFLOW_RET
+  make LLVM=1 olddefconfig
+  make LLVM=1 -j$(nproc)
+
+Note: CONFIG_KCOV_DATAFLOW_ARGS and CONFIG_KCOV_DATAFLOW_RET depend on
+CONFIG_KCOV and use $(cc-option) to verify the compiler supports the
+new flags. With standard (unpatched) clang, these options will not
+appear in menuconfig and silently remain disabled.
+
+Optional configs:
+  --enable KCOV_DATAFLOW_INSTRUMENT_ALL  (instrument entire kernel)
+  --enable KCOV_DATAFLOW_NO_INLINE       (enabled by default)
+  --set-val FRAME_WARN 4096             (needed for INSTRUMENT_ALL)
+  --disable KASAN                        (conflicts with INSTRUMENT_ALL)
+
+Testing
+=======
+
+Tested on linux-next 7.1.0-rc5 with custom clang/LLVM 23 and
+rustc 1.98-nightly (built against the same LLVM). Verified under
+virtme-ng (QEMU/KVM, 1GB RAM):
+- Per-module C (eight_args_mod): all 8 functions captured
+- Per-module C (deep_chain_mod): 10-deep call chain captured
+- Per-module Rust (eight_args_rust): all 8 rfunc functions captured
+- Interrupt safety: in_task() + recursion guard prevents corruption
+- Binder auditing: discovered 2 exploitable bugs (patches separate)
+- Standard clang (without patch): Kconfig options correctly hidden
+- Global enablement (INSTRUMENT_ALL): kernel boots, 104K records
+  captured during single copy.fail exploit reproduction
+  
+    https://github.com/yskzalloc/kcov-dataflow/blob/main/copy.fail/origin/converted.txt
+
+Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
 ---
-On Fedora 43, installing `bpftool` pulls in `llvm20-libs` (~140 MiB) as a hard
-dependency, even though the bpftool binary itself is ~730 KiB:
+Changes in v2:
+- EDITME: describe what is new in this series revision.
+- EDITME: use bulletpoints and terse descriptions.
+- Link to v1: https://patch.msgid.link/20260603-kcov-dataflow-next-20260603-v1-0-e64300bf17cf@est.tech
 
-    # dnf install bpftool
-    Installing:
-     bpftool            x86_64   7.6.0-1.fc43    fedora   731.4 KiB
-    Installing dependencies:
-     llvm20-filesystem  x86_64   20.1.8-2.fc43   fedora   0.0   B
-     llvm20-libs        x86_64   20.1.8-2.fc43   fedora   139.7 MiB
-
-The LLVM library is only used to disassemble JIT-compiled (native) programs,
-i.e. `bpftool prog dump jited`. Every other use case  works
-without LLVM. For scripting, automation, and CI, dragging in ~140 MB of LLVM
-just to have a single optional command available is a heavy cost.
-
-Load the LLVM disassembler lazily at runtime via `dlopen`/`dlsym` instead of
-linking against it at build time. When `prog dump jited` is invoked and the
-library is unavailable, fall back gracefully (libbfd, or an informative message).
-This would remove the automatic ELF dependency on `libLLVM.so`, allowing distributions to make
-LLVM a weak/optional dependency (e.g. RPM `Recommends`) rather than a hard one.
-
-The `perf` tool is solving the exact same problem (libLLVM/libcapstone
-bloating dependencies for users who never disassemble) by dlopen-ing these
-libraries at runtime, so distributions can ship them as a separate, optional
-package:
-
-- Overview: https://lwn.net/Articles/1040879/
-- https://lore.kernel.org/lkml/?q=Capstone%2Fllvm+dlopen
-
-- Build with the libbfd disassembler instead of LLVM (smaller, but a build/
-  packaging choice and subject to libbfd's unstable ABI).
-- Build with no disassembler at all (loses `prog dump jited` entirely).
-- Ship the disassembler in a separate binary (works, but less idiomatic for a
-  single-binary tool; dlopen keeps the existing UX intact).
-
-- bpftool 7.6.0-1.fc43 (Fedora 43), x86_64
----
- tools/bpf/bpftool/Makefile      |  63 ++++++++++++++++++----
- tools/bpf/bpftool/jit_disasm.c  | 112 +++++++++++++++++++++++-----------------
- tools/bpf/bpftool/llvm_disasm.c |  85 ++++++++++++++++++++++++++++++
- tools/bpf/bpftool/llvm_disasm.h |  38 ++++++++++++++
- 4 files changed, 240 insertions(+), 58 deletions(-)
-
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 0febf60e1..9887ac6fb 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -62,6 +62,7 @@ $(LIBBPF_BOOTSTRAP)-clean: FORCE | $(LIBBPF_BOOTSTRAP_OUTPUT)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) clean >/dev/null
- 
- prefix ?= /usr/local
-+libdir ?= $(prefix)/lib
- bash_compdir ?= /usr/share/bash-completion/completions
- 
- CFLAGS += -O2
-@@ -157,6 +158,8 @@ include $(wildcard $(OUTPUT)*.d)
- all: $(OUTPUT)bpftool
- 
- SRCS := $(wildcard *.c)
-+# llvm_disasm.c is compiled separately into the bpftool-llvm.so plugin.
-+SRCS := $(filter-out llvm_disasm.c,$(SRCS))
- 
- ifeq ($(feature-llvm),1)
- ifneq ($(SKIP_LLVM),1)
-@@ -165,19 +168,36 @@ endif
- endif
- 
- ifeq ($(HAS_LLVM),1)
-+  # The libLLVM-based JIT disassembler is built as a separate plugin,
-+  # bpftool-llvm.so, which is the only object that links against libLLVM.
-+  # bpftool loads it lazily with dlopen() (see jit_disasm.c), so the bpftool
-+  # binary itself keeps no dependency on the large libLLVM shared object.
-   CFLAGS  += -DHAVE_LLVM_SUPPORT
-+  CFLAGS  += -DLLVM_PLUGIN_DIR='"$(libdir)/bpftool"'
-+  # dlopen() lives in libc on modern glibc, but keep -ldl for portability.
-+  LIBS    += -ldl
-+
-+  # Flags used to build the plugin itself (the only part that needs libLLVM).
-   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
--  # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
--  # (e.g. when bpftool build is called from selftests build as selftests
--  # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
--  # compilation error due to redefinition. Let's filter it out here.
--  CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
--  LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-+  # llvm-config always adds -D_GNU_SOURCE, which llvm_disasm.c already defines;
-+  # filter it out to avoid a redefinition warning.
-+  LLVM_PLUGIN_CFLAGS := $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
-+
-+  # Embed libLLVM into the plugin statically when requested with
-+  # LLVM_LINK_STATIC=1, or when this LLVM install only ships static libraries
-+  # ("llvm-config --shared-mode" reports "static"). Otherwise link the shared
-+  # libLLVM, which is the only runtime dependency of the plugin.
-   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
--    LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
--    LIBS += -lstdc++
-+    LLVM_LINK_STATIC := 1
-+  endif
-+  ifeq ($(LLVM_LINK_STATIC),1)
-+    LLVM_PLUGIN_LIBS := $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-+    LLVM_PLUGIN_LIBS += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-+    LLVM_PLUGIN_LIBS += -lstdc++
-+  else
-+    LLVM_PLUGIN_LIBS := $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-   endif
--  LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
-+  LLVM_PLUGIN_LDFLAGS := $(shell $(LLVM_CONFIG) --ldflags)
- else
-   ifneq ($(SKIP_LIBBFD),1)
-   # Fall back on libbfd
-@@ -276,6 +296,20 @@ $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOOTSTRAP)
- $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
- 	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
- 
-+ifeq ($(HAS_LLVM),1)
-+all: $(OUTPUT)bpftool-llvm.so
-+
-+$(OUTPUT)llvm_disasm.o: llvm_disasm.c
-+	$(QUIET_CC)$(CC) $(CFLAGS) $(LLVM_PLUGIN_CFLAGS) -fPIC -c -MMD $< -o $@
-+
-+# The plugin is a shared object by definition, so drop a global -static (e.g.
-+# from EXTRA_LDFLAGS for a static bpftool) which would conflict with -shared.
-+# Embedding libLLVM statically is controlled separately (see LLVM_LINK_STATIC).
-+$(OUTPUT)bpftool-llvm.so: $(OUTPUT)llvm_disasm.o
-+	$(QUIET_LINK)$(CC) $(CFLAGS) $(filter-out -static,$(LDFLAGS)) \
-+		$(LLVM_PLUGIN_LDFLAGS) -shared -o $@ $< $(LLVM_PLUGIN_LIBS)
-+endif
-+
- $(BOOTSTRAP_OUTPUT)%.o: %.c $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS) | $(BOOTSTRAP_OUTPUT)
- 	$(QUIET_CC)$(HOSTCC) $(HOST_CFLAGS) -c -MMD $< -o $@
- 
-@@ -288,17 +322,25 @@ feature-detect-clean:
- 
- clean: $(LIBBPF)-clean $(LIBBPF_BOOTSTRAP)-clean feature-detect-clean
- 	$(call QUIET_CLEAN, bpftool)
--	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)*.o $(OUTPUT)*.d
-+	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)bpftool-llvm.so $(OUTPUT)*.o $(OUTPUT)*.d
- 	$(Q)$(RM) -- $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
- 	$(Q)$(RM) -r -- $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT)
- 	$(call QUIET_CLEAN, core-gen)
- 	$(Q)$(RM) -- $(OUTPUT)FEATURE-DUMP.bpftool
- 	$(Q)$(RM) -r -- $(OUTPUT)feature/
- 
-+ifeq ($(HAS_LLVM),1)
-+install-bin: $(OUTPUT)bpftool-llvm.so
-+endif
- install-bin: $(OUTPUT)bpftool
- 	$(call QUIET_INSTALL, bpftool)
- 	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(prefix)/sbin
- 	$(Q)$(INSTALL) $(OUTPUT)bpftool $(DESTDIR)$(prefix)/sbin/bpftool
-+ifeq ($(HAS_LLVM),1)
-+	$(call QUIET_INSTALL, bpftool-llvm.so)
-+	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(libdir)/bpftool
-+	$(Q)$(INSTALL) -m 0755 $(OUTPUT)bpftool-llvm.so $(DESTDIR)$(libdir)/bpftool/bpftool-llvm.so
-+endif
- 
- install: install-bin
- 	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(bash_compdir)
-@@ -307,6 +349,7 @@ install: install-bin
- uninstall:
- 	$(call QUIET_UNINST, bpftool)
- 	$(Q)$(RM) -- $(DESTDIR)$(prefix)/sbin/bpftool
-+	$(Q)$(RM) -- $(DESTDIR)$(libdir)/bpftool/bpftool-llvm.so
- 	$(Q)$(RM) -- $(DESTDIR)$(bash_compdir)/bpftool
- 
- doc:
-diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
-index 04541155e..e8cef2da2 100644
---- a/tools/bpf/bpftool/jit_disasm.c
-+++ b/tools/bpf/bpftool/jit_disasm.c
-@@ -25,10 +25,9 @@
- #include <bpf/libbpf.h>
- 
- #ifdef HAVE_LLVM_SUPPORT
--#include <llvm-c/Core.h>
--#include <llvm-c/Disassembler.h>
--#include <llvm-c/Target.h>
--#include <llvm-c/TargetMachine.h>
-+#include <dlfcn.h>
-+
-+#include "llvm_disasm.h"
- #endif
- 
- #ifdef HAVE_LIBBFD_SUPPORT
-@@ -45,7 +44,32 @@ static int oper_count;
- #ifdef HAVE_LLVM_SUPPORT
- #define DISASM_SPACER
- 
--typedef LLVMDisasmContextRef disasm_ctx_t;
-+/*
-+ * The libLLVM-based disassembler used for "bpftool prog dump jited" lives in a
-+ * separate plugin, bpftool-llvm.so, which is the only object linked against
-+ * libLLVM. This keeps the bpftool binary itself free of a hard dependency on
-+ * the (large) libLLVM shared object: the plugin is loaded lazily with dlopen()
-+ * the first time a JITed image actually needs to be disassembled, with its
-+ * entry points resolved by dlsym(). See llvm_disasm.c for the plugin.
-+ *
-+ * LLVM_PLUGIN_DIR is the install directory baked in at build time
-+ * ($(libdir)/bpftool). When set, the plugin is loaded from that absolute
-+ * location; otherwise only the bare file name is used, i.e. the plugin is
-+ * looked up via the dynamic linker search path (or the current directory).
-+ */
-+#ifdef LLVM_PLUGIN_DIR
-+#define LLVM_PLUGIN_PATH LLVM_PLUGIN_DIR "/bpftool-llvm.so"
-+#else
-+#define LLVM_PLUGIN_PATH "bpftool-llvm.so"
-+#endif
-+
-+typedef void *disasm_ctx_t;
-+
-+static void *llvm_plugin_handle;
-+static __typeof__(&bpftool_llvm_init) p_bpftool_llvm_init;
-+static __typeof__(&bpftool_llvm_create_context) p_bpftool_llvm_create_context;
-+static __typeof__(&bpftool_llvm_destroy_context) p_bpftool_llvm_destroy_context;
-+static __typeof__(&bpftool_llvm_disassemble) p_bpftool_llvm_disassemble;
- 
- static int printf_json(char *s)
- {
-@@ -63,48 +87,13 @@ static int printf_json(char *s)
- 	return 0;
- }
- 
--/* This callback to set the ref_type is necessary to have the LLVM disassembler
-- * print PC-relative addresses instead of byte offsets for branch instruction
-- * targets.
-- */
--static const char *
--symbol_lookup_callback(__maybe_unused void *disasm_info,
--		       __maybe_unused uint64_t ref_value,
--		       uint64_t *ref_type, __maybe_unused uint64_t ref_PC,
--		       __maybe_unused const char **ref_name)
--{
--	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
--	return NULL;
--}
--
- static int
- init_context(disasm_ctx_t *ctx, const char *arch,
- 	     __maybe_unused const char *disassembler_options,
- 	     __maybe_unused unsigned char *image, __maybe_unused ssize_t len,
- 	     __maybe_unused __u64 func_ksym)
- {
--	char *triple;
--
--	if (arch)
--		triple = LLVMNormalizeTargetTriple(arch);
--	else
--		triple = LLVMGetDefaultTargetTriple();
--	if (!triple) {
--		p_err("Failed to retrieve triple");
--		return -1;
--	}
--
--	/*
--	 * Enable all aarch64 ISA extensions so the disassembler can handle any
--	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
--	 */
--	if (!strncmp(triple, "aarch64", 7))
--		*ctx = LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0, NULL,
--						   symbol_lookup_callback);
--	else
--		*ctx = LLVMCreateDisasm(triple, NULL, 0, NULL, symbol_lookup_callback);
--	LLVMDisposeMessage(triple);
--
-+	*ctx = p_bpftool_llvm_create_context(arch);
- 	if (!*ctx) {
- 		p_err("Failed to create disassembler");
- 		return -1;
-@@ -115,7 +104,7 @@ init_context(disasm_ctx_t *ctx, const char *arch,
- 
- static void destroy_context(disasm_ctx_t *ctx)
- {
--	LLVMDisposeMessage(*ctx);
-+	p_bpftool_llvm_destroy_context(*ctx);
- }
- 
- static int
-@@ -125,8 +114,8 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
- 	char buf[256];
- 	int count;
- 
--	count = LLVMDisasmInstruction(*ctx, image + pc, len - pc, func_ksym + pc,
--				      buf, sizeof(buf));
-+	count = p_bpftool_llvm_disassemble(*ctx, image, len, pc, func_ksym,
-+					   buf, sizeof(buf));
- 	if (json_output)
- 		printf_json(buf);
- 	else
-@@ -137,10 +126,37 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
- 
- int disasm_init(void)
- {
--	LLVMInitializeAllTargetInfos();
--	LLVMInitializeAllTargetMCs();
--	LLVMInitializeAllDisassemblers();
--	return 0;
-+	if (llvm_plugin_handle)
-+		return p_bpftool_llvm_init();
-+
-+	/* Load the plugin by its absolute install path. */
-+	llvm_plugin_handle = dlopen(LLVM_PLUGIN_PATH, RTLD_NOW | RTLD_LOCAL);
-+	if (!llvm_plugin_handle) {
-+		p_err("failed to load %s, install it to disassemble JITed programs: %s",
-+		      LLVM_PLUGIN_PATH, dlerror());
-+		return -1;
-+	}
-+
-+#define RESOLVE(name)							       \
-+	do {								       \
-+		p_##name = (__typeof__(p_##name))dlsym(llvm_plugin_handle,     \
-+						       #name);		       \
-+		if (!p_##name) {					       \
-+			p_err("%s is missing symbol %s: %s",		       \
-+			      LLVM_PLUGIN_PATH, #name, dlerror());	       \
-+			dlclose(llvm_plugin_handle);			       \
-+			llvm_plugin_handle = NULL;			       \
-+			return -1;					       \
-+		}							       \
-+	} while (0)
-+
-+	RESOLVE(bpftool_llvm_init);
-+	RESOLVE(bpftool_llvm_create_context);
-+	RESOLVE(bpftool_llvm_destroy_context);
-+	RESOLVE(bpftool_llvm_disassemble);
-+#undef RESOLVE
-+
-+	return p_bpftool_llvm_init();
- }
- #endif /* HAVE_LLVM_SUPPORT */
- 
-diff --git a/tools/bpf/bpftool/llvm_disasm.c b/tools/bpf/bpftool/llvm_disasm.c
-new file mode 100644
-index 000000000..b83216191
---- /dev/null
-+++ b/tools/bpf/bpftool/llvm_disasm.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * libLLVM-based BPF JIT disassembler plugin for bpftool.
-+ *
-+ * This translation unit is built into a standalone shared object
-+ * (bpftool-llvm.so) which is the only bpftool component that links against
-+ * libLLVM. bpftool loads it lazily with dlopen() (see jit_disasm.c) so that
-+ * the bpftool binary itself does not depend on the large libLLVM shared
-+ * object. Only the small, stable C ABI declared in llvm_disasm.h is exposed.
-+ */
-+#ifndef _GNU_SOURCE
-+#define _GNU_SOURCE
-+#endif
-+#include <stdint.h>
-+#include <string.h>
-+#include <sys/types.h>
-+
-+#include <llvm-c/Core.h>
-+#include <llvm-c/Disassembler.h>
-+#include <llvm-c/Target.h>
-+#include <llvm-c/TargetMachine.h>
-+
-+#include "llvm_disasm.h"
-+
-+/* This callback to set the ref_type is necessary to have the LLVM disassembler
-+ * print PC-relative addresses instead of byte offsets for branch instruction
-+ * targets.
-+ */
-+static const char *
-+symbol_lookup_callback(void *disasm_info, uint64_t ref_value,
-+		       uint64_t *ref_type, uint64_t ref_PC,
-+		       const char **ref_name)
-+{
-+	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
-+	return NULL;
-+}
-+
-+int bpftool_llvm_init(void)
-+{
-+	LLVMInitializeAllTargetInfos();
-+	LLVMInitializeAllTargetMCs();
-+	LLVMInitializeAllDisassemblers();
-+
-+	return 0;
-+}
-+
-+void *bpftool_llvm_create_context(const char *arch)
-+{
-+	LLVMDisasmContextRef ctx;
-+	char *triple;
-+
-+	if (arch)
-+		triple = LLVMNormalizeTargetTriple(arch);
-+	else
-+		triple = LLVMGetDefaultTargetTriple();
-+	if (!triple)
-+		return NULL;
-+
-+	/*
-+	 * Enable all aarch64 ISA extensions so the disassembler can handle any
-+	 * instruction the kernel JIT might emit (e.g. ARM64 LSE atomics).
-+	 */
-+	if (!strncmp(triple, "aarch64", 7))
-+		ctx = LLVMCreateDisasmCPUFeatures(triple, "", "+all", NULL, 0,
-+						  NULL, symbol_lookup_callback);
-+	else
-+		ctx = LLVMCreateDisasm(triple, NULL, 0, NULL,
-+				       symbol_lookup_callback);
-+	LLVMDisposeMessage(triple);
-+
-+	return ctx;
-+}
-+
-+void bpftool_llvm_destroy_context(void *ctx)
-+{
-+	LLVMDisasmDispose(ctx);
-+}
-+
-+int bpftool_llvm_disassemble(void *ctx, unsigned char *image, ssize_t len,
-+			     int pc, uint64_t func_ksym, char *buf,
-+			     size_t buf_sz)
-+{
-+	return LLVMDisasmInstruction(ctx, image + pc, len - pc, func_ksym + pc,
-+				     buf, buf_sz);
-+}
-diff --git a/tools/bpf/bpftool/llvm_disasm.h b/tools/bpf/bpftool/llvm_disasm.h
-new file mode 100644
-index 000000000..cd9491ea3
---- /dev/null
-+++ b/tools/bpf/bpftool/llvm_disasm.h
-@@ -0,0 +1,38 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+#ifndef __BPFTOOL_LLVM_DISASM_H
-+#define __BPFTOOL_LLVM_DISASM_H
-+
-+#include <stddef.h>
-+#include <stdint.h>
-+#include <sys/types.h>
-+
-+/*
-+ * Stable C ABI between bpftool and its optional libLLVM-based JIT disassembler
-+ * plugin (bpftool-llvm.so). bpftool resolves these symbols with dlsym()
-+ * after dlopen()ing the plugin; the plugin is the only object that links
-+ * against libLLVM. See jit_disasm.c (loader) and llvm_disasm.c (plugin).
-+ */
-+
-+/* Initialize the libLLVM targets and disassemblers. Returns 0 on success. */
-+int bpftool_llvm_init(void);
-+
-+/*
-+ * Create a disassembler context for @arch (NULL selects the host
-+ * architecture). Returns an opaque context pointer, or NULL on failure.
-+ */
-+void *bpftool_llvm_create_context(const char *arch);
-+
-+/* Release a context previously returned by bpftool_llvm_create_context(). */
-+void bpftool_llvm_destroy_context(void *ctx);
-+
-+/*
-+ * Disassemble the single instruction at @image[@pc] into @buf as a NUL
-+ * terminated string. @func_ksym is the kernel address of @image and is used to
-+ * render absolute branch targets. Returns the instruction length in bytes, or
-+ * 0 if the instruction could not be decoded.
-+ */
-+int bpftool_llvm_disassemble(void *ctx, unsigned char *image, ssize_t len,
-+			     int pc, uint64_t func_ksym, char *buf,
-+			     size_t buf_sz);
-+
-+#endif /* __BPFTOOL_LLVM_DISASM_H */
+To: Ingo Molnar <mingo@redhat.com>
+To: Peter Zijlstra <peterz@infradead.org>
+To: Juri Lelli <juri.lelli@redhat.com>
+To: Vincent Guittot <vincent.guittot@linaro.org>
+To: Dietmar Eggemann <dietmar.eggemann@arm.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+To: Ben Segall <bsegall@google.com>
+To: Mel Gorman <mgorman@suse.de>
+To: Valentin Schneider <vschneid@redhat.com>
+To: K Prateek Nayak <kprateek.nayak@amd.com>
+To: Dmitry Vyukov <dvyukov@google.com>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+To: Bill Wendling <morbo@google.com>
+To: Justin Stitt <justinstitt@google.com>
+To: Nicolas Schier <nsc@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>
+To: Boqun Feng <boqun@kernel.org>
+To: Gary Guo <gary@garyguo.net>
+To: Björn Roy Baron <bjorn3_gh@protonmail.com>
+To: Benno Lossin <lossin@kernel.org>
+To: Andreas Hindborg <a.hindborg@kernel.org>
+To: Alice Ryhl <aliceryhl@google.com>
+To: Trevor Gross <tmgross@umich.edu>
+To: Danilo Krummrich <dakr@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: kasan-dev@googlegroups.com
+Cc: llvm@lists.linux.dev
+Cc: linux-kbuild@vger.kernel.org
+Cc: rust-for-linux@vger.kernel.org
+Cc: workflows@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
 
 ---
-base-commit: ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
-change-id: 20260603-bpftool-plugin-c994bc3e0643
+Yunseong Kim (6):
+      kcov: add per-task dataflow tracking for function arguments/return values
+      kcov: add build system support for dataflow instrumentation
+      kcov: add CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL and NO_INLINE
+      tools/kcov-dataflow: add userspace consumer and test modules
+      kcov: add interrupt context guard to kcov_df_write()
+      kcov: add recursion guard and documentation for kcov-dataflow
+
+ Documentation/dev-tools/kcov-dataflow.rst          | 282 +++++++++++++++++++
+ include/linux/sched.h                              |   8 +
+ kernel/Makefile                                    |   3 +
+ kernel/kcov.c                                      | 307 +++++++++++++++++++++
+ lib/Kconfig.debug                                  |  43 +++
+ rust/Makefile                                      |   1 +
+ scripts/Makefile.kcov                              |   6 +
+ scripts/Makefile.lib                               |   7 +
+ tools/kcov-dataflow/.gitignore                     |  12 +
+ tools/kcov-dataflow/deep_module/Makefile           |   2 +
+ tools/kcov-dataflow/deep_module/deep_chain_mod.c   | 224 +++++++++++++++
+ tools/kcov-dataflow/eight_args_c/Makefile          |   3 +
+ tools/kcov-dataflow/eight_args_c/eight_args_mod.c  |  95 +++++++
+ tools/kcov-dataflow/eight_args_rust/Makefile       |   2 +
+ .../eight_args_rust/eight_args_rust.rs             | 114 ++++++++
+ tools/kcov-dataflow/kcov-view.py                   | 272 ++++++++++++++++++
+ tools/kcov-dataflow/trigger.c                      | 125 +++++++++
+ 17 files changed, 1506 insertions(+)
+---
+base-commit: f7af91adc230aa99e23330ecf85bc9badd9780ad
+change-id: 20260603-kcov-dataflow-next-20260603-8bf628f98086
 
 Best regards,
--- 
-Korenberg Mark <socketpair@gmail.com>
-
+--  
+Yunseong Kim <yunseong.kim@est.tech>
 
