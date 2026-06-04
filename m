@@ -1,143 +1,136 @@
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCD53C457D
-	for <llvm@lists.linux.dev>; Thu,  4 Jun 2026 19:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562422EEE92;
+	Thu,  4 Jun 2026 21:47:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780602546; cv=none; b=Eqzb8bX2AmeXcNPFj2PBhz0BjpmLHrVZM3ifinWENRI56w2tcE9WaVHdkjJENllLtIORFEyDuSM9cNn+HftbZBik11NnzcZUr4XB9BynOcehpKSb8KLtA3bUVPd3iYdUBUb3RnVzhq/89sIudyrG9wleJwP49smHRCslajoaYsI=
+	t=1780609627; cv=none; b=ixy2K6uD4R7vE1abeO6KjZw1bzWgJqQ+VMxIJWFT9MX1YeNVUhtZ/KMJ2AbUzPA3eXl4RZ37r2JNIr2LDm8gJon1KZlE6vpLcMVXRFVy7iMto7QpCJP6zvFD9DshoJOqA4KZBGIQogJJ2TdsnBfAAVLKmuFd72ChnRMg+6CskDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780602546; c=relaxed/simple;
-	bh=95hgKfjMszOODLBl4b5BWs5yYW/PDnGj21k3EiOKjUw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=mqRUiSppuN9QfrrJiPD7MPFdy0NAGH/IyCGnAeOQWxu3+qdWTUtR120E5kPvczznkRRIt6lNTgrKJJ69xsdkRIHA+MOkG1oYipNPfJEWGxxl8euyf4xxOnFjUnuR6uXaZYt5qMaGbswlfzWNUfE9QB+n4VmviLmTbf9PAno5VG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kSKT9GUN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Z1LZyYBx; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1780609627; c=relaxed/simple;
+	bh=YbaEXYukQgl0J4eLc4dkXihGQg/spIPsxRJ1aBDKrso=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=iTOkzAmhk04pYuj9Pa0jcGehDdzYP0cvCOUStl5bdnktVMDMJ3MTXTCbqR1rPnwQSIdQX/3ni+4POs1plYjS88PArj9dZ0x4T+qoly8D9I3lHcrcEZ47VfAGTUWPPXPFpL9g5sE5hHkvCwasG7NlIz+YtBZWbHDmTNaUz5d3JGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RWAg/heV; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kSKT9GUN";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Z1LZyYBx"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id EDF0F1400128;
-	Thu,  4 Jun 2026 15:49:03 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Thu, 04 Jun 2026 15:49:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1780602543;
-	 x=1780688943; bh=pdkLrvzWndG9KI1O9t/BO1slV9taKxOlS4jkBc5YjYM=; b=
-	kSKT9GUNypJ5Y1S9eoyKbpUlCbxgHnoB03x0E3VipnIKd2aYmKOopmoONS+qmM3x
-	gN7CGay51uLoQJnwqqfOKw1+3wf7kBbjo+kO0640sF9e72U2eNTz/utr5ockzMNR
-	0qg2dred6WhWIUOnhayEylNbmXQ34cq2XCxtfJkcefTZ6SOSMyy4+guVu9yAKvJG
-	CoD0o4UuJULBNAgEezYcXX8/qrGTe27tMwZ48XQ9p4dPEpXxEwKXzUeVz8s7HBKz
-	seFzVQh+zK/H0+5M4HNQT8tGS2IPtLgAb1gV7UndnCl3On4LE8Ud1MJZrZHN7eQh
-	cdbvvrzvORfpdIuwPMGOsQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1780602543; x=
-	1780688943; bh=pdkLrvzWndG9KI1O9t/BO1slV9taKxOlS4jkBc5YjYM=; b=Z
-	1LZyYBxXC4Iy8lw4wxgQKHG01Dz5k+j5PCXRwz1n5YCa0rYY7SNahbEDRwJNQGFr
-	jNAdLL8OATnEkRhRsi7740Z9nHSRyQVDaKBTzwv8syg48fNmjIdJvE2pa8mEOUtH
-	vdvopl69zekdOoh8XSQbyWBmLs2kKZPQsAPeuQgXxZTplVKayWWkpkjtGIDJfryW
-	sFc68sW/OrtgQIwoTKBP0CzrCDtqf2d+p+RSHXL8Yeh/KDXoyZWvk0vVFElTcFNg
-	y8HVgqZRz8Nn4p6KAZ+r485RKrmQXTSHX3BRIADBrBprMscYQG2KrJYRGhwh5l2z
-	/31u3dYV45IxglsTUC/nw==
-X-ME-Sender: <xms:r9YhavDpPGmbt57grrJkEyGvvIzu1bKEt3xCC0WnCCQxXwMFoJxsjA>
-    <xme:r9YhagUP7C03_V29DTKq46X95zCefBgEG_3OtGJFtILyRBoO8Rl3t7gvyNyucZpiq
-    Yskzd3HRLj6lF_Ai3b3KVzYX7Z3_qA7ZOo4tkgVwnjK-WTFBZ0URudA>
-X-ME-Proxy-Cause: dmFkZTFmN8WY/CY0LArc598Jh7Tv9t0DRK6pMOpAPY2yHPvMe5kyLK5oy9tLXccRcwVy96
-    tcpzp8SKZvkADM7nfqj8TlEpdC7E3vZJKfFbsTJjxoSGmp+UueR9R0EfkhACPdqFCB3RNG
-    1kBw4VrBMFzo3l8hs7442iGGTfn38HyTBDtTho2oVlwYq6PE8Ajh3/mym+MAIa087c43ha
-    imaZT51sjdvAVUPaDrTSTGD44Gef3XrmP7u2rr6Jo4TeXpdLzNKIUD/7tqhoxFVFRDB0yW
-    QGg47oneQr2fGml05wgnC7PMrUl1CFMFnKVrU2bV5RgiBXxxHIrJfb1TogKuU4pTEY1ULe
-    3FWHY+q4L9RSVP6Jahb3cyvTMyLPK0SM1TfPUoAHU+nmS4T3QFLhkhQ1qe1Bvlmq/pN2Ow
-    88l8BJ+pQ3IU5sGddDuIW7JEisyW6kN98BPl9FbvTfdO8JemGyN1i2aHwJnEZHjznqgLZ8
-    mpm4YKvrcleyya5filG+PH4iyGRKJ67Lc5kxFuUe4Y/eKX+3Li9xMWbbgPuagwiUiEnjlN
-    zwHiwtYZuTR1qgKCLwHWlkuyzGp6sYtO/KXOsDBdwFR5uCBg+yN8TKK0XHIciRJMRLKhgW
-    K7r6Fip/R4tNzvNLXsl8TpwvMSXnzdoAkXqgtJqk3tI0N9wMAzUoQzSUJlOQ
-X-ME-Proxy: <xmx:r9Yhai-n0veJjBVzHumGl3YqqDCV10l3EJlh4-oWKOaHCvI8GUKVYw>
-    <xmx:r9YhapHno_p67N0NzPaNywaEESSiDm6gCDvtodyIfFNmVMgSYbe1Lg>
-    <xmx:r9YhakQAcq6PbJF5dzpy7jgycIdaJeZ4XMEGexIwYMe5Al_D8NhxUw>
-    <xmx:r9YhaoTU5E4fRr7-NQ2TcizYiCVt0gHQHz2A6YTy_vBuq5Gvv0zrGg>
-    <xmx:r9YhajaBLvzQ_oLIM4t_un8QS5MX9FFk7N5c9Tblfm9RHYnC5gXkZZLZ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 59F37182007E; Thu,  4 Jun 2026 15:49:03 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RWAg/heV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780609627; x=1812145627;
+  h=date:from:to:cc:subject:message-id;
+  bh=YbaEXYukQgl0J4eLc4dkXihGQg/spIPsxRJ1aBDKrso=;
+  b=RWAg/heV8QWAruXFD/ODFKPnk0+a6HrecfM14x74fyAuiEBq7upG1Qnq
+   haZtzIWDbNkmZWgALcvugIwtsd4zdz/i3hHZ8MC5FALDEV9kZYLoRF0Vl
+   /DLMYJVcgK6UbG0t28OVurXVSdndLD7DOZb+87kylpiwQU15Hq3rebhIk
+   K2nn/WdJzGPF8DHO/czkeF/M9UUKKd/JdNexmmlw5cSBAugOYwLY1rj6k
+   tcY9HO0h9UTJUEbC/nxLZ2JfVkr4F8hWs2lhdgQB6h83QAbGOweQ47X4B
+   sXqF8ViIU1T23+00xN92ZjRD1FHAAbWmp20wieuyNePnCa830Tmr3a4I/
+   Q==;
+X-CSE-ConnectionGUID: sj0NehpKQ82HsQt7GWlVXA==
+X-CSE-MsgGUID: FZtoBkJQTYekawLW+XhzFQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="81353901"
+X-IronPort-AV: E=Sophos;i="6.24,187,1774335600"; 
+   d="scan'208";a="81353901"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 14:47:06 -0700
+X-CSE-ConnectionGUID: zEOSAifTTLCnvAi32RLZcw==
+X-CSE-MsgGUID: XO6QoCIvSXSpMBCn1CmhwQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,187,1774335600"; 
+   d="scan'208";a="244721978"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by orviesa009.jf.intel.com with ESMTP; 04 Jun 2026 14:47:04 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wVFu1-000000002Ob-3438;
+	Thu, 04 Jun 2026 21:47:01 +0000
+Date: Thu, 04 Jun 2026 23:46:31 +0200
+From: kernel test robot <lkp@intel.com>
+To: Umang Jain <uajain@igalia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: drivers/usb/early/xhci-dbc.c:657:22: warning: unused
+ variable 'offset'
+Message-ID: <202606042320.kigKLoga-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-ThreadId: AqrEF5vWDDS-
-Date: Thu, 04 Jun 2026 21:48:43 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andy Shevchenko" <andriy.shevchenko@intel.com>,
- "Richard Fung" <richardfung@google.com>
-Cc: "Eric Biggers" <ebiggers@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>,
- "Miklos Szeredi" <miklos@szeredi.hu>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Message-Id: <65434490-978a-412d-b88e-3dff3bc75164@app.fastmail.com>
-In-Reply-To: <aiG4suLcgILS8Hha@black.igk.intel.com>
-References: <20240730142802.1082627-1-arnd@kernel.org>
- <20240801010953.GA1835661@google.com>
- <CAGndiTNdCGuHRmnp+G-=_PzTaLXnUZpuXAT8dK-wdoG7Mpwt4A@mail.gmail.com>
- <aiG4suLcgILS8Hha@black.igk.intel.com>
-Subject: Re: [PATCH] fuse: fs-verity: aoid out-of-range comparison
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-On Thu, Jun 4, 2026, at 19:41, Andy Shevchenko wrote:
-> On Thu, Aug 01, 2024 at 10:45:01AM -0700, Richard Fung wrote:
->> > I think this was just defensive coding to ensure that the assignment to
->> > iov_len can't overflow regardless of the type of digest_size
->> 
->> I agree with this. Removing it sounds good to me
->
-> Where we are with this? I have just stumbled over this issue yesterday when
-> tried to have `make W=1` clean build of fs/.
+tree:   https://github.com/intel-lab-lkp/linux/commits/Umang-Jain/usb-early-xhci-dbc-Track-early_ioremap-size-separately/20260604-225542
+head:   2ecba7a3b238002d00204460340708e61b6bee82
+commit: 2ecba7a3b238002d00204460340708e61b6bee82 WIP: early: xhci-xdbc: Map lower and with 0 offset to partially work
+date:   7 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260604/202606042320.kigKLoga-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260604/202606042320.kigKLoga-lkp@intel.com/reproduce)
 
-I have nine of these in my randconfig build tree tree at the moment, and
-with my patches I get a clean build with the warning enabled, I sent
-these patches when I first came across them, usually after a code change,
-though some of them may be old:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606042320.kigKLoga-lkp@intel.com/
 
-    drivers/block/rbd.c:6079:17: error: result of comparison of constant 2305843009213693948 with expression of type 'u32' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+All warnings (new ones prefixed by >>):
 
-    net/ipv4/tcp_output.c:188:3: error: result of comparison of constant -1 with expression of type 'u8' (aka 'unsigned char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+>> drivers/usb/early/xhci-dbc.c:657:22: warning: unused variable 'offset' [-Wunused-variable]
+     657 |         u32 bus, dev, func, offset;
+         |                             ^~~~~~
+   1 warning generated.
 
-    drivers/infiniband/core/uverbs_ioctl.c:90:39: error: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
 
-    drivers/clk/actions/owl-pll.c:182:2: error: result of comparison of constant 2000 with expression of type 'u8' (aka 'unsi
-gned char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+vim +/offset +657 drivers/usb/early/xhci-dbc.c
 
-    arch/arm/mach-omap2/wd_timer.c:89:3: error: result of comparison of constant 2000 with expression of type 'u8' (aka 'unsi
-gned char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+aeb9dd1de98c1a Lu Baolu       2017-03-21  653  
+b0ae33a2d2fb6c Peter Zijlstra 2022-03-04  654  int __init early_xdbc_parse_parameter(char *s, int keep_early)
+aeb9dd1de98c1a Lu Baolu       2017-03-21  655  {
+aeb9dd1de98c1a Lu Baolu       2017-03-21  656  	unsigned long dbgp_num = 0;
+aeb9dd1de98c1a Lu Baolu       2017-03-21 @657  	u32 bus, dev, func, offset;
+298ac860af9a0b Peter Zijlstra 2022-03-04  658  	char *e;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  659  	int ret;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  660  
+aeb9dd1de98c1a Lu Baolu       2017-03-21  661  	if (!early_pci_allowed())
+aeb9dd1de98c1a Lu Baolu       2017-03-21  662  		return -EPERM;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  663  
+b0ae33a2d2fb6c Peter Zijlstra 2022-03-04  664  	early_console_keep = keep_early;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  665  
+aeb9dd1de98c1a Lu Baolu       2017-03-21  666  	if (xdbc.xdbc_reg)
+aeb9dd1de98c1a Lu Baolu       2017-03-21  667  		return 0;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  668  
+298ac860af9a0b Peter Zijlstra 2022-03-04  669  	if (*s) {
+298ac860af9a0b Peter Zijlstra 2022-03-04  670  	       dbgp_num = simple_strtoul(s, &e, 10);
+298ac860af9a0b Peter Zijlstra 2022-03-04  671  	       if (s == e)
+aeb9dd1de98c1a Lu Baolu       2017-03-21  672  		       dbgp_num = 0;
+298ac860af9a0b Peter Zijlstra 2022-03-04  673  	}
+aeb9dd1de98c1a Lu Baolu       2017-03-21  674  
+aeb9dd1de98c1a Lu Baolu       2017-03-21  675  	pr_notice("dbgp_num: %lu\n", dbgp_num);
+aeb9dd1de98c1a Lu Baolu       2017-03-21  676  
+aeb9dd1de98c1a Lu Baolu       2017-03-21  677  	/* Locate the host controller: */
+aeb9dd1de98c1a Lu Baolu       2017-03-21  678  	ret = xdbc_find_dbgp(dbgp_num, &bus, &dev, &func);
+aeb9dd1de98c1a Lu Baolu       2017-03-21  679  	if (ret) {
+aeb9dd1de98c1a Lu Baolu       2017-03-21  680  		pr_notice("failed to locate xhci host\n");
+aeb9dd1de98c1a Lu Baolu       2017-03-21  681  		return -ENODEV;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  682  	}
+aeb9dd1de98c1a Lu Baolu       2017-03-21  683  
+aeb9dd1de98c1a Lu Baolu       2017-03-21  684  	xdbc.vendor	= read_pci_config_16(bus, dev, func, PCI_VENDOR_ID);
+aeb9dd1de98c1a Lu Baolu       2017-03-21  685  	xdbc.device	= read_pci_config_16(bus, dev, func, PCI_DEVICE_ID);
+aeb9dd1de98c1a Lu Baolu       2017-03-21  686  	xdbc.bus	= bus;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  687  	xdbc.dev	= dev;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  688  	xdbc.func	= func;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  689  
+aeb9dd1de98c1a Lu Baolu       2017-03-21  690  	/* Map the IO memory: */
+aeb9dd1de98c1a Lu Baolu       2017-03-21  691  	xdbc.xhci_base = xdbc_map_pci_mmio(bus, dev, func);
+aeb9dd1de98c1a Lu Baolu       2017-03-21  692  	if (!xdbc.xhci_base)
+aeb9dd1de98c1a Lu Baolu       2017-03-21  693  		return -EINVAL;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  694  
+2ecba7a3b23800 Umang Jain     2026-06-04  695  	xdbc.xdbc_reg = (struct xdbc_regs __iomem *)(xdbc.xhci_base);
+aeb9dd1de98c1a Lu Baolu       2017-03-21  696  
+aeb9dd1de98c1a Lu Baolu       2017-03-21  697  	return 0;
+aeb9dd1de98c1a Lu Baolu       2017-03-21  698  }
+aeb9dd1de98c1a Lu Baolu       2017-03-21  699  
 
-    fs/fuse/ioctl.c:130:18: error: result of comparison of constant 18446744073709551611 with expression of type '__u16' (aka
- 'unsigned short') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-
-    drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1630:32: error: result of comparison of constant 65536 with expression of type '
-u16' (aka 'unsigned short') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-
-    arch/riscv/errata/sifive/errata.c:29:14: error: result of comparison of constant 9223372036854775815 with expression of t
-ype 'unsigned long' is always true [-Werror,-Wtautological-constant-out-of-range-compare]
-    arch/riscv/errata/sifive/errata.c:42:14: error: result of comparison of constant 9223372036854775815 with expression of t
-ype 'unsigned long' is always true [-Werror,-Wtautological-constant-out-of-range-compare]
-
-    drivers/gpu/drm/nouveau/nvkm/subdev/fb/gb202.c:17:37: error: result of comparison of constant 4503599627370495 with expre
-ssion of type 'dma_addr_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-
-If you think there is a chance to enable it by default soon, I can
-try to see which ones are still required and send them again.
-
-       Arnd
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
