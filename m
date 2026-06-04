@@ -1,64 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7E13B6363;
-	Thu,  4 Jun 2026 16:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC97E2DEA8C;
+	Thu,  4 Jun 2026 16:52:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780590726; cv=none; b=BEr+bw9cAFUwyOpAGFffE59SLq+gPOqaZRa8LU7QbWyicl+71S98ia4XFZsEkt/ul3rs8uSxG8Rf86crF7AuZNb/EsW99wR+2A19ukzZORuGa9ln3GD98f7AE7g3Tg5YxwpDaAuIGNzGayaMC9vBiAY2YA/PrbPnvig4lzIF6Ok=
+	t=1780591925; cv=none; b=fOPVyvqUWyuUsotNpvLENC6lS9ojWRYI7IeNRovVBDbieE5yBOCFB/KZJCssdFqv/qZA0OXamX1acKGSUmosZ2STtV+AcHKWgXrqk2cvc+jOtjiEI029oCIKynmZh5SeVvq1o4a+tuhrKmywhtURZJWUq34OaCV520ySHIC32sM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780590726; c=relaxed/simple;
-	bh=fXpBxqROFPJ4zku8Z90PN5SeF6qExYaF4VgwNxixemE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Gh8jvDLlWerGzXHUYHXEHfKSkIWpAmrRwZ08XwUoedqBSMudOO1qcbAJsKCIjUS7e3mVf/a7N5TNybkJTYtW3ciay4qUaDyiIvWqzG4CDKm2oH/PcI445ezZq2AvyhZSlZ3F2cXi+fUtATxXaZ+b6tFSTsr2WoPleiDIqbbFoMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LGFbL41j; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1780591925; c=relaxed/simple;
+	bh=bGekkKMrvCJEuovAEAIlT2J2j0aiywvMyBg8Z6i9Vzs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=R3kjfadvIitHLLvUYZebJZ44y1tOqPCF6eDWfHQX4Ie24Ipg0vaRU2zOkTq7NhUf9le1oxseD6ob9+s4et3Xllg6reuZ7LfCEDBldVqgxpbfDqcI361I7sSNxMZWy7Daidgkdi0QI38Hk7fNFrok17qYLdZUrVNOdH1N6keP+Vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lTve8epX; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LGFbL41j"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lTve8epX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780590725; x=1812126725;
+  t=1780591923; x=1812127923;
   h=date:from:to:cc:subject:message-id;
-  bh=fXpBxqROFPJ4zku8Z90PN5SeF6qExYaF4VgwNxixemE=;
-  b=LGFbL41jGfa9iblQobkfo3dgMgK+jx7fH3ax1LYhm7d91ptaP1zT2OU7
-   IDOpMEfEM4pFnv+gHcnZwrPatNhQPPmlXef4YCPnxvqvCn2krP5l73BMG
-   wI9+n7OT9FFSIpz6I2NGdhIRJl94lXMzqkWV27Y7fnoF7bSC3cRhvXwHz
-   vy/UjbdZBEhi5ddG6MFqO+TZsNqtniHhyKqQuUR68BVOlUKi6eyYmDHZb
-   zMuQPVaqeqkj4DaX9Lbw9Vxy9DVX9slRRx8R5Fwim78lLXF6uAhjx6p+7
-   n4JWV3RbCrrG0PqkbqxRAttKGkd00FUwkDFwm452JytUHaitzpXsy3Qn7
+  bh=bGekkKMrvCJEuovAEAIlT2J2j0aiywvMyBg8Z6i9Vzs=;
+  b=lTve8epXJRUX7449wRVw6hOXJYZxTCge2b3iUU/HX2+BOowQWnHcoLWG
+   DDirIFItHckFogNPB15wQYgHRpskRUlnuk0XieG9NfxfWNqbt4iTxrFpm
+   20opisnklGfDr5xj6xRRIgCgT2thuJloa6i6/aZ0q79yGbUzqsK8m5sct
+   YutyZ79AC+8Fbm1xZj+OQQmH5bJjDqcucFxi2rTO6DfpXFXFh2V7ouAqy
+   +3HxVq7ZISIDJ4Dl9ywiYmiyuOncSb549jYnxb2EHBV9WVWMxunHwgSLQ
+   iiv4lWBUvjRb0E7CJ5ZqaGGf/cAgW0gjKo9p2n76sQ9hYrBPOfwhEfrVk
    g==;
-X-CSE-ConnectionGUID: elvmvi/ER+GPHilqivYOCw==
-X-CSE-MsgGUID: Bu/Eh0Z2Q7ax4dlC9BW7pg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="92530672"
+X-CSE-ConnectionGUID: bUcWRnwEQFqRKP2IFxpRLA==
+X-CSE-MsgGUID: I0MPo+v/TeaQDDeVIgh/jA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="92106474"
 X-IronPort-AV: E=Sophos;i="6.24,187,1774335600"; 
-   d="scan'208";a="92530672"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 09:32:04 -0700
-X-CSE-ConnectionGUID: EtyvINlqTimj/izOU8Aydg==
-X-CSE-MsgGUID: vC5BHr4aSJiOUyunkQqPhQ==
+   d="scan'208";a="92106474"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 09:52:03 -0700
+X-CSE-ConnectionGUID: BEgr8ZQkSpu+xFIcKwRHeA==
+X-CSE-MsgGUID: /48/aHS1TOy2K90wato3CA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,187,1774335600"; 
-   d="scan'208";a="240124070"
+   d="scan'208";a="238251939"
 Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa006.fm.intel.com with ESMTP; 04 Jun 2026 09:32:01 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 04 Jun 2026 09:52:01 -0700
 Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wVAz9-000000002M5-1swo;
-	Thu, 04 Jun 2026 16:31:59 +0000
-Date: Thu, 04 Jun 2026 18:31:09 +0200
+	id 1wVBIV-000000002MH-2epl;
+	Thu, 04 Jun 2026 16:51:59 +0000
+Date: Thu, 04 Jun 2026 18:51:45 +0200
 From: kernel test robot <lkp@intel.com>
-To: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
+To: "Michael S. Tsirkin" <mst@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
  kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
- netdev@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
- Harald Mommer <harald.mommer@oss.qualcomm.com>,
- "Mikhail Golubev-Ciuchea" <mikhail.golubev-ciuchea@oss.qualcomm.com>,
- "Marc Kleine-Budde" <mkl@pengutronix.de>,
- Francesco Valla <francesco@valla.it>
-Subject: [mst-vhost:vhost 5/37]
- ./usr/include/linux/virtio_can.h:29:35: error: // comments are not allowed in
- this language
-Message-ID: <202606041812.lddXUy2x-lkp@intel.com>
+ netdev@vger.kernel.org
+Subject: [mst-vhost:balloon 8/38] Warning: mm/page_alloc.c:7002
+ function parameter 'user_addr' not described in '__alloc_contig_frozen_range'
+Message-ID: <202606041824.6UhiUn3N-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -66,25 +61,28 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git vhost
-head:   7a85231f762aa97b945878abb9a26683486836c6
-commit: 2b6b4bb7d96f407e42bfe28c4cd9ce8f7a59ab69 [5/37] can: virtio: Add virtio CAN driver
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260604/202606041812.lddXUy2x-lkp@intel.com/config)
+Hi Michael,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git balloon
+head:   ffd91da19b20a15bbcff7438ef1ad0031c110395
+commit: c2b251ca61f1a3911a1c9ea9d1a5511a4da1aa1c [8/38] mm: add alloc_contig_frozen_pages_user for cache-friendly zeroing
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260604/202606041824.6UhiUn3N-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260604/202606041812.lddXUy2x-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260604/202606041824.6UhiUn3N-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606041812.lddXUy2x-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606041824.6UhiUn3N-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/virtio_can.h:29:35: error: // comments are not allowed in this language [-Werror,-Wcomment]
-      29 | #define VIRTIO_CAN_MAX_DLEN    64 // this is like CANFD_MAX_DLEN
-         |                                   ^
-   1 error generated.
+>> Warning: mm/page_alloc.c:7002 function parameter 'user_addr' not described in '__alloc_contig_frozen_range'
+>> Warning: mm/page_alloc.c:7002 expecting prototype for alloc_contig_frozen_range(). Prototype was for __alloc_contig_frozen_range() instead
+>> Warning: mm/page_alloc.c:7266 function parameter 'user_addr' not described in 'alloc_contig_frozen_pages_user'
+>> Warning: mm/page_alloc.c:7266 expecting prototype for alloc_contig_frozen_pages(). Prototype was for alloc_contig_frozen_pages_user() instead
 
 --
 0-DAY CI Kernel Test Service
