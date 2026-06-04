@@ -1,34 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5791D175A7E;
-	Thu,  4 Jun 2026 22:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A6D2EFD9B;
+	Thu,  4 Jun 2026 22:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780612848; cv=none; b=dDMiER5ljCRYd7Ysvn6h9zVmBmEDnO++p85shkyvIUNb8WCcSg8AG7BqBZRjD11znydEVh7tQZzA32zNHYwqycHxz6xwG+tMgbtr3O4LESkAmzZ7F0xobqL+Z4VInWExgg+oaLVZeWkEq1+QHxBsCCH5olOBD+taug95Tbhm8oo=
+	t=1780613860; cv=none; b=ExWip6hNpJPGPEzFVISm8xbE9T8IqDhzGK25dLgaylz1FziGAvjcCl8ZrwyG2KsRF8Lbv2iyXNJHf64iYUChQquoLnF1TuoGTCnbLZpjZe6TzJRr0ZfwD5GKhI20Y8bV5uZWqYlnh9Gu4I6CPyz4A6co9p7SXsDfTTZLl1xr0O8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780612848; c=relaxed/simple;
-	bh=EX6csmbrJqEzxCbHsVp7F8OYRVjs7FwhFm2n8H80xew=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PbQPxaLpwzmmz3X7kGf1EJMFRqBpPwRdQf+UEqblsUoWLYpQ0dAagatA5Bx2pN2wQrDXPDzVv+ymQkZeNb1imPuf7sWDWtMRU3a7CliCgneGSWp+eACc2LqzRQfae6FO8GDyzEqsANeRXT9d4JPWE68QALQmm0Y27XBX/Z6bBag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kuBs0nqB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780613860; c=relaxed/simple;
+	bh=2TlUIBpxSMH+9bGcBFZbe1n6gKi9gIbnhoT2ikTVCJc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MfW5LqIxh8TaSWSsbtmhRpJu/J1byuDS+JM5G91ZMAAQA5u5lYkAGTE3C/TC+aVMI2WtppJdcTM9OU9fpqEqetBxZwb2ytvAekwuk9WL06G+k4U0Lc73jg/1AFjL7kzXHqaiamTbPgMf2UwDc4oC0LcueO5nJ2Rq2dXluPz/7CE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ny1bTZtc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kuBs0nqB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7471F00893;
-	Thu,  4 Jun 2026 22:40:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ny1bTZtc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E36B1F00893;
+	Thu,  4 Jun 2026 22:57:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780612847;
-	bh=vNSWf7nSgDH8L2l2DjM7pdv9xwtZIhfH8fKI+ltDrRI=;
+	s=k20260515; t=1780613859;
+	bh=eB8NVASMw6EPL4lglam8dxrHSkSbY4ghGAbIjShoqbg=;
 	h=From:Date:Subject:To:Cc;
-	b=kuBs0nqBArB9Quu4d9LMMxXU2532mvXaQW5vfH8b7Mz0WJSr1+xaXFcY/9AYHvtKx
-	 ynlTht61ukSw44QuXtfvRpCOIy3i6+pvxn5xik04n/ppxC24kR6Dvss1XS6VpSyvF9
-	 1tFOW7T2H63xJfkpe/iS8UCBfZPSvvwi9Z+HHyP6Al8XVWVqDugcFhYwSVhikX2n25
-	 HtFt/jDvSARSgEicgCYvsw1dVMxdFynigu2xG/kv46guRyxRT7dfuSp3NlnyoHv1jY
-	 gNxJHJffpQH3osuvb1Ff2VtV4KS4kweTyrA1if9iM6qioLYzTqwxtw+d19ud2p6IMX
-	 gieRo4aqn6i2w==
+	b=ny1bTZtcbVbH1dP6DwLhOb+zF7t/xRud2pn0rNiIDF6rQ3V7oaDig7jC/J/+pKdNb
+	 +AmriHItOcdJll1+jYEBOHAmWQfjHqcIlg/z1TEZMhg7WIzTF4QtyTLiUbpCJwpDIP
+	 720JVgcn0Ehg72rh9bcXOg5orE+qSBsJrAmfQS3EBYeGLAtVALnxoDuRk2qVqN1oRX
+	 y2J32UBuK4NSCgPnypqinWt2H5YIqgUajVBgnM0Bg4gDpLIlrRvwUdsr/xvseAwkRk
+	 ag5mt7FImb9abTYSmq7oGDLrre1DJDp5TsNzOWK7MdmcPi5uWKO2ktuemg+rtRqHwY
+	 EinDYw66qD2Lg==
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 04 Jun 2026 15:40:41 -0700
-Subject: [PATCH] wifi: mac80211: Fix -Wc23-extensions in
- hwmp_route_info_get()
+Date: Thu, 04 Jun 2026 15:57:15 -0700
+Subject: [PATCH] can: virtio: Fix comment in UAPI header
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,84 +36,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260604-mac80211-mesh_hwmp-fix-c23-extensions-v1-1-25a64d6ce541@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNUQrCMBBF0a2U+XYgiTW0bkVE2snEREgsmaqF0
- r2b6ueBx30rCJfIAudmhcLvKPGZK/ShAQpDvjNGVw1GGausajEN1CmjNSaWcAufNKGPC5I5Ii8
- z5z0geOpHR966zvct1NZUuK5+P5fr3/IaH0zzHodt+wKPv1fwiQAAAA==
-X-Change-ID: 20260604-mac80211-mesh_hwmp-fix-c23-extensions-59bdcf6d8f94
-To: Johannes Berg <johannes@sipsolutions.net>
-Cc: Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Masashi Honma <masashi.honma@gmail.com>, linux-wireless@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Nathan Chancellor <nathan@kernel.org>
+Message-Id: <20260604-virtio_can-fix-uapi-comment-v1-1-199fa96ec5f0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM0QqDMAxA0V+RPC/QiYj4KyIjjXGLYCttLYL47
+ 3bb44HLPSFKUInQVycEyRrVu4LnowL+kHsL6lQMtalb05oGs4ak/sXkcNYDd9oU2a+ruISWaSb
+ T2cZ2BOWwBSnN7z6Mf8fdLsLpu4TrugHgD/P8fwAAAA==
+X-Change-ID: 20260604-virtio_can-fix-uapi-comment-bcafa08b4b8a
+To: Harald Mommer <harald.mommer@oss.qualcomm.com>, 
+ Matias Ezequiel Vara Larsen <mvaralar@redhat.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>
+Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+ =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+ Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Francesco Valla <francesco@valla.it>, virtualization@lists.linux.dev, 
+ linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2460; i=nathan@kernel.org;
- h=from:subject:message-id; bh=EX6csmbrJqEzxCbHsVp7F8OYRVjs7FwhFm2n8H80xew=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFmK/97kXZe4uEZu3ey1/RMrg80+GLq9C6oOYV+abpEgu
- ij0z4LKjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjAR/mMMv1k+BT11feI34/kJ
- h2ih/7kZtxdO9Vj73VKHIa1XvWxOEy/DP9WFW1u+Jv/00mT+c+nfgZ1botStdRyP7Qn9Fcr4gt3
- YlAkA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1447; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=2TlUIBpxSMH+9bGcBFZbe1n6gKi9gIbnhoT2ikTVCJc=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFlKTA/uH5s4L8hHfR/7q62fzHL1AoWW7XCWUn9wqzUwV
+ OO3tFp+RykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiImiEjw8pbbGd7Y5MXvJLY
+ sU18041Zby9fz/7TcMB0N9ObL6u3nHJlZDjemiJ45aNWV+ARNo1zizk1Hb6bzb7e2q53+RaftLj
+ 9PxYA
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-When building with a version of clang that supports
-'-fms-anonymous-structs' (which will be used by the kernel instead of
-the wider '-fms-extensions'), there are a couple warnings after some
-recent mesg_hwmp.c changes:
+When compile testing the UAPI headers with clang, there is an warning turned
+error for using a C++ style ('//') comment, which is explicitly forbidden for
+UAPI headers.
 
-  net/mac80211/mesh_hwmp.c:373:3: error: label followed by a declaration is a C23 extension [-Werror,-Wc23-extensions]
-    373 |                 struct ieee80211_mesh_hwmp_preq_top *preq_elem_top =
-        |                 ^
-  net/mac80211/mesh_hwmp.c:390:3: error: label followed by a declaration is a C23 extension [-Werror,-Wc23-extensions]
-    390 |                 struct ieee80211_mesh_hwmp_prep_top *prep_elem_top =
-        |                 ^
-  2 errors generated.
+  In file included from <built-in>:1:
+  ./usr/include/linux/virtio_can.h:29:35: error: // comments are not allowed in this language [-Werror,-Wcomment]
+     29 | #define VIRTIO_CAN_MAX_DLEN    64 // this is like CANFD_MAX_DLEN
+        |                                   ^
+  1 error generated.
 
-Enclose the switch case blocks in braces to clear up the warning.
+Switch to a standard C style comment.
 
-Fixes: a91c65cb99d1 ("wifi: mac80211: Use struct instead of macro for PREP frame")
-Fixes: 4ac20bd40b7d ("wifi: mac80211: Use struct instead of macro for PREQ frame")
+Fixes: 2b6b4bb7d96f ("can: virtio: Add virtio CAN driver")
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- net/mac80211/mesh_hwmp.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ include/uapi/linux/virtio_can.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/mac80211/mesh_hwmp.c b/net/mac80211/mesh_hwmp.c
-index 84903737271d..7f962b003579 100644
---- a/net/mac80211/mesh_hwmp.c
-+++ b/net/mac80211/mesh_hwmp.c
-@@ -369,7 +369,7 @@ static u32 hwmp_route_info_get(struct ieee80211_sub_if_data *sdata,
- 	fresh_info = true;
+diff --git a/include/uapi/linux/virtio_can.h b/include/uapi/linux/virtio_can.h
+index 08d7e3e78776..e054d5099241 100644
+--- a/include/uapi/linux/virtio_can.h
++++ b/include/uapi/linux/virtio_can.h
+@@ -26,7 +26,7 @@
+ #define VIRTIO_CAN_FLAGS_FD             0x4000
+ #define VIRTIO_CAN_FLAGS_RTR            0x2000
  
- 	switch (action) {
--	case MPATH_PREQ:
-+	case MPATH_PREQ: {
- 		struct ieee80211_mesh_hwmp_preq_top *preq_elem_top =
- 			(void *)hwmp_ie;
- 		struct ieee80211_mesh_hwmp_preq_bottom *preq_elem_bottom =
-@@ -381,7 +381,8 @@ static u32 hwmp_route_info_get(struct ieee80211_sub_if_data *sdata,
- 		orig_metric = le32_to_cpu(preq_elem_bottom->metric);
- 		hopcount = preq_elem_top->hopcount + 1;
- 		break;
--	case MPATH_PREP:
-+	}
-+	case MPATH_PREP: {
- 		/* Originator here refers to the MP that was the target in the
- 		 * Path Request. We divert from the nomenclature in the draft
- 		 * so that we can easily use a single function to gather path
-@@ -398,6 +399,7 @@ static u32 hwmp_route_info_get(struct ieee80211_sub_if_data *sdata,
- 		orig_metric = le32_to_cpu(prep_elem_bottom->metric);
- 		hopcount = prep_elem_top->hopcount + 1;
- 		break;
-+	}
- 	default:
- 		rcu_read_unlock();
- 		return 0;
+-#define VIRTIO_CAN_MAX_DLEN    64 // this is like CANFD_MAX_DLEN
++#define VIRTIO_CAN_MAX_DLEN    64 /* this is like CANFD_MAX_DLEN */
+ 
+ struct virtio_can_config {
+ #define VIRTIO_CAN_S_CTRL_BUSOFF (1u << 0) /* Controller BusOff */
 
 ---
-base-commit: a26c2a22e7e88b2b5afb1349f3994fc564c988b1
-change-id: 20260604-mac80211-mesh_hwmp-fix-c23-extensions-59bdcf6d8f94
+base-commit: 7a85231f762aa97b945878abb9a26683486836c6
+change-id: 20260604-virtio_can-fix-uapi-comment-bcafa08b4b8a
 
 Best regards,
 --  
