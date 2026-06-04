@@ -1,136 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562422EEE92;
-	Thu,  4 Jun 2026 21:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E483A329E6C;
+	Thu,  4 Jun 2026 21:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780609627; cv=none; b=ixy2K6uD4R7vE1abeO6KjZw1bzWgJqQ+VMxIJWFT9MX1YeNVUhtZ/KMJ2AbUzPA3eXl4RZ37r2JNIr2LDm8gJon1KZlE6vpLcMVXRFVy7iMto7QpCJP6zvFD9DshoJOqA4KZBGIQogJJ2TdsnBfAAVLKmuFd72ChnRMg+6CskDc=
+	t=1780609731; cv=none; b=Stzr4rNzyKtVbicycBzadsGwUY9h+Bj3dHsVR75V7lmSXuGySIVGhLcnXHG6x1fTIepaD9umtxUZtZ7hEbI6pCDoVw2P8lYXnpRwoFTDtTABOOdaJsncihePKcvLtD8Ea9/GaxSTjAU4v5As77OZh7rwGKyNM4sqlKDYoq4LzXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780609627; c=relaxed/simple;
-	bh=YbaEXYukQgl0J4eLc4dkXihGQg/spIPsxRJ1aBDKrso=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=iTOkzAmhk04pYuj9Pa0jcGehDdzYP0cvCOUStl5bdnktVMDMJ3MTXTCbqR1rPnwQSIdQX/3ni+4POs1plYjS88PArj9dZ0x4T+qoly8D9I3lHcrcEZ47VfAGTUWPPXPFpL9g5sE5hHkvCwasG7NlIz+YtBZWbHDmTNaUz5d3JGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RWAg/heV; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780609731; c=relaxed/simple;
+	bh=iK7nDkaVl+kbc7PjAEoaEgaDEKAIkheFFI1yWCxh/uA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bLvbVHmrIlsDwkcItFk/QJBBJkwwBsFhSMXbBuLWAKGbxZ53qY67wfHTlehJu480XBjC80idK6siy3tEDgF/lWkrLkuwMk/VA9MvJ5eUd9ELhulo9WXw1VkVApyd6N0Wo9XXm+vtYqX+0B/dBCZipmcXzhJC2LtLgDv1OpPimSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oOJtH3Ws; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RWAg/heV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780609627; x=1812145627;
-  h=date:from:to:cc:subject:message-id;
-  bh=YbaEXYukQgl0J4eLc4dkXihGQg/spIPsxRJ1aBDKrso=;
-  b=RWAg/heV8QWAruXFD/ODFKPnk0+a6HrecfM14x74fyAuiEBq7upG1Qnq
-   haZtzIWDbNkmZWgALcvugIwtsd4zdz/i3hHZ8MC5FALDEV9kZYLoRF0Vl
-   /DLMYJVcgK6UbG0t28OVurXVSdndLD7DOZb+87kylpiwQU15Hq3rebhIk
-   K2nn/WdJzGPF8DHO/czkeF/M9UUKKd/JdNexmmlw5cSBAugOYwLY1rj6k
-   tcY9HO0h9UTJUEbC/nxLZ2JfVkr4F8hWs2lhdgQB6h83QAbGOweQ47X4B
-   sXqF8ViIU1T23+00xN92ZjRD1FHAAbWmp20wieuyNePnCa830Tmr3a4I/
-   Q==;
-X-CSE-ConnectionGUID: sj0NehpKQ82HsQt7GWlVXA==
-X-CSE-MsgGUID: FZtoBkJQTYekawLW+XhzFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="81353901"
-X-IronPort-AV: E=Sophos;i="6.24,187,1774335600"; 
-   d="scan'208";a="81353901"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 14:47:06 -0700
-X-CSE-ConnectionGUID: zEOSAifTTLCnvAi32RLZcw==
-X-CSE-MsgGUID: XO6QoCIvSXSpMBCn1CmhwQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,187,1774335600"; 
-   d="scan'208";a="244721978"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa009.jf.intel.com with ESMTP; 04 Jun 2026 14:47:04 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wVFu1-000000002Ob-3438;
-	Thu, 04 Jun 2026 21:47:01 +0000
-Date: Thu, 04 Jun 2026 23:46:31 +0200
-From: kernel test robot <lkp@intel.com>
-To: Umang Jain <uajain@igalia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: drivers/usb/early/xhci-dbc.c:657:22: warning: unused
- variable 'offset'
-Message-ID: <202606042320.kigKLoga-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oOJtH3Ws"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45EC31F00893;
+	Thu,  4 Jun 2026 21:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780609730;
+	bh=hccU/NDSuAvcNj2qshs5G5T8N2B5+zR4AKzNjS5QKDY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=oOJtH3WswuxaSXCBwtdBZdGgqvPxMl2AxmgsBn1Q7sv9bv+2fIQpUu8P6psX9SraE
+	 lSBE1kDOlOcCkxwq1Te5aY2Bf5gUb74/snkw1zcC7CzFdqpd4Avhfe2fsm750odqgS
+	 O59dMX2g/aDU3jKvEKl8txbOdj8B+U3/SsyEk2xAP8EUrnd4KHHvI+btOw06/4rK2Q
+	 taz///r7YoJ8dRaGduBLFDxVhYonPuOrFN7EFKzndPcRwg/FSeYlsjY8zFKlhD4Wob
+	 HX+achzSxwGdodU9S7+z5XB058pkm5Q/iau8rvefFGQqQMoYtL2OOWHLyI0pZM4xE6
+	 OCPIVEZUZh7Aw==
+Date: Thu, 4 Jun 2026 14:48:40 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Yunseong Kim <yunseong.kim@est.tech>, Ingo Molnar <mingo@redhat.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, workflows@vger.kernel.org,
+	linux-doc@vger.kernel.org, Yunseong Kim <ysk@kzalloc.com>
+Subject: Re: [RFC PATCH v2 2/6] kcov: add build system support for dataflow
+ instrumentation
+Message-ID: <20260604214840.GA3915915@ax162>
+References: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech>
+ <20260603-kcov-dataflow-next-20260603-v2-2-fee0939de2c4@est.tech>
+ <20260604084519.GA3126523@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260604084519.GA3126523@noisy.programming.kicks-ass.net>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Umang-Jain/usb-early-xhci-dbc-Track-early_ioremap-size-separately/20260604-225542
-head:   2ecba7a3b238002d00204460340708e61b6bee82
-commit: 2ecba7a3b238002d00204460340708e61b6bee82 WIP: early: xhci-xdbc: Map lower and with 0 offset to partially work
-date:   7 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260604/202606042320.kigKLoga-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260604/202606042320.kigKLoga-lkp@intel.com/reproduce)
+On Thu, Jun 04, 2026 at 10:45:19AM +0200, Peter Zijlstra wrote:
+> On Wed, Jun 03, 2026 at 07:43:29PM +0200, Yunseong Kim wrote:
+> > Add CFLAGS_KCOV_DATAFLOW and RUSTFLAGS_KCOV_DATAFLOW exports to
+> > scripts/Makefile.kcov, containing:
+> >   -fsanitize-coverage=dataflow-args,dataflow-ret -g
+> >   (with optional -fno-inline via CONFIG_KCOV_DATAFLOW_NO_INLINE)
+> > 
+> > scripts/Makefile.lib applies these flags when a module's Makefile sets:
+> >   KCOV_DATAFLOW_file.o := y   (per-file)
+> >   KCOV_DATAFLOW := y          (per-directory)
+> > 
+> > Also supports CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL for global enablement.
+> > The flags are only applied to kernel objects (same guard as basic KCOV).
+> > 
+> > Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
+> > ---
+> >  scripts/Makefile.kcov | 6 ++++++
+> >  scripts/Makefile.lib  | 7 +++++++
+> >  2 files changed, 13 insertions(+)
+> > 
+> > diff --git a/scripts/Makefile.kcov b/scripts/Makefile.kcov
+> > index 78305a84ba9d..101173fe194b 100644
+> > --- a/scripts/Makefile.kcov
+> > +++ b/scripts/Makefile.kcov
+> > @@ -2,10 +2,16 @@
+> >  kcov-flags-y					+= -fsanitize-coverage=trace-pc
+> >  kcov-flags-$(CONFIG_KCOV_ENABLE_COMPARISONS)	+= -fsanitize-coverage=trace-cmp
+> >  
+> > +# KCOV dataflow: trace function args and return values
+> > +kcov-dataflow-flags-y := -fsanitize-coverage=dataflow-args,dataflow-ret -g
+> > +kcov-dataflow-flags-$(CONFIG_KCOV_DATAFLOW_NO_INLINE) += -fno-inline
+> 
+> https://clang.llvm.org/docs/ClangCommandLineReference.html
+> 
+> Has no mention of -fno-inline, furthermore, what are the exact
+> semantics? Does it inhibit __always_inline?
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606042320.kigKLoga-lkp@intel.com/
+Based on clang/test/CodeGen/always-inline.c [1], I believe the semantics
+are the same as GCC's '-fno-inline' [2], which avoids inlining except
+for always_inline functions.
 
-All warnings (new ones prefixed by >>):
+[1]: https://github.com/llvm/llvm-project/blob/1d13b74cf086629d5cdae5f44ef4a62cebcaf3ff/clang/test/CodeGen/always-inline.c
+[2]: https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-fno-inline
 
->> drivers/usb/early/xhci-dbc.c:657:22: warning: unused variable 'offset' [-Wunused-variable]
-     657 |         u32 bus, dev, func, offset;
-         |                             ^~~~~~
-   1 warning generated.
-
-
-vim +/offset +657 drivers/usb/early/xhci-dbc.c
-
-aeb9dd1de98c1a Lu Baolu       2017-03-21  653  
-b0ae33a2d2fb6c Peter Zijlstra 2022-03-04  654  int __init early_xdbc_parse_parameter(char *s, int keep_early)
-aeb9dd1de98c1a Lu Baolu       2017-03-21  655  {
-aeb9dd1de98c1a Lu Baolu       2017-03-21  656  	unsigned long dbgp_num = 0;
-aeb9dd1de98c1a Lu Baolu       2017-03-21 @657  	u32 bus, dev, func, offset;
-298ac860af9a0b Peter Zijlstra 2022-03-04  658  	char *e;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  659  	int ret;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  660  
-aeb9dd1de98c1a Lu Baolu       2017-03-21  661  	if (!early_pci_allowed())
-aeb9dd1de98c1a Lu Baolu       2017-03-21  662  		return -EPERM;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  663  
-b0ae33a2d2fb6c Peter Zijlstra 2022-03-04  664  	early_console_keep = keep_early;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  665  
-aeb9dd1de98c1a Lu Baolu       2017-03-21  666  	if (xdbc.xdbc_reg)
-aeb9dd1de98c1a Lu Baolu       2017-03-21  667  		return 0;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  668  
-298ac860af9a0b Peter Zijlstra 2022-03-04  669  	if (*s) {
-298ac860af9a0b Peter Zijlstra 2022-03-04  670  	       dbgp_num = simple_strtoul(s, &e, 10);
-298ac860af9a0b Peter Zijlstra 2022-03-04  671  	       if (s == e)
-aeb9dd1de98c1a Lu Baolu       2017-03-21  672  		       dbgp_num = 0;
-298ac860af9a0b Peter Zijlstra 2022-03-04  673  	}
-aeb9dd1de98c1a Lu Baolu       2017-03-21  674  
-aeb9dd1de98c1a Lu Baolu       2017-03-21  675  	pr_notice("dbgp_num: %lu\n", dbgp_num);
-aeb9dd1de98c1a Lu Baolu       2017-03-21  676  
-aeb9dd1de98c1a Lu Baolu       2017-03-21  677  	/* Locate the host controller: */
-aeb9dd1de98c1a Lu Baolu       2017-03-21  678  	ret = xdbc_find_dbgp(dbgp_num, &bus, &dev, &func);
-aeb9dd1de98c1a Lu Baolu       2017-03-21  679  	if (ret) {
-aeb9dd1de98c1a Lu Baolu       2017-03-21  680  		pr_notice("failed to locate xhci host\n");
-aeb9dd1de98c1a Lu Baolu       2017-03-21  681  		return -ENODEV;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  682  	}
-aeb9dd1de98c1a Lu Baolu       2017-03-21  683  
-aeb9dd1de98c1a Lu Baolu       2017-03-21  684  	xdbc.vendor	= read_pci_config_16(bus, dev, func, PCI_VENDOR_ID);
-aeb9dd1de98c1a Lu Baolu       2017-03-21  685  	xdbc.device	= read_pci_config_16(bus, dev, func, PCI_DEVICE_ID);
-aeb9dd1de98c1a Lu Baolu       2017-03-21  686  	xdbc.bus	= bus;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  687  	xdbc.dev	= dev;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  688  	xdbc.func	= func;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  689  
-aeb9dd1de98c1a Lu Baolu       2017-03-21  690  	/* Map the IO memory: */
-aeb9dd1de98c1a Lu Baolu       2017-03-21  691  	xdbc.xhci_base = xdbc_map_pci_mmio(bus, dev, func);
-aeb9dd1de98c1a Lu Baolu       2017-03-21  692  	if (!xdbc.xhci_base)
-aeb9dd1de98c1a Lu Baolu       2017-03-21  693  		return -EINVAL;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  694  
-2ecba7a3b23800 Umang Jain     2026-06-04  695  	xdbc.xdbc_reg = (struct xdbc_regs __iomem *)(xdbc.xhci_base);
-aeb9dd1de98c1a Lu Baolu       2017-03-21  696  
-aeb9dd1de98c1a Lu Baolu       2017-03-21  697  	return 0;
-aeb9dd1de98c1a Lu Baolu       2017-03-21  698  }
-aeb9dd1de98c1a Lu Baolu       2017-03-21  699  
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Nathan
