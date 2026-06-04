@@ -1,105 +1,108 @@
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF893C0A0D
-	for <llvm@lists.linux.dev>; Thu,  4 Jun 2026 05:43:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F953D47B1
+	for <llvm@lists.linux.dev>; Thu,  4 Jun 2026 06:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780551815; cv=none; b=FNhMZY3XKlgfJLllNCvy1g0VDJuW4Zc4XsQuo70MMG4KtPtl9zmd3O882lCGzNGi368XPSWgifJC3w0PTXwyvuFmBmEu4OmhtBQo/ihHkSmsH3ot+lfbqXng29HWYpoAdbDSWf3G6cl9+hjtuCmFfsA5A7ysT9Az/Siq3tQR/2U=
+	t=1780553002; cv=none; b=sHUclgS5v62ZA9jwUQU9X33BSzxyWJjVHJIuh5JGueWOYtrLnjlu3J43mIACK90mQzMdMvpJUz479Ah4lPPAdR0FcGsQHlzwcfVCg66+ih5w593C9iTxYdtVbNR7wD/9XTJ53hYKyz8GI6FlxKQ81vo5N3U0ywcg5VBtbp0kE3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780551815; c=relaxed/simple;
-	bh=AEhMerSE061sddegxts/S9Yhziuy8j0ynoTHFqr9dPc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EFIkzal7mr6c8qTZK9vT+LOx5Fw6/RFeZGtzdkq65SBkoKZjVQ0/qY65bdxueqX/CXKLMedqzvFJ8wN9FTP18oKWa3m3evyySCN498EBus4gabWkJ/tJFSEChvtXb9Z7jDNgeoaK3TwER+ETcdhP7TpYSj17LQ1kb4i6+g0YRfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tAp4rMtg; arc=none smtp.client-ip=209.85.167.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780553002; c=relaxed/simple;
+	bh=+yYSQP6LeZMc3ZffWozLVmprMPp6mtXwffsPe9XTOBw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hJWVYp3h5wi2AsMo7635T9kntaYs2+fH1srKHjoanzrw9vlAEX2RoztYWofcZHw1UYL0r648Y1lzrCTSW6lv7yf7heKNhSkF8uiMVBj1MnYPX+0FaxlTGGCGry3kgiNl7uAjAsqcitGHZJExKIflXu7dt1RxsEkrWvNiR9q8VCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=KN/DqLcD; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tAp4rMtg"
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-485ecc0f2dfso257722b6e.3
-        for <llvm@lists.linux.dev>; Wed, 03 Jun 2026 22:43:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="KN/DqLcD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780551812; x=1781156612; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dd5qbt0svs5X9PyH4+Z4KjGVOSti+IcuLa2FFG2ZmDM=;
-        b=tAp4rMtgW4akyxyJ5xMc1AS5I9FbmUPDbcENQpX4V81mkitsW1cHKttFoS2whnTvRC
-         9OunO5fpsTJHHgQpgQ8itT18BQgLdreFApuBiYgnsaF8mddHFFTwTFxhORuaypRDweGU
-         b6TWcBGmNLWkwXfZscN96bsTQ0BcyHJm9eLRavMQfY9cDjJQzuqn+70IhdDJjputWmIo
-         IRezM0aIG4fmm+/wYKDTCC6ml5FfOXSnt0E6gNC8eWvEyznXsPPsZ3c+8qVnbPpNBesg
-         7BSBEnrktEfwjw41s8CIuEbPaDFZzA45DUkvxU2+ADXxjavofIw/+m9WCylaBwqn0kui
-         4nVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780551812; x=1781156612;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dd5qbt0svs5X9PyH4+Z4KjGVOSti+IcuLa2FFG2ZmDM=;
-        b=aiIFg5uDnKsZyy24ujdiqqXagXqCmZ6hsnRdTwheMIktDq2l5nnJbpN9p0oxoeCkkn
-         m7NOvNjZkfuNx0PblJb2gtupiev8jBB5PpUFYSPHVMqgE9PB4wfdPQLCk80HcEmPKEnc
-         5u+GxvD1DmWbX++VBJSL4eOA5H1X/BvEnL7ZXw0NjEcoWDNEGJspfIV+eXJXVZGc1V9o
-         kB5t5EXNBXsud85VH4ry90Iej4O03aktJGbb9vo1TJUmuIk/sO8YyOS2C9tzDQiPA3MH
-         3fzNiJfwmJBHM2AuVLbV1nubLQ9Y2a6ph/3WmZ88MSNkiVil4Qb+cKCgiG+Y0SOyxyln
-         j9CQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+B32LMiV0cnj8mRNRVKuq4CEMhaRIn09IU5BxR+L5cUeytBv7PNxh0jsTppoEhP0r10ZTW@lists.linux.dev
-X-Gm-Message-State: AOJu0YwdPSzb5ik77wL+xdYZWUPAVkm5IpmLJJR0uAtAT0BZro801A2M
-	v8YZ8bpmDRgfuzkABL9bPNJhCa+smuKigK1QKa+QkFyPKQuGlJ+EJRzJ
-X-Gm-Gg: Acq92OH6X8egF2mKsMrJOUe2X69ajuHSE5iOth3nVngr3bIsc/Bp/tbpdOJM+dHvcOe
-	hIgGVjecv/k9+mZZUypIklauaxsXyFvtWY3LxwtiFOyFUvrac6Fqjie4tu3nOPZUPZcLq4loznK
-	slRLkR1745l2Bkla6goTqXDM8FNq7ZllRW/csZd7LUFeolFkcjxpKO4YoSnq2jLEdxoA+teG1yK
-	wAXD56GhUY1ab/Aq8UW/NIIg+/J9Uq6IubBKRbVumiXYu4fyMMIP1ZwrP3QX1X7uCcUD6zc3tko
-	ZXaDYjOv8AkmMVOhy7IwNCdVeFKVNlOcvz/RK8HPSm8HUk2UUOUj63nPGB6iF/XRyKvYpXX8LGk
-	cINKtofJ3mGaFgOvKWX6fG0vk2QkXlc/d44Al8tJvmsLzODCLq/+ACO4F2y35i5LXmcM2JlOzJZ
-	E/TcsDB6a4UOHzqZBwH4R6I72FKMmz1ejhsJJ87ftX/y080bAoHnsX3vnLN6W9t/LY7470QllIQ
-	hVC1Ykq72uGuNPqu7Jkj1VVYSzXpRTAI3Hbtzy4CYwVMdjM4wM1wtQInUtdPc4mMyFbyA==
-X-Received: by 2002:a05:6808:d48:b0:486:4892:d562 with SMTP id 5614622812f47-4865a9a50b5mr3872126b6e.1.1780551812279;
-        Wed, 03 Jun 2026 22:43:32 -0700 (PDT)
-Received: from localhost.localdomain (99-61-165-33.lightspeed.sntcca.sbcglobal.net. [99.61.165.33])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e6e75c5495sm3197548a34.10.2026.06.03.22.43.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 22:43:31 -0700 (PDT)
-From: Mithil Bavishi <bavishimithil@gmail.com>
-To: nathan@kernel.org
-Cc: aaro.koskinen@iki.fi,
-	andreas@kemnade.info,
-	bavishimithil@gmail.com,
-	kees@kernel.org,
-	khilman@baylibre.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-omap@vger.kernel.org,
-	linux@armlinux.org.uk,
-	lkp@intel.com,
-	llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	rogerq@kernel.org,
-	samitolvanen@google.com,
-	tony@atomide.com
-Subject: Re: [PATCH v2] ARM: OMAP2+: Add CFI type for omap4_finish_suspend
-Date: Wed,  3 Jun 2026 22:43:29 -0700
-Message-ID: <20260604054329.19450-1-bavishimithil@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260525165527.GA18457@ax162>
-References: <20260525165527.GA18457@ax162>
+	d=codeconstruct.com.au; s=2022a; t=1780552997;
+	bh=uYEiIKeZO3aBG6XlpnCb3l6B+MiZrhwTf4twZWvkiSs=;
+	h=From:Date:Subject:To:Cc;
+	b=KN/DqLcDkU/Rjufk/YE7UVnQw/ZcbgNtD2SElb5OoQwo7RpFQL2r0dLXXXHym7FP8
+	 Qsd6OKHxo6G6WbgblhpUDykuunowPUy9u/6qEjZqYHxvMNkG033pOSRW7ukv/BXKop
+	 Ekjo4anxXwgshrwVbAnxwEC7yatBuu+xsLL2QYIWhgpkTpAz4BOolNTee0y9qQYNNy
+	 z74EsqIbbC0GaDLCU1+gXyOZ8nbaOY6LWJ9EkhaEgH8SrKIW8ful30MKwu4F5jwH9V
+	 OKn/1xshC6gZG5LPlbRoBQsuXYAGP468hfwn3H/WUH33Kd6bmiyd2fKZ9BGuFeWSKO
+	 PFNS/g54+F/pA==
+Received: by codeconstruct.com.au (Postfix, from userid 10004)
+	id 4003A605A0; Thu,  4 Jun 2026 14:03:17 +0800 (AWST)
+From: James Lee <james@codeconstruct.com.au>
+Date: Thu, 04 Jun 2026 14:03:00 +0800
+Subject: [PATCH] modpost: Add __llvm_covfun and __llvm_covmap to
+ section_white_list
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260604-dev-coverage-patch-v1-1-9f9368253cb4@codeconstruct.com.au>
+X-B4-Tracking: v=1; b=H4sIABMVIWoC/x2MQQqAIBAAvxJ7TtBNCvpKdDBday8aGhKIf086D
+ sNMhUyJKcM6VEhUOHMMHdQ4gL1MOEmw6wwocZaz1MJRETYWSqa72zz2EseCk5YKvVIOengn8vz
+ +021v7QNvH2eXZAAAAA==
+X-Change-ID: 20260604-dev-coverage-patch-b7234012f11d
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, James Lee <james@codeconstruct.com.au>
+X-Mailer: b4 0.14.2
 
-> are both pointing out that cfi_types.h needs to be included in
-> arch/arm/mach-omap2/sleep44xx.S for SYM_TYPED_FUNC_START to always be
-> expanded properly. I tested adding
->
->   #include <linux/cfi_types.h>
->
-> as the first include line and both issues were resolved.
+Modpost emits hundreds of warnings when using Clang to build for ARCH=um
+and CONFIG_GCOV=y. e.g.:
+    vmlinux (__llvm_covfun): unexpected non-allocatable section.
+    Did you forget to use "ax"/"aw" in a .S file?
+    Note that for example <linux/init.h> contains
+    section definitions for use in .S files.
 
-My apologies, I was switching systems and seem to have lost this somewhere
-in the process. Sent a v3 with the include, thanks a lot!
+For example, when we use LLVM for a kunit user mode build with coverage:
+    python3 tools/testing/kunit/kunit.py build --make_options LLVM=1 \
+        --kunitconfig=tools/testing/kunit/configs/default.config \
+        --kunitconfig=tools/testing/kunit/configs/coverage_uml.config
 
-Best,
-Mithil Bavishi
+The behaviour occurs when building the kernel for ARCH=um with code
+coverage enabled. The warnings come from modpost's check_sec_ref
+function, which ensures no sections reference others that will be
+discarded. covfun and covmap sections must reference __init and __exit
+sections to collect coverage data, triggering the modpost warning.
+
+To suppress these warnings, these section names have been added to
+modpost's whitelist. This is unlikely to suppress legitimate warnings as
+Clang will only insert these sections when building with coverage, and
+can be assumed to manage these references safely.
+
+Signed-off-by: James Lee <james@codeconstruct.com.au>
+---
+Unsure if there are Clang options that might better suppress this.
+Certainly open to other options if they're available.
+---
+ scripts/mod/modpost.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index be89921d60b61d1db0398313aeb00bc1888843b1..287b7d67747dfe215640a4f8ec615519e9699921 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -749,6 +749,8 @@ static const char *const section_white_list[] =
+ 	".gnu.lto*",
+ 	".discard.*",
+ 	".llvm.call-graph-profile",	/* call graph */
++	"__llvm_covfun",
++	"__llvm_covmap",
+ 	NULL
+ };
+ 
+
+---
+base-commit: d76bb1ebb5587f66b0f8b8099bfbb44722bc08b3
+change-id: 20260604-dev-coverage-patch-b7234012f11d
+
+Best regards,
+-- 
+James Lee <james@codeconstruct.com.au>
+
