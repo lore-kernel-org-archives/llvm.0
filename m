@@ -1,113 +1,118 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A3D3CAE97
-	for <llvm@lists.linux.dev>; Thu,  4 Jun 2026 06:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382843BD22E;
+	Thu,  4 Jun 2026 08:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780556227; cv=none; b=KuGZS4VU+F5eu6RJFwGYg8hm6OsjS64G+DFyBhPagZ+FntJBHXnwxSlmXDnlvtRsCaYa6lx2RhyKEuugbt5wMibN+36kwL727NiPQNcrgoRNRchsTC3HRUTOXp3jIq4FQJMWErwQosqoC3d3VaoX/xaqALE/LOWeKd6zWRBHQJQ=
+	t=1780560903; cv=none; b=uKGEULKkg3yYFTX8S4epA4NNTtJNnchTfNyjE7sjiUoVL/tq45TPvlbzRVH7zaywrgAMIg8f4okBhA7S4lI6u8meKFWaPdR0FYxmOFEzOg3G9dT+b3rBfEVl32o8w0SVrvH21G62G2Xo+Ipps4D1hCqseUNnNzD0LL3RZDKcikA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780556227; c=relaxed/simple;
-	bh=dydZVhth1y6JE7+fyLmn2w7NHqI4W6Xits7j2exGHig=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WJkMJ4n56etPWPdTkuudgDXe+cY7tOonoV/b4uZ4cFLd92Nwrs6CfSYc4g76OLzvpll6Y5N+p91/DfOm1/3UndXkZkPyyknijOXAgvFW0Aw9xY+GZ0PbM6MrUvpZIfDHXGUSpHyScRXXrz0aiH/ju8HlbARRc/yzqeLuxpQ3psI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FcbXErjt; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780560903; c=relaxed/simple;
+	bh=TD0BOCUoOwVZ5vKNuGDk/gaRatcONh155joLe1kDmeM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=tNIs3OH7zy50rFeg72MDH63yDsalm/AE1x+pva2PSsFbbJolpKubntrdgXhGNS+LDq66Rc8+mu2R5EPk/8O44I9CbNEXByLAz9SjkNehKSGopmXjuk7R7vGF0h4x8RAUaDn1Y+qcTCDbYHzvPqTkZHe2Nz1LeMvM7gpQFwjMRO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b5uJOCqG; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FcbXErjt"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780556224;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2K4imcceEzYpUOx6xUchhbO3GzKewULjWdUSxLezYq8=;
-	b=FcbXErjtlTY6PwY7b3DmaGm946iCHHqA4xODP3txeKerfajc18mAzBEd9Nd86++L5m+r/y
-	RvxO+5n1yjYTpd/M4hPs7P5GSklG+evgZW74n4dl7PktQBKl5+Wti4zqEVchk6dDjMWjFQ
-	HSzjQISY/riGUyA58zySejFTRHTMHQA=
-From: George Guo <dongtai.guo@linux.dev>
-To: chenhuacai@kernel.org,
-	jpoimboe@kernel.org,
-	peterz@infradead.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com
-Cc: kernel@xen0n.name,
-	joe.lawrence@redhat.com,
-	rostedt@goodmis.org,
-	ardb@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	yangtiezhu@loongson.cn,
-	jiaxun.yang@flygoat.com,
-	xry111@xry111.site,
-	liukexin@kylinos.cn,
-	loongarch@lists.linux.dev,
-	live-patching@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	George Guo <guodongtai@kylinos.cn>
-Subject: [PATCH 8/8] klp-build: Add LoongArch syscall patching macro
-Date: Thu,  4 Jun 2026 14:53:17 +0800
-Message-Id: <20260604065317.219777-9-dongtai.guo@linux.dev>
-In-Reply-To: <20260604065317.219777-1-dongtai.guo@linux.dev>
-References: <20260604065317.219777-1-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b5uJOCqG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780560902; x=1812096902;
+  h=date:from:to:cc:subject:message-id;
+  bh=TD0BOCUoOwVZ5vKNuGDk/gaRatcONh155joLe1kDmeM=;
+  b=b5uJOCqG9qztSzwqvVWs9U4YdzWbmrCvdpMUlunRr3yySfs/hK4Jb76F
+   yxm+A7mL85QeZu410NJumrzwuTQZtrjijvFv3FV9OiW8ZCa2CAT8JUG21
+   KnsmpKMpA41YiFzrDYqp+PN2bxqnjdvScyZL6xZKzo3EnTCh2fRYpoPwF
+   yLaQXvCdDVxmkhkQoKpirwjduOFrxytbW8fAQ8Tmf07w/pvXhJTH0HCvk
+   qGWO3lHCg2r/FhG87Qxb0yXEi+u4bm/nf4Rb8PfpypuvmSCjbPUjdYfs2
+   ++B47y4dYEnyEm7yK9Xqf5qH8KFR0wCsQFlv2OOpT0mPtpR1dzTdZkqes
+   A==;
+X-CSE-ConnectionGUID: TFeLAl5uS/iQXT+pfFKKYA==
+X-CSE-MsgGUID: +Uo08dzqSc++rPcHaDkPdw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="81563922"
+X-IronPort-AV: E=Sophos;i="6.24,186,1774335600"; 
+   d="scan'208";a="81563922"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 01:15:01 -0700
+X-CSE-ConnectionGUID: +vHmWNBeRhCscYEqnM2NtQ==
+X-CSE-MsgGUID: YbBZ+JMNS762jt6Rgvcr5A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,186,1774335600"; 
+   d="scan'208";a="243412326"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 04 Jun 2026 01:14:59 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wV3E8-00000000ESG-1k0H;
+	Thu, 04 Jun 2026 08:14:56 +0000
+Date: Thu, 04 Jun 2026 16:13:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <kees@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+ Nathan Chancellor <nathan@kernel.org>
+Subject: ld.lld: error: undefined symbol:
+ __kcfi_typeid_aria_aesni_avx_encrypt_16way
+Message-ID: <202606041643.GyTZgCk1-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: George Guo <guodongtai@kylinos.cn>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ba3e43a9e601636f5edb54e259a74f96ca3b8fd8
+commit: 23ef9d439769d5f35353650e771c63d13824235b kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
+date:   8 months ago
+config: x86_64-randconfig-013 (https://download.01.org/0day-ci/archive/20260604/202606041643.GyTZgCk1-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260604/202606041643.GyTZgCk1-lkp@intel.com/reproduce)
 
-Add LoongArch support for KLP_SYSCALL_DEFINEx(), mirroring the generic
-__SYSCALL_DEFINEx() pattern from include/linux/syscalls.h.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: 23ef9d439769 ("kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606041643.GyTZgCk1-lkp@intel.com/
 
-Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
----
- include/linux/livepatch_helpers.h | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+All errors (new ones prefixed by >>):
 
-diff --git a/include/linux/livepatch_helpers.h b/include/linux/livepatch_helpers.h
-index 4b647b83865f..a8aad067177b 100644
---- a/include/linux/livepatch_helpers.h
-+++ b/include/linux/livepatch_helpers.h
-@@ -91,6 +91,28 @@
- 	}								\
- 	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
- 
-+#elif defined(CONFIG_LOONGARCH)
-+
-+#define __KLP_SYSCALL_DEFINEx(x, name, ...)                             \
-+	__diag_push();                                                  \
-+	__diag_ignore(GCC, 8, "-Wattribute-alias",                      \
-+		      "Type aliasing is used to sanitize syscall arguments");\
-+	asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
-+		__attribute__((alias(__stringify(__se_sys##name))));    \
-+	ALLOW_ERROR_INJECTION(sys##name, ERRNO);                        \
-+	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));\
-+	asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__)); \
-+	asmlinkage long __attribute__((optimize("-fno-optimize-sibling-calls")))\
-+			__se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))  \
-+	{                                                               \
-+		long ret = __klp_do_sys##name(__MAP(x,__SC_CAST,__VA_ARGS__));\
-+		__MAP(x,__SC_TEST,__VA_ARGS__);                         \
-+		__PROTECT(x, ret,__MAP(x,__SC_ARGS,__VA_ARGS__));       \
-+		return ret;                                             \
-+	}                                                               \
-+	__diag_pop();                                                   \
-+	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
-+
- #endif
- 
- #endif /* _LINUX_LIVEPATCH_HELPERS_H */
--- 
-2.25.1
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_encrypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:970 (arch/x86/crypto/aria-aesni-avx-asm_64.S:970)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_encrypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_decrypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:995 (arch/x86/crypto/aria-aesni-avx-asm_64.S:995)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_decrypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_ctr_crypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:1096 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1096)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_ctr_crypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_encrypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:1266 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1266)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_encrypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_decrypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:1291 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1291)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_decrypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_ctr_crypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:1316 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1316)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_ctr_crypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_encrypt_32way
+   >>> referenced by aria-aesni-avx2-asm_64.S:1345 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1345)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_encrypt_32way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_decrypt_32way
+   >>> referenced by aria-aesni-avx2-asm_64.S:1370 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1370)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_decrypt_32way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_ctr_crypt_32way
+   >>> referenced by aria-aesni-avx2-asm_64.S:1395 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1395)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_ctr_crypt_32way)
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
