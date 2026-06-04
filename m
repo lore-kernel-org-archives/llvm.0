@@ -1,81 +1,87 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4043C4B9F
-	for <llvm@lists.linux.dev>; Thu,  4 Jun 2026 05:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF893C0A0D
+	for <llvm@lists.linux.dev>; Thu,  4 Jun 2026 05:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780551661; cv=none; b=A43wp5cYrTZHwNzXoP9HCQV0dDkjQ1/w6RRBheuM1thxCK9NAkIcXJ79io+5MrbAXk/bC41FpKIRE4JJeLTMxaFBq/GW/3mMOiNOcYPl4pttTvcH+1zOSnwwl2w0ss/4nG3TMTR4ZHdPuSKefn4WzyZ8jGrT1fYiAuFosxRSHM0=
+	t=1780551815; cv=none; b=FNhMZY3XKlgfJLllNCvy1g0VDJuW4Zc4XsQuo70MMG4KtPtl9zmd3O882lCGzNGi368XPSWgifJC3w0PTXwyvuFmBmEu4OmhtBQo/ihHkSmsH3ot+lfbqXng29HWYpoAdbDSWf3G6cl9+hjtuCmFfsA5A7ysT9Az/Siq3tQR/2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780551661; c=relaxed/simple;
-	bh=904hfk+1/sPDYqEKZWi/BogqSgfzWSRNP+4wfvbsumg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GFtHSFusNl7dKYsD5rjTlaEfkkUn2qySzUoa5sWToYLzhUTaDa75c5SCzztHWKDN4gRxVFaMOvZxae7b2f8QhVet2WS2kmontOd9HE590bnHTHe+sMsOOfUXYMr2H3yoxG44N9J5VQf4ygflVboI4lm3pTG3PFw8rVfAsuKXrFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EAA4JALx; arc=none smtp.client-ip=209.85.128.179
+	s=arc-20240116; t=1780551815; c=relaxed/simple;
+	bh=AEhMerSE061sddegxts/S9Yhziuy8j0ynoTHFqr9dPc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EFIkzal7mr6c8qTZK9vT+LOx5Fw6/RFeZGtzdkq65SBkoKZjVQ0/qY65bdxueqX/CXKLMedqzvFJ8wN9FTP18oKWa3m3evyySCN498EBus4gabWkJ/tJFSEChvtXb9Z7jDNgeoaK3TwER+ETcdhP7TpYSj17LQ1kb4i6+g0YRfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tAp4rMtg; arc=none smtp.client-ip=209.85.167.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EAA4JALx"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-7dd5a8dc8a2so2358717b3.0
-        for <llvm@lists.linux.dev>; Wed, 03 Jun 2026 22:40:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tAp4rMtg"
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-485ecc0f2dfso257722b6e.3
+        for <llvm@lists.linux.dev>; Wed, 03 Jun 2026 22:43:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780551657; x=1781156457; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LREGCnvB9r3+rbw8NbYyQSnfAuuxbV3j4ZuR6PAmnmM=;
-        b=EAA4JALxJmiswSg2BN9kNPiZeMM4/TO0g5fkeFQwCy/QCprAIO7EOCxrTUCuZiF9HX
-         lCPHJrgUlsSy6d56sEidmpOVG31wDB9K3ZYaBtN366Z5MtCGhAWDn1X0eDoGeZ0eJBPm
-         nolD3G76O9VrMJfyZDRZ4BF0A8zX9hnq4dRIDbChMcqb6gjww24/Q2HLz3y0HL8T8dmG
-         cvS7/m7lnQULdrIl+pD1dBQPyTzzYDfyQSoAKhuBIr8ljKf/baXClT9Wj3WWoY8XSb81
-         csGjNWTNfnfgLDUGIXPS/ypv5QioH77bmIfqPHBG9wShXTO9JOkUsSnWrjG65Vgti11a
-         hppA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780551657; x=1781156457;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1780551812; x=1781156612; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LREGCnvB9r3+rbw8NbYyQSnfAuuxbV3j4ZuR6PAmnmM=;
-        b=K2asw9jQsfjOnAsmpJXxL4CNGJK3v2P+R+RLgCDfNXvSK2ymvf7jF3PE3fKueDHGgG
-         GIp+ngBTvVaqVpqF248o34Niyje6kfzualRhQCW7cW5uDL1G5Tn9qD4rL0lase7bCvzt
-         /mFNApUPeR/XqqIwy86xfhKpVXMx3vNfLzK4XGsg+ruYSRrnaQGh9qX9mpNDCbuoXgd6
-         ft8U7WspY5/NBWmFMmio+7W3+OwhfujXQkov54u3h4GfMPOJ5ISJt7vvMoIsiRbId5OQ
-         3cLKfGXWnDi19z0ZtIQqmRRgHDeBLJ1r0iWsRYEKTT9r/lA4f55dPH82VsAB6xSRduMg
-         UKMA==
-X-Forwarded-Encrypted: i=1; AFNElJ97Oqp4rSS42F3JKg+1EQ7yx5wyirAqgVU4cM9Vi9TqBKgz8PjEvV1nn6kpF05/qSRLw7tu@lists.linux.dev
-X-Gm-Message-State: AOJu0YwmzW4DVlqOi9C4mHLjppjowVYcD97mv0lhbRZRzJ5VjZ07168Q
-	B6+RsCcrEe5bKAG79n6GfuOa7FdpmJBboGNiP/Wpb98E3258A+22zVJd
-X-Gm-Gg: Acq92OEeElO+WmWJ2Lfe2d0JB5Th/QMAnZ0t2+BPEmtNCCfQdBoizV7wAF67Q/0rDJt
-	WfYaPtS6sqW5grywO1c4sKK39735E/Vh06n5D6mwdeyzAJ63JzAw/bEwtvyJzKxShtK4lEesiX3
-	7k0eTjIdiT85OtoSUFhf+UvxcPXvUGiTjJrSAkN7oUTPy7ZA6k7bRo79dnOCjZpbo9R4dyw09eb
-	a1fd+lnLNSwcgLgUAgIrSnIvzfEBdLJbcKtGF2v9ArPyNYVBHP4jT5abrDEU1BOEBe6/oS7JXVj
-	y6ViZKid4BiwI8Lkv0VBKOZ+DWyoNOkUMHepvIVU4rzGEx6E1NxnnZo+0CCQby/1gQSH+NAlIoM
-	pha/CjtbXcpW9XhlS8geFwEvD5TdM2UZnkpUB9K2Mo8NC+2AsB8sS/J8qxuUhY38W83FXcLhpmY
-	xneYi1EOkgqnD6nB7nistD4cyJfDKZBvPDdAqE8weBuIXGDiRogH0w5J1a9eIqVnTUwhBwXoZoF
-	usfNuR5GecEt9OBgo6jCvd2H3MMjRGbXou7BcWuPrx+6oKZkud/5JD2TDNvu0xNE7bdXA==
-X-Received: by 2002:a05:690c:6d04:b0:7b3:3a49:752 with SMTP id 00721157ae682-7ea4d2715cemr58826857b3.41.1780551657199;
-        Wed, 03 Jun 2026 22:40:57 -0700 (PDT)
+        bh=dd5qbt0svs5X9PyH4+Z4KjGVOSti+IcuLa2FFG2ZmDM=;
+        b=tAp4rMtgW4akyxyJ5xMc1AS5I9FbmUPDbcENQpX4V81mkitsW1cHKttFoS2whnTvRC
+         9OunO5fpsTJHHgQpgQ8itT18BQgLdreFApuBiYgnsaF8mddHFFTwTFxhORuaypRDweGU
+         b6TWcBGmNLWkwXfZscN96bsTQ0BcyHJm9eLRavMQfY9cDjJQzuqn+70IhdDJjputWmIo
+         IRezM0aIG4fmm+/wYKDTCC6ml5FfOXSnt0E6gNC8eWvEyznXsPPsZ3c+8qVnbPpNBesg
+         7BSBEnrktEfwjw41s8CIuEbPaDFZzA45DUkvxU2+ADXxjavofIw/+m9WCylaBwqn0kui
+         4nVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780551812; x=1781156612;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=dd5qbt0svs5X9PyH4+Z4KjGVOSti+IcuLa2FFG2ZmDM=;
+        b=aiIFg5uDnKsZyy24ujdiqqXagXqCmZ6hsnRdTwheMIktDq2l5nnJbpN9p0oxoeCkkn
+         m7NOvNjZkfuNx0PblJb2gtupiev8jBB5PpUFYSPHVMqgE9PB4wfdPQLCk80HcEmPKEnc
+         5u+GxvD1DmWbX++VBJSL4eOA5H1X/BvEnL7ZXw0NjEcoWDNEGJspfIV+eXJXVZGc1V9o
+         kB5t5EXNBXsud85VH4ry90Iej4O03aktJGbb9vo1TJUmuIk/sO8YyOS2C9tzDQiPA3MH
+         3fzNiJfwmJBHM2AuVLbV1nubLQ9Y2a6ph/3WmZ88MSNkiVil4Qb+cKCgiG+Y0SOyxyln
+         j9CQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+B32LMiV0cnj8mRNRVKuq4CEMhaRIn09IU5BxR+L5cUeytBv7PNxh0jsTppoEhP0r10ZTW@lists.linux.dev
+X-Gm-Message-State: AOJu0YwdPSzb5ik77wL+xdYZWUPAVkm5IpmLJJR0uAtAT0BZro801A2M
+	v8YZ8bpmDRgfuzkABL9bPNJhCa+smuKigK1QKa+QkFyPKQuGlJ+EJRzJ
+X-Gm-Gg: Acq92OH6X8egF2mKsMrJOUe2X69ajuHSE5iOth3nVngr3bIsc/Bp/tbpdOJM+dHvcOe
+	hIgGVjecv/k9+mZZUypIklauaxsXyFvtWY3LxwtiFOyFUvrac6Fqjie4tu3nOPZUPZcLq4loznK
+	slRLkR1745l2Bkla6goTqXDM8FNq7ZllRW/csZd7LUFeolFkcjxpKO4YoSnq2jLEdxoA+teG1yK
+	wAXD56GhUY1ab/Aq8UW/NIIg+/J9Uq6IubBKRbVumiXYu4fyMMIP1ZwrP3QX1X7uCcUD6zc3tko
+	ZXaDYjOv8AkmMVOhy7IwNCdVeFKVNlOcvz/RK8HPSm8HUk2UUOUj63nPGB6iF/XRyKvYpXX8LGk
+	cINKtofJ3mGaFgOvKWX6fG0vk2QkXlc/d44Al8tJvmsLzODCLq/+ACO4F2y35i5LXmcM2JlOzJZ
+	E/TcsDB6a4UOHzqZBwH4R6I72FKMmz1ejhsJJ87ftX/y080bAoHnsX3vnLN6W9t/LY7470QllIQ
+	hVC1Ykq72uGuNPqu7Jkj1VVYSzXpRTAI3Hbtzy4CYwVMdjM4wM1wtQInUtdPc4mMyFbyA==
+X-Received: by 2002:a05:6808:d48:b0:486:4892:d562 with SMTP id 5614622812f47-4865a9a50b5mr3872126b6e.1.1780551812279;
+        Wed, 03 Jun 2026 22:43:32 -0700 (PDT)
 Received: from localhost.localdomain (99-61-165-33.lightspeed.sntcca.sbcglobal.net. [99.61.165.33])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7ea23592beasm29137517b3.32.2026.06.03.22.40.53
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e6e75c5495sm3197548a34.10.2026.06.03.22.43.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2026 22:40:55 -0700 (PDT)
+        Wed, 03 Jun 2026 22:43:31 -0700 (PDT)
 From: Mithil Bavishi <bavishimithil@gmail.com>
-To: Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Tony Lindgren <tony@atomide.com>,
-	Russell King <linux@armlinux.org.uk>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <kees@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
+To: nathan@kernel.org
+Cc: aaro.koskinen@iki.fi,
+	andreas@kemnade.info,
+	bavishimithil@gmail.com,
+	kees@kernel.org,
+	khilman@baylibre.com,
 	linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org,
-	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	Mithil Bavishi <bavishimithil@gmail.com>
-Subject: [PATCH v3] ARM: OMAP2+: Add CFI type for omap4_finish_suspend
-Date: Wed,  3 Jun 2026 22:40:48 -0700
-Message-ID: <20260604054048.18980-1-bavishimithil@gmail.com>
+	linux-omap@vger.kernel.org,
+	linux@armlinux.org.uk,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	rogerq@kernel.org,
+	samitolvanen@google.com,
+	tony@atomide.com
+Subject: Re: [PATCH v2] ARM: OMAP2+: Add CFI type for omap4_finish_suspend
+Date: Wed,  3 Jun 2026 22:43:29 -0700
+Message-ID: <20260604054329.19450-1-bavishimithil@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260525165527.GA18457@ax162>
+References: <20260525165527.GA18457@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -84,51 +90,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With CONFIG_CFI enabled, OMAP4 can trap in omap4_enter_lowpower()
-because omap_pm_ops.finish_suspend points directly to the assembly
-routine omap4_finish_suspend, which lacks the expected KCFI type
-metadata.
+> are both pointing out that cfi_types.h needs to be included in
+> arch/arm/mach-omap2/sleep44xx.S for SYM_TYPED_FUNC_START to always be
+> expanded properly. I tested adding
+>
+>   #include <linux/cfi_types.h>
+>
+> as the first include line and both issues were resolved.
 
-Annotate omap4_finish_suspend with SYM_TYPED_FUNC_START so the assembly
-routine carries the KCFI type metadata.
+My apologies, I was switching systems and seem to have lost this somewhere
+in the process. Sent a v3 with the include, thanks a lot!
 
-Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Andreas Kemnade <andreas@kemnade.info>
----
- arch/arm/mach-omap2/sleep44xx.S | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/mach-omap2/sleep44xx.S b/arch/arm/mach-omap2/sleep44xx.S
-index f09c91978..8b515f300 100644
---- a/arch/arm/mach-omap2/sleep44xx.S
-+++ b/arch/arm/mach-omap2/sleep44xx.S
-@@ -6,6 +6,7 @@
-  * 	Santosh Shilimkar <santosh.shilimkar@ti.com>
-  */
- 
-+#include <linux/cfi_types.h>
- #include <linux/linkage.h>
- #include <asm/assembler.h>
- #include <asm/smp_scu.h>
-@@ -58,7 +59,7 @@
-  * stack frame and it expects the caller to take care of it. Hence the entire
-  * stack frame is saved to avoid possible stack corruption.
-  */
--ENTRY(omap4_finish_suspend)
-+SYM_TYPED_FUNC_START(omap4_finish_suspend)
- 	stmfd	sp!, {r4-r12, lr}
- 	cmp	r0, #0x0
- 	beq	do_WFI				@ No lowpower state, jump to WFI
-@@ -223,7 +224,7 @@ skip_scu_gp_clear:
- 	isb
- 	dsb
- 	ldmfd	sp!, {r4-r12, pc}
--ENDPROC(omap4_finish_suspend)
-+SYM_FUNC_END(omap4_finish_suspend)
- 
- /*
-  * ============================
--- 
-2.43.0
-
+Best,
+Mithil Bavishi
