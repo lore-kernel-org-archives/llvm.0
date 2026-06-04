@@ -1,101 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D789A3B27E2;
-	Wed,  3 Jun 2026 23:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4A41EF09B;
+	Thu,  4 Jun 2026 02:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780529373; cv=none; b=kwra1+OwoqsL+oweLlwRhSfvNZgC6RzZ4syS8T0GtcRGZXb9mKSaEyuabxy6pxhuZnB9nee0vGU5KOaUTIIadejfVhXAf73ZfSUAE5EAK5wYZk9Eki0U27rNwuIxTrhzmVfGLoU7T/eYZfl2jACAu4h0Ddi+ltAWnD4pIarkogw=
+	t=1780540321; cv=none; b=lUTE7xvLDX0ldFTFuO4Zlw42mUElu7Jz5+8X3EOe3eBPglCB4jUnUzpsvRxcdkHLDUkvG8YTZzhxweQe/d4/V0s0jr9kjEfzlgxW5jRJxfwrxGAVbcNisnfjSVt8ByTLa2e4CnUl2rhVoF5eDO8QeNQE8zGARxjRqbizomohG/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780529373; c=relaxed/simple;
-	bh=Ha4oADRXq1PYWtCJBMnXq0kpE6mHWtuzSC7B8v/poo4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=nhGNwC8wXliEBaD0+pygVXmuY6pCvC3pG0Y+BMvEP34BwDByYth7ubDotYjdDKOMIlU0utipdxgxnOOBW/Ni56Hc6ue52eOUBoxuQExUqe5e8Y98pinGqK6mOpb2/Q65jF5+Fr5oA5vC2eHppuh5HJCiLHKqnu2aG9OZmL/uwTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bRHhIEFL; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1780540321; c=relaxed/simple;
+	bh=ecX+LEyNr+KiQv+ml+XwvO5CEqaF8QSrr+6scWJ9hro=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OYGY051hqVcQnFUbhVwXAFgvX2oM9//pw7nOhqcAO+obJus9H8WL/8n8mtCaWR4suQKLiGAG6IQBYpM5g+IJqgaVeREOL9HyUzqGYByk2hT3GrWLcLgrHko9Onut9AzjJp0XtEdS3O/Oaj62kmooGdDl9nW5FdgJNuvvIRhz6Ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XFLSNfg7; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bRHhIEFL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XFLSNfg7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780529372; x=1812065372;
-  h=date:from:to:cc:subject:message-id;
-  bh=Ha4oADRXq1PYWtCJBMnXq0kpE6mHWtuzSC7B8v/poo4=;
-  b=bRHhIEFL4bNiEelZw2C+oitv2AqcK6SBQk8mneNtWccRFmJwqU0Apcxj
-   TOU7F4GWiyk2YFLuZ7Da9EXuyQQSfDLjedEwck4go/dEEm6wW0Wnd1zBk
-   ydL+jA/G9czjLJtVkFQ5dRlXVzGRiHgF2vtMEPZ0JwGa6nBqSoLzRpjlT
-   9sihQT12smIgnUUshwijeyxy30gbzVt8If+F7SVCEWYyUZHhd9sl9Aro2
-   ukAh/tHUgzesVbRqTVDzNDAPSqbZr5Mvv856wjnfiqo3qXyCCLqNOeIt1
-   GwfQgpCTve6rdpE1WyKS/jRsIcUWQ62Y3LpnxyqbYe+/jgju7UsIjYZCE
-   Q==;
-X-CSE-ConnectionGUID: +aYOM08YT26uKaZSMBwSOg==
-X-CSE-MsgGUID: xw34qsZvQ6G8mpcEEW/DaQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="84974564"
+  t=1780540320; x=1812076320;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ecX+LEyNr+KiQv+ml+XwvO5CEqaF8QSrr+6scWJ9hro=;
+  b=XFLSNfg7hFoldiKd+WBqpMYHpHyZkg1EqwRu0bK8B996vfrJzoIyEH2L
+   tKB+IAwVNJqkSm9bsju58x7K6BDf2VFrtPQqQYX2NYxxo814asLeHxCZb
+   AcvK7JxrMpR5GGrrYbw2BWB9nNxdhQZSiKGMZmAlohOOTUD5AMK8zBgGT
+   VVMLscO1aoIxm8QpbJkAw40y8K7q0qA/eJwv6n6F7x6wH1fUFr21XMhQk
+   IR2GdOEF+Hzr3Wg1bLKBYLnzrNWuX6J6faDPzS9Jkde8+kLAihi29guSI
+   IYttRFkA9clw5a/LaJxTmRQgzW81sqiTKNljfkBSeEDZy6nTD+EE3vCk9
+   g==;
+X-CSE-ConnectionGUID: 7O9OU+BUQbmfpaN455JWSQ==
+X-CSE-MsgGUID: yQXpu3YLThika8xnH/WXFw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="81489411"
 X-IronPort-AV: E=Sophos;i="6.24,186,1774335600"; 
-   d="scan'208";a="84974564"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 16:29:31 -0700
-X-CSE-ConnectionGUID: bp+4zMZzSXuPfJ7utyxZlw==
-X-CSE-MsgGUID: 7hgxRcjqQSCaGGNwFXt6Tg==
+   d="scan'208";a="81489411"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2026 19:31:59 -0700
+X-CSE-ConnectionGUID: AxkxxfF7SWWRaMTzd4Ucfw==
+X-CSE-MsgGUID: 39dtM/D6QVm0vmvMl7BYEA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,186,1774335600"; 
-   d="scan'208";a="274613151"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 03 Jun 2026 16:29:30 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+   d="scan'208";a="268070865"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa002.fm.intel.com with ESMTP; 03 Jun 2026 19:31:56 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wUv1b-00000000E00-2bQu;
-	Wed, 03 Jun 2026 23:29:27 +0000
-Date: Thu, 04 Jun 2026 07:28:31 +0800
+	id 1wUxs9-000000002G1-2x9X;
+	Thu, 04 Jun 2026 02:31:53 +0000
+Date: Thu, 04 Jun 2026 04:31:26 +0200
 From: kernel test robot <lkp@intel.com>
-To: Tom Lendacky <thomas.lendacky@amd.com>
+To: "Jonas =?utf-8?Q?Schw=C3=B6bel"?= <jonasschwoebel@yahoo.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Joerg Roedel <joerg.roedel@amd.com>
-Subject: [joro:kvm-planes-v7.1 59/60] arch/x86/kvm/svm/svm.c:5326:6:
- error: call to undeclared function '____sev_snp_guest'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202606040736.ebDQao8C-lkp@intel.com>
+ 0day robot <lkp@intel.com>, Svyatoslav Ryhel <clamor95@gmail.com>
+Subject: drivers/hwmon/emc1403.c:669:15: warning: cast to smaller
+ integer type 'enum emc1403_chip' from 'const void *'
+Message-ID: <202606040447.wMiarOHP-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/linux.git kvm-planes-v7.1
-head:   02b786614480597a489766ec45b0ec286a3301a0
-commit: a476e7f4b75733365b448899e65f4326eaebf9e3 [59/60] kvm: svm: Implement max_planes x86 operation
-config: x86_64-randconfig-016-20260603 (https://download.01.org/0day-ci/archive/20260604/202606040736.ebDQao8C-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260604/202606040736.ebDQao8C-lkp@intel.com/reproduce)
+tree:   https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-hwmon-lm90-Document-SMSC-EMC1402-1403-1404-1428/20260603-223112
+head:   7ecd216775028bbe12faecefad3fe2d0b5c13698
+commit: 4fa4634e45d9f0c3637033dec6512af69c164516 hwmon: (emc1403) Convert to use OF bindings
+date:   12 hours ago
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260604/202606040447.wMiarOHP-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260604/202606040447.wMiarOHP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606040736.ebDQao8C-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606040447.wMiarOHP-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/svm/svm.c:5326:6: error: call to undeclared function '____sev_snp_guest'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    5326 |         if (____sev_snp_guest(kvm))
-         |             ^
-   arch/x86/kvm/svm/svm.c:5326:6: note: did you mean 'is_sev_snp_guest'?
-   arch/x86/kvm/svm/svm.h:461:29: note: 'is_sev_snp_guest' declared here
-     461 | static __always_inline bool is_sev_snp_guest(struct kvm_vcpu *vcpu)
-         |                             ^
-   1 error generated.
+>> drivers/hwmon/emc1403.c:669:15: warning: cast to smaller integer type 'enum emc1403_chip' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+     669 |         data->chip = (enum emc1403_chip)i2c_get_match_data(client);
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/____sev_snp_guest +5326 arch/x86/kvm/svm/svm.c
+vim +669 drivers/hwmon/emc1403.c
 
-  5323	
-  5324	static unsigned svm_max_planes(struct kvm *kvm)
-  5325	{
-> 5326		if (____sev_snp_guest(kvm))
-  5327			return sev_snp_max_planes(kvm);
-  5328	
-  5329		return kvm_x86_default_max_planes(kvm);
-  5330	}
-  5331	
+   658	
+   659	static int emc1403_probe(struct i2c_client *client)
+   660	{
+   661		struct thermal_data *data;
+   662		struct device *hwmon_dev;
+   663	
+   664		data = devm_kzalloc(&client->dev, sizeof(struct thermal_data),
+   665				    GFP_KERNEL);
+   666		if (!data)
+   667			return -ENOMEM;
+   668	
+ > 669		data->chip = (enum emc1403_chip)i2c_get_match_data(client);
+   670		if (!data->chip)
+   671			return dev_err_probe(&client->dev, -ENODEV, "Unknown device!\n");
+   672	
+   673		data->regmap = devm_regmap_init_i2c(client, &emc1403_regmap_config);
+   674		if (IS_ERR(data->regmap))
+   675			return PTR_ERR(data->regmap);
+   676	
+   677		hwmon_dev = devm_hwmon_device_register_with_info(&client->dev,
+   678								 client->name, data,
+   679								 &emc1403_chip_info,
+   680								 emc1403_groups);
+   681		return PTR_ERR_OR_ZERO(hwmon_dev);
+   682	}
+   683	
 
 --
 0-DAY CI Kernel Test Service
