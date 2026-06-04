@@ -1,122 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E483A329E6C;
-	Thu,  4 Jun 2026 21:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5791D175A7E;
+	Thu,  4 Jun 2026 22:40:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780609731; cv=none; b=Stzr4rNzyKtVbicycBzadsGwUY9h+Bj3dHsVR75V7lmSXuGySIVGhLcnXHG6x1fTIepaD9umtxUZtZ7hEbI6pCDoVw2P8lYXnpRwoFTDtTABOOdaJsncihePKcvLtD8Ea9/GaxSTjAU4v5As77OZh7rwGKyNM4sqlKDYoq4LzXs=
+	t=1780612848; cv=none; b=dDMiER5ljCRYd7Ysvn6h9zVmBmEDnO++p85shkyvIUNb8WCcSg8AG7BqBZRjD11znydEVh7tQZzA32zNHYwqycHxz6xwG+tMgbtr3O4LESkAmzZ7F0xobqL+Z4VInWExgg+oaLVZeWkEq1+QHxBsCCH5olOBD+taug95Tbhm8oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780609731; c=relaxed/simple;
-	bh=iK7nDkaVl+kbc7PjAEoaEgaDEKAIkheFFI1yWCxh/uA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bLvbVHmrIlsDwkcItFk/QJBBJkwwBsFhSMXbBuLWAKGbxZ53qY67wfHTlehJu480XBjC80idK6siy3tEDgF/lWkrLkuwMk/VA9MvJ5eUd9ELhulo9WXw1VkVApyd6N0Wo9XXm+vtYqX+0B/dBCZipmcXzhJC2LtLgDv1OpPimSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oOJtH3Ws; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780612848; c=relaxed/simple;
+	bh=EX6csmbrJqEzxCbHsVp7F8OYRVjs7FwhFm2n8H80xew=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PbQPxaLpwzmmz3X7kGf1EJMFRqBpPwRdQf+UEqblsUoWLYpQ0dAagatA5Bx2pN2wQrDXPDzVv+ymQkZeNb1imPuf7sWDWtMRU3a7CliCgneGSWp+eACc2LqzRQfae6FO8GDyzEqsANeRXT9d4JPWE68QALQmm0Y27XBX/Z6bBag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kuBs0nqB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oOJtH3Ws"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45EC31F00893;
-	Thu,  4 Jun 2026 21:48:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kuBs0nqB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7471F00893;
+	Thu,  4 Jun 2026 22:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780609730;
-	bh=hccU/NDSuAvcNj2qshs5G5T8N2B5+zR4AKzNjS5QKDY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=oOJtH3WswuxaSXCBwtdBZdGgqvPxMl2AxmgsBn1Q7sv9bv+2fIQpUu8P6psX9SraE
-	 lSBE1kDOlOcCkxwq1Te5aY2Bf5gUb74/snkw1zcC7CzFdqpd4Avhfe2fsm750odqgS
-	 O59dMX2g/aDU3jKvEKl8txbOdj8B+U3/SsyEk2xAP8EUrnd4KHHvI+btOw06/4rK2Q
-	 taz///r7YoJ8dRaGduBLFDxVhYonPuOrFN7EFKzndPcRwg/FSeYlsjY8zFKlhD4Wob
-	 HX+achzSxwGdodU9S7+z5XB058pkm5Q/iau8rvefFGQqQMoYtL2OOWHLyI0pZM4xE6
-	 OCPIVEZUZh7Aw==
-Date: Thu, 4 Jun 2026 14:48:40 -0700
+	s=k20260515; t=1780612847;
+	bh=vNSWf7nSgDH8L2l2DjM7pdv9xwtZIhfH8fKI+ltDrRI=;
+	h=From:Date:Subject:To:Cc;
+	b=kuBs0nqBArB9Quu4d9LMMxXU2532mvXaQW5vfH8b7Mz0WJSr1+xaXFcY/9AYHvtKx
+	 ynlTht61ukSw44QuXtfvRpCOIy3i6+pvxn5xik04n/ppxC24kR6Dvss1XS6VpSyvF9
+	 1tFOW7T2H63xJfkpe/iS8UCBfZPSvvwi9Z+HHyP6Al8XVWVqDugcFhYwSVhikX2n25
+	 HtFt/jDvSARSgEicgCYvsw1dVMxdFynigu2xG/kv46guRyxRT7dfuSp3NlnyoHv1jY
+	 gNxJHJffpQH3osuvb1Ff2VtV4KS4kweTyrA1if9iM6qioLYzTqwxtw+d19ud2p6IMX
+	 gieRo4aqn6i2w==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Yunseong Kim <yunseong.kim@est.tech>, Ingo Molnar <mingo@redhat.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org, Yunseong Kim <ysk@kzalloc.com>
-Subject: Re: [RFC PATCH v2 2/6] kcov: add build system support for dataflow
- instrumentation
-Message-ID: <20260604214840.GA3915915@ax162>
-References: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech>
- <20260603-kcov-dataflow-next-20260603-v2-2-fee0939de2c4@est.tech>
- <20260604084519.GA3126523@noisy.programming.kicks-ass.net>
+Date: Thu, 04 Jun 2026 15:40:41 -0700
+Subject: [PATCH] wifi: mac80211: Fix -Wc23-extensions in
+ hwmp_route_info_get()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260604084519.GA3126523@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260604-mac80211-mesh_hwmp-fix-c23-extensions-v1-1-25a64d6ce541@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNUQrCMBBF0a2U+XYgiTW0bkVE2snEREgsmaqF0
+ r2b6ueBx30rCJfIAudmhcLvKPGZK/ShAQpDvjNGVw1GGausajEN1CmjNSaWcAufNKGPC5I5Ii8
+ z5z0geOpHR966zvct1NZUuK5+P5fr3/IaH0zzHodt+wKPv1fwiQAAAA==
+X-Change-ID: 20260604-mac80211-mesh_hwmp-fix-c23-extensions-59bdcf6d8f94
+To: Johannes Berg <johannes@sipsolutions.net>
+Cc: Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Masashi Honma <masashi.honma@gmail.com>, linux-wireless@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2460; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=EX6csmbrJqEzxCbHsVp7F8OYRVjs7FwhFm2n8H80xew=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFmK/97kXZe4uEZu3ey1/RMrg80+GLq9C6oOYV+abpEgu
+ ij0z4LKjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjAR/mMMv1k+BT11feI34/kJ
+ h2ih/7kZtxdO9Vj73VKHIa1XvWxOEy/DP9WFW1u+Jv/00mT+c+nfgZ1botStdRyP7Qn9Fcr4gt3
+ YlAkA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Thu, Jun 04, 2026 at 10:45:19AM +0200, Peter Zijlstra wrote:
-> On Wed, Jun 03, 2026 at 07:43:29PM +0200, Yunseong Kim wrote:
-> > Add CFLAGS_KCOV_DATAFLOW and RUSTFLAGS_KCOV_DATAFLOW exports to
-> > scripts/Makefile.kcov, containing:
-> >   -fsanitize-coverage=dataflow-args,dataflow-ret -g
-> >   (with optional -fno-inline via CONFIG_KCOV_DATAFLOW_NO_INLINE)
-> > 
-> > scripts/Makefile.lib applies these flags when a module's Makefile sets:
-> >   KCOV_DATAFLOW_file.o := y   (per-file)
-> >   KCOV_DATAFLOW := y          (per-directory)
-> > 
-> > Also supports CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL for global enablement.
-> > The flags are only applied to kernel objects (same guard as basic KCOV).
-> > 
-> > Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
-> > ---
-> >  scripts/Makefile.kcov | 6 ++++++
-> >  scripts/Makefile.lib  | 7 +++++++
-> >  2 files changed, 13 insertions(+)
-> > 
-> > diff --git a/scripts/Makefile.kcov b/scripts/Makefile.kcov
-> > index 78305a84ba9d..101173fe194b 100644
-> > --- a/scripts/Makefile.kcov
-> > +++ b/scripts/Makefile.kcov
-> > @@ -2,10 +2,16 @@
-> >  kcov-flags-y					+= -fsanitize-coverage=trace-pc
-> >  kcov-flags-$(CONFIG_KCOV_ENABLE_COMPARISONS)	+= -fsanitize-coverage=trace-cmp
-> >  
-> > +# KCOV dataflow: trace function args and return values
-> > +kcov-dataflow-flags-y := -fsanitize-coverage=dataflow-args,dataflow-ret -g
-> > +kcov-dataflow-flags-$(CONFIG_KCOV_DATAFLOW_NO_INLINE) += -fno-inline
-> 
-> https://clang.llvm.org/docs/ClangCommandLineReference.html
-> 
-> Has no mention of -fno-inline, furthermore, what are the exact
-> semantics? Does it inhibit __always_inline?
-> 
+When building with a version of clang that supports
+'-fms-anonymous-structs' (which will be used by the kernel instead of
+the wider '-fms-extensions'), there are a couple warnings after some
+recent mesg_hwmp.c changes:
 
-Based on clang/test/CodeGen/always-inline.c [1], I believe the semantics
-are the same as GCC's '-fno-inline' [2], which avoids inlining except
-for always_inline functions.
+  net/mac80211/mesh_hwmp.c:373:3: error: label followed by a declaration is a C23 extension [-Werror,-Wc23-extensions]
+    373 |                 struct ieee80211_mesh_hwmp_preq_top *preq_elem_top =
+        |                 ^
+  net/mac80211/mesh_hwmp.c:390:3: error: label followed by a declaration is a C23 extension [-Werror,-Wc23-extensions]
+    390 |                 struct ieee80211_mesh_hwmp_prep_top *prep_elem_top =
+        |                 ^
+  2 errors generated.
 
-[1]: https://github.com/llvm/llvm-project/blob/1d13b74cf086629d5cdae5f44ef4a62cebcaf3ff/clang/test/CodeGen/always-inline.c
-[2]: https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-fno-inline
+Enclose the switch case blocks in braces to clear up the warning.
 
--- 
+Fixes: a91c65cb99d1 ("wifi: mac80211: Use struct instead of macro for PREP frame")
+Fixes: 4ac20bd40b7d ("wifi: mac80211: Use struct instead of macro for PREQ frame")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ net/mac80211/mesh_hwmp.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/net/mac80211/mesh_hwmp.c b/net/mac80211/mesh_hwmp.c
+index 84903737271d..7f962b003579 100644
+--- a/net/mac80211/mesh_hwmp.c
++++ b/net/mac80211/mesh_hwmp.c
+@@ -369,7 +369,7 @@ static u32 hwmp_route_info_get(struct ieee80211_sub_if_data *sdata,
+ 	fresh_info = true;
+ 
+ 	switch (action) {
+-	case MPATH_PREQ:
++	case MPATH_PREQ: {
+ 		struct ieee80211_mesh_hwmp_preq_top *preq_elem_top =
+ 			(void *)hwmp_ie;
+ 		struct ieee80211_mesh_hwmp_preq_bottom *preq_elem_bottom =
+@@ -381,7 +381,8 @@ static u32 hwmp_route_info_get(struct ieee80211_sub_if_data *sdata,
+ 		orig_metric = le32_to_cpu(preq_elem_bottom->metric);
+ 		hopcount = preq_elem_top->hopcount + 1;
+ 		break;
+-	case MPATH_PREP:
++	}
++	case MPATH_PREP: {
+ 		/* Originator here refers to the MP that was the target in the
+ 		 * Path Request. We divert from the nomenclature in the draft
+ 		 * so that we can easily use a single function to gather path
+@@ -398,6 +399,7 @@ static u32 hwmp_route_info_get(struct ieee80211_sub_if_data *sdata,
+ 		orig_metric = le32_to_cpu(prep_elem_bottom->metric);
+ 		hopcount = prep_elem_top->hopcount + 1;
+ 		break;
++	}
+ 	default:
+ 		rcu_read_unlock();
+ 		return 0;
+
+---
+base-commit: a26c2a22e7e88b2b5afb1349f3994fc564c988b1
+change-id: 20260604-mac80211-mesh_hwmp-fix-c23-extensions-59bdcf6d8f94
+
+Best regards,
+--  
 Cheers,
 Nathan
+
