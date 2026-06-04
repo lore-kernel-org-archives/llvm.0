@@ -1,136 +1,248 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D000738C2D0;
-	Thu,  4 Jun 2026 10:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74ECE3A383C
+	for <llvm@lists.linux.dev>; Thu,  4 Jun 2026 10:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780569076; cv=none; b=ZEDZPwxknIaMycmopDs7rkxCkXromNOHLKhcBxErVBw9MTYtV5RQh/UFeJKfZPWfPk4ZNOQNmgT87geFmMv76fFv3bqD0vRZ1bak8E3o03lW4C0rDO+VfzWaU4HQffrb8T2k+S+rZxNtC9EDWoU9F6CjZZl9pJKNhW8nLtmzY5c=
+	t=1780569206; cv=none; b=p/v4PxUyu3bxHYf6dUg/ukTgO+r2d6WHO+gVaG3l1gFgCvofaNG9T9qB8otlBpa1QgKOKmnt2Wbh4Gc6pKtIgLctup/HdDYgVF7sxVw1Mu+jMrnUGSoYRKFZbk75j3O2pTJTUHXWs/yotZ+eHOB04CryyLkQBRzAMTQ9+y0J9PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780569076; c=relaxed/simple;
-	bh=4Zsg27HLHHxhAkTDy+lW27lhyVLE2+tX2v5oBBbCbmE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=NUgACZeM2+vjI83KEURx8ZBSvF5Nik8XjhuCHfT7LmyJA4+iy9wsu8nHbWtgfDxg19VoiKlzDiadEwvh7PZfAL5vXOmeCHPPPDLikGDLv7eFYzhRYJ2y9fAfyMVq1Orn7KbcvwQCuqqJ1+1nRghAuroTpajYKaxQ/D2jRIRUax8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iGStBw/b; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780569206; c=relaxed/simple;
+	bh=ARcek2FIaoN1gTuInpg1/4ZJULjYq1Im45gBx1yBdUA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HNibTzzACllI3oFiHRItZ7iGmXRqKsjlybBCtstuEuQSzqpUBPP3oCVokbxeOnAhkKvCThQKkIvtp0csEz0ihQjh0Qb2+YnNArZrjEg2Pk16wHOyWYE+Fr8uzNP/kPQoUAik4W80zha4ofGh9aPEQlF5kzyPvGvUkgo4as4j8SY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N5EyzVLa; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iGStBw/b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N5EyzVLa"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780569074; x=1812105074;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4Zsg27HLHHxhAkTDy+lW27lhyVLE2+tX2v5oBBbCbmE=;
-  b=iGStBw/bmSetLTL9/YT5ncRynDo/JBvCtHf41oQ91cG3mO6NuQvQi1VE
-   Prnv6qwHs4vw6/AgOFh9yqoGa3oxXznBy2uAB51QetR7tBaSaTwoGscPF
-   GYi2EE//DTr05KVhSzGB96nz28zAKzN9wX1+632+vNrpa5UrC7wXPYPzN
-   A36AP5/E9JXAV2FU3bKCezE1vObEYTraIAf3RKJ0L0TfiAChcw3b4Nluv
-   Jp7XDBLzY692iviH/QFMn+Ek0jxT9uIfPyOqzsTEA1AAzMvjcHhp580WC
-   oWA2JjXbu1KfWiCgVE5hnt+RKKsz7dN+e1C7KFy7JLuMfyE/D5sQ9Eaho
-   w==;
-X-CSE-ConnectionGUID: Kg7sbrnDTmSnO77gRC4g7Q==
-X-CSE-MsgGUID: 7M1XQN3eRV2SNR3Fym/0yw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="91969624"
+  t=1780569204; x=1812105204;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ARcek2FIaoN1gTuInpg1/4ZJULjYq1Im45gBx1yBdUA=;
+  b=N5EyzVLarzItA/vD+OOWmNoEBtWtytecy5Es/X9CWCkHeCSb3xxQpD+m
+   lMCcu9WraocAd6xNo3U5JKHicPx8sZU3sBhx92X+Oywv4/7itZTJyyOG2
+   K4KzVLmCfPadN76+VAlO+kbQPGOowaSPpUU5vyt0pMIKI8EAvO7q6RbQC
+   RO02evCnmUocrfrIPWXJIXvJJUE++1MymcZ7UpWu5kydvLMK9c9pCmlfu
+   +o1Yl9IpQ9qWEb/KYt/Sfvd+VfAmRdXNGgd4mdM2WpkMJcv6O68ese7KR
+   jr+a0Jb2ilb/+m8zikno3ALS1DsmPA2hysCspaeGHP1NrLcru39MLE01c
+   Q==;
+X-CSE-ConnectionGUID: H2PjznuTQziTFY1iWwYblA==
+X-CSE-MsgGUID: 8v5pWuojQVGgyjFTjPLPLQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11806"; a="81575557"
 X-IronPort-AV: E=Sophos;i="6.24,187,1774335600"; 
-   d="scan'208";a="91969624"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 03:31:13 -0700
-X-CSE-ConnectionGUID: sldVB1xGQ3OiBGsQWxGQgg==
-X-CSE-MsgGUID: OmjRoIn7QOuN2+Dq1DUl2A==
+   d="scan'208";a="81575557"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 03:33:24 -0700
+X-CSE-ConnectionGUID: espMLuuITu+n3FmkWvssWQ==
+X-CSE-MsgGUID: 0hhHHvCzQ4SxsxpNvJhPOg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,187,1774335600"; 
-   d="scan'208";a="249429977"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 04 Jun 2026 03:31:10 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wV5Lv-00000000Ebo-1sDz;
-	Thu, 04 Jun 2026 10:31:07 +0000
-Date: Thu, 04 Jun 2026 18:30:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, x86@kernel.org,
- David Woodhouse <dwmw@amazon.co.uk>,
- "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>,
- Jacob Keller <jacob.e.keller@intel.com>
-Subject: [tip:timers/ptp 5/25] arch/arm64/kvm/hyp_trace.c:121:24:
- error: incompatible pointer to integer conversion passing 'struct
- system_time_snapshot *' to parameter of type 'clockid_t' (aka 'int')
-Message-ID: <202606041827.OZlaB99X-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+   d="scan'208";a="241536848"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa007.fm.intel.com with ESMTP; 04 Jun 2026 03:33:21 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 81A7C98; Thu, 04 Jun 2026 12:33:20 +0200 (CEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	codalist@coda.cs.cmu.edu,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Jan Harkes <jaharkes@cs.cmu.edu>,
+	coda@cs.cmu.edu,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: [PATCH v1 1/1] coda: Remove set but unused variables
+Date: Thu,  4 Jun 2026 12:33:19 +0200
+Message-ID: <20260604103319.342158-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
 
-Hi Thomas,
+The clang compiler is not happy with set and unused variables:
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+  fs/coda/upcall.c:115:27: error: variable 'outp' set but not used [-Werror,-Wunused-but-set-variable]
+  ...
+  fs/coda/upcall.c:577:20: error: variable 'outp' set but not used [-Werror,-Wunused-but-set-variable]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/ptp
-head:   571287cd351fcda7df3050009786f110cfd30bd9
-commit: d09439210441efbadd8b0aa32c1ddb1eab2f3abd [5/25] KVM: arm64: Use ktime_get_snapshot_id() to retrieve CLOCK_BOOTTIME
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260604/202606041827.OZlaB99X-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260604/202606041827.OZlaB99X-lkp@intel.com/reproduce)
+Clean up the unused variables and associated unused code pieces.
+To make this happen, introduce a new UPARG_NO_OUTP() helper macro.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606041827.OZlaB99X-lkp@intel.com/
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ fs/coda/upcall.c | 37 +++++++++++++++++--------------------
+ 1 file changed, 17 insertions(+), 20 deletions(-)
 
-All errors (new ones prefixed by >>):
+diff --git a/fs/coda/upcall.c b/fs/coda/upcall.c
+index 3438119b5dcf..3ed04d758322 100644
+--- a/fs/coda/upcall.c
++++ b/fs/coda/upcall.c
+@@ -66,6 +66,13 @@ do {\
+         outsize = insize; \
+ } while (0)
+ 
++#define UPARG_NO_OUTP(op)\
++do {\
++	inp = (union inputArgs *)alloc_upcall(op, insize); \
++	if (IS_ERR(inp)) { return PTR_ERR(inp); }\
++	outsize = insize; \
++} while (0)
++
+ #define INSIZE(tag) sizeof(struct coda_ ## tag ## _in)
+ #define OUTSIZE(tag) sizeof(struct coda_ ## tag ## _out)
+ #define SIZE(tag)  max_t(unsigned int, INSIZE(tag), OUTSIZE(tag))
+@@ -112,11 +119,10 @@ int venus_setattr(struct super_block *sb, struct CodaFid *fid,
+ 		  struct coda_vattr *vattr)
+ {
+         union inputArgs *inp;
+-        union outputArgs *outp;
+         int insize, outsize, error;
+ 	
+ 	insize = SIZE(setattr);
+-	UPARG(CODA_SETATTR);
++	UPARG_NO_OUTP(CODA_SETATTR);
+ 
+         inp->coda_setattr.VFid = *fid;
+ 	inp->coda_setattr.attr = *vattr;
+@@ -161,11 +167,10 @@ int venus_close(struct super_block *sb, struct CodaFid *fid, int flags,
+ 		kuid_t uid)
+ {
+ 	union inputArgs *inp;
+-	union outputArgs *outp;
+ 	int insize, outsize, error;
+ 	
+ 	insize = SIZE(release);
+-	UPARG(CODA_CLOSE);
++	UPARG_NO_OUTP(CODA_CLOSE);
+ 	
+ 	inp->ih.uid = from_kuid(&init_user_ns, uid);
+         inp->coda_close.VFid = *fid;
+@@ -235,14 +240,13 @@ int venus_rename(struct super_block *sb, struct CodaFid *old_fid,
+ 		 const char *new_name)
+ {
+ 	union inputArgs *inp;
+-        union outputArgs *outp;
+         int insize, outsize, error; 
+ 	int offset, s;
+ 	
+ 	offset = INSIZE(rename);
+ 	insize = max_t(unsigned int, offset + new_length + old_length + 8,
+ 		     OUTSIZE(rename)); 
+- 	UPARG(CODA_RENAME);
++	UPARG_NO_OUTP(CODA_RENAME);
+ 
+         inp->coda_rename.sourceFid = *old_fid;
+         inp->coda_rename.destFid =  *new_fid;
+@@ -303,13 +307,12 @@ int venus_rmdir(struct super_block *sb, struct CodaFid *dirfid,
+ 		    const char *name, int length)
+ {
+         union inputArgs *inp;
+-        union outputArgs *outp;
+         int insize, outsize, error;
+         int offset;
+ 
+         offset = INSIZE(rmdir);
+ 	insize = max_t(unsigned int, offset + length + 1, OUTSIZE(rmdir));
+-	UPARG(CODA_RMDIR);
++	UPARG_NO_OUTP(CODA_RMDIR);
+ 
+         inp->coda_rmdir.VFid = *dirfid;
+         inp->coda_rmdir.name = offset;
+@@ -326,12 +329,11 @@ int venus_remove(struct super_block *sb, struct CodaFid *dirfid,
+ 		    const char *name, int length)
+ {
+         union inputArgs *inp;
+-        union outputArgs *outp;
+         int error=0, insize, outsize, offset;
+ 
+         offset = INSIZE(remove);
+ 	insize = max_t(unsigned int, offset + length + 1, OUTSIZE(remove));
+-	UPARG(CODA_REMOVE);
++	UPARG_NO_OUTP(CODA_REMOVE);
+ 
+         inp->coda_remove.VFid = *dirfid;
+         inp->coda_remove.name = offset;
+@@ -380,13 +382,12 @@ int venus_link(struct super_block *sb, struct CodaFid *fid,
+ 		  struct CodaFid *dirfid, const char *name, int len )
+ {
+         union inputArgs *inp;
+-        union outputArgs *outp;
+         int insize, outsize, error;
+         int offset;
+ 
+ 	offset = INSIZE(link);
+ 	insize = max_t(unsigned int, offset  + len + 1, OUTSIZE(link));
+-        UPARG(CODA_LINK);
++        UPARG_NO_OUTP(CODA_LINK);
+ 
+         inp->coda_link.sourceFid = *fid;
+         inp->coda_link.destFid = *dirfid;
+@@ -407,13 +408,12 @@ int venus_symlink(struct super_block *sb, struct CodaFid *fid,
+ 		     const char *symname, int symlen)
+ {
+         union inputArgs *inp;
+-        union outputArgs *outp;
+         int insize, outsize, error;
+         int offset, s;
+ 
+         offset = INSIZE(symlink);
+ 	insize = max_t(unsigned int, offset + len + symlen + 8, OUTSIZE(symlink));
+-	UPARG(CODA_SYMLINK);
++	UPARG_NO_OUTP(CODA_SYMLINK);
+         
+         /*        inp->coda_symlink.attr = *tva; XXXXXX */ 
+         inp->coda_symlink.VFid = *fid;
+@@ -440,11 +440,10 @@ int venus_symlink(struct super_block *sb, struct CodaFid *fid,
+ int venus_fsync(struct super_block *sb, struct CodaFid *fid)
+ {
+         union inputArgs *inp;
+-        union outputArgs *outp; 
+ 	int insize, outsize, error;
+ 	
+ 	insize=SIZE(fsync);
+-	UPARG(CODA_FSYNC);
++	UPARG_NO_OUTP(CODA_FSYNC);
+ 
+ 	inp->coda_fsync.VFid = *fid;
+ 	error = coda_upcall(coda_vcp(sb), insize, &outsize, inp);
+@@ -456,11 +455,10 @@ int venus_fsync(struct super_block *sb, struct CodaFid *fid)
+ int venus_access(struct super_block *sb, struct CodaFid *fid, int mask)
+ {
+         union inputArgs *inp;
+-        union outputArgs *outp; 
+ 	int insize, outsize, error;
+ 
+ 	insize = SIZE(access);
+-	UPARG(CODA_ACCESS);
++	UPARG_NO_OUTP(CODA_ACCESS);
+ 
+         inp->coda_access.VFid = *fid;
+         inp->coda_access.flags = mask;
+@@ -574,7 +572,6 @@ int venus_access_intent(struct super_block *sb, struct CodaFid *fid,
+ 			size_t count, loff_t ppos, int type)
+ {
+ 	union inputArgs *inp;
+-	union outputArgs *outp;
+ 	int insize, outsize, error;
+ 	bool finalizer =
+ 		type == CODA_ACCESS_TYPE_READ_FINISH ||
+@@ -584,7 +581,7 @@ int venus_access_intent(struct super_block *sb, struct CodaFid *fid,
+ 		return 0;
+ 
+ 	insize = SIZE(access_intent);
+-	UPARG(CODA_ACCESS_INTENT);
++	UPARG_NO_OUTP(CODA_ACCESS_INTENT);
+ 
+ 	inp->coda_access_intent.VFid = *fid;
+ 	inp->coda_access_intent.count = count;
+-- 
+2.50.1
 
->> arch/arm64/kvm/hyp_trace.c:121:24: error: incompatible pointer to integer conversion passing 'struct system_time_snapshot *' to parameter of type 'clockid_t' (aka 'int') [-Wint-conversion]
-     121 |         ktime_get_snapshot_id(&snap, CLOCK_BOOTTIME);
-         |                               ^~~~~
-   include/linux/timekeeping.h:355:45: note: passing argument to parameter 'clock_id' here
-     355 | extern void ktime_get_snapshot_id(clockid_t clock_id, struct system_time_snapshot *systime_snapshot);
-         |                                             ^
->> arch/arm64/kvm/hyp_trace.c:121:31: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct system_time_snapshot *' [-Wint-conversion]
-     121 |         ktime_get_snapshot_id(&snap, CLOCK_BOOTTIME);
-         |                                      ^~~~~~~~~~~~~~
-   include/uapi/linux/time.h:56:26: note: expanded from macro 'CLOCK_BOOTTIME'
-      56 | #define CLOCK_BOOTTIME                  7
-         |                                         ^
-   include/linux/timekeeping.h:355:84: note: passing argument to parameter 'systime_snapshot' here
-     355 | extern void ktime_get_snapshot_id(clockid_t clock_id, struct system_time_snapshot *systime_snapshot);
-         |                                                                                    ^
-   2 errors generated.
-
-
-vim +121 arch/arm64/kvm/hyp_trace.c
-
-   108	
-   109	static void hyp_trace_clock_enable(struct hyp_trace_clock *hyp_clock, bool enable)
-   110	{
-   111		struct system_time_snapshot snap;
-   112	
-   113		if (hyp_clock->running == enable)
-   114			return;
-   115	
-   116		if (!enable) {
-   117			cancel_delayed_work_sync(&hyp_clock->work);
-   118			hyp_clock->running = false;
-   119		}
-   120	
- > 121		ktime_get_snapshot_id(&snap, CLOCK_BOOTTIME);
-   122	
-   123		hyp_clock->boot = ktime_to_ns(snap.systime);
-   124		hyp_clock->cycles = snap.cycles;
-   125		hyp_clock->mult = 0;
-   126	
-   127		init_completion(&hyp_clock->ready);
-   128		INIT_DELAYED_WORK(&hyp_clock->work, __hyp_clock_work);
-   129		schedule_delayed_work(&hyp_clock->work, msecs_to_jiffies(CLOCK_INIT_MS));
-   130		wait_for_completion(&hyp_clock->ready);
-   131		hyp_clock->running = true;
-   132	}
-   133	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
