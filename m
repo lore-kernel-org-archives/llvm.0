@@ -1,64 +1,64 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090A03DD507
-	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 22:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B098D3E715A
+	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 22:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780696930; cv=none; b=sOGS103KOoY78IOvWaIM7L+pBhRU46Cc38A0nn6t90oR6PM7toHX3FdnzcBnwmGrDZZ6D8qYoUEBdRoe8rPNZ0DdrjYNjWtg8x6rpGTZfiK+rJE1Bi1KAkAHO1R25ebvZqdiVTDQZrUK2kNUDQJKOgeUp+yarhF1H294WYJUKhA=
+	t=1780696932; cv=none; b=UZfvjrcbvPSAb6gYOiLCXV0oEYEDjlt+FsQn20mzO+SfiwjB+DgMzKDeBRyCy/1zo/hWflp3SkduljdgH39CZV5ZLCljfb8lWyO5kKsCpa9zXeHjfMZ+ekPs3WJqznd424IZOXNvkKi7gxYM7pNWe/EwFZyR13vQHYgoDKHJUcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780696930; c=relaxed/simple;
-	bh=ZIbZrZAamM8DHdzetSAyNZ32dsZlWnuLa36YcV5UTMo=;
+	s=arc-20240116; t=1780696932; c=relaxed/simple;
+	bh=5w6tsBgfpFcK6p2n/K6AqHvbyJ9yiri4PsQmj2ASk4M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AeM2r7LpqbUGmTsY3oojX+6X40SOVoQpx/E0In7eOz4dPd1kkM64+/ptry/EoH2fAS+fVQIEYLAcdAwWMA7PjUHsZ0eWiqvLpf5Z6SWtA+hFh0EQt8JjxM4kA+6/0KC8wN3QnaLhJeOI4nl2lgX8LNyE69E6cqz2fYx11oSqSLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z49Kc1W0; arc=none smtp.client-ip=209.85.210.170
+	 MIME-Version; b=DSLvMrYUBeaYNMh6FlEMDOddT1KZ3NJKnaXlulzghEeq01+5CTBHrhOeDJBSZimA0NzMv0DAEAn8uzHPQRgDPSjLooE8u6Mctq/czXk1KMOkknY+BChS7j/O5JUzZC2z4zj1ehKZhjW2Q6kfZ2WvU7rZxLfu9WXJoAZ+mnMFwYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j1SsxAD6; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z49Kc1W0"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8422871b42dso1479399b3a.3
-        for <llvm@lists.linux.dev>; Fri, 05 Jun 2026 15:02:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j1SsxAD6"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-842288702fbso1049760b3a.1
+        for <llvm@lists.linux.dev>; Fri, 05 Jun 2026 15:02:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780696928; x=1781301728; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1780696930; x=1781301730; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XsujHfWeeEl/d7h28VlfSKrBHdpgYMwwQ54lzvrhDbE=;
-        b=Z49Kc1W0w8YXcvAkk1evhst6cYw/RDrrUcH9NjewvVkWd+mot7H7xw0aXr2kxtuktO
-         rSI8Qywqlg8E1RBNjQ2/jA4tKwbjGf38SxqrzO9i3XM8wHaoAzNeO6HLQmmjr4luJ+NI
-         bdZ5H8TkobcfD3d3AxoxPDryoKFhsbfm+452Bhc+JnAThnqCxT9Jp0tB6HtS9TT/zwqs
-         67wS+fLp6nHxGtyEzOIokA9fLDIVE/4QbUkBJYGaGkkhxjFInLfkeyZ2Rugxw4oeFKE2
-         YzSmeizDqsY/OVB9ODefJFGkQBUjqVjgvuIQf6oCyw0NzGw3jhfZXrXlaZGNCNqSpSUB
-         JARw==
+        bh=lCrOV/66FRzdEdHCWluMsQiKmBFsYBQNgpZa33W4dWo=;
+        b=j1SsxAD6ETadbqloSYlPLyUYPJStA944yCl8+wR95M6XkymfUQ3hSQonaYH21T6BRb
+         TdIDjHW+Oc5jyX8dEQ6kCq5NrN3F9fAGInorVfNvS9ZX9j9MF2xt9StrF9B55sE+tu1u
+         Z1F5/rk81Yve1qWUeAFZfruzxF12pysJwxkiX3Xdl9qMvS5krMj9gjnsmH8bK8vJAWn4
+         4Zbfaf+HR71wCrwhF7USuGZYU+g4ZDziCOWx5UbmQpk8iQ8cDwrVncpS/BebKAWEgJFe
+         jyNUjrLb6J9tsYn17GHMVz8yv4UXm+Z47B9Ea5dgbkDcktrPurDKcnR9r2aH6Lw9wFR0
+         /Evw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780696928; x=1781301728;
+        d=1e100.net; s=20251104; t=1780696930; x=1781301730;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=XsujHfWeeEl/d7h28VlfSKrBHdpgYMwwQ54lzvrhDbE=;
-        b=Q4kRJPU9vEsuKuxccXSvwnUFNV4PmB+ac/XT5XJrh2GKVth86hlh1MS5QECy0Zcnm0
-         9cfjHGk28CKvYrw9EMJUpaTQW/QzTR+TejaFDOPuYBdJ06UK4oVJrYfvN7RnwAL8KupD
-         ymDZ1E6O7piBtZANKGEd6Ru45NnrIO91PLFkNNAczRSFkcs4Ge4nz/YO44NiSSEhFDMm
-         wTKJgdxlOuhFu2wb4NiHMMJDTKvJeKF1WqxUYoxdfnOzAiC94e/2TzxumOXN9qrxXlf8
-         V+oaxjiqjpj1q6PYuBOtUiMR6gX1SEZquMywvCdW8nZRfCd+UHumL1K5+7ERjEuzWfdI
-         n1+w==
-X-Forwarded-Encrypted: i=1; AFNElJ/w0sqTQYFub14NlucwbYVMZREwjAR4s5/vOWzQ61/4rgIQaxC1hcN/5EXlYTg7bQtlvSbG@lists.linux.dev
-X-Gm-Message-State: AOJu0YxiTDgIkSW8B+WlZXt5hk9fRRbCOBo0oGXr9+7Bt0/A3SH3Tj1g
-	egwI9X4YVfbWO6tEKCk6zPAI9+7XaBmpTE7D3P81Ww3AtgTYxF1TZAkI
-X-Gm-Gg: Acq92OErHWZc40njGeg86YOQ9gUskFYGKk+yL5U7cWDLveKYeBuZ0Khjop3xI/S81xI
-	GtxHggzjcS7cYsBbrE3NGuTBFfz1Mxh6ZBhz7t+QHLJC0TMVkpI2zBDyjRDteDhvxzj0nBm2Qyr
-	gZh1Wk//7bs31VtlzoukT62Mfnxm/hFBEgozz4IGF8qt+tymT5ciIdAy4PEQS1KkUd9qngzxFlf
-	Uot5z7CVuALzo9ptag2dzT3EUigCkkvsN8HW4yznIlW87uYRVRYz6rF/MA486G8wgY+iedjzGWc
-	7IMUYHwCm2U74eEa3rpcN0x5dpZuWVQJcO/Pv6omNebxxKn9pb0E8BIEcHL359/hHvk6DVAcaSI
-	+UW7l7W9l3/ovQ6L/+DVQXaPVjfwl9nbYefmYOalcs8fEuZDHo4bRtW1gcP7/pRLKmWRT0rO7vE
-	Braagm9KSzE0uNLWH+G/h8U5vGA6EzIfMEx+8BYwT0r85S4lkd/sKWW/jbXGtN5EoSv5Co1HmP8
-	sszfQCn8WoO5oSsYZx9Wm3YUQsiIIWKkTohtkf3IR5x+g==
-X-Received: by 2002:a05:6a00:a13:b0:82c:d7c9:5479 with SMTP id d2e1a72fcca58-842b0e3da19mr5756498b3a.32.1780696928113;
-        Fri, 05 Jun 2026 15:02:08 -0700 (PDT)
+        bh=lCrOV/66FRzdEdHCWluMsQiKmBFsYBQNgpZa33W4dWo=;
+        b=OnY8GczOcIFXx0UqepLR0IKCib87nB5jWKZXelNIq72ZpiLTL5XjzyRq3Bbl+DE5S2
+         Q1oVmNEd8rsHuSzWiDTi8HjMEo+YLu1zBZBToPWlEcHPWur8cBS3kqAW/kJWsmo5XrMq
+         xX3eL/KfpGf/WU3J3N0DAPe/qQEs1PgPh5I11nIFpDMG/noRTcwu8JO7yF/PIcHQ0FvP
+         pCB92eTb1A028xHqO5/Nm05Z8ksvls1yX6/UO+ponFoq/3BdjCD/vP+T325AJyemiFIx
+         +XY4jCVgi2eLgMflE6/pTdnRK3JumgP+m1NBM3EgGjTypGaGpLJkCUT9j/F7evg1DtoR
+         MP7w==
+X-Forwarded-Encrypted: i=1; AFNElJ8zClVCsomdSeBaqFHSA+FaGOd82lK5qXnjOuEwhVSzr2223/FfOM4jpg/I2UsUwsKw4mPs@lists.linux.dev
+X-Gm-Message-State: AOJu0YwMZ5paYqQLSHVh+Z06tKK+jn8zyUKSzdCBE6uZDSHpaZVltPFy
+	tCp2MCRCtmvy+uzbpcOQophMeOAMZOgkQXZy3aiYsHeSvhQfHx5l2QCl
+X-Gm-Gg: Acq92OGrf8UX82/aUHM6/j6ayclCZVsBIXnEzlKbOjvrz/4l58qzE6V2fM6YcL18VCY
+	0y/EkLqMvttPjaOOIUlxX4pCSmKVZskt3VAfuycXIKw9exyJZIzH0c+A+bZLzl6c3Vl56fPDKSS
+	bb8KXY7bPs7A35mSUZ8DSa1iFTlLIKVIanttuEVOHWsUcTebXd28V3PZ2Bc1bHB7B292yNCTL//
+	0aHTpgEtHR1Qsr0FMYm3ftK1bY5/AC6MKma13iefWxGMDqcM8lsWaqXkhzRXCkU8GBdmqHNIUlU
+	NArV5DLnw1O4UUkQIhLG3HcioP5/SbirMmReGoKPpDo6I8xH8sDQEOTeRjxmPd+/U9Ps/YxiuJc
+	ErTTG5zbRMMwAyKm622p36bpADng1NFZ4/ahcP1WP3WjBbbdGSQ5fq/YzHnWSrh4q3oXs7OrCkB
+	WYgR3N2qWZnK3/EYi4Z6cvbJCnyCT/iTzDAVr2XYWw+dApaVexH7NlXu54sbisPQwEvTqZHd54U
+	/0rCd4x8G4wrs6lhjErVyzlB+zHt7+kdVAgSV6Ot5ZnVw==
+X-Received: by 2002:aa7:88c6:0:b0:834:e5a2:d089 with SMTP id d2e1a72fcca58-842b109cf44mr5622300b3a.33.1780696929651;
+        Fri, 05 Jun 2026 15:02:09 -0700 (PDT)
 Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-842824a1cb4sm12518883b3a.26.2026.06.05.15.02.06
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-842824a1cb4sm12518883b3a.26.2026.06.05.15.02.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 15:02:07 -0700 (PDT)
+        Fri, 05 Jun 2026 15:02:08 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: dmaengine@vger.kernel.org
 Cc: Vinod Koul <vkoul@kernel.org>,
@@ -71,9 +71,9 @@ Cc: Vinod Koul <vkoul@kernel.org>,
 	linux-kernel@vger.kernel.org (open list),
 	linuxppc-dev@lists.ozlabs.org (open list:FREESCALE DMA DRIVER),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH 09/10] dmaengine: fsldma: convert to devm_request_irq
-Date: Fri,  5 Jun 2026 15:01:33 -0700
-Message-ID: <20260605220134.43295-10-rosenp@gmail.com>
+Subject: [PATCH 10/10] dmaengine: fsldma: replace ppc-specific accessors with portable generic ones
+Date: Fri,  5 Jun 2026 15:01:34 -0700
+Message-ID: <20260605220134.43295-11-rosenp@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260605220134.43295-1-rosenp@gmail.com>
 References: <20260605220134.43295-1-rosenp@gmail.com>
@@ -85,108 +85,140 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Replace request_irq/free_irq with devm_request_irq, tying IRQ
-lifetimes to the parent DMA device. This removes fsldma_free_irqs()
-entirely, eliminates the out_unwind error unwind label, and drops
-the explicit free_irq call from fsldma_of_remove.
+- Convert remaining in_be32/in_le32 calls to FSL_DMA_IN macro
+- Replace __ilog2 with generic ilog2 (pull in linux/log2.h)
+- Add linux/io.h include
+- Expand non-PPC accessor support from ARM-only to all architectures
+- Guard 64-bit generic accessors with CONFIG_64BIT; provide
+  emulation using 32-bit accessors on 32-bit platforms
+
+Add COMPILE_TEST support as a result for extra compile coverage.
 
 Assisted-by: opencode:big-pickle
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/dma/fsldma.c | 50 ++++++--------------------------------------
- 1 file changed, 6 insertions(+), 44 deletions(-)
+ drivers/dma/Kconfig  |  2 +-
+ drivers/dma/fsldma.c | 11 ++++++-----
+ drivers/dma/fsldma.h | 35 ++++++++++++++++++++++++++++++++---
+ 3 files changed, 39 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+index 302021540d76..9b13e7aa31c7 100644
+--- a/drivers/dma/Kconfig
++++ b/drivers/dma/Kconfig
+@@ -206,7 +206,7 @@ config EP93XX_DMA
+ 
+ config FSL_DMA
+ 	tristate "Freescale Elo series DMA support"
+-	depends on FSL_SOC
++	depends on FSL_SOC || COMPILE_TEST
+ 	select DMA_ENGINE
+ 	select ASYNC_TX_ENABLE_CHANNEL_SWITCH
+ 	help
 diff --git a/drivers/dma/fsldma.c b/drivers/dma/fsldma.c
-index 79a268139b9f..01c9cd27e795 100644
+index 01c9cd27e795..a7c1f1b4c9ac 100644
 --- a/drivers/dma/fsldma.c
 +++ b/drivers/dma/fsldma.c
-@@ -1027,26 +1027,6 @@ static irqreturn_t fsldma_ctrl_irq(int irq, void *data)
- 	return IRQ_RETVAL(handled);
- }
- 
--static void fsldma_free_irqs(struct fsldma_device *fdev)
--{
--	struct fsldma_chan *chan;
--	int i;
--
--	if (fdev->irq) {
--		dev_dbg(fdev->dev, "free per-controller IRQ\n");
--		free_irq(fdev->irq, fdev);
--		return;
--	}
--
--	for (i = 0; i < FSL_DMA_MAX_CHANS_PER_DEVICE; i++) {
--		chan = fdev->chan[i];
--		if (chan && chan->irq) {
--			chan_dbg(chan, "free per-channel IRQ\n");
--			free_irq(chan->irq, chan);
--		}
--	}
--}
--
- static int fsldma_request_irqs(struct fsldma_device *fdev)
- {
- 	struct fsldma_chan *chan;
-@@ -1056,9 +1036,8 @@ static int fsldma_request_irqs(struct fsldma_device *fdev)
- 	/* if we have a per-controller IRQ, use that */
- 	if (fdev->irq) {
- 		dev_dbg(fdev->dev, "request per-controller IRQ\n");
--		ret = request_irq(fdev->irq, fsldma_ctrl_irq, IRQF_SHARED,
--				  "fsldma-controller", fdev);
--		return ret;
-+		return devm_request_irq(fdev->dev, fdev->irq, fsldma_ctrl_irq,
-+				       IRQF_SHARED, "fsldma-controller", fdev);
+@@ -32,6 +32,8 @@
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/platform_device.h>
++#include <linux/io.h>
++#include <linux/log2.h>
+ #include <linux/fsldma.h>
+ #include "dmaengine.h"
+ #include "fsldma.h"
+@@ -266,7 +268,7 @@ static void fsl_chan_set_src_loop_size(struct fsldma_chan *chan, int size)
+ 	case 4:
+ 	case 8:
+ 		mode &= ~FSL_DMA_MR_SAHTS_MASK;
+-		mode |= FSL_DMA_MR_SAHE | (__ilog2(size) << 14);
++		mode |= FSL_DMA_MR_SAHE | (ilog2(size) << 14);
+ 		break;
  	}
  
- 	/* no per-controller IRQ, use the per-channel IRQs */
-@@ -1069,34 +1048,19 @@ static int fsldma_request_irqs(struct fsldma_device *fdev)
- 
- 		if (chan->irq <= 0) {
- 			chan_err(chan, "interrupts property missing in device tree\n");
--			ret = -ENODEV;
--			goto out_unwind;
-+			return -ENODEV;
- 		}
- 
- 		chan_dbg(chan, "request per-channel IRQ\n");
--		ret = request_irq(chan->irq, fsldma_chan_irq, IRQF_SHARED,
--				  "fsldma-chan", chan);
-+		ret = devm_request_irq(fdev->dev, chan->irq, fsldma_chan_irq,
-+				       IRQF_SHARED, "fsldma-chan", chan);
- 		if (ret) {
- 			chan_err(chan, "unable to request per-channel IRQ\n");
--			goto out_unwind;
-+			return ret;
- 		}
+@@ -299,7 +301,7 @@ static void fsl_chan_set_dst_loop_size(struct fsldma_chan *chan, int size)
+ 	case 4:
+ 	case 8:
+ 		mode &= ~FSL_DMA_MR_DAHTS_MASK;
+-		mode |= FSL_DMA_MR_DAHE | (__ilog2(size) << 16);
++		mode |= FSL_DMA_MR_DAHE | (ilog2(size) << 16);
+ 		break;
  	}
  
- 	return 0;
--
--out_unwind:
--	for (/* none */; i >= 0; i--) {
--		chan = fdev->chan[i];
--		if (!chan)
--			continue;
--
--		if (chan->irq <= 0)
--			continue;
--
--		free_irq(chan->irq, chan);
--	}
--
--	return ret;
+@@ -326,7 +328,7 @@ static void fsl_chan_set_request_count(struct fsldma_chan *chan, int size)
+ 
+ 	mode = get_mr(chan);
+ 	mode &= ~FSL_DMA_MR_BWC_MASK;
+-	mode |= (__ilog2(size) << 24) & FSL_DMA_MR_BWC_MASK;
++	mode |= (ilog2(size) << 24) & FSL_DMA_MR_BWC_MASK;
+ 
+ 	set_mr(chan, mode);
  }
+@@ -1004,8 +1006,7 @@ static irqreturn_t fsldma_ctrl_irq(int irq, void *data)
+ 	u32 gsr, mask;
+ 	int i;
  
- /*----------------------------------------------------------------------------*/
-@@ -1304,8 +1268,6 @@ static void fsldma_of_remove(struct platform_device *op)
- 	fdev = platform_get_drvdata(op);
- 	dma_async_device_unregister(&fdev->common);
+-	gsr = (fdev->feature & FSL_DMA_BIG_ENDIAN) ? in_be32(fdev->regs)
+-						   : in_le32(fdev->regs);
++	gsr = FSL_DMA_IN(fdev, fdev->regs, 32);
+ 	mask = 0xff000000;
+ 	dev_dbg(fdev->dev, "IRQ: gsr 0x%.8x\n", gsr);
  
--	fsldma_free_irqs(fdev);
+diff --git a/drivers/dma/fsldma.h b/drivers/dma/fsldma.h
+index d7b7a3138b85..01f93123b233 100644
+--- a/drivers/dma/fsldma.h
++++ b/drivers/dma/fsldma.h
+@@ -232,17 +232,46 @@ static void fsl_iowrite64be(u64 val, u64 __iomem *addr)
+ 	out_be32((u32 __iomem *)addr + 1, (u32)val);
+ }
+ #endif
+-#endif
 -
- 	for (i = 0; i < FSL_DMA_MAX_CHANS_PER_DEVICE; i++) {
- 		if (fdev->chan[i])
- 			fsl_dma_chan_remove(fdev->chan[i]);
+-#if defined(CONFIG_ARM64) || defined(CONFIG_ARM)
++#else
+ #define fsl_ioread32(p)		ioread32(p)
+ #define fsl_ioread32be(p)	ioread32be(p)
+ #define fsl_iowrite32(v, p)	iowrite32(v, p)
+ #define fsl_iowrite32be(v, p)	iowrite32be(v, p)
++
++#ifdef CONFIG_64BIT
+ #define fsl_ioread64(p)		ioread64(p)
+ #define fsl_ioread64be(p)	ioread64be(p)
+ #define fsl_iowrite64(v, p)	iowrite64(v, p)
+ #define fsl_iowrite64be(v, p)	iowrite64be(v, p)
++#else
++static inline u64 fsl_ioread64(const u64 __iomem *addr)
++{
++	u32 val_lo = ioread32((u32 __iomem *)addr);
++	u32 val_hi = ioread32((u32 __iomem *)addr + 1);
++
++	return ((u64)val_hi << 32) + val_lo;
++}
++
++static inline void fsl_iowrite64(u64 val, u64 __iomem *addr)
++{
++	iowrite32(val >> 32, (u32 __iomem *)addr + 1);
++	iowrite32((u32)val, (u32 __iomem *)addr);
++}
++
++static inline u64 fsl_ioread64be(const u64 __iomem *addr)
++{
++	u32 val_hi = ioread32be((u32 __iomem *)addr);
++	u32 val_lo = ioread32be((u32 __iomem *)addr + 1);
++
++	return ((u64)val_hi << 32) + val_lo;
++}
++
++static inline void fsl_iowrite64be(u64 val, u64 __iomem *addr)
++{
++	iowrite32be(val >> 32, (u32 __iomem *)addr);
++	iowrite32be((u32)val, (u32 __iomem *)addr + 1);
++}
++#endif
+ #endif
+ 
+ #define FSL_DMA_IN(fsl_dma, addr, width)			\
 -- 
 2.54.0
 
