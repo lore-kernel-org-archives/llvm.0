@@ -1,105 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF341E5B63;
-	Fri,  5 Jun 2026 00:33:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C113B7B93;
+	Fri,  5 Jun 2026 01:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780619614; cv=none; b=K4aAET5RNVqzNQwlbJ1oSN2L8exxysWazQQQcaH5RjdzCUt48eDs57pnSTmE0KAPBPykpNkfwYAS7IbKOwRJe9+nXOaQaWZLPkbP2MXml/9UFdqcIyEFmvVMriaWyI43ougIND3tCjlIb3Lp5ngSXyGLpnHKhqfEe2JyZFzUMts=
+	t=1780622655; cv=none; b=VztraQaa01JTkjgis/Mk1B20t0GCF70YEJpK7PrYZz0gY6LI6f4gjppputsrBvgR9hsOtUtoA+bVpQZonWeb72E8KHkehmqnSkYEnxo8eg9a3I8oluKPFPDPRdTU7agWZMwN564p8pufle/TvOLWIg6ok24FwBvbgIUhjGh0r6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780619614; c=relaxed/simple;
-	bh=FiIhFTMpDiko60PkDxAKjTjhqyUO6mVmOJmI7hvwhKw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QN5QBGuQ5BFYTNWTLZtKbTcXLSqONANG5Yn3hTjI4GceTW6M2db/G2MFgBGyKTCS6eUPOVIiaS7ZQUJc5nZihzor80De95cXaa8JhfYe+aWqJ+yjJuDLeQsDd6VU08I6jkAKKx2juKJHTPyjj75pHOePYDmAuCV/DegQr7dTKDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lW3boJ0L; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780622655; c=relaxed/simple;
+	bh=wUXquFQuBDYMZICYnLQmQNv1jv/HaB9bdKctPiDDt8E=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=KcwO/3+iecUlB50H2+4s9JY5B+kARex9slNG5IXd4yyDdT7UF0iuuKW4ldmsxRhGh/A9mkSOMbShvjejd03TyR5VNQa295tnwRI8+OsISdEgBnnoWil87PVKXTIjRbng92IRZ3iA2a5ASzoC23bE+AQ+/GTBaBDC6z2UqGq+74c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F1bwtWx4; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lW3boJ0L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96DDD1F00893;
-	Fri,  5 Jun 2026 00:33:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780619613;
-	bh=1Fql6FtY6DpZSGux+lI1tMeBBWlScRTWwhveUt8GEA8=;
-	h=From:Date:Subject:To:Cc;
-	b=lW3boJ0LmgfgckSGy6GxiEZ66O9yCvpVtIy4zFIoDMRauMJHDs5ORItzr40vvjVMd
-	 70wSR9XfFQgfhwdfAfhvyr/J2xZq7948718pDFIc6y348FFvv2ZUtLHClkfBp6tRGL
-	 0Mnub7QutkPZBeT5NXMhJXx4pxLuLpSxzZIQoiq+R45MySj95G+FvxkRin01J/mr/4
-	 s2CYClUhE4hkIHblTTVjsWOoqV+D61Uxjv/+YLD9i22UI9Z8BIUHtQrDfh68RkC9Jw
-	 nn7z6YyXjgorxAGSgABLGwlxzS4oR6VL3B5iAkR57KPYNJg+DbN9yu5xkWJKKBnNxp
-	 g+E0WuN3EJdSQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 04 Jun 2026 17:33:21 -0700
-Subject: [PATCH] cfi: Include uaccess.h for get_kernel_nofault()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F1bwtWx4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780622650; x=1812158650;
+  h=date:from:to:cc:subject:message-id;
+  bh=wUXquFQuBDYMZICYnLQmQNv1jv/HaB9bdKctPiDDt8E=;
+  b=F1bwtWx4NxEChjrWnd7hPogJ6oFUZa8wKfUc8NHyhLIqqq7lq4C1vnJE
+   3ZX9UFrASnQrKgfSJmEtFcuniRgFTUq7UafKaao6gD159zMX7ifvnpiUJ
+   B14NbwLmdLSCdGXnA9G23eZ9L4o0GZulmAPLqdyvz5mL9cg65UyErODzE
+   O7QwAVe0IPGefWwBuZRCBVwEswPFqJ8uD+WohnIRVjz4+cSLb1WjowLjV
+   4IWUz+bWNV2o4CBp1MDtBn/YLSq/y+4KzjOJtHDUdXkRgu2wqD/7+ScGn
+   7aFMSGX1W3odU1IkRzHuqXA2W/r/yNwJ/nlfOGps5Ts1LvsnfXZcn1q5R
+   Q==;
+X-CSE-ConnectionGUID: 3FYtM6Z4TTSfYyb7aJVbww==
+X-CSE-MsgGUID: o1P1ITQpRqG6HxamPXF7Ow==
+X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="92142076"
+X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
+   d="scan'208";a="92142076"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 18:24:05 -0700
+X-CSE-ConnectionGUID: uF5IaECnRIOofeg8SgIBIg==
+X-CSE-MsgGUID: SZZHOVVQTCOmJU6YGz8JJw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
+   d="scan'208";a="240516094"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 04 Jun 2026 18:24:03 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wVJI0-00000000FQW-1P2q;
+	Fri, 05 Jun 2026 01:24:00 +0000
+Date: Fri, 05 Jun 2026 09:23:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+ netdev@vger.kernel.org
+Subject: [mst-vhost:balloon 12/38] ld.lld: error: undefined symbol:
+ folio_zero_user
+Message-ID: <202606050942.HHhnHpHF-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260604-tracing-fix-cfi-h-build-error-v1-1-b27015390901@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQqDMBBA0avIrDsQY5tCryJdmMlEp5QoExVBv
- HujXT74/B0yq3CGV7WD8ipZxlRQ3yqgoUs9o4RisMY648wdZ+1IUo9RNqQoOKBf5BuQVUfFxpH
- 1TPEZ6geUx6Rcwuvfvv/Oi/8wzecUjuMHvFNyQYEAAAA=
-X-Change-ID: 20260604-tracing-fix-cfi-h-build-error-36c2becf7d15
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Sami Cclvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
- Eva Kurchatova <eva.kurchatova@virtuozzo.com>, 
- Masami Hiramatsu <mhiramat@kernel.org>, llvm@lists.linux.dev, 
- linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1580; i=nathan@kernel.org;
- h=from:subject:message-id; bh=FiIhFTMpDiko60PkDxAKjTjhqyUO6mVmOJmI7hvwhKw=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlKktFNVepzVVgLy7iV/9TvTJmVO02uq6qQ58Ft+Uc1O
- 9X/L27sKGVhEONikBVTZKl+rHrc0HDOWcYbpybBzGFlAhnCwMUpABNZfJHhfyHb30V27se2Xbez
- evs7XS5EPqXHytRyiazdv7lXZ4ps3MbIsK//9LTdD159D56yfeHK/PiafvY7370nu09Zfm3umar
- lG9kA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-After commit 0652a3daa787 ("tracing: Fix CFI violation in probestub
-being called by tprobes"), there are many build errors when building
-ARCH=arm multi_v7_defconfig + CONFIG_CFI=y like:
+Hi Michael,
 
-  In file included from drivers/base/devres.c:17:
-  In file included from drivers/base/trace.h:16:
-  In file included from include/linux/tracepoint.h:23:
-  include/linux/cfi.h:44:6: error: call to undeclared function 'get_kernel_nofault'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     44 |         if (get_kernel_nofault(hash, func - cfi_get_offset()))
-        |             ^
-  1 error generated.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-get_kernel_nofault() is called in the generic version of
-cfi_get_func_hash() but nothing ensures uaccess.h is always included for
-a proper expansion and prototype. Include uaccess.h in cfi.h to clear up
-the errors.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git balloon
+head:   b145636d693114d343a0a47a4400f5b31e211fec
+commit: c4af912c65bc897b31264a3403f18b0cf52fa10c [12/38] mm: use folio_zero_user for user pages in post_alloc_hook
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260605/202606050942.HHhnHpHF-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260605/202606050942.HHhnHpHF-lkp@intel.com/reproduce)
 
-Cc: stable@vger.kernel.org
-Fixes: 0652a3daa787 ("tracing: Fix CFI violation in probestub being called by tprobes")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- include/linux/cfi.h | 1 +
- 1 file changed, 1 insertion(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606050942.HHhnHpHF-lkp@intel.com/
 
-diff --git a/include/linux/cfi.h b/include/linux/cfi.h
-index 1fd22ea6eba4..0f220d29225c 100644
---- a/include/linux/cfi.h
-+++ b/include/linux/cfi.h
-@@ -9,6 +9,7 @@
- 
- #include <linux/bug.h>
- #include <linux/module.h>
-+#include <linux/uaccess.h>
- #include <asm/cfi.h>
- 
- #ifdef CONFIG_CFI
+All errors (new ones prefixed by >>):
 
----
-base-commit: 0652a3daa78723f955b1ebeb621665ce72bec53e
-change-id: 20260604-tracing-fix-cfi-h-build-error-36c2becf7d15
+>> ld.lld: error: undefined symbol: folio_zero_user
+   >>> referenced by page_alloc.c
+   >>>               mm/page_alloc.o:(post_alloc_hook) in archive vmlinux.a
+   >>> referenced by page_alloc.c
+   >>>               mm/page_alloc.o:(get_page_from_freelist) in archive vmlinux.a
 
-Best regards,
---  
-Cheers,
-Nathan
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
