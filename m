@@ -1,127 +1,444 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CE63DE450
-	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 15:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1967B413230
+	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 15:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780672618; cv=pass; b=VfWAqsRlr6B3umlltxcSIBM5bo6aSefqPZEATSys5RPUDWN1BWJhH6bRyGqcTUotJvLI1ZU1ENUiFaXi3YGHq8IQXvRVhco9BXgpTuANhXxorU6jaK3CZfIr9fpLGuxXE1SX8UkQCt6qCp9U1jcLCsBe2irErMZi1RSRd6YQRGQ=
+	t=1780672788; cv=pass; b=sFXNYILIP3DkiXosAqJrXMxMy2Y+0erQJYewa0Vs7L3mLZnglL34kW+mmabYq1nUxCqBHgDbFiGgwnFADcU9BQd8+211DIQNw/JwCCGjOtaQnKwUSX/v/lkMj7Fkt67EYlRLQY+ElbZtSy5VsRVZgo/LlndWKv81b+AJzniM8RY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780672618; c=relaxed/simple;
-	bh=M0Ti+6+2fGXFk+cKiUj9GFmw1ywuOZbs7swH9SSB+IY=;
+	s=arc-20240116; t=1780672788; c=relaxed/simple;
+	bh=ymFf/rEwZrJs5X9wKSO5OinbMUTtbF8uY2QhuC9pf7k=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QPuYem638cmGwiTdZLH9KwlynqNEYolm2lXvmhD4qGUD8XoPJc8xdWVzmZ9iXb6pPtXcJQxmH9iPbyHEJiUjwg30SGYnIpZ/3gPIPaomOpcBYKVpuZJ0vpoxgZyi9ml07Sqwe8pDPFN01qzDbWxBlh7RoKatSlKseEQ1HDjFUKc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l/YWDT3d; arc=pass smtp.client-ip=209.85.208.45
+	 To:Cc:Content-Type; b=M4G0YQ8+EFw927oh2p7i3GwlYl8YhPHHEQ/ymZdKlZiq7dAQ4zMhJ1XL1ajr7tFr7LjvxxfXQmaaQRDAduTgdW7V8M4OA0AdM8O5EiTcerCxPoNPeNXuC4GFq4GWA3uTxJsy7FcaAkEDu8+fXGR3dtdeAGOAJMarBZuilJ4b2SA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XYs+5ZkD; arc=pass smtp.client-ip=74.125.224.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l/YWDT3d"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-68bd7ec2371so10477a12.1
-        for <llvm@lists.linux.dev>; Fri, 05 Jun 2026 08:16:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780672615; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XYs+5ZkD"
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-660e9ea26b9so2182467d50.3
+        for <llvm@lists.linux.dev>; Fri, 05 Jun 2026 08:19:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780672783; cv=none;
         d=google.com; s=arc-20240605;
-        b=d1p7IX77ffyaKG+0LYJA0GB2SP/Tcg90leUe3udLfcOheGoIUkYAxmnyFSufha1oEo
-         mWeeQAySlD5K52jZPD64Bt9Vd8+aEw+35mvMEO5TNlDxhGzXz6gVKUveCQ+/x0KEG1tp
-         nlaA5AiGeOqGMShsbeDrZ7kp4NfpjV2REZrD5c2EMqh1M/ZpSG2crQinIuzi39/SXV/W
-         a7C+V2zKZg/AQE19jrJLvBmo42DRKm3GPl8kXJZycGmMW04YGQ9elNnmL8FSxUh2ivSW
-         nyWY8G1TiFXnzolDHJbN/Sa6GELWORy7M1ak2P3NacpEbZTldr2oa7cTr3+tKTwDnIo+
-         steA==
+        b=UsH+IIqkN8dwgRQ9hP66T1eU1BMf4e0I/HVq1h6X3sqeLbU23LqWjThvfgA4nuBHum
+         Y43cqPTBdJ8lVy1q//Og8AOwNRZ7AyBGnMJooYo0bzgOLmRrHqHNMp032dia5d+GbMLs
+         rLK0lbGZ5zVjK1Zc1SxcBFWdd4bIFNKI7yWcujb5bpKrMRRiEu2vHHO2YlFXUziHwa+U
+         LQlzki+PLBXYY3SKBvAD2sgyFMpjhx5SA6eyUp2Yk553s4G2D4N0rOJDrSJguzki0OUn
+         BtetplssmxsqReaFrVaMscpR2kBbsqWWN5m2GIm5Ah0APnYdQsKAsT8btjRCn+Haeuhx
+         zILw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=R4P/dDdhLfcmxlWjGtS/G4l/JMEkA2smtkmUSE6BkJ0=;
-        fh=O7bb0+anp3Lc6u/+6IoVx9zpQCudpuD9Ci3po1WOJqI=;
-        b=V/RGSF4yTa9LPGz2zxKJJ36bohGMZvAilbkBVZraAZhkMEP9+W/kerhZZKZ4Jlfxlb
-         iYqUCYGJwXQiL01cv1clcXBBS+lOHxiCw8hhvwtG7+7IDA5yeOk0/bicdm26+7fDiN2m
-         RgMkvEL5wnc/EMkjijTo5qzylgtuhQptnDAYoaxnXQReyasrjKOI2YXtBM/PAJXQqteE
-         2kGJkZMz4Z3XtV83s5yQ8a5ttTOH9iDBXIp2W7G4ioBN0y4vLsel0oqEC8MpG+PQqZbO
-         RGuy5F1pcj9oRGV95PGvYB0W49fgDbMguDocnPDjKe4xeuLUtz5iR3iz5yOdiG2ylCp2
-         XvBQ==;
+        bh=3m/KOQvsG1uJHDvO1PZnjraMcJuZMi2RUKvodsmX6gM=;
+        fh=T2Xs86h3DRDy86MHkmzf7d9jvfkvqmMNp5e7HnEgaio=;
+        b=J8ET5KR2gncYIwjNgBXZp64wgfLeMuovKs3+2vWynzivTQWoPWYvY5tv4l72bdFpVt
+         a44E4btEiJ+R5jKfzVxFf/DQDhJGKEOBJJe+cZ/gyXzoi3seSw8YMP6daTqJbDDqlhYf
+         Q2MOznkZoh/5EeFoYIKx9U4RoyEqhO72Ws2ZGv+OBc1UBTCjo+QPhNx0rKpCZvvIk6b+
+         EgQHkyt3tWqf4quQcfN5PHdwRIIcSeTzHO20v2XO5mW5DU+vDeSp9cWh/yrI0unKYYJd
+         x0ixNvexDlVn0SNqSeoEpLnT+fNU/nqdriRarQEisjZEaCI1A6cEQBSl6fl8eLT/EDJx
+         fPqw==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780672615; x=1781277415; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1780672783; x=1781277583; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R4P/dDdhLfcmxlWjGtS/G4l/JMEkA2smtkmUSE6BkJ0=;
-        b=l/YWDT3dq3H8qPpOfko0qtLbgwmvDYmvyVNlpkjrDTQlZtJppwB2FWtLV/YpJmTxZp
-         jhgmIOOBEPaZRe44hHPwK0/WvpwyIXvMoOOYV0ofjHRywtqPEi/mQgLxNv8Gp/9qOpKS
-         ryDF3g7hMAyryutEF9sYNk5epfCFs7JiIYzNzRpG7a3THI3ZJ53WYAwGrTlN9Fe7nok+
-         mkuDZMAo14n5+R+MVWIgwL71nLxuY6dM3UWK42weaAHXNRoa7rcrG0V274XDAgHiBjLm
-         8wvSc5DsCyHdDQ/EYiMfkhPQobjFV9hvN2TqvammpeJrzLI10bdlwZ0h6pPhz8ufpSEh
-         bLUA==
+        bh=3m/KOQvsG1uJHDvO1PZnjraMcJuZMi2RUKvodsmX6gM=;
+        b=XYs+5ZkDXHSW25QSLbotm4sca9FX+aWxtiYj78nWr+AbxZqHRY/IgJvAU+zts6MceJ
+         JVF2BltUpFSeFRI35qtr8vTs8fCXGCrgHTqRnSIbI0T2NHsbHYlzxvePEdgD+JCdnWrU
+         gICdXjSKAb0i6GVnmA+N0vmY9mY+IWuEn/iOiLhHRiV59aKYI9GqCCxujyi+EvdDxkA9
+         higJ5PzoXgAlqp4fjScEVsEIKEJqXlbhUuwV4rvDmISTm00QisdvCxZ2mg2YMUWLhDkF
+         5bG6ptLoG0B4LRwl7Bfqtx04SzNOvERKRWKlYs38Bny+LS6tXS4B5gSoZA14Q+Yq/uUP
+         Kiuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780672615; x=1781277415;
+        d=1e100.net; s=20251104; t=1780672783; x=1781277583;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=R4P/dDdhLfcmxlWjGtS/G4l/JMEkA2smtkmUSE6BkJ0=;
-        b=lU9gQv8s+GyqipQPva5cDjX1XWyjZRfWuJMXyNyHnJg/AKyJfOXtoF1P9VQgQwHblG
-         2YGyddY9XFks/VUfCTnEvK41E36GQqnK+V9OxeAWy7ArQ+jhGu45gBX2md4Qc3fSiVkv
-         9ZeUwVNxd2DNlVHKt0ftN7VZW+eoXkaFCeg/CJg5n115OXiGbw2bwEU1RDKpNVvAuMjB
-         CWjE8WUbyCZuDTS1/7AUv7h0dWF8XmU+BlwTk31RCNnRP/zXotMB6kdF+jetHQG/QFWR
-         EE+AC+PJdi+tVwyPr4zGWb/M1L/tAbYe9zlI5cXADjyFJstMloMOIgpKcBrpfOQVmU73
-         gz4Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9xEN8wQD6xcX7P5eAj1Ls1Wv7hnPnA6P5iujGBN8ysjW4uZkxnD3sLsxTNCBQF1v6egu7v@lists.linux.dev
-X-Gm-Message-State: AOJu0YzlsigIoQJ3pIDgSuQkvU5C7fnmNg4qmnFr6bGeZei3F+IFKO6e
-	9mc0cWSzJ4c3yqoeTyYs+TZRcrYW3jnIb8meVc2rgeQXwo+4/0IX1Ff1EqBp3OPOE6SaJvFMXIA
-	tDNkPZBKuqXLrEGObbFBP1fIk9ks1ivwLEwAGZ77DUr4kLwKfR34gVrCq
-X-Gm-Gg: Acq92OFdbOF4iDBgU5s6zyBWEsXBMhmeCInphVYCyPEB6yM8ETq+FgYoamvSR2ZKq7p
-	adEk6qWPpHkM+H1Y2oc55Jlwn2IKYw4/Rd9+nNAfMNOpcW3a/VxXEWtH2v/v0WeKTV+L2l+G8Fo
-	mRuIRfF07NmTB0pAtiTD5u8b/9rkHz97Pmtas1fpjW8cR92DGnkGW8at8cEL4+U6r0GgzHrRmm4
-	Y9Vt08Blk3/7PvgZyOwclroxexPLEabknZUzwIzVzRkhOCvi+fDcPapAULBLpHHNdRI9qsGL8Ap
-	FSIvXzXxp+Rc+Vk=
-X-Received: by 2002:aa7:c413:0:b0:68f:d41d:ca5f with SMTP id
- 4fb4d7f45d1cf-68fe927fc75mr43411a12.13.1780672614649; Fri, 05 Jun 2026
- 08:16:54 -0700 (PDT)
+        bh=3m/KOQvsG1uJHDvO1PZnjraMcJuZMi2RUKvodsmX6gM=;
+        b=AL/2TsSDnNMNalWu5TiW2cJlVy3w4ImF0Zs9RN+jssSvaq9PRxada4K1IhprLEq4Nm
+         eC+ewf9SnfNAP9uzlta87GndOK5c5LfLVwVdS0IjRa/Zuv2/xLgyCZ9QrUchO6DCa0An
+         x2oXtV3yl6ePi7P1doSiNevSaCZMi4TSz6a0AU9ltr+kzpm8G1EyAfc9SN0S+nziAtht
+         oFApAlX0FgLWgTzvGqhYtRjOQxb7QeQ7lWNgyvisXpYU36hcbHrA6T+Qkq4J/JWMWLM9
+         KZi0DysoFGK2TZGhZNKs+I15UqPpDxMnH36sXo3F4jyrDo7fCs2LqZLLPETtg7UPKBjc
+         liRQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9RaOmg0jl27M05WjQnQscOcLKp/lCpMiDiMLPcOHZLBNTD/LF2QO9BN+1OdphjcYgfJPHV@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz1zEScDVtRhs+1c0iyz0rXNe36fWLXYbmsRhe7lz1zxkyqLTir
+	arFfM7Fo4boL/wa2IuXkeU86QVnxGKQ3QVkXTe1kFJHSSgtcmNkr13VhgZivGkuc7tgQXc6bNRm
+	BP3ntdvdw2iSRiE9LC47rGBOOjGnxUJJNS4XVoQ2D
+X-Gm-Gg: Acq92OFr+NVvz/OEVjEQbOq8bQ8spPdpYLxPPg4+Ei2mLODscFE8SoAcwOswmwjDIvd
+	zAIbvjgObyahXgVP+Znpax3nG2UUK+NoUhVBPC8e6y/qi6y7/sAebXtAnKd3/qE1bSWr7LfXzDt
+	oG8cYftKeJ15UD8dy413HV1hAFhF/WSKg2O+i8o51kZ8WdT8ypSYr2DrVaMhUmhC/ySxwquDSVT
+	ejodKIRG//gm5ydD0v5qBcgCMBAqDRpD04NeSgFNIRJG9HycaJ7sgagSs6MTUb5dZezsAyT3ebD
+	77z9SANejgjB6Z0Bcg1kreyFw+RQgLEMLhQAnZYSnkN8m5nzVsE=
+X-Received: by 2002:a05:690e:1c07:b0:64c:9f31:e33 with SMTP id
+ 956f58d0204a3-66106fbfa70mr3468603d50.65.1780672782001; Fri, 05 Jun 2026
+ 08:19:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260604-tracing-fix-cfi-h-build-error-v1-1-b27015390901@kernel.org>
-In-Reply-To: <20260604-tracing-fix-cfi-h-build-error-v1-1-b27015390901@kernel.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Fri, 5 Jun 2026 08:16:17 -0700
-X-Gm-Features: AVVi8CeQw3smwcST71LMGAGTwkM2lHTSl-GXkozY0EakrBxGEKMpmYz8YpNBi-g
-Message-ID: <CABCJKud4OxJJVt5eTaNqpGqLrKbF2teAd3FERoeg+sG-G2Yiag@mail.gmail.com>
-Subject: Re: [PATCH] cfi: Include uaccess.h for get_kernel_nofault()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Kees Cook <kees@kernel.org>, 
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>, Masami Hiramatsu <mhiramat@kernel.org>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech> <20260603-kcov-dataflow-next-20260603-v2-4-fee0939de2c4@est.tech>
+In-Reply-To: <20260603-kcov-dataflow-next-20260603-v2-4-fee0939de2c4@est.tech>
+From: Alexander Potapenko <glider@google.com>
+Date: Fri, 5 Jun 2026 17:19:01 +0200
+X-Gm-Features: AVVi8Ceblw1PVlq_JOUX8fDH6TRKq7cz66at-ID_frny8QXhTeItWJGDPY83a0I
+Message-ID: <CAG_fn=UTFnM60LVABGR-V0NwYc4d9C4KAhT4A_+oxduJcSeqew@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 4/6] tools/kcov-dataflow: add userspace consumer
+ and test modules
+To: Yunseong Kim <yunseong.kim@est.tech>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
+	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, workflows@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Yunseong Kim <ysk@kzalloc.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 4, 2026 at 5:33=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
-> wrote:
+On Wed, Jun 3, 2026 at 7:43=E2=80=AFPM Yunseong Kim <yunseong.kim@est.tech>=
+ wrote:
 >
-> After commit 0652a3daa787 ("tracing: Fix CFI violation in probestub
-> being called by tprobes"), there are many build errors when building
-> ARCH=3Darm multi_v7_defconfig + CONFIG_CFI=3Dy like:
+> Add tools/kcov-dataflow/ with:
 >
->   In file included from drivers/base/devres.c:17:
->   In file included from drivers/base/trace.h:16:
->   In file included from include/linux/tracepoint.h:23:
->   include/linux/cfi.h:44:6: error: call to undeclared function 'get_kerne=
-l_nofault'; ISO C99 and later do not support implicit function declarations=
- [-Wimplicit-function-declaration]
->      44 |         if (get_kernel_nofault(hash, func - cfi_get_offset()))
->         |             ^
->   1 error generated.
+> - trigger.c: userspace consumer that opens /sys/kernel/debug/kcov_dataflo=
+w,
+>   mmaps the buffer, enables recording, triggers a kernel path, and dumps
+>   the captured TLV records.
 >
-> get_kernel_nofault() is called in the generic version of
-> cfi_get_func_hash() but nothing ensures uaccess.h is always included for
-> a proper expansion and prototype. Include uaccess.h in cfi.h to clear up
-> the errors.
+> - kcov-view.py: visualization tool that parses and pretty-prints the
+>   binary TLV buffer with struct field expansion and symbol resolution.
 >
-> Cc: stable@vger.kernel.org
-> Fixes: 0652a3daa787 ("tracing: Fix CFI violation in probestub being calle=
-d by tprobes")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> - eight_args_c/eight_args_mod.c: stress test with 1-8 argument functions
+>   verifying correct capture of register and stack-passed arguments.
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+I think the tests should better go to tools/testing/selftests.
 
-Sami
+> diff --git a/tools/kcov-dataflow/.gitignore b/tools/kcov-dataflow/.gitign=
+ore
+> new file mode 100644
+> index 000000000000..1f35df8fbd07
+> --- /dev/null
+> +++ b/tools/kcov-dataflow/.gitignore
+
+I am not sure about the conventions, but a bunch of other .gitignore
+files have SPDX headers.
+
+> diff --git a/tools/kcov-dataflow/deep_module/Makefile b/tools/kcov-datafl=
+ow/deep_module/Makefile
+> new file mode 100644
+> index 000000000000..6afed580dc9a
+> --- /dev/null
+> +++ b/tools/kcov-dataflow/deep_module/Makefile
+
+Makefiles must have SPDX headers.
+
+> diff --git a/tools/kcov-dataflow/deep_module/deep_chain_mod.c b/tools/kco=
+v-dataflow/deep_module/deep_chain_mod.c
+> new file mode 100644
+> index 000000000000..786e23c5d213
+> --- /dev/null
+> +++ b/tools/kcov-dataflow/deep_module/deep_chain_mod.c
+> @@ -0,0 +1,224 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * deep_chain_mod.c - Demonstrates kcov_dataflow tracing through 10 nest=
+ed
+> + * function calls. An attacker-controlled "offset" value propagates from
+> + * the entry point through transformations until it causes an OOB write
+> + * in the deepest function.
+
+I don't fully understand the purpose of this file. Are you going to
+parse its output for testing?
+
+> + *
+> + * Call chain:
+> + *   entry_handler =E2=86=92 parse_request =E2=86=92 validate_header =E2=
+=86=92 extract_payload =E2=86=92
+> + *   transform_data =E2=86=92 apply_filter =E2=86=92 compute_index =E2=
+=86=92 lookup_slot =E2=86=92
+> + *   write_slot =E2=86=92 commit_write (BUG: OOB here)
+
+Call me old fashioned, but I think we can easily avoid the non-ASCII
+characters here.
+
+
+> +/* Function 10 (DEEPEST): The vulnerable write */
+> +static noinline int commit_write(struct slot_table *table, u32 index, u6=
+4 value)
+> +{
+> +       /* BUG: no bounds check on index =E2=80=94 if index >=3D 8, OOB w=
+rite */
+> +       table->slots[index] =3D value;
+> +       return 0;
+> +}
+
+Does this call chain need to be this long?
+I assume it was extracted from some real-world example, but maybe
+pruning it to 3-5 calls would demonstrate the capabilities of dataflow
+tracing just as well?
+
+
+> +
+> +       table =3D kzalloc(sizeof(*table), GFP_KERNEL);
+> +       if (!table)
+> +               return -ENOMEM;
+> +       table->num_slots =3D 8;
+> +
+> +       /* The tainted data flow:
+Please make sure to conform to
+https://docs.kernel.org/process/coding-style.html#commenting
+
+> +
+> +/* Trigger: constructs a malicious request that causes index=3D12 (OOB) =
+*/
+> +static ssize_t deep_trigger_write(struct file *file, const char __user *=
+ubuf,
+> +                                 size_t count, loff_t *ppos)
+> +{
+> +       u8 *buf;
+> +       struct request_header *hdr;
+> +       struct payload *pl;
+> +
+> +       buf =3D kzalloc(256, GFP_KERNEL);
+> +       if (!buf)
+> +               return -ENOMEM;
+> +
+> +       /* Craft malicious request */
+> +       hdr =3D (struct request_header *)buf;
+> +       hdr->magic =3D 0x50524F54;       /* valid magic */
+> +       hdr->version =3D 1;              /* valid version */
+> +       hdr->payload_offset =3D 16;      /* offset to payload (valid posi=
+tion) */
+> +       hdr->payload_size =3D sizeof(struct payload);
+> +
+> +       /* Craft payload that will produce OOB index */
+> +       pl =3D (struct payload *)(buf + 16);
+> +       pl->session_id =3D 0xAAAABBBBCCCCDDDDULL;
+
+Much is happening in this code, making it hard to review, but all
+these values do not seem to be used anywhere.
+
+
+> +
+> +noinline u64 func2(u64 a1, u64 a2)
+> +{
+> +       return a1 + a2;
+> +}
+> +EXPORT_SYMBOL(func2);
+> +
+> +noinline u64 func3(u64 a1, u64 a2, u64 a3)
+> +{
+> +       return a1 + a2 + a3;
+> +}
+> +EXPORT_SYMBOL(func3);
+
+Would it be more readable to use some macro magic here?
+
+E.g.:
+```
+#define DEFINE_SUM_FUNC(n, sum_expr, ...)           \
+noinline u64 func##n(__VA_ARGS__)               \
+{                                               \
+return sum_expr;                            \
+}                                               \
+EXPORT_SYMBOL(func##n)
+
+DEFINE_SUM_FUNC(1, a1, u64 a1);
+DEFINE_SUM_FUNC(2, a1 + a2, u64 a1, u64 a2);
+DEFINE_SUM_FUNC(3, a1 + a2 + a3, u64 a1, u64 a2, u64 a3);
+DEFINE_SUM_FUNC(4, a1 + a2 + a3 + a4, u64 a1, u64 a2, u64 a3, u64 a4);
+DEFINE_SUM_FUNC(5, a1 + a2 + a3 + a4 + a5, u64 a1, u64 a2, u64 a3, u64
+a4, u64 a5);
+DEFINE_SUM_FUNC(6, a1 + a2 + a3 + a4 + a5 + a6, u64 a1, u64 a2, u64
+a3, u64 a4, u64 a5, u64 a6);
+DEFINE_SUM_FUNC(7, a1 + a2 + a3 + a4 + a5 + a6 + a7, u64 a1, u64 a2,
+u64 a3, u64 a4, u64 a5, u64 a6, u64 a7);
+DEFINE_SUM_FUNC(8, a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8, u64 a1, u64
+a2, u64 a3, u64 a4, u64 a5, u64 a6, u64 a7, u64 a8);
+```
+
+You could as well define the function prototypes instead of applying
+-Wno-missing-prototypes.
+
+
+> +{
+> +       pr_info("func1(0x11)=3D0x%llx\n", func1(0x11));
+> +       pr_info("func2(0x11,0x22)=3D0x%llx\n", func2(0x11, 0x22));
+> +       pr_info("func3(0x11,0x22,0x33)=3D0x%llx\n",
+> +               func3(0x11, 0x22, 0x33));
+> +       pr_info("func4(0x11,..,0x44)=3D0x%llx\n",
+> +               func4(0x11, 0x22, 0x33, 0x44));
+> +       pr_info("func5(0x11,..,0x55)=3D0x%llx\n",
+> +               func5(0x11, 0x22, 0x33, 0x44, 0x55));
+> +       pr_info("func6(0x11,..,0x66)=3D0x%llx\n",
+> +               func6(0x11, 0x22, 0x33, 0x44, 0x55, 0x66));
+> +       pr_info("func7(0x11,..,0x77)=3D0x%llx\n",
+> +               func7(0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77));
+> +       pr_info("func8(0x11,..,0x88)=3D0x%llx\n",
+> +               func8(0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88));
+> +       return count;
+> +}
+
+The inconsistent output format here suggests that the output is never valid=
+ated.
+
+> +
+> +static const struct proc_ops ops =3D { .proc_write =3D trigger_write };
+
+This file should belong to debugfs rather than /proc/.
+
+> diff --git a/tools/kcov-dataflow/eight_args_rust/eight_args_rust.rs b/too=
+ls/kcov-dataflow/eight_args_rust/eight_args_rust.rs
+> new file mode 100644
+> index 000000000000..11bbe1449eaf
+> --- /dev/null
+> +++ b/tools/kcov-dataflow/eight_args_rust/eight_args_rust.rs
+> @@ -0,0 +1,114 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//! Verify kcov_dataflow captures 1-arg through 8-arg functions.
+> +//! Write to /sys/kernel/debug/test_args_rust to trigger all 8.
+
+Please make sure triggers for all your tests are consistent,
+preferably somewhere under /sys/kernel/debug/kcov_testing/ or similar.
+
+
+
+> +
+> +Reads both /sys/kernel/debug/kcov (PC trace) and /sys/kernel/debug/kcov_=
+dataflow
+> +(args/ret), correlates by PC, and produces a human-readable call trace w=
+ith
+> +argument values and struct field expansion.
+> +
+> +Usage (inside guest or with appropriate permissions):
+> +    python3 kcov-view.py <trigger_command>
+> +
+> +Example:
+> +    python3 kcov-view.py "echo x > /proc/uaf_trigger"
+> +
+> +Output:
+> +    func+0x0 [module]
+> +      =E2=86=92 a(arg[0]=3D0x1, arg[1]=3D0x2, arg[2]=3D0x3, arg[3]=3Dstr=
+uct{.f[0]=3D1, .f[1]=3D2, .f[2]=3D3})
+> +        =E2=86=90 ret =3D struct{.f[0]=3D1, .f[1]=3D2, .f[2]=3D3}
+> +      =E2=86=92 a(arg[0]=3D0x0, arg[1]=3D0x0, arg[2]=3D0x1, arg[3]=3DNUL=
+L)
+> +        =E2=86=90 ret =3D 0x0
+> +"""
+> +import os, sys, struct, mmap, fcntl, subprocess, re, ctypes
+> +from collections import defaultdict
+> +
+> +# Ioctl definitions (x86_64)
+
+Why is this code x86-specific?
+
+> +def parse_dataflow(buf, n):
+> +    """Parse TLV records from kcov_dataflow buffer into a list of events=
+."""
+> +    events =3D []
+> +    i =3D 1
+> +    while i <=3D n and i < BUF_SIZE:
+> +        hdr =3D buf[i]
+> +        typ =3D hdr & 0xF0000000
+> +        seq =3D hdr & 0x00FFFFFF
+
+These numbers are used more than once - please declare them as
+constants instead.
+
+> +
+> +        if typ not in (0xE0000000, 0xF0000000):
+Same here, no one knows what these numbers stand for.
+
+
+> +        while i <=3D n and i < BUF_SIZE:
+> +            v =3D buf[i]
+> +            vtype =3D v & 0xF0000000
+
+Please use helper functions to extract the type, size and whatnot.
+
+> +            if vtype =3D=3D 0xE0000000 or vtype =3D=3D 0xF0000000:
+> +                break
+> +            fields.append(v)
+> +            i +=3D 1
+> +
+> +        if typ =3D=3D 0xE0000000:
+> +            arg_idx =3D (meta >> 56) & 0xFF
+> +            arg_sz =3D (meta >> 48) & 0xFF
+> +            ptr =3D meta & 0xFFFFFFFFFFFF
+> +            events.append({
+> +                "type": "entry", "seq": seq, "pc": pc,
+> +                "arg_idx": arg_idx, "arg_size": arg_sz,
+> +                "ptr": ptr, "fields": fields
+> +            })
+
+This looks like it could benefit from OOP.
+
+
+> diff --git a/tools/kcov-dataflow/trigger.c b/tools/kcov-dataflow/trigger.=
+c
+> new file mode 100644
+> index 000000000000..7fa7b4414770
+> --- /dev/null
+> +++ b/tools/kcov-dataflow/trigger.c
+> @@ -0,0 +1,125 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * trigger.c - Uses /sys/kernel/debug/kcov_dataflow to capture
+
+This code seems to partially duplicate kcov-view.py, do you need both?
+
+> +#define COVER_SIZE (64 * 1024)  /* 64K u64 words =3D 512KB */
+> +
+> +static void dump_buffer(uint64_t *cover, uint64_t n)
+> +{
+> +       uint64_t i =3D 1;
+> +
+> +       printf("=3D=3D=3D KCOV Dataflow TLV Dump (%lu words) =3D=3D=3D\n"=
+, n);
+> +       while (i <=3D n && i < COVER_SIZE) {
+> +               uint64_t hdr =3D cover[i];
+> +               uint64_t type =3D hdr & 0xF0000000ULL;
+
+Maybe we could use unions to unpack the header?
+I don't mind the masks either, but please declare them as constants.
+
+
+> +int main(int argc, char **argv)
+> +{
+> +       const char *trigger_path =3D "/proc/uaf_trigger";
+
+I couldn't find /proc/uaf_trigger anywhere, does it belong to this series?
+If trigger.c is a general-purpose tool rather than a test script, it
+shouldn't depend on the test modules.
+
+
+
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
