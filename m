@@ -1,154 +1,155 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86763815C3
-	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 01:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39B226A0A7;
+	Fri,  5 Jun 2026 05:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780623439; cv=none; b=EQINrdZSRx4rWI+hULOXi4jF2sdF4VKYTGh3SXHE5oBqcZbmzqX7fYxSuBEfQ3BDeNgKoymylfnUIfv0JSf1okC93mnfpGXa/DQlL+j+8JuoHTiiPPG2RLW8sr8BlT11nPx1NfkvfVNBv3BIFOFDxmvuJxwjw5ljHVbiE3ANscI=
+	t=1780636393; cv=none; b=MBk16BJBm7Uc59MYkdm633HGiVYfXDY7K/ygg/0+wRa+uHiHrlAK9MKJZVHdSFL3ECTNUlYeA4uva8aOVNHHT9BYmaisKDOXmpMx317zuHOQSAKezlV4F2e5ECImDxh8moqUTnS1eJ8t1yYM0ePx3oytm3y+B0ZUJxm3rRz+LVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780623439; c=relaxed/simple;
-	bh=p0gghpvPD3+GfjmZjN3CHuee0D96vimcY4fMbwhUbeo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mp+40B8Xt/yZm38i76o4O4jy3VXSdBUuFdHOw7Njnu9wia1bZyqgOrgSA+tnKpeNiA54/1/nohtKryjSXJlKf7GiW3khpFDGCR5FyzDn+n9v3eIF2XQPcbu242HJG07uIfqoETKiMk/eGqaAWaVloH/DTl0UaMSUienyzby8vNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=morsemicro.com; spf=pass smtp.mailfrom=morsemicro.com; dkim=pass (2048-bit key) header.d=morsemicro-com.20251104.gappssmtp.com header.i=@morsemicro-com.20251104.gappssmtp.com header.b=Yyqs0wcM; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=morsemicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=morsemicro.com
+	s=arc-20240116; t=1780636393; c=relaxed/simple;
+	bh=wjjS3RRY2MZkS8+TAwsHEXrYCx9dywpP1pA5N3cKgAE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=YF7p5MV8D/H3+y8sNYgMQsJVD7PC8kWNOp3IT2WHgl3ZBuwlmA4Pz4xcPdGXzGYDI5VUnjqCO8NGW5IKreSftTD/nrsnLDYElpnTYUa7P9m+n+utdndp6unHHwWLz0TH0mgxLW/tmDoXY6CRESXjcycSUkU+wVHJMo54n1wtgXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bEZ5VbiC; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=morsemicro-com.20251104.gappssmtp.com header.i=@morsemicro-com.20251104.gappssmtp.com header.b="Yyqs0wcM"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8421f0e9c5bso623021b3a.3
-        for <llvm@lists.linux.dev>; Thu, 04 Jun 2026 18:37:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=morsemicro-com.20251104.gappssmtp.com; s=20251104; t=1780623432; x=1781228232; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x3YJVB0X+wOpRvyKCo/LAB/oLyFtsEoBhz1pZ3Gryj0=;
-        b=Yyqs0wcMoCvlRsViYdxS76URLgIJn0mn2IqBMxjMmFhtIadJEU6QUD/hK84HnJ/ShS
-         KsQ1WO02+ntNN0/14TBPrbOSD2I65eENdDF/1DQO3vb7+mK0irQXRP4sWQtEVC7UKmHG
-         gfALfzt2B9ElIa8fDYGG6hKR0blxRGA5KiH8d40M4zEaa32h7YRD9G71qczLkhvlNQOg
-         l7WtwAYO3YdnDb5rZWp8TIpNQrPsuc1AEaSO9lbCOkZCvFHNlPPBHsFTdvwhHRZ+UKOM
-         IDOnXt06bncytUS6ZaND3Ox1FpHKoVbaSOsLgNeqkOL2TWuuvXes88eHQWCTYfTfL+7O
-         UQQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780623432; x=1781228232;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x3YJVB0X+wOpRvyKCo/LAB/oLyFtsEoBhz1pZ3Gryj0=;
-        b=e0XUToYiFTghMA8o5q+hUfyekyjw9uhQlPmWQlTdVW/wbIfg83Jeu7nWkLUrULkgG7
-         E8BtK7A3DABvSD9o1cGI1NUaR3VsX0N0++K9qFy8RLKt7Furxpkj7mvPIgswDsUlWCx0
-         BKqLuVDrGgzRPIpJbTst3hs0m2a9UikqWVw6qUhLnnpwvDGyNiSNVKiG0sil1d4Liwry
-         KjPdtowYnbX2UASlFcem6HAN4LkyowdDj/9r0Kc8cuhPZF+tqinpps2kw1E9XdJbVvOx
-         LOvgBV7PdOdhnH4+9D/vukTSc400+HR2yQtYhDtUnOAI80Dxc6rFO1W6hrAjC0D7yjFz
-         Oo4w==
-X-Forwarded-Encrypted: i=1; AFNElJ9pDv9B1QDh/GnPOQgEbJ69GvGGGO77GPn2HKzd+fTvesVERvFz35z/5ys+mpV3Wkwhmof2@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxv8MYDuVj8+OPjQdxxBfRh3bL4bVjL7h8eycAzAJHabhfs2RCr
-	dfN0g/HjUNJUfQabmH4bZl8Jz1r7v1gDo7s5a2HKXquqrvvv/rQdk3MaO2aZaPFg5fc=
-X-Gm-Gg: Acq92OEjbcy4jGYmWEkeRHx0SYTFucS+viHO60P5fbaMAZntekXubKip6vVtcGqoicy
-	03u5rlWlVJDS7arZqYEdsgzHmrPH/P58oEiIr42QBdPBWcLzIAH6AiplSvVV045qoUCH9vFH3La
-	TsYxpqNKQDXAPVQIsaXO4JDSL63pfswLnIHrnmVD2+n3Dsii6K7u30vB+9JtyCFk5kFKokU4TGH
-	AIkBaUhnhFxr1YbajGfAKU9H1vvwSPcuhy0Z95R+jrr8qrX1EUxMxc+JTW4oeI/a2DwiBopU/pv
-	Uhst0xNXQ5N5V7JBVqP1w3fKnhMgcOItnQ51ZnW49Vpodz9brn3AGlDF6BnR3tVqO/SN6GCICYT
-	ixq9W49tRgqy9n279nf3C2cCfO39kTdStcRCTlyomGM+74atX6EZnuJKPb0n/jr2vvX/+gGjWLR
-	b8gAB69jWWmFnXFMBLJJHM/PslgHjtmv+mVODQ4p4K1sBEWNr7/oC8c+NIdN0KfLn8t+qmOW7P0
-	iCaQHJeddP5Xeqx4IBdELDcHdb+XYNAz8jIMSo3th4t
-X-Received: by 2002:a05:6a00:418d:b0:82a:7dfd:9757 with SMTP id d2e1a72fcca58-842b0e1fd5fmr1106286b3a.4.1780623431696;
-        Thu, 04 Jun 2026 18:37:11 -0700 (PDT)
-Received: from localhost (60-242-93-14.static.tpgi.com.au. [60.242.93.14])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8428291ed20sm9107777b3a.61.2026.06.04.18.37.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 18:37:11 -0700 (PDT)
-Date: Fri, 5 Jun 2026 11:36:58 +1000
-From: Lachlan Hodges <lachlan.hodges@morsemicro.com>
-To: Johannes Berg <johannes@sipsolutions.net>
-Cc: Dan Callaghan <dan.callaghan@morsemicro.com>, 
-	Arien Judge <arien.judge@morsemicro.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, ayman.grais@morsemicro.com, linux-wireless@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH wireless-next v2 12/31] wifi: mm81x: add mac.c
-Message-ID: <melvfwusxqypnswfhlapfi2w2awyw6zyc4lkvi6t4sog5njvb5@d7qyhc23sgaj>
-References: <20260430045615.334669-1-lachlan.hodges@morsemicro.com>
- <20260430045615.334669-13-lachlan.hodges@morsemicro.com>
- <e964f5728bde677dc837f55617a83b63c364cbf3.camel@sipsolutions.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bEZ5VbiC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780636391; x=1812172391;
+  h=date:from:to:cc:subject:message-id;
+  bh=wjjS3RRY2MZkS8+TAwsHEXrYCx9dywpP1pA5N3cKgAE=;
+  b=bEZ5VbiCJCwlGXXEtWNlVgqgtBInEgLPssDNrEDbDQi/M6OzrEjk3yHD
+   4mUHxHPkh97+JDajXhh1eW1iWTt/D8iN8O6zaetN/peFy7LHsdkz2RHIH
+   QV4GBTRM7tFDsGeunmcuIUnAHyi2EsKXK/Zfm/0fT3IGKfFeai+Y+dteM
+   CMT1iNmMzL7rDryogH7cn9mNpChaBa0J0Go2+77+d2w8XJ64eWl4/IiWr
+   GC0NfpdQYhji55r7VudUYgwN56/vPCSPYCpu0UVHQjYfMfH77O0bnxa/z
+   d8i0wk5MY0U3Bo7nukghByzFJU5Ys+GSzvSCb6Kgopwrm/HXEPfxmZeAu
+   w==;
+X-CSE-ConnectionGUID: zKcvCA26Q22KOwyV2ug1Xw==
+X-CSE-MsgGUID: lAqLAj6SRNuEFFnx1HrPog==
+X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="81529061"
+X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
+   d="scan'208";a="81529061"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 22:13:11 -0700
+X-CSE-ConnectionGUID: Vg3sGhd6QiCkAXX/rUMsMw==
+X-CSE-MsgGUID: ebVgZb6SQo+8a9d7Zy2tww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
+   d="scan'208";a="249077884"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by orviesa004.jf.intel.com with ESMTP; 04 Jun 2026 22:13:09 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wVMrj-000000002U7-1mbJ;
+	Fri, 05 Jun 2026 05:13:07 +0000
+Date: Fri, 05 Jun 2026 07:12:09 +0200
+From: kernel test robot <lkp@intel.com>
+To: Chengwen Feng <fengchengwen@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: drivers/vfio/pci/vfio_pci_config.c:1166:9: error: call to
+ undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202606050731.hnLOapOi-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e964f5728bde677dc837f55617a83b63c364cbf3.camel@sipsolutions.net>
 
-On Thu, Jun 04, 2026 at 01:46:32PM +0200, Johannes Berg wrote:
-> 
-> > +static void mm81x_mac_ops_flush(struct ieee80211_hw *hw,
-> > +				struct ieee80211_vif *vif, u32 queues,
-> > +				bool drop)
-> > +{
-> > +	struct mm81x *mors = hw->priv;
-> > +
-> > +	/* We don't support IEEE80211_HW_QUEUE_CONTROL so flush all queues */
-> > +	if (drop) {
-> > +		/*
-> > +		 * No need to call mm81x_skbq_stop_tx_queues as mac80211
-> > +		 * has already cancelled each queue prior to calling .flush()
-> > +		 */
-> > +		mm81x_skbq_data_traffic_pause(mors);
-> > +
-> > +		flush_work(&mors->hif_work);
-> > +		flush_work(&mors->tx_stale_work);
-> > +
-> > +		mm81x_hif_clear_events(mors);
-> > +		mm81x_hif_flush_tx_data(mors);
-> > +		mm81x_hif_flush_cmds(mors);
-> > +
-> > +		/* Reenable data, not that there will be any */
-> > +		mm81x_skbq_data_traffic_resume(mors);
-> > +	}
-> > +}
-> 
-> Doing nothing in the !drop case seems questionable - mac80211 uses this
-> sometimes to e.g. make sure a deauth frame really went out before
-> shutting down the hardware.
+tree:   https://github.com/intel-lab-lkp/linux/commits/Chengwen-Feng/PCI-TPH-Fix-pcie_tph_get_st_table_loc-field-extraction/20260604-214853
+head:   345c2b0902fb86eb32cf8fadfdfb114490531b81
+commit: 345c2b0902fb86eb32cf8fadfdfb114490531b81 vfio/pci: Virtualize PCIe TPH capability registers
+date:   15 hours ago
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260605/202606050731.hnLOapOi-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260605/202606050731.hnLOapOi-lkp@intel.com/reproduce)
 
-Yea I agree, we should handle both cases it looks like need to
-rework some of the hw queue logic such that we can handle the !drop
-case.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606050731.hnLOapOi-lkp@intel.com/
 
-> > +static void mm81x_mac_ops_sta_rc_update(struct ieee80211_hw *hw,
-> > +					struct ieee80211_vif *vif,
-> > +					struct ieee80211_link_sta *link_sta,
-> > +					u32 changed)
-> > +{
-> > +	struct mm81x *mors = hw->priv;
-> > +	struct ieee80211_sta *sta = link_sta->sta;
-> > +	enum ieee80211_sta_state old_state;
-> > +	enum ieee80211_sta_state new_state;
-> > +
-> > +	dev_dbg(mors->dev,
-> > +		"Rate control config updated (changed %u, peer address %pM)",
-> > +		changed, sta->addr);
-> > +
-> > +	if (!(changed & IEEE80211_RC_BW_CHANGED))
-> > +		return;
-> > +
-> > +	/*
-> > +	 * Simulate the disconnection and connection to reinitialize the sta
-> > +	 * in mmrc with new BW
-> > +	 */
-> > +	old_state = IEEE80211_STA_ASSOC;
-> > +	new_state = IEEE80211_STA_NOTEXIST;
-> 
-> No real objection since it's driver internal, but note that this
-> transition is normally impossible from mac80211 since it doesn't go
-> through the intermediate states.
+All errors (new ones prefixed by >>):
 
-I realised not too long ago that this function can be entirely removed
-since this path is not possible in the current S1G implementation,
-atleast until channel switching is implemented but compared to
-regular wifi I don't think it's as important to have. So I'm just
-going to remove it for v3.
+>> drivers/vfio/pci/vfio_pci_config.c:1166:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1166 |         mode = FIELD_GET(PCI_TPH_CTRL_MODE_SEL_MASK, data);
+         |                ^
+   1 error generated.
 
-lachlan
+
+vim +/FIELD_GET +1166 drivers/vfio/pci/vfio_pci_config.c
+
+  1127	
+  1128	static int vfio_find_cap_start(struct vfio_pci_core_device *vdev, int pos);
+  1129	static int vfio_tph_config_write(struct vfio_pci_core_device *vdev, int pos,
+  1130					 int count, struct perm_bits *perm,
+  1131					 int offset, __le32 val)
+  1132	{
+  1133		int req_en_byte = PCI_TPH_CTRL + 1;
+  1134		struct pci_dev *pdev = vdev->pdev;
+  1135		__le32 org_val = 0;
+  1136		bool extended;
+  1137		u8 mode, req;
+  1138		int i, ret;
+  1139		u16 start;
+  1140		u32 data;
+  1141	
+  1142		if (!vdev->tph_permit)
+  1143			return count;
+  1144	
+  1145		/* Back up the original values in order rollback when fail */
+  1146		if (offset <= req_en_byte && offset + count > req_en_byte)
+  1147			vfio_default_config_read(vdev, pos, count, perm, offset,
+  1148						 &org_val);
+  1149	
+  1150		ret = vfio_default_config_write(vdev, pos, count, perm, offset, val);
+  1151		if (ret != count)
+  1152			return ret;
+  1153	
+  1154		/* Skip if write range does not cover Requester Enable byte */
+  1155		if (offset > req_en_byte || offset + count <= req_en_byte)
+  1156			return count;
+  1157	
+  1158		ret = vfio_pci_set_power_state(vdev, PCI_D0);
+  1159		if (ret)
+  1160			return count;
+  1161	
+  1162		mutex_lock(&vdev->tph_lock);
+  1163	
+  1164		start = vfio_find_cap_start(vdev, pos);
+  1165		data = le32_to_cpu(*(__le32 *)&vdev->vconfig[start + PCI_TPH_CTRL]);
+> 1166		mode = FIELD_GET(PCI_TPH_CTRL_MODE_SEL_MASK, data);
+  1167		req = FIELD_GET(PCI_TPH_CTRL_REQ_EN_MASK, data);
+  1168	
+  1169		if (req == PCI_TPH_REQ_TPH_ONLY || req == PCI_TPH_REQ_EXT_TPH) {
+  1170			extended = !!(req == PCI_TPH_REQ_EXT_TPH);
+  1171			ret = pcie_enable_tph_explicit(pdev, mode, extended);
+  1172			if (!ret && vdev->tph_st_shadow) {
+  1173				for (i = 0; i < vdev->tph_st_entries; i++)
+  1174					pcie_tph_set_st_entry(pdev, i,
+  1175							      vdev->tph_st_shadow[i]);
+  1176			}
+  1177			if (ret)
+  1178				vfio_default_config_write(vdev, pos, count, perm,
+  1179							  offset, org_val);
+  1180		} else if (req == PCI_TPH_REQ_DISABLE) {
+  1181			pcie_disable_tph(vdev->pdev);
+  1182		} else {
+  1183			vfio_default_config_write(vdev, pos, count, perm, offset,
+  1184						  org_val);
+  1185		}
+  1186	
+  1187		mutex_unlock(&vdev->tph_lock);
+  1188	
+  1189		return count;
+  1190	}
+  1191	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
