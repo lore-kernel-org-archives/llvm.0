@@ -1,76 +1,71 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4D4405C23
-	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 06:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C376E410D30;
+	Fri,  5 Jun 2026 06:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780640792; cv=none; b=HgSgqWyEhCCHHslvdWHx+eWimAhlBsN837I9vHL4GduNo665++yZ5b6N/oPftkf1Y7OYf2jF4xLGTlAmCV1dwnavaNCCf7m5s6I+e9yTClHRFM2iAshGkNdNwDg8bNH9qIhwgUc1+O+v3TIbKIsE5zu3IKxwINNU9YapRXjiKL8=
+	t=1780642455; cv=none; b=WA/xrsFKZ6z/cChqzvXdeGA0JtEakvNUvLoLwOr784bCH3C8gZqyBjbNqLc1DpsnmSIxbXqUu/bCC0qIsh+OFoeGvqYKFRCizbwFUMdTkxRAeOPJZZhCrC8eQuF2jWkX2XFRP6EEFostD2fiaRtuhwPndi+q8jTRnTimQZtd+Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780640792; c=relaxed/simple;
-	bh=iNh/mb2eiocXb4S+1yThHgdvvhY1IocXV2BZgTAkwK0=;
+	s=arc-20240116; t=1780642455; c=relaxed/simple;
+	bh=Bfhxyeh0I+nLYaM2G8L9iOBrMI/5fCXfZhtYUW4UmJY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sT1DXEB/rdlbPtpfEAvKCo2z+0dTG0sfVhXbhgESbSyVaTq/vYAoowWRqDQAe/7g+jJQKcNiti/dYuvVTPz/sAKxCi4oFAHb2mbdho4feUOXjqOQauCbMi5tyyzRRTfsr4DzAnWtH564lN3fKj3sINPw0946MAUhczoQqxPnHCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=morsemicro.com; spf=pass smtp.mailfrom=morsemicro.com; dkim=pass (2048-bit key) header.d=morsemicro-com.20251104.gappssmtp.com header.i=@morsemicro-com.20251104.gappssmtp.com header.b=Zz3Q5WBv; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=morsemicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=morsemicro.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=YRLAOcsYGOKBZHE2+4zcXWzFBqOAFHOZYvPLv7sWZzICwYG4u1KXUl1OjEaTbzvq0HotSCPu6I+5EqbrIVM4i4Jc3KYsPV0oZHzZ4p0gCS8sIINEkwAslJ2O9P9UaErUEUm8r2mnmHNre+CkxsiuXi5Fi3fRgHAtze1d+anlDLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J6Xgq5kk; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=morsemicro-com.20251104.gappssmtp.com header.i=@morsemicro-com.20251104.gappssmtp.com header.b="Zz3Q5WBv"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c0c3184c71so12187185ad.1
-        for <llvm@lists.linux.dev>; Thu, 04 Jun 2026 23:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=morsemicro-com.20251104.gappssmtp.com; s=20251104; t=1780640790; x=1781245590; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a3Fr+w0Wf3CCQXoGfTaQ02R3tpfIPjjorzQJs8m1zi4=;
-        b=Zz3Q5WBvx68T9/W7S+0uocaKrQsz0Hu574W1Bn04gmMEGH9JG7fofVgPq0v8xr1b6t
-         rhNCCqhc5FSceShGe2DrqfWCZI+cu1jhNXqCAgA5qHIvmLEFOVU3kl/D/2JYko3CBNNX
-         TtLCHGtbOSUxOO33RzTxi+SBdQBX/QjSzTuY8/J2emJruknxbEXXDg7hSv1aOQe3p9Wl
-         xKdZLWyYxO+B4B15h/MM95KV8rSlAeij6dWqchrYPV3lgeT4FvqXOrxehhhmVdVDPMo2
-         yKLz+r6+gWab/WiKw3q8LEgwPbVBl+CLbKLg/7dIr6MPyWRcdJnvyITYAuBeBWMlm3ob
-         h50g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780640790; x=1781245590;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a3Fr+w0Wf3CCQXoGfTaQ02R3tpfIPjjorzQJs8m1zi4=;
-        b=l02CZYI+Ejegp/cJx14zPmpJkhlau9YWhsXXKpJTxRzTz6APe8pbXZnvrJ+DMEtcg1
-         Bv5dHcN1ACZ93aJEnQFm6bwD9lJpdkHlAI7FwgGIZ5gLFLEBr2jvqcj3ftq4ROMemFU+
-         XlLSPQmaAWoHkXqACpkf6LW80oPda5AkkMzn3BZXFx0iz6cBpZmZriCQgiE/TcNPrLuD
-         1EB4LdKKUDGM8UiqWGJqNizFkEVeXTwPKdisUKh12T6hXNmsJNdMaVSZ3r+mWHojRPKw
-         mhVtni0oiJ2M7BGH2cO4wrGhTBLF7POIaeUVYoA/bALJ7/554Y+6FfiMewUoffDBdX/F
-         uDCw==
-X-Forwarded-Encrypted: i=1; AFNElJ/nP/kjc6w306TBcKTpTxz+juQM/plb8SS2p3KYMgVgfayaYdH8U9LHw1f8ui0/py5YxK5N@lists.linux.dev
-X-Gm-Message-State: AOJu0YyFiOshFH1iF+wN7/8G/pZxb/3XfX518UKCdlDCFYH7MJ4qYjkT
-	C9q71G+ZQYrEj6r5HycDEY5gAft7Ghl3KhCrpSUNxnO7FBp0ryqrqg439Wbg8NJ+B3E=
-X-Gm-Gg: Acq92OEENVPZqqUB68DrBZ/RP86muydZ0A+X8IdyAlyAMVJJ41wRmR5Weozay5zrrI9
-	d95eqWk81IiryvVSx3dheAT9VtRo5XP8TTckQfkQv6ZKDhJYZvAlvXOY865wLgxmi2x2D5n+RRa
-	VZGSFwqRi3U0Wlkw7jwMFGj9M0MzEOWuZGHDcp1tARwhuWVr+lEX9Zxp+eCKnIhhzxAtmw1Gl2x
-	Q4Cx7MdpJEjnbIlAjf9QC9p/jFtdx+uCcIptvroF2Xwo996RHdEgpfWqWOv/5+J6JEcWwsitWBb
-	D9BAsDC92sEmhaYY72oPc6Vkvsd9bQgrbKl/zC2bN7AaIkzBIV3Xj8lsVbHY/36iS1GLaMPHSv6
-	i6kBebs0f+qfOh7ZRc2aEu2w6cEWXcPW11gjsTjdRN/c1MiZX0t3E23ZjGyL8Y0CbOdbB9QZU7b
-	i9n8MqUXrKe6Rr08IWjvsUDadjTvhj9NHmv/nseIYEVTcshmpqwh+wbrQ8j3ZQQEszA3jhblzki
-	5wpGJalqyDwqT6aWYYonZF/HQIqXqJwqg==
-X-Received: by 2002:a17:902:ecc3:b0:2b7:aa20:3c61 with SMTP id d9443c01a7336-2c1e8339808mr21810535ad.33.1780640790120;
-        Thu, 04 Jun 2026 23:26:30 -0700 (PDT)
-Received: from localhost (60-242-93-14.static.tpgi.com.au. [60.242.93.14])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16629cf89sm78782835ad.56.2026.06.04.23.26.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 23:26:29 -0700 (PDT)
-Date: Fri, 5 Jun 2026 16:26:24 +1000
-From: Lachlan Hodges <lachlan.hodges@morsemicro.com>
-To: Johannes Berg <johannes@sipsolutions.net>
-Cc: Dan Callaghan <dan.callaghan@morsemicro.com>, 
-	Arien Judge <arien.judge@morsemicro.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, ayman.grais@morsemicro.com, linux-wireless@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH wireless-next v2 12/31] wifi: mm81x: add mac.c
-Message-ID: <aqbfc2k7xdlggjchxuuklzliuu7cutoqwemjc72zrghhrvwf5f@gqnz7wyqirxx>
-References: <20260430045615.334669-1-lachlan.hodges@morsemicro.com>
- <20260430045615.334669-13-lachlan.hodges@morsemicro.com>
- <e964f5728bde677dc837f55617a83b63c364cbf3.camel@sipsolutions.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J6Xgq5kk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780642454; x=1812178454;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Bfhxyeh0I+nLYaM2G8L9iOBrMI/5fCXfZhtYUW4UmJY=;
+  b=J6Xgq5kklws8g8/3b5+KYtlQa9T9dvORb0OhvF9yDCbo+0m+sld+PYpt
+   uY3irBSxmLRAQA+8Pc0g5uBjifZ+uSC0R0oe4b+ZbttipPrRwcAIzRfJx
+   pNsv6FVRe1Do9wsNDOS2QLGsxLySoye6/QumnNNnrZZdzMftqH5dsFNf6
+   U8glVMH4Qedtqrs6PRRlYtOgydJzwSe/Ku7ocPz2gez8kzePEhbV+LTPQ
+   tFLpP9WTEnCg3kMiaDgYM/DcRGAUk4T4mc5wSDC3ddPtvqLHReMn/YhDm
+   9+5T8tB0mMg0ElW07OdUCQU0/3TzSk5K/+KfFMAhAuu8sF6z6KA36PX1J
+   w==;
+X-CSE-ConnectionGUID: XbyS7aJSQROu7k6P11tCPA==
+X-CSE-MsgGUID: WeWYZ3upTPy+I7oYB4bopA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="81474440"
+X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
+   d="scan'208";a="81474440"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2026 23:54:14 -0700
+X-CSE-ConnectionGUID: igsVH0E/Q920RoFFPu5r2g==
+X-CSE-MsgGUID: Mv2TdVCjQlahbFrWexy6Vg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
+   d="scan'208";a="238412207"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa009.fm.intel.com with ESMTP; 04 Jun 2026 23:54:10 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wVORU-000000002Uv-18Ka;
+	Fri, 05 Jun 2026 06:54:08 +0000
+Date: Fri, 5 Jun 2026 08:54:01 +0200
+From: kernel test robot <lkp@intel.com>
+To: Adam Young <admiyo@os.amperecomputing.com>,
+	Sudeep Holla <sudeep.holla@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Saket Dumbre <saket.dumbre@intel.com>, Len Brown <lenb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-acpi@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Huisong Li <lihuisong@huawei.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v01] mailbox/pcc.c:  add query channel function
+Message-ID: <202606050825.2uv1FZrY-lkp@intel.com>
+References: <20260604203749.168752-1-admiyo@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,77 +74,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e964f5728bde677dc837f55617a83b63c364cbf3.camel@sipsolutions.net>
+In-Reply-To: <20260604203749.168752-1-admiyo@os.amperecomputing.com>
 
-Hi Johannes, just having a think about how to do this:
+Hi Adam,
 
-On Thu, Jun 04, 2026 at 01:46:32PM +0200, Johannes Berg wrote:
-> 
-> > +static void mm81x_mac_ops_flush(struct ieee80211_hw *hw,
-> > +				struct ieee80211_vif *vif, u32 queues,
-> > +				bool drop)
-> > +{
-> > +	struct mm81x *mors = hw->priv;
-> > +
-> > +	/* We don't support IEEE80211_HW_QUEUE_CONTROL so flush all queues */
-> > +	if (drop) {
-> > +		/*
-> > +		 * No need to call mm81x_skbq_stop_tx_queues as mac80211
-> > +		 * has already cancelled each queue prior to calling .flush()
-> > +		 */
-> > +		mm81x_skbq_data_traffic_pause(mors);
-> > +
-> > +		flush_work(&mors->hif_work);
-> > +		flush_work(&mors->tx_stale_work);
-> > +
-> > +		mm81x_hif_clear_events(mors);
-> > +		mm81x_hif_flush_tx_data(mors);
-> > +		mm81x_hif_flush_cmds(mors);
-> > +
-> > +		/* Reenable data, not that there will be any */
-> > +		mm81x_skbq_data_traffic_resume(mors);
-> > +	}
-> > +}
-> 
-> Doing nothing in the !drop case seems questionable - mac80211 uses this
-> sometimes to e.g. make sure a deauth frame really went out before
-> shutting down the hardware.
+kernel test robot noticed the following build warnings:
 
-What is the consensus (or I guess your opinion) on using
-read_poll_timeout() with a function that isn't really doing any real
-I/O but rather just reading software queue state? E.g.:
+[auto build test WARNING on jassibrar-mailbox/for-next]
+[also build test WARNING on rafael-pm/linux-next rafael-pm/bleeding-edge soc/for-next linus/master v6.16-rc1 next-20260604]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-static void mm81x_mac_wait_queues(struct mm81x *mors)
-{
-	int remaining;
+url:    https://github.com/intel-lab-lkp/linux/commits/Adam-Young/mailbox-pcc-c-add-query-channel-function/20260605-044323
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jassibrar/mailbox.git for-next
+patch link:    https://lore.kernel.org/r/20260604203749.168752-1-admiyo%40os.amperecomputing.com
+patch subject: [PATCH v01] mailbox/pcc.c:  add query channel function
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260605/202606050825.2uv1FZrY-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260605/202606050825.2uv1FZrY-lkp@intel.com/reproduce)
 
-	if (read_poll_timeout(mm81x_hif_get_tx_outstanding_count, remaining,
-			      !remaining, MM81X_FLUSH_DRAIN_POLL_US,
-			      MM81X_FLUSH_DRAIN_TIMEOUT_US, false, mors))
-		dev_warn(mors->dev,
-			 "Unable to empty queues before timeout. Remaining: %d",
-			 remaining);
-}
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606050825.2uv1FZrY-lkp@intel.com/
 
-where mm81x_hif_get_tx_outstanding_count internally is:
+All warnings (new ones prefixed by >>):
 
-int mm81x_yaps_get_tx_outstanding_count(struct mm81x *mors)
-{
-	int i;
-	int count = 0;
-	struct mm81x_yaps *yaps = &mors->hif.u.yaps;
+>> Warning: drivers/mailbox/pcc.c:358 function parameter 'q_chan' not described in 'pcc_mbox_query_channel'
+>> Warning: drivers/mailbox/pcc.c:358 function parameter 'subspace_id' not described in 'pcc_mbox_query_channel'
+>> Warning: drivers/mailbox/pcc.c:358 function parameter 'q_chan' not described in 'pcc_mbox_query_channel'
+>> Warning: drivers/mailbox/pcc.c:358 function parameter 'subspace_id' not described in 'pcc_mbox_query_channel'
 
-	/* We only care about data + mgmt here */
-	count += mm81x_skbq_outstanding(&yaps->mgmt_q);
-
-	for (i = 0; i < ARRAY_SIZE(yaps->data_tx_qs); i++)
-		count += mm81x_skbq_outstanding(&yaps->data_tx_qs[i]);
-
-	return count;
-}
-
-It is fairly easy to opencode something similar, but this looks nice :)
-though I can't see many examples of using it like this so I am
-a bit cautious.
-
-lachlan
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
