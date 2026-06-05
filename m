@@ -1,211 +1,162 @@
-Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012071.outbound.protection.outlook.com [40.93.195.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54404282F19
-	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 16:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B8D346E63
+	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 16:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.71
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780675576; cv=pass; b=R7qQoKbJrmjyb3eAWR2W7Ih46AzZ+4rNZekPG6jwKqr6MEjXukOPE/xKVPJ6vUnqRVAyOQsO8mLkhowb3crpFhaJdXAvxzDcO643Z886wtiboT6xSU8Erag0ls7FSqLPXpID+q0B7QV/4cGmTOY6A5WK1STFg/XfkY2HbJfB0pE=
+	t=1780675762; cv=fail; b=iPt9hespQTLkA4GzhWo4B2KduluYLTxDeXHyRR+mdBGs0SGyve2gcM7euaFiqPvy/NvMkx4cxG4f9Yr+fNGJKjlAfybEde/u9m0wRJ3A2bE3VToO3fKccU/aUBr2JP0LnWkrOmrSr/pjsgojr1oLa68ReYdfWDCiARTJANzMA9M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780675576; c=relaxed/simple;
-	bh=CYocm5u0+pg9o3aIVAE3m5a3oTIe6F5o9fKMKsoF8EI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Rh2x083tktdm0l4AB2kHTG9CngXb0r7+qz6cAxo/DHkk86frWbuPRhus59xO7ryYEkZOJ+3HKs/qb3sX97HpZaXG0Rm/11QSk9nhiT9JfWQQ1mrO3L0eEJyOqNLPe56Iumlv0L7XdfRlI6SaaB+3jXEVbHBaVF44tKEXJGxcyas=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=skY2DMNA; arc=pass smtp.client-ip=74.125.224.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1780675762; c=relaxed/simple;
+	bh=dOT8BCx2KUP+4Mln+EX37NU5wiBeH66P08eLxSnAtUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ujBTYCziyqv0IcPgZlKkuE3/+WhXZYXDnfo9JoLps0qKg3IcEqIIwLFIC9R52xBCNa5fAYCF0sLeC390k+ct4bMtlB0dsOjT6FFQWidSutic0fkdyWxf+HE58tVaYPV33UpszJURj1gUPa5mvpEzpgdpBKoUvSBLl/Dj0gSUzcA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SNsOTZhC; arc=fail smtp.client-ip=40.93.195.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="skY2DMNA"
-Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-66039d3efcbso2358549d50.2
-        for <llvm@lists.linux.dev>; Fri, 05 Jun 2026 09:06:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780675574; cv=none;
-        d=google.com; s=arc-20240605;
-        b=k2B77h/JHUJMYwcbqiwuOfN4mbNbZ6uFqLNR32y2zb6+ER9wL4lyVzpKyIOVp1r/4u
-         /v1Rf96KGakN9db1/xGosyFoWLnsodoBkBqNAbdgIUBsZOsJ20eZ7TKolWtHLBRxlrTz
-         iwxazcp7Tygc0VGFFywVa4xfb1Y83Dq2V9z4xc9cnMzj69xOh7Q8vMqTDYAwY9He0/lj
-         CM0MsQwqwm4x1S8ardT3x8+s0B/UQUKmB7oxZv4KdJc8lLOmUdFlGonTJ560upSz4f2Q
-         2bQ18FebbGFK1ZyLOIt0+5J/DMBY+QkSQtgTqBplECD5aoxq97ncKtIYDH1HemLxhASt
-         qFzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qpweCGcPTYVu/t4xYY3lqhavrFen0DWkq0lhTltrHoo=;
-        fh=LBOC7WYAe8Dkx8CtM/uqzSiCL4uaIYW31ZXAV6/RV4Y=;
-        b=gZxmyjGL/OGM2oxyvmtxVIK+IhTEIQBcEzJYgM7VrOvgvnNXlJVLlJIyMvtXBWNtP+
-         iYWrHA0837mdkrZN1a8sa38tfMRZTGrQp5/k6x75eGc1GINs0ySLdPei5yInXt2ndc5/
-         xhS7KkDYHMwW2qsiI5PfeCPfBuDLVhjTvEkepV+e/9LOpOq2zU7IC9QUVyp+HlhcF6cn
-         ZAI6rH8zuTWqb5dz6U/euSZVdgGg+rdHG+X1lHr+u7a0mCKtnOzzzovL/7r9AJBZ6Nhl
-         a/Fb8EKQ1XtmPyeBOJzVIcTZNBBq316mCgXimRsky7+zA8/wP3goigfZa1no9/6ICGVt
-         3v1Q==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780675574; x=1781280374; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qpweCGcPTYVu/t4xYY3lqhavrFen0DWkq0lhTltrHoo=;
-        b=skY2DMNAwKGdwCXRSdvs1rtNQ20cHe425BMdEEiDx5hJTVhQvW51YJMr6TEUNrG6ZV
-         qcLVcq/ooVShit2TFXtrtirEBFhGyynpatrhQK8lvj0n8UFmXTPFcQnvYM4+36mFZxcf
-         r/mo1C37XAIlMYMzbmGeJ84ivn4+BZJcLxHqnyhdhA121J+Y9bkziyZbqsqsG5zQe4Vf
-         sP10vSbf9A0jChaEczT0LfxuAHipURzqJ8KHFbFqmoWVBdVgYCxrbNhMvTtltGaOeYjo
-         0q34CO86n4fvHOCS+Ff0z6UsPIJ6NF6WVbPTUf/bYgGzcJgohuybCU6WChwXh+vzNo7J
-         Y5oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780675574; x=1781280374;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qpweCGcPTYVu/t4xYY3lqhavrFen0DWkq0lhTltrHoo=;
-        b=b9zA4DHONkapXPsMjKeqCV4zVDfSd3qxZgh2nWMeC/ZuyndWSxLahyHNoBC/jXHN4j
-         yWmLIgFrViUWVCQ2dH90NgoAAs1qhvav6qoBiM/g5nokc7SiXGRxR5tEn6fsOKWDbOuu
-         NCjc/6EPJwp6OCT56D0Eh6y8mkmq09uE3d867Vuw5SB5HfsP5Sfb2HkK+5pQP+25XQC8
-         nV0gyS6gdTWAqIw3XgGTa4J40hsdrI4CLgC51j9hvaeSqh5wfEneYaIgeFlNAbjYz5kK
-         UCDsxTidKGtKSsL/JI7Yig46M1e3ID1f4dxMNDsXx374jV4enKhmvF5juHto9zH4v2va
-         qPSg==
-X-Forwarded-Encrypted: i=1; AFNElJ8Esx8CP9BWnLT8xuB9wjsDwTuWQEPLG9OGr2K6epWletdI/Ao/asfiCztnKeUWjMtUlEB1@lists.linux.dev
-X-Gm-Message-State: AOJu0YzNOoVsUFDt6V4yo/Q7eF6cuuihiSiAdXR4Cpu9fbqoIl1mCWjl
-	AT97F1JE0TKDGFSecqHm7qdvhBctnC2iE4jh5rpgd6atSbjqFId87TTkR7nndXQ76vJgBnjOgLe
-	6dRv7GLIdU60xiDfdfwIECryPCX0cQ+jvckpTbnrW
-X-Gm-Gg: Acq92OEqIPsp8LmwmZzIchzpvC5TKOCPrIl3NCtBUVW03Pa5RdQpVgdDEWYA7ccyqXr
-	Gw+OIqf4l2EpWf+sGc3dI+ci2QpjZDg0R/lUiEycxjABArKlBqqr3o9SVawJJot0XUncxjMZivr
-	YKqeTDaYJFuOWxf515AQ0/LwirqJJzXLzYQXDp/2dszP2mM0T60yldZ8ZcQE7rcSH0ZPAqAzMZt
-	OjS8SsX+g4CVQmJgaUAWlWysQ2Q4SSmEDVG3XLUW7AsLSshzEWoW1s3apBMghmohkBtMakAv4B5
-	DLkLiZHQwGcAJGO06O7qfwgKzT1xi8FTYDhlwp9+262jt9GWfSw=
-X-Received: by 2002:a53:e306:0:b0:660:3426:3ff1 with SMTP id
- 956f58d0204a3-66106f583b0mr2916376d50.34.1780675573532; Fri, 05 Jun 2026
- 09:06:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SNsOTZhC"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oNOcsSovHK+26zjceoxT3UWuLAuLO69p5Q7Gm3oB0PL8CTNdOt/DdxEMDoZCd6j713OgFSFCNjQrhnoklT3uY1PF5IciN1u1Y1l/43plO7LeC2hD1H3/fQa00gfNvibCC7r/G3ozpAC/+pO1M0a4kDMcCNoVSVKHMo/+Y1VUjb+2yR2WUPpSFLWak6z9sV22rTTD1r9AarVshNswj3udUpCIlsSPlNHGizpgwxcIhi0+LyY5rVMlzJFBfd955BIrF+tEPt4iWIv3kgYDCeNkSqNeEM/370BTJqmCIdUgfqAefCqsV2G+Y6BUFd4Y8BlfkJ2HzUY4wWv9J4Cpad48zw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6X8GaMDfhvo81i/hB3v0OOvEmgiILfEODZ+xfAmeVEg=;
+ b=DUrrhFbqZvc6tPZftVrrEdhqoA8dU/yuI0NYaLZYJvyXKNSIYwctUq0ooKdjdDzgDK3Sp/Ssxu8GV209yfFpAnMjCUuHDj5juN52QnlmXnq+ODA/urYcibqvvxJvJonEKL+PZqpJsSfHpvvVBZkGBvG8UOko/uIRzz5uiKTuwXIY9EHWEKhTUyCMdZcltN+itrS974Quj1rkIcBaam+maCUY+0XqyB9KzUZew2N2bm1K5dvq898FCJ5dRTd+K5TZtLs2rI/v0GxiMuJhlkDjXWCH9o+uOSlzf1dw4H+XQ1sI4TiOVBjAS7plF3hcfbPNX4+ILWR66Z/MjjQtCiet8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6X8GaMDfhvo81i/hB3v0OOvEmgiILfEODZ+xfAmeVEg=;
+ b=SNsOTZhC3ullHIRjGsRQkEdZ4EtHB1+n7AdvxrE+mI7tkLnGt8knw8DzwZKV50Re4txYyPn8/3JvVLJ9piO6bT4NrYhvkdj6guux8oK1mOlSlq+mjGVRdpYDGKiivRfMtMQ2esra23DlnTg39ZgnUZkFXDTgsBW7s7gBchlYliF5lZ6OumfQWdX1LAXa/HiR2qth1w2nbFevDWlETXaNJHc2HMPgH3cARtxYbPef3ImKRb6KxVYa8W6cQ+aKrAz6ZnB67GfpEImIX9Ng+/JS0ivCpGnQolAjoBV5JAtzDqeLy3syAjpDnzdNX7RkjWXAAW4523Hb2Zc1clnpQjEcjw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by IA0PR12MB7752.namprd12.prod.outlook.com (2603:10b6:208:442::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.9; Fri, 5 Jun 2026
+ 16:09:14 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%4]) with mapi id 15.21.0092.007; Fri, 5 Jun 2026
+ 16:09:14 +0000
+Date: Fri, 5 Jun 2026 13:09:13 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Doug Ledford <dledford@redhat.com>,
+	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+	Mike Marciniszyn <mike.marciniszyn@intel.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Kees Cook <kees@kernel.org>,
+	Dean Luick <dean.luick@cornelisnetworks.com>,
+	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] [v2] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
+Message-ID: <20260605160913.GB2728758@nvidia.com>
+References: <20260602140453.3542427-1-arnd@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260602140453.3542427-1-arnd@kernel.org>
+X-ClientProxiedBy: BL1PR13CA0099.namprd13.prod.outlook.com
+ (2603:10b6:208:2b9::14) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech> <20260603-kcov-dataflow-next-20260603-v2-1-fee0939de2c4@est.tech>
-In-Reply-To: <20260603-kcov-dataflow-next-20260603-v2-1-fee0939de2c4@est.tech>
-From: Alexander Potapenko <glider@google.com>
-Date: Fri, 5 Jun 2026 18:05:34 +0200
-X-Gm-Features: AVVi8CdtIWJrRUEJnQQQB7BanVCY0Gd9ha8SThOa2A947QiJHGGMsBgLigo__P8
-Message-ID: <CAG_fn=UMJJz+3zipowaC4uTvcbC0gvXbBRaF0UUJ_1AW+oWNGA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/6] kcov: add per-task dataflow tracking for
- function arguments/return values
-To: Yunseong Kim <yunseong.kim@est.tech>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Yunseong Kim <ysk@kzalloc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|IA0PR12MB7752:EE_
+X-MS-Office365-Filtering-Correlation-Id: 504532ac-7a1b-4827-253a-08dec31cc999
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|22082099003|18002099003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	DwSuLOdaAE6MHnCkMSUJCc/jWUFOxYh2O5i4l4G7+8Wb2s83eY+64S3uE7B1+pWWN/gUWN5zAQ/usWIp92bNIdNl4dfLNo50cnI5TrTiVqC4PR8fL3RQwsX11ElsRkEpBvssrlt++91KUFN1lj1dCPdZGXTnOQWpSuYVRYo/Q64Wg/pTfdIV0Nqnia/d+amqezr5YWIPoXJjJMVUAFNTT53wW7gL06NYWbbYiLIEXEabc9GVyxkUwQ8favyNrSdaI95TFUEG6Wh0+72XJI46PWcjtjg/GtPTgq37dvnKjLUBhEcYOkK1x0mVWq5p8R9jIVKDRAF441XMBH7dYd1KJoumSn/2ZKtxbPiHhWA7AZ/YcU2cbgCtwrlKX6sB/famPHb90wlAC7drH6eXZd1JmVwKp3iLjO2+JC6I0rf9NUbATH1n4o0c5BYuXuK52y/7hnPeQ7mYr44fNKqw2GUa+VadGZYhbO5OQK8NvOp+77Iyuct4jbsukmbDjBwhldplhRKiJxWKkIHlHPN73fglDBVn+PA6nm/22E5SqKQ2/qiRd2QSYj5BB69TAY7InivCb2kcgS74XRB2S4Cmcd89FqiYW1VP6Nz5JB1+a/TL2r2FwyQL4xzmXr9J84OXWdIamGGUkWBegGKoMuYaDD2fAZz8fJtfsClae5BB1V00HsSA/OWMi5HhtAUWao8ZpEhu
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(22082099003)(18002099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?DEYKPymROBWE18NYSwMPecmPKCMpaBlJU5Ce9EpUoCLNE4l5Wk1HYbWQbjbp?=
+ =?us-ascii?Q?JGEzFkc42wuOyJ3JIlHEMlvcpDpI3qv9Tx2CrBYltnP6o1yKVj3E8IQp8rjd?=
+ =?us-ascii?Q?DadMGiAA0HV9KmTdi0CESaGJce5yTZS32fylcIeGhBgbzB5bEdMqH/WV/5Cn?=
+ =?us-ascii?Q?Cw/QtO2cg0i0jzuhgEJELqbT+UMgtDpl5IxbOFoPY5PxUCjZ6me42zDSUx5M?=
+ =?us-ascii?Q?+5jTiFqoY3a8/Q5/rgSowVPH2RqlvG5govOBM+2HTXHx9MAV1uMbVoKGHXwt?=
+ =?us-ascii?Q?E0OtXjXt8sGJuTZgBLOk9qITw6lLLbpzRM62EqKe03PEmbFLbKHtU8xZA1r+?=
+ =?us-ascii?Q?6uHUfvhrhSXqKDcmrtRXYkt7I+CYyerLrde2wXAaNMsaxLJT5jsThDA+73rt?=
+ =?us-ascii?Q?qJIeZ/BSW0kHhH4y/Z9vhOqJo3UsoXVKrDI1dgFNmaBRQ/dwN0G151fWNkol?=
+ =?us-ascii?Q?twW1UX3ut1uM/1/+AOAtt+Y79zzzRAIRYhwwI2d1S8sPT8E6HX0CxJyIhbNX?=
+ =?us-ascii?Q?hYdq9pm4Lf72FOmwizG1fIc3phB6YXSEJ6nzqNDJhkLivUgkwnEdy2ibP2RG?=
+ =?us-ascii?Q?gQ/vQS0f0t+8d98vrkw7pGvC3hoODfNlGTyHHV65mlEGODnmuFBUBanqhupk?=
+ =?us-ascii?Q?I7lOORaKdj2SPbBFohfX0YpVbN0E6DAGdBaOPaaZ1z2MrNHi56zBZomEQZJg?=
+ =?us-ascii?Q?yoQa2qKXdhKu1YZmicQJc+l6U3eflB2UhvI7u2J42aIAcAaTgx7NE/Xdo0hg?=
+ =?us-ascii?Q?DRkCciIRYAoK45gzOPjboe2ACb8cJe5UgrhRk6d+keciEQ2O+FYLXJuOHVdQ?=
+ =?us-ascii?Q?YGYK0q2nGNxer5IxUpd89ul0Jv9BAWEl6LBvWp7tNG2OudnAop8RxanFlSFv?=
+ =?us-ascii?Q?se/MPXDHCPOuA8Gklez1JI/dYN7Mmlj0yAmhX1JQIcf5/Ts1bEj3jPS+B9YA?=
+ =?us-ascii?Q?fR/4wgYCXNvt09Ru1GKyDMV7WI1orhsR641SA1XExtMEa5SMUzgerqPbpDd/?=
+ =?us-ascii?Q?qiBkJxcHn+cqFc3UtHrMEgL1G0kNSZDOGq/aQb847VS40XDtKHnFkMOkifkn?=
+ =?us-ascii?Q?3hZiogxatI0/RfKyd1AiYV4U3tUYQkcIPkM6UkHiYrZE1sUucYXG3KZbA57M?=
+ =?us-ascii?Q?qO/DamdrytiOUTW2EP6pLutkaAFVo+5jESkUzh72Z965A6WU1KbgYvhPqgUb?=
+ =?us-ascii?Q?rCamT+cC1v9hkRtoUs3MC0KjOPCMNUBTKi2QLFFML0I4gHMXr9ytafGDmAEE?=
+ =?us-ascii?Q?arrj3OyPasxqXzIXAE8FAwyFRfJHztQS4SiLufJlRnRA48W73zP9GFwgV9fC?=
+ =?us-ascii?Q?4vaVKsZ/cF8G/OhHFv6FSliP8kbootZbe3WtuYGYhd2I8lKIH1G7hoCPGiB0?=
+ =?us-ascii?Q?odFFzHyShYpIJ8nJqRnIAKJJof0n0Pk/z/QCrexW7Ze8AFBMptLqiK01y4XZ?=
+ =?us-ascii?Q?ZrV6xdHFYL258GKSodq5G9wR9y/Ifil5VhurJm2YA21EHr0/K1EBHxsXJ/MK?=
+ =?us-ascii?Q?awmNpFzieF9r7gvNiWPSOZoB38QMLo6pxPFqMs2LbApUVXJEo/oTP3sZuhJk?=
+ =?us-ascii?Q?pYtOJOPN1q/uqPOYx7ZdLzyyf+He4VK/P9saghC092DukQYiz6hew0A3D7Sz?=
+ =?us-ascii?Q?tGH3opSLPqTB6SH8xQYTtcO5wyQi8oB007mh3ERtWDNkN1iSiiVg/eLOFAkT?=
+ =?us-ascii?Q?1xxrGN3M3Ppc0c9c115vX3TnZDFzIeDW9mJWq7f7ht8MrNcs?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 504532ac-7a1b-4827-253a-08dec31cc999
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2026 16:09:14.3480
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IrQhRpnEPbKtMBQyLm2c+OQOYJFKUBA76W2P5xbecxmtldGjULQUygy4mj5lEZaF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7752
 
-> - Per-task buffer: task->kcov_df_area with atomic xadd reservation
-
-I don't understand this line...
-
-> - Recursion-safe: notrace __no_sanitize_coverage noinline
-> - ERR_PTR aware: skips struct expansion for error pointers
-
-... and this.
-
->
-> The callbacks (__sanitizer_cov_trace_args/ret) are inserted by the
-> compiler when -fsanitize-coverage=3Ddataflow-args,dataflow-ret is used.
-> The Kconfig options depend on cc-option to verify compiler support.
->
-> Buffer format (TLV records, all u64):
->   area[0]: atomic word count
->   [pos+0]: type_and_seq (0xE=3Dentry, 0xF=3Dreturn in upper 4 bits)
->   [pos+1]: PC
->   [pos+2]: meta (arg_idx | arg_size | ptr)
->   [pos+3..N]: field values read via copy_from_kernel_nofault()
->
-> This is completely independent from legacy /sys/kernel/debug/kcov.
-> Existing users (syzkaller, oss-fuzz) are unaffected.
-
-Does oss-fuzz even use kcov?
-
->
-> Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
+On Tue, Jun 02, 2026 at 04:04:34PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> clang warns about a function missing a printf attribute:
+> 
+> include/rdma/rdma_vt.h:457:47: error: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'rvt_set_ibdev_name' [-Werror,-Wmissing-format-attribute]
+>   447 | static inline void rvt_set_ibdev_name(struct rvt_dev_info *rdi,
+>       | __attribute__((format(printf, 2, 3)))
+>   448 |                                       const char *fmt, const char *name,
+>   449 |                                       const int unit)
+> 
+> The helper was originally added as an abstraction for the hfi1 and
+> qib drivers needing the same thing, but now qib is gone, and hfi1
+> is the only remaining user of rdma_vt.
+> 
+> Avoid the warning and allow the compiler to check the format string by
+> open-coding the helper and directly assigning the device name.
+> 
+> Fixes: 5084c8ff21f2 ("IB/{rdmavt, hfi1, qib}: Self determine driver name")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Reviewed-by: Kees Cook <kees@kernel.org>
 > ---
->  include/linux/sched.h |   8 ++
->  kernel/kcov.c         | 291 ++++++++++++++++++++++++++++++++++++++++++++=
-++++++
->  lib/Kconfig.debug     |  22 ++++
->  3 files changed, 321 insertions(+)
->
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index c4433c185ad8..03be4b495f70 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1533,6 +1533,14 @@ struct task_struct {
->         /* KCOV sequence number: */
->         int                             kcov_sequence;
->
-> +       /* KCOV dataflow per-task sequence counter for TLV records: */
-> +       u32                             kcov_dataflow_seq;
-> +
-> +       /* KCOV dataflow: separate buffer for trace-args/trace-ret */
-> +       unsigned int                    kcov_df_size;
-> +       void                            *kcov_df_area;
-> +       bool                            kcov_df_enabled;
-> +
->         /* Collect coverage from softirq context: */
->         unsigned int                    kcov_softirq;
->  #endif
-> diff --git a/kernel/kcov.c b/kernel/kcov.c
-> index 1df373fb562b..d3c9c0efe961 100644
-> --- a/kernel/kcov.c
-> +++ b/kernel/kcov.c
-> @@ -353,6 +353,288 @@ void notrace __sanitizer_cov_trace_switch(kcov_u64 =
-val, void *arg)
->  EXPORT_SYMBOL(__sanitizer_cov_trace_switch);
->  #endif /* ifdef CONFIG_KCOV_ENABLE_COMPARISONS */
->
-> +#if defined(CONFIG_KCOV_DATAFLOW_ARGS) || defined(CONFIG_KCOV_DATAFLOW_R=
-ET)
-> +/*
-> + * KCOV Dataflow: /sys/kernel/debug/kcov_dataflow
-> + *
-> + * Completely separate from legacy /sys/kernel/debug/kcov.
+> v2: fix typo
+>     drop two other patches from the series that are no longer
+>     relevant, leaving only one patch
+> ---
+>  drivers/infiniband/hw/hfi1/init.c | 13 ++++++++++++-
+>  include/rdma/rdma_vt.h            | 20 --------------------
+>  2 files changed, 12 insertions(+), 21 deletions(-)
 
-Since this code is completely separate, could it be put into a separate fil=
-e?
-I think kcov.c is too big already.
+Applied, thanks
 
-> + * Own buffer, own ioctl, own mmap. No printk =E2=80=94 buffer only.
-
-Can you please not use these long dashes in C code?
-
-> +/*
-> + * Core write function =E2=80=94 no printk, no locks, just atomic buffer=
- write.
-
-I think it's okay to omit what this function is not doing.
-
-
-> +
-> +       /* Atomic reservation */
-> +       pos =3D 1 + xadd((unsigned long *)&area[0], record_len);
-> +       if (unlikely(pos + record_len > max_pos)) {
-> +               xadd((unsigned long *)&area[0], -(long)record_len);
-> +               return;
-> +       }
-
-Have you tried compiling this code on ARM64?
-I am pretty sure they don't have xadd(), so it won't work.
-But why do we need an atomic increment here at all? write_comp_data()
-performs the same job, and does not need it.
-Or am I missing something?
+Jason
