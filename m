@@ -1,162 +1,136 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012071.outbound.protection.outlook.com [40.93.195.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B8D346E63
-	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 16:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEECA3C819A
+	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 16:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780675762; cv=fail; b=iPt9hespQTLkA4GzhWo4B2KduluYLTxDeXHyRR+mdBGs0SGyve2gcM7euaFiqPvy/NvMkx4cxG4f9Yr+fNGJKjlAfybEde/u9m0wRJ3A2bE3VToO3fKccU/aUBr2JP0LnWkrOmrSr/pjsgojr1oLa68ReYdfWDCiARTJANzMA9M=
+	t=1780676488; cv=pass; b=L1mXmVpqpfqUMqhc8gZ8uklR9kadvrNqQV/YWlE+EEA3hbo0EA8wvd59FJQ9cnfYTja32pqFPb5EjHpnSjoN6vh8tQyLW8fGHb9MrW6vM9RZ8bv5CF+M8zt50H4kSpSG974V7rEMvsnYFJmcqTKNtnwlI87JqDIR7Fi6iOtpp2o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780675762; c=relaxed/simple;
-	bh=dOT8BCx2KUP+4Mln+EX37NU5wiBeH66P08eLxSnAtUM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ujBTYCziyqv0IcPgZlKkuE3/+WhXZYXDnfo9JoLps0qKg3IcEqIIwLFIC9R52xBCNa5fAYCF0sLeC390k+ct4bMtlB0dsOjT6FFQWidSutic0fkdyWxf+HE58tVaYPV33UpszJURj1gUPa5mvpEzpgdpBKoUvSBLl/Dj0gSUzcA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SNsOTZhC; arc=fail smtp.client-ip=40.93.195.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1780676488; c=relaxed/simple;
+	bh=mWB1QjoCqaUp7xOYtL0VXwUOlRHPZS3Zm5pVWOTzZow=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XgTr9Ht8oJOraASsWeAXeaqWoeQbUGB1xqq8eRc7JRxxPNCmT8TTBSQGcK2h5A6+wTF11j/EWWungcfy+NA44ZPL2MCzjdOTRkphrnqjoTFgpno4WIQ5HeS3P7jt+CrBgzPxBGnQ7k3VV6xCa8+OndBvLmMBJb4AVprRciAjbVc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k6ws2eKA; arc=pass smtp.client-ip=74.125.224.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SNsOTZhC"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oNOcsSovHK+26zjceoxT3UWuLAuLO69p5Q7Gm3oB0PL8CTNdOt/DdxEMDoZCd6j713OgFSFCNjQrhnoklT3uY1PF5IciN1u1Y1l/43plO7LeC2hD1H3/fQa00gfNvibCC7r/G3ozpAC/+pO1M0a4kDMcCNoVSVKHMo/+Y1VUjb+2yR2WUPpSFLWak6z9sV22rTTD1r9AarVshNswj3udUpCIlsSPlNHGizpgwxcIhi0+LyY5rVMlzJFBfd955BIrF+tEPt4iWIv3kgYDCeNkSqNeEM/370BTJqmCIdUgfqAefCqsV2G+Y6BUFd4Y8BlfkJ2HzUY4wWv9J4Cpad48zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6X8GaMDfhvo81i/hB3v0OOvEmgiILfEODZ+xfAmeVEg=;
- b=DUrrhFbqZvc6tPZftVrrEdhqoA8dU/yuI0NYaLZYJvyXKNSIYwctUq0ooKdjdDzgDK3Sp/Ssxu8GV209yfFpAnMjCUuHDj5juN52QnlmXnq+ODA/urYcibqvvxJvJonEKL+PZqpJsSfHpvvVBZkGBvG8UOko/uIRzz5uiKTuwXIY9EHWEKhTUyCMdZcltN+itrS974Quj1rkIcBaam+maCUY+0XqyB9KzUZew2N2bm1K5dvq898FCJ5dRTd+K5TZtLs2rI/v0GxiMuJhlkDjXWCH9o+uOSlzf1dw4H+XQ1sI4TiOVBjAS7plF3hcfbPNX4+ILWR66Z/MjjQtCiet8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6X8GaMDfhvo81i/hB3v0OOvEmgiILfEODZ+xfAmeVEg=;
- b=SNsOTZhC3ullHIRjGsRQkEdZ4EtHB1+n7AdvxrE+mI7tkLnGt8knw8DzwZKV50Re4txYyPn8/3JvVLJ9piO6bT4NrYhvkdj6guux8oK1mOlSlq+mjGVRdpYDGKiivRfMtMQ2esra23DlnTg39ZgnUZkFXDTgsBW7s7gBchlYliF5lZ6OumfQWdX1LAXa/HiR2qth1w2nbFevDWlETXaNJHc2HMPgH3cARtxYbPef3ImKRb6KxVYa8W6cQ+aKrAz6ZnB67GfpEImIX9Ng+/JS0ivCpGnQolAjoBV5JAtzDqeLy3syAjpDnzdNX7RkjWXAAW4523Hb2Zc1clnpQjEcjw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
- by IA0PR12MB7752.namprd12.prod.outlook.com (2603:10b6:208:442::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.9; Fri, 5 Jun 2026
- 16:09:14 +0000
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528%4]) with mapi id 15.21.0092.007; Fri, 5 Jun 2026
- 16:09:14 +0000
-Date: Fri, 5 Jun 2026 13:09:13 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Doug Ledford <dledford@redhat.com>,
-	"Michael J. Ruhl" <michael.j.ruhl@intel.com>,
-	Mike Marciniszyn <mike.marciniszyn@intel.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Kees Cook <kees@kernel.org>,
-	Dean Luick <dean.luick@cornelisnetworks.com>,
-	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] [v2] RDMA/hfi1, rdmavt: open-code rvt_set_ibdev_name()
-Message-ID: <20260605160913.GB2728758@nvidia.com>
-References: <20260602140453.3542427-1-arnd@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260602140453.3542427-1-arnd@kernel.org>
-X-ClientProxiedBy: BL1PR13CA0099.namprd13.prod.outlook.com
- (2603:10b6:208:2b9::14) To LV8PR12MB9620.namprd12.prod.outlook.com
- (2603:10b6:408:2a1::19)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k6ws2eKA"
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-6611689dc10so118921d50.1
+        for <llvm@lists.linux.dev>; Fri, 05 Jun 2026 09:21:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780676486; cv=none;
+        d=google.com; s=arc-20240605;
+        b=dh9BTQ36EMWoTiFbaKN4DryOrxeuC1IuuVQ+DhNqkl8sKlF//qwKqrnbGk0yVYvBOb
+         T87Rk+kiBveyLIISIyoqkH4QayyWO1olOlyPOuumrEApY2zySlJvqior/V6p/6dXCBVT
+         ux5xoUeX/tsHEIg9iClWEMUhI9kN/KvcWdm5bmMXx+FYxSyt417n9kLH2N58SjKc6bsG
+         ByYBnSVebBkcPVmelgu481D1awvVqZlwa7/BOZXO90Ezrer4WIwnURXqT1yM4/NXJ3ME
+         Qasw6U54wskNIdpKWZRcZxNQ0lVWZqraw1tDedWUM9s2JcrIquWN2FIXJwwCbgjpC6fX
+         fGoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=mWB1QjoCqaUp7xOYtL0VXwUOlRHPZS3Zm5pVWOTzZow=;
+        fh=Gnmu42yWc+oHJu7wjUIbrgjLQ3jIN54vI3YazJCPKRU=;
+        b=lmP3Vi70Yra8+/w7V6GpT88Z2nl/i19wKz8G3iCqEV0XP2+RsGbCsM5zJFg797vT3n
+         1t8i5mTEFg/4Lm0RLTUVPU5PQR8SZFBRWJSqgDvJCtgwPiL6AI10mgtBHx5IhO+PifQ/
+         6FdWJ5QSueHPS3kymbhqUactvewWRXCKLB5VvNZAqubDOsX3aCHZs3H6xPHKaGzJcp+B
+         PfAZEfRDUe6glJpvjtmurds1OYJSg17Q4OaaB1LBBCY5r8RI7Q95CHWtrFQkIBIFVc+t
+         fIH99ZSYxb6FC65sJv0kOvH3BypS7LUF9UHjddExcQ4/rW2fJq29yoyupaxAfqHHCp9q
+         9SWg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1780676486; x=1781281286; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mWB1QjoCqaUp7xOYtL0VXwUOlRHPZS3Zm5pVWOTzZow=;
+        b=k6ws2eKAAeRYoivNgd+cnclPLdzXp+TOxQdUsD3SE4opbxgiVZGvkKwQX9ZMg5RnhO
+         uniKe0BBVRG3zsk1ufjkDm4N4evw11+JYQKcxof6/+gH8cACKjmEEvJzWjQCJEgh38nT
+         ml5l9HhZquYm0dmPaCeRi8HdIAq4xNWAA8kl0Fu5KVBOArKbaKqX+RyxYLyKTSaUMhyx
+         KLGdDPRPKBS80oFVgyS6+lPV5gVKm0v4zECN9AxQrMQ6gyculvz/xPQ9hvyIx2aGV3K0
+         js/T4rZq6WY3YrL9N7qxkffhjJQ8jmy+v2gLgvT3Y84Pnk8Ers8NhJptSC5BmoT9OROZ
+         /cBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780676486; x=1781281286;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mWB1QjoCqaUp7xOYtL0VXwUOlRHPZS3Zm5pVWOTzZow=;
+        b=tISYvLN2oN9CAohc33djbetPttF2E7OfEZnNL8vE7vlfpGwmOZ7UjQHGOrA7z6JgSt
+         buudIOj1m8KIFq8lCAGXaZoq0FWdkF61bobshgCilchxLe3p9s+0kQ2RNX2TxkbPQXCQ
+         3Cu07+ShFYGCiBu4GislpvRnNG9jS0FyMcvU6rQpBNsrj74aHLr7JKfKNxC5lS8iBBFS
+         cxwKIhc4DBh/mgFQ9cqMdoXvLKXtdHrlobtdKlkr+aLFPfuB+nVyM1rJYZEMrPCNwT03
+         EjRoJVJ0yFEjSc1Y8MKjez2TeV1Hn+DoDttnbhdNXXgqjT5ax8A+M3NwSUtWpvEzg7cJ
+         xB2w==
+X-Forwarded-Encrypted: i=1; AFNElJ9k8fdiNs1xP2O7yqNP8isf8MpkwpTeBCsoZh7SrhxXqpWdSZmJscmBzWDjyhhZ6HtK3wCu@lists.linux.dev
+X-Gm-Message-State: AOJu0YwWpW1KauNi+F+VHMrPonQRG1akitqxNJcFIcBXbphV/tpFpgT+
+	xH844m0h6Spc/Mfvxa68713HYvPcKt/u8ZkjTwFYury+j43FpWNwzJGr+DnyRjePvyp6bADoEk2
+	LIPZOi7utyqTpZmO8gFZg7UElZl1s3I3GZGi5VCdF
+X-Gm-Gg: Acq92OEsisJr5nLX+AD+H5+PYAjl1xxFXo7YezA0oPHknuqWS+L1MNWXU710neNciwS
+	fed1xhaOJyT/TE1Hwbg3EwBRABOMUNOyEyKmvGSL8W4Bv/QDqAwzmsAc8JzYKe3XJMvT//igJQg
+	ZEf+bTEo+YW1vm4Sdh9TPKcLmLUyTs85vG74Qr/VhlcdADafW7wHWGllm3hpB+EPeO065ajr65I
+	vpAg9zE/KL8O5+VBsVPhDmHs23IWybiaVHp91N4w/Jp8RefENFSDnv1Gn0uBZhDt3tMSo7lHlGg
+	EIK1UgsSNzuw6Iyuh9wvefH1s4lBqYgPBIdep870idFEFtLgCE8=
+X-Received: by 2002:a05:690e:1388:b0:660:877f:a5f5 with SMTP id
+ 956f58d0204a3-6610704f8f0mr3897550d50.43.1780676485426; Fri, 05 Jun 2026
+ 09:21:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|IA0PR12MB7752:EE_
-X-MS-Office365-Filtering-Correlation-Id: 504532ac-7a1b-4827-253a-08dec31cc999
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|22082099003|18002099003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	DwSuLOdaAE6MHnCkMSUJCc/jWUFOxYh2O5i4l4G7+8Wb2s83eY+64S3uE7B1+pWWN/gUWN5zAQ/usWIp92bNIdNl4dfLNo50cnI5TrTiVqC4PR8fL3RQwsX11ElsRkEpBvssrlt++91KUFN1lj1dCPdZGXTnOQWpSuYVRYo/Q64Wg/pTfdIV0Nqnia/d+amqezr5YWIPoXJjJMVUAFNTT53wW7gL06NYWbbYiLIEXEabc9GVyxkUwQ8favyNrSdaI95TFUEG6Wh0+72XJI46PWcjtjg/GtPTgq37dvnKjLUBhEcYOkK1x0mVWq5p8R9jIVKDRAF441XMBH7dYd1KJoumSn/2ZKtxbPiHhWA7AZ/YcU2cbgCtwrlKX6sB/famPHb90wlAC7drH6eXZd1JmVwKp3iLjO2+JC6I0rf9NUbATH1n4o0c5BYuXuK52y/7hnPeQ7mYr44fNKqw2GUa+VadGZYhbO5OQK8NvOp+77Iyuct4jbsukmbDjBwhldplhRKiJxWKkIHlHPN73fglDBVn+PA6nm/22E5SqKQ2/qiRd2QSYj5BB69TAY7InivCb2kcgS74XRB2S4Cmcd89FqiYW1VP6Nz5JB1+a/TL2r2FwyQL4xzmXr9J84OXWdIamGGUkWBegGKoMuYaDD2fAZz8fJtfsClae5BB1V00HsSA/OWMi5HhtAUWao8ZpEhu
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(22082099003)(18002099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?DEYKPymROBWE18NYSwMPecmPKCMpaBlJU5Ce9EpUoCLNE4l5Wk1HYbWQbjbp?=
- =?us-ascii?Q?JGEzFkc42wuOyJ3JIlHEMlvcpDpI3qv9Tx2CrBYltnP6o1yKVj3E8IQp8rjd?=
- =?us-ascii?Q?DadMGiAA0HV9KmTdi0CESaGJce5yTZS32fylcIeGhBgbzB5bEdMqH/WV/5Cn?=
- =?us-ascii?Q?Cw/QtO2cg0i0jzuhgEJELqbT+UMgtDpl5IxbOFoPY5PxUCjZ6me42zDSUx5M?=
- =?us-ascii?Q?+5jTiFqoY3a8/Q5/rgSowVPH2RqlvG5govOBM+2HTXHx9MAV1uMbVoKGHXwt?=
- =?us-ascii?Q?E0OtXjXt8sGJuTZgBLOk9qITw6lLLbpzRM62EqKe03PEmbFLbKHtU8xZA1r+?=
- =?us-ascii?Q?6uHUfvhrhSXqKDcmrtRXYkt7I+CYyerLrde2wXAaNMsaxLJT5jsThDA+73rt?=
- =?us-ascii?Q?qJIeZ/BSW0kHhH4y/Z9vhOqJo3UsoXVKrDI1dgFNmaBRQ/dwN0G151fWNkol?=
- =?us-ascii?Q?twW1UX3ut1uM/1/+AOAtt+Y79zzzRAIRYhwwI2d1S8sPT8E6HX0CxJyIhbNX?=
- =?us-ascii?Q?hYdq9pm4Lf72FOmwizG1fIc3phB6YXSEJ6nzqNDJhkLivUgkwnEdy2ibP2RG?=
- =?us-ascii?Q?gQ/vQS0f0t+8d98vrkw7pGvC3hoODfNlGTyHHV65mlEGODnmuFBUBanqhupk?=
- =?us-ascii?Q?I7lOORaKdj2SPbBFohfX0YpVbN0E6DAGdBaOPaaZ1z2MrNHi56zBZomEQZJg?=
- =?us-ascii?Q?yoQa2qKXdhKu1YZmicQJc+l6U3eflB2UhvI7u2J42aIAcAaTgx7NE/Xdo0hg?=
- =?us-ascii?Q?DRkCciIRYAoK45gzOPjboe2ACb8cJe5UgrhRk6d+keciEQ2O+FYLXJuOHVdQ?=
- =?us-ascii?Q?YGYK0q2nGNxer5IxUpd89ul0Jv9BAWEl6LBvWp7tNG2OudnAop8RxanFlSFv?=
- =?us-ascii?Q?se/MPXDHCPOuA8Gklez1JI/dYN7Mmlj0yAmhX1JQIcf5/Ts1bEj3jPS+B9YA?=
- =?us-ascii?Q?fR/4wgYCXNvt09Ru1GKyDMV7WI1orhsR641SA1XExtMEa5SMUzgerqPbpDd/?=
- =?us-ascii?Q?qiBkJxcHn+cqFc3UtHrMEgL1G0kNSZDOGq/aQb847VS40XDtKHnFkMOkifkn?=
- =?us-ascii?Q?3hZiogxatI0/RfKyd1AiYV4U3tUYQkcIPkM6UkHiYrZE1sUucYXG3KZbA57M?=
- =?us-ascii?Q?qO/DamdrytiOUTW2EP6pLutkaAFVo+5jESkUzh72Z965A6WU1KbgYvhPqgUb?=
- =?us-ascii?Q?rCamT+cC1v9hkRtoUs3MC0KjOPCMNUBTKi2QLFFML0I4gHMXr9ytafGDmAEE?=
- =?us-ascii?Q?arrj3OyPasxqXzIXAE8FAwyFRfJHztQS4SiLufJlRnRA48W73zP9GFwgV9fC?=
- =?us-ascii?Q?4vaVKsZ/cF8G/OhHFv6FSliP8kbootZbe3WtuYGYhd2I8lKIH1G7hoCPGiB0?=
- =?us-ascii?Q?odFFzHyShYpIJ8nJqRnIAKJJof0n0Pk/z/QCrexW7Ze8AFBMptLqiK01y4XZ?=
- =?us-ascii?Q?ZrV6xdHFYL258GKSodq5G9wR9y/Ifil5VhurJm2YA21EHr0/K1EBHxsXJ/MK?=
- =?us-ascii?Q?awmNpFzieF9r7gvNiWPSOZoB38QMLo6pxPFqMs2LbApUVXJEo/oTP3sZuhJk?=
- =?us-ascii?Q?pYtOJOPN1q/uqPOYx7ZdLzyyf+He4VK/P9saghC092DukQYiz6hew0A3D7Sz?=
- =?us-ascii?Q?tGH3opSLPqTB6SH8xQYTtcO5wyQi8oB007mh3ERtWDNkN1iSiiVg/eLOFAkT?=
- =?us-ascii?Q?1xxrGN3M3Ppc0c9c115vX3TnZDFzIeDW9mJWq7f7ht8MrNcs?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 504532ac-7a1b-4827-253a-08dec31cc999
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2026 16:09:14.3480
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IrQhRpnEPbKtMBQyLm2c+OQOYJFKUBA76W2P5xbecxmtldGjULQUygy4mj5lEZaF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7752
+References: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech>
+In-Reply-To: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech>
+From: Alexander Potapenko <glider@google.com>
+Date: Fri, 5 Jun 2026 18:20:43 +0200
+X-Gm-Features: AVVi8Cev4P7AiBmPodWfwaPtX8_k3m47tFa_rHl6t21z7L5L4Qmm-6Ly0xXbR54
+Message-ID: <CAG_fn=W1++qPJWQk1+4MtRfe6n1iUKF2O5pddnqKGwSq85CuqA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/6] kcov: per-task dataflow extraction at kernel
+ function boundaries
+To: Yunseong Kim <yunseong.kim@est.tech>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
+	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, workflows@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Yunseong Kim <ysk@kzalloc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 02, 2026 at 04:04:34PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang warns about a function missing a printf attribute:
-> 
-> include/rdma/rdma_vt.h:457:47: error: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'rvt_set_ibdev_name' [-Werror,-Wmissing-format-attribute]
->   447 | static inline void rvt_set_ibdev_name(struct rvt_dev_info *rdi,
->       | __attribute__((format(printf, 2, 3)))
->   448 |                                       const char *fmt, const char *name,
->   449 |                                       const int unit)
-> 
-> The helper was originally added as an abstraction for the hfi1 and
-> qib drivers needing the same thing, but now qib is gone, and hfi1
-> is the only remaining user of rdma_vt.
-> 
-> Avoid the warning and allow the compiler to check the format string by
-> open-coding the helper and directly assigning the device name.
-> 
-> Fixes: 5084c8ff21f2 ("IB/{rdmavt, hfi1, qib}: Self determine driver name")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> ---
-> v2: fix typo
->     drop two other patches from the series that are no longer
->     relevant, leaving only one patch
-> ---
->  drivers/infiniband/hw/hfi1/init.c | 13 ++++++++++++-
->  include/rdma/rdma_vt.h            | 20 --------------------
->  2 files changed, 12 insertions(+), 21 deletions(-)
+On Wed, Jun 3, 2026 at 7:43=E2=80=AFPM Yunseong Kim <yunseong.kim@est.tech>=
+ wrote:
+>
+> Introduces a new KCOV exetened feature that captures function arguments a=
+nd
+> return values at kernel function boundaries, enabling per-process visibil=
+ity
+> into runtime dataflow.
 
-Applied, thanks
-
-Jason
+Some high-level comments:
+- Make sure your code can run on every platform supported by kcov (namely A=
+RM64)
+- Check out Sashiko findings:
+https://sashiko.dev/#/patchset/20260603-kcov-dataflow-next-20260603-v2-0-fe=
+e0939de2c4%40est.tech,
+at least some of them seem to make sense
+- Please consolidate changes to the same file into a single patch
+- There seem to be two tools (one in C and one in Python) with
+overlapping functionality, can you keep only one?
+- The test modules seem to be used only in manual testing. Can you
+convert them to kselftests or remove them?
+- At this point, long dashes in the kernel codebase are quite rare,
+and I don't see a reason to add more.
