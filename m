@@ -1,97 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531F94C77D5;
-	Fri,  5 Jun 2026 11:09:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62DA36D9E0;
+	Fri,  5 Jun 2026 14:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780657745; cv=none; b=OUicBnNZwsmpkO6xdW4eI9lh4EnR/IywJLyCPvFWAxeIlpC79O8gfJSwJI50y5rwypHJ2g5Om+eHVE3kV2Oj9QNT94z+qtNzwEjC4CtWouic38YkzbMrxVL4fPCzg3rFL1JH/AHmoeQsQ+oo/+/YSzrd/WVUpLPTvToDJWc7YH4=
+	t=1780669135; cv=none; b=DlDpD3Biw6m7nln8u4ZDpBUXlNYH+mhtP1/2nlRMCfpp5cYCuolEkTkNenPXmh2rOJJKlG39KbywtGMJeNSNlm2oy7406KCPgcriEKtp7XNBUkedcET/u0HMMjXaE8PRfXavtoTfwABwu4XslbtgXc3nGJd+cCsSeLq5txtkUks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780657745; c=relaxed/simple;
-	bh=zwBD0rLlxPPR609qpQu70kZoMMGspzW0MPhOKtMg7+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qtq5ykJQxH7z+GrMyViVfPLvlGZd/MP8ctp3p6zEGsKCMQiKv/p7wbl0JtUP/QdQXks9Y058ub+zCHAofgth1BuNKT1FS4i2+IYchu1inKg/0krPKWuHMUkHNILcnM4iuc9iOVZNkUfz+igtJUJAwSlOB2MwqAy2zkMG9nYEj5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cjQ536E/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780669135; c=relaxed/simple;
+	bh=6j6Kbr3PTBz4Ce08nM4gCYJRDe0clylusP7FpmuwSPQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=XvOV7Ae0Wgv58SVIYeCjMDQM/CjmnrPyZK6JJuO8GUEeSNfz2NJQfOAs7ZnHCGEu1iPd/byRPLl1du+ZiE0BtbX+3nEdlWuaTszEjk349xj9XPrJQ2azlRRZ8AUAds25SEDn1r6Kj0qX80sWpd95cHus1Xg7ga0KikYKGPGI930=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dQlqtzz6; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cjQ536E/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D1021F00893;
-	Fri,  5 Jun 2026 11:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780657743;
-	bh=yGHqOQY5kzrb5h96V7n84BKzpzqo4H15iFYx+IE3vHM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=cjQ536E/8N9YRquKXOV7QSWij2AKvUejJEgY04brxY1Y7+1sFaYf1Z0Zk0Hu3VAoz
-	 vmw5arHWnVIg+j1xrx3wDI+J9E+zR4lb9OnK0krTUvujRgs2uqTvwh+1R8HvuRq12R
-	 N28IUc4dp+d/TU+i7y2SJ/kR2Eqa2JdiDzxkfFtb7zczK4ULGlb4DKDkaaM3oNa3tW
-	 RFobiAa5/i9zk3LB4xBBysRH71k3APtKnRgxUHkeSe5zLomoRPvVekrwd15B9tzq1n
-	 +QOy3QP3Gv+vg2BXQFKhhuHmoDS2RYYVVv2/kMBHp9tgdT91Cg54wR/bGwg0NPQEDw
-	 G7DxCxuj0d8gg==
-Date: Fri, 5 Jun 2026 12:08:58 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
-Cc: DRM XE List <intel-xe@lists.freedesktop.org>,
-	Gustavo Sousa <gustavo.sousa@intel.com>,
-	Violet Monti <violet.monti@intel.com>,
-	Matt Roper <matthew.d.roper@intel.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>, llvm@lists.linux.dev
-Subject: Re: linux-next: build failure after merge of the drm-xe tree
-Message-ID: <3e15fe90-74e2-4aaa-b280-c486c8773514@sirena.org.uk>
-References: <aiAz4DmtngY0r6Cx@sirena.org.uk>
- <bfb0dee8-b243-47ba-a89d-71472b0d51c5@sirena.org.uk>
- <f9094757b2aab617feb8fc3f8a66f46595e0ae27.camel@linux.intel.com>
- <551d384f-d151-4d1e-bcb8-a1cde0860a30@sirena.org.uk>
- <8c4d38f10b1941687314bc43cc4de40097b84b78.camel@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dQlqtzz6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780669129; x=1812205129;
+  h=date:from:to:cc:subject:message-id;
+  bh=6j6Kbr3PTBz4Ce08nM4gCYJRDe0clylusP7FpmuwSPQ=;
+  b=dQlqtzz68rSwb1cY2X4LpKJS8I2hxmFYdto//QW2wdpkPEhAHi35tsB0
+   nqdNHXLr9NvlyiNG8PyGBAQQIAY0vPAWRT5LWuzJmwgRjTUcNHn078se7
+   EtLxghuCJuMmeSpJVEw3abFlAqg+9LntJm4FeJpGvjaIM1eHvNFG+RJZc
+   60Y1dLm/l2NBgErDvgQGYlCE9edWODoEunM+kSOBJGRt5EzZo4ZALdL4d
+   eRWqAxzQWyf3AKnJiaBYLsQpog6dS9g38u0CWY2tXeGguMLnpGLP1uWSw
+   t4XN9V8xksT6aMYtsiso0A9m5zJGbi0PxjfdHIHrIX3xHUHjwa9ly7kHT
+   w==;
+X-CSE-ConnectionGUID: ljyq+rP4QHaqrIlitFo/VA==
+X-CSE-MsgGUID: iQanu1ZkQsGZOYsuevYAOw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11807"; a="81411662"
+X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
+   d="scan'208";a="81411662"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2026 07:18:48 -0700
+X-CSE-ConnectionGUID: GPiRgkVvRLqU/obW3K9mGw==
+X-CSE-MsgGUID: /3+SwIOpTQCe212hiyW2LQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,188,1774335600"; 
+   d="scan'208";a="249960226"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 05 Jun 2026 07:18:46 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wVVNj-00000000G78-3I2t;
+	Fri, 05 Jun 2026 14:18:43 +0000
+Date: Fri, 05 Jun 2026 22:18:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-media@vger.kernel.org
+Subject: [sailus-media-tree:partial-reg 5/9]
+ drivers/media/v4l2-core/v4l2-event.c:81:41: warning: variable 'evspec' is
+ uninitialized when used within its own initialization
+Message-ID: <202606052235.rM24ifzS-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="47culnYV5tZ3h9bn"
-Content-Disposition: inline
-In-Reply-To: <8c4d38f10b1941687314bc43cc4de40097b84b78.camel@linux.intel.com>
-X-Cookie: Error in operator: add beer
+
+tree:   git://linuxtv.org/sailus/media_tree.git partial-reg
+head:   b7d01dab7d47849d483b459ff2abf50497b52149
+commit: 0258a2c8b5c7b9a6a0adce2059f2ecd12046776d [5/9] v4l: event: Split the event framework into generic and V4L2 bits
+config: arm64-randconfig-004-20260605 (https://download.01.org/0day-ci/archive/20260605/202606052235.rM24ifzS-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260605/202606052235.rM24ifzS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606052235.rM24ifzS-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/v4l2-core/v4l2-event.c:81:41: warning: variable 'evspec' is uninitialized when used within its own initialization [-Wuninitialized]
+      81 |         const struct v4l2_event_spec *evspec = evspec;
+         |                                       ~~~~~~   ^~~~~~
+   1 warning generated.
 
 
---47culnYV5tZ3h9bn
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +/evspec +81 drivers/media/v4l2-core/v4l2-event.c
 
-On Thu, Jun 04, 2026 at 07:23:40PM +0200, Thomas Hellstr=F6m wrote:
+    77	
+    78	static bool v4l2_evop_is_subscribed(struct media_subscribed_evbase *mse,
+    79					    const void *__evspec)
+    80	{
+  > 81		const struct v4l2_event_spec *evspec = evspec;
+    82		struct v4l2_subscribed_event *sev = to_v4l2_subscribed_event(mse);
+    83	
+    84		return sev->evspec.type == evspec->type &&
+    85			sev->evspec.id == evspec->id;
+    86	}
+    87	
 
-> So I merged drm-xe-next into next-20260603, and no build errors neither
-> with gcc nor clang.
-
-> AI says it's confident that the error report is from clang, based on
-> -fmacro-backtrace-limit suggestion and the "2 errors generated."
-> summary, and suggests this might be an older clang version limitation?
-
-Bah, sorry - it is actually clang, I changed it to that to avoid some
-issues with Rust getting disable due to interactions with sanitisers
-when building GCC.  Apologies, I should have double checked or just
-remembered.  This is clang 19 from Debian stable, our current minimum
-supported clang is clang 17.  CCing in the clang people.
-
---47culnYV5tZ3h9bn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoirkoACgkQJNaLcl1U
-h9Auagf7BkNAJSUv367MDlG0YYTXNEyKWQJf8Lp8rX/+R9GM5UP6z2rXbERTHJve
-rWX1oXa11ep9upgnYyERxQB0blhgJp8TSYu+u8UWBA9r+fWfeNovN4tBW7AsV1Ue
-c/cFxN90+8uQ5lXFT3RazHmDmIShjbJihARiertyy2U1l0WlgBManfXMXydwJjSF
-RUaCkmGl3Srx/YE4UbfexvlTn4zCzPj52VB3MM6YcB5wbPeOcWw4beAD1clj5S5l
-0RSH/5Xcd2jv8tGzvSeh9cAHUJoMhRnDXDcZqJtAYkApDpIvRJUOElBJyYeW5uhR
-o5CPSRr+A4l3Asq49JAYfen3VnLZoQ==
-=jOFx
------END PGP SIGNATURE-----
-
---47culnYV5tZ3h9bn--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
