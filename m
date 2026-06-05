@@ -1,505 +1,272 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C247416D01;
-	Fri,  5 Jun 2026 17:23:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFF8368D69;
+	Fri,  5 Jun 2026 17:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780680188; cv=none; b=aifjWHEC6ejWJLrK8mhH98OjLQTqvwFeAGK8BKduJg+IvwXG/5uMj32qhxj7sdkLcs5nFxSpAof/Q8hc/NWONM1dVqZ2jF7hCKw6af6pCB6WOHktpf27zAC4HLjamBLQzL65jnx+VLzjiInHg/T37WW4hSvMS//sKtu5ReGwIa4=
+	t=1780680505; cv=none; b=J6hkvNbZws8wQmZ1zP89pw3hJRUhAqc3R60F65GRV3mNFLRmovvtBPbrnpNzKAC08QqwHntZ3SL7ApWbCG+fhQB2saPrJa30cEjegqqIL1BdnHbCtnUGCyGY3LqKtSXvjj8754WE4rphQ5OJNvWrveU7dC9KqhQqzu1sZMC7fQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780680188; c=relaxed/simple;
-	bh=lizWom7kQpSapScdlQtqP0GPMCXLJkaPKaDj2lnf8e4=;
+	s=arc-20240116; t=1780680505; c=relaxed/simple;
+	bh=XiuF971PQZgpVQW9suL6sN/+XwRYoVGoZgxE5xeqltw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=opQ8C7CD74C7YOF3pvLfigFNRrGsdOLMwyd7daMzBoPwr9X8f4cE9XKFFJ3sfYnl6333gsFQB3sxpc1ZADEs3t8FpCfCZTpI/pE9xbgcUv0V59GF5M00F1hdRvFUgfCIFGP3eB4qHIFau0yf+N6MVVChLMLGWKu5Cj9A5IFIv0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VXe3tUct; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=l2K1sq3himJh6uWWNZnXWI545qMuqWyhkb73EXro0nwzXgVCTyDtohX7wDq0wzY9PRsxM72JOvbuT8XD/PWukhWIaJTrqC3sAUpiQRPdls+1pSI6QKIGtDDgNxZaT7NL2qpTYd9Z18BE6GclyBSmvd4B0Da2U0Y6VQzLYsllaxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aSz/gqT1; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VXe3tUct"
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 4B2F01F00893;
-	Fri,  5 Jun 2026 17:23:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780680187;
-	bh=JmeMxbXw2ZDUnGPQV9xGUwkBAbxAXeB57R4NlHLmCCU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VXe3tUctdvoapIkLQpt0U552wqCeFZZczgH/BeLyYfz2UZIyHmXxIl0RYwXXrGJvL
-	 gHsvtEpCDksKnSboMaNJBdo9inyJ/j94jrwLAjL8FzefmOSfASXZV7ytifDjhFXBev
-	 X8PqhCwReJ9U90h1qMZ7CSVVuIc+N8iSZCqZGCNA89YlR0rtV/rBWiahOyKx/OweWe
-	 /aI0xYUd2+ZDUCOs+weHiYTHRyw7Hz5FwI5g1z0vylbDC+nZmf3VJAMFkS4qwnFn3A
-	 lejISQ+OvG3E0sd0UHj8lTGFWtUloqyiXmEomfXGstcueTGENDUSJ4mAe8zyIyJC2A
-	 Zc+dA8Ow1wgtA==
-Date: Wed, 3 Jun 2026 21:25:19 +0200
-From: Nicolas Schier <nsc@kernel.org>
-To: Yunseong Kim <yunseong.kim@est.tech>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org, Yunseong Kim <ysk@kzalloc.com>
-Subject: Re: [RFC PATCH v2 1/6] kcov: add per-task dataflow tracking for
- function arguments/return values
-Message-ID: <aiB_nycHL-MLN-3g@levanger>
-Mail-Followup-To: Yunseong Kim <yunseong.kim@est.tech>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org, Yunseong Kim <ysk@kzalloc.com>
-References: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech>
- <20260603-kcov-dataflow-next-20260603-v2-1-fee0939de2c4@est.tech>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aSz/gqT1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780680502; x=1812216502;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XiuF971PQZgpVQW9suL6sN/+XwRYoVGoZgxE5xeqltw=;
+  b=aSz/gqT1J4Ln/iC4hWhqFHQ81xPjXBVCngJ58/DnedlcFila76GNmQ3q
+   cYHg5oEuDb/x/RRruDaTrQDRBiTQfdjrxNp7iCDaw1FpcXwbdC7D5Xl0D
+   1jLlToLTkpmtgv/zedaCCb+QHsKeTsU1mo+HERdom+qAwuX1/x+lzbGPS
+   Avwftpe/v2Qnzn7bllniWThKNOx/UYy1B7wr+dvR9fMeRXLaPhXadVKnA
+   NI0GblrepBZWLDeXcdYCPdBfTBdHTOzH5W1llx0PEkqJgiBa9NWZUdy5u
+   jgGWg3YYugBg2yUvoEchLK7E6dld3mr/dzkFUOzWpd1ftgWV7Pw7qseVz
+   w==;
+X-CSE-ConnectionGUID: 7jabUeprSo64vXZtnMhEow==
+X-CSE-MsgGUID: 3WgjLld/Q/ixsTE7PPU4QQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11808"; a="80552781"
+X-IronPort-AV: E=Sophos;i="6.24,189,1774335600"; 
+   d="scan'208";a="80552781"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2026 10:28:21 -0700
+X-CSE-ConnectionGUID: ORf4pc2nRa2PMAduwSKwEg==
+X-CSE-MsgGUID: ff40pEPXTZy4h2zDthabAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,189,1774335600"; 
+   d="scan'208";a="248825404"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 05 Jun 2026 10:28:19 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wVYLA-000000002cL-10lh;
+	Fri, 05 Jun 2026 17:28:16 +0000
+Date: Fri, 5 Jun 2026 19:27:48 +0200
+From: kernel test robot <lkp@intel.com>
+To: Yu Kuai <yukuai@kernel.org>, Song Liu <song@kernel.org>,
+	Yu Kuai <yukuai@fygo.io>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Li Nan <magiclinan@didiglobal.com>, Xiao Ni <xiao@kernel.org>,
+	linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] md/raid5: split reshape bios before bitmap accounting
+Message-ID: <202606051933.yVCn4DIj-lkp@intel.com>
+References: <20260605091527.2463539-21-yukuai@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260603-kcov-dataflow-next-20260603-v2-1-fee0939de2c4@est.tech>
+In-Reply-To: <20260605091527.2463539-21-yukuai@kernel.org>
 
-On Wed, Jun 03, 2026 at 07:43:28PM +0200, Yunseong Kim wrote:
-> Add a new KCOV subsystem that captures function arguments at entry and
-> return values at exit, with automatic struct field expansion using
-> compiler-generated DebugInfo metadata.
-> 
-> Key components:
-> - CONFIG_KCOV_DATAFLOW_ARGS: enables argument capture
-> - CONFIG_KCOV_DATAFLOW_RET: enables return value capture
-> - /sys/kernel/debug/kcov_dataflow: separate device from legacy kcov
-> - Ioctl namespace 'd' (KCOV_DF_INIT_TRACE, KCOV_DF_ENABLE, KCOV_DF_DISABLE)
-> - Per-task buffer: task->kcov_df_area with atomic xadd reservation
-> - Fault-tolerant: all reads via copy_from_kernel_nofault()
-> - Recursion-safe: notrace __no_sanitize_coverage noinline
-> - ERR_PTR aware: skips struct expansion for error pointers
-> 
-> The callbacks (__sanitizer_cov_trace_args/ret) are inserted by the
-> compiler when -fsanitize-coverage=dataflow-args,dataflow-ret is used.
-> The Kconfig options depend on cc-option to verify compiler support.
-> 
-> Buffer format (TLV records, all u64):
->   area[0]: atomic word count
->   [pos+0]: type_and_seq (0xE=entry, 0xF=return in upper 4 bits)
->   [pos+1]: PC
->   [pos+2]: meta (arg_idx | arg_size | ptr)
->   [pos+3..N]: field values read via copy_from_kernel_nofault()
-> 
-> This is completely independent from legacy /sys/kernel/debug/kcov.
-> Existing users (syzkaller, oss-fuzz) are unaffected.
-> 
-> Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
-> ---
->  include/linux/sched.h |   8 ++
->  kernel/kcov.c         | 291 ++++++++++++++++++++++++++++++++++++++++++++++++++
->  lib/Kconfig.debug     |  22 ++++
->  3 files changed, 321 insertions(+)
-> 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index c4433c185ad8..03be4b495f70 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1533,6 +1533,14 @@ struct task_struct {
->  	/* KCOV sequence number: */
->  	int				kcov_sequence;
->  
-> +	/* KCOV dataflow per-task sequence counter for TLV records: */
-> +	u32				kcov_dataflow_seq;
-> +
-> +	/* KCOV dataflow: separate buffer for trace-args/trace-ret */
-> +	unsigned int			kcov_df_size;
-> +	void				*kcov_df_area;
-> +	bool				kcov_df_enabled;
-> +
->  	/* Collect coverage from softirq context: */
->  	unsigned int			kcov_softirq;
->  #endif
-> diff --git a/kernel/kcov.c b/kernel/kcov.c
-> index 1df373fb562b..d3c9c0efe961 100644
-> --- a/kernel/kcov.c
-> +++ b/kernel/kcov.c
-> @@ -353,6 +353,288 @@ void notrace __sanitizer_cov_trace_switch(kcov_u64 val, void *arg)
->  EXPORT_SYMBOL(__sanitizer_cov_trace_switch);
->  #endif /* ifdef CONFIG_KCOV_ENABLE_COMPARISONS */
->  
-> +#if defined(CONFIG_KCOV_DATAFLOW_ARGS) || defined(CONFIG_KCOV_DATAFLOW_RET)
-> +/*
-> + * KCOV Dataflow: /sys/kernel/debug/kcov_dataflow
-> + *
-> + * Completely separate from legacy /sys/kernel/debug/kcov.
-> + * Own buffer, own ioctl, own mmap. No printk — buffer only.
-> + *
-> + * TLV record layout (all u64):
-> + *   area[0]: total u64 words written (atomic counter)
-> + *   [pos+0]: type_and_seq (0xE=entry|0xF=return in upper 4 bits, seq in lower 24)
-> + *   [pos+1]: PC
-> + *   [pos+2]: raw pointer | (arg_idx << 56) | (arg_size << 48) for entry
-> + *   [pos+3..N]: field values (or scalar value if num_fields=0)
-> + */
-> +#define KCOV_DF_TYPE_ENTRY	0xE0000000ULL
-> +#define KCOV_DF_TYPE_RET	0xF0000000ULL
-> +#define KCOV_DF_MAGIC_BAD	0xBADADD85ULL
-> +#define KCOV_DF_IS_ERR(p)	((unsigned long)(p) >= (unsigned long)-4095UL)
-> +
-> +/* Ioctl commands for /sys/kernel/debug/kcov_dataflow */
-> +#define KCOV_DF_INIT_TRACE	_IOR('d', 1, unsigned long)
-> +#define KCOV_DF_ENABLE		_IO('d', 100)
-> +#define KCOV_DF_DISABLE		_IO('d', 101)
-> +
-> +struct kcov_dataflow {
-> +	refcount_t	refcount;
-> +	spinlock_t	lock;
-> +	unsigned int	size;	/* in u64 words */
-> +	void		*area;
-> +	struct task_struct *t;
-> +};
-> +
-> +static void kcov_df_put(struct kcov_dataflow *df)
-> +{
-> +	if (refcount_dec_and_test(&df->refcount)) {
-> +		vfree(df->area);
-> +		kfree(df);
-> +	}
-> +}
-> +
-> +/*
-> + * Core write function — no printk, no locks, just atomic buffer write.
-> + * Called from __sanitizer_cov_trace_args/ret in instrumented code.
-> + */
-> +static noinline notrace __no_sanitize_coverage void
-> +kcov_df_write(u64 type_marker, u64 pc, u64 meta, void *ptr,
-> +	      u64 *offsets, u32 num_fields)
-> +{
-> +	struct task_struct *t = current;
-> +	u64 *area;
-> +	unsigned long pos, max_pos;
-> +	u32 record_len, seq, i;
-> +
-> +	if (!t->kcov_df_enabled)
-> +		return;
-> +
-> +	area = (u64 *)t->kcov_df_area;
-> +	if (!area)
-> +		return;
-> +
-> +	max_pos = t->kcov_df_size;
-> +
-> +	/* Record: header(1) + pc(1) + meta(1) + fields or scalar(max 1) */
-> +	record_len = 3 + (num_fields > 0 ? num_fields : 1);
-> +
-> +	/* Atomic reservation */
-> +	pos = 1 + xadd((unsigned long *)&area[0], record_len);
-> +	if (unlikely(pos + record_len > max_pos)) {
-> +		xadd((unsigned long *)&area[0], -(long)record_len);
-> +		return;
-> +	}
-> +
-> +	seq = ++t->kcov_dataflow_seq;
-> +	area[pos] = type_marker | (seq & 0x00FFFFFFULL);
-> +	area[pos + 1] = pc;
-> +	area[pos + 2] = meta;
-> +
-> +	if (num_fields == 0) {
-> +		/* Scalar: read value from ptr using size from meta */
-> +		u64 val = 0;
-> +		u32 sz = (meta >> 48) & 0xFF;
-> +
-> +		if (sz > sizeof(val))
-> +			sz = sizeof(val);
-> +		if (ptr && !KCOV_DF_IS_ERR(ptr))
-> +			copy_from_kernel_nofault(&val, ptr, sz);
-> +		area[pos + 3] = val;
-> +	} else {
-> +		/* Struct fields */
-> +		if (KCOV_DF_IS_ERR(ptr)) {
-> +			for (i = 0; i < num_fields; i++)
-> +				area[pos + 3 + i] = KCOV_DF_MAGIC_BAD;
-> +			return;
-> +		}
-> +		for (i = 0; i < num_fields; i++) {
-> +			u64 off, sz, val = KCOV_DF_MAGIC_BAD;
-> +			void *fa;
-> +
-> +			if (copy_from_kernel_nofault(&off, &offsets[i * 2], sizeof(off)) ||
-> +			    copy_from_kernel_nofault(&sz, &offsets[i * 2 + 1], sizeof(sz))) {
-> +				area[pos + 3 + i] = KCOV_DF_MAGIC_BAD;
-> +				continue;
-> +			}
-> +			fa = (void *)((unsigned long)ptr + off);
-> +			val = 0;
-> +			if (sz <= sizeof(val))
-> +				copy_from_kernel_nofault(&val, fa, sz);
-> +			else
-> +				copy_from_kernel_nofault(&val, fa, sizeof(val));
-> +			area[pos + 3 + i] = val;
-> +		}
-> +	}
-> +}
-> +
-> +#ifdef CONFIG_KCOV_DATAFLOW_ARGS
-> +noinline void notrace __no_sanitize_coverage
-> +__sanitizer_cov_trace_args(u64 pc, u32 arg_idx, u32 arg_size, void *arg_ptr,
-> +			   u64 *offsets, u32 num_fields);
-> +
-> +noinline void notrace __no_sanitize_coverage
-> +__sanitizer_cov_trace_args(u64 pc, u32 arg_idx, u32 arg_size, void *arg_ptr,
-> +			   u64 *offsets, u32 num_fields)
-> +{
-> +	/* meta: [arg_idx(8) | arg_size(8) | ptr(48)] */
-> +	u64 meta = ((u64)arg_idx << 56) | ((u64)arg_size << 48) |
-> +		   ((u64)(unsigned long)arg_ptr & 0xFFFFFFFFFFFFULL);
-> +	kcov_df_write(KCOV_DF_TYPE_ENTRY, pc, meta, arg_ptr,
-> +		      offsets, num_fields);
-> +}
-> +EXPORT_SYMBOL(__sanitizer_cov_trace_args);
-> +#endif
-> +
-> +#ifdef CONFIG_KCOV_DATAFLOW_RET
-> +noinline void notrace __no_sanitize_coverage
-> +__sanitizer_cov_trace_ret(u64 pc, u32 ret_size, void *ret_val,
-> +			  u64 *offsets, u32 num_fields);
-> +
-> +noinline void notrace __no_sanitize_coverage
-> +__sanitizer_cov_trace_ret(u64 pc, u32 ret_size, void *ret_val,
-> +			  u64 *offsets, u32 num_fields)
-> +{
-> +	u64 meta = ((u64)ret_size << 48) |
-> +		   ((u64)(unsigned long)ret_val & 0xFFFFFFFFFFFFULL);
-> +	kcov_df_write(KCOV_DF_TYPE_RET, pc, meta, ret_val,
-> +		      offsets, num_fields);
-> +}
-> +EXPORT_SYMBOL(__sanitizer_cov_trace_ret);
-> +#endif
-> +
-> +/* --- /sys/kernel/debug/kcov_dataflow file operations --- */
-> +
-> +static int kcov_df_open(struct inode *inode, struct file *filep)
-> +{
-> +	struct kcov_dataflow *df;
-> +
-> +	df = kzalloc(sizeof(*df), GFP_KERNEL);
-> +	if (!df)
-> +		return -ENOMEM;
-> +	spin_lock_init(&df->lock);
-> +	refcount_set(&df->refcount, 1);
-> +	filep->private_data = df;
-> +	return nonseekable_open(inode, filep);
-> +}
-> +
-> +static int kcov_df_close(struct inode *inode, struct file *filep)
-> +{
-> +	struct kcov_dataflow *df = filep->private_data;
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&df->lock, flags);
-> +	if (df->t == current) {
-> +		current->kcov_df_enabled = false;
-> +		current->kcov_df_area = NULL;
-> +		current->kcov_df_size = 0;
-> +		df->t = NULL;
-> +	}
-> +	spin_unlock_irqrestore(&df->lock, flags);
-> +	kcov_df_put(df);
-> +	return 0;
-> +}
-> +
-> +static int kcov_df_mmap(struct file *filep, struct vm_area_struct *vma)
-> +{
-> +	struct kcov_dataflow *df = filep->private_data;
-> +	unsigned long size, off;
-> +	struct page *page;
-> +	unsigned long flags;
-> +	void *area;
-> +	int res = 0;
-> +
-> +	spin_lock_irqsave(&df->lock, flags);
-> +	size = df->size * sizeof(u64);
-> +	if (!df->area || vma->vm_pgoff != 0 ||
-> +	    vma->vm_end - vma->vm_start != size) {
-> +		res = -EINVAL;
-> +		goto out;
-> +	}
-> +	area = df->area;
-> +	spin_unlock_irqrestore(&df->lock, flags);
-> +
-> +	vm_flags_set(vma, VM_DONTEXPAND);
-> +	for (off = 0; off < size; off += PAGE_SIZE) {
-> +		page = vmalloc_to_page(area + off);
-> +		res = vm_insert_page(vma, vma->vm_start + off, page);
-> +		if (res)
-> +			return res;
-> +	}
-> +	return 0;
-> +out:
-> +	spin_unlock_irqrestore(&df->lock, flags);
-> +	return res;
-> +}
-> +
-> +static long kcov_df_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
-> +{
-> +	struct kcov_dataflow *df = filep->private_data;
-> +	unsigned long flags;
-> +	unsigned long size;
-> +	int res = 0;
-> +
-> +	spin_lock_irqsave(&df->lock, flags);
-> +	switch (cmd) {
-> +	case KCOV_DF_INIT_TRACE:
-> +		if (df->area) {
-> +			res = -EBUSY;
-> +			break;
-> +		}
-> +		size = arg;
-> +		if (size < 2 || size > (128 << 20) / sizeof(u64)) {
-> +			res = -EINVAL;
-> +			break;
-> +		}
-> +		spin_unlock_irqrestore(&df->lock, flags);
-> +		df->area = vmalloc_user(size * sizeof(u64));
-> +		if (!df->area)
-> +			return -ENOMEM;
-> +		spin_lock_irqsave(&df->lock, flags);
-> +		df->size = size;
-> +		break;
-> +
-> +	case KCOV_DF_ENABLE:
-> +		if (!df->area || df->t) {
-> +			res = -EINVAL;
-> +			break;
-> +		}
-> +		df->t = current;
-> +		current->kcov_df_area = df->area;
-> +		current->kcov_df_size = df->size;
-> +		current->kcov_dataflow_seq = 0;
-> +		/* Barrier before enabling */
-> +		barrier();
-> +		current->kcov_df_enabled = true;
-> +		break;
-> +
-> +	case KCOV_DF_DISABLE:
-> +		if (df->t != current) {
-> +			res = -EINVAL;
-> +			break;
-> +		}
-> +		current->kcov_df_enabled = false;
-> +		barrier();
-> +		current->kcov_df_area = NULL;
-> +		current->kcov_df_size = 0;
-> +		df->t = NULL;
-> +		break;
-> +
-> +	default:
-> +		res = -ENOTTY;
-> +	}
-> +	spin_unlock_irqrestore(&df->lock, flags);
-> +	return res;
-> +}
-> +
-> +static const struct file_operations kcov_df_fops = {
-> +	.open		= kcov_df_open,
-> +	.unlocked_ioctl	= kcov_df_ioctl,
-> +	.compat_ioctl	= kcov_df_ioctl,
-> +	.mmap		= kcov_df_mmap,
-> +	.release	= kcov_df_close,
-> +};
-> +#endif /* CONFIG_KCOV_DATAFLOW_ARGS || CONFIG_KCOV_DATAFLOW_RET */
-> +
->  static void kcov_start(struct task_struct *t, struct kcov *kcov,
->  			unsigned int size, void *area, enum kcov_mode mode,
->  			int sequence)
-> @@ -1146,6 +1428,15 @@ static int __init kcov_init(void)
->  	 */
->  	debugfs_create_file_unsafe("kcov", 0600, NULL, NULL, &kcov_fops);
->  
-> +#if defined(CONFIG_KCOV_DATAFLOW_ARGS) || defined(CONFIG_KCOV_DATAFLOW_RET)
-> +	/*
-> +	 * Toggle verbose printk: echo 1 > /sys/kernel/debug/kcov_dataflow_verbose
-> +	 * Default off — zero overhead when not debugging.
-> +	 */
-> +	debugfs_create_file_unsafe("kcov_dataflow", 0600, NULL, NULL,
-> +				   &kcov_df_fops);
-> +#endif
-> +
->  #ifdef CONFIG_KCOV_SELFTEST
->  	selftest();
->  #endif
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index e2f976c3301b..abd1a94589aa 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2261,6 +2261,28 @@ config KCOV_SELFTEST
->  	  On test failure, causes the kernel to panic. Recommended to be
->  	  enabled, ensuring critical functionality works as intended.
->  
-> +
-> +config KCOV_DATAFLOW_ARGS
-> +	bool "Enable KCOV dataflow: function argument capture"
-> +	depends on KCOV
-> +	depends on $(cc-option,-fsanitize-coverage=dataflow-args)
-> +	help
-> +	  Captures function arguments at entry via /sys/kernel/debug/kcov_dataflow.
-> +	  Struct pointer arguments are auto-expanded using compiler DebugInfo
-> +	  metadata, recording individual field values at runtime.
-> +	  Enable per-module with: KCOV_DATAFLOW_file.o := y in the Makefile.
-> +	  Requires clang with -fsanitize-coverage=dataflow-args support.
-> +
-> +config KCOV_DATAFLOW_RET
-> +	bool "Enable KCOV dataflow: return value capture"
-> +	depends on KCOV
-> +	depends on $(cc-option,-fsanitize-coverage=dataflow-ret)
-> +	help
-> +	  Captures function return values via /sys/kernel/debug/kcov_dataflow.
-> +	  Struct pointer returns are auto-expanded using compiler DebugInfo
-> +	  metadata, recording individual field values at runtime.
-> +	  Enable per-module with: KCOV_DATAFLOW_file.o := y in the Makefile.
-> +	  Requires clang with -fsanitize-coverage=dataflow-ret support.
+Hi Yu,
 
-You might want to add an empty line here.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.16-rc1 next-20260605]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/md-raid5-split-reshape-bios-before-bitmap-accounting/20260605-173848
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260605091527.2463539-21-yukuai%40kernel.org
+patch subject: [PATCH] md/raid5: split reshape bios before bitmap accounting
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260605/202606051933.yVCn4DIj-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260605/202606051933.yVCn4DIj-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606051933.yVCn4DIj-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/md/raid5.c:4221:7: warning: variable 'qread' set but not used [-Wunused-but-set-variable]
+    4221 |                 int qread =0;
+         |                     ^
+>> drivers/md/raid5.c:6126:7: error: call to undeclared function 'mddev_bio_split_at_reshape_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    6126 |         bi = mddev_bio_split_at_reshape_offset(mddev, bi, NULL,
+         |              ^
+>> drivers/md/raid5.c:6126:5: error: incompatible integer to pointer conversion assigning to 'struct bio *' from 'int' [-Wint-conversion]
+    6126 |         bi = mddev_bio_split_at_reshape_offset(mddev, bi, NULL,
+         |            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    6127 |                                                &conf->bio_split);
+         |                                                ~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
--- 
-Nicolas
+vim +/mddev_bio_split_at_reshape_offset +6126 drivers/md/raid5.c
+
+  6083	
+  6084	static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+  6085	{
+  6086		DEFINE_WAIT_FUNC(wait, woken_wake_function);
+  6087		struct r5conf *conf = mddev->private;
+  6088		const int rw = bio_data_dir(bi);
+  6089		struct stripe_request_ctx *ctx;
+  6090		sector_t logical_sector;
+  6091		enum stripe_result res;
+  6092		int s, stripe_cnt;
+  6093		bool on_wq;
+  6094	
+  6095		if (unlikely(bi->bi_opf & REQ_PREFLUSH)) {
+  6096			int ret = log_handle_flush_request(conf, bi);
+  6097	
+  6098			if (ret == 0)
+  6099				return true;
+  6100			if (ret == -ENODEV) {
+  6101				if (md_flush_request(mddev, bi))
+  6102					return true;
+  6103			}
+  6104			/* ret == -EAGAIN, fallback */
+  6105		}
+  6106	
+  6107		md_write_start(mddev, bi);
+  6108		/*
+  6109		 * If array is degraded, better not do chunk aligned read because
+  6110		 * later we might have to read it again in order to reconstruct
+  6111		 * data on failed drives.
+  6112		 */
+  6113		if (rw == READ && mddev->degraded == 0 &&
+  6114		    mddev->reshape_position == MaxSector) {
+  6115			bi = chunk_aligned_read(mddev, bi);
+  6116			if (!bi)
+  6117				return true;
+  6118		}
+  6119	
+  6120		if (unlikely(bio_op(bi) == REQ_OP_DISCARD)) {
+  6121			make_discard_request(mddev, bi);
+  6122			md_write_end(mddev);
+  6123			return true;
+  6124		}
+  6125	
+> 6126		bi = mddev_bio_split_at_reshape_offset(mddev, bi, NULL,
+  6127						       &conf->bio_split);
+  6128		if (!bi) {
+  6129			if (rw == WRITE)
+  6130				md_write_end(mddev);
+  6131			return true;
+  6132		}
+  6133	
+  6134		logical_sector = bi->bi_iter.bi_sector & ~((sector_t)RAID5_STRIPE_SECTORS(conf)-1);
+  6135		bi->bi_next = NULL;
+  6136	
+  6137		ctx = mempool_alloc(conf->ctx_pool, GFP_NOIO);
+  6138		memset(ctx, 0, conf->ctx_size);
+  6139		ctx->first_sector = logical_sector;
+  6140		ctx->last_sector = bio_end_sector(bi);
+  6141		/*
+  6142		 * if r5l_handle_flush_request() didn't clear REQ_PREFLUSH,
+  6143		 * we need to flush journal device
+  6144		 */
+  6145		if (unlikely(bi->bi_opf & REQ_PREFLUSH))
+  6146			ctx->do_flush = true;
+  6147	
+  6148		stripe_cnt = DIV_ROUND_UP_SECTOR_T(ctx->last_sector - logical_sector,
+  6149						   RAID5_STRIPE_SECTORS(conf));
+  6150		bitmap_set(ctx->sectors_to_do, 0, stripe_cnt);
+  6151	
+  6152		pr_debug("raid456: %s, logical %llu to %llu\n", __func__,
+  6153			 bi->bi_iter.bi_sector, ctx->last_sector);
+  6154	
+  6155		/* Bail out if conflicts with reshape and REQ_NOWAIT is set */
+  6156		if ((bi->bi_opf & REQ_NOWAIT) &&
+  6157		    get_reshape_loc(mddev, conf, logical_sector) == LOC_INSIDE_RESHAPE) {
+  6158			bio_wouldblock_error(bi);
+  6159			if (rw == WRITE)
+  6160				md_write_end(mddev);
+  6161			mempool_free(ctx, conf->ctx_pool);
+  6162			return true;
+  6163		}
+  6164		md_account_bio(mddev, &bi);
+  6165	
+  6166		/*
+  6167		 * Lets start with the stripe with the lowest chunk offset in the first
+  6168		 * chunk. That has the best chances of creating IOs adjacent to
+  6169		 * previous IOs in case of sequential IO and thus creates the most
+  6170		 * sequential IO pattern. We don't bother with the optimization when
+  6171		 * reshaping as the performance benefit is not worth the complexity.
+  6172		 */
+  6173		if (likely(conf->reshape_progress == MaxSector)) {
+  6174			logical_sector = raid5_bio_lowest_chunk_sector(conf, bi);
+  6175			on_wq = false;
+  6176		} else {
+  6177			add_wait_queue(&conf->wait_for_reshape, &wait);
+  6178			on_wq = true;
+  6179		}
+  6180		s = (logical_sector - ctx->first_sector) >> RAID5_STRIPE_SHIFT(conf);
+  6181	
+  6182		while (1) {
+  6183			res = make_stripe_request(mddev, conf, ctx, logical_sector,
+  6184						  bi);
+  6185			if (res == STRIPE_FAIL || res == STRIPE_WAIT_RESHAPE)
+  6186				break;
+  6187	
+  6188			if (res == STRIPE_RETRY)
+  6189				continue;
+  6190	
+  6191			if (res == STRIPE_SCHEDULE_AND_RETRY) {
+  6192				WARN_ON_ONCE(!on_wq);
+  6193				/*
+  6194				 * Must release the reference to batch_last before
+  6195				 * scheduling and waiting for work to be done,
+  6196				 * otherwise the batch_last stripe head could prevent
+  6197				 * raid5_activate_delayed() from making progress
+  6198				 * and thus deadlocking.
+  6199				 */
+  6200				if (ctx->batch_last) {
+  6201					raid5_release_stripe(ctx->batch_last);
+  6202					ctx->batch_last = NULL;
+  6203				}
+  6204	
+  6205				wait_woken(&wait, TASK_UNINTERRUPTIBLE,
+  6206					   MAX_SCHEDULE_TIMEOUT);
+  6207				continue;
+  6208			}
+  6209	
+  6210			s = find_next_bit_wrap(ctx->sectors_to_do, stripe_cnt, s);
+  6211			if (s == stripe_cnt)
+  6212				break;
+  6213	
+  6214			logical_sector = ctx->first_sector +
+  6215				(s << RAID5_STRIPE_SHIFT(conf));
+  6216		}
+  6217		if (unlikely(on_wq))
+  6218			remove_wait_queue(&conf->wait_for_reshape, &wait);
+  6219	
+  6220		if (ctx->batch_last)
+  6221			raid5_release_stripe(ctx->batch_last);
+  6222	
+  6223		if (rw == WRITE)
+  6224			md_write_end(mddev);
+  6225	
+  6226		mempool_free(ctx, conf->ctx_pool);
+  6227		if (res == STRIPE_WAIT_RESHAPE) {
+  6228			DECLARE_COMPLETION_ONSTACK(done);
+  6229			WRITE_ONCE(bi->bi_private, &done);
+  6230	
+  6231			bio_endio(bi);
+  6232	
+  6233			wait_for_completion(&done);
+  6234			return false;
+  6235		}
+  6236	
+  6237		bio_endio(bi);
+  6238		return true;
+  6239	}
+  6240	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
