@@ -1,64 +1,64 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602DE3D647C
-	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 22:02:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4B13D88FA
+	for <llvm@lists.linux.dev>; Fri,  5 Jun 2026 22:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780696923; cv=none; b=aZRPfweEIzCPME8PoR29C+0DuYtTJnqnypxSGJMMuIOTgORHNtpFoQ2ZcEc4ZJWweybZDcx5Oq1+K1rztuA9QSvqaPKGwqfRIEMmvYGktH69vWqObpgQc/tT+eFEPjyIABq9VRA0JA0LaMwegvgVKULNmpRpyA61har3VweMeTU=
+	t=1780696924; cv=none; b=Sui/DTymzIiQZpgRR0WJ8znhjx+lAZD1fL94KYYNKSemyorxykfqDY3Q2GNzwoxJ960vDxODxb62vfa9sjZSCszAC1FT6xV+r7vvZnvBT1kpFWt+2Uguzbo9j5bI2vh1Fhx0EDUH+yDKUBzh09E2M7Cg2/gWgrxW3afOUUJhXM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780696923; c=relaxed/simple;
-	bh=bKQWmItIKnc/fdJSRRktRi/1cUXUvo7d8EoyajRgfGY=;
+	s=arc-20240116; t=1780696924; c=relaxed/simple;
+	bh=M1tCipKgh6sdfzfNx6Ayc+P63xEC6ccKKNUWUXQ278s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IdwMlGdQ/fVtw8IJq0CAxsgJ8eK5kJrXXSQ9NUcfpmsvuIBJeOLAC6sSqdWDgksyrQM2bfPGJfqeLNYh2hykHMxnlPcyJYg09Tevhaqt9CUSMNz9k/9OSHsJVP0Pm87JqiDOBQmjnXkNNd6GWsj6mFVOs4Vofcokg4sDB4fmidw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OquPbIOZ; arc=none smtp.client-ip=209.85.210.171
+	 MIME-Version; b=bEcPES3QZJGIVCLCxKnPUuVt/VC1w/AFMZ9VigOjaunS8/aWy5UVD+EA7x1DhkZf8J0KpmQHyzHoKl3v9T6MMbIvQIb6t/npbvrd41M9bNBA/R8bJ1JWQADOs0gf6j8VG6/tiNQW8njXRnzK36QcF6OA6gAWJexOoPqPcWPSCK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TiIf7nhG; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OquPbIOZ"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8422524cb38so827298b3a.0
-        for <llvm@lists.linux.dev>; Fri, 05 Jun 2026 15:02:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TiIf7nhG"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8423f52af13so1719462b3a.2
+        for <llvm@lists.linux.dev>; Fri, 05 Jun 2026 15:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780696921; x=1781301721; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1780696922; x=1781301722; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w0IcJHFrxrpFxcVE04G7XPPulmPSc2DO5kl+s9g50fo=;
-        b=OquPbIOZkuIvynSch7eFY3yiwr7elYnVe5iYpKOqS1Hg0vHTFpm/ZHp6hmaEO9Nzdu
-         9YzuQuRwmz+6f8bXFaVQ/+qw+B9KcuWXDWYZlStfHlFc55tr4Ax7gc6x3h0ZlM78OxlG
-         wbLPr5wIjD6O5izWpumGkxtnmL9pigztbza42QSUflF86AJpkG7PBnufJ9fzqu07r55k
-         JutBTwYLkDgYMhDX/YLjpYOqg3br3nSbrP0Cghix8tBkl1+OdJevb2AHhpr6TTVrV/jr
-         GZO5HE1Ez4swuJ+D+is4Gn5ydGdRKQeC1qbpmxs6KMVyXLi/n0YavRvgZQ0u6sbRQkHL
-         f2gQ==
+        bh=3h60AiEE0ezQWif9mmBIRZAGzyRJ5Mypr0bfFicKOUY=;
+        b=TiIf7nhGy2Rt69OoxxFh5prJugLRXLO3xQqpJfGVrHpOhd6YCvgqV0IkbKpp4jSi2V
+         SFrJaXsrcpX1AMV+BZHfC7n+laFK+Po6GzXrJ0mPa0qhYjJbBP1nXbz+zXxczeAHl705
+         RLk+xzToC0x7vzJa58mnQTVd8TCnVqbQg3RdzodJB75VviqiDohmAi5L98ZTy/nWBeQF
+         x5UkPVRbB1R0RkTafjxFG/G4ib8WMlbnY+ayVUH1H6vjSvaHUySccjiz6ZFusCOUnuKf
+         IA7lALzY+AzOP6hxxfD/0WuCb2oQFuwPH9LrgZlndP0f1KFAcKo75VCBCJC18J/BUtmX
+         Hwtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780696921; x=1781301721;
+        d=1e100.net; s=20251104; t=1780696922; x=1781301722;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=w0IcJHFrxrpFxcVE04G7XPPulmPSc2DO5kl+s9g50fo=;
-        b=aUSyvlnBY6xh0nnpWsPxCqtFkxbzIqJ5m6VgMxhy/H4RapwaNfd91+i70fDUUP0OyV
-         QIA1RpElmxeJpY5mOXsQIzJFd2nbF3WAJc0aaABvtl0Ky8CmYCNtViL5djhN8F30OWyE
-         hzCxyiUQ1JcuGeCdBXaDbjQAfU5Zd7Z6TNyjETW9XBk0Ktr9qXtwyyfBSDEEoDFBAncv
-         FxUHtf71fcVZX/bwxpMxJJYfEknhzl+EDkDoxXiYInV7RoeehKGMDA/zGTGIVMJcZNFM
-         EZHWv7iKwNxZYH+EaNh6DTvbWY6mpDFIH27clHBWf5k2fmdLhuqHMH3FOHGC0r2Suasc
-         Anww==
-X-Forwarded-Encrypted: i=1; AFNElJ9MGxkVNNeuIYZb1btOGBlV8upYERjNrxMG3+giHtQLCdSkUllNDxEUa7Ry23ev8G64OByh@lists.linux.dev
-X-Gm-Message-State: AOJu0YykQF2WeqKB67mFvEedIxTYer2IgqknN7BXx6fuPDOrz3OODrfy
-	aHy5t/INtHC3znNJJAW1cB2hXitRM8uev8czvDCOTomo5S64AIO3Fcnp
-X-Gm-Gg: Acq92OGj9Kt84VWHMUegrcsxDiSF/SrFDklCUcy/QPbBpYcgu9dlGXPYVS3S8UM9YYG
-	Jy5ea96iPPU2nUxCDvEQDc24XAK9QgnHH2nm1HN1WBfPc7FIN7WKjd4kDjxDGxtxQc4hej8zzCj
-	+WIQAC6WlCCm/LKMy8zzVB6QdsVSgyhF/IkdvKzUM4ymEczJFYvvVTJ2X21UUj0/bXpYiRdyDCT
-	g/kW83vT0X4NPUKltC0X/7hCRKpOpu+y15VdiHGJwW9+HP1COkVEx4xPsjlLhBoxJpPLibXIem9
-	0N+tsC0ZhwBVTmMhgdt/TQ9b+tSlKBWYbqlDlH/FVQFA4lsegoJpXjiOseL2JD64xVGw+RpUMMq
-	DHtuXF+fWIWf1yWUQm50QAWMjrEIVpoEYoHVtiTYBx8ksEIcDmKFuwCyVnas2mIvvoDW7cSaeuL
-	OFq06BuH8Hzoe+IyGFJtHv9l1mwi+3kyVG/PF/LNAT4MlrypbG2UxwF2comKGwAhWopGRm9dMky
-	KjBQdmjTUpECWmUojkksmEaoRc4dKfY7hIiOsDgO6eIZg==
-X-Received: by 2002:a05:6a00:1c94:b0:842:6d5d:58dc with SMTP id d2e1a72fcca58-842b0feef0fmr5682549b3a.43.1780696920695;
-        Fri, 05 Jun 2026 15:02:00 -0700 (PDT)
+        bh=3h60AiEE0ezQWif9mmBIRZAGzyRJ5Mypr0bfFicKOUY=;
+        b=PPAcOHWNU0IK/J5rkMxKzz9T9YT2LRiVL2xWH4LY/v5e5hjvhwAPr2bUftfxCvjewk
+         6pi7ug9zenTz+68fcoNuY9rBgcL2Jw7wS6fy99RtUJT/hURtoWc6wMUy9/aneMyVhuKZ
+         w71FQlSwnOds8SZICnknxwO/YmnbiRdw99p+QqPNXm18SOHadx0hFybaYP5/mAc3uRkQ
+         ebftMn3Q9ZcMbSfklgCDmvw7gywLfMjPozZLwFVNikpwlcYBPCzh20qpSvKwNKfc29eo
+         PkK/74xTO+r/vQhgAu1ErofU1ttB9FVVhcVzUfgdHbse5uj3heKbP8vpw+Jps4tQ21W+
+         wBvw==
+X-Forwarded-Encrypted: i=1; AFNElJ8MC7AnM7qwQFjDh0C8s2LwbHYaR5VmdpCjeySUVY7NmqU7HUf/MoYED5B/kVvRG4plStfQ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy2/8tcSmP2W6yDrX3p4HPBNVgAGvAU6UCn7IzGF1FbjYITYPzu
+	n4azLGE8qzBn6cosgytnCi3JkpWUKLf9+Ww0NN0mbvYfuTvJy2OxvTQr
+X-Gm-Gg: Acq92OFrTvEWW3pJ2rweUZ49dna424XTNz1Qc1lHqkZX61lylBRlfJ6LJ8eAbaWNFmy
+	fg1Y6Ajxrwnz5q/qlClGBIikeFRsDboDvrpGzRP28KZ3d3523vTOp58dzYJGffJ4uxnbawKnquQ
+	6NuP0FFlJskgm0HvCHkTd+SGrPpu5DUtRjtv4xO1KQtECv/77doJV/QNjaQGX+oCFsZhtmnisBQ
+	R/ojO7kxc05g4EQQlUrqzWN95PK9NK7inTXpXwN89sid8/yKeLyyzu66GD3Hq9DtsVnpAlhT/FT
+	S+itsNOv6Ja1LyUbyRFSrDmPLTLUrnnRjslfNxUdsEUg/hpKunwnTMa+XCannTFOMJyM0MG/pSh
+	xga0oytGseWpkLVkj62n/N1IIGQHg9BoNdTXZ+mmyMqOGRahFzo9/GXiu9dCs3jnjAZgUx4U7Ox
+	9LrweYZBXeVrlrUlpEF6/0DSTlLxGbl8gj97u2s5g0a/c4muiBAW/37+1foSl4Zkov2FlRGWh7h
+	OnPmM+GxmePAF3aS6cNx7CP5DxHGHYCoYZjQ53qAYHiZA==
+X-Received: by 2002:a05:6a00:13a7:b0:842:48ae:1d6c with SMTP id d2e1a72fcca58-842b0f5477emr5790548b3a.24.1780696922232;
+        Fri, 05 Jun 2026 15:02:02 -0700 (PDT)
 Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-842824a1cb4sm12518883b3a.26.2026.06.05.15.01.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-842824a1cb4sm12518883b3a.26.2026.06.05.15.02.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 15:02:00 -0700 (PDT)
+        Fri, 05 Jun 2026 15:02:01 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: dmaengine@vger.kernel.org
 Cc: Vinod Koul <vkoul@kernel.org>,
@@ -71,9 +71,9 @@ Cc: Vinod Koul <vkoul@kernel.org>,
 	linux-kernel@vger.kernel.org (open list),
 	linuxppc-dev@lists.ozlabs.org (open list:FREESCALE DMA DRIVER),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH 05/10] dmaengine: fsldma: convert ioremap to devm_platform_ioremap_resource
-Date: Fri,  5 Jun 2026 15:01:29 -0700
-Message-ID: <20260605220134.43295-6-rosenp@gmail.com>
+Subject: [PATCH 06/10] dmaengine: fsldma: convert channel allocation to devm_kzalloc
+Date: Fri,  5 Jun 2026 15:01:30 -0700
+Message-ID: <20260605220134.43295-7-rosenp@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260605220134.43295-1-rosenp@gmail.com>
 References: <20260605220134.43295-1-rosenp@gmail.com>
@@ -85,68 +85,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Convert of_iomap to devm_platform_ioremap_resource to let the devm
-framework handle unmapping. This allows removing the out_iounmap
-label, out_return label, and the explicit iounmap in both the probe
-error path and the remove function.
-
-The DGSR (fdev->regs) and per-channel registers (chan->regs) map
-physically distinct regions in all supported variants
-(EloPlus/Elo/Elo3), so there is no overlap risk.
+Convert fsl_dma_chan_probe from kzalloc_obj to devm_kzalloc, tying
+the channel lifetime to the parent DMA device. This removes the
+need for kfree(chan) in both the probe error path and the remove
+function.
 
 Assisted-by: opencode:big-pickle
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/dma/fsldma.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ drivers/dma/fsldma.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/dma/fsldma.c b/drivers/dma/fsldma.c
-index 2efa16d12679..2a6a247761a4 100644
+index 2a6a247761a4..ee6e595c2972 100644
 --- a/drivers/dma/fsldma.c
 +++ b/drivers/dma/fsldma.c
-@@ -1229,19 +1229,17 @@ static int fsldma_of_probe(struct platform_device *op)
- 	fdev->addr_bits = (long)device_get_match_data(fdev->dev);
+@@ -1111,11 +1111,9 @@ static int fsl_dma_chan_probe(struct fsldma_device *fdev,
+ 	int err;
  
- 	/* ioremap the registers for use */
--	fdev->regs = of_iomap(op->dev.of_node, 0);
--	if (!fdev->regs) {
-+	fdev->regs = devm_platform_ioremap_resource(op, 0);
-+	if (IS_ERR(fdev->regs)) {
- 		dev_err(&op->dev, "unable to ioremap registers\n");
--		return -ENOMEM;
-+		return PTR_ERR(fdev->regs);
- 	}
+ 	/* alloc channel */
+-	chan = kzalloc_obj(*chan);
+-	if (!chan) {
+-		err = -ENOMEM;
+-		goto out_return;
+-	}
++	chan = devm_kzalloc(fdev->dev, sizeof(*chan), GFP_KERNEL);
++	if (!chan)
++		return -ENOMEM;
  
- 	/* map the channel IRQ if it exists, but don't hookup the handler yet */
- 	fdev->irq = platform_get_irq_optional(op, 0);
- 	if (fdev->irq < 0) {
--		if (fdev->irq != -ENXIO) {
--			err = fdev->irq;
--			goto out_iounmap;
--		}
-+		if (fdev->irq != -ENXIO)
-+			return fdev->irq;
- 		fdev->irq = 0;
- 	}
+ 	/* ioremap registers for use */
+ 	chan->regs = of_iomap(node, 0);
+@@ -1197,9 +1195,6 @@ static int fsl_dma_chan_probe(struct fsldma_device *fdev,
  
-@@ -1309,8 +1307,6 @@ static int fsldma_of_probe(struct platform_device *op)
- 		if (fdev->chan[i])
- 			fsl_dma_chan_remove(fdev->chan[i]);
- 	}
--out_iounmap:
--	iounmap(fdev->regs);
+ out_iounmap_regs:
+ 	iounmap(chan->regs);
+-out_free_chan:
+-	kfree(chan);
+-out_return:
  	return err;
  }
  
-@@ -1328,8 +1324,6 @@ static void fsldma_of_remove(struct platform_device *op)
- 		if (fdev->chan[i])
- 			fsl_dma_chan_remove(fdev->chan[i]);
- 	}
--
--	iounmap(fdev->regs);
+@@ -1208,7 +1203,6 @@ static void fsl_dma_chan_remove(struct fsldma_chan *chan)
+ 	tasklet_kill(&chan->tasklet);
+ 	list_del(&chan->common.device_node);
+ 	iounmap(chan->regs);
+-	kfree(chan);
  }
  
- #ifdef CONFIG_PM
+ static int fsldma_of_probe(struct platform_device *op)
 -- 
 2.54.0
 
