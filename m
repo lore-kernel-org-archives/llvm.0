@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A6D2EFD9B;
-	Thu,  4 Jun 2026 22:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF341E5B63;
+	Fri,  5 Jun 2026 00:33:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780613860; cv=none; b=ExWip6hNpJPGPEzFVISm8xbE9T8IqDhzGK25dLgaylz1FziGAvjcCl8ZrwyG2KsRF8Lbv2iyXNJHf64iYUChQquoLnF1TuoGTCnbLZpjZe6TzJRr0ZfwD5GKhI20Y8bV5uZWqYlnh9Gu4I6CPyz4A6co9p7SXsDfTTZLl1xr0O8=
+	t=1780619614; cv=none; b=K4aAET5RNVqzNQwlbJ1oSN2L8exxysWazQQQcaH5RjdzCUt48eDs57pnSTmE0KAPBPykpNkfwYAS7IbKOwRJe9+nXOaQaWZLPkbP2MXml/9UFdqcIyEFmvVMriaWyI43ougIND3tCjlIb3Lp5ngSXyGLpnHKhqfEe2JyZFzUMts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780613860; c=relaxed/simple;
-	bh=2TlUIBpxSMH+9bGcBFZbe1n6gKi9gIbnhoT2ikTVCJc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MfW5LqIxh8TaSWSsbtmhRpJu/J1byuDS+JM5G91ZMAAQA5u5lYkAGTE3C/TC+aVMI2WtppJdcTM9OU9fpqEqetBxZwb2ytvAekwuk9WL06G+k4U0Lc73jg/1AFjL7kzXHqaiamTbPgMf2UwDc4oC0LcueO5nJ2Rq2dXluPz/7CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ny1bTZtc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1780619614; c=relaxed/simple;
+	bh=FiIhFTMpDiko60PkDxAKjTjhqyUO6mVmOJmI7hvwhKw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QN5QBGuQ5BFYTNWTLZtKbTcXLSqONANG5Yn3hTjI4GceTW6M2db/G2MFgBGyKTCS6eUPOVIiaS7ZQUJc5nZihzor80De95cXaa8JhfYe+aWqJ+yjJuDLeQsDd6VU08I6jkAKKx2juKJHTPyjj75pHOePYDmAuCV/DegQr7dTKDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lW3boJ0L; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ny1bTZtc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E36B1F00893;
-	Thu,  4 Jun 2026 22:57:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lW3boJ0L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96DDD1F00893;
+	Fri,  5 Jun 2026 00:33:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780613859;
-	bh=eB8NVASMw6EPL4lglam8dxrHSkSbY4ghGAbIjShoqbg=;
+	s=k20260515; t=1780619613;
+	bh=1Fql6FtY6DpZSGux+lI1tMeBBWlScRTWwhveUt8GEA8=;
 	h=From:Date:Subject:To:Cc;
-	b=ny1bTZtcbVbH1dP6DwLhOb+zF7t/xRud2pn0rNiIDF6rQ3V7oaDig7jC/J/+pKdNb
-	 +AmriHItOcdJll1+jYEBOHAmWQfjHqcIlg/z1TEZMhg7WIzTF4QtyTLiUbpCJwpDIP
-	 720JVgcn0Ehg72rh9bcXOg5orE+qSBsJrAmfQS3EBYeGLAtVALnxoDuRk2qVqN1oRX
-	 y2J32UBuK4NSCgPnypqinWt2H5YIqgUajVBgnM0Bg4gDpLIlrRvwUdsr/xvseAwkRk
-	 ag5mt7FImb9abTYSmq7oGDLrre1DJDp5TsNzOWK7MdmcPi5uWKO2ktuemg+rtRqHwY
-	 EinDYw66qD2Lg==
+	b=lW3boJ0LmgfgckSGy6GxiEZ66O9yCvpVtIy4zFIoDMRauMJHDs5ORItzr40vvjVMd
+	 70wSR9XfFQgfhwdfAfhvyr/J2xZq7948718pDFIc6y348FFvv2ZUtLHClkfBp6tRGL
+	 0Mnub7QutkPZBeT5NXMhJXx4pxLuLpSxzZIQoiq+R45MySj95G+FvxkRin01J/mr/4
+	 s2CYClUhE4hkIHblTTVjsWOoqV+D61Uxjv/+YLD9i22UI9Z8BIUHtQrDfh68RkC9Jw
+	 nn7z6YyXjgorxAGSgABLGwlxzS4oR6VL3B5iAkR57KPYNJg+DbN9yu5xkWJKKBnNxp
+	 g+E0WuN3EJdSQ==
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 04 Jun 2026 15:57:15 -0700
-Subject: [PATCH] can: virtio: Fix comment in UAPI header
+Date: Thu, 04 Jun 2026 17:33:21 -0700
+Subject: [PATCH] cfi: Include uaccess.h for get_kernel_nofault()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,66 +36,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260604-virtio_can-fix-uapi-comment-v1-1-199fa96ec5f0@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM0QqDMAxA0V+RPC/QiYj4KyIjjXGLYCttLYL47
- 3bb44HLPSFKUInQVycEyRrVu4LnowL+kHsL6lQMtalb05oGs4ak/sXkcNYDd9oU2a+ruISWaSb
- T2cZ2BOWwBSnN7z6Mf8fdLsLpu4TrugHgD/P8fwAAAA==
-X-Change-ID: 20260604-virtio_can-fix-uapi-comment-bcafa08b4b8a
-To: Harald Mommer <harald.mommer@oss.qualcomm.com>, 
- Matias Ezequiel Vara Larsen <mvaralar@redhat.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>
-Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
- =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
- Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>, 
- Marc Kleine-Budde <mkl@pengutronix.de>, 
- Francesco Valla <francesco@valla.it>, virtualization@lists.linux.dev, 
- linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Message-Id: <20260604-tracing-fix-cfi-h-build-error-v1-1-b27015390901@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQqDMBBA0avIrDsQY5tCryJdmMlEp5QoExVBv
+ HujXT74/B0yq3CGV7WD8ipZxlRQ3yqgoUs9o4RisMY648wdZ+1IUo9RNqQoOKBf5BuQVUfFxpH
+ 1TPEZ6geUx6Rcwuvfvv/Oi/8wzecUjuMHvFNyQYEAAAA=
+X-Change-ID: 20260604-tracing-fix-cfi-h-build-error-36c2becf7d15
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Sami Cclvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
+ Eva Kurchatova <eva.kurchatova@virtuozzo.com>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, llvm@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1447; i=nathan@kernel.org;
- h=from:subject:message-id; bh=2TlUIBpxSMH+9bGcBFZbe1n6gKi9gIbnhoT2ikTVCJc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlKTA/uH5s4L8hHfR/7q62fzHL1AoWW7XCWUn9wqzUwV
- OO3tFp+RykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiImiEjw8pbbGd7Y5MXvJLY
- sU18041Zby9fz/7TcMB0N9ObL6u3nHJlZDjemiJ45aNWV+ARNo1zizk1Hb6bzb7e2q53+RaftLj
- 9PxYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1580; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=FiIhFTMpDiko60PkDxAKjTjhqyUO6mVmOJmI7hvwhKw=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFlKktFNVepzVVgLy7iV/9TvTJmVO02uq6qQ58Ft+Uc1O
+ 9X/L27sKGVhEONikBVTZKl+rHrc0HDOWcYbpybBzGFlAhnCwMUpABNZfJHhfyHb30V27se2Xbez
+ evs7XS5EPqXHytRyiazdv7lXZ4ps3MbIsK//9LTdD159D56yfeHK/PiafvY7370nu09Zfm3umar
+ lG9kA
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-When compile testing the UAPI headers with clang, there is an warning turned
-error for using a C++ style ('//') comment, which is explicitly forbidden for
-UAPI headers.
+After commit 0652a3daa787 ("tracing: Fix CFI violation in probestub
+being called by tprobes"), there are many build errors when building
+ARCH=arm multi_v7_defconfig + CONFIG_CFI=y like:
 
-  In file included from <built-in>:1:
-  ./usr/include/linux/virtio_can.h:29:35: error: // comments are not allowed in this language [-Werror,-Wcomment]
-     29 | #define VIRTIO_CAN_MAX_DLEN    64 // this is like CANFD_MAX_DLEN
-        |                                   ^
+  In file included from drivers/base/devres.c:17:
+  In file included from drivers/base/trace.h:16:
+  In file included from include/linux/tracepoint.h:23:
+  include/linux/cfi.h:44:6: error: call to undeclared function 'get_kernel_nofault'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     44 |         if (get_kernel_nofault(hash, func - cfi_get_offset()))
+        |             ^
   1 error generated.
 
-Switch to a standard C style comment.
+get_kernel_nofault() is called in the generic version of
+cfi_get_func_hash() but nothing ensures uaccess.h is always included for
+a proper expansion and prototype. Include uaccess.h in cfi.h to clear up
+the errors.
 
-Fixes: 2b6b4bb7d96f ("can: virtio: Add virtio CAN driver")
+Cc: stable@vger.kernel.org
+Fixes: 0652a3daa787 ("tracing: Fix CFI violation in probestub being called by tprobes")
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- include/uapi/linux/virtio_can.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/cfi.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/uapi/linux/virtio_can.h b/include/uapi/linux/virtio_can.h
-index 08d7e3e78776..e054d5099241 100644
---- a/include/uapi/linux/virtio_can.h
-+++ b/include/uapi/linux/virtio_can.h
-@@ -26,7 +26,7 @@
- #define VIRTIO_CAN_FLAGS_FD             0x4000
- #define VIRTIO_CAN_FLAGS_RTR            0x2000
+diff --git a/include/linux/cfi.h b/include/linux/cfi.h
+index 1fd22ea6eba4..0f220d29225c 100644
+--- a/include/linux/cfi.h
++++ b/include/linux/cfi.h
+@@ -9,6 +9,7 @@
  
--#define VIRTIO_CAN_MAX_DLEN    64 // this is like CANFD_MAX_DLEN
-+#define VIRTIO_CAN_MAX_DLEN    64 /* this is like CANFD_MAX_DLEN */
+ #include <linux/bug.h>
+ #include <linux/module.h>
++#include <linux/uaccess.h>
+ #include <asm/cfi.h>
  
- struct virtio_can_config {
- #define VIRTIO_CAN_S_CTRL_BUSOFF (1u << 0) /* Controller BusOff */
+ #ifdef CONFIG_CFI
 
 ---
-base-commit: 7a85231f762aa97b945878abb9a26683486836c6
-change-id: 20260604-virtio_can-fix-uapi-comment-bcafa08b4b8a
+base-commit: 0652a3daa78723f955b1ebeb621665ce72bec53e
+change-id: 20260604-tracing-fix-cfi-h-build-error-36c2becf7d15
 
 Best regards,
 --  
