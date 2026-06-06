@@ -1,115 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0FD2F1FEA
-	for <llvm@lists.linux.dev>; Sat,  6 Jun 2026 06:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66CB245039;
+	Sat,  6 Jun 2026 08:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780726332; cv=none; b=n6pBBOGZf8mgk/1LrLa+Ql946oksWxuKrziHGEEoRCb1yT5pKtV+QSery2mUv+S2AGybguT2yyVEqHin8F2Pu8Z/0FKVyvyANXHO6nO5je0n3UNx0wuAtGhTvqJOqQlln9lZHoXXnC/8kh19NogEuoQ/pFkAdnJ2mv27zgybHuc=
+	t=1780734098; cv=none; b=f50KZmzSD9OIip48Hrmv0YWkFlS2tVdLopm0ENUW2p/MR0FBBSyIF0htfzAIV7oTfbqLDFmbSyqLcBefxC2BzVjP0RXhiOhvSnT/setnPtri6eQpU33g2SI6eyN/Ayeh+IBv0vc43UTxlC4tomx9OvbYknAWFVtulalUpH7huuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780726332; c=relaxed/simple;
-	bh=UL9X3l/5w72gGCaaPxJOkePHOrg/dOgKg5xv1nEFzqQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=WzJdP6EV29S+bxAEjWI/nWBhpxlWLguJcj30ziHh5SI2+RiST3Xq7/0dCHagHdwcB9RcSTK3DIqM0KEdgGWVbifQLExdFF9PrZBKffqk2ugsQ6/zAtBOauVmHHRApLM8r0G3G6t4ZfhP01XgyDDxYY9aADedxsduEGBEHtRXWfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RjZrTS9O; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1780734098; c=relaxed/simple;
+	bh=aYEi/qqWBd6TN/TGIsL+LMdhPj0T3z09U46ylZNvSZQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=FFb14oChek5+wB/PeZSvn8brJ3k416NGz918qg/31i2AK7ONOusT1Md21qYFRtmvX49SJzZOnKRijBmKbAk/hMzzhqA5eGyjTZN4yLG6yLKrGUG/BqXOLAc42RhoNlRaW6ZNxqx8VDfVWzPqIgyaSrOIzZ2xUntTnOrk5OJ2LlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IRBFyrOh; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RjZrTS9O"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1780726329;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ig9IgOivHTTYDOwF6BATRZf1h/BqWcj6l7opNNZhdWo=;
-	b=RjZrTS9OXbI/qdxfa85we0elmAPWeREJ0hU72QxKAuRMsMq7xMr1SFOkufiEYr4BiqOPqA
-	6LDFXfnwaOudR5kANlkzRI3qCn6HARmEvz1pdoR82AS+QAvj+cPqVbDXITAfgSEmKfGy+i
-	MXsLQdkcwwBbNQWTIjROutyNRMXTgPY=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-461-xjPx2j8dPHOcWN3uhrrdmg-1; Sat,
- 06 Jun 2026 02:12:08 -0400
-X-MC-Unique: xjPx2j8dPHOcWN3uhrrdmg-1
-X-Mimecast-MFC-AGG-ID: xjPx2j8dPHOcWN3uhrrdmg_1780726327
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 686861956089
-	for <llvm@lists.linux.dev>; Sat,  6 Jun 2026 06:12:07 +0000 (UTC)
-Received: from [172.20.220.30] (unknown [10.30.44.120])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0528A180034F;
-	Sat,  6 Jun 2026 06:12:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-rc6,
- upstream-mainline, 06121e12)
-Date: Sat, 06 Jun 2026 06:12:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IRBFyrOh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780734095; x=1812270095;
+  h=date:from:to:cc:subject:message-id;
+  bh=aYEi/qqWBd6TN/TGIsL+LMdhPj0T3z09U46ylZNvSZQ=;
+  b=IRBFyrOhrSqzNMIHtb+Wky8y621M1UkR1W1HWf8j7kbf4rT4QJqCmhrx
+   +HUBEj3i6iEKrJF9Z+KJGeYUIbdTrk1BWzHN/ikKWId+gZq9G7KpbTANs
+   N6LMZqHIUf30cDWrP1Neg9EG2ksEqYfJX4mz38nVngur3nunQYzHUtsUf
+   VlWe9cm8mmV/n2vklGTRB4KrQ7uKF37nnHUreq/nS15vkhM5xIaHy4yi2
+   ybbM+XwUsyEx8cmxnW+J9sV7MchIqVuAZODmKoRdWAudfVOA2AGoizYIy
+   HBwtlj2jh32UjiHVSyx9o0VLgVyjVEqrHptIIpqVvzaDIUhBSHQkYidC0
+   g==;
+X-CSE-ConnectionGUID: OiFwwzJ/SmOTAo1levuy6g==
+X-CSE-MsgGUID: 6iGCEnADTV2zJYPGWRhZdw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11808"; a="81463561"
+X-IronPort-AV: E=Sophos;i="6.24,190,1774335600"; 
+   d="scan'208";a="81463561"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2026 01:21:35 -0700
+X-CSE-ConnectionGUID: n2nZ78hcTUexJNSV7VBw3g==
+X-CSE-MsgGUID: y1YmUAcBRyWKtjdnZvfznA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,190,1774335600"; 
+   d="scan'208";a="268998761"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa001.fm.intel.com with ESMTP; 06 Jun 2026 01:21:33 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wVmHb-000000002nt-0bEk;
+	Sat, 06 Jun 2026 08:21:31 +0000
+Date: Sat, 06 Jun 2026 10:20:43 +0200
+From: kernel test robot <lkp@intel.com>
+To: Brian Cain <brian.cain@oss.qualcomm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bcain:bcain/boot_qemu 47/51] mm/mm_init.c:920:18: error: no
+ member named 'pageblock_flags' in 'struct zone'
+Message-ID: <202606061035.2mg8Zuju-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <59343.126060602120800295@us-mta-461.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: BvU7Y1mrXeFLLYwbQMz5N9iZtf24sNv5OCOD9YZvu6E_1780726327
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/boot_qemu
+head:   c850792455fb50ac41c7100e7d6f5f834d3141ee
+commit: bdd721ef7955b07ea40dbb3babd1b9e7beae2c01 [47/51] mm: guard pageblock init against missing pageblock_flags
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260606/202606061035.2mg8Zuju-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260606/202606061035.2mg8Zuju-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606061035.2mg8Zuju-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'kbuild-fixes-7.1-3' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/kbuild/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2580216737
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2580216737_ppc64le_kernel
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+>> mm/mm_init.c:920:18: error: no member named 'pageblock_flags' in 'struct zone'
+     920 |                         if (likely(z->pageblock_flags)) {
+         |                                    ~  ^
+   1 error generated.
 
 
+vim +920 mm/mm_init.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   887	
+   888		for (pfn = start_pfn; pfn < end_pfn; ) {
+   889			/*
+   890			 * There can be holes in boot-time mem_map[]s handed to this
+   891			 * function.  They do not exist on hotplugged memory.
+   892			 */
+   893			if (context == MEMINIT_EARLY) {
+   894				if (overlap_memmap_init(zone, &pfn))
+   895					continue;
+   896				if (defer_init(nid, pfn, zone_end_pfn)) {
+   897					deferred_struct_pages = true;
+   898					break;
+   899				}
+   900			}
+   901	
+   902			page = pfn_to_page(pfn);
+   903			__init_single_page(page, pfn, zone, nid);
+   904			if (context == MEMINIT_HOTPLUG) {
+   905	#ifdef CONFIG_ZONE_DEVICE
+   906				if (zone == ZONE_DEVICE)
+   907					__SetPageReserved(page);
+   908				else
+   909	#endif
+   910					__SetPageOffline(page);
+   911			}
+   912	
+   913			/*
+   914			 * Usually, we want to mark the pageblock MIGRATE_MOVABLE,
+   915			 * such that unmovable allocations won't be scattered all
+   916			 * over the place during system boot.
+   917			 */
+   918			if (pageblock_aligned(pfn)) {
+   919				struct zone *z = page_zone(page);
+ > 920				if (likely(z->pageblock_flags)) {
+   921					init_pageblock_migratetype(page, migratetype,
+   922							isolate_pageblock);
+   923				} else {
+   924					pr_warn_once("memmap_init_range: skipping pageblock init for pfn 0x%lx (zone %s has no pageblock_flags)\n",
+   925						     pfn, z->name);
+   926				}
+   927				cond_resched();
+   928			}
+   929			pfn++;
+   930		}
+   931	}
+   932	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
