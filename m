@@ -1,30 +1,32 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51ABC33291F
-	for <llvm@lists.linux.dev>; Mon,  8 Jun 2026 10:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8717833291F
+	for <llvm@lists.linux.dev>; Mon,  8 Jun 2026 10:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780913344; cv=none; b=PDLwJNa8r+YHm95MIbvm56rRDNoFfi53mp0zTNdB+JiDDaAUvqmIfmYAKXVeljKY7ovzXaUVL5SClwnHc8zIcmRMHbx1M2D1U19J6RXHluVUQLDJTOPgeZ5H1sNk7CU7zQuKfPlpbLIgLF6jPiKzq/qxk8qJWXUOBQ3nRTOprX8=
+	t=1780913359; cv=none; b=rLVka/iwH43XIVRUSNGldnFg/QSHeI9pZs8h6ij0asBUTBKeOGX6pWr6xb+oqd6455mnpqgtwKx2LKoSI9quunKA3LnJGI+EsdzgkX4v3Fb6z07RAH18CnXoddGzxsAeT92BOt9ODh5em5XdSGwd0MjHZQjBf9ESjoOmHv4l1b8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780913344; c=relaxed/simple;
-	bh=jh3gqHk1HNBvLAhELs2EctotIEZwksYr5TrkobDCakM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hBwbIs0uUN9qG5HOeiR7qDoHbloUGcisUrRIRXQuaapXDpGQPGJyOp65w1zwSaCg8uubbQvP5tNyXiSqPtL9ydq7tV4jxHOeP3r7uugBtAHWkKRciwQXGfMZ5bTnXxHw4f4koQBYyx7mft8mGLzq4RJfZZo2iahEcg9DfSr6eYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ek9qG2w6; arc=none smtp.client-ip=91.218.175.182
+	s=arc-20240116; t=1780913359; c=relaxed/simple;
+	bh=oLaUr+FB9VSsAuBRiSWaPzIJPJ7H5RqIcSuL90V25FQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=sLqMt/iAApj72m6Li8B8KZ64e8e4mPjvShFiHiJppaks5W/n6gr0SIQuOcZJuw4SXdiudvaoJUqWqD/UMwlZVzs/6fO3HjghKBRXLge5A0OyjwDrBuMTb57vueFCJ1ptZL+zYqJuz6Mt6qwIzVfWNk3F7+mEDQqEfJ1rAWfgh64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Odn9mZY3; arc=none smtp.client-ip=95.215.58.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ek9qG2w6"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Odn9mZY3"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780913340;
+	t=1780913355;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=AM0qgBKFGYsFBxyy5qkcaWxD4QqYzP5wt4OhR2froyA=;
-	b=ek9qG2w6ER/i4WtvoscCoszUq1Ims10QtriibwdVPyGmsMU8uLBlw5lPjom/Dru8V1CSOA
-	zhRjga9tO6uPfngAco0gR2iA7pXrW7MUGIRerAE9lJLT530aTPTInZyBEoiYrD6ephKMTE
-	P0av98l+QKoYfFqgLiFbXbwGYOMFSuM=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=svJYdefjY/nnU0nlx6aQgjbpTVvVYZOsKKX0wUiaSj0=;
+	b=Odn9mZY3cNUro3pEUg1lhAW8gAMo7ePk90o5AGYh4roShxVWdKlb0a8sBa0dLRAOllemGN
+	S9e2A+sL0BMMhHP2qWhWRhmbtdynGoscDodaBTP6UsRLN78FLhWsboFvwBnR5oDISjBVKt
+	VeVw5ldW6sERyqUVmNz6eIzNCJcnCto=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	jpoimboe@kernel.org,
@@ -48,9 +50,11 @@ Cc: kernel@xen0n.name,
 	live-patching@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/8] LoongArch: Add livepatch build (KLP) support
-Date: Mon,  8 Jun 2026 18:08:44 +0800
-Message-Id: <20260608100852.325413-1-dongtai.guo@linux.dev>
+Subject: [PATCH v2 1/8] objtool/LoongArch: Add arch_adjusted_addend() for KLP support
+Date: Mon,  8 Jun 2026 18:08:45 +0800
+Message-Id: <20260608100852.325413-2-dongtai.guo@linux.dev>
+In-Reply-To: <20260608100852.325413-1-dongtai.guo@linux.dev>
+References: <20260608100852.325413-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,95 +64,33 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-This series adds LoongArch support for the klp-build livepatch tooling,
-enabling automated livepatch module generation using objtool on
-LoongArch.
+From: George Guo <guodongtai@kylinos.cn>
 
-It is based on Josh Poimboeuf's klp-build series [1] (see base-commit
-below) and extends it with the LoongArch-specific objtool and build
-pieces, plus a few LoongArch toolchain/relocation fixes required to make
-livepatch modules load and run correctly.
+Implement arch_adjusted_addend() to return the relocation addend value.
 
-Overview (the feature is wired up last so the series stays bisectable:
-objtool's KLP arch hooks are all in place before ARCH_HAS_KLP is turned
-on):
+Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
+Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+Signed-off-by: George Guo <guodongtai@kylinos.cn>
+---
+ tools/objtool/arch/loongarch/decode.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- - Patches 1 and 6 add the objtool hooks LoongArch needs:
-   arch_adjusted_addend() and arch_jump_opcode_bytes() (the latter makes
-   klp checksums for jump/call instructions position-independent,
-   mirroring x86/arm64).
- - Patch 2 marks the special sections so objtool can split them into
-   per-entry symbols: SHF_MERGE entry sizes for the read-only
-   .altinstructions/__ex_table, and ANNOTATE_DATA_SPECIAL for the
-   writable __bug_table/__jump_table.
- - Patches 3-4 fix kernel panics seen when loading livepatch modules,
-   caused by LoongArch code-generation/relocation assumptions:
-     * disable -mdirect-extern-access for klp builds (the module loader
-       relies on GOT entries for external symbol references),
-     * build with -fPIC so same-compilation-unit symbol references stay
-       GOT-indirect and can be relocated into the livepatch module
-       (-fPIE is not enough: it emits direct, non-GOT references).
- - Patch 5 fixes EFI linking when building with -fdata-sections.
- - Patch 7 adds KLP_SYSCALL_DEFINEx() support for LoongArch.
- - Patch 8 wires up LoongArch klp-build (selects HAVE_KLP_BUILD and
-   enables objtool's KLP support).
-
-Testing:
- - objtool builds cleanly for LoongArch.
- - Livepatch modules were generated and loaded on a LoongArch machine;
-   the panics addressed by patches 3-4 no longer reproduce.
-
-Changes since v1 [2]:
- - Mark the writable special sections (__bug_table, __jump_table) with
-   ANNOTATE_DATA_SPECIAL instead of SHF_MERGE+entsize, which is invalid
-   for writable sections and rejected by Clang; SHF_MERGE is kept only
-   for the read-only .altinstructions/__ex_table.  Also dropped a
-   redundant asm-offsets.h include in head.S.  (WangYuli)
- - Rewrote the -fPIC commit message: the root cause is GOT indirection,
-   not "absolute addressing".  With CONFIG_RELOCATABLE=y the kernel is
-   already built -fPIE, yet -fPIE still emits direct, non-GOT references
-   for same-compilation-unit symbols, so -fPIC is required.  (Xi Ruoyao)
- - Set the LoongArch CFLAGS in build_kernel(), where the variables are
-   actually used; in v1 they were in clean_kernel() and had no effect.
-   (WangYuli)
- - Gated the klp-build changes on CONFIG_RELOCATABLE=y and
-   CONFIG_AS_HAS_EXPLICIT_RELOCS=y, and only override KBUILD_CFLAGS_KERNEL
-   when needed, so other arches/configs are unaffected.
- - Reordered the series so the enabling patch ("Add livepatch build (KLP)
-   support") comes last, keeping every commit buildable/bisectable.
-   Patch numbers therefore differ from v1.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/log/?h=klp-build-arm64
-[2] https://lore.kernel.org/all/20260604065317.219777-1-dongtai.guo@linux.dev/
-
-George Guo (8):
-  objtool/LoongArch: Add arch_adjusted_addend() for KLP support
-  LoongArch: Mark special sections for KLP support
-  livepatch/klp-build: disable direct-extern-access for LoongArch to fix
-    kernel panic
-  livepatch/klp-build: build LoongArch with -fPIC to keep GOT-indirect
-    symbol references
-  LoongArch: Fix EFI linking with -fdata-sections
-  objtool/klp: Add LoongArch jump opcode bytes support
-  klp-build: Add LoongArch syscall patching macro
-  LoongArch: Add livepatch build (KLP) support
-
- arch/loongarch/Kconfig                       |  1 +
- arch/loongarch/include/asm/alternative-asm.h |  5 ++-
- arch/loongarch/include/asm/alternative.h     |  6 ++-
- arch/loongarch/include/asm/asm-extable.h     | 10 ++++-
- arch/loongarch/include/asm/bug.h             |  1 +
- arch/loongarch/include/asm/jump_label.h      |  2 +
- arch/loongarch/kernel/asm-offsets.c          | 20 +++++++++
- arch/loongarch/kernel/vmlinux.lds.S          |  2 +-
- include/linux/livepatch_helpers.h            | 22 ++++++++++
- scripts/livepatch/klp-build                  | 36 ++++++++++++++-
- tools/objtool/Makefile                       |  3 +-
- tools/objtool/arch/loongarch/decode.c        | 46 ++++++++++++++++++++
- 12 files changed, 145 insertions(+), 9 deletions(-)
-
-
-base-commit: 85afaba140a4b9f20fe8c8a64b24fc85f022d981
+diff --git a/tools/objtool/arch/loongarch/decode.c b/tools/objtool/arch/loongarch/decode.c
+index 6cd288150f49..674e4efd138f 100644
+--- a/tools/objtool/arch/loongarch/decode.c
++++ b/tools/objtool/arch/loongarch/decode.c
+@@ -34,6 +34,11 @@ s64 arch_insn_adjusted_addend(struct instruction *insn, struct reloc *reloc)
+ 	return reloc_addend(reloc);
+ }
+ 
++u64 arch_adjusted_addend(struct reloc *reloc)
++{
++	return reloc_addend(reloc);
++}
++
+ bool arch_pc_relative_reloc(struct reloc *reloc)
+ {
+ 	return false;
 -- 
 2.25.1
 
