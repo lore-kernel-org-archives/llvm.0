@@ -1,110 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C132ED84A;
-	Mon,  8 Jun 2026 19:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203723ACF1D;
+	Mon,  8 Jun 2026 22:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780945689; cv=none; b=VLcW6y7iJTt09eBHZ6vAjfM3+Ep2VQbiXDjiDRve3jCXNYFwtIlFREiFSmmMb4Ve6elBRNwflETPdylypaQqSlVHgn/Uf+wawPVmBpHAAZoCNxVfcrYTR2Z+10/Ho0115yNDxb/0TPP3pn3mtN3vy19NO2jLbHWzKpYEPvYg+dI=
+	t=1780956010; cv=none; b=AvtZfziFfmiMqx+qGZw9UllT3YoHkfxkvr1nwY4ewBob0X4y5g98WGXczeLcZX2Ho8Sskbf+YF4bE9SdR0Oq6eA/zApy16J+x0jZxFqWNMFDWYAALxb35MIPqJWpiC9i35MScjN0ZrR7KTanLyDZw2vu+tsb9M8lJivBal+nAbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780945689; c=relaxed/simple;
-	bh=Af0JZX8s+dvZ78Bdx0K+Qrq6cFPSC7gdfCps7yQ40GE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=GLNllR6aMvGAhIU3rJUEh8j/tdiUvjpl3aSltfYMz0rKZWAQmiKRpCvQxCgC/U8xP7PemXhVC4oXzST4VErwHQkfA25v3GKMzmh9/wx0FMriD+G4esuPiKVbpGmtYGuMkKS+aQvPy2q2XPt3KpdKcVmzA9zYtgQSPNEVj7AdTGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K1cHekBj; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1780956010; c=relaxed/simple;
+	bh=3bjPxrqKwEOuzsBWVHgsh3vwYwgXPNjOwV0NyqcBn/E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bsfui+bjiWXez/kuKqth2CTZMHClvA/B7w57Mttp9eDY9h+unCtTOd1DWaIkmI4wSNw18w1/pllfsClm6Bc4kJlknArYZyjOU1b17I9Yn/HhD31m6ISDAZzno12ApCXT8gW0zWu/p4IIck5zdv3IdzFqvWWs1BwlKxj439WyYGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iL4SbJSV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K1cHekBj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780945687; x=1812481687;
-  h=date:from:to:cc:subject:message-id;
-  bh=Af0JZX8s+dvZ78Bdx0K+Qrq6cFPSC7gdfCps7yQ40GE=;
-  b=K1cHekBjQCaF9a+hBPRxB3NV9U0vphC9rCC6eZH25aNxVGxo/nvoTDMt
-   uL0oj2Q1ZTMmh5HN8C+kAeqKau67o3qfc046JEfj1Uxm/+2LvNOYoTbCN
-   0FxZTbDAAGZ7ziakx0gGYIzWCI8yAhbBzRvviB32kQl7jqqk4Kg0uAn15
-   MlXzyIehXsKA9q/n07xTLQ2xwkXY/sR8htHgbwDC3OvWZKNlr3W+oEDMa
-   foHHUy4EeBRgy1xSs2wy+idXFiScyQLww7uwzm3zg6ckY80BvoQii/kf6
-   4RTCYVbRlbxayXuM2sTS1fPQDre/oqxR1thCn6FinQQwVwb3MNFNCKOg7
-   Q==;
-X-CSE-ConnectionGUID: rTZd6yNmTJqyXorH37hidA==
-X-CSE-MsgGUID: EMoPlcO/Q+y85lPephSt+w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11811"; a="84265906"
-X-IronPort-AV: E=Sophos;i="6.24,194,1774335600"; 
-   d="scan'208";a="84265906"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2026 12:08:07 -0700
-X-CSE-ConnectionGUID: dqv8suxARmeQuRB+FXNCZg==
-X-CSE-MsgGUID: Ytun5s7cSvmbwi+5FJIUFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,194,1774335600"; 
-   d="scan'208";a="245500175"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa008.jf.intel.com with ESMTP; 08 Jun 2026 12:08:06 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wWfKN-000000003J3-16xq;
-	Mon, 08 Jun 2026 19:08:03 +0000
-Date: Mon, 08 Jun 2026 21:07:58 +0200
-From: kernel test robot <lkp@intel.com>
-To: Eric Dumazet <edumazet@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: net/sched/sch_generic.c:594:22: error: passing
- 'netdevice_tracker' to parameter of incompatible type 'const void *'
-Message-ID: <202606082019.OHi1pHox-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iL4SbJSV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F3021F00893;
+	Mon,  8 Jun 2026 22:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780956008;
+	bh=srVNVttQNEpPadV3x4J3hs3Ppt9fO7+1ro9IcbQQSfU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=iL4SbJSVwg61EbfNlh+bnFyUBqmUeR+9Kebg0utBFDBbwlEjKhP1erVOGfzLmHIJC
+	 /K6nk0n6qAv13AWYDu90rMmY4jfQ0QBPWoHwkny7vOLnz2ntSkvmM1KO7+SeWCWkvU
+	 1u27km9tq4O5rhe6QalgZAsYBHfNmk1Xm0XE+a3iQGDHblmZWdQfZIqKigSCeWGJEh
+	 UP7No1PBABw29q7AC6QMUqib1Dp11eGJkY0o/nRnumIYHME17xNsU2BzUkvTFXpSYB
+	 PZK8ffP0Y/8rmugSC+JFKY3tnK8X82i8QwMeXe0ekGy5KFX1J3nwXQQFrMMnCZNbQ0
+	 0QLBMUQO0mLFA==
+Date: Mon, 8 Jun 2026 15:00:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jori Koolstra <jkoolstra@xs4all.nl>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Christian Brauner <christianvanbrauner@gmail.com>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [brauner-github:vfs-7.2.misc 28/28]
+ fs/smb/client/file.c:3237:23: warning: converting the result of '<<' to a
+ boolean always evaluates to true
+Message-ID: <20260608220004.GB2340474@ax162>
+References: <202606080831.mf22xxxh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202606080831.mf22xxxh-lkp@intel.com>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-watchdog-fix-refcount-tracking-races/20260608-205327
-head:   db0aade8ee8c6b624d8541821b8124d51e9c565a
-commit: db0aade8ee8c6b624d8541821b8124d51e9c565a net: watchdog: fix refcount tracking races
-date:   6 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260608/202606082019.OHi1pHox-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260608/202606082019.OHi1pHox-lkp@intel.com/reproduce)
+On Mon, Jun 08, 2026 at 08:49:58AM +0800, kernel test robot wrote:
+> Hi Jori,
+> 
+> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+> 
+> tree:   https://github.com/brauner/linux.git vfs-7.2.misc
+> head:   0da79c259ad0554b36761a7135d4f92eb7c46263
+> commit: 0da79c259ad0554b36761a7135d4f92eb7c46263 [28/28] vfs: uapi: retire octal and hex numbers in favor of (1 << n) for O_ flags
+> config: s390-randconfig-002 (https://download.01.org/0day-ci/archive/20260608/202606080831.mf22xxxh-lkp@intel.com/config)
+> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260608/202606080831.mf22xxxh-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202606080831.mf22xxxh-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> fs/smb/client/file.c:3237:23: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+>     3237 |                         break_lease(inode, O_WRONLY);
+>          |                                            ^
+>    include/uapi/asm-generic/fcntl.h:20:21: note: expanded from macro 'O_WRONLY'
+>       20 | #define O_WRONLY        (1 << 0)
+>          |                            ^
+>    1 warning generated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606082019.OHi1pHox-lkp@intel.com/
+This should be resolved when
 
-All errors (new ones prefixed by >>):
+  https://lore.kernel.org/20260607-breakleasefix-v1-1-658dce536d15@kernel.org/
 
->> net/sched/sch_generic.c:594:22: error: passing 'netdevice_tracker' to parameter of incompatible type 'const void *'
-     594 |                 if (IS_ERR_OR_NULL(dev->watchdog_dev_tracker))
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/err.h:90:68: note: passing argument to parameter 'ptr' here
-      90 | static inline bool __must_check IS_ERR_OR_NULL(__force const void *ptr)
-         |                                                                    ^
-   1 error generated.
+is applied.
 
-
-vim +594 net/sched/sch_generic.c
-
-   584	
-   585	void netdev_watchdog_up(struct net_device *dev)
-   586	{
-   587		if (!dev->netdev_ops->ndo_tx_timeout)
-   588			return;
-   589		if (dev->watchdog_timeo <= 0)
-   590			dev->watchdog_timeo = 5*HZ;
-   591		spin_lock_bh(&dev->tx_global_lock);
-   592		if (!mod_timer(&dev->watchdog_timer,
-   593			       round_jiffies(jiffies + dev->watchdog_timeo))) {
- > 594			if (IS_ERR_OR_NULL(dev->watchdog_dev_tracker))
-   595				netdev_hold(dev, &dev->watchdog_dev_tracker,
-   596					    GFP_ATOMIC);
-   597		}
-   598		spin_unlock_bh(&dev->tx_global_lock);
-   599	}
-   600	EXPORT_SYMBOL_GPL(netdev_watchdog_up);
-   601	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Nathan
