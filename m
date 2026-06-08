@@ -1,122 +1,154 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B26E3B3BF2
-	for <llvm@lists.linux.dev>; Mon,  8 Jun 2026 09:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51ABC33291F
+	for <llvm@lists.linux.dev>; Mon,  8 Jun 2026 10:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780909389; cv=none; b=AadAtDGPXucEiXXgxP41DjhkR8sMFOLkVrSaabFKT+dNlkx+XEqr9+I1/9/ODMrB2OVhuODErp53Deu6xsDV8kj4CC1xx4iNcPqWeRQncsR2cbI0QLXvq+f18P2WGMDbHYzRJc8c14uq+4nIlLVm5Ev184g9GXNXWN4/Xnc1Ncw=
+	t=1780913344; cv=none; b=PDLwJNa8r+YHm95MIbvm56rRDNoFfi53mp0zTNdB+JiDDaAUvqmIfmYAKXVeljKY7ovzXaUVL5SClwnHc8zIcmRMHbx1M2D1U19J6RXHluVUQLDJTOPgeZ5H1sNk7CU7zQuKfPlpbLIgLF6jPiKzq/qxk8qJWXUOBQ3nRTOprX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780909389; c=relaxed/simple;
-	bh=/jWXJfBzrRJ1HeS9IjwZhcmCRKGDHey7KBlrSSvTIJY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=BwF7AvcB1bB1+GAkhqlAvZiaBZc1poO1/IuT6OS1MQxMcuvFSZHiTCnXEyFzYNcuIMAS95d3ZVNYwGAya0fztmSBJKeIm2Z2J2NEI1LaGrwb2JdV0Pa698JNqA9zrQ0mbDJK45QSCWIcSerWfN6MIW2DgU6caqSVfmvKDzh5GUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RQtgcqbe; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1780913344; c=relaxed/simple;
+	bh=jh3gqHk1HNBvLAhELs2EctotIEZwksYr5TrkobDCakM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hBwbIs0uUN9qG5HOeiR7qDoHbloUGcisUrRIRXQuaapXDpGQPGJyOp65w1zwSaCg8uubbQvP5tNyXiSqPtL9ydq7tV4jxHOeP3r7uugBtAHWkKRciwQXGfMZ5bTnXxHw4f4koQBYyx7mft8mGLzq4RJfZZo2iahEcg9DfSr6eYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ek9qG2w6; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RQtgcqbe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1780909387;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ek9qG2w6"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1780913340;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=6A7GcrI/nqGziOYMuyUtXm9YXtFpTUH8rwLGuxD5Mac=;
-	b=RQtgcqbe4trsxDAS+BZlldHFxd2FreV62WdPhxQkwJYLlWR2886P9fFJM+yhuEzr7AkV0e
-	ZZjZjQcYcygXTH58MmrUmfWfpQNv/pDZFMBd2bu+VMPFfJ/NKIgVJin+6rDRTu/ve7yvdf
-	uiBU7kuv0ZevDs86B+5ghdEp5zfEIAg=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-654-MpFZtl7QNm2IA0300-Xh3A-1; Mon,
- 08 Jun 2026 05:03:06 -0400
-X-MC-Unique: MpFZtl7QNm2IA0300-Xh3A-1
-X-Mimecast-MFC-AGG-ID: MpFZtl7QNm2IA0300-Xh3A_1780909385
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0D8F8180035C
-	for <llvm@lists.linux.dev>; Mon,  8 Jun 2026 09:03:05 +0000 (UTC)
-Received: from [172.20.145.56] (unknown [10.30.45.118])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8D6AF19560A2;
-	Mon,  8 Jun 2026 09:03:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-rc6,
- upstream-mainline, c68691dc)
-Date: Mon, 08 Jun 2026 09:03:04 -0000
-To: llvm@lists.linux.dev, yoyang@redhat.com
+	bh=AM0qgBKFGYsFBxyy5qkcaWxD4QqYzP5wt4OhR2froyA=;
+	b=ek9qG2w6ER/i4WtvoscCoszUq1Ims10QtriibwdVPyGmsMU8uLBlw5lPjom/Dru8V1CSOA
+	zhRjga9tO6uPfngAco0gR2iA7pXrW7MUGIRerAE9lJLT530aTPTInZyBEoiYrD6ephKMTE
+	P0av98l+QKoYfFqgLiFbXbwGYOMFSuM=
+From: George Guo <dongtai.guo@linux.dev>
+To: chenhuacai@kernel.org,
+	jpoimboe@kernel.org,
+	peterz@infradead.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com
+Cc: kernel@xen0n.name,
+	joe.lawrence@redhat.com,
+	rostedt@goodmis.org,
+	ardb@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	yangtiezhu@loongson.cn,
+	jiaxun.yang@flygoat.com,
+	liukexin@kylinos.cn,
+	guodongtai@kylinos.cn,
+	xry111@xry111.site,
+	wangyuli@aosc.io,
+	loongarch@lists.linux.dev,
+	live-patching@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/8] LoongArch: Add livepatch build (KLP) support
+Date: Mon,  8 Jun 2026 18:08:44 +0800
+Message-Id: <20260608100852.325413-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <81303.126060805030600944@us-mta-654.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: FLC1Ep8LItVHsbGJ5Ce85f6VmcYyCSSUts11N4NT8-0_1780909385
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi, we tested your kernel and here are the results:
+This series adds LoongArch support for the klp-build livepatch tooling,
+enabling automated livepatch module generation using objtool on
+LoongArch.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+It is based on Josh Poimboeuf's klp-build series [1] (see base-commit
+below) and extends it with the LoongArch-specific objtool and build
+pieces, plus a few LoongArch toolchain/relocation fixes required to make
+livepatch modules load and run correctly.
+
+Overview (the feature is wired up last so the series stays bisectable:
+objtool's KLP arch hooks are all in place before ARCH_HAS_KLP is turned
+on):
+
+ - Patches 1 and 6 add the objtool hooks LoongArch needs:
+   arch_adjusted_addend() and arch_jump_opcode_bytes() (the latter makes
+   klp checksums for jump/call instructions position-independent,
+   mirroring x86/arm64).
+ - Patch 2 marks the special sections so objtool can split them into
+   per-entry symbols: SHF_MERGE entry sizes for the read-only
+   .altinstructions/__ex_table, and ANNOTATE_DATA_SPECIAL for the
+   writable __bug_table/__jump_table.
+ - Patches 3-4 fix kernel panics seen when loading livepatch modules,
+   caused by LoongArch code-generation/relocation assumptions:
+     * disable -mdirect-extern-access for klp builds (the module loader
+       relies on GOT entries for external symbol references),
+     * build with -fPIC so same-compilation-unit symbol references stay
+       GOT-indirect and can be relocated into the livepatch module
+       (-fPIE is not enough: it emits direct, non-GOT references).
+ - Patch 5 fixes EFI linking when building with -fdata-sections.
+ - Patch 7 adds KLP_SYSCALL_DEFINEx() support for LoongArch.
+ - Patch 8 wires up LoongArch klp-build (selects HAVE_KLP_BUILD and
+   enables objtool's KLP support).
+
+Testing:
+ - objtool builds cleanly for LoongArch.
+ - Livepatch modules were generated and loaded on a LoongArch machine;
+   the panics addressed by patches 3-4 no longer reproduce.
+
+Changes since v1 [2]:
+ - Mark the writable special sections (__bug_table, __jump_table) with
+   ANNOTATE_DATA_SPECIAL instead of SHF_MERGE+entsize, which is invalid
+   for writable sections and rejected by Clang; SHF_MERGE is kept only
+   for the read-only .altinstructions/__ex_table.  Also dropped a
+   redundant asm-offsets.h include in head.S.  (WangYuli)
+ - Rewrote the -fPIC commit message: the root cause is GOT indirection,
+   not "absolute addressing".  With CONFIG_RELOCATABLE=y the kernel is
+   already built -fPIE, yet -fPIE still emits direct, non-GOT references
+   for same-compilation-unit symbols, so -fPIC is required.  (Xi Ruoyao)
+ - Set the LoongArch CFLAGS in build_kernel(), where the variables are
+   actually used; in v1 they were in clean_kernel() and had no effect.
+   (WangYuli)
+ - Gated the klp-build changes on CONFIG_RELOCATABLE=y and
+   CONFIG_AS_HAS_EXPLICIT_RELOCS=y, and only override KBUILD_CFLAGS_KERNEL
+   when needed, so other arches/configs are unaffected.
+ - Reordered the series so the enabling patch ("Add livepatch build (KLP)
+   support") comes last, keeping every commit buildable/bisectable.
+   Patch numbers therefore differ from v1.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/log/?h=klp-build-arm64
+[2] https://lore.kernel.org/all/20260604065317.219777-1-dongtai.guo@linux.dev/
+
+George Guo (8):
+  objtool/LoongArch: Add arch_adjusted_addend() for KLP support
+  LoongArch: Mark special sections for KLP support
+  livepatch/klp-build: disable direct-extern-access for LoongArch to fix
+    kernel panic
+  livepatch/klp-build: build LoongArch with -fPIC to keep GOT-indirect
+    symbol references
+  LoongArch: Fix EFI linking with -fdata-sections
+  objtool/klp: Add LoongArch jump opcode bytes support
+  klp-build: Add LoongArch syscall patching macro
+  LoongArch: Add livepatch build (KLP) support
+
+ arch/loongarch/Kconfig                       |  1 +
+ arch/loongarch/include/asm/alternative-asm.h |  5 ++-
+ arch/loongarch/include/asm/alternative.h     |  6 ++-
+ arch/loongarch/include/asm/asm-extable.h     | 10 ++++-
+ arch/loongarch/include/asm/bug.h             |  1 +
+ arch/loongarch/include/asm/jump_label.h      |  2 +
+ arch/loongarch/kernel/asm-offsets.c          | 20 +++++++++
+ arch/loongarch/kernel/vmlinux.lds.S          |  2 +-
+ include/linux/livepatch_helpers.h            | 22 ++++++++++
+ scripts/livepatch/klp-build                  | 36 ++++++++++++++-
+ tools/objtool/Makefile                       |  3 +-
+ tools/objtool/arch/loongarch/decode.c        | 46 ++++++++++++++++++++
+ 12 files changed, 145 insertions(+), 9 deletions(-)
 
 
-Kernel information:
-    Commit message: Merge tag 'x86-urgent-2026-06-07' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/tip/tip
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2583319450
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2583319450_ppc64le_kernel
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2583319450_aarch64_kernel_kcidb_tool_21425083_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2583319450_x86_64_kernel_kcidb_tool_21425075_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+base-commit: 85afaba140a4b9f20fe8c8a64b24fc85f022d981
+-- 
+2.25.1
 
