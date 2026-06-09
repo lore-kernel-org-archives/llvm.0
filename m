@@ -1,44 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61AF33DE43E;
-	Tue,  9 Jun 2026 23:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54901E492D;
+	Tue,  9 Jun 2026 23:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781048569; cv=none; b=azyGcBH4vkGh2AxQFYAu4CJEaQnaTDX4JIWAzM2HP6B+ijWq6+rKbhkmSKGVxVv7pki3777aywktL0IAW4hClC1KkBAySQW98comb9l2i/CU+vYvGWV/sSz5CpHgjOeFKW83FJlCWvInNWsyZTNG2R5qfY6EH2agTb4dwGgL0M8=
+	t=1781049085; cv=none; b=Oo69QqJ131eXgaSsmRqgqWude7kywKfs7R+vYHs2OkpOh7wKxCyE5hAkGYh0HDqNdaz/mM/dn8orGitXe+RBfKDv5fV0H9dr7KeqZ/zAyzMx1yWsBeFcq/BJ4tm55XGWDhm1XPLDpP8FZZRxrSOhi1a6zG+Ylt39I/iqtjSmvWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781048569; c=relaxed/simple;
-	bh=QkOukaD62/6729HeqHX3CRcThRH96lR0vkjEb3HWdu8=;
+	s=arc-20240116; t=1781049085; c=relaxed/simple;
+	bh=Vyr+KMrlmuFfvy74m/59of/SuyIpDkHClr60ZNAXz+E=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=nxhQMkdTf4w6MQUOV/uLh+tbz79lWh+cz3fKYjDJqqwAWBgOMefkceEw4KfotzaToXZCRuzK9hCFmY67PNQJY72KoQvk0w+90hvW/4tk0fpZD1lMeRhO2E3P0ryaRfKEQAFHCghX1JnglaoShk7osTfSujJTwlSNjE+Vttw0PMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WWzSGPIy; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=YqcLCxMsEzddx5mNLgAGWgbaJpVT94bxuaJ9UjtSU5Yxn2HInRxzynwY147QLn9C2nUdRLoitEflZSxILQHpzT3ktgN7CLr+EZW4PKtfTXNa/tMMprhOTBNUxMJlwS+5MV5v+zDHf5Iu+ecTJ8ub4jnUFHpwwjf5+madwkXtJmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lTUYgUz3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WWzSGPIy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 836501F00893;
-	Tue,  9 Jun 2026 23:42:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lTUYgUz3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B261F00893;
+	Tue,  9 Jun 2026 23:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781048568;
-	bh=xubkKUavs48CwLWB6rIAtyrQ6LrYd1wcxPCTWiLznys=;
+	s=k20260515; t=1781049084;
+	bh=sAM1OjvV4RCwTsEIs65/1PqOKnexTxy5ur/iwOgCTSs=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=WWzSGPIyTNcQ9B78fY7ktB5q6d6AgUVADFX0XykqvatRY5LBVgUGPguBoZBSzbOnR
-	 fMM2z3rjDgO2k9N51Ivog2tZAlddAfGipBkTneh3NwFBid2TKRhBWa1732gL63mk5h
-	 v/3gGTnu9rchBVK1K3RWpd/0bxY2ya9vhZLHREnseit3TQPGwV2fqZZyzGvc9qd97j
-	 kGKAfiiALFaU59TGCrON2ZvrG13rOO+lzxR5ABEtJx0HEDXODNbHOXEp7hpBiz12hy
-	 7lvWFm7JewlpbdS57/XdQENSotab33tOAgBJB+6g9aWe7eefANiHDiZAgttX4Ss43s
-	 MzOVh6Mpba8mg==
+	b=lTUYgUz3Mdv7RPVcFILnc3/AFwXeanB+AJJJxW07H+QCgQbpM5ByJFdy/NEuIzKvk
+	 DguYVORopKTN8OQpNUyIE1ulMqH91/0XUfjj1ZGq4lpiACMlWLwXlj4VHgsjvoTxzn
+	 El/edqU1dvHDVE6YxV9pU+gM4e8KwkZ7F3sl5s4+PVp+rLlhBJ3XvQ+uuOPPL3qFIS
+	 KX2BYI7k6vzyhEY9B5WOrrawG6I2bWMVbsg4X0MyigrY8Mp06wYhKprAUqO1tmd/bN
+	 iGQnAAhL98N9txhAynrxFpLUif1QlktU0OMDTNGLa4zfedTo/jCNelGwwwG+tP8ZeY
+	 QPtHxYUnITtcA==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Nicolas Schier <nsc@kernel.org>, 
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, 
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Philipp Hahn <p.hahn@avm.de>
-Cc: Philipp Hahn <phahn-oss@avm.de>, linux-kbuild@vger.kernel.org, 
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-In-Reply-To: <40180613bef84946c45d6fbeb4bb274573cd0beb.1778849135.git.phahn-oss@avm.de>
-References: <40180613bef84946c45d6fbeb4bb274573cd0beb.1778849135.git.phahn-oss@avm.de>
-Subject: Re: [PATCH] run-clang-tools: run multiprocessing.Pool as context
- manager
-Message-Id: <178104854408.2704789.17704419269230550087.b4-ty@b4>
-Date: Tue, 09 Jun 2026 16:42:24 -0700
+ Yonghong Song <yonghong.song@linux.dev>, Bill Wendling <morbo@google.com>, 
+ Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
+ "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
+ Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+ Stafford Horne <shorne@gmail.com>, Piotr Gorski <piotrgorski@cachyos.org>, 
+ Venkat Rao Bagalkote <venkat88@linux.ibm.com>, 
+ Teresa Johnson <tejohnson@google.com>, Thomas Gleixner <tglx@kernel.org>, 
+ Christophe Leroy <chleroy@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+ xur@google.com
+Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ llvm@lists.linux.dev
+In-Reply-To: <20260529185347.2418373-1-xur@google.com>
+References: <20260529185347.2418373-1-xur@google.com>
+Subject: Re: [PATCH v12 0/3] kbuild: distributed build support for Clang
+ ThinLTO
+Message-Id: <178104893725.2707941.7165957214704818524.b4-ty@b4>
+Date: Tue, 09 Jun 2026 16:48:57 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,17 +57,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=736; i=nathan@kernel.org;
- h=from:subject:message-id; bh=QkOukaD62/6729HeqHX3CRcThRH96lR0vkjEb3HWdu8=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFkaS75JJ7J/XF3KunpGaM9OKXl26dPTttzjTAwyXHfyz
- oMlX64+7yhlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQAT2fCY4Z/h56Pezrz875WO
- pDB0TGUVsAuef9l59qcD2evuvkoTKtNkZHhobBUudc+AbXvTtHmy069b3dGKvSTlcPrQLZEwJfU
- jl7kA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2283; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Vyr+KMrlmuFfvy74m/59of/SuyIpDkHClr60ZNAXz+E=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFkay75vKGk+Xtg851D/R94Snl0f3qe9XpRs6xCyK6Vv1
+ tRPelExHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAihtaMDLOC5tislvkgc3Tf
+ f22Bvb4XJYUlryeYBDX+P7DkceqMr0qMDMtUpf78UGyNfWQ2w9f7a+GXlJ8zGy1ak29O613JfTj
+ DlR8A
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Fri, 15 May 2026 14:47:50 +0200, Philipp Hahn wrote:
-> run-clang-tools: run multiprocessing.Pool as context manager
+On Fri, 29 May 2026 11:53:43 -0700, xur@google.com wrote:
+> kbuild: distributed build support for Clang ThinLTO
+> 
+> From: Rong Xu <xur@google.com>
+> 
+> ChangeLog:
+> 
+> V12: Fixed an build error reported by Nathan Chancellor:
+>      Reverted to v10 shell script based approach to get saved_c_flags.
+> V11: Integrated feedback from Sashiko (Nathan Chancellor):
+>      (1) Included modkern_cflags within the saved _c_flags.
+>      (2) Replaced the shell command with $(saved_c_flags_$(<)).
+>      (3) Refined the file matching for ar_vmlinux.a.
+> V10: Fixed a minor build error in v9 and added comments.
+> V9:  Fixed a minor build error.
+> V8:  Disabled -always-rename-promoted-locals=false for the distrubute
+>      mode, based on Yonghong and Nathan's comments.
+> V7: (1) Resolved a conflict by rebasing to kbuild/kbuild-next-unstable.
+>     (2) Separated the '--thin' to 'T' change into its own patch to
+>         preserve Masahiro's original version.
+> V6: Change '--thin' back to 'T' in Makefile.vmlinux_a to fix
+>     reported the build error from old ar.
+> V5: Handle single quote escaping in echo _c_flags to fix
+>     Piotr Gorski's reported error.
+> V4: This is based on the reimplementation provided by Masahiro Yamada
+> on May 26. The difference is that this version now saves the compiler
+> flags (_c_flags) from the Front-End (FE) compilation and re-uses them
+> for the subsequent Back-End (BE) compilation.
+> 
+> [...]
+
+As noted elsewhere in the thread, I squashed patches 1 and 2 to avoid
+bisection issues.
 
 Applied to
 
@@ -66,8 +106,10 @@ Applied to
 
 Thanks!
 
-[1/1] run-clang-tools: run multiprocessing.Pool as context manager
-      https://git.kernel.org/kbuild/c/c10ba5c9c62e2
+[1/2] kbuild: move vmlinux.a build rule to scripts/Makefile.vmlinux_a
+      https://git.kernel.org/kbuild/c/9c72d26e9fe3b
+[2/2] kbuild: distributed build support for Clang ThinLTO
+      https://git.kernel.org/kbuild/c/9f2aee8f7d184
 
 Please look out for regression or issue reports or other follow up
 comments, as they may result in the patch/series getting dropped or
