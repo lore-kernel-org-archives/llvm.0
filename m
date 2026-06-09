@@ -1,64 +1,64 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F089D3F0744
-	for <llvm@lists.linux.dev>; Tue,  9 Jun 2026 22:19:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872694071FE
+	for <llvm@lists.linux.dev>; Tue,  9 Jun 2026 22:19:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781043595; cv=none; b=IONTFK/5HBd4AbJalVdELayWNeoysIBDyPp4Hc8vNsvV6LBUCMc4ENHjyz47ullH7dJTlC015P+Ft1R4X8CBvor11KKQpqfOzV8khemYkoliF0tQBIU8JREHjIhak4SJjfYjSWMLWVH+ogGGBIBfJtJm3D1pGYIU0nbfm1af0M0=
+	t=1781043597; cv=none; b=QCwSHmwWOtZtU84TBo+G5R9PMXA/GRu4NMuVb2IhRdYsOyGv5gVCV/rso7jCMJK7D4nErxrSW3HQj98W0n/9ffPOa7Xq3h5RBezdWeEz1RLF83pJy+/6lcO2Dhuz79aSWC2DWowanJveb9DAFjeepxY0Bh4E0EnXdntR+UI0aSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781043595; c=relaxed/simple;
-	bh=RhXIYqhBSB+K4Y9o4QC7TbeT9dbJgsSR8y4PjJxpvyg=;
+	s=arc-20240116; t=1781043597; c=relaxed/simple;
+	bh=xvy4bkq3P2rtPuts3OtlogJt4Cz0NMbc+ohhmCAWkn0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lz5IHwu6E/yt0igY4KlesXV1i5FdnYDV+SF7Sp43QOFmuqF8Fl/z6CKPhsH+37p8Zq0kn2cFMM/K8h2l+I6v9h1RkUV9ur2weLPSNWZeupfiV0WgQ5X3HTC+ILQGF2XaxdJHZmLS+Tq4zT6RE0oYneqevdJpMx9CcUZQKeV7ZKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jGBa9+kt; arc=none smtp.client-ip=209.85.215.182
+	 MIME-Version; b=tG4GAsHfq+8db+47h2ohdzX0q4JCm4hWHVdFN2+pgiLot/Zo+f4xDO0U0gzNyf09cbX2PmNgyVUf00gX0nCVUHwXhfbNbQ8oWh8DIMTM5pvp7DCYBk0/6SBiH/2MXg2xNUKKjjiMBlVkb1w1X0htyEEyLJy/Ck+B4sj9vMaECbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S/G+2rFZ; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jGBa9+kt"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c85b73ffb52so2565385a12.3
-        for <llvm@lists.linux.dev>; Tue, 09 Jun 2026 15:19:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S/G+2rFZ"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c8585ecdd71so2180473a12.0
+        for <llvm@lists.linux.dev>; Tue, 09 Jun 2026 15:19:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781043593; x=1781648393; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1781043595; x=1781648395; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tNx4Xy1KooduVSVGOlll8hTxHBnljmtg7WB5wHO3xtI=;
-        b=jGBa9+kt9hyClxO/s1IyXQ439BxwKWffGsgGJD8H4VKxHwMoQ88foQFu255hXaKjoF
-         6Bg9gwqaNOYyRsghtV8HNbBluNgxLXv5t7B3F2HDD9K0J6SEDPhqjy38F1ZXLCDmKH4O
-         fwF9xYbLbEO1o7IOaNGkoatPzfSXDKgvUxTafC6sUimQlLs8xz9oZsKdP92A5qaX/NK+
-         CaIxlG+AsQB4l2p0H6Y7bskO8UZe5MQJSemS+M+pZOIE2eBxreZXK8vMveaDt6qM69bv
-         9kTZp3mSLk0mwsPilirG3v7QfYNlv90ol/vpwkZvbbxQaXpibBSYATOeX0oHX6XTyMBe
-         OxwA==
+        bh=Y6ipJNaJivS6R5/q/SqMYFm/sZfUc0Uv8GQU8fX6jMU=;
+        b=S/G+2rFZ+kgsFW7X+2n/OcBufXveQdHHqWV3JjSzwGB75mPlm3d1DCeubbXQsjTrxj
+         +tnSW6XgnLHMBU6yIh5hgxZLy7SnUU2km+idrqgSQ1aiKBNehLfv5a4sRcfJzcPL0KKW
+         4Xrbk6Apuo4jdMuyxZKg+9JkxUdthLMeSVEroskm8IRs5TvG23TWV49Tg24w4WqlUwzt
+         7du7wa6rr2KAnyqPb68v1fQRmu6d6Bw7A3EEhmb+Wx48PF4l0ChZwz6a/d+8+dZz556O
+         zKXAKrtqZf0KGruA7JQ6hVZBEIU1y9qg+dpl/AvmrwYnK+mikkJ/EgjLjRHPazJePshD
+         qD2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781043593; x=1781648393;
+        d=1e100.net; s=20251104; t=1781043595; x=1781648395;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tNx4Xy1KooduVSVGOlll8hTxHBnljmtg7WB5wHO3xtI=;
-        b=saW+GuWDekoWz+m7fslYaA+AcAd8DYLIrceoky8Qe8nCC8lcHiG+pkcY6vLl08y6ny
-         9UkTyG6JkvCHZ9z39jna+kVKBubI1aZzezuNxoN6wWPagCcHm2M0SyUb2+V4V31veM7M
-         P/8XcGh+4c4xGd1dbI7hEdC65Wq/Bh+Rsbb/qiRMsoi/q9xQXenGvegPVUpamGNFCUb5
-         YdR8SMAb128Yk9fCpgibzEZVnkoyaCcBrKCFYKXzrh1rZGvMVVqQe5eJt9SOV9tX38O8
-         TeudAKjZmP8iM7dPlUoWKEC52PnbB6dzjN73PU8jckGSEqBLCfEVU6kJE4VXn/PDazQV
-         Q6wQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/Pw8zL9qnI3g6O8FCojt9b7GKvoj4dgCnG8yYP1KJoaawCl8F80yR+ItFOouyyQvuy9EpK@lists.linux.dev
-X-Gm-Message-State: AOJu0YzWbq/qodQTxVW6QfdMkQ0fSp9WDBN94y0MhDkcJWEWZSVRPhqb
-	DDAggjWQjDu8GLrjpk8twI6yrw1+mNkKpn+tl1d+RAJvEUJin9lZ91U+
-X-Gm-Gg: Acq92OHvr29QwM+inOjloAJyobu3b8W01ATyye05V0s+Je5NztPToKbxsnLZ3l0+bvI
-	uwZoO0PklLnBuDE9UOzwsOSTzDhJgln5jEbWARja0JX2rza5tSOzRaxmdFVq8n5q0Cd/VIXFwH+
-	ZOPr3vp6N7OFhSKLfBejNQ6dkiXYRwowB0i03Q4BWk1SZAOBFYD8LDUIH+tlT6ifcdS8lOtegtE
-	XutwUBRZe8R7VKzku9Fd4/+YY+0A7+M7HyJd8laxZwb/dYpwPreLyaAv4IF3J46gADSqeQV1yUQ
-	DHUyQLIldTA3Fhj7vUqs5c0YTbDyqv+fntqQAUZBBc0Htpwg9zMe5ddTuTscWngAxRVy9OmQd5a
-	yrf3f0IJLCuYCmazzBM2VMh11iMeDXcyXFmZsd/G8khGCoPzvaQI019cdizi5QMU8RVBZ1UFOcn
-	ta0Mjh38dyLO7qRguwaDN23yrTIiefisrl2bq6RTogqW2I26ZQHO9bZ2eEq/omZdE2HBcrcfkUi
-	5Zb+Qw9oPru4bcCSjLzUvafj58ZGq8NCp/K7rXS2ZX/WQ==
-X-Received: by 2002:a05:6a21:6113:b0:3b3:65c4:c680 with SMTP id adf61e73a8af0-3b4ccf7f2b8mr29078053637.25.1781043593166;
-        Tue, 09 Jun 2026 15:19:53 -0700 (PDT)
+        bh=Y6ipJNaJivS6R5/q/SqMYFm/sZfUc0Uv8GQU8fX6jMU=;
+        b=DRGNyg7zV+XmeQmIOI+6naEk6wCyjDu5BxqdmvrXSqvbCEJxGm287ehR++LCOU7fFy
+         XleFnCd6AFzJPCWTnxo4mpO2PTKrchDwMdkxyvL9gmqD3aD/lMiW4nQ8fmDTWEvHriju
+         1b6IdljxvRFtkiSz4b6epQIzZSuL+kTa1eYMM94z7S0iRLrz2pff3OPQaL0L6KF1UcEY
+         zz4HQiYBKhFXT0l6Ve2Z6D3L4U1g1tEtc7UX1u9i57LVBr+XiE1VHtMbwlxpCLJ5faqj
+         5hjkNMmxBBxbImtL1YzcV9IvawbH7BIvcWkQRJXOZIAPda2QCAcrjwx6bSG2AYyG0El8
+         XsgA==
+X-Forwarded-Encrypted: i=1; AFNElJ/VvmzX4e55w71SMFd9xCt4bfXJOD2foq9GycProKRapKlT2sGPVSZzAv7W/SHB0UlpMEmE@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw2Aj0vagATNT3KMhku0Xp5XOqXVrPkH3clEpr5ippJJ5/sSIg3
+	U0jFNiqmXn8MIL5rQHs1mKngAThKX+iRXFMKUJ8rBRrbCI1GVhWkpQQzZX4goyZP
+X-Gm-Gg: Acq92OFltRCJyoVJ+KWSKEN0KQn+jzogVJZZAGPPwOFl5iHGp6Bw8MEHPj05sZYjXBs
+	HgWx52vDKuAy5Hzx6KA2d7x/SIgSoHfV3BmgpF2u5ODu3oD/1XL15SOFI2XbkoHNEVYvZD7Opva
+	LS4WxflQqz51GKjjzUzEYZPoLqNbKP8bd5i3iDIA7Vdn9miZxVUDDneI9S3SeKPR+hT2tits4rx
+	v5AEUEcJZa691r2NNZnmOIRszAMz4mP9DM337Zwmys+Ko5PJVQvKYU/OeYVi3+F/TPpMvYPqdvf
+	H48jilFllKf8YHdyUJgJYQFudZRxhE3AxeQgmX+2EI8ZjW4L9BipSd3bFa6urLd/EitrFZVWvj0
+	vS7dQ5SfsgysyfbXfi9xOryOUR6Oh6lM6Y8rnjc/fLsDmvXwQl1jK3kvA+z4Tq3GrggM//4lQhJ
+	owQbhFxWhWAqSRY6jV4UgrZJnmEUYIbJELwyKAwCF69DwoXYTW39uW5F6XbI2apf5VvIhbqX2nA
+	+gas4Un2SyMxAAUma+S/PSlMa0JQbzk4YQ9PVjY6yD8yw==
+X-Received: by 2002:a05:6a20:d043:b0:3b4:84c5:45d0 with SMTP id adf61e73a8af0-3b4ccf35b24mr25054339637.27.1781043594737;
+        Tue, 09 Jun 2026 15:19:54 -0700 (PDT)
 Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df04ff24sm19661834a12.14.2026.06.09.15.19.50
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df04ff24sm19661834a12.14.2026.06.09.15.19.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 15:19:52 -0700 (PDT)
+        Tue, 09 Jun 2026 15:19:54 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: dmaengine@vger.kernel.org
 Cc: Vinod Koul <vkoul@kernel.org>,
@@ -71,9 +71,9 @@ Cc: Vinod Koul <vkoul@kernel.org>,
 	linux-kernel@vger.kernel.org (open list),
 	linuxppc-dev@lists.ozlabs.org (open list:FREESCALE DMA DRIVER),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCHv3 03/15] dmaengine: fsldma: halt DMA engine before freeing resources
-Date: Tue,  9 Jun 2026 15:19:14 -0700
-Message-ID: <20260609221926.35538-4-rosenp@gmail.com>
+Subject: [PATCHv3 04/15] dmaengine: fsldma: provide device_release callback
+Date: Tue,  9 Jun 2026 15:19:15 -0700
+Message-ID: <20260609221926.35538-5-rosenp@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260609221926.35538-1-rosenp@gmail.com>
 References: <20260609221926.35538-1-rosenp@gmail.com>
@@ -85,44 +85,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When a channel is released (fsl_dma_free_chan_resources) or the driver is
-unbound (fsl_dma_chan_remove), the descriptor pool and channel resources
-are freed without stopping the DMA hardware first.  An active transfer
-could continue executing in the background, fetching descriptors or
-writing data to physical memory pages that have already been freed.
+The DMA core requires drivers to set dma_device.device_release so that
+the container structure is only freed after all references to it have
+been dropped (see the comment above dma_async_device_register()).
 
-Fix by calling dma_halt() in both paths before cleaning up, matching
-the pattern already used in fsl_dma_device_terminate_all().
+This driver violated that contract: fdev was devm_kzalloc()'d with no
+device_release callback.  If a client still held a channel reference
+when the driver was unbound, dma_device_release() would eventually
+run on freed memory, causing a use-after-free.
+
+Fix by allocating fdev with kzalloc_obj(), adding
+fsldma_device_release() to free it, and setting device_release.
+fsldma_of_remove() now saves channel pointers and frees IRQs before
+calling dma_async_device_unregister(), since fdev may be freed by
+the release callback inside that call.
 
 Assisted-by: opencode:big-pickle
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/dma/fsldma.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/dma/fsldma.c | 27 ++++++++++++++++++++++-----
+ 1 file changed, 22 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/dma/fsldma.c b/drivers/dma/fsldma.c
-index 455d21d738de..1ba10d065278 100644
+index 1ba10d065278..43d817f6ded1 100644
 --- a/drivers/dma/fsldma.c
 +++ b/drivers/dma/fsldma.c
-@@ -748,6 +748,7 @@ static void fsl_dma_free_chan_resources(struct dma_chan *dchan)
+@@ -1219,6 +1219,8 @@ static void fsl_dma_chan_remove(struct fsldma_chan *chan)
+ 	kfree(chan);
+ }
  
- 	chan_dbg(chan, "free all channel resources\n");
- 	spin_lock_bh(&chan->desc_lock);
-+	dma_halt(chan);
- 	fsldma_cleanup_descriptors(chan);
- 	fsldma_free_desc_list(chan, &chan->ld_pending);
- 	fsldma_free_desc_list(chan, &chan->ld_running);
-@@ -1207,6 +1208,10 @@ static int fsl_dma_chan_probe(struct fsldma_device *fdev,
- 
- static void fsl_dma_chan_remove(struct fsldma_chan *chan)
- {
-+	spin_lock_bh(&chan->desc_lock);
-+	dma_halt(chan);
-+	spin_unlock_bh(&chan->desc_lock);
++static void fsldma_device_release(struct dma_device *dma_dev);
 +
- 	tasklet_kill(&chan->tasklet);
- 	irq_dispose_mapping(chan->irq);
- 	list_del(&chan->common.device_node);
+ static int fsldma_of_probe(struct platform_device *op)
+ {
+ 	struct fsldma_device *fdev;
+@@ -1257,6 +1259,7 @@ static int fsldma_of_probe(struct platform_device *op)
+ 	fdev->common.device_issue_pending = fsl_dma_memcpy_issue_pending;
+ 	fdev->common.device_config = fsl_dma_device_config;
+ 	fdev->common.device_terminate_all = fsl_dma_device_terminate_all;
++	fdev->common.device_release = fsldma_device_release;
+ 	fdev->common.dev = &op->dev;
+ 
+ 	fdev->common.src_addr_widths = FSL_DMA_BUSWIDTHS;
+@@ -1316,19 +1319,33 @@ static int fsldma_of_probe(struct platform_device *op)
+ 	return err;
+ }
+ 
++static void fsldma_device_release(struct dma_device *dma_dev)
++{
++	struct fsldma_device *fdev = container_of(dma_dev, struct fsldma_device,
++						  common);
++	kfree(fdev);
++}
++
+ static void fsldma_of_remove(struct platform_device *op)
+ {
+-	struct fsldma_device *fdev;
++	struct fsldma_device *fdev = platform_get_drvdata(op);
++	struct fsldma_chan *chans[FSL_DMA_MAX_CHANS_PER_DEVICE];
+ 	unsigned int i;
+ 
+-	fdev = platform_get_drvdata(op);
+-	dma_async_device_unregister(&fdev->common);
++	for (i = 0; i < FSL_DMA_MAX_CHANS_PER_DEVICE; i++)
++		chans[i] = fdev->chan[i];
+ 
+ 	fsldma_free_irqs(fdev);
+ 
++	/*
++	 * fdev may be freed by fsldma_device_release inside this call;
++	 * use saved copies of the channel pointers afterwards.
++	 */
++	dma_async_device_unregister(&fdev->common);
++
+ 	for (i = 0; i < FSL_DMA_MAX_CHANS_PER_DEVICE; i++) {
+-		if (fdev->chan[i])
+-			fsl_dma_chan_remove(fdev->chan[i]);
++		if (chans[i])
++			fsl_dma_chan_remove(chans[i]);
+ 	}
+ 	irq_dispose_mapping(fdev->irq);
+ 
 -- 
 2.54.0
 
