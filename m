@@ -1,139 +1,160 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6BB4D90B5
-	for <llvm@lists.linux.dev>; Tue,  9 Jun 2026 18:58:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B484346A14;
+	Tue,  9 Jun 2026 20:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781031485; cv=none; b=mupulLuNr3mxJdtqt76NfeAj2q3gzVeUqw6zjDOGbrIfTf6lUvIVPCZQzqRGO4o0Nf0mj7u/I9KleE1dCT8eKasVY6Ay1Iu3LN6HA2HiPYFBJEYdw4PCiL5bbHaD3eQAIZNU7/8EX3GNqTvYB88J7V8dlA+ETIGXr1eVS4E2Wpo=
+	t=1781035245; cv=none; b=tO+mrZNGMrx4A4ROXwiEx8VVfpBa6qCRXijzUFjz91uapVXKWJFqbgyerUuLCEd897ZOR4n1V9qLLXDMhmyR0j+jYLE1BIGAenaYzKoQ4SR1XbpWtBd21nTiYDmeAJ7FjeTs8h9S+Rv9KXOgDDhdphyptY1QUkF8kzGB3LCGCf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781031485; c=relaxed/simple;
-	bh=vgTU6IpqehS35f26r2q57NqAGrF/RDXF3lubDqCB+Bg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qSBO127p0x8pQ2x2Wg9ouB9sK+KPyHUOcG0B2k6zEScLREEOoQHfm4qqpq6S7fBOBrXcmaG5xJc91T4cCT1xOs9YAVSMs4d2nIIhD0k7G5usgbgY+6oeFjcWDgiIO9eCVlV6kPsV52QG7xiskIpdZXnFGvpmUcXtYNW+u1ZiWTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=cZy0v1i7; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1781035245; c=relaxed/simple;
+	bh=1IAGt3cJ+GNLO2Mp9SN8Z7rKExCu+XTzX8q4S1h0VSM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bcCg4wHd0anZ+xpidcPbnqYiXB7tz+XIiCtW3jGI1ZQIZhTDZpjY8hLOD8K6Df9Wt/LMMjC+a5EHqHSXba8pmcCbSSRmSY2Uic7QYV0ZJ/KE0RBxcz6KgBmjg26SXxvUz0crtJQP5Wh/hAjo3XYPxM0FqEKHUdcxSpFrUwAxnyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QE0mbi+5; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="cZy0v1i7"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-45eeea039ebso3141368f8f.1
-        for <llvm@lists.linux.dev>; Tue, 09 Jun 2026 11:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1781031480; x=1781636280; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r7ceLvJFGDWzpb591woUgz7GBOYPJ1IlL6PiiR38W78=;
-        b=cZy0v1i7g9A8Q0rl1yIa8/Ol6alSLnI/c2YNdAFzVI1X7WLic1tmVvM54gjUqWQFQ4
-         afvtosImESKOJIcgu0Sp3krsqJcCvSlpWYF+xEUIghZoWMEs0mg/Y2lU2kCXOmWQy8T7
-         CnSsDKX8v62sGvNjDWkGJsfRicl5ANqsmpfHqU1Qd7fQaDaSK3Rb7Fr0c3NCxvnpKkm7
-         SMgLnSCmR7w1aSWBSCyVvwtbsTPoChvMHsM8kdENGz51yDJYpREqeE/3YXkdft/jA4dO
-         T4cN7MxFY1r0vYCTJL1oOpMwuM2cmrRlCdqDx1Tabjjazk4ke3ohOQXFyH1UzQuZ3Lb9
-         XcfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781031480; x=1781636280;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=r7ceLvJFGDWzpb591woUgz7GBOYPJ1IlL6PiiR38W78=;
-        b=h0zWN2zx2+LplpX7kQHy+Yrz3C8q23R+QytyGhOUf8sUXmf1TcU5mUur1D9EALWmf2
-         E+SYqgf9eNRiNWnjmxm4xbcHdV4yyza0HAkv1uUg85/Ns9rIHYVAVe0fhmuQqtmYOvac
-         l+g0xz/UHQ0Rri9e3tG1EnsLADBXECPZrJsYJZ4X3yaQVGe0TYzSe5MgfTnimBnMAzk/
-         Z15e4tZwH/2AipTBAMifWxHzcxff9MulF7C3Em8kpJvWtqocxHJihqqv6/VsRV/ra+yM
-         tbUwaQkEU6Tm54Y0c3gqb/OJ6FkY8hAD9GGzLRucqmjwiTcZPGG6tflNExSd9OhnGzpd
-         Gttw==
-X-Forwarded-Encrypted: i=1; AFNElJ99JPRNNUBYfB842vuk/UAi10OPMOIh8YhGXtA6MD2QUZWt3PGlQ1pnp8DMa3MfIFIGYwg5@lists.linux.dev
-X-Gm-Message-State: AOJu0YyziByS5usb0F1TL1D92gOmTHJAaQ23olr01gow+qOJ51517ErM
-	cF3RqiNN3uzx0X1EMh9BZ4aQ2ppaavNL3bp9pEdJxbzsiQzZdwtEkI/gO9b9bED8LNY=
-X-Gm-Gg: Acq92OEemb3faNEemNlWU04bbP/RwNbBvc7FXkQWDAWhluJdnT916yA4ZXJGLYbpnmP
-	X87LolqDBIV9dReoT32r5alI33g02pU+sDEduz/moLXwWGTtyrwN48sAKTKC2DPfsat8IgDX+eE
-	PDT9NW4FO6djJi4v1VhHWcEHG4A9z+aaGfQWFVFXH2XP3Z1aNMDbwwS2zqLndCdWVrBQyh9vV1v
-	/txwEUjNFqKwGjaK3LWMH5kQPux5IQHD6i2kGzgv5cD8h3cKGIYs0/qsA7UnmC7HzyLdJUJ26mS
-	rOmDYLNbVYBkoZnTkczCepphK3BzJZyYPFaoLTnkQpYKjCutVhE+uXgi6q7U6hb2pKI9cee8ADO
-	OJ+YGVLBlcFVXqunXVtD7OcZ3XPJBaIQpMugBp7ocdP8xJS6lSW7osr9qjAL05+E5UHTFT0BHBa
-	XCiBZ7iHS2Nqgu71o8DMv+yTplESIX0rPZC4pwuH2/5g==
-X-Received: by 2002:a5d:550f:0:b0:460:3233:f994 with SMTP id ffacd0b85a97d-4603233fa1fmr26772439f8f.43.1781031480394;
-        Tue, 09 Jun 2026 11:58:00 -0700 (PDT)
-Received: from localhost ([2001:4091:a245:857c:bd97:47c2:83e4:8d45])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2f2710sm50663559f8f.14.2026.06.09.11.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 11:58:00 -0700 (PDT)
-From: "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
-Date: Tue, 09 Jun 2026 20:56:23 +0200
-Subject: [PATCH v6 11/11] arm64: dts: ti: k3-am62p-ti-ipc-firmware: Add r5f
- nodes to pre-ram bootphase
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QE0mbi+5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781035245; x=1812571245;
+  h=date:from:to:cc:subject:message-id;
+  bh=1IAGt3cJ+GNLO2Mp9SN8Z7rKExCu+XTzX8q4S1h0VSM=;
+  b=QE0mbi+5PJ/7A81losFNSWUvmpPuyErexj3JLE26JjNtFEYx7Ho61Y0n
+   0KLpbJc77l69IZSXaBQqkIkB1W4YsPe1q0JbxWZMw+ryQEN+KrI1KM9Bi
+   2oo6EHlShzYTOYHxaGACXkf1yIdNyKEp3L9JmMcDqwn1PDlo2zrdQxzr2
+   rc5ZFcUo0Dpe5vuto/4IcsAe/9vEvA34ygS/SkWUIWZ9sMvb6+OnPbkwA
+   Fu66wFdKde/NHJwdDTpup2/mTf9CJGSftrvQ4JTL9/PkDvLZbwoalgrFu
+   Hc6hOytO0Q1pDOLKKH6PqERyz5SGbhOEsz+71PiBY4T6wjZih2BkehDoO
+   Q==;
+X-CSE-ConnectionGUID: rlRO5SscR1e3CDWdVO5A6A==
+X-CSE-MsgGUID: qSzbw75xRr+0KqpKkdH1Ug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="92133986"
+X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
+   d="scan'208";a="92133986"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 13:00:42 -0700
+X-CSE-ConnectionGUID: usxphOB5QBO8PbH8qm7+Iw==
+X-CSE-MsgGUID: nxPVJ39ISZ+Agg97oV4HuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
+   d="scan'208";a="249881881"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 09 Jun 2026 13:00:40 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wX2cn-00000000KUW-0pZ0;
+	Tue, 09 Jun 2026 20:00:37 +0000
+Date: Wed, 10 Jun 2026 03:59:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-next 11/22] fs/afs/symlink.c:97:7:
+ warning: variable 'ret' is uninitialized when used here
+Message-ID: <202606100329.iHRpefyn-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260609-topic-am62a-ioddr-dt-v6-19-v6-11-16afba97fbe0@baylibre.com>
-References: <20260609-topic-am62a-ioddr-dt-v6-19-v6-0-16afba97fbe0@baylibre.com>
-In-Reply-To: <20260609-topic-am62a-ioddr-dt-v6-19-v6-0-16afba97fbe0@baylibre.com>
-To: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Judith Mendez <jm@ti.com>, Daniel Schultz <d.schultz@phytec.de>, 
- Andrew Davis <afd@ti.com>, Siddharth Vadapalli <s-vadapalli@ti.com>, 
- Paresh Bhagat <p-bhagat@ti.com>, Bryan Brattlof <bb@ti.com>, 
- Jai Luthra <jai.luthra@ideasonboard.com>, Devarsh Thakkar <devarsht@ti.com>, 
- Beleswar Padhi <b-padhi@ti.com>, 
- Francesco Dolcini <francesco.dolcini@toradex.com>, 
- Stefano Radaelli <stefano.radaelli21@gmail.com>
-Cc: Vishal Mahaveer <vishalm@ti.com>, Kevin Hilman <khilman@baylibre.com>, 
- Sebin Francis <sebin.francis@ti.com>, Kendall Willis <k-willis@ti.com>, 
- Akashdeep Kaur <a-kaur@ti.com>, linux-arm-kernel@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Hari Nagalla <hnagalla@ti.com>, 
- "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1228; i=msp@baylibre.com;
- h=from:subject:message-id; bh=vgTU6IpqehS35f26r2q57NqAGrF/RDXF3lubDqCB+Bg=;
- b=owGbwMvMwCXWejAsc4KoVzDjabUkhiyNJIWtC9Wd2BVK7G1VZ8l/k5HMmsA25/PcSXd6/2gZ+
- f1sXHq/o5SFQYyLQVZMkaUzMTTtv/zOY8mLlm2GmcPKBDKEgYtTACYy/wDD/7wDn10ljz4x7v5f
- x+0qqP7Fp+UFx/bzO2//fyb2UPHTo/sMf0V3LxBvKiy/5ByoVr9u0vdfkZOXN0z6r+Hv6Wy2VuL
- 0DyYA
-X-Developer-Key: i=msp@baylibre.com; a=openpgp;
- fpr=BADD88DB889FDC3E8A3D5FE612FA6A01E0A45B41
 
-For IO+DDR the wkup_r5fss0_core0 and the
-wkup_r5fss0_core0_lpm_metadata_region need to be accessed before RAM
-setup is done. These are used to read the lpm metadata region in which
-data is stored to resume. This needs to be done before RAM is in use to
-avoid overwriting data.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
+head:   1d9a108be2c6acdd19dfad7fd3f536c79810dafa
+commit: 169b840c161aff8f6ece83314583a409431e2824 [11/22] afs: Use a bvecq to hold dir content rather than folioq
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260610/202606100329.iHRpefyn-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260610/202606100329.iHRpefyn-lkp@intel.com/reproduce)
 
-Signed-off-by: Markus Schneider-Pargmann (TI) <msp@baylibre.com>
----
- arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606100329.iHRpefyn-lkp@intel.com/
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi b/arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi
-index 8f7409da83392d2d1f160a9645ef4d68f7aaa1bf..04fcd5115b9d95e6e23c4e43782c06501a0fa601 100644
---- a/arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi
-@@ -40,6 +40,7 @@ wkup_r5fss0_core0_lpm_metadata_region: memory@9ca08000 {
- 		compatible = "shared-dma-pool";
- 		reg = <0x00 0x9ca08000 0x00 0x1000>;
- 		no-map;
-+		bootph-pre-ram;
- 	};
- 
- 	wkup_r5fss0_core0_lpm_rest_region: memory@9ca09000 {
-@@ -89,6 +90,7 @@ &wkup_r5fss0_core0 {
- 			      "lpm-metadata", "lpm-context",
- 			      "dm-firmware";
- 	status = "okay";
-+	bootph-pre-ram;
- };
- 
- &mcu_r5fss0 {
+All warnings (new ones prefixed by >>):
 
--- 
-2.53.0
+>> fs/afs/symlink.c:97:7: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+      97 |                 if (ret < 0)
+         |                     ^~~
+   fs/afs/symlink.c:86:13: note: initialize the variable 'ret' to silence this warning
+      86 |         ssize_t ret;
+         |                    ^
+         |                     = 0
+   1 warning generated.
 
+
+vim +/ret +97 fs/afs/symlink.c
+
+c0410adf3da6db David Howells 2026-05-12   78  
+c0410adf3da6db David Howells 2026-05-12   79  /*
+c0410adf3da6db David Howells 2026-05-12   80   * Read a symlink in a single download.
+c0410adf3da6db David Howells 2026-05-12   81   */
+c0410adf3da6db David Howells 2026-05-12   82  static ssize_t afs_do_read_symlink(struct afs_vnode *vnode)
+c0410adf3da6db David Howells 2026-05-12   83  {
+c0410adf3da6db David Howells 2026-05-12   84  	struct afs_symlink *symlink;
+c0410adf3da6db David Howells 2026-05-12   85  	struct iov_iter iter;
+c0410adf3da6db David Howells 2026-05-12   86  	ssize_t ret;
+c0410adf3da6db David Howells 2026-05-12   87  	loff_t i_size;
+c0410adf3da6db David Howells 2026-05-12   88  
+c0410adf3da6db David Howells 2026-05-12   89  	i_size = i_size_read(&vnode->netfs.inode);
+c0410adf3da6db David Howells 2026-05-12   90  	if (i_size > PAGE_SIZE - 1) {
+c0410adf3da6db David Howells 2026-05-12   91  		trace_afs_file_error(vnode, -EFBIG, afs_file_error_dir_big);
+c0410adf3da6db David Howells 2026-05-12   92  		return -EFBIG;
+c0410adf3da6db David Howells 2026-05-12   93  	}
+c0410adf3da6db David Howells 2026-05-12   94  
+c0410adf3da6db David Howells 2026-05-12   95  	if (!vnode->directory) {
+169b840c161aff David Howells 2026-01-07   96  		vnode->directory = bvecq_alloc_buffer(PAGE_SIZE, GFP_KERNEL);
+c0410adf3da6db David Howells 2026-05-12  @97  		if (ret < 0)
+c0410adf3da6db David Howells 2026-05-12   98  			return ret;
+c0410adf3da6db David Howells 2026-05-12   99  	}
+c0410adf3da6db David Howells 2026-05-12  100  
+169b840c161aff David Howells 2026-01-07  101  	iov_iter_bvec_queue(&iter, ITER_DEST, vnode->directory, 0, 0, PAGE_SIZE);
+c0410adf3da6db David Howells 2026-05-12  102  
+c0410adf3da6db David Howells 2026-05-12  103  	/* AFS requires us to perform the read of a symlink as a single unit to
+c0410adf3da6db David Howells 2026-05-12  104  	 * avoid issues with the content being changed between reads.
+c0410adf3da6db David Howells 2026-05-12  105  	 */
+c0410adf3da6db David Howells 2026-05-12  106  	ret = netfs_read_single(&vnode->netfs.inode, NULL, &iter);
+c0410adf3da6db David Howells 2026-05-12  107  	if (ret >= 0) {
+c0410adf3da6db David Howells 2026-05-12  108  		i_size = ret;
+c0410adf3da6db David Howells 2026-05-12  109  		if (i_size > PAGE_SIZE - 1) {
+c0410adf3da6db David Howells 2026-05-12  110  			trace_afs_file_error(vnode, -EFBIG, afs_file_error_dir_big);
+c0410adf3da6db David Howells 2026-05-12  111  			return -EFBIG;
+c0410adf3da6db David Howells 2026-05-12  112  		}
+c0410adf3da6db David Howells 2026-05-12  113  		vnode->directory_size = i_size;
+c0410adf3da6db David Howells 2026-05-12  114  
+c0410adf3da6db David Howells 2026-05-12  115  		/* Copy the symlink. */
+c0410adf3da6db David Howells 2026-05-12  116  		symlink = kmalloc_flex(struct afs_symlink, content, i_size + 1,
+c0410adf3da6db David Howells 2026-05-12  117  				       GFP_KERNEL);
+c0410adf3da6db David Howells 2026-05-12  118  		if (!symlink)
+c0410adf3da6db David Howells 2026-05-12  119  			return -ENOMEM;
+c0410adf3da6db David Howells 2026-05-12  120  
+c0410adf3da6db David Howells 2026-05-12  121  		refcount_set(&symlink->ref, 1);
+c0410adf3da6db David Howells 2026-05-12  122  		symlink->content[i_size] = 0;
+c0410adf3da6db David Howells 2026-05-12  123  
+169b840c161aff David Howells 2026-01-07  124  		const char *s = bvec_kmap_partial(&vnode->directory->bv[0], 0);
+c0410adf3da6db David Howells 2026-05-12  125  
+c0410adf3da6db David Howells 2026-05-12  126  		memcpy(symlink->content, s, i_size);
+c0410adf3da6db David Howells 2026-05-12  127  		kunmap_local(s);
+c0410adf3da6db David Howells 2026-05-12  128  
+c0410adf3da6db David Howells 2026-05-12  129  		afs_replace_symlink(vnode, symlink);
+c0410adf3da6db David Howells 2026-05-12  130  	}
+c0410adf3da6db David Howells 2026-05-12  131  
+c0410adf3da6db David Howells 2026-05-12  132  	if (!fscache_cookie_enabled(netfs_i_cookie(&vnode->netfs))) {
+169b840c161aff David Howells 2026-01-07  133  		bvecq_put(vnode->directory);
+c0410adf3da6db David Howells 2026-05-12  134  		vnode->directory = NULL;
+c0410adf3da6db David Howells 2026-05-12  135  		vnode->directory_size = 0;
+c0410adf3da6db David Howells 2026-05-12  136  	}
+c0410adf3da6db David Howells 2026-05-12  137  
+c0410adf3da6db David Howells 2026-05-12  138  	return ret;
+c0410adf3da6db David Howells 2026-05-12  139  }
+c0410adf3da6db David Howells 2026-05-12  140  
+
+:::::: The code at line 97 was first introduced by commit
+:::::: c0410adf3da6db46f3513411fcf95e63c2f1d1ad afs: Fix the locking used by afs_get_link()
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: Christian Brauner <brauner@kernel.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
