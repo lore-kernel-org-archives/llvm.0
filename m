@@ -1,228 +1,304 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7D8329C54;
-	Tue,  9 Jun 2026 14:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A302848A2C1
+	for <llvm@lists.linux.dev>; Tue,  9 Jun 2026 15:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781014285; cv=none; b=A7MOp1Y9Yx7hwh8jSX1iKlx834b/MUNXvjd/rNdyAc8elFormHlzm3XQY7uUFQDPELwRdQ1jFi/mYgjigCQ7TIh1E0s8W0ApmeNAtUUZ8CSSDlxiOXQQCL+4t6zkw1X0+5i4d/NTRNNktJK+UgTmLjDqEp6nvcTBHl0ddFX2SpA=
+	t=1781017983; cv=none; b=sF8KVftWwZqdjQVWhj5uYZEcLiTETebhddGpRPR0Y1vsgDKhQxb4tNRNywpTppGA7cv2TlgLdsO2U34HENR6PNDrmCEF+Ph/UeErwWLJbwPQMG/SO3QTqG9NwLnkFw8jUDxf7eU4qMhyIKdHeLFe7Uqq2k8j/R0K6/cA82Cx+PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781014285; c=relaxed/simple;
-	bh=PTgYkmz3qgg+7i1LNASRF6bOgNEAt5ih4Mz4baD/TKg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=s9FwB7I7CTlOHkb8JosPrGhb+y9pS1DZs8GUOQW/HuFHGMOylHcTX3jTVBzfvS87uAize2A8jfHdFTDJH+1amWf8noLwjtTAA1nOT4Kq/wrK2o9firj93TDrO3Kz3LDdHZhtFAf33BJJQ1ttxyFp+7Kxnm0tD0N9aOdIT+0t1D4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L84SElK0; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781017983; c=relaxed/simple;
+	bh=xcOGKoMm03lLeS9XJqjHXKkCWUlcva6I470XZxVXAW8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=JsjmZGFrM4qsmy80zm7AQgPK9T+a9qslGEuk4hV8fSuUD1bomhWoMetZYWO9LYkXAfsZ+kNfKBNTCeeNgcL3IbBFRPMQTiD9CBVBl6O1+ANZwLHVih8gykTuvZ/u5XwKe9se4H9+B8DCgVRPUJ53KYvPcagunGWNMWxXV+fuWWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IO3TsEbd; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L84SElK0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781014282; x=1812550282;
-  h=date:from:to:cc:subject:message-id;
-  bh=PTgYkmz3qgg+7i1LNASRF6bOgNEAt5ih4Mz4baD/TKg=;
-  b=L84SElK0Xn9NWswkEImQUrvkGrCi3cT7rfEbhh0qbkM/tuNvVUqWh2VO
-   3tm8CTZpxK29U17RZd597hZQpZDJt1obNR1cpS+Rmea6ST7m6NLQJYMmg
-   NSJ0v5mNqjjQrbTwx0sBnuHKHBgIBRe/ehCqY+MnX6HX/RTVuoR9D12mT
-   8as5KSy7aF5Ue37vEcZK2ddYE53euW5HjPEwAB/RCK6iAaiAKtGqujyKP
-   vSbc6k2Kg0CI4Ai+8z0ycnGJhLAhx1+iuzDGnDJi6289r16Iymyq+4JoW
-   m3Qo4h07yaNjN9OQIYAfkHd3exi5JzbM58zDUSqxPXvuP84GEiY7ky6H1
-   Q==;
-X-CSE-ConnectionGUID: igkTZXraQxuz4Q/aUBjqNg==
-X-CSE-MsgGUID: kmia2nxaSE+gYj8bQSYzbg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="104439593"
-X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
-   d="scan'208";a="104439593"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 07:11:22 -0700
-X-CSE-ConnectionGUID: kN1VU6k8QaWQUBBianijsQ==
-X-CSE-MsgGUID: bW3ANYe5Qxm5lOuq67cwzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
-   d="scan'208";a="250947993"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa005.fm.intel.com with ESMTP; 09 Jun 2026 07:11:19 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wWxAj-000000003SL-1ESW;
-	Tue, 09 Jun 2026 14:11:17 +0000
-Date: Tue, 09 Jun 2026 16:10:58 +0200
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [hare-scsi-devel:configfs-ns.v5 42/42]
- include/linux/mmzone.h:839:25: error: use of undeclared identifier
- 'PAGE_ALLOC_COSTLY_ORDER'
-Message-ID: <202606091636.ViVl8kG7-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IO3TsEbd"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-beb2a97cc9aso916160466b.2
+        for <llvm@lists.linux.dev>; Tue, 09 Jun 2026 08:12:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781017976; x=1781622776; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8EM4W/LPFkVTamC5bX+lGeXNaVfuL6P3AGe9bieX5rA=;
+        b=IO3TsEbdV0yfdlJrvbcNxaT0BVBlacePfYurDyQ1tZptQ30+7wM3sLcIztN41xVeKq
+         tve5Q9FXtm8FpWyTXKGfsSDymLiFri+lktAdt978W2zvXEKugAg+yxAu3Skejdd3ggry
+         l91qMxCGiVxsnBRKjy5ovPij+YcboyMcR4FIoxPP13m/WPBPw7xIIqKuW3QQiiYx8F12
+         62wnySoV+G6vUCeZQ15wB1sOycSNZKUWhW4K3YjVMdSHOyQ5Q2SlOoToxVba5qQiMzXd
+         gRKCdbJ2Kyfz1/HSD4TB1yWaEYvRsupO01MX6ByIEh24KOI8vJNkHMCSNIAUzPQ6pkCp
+         U7NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781017976; x=1781622776;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8EM4W/LPFkVTamC5bX+lGeXNaVfuL6P3AGe9bieX5rA=;
+        b=iCiBbtyWHqq2ErE/GCkqU63hlw4JuYCidjPFDUDvyJOaIlSOGorGbX1NsoFriXDCAh
+         /RCdlTdorWodn28TXcVu8MrZ926FNLwDymLucytXRCSU+e3AtHx+JDLaXOb1m2E9lDyD
+         9aVL2rOJyArnytzFmVB6XPMFTbqhFucEWNro6gCnG5PZRDWXOXAoautI04U7/Qq+hCYA
+         mNGHDonf75QTxED8nFwehrQfVlhAve/f7/h2C2gFM9PoghPbfnyWdd0DVW5Wtch/del1
+         0d14onIHoFmORIBs/zpruUIjvI+yKVqvW1lINThwdQ4ChSNjDwMK5vczmkuLgcVsQKs8
+         fN5w==
+X-Forwarded-Encrypted: i=1; AFNElJ8Q7C+kQkx8eYz4mLiW6MzMQAJcmMUseRmAB536SSR2V5dMfMau5q/0lni9Abna+uyM1SSI@lists.linux.dev
+X-Gm-Message-State: AOJu0YzsmSQSAkyWpVUdFtb9EfWLffpj/YETpWYWJue3ubHwF29Os6Wi
+	LVdDuQD31b3OPlj2NM0Zd2hRFu9z+pS9qfBkhPW/oRik0wxDRGF19NCJ
+X-Gm-Gg: Acq92OHBaM+jLCH5G2mDPdhXyh5O+dqor3Zm3r/XHFntvaSzmav0lmhPsDgI2i8RxvC
+	sheCdiIDwfMdsjlEqRB2ptq70wfoS3OLriiy5zbJdWoCxj5aHdIWLxiXqb91hOOWwA7c58YZ25h
+	PgZSD2nm8OXI/nkiTFpES5ch+jBT/5+no2xx7VRs8DqRqT6qyR1hxREqmvG8uCa9G5YMh3qLwpo
+	+FRG0oEIkLU86HkCiMaz0EXVbrv5jXTeKuOuB1umAsH5DlfnA7UpzJp89BJv7aWnTJVw3qvAg/z
+	bfBcR+N3a0BmCYJq7XfuDZagLPEaS3hsqyVO9Z1Pk8Lr3BV00/4iQhNrk3qLCMOKIThDLcfaxxg
+	AJ1/PTChvbP+3Llo8wTsVTXossr1UQ76val9G4josnY+fAWZ5AAjA5NhTozlKVG7e1BqjjM/Em1
+	/FhlXhOWehIimh8mg76k7AkXsrFn67xDZQ
+X-Received: by 2002:a17:907:a0b:b0:bec:b4e3:e930 with SMTP id a640c23a62f3a-bf936ce5946mr185365466b.12.1781017975406;
+        Tue, 09 Jun 2026 08:12:55 -0700 (PDT)
+Received: from Ansuel-XPS24 ([2.195.136.12])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-bf0517721e5sm1073637866b.9.2026.06.09.08.12.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 08:12:54 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Saravana Kannan <saravanak@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net-next v6 00/12] net: pcs: Introduce support for fwnode PCS
+Date: Tue,  9 Jun 2026 17:11:56 +0200
+Message-ID: <20260609151212.29469-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git configfs-ns.v5
-head:   6a13a5d67caca4ca57eb8e916f762a491d8c3120
-commit: 6a13a5d67caca4ca57eb8e916f762a491d8c3120 [42/42] mm,block: Make PAGE_ALLOC_COSTLY_ORDER configurable
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260609/202606091636.ViVl8kG7-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260609/202606091636.ViVl8kG7-lkp@intel.com/reproduce)
+This series introduce a most awaited feature that is correctly
+provide PCS with fwnode without having to use specific export symbol
+and additional handling of PCS in phylink.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606091636.ViVl8kG7-lkp@intel.com/
+At times there were 2 different implementation (this and the one
+from Sean) but Sean agreed that this can be picked and used in favor
+of his implementation as long as his case with race condition is
+correctly handled.
 
-All errors (new ones prefixed by >>):
+---
+First the PCS fwnode:
 
-   WARN /zdci/src/lkp/lib/log.sh:131:in `log_warn': /opt/cross/rustc-1.96.0-bindgen-0.72.1 doesn't exist
-     from /zdci/src/kernel-tests/lib/debug.sh:164: kbuild_log_warn
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3334: export_rust_path
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3324: export_compiler_path
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3803: invoke_make
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3985: make
-     from /zdci/src/kernel-tests/common.sh:202: redirect_error_to_screen
-     from /zdci/src/kernel-tests/common.sh:210: redirect_command_errors
-     from /zdci/src/kernel-tests/lib/kbuild.sh:5642: make_prepare
-     from /zdci/src/kernel-tests/lib/kbuild.sh:5871: test_kernel_build
-     from /zdci/src/kernel-tests/lib/builder/base.sh:442: builder_execute_build
-     from /zdci/src/kernel-tests/lib/kbuild.sh:6381: compile_one_config
-     from /zdci/src/kernel-tests/lib/builder/base.sh:88: builder_compile
-     from /zdci/src/kernel-tests/bisect-test-build-error.sh:102: main
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:18:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:839:25: error: use of undeclared identifier 'PAGE_ALLOC_COSTLY_ORDER'
-     839 |         struct list_head lists[NR_PCP_LISTS];
-         |                                ^~~~~~~~~~~~
-   include/linux/mmzone.h:807:23: note: expanded from macro 'NR_PCP_LISTS'
-     807 | #define NR_PCP_LISTS (NR_LOWORDER_PCP_LISTS + NR_PCP_THP)
-         |                       ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/mmzone.h:806:52: note: expanded from macro 'NR_LOWORDER_PCP_LISTS'
-     806 | #define NR_LOWORDER_PCP_LISTS (MIGRATE_PCPTYPES * (PAGE_ALLOC_COSTLY_ORDER + 1))
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
+The concept is to implement a producer-consumer API similar to other
+subsystem like clock or PHY.
 
+That seems to be the best solution to the problem as PCS driver needs
+to be detached from phylink and implement a simple way to provide a
+PCS while maintaining support for probe defer or driver removal.
 
-vim +/PAGE_ALLOC_COSTLY_ORDER +839 include/linux/mmzone.h
+To keep the implementation simple, the PCS driver devs needs some
+collaboration to correctly implement this. This is O.K. as helper
+to correctly implement this are provided hence it's really a matter
+of following a pattern to correct follow removal of a PCS driver.
 
-ca71fe1ad9221a Ying Huang     2023-10-16  823  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  824  struct per_cpu_pages {
-4b23a68f953628 Mel Gorman     2022-06-24  825  	spinlock_t lock;	/* Protects lists field */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  826  	int count;		/* number of pages in the list */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  827  	int high;		/* high watermark, emptying needed */
-90b41691b98813 Ying Huang     2023-10-16  828  	int high_min;		/* min high watermark */
-90b41691b98813 Ying Huang     2023-10-16  829  	int high_max;		/* max high watermark */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  830  	int batch;		/* chunk size for buddy add/remove */
-ca71fe1ad9221a Ying Huang     2023-10-16  831  	u8 flags;		/* protected by pcp->lock */
-c0a242394cb980 Ying Huang     2023-10-16  832  	u8 alloc_factor;	/* batch scaling factor during allocate */
-28f836b6777b6f Mel Gorman     2021-06-28  833  #ifdef CONFIG_NUMA
-c0a242394cb980 Ying Huang     2023-10-16  834  	u8 expire;		/* When 0, remote pagesets are drained */
-28f836b6777b6f Mel Gorman     2021-06-28  835  #endif
-6ccdcb6d3a741c Ying Huang     2023-10-16  836  	short free_count;	/* consecutive free count */
-5f8dcc21211a3d Mel Gorman     2009-09-21  837  
-5f8dcc21211a3d Mel Gorman     2009-09-21  838  	/* Lists of pages, one per migrate type stored on the pcp-lists */
-44042b4498728f Mel Gorman     2021-06-28 @839  	struct list_head lists[NR_PCP_LISTS];
-5d0a661d808fc8 Mel Gorman     2022-06-24  840  } ____cacheline_aligned_in_smp;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  841  
+A PCS provider have to implement and call fwnode_pcs_add_provider() in
+probe function and define an xlate function to define how the PCS
+should be provided based on the requested interface and phandle spec
+defined in fwnode (based on the #pcs-cells)
 
-:::::: The code at line 839 was first introduced by commit
-:::::: 44042b4498728f4376e84bae1ac8016d146d850b mm/page_alloc: allow high-order pages to be stored on the per-cpu lists
+fwnode_pcs_get() is provided to provide a specific PCS declared in
+fwnode at index.
 
-:::::: TO: Mel Gorman <mgorman@techsingularity.net>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+A simple xlate function is provided for simple single PCS
+implementation, fwnode_pcs_simple_get.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+A PCS provider on driver removal should first call
+fwnode_pcs_del_provider() to delete itself as a provider and then
+release the PCS from phylink with phylink_release_pcs() under rtnl
+lock.
+
+---
+Second PCS handling in phylink:
+
+We have the PCS problem for the only reason that in initial
+implementation, we permitted way too much flexibility to MAC driver
+and things started to deviate. At times we couldn't think SoC
+would start to put PCS outside the MAC hence it was OK to assume
+they would live in the same driver. With the introduction of
+10g in more consumer devices, we are observing a rapid growth
+of this pattern with multiple PCS external to MAC.
+
+To put a stop on this, the only solution is to give back to phylink
+control on PCS handling and enforce more robust supported interface
+definition from both MAC and PCS side.
+
+It's suggested to read patch 0003 of this series for more info, here
+a brief explaination of the idea:
+
+This series introduce handling of PCS in phylink and try to deprecate
+.mac_select_pcs.
+
+Phylink now might contain a linked list of available PCS and
+those will be used for PCS selection on phylink_major_config.
+
+MAC driver needs to define pcs_interfaces mask in phylink_config
+for every interface that needs a dedicated PCS.
+
+These PCS needs to be provided to phylink at phylink_create time
+by setting the available_pcs and num_available_pcs in phylink_config.
+A helper to parse PCS from fwnode is provided
+fwnode_phylink_pcs_parse() that will fill a preallocated array of
+PCS. (the same function can be used to get the number of PCS
+defined in DT, more info in patch 0005)
+
+phylink_create() will fill the internal PCS list with the passed
+array of PCS. phylink_major_config and other user of .mac_select_pcs
+are adapted to make use of this new PCS list.
+
+The supported interface value is also moved internally to phylink
+struct. This is to handle late removal and addition of PCS.
+(the bonus effect to this is giving phylink a clear idea of what
+is actually supported by the MAC and his constraint with PCS)
+
+The supported interface mask in phylink is done by OR the
+supported_interfaces in phylink_config with every PCS in PCS list.
+
+PCS removal is supported by forcing a mac_config, refresh the
+supported interfaces and run a phy_resolve().
+
+PCS late addition is supported by introducing a global notifier
+for PCS provider. If a phylink have the pcs_interfaces mask not
+zero, it's registered to this notifier.
+
+PCS provider will emit a global PCS add event to signal any
+interface that a new PCS might be avialable.
+
+The function will then check if the PCS is related to the MAC
+fwnode and add it accordingly.
+
+A user for this new implementation is provided as an Airoha PCS
+driver. This was also tested downstream with the IPQ95xx QCOM SoC
+and with the help of Daniel also on the various Mediatek MT7988
+SoC with both SFP cage implementation and DSA attached.
+
+Lots of tests were done with driver unbind/bind and with interface
+up/down also by adding print to make sure major_config_fail gets
+correctly triggered and reset once the PCS comes back.
+
+The dedicated commits have longer description on the implementation
+so it's suggested to also check there for additional info.
+
+It's worth to mention that OpenWrt is currently using this on
+Mediatek SoC and QCOM ipq807x/ipq60xx/ipq50xx and Airoha are
+already ported in staging tree for testing.
+
+---
+
+Changes v6:
+- Rebase on top of net-next
+- Add Documentation files
+- Add fw_devlink patch
+- Fix some comments typo
+- Rework the airoha_eth.c implementation with new multi serdes code
+- Extend PCS code with PCIe and USB support
+- Align schema to new property
+Changes v5:
+- Rebase on top of net-next
+- Use the new force_major_config
+- Reword some comments and commit description
+- Return -ENODEV instead of -EPROBE_DEFER to perevent race condition
+- Drop phy_interface_copy patch (Russell pushed an equivalent version)
+Changes v4:
+- Move patch 0002 phy_interface_copy to 0002 (fix bisectability
+  problem)
+- Address review from Lorenzo for Airoha ethernet driver
+- Fix kdoc error with missing Return (actually missing : before Return)
+- Fix UNMET dependency reported error for CONFIG_FWNODE_PCS
+- Revert to pcs.c instead of core.c (due to name conflict with other kmod)
+- Fix clang compilation error for Airoha PCS driver
+- Add missing inline function to pcs.h function
+Changes v3:
+- Out of RFC
+- Fix various spelling mistake
+- Drop circular dependency patch
+- Complete Airoha Ethernet phylink integration
+- Introduce .pcs_link_down PCS OP
+Changes v2:
+- Switch to fwnode
+- Implement PCS provider notifier
+- Better split changes
+- Move supported_interfaces to phylink
+- Add circular dependency patch
+- Rework handling with indirect addition/removal and
+  trigger of phylink_resolve()
+
+Christian Marangi (12):
+  net: phylink: keep and use MAC supported_interfaces in phylink struct
+  net: phylink: introduce internal phylink PCS handling
+  net: phylink: add phylink_release_pcs() to externally release a PCS
+  net: pcs: implement Firmware node support for PCS driver
+  net: phylink: support late PCS provider attach
+  net: Document PCS subsystem
+  MAINTAINERS: add myself as PCS subsystem maintainer
+  of: property: fw_devlink: Add support for "pcs-handle"
+  net: phylink: add .pcs_link_down PCS OP
+  dt-bindings: net: pcs: Document support for Airoha Ethernet PCS
+  net: pcs: airoha: add PCS driver for Airoha AN7581 SoC
+  net: airoha: add phylink support
+
+ .../bindings/net/pcs/airoha,pcs.yaml          |  260 ++
+ Documentation/networking/index.rst            |    1 +
+ Documentation/networking/pcs.rst              |  228 ++
+ MAINTAINERS                                   |    9 +
+ drivers/net/ethernet/airoha/Kconfig           |    1 +
+ drivers/net/ethernet/airoha/airoha_eth.c      |  167 +-
+ drivers/net/ethernet/airoha/airoha_eth.h      |    3 +
+ drivers/net/ethernet/airoha/airoha_regs.h     |   12 +
+ drivers/net/pcs/Kconfig                       |    8 +
+ drivers/net/pcs/Makefile                      |    3 +
+ drivers/net/pcs/airoha/Kconfig                |   12 +
+ drivers/net/pcs/airoha/Makefile               |    7 +
+ drivers/net/pcs/airoha/pcs-airoha-common.c    | 1313 +++++++++++
+ drivers/net/pcs/airoha/pcs-airoha.h           | 1309 +++++++++++
+ drivers/net/pcs/airoha/pcs-an7581.c           | 2093 +++++++++++++++++
+ drivers/net/pcs/pcs.c                         |  241 ++
+ drivers/net/phy/phylink.c                     |  316 ++-
+ drivers/of/property.c                         |    2 +
+ include/linux/pcs/pcs-provider.h              |   41 +
+ include/linux/pcs/pcs.h                       |  104 +
+ include/linux/phylink.h                       |   20 +
+ 21 files changed, 6123 insertions(+), 27 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/airoha,pcs.yaml
+ create mode 100644 Documentation/networking/pcs.rst
+ create mode 100644 drivers/net/pcs/airoha/Kconfig
+ create mode 100644 drivers/net/pcs/airoha/Makefile
+ create mode 100644 drivers/net/pcs/airoha/pcs-airoha-common.c
+ create mode 100644 drivers/net/pcs/airoha/pcs-airoha.h
+ create mode 100644 drivers/net/pcs/airoha/pcs-an7581.c
+ create mode 100644 drivers/net/pcs/pcs.c
+ create mode 100644 include/linux/pcs/pcs-provider.h
+ create mode 100644 include/linux/pcs/pcs.h
+
+-- 
+2.53.0
+
