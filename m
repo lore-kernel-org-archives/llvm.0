@@ -1,158 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D8B3F5BC2;
-	Tue,  9 Jun 2026 23:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1DED370ACE;
+	Tue,  9 Jun 2026 23:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781046558; cv=none; b=rcRMpEzSjVa3HFnWCjbzo+I5uNuqWR15h5F8TyvzCq3CYflZz+MKkJ/e2vmvcK/cR1P1M8Q/Uox0TtgexsvxhuubhllTF1HnK5x7aN+j2xRUAprzQy4nfdab8QDi9YfN52if2Y1tYv92v1KJXcwOt6wGS0N6XaxHQrfPQmyTKaM=
+	t=1781048437; cv=none; b=NePIdc0MdxMw343bAj+Y4AIG9RBmG845L1EYdNQ9Jtp8UKYQeK5XkYqOIoadUbi5lHytupleCBBcK8P/gwt/PJjazs33/l2ap2OFl3vxjGb5fkt6lbf7pENA3kmC3/Qc4X4v8FUAmwTmCMkfa6GdWg1kS2PJySsklFRXzCU/54Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781046558; c=relaxed/simple;
-	bh=1OjaBozmMS7OkEWtwI0fZZy/7aRXgKMoI2DySNHayFU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=BAV9a+GULB0D16B5zZ02Ydpfdl+J/pkntUNzuEjLROnZFY/+GZ84HO1VgnZc4p/45PulTTLXRpL5j6xtIOGuZY0o5b09LAWt1wVld/4TH+Niwfzn128TMdIGlhlpJ/xThi2X9XOf+44irO2zNFDDiTNEMBiWnW654XniE06H6cI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kMjVELSY; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781048437; c=relaxed/simple;
+	bh=cUPl6GbgtHpFAbSkmB2tZ0f6uqr9N/6A5bxVPT1xDF4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=u3zNgUr72HnmdkhuXa2wnfsG4Dc5VA4d+0Jt8EsgUBPY3wwGtrY5H4xRcTP8DGyxm+BJICIJOINbXvSJwV4/Gya+/7dTLVffbkDk30N5dJ9YIiRhgqFTGvJFLTglAcpQhDobMYAdrMyE2h3w5vSbN5dUk5rCZSVaDbbQvEoC3T0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jo25DLt8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kMjVELSY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781046556; x=1812582556;
-  h=date:from:to:cc:subject:message-id;
-  bh=1OjaBozmMS7OkEWtwI0fZZy/7aRXgKMoI2DySNHayFU=;
-  b=kMjVELSYw/wSDmfoyLYIy2OziGXn8bp1O0xA9C0ZLzNgb/oLxb+7Ce9f
-   Sivu1mLBvmJpzga2Gp8zPblBNOKgIyMyoMNtcX32/o3qwggXTh6sKtbFZ
-   gblspU1hffrSHRRjKLt9tnjRQ+kVhJUieAVSsjhGZnE862YkwGOZruDdg
-   vjlHHrCcv7rD3dvC7O+Hxq5jKmALjWgxY1i31KYljDZZdlE0xl3QWgX6/
-   SSmBsJAQ9i5ogVr5uWsWiZmiTGHPloT5eFhbnr/iXwmeMStHUxmmJNQYq
-   zWG/mQ1dhSuvJU1cY8g7PRbr6e3SFMOPpgPOxZ5ac3tF/mA2lOPLU/BqE
-   Q==;
-X-CSE-ConnectionGUID: +Y/zdWSWRPeG/8LVhbtXUg==
-X-CSE-MsgGUID: NyaI9w9gRDWncRp8uNTnDA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="104491826"
-X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
-   d="scan'208";a="104491826"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 16:09:14 -0700
-X-CSE-ConnectionGUID: tMH0RdOwQyCgGB3Lrd4dPw==
-X-CSE-MsgGUID: JRHD+VwiSXaxEyGIAFZ1jA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
-   d="scan'208";a="245150781"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 09 Jun 2026 16:09:12 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wX5ZF-00000000KeY-3uQf;
-	Tue, 09 Jun 2026 23:09:09 +0000
-Date: Wed, 10 Jun 2026 07:08:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-next 22/22] fs/9p/vfs_addr.c:79:6:
- warning: variable 'len' is used uninitialized whenever 'if' condition is true
-Message-ID: <202606100718.e78jIMlQ-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jo25DLt8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF901F00893;
+	Tue,  9 Jun 2026 23:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781048436;
+	bh=zWbtTasqHYZ22NTZEvHP2JSPQq6kl25q5C50kDsT+E4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=Jo25DLt8y/eYZGx0wVxq7hpF3pDLq+GnWrC0/AO0oUfdJjL9ndIfdKOcT4FBZx/5P
+	 Z2tWoUIJPdOyfiKe2Kg9bTRRL6aK7ryLKnaJ69A4M6216UkUP7pvN7lvgDUq50MRYg
+	 /1rzeVP2M62oMtjXZsIH7cm+nmEUuuULWhh4AZTGg/0csLMisbFoowh0pI2hVqexIp
+	 jGwKY11YAMv8chHr6RmC/+12KP6fKFd3HoyD7Uweg9aQ7z/OzimqiStVy4QfII5CYq
+	 6sDd/+XD1sjXTmpeaGzC33yqbz35gRFaIsn2o12RwX3kaQInYNdLtUevamI2Mhtb4B
+	 oaOF3cMYwPJpg==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <nsc@kernel.org>, Bill Wendling <morbo@google.com>, 
+ Justin Stitt <justinstitt@google.com>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-kbuild@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org, 
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+ linux-hardening@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
+ Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>, 
+ linux-arm-kernel@lists.infradead.org, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org, 
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Ard Biesheuvel <ardb@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+In-Reply-To: <20260517-bump-minimum-supported-llvm-version-to-17-v2-0-b3b8cda46bdd@kernel.org>
+References: <20260517-bump-minimum-supported-llvm-version-to-17-v2-0-b3b8cda46bdd@kernel.org>
+Subject: Re: [PATCH v2 00/16] Bump minimum version of LLVM for building the
+ kernel to 17.0.1
+Message-Id: <178104773630.2704789.17858317658280322569.b4-ty@b4>
+Date: Tue, 09 Jun 2026 16:28:56 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3318; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=cUPl6GbgtHpFAbSkmB2tZ0f6uqr9N/6A5bxVPT1xDF4=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFkaS3IPsivujN14IlVvd5DxTcUlU/e9+jdRk8kvq+dbf
+ cHdx/90O0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEdr5mZNiTt59J7VTM/K2v
+ O/fyv5M5fzHhZbORdoB/UO3ffVtuSXszMvwzu30mYUfBRMtKrwu9x/rrlisuX/pr+9lt+mEBEj8
+ MOVkB
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
-head:   1d9a108be2c6acdd19dfad7fd3f536c79810dafa
-commit: 1d9a108be2c6acdd19dfad7fd3f536c79810dafa [22/22] netfs: Combine prepare and issue ops and grab the buffers on request
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260610/202606100718.e78jIMlQ-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260610/202606100718.e78jIMlQ-lkp@intel.com/reproduce)
+On Sun, 17 May 2026 13:05:03 -1000, Nathan Chancellor wrote:
+> Bump minimum version of LLVM for building the kernel to 17.0.1
+> 
+> The current minimum version of LLVM for building the kernel is 15.0.0.
+> However, there are two deficiencies compared to GCC that were fixed in
+> LLVM 17 that are starting to become more noticeable.
+> 
+> The first was a bug in LLVM's scope checker [1], where all labels in a
+> function were validated as potential targets of an asm goto statement,
+> even if they were not listed in the asm goto statement as targets. This
+> becomes particularly problematic when the cleanup attribute is used, as
+> 
+> [...]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606100718.e78jIMlQ-lkp@intel.com/
+Applied to
 
-All warnings (new ones prefixed by >>):
+  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next
 
->> fs/9p/vfs_addr.c:79:6: warning: variable 'len' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-      79 |         if (err < 0)
-         |             ^~~~~~~
-   fs/9p/vfs_addr.c:90:51: note: uninitialized use occurs here
-      90 |         return netfs_write_subrequest_terminated(subreq, len ?: err);
-         |                                                          ^~~
-   fs/9p/vfs_addr.c:79:2: note: remove the 'if' if its condition is always false
-      79 |         if (err < 0)
-         |         ^~~~~~~~~~~~
-      80 |                 goto term;
-         |                 ~~~~~~~~~
-   fs/9p/vfs_addr.c:74:14: note: initialize the variable 'len' to silence this warning
-      74 |         int err, len;
-         |                     ^
-         |                      = 0
-   1 warning generated.
---
->> fs/netfs/write_collect.c:154:7: warning: variable 'fpos' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     154 |                 if (!bvecq->bv[slot].bv_page) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/write_collect.c:186:7: note: uninitialized use occurs here
-     186 |                 if (fpos + fsize >= collected_to)
-         |                     ^~~~
-   fs/netfs/write_collect.c:154:3: note: remove the 'if' if its condition is always false
-     154 |                 if (!bvecq->bv[slot].bv_page) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     155 |                         WARN_ONCE(1, "R=%08x slot already cleared?\n", wreq->debug_id);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     156 |                         fsize = bvecq->bv[slot].bv_len;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     157 |                         goto skip;
-         |                         ~~~~~~~~~~
-     158 |                 }
-         |                 ~
-   fs/netfs/write_collect.c:137:26: note: initialize the variable 'fpos' to silence this warning
-     137 |                 unsigned long long fpos, fend;
-         |                                        ^
-         |                                         = 0
-   1 warning generated.
---
->> fs/netfs/read_pgpriv2.c:204:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     204 |         return ret;
-         |                ^~~
-   fs/netfs/read_pgpriv2.c:187:9: note: initialize the variable 'ret' to silence this warning
-     187 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+Thanks!
+
+[01/16] kbuild: Bump minimum version of LLVM for building the kernel to 17.0.1
+        https://git.kernel.org/kbuild/c/ce3267a39a92b
+[02/16] security/Kconfig.hardening: Remove tautological condition from CC_HAS_ZERO_CALL_USED_REGS
+        https://git.kernel.org/kbuild/c/813fe686e90b4
+[03/16] security/Kconfig.hardening: Remove tautological condition from FORTIFY_SOURCE
+        https://git.kernel.org/kbuild/c/8ad2017578c99
+[04/16] security/Kconfig.hardening: Remove tautological condition from CC_HAS_RANDSTRUCT
+        https://git.kernel.org/kbuild/c/9331258bc129a
+[05/16] arch/Kconfig: Remove tautological conditions from HAS_LTO_CLANG
+        https://git.kernel.org/kbuild/c/2189cb1a80f06
+[06/16] arch/Kconfig: Remove tautological condition from AUTOFDO_CLANG
+        https://git.kernel.org/kbuild/c/de0bf1e138fcd
+[07/16] ARM: Drop tautological ld.lld conditions from ARCH_MULTI_V4{,T}
+        https://git.kernel.org/kbuild/c/48d229b6a48ae
+[08/16] riscv: Remove tautological condition from selection of ARCH_SUPPORTS_CFI
+        https://git.kernel.org/kbuild/c/62c4af8689511
+[09/16] riscv: Drop tautological condition from TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+        https://git.kernel.org/kbuild/c/7e279976cf2a2
+[10/16] scripts/Makefile.warn: Drop -Wformat handling for clang < 16
+        https://git.kernel.org/kbuild/c/2a35c63c6bc42
+[11/16] x86/build: Drop unnecessary '-ffreestanding' addition to KBUILD_CFLAGS
+        https://git.kernel.org/kbuild/c/7b3281fcb43c5
+[12/16] x86/module: Revert "Deal with GOT based stack cookie load on Clang < 17"
+        https://git.kernel.org/kbuild/c/12b7bf92bddd4
+[13/16] x86/entry/vdso32: Remove conditional omission of '.cfi_offset eflags'
+        https://git.kernel.org/kbuild/c/4e7af20d0d104
+[14/16] kbuild: Remove check for broken scoping with clang < 17 in CC_HAS_ASM_GOTO_OUTPUT
+        https://git.kernel.org/kbuild/c/f3de78cb19d12
+[15/16] compiler-clang.h: Remove __cleanup -Wunused-variable workaround
+        https://git.kernel.org/kbuild/c/c69eaa687667e
+[16/16] compiler-clang.h: Drop explicit version number from "all" diagnostic macro
+        https://git.kernel.org/kbuild/c/c919893eabb43
+
+Please look out for regression or issue reports or other follow up
+comments, as they may result in the patch/series getting dropped or
+reverted. Patches applied to an "unstable" branch are accepted pending
+wider testing in -next and any post-commit review; they will generally
+be moved to the main branch in a week if no issues are found.
+
+Best regards,
+-- 
+Cheers,
+Nathan
 
 
-vim +79 fs/9p/vfs_addr.c
-
-    66	
-    67	/*
-    68	 * Issue a subrequest to write to the server.
-    69	 */
-    70	static void v9fs_issue_write(struct netfs_io_subrequest *subreq)
-    71	{
-    72		struct iov_iter iter;
-    73		struct p9_fid *fid = subreq->rreq->netfs_priv;
-    74		int err, len;
-    75	
-    76		subreq->len = umin(subreq->len, fid->clnt->msize - P9_IOHDRSZ);
-    77	
-    78		err = netfs_prepare_write_buffer(subreq, INT_MAX);
-  > 79		if (err < 0)
-    80			goto term;
-    81	
-    82		iov_iter_bvec_queue(&iter, ITER_SOURCE, subreq->content.bvecq,
-    83				    subreq->content.slot, subreq->content.offset, subreq->len);
-    84	
-    85		len = p9_client_write(fid, subreq->start, &iter, &err);
-    86		if (len > 0)
-    87			__set_bit(NETFS_SREQ_MADE_PROGRESS, &subreq->flags);
-    88	
-    89	term:
-    90		return netfs_write_subrequest_terminated(subreq, len ?: err);
-    91	}
-    92	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
