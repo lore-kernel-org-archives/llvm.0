@@ -1,64 +1,64 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98DC4D2EFE
-	for <llvm@lists.linux.dev>; Tue,  9 Jun 2026 22:20:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682774D8D98
+	for <llvm@lists.linux.dev>; Tue,  9 Jun 2026 22:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781043615; cv=none; b=fmU57viyaG3diFiveeQs/s8tt5FS+9KmdRSVUSBSgdf/9aD5QUUWuri0Nhc3F2CcQf3ebeoU6rDOoBBdKJ8WnXm5NY/QiCwclJEP/C8npRx20N8AvS5An1kamWKWM0sDmYCjxv/8xuFJwvgYa4IbTNK6qyF8ohQpFPXwPVQpiyM=
+	t=1781043616; cv=none; b=nKiJZFbH6godo8H1NdpSdR9JyzaWUuRBL6CbdVmFq7MCQnw1BXKycySuk4zsEq7JyevCQj7dKer9QR1DLNG/izNcWq6OOTiazeU0xQmugNTn/LihEmhS3axyBUc914d5LNW8UQ+OW+IEhRGvd/SckkCIqQX5Z7BU7CJEf/918sM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781043615; c=relaxed/simple;
-	bh=qh8I3vnOxyJVMrriCmgL8Ppb0gIh5xcK0e99IyDGG7o=;
+	s=arc-20240116; t=1781043616; c=relaxed/simple;
+	bh=9Yea6xTnMAtPCPNuS9VV3xysMhmXAvdi4sueisMN3io=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AtSqt4oVctFJNytKOg1MDIdDA1hIm3eP2eDqlbUFnnFPWvNYcw5K3DEShQL+/tcbcpEWRDf2sNv6yCPS9XtZc4Gh6XA7X3urPhQrY37q9znpp4xeqkBuKiHrXQycgu5i0foWrgOfNnXTSphl1P7EBdjzO2XkMx+TI60oseGB4ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QGD6duok; arc=none smtp.client-ip=209.85.215.176
+	 MIME-Version; b=HAqasddKHdcPLkrTC6zQYNUB9GpvWWYmOhqOuFA2pFiqfpWNQLLVo++6AYLUUSQbt5HHE0GPql+gQZZXvtmoH7Ri/jOyrp1rKYHAKErRhTIzaqJkSYu7bBa+mqlMcakTv/UG4jVC+UJbfqpnIB/15T9nv/36okho084+exL3Bik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pgJPvFk6; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QGD6duok"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c85825bbc4fso3666233a12.2
-        for <llvm@lists.linux.dev>; Tue, 09 Jun 2026 15:20:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pgJPvFk6"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-36b903567fdso6132730a91.1
+        for <llvm@lists.linux.dev>; Tue, 09 Jun 2026 15:20:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781043613; x=1781648413; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1781043614; x=1781648414; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8UhO55Yo3qdvFwINhOeOCySQ32WXkyaaxtV0xfPLwL8=;
-        b=QGD6duokTSJ6TtVob9ZonYBFXYOeIop4xC9ffip74hAJADmfPlirLZc0mDEBqGkeMl
-         4m5RLLtOdrQBwGGPv4epitpy+fAiaLku+ygnzsZh9YwAIPbI3kyjIpAK+arWJKj4Gr43
-         bA5LOWuwYnqWQ5gBqkkS1kB+e64NpMLfgRpcZKZpsvL9NSKPea66cNA9f9P81UZ9HTD2
-         FlCT6xgx/n/DXkciSeUPKc9Mnk9C6VtAiZB1l9Wq9M02DtVkteCGdWDFcGwCVgBSZhXr
-         nGNBM+dEPH+hs/4DHhfPoRoiuFYxMTeUHYeDExTMAn4BdSZwr5SHquvMVQopbKx8XiHt
-         582g==
+        bh=7abx5gUeKQ1VRxaWBSzbzTorD8zfPoqeElZR6g6xg44=;
+        b=pgJPvFk6KPx7BvVO0UOT5M+SUuZUQLJwltyuN9aM+8b3/YDVkiCUtvV6Yd0H21qagC
+         NY4ezSSl6kGpuhqQflQzvfg/6pfG7TfxNpFUYQNd1Sc38xmVh+f9Vjc0UWYLqthP0qZK
+         kF0uLFNQ6vjCC77eSV+oT1mU+nPYhcopvaQnbqw21R7axtr3ZMnM9s7SGjgrHjJheSI/
+         vbAwTROZ+Ux1XPHwQWJ99COiaz2eZ0D/+gBa0D9ghq3Y8IE8n6sA64AeWoIgjwQKuzLz
+         cTaYdfush+Jpnb+63pVHnDsUuL/kxpR0d1YC92Ch+d+fijON3qrZkkZ3kSS1iYeEiFMa
+         RlMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781043613; x=1781648413;
+        d=1e100.net; s=20251104; t=1781043614; x=1781648414;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=8UhO55Yo3qdvFwINhOeOCySQ32WXkyaaxtV0xfPLwL8=;
-        b=Qlw6/oLg3smwPW5q7bm9bSK+qfXo9mG3vFBCZfCSx7YJOMQEKny3AMNKyf4p4usS0C
-         hPYGqW3nZci3XlTFjGsFfWhPwFiAw8rXyypf5pyzK2OUjlwOeTxMHmwUqQ2tT3zd2QdO
-         R6pUgWWm17ee02X2corgapqI++zyzYrjlyU9FPXUcuwd1GM7iLSMEQjH9lkt0c/bULFA
-         /1c7LwTrJ4M/oCjfX/65ej571LzxzHyZzej3sKhfXqtehCsxGYdGvZWW5sntQ3VMXik+
-         gc1xgOJTSAr872lb5i6AOXAn1yn6QOQX0P9jKSR808cM/kidA24BSJpj913yYTSqMnQu
-         cPnw==
-X-Forwarded-Encrypted: i=1; AFNElJ/3PibmJr/qTX9xX8XJhKf7pSVi5+1LQ9rLRkDLxllwl/IoNN6Cr3dWNP0dA8c8/XxbTUrP@lists.linux.dev
-X-Gm-Message-State: AOJu0YxkhshwgtvE8QOAAGrDDxaWxf7p47Q5fis43WiiHRQ2mq//Sw3B
-	A2SsX77lQb9r7/s6/VKpbowTvpR4f8cx/YcwbiciZj2bh3R4XnrjoEzA
-X-Gm-Gg: Acq92OH4U5m+dtA2o8KQwBK2mnhgyI90mDOd4o41zjieAzZyyQUzJ3oAHsHivMwwJaR
-	J9PxQgYzWMDxM6w/fIXWhFAQXU2Vu/KYCXgXyjQdPOds8H5WrbpApIrcr17iLpwAPAYX11/mrTl
-	DbO/l/G+S7fswMI3QWBPWKR0Rgp/HoPo15MSO1w94iQa2jJKIkVGaWsA9RIlNMMspqvf71huORf
-	QGOkgn9Lz44+Do030t75bctext4Cva0NtcWJtMW69lQtp56VpXEh72Dk71l/cKtPyLw4KZzBI6p
-	ttC7x5S74FykK4Odsmr1gXOsSzt7fh2KxPFjjaJiK9Y8oA/h/pZA4SujzQyJ0jCohR6w9T4XdVN
-	M2fQmaRYznXzTZLknwVUkU0FXM7bx5zynmZT2eT0aagu51sZOXHw4tTHAqtkaA38sATZZQ3CAZR
-	XHtWGnN/1vhWSdsIz40sZu8rDbFEETRHuZtSSqmMaIkuzrzXjDKzFMbOQ5nzdDzLHx/PcbIx/KE
-	bAbbYwSapsIPBXRB9PxYGHVd1POH+KIoZ5r07Qo5cm/Qg==
-X-Received: by 2002:a05:6a20:918b:b0:3b4:79fd:cba4 with SMTP id adf61e73a8af0-3b4ccdedeb9mr26932559637.12.1781043613288;
-        Tue, 09 Jun 2026 15:20:13 -0700 (PDT)
+        bh=7abx5gUeKQ1VRxaWBSzbzTorD8zfPoqeElZR6g6xg44=;
+        b=ZpsDJXlKXvsV3kPW6/01JjPvioMue5KRvk1K2/kf6J9hTumj32RyTHMkHV+uJpD1Fi
+         yBeflkLsKwLs3yOkdXV1dBoYSRHfGiRudFj6BtMQ20YtOsLXUP3c7mIe8UzVp3qY4Uoe
+         gIxR62/vL4mcQMx6Hqg4JEnraKpgpfiGrEuNorRWAhMXWK0UP44q1Y8GgDwlWUnHLzL9
+         28xu+s2Ezj1zvLgQ7M4VD7pXrhpK/KQT1hIZkQfEst+OEiJqi7SfNK51Qme+iEJDPCIW
+         GeUECAAPmX/RaHR9ThnPg1JanWu7mNGsXyL/2P6ixztJLKcEMQVIJPFyFT1eSTVht65D
+         3GYg==
+X-Forwarded-Encrypted: i=1; AFNElJ8BqicrNE/+XjT+G+dRJrVPtw0CwVLZF0/cKNrU+vsO9/dt1f+v3SVatH8e6Mobj9IKsp7D@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz5oZy6IUEj4Hv8+IxJsv4tgByt2ssOj9WO0G0x7Iay5OzyfuXa
+	v3c3R5t+28Gei8JB2zjVx/r4A0x/uJIduAbMdTrEmMWVq/2z4sMm5yhZ50uglWtI
+X-Gm-Gg: Acq92OHjeEXx99H1Ef0C1EIhaxNaHChxnlaWZCM8fMVOSxcpJXBWDRsB7r0kwK0DKY+
+	JI3l2HI76h2MipxnxDHPa508GNcyLuW3mrxwn6yB6hAQBSmhORbOkgz1ag/ZgsGQRffL7Jp7OGH
+	VpQkYwag2ar9/eiZRwAbuhYWktY3zGY9ybgGOQ8An9rag476Bz8JaSpsBtxiJiYOIS0FENB5eug
+	OPuo2XgF2z3zB6ouCw5fCHMSDhP+cCozwPS0ERJ1MoJnkAj+8c6BokTfdPp4aS7dwLlcdnlzn5k
+	RyV0csPCvOolvQkycuWxSWDB2aUtLSa/MXPNj5UuhzdKKIlpWXzNb7x9q/zuwNHoFr5c75ThYnJ
+	NXKLYVcKGtT0VW+zQOXSnarkMtB8g2osMyYpvMsRVg2m2kyLwC0OZMoK8WXFTUKIrwgYSnf+eUA
+	kT68AXaeFm4MmacwHZTDJUgpdajPNIWWeikPBIO6t+IDcC+f2YA1OQ6dAd/3HI7n+3ZRuQ36/y4
+	1D7wRmPm4CdiYy3TbquiLpKl8jYTvU4TnAvPZknkLVOi3Lu781VNQas
+X-Received: by 2002:a17:90b:5204:b0:36d:df4f:ab2 with SMTP id 98e67ed59e1d1-370f0772dd1mr26545593a91.13.1781043614688;
+        Tue, 09 Jun 2026 15:20:14 -0700 (PDT)
 Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df04ff24sm19661834a12.14.2026.06.09.15.20.10
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df04ff24sm19661834a12.14.2026.06.09.15.20.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2026 15:20:12 -0700 (PDT)
+        Tue, 09 Jun 2026 15:20:14 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: dmaengine@vger.kernel.org
 Cc: Vinod Koul <vkoul@kernel.org>,
@@ -71,9 +71,9 @@ Cc: Vinod Koul <vkoul@kernel.org>,
 	linux-kernel@vger.kernel.org (open list),
 	linuxppc-dev@lists.ozlabs.org (open list:FREESCALE DMA DRIVER),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCHv3 14/15] dmaengine: fsldma: replace ppc-specific accessors with portable generic ones
-Date: Tue,  9 Jun 2026 15:19:25 -0700
-Message-ID: <20260609221926.35538-15-rosenp@gmail.com>
+Subject: [PATCHv3 15/15] dmaengine: fsldma: fix kernel-doc param names to match function signatures
+Date: Tue,  9 Jun 2026 15:19:26 -0700
+Message-ID: <20260609221926.35538-16-rosenp@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260609221926.35538-1-rosenp@gmail.com>
 References: <20260609221926.35538-1-rosenp@gmail.com>
@@ -85,140 +85,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-- Convert remaining in_be32/in_le32 calls to FSL_DMA_IN macro
-- Replace __ilog2 with generic ilog2 (pull in linux/log2.h)
-- Add linux/io.h include
-- Expand non-PPC accessor support from ARM-only to all architectures
-- Guard 64-bit generic accessors with CONFIG_64BIT; provide
-  emulation using 32-bit accessors on 32-bit platforms
+Fix kernel-doc warnings where the documented parameter names
+(@chan) no longer match the actual function signatures (@dchan),
+and add the missing @cookie and @txstate parameters to
+fsl_tx_status.
 
-Add COMPILE_TEST support as a result for extra compile coverage.
+These are pre-existing mismatches that predate the recent
+devm conversion series.
 
 Assisted-by: opencode:big-pickle
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/dma/Kconfig  |  2 +-
- drivers/dma/fsldma.c | 11 ++++++-----
- drivers/dma/fsldma.h | 35 ++++++++++++++++++++++++++++++++---
- 3 files changed, 39 insertions(+), 9 deletions(-)
+ drivers/dma/fsldma.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-index 302021540d76..9b13e7aa31c7 100644
---- a/drivers/dma/Kconfig
-+++ b/drivers/dma/Kconfig
-@@ -206,7 +206,7 @@ config EP93XX_DMA
- 
- config FSL_DMA
- 	tristate "Freescale Elo series DMA support"
--	depends on FSL_SOC
-+	depends on FSL_SOC || COMPILE_TEST
- 	select DMA_ENGINE
- 	select ASYNC_TX_ENABLE_CHANNEL_SWITCH
- 	help
 diff --git a/drivers/dma/fsldma.c b/drivers/dma/fsldma.c
-index 7d0c80121aa4..d4c9b81ade0d 100644
+index d4c9b81ade0d..c0dbcd09999e 100644
 --- a/drivers/dma/fsldma.c
 +++ b/drivers/dma/fsldma.c
-@@ -32,6 +32,8 @@
- #include <linux/of_address.h>
- #include <linux/of_irq.h>
- #include <linux/platform_device.h>
-+#include <linux/io.h>
-+#include <linux/log2.h>
- #include <linux/fsldma.h>
- #include "dmaengine.h"
- #include "fsldma.h"
-@@ -266,7 +268,7 @@ static void fsl_chan_set_src_loop_size(struct fsldma_chan *chan, int size)
- 	case 4:
- 	case 8:
- 		mode &= ~FSL_DMA_MR_SAHTS_MASK;
--		mode |= FSL_DMA_MR_SAHE | (__ilog2(size) << 14);
-+		mode |= FSL_DMA_MR_SAHE | (ilog2(size) << 14);
- 		break;
- 	}
+@@ -685,7 +685,7 @@ static void fsldma_cleanup_descriptors(struct fsldma_chan *chan)
  
-@@ -299,7 +301,7 @@ static void fsl_chan_set_dst_loop_size(struct fsldma_chan *chan, int size)
- 	case 4:
- 	case 8:
- 		mode &= ~FSL_DMA_MR_DAHTS_MASK;
--		mode |= FSL_DMA_MR_DAHE | (__ilog2(size) << 16);
-+		mode |= FSL_DMA_MR_DAHE | (ilog2(size) << 16);
- 		break;
- 	}
+ /**
+  * fsl_dma_alloc_chan_resources - Allocate resources for DMA channel.
+- * @chan : Freescale DMA channel
++ * @dchan : Freescale DMA channel
+  *
+  * This function will create a dma pool for descriptor allocation.
+  *
+@@ -742,7 +742,7 @@ static void fsldma_free_desc_list_reverse(struct fsldma_chan *chan,
  
-@@ -326,7 +328,7 @@ static void fsl_chan_set_request_count(struct fsldma_chan *chan, int size)
+ /**
+  * fsl_dma_free_chan_resources - Free all resources of the channel.
+- * @chan : Freescale DMA channel
++ * @dchan : Freescale DMA channel
+  */
+ static void fsl_dma_free_chan_resources(struct dma_chan *dchan)
+ {
+@@ -878,7 +878,7 @@ static int fsl_dma_device_config(struct dma_chan *dchan,
  
- 	mode = get_mr(chan);
- 	mode &= ~FSL_DMA_MR_BWC_MASK;
--	mode |= (__ilog2(size) << 24) & FSL_DMA_MR_BWC_MASK;
-+	mode |= (ilog2(size) << 24) & FSL_DMA_MR_BWC_MASK;
+ /**
+  * fsl_dma_memcpy_issue_pending - Issue the DMA start command
+- * @chan : Freescale DMA channel
++ * @dchan : Freescale DMA channel
+  */
+ static void fsl_dma_memcpy_issue_pending(struct dma_chan *dchan)
+ {
+@@ -891,7 +891,9 @@ static void fsl_dma_memcpy_issue_pending(struct dma_chan *dchan)
  
- 	set_mr(chan, mode);
- }
-@@ -1007,8 +1009,7 @@ static irqreturn_t fsldma_ctrl_irq(int irq, void *data)
- 	u32 gsr, mask;
- 	int i;
- 
--	gsr = (fdev->feature & FSL_DMA_BIG_ENDIAN) ? in_be32(fdev->regs)
--						   : in_le32(fdev->regs);
-+	gsr = FSL_DMA_IN(fdev, fdev->regs, 32);
- 	mask = 0xff000000;
- 	dev_dbg(fdev->dev, "IRQ: gsr 0x%.8x\n", gsr);
- 
-diff --git a/drivers/dma/fsldma.h b/drivers/dma/fsldma.h
-index d7b7a3138b85..01f93123b233 100644
---- a/drivers/dma/fsldma.h
-+++ b/drivers/dma/fsldma.h
-@@ -232,17 +232,46 @@ static void fsl_iowrite64be(u64 val, u64 __iomem *addr)
- 	out_be32((u32 __iomem *)addr + 1, (u32)val);
- }
- #endif
--#endif
--
--#if defined(CONFIG_ARM64) || defined(CONFIG_ARM)
-+#else
- #define fsl_ioread32(p)		ioread32(p)
- #define fsl_ioread32be(p)	ioread32be(p)
- #define fsl_iowrite32(v, p)	iowrite32(v, p)
- #define fsl_iowrite32be(v, p)	iowrite32be(v, p)
-+
-+#ifdef CONFIG_64BIT
- #define fsl_ioread64(p)		ioread64(p)
- #define fsl_ioread64be(p)	ioread64be(p)
- #define fsl_iowrite64(v, p)	iowrite64(v, p)
- #define fsl_iowrite64be(v, p)	iowrite64be(v, p)
-+#else
-+static inline u64 fsl_ioread64(const u64 __iomem *addr)
-+{
-+	u32 val_lo = ioread32((u32 __iomem *)addr);
-+	u32 val_hi = ioread32((u32 __iomem *)addr + 1);
-+
-+	return ((u64)val_hi << 32) + val_lo;
-+}
-+
-+static inline void fsl_iowrite64(u64 val, u64 __iomem *addr)
-+{
-+	iowrite32(val >> 32, (u32 __iomem *)addr + 1);
-+	iowrite32((u32)val, (u32 __iomem *)addr);
-+}
-+
-+static inline u64 fsl_ioread64be(const u64 __iomem *addr)
-+{
-+	u32 val_hi = ioread32be((u32 __iomem *)addr);
-+	u32 val_lo = ioread32be((u32 __iomem *)addr + 1);
-+
-+	return ((u64)val_hi << 32) + val_lo;
-+}
-+
-+static inline void fsl_iowrite64be(u64 val, u64 __iomem *addr)
-+{
-+	iowrite32be(val >> 32, (u32 __iomem *)addr);
-+	iowrite32be((u32)val, (u32 __iomem *)addr + 1);
-+}
-+#endif
- #endif
- 
- #define FSL_DMA_IN(fsl_dma, addr, width)			\
+ /**
+  * fsl_tx_status - Determine the DMA status
+- * @chan : Freescale DMA channel
++ * @dchan : Freescale DMA channel
++ * @cookie : DMA transaction identifier
++ * @txstate : DMA transaction state
+  */
+ static enum dma_status fsl_tx_status(struct dma_chan *dchan,
+ 					dma_cookie_t cookie,
 -- 
 2.54.0
 
