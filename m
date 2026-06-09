@@ -1,120 +1,117 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70023C0624
-	for <llvm@lists.linux.dev>; Tue,  9 Jun 2026 05:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D233C3458;
+	Tue,  9 Jun 2026 05:39:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780982401; cv=none; b=MZR820u7BHtju46gInrCHgh/qwdZ9ZLCSQh87ufItWAQ2q3TvJ29zggJtuw067j7GrsLQKzJ+mckpanYFZRiDfQKQdrLvjQWVEabv4lydkomKuGHUy4BrAzHHkg99ZbBiFIsWmg/mryuU5FodqRpcUn98iFI9EhKsQaknd0Uzec=
+	t=1780983548; cv=none; b=Dc1cXncoK44pe+TFgkxK9e9eWuHpnbRu38G4IhVKVOKIE9h2a4PptKChxScHoKIRe2SBO+Js0uaNgsdYcq+QMlSjoorptUeLMstJyyM7siUHvx4ARBVhu1IDyVoSgRlc4ZjP/SWO5SFySilN7VxFrJHau9lWc66QPW1/zOObsio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780982401; c=relaxed/simple;
-	bh=p3b+oqPtAuju1RYgsAl7ReClPI6uVR8SOh2hQIDKGlA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Dni1zvuP2AUM8pqnVkbIZfMibebiFzYtuwFkkBpzwK6nvLGHC4NbhNgCjh7AQ9XnDGZb5nVXFNU2BpINj1xcIqSRxPFGEzvtR7NWFkpkAdHx4uWIQUS6YV4G+8f858o3e/LjJsfqis3e1qcx1Pu3C3p0y8yywXLPthPkldUuMgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ux4Sxe57; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780983548; c=relaxed/simple;
+	bh=tJ04mNI3wGoT1FrO9b4vb8ttcVS8WUOvs0hrFvHr1ZM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GEElAytjRNFxRgDU2HRNjDVb5H6uwluAIfV+gfPivzW/SI4MsvVfe8UxCVIJSg/N6r2iUZCBy6oXVmHJmcovC4eQApYjC3iAwzy7yg9Z5qb9Ovt7VlH4kErXgSOJt7M9iOtjI9OqsIpNOmECO3HEzDXc3N6K1uMl/roDm1LSTJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dUH7UO82; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ux4Sxe57"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780982397;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qqv7V2fOPtI/ThmR4RMSaDZYBMTub7x0mcT3c/TCl7o=;
-	b=Ux4Sxe57og2EYdBgnIZvy0cSOLF9yLWtWin3GQWmouHEodCUIvvez5+X2r0GUqwrqd53Jq
-	CmmT5DtrtboERLh7WRMjnZiatGY9NrclpTXmn6pDm73lPPWFlKHQFKZm4QM2cIbXoUYj6i
-	FEIWEDC/DcQtfVpbohDn/TT2CaszR2U=
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Date: Tue, 09 Jun 2026 05:19:27 +0000
-Subject: [PATCH 2/2] arm64: ftrace: allow DIRECT_CALLS without CALL_OPS
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dUH7UO82"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780983547; x=1812519547;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tJ04mNI3wGoT1FrO9b4vb8ttcVS8WUOvs0hrFvHr1ZM=;
+  b=dUH7UO82fkJgzgG2JbxhD2Nz6e++ZHtdld4RTGZIMwppseggqX+l43n0
+   +UnNmTv+JYjQnfbQcflHBhSl1SY1sRu9Hqxs+eV8CvZLxuqEs5iqDoC4Z
+   UJp2Q8RowabLyEHuzcnIM9NcJ/7C/qRYJOD9HWFU0AffsEB2Z5yO7L/ok
+   +yfcRTqb+Y/6SHzvrzDmDGWNGN9CYphn72Panb+JD9rMOyNyrhcp55UaB
+   xvbIaIazMzuQi8Z4jIPjAi2tXC8NdGYyFUTCil7jtjTGDigPv6VJZQ+fd
+   DeWwKoE/S0QtUzfDgKx0L7unYV++F3RVemeufnp3YSXyfsVmH7DpHLn5c
+   g==;
+X-CSE-ConnectionGUID: ELOfyI3oQz6F2KDhrYqw4Q==
+X-CSE-MsgGUID: tnVjPTBpSLqoYKpjysHKfw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11811"; a="93120100"
+X-IronPort-AV: E=Sophos;i="6.24,195,1774335600"; 
+   d="scan'208";a="93120100"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2026 22:39:05 -0700
+X-CSE-ConnectionGUID: tQMiSenwQDmsiLJyCAF8+A==
+X-CSE-MsgGUID: q5Y77oasQeOaj1XrdjL5OQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,195,1774335600"; 
+   d="scan'208";a="245798226"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 08 Jun 2026 22:39:03 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wWpAy-00000000Jfu-2EuS;
+	Tue, 09 Jun 2026 05:39:00 +0000
+Date: Tue, 09 Jun 2026 13:38:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/auxclock-nanosleep 32/52]
+ kernel/time/hrtimer.c:599:13: error: call to undeclared function
+ 'hrtimer_time_to_monotonic'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202606091353.TwHVKGhK-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260609-arm64-ftrace-direct-calls-v1-2-4a46f266697f@linux.dev>
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
-In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
-To: Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
- bpf@vger.kernel.org, Florent Revest <revest@chromium.org>, 
- Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huawei.com>, 
- "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
 
-arm64 gained ftrace direct calls in commit 2aa6ac03516d ("arm64:
-ftrace: Add direct call support") on top of
-DYNAMIC_FTRACE_WITH_CALL_OPS, using the per-callsite ops pointer as a
-fast path to reach the direct trampoline. Since commit baaf553d3bc3
-("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS"), CALL_OPS is
-mutually exclusive with CFI: the pre-function NOPs would change the
-offset of the pre-function kCFI type hash, and the compiler support
-needed to keep that offset consistent does not exist yet.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/auxclock-nanosleep
+head:   bca5a81b57571c48bb81e7225cb1e4248f98b346
+commit: 7a200ad6980105f50270ca602d25d2960bfd63f6 [32/52] helper
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260609/202606091353.TwHVKGhK-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260609/202606091353.TwHVKGhK-lkp@intel.com/reproduce)
 
-The result is that a CONFIG_CFI=y kernel loses CALL_OPS, and with it
-DIRECT_CALLS, and with it every BPF trampoline attachment to kernel
-functions: register_fentry() returns -ENOTSUPP, so fentry/fexit,
-fmod_ret and BPF LSM programs cannot attach at all. This is a real
-problem for hardened arm64 deployments that rely on BPF LSM for
-security monitoring while keeping kCFI enabled.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606091353.TwHVKGhK-lkp@intel.com/
 
-CALL_OPS is an optimization for direct calls, not a dependency. When
-the direct trampoline is within BL range, the callsite branches
-straight to it and ftrace_caller is not involved. When it is out of
-range, ftrace_find_callable_addr() already falls back to
-ftrace_caller, and the DIRECT_CALLS machinery there
-(FREGS_DIRECT_TRAMP, ftrace_caller_direct_late) is gated on
-DIRECT_CALLS alone, not CALL_OPS: the ops dispatch invokes
-call_direct_funcs(), which stores the trampoline address in
-ftrace_regs, and ftrace_caller tail-calls it. s390 and loongarch use
-this same mechanism for HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS without
-having CALL_OPS at all, and DYNAMIC_FTRACE_WITH_ARGS without CALL_OPS
-is already a supported arm64 configuration (GCC builds with
-CC_OPTIMIZE_FOR_SIZE do not satisfy the CALL_OPS select condition).
+All errors (new ones prefixed by >>):
 
-Drop the CALL_OPS requirement from the
-HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS select. Configurations that
-keep CALL_OPS (!CFI clang builds, and GCC builds without
-CC_OPTIMIZE_FOR_SIZE) are unchanged. CALL_OPS-less configurations
-take the ftrace_caller ops-dispatch path for out-of-range direct
-calls, trading the per-callsite fast path for working BPF
-trampolines; in-range attachments still branch directly with no
-overhead. GCC -Os builds also gain DIRECT_CALLS as a side effect.
-That is intended: s390 and loongarch already ship DIRECT_CALLS
-without any per-callsite fast path.
+>> kernel/time/hrtimer.c:599:13: error: call to undeclared function 'hrtimer_time_to_monotonic'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     599 |                 expires = hrtimer_time_to_monotonic(base, base->expires_next);
+         |                           ^
+   kernel/time/hrtimer.c:871:12: error: call to undeclared function 'hrtimer_time_to_monotonic'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     871 |         expires = hrtimer_time_to_monotonic(base, expires);
+         |                   ^
+   kernel/time/hrtimer.c:965:13: error: call to undeclared function 'hrtimer_time_to_monotonic'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     965 |                 expires = hrtimer_time_to_monotonic(base, next->expires);
+         |                           ^
+   kernel/time/hrtimer.c:1550:12: error: call to undeclared function 'hrtimer_time_to_monotonic'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1550 |         expires = hrtimer_time_to_monotonic(timer->base, expires);
+         |                   ^
+   4 errors generated.
 
-Assisted-by: Claude:unspecified
-Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
----
- arch/arm64/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index fe60738e5943b..2cd7d536671c9 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -188,7 +188,7 @@ config ARM64
- 		if (GCC_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS || \
- 		    CLANG_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS)
- 	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS \
--		if DYNAMIC_FTRACE_WITH_ARGS && DYNAMIC_FTRACE_WITH_CALL_OPS
-+		if DYNAMIC_FTRACE_WITH_ARGS
- 	select HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS \
- 		if (DYNAMIC_FTRACE_WITH_ARGS && !CFI && \
- 		    (CC_IS_CLANG || !CC_OPTIMIZE_FOR_SIZE))
+vim +/hrtimer_time_to_monotonic +599 kernel/time/hrtimer.c
 
--- 
-2.52.0
+   590	
+   591	/* Find the base with the earliest expiry */
+   592	static void hrtimer_bases_first(struct hrtimer_cpu_base *cpu_base,unsigned int active,
+   593					ktime_t *expires_next, struct hrtimer **next_timer)
+   594	{
+   595		struct hrtimer_clock_base *base;
+   596		ktime_t expires;
+   597	
+   598		for_each_active_base(base, cpu_base, active) {
+ > 599			expires = hrtimer_time_to_monotonic(base, base->expires_next);
+   600			if (expires < *expires_next) {
+   601				*expires_next = expires;
+   602				*next_timer = clock_base_next_timer(base);
+   603			}
+   604		}
+   605	}
+   606	
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
