@@ -1,160 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B484346A14;
-	Tue,  9 Jun 2026 20:00:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178F7361DD0
+	for <llvm@lists.linux.dev>; Tue,  9 Jun 2026 22:19:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781035245; cv=none; b=tO+mrZNGMrx4A4ROXwiEx8VVfpBa6qCRXijzUFjz91uapVXKWJFqbgyerUuLCEd897ZOR4n1V9qLLXDMhmyR0j+jYLE1BIGAenaYzKoQ4SR1XbpWtBd21nTiYDmeAJ7FjeTs8h9S+Rv9KXOgDDhdphyptY1QUkF8kzGB3LCGCf0=
+	t=1781043586; cv=none; b=hzZvwRG/sKBg3Ic9YVQih7gj7dtzCBAUwJWBKPMFQ8NCqf/Eq1SsEeX+GNXeukM6dMnfpyqqZ+HBJ56o4Kzc1V2fm6o5f/0wqdIivdE8JPkYTjCLTw2n4WY9qQplitP8zQjlRqTf6A6NzcvetYglrAKCZNE954RFQy80xWykmTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781035245; c=relaxed/simple;
-	bh=1IAGt3cJ+GNLO2Mp9SN8Z7rKExCu+XTzX8q4S1h0VSM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=bcCg4wHd0anZ+xpidcPbnqYiXB7tz+XIiCtW3jGI1ZQIZhTDZpjY8hLOD8K6Df9Wt/LMMjC+a5EHqHSXba8pmcCbSSRmSY2Uic7QYV0ZJ/KE0RBxcz6KgBmjg26SXxvUz0crtJQP5Wh/hAjo3XYPxM0FqEKHUdcxSpFrUwAxnyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QE0mbi+5; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781043586; c=relaxed/simple;
+	bh=4/M/Z2Yw+2EJSZ+xE69ERPp/09jQ6db4A4lE0jGTRKI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P2TyQJnNr7+v0NDpvlEmyP0ykcLVn1TT91PyugCbEXYKopIA8l7DR0lW6OjkFj+m5yNUN5mesABVPd3kvID2bq1GCGoE1jCFdTZTbTz87tvxvCB4ggpsfvJXb3xbadBp2QTztTMkOohAbeTula9nAouL9s+85MXNiDPCtoYxvqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XHv4G4jX; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QE0mbi+5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781035245; x=1812571245;
-  h=date:from:to:cc:subject:message-id;
-  bh=1IAGt3cJ+GNLO2Mp9SN8Z7rKExCu+XTzX8q4S1h0VSM=;
-  b=QE0mbi+5PJ/7A81losFNSWUvmpPuyErexj3JLE26JjNtFEYx7Ho61Y0n
-   0KLpbJc77l69IZSXaBQqkIkB1W4YsPe1q0JbxWZMw+ryQEN+KrI1KM9Bi
-   2oo6EHlShzYTOYHxaGACXkf1yIdNyKEp3L9JmMcDqwn1PDlo2zrdQxzr2
-   rc5ZFcUo0Dpe5vuto/4IcsAe/9vEvA34ygS/SkWUIWZ9sMvb6+OnPbkwA
-   Fu66wFdKde/NHJwdDTpup2/mTf9CJGSftrvQ4JTL9/PkDvLZbwoalgrFu
-   Hc6hOytO0Q1pDOLKKH6PqERyz5SGbhOEsz+71PiBY4T6wjZih2BkehDoO
-   Q==;
-X-CSE-ConnectionGUID: rlRO5SscR1e3CDWdVO5A6A==
-X-CSE-MsgGUID: qSzbw75xRr+0KqpKkdH1Ug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="92133986"
-X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
-   d="scan'208";a="92133986"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 13:00:42 -0700
-X-CSE-ConnectionGUID: usxphOB5QBO8PbH8qm7+Iw==
-X-CSE-MsgGUID: nxPVJ39ISZ+Agg97oV4HuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,196,1774335600"; 
-   d="scan'208";a="249881881"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 09 Jun 2026 13:00:40 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wX2cn-00000000KUW-0pZ0;
-	Tue, 09 Jun 2026 20:00:37 +0000
-Date: Wed, 10 Jun 2026 03:59:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-next 11/22] fs/afs/symlink.c:97:7:
- warning: variable 'ret' is uninitialized when used here
-Message-ID: <202606100329.iHRpefyn-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XHv4G4jX"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c8585ecdd71so2180443a12.0
+        for <llvm@lists.linux.dev>; Tue, 09 Jun 2026 15:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781043584; x=1781648384; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+enzAQ5tSvqZYMQTM27Sa9xGue4NUeyFXwU532vPXo=;
+        b=XHv4G4jXZFCwRQxW7RcouONwoCCix3Ox+r+Xd7LXEXhfJCaY0dY0KCvC/9/3CVnmhE
+         Yl+kH0F7Ql6LPW4iFGAnYNHMnXlLJd/MIh8LpNxiPVUpDcYs1cHhuE4elOSlntqeJW/s
+         SwVXU3kNRfWiVgocmyyC+lz4i7lF3KgztRdp91Kfv4I5seyZ1wjwVHvzSorVE3cCIQMu
+         WJzc6nJbv9nfMuHoQxcjdcn5HXAGeuYg92KqsQbjDbZP7cRFdiRFTQJ4hXSMMMzS61x+
+         v2FsDZG/mZUo1G461xvyJX9gT7NuZg9nRWSgYhg2GSDvOAufezsbS5c3TDHdK3aQSE2u
+         vsFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781043584; x=1781648384;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u+enzAQ5tSvqZYMQTM27Sa9xGue4NUeyFXwU532vPXo=;
+        b=oZNoNp0XKOmP1/jR6hR7Dcoct6bHb9hwUdQAfoc0BYWk9js4HIHFZOKQsx6TgNKAQl
+         BbHBArv7IUXvwQkuLNUKdPIsxYR9wq+AmSKS8+I6vB78g4NJi1zcRsAYnxrdhYQJczsk
+         LsgwMhcV4Aii5JeHxaixiplwr0z7nfDaMLzInM7PtMVewQogffhk4o0PEIpfGTEx7uAc
+         lRU7nw+Ol+PYE+uiREhogdtsmzke0dQG9bAGOVJxYcpsZamtxLx1r1cmWIpAsBP+Kfqx
+         iRCHnZXQdnD0hqB7w++pGPgfzOiSp9myRDokDA2ivwlF2hyNJRTi3r1RHwov1EyfKDmw
+         JkZg==
+X-Forwarded-Encrypted: i=1; AFNElJ81F7lMi9qMVSoIgOKX7NkwZOPwIKWjuwuVXarnTpjv45NM+0eaSyJY/VNoDUgyTaAtMFfj@lists.linux.dev
+X-Gm-Message-State: AOJu0YwbjcFscvuPoiVzvpgDFq7qhI8ScwbHmlTY4JBSJWsXoLtdEbvd
+	Shnuqta3c5NpKUqFS+b5snrgKjiMxXn2WaOyMjAG/bljyPwSlQ1I13g0
+X-Gm-Gg: Acq92OGq5fBfOBNgqbs/BMquzoWG65KfEIke36YRC5GP1VjsevWK04/5gos0kVcxgxo
+	AVnBKnfnkP8pCsOU4PXU4NBkDZknBNZRUOr+uKiOU0Numh0knjXYp8e0ujjUjH4HwWt+n+J7J5X
+	N4XC8Zq5Dldzyn46Y+xqPRI40UELT1PuNPCy10avwjotZQhyp3r1MW7ry/R6ru7Xba9fF7TcwLc
+	FXXQT5tKPtrByRycy9Scwu35oqrlCbey+KQejXzKxpw+bC5HkLR8d02X7YMYhdVxR/HyGlaiSpo
+	1tAcT6HbLtyhNWdox5pEvhMv++HexUgC/KRecFRrVZYi7T/h2LZPxR+HkHedgXPswSNpS27MK+M
+	VS9SgHPGUMGDr7Bsg9N/adVIM8vHhvxFH5Rq10TAbfkP9tIQmRjF79cq15i0oYXRMhu+EwZB1Pd
+	sbtBd7ETBFFsrFRtoISFJVMusXh2K1fOebqjgJQXvTiFMrCOUqWQTShe5dotCriTLAhoaOv7zcw
+	+40QC0q6nUKJ7PzAnXnGuKnQP1AvlAoKy/OpOAxlMbKRg==
+X-Received: by 2002:a05:6a20:158c:b0:3a2:d838:bfca with SMTP id adf61e73a8af0-3b4cccfdeb8mr26870997637.3.1781043584305;
+        Tue, 09 Jun 2026 15:19:44 -0700 (PDT)
+Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85df04ff24sm19661834a12.14.2026.06.09.15.19.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 15:19:43 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: dmaengine@vger.kernel.org
+Cc: Vinod Koul <vkoul@kernel.org>,
+	Frank Li <Frank.Li@kernel.org>,
+	Zhang Wei <zw@zh-kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org (open list),
+	linuxppc-dev@lists.ozlabs.org (open list:FREESCALE DMA DRIVER),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCHv3 00/15] dmaengine: fsldma: devm conversion, fixups, and cleanups
+Date: Tue,  9 Jun 2026 15:19:11 -0700
+Message-ID: <20260609221926.35538-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
-head:   1d9a108be2c6acdd19dfad7fd3f536c79810dafa
-commit: 169b840c161aff8f6ece83314583a409431e2824 [11/22] afs: Use a bvecq to hold dir content rather than folioq
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260610/202606100329.iHRpefyn-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260610/202606100329.iHRpefyn-lkp@intel.com/reproduce)
+  - Kill the channel tasklet before removal to prevent a race with
+    the IRQ handler.
+  - Check the return value of dma_async_device_register() instead
+    of silently returning success.
+  - Replace the powerpc-specific I/O accessors with portable
+    generic ones so the driver can be built on non-powerpc
+    architectures.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606100329.iHRpefyn-lkp@intel.com/
+Build-tested with LLVM=1 ARCH=powerpc allmodconfig
 
-All warnings (new ones prefixed by >>):
+v3: even more sashiko fixes
+v2: add extra fixes to satisfy sashiko
 
->> fs/afs/symlink.c:97:7: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-      97 |                 if (ret < 0)
-         |                     ^~~
-   fs/afs/symlink.c:86:13: note: initialize the variable 'ret' to silence this warning
-      86 |         ssize_t ret;
-         |                    ^
-         |                     = 0
-   1 warning generated.
+Rosen Penev (15):
+  dmaengine: fsldma: kill tasklet before removing channel
+  dmaengine: fsldma: drop desc_lock before invoking client callback
+  dmaengine: fsldma: halt DMA engine before freeing resources
+  dmaengine: fsldma: provide device_release callback
+  dmaengine: fsldma: check dma_async_device_register() return value
+  dmaengine: fsldma: fix probe error path not freeing IRQs
+  dmaengine: fsldma: fix request_irqs unwind freeing unregistered IRQ
+  dmaengine: fsldma: convert to platform_get_irq_optional()
+  dmaengine: fsldma: use devm for kzalloc()
+  dmaengine: fsldma: use devm_platform_ioremap_resource()
+  dmaengine: fsldma: convert channel allocation to devm_kzalloc()
+  dmaengine: fsldma: use devm for of_iomap()
+  dmaengine: fsldma: replace irq_of_parse_and_map with of_irq_get
+  dmaengine: fsldma: replace ppc-specific accessors with portable
+    generic ones
+  dmaengine: fsldma: fix kernel-doc param names to match function
+    signatures
 
-
-vim +/ret +97 fs/afs/symlink.c
-
-c0410adf3da6db David Howells 2026-05-12   78  
-c0410adf3da6db David Howells 2026-05-12   79  /*
-c0410adf3da6db David Howells 2026-05-12   80   * Read a symlink in a single download.
-c0410adf3da6db David Howells 2026-05-12   81   */
-c0410adf3da6db David Howells 2026-05-12   82  static ssize_t afs_do_read_symlink(struct afs_vnode *vnode)
-c0410adf3da6db David Howells 2026-05-12   83  {
-c0410adf3da6db David Howells 2026-05-12   84  	struct afs_symlink *symlink;
-c0410adf3da6db David Howells 2026-05-12   85  	struct iov_iter iter;
-c0410adf3da6db David Howells 2026-05-12   86  	ssize_t ret;
-c0410adf3da6db David Howells 2026-05-12   87  	loff_t i_size;
-c0410adf3da6db David Howells 2026-05-12   88  
-c0410adf3da6db David Howells 2026-05-12   89  	i_size = i_size_read(&vnode->netfs.inode);
-c0410adf3da6db David Howells 2026-05-12   90  	if (i_size > PAGE_SIZE - 1) {
-c0410adf3da6db David Howells 2026-05-12   91  		trace_afs_file_error(vnode, -EFBIG, afs_file_error_dir_big);
-c0410adf3da6db David Howells 2026-05-12   92  		return -EFBIG;
-c0410adf3da6db David Howells 2026-05-12   93  	}
-c0410adf3da6db David Howells 2026-05-12   94  
-c0410adf3da6db David Howells 2026-05-12   95  	if (!vnode->directory) {
-169b840c161aff David Howells 2026-01-07   96  		vnode->directory = bvecq_alloc_buffer(PAGE_SIZE, GFP_KERNEL);
-c0410adf3da6db David Howells 2026-05-12  @97  		if (ret < 0)
-c0410adf3da6db David Howells 2026-05-12   98  			return ret;
-c0410adf3da6db David Howells 2026-05-12   99  	}
-c0410adf3da6db David Howells 2026-05-12  100  
-169b840c161aff David Howells 2026-01-07  101  	iov_iter_bvec_queue(&iter, ITER_DEST, vnode->directory, 0, 0, PAGE_SIZE);
-c0410adf3da6db David Howells 2026-05-12  102  
-c0410adf3da6db David Howells 2026-05-12  103  	/* AFS requires us to perform the read of a symlink as a single unit to
-c0410adf3da6db David Howells 2026-05-12  104  	 * avoid issues with the content being changed between reads.
-c0410adf3da6db David Howells 2026-05-12  105  	 */
-c0410adf3da6db David Howells 2026-05-12  106  	ret = netfs_read_single(&vnode->netfs.inode, NULL, &iter);
-c0410adf3da6db David Howells 2026-05-12  107  	if (ret >= 0) {
-c0410adf3da6db David Howells 2026-05-12  108  		i_size = ret;
-c0410adf3da6db David Howells 2026-05-12  109  		if (i_size > PAGE_SIZE - 1) {
-c0410adf3da6db David Howells 2026-05-12  110  			trace_afs_file_error(vnode, -EFBIG, afs_file_error_dir_big);
-c0410adf3da6db David Howells 2026-05-12  111  			return -EFBIG;
-c0410adf3da6db David Howells 2026-05-12  112  		}
-c0410adf3da6db David Howells 2026-05-12  113  		vnode->directory_size = i_size;
-c0410adf3da6db David Howells 2026-05-12  114  
-c0410adf3da6db David Howells 2026-05-12  115  		/* Copy the symlink. */
-c0410adf3da6db David Howells 2026-05-12  116  		symlink = kmalloc_flex(struct afs_symlink, content, i_size + 1,
-c0410adf3da6db David Howells 2026-05-12  117  				       GFP_KERNEL);
-c0410adf3da6db David Howells 2026-05-12  118  		if (!symlink)
-c0410adf3da6db David Howells 2026-05-12  119  			return -ENOMEM;
-c0410adf3da6db David Howells 2026-05-12  120  
-c0410adf3da6db David Howells 2026-05-12  121  		refcount_set(&symlink->ref, 1);
-c0410adf3da6db David Howells 2026-05-12  122  		symlink->content[i_size] = 0;
-c0410adf3da6db David Howells 2026-05-12  123  
-169b840c161aff David Howells 2026-01-07  124  		const char *s = bvec_kmap_partial(&vnode->directory->bv[0], 0);
-c0410adf3da6db David Howells 2026-05-12  125  
-c0410adf3da6db David Howells 2026-05-12  126  		memcpy(symlink->content, s, i_size);
-c0410adf3da6db David Howells 2026-05-12  127  		kunmap_local(s);
-c0410adf3da6db David Howells 2026-05-12  128  
-c0410adf3da6db David Howells 2026-05-12  129  		afs_replace_symlink(vnode, symlink);
-c0410adf3da6db David Howells 2026-05-12  130  	}
-c0410adf3da6db David Howells 2026-05-12  131  
-c0410adf3da6db David Howells 2026-05-12  132  	if (!fscache_cookie_enabled(netfs_i_cookie(&vnode->netfs))) {
-169b840c161aff David Howells 2026-01-07  133  		bvecq_put(vnode->directory);
-c0410adf3da6db David Howells 2026-05-12  134  		vnode->directory = NULL;
-c0410adf3da6db David Howells 2026-05-12  135  		vnode->directory_size = 0;
-c0410adf3da6db David Howells 2026-05-12  136  	}
-c0410adf3da6db David Howells 2026-05-12  137  
-c0410adf3da6db David Howells 2026-05-12  138  	return ret;
-c0410adf3da6db David Howells 2026-05-12  139  }
-c0410adf3da6db David Howells 2026-05-12  140  
-
-:::::: The code at line 97 was first introduced by commit
-:::::: c0410adf3da6db46f3513411fcf95e63c2f1d1ad afs: Fix the locking used by afs_get_link()
-
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: Christian Brauner <brauner@kernel.org>
+ drivers/dma/Kconfig  |   2 +-
+ drivers/dma/fsldma.c | 253 +++++++++++++++++++++++--------------------
+ drivers/dma/fsldma.h |  35 +++++-
+ 3 files changed, 167 insertions(+), 123 deletions(-)
 
 --
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.54.0
+
