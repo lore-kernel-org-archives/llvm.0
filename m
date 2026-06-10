@@ -1,232 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F643537CC;
-	Wed, 10 Jun 2026 05:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55E3382374
+	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 07:11:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781069490; cv=none; b=IMKDpehQaDY4/wZ4PefnIMaWg4gnNMojznHx8u0eEOSNXMRCEF0eOZD57V75TQFAQ4AonQn+MI5CefkJv4ZZ7Ev/S5epzgtIFL8SPg86lOZgvj86/52zj7bcY3dV37gRb26oVGHyJyBl1vuhfthtol/fScbvpGfMSJPFT93ln4M=
+	t=1781075498; cv=none; b=OE2mlvBS3Y/mDyja0CeM72AKqmWoNNaPUGTX+kZ+nLAZvz1/GccR+Nk9hGMZcrdAt02JWX0UPCBab2JCba9HXM/99pWHmzssLzdHbIVXfWRNK/G5dX0yEPGpL3RriwbYSjftDg3jJaGxY+4TvGsfsmsBK8CwST9UZucdEXIoz+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781069490; c=relaxed/simple;
-	bh=2ZBD64nCSNX4qrXq23kTbH7PHKcJBaGVzNQsKLasKQI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=KRoPaNibfX/UEVSyCFVsEyJBSWVdKi0Wgrxk9nKlmSAAIOZe+BGuiAchqGnxI39mytolX1JdSKKzWYz9DEyxV47YqDTXKowuNSo8j1nsDA1enTBRkr34kGAbi/bAcM+2/LU0jw31KUe6oLhQuXgjWn79N/IoZ6A7eu8vuL35LjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=giu63dJD; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781075498; c=relaxed/simple;
+	bh=1OO4t4Grl2OW+LLXIPdqNnIbkyfNysrf3WTK/30c8AU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=dcWkz3wa3HpEZ67HmBVFncXxWYSgVVf34sZW01pkZxKuX7Ar85SUerSKGbpVkfjaTId8mtliSYDUx1uC3MKamSuxHteuCMMCIYGel2FdC7B3X1ZkHFY8NyIPAr+r5OerwwyWAwFB+xsd3URXdvxWtfVgM9JZj0XsQDm04a7efKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=Mmp40Vvt; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="giu63dJD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781069487; x=1812605487;
-  h=date:from:to:cc:subject:message-id;
-  bh=2ZBD64nCSNX4qrXq23kTbH7PHKcJBaGVzNQsKLasKQI=;
-  b=giu63dJDLSp39pxidlxZu2VmN43ARsge4lbmHvZtzPd7/O0tL+srhUwF
-   wnaFFIu8mvKo3eBeuSh5EOxFrecEMKqnppE9vgGFYhQiGvA5UU/g9dQJG
-   BrWZVzrKScFYVRVud5c06bNLUSzbrWwhwb/B4Ll7lpNEV445iW6QfuDPl
-   ldpSlcSvFEotM43RQn33Bwbev6VEQinn8DgO5xwy0ba0NtwsO73BM05bm
-   /yaownayQIYz0UI++ZBRlFDLjKoRPQhb8AbeldMg2AkeZtpnCiTv2ecqi
-   RGMnSBo2Q51V+m+bnx6Ki7PjyJvBfv6s3rtoevHKeXQe6sFihF/27YBz+
-   A==;
-X-CSE-ConnectionGUID: nBkAsdDVSuC4H0hBZQgvVQ==
-X-CSE-MsgGUID: Ic0xup6HTD+t+s+a5p1PaQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="93239899"
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="93239899"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 22:31:22 -0700
-X-CSE-ConnectionGUID: QnA1Uq1DSz6bqZ1IwDqIog==
-X-CSE-MsgGUID: DAG/K+MvS+2UoFmOLcQzdQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="247929073"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 09 Jun 2026 22:31:20 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wXBX4-00000000Kwc-1IXf;
-	Wed, 10 Jun 2026 05:31:18 +0000
-Date: Wed, 10 Jun 2026 13:31:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [hare-scsi-devel:configfs-ns.v5 42/42]
- include/linux/mmzone.h:839:25: error: use of undeclared identifier
- 'PAGE_ALLOC_COSTLY_ORDER'
-Message-ID: <202606101308.Lw17R25F-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="Mmp40Vvt"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-45ef779c1c2so4383975f8f.1
+        for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 00:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1781075494; x=1781680294; darn=lists.linux.dev;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NHfSgeA/fGjDjbLrs9feaMOJjE/ZZnjX2Fhpf1TFZoY=;
+        b=Mmp40VvtTdsO/GjMPlu64hRmmw9hGmtqvfUGkj5wkxO3B//NluVfBrWUDWvk1HFEHm
+         ZQK99XJp+KFosA/n8FFCuwj+ahcTyIsptnB+GghlztouoA5A6n/VfqUtzf6i+7cqe8ar
+         LYa1p3KrYfxnwb6fNxMN+sK8IpiOAE7Sss5Zje7c5FEy/ptvXz42ilPctQ5Y20UbliCe
+         jlReoh16W3IiHULUcdo5EZSH8Vw4Z0ldsvUCse2PdwiuD5y27xhmnao68DOCxjs4yOkz
+         ze5HvLGanZKCZwtw7hHdgCbbUlGCAFrnywCtXoR7RHCSYr3/NGqFnoHC4OAhC3J5E+2I
+         lWHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781075494; x=1781680294;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NHfSgeA/fGjDjbLrs9feaMOJjE/ZZnjX2Fhpf1TFZoY=;
+        b=ce86WntzIYq+7dAb8WtjN9OGv0eUdP3+9s6zKD5KO1fdaCWcC/zQnT9ERRJtS5ju9b
+         SMrZDOhmDxYDuoni86rBjDZu1mJkg86S9Rt8LEAQH0eufzr/3DS4ZOo84HqIm7xA6ZQK
+         hh7Xw08L9RGFX7kX2pLP/YGAlv/MkeXbE8bhDF213UdtNIYssMn+BJgl7kUhJAVV6yD6
+         9dQkC9k6Hw2tNnRZ/I9efPi1LV7qrROu9wTdWZ6P4F1gHwM41wOmrrvxi5hwFO4XKQGN
+         FfDQdMt1ePO2qv1DllmQErmDLlvjGXQwjQYPpRqTMqnXm4AwmYp42kzDOpRm4pacCHj9
+         MUFA==
+X-Forwarded-Encrypted: i=1; AFNElJ/pL2aSwikZ1yCSzKdstiP+bZiLMEI1h0Z9Dujnh8a81o4o/mQM/sNyAw36fjQ0Pa6n7JY5@lists.linux.dev
+X-Gm-Message-State: AOJu0YzRZXbUlKwsWjf1LzpBieSlYVYNBpfYMcoQprZaHzMaM2WRWtg1
+	4eX6Sr6TilfB4bvIUsi9zxqpZ0JDYVCW9hsclPX3FHJ/q37WXy2+tq92uowTlG7T8VY=
+X-Gm-Gg: Acq92OHdZZEOsWRGJj8gh66VYorsMuSONYV7/lfQ2yML+4jn9pETOmQ61DTVx0RIY4E
+	XXgmVjmD4L6g65Om5gJn4kJQoOE4DPgBgQfbXaW5BSxigFu5zljUZojrZQK9SE0ElD7ZdaKGwMw
+	B/eSzTfKGpdjaIJa+ooy61Ipcqpo1Onq636mPWvn+oXEBWtsOACrql5nSXN4RZWCis6E/ymRbDO
+	3JgJNMkZcKMQ4Km1ZLOp1LSuAdLuueWquTwSMD5em8cCJGO9VG9oUXEhEeaOMPXetR32ljMIfgV
+	j7C8H5wnOsG7FYA2urr+z7ttQA5DL5x0FPcL3+YC2E327/ZoI+rx17+G6dScDWB9bDfdUDdDqRo
+	HNqeA2y2gnFzZbuIZMfMj/NqEFDf9gTTBS5ZtefsbDHiSUMQdmjdy7QGuZ5YziM6kWRbBdlaknG
+	o19Prz7S9YTkZCD8j1ExboL91j5yz/82A1MXVGqalS
+X-Received: by 2002:a5d:4e03:0:b0:43d:740:fb37 with SMTP id ffacd0b85a97d-46030641a81mr28093929f8f.24.1781075494136;
+        Wed, 10 Jun 2026 00:11:34 -0700 (PDT)
+Received: from localhost ([2001:4091:a245:857c:6881:1355:3b75:b347])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2dcae2sm73998699f8f.6.2026.06.10.00.11.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 00:11:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+Mime-Version: 1.0
+Content-Type: multipart/signed;
+ boundary=994575abcf1e9190cecd15ed8f5aca86c3a1ed0abda2c617779b5e42dcaa;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Wed, 10 Jun 2026 09:11:22 +0200
+Message-Id: <DJ56KCZMDJ35.3CKN0VT59QRJV@baylibre.com>
+To: "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>, "Nishanth Menon"
+ <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo"
+ <kristo@kernel.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, "Nick Desaulniers"
+ <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, "Judith Mendez" <jm@ti.com>,
+ "Daniel Schultz" <d.schultz@phytec.de>, "Andrew Davis" <afd@ti.com>,
+ "Siddharth Vadapalli" <s-vadapalli@ti.com>, "Paresh Bhagat"
+ <p-bhagat@ti.com>, "Bryan Brattlof" <bb@ti.com>, "Jai Luthra"
+ <jai.luthra@ideasonboard.com>, "Devarsh Thakkar" <devarsht@ti.com>,
+ "Beleswar Padhi" <b-padhi@ti.com>, "Francesco Dolcini"
+ <francesco.dolcini@toradex.com>, "Stefano Radaelli"
+ <stefano.radaelli21@gmail.com>
+Cc: "Vishal Mahaveer" <vishalm@ti.com>, "Kevin Hilman"
+ <khilman@baylibre.com>, "Sebin Francis" <sebin.francis@ti.com>, "Kendall
+ Willis" <k-willis@ti.com>, "Akashdeep Kaur" <a-kaur@ti.com>,
+ <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, "Hari Nagalla"
+ <hnagalla@ti.com>
+Subject: Re: [PATCH v6 04/11] arm64: dts: ti: k3-am62p-verdin: Fix wkup R5F
+ memory region size
+From: "Markus Schneider-Pargmann" <msp@baylibre.com>
+X-Mailer: aerc 0.21.0-126-g9e77103592fe
+References: <20260609-topic-am62a-ioddr-dt-v6-19-v6-0-16afba97fbe0@baylibre.com> <20260609-topic-am62a-ioddr-dt-v6-19-v6-4-16afba97fbe0@baylibre.com>
+In-Reply-To: <20260609-topic-am62a-ioddr-dt-v6-19-v6-4-16afba97fbe0@baylibre.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git configfs-ns.v5
-head:   6a13a5d67caca4ca57eb8e916f762a491d8c3120
-commit: 6a13a5d67caca4ca57eb8e916f762a491d8c3120 [42/42] mm,block: Make PAGE_ALLOC_COSTLY_ORDER configurable
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260610/202606101308.Lw17R25F-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260610/202606101308.Lw17R25F-lkp@intel.com/reproduce)
+--994575abcf1e9190cecd15ed8f5aca86c3a1ed0abda2c617779b5e42dcaa
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606101308.Lw17R25F-lkp@intel.com/
+Hi,
 
-All errors (new ones prefixed by >>):
+On Tue Jun 9, 2026 at 8:56 PM CEST, Markus Schneider-Pargmann (TI) wrote:
+> The wkup_r5fss0_core0_memory_region was reserved with only
+> 0x0f00000 but the MCU SDK linker for the wkup R5F firmware on
 
-   WARN /zdci/src/lkp/lib/log.sh:131:in `log_warn': /opt/cross/rustc-1.96.0-bindgen-0.72.1 doesn't exist
-     from /zdci/src/kernel-tests/lib/debug.sh:164: kbuild_log_warn
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3334: export_rust_path
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3324: export_compiler_path
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3803: invoke_make
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3985: make
-     from /zdci/src/kernel-tests/common.sh:202: redirect_error_to_screen
-     from /zdci/src/kernel-tests/common.sh:210: redirect_command_errors
-     from /zdci/src/kernel-tests/lib/kbuild.sh:5642: make_prepare
-     from /zdci/src/kernel-tests/lib/kbuild.sh:5871: test_kernel_build
-     from /zdci/src/kernel-tests/lib/builder/base.sh:442: builder_execute_build
-     from /zdci/src/kernel-tests/lib/kbuild.sh:6381: compile_one_config
-     from /zdci/src/kernel-tests/lib/builder/base.sh:88: builder_compile
-     from /zdci/src/kernel-tests/bisect-test-build-error.sh:102: main
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/resource_ext.h:11:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:839:25: error: use of undeclared identifier 'PAGE_ALLOC_COSTLY_ORDER'
-     839 |         struct list_head lists[NR_PCP_LISTS];
-         |                                ^~~~~~~~~~~~
-   include/linux/mmzone.h:807:23: note: expanded from macro 'NR_PCP_LISTS'
-     807 | #define NR_PCP_LISTS (NR_LOWORDER_PCP_LISTS + NR_PCP_THP)
-         |                       ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/mmzone.h:806:52: note: expanded from macro 'NR_LOWORDER_PCP_LISTS'
-     806 | #define NR_LOWORDER_PCP_LISTS (MIGRATE_PCPTYPES * (PAGE_ALLOC_COSTLY_ORDER + 1))
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
+This and the var-som patch incorrectly mention the reserved size to be
+0x0f00000 in the commit message while it should say 0x01e00000. I will
+fix the commit message with the next version.
+
+Best
+Markus
+
+> AM62P defines the DM code/data DDR footprint differently:
+>
+>     /* DDR for DM R5F code/data [ size 27 MiB + 396 KB ] */
+>     DDR                         : ORIGIN =3D 0x9CAA5000 LENGTH =3D 0x1B63=
+000
+>
+> which results in an end at 0x9e608000. For this memory region which
+> starts at 0x9c900000 this means a length of:
+>
+>     0x9e608000 - 0x9c900000 =3D 0x1d08000
+>
+> Link: https://github.com/TexasInstruments/mcupsdk-core-k3/blob/k3_main/ex=
+amples/drivers/ipc/ipc_rpmsg_echo_linux/am62px-sk/wkup-r5fss0-0_freertos/ti=
+-arm-clang/linker.cmd
+> Fixes: 87f95ea316ac ("arm64: dts: ti: Add Toradex Verdin AM62P")
+> Signed-off-by: Markus Schneider-Pargmann (TI) <msp@baylibre.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi b/arch/arm64/boo=
+t/dts/ti/k3-am62p-verdin.dtsi
+> index 7ee894d59113aa727d41b7ecd6b2bc7e12760823..8a5ff5c457579c7b1be7157d2=
+35fd4b4e5c6af11 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi
+> @@ -170,7 +170,7 @@ wkup_r5fss0_core0_dma_memory_region: memory@9c800000 =
+{
+> =20
+>  		wkup_r5fss0_core0_memory_region: memory@9c900000 {
+>  			compatible =3D "shared-dma-pool";
+> -			reg =3D <0x00 0x9c900000 0x00 0x01e00000>;
+> +			reg =3D <0x00 0x9c900000 0x00 0x01d08000>;
+>  			no-map;
+>  		};
+>  	};
 
 
-vim +/PAGE_ALLOC_COSTLY_ORDER +839 include/linux/mmzone.h
+--994575abcf1e9190cecd15ed8f5aca86c3a1ed0abda2c617779b5e42dcaa
+Content-Type: application/pgp-signature; name="signature.asc"
 
-ca71fe1ad9221a Ying Huang     2023-10-16  823  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  824  struct per_cpu_pages {
-4b23a68f953628 Mel Gorman     2022-06-24  825  	spinlock_t lock;	/* Protects lists field */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  826  	int count;		/* number of pages in the list */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  827  	int high;		/* high watermark, emptying needed */
-90b41691b98813 Ying Huang     2023-10-16  828  	int high_min;		/* min high watermark */
-90b41691b98813 Ying Huang     2023-10-16  829  	int high_max;		/* max high watermark */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  830  	int batch;		/* chunk size for buddy add/remove */
-ca71fe1ad9221a Ying Huang     2023-10-16  831  	u8 flags;		/* protected by pcp->lock */
-c0a242394cb980 Ying Huang     2023-10-16  832  	u8 alloc_factor;	/* batch scaling factor during allocate */
-28f836b6777b6f Mel Gorman     2021-06-28  833  #ifdef CONFIG_NUMA
-c0a242394cb980 Ying Huang     2023-10-16  834  	u8 expire;		/* When 0, remote pagesets are drained */
-28f836b6777b6f Mel Gorman     2021-06-28  835  #endif
-6ccdcb6d3a741c Ying Huang     2023-10-16  836  	short free_count;	/* consecutive free count */
-5f8dcc21211a3d Mel Gorman     2009-09-21  837  
-5f8dcc21211a3d Mel Gorman     2009-09-21  838  	/* Lists of pages, one per migrate type stored on the pcp-lists */
-44042b4498728f Mel Gorman     2021-06-28 @839  	struct list_head lists[NR_PCP_LISTS];
-5d0a661d808fc8 Mel Gorman     2022-06-24  840  } ____cacheline_aligned_in_smp;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  841  
+-----BEGIN PGP SIGNATURE-----
 
-:::::: The code at line 839 was first introduced by commit
-:::::: 44042b4498728f4376e84bae1ac8016d146d850b mm/page_alloc: allow high-order pages to be stored on the per-cpu lists
+iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCaikOHBsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlPa
+gAEAyrybqnS6hv3Ovek0j7b14FzBa99hKAVYVQajdPf6WZYA/jNeWkQ0ZfOTfw7C
+HBBAgvhweurSyFbfEsO3R2u7jS4M
+=GC8Q
+-----END PGP SIGNATURE-----
 
-:::::: TO: Mel Gorman <mgorman@techsingularity.net>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--994575abcf1e9190cecd15ed8f5aca86c3a1ed0abda2c617779b5e42dcaa--
