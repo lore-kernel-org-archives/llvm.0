@@ -1,128 +1,158 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F663D9DB4;
-	Wed, 10 Jun 2026 10:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6280532861F
+	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 11:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781087076; cv=none; b=QqvKmjQL2akP2d0zifUX3e1Au4DpfxoDSaTKKO5+f8UAS95uvT7ltl5Ewcc2UBpN+sAVOxzZfsaXdkDL3BBNbPEDS5Szs7ga2GAi2bka9KQpm3IHwNesFArdoeutF6Pwl0ky8967Xb0lyDsn+5RxIwGEOCwUlBAxnXgybLxX0ds=
+	t=1781090721; cv=none; b=RysvPypls/yMFM086Wia0e2rxnC2Q5NKA3B7RvZoZNKb7Jp/UkM/vnz+Re1ItN3inyq+FQmmOEFrZL0X/nyJTms71Wj62QG8ot+BR5tYxJIS+BUCkg25LCg/dLNaLRjBmpzd2mJhH2TWXq/1T2PbNfnNCg6CxJ9EeFS8F3kcqhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781087076; c=relaxed/simple;
-	bh=VPIJghQGO9fRx1dNGVr2U/4TQ1mVqFYwuo///L76Zy4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rk3voFp1CmU0QK+TYMKEHQLcpzIvZ2EDSxP1ugozRiq/XWXd057EsvwnL1XUk4IjKe7E06eB57SOc0aMhs7MgIyw+ylXZp+6jrvpjfmMK6ZjZrzP8mOJjZeU567GyCKq4BOPXW7XvJFHMk73NjTcX03ix9DuQDpn964eoKjqtWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QP2Dc2/K; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781090721; c=relaxed/simple;
+	bh=FrslU7oly/1il64yqMWa4Lm/Dci+q3SZPo/pn/zQtxs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GtMFn0O7xXlkAh3GyBSI21BVaefvSmdd7bSooOk1plhmH9q/RrwCv2gVmh+/4p2uUVfRC4nCK08jb40zOrx1Eccl4qbHu8mV/WlavsyWa+bZGHyM6aYyvOa4htM438/osPeiHus0B4jbv2PGTWp/piPSoo9ZlgpVmbVwWHsv5js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ocblb4ts; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QP2Dc2/K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781087074; x=1812623074;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VPIJghQGO9fRx1dNGVr2U/4TQ1mVqFYwuo///L76Zy4=;
-  b=QP2Dc2/KS+cux8RfPYjpNvFdN1Kf7UKjBRopr9rQxza0x89RSYzQfMjX
-   Ie5JQtLMuZDhnlFfNgKNIdRm1Z4ykRTLxud3P+t2WZZxXnUVJnqMDcHTi
-   vkGlx60FQTwS7HpM5LL+DqriXGUsr/xucbW2AvZ/GI1UmgRQW97s9/gui
-   DPqDXmvSeUlsPxY0OXL7cMlILphKpixEXicBhsJmjzPrTBM0gfzG9YU7Z
-   dFeCUJUTPhacXxuogjWTWl8uve4KL3HF+lmVdqrIfRyR1XiNAlT7SiDgr
-   uf6aDV+kv2ei25Jq1uL6+XAvBaEhSSlPBYYG1a/8pyVRAoXEpbYnPQmpW
-   w==;
-X-CSE-ConnectionGUID: ebqduFYYTyq5uXArLVYv9g==
-X-CSE-MsgGUID: ywaI/jdeRCqYGMpj9m3iqw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="92549603"
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="92549603"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2026 03:24:33 -0700
-X-CSE-ConnectionGUID: 3Ez8/HUASkKJ39t9fqOP+A==
-X-CSE-MsgGUID: Uss+nLKwSyak1Tvukt/jRQ==
-X-ExtLoop1: 1
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa003.fm.intel.com with ESMTP; 10 Jun 2026 03:24:32 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wXG6o-000000003fV-3J3n;
-	Wed, 10 Jun 2026 10:24:30 +0000
-Date: Wed, 10 Jun 2026 12:23:41 +0200
-From: kernel test robot <lkp@intel.com>
-To: Alex Yeo <alexyeo362@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v2] platform/x86: panasonic-laptop: add fan speed
- mode for newer models
-Message-ID: <202606101201.Uas4V2ol-lkp@intel.com>
-References: <20260610031756.546459-1-alexyeo362@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ocblb4ts"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65AB87x83398572;
+	Wed, 10 Jun 2026 11:25:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=3SV+GlkW/0ngO00KYqyHWwGFetvfNkhQQfFgu9SSg
+	as=; b=ocblb4tshdTpqOmcVd5IWywGss5yYoZvSw++ihoj9FMhQGxQk+4qvZJJY
+	K9bcjjh9PbwXicMRhDwc7YOPFR5gwtJdEGlL3CSwkEvXt+ubrQomzRSDOcNw4C3u
+	wIsepZ+YZV+r0iQmRJqHFRuhtDxL4siiuTRP8aNI8bpNSG4jv/x+zez6p9p1c7NQ
+	TjoavkwC0/nsA8+Wqq6uMuPINM77GrFi8+aLvqrpqnRUzL0pSstQS9AdcxuPf3fv
+	xUilmvXR7g4ZmKYS0BWrELewyGNyYQEEpM8uYTKEUYjWkUrFzW301LJxqRUJFwyE
+	+dmazr2oDOkVY+RQdnz4QTuTMSukw==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4emb7qrsav-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jun 2026 11:25:06 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65ABJcf6013368;
+	Wed, 10 Jun 2026 11:25:05 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4en03g66ey-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jun 2026 11:25:05 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65ABP20x30212610
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 10 Jun 2026 11:25:02 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id F0EA220043;
+	Wed, 10 Jun 2026 11:25:01 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A564A20040;
+	Wed, 10 Jun 2026 11:25:01 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 10 Jun 2026 11:25:01 +0000 (GMT)
+From: Jens Remus <jremus@linux.ibm.com>
+To: linux-s390@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc: Jens Remus <jremus@linux.ibm.com>, Jan Polensky <japo@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: [PATCH] perf s390: Fix TEXTREL in Python extension by compiling as PIC
+Date: Wed, 10 Jun 2026 13:24:51 +0200
+Message-ID: <20260610112451.1553054-1-jremus@linux.ibm.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260610031756.546459-1-alexyeo362@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=HppG3UTS c=1 sm=1 tr=0 ts=6a294993 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=Q_CO2TND4s4ZintWIbEA:9
+X-Proofpoint-GUID: IpP5FWr3dqTNlUcSbSGXYywjgaJ0ZU2U
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjEwMDEwNiBTYWx0ZWRfX6ZaolGzwO4i0
+ oYSz9wAzRCsaVDQ39ov6sgji2V/Y090Za03NzbJS/Sj7i91qMiPxBHmKTwNsIaDb6advw2JTUOF
+ qQUT1+O94FcJTol9OyngeGaZuEL75wQScS1EKZlhJj/PeTHwWJ6Rs6tQ25P4bGTZhmWVxdOXZT6
+ zqPCoe6kC0g4Dzxs+Cc4SdC3XRIreZX7G+U5ErFTW7J6Gij+Pkt4b0K2lXeQqwswKZt2+PZbX9+
+ aagTy5moUqUCuo60eRDt9T+hUTGWvXvZ0kDW9QUvEs62/R0d4LlJomj3HIP2QeywdvKjaQ+pzbf
+ IPqzAK8Qew3SWuryorYVfjVMHcqlggc4biZlpArphD9YhIiAIyen7yTC3Gy7LoVJ/qM/mKdTwMz
+ nfGELBkdgiXGbIQbbWQoPq2zJxuWVc/11CkyZDFgNeNy20ylpwzQLPK8S59hsf7DfXHPBoFWDMf
+ 5iCUQOlL9Ae9JimJhDw==
+X-Proofpoint-ORIG-GUID: ri4xy9gy99bw3ADijFeiaHYyqEe8hw-E
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-10_02,2026-06-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 adultscore=0 phishscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 clxscore=1011 bulkscore=0 spamscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2606100106
 
-Hi Alex,
+On s390 the Python extension build fails as follows when using a linker
+that is configured to treat text relocations (TEXTREL) in shared
+libraries as error by default:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+  GEN     python/perf.cpython-314-s390x-linux-gnu.so
+/usr/bin/ld.bfd: error: read-only segment has dynamic relocations
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.1-rc7 next-20260609]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This occurrs because util/llvm-c-helpers.o is erroneously built from
+util/llvm-c-helpers.cpp without compiler option -fPIC but linked into
+the shared library (via libperf-util.a(perf-util-in.o)).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Yeo/platform-x86-panasonic-laptop-add-fan-speed-mode-for-newer-models/20260610-112852
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260610031756.546459-1-alexyeo362%40gmail.com
-patch subject: [RFC PATCH v2] platform/x86: panasonic-laptop: add fan speed mode for newer models
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260610/202606101201.Uas4V2ol-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260610/202606101201.Uas4V2ol-lkp@intel.com/reproduce)
+On s390, object files must be compiled as position-indepedent code (PIC)
+in order to be linked into shared libraries.  Commit a9a3f1d18a6c ("perf
+s390: Always build with -fPIC") added compiler option -fPIC to CFLAGS
+for s390, which is used in C compiles.  Add -fPIC to CXXFLAGS for s390
+as well, so that it is also used in C++ compiles.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606101201.Uas4V2ol-lkp@intel.com/
+Reported-by: Thomas Richter <tmricht@linux.ibm.com>
+Signed-off-by: Jens Remus <jremus@linux.ibm.com>
+---
 
-All errors (new ones prefixed by >>):
+Notes (jremus):
+    This patch applies on top of the perf-tools-next tree:
+    
+      git://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git  master
+    
+    Note that this resolves the issue discussed in thread "[PATCH 1/1] perf
+    build: Fix Python extension build with GCC 16 hardening":
+    https://lore.kernel.org/all/ahV2XGx_6h7upuc3@li-276bd24c-2dcc-11b2-a85c-945b6f05615c.ibm.com/T/
 
->> drivers/platform/x86/panasonic-laptop.c:518:2: error: use of undeclared identifier 'status'
-     518 |         status = acpi_get_handle(NULL, "\\_SB.PC00.LPCB.EC0.CEFM", &handle);
-         |         ^~~~~~
-   drivers/platform/x86/panasonic-laptop.c:519:19: error: use of undeclared identifier 'status'; did you mean 'static'?
-     519 |         if (ACPI_FAILURE(status))
-         |                          ^~~~~~
-   drivers/platform/x86/panasonic-laptop.c:521:2: error: use of undeclared identifier 'status'
-     521 |         status = acpi_get_handle(NULL, "\\_SB.PC00.LPCB.EC0.SEFM", &handle);
-         |         ^~~~~~
-   drivers/platform/x86/panasonic-laptop.c:522:19: error: use of undeclared identifier 'status'; did you mean 'static'?
-     522 |         if (ACPI_FAILURE(status))
-         |                          ^~~~~~
-   4 errors generated.
+ tools/perf/Makefile.config | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 333ddd0e4bd8..33f90968c8a9 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -109,6 +109,7 @@ endif
+ 
+ ifeq ($(ARCH),s390)
+   CFLAGS += -fPIC
++  CXXFLAGS += -fPIC
+ endif
+ 
+ ifeq ($(ARCH),mips)
+-- 
+2.53.0
 
-vim +/status +518 drivers/platform/x86/panasonic-laptop.c
-
-   512	
-   513	static acpi_status check_fan_mode_present(void)
-   514	{
-   515		acpi_handle handle;
-   516	
-   517		/* check if read (CEFM) and set (SEFM) are available */
- > 518		status = acpi_get_handle(NULL, "\\_SB.PC00.LPCB.EC0.CEFM", &handle);
-   519		if (ACPI_FAILURE(status))
-   520			return -ENOENT;
-   521		status = acpi_get_handle(NULL, "\\_SB.PC00.LPCB.EC0.SEFM", &handle);
-   522		if (ACPI_FAILURE(status))
-   523			return -ENOENT;
-   524	
-   525		return 0;
-   526	}
-   527	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
