@@ -1,185 +1,175 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8449A43900F
-	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 15:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781106616; cv=none; b=sllgQxhGd3ULXHPPKFJ52uGfHgDCCGic/WwYjcMSi6JbZjQu4s9ZwOh/k3R5rh1hBkrhZ21Dz880W1WJqEMWQ87pNGFQ3CXzpvNK0593idyPtUINxEn+bQ1tWmGCtTskXMeynPKBot+UZ2A/CXMthN2jino82m009bo0JK+T8AY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781106616; c=relaxed/simple;
-	bh=Uy1jEB3de+y/OfX3XHuNkFbcXv0lUt9DsP84+jWEy24=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hfvRXZ8fmAxzoDu+s49TRPl41TVymMU7X8OixH8my7xmEnkCmclBsv4QS1LxLNnU34WdcoH5l0ov9fhv4+LYbY6ZUlk2vaVnP1Cs+ew3BZzIx6dQJvmmq/cxL2BBfuAsfjMmEYBgYQw0Qf96+s/QFJTTTJfTrk/BPKc/akxC5gA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hnWyNs5Z; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F305F31F9A4
+	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 16:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781108369; cv=pass; b=G/S/LyHp65RxeqFP3uT7sX/otPWc4MIJrH7TLJFbdbseIVOpZ+FUEy55rIyYDKblS4SFymo8vMuUijLJzXXXOG4T8obibB0D/nM1+3gt1fErAaH0MM0EpVmOeTxvBfcugA8G7VTdPs+SlP45oR2ZImwTna0vSYF5mOm1Al1s2XA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781108369; c=relaxed/simple;
+	bh=tEcBow2gdBp+/voVp/g9x+g9NV2I+Be2aTB/lbhkaHs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZlAPxV+bUGCNoQfYj1r5pfJcedAV1Qas5uLUvdKq0Ou9IrWO+7yXBVZsMlF+aK+q2xHGBFeuVIifwafaoLKvlOqVdx5HmMbcJFhTaoayi34vx2sqE1uGJ/VdZhqs2MetfbQrU/QjokWSL+WbRARpEpAcf3mvGQT834wMWWSYp44=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WHkwJPEs; arc=pass smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hnWyNs5Z"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2c132ac5ec2so68697675ad.1
-        for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 08:50:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WHkwJPEs"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2bf2911f93cso80545ad.1
+        for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 09:19:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781108366; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CHdgquIPsjtevG9yLBSEjbomMuBawN+Lls+w16ZosrABe1EEfr0E5PRXO7JWunlAdE
+         DeG1HCPUuwmXUhKKaW6SI0Y0inKiBIWFhFP1V2ZJI2/1NQB+ezioNbOWP0mXfupoO+F0
+         iOV7PRDpQD+Z9myOtayjzgfVBUEVmVzje9Sqk7P4UQqkgxdz/Zf+4wTiHzpBiiGGCLha
+         vqlaLZF6H8NPGjaBqSqSA91QsMWkW1eXUaW6/XEclx2HNAHosSPU8NZgKKhFDPLUPwlY
+         y2TXsA7w3pg0Zhua67PFrogNWEvm0f5rBUcM1TjguekumYoiv20qiWZNquaykRJPYy4s
+         024Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Vi11/rohvLJyMxroWGqfziqvFq44cunGgPMb0wuOPpg=;
+        fh=nDmSPuKujzMxGHXs6S4RbnTbl0H0Cq8kztz/yDN4QcM=;
+        b=BSNFLxYLItZQ832OQBezApnmmFz0ApWkJ+WqKHDrWzJLeIw8h595I+h+kF/niV3Q8z
+         qAjtZS0oLPiHSx8ARqy+cOHHjsw44XxGh/jO5DUbaYiSxJv78a3mZSQnKVYCSzJpk4Mp
+         zOkf45F9S1p4hKt7oRYJKVv6vtEGGU7haZKquLRrXcJdRQZ0yEHXm3jf3fMGDhptIlF8
+         60MSVHCEBNxuD06o3VkIMCuqT+ah4Ptts9XyVHPlU/p8Ztd8iPZR79345a9HKDUw31xF
+         qasTa9cgCQwJswBwUg6zpcLDykIagZWln201KsW62vKX+Z8JhZs4YC9d8ITf4TWDEUDZ
+         pyJw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781106613; x=1781711413; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N62HLkzXr48klLfiaIQLz719iwqu6H5OvWl+Uf/YYek=;
-        b=hnWyNs5ZP0AXD6VCml3WbvTIpwI2Y8mRHEW3OxOBxY24wdSqaTS9r0Sg/w8Pe8Ec7x
-         sGFOT7TaFOlWuX3Zn6w0z7qd0aLtuhFrl9fky7TxCerZkTGX6C1CnVqDxcREDfe9wJoD
-         OzDfItXQELjDqwr0gcoYSunr3lZGcTiuxr3vFxYi4oVdGDm9cRWPkEB7+YdkdaGdcfIq
-         1t5hTbjOplNJLy1ynV6/af1loziY/4HeO5LzrnqHjcq2bx1VjCe47pfth4CuLe2PUpYy
-         7KITJVOl8dX5goEEH0kdZX0OyznWwAUjlRXOS37x6FoWh+/n5wrRuQd79xPMWPuXcBuF
-         Scww==
+        d=google.com; s=20251104; t=1781108366; x=1781713166; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vi11/rohvLJyMxroWGqfziqvFq44cunGgPMb0wuOPpg=;
+        b=WHkwJPEsByvQ6CNP4SKfm+iqh204dSpVAykHKz861F9YhUzUTVWNCdVtYzUSl1F0/6
+         exSO9mjrsg4JsDSmeO34e3FSgiruD+yQDN0TpOe/ZG3hMgBG5+sF/8SUXUet43409r0/
+         VULwxsTXA237dVSogp+k5XPSMZoHi5FD/dJoU0iHz6tDK7yycXpIoF+C+QxJVnzNbHAm
+         f0sSZs0FR5seYdispUZhHQTSFF+S1jH0d27cy2TuYyqvkva3evHEXSTaWi325dmQwsJM
+         vswX8sAaUvqZDBkDvmS0fmoaBqyQ9knJKXpJeByNM/bI2Ho/ofDiiudcOAMwmkyFmoHg
+         BQEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781106613; x=1781711413;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N62HLkzXr48klLfiaIQLz719iwqu6H5OvWl+Uf/YYek=;
-        b=HzRPL+kmFXqTcXSPoMB37rY/6QTGmDDV4+2o74HRqxxpWgj0R9/0WT5U/S6Dx02BcO
-         4DzDpXf3DMqwFEv7R/0DiFGqPDwqoF4c89h+la7GkXMGF+WYCyEHcUuAu7L7dj5gStpp
-         Di3i1s+HSoi9kkuLOvPZVZqmA3SFjTGF66wgjKTCnQU8JM4nhGPd+zegng4aO5RctszN
-         26cXulra2qvS0X0/YfzrIYYryqOntEICEllEKN/yRQpdGIXY8CR7qYuWiNJZZvO2TrDJ
-         xt1qYTwV0NMNbfgMlb4+h5wHbYfn3dLQwrZN90bDU9C1WWgNWkcMhq729cC+fs4n5pF1
-         nbjw==
-X-Forwarded-Encrypted: i=1; AFNElJ/OTBZUx76MFT8Lxyj7VpVmOO3sfXaxtbxsPgE4o2vz34oDtWvRF8P3v2w4f4BcKxu3A7pI@lists.linux.dev
-X-Gm-Message-State: AOJu0YxnttGMtqt3+grjLd8OsUFRlT+AoRocPa7d2sgv/FmEvwfLwYCS
-	YvJwMCBviflPzzrnxtbWdKflHT3csN38NgUnjxbKXy5uR1+HTZImfRT5tzQfxeR52A==
-X-Gm-Gg: Acq92OG4Z1lVwIrpwK0U6v+aoEDY6M2d6h6qFxMpScAwoa/j21vmDqOY3hY0acmdFob
-	4QIIqcjtD9/AeDL+lOk/vaPyOb6vw6TQCb39S6CyIGipB86BITDT2NHMOUoNYw5SeN2/TljP4Uv
-	NkrNKic7tuwHqj+Gmh4HLwyqLu30YNgryf4h6H6th1fys51yrPrTyMfwjZMzZpbLIjz1pstWLZr
-	QJdFDKqMNo3l77eEBHWExffM+bpX2zynN/WgxiHGFVPN7bjEfBjlsdGQS559fvOIxqKUHEwF057
-	3tky64KyOEFFDPxraP6z3EaezXnq3QpLXOs9M/PPf4j3rEhGHbYrvkjdLspEUWSkwHkYmZ7qMc0
-	98wyaUwyPIg5rdiGd+td/EUCbpMylFFBYZiy9DYnRksBaiu2o0QwiOqeJ9DwEOQKaMLB3ITfrNo
-	HwItASZv5rndNmpr+oVpLilDMms/mL8O2XbV7Cp5etuI1uZJmqmK7utEDLDiSyzcw9kMYLvXQk/
-	MxeQr8a3Jh3nHs8
-X-Received: by 2002:a17:902:fc4c:b0:2c2:1982:527a with SMTP id d9443c01a7336-2c2198254f0mr234468445ad.16.1781106612163;
-        Wed, 10 Jun 2026 08:50:12 -0700 (PDT)
-Received: from google.com (112.173.50.34.bc.googleusercontent.com. [34.50.173.112])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c2a4a64e22sm56793545ad.61.2026.06.10.08.50.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 08:50:11 -0700 (PDT)
-Date: Wed, 10 Jun 2026 15:50:07 +0000
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	Thomas Gleixner <tglx@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Subject: Re: [PATCH] MIPS: VDSO: Avoid including .got in dynamic segment
-Message-ID: <aimHmmG48fpqtcJO@google.com>
-References: <20260609-mips-vdso-fix-section-layout-v1-1-0e80ffadf7c7@kernel.org>
+        d=1e100.net; s=20251104; t=1781108366; x=1781713166;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Vi11/rohvLJyMxroWGqfziqvFq44cunGgPMb0wuOPpg=;
+        b=JtiyubmCOGnTuwKoEB52R64WgcyYhj5OuVighBatjSn972+uEsDPQ0xnZ7jGtfPgS/
+         NKuA0B97yRUeDUeTNgmx2kO6S2aJhmrN+IOkdnaNjEAcpLlRGf+dXtfEGGiJz3kVS1bx
+         Ssl8LyIsOfaJ9FTTV7I3Qk6JRkbHD/SId9I7hq5QMo+EKk9mkIMJ3e0X0nJOdkRA2h8V
+         +z+FpEgbPtSpXHW9Ih1Nr1FzHVNMnxoDtfzZTUmtroND4pRuVtMgD/X3w9352uR30CNE
+         e9ZAZ4AXeO380x65zDgoC9MTujot/NVhLzRepS/PfCjnExccPg+co+4VdpNd6k+R3DwZ
+         qa6A==
+X-Forwarded-Encrypted: i=1; AFNElJ/2gSSUIkAv9emKEgSmmfB/lIl8U8qDVim/cJXspfW8FBaeLiKtno6TKsEoLk19w6NQKqY1@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz9Zrt4ujO7yQQsJXwp6ZYH7Z3/ie8C8hDidLzKcadeDDSckOM5
+	ZBuQrtx27DRqAdqVURDd9DtvIq3yDakrgP8KgkWXOx02KkZCgt/FaZeeGRiLwW425hfRT1+I9TB
+	UgIQkVlENub7FsAhOlSkddY+iGcStlfD0UycY/yek
+X-Gm-Gg: Acq92OHzfkV1a5d3a/zSfPDqma6MpEzufCX6zGVXqM6Ucn6mNHPFCQf3WhNqxl2zp6d
+	3FBzm1vyqZTrJSWKXRtLFEzMY1lHL0gX0AGP+Q6BcBgq9XFOkFcdfACP476ndzZyy+OAY0EF3V6
+	r90RBknWAy4Xk3j3Nm0mscG22Guq693t6cl9+bM7baCVI0CsmaRBJYoumokTbMsKUOzJL11GIzW
+	IlfeFVkQTMip9Cos2EO3fllKVCnZqWJ22nkYDfjK2wv7I0hPkfwCsj+83nrG9MXNT0zpEp3crGE
+	28Cg8rv0ITfEMtBGz5dDzXbbe7nd39tOe7CopO6dwQmTtAwcs4Z8DVuYJWY=
+X-Received: by 2002:a17:903:3c25:b0:2c1:ee6e:4e4a with SMTP id
+ d9443c01a7336-2c2d942700amr238395ad.27.1781108365793; Wed, 10 Jun 2026
+ 09:19:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260609-mips-vdso-fix-section-layout-v1-1-0e80ffadf7c7@kernel.org>
+References: <20260610112451.1553054-1-jremus@linux.ibm.com> <a76b93d7-89bb-483a-80dd-59e3dbf921a3@linaro.org>
+In-Reply-To: <a76b93d7-89bb-483a-80dd-59e3dbf921a3@linaro.org>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 10 Jun 2026 09:19:14 -0700
+X-Gm-Features: AVVi8CeML9xOHpqDi-kOipKhEhSw8qM5oNh-G4lar_licy0sI8HoLNL-mbAU5DU
+Message-ID: <CAP-5=fUowmCCdfAOoPimduZ53GTfRPp1qPLMUfXU6R80=x88Eg@mail.gmail.com>
+Subject: Re: [PATCH] perf s390: Fix TEXTREL in Python extension by compiling
+ as PIC
+To: James Clark <james.clark@linaro.org>
+Cc: Jens Remus <jremus@linux.ibm.com>, Jan Polensky <japo@linux.ibm.com>, 
+	Thomas Richter <tmricht@linux.ibm.com>, Hendrik Brueckner <brueckner@linux.ibm.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, linux-s390@vger.kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 09, 2026 at 06:31:21PM -0700, Nathan Chancellor wrote:
-> After commit 2db1ec80dfd5 ("MIPS: VDSO: Fold MIPS_DISABLE_VDSO into
-> MIPS_GENERIC_GETTIMEOFDAY"), building ARCH=mips allnoconfig with LLVM=1
-> shows some warnings from llvm-readelf while checking the VDSO for
-> dynamic relocations:
-> 
->   llvm-readelf: warning: 'arch/mips/vdso/vdso.so.dbg.raw': invalid PT_DYNAMIC size (0xa4)
->   llvm-readelf: warning: 'arch/mips/vdso/vdso.so.dbg.raw': PT_DYNAMIC dynamic table is invalid: SHT_DYNAMIC will be used
-> 
-> The blamed commit alters the link order of objects into vdso.so.raw,
-> placing vgettimeofday.o after sigreturn.o. This ultimately results in
-> the .text section shrinking slightly in size, which in turn changes the
-> offset of the .dynamic section.
-> 
->   -  [ 9] .text             PROGBITS        000002f0 0002f0 000930 00  AX  0   0 16
->   -  [10] .dynamic          DYNAMIC         00000c20 000c20 000090 08   A  5   0  4
->   +  [ 9] .text             PROGBITS        000002f0 0002f0 000924 00  AX  0   0 16
->   +  [10] .dynamic          DYNAMIC         00000c14 000c14 000090 08   A  5   0  4
-> 
-> Changing the offset of the .dynamic section causes the dynamic segment
-> size to grow by the same amount, which triggers a warning in
-> llvm-readelf because PT_DYNAMIC's p_filesz (0xa4) is no longer a
-> multiple of its sh_entsize (8):
-> 
->   -  DYNAMIC        0x000c20 0x00000c20 0x00000c20 0x00098 0x00098 R   0x10
->   +  DYNAMIC        0x000c14 0x00000c14 0x00000c14 0x000a4 0x000a4 R   0x10
-> 
-> The size of the dynamic segment was already incorrect before the blamed
-> comment, as it should be 0x90 like the .dynamic section above (18
-> entries at 8 bytes per entry); it just so happens that 0x98 % 8 is 0,
-> whereas 0xa4 % 8 is 4, so there was no warning.
-> 
-> Looking at the section to segment mapping of the dynamic segment reveals
-> that it includes the .got section, as it is implicitly placed after
-> .dynamic by ld.lld's orphan section heuristics and inherits its segments
-> from the linker script.
-> 
->   [ 9] .text             PROGBITS        000002f0 0002f0 000924 00  AX  0   0 16
->   [10] .dynamic          DYNAMIC         00000c14 000c14 000090 08   A  5   0  4
->   [11] .got              PROGBITS        00000cb0 000cb0 000008 00 WAp  0   0 16
-> 
->   Section to Segment mapping:
->    Segment Sections...
->     00     .mips_abiflags
->     01     .reginfo
->     02     .mips_abiflags .reginfo .hash .dynsym .dynstr .gnu.version .gnu.version_d .note .text .dynamic .got
->     03     .dynamic .got
->     04     .note
-> 
-> Explicitly describe the .got section in the MIPS VDSO linker script
-> after .rodata, which switches back to the default text segment,
-> resulting in a dynamic segment that is the exact size of the .dynamic
-> section as expected with no other layout changes.
-> 
->   -  DYNAMIC        0x000c14 0x00000c14 0x00000c14 0x000a4 0x000a4 R   0x10
->   +  DYNAMIC        0x000c14 0x00000c14 0x00000c14 0x00090 0x00090 R   0x4
-> 
->   -   03     .dynamic .got
->   +   03     .dynamic
-> 
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2166
-> Fixes: 2db1ec80dfd5 ("MIPS: VDSO: Fold MIPS_DISABLE_VDSO into MIPS_GENERIC_GETTIMEOFDAY")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Wed, Jun 10, 2026 at 6:39=E2=80=AFAM James Clark <james.clark@linaro.org=
+> wrote:
+>
+>
+>
+> On 10/06/2026 12:24 pm, Jens Remus wrote:
+> > On s390 the Python extension build fails as follows when using a linker
+> > that is configured to treat text relocations (TEXTREL) in shared
+> > libraries as error by default:
+> >
+> >    GEN     python/perf.cpython-314-s390x-linux-gnu.so
+> > /usr/bin/ld.bfd: error: read-only segment has dynamic relocations
+> >
+> > This occurrs because util/llvm-c-helpers.o is erroneously built from
+> > util/llvm-c-helpers.cpp without compiler option -fPIC but linked into
+> > the shared library (via libperf-util.a(perf-util-in.o)).
+> >
+> > On s390, object files must be compiled as position-indepedent code (PIC=
+)
+> > in order to be linked into shared libraries.  Commit a9a3f1d18a6c ("per=
+f
+> > s390: Always build with -fPIC") added compiler option -fPIC to CFLAGS
+> > for s390, which is used in C compiles.  Add -fPIC to CXXFLAGS for s390
+> > as well, so that it is also used in C++ compiles.
+> >
+> > Reported-by: Thomas Richter <tmricht@linux.ibm.com>
+> > Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 
-Thanks for the patch!
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+Great! Perhaps we should add a fixes tag for backports. Perhaps:
 
-> ---
-> The fixes tag feels a little strong since it seems like it has just been
-> luck up until this point that there has been no warning but I decided to
-> be conservative and include it regardless. Feel free to remove it if you
-> see fit.
-> 
-> I think this should go via timers/vdso with the blamed commit. I plan to
-> send a follow up series for 7.3 to add '--orphan-handling' to the MIPS
-> VDSO to avoid issues like this in the future but that can go via the
-> MIPS tree, as it is not really a fix and I will need to properly test
-> it.
-> ---
->  arch/mips/vdso/vdso.lds.S | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
-> index 05badf3ae0ff..278ab6444e98 100644
-> --- a/arch/mips/vdso/vdso.lds.S
-> +++ b/arch/mips/vdso/vdso.lds.S
-> @@ -56,6 +56,7 @@ SECTIONS
->  	.dynamic	: { *(.dynamic) }		:text :dynamic
->  
->  	.rodata		: { *(.rodata*) }		:text
-> +	.got		: { *(.got) }
->  
->  	_end = .;
->  	PROVIDE(end = .);
-> 
-> ---
-> base-commit: 13f6218e6fe79dc64aed76d738b765b45f62492b
-> change-id: 20260608-mips-vdso-fix-section-layout-262bc18d0c29
-> 
-> Best regards,
-> --  
-> Cheers,
-> Nathan
-> 
+Fixes: a9a3f1d18a6c ("perf s390: Always build with -fPIC")
+
+Reviewed-by: Ian Rogers <irogers@google.com>
+
+Thanks,
+Ian
+
+> > ---
+> >
+> > Notes (jremus):
+> >      This patch applies on top of the perf-tools-next tree:
+> >
+> >        git://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-ne=
+xt.git  master
+> >
+> >      Note that this resolves the issue discussed in thread "[PATCH 1/1]=
+ perf
+> >      build: Fix Python extension build with GCC 16 hardening":
+> >      https://lore.kernel.org/all/ahV2XGx_6h7upuc3@li-276bd24c-2dcc-11b2=
+-a85c-945b6f05615c.ibm.com/T/
+> >
+> >   tools/perf/Makefile.config | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > index 333ddd0e4bd8..33f90968c8a9 100644
+> > --- a/tools/perf/Makefile.config
+> > +++ b/tools/perf/Makefile.config
+> > @@ -109,6 +109,7 @@ endif
+> >
+> >   ifeq ($(ARCH),s390)
+> >     CFLAGS +=3D -fPIC
+> > +  CXXFLAGS +=3D -fPIC
+> >   endif
+> >
+> >   ifeq ($(ARCH),mips)
+>
+> Reviewed-by: James Clark <james.clark@linaro.org>
+>
