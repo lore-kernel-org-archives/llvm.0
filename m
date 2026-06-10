@@ -1,82 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D960E53E0B;
-	Wed, 10 Jun 2026 22:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763F4369D7C
+	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 22:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781128926; cv=none; b=bIj1/Q+vjLYYcZlVrtkNJIYMILSAStu4D9z8tnvTzkNrpQUfO1l9+9/+4cpHeGErwfPpREiaQQZnzrTJlHVljOg7uIGnc+zq3RPer/8f6FcXh14z2DlrH3946Ud9pXXxz5Gq0B2ZEpcnnzfqgw5K66hfr83IrZ+GXgHW/sK6MF0=
+	t=1781131405; cv=none; b=VXFoFx9VatnnU5tZBnAu2lswO+gdn447HTewDJojxTwpjTZ1NFrcti1CwmU8vPS2LkLvF9qD60bU1CBKv9gmtsBTm91+0saQHfALT9wZ+s66ID3lQwCsSzZr7si1LZfvWPcF/duhvvNHPSBJfDsHxDK0nCKlTQS8bQI6CbCmkhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781128926; c=relaxed/simple;
-	bh=Zh1h9ZY8dozzaTgCNIksGo4kXi/3jgeHgiTd250BhX0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=IAzxs7X9JuV9miy3BMTTc8CSYFSSKSJdC65r0l73fJkMa7WHDKevjdhwqVpb3aYNJpHePlSSTave4c2GFwFw40RJIheiO3kbiH+j+ceOtml12bR8oxS2Rvzb4KkKLS0sdmr4Pw1qpY4zTGoeo2DXFQ9tX2bRqFKb3nf5PREmC7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g5nuWBaS; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781131405; c=relaxed/simple;
+	bh=0mIimJZwSrMOwOod1z2uAYi8SE+ZraOi6XHfdAjx1Tg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bMzzdpeXbiP7i+JxToaBu4ozeT6QKjfrDmawqdcbEweOZIYcXdAhDBSrSjd6NjvQpeMMv9Z4p3hTs8DoLj9y0MWgwgyLhx3rtwxhz9XIhpfMDIo8Z5P0A1sZE4SCOFVzhj2ga7OLlIdVmFrWKFdfkmy5CISnZNX9+/q+Oda5jL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GCDhfGUX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g5nuWBaS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781128925; x=1812664925;
-  h=date:from:to:cc:subject:message-id;
-  bh=Zh1h9ZY8dozzaTgCNIksGo4kXi/3jgeHgiTd250BhX0=;
-  b=g5nuWBaSG76+BcLP7lyHXofbxNT7Bu6No0+AfTPClGRxUsDiZo0Xbf4Q
-   FfFdRCZvaWSb08b+Oc9Q7J/4FYvVIJpMD9tY13n3Q7asfJixRdkHqBCgN
-   lGAex1ImN3lZ/eRZSRp2wS7ar0S/WAVohyOOxI9+eRwAxMVSc35/qMhMJ
-   WKrPDDr8Kzt/HcUmvOGf3b/4EkLqU5brcQmwipoDv3d1QWsNVGFJgNzmp
-   sksBD7aGD4SecMZveW8UIDxo31afDOGt3H8ybKD6d7FU9XfwOYj5tLFky
-   K8CrQETlvjJvZb/FVAnBBYsSN1JQ4VRtvQI/+AQi616mcNNigLRg/xzy4
-   g==;
-X-CSE-ConnectionGUID: 8nYG9gMQRSaZgBbuHcWyZA==
-X-CSE-MsgGUID: g4TEsQYjTzinTWm3l6Odyg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="99358132"
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="99358132"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2026 15:02:03 -0700
-X-CSE-ConnectionGUID: neIJR62tRyuzb8o5XFUK4Q==
-X-CSE-MsgGUID: ldWgh4vuQbq/6aehWTuPXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="243339914"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Jun 2026 15:01:59 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wXQzj-00000000Lwo-0KUr;
-	Wed, 10 Jun 2026 22:01:55 +0000
-Date: Thu, 11 Jun 2026 06:01:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thierry Reding <treding@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Jon Hunter <jonathanh@nvidia.com>,
- Manikanta Maddireddy <mmaddireddy@nvidia.com>
-Subject: [jonhunter:tegra/next-fixes 25/27] ERROR: modpost:
- "tegra_is_silicon" [drivers/pci/controller/pcie-tegra264.ko] undefined!
-Message-ID: <202606110526.pvvoCt1y-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GCDhfGUX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE9251F0089D
+	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 22:43:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781131404;
+	bh=62bFE+9EiC4Wl6sR/gNVDtGRVBnRqEmz0YnELUX+5Xs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=GCDhfGUXvvVNHLXhr3frkjO1Rp4OtsKp0qM3R31fePjb//IULavexvDmNUUwA04Ub
+	 Dzlzh2pzRTGy59f+l+FcFl6Yb7JHo1erepIH9ag8J/kku0Cip94/n/lnMR10AXod+E
+	 Eo9yh0/1Iz8nn2Z2avr7KPAgjzoa5BEPnlspQTzlg3rKjx1wz7yacqY5QAT1hJvXmc
+	 p+h4mmaqYQXlAywwxh+PM6aAWHmctdeOpMdFSOJmYCYFWVtcq+mLZQz8SbOiIU5i+B
+	 W6h3yZfiZGrVAGQ4KxdyXBJ5+NYJjpIS11ozMi8kHTJQg+Iz/vEkAJtdxm8C+VNjjZ
+	 1YzD783Gy0FgA==
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-bec423a5265so1185859966b.1
+        for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 15:43:23 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/dy0hPg6rF+FjqRCPh44Ct2kPJZFMYG6y4fwOVsQvdrxh+XO1EWBBoSp5bCkJS3hnIUyTT@lists.linux.dev
+X-Gm-Message-State: AOJu0YxLnMH6typxszy008MJuo03slT/vta+Bo3qRMkuBW2VxyAhg0ew
+	2hQ1Am0YHzfeoltPepS54QnMaP5YhcKPXhTNfCFnoJMpm4pCx7hRJtBswniZ+dT2FYSOLddt5xm
+	yyBo9S55zWpR/chC11CBdZlLjhbCLBQ==
+X-Received: by 2002:a17:907:c28c:b0:bd0:df77:98bb with SMTP id
+ a640c23a62f3a-bf3702817fbmr1479114866b.9.1781131402612; Wed, 10 Jun 2026
+ 15:43:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260609151212.29469-1-ansuelsmth@gmail.com> <20260609151212.29469-9-ansuelsmth@gmail.com>
+In-Reply-To: <20260609151212.29469-9-ansuelsmth@gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 10 Jun 2026 17:43:11 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJdBxsbUK+n9h17K9SC7ojcPxemeijJhUGQt9HuB82OYg@mail.gmail.com>
+X-Gm-Features: AVVi8CfnalHGFSDJtFBoMIJ88H-i-Yw1YCOHz7GBxBm4GdczRrsSV4xJzXraBNE
+Message-ID: <CAL_JsqJdBxsbUK+n9h17K9SC7ojcPxemeijJhUGQt9HuB82OYg@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 08/12] of: property: fw_devlink: Add support
+ for "pcs-handle"
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Saravana Kannan <saravanak@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/jonhunter/linux tegra/next-fixes
-head:   7e34e632a4fcdc8d53c9ae5c0dbf541827b64de5
-commit: 35f9239ce985897b6f1fb9f8e2c329a809c02c24 [25/27] PCI: tegra: Add Tegra264 support
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260611/202606110526.pvvoCt1y-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260611/202606110526.pvvoCt1y-lkp@intel.com/reproduce)
+On Tue, Jun 9, 2026 at 10:13=E2=80=AFAM Christian Marangi <ansuelsmth@gmail=
+.com> wrote:
+>
+> Add support for parsing PCS binding so that fw_devlink can
+> enforce the dependency with Ethernet port.
+>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  drivers/of/property.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index 136946f8b746..e6584a2f705d 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1392,6 +1392,7 @@ DEFINE_SIMPLE_PROP(access_controllers, "access-cont=
+rollers", "#access-controller
+>  DEFINE_SIMPLE_PROP(pses, "pses", "#pse-cells")
+>  DEFINE_SIMPLE_PROP(power_supplies, "power-supplies", NULL)
+>  DEFINE_SIMPLE_PROP(mmc_pwrseq, "mmc-pwrseq", NULL)
+> +DEFINE_SIMPLE_PROP(pcs_handle, "pcs-handle", "#pcs-cells")
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606110526.pvvoCt1y-lkp@intel.com/
+There is no such common property "#pcs-cells".
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "tegra_is_silicon" [drivers/pci/controller/pcie-tegra264.ko] undefined!
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
+>  DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
+>
+> @@ -1548,6 +1549,7 @@ static const struct supplier_bindings of_supplier_b=
+indings[] =3D {
+>         { .parse_prop =3D parse_interrupts, },
+>         { .parse_prop =3D parse_interrupt_map, },
+>         { .parse_prop =3D parse_access_controllers, },
+> +       { .parse_prop =3D parse_pcs_handle, },
+>         { .parse_prop =3D parse_regulators, },
+>         { .parse_prop =3D parse_gpio, },
+>         { .parse_prop =3D parse_gpios, },
+> --
+> 2.53.0
+>
