@@ -1,107 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763F4369D7C
-	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 22:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC25E40D592;
+	Wed, 10 Jun 2026 22:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781131405; cv=none; b=VXFoFx9VatnnU5tZBnAu2lswO+gdn447HTewDJojxTwpjTZ1NFrcti1CwmU8vPS2LkLvF9qD60bU1CBKv9gmtsBTm91+0saQHfALT9wZ+s66ID3lQwCsSzZr7si1LZfvWPcF/duhvvNHPSBJfDsHxDK0nCKlTQS8bQI6CbCmkhs=
+	t=1781131676; cv=none; b=iGjCD4WOAnbX3iCjr7BDcePA1ObKXnzqB7QbGVJ/SfO5f/MA9JIaY+30uVYb+pHWLnrHrrfQo45RNyVeTUxUlw0uH+NFTHZZvGCOpm993OeYINNeuvKAfmK6KXijFZLiTJ8RUqhmX3YyANAtzdxSU8SF0Zkkkex0C4d4dYL9Kq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781131405; c=relaxed/simple;
-	bh=0mIimJZwSrMOwOod1z2uAYi8SE+ZraOi6XHfdAjx1Tg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bMzzdpeXbiP7i+JxToaBu4ozeT6QKjfrDmawqdcbEweOZIYcXdAhDBSrSjd6NjvQpeMMv9Z4p3hTs8DoLj9y0MWgwgyLhx3rtwxhz9XIhpfMDIo8Z5P0A1sZE4SCOFVzhj2ga7OLlIdVmFrWKFdfkmy5CISnZNX9+/q+Oda5jL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GCDhfGUX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781131676; c=relaxed/simple;
+	bh=gLLCtpu1HW4y48WvsCoQTVPgxaeKpCOnu7uRUsWxsfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KBnZoETdSBZoeFlyYR+ZKUtTjM1/nK1sICxso80ywVzN1S2JSgF2TW8tdwaImSLfQy8eB3Sv9K/Y5a2N/5oxfbWMO9gQwtaoQCiQ9yRtrcaB7P1GCy1HL05CA7WeF6dB/R0EIco3H+xHQS5vzwc7cv0lfxY3O69N8YycyIuWlrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpJZT38u; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GCDhfGUX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE9251F0089D
-	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 22:43:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpJZT38u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB4AA1F00893;
+	Wed, 10 Jun 2026 22:47:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781131404;
-	bh=62bFE+9EiC4Wl6sR/gNVDtGRVBnRqEmz0YnELUX+5Xs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=GCDhfGUXvvVNHLXhr3frkjO1Rp4OtsKp0qM3R31fePjb//IULavexvDmNUUwA04Ub
-	 Dzlzh2pzRTGy59f+l+FcFl6Yb7JHo1erepIH9ag8J/kku0Cip94/n/lnMR10AXod+E
-	 Eo9yh0/1Iz8nn2Z2avr7KPAgjzoa5BEPnlspQTzlg3rKjx1wz7yacqY5QAT1hJvXmc
-	 p+h4mmaqYQXlAywwxh+PM6aAWHmctdeOpMdFSOJmYCYFWVtcq+mLZQz8SbOiIU5i+B
-	 W6h3yZfiZGrVAGQ4KxdyXBJ5+NYJjpIS11ozMi8kHTJQg+Iz/vEkAJtdxm8C+VNjjZ
-	 1YzD783Gy0FgA==
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-bec423a5265so1185859966b.1
-        for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 15:43:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ/dy0hPg6rF+FjqRCPh44Ct2kPJZFMYG6y4fwOVsQvdrxh+XO1EWBBoSp5bCkJS3hnIUyTT@lists.linux.dev
-X-Gm-Message-State: AOJu0YxLnMH6typxszy008MJuo03slT/vta+Bo3qRMkuBW2VxyAhg0ew
-	2hQ1Am0YHzfeoltPepS54QnMaP5YhcKPXhTNfCFnoJMpm4pCx7hRJtBswniZ+dT2FYSOLddt5xm
-	yyBo9S55zWpR/chC11CBdZlLjhbCLBQ==
-X-Received: by 2002:a17:907:c28c:b0:bd0:df77:98bb with SMTP id
- a640c23a62f3a-bf3702817fbmr1479114866b.9.1781131402612; Wed, 10 Jun 2026
- 15:43:22 -0700 (PDT)
+	s=k20260515; t=1781131675;
+	bh=GRvgTXlPZl11xkQBcRqK4OFLDdU04M2262Jxs4ZW4C4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=gpJZT38uyfsTpqy3Gr+HepAiLDv+DSwP8ChARazi3xh01rFNGozsQmbelEOh3xDXC
+	 /4htzP9ffXXPqdLLnzPsShgEFi3hOianssEDcaVG8hRX4yICacLhA5ZntbhvD9+dZB
+	 rSl4pGs3qS9zFdINT7SXpB1/idWtIwIqofWRWsvH1UYFw/iJoWi9ijwFGtFeg4dyxz
+	 cm0qCW7trDQVzPSqJw6M9TsRwnKbJwZUEJoEhnImqQ5/vI01Xq2zY/BXFOzBvObcgL
+	 Vpmdiv0o7rHK3l/9Pi9UbbR8gCp+38+y1FyYc1ylkpQyFBo3Ew1jQC+miwSlW/7J6c
+	 EFLH4+mi/KUoA==
+Date: Wed, 10 Jun 2026 15:47:45 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Thomas Gleixner <tglx@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Subject: Re: [PATCH] MIPS: VDSO: Avoid including .got in dynamic segment
+Message-ID: <20260610224745.GA2820589@ax162>
+References: <20260609-mips-vdso-fix-section-layout-v1-1-0e80ffadf7c7@kernel.org>
+ <20260610093311-dcb6efd5-6921-48a6-a97a-8739fe7d3417@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260609151212.29469-1-ansuelsmth@gmail.com> <20260609151212.29469-9-ansuelsmth@gmail.com>
-In-Reply-To: <20260609151212.29469-9-ansuelsmth@gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Wed, 10 Jun 2026 17:43:11 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJdBxsbUK+n9h17K9SC7ojcPxemeijJhUGQt9HuB82OYg@mail.gmail.com>
-X-Gm-Features: AVVi8CfnalHGFSDJtFBoMIJ88H-i-Yw1YCOHz7GBxBm4GdczRrsSV4xJzXraBNE
-Message-ID: <CAL_JsqJdBxsbUK+n9h17K9SC7ojcPxemeijJhUGQt9HuB82OYg@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 08/12] of: property: fw_devlink: Add support
- for "pcs-handle"
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Lorenzo Bianconi <lorenzo@kernel.org>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Saravana Kannan <saravanak@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260610093311-dcb6efd5-6921-48a6-a97a-8739fe7d3417@linutronix.de>
 
-On Tue, Jun 9, 2026 at 10:13=E2=80=AFAM Christian Marangi <ansuelsmth@gmail=
-.com> wrote:
->
-> Add support for parsing PCS binding so that fw_devlink can
-> enforce the dependency with Ethernet port.
->
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  drivers/of/property.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/of/property.c b/drivers/of/property.c
-> index 136946f8b746..e6584a2f705d 100644
-> --- a/drivers/of/property.c
-> +++ b/drivers/of/property.c
-> @@ -1392,6 +1392,7 @@ DEFINE_SIMPLE_PROP(access_controllers, "access-cont=
-rollers", "#access-controller
->  DEFINE_SIMPLE_PROP(pses, "pses", "#pse-cells")
->  DEFINE_SIMPLE_PROP(power_supplies, "power-supplies", NULL)
->  DEFINE_SIMPLE_PROP(mmc_pwrseq, "mmc-pwrseq", NULL)
-> +DEFINE_SIMPLE_PROP(pcs_handle, "pcs-handle", "#pcs-cells")
+On Wed, Jun 10, 2026 at 09:45:08AM +0200, Thomas Weißschuh wrote:
+> On Tue, Jun 09, 2026 at 06:31:21PM -0700, Nathan Chancellor wrote:
+> > The fixes tag feels a little strong since it seems like it has just been
+> > luck up until this point that there has been no warning but I decided to
+> > be conservative and include it regardless. Feel free to remove it if you
+> > see fit.
+> 
+> I have seen this issue independently from the commit blamed above.
+> It occurs at least on commit 2b7a25df823d ("Merge tag 'mm-nonmm-stable-2026-02-18-19-56'
+> of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm").
+> If you want I can investigate more, but the Fixes above works for me, too.
 
-There is no such common property "#pcs-cells".
+Maybe it would be better to blame the original vDSO commit then?
 
->  DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
->  DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
->
-> @@ -1548,6 +1549,7 @@ static const struct supplier_bindings of_supplier_b=
-indings[] =3D {
->         { .parse_prop =3D parse_interrupts, },
->         { .parse_prop =3D parse_interrupt_map, },
->         { .parse_prop =3D parse_access_controllers, },
-> +       { .parse_prop =3D parse_pcs_handle, },
->         { .parse_prop =3D parse_regulators, },
->         { .parse_prop =3D parse_gpio, },
->         { .parse_prop =3D parse_gpios, },
-> --
-> 2.53.0
->
+Fixes: ebb5e78cc634 ("MIPS: Initial implementation of a VDSO")
+
+I cannot build with LLVM back that far but something tells me that this
+could happen back then too just because .got is not described there. I
+don't have a strong opinion though, this does not appear to be a
+functional issue since llvm-readelf just falls back to using .dynamic
+directly IIUC. I guess tglx could make the call during application if he
+is okay with that?
+
+-- 
+Cheers,
+Nathan
