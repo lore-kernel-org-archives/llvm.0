@@ -1,194 +1,173 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012068.outbound.protection.outlook.com [52.101.66.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78F11465B4;
-	Wed, 10 Jun 2026 02:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781059322; cv=none; b=digf9d897Mdzn62S5k5kGdCc2yzEn7j6GFO/PA4HWOvETBto0SORJB8Hldou2ItUqzMHevL7iXA4IeJGrsXMVoqbub4pP56eWj1mUkRFQmdbk2kGxJChlUryhxpLdQNnvrUqD+17fmjoSxLiBOYJfC86QeiEFuYUtA6qSf6Cm0I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781059322; c=relaxed/simple;
-	bh=FzCRQp7EQcm2MVEnS6GRXQeHzEvOtguwaMHZ5KVf15Y=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=SFaJCDpJYpLbo8Dv6tpW1uUVubXRKsejdPR+lxtXhYLB5EdtDJd45971t365BE7KcejqHCeSPN36jsWARH+tDW7Z3UvTxwpJsJDnC7vw/BdZr/ZpVi7LWCATRb4HtNIeNYCeryaPNe5aV+3Z85JKzW0R7VUf6pFjJ9iPHaxEnyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E2/19kTZ; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A2D7261A
+	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 02:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781059635; cv=fail; b=FZA7YYlGxNZ//NK9dc/VagYH8AP7921rJ3lX1F/BkgJAXVN1ciP/wC8/Zx2S249y6IKCa8fdNjTEq0sUaspq7IwRsRY4DuvcrVNlY/cLvzbndaIK4WY2JwwQ9bH8YdN4vM4+FSgHvLyjiWRDvVpHxlE8FNWdkOn7jtLbPPXIeFs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781059635; c=relaxed/simple;
+	bh=LOsWSsOM2AkrXJoAYfqH/TwfninOrg9JBCxvXQs4nM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=bsA+iegNm7+xxOvRQ1St4w/GOsbvfEJB41HBj6hyjfwr8L9dOYAqgd2iwkI/qL7U5r4fAEzh/e/lPwZgwRY4j1N4hBWiy12aK08H9mvz8AYdQh6siAZwQiD1JUn/xU2vHkLv3RzUADhV6W/adBTSjoVj8GMfBPQ/pTAvewzYwWI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=wWfProsa; arc=fail smtp.client-ip=52.101.66.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E2/19kTZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781059320; x=1812595320;
-  h=date:from:to:cc:subject:message-id;
-  bh=FzCRQp7EQcm2MVEnS6GRXQeHzEvOtguwaMHZ5KVf15Y=;
-  b=E2/19kTZ5t58uqtsnZQFVbv9ZVqvp4FL8PsTl8mtiWQGZjlCvEmqbCtD
-   /8RsV5k3NTuBd19OT0xTo6oHhu0wypTZ2ib6cOSd5XZRJrkobVcB1Hu7X
-   +YcAN6c+LEe2OWM3fTsaMu5CsxkIlN2eHCKqeZHMSxiy2cfo1UtwLudbZ
-   yuvYUhXApkJSo6+5kKdIiEI7paMtbON019nSEEzB18cndMun49un6DCe7
-   +hpxK3d64p1DRBsIc0KztnAALaDQc93l5Vm9nAWIOO5Ect389HNwfPyO6
-   bPbrNTkneedZjf0t/wxlDWiaCTi23k2ixRM11LFNzUhaJTFypTTw+Y+6H
-   Q==;
-X-CSE-ConnectionGUID: WcrByv1+QIKtCNr4dirCNg==
-X-CSE-MsgGUID: f5eiFV6OR5moB3cW6shIbw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="81890162"
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="81890162"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 19:41:59 -0700
-X-CSE-ConnectionGUID: C0z58JHPRhKb21Rp6EuqAw==
-X-CSE-MsgGUID: WugA5359T3aEEUflLLjSZA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="243578732"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 09 Jun 2026 19:41:57 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wX8t9-00000000Kow-0Qm0;
-	Wed, 10 Jun 2026 02:41:55 +0000
-Date: Wed, 10 Jun 2026 10:41:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Jones <andrew.jones@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Anup Patel <anup@brainfault.org>
-Subject: [avpatel:riscv_trace_support_v4 42/81]
- arch/riscv/kvm/aia_imsic.c:923:2: warning: variable 'vcpu' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <202606101041.MjpVfbMX-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="wWfProsa"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=k55US6QZoGehiIxR+eTkMRAM6MTOVdiRQIIy5f8zPwLJws9EzE4A0tpmbdeCJqWBvcmBKiLNv7PgHp1EVh31rVef4Sp65or2FdLEr3ZOkkxpX1FZaHmvCtiNJbAovAmvtdWZZidvB0o6vSxnt8lvMayt7f5dos4C+eOqewHdCuOVhPw9LevTSYjsKcikpNOiqsdbV1HpaFS5QQuzbHV7XeRcpXijeGsYLXwoKjegFMMMSB4JrZ/x56w4zdeIasNXFrb6bQ1H6tZsprpvjrdIEcneuKDTjU29F6n9+ht/rRHEKugW3Y/kg+3Ux3YZodJhRUhzNwsCwdiMBCmjqcvndw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eb+su4749vefTGRGMVqPuYfnXZ46ydCYl+j6Ij6YvZU=;
+ b=t4ambrK+6ZPYZBq/1tkxAe2JnYIAkGTFrmiVBzVbDivvs4HSJpRD+x4tvVms9nPgT+eC4Frt5D5Uu1WyLjZLug5OCmxxIds8DzUyKyhlr2HGDnB066A9XwsyGDQpwK8/1EoCduUmLn0T4jy7x8hcWYwWxCGSYAupBsoPN/rJhCktJVlWHmEmkD8w/r5CiJ3G6IoNOOyrCYN/gU6NT0VGt9OpyyNeoI06tWZD8Qyv9USrfIUFNGTEOj/fmnrQCy87qvp/nugn79LNW72vG4QUnQZZutrgAuM4cXd/KNZOWfF3ZLbwfzYWvorcc3TZFWTE9TtTOleIwiiB+X8BoUDEZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eb+su4749vefTGRGMVqPuYfnXZ46ydCYl+j6Ij6YvZU=;
+ b=wWfProsatH02K0Sph1ui+8VPJuV58VTn2jsPEv/qXVr3OYhOAqC3KxqdKfd7+iPe0D3g28SDzETv0YfHwFEBBWo/IJ2YmCKj8aprRwlwbjOZ8xk8zhhJOcTUCqMMviHn8Rw37WTkqQjKixUvNA8TuFF2ik+fazvjqBxPjpozhR68JlwhtMSSB8+Ax93FXQcs7qHobODn5oL6iZJMxqQEQxfjJtyJJBzCIeF16RVwK8ptFPvfnnBShGRA4dDrrbdelnoLMuNPsjJbfz9U2jxGRksN+JhB4P9SaF3qCwv0NkjqhhA3xmOH8kcxyTiTU1/i7LgldZmDwNWIbIfxS0PsLQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from GV2PR04MB11799.eurprd04.prod.outlook.com (2603:10a6:150:2cf::9)
+ by VE1PR04MB7406.eurprd04.prod.outlook.com (2603:10a6:800:1ae::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.14; Wed, 10 Jun
+ 2026 02:47:09 +0000
+Received: from GV2PR04MB11799.eurprd04.prod.outlook.com
+ ([fe80::2146:83a2:5329:b7c]) by GV2PR04MB11799.eurprd04.prod.outlook.com
+ ([fe80::2146:83a2:5329:b7c%6]) with mapi id 15.21.0092.011; Wed, 10 Jun 2026
+ 02:47:08 +0000
+Date: Tue, 9 Jun 2026 21:46:51 -0500
+From: Frank Li <Frank.li@oss.nxp.com>
+To: Rosen Penev <rosenp@gmail.com>
+Cc: dmaengine@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+	Frank Li <Frank.Li@kernel.org>, Zhang Wei <zw@zh-kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:FREESCALE DMA DRIVER" <linuxppc-dev@lists.ozlabs.org>,
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Subject: Re: [PATCHv3 03/15] dmaengine: fsldma: halt DMA engine before
+ freeing resources
+Message-ID: <aijQGwzQpi8oTGIU@SMW015318>
+References: <20260609221926.35538-1-rosenp@gmail.com>
+ <20260609221926.35538-4-rosenp@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260609221926.35538-4-rosenp@gmail.com>
+X-ClientProxiedBy: SN1PR12CA0060.namprd12.prod.outlook.com
+ (2603:10b6:802:20::31) To GV2PR04MB11799.eurprd04.prod.outlook.com
+ (2603:10a6:150:2cf::9)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GV2PR04MB11799:EE_|VE1PR04MB7406:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6753c411-2592-41b6-d128-08dec69a908e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|7416014|376014|19092799006|366016|1800799024|56012099006|4143699003|11063799006|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	Jp2KEZhf9DO5gpjXLPmKXyQpt0H5wHtZKlvg4yCq19nX1FpcwxU6aMUM1c4kQRN5vUimynJacstL1ZrCx0aZ29sKP/vF0SdjejAL3vkqsPLrPo2FgK0b0KHW2tYpPrB/AS7rJ3tD3G5j1GQGk+am7Pl2nC+p1H539TbhgIlPbfAHPHyQvLt72DZepVS8/9i/criCnpksaCXVuTs21YQgROhQBv0gE7Q9THgh6PWMunWxgqqRZCkMKJSYYgpfqlRq+qu+kOvwenV4xo0BYKkVKQRkIzauHzNFvgbLy5T190hoSaLY95XEtMA65rHi9/TvhjlXa7pVbqA5wUyIHfyEYH5aOl+O55oG6GcCPDCIHOQq/lEpdEbYw+oXVXwem5nTUMcD4g9lmjInJrC+fYRs7VS59c7TYvdzbRKrGQiU1HxYkd08MMiFlXvsLPl9kXAFcIscb7Jgv0//lPSxG19Uspp7xwfEqothAJFTWJ/ImLG899EMzMBsiAXw3Rh9CNj0otMNHP7YzD08SlPz4U6ccRQj94yOit/VEgvanUSKnXyP860fWxHAD81PEhkkQmpdsER55OFQr62EZTS2kL9Zvcfx1+U0qF/pvamY0A6BRzwT1XZn2/H56lNAdAS57cWKVymqJ2YW4SeVLHmFQiMlZ1EE7XH6Iz1+Qex154DRB0hk4rwY2nMF4im3htMpvKxH
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR04MB11799.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(19092799006)(366016)(1800799024)(56012099006)(4143699003)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?fRdndRmq/bz9fHk8Z2PaQTkUH4DuuMhRg0i6DKBX6E+2ZnrNh6OzP/gz99vP?=
+ =?us-ascii?Q?Qw7otiYPxQ5d3NskjwjVquIS/QblJ3cTsj25E3BTls/mTarAidQlI9e9d2f2?=
+ =?us-ascii?Q?VRVEp7LWSUzxUHNxv7JRUeOHYB4WlzGGSNlZI+lPjAg645/+oYY/ieQDsGpu?=
+ =?us-ascii?Q?B+JwucfIM4U93kUDnLmuiXYOL1qzGy2F1bfm/Ej9sCFqMypA3AV9kSKzyd03?=
+ =?us-ascii?Q?6IgwKWUnRG0DSTGfdaJQggEWFliSdkEMqjc01okPzSg0WaYuroX76zShiwxF?=
+ =?us-ascii?Q?i7/Rr+DSl/G4tnmUYKhMWZzoR4cUa5pU7drzkNfFf7arTFwWdy9+TiX/1l/A?=
+ =?us-ascii?Q?7xQ1Gz6Rcn0E0UgBBciQaIwjgplKK8Z2OrmJ/dv30i22V2zV/c2f3beaP1UZ?=
+ =?us-ascii?Q?tTp3aLaQFGVSWDVvvAICoqifjuG72OAwxIiHqXsqu8h8JvOghSMGTokK2O4P?=
+ =?us-ascii?Q?LwOcTsSJTdwGJH22Q7kgtDVHbXWbAJE5fyWb/bMc3hNparcn6mNhW1LmG0ri?=
+ =?us-ascii?Q?vUwssS29KiK2rO9kHaBHY2YnB0MuWEUKjByAs8U6X4QDDWpOaB0ffqheYXbM?=
+ =?us-ascii?Q?aqFNmDHpJxI6icA9ZwMoNb8ZEuKvRZPbPkgCWM2IUkyIn8Jk+SGfJg9Ud2W+?=
+ =?us-ascii?Q?wjq8g+OsyxKueTWaVSiP9WSOTv7ZL5upnMaesbv6o4dgqAb/mr/bSJ9mp75j?=
+ =?us-ascii?Q?fALWpxchbpGCd4tbdYwycRG0yw7T38jDoFbpkOaG1aJCsOjhAqPJDtZIxpPq?=
+ =?us-ascii?Q?jS2TfmpRezc09gZHPo+bCkj6aZQ5SxnwXjXV28WCYjZrksxQLqLur1toTVuh?=
+ =?us-ascii?Q?3DNl0aghWK3J9gkbWeStgEoYidQ2wSYnTm7mlI00mXs7bj9xt0elowbNYBLE?=
+ =?us-ascii?Q?Q3RkXdN/HFrvUKjuXZlIlZzCXLbSEzfJNFQn4/URAGBQhas+jN17xf44J+LK?=
+ =?us-ascii?Q?eypZdZJg+wKCR1GTK4s/hjBf4ReNMJO885KKEHO1cDhfD7ngSEFbiq+SMJ5X?=
+ =?us-ascii?Q?bPLKLIAELPVU8ukyyfzktz126546sWm9JCucAYC7083NGWwoKh4fNic9H6vH?=
+ =?us-ascii?Q?gSqfR9R0B78JZpgwrSm9EkvPZewttTsvxfyyKUCZgd4Cu2TXiYk2A1GBaKjl?=
+ =?us-ascii?Q?u0xfecZ6y8zUBDktP1lEDIQDfKq64Qsrr2Jp6PB6e+AWD5GyVOFP3itf/GoT?=
+ =?us-ascii?Q?lx513SLO01DkcJ5SIhfjy+xgF0jamSYRD6tK6pD2EvWP6eWbU56sMmYb3knE?=
+ =?us-ascii?Q?5fuoo7mYon1YwbqMUtKFSIuHtSGfI3OUTDEHOXZKbzJ36c445BsUt9JFBxNG?=
+ =?us-ascii?Q?mwtb+3VP6WwLosFBGdUDSh7gsAVH63fqSE3FnYUEK3BTnDG3gXvk6LQUCu5m?=
+ =?us-ascii?Q?IXfVwVsbUBdhhL1jncPQwQZlD3WFPQ/iXBG8qOJG3YQD9R8n+1zI0xR0R4FV?=
+ =?us-ascii?Q?2rvgxes2JnP5yH1wLV3/LKmUeEfzJDzkgJi8Ca4iMR3lgXZlwrlRwrXM+k5R?=
+ =?us-ascii?Q?f6Xr9ggr4VmXB32P79U4cOtE7RVPZre8d1FWR972U8ESe63Ez8bvvwTG6C9M?=
+ =?us-ascii?Q?6f/SCj/9ERrZP2BEJOz/d28DXzbJPih89xW34W32M1XOJQSZx/G9PrDAaW+f?=
+ =?us-ascii?Q?EfJHV1UiIIHMp7Z9YRI/zCutPvZ6xQcpEmKMad1tNPijpQxawPcjhC3Dujwv?=
+ =?us-ascii?Q?k8/7MiUpQoqbycWgEtxmvRXWRBNpPcQgsnzYAC9m8TNzfM4sDM7dhkjtRBRO?=
+ =?us-ascii?Q?p4vlao4DJsTV06BBd6oE9ePN0fNcY99hUMQ5w82ncfMFcmbI+dXt?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6753c411-2592-41b6-d128-08dec69a908e
+X-MS-Exchange-CrossTenant-AuthSource: GV2PR04MB11799.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2026 02:47:08.8787
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: W3+sC0Vm3b10nRv90Oc6W2614rNGRM0SFiW2bANhYoJGyN/TFkrwYv68ALPcZWsj6VxiWilEFbwM9BxRU1BkNpF8UllwkgCdxNWYoMM5nW53BlPItLOV7YBcgqw+vgAa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7406
 
-tree:   https://github.com/avpatel/linux.git riscv_trace_support_v4
-head:   79783024b7bd12897e21fecfaf6ac7dad02a8f0e
-commit: ad85db7c4e6fc14b499d0453702948501a67b18d [42/81] RISC-V: KVM: Add guest file irqbypass support
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20260610/202606101041.MjpVfbMX-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260610/202606101041.MjpVfbMX-lkp@intel.com/reproduce)
+On Tue, Jun 09, 2026 at 03:19:14PM -0700, Rosen Penev wrote:
+> When a channel is released (fsl_dma_free_chan_resources) or the driver is
+> unbound (fsl_dma_chan_remove), the descriptor pool and channel resources
+> are freed without stopping the DMA hardware first.  An active transfer
+> could continue executing in the background, fetching descriptors or
+> writing data to physical memory pages that have already been freed.
+>
+> Fix by calling dma_halt() in both paths before cleaning up, matching
+> the pattern already used in fsl_dma_device_terminate_all().
+>
+> Assisted-by: opencode:big-pickle
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606101041.MjpVfbMX-lkp@intel.com/
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-All warnings (new ones prefixed by >>):
-
->> arch/riscv/kvm/aia_imsic.c:923:2: warning: variable 'vcpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     923 |         kvm_for_each_vcpu(tmp, vcpu, kvm) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kvm_host.h:1012:6: note: expanded from macro 'kvm_for_each_vcpu'
-    1012 |         if (atomic_read(&kvm->online_vcpus))                            \
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_imsic.c:927:7: note: uninitialized use occurs here
-     927 |         if (!vcpu)
-         |              ^~~~
-   arch/riscv/kvm/aia_imsic.c:923:2: note: remove the 'if' if its condition is always true
-     923 |         kvm_for_each_vcpu(tmp, vcpu, kvm) {
-         |         ^
-   include/linux/kvm_host.h:1012:2: note: expanded from macro 'kvm_for_each_vcpu'
-    1012 |         if (atomic_read(&kvm->online_vcpus))                            \
-         |         ^
-   arch/riscv/kvm/aia_imsic.c:887:23: note: initialize the variable 'vcpu' to silence this warning
-     887 |         struct kvm_vcpu *vcpu;
-         |                              ^
-         |                               = NULL
-   1 warning generated.
-
-
-vim +923 arch/riscv/kvm/aia_imsic.c
-
-   876	
-   877	void kvm_arch_update_irqfd_routing(struct kvm_kernel_irqfd *irqfd,
-   878					   struct kvm_kernel_irq_routing_entry *old,
-   879					   struct kvm_kernel_irq_routing_entry *new)
-   880	{
-   881		struct riscv_iommu_ir_vcpu_info vcpu_info;
-   882		struct kvm *kvm = irqfd->kvm;
-   883		struct kvm_aia *aia = &kvm->arch.aia;
-   884		int host_irq;
-   885		struct irq_data *irqdata;
-   886		unsigned long tmp, flags;
-   887		struct kvm_vcpu *vcpu;
-   888		struct imsic *imsic;
-   889		struct msi_msg msg;
-   890		u64 msi_addr_mask;
-   891		gpa_t target;
-   892		int ret;
-   893	
-   894		host_irq = irqfd->producer->irq;
-   895		irqdata = irq_get_irq_data(host_irq);
-   896	
-   897		if (old && old->type == KVM_IRQ_ROUTING_MSI &&
-   898		    new && new->type == KVM_IRQ_ROUTING_MSI &&
-   899		    !memcmp(&old->msi, &new->msi, sizeof(new->msi)))
-   900			return;
-   901	
-   902		if (!new) {
-   903			if (!WARN_ON_ONCE(!old) && old->type == KVM_IRQ_ROUTING_MSI) {
-   904				ret = irq_set_vcpu_affinity(host_irq, NULL);
-   905				WARN_ON_ONCE(ret && ret != -EOPNOTSUPP);
-   906			}
-   907			return;
-   908		}
-   909	
-   910		if (new->type != KVM_IRQ_ROUTING_MSI)
-   911			return;
-   912	
-   913		target = ((gpa_t)new->msi.address_hi << 32) | new->msi.address_lo;
-   914		if (WARN_ON_ONCE(target & (IMSIC_MMIO_PAGE_SZ - 1)))
-   915			return;
-   916	
-   917		msg = (struct msi_msg){
-   918			.address_hi = new->msi.address_hi,
-   919			.address_lo = new->msi.address_lo,
-   920			.data = new->msi.data,
-   921		};
-   922	
- > 923		kvm_for_each_vcpu(tmp, vcpu, kvm) {
-   924			if (target == vcpu->arch.aia_context.imsic_addr)
-   925				break;
-   926		}
-   927		if (!vcpu)
-   928			return;
-   929	
-   930		msi_addr_mask = kvm_riscv_aia_msi_addr_mask(aia);
-   931		vcpu_info = (struct riscv_iommu_ir_vcpu_info){
-   932			.gpa = target,
-   933			.msi_addr_mask = msi_addr_mask,
-   934			.msi_addr_pattern = (target >> IMSIC_MMIO_PAGE_SHIFT) & ~msi_addr_mask,
-   935			.group_index_bits = aia->nr_group_bits,
-   936			.group_index_shift = aia->nr_group_shift,
-   937		};
-   938	
-   939		imsic = vcpu->arch.aia_context.imsic_state;
-   940	
-   941		read_lock_irqsave(&imsic->vsfile_lock, flags);
-   942	
-   943		if (imsic->vsfile_cpu < 0)
-   944			goto out;
-   945	
-   946		vcpu_info.hpa = imsic->vsfile_pa;
-   947	
-   948		ret = irq_set_vcpu_affinity(host_irq, &vcpu_info);
-   949		WARN_ON_ONCE(ret && ret != -EOPNOTSUPP);
-   950		if (ret)
-   951			goto out;
-   952	
-   953		/*
-   954		 * Unlike x86 (which updates the IRTE) and arm64 (which updates
-   955		 * the ITS ITTE), RISC-V reprograms the device MSI target address
-   956		 * to the guest IMSIC GPA. The device writes to the guest GPA;
-   957		 * the IOMMU MSI table maps guest GPA -> host VS-file HPA.
-   958		 */
-   959		irq_data_get_irq_chip(irqdata)->irq_write_msi_msg(irqdata, &msg);
-   960	
-   961	out:
-   962		read_unlock_irqrestore(&imsic->vsfile_lock, flags);
-   963	}
-   964	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  drivers/dma/fsldma.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/dma/fsldma.c b/drivers/dma/fsldma.c
+> index 455d21d738de..1ba10d065278 100644
+> --- a/drivers/dma/fsldma.c
+> +++ b/drivers/dma/fsldma.c
+> @@ -748,6 +748,7 @@ static void fsl_dma_free_chan_resources(struct dma_chan *dchan)
+>
+>  	chan_dbg(chan, "free all channel resources\n");
+>  	spin_lock_bh(&chan->desc_lock);
+> +	dma_halt(chan);
+>  	fsldma_cleanup_descriptors(chan);
+>  	fsldma_free_desc_list(chan, &chan->ld_pending);
+>  	fsldma_free_desc_list(chan, &chan->ld_running);
+> @@ -1207,6 +1208,10 @@ static int fsl_dma_chan_probe(struct fsldma_device *fdev,
+>
+>  static void fsl_dma_chan_remove(struct fsldma_chan *chan)
+>  {
+> +	spin_lock_bh(&chan->desc_lock);
+> +	dma_halt(chan);
+> +	spin_unlock_bh(&chan->desc_lock);
+> +
+>  	tasklet_kill(&chan->tasklet);
+>  	irq_dispose_mapping(chan->irq);
+>  	list_del(&chan->common.device_node);
+> --
+> 2.54.0
+>
