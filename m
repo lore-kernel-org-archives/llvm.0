@@ -1,104 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682833438A2;
-	Wed, 10 Jun 2026 19:50:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A523749FE;
+	Wed, 10 Jun 2026 19:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781121048; cv=none; b=FxR1INUZmFK/IpVmnvvNbpycvtCar+qO6/Xmt+bcKFeiGRTj5DhkEkYFOK+cI7VdjYKlvsJz51rTezDCzxNB/3g/1UjzNCk7lvdzMr4VQ8E0MZhc/Ss9/vnrdk/M5bolUtsRIaiRt7+y14jRtV3g6AKbBz1JAPnwVxgu4fz6NBM=
+	t=1781121354; cv=none; b=Vl2YUb+tkllEphARnr/mTUmkxSt5bkte+weyXR4F51GTupBHRMRD3QPOYVA2INUI+618MJ7ebkTXhNyJbjS4R9tpqgHIRIaqvf6mMa6o+FWmNlMHRnEhlOxMqp6ZQRjgasGm+2w/Lwu8+hN17R4fRUZ9jivHD568PGm7d1Xn95s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781121048; c=relaxed/simple;
-	bh=NNksoh7Ns2g1gqLHnb6MZ59thijmaV2sFavKgQ6aShA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jAJk3Dq+K31wHMzE6JHrG9+pjVG4w/TU/akKSCOe46+RQEHo+sjmDJ5YlecVY3v4xgGOStMV//6kl6iYAOM1VHF0FOyo/oQBvyFoEteUisWFJUFSF8hnlX9PvZPJCgADo9pBX8a4OzchOXJpMFWKDn3SPpN1ZwvZQcVhpiMcvu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LUCOdF8Q; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781121354; c=relaxed/simple;
+	bh=7yCRnBdSoBx0d1yeDH0mLW91nVbKFmCjBssiBqG6qhA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=G1LxvH9I4YGmuS1VZ9xEZrnF+jG1frX18fZmf/moemyJKlqR8woQwsFWEn4vCvxAmtBJ2AS9UPvPTxkyVOuS8pu2cTMOVuO7YFH6awkIhaMaHLlift02Iawg4L7/sYAU5YilQj06EjHi6ONMcCCNtuK4vTTRSYgl2bXKbkcezxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MnJbwc0I; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LUCOdF8Q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781121046; x=1812657046;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NNksoh7Ns2g1gqLHnb6MZ59thijmaV2sFavKgQ6aShA=;
-  b=LUCOdF8QCa3t587tvEB6/Rf0gBjjoVdW5HRXrVtzLlXQhTLvHSpsKFiX
-   +51jwTZGscF7t1epclLlfteXB0ULoq9t7f/m1/xfQ1ySp6FJZ3HOqFxkR
-   Z2sIN4KWYEUO+d7RlUwUo8q+pxw/nH0P7QkDvHt5UUAcXKe0A52hA/OQr
-   7ahB9Wgwki+t0bmlJhiNyft2Zk4oxVHrLUKSChKjmQ9Ez1Mcacm1y1IGC
-   t44KE7fIUTNjAb7Tmmp9NX5ZE7WS+9l9EuJOgJ0ByNXzlZ2aMdsOezMfo
-   5x1IzqWGe4zNzG1CCNqJvnhuw5ZDZwToSK0eYJN8u410wNQUPa8+uE5RK
-   A==;
-X-CSE-ConnectionGUID: VlduKa5CS7GcX7gMExGB7w==
-X-CSE-MsgGUID: txGJ5ACBRluKHFUMe7aFpA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="81902012"
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="81902012"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2026 12:50:45 -0700
-X-CSE-ConnectionGUID: MNol4bm2Su26hykbOpkGTA==
-X-CSE-MsgGUID: QjEYvZrpRMO1aH1q6gDrCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
-   d="scan'208";a="243312217"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Jun 2026 12:50:40 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wXOwf-000000003oP-4AsC;
-	Wed, 10 Jun 2026 19:50:37 +0000
-Date: Wed, 10 Jun 2026 21:50:06 +0200
-From: kernel test robot <lkp@intel.com>
-To: Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>, rcu@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ojeda@kernel.org,
-	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com,
-	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
-	tmgross@umich.edu, dakr@kernel.org, peterz@infradead.org,
-	fujita.tomonori@gmail.com, tamird@kernel.org,
-	jiangshanlai@gmail.com, paulmck@kernel.org, josh@joshtriplett.org,
-	rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>
-Subject: Re: [PATCH v9 4/4] MAINTAINERS: add Rust SRCU files to SRCU entry
-Message-ID: <202606102148.n3zUlB8z-lkp@intel.com>
-References: <20260529134004.396743-5-work@onurozkan.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MnJbwc0I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B51CE1F00893;
+	Wed, 10 Jun 2026 19:55:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781121353;
+	bh=rfNmIKeDfuYBvW4Bocig2oTJSa1GAXNgA7P0PHQmb0E=;
+	h=From:Date:Subject:To:Cc;
+	b=MnJbwc0IYgI6UXEzLc8FlU/oS3uyel21t8Bx4W4MI5JXpupRdKM/uE44/OXkoJnPq
+	 dN24Vm1OhxFac6X+0NNSU65ODzGK+DCiMqYaskGM7YBnGFfPBZQPT55Ri5roF0gMqt
+	 6D5umH1uHLJiMLyXKHJ0pIx1uXsNsBZYOPoP0NBsJCLaY+0ycdRweBPpYz/7d0xcq5
+	 T6BJCsA39sv+vXpQyLPzaUNqxhRBy3TPTiSIAbIwoGi8jYk4vcNH8lvzcpUCtGNm/F
+	 01UBEjob8zQ9p1HGV5wCYmWib1T3Cf/eFudOkjRI8n4hZe/nnbyfh4/IEM35QaPU8V
+	 URbXs7hhfr6Mg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 10 Jun 2026 12:55:25 -0700
+Subject: [PATCH] kbuild: Use ld.lld for linking host programs when LLVM is
+ set
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260529134004.396743-5-work@onurozkan.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260610-kbuild-use-lld-for-linking-hostprogs-v1-1-70396fe42ee3@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNQQqDMBCF4avIrDsQLVHpVUoXJk7i1JBIxpSCe
+ Pem7erxbf53gFBmErg1B2R6sXCKFe2lAbtM0RPyXA2d6nrVtwpXUzjMWIQw1HUpY+C4cvS4JNm
+ 3nLygsu6qx3HQ2gxQU1smx+/fzf3xtxTzJLt/23CeH96W/UWIAAAA
+X-Change-ID: 20260610-kbuild-use-lld-for-linking-hostprogs-0cf3588755b7
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1728; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=7yCRnBdSoBx0d1yeDH0mLW91nVbKFmCjBssiBqG6qhA=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFmaB91PPo7yW3zwuOnrc5PNjX5c75Dwr66ZusSrqOXZ7
+ BRH7yS/jlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjAR8WMM//R/9i3Zbb7qwapn
+ 99a71h3Mnm216UVdZ/bR7zGCoVOCNV4yMszdW+PsWpIpozCVU7f4i0NM30JJB/PK517LGNNmVO5
+ 4ywEA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Onur,
+Currently, host programs are linked with HOSTCC using the toolchain's
+default linker. This can result in confusing behavior when using the
+LLVM Kbuild variable (which states that the user would like to build
+with the LLVM toolchain instead of the GNU one), as clang's default
+linker is ld for most platforms, not ld.lld. The documentation mentions
+HOSTLD=ld.lld is set but this variable is not used by Kbuild proper,
+only within some tools/ projects. Kbuild provides the HOSTLDFLAGS
+variable, which allow users to provide the '-fuse-ld' or '--ld-path'
+flags to customize what linker is used, but this is not super obvious to
+folks not familiar with Kbuild.
 
-kernel test robot noticed the following build warnings:
+If the user has not customized the linker already using one of these
+flags, default to ld.lld when using the LLVM variable, which is more in
+line with user expectations when using that variable.
 
-[auto build test WARNING on rcu/rcu/dev]
-[also build test WARNING on rust/rust-next linus/master v7.1-rc7 next-20260610]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2167
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Onur-zkan/rust-helpers-add-SRCU-helpers/20260529-214529
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rcu/linux.git rcu/dev
-patch link:    https://lore.kernel.org/r/20260529134004.396743-5-work%40onurozkan.dev
-patch subject: [PATCH v9 4/4] MAINTAINERS: add Rust SRCU files to SRCU entry
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260610/202606102148.n3zUlB8z-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260610/202606102148.n3zUlB8z-lkp@intel.com/reproduce)
+diff --git a/Makefile b/Makefile
+index 37fdb454b637..ae263f964e82 100644
+--- a/Makefile
++++ b/Makefile
+@@ -525,6 +525,9 @@ OBJCOPY		= $(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX)
+ OBJDUMP		= $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
+ READELF		= $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
+ STRIP		= $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
++ifeq ($(filter -fuse-ld=% --ld-path=%,$(KBUILD_HOSTLDFLAGS)),)
++KBUILD_HOSTLDFLAGS += -fuse-ld=lld
++endif
+ else
+ CC		= $(CROSS_COMPILE)gcc
+ LD		= $(CROSS_COMPILE)ld
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606102148.n3zUlB8z-lkp@intel.com/
+---
+base-commit: 1a1e62a5a48494cdf33e3bfb82fb8f408da7c4cc
+change-id: 20260610-kbuild-use-lld-for-linking-hostprogs-0cf3588755b7
 
-All warnings (new ones prefixed by >>):
+Best regards,
+--  
+Cheers,
+Nathan
 
->> Warning: kernel/rcu/srcutree.c:305 expecting prototype for init_srcu_struct(). Prototype was for init_srcu_struct_generic() instead
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
