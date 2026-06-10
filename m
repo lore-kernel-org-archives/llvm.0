@@ -1,142 +1,111 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18C1370D61
-	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 04:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD3F1B4F0A;
+	Wed, 10 Jun 2026 05:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781066597; cv=none; b=qJb0Uakag5wluuHnUDQcKIBCafH/WuFCuJihSrBwZP63LVAkEBwOJ69Kc3TO416eM3yvyGbwqKIpGy5ZXNESUgepzY0Y7xs56u7i7fH6M+JSCzTINWhJ/vRldG7fT6YiMXN5uo6x36WgnuZ+WQa2v4fxnJs6Dcg0c8bqjqhZk+8=
+	t=1781069486; cv=none; b=b1HOqmspgTKRzzjPA/CKopVRpbqklGOznFBXrjDzcu+MUCYzpN56i4W6fnMbAYNOSLPHshceKyM72DGPsCxIw/KrQu+zVdyfI3/vQ3DTGMhtPNE+xxjyCU1rwSreVU9om8jsWuOcx12rQAl9M5S0S/3HFUAyeIUIkaeuH6hZQZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781066597; c=relaxed/simple;
-	bh=YugiFesYD2nWr2HkyCAvq+z4fvPBJPssyXkaIQEWn8o=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=GmCEoSyz2j7pzt2rCBaq99+MUqs4dhly8fIrvdW49Ud6zcAZ/TsTwizKbtnHvsC+Vanwdsckf1OGmUIQXq2ykPYPhDdfH5nMaVs2GlsRpxSwjKdrJpXervRwCfrqudIKsb1godpi84JYdnPMrwDofkpLYFVDbOMLeuMV1fSnWnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=craftyguy.net; spf=pass smtp.mailfrom=craftyguy.net; dkim=pass (2048-bit key) header.d=craftyguy.net header.i=@craftyguy.net header.b=HjIzng/P; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=craftyguy.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=craftyguy.net
+	s=arc-20240116; t=1781069486; c=relaxed/simple;
+	bh=88pESr0P3P2WVRIdZR7FQ6xJgH5PcGA8QD36ljG9Ud4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cGj3b75pa+a/lodPnqof+sOk+uOHRfXb4jqi9fjEzjXJkpPIuv3YSaZs6WBNBWZKUdA8QDQpfdGm+3VMmrFwl/KvYaD//hPefiLiNRSMdaWEmnNF6eaSPmqOO7BNOyVh/tK+GM1+N5ooi+aZtOb/+KwdIRQuoYFO20anodr/1/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e2FZibXZ; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=craftyguy.net header.i=@craftyguy.net header.b="HjIzng/P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e2FZibXZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781069484; x=1812605484;
+  h=date:from:to:cc:subject:message-id;
+  bh=88pESr0P3P2WVRIdZR7FQ6xJgH5PcGA8QD36ljG9Ud4=;
+  b=e2FZibXZ5VT4JAB5J8L4budDsAIvG5yV2RAE4fJipGP8CgHztG1EzRxq
+   GxWcsCKqCbPZBRUTlnLXJJesluxXOPfpKuVM3w27yLCtzK90ZGWilevQl
+   z2HfKddmmePOq+o0PI9SdkzCY7BjZXTU6GMY1LTvayOjsJ1lNko/4+ZOb
+   57pDpb/yP/FNHX+YiE/Mj4BBCFBitAofAr2Mcronlb8gu8cA8X+MIjbs6
+   VlZQFGF45y5D3F4mlsEwChI85a6naViQ//nhw2mWaUoagAq6gF06HMO3m
+   KTQBLlkVwoZml5fv9JEZCJq11gUBL39qOcwBwIn9it+V0BIjljs9b2gBf
+   w==;
+X-CSE-ConnectionGUID: TnQ15W5MTtGBGg6+JNe1JA==
+X-CSE-MsgGUID: UH2lLOqaTEOARsrjHLXw2Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="93239898"
+X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
+   d="scan'208";a="93239898"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 22:31:22 -0700
+X-CSE-ConnectionGUID: jgYoUPb3QMajaIvKojqJog==
+X-CSE-MsgGUID: vSrpD74/TZeilooadxqifQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
+   d="scan'208";a="247929071"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 09 Jun 2026 22:31:20 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wXBX4-00000000Kwg-1VOq;
+	Wed, 10 Jun 2026 05:31:18 +0000
+Date: Wed, 10 Jun 2026 13:31:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [superna9999:topic/sm8650/ayaneo-pocket-s2/wsa2-fix 5/5]
+ sound/soc/qcom/sc8280xp.c:237:64: error: use of undeclared identifier
+ 'cpu_dai'
+Message-ID: <202606101325.nm9PJYzJ-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=craftyguy.net;
-	s=key1; t=1781066582;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xrfCOYnawNby/+6P5H5Tb/h+uk8XWKJB+gnkB26erd0=;
-	b=HjIzng/PovlFPzFjQIm3WEnGb3lIqEqOpN83SRyVl11T0Q6qhZZ2c665qUk+FpBzWNZSCc
-	p6lBKhYhWMqi7mtmsb6CFySW9JvTlQuicxxP66QwLuyhv3qrXdD6bzXqCPDqFDR0EQ1vBy
-	pW41C5Y3GEHBAlb7lN4Tp59P/gSQLV1yZ50g8UMnARlIjc8KfJEdqIbMbsoYx8zlf7CHuI
-	eQbW5a7+UgkBsVhGWRYdkLhj0kktK9pCr3D8bO40VCgXIPJo6kKyMJLSlH/AtOPtfF1xH/
-	k4fSQ0fQvKyI2IhqM+t++UnxBSJtse5s3E9NzdXFC5FaQ6gYYA33YAtMoOBTqA==
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 09 Jun 2026 21:42:56 -0700
-Message-Id: <DJ53EPMYFXVH.3I4BP5PF8XJ9G@craftyguy.net>
-Cc: <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <llvm@lists.linux.dev>,
- <bpf@vger.kernel.org>, "Florent Revest" <revest@chromium.org>, "Puranjay
- Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huawei.com>
-Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without
- CALL_OPS
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Clayton Craft" <clayton@craftyguy.net>
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Nathan
- Chancellor" <nathan@kernel.org>, "Nick Desaulniers"
- <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
-In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
-X-Migadu-Flow: FLOW_OUT
 
-On Mon Jun 8, 2026 at 10:19 PM PDT, Jose Fernandez (Anthropic) wrote:
-> On arm64, HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is currently selected
-> only when DYNAMIC_FTRACE_WITH_CALL_OPS is available. CALL_OPS, in
-> turn, is mutually exclusive with kCFI: the pre-function NOPs it needs
-> would change the offset of the pre-function type hash (see
-> baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")),
-> and the compiler support needed to reconcile the two does not exist
-> yet.
->
-> The result is that a CONFIG_CFI=3Dy arm64 kernel has no
-> ftrace direct calls at all, so register_fentry() fails with -ENOTSUPP
-> and no BPF trampoline can attach: fentry/fexit, fmod_ret and BPF LSM
-> programs are all unavailable. Deployments that want both kCFI
-> hardening and BPF-based security monitoring currently have to give
-> one of them up. systemd's bpf-restrict-fs feature hits this today:
-> https://lore.kernel.org/all/20250610232418.GA3544567@ax162/
->
-> CALL_OPS is an optimization for direct calls, not a dependency.
-> In-BL-range trampolines are reached by a direct branch without
-> consulting the ops pointer, and out-of-range trampolines already
-> fall back to ftrace_caller, where the DIRECT_CALLS machinery
-> (call_direct_funcs() storing the trampoline in ftrace_regs, the
-> ftrace_caller tail-call) is gated on DIRECT_CALLS alone. s390 and
-> loongarch ship HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS this way,
-> without having CALL_OPS at all.
->
-> Patch 1 prepares ftrace_modify_call() to build without CALL_OPS by
-> widening its #ifdef and using the existing ftrace_rec_update_ops()
-> wrapper (no functional change for current configurations). Patch 2
-> drops the CALL_OPS requirement from the DIRECT_CALLS select.
->
-> Configurations that keep CALL_OPS (clang !CFI, and GCC without
-> CC_OPTIMIZE_FOR_SIZE) are unchanged. We verified this: in an arm64
-> clang build, every object file is byte-identical before and after
-> the series except ftrace.o itself, and its disassembly is identical.
-> CFI builds (and GCC -Os builds) gain working direct calls, with
-> out-of-range attachments taking the ftrace_caller dispatch path
-> instead of the per-callsite fast path.
->
-> We tested on a 6.18.y-based kernel and on this base with clang
-> kCFI builds (CONFIG_CFI=3Dy, enforcing) under qemu (TCG, and KVM on an
-> arm64 host) and on GB200-based arm64 hardware: fentry/fexit, fmod_ret
-> and BPF LSM programs load, attach and execute; the ftrace-direct
-> sample modules (including both modify samples, exercising
-> ftrace_modify_call()) run cleanly; no CFI violations observed. The
-> fentry_test, fexit_test, fentry_fexit, fexit_sleep, fexit_stress,
-> modify_return, tracing_struct, lsm and trampoline_count selftests and
-> the ftrace direct-call selftests (test.d/direct) pass on the new
-> configuration with results identical to a CALL_OPS kernel built from
-> the same tree, and a broader test_progs sweep showed no differences
-> attributable to this series. Without the series, all of the above
-> fail at attach time with -ENOTSUPP.
->
-> riscv has the same gap (its DIRECT_CALLS select also requires
-> CALL_OPS, and its CALL_OPS is likewise !CFI); if this approach is
-> acceptable for arm64 we can follow up there.
->
-> ---
-> Jose Fernandez (Anthropic) (2):
->       arm64: ftrace: prepare ftrace_modify_call() for use without CALL_OP=
-S
->       arm64: ftrace: allow DIRECT_CALLS without CALL_OPS
->
->  arch/arm64/Kconfig         | 2 +-
->  arch/arm64/kernel/ftrace.c | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> ---
-> base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
-> change-id: 20260607-arm64-ftrace-direct-calls-152230ef7077
->
-> Best regards,
-> --
-> Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+tree:   https://github.com/superna9999/linux topic/sm8650/ayaneo-pocket-s2/wsa2-fix
+head:   074a0ec5e0e7c16933371ee131890bacbfee4fdd
+commit: 074a0ec5e0e7c16933371ee131890bacbfee4fdd [5/5] WiP
+config: x86_64-buildonly-randconfig-003-20260610 (https://download.01.org/0day-ci/archive/20260610/202606101325.nm9PJYzJ-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260610/202606101325.nm9PJYzJ-lkp@intel.com/reproduce)
 
-Thanks for fixing this! I gave it a try on an aarch64 laptop (macbook m2)
-using kernel 7.0.11 with CFI=3Dy && DEBUG_INFO_BTF=3Dy, built with clang. A=
-FAIK it
-seems to work great, I am able to finally run systemd with BPF support (e.g=
-.,
-unprivileged nspawn works now)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606101325.nm9PJYzJ-lkp@intel.com/
 
-Tested-by: Clayton Craft <craftyguy@postmarketos.org>
+All errors (new ones prefixed by >>):
 
+>> sound/soc/qcom/sc8280xp.c:237:64: error: use of undeclared identifier 'cpu_dai'
+     237 |         return qcom_snd_sdw_prepare(substream, &data->stream_prepared[cpu_dai->id]);
+         |                                                                       ^~~~~~~
+   1 error generated.
+
+
+vim +/cpu_dai +237 sound/soc/qcom/sc8280xp.c
+
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  223  
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  224  static int sc8280xp_snd_prepare(struct snd_pcm_substream *substream)
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  225  {
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  226  	struct snd_soc_pcm_runtime *rtd = snd_soc_substream_to_rtd(substream);
+295aeea6646ad6c Srinivas Kandagatla 2022-09-16  227  	struct sc8280xp_snd_data *data = snd_soc_card_get_drvdata(rtd->card);
+295aeea6646ad6c Srinivas Kandagatla 2022-09-16  228  
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  229  	if (data->snd_soc_common_priv->snd_prepare) {
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  230  		int ret;
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  231  
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  232  		ret = data->snd_soc_common_priv->snd_prepare(substream);
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  233  		if (ret)
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  234  			return ret;
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  235  	}
+074a0ec5e0e7c16 Neil Armstrong      2026-05-28  236  
+d02460317ed9c95 Srinivas Kandagatla 2025-10-22 @237  	return qcom_snd_sdw_prepare(substream, &data->stream_prepared[cpu_dai->id]);
+295aeea6646ad6c Srinivas Kandagatla 2022-09-16  238  }
+295aeea6646ad6c Srinivas Kandagatla 2022-09-16  239  
+
+:::::: The code at line 237 was first introduced by commit
+:::::: d02460317ed9c95aa2c5f6ff1c70e22e1857d95d ASoC: qcom: sdw: remove redundant code
+
+:::::: TO: Srinivas Kandagatla <srinivas.kandagatla@oss.qualcomm.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
