@@ -1,201 +1,174 @@
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011067.outbound.protection.outlook.com [52.101.65.67])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF83309F09
-	for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 02:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781060330; cv=fail; b=IMWG3RYi9Q9gm8bNI8Euh0bl5pbPKBqfPDpaZT+20fHo5AaY1EntGfgORDWShFZtmDk/BPGLS1P2rg2m7NixMOGvIhwtiOfjd9U8vHohEpaR1dJ7aymgu2eGfE9VoSlHUbHTWQ2RPtbrap0ElG2mhiD+lP1tdDS6604JpNn3Nuo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781060330; c=relaxed/simple;
-	bh=KqI4KLFKio9aPiVCE9vn5eItUQ+8oMPwup9dYFGkZas=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=eGYOzi0aDivqbjHtmd9qWaC/Xz4cNin0mB/Jc3zKmaC40uhdYJlfcs60vbjLFP7xP9o1MveR9d59t0v9ZfVH3whGdCeuyKvQnX7Wn2HfnJgn+6t/LMnAnujaOlkwTs8Km6RITA222HYad2Imqb4Vej6arjkChb93oKTaBQC0KuA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=IqD3B9l1; arc=fail smtp.client-ip=52.101.65.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B469C29E116;
+	Wed, 10 Jun 2026 03:38:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781062712; cv=none; b=ADZQpFONUL+RjH1A3YfnFfFPDLLji4JfJfSKo2FHRu3h32oP9Bkg4jG5CM8K/taCCP8grXL9gwKRLKbUO1cLY3y81PskzWRYEEjfgBzlEvNgybNF2JaMsooCjewZnOxPD2mR7VQVN7gapCWj2592FMSdxMQY09/D3eBCYFSyIWA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781062712; c=relaxed/simple;
+	bh=/mSBNSHU/9CK2rUIN+QV6/0wvyFdNeR8jeJadlDUBU4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=nL2feMuHRz44UyRr3Bkpz9cIGuBuqfgE+9TwLie6GD2WcNYw0QARmd8vzHu5k/jMAvzjJdL1YcobCtWwDY2Z4FsOtczKyEHrGzeR+7kNxvfOnWiS7ao2Q3HxQR2NHcTBalHEnV3EW7dZfzOm5dDdzW/TvBX383NIhgTL88/QQFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fRTWWkTD; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="IqD3B9l1"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VR+UlKw+inq5lclzZ5iWMpTe9r0hsTZBmr5ad1gg6CM9TWGKvd3OupS8LEFZo9wyZUM7ygoAbwksjCssCquyJV27Q8zNCEhq2SBwwC9ZaL1mRwHfYRGpOVVx4jnGMnW6Y8yJOWgwoT5y/vPcNwkhU+a+ewudhGFtgZCx8HGmHYXPowRVLOouUYnjm7XzcjfdPKZCcgi2LyWERWj4Fy43yHRrnEG32EfRaJNlUI7u3MjXyd4n+KAEWEvhZb/eTIj0js/EsgzD+sUWa+De6/2hO3O+ccSY3gDf+CknPqWQ9e0l2OlO315m+eYhYknhUqqDk8ivJoI5T8FxlFDzPKKyag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D2Xna/3EzXRvr46eLiAm0p3QN0qbDLihzDgmMdSMZ/o=;
- b=xLNxpY1k9lXCeYSY5q3CHfkcuZafqAa64bAULoJsDvLPSBxFIcNIx+yqiSRRq5fPl39KsSX4E2BnH6nZ0UGQCLvW71Hxp/ZvqFwgHZiWCSdOYfga81vkQ1qehhq6OSajwbiP/a/YLW5jXwyXN1LObbRpVPHGGTheE93+vNHGX/bOwQ53dzQSVb/++EsJF0Mrpmhmiv0KSkcHTY8VBB59TRxOJmSrCn/1mBgVpXbWX8A2lbqbsHbBOiL+I736lyfQWj0NUeLVQD6I2BLd+VGczw8tcNkVI0EA+LhUaO3QYHREFSAi21S8mn1wMrbXJw0yEFW74vdByFA58K/mYahOKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D2Xna/3EzXRvr46eLiAm0p3QN0qbDLihzDgmMdSMZ/o=;
- b=IqD3B9l1bNvejycj/LU0eQK+U9bMt/MxchSZYGYiBI0WES+E5tmG4MSc15p1evWC5iYjnrnxJkS3VUfe2tFgx3uutIQcN7cy8wVlZy2xB1X/sHfNzLgFzNryez0C3nW2ACSCknYByCIa+pcyLyUt6U9k9b3HEoi0orl3pmZQwoxJCfuQJb4HNmwPLD0feBfpZaBR0Vwppezi0yvcgQD5JlXqkqqKB6/is/UdiiGVatSxn7sFDoXxi1L1a3eap949lVfsU7yE70Bqgp8n0lmx4JKFfbIIPIAbDZVr0n7+xN/sxX+HEiM2k07bkQa/G+C2ReeOck1oY4N7QGRwDPW0Jg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from GV2PR04MB11799.eurprd04.prod.outlook.com (2603:10a6:150:2cf::9)
- by AM0PR04MB7105.eurprd04.prod.outlook.com (2603:10a6:208:19b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.11; Wed, 10 Jun
- 2026 02:58:44 +0000
-Received: from GV2PR04MB11799.eurprd04.prod.outlook.com
- ([fe80::2146:83a2:5329:b7c]) by GV2PR04MB11799.eurprd04.prod.outlook.com
- ([fe80::2146:83a2:5329:b7c%6]) with mapi id 15.21.0092.011; Wed, 10 Jun 2026
- 02:58:44 +0000
-Date: Tue, 9 Jun 2026 21:58:19 -0500
-From: Frank Li <Frank.li@oss.nxp.com>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: dmaengine@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-	Frank Li <Frank.Li@kernel.org>, Zhang Wei <zw@zh-kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:FREESCALE DMA DRIVER" <linuxppc-dev@lists.ozlabs.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCHv3 08/15] dmaengine: fsldma: convert to
- platform_get_irq_optional()
-Message-ID: <aijSy4Diinx4LBRL@SMW015318>
-References: <20260609221926.35538-1-rosenp@gmail.com>
- <20260609221926.35538-9-rosenp@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260609221926.35538-9-rosenp@gmail.com>
-X-ClientProxiedBy: SA1PR04CA0012.namprd04.prod.outlook.com
- (2603:10b6:806:2ce::15) To GV2PR04MB11799.eurprd04.prod.outlook.com
- (2603:10a6:150:2cf::9)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fRTWWkTD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781062710; x=1812598710;
+  h=date:from:to:cc:subject:message-id;
+  bh=/mSBNSHU/9CK2rUIN+QV6/0wvyFdNeR8jeJadlDUBU4=;
+  b=fRTWWkTDkiIXawExcviMv7I69XSgVd1eMD8Q8c7MQexLq2/HYFzURkDT
+   JPoBfjU4Bw/sF5Jq0cIMq9kdSU2Dv14mHhqwMGVNAzI0eY5wx3RZv6rVJ
+   eKsqJuu0rb6PbiT5XkeUueIcOFcF+ARzK9KARZOwpCOy3/Pxnb4O5i4Mc
+   AZ1vjTXoCwgpdxxWEok52iBwGAewm+d5vmLsTama48dLdMB9IMIh1T6di
+   BG3H2bSaeczqCTkqSNa69bgZ096EveQ3AnWQVyVU5AXpTL3u8mCcax+/t
+   2VRCvisVXyknLfUGs7sRN1vMmaEm9dUjkt0E3JhWAeqwVd3OONkHJ8IuK
+   w==;
+X-CSE-ConnectionGUID: 8lXNMrbURoepDDY/Rjem8A==
+X-CSE-MsgGUID: e/5Xl1SkRFm2K0plLqw9Bw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11812"; a="80862639"
+X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
+   d="scan'208";a="80862639"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2026 20:38:30 -0700
+X-CSE-ConnectionGUID: EmwTvBMZQPq8Uk3mlK5xHA==
+X-CSE-MsgGUID: Oxv/nvN1Q+6m6eLdWpUkYg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
+   d="scan'208";a="241618247"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa006.fm.intel.com with ESMTP; 09 Jun 2026 20:38:29 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wX9lq-000000003bp-2l8m;
+	Wed, 10 Jun 2026 03:38:26 +0000
+Date: Wed, 10 Jun 2026 05:38:23 +0200
+From: kernel test robot <lkp@intel.com>
+To: Sumit Saxena <sumit.saxena@broadcom.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: drivers/scsi/megaraid/megaraid_mbox.c:623:51: error: use of
+ undeclared identifier 'pdev'
+Message-ID: <202606100515.4ene4mEh-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV2PR04MB11799:EE_|AM0PR04MB7105:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d4fe80a-b349-4550-e00c-08dec69c2f2b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|376014|7416014|366016|19092799006|22082099003|18002099003|56012099006|11063799006|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	wKvsj8m3qEr/QHczH0qlSZBzg+b2nNEa8dDU6uWluXWqPrcM4YT77Lclrw6wgJ5DJS0muveDcY6pO8NyUL9UIHpYwwk+0QOGOMZ+jvvPtnRLbDJYPk3BOMSV3V3cOT61DGDgAS7Aah4yO1UiqWZuayEwQFIegekpxGM4DlXnURaCHOF5OQ2n8+CZg5n1AgQoZGm+xqTscNnJhPwZCy5cARfOkxiQYfGuPby2WH52wpQ6GQeKBrj8WW2fgAswawjkTDQuZ3XD4zJCPv0ASQIsQfqsTPHJTPFTRvvU/v3xuWK18Ey1chPCHPpEfzHgdRYHYS2GFJbqwucggSS+ZkssP1C8NsyRrX1ZCD563Vdwhmp9nOvEsNXop02akEoIovwnar0THcucwLT/Oi6NXXUB9DVX5zIPwpelvVykBN8l5/p2nxagQnobpiVgzlz/ATtaNNm6NPp8XHu6QazfTJJ0UQjtUafhKQEBMDem7l28DP5tBmglBKRv5e2tOxyhexL7reqq+j1MzMJZvxTrjOjwQyPtdXNor8X2fuJWoh24KRFdeRiUQ/XgCxrPERKrKTZ9Nykz5Uurrqiemvj4LByqZtvCFeS+hVK9mswAXVHOChZyEwaUs2v2KwmuwWTFiw2vLzABRblqSQtihUGbP/fAjC1J/d8xL7E6psrCj41uhAJahYi3GKfEZ74ANjL5Z5sh
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR04MB11799.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(376014)(7416014)(366016)(19092799006)(22082099003)(18002099003)(56012099006)(11063799006)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?EM2tx3h8Ybiswi6Dfw08JJ3Ppi04jQG1NxFNkmzNyl/1+2jEZze1GiXG6k6+?=
- =?us-ascii?Q?pcG0ISLoBCTRFvUDRpv6JAAZXdPb+qFQUyyg86dQeAYAqkAGXc+Uun4QdI42?=
- =?us-ascii?Q?9Gn6R5Pa8JYAK8Em+ccnr6MtA2rsNcFsSFFPEfwSfAHIC5Rt/yapFFDAqH0k?=
- =?us-ascii?Q?rrgg4+BaK7CxRnStCqDi2P672vVZoORiko5wM2yM4Z1irVEpKmaU7wM5Emrv?=
- =?us-ascii?Q?IP1ig7JTzZDRj9+hHLhMV5ztmWeDq6UAeYZwYtHTPBzHKiQKoxpP5H/whbqK?=
- =?us-ascii?Q?xcTp2y5wbsa5z4IRlLSZACHbnfVFRzlYDAp+nwhMykiO5Q0qSGyAfNuMnSBD?=
- =?us-ascii?Q?dpXKWj13XDLvHqNjrj1+HpZx9K4UqVed61UB0y6tG9kKL/1HsOGCQ1JTAu7z?=
- =?us-ascii?Q?k1OZ7MOTPeTKhhsxO1ekwkS5/WsmrWfd20kXoMwdjnZJQ4s/xcod049PXKYr?=
- =?us-ascii?Q?tCus0zkcGDND0r6NVkGps76l7jigzeCuLVgobuEqv86/5vrdCGSGSu/Ea3Pw?=
- =?us-ascii?Q?Axf03DkReEebW1KcJh5fGsstmqTDtf+L6BEDvvI27KDeKkeEQxpz8nfNuyEr?=
- =?us-ascii?Q?E5Dlg0m3aXn2H7+GAkN2WbVWvtTY5xxxoJm4tMlcp7ngvzJhEaCN9S4AXRSU?=
- =?us-ascii?Q?yN4nedSy24SPMTHjn5qOkiYCm2LGU3czcbCyBp9HFTzAP96sbjeaPoBZnPXY?=
- =?us-ascii?Q?pKq8SL81LoxrdRAZjd21qEUXwVG6+X2Ky+geZrKa8SCkiJ83sE4lrnJcyCp7?=
- =?us-ascii?Q?uHdlcrcsO1W+da2Zu+33gd15sAlOTW/Ewo/EJqpO/okfmV1zkds4c3dfl0G6?=
- =?us-ascii?Q?kQMTKqYr/0JUaOg7EaNJHmUFJPCZKTHcePeoXDckvawyxa5PswZSiBkmIMMS?=
- =?us-ascii?Q?Z9bmMdZkKsy+THV2XDZtJ8j37kf4zaz1yPI9DZFPPoTYbElIGEZWbAMg8U3G?=
- =?us-ascii?Q?2fYUwVwWBnu05N1eUISAhqSw6fQ8hO5F7vY71KiKrCYIN+cbi1I97oJ8N5Pt?=
- =?us-ascii?Q?1wWqV1T0kPhLEAWVV00rOCsVAs+0WVeMJ0Smq03xDy5XpjMKuqARaqPysgj9?=
- =?us-ascii?Q?htdiG+l9n0VsrBU48EWDNTmx+2jOg87tn2vTpFWiNo2F757wqu0bHtXHdz2Y?=
- =?us-ascii?Q?WEFKYcNgYJQCwZqGgsB0Af5uhRbben2CeVnT2Apm0l4VJWZT9/5af9qHNq37?=
- =?us-ascii?Q?A4Ex15x1sN6yIWP6bM6i+/WUzSYhgtP8w/9ZzcSl4VUVxe6a37Rcl9h5TWvy?=
- =?us-ascii?Q?MiaUAqGPFq9M5km4jEn8zBmnmxm8NSlJsG7iwgkc1k2rjXk0gvgjY+C25O/p?=
- =?us-ascii?Q?YR7080oneadBAy2MlpikoLAAC2UazOQ5T1w9ctYMo29ALF7v4Ho4vuXoZbrb?=
- =?us-ascii?Q?KnVJiaT7v//J8PJ7RLQQZNry5IV2r+viTtpSocLm2qXvi59JuLQfIBHEn6a1?=
- =?us-ascii?Q?eO7wml3Qt4BcIqUwSqn/yBVcnlZgeWTiAMxmcA9xb6QIvlvYa66YiUrdKOSg?=
- =?us-ascii?Q?NLilTtQ3nCw8XBZgQCIdXFJlvnrOtt2zDvg3gBROPZHPzAUFZHa6/LreWXhW?=
- =?us-ascii?Q?pnVLPENL///9oHDpoccK6i7j8Ru0VrM9MQbdgdgb9rLso9wDZALNL8LNo0jc?=
- =?us-ascii?Q?Qz2TZ936gglVu825W/mKAz1eZMs+8dYm2aisgYVLkQXr/f/9INuKT+lkFZjD?=
- =?us-ascii?Q?7P5KehF/WYKAocUT2btckjNljeE+jVCABVxEWTyWe3bs4NUpitE1TJpXctzK?=
- =?us-ascii?Q?QdjralQqxsqZAUfM48aFQZiRKbXL8r+wbc/9uiuBGhuZ7oEgKoWM?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d4fe80a-b349-4550-e00c-08dec69c2f2b
-X-MS-Exchange-CrossTenant-AuthSource: GV2PR04MB11799.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2026 02:58:44.5126
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JBWe16WL/lGC7MVZ5HDf4RiJ7jhSYvI/ni9OlD+PXFq+Yy7Y0geYuqUF6Gfif6W7L6p7kTY+5A0+dWT4G6dkrj2At91PEDvm36tP48YNGpExJQUBtZCNdnHfyR5yNqCC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7105
 
-On Tue, Jun 09, 2026 at 03:19:19PM -0700, Rosen Penev wrote:
-> Replace the per-controller irq_of_parse_and_map() call with
-> platform_get_irq_optional(). The controller IRQ is optional -- when
-> absent (-ENXIO) the driver falls back to per-channel IRQs.
+tree:   https://github.com/intel-lab-lkp/linux/commits/Sumit-Saxena/scsi-scan-allocate-sdev-and-starget-on-the-NUMA-node-of-the-host-adapter/20260609-195849
+head:   1a119c6869ad0a915e9c86e65a8a3d0b0c4b21d2
+commit: 7479f1902d058cd6e51b1f7f9b23241d8fd588cd scsi: host: allocate struct Scsi_Host on the NUMA node of the host adapter
+date:   16 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260610/202606100515.4ene4mEh-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260610/202606100515.4ene4mEh-lkp@intel.com/reproduce)
 
-Nit: The controller IRQ is optional when absent (-ENXIO) and driver falls back
-to use per-channel IRQs.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606100515.4ene4mEh-lkp@intel.com/
 
-> Any other
-> error is treated as fatal. The corresponding irq_dispose_mapping()
-> calls in the probe error path and remove function are removed.
->
-> The per-channel IRQ mapping in fsl_dma_chan_probe() uses a child
-> device_node rather than the platform device's of_node, so it is not
-> converted here.
->
-> Assisted-by: opencode:big-pickle
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+All errors (new ones prefixed by >>):
 
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
+>> drivers/ata/libata-scsi.c:4619:57: error: too few arguments to function call, expected 3, have 2
+    4619 |                 shost = scsi_host_alloc(sht, sizeof(struct ata_port *));
+         |                         ~~~~~~~~~~~~~~~                               ^
+   include/scsi/scsi_host.h:799:26: note: 'scsi_host_alloc' declared here
+     799 | extern struct Scsi_Host *scsi_host_alloc(const struct scsi_host_template *sht,
+         |                          ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     800 |                                          int privsize, struct device *dev);
+         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/usb/storage/usb.c:1034:41: error: too few arguments to function call, expected 3, have 2
+    1034 |         host = scsi_host_alloc(sht, sizeof(*us));
+         |                ~~~~~~~~~~~~~~~                 ^
+   include/scsi/scsi_host.h:799:26: note: 'scsi_host_alloc' declared here
+     799 | extern struct Scsi_Host *scsi_host_alloc(const struct scsi_host_template *sht,
+         |                          ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     800 |                                          int privsize, struct device *dev);
+         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/ufs/core/ufshcd.c:10945:27: error: too few arguments to function call, expected 3, have 2
+    10944 |         host = scsi_host_alloc(&ufshcd_driver_template,
+          |                ~~~~~~~~~~~~~~~
+    10945 |                                 sizeof(struct ufs_hba));
+          |                                                       ^
+   include/scsi/scsi_host.h:799:26: note: 'scsi_host_alloc' declared here
+     799 | extern struct Scsi_Host *scsi_host_alloc(const struct scsi_host_template *sht,
+         |                          ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     800 |                                          int privsize, struct device *dev);
+         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/scsi/megaraid/megaraid_mbox.c:623:51: error: use of undeclared identifier 'pdev'
+     623 |         host = scsi_host_alloc(&megaraid_template_g, 8, &pdev->dev);
+         |                                                          ^~~~
+   1 error generated.
 
-> ---
->  drivers/dma/fsldma.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/dma/fsldma.c b/drivers/dma/fsldma.c
-> index c04a7fbd2ed0..eba194d64105 100644
-> --- a/drivers/dma/fsldma.c
-> +++ b/drivers/dma/fsldma.c
-> @@ -1213,7 +1213,6 @@ static void fsl_dma_chan_remove(struct fsldma_chan *chan)
->  	spin_unlock_bh(&chan->desc_lock);
->
->  	tasklet_kill(&chan->tasklet);
-> -	irq_dispose_mapping(chan->irq);
->  	list_del(&chan->common.device_node);
->  	iounmap(chan->regs);
->  	kfree(chan);
-> @@ -1248,7 +1247,14 @@ static int fsldma_of_probe(struct platform_device *op)
->  	}
->
->  	/* map the channel IRQ if it exists, but don't hookup the handler yet */
-> -	fdev->irq = irq_of_parse_and_map(op->dev.of_node, 0);
-> +	fdev->irq = platform_get_irq_optional(op, 0);
-> +	if (fdev->irq < 0) {
-> +		if (fdev->irq != -ENXIO) {
-> +			err = fdev->irq;
-> +			goto out_iounmap;
-> +		}
-> +		fdev->irq = 0;
-> +	}
->
->  	dma_cap_set(DMA_MEMCPY, fdev->common.cap_mask);
->  	dma_cap_set(DMA_SLAVE, fdev->common.cap_mask);
-> @@ -1317,7 +1323,7 @@ static int fsldma_of_probe(struct platform_device *op)
->  		if (fdev->chan[i])
->  			fsl_dma_chan_remove(fdev->chan[i]);
->  	}
-> -	irq_dispose_mapping(fdev->irq);
-> +out_iounmap:
->  	iounmap(fdev->regs);
->  out_free:
->  	kfree(fdev);
-> @@ -1353,7 +1359,6 @@ static void fsldma_of_remove(struct platform_device *op)
->  		if (chans[i])
->  			fsl_dma_chan_remove(chans[i]);
->  	}
-> -	irq_dispose_mapping(fdev->irq);
->
->  	iounmap(fdev->regs);
->  	kfree(fdev);
-> --
-> 2.54.0
->
+
+vim +/pdev +623 drivers/scsi/megaraid/megaraid_mbox.c
+
+   609	
+   610	
+   611	/**
+   612	 * megaraid_io_attach - attach a device with the IO subsystem
+   613	 * @adapter		: controller's soft state
+   614	 *
+   615	 * Attach this device with the IO subsystem.
+   616	 */
+   617	static int
+   618	megaraid_io_attach(adapter_t *adapter)
+   619	{
+   620		struct Scsi_Host	*host;
+   621	
+   622		// Initialize SCSI Host structure
+ > 623		host = scsi_host_alloc(&megaraid_template_g, 8, &pdev->dev);
+   624		if (!host) {
+   625			con_log(CL_ANN, (KERN_WARNING
+   626				"megaraid mbox: scsi_host_alloc failed\n"));
+   627	
+   628			return -1;
+   629		}
+   630	
+   631		SCSIHOST2ADAP(host)	= (caddr_t)adapter;
+   632		adapter->host		= host;
+   633	
+   634		host->irq		= adapter->irq;
+   635		host->unique_id		= adapter->unique_id;
+   636		host->can_queue		= adapter->max_cmds;
+   637		host->this_id		= adapter->init_id;
+   638		host->sg_tablesize	= adapter->sglen;
+   639		host->max_sectors	= adapter->max_sectors;
+   640		host->cmd_per_lun	= adapter->cmd_per_lun;
+   641		host->max_channel	= adapter->max_channel;
+   642		host->max_id		= adapter->max_target;
+   643		host->max_lun		= adapter->max_lun;
+   644	
+   645	
+   646		// notify mid-layer about the new controller
+   647		if (scsi_add_host(host, &adapter->pdev->dev)) {
+   648	
+   649			con_log(CL_ANN, (KERN_WARNING
+   650				"megaraid mbox: scsi_add_host failed\n"));
+   651	
+   652			scsi_host_put(host);
+   653	
+   654			return -1;
+   655		}
+   656	
+   657		scsi_scan_host(host);
+   658	
+   659		return 0;
+   660	}
+   661	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
