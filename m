@@ -1,121 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5B3369972;
-	Wed, 10 Jun 2026 19:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33B1361641;
+	Wed, 10 Jun 2026 19:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781119017; cv=none; b=DBfURhUJZm4L8cORKkp+g8pGaBmny8yLpLIG/PHNKRe88hd+9izeplZ9ne4CXGh/9DdvdvOkl0zvyVyk4BVAjsIZGJcRG5Flro1J3Y+N7sPwE1PTvQ4lVXI05bJ5XjlmORPvK88uq45ScyDFPwdRjqNqAlYyYcAHw0N06ra0C1c=
+	t=1781119982; cv=none; b=U6SZdXkod/N5N/X8AJ5YiU5mav62c+3MaF81RwTSgzRJDR7fwxPHDS6BSKc2gRKSdkmOjfLnyn9yu1o0L7evirtYZCN77ygBrAp617AkFlW2sXQQu8CoIV19XasaCaXYZ+mJ1dbcPLpjv6U9WL7+zVfudTpg64BxDNRRwxJXKTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781119017; c=relaxed/simple;
-	bh=87NuS3KNdlitbOETz2zmHH8D4uXV5+ppQqeSTQxa314=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=t4WoOAnVj8HNzy+WYVinQCYx53oOUea55x7vsJUOmnECHhkDQYAI5A/PyZp+H3nUWppQseGQqryBUBxY2sbhQsVHCJSurjdBiGzhDuRSrGi/MH8PsJRcXn8Jjq3Tykj7i7YXf+738TbrIQMLDpif4A0imXNAD52hzlurmmoiay0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ggsLn+S2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781119982; c=relaxed/simple;
+	bh=GY05IJrZKcxcHjpA8csG4o4QDYOJDwexr7PFGzhyaHc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=nzbpI99bcwTNrnXJz4J3ZwL7jsWLm5Bcaj7eylo5598RCGXt7csA0Ao4cq3wNNaEydtfb7YJDlic6CkL1GmL6gI/8jEdi2vs/D4ppx4j1SJiGmFxQ6ppVVAUZR6FTQ38Ksi4hkWuUfrmuLLPFXluvYkWTUTpcew4XL0jG3pwNI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i/CSut24; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggsLn+S2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D2BD1F00893;
-	Wed, 10 Jun 2026 19:16:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781119016;
-	bh=Kpw1MsS52NmtqUVuVI31AuxdPeof9d4Z1uB6+yh651c=;
-	h=From:Date:Subject:To:Cc;
-	b=ggsLn+S2UnECXQqe4vtikcK8qQlfd0BciyI4rmMsVq6eR0xW1Xl4+sLjaSabBLW3d
-	 1YTF/Uu9ZW6xjxfUY5bkRIUZhz4sG61B/7mLubWoO9Z2keThVDyNaynnf8IfsNZ+5J
-	 UGIR3WTAD3f092cmGQ0lOv7kGi5yEYf1l9UqRWG+K/90gFKRrKhzggh1ekF3ZgChgI
-	 SXGf+WA2hbdSi6nHjrJG9h3UvtBO4hBceZvt8DSnK/kUPRMu0INk1dQJzEqWz0ZPD6
-	 7r4SxSctZjmYvDSiU5eMWVwZ7Kbn5xXQL2MCP2CK0Q/JDdO+PxGMpREx3zO8c3Nlfg
-	 uD3NMjyttahXg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 10 Jun 2026 12:16:49 -0700
-Subject: [PATCH] vduse: Fix error around jumping over a __cleanup()
- variable
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i/CSut24"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781119979; x=1812655979;
+  h=date:from:to:cc:subject:message-id;
+  bh=GY05IJrZKcxcHjpA8csG4o4QDYOJDwexr7PFGzhyaHc=;
+  b=i/CSut24Hplje1O/FUrq82F72kkCuSklGuGwzwPxq7ajJftB1SeE+S4I
+   70TLShbmq4EgiZLbipOb8/GC8XDu1BSZA9gYHvQQODLyrLeZjQb2r1cac
+   9fOIfYAHghIz3ph663idlbLzOE9aGoUOyOrI2TGOO2d5nDqkkduc0C9IY
+   /sMM0362UmFskH94e1Njrx8uChwBG4HOKa2Mq+mjdwXcYkCSTmCsAij0R
+   F2TWbYalgljMr40OBJHGFPW5O2zokypClbB9qcCexX7q/pijz5JZeC9IQ
+   oRQURVn6x2U7xnSl2FufkzYRGDeurItyL/pNklZfVLh6S4CRrHSLacBcJ
+   w==;
+X-CSE-ConnectionGUID: +ubKRUJBRJmwanTbODfRRQ==
+X-CSE-MsgGUID: pHDMNz37SgG7pK7UdabpWQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="81987247"
+X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
+   d="scan'208";a="81987247"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2026 12:32:48 -0700
+X-CSE-ConnectionGUID: 1yBt8qdqTQ2GXOwIA2LhLg==
+X-CSE-MsgGUID: LLohIqf+RuujZ4mFGGamRA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,197,1774335600"; 
+   d="scan'208";a="251179401"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 10 Jun 2026 12:32:47 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wXOfL-00000000Los-3vow;
+	Wed, 10 Jun 2026 19:32:43 +0000
+Date: Thu, 11 Jun 2026 03:31:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Li Jun <lijun01@kylinos.cn>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:asoc-7.1 10/10]
+ sound/soc/loongson/loongson_dma.c:213:45: warning: format specifies type
+ 'unsigned int' but the argument has type 'u64' (aka 'unsigned long long')
+Message-ID: <202606110332.I6vetCYj-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260610-vduse_vq_kick-fix-guard-usage-v1-1-0ce02c08006e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM0QrCMAxA0V8ZeTbQrDLRXxEZtY0zDqY2tghj/
- 75MHw9c7gzKWVjh1MyQuYrKczLQroF4D9PAKMkMrWs715HDmopyX9/9KHHEm3xxKCEnLBosTuT
- 8IXpPezqCPV6ZLfn9z5e/tVwfHD/bFJZlBYYxzcuBAAAA
-X-Change-ID: 20260610-vduse_vq_kick-fix-guard-usage-d1037c331419
-To: "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
- =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>
-Cc: virtualization@lists.linux.dev, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2179; i=nathan@kernel.org;
- h=from:subject:message-id; bh=87NuS3KNdlitbOETz2zmHH8D4uXV5+ppQqeSTQxa314=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFmaO9Qkuwpjzom/cMxhVne0Y3uw+gu7U7PkmxynyUt3n
- LugsKuuo5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEwk9TMjQ1fFU8dbx0K3Jx2o
- 0N/H8Ivbz3mLQJiL45ubaccurxPuSWZkON5/kOmhZ39SsGDBqvAF17a/vF50Nuu71ypnhvutB/e
- U8AMA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-When building with clang, there is an error in vduse_vq_kick() from
-attempting to jump over a variable declared with the cleanup attribute
-using goto:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git asoc-7.1
+head:   3f3d5a7a065fc9874f671c5afb9dd214f7671946
+commit: 3f3d5a7a065fc9874f671c5afb9dd214f7671946 [10/10] ASoC: loongson: Fix invalid position error in ls_pcm_pointer
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260611/202606110332.I6vetCYj-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 7917772d7d61384696c61102c08c2ea158e610fa)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260611/202606110332.I6vetCYj-lkp@intel.com/reproduce)
 
-  drivers/vdpa/vdpa_user/vduse_dev.c:566:3: error: cannot jump from this goto statement to its label
-    566 |                 goto unlock;
-        |                 ^
-  drivers/vdpa/vdpa_user/vduse_dev.c:568:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    568 |         guard(rwsem_read)(&vq->dev->rwsem);
-        |         ^
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606110332.I6vetCYj-lkp@intel.com/
 
-Jumping over a variable declared with the cleanup attribute does not
-prevent the cleanup function from running, it would just result in the
-variable being passed uninitialized to the cleanup function .clang
-errors instead of generating the invalid code, unlike GCC.
+All warnings (new ones prefixed by >>):
 
-The jump is only present to call spin_unlock(), so convert the
-spin_lock() and spin_unlock() calls to an equivalent guard() to avoid
-the jump while leaving runtime behavior unchanged, clearing up the
-warning.
+>> sound/soc/loongson/loongson_dma.c:213:45: warning: format specifies type 'unsigned int' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
+     213 |                 dev_warn(dev, "WARNING! dma_addr:0x%x\n", addr);
+         |                                                    ~~     ^~~~
+         |                                                    %llx
+   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                     ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   1 warning generated.
 
-Fixes: 6c141c034c1b ("vduse: Add suspend")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/vdpa/vdpa_user/vduse_dev.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-index a257fdcb77b7..0500da043761 100644
---- a/drivers/vdpa/vdpa_user/vduse_dev.c
-+++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -561,9 +561,9 @@ static int vduse_vdpa_set_vq_address(struct vdpa_device *vdpa, u16 idx,
- 
- static void vduse_vq_kick(struct vduse_virtqueue *vq)
- {
--	spin_lock(&vq->kick_lock);
-+	guard(spinlock)(&vq->kick_lock);
- 	if (!vq->ready)
--		goto unlock;
-+		return;
- 
- 	guard(rwsem_read)(&vq->dev->rwsem);
- 	if (vq->dev->suspended)
-@@ -573,8 +573,6 @@ static void vduse_vq_kick(struct vduse_virtqueue *vq)
- 		eventfd_signal(vq->kickfd);
- 	else
- 		vq->kicked = true;
--unlock:
--	spin_unlock(&vq->kick_lock);
- }
- 
- static void vduse_vq_kick_work(struct work_struct *work)
+vim +213 sound/soc/loongson/loongson_dma.c
 
----
-base-commit: 6c141c034c1b0b74a2ca4dd3d6fbb6d9054f6e46
-change-id: 20260610-vduse_vq_kick-fix-guard-usage-d1037c331419
+   196	
+   197	static snd_pcm_uframes_t
+   198	loongson_pcm_pointer(struct snd_soc_component *component,
+   199			     struct snd_pcm_substream *substream)
+   200	{
+   201		struct snd_pcm_runtime *runtime = substream->runtime;
+   202		struct device *dev = substream->pcm->card->dev;
+   203		struct loongson_runtime_data *prtd = runtime->private_data;
+   204		struct loongson_dma_desc *desc;
+   205		snd_pcm_uframes_t x;
+   206		u64 addr;
+   207	
+   208		desc = dma_desc_save(prtd);
+   209		addr = ((u64)desc->saddr_hi << 32) | desc->saddr;
+   210	
+   211		if (addr < runtime->dma_addr ||
+   212		    addr > runtime->dma_addr + runtime->dma_bytes) {
+ > 213			dev_warn(dev, "WARNING! dma_addr:0x%x\n", addr);
+   214			x = 0;
+   215		} else {
+   216			x = bytes_to_frames(runtime, addr - runtime->dma_addr);
+   217			if (x == runtime->buffer_size)
+   218				x = 0;
+   219		}
+   220	
+   221		return x;
+   222	}
+   223	
 
-Best regards,
---  
-Cheers,
-Nathan
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
