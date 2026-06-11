@@ -1,533 +1,326 @@
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012020.outbound.protection.outlook.com [52.101.66.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E2C492539
-	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 16:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032BB238D52
+	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 16:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781194933; cv=fail; b=Fkyo+kNedsGfVaO8aU+paBVa8duom1fmQhaV1Vyik2soiMJ7KPQm5HaH3mn4XIglhnkAV4oec3wGkS3D+PRc8H2IT8LChxEEA7CePm2bxSzKSnI4O8Od9dtoFI6XZ+t0EEpFYhQ9NDH8ook0AwqwGdL26rRA6OcHq1lE1VN3wyo=
+	t=1781195450; cv=pass; b=Gr0A/ZpzS4rItWF/N/4c8d13KUFn1XQafCelO8xrkQzgA8yV7d0Pa/OOIPuosmtXCQqZ6N0vDc8IeifR9eEy8c6nc/E1xEZkn6tKVVMZCoRIvUd+mwItZ4UlUoVkxE8OstcUZEJh1GMJ4EQdayxv6IsEZ4IKwew1RY2lS8O00Pc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781194933; c=relaxed/simple;
-	bh=/QO7d0pbLHh6PDXLjjWzFubgN6kPyE0jU7Dr92rYdGY=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=V3Lp+nOn++C9WkgvHV2Sh5m93sS4WI6TZ7LT55e340lmKZPG/xAPi6jK//kS7qB/OHi1V3kIwLVEn+l2u2j5V7QdbfKaQ9VeT5cqDxng7C8DPp9+leXZj8uWhveJEi4YgQLQ9wxsZhTDxe/FGTFd8kGcmlMHyTU+LGM4gvqzqog=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=pnOWWgPT; arc=fail smtp.client-ip=52.101.66.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
+	s=arc-20240116; t=1781195450; c=relaxed/simple;
+	bh=2nbyxf80S/ptMFRJyba8LgNgyq0oU2BmImEh657hN2Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RyPEkYnzYHNuWcZ8AJlqK+SS/Ad/2q02Szfhpfqq80X43Baotk82K+4Re9+kbZclgoJKneTy/fEIfN58iTN2SuHMZPtIDr6GoMlPlYxY8ooPfs+rq69wvJeXq8q/fehzXBOAEFFK505cL4/6wcej7FNIYraJU2MUz4n0TUSBclQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ko5nPcIk; arc=pass smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="pnOWWgPT"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fNCCw8gDHe8R68nVJ17p8+ZeDW3zPrjKG2QrqCpVKIyzZBhQXwoYDKKJC20BMdXf91t6efOl+xdsW4rk4XJ/6h92XzZ21z3THpXHMq6Khp5ZS6xEUdUOwQNxAjbqJenshr4dbGGuySXJvELv7lkfKDSWfCdd/p8XfVZD/aB1BBdRIFtn8EEB8NZ5VHQcpzyJduH9DVGDcLvYsdn8dGxKiocDbsObYovZg9PE54kXylHQDvQd16vIkNFraSZQH5J57ZjtIkl7mgW6pwKHhgEbned3H9BEPNHMWJjsmPbpD5ryDGUoCgo3jNkPaqKQYygubIPRJGUc9W5Lfw7dbbksew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aWpBGa9Bxt7VzvS8PLudFJQTc3v2XROBC4kSRu7VSAg=;
- b=Q6XoAD8NFfj6o0SELYOU9XzlI8YPUZ+YXV3ncSWW7cc96vsMXHgi3JFDY8XJk2spn32GjmNQuf0wbamL2bkT5DUDbUnH1rQFFj+tg+SOgtiM1IQoxbxJ9IBwHX5g+h3CZGZDTGUdofyC7pZjafMSt7/NicFtMtfWm5Qf5kd2r/WbrjPjydzCryUFiVrIfdOYBKIRON4T0beIEn5uCcI16uaJNici0Mr1Yyyy+WVlvnfNOKp6n6tgj/nFHSJYVwhSouxaH6a5s8/B0WsVARDKW9qVflVjhOOx8MP9YeGUZMQw0f6/FCbx5zLih0L9jHQyh448MFBSGiUqWN2pI0de6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aWpBGa9Bxt7VzvS8PLudFJQTc3v2XROBC4kSRu7VSAg=;
- b=pnOWWgPTf+QA6HQPdViPLCWKPIcOToU7hlSV7f+lVkImoSAkdHNTrWspZDjlS8ZjcNq1dyWCWyE7HqSwzQ8Ha7t6HqAGmXZVHnGHuG9bgs6eRApTpfrcXRsCjsLOaGR40TG//bZopvT7ESOe+zymv/2HuaNapUGFbgFS9DTozt/6i2CJqp/YzXAInX+OMG9eBIhyMYb94gQscP+fNAWMNTM7TTTJHqSEzW/C3w2R2V1MazxtJI5RrBwoLhmT5Z4TBAD/hcNyZ14G/sNwBXI61BUK7ZGXNVVNRt0rfGE3BvEqrluMNh6JZx2nh9SqbJjbN34jmm0tlUo3V+BRLvR6+g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from DB9P189MB1754.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:2a5::24)
- by PAWP189MB2829.EURP189.PROD.OUTLOOK.COM (2603:10a6:102:468::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.13; Thu, 11 Jun
- 2026 16:22:01 +0000
-Received: from DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
- ([fe80::2af4:a981:db81:d471]) by DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
- ([fe80::2af4:a981:db81:d471%6]) with mapi id 15.21.0113.013; Thu, 11 Jun 2026
- 16:22:01 +0000
-From: Yunseong Kim <yunseong.kim@est.tech>
-Date: Thu, 11 Jun 2026 18:21:16 +0200
-Subject: [RFC PATCH v2 14/14] Documentation: add kcov-dataflow.rst
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260611-b4-kcov-dataflow-v2-v2-14-0a261da3987c@est.tech>
-References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
-In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- K Prateek Nayak <kprateek.nayak@amd.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, 
- Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>, 
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Yunseong Kim <yunseong.kim@est.tech>
-Cc: linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
- rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- llvm@lists.linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
- Yeoreum Yun <yeoreum.yun@arm.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781194895; l=12496;
- i=yunseong.kim@est.tech; s=20260426; h=from:subject:message-id;
- bh=/QO7d0pbLHh6PDXLjjWzFubgN6kPyE0jU7Dr92rYdGY=;
- b=djzukwNo+OmamenYPu+h1hlnGM1Q1eKpTy7Lkob/n535yCIsP008ubTTkjqdJErql5jBJKLXt
- bu5itSDzg1QD35LNTmLWyNBOiQ5/KekYTC3Zl71uCLU8/+s3oEr4j/S
-X-Developer-Key: i=yunseong.kim@est.tech; a=ed25519;
- pk=1nBUX92cvTaavYG1+MR073D+XMKhdOciBZcnf6h6qEo=
-X-ClientProxiedBy: GVX0EPF0005F693.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:158:400::13c) To DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:10:2a5::24)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ko5nPcIk"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-68c32f3c6d6so21331a12.3
+        for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 09:30:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781195446; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PD8PuGXK+knXc+Z4acFSfUHuCFwQ4j2ras3CQNj1LwJ37a/DAkMSRcQ+2+7x+fcSG7
+         xG07T2GQ7BcVh1+YgfHNwK0TXf9MYQQgHZHJcb8xx+aNdxJkM1r90pMvYD9DtaLypuY1
+         HTIAF+mlYWf9f0ZHSj4jPrl/6oycaJ1SqpAyQb9X6E9YulNJ9negVy00anB9BLQsbsuO
+         40VvOe6CVQ9WUMXUqM84pEHGi/0rmGDcUMuf4DvjmL2lFv6ijMrU+c9oO9DioQzMAtSX
+         yVxx44jyaoYWqMwNoD8pjAFfkG1Uxl3lY3faQkV8SvqKSxX1RzVO/49MOFTBZ8z3Or8V
+         BlzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=iheKOWFdtwPumeqiSxQOmmhC5dJ1TWCtS8vJVMwePJg=;
+        fh=ruT/KVOboZme75up5PDz7j0wuqGB9FbU/XdXBSPvvbA=;
+        b=Eblyycnpd2NdAcfbpgcm+GpDsoFzhu2HzP7j73qAH9FSN8veHMb5CEK7DQ84/F9rSy
+         7Vtq645GR8MXQMksOocptsyi3j8tkczIJWxnhmYpKcursNKxx6lnGI6ZRsDZdhZanSYR
+         FZubDmsvtgyh3e2Z1s0BYzjuEsh5fV6gWK9zBNRAFufmGgRGsxohU6lALaTBZpqCacPU
+         P8yNwob9qatCrDpttW2x3IA/DIGw5rgod2JGj/bxEH/q4aZJ1udAcAHWXHjPD+ZWrkYl
+         jfK8N4XhENhyOWeHTQZbIH8H3zDV67Me/fnI+eK3AspGHmS4WAcRGo7Jw+5HA2nUtYR7
+         UKWA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781195446; x=1781800246; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iheKOWFdtwPumeqiSxQOmmhC5dJ1TWCtS8vJVMwePJg=;
+        b=ko5nPcIkKvc+jrLf7ol2MG0SQh5R97XywlE5CE+rbsq/rzK5azJ7YqVd2tn328F+Bs
+         CuTBpqQnOoQ9PFwBWW1eCI5SQJLyc2ds6obKC+VgGrekxv6sg1UmP+dKIg/yKzgrgkZT
+         d4FaUSbsMwEiV2aPdXnahSLrrPEX5o31QthfMhVMn0bYuc0DzZCUwAM1bjXt9aCQbU1U
+         HeJKjICtfWnjTVDZPCz0ELLwHgoJljU2sRQ+tIVVSzHwCDr4LOn0C3FiHju5FDOYhcUK
+         Yrh02pZwZYc4MFkadqTXjIhB3IqlRPxbdfL1Ekl71P/Wjwg/FaLFwfTkHw6WkBoYbdX5
+         mkTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781195446; x=1781800246;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iheKOWFdtwPumeqiSxQOmmhC5dJ1TWCtS8vJVMwePJg=;
+        b=mhP3oO3zrAkg2M5pcE2ozf/NZ737gd/qICn5XiF1eUFSVs8+AA1miwgK/OY6s83iQE
+         uZwIYRGT7Zcx9zNFuaYPHS9Zm4dYCF18ldMS1S6phBGPGaK70uNAtcobsXtZMbdlyJEH
+         ku1qvyktJhzl4w5WmaWeFJ+rin+2pZmcJ/En+FRUwJTMWC0u1yRbgbCbfMAnCJxNiWel
+         CGOg9FeUeaDtOwqgq391fr7Awx5ABmnB+GqfAFFGPlsmyfFAn8o0SVtL0BMjjq1c+Kjx
+         MD3SUp7sO0aJzxzuJVCPcsE8WRzp0mNTF40kfEWSseFENoXD1S2tR9Yg22DNyjxB6pUM
+         EPTA==
+X-Forwarded-Encrypted: i=1; AFNElJ+iWAliKtH2ewgYMOPqx85dtOnNt3dlW+O16OgNWG2RdPVbYzrJ9bHCN1cxsW3eZ6iHxtFs@lists.linux.dev
+X-Gm-Message-State: AOJu0YxYcWJV0AsMwALfOIvvZMEAq6raKsaajtl1lZb6wvyudrlJ134t
+	S6ZKb6KU7OfsOWyCd2B3TGJdSn/rRSqI0YcQMKb7wnUZgKyXSui2Id0Eu6ynjHYyry+g22ta6lR
+	XrtAR5reMUJVDkaVKzAX8VwDe9b12wEA=
+X-Gm-Gg: Acq92OHBzn/T5ze0BXEIxUH53bTrvgIWATDr3OIUhzBTaGQzwQLFJfKPyXj1aOeph6d
+	ntyrrK6hr4d46+xVqXzyGG8kRTgsP7onye1FPWlE18Kb1pKPa9U7+UA+lJ3vx4THTev/pA4hTXO
+	ETGthZJxAB7BECfyS66k7554XHGdIX8xK2uhPgSwMpyhEnT/+Oqu0fFhUEuHOCYvqwjI+Kn6MOX
+	qYFCuQnqbUQVyWYhKMEZ5QDMgLZyCOu5dwdPVdVNw3mdhM1MItjGg9vL4xE+Hoe30Txbfvuqegm
+	Sx493EfjrtcH7n41C0PK7NJribqDKroIaD5orNkZYRhskWR9EdN7nkZq8ZiGozG2xK+pkCKM41P
+	0nv3pDP4D8u78jLWD2g1F5Dz2RGVUjh90yqxPkye4e2hq2tUq/pmLnqjKSJtolGgfGqE=
+X-Received: by 2002:a05:6402:1948:b0:687:819:545a with SMTP id
+ 4fb4d7f45d1cf-6930e438b2emr1819681a12.25.1781195446025; Thu, 11 Jun 2026
+ 09:30:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9P189MB1754:EE_|PAWP189MB2829:EE_
-X-MS-Office365-Filtering-Correlation-Id: 16ee207c-d882-45a0-49df-08dec7d59150
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|7416014|921020|56012099006|11063799006|3023799007|6133799003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	7kXpKgAZ2npSI+Vazsj9EPVIK4hAdklIQvqjUVvI9iBAVabc2hw66gqmrzuXzDgx9a7aYOPpdVisxuVYpHkYqcposTqfluv1/DLn47lafC8Bums+9IS7UO7Hk1GZIBOLJ4oeUO67QNU/u1ZdSiFwMJFC6ULbG0oTDFmGx+wy71jkm9hS/8Qr1S3iPFha9FkZBKfSB+1e5UI57KZ1cKcPV/YQ5mEN062NZfA3HhsUSn/sULr5K5R7zKaPGYRHQhEx+tIcp6RC/W7dnX+mn9ZJWbkNctGnb85IAv3o9TwIhjJ/i714/wjUXQbayIfLT9yGgQaQEYiKysJtsjwuS47lgWwze5WlO/7gdsJtVpqBbtBBke+SzHaVho5lI7NhCDuUcOvs1Jey+1/BK8e2KVpViE75HkGg5lSm+/uCsRLQipEOY4sbTYsNivkJpo71NRt8YJkDzSxjT9MB+fcNVFzBT5HoDMMpJBcZgshorKB1PSpBs5r9Uds4k2143Ibfm5/491YsDGiTmDuifC9V7iO48jUrvTRYpTC5yYgdSv95BfvIuddxB3ata4P2ymwmq69M1IPQF3qIXeveuf76M1wvjU2h/ShUjZkKzSlUFr76c7k0BDn7p6Ql9v24sM59a3eiAlFhDDmOdQZykCWjFotM7eQdD+OKQKhzdj5CRZ6t1dKP85s4ThhPEKSml8mvTnuq0Fr+PBZ3mlHNn5cMfaL0GesrxacY76atYKwgRd98Xyo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9P189MB1754.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(7416014)(921020)(56012099006)(11063799006)(3023799007)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZGtyUmNJYmxSbDBabzl4WFlvYTFITFRhOXVkRHdFcDNoS2grbDM5bjk3a1pu?=
- =?utf-8?B?ZkxBQVFCUFNtcmF3NzZ4NmNHZ2dtSGRMOEhCRHJmb1VQZzVqMnB3OVVJMUxG?=
- =?utf-8?B?Qm9YSG4xaDU0T2daOFpwN1lWT0g0WFdvQnRCUnpCN21IY01SODlEL1dIT29m?=
- =?utf-8?B?U1Nla2VQOS9FRkh3K3lDNUVQSFdzMTJHMzJ4dUMvbFczRTFmM1FOY0U0enlJ?=
- =?utf-8?B?Y1Y1dU9ReXNpSXJRUVRLUGwydWZ5UmVFU05kQXpXSHN2Q29lUG5jRk4vV0cy?=
- =?utf-8?B?dGtvdm9GOU5ydVRFRDNud2thVkRFbVQyWWZocitOVnlxcFZvUnFjcDVwZ2hE?=
- =?utf-8?B?RUJibzhnZDJRbCtBM2JCV0V3Zzk0VEkwUU5LRGp0WDF3RFRLbUhZRGFicXBj?=
- =?utf-8?B?aEhDbElza2VvNFJzVWRtRjdQK3lUV2dzRDV4NStTVHFSVHpIU2V6eEVhd1Rl?=
- =?utf-8?B?MUV6TFJwbzFQZjJrdnRCZGlSVWR6RmppSzN5cytjbEVNZVBVSmZHZlduSjRY?=
- =?utf-8?B?eEhOeDdIdGUwNWRlV0FIWUpGZlg5a1pPbjZJWUdQVmVZMlYweE5kN2xyRGV3?=
- =?utf-8?B?eEtyWDNuTkZBWnI0eFQwN2tGY1ZZTXNKQVhaeDBGMk9JN2xYYmZ4ZlRJdWxK?=
- =?utf-8?B?a2pCbTJZYmIzZVFTYW92YUhNQS9TcnY1UEdITEtQYWVpaFpBemZuMVphdU5O?=
- =?utf-8?B?YWVzcWR3dHVSdjZKVGlKWVlTYTBKMGtBRkl6Yi9neWl4VlY4NW9QMjRRL3Ir?=
- =?utf-8?B?SlVkM0x5aWt5NURVQXYzbjlvUmZvUzBReWUzc3R2cUVxU0toVzFmVi94K094?=
- =?utf-8?B?ZUhWNFlMTlRxcm5idDA3b2dRMDhIbndqL2N6aFBxWXd1d3pKTFZiQTZDNWds?=
- =?utf-8?B?dnZmUHRBUnBKV01UdjZUeUlDUVRpQjFibUpCRDJoa0lUbGVmemRFTGF6NHQ1?=
- =?utf-8?B?ODYyak0vUjZib05OMkZlS3dUMmZzZGhMdllWNElabDM3bkpoY3RLalhMSVRE?=
- =?utf-8?B?SVBycVo3S3JyajE0b3pqS1Rucnk1aGFtWWZvRXMzUHNwUFYwZlVaeXpKMXlt?=
- =?utf-8?B?MDdOaWVLbkJFaXN1QTFVaWJjSnVLZFhOdC9xdnNVdTNQdERxUWtsZGdmRjBy?=
- =?utf-8?B?anY0eGxaL1lQVXZTMUlQM0RjNnM0dElZV0hoMmtlU2Z5L1cveVFvbjc0UGZN?=
- =?utf-8?B?N3ZXTTMxdFRpbGRmUi9DVXVuSmxRRm9ucWxndXJuTUpQVXh6Ui93L2lWeVZY?=
- =?utf-8?B?NUVSMkl4aTZjWnE4RjFjeUcrZVBqUGl0YW9tL0NISGxJZmJORzNobjRXam9j?=
- =?utf-8?B?ckpJelMrbUI1YXczNVZRV2NlYyt5YjNDbExCbG9RUTVVeS9NSm1ObTZiTmtB?=
- =?utf-8?B?YkRnUUN5RWFyL3M0SkdDMmxFeVczTmZWRTZ6MG95empUN3llZS9nM2Ivc3pq?=
- =?utf-8?B?d2VLdjQ0M252WTlsTUE2eStIV3NmUHhyd0VNWFV0QldwSGtGQTYvYXQzaC82?=
- =?utf-8?B?RkkyVW9YMDhOTnlxaVhaekhNU0hoZlJmcjhqOGcwcDBXd0lPemtqTjhTanQ3?=
- =?utf-8?B?QmJmZi9YZytxa3BJNmRVYlBhYllGZEZROXZNYUdVYkZSL0FHTE1nQ2VXN2o0?=
- =?utf-8?B?UGZwUWZvSThMUjFWaU50NzhlaFBvY1dRMy8zeG5GVUx4eU5pUnI3QWtqUThZ?=
- =?utf-8?B?bWRaVHk3L0owa0xqK3g2NVJYblF6NE44TmZWc2NlTUtQbE1FcE1ZdDYrejNH?=
- =?utf-8?B?UUJxNW5SaWV0OUlKWklEMVFuMFE3RmJ3aU96a01naXlSVjIxTFhMZnV3cDFF?=
- =?utf-8?B?YUlSR3VDcGRmUllJdHdBeG5XZUVkc2NYQnVzeGFQaUFRcVhCbDlhWmdWY2cx?=
- =?utf-8?B?ZEsxc0h3YlFIdGNVMW1wY3lNN0hpZmRBcmFIcnp1L1NEOXNZdG1WaG51amZt?=
- =?utf-8?B?WG9TcFE0U1hDRFRKdWVickFKZEVDR2cvZTRsYnBCek4yS2tGMGd0SmFDVzgy?=
- =?utf-8?B?Tk83bUlsSUMvWmNjUktLQnNUMW1YSGdSMElvZ1g1SFNpN2RoRGJQWldsa2Rs?=
- =?utf-8?B?ckhOMDh1amgrM09hd2lYRUF4eUR0dWl0NmZ1TlM0UEd0ZkxwWHIvT0JVdnd1?=
- =?utf-8?B?K2g3ZHFJSjc4TFVtY3QrNXErcE16THF0a1dDd2lDeFRnWk5ReklSU2dBc3Q4?=
- =?utf-8?B?VXExZ1E1WlFYeWwrQjJ2aTNvSWpHcTVDM0ZjdFdlbFZoUExUWjJ6THdHVTZO?=
- =?utf-8?B?V05JTW9PbzFQUi9sVGpGU0x1QzhCNzdYblZNSndCVmlrbVFldWZkNTNTRG9S?=
- =?utf-8?B?TDJMN1UrbmNMaCtvbWxBNmlBM1RQWTJrMkxyL0JMamNWK1ZRaVJIQT09?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16ee207c-d882-45a0-49df-08dec7d59150
-X-MS-Exchange-CrossTenant-AuthSource: DB9P189MB1754.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2026 16:22:01.4854
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lz2tdGPdgSR3llAbP75jWb9xs33EXLwlqly9t6QAo6TjkOwDtLWWpChFjGL+Hpgf+CZ0qBI0gCqqJdK4eLOVAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWP189MB2829
+References: <20260611035245.13439-1-rosenp@gmail.com> <20260611035245.13439-3-rosenp@gmail.com>
+ <airSHmdtCg5yWn0X@lizhi-Precision-Tower-5810>
+In-Reply-To: <airSHmdtCg5yWn0X@lizhi-Precision-Tower-5810>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Thu, 11 Jun 2026 09:30:34 -0700
+X-Gm-Features: AVVi8CeqeKhQJh1oE_uJdumUn9r0WFmAfFwWPafkU5F8prKElzOIcB4MnkuaMOg
+Message-ID: <CAKxU2N9bMeuOKBDOXB=bFFkiNTZh-ZQFE6CSC5FZ_p6ygo9zZw@mail.gmail.com>
+Subject: Re: [PATCHv4 02/15] dmaengine: fsldma: drop desc_lock before invoking
+ client callback
+To: Frank Li <Frank.li@oss.nxp.com>
+Cc: dmaengine@vger.kernel.org, Vinod Koul <vkoul@kernel.org>, 
+	Frank Li <Frank.Li@kernel.org>, Zhang Wei <zw@zh-kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:FREESCALE DMA DRIVER" <linuxppc-dev@lists.ozlabs.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add documentation for the KCOV-Dataflow subsystem covering:
-- Prerequisites and Kconfig options
-- Per-module and per-directory instrumentation
-- Data collection example with buffer parsing
-- Ring buffer TLV record format
-- Safety properties
-- Ioctl interface reference
-- Compatibility with legacy KCOV
-- Rust module support via post-compilation pipeline
-- Fork/child process tracing pattern
-
-Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
----
- Documentation/dev-tools/index.rst              |   1 +
- Documentation/dev-tools/kcov-dataflow.rst      | 321 +++++++++++++++++++++++++
- tools/testing/selftests/kcov_dataflow/Makefile |   2 +-
- 3 files changed, 323 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
-index 59cbb77b33ff..541c58cc65ea 100644
---- a/Documentation/dev-tools/index.rst
-+++ b/Documentation/dev-tools/index.rst
-@@ -24,6 +24,7 @@ Documentation/process/debugging/index.rst
-    context-analysis
-    sparse
-    kcov
-+   kcov-dataflow
-    gcov
-    kasan
-    kmsan
-diff --git a/Documentation/dev-tools/kcov-dataflow.rst b/Documentation/dev-tools/kcov-dataflow.rst
-new file mode 100644
-index 000000000000..603c83946d12
---- /dev/null
-+++ b/Documentation/dev-tools/kcov-dataflow.rst
-@@ -0,0 +1,321 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+KCOV-Dataflow: function argument and return value extraction
-+=============================================================
-+
-+KCOV-Dataflow captures function arguments and return values, including
-+automatic struct field decomposition, at instrumented kernel function
-+boundaries. It provides per-task, lock-free ring buffers accessible via
-+``mmap()``, enabling data-flow-aware fuzzing and post-mortem contract
-+verification.
-+
-+Unlike KCOV's ``trace-pc`` which reports *which* code executed,
-+KCOV-Dataflow reports *what values* were passed and returned. This is
-+a completely separate device from ``/sys/kernel/debug/kcov``.
-+
-+Prerequisites
-+-------------
-+
-+KCOV-Dataflow requires Clang/LLVM with the ``trace-args`` and
-+``trace-ret`` SanitizerCoverage extensions. Standard (unpatched)
-+compilers will not expose these Kconfig options.
-+
-+To enable KCOV-Dataflow, configure the kernel with::
-+
-+        CONFIG_KCOV=y
-+        CONFIG_KCOV_DATAFLOW_ARGS=y
-+        CONFIG_KCOV_DATAFLOW_RET=y
-+
-+Optional: instrument the entire kernel (significant overhead)::
-+
-+        CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL=y
-+
-+Coverage data becomes accessible once debugfs is mounted::
-+
-+        mount -t debugfs none /sys/kernel/debug
-+
-+Per-module instrumentation
-+--------------------------
-+
-+To instrument a specific module, add to its Makefile::
-+
-+        KCOV_DATAFLOW_my_module.o := y
-+
-+For example, to instrument the Android binder driver::
-+
-+        # drivers/android/Makefile
-+        KCOV_DATAFLOW_binder.o := y
-+        KCOV_DATAFLOW_binder_alloc.o := y
-+
-+To instrument an entire directory, set the variable without a filename::
-+
-+        # fs/Makefile
-+        KCOV_DATAFLOW := y
-+
-+The build system automatically adds the required compiler flags
-+(``-fsanitize-coverage=trace-args,trace-ret``). Debug info is provided
-+by ``CONFIG_DEBUG_INFO`` which is a Kconfig dependency.
-+
-+Data collection
-+---------------
-+
-+The following program demonstrates how to collect function argument and
-+return value data for a single syscall:
-+
-+.. code-block:: c
-+
-+    #include <stdio.h>
-+    #include <stdint.h>
-+    #include <stdlib.h>
-+    #include <sys/types.h>
-+    #include <sys/ioctl.h>
-+    #include <sys/mman.h>
-+    #include <unistd.h>
-+    #include <fcntl.h>
-+
-+    #define KCOV_DF_INIT_TRACE  _IOR('d', 1, unsigned long)
-+    #define KCOV_DF_ENABLE      _IO('d', 100)
-+    #define KCOV_DF_DISABLE     _IO('d', 101)
-+    #define BUF_SIZE            (1 << 20)  /* 1M words = 8MB */
-+
-+    int main(void)
-+    {
-+        int fd;
-+        uint64_t *buf, n, i;
-+
-+        fd = open("/sys/kernel/debug/kcov_dataflow", O_RDWR);
-+        if (fd == -1)
-+            perror("open"), exit(1);
-+
-+        /* Allocate buffer (size in u64 words). */
-+        if (ioctl(fd, KCOV_DF_INIT_TRACE, BUF_SIZE))
-+            perror("ioctl(INIT)"), exit(1);
-+
-+        /* Map the buffer into user space. */
-+        buf = (uint64_t *)mmap(NULL, BUF_SIZE * sizeof(uint64_t),
-+                               PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+        if (buf == MAP_FAILED)
-+            perror("mmap"), exit(1);
-+
-+        /* Enable data-flow collection for this task. */
-+        if (ioctl(fd, KCOV_DF_ENABLE, 0))
-+            perror("ioctl(ENABLE)"), exit(1);
-+
-+        /* Reset counter. */
-+        __atomic_store_n(&buf[0], 0, __ATOMIC_RELAXED);
-+
-+        /* === Trigger syscall(s) here === */
-+        read(-1, NULL, 0);
-+
-+        /* Read how many words were written. */
-+        n = __atomic_load_n(&buf[0], __ATOMIC_RELAXED);
-+
-+        /* Parse TLV records. */
-+        i = 1;
-+        while (i + 3 < n) {
-+            uint64_t type_seq = buf[i];
-+            uint64_t pc       = buf[i + 1];
-+            uint64_t meta     = buf[i + 2];
-+            uint32_t type     = (type_seq >> 28) & 0xF;
-+            uint32_t num_vals = (type_seq >> 24) & 0xF;
-+            uint32_t seq      = type_seq & 0x00FFFFFF;
-+            uint32_t arg_idx  = (meta >> 56) & 0xFF;
-+            uint32_t size     = (meta >> 48) & 0xFF;
-+
-+            if (type_seq >> 32 || (type != 0xE && type != 0xF)) {
-+                i++;
-+                continue;
-+            }
-+            if (!num_vals)
-+                num_vals = 1;
-+
-+            printf("[%s] seq=%u pc=0x%lx arg_idx=%u size=%u val=0x%lx\n",
-+                   type == 0xE ? "ENTRY" : "RET",
-+                   seq, pc, arg_idx, size, buf[i + 3]);
-+            i += 3 + num_vals;
-+        }
-+
-+        if (ioctl(fd, KCOV_DF_DISABLE, 0))
-+            perror("ioctl(DISABLE)"), exit(1);
-+
-+        munmap(buf, BUF_SIZE * sizeof(uint64_t));
-+        close(fd);
-+        return 0;
-+    }
-+
-+Ring buffer format
-+------------------
-+
-+The buffer is an array of ``u64`` words::
-+
-+        buf[0]: atomic counter -- total words written
-+
-+Each record occupies 3 + N words:
-+
-+.. list-table::
-+   :header-rows: 1
-+
-+   * - Offset
-+     - Field
-+     - Description
-+   * - 0
-+     - type_and_seq
-+     - bits[31:28] = 0xE (entry) or 0xF (return), bits[27:24] = num_vals,
-+       bits[23:0] = sequence number
-+   * - 1
-+     - pc
-+     - Instrumented function address
-+   * - 2
-+     - meta
-+     - bits[63:56] = arg_idx (0 for return), bits[55:48] = size in bytes,
-+       bits[47:0] = raw pointer value
-+   * - 3..N
-+     - field_val[0..N]
-+     - Struct field values or single scalar
-+
-+Magic values:
-+
-+- ``0xBADADD85``: field read failed (pointer was invalid/freed/poisoned)
-+
-+Safety
-+------
-+
-+- Callbacks are ``notrace``, ``__no_sanitize_coverage``, ``noinline``
-+  to prevent recursion.
-+- All pointer reads use ``copy_from_kernel_nofault()`` -- survives
-+  freed, poisoned, or unmapped memory.
-+- An ``in_task()`` guard rejects calls from hardirq/softirq/NMI context,
-+  preventing reentrant buffer corruption.
-+- No ``printk`` or allocation in the data path.
-+- When not enabled for a task, overhead is a single boolean check.
-+
-+Ioctl interface
-+---------------
-+
-+.. list-table::
-+   :header-rows: 1
-+
-+   * - Command
-+     - Value
-+     - Description
-+   * - KCOV_DF_INIT_TRACK
-+     - ``_IOR('d', 1, unsigned long)``
-+     - Allocate buffer (size in u64 words)
-+   * - KCOV_DF_ENABLE
-+     - ``_IO('d', 100)``
-+     - Start collection for current task
-+   * - KCOV_DF_DISABLE
-+     - ``_IO('d', 101)``
-+     - Stop collection
-+
-+Compatibility
-+-------------
-+
-+KCOV-Dataflow is completely independent from legacy KCOV:
-+
-+- Separate device: ``/sys/kernel/debug/kcov_dataflow``
-+- Separate ioctl namespace (``'d'`` vs ``'c'``)
-+- Separate per-task buffer
-+- Both can be used simultaneously without interference
-+- syzkaller and other KCOV users are unaffected
-+
-+Rust module support
-+-------------------
-+
-+Rust kernel modules are supported via a post-compilation pipeline::
-+
-+        rustc --emit=llvm-ir -g module.rs
-+        opt -passes=sancov-module \
-+            -sanitizer-coverage-trace-args \
-+            -sanitizer-coverage-trace-ret module.ll -S -o module_inst.ll
-+        llc -filetype=obj module_inst.ll -o module.o
-+
-+Selftests
-+---------
-+
-+Automated tests and visualization tools are in
-+``tools/testing/selftests/kcov_dataflow/``::
-+
-+        # Automated ioctl interface test (TAP output):
-+        make -C tools/testing/selftests/kcov_dataflow
-+        vng --user root --exec \
-+          tools/testing/selftests/kcov_dataflow/user_ioctl/user_ioctl
-+
-+        # Load a test module and view captured records:
-+        make LLVM=1 CC=clang M=tools/testing/selftests/kcov_dataflow/eight_args_c modules
-+        vng --user root --exec \
-+          "python3 tools/testing/selftests/kcov_dataflow/trigger-view.py \
-+            eight_args_c -C 8 --ko \
-+            tools/testing/selftests/kcov_dataflow/eight_args_c/eight_args_c.ko"
-+
-+        # Binderfs ioctl capture test (requires CONFIG_ANDROID_BINDER_IPC):
-+        make -C tools/testing/selftests/kcov_dataflow/binderfs
-+        vng --user root --exec \
-+          tools/testing/selftests/kcov_dataflow/binderfs/binderfs_test
-+
-+See ``tools/testing/selftests/kcov_dataflow/README.rst`` for details.
-+
-+Tracing child processes
-+-----------------------
-+
-+KCOV-Dataflow is per-task: after ``fork()``, the child does not inherit
-+the enabled state. To trace child processes, re-enable on the inherited
-+file descriptor in the child before ``exec()``. The ``mmap``'d buffer is
-+shared (``MAP_SHARED``), so both parent and child write to the same ring
-+buffer atomically.
-+
-+.. code-block:: c
-+
-+    #include <stdio.h>
-+    #include <stdint.h>
-+    #include <stdlib.h>
-+    #include <sys/ioctl.h>
-+    #include <sys/mman.h>
-+    #include <sys/wait.h>
-+    #include <unistd.h>
-+    #include <fcntl.h>
-+
-+    #define KCOV_DF_INIT_TRACE  _IOR('d', 1, unsigned long)
-+    #define KCOV_DF_ENABLE      _IO('d', 100)
-+    #define KCOV_DF_DISABLE     _IO('d', 101)
-+    #define BUF_SIZE            (1 << 20)
-+
-+    int main(int argc, char **argv)
-+    {
-+        int fd = open("/sys/kernel/debug/kcov_dataflow", O_RDWR);
-+        ioctl(fd, KCOV_DF_INIT_TRACE, BUF_SIZE);
-+        uint64_t *buf = mmap(NULL, BUF_SIZE * 8,
-+                             PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+
-+        /* Enable for parent task. */
-+        ioctl(fd, KCOV_DF_ENABLE, 0);
-+        __atomic_store_n(&buf[0], 0, __ATOMIC_RELAXED);
-+
-+        pid_t pid = fork();
-+        if (pid == 0) {
-+            /*
-+             * Child: re-enable on inherited fd.
-+             * The shared mmap buffer receives records from both tasks.
-+             */
-+            ioctl(fd, KCOV_DF_ENABLE, 0);
-+            execvp(argv[1], &argv[1]);
-+            _exit(1);
-+        }
-+
-+        waitpid(pid, NULL, 0);
-+        ioctl(fd, KCOV_DF_DISABLE, 0);
-+
-+        uint64_t n = __atomic_load_n(&buf[0], __ATOMIC_RELAXED);
-+        printf("Captured %lu words from parent + child\n", n);
-+
-+        munmap(buf, BUF_SIZE * 8);
-+        close(fd);
-+        return 0;
-+    }
-+
-+Note: the child's ``ioctl(fd, KCOV_DF_ENABLE)`` will fail if the parent
-+has not yet called ``KCOV_DF_DISABLE``, because only one task can be
-+associated with a descriptor at a time. For true multi-process tracing,
-+open a separate ``kcov_dataflow`` fd per child, or disable in the parent
-+before the child enables (as shown above -- the parent is blocked in
-+``waitpid`` so it generates no records during that time anyway).
-diff --git a/tools/testing/selftests/kcov_dataflow/Makefile b/tools/testing/selftests/kcov_dataflow/Makefile
-index 6412c90edfa1..9691b41ffd3e 100644
---- a/tools/testing/selftests/kcov_dataflow/Makefile
-+++ b/tools/testing/selftests/kcov_dataflow/Makefile
-@@ -1,4 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
- TEST_GEN_PROGS := user_ioctl/user_ioctl
--TEST_PROGS := run_eight_args_c.sh run_rust_ffi_contract.sh
-+TEST_PROGS := run_eight_args_c.sh run_eight_args_rust.sh run_rust_ffi_contract.sh
- include ../lib.mk
-
--- 
-2.43.0
-
+On Thu, Jun 11, 2026 at 8:20=E2=80=AFAM Frank Li <Frank.li@oss.nxp.com> wro=
+te:
+>
+> On Wed, Jun 10, 2026 at 08:52:32PM -0700, Rosen Penev wrote:
+> > fsldma_run_tx_complete_actions() calls dmaengine_desc_get_callback_invo=
+ke()
+> > while still holding chan->desc_lock.  If the client submits a new
+> > transaction from their completion callback, fsl_dma_tx_submit()
+> > tries to acquire the same non-recursive spinlock, causing a
+> > self-deadlock.
+> >
+> > Fix by extracting the callback info under the lock, removing the
+> > descriptor from ld_running, dropping the lock, then invoking the
+> > callback and running dependencies outside the lock.
+> >
+> > Assisted-by: opencode:big-pickle
+> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> > ---
+> >  drivers/dma/fsldma.c | 108 ++++++++++++++++++++++---------------------
+> >  1 file changed, 55 insertions(+), 53 deletions(-)
+> >
+> > diff --git a/drivers/dma/fsldma.c b/drivers/dma/fsldma.c
+> > index 0e2f84862261..455d21d738de 100644
+> > --- a/drivers/dma/fsldma.c
+> > +++ b/drivers/dma/fsldma.c
+> > @@ -496,16 +496,19 @@ static void fsldma_clean_completed_descriptor(str=
+uct fsldma_chan *chan)
+> >  }
+> >
+> >  /**
+> > - * fsldma_run_tx_complete_actions - cleanup a single link descriptor
+> > + * fsldma_run_tx_complete_actions - unmap and extract callback from a =
+descriptor
+> >   * @chan: Freescale DMA channel
+> > - * @desc: descriptor to cleanup and free
+> > + * @desc: descriptor to process
+> >   * @cookie: Freescale DMA transaction identifier
+> > + * @cb: returned callback information
+> >   *
+> > - * This function is used on a descriptor which has been executed by th=
+e DMA
+> > - * controller. It will run any callbacks, submit any dependencies.
+> > + * Unmap the descriptor if it has been submitted and extract its callb=
+ack
+> > + * into @cb.  The caller must invoke the callback and run dependencies
+> > + * after releasing chan->desc_lock.
+> >   */
+> >  static dma_cookie_t fsldma_run_tx_complete_actions(struct fsldma_chan =
+*chan,
+> > -             struct fsl_desc_sw *desc, dma_cookie_t cookie)
+> > +             struct fsl_desc_sw *desc, dma_cookie_t cookie,
+> > +             struct dmaengine_desc_callback *cb)
+> >  {
+> >       struct dma_async_tx_descriptor *txd =3D &desc->async_tx;
+> >       dma_cookie_t ret =3D cookie;
+> > @@ -514,49 +517,14 @@ static dma_cookie_t fsldma_run_tx_complete_action=
+s(struct fsldma_chan *chan,
+> >
+> >       if (txd->cookie > 0) {
+> >               ret =3D txd->cookie;
+> > -
+> >               dma_descriptor_unmap(txd);
+> > -             /* Run the link descriptor callback function */
+> > -             dmaengine_desc_get_callback_invoke(txd, NULL);
+> >       }
+> >
+> > -     /* Run any dependencies */
+> > -     dma_run_dependencies(txd);
+> > +     dmaengine_desc_get_callback(txd, cb);
+> >
+> >       return ret;
+> >  }
+> >
+> > -/**
+> > - * fsldma_clean_running_descriptor - move the completed descriptor fro=
+m
+> > - * ld_running to ld_completed
+> > - * @chan: Freescale DMA channel
+> > - * @desc: the descriptor which is completed
+> > - *
+> > - * Free the descriptor directly if acked by async_tx api, or move it t=
+o
+> > - * queue ld_completed.
+> > - */
+> > -static void fsldma_clean_running_descriptor(struct fsldma_chan *chan,
+> > -             struct fsl_desc_sw *desc)
+> > -{
+> > -     /* Remove from the list of transactions */
+> > -     list_del(&desc->node);
+> > -
+> > -     /*
+> > -      * the client is allowed to attach dependent operations
+> > -      * until 'ack' is set
+> > -      */
+> > -     if (!async_tx_test_ack(&desc->async_tx)) {
+> > -             /*
+> > -              * Move this descriptor to the list of descriptors which =
+is
+> > -              * completed, but still awaiting the 'ack' bit to be set.
+> > -              */
+> > -             list_add_tail(&desc->node, &chan->ld_completed);
+> > -             return;
+> > -     }
+> > -
+> > -     dma_pool_free(chan->desc_pool, desc, desc->async_tx.phys);
+> > -}
+> > -
+> >  /**
+> >   * fsl_chan_xfer_ld_queue - transfer any pending transactions
+> >   * @chan : Freescale DMA channel
+> > @@ -635,22 +603,23 @@ static void fsl_chan_xfer_ld_queue(struct fsldma_=
+chan *chan)
+> >   */
+> >  static void fsldma_cleanup_descriptors(struct fsldma_chan *chan)
+> >  {
+> > -     struct fsl_desc_sw *desc, *_desc;
+> > +     struct fsl_desc_sw *desc;
+> >       dma_cookie_t cookie =3D 0;
+> >       dma_addr_t curr_phys =3D get_cdar(chan);
+> >       int seen_current =3D 0;
+> >
+> >       fsldma_clean_completed_descriptor(chan);
+> >
+> > -     /* Run the callback for each descriptor, in order */
+> > -     list_for_each_entry_safe(desc, _desc, &chan->ld_running, node) {
+> > -             /*
+> > -              * do not advance past the current descriptor loaded into=
+ the
+> > -              * hardware channel, subsequent descriptors are either in
+> > -              * process or have not been submitted
+> > -              */
+> > -             if (seen_current)
+> > -                     break;
+> > +     /*
+> > +      * Take descriptors one at a time from the front of the running
+> > +      * queue.  We re-read the list each iteration so that we don't
+> > +      * chase a stale next pointer across the lock-drop below.
+> > +      */
+> > +     while (!seen_current && !list_empty(&chan->ld_running)) {
+> > +             struct dmaengine_desc_callback cb;
+> > +
+> > +             desc =3D list_first_entry(&chan->ld_running,
+> > +                                     struct fsl_desc_sw, node);
+> >
+> >               /*
+> >                * stop the search if we reach the current descriptor and=
+ the
+> > @@ -662,9 +631,42 @@ static void fsldma_cleanup_descriptors(struct fsld=
+ma_chan *chan)
+> >                               break;
+> >               }
+> >
+> > -             cookie =3D fsldma_run_tx_complete_actions(chan, desc, coo=
+kie);
+> > +             cookie =3D fsldma_run_tx_complete_actions(chan, desc, coo=
+kie, &cb);
+> >
+> > -             fsldma_clean_running_descriptor(chan, desc);
+> > +             /*
+> > +              * Remove from the running list before dropping the lock =
+so
+> > +              * that terminate_all cannot free this descriptor while w=
+e
+> > +              * call into the client below.
+> > +              */
+> > +             list_del(&desc->node);
+> > +
+> > +             /*
+> > +              * Prevent dma_run_dependencies() from calling
+> > +              * fsl_chan_xfer_ld_queue() while we are not holding the
+> > +              * lock.  That would splice pending descriptors into
+> > +              * ld_running before they have been completed by hardware=
+.
+> > +              * fsl_chan_xfer_ld_queue at the end of this function wil=
+l
+> > +              * re-evaluate the situation.
+> > +              */
+> > +             chan->idle =3D false;
+> > +
+> > +             /*
+> > +              * Drop the lock before invoking the client callback, sin=
+ce
+> > +              * the DMAengine API explicitly allows clients to submit =
+new
+> > +              * transactions from their completion callback.  Otherwis=
+e
+> > +              * we self-deadlock on chan->desc_lock.
+> > +              */
+> > +             spin_unlock(&chan->desc_lock);
+> > +             dmaengine_desc_callback_invoke(&cb, NULL);
+> > +             dma_run_dependencies(&desc->async_tx);
+> > +             spin_lock(&chan->desc_lock);
+>
+> Not sure if you have hardware to test it. This change is quite big. Gener=
+ally,
+> keep desc_lock and move these complete queue,  defer to tasklet or workqu=
+eue
+> run callback in in complete queue by hold complete queue's lock.
+I do not. And because it is quite big, I will drop it.
+>
+> > +
+> > +             chan->idle =3D true;
+> > +
+> > +             if (!async_tx_test_ack(&desc->async_tx))
+> > +                     list_add_tail(&desc->node, &chan->ld_completed);
+> > +             else
+> > +                     dma_pool_free(chan->desc_pool, desc, desc->async_=
+tx.phys);
+>
+> desc already removed from list, needn't hold desc_lock, you can move it
+> just before spin_lock()
+>
+> You should use difference lock for ld_completed.
+>
+> Frank
+>
+> >       }
+> >
+> >       /*
+> > --
+> > 2.54.0
+> >
