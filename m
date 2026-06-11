@@ -1,44 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 180B32DA76C;
-	Thu, 11 Jun 2026 12:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2644C2DA76C;
+	Thu, 11 Jun 2026 12:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781182711; cv=none; b=PqbNmSX5mayZD14knJvAmh5e5MsiKZ24FectWzfnohTKRwns6uzAVgKHXsKeZCm1Lwt7fES7jXtT+aq+B9TIcddJwyl5y1KiR3LNBTEiW8O856qj4zIypizmBYKajDvTz6zKDTABT2sfqab4P48GjUJzoNIzFgRBdvYa0nrf0+g=
+	t=1781182798; cv=none; b=Ab8AOCT57nbd/UcAisrckVx51rTQvovlnAU7BsXSz7d2PYRO2dWhaVSgHfoVE3pyq0rFsw70c+55MX9CurnAvYnbJmvC9ADiZgFwHrHWs0w4PEnvLMEfQHPnxhzkw08+It6Z3LOWtBk5RVGnNro0OjNl9rmxyNNgKeOfWnCE/60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781182711; c=relaxed/simple;
-	bh=QE0ehZnwPg2+Law+f8Qni0EUBclw25XvcJEvWUu8C14=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=f7dckqZS2Vo9MRv8clsWsfQZPCFeLbstjwmy+o7NqqIosurvW7p7TyAy98pnmaUFiEWsfUHrefCZRWlMTflWZ0AyOh0iZSfn2mh8h83ALPAXne5SYFo4VHpYtOJfH+irCGkx/HDmT6PdbltfDrB3ia0dTXRI9R5aZ3z1LnNdOHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jmr6holv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781182798; c=relaxed/simple;
+	bh=8KAGxG+bTzZw0NtXACFDYDhwLup09FdT2xtTamsCuMk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ag1DfnLoVIYnLg6J4cFL12bvNlWAr8q0sDVvivQmSohNcFoB6wSgSJ51bAfBdktHHe1PBXAR9rp+brAxXcgclNWDwMv1IzaJP6gKo39+Mv0my3FM+utICff2bxiDXkng7wnJymrHHzxCMGOpJEGIv1mWH7yX2Hq6E3p9siasw/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VZd0c5nH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jmr6holv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 860071F00893;
-	Thu, 11 Jun 2026 12:58:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VZd0c5nH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B77F1F00893;
+	Thu, 11 Jun 2026 12:59:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781182707;
-	bh=xoThyNDhoXi0q4nklYxR3wusyJfAFvo0Yiumhi7jkAg=;
+	s=k20260515; t=1781182796;
+	bh=zfe+53sDR95Yk81P6I4goSKtYHLjwJCYHiFTrpzsUlc=;
 	h=From:To:Cc:Subject:Date;
-	b=Jmr6holvwx0XqGvka84MEDz7v68XthZniqnVy7CIPlXRnBrP6hhfoTkzg0GvvMkS6
-	 2CymkgQJQm27vXQAYDgBULlLOO92p24Qs9FD8s698JknO26d3fKC5HO/gV0Um+wf8c
-	 0caYpi5+53qGpdQOtB0a1laU8H6JJmV3m38CcOPj8Gul47b0R4KLMV9SWsC5vSLolP
-	 VerYqiT4fdC/89+wUwLDC9AwSyZ3+rOlbsGxAwXPfe/1dYmKMY7c8jDK8LnnHLlmSr
-	 yTQSNA+zX7tJ/+NHtu3QQTufdXoHBsiLAoYHWVm/aeXI7jBX8IvGogExX83vXUbyed
-	 gRSVMBl86U9zQ==
+	b=VZd0c5nHMgfT64+gqRWhAqWqHiJyAx6KhY1MwIRMr8tWmqAOFe+V5O+IujkmUCUwT
+	 LulxrT51VENissvj6gyb5iAsFIYuFcku8/wAOQ1V1qt4cDThgatvJJb16gTd3HUSC3
+	 vwLyzGfawRHiVHIzdlGyv6Gv1GJkmMNgzCrN0tVWHHuVHPMlC/HHr8DHDEh2tinep7
+	 fNfmK3sEc7p8q2ZlR8CWgHGVvC5OYtGprFiubfHURUOaGquQszPOPx92rJ8h/rR0Q9
+	 D49ZpkB9rPEO9JLCunMbHWQTIsJzYYs++C3i11xfsv/cEocbebvqAFZ+lDNzE71Zhf
+	 MkeBf2bKhWAtg==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Srinivas Kandagatla <srini@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Christian Marangi <ansuelsmth@gmail.com>
+To: Eric Biggers <ebiggers@kernel.org>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-crypto@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] nvmem: airoha: add ARM64 dependency
-Date: Thu, 11 Jun 2026 14:58:00 +0200
-Message-Id: <20260611125822.3386722-1-arnd@kernel.org>
+Subject: [PATCH] lib/crypto: gf128hash: mark clmul32() as noinline_for_stack
+Date: Thu, 11 Jun 2026 14:59:39 +0200
+Message-Id: <20260611125952.3387258-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -50,39 +51,50 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The driver already depends on HAVE_ARM_SMCCC and ARCH_AIROHA, but both
-are available for 32-bit and 64-bit targets. However, the smccc invocation
-fails on thumb2 builds with clang:
+During randconfig testing, I came across a lot of warnings for the newly
+added carryless multiplication function triggering excessive stack usage
+from spilling temporary variables to the stack:
 
-drivers/nvmem/airoha-smc-efuses.c:38:2: error: write to reserved register 'R7'
-   38 |         arm_smccc_1_1_invoke(AIROHA_SMC_EFUSE_FID,
-      |         ^
-note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-arch/arm/include/asm/opcodes.h:215:2: note: expanded from macro '__inst_arm_thumb32'
-  215 |         __inst_thumb32(thumb_opcode)
-      |         ^
+lib/crypto/gf128hash.c:166:1: error: stack frame size (1192) exceeds limit (1024) in 'polyval_mul_generic' [-Werror,-Wframe-larger-than]
 
-Since the driver is only used on the 64-bit an7581 soc, avoid this
-problem with a stricter dependency.
+In addition to the possible risk of overflowing the kernel stack,
+the generated object code surely performs very poorly.
 
-Fixes: 25e001fcc1e6 ("nvmem: airoha: Add support for SMC eFUSE")
+This only happens on architectures that don't provide uint128_t
+(which should be all 32-bit architectures on modern compilers), but
+though I tested random x86 and arm configs, I only saw this with arm's
+CONFIG_THUMB2_KERNEL, which adds more pressure to the register allocator.
+
+The testing was done using clang-22, I don't know if gcc has the same
+problem. Marking clmul32() as noinline_for_stack experimentally shows
+all of the affected builds to completely solve the problem, reducing
+the stack usage to a few bytes as expected.
+
+Since u64 arithmetic frequently leads to compilers badly optimizing
+32-bit targets, keeping clmul32 out of line is likely to help on
+other 32-bit configurations as well when they run into this problem,
+though it may also result in a small performance degradation in
+configurations that would benefit from inlining.
+
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/nvmem/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+---
+ lib/crypto/gf128hash.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index e10f7ff725ff..f33ee18930ae 100644
---- a/drivers/nvmem/Kconfig
-+++ b/drivers/nvmem/Kconfig
-@@ -30,6 +30,7 @@ source "drivers/nvmem/layouts/Kconfig"
+diff --git a/lib/crypto/gf128hash.c b/lib/crypto/gf128hash.c
+index 2650603d8ba8..8dcdf5ec98be 100644
+--- a/lib/crypto/gf128hash.c
++++ b/lib/crypto/gf128hash.c
+@@ -109,7 +109,7 @@ static void clmul64(u64 a, u64 b, u64 *out_lo, u64 *out_hi)
+ #else /* CONFIG_ARCH_SUPPORTS_INT128 */
  
- config NVMEM_AIROHA_SMC_EFUSES
- 	tristate "Airoha SMC eFuse support"
-+	depends on ARM64
- 	depends on ARCH_AIROHA || COMPILE_TEST
- 	depends on HAVE_ARM_SMCCC
- 	default ARCH_AIROHA
+ /* Do a 32 x 32 => 64 bit carryless multiplication. */
+-static u64 clmul32(u32 a, u32 b)
++static noinline_for_stack u64 clmul32(u32 a, u32 b)
+ {
+ 	/*
+ 	 * With 32-bit multiplicands and one term every 4 bits, there are up to
 -- 
 2.39.5
 
