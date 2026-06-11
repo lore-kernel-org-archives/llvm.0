@@ -1,122 +1,211 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D708285061
-	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 04:06:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDAA40D573;
+	Thu, 11 Jun 2026 04:06:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781150802; cv=none; b=idTtBRlfguEmtpVtBMxukNkJWPdgNyKeCq+c9quBC+CBvSj4IcJzymM7XYugJgah3dBMXnu7RdixgxpzzGNOHvIviOCUhHAZM0TyanP83Mrxt+n2Cqjw/fK4f2YinOCpTBoZTRcMV7YoEssczNXs4lZhd7z8JYlgs2TYRTweRmc=
+	t=1781150812; cv=none; b=rD7RYlQjOe0r69l5swRRRquWoYGr3EZV5I++ad7TLOG8+nVSlWrqWDmcKA0T2V278oL/fhSsNQUwdD2yJlE34K2/nEYzK0zutwT6OrXT0TnmwJ8ZSCvW3IZ1s9MjCV1oHdwPBM2Ul+dGXiDRwH+qlpUlAsXzVgKmIWqTlgKZUw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781150802; c=relaxed/simple;
-	bh=+GjhoPPuOwuX/ah7svyLMmYnjTNjvaIXfv0nBJmKzLw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fLSw4znowbhgJcuXszOij0uUkNtyK7mTQkJin4O2jy2hW+IcIuu4mVZrHbnXwnGfyrY96uyiLl3tw2PEiXtoTC9+xyA78oUrKUe8bvJ5dm/IB4OAMUk+UhBD9wWzJoqxniGN02Qge2w/vXeJ6mRYHpJyGosY/mlpln33m69k09U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gbTbR3DWDzYQv4M
-	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 12:06:11 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 21F9D40561
-	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 12:06:31 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with SMTP id Syh0CgBn3oNFNCpqRKCDBQ--.52639S2;
-	Thu, 11 Jun 2026 12:06:30 +0800 (CST)
-Message-ID: <1bc99f2d-3d79-4680-ba67-bafc6ebf0a48@huaweicloud.com>
-Date: Thu, 11 Jun 2026 12:06:29 +0800
+	s=arc-20240116; t=1781150812; c=relaxed/simple;
+	bh=BgS5ORAJRoiuIylmQNMgl7+KoijQ27uQgkWhmji5PCI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=RP1U67KBgQF9gywizokJOyGtDAyw1UelMZVOzasPIxfgoIsE5tmu77W+QnUrbaZnFLc/aQOAToZnw3eX61KSKSnooElb1E5BxcKeBc09qLzuFwFLean9DYPI/CP8LQBQUQgEwI40ER1GmvIbDXQF7TNH5YNHUB6gPVmj04UdQgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nqrwYWTu; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nqrwYWTu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781150810; x=1812686810;
+  h=date:from:to:cc:subject:message-id;
+  bh=BgS5ORAJRoiuIylmQNMgl7+KoijQ27uQgkWhmji5PCI=;
+  b=nqrwYWTu8EaYSPaoBr2SWrtXpnVPSRx9wQP5RoI7P3nX8tJHOgmvRN3R
+   h3RWnj/LehU6WkM85RLZkYUtqpEvNlzEB0cpLmIhng8P5wyqMVEd/9KhU
+   HJRY3flip1O3ssGUM5+91K6E22Qc8JV2Smthq0RRh11XrybQk6ayWrdig
+   JsR1Ok5Ucn604upBLp+zkTIiiACt6xuCysdi8PVtCUKyq9xORpMCDhZEp
+   biKR/fGIOCodb7N8NR7234j76xMd8thwYLeA52W+Egio6Ps14d+wWIx/F
+   lvKJ43BZKz6GsM1s3JhvTMxtTTBF39+8Ey1LeVgX+G0r7JrZn+9RlncoG
+   g==;
+X-CSE-ConnectionGUID: Qu3I51DbRjaFKHmPtaTCNQ==
+X-CSE-MsgGUID: j/GNtzjWS+qQ67DNHKWKLA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="92632873"
+X-IronPort-AV: E=Sophos;i="6.24,198,1774335600"; 
+   d="scan'208";a="92632873"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2026 21:06:49 -0700
+X-CSE-ConnectionGUID: OMr7ZQqLTqmzh06w4F+9Lw==
+X-CSE-MsgGUID: zJwKsWbGRT+pyQAxDVlOjA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,198,1774335600"; 
+   d="scan'208";a="276558453"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by orviesa002.jf.intel.com with ESMTP; 10 Jun 2026 21:06:47 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wXWgm-000000003vp-2iCy;
+	Thu, 11 Jun 2026 04:06:44 +0000
+Date: Thu, 11 Jun 2026 06:05:53 +0200
+From: kernel test robot <lkp@intel.com>
+To: Joshua Leivenzon <hacker1024@users.sourceforge.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>
+Subject: [hid:for-7.2/asus 1/7] drivers/hid/hid-asus.c:1399:14:
+ warning: variable 'rsize_orig' is used uninitialized whenever 'if' condition
+ is false
+Message-ID: <202606110526.QfgiXQTQ-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] arm64: ftrace: prepare ftrace_modify_call() for use
- without CALL_OPS
-Content-Language: en-US
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
- bpf@vger.kernel.org, Florent Revest <revest@chromium.org>,
- Puranjay Mohan <puranjay@kernel.org>
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
- <20260609-arm64-ftrace-direct-calls-v1-1-4a46f266697f@linux.dev>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-1-4a46f266697f@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgBn3oNFNCpqRKCDBQ--.52639S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF18Cw4ftFWUKF1UZFy8uFg_yoW8Zw4Upr
-	WSk3Z8KrWUuF4vkayIg3W3WrWqkw40yry3KFWDW34Y9rn0vrWrKrsxC3ZrGrWDK3s7WFW7
-	ZF1xZry5AF1DZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 6/9/2026 1:19 PM, Jose Fernandez (Anthropic) wrote:
-> ftrace_modify_call() is guarded by CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
-> and calls ftrace_rec_set_ops(rec, arm64_rec_get_ops(rec)) directly,
-> which only exists when CALL_OPS is enabled.
-> 
-> Generic ftrace also needs ftrace_modify_call() when
-> CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is enabled, to retarget a
-> callsite between two non-FTRACE_ADDR destinations, as happens when a
-> direct trampoline is modified. The next patch allows DIRECT_CALLS without
-> CALL_OPS, so widen the guard to cover both configurations and switch
-> the body to the ftrace_rec_update_ops() wrapper, which already has a
-> stub for the !CALL_OPS case. ftrace_make_call() already uses the same
-> wrapper today.
-> 
-> No functional change: with CALL_OPS enabled, ftrace_rec_update_ops()
-> expands to the exact call this replaces.
-> 
-> Assisted-by: Claude:unspecified
-> Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
-> ---
->   arch/arm64/kernel/ftrace.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-> index 5a1554a441628..e1a3c0b3a0514 100644
-> --- a/arch/arm64/kernel/ftrace.c
-> +++ b/arch/arm64/kernel/ftrace.c
-> @@ -409,7 +409,8 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
->   	return ftrace_modify_code(pc, old, new, true);
->   }
->   
-> -#ifdef CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
-> +#if defined(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS) || \
-> +	defined(CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS)
->   int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
->   		       unsigned long addr)
->   {
-> @@ -417,7 +418,7 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
->   	u32 old, new;
->   	int ret;
->   
-> -	ret = ftrace_rec_set_ops(rec, arm64_rec_get_ops(rec));
-> +	ret = ftrace_rec_update_ops(rec);
->   	if (ret)
->   		return ret;
->   
->
-Acked-by: Xu Kuohai <xukuohai@huawei.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-7.2/asus
+head:   9bde6277292c8233fb24fc6e51323027b49d1cde
+commit: 92f9f783f013a27a175089950b7b22c3d5a48249 [1/7] HID: asus: Fix up Zenbook Duo report descriptors
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260611/202606110526.QfgiXQTQ-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260611/202606110526.QfgiXQTQ-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606110526.QfgiXQTQ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hid/hid-asus.c:1399:14: warning: variable 'rsize_orig' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    1399 |                 } else if (drvdata->quirks & QUIRK_ZENBOOK_DUO_KEYBOARD) {
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-asus.c:1410:17: note: uninitialized use occurs here
+    1410 |                 if (*rsize == rsize_orig &&
+         |                               ^~~~~~~~~~
+   drivers/hid/hid-asus.c:1399:10: note: remove the 'if' if its condition is always true
+    1399 |                 } else if (drvdata->quirks & QUIRK_ZENBOOK_DUO_KEYBOARD) {
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-asus.c:1390:17: note: initialize the variable 'rsize_orig' to silence this warning
+    1390 |                 int rsize_orig;
+         |                               ^
+         |                                = 0
+   1 warning generated.
+
+
+vim +1399 drivers/hid/hid-asus.c
+
+  1370	
+  1371	static const __u8 *asus_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+  1372			unsigned int *rsize)
+  1373	{
+  1374		struct asus_drvdata *drvdata = hid_get_drvdata(hdev);
+  1375	
+  1376		if (drvdata->quirks & QUIRK_FIX_NOTEBOOK_REPORT &&
+  1377				*rsize >= 56 && rdesc[54] == 0x25 && rdesc[55] == 0x65) {
+  1378			hid_info(hdev, "Fixing up Asus notebook report descriptor\n");
+  1379			rdesc[55] = 0xdd;
+  1380		}
+  1381		/* For the T100TA/T200TA keyboard dock */
+  1382		if (drvdata->quirks & QUIRK_T100_KEYBOARD &&
+  1383			 (*rsize == 76 || *rsize == 101) &&
+  1384			 rdesc[73] == 0x81 && rdesc[74] == 0x01) {
+  1385			hid_info(hdev, "Fixing up Asus T100 keyb report descriptor\n");
+  1386			rdesc[74] &= ~HID_MAIN_ITEM_CONSTANT;
+  1387		}
+  1388		/* For the T100CHI/T90CHI keyboard dock and Zenbook Duo 2024+ keyboards */
+  1389		if (drvdata->quirks & (QUIRK_T100CHI | QUIRK_T90CHI | QUIRK_ZENBOOK_DUO_KEYBOARD)) {
+  1390			int rsize_orig;
+  1391			int offs;
+  1392	
+  1393			if (drvdata->quirks & QUIRK_T100CHI) {
+  1394				rsize_orig = 403;
+  1395				offs = 388;
+  1396			} else if (drvdata->quirks & QUIRK_T90CHI) {
+  1397				rsize_orig = 306;
+  1398				offs = 291;
+> 1399			} else if (drvdata->quirks & QUIRK_ZENBOOK_DUO_KEYBOARD) {
+  1400				rsize_orig = 257;
+  1401				offs = 176;
+  1402			}
+  1403	
+  1404			/*
+  1405			 * Change Usage (76h) to Usage Minimum (00h), Usage Maximum
+  1406			 * (FFh) and clear the flags in the Input() byte.
+  1407			 * Note the descriptor has a bogus 0 byte at the end so we
+  1408			 * only need 1 extra byte.
+  1409			 */
+  1410			if (*rsize == rsize_orig &&
+  1411				rdesc[offs] == 0x09 && rdesc[offs + 1] == 0x76) {
+  1412				__u8 *new_rdesc;
+  1413	
+  1414				new_rdesc = devm_kzalloc(&hdev->dev, rsize_orig + 1,
+  1415							 GFP_KERNEL);
+  1416				if (!new_rdesc)
+  1417					return rdesc;
+  1418	
+  1419				hid_info(hdev, "Fixing up %s keyb report descriptor\n",
+  1420					drvdata->quirks & QUIRK_T100CHI ?
+  1421					"T100CHI" : drvdata->quirks & QUIRK_T90CHI ?
+  1422					"T90CHI" : "ZENBOOK DUO");
+  1423	
+  1424				memcpy(new_rdesc, rdesc, rsize_orig);
+  1425				*rsize = rsize_orig + 1;
+  1426				rdesc = new_rdesc;
+  1427	
+  1428				memmove(rdesc + offs + 4, rdesc + offs + 2, 12);
+  1429				rdesc[offs] = 0x19;
+  1430				rdesc[offs + 1] = 0x00;
+  1431				rdesc[offs + 2] = 0x29;
+  1432				rdesc[offs + 3] = 0xff;
+  1433				rdesc[offs + 14] = 0x00;
+  1434			}
+  1435		}
+  1436	
+  1437		if (drvdata->quirks & QUIRK_G752_KEYBOARD &&
+  1438			 *rsize == 75 && rdesc[61] == 0x15 && rdesc[62] == 0x00) {
+  1439			/* report is missing usage minimum and maximum */
+  1440			__u8 *new_rdesc;
+  1441			size_t new_size = *rsize + sizeof(asus_g752_fixed_rdesc);
+  1442	
+  1443			new_rdesc = devm_kzalloc(&hdev->dev, new_size, GFP_KERNEL);
+  1444			if (new_rdesc == NULL)
+  1445				return rdesc;
+  1446	
+  1447			hid_info(hdev, "Fixing up Asus G752 keyb report descriptor\n");
+  1448			/* copy the valid part */
+  1449			memcpy(new_rdesc, rdesc, 61);
+  1450			/* insert missing part */
+  1451			memcpy(new_rdesc + 61, asus_g752_fixed_rdesc, sizeof(asus_g752_fixed_rdesc));
+  1452			/* copy remaining data */
+  1453			memcpy(new_rdesc + 61 + sizeof(asus_g752_fixed_rdesc), rdesc + 61, *rsize - 61);
+  1454	
+  1455			*rsize = new_size;
+  1456			rdesc = new_rdesc;
+  1457		}
+  1458	
+  1459		if (drvdata->quirks & QUIRK_ROG_NKEY_KEYBOARD &&
+  1460				*rsize == 331 && rdesc[190] == 0x85 && rdesc[191] == 0x5a &&
+  1461				rdesc[204] == 0x95 && rdesc[205] == 0x05) {
+  1462			hid_info(hdev, "Fixing up Asus N-KEY keyb report descriptor\n");
+  1463			rdesc[205] = 0x01;
+  1464		}
+  1465	
+  1466		/* match many more n-key devices */
+  1467		if (drvdata->quirks & QUIRK_ROG_NKEY_KEYBOARD && *rsize > 15) {
+  1468			for (int i = 0; i < *rsize - 15; i++) {
+  1469				/* offset to the count from 0x5a report part always 14 */
+  1470				if (rdesc[i] == 0x85 && rdesc[i + 1] == 0x5a &&
+  1471				    rdesc[i + 14] == 0x95 && rdesc[i + 15] == 0x05) {
+  1472					hid_info(hdev, "Fixing up Asus N-Key report descriptor\n");
+  1473					rdesc[i + 15] = 0x01;
+  1474					break;
+  1475				}
+  1476			}
+  1477		}
+  1478	
+  1479		return rdesc;
+  1480	}
+  1481	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
