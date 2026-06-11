@@ -1,82 +1,112 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0AC30DEB8;
-	Thu, 11 Jun 2026 19:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97AD62D73A6;
+	Thu, 11 Jun 2026 19:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781206134; cv=none; b=Me/hP4DIAYQ77DDIb7DCf3KTPVP2OyF886GUWfS4e0L6nwwiHvkbfSGz7zI/hHAPAHzogoahJmfFXyf9oAaLyjUjEaPu8SVeZruBdTBcCxR5EQcthAPLMEJqPkkLryScHIw1xgI2c2hLJeQFolvtgXouzG+gcZdCk9d7dW1phh4=
+	t=1781206390; cv=none; b=MQPV8BZXrxGyPEUhjrwtMyyjAbR5tQmhdmTcoevjG5hJX19tBYZ/vHyE3Ro++O4IB7Sz/dHs+01IYlu8r58pjun82Pfmvw2DnHI848Yk1+eGA486dL6/6hJDey8h5YEBxkfT0NytcdRyHFZzQ2/fKbyNRmXJdP48IVsYRWrktsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781206134; c=relaxed/simple;
-	bh=p5QPawHMjTq8D3EPgkhTwPBzrNRu6zmFROilZF3lTHs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c794DCcjQ7okZWYGhOuSS/2fF9TfiYQ7zOHiMX0BbwPCN6VvTc78FNri2G0TNLbNkZHNc7hnZN8aBeJoFQULPqlbI1I0ImMvB7l0wpU3+p9Y22cmR8nyNo5LK8wwujgADY16K+wQBy3NoQohfdT5zX1UgpKFmIPxjRNqJxBS+Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jOZvkt+0; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1781206390; c=relaxed/simple;
+	bh=Cqq+0GPv0O+0FgBka9Xq4A6rR9DUIeNAvdbF6EB/Hig=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=HYE/7sKzmpC1/v7rfPvzbBWXVb9wLJKIP8yLhf5ob6Po5pAYwaHx95yDrNs9KTQHDIb4pYrhUwF04BTiQtRVuyNgHq26Yk7ZXZl7kgTPf6fiWd1a2b0G8yg9J0T8x30xFPTtA8kFm2hqWGAxgnJXEqHkxPvv+9zZ9ZEIdlVZf78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QWJpF+gW; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jOZvkt+0"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=w0EWEUg0T2YXgOikKRNlNkeMOG3wiQMYZyZacU4kkh8=; b=jOZvkt+0AjfLO6hh+4KlqVZXse
-	AEzINykqeIM66+ws4ZPJsz7cDE2ruJykb83jJlv950jQatWcgRj//maklA1NUOpUlbagoauwNp1D/
-	TyZJve0I4NSaN2S0fCbuWNEN08DumcPVkQQ+zoys1bU+tNZabeFSAknA3hVXrJ156yaKyoclj6haV
-	GZfVIiZcpSD1NuWPBAfwOquzIj3oPiAKxl/n5sgblV2zyhPcMuBh4yAUctgE92T+ezhHgKmkdBDY8
-	oCmhcx31OFcsH8+Khmd/IY8MJSKuIa0+F+uMhLKYcVghw++GkXhZKYXHXQMJxcclV6cxSHnPUd9St
-	9h+4LQPA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1wXl55-00000005bMi-0TYi;
-	Thu, 11 Jun 2026 19:28:47 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id EAD24300312; Thu, 11 Jun 2026 21:28:45 +0200 (CEST)
-Date: Thu, 11 Jun 2026 21:28:45 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Jens Remus <jremus@linux.ibm.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Heiko Carstens <hca@linux.ibm.com>,
-	Sashiko <sashiko-bot@kernel.org>
-Subject: Re: [PATCH] x86/cfi: Use symmetric SYM_START and SYM_END in
- __CFI_TYPE()
-Message-ID: <20260611192845.GL187714@noisy.programming.kicks-ass.net>
-References: <20260611155716.830563-1-jremus@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QWJpF+gW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781206389; x=1812742389;
+  h=date:from:to:cc:subject:message-id;
+  bh=Cqq+0GPv0O+0FgBka9Xq4A6rR9DUIeNAvdbF6EB/Hig=;
+  b=QWJpF+gWcWlXMrU5YECf429z1WktFezfneaPpUgD9B4BUNoUm0+EDek3
+   71Zrc3yl/6LPVrkBrWswr1L3lxCEy1adREmjumtLg48ZCNaRMpxEuUzrz
+   D95gt7A1Zn2m5Y1y28ZxSdSdPxpyAO1pSe0YmbdWaCrIX4txU1Ln35n6A
+   nuD7Jj9Cv+Bc95wnSgXweOgjSX/XbjYaN/QQnqrp9HYFTLA/qCLuEM+1E
+   BicVIs2tq4tMlSvlMKNEO6uPF7JZvjcr1ipoCgTFWXFeaHADo0wfHiRLt
+   TaV4SRInVyZzwnB1Be+sv6ZY36FSDxGcoqbdaoSD87Fhq55K6vpSi4RTd
+   A==;
+X-CSE-ConnectionGUID: vlF3GA19SPqMxqrxwt4ePw==
+X-CSE-MsgGUID: Qfur0AE3Sby8UQ6HeqD/7Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="81939514"
+X-IronPort-AV: E=Sophos;i="6.24,199,1774335600"; 
+   d="scan'208";a="81939514"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2026 12:32:57 -0700
+X-CSE-ConnectionGUID: bGSpF6ZcQCq5NEbRBSD8QA==
+X-CSE-MsgGUID: qgtQI2+9ToqhK3D4Zrtnyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,199,1774335600"; 
+   d="scan'208";a="248474511"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa004.fm.intel.com with ESMTP; 11 Jun 2026 12:32:55 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wXl93-00000000459-1Ij6;
+	Thu, 11 Jun 2026 19:32:53 +0000
+Date: Thu, 11 Jun 2026 21:32:16 +0200
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Ackerley Tng <ackerleytng@google.com>
+Subject: [sean-jc:x86/gmem_inplace 35/59]
+ arch/x86/kvm/../../../virt/kvm/guest_memfd.c:1204:10: error: call to
+ undeclared function 'kvm_range_has_vm_memory_attributes'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202606112109.SWdbql08-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260611155716.830563-1-jremus@linux.ibm.com>
 
-On Thu, Jun 11, 2026 at 05:57:15PM +0200, Jens Remus wrote:
-> Commit ccace936eec7 ("x86: Add types to indirectly called assembly
-> functions") introduced a x86-specific implementation of __CFI_TYPE()
-> using an asymmetric combination of SYM_START() and SYM_FUNC_END() to
-> add a symbol to the KCFI type identifier that precedes a function.
-> 
-> This asymmetric combination is an issue if SYM_FUNC_END() ever gets
-> extended in a way that requires it to be used symmetrically with
-> SYM_FUNC_START*().  For instance to emit DWARF CFI directives that
-> denote the start/end of a function. [1]
-> 
-> Use SYM_END() with SYM_T_FUNC instead.  No functional change, as the
-> generic implementation of SYM_FUNC_END(name) expands into
-> SYM_END(name, SYM_T_FUNC).
-> 
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://sashiko.dev/#/patchset/20260522110427.2816637-1-jremus@linux.ibm.com?part=3 [1]
-> Signed-off-by: Jens Remus <jremus@linux.ibm.com>
+tree:   https://github.com/sean-jc/linux x86/gmem_inplace
+head:   4a99b51978dc7e7b3e5f61c14790e9f49c33fdbb
+commit: 3b494d9b05174562830962ea9e49aff75fde974f [35/59] KVM: Let userspace disable per-VM mem attributes, enable per-gmem attributes
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260611/202606112109.SWdbql08-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260611/202606112109.SWdbql08-lkp@intel.com/reproduce)
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606112109.SWdbql08-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:1204:10: error: call to undeclared function 'kvm_range_has_vm_memory_attributes'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1204 |                 return kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + nr_pages,
+         |                        ^
+   1 error generated.
+
+
+vim +/kvm_range_has_vm_memory_attributes +1204 arch/x86/kvm/../../../virt/kvm/guest_memfd.c
+
+1f6c06b177513e8 Paolo Bonzini       2024-02-14  1196  
+36cf63bb5df6883 Fuad Tabba          2025-07-29  1197  #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_POPULATE
+3338335299abe86 Sean Christopherson 2026-06-10  1198  static bool kvm_gmem_range_is_private(struct file *file, pgoff_t index,
+3338335299abe86 Sean Christopherson 2026-06-10  1199  				      size_t nr_pages, struct kvm *kvm, gfn_t gfn)
+3338335299abe86 Sean Christopherson 2026-06-10  1200  {
+3338335299abe86 Sean Christopherson 2026-06-10  1201  	struct maple_tree *mt = &GMEM_I(file_inode(file))->attributes;
+3338335299abe86 Sean Christopherson 2026-06-10  1202  
+3338335299abe86 Sean Christopherson 2026-06-10  1203  	if (!gmem_in_place_conversion)
+3338335299abe86 Sean Christopherson 2026-06-10 @1204  		return kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + nr_pages,
+3338335299abe86 Sean Christopherson 2026-06-10  1205  							  KVM_MEMORY_ATTRIBUTE_PRIVATE,
+3338335299abe86 Sean Christopherson 2026-06-10  1206  							  KVM_MEMORY_ATTRIBUTE_PRIVATE);
+3338335299abe86 Sean Christopherson 2026-06-10  1207  
+e4f7252dca71e1a Ackerley Tng        2026-04-23  1208  	return kvm_gmem_range_has_attributes(mt, index, nr_pages,
+e4f7252dca71e1a Ackerley Tng        2026-04-23  1209  					     KVM_MEMORY_ATTRIBUTE_PRIVATE);
+3338335299abe86 Sean Christopherson 2026-06-10  1210  }
+2a62345b30529e4 Michael Roth        2026-01-08  1211  
+
+:::::: The code at line 1204 was first introduced by commit
+:::::: 3338335299abe867f2a5d5b207df57edba03b5f1 KVM: guest_memfd: Wire up kvm_get_memory_attributes() to per-gmem attributes
+
+:::::: TO: Sean Christopherson <seanjc@google.com>
+:::::: CC: Sean Christopherson <seanjc@google.com>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
