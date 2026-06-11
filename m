@@ -1,90 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F883537C8;
-	Thu, 11 Jun 2026 13:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0066F408637;
+	Thu, 11 Jun 2026 15:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781186178; cv=none; b=IGXhysejWZlsBiFPDqf/gdfTt6q1lZI3z2yMim9iNqpwbN1IirKswDHZ38RgdDwux871GJTWx+GlSvdIa3i94M76vVb9QCm1b8RgsngpRYvnjV7u4zlgLv16Ked8+ksE0qaDWAXJhlbF0wPgWvCruEU1VBzLVDYfeuG2A0F1vIQ=
+	t=1781191139; cv=none; b=lBuuwXbygZZxG45RWRAWt4544yRE7Fi0rDrBSY5A/vw4oZTmLbY6F0jKHQN63rwzxH+ZkK4JNp8O1OY7VypVhzoa6Kmq9rh7xsG9nfSDjj90GpAjkICKLr4memtlCVOuDdfKWtBlhV8gOZnOd2AMNU3Usg58buSb1caDQ4TMuoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781186178; c=relaxed/simple;
-	bh=paRr4T6LKRY0fnIRe3DjenQLnPM7mOqcQW2rVnXTq2I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NHSSlUGpAF8U3VtQsUxaXKM0Pu2ZZlgAY0zEHgkuz7iOwroFPbrZQk161+yDao74sR2YPDa21IJglxOOGR9/eDFwc9pAveWKCvdgqa8os1J5/8vmrPaIs3XedLDd/jXrCN6GjOP+cCaVnjedSkYapn24dWZI3ZNrrszOH8WSf4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hmGsUd95; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781191139; c=relaxed/simple;
+	bh=DN0B0za8v+kiPRPL9bCEEB1MG1wZscC2VrLNbxDC20A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jNeVJYQIb2S3yWG7wL6m/www2Mq8eqNVZWdOAOtNNPiba85jtqPpMFjLPHjbV0NnIz+NZJRZFW8EZkm6FqGIDvY4Heub396NAay/E0Vqjm6YoiEBXi3b7JhoeZhZ+WdPqux8Iy/UHSazYzNpsIzmr7rOm6ppuBl81CVggmHWdZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KAlKpYx6; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hmGsUd95"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 956071F00893;
-	Thu, 11 Jun 2026 13:56:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781186177;
-	bh=SUOuPf9VgztfwpD31VQB2QF3LLKSgcQvoPRCqkRWmAA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=hmGsUd958piwIRs1z4CkCvr45U9dM9GKsRx053NCzGhO87m2uum70Tmti9TDd2C/u
-	 UWU5s6LmQDCq5SW9RA3KwSgGilAcFn79urvlf9Qj1qH2HvmB8KP5/3Iswa0HC6/J0Q
-	 Ymk/VYZeknMXO58bZER6SO03OxTvegn56iBnBtjxb0+3X2L6ngmV3xzAkjjt3eK7or
-	 xn9QPsEaGnkqx10xvocBuGsFz3tVtEDohDu9Ap1GTQGDyUBHCj2dtpygmuyNqf3+/T
-	 9GepEGD0Ra0mbtkAne1Otn8CslsfgypJrmFP2eci7hyNiw8Hfv+hHdHIjxlMKqoLQ6
-	 gnG46iMDsp5Rw==
-From: SeongJae Park <sj@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Ravi Jonnalagadda <ravis.opensrc@gmail.com>,
-	Quanmin Yan <yanquanmin1@huawei.com>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] mm/damon/core: reduce kernel stack usage
-Date: Thu, 11 Jun 2026 06:56:07 -0700
-Message-ID: <20260611135608.66888-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260611125704.3386176-1-arnd@kernel.org>
-References: 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KAlKpYx6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781191139; x=1812727139;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DN0B0za8v+kiPRPL9bCEEB1MG1wZscC2VrLNbxDC20A=;
+  b=KAlKpYx6PsTVfpkMtKijcApkcC5YR31SdVGeXwOYcNyEBq589wvg7D/v
+   s69MDjNj6SCjOlmGc83P/K3TMMssu1WxUCyRXCcQqCgBJL+CB4dekxD5o
+   4UAzhfCeL72mscNrpTKbWAD+i/GgfWt0bmQ01lkrlLMzceIe0Hf2eOy/P
+   bfm3ye+LTsLy074lyCllIHnlMAW/xsqZ1LyrNVNQQ9T2vgiNO8ESPu23D
+   1FJbbafb0goHqQlZ7g1rpkO8VSLAzQVLrjauocRqz3CvaVQ29WfA92KV5
+   VjR/JZSrHJBLMtlGLCgHowvsKmzCEiC51MzTMsL0jAikBiYdG/fwVdqWM
+   A==;
+X-CSE-ConnectionGUID: Q2cJDqaRQvC58SwIV9LpeQ==
+X-CSE-MsgGUID: lj3uvVrrSamlYm0fqgZeow==
+X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="85846835"
+X-IronPort-AV: E=Sophos;i="6.24,199,1774335600"; 
+   d="scan'208";a="85846835"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2026 08:18:56 -0700
+X-CSE-ConnectionGUID: G9aZmjN4QJuI36RU1IX2qQ==
+X-CSE-MsgGUID: Ih4afP4oRgCsCTQ9nGL3Qg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,199,1774335600"; 
+   d="scan'208";a="246385758"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by orviesa008.jf.intel.com with ESMTP; 11 Jun 2026 08:18:54 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wXhBD-0000000042l-0AtZ;
+	Thu, 11 Jun 2026 15:18:51 +0000
+Date: Thu, 11 Jun 2026 17:18:27 +0200
+From: kernel test robot <lkp@intel.com>
+To: =?utf-8?Q?"Micha=C5=82?= Grzelak" <michal.grzelak@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: drivers/gpu/drm/i915/display/intel_bios.c:3899:20: warning:
+ variable 'vspeo' is uninitialized when used here
+Message-ID: <202606111734.HRShsb0i-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
 
-On Thu, 11 Jun 2026 14:56:57 +0200 Arnd Bergmann <arnd@kernel.org> wrote:
+tree:   https://github.com/intel-lab-lkp/linux/commits/Micha-Grzelak/drm-i915-bios-search-for-VBT-57-by-default/20260609-035533
+head:   37e5f3711f75121bd6a54baa6a92299c51fc313c
+commit: 703adad1fcf91efe93f2e1bf885dd23d33cc642c drm/i915: override Snps's VS/PE when requested
+date:   3 days ago
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260611/202606111734.HRShsb0i-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260611/202606111734.HRShsb0i-lkp@intel.com/reproduce)
 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The main thread function has recently grown to the point of
-> exceeding stack frame size warning limits in some configurations.
-> This is what I hit on s390 with clang and CONFIG_KASAN:
-> 
-> mm/damon/core.c:3440:31: error: stack frame size (1352) exceeds limit (1280) in 'kdamond_fn' [-Werror,-Wframe-larger-than]
->  3440 | static int kdamond_fn(struct damon_ctx *ctx)
-> 
-> The largest stack usage here is inside of the kdamond_tune_intervals(),
-> so by marking that one as noinline_for_stack, the functions individually
-> stay below the warning limit, though kdamond_fn() itself still uses
-> hundreds of kilobytes for some reason.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606111734.HRShsb0i-lkp@intel.com/
 
-Thank you for this fix, Arnd!  I will also take a look in kdamond_fn() to see
-if there are more things to reduce.
+All warnings (new ones prefixed by >>):
 
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-Should we add Fixes: and Cc: stable@ too?  This function was introduced by
-commit f04b0fedbe71 ("mm/damon/core: implement intervals auto-tuning") which
-was merged into 6.15.
+>> drivers/gpu/drm/i915/display/intel_bios.c:3899:20: warning: variable 'vspeo' is uninitialized when used here [-Wuninitialized]
+    3899 |         entries = (void *)vspeo->entries;
+         |                           ^~~~~
+   drivers/gpu/drm/i915/display/intel_bios.c:3891:35: note: initialize the variable 'vspeo' to silence this warning
+    3891 |         struct intel_ddi_buf_trans *vspeo;
+         |                                          ^
+         |                                           = NULL
+   1 warning generated.
 
 
-Thanks,
-SJ
+vim +/vspeo +3899 drivers/gpu/drm/i915/display/intel_bios.c
 
-[...]
+  3883	
+  3884	const struct intel_ddi_buf_trans *
+  3885	intel_bios_get_c20_vspeo(const struct intel_bios_encoder_data *devdata,
+  3886				 bool has_dp, bool is_uhbr)
+  3887	{
+  3888		struct intel_display *display;
+  3889		union intel_ddi_buf_trans_entry *entries;
+  3890		int num_columns, num_rows, level, idx;
+  3891		struct intel_ddi_buf_trans *vspeo;
+  3892		const u32 *tables;
+  3893		size_t offset = 0;
+  3894	
+  3895		if (!validate_vspeo(devdata, has_dp))
+  3896			return NULL;
+  3897	
+  3898		display = devdata->display;
+> 3899		entries = (void *)vspeo->entries;
+  3900		tables = display->vbt.vspeo.tables;
+  3901		num_columns = display->vbt.vspeo.num_columns;
+  3902		num_rows = display->vbt.vspeo.num_rows;
+  3903		idx = is_uhbr ? 5 : 4;
+  3904	
+  3905		offset += idx * num_rows * num_columns;
+  3906	
+  3907		for (level = 0; level < num_rows; level++) {
+  3908			u32 vswing = tables[offset];
+  3909			u32 pre_cursor = tables[offset + 1];
+  3910			u32 post_cursor = tables[offset + 2];
+  3911	
+  3912			entries[level].snps.vswing = vswing;
+  3913			entries[level].snps.pre_cursor = pre_cursor;
+  3914			entries[level].snps.post_cursor = post_cursor;
+  3915	
+  3916			offset += num_columns;
+  3917		}
+  3918	
+  3919		return vspeo;
+  3920	}
+  3921	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
