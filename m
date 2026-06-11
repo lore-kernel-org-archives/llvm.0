@@ -1,163 +1,167 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888443E1223
-	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 15:57:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781193471; cv=none; b=YUQnvBD9CiImKIl6yJatRSD1GLzkvhvQU6s8WverS4BVVsnpK35Tflz6G19Y9dhMJc25LKKu+7gnZ0S54oHbZ/n/mp7mnoXC9HaN8iNaNnBsNPEfG7z+3+amV4HAjlWg2HYMw/ThM6YF3YSKZ6gRcbMNunA+rihIqv8ECM7X8M8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781193471; c=relaxed/simple;
-	bh=FMohIXLUmdM7d1qQg69cZ9l2z6MfDuNdR9XP1KafGgI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J1aJplPuOXp0YqDU+8CcybgnLKcsiEM1HZzxjZ52gcSRU8Ea1LdpIdsGdz+6rKAB/x/w4c+ZmDvSL1/HtiOeMQhQBvvNrQ+o6eENsku6i1FFxYyRbh7yheUe0rTg3WFkydpgN3cyFDGhtJGPXFvKPHc4pOIeRqUrQ9D8HYFvfPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TsF4ZU8c; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42412396D25
+	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 16:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781194127; cv=pass; b=af2m0XSDqvJrpbwRMbPbS1aXjEKixX7Y8AKnX5MyuD9VINfKMYH69Z9+vMKiMnGJjrN7ZeqOXKeb+fM0ICqTIgAFd18w9FhejCiETVouP9SWsFuF4k5zgsHGBDLavndG6rIJpSClMUE+I1Vsppga96/TFNHJXW/31CXhxLIV+d0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781194127; c=relaxed/simple;
+	bh=sj2FS3py+P6ghioGl4/Lb8GGlbT9xXdYa6q6BQWvjtI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=asa8iYPNjx7ti5iIQQefJRSZEUZWgXtMU9ownZ3RwT4N+/IGLNFyHmKONPjwQTSVYBIHEwmDT9KRfw7t0XOshPe4odEDgutv0Ye0mijsiG/MLp8Ko6hL/LfbAK1qX9W/WM95htGhHDNSspAdbmvRidxoeLGXn9zyc9PoPdS5OIo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R48pi0+k; arc=pass smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TsF4ZU8c"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65BBNbJN3874120;
-	Thu, 11 Jun 2026 15:57:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=8iR2H/GVSh12+Y9o8qyjxnMT7K0Iu6/nW4dwLIhyv
-	NE=; b=TsF4ZU8cOJic9r+/KvGybi4XR0xn0ALdeZVxAIl6SswpzTu/qZsWOMpmK
-	NlYzUVG0vCxcqdK7T8XeZA70749R2v1+X7qsmUNzr0eqQw7d0INJzn0l+u86mOOv
-	53MhZrpHv0aFSkeHV7dP1SjK4kWOeSJtJpNfpWI+JH7HOM8wn9YbiT9GwoMA/E13
-	wtLl6AXpgVZg49jx3sBVfaHzIKbr/Zq/R5udOpMvVjT2lMMzJab1lODOUPyWJyWP
-	jFJVTKxHZMW2ONfULxAKK8xeG6RSMxmizgIuFG2t4MCeVWKZYp2BhcqVCldsE6z9
-	cLq34MNTW+SUdOHUP2ACoE0jo1d2Q==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4eqe8evp2e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jun 2026 15:57:29 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65BFncnU018000;
-	Thu, 11 Jun 2026 15:57:28 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4eqe0a3vfx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jun 2026 15:57:28 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65BFvObw27394442
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 11 Jun 2026 15:57:24 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 50DCA2004B;
-	Thu, 11 Jun 2026 15:57:24 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C889F20043;
-	Thu, 11 Jun 2026 15:57:23 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 11 Jun 2026 15:57:23 +0000 (GMT)
-From: Jens Remus <jremus@linux.ibm.com>
-To: Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc: Jens Remus <jremus@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
-        Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH] x86/cfi: Use symmetric SYM_START and SYM_END in __CFI_TYPE()
-Date: Thu, 11 Jun 2026 17:57:15 +0200
-Message-ID: <20260611155716.830563-1-jremus@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R48pi0+k"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-beb8a08a6c8so1194857666b.2
+        for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 09:08:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781194125; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lYqo6AnPjJQ+DglZCyMc3mik+8OEuKn36BJA3+XrWWrMky+KvfPeL4imdG+Ht7ZKrY
+         H985onlfPQ0PeL64CpkEg/nnULSPDrca1kCwFVqfQPgcY5DD+LDqyoP+Ga0m9m7R51Rs
+         RKxe9r9jWgf9X2BPPGdA4VmEX+GeVouLEyGfLxAjgo4NqYsJ4gR7bbuZXUpnWyQM2/2B
+         sBQSH3ZB1hhG9UAhbjsOtDA1J2kBvCTjvu49nPcK7ccXhDj2Rk7fqMD3tL0oMTj724GR
+         ON/ZnJwkgTAF7tFSUi780D1AyMylGqOj8FXAgwgiJOhCNFT6EhemWRopS1eN5Kq1ktq0
+         UIKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0BPhvT50VQuK2+y7zbXq9J0IJLvfRaU5Y2kOZciKetk=;
+        fh=zA8m62LWzMiRJQ4MI1ngSLd/KodBZR3O3JSnwdKGASw=;
+        b=V5p5ATSSPqUq8xXbh+gWbzI4dRAn/RLNOB9YEAeSYSV6VYeiFrSAWLoRhJq/LFhs+4
+         Bk16i+fek/wFpXkGu47CUU0o8Q96Wc1hR9YT8hMEfPuSdDEq/oSZGhX4yz4513lrLLAM
+         GbYw5QbyEJZsQm1CVPft3tv2mPlFaeD0TInrKRiQ7d/gLhr2a4cd8/P105UnmXX8Tr6a
+         NrnPsHXBydSThxng+JuE62omKGefu/65lSpg8Z5MD6BHTedRTaDWpx+Tg1Q5TtHy+uao
+         kGbBlZbXQgnUsEuagKqFx0SFQDmsBSuS5Yu+2IfJv87/g5FRXoAuKVmdO8etO8asW+hL
+         YBmw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781194125; x=1781798925; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0BPhvT50VQuK2+y7zbXq9J0IJLvfRaU5Y2kOZciKetk=;
+        b=R48pi0+kED1K9uuEZVyLa1fYdR/oPIYI/NH9PFyHk9vqz2UiSjBivAPlA8fGusaVXp
+         YRDDcizmrkxlfAcIP+Z5+hSsKKfntlkfOoYicLK6oIb6KE7axEWC7jcpFc1O0oXYsh/y
+         OGc1Bz3H+I5MbI1PEuhZQXwJ946FQsaNz+neNx0gg0f1PfIGdHRYmn78UHVO9JDlTOZM
+         08H5iamzPGXWzyNhEMbt4uN+XrlT+nCiHRXClvcv9+qTidRbZZ8ApdNkpXy4Uw03qe9q
+         sClGRNQYEv6REyhF2BX+8e/WJsqt3TBdTaZhaYCQHGcm0GiAmqbuvx0KcZbOTYvEV3pW
+         /Ljw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781194125; x=1781798925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0BPhvT50VQuK2+y7zbXq9J0IJLvfRaU5Y2kOZciKetk=;
+        b=rwWPIITO4QMi/Kt7gyGQKjKCBLptYfmHIBw1Civl1LM1DO9bbbGTIG2FWVlR2nJdhs
+         GSvNSPKOHpEe2RaYUGSw6mU0+POoV/GaYr2BOvkUjy6gH/UomIOGxBjcKUJS2C6K+KCO
+         kQ/MxRTb3DTariHzpIfhE+ZA5RbAoLfcrkLHYsIGVAyRBGFHj228N7MUNe6OadM6ucpD
+         kJnSlAcAB4zC4kAEieSCdRsewBAjjuJJ1wv2EOi680n2nK1BlnLwWR7+/TSL5sB6lkaU
+         iUQ/mb2n728vFrcAmZDARc2nHXy16Leh5sGE5g2QmSVjhLj6wEfcRXOzEPkxrZZT3ZPU
+         1/xQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8AyFFPHT8At0CGHsnd2UOCSLGhSUCs/f2n+17cs0iYJqTA0qmL3CPXGbQot5hDLBhZvYgq@lists.linux.dev
+X-Gm-Message-State: AOJu0YwDNTqFfagmRwz4FPt5vwamxVg11cVJ8WLmFcYQnonnWXUj0YXd
+	t9qochyfELmQkfGTZCJv3QpeGEt8ZpRCE1D0GTKbRHmytNmSuj6PWBJ1VhGWa14NtOta9Ekk1Nr
+	qk04nihNQ5HBVGe9prL1EJtdKyrTK1Vo=
+X-Gm-Gg: Acq92OGkdDZIqhFdEQbb+nHZQeuxl2wGAFeDiJ6iQe1ByT4L5IYzPU3pvJ5ffF43rkR
+	C9Fl6nHow0Zs+iFOTaEmAHMxx3QVLrBmRnwnLfAEkV0h8MVekUpLFyizo8DcnXiLF8obn5WQqfE
+	9RnfeeFkBM+MuMsfXHQz7mGoUPJ5uXHhUM1QuDMwMFWLoYgbsXri0jJJKwjhw0IpukASTQx1j7c
+	x4LcovATKr+ec2qrNE14CMJs4KZtluSM+T4ouiNejjxyzo4vdHuhylqIYVDJs2F7pLgn0T9NliE
+	bJfcIZ77sTr4tB8qem1PB9It0B+DqmRq2WqRg2EUTFecXqm+AoT79Ofs6FgH3ktXyd5GT8gkyPF
+	eKaRBB/3tHZLwjWLhIl8gsT3ozis+OXdCAHyLzv51BEg5kddmKO6kJV2J
+X-Received: by 2002:a17:907:1dd8:b0:bec:f0bb:66f5 with SMTP id
+ a640c23a62f3a-bfc87c0cb2bmr131123066b.30.1781194124409; Thu, 11 Jun 2026
+ 09:08:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjExMDE1NyBTYWx0ZWRfX/OdRS+u3fDHO
- 6+VZ2tLWVcinDEK3b6iRRxYfWFYLAIj1x4ow56KG9RRYomvLFva3W90IDjAED6OWGqV9tyBEf3B
- B7Cb5LJ/QDf/yQQ3vkjQNzWZIZgbLBEKHWx8Zx+NDEczDGq0CSwVZ42Us5nUWKXl2FKnVkVHrty
- fX4s1SMzHrOLrg2mzl/2HaH0j/NeLyjUvVeb2oM6MDm9jyoCfMxX3tJKV1YtfaJSqiaBeO9Vm1d
- BFGNm7kJBOHKWBiK6y+bT8j+Kri2mXhiU/MSTxF0M736+Hx1K+MPqW8wTXDmYuMHC84/tDu4mRQ
- 6W3FN7qympPAaFz9tSzpBhmYU/KDS5/iOZFmTHRghB0Pi+xCCwr/SOg8CS1p6r0yQWgi0DPLY9t
- /gzoRztyR1qur1wouM//ANqA+cV1emvHRxH0fkrwNPiZKAayD5Rb/GXe+Ajs/YMReHzuV9U6JBV
- mysKEt5whTzUFbio2GQ==
-X-Authority-Analysis: v=2.4 cv=dr7rzVg4 c=1 sm=1 tr=0 ts=6a2adae9 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=U7nrCbtTmkRpXpFmAIza:22 a=c92rfblmAAAA:8 a=VnNF1IyMAAAA:8 a=VwQbUJbxAAAA:8
- a=aq8RmjuiW1DVT2snRsEA:9 a=GvGzcOZaWPEFPQC_NcjD:22
-X-Proofpoint-ORIG-GUID: EGbllhVnDFjd_U6hiyNy4MgoTGt5rFRD
-X-Proofpoint-GUID: iRTsPWvfkU0TV2kjbYUPuISlnjulOczw
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjExMDE1NyBTYWx0ZWRfXxOn9BTGhWshI
- TcLxtUjIkNwDSrhsCrFrU8wxflpiI830FnAh3yp+sbaFykPpyHkz/AuC/lxvoMcEMPppWkW7Det
- gU4BPmCjsJTbmr8XJ/6+Sx6ngo67ZxU=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-11_03,2026-06-11_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- clxscore=1011 bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606040000 definitions=main-2606110157
+References: <20260611035245.13439-1-rosenp@gmail.com> <20260611035245.13439-12-rosenp@gmail.com>
+ <airV8Wm3yyY4hTQP@lizhi-Precision-Tower-5810>
+In-Reply-To: <airV8Wm3yyY4hTQP@lizhi-Precision-Tower-5810>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Thu, 11 Jun 2026 09:08:32 -0700
+X-Gm-Features: AVVi8Cd07wPKVB64G5JpfGCeLGfe3Dlz_RdVLBiqMrIH7Js6qZaJUTS5GxMh3qw
+Message-ID: <CAKxU2N9QNMo9u0s_MfYG8qfiWsHqwuB9ax_qbf6gbxA0syOiaw@mail.gmail.com>
+Subject: Re: [PATCHv4 11/15] dmaengine: fsldma: convert channel allocation to devm_kzalloc()
+To: Frank Li <Frank.li@oss.nxp.com>
+Cc: dmaengine@vger.kernel.org, Vinod Koul <vkoul@kernel.org>, 
+	Frank Li <Frank.Li@kernel.org>, Zhang Wei <zw@zh-kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:FREESCALE DMA DRIVER" <linuxppc-dev@lists.ozlabs.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Commit ccace936eec7 ("x86: Add types to indirectly called assembly
-functions") introduced a x86-specific implementation of __CFI_TYPE()
-using an asymmetric combination of SYM_START() and SYM_FUNC_END() to
-add a symbol to the KCFI type identifier that precedes a function.
-
-This asymmetric combination is an issue if SYM_FUNC_END() ever gets
-extended in a way that requires it to be used symmetrically with
-SYM_FUNC_START*().  For instance to emit DWARF CFI directives that
-denote the start/end of a function. [1]
-
-Use SYM_END() with SYM_T_FUNC instead.  No functional change, as the
-generic implementation of SYM_FUNC_END(name) expands into
-SYM_END(name, SYM_T_FUNC).
-
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Closes: https://sashiko.dev/#/patchset/20260522110427.2816637-1-jremus@linux.ibm.com?part=3 [1]
-Signed-off-by: Jens Remus <jremus@linux.ibm.com>
----
-
-Notes (jremus):
-    This patch applies on top of linus' tree (9716c086c8e8):
-    
-      git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git  master
-    
-    I verified as follows that in x86-64 builds of vmlinux using Clang with
-    kCFI enabled without and with my patch applied vmlinux.o only differs in
-    relocations targeting .rodata.str* and a few symbols in .rodata shifted
-    (both likely due to differences in string merging):
-    
-    $ objdump -d vmlinux.o > vmlinux.o.{old|new}.objdump
-    $ readelf -Wa vmlinux.o > vmlinux.o.{old|new}.readelf
-    $ diff -u vmlinux.o.old.objdump vmlinux.o.new.objdump
-    [no differences]
-    $ diff -u0 vmlinux.o.old.readelf vmlinux.o.new.readelf | \
-      grep --invert-match -E "\.rodata\.str|@@"
-    [see above]
-
- arch/x86/include/asm/linkage.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/linkage.h b/arch/x86/include/asm/linkage.h
-index a7294656ad90..c9769a7b6e66 100644
---- a/arch/x86/include/asm/linkage.h
-+++ b/arch/x86/include/asm/linkage.h
-@@ -103,7 +103,7 @@
- 	.byte 0xb8 ASM_NL					\
- 	.long __kcfi_typeid_##name ASM_NL			\
- 	CFI_POST_PADDING					\
--	SYM_FUNC_END(__cfi_##name)
-+	SYM_END(__cfi_##name, SYM_T_FUNC)
- 
- /* UML needs to be able to override memcpy() and friends for KASAN. */
- #ifdef CONFIG_UML
--- 
-2.53.0
-
+On Thu, Jun 11, 2026 at 8:36=E2=80=AFAM Frank Li <Frank.li@oss.nxp.com> wro=
+te:
+>
+> On Wed, Jun 10, 2026 at 08:52:41PM -0700, Rosen Penev wrote:
+> > Convert fsl_dma_chan_probe from kzalloc_obj() to devm_kzalloc(), tying
+> > the channel lifetime to the parent DMA device. Remove kfree(chan) in bo=
+th
+> > the probe error path and the remove function.
+> >
+> > Assisted-by: opencode:big-pickle
+> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> > ---
+>
+> If use flexible array, needn't allocate channel
+Not sure what you mean. A regular array avoids that as well.
+>
+> Frank
+>
+> >  drivers/dma/fsldma.c | 12 +++---------
+> >  1 file changed, 3 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/drivers/dma/fsldma.c b/drivers/dma/fsldma.c
+> > index e4a3315a7d9d..0df09789187d 100644
+> > --- a/drivers/dma/fsldma.c
+> > +++ b/drivers/dma/fsldma.c
+> > @@ -1114,11 +1114,9 @@ static int fsl_dma_chan_probe(struct fsldma_devi=
+ce *fdev,
+> >       int err;
+> >
+> >       /* alloc channel */
+> > -     chan =3D kzalloc_obj(*chan);
+> > -     if (!chan) {
+> > -             err =3D -ENOMEM;
+> > -             goto out_return;
+> > -     }
+> > +     chan =3D devm_kzalloc(fdev->dev, sizeof(*chan), GFP_KERNEL);
+> > +     if (!chan)
+> > +             return -ENOMEM;
+> >
+> >       /* ioremap registers for use */
+> >       chan->regs =3D of_iomap(node, 0);
+> > @@ -1200,9 +1198,6 @@ static int fsl_dma_chan_probe(struct fsldma_devic=
+e *fdev,
+> >
+> >  out_iounmap_regs:
+> >       iounmap(chan->regs);
+> > -out_free_chan:
+> > -     kfree(chan);
+> > -out_return:
+> >       return err;
+> >  }
+> >
+> > @@ -1215,7 +1210,6 @@ static void fsl_dma_chan_remove(struct fsldma_cha=
+n *chan)
+> >       tasklet_kill(&chan->tasklet);
+> >       list_del(&chan->common.device_node);
+> >       iounmap(chan->regs);
+> > -     kfree(chan);
+> >  }
+> >
+> >  static void fsldma_device_release(struct dma_device *dma_dev);
+> > --
+> > 2.54.0
+> >
