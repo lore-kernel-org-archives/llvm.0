@@ -1,137 +1,156 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D6230171C
-	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 04:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C9B37B02E
+	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 06:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781150813; cv=none; b=O3fWSu0x3gN3xfu2fDXYtVmV29b9JrNLlOHtZyd51LAUFzgZ8E3JVMxYivou4MjFAZ+QakKAz8q+9YQaF3+hsLzcFJCA8wLVGISORORikcY+11q0Yl/mpHAxfeY6EYfKEkORHWaLmRN52ft80BlAx/FH5Br8IyMvtc6HK1B28OA=
+	t=1781160857; cv=none; b=q7Bj6PFKpgydbarKud64grXUCvNb2tvVZ1VWtJutPbgf3rcY6+JEM5Tg+qu2updhiPq7E0CZsTnlZa6HngpKu6KIMY/+519/bSaYTAGLc1IVuu4Zqw9eTLd1RQvCL8EdPsR9KBn+3Hje3hnl40X7xXGbGHeRnjdO91Fo/SX4xJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781150813; c=relaxed/simple;
-	bh=tCKXuux5w+PsoscSs2ajnpA+0k0HsLplhT8RfrDe/pY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XwJ4Lo6Jb3MNFG0GO54Ump71MBg63CazORkX+e3i++LuBHHZS4LYuJAKfRoJV2aGVaQqdV6KCJh2Ldo7Eq7QR+lF7pGY9A2zf+5V74g3Hl9FJ13BFa/S/7lZnGdOhNCJmYJcx57hFfY5AhkDAU1J0Y7USHDO6+VjC4OEk40GUfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gbTbl6bD3zYQv6G
-	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 12:06:27 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 953014056F
-	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 12:06:47 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with SMTP id Syh0CgBn3oNFNCpqRKCDBQ--.52639S3;
-	Thu, 11 Jun 2026 12:06:47 +0800 (CST)
-Message-ID: <ffcc7086-941c-443f-bf54-c33610147ca3@huaweicloud.com>
-Date: Thu, 11 Jun 2026 12:06:47 +0800
+	s=arc-20240116; t=1781160857; c=relaxed/simple;
+	bh=BzoDKri2AnQ0Gzc0Q9uN7BE4vlA65vCGXfLvgcKu5xo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=cPrURZss0YpPNMHOB5LRXcQ2hlJ60bYEiak0rTtHATArSB3OYYRng0A5sigZi9mBLEu62mk9kGW/m8GZ+sXOUUGmxCsrP+z8kgWo/7c5kc3E2tc26O/SHg5F+mMUfEkf4YfEDpngmU3xYuDkn1bjTzBcvMzQalvfbknmebZ/sRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XDnp94WL; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XDnp94WL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781160851;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SyfejcTOJzGfkGjW2j6iDmBXVI3fZpPrk4NxQ/CTQBQ=;
+	b=XDnp94WLhgiz9zgC07XOiHVsFI1DH+16Rmm6dzhZLrN24/569RXR+gToKSNdYNSY4UBDZE
+	sNqUw4TXNLzlESaky9axHz1lWiM4K+nxh+MmzeGzhIl6PfMmomBqSOAMg17KTx30LxecW6
+	XCgHEVbh5clQC6Zh5yTODDXJhYVoI8w=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-306-9dqnVJstMPKSQihUTs71TA-1; Thu, 11 Jun 2026 02:54:06 -0400
+X-MC-Unique: 9dqnVJstMPKSQihUTs71TA-1
+X-Mimecast-MFC-AGG-ID: 9dqnVJstMPKSQihUTs71TA_1781160845
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-490e17fff23so6079275e9.3
+        for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 23:54:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781160845; x=1781765645;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SyfejcTOJzGfkGjW2j6iDmBXVI3fZpPrk4NxQ/CTQBQ=;
+        b=GVHXtGO05ACHegDOZRRvAraziR5OC472sj0Cx47wov5UVRu/1WvAOgNoBZKVYqfUdO
+         Trqz71OGc1K+n6hlTaa0s09dsK47NV+8aJhLXQEW/dJZA5m6cJJXqS65Zn0jGvK/mxl3
+         FWlvwtCpuHNpx5H9JUI0xEyDRTW/JFpUgVex+x6o+TfAQSzg9tYnodqRRaQFFEOsm8Mm
+         XkB+Alc7JxDvTMAvNz5AbNU67co+ifkUw1F6ijrHrKwm11MZGAmDXxXQC2Doq0zRpO+u
+         /So7vg2Pwgbe3+rjk8I+Sbg7ZNVRJq/Ly3qtr6I/8ijHb4kjqt8A0EcHzusHX8x23cGX
+         iLNg==
+X-Forwarded-Encrypted: i=1; AFNElJ8nejfy/PMwBU1fRN4mtdMaJiRHU76YcOQWrZ66okYUSEvUC6CzoT/QKfT5THGuCc7rytF/@lists.linux.dev
+X-Gm-Message-State: AOJu0YwMgAu5sT6L/xgpPfoKRYZA3nOc5eaj241Y0pUj4JBP+SvGcpVx
+	cbVJhUz6pjARlX5JuCvLVYrdN/ECpowyHWMC8i3Hq7UD8NHP4Wvlud6WlVeOogn6cCzb6rPZ4Py
+	hPERaBXtO3q1GUspdpK8uGxv4kafqnAlM0IJU/HTbvnZEkVaFQl+GHQI=
+X-Gm-Gg: Acq92OE3pFwmX8pZjXeKLqomIvEEQculjpt7DsXjlMaXW3RoQTCJGZ/GFd26rEePnuu
+	iex0dvgGnG5G53cdECT1e83EHZsghOYtRxyLj8Fx5QAYHVL6xxmKQ37W76wpECgxWPe5N2eUgSY
+	7jhaNKjzlDwHg/SwkebzX5w3PZycA77sNJ+VUQ/zTIOnqCz9Reh8x7QYdwHFOkhcMKllwA8SPC6
+	Uu6p0B6/SBZaRvcBVeaA/4ZHjxRqf62tAZ/qYPOLhKWPQ6AVJrpfjhuLNb97dcWwKBgqk6mG0PH
+	nd6YyoCYoXV/f3EMyRcLV5E6ag5Eji/ux9jsRfK6PLdlb17E2NhkzAOOI8G68WrEFxEM5PjzJOs
+	5rGMLeoXHArM9MiMB21RAdVHmxmExQTZhHK9pleEpqAr+tTzF49m/AQ==
+X-Received: by 2002:a05:600c:c04b:10b0:490:c2a3:3302 with SMTP id 5b1f17b1804b1-490e561e473mr9784585e9.35.1781160845358;
+        Wed, 10 Jun 2026 23:54:05 -0700 (PDT)
+X-Received: by 2002:a05:600c:c04b:10b0:490:c2a3:3302 with SMTP id 5b1f17b1804b1-490e561e473mr9784225e9.35.1781160844845;
+        Wed, 10 Jun 2026 23:54:04 -0700 (PDT)
+Received: from redhat.com (IGLD-80-230-85-71.inter.net.il. [80.230.85.71])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4602cda3651sm67202077f8f.32.2026.06.10.23.54.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2026 23:54:04 -0700 (PDT)
+Date: Thu, 11 Jun 2026 02:54:01 -0400
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] vduse: Fix error around jumping over a __cleanup()
+ variable
+Message-ID: <20260611025332-mutt-send-email-mst@kernel.org>
+References: <20260610-vduse_vq_kick-fix-guard-usage-v1-1-0ce02c08006e@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] arm64: ftrace: allow DIRECT_CALLS without CALL_OPS
-Content-Language: en-US
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
- bpf@vger.kernel.org, Florent Revest <revest@chromium.org>,
- Puranjay Mohan <puranjay@kernel.org>
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
- <20260609-arm64-ftrace-direct-calls-v1-2-4a46f266697f@linux.dev>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-2-4a46f266697f@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgBn3oNFNCpqRKCDBQ--.52639S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFyxKr48JF1fZr47Ww4fAFb_yoW5uFW3pr
-	yfuwnrCrsxZF1F9r42ga4UW345Z397ArW3GF95JrZ0k3s5CrWvkFsxtFZrK34Dtrs3GrWU
-	XF1Y934UWFnrZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GF
-	v_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
-	xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrx
-	kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
-	6r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8Jw
-	CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU3cTmDUUU
-	U
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+In-Reply-To: <20260610-vduse_vq_kick-fix-guard-usage-v1-1-0ce02c08006e@kernel.org>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: IR4UYUUkeT4OConU8CssoFBAQUjJUJzqEj6PjBmX1xg_1781160845
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 6/9/2026 1:19 PM, Jose Fernandez (Anthropic) wrote:
-> arm64 gained ftrace direct calls in commit 2aa6ac03516d ("arm64:
-> ftrace: Add direct call support") on top of
-> DYNAMIC_FTRACE_WITH_CALL_OPS, using the per-callsite ops pointer as a
-> fast path to reach the direct trampoline. Since commit baaf553d3bc3
-> ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS"), CALL_OPS is
-> mutually exclusive with CFI: the pre-function NOPs would change the
-> offset of the pre-function kCFI type hash, and the compiler support
-> needed to keep that offset consistent does not exist yet.
+On Wed, Jun 10, 2026 at 12:16:49PM -0700, Nathan Chancellor wrote:
+> When building with clang, there is an error in vduse_vq_kick() from
+> attempting to jump over a variable declared with the cleanup attribute
+> using goto:
 > 
-> The result is that a CONFIG_CFI=y kernel loses CALL_OPS, and with it
-> DIRECT_CALLS, and with it every BPF trampoline attachment to kernel
-> functions: register_fentry() returns -ENOTSUPP, so fentry/fexit,
-> fmod_ret and BPF LSM programs cannot attach at all. This is a real
-> problem for hardened arm64 deployments that rely on BPF LSM for
-> security monitoring while keeping kCFI enabled.
+>   drivers/vdpa/vdpa_user/vduse_dev.c:566:3: error: cannot jump from this goto statement to its label
+>     566 |                 goto unlock;
+>         |                 ^
+>   drivers/vdpa/vdpa_user/vduse_dev.c:568:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+>     568 |         guard(rwsem_read)(&vq->dev->rwsem);
+>         |         ^
 > 
-> CALL_OPS is an optimization for direct calls, not a dependency. When
-> the direct trampoline is within BL range, the callsite branches
-> straight to it and ftrace_caller is not involved. When it is out of
-> range, ftrace_find_callable_addr() already falls back to
-> ftrace_caller, and the DIRECT_CALLS machinery there
-> (FREGS_DIRECT_TRAMP, ftrace_caller_direct_late) is gated on
-> DIRECT_CALLS alone, not CALL_OPS: the ops dispatch invokes
-> call_direct_funcs(), which stores the trampoline address in
-> ftrace_regs, and ftrace_caller tail-calls it. s390 and loongarch use
-> this same mechanism for HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS without
-> having CALL_OPS at all, and DYNAMIC_FTRACE_WITH_ARGS without CALL_OPS
-> is already a supported arm64 configuration (GCC builds with
-> CC_OPTIMIZE_FOR_SIZE do not satisfy the CALL_OPS select condition).
+> Jumping over a variable declared with the cleanup attribute does not
+> prevent the cleanup function from running, it would just result in the
+> variable being passed uninitialized to the cleanup function .clang
+> errors instead of generating the invalid code, unlike GCC.
 > 
-> Drop the CALL_OPS requirement from the
-> HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS select. Configurations that
-> keep CALL_OPS (!CFI clang builds, and GCC builds without
-> CC_OPTIMIZE_FOR_SIZE) are unchanged. CALL_OPS-less configurations
-> take the ftrace_caller ops-dispatch path for out-of-range direct
-> calls, trading the per-callsite fast path for working BPF
-> trampolines; in-range attachments still branch directly with no
-> overhead. GCC -Os builds also gain DIRECT_CALLS as a side effect.
-> That is intended: s390 and loongarch already ship DIRECT_CALLS
-> without any per-callsite fast path.
+> The jump is only present to call spin_unlock(), so convert the
+> spin_lock() and spin_unlock() calls to an equivalent guard() to avoid
+> the jump while leaving runtime behavior unchanged, clearing up the
+> warning.
 > 
-> Assisted-by: Claude:unspecified
-> Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+> Fixes: 6c141c034c1b ("vduse: Add suspend")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+Eugenio?
+
 > ---
->   arch/arm64/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/vdpa/vdpa_user/vduse_dev.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index fe60738e5943b..2cd7d536671c9 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -188,7 +188,7 @@ config ARM64
->   		if (GCC_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS || \
->   		    CLANG_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS)
->   	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS \
-> -		if DYNAMIC_FTRACE_WITH_ARGS && DYNAMIC_FTRACE_WITH_CALL_OPS
-> +		if DYNAMIC_FTRACE_WITH_ARGS
->   	select HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS \
->   		if (DYNAMIC_FTRACE_WITH_ARGS && !CFI && \
->   		    (CC_IS_CLANG || !CC_OPTIMIZE_FOR_SIZE))
+> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> index a257fdcb77b7..0500da043761 100644
+> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> @@ -561,9 +561,9 @@ static int vduse_vdpa_set_vq_address(struct vdpa_device *vdpa, u16 idx,
+>  
+>  static void vduse_vq_kick(struct vduse_virtqueue *vq)
+>  {
+> -	spin_lock(&vq->kick_lock);
+> +	guard(spinlock)(&vq->kick_lock);
+>  	if (!vq->ready)
+> -		goto unlock;
+> +		return;
+>  
+>  	guard(rwsem_read)(&vq->dev->rwsem);
+>  	if (vq->dev->suspended)
+> @@ -573,8 +573,6 @@ static void vduse_vq_kick(struct vduse_virtqueue *vq)
+>  		eventfd_signal(vq->kickfd);
+>  	else
+>  		vq->kicked = true;
+> -unlock:
+> -	spin_unlock(&vq->kick_lock);
+>  }
+>  
+>  static void vduse_vq_kick_work(struct work_struct *work)
 > 
-Acked-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+> base-commit: 6c141c034c1b0b74a2ca4dd3d6fbb6d9054f6e46
+> change-id: 20260610-vduse_vq_kick-fix-guard-usage-d1037c331419
+> 
+> Best regards,
+> --  
+> Cheers,
+> Nathan
 
