@@ -1,46 +1,52 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2644C2DA76C;
-	Thu, 11 Jun 2026 12:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F883537C8;
+	Thu, 11 Jun 2026 13:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781182798; cv=none; b=Ab8AOCT57nbd/UcAisrckVx51rTQvovlnAU7BsXSz7d2PYRO2dWhaVSgHfoVE3pyq0rFsw70c+55MX9CurnAvYnbJmvC9ADiZgFwHrHWs0w4PEnvLMEfQHPnxhzkw08+It6Z3LOWtBk5RVGnNro0OjNl9rmxyNNgKeOfWnCE/60=
+	t=1781186178; cv=none; b=IGXhysejWZlsBiFPDqf/gdfTt6q1lZI3z2yMim9iNqpwbN1IirKswDHZ38RgdDwux871GJTWx+GlSvdIa3i94M76vVb9QCm1b8RgsngpRYvnjV7u4zlgLv16Ked8+ksE0qaDWAXJhlbF0wPgWvCruEU1VBzLVDYfeuG2A0F1vIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781182798; c=relaxed/simple;
-	bh=8KAGxG+bTzZw0NtXACFDYDhwLup09FdT2xtTamsCuMk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ag1DfnLoVIYnLg6J4cFL12bvNlWAr8q0sDVvivQmSohNcFoB6wSgSJ51bAfBdktHHe1PBXAR9rp+brAxXcgclNWDwMv1IzaJP6gKo39+Mv0my3FM+utICff2bxiDXkng7wnJymrHHzxCMGOpJEGIv1mWH7yX2Hq6E3p9siasw/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VZd0c5nH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781186178; c=relaxed/simple;
+	bh=paRr4T6LKRY0fnIRe3DjenQLnPM7mOqcQW2rVnXTq2I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NHSSlUGpAF8U3VtQsUxaXKM0Pu2ZZlgAY0zEHgkuz7iOwroFPbrZQk161+yDao74sR2YPDa21IJglxOOGR9/eDFwc9pAveWKCvdgqa8os1J5/8vmrPaIs3XedLDd/jXrCN6GjOP+cCaVnjedSkYapn24dWZI3ZNrrszOH8WSf4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hmGsUd95; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VZd0c5nH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B77F1F00893;
-	Thu, 11 Jun 2026 12:59:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hmGsUd95"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 956071F00893;
+	Thu, 11 Jun 2026 13:56:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781182796;
-	bh=zfe+53sDR95Yk81P6I4goSKtYHLjwJCYHiFTrpzsUlc=;
-	h=From:To:Cc:Subject:Date;
-	b=VZd0c5nHMgfT64+gqRWhAqWqHiJyAx6KhY1MwIRMr8tWmqAOFe+V5O+IujkmUCUwT
-	 LulxrT51VENissvj6gyb5iAsFIYuFcku8/wAOQ1V1qt4cDThgatvJJb16gTd3HUSC3
-	 vwLyzGfawRHiVHIzdlGyv6Gv1GJkmMNgzCrN0tVWHHuVHPMlC/HHr8DHDEh2tinep7
-	 fNfmK3sEc7p8q2ZlR8CWgHGVvC5OYtGprFiubfHURUOaGquQszPOPx92rJ8h/rR0Q9
-	 D49ZpkB9rPEO9JLCunMbHWQTIsJzYYs++C3i11xfsv/cEocbebvqAFZ+lDNzE71Zhf
-	 MkeBf2bKhWAtg==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
+	s=k20260515; t=1781186177;
+	bh=SUOuPf9VgztfwpD31VQB2QF3LLKSgcQvoPRCqkRWmAA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=hmGsUd958piwIRs1z4CkCvr45U9dM9GKsRx053NCzGhO87m2uum70Tmti9TDd2C/u
+	 UWU5s6LmQDCq5SW9RA3KwSgGilAcFn79urvlf9Qj1qH2HvmB8KP5/3Iswa0HC6/J0Q
+	 Ymk/VYZeknMXO58bZER6SO03OxTvegn56iBnBtjxb0+3X2L6ngmV3xzAkjjt3eK7or
+	 xn9QPsEaGnkqx10xvocBuGsFz3tVtEDohDu9Ap1GTQGDyUBHCj2dtpygmuyNqf3+/T
+	 9GepEGD0Ra0mbtkAne1Otn8CslsfgypJrmFP2eci7hyNiw8Hfv+hHdHIjxlMKqoLQ6
+	 gnG46iMDsp5Rw==
+From: SeongJae Park <sj@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	linux-crypto@vger.kernel.org,
+	Ravi Jonnalagadda <ravis.opensrc@gmail.com>,
+	Quanmin Yan <yanquanmin1@huawei.com>,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] lib/crypto: gf128hash: mark clmul32() as noinline_for_stack
-Date: Thu, 11 Jun 2026 14:59:39 +0200
-Message-Id: <20260611125952.3387258-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+Subject: Re: [PATCH] mm/damon/core: reduce kernel stack usage
+Date: Thu, 11 Jun 2026 06:56:07 -0700
+Message-ID: <20260611135608.66888-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260611125704.3386176-1-arnd@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,52 +55,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, 11 Jun 2026 14:56:57 +0200 Arnd Bergmann <arnd@kernel.org> wrote:
 
-During randconfig testing, I came across a lot of warnings for the newly
-added carryless multiplication function triggering excessive stack usage
-from spilling temporary variables to the stack:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The main thread function has recently grown to the point of
+> exceeding stack frame size warning limits in some configurations.
+> This is what I hit on s390 with clang and CONFIG_KASAN:
+> 
+> mm/damon/core.c:3440:31: error: stack frame size (1352) exceeds limit (1280) in 'kdamond_fn' [-Werror,-Wframe-larger-than]
+>  3440 | static int kdamond_fn(struct damon_ctx *ctx)
+> 
+> The largest stack usage here is inside of the kdamond_tune_intervals(),
+> so by marking that one as noinline_for_stack, the functions individually
+> stay below the warning limit, though kdamond_fn() itself still uses
+> hundreds of kilobytes for some reason.
 
-lib/crypto/gf128hash.c:166:1: error: stack frame size (1192) exceeds limit (1024) in 'polyval_mul_generic' [-Werror,-Wframe-larger-than]
+Thank you for this fix, Arnd!  I will also take a look in kdamond_fn() to see
+if there are more things to reduce.
 
-In addition to the possible risk of overflowing the kernel stack,
-the generated object code surely performs very poorly.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-This only happens on architectures that don't provide uint128_t
-(which should be all 32-bit architectures on modern compilers), but
-though I tested random x86 and arm configs, I only saw this with arm's
-CONFIG_THUMB2_KERNEL, which adds more pressure to the register allocator.
+Reviewed-by: SeongJae Park <sj@kernel.org>
 
-The testing was done using clang-22, I don't know if gcc has the same
-problem. Marking clmul32() as noinline_for_stack experimentally shows
-all of the affected builds to completely solve the problem, reducing
-the stack usage to a few bytes as expected.
+Should we add Fixes: and Cc: stable@ too?  This function was introduced by
+commit f04b0fedbe71 ("mm/damon/core: implement intervals auto-tuning") which
+was merged into 6.15.
 
-Since u64 arithmetic frequently leads to compilers badly optimizing
-32-bit targets, keeping clmul32 out of line is likely to help on
-other 32-bit configurations as well when they run into this problem,
-though it may also result in a small performance degradation in
-configurations that would benefit from inlining.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
----
- lib/crypto/gf128hash.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+SJ
 
-diff --git a/lib/crypto/gf128hash.c b/lib/crypto/gf128hash.c
-index 2650603d8ba8..8dcdf5ec98be 100644
---- a/lib/crypto/gf128hash.c
-+++ b/lib/crypto/gf128hash.c
-@@ -109,7 +109,7 @@ static void clmul64(u64 a, u64 b, u64 *out_lo, u64 *out_hi)
- #else /* CONFIG_ARCH_SUPPORTS_INT128 */
- 
- /* Do a 32 x 32 => 64 bit carryless multiplication. */
--static u64 clmul32(u32 a, u32 b)
-+static noinline_for_stack u64 clmul32(u32 a, u32 b)
- {
- 	/*
- 	 * With 32-bit multiplicands and one term every 4 bits, there are up to
--- 
-2.39.5
-
+[...]
