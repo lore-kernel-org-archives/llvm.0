@@ -1,88 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B03004ADDB1;
-	Thu, 11 Jun 2026 18:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DC24D9902
+	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 18:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781201665; cv=none; b=J81KinZnXGMIOrocmY1tlFSaaVPKqw+Z2jrEMZa6gDi8ehufKgUdEciVo0wBVKRIWC94spxSnOAoKEz7rl5TLUVw+1s3DM0HEVvG6XOEP6AbV9qsqbM3ZwD3IEbCDqkZPjh39kMp2vDvuQU4EGqPEUund7TO14WgNrxbQ0MGTPc=
+	t=1781203844; cv=none; b=SaAH74ZSS687bhHhwZX2qMlCdYG75Yv4Mr6H2InRPUQdGGdip7NH+Ab313KM3/9XVxmxs2jv8XfpGZdKgdhR+8eNhpo3qu7csIyRGnNy5ba/ijowk9xybhAplgLeDoVClBRkRtTyA7/IC+/ixWyv2pRJCx8JUCQkjdrfwEdA278=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781201665; c=relaxed/simple;
-	bh=5NaNkXMxeTVuncMtZJRv8HCHV83M6xaKqTseLXL1sEY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jQu06nc0BE4bXWLPQIenQLiqZ29N3/7ELk099uj3O8WvvyYDbi12Z3sTcToe15wgrWYApcUl0OCFbFLrXAQugNkb5yF5/zHSpUtHHmJ2H2M4GjQfUHxEY2GSrITIisnmk8ki2d0/6fl3cjxdy3x6tzcuYItK64fDDNDGj3HjvR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VuHYrJ7g; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781203844; c=relaxed/simple;
+	bh=VUW8ZZgWRO6oBI/K1zuIFj0/8C/+Pr+bZK7RoXtN3jc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RM+/7Sww2wzyJhLJw2ET2eKWB842ZaWvyP7/9oWCsWBGw9EN5Op7dwJHMtLMnlhRtyLa2YhB0Cup4XblURdFbaTCPxiYuwugdgp1xcrhWXK94d25U8hXyy52eldR9qTeYCm3f2qUOOszg2McPLduv3fyiN9W8S5fZ1hO5OrFusw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gBCz2JEc; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VuHYrJ7g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781201661; x=1812737661;
-  h=date:from:to:cc:subject:message-id;
-  bh=5NaNkXMxeTVuncMtZJRv8HCHV83M6xaKqTseLXL1sEY=;
-  b=VuHYrJ7gR6HuarhXslMWQE9WuMQi1mwRaiaDAM5MoXtitxeG6+kscsJ2
-   IfZ5tVIT69nyMBupbytWMP31JW5/eT337ZNdrirw6XP2uttNWmfFvlyew
-   /STF1Kk1qW9gLbnDaMQI4zgVuUUpNmPEU7yM8bTp5jD+d7gbg7lJhj60F
-   IRtU+36Fp/SNZbq40GDtRcl3cZt5BHpJjvupKmebv3q+5gS7gscZGoTjB
-   OqaLtreR4E9V440aE12/P4ZIogV/P5HZSqJMkVgy8V1D0uzzSX2KOehj2
-   152pdKAcaLO5f6oFxiLnE2mianNMO3EeECv+wZLDj4yV6SvflU1o8kFc7
-   Q==;
-X-CSE-ConnectionGUID: Tj2lQk3zQ5Wtxr1Fq0qONw==
-X-CSE-MsgGUID: HLgPRxtxSHSYB1wkmGp5pw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="99446010"
-X-IronPort-AV: E=Sophos;i="6.24,199,1774335600"; 
-   d="scan'208";a="99446010"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2026 11:14:21 -0700
-X-CSE-ConnectionGUID: GN6Ax1eMSue9NyogvV0U0w==
-X-CSE-MsgGUID: +SqQDROHQueSBXj82C91JA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,199,1774335600"; 
-   d="scan'208";a="270225437"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Jun 2026 11:14:19 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wXjuy-00000000Ndq-2frj;
-	Thu, 11 Jun 2026 18:14:16 +0000
-Date: Fri, 12 Jun 2026 02:14:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Israel Cepeda <israel.a.cepeda.lopez@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Hans de Goede <hansg@kernel.org>
-Subject: Warning: drivers/usb/misc/usbio.c:117 struct member
- 'nr_i2c_buses' not described in 'usbio_device'
-Message-ID: <202606120202.S3B5c4hl-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gBCz2JEc"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-45efb698ef2so80971f8f.3
+        for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 11:50:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781203840; x=1781808640; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aUxfWJt8IGWDlV52x/Qd1ZFtz3KlHMm4m7NO0v4ch/g=;
+        b=gBCz2JEc1cY+xP5LkHM1trEtwzQ/oIwFWjvf2LGdBB1Dg8Sk5hP6vZ9e7/zn1vp6d7
+         BGhIJlfhqqI3iXGKRnviBAoHtPrT7PcgidMBleqjPD1coxaSVQDnpr7OtJqTkbUbzRqg
+         pgo7CQw47VxeeJOX9mmg39AlSJMOb3bAAfhQlsFi6HYIF5dI0kp+tMV67e9sirLc5wHP
+         uGjCAixbC8xszdDYfdQ2H4vAadzcozEsCDlE2H4yLrUEo+vMfnaKnMvBK0VKE0ne+7ZS
+         VYF3E8WvaTjqRyCD+drZ2i825KHpqdR/oluX6MvjAH6Z+HQ4wKeSliYb9gphnMy8L4cg
+         Yv9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781203840; x=1781808640;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=aUxfWJt8IGWDlV52x/Qd1ZFtz3KlHMm4m7NO0v4ch/g=;
+        b=qU/EjvTe+vy6/JCEAhfbKu3NZrL9UIicj7/hW5AVgIuOaMvDEGMcsIJmH9o8osPRxp
+         HFkSfu8k5uyb56NjQrMi7b5YKcIOlNh1AX7Uy/MrPmjQMGYbwjwIO7wdyNzS/cW8iBWz
+         MVuKtpG589qBY5B7tibjb+IlBjEJ6OtZmhY5nW7h+JSAqxFCuk1JtADfKH+203qhn8zA
+         t0h3BvZyfslorMR+ouJz8k9NUHoEBlWvR4MkEnCCy0IZB5vHND9n0AcnusZze7/AfXuY
+         t4RDVM2G1Q7g3O7i+n0CJ3zWLPnBvK+mh87FFS+YnvwzcfMj8cC8McsbUgh5/odZ36+k
+         WGVA==
+X-Forwarded-Encrypted: i=1; AFNElJ+LPiktZP/KEkkb869E011ypuf7oxncEYJbiQusDo9HExR44C0Q650LRcmR28dcHm6oLS8O@lists.linux.dev
+X-Gm-Message-State: AOJu0YzgmZ+9e+Ny8QS2lJbnrwi500UWW62PSLHzBzyCBNA642Tb2Ake
+	W0qBF2bP8XLds5Uwogki3O+u4lQgVFR8hrgbPv/XQ085XDtW/8QFLDR7
+X-Gm-Gg: Acq92OHyEzsgUJSDJKi6RhjZOH0wh8lc5nFkv31X1YjeY4z45yYY1rq9rHDhStKBJ86
+	TM4QIPsa6jdCz9Nlv85dcnkdZhgfRjvcwJv06wJmqYKMIu/okomuIz/fplOXiGeizK6X78ANMTB
+	1dPTEveN+/dBKm1p4ajRrv+qw1kWRtU4suKzfaEikB4Mmla5hyppDv94BywopHQS7d/SjnTmnd1
+	7zsov5OV3PeDpeSIOZiFmkwIJ55qI4kO+SCpCLAfCH+t1VtTsMqlED9pKrhQws7D19SIShHpScO
+	wIoixYjQRezjt7jXUm5MTRSaUpwL24j9jLFj1Uu9UqiSpI9tBTCPBzpHgOONBgyqjlkobhCf2CA
+	NRIB/V1Nk/Q6VxZrFU3gN4wuSrXcqpqHzKBxYpZ5BR+8g4n4m3VfQoCqaPRShkT4y1q0Z/MEz79
+	1RgANqaLkPa6f3B/RQa6Zu6F44DF1QPngr1JUCuDKbMz3Acvec5JvBlc/SCwtc
+X-Received: by 2002:a05:600c:8b31:b0:485:9a50:3370 with SMTP id 5b1f17b1804b1-490e55c3ca2mr57651865e9.8.1781203839529;
+        Thu, 11 Jun 2026 11:50:39 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490ea7c09bcsm3579135e9.2.2026.06.11.11.50.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2026 11:50:39 -0700 (PDT)
+Date: Thu, 11 Jun 2026 19:50:37 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: SeongJae Park <sj@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, Arnd
+ Bergmann <arnd@arndb.de>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, Ravi Jonnalagadda
+ <ravis.opensrc@gmail.com>, Quanmin Yan <yanquanmin1@huawei.com>,
+ damon@lists.linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH] mm/damon/core: reduce kernel stack usage
+Message-ID: <20260611195037.1adec04d@pumpkin>
+In-Reply-To: <20260611125704.3386176-1-arnd@kernel.org>
+References: <20260611125704.3386176-1-arnd@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Israel,
+On Thu, 11 Jun 2026 14:56:57 +0200
+Arnd Bergmann <arnd@kernel.org> wrote:
 
-First bad commit (maybe != root cause):
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The main thread function has recently grown to the point of
+> exceeding stack frame size warning limits in some configurations.
+> This is what I hit on s390 with clang and CONFIG_KASAN:
+> 
+> mm/damon/core.c:3440:31: error: stack frame size (1352) exceeds limit (1280) in 'kdamond_fn' [-Werror,-Wframe-larger-than]
+>  3440 | static int kdamond_fn(struct damon_ctx *ctx)
+> 
+> The largest stack usage here is inside of the kdamond_tune_intervals(),
+> so by marking that one as noinline_for_stack, the functions individually
+> stay below the warning limit, though kdamond_fn() itself still uses
+> hundreds of kilobytes for some reason.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9716c086c8e8b141d35aa61f2e96a2e83de212a7
-commit: 121a0f839dbb397af5fabb701cea3e9983223e50 usb: misc: Add Intel USBIO bridge driver
-date:   9 months ago
-config: x86_64-randconfig-072-20260611 (https://download.01.org/0day-ci/archive/20260612/202606120202.S3B5c4hl-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260612/202606120202.S3B5c4hl-lkp@intel.com/reproduce)
+Does that actually reduce the stack use if the functions are called?
+Or just stop the compiler bleating and running the code is still likely
+to overflow the stack.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Fixes: 121a0f839dbb ("usb: misc: Add Intel USBIO bridge driver")
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606120202.S3B5c4hl-lkp@intel.com/
+I keep thinking it should be possible to get (say) objtool to output
+the stack offsets of every call.
+With (I think it is) fine-ibt the hashes can be used so separate all the
+indirect calls (although you might need a 'salt' to separate the different
+'void (*)(void *)' functions - that probably ought to be done anyway).
+Then it is a SMOP to generate a maximal stack depth for each function and
+to detect the recursive loops.
 
-All warnings (new ones prefixed by >>):
+I did that many many years ago for an embedded system (no indirect calls),
+the outcome was that we didn't have enough memory to allow for the worst
+case stack use!
+The deep places were all (the equivalent of) printk() in pretty
+impossible error paths.
 
->> Warning: drivers/usb/misc/usbio.c:117 struct member 'nr_i2c_buses' not described in 'usbio_device'
-   Warning: drivers/usb/misc/usbio.c:117 struct member 'i2cs' not described in 'usbio_device'
+-- David
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  mm/damon/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/damon/core.c b/mm/damon/core.c
+> index 265d51ade25b..69f38c48ac08 100644
+> --- a/mm/damon/core.c
+> +++ b/mm/damon/core.c
+> @@ -2002,7 +2002,7 @@ static unsigned long damon_get_intervals_adaptation_bp(struct damon_ctx *c)
+>  	return adaptation_bp;
+>  }
+>  
+> -static void kdamond_tune_intervals(struct damon_ctx *c)
+> +static noinline_for_stack void kdamond_tune_intervals(struct damon_ctx *c)
+>  {
+>  	unsigned long adaptation_bp;
+>  	struct damon_attrs new_attrs;
+
