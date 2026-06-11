@@ -1,146 +1,122 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C7E8190473
-	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 03:53:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D708285061
+	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 04:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781150009; cv=none; b=JgnXXtYi7YP6nGvU5qWBc+DW1drdmnxYHewBkNFSStwFqx6bBSfujcnvL2FRPYaesaQXMOVpSqSf98NpwnHUhPsD493UKiD+AU2mXXwncE7phBkOBQiitwFKB8zNWicR9yIAJ9mi4xdgZsTZ9nGU7jwLrq11JIkZtSopFDglzNk=
+	t=1781150802; cv=none; b=idTtBRlfguEmtpVtBMxukNkJWPdgNyKeCq+c9quBC+CBvSj4IcJzymM7XYugJgah3dBMXnu7RdixgxpzzGNOHvIviOCUhHAZM0TyanP83Mrxt+n2Cqjw/fK4f2YinOCpTBoZTRcMV7YoEssczNXs4lZhd7z8JYlgs2TYRTweRmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781150009; c=relaxed/simple;
-	bh=Yy/+xRHJiX/hDJ5xQsjisJqg3r4yly3VHd3NS0SNXAk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bhTDVILh955sXpox0fB9RlR/6EFAAAi/z+MqIhZCGryZicfaMsN3LEelXLMWqRtThABhR6Kt5YwXmuoz/c9RnR4dpL+6R88IMsf+grLfLVobZQG2s/MTTvXHmmeqq38NyL0he6oC5xAydirZE371y8LDm5XzVwKWRA4m0pTts48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IAvOWPHv; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IAvOWPHv"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-36ba706ab46so5036303a91.1
-        for <llvm@lists.linux.dev>; Wed, 10 Jun 2026 20:53:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781150006; x=1781754806; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9N+wW4hckA7+pUN5DQbu3VTnKoKBAMqPRZDxheSBFcw=;
-        b=IAvOWPHvFOFtyXNTThgvN0BnDQClB+nwiXoZ/EA2fNC6AlRIiRkwY2tkFj/F0z4DTc
-         lTQFZu6WOyyqcNYJn4CFOmGeldpCN8GjmjR4QiHBLib5UJqXUCAtvfRSQoSXOPbZdoab
-         REoxcE2gx901tUNJhhqaawUog9+d6WzfxQjOZgj7lb73FDHxgUyvAUfcA5r/vtFMwQyy
-         8kyabsYROKw3i0PUlBLOzNLO6Bt86rht8k9VZkl7FrJdlT4k703oI4/fhc2g3DpLkG3Q
-         EM9+a4AtmPXv0U4WcU5NT2M01dFWraQil0AVhcepjkbP/6EY3eK7HJaaqlt36H1LnWhN
-         ed5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781150006; x=1781754806;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9N+wW4hckA7+pUN5DQbu3VTnKoKBAMqPRZDxheSBFcw=;
-        b=aTEY3y0kyMHWMSatqIRLSiI6zvAK+IdvchrcqXq3jTU7+kNDi9QNFYDQGaC4E/LC7+
-         E6o8WBDVresmvdQtx4nNGzQPu5trTzB0UFzQX9CI0WqPQUR+83bMxj2nTnxTOkCjhVaS
-         zjqABLiVC7bVkivseB8cgdtl2aCocpHbIcdjvPcxQ7rbI3MZrR9V9WVZfCxDzVVyDYM6
-         BvPEzCHqibOAAnvaM5+xxQCg1jHxSS3cYmifcbiXgPMplCNAnckA2jtkY4sQYuCexfFA
-         lvV8gY8XrGaUxgHL65VQfnnHh0xc8Ks3dKjE0ANX1zO7pWB+SbaL6Kd3qiq2tkUz0TiM
-         snrQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9OQJw/s0Skm5K2dE32j6UIj/ABp8jy9FN/0WdOh5m4zudLU/ZOtrnBxo0K06/YuMlB+Mt/@lists.linux.dev
-X-Gm-Message-State: AOJu0YxmTnBhfA+urs4gVQAF12mP0T/V+TJMTKGNcaW0KC1HlPaxOlVd
-	/zhJYX6WBmxTbDru1zv+v/z1eneeL6WMN7DD3beYipZwlZdUW5z4iDZM
-X-Gm-Gg: Acq92OGOZsHwz+IEs+ABRHIDmPeJRUvH3AUnUZOsgIZN3CyoCcAWm9pnUmkTd3PaFUf
-	zDcql51to53FIaF0V1b7cUxvRZOHX6PdKtxauts1x1rpkhOj/S9y5EndeJJzFqksghtGQKjz+KB
-	fl5YoUauGR1B+ZvDGn7/juIno1Nb9AxNuQj2BXUrMRFS/tZ4n7JHMF8E8rHz0ug7hRwTmrcTUmh
-	vDWiWFRPVbumMk8arrs5ZDmGAboLIW9Npvbvhsp1uFQ2Lj2R8m+O8TvE6fMuwt7oSIlPlu5IC/i
-	bJWanfaAP7AjlbFcqPEBCl5BEsvEH3lMA5oHg4sLW0TDa39vt+Wey0fBSzAUk/dcyLSbFXMzHug
-	RmN/s2Y3edq6a536C/4y5vmZhJim7oYb1RMKcRtCTX6I94KvnpA+9AZzzqa+819r8c05ppLEYKu
-	ehJWmWcnJGHUNqzQzPvOsBTLcXrfgx5tCToIeGZCmTRxdSZmGnuoDRr4zEWbf0dqRLnNrhRRePa
-	1l2nxNKyDhBaCjHfbhz6ITjLt/3adBo2gliMotvhPOwSw==
-X-Received: by 2002:a17:90b:1a84:b0:369:f48a:f24b with SMTP id 98e67ed59e1d1-3778ebecbeemr1357925a91.0.1781150005805;
-        Wed, 10 Jun 2026 20:53:25 -0700 (PDT)
-Received: from ryzen ([2601:644:8000:5b5d:7285:c2ff:fe45:8a32])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-377522a188asm910131a91.3.2026.06.10.20.53.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 20:53:25 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: dmaengine@vger.kernel.org
-Cc: Vinod Koul <vkoul@kernel.org>,
-	Frank Li <Frank.Li@kernel.org>,
-	Zhang Wei <zw@zh-kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	linuxppc-dev@lists.ozlabs.org (open list:FREESCALE DMA DRIVER),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCHv4 15/15] dmaengine: fsldma: fix kernel-doc param names to match function signatures
-Date: Wed, 10 Jun 2026 20:52:45 -0700
-Message-ID: <20260611035245.13439-16-rosenp@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260611035245.13439-1-rosenp@gmail.com>
-References: <20260611035245.13439-1-rosenp@gmail.com>
+	s=arc-20240116; t=1781150802; c=relaxed/simple;
+	bh=+GjhoPPuOwuX/ah7svyLMmYnjTNjvaIXfv0nBJmKzLw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fLSw4znowbhgJcuXszOij0uUkNtyK7mTQkJin4O2jy2hW+IcIuu4mVZrHbnXwnGfyrY96uyiLl3tw2PEiXtoTC9+xyA78oUrKUe8bvJ5dm/IB4OAMUk+UhBD9wWzJoqxniGN02Qge2w/vXeJ6mRYHpJyGosY/mlpln33m69k09U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gbTbR3DWDzYQv4M
+	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 12:06:11 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 21F9D40561
+	for <llvm@lists.linux.dev>; Thu, 11 Jun 2026 12:06:31 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP2 (Coremail) with SMTP id Syh0CgBn3oNFNCpqRKCDBQ--.52639S2;
+	Thu, 11 Jun 2026 12:06:30 +0800 (CST)
+Message-ID: <1bc99f2d-3d79-4680-ba67-bafc6ebf0a48@huaweicloud.com>
+Date: Thu, 11 Jun 2026 12:06:29 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] arm64: ftrace: prepare ftrace_modify_call() for use
+ without CALL_OPS
+Content-Language: en-US
+To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+ bpf@vger.kernel.org, Florent Revest <revest@chromium.org>,
+ Puranjay Mohan <puranjay@kernel.org>
+References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
+ <20260609-arm64-ftrace-direct-calls-v1-1-4a46f266697f@linux.dev>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-1-4a46f266697f@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:Syh0CgBn3oNFNCpqRKCDBQ--.52639S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF18Cw4ftFWUKF1UZFy8uFg_yoW8Zw4Upr
+	WSk3Z8KrWUuF4vkayIg3W3WrWqkw40yry3KFWDW34Y9rn0vrWrKrsxC3ZrGrWDK3s7WFW7
+	ZF1xZry5AF1DZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-Fix kernel-doc warnings where the documented parameter names
-(@chan) no longer match the actual function signatures (@dchan),
-and add the missing @cookie and @txstate parameters to
-fsl_tx_status.
-
-These are pre-existing mismatches that predate the recent
-devm conversion series.
-
-Assisted-by: opencode:big-pickle
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- drivers/dma/fsldma.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/dma/fsldma.c b/drivers/dma/fsldma.c
-index 157db416eaaf..694c1b12bf2b 100644
---- a/drivers/dma/fsldma.c
-+++ b/drivers/dma/fsldma.c
-@@ -685,7 +685,7 @@ static void fsldma_cleanup_descriptors(struct fsldma_chan *chan)
- 
- /**
-  * fsl_dma_alloc_chan_resources - Allocate resources for DMA channel.
-- * @chan : Freescale DMA channel
-+ * @dchan : Freescale DMA channel
-  *
-  * This function will create a dma pool for descriptor allocation.
-  *
-@@ -742,7 +742,7 @@ static void fsldma_free_desc_list_reverse(struct fsldma_chan *chan,
- 
- /**
-  * fsl_dma_free_chan_resources - Free all resources of the channel.
-- * @chan : Freescale DMA channel
-+ * @dchan : Freescale DMA channel
-  */
- static void fsl_dma_free_chan_resources(struct dma_chan *dchan)
- {
-@@ -878,7 +878,7 @@ static int fsl_dma_device_config(struct dma_chan *dchan,
- 
- /**
-  * fsl_dma_memcpy_issue_pending - Issue the DMA start command
-- * @chan : Freescale DMA channel
-+ * @dchan : Freescale DMA channel
-  */
- static void fsl_dma_memcpy_issue_pending(struct dma_chan *dchan)
- {
-@@ -891,7 +891,9 @@ static void fsl_dma_memcpy_issue_pending(struct dma_chan *dchan)
- 
- /**
-  * fsl_tx_status - Determine the DMA status
-- * @chan : Freescale DMA channel
-+ * @dchan : Freescale DMA channel
-+ * @cookie : DMA transaction identifier
-+ * @txstate : DMA transaction state
-  */
- static enum dma_status fsl_tx_status(struct dma_chan *dchan,
- 					dma_cookie_t cookie,
--- 
-2.54.0
+On 6/9/2026 1:19 PM, Jose Fernandez (Anthropic) wrote:
+> ftrace_modify_call() is guarded by CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
+> and calls ftrace_rec_set_ops(rec, arm64_rec_get_ops(rec)) directly,
+> which only exists when CALL_OPS is enabled.
+> 
+> Generic ftrace also needs ftrace_modify_call() when
+> CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is enabled, to retarget a
+> callsite between two non-FTRACE_ADDR destinations, as happens when a
+> direct trampoline is modified. The next patch allows DIRECT_CALLS without
+> CALL_OPS, so widen the guard to cover both configurations and switch
+> the body to the ftrace_rec_update_ops() wrapper, which already has a
+> stub for the !CALL_OPS case. ftrace_make_call() already uses the same
+> wrapper today.
+> 
+> No functional change: with CALL_OPS enabled, ftrace_rec_update_ops()
+> expands to the exact call this replaces.
+> 
+> Assisted-by: Claude:unspecified
+> Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+> ---
+>   arch/arm64/kernel/ftrace.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+> index 5a1554a441628..e1a3c0b3a0514 100644
+> --- a/arch/arm64/kernel/ftrace.c
+> +++ b/arch/arm64/kernel/ftrace.c
+> @@ -409,7 +409,8 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+>   	return ftrace_modify_code(pc, old, new, true);
+>   }
+>   
+> -#ifdef CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
+> +#if defined(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS) || \
+> +	defined(CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS)
+>   int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+>   		       unsigned long addr)
+>   {
+> @@ -417,7 +418,7 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+>   	u32 old, new;
+>   	int ret;
+>   
+> -	ret = ftrace_rec_set_ops(rec, arm64_rec_get_ops(rec));
+> +	ret = ftrace_rec_update_ops(rec);
+>   	if (ret)
+>   		return ret;
+>   
+>
+Acked-by: Xu Kuohai <xukuohai@huawei.com>
 
