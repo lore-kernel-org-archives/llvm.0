@@ -1,242 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93D23CA4B9;
-	Thu, 11 Jun 2026 10:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63CF3CB907;
+	Thu, 11 Jun 2026 11:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781172483; cv=none; b=YWpRBDjHQzghHEm8x3+iawaeKoRBQuLgYhLKiPN2Xatk2pKZyQhwCMV+Mhsm7Z43NmWHEeCCB/ltE1BTdxpE9DwfI56KniN5bQHd8iz4pm0fictmuJIXAEAf3djFJQ5MHry2qWiv6ernjwTldcXSDqzkSqbGpGOSm78SKicAL3A=
+	t=1781177095; cv=none; b=KijOPeGNtbG5VJKKbI52HtgC1SyYWO6/Ci4Qq8Lmz61ec3IRC8iCFiRvfQQJZpE9l18RYFeCzFCd8kmrRqT0LxTQtLIBbtodfTxPR3BO83wQzMVwsHGbj6fVfNZ3MRx36e5xxiJ9I3KxTAD9Gl3c7kDEVXT/6I+drYz5wOfuA7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781172483; c=relaxed/simple;
-	bh=dO49bB1U82I9NOj7iBCUPCZlEj0Bk6lEc/VkexmVjv8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TMwb+1ePIdnKjB6Aqh+3RnZBds+rlZIZfsOVLZ2am8/9sL2NnzKliyqhol8VjO1eaDClmXTi2M4HBHMi7X3HohekjkVROJtOkBTw5NZ1+9P100fMnTmMGGVAQ0YYKNOsX8iyTGT73iz8hoUNkeo1ZN+EKNNuyIijK1sBsqWv4iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I8SyMQnT; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1781177095; c=relaxed/simple;
+	bh=wELHcPivu6R8tvSackQYHrhZdEO2ujYQ4CfSBrF41lo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=SRQqQL8/OOGaGjMh8L70AKeNHDB9q4Muc16XBbE+W6Y1ER3mjLlIrxgAIwFhZXu31KtYtON6E5GiRrXW3ewCQHFm08BWP7CpyOEh3rGmXcIZS/JeP798HoPjUWXltMe0kKagS0Ue80DbVjhIJucCmEh9YQutZ3t7BhiEf6ejxo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IKeihSY9; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I8SyMQnT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IKeihSY9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781172481; x=1812708481;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dO49bB1U82I9NOj7iBCUPCZlEj0Bk6lEc/VkexmVjv8=;
-  b=I8SyMQnTmLiv95X4TXzhi4ocrmyw1+x0c5JVFrD9Aj45vtk2VsQ1BtnA
-   t2E3UUE7riGO25UncCqf1Tq7WFZ2fV/ovqpU9Pvx48TmZY6fWdH7VaWAr
-   IGuR2E6B3tz9pMSNoIGRm9E6aSTQFjqmQCDPd7BuyaqGdHgyPEsMt1y4j
-   j+pkNUar09yHdd/DURjJWYoiJxG9pGVXl4dmpJEvWi0ryGh4th2u+oDJX
-   HRaCbYsXknM8Qov3WHJyCNFRsEM1vCRQmLVsT7in/Wt+4QZnhnbeekOBh
-   WSxHYGvKh9MjLwwtzpaARkhngu/x962cxGmLiQbd6iekin0X8zXUfpfmf
-   A==;
-X-CSE-ConnectionGUID: cqeVdTv0Q/GzMPBoXSaQTw==
-X-CSE-MsgGUID: Cn101H63RUSMF2rTIkCpBw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="81961795"
+  t=1781177093; x=1812713093;
+  h=date:from:to:cc:subject:message-id;
+  bh=wELHcPivu6R8tvSackQYHrhZdEO2ujYQ4CfSBrF41lo=;
+  b=IKeihSY99nYqbwZ7eTIovkDn/lEWP3rUMvbrLWAwNU+G3UoezCL0Eibs
+   fpxgE0CDoKu/ZcPVokRooVKJb4nyH5FR1gFWFQjdcok9EwdSggPDSFt8S
+   docJ+8rn2n3V8UJqw8kf9F1urlQXZhKQz3PNwEU0A1PneEdd7c8+uWPtw
+   7trD3nMOBd11LOndWeyUFHv4jNvzd6K6avEQ7vcyEPTgAjPf7sS3Rtpr7
+   1zOqPGIrtb+NdN5LhO4U3sy8HwNEM1hqR0h1IxtKBnzf2ilXYjcAxH7O2
+   tlixrRmUl3IjVYQJf6hA3xy5GE2cwGsZhNtKdB0VzPyEIFBYBuqjpHWu5
+   g==;
+X-CSE-ConnectionGUID: S6lwCn+iR0GmmB5yMytQSQ==
+X-CSE-MsgGUID: b0LJYtzxR52H0t2ezraC2A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="81894726"
 X-IronPort-AV: E=Sophos;i="6.24,198,1774335600"; 
-   d="scan'208";a="81961795"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2026 03:08:01 -0700
-X-CSE-ConnectionGUID: DOHW+5KbQMyubQMXOVKvWA==
-X-CSE-MsgGUID: NrbSc8hxRWa0wB2jZjosvw==
+   d="scan'208";a="81894726"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2026 04:24:52 -0700
+X-CSE-ConnectionGUID: mE5RSBOFQmSaSgJSo9x5wA==
+X-CSE-MsgGUID: WTpz0XmuQtG4uKiSF1P2xw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,198,1774335600"; 
-   d="scan'208";a="246459572"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 11 Jun 2026 03:07:58 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+   d="scan'208";a="250373939"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 11 Jun 2026 04:24:51 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wXcKJ-00000000MkY-1KqM;
-	Thu, 11 Jun 2026 10:07:55 +0000
-Date: Thu, 11 Jun 2026 18:07:24 +0800
+	id 1wXdWi-00000000409-31uq;
+	Thu, 11 Jun 2026 11:24:48 +0000
+Date: Thu, 11 Jun 2026 13:24:44 +0200
 From: kernel test robot <lkp@intel.com>
-To: Davidlohr Bueso <dave@stgolabs.net>, jic23@kernel.org, will@kernel.org,
-	mark.rutland@arm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-cxl@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	Harshal Thakkar <harshal.t@samsung.com>,
-	Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH] perf/cxlpmu: Support Channel/Rank/Bank filter
-Message-ID: <202606111843.aJlNG96K-lkp@intel.com>
-References: <20260611010409.2776635-1-dave@stgolabs.net>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:locking/core 33/36] Warning:
+ kernel/futex/core.c:366 function parameter 'fph_p' not described in
+ '__futex_hash'
+Message-ID: <202606111349.EFE5CORt-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260611010409.2776635-1-dave@stgolabs.net>
 
-Hi Davidlohr,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on arm-perf/for-next/perf]
-[also build test WARNING on cxl/next linus/master v7.1-rc7 next-20260610]
-[cannot apply to cxl/pending]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Davidlohr-Bueso/perf-cxlpmu-Support-Channel-Rank-Bank-filter/20260611-090512
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git for-next/perf
-patch link:    https://lore.kernel.org/r/20260611010409.2776635-1-dave%40stgolabs.net
-patch subject: [PATCH] perf/cxlpmu: Support Channel/Rank/Bank filter
-config: i386-buildonly-randconfig-001-20260611 (https://download.01.org/0day-ci/archive/20260611/202606111843.aJlNG96K-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260611/202606111843.aJlNG96K-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+head:   197a675f0715567d02c00050d87d9b1bfc8e790e
+commit: 498cfcdb70aaaa6be16b367758dc8f785b00cf1f [33/36] futex: Optimize futex hash bucket access patterns
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260611/202606111349.EFE5CORt-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260611/202606111349.EFE5CORt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606111843.aJlNG96K-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606111349.EFE5CORt-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/perf/cxl_pmu.c:344:19: warning: shift count >= width of type [-Wshift-count-overflow]
-     344 |         return FIELD_GET(CXL_PMU_ATTR_CONFIG2_CRB_MSK, event->attr.config2);
-         |                ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/cxl_pmu.c:258:39: note: expanded from macro 'CXL_PMU_ATTR_CONFIG2_CRB_MSK'
-     258 | #define CXL_PMU_ATTR_CONFIG2_CRB_MSK            GENMASK(63, 32)
-         |                                                 ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
-      48 |              (type_max(t) << (l) &                              \
-         |                           ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> drivers/perf/cxl_pmu.c:344:19: warning: shift count >= width of type [-Wshift-count-overflow]
-     344 |         return FIELD_GET(CXL_PMU_ATTR_CONFIG2_CRB_MSK, event->attr.config2);
-         |                ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/cxl_pmu.c:258:39: note: expanded from macro 'CXL_PMU_ATTR_CONFIG2_CRB_MSK'
-     258 | #define CXL_PMU_ATTR_CONFIG2_CRB_MSK            GENMASK(63, 32)
-         |                                                 ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
-      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
-         |                           ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> drivers/perf/cxl_pmu.c:344:19: warning: shift count >= width of type [-Wshift-count-overflow]
-     344 |         return FIELD_GET(CXL_PMU_ATTR_CONFIG2_CRB_MSK, event->attr.config2);
-         |                ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/cxl_pmu.c:258:39: note: expanded from macro 'CXL_PMU_ATTR_CONFIG2_CRB_MSK'
-     258 | #define CXL_PMU_ATTR_CONFIG2_CRB_MSK            GENMASK(63, 32)
-         |                                                 ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
-      48 |              (type_max(t) << (l) &                              \
-         |                           ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> drivers/perf/cxl_pmu.c:344:19: warning: shift count >= width of type [-Wshift-count-overflow]
-     344 |         return FIELD_GET(CXL_PMU_ATTR_CONFIG2_CRB_MSK, event->attr.config2);
-         |                ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/cxl_pmu.c:258:39: note: expanded from macro 'CXL_PMU_ATTR_CONFIG2_CRB_MSK'
-     258 | #define CXL_PMU_ATTR_CONFIG2_CRB_MSK            GENMASK(63, 32)
-         |                                                 ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
-      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
-         |                           ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> drivers/perf/cxl_pmu.c:344:19: warning: shift count >= width of type [-Wshift-count-overflow]
-     344 |         return FIELD_GET(CXL_PMU_ATTR_CONFIG2_CRB_MSK, event->attr.config2);
-         |                ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/cxl_pmu.c:258:39: note: expanded from macro 'CXL_PMU_ATTR_CONFIG2_CRB_MSK'
-     258 | #define CXL_PMU_ATTR_CONFIG2_CRB_MSK            GENMASK(63, 32)
-         |                                                 ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
-      48 |              (type_max(t) << (l) &                              \
-         |                           ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> drivers/perf/cxl_pmu.c:344:19: warning: shift count >= width of type [-Wshift-count-overflow]
-     344 |         return FIELD_GET(CXL_PMU_ATTR_CONFIG2_CRB_MSK, event->attr.config2);
-         |                ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/cxl_pmu.c:258:39: note: expanded from macro 'CXL_PMU_ATTR_CONFIG2_CRB_MSK'
-     258 | #define CXL_PMU_ATTR_CONFIG2_CRB_MSK            GENMASK(63, 32)
-         |                                                 ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
-      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
-         |                           ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:699:22: note: expanded from macro 'compiletime_assert'
-     699 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:687:23: note: expanded from macro '_compiletime_assert'
-     687 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:679:9: note: expanded from macro '__compiletime_assert'
-     679 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   6 warnings generated.
-
-
-vim +344 drivers/perf/cxl_pmu.c
-
-   341	
-   342	static u16 cxl_pmu_config2_get_crb(struct perf_event *event)
-   343	{
- > 344		return FIELD_GET(CXL_PMU_ATTR_CONFIG2_CRB_MSK, event->attr.config2);
-   345	}
-   346	
+>> Warning: kernel/futex/core.c:366 function parameter 'fph_p' not described in '__futex_hash'
+>> Warning: kernel/futex/core.c:366 function parameter 'fph_p' not described in '__futex_hash'
 
 --
 0-DAY CI Kernel Test Service
