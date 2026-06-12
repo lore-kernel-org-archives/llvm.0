@@ -1,184 +1,233 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010035.outbound.protection.outlook.com [52.101.84.35])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DDD23E9C1D
-	for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 13:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.35
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781269896; cv=fail; b=kr5qRpETCrxbqxJIVYuFW2sLlhvl0Zer0Om00torHQvZHd3wLhzWKwMfvMe5gf8CzeLlZWaZEuY6Ig8RhY7CByoyeh+S2cc8HqXQeJNrtTri2rjvNqkeo3ur7hEAbpVRCYkHFjn2YhpdpdxUxCAt8mldEDOITHfnkzC1o5V2UH4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781269896; c=relaxed/simple;
-	bh=Q3Tfb03njXf+/e/LLWRMFEGwgElERiVP25dEeg4DjSc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=QeVvn7fWfOf5INoF11/f3PJxYk6V0TwiyhrLHrzw4xNPAB1YQeg+sBWdBWyccKtsV8myo08jXmcgis8wJT+rd61R5ea+oiwxX4QxsQSutslcwJSW/whnpABaNlYkcULVYR01YA6pUW4uhssvLuCyTVGNh9IAeEDRsgZq4jMrlBA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=R93ruRrr; arc=fail smtp.client-ip=52.101.84.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FAA24886E;
+	Fri, 12 Jun 2026 14:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781275750; cv=none; b=gQXa9WoosBoTXB4C31surLKnGXn+141IL6L3z8xBDMniDWpsBr3RVpfshDu3Dw2er5YX0MO75NggsLGgVgq7X5fkVT4iIozGIL/Fvf6lQ7Lt9p1z91wr9clOcMNY/N5X1qFBQG3JEezHXsH1T5yNxZsuskmMj+MBRqp8if8KnzI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781275750; c=relaxed/simple;
+	bh=sPEMz439a9BjnXvGTSbuJ69SbnE8LRjcxhABBvexei0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=rUp2WDnK+AoVhoeksZrpt99GSPJKnvUho7QGUBeyklYLVaRo9Ph0cpvOmiJWwWtFDm/Bg/bau4H88LG/9xN1HhoGkSD2JQ3yYba4sMLT7NMzauVmkT/zBPGUCXDpMm5mlRsGJKjeC1cLoS55HFU6K/Ifi/RJ0Pye3jvsG/ep4yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=diBxnzJB; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="R93ruRrr"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JHTk3v0H7C2/JOahRdHIqg03H0kURjJFwuElMph5osEOzxJYyCh/q8RLqUXN7RZGps6+eymf6R1Jj1rFdk6oK44rcpjVfJSWgHgldJNNYCYOlYcirKWKNmqTIXnotNBwmb1sxzkL+xqMyQS7EZf2UoqV7g4S3Af4gta26RaPUHwSI7OuGxI29TdlMtIOhZCtNagmhaR4gFkGfKChAAt2AHwikxUJJg46/gnNIlxNpN9DnlS2Wk5/d75JeNs2N47UXZQEKXUq6Z944XoCYsjID+sZ6srwUR9MSfIgzYmQmxgHqXlGDORbkOALkWmlazgQMcyxj7xt58SgsjVIj6QW2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q3Tfb03njXf+/e/LLWRMFEGwgElERiVP25dEeg4DjSc=;
- b=bYAUhqBFAZFJnjyy1UZyv4b/OBzY47bD+IanCqHDbhBCCLuuZn+VvisyiCB2/K3s7gWtJ8YYkX8He2dQ6rxuNKAZUwopMskV9CFZVZaYJsrG6pg+DnF2IJJsJWhhBNBa22sKM6Tq984/WC7mgy+iDdgAIBpLCNWrvu4WtDuJb6D/HKUHEZ11l9dPpplgEZ5cNhKAhbyijunqThzcnCtTHp6Hg0tldJXLoauXtRX3DhjMwv+JxxqyLGSelcpevdmGusbhI78wjzt55kE7vPBNhVVAmvdS71BoepXtK0a+plZ2ZO2QnY1BOtsx2qQfOZZNACTu+LX7/NMEdZkCwl28vw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q3Tfb03njXf+/e/LLWRMFEGwgElERiVP25dEeg4DjSc=;
- b=R93ruRrrhsac4RHK7l6UzcRn5d6j3Kp/61QEDdAk3UR0Jptwz2P6DBIDEbBzgLLG14c6WUdkvuHGb+ylBT0fB7L928DaTpfnxCyde8kXQq6w8xL+BKZ5WqP/cR7Qr2Kfyg0HI5gCmcul4oTkTvVmyeTwIbKErH/wBR7L4tre82YlAfVga+svtLbx4zdRqSsp18ITY8qpv9Thy3FVgWN6YIphHyCTw4hvE/EuP9xx5lX6MwUuo1cm2odD0dN8yjDdaF2fpytNLlXN6pmFLbaq/RGg8RctILzMwMu5BWIW7i5t1whslifnv4JE6iGrSeP10SDF2XrqFogZhuTjN76x8w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:39b::19)
- by DB9P189MB2025.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:390::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.14; Fri, 12 Jun
- 2026 13:11:31 +0000
-Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
- ([fe80::69fc:c4d4:200b:e4b4]) by AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
- ([fe80::69fc:c4d4:200b:e4b4%7]) with mapi id 15.21.0113.013; Fri, 12 Jun 2026
- 13:11:31 +0000
-Message-ID: <de02f0dc-8840-446d-8661-928a49bb2caa@est.tech>
-Date: Fri, 12 Jun 2026 15:11:27 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 02/14] kcov: fix INIT_TRACK race in kcov_dataflow
-To: Alexander Potapenko <glider@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- kasan-dev@googlegroups.com, rust-for-linux@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
- linux-doc@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>,
- sashiko-bot <sashiko-bot@kernel.org>
-References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
- <20260611-b4-kcov-dataflow-v2-v2-2-0a261da3987c@est.tech>
- <CAG_fn=V1+_xLgCZgdLnT7Y-muRO0CXkrNKkC8AzrqzWoL4eR8w@mail.gmail.com>
- <5fa7a528-a4c5-4fdb-9a17-1b0992e955b3@est.tech>
- <CAG_fn=XB7_zbjGzpgwEzm5dqcwehqvB+=SpJhHvw9QdETberAg@mail.gmail.com>
-From: Yunseong Kim <yunseong.kim@est.tech>
-Content-Language: en-US
-In-Reply-To: <CAG_fn=XB7_zbjGzpgwEzm5dqcwehqvB+=SpJhHvw9QdETberAg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: DU7P191CA0021.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:10:54e::21) To AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:39b::19)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="diBxnzJB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781275749; x=1812811749;
+  h=date:from:to:cc:subject:message-id;
+  bh=sPEMz439a9BjnXvGTSbuJ69SbnE8LRjcxhABBvexei0=;
+  b=diBxnzJBR29+8FfeRSHUeoNhGtHJBZgoRa4FBj5F32ENLc4AV7bV37Yc
+   9BxfPIIkaE0uv9CEuhwo0TE29IMfDFIBYTPG3z15KFp3i6C4CzBK/nLsd
+   PdQ1u3S2CgtLCPgyJz08GBbVghtNlYRK6sMXHwsbZQMO3P3PTgI6oidoc
+   iZmXUWQs4BmGEQFzNOouzBSFh44tAs5R89qXxjPfg5YCfCFwL1sZDNccr
+   HwgGO66ov9v6LcqfmyezCJguhqxiQYRs4JTgZaEoHpTR1Itr+3o6qf98F
+   REVLKBCrMd5NbGgf32hybf7/UNqZi2aANZ5Masj6bISN7GthcvMA96wex
+   g==;
+X-CSE-ConnectionGUID: HUat+4BeRdim9/mocfUsbw==
+X-CSE-MsgGUID: 2LTWALrYQYiY3hLMeYOXGg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="82167417"
+X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
+   d="scan'208";a="82167417"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2026 07:49:09 -0700
+X-CSE-ConnectionGUID: uqpfzTzYRSGJILPojHl+iA==
+X-CSE-MsgGUID: NH7nlMG7SPiG2Z7piTmr6Q==
+X-ExtLoop1: 1
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa003.fm.intel.com with ESMTP; 12 Jun 2026 07:49:07 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wY3Bw-000000004Gj-2tfk;
+	Fri, 12 Jun 2026 14:49:04 +0000
+Date: Fri, 12 Jun 2026 16:48:46 +0200
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [hare-scsi-devel:configfs-ns.v6 1/24]
+ drivers/nvme/target/bpf.h:15:44: warning: declaration of 'struct
+ nvmet_subsys_link' will not be visible outside of this function
+Message-ID: <202606121653.sbaXkuBH-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8P189MB1752:EE_|DB9P189MB2025:EE_
-X-MS-Office365-Filtering-Correlation-Id: 023d9b6a-e6db-4a07-7f21-08dec8841ec3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|7416014|1800799024|376014|366016|56012099006|11063799006|4143699003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	wDbgI3n6vNz81aIr8zy8kaXv+0aEjafBO0NBeAz4ANYqVcKfvLKpVQlouJtuvUXbqD2GgcstNw0/AyfYeHiQiOGgK2POzKVsAxsoB7aaANQEN/ErIxeZmE3UmQiMcN9M+vuUXp3G89LUqxwXxrO17tjQMcUhNEpq3ntpaogXE4kF8JbK/Xzol/2MRypXVHFrY5M4tCQ4VNEQ29JbrMPj4imsc5g4+rAkqiMHIeiMcx7Yx3QWbWBk6S+tDxHIPHtka4OKBwBvDt6eBbEITU4gasToTSCVLVWn+dpFAkwUte7PYSEwebFNzepMnCn85XCVWhBlRu+5YzhEb5WhMTn6tBiwwVKDK+W5VSq5GPWodywdqvi53fetR8RR+vk5LR0G/e+xUtgDsfmcX8sPWte9oQopdGFeCRYPDpJ6DX9bcKpEUrudDjDiNuwkDo/1Yv8cHwpzIMT0k6ix7KyBkCDXvCEonLAxzKPQ/3hOP5cATdCZZCAWTzUjzRU2owt7JyIGmgArPrz1DXXofc20QULqPnCu4aj0rKeUaoxmU1rIyl3/BfcjC/T9D4zGz6ELpqd7WInON62+KhDJpP3MZMS9EbccaSXc2l8FP+UrAHRQkSrpzDUo0+pyyWjyzhhjau1rfRMDOAOOvhTzArM/u8MkTRnGvbNUMHCR11v5JBQGn5HSgjbn13vxlgBdOutrX46T
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P189MB1752.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(1800799024)(376014)(366016)(56012099006)(11063799006)(4143699003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NGlQaUdzU2tYS2tlK2xwb3RIY0NTSWxtUGRwaXdzVUV5NU5Xci9LR2pPMU4x?=
- =?utf-8?B?MG5DMzdLYTFqcEFGVXNpVWVNZ3FHVkZycUlTeDRLbi9leWdrVTFZeUEvQ3lW?=
- =?utf-8?B?ZmhLUHZCTGhEUmVuK2dIS3grSFlMR2ErM2lGbjJZbGNaN1RTN2xpTzJLcDRZ?=
- =?utf-8?B?TU9NcExYWmRlMEVRSmN5NTBJTC9uS0REY3ZxZmFuM05ZdktlOXhVT1AwelBH?=
- =?utf-8?B?UXNtaHNReGhUYzY5STRoZmFVU2NXY1hMdlpzSHNjR3dMUmNobWpPekFTakJn?=
- =?utf-8?B?cUNmY2JVaWgxZ2ZKd05rVVgvbS8rbUVPT09aRWVEUjdTcm53R21JR3hTOUVT?=
- =?utf-8?B?MHp3dGtoU2hGYmFuRm45ZUdnOENIYWJDSmJJYmVwbnVWRDRBR2VaL2ErZXhw?=
- =?utf-8?B?ZE9ZWEROdndQbmMyVGRKNnRUenI1RENiUlhYMUI3V2duWjU4eEkySHhCY2w2?=
- =?utf-8?B?Q0FWRUVFRUt4anhuZW9yZExhc2ZVTnd3UWM4L2NWUjE4TFIvYnRReXRmV0hx?=
- =?utf-8?B?c1VSR2w0TXg1anRjaWIvSE9mMzlyVFV5a0ROMWU2TTM0d1FlZGVEUWdEbGZE?=
- =?utf-8?B?cnB5dXhFYnJhZHRhcksrMCsxRjJ6L0RNdUxldmZWalU4ZnhuYmV1ZEF0ZjVF?=
- =?utf-8?B?L21Cb2NvdGMyejhaV1JTODd4dEY5aFZybko1c3c0ejZFZE82bTlLcXZiTG1t?=
- =?utf-8?B?OHJpQ0M3TElTdFVsQXBmZ01BY1ZTQkxLVTFaaEJUVFJhV3BrT1h2azFjUFlu?=
- =?utf-8?B?K3FlWmVaY05kL0hLclltZVZzQVRVK0RqRVNrRUpiWkE3T3g0TURBbzlrWDZE?=
- =?utf-8?B?UWtNMTlwOE1wMWJqMGdHZ1hWUTJZV3h3WE0rbjRrTG94RGVQTWtSZ0pBOHIv?=
- =?utf-8?B?MXFhZy9FTkFYc0NJOElpNWlXbkhKcjVTbUlqb2dJbkJqbjJ2a2xoMDUxNEFY?=
- =?utf-8?B?QWVFQzBPVlZ2U1ozTzdIYUxFc1daSWtHWkxMenVsYm9IVHYzbzd1YU45TFFw?=
- =?utf-8?B?bjUrcjhONG5BNnJFcmYzRWRsbHJBL1kyOThtZEMvVFk3Nm5FaGh4WFBoZVgy?=
- =?utf-8?B?R1ZSWGpVNGUyVWI0QWRpR3h5SzQxVXl6eW9CY1FBRFowY3RMRjhiNGt5MENl?=
- =?utf-8?B?V01OVS9yUU1ZK3JSOWZGTWtQbVFLM3dBNVhZVlh5WFIyY3o4cXE4cGNCcWZH?=
- =?utf-8?B?R2dNb1dKbTB5NEtKSG1BY0tRSDN4Uyt4eGxETTk0ZVZUVVR4dWNnNHRac2Nu?=
- =?utf-8?B?ZkV5SVlnRDZaTSt6cXQwdVduYTJuWWlnS1oyYzFCYWJPVmRUQ3YyMytiVHlC?=
- =?utf-8?B?eUdWdjBWRTVFbWEwdDVmeFFWaGtBaVV5MmZBU0RoM1hlbTBaeDlla1hNRXlx?=
- =?utf-8?B?ZE81UEUrTVdaVWdSWmhGMkVleG55OVE5bzRrZVNHbWFoSGI2VHJUMUcxQmZM?=
- =?utf-8?B?ZFpiNUJVWG5tNndrblFIZjZ6VlhhNWNRVWFxRExQTjBVT09YUkROQ0JWOFU3?=
- =?utf-8?B?dVBUbjJvRVlKeEYzMkp6amF3MllUbDRRUStBOEQ0cGpSWkNiYnJvOEltcGpl?=
- =?utf-8?B?VXd4a1dnbTJ5enYyOUxwK2h2Q2RJUFEvRDhQS3hRM3hxNW9zczhoZDc4VkRh?=
- =?utf-8?B?eHNLd1JxV2dGVTJaMlo0Z2RPREF3Sy9vWExjdkVUYmE0bSs5eFlqalVkR2lk?=
- =?utf-8?B?dEwvYWhLUGpPTFZFY1lLZ0xIK3g2dVB5OEVHT3EzV055OTJTZ2MrUjV0VW1m?=
- =?utf-8?B?NnF5T0tJMy96MG5VVkNhcXFtMTA5eU5BVnhRc3FWYXc5U1FEUnRHSUlhajYv?=
- =?utf-8?B?S2tCa3BFZndJM0lZam5ObVBEYTlJMFlFRXVOVlFnZ1F4NjRWUGFNYkU5eWpy?=
- =?utf-8?B?cUNaNkV4cHRCSk5uZEl4SEN2bklDNTBMS2VIZnhEVG1qRFRGOHNuOVYxY3Rp?=
- =?utf-8?B?eHFWUWJMZ2Z2NDhVT0c0OGppUGFRdE83TzVXMFFvcGFIKzQrTmdMYlNCdVRM?=
- =?utf-8?B?OUN4azhlMGhZKzE4Z1BCRnd6TjdTMDg5QzhsNndDeDhCZFVTaE9YbHdRek5v?=
- =?utf-8?B?MWFLWExQbWlrVVZMSHZ3Q0ZYcGFDTTMxa0txRDIxVmh0Wm9HRW90ZFBqb2Vp?=
- =?utf-8?B?V1UwUkFGL0dEYzNKNXZyOVBZYjdBZU5ucW96TzMxY08ybEVJaHJDL1hjQ3pm?=
- =?utf-8?B?ZmxtM3hRQ1V4OVFkNk5jREdDcXdjcWdZWjQ0YS9BanFNVEIzZmU2bm15dG93?=
- =?utf-8?B?cXVUdE1OdkpMR21XbnNHNDQ0VmJ1Tm5JaXJYNkFESnBCWnZBTHcrR0hrY3Bw?=
- =?utf-8?B?Y3NjUHBJQlFwb3pXcUgyanhnMXJuN1h0enRRNnY5bjFnNWVLNC9vUT09?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: 023d9b6a-e6db-4a07-7f21-08dec8841ec3
-X-MS-Exchange-CrossTenant-AuthSource: AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2026 13:11:31.1723
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZaBvngE+jWO8OmOKJbYaVnQO2G6ot5zAc1NzGJ3RuoAjJG0P5RjTpNdCLmsvpPDRX89pyEL7rX0W7UZ0BmQmGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P189MB2025
 
-Hi Alexander,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git configfs-ns.v6
+head:   65843faa046b6a3ff4953aba7319313104638535
+commit: 95eeb6714114cd17d9c4c494a28cc11d86059eef [1/24] nvmet-bpf: eBPF struct_ops support for log pages
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260612/202606121653.sbaXkuBH-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260612/202606121653.sbaXkuBH-lkp@intel.com/reproduce)
 
-> On Fri, Jun 12, 2026 at 9:25 AM Yunseong Kim <yunseong.kim@est.tech> wrote:
->>
->> Hi Alexander,
->>
->>> On Thu, Jun 11, 2026 at 6:21 PM Yunseong Kim <yunseong.kim@est.tech> wrote:
->>>>
->>>> [snip...]
->>
->> Thank you for your guide. I'll remove it in the next patch set.
-> Also please make sure to update the patch version. It's really hard to
-> distinguish between "[RFC PATCH v2 n/6]" and "[RFC PATCH v2 m/14]"
-> when both series pop up in the inbox.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606121653.sbaXkuBH-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/nvme/target/core.c:17:
+   In file included from drivers/nvme/target/trace.h:19:
+   In file included from drivers/nvme/target/nvmet.h:26:
+>> drivers/nvme/target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
+      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
+         |                                            ^
+>> drivers/nvme/target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                               ^
+>> drivers/nvme/target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                                            ^
+>> drivers/nvme/target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+         |                                                        ^
+   drivers/nvme/target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                  ^
+   drivers/nvme/target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                                               ^
+   drivers/nvme/target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                ^
+   drivers/nvme/target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                                                                    ^~~~~~~~~~~
+   6 warnings and 2 errors generated.
+--
+   In file included from drivers/nvme/target/configfs.c:23:
+   In file included from drivers/nvme/target/nvmet.h:26:
+>> drivers/nvme/target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
+      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
+         |                                            ^
+>> drivers/nvme/target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                               ^
+>> drivers/nvme/target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                                            ^
+>> drivers/nvme/target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+         |                                                        ^
+   drivers/nvme/target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                  ^
+   drivers/nvme/target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                                               ^
+   drivers/nvme/target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                ^
+   drivers/nvme/target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                                                                    ^~~~~~~~~~~
+   drivers/nvme/target/configfs.c:1114:19: error: incompatible pointer types passing 'struct nvmet_subsys_link *' to parameter of type 'struct nvmet_subsys_link *' [-Wincompatible-pointer-types]
+    1114 |         nvmet_bpf_detach(p);
+         |                          ^
+   drivers/nvme/target/bpf.h:15:63: note: passing argument to parameter 's' here
+      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
+         |                                                               ^
+   6 warnings and 3 errors generated.
+--
+   In file included from drivers/nvme/target/admin-cmd.c:13:
+   In file included from drivers/nvme/target/nvmet.h:26:
+>> drivers/nvme/target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
+      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
+         |                                            ^
+>> drivers/nvme/target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                               ^
+>> drivers/nvme/target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                                            ^
+>> drivers/nvme/target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+         |                                                        ^
+   drivers/nvme/target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                  ^
+   drivers/nvme/target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                                               ^
+   drivers/nvme/target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                ^
+   drivers/nvme/target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
+      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+         |                                                                    ^~~~~~~~~~~
+   drivers/nvme/target/admin-cmd.c:224:26: error: incompatible pointer types passing 'struct nvmet_subsys *' to parameter of type 'struct nvmet_subsys *' [-Wincompatible-pointer-types]
+     224 |         if (nvmet_bpf_supported(ctrl->subsys, req->port)) {
+         |                                 ^~~~~~~~~~~~
+   drivers/nvme/target/bpf.h:16:61: note: passing argument to parameter 'subsys' here
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                             ^
+   drivers/nvme/target/admin-cmd.c:224:40: error: incompatible pointer types passing 'struct nvmet_port *' to parameter of type 'struct nvmet_port *' [-Wincompatible-pointer-types]
+     224 |         if (nvmet_bpf_supported(ctrl->subsys, req->port)) {
+         |                                               ^~~~~~~~~
+   drivers/nvme/target/bpf.h:16:88: note: passing argument to parameter 'port' here
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                                                        ^
+   drivers/nvme/target/admin-cmd.c:228:37: error: incompatible pointer types passing 'struct nvmet_req *' to parameter of type 'struct nvmet_req *' [-Wincompatible-pointer-types]
+     228 |                         if (nvmet_bpf_log_page_supported(req, i))
+         |                                                          ^~~
+   drivers/nvme/target/bpf.h:20:67: note: passing argument to parameter 'req' here
+      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+         |                                                                   ^
+   drivers/nvme/target/admin-cmd.c:626:26: error: incompatible pointer types passing 'struct nvmet_subsys *' to parameter of type 'struct nvmet_subsys *' [-Wincompatible-pointer-types]
+     626 |         if (nvmet_bpf_supported(ctrl->subsys, req->port) &&
+         |                                 ^~~~~~~~~~~~
+   drivers/nvme/target/bpf.h:16:61: note: passing argument to parameter 'subsys' here
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                             ^
+   drivers/nvme/target/admin-cmd.c:626:40: error: incompatible pointer types passing 'struct nvmet_port *' to parameter of type 'struct nvmet_port *' [-Wincompatible-pointer-types]
+     626 |         if (nvmet_bpf_supported(ctrl->subsys, req->port) &&
+         |                                               ^~~~~~~~~
+   drivers/nvme/target/bpf.h:16:88: note: passing argument to parameter 'port' here
+      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+         |                                                                                        ^
+   drivers/nvme/target/admin-cmd.c:627:35: error: incompatible pointer types passing 'struct nvmet_req *' to parameter of type 'struct nvmet_req *' [-Wincompatible-pointer-types]
+     627 |             nvmet_bpf_log_page_supported(req, lid))
+         |                                          ^~~
+   drivers/nvme/target/bpf.h:20:67: note: passing argument to parameter 'req' here
+      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
+         |                                                                   ^
+   drivers/nvme/target/admin-cmd.c:628:33: error: incompatible pointer types passing 'struct nvmet_subsys *' to parameter of type 'struct nvmet_subsys *' [-Wincompatible-pointer-types]
+     628 |                 return nvmet_bpf_get_log_page(ctrl->subsys, req);
+         |                                               ^~~~~~~~~~~~
+   drivers/nvme/target/bpf.h:24:64: note: passing argument to parameter 'subsys' here
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                                ^
+   drivers/nvme/target/admin-cmd.c:628:47: error: incompatible pointer types passing 'struct nvmet_req *' to parameter of type 'struct nvmet_req *' [-Wincompatible-pointer-types]
+     628 |                 return nvmet_bpf_get_log_page(ctrl->subsys, req);
+         |                                                             ^~~
+   drivers/nvme/target/bpf.h:24:90: note: passing argument to parameter 'req' here
+      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
+         |                                                                                          ^
+   6 warnings and 10 errors generated.
 
 
-My apologies for the noise in the v1 (Mistakenly sent v2).
+vim +15 drivers/nvme/target/bpf.h
 
-I will ensure the v3 patch is thoroughly cleaned up before submitting.
+     8	
+     9	void nvmet_bpf_detach(struct nvmet_subsys_link *s);
+    10	bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port);
+    11	bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid);
+    12	void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req);
+    13	int __init nvmet_bpf_struct_ops_init(void);
+    14	#else
+  > 15	static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
+  > 16	static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
+    17	{
+    18		return false;
+    19	}
+  > 20	static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
 
-Thank you again, for the review.
-
-Best regards,
-Yunseong
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
