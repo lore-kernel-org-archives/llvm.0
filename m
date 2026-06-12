@@ -1,85 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A40371893;
-	Fri, 12 Jun 2026 08:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A6C31F9A3
+	for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 08:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781251668; cv=none; b=A+tgzVUu7sO3iH4DN3BbkpGBy1aJp/jWfsynzVWuntArgtmNheYtfIhdJne4l5X3RXvGEwVu/Em/eCT8su9GoCGqpNAR423hGRM6rZQo7olAPJj7S7YUKOqpzwXj7F8bOqevK5lWvTO+TT/LAfqzxntX4pc7nxX4MI4iJTIFWdw=
+	t=1781252037; cv=none; b=t+rk97lqhua05+v9YGThSxAsBZF/s1mn9vK1jEviA6D9r4+WmHZOvbY6h/wZdkv+BmkGYn/7Qzq4RMLo+nxZELhMpo9sYMqwqN6jjZdndO7WMh0fy4kOXthHkq0SXGgqq06cfu9jkHpFZ1CuavaJHoZvh/nJ4bRTw+ZTRCWvQGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781251668; c=relaxed/simple;
-	bh=9/PhghjZ+xd54UoLUQixk0uTuDw8IDQ6yDW5K3ErHBA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Piwg/ilhu2sS0otyV74hsR90JPB75/Ey9KfS6/AxCTxfCHh7qXi+T3CZrGLa/eh3cGcDwoqqn8pdNk3u6FpVEsg+aPLIKywsqbb+Wbwunrp8NYmrhprT/gcpuBO2ogZv11NXfCvNNfKJxzfCVwwAradYnt82zWd3jwRdY8qzCMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JPKLEPp/; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781252037; c=relaxed/simple;
+	bh=62zbLUPIeAKMLxTE14cge4JaHS8J4tk+naOd2uv2Av4=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oTlsGu0haYJWtDxajPaRMVYLwcqqoAIKOcJmYe4Rl64PqmRDAfQBim/PO1jyt34mivi+nBQWTlgvBBMx8Kn8Putzf2mKhqF/R6DCYlPdwZPHmgO0hH5/hx8BKEpfFQbuNdJx9Z/jAyH/rHAAjtq2BtHVh4yK7aRyC+fESjGTMK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WNsUo/IN; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JPKLEPp/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781251667; x=1812787667;
-  h=date:from:to:cc:subject:message-id;
-  bh=9/PhghjZ+xd54UoLUQixk0uTuDw8IDQ6yDW5K3ErHBA=;
-  b=JPKLEPp/971bbiEkrBBlFLCNZhmpYn224YsYAvXuzcOb9thBgwRKqFRm
-   XLsPJSP5bCTZyuzAcI556CdSSLZ8XGz9KY9NafHShh8yZjUINxk935luY
-   RG3uJ7gQK1QNnMMiZ2+BSAhKrXNbbMwTEt7ZH8RPlm409618D6hXjda0d
-   E3NcoBGf5PpR6/twgxOv0yzpMCS43gCjhhHYG20A5auX1MjUB47K+/Qz8
-   PGBTzFm97Jm2kJRmHFB4QsxkFoyzJk+LW4rWtrFOyiRAjGVBhGrOB/ZXN
-   lCEnGAhJMfJv/trzis7bG//gQEAsE1j5eDm4KwOTMI7RrpwVeU0pgsZF8
-   Q==;
-X-CSE-ConnectionGUID: gEsGRSLmSHC6QsCop2+dbg==
-X-CSE-MsgGUID: 6L0KdUICSW2B3jztEyowdA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="81093721"
-X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
-   d="scan'208";a="81093721"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2026 01:07:46 -0700
-X-CSE-ConnectionGUID: IWsIa/rLREa+/ZubCc3x4g==
-X-CSE-MsgGUID: ozFMRujRTz2+xwZqd3OjoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
-   d="scan'208";a="270414943"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 12 Jun 2026 01:07:45 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wXwvW-00000000OTt-1zfR;
-	Fri, 12 Jun 2026 08:07:42 +0000
-Date: Fri, 12 Jun 2026 16:06:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Mark Brown <broonie@kernel.org>
-Subject: [jirislaby:next_master 96/223] Warning:
- drivers/phy/apple/atc.c:631 Excess struct member 'sw' description in
- 'apple_atcphy'
-Message-ID: <202606121555.hvvZntPB-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WNsUo/IN"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-45ef41adbc1so493264f8f.0
+        for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 01:13:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781252034; x=1781856834; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=iluw3zoyTSmSzkjjNukNbm680IZJrEluKhEAoUtwN5s=;
+        b=WNsUo/INeR7TEOa2hAVhJGW+spL8qJh0HAT5JLHXhC0/hR1jK7xZ8qqxQq2wEY90dP
+         vyDqqWxGPj66VeJts2dYxAqif7HdC7xbAOjrtg5MbzuKx5yRB/slCOchsmPUdnuojgYh
+         piJC0/xI+eJfUsRIOv11sylAONxWF+yKlOXlKGkMwfhQN70gMNoVB8PD6zQug3c1mwYK
+         cje+VU9ngEy9/eiDW2Beis4aa8lAc3PYGrIFgPzuTYO/FoSZgn36zRTXmOgecp4Ga0I6
+         T4fDQB5lvRAajYytrgV6pGzsj7Dluj2RXNxlKOARM/eYE8e831ht0e6hry7g3cZ6cZos
+         Yddw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781252034; x=1781856834;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iluw3zoyTSmSzkjjNukNbm680IZJrEluKhEAoUtwN5s=;
+        b=kC6eTCSGVGTRhaG9O9NlwXWMQ8lyEQ7bLi5tfH5R1jtcNfURe/9tpEP3bMwZ/hwb19
+         oZRcNrxfYUvVH98ckWXv7v7lp6qRQKrdCLFbXDSdhjp3EgJFqlRQFAVjk9uW6QpnzDj8
+         MeptjgxTJyebeWUhF88pdI2o9YSa5bes/QFqalSYHBDpjgLnb50+ugY8DTMs/nAnQExM
+         tRaYpu3jmLoHOHv+Y3f//oWNPRECLE2Ip8Re7yQfjL1DWbqW5hcqDwkyvcuzQmBJeJ3z
+         6jOJJR10L3VYsCrYX6l2Q5TkCgeLCIiX4LYxa7/leR4Hmsx/XsB6MmuhmIMaljpUK23Y
+         RX5w==
+X-Forwarded-Encrypted: i=1; AFNElJ+7Px10nY+aXwGykb6cZtyVQVvs0mMcN3qcJ1adzXVSVWAk3DP9uYZ+g+E3rojNFfdKQ6jZ@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywnh3g4MKv6qtte8kSnfKo0Xzhx3seTNKHcDCTSo4TmMl6YBPR9
+	Y8iKtGaHyh0Ksrvor3HNbacg1+/eSgtMnbRC6C6sJiqFvHgpMYrXkbvE
+X-Gm-Gg: Acq92OER71+vnjNCQqZOjzT0gZHeJ7DpSXwqLDpxT4VpC7Y1/MCYdEoVrrfuPBdTKHt
+	SoZ6hNwindpmdd+N9kvXhmra7tqGv2f+Aps4sP07UprQM7FZ2+yOuSYup3X7ml49TgbWyW+OgYb
+	cxB3Id6cttYGQhtBd6YKJDqUz7C+eRq2glqs61A/EEviQcHxHyOxAL7r3T8zC4ofVR4xUK4s9q8
+	Jvf8MDZb2CuQ2UAbBM+fUpr/vx68yivtohAUH76AuhbzZvAH7SLbpWGZKZI8AyWoDGOB7vJo1G5
+	oD1eNptSe6lpH0savkjEPn8iFYjtRmiJaClmnQBxNgVpOfVHnNVNw0YZPID4/TickWWj52N5K1U
+	V9sLiGxWlhhfQZSn5YK9RLzLDJdWmzHH5DOf8HautVl7n5mhRiWCHcX3naDqQYJnFpnETJASc12
+	Uheza40OiJGmJOB1ZPIK/tWQ==
+X-Received: by 2002:a05:6000:2508:b0:45e:a314:ce0c with SMTP id ffacd0b85a97d-4606da5f2bemr2663661f8f.1.1781252033709;
+        Fri, 12 Jun 2026 01:13:53 -0700 (PDT)
+Received: from Ansuel-XPS. ([176.200.123.4])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2b0c35sm3661992f8f.22.2026.06.12.01.13.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jun 2026 01:13:53 -0700 (PDT)
+Message-ID: <6a2bbfc1.cf2df9a4.29e9ad.911b@mx.google.com>
+X-Google-Original-Message-ID: <aiu_vQHd741aPr_E@Ansuel-XPS.>
+Date: Fri, 12 Jun 2026 10:13:49 +0200
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Srinivas Kandagatla <srini@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] nvmem: airoha: add ARM64 dependency
+References: <20260611125822.3386722-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260611125822.3386722-1-arnd@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git next_master
-head:   a225caacc36546a09586e3ece36c0313146e7da9
-commit: 2fc247190dcde0aee3596b0fb87a0b5afa600941 [96/223] Merge branch 'docs-next' of git://git.lwn.net/linux.git
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260612/202606121555.hvvZntPB-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260612/202606121555.hvvZntPB-lkp@intel.com/reproduce)
+On Thu, Jun 11, 2026 at 02:58:00PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The driver already depends on HAVE_ARM_SMCCC and ARCH_AIROHA, but both
+> are available for 32-bit and 64-bit targets. However, the smccc invocation
+> fails on thumb2 builds with clang:
+> 
+> drivers/nvmem/airoha-smc-efuses.c:38:2: error: write to reserved register 'R7'
+>    38 |         arm_smccc_1_1_invoke(AIROHA_SMC_EFUSE_FID,
+>       |         ^
+> note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+> arch/arm/include/asm/opcodes.h:215:2: note: expanded from macro '__inst_arm_thumb32'
+>   215 |         __inst_thumb32(thumb_opcode)
+>       |         ^
+> 
+> Since the driver is only used on the 64-bit an7581 soc, avoid this
+> problem with a stricter dependency.
+> 
+> Fixes: 25e001fcc1e6 ("nvmem: airoha: Add support for SMC eFUSE")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606121555.hvvZntPB-lkp@intel.com/
+Reviewed-by: Christian Marangi <ansuelsmth@gmail.com>
 
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/phy/apple/atc.c:631 Excess struct member 'sw' description in 'apple_atcphy'
->> Warning: drivers/phy/apple/atc.c:631 Excess struct member 'mux' description in 'apple_atcphy'
->> Warning: drivers/phy/apple/atc.c:631 Excess struct member 'sw' description in 'apple_atcphy'
->> Warning: drivers/phy/apple/atc.c:631 Excess struct member 'mux' description in 'apple_atcphy'
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+	Ansuel
