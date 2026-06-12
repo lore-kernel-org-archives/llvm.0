@@ -1,60 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A023655E6;
-	Fri, 12 Jun 2026 18:18:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB81130FC27;
+	Fri, 12 Jun 2026 18:43:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781288297; cv=none; b=DXVpklvmYpv2EBwnqEC7I7Mg6dmVRf45Q0WdWiTDMv4SeQC8iXm0s5NXWAqSenqCz/tin9RnKGBusoqnBsRnzXOHCKH3yRScO49ZbdvQxhjR9itelkUxx08nxzXRpecMteNGNwmUhGjF7YKleK77O/JTcd9yUJ5mu2BrlVZRvYo=
+	t=1781289795; cv=none; b=SZwDgmtjr/TkJC5jasTyD/+jpKhjuQNeBWmHwhFhyc0jPV1pNF8/vYjyfkxo/eAlLYab7hbzoMJSL7TPsBgbibTvyE068TQOw8lSCI6Ugzaz3z+0ZeLlhmEcLjuVD51tqS6V7RIUk8aEPIoQTWUDeDwhnXUbv76kCAOjZvlcca0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781288297; c=relaxed/simple;
-	bh=GgXwtHCxCdjGr2EMLikfw9VatVYG3ZHRAJxS0RtI0o0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NnGkX/LmNlCZ8EZQ63L3exdn2l2VUM2fsKYapAQj+pzJG7+frN0RPJuBKZFLlBFPPDeLjxFi8pbHzrnWcSg04uewTnm82Hi9eEo5VZkKkgd0I0NRwPKkj7vFYeJVI49pZ9Mm2k5QlXsZ82STlLhV9sTeV2YHde4yDZcvJ1C7bLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QySR2KP0; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1781289795; c=relaxed/simple;
+	bh=wNhL5iRSmfNMwXCHqObtG0A0zazh6f3pyoNDGG/0z8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=kVONQLpRrgCVGdz1/VC3o7DnutfjGyIeegE0APaoQE15RLau8fNX1rKLFHgUYi2gYCp2+XfNZuhYNlwF2vP1d5xjsaeX6JKnAjwBowaQuhQzMPY97/y936i1IjR/qhGttjLQzMyznb3HUEsfZZL3uuDjdkG4AfIX8/xnDrJ342c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UPZrkCR2; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QySR2KP0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UPZrkCR2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781288294; x=1812824294;
+  t=1781289795; x=1812825795;
   h=date:from:to:cc:subject:message-id;
-  bh=GgXwtHCxCdjGr2EMLikfw9VatVYG3ZHRAJxS0RtI0o0=;
-  b=QySR2KP0RyNKo3EoALDdQbjNTPqGul48lRv7ri3s+5eqQydaUUX33SlY
-   +vTrhIq8JG4IzR+DOqDP6MUDfA55iJU+DwTnRfMllrjGuiAw2pAJZHn8t
-   xKGqRQvJQb/o2X1U0HoCjhkQMKt9G/wdvyTdWIXY8pP/BXRQwHZLFdgHN
-   jE50nfQ75FhxfI9B6smn+tb+a90M7OubzTJvD0MTaBqy/wjcyxszxLlRE
-   npSVUySkBhNFvXME1Q3USs0dzQkLftPHEIhwYUKsYQ363Z92EWpoAVMyj
-   KNLACRLcdSe5P4EvfvljlPYrDEisoXP+fwpldd94gKbGNlyk+6F6usyd1
+  bh=wNhL5iRSmfNMwXCHqObtG0A0zazh6f3pyoNDGG/0z8Y=;
+  b=UPZrkCR2wiXMRp9skbgRsRbpKntws2Nl8CGwX8fRcRIYF2QNqJXgTNlk
+   F6CVBDPz1jWH6E7WW/kmXM0dtnpNJCOGn8g7Izibybcg3wmNJx/KwreR4
+   /catESeVS3TtlCmh+EO5kHHs40Szk+wqsGTJDY34BRtEOqbdXsTt0/i+k
+   a0JG9O2rFV+/PcHIXPL/Y7I+qwvkuOWf2UFq786Ko4FC4bdtd4hRXzHaS
+   56DK65Y5au/2YMip37NBBXUUxCDcyz4ySVb1GgpKT+hgHVwvc3ygCw/6z
+   KmcBCyNSB3pO8XU4PlDYiIr7McjLnA68ILdnRvVAxvEfGCQP5Dh9r+KKl
    w==;
-X-CSE-ConnectionGUID: wY8BzxwjSWKETD/G1VZWtA==
-X-CSE-MsgGUID: okji8vMDQIm2GCoPpITgag==
-X-IronPort-AV: E=McAfee;i="6800,10657,11815"; a="85969209"
+X-CSE-ConnectionGUID: qPwE+GPVRdezbZqsWyRdZQ==
+X-CSE-MsgGUID: Zh1XpxMyRCyMkI7xNU5qug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11815"; a="104797083"
 X-IronPort-AV: E=Sophos;i="6.24,201,1774335600"; 
-   d="scan'208";a="85969209"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2026 11:18:13 -0700
-X-CSE-ConnectionGUID: +vqLKWf9T+irdFBg0Zrxtg==
-X-CSE-MsgGUID: gisD8UCbQmeAb2PyXyWVEQ==
+   d="scan'208";a="104797083"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2026 11:43:14 -0700
+X-CSE-ConnectionGUID: MnUUMRjxRMiVKK5FawwyVQ==
+X-CSE-MsgGUID: fvyB5zhqTt2qcIg1Ycc6yQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,201,1774335600"; 
-   d="scan'208";a="251170555"
+   d="scan'208";a="245984627"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 12 Jun 2026 11:18:11 -0700
+  by orviesa010.jf.intel.com with ESMTP; 12 Jun 2026 11:43:13 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wY6SG-00000000PBJ-1fAc;
-	Fri, 12 Jun 2026 18:18:08 +0000
-Date: Sat, 13 Jun 2026 02:17:21 +0800
+	id 1wY6qU-00000000PDF-2ZsF;
+	Fri, 12 Jun 2026 18:43:10 +0000
+Date: Sat, 13 Jun 2026 02:42:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jia Wang <wangjia@ultrarisc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-gpio@vger.kernel.org, Linus Walleij <linusw@kernel.org>,
- Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Subject: [linusw-pinctrl:devel 125/127] ERROR: modpost:
- "pinctrl_get_group_selector" [drivers/pinctrl/ultrarisc/pinctrl-ultrarisc.ko]
- undefined!
-Message-ID: <202606130210.ytVPxHlm-lkp@intel.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ebiggers:xor-pending 1/1] lib/raid/xor/x86/xor_arch.h:16:6:
+ error: call to undeclared function 'cpu_has_xfeatures'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202606130214.hwLDHz6m-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -62,21 +60,48 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-head:   981aefd53b3cdafae0e45332a1023b80d67f52be
-commit: cb7037924836a352e767f69f1aa65b82f3e815f4 [125/127] pinctrl: ultrarisc: Add UltraRISC DP1000 pinctrl driver
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260613/202606130210.ytVPxHlm-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c8ad049db78ae52052722b6f42b54cd2a666072b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260613/202606130210.ytVPxHlm-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git xor-pending
+head:   29d2790c2a2ae236ad76443f63a16fc2ebc3c3bf
+commit: 29d2790c2a2ae236ad76443f63a16fc2ebc3c3bf [1/1] lib/raid/xor: x86: Add AVX-512 optimized xor_gen()
+config: um-randconfig-002-20260612 (https://download.01.org/0day-ci/archive/20260613/202606130214.hwLDHz6m-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 62847ab7593df144a5708406e6240ec5e8a3a101)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260613/202606130214.hwLDHz6m-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606130210.ytVPxHlm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606130214.hwLDHz6m-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "pinctrl_get_group_selector" [drivers/pinctrl/ultrarisc/pinctrl-ultrarisc.ko] undefined!
+   In file included from lib/raid/xor/x86/xor-avx512.c:12:
+>> lib/raid/xor/x86/xor_arch.h:16:6: error: call to undeclared function 'cpu_has_xfeatures'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      16 |             cpu_has_xfeatures(XFEATURE_MASK_AVX512, NULL)) {
+         |             ^
+>> lib/raid/xor/x86/xor_arch.h:16:24: error: use of undeclared identifier 'XFEATURE_MASK_AVX512'
+      16 |             cpu_has_xfeatures(XFEATURE_MASK_AVX512, NULL)) {
+         |                               ^~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+--
+   In file included from lib/raid/xor/xor-core.c:140:
+   In file included from lib/raid/xor/um/xor_arch.h:2:
+>> lib/raid/xor/um/../x86/xor_arch.h:16:6: error: call to undeclared function 'cpu_has_xfeatures'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      16 |             cpu_has_xfeatures(XFEATURE_MASK_AVX512, NULL)) {
+         |             ^
+>> lib/raid/xor/um/../x86/xor_arch.h:16:24: error: use of undeclared identifier 'XFEATURE_MASK_AVX512'
+      16 |             cpu_has_xfeatures(XFEATURE_MASK_AVX512, NULL)) {
+         |                               ^~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/cpu_has_xfeatures +16 lib/raid/xor/x86/xor_arch.h
+
+    11	
+    12	static __always_inline void __init arch_xor_init(void)
+    13	{
+    14		if (IS_ENABLED(CONFIG_X86_64) && boot_cpu_has(X86_FEATURE_AVX512F) &&
+    15		    !boot_cpu_has(X86_FEATURE_PREFER_YMM) &&
+  > 16		    cpu_has_xfeatures(XFEATURE_MASK_AVX512, NULL)) {
 
 --
 0-DAY CI Kernel Test Service
