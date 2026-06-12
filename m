@@ -1,86 +1,187 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010024.outbound.protection.outlook.com [52.101.69.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D65C35E93E;
-	Fri, 12 Jun 2026 07:32:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781249566; cv=none; b=Du/aq4T1u0qhcSqHEsCCNx0hxZwNVXh+vB8vJ7mxSLDxDab9i1XQjyd3BpUETGAZuS4V5As8YnaA4Z55Qg51gzukUOAmV0CLmosKdxVC7awCqXoFywv0kNR7jxfZ0un6IUSftRbjuv1A4uyOyZN8df42OKxABO9SvKgGicn7LnY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781249566; c=relaxed/simple;
-	bh=wLfvdcGC6inqXE3MZbzbTKYNVxNQ4x0yEziFonfwWqI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Q7ZQ9uw8bppNSSEZrCPEqND/6aPr1jTMh8ReFeZtSYEDTJDpJ1dgSwAdBd3zbpHTLB+tPI0Nb3rAM87LRnA6dvCWEvxaOPpe/Q8AEm3roimKYIDsh0YdUISz+gsXs/hjFk+1HOUEuTblG118XMd2ZiGTmaBMAqh7KaBWONdHRbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HsHiZQjC; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BE93803D6
+	for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 07:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.24
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781249594; cv=fail; b=EjPJtBIogC1r1llGjjzCmapeE4Pbj2nzAWsGDSAnOBSCcimtUmKkAWO03+Qcc52rmFH//fuchGBOH5e9FgFdjRmNUmgLfE32ycmA7ENUHfB8lyva0C35P8Lfo+K00AolldgTx+ozi9Qi14N1J6bIAYbmTaRpOnGWm3LtMxV8MJY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781249594; c=relaxed/simple;
+	bh=jHCJHcJkD0l53V4TpzADRcKi3n18Iczh77RLhm570QM=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ryNcrwyYPD4pK/hhNLzQgyxyNAXIwA1foXVYvdAIxBQpluG86aLspkaufHMshuFzP9Hc4rqof8Yw52YrWfMYsh+V/RGRPDbXjlHhpicUrKzERZekn7UjeFbvuBhxvp7XeVkEtiwQyy+H/8rsTpuW056SZ38F4JvAgS/iLBok6zs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=GmW+JPeq; arc=fail smtp.client-ip=52.101.69.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HsHiZQjC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781249565; x=1812785565;
-  h=date:from:to:cc:subject:message-id;
-  bh=wLfvdcGC6inqXE3MZbzbTKYNVxNQ4x0yEziFonfwWqI=;
-  b=HsHiZQjCGLi33FTnc3jk8H+bQCMSJnHOpCQsC/SlI89OWqQWM5D4zNUB
-   tMH2Avw8YanVEk4N/ph5H3HyIT5sIUAj2WyZ/lMhQR9sUHn00vBe//CIz
-   wF8k7L2CXFQZ5dQXKfwD6uG+Qnzs1DjIXPT+BPhLerSwC6ncO8tpy3J0/
-   79EgSKx2LTCK0actaf1XW8woIKiA3vmCVnsVJ/YgkE+PMfEdrsMbCykAO
-   A1QrMDceNdtmvVfSJkKRFhg6LYuy2zLYYLh7ulaRtwKCjCVXQFXdFt6L9
-   oI9/3l/6xhGz1fcyO3YzMr+dSUOtz/6NXvwUXwmprI6zeCGr84+Fd1KxR
-   A==;
-X-CSE-ConnectionGUID: gkLBATSVQ/irf3SdJ/eL/w==
-X-CSE-MsgGUID: b1oUWiwHTN+dTDtv/xViWw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="92755193"
-X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
-   d="scan'208";a="92755193"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2026 00:32:44 -0700
-X-CSE-ConnectionGUID: kFaPmlx6TJySkiW91628pA==
-X-CSE-MsgGUID: YPwTw4yMRuWJRztEcRoO9Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
-   d="scan'208";a="245856376"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 12 Jun 2026 00:32:43 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wXwNb-00000000OS7-3Uz5;
-	Fri, 12 Jun 2026 07:32:39 +0000
-Date: Fri, 12 Jun 2026 15:31:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Logan Gunthorpe <logang@deltatee.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sbates130272-p2pmem:switchtec-dma-sysfs 3/5] ld.lld: error:
- undefined symbol: dma_chan_kobject_add
-Message-ID: <202606121508.oga9gQxg-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="GmW+JPeq"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=PiyhmlBDAByfbtq8FjPr8ei2cJzcjVhlnBwIHANtXYtbKf4cE1xh7G/GnPzVbII+q3S6fyBcvGZ3nCPJNyqGENbmYdYNAkeE6TYNODX+xrhTgUdytvLwP42GXVJwF9D10DfiJ/fdS11R2DGbCc66IosCVF4TEsSOyqE2qZcA348CG3WeMKuT8RvnVpSv/vwTWTnb3ZkH0pNtrrPQsojUqHg+uIJxn3O9BwgspYUCZB6uGrOjoYOqr12RRBsXJ52afM7Mk9FPvYPZJXkjNf2AAHQ9C9qNCZVkPSzb9HiM2IJZXjEbEI6lxC2iyM/G5fvAs2AQW2e47tSbfvbBe3G0DA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fJq4fa9rM9uZEC7f3XuPHliifevdHTxzarBSl7UEpNI=;
+ b=CLDO//Mvw61HH9DYpD6/PHYRIP6bIaBlY4WWa4Cq/1idWnjLsC+wlSmwAXDPlEHpnUctmmxFV3YdudRtmLw6Y2DZ6MI44fRrGjhjjYbXU0jFfvhB3ngUXTHe1fwPaYtxCZW4DY5sAXE7TbMrCHAUXvKri1R3wodSXJy6DFnZ4taJRfXxP2c2Pkr2rdsJ5y5T7CKSRHaVm6U7zGXJQP95bwyP2c8EW5GrwJwFfGOVDTCEl1CzkUKrFcbXStoh5V7f6GqSNU6bMRHikbrx0fYzYGskMnklNPPmW1vN1tP2o9XL0gFpNxx2mF+ILEvQJnP3y29X7HTU//xpXWM4thIWbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
+ dkim=pass header.d=est.tech; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fJq4fa9rM9uZEC7f3XuPHliifevdHTxzarBSl7UEpNI=;
+ b=GmW+JPeqULf2M8M/DKFHqKideOA4cVBXSmR+4JW7BKhPNBlYLDcpr6VtlrNiPrdWIIVzLyz5jaZXo9rUqxhZYO6n8oo9ThnCMqHjnEWyQ2L2LvvcdVTfxIp8b0yle5ya0khhlHbebyMd5VouIMP6JCK/3Yc2rGf1LDPuEjYDiqp1utDSKtcZhxGUyfFFr53gBAe9SUbhqfKhP6tYvWj7dHCzCPNS/OiZ3zl1xLtB2As8ROl0lCpX/DPKvjlu1iK9Dpxh9kJ8CKnn9Lbxk63bgQN44EsRps8XN6n0PmzuwQpKcsZYhNJVwwikoivZdEqrm1lHQly9ZLnnJ7EbHAfv0A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=est.tech;
+Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:39b::19)
+ by PAVP189MB2620.EURP189.PROD.OUTLOOK.COM (2603:10a6:102:2fd::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.14; Fri, 12 Jun
+ 2026 07:33:07 +0000
+Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+ ([fe80::69fc:c4d4:200b:e4b4]) by AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+ ([fe80::69fc:c4d4:200b:e4b4%7]) with mapi id 15.21.0113.013; Fri, 12 Jun 2026
+ 07:33:07 +0000
+Message-ID: <2c655653-88d7-4717-98f2-94e51cd457ef@est.tech>
+Date: Fri, 12 Jun 2026 09:33:00 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 0/6] kcov: per-task dataflow extraction at kernel
+ function boundaries
+To: Alexander Potapenko <glider@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>, Dmitry Vyukov
+ <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+ kasan-dev@googlegroups.com, llvm@lists.linux.dev,
+ linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+ Yunseong Kim <ysk@kzalloc.com>
+References: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech>
+ <CAG_fn=W1++qPJWQk1+4MtRfe6n1iUKF2O5pddnqKGwSq85CuqA@mail.gmail.com>
+From: Yunseong Kim <yunseong.kim@est.tech>
+Content-Language: en-US
+In-Reply-To: <CAG_fn=W1++qPJWQk1+4MtRfe6n1iUKF2O5pddnqKGwSq85CuqA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: GV3PEPF0001DBFC.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:158:400::317) To AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:39b::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8P189MB1752:EE_|PAVP189MB2620:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e745ec3-3eb8-4f2c-5bbc-08dec854d8f5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|366016|376014|1800799024|23010399003|18002099003|22082099003|6133799003|4143699003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	4AgIUqRVzO92Ncj0sRWqc6O94hUQRKGNBwyzyoCy2/tIGnt5dYq0EadzsQ8SthvThLEfhfYZk4SoQYIvPhmVdUGmrNOLqWHHLfFAL3DhBcHLir5JDjyeiXpX+bWNJ1YA/4cZXXuw+DBCsVOgfWEypeBAksw7Nj/+XAXxqXejnW44ThvocTR4tlzQIZkArntEphtiBo4BCOPJi9rk1jsNZNsmJ6FHUv66QgFMYUaqfhi5jfyIOAYSyowxWwyw/QB4/mD3w28f+G6PKt7s4Lt65keL2b0kD2/oFrl+BcA/dDo91Xx/0r3eyHU3uVXYabn/+NBtDtPj1lo958y5dg3rOcoERDBkX/2/YuKC9OoQsRnGAOZx74lkNv+uGodR+FyUYz4ezla8LIm3NsqpjRmo6P5TVSWtHtOH/mouI6inn/8IZUXHrRku99rGkO27paT9BDZUlDq0MRjNyqaFuSDc5tEoY10XhAL4PTIexegGHnntAHzGvTYSW+D2n8g/mGqBz6X2n7lDoeCnhy8MQwcfrFC++AdA7BmondxRqWHTpf2aZvkpNRuGC7877e4/YKbT0COQF6C1ZCA68V0qpcHS6llIIlLEDRe9a92OCgxGgjive3SjtlJjI4lJe/cn8k6AYB0gGefYyqScBeFe2oHkFA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P189MB1752.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024)(23010399003)(18002099003)(22082099003)(6133799003)(4143699003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dGxGcDBkdllCRHZ5SXRhd2NubXVPWGtRNk15TnRLTzNDZy8vNHdYY3d5ZEpE?=
+ =?utf-8?B?K1FmcGJILzdzY082U1g2SG5KdUF1Z0ZlRUlSMFRHa2xQbWNxS0o1eVZqR3Q1?=
+ =?utf-8?B?RllaRmxzT01ZME1mTzl4NERGdStJdUlONnpNeW9tRU9uSWVzbTZVRndBa0li?=
+ =?utf-8?B?azdETFlPMVlXVVRqRTVMNkNodlMvaUxWcTd6b3Z1OTVUUFY3Zmc0cG1mM0xL?=
+ =?utf-8?B?MG1JREZWaGVWVTFTUGZsc0xqNGk3cjNTVzlNcjlLOGY0SHAveExhRHROZUNj?=
+ =?utf-8?B?Vm95TFppZGRqeFQ0RVlmVUdaQ0R5RWdUYVdNeFpVdm1PcEhuVERDZVBLcmxX?=
+ =?utf-8?B?dzYwRW1CdGl2ZzJpengxdGpYVUZRZmwvcExGMTM5Tjh4VDVtUXZEYlhIQVV2?=
+ =?utf-8?B?d0h6R2lGSDVVNzNIbUZWSjhDVHFVbTlaQ3pVRkVZcWNnS0RGMzFyQXB4UU5k?=
+ =?utf-8?B?c3d0Z20xejVYQi85MjVxcERHb3RHRXFOVFE1dm1EM0l1dC9DcXNycFFneEx5?=
+ =?utf-8?B?c1NqMks0L0l0RXE0amZHRlhuVGpDc1FCYzIvcnZERVRJR2F6RDBlQStBWmpv?=
+ =?utf-8?B?QS9VejlDNjlzd2NHZm9FRVVXdnVRMnhFTzdSbk01UTlCTHZpVHM4ZWM5MHlm?=
+ =?utf-8?B?Z1cvdG8rZzM2ZVFGUkVDdjlTdTZWOXpiZGs3dHBlTzV6NmhzYUtiT2dxR2Fu?=
+ =?utf-8?B?UzgyaE91eUZXeXM4OUJBelBrWFhLOUZCQ2RHMlVpaEM4WVNmK1JQeEZFRVFX?=
+ =?utf-8?B?eEFqNjN4anB6dE9vRnVLN2t0VFViOGdnWVc3R2x6dlpHZVFycVZtVmR4VzN3?=
+ =?utf-8?B?cUdwUnhtSmlyMmZyTVBPN3d0dTRqVDMxbjhoTFhiTmF5eWVYcE5zNHI4UEtL?=
+ =?utf-8?B?TnBueGE1SDhlNmZQUDBGRFNXbGxJVVg2UVRQRWpkV3Bma1EyaTN3SW9CR2FE?=
+ =?utf-8?B?NjdzbUFzZVdmaW9Sb3RQU25JYjFlUWhGZ2JpVmcyaXNoUW1oN3prbWlqWU5t?=
+ =?utf-8?B?S1pBYmd6RTlTSTVPQTNoRytYbC9uRU9Vcngzb1Y0eVd5QUZ4bHp3aTZDSzFj?=
+ =?utf-8?B?SXhzUDA5MTg4NXFESHNoL2s5R0RjVjdUOGN5SjB5bUh0K2owYUxYS0FUWGpm?=
+ =?utf-8?B?Wlo2TFhxQTcvUEc0SUoxUG53ZG5wUUV4M0Z0enBHZWQ4d20yV1dTTnFqcU1M?=
+ =?utf-8?B?MkRhL0dOaUNaRzhkdUdOU3lLMHZZenMxV2tEaWdURlR5OXZ4aTN1UHJqMFQ0?=
+ =?utf-8?B?RmNTdUtnUFF3dEtoU01Mek1EUm5WWmNQZ3E2WGswZ0JTSGx2MUsxMGxHaVJz?=
+ =?utf-8?B?ZTZLSWpQTHVZNHJadys5L3FEYVc4QzYrUUhJcnNxWFZIeW5vSVRDNXNxeTV1?=
+ =?utf-8?B?N09yVDdrL2hSQVBGOHZNWE5WZjc4ekRITEFNaTFlc3ppQ0R4Z280ZTJwZGtL?=
+ =?utf-8?B?eXBEN3ZOU2tCa2JQYTN5U28wMEtiUVVWS3hIZUxpZVR2MlVMR0NYQVdJdVhR?=
+ =?utf-8?B?MDJxekk2b2x1OFRqVkVXSHh1NnoveHA3a3Y2TVpTMGFUREU3eDVEd0hzak5U?=
+ =?utf-8?B?SDlMWk1UN0Focm5FeHNRTHVkRSsxcGEweUhDR0JoZUhURG83bHh5NnFMM3dP?=
+ =?utf-8?B?MTlXMWxuYnR5YzNJSE1pOGFpZXh3R2YrL2hIQ2IrZEt0S0JDS0p3R0laRHhC?=
+ =?utf-8?B?c3BpSDVZaElaSG41enBHcVQzTzR0QzdsRkV4MXNNcWVNaDZkUWhwVm1XeDNz?=
+ =?utf-8?B?clJXellRMlhXbzN4SEcyaWkzQTBGck9VVjMwUzZQK3g3UjdsN2k4MjM2WE8z?=
+ =?utf-8?B?cm9RWEQ5dVY1VUUrUW03Mml3bUl1ZG82T3RmOHRUSVVTNnVFanFjS1JXZ2pM?=
+ =?utf-8?B?UGhmNytKcDdNN0pYZWlTWEluakhMcVZ0SEVqUkFpNXBBVytNcFhlMG15SmRX?=
+ =?utf-8?B?S2JNVnpOU0RwNHh3Rk1uV1M2ZWsrR2JJUlZ3a0t3VDMrTkswVHBFT1N0UjlB?=
+ =?utf-8?B?WXdsT1M2S24vQWZ1NG12c2w3WFg5V3ZNMVVRTk5ld0h3bHlUMXc1QzNRSjdN?=
+ =?utf-8?B?cVZXZEtUUURGQ3VFalRZdHdpcFI1cmNjMzlXMXVYbFloc3N2RHBsc1dDUmVB?=
+ =?utf-8?B?d2l1RjhPVUxLMW5vVHA4d05wbVZjNHJOM0RobnBtZkpHOEhkdXc4SnEzQWV4?=
+ =?utf-8?B?VGNOL0p6amhNYkFaWkh0K3R2eUtaMzZicTdUY2pRWXR3a2V1TktKallOeTRN?=
+ =?utf-8?B?b21rQmIxNVozSFVNbkFEeGtHN2FsdUR3a3lBUUo0aE5jeGIzQWEyc1NzUDB1?=
+ =?utf-8?B?aTd3SzUrZVJ2cnhsZnA4NzBDL1Z2YWV3SDIzL1hnWk1JTEVSV1JEUT09?=
+X-OriginatorOrg: est.tech
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e745ec3-3eb8-4f2c-5bbc-08dec854d8f5
+X-MS-Exchange-CrossTenant-AuthSource: AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2026 07:33:07.7283
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kpyvbxylVbs2owF94kzlFSitwc8IYc3a7Vb7j5NAXdKP+MRQKvnwe2su3oMWyrvlyR0sh1rQrctH6nn+NNgRjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVP189MB2620
 
-tree:   https://github.com/sbates130272/linux-p2pmem.git switchtec-dma-sysfs
-head:   ee2dacad5e6a8e8addc55cd39fe061ec8f008c71
-commit: d613c4bb7e9ff70c482e71c63911a20f51d13b84 [3/5] dmaengine: switchtec-dma: Add config sysfs attributes
-config: s390-randconfig-001-20260612 (https://download.01.org/0day-ci/archive/20260612/202606121508.oga9gQxg-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project c8ad049db78ae52052722b6f42b54cd2a666072b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260612/202606121508.oga9gQxg-lkp@intel.com/reproduce)
+Hi Alexander,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606121508.oga9gQxg-lkp@intel.com/
+> On Wed, Jun 3, 2026 at 7:43 PM Yunseong Kim <yunseong.kim@est.tech> wrote:
+>>
+>> Introduces a new KCOV exetened feature that captures function arguments and
+>> return values at kernel function boundaries, enabling per-process visibility
+>> into runtime dataflow.
+> 
+> Some high-level comments:
+> - Make sure your code can run on every platform supported by kcov (namely ARM64)
+> - Check out Sashiko findings:
+> https://sashiko.dev/#/patchset/20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4%40est.tech,
 
-All errors (new ones prefixed by >>):
+I handled those parts that seemed problematic from sashiko's review.
 
->> ld.lld: error: undefined symbol: dma_chan_kobject_add
-   >>> referenced by switchtec_dma.c:1428 (drivers/dma/switchtec_dma.c:1428)
-   >>>               drivers/dma/switchtec_dma.o:(switchtec_dma_probe) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: dma_chan_sysfs_ops
-   >>> referenced by switchtec_dma.c
-   >>>               drivers/dma/switchtec_dma.o:(switchtec_ktype) in archive vmlinux.a
+> at least some of them seem to make sense
+> - Please consolidate changes to the same file into a single patch
+> - There seem to be two tools (one in C and one in Python) with
+> overlapping functionality, can you keep only one?
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I revised this part in v2.
+
+> - The test modules seem to be used only in manual testing. Can you
+> convert them to kselftests or remove them?
+
+Thanks again for yout guide, I've updated it to v2.
+
+> - At this point, long dashes in the kernel codebase are quite rare,
+> and I don't see a reason to add more.
+
+I checked that the v2 series patchset was removed, using long dashes.
+
+Best regards,
+Yunseong
+
