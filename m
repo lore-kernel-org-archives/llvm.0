@@ -1,135 +1,122 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EBD3BED31
-	for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 11:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A65369D7C;
+	Fri, 12 Jun 2026 12:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781264240; cv=none; b=gu72isir834O/kQnTtgBGO6m8Do2pZLdD9Ncwhgi/TMHeDXjxITfrf+W7luHNMskB730w2jMWkguSU3HIHMdwW1Og5ftEIj1STc9lIs7IS8CBOFF40TFWpTLi4C2A0sybaS1vo1mbEdDPWQa2xDzM33gHzb9LPuiS6q7Z0JDoEg=
+	t=1781266658; cv=none; b=Mrcto5fcOzfDXSRW+5RxhkeXwu6IcgYRTHl37UYDbPW2V02JL/0ZYcn5Vw+horiYBVCmjSCBo+ldgdU3vsJ7vZ4IsrR5FMgjwHGUbPXEoWz6c9IyXHQxZK3chdCnZtc9ZlwHP9H4dBJBPVakgqygGUKmxHrmIBfBo91Z0EUF7II=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781264240; c=relaxed/simple;
-	bh=4bNEnXOnxP9R4p/TqJRZcA+o31g58k6pVxjAj3spyT4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NVh8EjoK9s7s5vhkpJntSWrglQXVu0tzguD18cwyWEEAuRsnpH1iwRh8q1cYM4eeVp0KKFlIInJD1xxZJKI6r/foVkJcLPKM3zdp5/dDIg8M095tg+Qamin+MheSTFcqmGNUNibja17vzTwcD1OH10goY4dtiYlHV9UwOl0fwlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LkTIZRQG; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781266658; c=relaxed/simple;
+	bh=YowMQlafNPWCIwKkwllObu8KogtKSLROX4QXzcUCw30=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=rgslqIHGUooLpicXvBF+mdMytErwFNqTHF+bT2TvuiLBuQHWNr0HOAnBOXBaeOohAWDH96u6sSAbNMUDWZ6kHhh/WREKxqtqx+YM53N4SGzzxUTUf1IrPmdVA+tHvi4eFn3auDRYay2usqsG9Hrhjufasb/L3Wt2Eg9pH5vHaAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VMYFjDuO; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LkTIZRQG"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-490ac357c55so7865145e9.1
-        for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 04:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781264235; x=1781869035; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=j9dyxygjV/3RofubGPQY9xrYK9q7NJvG8u++ttMJ7jM=;
-        b=LkTIZRQGrD5z6wdTmEAX1q/7yA4Fti+/9Y3/pGyM+TVGDBfaGniIJuAymFm+sNS01M
-         F2eWPiX0dT6EL5nfCYO9X7wL1ei9iBsyMgQUHTHV56do7k6t+xfeKm63ScE/bAAt4vjq
-         T7vQ+LaS76Z2ujihKCwTAFdkMDGTy/Zhq9MVZVUh8BSi1olWjgCUVJox3Oj1FjIIwjOR
-         Dj9NI7JfFwIaq3tIxYY9G+BMVZAY3KbCxi6k3aTBdOeJ66wJdst8QwU+hNlgSaRTzv23
-         8jDfw6At3QXK8BTsWjveeqoCO80OodKUKjRImlWSF4LallE41j4BVxoOxMVW+tff4V1U
-         wPzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781264235; x=1781869035;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j9dyxygjV/3RofubGPQY9xrYK9q7NJvG8u++ttMJ7jM=;
-        b=SshpESYTXTlhODaYFVEs+SAGFcUCNYYaV8jgaBDE24vYr6TK/W9rnNXUr80M2Gwhfu
-         UpsOGRMKkocTe0s+b37/GRCve1BvDUCmeREcBz2jYkoxqoYNEYXm0590ilOyhT5pXHOT
-         NA/nEy8djRa3jL/enJeK8J9lhVa2MSmho6z2SkA0fJaOMK0BEARmiJmh1JlQ+mT4vV46
-         nblh2V0qt+xKlN/3L4W/WHrlZKyZOyok/g/y2Z9YCmC7vWvs3FIAkiUFKOMb51tm9DNJ
-         Jxs8eLxi2KkF12ORqMQak9WIaiMbs9R3ooIFAJaV87OHsv3SFpVGMPF6m8V1qEQeXBd1
-         IE3w==
-X-Forwarded-Encrypted: i=1; AFNElJ8t5KYHR1rvbnLRA71aDh/gUKXC3qBl/8ykMB909cc0hKQFZx2jDsV7B30T64CHfSmZBlKn@lists.linux.dev
-X-Gm-Message-State: AOJu0YyiJoHqnhXpb4nHinfJ9R3tHM1n/XacmHeRkFsjlsdaqJOAyHC1
-	vmHzqsO9sTLpSy1hObuL37rAHZBO/HZU11qRYnqEzN9zvxPiBaComyVg
-X-Gm-Gg: Acq92OHzcdx6XjJ7UrWFPfnJV1YNG8JzrVgaY11coFb1bhJOjhg7c5x2pNYGavttAm8
-	btgq0ajRiVpxZzDbValg4+0Nzo9uiGWFo8tjDdEsY4a07N+VehOvBXRlG6vMIp/pFmTPuuEmgax
-	knWg0SQAE6AYw9AOpbzAXcS4v0euhpRZ1c15TXKFZB4iAvobvA0dppaPhHOE6NwHXsp9aVcZFXm
-	TOzaSa+MAfZd65l350Fg3AJEtC0smzbw1rhqPCEnQvV2uNltgdPjO8binGTn/4FdhC9SpjcpQqM
-	pZNnSdqNp1ES7AhJaCJse7P0aalxe6PHT/2x3W9qYBemTTA0dnSuTsgofYM6So5Jb+X2x3BSj6k
-	aXlSA/tzGLmvCB/PK/Rb4uMU13Ljtws9v7PYKPwDwRsXx3gc+W/xFUIPENKCMqy/2sHfswww/hi
-	A2Gxa80T7u5McTzZHtQFgmulnclLDpVxmUXOF8KINY1v6l9VHtzMr0l+r7MkxwzeF9ztG7M4BH/
-	9SCq7nQlBuJGM21a5g=
-X-Received: by 2002:a05:600c:8486:b0:490:a298:acf7 with SMTP id 5b1f17b1804b1-490ec4ee700mr36638215e9.17.1781264235050;
-        Fri, 12 Jun 2026 04:37:15 -0700 (PDT)
-Received: from [10.128.10.215] (195-23-151-163.net.novis.pt. [195.23.151.163])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2637ccsm4885808f8f.6.2026.06.12.04.37.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2026 04:37:14 -0700 (PDT)
-Sender: Julian Braha <julian.braha@gmail.com>
-Message-ID: <2e528372-aba4-4621-a9a3-7ce23571ef37@gmail.com>
-Date: Fri, 12 Jun 2026 12:37:11 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VMYFjDuO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781266657; x=1812802657;
+  h=date:from:to:cc:subject:message-id;
+  bh=YowMQlafNPWCIwKkwllObu8KogtKSLROX4QXzcUCw30=;
+  b=VMYFjDuO5ORUjye46luOUiBokw20CJmsKukT0TMxmnjFipq79vh7rz4n
+   LEjxz2Am50Pg7KudUdVOhaEC+ERUE67Cm68W61S4LfmfLpVPEvFssBA0H
+   tMoxPZmgBA/o3Ty+cx2tFscGIPXcj4Y5JFdKhpsCfc5JWHJs40CmozcVl
+   Sf4kVkf8aVjkigZQdUI4kjpM1bgotMJxqCJQ+8L/PKlB+Fpqs6o0CNkOB
+   wWIxMwk+TVW3SzpkB/zVxrVrEGTezI7flIAeXUMqOlFg4KcWmjqNw0b8g
+   Tr5DMKl6CYeyVhvjbT9/BkYVJ2W7UdLUbRDrJ5/RzfGta3jPrXJUMoknQ
+   Q==;
+X-CSE-ConnectionGUID: GnmMoWrPQsC4/3z7DTdpRg==
+X-CSE-MsgGUID: B/g5Ci/1TaKE8n/balPUSw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="81939328"
+X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
+   d="scan'208";a="81939328"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2026 05:17:36 -0700
+X-CSE-ConnectionGUID: rjTP3Qg1TVWD3ag4M464KA==
+X-CSE-MsgGUID: pMyGF8bGTguDCb1qYUFjEg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
+   d="scan'208";a="244386810"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 12 Jun 2026 05:17:34 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wY0pH-00000000OjL-4C4M;
+	Fri, 12 Jun 2026 12:17:32 +0000
+Date: Fri, 12 Jun 2026 20:16:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <kees@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+ Nathan Chancellor <nathan@kernel.org>
+Subject: ld.lld: error: undefined symbol:
+ __kcfi_typeid_aria_aesni_avx_encrypt_16way
+Message-ID: <202606122021.pA9TozrA-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 01/14] kcov: add per-task dataflow tracking for
- function arguments/return values
-To: Yunseong Kim <yunseong.kim@est.tech>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- Andrey Konovalov <andreyknvl@gmail.com>,
- Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
- rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- workflows@vger.kernel.org, linux-doc@vger.kernel.org,
- Yeoreum Yun <yeoreum.yun@arm.com>
-References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
- <20260611-b4-kcov-dataflow-v2-v2-1-0a261da3987c@est.tech>
-Content-Language: en-US
-From: Julian Braha <julianbraha@gmail.com>
-In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-1-0a261da3987c@est.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 6/11/26 17:21, Yunseong Kim wrote:
-> +config KCOV_DATAFLOW_RET
-> +	bool "Enable KCOV dataflow: return value capture"
-> +	depends on KCOV
-> +	depends on DEBUG_INFO
-> +	depends on $(cc-option,-fsanitize-coverage=trace-ret)
-> +	help
-> +	  Captures function return values via /sys/kernel/debug/kcov_dataflow.
-> +	  Struct pointer returns are auto-expanded using compiler DebugInfo
-> +	  metadata, recording individual field values at runtime.
-> +	  Enable per-module with: KCOV_DATAFLOW_file.o := y in the Makefile.
-> +	  Requires clang with -fsanitize-coverage=trace-ret support.
-> +
-> +config KCOV_DATAFLOW_NO_INLINE
-> +	bool "Disable inlining for dataflow-instrumented files"
-> +	default n
-In Kconfig, when you don't specify any default explicitly, it's
-implicitly 'default n'.
+Hi Kees,
 
-I think either style (implicit or explicit) is fine and both are used
-throughout the kernel, but is there any reason to make it explicit only
-for KCOV_DATAFLOW_NO_INLINE, and implicit for the others?
+FYI, the error/warning still remains.
 
-- Julian Braha
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2b414a95b8f7307d42173ba9e580d6d3e2bcbfce
+commit: 23ef9d439769d5f35353650e771c63d13824235b kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
+date:   9 months ago
+config: x86_64-randconfig-013 (https://download.01.org/0day-ci/archive/20260612/202606122021.pA9TozrA-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260612/202606122021.pA9TozrA-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: 23ef9d439769 ("kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606122021.pA9TozrA-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_encrypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:970 (arch/x86/crypto/aria-aesni-avx-asm_64.S:970)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_encrypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_decrypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:995 (arch/x86/crypto/aria-aesni-avx-asm_64.S:995)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_decrypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_ctr_crypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:1096 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1096)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_ctr_crypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_encrypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:1266 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1266)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_encrypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_decrypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:1291 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1291)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_decrypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_ctr_crypt_16way
+   >>> referenced by aria-aesni-avx-asm_64.S:1316 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1316)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_ctr_crypt_16way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_encrypt_32way
+   >>> referenced by aria-aesni-avx2-asm_64.S:1345 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1345)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_encrypt_32way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_decrypt_32way
+   >>> referenced by aria-aesni-avx2-asm_64.S:1370 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1370)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_decrypt_32way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_ctr_crypt_32way
+   >>> referenced by aria-aesni-avx2-asm_64.S:1395 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1395)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_ctr_crypt_32way)
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
