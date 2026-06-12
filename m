@@ -1,130 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D332C286419;
-	Fri, 12 Jun 2026 10:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EBD3BED31
+	for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 11:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781261519; cv=none; b=HxmOXpLv2ilReaa8Six7j1kLfAFk4fttjuWFZ/QUFG6nKxUbtXq3Lpa/2WNGrWQJJOEYEY8Ykkc11sPrWlKrufmXvFUoHv6yW4IX5pYbvYFDwcs6SRJMHH5aXUHbkHCuNao50BpPGHHa509GVHDqHqa87T76Iuij8M4uxNAVLEU=
+	t=1781264240; cv=none; b=gu72isir834O/kQnTtgBGO6m8Do2pZLdD9Ncwhgi/TMHeDXjxITfrf+W7luHNMskB730w2jMWkguSU3HIHMdwW1Og5ftEIj1STc9lIs7IS8CBOFF40TFWpTLi4C2A0sybaS1vo1mbEdDPWQa2xDzM33gHzb9LPuiS6q7Z0JDoEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781261519; c=relaxed/simple;
-	bh=pMOnB/VdBXmdUjIVbiD9nrvItT0vIkK1YmjB2wpMXxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q4WjAN37pyUr6Ioci56x2fxqtyteI8B5NB1kMPxKN/Ja4mAusw7B1RBbVHfBjwrNK5RM/JDBCi5NQtATXhH55Ayt2fZx6pkz0iKIyTD/1KWraeHAdud7A/+1bio3VVonCdKB9dbLHnas40wRCE0sdd/eziy8ZDL19RVpKPyvIFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ROG16Wg1; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781264240; c=relaxed/simple;
+	bh=4bNEnXOnxP9R4p/TqJRZcA+o31g58k6pVxjAj3spyT4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NVh8EjoK9s7s5vhkpJntSWrglQXVu0tzguD18cwyWEEAuRsnpH1iwRh8q1cYM4eeVp0KKFlIInJD1xxZJKI6r/foVkJcLPKM3zdp5/dDIg8M095tg+Qamin+MheSTFcqmGNUNibja17vzTwcD1OH10goY4dtiYlHV9UwOl0fwlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LkTIZRQG; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ROG16Wg1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781261518; x=1812797518;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pMOnB/VdBXmdUjIVbiD9nrvItT0vIkK1YmjB2wpMXxQ=;
-  b=ROG16Wg1KhrMWbKcNk5AWmYsE6lr7ewwPhPJxc66EO3FWyu1rzgesx06
-   hEbQYFiBIspy9zIAMNILIr2Swxg4uIwLCOB3dk7IvWEUlgYYk9aaxHKxY
-   j55N+KAFDEjMl/OMeuj33pcIppEVkHCfO35jogXGvqU+4A/jpb1Tud+Vn
-   w9qb9DI5DNVsL7m11zsLe8dCePoSJLUn+Lx2DVoaf/moPKUvjytQTypHU
-   EFeiuq6ALN5y8fmDcVSu/sokad7YxU9moOCIFjN8KTUIq99gZ2y0zCsT+
-   8Bz7bKg0M6g3QSEjVFT0oNj6fOLltp0LUR64GFWstnpz/uCP3VUKSp8OY
-   A==;
-X-CSE-ConnectionGUID: 54fOAHpjTn+7i5Iwm3QFcw==
-X-CSE-MsgGUID: TyJqc6luSvKuRxRpd5G8Uw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="81225542"
-X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
-   d="scan'208";a="81225542"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2026 03:51:57 -0700
-X-CSE-ConnectionGUID: +m0b2O1nRG2ZVT/wGcft6Q==
-X-CSE-MsgGUID: K7G8RJqfQ3ytrgkqBeLqGA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
-   d="scan'208";a="270834789"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 12 Jun 2026 03:51:55 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wXzUO-00000000OdB-1fzT;
-	Fri, 12 Jun 2026 10:51:52 +0000
-Date: Fri, 12 Jun 2026 18:51:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kyle Zeng <kylebot@openai.com>, jfs-discussion@lists.sourceforge.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Christian Brauner <brauner@kernel.org>,
-	Dave Kleikamp <shaggy@kernel.org>, outbounddisclosures@openai.com,
-	Kyle Zeng <kylebot@openai.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] jfs: validate active AG before updating db_active
-Message-ID: <202606121834.MtsXleJq-lkp@intel.com>
-References: <20260611212956.10206-1-kylebot@openai.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LkTIZRQG"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-490ac357c55so7865145e9.1
+        for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 04:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781264235; x=1781869035; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=j9dyxygjV/3RofubGPQY9xrYK9q7NJvG8u++ttMJ7jM=;
+        b=LkTIZRQGrD5z6wdTmEAX1q/7yA4Fti+/9Y3/pGyM+TVGDBfaGniIJuAymFm+sNS01M
+         F2eWPiX0dT6EL5nfCYO9X7wL1ei9iBsyMgQUHTHV56do7k6t+xfeKm63ScE/bAAt4vjq
+         T7vQ+LaS76Z2ujihKCwTAFdkMDGTy/Zhq9MVZVUh8BSi1olWjgCUVJox3Oj1FjIIwjOR
+         Dj9NI7JfFwIaq3tIxYY9G+BMVZAY3KbCxi6k3aTBdOeJ66wJdst8QwU+hNlgSaRTzv23
+         8jDfw6At3QXK8BTsWjveeqoCO80OodKUKjRImlWSF4LallE41j4BVxoOxMVW+tff4V1U
+         wPzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781264235; x=1781869035;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j9dyxygjV/3RofubGPQY9xrYK9q7NJvG8u++ttMJ7jM=;
+        b=SshpESYTXTlhODaYFVEs+SAGFcUCNYYaV8jgaBDE24vYr6TK/W9rnNXUr80M2Gwhfu
+         UpsOGRMKkocTe0s+b37/GRCve1BvDUCmeREcBz2jYkoxqoYNEYXm0590ilOyhT5pXHOT
+         NA/nEy8djRa3jL/enJeK8J9lhVa2MSmho6z2SkA0fJaOMK0BEARmiJmh1JlQ+mT4vV46
+         nblh2V0qt+xKlN/3L4W/WHrlZKyZOyok/g/y2Z9YCmC7vWvs3FIAkiUFKOMb51tm9DNJ
+         Jxs8eLxi2KkF12ORqMQak9WIaiMbs9R3ooIFAJaV87OHsv3SFpVGMPF6m8V1qEQeXBd1
+         IE3w==
+X-Forwarded-Encrypted: i=1; AFNElJ8t5KYHR1rvbnLRA71aDh/gUKXC3qBl/8ykMB909cc0hKQFZx2jDsV7B30T64CHfSmZBlKn@lists.linux.dev
+X-Gm-Message-State: AOJu0YyiJoHqnhXpb4nHinfJ9R3tHM1n/XacmHeRkFsjlsdaqJOAyHC1
+	vmHzqsO9sTLpSy1hObuL37rAHZBO/HZU11qRYnqEzN9zvxPiBaComyVg
+X-Gm-Gg: Acq92OHzcdx6XjJ7UrWFPfnJV1YNG8JzrVgaY11coFb1bhJOjhg7c5x2pNYGavttAm8
+	btgq0ajRiVpxZzDbValg4+0Nzo9uiGWFo8tjDdEsY4a07N+VehOvBXRlG6vMIp/pFmTPuuEmgax
+	knWg0SQAE6AYw9AOpbzAXcS4v0euhpRZ1c15TXKFZB4iAvobvA0dppaPhHOE6NwHXsp9aVcZFXm
+	TOzaSa+MAfZd65l350Fg3AJEtC0smzbw1rhqPCEnQvV2uNltgdPjO8binGTn/4FdhC9SpjcpQqM
+	pZNnSdqNp1ES7AhJaCJse7P0aalxe6PHT/2x3W9qYBemTTA0dnSuTsgofYM6So5Jb+X2x3BSj6k
+	aXlSA/tzGLmvCB/PK/Rb4uMU13Ljtws9v7PYKPwDwRsXx3gc+W/xFUIPENKCMqy/2sHfswww/hi
+	A2Gxa80T7u5McTzZHtQFgmulnclLDpVxmUXOF8KINY1v6l9VHtzMr0l+r7MkxwzeF9ztG7M4BH/
+	9SCq7nQlBuJGM21a5g=
+X-Received: by 2002:a05:600c:8486:b0:490:a298:acf7 with SMTP id 5b1f17b1804b1-490ec4ee700mr36638215e9.17.1781264235050;
+        Fri, 12 Jun 2026 04:37:15 -0700 (PDT)
+Received: from [10.128.10.215] (195-23-151-163.net.novis.pt. [195.23.151.163])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2637ccsm4885808f8f.6.2026.06.12.04.37.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Jun 2026 04:37:14 -0700 (PDT)
+Sender: Julian Braha <julian.braha@gmail.com>
+Message-ID: <2e528372-aba4-4621-a9a3-7ce23571ef37@gmail.com>
+Date: Fri, 12 Jun 2026 12:37:11 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260611212956.10206-1-kylebot@openai.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 01/14] kcov: add per-task dataflow tracking for
+ function arguments/return values
+To: Yunseong Kim <yunseong.kim@est.tech>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>,
+ Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+ rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+ Yeoreum Yun <yeoreum.yun@arm.com>
+References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
+ <20260611-b4-kcov-dataflow-v2-v2-1-0a261da3987c@est.tech>
+Content-Language: en-US
+From: Julian Braha <julianbraha@gmail.com>
+In-Reply-To: <20260611-b4-kcov-dataflow-v2-v2-1-0a261da3987c@est.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Kyle,
+On 6/11/26 17:21, Yunseong Kim wrote:
+> +config KCOV_DATAFLOW_RET
+> +	bool "Enable KCOV dataflow: return value capture"
+> +	depends on KCOV
+> +	depends on DEBUG_INFO
+> +	depends on $(cc-option,-fsanitize-coverage=trace-ret)
+> +	help
+> +	  Captures function return values via /sys/kernel/debug/kcov_dataflow.
+> +	  Struct pointer returns are auto-expanded using compiler DebugInfo
+> +	  metadata, recording individual field values at runtime.
+> +	  Enable per-module with: KCOV_DATAFLOW_file.o := y in the Makefile.
+> +	  Requires clang with -fsanitize-coverage=trace-ret support.
+> +
+> +config KCOV_DATAFLOW_NO_INLINE
+> +	bool "Disable inlining for dataflow-instrumented files"
+> +	default n
+In Kconfig, when you don't specify any default explicitly, it's
+implicitly 'default n'.
 
-kernel test robot noticed the following build errors:
+I think either style (implicit or explicit) is fine and both are used
+throughout the kernel, but is there any reason to make it explicit only
+for KCOV_DATAFLOW_NO_INLINE, and implicit for the others?
 
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on linus/master kleikamp-shaggy/jfs-next v7.1-rc7 next-20260611]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kyle-Zeng/jfs-validate-active-AG-before-updating-db_active/20260612-054255
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20260611212956.10206-1-kylebot%40openai.com
-patch subject: [PATCH] jfs: validate active AG before updating db_active
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20260612/202606121834.MtsXleJq-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260612/202606121834.MtsXleJq-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606121834.MtsXleJq-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/jfs/file.c:52:3: error: call to undeclared function 'jfs_error'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      52 |                 jfs_error(inode->i_sb,
-         |                 ^
-   fs/jfs/file.c:52:3: note: did you mean 'xas_error'?
-   include/linux/xarray.h:1435:19: note: 'xas_error' declared here
-    1435 | static inline int xas_error(const struct xa_state *xas)
-         |                   ^
-   1 error generated.
-
-
-vim +/jfs_error +52 fs/jfs/file.c
-
-    43	
-    44	static int jfs_get_active_ag(struct inode *inode, int *agp)
-    45	{
-    46		struct jfs_inode_info *ji = JFS_IP(inode);
-    47		struct jfs_sb_info *sbi = JFS_SBI(inode->i_sb);
-    48		struct bmap *bmap = sbi->bmap;
-    49		u64 ag = BLKTOAG(addressPXD(&ji->ixpxd), sbi);
-    50	
-    51		if (ag >= bmap->db_numag) {
-  > 52			jfs_error(inode->i_sb,
-    53				  "inode %lu has invalid active ag %llu\n",
-    54				  inode->i_ino, (unsigned long long)ag);
-    55			return -EIO;
-    56		}
-    57	
-    58		*agp = ag;
-    59		return 0;
-    60	}
-    61	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Julian Braha
