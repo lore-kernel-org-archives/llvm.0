@@ -1,204 +1,143 @@
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013051.outbound.protection.outlook.com [40.107.162.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7B73E008F
-	for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 07:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B169347505
+	for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 08:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781250935; cv=fail; b=Oq85JGn6perw77nobekHo0SK5tykRK1B0sUXRnna8YqUFsg7rbveszt6+QbuR3XMGS9ufFUnlRKSa8jirergB3h2KiqO0hSIgjPcT9rW4ZjFCuzK5Y7fnJZ84A/iIT4jnrghRqYp6TRP69IP1Wsr869FyaiasHpYqfwf1x7ZgSg=
+	t=1781251249; cv=pass; b=K116ZXjVQNoky2VpMU11KyzDr5aW1wBMo1HmAuSWM9iBR7dVIym5+6DsiQ4Bjz87XybYYe808nKpr5QRLqYjmVLUX1qMdrmpyf/yA2GNqfzHiA23vLRsNXM1caF1dd8dQ2FXbwY8fzsL8DdpkEEut3JtVFB/nkgRIO6hJ/zq+lI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781250935; c=relaxed/simple;
-	bh=VgEm48gfyMAZKSytSgzeiR02afNC3HE3WtUIjSa8ho4=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=KXIN0qIDHvRdjlfcKkhe/g3IfInqkr7NPbbO/6mJZqjgFiXnde/HzoLu/6xaIPhDmaa7QFogvRaKQA/gY7yw701l3sWK1RkcBodxyJo8f+A5jkjoBbLLd5bHV4vZhU4yQrKB2FmndF+7g2Hx5pkFOPNuRytaHfGSWtm2oqpVAd4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=z8CzslTB; arc=fail smtp.client-ip=40.107.162.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
+	s=arc-20240116; t=1781251249; c=relaxed/simple;
+	bh=KnRvALqwspnqi9RT/gX4yfpYLdFKrxcGw8Lr0DwyYvw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IVKMfF7my1u66aw6YS546tDmm3t9PqinnZ/P/Ag+IbX1hIzsGAuGBKb+PG1PAgaoin70gBGTOCguSoZg2oHN01dR1xYYez523+mD+5L/UOaOPbJEIGLqXR6gm/XZy+pCVJ/EMGcii04MMlrfm1b5X/EZVxphdwZHic5MXl9Coss=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CQiHqU9q; arc=pass smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="z8CzslTB"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=T0kASxDXs2SImR6RYlN4LXFo5N37nME9Z3EHzvpVY2BdjCTMeRBveFVsHEpXOVZUXQjPOJ3CQeAYo+lldF8YVKDFphq8QoTfChEdtGTmVaWK1cd+42z4jT4+HENL1lcXMyg9+iMkir2cjGfCCGtONNvtLkyI47krrEjX7Ys3ESC/Ydt+uqrPD1MPU/ZpUC42dVoqqrE2YMFeff9JXvyOwQysqjeQPHp3QlGKP8vaXJeX5BGwhwlkANte/DC+GUOQ+yjNGyjAVGkFUyUr6x0xuGQqhvrB8uWX1XuluGmK4I9cAABtf6UAlO90mdk34sv/0T++dLZlTdyAqvGygzKLMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Rj9OqbpdjIXVi/3TqJwOYtgSstY/gAtyFETjKlg9E5Y=;
- b=ZP/yfYYZxZAVFVn5uszSdt9GBqVLBieGcmAzXkrUrOIJDNI2s0QAsGq3u2HywLPaF5ynmAzKzButH/4Ir64in6BS9MFtp8SzaAS7YKTfN+AJ+xCU1xjJ/sCPDcVnqQlHyEtAIa9MtWmg12dQapS3H7jFg2Csr+gxbI29JDdgfFT3qYg8YvpqXKfbUaCnRnOoJJo62hg/7eNHSBrgoQ8tjlPXtkCZf8G+aBRiq4JafYgZEppfSz189DsqkseTSYYn/+QFb2rjY63l0Dok9n5uH0FVGRkhvfzqF3UmCIxlp1MJ8aQsAiYhG5SPZeTMhpF2E6CCeqhProRvYlskTyQi2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rj9OqbpdjIXVi/3TqJwOYtgSstY/gAtyFETjKlg9E5Y=;
- b=z8CzslTBCcaWLju+FySBPof9YNu8hh+v9ndDeGjIjaejuA0D6ef8Sfh4fhapwkGpr/qsTdvSvKFNvYQWHWfD281/5bNDrpt7dbAxxkT3EwShDWmmrepya4fUyoTD/hEvb71iWHag7AIofyDKXHFny43TFYq6FMJSLZVWe2rUtU13LbM7CxZV/OBah29KM73QOeuXYkazB+wtFuAzbJOEcu70UCg0EG4QFWqJ04C6KqOBZO0x6vUFlewXB0DslaLrpJ1sg7Ha2eRUPI41DOVPFeWDwZWrQkul7bCn2cuUR1SKAp6w567fUGPdh3K43Bj6baI9Kr+R7mjgPN7XEgV6Lw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:39b::19)
- by VI1P18901MB0623.EURP189.PROD.OUTLOOK.COM (2603:10a6:800:125::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.14; Fri, 12 Jun
- 2026 07:55:27 +0000
-Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
- ([fe80::69fc:c4d4:200b:e4b4]) by AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
- ([fe80::69fc:c4d4:200b:e4b4%7]) with mapi id 15.21.0113.013; Fri, 12 Jun 2026
- 07:55:27 +0000
-Message-ID: <59910826-ce09-4ef7-b14b-7d31faf4bad1@est.tech>
-Date: Fri, 12 Jun 2026 09:55:25 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 1/6] kcov: add per-task dataflow tracking for
- function arguments/return values
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>, Dmitry Vyukov
- <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- kasan-dev@googlegroups.com, llvm@lists.linux.dev,
- linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
- workflows@vger.kernel.org, linux-doc@vger.kernel.org,
- Yunseong Kim <ysk@kzalloc.com>
-References: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech>
- <20260603-kcov-dataflow-next-20260603-v2-1-fee0939de2c4@est.tech>
- <20260604084115.GZ3126523@noisy.programming.kicks-ass.net>
-From: Yunseong Kim <yunseong.kim@est.tech>
-Content-Language: en-US
-In-Reply-To: <20260604084115.GZ3126523@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: GV3PEPF0001DBC0.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:158:401::6b2) To AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:39b::19)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CQiHqU9q"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7dc67a5e102so6681687b3.1
+        for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 01:00:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781251246; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MeLai7G6eom+HA0cUxMwHeTsfa8kSCssc2P0Hlp46q5ivnKdUs0qT/FW9yFaaybbVv
+         Up36bxRQXPMHItHFpzB9xMWsKwhp6KCQ7VbUu06LSQqhWB2UcLXELoTtzY8y3pB9faT5
+         7abzMWTdmKA1gD/Raeq0s81FW5ZNKhRJmU/Q5tnr/y6fGc72tVz4Tm7JNlUGd7fyf5my
+         tsnAHUkHQWsWcIBLl6vfWhuUaJatWjmUcfp5yFJEy4o+wNXAF+G6TPd3Rgt+o9HCYRC2
+         3EyVzphvZlKxV6E+jget0wuqF1g8GzW//RoYeh+CwPnHMo2Ec0tnzh0GMAprp4Z6OUim
+         950w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=KnRvALqwspnqi9RT/gX4yfpYLdFKrxcGw8Lr0DwyYvw=;
+        fh=+42MydzensWoq0gM8mIeACrIZWtj8oeKseN8ZoAdZ1w=;
+        b=YKOdlptaAnp4Vuq/zijekA4BVxy+FHMRcc35opHvVrh0hTCybXc0UqrOPmkgLejLaS
+         zmgbgrn1D6ouQ0OPG4aXm4JaY99GSCL5GwbTWaFRrT3d652y8DsU8ydt8eUmB7U22goM
+         7FXMFIiwb/RuwJFJyg9f/a7b5BRjAC9ddjFxqaoQwl7NpyQF9252McpdISeuWtntlsog
+         vjZfxeaGxRCkXy45/v+h/+fKabUrFUo/UYdc/1d+5qMbkwgMxdQjjVwnY8Ams4bA/D1U
+         UmgMSXY352Ddofdp+Q6zEzv32hOzBETn+h6MlkVsqnR7o+wzOneph56z3H9LXL9LlVGI
+         3hDg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1781251246; x=1781856046; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KnRvALqwspnqi9RT/gX4yfpYLdFKrxcGw8Lr0DwyYvw=;
+        b=CQiHqU9qC9HnNLWojxnHHFTl2NeLMEVfuuAuzJZA9SHxAO72hbSJYDogMQQDlEX+9C
+         7RKYQC/GC0n9a0l9wqJeBR91PyrTnBKa7SNeLsHoP/tIB2v7Q9ELPaOMI3vrpzhB/2a/
+         w6os1t/HxpBiV6flxYRvycLjYrwzgB2/YmyWp7Ooq3Nbzc3mrtCFv+URanTjB9bvhvix
+         KdVcPh9k1Su+mobwCfxIkA4/RxnW7vmDOMYEmRTIcIR059Uos+6WjWgnB58vFhB50CXE
+         qLmAa9LqCOwobm4AXbhgyKIsMjpOlrZ0RJs+NtJgelb/Eq9RZuGCR7X2XgmGgFzihbZf
+         b0Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781251246; x=1781856046;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=KnRvALqwspnqi9RT/gX4yfpYLdFKrxcGw8Lr0DwyYvw=;
+        b=msWyjC5NdrpJckbomtF0naXi8KIOc6AJLMpCYTXfUHa5yHL2b6gt6ffI+PnLAV68Gm
+         7OVlEoLyv1B4OmArWnmIUrEP+D6XnaFdxQIDivbJZDev4wn3nz6vCzkmUvV6U/vEvzUb
+         MlEfNMjPLy7X5NZxXBqD3gXUzwSYwwS9htjw3qJB935r90MybQe++wX8p65nV1t7BaM3
+         jCqwJPPtiZXnun6qcVvM5qzDwebW1LKJGF2M7wv0ttunYm0b13koxlYyKkSH/kMZ76pw
+         7NjCk+yh9Z1pHN1qTm2OnqDNnLyfben1yslXbYtA2veQbv52FLEnSelLic1qYbBrXT+v
+         iiqQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+1/nV7Z2RyDzoRF1unUwhwJJm/G1737LLATpZsVKYLglCaj30arQDyFpqMfxZpZYnboBcA@lists.linux.dev
+X-Gm-Message-State: AOJu0YxRhrtMpbSZQFazF/iAp5m2SjZWs8tq3Hz6PYQaFphPhHS5zbAV
+	f4wLASw248toUMFlMRx+d6VKY1lkpDGoPAakY8klfuTMF8tU6Xk16uXgQY9yu8zceN62+KtTQkq
+	odEcssiTzLOYVZnwn5ivx4FYLsnYPn9kvM8lmq2FB
+X-Gm-Gg: Acq92OGnA618iQWhauhUGpYNyi+Sao2rCCEoDdAamRigyAsNkyQpYq+fbddQSXpJkVG
+	pY7UECjlEVzxjcKDkxU0GRR2hHXfgnjwwRcV3w/L3av1wQfuH7wI8rALTq55/t9U0fTlAl7XePQ
+	8cTJEzaZZ4RqbGuEA7oNvbNe1xL1KqrFe9rtZDOOfy9V8hxMFqup8BM+4mgpePDLPJVmVnomcrN
+	x70SENgLC702sR7ZvfpW3/UeiYXY1Dac5nHAjJtGACkIyshbLYXxbWkz7V/MArccfspKAtCyU3G
+	h0Fy3k0RnocK+IFv/XJVLhGVal+yIB07yexo3w==
+X-Received: by 2002:a05:690c:6201:b0:7db:f8b1:cd80 with SMTP id
+ 00721157ae682-7f7bac02970mr15863297b3.2.1781251245971; Fri, 12 Jun 2026
+ 01:00:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8P189MB1752:EE_|VI1P18901MB0623:EE_
-X-MS-Office365-Filtering-Correlation-Id: d61bf7df-62d6-4ec5-c3d7-08dec857f779
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|7416014|366016|1800799024|11063799006|4143699003|56012099006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	sop4020agTTdsBz69w/nreVtawrTeFsRw5mTMK1VIj3hhdUGmsizLeqsZ87aoWNfDW5b6vaxaIdOsEwUezyIXNAMLGGkBypVPGzanOoRqXWcHphxfeSQw+ILTEjjKJpHuSPRO/ctieScyT+Psk53uvRGWj22rkk5ChSGSe38ocYzU6/8+tMD9qJSYRlzFDgBUo4i5Cdz+W+x6LvSs2zCYfdKUXeUl1rjxVYMbhbOy3eP5b+rhStlw1zx5tMCgM+FUjWI2Kmm8FwxFfh4jHKnwuqW1jfzdiIhfGkFC+Az59RSA8U/O+xy8/WxPPkkOYkkHbxBEWOU0Y+el8p1t/ljp9J2IPvKgseWXRctwqpeM9WbzW4lFX0n+TGzoJluW7k47bM4uvbG/2e0QKqRQAhrcveWxQLkT9Y2LnR5iN84hnQ8IAcUbI6RX1cAGgVqNbbd8Du4B+cls5lI02lzwqyJ/++ZdFL4MsRkmhlju4zcH7BDXpQhObEr+x9EfrQ5VAMhm6kxGnJVwbKQMoJ2iy6hCmxO4KqhYY3L4dIh1mcBF2KlD8qLr2sSBrtrNwmaSx7d3JtSU0XcCZIzJ+cN2+5LYFYUk0EbgvFlrBULYJ7UDic0K3p/wY8TThJrCG+DHq2REOySZKZBcaPqS4IFHxGWmahdJvmpD0caRoAfQqgWAR6IYHqPFfIz+Lnt60/UlUfD
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P189MB1752.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(366016)(1800799024)(11063799006)(4143699003)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TU83WEZTUkJHb2xiY2tJYVlEUFZOUHR1WGNVM0JDc0FzMVV4Tk1LamJXSmR3?=
- =?utf-8?B?TGpSWXNqckNzL0xDZ0RZck9LWVBkYWZrdDc5TmJMVWh4b0Nyc3QvQnFIMStp?=
- =?utf-8?B?TEdkWENaSklsb21Mai9ZVjhZTGNVdk1pK2g5VHdhZGszQ1AxMGNKeXdYMUhL?=
- =?utf-8?B?MEV2SE92N0toRkV6d2JSdzMwcUtFN0J5YjdDSmdvRnVscFJxdVpNK09vTWFp?=
- =?utf-8?B?QUE3Q3loTWdzZWZKb0VYL29HdDB2MGdlb0FuOHpDR2JLczNuem1iNUxhWitx?=
- =?utf-8?B?dFFiRlBFN3hYNXNKZzNRVWJnT253bmI1cFB3ZVJVNXAzVmdNZUtlOXRDMGMz?=
- =?utf-8?B?VzBKY3ErSkg5eG01VVVCbUdXcDBhSWI5TVFQR3VlMk1WNER5U3NzUWQyVEJw?=
- =?utf-8?B?d1Qzd1dHNUlTNnF4cUVHaDF4WGhWTVRRUHNQL2tiOFRGWVY0UHdCa2h3Sk4w?=
- =?utf-8?B?Tm5kbnJpdzV1cjlkZnUyNUpSWW1zZzJMQnE1SU1zemIrRUw2amtGY0ZsRHlS?=
- =?utf-8?B?L3ZTVzlraGNydDFOZFEvT0NBakt5N2tvWjlHaWZ4ejVhaTg5SXROYWt4aGpw?=
- =?utf-8?B?QlB5ekJRVkVTODkzQUpObzR3Vnk5bXZMMzlVVGtOeDRLanpNeUVYbEN5RG1R?=
- =?utf-8?B?Wi9rU2t0VUtuMWxYSEpiVS9SSUlqeTl1TzdIUGZOcTVsK2JnczcrOVU0MU80?=
- =?utf-8?B?Y2xyNC9LcFpQcDd4a2Zpa2dhb3dLZmN1VGtvY1pRK0Q2bExxQmZuRElVZ3lZ?=
- =?utf-8?B?SzFyVUJhOXdlWGFqdVdYNjU5MFlMZ0RQbmV4andjQW54ZWFXaUh5djFGb29R?=
- =?utf-8?B?QnlMNmEwY2xwOXhsSzBsRC8vM0srRlpBTFlkc2ZYdjdnMGNKNVV1eS81SExm?=
- =?utf-8?B?SmRzUkxxajhOQmxXeE0rVFVZaFJhM2Fzcm4zalcvOWhOU3E3NjYwTU54ZVhN?=
- =?utf-8?B?RmI1ODJHTnJuS1ZlNlU2bjBTY1hNT3hUWG1hV0hzMXhtRm5XZEVFUUFldjB6?=
- =?utf-8?B?Q1ZGUkk3K0ZLVmRFL2Y1YzJsZlFNRDZhT05oUnoycW56S3h4WWswaUwzVFAz?=
- =?utf-8?B?V0xPY0RQNmVPQUNkNGQxRTF3NG5XVG1sM2hqRVhLdktpejc5dUpjSkdjS2p4?=
- =?utf-8?B?ZE90RCtSVVpnVVVzQXErd2Y1SUVseVpWWExkUkhjaVArbGFST0Y0RlJMNWxm?=
- =?utf-8?B?Tnd4b2J5bmR4dWhTVGFBTlFrbzF3MGRUOUkxZnFLc2FzZ1QyekFXdjd3MHdw?=
- =?utf-8?B?Rk9uWHI4R0VIcjM1ZGlkZEVQeHBja0tuTzNrV0JQSHlmbXFnUXc1MEF1Y2Qz?=
- =?utf-8?B?WHdmUkROK3pVZ0NZMmJEUC9udmdZMld5T29TSFFEU3l0RDFHT3cxYUZwSXcr?=
- =?utf-8?B?L1J2QjZBSzRBb1AvVVJOOFFLT2w3WXlSWnNHRWpFeVhlbThEakZSSGsrdjVW?=
- =?utf-8?B?YlhncStvOFo1SVRsTEJCNVJOTXR0bTRZRW9rSElObzc4WThmZ1Q5aXZvUjRs?=
- =?utf-8?B?OWhGWWlOKzJWdGYvVEtodEhzTkorbGFiUjgwWGdsRk9Wa2NaSGo2QzgxOTk4?=
- =?utf-8?B?OVJseTA5MFord3lGNEdGR1A0WmR1RDNsM2t4bEdPZll4Ry84eGVDUk1QVkRK?=
- =?utf-8?B?bXJmbkNoYWpnenh3MFhQeVgyZndEblA3cHQ3eGpHbDR0RmdURUF2NENRbXhD?=
- =?utf-8?B?c1Q5UytHRmgvUWt6eW1Wb1ViUDVLNDZlaEc1SlNRMWYvSDlsOUhYMzRvd20r?=
- =?utf-8?B?MFhzWTNLTlZyNXBJVEtuVTMxQ1ZYa0ExZk9yRzFuUTk0ckFCMVRKRHplUmVv?=
- =?utf-8?B?Rndxazc2MHRsWXMxNG52dzZLOHp5UDJZdVZOcGs3dHAvelZOdHRWM1ZidU1X?=
- =?utf-8?B?SndIR0RrdkF5UmFqaEZTdjdEaHI3NXlGNDBNaU44a0ovVExQdm5ZNlMrakxD?=
- =?utf-8?B?MktxdlVsTFB4QnpvOWVVY1c0cWYrV3Y3T01OTTdhWGRNRGw4NElzb29tSm5X?=
- =?utf-8?B?R2Rxc2VMcFJOVWQyY2IveENsRE1ERGZMZzB5Zm82YTRhK29mNjdRbjZ6MDVl?=
- =?utf-8?B?TXZudUhoMW9zT3VJOHd5cTZSZWIzRVA2RUFCSkNpSmxRRVY4dTBrRGo5VmV6?=
- =?utf-8?B?cEw3MU5zTjFoR3hRQ3JvS3hxR1NUd29QTFBWa09aR2Z4aWJDV2JVMXBOeG1F?=
- =?utf-8?B?SFQ0OWd5UTBzTDY2dHIvazZiZnBZSmZGVWV2VklyNjcrd1FNaW12aEN2R09N?=
- =?utf-8?B?a1Npc05BcVozRXR3VVBJc2NDZG55b0RBT1VGZlI3RlRaOU45Q2N3NGJVcGpL?=
- =?utf-8?B?Vmovd0RJMzIwVXU4cmw1VEFhMnpLWWdYRFkxampFQlI5S2dYVm9SUT09?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: d61bf7df-62d6-4ec5-c3d7-08dec857f779
-X-MS-Exchange-CrossTenant-AuthSource: AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2026 07:55:27.4209
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hraVacp2w0pQ0fGh/JuYgaqN4N5OQNEOg4FwIv97vGHmbT67++22UEOYJnamo6Sq9LvOLdvbVnirByBOHnxQCg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1P18901MB0623
+References: <20260611-b4-kcov-dataflow-v2-v2-0-0a261da3987c@est.tech>
+ <20260611-b4-kcov-dataflow-v2-v2-2-0a261da3987c@est.tech> <CAG_fn=V1+_xLgCZgdLnT7Y-muRO0CXkrNKkC8AzrqzWoL4eR8w@mail.gmail.com>
+ <5fa7a528-a4c5-4fdb-9a17-1b0992e955b3@est.tech>
+In-Reply-To: <5fa7a528-a4c5-4fdb-9a17-1b0992e955b3@est.tech>
+From: Alexander Potapenko <glider@google.com>
+Date: Fri, 12 Jun 2026 10:00:07 +0200
+X-Gm-Features: AVVi8CdEFjoun-R64CqbvYJPTnaS_E7TDNryUpyw-2UHJoZxcDfdiOQP2RCPBTE
+Message-ID: <CAG_fn=XB7_zbjGzpgwEzm5dqcwehqvB+=SpJhHvw9QdETberAg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 02/14] kcov: fix INIT_TRACK race in kcov_dataflow
+To: Yunseong Kim <yunseong.kim@est.tech>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+	kasan-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>, 
+	sashiko-bot <sashiko-bot@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Peter,
-
-> On Wed, Jun 03, 2026 at 07:43:28PM +0200, Yunseong Kim wrote:
->> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
->> index e2f976c3301b..abd1a94589aa 100644
->> --- a/lib/Kconfig.debug
->> +++ b/lib/Kconfig.debug
->> @@ -2261,6 +2261,28 @@ config KCOV_SELFTEST
->>  	  On test failure, causes the kernel to panic. Recommended to be
->>  	  enabled, ensuring critical functionality works as intended.
->>  
->> +
-> 
-> ^ This line...
-> 
->> +config KCOV_DATAFLOW_ARGS
->> +	bool "Enable KCOV dataflow: function argument capture"
->> +	depends on KCOV
->> +	depends on $(cc-option,-fsanitize-coverage=dataflow-args)
->> +	help
->> +	  Captures function arguments at entry via /sys/kernel/debug/kcov_dataflow.
->> +	  Struct pointer arguments are auto-expanded using compiler DebugInfo
->> +	  metadata, recording individual field values at runtime.
->> +	  Enable per-module with: KCOV_DATAFLOW_file.o := y in the Makefile.
->> +	  Requires clang with -fsanitize-coverage=dataflow-args support.
->> +
->> +config KCOV_DATAFLOW_RET
->> +	bool "Enable KCOV dataflow: return value capture"
->> +	depends on KCOV
->> +	depends on $(cc-option,-fsanitize-coverage=dataflow-ret)
->> +	help
->> +	  Captures function return values via /sys/kernel/debug/kcov_dataflow.
->> +	  Struct pointer returns are auto-expanded using compiler DebugInfo
->> +	  metadata, recording individual field values at runtime.
->> +	  Enable per-module with: KCOV_DATAFLOW_file.o := y in the Makefile.
->> +	  Requires clang with -fsanitize-coverage=dataflow-ret support.
-> 
-> Probably wants to be here...
-
-Thank you for code review. I updated at v2 patch.
-
-> 
->>  config DEBUG_AID_FOR_SYZBOT
->>         bool "Additional debug code for syzbot"
->>         default n
->>
->> -- 
->> 2.43.0
->>
-
-Best regards,
-Yunseong
+On Fri, Jun 12, 2026 at 9:25=E2=80=AFAM Yunseong Kim <yunseong.kim@est.tech=
+> wrote:
+>
+> Hi Alexander,
+>
+> > On Thu, Jun 11, 2026 at 6:21=E2=80=AFPM Yunseong Kim <yunseong.kim@est.=
+tech> wrote:
+> >>
+> >> [snip...]
+> >> Reported-by: sashiko-bot <sashiko-bot@kernel.org>
+> >> Closes: https://sashiko.dev/#/patchset/20260603-kcov-dataflow-next-202=
+60603-v2-0-fee0939de2c4%40est.tech
+> >> Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
+> >
+> > Can we please avoid this?
+> > kcov_dataflow.c is being introduced in the same series, there is no
+> > need to send a buggy commit and a follow-up fix - just squash the two
+> > together and note the changes after Signed-off-by: separated by a
+> > triple dash.
+>
+> Thank you for your guide. I'll remove it in the next patch set.
+Also please make sure to update the patch version. It's really hard to
+distinguish between "[RFC PATCH v2 n/6]" and "[RFC PATCH v2 m/14]"
+when both series pop up in the inbox.
