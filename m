@@ -1,122 +1,217 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011043.outbound.protection.outlook.com [40.107.130.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A65369D7C;
-	Fri, 12 Jun 2026 12:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781266658; cv=none; b=Mrcto5fcOzfDXSRW+5RxhkeXwu6IcgYRTHl37UYDbPW2V02JL/0ZYcn5Vw+horiYBVCmjSCBo+ldgdU3vsJ7vZ4IsrR5FMgjwHGUbPXEoWz6c9IyXHQxZK3chdCnZtc9ZlwHP9H4dBJBPVakgqygGUKmxHrmIBfBo91Z0EUF7II=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781266658; c=relaxed/simple;
-	bh=YowMQlafNPWCIwKkwllObu8KogtKSLROX4QXzcUCw30=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=rgslqIHGUooLpicXvBF+mdMytErwFNqTHF+bT2TvuiLBuQHWNr0HOAnBOXBaeOohAWDH96u6sSAbNMUDWZ6kHhh/WREKxqtqx+YM53N4SGzzxUTUf1IrPmdVA+tHvi4eFn3auDRYay2usqsG9Hrhjufasb/L3Wt2Eg9pH5vHaAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VMYFjDuO; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C264D382298
+	for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 12:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781268345; cv=fail; b=Os5fdaZC4/BpUpb3g/RAHSZk43LFZru3EQtOjLGVNtrgMY0qe7pF8kat9uO/Ixnhrqs6Ju4jeMmleZB8o6hIlPE77wGUsNBYnnJE44LAEy4lZphWnwzU8OVbx3xnJrn/jqmbDU2Lee/0HiELymPQhux4CNj8mbC5mAS5uuXD8+E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781268345; c=relaxed/simple;
+	bh=mU6zfBZQE4BC22lPpyLdexvO7jSf2oiw4oRHf1ZNxuw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=LQAg7UcRVYy8f5EbG5LCRv8P4mH10AAJ38F0Z95pkj81/j2nXm2dVHwUntE2nhPm4RWK+Fi3WpsJ5W5pRr6nk7KVOR82HivB9BWBaD+l4HQNLsKkYK4iW2sQYn5BkslWXcJKlSTgjdMxELKuvT0sw7bieLANiU5vsrU9cCewko8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=cPglFNhJ; arc=fail smtp.client-ip=40.107.130.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VMYFjDuO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781266657; x=1812802657;
-  h=date:from:to:cc:subject:message-id;
-  bh=YowMQlafNPWCIwKkwllObu8KogtKSLROX4QXzcUCw30=;
-  b=VMYFjDuO5ORUjye46luOUiBokw20CJmsKukT0TMxmnjFipq79vh7rz4n
-   LEjxz2Am50Pg7KudUdVOhaEC+ERUE67Cm68W61S4LfmfLpVPEvFssBA0H
-   tMoxPZmgBA/o3Ty+cx2tFscGIPXcj4Y5JFdKhpsCfc5JWHJs40CmozcVl
-   Sf4kVkf8aVjkigZQdUI4kjpM1bgotMJxqCJQ+8L/PKlB+Fpqs6o0CNkOB
-   wWIxMwk+TVW3SzpkB/zVxrVrEGTezI7flIAeXUMqOlFg4KcWmjqNw0b8g
-   Tr5DMKl6CYeyVhvjbT9/BkYVJ2W7UdLUbRDrJ5/RzfGta3jPrXJUMoknQ
-   Q==;
-X-CSE-ConnectionGUID: GnmMoWrPQsC4/3z7DTdpRg==
-X-CSE-MsgGUID: B/g5Ci/1TaKE8n/balPUSw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11813"; a="81939328"
-X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
-   d="scan'208";a="81939328"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2026 05:17:36 -0700
-X-CSE-ConnectionGUID: rjTP3Qg1TVWD3ag4M464KA==
-X-CSE-MsgGUID: pMyGF8bGTguDCb1qYUFjEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,200,1774335600"; 
-   d="scan'208";a="244386810"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 12 Jun 2026 05:17:34 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wY0pH-00000000OjL-4C4M;
-	Fri, 12 Jun 2026 12:17:32 +0000
-Date: Fri, 12 Jun 2026 20:16:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>
-Subject: ld.lld: error: undefined symbol:
- __kcfi_typeid_aria_aesni_avx_encrypt_16way
-Message-ID: <202606122021.pA9TozrA-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="cPglFNhJ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dfN06XDgwmU7dtDEJ9M52SPDDEWgvbAKlk2Ep4v9VpTRtZW6aB+tNT9j8jLLhMTJSXuD6Yxd5y25SbAsVYkiHz1dgI6bo4mKNUjX/8Ge0U7l2wvcarq19X/nmRzJgLEaguntdoNe4ao7MWA1v1uDceks23lVoq+jId7pD2dAQ7f4ocurCNgj7ou4VLC3Mz78RxJSP+A/D0SEtwf9m/imZ7D/LeHQIjT+Xg4ubKPLbCvJOdd03OpvK6IJZvcP3wKSuZcguwC7Qu0P1a6KMOwfsRxH2nsyPG9+bqP5K9jiiOZBLJmVlk8kojIpMZwHlmcOqmoe7wc5SSg7fpvsMimCIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=by5ZlX7G5fpV2fuz8CB39odUOXmn9mfcMl6iAXv0ss4=;
+ b=N0lRU0g6JwjxtL8buBRLXSpRY9k5EVXLUWD3ALVk1AuEWabdWjxQiXZeyAhdiVGo0GamGdTzeRNPl9uMR+c16eIi2+XWw41zAwicq3qHWGi+NrETIY4TBWawtn4HeKznluOaK2ABkW2XGWboT1tr95l1LvkWG3xIFaEnXSVxZfuUGW7A+YVdrthIOfrVcOzsnDebmEZ+Aj94QUYDTTn3bwGWDb3XR4WRMvzq+1RRKCNNJq6H158+9nYjPh/+LGRet1SwQ1AC25qvIBiVDkAdmwlp+ePJPdxFqI0++U8i5REv6gHjhqAZxRsSvH6FIozVPQRs10vXW6KvbbaAuG3amA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
+ dkim=pass header.d=est.tech; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=by5ZlX7G5fpV2fuz8CB39odUOXmn9mfcMl6iAXv0ss4=;
+ b=cPglFNhJW2bNx8uba0Xx6Spw1F7Rm7o6Z4HIkODkAbgDLW2BiXWYaIYGt9NVhubuH2d8H0X7c7gfEu/3iVqLe0WGJHsQub981Hl9ilHk8x+aL9H/3/w323cNKvQb59azN8HTsNOQwxoz8/s6mREPEcupJvo/CkyGXMqAWI2mb5DI9StfYvz/yVhyDWr0rQnrh2rPF7yJl6iQqbmvrkmPA/23dIJA2R3E/UgzzufGkZkW4iGs1zc+ncLg7wG1/IGEh0XmZIh3nVYFT057+Aw0w3RlFjPBUNsZQYSvFCgiJ+SZxC/J4TakOf9I2VPlQ3KoGVrdDHiJ1GRZTtIpryDdQA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=est.tech;
+Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:39b::19)
+ by PA4P189MB1295.EURP189.PROD.OUTLOOK.COM (2603:10a6:102:b8::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.14; Fri, 12 Jun
+ 2026 12:45:40 +0000
+Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+ ([fe80::69fc:c4d4:200b:e4b4]) by AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+ ([fe80::69fc:c4d4:200b:e4b4%7]) with mapi id 15.21.0113.013; Fri, 12 Jun 2026
+ 12:45:39 +0000
+Message-ID: <7f116596-6d71-42b0-8796-4a82c4c922c4@est.tech>
+Date: Fri, 12 Jun 2026 14:45:37 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 0/6] kcov: per-task dataflow extraction at kernel
+ function boundaries
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>, Dmitry Vyukov
+ <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+ kasan-dev@googlegroups.com, llvm@lists.linux.dev,
+ linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+ Yunseong Kim <ysk@kzalloc.com>, Yeoreum Yun <yeoreum.yun@arm.com>
+References: <20260603-kcov-dataflow-next-20260603-v2-0-fee0939de2c4@est.tech>
+ <20260604084026.GY3126523@noisy.programming.kicks-ass.net>
+ <513c68a8-e530-4461-a8e5-36e5d3d5858f@est.tech>
+ <20260612073858.GS187714@noisy.programming.kicks-ass.net>
+Content-Language: en-US
+From: Yunseong Kim <yunseong.kim@est.tech>
+In-Reply-To: <20260612073858.GS187714@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P123CA0098.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:139::13) To AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:39b::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8P189MB1752:EE_|PA4P189MB1295:EE_
+X-MS-Office365-Filtering-Correlation-Id: c552db22-3e4e-47a9-8bf8-08dec8808200
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|23010399003|7416014|376014|366016|22082099003|18002099003|56012099006|3023799007|6133799003|4143699003|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	TEh+vLFvoCTXdg1HoRBh3R2QOYTBy9jYdy9GMIe9I4pM4HgQ3y3JPrPRBtCIeTtNKbSvZEPQNuxNS1YPnCXewSMcfcOgWp9gzAa++ffpCF7pJ6RbXlX/TrgX5HcJTC3cMwBaEqN2SPW+2Gjj1v93oLlF5B064NYEjRH02Jsa/ID/iG/7jpehdInY47b6dQCqVX/y36wLzbf9wVqmCOV513r1VXhSrp0Evy+IAnD0lmmJ1KCzVqjwqJqKBe+c6YQOmPeXHPnYggjqQp9fSXQRnN2SyY0RcFbbKrPeTde0trjzVXXwWvxrO3uUMysh3SxSyYBDNpN/1f40uCCd0ksA1kAf6lN2VlNOMgEXOy1Qdwf/ONC14etipKVpif45niijYABp1cj8GbjwuzNE9L9VCFWMA0oyK3S7KDfNLq+6NJFTcfENdgouBOpqAiPjkLV8OAHObHpU1BOtOSObRfM+nL/LdgyIvjX3rDo//yf5EhQQHEs0VtmEcAPusWELd4P0SZBO+bP8/O73sRZ8rZ/na7ZM81G1ZxgXL+quHLtRTppqRVpN3M79/p2TzP0JMTCYujoHS+1f9ZOJsf8ZKKr7bYeHGdh6quwiyFtoz9GN1eRPvdL8zNUnVrALlBK51BqcyAALngoqUy5QCNS/MjdxJ6oQBX/ozDsflB5HF40pbVF8Ee0lh/37MvYoIj7FKz6bHHQBphoDg34O30s057cjMQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P189MB1752.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(7416014)(376014)(366016)(22082099003)(18002099003)(56012099006)(3023799007)(6133799003)(4143699003)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bktkU1M5eXZjenZka1crL0svMnFkNEprZksyMVNYWEZsNGRyMnZwS21sc1ZC?=
+ =?utf-8?B?WGVlWTE3SmZCWnF0M2s2a2ZEOVMzbWViajFkU1FzRk1FdnZQTkFad3psYXJX?=
+ =?utf-8?B?OVpvMHNUY0NnUVlFckd2NUdLc0phSmcyUW9iVTliSmFEMXBHdE1hWGNZME9w?=
+ =?utf-8?B?SnFyYU1rR2FjSXphTWR0U2JQZkhzTzROS2dUenZpbXRrbHRTeUdnUWwyK2gw?=
+ =?utf-8?B?NmNnVm1zZnRaTHdXR1VGZDhDK3A3Y2JPcDNnTis1L1g1ejlzWWlRMDNZMlZw?=
+ =?utf-8?B?Qmtibi9UZ3YyclJRekRpN0pxK2MvQTdRT3dibWRwVGZBQk44eFlOU2VMcklU?=
+ =?utf-8?B?WWdPczZFZXhLaysvOXY4alJtaWkvY1gvWVowRHFNa09EUHdPTVNid0FqQkc3?=
+ =?utf-8?B?a3JUWEdSUGM2cDBwNDNxM2JUS3IrdFNROXhjZnBKbHlkd01qY1p6QngzZVBt?=
+ =?utf-8?B?MEJFM1dzR25vR1lETzhUbFoyOEZLejJmb2dNcEpkb21ZUW9RanlyKytyM2FI?=
+ =?utf-8?B?emNyR0ZBTDUrV0FPNGRDSXE2Q1hVSXBlemhGZlVUZERnWXZaVGlodFdVR1hH?=
+ =?utf-8?B?SSszL0xmVndFejVYLzRTcnF3UzF4WitZWWVxSVFvbFY1aXQzTGtyZjhWMzUy?=
+ =?utf-8?B?MnNOc3ZubFViZmM3UWk5aisxVEJHWHNEMFA5ajBDUG9STitEVFlJNkc1dzNM?=
+ =?utf-8?B?clRXc3EyNUdiUVlYR29KSUo4bGhMMGVxYWJXSTc4d3FLZVFHQ3dyODBHOWJB?=
+ =?utf-8?B?K2Z5WUlScDJEZXpkTzZPZmdCYUowcHVOUmFybWYxYUlGT2tPdVJRY1JmTTFk?=
+ =?utf-8?B?T0EzbWJGeEZMenNGOTRnYVNHcVpINnJ5MlZ6R1ZMeGN4YURvUnFrMTQrLzFa?=
+ =?utf-8?B?Y011SUNKTG1Tbm5ES0lBWTBLYmJWdGpwYmpUUUl6Q3hqMkhFdy9YaEMzQ3pK?=
+ =?utf-8?B?RDc5aEZUYjBLTWtobEVlV2RlbHV3NGpUOE1UM2RzeXFpc0Y1cmFEdE5aSTZX?=
+ =?utf-8?B?M1VuU3UwczNZWUJvVnBGQUtOOFJSREExREx3NkZSN2tTTHhldk5jdzAzQU5K?=
+ =?utf-8?B?K0Eya2ZpZEFXcGZabS91anFKT1RvL2pFMXZtZG8yOEhRUzg2VTV0NjRxSnRm?=
+ =?utf-8?B?VXNIZlZLdm5uSldsV3Bzd2pITFg2QjlLMENOelk0RG9zdjZhSmcvWTF3bW4v?=
+ =?utf-8?B?NEtLdmJOY1hFbVEzREd3N2crSS9PVGRYRFoxUzF5Q3Z1VzZ6dDJSSzkwZjNK?=
+ =?utf-8?B?NVA1R2FWNG5nMFJxMlNxdjkzZ0IwRGUxaFRMWE8yc2g5Sm5kb1lObXVnbnpo?=
+ =?utf-8?B?Z3JZeGU4WFNzT3BmUCtaSGxzRXVtY3BIZnBkVXk1eVljNWR3UkErcjVESUdC?=
+ =?utf-8?B?ZFVocXBRL3h2cGs5OXdSaWpoeHVvR044b1AzRVBLZC9JTk9nRUszT3BCNWRW?=
+ =?utf-8?B?K2hYOGVhWjArd0pJSElkYk1rTm1GNXMydENiZDlEMmsyaUZsMFRZVWRyN3pw?=
+ =?utf-8?B?RWJ1NlZYTDRBRzUyNVVWU2F0M0FQL1VqTEJDdFltZGdDcDhScnZOc1FNVjdl?=
+ =?utf-8?B?VU9hZlhibXRDVFk0OCsvbCt2M0J3TzhhSHdvNTRaemFRa01SZnFnKzAzaExM?=
+ =?utf-8?B?akttSk93QWJqV1NNUVB4bVB4S2VUSmRNdzNiZ2lNS1hsR2ZNZnovQ2lrRVJX?=
+ =?utf-8?B?clhTT0NSRjNxeHExOWVmRFFhRDVybTVBV3JEWkwwRjNDR2RCTDRJZC9jSjN6?=
+ =?utf-8?B?YkcrbU0wSklMeUtEUkJrNmxQbVRoK000NFRiaUdadEk4RXRyYmRCYVo2RzE1?=
+ =?utf-8?B?T1hucThqNHhqdDBaODNmdDcrM1NZR1JhdFNPYkFzVUxPMUlQaEQxb0grb2Ni?=
+ =?utf-8?B?d0dwTDVGNmoyaXZQWnM4QTk0T0Fta09kSFBQQndodmRsOXFVTjhBYllKSWVm?=
+ =?utf-8?B?OTJma3hmVXlrdVJXejdJZ2t4ZVRuN1ZueDJqZ2RRR2RSbTN0eUY0NTc1WkNI?=
+ =?utf-8?B?TGJZSUdYQ3hJVkxjRFpURS9HcDIzRXowYjdBZHpxU2prSjNKTzFzcmlFY1B3?=
+ =?utf-8?B?ajNWTDRydVU4U1M2T2JGYk1LWnVMb3RsZlBURzVGbTJncjNwTFRSVXVYSHJ1?=
+ =?utf-8?B?NEV2QkZHcHVLWWpacHg0cG5uWWl5ekZSYW9Td1FyVTQ5eFJNNThQSGZwUnZy?=
+ =?utf-8?B?Vmx1cE5ralRmYUtObDdFeHlKZWtPV1ZxQlVDUWxtdlJoVEU4cm51ZGdrcGhJ?=
+ =?utf-8?B?MlBWbUs3Y0xQWFZRb2JERlEybDhIWVB0cG9PWEEva0lBUVRkQkxITkppUnQw?=
+ =?utf-8?B?OWlPYnR0bXhYeWNIeFNtYXF1dWczVTV4a0x2ZjAySUVxcmpnTTJkdz09?=
+X-OriginatorOrg: est.tech
+X-MS-Exchange-CrossTenant-Network-Message-Id: c552db22-3e4e-47a9-8bf8-08dec8808200
+X-MS-Exchange-CrossTenant-AuthSource: AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2026 12:45:39.6883
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c2HAd+zpuEOyUp4ZjZ4UECAqIYZhWvaEYV9EsDie4tJN3ZSCrUeYjmzB+iOA+j9C7i9JjCMYBO4XfH26Rj2TGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4P189MB1295
 
-Hi Kees,
+Hi Peter,
 
-FYI, the error/warning still remains.
+> On Fri, Jun 12, 2026 at 09:37:40AM +0200, Yunseong Kim wrote:
+>> Hi Peter,
+>>
+>>> On Wed, Jun 03, 2026 at 07:43:27PM +0200, Yunseong Kim wrote:
+>>>> CONFIG_KCOV_DATAFLOW_INSTRUMENT_ALL instruments every function in the
+>>>> kernel. 
+>>>
+>>> Well, I would hope it would very much not instrument noinstr functions.
+>>
+>> Thank you for your guidance. I updated the default
+>> CONFIG_KCOV_DATAFLOW_NO_INLINE to n.
+> 
+> That's not really the point. The compiler extension *must* respect
+> noinstr. If there it no function attribute to suppress this kcov stuff,
+> then its an absolute non-starter.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2b414a95b8f7307d42173ba9e580d6d3e2bcbfce
-commit: 23ef9d439769d5f35353650e771c63d13824235b kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
-date:   9 months ago
-config: x86_64-randconfig-013 (https://download.01.org/0day-ci/archive/20260612/202606122021.pA9TozrA-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260612/202606122021.pA9TozrA-lkp@intel.com/reproduce)
+Thank you again, for pointing that out.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Fixes: 23ef9d439769 ("kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI")
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606122021.pA9TozrA-lkp@intel.com/
+I've been using the same mechanism that KCOV (trace-pc) already relies on.
+trace-args/ret shares the identical code path and attribute check.
 
-All errors (new ones prefixed by >>):
+LLVM side:
 
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_encrypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:970 (arch/x86/crypto/aria-aesni-avx-asm_64.S:970)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_encrypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_decrypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:995 (arch/x86/crypto/aria-aesni-avx-asm_64.S:995)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_decrypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_ctr_crypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:1096 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1096)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_ctr_crypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_encrypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:1266 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1266)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_encrypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_decrypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:1291 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1291)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_decrypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_ctr_crypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:1316 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1316)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_ctr_crypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_encrypt_32way
-   >>> referenced by aria-aesni-avx2-asm_64.S:1345 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1345)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_encrypt_32way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_decrypt_32way
-   >>> referenced by aria-aesni-avx2-asm_64.S:1370 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1370)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_decrypt_32way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_ctr_crypt_32way
-   >>> referenced by aria-aesni-avx2-asm_64.S:1395 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1395)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_ctr_crypt_32way)
+noinstr functions are never instrumented because the existing
+NoSanitizeCoverage attribute check at the top of the function-level pass
+covers all SanCov instrumentation types including trace-args/ret.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  1. Marked functions as noinstr expands to __no_sanitize_coverage, emits
+   __attribute__((no_sanitize("coverage")))
+
+  2. Clang translates that to Attribute::NoSanitizeCoverage
+
+  3. llvm/lib/Transforms/Instrumentation/SanitizerCoverage.cpp
+
+     if (F.hasFnAttribute(Attribute::NoSanitizeCoverage))
+
+     https://github.com/llvm/llvm-project/commit/280333021e95#diff-1b024748b036cfd10a7c3dfc7e9c53b0f752b27d7ea193939c59b2de60f69a70R445
+
+  4. skips ALL instrumentation including trace-args/trace-ret
+
+Dobule check with objtool:
+
+Even KCOV_DATAFLOW_NO_INLINE enabled kernel:
+
+  $ for fn in ct_nmi_enter ct_nmi_exit exc_nmi syscall_enter_from_user_mode; do
+      count=$(objdump -d vmlinux --disassemble=$fn | grep -c sanitizer_cov)
+      echo "$fn: $count sanitizer calls"
+    done
+  
+  ct_nmi_enter: 0 sanitizer calls
+  ct_nmi_exit: 0 sanitizer calls
+  exc_nmi: 0 sanitizer calls
+  syscall_enter_from_user_mode: 0 sanitizer calls
+
+If Rust noinstr functions are added in the future, they would use                          
+#[no_sanitize(coverage)]. This maps to the same Attribute::NoSanitizeCoverage                                                          
+LLVM attribute, yielding the exact same check and result.
+
+
+Best regards,
+Yunseong
+
