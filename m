@@ -1,145 +1,127 @@
-Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDBF3F44E4;
-	Fri, 12 Jun 2026 17:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E57396B6F
+	for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 18:15:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781284143; cv=none; b=lrf517eVSucW4g5nvOfkeKBecosNPz6qS9L+sfe1O14D/oO7zRWwb7830O4i0J4GZ6dgJ0qyh5LrnSETokDfwpcxVp6Kd7cWRQ1ozS0JZoHdsDUYSKtOErmwqFBGK9pvl0YqA/+ruw13QrvnmP8UCoCAjLEBKOKHIqr5HZO8Ev8=
+	t=1781288124; cv=none; b=I2It9SEq+x7dmsJ+kDFZtxq91K3Epr+DQRXkpeVt96NuQGlLhxwQ7Nj3ZbtZB4w3D3twajlC6KRC0a2FDVYN2qkIMW5zuZu8+y7qIOPbFyHYs92+tqdoWdACt8aIHCfdOl//eR8yVxw8dq/dyQCRqoXAKfIifHMNj80dWvvSEqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781284143; c=relaxed/simple;
-	bh=7d41YRMa4Rf7SsehB3A8aFwHAWiwjjEy1l8em50ck8I=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=ALIQMagl6qCiRVkdSwA5wnYdcXN3ilKvhEStZQ9o7j4rMX3C9VGa/YVnE86cZN883L2YpYFXOGGG/uBaXICqQYTlvlG1mD+96ExKPzeP69Iby9TQLhf8gJyjkx309l5P74ykOq0YpRBAMiIclVA9VQjgVXqTexqxoMwBlpBARVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bquUaG7N; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=h7tMjQUf; arc=none smtp.client-ip=202.12.124.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1781288124; c=relaxed/simple;
+	bh=vsANt1h9HdzXbx7N3oL80yOXLqH5oygsCyvZrb3biUE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Fz1LJr597w+vEOjx8Y04kcgga6ZJAIeMNef4BLgeR6mCDNxG3/yPLL5VKYvMf1X4GZrIoAqLqxRFr6K7Kf+x1TSedxQZZ4LARxPNrboQwKAdUQ2ti85Pgeau3LvZugdtntJNYlYPkCP2f39RqBTkmrRuJYJYxvfQVfSNYem4clg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z5dBRI9M; arc=none smtp.client-ip=74.125.82.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bquUaG7N";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="h7tMjQUf"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id B910B7A0148;
-	Fri, 12 Jun 2026 13:09:00 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Fri, 12 Jun 2026 13:09:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1781284140;
-	 x=1781370540; bh=BsUebY2ZXG2/1TO6nMs7fw5YQPjV9f9LK+DvZ2Jcfhc=; b=
-	bquUaG7N6CdRZXhDzy7S2dRUm3jRKQ6L0LVoYqkHU18Jsg+ri8+8fMM9WBcV59QS
-	i9APzzg6XUH+ShtlW4AsiannDhuZJ14zoqwCo73/Y2bbkTT4Rcj7IBdww+LLqlK0
-	iZKwd4aHvsf7zOVZ0rQAJISYcuxal3Fgkl8nsDeufvTG3wQWz+39aIp/2/FlV/eE
-	3MxTRnS3litp11LMo5H3BheN8HK7cqqF9OuMPbPlzqoO3oO0IasFqrqN6mjNaDDk
-	cGLgV/M/GmLaqLYXevN0U6OVDg4zwdQdc8NwrwoNRDlO3fQ6Tyvmv7kzRaEeNpck
-	adtQKZ7CdSDxgruVrfcC7w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1781284140; x=
-	1781370540; bh=BsUebY2ZXG2/1TO6nMs7fw5YQPjV9f9LK+DvZ2Jcfhc=; b=h
-	7tMjQUfH6zFenuqIJLzxcK8xG12he/XQo/ImA7umOkc7zWoHMHGQUt3rVGYHoMwp
-	wm9u1hlU8l2pYVim7SJ9vYZhGazTpcNR8wv6ceK7lRQwF+VcGmDzLFd8dFOhFSE/
-	0dVpcN8a3D61vz8AdEW5aySTV4lNedqYb2EdiaB8qxS9Pv/3R+tI8Ef6y31f7vwl
-	K9D20UqCCUjOMsdhtBINfiAgiXFp2lFnOsRvXgpiLGRpyHYeLcKqkhpwRwQSvZGA
-	TF/b1iOCV5CXHounvY+w4N/bLWd3kOh3K+7jz3yHq1jmkrKuq7FyQH17Pk5Z60Jd
-	S3QXsJBkecf3jfEyCAtBg==
-X-ME-Sender: <xms:LD0savSXV5zl7_--zguKxhEvrbskKYlLVyRh2YvonnF6JXtbsVKxDA>
-    <xme:LD0sarm-T8yPsQ9D2k4e0rQ4JW-wM7iUX4sMEzQmdxVH5_AAnurErA0s8FlZTDeFZ
-    iI8dbT02OthdSpl3KG0PJLDaW2IA-QSsl2cHrLosTGXuO1HU6pZI08>
-X-ME-Proxy-Cause: dmFkZTGwN+Ekeu17sMdaw9gASWSWOK9O1Zv6WScOHNDncCF07cLZEt8u3bD6JKiw70vsW5
-    gyk4kNWrdtL4pFHt07VYa6ueq6AfuzMpNyJ5O/P61NOVpiIvmo2U75TLSN99ln+iUsMfeT
-    mgxfr/nnyD5cckfWtpP3S42fIi/P2HV2KeFHQ47GGDTQWmoiCQywJ8H363tWJL16Zl1fhN
-    fb84euBh50u7OJWWBPMoLhu4+OmzW0j/ZBELvHtbvROJbDewuf2x9ahVLaozXAbI74QsvL
-    zGZK13k7Bj4cs+KCYq0u3ZGZdxwxfm6vDeOwboaoxEthvVrFdLmfecq7s7WWTejbwVaLGf
-    ezclml10ERX/lJf3eMC0WO0XNyiJQqPghg4DbRV0EcAq8g2lXR5kF6Yn0CUwmd1qt0zj3X
-    3wa1gWO/TGp4nqUp2PwtS87zJMSIwL5rnsLR+ZZg9hNk2qfuFc3sxnzLBki4MwOby9gWjZ
-    XV37tWK6+dn4i9Y5eZ6uQ34q9R66N+0x6Mjxqco7ZNUw5xfbCQkLBrW++b0wZHE3W1pfn4
-    f+xIsywnQUfzSyAyeTs0iQs4DiH3sDOIYehHPJ7lYjcNrdb0h8kH3bsD/CeGEKUNcaFTlS
-    46j7JHCRXozPG96KAmNLdMoqPFCehFKzOK3MRAm7NMl5+YZfkJ+NkFcaolgQ
-X-ME-Proxy: <xmx:LD0sahge6lPQ79-hlA-9zGwO2GZJyrDa4q9E7theuP66Ew4vx02gZw>
-    <xmx:LD0saibguOBbn3ns75KWJl9c3Fg-yLHDdGyT2TKZ7v9xPspm9HcLoA>
-    <xmx:LD0salgl3aExGE88O73YuF1R5qlx6JND46UvRasxbZ3CHi8iQYVnBw>
-    <xmx:LD0sakYLC9-VHquBVHNSb-Mmbo9fR-lH6_HUc9pVqqoPcdFYT_cq0g>
-    <xmx:LD0samHrYOlInMhF4Q8G40pcZfTTr6pnRcyJHmsiR1PTshu6yYKfN8gF>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id EF0C31820082; Fri, 12 Jun 2026 13:08:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z5dBRI9M"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-13809223fd4so1408343c88.1
+        for <llvm@lists.linux.dev>; Fri, 12 Jun 2026 11:15:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781288123; x=1781892923; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vpLH7pAfvy2/Tbtaa6B4TgQbD2Aufq4wSSHnGDhKK04=;
+        b=Z5dBRI9MTAv9JzOxpAS7+WJNv+KacomSVH2e4EOfbcCRZO3pXnF2OsXJ3yUTd7uiDB
+         VOweGHT805ICzPIrWN5AFuyZSj5wRAxxIY2Qeua19oIFYiQarh6b99QEuLPODPfuVNb7
+         J/zPulOU+4Zixq45kgjY2/exao+RYd1SMp2pRptxzB7BmrewGPHkvqjT4txyLBXs3I2C
+         mUs7JUwaKIaWtv6LenliihlAb0mfKYlFQk/zPYNppjuMth2nyWz+tyXmvfj9Y7qjrhEE
+         h5/PvUVfewfSzov6CAmaSXakU47VpAuizRST71z04oZPJODMt+yf/NJgfBhYgCc+QwOF
+         aqcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781288123; x=1781892923;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vpLH7pAfvy2/Tbtaa6B4TgQbD2Aufq4wSSHnGDhKK04=;
+        b=Cl5H4X8AZKaYw/ZbD/O7nx5Yh0L6JgkrlfgV8SzBl2FtW0WHVZq0wcyzzqXbt/iFyY
+         EA0BymzLzWUd+faXC/SUb2qf8b4C8swWx18wz7pL3nF4KrzULjzwXzYtC5jO/m03J/lZ
+         JqTubUfLXAn4IxIwBynjgyZiWnn/hBpjHT1/oRtK8cVg5tAZOxCahnJjq5STxbAQVmrv
+         86BWxqZwObBLPqEIg+FADJ8jpSIQ+kWOI2h27Kdc6CxdP0ePBUhLeheKta6SE4+6tPha
+         25iIYcG1EmtTZdhpm1IjWFeVjsdSHZb/5oFnNJt6N+3V8WTjz2YgbeN3n0eeFR8pvHey
+         +4VQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8GRjA7PIpQkc+3X+/zG6RrroMdrsy/Vt3ojsEuk2cdPtCSjsiJpThsvlNHw3BjU57v3T8B@lists.linux.dev
+X-Gm-Message-State: AOJu0YzoqwFY/Y8IHITpLzk4kMJ/BYveueWHngJm6fJH0aBSjstl3jJ1
+	HGG0sHNNSmPtCNj6PAksv0XQtbRC/7ksVzy1qiQMfcve/njb38T2jKO5
+X-Gm-Gg: Acq92OHWCilsnsiiLMkuXSYRU482czWS3ZQAlOLb0WcJDxTl5NJqAtyLqfJ9xj4EmSw
+	fvv6JqrHc+qGCuI+nsQqkGN6Frlw1B+N7cIDC3hn/2Ld14CE5W50IHRKGACpUdEx5NA+NsVp7bB
+	nEAlnAQgd6mdcOLrHa3ltgvKN0Z94WQg9ohvSGUhJfpF2VfkpmrePSc1ZEk9eSGcQf0Wfz8AMrV
+	VAp0aVglDJUuEtpBguF5gG/1BF0XfkNIuycOxva/Hl3zzH+Eu6x4Pm+tI7KL+lr+oWOtBO7/v/S
+	IdB8yjVrsW+/vRwZHL4Q4o1HzvxHqVLsZb37HO3eZ6V0PWAmUFZkZPdlDgxAtEDOBKCDxJ2y1gS
+	6ifMiCRFcV5R27C651GR1jof/g+DgJlOE3znzOIefbYMrC5JxeyaX8WQqdUpZWlJZDvtScmUcFV
+	urI7H046rpnoK4XPxx8G4vScQE4USAdjLlCU4VcK7PkLnwsxVnoYtC4JG3PdZQ6UWkH4RKafnXw
+	Jur66FvIG3NZtzbt08RdRxSU7kI+50tDQ==
+X-Received: by 2002:a05:7300:e7a5:b0:2ed:e14:e954 with SMTP id 5a478bee46e88-308200c2827mr1977791eec.30.1781288121023;
+        Fri, 12 Jun 2026 11:15:21 -0700 (PDT)
+Received: from ryzen ([2601:644:8000:5b5d:a073:5e58:ab5:a167])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3081e48e412sm4765327eec.4.2026.06.12.11.15.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jun 2026 11:15:20 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: sparclinux@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCHv2] sparc: Export mcount for Clang-built modules
+Date: Fri, 12 Jun 2026 11:15:03 -0700
+Message-ID: <20260612181503.4509-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AzfP_w-3vYjw
-Date: Fri, 12 Jun 2026 19:08:39 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "David Laight" <david.laight.linux@gmail.com>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: "SeongJae Park" <sj@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Ravi Jonnalagadda" <ravis.opensrc@gmail.com>,
- "Quanmin Yan" <yanquanmin1@huawei.com>, damon@lists.linux.dev,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <139b11c0-dce8-4995-8f28-320dfd6cc70f@app.fastmail.com>
-In-Reply-To: <20260611195037.1adec04d@pumpkin>
-References: <20260611125704.3386176-1-arnd@kernel.org>
- <20260611195037.1adec04d@pumpkin>
-Subject: Re: [PATCH] mm/damon/core: reduce kernel stack usage
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 11, 2026, at 20:50, David Laight wrote:
-> On Thu, 11 Jun 2026 14:56:57 +0200
-> Arnd Bergmann <arnd@kernel.org> wrote:
->
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> The main thread function has recently grown to the point of
->> exceeding stack frame size warning limits in some configurations.
->> This is what I hit on s390 with clang and CONFIG_KASAN:
->> 
->> mm/damon/core.c:3440:31: error: stack frame size (1352) exceeds limit (1280) in 'kdamond_fn' [-Werror,-Wframe-larger-than]
->>  3440 | static int kdamond_fn(struct damon_ctx *ctx)
->> 
->> The largest stack usage here is inside of the kdamond_tune_intervals(),
->> so by marking that one as noinline_for_stack, the functions individually
->> stay below the warning limit, though kdamond_fn() itself still uses
->> hundreds of kilobytes for some reason.
->
-> Does that actually reduce the stack use if the functions are called?
-> Or just stop the compiler bleating and running the code is still likely
-> to overflow the stack.
+Clang emits calls to mcount for -pg on sparc64, while the
+existing ftrace support only exports the _mcount name. With
+FUNCTION_TRACER enabled, modules can therefore keep relocations
+against mcount and fail during modpost:
 
-The one code path that was identified by the compiler does not
-improve, as the sum of the caller and the callee is still the
-same. As far as I can tell, the stack usage in gcc is similar
-in this code path, but it doesn't warn because the normal
-inliner does not combine these two.
+  ERROR: modpost: "mcount" [arch/sparc/kernel/chmc.ko] undefined!
 
-It does help in other leaf functions called by kdamond_fn() that
-now don't have the kdamond_tune_intervals() variables on the
-stack on top of their own ones, so in any other extern function
-called indirectly by kdamond_fn, more stack space is available.
+_mcount and mcount are aliases in arch/sparc/lib/mcount.S. Export
+the plain mcount alias as well so Clang-built modules can resolve
+their profiling call target.
 
-> I did that many many years ago for an embedded system (no indirect calls),
-> the outcome was that we didn't have enough memory to allow for the worst
-> case stack use!
-> The deep places were all (the equivalent of) printk() in pretty
-> impossible error paths.
+Assisted-by: Codex:GPT-5
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ v2: add declaration in asm-prototypes.h
+ arch/sparc/include/asm/asm-prototypes.h | 1 +
+ arch/sparc/lib/mcount.S                 | 1 +
+ 2 files changed, 2 insertions(+)
 
-Yes, that is a well known problem: it is very easy to construct
-call chains that are possible in the kernel that go way beyond
-any sensible size limit. Importantly, any GFP_KERNEL allocation
-can end up in the file system reclaim path.
+diff --git a/arch/sparc/include/asm/asm-prototypes.h b/arch/sparc/include/asm/asm-prototypes.h
+index 270c51017212..a39a24c53216 100644
+--- a/arch/sparc/include/asm/asm-prototypes.h
++++ b/arch/sparc/include/asm/asm-prototypes.h
+@@ -26,6 +26,7 @@ void *memset(void *s, int c, size_t n);
+ typedef int TItype __attribute__((mode(TI)));
+ TItype __multi3(TItype a, TItype b);
+ void _mcount(void);
++void mcount(void);
 
-The -Wframe-larger-than= warnings are just one way to make
-this less likely to happen.
+ s64 __ashldi3(s64, int);
+ s64 __lshrdi3(s64, int);
+diff --git a/arch/sparc/lib/mcount.S b/arch/sparc/lib/mcount.S
+index f7f7910eb41e..0309ba2c4712 100644
+--- a/arch/sparc/lib/mcount.S
++++ b/arch/sparc/lib/mcount.S
+@@ -21,6 +21,7 @@
+ 	EXPORT_SYMBOL(_mcount)
+ 	.globl		mcount
+ 	.type		mcount,#function
++	EXPORT_SYMBOL(mcount)
+ _mcount:
+ mcount:
+ #ifdef CONFIG_FUNCTION_TRACER
+--
+2.54.0
 
-     Arnd
