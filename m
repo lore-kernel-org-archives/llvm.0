@@ -1,59 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526EC2C11CF;
-	Sat, 13 Jun 2026 14:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52A02459DC;
+	Sat, 13 Jun 2026 16:26:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781359344; cv=none; b=K4WAhPtv0cjS1RAaovlzgG/D3v+Ke45xL5mbMvMRGP7VPnkldCE2jo9T/oq7u74W2dJeSleZGW4cV0B1mXrc3trJkPLh8DrgpLicfIOBRG+ZxgE+V7Xq+9qXrzBXo4ClVPDTT9cR14avM5SHS/9a6Bwl4UZ13t4MNK7zNsLh9PA=
+	t=1781368007; cv=none; b=IdFz14c8vxORQ2mCNmaDiMn8UdnsitYsQ2TeFJeLYHsCGmmAVzkKgchFM9t8IesANKGggHKfsWwzBOz2Xfm3D0Z20AKA0z2BXZRydI8KlDk0CCeST6iyBTOP8CmhCIkagYsqsbMMsRJGwLI+/m9KkylPv2yZyX+sGLJF1yRBrkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781359344; c=relaxed/simple;
-	bh=qF/GCY3ku27aWDbtVnROgkjd17wQ+N4kuN5tQlX+iHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=BAnLdwAOC5BJVAKusq7tkYGIJ40bWLRjYM82DhCuPBqkcoL0iaUonuJKaG+8PIIMuLH9Gl9CMa7EliKdt4kgu9AH5/keeE1ZArQ4NtRD6OkOBxAB1xKsgKPiGqd5RI4WfUfJWLCZrKcjOXyoAOQWgQBnQkiLzKnt1UAmtUy7Fyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=buOUWjdc; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781368007; c=relaxed/simple;
+	bh=6wyKlt/rkdkUyUC217gMouOHcTy4/PdKfaskDk3EwKQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SZz9S23QoHKRaDjcx07EmJGkV+BfH3xptsFGe3IeJsabtYtTeDxy/zF/ziasef/15ijIgJWc7uDvWedCe8eHiRyQn6TYdcUYmHhyAb1NIVwhHs27pYB2COLlZBdBDajSqkxycHAtcMp1Bdb6ewTzSyXJR/O3xvtYq8BoAt/zILU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ataMPZg9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="buOUWjdc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781359343; x=1812895343;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qF/GCY3ku27aWDbtVnROgkjd17wQ+N4kuN5tQlX+iHM=;
-  b=buOUWjdcw0yQ8xmBVP4JraNFT+xTULcpQq3IrvYABX3pI0shPdi1xX+l
-   IYcewF+JiVv3JQ5K2xwDUMi0aRBxz9US54AcN12OZnmE7SUEg2+80BI0u
-   +f/BUOrafaupRhL604pyeaIWax8RiGtwEl4WX0NRR4fZ3PutwUw5pUaO+
-   KT5N29B3bnjsaZ54USvYSaQbz2xlZqvncACpZXEl7iD5nEBc3qwIQuXEP
-   8/05avLGaLSUWhZWkaOzhrynZLpWDAzdmKpk5bohLQw0Ie+0++uYH6c4a
-   xh0JIRcFsXRvtLjwEQGJM6BS+dWgEBBugz9ADrBlN5nde8iMG55qGMXK9
-   g==;
-X-CSE-ConnectionGUID: s8pTnMm3QE+BMo8I1nFAKQ==
-X-CSE-MsgGUID: FEDRDcQ6RfqhGsBlu6f8sA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11816"; a="82230908"
-X-IronPort-AV: E=Sophos;i="6.24,202,1774335600"; 
-   d="scan'208";a="82230908"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2026 07:02:22 -0700
-X-CSE-ConnectionGUID: 3V2ewZzbT4G5a4ctsqa9NQ==
-X-CSE-MsgGUID: RwK02b8rQbSnPhp/40wtsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,202,1774335600"; 
-   d="scan'208";a="242692542"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa006.fm.intel.com with ESMTP; 13 Jun 2026 07:02:20 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wYOwE-000000004Uf-13R8;
-	Sat, 13 Jun 2026 14:02:18 +0000
-Date: Sat, 13 Jun 2026 16:01:51 +0200
-From: kernel test robot <lkp@intel.com>
-To: =?utf-8?Q?"Andr=C3=A9?= Almeida" <andrealmeid@igalia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: ERROR: modpost: "__set_task_comm"
- [lib/tests/string_kunit.ko] undefined!
-Message-ID: <202606131521.p7XfAbVA-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ataMPZg9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C8951F000E9;
+	Sat, 13 Jun 2026 16:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781368006;
+	bh=quHP7KcGd6kRdMSIND7iYUAuCYasmRY32NiFq9JBOVw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ataMPZg9iqpQuZ4K+KyXbM5t+5ZEDAZWlSSgehtwxnID/5KGzWRo4xRn6wFfWJCiC
+	 /UaFVNt+54AXniRya83/4iiXbEz5NzJAjmlkxSzI3KUGegh/kchqgwvRBk1acLbdbi
+	 skvydT7irWQ/A2n4879liE2Gc5w+MR0biDQx5tCxV948vKNzY+EHA8unCfca5wEKkr
+	 nv5YJ5zeV3TqhoXEZNEm8Ld9hX0IbHRlnnJcLiv88sHSJqlvPycKWAZxCstwD69gqR
+	 nYiNJS78wD8mMtvHVoblTe+riVJyOxEJ/CwfAufQQp1wRwSKOnOcmKbMD0ocaxIGZk
+	 CEa8EvXH8A7UQ==
+Date: Sat, 13 Jun 2026 12:26:41 -0400
+From: Nathan Chancellor <nathan@kernel.org>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] vduse: Fix error around jumping over a __cleanup()
+ variable
+Message-ID: <20260613162641.GA2697431@ax162>
+References: <20260610-vduse_vq_kick-fix-guard-usage-v1-1-0ce02c08006e@kernel.org>
+ <20260611110346.2b9388a1@pumpkin>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,24 +46,29 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260611110346.2b9388a1@pumpkin>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/sched-Update-get_task_comm-comment/20260613-002327
-head:   71cf6c96a43d5b1b807277ef0e81d193067a9ad5
-commit: e24677900b1148bc206fb3a08e057a21859567dd lib/string_kunit: Add test for copy_task_comm()
-date:   22 hours ago
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260613/202606131521.p7XfAbVA-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260613/202606131521.p7XfAbVA-lkp@intel.com/reproduce)
+On Thu, Jun 11, 2026 at 11:03:46AM +0100, David Laight wrote:
+> On Wed, 10 Jun 2026 12:16:49 -0700
+> Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> > When building with clang, there is an error in vduse_vq_kick() from
+> > attempting to jump over a variable declared with the cleanup attribute
+> > using goto:
+> .
+> > Jumping over a variable declared with the cleanup attribute does not
+> > prevent the cleanup function from running, it would just result in the
+> > variable being passed uninitialized to the cleanup function .clang
+> > errors instead of generating the invalid code, unlike GCC.
+> 
+> Does the same apply to variables allocated inside switch statements?
+> I'm sure I've seen one that wasn't inside an extra block.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606131521.p7XfAbVA-lkp@intel.com/
+Yes:
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+  https://lore.kernel.org/20251002233627.GA3978676@ax162/
 
->> ERROR: modpost: "__set_task_comm" [lib/tests/string_kunit.ko] undefined!
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Nathan
