@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C334D374728;
-	Sat, 13 Jun 2026 11:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D7673463;
+	Sat, 13 Jun 2026 13:34:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781351363; cv=none; b=cgiDl885f09ZpjRz2fLx3kU+2lzIWWrmn0kGNPJJEOksJ2S05zd6E8snqZr1DC1omq3pc+Nne4BZygefxMWXRA5t8F7JMJdq2etE4AtP7FhMxDxFnoYP6M//wLtxcUtXKR7vCCRDYytxag1qJFHqu9pIhfn4Vq5+S8wAO6T4OPg=
+	t=1781357648; cv=none; b=MFK+JU+q0KbZ9hXscvu19BW/mNu9V1NN2wrXRr5WBKaFdHvZZpb+jMDZfi399c/diKkekxThWKRUhkf8J6wwq93Q5c01hL9uS6jgE/DPqTD22JuafOn0NRVUW2M3Cw+4W5I6Dlm8zYtEr6VDnaPXf1RlLXo7dkXltjgw9AH0j3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781351363; c=relaxed/simple;
-	bh=6AiT8TVE9kz0XCg998qJ5vn1POeF3xXxIgNvk2kqbbY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=BkzmzQg9Y7YhZ8enPfkF/qOenho3IWiAvB1mUDtJpSw+ZC9bvXDS7fml3E9iSE0OaTc1qrjbAXg2kw+N0thHTF96zda9BDHwKkb517cPKgFFJ35JSFS5dPEjL0ISczKePCjfHq3SqbFWnMo56nyx08djETD56cLa2CmrUzwPg4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hGpGxat9; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1781357648; c=relaxed/simple;
+	bh=cHctk6Y8X+zELlpiO6iGG+QHfdR67iD/q24td39uY7M=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ZGfu2kQgcPAQNYZ13FQlt7V7JcpSBfIFNSwgUSM1iIhrGfXUK3v+s9mit0xRIzcKJZ0bgxWn1SPlp3Y+xdq77yzhE9fHmN98o8F0Cvor607i2ajNefQBJ28mDznqMrPVWA6e9sFiOksUBYlQXz672AKQ///Krix8gs1fCLE1bvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q9F1D/c0; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hGpGxat9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q9F1D/c0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781351362; x=1812887362;
+  t=1781357646; x=1812893646;
   h=date:from:to:cc:subject:message-id;
-  bh=6AiT8TVE9kz0XCg998qJ5vn1POeF3xXxIgNvk2kqbbY=;
-  b=hGpGxat9mdnd/KnjIcV0TCyIKLjmj980lFbBcuRiykeV5hte81oZUHNW
-   E21vFgUwXbs9PwHow+CJYt5kN/WIn2yxzMAXzAOcbxg5xjS/z1AKGYpLh
-   8y9zD+gs5V9uVAr2hOmVUbv8aeKq7OiRR3SV89AW19Ysm5CV0iSfzkC5i
-   2V1pyFgm3RE0XPBSx69PvbgZh5ym5gogiW7QpPnbqioU3lpHeGcQlaIEd
-   2xd9LexiNQr5yLy5e7v0c4J2aV2QokHWnOkfptuxcSKygX4nZFxzwod6m
-   dtdncDCnU3TZQa4Cwgp/mpl01MplrZwK+7S59f1qWJf8oqIi9RUhNDfdz
-   Q==;
-X-CSE-ConnectionGUID: 4sxOMrtqSbKYt3i3q2jsMA==
-X-CSE-MsgGUID: u/OTy5mvT+u6yFWi4cY2eA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11815"; a="81299209"
+  bh=cHctk6Y8X+zELlpiO6iGG+QHfdR67iD/q24td39uY7M=;
+  b=Q9F1D/c0ufUJEZ8fvVjchEEN/yGO4fOc2W812/seaCSqVRmHmJtz9slp
+   cA4gQT37Oj1MNzq97fFB7J5TDfcyHJeH7vTZdukL0Rdxk9yLEg+5PrnQM
+   2auKBmq7JNg1nL2PQI8ZjAzzylwtJi1kVfpUDoHYDu7i2aZvyhwVzeJ0q
+   OUghe2u+tq0Lb+tHGdvSJFXHYDzMuOIWugBwytVUhsLeHJ/ZPBTuLy9xW
+   fCjEgzWJn6YgtUFxNHHqWfILMbjNkdYIe0NqOo2xiLzYEPGJ13x4kLkAr
+   Us483W/r7Lq4b9ss8qifcr4avt0ZfE2+uNX3Etg0XPHklEgiUW34ZXCi5
+   A==;
+X-CSE-ConnectionGUID: H3q63WqUQ5eKILcCdFfCfA==
+X-CSE-MsgGUID: vztBzvC+QNKOFvwnSF7ExA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11815"; a="93660747"
 X-IronPort-AV: E=Sophos;i="6.24,202,1774335600"; 
-   d="scan'208";a="81299209"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2026 04:49:21 -0700
-X-CSE-ConnectionGUID: eT6oZC9QTKayQEjYW97Ssw==
-X-CSE-MsgGUID: 8uo6jugcSUOu4nEbDiRMkw==
+   d="scan'208";a="93660747"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2026 06:34:05 -0700
+X-CSE-ConnectionGUID: Vf+JZ+eYS/qEWpbZE5/wfw==
+X-CSE-MsgGUID: rkJuuJxgTbKSW2iZ6yWkzA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,202,1774335600"; 
-   d="scan'208";a="245929611"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa006.jf.intel.com with ESMTP; 13 Jun 2026 04:49:20 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+   d="scan'208";a="277251395"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 13 Jun 2026 06:34:04 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wYMrV-000000004Tp-1uXG;
-	Sat, 13 Jun 2026 11:49:17 +0000
-Date: Sat, 13 Jun 2026 13:49:05 +0200
+	id 1wYOUr-00000000PwS-2MIg;
+	Sat, 13 Jun 2026 13:34:01 +0000
+Date: Sat, 13 Jun 2026 21:33:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: Warning: kernel/seccomp.c:241 struct member 'pins' not
- described in 'seccomp_filter'
-Message-ID: <202606131331.Gwuxcq14-lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arnd-playground:config-gpio-legacy-7.2 21/21]
+ include/linux/gpio/consumer.h:177:20: error: incomplete definition of type
+ 'const struct gpio_desc'
+Message-ID: <202606132139.x0XHZayI-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,23 +60,159 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Cong-Wang/mm-add-__do_mmap-and-vm_mmap_seal_remote/20260613-081932
-head:   f5af20b8e3f9e7d8778e63646a08b4152ad65e7e
-commit: 28deacdb0e3273f480ad8f4c482c780a39fa687d seccomp: add kernel-installed pinned-memfd redirect
-date:   11 hours ago
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260613/202606131331.Gwuxcq14-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260613/202606131331.Gwuxcq14-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git config-gpio-legacy-7.2
+head:   24fae1df029804f4339484870fcdc70fe15fab97
+commit: 24fae1df029804f4339484870fcdc70fe15fab97 [21/21] gpiolib: introduce gpio_name() helper
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260613/202606132139.x0XHZayI-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260613/202606132139.x0XHZayI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606131331.Gwuxcq14-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606132139.x0XHZayI-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> Warning: kernel/seccomp.c:241 struct member 'pins' not described in 'seccomp_filter'
->> Warning: kernel/seccomp.c:241 struct member 'pins' not described in 'seccomp_filter'
+   In file included from arch/loongarch/kernel/env.c:9:
+   In file included from include/linux/efi.h:20:
+   In file included from include/linux/rtc.h:18:
+   In file included from include/linux/nvmem-provider.h:16:
+>> include/linux/gpio/consumer.h:177:20: error: incomplete definition of type 'const struct gpio_desc'
+     177 |         return desc ? desc->name : "(no gpio)";
+         |                       ~~~~^
+   include/linux/gpio/consumer.h:16:8: note: forward declaration of 'struct gpio_desc'
+      16 | struct gpio_desc;
+         |        ^
+   1 error generated.
+--
+   In file included from drivers/gpio/gpiolib-devres.c:15:
+>> include/linux/gpio/consumer.h:177:20: error: incomplete definition of type 'const struct gpio_desc'
+     177 |         return desc ? desc->name : "(no gpio)";
+         |                       ~~~~^
+   include/linux/gpio/consumer.h:16:8: note: forward declaration of 'struct gpio_desc'
+      16 | struct gpio_desc;
+         |        ^
+   In file included from drivers/gpio/gpiolib-devres.c:17:
+   In file included from drivers/gpio/gpiolib.h:12:
+   In file included from include/linux/cdev.h:8:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/loongarch/include/asm/elf.h:9:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/gpio/gpiolib-devres.c:17:
+   In file included from drivers/gpio/gpiolib.h:12:
+   In file included from include/linux/cdev.h:8:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/loongarch/include/asm/elf.h:9:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/gpio/gpiolib-devres.c:17:
+   In file included from drivers/gpio/gpiolib.h:12:
+   In file included from include/linux/cdev.h:8:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/loongarch/include/asm/elf.h:9:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/gpio/gpiolib-devres.c:17:
+   In file included from drivers/gpio/gpiolib.h:12:
+   In file included from include/linux/cdev.h:8:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/loongarch/include/asm/elf.h:9:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/gpio/gpiolib-devres.c:17:
+   In file included from drivers/gpio/gpiolib.h:12:
+   In file included from include/linux/cdev.h:8:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/loongarch/include/asm/elf.h:9:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+--
+   In file included from drivers/gpio/gpiolib-cdev.c:14:
+>> include/linux/gpio/consumer.h:177:20: error: incomplete definition of type 'const struct gpio_desc'
+     177 |         return desc ? desc->name : "(no gpio)";
+         |                       ~~~~^
+   include/linux/gpio/consumer.h:16:8: note: forward declaration of 'struct gpio_desc'
+      16 | struct gpio_desc;
+         |        ^
+>> drivers/gpio/gpiolib-cdev.c:1650:2: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+    1650 |         INIT_KFIFO(lr->events);
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:135:69: note: expanded from macro 'INIT_KFIFO'
+     135 |         __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : ARRAY_SIZE(__tmp->buf) - 1;\
+         |                       ~                             ~~~~~~~~~~~~~~~~~~~~~~~^~~
+   1 warning and 1 error generated.
+
+
+vim +177 include/linux/gpio/consumer.h
+
+   174	
+   175	static inline const char *gpiod_name(const struct gpio_desc *desc)
+   176	{
+ > 177		return desc ? desc->name : "(no gpio)";
+   178	}
+   179	
 
 --
 0-DAY CI Kernel Test Service
