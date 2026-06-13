@@ -1,134 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3456B33120E;
-	Sat, 13 Jun 2026 08:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422F4379979
+	for <llvm@lists.linux.dev>; Sat, 13 Jun 2026 08:43:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781338399; cv=none; b=jLq2n/IXZk+7qdCfDQdW8L8DaFscCLSIi+U8EFpzQZZ+vQ8fBlUBg+lPWJkrxS0H1VA8t5L436nKDIXHAqvKhe0OVM8PEyX9HA1Sqim0gv0dH63c0Bn6AuEgFu+wn6i3eGFKNbwo8Qb+YBqPbU93tU2lEsO7S6X1oUhybe0gayQ=
+	t=1781340195; cv=none; b=HKNND3/GIccoLUXTqqP4icumpcnYlsupgu9WDo9D8ob/OVwfd/wGhM9pEbRZCd9DH7ht1nXEFKb0RSNjQfpK0V8wFVtgfy69I+XCmUOoCd/Ze4sxPKO162RvGsLPR4s9oHfHdO/Na4KKg9F0Oqb2+LrOh28a1dnwwD3EojIrCnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781338399; c=relaxed/simple;
-	bh=2tTvA3CYC/vzlIJgP7jm9R+5foABqZJ6qf8RjgwOoPw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Fea0k4acOt2U6rhjqwyMD18Ui+B5/Cxb64MGH0XmBo2xIkwt1APuA6m/H1+mVRGBBLx0B6eAiGsdjlZ2TczFLNWBKpRd/tAtYXdGslpxP/VSdT3/2mlR03U88oRUoDohRFr4H5wD2/SGcVcf33FbDyPwkXfxKtpWU3d1x8x9Axg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lIR8zfqT; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781340195; c=relaxed/simple;
+	bh=Lgyiy5oN1qDVofYaHxoUBQoDLxBulYCTrybXzbDEnnc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=tHOlV8PauhHwmPspSjY3B3vhT+8rrfC1dz29fys8e0CH8Df01x0byRCgM7hMPqhKXxe3XClIYKnYAIRdYxpazNtF2GzMjmWlmjvD0h/OZzwf8Es3cSCBDXiWvjoxE+4wVsUm4/EQ/zW4d1h9GWEwUoPZx4YbLYvGTTZTQVqW+MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LNiBkI8j; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lIR8zfqT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781338398; x=1812874398;
-  h=date:from:to:cc:subject:message-id;
-  bh=2tTvA3CYC/vzlIJgP7jm9R+5foABqZJ6qf8RjgwOoPw=;
-  b=lIR8zfqTUiLabjyv82OXBnJrSmljcPWtev67OE6k2bIWaloavVHIZrln
-   h93SdH3/dXD9R0bNeDtTZdFLVHsqnrLyAZzfUKBXZRqsbukdHwbOEP8fR
-   YK/mX8OUGia94zaSu8dYtrJg/UI6K5JFoBOVXCCEzbzaW4b9v1WSfmKiI
-   kjxx6RhRJd8NFEzG/f+yvM/oMWimY68vR2DnNHx4JInvu/lwyi8ni4rKq
-   00I+wRFlcliHbDRy5E/wsGYEJAeNBHTTNMhUSilvbXLH5lx8L4s+YJKKy
-   avaaxcTjBnxMnyHzSIjYvUF1afwMsK8ZwM3F9q+fpLbj4E/TUPZzR+epy
-   g==;
-X-CSE-ConnectionGUID: iufiMf53Q3SCVl4oLT/OYg==
-X-CSE-MsgGUID: ENzaAYBgRoiyhjP2b2LTNw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11815"; a="92723078"
-X-IronPort-AV: E=Sophos;i="6.24,202,1774335600"; 
-   d="scan'208";a="92723078"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2026 01:13:17 -0700
-X-CSE-ConnectionGUID: j5xoaRTPRYuNbWgmWaHlcg==
-X-CSE-MsgGUID: 9njYqfBwRgewRr7HbZRSjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,202,1774335600"; 
-   d="scan'208";a="271072282"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 13 Jun 2026 01:13:16 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wYJUP-00000000PnM-2bds;
-	Sat, 13 Jun 2026 08:13:13 +0000
-Date: Sat, 13 Jun 2026 16:13:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mohammad Rafi Shaik <mohammad.rafi.shaik@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [superna9999:topic/sm8650/ayaneo-pocket-s2/pmos-v4 24/31]
- sound/soc/qcom/sc8280xp.c:176:13: error: use of undeclared identifier
- 'LPAIF_MI2S_MCLK'
-Message-ID: <202606131609.RqRpHPLB-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LNiBkI8j"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781340193;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=452XhnA6Hm8ySHzDumHz4u8rLO4xVxF6vPY9rXoXe2Q=;
+	b=LNiBkI8jqBhKu3X1XLtMeCNZd9TQBuFUl9YOccOTsnuf5rNm31uq/rfuWNdwnO9OEVfs56
+	clGUrcYO3ePvcvMRj5For3kyxV5S0WQ7QRmVZN5b0QxEQpEPLTUQza9TZcRBBN/snsccLI
+	VpYDOokjkVL6enS8sArJgCFu3GbQFvs=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-303-DKTvySYGMoGWC0fRqpyrpw-1; Sat,
+ 13 Jun 2026 04:43:10 -0400
+X-MC-Unique: DKTvySYGMoGWC0fRqpyrpw-1
+X-Mimecast-MFC-AGG-ID: DKTvySYGMoGWC0fRqpyrpw_1781340189
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 895D3180131C
+	for <llvm@lists.linux.dev>; Sat, 13 Jun 2026 08:43:09 +0000 (UTC)
+Received: from [172.20.205.34] (unknown [10.30.44.235])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1190B1774;
+	Sat, 13 Jun 2026 08:43:08 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-rc7,
+ upstream-mainline, 2a2974b5)
+Date: Sat, 13 Jun 2026 08:43:08 -0000
+To: llvm@lists.linux.dev, yoyang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Message-Id: <58913.126061304431000189@us-mta-303.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: ASr8-q7iXB9aCTeXSxIZ7o5eIoOyGNLFtR9fffILmGI_1781340189
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/superna9999/linux topic/sm8650/ayaneo-pocket-s2/pmos-v4
-head:   2990bb85e68d401720ce49038f3e512d7eb1a389
-commit: 82a9dc5108c057c67137a9d9bcab231d4989eccf [24/31] ASoC: qcom: sc8280xp: ASoC: qcom: sc8280xp: enhance machine driver for board-specific config
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260613/202606131609.RqRpHPLB-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 305faf498a4e0b52b40742c927af63ab2082e1a9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260613/202606131609.RqRpHPLB-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606131609.RqRpHPLB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> sound/soc/qcom/sc8280xp.c:176:13: error: use of undeclared identifier 'LPAIF_MI2S_MCLK'
-     176 |                                                LPAIF_MI2S_MCLK, mclk_freq,
-         |                                                ^~~~~~~~~~~~~~~
->> sound/soc/qcom/sc8280xp.c:181:13: error: use of undeclared identifier 'LPAIF_MI2S_BCLK'
-     181 |                                                LPAIF_MI2S_BCLK, bclk_freq,
-         |                                                ^~~~~~~~~~~~~~~
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +/LPAIF_MI2S_MCLK +176 sound/soc/qcom/sc8280xp.c
+Kernel information:
+    Commit message: Merge tag 'pci-v7.1-fixes-3' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/pci/pci
 
-   154	
-   155	static int sc8280xp_snd_hw_params(struct snd_pcm_substream *substream,
-   156					  struct snd_pcm_hw_params *params)
-   157	{
-   158		struct snd_soc_pcm_runtime *rtd = snd_soc_substream_to_rtd(substream);
-   159		struct snd_soc_dai *codec_dai = snd_soc_rtd_to_codec(rtd, 0);
-   160		struct snd_soc_dai *cpu_dai = snd_soc_rtd_to_cpu(rtd, 0);
-   161		struct sc8280xp_snd_data *data = snd_soc_card_get_drvdata(rtd->card);
-   162		int mclk_freq = sc8280xp_get_mclk_freq(params);
-   163		int bclk_freq = sc8280xp_get_bclk_freq(params);
-   164	
-   165		switch (cpu_dai->id) {
-   166		case PRIMARY_MI2S_RX ... QUATERNARY_MI2S_TX:
-   167		case QUINARY_MI2S_RX ... QUINARY_MI2S_TX:
-   168			snd_soc_dai_set_fmt(cpu_dai, SND_SOC_DAIFMT_BP_FP);
-   169	
-   170			if (data->snd_soc_common_priv->codec_dai_fmt)
-   171				snd_soc_dai_set_fmt(codec_dai,
-   172						    data->snd_soc_common_priv->codec_dai_fmt);
-   173	
-   174			if (data->snd_soc_common_priv->mi2s_mclk_enable)
-   175				snd_soc_dai_set_sysclk(cpu_dai,
- > 176						       LPAIF_MI2S_MCLK, mclk_freq,
-   177						       SND_SOC_CLOCK_IN);
-   178	
-   179			if (data->snd_soc_common_priv->mi2s_bclk_enable)
-   180				snd_soc_dai_set_sysclk(cpu_dai,
- > 181						       LPAIF_MI2S_BCLK, bclk_freq,
-   182						       SND_SOC_CLOCK_IN);
-   183	
-   184			if (data->snd_soc_common_priv->codec_sysclk_set)
-   185				snd_soc_dai_set_sysclk(cpu_dai,
-   186						       0, mclk_freq,
-   187						       SND_SOC_CLOCK_IN);
-   188			break;
-   189		default:
-   190			break;
-   191		}
-   192	
-   193		return 0;
-   194	}
-   195	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2598110070
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2598110070_ppc64le_kernel
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2598110070_x86_64_kernel_kcidb_tool_21459619_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
